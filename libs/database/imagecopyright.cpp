@@ -211,7 +211,7 @@ int ImageCopyright::languageMatch(const QList<CopyrightInfo> infos, const QStrin
 
     QLatin1String defaultCode("x-default");
 
-    for (int i=0; i<infos.size(); i++)
+    for (int i=0; i<infos.size(); ++i)
     {
         const CopyrightInfo &info = infos[i];
 

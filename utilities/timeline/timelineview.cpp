@@ -443,7 +443,7 @@ void TimeLineView::createNewDateSearchAlbum(const QString& name)
     SearchXmlWriter writer;
 
     // for each range, write a group with two fields
-    for (int i=0; i<list.size(); i++)
+    for (int i=0; i<list.size(); ++i)
     {
         writer.writeGroup();
         writer.writeField("creationdate", SearchXml::GreaterThan);

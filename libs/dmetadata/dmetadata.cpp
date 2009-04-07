@@ -1164,7 +1164,7 @@ QStringList DMetadata::valuesToString(const QVariantList &values, const Metadata
     Q_ASSERT(size == values.size());
 
     QStringList list;
-    for (int i=0; i<size; i++)
+    for (int i=0; i<size; ++i)
     {
         list << valueToString(values[i], fields[i]);
     }
@@ -1214,7 +1214,7 @@ QMap<int, QString> DMetadata::possibleValuesForEnumField(MetadataInfo::Field fie
             return map;
     }
 
-    for (int i = min; i <= max; i++)
+    for (int i = min; i <= max; ++i)
     {
         map[i] = valueToString(i, field);
     }

@@ -243,7 +243,7 @@ Setup::Setup(QWidget* parent)
                             "<i>Customize behavior of the other parts of digiKam</i></qt>"));
     d->page_misc->setIcon(KIcon("preferences-other"));
 
-    for (int page = 0; page != SetupPageEnumLast; page++)
+    for (int page = 0; page != SetupPageEnumLast; ++page)
     {
         KPageWidgetItem *item = d->pageItem((Page)page);
         if (!item)
@@ -283,7 +283,7 @@ QSize Setup::sizeHint() const
     QSize hint = KPageDialog::sizeHint();
     int maxHintHeight = 0;
     int maxWidgetHeight = 0;
-    for (int page = 0; page != SetupPageEnumLast; page++)
+    for (int page = 0; page != SetupPageEnumLast; ++page)
     {
         // only take tabs into account here that should better be displayed without scrolling
         if (page == CollectionsPage ||

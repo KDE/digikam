@@ -296,7 +296,7 @@ int WaterMark::queryFontSize(const QString& text, const QFont& font, int length)
     // Find font size using relative length compared to image width.
     QFont fnt = font;
     QRect fontRect;
-    for (int i = 1 ; i <= 1000 ; i++)
+    for (int i = 1 ; i <= 1000 ; ++i)
     {
         fnt.setPointSizeF(i);
         QFontMetrics fontMt(fnt);

@@ -123,7 +123,7 @@ template <typename T>
 void ChoiceSearchModel::setChecked(const T &key, bool checked)
 {
     QVariant variantKey(key);
-    for (int i=0; i<m_entries.size(); i++)
+    for (int i=0; i<m_entries.size(); ++i)
     {
         if (m_entries[i].key == variantKey)
             setChecked(i, checked);
@@ -133,7 +133,7 @@ void ChoiceSearchModel::setChecked(const T &key, bool checked)
 template <typename T>
 void ChoiceSearchModel::setChecked(const T &value, SearchXml::Relation relation)
 {
-    for (int i=0; i<m_entries.size(); i++)
+    for (int i=0; i<m_entries.size(); ++i)
     {
         setChecked(i, SearchXml::testRelation(m_entries[i].key.value<T>(), value, relation));
     }

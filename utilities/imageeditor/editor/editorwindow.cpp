@@ -643,7 +643,7 @@ void EditorWindow::slotAboutToShowUndoMenu()
     QStringList titles;
     m_canvas->getUndoHistory(titles);
 
-    for (int i=0; i<titles.size(); i++)
+    for (int i=0; i<titles.size(); ++i)
     {
         QAction *action =
             m_undoAction->menu()->addAction(titles[i], d->undoSignalMapper, SLOT(map()));
@@ -657,7 +657,7 @@ void EditorWindow::slotAboutToShowRedoMenu()
     QStringList titles;
     m_canvas->getRedoHistory(titles);
 
-    for (int i=0; i<titles.size(); i++)
+    for (int i=0; i<titles.size(); ++i)
     {
         QAction *action = m_redoAction->menu()->addAction(titles[i], d->redoSignalMapper, SLOT(map()));
         d->redoSignalMapper->setMapping(action, i + 1);

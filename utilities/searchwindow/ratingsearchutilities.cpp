@@ -76,7 +76,7 @@ QRect RatingStarDrawer::drawStarPolygons(QPainter *painter, int numberOfStars) c
     if (numberOfStars)
         drawnRect.adjust(0, 0, 0, starPolygonSize.height());
 
-    for (int i=0; i<numberOfStars; i++)
+    for (int i=0; i<numberOfStars; ++i)
     {
         painter->drawPolygon(polygon, Qt::WindingFill);
         polygon.translate(starPolygonSize.width(), 0);
@@ -157,7 +157,7 @@ void RatingComboBoxDelegate::drawRating(QPainter *painter, const QRect &rect, in
 RatingComboBoxModel::RatingComboBoxModel(QObject *parent) 
                    : QAbstractListModel(parent)
 {
-    for (int value = RatingComboBox::Null; value <= RatingComboBox::Rating5; value++)
+    for (int value = RatingComboBox::Null; value <= RatingComboBox::Rating5; ++value)
         m_entries << (RatingComboBox::RatingValue)value;
 }
 
@@ -294,7 +294,7 @@ void RatingComboBoxWidget::paintEvent(QPaintEvent *e)
         {
             QPixmap pix = starPixmap();
             int x = 0;
-            for (int i = 0; i < RatingMax; i++)
+            for (int i = 0; i < RatingMax; ++i)
             {
                 p.drawPixmap(x, 0, pix);
                 x += pix.width();

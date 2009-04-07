@@ -138,7 +138,7 @@ void CollectionScanner::recordHints(const QList<ItemCopyMoveHint> &hints)
     {
         QList<qlonglong> ids = hint.srcIds();
         QStringList dstNames = hint.dstNames();
-        for(int i=0;i<ids.size();i++)
+        for(int i=0;i<ids.size();++i)
             d->itemHints[NewlyAppearedFile(hint.albumIdDst(), dstNames[i])] = ids[i];
     }
 }
@@ -485,7 +485,7 @@ void CollectionScanner::scanAlbum(const CollectionLocation &location, const QStr
     // create a hash filename -> index in list
     QHash<QString, int> fileNameIndexHash;
     QSet<qlonglong> itemIdSet;
-    for (int i = 0; i < scanInfos.size(); i++)
+    for (int i = 0; i < scanInfos.size(); ++i)
     {
         fileNameIndexHash[scanInfos[i].itemName] = i;
         itemIdSet << scanInfos[i].id;

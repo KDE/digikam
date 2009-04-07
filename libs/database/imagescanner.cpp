@@ -487,7 +487,7 @@ void ImageScanner::scanIPTCCore()
         return;
 
     DatabaseAccess access;
-    for (int i=0; i<metadataInfos.size(); i++)
+    for (int i=0; i<metadataInfos.size(); ++i)
     {
         const QVariant &var = metadataInfos[i];
 

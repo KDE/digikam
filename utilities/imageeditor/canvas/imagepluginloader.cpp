@@ -68,7 +68,7 @@ public:
     {
         splash = 0;
 
-        for (int i=0 ; QString(ObsoleteImagePluginsList[i]) != QString("-1") ; i++)
+        for (int i=0 ; QString(ObsoleteImagePluginsList[i]) != QString("-1") ; ++i)
             obsoleteImagePluginsList << ObsoleteImagePluginsList[i];
     }
 

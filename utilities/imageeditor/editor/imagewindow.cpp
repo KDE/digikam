@@ -929,7 +929,7 @@ void ImageWindow::saveAsIsComplete()
         }
         else if (d->urlCurrent != m_savingContext->destinationURL)
         {
-            for (int i=0; i<d->imageInfoList.count(); i++)
+            for (int i=0; i<d->imageInfoList.count(); ++i)
             {
                 ImageInfo info = d->imageInfoList[i];
                 if (info.fileUrl() == m_savingContext->destinationURL)
@@ -1184,7 +1184,7 @@ void ImageWindow::slotCollectionImageChange(const CollectionImageChangeset &chan
     switch(changeset.operation())
     {
         case CollectionImageChangeset::Removed:
-            for (int i=0;i<d->imageInfoList.size();i++)
+            for (int i=0;i<d->imageInfoList.size();++i)
             {
                 if (changeset.containsImage(d->imageInfoList[i].id()))
                 {
@@ -1201,7 +1201,7 @@ void ImageWindow::slotCollectionImageChange(const CollectionImageChangeset &chan
             }
             break;
         case CollectionImageChangeset::RemovedAll:
-            for (int i=0;i<d->imageInfoList.size();i++)
+            for (int i=0;i<d->imageInfoList.size();++i)
             {
                 if (changeset.containsAlbum(d->imageInfoList[i].albumId()))
                 {

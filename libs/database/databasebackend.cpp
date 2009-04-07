@@ -333,7 +333,7 @@ bool DatabaseBackend::execSql(const QString& sql, QStringList* values)
     int count = query.record().count();
     while (query.next())
     {
-        for (int i=0; i<count; i++)
+        for (int i=0; i<count; ++i)
             (*values) << query.value(i).toString();
     }
     return true;
@@ -346,7 +346,7 @@ QList<QVariant> DatabaseBackend::readToList(QSqlQuery &query)
     int count = query.record().count();
     while (query.next())
     {
-        for (int i=0; i<count; i++)
+        for (int i=0; i<count; ++i)
             list << query.value(i);
     }
     return list;
@@ -479,7 +479,7 @@ QSqlQuery DatabaseBackend::execQuery(const QString& sql,
 QSqlQuery DatabaseBackend::execQuery(const QString& sql, const QList<QVariant> &boundValues)
 {
     QSqlQuery query = prepareQuery(sql);
-    for (int i=0; i<boundValues.size(); i++)
+    for (int i=0; i<boundValues.size(); ++i)
         query.bindValue(i, boundValues[i]);
     exec(query);
     return query;

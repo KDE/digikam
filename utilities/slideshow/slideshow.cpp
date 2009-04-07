@@ -393,13 +393,13 @@ void SlideShow::updatePixmap()
             if (d->settings.printRating && rating > 0)
             {
                 int x = 0;
-                for (int i = 0; i < rating; i++)
+                for (int i = 0; i < rating; ++i)
                 {
                     p.drawPixmap(10+x, height()-offset-d->selPixmap.height(), d->selPixmap);
                     x += d->selPixmap.width();
                 }
 
-                for (int i = rating; i < RatingMax; i++)
+                for (int i = rating; i < RatingMax; ++i)
                 {
                     p.drawPixmap(10+x, height()-offset-d->regPixmap.height(), d->regPixmap);
                     x += d->regPixmap.width();
@@ -550,7 +550,7 @@ void SlideShow::printInfoText(QPainter &p, int &offset, const QString& str)
     {
         offset += 20;
         p.setPen(Qt::black);
-        for (int x=9; x<=11; x++)
+        for (int x=9; x<=11; ++x)
             for (int y=offset+1; y>=offset-1; y--)
                 p.drawText(x, height()-y, str);
 
@@ -614,7 +614,7 @@ void SlideShow::printComments(QPainter &p, int &offset, const QString& comments)
         commentsByLines.prepend(newLine.trimmed());
     }
 
-    for (int i = 0 ; i < (int)commentsByLines.count() ; i++ )
+    for (int i = 0 ; i < (int)commentsByLines.count() ; ++i )
     {
         printInfoText(p, offset, commentsByLines[i]);
     }

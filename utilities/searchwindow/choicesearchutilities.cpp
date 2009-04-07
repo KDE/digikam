@@ -144,7 +144,7 @@ void ChoiceSearchModel::setChecked(int i, bool checked)
 
 void ChoiceSearchModel::resetChecked()
 {
-    for (int i=0; i<m_entries.size(); i++)
+    for (int i=0; i<m_entries.size(); ++i)
     {
         if (m_entries[i].checkState)
             setChecked(i, false);

@@ -825,9 +825,9 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
     uint* data  = (uint*)img.bits();
     uchar r, g, b, a;
 
-    for (int j=0; j < (int)img.height(); j++)
+    for (int j=0; j < (int)img.height(); ++j)
     {
-        for (int i=0; i < (int)img.width(); i++)
+        for (int i=0; i < (int)img.width(); ++i)
         {
             if (i < (mx-dx) || i > (mx-dx+mw-1) ||
                 j < (my-dy) || j > (my-dy+mh-1))

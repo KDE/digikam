@@ -78,12 +78,12 @@ void ImageData::fillPixelData(const QImage &im)
 {
     QImage image = im.scaled(Haar::NumberOfPixels, Haar::NumberOfPixels, Qt::IgnoreAspectRatio);
     int cn = 0;
-    for (int h = 0; h < Haar::NumberOfPixels; h++)
+    for (int h = 0; h < Haar::NumberOfPixels; ++h)
     {
         // Get a scanline:
         QRgb *line = (QRgb*)image.scanLine(h);
 
-        for (int w = 0; w < Haar::NumberOfPixels; w++)
+        for (int w = 0; w < Haar::NumberOfPixels; ++w)
         {
             QRgb pixel      = line[w];
             data1[cn] = qRed  (pixel);
@@ -106,9 +106,9 @@ void ImageData::fillPixelData(const DImg &im)
 
     uchar* ptr = image.bits();
     int cn = 0;
-    for (int h = 0; h < Haar::NumberOfPixels; h++)
+    for (int h = 0; h < Haar::NumberOfPixels; ++h)
     {
-        for (int w = 0; w < Haar::NumberOfPixels; w++)
+        for (int w = 0; w < Haar::NumberOfPixels; ++w)
         {
             data1[cn] = ptr[2];
             data2[cn] = ptr[1];
@@ -143,9 +143,9 @@ WeightBin::WeightBin()
     memset(m_bin, 5, NumberOfPixelsSquared);
 
     // Except for the 5 by 5 upper-left quadrant
-    for (i = 0; i < 5; i++)
+    for (i = 0; i < 5; ++i)
     {
-        for (j = 0; j < 5; j++)
+        for (j = 0; j < 5; ++j)
         {
             m_bin[i*128+j] = qMax(i, j);
             // NOTE: imgBin[0] == 0
@@ -174,7 +174,7 @@ void Calculator::haar2D(Unit a[])
 
     // scale by 1/sqrt(128) = 0.08838834764831843:
     /*
-    for (i = 0; i < NUM_PIXELS_SQUARED; i++)
+    for (i = 0; i < NUM_PIXELS_SQUARED; ++i)
         a[i] *= 0.08838834764831843;
     */
 
@@ -205,12 +205,12 @@ void Calculator::haar2D(Unit a[])
 
     // scale by 1/sqrt(128) = 0.08838834764831843:
     /*
-    for (i = 0; i < NUM_PIXELS_SQUARED; i++)
+    for (i = 0; i < NUM_PIXELS_SQUARED; ++i)
         a[i] *= 0.08838834764831843;
     */
 
     // Decompose columns:
-    for (i = 0; i < NumberOfPixels; i++)
+    for (i = 0; i < NumberOfPixels; ++i)
     {
         Unit C=1;
         int  h, h1;
@@ -253,7 +253,7 @@ void Calculator::transform(ImageData *data)
     Unit* b = data->data2;
     Unit* c = data->data3;
 
-    for (int i = 0; i < NumberOfPixelsSquared; i++)
+    for (int i = 0; i < NumberOfPixelsSquared; ++i)
     {
         Unit Y, I, Q;
 
@@ -288,7 +288,7 @@ void Calculator::getmLargests(Unit *cdata, Idx *sig)
     // Could skip i=0: goes into separate avgl
 
     // Fill up the bounded queue. (Assuming NUM_PIXELS_SQUARED > NUM_COEFS)
-    for (i = 1; i < NumberOfCoefficients+1; i++)
+    for (i = 1; i < NumberOfCoefficients+1; ++i)
     {
         val.i = i;
         val.d = fabs(cdata[i]);
@@ -296,7 +296,7 @@ void Calculator::getmLargests(Unit *cdata, Idx *sig)
     }
     // Queue is full (size is NUM_COEFS)
 
-    for (/*i = NUM_COEFS+1*/; i < NumberOfPixelsSquared; i++)
+    for (/*i = NUM_COEFS+1*/; i < NumberOfPixelsSquared; ++i)
     {
         val.d = fabs(cdata[i]);
 

@@ -312,7 +312,7 @@ void SetupCollectionTreeView::setModel(SetupCollectionModel *collectionModel)
 void SetupCollectionTreeView::modelLoadedCollections()
 {
     // make category entries span the whole line
-    for (int i=0;i<model()->rowCount(QModelIndex());i++)
+    for (int i=0;i<model()->rowCount(QModelIndex());++i)
         setFirstColumnSpanned(i, QModelIndex(), true);
 
     // show all entries
@@ -396,7 +396,7 @@ void SetupCollectionModel::loadCollections()
 void SetupCollectionModel::apply()
 {
     QList<int> newItems, deletedItems, renamedItems;
-    for (int i=0; i<m_collections.count(); i++)
+    for (int i=0; i<m_collections.count(); ++i)
     {
         const Item &item = m_collections[i];
         if (item.deleted && !item.location.isNull())
@@ -838,7 +838,7 @@ QModelIndex SetupCollectionModel::index(int row, int column, const QModelIndex &
         // The model indices contain as internal id the index to this list.
         int parentId = parent.row();
         int rowCount = 0;
-        for (int i=0; i<m_collections.count(); i++)
+        for (int i=0; i<m_collections.count(); ++i)
         {
             const Item &item = m_collections[i];
             if (!item.deleted && item.parentId == parentId)
@@ -872,7 +872,7 @@ QModelIndex SetupCollectionModel::indexForCategory(Category category) const
 QList<QModelIndex> SetupCollectionModel::categoryIndexes() const
 {
     QList<QModelIndex> list;
-    for (int cat=0; cat<NumberOfCategories; cat++)
+    for (int cat=0; cat<NumberOfCategories; ++cat)
         list << index(cat, 0, QModelIndex());
     return list;
 }
@@ -881,7 +881,7 @@ QModelIndex SetupCollectionModel::indexForId(int id, int column) const
 {
     int row = 0;
     const Item &indexItem = m_collections[id];
-    for (int i=0; i<m_collections.count(); i++)
+    for (int i=0; i<m_collections.count(); ++i)
     {
         const Item &item = m_collections[i];
         if (!item.deleted && item.parentId == indexItem.parentId)

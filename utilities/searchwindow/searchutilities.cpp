@@ -610,7 +610,7 @@ void CustomStepsDoubleSpinBox::stepBy(int steps)
         if (steps > 0)
         {
             // find the next value in m_values after current value
-            for (nextStep=0; nextStep<m_values.count(); nextStep++)
+            for (nextStep=0; nextStep<m_values.count(); ++nextStep)
             {
                 if (v <= m_values[nextStep])
                 {
@@ -741,7 +741,7 @@ void CustomStepsIntSpinBox::stepBy(int steps)
         if (steps > 0)
         {
             // find the next value in m_values after current value
-            for (nextStep=0; nextStep<m_values.count(); nextStep++)
+            for (nextStep=0; nextStep<m_values.count(); ++nextStep)
             {
                 if (v <= m_values[nextStep])
                 {

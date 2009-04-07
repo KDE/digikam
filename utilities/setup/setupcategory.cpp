@@ -187,7 +187,7 @@ void SetupCategory::slotAddCategory()
     if (newCategory.isEmpty()) return;
 
     bool found = false;
-    for (int i = 0 ; i < d->albumCategoryBox->count(); i++)
+    for (int i = 0 ; i < d->albumCategoryBox->count(); ++i)
     {
         QListWidgetItem *item = d->albumCategoryBox->item(i);
         if (newCategory == item->text())
@@ -212,7 +212,7 @@ void SetupCategory::applySettings()
 
     QStringList categoryList;
 
-    for (int i = 0 ; i < d->albumCategoryBox->count(); i++)
+    for (int i = 0 ; i < d->albumCategoryBox->count(); ++i)
     {
         QListWidgetItem *item = d->albumCategoryBox->item(i);
         categoryList.append(item->text());

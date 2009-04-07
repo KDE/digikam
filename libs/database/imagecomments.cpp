@@ -209,7 +209,7 @@ void ImageComments::addComment(const QString &comment, const QString &lang, cons
     if (language.isNull())
         language = "x-default";
 
-    for (int i=0; i<d->infos.size(); i++)
+    for (int i=0; i<d->infos.size(); ++i)
     {
         CommentInfo &info = d->infos[i];
 

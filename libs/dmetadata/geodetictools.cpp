@@ -548,7 +548,7 @@ public Shape getGeodeticCurve(const int numberOfPoints) {
     final GeneralPath     path = new GeneralPath(GeneralPath.WIND_EVEN_ODD, numberOfPoints+1);
     path.moveTo((float)toDegrees(long1),
                 (float)toDegrees(lat1));
-    for (int i=1; i<numberOfPoints; i++) {
+    for (int i=1; i<numberOfPoints; ++i) {
         this->distance = i*deltaDistance;
         computeDestinationPoint();
         path.lineTo((float)toDegrees(this->long2),
@@ -718,7 +718,7 @@ double Ellipsoid::orthodromicDistance(double x1, double y1, double x2, double y2
     double faz = baz*tu1;
     double x   = x2-x1;
 
-    for (int i=0; i<MAX_ITERATIONS; i++)
+    for (int i=0; i<MAX_ITERATIONS; ++i)
     {
         const double sx = sin(x);
         const double cx = cos(x);

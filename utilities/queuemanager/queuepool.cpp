@@ -74,7 +74,7 @@ QueueListView* QueuePool::findQueueById(int index) const
 QMap<int, QString> QueuePool::queuesMap() const
 {
     QMap<int, QString> map;
-    for (int i = 0; i < count(); i++)
+    for (int i = 0; i < count(); ++i)
         map.insert(i, tabText(i));
     return map;
 }
@@ -98,7 +98,7 @@ void QueuePool::slotAddQueue()
 QueuePoolItemsList QueuePool::totalPendingItemsList()
 {
     QueuePoolItemsList qpool;
-    for (int i = 0; i < count(); i++)
+    for (int i = 0; i < count(); ++i)
     {
         QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
         ImageInfoList list   = queue->pendingItemsList();
@@ -115,7 +115,7 @@ QueuePoolItemsList QueuePool::totalPendingItemsList()
 int QueuePool::totalPendingItems()
 {
     int items = 0;
-    for (int i = 0; i < count(); i++)
+    for (int i = 0; i < count(); ++i)
     {
         QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
         items                += queue->pendingItemsCount();
@@ -126,7 +126,7 @@ int QueuePool::totalPendingItems()
 int QueuePool::totalPendingTasks()
 {
     int tasks = 0;
-    for (int i = 0; i < count(); i++)
+    for (int i = 0; i < count(); ++i)
     {
         QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
         tasks                += queue->pendingTasksCount();
@@ -238,7 +238,7 @@ void QueuePool::slotSettingsChanged(const QueueSettings& settings)
 
 void QueuePool::setEnableToolTips(bool b)
 {
-    for (int i = 0; i < count(); i++)
+    for (int i = 0; i < count(); ++i)
     {
         QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
         if (queue) queue->setEnableToolTips(b);
@@ -248,7 +248,7 @@ void QueuePool::setEnableToolTips(bool b)
 bool QueuePool::customRenamingRulesAreValid()
 {
     QStringList list;
-    for (int i = 0; i < count(); i++)
+    for (int i = 0; i < count(); ++i)
     {
         QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
         if (queue)
@@ -274,7 +274,7 @@ bool QueuePool::customRenamingRulesAreValid()
 bool QueuePool::assignedBatchToolsListsAreValid()
 {
     QStringList list;
-    for (int i = 0; i < count(); i++)
+    for (int i = 0; i < count(); ++i)
     {
         QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
         if (queue)

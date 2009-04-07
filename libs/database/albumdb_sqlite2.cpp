@@ -127,7 +127,7 @@ bool AlbumDB_Sqlite2::execSql(const QString& sql, QStringList* const values,
             break;
 
         // Iterate over columns
-        for ( int i = 0; values && i < number; i++ )
+        for ( int i = 0; values && i < number; ++i )
         {
             *values << QString::fromLocal8Bit( value [i] );
         }

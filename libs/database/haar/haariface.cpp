@@ -99,12 +99,12 @@ public:
         stream.setVersion(QDataStream::Qt_4_3);
 
         // read averages
-        for (int i=0; i<3; i++)
+        for (int i=0; i<3; ++i)
             stream >> data->avg[i];
 
         // read coefficients
-        for (int i=0; i<3; i++)
-            for (int j=0; j<Haar::NumberOfCoefficients; j++)
+        for (int i=0; i<3; ++i)
+            for (int j=0; j<Haar::NumberOfCoefficients; ++j)
                 stream >> data->sig[i][j];
     }
 
@@ -119,12 +119,12 @@ public:
         stream << (qint32)Version;
 
         // write averages
-        for (int i=0; i<3; i++)
+        for (int i=0; i<3; ++i)
             stream << data->avg[i];
 
         // write coefficients
-        for (int i=0; i<3; i++)
-            for (int j=0; j<Haar::NumberOfCoefficients; j++)
+        for (int i=0; i<3; ++i)
+            for (int j=0; j<Haar::NumberOfCoefficients; ++j)
                 stream << data->sig[i][j];
 
         return array;
@@ -578,7 +578,7 @@ void HaarIface::getBestAndWorstPossibleScore(Haar::SignatureData *sig, SketchTyp
 
     // In the first step, the score is initialized with the weighted color channel averages.
     // We don't know the target channel average here, we only now its not negative => assume 0
-    for (int channel=0; channel<3; channel++)
+    for (int channel=0; channel<3; ++channel)
     {
         score += weights.weightForAverage(channel) * fabs( sig->avg[channel] /*- targetSig.avg[channel]*/ );
     }
@@ -590,10 +590,10 @@ void HaarIface::getBestAndWorstPossibleScore(Haar::SignatureData *sig, SketchTyp
     // In the second step, for every coefficient in the sig that have query and target in common,
     // so in our case all 3*40, subtract the specifically assigned weighting.
     score = 0;
-    for (int channel=0; channel<3; channel++)
+    for (int channel=0; channel<3; ++channel)
     {
         Haar::Idx *coefs = sig->sig[channel];
-        for (int coef = 0; coef < Haar::NumberOfCoefficients; coef++)
+        for (int coef = 0; coef < Haar::NumberOfCoefficients; ++coef)
         {
             score -= weights.weight(d->bin->binAbs(coefs[coef]), channel);
         }

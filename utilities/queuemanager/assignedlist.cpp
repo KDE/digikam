@@ -456,7 +456,7 @@ void AssignedListView::dropEvent(QDropEvent *e)
             QDataStream ds(ba);
             ds >> count;
 
-            for (int i = 0 ; i < count ; i++)
+            for (int i = 0 ; i < count ; ++i)
             {
                 int               group;
                 QString           name;

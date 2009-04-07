@@ -397,7 +397,7 @@ public:
             bool searchForNull = values.removeAll(-1);
             sql += "( ";
             bool first = true;
-            for (int i=0; i<values.size(); i++)
+            for (int i=0; i<values.size(); ++i)
             {
                 if (!first)
                     sql += "OR ";
@@ -1111,7 +1111,7 @@ QString ImageQueryBuilder::convertFromUrlToXml(const KUrl& url) const
 
     QMap<int, RuleTypeForConversion> rulesMap;
 
-    for (int i=1; i<=count; i++)
+    for (int i=1; i<=count; ++i)
     {
         RuleTypeForConversion rule;
 
@@ -1279,7 +1279,7 @@ QString ImageQueryBuilder::buildQueryFromUrl(const KUrl& url, QList<QVariant> *b
 
     QMap<int, RuleType> rulesMap;
 
-    for (int i=1; i<=count; i++)
+    for (int i=1; i<=count; ++i)
     {
         RuleType rule;
 
@@ -1633,7 +1633,7 @@ QString ImageQueryBuilder::possibleDate(const QString& str, bool& exact) const
     else
     {
         // hmm... not a year. is it a particular month?
-        for (int i=1; i<=12; i++)
+        for (int i=1; i<=12; ++i)
         {
             if (str.toLower() == m_shortMonths[i-1] ||
                 str.toLower() == m_longMonths[i-1])

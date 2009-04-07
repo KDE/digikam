@@ -349,7 +349,7 @@ void CameraSelection::setCamera(const QString& title, const QString& model,
         {
             d->serialButton->setChecked(true);
 
-            for (int i=0 ; i < d->portPathComboBox->count() ; i++)
+            for (int i=0 ; i < d->portPathComboBox->count() ; ++i)
             {
                 if (port == d->portPathComboBox->itemText(i))
                 {
@@ -371,7 +371,7 @@ void CameraSelection::getCameraList()
 
     GPCamera::getSupportedCameras(count, clist);
 
-    for (int i = 0 ; i < count ; i++)
+    for (int i = 0 ; i < count ; ++i)
     {
         cname = clist[i];
         if (cname == d->UMSCameraNameActual)
@@ -389,7 +389,7 @@ void CameraSelection::getSerialPortList()
 
     d->serialPortList.clear();
 
-    for (int i = 0; i < plist.count() ; i++)
+    for (int i = 0; i < plist.count() ; ++i)
     {
         if ((plist[i]).startsWith("serial:"))
             d->serialPortList.append(plist[i]);

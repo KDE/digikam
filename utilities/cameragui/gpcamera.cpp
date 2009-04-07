@@ -319,7 +319,7 @@ bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
         return false;
     }
 
-    for (int i = 0 ; i < nrofsinfos ; i++)
+    for (int i = 0 ; i < nrofsinfos ; ++i)
     {
         if (sinfos[i].fields & GP_STORAGEINFO_FILESYSTEMTYPE)
         {
@@ -617,7 +617,7 @@ bool GPCamera::getSubFolders(const QString& folder, QStringList& subFolderList)
     d->status = 0;
 
     int count = gp_list_count(clist);
-    for (int i = 0 ; i < count ; i++)
+    for (int i = 0 ; i < count ; ++i)
     {
         const char* subFolder;
         errorCode = gp_list_get_name(clist, i, &subFolder);
@@ -669,7 +669,7 @@ bool GPCamera::getItemsList(const QString& folder, QStringList& itemsList)
     }
 
     int count = gp_list_count(clist);
-    for (int i = 0 ; i < count ; i++)
+    for (int i = 0 ; i < count ; ++i)
     {
         errorCode = gp_list_get_name(clist, i, &cname);
         if (errorCode != GP_OK)
@@ -726,7 +726,7 @@ bool GPCamera::getItemsInfoList(const QString& folder, GPItemInfoList& items, bo
     }
 
     int count = gp_list_count(clist);
-    for (int i = 0 ; i < count ; i++)
+    for (int i = 0 ; i < count ; ++i)
     {
         errorCode = gp_list_get_name(clist, i, &cname);
         if (errorCode != GP_OK)
@@ -1089,7 +1089,7 @@ bool GPCamera::deleteAllItems(const QString& folder)
 
     if (folderList.count() > 0)
     {
-        for (int i = 0 ; i < folderList.count() ; i++)
+        for (int i = 0 ; i < folderList.count() ; ++i)
         {
             QString subFolder(folder);
 
@@ -1428,7 +1428,7 @@ void GPCamera::getSupportedCameras(int& count, QStringList& clist)
     }
     else
     {
-        for (int i = 0 ; i < count ; i++)
+        for (int i = 0 ; i < count ; ++i)
         {
             gp_abilities_list_get_abilities( abilList, i, &abil );
             const char *cname = abil.model;
@@ -1465,7 +1465,7 @@ void GPCamera::getSupportedPorts(QStringList& plist)
     }
     else
     {
-        for (int i = 0 ; i < numPorts ; i++)
+        for (int i = 0 ; i < numPorts ; ++i)
         {
             gp_port_info_list_get_info( list, i, &info );
             plist.append( info.path );
@@ -1544,7 +1544,7 @@ int GPCamera::autoDetect(QString& model, QString& port)
     camModel_ = 0;
     camPort_  = 0;
 
-    for (int i = 0; i < count; i++)
+    for (int i = 0; i < count; ++i)
     {
         if (gp_list_get_name(camList, i, &camModel_) != GP_OK)
         {
@@ -1596,7 +1596,7 @@ bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& mode
     gp_port_info_list_load( list );
 
     int numPorts = gp_port_info_list_count( list );
-    for (int i = 0 ; i < numPorts ; i++)
+    for (int i = 0 ; i < numPorts ; ++i)
     {
         // create a port object from info
         gp_port_info_list_get_info( list, i, &info );

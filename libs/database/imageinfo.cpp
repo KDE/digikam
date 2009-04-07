@@ -543,7 +543,7 @@ void ImageInfo::addTagPaths(const QStringList &tagPaths)
 {
     DatabaseAccess access;
     QList<int> list = access.db()->getTagsFromTagPaths(tagPaths, false);
-    for (int i=0; i<list.count(); i++)
+    for (int i=0; i<list.count(); ++i)
         access.db()->addItemTag(m_data->id, list[i]);
 }
 

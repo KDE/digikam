@@ -225,9 +225,9 @@ void GreycstorationIface::filterImage()
     {
         uchar *ptr = imageData;
 
-        for (y = 0; y < imageHeight; y++)
+        for (y = 0; y < imageHeight; ++y)
         {
-            for (x = 0; x < imageWidth; x++)
+            for (x = 0; x < imageWidth; ++x)
             {
                 d->img(x, y, 0) = ptr[0];        // Blue.
                 d->img(x, y, 1) = ptr[1];        // Green.
@@ -241,9 +241,9 @@ void GreycstorationIface::filterImage()
     {
         unsigned short *ptr = (unsigned short *)imageData;
 
-        for (y = 0; y < imageHeight; y++)
+        for (y = 0; y < imageHeight; ++y)
         {
-            for (x = 0; x < imageWidth; x++)
+            for (x = 0; x < imageWidth; ++x)
             {
                 d->img(x, y, 0) = ptr[0];        // Blue.
                 d->img(x, y, 1) = ptr[1];        // Green.
@@ -302,9 +302,9 @@ void GreycstorationIface::filterImage()
     {
         uchar *ptr = newData;
 
-        for (y = 0; y < newHeight; y++)
+        for (y = 0; y < newHeight; ++y)
         {
-            for (x = 0; x < newWidth; x++)
+            for (x = 0; x < newWidth; ++x)
             {
                 // Overwrite RGB values to destination.
                 ptr[0] = static_cast<uchar>(d->img(x, y, 0));        // Blue
@@ -319,9 +319,9 @@ void GreycstorationIface::filterImage()
     {
         unsigned short *ptr = (unsigned short *)newData;
 
-        for (y = 0; y < newHeight; y++)
+        for (y = 0; y < newHeight; ++y)
         {
-            for (x = 0; x < newWidth; x++)
+            for (x = 0; x < newWidth; ++x)
             {
                 // Overwrite RGB values to destination.
                 ptr[0] = static_cast<unsigned short>(d->img(x, y, 0));        // Blue
@@ -336,7 +336,7 @@ void GreycstorationIface::filterImage()
 
 void GreycstorationIface::restoration()
 {
-    for (uint iter = 0 ; !m_cancel && (iter < d->settings.nbIter) ; iter++)
+    for (uint iter = 0 ; !m_cancel && (iter < d->settings.nbIter) ; ++iter)
     {
         // This function will start a thread running one iteration of the GREYCstoration filter.
         // It returns immediately, so you can do what you want after (update a progress bar for
@@ -373,9 +373,9 @@ void GreycstorationIface::inpainting()
         d->mask    = CImg<uchar>(d->inPaintingMask.width(), d->inPaintingMask.height(), 1, 3);
         uchar *ptr = d->inPaintingMask.bits();
 
-        for (y = 0; y < d->inPaintingMask.height(); y++)
+        for (y = 0; y < d->inPaintingMask.height(); ++y)
         {
-            for (x = 0; x < d->inPaintingMask.width(); x++)
+            for (x = 0; x < d->inPaintingMask.width(); ++x)
             {
                 d->mask(x, y, 0) = ptr[2];        // blue.
                 d->mask(x, y, 1) = ptr[1];        // green.
@@ -391,7 +391,7 @@ void GreycstorationIface::inpainting()
         return;
     }
 
-    for (uint iter=0 ; !m_cancel && (iter < d->settings.nbIter) ; iter++)
+    for (uint iter=0 ; !m_cancel && (iter < d->settings.nbIter) ; ++iter)
     {
         // This function will start a thread running one iteration of the GREYCstoration filter.
         // It returns immediately, so you can do what you want after (update a progress bar for
@@ -435,7 +435,7 @@ void GreycstorationIface::resize()
 
     d->img.resize(w, h, 1, -100, init);
 
-    for (uint iter = 0 ; !m_cancel && (iter < d->settings.nbIter) ; iter++)
+    for (uint iter = 0 ; !m_cancel && (iter < d->settings.nbIter) ; ++iter)
     {
         // This function will start a thread running one iteration of the GREYCstoration filter.
         // It returns immediately, so you can do what you want after (update a progress bar for

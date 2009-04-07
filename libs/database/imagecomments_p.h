@@ -70,7 +70,7 @@ public:
 
         QLatin1String defaultCode("x-default");
 
-        for (int i=0; i<infos.size(); i++)
+        for (int i=0; i<infos.size(); ++i)
         {
             const CommentInfo &info = infos[i];
             if (info.type == DatabaseComment::Comment)

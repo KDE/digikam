@@ -118,7 +118,7 @@ void RawPostProcessing::rawPostProcessing()
         DImg tmp(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit());
         ImageLevels levels(m_orgImage.sixteenBit());
         int j=0;
-        for (int i = 0 ; i < 4; i++)
+        for (int i = 0 ; i < 4; ++i)
         {
             levels.setLevelLowInputValue(i, m_customRawSettings.levelsAdjust[j++]);
             levels.setLevelHighInputValue(i, m_customRawSettings.levelsAdjust[j++]);

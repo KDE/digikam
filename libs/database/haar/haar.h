@@ -148,7 +148,7 @@ public:
         // All values or false, only 2*40 are true.
         memset(indexList, 0, sizeof(MapIndexType[2 * Haar::NumberOfPixelsSquared]));
         int x;
-        for (int i=0; i<Haar::NumberOfCoefficients; i++)
+        for (int i=0; i<Haar::NumberOfCoefficients; ++i)
         {
             x = coefs[i] + Haar::NumberOfPixelsSquared;
             indexList[x] = true;

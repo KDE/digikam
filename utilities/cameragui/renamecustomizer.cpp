@@ -209,7 +209,7 @@ QString ManualRenameInput::parser(const QString& parse,
                 if( tmp[0].isLetter() )
                     tmp[0] = tmp[0].toUpper();
 
-                for( int i = 0; i < tmp.length(); i++ )
+                for( int i = 0; i < tmp.length(); ++i )
                 {
                     if( tmp[i+1].isLetter() && !tmp[i].isLetter() &&
                             tmp[i] != '\'' && tmp[i] != '?' && tmp[i] != '`' )

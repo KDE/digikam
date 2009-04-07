@@ -293,7 +293,7 @@ QList<int> DatabaseUrl::tagIds() const
 {
     QList<int> ids;
     QStringList stringIds = path().split('/', QString::SkipEmptyParts);
-    for (int i=0; i<stringIds.count(); i++)
+    for (int i=0; i<stringIds.count(); ++i)
     {
         ids << stringIds[i].toInt();
     }

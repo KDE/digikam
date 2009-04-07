@@ -291,7 +291,7 @@ DatabaseAccessUnlock::DatabaseAccessUnlock()
     // set lock count to 0
     DatabaseAccess::d->lockCount = 0;
     // unlock
-    for (int i=0; i<count; i++)
+    for (int i=0; i<count; ++i)
         DatabaseAccess::d->mutex.unlock();
     // drop lock acquired in first line. Mutex is now free.
     DatabaseAccess::d->mutex.unlock();
@@ -305,7 +305,7 @@ DatabaseAccessUnlock::DatabaseAccessUnlock(DatabaseAccess *)
     // set lock count to 0
     DatabaseAccess::d->lockCount = 0;
     // unlock
-    for (int i=0; i<count; i++)
+    for (int i=0; i<count; ++i)
         DatabaseAccess::d->mutex.unlock();
     // Mutex is now free
 }
@@ -313,7 +313,7 @@ DatabaseAccessUnlock::DatabaseAccessUnlock(DatabaseAccess *)
 DatabaseAccessUnlock::~DatabaseAccessUnlock()
 {
     // lock as often as it was locked before
-    for (int i=0; i<count; i++)
+    for (int i=0; i<count; ++i)
         DatabaseAccess::d->mutex.lock();
     // update lock count
     DatabaseAccess::d->lockCount = count;

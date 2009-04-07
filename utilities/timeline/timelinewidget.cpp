@@ -627,7 +627,7 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
     ref = d->refDateTime;
     ref.setTime(QTime(0, 0, 0, 0));
 
-    for (int i = 0 ; i < d->nbItems ; i++)
+    for (int i = 0 ; i < d->nbItems ; ++i)
     {
         val = statForDateTime(ref, &sel);
         max = (double)maxCount();
@@ -820,7 +820,7 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
     ref.setTime(QTime(0, 0, 0, 0));
     ref = prevDateTime(ref);
 
-    for (int i = 0 ; i < d->nbItems-1 ; i++)
+    for (int i = 0 ; i < d->nbItems-1 ; ++i)
     {
         val = statForDateTime(ref, &sel);
         max = (double)maxCount();
@@ -1400,25 +1400,25 @@ void TimeLineWidget::slotBackward()
     {
         case Day:
         {
-            for (int i = 0; i < 7; i++)
+            for (int i = 0; i < 7; ++i)
                 ref = prevDateTime(ref);
             break;
         }
         case Week:
         {
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; ++i)
                 ref = prevDateTime(ref);
             break;
         }
         case Month:
         {
-            for (int i = 0; i < 12; i++)
+            for (int i = 0; i < 12; ++i)
                 ref = prevDateTime(ref);
             break;
         }
         case Year:
         {
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 5; ++i)
                 ref = prevDateTime(ref);
             break;
         }
@@ -1454,25 +1454,25 @@ void TimeLineWidget::slotForward()
     {
         case Day:
         {
-            for (int i = 0; i < 7; i++)
+            for (int i = 0; i < 7; ++i)
                 ref = nextDateTime(ref);
             break;
         }
         case Week:
         {
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; ++i)
                 ref = nextDateTime(ref);
             break;
         }
         case Month:
         {
-            for (int i = 0; i < 12; i++)
+            for (int i = 0; i < 12; ++i)
                 ref = nextDateTime(ref);
             break;
         }
         case Year:
         {
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 5; ++i)
                 ref = nextDateTime(ref);
             break;
         }
@@ -1649,7 +1649,7 @@ QDateTime TimeLineWidget::dateTimeForPoint(const QPoint& pt, bool *isOnSelection
     QRect deskRect = KGlobalSettings::desktopGeometry(this);
     int items = deskRect.width() / d->barWidth;
 
-    for (int i = 0 ; i < items ; i++)
+    for (int i = 0 ; i < items ; ++i)
     {
         barRect.setTop(0);
         barRect.setLeft(d->startPos + i*d->barWidth);
@@ -1684,7 +1684,7 @@ QDateTime TimeLineWidget::dateTimeForPoint(const QPoint& pt, bool *isOnSelection
     ref.setTime(QTime(0, 0, 0, 0));
     ref = prevDateTime(ref);
 
-    for (int i = 0 ; i < items ; i++)
+    for (int i = 0 ; i < items ; ++i)
     {
         barRect.setTop(0);
         barRect.setRight(d->startPos - i*d->barWidth);

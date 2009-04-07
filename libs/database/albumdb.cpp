@@ -1062,7 +1062,7 @@ QVariantList AlbumDB::getImageMetadata(qlonglong imageID, DatabaseFields::ImageM
              fields & DatabaseFields::SubjectDistance)
            )
         {
-            for (int i=0; i<values.size(); i++)
+            for (int i=0; i<values.size(); ++i)
             {
                 if (values[i].type() == QVariant::String &&
                     (fieldNames[i] == "aperture" ||
@@ -1101,7 +1101,7 @@ QVariantList AlbumDB::getImagePosition(qlonglong imageID, DatabaseFields::ImageP
              fields & DatabaseFields::PositionAccuracy)
            )
         {
-            for (int i=0; i<values.size(); i++)
+            for (int i=0; i<values.size(); ++i)
             {
                 if (values[i].type() == QVariant::String &&
                     (fieldNames[i] == "latitudeNumber" ||
@@ -1714,7 +1714,7 @@ void AlbumDB::addBoundValuePlaceholders(QString &query, int count)
     questionMarks.reserve(count * 2);
     QString questionMark("?,");
 
-    for (int i=0; i<count; i++)
+    for (int i=0; i<count; ++i)
         questionMarks += questionMark;
     // remove last ','
     questionMarks.chop(1);

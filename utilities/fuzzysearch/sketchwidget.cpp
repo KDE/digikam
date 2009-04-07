@@ -226,7 +226,7 @@ void SketchWidget::replayEvents(int index)
 {
     d->pixmap.fill(qRgb(255, 255, 255));
 
-    for (int i = 0; i <= index; i++)
+    for (int i = 0; i <= index; ++i)
     {
         const DrawEvent &drawEvent = d->drawEventList[i];
         drawPath(drawEvent.penWidth, drawEvent.penColor, drawEvent.path);
@@ -239,7 +239,7 @@ void SketchWidget::sketchImageToXML(QXmlStreamWriter &writer)
 {
     writer.writeStartElement("SketchImage");
 
-    for (int i=0; i<=d->eventIndex; i++)
+    for (int i=0; i<=d->eventIndex; ++i)
     {
         const DrawEvent &event = d->drawEventList[i];
 
@@ -252,7 +252,7 @@ void SketchWidget::sketchImageToXML(QXmlStreamWriter &writer)
 
         // Initial position is 0,0
         QPointF pos(0,0);
-        for (int j=0; j<event.path.elementCount(); j++)
+        for (int j=0; j<event.path.elementCount(); ++j)
         {
             const QPainterPath::Element &element = event.path.elementAt(j);
             // Store begin and end point of a line, so no need to write moveTo elements to XML

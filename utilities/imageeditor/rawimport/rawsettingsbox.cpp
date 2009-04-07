@@ -449,7 +449,7 @@ void RawSettingsBox::readSettings()
 
     d->curveWidget->reset();
 
-    for (int j = 0 ; j <= 17 ; j++)
+    for (int j = 0 ; j <= 17 ; ++j)
     {
         QPoint disable(-1, -1);
         QPoint p = group.readEntry(QString("CurveAjustmentPoint%1").arg(j), disable);
@@ -508,7 +508,7 @@ void RawSettingsBox::writeSettings()
     group.writeEntry("Saturation",                 d->saturationInput->value());
     group.writeEntry("FineExposure",               d->fineExposureInput->value());
 
-    for (int j = 0 ; j <= 17 ; j++)
+    for (int j = 0 ; j <= 17 ; ++j)
     {
         QPoint p = d->curveWidget->curves()->getCurvePoint(ImageHistogram::ValueChannel, j);
         if (!d->curveWidget->curves()->isSixteenBits())
