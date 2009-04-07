@@ -227,7 +227,7 @@ void PreviewLoadingTask::execute()
         m_completed = true;
 
         // dispatch image to all listeners, including this
-        for (int i=0; i<m_listeners.count(); i++)
+        for (int i=0; i<m_listeners.count(); ++i)
         {
             m_listeners[i]->loadSaveNotifier()->imageLoaded(m_loadingDescription, img);
         }

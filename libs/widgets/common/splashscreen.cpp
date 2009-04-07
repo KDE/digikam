@@ -152,7 +152,7 @@ void SplashScreen::drawContents(QPainter* p)
     // Draw animated circles, increments are chosen
     // to get close to background's color
     // (didn't work well with QColor::light function)
-    for (int i=0; i < d->progressBarSize; i++)
+    for (int i=0; i < d->progressBarSize; ++i)
     {
         position = (d->state+i)%(2*d->progressBarSize-1);
         if (position < 3)

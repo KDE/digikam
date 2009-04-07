@@ -192,7 +192,7 @@ void SharedLoadingTask::execute()
         m_completed = true;
 
         // dispatch image to all listeners, including this
-        for (int i=0; i<m_listeners.count(); i++)
+        for (int i=0; i<m_listeners.count(); ++i)
         {
             LoadingProcessListener *l = m_listeners[i];
             if (l->accessMode() == LoadSaveThread::AccessModeReadWrite)
@@ -227,7 +227,7 @@ void SharedLoadingTask::progressInfo(const DImg *, float progress)
         LoadingCache *cache = LoadingCache::cache();
         LoadingCache::CacheLock lock(cache);
 
-        for (int i=0; i<m_listeners.size(); i++)
+        for (int i=0; i<m_listeners.size(); ++i)
         {
             LoadingProcessListener *l = m_listeners[i];
             if (l->querySendNotifyEvent())
@@ -303,7 +303,7 @@ void SharedLoadingTask::notifyNewLoadingProcess(LoadingProcess *process, Loading
         !description.isReducedVersion()
        )
     {
-        for (int i=0; i<m_listeners.size(); i++)
+        for (int i=0; i<m_listeners.size(); ++i)
         {
             m_listeners[i]->loadSaveNotifier()->moreCompleteLoadingAvailable(m_loadingDescription, description);
         }

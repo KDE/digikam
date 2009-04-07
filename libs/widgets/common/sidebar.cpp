@@ -202,7 +202,7 @@ void Sidebar::restore(const QList<QWidget*> thirdWidgetsToRestore, const QList<i
 
     if (thirdWidgetsToRestore.size() == sizes.size())
     {
-        for (int i=0; i<thirdWidgetsToRestore.size(); i++)
+        for (int i=0; i<thirdWidgetsToRestore.size(); ++i)
             d->splitter->setSize(thirdWidgetsToRestore[i], sizes[i]);
     }
 }
@@ -365,7 +365,7 @@ bool Sidebar::isExpanded()
 
 bool Sidebar::eventFilter(QObject *obj, QEvent *ev)
 {
-    for (int i = 0 ; i < d->tabs; i++)
+    for (int i = 0 ; i < d->tabs; ++i)
     {
         if ( obj == tab(i) )
         {

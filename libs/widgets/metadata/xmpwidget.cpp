@@ -82,10 +82,10 @@ static const char* StandardXmpEntryList[] =
 XmpWidget::XmpWidget(QWidget* parent, const char* name)
          : MetadataWidget(parent, name)
 {
-    for (int i=0 ; QString(StandardXmpEntryList[i]) != QString("-1") ; i++)
+    for (int i=0 ; QString(StandardXmpEntryList[i]) != QString("-1") ; ++i)
         m_keysFilter << StandardXmpEntryList[i];
 
-    for (int i=0 ; QString(XmpHumanList[i]) != QString("-1") ; i++)
+    for (int i=0 ; QString(XmpHumanList[i]) != QString("-1") ; ++i)
         m_tagsfilter << XmpHumanList[i];
 }
 

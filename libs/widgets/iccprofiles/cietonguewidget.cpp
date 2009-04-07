@@ -451,13 +451,13 @@ void CIETongueWidget::fillTongue()
 
     int x;
 
-    for (int y = 0; y < d->pxrows; y++)
+    for (int y = 0; y < d->pxrows; ++y)
     {
         int xe = 0;
 
         // Find horizontal extents of tongue on this line.
 
-        for (x = 0; x < d->pxcols; x++)
+        for (x = 0; x < d->pxcols; ++x)
         {
             if (QColor(Img.pixel(x + d->xBias, y)) != QColor(Qt::black))
             {
@@ -475,7 +475,7 @@ void CIETongueWidget::fillTongue()
 
         if (x < d->pxcols)
         {
-            for ( ; x <= xe; x++)
+            for ( ; x <= xe; ++x)
             {
                 QRgb Color = colorByCoord(x, y);
                 Img.setPixel(x + d->xBias, y, Color);
@@ -586,7 +586,7 @@ void CIETongueWidget::drawSmallElipse(LPcmsCIExyY xyY, BYTE r, BYTE g, BYTE b, i
 
 void CIETongueWidget::drawPatches()
 {
-    for (int i=0; i < d->Measurement.nPatches; i++)
+    for (int i=0; i < d->Measurement.nPatches; ++i)
     {
         LPPATCH p = d->Measurement.Patches + i;
 

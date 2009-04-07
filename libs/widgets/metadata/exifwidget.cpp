@@ -90,10 +90,10 @@ ExifWidget::ExifWidget(QWidget* parent, const char* name)
 {
     view()->setSortingEnabled(false);
 
-    for (int i=0 ; QString(StandardExifEntryList[i]) != QString("-1") ; i++)
+    for (int i=0 ; QString(StandardExifEntryList[i]) != QString("-1") ; ++i)
         m_keysFilter << StandardExifEntryList[i];
 
-    for (int i=0 ; QString(ExifHumanList[i]) != QString("-1") ; i++)
+    for (int i=0 ; QString(ExifHumanList[i]) != QString("-1") ; ++i)
         m_tagsfilter << ExifHumanList[i];
 }
 

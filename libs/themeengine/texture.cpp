@@ -211,7 +211,7 @@ void Texture::doHgradient()
     dgx /= d->width;
     dbx /= d->width;
 
-    for (x = 0; x < d->width; x++)
+    for (x = 0; x < d->width; ++x)
     {
         *(pr++) = (unsigned char) (xr);
         *(pg++) = (unsigned char) (xg);
@@ -285,7 +285,7 @@ void Texture::doDgradient()
     dgx /= w;
     dbx /= w;
 
-    for (x = 0; x < d->width; x++)
+    for (x = 0; x < d->width; ++x)
     {
         *(xt++) = (unsigned char) (xr);
         *(xt++) = (unsigned char) (xg);
@@ -301,7 +301,7 @@ void Texture::doDgradient()
     dgy /= h;
     dby /= h;
 
-    for (y = 0; y < d->height; y++)
+    for (y = 0; y < d->height; ++y)
     {
         *(yt++) = ((unsigned char) yr);
         *(yt++) = ((unsigned char) yg);
@@ -316,7 +316,7 @@ void Texture::doDgradient()
 
     for (yt = ytable, y = 0; y < d->height; y++, yt += 3)
     {
-        for (xt = xtable, x = 0; x < d->width; x++)
+        for (xt = xtable, x = 0; x < d->width; ++x)
         {
             *(pr++) = *(xt++) + *(yt);
             *(pg++) = *(xt++) + *(yt + 1);
@@ -475,7 +475,7 @@ void Texture::buildImage()
     unsigned int* bits = (unsigned int*) image.bits();
 
     register int p;
-    for (p =0; p < d->width*d->height; p++)
+    for (p =0; p < d->width*d->height; ++p)
     {
         *bits = 0xff << 24 | *pr << 16 | *pg << 8 | *pb;
         bits++;

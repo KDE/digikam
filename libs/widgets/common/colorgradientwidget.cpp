@@ -101,7 +101,7 @@ void ColorGradientWidget::paintEvent( QPaintEvent * )
 
     if ( d->orientation == Qt::Vertical )
     {
-        for ( int y = 0; y < image.height(); y++ )
+        for ( int y = 0; y < image.height(); ++y )
         {
             scale = 1.0 * y / image.height();
             col.setRgb( color1.red()   + int(redDiff   * scale),
@@ -110,7 +110,7 @@ void ColorGradientWidget::paintEvent( QPaintEvent * )
 
             unsigned int *p = (uint *) image.scanLine( y );
 
-            for ( int x = 0; x < image.width(); x++ )
+            for ( int x = 0; x < image.width(); ++x )
                 *p++ = col.rgb();
         }
     }
@@ -118,7 +118,7 @@ void ColorGradientWidget::paintEvent( QPaintEvent * )
     {
         unsigned int *p = (uint *) image.scanLine( 0 );
 
-        for ( int x = 0; x < image.width(); x++ )
+        for ( int x = 0; x < image.width(); ++x )
         {
             scale = 1.0 * x / image.width();
             col.setRgb( color1.red()   + int(redDiff   * scale),
@@ -127,7 +127,7 @@ void ColorGradientWidget::paintEvent( QPaintEvent * )
             *p++ = col.rgb();
         }
 
-        for ( int y = 1; y < image.height(); y++ )
+        for ( int y = 1; y < image.height(); ++y )
         {
             memcpy( image.scanLine( y ), image.scanLine( y - 1),
                     sizeof( unsigned int ) * image.width() );
@@ -137,7 +137,7 @@ void ColorGradientWidget::paintEvent( QPaintEvent * )
     const int psize = 256;
     QColor ditherPalette[psize];
 
-    for ( int s = 0; s < psize; s++ )
+    for ( int s = 0; s < psize; ++s )
     {
         ditherPalette[s].setRgb( color1.red()   + redDiff   * s / psize,
                                  color1.green() + greenDiff * s / psize,

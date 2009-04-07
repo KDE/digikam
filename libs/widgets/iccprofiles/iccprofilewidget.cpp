@@ -149,10 +149,10 @@ ICCProfileWidget::ICCProfileWidget(QWidget* parent, int w, int h)
                                                           i18n("The ICC profile color management flags"));
 
     // Set the list of keys and tags filters.
-    for (int i=0 ; QString(ICCEntryList[i]) != QString("-1") ; i++)
+    for (int i=0 ; QString(ICCEntryList[i]) != QString("-1") ; ++i)
         d->keysFilter << ICCEntryList[i];
 
-    for (int i=0 ; QString(ICCHumanList[i]) != QString("-1") ; i++)
+    for (int i=0 ; QString(ICCHumanList[i]) != QString("-1") ; ++i)
         d->tagsfilter << ICCHumanList[i];
 
     // Add CIE tongue graph to the widget area

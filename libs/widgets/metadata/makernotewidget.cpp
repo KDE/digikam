@@ -112,10 +112,10 @@ static const char* ExifEntryListToIgnore[] =
 MakerNoteWidget::MakerNoteWidget(QWidget* parent, const char* name)
                : MetadataWidget(parent, name)
 {
-    for (int i=0 ; QString(ExifEntryListToIgnore[i]) != QString("-1") ; i++)
+    for (int i=0 ; QString(ExifEntryListToIgnore[i]) != QString("-1") ; ++i)
         m_keysFilter << ExifEntryListToIgnore[i];
 
-    for (int i=0 ; QString(MakerNoteHumanList[i]) != QString("-1") ; i++)
+    for (int i=0 ; QString(MakerNoteHumanList[i]) != QString("-1") ; ++i)
         m_tagsfilter << MakerNoteHumanList[i];
 }
 

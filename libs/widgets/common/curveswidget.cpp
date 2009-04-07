@@ -235,7 +235,7 @@ void CurvesWidget::curveTypeChanged()
 
             //  pick representative points from the curve and make them control points
 
-            for (int i = 0; i <= 8; i++)
+            for (int i = 0; i <= 8; ++i)
             {
                 int index = CLAMP(i * m_imageHistogram->getHistogramSegments()/8,
                                   0, m_imageHistogram->getHistogramSegments()-1);
@@ -412,7 +412,7 @@ void CurvesWidget::paintEvent(QPaintEvent*)
 
     int curvePrevVal = 0;
 
-    for (x = 0 ; x < wWidth ; x++)
+    for (x = 0 ; x < wWidth ; ++x)
     {
         double value = 0.0;
         int    i, j;
@@ -498,7 +498,7 @@ void CurvesWidget::paintEvent(QPaintEvent*)
       p1.setPen(QPen(Qt::red, 3, Qt::SolidLine));
       p1.setRenderHint(QPainter::Antialiasing);
 
-      for (int p = 0 ; p < 17 ; p++)
+      for (int p = 0 ; p < 17 ; ++p)
       {
          QPoint curvePoint = d->curves->getCurvePoint(m_channelType, p);
 
@@ -627,7 +627,7 @@ void CurvesWidget::mousePressEvent(QMouseEvent *e)
 
     distance = 65536;
 
-    for (i = 0, closest_point = 0 ; i < 17 ; i++)
+    for (i = 0, closest_point = 0 ; i < 17 ; ++i)
     {
         int xcurvepoint = d->curves->getCurvePointX(m_channelType, i);
 
@@ -666,7 +666,7 @@ void CurvesWidget::mousePressEvent(QMouseEvent *e)
 
             d->rightMost = m_imageHistogram->getHistogramSegments();
 
-            for (i = closest_point + 1 ; i < 17 ; i++)
+            for (i = closest_point + 1 ; i < 17 ; ++i)
             {
                 if (d->curves->getCurvePointX(m_channelType, i) != -1)
                 {
@@ -729,7 +729,7 @@ void CurvesWidget::mouseMoveEvent(QMouseEvent *e)
 
    distance = 65536;
 
-   for (i = 0, closest_point = 0 ; i < 17 ; i++)
+   for (i = 0, closest_point = 0 ; i < 17 ; ++i)
    {
       if (d->curves->getCurvePointX(m_channelType, i) != -1)
       {
@@ -801,7 +801,7 @@ void CurvesWidget::mouseMoveEvent(QMouseEvent *e)
 
            if (x2 != x1)
            {
-              for (i = x1 ; i <= x2 ; i++)
+              for (i = x1 ; i <= x2 ; ++i)
                  d->curves->setCurveValue(m_channelType, i,
                     m_imageHistogram->getHistogramSegments()-1 - (y1 + ((y2 - y1) * (i - x1)) / (x2 - x1)));
            }

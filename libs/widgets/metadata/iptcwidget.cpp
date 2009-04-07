@@ -68,10 +68,10 @@ static const char* StandardIptcEntryList[] =
 IptcWidget::IptcWidget(QWidget* parent, const char* name)
           : MetadataWidget(parent, name)
 {
-    for (int i=0 ; QString(StandardIptcEntryList[i]) != QString("-1") ; i++)
+    for (int i=0 ; QString(StandardIptcEntryList[i]) != QString("-1") ; ++i)
         m_keysFilter << StandardIptcEntryList[i];
 
-    for (int i=0 ; QString(IptcHumanList[i]) != QString("-1") ; i++)
+    for (int i=0 ; QString(IptcHumanList[i]) != QString("-1") ; ++i)
         m_tagsfilter << IptcHumanList[i];
 }
 

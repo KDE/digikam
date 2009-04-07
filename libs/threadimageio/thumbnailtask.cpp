@@ -152,7 +152,7 @@ void ThumbnailLoadingTask::execute()
         m_completed = true;
 
         // dispatch image to all listeners, including this
-        for (int i=0; i<m_listeners.count(); i++)
+        for (int i=0; i<m_listeners.count(); ++i)
         {
             m_listeners[i]->loadSaveNotifier()->thumbnailLoaded(m_loadingDescription, qimage);
         }

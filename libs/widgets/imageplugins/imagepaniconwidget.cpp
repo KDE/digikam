@@ -124,7 +124,7 @@ void ImagePanIconWidget::paintEvent(QPaintEvent*)
     {
        QPoint pt;
 
-       for (int i = 0 ; i < d->hightlightPoints.count() ; i++)
+       for (int i = 0 ; i < d->hightlightPoints.count() ; ++i)
        {
           pt = d->hightlightPoints.point(i);
           pt.setX((int)(pt.x() * (float)(m_width)  / (float)d->iface->originalWidth()));

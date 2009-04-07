@@ -236,7 +236,7 @@ QImage ThumbnailCreator::loadPNG(const QString& path)
     }
 
     int sizeOfUint = sizeof(unsigned int);
-    for (i = 0 ; i < h ; i++)
+    for (i = 0 ; i < h ; ++i)
         lines[i] = ((unsigned char *)(qimage.bits())) + (i * w * sizeOfUint);
 
     png_read_image(png_ptr, lines);
