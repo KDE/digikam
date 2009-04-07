@@ -480,29 +480,25 @@ void FreeRotationTool::slotAutoHorizonVertiClicked()
 
 void FreeRotationTool::setAutoHorizonMode(AutoMode mode)
 {
-    double radius = 0.0;
-    radius = calculateAutoRadius();
+    double angle = 0.0;
+    angle = calculateAutoAngle();
 
-    if (mode == AutoVertical)
-    {
-//        if (flipped)
-//            radius -= 90.0;
-//        else
-//            radius += 90.0;
-    }
+//    if (mode == AutoVertical)
+//        angle = (angle + 90.0 <= 0.0) ? angle + 90.0 : angle - 90.0;
+
 
     // convert the angle to a string so we can easily split it up
-    QString angle = QString::number(radius, 'f', 2);
-    QStringList angles = angle.split('.');
+    QString angleStr       = QString::number(angle, 'f', 2);
+    QStringList anglesList = angleStr.split('.');
 
     // try to set the angle widgets with the extracted values
-    if (!angles.isEmpty() && angles.count() == 2)
+    if (!anglesList.isEmpty() && anglesList.count() == 2)
     {
         bool ok = false;
-        int mainAngle = angles[0].toInt(&ok);
+        int mainAngle = anglesList[0].toInt(&ok);
         if (!ok) mainAngle = 0;
 
-        double fineAngle = (QString("0.") + angles[1]).toDouble(&ok);
+        double fineAngle = (QString("0.") + anglesList[1]).toDouble(&ok);
         if (!ok) fineAngle = 0.0;
 
         m_angleInput->setValue(mainAngle);
@@ -529,9 +525,9 @@ QPixmap FreeRotationTool::generateBtnPixmap(const QString &label, const QColor &
     return pm;
 }
 
-double FreeRotationTool::calculateAutoRadius()
+double FreeRotationTool::calculateAutoAngle()
 {
-    return calculateRadius(m_autoHorizonPoint1, m_autoHorizonPoint2);
+    return calculateAngle(m_autoHorizonPoint1, m_autoHorizonPoint2);
 }
 
 //double FreeRotationTool::calculateRadius(const QPoint &p1, const QPoint &p2)
@@ -564,34 +560,60 @@ double FreeRotationTool::calculateAutoRadius()
 //    return radius;
 //}
 
-double FreeRotationTool::calculateRadius(const QPoint &p1, const QPoint &p2)
+double FreeRotationTool::calculateAngle(const QPoint &p1, const QPoint &p2)
 {
     // check if all points are valid
     if (!pointIsValid(p1) && !pointIsValid(p2))
         return 0.0;
 
-    double radius = 0.0;
-    bool flipped = false;
+    // check if point are not equal
+    if (p1 == p2)
+        return 0.0;
+
+    // if y() is equal, no angle needs to be calculated
+    if (p1.y() == p2.y())
+        return 0.0;
+
+    // if x() is equal, angle equals 90°
+    if (p1.y() == p2.y())
+        return 90.0;
+
+    // make sure p1 is always left to p2
+    QPoint pLeft;
+    QPoint pRight;
+    if (p1.x() < p2.x())
+    {
+        pLeft  = p1;
+        pRight = p2;
+    }
+    else
+    {
+        pLeft  = p2;
+        pRight = p1;
+    }
+
+    double angle = 0.0;
+    bool reverse = false;
 
     // check point layout
-    flipped = p2.x() < p1.x();
+    reverse = pRight.y() > pLeft.y();
 
     // calculate the angle
-    if (flipped)
+    if (reverse)
     {
-        radius = atan2((double)(p1.y() - p2.y()),
-                (double)(p1.x() - p2.x()))
+        angle = atan2((double)(pLeft.y() - pRight.y()),
+                (double)(pRight.x() - pLeft.x()))
                 * 180.0 / M_PI;
     }
     else
     {
-        radius = atan2((double)(p2.y() - p1.y()),
-                (double)(p2.x() - p1.x()))
+        angle = atan2((double)(pRight.y() - pLeft.y()),
+                (double)(pRight.x() - pLeft.x()))
                 * 180.0 / M_PI;
+        angle = -angle;
     }
-    radius = -radius;
 
-    return radius;
+    return angle;
 }
 
 void FreeRotationTool::setPointInvalid(QPoint &p)
