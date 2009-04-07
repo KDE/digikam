@@ -433,7 +433,7 @@ void NoiseReduction::box_filter(double *src, double *end, double *dest, double r
     int    bh   = boxwidth / 2;
     int    bh1  = boxwidth / 2+1;
 
-    for ( ; src <= end ; src++, dest++)
+    for ( ; src <= end ; ++src, ++dest)
     {
         *dest = (box + frac * ((src[bh1])+(src[-bh1]))) / fbw;
         box   = box - (src[-bh]) + (src[bh1]);
@@ -646,7 +646,7 @@ void NoiseReduction::filter(float *buffer, float *data, float *data2, float *rbu
     {
         // boost high frequency in rbuf
 
-        for (p1 = blp, p2 = rbuflp ; p1 <= brp ; p1++, p2++)
+        for (p1 = blp, p2 = rbuflp ; p1 <= brp ; ++p1, ++p2)
         {
             *p2 = (sharp+1.0) * p1[0] - sharp * 0.5 * (p1[-ofs]+p1[ofs]);
         }
@@ -663,7 +663,7 @@ void NoiseReduction::filter(float *buffer, float *data, float *data2, float *rbu
 
         // boost high frequency in rbuf
 
-        for (p1 = blp, p2 = rbuflp ; p1 <= brp ; p1++, p2++)
+        for (p1 = blp, p2 = rbuflp ; p1 <= brp ; ++p1, ++p2)
         {
             *p2 = ((sharp+1.0) * (p1[0]) - sharp * 0.5 * ((p1[-ofs2])+(p1[ofs2])));
         }
@@ -748,7 +748,7 @@ void NoiseReduction::filter(float *buffer, float *data, float *data2, float *rbu
 
         // forward pass
 
-        for (rbuf = rbuflp-(int) m_phase ; rbuf <= rbufrp; src++, dest++, rbuf++)
+        for (rbuf = rbuflp-(int) m_phase ; rbuf <= rbufrp; ++src, ++dest, ++rbuf)
         {
             // NOTE: commented from original implementation
             //fbw = fabs( rbuf[-ofs2]*ll2+rbuf[-ofs2-1]*rl2);

@@ -133,7 +133,7 @@ void Shear::filterImage(void)
 
     for( y = 0; y < new_height; ++y)
     {
-        for( x = 0; x < new_width; x++, p += 4 )
+        for( x = 0; x < new_width; ++x, p += 4 )
         {
             // get new positions
             nx = x + dx + y * horz_factor;

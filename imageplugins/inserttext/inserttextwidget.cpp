@@ -500,7 +500,7 @@ QRect InsertTextWidget::composeImage(Digikam::DImg *image, QPainter *destPainter
         nptr = textNotDrawn.bits();
         int bytesDepth = textDrawn.bytesDepth();
         int numPixels = textDrawn.width() * textDrawn.height();
-        for (int i = 0; i < numPixels; i++, ptr+= bytesDepth, nptr += bytesDepth)
+        for (int i = 0; i < numPixels; ++i, ptr+= bytesDepth, nptr += bytesDepth)
         {
             color.setColor(ptr, false);
             ncolor.setColor(nptr, false);

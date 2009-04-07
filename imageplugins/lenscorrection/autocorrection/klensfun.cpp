@@ -608,7 +608,7 @@ void KLensFunFilter::filterImage()
             if (m_lfModifier->ApplyGeometryDistortion(0.0, y, tempImage.width(), 1, pos))
             {
                 float *src = pos;
-                for (unsigned long x = 0; !m_cancel && (x < tempImage.width()); x++, loop++)
+                for (unsigned long x = 0; !m_cancel && (x < tempImage.width()); ++x, ++loop)
                 {
                     //qDebug (" ZZ %f %f %i %i", src[0], src[1], (int)src[0], (int)src[1]);
 
