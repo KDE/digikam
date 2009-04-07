@@ -175,12 +175,12 @@ bool DImgSharpen::convolveImage(const unsigned int order, const double *kernel)
             red = green = blue = alpha = 0;
             sy  = y-(kernelWidth/2);
 
-            for(mcy=0 ; !m_cancel && (mcy < kernelWidth) ; mcy++, sy++)
+            for(mcy=0 ; !m_cancel && (mcy < kernelWidth) ; ++mcy, ++sy)
             {
                 my = sy < 0 ? 0 : sy > (int)m_destImage.height()-1 ? m_destImage.height()-1 : sy;
                 sx = x+(-kernelWidth/2);
 
-                for(mcx=0 ; !m_cancel && (mcx < kernelWidth) ; mcx++, sx++)
+                for(mcx=0 ; !m_cancel && (mcx < kernelWidth) ; ++mcx, ++sx)
                 {
                     mx     = sx < 0 ? 0 : sx > (int)m_destImage.width()-1 ? m_destImage.width()-1 : sx;
                     color  = m_orgImage.getPixelColor(mx, my);

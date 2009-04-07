@@ -138,7 +138,7 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
 
     for (h = 0; !m_cancel && (h < height); ++h)
     {
-        for (w = 0; !m_cancel && (w < width); w++, i+=4)
+        for (w = 0; !m_cancel && (w < width); ++w, i+=4)
         {
             if (!sixteenBit)        // 8 bits image.
             {
@@ -229,9 +229,9 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
     i = j = 0;
 
     // We enter in the second main loop
-    for (w = 0; !m_cancel && (w < width); w++, i = w*4)
+    for (w = 0; !m_cancel && (w < width); ++w, i = w*4)
     {
-        for (h = 0; !m_cancel && (h < height); h++, i += width*4)
+        for (h = 0; !m_cancel && (h < height); ++h, i += width*4)
         {
             if (!sixteenBit)        // 8 bits image.
             {

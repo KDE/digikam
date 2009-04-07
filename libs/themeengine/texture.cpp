@@ -222,7 +222,7 @@ void Texture::doHgradient()
         xb += dbx;
     }
 
-    for (y = 1; y < d->height; y++, pr += d->width, pg += d->width, pb += d->width)
+    for (y = 1; y < d->height; ++y, pr += d->width, pg += d->width, pb += d->width)
     {
         memcpy(pr, d->red, d->width);
         memcpy(pg, d->green, d->width);
@@ -248,7 +248,7 @@ void Texture::doVgradient()
     unsigned char *pr = d->red, *pg = d->green, *pb = d->blue;
     register int y;
 
-    for (y = 0; y < d->height; y++, pr += d->width, pg += d->width, pb += d->width)
+    for (y = 0; y < d->height; ++y, pr += d->width, pg += d->width, pb += d->width)
     {
         memset(pr, (unsigned char) yr, d->width);
         memset(pg, (unsigned char) yg, d->width);
@@ -314,7 +314,7 @@ void Texture::doDgradient()
 
     // Combine tables to create gradient
 
-    for (yt = ytable, y = 0; y < d->height; y++, yt += 3)
+    for (yt = ytable, y = 0; y < d->height; ++y, yt += 3)
     {
         for (xt = xtable, x = 0; x < d->width; ++x)
         {
