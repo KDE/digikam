@@ -110,11 +110,11 @@ void FreeRotation::filterImage(void)
 
     // main loop
 
-    for (h = 0; !m_cancel && (h < nNewHeight); h++)
+    for (h = 0; !m_cancel && (h < nNewHeight); ++h)
     {
         nh = h - nhdy;
 
-        for (w = 0; !m_cancel && (w < nNewWidth); w++)
+        for (w = 0; !m_cancel && (w < nNewWidth); ++w)
         {
             nw = w - nhdx;
 
