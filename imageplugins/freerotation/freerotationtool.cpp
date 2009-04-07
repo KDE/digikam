@@ -436,10 +436,12 @@ void FreeRotationTool::updatePoints()
     tmp = generatePointLabel(m_autoHorizonPoint2);
     m_autoHoriPoint2Label->setText(tmp);
 
-    // set points in preview widget
-    QPolygon points(2);
-    points.setPoint(0, m_autoHorizonPoint1);
-    points.setPoint(1, m_autoHorizonPoint2);
+    // set points in preview widget, don't add invalid points
+    QPolygon points;
+    if (pointIsValid(m_autoHorizonPoint1))
+        points << m_autoHorizonPoint1;
+    if (pointIsValid(m_autoHorizonPoint2))
+        points << m_autoHorizonPoint2;
     m_previewWidget->setPoints(points);
 
     // enable / disable adjustment buttons

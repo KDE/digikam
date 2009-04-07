@@ -453,7 +453,7 @@ void ImageGuideWidget::updatePixmap()
 
     }
 
-    // add points (invalid points with a value of -1 are not displayed)
+    // add points
     if (d->selectedPoints.count() > 0)
     {
         QPoint point;
@@ -467,8 +467,6 @@ void ImageGuideWidget::updatePixmap()
             color = (i % 2 == 0) ? QColor(Qt::red) : QColor(Qt::green);
 
             point = d->selectedPoints.point(i);
-            if (point.x() == -1 || point.y() == -1)
-                continue;
             x = (int)(point.x() * (float)(d->width)  / (float) d->iface->originalWidth());
             y = (int)(point.y() * (float)(d->height) / (float) d->iface->originalHeight());
             x += d->rect.x();
