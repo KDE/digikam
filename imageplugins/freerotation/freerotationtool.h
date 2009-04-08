@@ -31,6 +31,7 @@
 #include "editortool.h"
 
 class QCheckBox;
+class QGroupBox;
 class QLabel;
 class QPixmap;
 class QPoint;
@@ -58,14 +59,6 @@ class FreeRotationTool : public Digikam::EditorToolThreaded
 
 public:
 
-    enum AutoMode
-    {
-        AutoHorizontal = 0,
-        AutoVertical
-    };
-
-public:
-
     FreeRotationTool(QObject *parent);
     ~FreeRotationTool();
 
@@ -73,12 +66,11 @@ private Q_SLOTS:
 
     void slotResetSettings();
     void slotColorGuideChanged();
-
     void slotManualAdjustToggled(bool);
-    void slotAutoHorizonP1Clicked();
-    void slotAutoHorizonP2Clicked();
-    void slotAutoHorizonHoriClicked();
-    void slotAutoHorizonVertiClicked();
+
+    void slotAutoAdjustP1Clicked();
+    void slotAutoAdjustP2Clicked();
+    void slotAutoAdjustClicked();
 
 private:
 
@@ -92,7 +84,6 @@ private:
 
     double  calculateAngle(const QPoint &p1, const QPoint &p2, bool *reverse = 0);
     double  calculateAutoAngle(bool *reverse = 0);
-    void    setAutoHorizonMode(AutoMode);
     QPixmap generateBtnPixmap(const QString &label, const QColor &color);
 
     bool    pointIsValid(const QPoint &p);
@@ -105,19 +96,18 @@ private:
 
     QLabel                       *m_newWidthLabel;
     QLabel                       *m_newHeightLabel;
-    QLabel                       *m_autoAdjustPoint1Label;
-    QLabel                       *m_autoAdjustPoint2Label;
 
     QCheckBox                    *m_antialiasInput;
     QCheckBox                    *m_manualAdjustInput;
 
-    QPushButton                  *m_horizontalAdjustBtn;
-    QPushButton                  *m_verticalAdjustBtn;
+    QPushButton                  *m_autoAdjustBtn;
+    QPushButton                  *m_autoAdjustPoint1Btn;
+    QPushButton                  *m_autoAdjustPoint2Btn;
 
     QPoint                        m_autoAdjustPoint1;
     QPoint                        m_autoAdjustPoint2;
 
-    QWidget                      *m_autoAdjustContainer;
+    QGroupBox                    *m_autoAdjustContainer;
     QWidget                      *m_manualAdjustContainer;
 
     KDcrawIface::RComboBox       *m_autoCropCB;

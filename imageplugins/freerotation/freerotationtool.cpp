@@ -35,12 +35,12 @@
 
 #include <QCheckBox>
 #include <QGridLayout>
+#include <QGroupBox>
 #include <QImage>
 #include <QLabel>
 #include <QLayout>
 #include <QPainter>
 #include <QPushButton>
-#include <QToolButton>
 
 // KDE includes
 
@@ -145,29 +145,34 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    m_manualAdjustInput      = new QCheckBox(i18n("Manual Adjustment"));
-    QLabel *label6           = new QLabel(i18n("Points:"));
+    QString btnWhatsThis = i18n("Select some point in the preview widget, "
+                                "then click this button to set it.");
+
     QPixmap pm1 = generateBtnPixmap(QString("1"), Qt::black);
-    QToolButton *btnPoint1   = new QToolButton;
-    btnPoint1->setIcon(pm1);
+    m_autoAdjustPoint1Btn = new QPushButton;
+    m_autoAdjustPoint1Btn->setIcon(pm1);
+    m_autoAdjustPoint1Btn->setText(i18n("not set"));
+    m_autoAdjustPoint1Btn->setSizePolicy(QSizePolicy::MinimumExpanding,
+                                         QSizePolicy::MinimumExpanding);
 
     QPixmap pm2 = generateBtnPixmap(QString("2"), Qt::black);
-    QToolButton *btnPoint2   = new QToolButton;
-    btnPoint2->setIcon(pm2);
+    m_autoAdjustPoint2Btn = new QPushButton;
+    m_autoAdjustPoint2Btn->setIcon(pm2);
+    m_autoAdjustPoint2Btn->setText(i18n("not set"));
+    m_autoAdjustPoint2Btn->setSizePolicy(QSizePolicy::MinimumExpanding,
+                                         QSizePolicy::MinimumExpanding);
 
-    QLabel *label7           = new QLabel(i18n("Adjustment:"));
-    m_horizontalAdjustBtn    = new QPushButton(i18nc("Horizontal Adjustment", "Horizontal"));
-    m_verticalAdjustBtn      = new QPushButton(i18nc("Vertical Adjustment", "Vertical"));
-    m_autoAdjustPoint1Label  = new QLabel(i18n("not set"));
-    m_autoAdjustPoint2Label  = new QLabel(i18n("not set"));
+    m_autoAdjustPoint1Btn->setToolTip(btnWhatsThis);
+    m_autoAdjustPoint1Btn->setWhatsThis(btnWhatsThis);
+    m_autoAdjustPoint2Btn->setToolTip(btnWhatsThis);
+    m_autoAdjustPoint2Btn->setWhatsThis(btnWhatsThis);
 
-    QString btnWhatsThis     = i18n("Select some point in the preview widget, "
-                                    "then click this button to set it.");
-    btnPoint1->setToolTip(btnWhatsThis);
-    btnPoint1->setWhatsThis(btnWhatsThis);
-    btnPoint2->setToolTip(btnWhatsThis);
-    btnPoint2->setWhatsThis(btnWhatsThis);
+    m_autoAdjustBtn = new QPushButton(i18nc("Automatic Adjustment", "Adjust"));
+    m_autoAdjustBtn->setMinimumHeight(50);
 
+    // -------------------------------------------------------------
+
+    m_manualAdjustInput          = new QCheckBox(i18n("Manual Adjustment"));
     m_manualAdjustContainer      = new QWidget;
     QGridLayout *containerLayout = new QGridLayout;
     containerLayout->addWidget(label3,              0, 0, 1, 3);
@@ -176,17 +181,15 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     containerLayout->addWidget(m_fineAngleInput,    3, 0, 1, 3);
     m_manualAdjustContainer->setLayout(containerLayout);
 
-    m_autoAdjustContainer         = new QWidget;
+    // -------------------------------------------------------------
+
+    m_autoAdjustContainer         = new QGroupBox(i18n("Automatic Adjustment"));
+    m_autoAdjustContainer->setFlat(true);
     QGridLayout *containerLayout2 = new QGridLayout;
-    containerLayout2->addWidget(label6,                  0, 0, 1, 1);
-    containerLayout2->addWidget(label7,                  0, 3, 1, 1);
-    containerLayout2->addWidget(btnPoint1,               1, 0, 1, 1);
-    containerLayout2->addWidget(m_autoAdjustPoint1Label, 1, 1, 1, 1);
-    containerLayout2->addWidget(m_horizontalAdjustBtn,   1, 3, 1, 2);
-    containerLayout2->addWidget(btnPoint2,               2, 0, 1, 1);
-    containerLayout2->addWidget(m_autoAdjustPoint2Label, 2, 1, 1, 1);
-    containerLayout2->addWidget(m_verticalAdjustBtn,     2, 3, 1, 2);
-    containerLayout2->setColumnStretch(2, 10);
+    containerLayout2->addWidget(m_autoAdjustPoint1Btn,   0, 0, 1, 1);
+    containerLayout2->addWidget(m_autoAdjustBtn,         0, 2, 2, 1);
+    containerLayout2->addWidget(m_autoAdjustPoint2Btn,   1, 0, 1, 1);
+    containerLayout2->setColumnStretch(1, 10);
     containerLayout2->setMargin(0);
     m_autoAdjustContainer->setLayout(containerLayout2);
 
@@ -195,6 +198,8 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     KSeparator *line  = new KSeparator(Qt::Horizontal);
     KSeparator *line2 = new KSeparator(Qt::Horizontal);
     KSeparator *line3 = new KSeparator(Qt::Horizontal);
+
+    // -------------------------------------------------------------
 
     QGridLayout* mainLayout = new QGridLayout;
     mainLayout->addWidget(label1,                  0, 0, 1, 1);
@@ -238,17 +243,14 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     connect(m_manualAdjustInput, SIGNAL(toggled(bool)),
             this, SLOT(slotManualAdjustToggled(bool)));
 
-    connect(btnPoint1, SIGNAL(clicked()),
-            this, SLOT(slotAutoHorizonP1Clicked()));
+    connect(m_autoAdjustPoint1Btn, SIGNAL(clicked()),
+            this, SLOT(slotAutoAdjustP1Clicked()));
 
-    connect(btnPoint2, SIGNAL(clicked()),
-            this, SLOT(slotAutoHorizonP2Clicked()));
+    connect(m_autoAdjustPoint2Btn, SIGNAL(clicked()),
+            this, SLOT(slotAutoAdjustP2Clicked()));
 
-    connect(m_horizontalAdjustBtn, SIGNAL(clicked()),
-            this, SLOT(slotAutoHorizonHoriClicked()));
-
-    connect(m_verticalAdjustBtn, SIGNAL(clicked()),
-            this, SLOT(slotAutoHorizonVertiClicked()));
+    connect(m_autoAdjustBtn, SIGNAL(clicked()),
+            this, SLOT(slotAutoAdjustClicked()));
 }
 
 FreeRotationTool::~FreeRotationTool()
@@ -446,10 +448,10 @@ void FreeRotationTool::updatePoints()
     // set labels
     QString tmp;
     tmp = generatePointLabel(m_autoAdjustPoint1);
-    m_autoAdjustPoint1Label->setText(tmp);
+    m_autoAdjustPoint1Btn->setText(tmp);
 
     tmp = generatePointLabel(m_autoAdjustPoint2);
-    m_autoAdjustPoint2Label->setText(tmp);
+    m_autoAdjustPoint2Btn->setText(tmp);
 
     // set points in preview widget, don't add invalid points
     QPolygon points;
@@ -461,8 +463,7 @@ void FreeRotationTool::updatePoints()
 
     // enable / disable adjustment buttons
     bool valid  = pointIsValid(m_autoAdjustPoint1) && pointIsValid(m_autoAdjustPoint2);
-    m_horizontalAdjustBtn->setEnabled(valid);
-    m_verticalAdjustBtn->setEnabled(valid);
+    m_autoAdjustBtn->setEnabled(valid);
 }
 
 void FreeRotationTool::resetPoints()
@@ -473,35 +474,24 @@ void FreeRotationTool::resetPoints()
     updatePoints();
 }
 
-void FreeRotationTool::slotAutoHorizonP1Clicked()
+void FreeRotationTool::slotAutoAdjustP1Clicked()
 {
     m_autoAdjustPoint1 = m_previewWidget->getSpotPosition();
     updatePoints();
 }
 
-void FreeRotationTool::slotAutoHorizonP2Clicked()
+void FreeRotationTool::slotAutoAdjustP2Clicked()
 {
     m_autoAdjustPoint2 = m_previewWidget->getSpotPosition();
     updatePoints();
 }
 
-void FreeRotationTool::slotAutoHorizonHoriClicked()
+void FreeRotationTool::slotAutoAdjustClicked()
 {
-    setAutoHorizonMode(AutoHorizontal);
-}
-
-void FreeRotationTool::slotAutoHorizonVertiClicked()
-{
-    setAutoHorizonMode(AutoVertical);
-}
-
-void FreeRotationTool::setAutoHorizonMode(AutoMode mode)
-{
-    double angle = 0.0;
     bool reverse = false;
-    angle = calculateAutoAngle(&reverse);
+    double angle = calculateAutoAngle(&reverse);
 
-    if (mode == AutoVertical)
+    if (fabs(angle) > 45.0)
     {
         if (reverse)
             angle += 90.0;
