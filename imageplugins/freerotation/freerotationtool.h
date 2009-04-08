@@ -105,8 +105,8 @@ private:
 
     QLabel                       *m_newWidthLabel;
     QLabel                       *m_newHeightLabel;
-    QLabel                       *m_autoHoriPoint1Label;
-    QLabel                       *m_autoHoriPoint2Label;
+    QLabel                       *m_autoAdjustPoint1Label;
+    QLabel                       *m_autoAdjustPoint2Label;
 
     QCheckBox                    *m_antialiasInput;
     QCheckBox                    *m_manualAdjustInput;
@@ -114,10 +114,10 @@ private:
     QPushButton                  *m_horizontalAdjustBtn;
     QPushButton                  *m_verticalAdjustBtn;
 
-    QPoint                        m_autoHorizonPoint1;
-    QPoint                        m_autoHorizonPoint2;
+    QPoint                        m_autoAdjustPoint1;
+    QPoint                        m_autoAdjustPoint2;
 
-    QWidget                      *m_autoHorizonContainer;
+    QWidget                      *m_autoAdjustContainer;
     QWidget                      *m_manualAdjustContainer;
 
     KDcrawIface::RComboBox       *m_autoCropCB;

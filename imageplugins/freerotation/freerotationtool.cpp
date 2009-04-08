@@ -150,7 +150,6 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     // -------------------------------------------------------------
 
     m_manualAdjustInput      = new QCheckBox(i18n("Manual Adjustment"));
-
     QLabel *label6           = new QLabel(i18n("Points:"));
     QPixmap pm1 = generateBtnPixmap(QString("1"), Qt::black);
     QToolButton *btnPoint1   = new QToolButton;
@@ -163,8 +162,8 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     QLabel *label7           = new QLabel(i18n("Adjustment:"));
     m_horizontalAdjustBtn    = new QPushButton(i18nc("Horizontal Adjustment", "Horizontal"));
     m_verticalAdjustBtn      = new QPushButton(i18nc("Vertical Adjustment", "Vertical"));
-    m_autoHoriPoint1Label    = new QLabel(i18n("not set"));
-    m_autoHoriPoint2Label    = new QLabel(i18n("not set"));
+    m_autoAdjustPoint1Label  = new QLabel(i18n("not set"));
+    m_autoAdjustPoint2Label  = new QLabel(i18n("not set"));
 
     QString btnWhatsThis     = i18n("Select some point in the preview widget, "
                                     "then click this button to set it.");
@@ -181,19 +180,19 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     containerLayout->addWidget(m_fineAngleInput,    3, 0, 1, 3);
     m_manualAdjustContainer->setLayout(containerLayout);
 
-    m_autoHorizonContainer        = new QWidget;
+    m_autoAdjustContainer        = new QWidget;
     QGridLayout *containerLayout2 = new QGridLayout;
     containerLayout2->addWidget(label6,                  0, 0, 1, 1);
     containerLayout2->addWidget(label7,                  0, 3, 1, 1);
     containerLayout2->addWidget(btnPoint1,               1, 0, 1, 1);
-    containerLayout2->addWidget(m_autoHoriPoint1Label,   1, 1, 1, 1);
+    containerLayout2->addWidget(m_autoAdjustPoint1Label, 1, 1, 1, 1);
     containerLayout2->addWidget(m_horizontalAdjustBtn,   1, 3, 1, 2);
     containerLayout2->addWidget(btnPoint2,               2, 0, 1, 1);
-    containerLayout2->addWidget(m_autoHoriPoint2Label,   2, 1, 1, 1);
+    containerLayout2->addWidget(m_autoAdjustPoint2Label, 2, 1, 1, 1);
     containerLayout2->addWidget(m_verticalAdjustBtn,     2, 3, 1, 2);
     containerLayout2->setColumnStretch(2, 10);
     containerLayout2->setMargin(0);
-    m_autoHorizonContainer->setLayout(containerLayout2);
+    m_autoAdjustContainer->setLayout(containerLayout2);
 
     // -------------------------------------------------------------
 
@@ -203,7 +202,7 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     mainLayout->addWidget(label2,                  1, 0, 1, 1);
     mainLayout->addWidget(m_newHeightLabel,        1, 1, 1, 2);
     mainLayout->addWidget(line,                    2, 0, 1, 3);
-    mainLayout->addWidget(m_autoHorizonContainer,  3, 0, 1, 3);
+    mainLayout->addWidget(m_autoAdjustContainer,   3, 0, 1, 3);
     mainLayout->addWidget(line2,                   4, 0, 1, 3);
     mainLayout->addWidget(label5,                  5, 0, 1, 1);
     mainLayout->addWidget(m_autoCropCB,            5, 1, 1, 2);
@@ -319,7 +318,7 @@ void FreeRotationTool::prepareEffect()
     m_antialiasInput->setEnabled(false);
     m_autoCropCB->setEnabled(false);
     m_manualAdjustInput->setEnabled(false);
-    m_autoHorizonContainer->setEnabled(false);
+    m_autoAdjustContainer->setEnabled(false);
     m_manualAdjustContainer->setEnabled(false);
 
     double angle = m_angleInput->value() + m_fineAngleInput->value();
@@ -348,7 +347,7 @@ void FreeRotationTool::prepareFinal()
     m_antialiasInput->setEnabled(false);
     m_autoCropCB->setEnabled(false);
     m_manualAdjustInput->setEnabled(false);
-    m_autoHorizonContainer->setEnabled(false);
+    m_autoAdjustContainer->setEnabled(false);
     m_manualAdjustContainer->setEnabled(false);
 
     double angle      = m_angleInput->value() + m_fineAngleInput->value();
@@ -410,7 +409,7 @@ void FreeRotationTool::renderingFinished()
     m_antialiasInput->setEnabled(true);
     m_autoCropCB->setEnabled(true);
     m_manualAdjustInput->setEnabled(true);
-    m_autoHorizonContainer->setEnabled(true);
+    m_autoAdjustContainer->setEnabled(true);
     m_manualAdjustContainer->setEnabled(true);
 
     bool autoHorizon = m_manualAdjustInput->isChecked();
@@ -440,43 +439,43 @@ void FreeRotationTool::updatePoints()
 {
     // set labels
     QString tmp;
-    tmp = generatePointLabel(m_autoHorizonPoint1);
-    m_autoHoriPoint1Label->setText(tmp);
+    tmp = generatePointLabel(m_autoAdjustPoint1);
+    m_autoAdjustPoint1Label->setText(tmp);
 
-    tmp = generatePointLabel(m_autoHorizonPoint2);
-    m_autoHoriPoint2Label->setText(tmp);
+    tmp = generatePointLabel(m_autoAdjustPoint2);
+    m_autoAdjustPoint2Label->setText(tmp);
 
     // set points in preview widget, don't add invalid points
     QPolygon points;
-    if (pointIsValid(m_autoHorizonPoint1))
-        points << m_autoHorizonPoint1;
-    if (pointIsValid(m_autoHorizonPoint2))
-        points << m_autoHorizonPoint2;
+    if (pointIsValid(m_autoAdjustPoint1))
+        points << m_autoAdjustPoint1;
+    if (pointIsValid(m_autoAdjustPoint2))
+        points << m_autoAdjustPoint2;
     m_previewWidget->setPoints(points);
 
     // enable / disable adjustment buttons
-    bool valid  = pointIsValid(m_autoHorizonPoint1) && pointIsValid(m_autoHorizonPoint2);
+    bool valid  = pointIsValid(m_autoAdjustPoint1) && pointIsValid(m_autoAdjustPoint2);
     m_horizontalAdjustBtn->setEnabled(valid);
     m_verticalAdjustBtn->setEnabled(valid);
 }
 
 void FreeRotationTool::resetPoints()
 {
-    setPointInvalid(m_autoHorizonPoint1);
-    setPointInvalid(m_autoHorizonPoint2);
+    setPointInvalid(m_autoAdjustPoint1);
+    setPointInvalid(m_autoAdjustPoint2);
     m_previewWidget->resetPoints();
     updatePoints();
 }
 
 void FreeRotationTool::slotAutoHorizonP1Clicked()
 {
-    m_autoHorizonPoint1 = m_previewWidget->getSpotPosition();
+    m_autoAdjustPoint1 = m_previewWidget->getSpotPosition();
     updatePoints();
 }
 
 void FreeRotationTool::slotAutoHorizonP2Clicked()
 {
-    m_autoHorizonPoint2 = m_previewWidget->getSpotPosition();
+    m_autoAdjustPoint2 = m_previewWidget->getSpotPosition();
     updatePoints();
 }
 
@@ -548,7 +547,7 @@ QPixmap FreeRotationTool::generateBtnPixmap(const QString &label, const QColor &
 
 double FreeRotationTool::calculateAutoAngle(bool *reverse)
 {
-    return calculateAngle(m_autoHorizonPoint1, m_autoHorizonPoint2, reverse);
+    return calculateAngle(m_autoAdjustPoint1, m_autoAdjustPoint2, reverse);
 }
 
 double FreeRotationTool::calculateAngle(const QPoint &p1, const QPoint &p2, bool *reverse)
