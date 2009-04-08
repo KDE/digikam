@@ -234,7 +234,6 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     connect(m_gboxSettings, SIGNAL(signalColorGuideChanged()),
             this, SLOT(slotColorGuideChanged()));
 
-    // auto-horizon
     connect(m_manualAdjustInput, SIGNAL(toggled(bool)),
             this, SLOT(slotManualAdjustToggled(bool)));
 
