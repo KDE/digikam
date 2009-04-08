@@ -105,7 +105,6 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
                                             EditorToolSettings::Cancel,
                                             EditorToolSettings::ColorGuide);
 
-
     QLabel *label1  = new QLabel(i18n("New width:"));
     m_newWidthLabel = new QLabel(temp.setNum( iface.originalWidth()) + i18n(" px"));
     m_newWidthLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
@@ -113,10 +112,6 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     QLabel *label2   = new QLabel(i18n("New height:"));
     m_newHeightLabel = new QLabel(temp.setNum( iface.originalHeight()) + i18n(" px"));
     m_newHeightLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
-
-    KSeparator *line  = new KSeparator(Qt::Horizontal);
-    KSeparator *line2 = new KSeparator(Qt::Horizontal);
-    KSeparator *line3 = new KSeparator(Qt::Horizontal);
 
     QLabel *label3 = new QLabel(i18n("Main angle:"));
     m_angleInput   = new RIntNumInput;
@@ -181,7 +176,7 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     containerLayout->addWidget(m_fineAngleInput,    3, 0, 1, 3);
     m_manualAdjustContainer->setLayout(containerLayout);
 
-    m_autoAdjustContainer        = new QWidget;
+    m_autoAdjustContainer         = new QWidget;
     QGridLayout *containerLayout2 = new QGridLayout;
     containerLayout2->addWidget(label6,                  0, 0, 1, 1);
     containerLayout2->addWidget(label7,                  0, 3, 1, 1);
@@ -197,6 +192,10 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
 
     // -------------------------------------------------------------
 
+    KSeparator *line  = new KSeparator(Qt::Horizontal);
+    KSeparator *line2 = new KSeparator(Qt::Horizontal);
+    KSeparator *line3 = new KSeparator(Qt::Horizontal);
+
     QGridLayout* mainLayout = new QGridLayout;
     mainLayout->addWidget(label1,                  0, 0, 1, 1);
     mainLayout->addWidget(m_newWidthLabel,         0, 1, 1, 2);
@@ -211,7 +210,7 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     mainLayout->addWidget(line3,                   8, 0, 1,-1);
     mainLayout->addWidget(label5,                  9, 0, 1, 1);
     mainLayout->addWidget(m_autoCropCB,            9, 1, 1, 2);
-    mainLayout->setRowStretch(11, 10);
+    mainLayout->setRowStretch(10, 10);
     mainLayout->setMargin(m_gboxSettings->spacingHint());
     mainLayout->setSpacing(m_gboxSettings->spacingHint());
     m_gboxSettings->plainPage()->setLayout(mainLayout);
