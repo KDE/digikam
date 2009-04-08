@@ -116,6 +116,7 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
 
     KSeparator *line  = new KSeparator(Qt::Horizontal);
     KSeparator *line2 = new KSeparator(Qt::Horizontal);
+    KSeparator *line3 = new KSeparator(Qt::Horizontal);
 
     QLabel *label3 = new QLabel(i18n("Main angle:"));
     m_angleInput   = new RIntNumInput;
@@ -201,14 +202,15 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     mainLayout->addWidget(m_newWidthLabel,         0, 1, 1, 2);
     mainLayout->addWidget(label2,                  1, 0, 1, 1);
     mainLayout->addWidget(m_newHeightLabel,        1, 1, 1, 2);
-    mainLayout->addWidget(line,                    2, 0, 1, 3);
-    mainLayout->addWidget(m_autoAdjustContainer,   3, 0, 1, 3);
-    mainLayout->addWidget(line2,                   4, 0, 1, 3);
-    mainLayout->addWidget(label5,                  5, 0, 1, 1);
-    mainLayout->addWidget(m_autoCropCB,            5, 1, 1, 2);
-    mainLayout->addWidget(m_antialiasInput,        6, 0, 1, 3);
-    mainLayout->addWidget(m_manualAdjustInput,     7, 0, 1, 1);
-    mainLayout->addWidget(m_manualAdjustContainer, 8, 0, 1, 3);
+    mainLayout->addWidget(line,                    2, 0, 1,-1);
+    mainLayout->addWidget(m_autoAdjustContainer,   3, 0, 1,-1);
+    mainLayout->addWidget(line2,                   4, 0, 1,-1);
+    mainLayout->addWidget(m_antialiasInput,        5, 0, 1,-1);
+    mainLayout->addWidget(m_manualAdjustInput,     6, 0, 1, 1);
+    mainLayout->addWidget(m_manualAdjustContainer, 7, 0, 1,-1);
+    mainLayout->addWidget(line3,                   8, 0, 1,-1);
+    mainLayout->addWidget(label5,                  9, 0, 1, 1);
+    mainLayout->addWidget(m_autoCropCB,            9, 1, 1, 2);
     mainLayout->setRowStretch(11, 10);
     mainLayout->setMargin(m_gboxSettings->spacingHint());
     mainLayout->setSpacing(m_gboxSettings->spacingHint());
@@ -426,7 +428,6 @@ void FreeRotationTool::renderingFinished()
 
 void FreeRotationTool::slotManualAdjustToggled(bool t)
 {
-    m_manualAdjustContainer->setVisible(t);
     m_manualAdjustContainer->setEnabled(t);
 }
 
