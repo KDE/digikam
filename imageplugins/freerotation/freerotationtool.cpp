@@ -270,8 +270,12 @@ void FreeRotationTool::readSettings()
     m_antialiasInput->setChecked(group.readEntry("Anti Aliasing", true));
     m_manualAdjustInput->setChecked(group.readEntry("Manual Adjust", false));
 
-    m_angleInput->defaultValue();
-    m_fineAngleInput->defaultValue();
+    m_angleInput->blockSignals(true);
+    m_fineAngleInput->blockSignals(true);
+    m_angleInput->slotReset();
+    m_fineAngleInput->slotReset();
+    m_angleInput->blockSignals(false);
+    m_fineAngleInput->blockSignals(false);
 
     resetPoints();
     slotManualAdjustToggled(m_manualAdjustInput->isChecked());
