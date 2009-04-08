@@ -264,11 +264,14 @@ void FreeRotationTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("freerotation Tool");
-    m_angleInput->setValue(group.readEntry("Main Angle", m_angleInput->defaultValue()));
-    m_fineAngleInput->setValue(group.readEntry("Fine Angle", m_fineAngleInput->defaultValue()));
+//    m_angleInput->setValue(group.readEntry("Main Angle", m_angleInput->defaultValue()));
+//    m_fineAngleInput->setValue(group.readEntry("Fine Angle", m_fineAngleInput->defaultValue()));
     m_autoCropCB->setCurrentIndex(group.readEntry("Auto Crop Type", m_autoCropCB->defaultIndex()));
     m_antialiasInput->setChecked(group.readEntry("Anti Aliasing", true));
     m_manualAdjustInput->setChecked(group.readEntry("Manual Adjust", false));
+
+    m_angleInput->defaultValue();
+    m_fineAngleInput->defaultValue();
 
     resetPoints();
     slotManualAdjustToggled(m_manualAdjustInput->isChecked());
@@ -281,8 +284,8 @@ void FreeRotationTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("freerotation Tool");
-    group.writeEntry("Main Angle", m_angleInput->value());
-    group.writeEntry("Fine Angle", m_fineAngleInput->value());
+//    group.writeEntry("Main Angle", m_angleInput->value());
+//    group.writeEntry("Fine Angle", m_fineAngleInput->value());
     group.writeEntry("Auto Crop Type", m_autoCropCB->currentIndex());
     group.writeEntry("Anti Aliasing", m_antialiasInput->isChecked());
     group.writeEntry("Manual Adjust", m_manualAdjustInput->isChecked());
