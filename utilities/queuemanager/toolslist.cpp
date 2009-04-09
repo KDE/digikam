@@ -294,7 +294,7 @@ QMap<int, QString> ToolsListView::itemsToMap(const QList<QTreeWidgetItem*> items
 void ToolsListView::slotContextMenu()
 {
     KMenu popmenu(this);
-    KAction *action = new KAction(KIcon("vcs_add"), i18n("Assign tools"), this);
+    KAction *action = new KAction(KIcon("bqm-add"), i18n("Assign tools"), this);
     connect(action, SIGNAL(triggered(bool) ),
             this, SLOT(slotAssignTools()));
 

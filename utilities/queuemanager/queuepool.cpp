@@ -82,7 +82,7 @@ QMap<int, QString> QueuePool::queuesMap() const
 void QueuePool::slotAddQueue()
 {
     QueueListView* queue = new QueueListView(this);
-    int index            = addTab(queue, SmallIcon("vcs_diff"), QString("#%1").arg(count()+1));
+    int index            = addTab(queue, SmallIcon("bqm-diff"), QString("#%1").arg(count()+1));
 
     connect(queue, SIGNAL(signalQueueContentsChanged()),
             this, SIGNAL(signalQueueContentsChanged()));

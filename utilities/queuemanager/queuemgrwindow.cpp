@@ -323,11 +323,11 @@ void QueueMgrWindow::setupActions()
     connect(d->stopAction, SIGNAL(triggered()), this, SLOT(slotStop()));
     actionCollection()->addAction("queuemgr_stop", d->stopAction);
 
-    d->newQueueAction = new KAction(KIcon("svn_add"), i18n("New Queue"), this);
+    d->newQueueAction = new KAction(KIcon("bqm-addqueue"), i18n("New Queue"), this);
     connect(d->newQueueAction, SIGNAL(triggered()), d->queuePool, SLOT(slotAddQueue()));
     actionCollection()->addAction("queuemgr_newqueue", d->newQueueAction);
 
-    d->removeQueueAction = new KAction(KIcon("svn_remove"), i18n("Remove Queue"), this);
+    d->removeQueueAction = new KAction(KIcon("bqm-rmqueue"), i18n("Remove Queue"), this);
     connect(d->removeQueueAction, SIGNAL(triggered()), d->queuePool, SLOT(slotRemoveCurrentQueue()));
     actionCollection()->addAction("queuemgr_removequeue", d->removeQueueAction);
 
@@ -353,15 +353,15 @@ void QueueMgrWindow::setupActions()
 
     // -- 'Tools' menu actions -----------------------------------------------------
 
-    d->moveUpToolAction = new KAction(KIcon("vcs_commit"), i18n("Move up"), this);
+    d->moveUpToolAction = new KAction(KIcon("bqm-commit"), i18n("Move up"), this);
     connect(d->moveUpToolAction, SIGNAL(triggered()), d->assignedList, SLOT(slotMoveCurrentToolUp()));
     actionCollection()->addAction("queuemgr_toolup", d->moveUpToolAction);
 
-    d->moveDownToolAction = new KAction(KIcon("vcs_update"), i18n("Move down"), this);
+    d->moveDownToolAction = new KAction(KIcon("bqm-update"), i18n("Move down"), this);
     connect(d->moveDownToolAction, SIGNAL(triggered()), d->assignedList, SLOT(slotMoveCurrentToolDown()));
     actionCollection()->addAction("queuemgr_tooldown", d->moveDownToolAction);
 
-    d->removeToolAction = new KAction(KIcon("vcs_remove"), i18n("Remove tool"), this);
+    d->removeToolAction = new KAction(KIcon("bqm-remove"), i18n("Remove tool"), this);
     connect(d->removeToolAction, SIGNAL(triggered()), d->assignedList, SLOT(slotRemoveCurrentTool()));
     actionCollection()->addAction("queuemgr_toolremove", d->removeToolAction);
 
