@@ -71,16 +71,22 @@ SetupPlugins::SetupPlugins(QWidget* parent)
 
     QVBoxLayout *layout = new QVBoxLayout(panel);
     d->pluginsNumber    = new QLabel(panel);
-    d->kipiConfig       = KIPI::PluginLoader::instance()->configWidget(panel);
-    d->kipiConfig->setWhatsThis(i18n("A list of available Kipi plugins appears below."));
+    if (KIPI::PluginLoader::instance())
+    {
+        d->kipiConfig = KIPI::PluginLoader::instance()->configWidget(panel);
+        d->kipiConfig->setWhatsThis(i18n("A list of available Kipi plugins appears below."));
+    }
 
     layout->addWidget(d->pluginsNumber);
     layout->addWidget(d->kipiConfig);
     layout->setMargin(KDialog::spacingHint());
     layout->setSpacing(KDialog::spacingHint());
 
-    KIPI::PluginLoader::PluginList list = KIPI::PluginLoader::instance()->pluginList();
-    initPlugins((int)list.count());
+    if (KIPI::PluginLoader::instance())
+    {
+        KIPI::PluginLoader::PluginList list = KIPI::PluginLoader::instance()->pluginList();
+        initPlugins((int)list.count());
+    }
 }
 
 SetupPlugins::~SetupPlugins()
@@ -97,7 +103,8 @@ void SetupPlugins::initPlugins(int kipiPluginsNumber)
 
 void SetupPlugins::applyPlugins()
 {
-    d->kipiConfig->apply();
+    if (KIPI::PluginLoader::instance())
+        d->kipiConfig->apply();
 }
 
 }  // namespace Digikam
