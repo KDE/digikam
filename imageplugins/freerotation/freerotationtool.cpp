@@ -167,6 +167,15 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     m_autoAdjustPoint2Btn->setToolTip(btnWhatsThis);
     m_autoAdjustPoint2Btn->setWhatsThis(btnWhatsThis);
 
+    // try to determine the maximum text width, to set the button minwidth
+    QFont fnt = m_autoAdjustPoint1Btn->font();
+    QFontMetrics fm(fnt);
+    int minWidth = fm.width(QString("(1234, 1234)")) + pm1.width() * 2 + 5;
+
+    // set new minwidth
+    m_autoAdjustPoint1Btn->setMinimumWidth(minWidth);
+    m_autoAdjustPoint2Btn->setMinimumWidth(minWidth);
+
     m_autoAdjustBtn = new QPushButton(i18nc("Automatic Adjustment", "Adjust"));
     m_autoAdjustBtn->setMinimumHeight(50);
 
