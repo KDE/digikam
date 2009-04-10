@@ -31,4 +31,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 020 ==> 188907 : Album view should display subfolders, like tag view does.
 021 ==> 183038 : "Select All" action interrupts other widgets. 
 022 ==> 189022 : Better guessing of proportions with 'inverse transformation' option.
-023 ==> 
+023 ==> 189286 : EXIF info lost while converting from NEF to TIFF.
+024 ==> 
