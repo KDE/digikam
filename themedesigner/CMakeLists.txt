@@ -32,7 +32,7 @@ INCLUDE_DIRECTORIES(
                      ../utilities/slideshow
                      ../utilities/imageeditor/editor
                      ../utilities/imageeditor/canvas
-                     ../utilities/imageeditor/tools
+                     ../utilities/imageeditor/printiface
 
                      # specific libs and utilities
                      ../libs/themeengine

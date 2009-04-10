@@ -33,7 +33,7 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/slideshow
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/editor
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/canvas
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/tools
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/printiface
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/rawimport
 
                      # specific libs and utilities
@@ -95,17 +95,17 @@ SET(digikamcore_LIB_SRCS
                         # utitilies
                         ${libslideshow_SRCS}
                         ${libdimgcanvas_SRCS}
-                        ${libdimgeditortools_SRCS}
+                        ${libdimgeditorprintiface_SRCS}
                         ${libdimgeditor_SRCS}
                         ${librawimport_SRCS}
    )
 
     KDE4_ADD_UI_FILES(digikamcore_LIB_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/tools/printoptionspage.ui
+        ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/printiface/printoptionspage.ui
        )
 
     kde4_add_kcfg_files(digikamcore_LIB_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/tools/digikamconfig.kcfgc
+        ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/printiface/digikamconfig.kcfgc
        )
 KDE4_ADD_LIBRARY(digikamcore SHARED ${digikamcore_LIB_SRCS})
 
