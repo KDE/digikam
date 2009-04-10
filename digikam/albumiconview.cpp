@@ -596,9 +596,6 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint&)
     popmenu.addSeparator();
     // --------------------------------------------------------
     cmhelper.addActionThumbnail(selectedImageIDs, d->currentAlbum);
-    cmhelper.addActionThumbnail(selectedImageIDs, d->currentAlbum);
-    cmhelper.addActionThumbnail(selectedImageIDs, d->currentAlbum);
-    cmhelper.addActionThumbnail(selectedImageIDs, d->currentAlbum);
     // --------------------------------------------------------
     cmhelper.addAssignTagsMenu(selectedImageIDs);
     cmhelper.addRemoveTagsMenu(selectedImageIDs);
