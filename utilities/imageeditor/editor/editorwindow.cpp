@@ -633,8 +633,8 @@ void EditorWindow::slotEditKeys()
 
 void EditorWindow::slotResize()
 {
-    ImageResize dlg(this);
-    dlg.exec();
+    ImageResize *tool = new ImageResize(this);
+    d->toolIface->loadTool(tool);
 }
 
 void EditorWindow::slotAboutToShowUndoMenu()

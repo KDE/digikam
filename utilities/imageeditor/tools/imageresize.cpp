@@ -43,7 +43,6 @@
 #include <QImage>
 #include <QLabel>
 #include <QPixmap>
-#include <QProgressBar>
 #include <QPushButton>
 #include <QTimer>
 #include <QVBoxLayout>
@@ -73,6 +72,9 @@
 
 #include "dimg.h"
 #include "imageiface.h"
+#include "imagewidget.h"
+#include "editortoolsettings.h"
+#include "editortooliface.h"
 #include "dimgthreadedfilter.h"
 #include "greycstorationiface.h"
 #include "greycstorationwidget.h"
@@ -83,35 +85,61 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
+class ResizeImage : public DImgThreadedFilter
+{
+
+public:
+
+    ResizeImage(DImg *orgImage, int newWidth, int newHeight, QObject *parent=0)
+        : DImgThreadedFilter(orgImage, parent, "resizeimage")
+
+    {
+        m_newWidth  = newWidth;
+        m_newHeight = newHeight;
+        initFilter();
+    };
+
+    ~ResizeImage(){};
+
+private:
+
+    void filterImage()
+    {
+        postProgress(25);
+        m_destImage = m_orgImage.copy();
+        postProgress(50);
+        m_destImage.resize(m_newWidth, m_newHeight);
+        postProgress(75);
+    };
+
+private:
+
+    int m_newWidth;
+    int m_newHeight;
+};
+
+// -------------------------------------------------------------
+
 class ImageResizePriv
 {
 public:
 
-    enum RunningMode
-    {
-        NoneRendering=0,
-        FinalRendering
-    };
-
     ImageResizePriv()
     {
-        currentRenderingMode = NoneRendering;
-        parent               = 0;
+        previewWidget        = 0;
         preserveRatioBox     = 0;
         useGreycstorationBox = 0;
         mainTab              = 0;
+        gboxSettings         = 0;
         wInput               = 0;
         hInput               = 0;
         wpInput              = 0;
         hpInput              = 0;
-        progressBar          = 0;
-        greycstorationIface  = 0;
         settingsWidget       = 0;
         cimgLogoLabel        = 0;
         restorationTips      = 0;
     }
 
-    int                   currentRenderingMode;
     int                   orgWidth;
     int                   orgHeight;
     int                   prevW;
@@ -120,8 +148,6 @@ public:
     double                prevWP;
     double                prevHP;
 
-    QWidget              *parent;
-
     QLabel               *restorationTips;
 
     QCheckBox            *preserveRatioBox;
@@ -129,9 +155,9 @@ public:
 
     KTabWidget           *mainTab;
 
-    QProgressBar         *progressBar;
-
     KUrlLabel            *cimgLogoLabel;
+
+    ImageWidget          *previewWidget;
 
     RIntNumInput         *wInput;
     RIntNumInput         *hInput;
@@ -139,26 +165,32 @@ public:
     RDoubleNumInput      *wpInput;
     RDoubleNumInput      *hpInput;
 
-    GreycstorationIface  *greycstorationIface;
+    EditorToolSettings   *gboxSettings;
     GreycstorationWidget *settingsWidget;
 };
 
-ImageResize::ImageResize(QWidget* parent)
-           : KDialog(parent), d(new ImageResizePriv)
-{
-    d->parent = parent;
+// -------------------------------------------------------------
 
-    setDefaultButton(Ok);
-    setButtons(Help|Default|User2|User3|Ok|Cancel);
-    setCaption(i18n("Resize Image"));
-    setModal(true);
-    setButtonText(User2,i18n("&Save As..."));
-    setButtonText(User3,i18n("&Load..."));
-    setHelp("resizetool.anchor", "digikam");
-    setButtonWhatsThis ( Default, i18n("Reset all filter parameters to their default values.") );
-    setButtonWhatsThis ( User3, i18n("Load all filter parameters from settings text file.") );
-    setButtonWhatsThis ( User2, i18n("Save all filter parameters to settings text file.") );
-    enableButton(Ok, false);
+ImageResize::ImageResize(QObject* parent)
+           : EditorToolThreaded(parent), d(new ImageResizePriv)
+{
+    setObjectName("resizeimage");
+    setToolName(i18n("Resize Image"));
+    setToolIcon(SmallIcon("transform-scale"));
+
+    d->previewWidget = new ImageWidget("resizeimage Tool", 0, QString(),
+                                       false, ImageGuideWidget::HVGuideMode, false);
+
+    setToolView(d->previewWidget);
+
+    // -------------------------------------------------------------
+
+    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                             EditorToolSettings::Try|
+                                             EditorToolSettings::Ok|
+                                             EditorToolSettings::Load|
+                                             EditorToolSettings::SaveAs|
+                                             EditorToolSettings::Cancel);
 
     ImageIface iface(0, 0);
     d->orgWidth  = iface.originalWidth();
@@ -170,24 +202,19 @@ ImageResize::ImageResize(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    QWidget *page = new QWidget(this);
-    setMainWidget(page);
-    QVBoxLayout *vlay  = new QVBoxLayout();
-    vlay->setSpacing(spacingHint());
-    page->setLayout(vlay);
+    QGridLayout* gridSettings = new QGridLayout(d->gboxSettings->plainPage());
+    d->mainTab                = new KTabWidget(d->gboxSettings->plainPage());
+    QWidget* firstPage        = new QWidget(d->mainTab);
+    QGridLayout* grid         = new QGridLayout(firstPage);
 
-    d->mainTab         = new KTabWidget( page );
-    QWidget* firstPage = new QWidget( d->mainTab );
-    QGridLayout* grid  = new QGridLayout(firstPage);
-
-    d->mainTab->addTab( firstPage, i18n("New Size") );
+    d->mainTab->addTab(firstPage, i18n("New Size"));
 
     QLabel *label1 = new QLabel(i18n("Width:"), firstPage);
     d->wInput      = new RIntNumInput(firstPage);
     d->wInput->setRange(1, qMax(d->orgWidth * 10, 9999), 1);
     d->wInput->setDefaultValue(d->orgWidth);
     d->wInput->setSliderEnabled(true);
-    d->wInput->setObjectName("d->wInput");
+    d->wInput->setObjectName("wInput");
     d->wInput->setWhatsThis( i18n("Set here the new image width in pixels."));
 
     QLabel *label2 = new QLabel(i18n("Height:"), firstPage);
@@ -195,21 +222,21 @@ ImageResize::ImageResize(QWidget* parent)
     d->hInput->setRange(1, qMax(d->orgHeight * 10, 9999), 1);
     d->hInput->setDefaultValue(d->orgHeight);
     d->hInput->setSliderEnabled(true);
-    d->hInput->setObjectName("d->hInput");
+    d->hInput->setObjectName("hInput");
     d->hInput->setWhatsThis( i18n("New image height in pixels (px)."));
 
     QLabel *label3 = new QLabel(i18n("Width (%):"), firstPage);
     d->wpInput     = new RDoubleNumInput(firstPage);
     d->wpInput->input()->setRange(1.0, 999.0, 1.0, true);
     d->wpInput->setDefaultValue(100.0);
-    d->wpInput->setObjectName("d->wpInput");
+    d->wpInput->setObjectName("wpInput");
     d->wpInput->setWhatsThis( i18n("New image width in percent (%)."));
 
     QLabel *label4 = new QLabel(i18n("Height (%):"), firstPage);
     d->hpInput     = new RDoubleNumInput(firstPage);
     d->hpInput->input()->setRange(1.0, 999.0, 1.0, true);
     d->hpInput->setDefaultValue(100.0);
-    d->hpInput->setObjectName("d->hpInput");
+    d->hpInput->setObjectName("hpInput");
     d->hpInput->setWhatsThis( i18n("New image height in percent (%)."));
 
     d->preserveRatioBox = new QCheckBox(i18n("Maintain aspect ratio"), firstPage);
@@ -230,38 +257,35 @@ ImageResize::ImageResize(QWidget* parent)
                                          "This process can take some time."), firstPage);
     d->restorationTips->setWordWrap(true);
 
-    d->progressBar = new QProgressBar(firstPage);
-    d->progressBar->setValue(0);
-    d->progressBar->setMaximum(100);
-    d->progressBar->setWhatsThis( i18n("This shows the current progress when you use the Restoration mode."));
-
-    grid->addWidget(d->preserveRatioBox,        0, 0, 1, 3);
-    grid->addWidget(label1,                     1, 0, 1, 1);
-    grid->addWidget(d->wInput,                  1, 1, 1, 2);
-    grid->addWidget(label2,                     2, 0, 1, 1);
-    grid->addWidget(d->hInput,                  2, 1, 1, 2);
-    grid->addWidget(label3,                     3, 0, 1, 1);
-    grid->addWidget(d->wpInput,                 3, 1, 1, 2);
-    grid->addWidget(label4,                     4, 0, 1, 1);
-    grid->addWidget(d->hpInput,                 4, 1, 1, 2);
-    grid->addWidget(new KSeparator(firstPage),  5, 0, 1, 3);
-    grid->addWidget(d->cimgLogoLabel,           6, 0, 3, 1);
-    grid->addWidget(d->useGreycstorationBox,    6, 1, 1, 2);
-    grid->addWidget(d->restorationTips,         7, 1, 1, 2);
-    grid->addWidget(d->progressBar,             8, 1, 1, 2);
+    grid->addWidget(d->preserveRatioBox,       0, 0, 1, 3);
+    grid->addWidget(label1,                    1, 0, 1, 1);
+    grid->addWidget(d->wInput,                 1, 1, 1, 2);
+    grid->addWidget(label2,                    2, 0, 1, 1);
+    grid->addWidget(d->hInput,                 2, 1, 1, 2);
+    grid->addWidget(label3,                    3, 0, 1, 1);
+    grid->addWidget(d->wpInput,                3, 1, 1, 2);
+    grid->addWidget(label4,                    4, 0, 1, 1);
+    grid->addWidget(d->hpInput,                4, 1, 1, 2);
+    grid->addWidget(new KSeparator(firstPage), 5, 0, 1, 3);
+    grid->addWidget(d->cimgLogoLabel,          6, 0, 3, 1);
+    grid->addWidget(d->useGreycstorationBox,   6, 1, 1, 2);
+    grid->addWidget(d->restorationTips,        7, 1, 1, 2);
     grid->setRowStretch(8, 10);
-    grid->setMargin(spacingHint());
-    grid->setSpacing(spacingHint());
+    grid->setMargin(d->gboxSettings->spacingHint());
+    grid->setSpacing(0);
 
     // -------------------------------------------------------------
 
     d->settingsWidget = new GreycstorationWidget(d->mainTab);
-    vlay->addWidget(d->mainTab);
 
-    // -------------------------------------------------------------
+    gridSettings->addWidget(d->mainTab,                               0, 1, 1, 1);
+    gridSettings->addWidget(new QLabel(d->gboxSettings->plainPage()), 1, 1, 1, 1);
+    gridSettings->setMargin(d->gboxSettings->spacingHint());
+    gridSettings->setSpacing(d->gboxSettings->spacingHint());
+    gridSettings->setRowStretch(2, 10);
 
-    adjustSize();
-    QTimer::singleShot(0, this, SLOT(readUserSettings()));
+    setToolSettings(d->gboxSettings);
+    init();
 
     // -------------------------------------------------------------
 
@@ -281,56 +305,21 @@ ImageResize::ImageResize(QWidget* parent)
             this, SLOT(slotValuesChanged()));
 
     connect(d->useGreycstorationBox, SIGNAL(toggled(bool)),
-             this, SLOT(slotRestorationToggled(bool)) );
-
-    connect(this, SIGNAL(cancelClicked()),
-            this, SLOT(slotCancel()));
-
-    connect(this, SIGNAL(defaultClicked()),
-            this, SLOT(slotDefault()));
-
-    connect(this, SIGNAL(user2Clicked()),
-            this, SLOT(slotUser2()));
-
-    connect(this, SIGNAL(user3Clicked()),
-            this, SLOT(slotUser3()));
+            this, SLOT(slotRestorationToggled(bool)) );
 
     // -------------------------------------------------------------
 
-    Digikam::GreycstorationSettings defaults;
+    GreycstorationSettings defaults;
     defaults.setResizeDefaultSettings();
     d->settingsWidget->setDefaultSettings(defaults);
 }
 
 ImageResize::~ImageResize()
 {
-    if (d->greycstorationIface)
-       delete d->greycstorationIface;
-
     delete d;
 }
 
-void ImageResize::slotButtonClicked(int button)
-{
-    // KDialog calls QDialog::accept() for Ok.
-    // We need to override this, we can only accept() when the thread has finished.
-
-    if (button == Ok)
-        slotOk();
-    else
-        KDialog::slotButtonClicked(button);
-}
-
-void ImageResize::slotRestorationToggled(bool b)
-{
-    d->settingsWidget->setEnabled(b);
-    d->progressBar->setEnabled(b);
-    d->cimgLogoLabel->setEnabled(b);
-    enableButton(User2, b);
-    enableButton(User3, b);
-}
-
-void ImageResize::readUserSettings()
+void ImageResize::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("resize Tool Dialog");
@@ -353,11 +342,9 @@ void ImageResize::readUserSettings()
     settings.tile       = group.readEntry("Tile",          defaults.tile);
     settings.btile      = group.readEntry("BTile",         defaults.btile);
     d->settingsWidget->setSettings(settings);
-
-    slotDefault();
 }
 
-void ImageResize::writeUserSettings()
+void ImageResize::writeSettings()
 {
     GreycstorationSettings settings = d->settingsWidget->getSettings();
     KConfigGroup group              = KGlobal::config()->group("resize Tool Dialog");
@@ -379,7 +366,7 @@ void ImageResize::writeUserSettings()
     group.sync();
 }
 
-void ImageResize::slotDefault()
+void ImageResize::slotResetSettings()
 {
     GreycstorationSettings settings;
     settings.setResizeDefaultSettings();
@@ -388,11 +375,7 @@ void ImageResize::slotDefault()
     d->useGreycstorationBox->setChecked(false);
     slotRestorationToggled(d->useGreycstorationBox->isChecked());
 
-    d->preserveRatioBox->blockSignals(true);
-    d->wInput->blockSignals(true);
-    d->hInput->blockSignals(true);
-    d->wpInput->blockSignals(true);
-    d->hpInput->blockSignals(true);
+    blockWidgetSignals(true);
 
     d->preserveRatioBox->setChecked(true);
     d->wInput->slotReset();
@@ -400,72 +383,72 @@ void ImageResize::slotDefault()
     d->wpInput->slotReset();
     d->hpInput->slotReset();
 
-    d->preserveRatioBox->blockSignals(false);
-    d->wInput->blockSignals(false);
-    d->hInput->blockSignals(false);
-    d->wpInput->blockSignals(false);
-    d->hpInput->blockSignals(false);
+    blockWidgetSignals(false);
 }
 
 void ImageResize::slotValuesChanged()
 {
-    enableButton(Ok, true);
-    d->wInput->blockSignals(true);
-    d->hInput->blockSignals(true);
-    d->wpInput->blockSignals(true);
-    d->hpInput->blockSignals(true);
+    blockWidgetSignals(true);
 
     QString s(sender()->objectName());
 
-    if (s == "d->wInput")
+    if(s == "wInput")
     {
-        double val = d->wInput->value();
-        double wp  = val/(double)(d->orgWidth) * 100.0;
-        d->wpInput->setValue(wp);
+        double val  = d->wInput->value();
+        double pval = val / (double)(d->orgWidth) * 100.0;
 
-        if (d->preserveRatioBox->isChecked())
+        d->wpInput->setValue(pval);
+
+        if(d->preserveRatioBox->isChecked())
         {
-            d->hpInput->setValue(wp);
-            int h = (int)(wp*d->orgHeight/100);
+            int h = (int)(pval * d->orgHeight / 100);
+
+            d->hpInput->setValue(pval);
             d->hInput->setValue(h);
         }
     }
-    else if (s == "d->hInput")
+    else if(s == "hInput")
     {
-        double val = d->hInput->value();
-        double hp  = val/(double)(d->orgHeight) * 100.0;
-        d->hpInput->setValue(hp);
+        double val  = d->hInput->value();
+        double pval = val / (double)(d->orgHeight) * 100.0;
 
-        if (d->preserveRatioBox->isChecked())
+        d->hpInput->setValue(pval);
+
+        if(d->preserveRatioBox->isChecked())
         {
-            d->wpInput->setValue(hp);
-            int w = (int)(hp*d->orgWidth/100);
+            int w = (int)(pval * d->orgWidth / 100);
+
+            d->wpInput->setValue(pval);
             d->wInput->setValue(w);
         }
     }
-    else if (s == "d->wpInput")
+    else if(s == "wpInput")
     {
         double val = d->wpInput->value();
-        int w      = (int)(val*d->orgWidth/100);
+        int w      = (int)(val * d->orgWidth / 100);
+
         d->wInput->setValue(w);
 
-        if (d->preserveRatioBox->isChecked())
+        if(d->preserveRatioBox->isChecked())
         {
+            int h = (int)(val * d->orgHeight / 100);
+
             d->hpInput->setValue(val);
-            int h = (int)(val*d->orgHeight/100);
             d->hInput->setValue(h);
         }
     }
-    else if (s == "d->hpInput")
+    else if(s == "hpInput")
     {
         double val = d->hpInput->value();
-        int h      = (int)(val*d->orgHeight/100);
+        int h = (int)(val * d->orgHeight / 100);
+
         d->hInput->setValue(h);
 
-        if (d->preserveRatioBox->isChecked())
+        if(d->preserveRatioBox->isChecked())
         {
+            int w = (int)(val * d->orgWidth / 100);
+
             d->wpInput->setValue(val);
-            int w = (int)(val*d->orgWidth/100);
             d->wInput->setValue(w);
         }
     }
@@ -475,46 +458,54 @@ void ImageResize::slotValuesChanged()
     d->prevWP = d->wpInput->value();
     d->prevHP = d->hpInput->value();
 
-    d->wInput->blockSignals(false);
-    d->hInput->blockSignals(false);
-    d->wpInput->blockSignals(false);
-    d->hpInput->blockSignals(false);
+    blockWidgetSignals(false);
 }
 
-void ImageResize::slotCancel()
-{
-    if (d->currentRenderingMode != ImageResizePriv::NoneRendering)
-    {
-        d->greycstorationIface->cancelFilter();
-        d->parent->unsetCursor();
-    }
-
-    done(Cancel);
-}
-
-void ImageResize::processCImgUrl(const QString& url)
-{
-    KToolInvocation::invokeBrowser(url);
-}
-
-void ImageResize::closeEvent(QCloseEvent *e)
-{
-    if (d->currentRenderingMode != ImageResizePriv::NoneRendering)
-    {
-        d->greycstorationIface->cancelFilter();
-        d->parent->unsetCursor();
-    }
-
-    e->accept();
-}
-
-void ImageResize::slotOk()
+void ImageResize::prepareEffect()
 {
     if (d->prevW  != d->wInput->value()  || d->prevH  != d->hInput->value() ||
         d->prevWP != d->wpInput->value() || d->prevHP != d->hpInput->value())
         slotValuesChanged();
 
-    d->currentRenderingMode = ImageResizePriv::FinalRendering;
+    d->settingsWidget->setEnabled(false);
+    d->preserveRatioBox->setEnabled(false);
+    d->useGreycstorationBox->setEnabled(false);
+    d->wInput->setEnabled(false);
+    d->hInput->setEnabled(false);
+    d->wpInput->setEnabled(false);
+    d->hpInput->setEnabled(false);
+
+    ImageIface* iface = d->previewWidget->imageIface();
+    int w             = iface->previewWidth();
+    int h             = iface->previewHeight();
+    DImg imTemp       = iface->getOriginalImg()->smoothScale(w, h, Qt::ScaleMin);
+    int new_w         = w*d->wpInput->value()/100.0;
+    int new_h         = h*d->hpInput->value()/100.0;
+
+    if (d->useGreycstorationBox->isChecked())
+    {
+        setFilter(dynamic_cast<DImgThreadedFilter*>(
+                  new GreycstorationIface(&imTemp,
+                                          d->settingsWidget->getSettings(),
+                                          GreycstorationIface::Resize,
+                                          new_w, new_h,
+                                          QImage(),
+                                          this)));
+    }
+    else
+    {
+        // See B.K.O #152192: CImg resize() sound like defective or unadapted
+        // to resize image without good quality.
+        setFilter(dynamic_cast<DImgThreadedFilter*>(new ResizeImage(&imTemp, new_w, new_h, this)));
+    }
+}
+
+void ImageResize::prepareFinal()
+{
+    if (d->prevW  != d->wInput->value()  || d->prevH  != d->hInput->value() ||
+        d->prevWP != d->wpInput->value() || d->prevHP != d->hpInput->value())
+        slotValuesChanged();
+
     d->mainTab->setCurrentIndex(0);
     d->settingsWidget->setEnabled(false);
     d->preserveRatioBox->setEnabled(false);
@@ -523,109 +514,94 @@ void ImageResize::slotOk()
     d->hInput->setEnabled(false);
     d->wpInput->setEnabled(false);
     d->hpInput->setEnabled(false);
-    enableButton(Ok, false);
-    enableButton(Default, false);
-    enableButton(User2, false);
-    enableButton(User3, false);
 
-    d->parent->setCursor( Qt::WaitCursor );
-    writeUserSettings();
     ImageIface iface(0, 0);
-    uchar *data = iface.getOriginalImage();
-    DImg image = DImg(iface.originalWidth(), iface.originalHeight(),
-                      iface.originalSixteenBit(), iface.originalHasAlpha(), data);
-    delete [] data;
 
     if (d->useGreycstorationBox->isChecked())
     {
-        d->progressBar->setValue(0);
-        d->progressBar->setEnabled(true);
-
-        if (d->greycstorationIface)
-        {
-            delete d->greycstorationIface;
-            d->greycstorationIface = 0;
-        }
-
-        d->greycstorationIface = new GreycstorationIface(
-                                     &image,
-                                     d->settingsWidget->getSettings(),
-                                     GreycstorationIface::Resize,
-                                     d->wInput->value(),
-                                     d->hInput->value(),
-                                     QImage(),
-                                     this);
-
-        connect(d->greycstorationIface, SIGNAL(started()),
-                this, SLOT(slotFilterStarted()));
-
-        connect(d->greycstorationIface, SIGNAL(finished(bool)),
-                this, SLOT(slotFilterFinished(bool)));
-
-        connect(d->greycstorationIface, SIGNAL(progress(int)),
-                this, SLOT(slotFilterProgress(int)));
-
-        d->greycstorationIface->startFilter();
+        setFilter(dynamic_cast<DImgThreadedFilter*>(
+                  new GreycstorationIface(iface.getOriginalImg(), 
+                                          d->settingsWidget->getSettings(),
+                                          GreycstorationIface::Resize,
+                                          d->wInput->value(),
+                                          d->hInput->value(),
+                                          QImage(),
+                                          this)));
     }
     else
     {
         // See B.K.O #152192: CImg resize() sound like defective or unadapted
         // to resize image without good quality.
-
-        image.resize(d->wInput->value(), d->hInput->value());
-        iface.putOriginalImage(i18n("Resize"), image.bits(),
-                               image.width(), image.height());
-        d->parent->unsetCursor();
-        accept();
+        setFilter(dynamic_cast<DImgThreadedFilter*>(new ResizeImage(iface.getOriginalImg(),
+                                                    d->wInput->value(),
+                                                    d->hInput->value(), 
+                                                    this)));
     }
 }
 
-void ImageResize::slotFilterStarted()
+void ImageResize::putPreviewData()
 {
-    d->progressBar->setValue(0);
+    ImageIface* iface = d->previewWidget->imageIface();
+    int w             = iface->previewWidth();
+    int h             = iface->previewHeight();
+    DImg imTemp       = filter()->getTargetImage().smoothScale(w, h, Qt::ScaleMin);
+    DImg imDest(w, h, filter()->getTargetImage().sixteenBit(),
+                filter()->getTargetImage().hasAlpha());
+
+    QColor background = toolView()->backgroundRole();
+    imDest.fill(DColor(background, filter()->getTargetImage().sixteenBit()));
+    imDest.bitBltImage(&imTemp, (w-imTemp.width())/2, (h-imTemp.height())/2);
+
+    iface->putPreviewImage((imDest.smoothScale(iface->previewWidth(), iface->previewHeight())).bits());
+    d->previewWidget->updatePreview();
 }
 
-void ImageResize::slotFilterFinished(bool success)
+void ImageResize::renderingFinished()
 {
-    if (success)        // Computation Completed !
-    {
-        switch (d->currentRenderingMode)
-        {
-            case ImageResizePriv::FinalRendering:
-            {
-                kDebug(50003) << "Final resizing completed..." << endl;
-
-                ImageIface iface(0, 0);
-                DImg resizedImage = d->greycstorationIface->getTargetImage();
-
-                iface.putOriginalImage(i18n("Resize"), resizedImage.bits(),
-                                       resizedImage.width(), resizedImage.height());
-                d->parent->unsetCursor();
-                accept();
-                break;
-            }
-        }
-    }
-    else                   // Computation Failed !
-    {
-        switch (d->currentRenderingMode)
-        {
-            case ImageResizePriv::FinalRendering:
-                d->parent->unsetCursor();
-                break;
-        }
-    }
+    d->settingsWidget->setEnabled(true);
+    d->useGreycstorationBox->setEnabled(true);
+    d->preserveRatioBox->setEnabled(true);
+    d->wInput->setEnabled(true);
+    d->hInput->setEnabled(true);
+    d->wpInput->setEnabled(true);
+    d->hpInput->setEnabled(true);
 }
 
-void ImageResize::slotFilterProgress(int progress)
+void ImageResize::putFinalData()
 {
-    d->progressBar->setValue(progress);
+    ImageIface iface(0, 0);
+    DImg targetImage = filter()->getTargetImage();
+    iface.putOriginalImage(i18n("Resize"),
+                            targetImage.bits(),
+                            targetImage.width(), targetImage.height());
 }
 
-void ImageResize::slotUser3()
+void ImageResize::blockWidgetSignals(bool b)
+{
+    d->preserveRatioBox->blockSignals(b);
+    d->wInput->blockSignals(b);
+    d->hInput->blockSignals(b);
+    d->wpInput->blockSignals(b);
+    d->hpInput->blockSignals(b);
+}
+
+void ImageResize::slotRestorationToggled(bool b)
+{
+    d->settingsWidget->setEnabled(b);
+    d->cimgLogoLabel->setEnabled(b);
+    toolSettings()->enableButton(EditorToolSettings::Load, b);
+    toolSettings()->enableButton(EditorToolSettings::SaveAs, b);
+}
+
+void ImageResize::processCImgUrl(const QString& url)
+{
+    KToolInvocation::invokeBrowser(url);
+}
+
+void ImageResize::slotLoadSettings()
 {
     KUrl loadBlowupFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
-                                       QString( "*" ), this,
+                                       QString( "*" ), kapp->activeWindow(),
                                        QString( i18n("Photograph Resizing Settings File to Load")) );
     if( loadBlowupFile.isEmpty() )
        return;
@@ -636,7 +612,7 @@ void ImageResize::slotUser3()
     {
         if (!d->settingsWidget->loadSettings(file, QString("# Photograph Resizing Configuration File")))
         {
-           KMessageBox::error(this,
+           KMessageBox::error(kapp->activeWindow(),
                         i18n("\"%1\" is not a Photograph Resizing settings text file.",
                         loadBlowupFile.fileName()));
            file.close();
@@ -644,15 +620,18 @@ void ImageResize::slotUser3()
         }
     }
     else
-        KMessageBox::error(this, i18n("Cannot load settings from the Photograph Resizing text file."));
+    {
+        KMessageBox::error(kapp->activeWindow(), 
+                           i18n("Cannot load settings from the Photograph Resizing text file."));
+    }
 
     file.close();
 }
 
-void ImageResize::slotUser2()
+void ImageResize::slotSaveAsSettings()
 {
     KUrl saveBlowupFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
-                                       QString( "*" ), this,
+                                       QString( "*" ), kapp->activeWindow(),
                                        QString( i18n("Photograph Resizing Settings File to Save")) );
     if( saveBlowupFile.isEmpty() )
        return;
@@ -662,7 +641,7 @@ void ImageResize::slotUser2()
     if ( file.open(QIODevice::WriteOnly) )
         d->settingsWidget->saveSettings(file, QString("# Photograph Resizing Configuration File"));
     else
-        KMessageBox::error(this, i18n("Cannot save settings to the Photograph Resizing text file."));
+        KMessageBox::error(kapp->activeWindow(), i18n("Cannot save settings to the Photograph Resizing text file."));
 
     file.close();
 }

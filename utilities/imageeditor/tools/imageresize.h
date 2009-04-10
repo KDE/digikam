@@ -27,56 +27,45 @@
 // Qt includes
 
 #include <QString>
-#include <QCloseEvent>
-#include <QCustomEvent>
-
-// KDE includes
-
-#include <kdialog.h>
 
 // Local includes
 
 #include "digikam_export.h"
+#include "editortool.h"
 
 namespace Digikam
 {
 
 class ImageResizePriv;
 
-class DIGIKAM_EXPORT ImageResize : public KDialog
+class DIGIKAM_EXPORT ImageResize : public EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    ImageResize(QWidget* parent);
+    ImageResize(QObject* parent);
     ~ImageResize();
-
-protected:
-
-    void closeEvent(QCloseEvent *e);
 
 private:
 
-    void writeUserSettings();
+    void writeSettings();
+    void readSettings();
+    void prepareEffect();
+    void prepareFinal();
+    void putPreviewData();
+    void putFinalData();
+    void renderingFinished();
+    void blockWidgetSignals(bool b);
 
 private Q_SLOTS:
 
-    void slotOk();
-    void slotCancel();
-    void slotDefault();
-    void slotUser2();
-    void slotUser3();
-    void processCImgUrl(const QString&);
+    void slotSaveAsSettings();
+    void slotLoadSettings();
+    void slotResetSettings();
     void slotValuesChanged();
-    void readUserSettings();
+    void processCImgUrl(const QString&);
     void slotRestorationToggled(bool);
-
-    virtual void slotButtonClicked(int);
-
-    void slotFilterStarted();
-    void slotFilterFinished(bool);
-    void slotFilterProgress(int);
 
 private:
 
