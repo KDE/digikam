@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGE_RESIZE_H
-#define IMAGE_RESIZE_H
+#ifndef RESIZE_TOOL_H
+#define RESIZE_TOOL_H
 
 // Qt includes
 
@@ -30,22 +30,21 @@
 
 // Local includes
 
-#include "digikam_export.h"
 #include "editortool.h"
 
-namespace Digikam
+namespace DigikamImagesPluginCore
 {
 
-class ImageResizePriv;
+class ResizeToolPriv;
 
-class DIGIKAM_EXPORT ImageResize : public EditorToolThreaded
+class ResizeTool : public Digikam::EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    ImageResize(QObject* parent);
-    ~ImageResize();
+    ResizeTool(QObject* parent);
+    ~ResizeTool();
 
 private:
 
@@ -69,9 +68,9 @@ private Q_SLOTS:
 
 private:
 
-    ImageResizePriv* const d;
+    ResizeToolPriv* const d;
 };
 
-}  // namespace Digikam
+}  // namespace DigikamImagesPluginCore
 
-#endif /* IMAGE_RESIZE_H */
+#endif /* RESIZE_TOOL_H */

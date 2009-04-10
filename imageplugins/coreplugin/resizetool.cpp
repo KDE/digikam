@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#include "imageresize.h"
-#include "imageresize.moc"
+#include "resizetool.h"
+#include "resizetool.moc"
 
 // C++ includes
 
@@ -81,8 +81,9 @@
 #include "greycstorationsettings.h"
 
 using namespace KDcrawIface;
+using namespace Digikam;
 
-namespace Digikam
+namespace DigikamImagesPluginCore
 {
 
 class ResizeImage : public DImgThreadedFilter
@@ -120,11 +121,11 @@ private:
 
 // -------------------------------------------------------------
 
-class ImageResizePriv
+class ResizeToolPriv
 {
 public:
 
-    ImageResizePriv()
+    ResizeToolPriv()
     {
         previewWidget        = 0;
         preserveRatioBox     = 0;
@@ -171,8 +172,8 @@ public:
 
 // -------------------------------------------------------------
 
-ImageResize::ImageResize(QObject* parent)
-           : EditorToolThreaded(parent), d(new ImageResizePriv)
+ResizeTool::ResizeTool(QObject* parent)
+           : EditorToolThreaded(parent), d(new ResizeToolPriv)
 {
     setObjectName("resizeimage");
     setToolName(i18n("Resize Image"));
@@ -314,12 +315,12 @@ ImageResize::ImageResize(QObject* parent)
     d->settingsWidget->setDefaultSettings(defaults);
 }
 
-ImageResize::~ImageResize()
+ResizeTool::~ResizeTool()
 {
     delete d;
 }
 
-void ImageResize::readSettings()
+void ResizeTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("resize Tool Dialog");
@@ -344,7 +345,7 @@ void ImageResize::readSettings()
     d->settingsWidget->setSettings(settings);
 }
 
-void ImageResize::writeSettings()
+void ResizeTool::writeSettings()
 {
     GreycstorationSettings settings = d->settingsWidget->getSettings();
     KConfigGroup group              = KGlobal::config()->group("resize Tool Dialog");
@@ -366,7 +367,7 @@ void ImageResize::writeSettings()
     group.sync();
 }
 
-void ImageResize::slotResetSettings()
+void ResizeTool::slotResetSettings()
 {
     GreycstorationSettings settings;
     settings.setResizeDefaultSettings();
@@ -386,7 +387,7 @@ void ImageResize::slotResetSettings()
     blockWidgetSignals(false);
 }
 
-void ImageResize::slotValuesChanged()
+void ResizeTool::slotValuesChanged()
 {
     blockWidgetSignals(true);
 
@@ -461,7 +462,7 @@ void ImageResize::slotValuesChanged()
     blockWidgetSignals(false);
 }
 
-void ImageResize::prepareEffect()
+void ResizeTool::prepareEffect()
 {
     if (d->prevW  != d->wInput->value()  || d->prevH  != d->hInput->value() ||
         d->prevWP != d->wpInput->value() || d->prevHP != d->hpInput->value())
@@ -500,7 +501,7 @@ void ImageResize::prepareEffect()
     }
 }
 
-void ImageResize::prepareFinal()
+void ResizeTool::prepareFinal()
 {
     if (d->prevW  != d->wInput->value()  || d->prevH  != d->hInput->value() ||
         d->prevWP != d->wpInput->value() || d->prevHP != d->hpInput->value())
@@ -539,7 +540,7 @@ void ImageResize::prepareFinal()
     }
 }
 
-void ImageResize::putPreviewData()
+void ResizeTool::putPreviewData()
 {
     ImageIface* iface = d->previewWidget->imageIface();
     int w             = iface->previewWidth();
@@ -556,7 +557,7 @@ void ImageResize::putPreviewData()
     d->previewWidget->updatePreview();
 }
 
-void ImageResize::renderingFinished()
+void ResizeTool::renderingFinished()
 {
     d->settingsWidget->setEnabled(true);
     d->useGreycstorationBox->setEnabled(true);
@@ -567,7 +568,7 @@ void ImageResize::renderingFinished()
     d->hpInput->setEnabled(true);
 }
 
-void ImageResize::putFinalData()
+void ResizeTool::putFinalData()
 {
     ImageIface iface(0, 0);
     DImg targetImage = filter()->getTargetImage();
@@ -576,7 +577,7 @@ void ImageResize::putFinalData()
                             targetImage.width(), targetImage.height());
 }
 
-void ImageResize::blockWidgetSignals(bool b)
+void ResizeTool::blockWidgetSignals(bool b)
 {
     d->preserveRatioBox->blockSignals(b);
     d->wInput->blockSignals(b);
@@ -585,7 +586,7 @@ void ImageResize::blockWidgetSignals(bool b)
     d->hpInput->blockSignals(b);
 }
 
-void ImageResize::slotRestorationToggled(bool b)
+void ResizeTool::slotRestorationToggled(bool b)
 {
     d->settingsWidget->setEnabled(b);
     d->cimgLogoLabel->setEnabled(b);
@@ -593,12 +594,12 @@ void ImageResize::slotRestorationToggled(bool b)
     toolSettings()->enableButton(EditorToolSettings::SaveAs, b);
 }
 
-void ImageResize::processCImgUrl(const QString& url)
+void ResizeTool::processCImgUrl(const QString& url)
 {
     KToolInvocation::invokeBrowser(url);
 }
 
-void ImageResize::slotLoadSettings()
+void ResizeTool::slotLoadSettings()
 {
     KUrl loadBlowupFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
                                        QString( "*" ), kapp->activeWindow(),
@@ -628,7 +629,7 @@ void ImageResize::slotLoadSettings()
     file.close();
 }
 
-void ImageResize::slotSaveAsSettings()
+void ResizeTool::slotSaveAsSettings()
 {
     KUrl saveBlowupFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
                                        QString( "*" ), kapp->activeWindow(),
@@ -646,4 +647,4 @@ void ImageResize::slotSaveAsSettings()
     file.close();
 }
 
-}  // namespace Digikam
+}  // namespace DigikamImagesPluginCore

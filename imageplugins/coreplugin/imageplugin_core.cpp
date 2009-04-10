@@ -47,7 +47,7 @@
 #include "bwsepiatool.h"
 #include "hsltool.h"
 #include "iccprooftool.h"
-#include "imageresize.h"
+#include "resizetool.h"
 #include "blurtool.h"
 #include "ratiocroptool.h"
 #include "sharpentool.h"
@@ -322,6 +322,6 @@ void ImagePlugin_Core::slotRatioCrop()
 
 void ImagePlugin_Core::slotResize()
 {
-    ImageResize *tool = new ImageResize(this);
+    ResizeTool *tool = new ResizeTool(this);
     loadTool(tool);
 }
