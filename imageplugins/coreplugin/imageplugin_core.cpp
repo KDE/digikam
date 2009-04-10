@@ -7,7 +7,7 @@
  * Description : digiKam image editor plugin core
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,7 +21,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "imageplugin_core.h"
 #include "imageplugin_core.moc"
@@ -48,6 +47,7 @@
 #include "bwsepiatool.h"
 #include "hsltool.h"
 #include "iccprooftool.h"
+#include "imageresize.h"
 #include "blurtool.h"
 #include "ratiocroptool.h"
 #include "sharpentool.h"
@@ -146,6 +146,12 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
     actionCollection()->addAction("implugcore_ratiocrop", m_aspectRatioCropAction );
     connect(m_aspectRatioCropAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotRatioCrop()));
+
+
+    m_resizeAction = new KAction(KIcon("transform-scale"), i18n("&Resize..."), this);
+    actionCollection()->addAction("implugcore_resize", m_resizeAction);
+    connect(m_resizeAction, SIGNAL(triggered()),
+            this, SLOT(slotResize()));
 
     //-------------------------------
     // Init. menu actions.
@@ -311,5 +317,11 @@ void ImagePlugin_Core::slotSharpen()
 void ImagePlugin_Core::slotRatioCrop()
 {
     RatioCropTool *tool = new RatioCropTool(this);
+    loadTool(tool);
+}
+
+void ImagePlugin_Core::slotResize()
+{
+    ImageResize *tool = new ImageResize(this);
     loadTool(tool);
 }

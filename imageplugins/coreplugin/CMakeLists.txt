@@ -47,18 +47,19 @@ ENDFOREACH(_curentfile ${libclapack_SRCS})
 SET(digikamimageplugin_core_PART_SRCS 
     ${libclapack_SRCS} 
     ../../imageplugins/coreplugin/autocorrectiontool.cpp 
-    ../../imageplugins/coreplugin/bcgtool.cpp 
-    ../../imageplugins/coreplugin/bwsepiatool.cpp 
-    ../../imageplugins/coreplugin/hsl/hsltool.cpp 
+    ../../imageplugins/coreplugin/bcgtool.cpp
+    ../../imageplugins/coreplugin/bwsepiatool.cpp
+    ../../imageplugins/coreplugin/hsl/hsltool.cpp
     ../../imageplugins/coreplugin/hsl/hspreviewwidget.cpp
-    ../../imageplugins/coreplugin/iccprooftool.cpp 
-    ../../imageplugins/coreplugin/blurtool.cpp 
-    ../../imageplugins/coreplugin/imageplugin_core.cpp 
+    ../../imageplugins/coreplugin/iccprooftool.cpp
+    ../../imageplugins/coreplugin/blurtool.cpp
+    ../../imageplugins/coreplugin/imageplugin_core.cpp
     ../../imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp
-    ../../imageplugins/coreplugin/ratiocrop/ratiocroptool.cpp 
-    ../../imageplugins/coreplugin/redeyetool.cpp 
-    ../../imageplugins/coreplugin/rgbtool.cpp 
-    ../../imageplugins/coreplugin/sharpnesseditor/sharpentool.cpp 
+    ../../imageplugins/coreplugin/ratiocrop/ratiocroptool.cpp
+    ../../imageplugins/coreplugin/imageresize.cpp
+    ../../imageplugins/coreplugin/redeyetool.cpp
+    ../../imageplugins/coreplugin/rgbtool.cpp
+    ../../imageplugins/coreplugin/sharpnesseditor/sharpentool.cpp
     ../../imageplugins/coreplugin/sharpnesseditor/matrix.cpp
     ../../imageplugins/coreplugin/sharpnesseditor/refocus.cpp
     ../../imageplugins/coreplugin/sharpnesseditor/unsharp.cpp

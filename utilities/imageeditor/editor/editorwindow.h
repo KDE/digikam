@@ -186,7 +186,6 @@ protected Q_SLOTS:
     void slotSaveAs() { saveAs(); };
 
     void slotEditKeys();
-    void slotResize();
 
     void slotAboutToShowUndoMenu();
     void slotAboutToShowRedoMenu();

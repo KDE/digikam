@@ -559,9 +559,8 @@ ENDIF(MSVC)
        )
 
     SET(libdimgeditortools_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/tools/printhelper.cpp  
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/tools/printoptionspage.cpp  
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/tools/imageresize.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/tools/printhelper.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/tools/printoptionspage.cpp
        )
 
     SET(librawimport_SRCS

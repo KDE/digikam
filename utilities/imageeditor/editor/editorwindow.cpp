@@ -104,7 +104,6 @@
 #include "imagedialog.h"
 #include "imageplugin.h"
 #include "imagepluginloader.h"
-#include "imageresize.h"
 #include "iofilesettingscontainer.h"
 #include "libsinfodlg.h"
 #include "loadingcacheinterface.h"
@@ -463,10 +462,6 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'Transform' menu actions ---------------------------------------------
 
-    d->resizeAction = new KAction(KIcon("transform-scale"), i18n("&Resize..."), this);
-    connect(d->resizeAction, SIGNAL(triggered()), this, SLOT(slotResize()));
-    actionCollection()->addAction("editorwindow_resize", d->resizeAction);
-
     d->cropAction = new KAction(KIcon("transform-crop-and-resize"), i18n("Crop"), this);
     d->cropAction->setShortcut(Qt::CTRL+Qt::Key_X);
     connect(d->cropAction, SIGNAL(triggered()), m_canvas, SLOT(slotCrop()));
@@ -629,12 +624,6 @@ void EditorWindow::slotEditKeys()
     dialog.addCollection(actionCollection(), i18nc("general editor shortcuts", "General"));
     dialog.addCollection(d->imagepluginsActionCollection, i18nc("imageplugins shortcuts", "Image Plugins"));
     dialog.configure();
-}
-
-void EditorWindow::slotResize()
-{
-    ImageResize *tool = new ImageResize(this);
-    d->toolIface->loadTool(tool);
 }
 
 void EditorWindow::slotAboutToShowUndoMenu()
@@ -990,7 +979,6 @@ void EditorWindow::toggleStandardActions(bool val)
     d->flipHorizAction->setEnabled(val);
     d->flipVertAction->setEnabled(val);
     d->filePrintAction->setEnabled(val);
-    d->resizeAction->setEnabled(val);
     m_fileDeleteAction->setEnabled(val);
     m_saveAsAction->setEnabled(val);
     d->selectAllAction->setEnabled(val);
