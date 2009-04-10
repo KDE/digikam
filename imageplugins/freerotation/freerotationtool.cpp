@@ -184,10 +184,10 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     m_manualAdjustInput          = new QCheckBox(i18n("Manual Adjustment"));
     m_manualAdjustContainer      = new QWidget;
     QGridLayout *containerLayout = new QGridLayout;
-    containerLayout->addWidget(label3,              0, 0, 1, 3);
-    containerLayout->addWidget(m_angleInput,        1, 0, 1, 3);
-    containerLayout->addWidget(label4,              2, 0, 1, 3);
-    containerLayout->addWidget(m_fineAngleInput,    3, 0, 1, 3);
+    containerLayout->addWidget(label3,              0, 0, 1, 1);
+    containerLayout->addWidget(m_angleInput,        1, 0, 1, 1);
+    containerLayout->addWidget(label4,              2, 0, 1, 1);
+    containerLayout->addWidget(m_fineAngleInput,    3, 0, 1, 1);
     m_manualAdjustContainer->setLayout(containerLayout);
 
     // -------------------------------------------------------------
@@ -212,9 +212,9 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
 
     QGridLayout* mainLayout = new QGridLayout;
     mainLayout->addWidget(label1,                  0, 0, 1, 1);
-    mainLayout->addWidget(m_newWidthLabel,         0, 1, 1, 2);
+    mainLayout->addWidget(m_newWidthLabel,         0, 1, 1, 1);
     mainLayout->addWidget(label2,                  1, 0, 1, 1);
-    mainLayout->addWidget(m_newHeightLabel,        1, 1, 1, 2);
+    mainLayout->addWidget(m_newHeightLabel,        1, 1, 1, 1);
     mainLayout->addWidget(line,                    2, 0, 1,-1);
     mainLayout->addWidget(m_autoAdjustContainer,   3, 0, 1,-1);
     mainLayout->addWidget(line2,                   4, 0, 1,-1);
@@ -223,7 +223,7 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     mainLayout->addWidget(m_manualAdjustContainer, 7, 0, 1,-1);
     mainLayout->addWidget(line3,                   8, 0, 1,-1);
     mainLayout->addWidget(label5,                  9, 0, 1, 1);
-    mainLayout->addWidget(m_autoCropCB,            9, 1, 1, 2);
+    mainLayout->addWidget(m_autoCropCB,            9, 1, 1, 1);
     mainLayout->setRowStretch(10, 10);
     mainLayout->setMargin(m_gboxSettings->spacingHint());
     mainLayout->setSpacing(m_gboxSettings->spacingHint());
