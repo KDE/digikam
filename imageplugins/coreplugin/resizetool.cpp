@@ -173,7 +173,7 @@ public:
 // -------------------------------------------------------------
 
 ResizeTool::ResizeTool(QObject* parent)
-           : EditorToolThreaded(parent), d(new ResizeToolPriv)
+          : EditorToolThreaded(parent), d(new ResizeToolPriv)
 {
     setObjectName("resizeimage");
     setToolName(i18n("Resize Image"));
@@ -313,6 +313,8 @@ ResizeTool::ResizeTool(QObject* parent)
     GreycstorationSettings defaults;
     defaults.setResizeDefaultSettings();
     d->settingsWidget->setDefaultSettings(defaults);
+
+    slotResetSettings();
 }
 
 ResizeTool::~ResizeTool()
