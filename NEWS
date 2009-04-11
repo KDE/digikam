@@ -32,4 +32,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 021 ==> 183038 : "Select All" action interrupts other widgets. 
 022 ==> 189022 : Better guessing of proportions with 'inverse transformation' option.
 023 ==> 189286 : EXIF info lost while converting from NEF to TIFF.
-024 ==> 
+024 ==> 189336 : Preview of RAW look different than actual image.
+025 ==> 
+
