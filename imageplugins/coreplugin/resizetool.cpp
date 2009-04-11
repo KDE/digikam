@@ -314,7 +314,7 @@ ResizeTool::ResizeTool(QObject* parent)
     defaults.setResizeDefaultSettings();
     d->settingsWidget->setDefaultSettings(defaults);
 
-    slotResetSettings();
+    QTimer::singleShot(0, this, SLOT(slotResetSettings()));
 }
 
 ResizeTool::~ResizeTool()
