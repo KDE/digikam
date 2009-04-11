@@ -5,6 +5,8 @@ Gilles Caulier <caulier dot gilles at gmail dot com>
 Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
 Laurent Montel <montel at kde dot org>
 Andi Clemens <andi dot clemens at gmx dot net>
+Angelo Naselli <anaselli at linux dot it>
+Rainer Krienke <krienke at uni-koblenz dot de>
 
 URL
 ---
@@ -72,15 +74,7 @@ DIRECTORIES / FILES                     DONE BY     SHOWFOTO DIGIKAM   PORT     
     thumbbar.cpp                        Gilles          X      X       DONE        DONE     Still use Q3ScrollView. Port to QScrollArea and Model/View
 |-----iccprofiles                       Gilles          X      X       DONE        DONE
 |-----imageplugins                      Gilles          X      X       DONE        DONE
-|-----metadata
-    exifwidget.cpp                      Gilles          X      X       DONE        DONE
-    iptcwidget.cpp                      Gilles          X      X       DONE        DONE
-    makernotewidget.cpp                 Gilles          X      X       DONE        DONE
-    mdkeylistviewitem.cpp               Gilles          X      X       DONE        DONE
-    metadatalistview.cpp                Gilles          X      X       DONE        DONE
-    metadatalistviewitem.cpp            Gilles          X      X       DONE        DONE
-    metadatawidget.cpp                  Gilles          X      X       DONE        DONE
-    xmpwidget.cpp                       Gilles          X      X       DONE        DONE
+|-----metadata                          Gilles          X      X       DONE        DONE
 
 |-utilities
 |---batch                               Gilles                 X       DONE        -
@@ -102,7 +96,7 @@ DIRECTORIES / FILES                     DONE BY     SHOWFOTO DIGIKAM   PORT     
     umscamera.cpp                       Gilles                 X       DONE        DONE
 |---fuzzysearch                         Gilles                 X       DONE        DONE
 |---gpssearch                           Gilles                 X       DONE        DONE
-|---hotplug                             Laurent                        DONE        -
+|---hotplug                             Marcel                         DONE        -
 |---imageeditor
 |-----canvas
     canvas.cpp                          Gilles          X      X       DONE        DONE     Still use Q3ScrollView. Port to PreviewWidget and Model/View
@@ -113,18 +107,16 @@ DIRECTORIES / FILES                     DONE BY     SHOWFOTO DIGIKAM   PORT     
     undoaction.cpp                      Gilles          X      X       DONE        DONE
     undocache.cpp                       Gilles          X      X       DONE        DONE
     undomanager.cpp                     Gilles          X      X       DONE        DONE
-|-----editor
-    editorwindow.cpp                    Gilles          X      X       DONE        DONE
-    imageiface.cpp                      Gilles          X      X       DONE        DONE
-    imagewindow.cpp                     Gilles                 X       DONE        DONE
-|-----tools                             Laurent         X      X       DONE        DONE
+|-----editor                            Gilles          X      X       DONE        DONE
+|-----printiface                        Angelo          X      X       DONE        DONE
+|---kipiiface                           Gilles                 X       DONE        DONE
 |---lighttable
     lighttablepreview.cpp               Gilles                 X       DONE        DONE     Still use Q3ScrollView. Port to PreviewWidget and Model/View
     lighttableview.cpp                  Gilles                 X       DONE        DONE
     lighttablebar.cpp                   Gilles                 X       DONE                 Port to Qt4 and Model/View
     lighttablewindow.cpp                Gilles                 X       DONE        DONE
-|---kipiiface                           Gilles                 X       DONE        DONE
-|---scripts                             Gilles                         DONE        -
+|---queuemanager                        Gilles                 X       DONE        DONE
+|---scripts                             Rainer                         DONE        -
 |---searchwindow                        Marcel                 X       DONE        DONE
 |---setup                               Gilles          X      X       DONE        DONE
 |---slideshow                           Laurent         X      X       DONE        DONE
@@ -211,4 +203,4 @@ DIRECTORIES / FILES                     DONE BY     SHOWFOTO DIGIKAM   PORT     
 |---texture                             Laurent                        DONE        DONE
 |---whitebalance                        Gilles                         DONE        DONE
 
-|-themedesigner                         Gilles                         DONE
+|-themedesigner                         Andi                           DONE        DONE
