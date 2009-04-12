@@ -329,12 +329,13 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
             for (ImageInfoList::const_iterator it = d->currentInfos.constBegin(); 
                  it != d->currentInfos.constEnd(); ++it)
             {
-                if (!(*it).imagePosition().isEmpty())
+                ImagePosition pos = d->currentInfos.first().imagePosition();
+                if (!pos.isEmpty())
                 {
                     GPSInfo info;
-                    info.latitude  = (*it).imagePosition().latitudeNumber();
-                    info.longitude = (*it).imagePosition().longitudeNumber();
-                    info.altitude  = (*it).imagePosition().altitude();
+                    info.latitude  = pos.latitudeNumber();
+                    info.longitude = pos.longitudeNumber();
+                    info.altitude  = pos.altitude();
                     info.dateTime  = (*it).dateTime();
                     info.url       = (*it).fileUrl();
                     list.append(info);
