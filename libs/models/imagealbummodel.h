@@ -37,6 +37,7 @@ class KJob;
 namespace Digikam
 {
 
+class ImageChangeset;
 class CollectionImageChangeset;
 class SearchChangeset;
 class Album;
@@ -63,6 +64,7 @@ public Q_SLOTS:
     void openAlbum(Album *album);
     /** Reloads the current album */
     void refresh();
+    bool hasScheduledRefresh() const;
 
 Q_SIGNALS:
 
@@ -74,6 +76,7 @@ protected Q_SLOTS:
     void slotData(KIO::Job* job, const QByteArray& data);
 
     void slotNextRefresh();
+    void slotImageChange(const ImageChangeset &changeset);
     void slotCollectionImageChange(const CollectionImageChangeset &changeset);
     void slotSearchChange(const SearchChangeset &changeset);
 

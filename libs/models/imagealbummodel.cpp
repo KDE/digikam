@@ -85,6 +85,9 @@ ImageAlbumModel::ImageAlbumModel(QObject *parent)
     connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset &)),
             this, SLOT(slotCollectionImageChange(const CollectionImageChangeset &)));
 
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset &)),
+            this, SLOT(slotImageChange(const ImageChangeset &)));
+
     connect(DatabaseAccess::databaseWatch(), SIGNAL(searchChange(const SearchChangeset &)),
             this, SLOT(slotSearchChange(const SearchChangeset &)));
 
@@ -117,6 +120,11 @@ void ImageAlbumModel::openAlbum(Album *album)
 void ImageAlbumModel::refresh()
 {
     startLoadingAlbum(d->currentAlbum);
+}
+
+bool ImageAlbumModel::hasScheduledRefresh() const
+{
+    return d->refreshTimer->isActive();
 }
 
 void ImageAlbumModel::startLoadingAlbum(Album *album)
@@ -199,9 +207,39 @@ void ImageAlbumModel::slotNextRefresh()
         refresh();
 }
 
+void ImageAlbumModel::slotImageChange(const ImageChangeset &changeset)
+{
+    if (!d->currentAlbum)
+        return;
+
+    // already scheduled to refresh?
+    if (d->refreshTimer->isActive())
+        return;
+
+    if (d->currentAlbum->type() == Album::SEARCH)
+    {
+        // For searches any touched field can require a refresh.
+        // We cannot easily find out which fields are searched for, so we refresh for any change.
+        foreach(qlonglong id, changeset.ids())
+        {
+            // if one matching image id is found, trigger a refresh
+            if (hasImage(id))
+            {
+                d->refreshTimer->start(100);
+                return;
+            }
+        }
+    }
+
+}
+
 void ImageAlbumModel::slotCollectionImageChange(const CollectionImageChangeset &changeset)
 {
     if (!d->currentAlbum)
+        return;
+
+    // already scheduled to refresh?
+    if (d->refreshTimer->isActive())
         return;
 
     bool doRefresh = false;
