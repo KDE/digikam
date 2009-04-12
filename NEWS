@@ -34,5 +34,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 023 ==> 189286 : EXIF info lost while converting from NEF to TIFF.
 024 ==> 189336 : Preview of RAW look different than actual image.
 025 ==> 189413 : Images without GPS-data are shown on the equator in the geolocation-view.
-026 ==> 
+026 ==> 184954 : Unable to delete items from camera - canon sx10is.
+027 ==> 
 
