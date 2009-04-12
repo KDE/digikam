@@ -368,7 +368,7 @@ void TagFilterView::slotTextTagFilterChanged(const SearchTextSettings& settings)
 {
     if (settings.text.isEmpty())
     {
-        collapseView();
+        collapseView(FolderView::RestoreSelectedItem);
         return;
     }
 

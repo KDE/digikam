@@ -65,11 +65,18 @@ public:
     {
         /*
          * Collapse the folder view and re-open the current viewed album (default mode)
-         * In this mode, all root items are collapsed, then the one containing
+         * In this mode, all root items are collapsed and the one containing
          * the currently selected album is expand again.
          * This mode will make sure that the selected album is visible in the folder tree.
+         * This only works for AlbumFolder and TagFolder view.
          */
         RestoreCurrentAlbum,
+        /*
+         * Collapse the view to the currently selected list item.
+         * In this mode, all root items are collapsed and the one containing
+         * the currently selected item is expand again.
+         */
+        RestoreSelectedItem,
         /*
          * Collapse the folder view but omit the root item.
          * In this mode all items in the folder view are collapsed,

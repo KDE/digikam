@@ -630,7 +630,6 @@ void FolderView::collapseView(CollapseMode mode)
         iter++;
     }
 
-    // handle special cases
     switch (mode)
     {
         case OmitRoot:
@@ -638,6 +637,7 @@ void FolderView::collapseView(CollapseMode mode)
             firstChild()->setOpen(true);
             break;
         }
+
         case RestoreCurrentAlbum:
         {
             if (!AlbumManager::instance()->currentAlbum())
@@ -669,8 +669,31 @@ void FolderView::collapseView(CollapseMode mode)
                 ensureItemVisible(restoredItem);
             break;
         }
-        default:
+
+        case RestoreSelectedItem:
+        {
+            Q3ListViewItemIterator iter(this);
+            Q3ListViewItem* restoredItem = 0;
+
+            while (iter.current())
+            {
+                Q3ListViewItem* curItem = iter.current();
+
+                if (curItem)
+                {
+                    if (curItem->isSelected())
+                    {
+                        curItem->setOpen(true);
+                        restoredItem = curItem;
+                        break;
+                    }
+                }
+                iter++;
+            }
+            if (restoredItem)
+                ensureItemVisible(restoredItem);
             break;
+        }
     }
 }
 
