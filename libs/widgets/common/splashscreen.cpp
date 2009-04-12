@@ -62,7 +62,6 @@ public:
         state           = 0;
         progressBarSize = 3;
         state           = 0;
-        messageColor    = Qt::lightGray;
         messageAlign    = Qt::AlignLeft;
         version         = QString(digikam_version_short);
         versionColor    = Qt::white;
@@ -88,9 +87,15 @@ SplashScreen::SplashScreen()
             : KSplashScreen(QPixmap()), d(new SplashScreenPriv)
 {
     if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
+    {
         setPixmap(KStandardDirs::locate("data","digikam/data/splash-digikam.png"));
+        d->messageColor = Qt::black;
+    }
     else
+    {
         setPixmap(KStandardDirs::locate("data","showfoto/data/splash-showfoto.png"));
+        d->messageColor = Qt::lightGray;
+    }
 
     QTimer *timer = new QTimer( this );
 
