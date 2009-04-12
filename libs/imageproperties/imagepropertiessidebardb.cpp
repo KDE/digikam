@@ -329,7 +329,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
             for (ImageInfoList::const_iterator it = d->currentInfos.constBegin(); 
                  it != d->currentInfos.constEnd(); ++it)
             {
-                ImagePosition pos = d->currentInfos.first().imagePosition();
+                ImagePosition pos = (*it).imagePosition();
                 if (!pos.isEmpty())
                 {
                     GPSInfo info;
