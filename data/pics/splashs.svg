@@ -19,7 +19,7 @@
    sodipodi:docname="splashs.svg"
    sodipodi:docbase="/home/tsoots/ohj/translations/po"
    version="1.0"
-   inkscape:export-filename="/home/andi/3434046522_876dd3779e_splash2.png"
+   inkscape:export-filename="/home/andi/bug-splash-showfoto.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90"
    inkscape:output_extension="org.inkscape.output.svg.inkscape">
@@ -43339,6 +43339,27 @@
        fx="521.16754"
        fy="545.92981"
        r="146.47212" />
+    <inkscape:perspective
+       id="perspective31505"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective31558"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective9328"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       sodipodi:type="inkscape:persp3d" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -43347,9 +43368,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="139.23819"
-     inkscape:cy="135.18071"
+     inkscape:zoom="0.5"
+     inkscape:cx="109.78425"
+     inkscape:cy="-53.24594"
      inkscape:document-units="px"
      inkscape:current-layer="layer9"
      gridtolerance="10000"
@@ -43384,6 +43405,31 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
+  <g
+     inkscape:groupmode="layer"
+     id="layer10"
+     inkscape:label="note"
+     style="display:inline"
+     sodipodi:insensitive="true">
+    <text
+       xml:space="preserve"
+       style="font-size:29.35857964px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Arial;-inkscape-font-specification:Arial"
+       x="-498.88324"
+       y="228.24594"
+       id="text9334"><tspan
+         sodipodi:role="line"
+         id="tspan9336"
+         x="-498.88324"
+         y="228.24594">open layers</tspan><tspan
+         sodipodi:role="line"
+         x="-498.88324"
+         y="264.94415"
+         id="tspan9338">to view / hide the different</tspan><tspan
+         sodipodi:role="line"
+         x="-498.88324"
+         y="301.6424"
+         id="tspan9340">application logos</tspan></text>
+  </g>
   <g
      inkscape:groupmode="layer"
      id="layer9"
