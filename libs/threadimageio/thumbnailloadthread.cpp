@@ -110,6 +110,7 @@ ThumbnailLoadThread::ThumbnailLoadThread()
 
 ThumbnailLoadThread::~ThumbnailLoadThread()
 {
+    shutdownThread();
     delete d->creator;
     delete d;
 }

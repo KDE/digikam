@@ -171,6 +171,7 @@ public:
 protected:
 
     virtual void run();
+    void shutdownThread();
     void notificationReceived();
 
 protected:

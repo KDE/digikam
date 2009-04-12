@@ -71,6 +71,17 @@ LoadSaveThread::LoadSaveThread()
 
 LoadSaveThread::~LoadSaveThread()
 {
+    shutdownThread();
+
+    if (d->lastTask)
+        delete d->lastTask;
+    foreach (LoadSaveTask *task, m_todo)
+        delete task;
+    delete d;
+}
+
+void LoadSaveThread::shutdownThread()
+{
     d->running = false;
     {
         QMutexLocker lock(&m_mutex);
@@ -78,12 +89,6 @@ LoadSaveThread::~LoadSaveThread()
     }
 
     wait();
-
-    if (d->lastTask)
-        delete d->lastTask;
-    foreach (LoadSaveTask *task, m_todo)
-        delete task;
-    delete d;
 }
 
 void LoadSaveThread::load(LoadingDescription description)
