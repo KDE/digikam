@@ -48,6 +48,9 @@ ImageInfoCache::ImageInfoCache()
 
     connect(dbwatch, SIGNAL(imageTagChange(const ImageTagChangeset &)),
             this, SLOT(slotImageTagChanged(const ImageTagChangeset &)));
+
+    connect(dbwatch, SIGNAL(albumChange(const AlbumChangeset &)),
+            this, SLOT(slotAlbumChange(const AlbumChangeset &)));
 }
 
 ImageInfoCache::~ImageInfoCache()
@@ -135,6 +138,23 @@ void ImageInfoCache::slotImageTagChanged(const ImageTagChangeset &changeset)
         QHash<qlonglong, ImageInfoData *>::iterator it = m_infos.find(imageId);
         if (it != m_infos.end())
             (*it)->tagIdsCached = false;
+    }
+}
+
+void ImageInfoCache::slotAlbumChange(const AlbumChangeset &changeset)
+{
+    DatabaseAccess access;
+
+    switch(changeset.operation())
+    {
+        case AlbumChangeset::Added:
+        case AlbumChangeset::Deleted:
+        case AlbumChangeset::Renamed:
+        case AlbumChangeset::PropertiesChanged:
+            m_albums.remove(changeset.albumId());
+            break;
+        case AlbumChangeset::Unknown:
+            break;
     }
 }
 

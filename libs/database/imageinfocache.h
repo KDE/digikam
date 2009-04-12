@@ -76,6 +76,7 @@ private Q_SLOTS:
 
     void slotImageChanged(const ImageChangeset &changeset);
     void slotImageTagChanged(const ImageTagChangeset &changeset);
+    void slotAlbumChange(const AlbumChangeset &);
 
 private:
 
