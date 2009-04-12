@@ -7,8 +7,8 @@
  * Description : image properties side bar using data from
  *               digiKam database.
  *
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -326,18 +326,28 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         else if (tab == m_gpsTab && !m_dirtyGpsTab)
         {
             GPSInfoList list;
-            for (ImageInfoList::const_iterator it = d->currentInfos.constBegin(); it != d->currentInfos.constEnd(); ++it)
+            for (ImageInfoList::const_iterator it = d->currentInfos.constBegin(); 
+                 it != d->currentInfos.constEnd(); ++it)
             {
-                GPSInfo info;
-                info.latitude  = (*it).imagePosition().latitudeNumber();
-                info.longitude = (*it).imagePosition().longitudeNumber();
-                info.altitude  = (*it).imagePosition().altitude();
-                info.dateTime  = (*it).dateTime();
-                info.url       = (*it).fileUrl();
-                list.append(info);
+                if (!(*it).imagePosition().isEmpty())
+                {
+                    GPSInfo info;
+                    info.latitude  = (*it).imagePosition().latitudeNumber();
+                    info.longitude = (*it).imagePosition().longitudeNumber();
+                    info.altitude  = (*it).imagePosition().altitude();
+                    info.dateTime  = (*it).dateTime();
+                    info.url       = (*it).fileUrl();
+                    list.append(info);
+                }
             }
-            m_gpsTab->setGPSInfoList(list);
-
+            if (list.isEmpty())
+            {
+                m_gpsTab->setCurrentURL();
+            }
+            else
+            {
+                m_gpsTab->setGPSInfoList(list);
+            }
             m_dirtyGpsTab = true;
         }
     }
