@@ -274,6 +274,8 @@ public:
     void setChecked(Album *album, bool isChecked);
     /// Sets the check state of the album
     void setCheckState(Album *album, Qt::CheckState state);
+    /// Toggles the check state of album between Checked or Unchecked
+    void toggleChecked(Album *album);
 
     /// Returns a list of album with check state Checked
     QList<Album *> checkedAlbums() const;

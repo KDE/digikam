@@ -95,7 +95,7 @@ QModelIndex AlbumFilterModel::rootAlbumIndex() const
 
 AlbumFilterModel::MatchResult AlbumFilterModel::matches(const QModelIndex &index) const
 {
-    return matches(sourceAlbumModel()->albumForIndex(index));
+    return matches(sourceAlbumModel()->albumForIndex(mapToSource(index)));
 }
 
 AlbumFilterModel::MatchResult AlbumFilterModel::matches(Album *album) const

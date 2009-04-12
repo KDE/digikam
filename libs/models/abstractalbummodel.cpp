@@ -654,6 +654,11 @@ void AbstractCheckableAlbumModel::setCheckState(Album *album, Qt::CheckState sta
     setData(indexForAlbum(album), state, Qt::CheckStateRole);
 }
 
+void AbstractCheckableAlbumModel::toggleChecked(Album *album)
+{
+    setChecked(album, !isChecked(album));
+}
+
 QList<Album *> AbstractCheckableAlbumModel::checkedAlbums() const
 {
     // return a list with all keys with value Qt::Checked

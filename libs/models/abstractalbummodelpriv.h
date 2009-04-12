@@ -50,8 +50,10 @@ public:
 
     Album *findNthChild(Album *parent, int n)
     {
-        // return the n-th of theh children of parent, or 0
+        // return the n-th of the children of parent, or 0
         Album *a = parent->firstChild();
+        if (!a)
+            return 0;
         for (int i=0; i<n; ++i)
         {
             a = a->next();
