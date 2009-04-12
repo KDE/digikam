@@ -36,5 +36,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 025 ==> 189413 : Images without GPS-data are shown on the equator in the geolocation-view.
 026 ==> 184954 : Unable to delete items from camera - canon sx10is.
 027 ==> 189168 : You do not have write access to your home directory base path.
-028 ==> 
+028 ==> 185617 : Images are invalid / not found when an album is moved.
+029 ==> 
 
