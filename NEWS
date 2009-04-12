@@ -38,5 +38,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 027 ==> 189168 : You do not have write access to your home directory base path.
 028 ==> 185617 : Images are invalid / not found when an album is moved.
 029 ==> 187265 : Advanced search crashes if a selected album has been deleted.
-030 ==> 
+030 ==> 185177 : Searches are not updated when changes are made to the resulting image set.
+031 ==> 
 
