@@ -399,8 +399,8 @@ void AlbumManager::changeDatabase(const QString &dbPath)
                 KGuiItem startFresh(i18n("Create New Database"), "document-new");
                 KGuiItem upgrade(i18n("Upgrade Database"), "view-refresh");
                 int result = KMessageBox::warningYesNoCancel(0,
-                                    i18n("<p>You have chosen the folder \"%1\" as the new place to store the database."
-                                         "A database file from an older digikam version is found in this folder.</p> "
+                                    i18n("<p>You have chosen the folder \"%1\" as the new place to store the database. "
+                                         "A database file from an older version of digiKam is found in this folder.</p> "
                                         "<p>Would you like to upgrade the old database file, start with a new database, "
                                         "or copy the current database to this location and continue using it?</p> ",
                                         newDir.path()),
