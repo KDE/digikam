@@ -714,4 +714,16 @@ bool AbstractCheckableAlbumModel::setData(const QModelIndex &index, const QVaria
         return AbstractCountingAlbumModel::setData(index, value, role);
 }
 
+void AbstractCheckableAlbumModel::albumCleared(Album *album)
+{
+    m_checkedAlbums.remove(album);
+    AbstractCountingAlbumModel::albumCleared(album);
+}
+
+void AbstractCheckableAlbumModel::allAlbumsCleared()
+{
+    m_checkedAlbums.clear();
+    AbstractCountingAlbumModel::allAlbumsCleared();
+}
+
 } // namespace Digikam
