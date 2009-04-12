@@ -657,6 +657,25 @@ void AlbumLister::slotImageChange(const ImageChangeset &changeset)
     if (!d->currAlbum)
         return;
 
+    // already scheduled to refresh?
+    if (d->refreshTimer->isActive())
+        return;
+
+    if (d->currAlbum->type() == Album::SEARCH)
+    {
+        // For searches any touched field can require a refresh.
+        // We cannot easily find out which fields are searched for, so we refresh for any change.
+        foreach(qlonglong id, changeset.ids())
+        {
+            // if one matching image id is found, trigger a refresh
+            if (d->itemListSet.contains(id))
+            {
+                d->refreshTimer->start(100);
+                return;
+            }
+        }
+    }
+
     // already scheduled to re-filter?
     if (d->filterTimer->isActive())
         return;
@@ -675,7 +694,7 @@ void AlbumLister::slotImageChange(const ImageChangeset &changeset)
     // is one of our images affected?
     foreach(qlonglong id, changeset.ids())
     {
-        // if one matching image id is found, trigger a refresh
+        // if one matching image id is found, trigger a refilter
         if (d->itemListSet.contains(id))
         {
             d->filterTimer->start();
@@ -687,6 +706,10 @@ void AlbumLister::slotImageChange(const ImageChangeset &changeset)
 void AlbumLister::slotImageTagChange(const ImageTagChangeset &changeset)
 {
     if (!d->currAlbum)
+        return;
+
+    // already scheduled to refresh?
+    if (d->refreshTimer->isActive())
         return;
 
     // already scheduled to re-filter?
@@ -712,6 +735,10 @@ void AlbumLister::slotImageTagChange(const ImageTagChangeset &changeset)
 void AlbumLister::slotCollectionImageChange(const CollectionImageChangeset &changeset)
 {
     if (!d->currAlbum)
+        return;
+
+    // already scheduled to refresh?
+    if (d->refreshTimer->isActive())
         return;
 
     bool doRefresh = false;
