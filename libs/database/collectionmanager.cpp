@@ -327,7 +327,7 @@ QList<SolidVolumeInfo> CollectionManagerPrivate::actuallyListVolumes()
             info.path += '/';
         info.uuid = volume->uuid();
         info.label = volume->label();
-        info.isRemovable = drive->isRemovable();
+        info.isRemovable = drive->isHotpluggable() || drive->isRemovable();
         info.isOpticalDisc = volumeDevice.is<Solid::OpticalDisc>();
 
         volumes << info;
