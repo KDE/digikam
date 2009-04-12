@@ -47,25 +47,46 @@ public:
     AbstractSpecificAlbumModel *albumModel() const;
     AlbumFilterModel *albumFilterModel() const;
 
+    /// Enable expanding of tree items on single click on the item (default: on)
+    void setSelectOnSingleClick(bool doThat);
+
 public Q_SLOTS:
 
     void setSearchTextSettings(const SearchTextSettings &settings);
 
 Q_SIGNALS:
 
+    /// Emitted when the currently selected album changes
+    void currentAlbumChanged(Album *currentAlbum);
+    /// Emitted when the current selection changes. Use currentChanged unless in multi-selection mode.
+    void selectedAlbumsChanged(QList<Album*> selectedAlbums);
+    /// Emitted when search text settings have been changed
     void filteringDone(bool atLeastOneMatch);
 
 protected Q_SLOTS:
 
-    void slotFilterChanged();
+    // override if implemented behavior is not as intended
     virtual void slotRootAlbumAvailable();
+
+    void slotFilterChanged();
+    void slotCurrentChanged();
+    void slotSelectionChanged();
 
 protected:
 
     bool checkExpandedState(const QModelIndex &index);
+    void mousePressEvent(QMouseEvent *e);
+
+    virtual void middleButtonPressed(Album *a);
 
     AbstractSpecificAlbumModel *m_albumModel;
     AlbumFilterModel           *m_albumFilterModel;
+
+    bool     m_checkOnMiddleClick;
+
+private:
+
+    bool     m_expandOnSingleClick;
 };
 
 class AbstractCountingAlbumTreeView : public AbstractAlbumTreeView
@@ -85,18 +106,40 @@ private Q_SLOTS:
     void updateShowCountState(const QModelIndex &index, bool recurse);
 };
 
-class AlbumTreeView : public AbstractCountingAlbumTreeView
+class AbstractCheckableAlbumTreeView : public AbstractCountingAlbumTreeView
+{
+
+public:
+
+    /// Models of these view _can_ be checkable, they need _not_. You need to enable it on the model.
+
+    AbstractCheckableAlbumTreeView(AbstractCheckableAlbumModel *model, QWidget *parent = 0);
+
+    /// Manage check state through the model directly
+    AbstractCheckableAlbumModel *checkableModel() const;
+
+    /// Enable checking on middle mouse button click (default: on)
+    void setCheckOnMiddleClick(bool doThat);
+
+protected:
+
+    virtual void middleButtonPressed(Album *a);
+};
+
+class AlbumTreeView : public AbstractCheckableAlbumTreeView
 {
 public:
 
     AlbumTreeView(QWidget *parent = 0);
+    AlbumModel *albumModel() const;
 };
 
-class TagTreeView : public AbstractCountingAlbumTreeView
+class TagTreeView : public AbstractCheckableAlbumTreeView
 {
 public:
 
     TagTreeView(QWidget *parent = 0);
+    TagModel *albumModel() const;
 };
 
 class SearchTreeView : public AbstractAlbumTreeView
@@ -104,6 +147,7 @@ class SearchTreeView : public AbstractAlbumTreeView
 public:
 
     SearchTreeView(QWidget *parent = 0);
+    SearchModel *albumModel() const;
 };
 
 class DateAlbumTreeView : public AbstractCountingAlbumTreeView
@@ -111,6 +155,7 @@ class DateAlbumTreeView : public AbstractCountingAlbumTreeView
 public:
 
     DateAlbumTreeView(QWidget *parent = 0);
+    DateAlbumModel *albumModel() const;
 };
 
 
