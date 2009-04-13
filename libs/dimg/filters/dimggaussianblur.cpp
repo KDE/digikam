@@ -86,25 +86,13 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
        return;
     }
 
+    kDebug(50003) << "DImgGaussianBlur::Process Computation..." << endl;
+
     if (!sixteenBit)           // 8 bits image.
     {
         // Copy the src image data into a CImg type image
-        CImg<uchar> img = CImg<uchar>(width, height, 1, 4);
-        uchar *ptr = data;
-
-        for (int y = 0; y < height; ++y)
-        {
-            for (int x = 0; x < width; ++x)
-            {
-                img(x, y, 0) = ptr[0];        // Blue.
-                img(x, y, 1) = ptr[1];        // Green.
-                img(x, y, 2) = ptr[2];        // Red.
-                img(x, y, 3) = ptr[3];        // Alpha.
-                ptr += 4;
-            }
-        }
-
-        kDebug(50003) << "DImgGaussianBlur::Process Computation..." << endl;
+        CImg<uchar> img = CImg<uchar>(data, 4, width, height, 1, false).
+                          get_permute_axes("yzvx");
 
         // blur the image
         img.blur(radius);
@@ -112,16 +100,16 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
         // Copy CImg onto destination.
         kDebug(50003) << "DImgGaussianBlur::Finalization..." << endl;
 
-        ptr = m_destImage.bits();
+        uchar *ptr = m_destImage.bits();
         for (int y = 0; y < height; ++y)
         {
             for (int x = 0; x < width; ++x)
             {
                 // Overwrite RGB values to destination.
-                ptr[0] = static_cast<uchar>(img(x, y, 0));        // Blue
-                ptr[1] = static_cast<uchar>(img(x, y, 1));        // Green
-                ptr[2] = static_cast<uchar>(img(x, y, 2));        // Red
-                ptr[3] = static_cast<uchar>(img(x, y, 3));        // Alpha
+                ptr[0] = img(x, y, 0);        // Blue
+                ptr[1] = img(x, y, 1);        // Green
+                ptr[2] = img(x, y, 2);        // Red
+                ptr[3] = img(x, y, 3);        // Alpha
                 ptr    += 4;
             }
         }
@@ -129,22 +117,8 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
     else                                // 16 bits image.
     {
         // Copy the src image data into a CImg type image
-        CImg<> img = CImg<>(width, height, 1, 4);
-        unsigned short *ptr = (unsigned short *)data;
-
-        for (int y = 0; y < height; ++y)
-        {
-            for (int x = 0; x < width; ++x)
-            {
-                img(x, y, 0) = ptr[0];        // Blue.
-                img(x, y, 1) = ptr[1];        // Green.
-                img(x, y, 2) = ptr[2];        // Red.
-                img(x, y, 3) = ptr[3];        // Alpha.
-                ptr += 4;
-            }
-        }
-
-        kDebug(50003) << "DImgGaussianBlur::Process Computation..." << endl;
+        CImg<unsigned short> img = CImg<unsigned short>((unsigned short*)data, 4, width, height, 1, false).
+                                   get_permute_axes("yzvx");
 
         // blur the image
         img.blur(radius);
@@ -152,16 +126,16 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
         // Copy CImg onto destination.
         kDebug(50003) << "DImgGaussianBlur::Finalization..." << endl;
 
-        ptr = (unsigned short *)m_destImage.bits();
+        unsigned short *ptr = (unsigned short *)m_destImage.bits();
         for (int y = 0; y < height; ++y)
         {
             for (int x = 0; x < width; ++x)
             {
                 // Overwrite RGB values to destination.
-                ptr[0] = static_cast<unsigned short>(img(x, y, 0));        // Blue
-                ptr[1] = static_cast<unsigned short>(img(x, y, 1));        // Green
-                ptr[2] = static_cast<unsigned short>(img(x, y, 2));        // Red
-                ptr[3] = static_cast<unsigned short>(img(x, y, 3));        // Alpha
+                ptr[0] = img(x, y, 0);        // Blue
+                ptr[1] = img(x, y, 1);        // Green
+                ptr[2] = img(x, y, 2);        // Red
+                ptr[3] = img(x, y, 3);        // Alpha
                 ptr    += 4;
             }
         }
