@@ -6,7 +6,8 @@
  * Date        : 2004-07-09
  * Description : a tool to blur an image
  *
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,12 +36,12 @@
 #include <kaboutdata.h>
 #include <kapplication.h>
 #include <kconfig.h>
-#include <kcursor.h>
-#include <kglobal.h>
-#include <klocale.h>
-#include <kiconloader.h>
 #include <kconfiggroup.h>
+#include <kcursor.h>
 #include <kdebug.h>
+#include <kglobal.h>
+#include <kiconloader.h>
+#include <klocale.h>
 
 // LibKDcraw includes
 
@@ -48,11 +49,10 @@
 
 // Local includes
 
+#include "dimggaussianblur.h"
+#include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imagepanelwidget.h"
-#include "editortoolsettings.h"
-#include "dimggaussianblur.h"
-
 
 using namespace KDcrawIface;
 using namespace Digikam;
@@ -70,17 +70,15 @@ BlurTool::BlurTool(QObject* parent)
 
     m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
                                             EditorToolSettings::Ok|
-                                            EditorToolSettings::Cancel|
-                                            EditorToolSettings::Try,
+                                            EditorToolSettings::Cancel,
                                             EditorToolSettings::PanIcon);
     QGridLayout* grid = new QGridLayout( m_gboxSettings->plainPage() );
 
     QLabel *label = new QLabel(i18n("Smoothness:"), m_gboxSettings->plainPage());
 
-    m_radiusInput = new RIntNumInput(m_gboxSettings->plainPage());
-    m_radiusInput->setRange(0, 100, 1);
-    m_radiusInput->setSliderEnabled(true);
-    m_radiusInput->setDefaultValue(0);
+    m_radiusInput = new RDoubleNumInput(m_gboxSettings->plainPage());
+    m_radiusInput->setRange(0.0, 100.0, 0.1);
+    m_radiusInput->setDefaultValue(0.0);
     m_radiusInput->setWhatsThis( i18n("A smoothness of 0 has no effect, "
                                       "1 and above determine the Gaussian blur matrix radius "
                                       "that determines how much to blur the image."));
@@ -97,6 +95,12 @@ BlurTool::BlurTool(QObject* parent)
 
     setToolView(m_previewWidget);
     init();
+
+    connect(m_radiusInput, SIGNAL(valueChanged(double)),
+            this, SLOT(slotTimer()));
+
+    connect(m_previewWidget, SIGNAL(signalOriginalClipFocusChanged()),
+            this, SLOT(slotTimer()));
 }
 
 BlurTool::~BlurTool()

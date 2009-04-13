@@ -6,7 +6,8 @@
  * Date        : 2004-07-09
  * Description : a tool to blur an image
  *
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,7 +31,7 @@
 
 namespace KDcrawIface
 {
-class RIntNumInput;
+class RDoubleNumInput;
 }
 
 namespace Digikam
@@ -68,11 +69,11 @@ private:
 
 private:
 
-    KDcrawIface::RIntNumInput   *m_radiusInput;
+    KDcrawIface::RDoubleNumInput   *m_radiusInput;
 
-    Digikam::ImagePanelWidget   *m_previewWidget;
+    Digikam::ImagePanelWidget      *m_previewWidget;
 
-    Digikam::EditorToolSettings *m_gboxSettings;
+    Digikam::EditorToolSettings    *m_gboxSettings;
 };
 
 }  // namespace DigikamImagesPluginCore

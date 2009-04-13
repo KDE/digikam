@@ -6,7 +6,8 @@
  * Date        : 2005-17-07
  * Description : A Gaussian Blur threaded image filter.
  *
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,56 +38,23 @@ class DIGIKAM_EXPORT DImgGaussianBlur : public DImgThreadedFilter
 
 public:
 
-    DImgGaussianBlur(DImg *orgImage, QObject *parent=0, int radius=3);
+    DImgGaussianBlur(DImg *orgImage, QObject *parent=0, double radius=3.0);
 
     // Constructor for slave mode: execute immediately in current thread with specified master filter
     DImgGaussianBlur(DImgThreadedFilter *parentFilter, const DImg &orgImage, const DImg &destImage,
-                     int progressBegin=0, int progressEnd=100, int radius=3);
+                     int progressBegin=0, int progressEnd=100, double radius=3.0);
 
     ~DImgGaussianBlur(){};
 
 private:  // Gaussian blur filter data.
 
-    int m_radius;
+    double m_radius;
 
 private:  // Gaussian blur filter methods.
 
     virtual void filterImage();
 
-    void gaussianBlurImage(uchar *data, int width, int height, bool sixteenBit, int radius);
-
-    // function to allocate a 2d array
-    int** Alloc2DArray (int Columns, int Rows)
-    {
-       // First, we declare our future 2d array to be returned
-       int** lpcArray = 0L;
-
-       // Now, we alloc the main pointer with Columns
-       lpcArray = new int*[Columns];
-
-       for (int i = 0; i < Columns; ++i)
-           lpcArray[i] = new int[Rows];
-
-       return (lpcArray);
-    };
-
-    // Function to deallocates the 2d array previously created
-    void Free2DArray (int** lpcArray, int Columns)
-    {
-       // loop to deallocate the columns
-       for (int i = 0; i < Columns; ++i)
-           delete [] lpcArray[i];
-
-       // now, we delete the main pointer
-       delete [] lpcArray;
-    };
-
-    inline bool IsInside (int Width, int Height, int X, int Y)
-    {
-       bool bIsWOk = ((X < 0) ? false : (X >= Width ) ? false : true);
-       bool bIsHOk = ((Y < 0) ? false : (Y >= Height) ? false : true);
-       return (bIsWOk && bIsHOk);
-    };
+    void gaussianBlurImage(uchar *data, int width, int height, bool sixteenBit, double radius);
 };
 
 }  // namespace Digikam
