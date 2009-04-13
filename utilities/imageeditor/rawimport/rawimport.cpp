@@ -91,7 +91,7 @@ RawImport::~RawImport()
 
 void RawImport::slotInit()
 {
-    readSettings();
+     EditorToolThreaded::slotInit();
 
     // ---------------------------------------------------------------
 
