@@ -211,9 +211,12 @@ void SplashScreen::drawContents(QPainter* p)
     p->fillRect(r.x()-3, r.y()-1, r.width()+5, r.height()-1, d->textBrush);
     p->setPen(d->versionColor);
     p->drawText(r, Qt::AlignRight, d->version);
+    p->save();
+    p->setRenderHint(QPainter::Antialiasing, false);
     p->setPen(Qt::black);
     p->setBrush(Qt::NoBrush);
     p->drawRect(r.x()-3, r.y()-1, r.width()+5, r.height()-1);
+    p->restore();
 }
 
 }   // namespace Digikam
