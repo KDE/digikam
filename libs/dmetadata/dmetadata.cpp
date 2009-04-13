@@ -217,15 +217,17 @@ bool DMetadata::setImageComment(const QString& comment) const
 
     // In Third we write comments into XMP. Language Alternative rule is not yet used.
 
-    if (!setXmpTagStringLangAlt("Xmp.dc.description", comment, QString(), false))
-        return false;
+    if (supportXmp())
+    {
+        if (!setXmpTagStringLangAlt("Xmp.dc.description", comment, QString(), false))
+            return false;
 
-    if (!setXmpTagStringLangAlt("Xmp.exif.UserComment", comment, QString(), false))
-        return false;
+        if (!setXmpTagStringLangAlt("Xmp.exif.UserComment", comment, QString(), false))
+            return false;
 
-    if (!setXmpTagStringLangAlt("Xmp.tiff.ImageDescription", comment, QString(), false))
-        return false;
-
+        if (!setXmpTagStringLangAlt("Xmp.tiff.ImageDescription", comment, QString(), false))
+            return false;
+    }
     // In Four we write comments into IPTC.
     // Note that Caption IPTC tag is limited to 2000 char and ASCII charset.
 
@@ -368,8 +370,11 @@ bool DMetadata::setImageRating(int rating) const
 
     // Set standard XMP rating tag.
 
-    if (!setXmpTagString("Xmp.xmp.Rating", QString::number(rating)))
-        return false;
+    if (supportXmp())
+    {
+        if (!setXmpTagString("Xmp.xmp.Rating", QString::number(rating)))
+            return false;
+    }
 
     // Set Exif rating tag used by Windows Vista.
 
@@ -400,8 +405,11 @@ bool DMetadata::setImageRating(int rating) const
             break;
     }
 
-    if (!setXmpTagString("Xmp.MicrosoftPhoto.Rating", QString::number(ratePercents)))
-        return false;
+    if (supportXmp())
+    {
+        if (!setXmpTagString("Xmp.MicrosoftPhoto.Rating", QString::number(ratePercents)))
+            return false;
+    }
 
     if (!setExifTagLong("Exif.Image.0x4749", ratePercents))
         return false;
@@ -522,9 +530,11 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath) const
 
     // Set the new Tags path list. This is set, not add-to like setXmpKeywords.
     // Unlike the other keyword fields, we do not need to merge existing entries.
-    if (!setXmpTagStringSeq("Xmp.digiKam.TagsList", tagsPath))
-        return false;
-
+    if (supportXmp())
+    {
+        if (!setXmpTagStringSeq("Xmp.digiKam.TagsList", tagsPath))
+            return false;
+    }
     return true;
 }
 
@@ -535,24 +545,27 @@ bool DMetadata::setImagePhotographerId(const QString& author, const QString& aut
 
     // Set XMP tags. XMP<->IPTC Schema from Photoshop 7.0
 
-    // Create a list of authors including old one witch already exists.
-    QStringList oldAuthors = getXmpTagStringSeq("Xmp.dc.creator", false);
-    QStringList newAuthors(author);
-
-    for (QStringList::Iterator it = oldAuthors.begin(); it != oldAuthors.end(); ++it)
+    if (supportXmp())
     {
-        if (!newAuthors.contains(*it))
-            newAuthors.append(*it);
+        // Create a list of authors including old one witch already exists.
+        QStringList oldAuthors = getXmpTagStringSeq("Xmp.dc.creator", false);
+        QStringList newAuthors(author);
+
+        for (QStringList::Iterator it = oldAuthors.begin(); it != oldAuthors.end(); ++it)
+        {
+            if (!newAuthors.contains(*it))
+                newAuthors.append(*it);
+        }
+
+        if (!setXmpTagStringSeq("Xmp.dc.creator", newAuthors, false))
+            return false;
+
+        if (!setXmpTagStringSeq("Xmp.tiff.Artist", newAuthors, false))
+            return false;
+
+        if (!setXmpTagString("Xmp.photoshop.AuthorsPosition", authorTitle, false))
+            return false;
     }
-
-    if (!setXmpTagStringSeq("Xmp.dc.creator", newAuthors, false))
-        return false;
-
-    if (!setXmpTagStringSeq("Xmp.tiff.Artist", newAuthors, false))
-        return false;
-
-    if (!setXmpTagString("Xmp.photoshop.AuthorsPosition", authorTitle, false))
-        return false;
 
     // Set IPTC tags.
 
@@ -568,22 +581,24 @@ bool DMetadata::setImageCredits(const QString& credit, const QString& source, co
         return false;
 
     // Set XMP tags. XMP<->IPTC Schema from Photoshop 7.0
+    if (supportXmp())
+    {
+        if (!setXmpTagString("Xmp.photoshop.Credit", credit, false))
+            return false;
 
-    if (!setXmpTagString("Xmp.photoshop.Credit", credit, false))
-        return false;
+        if (!setXmpTagString("Xmp.photoshop.Source", source, false))
+            return false;
 
-    if (!setXmpTagString("Xmp.photoshop.Source", source, false))
-        return false;
+        if (!setXmpTagString("Xmp.dc.source", source, false))
+            return false;
 
-    if (!setXmpTagString("Xmp.dc.source", source, false))
-        return false;
+        // NOTE : language Alternative rule is not yet used here.
+        if (!setXmpTagStringLangAlt("Xmp.dc.rights", copyright, QString(), false))
+            return false;
 
-    // NOTE : language Alternative rule is not yet used here.
-    if (!setXmpTagStringLangAlt("Xmp.dc.rights", copyright, QString(), false))
-        return false;
-
-    if (!setXmpTagStringLangAlt("Xmp.tiff.Copyright", copyright, QString(), false))
-        return false;
+        if (!setXmpTagStringLangAlt("Xmp.tiff.Copyright", copyright, QString(), false))
+            return false;
+    }
 
     // Set IPTC tags.
 
@@ -1525,6 +1540,5 @@ bool DMetadata::removeXmpSubjects(const QStringList& subjectsToRemove, bool setP
     return removeFromXmpTagStringBag("Xmp.iptc.SubjectCode", subjectsToRemove, setProgramName);
 }
 // End: Scheduled to be moved to libkexiv2
-
 
 }  // namespace Digikam
