@@ -34,7 +34,6 @@
 #include <QColor>
 #include <QTime>
 #include <QTextDocument>
-#include <QLinearGradient>
 
 // KDE includes
 
@@ -67,7 +66,6 @@ public:
         version         = QString(digikam_version_short);
         versionColor    = Qt::white;
         messageColor    = Qt::white;
-        textBrush       = QBrush(QColor(27, 57, 59, 192));
     }
 
     int     state;
@@ -79,8 +77,6 @@ public:
 
     QColor  messageColor;
     QColor  versionColor;
-
-    QBrush  textBrush;
 
     QTime   lastStateUpdateTime;
 };
@@ -144,7 +140,8 @@ void SplashScreen::drawContents(QPainter* p)
     int position;
     QColor basecolor(155, 192, 231);
 
-    // Draw background circles
+    // -- Draw background circles ------------------------------------
+
     QPainter::RenderHints hints = p->renderHints();
     p->setRenderHints(QPainter::Antialiasing);
     p->setPen(Qt::NoPen);
@@ -188,34 +185,25 @@ void SplashScreen::drawContents(QPainter* p)
     p->setPen(d->messageColor);
     p->drawText(r, d->messageAlign, d->message);
 
-    // Draw slogan
-    p->save();
+    // -- Draw version string -------------------------------------------------
+
+    QFontMetrics fontMt(fnt);
+    QRect r2 = fontMt.boundingRect(rect(), 0, d->version);
+    r2.moveTopLeft(QPoint(width()-r2.width()-10, r.y()));
+    p->setPen(d->versionColor);
+    p->drawText(r2, Qt::AlignLeft, d->version);
+
+    // -- Draw slogan ----------------------------------------------------------
+
     r = rect();
     r.setCoords(r.x() + 210, r.y() + 235, r.x() + 490, r.y() + 275);
     p->translate(r.x(), r.y());
-    p->setFont(fnt);
     QTextDocument slogan;
     slogan.setDefaultTextOption(QTextOption(Qt::AlignRight | Qt::AlignVCenter));
     slogan.setHtml(Digikam::digiKamSloganFormated().toString());
     slogan.setPageSize(r.size());
     slogan.setDefaultFont(fnt);
     slogan.drawContents(p, QRect(0, 0, r.width(), r.height()));
-    p->restore();
-
-    // Draw version string on bottom/right corner.
-    QFontMetrics fontMt(fnt);
-    r = fontMt.boundingRect(rect(), 0, d->version);
-    r.moveTopLeft(QPoint(width()-r.width()-10, height()-r.height()-3));
-    p->setFont(fnt);
-    p->fillRect(r.x()-3, r.y()-1, r.width()+5, r.height()-1, d->textBrush);
-    p->setPen(d->versionColor);
-    p->drawText(r, Qt::AlignRight, d->version);
-    p->save();
-    p->setRenderHint(QPainter::Antialiasing, false);
-    p->setPen(Qt::black);
-    p->setBrush(Qt::NoBrush);
-    p->drawRect(r.x()-3, r.y()-1, r.width()+5, r.height()-1);
-    p->restore();
 }
 
 }   // namespace Digikam
