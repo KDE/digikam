@@ -34,6 +34,7 @@
 #include <QColor>
 #include <QTime>
 #include <QTextDocument>
+#include <QLinearGradient>
 
 // KDE includes
 
@@ -143,7 +144,12 @@ void SplashScreen::drawContents(QPainter* p)
     int position;
     QColor basecolor(155, 192, 231);
 
-    p->fillRect(2, 2, width()-4, 19, d->textBrush);
+    QRect topRect(2, 2, width()-4, 19);
+    QLinearGradient gradient(topRect.width()/2, 0, topRect.width()/2, topRect.height());
+    gradient.setColorAt(0.0, QColor(27, 57, 59, 192));
+    gradient.setColorAt(0.7, QColor(26, 30, 63, 180));
+    gradient.setColorAt(1.0, QColor(36, 76, 79, 168));
+    p->fillRect(topRect, gradient);
 
     // Draw background circles
     QPainter::RenderHints hints = p->renderHints();
