@@ -39,5 +39,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 028 ==> 185617 : Images are invalid / not found when an album is moved.
 029 ==> 187265 : Advanced search crashes if a selected album has been deleted.
 030 ==> 185177 : Searches are not updated when changes are made to the resulting image set.
-031 ==> 
+031 ==> 189542 : Crash on opening download dialog.
+032 ==> 
 
