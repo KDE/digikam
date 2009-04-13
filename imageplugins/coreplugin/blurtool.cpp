@@ -96,6 +96,8 @@ BlurTool::BlurTool(QObject* parent)
     setToolView(m_previewWidget);
     init();
 
+    // --------------------------------------------------------
+
     connect(m_radiusInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotTimer()));
 
@@ -132,6 +134,7 @@ void BlurTool::slotResetSettings()
 
 void BlurTool::prepareEffect()
 {
+    QApplication::setOverrideCursor(Qt::WaitCursor);
     m_radiusInput->setEnabled(false);
     DImg img = m_previewWidget->getOriginalRegionImage();
     setFilter(dynamic_cast<DImgThreadedFilter*>(new DImgGaussianBlur(&img, this, m_radiusInput->value())));
@@ -167,6 +170,7 @@ void BlurTool::putFinalData()
 
 void BlurTool::renderingFinished(void)
 {
+    QApplication::restoreOverrideCursor();
     m_radiusInput->setEnabled(true);
 }
 
