@@ -86,11 +86,10 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
        return;
     }
 
-    // Copy the src image data into a CImg type image
-    CImg<> img = CImg<>(width, height, 1, 4);
-
     if (!sixteenBit)           // 8 bits image.
     {
+        // Copy the src image data into a CImg type image
+        CImg<uchar> img = CImg<uchar>(width, height, 1, 4);
         uchar *ptr = data;
 
         for (int y = 0; y < height; ++y)
@@ -104,35 +103,16 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
                 ptr += 4;
             }
         }
-    }
-    else                                // 16 bits image.
-    {
-        unsigned short *ptr = (unsigned short *)data;
 
-        for (int y = 0; y < height; ++y)
-        {
-            for (int x = 0; x < width; ++x)
-            {
-                img(x, y, 0) = ptr[0];        // Blue.
-                img(x, y, 1) = ptr[1];        // Green.
-                img(x, y, 2) = ptr[2];        // Red.
-                img(x, y, 3) = ptr[3];        // Alpha.
-                ptr += 4;
-            }
-        }
-    }
+        kDebug(50003) << "DImgGaussianBlur::Process Computation..." << endl;
 
-    kDebug(50003) << "DImgGaussianBlur::Process Computation..." << endl;
+        // blur the image
+        img.blur(radius);
 
-    // blur the image
-    img.blur(radius);
+        // Copy CImg onto destination.
+        kDebug(50003) << "DImgGaussianBlur::Finalization..." << endl;
 
-    // Copy CImg onto destination.
-    kDebug(50003) << "DImgGaussianBlur::Finalization..." << endl;
-
-    if (!sixteenBit)           // 8 bits image.
-    {
-        uchar *ptr = m_destImage.bits();
+        ptr = m_destImage.bits();
         for (int y = 0; y < height; ++y)
         {
             for (int x = 0; x < width; ++x)
@@ -146,9 +126,33 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
             }
         }
     }
-    else                                     // 16 bits image.
+    else                                // 16 bits image.
     {
-        unsigned short *ptr = (unsigned short *)m_destImage.bits();
+        // Copy the src image data into a CImg type image
+        CImg<> img = CImg<>(width, height, 1, 4);
+        unsigned short *ptr = (unsigned short *)data;
+
+        for (int y = 0; y < height; ++y)
+        {
+            for (int x = 0; x < width; ++x)
+            {
+                img(x, y, 0) = ptr[0];        // Blue.
+                img(x, y, 1) = ptr[1];        // Green.
+                img(x, y, 2) = ptr[2];        // Red.
+                img(x, y, 3) = ptr[3];        // Alpha.
+                ptr += 4;
+            }
+        }
+
+        kDebug(50003) << "DImgGaussianBlur::Process Computation..." << endl;
+
+        // blur the image
+        img.blur(radius);
+
+        // Copy CImg onto destination.
+        kDebug(50003) << "DImgGaussianBlur::Finalization..." << endl;
+
+        ptr = (unsigned short *)m_destImage.bits();
         for (int y = 0; y < height; ++y)
         {
             for (int x = 0; x < width; ++x)
