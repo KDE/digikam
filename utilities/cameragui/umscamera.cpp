@@ -7,7 +7,7 @@
  * Description : USB Mass Storage camera interface
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -286,6 +286,8 @@ bool UMSCamera::loadKDEThumbCreator(const QString& folder, const QString& itemNa
 
     QString mimeTypeAlt = mimeType.replace(QRegExp("/.*"), "/*");
     QString plugin;
+
+    if (!KServiceTypeTrader::self()) return false;
 
     KService::List plugins = KServiceTypeTrader::self()->query("ThumbCreator");
     for (KService::List::ConstIterator it = plugins.constBegin(); it != plugins.constEnd(); ++it)
