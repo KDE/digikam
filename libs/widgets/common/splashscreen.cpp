@@ -143,7 +143,7 @@ void SplashScreen::drawContents(QPainter* p)
     int position;
     QColor basecolor(155, 192, 231);
 
-    p->fillRect(1, 1, width()-1, 20, d->textBrush);
+    p->fillRect(2, 2, width()-4, 19, d->textBrush);
 
     // Draw background circles
     QPainter::RenderHints hints = p->renderHints();
@@ -183,7 +183,7 @@ void SplashScreen::drawContents(QPainter* p)
     // Draw message at given position, limited to 43 chars
     // If message is too long, string is truncated
     if (d->message.length() > 40)
-        d->message.truncate(39); 
+        d->message.truncate(39);
 
     d->message += "...";
     p->setPen(d->messageColor);
