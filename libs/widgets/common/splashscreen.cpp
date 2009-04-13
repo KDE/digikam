@@ -65,7 +65,8 @@ public:
         messageAlign    = Qt::AlignLeft;
         version         = QString(digikam_version_short);
         versionColor    = Qt::white;
-        versionBrush    = QBrush(QColor(27, 57, 59, 192));
+        messageColor    = Qt::white;
+        textBrush       = QBrush(QColor(27, 57, 59, 192));
     }
 
     int     state;
@@ -78,7 +79,7 @@ public:
     QColor  messageColor;
     QColor  versionColor;
 
-    QBrush  versionBrush;
+    QBrush  textBrush;
 
     QTime   lastStateUpdateTime;
 };
@@ -89,12 +90,10 @@ SplashScreen::SplashScreen()
     if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
     {
         setPixmap(KStandardDirs::locate("data","digikam/data/splash-digikam.png"));
-        d->messageColor = Qt::black;
     }
     else
     {
         setPixmap(KStandardDirs::locate("data","showfoto/data/splash-showfoto.png"));
-        d->messageColor = Qt::lightGray;
     }
 
     QTimer *timer = new QTimer( this );
@@ -144,20 +143,22 @@ void SplashScreen::drawContents(QPainter* p)
     int position;
     QColor basecolor(155, 192, 231);
 
+    p->fillRect(1, 1, width()-1, 20, d->textBrush);
+
     // Draw background circles
     QPainter::RenderHints hints = p->renderHints();
     p->setRenderHints(QPainter::Antialiasing);
     p->setPen(Qt::NoPen);
     p->setBrush(QColor(225, 234, 231));
-    p->drawEllipse(21, 7, 9, 9);
-    p->drawEllipse(32, 7, 9, 9);
-    p->drawEllipse(43, 7, 9, 9);
+    p->drawEllipse(21, 6, 9, 9);
+    p->drawEllipse(32, 6, 9, 9);
+    p->drawEllipse(43, 6, 9, 9);
     p->setRenderHints(hints);
 
     // Draw animated circles, increments are chosen
     // to get close to background's color
     // (didn't work well with QColor::light function)
-    for (int i=0; i < d->progressBarSize; ++i)
+    for (int i = 0; i < d->progressBarSize; ++i)
     {
         position = (d->state+i)%(2*d->progressBarSize-1);
         if (position < 3)
@@ -166,32 +167,30 @@ void SplashScreen::drawContents(QPainter* p)
                                basecolor.green()-28*i,
                                basecolor.blue() -10*i));
 
-            p->drawEllipse(21+position*11, 7, 9, 9);
+            p->drawEllipse(21+position*11, 6, 9, 9);
         }
     }
-
-    p->setPen(d->messageColor);
 
     // We use a device dependant font with a fixed size.
     QFont fnt(KGlobalSettings::generalFont());
     fnt.setPixelSize(10);
+    fnt.setBold(false);
     p->setFont(fnt);
 
     QRect r = rect();
-    r.setCoords(r.x() + 60, r.y() + 5, r.width() - 10, r.height() - 10);
-
-    p->drawText(r, d->messageAlign, d->message);
+    r.setCoords(r.x() + 60, r.y() + 4, r.width() - 10, r.height() - 10);
 
     // Draw message at given position, limited to 43 chars
     // If message is too long, string is truncated
     if (d->message.length() > 40)
-        d->message.truncate(39); d->message += "...";
+        d->message.truncate(39); 
 
+    d->message += "...";
+    p->setPen(d->messageColor);
     p->drawText(r, d->messageAlign, d->message);
 
     // Draw slogan
     p->save();
-    fnt.setPixelSize(11);
     r = rect();
     r.setCoords(r.x() + 210, r.y() + 235, r.x() + 490, r.y() + 275);
     p->translate(r.x(), r.y());
@@ -205,12 +204,11 @@ void SplashScreen::drawContents(QPainter* p)
     p->restore();
 
     // Draw version string on bottom/right corner.
-    fnt.setPixelSize(10);
     QFontMetrics fontMt(fnt);
     r = fontMt.boundingRect(rect(), 0, d->version);
     r.moveTopLeft(QPoint(width()-r.width()-10, height()-r.height()-3));
     p->setFont(fnt);
-    p->fillRect(r.x()-3, r.y()-1, r.width()+5, r.height()-1, d->versionBrush);
+    p->fillRect(r.x()-3, r.y()-1, r.width()+5, r.height()-1, d->textBrush);
     p->setPen(d->versionColor);
     p->drawText(r, Qt::AlignRight, d->version);
     p->setPen(Qt::black);
