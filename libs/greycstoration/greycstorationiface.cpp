@@ -50,7 +50,7 @@
 #include <pthread.h>
 #endif
 
-/** Uncomment this line if you use future GreycStoration implementation with GFact parameter 
+/** Uncomment this line if you use future GreycStoration implementation with GFact parameter
  */
 #define GREYSTORATION_USING_GFACT 1
 
@@ -214,44 +214,20 @@ void GreycstorationIface::filterImage()
 
     kDebug(50003) << "GreycstorationIface::Initialization..." << endl;
 
-    // Copy the src image data into a CImg type image with three channels and no alpha.
+    uchar* data = m_orgImage.bits();
+    int width   = m_orgImage.width();
+    int height  = m_orgImage.height();
 
-    uchar* imageData = m_orgImage.bits();
-    int imageWidth   = m_orgImage.width();
-    int imageHeight  = m_orgImage.height();
-    d->img           = CImg<>(imageWidth, imageHeight, 1, 4);
-
+    // convert DImg (interleaved RGBA) to CImg (planar RGBA)
     if (!m_orgImage.sixteenBit())           // 8 bits image.
     {
-        uchar *ptr = imageData;
-
-        for (y = 0; y < imageHeight; ++y)
-        {
-            for (x = 0; x < imageWidth; ++x)
-            {
-                d->img(x, y, 0) = ptr[0];        // Blue.
-                d->img(x, y, 1) = ptr[1];        // Green.
-                d->img(x, y, 2) = ptr[2];        // Red.
-                d->img(x, y, 3) = ptr[3];        // Alpha.
-                ptr += 4;
-            }
-        }
+        d->img = CImg<>(data, 4, width, height, 1, false).
+                 get_permute_axes("yzvx");
     }
-    else                                // 16 bits image.
+    else                                    // 16 bits image.
     {
-        unsigned short *ptr = (unsigned short *)imageData;
-
-        for (y = 0; y < imageHeight; ++y)
-        {
-            for (x = 0; x < imageWidth; ++x)
-            {
-                d->img(x, y, 0) = ptr[0];        // Blue.
-                d->img(x, y, 1) = ptr[1];        // Green.
-                d->img(x, y, 2) = ptr[2];        // Red.
-                d->img(x, y, 3) = ptr[3];        // Alpha.
-                ptr += 4;
-            }
-        }
+        d->img = CImg<>((unsigned short*)data, 4, width, height, 1, false).
+                 get_permute_axes("yzvx");
     }
 
     kDebug(50003) << "GreycstorationIface::Process Computation..." << endl;
