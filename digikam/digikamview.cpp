@@ -94,6 +94,7 @@
 #include "timelinefolderview.h"
 #include "dio.h"
 #include "digikamapp.h"
+#include "queuemgrwindow.h"
 
 namespace Digikam
 {
@@ -1518,9 +1519,15 @@ void DigikamView::slotImageAddToCurrentQueue()
 
 void DigikamView::slotImageAddToNewQueue()
 {
+    bool newQueue = QueueMgrWindow::queueManagerWindowCreated() &&
+                   !QueueMgrWindow::queueManagerWindow()->queuesMap().isEmpty();
+
     if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
     {
-        d->iconView->insertSelectionToNewQueue();
+        if (newQueue)
+            d->iconView->insertSelectionToNewQueue();
+        else
+            d->iconView->insertSelectionToCurrentQueue();
     }
     else
     {
@@ -1528,7 +1535,7 @@ void DigikamView::slotImageAddToNewQueue()
         ImageInfoList list;
         ImageInfo info = d->albumWidgetStack->imagePreviewView()->getImageInfo();
         list.append(info);
-        d->iconView->insertToQueueManager(list, info, true);
+        d->iconView->insertToQueueManager(list, info, newQueue);
     }
 }
 

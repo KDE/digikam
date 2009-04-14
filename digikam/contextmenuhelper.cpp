@@ -383,16 +383,23 @@ void ContextMenuHelper::addQueueManagerMenu()
     bqmMenu->addAction(d->stdActionCollection->action(queueActions.at(0)));
     bqmMenu->addAction(d->stdActionCollection->action(queueActions.at(1)));
 
+    // if queue list is empty, do not display the queue submenu
     if (QueueMgrWindow::queueManagerWindowCreated() &&
        !QueueMgrWindow::queueManagerWindow()->queuesMap().isEmpty())
     {
         QueueMgrWindow* qmw = QueueMgrWindow::queueManagerWindow();
         KMenu* queueMenu    = new KMenu(i18n("Add to Existing Queue"), bqmMenu);
 
-        QList<QAction*> queueList;
-        QMapIterator<int, QString> it(qmw->queuesMap());
+        // enable the standard action for adding items to the current queue
+        d->stdActionCollection->action(queueActions.at(0))->setEnabled(true);
+
+        // queueActions is used by the exec() method to emit an appropriate signal.
+        // Reset the map before filling in the actions.
         if (!d->queueActions.isEmpty())
             d->queueActions.clear();
+
+        QList<QAction*> queueList;
+        QMapIterator<int, QString> it(qmw->queuesMap());
         while (it.hasNext())
         {
             it.next();
@@ -402,6 +409,10 @@ void ContextMenuHelper::addQueueManagerMenu()
         }
         queueMenu->addActions(queueList);
         bqmMenu->addMenu(queueMenu);
+    }
+    else
+    {
+        d->stdActionCollection->action(queueActions.at(0))->setEnabled(false);
     }
     d->menu->addMenu(bqmMenu);
 }
