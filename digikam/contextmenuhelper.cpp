@@ -390,9 +390,6 @@ void ContextMenuHelper::addQueueManagerMenu()
         QueueMgrWindow* qmw = QueueMgrWindow::queueManagerWindow();
         KMenu* queueMenu    = new KMenu(i18n("Add to Existing Queue"), bqmMenu);
 
-        // enable the standard action for adding items to the current queue
-        d->stdActionCollection->action(queueActions.at(0))->setEnabled(true);
-
         // queueActions is used by the exec() method to emit an appropriate signal.
         // Reset the map before filling in the actions.
         if (!d->queueActions.isEmpty())
@@ -409,10 +406,6 @@ void ContextMenuHelper::addQueueManagerMenu()
         }
         queueMenu->addActions(queueList);
         bqmMenu->addMenu(queueMenu);
-    }
-    else
-    {
-        d->stdActionCollection->action(queueActions.at(0))->setEnabled(false);
     }
     d->menu->addMenu(bqmMenu);
 }
