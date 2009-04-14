@@ -28,3 +28,4 @@ Invert Tag Selection
 
 Note: Something seems to be very slow when creating the context menu for the first time.
       I guess it has something to do with either the BQM or LightTable actions.
+      Note 2: (ok it is the BQM submenu...)
