@@ -383,23 +383,26 @@ void ContextMenuHelper::addQueueManagerMenu()
     bqmMenu->addAction(d->stdActionCollection->action(queueActions.at(0)));
     bqmMenu->addAction(d->stdActionCollection->action(queueActions.at(1)));
 
-    QueueMgrWindow* qmw = QueueMgrWindow::queueManagerWindow();
-    KMenu* queueMenu    = new KMenu(i18n("Add to Existing Queue"), bqmMenu);
-
-    QList<QAction*> queueList;
-    QMapIterator<int, QString> it(qmw->queuesMap());
-    if (!d->queueActions.isEmpty())
-        d->queueActions.clear();
-    while (it.hasNext())
+    if (QueueMgrWindow::queueManagerWindowCreated() &&
+       !QueueMgrWindow::queueManagerWindow()->queuesMap().isEmpty())
     {
-        it.next();
-        QAction* action = new QAction(it.value(), this);
-        queueList << action;
-        d->queueActions[it.key()] = action;
-    }
-    queueMenu->addActions(queueList);
+        QueueMgrWindow* qmw = QueueMgrWindow::queueManagerWindow();
+        KMenu* queueMenu    = new KMenu(i18n("Add to Existing Queue"), bqmMenu);
 
-    bqmMenu->addMenu(queueMenu);
+        QList<QAction*> queueList;
+        QMapIterator<int, QString> it(qmw->queuesMap());
+        if (!d->queueActions.isEmpty())
+            d->queueActions.clear();
+        while (it.hasNext())
+        {
+            it.next();
+            QAction* action = new QAction(it.value(), this);
+            queueList << action;
+            d->queueActions[it.key()] = action;
+        }
+        queueMenu->addActions(queueList);
+        bqmMenu->addMenu(queueMenu);
+    }
     d->menu->addMenu(bqmMenu);
 }
 
