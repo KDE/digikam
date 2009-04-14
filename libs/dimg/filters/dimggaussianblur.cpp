@@ -90,7 +90,7 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
 
     if (!sixteenBit)           // 8 bits image.
     {
-        // Copy the src image data into a CImg type image
+        // convert DImg (interleaved RGBA) to CImg (planar RGBA)
         CImg<uchar> img = CImg<uchar>(data, 4, width, height, 1, false).
                           get_permute_axes("yzvx");
 
@@ -116,7 +116,7 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
     }
     else                                // 16 bits image.
     {
-        // Copy the src image data into a CImg type image
+        // convert DImg (interleaved RGBA) to CImg (planar RGBA)
         CImg<unsigned short> img = CImg<unsigned short>((unsigned short*)data, 4, width, height, 1, false).
                                    get_permute_axes("yzvx");
 
