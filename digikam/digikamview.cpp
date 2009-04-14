@@ -1537,6 +1537,9 @@ void DigikamView::slotImageAddToNewQueue()
         list.append(info);
         d->iconView->insertToQueueManager(list, info, newQueue);
     }
+
+    if (!newQueue)
+        DigikamApp::getinstance()->action("image_add_to_current_queue")->setEnabled(true);
 }
 
 void DigikamView::slotImageAddToExistingQueue(int queueid)

@@ -732,6 +732,7 @@ void DigikamApp::setupActions()
     d->imageAddCurrentQueueAction = new KAction(KIcon("bqm-commit"), i18n("Add to Current Queue"), this);
     d->imageAddCurrentQueueAction->setShortcut(Qt::CTRL+Qt::Key_B);
     d->imageAddCurrentQueueAction->setWhatsThis(i18n("Add selected items to current queue from batch manager."));
+    d->imageAddCurrentQueueAction->setEnabled(false);
     connect(d->imageAddCurrentQueueAction, SIGNAL(triggered()), d->view, SLOT(slotImageAddToCurrentQueue()));
     actionCollection()->addAction("image_add_to_current_queue", d->imageAddCurrentQueueAction);
 
