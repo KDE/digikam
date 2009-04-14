@@ -65,8 +65,8 @@ class ImageInfo;
  * adding disabled actions is turned off, to clean up the menu and make it
  * more readable.
  *
- * If the %ContextMenuHelper class is used, it is usually the best to use its
- * own exec() method, instead the one from the assigned menu. This way signals from
+ * If the %ContextMenuHelper class is used, you need to call its own exec() method,
+ * instead the one from the parent menu. This way signals from
  * special menus can be emitted and connected to the appropriate slots.
  */
 class ContextMenuHelper : public QObject
@@ -306,10 +306,10 @@ public:
     void addAlbumActions();
 
     /**
-     * Execute the registered menu and evaluate the triggered actions.
+     * Execute the registered parent menu and evaluate the triggered actions.
      *
-     * Always use this method instead the one from QMenu.
-     * It will ensure that the signals are emitted or other special cases are handled.
+     * Always use this method instead the one from the parent menu.
+     * It will ensure that the signals are emitted and special cases are handled.
      *
      * @param pos position of the triggered action in the registered menu
      * @param at the action that should be at the position pos
