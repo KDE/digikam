@@ -52,7 +52,7 @@ public:
         state           = 0;
         progressBarSize = 3;
         state           = 0;
-        color           = Qt::gray;
+        color           = Qt::black;
         alignment       = Qt::AlignLeft;
     }
 
