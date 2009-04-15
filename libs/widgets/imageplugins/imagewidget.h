@@ -75,7 +75,7 @@ public:
     void   writeSettings();
 
     void   setRenderingPreviewMode(int mode);
-    void   setPoints(const QPolygon &p);
+    void   setPoints(const QPolygon &p, bool drawLine = false);
     void   resetPoints();
 
 public Q_SLOTS:

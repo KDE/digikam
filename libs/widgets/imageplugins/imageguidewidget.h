@@ -97,7 +97,7 @@ public:
     int    getRenderingPreviewMode();
     void   resetSpotPosition();
     void   updatePreview();
-    void   setPoints(const QPolygon &p);
+    void   setPoints(const QPolygon &p, bool drawLine = false);
     void   resetPoints();
 
 public Q_SLOTS:

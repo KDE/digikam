@@ -71,6 +71,7 @@ public:
         renderingPreviewMode      = ImageGuideWidget::NoPreviewMode;
         underExposureIndicator    = false;
         overExposureIndicator     = false;
+        drawLineBetweenPoints     = false;
     }
 
     bool        sixteenBit;
@@ -79,6 +80,7 @@ public:
     bool        onMouseMovePreviewToggled;
     bool        underExposureIndicator;
     bool        overExposureIndicator;
+    bool        drawLineBetweenPoints;
 
     int         width;
     int         height;
@@ -486,6 +488,22 @@ void ImageGuideWidget::updatePixmap()
             p.setBrush(Qt::NoBrush);
             p.drawPoint(QPoint(x, y));
             p.drawText(QPoint(x+10, y-5), QString::number(i+1));
+
+            // draw line
+            if (d->drawLineBetweenPoints &&
+               (i+1) < d->selectedPoints.count() && !d->selectedPoints.point(i+1).isNull())
+            {
+                p.save();
+                QPoint point2 = d->selectedPoints.point(i+1);
+                int x2 = (int)(point2.x() * (float)(d->width)  / (float) d->iface->originalWidth());
+                int y2 = (int)(point2.y() * (float)(d->height) / (float) d->iface->originalHeight());
+                x2 += d->rect.x() + 1;
+                y2 += d->rect.y() + 1;
+                p.setRenderHint(QPainter::Antialiasing, false);
+                p.drawLine(QPoint(x, y), QPoint(x2, y2));
+                p.restore();
+            }
+
         }
 
         p.setRenderHints(hints);
@@ -675,9 +693,10 @@ void ImageGuideWidget::leaveEvent(QEvent*)
     }
 }
 
-void ImageGuideWidget::setPoints(const QPolygon &p)
+void ImageGuideWidget::setPoints(const QPolygon &p, bool drawLine)
 {
     d->selectedPoints = p;
+    d->drawLineBetweenPoints = drawLine;
     updatePreview();
 }
 

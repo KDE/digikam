@@ -354,9 +354,9 @@ void ImageWidget::writeSettings()
     config->sync();
 }
 
-void ImageWidget::setPoints(const QPolygon &p)
+void ImageWidget::setPoints(const QPolygon &p, bool drawLine)
 {
-    d->previewWidget->setPoints(p);
+    d->previewWidget->setPoints(p, drawLine);
 }
 
 void ImageWidget::resetPoints()
