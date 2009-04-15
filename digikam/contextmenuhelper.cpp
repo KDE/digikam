@@ -396,10 +396,12 @@ void ContextMenuHelper::addQueueManagerMenu()
             d->queueActions.clear();
 
         QList<QAction*> queueList;
-        QMapIterator<int, QString> it(qmw->queuesMap());
-        while (it.hasNext())
+
+        // get queue list from BQM window, do not access it directly, it might crash
+        // when the list is changed
+        QMap<int, QString> qmwMap = qmw->queuesMap();
+        for (QMap<int, QString>::iterator it = qmwMap.begin(); it != qmwMap.end(); ++it)
         {
-            it.next();
             QAction* action = new QAction(it.value(), this);
             queueList << action;
             d->queueActions[it.key()] = action;
