@@ -499,7 +499,7 @@ void ImageGuideWidget::updatePixmap()
                 int y2 = (int)(point2.y() * (float)(d->height) / (float) d->iface->originalHeight());
                 x2 += d->rect.x() + 1;
                 y2 += d->rect.y() + 1;
-                p.setRenderHint(QPainter::Antialiasing, false);
+                p.setRenderHint(QPainter::Antialiasing, true);
                 p.drawLine(QPoint(x, y), QPoint(x2, y2));
                 p.restore();
             }
