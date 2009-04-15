@@ -151,14 +151,14 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     QPixmap pm1 = generateBtnPixmap(QString("1"), Qt::black);
     m_autoAdjustPoint1Btn = new QPushButton;
     m_autoAdjustPoint1Btn->setIcon(pm1);
-    m_autoAdjustPoint1Btn->setText(i18n("not set"));
+    m_autoAdjustPoint1Btn->setText(i18n("Click to set"));
     m_autoAdjustPoint1Btn->setSizePolicy(QSizePolicy::MinimumExpanding,
                                          QSizePolicy::MinimumExpanding);
 
     QPixmap pm2 = generateBtnPixmap(QString("2"), Qt::black);
     m_autoAdjustPoint2Btn = new QPushButton;
     m_autoAdjustPoint2Btn->setIcon(pm2);
-    m_autoAdjustPoint2Btn->setText(i18n("not set"));
+    m_autoAdjustPoint2Btn->setText(i18n("Click to set"));
     m_autoAdjustPoint2Btn->setSizePolicy(QSizePolicy::MinimumExpanding,
                                          QSizePolicy::MinimumExpanding);
 
@@ -339,14 +339,14 @@ void FreeRotationTool::prepareEffect()
     m_autoAdjustContainer->setEnabled(false);
     m_manualAdjustContainer->setEnabled(false);
 
-    double angle = m_angleInput->value() + m_fineAngleInput->value();
+    double angle      = m_angleInput->value() + m_fineAngleInput->value();
     bool antialiasing = m_antialiasInput->isChecked();
-    int autocrop = m_autoCropCB->currentIndex();
+    int autocrop      = m_autoCropCB->currentIndex();
     QColor background = toolView()->backgroundRole();
 
     ImageIface* iface = m_previewWidget->imageIface();
-    int orgW = iface->originalWidth();
-    int orgH = iface->originalHeight();
+    int orgW          = iface->originalWidth();
+    int orgH          = iface->originalHeight();
 
     uchar *data = iface->getPreviewImage();
     DImg image(iface->previewWidth(), iface->previewHeight(), iface->previewSixteenBit(),
@@ -444,7 +444,7 @@ void FreeRotationTool::slotManualAdjustToggled(bool t)
 QString FreeRotationTool::generatePointLabel(const QPoint &p)
 {
     if (!pointIsValid(p))
-        return QString(i18n("not set"));
+        return QString(i18n("Click to set"));
 
     QString label = QString("(%1, %2)")
                            .arg(p.x())
