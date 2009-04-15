@@ -465,9 +465,18 @@ void FreeRotationTool::updatePoints()
     // set points in preview widget, don't add invalid points
     QPolygon points;
     if (pointIsValid(m_autoAdjustPoint1))
+    {
         points << m_autoAdjustPoint1;
+        m_autoAdjustPoint2Btn->setEnabled(true);
+    }
+    else
+    {
+        m_autoAdjustPoint2Btn->setEnabled(false);
+    }
     if (pointIsValid(m_autoAdjustPoint2))
+    {
         points << m_autoAdjustPoint2;
+    }
     m_previewWidget->setPoints(points, true);
 
     // enable / disable adjustment buttons
