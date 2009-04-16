@@ -524,7 +524,7 @@ void FreeRotationTool::slotAutoAdjustClicked()
     QStringList anglesList = angleStr.split('.');
 
     // try to set the angle widgets with the extracted values
-    if (!anglesList.isEmpty() && anglesList.count() == 2)
+    if (anglesList.count() == 2)
     {
         bool ok = false;
         int mainAngle = anglesList[0].toInt(&ok);
