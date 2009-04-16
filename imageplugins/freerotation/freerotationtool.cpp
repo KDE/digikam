@@ -531,6 +531,7 @@ void FreeRotationTool::slotAutoAdjustClicked()
         if (!ok) mainAngle = 0;
 
         double fineAngle = (QString("0.") + anglesList[1]).toDouble(&ok);
+        fineAngle = (mainAngle < 0.0) ? -fineAngle : fineAngle;
         if (!ok) fineAngle = 0.0;
 
         m_angleInput->setValue(mainAngle);
