@@ -424,6 +424,7 @@ void EditorToolThreaded::slotCancel()
 {
     writeSettings();
     slotAbort();
+    kapp->restoreOverrideCursor();
     emit cancelClicked();
 }
 
