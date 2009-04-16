@@ -40,5 +40,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 029 ==> 187265 : Advanced search crashes if a selected album has been deleted.
 030 ==> 185177 : Searches are not updated when changes are made to the resulting image set.
 031 ==> 189542 : Crash on opening download dialog.
-032 ==> 
+032 ==> 114225 : Free rotation using an horizontal line. 
+033 ==> 
 
