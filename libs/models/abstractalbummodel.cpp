@@ -37,6 +37,7 @@
 
 #include "albummanager.h"
 #include "albumthumbnailloader.h"
+#include "albummodeldragdrophandler.h"
 
 namespace Digikam
 {
@@ -207,36 +208,57 @@ QModelIndex AbstractAlbumModel::parent(const QModelIndex &index) const
     return QModelIndex();
 }
 
-bool AbstractAlbumModel::setData(const QModelIndex &index, const QVariant &value, int role)
-{
-    //TODO
-    return QAbstractItemModel::setData(index, value, role);
-}
-
 Qt::DropActions AbstractAlbumModel::supportedDropActions() const
 {
-    return Qt::MoveAction;
-    //TODO
-    return QAbstractItemModel::supportedDropActions();
+    return Qt::CopyAction|Qt::MoveAction;
 }
 
 QStringList AbstractAlbumModel::mimeTypes() const
 {
-    return QStringList() << "digikam/item-ids" << "digikam/image-ids";
-    //TODO
-    return QAbstractItemModel::mimeTypes();
+    if (d->dragDropHandler)
+        return d->dragDropHandler->mimeTypes();
+    return QStringList();
 }
 
-bool AbstractAlbumModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
+bool AbstractAlbumModel::dropMimeData(const QMimeData *, Qt::DropAction, int, int, const QModelIndex &)
 {
-    //TODO
-    return QAbstractItemModel::dropMimeData(data, action, row, column, parent);
+    // we require custom solutions
+    return false;
 }
 
 QMimeData *AbstractAlbumModel::mimeData(const QModelIndexList &indexes) const
 {
-    //TODO
-    return QAbstractItemModel::mimeData(indexes);
+    if (!d->dragDropHandler)
+        return 0;
+
+    QList<Album*> albums;
+    foreach (const QModelIndex &index, indexes)
+    {
+        Album *a = albumForIndex(index);
+        if (a)
+            albums << a;
+    }
+    return d->dragDropHandler->createMimeData(albums);
+}
+
+void AbstractAlbumModel::setEnableDrag(bool enable)
+{
+    d->itemDrag = enable;
+}
+
+void AbstractAlbumModel::setEnableDrop(bool enable)
+{
+    d->itemDrop = enable;
+}
+
+void AbstractAlbumModel::setDragDropHandler(AlbumModelDragDropHandler *handler)
+{
+    d->dragDropHandler = handler;
+}
+
+AlbumModelDragDropHandler *AbstractAlbumModel::dragDropHandler() const
+{
+    return d->dragDropHandler;
 }
 
 QModelIndex AbstractAlbumModel::indexForAlbum(Album *a) const
@@ -290,7 +312,12 @@ QString AbstractAlbumModel::columnHeader() const
 
 Qt::ItemFlags AbstractAlbumModel::itemFlags(Album *) const
 {
-    return Qt::ItemIsSelectable|Qt::ItemIsEnabled|Qt::ItemIsDropEnabled;
+    Qt::ItemFlags f = Qt::ItemIsSelectable|Qt::ItemIsEnabled;
+    if (d->itemDrag)
+        f |= Qt::ItemIsDragEnabled;
+    if (d->itemDrop)
+        f |= Qt::ItemIsDropEnabled;
+    return f;
 }
 
 bool AbstractAlbumModel::filterAlbum(Album *album) const

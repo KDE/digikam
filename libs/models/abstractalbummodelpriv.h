@@ -38,12 +38,20 @@ public:
         rootBehavior  = AbstractAlbumModel::IncludeRootAlbum;
         addingAlbum   = 0;
         removingAlbum = 0;
+        itemDrag      = true;
+        itemDrop      = true;
+        dragDropHandler
+                      = 0;
     }
 
     Album            *rootAlbum;
     Album::Type       type;
     AbstractAlbumModel::RootAlbumBehavior
                       rootBehavior;
+    bool              itemDrag;
+    bool              itemDrop;
+    AlbumModelDragDropHandler
+                     *dragDropHandler;
 
     Album            *addingAlbum;
     Album            *removingAlbum;

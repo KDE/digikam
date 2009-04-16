@@ -40,6 +40,7 @@ namespace Digikam
 
 class Album;
 class AlbumManager;
+class AlbumModelDragDropHandler;
 class AlbumModelPriv;
 
 class AbstractAlbumModel : public QAbstractItemModel
@@ -86,7 +87,6 @@ public:
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
-    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole );
     virtual bool hasChildren(const QModelIndex &parent = QModelIndex()) const;
     virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
     virtual QModelIndex parent(const QModelIndex &index) const;
@@ -95,6 +95,12 @@ public:
     virtual QStringList mimeTypes() const;
     virtual bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
     virtual QMimeData * mimeData(const QModelIndexList &indexes) const;
+
+    /// Set a drag drop handler.
+    void setDragDropHandler(AlbumModelDragDropHandler *handler);
+
+    /// Returns the drag drop handler, or 0 if none is installed
+    AlbumModelDragDropHandler *dragDropHandler() const;
 
     /** Returns the album object associated with the given model index */
     Album *albumForIndex(const QModelIndex &index) const;
@@ -132,6 +138,10 @@ protected:
     /// Notification when all entries are removed
     virtual void allAlbumsCleared() {};
 
+    /** Switch on drag and drop globally for all items. Default is true.
+     *  For per-item cases reimplement itemFlags(). */
+    void setEnableDrag(bool enable);
+    void setEnableDrop(bool enable);
 
 protected Q_SLOTS:
 
