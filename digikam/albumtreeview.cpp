@@ -168,7 +168,8 @@ void AbstractAlbumTreeView::mousePressEvent(QMouseEvent *e)
     if (m_expandOnSingleClick && e->button() == Qt::LeftButton)
     {
         QModelIndex index = indexAt(e->pos());
-        if (index.isValid())
+        // double check with visualRect so that mouse click is not on decoration
+        if (index.isValid() && visualRect(index).contains(e->pos()))
         {
             // See B.K.O #126871: collapse/expand treeview using left mouse button single click.
             // Exception: If a newly selected item is already expanded, do not collapse on selection.
@@ -286,6 +287,9 @@ AlbumTreeView::AlbumTreeView(QWidget *parent)
 
     expand(m_albumFilterModel->rootAlbumIndex());
     setRootIsDecorated(false);
+    setAcceptDrops(true);
+    setDropIndicatorShown(true);
+    setAutoExpandDelay(100);
 }
 
 AlbumModel *AlbumTreeView::albumModel() const
