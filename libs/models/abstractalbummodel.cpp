@@ -215,12 +215,14 @@ bool AbstractAlbumModel::setData(const QModelIndex &index, const QVariant &value
 
 Qt::DropActions AbstractAlbumModel::supportedDropActions() const
 {
+    return Qt::MoveAction;
     //TODO
     return QAbstractItemModel::supportedDropActions();
 }
 
 QStringList AbstractAlbumModel::mimeTypes() const
 {
+    return QStringList() << "digikam/item-ids" << "digikam/image-ids";
     //TODO
     return QAbstractItemModel::mimeTypes();
 }
@@ -288,7 +290,7 @@ QString AbstractAlbumModel::columnHeader() const
 
 Qt::ItemFlags AbstractAlbumModel::itemFlags(Album *) const
 {
-    return Qt::ItemIsSelectable|Qt::ItemIsEnabled;
+    return Qt::ItemIsSelectable|Qt::ItemIsEnabled|Qt::ItemIsDropEnabled;
 }
 
 bool AbstractAlbumModel::filterAlbum(Album *album) const
@@ -301,14 +303,16 @@ void AbstractAlbumModel::slotAlbumAboutToBeAdded(Album *album, Album *parent, Al
     if (!filterAlbum(album))
         return;
 
-    // when the model is instantiated before albums are initialized
-    if (album->isRoot() && !d->rootAlbum)
-        d->rootAlbum = album;
-
     // start inserting operation
-    int row = prev ? d->findIndexAsChild(prev) : 0;
+    int row = prev ? d->findIndexAsChild(prev)+1 : 0;
     QModelIndex parentIndex = indexForAlbum(parent);
     beginInsertRows(parentIndex, row, row);
+
+    // The root album will become available in time
+    // when the model is instantiated before albums are initialized.
+    // Set d->rootAlbum only after
+    if (album->isRoot() && !d->rootAlbum)
+        d->rootAlbum = album;
 
     // store album for slotAlbumAdded
     d->addingAlbum = album;
