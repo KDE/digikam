@@ -743,6 +743,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/abstractalbummodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/albummodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/albumfiltermodel.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/albummodeldragdrophandler.cpp
        )
 
     SET(liblighttable_SRCS
@@ -834,6 +835,7 @@ ENDIF(MSVC)
 
     SET(libdigikamgui_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumdragdrop.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumiconview.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumiconviewfilter.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumiconviewtooltip.cpp 
