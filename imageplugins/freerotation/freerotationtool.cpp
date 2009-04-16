@@ -568,7 +568,7 @@ double FreeRotationTool::calculateAngle(const QPoint &p1, const QPoint &p2)
     if (!pointIsValid(p1) && !pointIsValid(p2))
         return 0.0;
 
-    // check if point are not equal
+    // check if points are equal
     if (p1 == p2)
         return 0.0;
 
