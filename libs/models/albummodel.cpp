@@ -52,7 +52,7 @@ AlbumModel::AlbumModel(RootAlbumBehavior rootBehavior, QObject *parent)
 
 PAlbum *AlbumModel::albumForIndex(const QModelIndex &index) const
 {
-    return static_cast<PAlbum*>(albumForIndex(index));
+    return static_cast<PAlbum*>(AbstractCheckableAlbumModel::albumForIndex(index));
 }
 
 QVariant AlbumModel::decorationRole(Album *album) const
@@ -79,7 +79,7 @@ TagModel::TagModel(RootAlbumBehavior rootBehavior, QObject *parent)
 
 TAlbum *TagModel::albumForIndex(const QModelIndex &index) const
 {
-    return static_cast<TAlbum*>(albumForIndex(index));
+    return static_cast<TAlbum*>(AbstractCheckableAlbumModel::albumForIndex(index));
 }
 
 QVariant TagModel::decorationRole(Album *album) const
@@ -103,7 +103,7 @@ SearchModel::SearchModel(QObject *parent)
 
 SAlbum *SearchModel::albumForIndex(const QModelIndex &index) const
 {
-    return static_cast<SAlbum*>(albumForIndex(index));
+    return static_cast<SAlbum*>(AbstractSpecificAlbumModel::albumForIndex(index));
 }
 
 void SearchModel::setSearchType(DatabaseSearch::Type type)
@@ -170,7 +170,7 @@ DateAlbumModel::DateAlbumModel(QObject *parent)
 
 DAlbum *DateAlbumModel::albumForIndex(const QModelIndex &index) const
 {
-    return static_cast<DAlbum*>(albumForIndex(index));
+    return static_cast<DAlbum*>(AbstractCountingAlbumModel::albumForIndex(index));
 }
 
 void DateAlbumModel::setPixmaps(const QPixmap &forYearAlbums, const QPixmap &forMonthAlbums)
