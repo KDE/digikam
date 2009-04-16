@@ -507,12 +507,10 @@ void FreeRotationTool::slotAutoAdjustP2Clicked()
 
 void FreeRotationTool::slotAutoAdjustClicked()
 {
-    bool reverse = false;
-    double angle = calculateAutoAngle(&reverse);
-
+    double angle = calculateAutoAngle();
     if (fabs(angle) > 45.0)
     {
-        if (reverse)
+        if (angle < 0.0)
             angle += 90.0;
         else
             angle -= 90.0;
@@ -560,12 +558,12 @@ QPixmap FreeRotationTool::generateBtnPixmap(const QString &label, const QColor &
     return pm;
 }
 
-double FreeRotationTool::calculateAutoAngle(bool *reverse)
+double FreeRotationTool::calculateAutoAngle()
 {
-    return calculateAngle(m_autoAdjustPoint1, m_autoAdjustPoint2, reverse);
+    return calculateAngle(m_autoAdjustPoint1, m_autoAdjustPoint2);
 }
 
-double FreeRotationTool::calculateAngle(const QPoint &p1, const QPoint &p2, bool *reverse)
+double FreeRotationTool::calculateAngle(const QPoint &p1, const QPoint &p2)
 {
     // check if all points are valid
     if (!pointIsValid(p1) && !pointIsValid(p2))
@@ -583,41 +581,17 @@ double FreeRotationTool::calculateAngle(const QPoint &p1, const QPoint &p2, bool
     if (p1.y() == p2.y())
         return 90.0;
 
-    // make sure p1 is always left to p2
-    QPoint pLeft;
-    QPoint pRight;
-    if (p1.x() < p2.x())
-    {
-        pLeft  = p1;
-        pRight = p2;
-    }
-    else
-    {
-        pLeft  = p2;
-        pRight = p1;
-    }
-
-    double angle = 0.0;
-
     // check point layout
-    bool _reverse = pRight.y() > pLeft.y();
-    if (reverse)
-        *reverse = _reverse;
+    bool reverse = ((p1.x() < p2.x()) && (p2.y() > p1.y())) ||
+                   ((p1.x() > p2.x()) && (p2.y() < p1.y()));
 
     // calculate the angle
-    if (_reverse)
-    {
-        angle = atan2((double)(pLeft.y() - pRight.y()),
-                      (double)(pRight.x() - pLeft.x()))
-                      * 180.0 / M_PI;
-    }
-    else
-    {
-        angle = atan2((double)(pRight.y() - pLeft.y()),
-                      (double)(pRight.x() - pLeft.x()))
-                      * 180.0 / M_PI;
-        angle = -angle;
-    }
+    double angle = 0.0;
+    double ly = fabs((double)p2.y() - p1.y());
+    double lx = fabs((double)p2.x() - p1.x());
+
+    angle = atan2(ly, lx) * 180.0 / M_PI;
+    angle = reverse ? -angle : angle;
 
     return angle;
 }

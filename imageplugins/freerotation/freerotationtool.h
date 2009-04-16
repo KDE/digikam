@@ -82,8 +82,8 @@ private:
     void putFinalData();
     void renderingFinished();
 
-    double  calculateAngle(const QPoint &p1, const QPoint &p2, bool *reverse = 0);
-    double  calculateAutoAngle(bool *reverse = 0);
+    double  calculateAngle(const QPoint &p1, const QPoint &p2);
+    double  calculateAutoAngle();
     QPixmap generateBtnPixmap(const QString &label, const QColor &color);
 
     bool    pointIsValid(const QPoint &p);
