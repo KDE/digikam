@@ -66,14 +66,22 @@ DItemDrag::DItemDrag(const KUrl::List &urls,
     urls.populateMimeData(this);
 }
 
-bool DItemDrag::canDecode(const QMimeData* e)
+QStringList DItemDrag::mimeTypes()
 {
     // we do not want decode text/uri-list,
     // we only export this data above for dragging to outside digikam.
-    return e->hasFormat("digikam/item-ids")  ||
-           e->hasFormat("digikam/album-ids") ||
-           e->hasFormat("digikam/image-ids") ||
-           e->hasFormat("digikam/digikamalbums");
+    return QStringList() << "digikam/item-ids"
+                         << "digikam/album-ids"
+                         << "digikam/image-ids"
+                         << "digikam/digikamalbums";
+}
+
+bool DItemDrag::canDecode(const QMimeData* e)
+{
+    foreach (const QString &mimeType, mimeTypes())
+        if (e->hasFormat(mimeType))
+            return true;
+    return false;
 }
 
 bool DItemDrag::decode(const QMimeData* e,
@@ -142,6 +150,11 @@ DTagDrag::DTagDrag(int albumid)
     setData("digikam/tag-id", ba);
 }
 
+QStringList DTagDrag::mimeTypes()
+{
+    return QStringList() << "digikam/tag-id";
+}
+
 bool DTagDrag::canDecode(const QMimeData *e)
 {
     return e->hasFormat("digikam/tag-id");
@@ -180,6 +193,11 @@ DAlbumDrag::DAlbumDrag(const KUrl &url, int albumid)
     QDataStream ds2(&ba2, QIODevice::WriteOnly);
     ds2 << albumid;
     setData("digikam/album-id", ba2);
+}
+
+QStringList DAlbumDrag::mimeTypes()
+{
+    return QStringList() << "digikam/album-id";
 }
 
 bool DAlbumDrag::canDecode(const QMimeData* e)
@@ -231,6 +249,11 @@ DTagListDrag::DTagListDrag(const QList<int>& tagIDs)
     setData("digikam/taglist", ba);
 }
 
+QStringList DTagListDrag::mimeTypes()
+{
+    return QStringList() << "digikam/taglist";
+}
+
 bool DTagListDrag::canDecode(const QMimeData* e)
 {
     return e->hasFormat("digikam/taglist");
@@ -264,6 +287,11 @@ DCameraItemListDrag::DCameraItemListDrag(const QStringList& cameraItemPaths)
     QDataStream ds(&ba, QIODevice::WriteOnly);
     ds << cameraItemPaths;
     setData("digikam/cameraItemlist", ba);
+}
+
+QStringList DCameraItemListDrag::mimeTypes()
+{
+    return QStringList() << "digikam/cameraItemlist";
 }
 
 bool DCameraItemListDrag::canDecode(const QMimeData* e)
@@ -303,6 +331,11 @@ DCameraDragObject::DCameraDragObject(const CameraType& ctype)
     ds << ctype.path();
     ds << ctype.lastAccess();
     setData("camera/unknown", ba);
+}
+
+QStringList DCameraDragObject::mimeTypes()
+{
+    return QStringList() << "camera/unknown";
 }
 
 bool DCameraDragObject::canDecode(const QMimeData* e)

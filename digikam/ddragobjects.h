@@ -63,6 +63,7 @@ public:
               const QList<int>& imageIDs);
 
     static bool canDecode(const QMimeData* e);
+    static QStringList mimeTypes();
     static bool decode(const QMimeData* e,
                        KUrl::List &urls,
                        KUrl::List &kioURLs,
@@ -83,6 +84,7 @@ class DTagDrag : public QMimeData
 public:
 
     DTagDrag(int albumid);
+    static QStringList mimeTypes();
     static bool canDecode(const QMimeData* e);
     static bool decode(const QMimeData* e, int &tagID);
 };
@@ -100,6 +102,7 @@ class DAlbumDrag : public QMimeData
 public:
 
     DAlbumDrag(const KUrl &url, int albumid);
+    static QStringList mimeTypes();
     static bool canDecode(const QMimeData* e);
     static bool decode(const QMimeData* e, KUrl::List &urls, int &albumID);
 };
@@ -117,6 +120,7 @@ class DTagListDrag : public QMimeData
 public:
 
     DTagListDrag(const QList<int>& tagIDs);
+    static QStringList mimeTypes();
     static bool canDecode(const QMimeData* e);
     static bool decode(const QMimeData* e, QList<int> &tagIDs);
 };
@@ -134,6 +138,7 @@ class DCameraItemListDrag : public QMimeData
 public:
 
     DCameraItemListDrag(const QStringList& cameraItemPaths);
+    static QStringList mimeTypes();
     static bool canDecode(const QMimeData* e);
     static bool decode(const QMimeData* e, QStringList &cameraItemPaths);
 };
@@ -152,6 +157,7 @@ class DCameraDragObject : public QMimeData
 public:
 
     DCameraDragObject(const CameraType& ctype);
+    static QStringList mimeTypes();
     static bool canDecode(const QMimeData* e);
     static bool decode(const QMimeData* e, CameraType& ctype);
 };
