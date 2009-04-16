@@ -439,6 +439,7 @@ void FreeRotationTool::renderingFinished()
 void FreeRotationTool::slotManualAdjustToggled(bool t)
 {
     m_manualAdjustContainer->setEnabled(t);
+    resetPoints();
 }
 
 QString FreeRotationTool::generatePointLabel(const QPoint &p)
