@@ -516,8 +516,7 @@ void FreeRotationTool::slotAutoAdjustClicked()
             angle -= 90.0;
     }
 
-    // if auto-adjust has been called twice or more, we need to add the new angle
-    // to the already set values
+    // we need to add the calculated angle to the currently set angle
     angle = (double)m_angleInput->value() + m_fineAngleInput->value() + angle;
 
     // convert the angle to a string so we can easily split it up
