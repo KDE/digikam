@@ -34,7 +34,9 @@
 
 // Local includes
 
+#include "albumdragdrop.h"
 #include "albummanager.h"
+#include "albummodeldragdrophandler.h"
 #include "albumsettings.h"
 #include "albumthumbnailloader.h"
 
@@ -97,6 +99,16 @@ AlbumFilterModel *AbstractAlbumTreeView::albumFilterModel() const
 void AbstractAlbumTreeView::setSelectOnSingleClick(bool doThat)
 {
     m_expandOnSingleClick = doThat;
+}
+
+QModelIndex AbstractAlbumTreeView::indexVisuallyAt(const QPoint &p)
+{
+    if (viewport()->rect().contains(p)) {
+        QModelIndex index = indexAt(p);
+        if (index.isValid() && visualRect(index).contains(p))
+            return index;
+    }
+    return QModelIndex();
 }
 
 void AbstractAlbumTreeView::slotFilterChanged()
@@ -167,9 +179,8 @@ void AbstractAlbumTreeView::mousePressEvent(QMouseEvent *e)
 {
     if (m_expandOnSingleClick && e->button() == Qt::LeftButton)
     {
-        QModelIndex index = indexAt(e->pos());
-        // double check with visualRect so that mouse click is not on decoration
-        if (index.isValid() && visualRect(index).contains(e->pos()))
+        QModelIndex index = indexVisuallyAt(e->pos());
+        if (index.isValid())
         {
             // See B.K.O #126871: collapse/expand treeview using left mouse button single click.
             // Exception: If a newly selected item is already expanded, do not collapse on selection.
@@ -191,6 +202,46 @@ void AbstractAlbumTreeView::mousePressEvent(QMouseEvent *e)
 void AbstractAlbumTreeView::middleButtonPressed(Album *)
 {
     // reimplement if needed
+}
+
+void AbstractAlbumTreeView::dragEnterEvent(QDragEnterEvent *e)
+{
+    QTreeView::dragEnterEvent(e);
+}
+
+void AbstractAlbumTreeView::dragMoveEvent(QDragMoveEvent *e)
+{
+    QTreeView::dragMoveEvent(e);
+    AlbumModelDragDropHandler *handler = m_albumModel->dragDropHandler();
+    if (handler)
+    {
+        QModelIndex index = indexVisuallyAt(e->pos());
+        Qt::DropAction action = handler->accepts(e->mimeData(), m_albumFilterModel->mapToSource(index));
+        if (action == Qt::IgnoreAction)
+            e->ignore();
+        else
+        {
+            e->setDropAction(action);
+            e->accept();
+        }
+    }
+}
+
+void AbstractAlbumTreeView::dragLeaveEvent(QDragLeaveEvent * e)
+{
+    QTreeView::dragLeaveEvent(e);
+}
+
+void AbstractAlbumTreeView::dropEvent(QDropEvent *e)
+{
+    QTreeView::dropEvent(e);
+    AlbumModelDragDropHandler *handler = m_albumModel->dragDropHandler();
+    if (handler)
+    {
+        QModelIndex index = indexVisuallyAt(e->pos());
+        if (handler->dropEvent(this, e, m_albumFilterModel->mapToSource(index)))
+            e->accept();
+    }
 }
 
 // --------------------------------------- //
@@ -282,14 +333,18 @@ void AbstractCheckableAlbumTreeView::middleButtonPressed(Album *a)
 AlbumTreeView::AlbumTreeView(QWidget *parent)
     : AbstractCheckableAlbumTreeView(new AlbumModel(AlbumModel::IncludeRootAlbum), parent)
 {
+    albumModel()->setDragDropHandler(new AlbumDragDropHandler(albumModel()));
+
     connect(AlbumManager::instance(), SIGNAL(signalPAlbumsDirty(const QMap<int, int>&)),
              m_albumModel, SLOT(setCountMap(const QMap<int, int>&)));
 
     expand(m_albumFilterModel->rootAlbumIndex());
     setRootIsDecorated(false);
+
+    setDragEnabled(true);
     setAcceptDrops(true);
-    setDropIndicatorShown(true);
-    setAutoExpandDelay(100);
+    setDropIndicatorShown(false);
+    setAutoExpandDelay(300);
 }
 
 AlbumModel *AlbumTreeView::albumModel() const

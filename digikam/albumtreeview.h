@@ -50,6 +50,12 @@ public:
     /// Enable expanding of tree items on single click on the item (default: on)
     void setSelectOnSingleClick(bool doThat);
 
+    /** This is a combination of indexAt() checked with visualRect().
+     *  p must be in the viewport currently. Decoration will not be included.
+     *  Suitable for mouse click positions.
+     */
+    QModelIndex indexVisuallyAt(const QPoint &p);
+
 public Q_SLOTS:
 
     void setSearchTextSettings(const SearchTextSettings &settings);
@@ -76,6 +82,11 @@ protected:
 
     bool checkExpandedState(const QModelIndex &index);
     void mousePressEvent(QMouseEvent *e);
+
+    void dragEnterEvent(QDragEnterEvent *e);
+    void dragMoveEvent(QDragMoveEvent *e);
+    void dragLeaveEvent(QDragLeaveEvent * e);
+    void dropEvent(QDropEvent *e);
 
     virtual void middleButtonPressed(Album *a);
 
