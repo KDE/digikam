@@ -41,5 +41,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 030 ==> 185177 : Searches are not updated when changes are made to the resulting image set.
 031 ==> 189542 : Crash on opening download dialog.
 032 ==> 114225 : Free rotation using an horizontal line. 
-033 ==> 
+033 ==> 189843 : Crash on ubuntu jaunty beta.
+034 ==> 
 
