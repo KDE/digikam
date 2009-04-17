@@ -34,7 +34,7 @@
 #include "imageplugin.h"
 #include "digikam_export.h"
 
-class KAction;
+class ImagePlugin_CorePriv;
 
 class ImagePlugin_Core : public Digikam::ImagePlugin
 {
@@ -42,11 +42,11 @@ class ImagePlugin_Core : public Digikam::ImagePlugin
 
 public:
 
-    ImagePlugin_Core(QObject *parent, const QVariantList &args);
+    ImagePlugin_Core(QObject *parent, const QVariantList& args);
     ~ImagePlugin_Core();
 
-    void setEnabledSelectionActions(bool enable);
-    void setEnabledActions(bool enable);
+    void setEnabledSelectionActions(bool b);
+    void setEnabledActions(bool b);
 
 private Q_SLOTS:
 
@@ -71,20 +71,8 @@ private Q_SLOTS:
 
 private:
 
-    KAction *m_redeyeAction;
-    KAction *m_BCGAction;
-    KAction *m_HSLAction;
-    KAction *m_RGBAction;
-    KAction *m_autoCorrectionAction;
-    KAction *m_invertAction;
-    KAction *m_BWAction;
-    KAction *m_aspectRatioCropAction;
-    KAction *m_resizeAction;
-    KAction *m_sharpenAction;
-    KAction *m_blurAction;
-    KAction *m_colorManagementAction;
-    KAction *m_convertTo8Bits;
-    KAction *m_convertTo16Bits;
+    ImagePlugin_CorePriv* const d;
+
 };
 
 #endif /* IMAGEPLUGIN_CORE_H */
