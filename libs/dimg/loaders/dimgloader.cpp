@@ -7,7 +7,7 @@
  * Description : DImg image loader interface
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -174,8 +174,8 @@ bool DImgLoader::checkExifWorkingColorSpace()
     {
         case DMetadata::WORKSPACE_SRGB:
         {
-            QString directory = KGlobal::dirs()->findResourceDir("profiles", "srgb.icm");
-            m_image->getICCProfilFromFile(directory + "srgb.icm");
+            QString directory = KGlobal::dirs()->findResourceDir("profiles", "srgb-d65.icm");
+            m_image->getICCProfilFromFile(directory + "srgb-d65.icm");
             DDebug() << "Exif color-space tag is sRGB. Using default sRGB ICC profile." << endl;
             return true;
             break;
