@@ -42,5 +42,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 031 ==> 189542 : Crash on opening download dialog.
 032 ==> 114225 : Free rotation using an horizontal line. 
 033 ==> 189843 : Crash on ubuntu jaunty beta.
-034 ==> 
+034 ==> 167836 : Image preview is too large.
+035 ==> 
 
