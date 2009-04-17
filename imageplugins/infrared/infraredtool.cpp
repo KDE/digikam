@@ -174,6 +174,7 @@ void InfraredTool::readSettings()
     m_sensibilitySlider->blockSignals(false);
     m_addFilmGrain->blockSignals(false);
     slotSliderMoved(m_sensibilitySlider->value());
+    slotEffect();
 }
 
 void InfraredTool::writeSettings()
