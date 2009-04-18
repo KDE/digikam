@@ -32,10 +32,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// LibKIPI includes
-
-#include <libkipi/version.h>
-
 // Local includes
 
 #include "constants.h"
@@ -81,7 +77,12 @@ KIPI::ImageCollection KipiInterface::currentAlbum()
     if ( currAlbum )
     {
         return KIPI::ImageCollection(new KipiImageCollection(KipiImageCollection::AllItems,
-                                         currAlbum, fileExtensions()));
+                                         currAlbum, 
+#if KIPI_VERSION >= 0x000300
+                                         hostSetting("FileExtensions").toString()));
+#else
+                                         fileExtensions()));
+#endif
     }
     else
     {
@@ -94,9 +95,13 @@ KIPI::ImageCollection KipiInterface::currentSelection()
     Album* currAlbum = m_albumManager->currentAlbum();
     if ( currAlbum )
     {
-        return KIPI::ImageCollection(
-            new KipiImageCollection( KipiImageCollection::SelectedItems,
-                                        currAlbum, fileExtensions() ) );
+        return KIPI::ImageCollection(new KipiImageCollection(KipiImageCollection::SelectedItems,
+                                                             currAlbum, 
+#if KIPI_VERSION >= 0x000300
+                                         hostSetting("FileExtensions").toString()));
+#else
+                                         fileExtensions()));
+#endif
     }
     else
     {
@@ -107,7 +112,11 @@ KIPI::ImageCollection KipiInterface::currentSelection()
 QList<KIPI::ImageCollection> KipiInterface::allAlbums()
 {
     QList<KIPI::ImageCollection> result;
+#if KIPI_VERSION >= 0x000300
+    QString fileFilter(hostSetting("FileExtensions").toString());
+#else
     QString fileFilter(fileExtensions());
+#endif
 
     const AlbumList palbumList = m_albumManager->allPAlbums();
     for ( AlbumList::ConstIterator it = palbumList.constBegin();
@@ -131,7 +140,7 @@ QList<KIPI::ImageCollection> KipiInterface::allAlbums()
             continue;
 
         KipiImageCollection* col = new KipiImageCollection(KipiImageCollection::AllItems,
-                                                           *it, fileFilter );
+                                                           *it, fileFilter);
         result.append( KIPI::ImageCollection( col ) );
     }
 
@@ -230,18 +239,6 @@ void KipiInterface::slotCurrentAlbumChanged( Album *album )
     emit currentAlbumChanged( album != 0 );
 }
 
-QString KipiInterface::fileExtensions()
-{
-    // do not save this into a local variable, as this
-    // might change in the main app
-
-    AlbumSettings* s = AlbumSettings::instance();
-    return (s->getImageFileFilter() + ' ' +
-            s->getMovieFileFilter() + ' ' +
-            s->getAudioFileFilter() + ' ' +
-            s->getRawFileFilter());
-}
-
 void KipiInterface::thumbnail(const KUrl& url, int /*size*/)
 {
     // NOTE: size is not used here. Cache use the max pixmap size to store thumbs (256).
@@ -282,10 +279,29 @@ QVariant KipiInterface::hostSetting(const QString& settingName)
     }
     else if (settingName == QString("FileExtensions"))
     {
-        return fileExtensions();
+        // do not save this into a local variable, as this
+        // might change in the main app
+
+        AlbumSettings* s = AlbumSettings::instance();
+        return (s->getImageFileFilter() + ' ' +
+                s->getMovieFileFilter() + ' ' +
+                s->getAudioFileFilter() + ' ' +
+                s->getRawFileFilter());
     }
 
     return QVariant();
+}
+#else
+QString KipiInterface::fileExtensions()
+{
+    // do not save this into a local variable, as this
+    // might change in the main app
+
+    AlbumSettings* s = AlbumSettings::instance();
+    return (s->getImageFileFilter() + ' ' +
+            s->getMovieFileFilter() + ' ' +
+            s->getAudioFileFilter() + ' ' +
+            s->getRawFileFilter());
 }
 #endif
 

@@ -85,8 +85,7 @@ public:
     void refreshImages( const KUrl::List& urls );
 
     int features() const;
-    QString fileExtensions();
-
+  
     void thumbnail( const KUrl& url, int size );
     void thumbnails( const KUrl::List& list, int size );
 
@@ -95,6 +94,8 @@ public:
 
 #if KIPI_VERSION >= 0x000300
     QVariant hostSetting(const QString& settingName);
+#else
+    QString fileExtensions();
 #endif
 
 public Q_SLOTS:
