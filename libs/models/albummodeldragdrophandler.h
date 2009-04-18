@@ -39,7 +39,7 @@ namespace Digikam
 class Album;
 class AbstractAlbumModel;
 
-class DIGIKAM_EXPORT AlbumModelDragDropHandler : public QObject
+class DIGIKAM_DATABASE_EXPORT AlbumModelDragDropHandler : public QObject
 {
 public:
 
@@ -71,7 +71,6 @@ protected:
     AbstractAlbumModel *m_model;
 };
 
-}
+} // namespace Digikam
 
-#endif
-
+#endif // ALBUMMODELDRAGDROPHANDLER_H
