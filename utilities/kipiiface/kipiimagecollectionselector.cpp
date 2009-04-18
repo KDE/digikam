@@ -39,6 +39,10 @@
 #include <ktabwidget.h>
 #include <kvbox.h>
 
+// LibKIPI includes
+
+#include <libkipi/version.h>
+
 // Local includes
 
 #include "constants.h"
@@ -270,7 +274,11 @@ void KipiImageCollectionSelector::populateTreeView(const AlbumList& aList, QTree
 
 QList<KIPI::ImageCollection> KipiImageCollectionSelector::selectedImageCollections() const
 {
+#if KIPI_VERSION >= 0x000300
+    QString ext = d->iface->hostSetting("FileExtensions").toString();
+#else
     QString ext = d->iface->fileExtensions();
+#endif
     QList<KIPI::ImageCollection> list;
 
     QTreeWidgetItemIterator it(d->albumsView, QTreeWidgetItemIterator::Checked);

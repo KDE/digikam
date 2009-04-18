@@ -39,6 +39,10 @@
 #include <kmessagebox.h>
 #include <kinputdialog.h>
 
+// LibKIPI includes
+
+#include <libkipi/version.h>
+
 // Local includes
 
 #include "album.h"
@@ -90,7 +94,11 @@ KIPI::ImageCollection KipiUploadWidget::selectedImageCollection() const
     KIPI::ImageCollection collection;
     if (d->iface)
     {
+#if KIPI_VERSION >= 0x000300
+        QString ext = d->iface->hostSetting("FileExtensions").toString();
+#else
         QString ext = d->iface->fileExtensions();
+#endif
 
         TreeAlbumItem* item = dynamic_cast<TreeAlbumItem*>(d->albumSel->albumView()->currentItem());
         if (item)
