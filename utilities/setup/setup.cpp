@@ -248,8 +248,8 @@ Setup::Setup(QWidget* parent)
         KPageWidgetItem *item = d->pageItem((Page)page);
         if (!item)
             continue;
-        QWidget *page = item->widget();
-        QScrollArea *scrollArea = qobject_cast<QScrollArea*>(page);
+        QWidget *wgt            = item->widget();
+        QScrollArea *scrollArea = qobject_cast<QScrollArea*>(wgt);
         if (scrollArea)
             scrollArea->setFrameShape(QFrame::NoFrame);
     }
