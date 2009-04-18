@@ -48,12 +48,9 @@ public:
 
     EditorToolIfacePriv()
     {
-        prevTab = 0;
         editor  = 0;
         tool    = 0;
     }
-
-    QWidget      *prevTab;
 
     EditorTool   *tool;
 
@@ -93,7 +90,6 @@ void EditorToolIface::loadTool(EditorTool* tool)
     d->tool = tool;
     d->editor->editorStackView()->setToolView(d->tool->toolView());
     d->editor->editorStackView()->setViewMode(EditorStackView::ToolViewMode);
-    d->prevTab = d->editor->rightSideBar()->getActiveTab();
     d->editor->rightSideBar()->appendTab(d->tool->toolSettings(), d->tool->toolIcon(), d->tool->toolName());
     d->editor->rightSideBar()->setActiveTab(d->tool->toolSettings());
     d->editor->toggleActions(false);
@@ -110,7 +106,6 @@ void EditorToolIface::unLoadTool()
     d->editor->editorStackView()->setViewMode(EditorStackView::CanvasMode);
     d->editor->editorStackView()->setToolView(0);
     d->editor->rightSideBar()->deleteTab(d->tool->toolSettings());
-    d->editor->rightSideBar()->setActiveTab(d->prevTab);
     d->editor->toggleActions(true);
     // To restore canvas zoom level in zoom combobox.
     if (!d->editor->editorStackView()->canvas()->fitToWindow())
