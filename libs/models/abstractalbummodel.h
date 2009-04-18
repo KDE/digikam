@@ -134,7 +134,7 @@ protected:
      *  They must have a common root album, which is set in the constructor. */
     virtual bool filterAlbum(Album *album) const;
     /// Notification when an entry is removed
-    virtual void albumCleared(Album */*album*/) {};
+    virtual void albumCleared(Album* /*album*/) {};
     /// Notification when all entries are removed
     virtual void allAlbumsCleared() {};
 
