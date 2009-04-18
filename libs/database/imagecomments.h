@@ -43,9 +43,21 @@
 namespace Digikam
 {
 
+class ImageCommentsPriv;
+
 class DIGIKAM_DATABASE_EXPORT ImageComments
 {
 public:
+
+    /**
+     * The ImageComments class shall provide short-lived objects that provide read/write access
+     * to the comments stored in the database. It is a mere wrapper around the less
+     * convenient access methods in AlbumDB.
+     * Database results are cached, but the object will not listen to database changes from other places.
+     *
+     * Changes are applied to the database only after calling apply(), which you can call any time
+     * and which will in any case be called from the destructor.
+     */
 
     enum LanguageChoiceBehavior
     {
@@ -71,84 +83,6 @@ public:
         UniquePerLanguageAndAuthor
     };
 
-private:
-
-	class ImageCommentsPriv : public QSharedData
-	{
-	public:
-
-		ImageCommentsPriv()
-		{
-			id = -1;
-			unique = ImageComments::UniquePerLanguage;
-		}
-
-		qlonglong                     id;
-		QList<CommentInfo>            infos;
-		QSet<int>                     dirtyIndices;
-		QSet<int>                     newIndices;
-		ImageComments::UniqueBehavior unique;
-
-		void languageMatch(const QString &fullCode, const QString &langCode,
-						   int &fullCodeMatch, int &langCodeMatch, int &defaultCodeMatch, int &firstMatch) const
-		{
-			// if you change the algorithm, please take a look at ImageCopyright as well
-			fullCodeMatch    = -1;
-			langCodeMatch    = -1;
-			defaultCodeMatch = -1;
-			firstMatch       = -1;
-
-			if (infos.isEmpty())
-			{
-				return;
-			}
-			else
-			{
-				firstMatch = 0; // index of first entry - at least we have one
-			}
-
-			// First we search for a full match
-			// Second for a match of the language code
-			// Third for the default code
-			// Fourth we return the first comment
-
-			QLatin1String defaultCode("x-default");
-
-			for (int i=0; i<infos.size(); ++i)
-			{
-				const CommentInfo &info = infos[i];
-				if (info.type == DatabaseComment::Comment)
-				{
-					if (info.language == fullCode)
-					{
-						fullCodeMatch = i;
-						break;
-					}
-					else if (info.language.startsWith(langCode) && langCodeMatch == -1)
-					{
-						langCodeMatch = i;
-					}
-					else if (info.language == defaultCode)
-					{
-						defaultCodeMatch = i;
-					}
-				}
-			}
-		}
-	};
-
-	/**
-     * The ImageComments class shall provide short-lived objects that provide read/write access
-     * to the comments stored in the database. It is a mere wrapper around the less
-     * convenient access methods in AlbumDB.
-     * Database results are cached, but the object will not listen to database changes from other places.
-     *
-     * Changes are applied to the database only after calling apply(), which you can call any time
-     * and which will in any case be called from the destructor.
-     */
-
-public:
-
     /** Create a null ImageComments object */
     ImageComments();
 
@@ -164,6 +98,8 @@ public:
 
     ImageComments(const ImageComments &other);
     ~ImageComments();
+
+    ImageComments &operator=(const ImageComments &other);
 
     bool isNull() const;
 

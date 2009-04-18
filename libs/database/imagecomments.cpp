@@ -36,6 +36,70 @@
 namespace Digikam
 {
 
+class ImageCommentsPriv : public QSharedData
+{
+public:
+
+    ImageCommentsPriv()
+    {
+        id = -1;
+        unique = ImageComments::UniquePerLanguage;
+    }
+
+    qlonglong                     id;
+    QList<CommentInfo>            infos;
+    QSet<int>                     dirtyIndices;
+    QSet<int>                     newIndices;
+    ImageComments::UniqueBehavior unique;
+
+    void languageMatch(const QString &fullCode, const QString &langCode,
+                        int &fullCodeMatch, int &langCodeMatch, int &defaultCodeMatch, int &firstMatch) const
+    {
+        // if you change the algorithm, please take a look at ImageCopyright as well
+        fullCodeMatch    = -1;
+        langCodeMatch    = -1;
+        defaultCodeMatch = -1;
+        firstMatch       = -1;
+
+        if (infos.isEmpty())
+        {
+            return;
+        }
+        else
+        {
+            firstMatch = 0; // index of first entry - at least we have one
+        }
+
+        // First we search for a full match
+        // Second for a match of the language code
+        // Third for the default code
+        // Fourth we return the first comment
+
+        QLatin1String defaultCode("x-default");
+
+        for (int i=0; i<infos.size(); ++i)
+        {
+            const CommentInfo &info = infos[i];
+            if (info.type == DatabaseComment::Comment)
+            {
+                if (info.language == fullCode)
+                {
+                    fullCodeMatch = i;
+                    break;
+                }
+                else if (info.language.startsWith(langCode) && langCodeMatch == -1)
+                {
+                    langCodeMatch = i;
+                }
+                else if (info.language == defaultCode)
+                {
+                    defaultCodeMatch = i;
+                }
+            }
+        }
+    }
+};
+
 ImageComments::ImageComments()
 {
 }
@@ -63,6 +127,12 @@ ImageComments::ImageComments(const ImageComments &other)
 ImageComments::~ImageComments()
 {
     apply();
+}
+
+ImageComments &ImageComments::operator=(const ImageComments &other)
+{
+    d = other.d;
+    return *this;
 }
 
 bool ImageComments::isNull() const
