@@ -53,10 +53,10 @@ public:
         enable        = true;
         autoHideTimer = 0;
         parent        = 0;
-        align         = DCursorTracker::Center;
+        alignment     = DCursorTracker::Center;
     }
 
-    DCursorTracker::Align align;
+    DCursorTracker::Align alignment;
     bool                  enable;
     bool                  keepOpen;
     QTimer*               autoHideTimer;
@@ -84,7 +84,7 @@ DCursorTracker::~DCursorTracker()
 
 void DCursorTracker::setAlign(Align align)
 {
-    d->align = align;
+    d->alignment = align;
 }
 
 /**
@@ -165,7 +165,7 @@ bool DCursorTracker::eventFilter(QObject *object, QEvent *e)
 
 void DCursorTracker::moveToParent(QWidget* parent)
 {
-    switch (d->align)
+    switch (d->alignment)
     {
         case Left:
         {
@@ -173,16 +173,17 @@ void DCursorTracker::moveToParent(QWidget* parent)
             move(p.x(), p.y()-height());
             break;
         }
-        case Center:
-        {
-            QPoint p = parent->mapToGlobal(QPoint(parent->width()/2, 0));
-            move(p.x()-width()/2, p.y()-height());
-            break;
-        }
         case Right:
         {
             QPoint p = parent->mapToGlobal(QPoint(parent->width(), 0));
             move(p.x()-width(), p.y()-height());
+            break;
+        }
+        case Center:
+        default:
+        {
+            QPoint p = parent->mapToGlobal(QPoint(parent->width()/2, 0));
+            move(p.x()-width()/2, p.y()-height());
             break;
         }
     }
