@@ -31,7 +31,7 @@
 
 // Local includes
 
-#include "digikam_export.h"
+//#include "digikam_export.h"
 
 namespace Digikam
 {
@@ -39,7 +39,7 @@ namespace Digikam
 class Album;
 class AbstractAlbumModel;
 
-class DIGIKAM_DATABASE_EXPORT AlbumModelDragDropHandler : public QObject
+class AlbumModelDragDropHandler : public QObject
 {
 public:
 
