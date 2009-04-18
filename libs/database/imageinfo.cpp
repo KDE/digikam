@@ -44,9 +44,7 @@
 #include "imageinfodata.h"
 #include "imageinfocache.h"
 #include "imagescanner.h"
-/*#include "imageposition_p.h"
-#include "imagecomments_p.h"
-*/
+
 namespace Digikam
 {
 
