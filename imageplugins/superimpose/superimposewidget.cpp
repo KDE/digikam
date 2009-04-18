@@ -256,12 +256,12 @@ void SuperImposeWidget::mousePressEvent ( QMouseEvent * e )
         switch (m_editMode)
         {
             case ZOOMIN:
-                if (zoomSelection(+0.05))
+                if (zoomSelection(+0.05F))
                     moveSelection(width()/2 - e->x(), height()/2 - e->y());
                 break;
 
             case ZOOMOUT:
-                if (zoomSelection(-0.05))
+                if (zoomSelection(-0.05F))
                     moveSelection(width()/2 - e->x(), height()/2 - e->y());
                 break;
 

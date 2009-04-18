@@ -129,7 +129,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     // some pseudo-progress
     if (observer)
-        observer->progressInfo(m_image, 0.1);
+        observer->progressInfo(m_image, 0.1F);
 
     // -------------------------------------------------------------------
     // Check color space.
@@ -399,7 +399,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             // use 0-10% and 90-100% for pseudo-progress
             if (observer && y >= (long)checkPoint)
             {
-                checkPoint += granularity(observer, y, 0.8);
+                checkPoint += granularity(observer, y, 0.8F);
                 if (!observer->continueQuery(m_image))
                 {
                     delete [] data;
@@ -525,7 +525,7 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     }
 
     if (observer)
-        observer->progressInfo(m_image, 0.1);
+        observer->progressInfo(m_image, 0.1F);
 
     // -------------------------------------------------------------------
     // Check color space.
@@ -588,7 +588,7 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     {
         if (observer && y == (long)checkpoint)
         {
-            checkpoint += granularity(observer, imageHeight(), 0.8);
+            checkpoint += granularity(observer, imageHeight(), 0.8F);
             if (!observer->continueQuery(m_image))
             {
                 jas_image_destroy(jp2_image);

@@ -141,7 +141,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
             if (observer && h == checkpoint)
             {
-                checkpoint += granularity(observer, height, 0.9);
+                checkpoint += granularity(observer, height, 0.9F);
                 if (!observer->continueQuery(m_image))
                 {
                     delete [] data;
@@ -180,7 +180,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     return true;
 }
 
-bool PPMLoader::save(const QString& /*filePath*/, DImgLoaderObserver */*observer*/)
+bool PPMLoader::save(const QString& /*filePath*/, DImgLoaderObserver* /*observer*/)
 {
     return false;
 }

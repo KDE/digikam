@@ -326,7 +326,7 @@ void RAWLoader::postProcessing(DImgLoaderObserver *observer)
                         1.0,                                // gamma
                         m_customRawSettings.saturation);    // saturation
     }
-    if (observer) observer->progressInfo(m_image, 0.92);
+    if (observer) observer->progressInfo(m_image, 0.92F);
 
     if (m_customRawSettings.lightness != 0.0 ||
         m_customRawSettings.contrast  != 1.0 ||
@@ -338,7 +338,7 @@ void RAWLoader::postProcessing(DImgLoaderObserver *observer)
         bcg.setGamma(m_customRawSettings.gamma);
         bcg.applyBCG(imageData(), imageWidth(), imageHeight(), m_rawDecodingSettings.sixteenBitsImage);
     }
-    if (observer) observer->progressInfo(m_image, 0.94);
+    if (observer) observer->progressInfo(m_image, 0.94F);
 
     if (!m_customRawSettings.curveAdjust.isEmpty())
     {
@@ -350,7 +350,7 @@ void RAWLoader::postProcessing(DImgLoaderObserver *observer)
         curves.curvesLutProcess(imageData(), tmp.bits(), imageWidth(), imageHeight());
         memcpy(imageData(), tmp.bits(), tmp.numBytes());
     }
-    if (observer) observer->progressInfo(m_image, 0.96);
+    if (observer) observer->progressInfo(m_image, 0.96F);
 
     if (!m_customRawSettings.levelsAdjust.isEmpty())
     {
@@ -369,7 +369,7 @@ void RAWLoader::postProcessing(DImgLoaderObserver *observer)
         levels.levelsLutProcess(imageData(), tmp.bits(), imageWidth(), imageHeight());
         memcpy(imageData(), tmp.bits(), tmp.numBytes());
     }
-    if (observer) observer->progressInfo(m_image, 0.98);
+    if (observer) observer->progressInfo(m_image, 0.98F);
 }
 
 }  // namespace Digikam

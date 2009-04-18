@@ -54,7 +54,7 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     QImage image(filePath);
 
     if (observer)
-        observer->progressInfo(m_image, 0.9);
+        observer->progressInfo(m_image, 0.9F);
 
     if (image.isNull())
     {
@@ -142,13 +142,13 @@ bool QImageLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     QImage image = m_image->copyQImage();
 
     if (observer)
-        observer->progressInfo(m_image, 0.1);
+        observer->progressInfo(m_image, 0.1F);
 
     // Saving is opaque to us. No support for stopping from observer,
     // progress info are only pseudo values
     bool success = image.save(filePath, format.toUpper(), quality);
     if (observer && success)
-        observer->progressInfo(m_image, 1.0);
+        observer->progressInfo(m_image, 1.0F);
 
     imageSetAttribute("format", format.toUpper());
 
