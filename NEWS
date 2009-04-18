@@ -46,4 +46,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 035 ==> 189250 : Editing a canon camera jpeg adds broken sRGB profile.
 036 ==> 187733 : Cannot turn off sidebar after Infrared filter usage?
 037 ==> 188755 : Strange behaviour on selection.
-038 ==> 
+038 ==> 185884 : Empty view after clicking the left thumbnail image in Image Editor filter view.
+039 ==> 

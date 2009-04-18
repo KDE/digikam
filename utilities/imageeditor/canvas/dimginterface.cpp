@@ -710,7 +710,7 @@ void DImgInterface::updateUndoState()
 
 bool DImgInterface::imageValid()
 {
-    return !d->image.isNull();
+    return d->valid;
 }
 
 int DImgInterface::width()
