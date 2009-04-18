@@ -269,7 +269,7 @@ QString ManualRenameInput::createToolTip()
 void ManualRenameInput::slotToolTipButtonToggled(bool checked)
 {
     d->tooltipTracker->setVisible(checked);
-    d->tooltipTracker->refresh(DCursorTracker::Left);
+    slotUpdateTrackerPos();
 }
 
 void ManualRenameInput::slotUpdateTrackerPos()
