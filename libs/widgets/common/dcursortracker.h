@@ -53,6 +53,15 @@ class DIGIKAM_EXPORT DCursorTracker : public QLabel
 
 public:
 
+    enum TrackerAlignment
+    {
+        Left = 0,
+        Center,
+        Right
+    };
+
+public:
+
     DCursorTracker(const QString& txt, QWidget *parent);
     ~DCursorTracker();
 
@@ -61,7 +70,7 @@ public:
     void setKeepOpen(bool b);
 
     void triggerAutoShow(int timeout = 2000);
-    void refresh();
+    void refresh(TrackerAlignment align = Center);
 
 protected:
 
@@ -73,7 +82,7 @@ private Q_SLOTS:
 
 private:
 
-    void moveToParent(QWidget* parent);
+    void moveToParent(QWidget* parent, TrackerAlignment align = Center);
 
 private:
 

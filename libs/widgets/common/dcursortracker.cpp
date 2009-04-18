@@ -110,9 +110,9 @@ void DCursorTracker::triggerAutoShow(int timeout)
     }
 }
 
-void DCursorTracker::refresh()
+void DCursorTracker::refresh(TrackerAlignment align)
 {
-    moveToParent(d->parent);
+    moveToParent(d->parent, align);
 }
 
 void DCursorTracker::slotAutoHide()
@@ -156,10 +156,29 @@ bool DCursorTracker::eventFilter(QObject *object, QEvent *e)
     return false;
 }
 
-void DCursorTracker::moveToParent(QWidget* parent)
+void DCursorTracker::moveToParent(QWidget* parent, TrackerAlignment align)
 {
-    QPoint p = parent->mapToGlobal(QPoint(parent->width()/2, 0));
-    move(p.x()-width()/2, p.y()-height());
+    switch (align)
+    {
+        case Left:
+        {
+            QPoint p = parent->mapToGlobal(QPoint(0, 0));
+            move(p.x(), p.y()-height());
+            break;
+        }
+        case Center:
+        {
+            QPoint p = parent->mapToGlobal(QPoint(parent->width()/2, 0));
+            move(p.x()-width()/2, p.y()-height());
+            break;
+        }
+        case Right:
+        {
+            QPoint p = parent->mapToGlobal(QPoint(parent->width(), 0));
+            move(p.x()-width(), p.y()-height());
+            break;
+        }
+    }
 }
 
 
