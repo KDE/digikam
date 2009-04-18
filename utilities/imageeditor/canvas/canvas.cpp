@@ -628,29 +628,27 @@ void Canvas::contentsMousePressEvent(QMouseEvent *e)
             // Set diagonally opposite corner as anchor
 
             QRect r(d->rubber->rubberBandAreaOnContents());
-            QRect newRect(r);
 
             if (d->ltActive)
             {
-                newRect.setTopLeft(r.bottomRight());
-                newRect.setBottomRight(r.topLeft());
+                d->rubber->setFirstPointOnViewport(r.bottomRight());
+                d->rubber->setSecondPointOnViewport(r.topLeft());
             }
             else if (d->rtActive)
             {
-                newRect.setTopLeft(r.bottomLeft());
-                newRect.setBottomRight(r.topRight());
+                d->rubber->setFirstPointOnViewport(r.bottomLeft());
+                d->rubber->setSecondPointOnViewport(r.topRight());
             }
             else if (d->lbActive)
             {
-                newRect.setTopLeft(r.topRight());
-                newRect.setBottomRight(r.bottomLeft());
+                d->rubber->setFirstPointOnViewport(r.topRight());
+                d->rubber->setSecondPointOnViewport(r.bottomLeft());
             }
             else if (d->rbActive)
             {
-                newRect.setTopLeft(r.topLeft());
-                newRect.setBottomRight(r.bottomLeft());
+                d->rubber->setFirstPointOnViewport(r.topLeft());
+                d->rubber->setSecondPointOnViewport(r.bottomRight());
             }
-            d->rubber->setRectOnContents(newRect);
 
             viewport()->setMouseTracking(false);
             d->pressedMoved  = false;

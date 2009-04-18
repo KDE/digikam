@@ -45,4 +45,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 034 ==> 167836 : Image preview is too large.
 035 ==> 189250 : Editing a canon camera jpeg adds broken sRGB profile.
 036 ==> 187733 : Cannot turn off sidebar after Infrared filter usage?
-037 ==> 
+037 ==> 188755 : Strange behaviour on selection.
+038 ==> 
