@@ -50,6 +50,10 @@ public:
 
     void setSourceImageModel(ImageAlbumModel* model);
 
+protected:
+
+    virtual int compareInfosCategories(const ImageInfo &left, const ImageInfo &right) const;
+
 protected Q_SLOTS:
 
     //void slotListedAlbumChanged(Album *album);

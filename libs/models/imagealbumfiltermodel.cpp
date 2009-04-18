@@ -24,6 +24,10 @@
 #include "imagealbumfiltermodel.h"
 #include "imagealbumfiltermodel.moc"
 
+// KDE includes
+
+#include <kstringhandler.h>
+
 // Local includes
 
 #include "imagefiltermodelpriv.h"
@@ -88,6 +92,31 @@ void ImageAlbumFilterModel::setImageFilterSettings(const ImageFilterSettings &s)
     settings.setAlbumNames(d->albumNamesHash);
     settings.setTagNames(d->tagNamesHash);
     ImageFilterModel::setImageFilterSettings(settings);
+}
+
+int ImageAlbumFilterModel::compareInfosCategories(const ImageInfo &left, const ImageInfo &right) const
+{
+    Q_D(const ImageAlbumFilterModel);
+    switch (d->categorizationMode)
+    {
+        case NoCategories:
+            return 0;
+        case CategoryByAlbum:
+        {
+            PAlbum *leftAlbum = AlbumManager::instance()->findPAlbum(left.albumId());
+            PAlbum *rightAlbum = AlbumManager::instance()->findPAlbum(right.albumId());
+            if (!leftAlbum || !rightAlbum)
+                return -1;
+            if (d->sortOrder == SortByCreationDate || d->sortOrder == SortByModificationDate)
+                return leftAlbum->date() < rightAlbum->date();
+
+            return KStringHandler::naturalCompare(leftAlbum->albumPath(), rightAlbum->albumPath());
+        }
+        case CategoryByFormat:
+            return KStringHandler::naturalCompare(left.format(), right.format());
+        default:
+            return 0;
+    }
 }
 
 void ImageAlbumFilterModel::albumChange(Album *album)
