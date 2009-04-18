@@ -26,7 +26,9 @@
 
 // Qt includes
 
-#include <QSortFilterProxyModel>
+// KDE includes
+
+#include "kcategorizedsortfilterproxymodel.h"
 
 // Local includes
 
@@ -41,7 +43,7 @@ class ImageChangeset;
 class ImageTagChangeset;
 class ImageFilterModelPrivate;
 
-class DIGIKAM_DATABASE_EXPORT ImageFilterModel : public QSortFilterProxyModel
+class DIGIKAM_DATABASE_EXPORT ImageFilterModel : public KCategorizedSortFilterProxyModel
 {
     Q_OBJECT
 
@@ -52,6 +54,8 @@ public:
 
     /** This filter model is for use with ImageModel source models only. */
     void setSourceImageModel(ImageModel* model);
+
+    ImageModel *sourceModel() const;
 
     /** Changes the current image filter settings and refilters. */
     virtual void setImageFilterSettings(const ImageFilterSettings &settings);
@@ -71,11 +75,45 @@ public:
     void setMimeTypeFilter(int mimeTypeFilter);
     void setTextFilter(const SearchTextSettings& settings);
 
+    enum CategorizationMode
+    {
+        NoCategories,
+        CategoryByAlbum,
+        CategoryByFormat
+    };
+
+    enum SortOrder
+    {
+        SortByFileName,
+        SortByFilePath,
+        SortByFileSize,
+        SortByModificationDate,
+        SortByCreationDate,
+        SortByRating,
+        SortByImageSize // pixel number
+    };
+
+    void setCategorizationMode(CategorizationMode mode);
+    CategorizationMode categorizationMode() const;
+
+    void setSortOrder(SortOrder order);
+    SortOrder sortOrder() const;
+
 protected:
 
     virtual void setSourceModel(QAbstractItemModel* model);
 
     virtual bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
+
+    virtual int  compareCategories(const QModelIndex &left, const QModelIndex &right) const;
+    virtual bool subSortLessThan(const QModelIndex &left, const QModelIndex &right) const;
+
+    /** Reimplement to customize category sorting,
+     *  Return negative if category of left < category right,
+     *  Return 0 if left and right are in the same category, else return positive. */
+    virtual int compareInfosCategories(const ImageInfo &left, const ImageInfo &right) const;
+    /** Reimplement to customize sorting. Do not take categories into account here. */
+    virtual bool infosLessThan(const ImageInfo &left, const ImageInfo &right) const;
 
     ImageFilterModelPrivate *const d_ptr;
     ImageFilterModel(ImageFilterModelPrivate &dd, QObject *parent);

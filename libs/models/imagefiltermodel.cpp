@@ -28,6 +28,10 @@
 #include "imagefiltermodelthreads.h"
 #include "imagefiltermodelthreads.moc"
 
+// KDE includes
+
+#include <kstringhandler.h>
+
 // Local includes
 
 #include "databaseaccess.h"
@@ -42,6 +46,8 @@ namespace Digikam
 ImageFilterModelPrivate::ImageFilterModelPrivate()
 {
     imageModel            = 0;
+    sortOrder             = ImageFilterModel::SortByFileName;
+    categorizationMode    = ImageFilterModel::NoCategories;
     version               = 0;
     lastDiscardVersion    = 0;
     lastFilteredVersion   = 0;
@@ -79,14 +85,14 @@ const int PrepareChunkSize = 100;
 const int FilterChunkSize = 2000;
 
 ImageFilterModel::ImageFilterModel(QObject *parent)
-                : QSortFilterProxyModel(parent),
+                : KCategorizedSortFilterProxyModel(parent),
                   d_ptr(new ImageFilterModelPrivate)
 {
     d_ptr->init(this);
 }
 
 ImageFilterModel::ImageFilterModel(ImageFilterModelPrivate &dd, QObject *parent)
-                : QSortFilterProxyModel(parent),
+                : KCategorizedSortFilterProxyModel(parent),
                   d_ptr(&dd)
 {
     d_ptr->init(this);
@@ -123,6 +129,12 @@ void ImageFilterModel::setSourceModel(QAbstractItemModel *sourceModel)
 {
     // made it protected, only setSourceImageModel is public
     QSortFilterProxyModel::setSourceModel(sourceModel);
+}
+
+ImageModel *ImageFilterModel::sourceModel() const
+{
+    Q_D(const ImageFilterModel);
+    return d->imageModel;
 }
 
 void ImageFilterModel::setSourceImageModel(ImageModel *sourceModel)
@@ -427,6 +439,106 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
     }
 
     emit processed(package);
+}
+
+void ImageFilterModel::setCategorizationMode(ImageFilterModel::CategorizationMode mode)
+{
+    Q_D(ImageFilterModel);
+    if (mode == d->categorizationMode)
+        return;
+    d->categorizationMode = mode;
+    setCategorizedModel(mode != NoCategories);
+    invalidate();
+}
+
+ImageFilterModel::CategorizationMode ImageFilterModel::categorizationMode() const
+{
+    Q_D(const ImageFilterModel);
+    return d->categorizationMode;
+}
+
+void ImageFilterModel::setSortOrder(ImageFilterModel::SortOrder order)
+{
+    Q_D(ImageFilterModel);
+    if (d->sortOrder == order)
+        return;
+    d->sortOrder = order;
+    invalidate();
+}
+
+ImageFilterModel::SortOrder ImageFilterModel::sortOrder() const
+{
+    Q_D(const ImageFilterModel);
+    return d->sortOrder;
+}
+
+int ImageFilterModel::compareCategories(const QModelIndex &left, const QModelIndex &right) const
+{
+    Q_D(const ImageFilterModel);
+    if (!left.isValid() || !right.isValid())
+        return -1;
+    return compareInfosCategories(d->imageModel->imageInfoRef(left), d->imageModel->imageInfoRef(right));
+}
+
+bool ImageFilterModel::subSortLessThan(const QModelIndex &left, const QModelIndex &right) const
+{
+    Q_D(const ImageFilterModel);
+    if (!left.isValid() || !right.isValid())
+        return true;
+    return infosLessThan(d->imageModel->imageInfoRef(left), d->imageModel->imageInfoRef(right));
+}
+
+int ImageFilterModel::compareInfosCategories(const ImageInfo &left, const ImageInfo &right) const
+{
+    Q_D(const ImageFilterModel);
+    switch (d->categorizationMode)
+    {
+        case NoCategories:
+            return 0;
+        case CategoryByAlbum:
+        {
+            int leftAlbum = left.albumId();
+            int rightAlbum = right.albumId();
+            if (leftAlbum == rightAlbum)
+                return 0;
+            else if (leftAlbum < rightAlbum)
+                return -1;
+            else
+                return 1;
+        }
+        case CategoryByFormat:
+            return KStringHandler::naturalCompare(left.format(), right.format());
+        default:
+            return 0;
+    }
+}
+
+bool ImageFilterModel::infosLessThan(const ImageInfo &left, const ImageInfo &right) const
+{
+    Q_D(const ImageFilterModel);
+    switch (d->sortOrder)
+    {
+        case SortByFileName:
+            return KStringHandler::naturalCompare(left.name(), right.name()) < 0;
+        case SortByFilePath:
+            return KStringHandler::naturalCompare(left.filePath(), right.filePath()) < 0;
+        case SortByFileSize:
+            return left.fileSize() < right.fileSize();
+        case SortByModificationDate:
+            return left.modDateTime() < right.modDateTime();
+        case SortByCreationDate:
+            return left.dateTime() < right.dateTime();
+        case SortByRating:
+            return left.rating() < right.rating();
+        case SortByImageSize:
+        {
+            QSize leftSize = left.dimensions();
+            QSize rightSize = right.dimensions();
+            return leftSize.width() * leftSize.height() < rightSize.width() * rightSize.height();
+        }
+        default:
+            return false;
+    }
 }
 
 void ImageFilterModel::slotImageTagChange(const ImageTagChangeset &changeset)

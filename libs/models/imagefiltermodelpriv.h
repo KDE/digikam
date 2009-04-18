@@ -81,6 +81,10 @@ public:
 
     ImageFilterSettings        filter;
 
+    ImageFilterModel::SortOrder sortOrder;
+    ImageFilterModel::CategorizationMode
+                               categorizationMode;
+
     volatile unsigned int      version;
     unsigned int               lastDiscardVersion;
     unsigned int               lastFilteredVersion;
