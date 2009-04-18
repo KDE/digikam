@@ -6,7 +6,7 @@
  * Date        : 2007-09-19
  * Description : Access to comments of an image in the database
  *
- * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,11 +23,6 @@
 
 #include "imagecomments.h"
 
-// Qt includes
-
-#include <QSharedData>
-#include <QSet>
-
 // KDE includes
 
 #include <kdebug.h>
@@ -37,7 +32,6 @@
 // Local includes
 
 #include "albumdb.h"
-#include "imagecomments_p.h"
 
 namespace Digikam
 {

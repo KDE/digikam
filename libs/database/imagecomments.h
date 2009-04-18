@@ -6,7 +6,9 @@
  * Date        : 2007-09-19
  * Description : Access to comments of an image in the database
  *
- * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008 by Patrick Spendrin <ps_ml at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,6 +31,8 @@
 #include <QString>
 #include <QDateTime>
 #include <QSharedDataPointer>
+#include <QSharedData>
+#include <QSet>
 
 // Local includes
 
@@ -39,11 +43,101 @@
 namespace Digikam
 {
 
-class ImageCommentsPriv;
-
 class DIGIKAM_DATABASE_EXPORT ImageComments
 {
-    /**
+public:
+
+    enum LanguageChoiceBehavior
+    {
+        /**
+         *  Return only a comment if the language code
+         *  (at least the language code, the country part may differ)
+         *  is identical. Else returns a null QString.
+         */
+        ReturnMatchingLanguageOnly,
+        /// If no matching language as above is found, return the default language.
+        ReturnMatchingOrDefaultLanguage,
+        /** If no matching or default language is found, return the first comment.
+         *  Returns a null string only if no comment is available.
+         */
+        ReturnMatchingDefaultOrFirstLanguage
+    };
+
+    enum UniqueBehavior
+    {
+        /** Allow only one comment per language. Default setting. */
+        UniquePerLanguage,
+        /** Allow multiple comments per language, each with a different author */
+        UniquePerLanguageAndAuthor
+    };
+
+private:
+
+	class ImageCommentsPriv : public QSharedData
+	{
+	public:
+
+		ImageCommentsPriv()
+		{
+			id = -1;
+			unique = ImageComments::UniquePerLanguage;
+		}
+
+		qlonglong                     id;
+		QList<CommentInfo>            infos;
+		QSet<int>                     dirtyIndices;
+		QSet<int>                     newIndices;
+		ImageComments::UniqueBehavior unique;
+
+		void languageMatch(const QString &fullCode, const QString &langCode,
+						   int &fullCodeMatch, int &langCodeMatch, int &defaultCodeMatch, int &firstMatch) const
+		{
+			// if you change the algorithm, please take a look at ImageCopyright as well
+			fullCodeMatch    = -1;
+			langCodeMatch    = -1;
+			defaultCodeMatch = -1;
+			firstMatch       = -1;
+
+			if (infos.isEmpty())
+			{
+				return;
+			}
+			else
+			{
+				firstMatch = 0; // index of first entry - at least we have one
+			}
+
+			// First we search for a full match
+			// Second for a match of the language code
+			// Third for the default code
+			// Fourth we return the first comment
+
+			QLatin1String defaultCode("x-default");
+
+			for (int i=0; i<infos.size(); ++i)
+			{
+				const CommentInfo &info = infos[i];
+				if (info.type == DatabaseComment::Comment)
+				{
+					if (info.language == fullCode)
+					{
+						fullCodeMatch = i;
+						break;
+					}
+					else if (info.language.startsWith(langCode) && langCodeMatch == -1)
+					{
+						langCodeMatch = i;
+					}
+					else if (info.language == defaultCode)
+					{
+						defaultCodeMatch = i;
+					}
+				}
+			}
+		}
+	};
+
+	/**
      * The ImageComments class shall provide short-lived objects that provide read/write access
      * to the comments stored in the database. It is a mere wrapper around the less
      * convenient access methods in AlbumDB.
@@ -72,30 +166,6 @@ public:
     ~ImageComments();
 
     bool isNull() const;
-
-    enum LanguageChoiceBehavior
-    {
-        /**
-         *  Return only a comment if the language code
-         *  (at least the language code, the country part may differ)
-         *  is identical. Else returns a null QString.
-         */
-        ReturnMatchingLanguageOnly,
-        /// If no matching language as above is found, return the default language.
-        ReturnMatchingOrDefaultLanguage,
-        /** If no matching or default language is found, return the first comment.
-         *  Returns a null string only if no comment is available.
-         */
-        ReturnMatchingDefaultOrFirstLanguage
-    };
-
-    enum UniqueBehavior
-    {
-        /** Allow only one comment per language. Default setting. */
-        UniquePerLanguage,
-        /** Allow multiple comments per language, each with a different author */
-        UniquePerLanguageAndAuthor
-    };
 
     /**
      * Changes the behavior to unique comments per language, see the enum above for possible
@@ -181,7 +251,9 @@ protected:
                           DatabaseComment::Type type,
                           const QDateTime &date);
 
-    QSharedDataPointer<ImageCommentsPriv> d;
+protected:
+
+	QSharedDataPointer<ImageCommentsPriv> d;
 };
 
 } // namespace Digikam
