@@ -26,9 +26,9 @@
 // Local includes
 
 #include "imageinfo.h"
-#include "imagecomments_p.h"
+/*#include "imagecomments_p.h"
 #include "imageposition_p.h"
-
+*/
 namespace Digikam
 {
 }

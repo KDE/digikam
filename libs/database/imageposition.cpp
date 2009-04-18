@@ -23,10 +23,6 @@
 
 #include "imageposition.h"
 
-// Qt includes
-
-#include <QSharedData>
-
 // Local includes
 
 #include "databaseaccess.h"
@@ -34,7 +30,6 @@
 #include "databasefields.h"
 #include "dmetadata.h"
 #include "metadatainfo.h"
-#include "imageposition_p.h"
 
 namespace Digikam
 {

@@ -57,9 +57,9 @@
 #include "imagequerybuilder.h"
 #include "dmetadata.h"
 #include "haariface.h"
-#include "imagecomments_p.h"
+/*#include "imagecomments_p.h"
 #include "imageposition_p.h"
-
+*/
 namespace Digikam
 {
 
