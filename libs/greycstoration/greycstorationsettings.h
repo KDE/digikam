@@ -70,12 +70,12 @@ public:
         interp     = NearestNeighbor;
 
         amplitude  = 60.0;
-        sharpness  = 0.7;
-        anisotropy = 0.3;
-        alpha      = 0.6;
-        sigma      = 1.1;
+        sharpness  = 0.7F;
+        anisotropy = 0.3F;
+        alpha      = 0.6F;
+        sigma      = 1.1F;
         gaussPrec  = 2.0;
-        dl         = 0.8;
+        dl         = 0.8F;
         da         = 30.0;
     };
 
@@ -90,12 +90,12 @@ public:
         interp     = NearestNeighbor;
 
         amplitude  = 20.0;
-        sharpness  = 0.3;
+        sharpness  = 0.3F;
         anisotropy = 1.0;
-        alpha      = 0.8;
+        alpha      = 0.8F;
         sigma      = 2.0;
         gaussPrec  = 2.0;
-        dl         = 0.8;
+        dl         = 0.8F;
         da         = 30.0;
     };
 
@@ -110,12 +110,12 @@ public:
         interp     = NearestNeighbor; 
 
         amplitude  = 20.0;
-        sharpness  = 0.2;
-        anisotropy = 0.9;
-        alpha      = 0.1;
+        sharpness  = 0.2F;
+        anisotropy = 0.9F;
+        alpha      = 0.1F;
         sigma      = 1.5;
         gaussPrec  = 2.0;
-        dl         = 0.8;
+        dl         = 0.8F;
         da         = 30.0;
     };
 
