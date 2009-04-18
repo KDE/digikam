@@ -337,7 +337,7 @@ void QueueMgrWindow::setupActions()
     connect(d->removeItemsSelAction, SIGNAL(triggered()), d->queuePool, SLOT(slotRemoveSelectedItems()));
     actionCollection()->addAction("queuemgr_removeitemssel", d->removeItemsSelAction);
 
-    d->removeItemsDoneAction = new KAction(i18n("Removing items completed"), this);
+    d->removeItemsDoneAction = new KAction(i18n("Remove processed items"), this);
     d->removeItemsDoneAction->setEnabled(false);
     connect(d->removeItemsDoneAction, SIGNAL(triggered()), d->queuePool, SLOT(slotRemoveItemsDone()));
     actionCollection()->addAction("queuemgr_removeitemsdone", d->removeItemsDoneAction);
