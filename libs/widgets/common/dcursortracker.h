@@ -65,12 +65,13 @@ public:
     DCursorTracker(const QString& txt, QWidget *parent);
     ~DCursorTracker();
 
+    void setAlign(TrackerAlignment align);
     void setText(const QString& txt);
     void setEnable(bool b);
     void setKeepOpen(bool b);
 
     void triggerAutoShow(int timeout = 2000);
-    void refresh(TrackerAlignment align = Center);
+    void refresh();
 
 protected:
 
@@ -82,7 +83,7 @@ private Q_SLOTS:
 
 private:
 
-    void moveToParent(QWidget* parent, TrackerAlignment align = Center);
+    void moveToParent(QWidget* parent);
 
 private:
 

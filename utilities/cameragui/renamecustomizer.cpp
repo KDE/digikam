@@ -99,6 +99,7 @@ ManualRenameInput::ManualRenameInput(QWidget* parent)
 
     QString tooltip   = createToolTip();
     d->tooltipTracker = new DTipTracker(tooltip, d->parseStringLineEdit);
+    d->tooltipTracker->setAlign(DCursorTracker::Left);
     d->tooltipTracker->setEnable(false);
     d->tooltipTracker->setKeepOpen(true);
 
@@ -274,7 +275,7 @@ void ManualRenameInput::slotToolTipButtonToggled(bool checked)
 
 void ManualRenameInput::slotUpdateTrackerPos()
 {
-    d->tooltipTracker->refresh(DCursorTracker::Left);
+    d->tooltipTracker->refresh();
 }
 
 

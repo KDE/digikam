@@ -53,12 +53,15 @@ public:
         enable        = true;
         autoHideTimer = 0;
         parent        = 0;
+        align         = DCursorTracker::Center;
     }
 
-    bool     enable;
-    bool     keepOpen;
-    QTimer*  autoHideTimer;
-    QWidget* parent;
+    DCursorTracker::TrackerAlignment align;
+
+    bool             enable;
+    bool             keepOpen;
+    QTimer*          autoHideTimer;
+    QWidget*         parent;
 };
 
 DCursorTracker::DCursorTracker(const QString& txt, QWidget *parent)
@@ -78,6 +81,11 @@ DCursorTracker::DCursorTracker(const QString& txt, QWidget *parent)
 DCursorTracker::~DCursorTracker()
 {
     delete d;
+}
+
+void DCursorTracker::setAlign(TrackerAlignment align)
+{
+    d->align = align;
 }
 
 /**
@@ -110,9 +118,9 @@ void DCursorTracker::triggerAutoShow(int timeout)
     }
 }
 
-void DCursorTracker::refresh(TrackerAlignment align)
+void DCursorTracker::refresh()
 {
-    moveToParent(d->parent, align);
+    moveToParent(d->parent);
 }
 
 void DCursorTracker::slotAutoHide()
@@ -156,9 +164,9 @@ bool DCursorTracker::eventFilter(QObject *object, QEvent *e)
     return false;
 }
 
-void DCursorTracker::moveToParent(QWidget* parent, TrackerAlignment align)
+void DCursorTracker::moveToParent(QWidget* parent)
 {
-    switch (align)
+    switch (d->align)
     {
         case Left:
         {
