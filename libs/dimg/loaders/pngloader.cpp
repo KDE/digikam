@@ -372,7 +372,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             //png_set_swap_alpha(png_ptr);
 
         if (observer)
-            observer->progressInfo(m_image, 0.1);
+            observer->progressInfo(m_image, 0.1F);
 
         // -------------------------------------------------------------------
         // Get image data.
@@ -422,7 +422,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             {
                 if (observer && y == checkPoint)
                 {
-                    checkPoint += granularity(observer, height, 0.7);
+                    checkPoint += granularity(observer, height, 0.7F);
                     if (!observer->continueQuery(m_image))
                     {
                         png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
@@ -462,7 +462,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     }
 
     if (observer)
-        observer->progressInfo(m_image, 0.9);
+        observer->progressInfo(m_image, 0.9F);
 
     // -------------------------------------------------------------------
     // Read image ICC profile
@@ -821,7 +821,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     }
 
     if (observer)
-        observer->progressInfo(m_image, 0.2);
+        observer->progressInfo(m_image, 0.2F);
 
     // -------------------------------------------------------------------
     // Write image data
@@ -837,7 +837,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
         if (observer && y == checkPoint)
         {
-            checkPoint += granularity(observer, imageHeight(), 0.8);
+            checkPoint += granularity(observer, imageHeight(), 0.8F);
             if (!observer->continueQuery(m_image))
             {
                 png_destroy_write_struct(&png_ptr, (png_infopp) & info_ptr);

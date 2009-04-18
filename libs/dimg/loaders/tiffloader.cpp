@@ -266,7 +266,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     if (m_loadFlags & LoadImageData)
     {
         if (observer)
-            observer->progressInfo(m_image, 0.1);
+            observer->progressInfo(m_image, 0.1F);
 
         strip_size    = TIFFStripSize(tif);
         num_of_strips = TIFFNumberOfStrips(tif);
@@ -284,7 +284,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             {
                 if (observer && st == checkpoint)
                 {
-                    checkpoint += granularity(observer, num_of_strips, 0.8);
+                    checkpoint += granularity(observer, num_of_strips, 0.8F);
                     if (!observer->continueQuery(m_image))
                     {
                         delete [] data;
@@ -428,7 +428,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             {
                 if (observer && row >= checkpoint)
                 {
-                    checkpoint += granularity(observer, h, 0.8);
+                    checkpoint += granularity(observer, h, 0.8F);
                     if (!observer->continueQuery(m_image))
                     {
                         delete [] data;
@@ -642,7 +642,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     // Write full image data in tiff directory IFD0
 
     if (observer)
-        observer->progressInfo(m_image, 0.1);
+        observer->progressInfo(m_image, 0.1F);
 
     uchar  *pixel;
     double  alpha_factor;
@@ -666,7 +666,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
         if (observer && y == checkpoint)
         {
-            checkpoint += granularity(observer, h, 0.8);
+            checkpoint += granularity(observer, h, 0.8F);
             if (!observer->continueQuery(m_image))
             {
                 _TIFFfree(buf);
