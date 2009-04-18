@@ -126,9 +126,9 @@ void Charcoal::filterImage(void)
                    m_destImage.height(), m_destImage.sixteenBit(),  // Image data.
                    true,                                            // Preserve luminosity.
                    true,                                            // Monochrome.
-                   0.3, 0.59 , 0.11,                                // Red channel gains.
-                   0.0, 1.0,   0.0,                                 // Green channel gains (not used).
-                   0.0, 0.0,   1.0);                                // Blue channel gains (not used).
+                   0.3F, 0.59F , 0.11F,                             // Red channel gains.
+                   0.0F, 1.0F,   0.0F,                              // Green channel gains (not used).
+                   0.0F, 0.0F,   1.0F);                             // Blue channel gains (not used).
     postProgress( 90 );
     if (m_cancel)
         return;
