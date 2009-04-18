@@ -34,6 +34,59 @@
 namespace Digikam
 {
 
+class ImagePositionPriv : public QSharedData
+{
+
+public:
+
+    ImagePositionPriv()
+    {
+        imageId         = -1;
+        latitudeNumber  = 0;
+        longitudeNumber = 0;
+        altitude        = 0;
+        orientation     = 0;
+        tilt            = 0;
+        roll            = 0;
+        accuracy        = 0;
+        empty           = true;
+        dirtyFields     = DatabaseFields::ImagePositionsNone;
+    }
+
+    void resetData()
+    {
+        description     = QString();
+        latitude        = QString();
+        longitude       = QString();
+        latitudeNumber  = 0;
+        longitudeNumber = 0;
+        altitude        = 0;
+        orientation     = 0;
+        tilt            = 0;
+        roll            = 0;
+        empty           = true;
+        dirtyFields     = DatabaseFields::ImagePositionsNone;
+    }
+
+    bool                           empty;
+
+    double                         latitudeNumber;
+    double                         longitudeNumber;
+    double                         altitude;
+    double                         orientation;
+    double                         tilt;
+    double                         roll;
+    double                         accuracy;
+
+    qlonglong                      imageId;
+
+    QString                        description;
+    QString                        latitude;
+    QString                        longitude;
+
+    DatabaseFields::ImagePositions dirtyFields;
+};
+
 ImagePosition::ImagePosition()
 {
 }
@@ -68,6 +121,12 @@ ImagePosition::ImagePosition(const ImagePosition &other)
 ImagePosition::~ImagePosition()
 {
     apply();
+}
+
+ImagePosition &ImagePosition::operator=(const ImagePosition &other)
+{
+    d = other.d;
+    return *this;
 }
 
 bool ImagePosition::isNull() const
