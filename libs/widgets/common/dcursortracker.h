@@ -53,19 +53,9 @@ class DIGIKAM_EXPORT DCursorTracker : public QLabel
 
 public:
 
-    enum Align
-    {
-        Left = 0,
-        Center,
-        Right
-    };
-
-public:
-
-    DCursorTracker(const QString& txt, QWidget *parent);
+    DCursorTracker(const QString& txt, QWidget *parent, Qt::Alignment align = Qt::AlignCenter);
     ~DCursorTracker();
 
-    void setAlign(Align align);
     void setText(const QString& txt);
     void setEnable(bool b);
     void setKeepOpen(bool b);
@@ -99,7 +89,7 @@ class DIGIKAM_EXPORT DTipTracker : public DCursorTracker
 
 public:
 
-    DTipTracker(const QString& txt, QWidget *parent);
+    DTipTracker(const QString& txt, QWidget *parent, Qt::Alignment align = Qt::AlignCenter);
 };
 
 } // namespace Digikam

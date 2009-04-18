@@ -98,8 +98,7 @@ ManualRenameInput::ManualRenameInput(QWidget* parent)
     setLayout(mainLayout);
 
     QString tooltip   = createToolTip();
-    d->tooltipTracker = new DTipTracker(tooltip, d->parseStringLineEdit);
-    d->tooltipTracker->setAlign(DCursorTracker::Left);
+    d->tooltipTracker = new DTipTracker(tooltip, d->parseStringLineEdit, Qt::AlignLeft);
     d->tooltipTracker->setEnable(false);
     d->tooltipTracker->setKeepOpen(true);
 

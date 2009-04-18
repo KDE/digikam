@@ -53,22 +53,23 @@ public:
         enable        = true;
         autoHideTimer = 0;
         parent        = 0;
-        alignment     = DCursorTracker::Center;
     }
 
-    DCursorTracker::Align alignment;
-    bool                  enable;
-    bool                  keepOpen;
-    QTimer*               autoHideTimer;
-    QWidget*              parent;
+    Qt::Alignment alignment;
+    bool          enable;
+    bool          keepOpen;
+    QTimer*       autoHideTimer;
+    QWidget*      parent;
 };
 
-DCursorTracker::DCursorTracker(const QString& txt, QWidget *parent)
+DCursorTracker::DCursorTracker(const QString& txt, QWidget *parent, Qt::Alignment align)
               : QLabel(txt, 0, Qt::ToolTip), d(new DCursorTrackerPriv)
 {
     d->parent = parent;
     d->parent->setMouseTracking(true);
     d->parent->installEventFilter(this);
+
+    d->alignment = align;
 
     d->autoHideTimer = new QTimer(this);
     d->autoHideTimer->setSingleShot(true);
@@ -80,11 +81,6 @@ DCursorTracker::DCursorTracker(const QString& txt, QWidget *parent)
 DCursorTracker::~DCursorTracker()
 {
     delete d;
-}
-
-void DCursorTracker::setAlign(Align align)
-{
-    d->alignment = align;
 }
 
 /**
@@ -167,19 +163,19 @@ void DCursorTracker::moveToParent(QWidget* parent)
 {
     switch (d->alignment)
     {
-        case Left:
+        case Qt::AlignLeft:
         {
             QPoint p = parent->mapToGlobal(QPoint(0, 0));
             move(p.x(), p.y()-height());
             break;
         }
-        case Right:
+        case Qt::AlignRight:
         {
             QPoint p = parent->mapToGlobal(QPoint(parent->width(), 0));
             move(p.x()-width(), p.y()-height());
             break;
         }
-        case Center:
+        case Qt::AlignCenter:
         default:
         {
             QPoint p = parent->mapToGlobal(QPoint(parent->width()/2, 0));
@@ -190,8 +186,8 @@ void DCursorTracker::moveToParent(QWidget* parent)
 }
 
 
-DTipTracker::DTipTracker(const QString& txt, QWidget *parent)
-           : DCursorTracker(txt, parent)
+DTipTracker::DTipTracker(const QString& txt, QWidget *parent, Qt::Alignment align)
+           : DCursorTracker(txt, parent, align)
 {
     setPalette(QToolTip::palette());
     setFrameStyle(QFrame::Plain | QFrame::Box);
