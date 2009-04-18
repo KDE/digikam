@@ -125,7 +125,7 @@ bool Restoration::toolOperations()
 
         case ReduceJPEGArtefacts:
         {
-            settings.sharpness = 0.3;
+            settings.sharpness = 0.3F;
             settings.sigma     = 1.0;
             settings.amplitude = 100.0;
             settings.nbIter    = 2;
@@ -134,7 +134,7 @@ bool Restoration::toolOperations()
 
         case ReduceTexturing:
         {
-            settings.sharpness = 0.5;
+            settings.sharpness = 0.5F;
             settings.sigma     = 1.5;
             settings.amplitude = 100.0;
             settings.nbIter    = 2;
