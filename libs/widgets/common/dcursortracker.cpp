@@ -56,12 +56,11 @@ public:
         align         = DCursorTracker::Center;
     }
 
-    DCursorTracker::TrackerAlignment align;
-
-    bool             enable;
-    bool             keepOpen;
-    QTimer*          autoHideTimer;
-    QWidget*         parent;
+    DCursorTracker::Align align;
+    bool                  enable;
+    bool                  keepOpen;
+    QTimer*               autoHideTimer;
+    QWidget*              parent;
 };
 
 DCursorTracker::DCursorTracker(const QString& txt, QWidget *parent)
@@ -83,7 +82,7 @@ DCursorTracker::~DCursorTracker()
     delete d;
 }
 
-void DCursorTracker::setAlign(TrackerAlignment align)
+void DCursorTracker::setAlign(Align align)
 {
     d->align = align;
 }
