@@ -1010,7 +1010,12 @@ bool Canvas::fitToWindow()
 
 void Canvas::toggleFitToWindow()
 {
-    d->autoZoom = !d->autoZoom;
+    setFitToWindow(!d->autoZoom);
+}
+
+void Canvas::setFitToWindow(bool fit)
+{
+    d->autoZoom = fit;
 
     if (d->autoZoom)
         updateAutoZoom();
