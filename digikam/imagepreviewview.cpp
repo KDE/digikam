@@ -350,7 +350,6 @@ void ImagePreviewView::slotContextMenu()
 
     DPopupMenu popmenu(this);
     ContextMenuHelper cmhelper(&popmenu);
-    cmhelper.setSelectedItems(selectedItems);
 
     cmhelper.addAction(prevAction, true);
     cmhelper.addAction(nextAction, true);
@@ -362,7 +361,7 @@ void ImagePreviewView::slotContextMenu()
     cmhelper.addActionLightTable();
     cmhelper.addQueueManagerMenu();
     cmhelper.addGotoMenu(idList);
-    cmhelper.addServicesMenu();
+    cmhelper.addServicesMenu(selectedItems);
     cmhelper.addKipiActions();
     popmenu.addSeparator();
     // --------------------------------------------------------

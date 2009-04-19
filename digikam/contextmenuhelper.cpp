@@ -173,8 +173,10 @@ void ContextMenuHelper::addActionThumbnail(imageIds& ids, Album* album)
     }
 }
 
-void ContextMenuHelper::addServicesMenu()
+void ContextMenuHelper::addServicesMenu(KUrl::List selectedItems)
 {
+    setSelectedItems(selectedItems);
+
     // This code is inspired from KonqMenuActions:
     // kdebase/apps/lib/konq/konq_menuactions.cpp
 
@@ -587,7 +589,8 @@ void ContextMenuHelper::setSelectedIds(imageIds &ids)
 
 void ContextMenuHelper::setSelectedItems(KUrl::List urls)
 {
-    d->selectedItems = urls;
+    if (d->selectedItems.isEmpty())
+        d->selectedItems = urls;
 }
 
 } // namespace Digikam

@@ -365,7 +365,6 @@ void LightTablePreview::slotContextMenu()
 
     DPopupMenu popmenu(this);
     ContextMenuHelper cmhelper(&popmenu);
-    cmhelper.setSelectedItems(selectedItems);
 
     cmhelper.addAction(zoomInAction);
     cmhelper.addAction(zoomOutAction);
@@ -374,7 +373,7 @@ void LightTablePreview::slotContextMenu()
     // --------------------------------------------------------
     cmhelper.addAction(slideshowAction);
     cmhelper.addAction(editAction);
-    cmhelper.addServicesMenu();
+    cmhelper.addServicesMenu(selectedItems);
     popmenu.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAction(trashAction);

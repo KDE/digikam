@@ -190,10 +190,10 @@ public:
      * It will query the item for registered services and provide them in a submenu.
      * The menu will be titled "Open With...".
      *
-     * @param item the selected item
+     * @param selectedItems the list of selected items
      * @param servicesMap a reference to a map that will be filled with the detected services
      */
-    void addServicesMenu();
+    void addServicesMenu(KUrl::List selectedItems);
 
     /**
      * Add the Goto menu.
@@ -317,9 +317,6 @@ public:
      */
     QAction* exec(const QPoint& pos, QAction* at = 0);
 
-    /** Assign the selected items from the current view */
-    void setSelectedItems(KUrl::List urls);
-
 private Q_SLOTS:
 
     void slotOpenWith();
@@ -328,6 +325,7 @@ private Q_SLOTS:
 private:
 
     void setSelectedIds(imageIds& ids);
+    void setSelectedItems(KUrl::List urls);
 
 private:
 

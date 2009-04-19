@@ -576,7 +576,6 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint&)
 
     DPopupMenu popmenu(this);
     ContextMenuHelper cmhelper(&popmenu);
-    cmhelper.setSelectedItems(selectedItems());
 
     cmhelper.addAction("album_new_from_selection");
     cmhelper.addAction(viewAction);
@@ -585,7 +584,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint&)
     cmhelper.addActionLightTable();
     cmhelper.addQueueManagerMenu();
     cmhelper.addGotoMenu(selectedImageIDs);
-    cmhelper.addServicesMenu();
+    cmhelper.addServicesMenu(selectedItems());
     cmhelper.addKipiActions();
     cmhelper.addAction("image_rename");
     popmenu.addSeparator();
