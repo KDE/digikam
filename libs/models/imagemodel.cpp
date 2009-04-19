@@ -30,6 +30,8 @@
 
 // KDE includes
 
+#include <kdebug.h>
+
 // Local includes
 
 #include "imageinfo.h"
@@ -103,6 +105,15 @@ qlonglong ImageModel::imageId(int row) const
     return d->infos[row].id();
 }
 
+// static method
+ImageInfo ImageModel::retrieveImageInfo(const QModelIndex &index)
+{
+    ImageModel *model = index.data(ImageModelPointerRole).value<ImageModel*>();
+    Q_ASSERT(model);
+    int row = index.data(ImageModelInternalId).toInt();
+    return model->imageInfo(row);
+}
+
 void ImageModel::addImageInfos(const QList<ImageInfo> &infos)
 {
     if (infos.isEmpty())
@@ -119,6 +130,7 @@ void ImageModel::clearImageInfos()
     reset();
     d->infos.clear();
     d->ids.clear();
+    imageInfosCleared();
 }
 
 QList<ImageInfo> ImageModel::imageInfos() const
@@ -183,6 +195,10 @@ QVariant ImageModel::data(const QModelIndex &index, int role) const
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
             return d->infos[index.row()].name();
+        case ImageModelPointerRole:
+            return QVariant::fromValue(const_cast<ImageModel*>(this));
+        case ImageModelInternalId:
+            return index.row();
     }
     return QVariant();
 }

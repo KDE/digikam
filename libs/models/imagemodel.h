@@ -44,6 +44,16 @@ class DIGIKAM_DATABASE_EXPORT ImageModel : public QAbstractListModel
 
 public:
 
+    enum ImageModelRoles
+    {
+        /// An ImageModel* pointer to this model
+        ImageModelPointerRole = Qt::UserRole,
+        ImageModelInternalId  = Qt::UserRole + 1,
+        /// Returns a thumbnail pixmap. May be implemented by subclasses.
+        /// Returns either a valid pixmap or a null QVariant.
+        ThumbnailRole         = Qt::UserRole + 2
+    };
+
     ImageModel(QObject *parent = 0);
     ~ImageModel();
 
@@ -64,6 +74,10 @@ public:
     ImageInfo imageInfo(int row) const;
     ImageInfo &imageInfoRef(int row) const;
     qlonglong imageId(int row) const;
+
+    /** Retrieves the imageInfo object from the data() method of the given index.
+     *  The index may be from a QSortFilterProxyModel as long as an ImageModel is at the end. */
+    static ImageInfo retrieveImageInfo(const QModelIndex &index);
 
     void addImageInfos(const QList<ImageInfo> &infos);
     void clearImageInfos();
@@ -114,6 +128,9 @@ public Q_SLOTS:
 
 protected:
 
+    // Called when the internal storage is cleared
+    virtual void imageInfosCleared() {};
+
 protected Q_SLOTS:
 
     void appendInfos(const QList<ImageInfo> &infos);
@@ -124,5 +141,7 @@ private:
 };
 
 } // namespace Digikam
+
+Q_DECLARE_METATYPE(Digikam::ImageModel*)
 
 #endif // IMAGEMODEL_H
