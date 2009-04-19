@@ -333,6 +333,8 @@ void ImagePreviewView::slotContextMenu()
 
     QList<qlonglong> idList;
     idList << d->imageInfo.id();
+    KUrl::List selectedItems;
+    selectedItems << d->imageInfo.fileUrl();
 
     // Temporary actions --------------------------------------
 
@@ -348,6 +350,7 @@ void ImagePreviewView::slotContextMenu()
 
     DPopupMenu popmenu(this);
     ContextMenuHelper cmhelper(&popmenu);
+    cmhelper.setSelectedItems(selectedItems);
 
     cmhelper.addAction(prevAction, true);
     cmhelper.addAction(nextAction, true);
@@ -359,7 +362,7 @@ void ImagePreviewView::slotContextMenu()
     cmhelper.addActionLightTable();
     cmhelper.addQueueManagerMenu();
     cmhelper.addGotoMenu(idList);
-    cmhelper.addServicesMenu(d->imageInfo);
+    cmhelper.addServicesMenu();
     cmhelper.addKipiActions();
     popmenu.addSeparator();
     // --------------------------------------------------------

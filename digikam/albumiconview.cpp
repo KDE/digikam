@@ -585,7 +585,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint&)
     cmhelper.addActionLightTable();
     cmhelper.addQueueManagerMenu();
     cmhelper.addGotoMenu(selectedImageIDs);
-    cmhelper.addServicesMenu(imageInfo);
+    cmhelper.addServicesMenu();
     cmhelper.addKipiActions();
     cmhelper.addAction("image_rename");
     popmenu.addSeparator();

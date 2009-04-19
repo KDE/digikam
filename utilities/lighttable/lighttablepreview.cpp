@@ -349,6 +349,8 @@ void LightTablePreview::slotContextMenu()
 
     QList<qlonglong> idList;
     idList << d->imageInfo.id();
+    KUrl::List selectedItems;
+    selectedItems << d->imageInfo.fileUrl();
 
     //-- temporary actions -----------------------------------------------
 
@@ -363,6 +365,7 @@ void LightTablePreview::slotContextMenu()
 
     DPopupMenu popmenu(this);
     ContextMenuHelper cmhelper(&popmenu);
+    cmhelper.setSelectedItems(selectedItems);
 
     cmhelper.addAction(zoomInAction);
     cmhelper.addAction(zoomOutAction);
@@ -371,7 +374,7 @@ void LightTablePreview::slotContextMenu()
     // --------------------------------------------------------
     cmhelper.addAction(slideshowAction);
     cmhelper.addAction(editAction);
-    cmhelper.addServicesMenu(d->imageInfo);
+    cmhelper.addServicesMenu();
     popmenu.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAction(trashAction);

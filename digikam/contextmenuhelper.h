@@ -193,7 +193,7 @@ public:
      * @param item the selected item
      * @param servicesMap a reference to a map that will be filled with the detected services
      */
-    void addServicesMenu(const ImageInfo &item);
+    void addServicesMenu();
 
     /**
      * Add the Goto menu.
