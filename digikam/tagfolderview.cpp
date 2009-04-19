@@ -64,11 +64,6 @@
 #include "syncjob.h"
 #include "tageditdlg.h"
 
-#include "config-digikam.h"
-#ifdef HAVE_KDEPIMLIBS
-#include <kabc/stdaddressbook.h>
-#endif // HAVE_KDEPIMLIBS
-
 namespace Digikam
 {
 
@@ -181,11 +176,9 @@ public:
 
     TagFolderViewPriv()
     {
-        ABCMenu           = 0;
         albumMan          = 0;
     }
 
-    KMenu             *ABCMenu;
     AlbumManager      *albumMan;
 };
 
@@ -550,17 +543,7 @@ void TagFolderView::slotContextMenu(Q3ListViewItem *item, const QPoint &, int)
 
     // temporary actions --------------------------------------
 
-    #ifdef HAVE_KDEPIMLIBS
-    d->ABCMenu = new KMenu(this);
-
-    connect( d->ABCMenu, SIGNAL(aboutToShow()),
-             this, SLOT(slotABCContextMenu()));
-
-    d->ABCMenu->menuAction()->setIcon(SmallIcon("tag-addressbook"));
-    d->ABCMenu->menuAction()->setText(i18n("Create Tag From Address Book"));
-#endif // HAVE_KDEPIMLIBS
-
-    QAction *resetIconAction = new QAction(SmallIcon("view-refresh"),  i18n("Reset Tag Icon"), this);
+    QAction *resetIconAction = new QAction(SmallIcon("view-refresh"), i18n("Reset Tag Icon"), this);
     if (!tag || !tag->parent())
         resetIconAction->setEnabled(false);
     // --------------------------------------------------------
@@ -570,8 +553,7 @@ void TagFolderView::slotContextMenu(Q3ListViewItem *item, const QPoint &, int)
     ContextMenuHelper cmhelper(&popmenu);
 
     cmhelper.addAction("tag_new");
-    if (d->ABCMenu)
-        popmenu.addMenu(d->ABCMenu);
+    cmhelper.addCreateTagFromAddressbookMenu();
     cmhelper.addAction(resetIconAction);
     popmenu.addSeparator();
     // --------------------------------------------------------
@@ -581,6 +563,9 @@ void TagFolderView::slotContextMenu(Q3ListViewItem *item, const QPoint &, int)
     cmhelper.addAction("tag_edit");
 
     // special action handling --------------------------------
+
+    connect(&cmhelper, SIGNAL(signalAddNewTagFromABCMenu(const QString&)),
+            this, SLOT(slotTagNewFromABCMenu(const QString&)));
 
     QAction* choice = cmhelper.exec(QCursor::pos());
     if (choice)
@@ -594,36 +579,12 @@ void TagFolderView::slotContextMenu(Q3ListViewItem *item, const QPoint &, int)
 
     popmenu.deleteLater();
     delete resetIconAction;
-    delete d->ABCMenu;
-    d->ABCMenu = 0;
 }
 
-void TagFolderView::slotABCContextMenu()
+void TagFolderView::slotTagNewFromABCMenu(const QString& name)
 {
-#ifdef HAVE_KDEPIMLIBS
-    d->ABCMenu->clear();
-
-    KABC::AddressBook* ab = KABC::StdAddressBook::self();
-    QStringList names;
-    for ( KABC::AddressBook::Iterator it = ab->begin(); it != ab->end(); ++it )
-    {
-        names.push_back(it->formattedName());
-    }
-    qSort(names);
-
-    for ( QStringList::ConstIterator it = names.constBegin(); it != names.constEnd(); ++it )
-    {
-        QString name = *it;
-        if (!name.isNull() )
-            d->ABCMenu->addAction(name);
-    }
-
-    if (d->ABCMenu->isEmpty())
-    {
-        QAction *nothingFound = d->ABCMenu->addAction(i18n("No address book entries found"));
-        nothingFound->setEnabled(false);
-    }
-#endif // HAVE_KDEPIMLIBS
+    TagFolderViewItem *item = dynamic_cast<TagFolderViewItem*>(selectedItem());
+    tagNew(item, name);
 }
 
 void TagFolderView::tagNew()
@@ -632,7 +593,7 @@ void TagFolderView::tagNew()
     tagNew(item);
 }
 
-void TagFolderView::tagNew( TagFolderViewItem *item, const QString& _title, const QString& _icon )
+void TagFolderView::tagNew(TagFolderViewItem *item, const QString& _title, const QString& _icon)
 {
     QString title = _title;
     QString icon  = _icon;

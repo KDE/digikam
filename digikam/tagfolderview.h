@@ -88,12 +88,12 @@ private Q_SLOTS:
     void slotAlbumIconChanged(Album* album);
     void slotAlbumMoved(TAlbum* tag, TAlbum* newParent);
     void slotContextMenu(Q3ListViewItem*, const QPoint&, int);
-    void slotABCContextMenu();
     void slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbnail);
     void slotThumbnailLost(Album *album);
     void slotReloadThumbnails();
     void slotRefresh(const QMap<int, int>&);
     void slotAssignTags(int tagId, const QList<int> &imageIDs);
+    void slotTagNewFromABCMenu(const QString&);
 
 Q_SIGNALS: // private
 

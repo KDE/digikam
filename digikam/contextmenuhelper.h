@@ -87,6 +87,7 @@ Q_SIGNALS:
     void signalRemoveTag(int);
     void signalAssignRating(int);
     void signalAddToExistingQueue(int);
+    void signalAddNewTagFromABCMenu(const QString&);
 
 public:
 
@@ -321,6 +322,8 @@ private Q_SLOTS:
 
     void slotOpenWith();
     void slotOpenWith(QAction* action);
+    void slotABCContextMenu();
+    void slotABCMenuTriggered(QAction*);
 
 private:
 

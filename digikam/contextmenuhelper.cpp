@@ -67,6 +67,11 @@
 #include "ratingpopupmenu.h"
 #include "tagspopupmenu.h"
 
+#include "config-digikam.h"
+#ifdef HAVE_KDEPIMLIBS
+#include <kabc/stdaddressbook.h>
+#endif // HAVE_KDEPIMLIBS
+
 namespace Digikam
 {
 
@@ -81,6 +86,8 @@ public:
         parent              = 0;
         setThumbnailAction  = 0;
         stdActionCollection = 0;
+        parent              = 0;
+        ABCmenu             = 0;
     }
 
     QAction*                      gotoAlbumAction;
@@ -94,8 +101,9 @@ public:
     QMap<QString, KService::Ptr>  servicesMap;
 
     QMenu*                        parent;
+    QMenu*                        ABCmenu;
 
-    KActionCollection*  stdActionCollection;
+    KActionCollection*            stdActionCollection;
 };
 
 ContextMenuHelper::ContextMenuHelper(QMenu* parent, KActionCollection* actionCollection)
@@ -353,15 +361,57 @@ void ContextMenuHelper::addRatingMenu()
 void ContextMenuHelper::addCreateTagFromAddressbookMenu()
 {
 #ifdef HAVE_KDEPIMLIBS
-    d->ABCMenu = new KMenu(this);
+    if (d->ABCmenu)
+        delete d->ABCmenu;
 
-    connect( d->ABCMenu, SIGNAL( aboutToShow() ),
-             this, SLOT( slotABCContextMenu() ) );
+    d->ABCmenu = new QMenu(d->parent);
 
-    popmenu.addMenu(d->ABCMenu);
-    d->ABCMenu->menuAction()->setIcon(SmallIcon("tag-addressbook"));
-    d->ABCMenu->menuAction()->setText(i18n("Create Tag From Address Book"));
+    connect(d->ABCmenu, SIGNAL(aboutToShow()),
+            this, SLOT(slotABCContextMenu()));
+
+    QAction *abcAction = d->ABCmenu->menuAction();
+    abcAction->setIcon(SmallIcon("tag-addressbook"));
+    abcAction->setText(i18n("Create Tag From Address Book"));
+    d->parent->addMenu(d->ABCmenu);
+
+    connect(d->ABCmenu, SIGNAL(triggered(QAction*)),
+            this, SLOT(slotABCMenuTriggered(QAction*)));
+
 #endif // HAVE_KDEPIMLIBS
+}
+
+void ContextMenuHelper::slotABCContextMenu()
+{
+#ifdef HAVE_KDEPIMLIBS
+    d->ABCmenu->clear();
+
+    KABC::AddressBook* ab = KABC::StdAddressBook::self();
+    QStringList names;
+    for ( KABC::AddressBook::Iterator it = ab->begin(); it != ab->end(); ++it )
+    {
+        names.push_back(it->formattedName());
+    }
+    qSort(names);
+
+    for ( QStringList::ConstIterator it = names.constBegin(); it != names.constEnd(); ++it )
+    {
+        QString name = *it;
+        if (!name.isNull() )
+            d->ABCmenu->addAction(name);
+    }
+
+    if (d->ABCmenu->isEmpty())
+    {
+        QAction *nothingFound = d->ABCmenu->addAction(i18n("No address book entries found"));
+        nothingFound->setEnabled(false);
+    }
+#endif // HAVE_KDEPIMLIBS
+}
+
+void ContextMenuHelper::slotABCMenuTriggered(QAction* action)
+{
+    QString name = action->iconText();
+    emit signalAddNewTagFromABCMenu(name);
 }
 
 void ContextMenuHelper::addSelectTagsMenu(Q3ListViewItem *item)
