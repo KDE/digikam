@@ -270,7 +270,7 @@ bool DigikamFirstRun::checkRootAlbum(QString& rootAlbumFolder)
 bool DigikamFirstRun::checkDatabase(QString& dbFolder)
 {
     dbFolder = d->dbPathRequester->url().toLocalFile();
-    kDebug(50003) << "DB folder is : " << rootAlbumFolder << endl;
+    kDebug(50003) << "DB folder is : " << dbFolder << endl;
 
     if (dbFolder.isEmpty())
     {
