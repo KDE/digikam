@@ -28,7 +28,7 @@
 // Local includes
 
 #include "digikam_export.h"
-#include <dimg.h>
+#include "dimg.h"
 
 class QWidget;
 

@@ -32,27 +32,31 @@
 namespace Digikam
 {
 
-  /**
-   * An RAII class to block and unblock signals from a QObject instance
-   */
-  class SignalBlocker
-  {
-    public:
-      SignalBlocker ( QObject* object )
-      {
-        mObject = object;
-        mWasBlocked = object->blockSignals ( true );
-      }
+/**
+  * An RAII class to block and unblock signals from a QObject instance
+  */
+class SignalBlocker
+{
 
-      ~SignalBlocker()
-      {
-        mObject->blockSignals ( mWasBlocked );
-      }
+public:
 
-    private:
-      QObject* mObject;
-      bool mWasBlocked;
-  };
+    SignalBlocker(QObject* object)
+    {
+        mObject     = object;
+        mWasBlocked = object->blockSignals(true);
+    }
+
+    ~SignalBlocker()
+    {
+        mObject->blockSignals(mWasBlocked);
+    }
+
+private:
+
+    bool     mWasBlocked;
+
+    QObject* mObject;
+};
 
 } // namespace
 

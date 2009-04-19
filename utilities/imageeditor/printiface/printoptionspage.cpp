@@ -49,26 +49,25 @@
 namespace Digikam
 {
 
-  static inline double unitToInches ( PrintOptionsPage::Unit unit )
-  {
+static inline double unitToInches ( PrintOptionsPage::Unit unit )
+{
     if ( unit == PrintOptionsPage::Inches )
     {
-      return 1.;
+        return 1.;
     }
     else if ( unit == PrintOptionsPage::Centimeters )
     {
-      return 1/2.54;
+        return 1/2.54;
     }
     else   // Millimeters
     {
-      return 1/25.4;
+        return 1/25.4;
     }
-  }
+}
 
-
-  class PrintOptionsPagePrivate : public Ui_PrintOptionsPage
-  {
-  public:
+class PrintOptionsPagePrivate : public Ui_PrintOptionsPage
+{
+public:
 
     QWidget              *mParent;
     QSize                 mImageSize;
@@ -79,88 +78,86 @@ namespace Digikam
     QString               outputProfilePath;
     QCheckBox            *colorManaged;
     QPushButton          *cmPreferences;
-    bool                 cmEnabled;
+    bool                  cmEnabled;
 
     void initColorManagement()
     {
-      colorManaged = new QCheckBox(i18n("Use Color Management for Printing"), cmbox);
-      colorManaged->setChecked( false );
-      cmPreferences = new QPushButton(i18n("Settings..."), cmbox);
-      QWidget *space = new QWidget(cmbox);
-      cmbox->setStretchFactor(space, 10);
-      cmbox->setSpacing(KDialog::spacingHint());
-
+        colorManaged   = new QCheckBox(i18n("Use Color Management for Printing"), cmbox);
+        colorManaged->setChecked( false );
+        cmPreferences  = new QPushButton(i18n("Settings..."), cmbox);
+        QWidget *space = new QWidget(cmbox);
+        cmbox->setStretchFactor(space, 10);
+        cmbox->setSpacing(KDialog::spacingHint());
     }
 
     void initPositionFrame()
     {
-      mPositionFrame->setStyleSheet (
-          "QFrame {"
-          " background-color: palette(mid);"
-          " border: 1px solid palette(dark);"
-          "}"
-          "QToolButton {"
-          " border: none;"
-          " background: palette(base);"
-          "}"
-          "QToolButton:hover {"
-          " background: palette(alternate-base);"
-          " border: 1px solid palette(highlight);"
-          "}"
-          "QToolButton:checked {"
-          " background-color: palette(highlight);"
-          "}"
-      );
+        mPositionFrame->setStyleSheet (
+            "QFrame {"
+            " background-color: palette(mid);"
+            " border: 1px solid palette(dark);"
+            "}"
+            "QToolButton {"
+            " border: none;"
+            " background: palette(base);"
+            "}"
+            "QToolButton:hover {"
+            " background: palette(alternate-base);"
+            " border: 1px solid palette(highlight);"
+            "}"
+            "QToolButton:checked {"
+            " background-color: palette(highlight);"
+            "}"
+        );
 
-      QGridLayout* layout = new QGridLayout ( mPositionFrame );
-      layout->setMargin ( 0 );
-      layout->setSpacing ( 1 );
-      for ( int row = 0; row < 3; ++row )
-      {
-        for ( int col = 0; col < 3; ++col )
+        QGridLayout* layout = new QGridLayout ( mPositionFrame );
+        layout->setMargin ( 0 );
+        layout->setSpacing ( 1 );
+        for ( int row = 0; row < 3; ++row )
         {
-          QToolButton* button = new QToolButton ( mPositionFrame );
-          button->setFixedSize ( 40, 40 );
-          button->setCheckable ( true );
-          layout->addWidget ( button, row, col );
+            for ( int col = 0; col < 3; ++col )
+            {
+                QToolButton* button = new QToolButton ( mPositionFrame );
+                button->setFixedSize ( 40, 40 );
+                button->setCheckable ( true );
+                layout->addWidget ( button, row, col );
 
-          Qt::Alignment alignment;
-          if ( row == 0 )
-          {
-            alignment = Qt::AlignTop;
-          }
-          else if ( row == 1 )
-          {
-            alignment = Qt::AlignVCenter;
-          }
-          else
-          {
-            alignment = Qt::AlignBottom;
-          }
-          if ( col == 0 )
-          {
-            alignment |= Qt::AlignLeft;
-          }
-          else if ( col == 1 )
-          {
-            alignment |= Qt::AlignHCenter;
-          }
-          else
-          {
-            alignment |= Qt::AlignRight;
-          }
+                Qt::Alignment alignment;
+                if ( row == 0 )
+                {
+                    alignment = Qt::AlignTop;
+                }
+                else if ( row == 1 )
+                {
+                    alignment = Qt::AlignVCenter;
+                }
+                else
+                {
+                    alignment = Qt::AlignBottom;
+                }
+                if ( col == 0 )
+                {
+                    alignment |= Qt::AlignLeft;
+                }
+                else if ( col == 1 )
+                {
+                    alignment |= Qt::AlignHCenter;
+                }
+                else
+                {
+                    alignment |= Qt::AlignRight;
+                }
 
-          mPositionGroup.addButton ( button, int ( alignment ) );
+                mPositionGroup.addButton ( button, int ( alignment ) );
+            }
         }
-      }
     }
-  };
+};
 
 
-  PrintOptionsPage::PrintOptionsPage (QWidget *parent, const QSize& imageSize)
-      : QWidget()
-      , d ( new PrintOptionsPagePrivate )
-  {
+PrintOptionsPage::PrintOptionsPage (QWidget *parent, const QSize& imageSize)
+                : QWidget(), d ( new PrintOptionsPagePrivate )
+{
     d->setupUi ( this );
     d->mParent   = parent;
     d->cmEnabled = false;
@@ -190,141 +187,129 @@ namespace Digikam
 
     connect( d->cmPreferences, SIGNAL(clicked()),
              this, SLOT(slotSetupDlg()) );
+}
 
-  }
-
-
-  PrintOptionsPage::~PrintOptionsPage()
-  {
+PrintOptionsPage::~PrintOptionsPage()
+{
     delete d;
-  }
+}
 
-  bool PrintOptionsPage::colorManaged()
-  {
+bool PrintOptionsPage::colorManaged()
+{
     return d->colorManaged->isChecked();
-  }
+}
 
-  bool PrintOptionsPage::autoRotation()
-  {
+bool PrintOptionsPage::autoRotation()
+{
     return d->kcfg_PrintAutoRotate->isChecked();
-  }
+}
 
-  QString PrintOptionsPage::inProfilePath()
-  {
+QString PrintOptionsPage::inProfilePath()
+{
     return d->inProfilePath;
-  }
+}
 
-  QString PrintOptionsPage::outputProfilePath()
-  {
+QString PrintOptionsPage::outputProfilePath()
+{
     return d->outputProfilePath;
-  }
+}
 
-  Qt::Alignment PrintOptionsPage::alignment() const
-  {
+Qt::Alignment PrintOptionsPage::alignment() const
+{
     int id = d->mPositionGroup.checkedId();
     kWarning() << "alignment=" << id;
     return Qt::Alignment ( id );
-  }
+}
 
-
-  PrintOptionsPage::ScaleMode PrintOptionsPage::scaleMode() const
-  {
+PrintOptionsPage::ScaleMode PrintOptionsPage::scaleMode() const
+{
     return PrintOptionsPage::ScaleMode ( d->mScaleGroup.checkedId() );
-  }
+}
 
-
-  bool PrintOptionsPage::enlargeSmallerImages() const
-  {
+bool PrintOptionsPage::enlargeSmallerImages() const
+{
     return d->kcfg_PrintEnlargeSmallerImages->isChecked();
-  }
+}
 
-
-  PrintOptionsPage::Unit PrintOptionsPage::scaleUnit() const
-  {
+PrintOptionsPage::Unit PrintOptionsPage::scaleUnit() const
+{
     return PrintOptionsPage::Unit ( d->kcfg_PrintUnit->currentIndex() );
-  }
+}
 
-
-  double PrintOptionsPage::scaleWidth() const
-  {
+double PrintOptionsPage::scaleWidth() const
+{
     return d->kcfg_PrintWidth->value() * unitToInches ( scaleUnit() );
-  }
+}
 
-
-  double PrintOptionsPage::scaleHeight() const
-  {
+double PrintOptionsPage::scaleHeight() const
+{
     return d->kcfg_PrintHeight->value() * unitToInches ( scaleUnit() );
-  }
+}
 
-
-  void PrintOptionsPage::adjustWidthToRatio()
-  {
+void PrintOptionsPage::adjustWidthToRatio()
+{
     if ( !d->kcfg_PrintKeepRatio->isChecked() )
     {
-      return;
+        return;
     }
     double width = d->mImageSize.width() * d->kcfg_PrintHeight->value() / d->mImageSize.height();
 
     SignalBlocker blocker ( d->kcfg_PrintWidth );
     d->kcfg_PrintWidth->setValue ( width ? width : 1. );
-  }
+}
 
-
-  void PrintOptionsPage::adjustHeightToRatio()
-  {
+void PrintOptionsPage::adjustHeightToRatio()
+{
     if ( !d->kcfg_PrintKeepRatio->isChecked() )
     {
-      return;
+        return;
     }
     double height = d->mImageSize.height() * d->kcfg_PrintWidth->value() / d->mImageSize.width();
 
     SignalBlocker blocker ( d->kcfg_PrintHeight );
     d->kcfg_PrintHeight->setValue ( height ? height : 1. );
-  }
+}
 
-
-  void PrintOptionsPage::loadConfig()
-  {
+void PrintOptionsPage::loadConfig()
+{
     QAbstractButton* button;
 
     button = d->mPositionGroup.button ( DigikamConfig::printPosition() );
     if ( button )
     {
-      button->setChecked ( true );
+        button->setChecked ( true );
     }
     else
     {
-      kWarning() << "Unknown button for position group";
+        kWarning() << "Unknown button for position group";
     }
 
     button = d->mScaleGroup.button ( DigikamConfig::printScaleMode() );
     if ( button )
     {
-      button->setChecked ( true );
+        button->setChecked ( true );
     }
     else
     {
-      kWarning() << "Unknown button for scale group";
+        kWarning() << "Unknown button for scale group";
     }
 
     d->mConfigDialogManager->updateWidgets();
 
     if ( d->kcfg_PrintKeepRatio->isChecked() )
     {
-      adjustHeightToRatio();
+        adjustHeightToRatio();
     }
 
     d->colorManaged->setChecked (DigikamConfig::printColorManaged());
-    KConfigGroup group = KGlobal::config()->group("Color Management");
-
+    KConfigGroup group   = KGlobal::config()->group("Color Management");
     d->inProfilePath     = group.readPathEntry("WorkSpaceProfile", QString());
     d->outputProfilePath = group.readPathEntry("ProofProfileFile", QString());
-    d->cmEnabled = group.readEntry<bool>("EnableCM", false);
-  }
+    d->cmEnabled         = group.readEntry<bool>("EnableCM", false);
+}
 
-
-  void PrintOptionsPage::saveConfig()
-  {
+void PrintOptionsPage::saveConfig()
+{
     int position = d->mPositionGroup.checkedId();
     DigikamConfig::setPrintPosition ( position );
 
@@ -334,23 +319,23 @@ namespace Digikam
     d->mConfigDialogManager->updateSettings();
 
     DigikamConfig::self()->writeConfig();
-  }
+}
 
-  void PrintOptionsPage::slotAlertSettings( bool t)
-  {
+void PrintOptionsPage::slotAlertSettings( bool t)
+{
     if (t && !d->cmEnabled)
     {
-      QString message = i18n("<p>Color Management is disabled.</p> \
-          <p>You can enable it now by clicking on the \"Settings\" button.</p>");
-      KMessageBox::information(this, message);
-       d->colorManaged->setChecked(!t);
+        QString message = i18n("<p>Color Management is disabled.</p> "
+                               "<p>You can enable it now by clicking on the \"Settings\" button.</p>");
+        KMessageBox::information(this, message);
+        d->colorManaged->setChecked(!t);
      }
-  }
+}
 
-  void PrintOptionsPage::slotSetupDlg()
-  {
+void PrintOptionsPage::slotSetupDlg()
+{
     EditorWindow* editor = dynamic_cast<EditorWindow*>(d->mParent);
     editor->setupICC();
-  }
+}
 
 } // namespace

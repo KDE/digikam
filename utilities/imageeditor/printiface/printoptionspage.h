@@ -32,56 +32,57 @@
 namespace Digikam
 {
 
-  class PrintOptionsPagePrivate;
-  class PrintOptionsPage : public QWidget
-  {
-      Q_OBJECT
+class PrintOptionsPagePrivate;
 
-    public:
+class PrintOptionsPage : public QWidget
+{
+    Q_OBJECT
 
-      enum ScaleMode
-      {
+public:
+
+    enum ScaleMode
+    {
         NoScale,
         ScaleToPage,
         ScaleToCustomSize
-      };
+    };
 
-      // Order should match the content of the unit combbox in the ui file
-      enum Unit
-      {
+    // Order should match the content of the unit combbox in the ui file
+    enum Unit
+    {
         Millimeters,
         Centimeters,
         Inches
-      };
+    };
 
-      PrintOptionsPage (QWidget *parent, const QSize& imageSize );
-      ~PrintOptionsPage();
+    PrintOptionsPage(QWidget *parent, const QSize& imageSize );
+    ~PrintOptionsPage();
 
-      Qt::Alignment alignment() const;
-      ScaleMode scaleMode() const;
-      bool enlargeSmallerImages() const;
-      Unit scaleUnit() const;
-      double scaleWidth() const;
-      double scaleHeight() const;
-      bool colorManaged();
-      bool autoRotation();
-      QString inProfilePath();
-      QString outputProfilePath();
+    Qt::Alignment alignment() const;
+    ScaleMode scaleMode() const;
+    bool enlargeSmallerImages() const;
+    Unit scaleUnit() const;
+    double scaleWidth() const;
+    double scaleHeight() const;
+    bool colorManaged();
+    bool autoRotation();
+    QString inProfilePath();
+    QString outputProfilePath();
 
-      void loadConfig();
-      void saveConfig();
+    void loadConfig();
+    void saveConfig();
 
-    private Q_SLOTS:
+private Q_SLOTS:
 
-      void adjustWidthToRatio();
-      void adjustHeightToRatio();
-      void slotAlertSettings ( bool );
-      void slotSetupDlg();
+    void adjustWidthToRatio();
+    void adjustHeightToRatio();
+    void slotAlertSettings(bool);
+    void slotSetupDlg();
 
-    private:
+private:
 
-      PrintOptionsPagePrivate* const d;
-  };
+    PrintOptionsPagePrivate* const d;
+};
 
 } // namespace
 
