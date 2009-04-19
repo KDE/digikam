@@ -176,7 +176,23 @@ void ContextMenuHelper::addServicesMenu()
 {
     // TODO: handle multiple selections correctly
     KMimeType::Ptr mimePtr = KMimeType::findByUrl(d->selectedItems.first(), 0, true, true);
-    const KService::List offers = KMimeTypeTrader::self()->query(mimePtr->name());
+    KService::List offers = KMimeTypeTrader::self()->query(mimePtr->name());
+
+    // remove duplicate service entries
+    QSet<QString> seenApps;
+    for (KService::List::iterator it = offers.begin(); it != offers.end();)
+    {
+        const QString appName((*it)->name());
+        if (!seenApps.contains(appName))
+        {
+            seenApps.insert(appName);
+            ++it;
+        }
+        else
+        {
+            it = offers.erase(it);
+        }
+    }
 
     KMenu *servicesMenu = new KMenu(d->parent);
     qDeleteAll(servicesMenu->actions());
