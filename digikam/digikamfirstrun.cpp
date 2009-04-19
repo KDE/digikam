@@ -203,6 +203,7 @@ void DigikamFirstRun::saveSettings(const QString& rootAlbumFolder, const QString
 bool DigikamFirstRun::checkRootAlbum(QString& rootAlbumFolder)
 {
     rootAlbumFolder = d->rootAlbumPathRequester->url().toLocalFile();
+    kDebug(50003) << "Root album is : " << rootAlbumFolder << endl;
 
     if (rootAlbumFolder.isEmpty())
     {
@@ -269,6 +270,7 @@ bool DigikamFirstRun::checkRootAlbum(QString& rootAlbumFolder)
 bool DigikamFirstRun::checkDatabase(QString& dbFolder)
 {
     dbFolder = d->dbPathRequester->url().toLocalFile();
+    kDebug(50003) << "DB folder is : " << rootAlbumFolder << endl;
 
     if (dbFolder.isEmpty())
     {
