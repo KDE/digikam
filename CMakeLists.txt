@@ -735,6 +735,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagemodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagefiltermodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagefiltersettings.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagethumbnailmodel.cpp
        )
 
     SET(libalbummodels_SRCS
@@ -869,6 +870,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/icongroupitem.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/iconitem.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imageattributeswatch.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagedelegate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagepreviewview.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagepreviewbar.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/kdateedit.cpp 
