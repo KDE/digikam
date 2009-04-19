@@ -46,6 +46,7 @@
 #include <kstandardaction.h>
 #include <kopenwithdialog.h>
 #include <krun.h>
+#include <kfileitem.h>
 
 // LibKIPI includes
 
@@ -174,9 +175,29 @@ void ContextMenuHelper::addActionThumbnail(imageIds& ids, Album* album)
 
 void ContextMenuHelper::addServicesMenu()
 {
-    // TODO: handle multiple selections correctly
-    KMimeType::Ptr mimePtr = KMimeType::findByUrl(d->selectedItems.first(), 0, true, true);
-    KService::List offers = KMimeTypeTrader::self()->query(mimePtr->name());
+    // This code is inspired from KonqMenuActions:
+    // kdebase/apps/lib/konq/konq_menuactions.cpp
+
+    QStringList mimeTypes;
+    foreach(const KUrl& item, d->selectedItems)
+    {
+        const QString mimeType = KMimeType::findByUrl(item, 0, true, true)->name();
+        if (!mimeTypes.contains(mimeType))
+            mimeTypes << mimeType;
+    }
+
+    // Query trader
+    const QString firstMimeType = mimeTypes.takeFirst();
+    const QString constraintTemplate = "'%1' in ServiceTypes";
+    QStringList constraints;
+    foreach(const QString& mimeType, mimeTypes)
+    {
+        constraints << constraintTemplate.arg(mimeType);
+    }
+
+    KService::List offers = KMimeTypeTrader::self()->query(firstMimeType,
+                                                           "Application",
+                                                           constraints.join( " and "));
 
     // remove duplicate service entries
     QSet<QString> seenApps;
@@ -194,41 +215,53 @@ void ContextMenuHelper::addServicesMenu()
         }
     }
 
-    KMenu *servicesMenu = new KMenu(d->parent);
-    qDeleteAll(servicesMenu->actions());
-
-    QAction* menuAction = servicesMenu->menuAction();
-    menuAction->setText(i18n("Open With"));
-
-    foreach (KService::Ptr service, offers)
+    if (!offers.isEmpty())
     {
-        QString text = service->name().replace( '&', "&&" );
-        QAction* action = servicesMenu->addAction(text);
-        action->setIcon(KIcon(service->icon()));
-        action->setData(service->name());
-        d->servicesMap[text] = service;
-    }
+        KMenu *servicesMenu = new KMenu(d->parent);
+        qDeleteAll(servicesMenu->actions());
 
-    if (!servicesMenu->isEmpty())
+        QAction* serviceAction = servicesMenu->menuAction();
+        serviceAction->setText(i18n("Open With"));
+
+        foreach (KService::Ptr service, offers)
+        {
+            QString name = service->name().replace( '&', "&&" );
+            QAction* action = servicesMenu->addAction(name);
+            action->setIcon(KIcon(service->icon()));
+            action->setData(service->name());
+            d->servicesMap[name] = service;
+        }
+
         servicesMenu->addSeparator();
+        servicesMenu->addAction(i18n("Other..."));
 
-    servicesMenu->addAction(i18n("Other Application..."));
+        addAction(serviceAction);
 
-    addAction(menuAction);
+        connect(servicesMenu, SIGNAL(triggered(QAction*)),
+                this, SLOT(slotOpenWith(QAction*)));
+    }
+    else
+    {
+        QAction *serviceAction = new QAction(i18n("Open With..."), this);
+        addAction(serviceAction);
 
-    connect(servicesMenu, SIGNAL(triggered(QAction*)),
-            this, SLOT(openWith(QAction*)));
+        connect(serviceAction, SIGNAL(triggered()),
+                this, SLOT(slotOpenWith()));
+    }
 }
 
-void ContextMenuHelper::openWith(QAction* action)
+void ContextMenuHelper::slotOpenWith()
 {
-    if (!action)
-        return;
+    // call the slot with an "empty" action
+    slotOpenWith(0);
+}
 
+void ContextMenuHelper::slotOpenWith(QAction* action)
+{
     KService::Ptr service;
     KUrl::List list = d->selectedItems;
 
-    QString name = action->data().toString();
+    QString name = action ? action->data().toString() : QString();
     if (name.isEmpty())
     {
         KOpenWithDialog dlg(list);

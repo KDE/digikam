@@ -322,7 +322,8 @@ public:
 
 private Q_SLOTS:
 
-    void openWith(QAction* action);
+    void slotOpenWith();
+    void slotOpenWith(QAction* action);
 
 private:
 
