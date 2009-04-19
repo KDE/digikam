@@ -174,6 +174,7 @@ void ContextMenuHelper::addActionThumbnail(imageIds& ids, Album* album)
 
 void ContextMenuHelper::addServicesMenu()
 {
+    // TODO: handle multiple selections correctly
     KMimeType::Ptr mimePtr = KMimeType::findByUrl(d->selectedItems.first(), 0, true, true);
     const KService::List offers = KMimeTypeTrader::self()->query(mimePtr->name());
 
