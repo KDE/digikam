@@ -67,7 +67,7 @@ public:
 };
 
 ImageAlbumModel::ImageAlbumModel(QObject *parent)
-               : ImageModel(parent),
+               : ImageThumbnailModel(parent),
       d(new ImageAlbumModelPriv)
 {
     d->refreshTimer = new QTimer(this);

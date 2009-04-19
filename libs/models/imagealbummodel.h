@@ -28,7 +28,7 @@
 
 // Local includes
 
-#include "imagemodel.h"
+#include "imagethumbnailmodel.h"
 #include "album.h"
 
 namespace KIO { class Job; }
@@ -43,7 +43,7 @@ class SearchChangeset;
 class Album;
 class ImageAlbumModelPriv;
 
-class ImageAlbumModel : public ImageModel
+class ImageAlbumModel : public ImageThumbnailModel
 {
     Q_OBJECT
 
