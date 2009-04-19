@@ -66,8 +66,10 @@ namespace Digikam
   }
 
 
-  struct PrintOptionsPagePrivate : public Ui_PrintOptionsPage
+  class PrintOptionsPagePrivate : public Ui_PrintOptionsPage
   {
+  public:
+
     QWidget              *mParent;
     QSize                 mImageSize;
     QButtonGroup          mScaleGroup;

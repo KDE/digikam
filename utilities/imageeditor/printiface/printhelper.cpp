@@ -48,8 +48,10 @@
 namespace Digikam
 {
 
-  struct PrintHelperPrivate
+  class PrintHelperPrivate
   {
+  public:
+
     QWidget* mParent;
 
     QSize adjustSize ( PrintOptionsPage* optionsPage, DImg &doc, int printerResolution, const QSize & viewportSize )
