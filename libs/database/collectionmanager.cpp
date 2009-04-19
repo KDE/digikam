@@ -870,7 +870,7 @@ void CollectionManager::setLabel(const CollectionLocation &location, const QStri
         return;
 
     // update db
-    ChangingDB db();
+    ChangingDB db(d);
     access.db()->setAlbumRootLabel(albumLoc->id(), label);
 
     // update local structure
