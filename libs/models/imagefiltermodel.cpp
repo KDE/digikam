@@ -168,6 +168,8 @@ void ImageFilterModel::setSourceImageModel(ImageModel *sourceModel)
     setSourceModel(d->imageModel);
 }
 
+// -------------- Filter settings --------------
+
 void ImageFilterModel::setDayFilter(const QList<QDateTime>& days)
 {
     Q_D(ImageFilterModel);
@@ -267,6 +269,8 @@ bool ImageFilterModel::filterAcceptsRow(int source_row, const QModelIndex &sourc
     // usually done in thread and cache, unless source model changed
     return d->filter.matches(d->imageModel->imageInfo(source_row));
 }
+
+// -------------- Threaded preparation & filtering --------------
 
 void ImageFilterModelPrivate::preprocessInfos(const QList<ImageInfo> &infos)
 {
@@ -441,6 +445,8 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
     emit processed(package);
 }
 
+// -------------- Sorting and Categorization --------------
+
 void ImageFilterModel::setCategorizationMode(ImageFilterModel::CategorizationMode mode)
 {
     Q_D(ImageFilterModel);
@@ -540,6 +546,8 @@ bool ImageFilterModel::infosLessThan(const ImageInfo &left, const ImageInfo &rig
             return false;
     }
 }
+
+// -------------- Watching changes --------------
 
 void ImageFilterModel::slotImageTagChange(const ImageTagChangeset &changeset)
 {
