@@ -120,7 +120,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     }
 
     if (observer)
-        observer->progressInfo(m_image, 0.1);
+        observer->progressInfo(m_image, 0.1F);
 
     unsigned short *data = 0;
 
