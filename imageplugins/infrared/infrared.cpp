@@ -133,11 +133,11 @@ void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grai
     memcpy (pBWBits, data, numBytes);
 
     Digikam::DImgImageFilters().channelMixerImage(pBWBits, Width, Height, sixteenBit, // Image data.
-                                                  true,                   // Preserve luminosity.
-                                                  true,                   // Monochrome.
-                                                  0.4, greenBoost, -0.8,  // Red channel gains.
-                                                  0.0, 1.0,         0.0,  // Green channel gains (not used).
-                                                  0.0, 0.0,         1.0); // Blue channel gains (not used).
+                                                  true,                     // Preserve luminosity.
+                                                  true,                     // Monochrome.
+                                                  0.4F, greenBoost, -0.8F,  // Red channel gains.
+                                                  0.0F, 1.0F,        0.0F,  // Green channel gains (not used).
+                                                  0.0F, 0.0F,        1.0F); // Blue channel gains (not used).
     postProgress( 10 );
     if (m_cancel)
     {
