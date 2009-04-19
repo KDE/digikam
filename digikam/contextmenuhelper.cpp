@@ -44,6 +44,8 @@
 #include <kmimetype.h>
 #include <kmimetypetrader.h>
 #include <kstandardaction.h>
+#include <kopenwithdialog.h>
+#include <krun.h>
 
 // LibKIPI includes
 
@@ -80,13 +82,15 @@ public:
         stdActionCollection = 0;
     }
 
-    QAction*            gotoAlbumAction;
-    QAction*            gotoDateAction;
-    QAction*            setThumbnailAction;
+    QAction*                      gotoAlbumAction;
+    QAction*                      gotoDateAction;
+    QAction*                      setThumbnailAction;
 
-    QList<qlonglong>    selectedIds;
+    QList<qlonglong>              selectedIds;
+    KUrl::List                    selectedItems;
 
-    QMap<int, QAction*> queueActions;
+    QMap<int, QAction*>           queueActions;
+    QMap<QString, KService::Ptr>  servicesMap;
 
     QMenu*              menu;
 
@@ -168,24 +172,67 @@ void ContextMenuHelper::addActionThumbnail(imageIds& ids, Album* album)
     }
 }
 
-void ContextMenuHelper::addServicesMenu(const ImageInfo& item, QMap<QAction*, KService::Ptr> &servicesMap)
+void ContextMenuHelper::addServicesMenu(const ImageInfo& item)
 {
     KMimeType::Ptr mimePtr = KMimeType::findByUrl(item.fileUrl(), 0, true, true);
     const KService::List offers = KMimeTypeTrader::self()->query(mimePtr->name());
+
     KMenu *servicesMenu = new KMenu(d->menu);
+    qDeleteAll(servicesMenu->actions());
+
     QAction* menuAction = servicesMenu->menuAction();
     menuAction->setText(i18n("Open With"));
 
-    foreach (KService::Ptr ptr, offers)
+    foreach (KService::Ptr service, offers)
     {
-        QAction *serviceAction = servicesMenu->addAction(SmallIcon(ptr->icon()), ptr->name());
-        servicesMap[serviceAction] = ptr;
+        QString text = service->name().replace( '&', "&&" );
+        QAction* action = servicesMenu->addAction(text);
+        action->setIcon(KIcon(service->icon()));
+        action->setData(service->name());
+        d->servicesMap[text] = service;
     }
 
-    if (servicesMenu->isEmpty())
-        menuAction->setEnabled(false);
+    if (!servicesMenu->isEmpty())
+        servicesMenu->addSeparator();
+
+    servicesMenu->addAction(i18n("Other Application..."));
 
     addAction(menuAction);
+
+    connect(servicesMenu, SIGNAL(triggered(QAction*)),
+            this, SLOT(openWith(QAction*)));
+}
+
+void ContextMenuHelper::openWith(QAction* action)
+{
+    if (!action)
+        return;
+
+    KService::Ptr service;
+    KUrl::List list = d->selectedItems;
+
+    QString name = action->data().toString();
+    if (name.isEmpty())
+    {
+        KOpenWithDialog dlg(list);
+        if (!dlg.exec())
+            return;
+        service = dlg.service();
+
+        if (!service)
+        {
+            // User entered a custom command
+            if (!dlg.text().isEmpty())
+                KRun::run(dlg.text(), list, d->menu);
+            return;
+        }
+    }
+    else
+    {
+        service = d->servicesMap[name];
+    }
+
+    KRun::run(*service, list, d->menu);
 }
 
 void ContextMenuHelper::addKipiActions()
@@ -486,6 +533,11 @@ void ContextMenuHelper::setSelectedIds(imageIds &ids)
 {
     if (d->selectedIds.isEmpty())
         d->selectedIds = ids;
+}
+
+void ContextMenuHelper::setSelectedItems(KUrl::List urls)
+{
+    d->selectedItems = urls;
 }
 
 } // namespace Digikam

@@ -556,7 +556,6 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint&)
 {
     if (!item) return;
 
-    QMap<QAction*, KService::Ptr> servicesMap;
     AlbumIconItem* iconItem = static_cast<AlbumIconItem *>(item);
     ImageInfo imageInfo     = iconItem->imageInfo();
 
@@ -577,6 +576,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint&)
 
     DPopupMenu popmenu(this);
     ContextMenuHelper cmhelper(&popmenu);
+    cmhelper.setSelectedItems(selectedItems());
 
     cmhelper.addAction("album_new_from_selection");
     cmhelper.addAction(viewAction);
@@ -585,7 +585,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint&)
     cmhelper.addActionLightTable();
     cmhelper.addQueueManagerMenu();
     cmhelper.addGotoMenu(selectedImageIDs);
-    cmhelper.addServicesMenu(imageInfo, servicesMap);
+    cmhelper.addServicesMenu(imageInfo);
     cmhelper.addKipiActions();
     cmhelper.addAction("image_rename");
     popmenu.addSeparator();
@@ -629,23 +629,9 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint&)
     connect(&cmhelper, SIGNAL(signalAddToExistingQueue(int)),
             this, SIGNAL(signalAddToExistingQueue(int)));
 
-    // handle temporary actions
+    // --------------------------------------------------------
 
-    QAction* choice = cmhelper.exec(QCursor::pos());
-    if (choice)
-    {
-        if (servicesMap.contains(choice))
-        {
-            KService::Ptr imageServicePtr = servicesMap[choice];
-            KUrl::List urlList = selectedItems();
-            if (urlList.count())
-                KRun::run(*imageServicePtr, urlList, this);
-        }
-        else if (choice == viewAction)
-        {
-            emit signalPreviewItem(iconItem);
-        }
-    }
+    cmhelper.exec(QCursor::pos());
 
     // cleanup -----------------------
 

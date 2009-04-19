@@ -48,8 +48,6 @@
 #include <kmenu.h>
 #include <kmimetype.h>
 #include <kmimetypetrader.h>
-#include <krun.h>
-#include <kservice.h>
 
 // LibKIPI includes
 
@@ -333,7 +331,6 @@ void ImagePreviewView::slotContextMenu()
     if (d->imageInfo.isNull())
         return;
 
-    QMap<QAction*, KService::Ptr> servicesMap;
     QList<qlonglong> idList;
     idList << d->imageInfo.id();
 
@@ -362,7 +359,7 @@ void ImagePreviewView::slotContextMenu()
     cmhelper.addActionLightTable();
     cmhelper.addQueueManagerMenu();
     cmhelper.addGotoMenu(idList);
-    cmhelper.addServicesMenu(d->imageInfo, servicesMap);
+    cmhelper.addServicesMenu(d->imageInfo);
     cmhelper.addKipiActions();
     popmenu.addSeparator();
     // --------------------------------------------------------
@@ -406,12 +403,6 @@ void ImagePreviewView::slotContextMenu()
         if (choice == prevAction)            emit signalPrevItem();
         else if (choice == nextAction)       emit signalNextItem();
         else if (choice == back2AlbumAction) emit signalBack2Album();
-        else if (servicesMap.contains(choice))
-        {
-            KService::Ptr imageServicePtr = servicesMap[choice];
-            KUrl url(d->imageInfo.fileUrl().path());
-            KRun::run(*imageServicePtr, url, this);
-        }
     }
 
     // cleanup -------------------------

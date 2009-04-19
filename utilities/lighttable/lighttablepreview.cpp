@@ -50,8 +50,6 @@
 #include <kmenu.h>
 #include <kmimetype.h>
 #include <kmimetypetrader.h>
-#include <krun.h>
-#include <kservice.h>
 
 // Local includes
 
@@ -351,7 +349,6 @@ void LightTablePreview::slotContextMenu()
 
     QList<qlonglong> idList;
     idList << d->imageInfo.id();
-    QMap<QAction *, KService::Ptr> servicesMap;
 
     //-- temporary actions -----------------------------------------------
 
@@ -374,7 +371,7 @@ void LightTablePreview::slotContextMenu()
     // --------------------------------------------------------
     cmhelper.addAction(slideshowAction);
     cmhelper.addAction(editAction);
-    cmhelper.addServicesMenu(d->imageInfo, servicesMap);
+    cmhelper.addServicesMenu(d->imageInfo);
     popmenu.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAction(trashAction);
@@ -406,12 +403,6 @@ void LightTablePreview::slotContextMenu()
         else if (choice == zoomInAction)    slotIncreaseZoom();
         else if (choice == zoomOutAction)   slotDecreaseZoom();
         else if (choice == fitWindowAction) fitToWindow();
-        else if (servicesMap.contains(choice))
-        {
-            KService::Ptr imageServicePtr = servicesMap[choice];
-            KUrl url(d->imageInfo.fileUrl().path());
-            KRun::run(*imageServicePtr, url, this);
-        }
     }
 
     popmenu.deleteLater();

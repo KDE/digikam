@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <kservice.h>
+#include <kurl.h>
 
 class Q3ListViewItem;
 class QAction;
@@ -193,7 +193,7 @@ public:
      * @param item the selected item
      * @param servicesMap a reference to a map that will be filled with the detected services
      */
-    void addServicesMenu(const ImageInfo &item, QMap<QAction*, KService::Ptr> &servicesMap);
+    void addServicesMenu(const ImageInfo &item);
 
     /**
      * Add the Goto menu.
@@ -317,13 +317,15 @@ public:
      */
     QAction* exec(const QPoint& pos, QAction* at = 0);
 
+    /** Assign the selected items from the current view */
+    void setSelectedItems(KUrl::List urls);
+
+private Q_SLOTS:
+
+    void openWith(QAction* action);
+
 private:
 
-    /**
-     * Assign the selected image ids.
-     *
-     * @param ids the selected image ids
-     */
     void setSelectedIds(imageIds& ids);
 
 private:
