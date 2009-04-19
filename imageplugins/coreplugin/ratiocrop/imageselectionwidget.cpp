@@ -31,9 +31,9 @@
 #define MINRANGE 0
 
 // Golden number (1+sqrt(5))/2
-#define PHI      1.61803398874989479
+#define PHI      1.61803398874989479F
 // 1/PHI
-#define INVPHI   0.61803398874989479
+#define INVPHI   0.61803398874989479F
 
 
 #include "imageselectionwidget.h"
