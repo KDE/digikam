@@ -425,7 +425,7 @@ void ImageLevels::levelsLutSetup(int nchannels)
     {
        d->lut->luts[i] = new unsigned short[(d->sixteenBit ? 65535 : 255) + 1];
 
-       for (v = 0 ; v <= (d->sixteenBit ? 65535 : 255) ; ++v)
+       for (v = 0 ; v <= (uint)(d->sixteenBit ? 65535 : 255) ; ++v)
        {
           // to add gamma correction use func(v ^ g) ^ 1/g instead.
 
