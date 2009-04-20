@@ -114,7 +114,6 @@ ToolsListView::ToolsListView(QWidget *parent)
     setContextMenuPolicy(Qt::CustomContextMenu);
     setIconSize(QSize(22, 22));
     setSelectionMode(QAbstractItemView::ExtendedSelection);
-    setWhatsThis(i18n("This is the list of batch tools available."));
     setSortingEnabled(false);
     setAllColumnsShowFocus(true);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -122,11 +121,6 @@ ToolsListView::ToolsListView(QWidget *parent)
     setHeaderHidden(true);
     setDragEnabled(true);
     header()->setResizeMode(QHeaderView::Stretch);
-
-    new ToolListViewGroup(this, BatchTool::BaseTool);
-    new ToolListViewGroup(this, BatchTool::CustomTool);
-    // Not yet implemented in libkipi.
-    //new ToolListViewGroup(this, BatchTool::KipiTool);
 
     connect(this, SIGNAL(customContextMenuRequested(const QPoint&)),
             this, SLOT(slotContextMenu()));

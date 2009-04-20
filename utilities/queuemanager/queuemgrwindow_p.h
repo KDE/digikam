@@ -70,7 +70,7 @@ public:
         assignedList           = 0;
         queuePool              = 0;
         queueSettingsView      = 0;
-        toolsList              = 0;
+        toolsView              = 0;
         batchToolsMgr          = 0;
         toolSettings           = 0;
         showMenuBarAction      = 0;
@@ -127,7 +127,7 @@ public:
 
     ActionThread              *thread;
 
-    ToolsListView             *toolsList;
+    ToolsView                 *toolsView;
     ToolSettingsView          *toolSettings;
     AssignedListView          *assignedList;
     QueuePool                 *queuePool;

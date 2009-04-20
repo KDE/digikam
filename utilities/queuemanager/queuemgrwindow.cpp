@@ -75,7 +75,7 @@
 #include "queuesettingsview.h"
 #include "assignedlist.h"
 #include "toolsettingsview.h"
-#include "toolslistview.h"
+#include "toolsview.h"
 #include "componentsinfo.h"
 #include "digikamapp.h"
 #include "themeengine.h"
@@ -199,8 +199,8 @@ void QueueMgrWindow::setupUserArea()
 
     QGroupBox *toolsBox = new QGroupBox(i18n("Batch Tools Available"), mainW);
     QVBoxLayout *vlay3  = new QVBoxLayout(toolsBox);
-    d->toolsList        = new ToolsListView(toolsBox);
-    vlay3->addWidget(d->toolsList);
+    d->toolsView        = new ToolsView(toolsBox);
+    vlay3->addWidget(d->toolsView);
     vlay3->setSpacing(0);
     vlay3->setMargin(0);
 
@@ -264,7 +264,7 @@ void QueueMgrWindow::setupConnections()
     connect(d->assignedList, SIGNAL(signalAssignedToolsChanged(const AssignedBatchTools&)),
             this, SLOT(slotAssignedToolsChanged(const AssignedBatchTools&)));
 
-    connect(d->toolsList, SIGNAL(signalAssignTools(const QMap<int, QString>&)),
+    connect(d->toolsView, SIGNAL(signalAssignTools(const QMap<int, QString>&)),
             d->assignedList, SLOT(slotAssignTools(const QMap<int, QString>&)));
 
     // -- Queued Items list connections -------------------------------------
@@ -738,7 +738,7 @@ void QueueMgrWindow::populateToolsList()
     BatchToolsList list = d->batchToolsMgr->toolsList();
     foreach(BatchTool *tool, list)
     {
-        d->toolsList->addTool(tool);
+        d->toolsView->addTool(tool);
     }
 }
 
@@ -1009,7 +1009,7 @@ void QueueMgrWindow::busy(bool busy)
     d->clearQueueAction->setEnabled(!d->busy);
     d->queuePool->setEnabled(!d->busy);
     d->queueSettingsView->setEnabled(!d->busy);
-    d->toolsList->setEnabled(!d->busy);
+    d->toolsView->setEnabled(!d->busy);
     d->assignedList->setEnabled(!d->busy);
     d->toolSettings->setEnabled(!d->busy);
     d->stopAction->setEnabled(d->busy);
