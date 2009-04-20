@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TOOLS_LIST_H
-#define TOOLS_LIST_H
+#ifndef TOOLS_LIST_VIEW_H
+#define TOOLS_LIST_VIEW_H
 
 // Qt includes
 
@@ -117,4 +117,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // TOOLS_LIST_H
+#endif // TOOLS_LIST_VIEW_H

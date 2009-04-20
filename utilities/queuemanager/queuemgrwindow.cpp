@@ -73,9 +73,9 @@
 #include "queuepool.h"
 #include "queuelist.h"
 #include "queuesettingsview.h"
-#include "toolslist.h"
 #include "assignedlist.h"
 #include "toolsettingsview.h"
+#include "toolslistview.h"
 #include "componentsinfo.h"
 #include "digikamapp.h"
 #include "themeengine.h"
@@ -88,7 +88,7 @@
 #include "rawcameradlg.h"
 #include "imagedialog.h"
 #include "thumbnailsize.h"
-#include "queuemgrwindowprivate.h"
+#include "queuemgrwindow_p.h"
 
 namespace Digikam
 {

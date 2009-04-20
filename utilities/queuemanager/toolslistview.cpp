@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#include "toolslist.h"
-#include "toolslist.moc"
+#include "toolslistview.h"
+#include "toolslistview.moc"
 
 // Qt includes
 
