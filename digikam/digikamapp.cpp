@@ -111,7 +111,6 @@
 #include "cameraui.h"
 #include "componentsinfo.h"
 #include "digikamadaptor.h"
-#include "digikamappprivate.h"
 #include "dio.h"
 #include "dlogoaction.h"
 #include "fingerprintsgenerator.h"
@@ -131,6 +130,7 @@
 #include "themeengine.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
+#include "digikamapp_p.h"
 
 using KIO::Job;
 using KIO::UDSEntryList;

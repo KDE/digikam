@@ -80,7 +80,7 @@
 #include "syncjob.h"
 #include "thumbnailsize.h"
 #include "lighttablepreview.h"
-#include "lighttablewindowprivate.h"
+#include "lighttablewindow_p.h"
 
 namespace Digikam
 {

@@ -122,7 +122,7 @@
 #include "cameracontroller.h"
 #include "cameralist.h"
 #include "cameratype.h"
-#include "camerauiprivate.h"
+#include "cameraui_p.h"
 
 namespace Digikam
 {

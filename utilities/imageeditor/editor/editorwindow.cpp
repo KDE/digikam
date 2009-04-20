@@ -97,7 +97,6 @@
 #include "dlogoaction.h"
 #include "editorstackview.h"
 #include "editortooliface.h"
-#include "editorwindowprivate.h"
 #include "exposurecontainer.h"
 #include "filesaveoptionsbox.h"
 #include "iccsettingscontainer.h"
@@ -115,6 +114,7 @@
 #include "themeengine.h"
 #include "thumbbar.h"
 #include "printhelper.h"
+#include "editorwindow_p.h"
 
 namespace Digikam
 {
