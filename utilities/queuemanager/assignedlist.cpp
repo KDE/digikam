@@ -45,7 +45,7 @@
 
 #include "queuemgrwindow.h"
 #include "queuesettingsview.h"
-#include "toolslist.h"
+#include "toolslistview.h"
 
 namespace Digikam
 {
