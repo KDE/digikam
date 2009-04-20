@@ -189,7 +189,7 @@ protected:
 
 protected:
 
-	QSharedDataPointer<ImageCommentsPriv> d;
+    QSharedDataPointer<ImageCommentsPriv> d;
 };
 
 } // namespace Digikam

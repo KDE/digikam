@@ -240,26 +240,26 @@ DImg DImg::smoothScaleSection(int sx, int sy,
     }
     else
     {
-    	if (hasAlpha())
+        if (hasAlpha())
         {
-    	    dimgScaleAARGBA(scaleinfo,
-			                (uint *)buffer.bits(),
-			                ((sx * dw) / sw),
-			                ((sy * dh) / sh),
-			                0, 0,
-			                dw, dh,
-			                dw, w);
+            dimgScaleAARGBA(scaleinfo,
+                            (uint *)buffer.bits(),
+                            ((sx * dw) / sw),
+                            ((sy * dh) / sh),
+                            0, 0,
+                            dw, dh,
+                            dw, w);
         }
         else
         {
-	       dimgScaleAARGB(scaleinfo,
-			              (uint *)buffer.bits(),
-			              ((sx * dw) / sw),
-			              ((sy * dh) / sh),
-			              0, 0,
-			              dw, dh,
-			              dw, w);
-	    }
+           dimgScaleAARGB(scaleinfo,
+                          (uint *)buffer.bits(),
+                          ((sx * dw) / sw),
+                          ((sy * dh) / sh),
+                          0, 0,
+                          dw, dh,
+                          dw, w);
+        }
     }
 
     dimgFreeScaleInfo(scaleinfo);
@@ -409,13 +409,13 @@ DImgScaleInfo* DImgScale::dimgCalcScaleInfo(const DImg &img,
     {
         isi->ypoints   = 0;
         isi->ypoints16 = dimgCalcYPoints16((ullong*)img.bits(), img.width(), img.height(), sch);
-    	if (!isi->ypoints16) return(dimgFreeScaleInfo(isi));
+        if (!isi->ypoints16) return(dimgFreeScaleInfo(isi));
     }
     else
     {
         isi->ypoints16 = 0;
         isi->ypoints   = dimgCalcYPoints((uint*)img.bits(), img.width(), img.height(), sch);
-	    if (!isi->ypoints) return(dimgFreeScaleInfo(isi));
+        if (!isi->ypoints) return(dimgFreeScaleInfo(isi));
     }
 
     if (aa)
@@ -1584,7 +1584,7 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo *isi, ullong *dest,
         {
             Cy = YAP >> 16;
             yap = YAP & 0xffff;
-	    dptr = dest + y * dow;
+            dptr = dest + y * dow;
 
             for(x = dxx; x < end; ++x)
             {
@@ -1743,7 +1743,7 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo *isi, ullong *dest,
                         B_VAL16(dptr) = b;
                         A_VAL16(dptr) = a;
 
-            			dptr++;
+                        dptr++;
                     }
                     else
                     {
@@ -1767,7 +1767,7 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo *isi, ullong *dest,
                         B_VAL16(dptr) = b;
                         A_VAL16(dptr) = a;
 
-			            dptr++;
+                        dptr++;
                     }
                 }
             }
@@ -1800,7 +1800,7 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo *isi, ullong *dest,
                         B_VAL16(dptr) = b;
                         A_VAL16(dptr) = a;
 
-            			dptr++;
+                        dptr++;
                     }
                     else
                         *dptr++ = sptr[xpoints[x] ];

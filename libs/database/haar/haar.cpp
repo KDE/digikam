@@ -200,7 +200,7 @@ void Calculator::haar2D(Unit a[])
             memcpy(a+i+h1, t, h1*sizeof(a[0]));
         }
         // Fix first element of each row:
-        a[i] *= C;	// C = 1/sqrt(NUM_PIXELS)
+        a[i] *= C;  // C = 1/sqrt(NUM_PIXELS)
     }
 
     // scale by 1/sqrt(128) = 0.08838834764831843:

@@ -1429,7 +1429,7 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
             QFileInfo fi(downloadName);
 
             QString subAlbum = fi.suffix().toUpper();
-	        if (fi.suffix().toUpper() == QString("JPEG") ||
+            if (fi.suffix().toUpper() == QString("JPEG") ||
                 fi.suffix().toUpper() == QString("JPE"))
                 subAlbum = QString("JPG");
             if (fi.suffix().toUpper() == QString("TIFF"))

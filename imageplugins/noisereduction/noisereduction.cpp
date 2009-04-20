@@ -189,7 +189,7 @@ void NoiseReduction::filterImage(void)
         float t2 = m_lsmooth;
 
         // Values are squared, so that sliders get a nonlinear characteristic
-	// for better adjustment accuracy when values are small.
+        // for better adjustment accuracy when values are small.
         t*=t;
         t2*=t2;
 

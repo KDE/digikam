@@ -170,7 +170,7 @@ void IconGroupItem::takeItem(IconItem* item)
     {
         d->lastItem = d->lastItem->m_prev;
         if ( d->lastItem )
-	    d->lastItem->m_next = 0;
+            d->lastItem->m_next = 0;
         else
             d->firstItem = d->lastItem = 0;
     }

@@ -263,7 +263,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
                     break;
 
-                case PNG_COLOR_TYPE_GRAY_ALPHA :	// Grayscale + Alpha
+                case PNG_COLOR_TYPE_GRAY_ALPHA :    // Grayscale + Alpha
 #ifdef ENABLE_DEBUG_MESSAGES
                     kDebug(50003) << "PNG in PNG_COLOR_TYPE_GRAY_ALPHA" << endl;
 #endif

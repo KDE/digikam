@@ -68,7 +68,7 @@ PPMLoader::PPMLoader(DImg* image)
 bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 {
     //TODO: progress information
-    int	 width, height, rgbmax;
+    int  width, height, rgbmax;
     char nl;
 
     FILE *file = fopen(QFile::encodeName(filePath), "rb");
