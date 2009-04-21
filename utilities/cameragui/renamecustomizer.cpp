@@ -155,7 +155,7 @@ QString ManualRenameInput::parser(const QString &parse,
     // parse sequence number token ----------------------------
     {
         QRegExp regExp("(#+)(\\{(\\d+)\\s*,\\s*(\\d+)\\})?");
-        int pos     = 0;
+        int pos = 0;
         while (pos > -1)
         {
             pos = regExp.indexIn(parsedString, pos);
