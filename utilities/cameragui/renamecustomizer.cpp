@@ -145,7 +145,7 @@ void ManualRenameInput::slotHideToolTipTracker()
     slotToolTipButtonToggled(false);
 }
 
-QString ManualRenameInput::parser(const QString& parse,
+QString ManualRenameInput::parser(const QString &parse,
                                   const QString &fileName, const QString &cameraName,
                                   const QDateTime &dateTime, int index)
 {
@@ -195,7 +195,7 @@ QString ManualRenameInput::parser(const QString& parse,
             }
         }
     }
-    // parse * token (first letter upper case -----------------
+    // parse * token (first letter of each word upper case) ---
     {
         QRegExp regExp("\\*{1}");
         regExp.setMinimal(true);
