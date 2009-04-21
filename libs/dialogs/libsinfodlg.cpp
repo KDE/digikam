@@ -176,7 +176,7 @@ LibsInfoDlg::LibsInfoDlg(QWidget *parent)
 #endif
 
 #if KDCRAW_VERSION >= 0x000500
-    list.insert(i18n("LibRaw parallel demosaicing"), KDcrawIface::KDcraw::librawUseGomp() ?
+    list.insert(i18n("Parallelized demosaicing"),    KDcrawIface::KDcraw::librawUseGomp() ?
                                                      i18n("Yes") : i18n("No"));
 #endif
     list.insert(i18n("LibKExiv2"),                   KExiv2Iface::KExiv2::version());
