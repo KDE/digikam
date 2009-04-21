@@ -5,7 +5,8 @@ digiKam 0.11.0-beta1 - Release date: 2009-xx-xx
 NEW FEATURES:
 
 General        : Add new Batch Queue Manager.
-General        : new tool bar animation banner.
+General        : New tool bar animation banner.
+General        : Fix compilation under MSVC 9.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
