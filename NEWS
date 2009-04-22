@@ -48,4 +48,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 036 ==> 187733 : Cannot turn off sidebar after Infrared filter usage?
 037 ==> 188755 : Strange behaviour on selection.
 038 ==> 185884 : Empty view after clicking the left thumbnail image in Image Editor filter view.
-039 ==> 
+039 ==> 188062 : Synchronize Images with Database does not save Copyright, Credit, Source, By-line, By-line Title in IPTC.
+040 ==> 
+
