@@ -295,8 +295,8 @@ void SetupMime::readSettings()
     DatabaseAccess().db()->getUserFilterSettings(&image, &video, &audio);
 
     d->imageFileFilterEdit->setText(image);
-    d->movieFileFilterEdit->setText(audio);
-    d->audioFileFilterEdit->setText(video);
+    d->movieFileFilterEdit->setText(video);
+    d->audioFileFilterEdit->setText(audio);
 }
 
 void SetupMime::slotRevertImageFileFilter()
