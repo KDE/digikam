@@ -316,10 +316,11 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         IF(NOT GCC_VERSION)
             STRING(REGEX REPLACE ".*\\(GCC\\).* ([34]\\.[0-9]) .*" "\\1.0" GCC_VERSION "${VERSION_GCC_INFO}")
         ENDIF (NOT GCC_VERSION)
+        
         MACRO_ENSURE_VERSION("4.3.0" "${GCC_VERSION}" GCC_VERSION_BAD)
 
         IF(GCC_VERSION_BAD)
-            MESSAGE(STATUS "Adjusting compilation flags for GCC version (${GCC_VERSION})")
+            MESSAGE(STATUS "Adjusting compilation flags for GCC version (${GCC_VERSION} )")
             ADD_DEFINITIONS(-fno-tree-pre)
         ENDIF(GCC_VERSION_BAD)
     ENDIF(CMAKE_COMPILER_IS_GNUCXX)
