@@ -63,9 +63,7 @@ public:
     ImageGuideWidgetPriv()
     {
         pixmap                    = 0;
-        mask_pixmap               = 0;
-//         red_pixmap                = 0;
-//         green_pixmap              = 0;
+        maskPixmap                = 0;
         iface                     = 0;
         flicker                   = 0;
         timerID                   = 0;
@@ -76,7 +74,6 @@ public:
         overExposureIndicator     = false;
         drawLineBetweenPoints     = false;
         drawingMask               = false;
-//         redMask                   = true;
         enableDrawMask            = false;
     }
 
@@ -88,7 +85,6 @@ public:
     bool        overExposureIndicator;
     bool        drawLineBetweenPoints;
     bool        drawingMask;
-//     bool        redMask;
     bool        enableDrawMask;
 
     int         width;
@@ -109,9 +105,7 @@ public:
     QColor      paintColor;
 
     QPixmap    *pixmap;
-    QPixmap    *mask_pixmap;
-//     QPixmap    *red_pixmap;
-//     QPixmap    *green_pixmap;
+    QPixmap    *maskPixmap;
 
     QPoint      lastPoint;
 
@@ -146,15 +140,10 @@ ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent,
     d->preview.setICCProfil( d->iface->getOriginalImg()->getICCProfil() );
     delete [] data;
 
-    d->pixmap       = new QPixmap(w, h);
-    d->rect         = QRect(w/2-d->width/2, h/2-d->height/2, d->width, d->height);
-    d->mask_pixmap  = new QPixmap(d->rect.width(), d->rect.height());
-//     d->red_pixmap   = new QPixmap(d->rect.width(), d->rect.height());
-//     d->green_pixmap = new QPixmap(d->rect.width(), d->rect.height());
-
-    d->mask_pixmap->fill(QColor(0,0,0,0));
-//     d->red_pixmap->fill(QColor(0,0,0,0));
-//     d->green_pixmap->fill(QColor(0,0,0,0));
+    d->pixmap     = new QPixmap(w, h);
+    d->rect       = QRect(w/2-d->width/2, h/2-d->height/2, d->width, d->height);
+    d->maskPixmap = new QPixmap(d->rect.width(), d->rect.height());
+    d->maskPixmap->fill(QColor(0,0,0,0));
 
     d->paintColor.setRgb(255, 255, 255, 255);
 
@@ -174,14 +163,8 @@ ImageGuideWidget::~ImageGuideWidget()
     if (d->pixmap)
         delete d->pixmap;
 
-    if(d->mask_pixmap)
-        delete d->mask_pixmap;
-
-//     if(d->red_pixmap)
-//         delete d->red_pixmap;
-
-//     if(d->green_pixmap)
-//         delete d->green_pixmap;
+    if(d->maskPixmap)
+        delete d->maskPixmap;
 
     delete d;
 }
@@ -554,9 +537,8 @@ void ImageGuideWidget::paintEvent(QPaintEvent*)
 
     if (d->enableDrawMask)
     {
-        p.drawPixmap(d->rect.x(), d->rect.y(), *d->mask_pixmap);
-//         p.drawPixmap(d->rect.x(), d->rect.y(), *d->red_pixmap);
-//         p.drawPixmap(d->rect.x(), d->rect.y(), *d->green_pixmap);
+        p.setOpacity(0.7);
+        p.drawPixmap(d->rect.x(), d->rect.y(), *d->maskPixmap);
     }
 
     p.end();
@@ -584,11 +566,10 @@ void ImageGuideWidget::resizeEvent(QResizeEvent *e)
 {
     blockSignals(true);
     delete d->pixmap;
-    delete d->mask_pixmap;
-//     delete d->red_pixmap;
-//     delete d->green_pixmap;
-    int w = e->size().width();
-    int h = e->size().height();
+    delete d->maskPixmap;
+
+    int w     = e->size().width();
+    int h     = e->size().height();
     int old_w = d->width;
     int old_h = d->height;
 
@@ -603,13 +584,8 @@ void ImageGuideWidget::resizeEvent(QResizeEvent *e)
 
     d->pixmap       = new QPixmap(w, h);
     d->rect         = QRect(w/2-d->width/2, h/2-d->height/2, d->width, d->height);
-    d->mask_pixmap   = new QPixmap(d->rect.width(), d->rect.height());
-//     d->red_pixmap   = new QPixmap(d->rect.width(), d->rect.height());
-//     d->green_pixmap = new QPixmap(d->rect.width(), d->rect.height());
-
-    d->mask_pixmap->fill(QColor(0,0,0,0));
-//     d->red_pixmap->fill(QColor(0,0,0,0));
-//     d->green_pixmap->fill(QColor(0,0,0,0));
+    d->maskPixmap   = new QPixmap(d->rect.width(), d->rect.height());
+    d->maskPixmap->fill(QColor(0,0,0,0));
 
     d->spot.setX((int)((float)d->spot.x() * ( (float)d->width  / (float)old_w)));
     d->spot.setY((int)((float)d->spot.y() * ( (float)d->height / (float)old_h)));
@@ -790,7 +766,7 @@ void ImageGuideWidget::drawLineTo(const QPoint& endPoint)
 
 void ImageGuideWidget::drawLineTo(int width, const QColor& color, const QPoint& start, const QPoint& end)
 {
-    QPainter painter(d->mask_pixmap);
+    QPainter painter(d->maskPixmap);
 
     painter.setPen(QPen(color, width, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter.drawLine(start, end);
@@ -805,7 +781,7 @@ void ImageGuideWidget::drawLineTo(int width, const QColor& color, const QPoint& 
 
 void ImageGuideWidget::setPaintColor(const QColor& color)
 {
-    d->paintColor.setRgba(color.rgba());
+    d->paintColor = color;
 }
 
 void ImageGuideWidget::setMaskEnabled(bool enabled)
@@ -816,7 +792,7 @@ void ImageGuideWidget::setMaskEnabled(bool enabled)
 
 QImage ImageGuideWidget::getMask() const
 {
-    QImage mask = d->mask_pixmap->toImage();
+    QImage mask = d->maskPixmap->toImage();
     return mask;
 }
 
