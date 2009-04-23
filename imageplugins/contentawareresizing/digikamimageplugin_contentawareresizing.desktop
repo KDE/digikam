@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=ImagePlugin_ContentAwareResizing
+Type=Service
+ServiceTypes=Digikam/ImagePlugin
+Encoding=UTF-8
+Comment=Liquid Rescale plugin for digiKam
+X-KDE-Library=digikamimageplugin_contentawareresizing
+author=Julien Pontabry, julien dot pontabry at u-strasbg dot fr
