@@ -6,7 +6,7 @@
  * Date        : 2004-08-20
  * Description : a widget to display an image with guides
  *
- * Copyright (C) 2004-2008 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2009 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -97,8 +97,13 @@ public:
     int    getRenderingPreviewMode();
     void   resetSpotPosition();
     void   updatePreview();
-    void   setPoints(const QPolygon &p, bool drawLine = false);
+    void   setPoints(const QPolygon& p, bool drawLine=false);
     void   resetPoints();
+
+    void   setPaintColor(QColor color);
+    void   setMaskEnabled(bool enabled);
+
+    QImage *getMask();
 
 public Q_SLOTS:
 
@@ -110,8 +115,8 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 
-    void spotPositionChangedFromOriginal(const Digikam::DColor &color, const QPoint &position);
-    void spotPositionChangedFromTarget(const Digikam::DColor &color, const QPoint &position);
+    void spotPositionChangedFromOriginal(const Digikam::DColor& color, const QPoint& position);
+    void spotPositionChangedFromTarget(const Digikam::DColor& color, const QPoint& position);
     void signalResized();
 
 protected:
@@ -128,6 +133,8 @@ protected:
 private:
 
     void updatePixmap();
+    void drawLineTo(const QPoint& endPoint);
+    void drawLineTo(int width, const QColor& color, const QPoint& start, const QPoint& end);
 
 private:
 

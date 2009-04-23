@@ -7,7 +7,7 @@
  * Description : a widget to display an image preview with some
  *               modes to compare effect results.
  *
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -210,10 +210,10 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
 
     // -------------------------------------------------------------
 
-    grid->addWidget(d->prevBBox,        1, 0, 1, 1);
-    grid->addWidget(d->spotInfoLabel,   1, 1, 1, 1);
-    grid->addWidget(d->expoBBox,        1, 3, 1, 1);
-    grid->addWidget(frame,              3, 0, 1, 4 );
+    grid->addWidget(d->prevBBox,      1, 0, 1, 1);
+    grid->addWidget(d->spotInfoLabel, 1, 1, 1, 1);
+    grid->addWidget(d->expoBBox,      1, 3, 1, 1);
+    grid->addWidget(frame,            3, 0, 1, 4 );
     grid->setColumnMinimumWidth(2, KDialog::spacingHint());
     grid->setColumnMinimumWidth(1, KDialog::spacingHint());
     grid->setRowMinimumHeight(0, KDialog::spacingHint());
@@ -252,7 +252,9 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     // -------------------------------------------------------------
 
     if (prevModeOptions)
+    {
         readSettings();
+    }
     else
     {
         setRenderingPreviewMode(ImageGuideWidget::NoPreviewMode);
@@ -333,24 +335,24 @@ void ImageWidget::slotUpdateSpotInfo(const Digikam::DColor &col, const QPoint &p
 void ImageWidget::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(d->settingsSection);
+    KConfigGroup group        = config->group(d->settingsSection);
 
     d->underExposureButton->setChecked(group.readEntry("Under Exposure Indicator", false));
     d->overExposureButton->setChecked(group.readEntry("Over Exposure Indicator", false));
 
     int mode = group.readEntry("Separate View", (int)ImageGuideWidget::PreviewBothImagesVertCont);
-    mode = qMax((int)ImageGuideWidget::PreviewOriginalImage, mode);
-    mode = qMin((int)ImageGuideWidget::NoPreviewMode, mode);
+    mode     = qMax((int)ImageGuideWidget::PreviewOriginalImage, mode);
+    mode     = qMin((int)ImageGuideWidget::NoPreviewMode, mode);
     setRenderingPreviewMode(mode);
 }
 
 void ImageWidget::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(d->settingsSection);
-    group.writeEntry("Separate View", getRenderingPreviewMode());
+    KConfigGroup group        = config->group(d->settingsSection);
+    group.writeEntry("Separate View",            getRenderingPreviewMode());
     group.writeEntry("Under Exposure Indicator", d->underExposureButton->isChecked());
-    group.writeEntry("Over Exposure Indicator", d->overExposureButton->isChecked());
+    group.writeEntry("Over Exposure Indicator",  d->overExposureButton->isChecked());
     config->sync();
 }
 
@@ -362,6 +364,21 @@ void ImageWidget::setPoints(const QPolygon &p, bool drawLine)
 void ImageWidget::resetPoints()
 {
     d->previewWidget->resetPoints();
+}
+
+void ImageWidget::setPaintColor(QColor color)
+{
+    d->previewWidget->setPaintColor(color);
+}
+
+void ImageWidget::setMaskEnabled(bool enabled)
+{
+    d->previewWidget->setMaskEnabled(enabled);
+}
+
+QImage *ImageWidget::getMask()
+{
+    return d->previewWidget->getMask();
 }
 
 }  // namespace Digikam

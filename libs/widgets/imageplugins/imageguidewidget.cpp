@@ -6,7 +6,7 @@
  * Date        : 2004-11-16
  * Description : a widget to display an image with guides
  *
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -63,6 +63,9 @@ public:
     ImageGuideWidgetPriv()
     {
         pixmap                    = 0;
+        mask_pixmap               = 0;
+//         red_pixmap                = 0;
+//         green_pixmap              = 0;
         iface                     = 0;
         flicker                   = 0;
         timerID                   = 0;
@@ -72,6 +75,9 @@ public:
         underExposureIndicator    = false;
         overExposureIndicator     = false;
         drawLineBetweenPoints     = false;
+        drawingMask               = false;
+//         redMask                   = true;
+        enableDrawMask            = false;
     }
 
     bool        sixteenBit;
@@ -81,6 +87,9 @@ public:
     bool        underExposureIndicator;
     bool        overExposureIndicator;
     bool        drawLineBetweenPoints;
+    bool        drawingMask;
+//     bool        redMask;
+    bool        enableDrawMask;
 
     int         width;
     int         height;
@@ -97,8 +106,14 @@ public:
     QRect       rect;
 
     QColor      guideColor;
+    QColor      paintColor;
 
     QPixmap    *pixmap;
+    QPixmap    *mask_pixmap;
+//     QPixmap    *red_pixmap;
+//     QPixmap    *green_pixmap;
+
+    QPoint      lastPoint;
 
     ImageIface *iface;
 
@@ -131,8 +146,19 @@ ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent,
     d->preview.setICCProfil( d->iface->getOriginalImg()->getICCProfil() );
     delete [] data;
 
-    d->pixmap = new QPixmap(w, h);
-    d->rect   = QRect(w/2-d->width/2, h/2-d->height/2, d->width, d->height);
+    d->pixmap       = new QPixmap(w, h);
+    d->rect         = QRect(w/2-d->width/2, h/2-d->height/2, d->width, d->height);
+    d->mask_pixmap  = new QPixmap(d->rect.width(), d->rect.height());
+//     d->red_pixmap   = new QPixmap(d->rect.width(), d->rect.height());
+//     d->green_pixmap = new QPixmap(d->rect.width(), d->rect.height());
+
+    d->mask_pixmap->fill(QColor(0,0,0,0));
+//     d->red_pixmap->fill(QColor(0,0,0,0));
+//     d->green_pixmap->fill(QColor(0,0,0,0));
+
+    d->paintColor.setRgb(255, 255, 255, 255);
+
+    d->lastPoint = QPoint(d->rect.x(),d->rect.y());
 
     resetSpotPosition();
     setSpotVisible(d->spotVisible, blink);
@@ -147,6 +173,15 @@ ImageGuideWidget::~ImageGuideWidget()
 
     if (d->pixmap)
         delete d->pixmap;
+
+    if(d->mask_pixmap)
+        delete d->mask_pixmap;
+
+//     if(d->red_pixmap)
+//         delete d->red_pixmap;
+
+//     if(d->green_pixmap)
+//         delete d->green_pixmap;
 
     delete d;
 }
@@ -239,7 +274,7 @@ void ImageGuideWidget::updatePixmap()
     QString text;
     QRect textRect, fontRect;
     QFontMetrics fontMt = p.fontMetrics();
-    p.setPen(QPen(Qt::red, 1)) ;
+    p.setPen(QPen(Qt::red, 1));
 
     d->pixmap->fill(palette().color(QPalette::Background));
 
@@ -248,7 +283,7 @@ void ImageGuideWidget::updatePixmap()
     {
         p.drawPixmap(d->rect, d->iface->convertToPixmap(d->preview));
 
-        text = i18n("Original");
+        text     = i18n("Original");
         fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
         textRect.setTopLeft(QPoint(d->rect.x() + 20, d->rect.y() + 20));
         textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2 ) );
@@ -516,6 +551,14 @@ void ImageGuideWidget::paintEvent(QPaintEvent*)
 {
     QPainter p(this);
     p.drawPixmap(0, 0, *d->pixmap);
+
+    if (d->enableDrawMask)
+    {
+        p.drawPixmap(d->rect.x(), d->rect.y(), *d->mask_pixmap);
+//         p.drawPixmap(d->rect.x(), d->rect.y(), *d->red_pixmap);
+//         p.drawPixmap(d->rect.x(), d->rect.y(), *d->green_pixmap);
+    }
+
     p.end();
 }
 
@@ -541,6 +584,9 @@ void ImageGuideWidget::resizeEvent(QResizeEvent *e)
 {
     blockSignals(true);
     delete d->pixmap;
+    delete d->mask_pixmap;
+//     delete d->red_pixmap;
+//     delete d->green_pixmap;
     int w = e->size().width();
     int h = e->size().height();
     int old_w = d->width;
@@ -555,8 +601,15 @@ void ImageGuideWidget::resizeEvent(QResizeEvent *e)
     d->preview.setICCProfil( d->iface->getOriginalImg()->getICCProfil() );
     delete [] data;
 
-    d->pixmap = new QPixmap(w, h);
-    d->rect   = QRect(w/2-d->width/2, h/2-d->height/2, d->width, d->height);
+    d->pixmap       = new QPixmap(w, h);
+    d->rect         = QRect(w/2-d->width/2, h/2-d->height/2, d->width, d->height);
+    d->mask_pixmap   = new QPixmap(d->rect.width(), d->rect.height());
+//     d->red_pixmap   = new QPixmap(d->rect.width(), d->rect.height());
+//     d->green_pixmap = new QPixmap(d->rect.width(), d->rect.height());
+
+    d->mask_pixmap->fill(QColor(0,0,0,0));
+//     d->red_pixmap->fill(QColor(0,0,0,0));
+//     d->green_pixmap->fill(QColor(0,0,0,0));
 
     d->spot.setX((int)((float)d->spot.x() * ( (float)d->width  / (float)old_w)));
     d->spot.setY((int)((float)d->spot.y() * ( (float)d->height / (float)old_h)));
@@ -567,105 +620,130 @@ void ImageGuideWidget::resizeEvent(QResizeEvent *e)
 
 void ImageGuideWidget::mousePressEvent(QMouseEvent *e)
 {
-    if ( !d->focus && e->button() == Qt::LeftButton &&
-         d->rect.contains( e->x(), e->y() ) && d->spotVisible )
+    if (e->button() == Qt::LeftButton)
     {
-       d->focus = true;
-       d->spot.setX(e->x()-d->rect.x());
-       d->spot.setY(e->y()-d->rect.y());
-       updatePreview();
+        if ( !d->focus && d->rect.contains( e->x(), e->y() ) && d->spotVisible )
+        {
+            d->focus = true;
+            d->spot.setX(e->x()-d->rect.x());
+            d->spot.setY(e->y()-d->rect.y());
+        }
+        else if (d->enableDrawMask)
+        {
+            d->lastPoint = QPoint(e->x()-d->rect.x(), e->y()-d->rect.y());
+            d->drawingMask = true;
+        }
+
+        updatePreview();
     }
 }
 
 void ImageGuideWidget::mouseReleaseEvent(QMouseEvent *e)
 {
-    if ( d->rect.contains( e->x(), e->y() ) && d->focus && d->spotVisible)
+    if (d->rect.contains(e->x(), e->y()))
     {
-       d->focus = false;
-       updatePreview();
-       d->spot.setX(e->x()-d->rect.x());
-       d->spot.setY(e->y()-d->rect.y());
+        if ( d->focus && d->spotVisible)
+        {
+            d->focus = false;
+            updatePreview();
+            d->spot.setX(e->x()-d->rect.x());
+            d->spot.setY(e->y()-d->rect.y());
 
-       DColor color;
-       QPoint point = getSpotPosition();
+            DColor color;
+            QPoint point = getSpotPosition();
 
-       if (d->renderingPreviewMode == PreviewOriginalImage)
-       {
-            color = getSpotColor(OriginalImage);
-            emit spotPositionChangedFromOriginal( color, d->spot );
-       }
-       else if (d->renderingPreviewMode == PreviewTargetImage || d->renderingPreviewMode == NoPreviewMode)
-       {
-            color = getSpotColor(TargetPreviewImage);
-            emit spotPositionChangedFromTarget( color, d->spot );
-       }
-       else if (d->renderingPreviewMode == PreviewBothImagesVert)
-       {
-            if (d->spot.x() > d->rect.width()/2)
-            {
-                color = getSpotColor(TargetPreviewImage);
-                emit spotPositionChangedFromTarget(color, QPoint(d->spot.x() - d->rect.width()/2,
-                                                   d->spot.y()));
-            }
-            else
+            if (d->renderingPreviewMode == PreviewOriginalImage)
             {
                 color = getSpotColor(OriginalImage);
                 emit spotPositionChangedFromOriginal( color, d->spot );
             }
-       }
-       else if (d->renderingPreviewMode == PreviewBothImagesVertCont)
-       {
-            if (d->spot.x() > d->rect.width()/2)
+            else if (d->renderingPreviewMode == PreviewTargetImage || d->renderingPreviewMode == NoPreviewMode)
             {
                 color = getSpotColor(TargetPreviewImage);
-                emit spotPositionChangedFromTarget( color, d->spot);
+                emit spotPositionChangedFromTarget( color, d->spot );
             }
-            else
+            else if (d->renderingPreviewMode == PreviewBothImagesVert)
             {
-                color = getSpotColor(OriginalImage);
-                emit spotPositionChangedFromOriginal( color, d->spot );
+                if (d->spot.x() > d->rect.width()/2)
+                {
+                    color = getSpotColor(TargetPreviewImage);
+                    emit spotPositionChangedFromTarget(color, QPoint(d->spot.x() - d->rect.width()/2,
+                                                    d->spot.y()));
+                }
+                else
+                {
+                    color = getSpotColor(OriginalImage);
+                    emit spotPositionChangedFromOriginal( color, d->spot );
+                }
             }
-       }
-       else if (d->renderingPreviewMode == PreviewBothImagesHorz)
-       {
-            if (d->spot.y() > d->rect.height()/2)
+            else if (d->renderingPreviewMode == PreviewBothImagesVertCont)
             {
-                color = getSpotColor(TargetPreviewImage);
-                emit spotPositionChangedFromTarget(color, QPoint(d->spot.x(),
-                                                   d->spot.y() - d->rect.height()/2 ));
+                if (d->spot.x() > d->rect.width()/2)
+                {
+                    color = getSpotColor(TargetPreviewImage);
+                    emit spotPositionChangedFromTarget( color, d->spot);
+                }
+                else
+                {
+                    color = getSpotColor(OriginalImage);
+                    emit spotPositionChangedFromOriginal( color, d->spot );
+                }
             }
-            else
+            else if (d->renderingPreviewMode == PreviewBothImagesHorz)
             {
-                color = getSpotColor(OriginalImage);
-                emit spotPositionChangedFromOriginal( color, d->spot );
+                if (d->spot.y() > d->rect.height()/2)
+                {
+                    color = getSpotColor(TargetPreviewImage);
+                    emit spotPositionChangedFromTarget(color, QPoint(d->spot.x(),
+                                                    d->spot.y() - d->rect.height()/2 ));
+                }
+                else
+                {
+                    color = getSpotColor(OriginalImage);
+                    emit spotPositionChangedFromOriginal( color, d->spot );
+                }
             }
-       }
-       else if (d->renderingPreviewMode == PreviewBothImagesHorzCont)
-       {
-            if (d->spot.y() > d->rect.height()/2)
+            else if (d->renderingPreviewMode == PreviewBothImagesHorzCont)
             {
-                color = getSpotColor(TargetPreviewImage);
-                emit spotPositionChangedFromTarget( color, d->spot);
+                if (d->spot.y() > d->rect.height()/2)
+                {
+                    color = getSpotColor(TargetPreviewImage);
+                    emit spotPositionChangedFromTarget( color, d->spot);
+                }
+                else
+                {
+                    color = getSpotColor(OriginalImage);
+                    emit spotPositionChangedFromOriginal( color, d->spot );
+                }
             }
-            else
-            {
-                color = getSpotColor(OriginalImage);
-                emit spotPositionChangedFromOriginal( color, d->spot );
-            }
-       }
+        }
+        else if (e->button() == Qt::LeftButton && d->drawingMask)
+        {
+            d->drawingMask = false;
+            updatePreview();
+        }
     }
 }
 
 void ImageGuideWidget::mouseMoveEvent(QMouseEvent *e)
 {
-    if ( d->rect.contains( e->x(), e->y() ) && !d->focus && d->spotVisible )
+    if (d->rect.contains(e->x(), e->y()))
     {
-        setCursor( Qt::CrossCursor );
-    }
-    else if ( d->rect.contains( e->x(), e->y() ) && d->focus && d->spotVisible )
-    {
-        d->spot.setX(e->x()-d->rect.x());
-        d->spot.setY(e->y()-d->rect.y());
+//         setCursor(Qt::CrossCursor);
+
+        if ( d->focus && d->spotVisible )
+        {
+            setCursor(Qt::CrossCursor);
+            d->spot.setX(e->x()-d->rect.x());
+            d->spot.setY(e->y()-d->rect.y());
+        }
+        else if ((e->buttons() & Qt::LeftButton) && d->drawingMask)
+        {
+            setCursor(Qt::CrossCursor);
+            QPoint currentPos = QPoint(e->x()-d->rect.x(), e->y()-d->rect.y());
+            drawLineTo(currentPos);
+            updatePreview();
+        }
     }
     else
     {
@@ -695,7 +773,7 @@ void ImageGuideWidget::leaveEvent(QEvent*)
 
 void ImageGuideWidget::setPoints(const QPolygon &p, bool drawLine)
 {
-    d->selectedPoints = p;
+    d->selectedPoints        = p;
     d->drawLineBetweenPoints = drawLine;
     updatePreview();
 }
@@ -703,6 +781,53 @@ void ImageGuideWidget::setPoints(const QPolygon &p, bool drawLine)
 void ImageGuideWidget::resetPoints()
 {
     d->selectedPoints.clear();
+}
+
+void ImageGuideWidget::drawLineTo(const QPoint& endPoint)
+{
+    drawLineTo(10, d->paintColor, d->lastPoint, endPoint);
+}
+
+void ImageGuideWidget::drawLineTo(int width, const QColor& color, const QPoint& start, const QPoint& end)
+{
+    QPainter painter(d->mask_pixmap);
+
+    painter.setPen(QPen(color, width, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    painter.drawLine(start, end);
+
+    int rad = (width / 2) + 2;
+
+    update(QRect(start, end).normalized().adjusted(-rad, -rad, +rad, +rad));
+    d->lastPoint = end;
+
+    painter.end();
+}
+
+void ImageGuideWidget::setPaintColor(QColor color)
+{
+    d->paintColor.setRgba(color.rgba());
+}
+
+void ImageGuideWidget::setMaskEnabled(bool enabled)
+{
+    d->enableDrawMask = enabled;
+    updatePreview();
+}
+
+QImage *ImageGuideWidget::getMask()
+{
+//     QImage tmp = d->mask_pixmap->toImage().scaled(d->iface->originalWidth(), d->iface->originalHeight());
+    QImage tmp = d->mask_pixmap->toImage();
+
+    int size = tmp.width()*tmp.height()*4;
+    uchar *data = new uchar[size];
+    for(int k=0; k<size; k++){
+        data[k] = tmp.bits()[k];}
+
+    QImage *mask = new QImage(data, tmp.width(),
+                          tmp.height(), tmp.format());
+
+    return mask;
 }
 
 }  // namespace Digikam
