@@ -60,7 +60,7 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_BINARY_DIR}/../
 
                      # external library paths
-                     ${JPEG_INCLUDE_DIS}
+                     ${JPEG_INCLUDE_DIR}
                      ${PNG_PNG_INCLUDE_DIR}
                      ${TIFF_INCLUDE_DIR}
                    )
