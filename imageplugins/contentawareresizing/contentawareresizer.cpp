@@ -232,6 +232,7 @@ void ContentAwareResizer::buildBias(QImage *mask)
             }
         }
 
+        kDebug(50003) << "Set LibLqr mask..." << endl;
         lqr_carver_bias_add(d->carver, d->bias, 10000);
     }
 }
