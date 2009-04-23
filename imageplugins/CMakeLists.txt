@@ -47,4 +47,7 @@ ADD_SUBDIRECTORY( sheartool )
 ADD_SUBDIRECTORY( superimpose )
 ADD_SUBDIRECTORY( texture )
 ADD_SUBDIRECTORY( whitebalance )
-ADD_SUBDIRECTORY( contentawareresizing )
+
+IF(GLIB2_FOUND)
+    ADD_SUBDIRECTORY( contentawareresizing )
+ENDIF(GLIB2_FOUND)

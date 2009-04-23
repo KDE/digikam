@@ -1,5 +1,3 @@
-# Liblqr needs glib2 shared library.
-MACRO_OPTIONAL_FIND_PACKAGE(GLIB2)
 
 INCLUDE_DIRECTORIES(${GLIB2_INCLUDE_DIR} lqr)
 

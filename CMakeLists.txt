@@ -48,6 +48,7 @@ MACRO_OPTIONAL_FIND_PACKAGE(Jasper)
 MACRO_OPTIONAL_FIND_PACKAGE(Kdcraw)
 MACRO_OPTIONAL_FIND_PACKAGE(Kexiv2)
 MACRO_OPTIONAL_FIND_PACKAGE(Kipi)
+MACRO_OPTIONAL_FIND_PACKAGE(GLIB2)   # For Lqr library used in ContentsAwareResizing tool.
 
 IF(ENABLE_GPHOTO2)
     MACRO_OPTIONAL_FIND_PACKAGE(Gphoto2)
@@ -248,9 +249,19 @@ IF(LENSFUN_FOUND)
 ELSE(LENSFUN_FOUND)
     MESSAGE(STATUS " liblensfun library found............ NO  (optional)")
     MESSAGE(STATUS "")
-    MESSAGE(STATUS " digiKam will be compiled without lens auto-correction image editor plugin.")
+    MESSAGE(STATUS " digiKam will be compiled without lens auto-correction image editor tool.")
     MESSAGE(STATUS "")
 ENDIF(LENSFUN_FOUND)
+
+IF(GLIB2_FOUND)
+    MESSAGE(STATUS " libglib2 library found.............. YES (optional)")
+ELSE(GLIB2_FOUND)
+    MESSAGE(STATUS " libglib2 library found.............. NO  (optional)")
+    MESSAGE(STATUS "")
+    MESSAGE(STATUS " digiKam will be compiled without liquid rescale image editor tool.")
+    MESSAGE(STATUS "")
+ENDIF(GLIB2_FOUND)
+
 
 IF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND JASPER_FOUND AND KDCRAW_FOR_DIGIKAM AND KEXIV2_FOUND AND KIPI_FOUND)
     IF(ENABLE_GPHOTO2)
