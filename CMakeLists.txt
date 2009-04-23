@@ -96,6 +96,9 @@ MACRO_BOOL_TO_01(MARBLEWIDGET_FOUND HAVE_MARBLEWIDGET)
 MACRO_OPTIONAL_FIND_PACKAGE(LensFun)
 MACRO_BOOL_TO_01(LENSFUN_FOUND HAVE_LENSFUN)
 
+# Check GLib2 library for liquid rescale tool.
+MACRO_OPTIONAL_FIND_PACKAGE(GLIB2)
+
 # Set config file depending of optional depencies
 
 CONFIGURE_FILE(config-digikam.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-digikam.h)
