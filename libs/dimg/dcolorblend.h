@@ -6,7 +6,7 @@
  * Date        : 2006-03-01
  * Description : DColor methods for blending
  *
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,9 +21,9 @@
  *
  * ============================================================ */
 
-// Inspired by DirectFB, src/gfx/generic/generic.c:
-
 /*
+   Inspired by DirectFB, src/gfx/generic/generic.c:
+
    (c) Copyright 2000-2002  convergence integrated media GmbH <curanz@convergence.de>
    (c) Copyright 2002-2005  convergence GmbH.
 
@@ -32,9 +32,8 @@
    Written by Denis Oliver Kropp <dok@directfb.org>,
               Andreas Hundt <andi@fischlustig.de>,
               Sven Neumann <neo@directfb.org>,
-              Ville Syrjälä <syrjala@sci.fi> and
+              Ville Syrjala <syrjala@sci.fi> and
               Claudio Ciccani <klan@users.sf.net>.
-
 */
 
 #ifndef DCOLORBLEND_H
@@ -167,10 +166,18 @@ inline void DColor::blendClamp16()
 
 inline void DColor::blendClamp8()
 {
-    if (0xFF00 & red())   setRed(255);
-    if (0xFF00 & green()) setGreen(255);
-    if (0xFF00 & blue())  setBlue(255);
-    if (0xFF00 & alpha()) setAlpha(255);
+    if (0xFFFFFF00 & red())   setRed(255);
+    if (0xFFFFFF00 & green()) setGreen(255);
+    if (0xFFFFFF00 & blue())  setBlue(255);
+    if (0xFFFFFF00 & alpha()) setAlpha(255);
+}
+
+inline void DColor::multiply(float factor)
+{
+	setRed(red() * factor);
+	setGreen(green() * factor);
+	setBlue(blue() * factor);
+	setAlpha(alpha() * factor);
 }
 
 } // namespace Digikam

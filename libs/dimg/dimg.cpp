@@ -895,7 +895,7 @@ QString DImg::embeddedText(const QString& key) const
 
 DColor DImg::getPixelColor(uint x, uint y) const
 {
-    if (isNull() || x > width() || y > height())
+    if (isNull() || x >= width() || y >= height())
     {
         kDebug(50003) << "DImg::getPixelColor() : wrong pixel position!" << endl;
         return DColor();
@@ -906,7 +906,223 @@ DColor DImg::getPixelColor(uint x, uint y) const
     return( DColor(data, sixteenBit()) );
 }
 
-void DImg::setPixelColor(uint x, uint y, DColor color)
+void DImg::prepareSubPixelAccess()
+{
+    if (m_priv->lanczos_func)
+        return;
+
+    /* Precompute the Lanczos kernel */
+    LANCZOS_DATA_TYPE *lanczos_func = new LANCZOS_DATA_TYPE[LANCZOS_SUPPORT * LANCZOS_SUPPORT * LANCZOS_TABLE_RES];
+    for (int i = 0; i < LANCZOS_SUPPORT * LANCZOS_SUPPORT * LANCZOS_TABLE_RES; i++)
+    {
+        if (i == 0)
+        {
+            lanczos_func [i] = LANCZOS_DATA_ONE;
+        }
+        else
+        {
+            float d = sqrt (((float)i) / LANCZOS_TABLE_RES);
+            lanczos_func [i] = (LANCZOS_DATA_TYPE)((LANCZOS_DATA_ONE * LANCZOS_SUPPORT *
+                               sin (M_PI * d) * sin ((M_PI / LANCZOS_SUPPORT) * d)) /
+                               (M_PI * M_PI * d * d));
+        }
+    }
+
+    m_priv->lanczos_func = lanczos_func;
+}
+
+#ifdef LANCZOS_DATA_FLOAT
+
+static inline int normalizeAndClamp(float norm, int sum, int max)
+{
+	int r = 0;
+
+	if (norm != 0.0)
+		r = sum / norm;
+	if (r < 0)
+		r = 0;
+	else if (r > max)
+		r = max;
+	return r;
+}
+
+#else /* LANCZOS_DATA_FLOAT */
+
+static inline int normalizeAndClamp(int norm, int sum, int max)
+{
+	int r = 0;
+
+	if (norm != 0)
+		r = sum / norm;
+	if (r < 0)
+		r = 0;
+	else if (r > max)
+		r = max;
+	return r;
+}
+
+#endif /* LANCZOS_DATA_FLOAT */
+
+DColor DImg::getSubPixelColor(float x, float y) const
+{
+    if (isNull() || x >= width() || y >= height())
+    {
+        kDebug(50003) << "DImg::getPixelColor() : wrong pixel position!" << endl;
+        return DColor();
+    }
+
+    const LANCZOS_DATA_TYPE *lanczos_func = m_priv->lanczos_func;
+    if (lanczos_func == 0)
+        return DColor();
+
+    Digikam::DColor col(0, 0, 0, 0xFFFF, sixteenBit());
+
+#ifdef LANCZOS_DATA_FLOAT
+
+    float xs = ::ceilf  (x) - LANCZOS_SUPPORT;
+    float xe = ::floorf (x) + LANCZOS_SUPPORT;
+    float ys = ::ceilf  (y) - LANCZOS_SUPPORT;
+    float ye = ::floorf (y) + LANCZOS_SUPPORT;
+    if (xs >= 0 && ys >= 0 && xe < width() && ye < height())
+    {
+        float norm = 0.0;
+        float sumR = 0.0;
+        float sumG = 0.0;
+        float sumB = 0.0;
+        float _dx  = x - xs;
+        float dy   = y - ys;
+
+        for (; ys <= ye; ys += 1.0, dy -= 1.0)
+        {
+            float xc, dx = _dx;
+            for (xc = xs; xc <= xe; xc += 1.0, dx -= 1.0)
+            {
+                uchar *data = bits() + (int)(xs*bytesDepth()) + (int)(width()*ys*bytesDepth());
+                DColor src = DColor(data, sixteenBit());
+
+                float d = dx * dx + dy * dy;
+                if (d >= LANCZOS_SUPPORT * LANCZOS_SUPPORT)
+                    continue;
+
+                d    = lanczos_func [(int)(d * LANCZOS_TABLE_RES)];
+                norm += d;
+                sumR += d * src.red();
+                sumG += d * src.green();
+                sumB += d * src.blue();
+            }
+        }
+
+        int max = sixteenBit()? 65535 : 255;
+        col.setRed(normalizeAndClamp(norm, sumR, max));
+        col.setGreen(normalizeAndClamp(norm, sumG, max));
+        col.setBlue(normalizeAndClamp(norm, sumB, max));
+    }
+
+#else /* LANCZOS_DATA_FLOAT */
+
+    /* Do it in integer arithmetic, it's faster */
+    int xx   = (int)x;
+    int yy   = (int)y;
+    int xs   = xx + 1 - LANCZOS_SUPPORT;
+    int xe   = xx     + LANCZOS_SUPPORT;
+    int ys   = yy + 1 - LANCZOS_SUPPORT;
+    int ye   = yy     + LANCZOS_SUPPORT;
+    int norm = 0;
+    int sumR = 0;
+    int sumG = 0;
+    int sumB = 0;
+    int _dx  = (int)(x * 4096.0) - (xs << 12);
+    int dy   = (int)(y * 4096.0) - (ys << 12);
+
+    for (; ys <= ye; ys++, dy -= 4096)
+    {
+        int xc, dx = _dx;
+        for (xc = xs; xc <= xe; xc++, dx -= 4096)
+        {
+            DColor src(0, 0, 0, 0xFFFF, sixteenBit());
+            if (xc >= 0 && ys >= 0 && xc < (int)width() && ys < (int)height())
+            {
+                uchar *data = bits() + xc*bytesDepth() + width()*ys*bytesDepth();
+                src.setColor(data, sixteenBit());
+            }
+
+            int d = (dx * dx + dy * dy) >> 12;
+            if (d >= 4096 * LANCZOS_SUPPORT * LANCZOS_SUPPORT)
+                continue;
+
+            d    = lanczos_func [(d * LANCZOS_TABLE_RES) >> 12];
+            norm += d;
+            sumR += d * src.red();
+            sumG += d * src.green();
+            sumB += d * src.blue();
+        }
+    }
+
+    int max = sixteenBit()? 65535 : 255;
+    col.setRed(normalizeAndClamp(norm, sumR, max));
+    col.setGreen(normalizeAndClamp(norm, sumG, max));
+    col.setBlue(normalizeAndClamp(norm, sumB, max));
+
+#endif /* LANCZOS_DATA_FLOAT */
+
+    return col;
+}
+
+DColor DImg::getSubPixelColorFast(float x, float y) const
+{
+    int xx    = (int)x;
+    int yy    = (int)y;
+    float d_x = x - (int)x;
+    float d_y = y - (int)y;
+    uchar *data;
+
+    DColor d00, d01, d10, d11;
+    DColor col;
+
+    data = bits() + xx*bytesDepth() + yy*width()*bytesDepth();
+    d00.setColor(data, sixteenBit());
+    if ((xx+1) < (int)width())
+    {
+        data = bits() + (xx+1)*bytesDepth() + yy*width()*bytesDepth();
+        d10.setColor(data, sixteenBit());
+    }
+    if ((yy+1) < (int)height())
+    {
+        data = bits() + xx*bytesDepth() + (yy+1)*width()*bytesDepth();
+        d01.setColor(data, sixteenBit());
+    }
+    if ((xx+1) < (int)width() && (yy+1) < (int)height())
+    {
+        data = bits() + (xx+1)*bytesDepth() + (yy+1)*width()*bytesDepth();
+        d11.setColor(data, sixteenBit());
+    }
+
+    d00.multiply(1.0-d_x);
+    d00.multiply(1.0-d_y);
+
+    d10.multiply(d_x);
+    d10.multiply(1.0-d_y);
+
+    d01.multiply(1.0-d_x);
+    d01.multiply(d_y);
+
+    d11.multiply(d_x);
+    d11.multiply(d_y);
+
+    col.blendAdd(d00);
+    col.blendAdd(d10);
+    col.blendAdd(d01);
+    col.blendAdd(d11);
+
+    if (sixteenBit())
+        col.blendClamp16();
+    else
+        col.blendClamp8();
+
+    return col;
+}
+
+void DImg::setPixelColor(uint x, uint y, const DColor& color)
 {
     if (isNull() || x > width() || y > height())
     {

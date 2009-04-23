@@ -18,7 +18,6 @@
  *
  * ============================================================ */
 
-
 #include "klensfun.h"
 #include "klensfun.moc"
 
@@ -42,7 +41,6 @@
 
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>
-
 
 Q_DECLARE_METATYPE( DigikamAutoCorrectionImagesPlugin::KLFDeviceSelector::DevicePtr )
 Q_DECLARE_METATYPE( DigikamAutoCorrectionImagesPlugin::KLFDeviceSelector::LensPtr )
@@ -531,6 +529,7 @@ void KLensFunFilter::filterImage()
 
     if ( m_klf->m_filterCCA )
     {
+        m_orgImage.prepareSubPixelAccess(); // init lanczos kernel
         for (unsigned int y=0; !m_cancel && (y < m_orgImage.height()); ++y)
         {
             if (m_lfModifier->ApplySubpixelDistortion(0.0, y, m_orgImage.width(), 1, pos))
@@ -538,11 +537,11 @@ void KLensFunFilter::filterImage()
                 float *src = pos;
                 for (unsigned x = 0; !m_cancel && (x < m_destImage.width()); ++x)
                 {
-                    Digikam::DColor destPixel;
+                    Digikam::DColor destPixel(0, 0, 0, 0xFFFF, m_destImage.sixteenBit());
 
-                    destPixel.setRed  (m_orgImage.getPixelColor(src[0], src[1]).red()   );
-                    destPixel.setGreen(m_orgImage.getPixelColor(src[2], src[3]).green() );
-                    destPixel.setBlue (m_orgImage.getPixelColor(src[4], src[5]).blue()  );
+                    destPixel.setRed  (m_orgImage.getSubPixelColorFast(src[0], src[1]).red()   );
+                    destPixel.setGreen(m_orgImage.getSubPixelColorFast(src[2], src[3]).green() );
+                    destPixel.setBlue (m_orgImage.getSubPixelColorFast(src[4], src[5]).blue()  );
 
                     m_destImage.setPixelColor(x, y, destPixel);
                     src += 2 * 3;
@@ -602,6 +601,7 @@ void KLensFunFilter::filterImage()
 
         // we need a deep copy first
         Digikam::DImg tempImage(m_destImage.width(), m_destImage.height(), m_destImage.sixteenBit(), m_destImage.hasAlpha());
+        m_destImage.prepareSubPixelAccess(); // init lanczos kernel
 
         for (unsigned long y=0; !m_cancel && (y < tempImage.height()); ++y)
         {
@@ -612,7 +612,7 @@ void KLensFunFilter::filterImage()
                 {
                     //qDebug (" ZZ %f %f %i %i", src[0], src[1], (int)src[0], (int)src[1]);
 
-                    tempImage.setPixelColor(x, y, m_destImage.getPixelColor((int)src[0], (int)src[1]));
+                    tempImage.setPixelColor(x, y, m_destImage.getSubPixelColor(src[0], src[1]));
                     src += 2;
                 }
             }

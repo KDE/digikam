@@ -7,7 +7,7 @@
  * Description : DImg private data members
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,6 +37,30 @@
 #include "digikam_export.h"
 #include "dshareddata.h"
 
+/** Lanczos kernel is precomputed in a table with this resolution
+    The value below seems to be enough for HQ upscaling up to eight times
+ */
+#define LANCZOS_TABLE_RES  256
+
+/** A support of 3 gives an overall sharper looking image, but
+    it is a) slower b) gives more sharpening artefacts
+ */
+#define LANCZOS_SUPPORT    2
+
+/** Define this to use a floating-point implementation of Lanczos interpolation.
+    The integer implementation is a little bit less accurate, but MUCH faster
+    (even on machines with FPU - ~2.5 times faster on Core2); besides, it will
+    run a hell lot faster on computers without a FPU (e.g. PDAs).
+ */
+//#define LANCZOS_DATA_FLOAT
+#ifdef LANCZOS_DATA_FLOAT
+#define LANCZOS_DATA_TYPE float
+#define LANCZOS_DATA_ONE 1.0
+#else
+#define LANCZOS_DATA_TYPE int
+#define LANCZOS_DATA_ONE 4096
+#endif
+
 namespace Digikam
 {
 
@@ -50,6 +74,7 @@ public:
         width             = 0;
         height            = 0;
         data              = 0;
+        lanczos_func	  = 0;
         alpha             = false;
         sixteenBit        = false;
         isReadOnly        = false;
@@ -58,6 +83,7 @@ public:
     ~DImgPrivate()
     {
         delete [] data;
+        delete [] lanczos_func;
     }
 
     bool                    null;
@@ -69,6 +95,7 @@ public:
     unsigned int            height;
 
     unsigned char          *data;
+    LANCZOS_DATA_TYPE	   *lanczos_func;
 
     QMap<int, QByteArray>   metaData;
     QMap<QString, QVariant> attributes;

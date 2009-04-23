@@ -140,6 +140,7 @@ public:
     inline void blendAdd(const DColor &src);
     inline void blendClamp8();
     inline void blendClamp16();
+    inline void multiply(float factor);
 };
 
 }  // namespace Digikam
