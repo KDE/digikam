@@ -7,7 +7,7 @@
  * Description : Shared data with reference counting and explicit sharing
  *
  * Copyright (C) 1992-2006 Trolltech ASA.
- * Copyright (C) 2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This file may be used under the terms of the GNU General Public
  * License version 2.0 as published by the Free Software Foundation
@@ -70,7 +70,9 @@ private:
 
 template <class T> class DSharedDataPointer
 {
+
 public:
+
     /**
      * Use this class to store pointers to a shared data object, which
      * inherits DSharedData.
@@ -111,14 +113,17 @@ public:
     inline ~DSharedDataPointer()
         { if (d && !d->ref.deref()) delete d; }
 
-    inline DSharedDataPointer(const DSharedDataPointer<T> &o) : d(o.d) { if (d) d->ref.ref(); }
+    inline DSharedDataPointer(const DSharedDataPointer<T> &o) : d(o.d)
+        { if (d) d->ref.ref(); }
 
-    inline DSharedDataPointer<T> & operator=(const DSharedDataPointer<T> &o) {
+    inline DSharedDataPointer<T> & operator=(const DSharedDataPointer<T> &o)
+    {
         delete assign(o);
         return *this;
     }
 
-    inline DSharedDataPointer &operator=(T *o) {
+    inline DSharedDataPointer &operator=(T *o)
+    {
         delete assign(o);
         return *this;
     }
@@ -134,7 +139,8 @@ public:
      */
     inline T *assign(const DSharedDataPointer<T> &o)
     {
-        if (o.d != d) {
+        if (o.d != d)
+        {
             // reference new value
             if (o.d)
                 o.d->ref.ref();
@@ -152,7 +158,8 @@ public:
 
     inline T *assign(T *o)
     {
-        if (o != d) {
+        if (o != d)
+        {
             // reference new value
             if (o)
                 o->ref.ref();
@@ -179,10 +186,10 @@ public:
     inline bool operator!() const { return !d; }
 
 private:
-    T *d;
+
+    T* d;
 };
 
 }  // namespace Digikam
 
 #endif // DSHAREDDATA_H
-

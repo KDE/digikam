@@ -6,7 +6,7 @@
  * Date        : 2006-03-02
  * Description : DColor methods for composing
  *
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,12 +38,7 @@
 
 */
 
-
 #include "dcolorcomposer.h"
-
-// C++ includes
-
-#include <cmath>
 
 namespace Digikam
 {

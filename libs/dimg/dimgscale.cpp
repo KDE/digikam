@@ -10,7 +10,7 @@
  *               section of a image. Added 16bit image support
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Ported to C++/QImage by Daniel M. Duley
  * Following modification are (C) Daniel M. Duley
@@ -2124,4 +2124,3 @@ int sow);             // src scanline width
 */
 
 }  // namespace Digikam
-
