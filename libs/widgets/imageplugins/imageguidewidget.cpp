@@ -803,7 +803,7 @@ void ImageGuideWidget::drawLineTo(int width, const QColor& color, const QPoint& 
     painter.end();
 }
 
-void ImageGuideWidget::setPaintColor(QColor color)
+void ImageGuideWidget::setPaintColor(const QColor& color)
 {
     d->paintColor.setRgba(color.rgba());
 }

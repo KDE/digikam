@@ -100,7 +100,7 @@ public:
     void   setPoints(const QPolygon& p, bool drawLine=false);
     void   resetPoints();
 
-    void   setPaintColor(QColor color);
+    void   setPaintColor(const QColor& color);
     void   setMaskEnabled(bool enabled);
 
     QImage *getMask();
