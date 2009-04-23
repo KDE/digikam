@@ -243,7 +243,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     d->maskGroup->addButton(d->redMaskTool, ContentAwareResizeToolPriv::redMask);
 
     QLabel *labeGreenMaskTool = new QLabel(i18n("Preservation weight mask:"), d->gboxSettings->plainPage());
-    d->greenMaskTool        = new QToolButton(d->gboxSettings->plainPage());
+    d->greenMaskTool          = new QToolButton(d->gboxSettings->plainPage());
     d->greenMaskTool->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/indicator-green.png")));
     d->greenMaskTool->setCheckable(true);
     d->greenMaskTool->setToolTip(i18n("Draw a preservation mask"));
@@ -547,9 +547,9 @@ void ContentAwareResizeTool::prepareEffect()
 
     if(d->mixedRescaleInput->value()<100.0) // mixed rescale
     {
-        double stdRescaleP   = (100.0 - d->mixedRescaleInput->value()) / 100.0;
-        int diff_w           = stdRescaleP * (w - new_w);
-        int diff_h           = stdRescaleP * (h - new_h);
+        double stdRescaleP = (100.0 - d->mixedRescaleInput->value()) / 100.0;
+        int diff_w         = stdRescaleP * (w - new_w);
+        int diff_h         = stdRescaleP * (h - new_h);
 
         imTemp.resize(imTemp.width() - diff_w, imTemp.height() - diff_h);
     }
@@ -591,12 +591,12 @@ void ContentAwareResizeTool::prepareFinal()
 
     if(d->mixedRescaleInput->value() < 100.0) // mixed rescale
     {
-        double stdRescaleP   = (100.0 - d->mixedRescaleInput->value()) / 100.0;
-        int diff_w           = stdRescaleP * (iface.originalWidth() - d->wInput->value());
-        int diff_h           = stdRescaleP * (iface.originalHeight() - d->hInput->value());
-        DImg image           = iface.getOriginalImg()->smoothScale(iface.originalWidth() - diff_w,
-                                                                   iface.originalHeight() - diff_h,
-                                                                   Qt::IgnoreAspectRatio);
+        double stdRescaleP = (100.0 - d->mixedRescaleInput->value()) / 100.0;
+        int diff_w         = stdRescaleP * (iface.originalWidth() - d->wInput->value());
+        int diff_h         = stdRescaleP * (iface.originalHeight() - d->hInput->value());
+        DImg image         = iface.getOriginalImg()->smoothScale(iface.originalWidth() - diff_w,
+                                                                 iface.originalHeight() - diff_h,
+                                                                 Qt::IgnoreAspectRatio);
 
         if(d->weightMaskBox->isChecked())
         {
@@ -684,7 +684,7 @@ void ContentAwareResizeTool::blockWidgetSignals(bool b)
 
 void ContentAwareResizeTool::slotMaskColorChanged(int type)
 {
-    if (type ==  ContentAwareResizeToolPriv::redMask)
+    if (type == ContentAwareResizeToolPriv::redMask)
         d->previewWidget->setPaintColor(QColor(255, 0, 0, 255));
     else // green mask
         d->previewWidget->setPaintColor(QColor(0, 255, 0, 255));
