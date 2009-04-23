@@ -48,7 +48,7 @@ extern "C"
 
 // Local includes
 
-#include "dimgprivate.h"
+#include "dimg_p.h"
 #include "dimg.h"
 
 typedef uint64_t ullong;

@@ -36,7 +36,7 @@
 
 // Local includes
 
-#include "dimgprivate.h"
+#include "dimg_p.h"
 #include "dmetadata.h"
 #include "dimgloaderobserver.h"
 
