@@ -103,11 +103,11 @@ public:
     void   setPaintColor(const QColor& color);
     void   setMaskEnabled(bool enabled);
 
-    QImage *getMask();
+    QImage getMask() const;
 
 public Q_SLOTS:
 
-    void slotChangeGuideColor(const QColor &color);
+    void slotChangeGuideColor(const QColor& color);
     void slotChangeGuideSize(int size);
     void slotChangeRenderingPreviewMode(int mode);
     void slotToggleUnderExposure(bool);

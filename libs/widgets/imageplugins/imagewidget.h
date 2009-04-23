@@ -78,25 +78,25 @@ public:
     void   setPoints(const QPolygon &p, bool drawLine = false);
     void   resetPoints();
 
-    void   setPaintColor(QColor color);
+    void   setPaintColor(const QColor& color);
     void   setMaskEnabled(bool enabled);
 
-    QImage *getMask();
+    QImage getMask() const;
 
 public Q_SLOTS:
 
-    void slotChangeGuideColor(const QColor &color);
+    void slotChangeGuideColor(const QColor& color);
     void slotChangeGuideSize(int size);
 
 Q_SIGNALS:
 
-    void spotPositionChangedFromOriginal( const Digikam::DColor &color, const QPoint &position );
-    void spotPositionChangedFromTarget( const Digikam::DColor &color, const QPoint &position );
+    void spotPositionChangedFromOriginal(const Digikam::DColor& color, const QPoint& position);
+    void spotPositionChangedFromTarget(const Digikam::DColor& color, const QPoint& position);
     void signalResized();
 
 private Q_SLOTS:
 
-    void slotUpdateSpotInfo(const Digikam::DColor &col, const QPoint &point);
+    void slotUpdateSpotInfo(const Digikam::DColor& col, const QPoint& point);
 
 private:
 

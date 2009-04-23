@@ -78,7 +78,7 @@ public:
 
 ContentAwareResizer::ContentAwareResizer(DImg *orgImage, uint width, uint height,
                                          int step, double rigidity, LqrGradFuncType func,
-                                         LqrResizeOrder resize_order, QImage *mask, QObject *parent)
+                                         LqrResizeOrder resize_order, const QImage& mask, QObject *parent)
                    : Digikam::DImgThreadedFilter(orgImage, parent, "ContentAwareResizer"),
                      d(new ContentAwareResizerPriv)
 {
@@ -127,7 +127,7 @@ ContentAwareResizer::ContentAwareResizer(DImg *orgImage, uint width, uint height
             lqr_carver_set_resize_order(d->carver, LQR_RES_ORDER_VERT);
 
         // Set a bias if any mask
-        if(mask)
+        if(!mask.isNull())
             buildBias(mask);
     }
 }
@@ -202,11 +202,11 @@ void ContentAwareResizer::cancelFilter()
     DImgThreadedFilter::cancelFilter();
 }
 
-void ContentAwareResizer::buildBias(QImage *mask)
+void ContentAwareResizer::buildBias(const QImage& mask)
 {
     QColor pixColor;
-    int r,g,b,a;
-    int biasSize = mask->width()*mask->height();
+    int    r,g,b,a;
+    int    biasSize = mask.width() * mask.height();
 
     d->bias = new gdouble[biasSize];
 
@@ -217,18 +217,18 @@ void ContentAwareResizer::buildBias(QImage *mask)
             d->bias[k] = 0.0;
 
         // Build bias table
-        for(int x=0; x<mask->width(); x++)
+        for(int x=0; x<mask.width(); x++)
         {
-            for(int y=0; y<mask->height(); y++)
+            for(int y=0; y<mask.height(); y++)
             {
-                pixColor = QColor::fromRgba(mask->pixel(x,y));
+                pixColor = QColor::fromRgba(mask.pixel(x,y));
                 pixColor.getRgb(&r, &g, &b, &a);
 
                 // There we have to calculate the correct k of d->bias
                 if(g == 255)
-                    d->bias[(mask->height()-1-y)*mask->width() + x] = 10000.0;
+                    d->bias[(mask.height()-1-y)*mask.width() + x] = 10000.0;
                 else if(r == 255)
-                    d->bias[(mask->height()-1-y)*mask->width() + x] = -10000.0;
+                    d->bias[(mask.height()-1-y)*mask.width() + x] = -10000.0;
             }
         }
 

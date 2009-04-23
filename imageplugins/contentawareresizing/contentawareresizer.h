@@ -25,10 +25,6 @@
 #ifndef CONTENT_AWARE_RESIZER_H
 #define CONTENT_AWARE_RESIZER_H
 
-// Local includes
-
-#include "dimgthreadedfilter.h"
-
 // Qt includes
 
 #include <QImage>
@@ -36,6 +32,10 @@
 // Liquid rescale library include
 
 #include "lqr.h"
+
+// Local includes
+
+#include "dimgthreadedfilter.h"
 
 using namespace Digikam;
 
@@ -51,7 +51,7 @@ public:
 
     ContentAwareResizer(DImg *orgImage, uint width, uint height,
                         int step=1, double rigidity=0.0, LqrGradFuncType func=LQR_GF_XABS,
-                        LqrResizeOrder resize_order=LQR_RES_ORDER_HOR, QImage *mask=0,
+                        LqrResizeOrder resize_order=LQR_RES_ORDER_HOR, const QImage& mask=QImage(),
                         QObject *parent=0);
     ~ContentAwareResizer();
 
@@ -62,7 +62,7 @@ private:
     void cancelFilter();
     void filterImage();
 
-    void buildBias(QImage *mask);
+    void buildBias(const QImage& mask);
 
 private:
 

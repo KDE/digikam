@@ -280,7 +280,7 @@ void ImageWidget::updatePreview()
     d->previewWidget->updatePreview();
 }
 
-void ImageWidget::slotChangeGuideColor(const QColor &color)
+void ImageWidget::slotChangeGuideColor(const QColor& color)
 {
     d->previewWidget->slotChangeGuideColor(color);
 }
@@ -323,7 +323,7 @@ void ImageWidget::setRenderingPreviewMode(int mode)
     d->previewWidget->slotChangeRenderingPreviewMode(mode);
 }
 
-void ImageWidget::slotUpdateSpotInfo(const Digikam::DColor &col, const QPoint &point)
+void ImageWidget::slotUpdateSpotInfo(const Digikam::DColor& col, const QPoint& point)
 {
     DColor color = col;
     d->spotInfoLabel->setText(i18n("(%1,%2) RGBA:%3,%4,%5,%6",
@@ -356,7 +356,7 @@ void ImageWidget::writeSettings()
     config->sync();
 }
 
-void ImageWidget::setPoints(const QPolygon &p, bool drawLine)
+void ImageWidget::setPoints(const QPolygon& p, bool drawLine)
 {
     d->previewWidget->setPoints(p, drawLine);
 }
@@ -366,7 +366,7 @@ void ImageWidget::resetPoints()
     d->previewWidget->resetPoints();
 }
 
-void ImageWidget::setPaintColor(QColor color)
+void ImageWidget::setPaintColor(const QColor& color)
 {
     d->previewWidget->setPaintColor(color);
 }
@@ -376,7 +376,7 @@ void ImageWidget::setMaskEnabled(bool enabled)
     d->previewWidget->setMaskEnabled(enabled);
 }
 
-QImage *ImageWidget::getMask()
+QImage ImageWidget::getMask() const
 {
     return d->previewWidget->getMask();
 }

@@ -554,12 +554,16 @@ void ContentAwareResizeTool::prepareEffect()
         imTemp.resize(imTemp.width() - diff_w, imTemp.height() - diff_h);
     }
 
+    QImage mask;
+    if(d->weightMaskBox->isChecked())
+        mask = d->previewWidget->getMask();
+
     setFilter(dynamic_cast<DImgThreadedFilter*>(
               new ContentAwareResizer(&imTemp, new_w, new_h,
                                       d->stepInput->value(), d->rigidityInput->value(),
                                       (LqrGradFuncType)d->funcInput->currentIndex(),
                                       (LqrResizeOrder)d->resizeOrderInput->currentIndex(),
-                                      0, this)));
+                                      mask, this)));
 }
 
 void ContentAwareResizeTool::prepareFinal()
@@ -583,9 +587,9 @@ void ContentAwareResizeTool::prepareFinal()
     d->greenMaskTool->setEnabled(false);
 
     ImageIface iface(0, 0);
+    QImage mask;
 
-
-    if(d->mixedRescaleInput->value()<100.0) // mixed rescale
+    if(d->mixedRescaleInput->value() < 100.0) // mixed rescale
     {
         double stdRescaleP   = (100.0 - d->mixedRescaleInput->value()) / 100.0;
         int diff_w           = stdRescaleP * (iface.originalWidth() - d->wInput->value());
@@ -596,50 +600,28 @@ void ContentAwareResizeTool::prepareFinal()
 
         if(d->weightMaskBox->isChecked())
         {
-            QImage tmp   = d->previewWidget->getMask()->scaled(iface.originalWidth() - diff_w,
-                                                               iface.originalHeight() - diff_h);
-            QImage *mask = new QImage(tmp.bits(), tmp.width(), tmp.height(), tmp.format());
- 
-            setFilter(dynamic_cast<DImgThreadedFilter*>(
-                      new ContentAwareResizer(&image, d->wInput->value(), d->hInput->value(),
-                                              d->stepInput->value(), d->rigidityInput->value(),
-                                              (LqrGradFuncType)d->funcInput->currentIndex(),
-                                              (LqrResizeOrder)d->resizeOrderInput->currentIndex(),
-                                              mask, this)));
+            mask = d->previewWidget->getMask().scaled(iface.originalWidth()  - diff_w,
+                                                      iface.originalHeight() - diff_h);
         }
-        else
-        {
-            setFilter(dynamic_cast<DImgThreadedFilter*>(
-                      new ContentAwareResizer(&image, d->wInput->value(), d->hInput->value(),
-                                              d->stepInput->value(), d->rigidityInput->value(),
-                                              (LqrGradFuncType)d->funcInput->currentIndex(),
-                                              (LqrResizeOrder)d->resizeOrderInput->currentIndex(),
-                                              0, this)));
-        }
+
+        setFilter(dynamic_cast<DImgThreadedFilter*>(
+                    new ContentAwareResizer(&image, d->wInput->value(), d->hInput->value(),
+                                            d->stepInput->value(), d->rigidityInput->value(),
+                                            (LqrGradFuncType)d->funcInput->currentIndex(),
+                                            (LqrResizeOrder)d->resizeOrderInput->currentIndex(),
+                                            mask, this)));
     }
     else
     {
         if(d->weightMaskBox->isChecked())
-        {
-            QImage tmp   = d->previewWidget->getMask()->scaled(iface.originalWidth(), iface.originalHeight());
-            QImage *mask = new QImage(tmp.bits(), tmp.width(), tmp.height(), tmp.format());
+            mask = d->previewWidget->getMask().scaled(iface.originalWidth(), iface.originalHeight());
 
-            setFilter(dynamic_cast<DImgThreadedFilter*>(
-                      new ContentAwareResizer(iface.getOriginalImg(), d->wInput->value(), d->hInput->value(),
-                                              d->stepInput->value(), d->rigidityInput->value(),
-                                              (LqrGradFuncType)d->funcInput->currentIndex(),
-                                              (LqrResizeOrder)d->resizeOrderInput->currentIndex(),
-                                              mask, this)));
-        }
-        else
-        {
-            setFilter(dynamic_cast<DImgThreadedFilter*>(
-                      new ContentAwareResizer(iface.getOriginalImg(), d->wInput->value(), d->hInput->value(),
-                                              d->stepInput->value(), d->rigidityInput->value(),
-                                              (LqrGradFuncType)d->funcInput->currentIndex(),
-                                              (LqrResizeOrder)d->resizeOrderInput->currentIndex(),
-                                              0, this)));
-        }
+        setFilter(dynamic_cast<DImgThreadedFilter*>(
+                    new ContentAwareResizer(iface.getOriginalImg(), d->wInput->value(), d->hInput->value(),
+                                            d->stepInput->value(), d->rigidityInput->value(),
+                                            (LqrGradFuncType)d->funcInput->currentIndex(),
+                                            (LqrResizeOrder)d->resizeOrderInput->currentIndex(),
+                                            mask, this)));
     }
 }
 

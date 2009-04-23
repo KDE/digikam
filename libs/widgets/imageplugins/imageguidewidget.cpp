@@ -814,19 +814,9 @@ void ImageGuideWidget::setMaskEnabled(bool enabled)
     updatePreview();
 }
 
-QImage *ImageGuideWidget::getMask()
+QImage ImageGuideWidget::getMask() const
 {
-//     QImage tmp = d->mask_pixmap->toImage().scaled(d->iface->originalWidth(), d->iface->originalHeight());
-    QImage tmp = d->mask_pixmap->toImage();
-
-    int size = tmp.width()*tmp.height()*4;
-    uchar *data = new uchar[size];
-    for(int k=0; k<size; k++){
-        data[k] = tmp.bits()[k];}
-
-    QImage *mask = new QImage(data, tmp.width(),
-                          tmp.height(), tmp.format());
-
+    QImage mask = d->mask_pixmap->toImage();
     return mask;
 }
 
