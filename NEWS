@@ -49,5 +49,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 037 ==> 188755 : Strange behaviour on selection.
 038 ==> 185884 : Empty view after clicking the left thumbnail image in Image Editor filter view.
 039 ==> 188062 : Synchronize Images with Database does not save Copyright, Credit, Source, By-line, By-line Title in IPTC.
-040 ==> 
+040 ==> 186823 : Several bugs in lens defect auto-correction plugin.
+041 ==> 
 
