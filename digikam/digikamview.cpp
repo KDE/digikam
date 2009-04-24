@@ -61,40 +61,41 @@
 
 // Local includes
 
-#include "dmetadata.h"
-#include "albummanager.h"
+#include "config-digikam.h"
 #include "album.h"
-#include "albummodel.h"
-#include "albumwidgetstack.h"
 #include "albumfolderview.h"
-#include "albumiconview.h"
-#include "albumiconitem.h"
-#include "albumsettings.h"
 #include "albumhistory.h"
+#include "albumiconitem.h"
+#include "albumiconview.h"
+#include "albummanager.h"
+#include "albummodel.h"
+#include "albumsettings.h"
+#include "albumwidgetstack.h"
 #include "batchsyncmetadata.h"
 #include "collectionmanager.h"
-#include "slideshow.h"
-#include "sidebar.h"
-#include "imagepropertiessidebardb.h"
+#include "datefolderview.h"
+#include "digikamapp.h"
+#include "dio.h"
+#include "dmetadata.h"
+#include "fuzzysearchfolderview.h"
+#include "fuzzysearchview.h"
+#include "gpssearchfolderview.h"
+#include "gpssearchview.h"
 #include "imageinfoalbumsjob.h"
 #include "imagepreviewview.h"
-#include "datefolderview.h"
-#include "tagfolderview.h"
-#include "fuzzysearchview.h"
-#include "fuzzysearchfolderview.h"
-#include "gpssearchview.h"
-#include "gpssearchfolderview.h"
+#include "imagepropertiessidebardb.h"
+#include "queuemgrwindow.h"
 #include "searchfolderview.h"
 #include "searchtabheader.h"
+#include "sidebar.h"
+#include "slideshow.h"
 #include "statusprogressbar.h"
 #include "tagfilterview.h"
+#include "tagfolderview.h"
 #include "themeengine.h"
 #include "thumbnailsize.h"
-#include "timelineview.h"
 #include "timelinefolderview.h"
-#include "dio.h"
-#include "digikamapp.h"
-#include "queuemgrwindow.h"
+#include "timelineview.h"
 
 namespace Digikam
 {
@@ -229,7 +230,9 @@ DigikamView::DigikamView(QWidget *parent)
     d->dateFolderView   = new DateFolderView(this);
     d->timeLineView     = new TimeLineView(this);
     d->fuzzySearchView  = new FuzzySearchView(this);
+#ifdef HAVE_MARBLEWIDGET
     d->gpsSearchView    = new GPSSearchView(this);
+#endif
 
     d->leftSideBar->appendTab(d->folderBox, SmallIcon("folder-image"), i18n("Albums"));
     d->leftSideBar->appendTab(d->dateFolderView, SmallIcon("view-calendar-list"), i18n("Calendar"));
@@ -237,7 +240,9 @@ DigikamView::DigikamView(QWidget *parent)
     d->leftSideBar->appendTab(d->timeLineView, SmallIcon("player-time"), i18n("Timeline"));
     d->leftSideBar->appendTab(d->searchBox, SmallIcon("edit-find"), i18n("Searches"));
     d->leftSideBar->appendTab(d->fuzzySearchView, SmallIcon("tools-wizard"), i18n("Fuzzy Searches"));
+#ifdef HAVE_MARBLEWIDGET
     d->leftSideBar->appendTab(d->gpsSearchView, SmallIcon("applications-internet"), i18n("Map Searches"));
+#endif
 
     // To the right.
 
@@ -731,8 +736,10 @@ void DigikamView::slotAlbumAdded(Album *album)
                     d->timeLineView->searchBar()->completionObject()->addItem(salbum->title());
                 else if (salbum->isHaarSearch())
                     d->fuzzySearchView->searchBar()->completionObject()->addItem(salbum->title());
+#ifdef HAVE_MARBLEWIDGET
                 else if (salbum->isMapSearch())
                     d->gpsSearchView->searchBar()->completionObject()->addItem(salbum->title());
+#endif
 
                 break;
             }
@@ -786,8 +793,10 @@ void DigikamView::slotAlbumDeleted(Album *album)
                     d->timeLineView->searchBar()->completionObject()->removeItem(salbum->title());
                 else if (salbum->isHaarSearch())
                     d->fuzzySearchView->searchBar()->completionObject()->removeItem(salbum->title());
+#ifdef HAVE_MARBLEWIDGET
                 else if (salbum->isMapSearch())
                     d->gpsSearchView->searchBar()->completionObject()->removeItem(salbum->title());
+#endif
 
                 break;
             }
@@ -844,11 +853,13 @@ void DigikamView::slotAlbumRenamed(Album *album)
                     d->fuzzySearchView->searchBar()->completionObject()->addItem(salbum->title());
                     d->fuzzySearchView->folderView()->slotTextSearchFilterChanged(d->fuzzySearchView->searchBar()->searchTextSettings());
                 }
+#ifdef HAVE_MARBLEWIDGET
                 else if (salbum->isMapSearch())
                 {
                     d->gpsSearchView->searchBar()->completionObject()->addItem(salbum->title());
                     d->gpsSearchView->folderView()->slotTextSearchFilterChanged(d->gpsSearchView->searchBar()->searchTextSettings());
                 }
+#endif
 
                 break;
             }
@@ -874,7 +885,9 @@ void DigikamView::slotAlbumsCleared()
     d->searchSearchBar->completionObject()->clear();
     d->timeLineView->searchBar()->completionObject()->clear();
     d->fuzzySearchView->searchBar()->completionObject()->clear();
+#ifdef HAVE_MARBLEWIDGET
     d->gpsSearchView->searchBar()->completionObject()->clear();
+#endif
 }
 
 void DigikamView::slotAlbumHistoryBack(int steps)
@@ -1624,7 +1637,9 @@ void DigikamView::slotLeftSidebarChangedTab(QWidget* w)
     d->searchFolderView->setActive(w == d->searchBox);
     d->timeLineView->setActive(w == d->timeLineView);
     d->fuzzySearchView->setActive(w == d->fuzzySearchView);
+#ifdef HAVE_MARBLEWIDGET
     d->gpsSearchView->setActive(w == d->gpsSearchView);
+#endif
 }
 
 void DigikamView::slotAssignRating(int rating)
