@@ -189,8 +189,7 @@ void kio_digikamalbums::copy( const KUrl &src, const KUrl &dst, int mode, KIO::J
     int dstAlbumID = access.db()->getAlbumForPath(dbUrlDst.albumRootId(), dbUrlDst.album(), false);
     if (dstAlbumID == -1)
     {
-        error(KIO::ERR_UNKNOWN, QString("Destination album %1 not found in database")
-              .arg(dbUrlDst.album()));
+        error(KIO::ERR_UNKNOWN, i18n("Destination album %1 not found in database",dbUrlDst.album()));
         return;
     }
 
