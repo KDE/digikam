@@ -226,14 +226,14 @@ void ContentAwareResizer::buildBias(const QImage& mask)
 
                 // There we have to calculate the correct k of d->bias
                 if(g == 255)
-                    d->bias[(mask.height()-1-y)*mask.width() + x] = 10000.0;
+                    d->bias[y*mask.width() + x] = 1.0;
                 else if(r == 255)
-                    d->bias[(mask.height()-1-y)*mask.width() + x] = -10000.0;
+                    d->bias[y*mask.width() + x] = -1.0;
             }
         }
 
         kDebug(50003) << "Set LibLqr mask..." << endl;
-        lqr_carver_bias_add(d->carver, d->bias, 10000);
+        lqr_carver_bias_add(d->carver, d->bias, 1000000);
     }
 }
 
