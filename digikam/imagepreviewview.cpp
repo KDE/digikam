@@ -357,11 +357,13 @@ void ImagePreviewView::slotContextMenu()
     popmenu.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAction("image_edit");
+    cmhelper.addServicesMenu(selectedItems);
+    popmenu.addSeparator();
+    // --------------------------------------------------------
     cmhelper.addAction("image_find_similar");
     cmhelper.addActionLightTable();
     cmhelper.addQueueManagerMenu();
     cmhelper.addGotoMenu(idList);
-    cmhelper.addServicesMenu(selectedItems);
     cmhelper.addKipiActions();
     popmenu.addSeparator();
     // --------------------------------------------------------
