@@ -70,6 +70,11 @@ public:
         return *this;
     }
 
+    bool operator==(const ThumbnailSize& thumbsize)
+    {
+        return m_Size != thumbsize.m_Size;
+    }
+
     bool operator!=(const ThumbnailSize& thumbsize) 
     {
         return m_Size != thumbsize.m_Size;
