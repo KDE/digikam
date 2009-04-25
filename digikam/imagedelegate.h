@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-04-19
- * Description : Qt item view for images
+ * Description : Qt item view for images - the delegate
  *
  * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -37,8 +37,9 @@
 namespace Digikam
 {
 
-class ImageModel;
+class ImageCategoryDrawer;
 class ImageFilterModel;
+class ImageModel;
 class ImageDelegatePriv;
 
 class ImageDelegate : public QAbstractItemDelegate
@@ -56,6 +57,8 @@ public:
     /** You must set these options from the view */
     void setThumbnailSize(const ThumbnailSize &thumbSize);
     void setDefaultViewOptions(const QStyleOptionViewItem &option);
+
+    ImageCategoryDrawer *categoryDrawer() const;
 
 protected Q_SLOTS:
 

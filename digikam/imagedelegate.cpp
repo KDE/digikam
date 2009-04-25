@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-04-19
- * Description : Qt item view for images
+ * Description : Qt item view for images - the delegate
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2002-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -48,6 +48,7 @@
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "constants.h"
+#include "imagecategorydrawer.h"
 #include "imagemodel.h"
 #include "imagefiltermodel.h"
 #include "themeengine.h"
@@ -63,6 +64,7 @@ public:
 
     ImageDelegatePriv()
     {
+        categoryDrawer = 0;
         // Pre-computed star polygon for a 15x15 pixmap.
         starPolygon << QPoint(0,  6);
         starPolygon << QPoint(5,  5);
@@ -115,6 +117,8 @@ public:
 
     QCache<qlonglong, QRect>         actualPixmapRectCache;
     QCache<QString, QPixmap>         thumbnailBorderCache;
+
+    ImageCategoryDrawer             *categoryDrawer;
 };
 
 ImageDelegate::ImageDelegate(QObject *parent)
@@ -125,10 +129,13 @@ ImageDelegate::ImageDelegate(QObject *parent)
 
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
+
+    d->categoryDrawer = new ImageCategoryDrawer;
 }
 
 ImageDelegate::~ImageDelegate()
 {
+    delete d->categoryDrawer;
     delete d;
 }
 
@@ -140,6 +147,11 @@ void ImageDelegate::setThumbnailSize(const ThumbnailSize &thumbSize)
 
         updateRectsAndPixmaps();
     }
+}
+
+ImageCategoryDrawer *ImageDelegate::categoryDrawer() const
+{
+    return d->categoryDrawer;
 }
 
 void ImageDelegate::paint(QPainter * p, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -308,17 +320,20 @@ QSize ImageDelegate::sizeHint(const QStyleOptionViewItem &/*option*/, const QMod
 void ImageDelegate::setDefaultViewOptions(const QStyleOptionViewItem &option)
 {
     d->font = option.font;
+    d->categoryDrawer->setDefaultViewOptions(option);
 }
 
 void ImageDelegate::slotThemeChanged()
 {
     updateRectsAndPixmaps();
+    d->categoryDrawer->updateRectsAndPixmaps();
 }
 
 void ImageDelegate::slotSetupChanged()
 {
     updateRectsAndPixmaps();
-    // it changed! for all indexes! What am I supposed to do?
+    d->categoryDrawer->updateRectsAndPixmaps();
+    // it's pretty much nonsense to include any special index here.
     emit sizeHintChanged(QModelIndex());
 }
 
