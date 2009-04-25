@@ -30,6 +30,8 @@
 
 // KDE includes
 
+#include <kdebug.h>
+
 // Local includes
 
 #include "databasefields.h"
@@ -239,6 +241,18 @@ void ImageCategorizedView::scrollToWhenAvailable(qlonglong imageId)
     d->scrollToItemId = imageId;
 }
 
+void ImageCategorizedView::setCurrentUrl(const KUrl &url)
+{
+    QString path = url.path();
+    QModelIndex index = d->filterModel->indexForPath(path);
+    if (!index.isValid())
+    {
+        kWarning() << "no QModelIndex found for" << url;
+        return;
+    }
+    setCurrentIndex(index);
+}
+
 void ImageCategorizedView::scrollToStoredItem()
 {
     if (d->scrollToItemId)
@@ -274,10 +288,6 @@ void ImageCategorizedView::slotActivated(const QModelIndex &index)
         activated(info);
 }
 
-void ImageCategorizedView::activated(const ImageInfo &)
-{
-}
-
 void ImageCategorizedView::contextMenuEvent(QContextMenuEvent* event)
 {
     QModelIndex index = indexAt(event->pos());
@@ -290,12 +300,56 @@ void ImageCategorizedView::contextMenuEvent(QContextMenuEvent* event)
         showContextMenu(event);
 }
 
+void ImageCategorizedView::activated(const ImageInfo &)
+{
+}
+
 void ImageCategorizedView::showContextMenu(QContextMenuEvent *, const ImageInfo &)
 {
 }
 
 void ImageCategorizedView::showContextMenu(QContextMenuEvent *)
 {
+}
+
+void ImageCategorizedView::copy()
+{
+}
+
+void ImageCategorizedView::paste()
+{
+}
+
+void ImageCategorizedView::keyPressEvent(QKeyEvent *event)
+{
+    if (event == QKeySequence::Copy) {
+        copy();
+        event->accept();
+        return;
+    }
+    else if (event == QKeySequence::Paste)
+    {
+        paste();
+        event->accept();
+        return;
+    }
+
+    /*
+    // from dolphincontroller.cpp
+    const QItemSelectionModel* selModel = m_itemView->selectionModel();
+    const QModelIndex currentIndex = selModel->currentIndex();
+    const bool trigger = currentIndex.isValid()
+                         && ((event->key() == Qt::Key_Return)
+                            || (event->key() == Qt::Key_Enter))
+                         && (selModel->selectedIndexes().count() > 0);
+    if (trigger) {
+        const QModelIndexList indexList = selModel->selectedIndexes();
+        foreach (const QModelIndex& index, indexList) {
+            emit itemTriggered(itemForIndex(index));
+        }
+    }
+    */
+    KCategorizedView::keyPressEvent(event);
 }
 
 bool ImageCategorizedView::viewportEvent(QEvent *event)
@@ -314,7 +368,8 @@ bool ImageCategorizedView::viewportEvent(QEvent *event)
             QStyleOptionViewItem option = viewOptions();
             option.rect = visualRect(index);
             option.state |= (index == currentIndex() ? QStyle::State_HasFocus : QStyle::State_None);
-            d->toolTip->show(he, option, index);
+            if (d->delegate->acceptsToolTip(he->pos(), option, index))
+                d->toolTip->show(he, option, index);
             return true;
         }
         default:

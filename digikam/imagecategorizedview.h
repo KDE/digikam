@@ -68,12 +68,13 @@ public:
     ThumbnailSize thumbnailSize() const;
     void setThumbnailSize(const ThumbnailSize &size);
 
-    /** Scroll the view to the given item when it becomes available */
-    void scrollToWhenAvailable(qlonglong imageId);
-
 public Q_SLOTS:
 
     void setThumbnailSize(int size);
+    /** Scroll the view to the given item when it becomes available */
+    void scrollToWhenAvailable(qlonglong imageId);
+    /** Set as current item the item identified by its file url */
+    void setCurrentUrl(const KUrl &url);
 
 protected Q_SLOTS:
 
@@ -90,9 +91,12 @@ protected:
     virtual void activated(const ImageInfo &info);
     virtual void showContextMenu(QContextMenuEvent *event, const ImageInfo &info);
     virtual void showContextMenu(QContextMenuEvent *event);
+    virtual void copy();
+    virtual void paste();
 
-    bool viewportEvent(QEvent *event);
+    void keyPressEvent(QKeyEvent *event);
     void contextMenuEvent(QContextMenuEvent* event);
+    bool viewportEvent(QEvent *event);
 
 private:
 
