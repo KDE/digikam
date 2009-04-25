@@ -80,7 +80,9 @@ public:
     virtual QModelIndex index(int row, int column = 0, const QModelIndex &parent = QModelIndex()) const;
 
     /** Returns the ImageInfo object, reference or image id from the underlying data
-     *  pointed to by the index. */
+     *  pointed to by the index.
+     *  If the index is not valid, imageInfo will return a null ImageInfo, imageId will
+     *  return 0, imageInfoRef must not be called with an invalid index. */
     ImageInfo imageInfo(const QModelIndex &index) const;
     ImageInfo &imageInfoRef(const QModelIndex &index) const;
     qlonglong imageId(const QModelIndex &index) const;
@@ -102,6 +104,7 @@ public:
     /** Retrieves the imageInfo object from the data() method of the given index.
      *  The index may be from a QSortFilterProxyModel as long as an ImageModel is at the end. */
     static ImageInfo retrieveImageInfo(const QModelIndex &index);
+    static qlonglong retrieveImageId(const QModelIndex &index);
 
     void addImageInfos(const QList<ImageInfo> &infos);
     void clearImageInfos();

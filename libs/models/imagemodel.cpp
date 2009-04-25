@@ -113,7 +113,7 @@ ImageInfo &ImageModel::imageInfoRef(const QModelIndex &index) const
 qlonglong ImageModel::imageId(const QModelIndex &index) const
 {
     if (!index.isValid())
-        return -1;
+        return 0;
     return d->infos[index.row()].id();
 }
 
@@ -156,9 +156,19 @@ ImageInfo ImageModel::retrieveImageInfo(const QModelIndex &index)
         return ImageInfo();
 
     ImageModel *model = index.data(ImageModelPointerRole).value<ImageModel*>();
-    Q_ASSERT(model);
     int row = index.data(ImageModelInternalId).toInt();
     return model->imageInfo(row);
+}
+
+// static method
+qlonglong ImageModel::retrieveImageId(const QModelIndex &index)
+{
+    if (!index.isValid())
+        return 0;
+
+    ImageModel *model = index.data(ImageModelPointerRole).value<ImageModel*>();
+    int row = index.data(ImageModelInternalId).toInt();
+    return model->imageId(row);
 }
 
 QModelIndex ImageModel::indexForPath(const QString &filePath) const
