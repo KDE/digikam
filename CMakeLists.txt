@@ -508,6 +508,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/drubberband.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/ditemtooltip.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/filesaveoptionsbox.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/itemviewtooltip.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/statuszoombar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/statusprogressbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/statusnavigatebar.cpp
@@ -885,6 +886,8 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/icongroupitem.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/iconitem.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imageattributeswatch.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagecategorizedview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagecategorydrawer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagedelegate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagepreviewview.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagepreviewbar.cpp 
@@ -904,6 +907,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tageditdlg.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagfolderview.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagfilterview.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tooltipfiller.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/treefolderitem.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagspopupmenu.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/welcomepageview.cpp 
