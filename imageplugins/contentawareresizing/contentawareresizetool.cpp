@@ -261,7 +261,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     d->funcInput->addItem(i18n("Sum of absolute values"));
     d->funcInput->addItem(i18n("Absolute value"));
     d->funcInput->setDefaultIndex(ContentAwareResizeToolPriv::Abs);
-    d->funcInput->setWhatsThis(i18n("This option allows you to choose a gradient function. This function is used"
+    d->funcInput->setWhatsThis(i18n("This option allows you to choose a gradient function. This function is used "
                                     "to know wich pixels should be removed."));
 
     // -------------------------------------------------------------
