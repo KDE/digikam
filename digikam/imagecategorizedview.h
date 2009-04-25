@@ -102,10 +102,11 @@ private:
 
     void scrollToStoredItem();
 
+private:
+
     ImageCategorizedViewPriv* const d;
 };
 
-}
+} // namespace Digikam
 
-#endif
-
+#endif /* IMAGECATEGORIZEDVIEW_H */

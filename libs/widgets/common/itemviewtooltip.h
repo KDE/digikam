@@ -57,14 +57,14 @@ protected:
     virtual QRect repositionRect();
 
     bool eventFilter(QObject *o, QEvent *e);
-    void hideEvent(QHideEvent *);
+    void hideEvent(QHideEvent*);
     void mouseMoveEvent(QMouseEvent *e);
 
 private:
 
-    ItemViewToolTipPriv *d;
+    ItemViewToolTipPriv* const d;
 };
 
-}
+} // namespace Digikam
 
-#endif
+#endif /* ITEMVIEWTOOLTIP_H */

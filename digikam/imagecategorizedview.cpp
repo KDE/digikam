@@ -68,6 +68,8 @@ protected:
     }
 };
 
+// -------------------------------------------------------------------------------
+
 class ImageCategorizedViewPriv
 {
 public:
@@ -93,8 +95,10 @@ public:
     qlonglong                scrollToItemId;
 };
 
+// -------------------------------------------------------------------------------
+
 ImageCategorizedView::ImageCategorizedView(QWidget *parent)
-    : KCategorizedView(parent), d(new ImageCategorizedViewPriv)
+                    : KCategorizedView(parent), d(new ImageCategorizedViewPriv)
 {
     setSpacing(10);
     setViewMode(QListView::IconMode);
@@ -138,10 +142,13 @@ ImageCategorizedView::ImageCategorizedView(QWidget *parent)
     connect(this, SIGNAL(activated(const QModelIndex &)),
             this, SLOT(slotActivated(const ImageInfo &)));
     /*
-    if (KGlobalSettings::singleClick()) {
+    if (KGlobalSettings::singleClick())
+    {
         connect(this, SIGNAL(clicked(const QModelIndex&)),
                 controller, SLOT(triggerItem(const QModelIndex&)));
-    } else {
+    }
+    else
+    {
         connect(this, SIGNAL(doubleClicked(const QModelIndex&)),
                 controller, SLOT(triggerItem(const QModelIndex&)));
     }
@@ -182,8 +189,8 @@ QList<ImageInfo> ImageCategorizedView::selectedImageInfos() const
 QList<ImageInfo> ImageCategorizedView::selectedImageInfosCurrentFirst() const
 {
     QList<QModelIndex> indexes = selectedIndexes();
-    QModelIndex current = currentIndex();
-    QList<ImageInfo> infos;
+    QModelIndex        current = currentIndex();
+    QList<ImageInfo>   infos;
     foreach (const QModelIndex &index, indexes)
     {
         ImageInfo info = d->filterModel->imageInfo(index);
@@ -217,7 +224,6 @@ KUrl::List ImageCategorizedView::selectedUrls() const
         urls << info.fileUrl();
     return urls;
 }
-
 
 ThumbnailSize ImageCategorizedView::thumbnailSize() const
 {
@@ -297,7 +303,9 @@ void ImageCategorizedView::contextMenuEvent(QContextMenuEvent* event)
         showContextMenu(event, info);
     }
     else
+    {
         showContextMenu(event);
+    }
 }
 
 void ImageCategorizedView::activated(const ImageInfo &)
@@ -322,7 +330,8 @@ void ImageCategorizedView::paste()
 
 void ImageCategorizedView::keyPressEvent(QKeyEvent *event)
 {
-    if (event == QKeySequence::Copy) {
+    if (event == QKeySequence::Copy)
+    {
         copy();
         event->accept();
         return;
@@ -378,4 +387,4 @@ bool ImageCategorizedView::viewportEvent(QEvent *event)
     return KCategorizedView::viewportEvent(event);
 }
 
-}
+} // namespace Digikam

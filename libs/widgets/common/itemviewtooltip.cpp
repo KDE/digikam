@@ -43,13 +43,13 @@ public:
         view = 0;
     }
 
-    QAbstractItemView       *view;
-    QModelIndex              index;
-    QRect                    rect;
+    QAbstractItemView *view;
+    QModelIndex        index;
+    QRect              rect;
 };
 
 ItemViewToolTip::ItemViewToolTip(QAbstractItemView *view)
-    : DItemToolTip(), d(new ItemViewToolTipPriv)
+               : DItemToolTip(), d(new ItemViewToolTipPriv)
 {
     d->view = view;
 
@@ -74,7 +74,7 @@ QModelIndex ItemViewToolTip::currentIndex() const
 void ItemViewToolTip::show(QHelpEvent *, const QStyleOptionViewItem &option, const QModelIndex &index)
 {
     d->index = index;
-    d->rect = option.rect;
+    d->rect  = option.rect;
     qApp->installEventFilter(this);
 }
 
@@ -85,7 +85,7 @@ QRect ItemViewToolTip::repositionRect()
 
 void ItemViewToolTip::hideEvent(QHideEvent *)
 {
-    d->rect = QRect();
+    d->rect  = QRect();
     d->index = QModelIndex();
     qApp->removeEventFilter(this);
 }
@@ -98,10 +98,12 @@ bool ItemViewToolTip::eventFilter(QObject *o, QEvent *e)
     if (!isVisible())
         return false;
 
-    switch (e->type()) {
+    switch (e->type()) 
+    {
         #ifdef Q_WS_MAC
         case QEvent::KeyPress:
-        case QEvent::KeyRelease: {
+        case QEvent::KeyRelease: 
+	{
             int key = static_cast<QKeyEvent *>(e)->key();
             Qt::KeyboardModifiers mody = static_cast<QKeyEvent *>(e)->modifiers();
             if (!(mody & Qt::KeyboardModifierMask)
@@ -145,5 +147,4 @@ void ItemViewToolTip::mouseMoveEvent(QMouseEvent *e)
     DItemToolTip::mouseMoveEvent(e);
 }
 
-}
-
+} // namespace Digikam
