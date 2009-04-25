@@ -168,6 +168,31 @@ void ImageFilterModel::setSourceImageModel(ImageModel *sourceModel)
     setSourceModel(d->imageModel);
 }
 
+QVariant ImageFilterModel::data(const QModelIndex &index, int role) const
+{
+    Q_D(const ImageFilterModel);
+    if (!index.isValid())
+        return QVariant();
+
+    switch (role)
+    {
+        case CategorizationModeRole:
+            return d->categorizationMode;
+        case SortOrderRole:
+            return d->sortOrder;
+        case CategoryCountRole:
+            return categoryCount(d->imageModel->imageInfoRef(index));
+        case CategoryAlbumIdRole:
+            return d->imageModel->imageInfoRef(index).albumId();
+        case CategoryFormatRole:
+            return d->imageModel->imageInfoRef(index).albumId();
+        case ImageFilterModelPointerRole:
+            return QVariant::fromValue(const_cast<ImageFilterModel*>(this));
+    }
+
+    return KCategorizedSortFilterProxyModel::data(index, role);
+}
+
 // -------------- Filter settings --------------
 
 void ImageFilterModel::setDayFilter(const QList<QDateTime>& days)
@@ -253,6 +278,9 @@ void ImageFilterModel::slotModelReset()
     d->sentOutForReAdd = 0;
     // cause all packages on the way to be discarded
     d->version++;
+
+    d->categoryCountHashInt.clear();
+    d->categoryCountHashString.clear();
 }
 
 bool ImageFilterModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
@@ -454,6 +482,8 @@ void ImageFilterModel::setCategorizationMode(ImageFilterModel::CategorizationMod
         return;
     d->categorizationMode = mode;
     setCategorizedModel(mode != NoCategories);
+    d->categoryCountHashInt.clear();
+    d->categoryCountHashString.clear();
     invalidate();
 }
 
@@ -500,11 +530,16 @@ int ImageFilterModel::compareInfosCategories(const ImageInfo &left, const ImageI
     switch (d->categorizationMode)
     {
         case NoCategories:
+        case OneCategory:
             return 0;
         case CategoryByAlbum:
         {
             int leftAlbum = left.albumId();
             int rightAlbum = right.albumId();
+            // update count hash
+            d->cacheCategoryCount(leftAlbum, left.id());
+            d->cacheCategoryCount(rightAlbum, right.id());
+            // return comparation result
             if (leftAlbum == rightAlbum)
                 return 0;
             else if (leftAlbum < rightAlbum)
@@ -513,7 +548,32 @@ int ImageFilterModel::compareInfosCategories(const ImageInfo &left, const ImageI
                 return 1;
         }
         case CategoryByFormat:
-            return KStringHandler::naturalCompare(left.format(), right.format());
+        {
+            QString leftFormat = left.format();
+            QString rightFormat = right.format();
+
+            d->cacheCategoryCount(leftFormat, left.id());
+            d->cacheCategoryCount(rightFormat, right.id());
+
+            return KStringHandler::naturalCompare(leftFormat, rightFormat);
+        }
+        default:
+            return 0;
+    }
+}
+
+int ImageFilterModel::categoryCount(const ImageInfo &info) const
+{
+    Q_D(const ImageFilterModel);
+    switch (d->categorizationMode)
+    {
+        case NoCategories:
+        case OneCategory:
+            return rowCount();
+        case CategoryByAlbum:
+            return d->categoryCountHashInt[info.albumId()].size();
+        case CategoryByFormat:
+            return d->categoryCountHashString[info.format()].size();
         default:
             return 0;
     }

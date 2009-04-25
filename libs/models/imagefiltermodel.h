@@ -33,12 +33,12 @@
 // Local includes
 
 #include "imagefiltersettings.h"
+#include "imagemodel.h"
 #include "digikam_export.h"
 
 namespace Digikam
 {
 
-class ImageModel;
 class ImageChangeset;
 class ImageTagChangeset;
 class ImageFilterModelPrivate;
@@ -48,6 +48,21 @@ class DIGIKAM_DATABASE_EXPORT ImageFilterModel : public KCategorizedSortFilterPr
     Q_OBJECT
 
 public:
+
+    enum ImageFilterModelRoles
+    {
+        /// Returns the current categorization mode
+        CategorizationModeRole = ImageModel::FilterModelRoles + 1,
+        /// Returns the current sort order
+        SortOrderRole          = ImageModel::FilterModelRoles + 2,
+        /// Returns the number of items in the index' category
+        CategoryCountRole      = ImageModel::FilterModelRoles + 3,
+        /// Returns the id of the PAlbum of the index which is used for category
+        CategoryAlbumIdRole    = ImageModel::FilterModelRoles + 4,
+        /// Returns the format of the PAlbum of the index which is used for category
+        CategoryFormatRole     = ImageModel::FilterModelRoles + 5,
+        ImageFilterModelPointerRole  = ImageModel::FilterModelRoles + 50,
+    };
 
     ImageFilterModel(QObject *parent = 0);
     ~ImageFilterModel();
@@ -77,7 +92,8 @@ public:
 
     enum CategorizationMode
     {
-        NoCategories,
+        NoCategories, /// categorization switched off
+        OneCategory, /// all items in one global category
         CategoryByAlbum,
         CategoryByFormat
     };
@@ -99,6 +115,8 @@ public:
     void setSortOrder(SortOrder order);
     SortOrder sortOrder() const;
 
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+
 protected:
 
     virtual void setSourceModel(QAbstractItemModel* model);
@@ -107,6 +125,7 @@ protected:
 
     virtual int  compareCategories(const QModelIndex &left, const QModelIndex &right) const;
     virtual bool subSortLessThan(const QModelIndex &left, const QModelIndex &right) const;
+    virtual int  categoryCount(const ImageInfo &info) const;
 
     /** Reimplement to customize category sorting,
      *  Return negative if category of left < category right,
@@ -132,5 +151,7 @@ private:
 };
 
 } // namespace Digikam
+
+Q_DECLARE_METATYPE(Digikam::ImageFilterModel*)
 
 #endif // IMAGEMODEL_H
