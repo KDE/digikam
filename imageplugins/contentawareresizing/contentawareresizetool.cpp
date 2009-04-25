@@ -38,6 +38,7 @@
 #include <QButtonGroup>
 
 // KDE includes
+
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -224,12 +225,12 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
 
     // -------------------------------------------------------------
 
-    KSeparator *line4  = new KSeparator(Qt::Horizontal, d->gboxSettings->plainPage());
+    KSeparator *line4 = new KSeparator(Qt::Horizontal, d->gboxSettings->plainPage());
 
-    d->weightMaskBox = new QCheckBox(i18n("Add weight masks"), d->gboxSettings->plainPage());
+    d->weightMaskBox  = new QCheckBox(i18n("Add weight masks"), d->gboxSettings->plainPage());
     d->weightMaskBox->setWhatsThis(i18n("Enable this option to add suppression and preservation masks."));
     d->weightMaskBox->setChecked(false);
-    d->maskGroup     = new QButtonGroup(d->gboxSettings->plainPage());
+    d->maskGroup      = new QButtonGroup(d->gboxSettings->plainPage());
     d->maskGroup->setExclusive(true);
 
     QLabel *labeRedMaskTool = new QLabel(i18n("Suppression weight mask:"), d->gboxSettings->plainPage());
@@ -598,7 +599,6 @@ void ContentAwareResizeTool::prepareFinal()
             mask = d->previewWidget->getMask().scaled(iface.originalWidth(), iface.originalHeight());
 
         contentAwareResizeCore( iface.getOriginalImg(), d->wInput->value(), d->hInput->value(), mask);
-
     }
 }
 
@@ -643,7 +643,6 @@ void ContentAwareResizeTool::putFinalData()
     iface.putOriginalImage(i18n("Liquid Rescale"),
                            targetImage.bits(),
                            targetImage.width(), targetImage.height());
-
 }
 
 void ContentAwareResizeTool::blockWidgetSignals(bool b)
