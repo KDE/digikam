@@ -87,7 +87,7 @@ enum _LqrColDepth
   LQR_COLDEPTH_8I,
   LQR_COLDEPTH_16I,
   LQR_COLDEPTH_32F,
-  LQR_COLDEPTH_64F,
+  LQR_COLDEPTH_64F
 };
 
 typedef enum _LqrColDepth LqrColDepth;
