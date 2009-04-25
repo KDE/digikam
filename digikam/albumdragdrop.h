@@ -31,7 +31,6 @@
 #include "albummodeldragdrophandler.h"
 #include "albummodel.h"
 
-
 namespace Digikam
 {
 
@@ -51,7 +50,6 @@ public:
     virtual QMimeData *createMimeData(const QList<Album*>);
 };
 
-}
+} // namespace Digikam
 
-#endif
-
+#endif /* ALBUMDRAGDROP_H */

@@ -84,45 +84,45 @@ public:
         actualPixmapRectCache.setMaxCost(250);
         thumbnailBorderCache.setMaxCost(10);
 
-        editingRating = false;
+        editingRating   = false;
     }
 
-    QRect                            rect;
-    QRect                            tightPixmapRect;
-    QRect                            ratingRect;
-    QRect                            dateRect;
-    QRect                            modDateRect;
-    QRect                            pixmapRect;
-    QRect                            nameRect;
-    QRect                            commentsRect;
-    QRect                            resolutionRect;
-    QRect                            sizeRect;
-    QRect                            tagRect;
+    QRect                     rect;
+    QRect                     tightPixmapRect;
+    QRect                     ratingRect;
+    QRect                     dateRect;
+    QRect                     modDateRect;
+    QRect                     pixmapRect;
+    QRect                     nameRect;
+    QRect                     commentsRect;
+    QRect                     resolutionRect;
+    QRect                     sizeRect;
+    QRect                     tagRect;
 
-    QPixmap                          regPixmap;
-    QPixmap                          selPixmap;
-    QVector<QPixmap>                 ratingPixmaps;
+    QPixmap                   regPixmap;
+    QPixmap                   selPixmap;
+    QVector<QPixmap>          ratingPixmaps;
 
-    QFont                            font;
-    QFont                            fontReg;
-    QFont                            fontCom;
-    QFont                            fontXtra;
+    QFont                     font;
+    QFont                     fontReg;
+    QFont                     fontCom;
+    QFont                     fontXtra;
 
-    QPolygon                         starPolygon;
-    QSize                            starPolygonSize;
+    QPolygon                  starPolygon;
+    QSize                     starPolygonSize;
 
-    ThumbnailSize                    thumbSize;
+    ThumbnailSize             thumbSize;
 
-    bool                             editingRating;
+    bool                      editingRating;
 
-    QCache<qlonglong, QRect>         actualPixmapRectCache;
-    QCache<QString, QPixmap>         thumbnailBorderCache;
+    QCache<qlonglong, QRect>  actualPixmapRectCache;
+    QCache<QString, QPixmap>  thumbnailBorderCache;
 
-    ImageCategoryDrawer             *categoryDrawer;
+    ImageCategoryDrawer      *categoryDrawer;
 };
 
 ImageDelegate::ImageDelegate(QObject *parent)
-    : QAbstractItemDelegate(parent), d(new ImageDelegatePriv)
+             : QAbstractItemDelegate(parent), d(new ImageDelegatePriv)
 {
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
@@ -317,7 +317,7 @@ QSize ImageDelegate::sizeHint(const QStyleOptionViewItem &/*option*/, const QMod
     return d->rect.size();
 }
 
-bool ImageDelegate::acceptsToolTip(const QPoint &pos, const QStyleOptionViewItem &option, const QModelIndex & index) const
+bool ImageDelegate::acceptsToolTip(const QPoint& pos, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     qlonglong id = ImageModel::retrieveImageId(index);
 
@@ -637,6 +637,5 @@ QString ImageDelegate::squeezedText(QPainter* p, int width, const QString& text)
 
     return fullText;
 }
-}
 
-
+} // namespace Digikam

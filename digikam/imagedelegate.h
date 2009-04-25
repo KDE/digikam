@@ -85,9 +85,6 @@ private:
     ImageDelegatePriv* const d;
 };
 
-}
+} // namespace Digikam
 
-#endif
-
-
-
+#endif /* IMAGEDELEGATE_H */

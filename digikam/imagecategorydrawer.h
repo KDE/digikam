@@ -57,12 +57,11 @@ private:
     void updateRectsAndPixmaps(int width);
     void textForAlbum(const QModelIndex &index, QString *header, QString *subLine) const;
 
+private:
+
     ImageCategoryDrawerPriv* const d;
 };
 
-}
+} // namespace Digikam
 
-#endif
-
-
-
+#endif /* IMAGECATEGORYDRAWER_H */

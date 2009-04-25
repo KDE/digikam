@@ -51,13 +51,13 @@ public:
     {
     }
 
-    QFont               font;
-    QRect               rect;
-    QPixmap             pixmap;
+    QFont   font;
+    QRect   rect;
+    QPixmap pixmap;
 };
 
 ImageCategoryDrawer::ImageCategoryDrawer()
-    : d(new ImageCategoryDrawerPriv)
+                   : d(new ImageCategoryDrawerPriv)
 {
 }
 
@@ -125,19 +125,18 @@ void ImageCategoryDrawer::drawCategory(const QModelIndex &index, int /*sortRole*
     p->setFont(fontNormal);
 
     p->drawText(5, r.y(), r.width(), r.height(),
-            Qt::AlignLeft | Qt::AlignVCenter, subLine);
+                Qt::AlignLeft | Qt::AlignVCenter, subLine);
 }
 
 void ImageCategoryDrawer::textForAlbum(const QModelIndex &index, QString *header, QString *subLine) const
 {
-    int albumId = index.data(ImageFilterModel::CategoryAlbumIdRole).toInt();
-    PAlbum* album     = AlbumManager::instance()->findPAlbum(albumId);
+    int albumId   = index.data(ImageFilterModel::CategoryAlbumIdRole).toInt();
+    PAlbum* album = AlbumManager::instance()->findPAlbum(albumId);
 
     if (album)
     {
-        int count = index.data(ImageFilterModel::CategoryCountRole).toInt();
-
-        QDate date  = album->date();
+        int count  = index.data(ImageFilterModel::CategoryCountRole).toInt();
+        QDate date = album->date();
 
         KLocale tmpLocale(*KGlobal::locale());
 
@@ -215,6 +214,4 @@ void ImageCategoryDrawer::updateRectsAndPixmaps(int width)
     d->pixmap = ThemeEngine::instance()->bannerPixmap(d->rect.width(), d->rect.height());
 }
 
-}
-
-
+} // namespace Digikam

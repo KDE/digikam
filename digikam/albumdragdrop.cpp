@@ -49,7 +49,7 @@ namespace Digikam
 {
 
 AlbumDragDropHandler::AlbumDragDropHandler(AlbumModel *model)
-    : AlbumModelDragDropHandler(model)
+                    : AlbumModelDragDropHandler(model)
 {
 }
 
@@ -388,5 +388,4 @@ QMimeData *AlbumDragDropHandler::createMimeData(const QList<Album*>)
 }
 */
 
-}
-
+} // namespace Digikam
