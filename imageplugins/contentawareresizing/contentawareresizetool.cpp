@@ -495,27 +495,43 @@ void ContentAwareResizeTool::slotValuesChanged()
     blockWidgetSignals(false);
 }
 
+void ContentAwareResizeTool::enableContentAwareSettings(bool b)
+{
+    d->stepInput->setEnabled(b);
+    d->rigidityInput->setEnabled(b);
+    d->funcInput->setEnabled(b);
+    d->resizeOrderInput->setEnabled(b);
+    d->weightMaskBox->setEnabled(b);
+    d->redMaskTool->setEnabled(b);
+    d->greenMaskTool->setEnabled(b);
+}
 
 void ContentAwareResizeTool::slotMixedRescaleValueChanged()
 {
     blockWidgetSignals(true);
-
-    if (d->mixedRescaleInput->value()<=0.0)
-    {
-        d->stepInput->setEnabled(false);
-        d->rigidityInput->setEnabled(false);
-        d->funcInput->setEnabled(false);
-        d->resizeOrderInput->setEnabled(false);
-    }
-    else
-    {
-        d->stepInput->setEnabled(true);
-        d->rigidityInput->setEnabled(true);
-        d->funcInput->setEnabled(true);
-        d->resizeOrderInput->setEnabled(true);
-    }
-
+    enableContentAwareSettings(d->mixedRescaleInput->value()>0.0);
     blockWidgetSignals(false);
+}
+
+void ContentAwareResizeTool::disableSettings()
+{
+    d->preserveRatioBox->setEnabled(false);
+    d->wInput->setEnabled(false);
+    d->hInput->setEnabled(false);
+    d->wpInput->setEnabled(false);
+    d->hpInput->setEnabled(false);
+    d->mixedRescaleInput->setEnabled(false);
+    enableContentAwareSettings(false);
+}
+
+void ContentAwareResizeTool::contentAwareResizeCore(DImg *image, int target_width, int target_height, QImage mask)
+{
+    setFilter(dynamic_cast<DImgThreadedFilter*>(
+              new ContentAwareResizer(image, target_width, target_height,
+                                      d->stepInput->value(), d->rigidityInput->value(),
+                                      (LqrGradFuncType)d->funcInput->currentIndex(),
+                                      (LqrResizeOrder)d->resizeOrderInput->currentIndex(),
+                                      mask, this)));
 }
 
 void ContentAwareResizeTool::prepareEffect()
@@ -524,19 +540,7 @@ void ContentAwareResizeTool::prepareEffect()
         d->prevWP != d->wpInput->value() || d->prevHP != d->hpInput->value())
         slotValuesChanged();
 
-    d->preserveRatioBox->setEnabled(false);
-    d->wInput->setEnabled(false);
-    d->hInput->setEnabled(false);
-    d->wpInput->setEnabled(false);
-    d->hpInput->setEnabled(false);
-    d->mixedRescaleInput->setEnabled(false);
-    d->stepInput->setEnabled(false);
-    d->rigidityInput->setEnabled(false);
-    d->funcInput->setEnabled(false);
-    d->resizeOrderInput->setEnabled(false);
-    d->weightMaskBox->setEnabled(false);
-    d->redMaskTool->setEnabled(false);
-    d->greenMaskTool->setEnabled(false);
+    disableSettings();
 
     ImageIface* iface = d->previewWidget->imageIface();
     int w             = iface->previewWidth();
@@ -558,12 +562,7 @@ void ContentAwareResizeTool::prepareEffect()
     if(d->weightMaskBox->isChecked())
         mask = d->previewWidget->getMask();
 
-    setFilter(dynamic_cast<DImgThreadedFilter*>(
-              new ContentAwareResizer(&imTemp, new_w, new_h,
-                                      d->stepInput->value(), d->rigidityInput->value(),
-                                      (LqrGradFuncType)d->funcInput->currentIndex(),
-                                      (LqrResizeOrder)d->resizeOrderInput->currentIndex(),
-                                      mask, this)));
+    contentAwareResizeCore( &imTemp, new_w, new_h, mask );
 }
 
 void ContentAwareResizeTool::prepareFinal()
@@ -572,19 +571,7 @@ void ContentAwareResizeTool::prepareFinal()
         d->prevWP != d->wpInput->value() || d->prevHP != d->hpInput->value())
         slotValuesChanged();
 
-    d->preserveRatioBox->setEnabled(false);
-    d->wInput->setEnabled(false);
-    d->hInput->setEnabled(false);
-    d->wpInput->setEnabled(false);
-    d->hpInput->setEnabled(false);
-    d->mixedRescaleInput->setEnabled(false);
-    d->stepInput->setEnabled(false);
-    d->rigidityInput->setEnabled(false);
-    d->funcInput->setEnabled(false);
-    d->resizeOrderInput->setEnabled(false);
-    d->weightMaskBox->setEnabled(false);
-    d->redMaskTool->setEnabled(false);
-    d->greenMaskTool->setEnabled(false);
+    disableSettings();
 
     ImageIface iface(0, 0);
     QImage mask;
@@ -603,25 +590,15 @@ void ContentAwareResizeTool::prepareFinal()
             mask = d->previewWidget->getMask().scaled(iface.originalWidth()  - diff_w,
                                                       iface.originalHeight() - diff_h);
         }
-
-        setFilter(dynamic_cast<DImgThreadedFilter*>(
-                    new ContentAwareResizer(&image, d->wInput->value(), d->hInput->value(),
-                                            d->stepInput->value(), d->rigidityInput->value(),
-                                            (LqrGradFuncType)d->funcInput->currentIndex(),
-                                            (LqrResizeOrder)d->resizeOrderInput->currentIndex(),
-                                            mask, this)));
+        contentAwareResizeCore( &image, d->wInput->value(), d->hInput->value(), mask);
     }
     else
     {
         if(d->weightMaskBox->isChecked())
             mask = d->previewWidget->getMask().scaled(iface.originalWidth(), iface.originalHeight());
 
-        setFilter(dynamic_cast<DImgThreadedFilter*>(
-                    new ContentAwareResizer(iface.getOriginalImg(), d->wInput->value(), d->hInput->value(),
-                                            d->stepInput->value(), d->rigidityInput->value(),
-                                            (LqrGradFuncType)d->funcInput->currentIndex(),
-                                            (LqrResizeOrder)d->resizeOrderInput->currentIndex(),
-                                            mask, this)));
+        contentAwareResizeCore( iface.getOriginalImg(), d->wInput->value(), d->hInput->value(), mask);
+
     }
 }
 

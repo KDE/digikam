@@ -28,6 +28,9 @@
 // Local includes
 
 #include "editortool.h"
+#include "dimg.h"
+
+using namespace Digikam;
 
 namespace DigikamContentAwareResizingImagesPlugin
 {
@@ -53,6 +56,9 @@ private:
     void putFinalData();
     void renderingFinished();
     void blockWidgetSignals(bool b);
+    void disableSettings();
+    void contentAwareResizeCore(DImg *image, int target_width, int target_height, QImage mask);
+    void enableContentAwareSettings(bool b);
 
 private Q_SLOTS:
 
