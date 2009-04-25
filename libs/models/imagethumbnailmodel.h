@@ -47,6 +47,12 @@ class DIGIKAM_DATABASE_EXPORT ImageThumbnailModel : public ImageModel
 
 public:
 
+    /** An ImageModel that supports thumbnail loading.
+     *  You need to set a ThumbnailLoadThread to enable thumbnail loading.
+     *  Adjust the thumbnail size to your needs.
+     *  Note that setKeepsFilePathCache is enabled per default.
+     */
+
     ImageThumbnailModel(QObject *parent);
     ~ImageThumbnailModel();
 
@@ -66,17 +72,9 @@ public:
      */
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
-Q_SIGNALS:
-
-    void thumbnailAvailable(const QModelIndex &index);
-
 protected Q_SLOTS:
 
     void slotThumbnailLoaded(const LoadingDescription &loadingDescription, const QPixmap& thumb);
-
-protected:
-
-    virtual void imageInfosCleared();
 
 private:
 

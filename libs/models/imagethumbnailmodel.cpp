@@ -51,13 +51,12 @@ public:
 
     ThumbnailLoadThread       *thread;
     ThumbnailSize              thumbSize;
-
-    QHash<QString, int>        loadingProcessHash;
 };
 
 ImageThumbnailModel::ImageThumbnailModel(QObject *parent)
     : ImageModel(parent), d(new ImageThumbnailModelPriv)
 {
+    setKeepsFilePathCache(true);
 }
 
 ImageThumbnailModel::~ImageThumbnailModel()
@@ -105,7 +104,6 @@ QVariant ImageThumbnailModel::data(const QModelIndex &index, int role) const
             return thumbnail;
         else
         {
-            d->loadingProcessHash[path] = index.row();
             return QVariant(QVariant::Pixmap);
         }
     }
@@ -114,21 +112,11 @@ QVariant ImageThumbnailModel::data(const QModelIndex &index, int role) const
 
 void ImageThumbnailModel::slotThumbnailLoaded(const LoadingDescription &loadingDescription, const QPixmap& thumb)
 {
-    QHash<QString, int>::iterator it = d->loadingProcessHash.find(loadingDescription.filePath);
-    if (it != d->loadingProcessHash.end())
-    {
-        if (!thumb.isNull())
-        {
-            QModelIndex changed = index(it.value(), 0, QModelIndex());
-            emit thumbnailAvailable(changed);
-        }
-        d->loadingProcessHash.erase(it);
-    }
-}
-
-void ImageThumbnailModel::imageInfosCleared()
-{
-    d->loadingProcessHash.clear();
+    if (thumb.isNull())
+        return;
+    QModelIndex changed = indexForPath(loadingDescription.filePath);
+    if (changed.isValid())
+        emit dataChanged(changed, changed);
 }
 
 }
