@@ -4,11 +4,11 @@ digiKam 0.11.0-beta1 - Release date: 2009-xx-xx
 
 NEW FEATURES:
 
-General        : Add new Batch Queue Manager.
+General        : Add new Batch Queue Manager (http://www.digikam.org/node/427).
 General        : New tool bar animation banner.
 General        : Fix compilation under MSVC 9.
 
-ImageEditor    : New Liquid Rescale tool.
+ImageEditor    : New Liquid Rescale tool (http://www.digikam.org/node/439).
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
