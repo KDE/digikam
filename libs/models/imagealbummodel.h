@@ -76,7 +76,7 @@ protected Q_SLOTS:
     void slotData(KIO::Job* job, const QByteArray& data);
 
     void slotNextRefresh();
-    void slotImageChange(const ImageChangeset &changeset);
+    virtual void slotImageChange(const ImageChangeset &changeset);
     void slotCollectionImageChange(const CollectionImageChangeset &changeset);
     void slotSearchChange(const SearchChangeset &changeset);
 

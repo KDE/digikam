@@ -36,6 +36,8 @@
 namespace Digikam
 {
 
+class ImageChangeset;
+namespace DatabaseFields { class Set; }
 class ImageModelPriv;
 
 class DIGIKAM_DATABASE_EXPORT ImageModel : public QAbstractListModel
@@ -66,6 +68,11 @@ public:
     void setKeepsFilePathCache(bool keepCache);
     bool keepsFilePathCache() const;
 
+    /** Set a set of database fields to watch.
+     *  If either of these is changed, dataChanged() will be emitted.
+     *  Default is no flag (no signal will be emitted) */
+    void setWatchFlags(const DatabaseFields::Set &set);
+
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -83,6 +90,9 @@ public:
     ImageInfo imageInfo(int row) const;
     ImageInfo &imageInfoRef(int row) const;
     qlonglong imageId(int row) const;
+    /** Return the index for the given ImageInfo or id, if contained in this model. */
+    QModelIndex indexForImageInfo(const ImageInfo &info) const;
+    QModelIndex indexForImageId(qlonglong id) const;
     /** Returns the index or ImageInfo object from the underlying data
      *  for the given file path. This is fast if keepsFilePathCache is enabled.
      *  The file path is as returned by ImageInfo.filePath(). */
@@ -97,7 +107,7 @@ public:
     void clearImageInfos();
 
     QList<ImageInfo> imageInfos() const;
-    QSet<qlonglong> imageIds()    const;
+    QList<qlonglong> imageIds()    const;
 
     bool hasImage(qlonglong id) const;
     bool hasImage(const ImageInfo &info) const;
@@ -148,6 +158,8 @@ protected:
 protected Q_SLOTS:
 
     void appendInfos(const QList<ImageInfo> &infos);
+
+    virtual void slotImageChange(const ImageChangeset &changeset);
 
 private:
 

@@ -85,9 +85,6 @@ ImageAlbumModel::ImageAlbumModel(QObject *parent)
     connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset &)),
             this, SLOT(slotCollectionImageChange(const CollectionImageChangeset &)));
 
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset &)),
-            this, SLOT(slotImageChange(const ImageChangeset &)));
-
     connect(DatabaseAccess::databaseWatch(), SIGNAL(searchChange(const SearchChangeset &)),
             this, SLOT(slotSearchChange(const SearchChangeset &)));
 
@@ -231,6 +228,7 @@ void ImageAlbumModel::slotImageChange(const ImageChangeset &changeset)
         }
     }
 
+    ImageModel::slotImageChange(changeset);
 }
 
 void ImageAlbumModel::slotCollectionImageChange(const CollectionImageChangeset &changeset)

@@ -26,7 +26,8 @@
 
 // Qt includes
 
-#include <QSet>
+#include <QHash>
+#include <QItemSelection>
 
 // KDE includes
 
@@ -34,6 +35,9 @@
 
 // Local includes
 
+#include "databasechangesets.h"
+#include "databasefields.h"
+#include "databasewatch.h"
 #include "imageinfo.h"
 #include "imageinfolist.h"
 
@@ -51,18 +55,22 @@ public:
     }
 
     ImageInfoList   infos;
-    QSet<qlonglong> ids;
+    QHash<qlonglong, int> idHash;
 
     bool            keepFilePathCache;
     QHash<QString, int> filePathHash;
 
     QObject        *preprocessor;
+
+    DatabaseFields::Set watchFlags;
 };
 
 ImageModel::ImageModel(QObject *parent)
           : QAbstractListModel(parent),
             d(new ImageModelPriv)
 {
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset &)),
+            this, SLOT(slotImageChange(const ImageChangeset &)));
 }
 
 ImageModel::~ImageModel()
@@ -83,6 +91,11 @@ bool ImageModel::keepsFilePathCache() const
 bool ImageModel::isEmpty() const
 {
     return d->infos.isEmpty();
+}
+
+void ImageModel::setWatchFlags(const DatabaseFields::Set &set)
+{
+    d->watchFlags = set;
 }
 
 ImageInfo ImageModel::imageInfo(const QModelIndex &index) const
@@ -121,6 +134,19 @@ qlonglong ImageModel::imageId(int row) const
     if (row >= d->infos.size())
         return -1;
     return d->infos[row].id();
+}
+
+QModelIndex ImageModel::indexForImageInfo(const ImageInfo &info) const
+{
+    return indexForImageId(info.id());
+}
+
+QModelIndex ImageModel::indexForImageId(qlonglong id) const
+{
+    QHash<qlonglong, int>::iterator it = d->idHash.find(id);
+    if (it != d->idHash.end())
+        return createIndex(it.value(), 0);
+    return QModelIndex();
 }
 
 // static method
@@ -185,7 +211,7 @@ void ImageModel::clearImageInfos()
 {
     reset();
     d->infos.clear();
-    d->ids.clear();
+    d->idHash.clear();
     d->filePathHash.clear();
     imageInfosCleared();
 }
@@ -195,19 +221,19 @@ QList<ImageInfo> ImageModel::imageInfos() const
     return d->infos;
 }
 
-QSet<qlonglong> ImageModel::imageIds() const
+QList<qlonglong> ImageModel::imageIds() const
 {
-    return d->ids;
+    return d->idHash.keys();
 }
 
 bool ImageModel::hasImage(qlonglong id) const
 {
-    return d->ids.contains(id);
+    return d->idHash.contains(id);
 }
 
 bool ImageModel::hasImage(const ImageInfo &info) const
 {
-    return d->ids.contains(info.id());
+    return d->idHash.contains(info.id());
 }
 
 void ImageModel::setPreprocessor(QObject *preprocessor)
@@ -237,12 +263,12 @@ void ImageModel::appendInfos(const QList<ImageInfo> &infos)
     int lastNewIndex = d->infos.size() + infos.size() - 1;
     beginInsertRows(QModelIndex(), firstNewIndex, lastNewIndex);
     d->infos << infos;
-    foreach (const ImageInfo &info, infos)
-        d->ids << info.id();
-    if (d->keepFilePathCache)
+    for (int i=firstNewIndex; i<=lastNewIndex; i++)
     {
-        for (int i=firstNewIndex; i<=lastNewIndex; i++)
-            d->filePathHash[d->infos[i].filePath()] = i;
+        ImageInfo &info = d->infos[i];
+        d->idHash[info.id()] = i;
+        if (d->keepFilePathCache)
+            d->filePathHash[info.filePath()] = i;
     }
     endInsertRows();
     emit imageInfosAdded(infos);
@@ -324,5 +350,27 @@ QMimeData *ImageModel::mimeData(const QModelIndexList &indexes) const
     return QAbstractItemModel::mimeData(indexes);
 }
 */
+
+void ImageModel::slotImageChange(const ImageChangeset &changeset)
+{
+    if (d->infos.isEmpty())
+        return;
+
+    if (d->watchFlags & changeset.changes())
+    {
+        QItemSelection items;
+        foreach(qlonglong id, changeset.ids())
+        {
+            QModelIndex index = indexForImageId(id);
+            if (index.isValid())
+                items.select(index, index);
+        }
+        if (!items.isEmpty())
+        {
+            foreach (const QItemSelectionRange &range, items)
+                emit dataChanged(range.topLeft(), range.bottomRight());
+        }
+    }
+}
 
 } // namespace Digikam
