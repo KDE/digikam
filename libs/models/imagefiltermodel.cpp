@@ -193,6 +193,8 @@ QVariant ImageFilterModel::data(const QModelIndex &index, int role) const
     return KCategorizedSortFilterProxyModel::data(index, role);
 }
 
+// -------------- Convenience mappers --------------
+
 ImageInfo ImageFilterModel::imageInfo(const QModelIndex &index) const
 {
     Q_D(const ImageFilterModel);
@@ -227,6 +229,31 @@ QModelIndex ImageFilterModel::indexForPath(const QString &filePath) const
 {
     Q_D(const ImageFilterModel);
     return mapFromSource(d->imageModel->indexForPath(filePath));
+}
+
+QModelIndex ImageFilterModel::indexForImageInfo(const ImageInfo &info) const
+{
+    Q_D(const ImageFilterModel);
+    return mapFromSource(d->imageModel->indexForImageInfo(info));
+}
+
+QModelIndex ImageFilterModel::indexForImageId(qlonglong id) const
+{
+    Q_D(const ImageFilterModel);
+    return mapFromSource(d->imageModel->indexForImageId(id));
+}
+
+QList<ImageInfo> ImageFilterModel::imageInfosSorted() const
+{
+    Q_D(const ImageFilterModel);
+    QList<ImageInfo> infos;
+    const int size = rowCount();
+    for (int i=0; i<size; i++)
+    {
+        QModelIndex index = createIndex(i, 0);
+        infos << d->imageModel->imageInfo(mapToSource(index));
+    }
+    return infos;
 }
 
 // -------------- Filter settings --------------

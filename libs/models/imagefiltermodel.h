@@ -78,6 +78,11 @@ public:
     QList<ImageInfo> imageInfos(const QList<QModelIndex> &indexes);
     QList<qlonglong> imageIds(const QList<QModelIndex> &indexes);
     QModelIndex indexForPath(const QString &filePath) const;
+    QModelIndex indexForImageInfo(const ImageInfo &info) const;
+    QModelIndex indexForImageId(qlonglong id) const;
+    /** Returns a list of all image infos, sorted according to this model.
+     *  If you do not need a sorted list, use ImageModel's imageInfos() method. */
+    QList<ImageInfo> imageInfosSorted() const;
 
     /** Changes the current image filter settings and refilters. */
     virtual void setImageFilterSettings(const ImageFilterSettings &settings);
