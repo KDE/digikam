@@ -213,6 +213,11 @@ public:
     DATABASEFIELDS_SET_DECLARE_METHODS(ImageComments, imageComments)
     DATABASEFIELDS_SET_DECLARE_METHODS(ImagePositions, imagePositions)
 
+    inline bool operator&(const Set &other)
+    { return (images & other.images) || (imageInformation & other.imageInformation)  ||
+             (imageMetadata & other.imageMetadata) || (imageComments & other.imageComments) ||
+             (imagePositions & other.imagePositions) || (customEnum & other.customEnum); }
+
     inline CustomEnum &operator=(const CustomEnum &f) { return customEnum.operator=(f); }
     inline CustomEnum &operator|=(CustomEnum f)       { return customEnum.operator|=(f); }
     inline CustomEnum &operator^=(CustomEnum f)       { return customEnum.operator^=(f); }
