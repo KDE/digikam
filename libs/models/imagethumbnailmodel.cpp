@@ -74,8 +74,15 @@ void ImageThumbnailModel::setThumbnailLoadThread(ThumbnailLoadThread *thread)
     d->thread->setThumbnailSize(d->thumbSize.size());
 }
 
+ThumbnailSize ImageThumbnailModel::thumbnailSize() const
+{
+    return d->thumbSize;
+}
+
 void ImageThumbnailModel::setThumbnailSize(const ThumbnailSize &size)
 {
+    if (d->thumbSize == size)
+        return;
     d->thumbSize = size;
     d->thread->setThumbnailSize(d->thumbSize.size());
 }

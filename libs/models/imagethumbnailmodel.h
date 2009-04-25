@@ -62,6 +62,8 @@ public:
     /// Set the thumbnail size to use
     void setThumbnailSize(const ThumbnailSize &thumbSize);
 
+    ThumbnailSize thumbnailSize() const;
+
     /** Prepare the thumbnail loading for the given indexes */
     void prepareThumbnails(const QList<QModelIndex> &indexesToPrepare);
 
