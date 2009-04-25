@@ -286,7 +286,7 @@ Qt::ItemFlags ImageModel::flags(const QModelIndex &index) const
 
 QModelIndex ImageModel::index(int row, int column, const QModelIndex &parent) const
 {
-    if (column != 0 || parent.isValid() || row >= d->infos.size())
+    if (column != 0 || row < 0 || parent.isValid() || row >= d->infos.size())
         return QModelIndex();
 
     return createIndex(row, 0);
