@@ -43,6 +43,7 @@
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "album.h"
+#include "tooltipfiller.h"
 
 namespace Digikam
 {
@@ -116,76 +117,11 @@ QString FolderViewToolTip::tipContents()
         {
             PAlbum *album = item->album();
             if (album && !album->isRoot() && !album->isAlbumRoot())
-                return fillTipContents(album, item->isOpen() ? item->count()
-                                                             : item->countRecursive());
+                return ToolTipFiller::albumTipContents(album, item->isOpen() ? item->count()
+                                                                     : item->countRecursive());
         }
     }
     return QString();
-}
-
-QString FolderViewToolTip::fillTipContents(PAlbum *album, int count)
-{
-    if (!album) return QString();
-
-    QString            str;
-    AlbumSettings*     settings = AlbumSettings::instance();
-    DToolTipStyleSheet cnt(settings->getToolTipsFont());
-    QString            tip = cnt.tipHeader;
-
-    if (settings->getToolTipsShowAlbumTitle()      ||
-        settings->getToolTipsShowAlbumDate()       ||
-        settings->getToolTipsShowAlbumCollection() ||
-        settings->getToolTipsShowAlbumCategory()   ||
-        settings->getToolTipsShowAlbumCaption())
-    {
-        tip += cnt.headBeg + i18n("Album Properties") + cnt.headEnd;
-
-        if (settings->getToolTipsShowAlbumTitle())
-        {
-            tip += cnt.cellBeg + i18n("Name:") + cnt.cellMid;
-            tip += album->title() + cnt.cellEnd;
-        }
-
-        if (settings->getShowFolderTreeViewItemsCount())
-        {
-            tip += cnt.cellBeg + i18n("Items:") + cnt.cellMid;
-            tip += QString::number(count) + cnt.cellEnd;
-        }
-
-        if (settings->getToolTipsShowAlbumCollection())
-        {
-            tip += cnt.cellBeg + i18n("Collection:") + cnt.cellMid;
-            Album *col = AlbumManager::instance()->findAlbum(album->albumRootId());
-            tip += col ? col->title() : QString() + cnt.cellEnd;
-        }
-
-        if (settings->getToolTipsShowAlbumDate())
-        {
-            QDate date = album->date();
-            str        = KGlobal::locale()->formatDate(date, KLocale::ShortDate);
-            tip        += cnt.cellBeg + i18n("Date:") + cnt.cellMid + str + cnt.cellEnd;
-        }
-
-        if (settings->getToolTipsShowAlbumCategory())
-        {
-            str = album->category();
-            if (str.isEmpty()) str = QString("---");
-            tip += cnt.cellSpecBeg + i18n("Category:") + cnt.cellSpecMid + 
-                   cnt.breakString(str) + cnt.cellSpecEnd;
-        }
-
-        if (settings->getToolTipsShowAlbumCaption())
-        {
-            str = album->caption();
-            if (str.isEmpty()) str = QString("---");
-            tip += cnt.cellSpecBeg + i18n("Caption:") + cnt.cellSpecMid + 
-                   cnt.breakString(str) + cnt.cellSpecEnd;
-        }
-    }
-
-    tip += cnt.tipFooter;
-
-    return tip;
 }
 
 }  // namespace Digikam

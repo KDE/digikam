@@ -63,6 +63,7 @@
 #include "ratingbox.h"
 #include "dpopupmenu.h"
 #include "themeengine.h"
+#include "tooltipfiller.h"
 
 namespace Digikam
 {
@@ -744,7 +745,7 @@ QString ImagePreviewBarToolTip::tipContents()
 {
     if (!item()) return QString();
     ImageInfo info = dynamic_cast<ImagePreviewBarItem *>(item())->info();
-    return AlbumIconViewToolTip::fillTipContents(info);
+    return ToolTipFiller::imageInfoTipContents(info);
 }
 
 }  // namespace Digikam

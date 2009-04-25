@@ -39,7 +39,7 @@
 
 #include "queuelist.h"
 #include "albumsettings.h"
-#include "albumiconviewtooltip.h"
+#include "tooltipfiller.h"
 
 namespace Digikam
 {
@@ -101,7 +101,7 @@ QString QueueToolTip::tipContents()
 {
     if (!d->item) return QString();
     ImageInfo info = d->item->info();
-    return AlbumIconViewToolTip::fillTipContents(info);
+    return ToolTipFiller::imageInfoTipContents(info);
 }
 
 }  // namespace Digikam

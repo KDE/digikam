@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2008-12-29
- * Description : folder view tool tip
+ * Date        : 2008-12-10
+ * Description : album icon view tool tip
  *
  * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,40 +21,25 @@
  *
  * ============================================================ */
 
-#ifndef FOLDERVIEWTOOLTIP_H
-#define FOLDERVIEWTOOLTIP_H
+#ifndef TOOLTIPFILLER_H
+#define TOOLTIPFILLER_H
 
-// Local includes
+// Qt includes
 
-#include "ditemtooltip.h"
+#include <QString>
 
 namespace Digikam
 {
 
+class ImageInfo;
 class PAlbum;
-class FolderItem;
-class FolderView;
-class FolderViewToolTipPriv;
 
-class FolderViewToolTip : public DItemToolTip
+namespace ToolTipFiller
 {
-public:
-
-    FolderViewToolTip(FolderView* view);
-    ~FolderViewToolTip();
-
-    void setFolderItem(FolderItem* folderItem);
-
-private:
-
-    QRect   repositionRect();
-    QString tipContents();
-
-private:
-
-    FolderViewToolTipPriv* const d;
-};
+    QString imageInfoTipContents(const ImageInfo& info);
+    QString albumTipContents(PAlbum* album, int count);
+}
 
 }  // namespace Digikam
 
-#endif /* FOLDERVIEWTOOLTIP_H */
+#endif /* TOOLTIPFILLER_H */
