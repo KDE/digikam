@@ -57,6 +57,11 @@ public:
     ImageModel(QObject *parent = 0);
     ~ImageModel();
 
+    /** If a cache is kept, lookup by file path is fast,
+     *  without a cache it is O(n). Default is false. */
+    void setKeepsFilePathCache(bool keepCache);
+    bool keepsFilePathCache() const;
+
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -74,6 +79,11 @@ public:
     ImageInfo imageInfo(int row) const;
     ImageInfo &imageInfoRef(int row) const;
     qlonglong imageId(int row) const;
+    /** Returns the index or ImageInfo object from the underlying data
+     *  for the given file path. This is fast if keepsFilePathCache is enabled.
+     *  The file path is as returned by ImageInfo.filePath(). */
+    QModelIndex indexForPath(const QString &filePath) const;
+    ImageInfo imageInfo(const QString &filePath) const;
 
     /** Retrieves the imageInfo object from the data() method of the given index.
      *  The index may be from a QSortFilterProxyModel as long as an ImageModel is at the end. */

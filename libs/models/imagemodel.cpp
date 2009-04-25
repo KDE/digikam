@@ -46,13 +46,17 @@ public:
 
     ImageModelPriv()
     {
-        preprocessor = 0;
+        preprocessor      = 0;
+        keepFilePathCache = false;
     }
 
     ImageInfoList   infos;
     QSet<qlonglong> ids;
 
-    QObject      *preprocessor;
+    bool            keepFilePathCache;
+    QHash<QString, int> filePathHash;
+
+    QObject        *preprocessor;
 };
 
 ImageModel::ImageModel(QObject *parent)
@@ -64,6 +68,16 @@ ImageModel::ImageModel(QObject *parent)
 ImageModel::~ImageModel()
 {
     delete d;
+}
+
+void ImageModel::setKeepsFilePathCache(bool keepCache)
+{
+    d->keepFilePathCache = keepCache;
+}
+
+bool ImageModel::keepsFilePathCache() const
+{
+    return d->keepFilePathCache;
 }
 
 bool ImageModel::isEmpty() const
@@ -114,6 +128,41 @@ ImageInfo ImageModel::retrieveImageInfo(const QModelIndex &index)
     return model->imageInfo(row);
 }
 
+QModelIndex ImageModel::indexForPath(const QString &filePath) const
+{
+    if (d->keepFilePathCache)
+    {
+        int index = d->filePathHash.value(filePath, -1);
+        if (index != -1)
+            return createIndex(index, 0);
+    }
+    else
+    {
+        const int size = d->infos.size();
+        for (int i=0; i<size; i++)
+            if (d->infos[i].filePath() == filePath)
+                return createIndex(i, 0);
+    }
+    return QModelIndex();
+}
+
+ImageInfo ImageModel::imageInfo(const QString &filePath) const
+{
+    if (d->keepFilePathCache)
+    {
+        int index = d->filePathHash.value(filePath, -1);
+        if (index != -1)
+            return d->infos[index];
+    }
+    else
+    {
+        foreach (const ImageInfo &info, d->infos)
+            if (info.filePath() == filePath)
+                return info;
+    }
+    return ImageInfo();
+}
+
 void ImageModel::addImageInfos(const QList<ImageInfo> &infos)
 {
     if (infos.isEmpty())
@@ -130,6 +179,7 @@ void ImageModel::clearImageInfos()
     reset();
     d->infos.clear();
     d->ids.clear();
+    d->filePathHash.clear();
     imageInfosCleared();
 }
 
@@ -176,10 +226,17 @@ void ImageModel::reAddImageInfos(const QList<ImageInfo> &infos)
 void ImageModel::appendInfos(const QList<ImageInfo> &infos)
 {
     emit imageInfosAboutToBeAdded(infos);
-    beginInsertRows(QModelIndex(), d->infos.size(), d->infos.size() + infos.size());
+    int firstNewIndex = d->infos.size();
+    int lastNewIndex = d->infos.size() + infos.size() - 1;
+    beginInsertRows(QModelIndex(), firstNewIndex, lastNewIndex);
     d->infos << infos;
     foreach (const ImageInfo &info, infos)
         d->ids << info.id();
+    if (d->keepFilePathCache)
+    {
+        for (int i=firstNewIndex; i<=lastNewIndex; i++)
+            d->filePathHash[d->infos[i].filePath()] = i;
+    }
     endInsertRows();
     emit imageInfosAdded(infos);
 }
