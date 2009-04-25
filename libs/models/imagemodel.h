@@ -51,7 +51,11 @@ public:
         ImageModelInternalId  = Qt::UserRole + 1,
         /// Returns a thumbnail pixmap. May be implemented by subclasses.
         /// Returns either a valid pixmap or a null QVariant.
-        ThumbnailRole         = Qt::UserRole + 2
+        ThumbnailRole         = Qt::UserRole + 2,
+        // For use by subclasses
+        SubclassRoles         = Qt::UserRole + 100,
+        // For use by filter models
+        FilterModelRoles      = Qt::UserRole + 500
     };
 
     ImageModel(QObject *parent = 0);
