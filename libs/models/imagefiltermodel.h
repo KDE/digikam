@@ -72,6 +72,13 @@ public:
 
     ImageModel *sourceModel() const;
 
+    /// Convenience methods mapped to ImageModel
+    ImageInfo imageInfo(const QModelIndex &index) const;
+    qlonglong imageId(const QModelIndex &index) const;
+    QList<ImageInfo> imageInfos(const QList<QModelIndex> &indexes);
+    QList<qlonglong> imageIds(const QList<QModelIndex> &indexes);
+    QModelIndex indexForPath(const QString &filePath) const;
+
     /** Changes the current image filter settings and refilters. */
     virtual void setImageFilterSettings(const ImageFilterSettings &settings);
     ImageFilterSettings imageFilterSettings() const;

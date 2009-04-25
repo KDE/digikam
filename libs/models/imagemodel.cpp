@@ -87,6 +87,8 @@ bool ImageModel::isEmpty() const
 
 ImageInfo ImageModel::imageInfo(const QModelIndex &index) const
 {
+    if (!index.isValid())
+        return ImageInfo();
     return d->infos[index.row()];
 }
 
@@ -97,6 +99,8 @@ ImageInfo &ImageModel::imageInfoRef(const QModelIndex &index) const
 
 qlonglong ImageModel::imageId(const QModelIndex &index) const
 {
+    if (!index.isValid())
+        return -1;
     return d->infos[index.row()].id();
 }
 
@@ -122,6 +126,9 @@ qlonglong ImageModel::imageId(int row) const
 // static method
 ImageInfo ImageModel::retrieveImageInfo(const QModelIndex &index)
 {
+    if (!index.isValid())
+        return ImageInfo();
+
     ImageModel *model = index.data(ImageModelPointerRole).value<ImageModel*>();
     Q_ASSERT(model);
     int row = index.data(ImageModelInternalId).toInt();

@@ -193,6 +193,42 @@ QVariant ImageFilterModel::data(const QModelIndex &index, int role) const
     return KCategorizedSortFilterProxyModel::data(index, role);
 }
 
+ImageInfo ImageFilterModel::imageInfo(const QModelIndex &index) const
+{
+    Q_D(const ImageFilterModel);
+    return d->imageModel->imageInfo(mapToSource(index));
+}
+
+qlonglong ImageFilterModel::imageId(const QModelIndex &index) const
+{
+    Q_D(const ImageFilterModel);
+    return d->imageModel->imageId(mapToSource(index));
+}
+
+QList<ImageInfo> ImageFilterModel::imageInfos(const QList<QModelIndex> &indexes)
+{
+    Q_D(const ImageFilterModel);
+    QList<ImageInfo> infos;
+    foreach (const QModelIndex &index, indexes)
+        infos << d->imageModel->imageInfo(mapToSource(index));
+    return infos;
+}
+
+QList<qlonglong> ImageFilterModel::imageIds(const QList<QModelIndex> &indexes)
+{
+    Q_D(const ImageFilterModel);
+    QList<qlonglong> ids;
+    foreach (const QModelIndex &index, indexes)
+        ids << d->imageModel->imageId(mapToSource(index));
+    return ids;
+}
+
+QModelIndex ImageFilterModel::indexForPath(const QString &filePath) const
+{
+    Q_D(const ImageFilterModel);
+    return mapFromSource(d->imageModel->indexForPath(filePath));
+}
+
 // -------------- Filter settings --------------
 
 void ImageFilterModel::setDayFilter(const QList<QDateTime>& days)
