@@ -60,6 +60,8 @@ public:
 
     ImageCategoryDrawer *categoryDrawer() const;
 
+    virtual bool acceptsToolTip(const QPoint &pos, const QStyleOptionViewItem &option, const QModelIndex & index) const;
+
 protected Q_SLOTS:
 
     void slotThemeChanged();

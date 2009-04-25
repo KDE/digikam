@@ -317,6 +317,21 @@ QSize ImageDelegate::sizeHint(const QStyleOptionViewItem &/*option*/, const QMod
     return d->rect.size();
 }
 
+bool ImageDelegate::acceptsToolTip(const QPoint &pos, const QStyleOptionViewItem &option, const QModelIndex & index) const
+{
+    qlonglong id = ImageModel::retrieveImageId(index);
+
+    if (!id)
+        return false;
+
+    QRect actualRect = actualPixmapRect(id);
+    if (actualRect.isNull())
+        return false;
+
+    actualRect.translate(option.rect.topLeft());
+    return actualRect.contains(pos);
+}
+
 void ImageDelegate::setDefaultViewOptions(const QStyleOptionViewItem &option)
 {
     d->font = option.font;
