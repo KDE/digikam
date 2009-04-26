@@ -563,14 +563,14 @@ void ContentAwareResizeTool::prepareEffect()
     int w             = iface->previewWidth();
     int h             = iface->previewHeight();
     DImg imTemp       = iface->getOriginalImg()->smoothScale(w, h, Qt::ScaleMin);
-    int new_w         = w*d->wpInput->value()/100.0;
-    int new_h         = h*d->hpInput->value()/100.0;
+    int new_w         = (int)(w*d->wpInput->value()/100.0);
+    int new_h         = (int)(h*d->hpInput->value()/100.0);
 
     if(d->mixedRescaleInput->value()<100.0) // mixed rescale
     {
         double stdRescaleP = (100.0 - d->mixedRescaleInput->value()) / 100.0;
-        int diff_w         = stdRescaleP * (w - new_w);
-        int diff_h         = stdRescaleP * (h - new_h);
+        int diff_w         = (int)(stdRescaleP * (w - new_w));
+        int diff_h         = (int)(stdRescaleP * (h - new_h));
 
         imTemp.resize(imTemp.width() - diff_w, imTemp.height() - diff_h);
     }
@@ -596,8 +596,8 @@ void ContentAwareResizeTool::prepareFinal()
     if(d->mixedRescaleInput->value() < 100.0) // mixed rescale
     {
         double stdRescaleP = (100.0 - d->mixedRescaleInput->value()) / 100.0;
-        int diff_w         = stdRescaleP * (iface.originalWidth()  - d->wInput->value());
-        int diff_h         = stdRescaleP * (iface.originalHeight() - d->hInput->value());
+        int diff_w         = (int)(stdRescaleP * (iface.originalWidth()  - d->wInput->value()));
+        int diff_h         = (int)(stdRescaleP * (iface.originalHeight() - d->hInput->value()));
         DImg image         = iface.getOriginalImg()->smoothScale(iface.originalWidth()  - diff_w,
                                                                  iface.originalHeight() - diff_h,
                                                                  Qt::IgnoreAspectRatio);
