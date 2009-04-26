@@ -51,7 +51,7 @@ public:
 
     ContentAwareResizer(DImg *orgImage, uint width, uint height,
                         int step=1, double rigidity=0.0, LqrGradFuncType func=LQR_GF_XABS,
-                        LqrResizeOrder resize_order=LQR_RES_ORDER_HOR, const QImage& mask=QImage(),
+                        LqrResizeOrder resize_order=LQR_RES_ORDER_HOR, const QImage& mask=QImage(), bool preserve_skin_tones=false,
                         QObject *parent=0);
     ~ContentAwareResizer();
 
@@ -63,6 +63,8 @@ private:
     void filterImage();
 
     void buildBias(const QImage& mask);
+    void buildSkinToneBias();
+    bool isSkinTone(DColor c);
 
 private:
 

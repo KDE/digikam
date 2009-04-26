@@ -97,19 +97,25 @@ public:
 
     ContentAwareResizeToolPriv()
     {
-        previewWidget    = 0;
-        gboxSettings     = 0;
-        preserveRatioBox = 0;
-        prevW            = 0;
-        prevH            = 0;
-        orgWidth         = 0;
-        orgHeight        = 0;
-        wInput           = 0;
-        hInput           = 0;
-        wpInput          = 0;
-        hpInput          = 0;
-        stepInput        = 0;
-        rigidityInput    = 0;
+        preserveRatioBox  = 0;
+        weightMaskBox     = 0;
+        preserveSkinTones = 0;
+        previewWidget     = 0;
+        gboxSettings      = 0;
+        wInput            = 0;
+        hInput            = 0;
+        stepInput         = 0;
+        wpInput           = 0;
+        hpInput           = 0;
+        mixedRescaleInput = 0;
+        rigidityInput     = 0;
+        funcInput         = 0;
+        resizeOrderInput  = 0;
+        redMaskTool       = 0;
+        greenMaskTool     = 0;
+        maskGroup         = 0;
+        prevW             = 0;
+        prevH             = 0;
     }
 
     int                 orgWidth;
@@ -122,6 +128,7 @@ public:
 
     QCheckBox          *preserveRatioBox;
     QCheckBox          *weightMaskBox;
+    QCheckBox          *preserveSkinTones;
 
     ImageWidget        *previewWidget;
 
@@ -213,7 +220,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
 
     // -------------------------------------------------------------
 
-    KSeparator *line3  = new KSeparator(Qt::Horizontal, d->gboxSettings->plainPage());
+    KSeparator *line3         = new KSeparator(Qt::Horizontal, d->gboxSettings->plainPage());
 
     QLabel *labelMixedPercent = new QLabel(i18n("Percent of content aware rescale:"), d->gboxSettings->plainPage());
     d->mixedRescaleInput      = new RDoubleNumInput(d->gboxSettings->plainPage());
@@ -264,6 +271,11 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     d->funcInput->setDefaultIndex(ContentAwareResizeToolPriv::Abs);
     d->funcInput->setWhatsThis(i18n("This option allows you to choose a gradient function. This function is used "
                                     "to determine which pixels should be removed."));
+
+
+    d->preserveSkinTones = new QCheckBox(i18n("Preserve Skin Tones"), d->gboxSettings->plainPage());
+    d->preserveSkinTones->setWhatsThis(i18n("Enable this option to add more energy to pixels whose color looks like a skin tone."));
+    d->preserveSkinTones->setChecked(false);
 
     // -------------------------------------------------------------
 
@@ -330,15 +342,16 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     grid->addWidget(line,                 12, 0, 1, -1);
     grid->addWidget(labelFunction,        13, 0, 1, 1);
     grid->addWidget(d->funcInput,         13, 1, 1, 4);
-    grid->addWidget(line2,                14, 0, 1, -1);
-    grid->addWidget(labelAdvSettings,     15, 0, 1, 3);
-    grid->addWidget(labelRigidity,        16, 0, 1, 1);
-    grid->addWidget(d->rigidityInput,     16, 1, 1, 4);
-    grid->addWidget(labelStep,            17, 0, 1, 1);
-    grid->addWidget(d->stepInput,         17, 1, 1, 4);
-    grid->addWidget(labelResizeOrder,     18, 0, 1, 1);
-    grid->addWidget(d->resizeOrderInput,  18, 1, 1, 4);
-    grid->setRowStretch(19, 10);
+    grid->addWidget(d->preserveSkinTones, 14, 0, 1, 3);
+    grid->addWidget(line2,                15, 0, 1, -1);
+    grid->addWidget(labelAdvSettings,     16, 0, 1, 3);
+    grid->addWidget(labelRigidity,        17, 0, 1, 1);
+    grid->addWidget(d->rigidityInput,     17, 1, 1, 4);
+    grid->addWidget(labelStep,            18, 0, 1, 1);
+    grid->addWidget(d->stepInput,         18, 1, 1, 4);
+    grid->addWidget(labelResizeOrder,     19, 0, 1, 1);
+    grid->addWidget(d->resizeOrderInput,  19, 1, 1, 4);
+    grid->setRowStretch(20, 10);
     grid->setMargin(d->gboxSettings->spacingHint());
     grid->setSpacing(d->gboxSettings->spacingHint());
 
@@ -387,6 +400,8 @@ void ContentAwareResizeTool::readSettings()
     d->funcInput->setCurrentIndex(group.readEntry("Function",           d->funcInput->defaultIndex()));
     d->resizeOrderInput->setCurrentIndex(group.readEntry("Order",       d->resizeOrderInput->defaultIndex()));
     d->mixedRescaleInput->setValue(group.readEntry("MixedRescaleValue", d->mixedRescaleInput->defaultValue()));
+
+    enableContentAwareSettings(d->mixedRescaleInput->value() > 0.0);
 
     blockWidgetSignals(false);
 }
@@ -501,6 +516,7 @@ void ContentAwareResizeTool::enableContentAwareSettings(bool b)
     d->stepInput->setEnabled(b);
     d->rigidityInput->setEnabled(b);
     d->funcInput->setEnabled(b);
+    d->preserveSkinTones->setEnabled(b);
     d->resizeOrderInput->setEnabled(b);
     d->weightMaskBox->setEnabled(b);
     d->redMaskTool->setEnabled(b);
@@ -532,7 +548,7 @@ void ContentAwareResizeTool::contentAwareResizeCore(DImg *image, int target_widt
                                       d->stepInput->value(), d->rigidityInput->value(),
                                       (LqrGradFuncType)d->funcInput->currentIndex(),
                                       (LqrResizeOrder)d->resizeOrderInput->currentIndex(),
-                                      mask, this)));
+                                      mask, d->preserveSkinTones->isChecked(),this)));
 }
 
 void ContentAwareResizeTool::prepareEffect()
@@ -580,9 +596,9 @@ void ContentAwareResizeTool::prepareFinal()
     if(d->mixedRescaleInput->value() < 100.0) // mixed rescale
     {
         double stdRescaleP = (100.0 - d->mixedRescaleInput->value()) / 100.0;
-        int diff_w         = stdRescaleP * (iface.originalWidth() - d->wInput->value());
+        int diff_w         = stdRescaleP * (iface.originalWidth()  - d->wInput->value());
         int diff_h         = stdRescaleP * (iface.originalHeight() - d->hInput->value());
-        DImg image         = iface.getOriginalImg()->smoothScale(iface.originalWidth() - diff_w,
+        DImg image         = iface.getOriginalImg()->smoothScale(iface.originalWidth()  - diff_w,
                                                                  iface.originalHeight() - diff_h,
                                                                  Qt::IgnoreAspectRatio);
 
@@ -629,6 +645,7 @@ void ContentAwareResizeTool::renderingFinished()
     d->stepInput->setEnabled(true);
     d->rigidityInput->setEnabled(true);
     d->funcInput->setEnabled(true);
+    d->preserveSkinTones->setEnabled(true);
     d->resizeOrderInput->setEnabled(true);
     d->mixedRescaleInput->setEnabled(true);
     d->weightMaskBox->setEnabled(true);

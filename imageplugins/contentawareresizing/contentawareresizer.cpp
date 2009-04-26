@@ -78,7 +78,7 @@ public:
 
 ContentAwareResizer::ContentAwareResizer(DImg *orgImage, uint width, uint height,
                                          int step, double rigidity, LqrGradFuncType func,
-                                         LqrResizeOrder resize_order, const QImage& mask, QObject *parent)
+                                         LqrResizeOrder resize_order, const QImage& mask, bool preserve_skin_tones, QObject *parent)
                    : Digikam::DImgThreadedFilter(orgImage, parent, "ContentAwareResizer"),
                      d(new ContentAwareResizerPriv)
 {
@@ -129,6 +129,10 @@ ContentAwareResizer::ContentAwareResizer(DImg *orgImage, uint width, uint height
         // Set a bias if any mask
         if(!mask.isNull())
             buildBias(mask);
+
+        // Set skin tone mask if option is activated
+        if(preserve_skin_tones)
+            buildSkinToneBias();
     }
 }
 
@@ -202,13 +206,55 @@ void ContentAwareResizer::cancelFilter()
     DImgThreadedFilter::cancelFilter();
 }
 
+bool ContentAwareResizer::isSkinTone(DColor c) 
+{
+    int    R = c.red();
+    int    G = c.green();
+    int    B = c.blue();
+    int    S = R + G + B;
+    double r = R / S;
+    double g = G / S;
+    double b = B / S;
+    double s = r + g + b;
+
+    return( (b/g < 1.249)         &&
+            (s/3.0*r > 0.696)     &&
+            (1.0/3.0-b/s > 0.014) &&
+            (g/(3.0*s) <0.108)
+          );
+}
+
+void ContentAwareResizer::buildSkinToneBias()
+{
+    int biasSize = m_orgImage.width() * m_orgImage.height();
+    d->bias      = new gdouble[biasSize];
+
+    if(d->bias)
+    {
+        // Build bias table
+        for(uint x=0; x< m_orgImage.width(); x++)
+        {
+            for(uint y=0; y< m_orgImage.height(); y++)
+            {
+               // There we have to calculate the correct k of d->bias
+               if (isSkinTone(m_orgImage.getPixelColor(x,y)))
+                   d->bias[y*m_orgImage.width() + x] = 1.0;
+               else
+                   d->bias[y*m_orgImage.width() + x] = 0.0; 
+            }
+        }
+
+        kDebug(50003) << "Set LibLqr skin tone mask..." << endl;
+        lqr_carver_bias_add(d->carver, d->bias, 1000000);
+    }
+}
+
 void ContentAwareResizer::buildBias(const QImage& mask)
 {
     QColor pixColor;
     int    r,g,b,a;
     int    biasSize = mask.width() * mask.height();
-
-    d->bias = new gdouble[biasSize];
+    d->bias         = new gdouble[biasSize];
 
     if(d->bias)
     {
