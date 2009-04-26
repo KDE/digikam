@@ -61,7 +61,7 @@ public:
         CategoryAlbumIdRole    = ImageModel::FilterModelRoles + 4,
         /// Returns the format of the PAlbum of the index which is used for category
         CategoryFormatRole     = ImageModel::FilterModelRoles + 5,
-        ImageFilterModelPointerRole  = ImageModel::FilterModelRoles + 50,
+        ImageFilterModelPointerRole  = ImageModel::FilterModelRoles + 50
     };
 
     ImageFilterModel(QObject *parent = 0);
