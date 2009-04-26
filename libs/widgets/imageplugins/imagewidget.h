@@ -60,7 +60,7 @@ public:
 
     ImageWidget(const QString& settingsSection, QWidget *parent=0,
                 const QString& previewWhatsThis=QString(), bool prevModeOptions=true,
-                int guideMode=ImageGuideWidget::PickColorMode,
+                int  guideMode=ImageGuideWidget::PickColorMode,
                 bool guideVisible=true, bool useImageSelection=false);
     ~ImageWidget();
 
@@ -75,7 +75,7 @@ public:
     void   writeSettings();
 
     void   setRenderingPreviewMode(int mode);
-    void   setPoints(const QPolygon &p, bool drawLine = false);
+    void   setPoints(const QPolygon& p, bool drawLine=false);
     void   resetPoints();
 
     void   setPaintColor(const QColor& color);
