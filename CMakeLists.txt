@@ -1,6 +1,7 @@
 PROJECT(digikam)
 
 OPTION(ENABLE_GPHOTO2 "Build digiKam with libgphoto2 support (default=ON)" ON)
+OPTION(ENABLE_THEMEDESIGNER "Build digiKam theme designer (default=OFF)" OFF)
 
 # ==================================================================================================
 # Information to update before to release this package.
@@ -920,7 +921,10 @@ ENDIF(MSVC)
     ADD_SUBDIRECTORY(kioslave)
     ADD_SUBDIRECTORY(showfoto)
     ADD_SUBDIRECTORY(imageplugins)
-    ADD_SUBDIRECTORY(themedesigner)
+
+    IF(ENABLE_THEMEDESIGNER)
+        ADD_SUBDIRECTORY(themedesigner)
+    ENDIF(ENABLE_THEMEDESIGNER)
 
     INSTALL(FILES tips DESTINATION ${DATA_INSTALL_DIR}/digikam)
 

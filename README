@@ -86,9 +86,9 @@ http://dev.robotbattle.com/bugs/main_page.php
 
 Name            Version                       URL                                        Remarks
 
-CMake           >= 2.4.x                      http://www.cmake.org
-libqt           >= 4.3.x (4.4.x recommended)  http://www.qtsoftware.com                  Including SQLite3 database plugin
-kdelibs         >= 4.0.x (4.1.x recommended)  http://www.kde.org
+CMake           >= 2.4.x (2.4.3 recommended)  http://www.cmake.org
+libqt           >= 4.3.x (4.5.x recommended)  http://www.qtsoftware.com                  Including SQLite3 database plugin
+kdelibs         >= 4.0.x (4.2.x recommended)  http://www.kde.org
 libkipi         >= 0.2.0                      http://www.digikam.org/sharedlibs
 libkexiv2       >= 0.5.0                      http://www.digikam.org/sharedlibs          Version from trunk KDE svn repository. Will be released with KDE 4.2. Exiv2 0.18.x shared library recommended.
 libkdcraw       >= 0.4.0                      http://www.digikam.org/sharedlibs          Version from trunk KDE svn repository. Will be released with KDE 4.2.
@@ -100,16 +100,18 @@ libjasper       >= 1.7.x                      http://www.ece.uvic.ca/~mdadams/ja
 
 Optional :
 
-libkdepimlibs   >= 4.0.x (4.1.x recommended)  http://pim.kde.org                         To support KAddressBook entries.
+libkdepimlibs   >= 4.0.x (4.2.x recommended)  http://pim.kde.org                         To support KAddressBook entries.
 libmarblewidget >= 0.5.1 (0.6.x recommended)  http://edu.kde.org/marble                  To support Geolocation using Marble Widget.
 liblensfun      >= 0.1.0                      http://lensfun.berlios.de                  To support LensCorrection editor plugin.
-libgphoto2      >= 2.4.0                      http://www.gphoto.org                      To support Gphoto2 Cameras. Enable by default.
-                                                                                         Use CMake "-DENABLE_GPHOTO2=no" flag to compile 
-                                                                                         digiKam without libgphoto2 support.
+libgphoto2      >= 2.4.0                      http://www.gphoto.org                      To support Gphoto2 Cameras. 
 
 Note : all library dependencies require development and binary packages installed on your
 computer to compile digiKam.
 
+CMake compilation option de customized for digiKam:
+
+Use CMake "-DENABLE_GPHOTO2=no" flag to compile digiKam without libgphoto2 support (enabled by default).
+Use CMake "-DENABLE_GPHOTO2=yes" flag to compile digiKam theme designer (disabled by default).
 
 -- INSTALLATION --------------------------------------------------------
 
