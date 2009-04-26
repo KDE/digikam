@@ -26,7 +26,11 @@
 
 #define LQR_MAX_NAME_LENGTH (1024)
 
+#ifdef _MSC_VER
+#define LQR_PUBLIC
+#else
 #define LQR_PUBLIC __attribute__((visibility("default")))
+#endif
 
 #define TRY_N_N(assign) if ((assign) == NULL) { return NULL; }
 /*
