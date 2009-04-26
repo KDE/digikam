@@ -27,10 +27,10 @@
 #define LQR_MAX_NAME_LENGTH (1024)
 
 #ifdef _MSC_VER
-#define LQR_PUBLIC
+#define LQR_PUBLIC __declspec(dllexport)
 #else
 #define LQR_PUBLIC __attribute__((visibility("default")))
-#endif
+#endif /* _MSC_VER */
 
 #define TRY_N_N(assign) if ((assign) == NULL) { return NULL; }
 /*
