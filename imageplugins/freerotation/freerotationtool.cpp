@@ -581,9 +581,9 @@ double FreeRotationTool::calculateAngle(const QPoint &p1, const QPoint &p2)
     if (p1.y() == p2.y())
         return 90.0;
 
-    // check point layout
-    bool reverse = ((p1.x() < p2.x()) && (p2.y() > p1.y())) ||
-                   ((p1.x() > p2.x()) && (p2.y() < p1.y()));
+    // do we rotate to the left (counter clock wise)?
+    bool ccw = ((p1.x() < p2.x()) && (p2.y() > p1.y())) ||
+               ((p1.x() > p2.x()) && (p2.y() < p1.y()));
 
     // calculate the angle
     double angle = 0.0;
@@ -591,7 +591,7 @@ double FreeRotationTool::calculateAngle(const QPoint &p1, const QPoint &p2)
     double lx = fabs((double)p2.x() - p1.x());
 
     angle = atan2(ly, lx) * 180.0 / M_PI;
-    angle = reverse ? -angle : angle;
+    angle = ccw ? -angle : angle;
 
     return angle;
 }
