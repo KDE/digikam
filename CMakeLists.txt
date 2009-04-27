@@ -751,6 +751,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagemodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagefiltermodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagefiltersettings.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagemodeldragdrophandler.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagethumbnailmodel.cpp
        )
 
@@ -877,6 +878,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/datefolderview.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamapp.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamfirstrun.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamimageview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamview.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dio.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/ddragobjects.cpp 
