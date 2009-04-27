@@ -37,6 +37,7 @@
 #include "databasefields.h"
 #include "imagealbummodel.h"
 #include "imagealbumfiltermodel.h"
+#include "imagemodeldragdrophandler.h"
 #include "imagethumbnailmodel.h"
 #include "imagedelegate.h"
 #include "imagecategorydrawer.h"
@@ -467,6 +468,36 @@ bool ImageCategorizedView::viewportEvent(QEvent *event)
             break;
     }
     return KCategorizedView::viewportEvent(event);
+}
+
+void ImageCategorizedView::dragMoveEvent(QDragMoveEvent *e)
+{
+    KCategorizedView::dragMoveEvent(e);
+    ImageModelDragDropHandler *handler = d->model->dragDropHandler();
+    if (handler)
+    {
+        QModelIndex index = indexAt(e->pos());
+        Qt::DropAction action = handler->accepts(e->mimeData(), d->filterModel->mapToSource(index));
+        if (action == Qt::IgnoreAction)
+            e->ignore();
+        else
+        {
+            e->setDropAction(action);
+            e->accept();
+        }
+    }
+}
+
+void ImageCategorizedView::dropEvent(QDropEvent *e)
+{
+    KCategorizedView::dropEvent(e);
+    ImageModelDragDropHandler *handler = d->model->dragDropHandler();
+    if (handler)
+    {
+        QModelIndex index = indexAt(e->pos());
+        if (handler->dropEvent(this, e, d->filterModel->mapToSource(index)))
+            e->accept();
+    }
 }
 
 } // namespace Digikam

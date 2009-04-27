@@ -112,8 +112,10 @@ protected:
     void reset();
     void currentChanged(const QModelIndex &index, const QModelIndex &previous);
     void selectionChanged(const QItemSelection &, const QItemSelection &);
-    void keyPressEvent(QKeyEvent *event);
     void contextMenuEvent(QContextMenuEvent* event);
+    void dragMoveEvent(QDragMoveEvent *e);
+    void dropEvent(QDropEvent *e);
+    void keyPressEvent(QKeyEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void paintEvent(QPaintEvent *e);
     bool viewportEvent(QEvent *event);
