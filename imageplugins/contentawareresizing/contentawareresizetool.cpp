@@ -315,7 +315,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     d->resizeOrderInput->addItem(i18n("Horizontally first"));
     d->resizeOrderInput->addItem(i18n("Vertically first"));
     d->resizeOrderInput->setDefaultIndex(ContentAwareResizeToolPriv::Horizontally);
-    d->resizeOrderInput->setWhatsThis(i18n("You can set there if you want to resize horizontally first or "
+    d->resizeOrderInput->setWhatsThis(i18n("Here you can set whether to resize horizontally first or "
                                            "vertically first."));
 
     // -------------------------------------------------------------
