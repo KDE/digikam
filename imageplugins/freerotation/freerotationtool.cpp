@@ -195,9 +195,15 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
 
     m_autoAdjustContainer         = new QGroupBox(i18n("Automatic Correction"));
     QGridLayout *containerLayout2 = new QGridLayout;
-    containerLayout2->addWidget(m_autoAdjustPoint1Btn,   0, 0, 1, 1);
-    containerLayout2->addWidget(m_autoAdjustBtn,         0, 2, 2, 1);
-    containerLayout2->addWidget(m_autoAdjustPoint2Btn,   1, 0, 1, 1);
+    QLabel *autoDescr             = new QLabel;
+    autoDescr->setText(i18n("Correct the horizon of your images automatically by assigning two points in the "
+                            "preview widget and clicking <i>Adjust</i>."));
+    autoDescr->setAlignment(Qt::AlignHCenter);
+    autoDescr->setWordWrap(true);
+    containerLayout2->addWidget(autoDescr,               0, 0, 1,-1);
+    containerLayout2->addWidget(m_autoAdjustPoint1Btn,   1, 0, 1, 1);
+    containerLayout2->addWidget(m_autoAdjustBtn,         1, 2, 2, 1);
+    containerLayout2->addWidget(m_autoAdjustPoint2Btn,   2, 0, 1, 1);
     containerLayout2->setColumnStretch(1, 10);
     containerLayout2->setMargin(KDialog::marginHint());
     m_autoAdjustContainer->setLayout(containerLayout2);
