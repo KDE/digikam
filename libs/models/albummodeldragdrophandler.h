@@ -64,7 +64,7 @@ public:
     virtual QStringList mimeTypes() const;
 
     /** Create a mime data object for starting a drag from the given Albums */
-    virtual QMimeData *createMimeData(const QList<Album*>);
+    virtual QMimeData *createMimeData(const QList<Album*> &);
 
 protected:
 

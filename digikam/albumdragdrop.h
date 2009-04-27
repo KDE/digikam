@@ -47,7 +47,7 @@ public:
     virtual bool dropEvent(QAbstractItemView *view, QDropEvent *e, const QModelIndex &droppedOn);
     virtual Qt::DropAction accepts(const QMimeData *data, const QModelIndex &dropIndex);
     virtual QStringList mimeTypes() const;
-    virtual QMimeData *createMimeData(const QList<Album*>);
+    virtual QMimeData *createMimeData(const QList<Album*> &);
 };
 
 } // namespace Digikam

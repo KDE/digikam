@@ -58,7 +58,7 @@ QStringList AlbumModelDragDropHandler::mimeTypes() const
     return QStringList();
 }
 
-QMimeData *AlbumModelDragDropHandler::createMimeData(const QList<Album*>)
+QMimeData *AlbumModelDragDropHandler::createMimeData(const QList<Album*> &)
 {
     return 0;
 }
