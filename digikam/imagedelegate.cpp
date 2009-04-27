@@ -87,6 +87,10 @@ public:
         editingRating   = false;
     }
 
+    int                       spacing;
+    QSize                     gridSize;
+
+    QRect                     rectWithSpacing;
     QRect                     rect;
     QRect                     tightPixmapRect;
     QRect                     ratingRect;
@@ -144,9 +148,17 @@ void ImageDelegate::setThumbnailSize(const ThumbnailSize &thumbSize)
     if ( d->thumbSize != thumbSize)
     {
         d->thumbSize = thumbSize;
-
-        updateRectsAndPixmaps();
+        invalidatePaintingCache();
     }
+}
+
+void ImageDelegate::setSpacing(int spacing)
+{
+    if (d->spacing == spacing)
+        return;
+    d->spacing = spacing;
+    d->categoryDrawer->setLowerSpacing(spacing);
+    invalidatePaintingCache();
 }
 
 ImageCategoryDrawer *ImageDelegate::categoryDrawer() const
@@ -318,6 +330,11 @@ QSize ImageDelegate::sizeHint(const QStyleOptionViewItem &/*option*/, const QMod
     return d->rect.size();
 }
 
+QSize ImageDelegate::gridSize() const
+{
+    return d->gridSize;
+}
+
 bool ImageDelegate::acceptsToolTip(const QPoint& pos, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     return onActualPixmapRect(pos, option, index);
@@ -351,22 +368,31 @@ void ImageDelegate::setDefaultViewOptions(const QStyleOptionViewItem &option)
 
 void ImageDelegate::slotThemeChanged()
 {
-    updateRectsAndPixmaps();
-    d->categoryDrawer->updateRectsAndPixmaps();
+    invalidatePaintingCache();
 }
 
 void ImageDelegate::slotSetupChanged()
 {
-    updateRectsAndPixmaps();
-    d->categoryDrawer->updateRectsAndPixmaps();
-    // it's pretty much nonsense to include any special index here.
-    emit sizeHintChanged(QModelIndex());
+    invalidatePaintingCache();
 }
 
-void ImageDelegate::updateRectsAndPixmaps()
+void ImageDelegate::invalidatePaintingCache()
 {
-    const AlbumSettings *albumSettings = AlbumSettings::instance();
+    QSize oldGridSize = d->gridSize;
+    d->categoryDrawer->invalidatePaintingCache();
+    updateSizeRectsAndPixmaps();
+    if (oldGridSize != d->gridSize)
+    {
+        emit gridSizeChanged(d->gridSize);
+        // emit sizeHintChanged(QModelIndex());
+    }
+}
 
+void ImageDelegate::updateSizeRectsAndPixmaps()
+{
+    // ---- Reset values ----
+
+    d->gridSize       = QSize(0, 0);
     d->rect           = QRect(0, 0, 0, 0);
     d->ratingRect     = QRect(0, 0, 0, 0);
     d->dateRect       = QRect(0, 0, 0, 0);
@@ -377,6 +403,8 @@ void ImageDelegate::updateRectsAndPixmaps()
     d->resolutionRect = QRect(0, 0, 0, 0);
     d->sizeRect       = QRect(0, 0, 0, 0);
     d->tagRect        = QRect(0, 0, 0, 0);
+
+    // ---- Calculate fonts ----
 
     d->fontReg  = d->font;
     d->fontCom  = d->font;
@@ -395,6 +423,8 @@ void ImageDelegate::updateRectsAndPixmaps()
         d->fontCom.setPixelSize(fnSz-1);
         d->fontXtra.setPixelSize(fnSz-2);
     }
+
+    // ---- Fixed sizes and metrics ----
 
     const int radius = 3;
     const int margin = 5;
@@ -415,11 +445,14 @@ void ImageDelegate::updateRectsAndPixmaps()
 
     QSize starPolygonSize(15, 15);
 
+    // ---- Calculate rects ----
+
     int y = margin;
 
     d->pixmapRect = QRect(margin, y, w, d->thumbSize.size() + 2*radius);
     y = d->pixmapRect.bottom();
 
+    const AlbumSettings *albumSettings = AlbumSettings::instance();
     if (albumSettings->getIconShowRating())
     {
         d->ratingRect = QRect(margin, y, w, starPolygonSize.height());
@@ -468,15 +501,17 @@ void ImageDelegate::updateRectsAndPixmaps()
         y = d->tagRect.bottom();
     }
 
-    d->rect      = QRect(0, 0, w + 2*margin, y+margin+radius);
+    d->rect = QRect(0, 0, w + 2*margin, y+margin+radius);
+
+    d->gridSize  = QSize(d->rect.width() + d->spacing, d->rect.height() + d->spacing);
+
+    // ---- Cached pixmaps ----
 
     d->regPixmap = ThemeEngine::instance()->thumbRegPixmap(d->rect.width(),
                                                                d->rect.height());
 
     d->selPixmap = ThemeEngine::instance()->thumbSelPixmap(d->rect.width(),
                                                                d->rect.height());
-
-    // -- Generate rating pixmaps ------------------------------------------
 
     // We use antialiasing and want to pre-render the pixmaps.
     // So we need the background at the time of painting,

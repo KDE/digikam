@@ -53,9 +53,14 @@ public:
 
     virtual void paint(QPainter * painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     virtual QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex & index) const;
+    QSize gridSize() const;
 
     /** You must set these options from the view */
     void setThumbnailSize(const ThumbnailSize &thumbSize);
+    void setSpacing(int spacing);
+    /** Style option with standard values to use for cached rendering.
+     *  option.rect shall be the viewport rectangle.
+     *  Call on resize, font change.*/
     void setDefaultViewOptions(const QStyleOptionViewItem &option);
 
     ImageCategoryDrawer *categoryDrawer() const;
@@ -65,6 +70,7 @@ public:
 
 Q_SIGNALS:
 
+    void gridSizeChanged(const QSize &newSize);
     void waitingForThumbnail(const QModelIndex &index) const;
 
 protected Q_SLOTS:
@@ -78,7 +84,8 @@ protected:
     QRect actualPixmapRect(qlonglong imageid) const;
     void updateActualPixmapRect(qlonglong imageid, const QRect &rect);
 
-    void updateRectsAndPixmaps();
+    void invalidatePaintingCache();
+    void updateSizeRectsAndPixmaps();
 
     QPixmap ratingPixmap(int rating, bool selected) const;
     QString dateToString(const QDateTime& datetime) const;
