@@ -50,6 +50,7 @@
 #include <kconfiggroup.h>
 #include <kcursor.h>
 #include <kdebug.h>
+#include <kdialog.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -145,8 +146,8 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QString btnWhatsThis = i18n("Select some point in the preview widget, "
-                                "then click this button to set it.");
+    QString btnWhatsThis = i18n("Select a point in the preview widget, "
+                                "then click this button to assign the point for auto-correction.");
 
     QPixmap pm1 = generateBtnPixmap(QString("1"), Qt::black);
     m_autoAdjustPoint1Btn = new QPushButton;
@@ -181,32 +182,29 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    m_manualAdjustInput          = new QCheckBox(i18n("Manual Adjustment"));
-    m_manualAdjustContainer      = new QWidget;
+    m_manualAdjustContainer      = new QGroupBox(i18n("Manual Adjustment"));
     QGridLayout *containerLayout = new QGridLayout;
     containerLayout->addWidget(label3,              0, 0, 1, 1);
     containerLayout->addWidget(m_angleInput,        1, 0, 1, 1);
     containerLayout->addWidget(label4,              2, 0, 1, 1);
     containerLayout->addWidget(m_fineAngleInput,    3, 0, 1, 1);
+    containerLayout->setMargin(KDialog::marginHint());
     m_manualAdjustContainer->setLayout(containerLayout);
 
     // -------------------------------------------------------------
 
-    m_autoAdjustContainer         = new QGroupBox(i18n("Automatic Adjustment"));
-    m_autoAdjustContainer->setFlat(true);
+    m_autoAdjustContainer         = new QGroupBox(i18n("Automatic Correction"));
     QGridLayout *containerLayout2 = new QGridLayout;
     containerLayout2->addWidget(m_autoAdjustPoint1Btn,   0, 0, 1, 1);
     containerLayout2->addWidget(m_autoAdjustBtn,         0, 2, 2, 1);
     containerLayout2->addWidget(m_autoAdjustPoint2Btn,   1, 0, 1, 1);
     containerLayout2->setColumnStretch(1, 10);
-    containerLayout2->setMargin(0);
+    containerLayout2->setMargin(KDialog::marginHint());
     m_autoAdjustContainer->setLayout(containerLayout2);
 
     // -------------------------------------------------------------
 
     KSeparator *line  = new KSeparator(Qt::Horizontal);
-    KSeparator *line2 = new KSeparator(Qt::Horizontal);
-    KSeparator *line3 = new KSeparator(Qt::Horizontal);
 
     // -------------------------------------------------------------
 
@@ -217,13 +215,10 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     mainLayout->addWidget(m_newHeightLabel,        1, 1, 1, 1);
     mainLayout->addWidget(line,                    2, 0, 1,-1);
     mainLayout->addWidget(m_autoAdjustContainer,   3, 0, 1,-1);
-    mainLayout->addWidget(line2,                   4, 0, 1,-1);
+    mainLayout->addWidget(m_manualAdjustContainer, 4, 0, 1,-1);
     mainLayout->addWidget(m_antialiasInput,        5, 0, 1,-1);
-    mainLayout->addWidget(m_manualAdjustInput,     6, 0, 1, 1);
-    mainLayout->addWidget(m_manualAdjustContainer, 7, 0, 1,-1);
-    mainLayout->addWidget(line3,                   8, 0, 1,-1);
-    mainLayout->addWidget(label5,                  9, 0, 1, 1);
-    mainLayout->addWidget(m_autoCropCB,            9, 1, 1, 1);
+    mainLayout->addWidget(label5,                  6, 0, 1, 1);
+    mainLayout->addWidget(m_autoCropCB,            6, 1, 1, 1);
     mainLayout->setRowStretch(10, 10);
     mainLayout->setMargin(m_gboxSettings->spacingHint());
     mainLayout->setSpacing(m_gboxSettings->spacingHint());
@@ -249,9 +244,6 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     connect(m_gboxSettings, SIGNAL(signalColorGuideChanged()),
             this, SLOT(slotColorGuideChanged()));
 
-    connect(m_manualAdjustInput, SIGNAL(toggled(bool)),
-            this, SLOT(slotManualAdjustToggled(bool)));
-
     connect(m_autoAdjustPoint1Btn, SIGNAL(clicked()),
             this, SLOT(slotAutoAdjustP1Clicked()));
 
@@ -276,11 +268,8 @@ void FreeRotationTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("freerotation Tool");
-//    m_angleInput->setValue(group.readEntry("Main Angle", m_angleInput->defaultValue()));
-//    m_fineAngleInput->setValue(group.readEntry("Fine Angle", m_fineAngleInput->defaultValue()));
     m_autoCropCB->setCurrentIndex(group.readEntry("Auto Crop Type", m_autoCropCB->defaultIndex()));
     m_antialiasInput->setChecked(group.readEntry("Anti Aliasing", true));
-    m_manualAdjustInput->setChecked(group.readEntry("Manual Adjust", false));
 
     m_angleInput->blockSignals(true);
     m_fineAngleInput->blockSignals(true);
@@ -290,8 +279,6 @@ void FreeRotationTool::readSettings()
     m_fineAngleInput->blockSignals(false);
 
     resetPoints();
-    slotManualAdjustToggled(m_manualAdjustInput->isChecked());
-
     slotColorGuideChanged();
     slotEffect();
 }
@@ -300,11 +287,8 @@ void FreeRotationTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("freerotation Tool");
-//    group.writeEntry("Main Angle", m_angleInput->value());
-//    group.writeEntry("Fine Angle", m_fineAngleInput->value());
     group.writeEntry("Auto Crop Type", m_autoCropCB->currentIndex());
     group.writeEntry("Anti Aliasing", m_antialiasInput->isChecked());
-    group.writeEntry("Manual Adjust", m_manualAdjustInput->isChecked());
     m_previewWidget->writeSettings();
     group.sync();
 }
@@ -335,7 +319,6 @@ void FreeRotationTool::prepareEffect()
     m_fineAngleInput->setEnabled(false);
     m_antialiasInput->setEnabled(false);
     m_autoCropCB->setEnabled(false);
-    m_manualAdjustInput->setEnabled(false);
     m_autoAdjustContainer->setEnabled(false);
     m_manualAdjustContainer->setEnabled(false);
 
@@ -364,7 +347,6 @@ void FreeRotationTool::prepareFinal()
     m_fineAngleInput->setEnabled(false);
     m_antialiasInput->setEnabled(false);
     m_autoCropCB->setEnabled(false);
-    m_manualAdjustInput->setEnabled(false);
     m_autoAdjustContainer->setEnabled(false);
     m_manualAdjustContainer->setEnabled(false);
 
@@ -426,20 +408,10 @@ void FreeRotationTool::renderingFinished()
     m_fineAngleInput->setEnabled(true);
     m_antialiasInput->setEnabled(true);
     m_autoCropCB->setEnabled(true);
-    m_manualAdjustInput->setEnabled(true);
     m_autoAdjustContainer->setEnabled(true);
     m_manualAdjustContainer->setEnabled(true);
 
-    bool autoHorizon = m_manualAdjustInput->isChecked();
-    slotManualAdjustToggled(autoHorizon);
-
     kapp->restoreOverrideCursor();
-}
-
-void FreeRotationTool::slotManualAdjustToggled(bool t)
-{
-    m_manualAdjustContainer->setEnabled(t);
-    if (t) resetPoints();
 }
 
 QString FreeRotationTool::generatePointLabel(const QPoint &p)

@@ -66,7 +66,6 @@ private Q_SLOTS:
 
     void slotResetSettings();
     void slotColorGuideChanged();
-    void slotManualAdjustToggled(bool);
 
     void slotAutoAdjustP1Clicked();
     void slotAutoAdjustP2Clicked();
@@ -98,7 +97,6 @@ private:
     QLabel                       *m_newHeightLabel;
 
     QCheckBox                    *m_antialiasInput;
-    QCheckBox                    *m_manualAdjustInput;
 
     QPushButton                  *m_autoAdjustBtn;
     QPushButton                  *m_autoAdjustPoint1Btn;
@@ -108,7 +106,7 @@ private:
     QPoint                        m_autoAdjustPoint2;
 
     QGroupBox                    *m_autoAdjustContainer;
-    QWidget                      *m_manualAdjustContainer;
+    QGroupBox                    *m_manualAdjustContainer;
 
     KDcrawIface::RComboBox       *m_autoCropCB;
 
