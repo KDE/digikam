@@ -49,6 +49,10 @@ public:
     virtual void setImageFilterSettings(const ImageFilterSettings &settings);
 
     void setSourceImageModel(ImageAlbumModel* model);
+    ImageAlbumModel *sourceModel() const;
+
+    // convenience mappers
+    void prepareThumbnails(const QList<QModelIndex> &indexesToPrepare);
 
 protected:
 

@@ -47,8 +47,6 @@ public:
 
     QHash<int, QString> tagNamesHash;
     QHash<int, QString> albumNamesHash;
-
-    bool albumChange(Album *album);
 };
 
 ImageAlbumFilterModel::ImageAlbumFilterModel(QObject *parent)
@@ -77,6 +75,12 @@ void ImageAlbumFilterModel::setSourceImageModel(ImageAlbumModel* model)
     ImageFilterModel::setSourceImageModel(model);
 }
 
+ImageAlbumModel *ImageAlbumFilterModel::sourceModel() const
+{
+    Q_D(const ImageFilterModel);
+    return static_cast<ImageAlbumModel*>(d->imageModel);
+}
+
 /*
 void ImageAlbumFilterModel::slotListedAlbumChanged(Album *album)
 {
@@ -84,6 +88,11 @@ void ImageAlbumFilterModel::slotListedAlbumChanged(Album *album)
     d->currentAlbum = album;
 }
 */
+
+void ImageAlbumFilterModel::prepareThumbnails(const QList<QModelIndex> &indexesToPrepare)
+{
+    sourceModel()->prepareThumbnails(mapListToSource(indexesToPrepare));
+}
 
 void ImageAlbumFilterModel::setImageFilterSettings(const ImageFilterSettings &s)
 {
