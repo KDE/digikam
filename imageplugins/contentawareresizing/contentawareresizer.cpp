@@ -78,7 +78,8 @@ public:
 
 ContentAwareResizer::ContentAwareResizer(DImg *orgImage, uint width, uint height,
                                          int step, double rigidity, LqrGradFuncType func,
-                                         LqrResizeOrder resize_order, const QImage& mask, bool preserve_skin_tones, QObject *parent)
+                                         LqrResizeOrder resize_order, const QImage& mask, 
+                                         bool preserve_skin_tones, QObject *parent)
                    : Digikam::DImgThreadedFilter(orgImage, parent, "ContentAwareResizer"),
                      d(new ContentAwareResizerPriv)
 {
@@ -206,18 +207,19 @@ void ContentAwareResizer::cancelFilter()
     DImgThreadedFilter::cancelFilter();
 }
 
-bool ContentAwareResizer::isSkinTone(DColor c) 
+bool ContentAwareResizer::isSkinTone(const DColor& c) 
 {
-    c.convertToEightBit();
-    double R = c.red()/255.0;
-    double G = c.green()/255.0;
-    double B = c.blue()/255.0;
+    DColor color(c);
+    color.convertToEightBit();
+    double R = color.red()   / 255.0;
+    double G = color.green() / 255.0;
+    double B = color.blue()  / 255.0;
     double S = R + G + B;
 
-    return( (B/G < 1.249)         &&
-            (S/3.0*R > 0.696)     &&
+    return( (B/G         < 1.249) &&
+            (S/3.0*R     > 0.696) &&
             (1.0/3.0-B/S > 0.014) &&
-            (G/(3.0*S) <0.108)
+            (G/(3.0*S)   < 0.108)
           );
 }
 
@@ -229,9 +231,9 @@ void ContentAwareResizer::buildSkinToneBias()
     if(d->bias)
     {
         // Build bias table
-        for(uint x=0; x< m_orgImage.width(); x++)
+        for(uint x=0; x < m_orgImage.width(); x++)
         {
-            for(uint y=0; y< m_orgImage.height(); y++)
+            for(uint y=0; y < m_orgImage.height(); y++)
             {
                 // There we have to calculate the correct k of d->bias
                 if (isSkinTone(m_orgImage.getPixelColor(x,y)))
@@ -264,13 +266,13 @@ void ContentAwareResizer::buildBias(const QImage& mask)
     if(d->bias)
     {
         // Initialize the table of bias
-        for(int k=0; k<biasSize; k++)
+        for(int k=0; k < biasSize; k++)
             d->bias[k] = 0.0;
 
         // Build bias table
-        for(int x=0; x<mask.width(); x++)
+        for(int x=0; x < mask.width(); x++)
         {
-            for(int y=0; y<mask.height(); y++)
+            for(int y=0; y < mask.height(); y++)
             {
                 pixColor = QColor::fromRgba(mask.pixel(x,y));
                 pixColor.getRgb(&r, &g, &b, &a);
