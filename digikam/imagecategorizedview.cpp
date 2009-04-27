@@ -93,6 +93,9 @@ public:
 
     ThumbnailSize            thumbnailSize;
     qlonglong                scrollToItemId;
+
+    QPoint                   mouseClickPosition;
+    QList<QModelIndex>       indexesToThumbnail;
 };
 
 // -------------------------------------------------------------------------------
@@ -107,6 +110,8 @@ ImageCategorizedView::ImageCategorizedView(QWidget *parent)
     setResizeMode(QListView::Adjust);
     setMovement(QListView::Static);
     setWrapping(true);
+    // important optimization to make layouting O(1)
+    setUniformItemSizes(true);
 
     setSelectionMode(QAbstractItemView::ExtendedSelection);
 
@@ -139,8 +144,12 @@ ImageCategorizedView::ImageCategorizedView(QWidget *parent)
     connect(d->model, SIGNAL(signalImageInfosAdded(const QList<ImageInfo> &)),
             this, SLOT(slotImageInfosAdded()));
 
+    connect(d->delegate, SIGNAL(waitingForThumbnail(const QModelIndex &)),
+            this, SLOT(slotDelegateWaitsForThumbnail(const QModelIndex &)));
+
     connect(this, SIGNAL(activated(const QModelIndex &)),
             this, SLOT(slotActivated(const ImageInfo &)));
+
     /*
     if (KGlobalSettings::singleClick())
     {
@@ -290,9 +299,67 @@ void ImageCategorizedView::slotSetupChanged()
 
 void ImageCategorizedView::slotActivated(const QModelIndex &index)
 {
+    if (!d->mouseClickPosition.isNull())
+    {
+        // if the activation is caused by mouse click (not keyboard)
+        // we need to check the hot area
+        QStyleOptionViewItem option = viewOptions();
+        option.rect = visualRect(index);
+        if (!d->delegate->acceptsToolTip(d->mouseClickPosition, option, index))
+            return;
+    }
+
     ImageInfo info = d->filterModel->imageInfo(index);
     if (!info.isNull())
         activated(info);
+}
+
+void ImageCategorizedView::reset()
+{
+    KCategorizedView::reset();
+    emit selectionChanged();
+    emit selectionCleared();
+}
+
+void ImageCategorizedView::currentChanged(const QModelIndex &index, const QModelIndex &/*previous*/)
+{
+    emit currentChanged(d->filterModel->imageInfo(index));
+}
+
+void ImageCategorizedView::selectionChanged(const QItemSelection &selectedItems, const QItemSelection &deselectedItems)
+{
+    emit selectionChanged();
+    if (!selectedItems.isEmpty())
+        emit selected(d->filterModel->imageInfos(selectedItems.indexes()));
+    if (!deselectedItems.isEmpty())
+        emit deselected(d->filterModel->imageInfos(deselectedItems.indexes()));
+    if (!selectionModel()->hasSelection())
+        emit selectionCleared();
+}
+
+void ImageCategorizedView::activated(const ImageInfo &)
+{
+    // implemented in subclass
+}
+
+void ImageCategorizedView::showContextMenu(QContextMenuEvent *, const ImageInfo &)
+{
+    // implemented in subclass
+}
+
+void ImageCategorizedView::showContextMenu(QContextMenuEvent *)
+{
+    // implemented in subclass
+}
+
+void ImageCategorizedView::copy()
+{
+    // implemented in subclass
+}
+
+void ImageCategorizedView::paste()
+{
+    // implemented in subclass
 }
 
 void ImageCategorizedView::contextMenuEvent(QContextMenuEvent* event)
@@ -304,29 +371,15 @@ void ImageCategorizedView::contextMenuEvent(QContextMenuEvent* event)
         showContextMenu(event, info);
     }
     else
-    {
         showContextMenu(event);
-    }
 }
 
-void ImageCategorizedView::activated(const ImageInfo &)
+void ImageCategorizedView::mouseReleaseEvent(QMouseEvent *event)
 {
-}
-
-void ImageCategorizedView::showContextMenu(QContextMenuEvent *, const ImageInfo &)
-{
-}
-
-void ImageCategorizedView::showContextMenu(QContextMenuEvent *)
-{
-}
-
-void ImageCategorizedView::copy()
-{
-}
-
-void ImageCategorizedView::paste()
-{
+    // we store the position because the signals provide only the index
+    d->mouseClickPosition = event->pos();
+    KCategorizedView::mouseReleaseEvent(event);
+    d->mouseClickPosition = QPoint();
 }
 
 void ImageCategorizedView::keyPressEvent(QKeyEvent *event)
@@ -360,6 +413,34 @@ void ImageCategorizedView::keyPressEvent(QKeyEvent *event)
     }
     */
     KCategorizedView::keyPressEvent(event);
+}
+
+bool modelIndexByRowLessThan(const QModelIndex &i1, const QModelIndex &i2)
+{
+    return i1.row() < i2.row();
+}
+
+void ImageCategorizedView::paintEvent(QPaintEvent *e)
+{
+    // We want the thumbnails to be loaded in order.
+    // We cannot easily know which indexes are repainted, so we have to listen
+    // to our delegate telling us for which thumbnails he waits.
+    // After that we reorder them. See slotDelegateWaitsForThumbnail().
+    d->indexesToThumbnail.clear();
+
+    KCategorizedView::paintEvent(e);
+
+    if (!d->indexesToThumbnail.isEmpty())
+    {
+        qSort(d->indexesToThumbnail.begin(), d->indexesToThumbnail.end(), modelIndexByRowLessThan);
+        d->filterModel->prepareThumbnails(d->indexesToThumbnail);
+        d->indexesToThumbnail.clear();
+    }
+}
+
+void ImageCategorizedView::slotDelegateWaitsForThumbnail(const QModelIndex &index)
+{
+    d->indexesToThumbnail << index;
 }
 
 bool ImageCategorizedView::viewportEvent(QEvent *event)

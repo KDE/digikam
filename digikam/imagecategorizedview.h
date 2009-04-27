@@ -76,6 +76,20 @@ public Q_SLOTS:
     /** Set as current item the item identified by its file url */
     void setCurrentUrl(const KUrl &url);
 
+Q_SIGNALS:
+
+    void currentChanged(const ImageInfo &info);
+    /// Emitted when any selection change occurs. Any of the signals below will be emitted before.
+    void selectionChanged();
+    /// Emitted when new items are selected. The parameter includes only the newly selected infos,
+    /// there may be other already selected infos.
+    void selected(const QList<ImageInfo> &newSelectedInfos);
+    /// Emitted when items are deselected. There may be other selected infos left.
+    /// This signal is not emitted when the model is reset; then only selectionCleared is emitted.
+    void deselected(const QList<ImageInfo> &nowDeselectedInfos);
+    /// Emitted when the selection is completely cleared.
+    void selectionCleared();
+
 protected Q_SLOTS:
 
     void slotThemeChanged();
@@ -94,9 +108,19 @@ protected:
     virtual void copy();
     virtual void paste();
 
+    // reimplemented from parent class
+    void reset();
+    void currentChanged(const QModelIndex &index, const QModelIndex &previous);
+    void selectionChanged(const QItemSelection &, const QItemSelection &);
     void keyPressEvent(QKeyEvent *event);
     void contextMenuEvent(QContextMenuEvent* event);
+    void mouseReleaseEvent(QMouseEvent *event);
+    void paintEvent(QPaintEvent *e);
     bool viewportEvent(QEvent *event);
+
+private Q_SLOTS:
+
+    void slotDelegateWaitsForThumbnail(const QModelIndex &);
 
 private:
 
