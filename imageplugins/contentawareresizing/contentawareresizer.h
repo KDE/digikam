@@ -35,6 +35,7 @@
 
 // Local includes
 
+#include "dcolor.h"
 #include "dimgthreadedfilter.h"
 
 using namespace Digikam;
@@ -64,7 +65,7 @@ private:
 
     void buildBias(const QImage& mask);
     void buildSkinToneBias();
-    bool isSkinTone(DColor c);
+    inline bool isSkinTone(DColor c);
 
 private:
 

@@ -209,11 +209,11 @@ void ContentAwareResizer::cancelFilter()
 bool ContentAwareResizer::isSkinTone(DColor c) 
 {
     c.convertToEightBit();
-    double R=c.red()/255.0;
-    double G=c.green()/255.0;
-    double B=c.blue()/255.0;
+    double R = c.red()/255.0;
+    double G = c.green()/255.0;
+    double B = c.blue()/255.0;
     double S = R + G + B;
-    
+
     return( (B/G < 1.249)         &&
             (S/3.0*R > 0.696)     &&
             (1.0/3.0-B/S > 0.014) &&
@@ -233,14 +233,18 @@ void ContentAwareResizer::buildSkinToneBias()
         {
             for(uint y=0; y< m_orgImage.height(); y++)
             {
-               // There we have to calculate the correct k of d->bias
-               if (isSkinTone(m_orgImage.getPixelColor(x,y)))
-                   {
-                      kDebug(50003) << "Skin Tone detected at coordinates :" << x << y << endl;
-                      d->bias[y*m_orgImage.width() + x] = 1.0;
-                   }
-               else
-                   d->bias[y*m_orgImage.width() + x] = 0.0; 
+                // There we have to calculate the correct k of d->bias
+                if (isSkinTone(m_orgImage.getPixelColor(x,y)))
+                {
+                    {
+                        kDebug(50003) << "Skin Tone detected at coordinates :" << x << y << endl;
+                        d->bias[y*m_orgImage.width() + x] = 1.0;
+                    }
+                }
+                else
+                {
+                    d->bias[y*m_orgImage.width() + x] = 0.0; 
+                }
             }
         }
 
