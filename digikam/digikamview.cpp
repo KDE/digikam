@@ -256,6 +256,9 @@ DigikamView::DigikamView(QWidget *parent)
     d->rightSideBar->appendTab(d->tagFilterBox, SmallIcon("tag-assigned"), i18n("Tag Filters"));
 
     d->selectionTimer = new QTimer(this);
+    d->thumbSizeTimer = new QTimer(this);
+    d->thumbSizeTimer->setSingleShot(true);
+    d->thumbSizeTimer->setInterval(300);
 
     setupConnections();
 
@@ -267,9 +270,6 @@ DigikamView::DigikamView(QWidget *parent)
 
 DigikamView::~DigikamView()
 {
-    if (d->thumbSizeTimer)
-        delete d->thumbSizeTimer;
-
     saveViewState();
 
     delete d->albumHistory;
@@ -531,10 +531,13 @@ void DigikamView::setupConnections()
     connect(d->albumWidgetStack, SIGNAL(signalGotoTagAndItem(int)),
             this, SLOT(slotGotoTagAndItem(int)));
 
-    // -- Selection timer ---------------
+    // -- timers ---------------
 
     connect(d->selectionTimer, SIGNAL(timeout()),
             this, SLOT(slotDispatchImageSelected()));
+
+    connect(d->thumbSizeTimer, SIGNAL(timeout()),
+            this, SLOT(slotThumbSizeEffect()) );
 
     // -- Album Settings ----------------
 
@@ -1216,17 +1219,7 @@ void DigikamView::setThumbSize(int size)
 
         emit signalThumbSizeChanged(d->thumbSize);
 
-        if (d->thumbSizeTimer)
-        {
-            d->thumbSizeTimer->stop();
-            delete d->thumbSizeTimer;
-        }
-
-        d->thumbSizeTimer = new QTimer( this );
-        connect(d->thumbSizeTimer, SIGNAL(timeout()),
-                this, SLOT(slotThumbSizeEffect()) );
-        d->thumbSizeTimer->setSingleShot(true);
-        d->thumbSizeTimer->start(300);
+        d->thumbSizeTimer->start();
     }
 }
 
@@ -1237,10 +1230,7 @@ void DigikamView::slotThumbSizeEffect()
     d->iconView->setThumbnailSize(d->thumbSize);
     toggleZoomActions();
 
-    AlbumSettings* settings = AlbumSettings::instance();
-    if (!settings)
-        return;
-    settings->setDefaultIconSize(d->thumbSize);
+    AlbumSettings::instance()->setDefaultIconSize(d->thumbSize);
 }
 
 void DigikamView::toggleZoomActions()
