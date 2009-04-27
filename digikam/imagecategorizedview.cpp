@@ -232,7 +232,8 @@ ThumbnailSize ImageCategorizedView::thumbnailSize() const
 
 void ImageCategorizedView::setThumbnailSize(int size)
 {
-    setThumbnailSize(size);
+    // FIXME : recursive loop to infinite = bye bye computer (:=)))
+    // setThumbnailSize(size);
 }
 
 void ImageCategorizedView::setThumbnailSize(const ThumbnailSize &size)
