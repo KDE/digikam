@@ -38,6 +38,7 @@
 namespace Digikam
 {
 
+class Album;
 class ImageAlbumModel;
 class ImageAlbumFilterModel;
 class ImageDelegate;
@@ -69,6 +70,8 @@ public:
     void setThumbnailSize(const ThumbnailSize &size);
 
 public Q_SLOTS:
+
+    void openAlbum(Album *album);
 
     void setThumbnailSize(int size);
     /** Scroll the view to the given item when it becomes available */
@@ -116,16 +119,20 @@ protected:
     void dragMoveEvent(QDragMoveEvent *e);
     void dropEvent(QDropEvent *e);
     void keyPressEvent(QKeyEvent *event);
+    void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void paintEvent(QPaintEvent *e);
+    void resizeEvent(QResizeEvent *e);
     bool viewportEvent(QEvent *event);
 
 private Q_SLOTS:
 
+    void slotGridSizeChanged(const QSize &);
     void slotDelegateWaitsForThumbnail(const QModelIndex &);
 
 private:
 
+    void updateDelegateSizes();
     void scrollToStoredItem();
 
 private:

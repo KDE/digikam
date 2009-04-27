@@ -27,6 +27,8 @@
 // Qt includes
 
 #include <QHelpEvent>
+#include <QScrollBar>
+#include <QStyle>
 
 // KDE includes
 
@@ -34,6 +36,7 @@
 
 // Local includes
 
+#include "album.h"
 #include "databasefields.h"
 #include "imagealbummodel.h"
 #include "imagealbumfiltermodel.h"
@@ -104,7 +107,6 @@ public:
 ImageCategorizedView::ImageCategorizedView(QWidget *parent)
                     : KCategorizedView(parent), d(new ImageCategorizedViewPriv)
 {
-    setSpacing(10);
     setViewMode(QListView::IconMode);
     setLayoutDirection(Qt::LeftToRight);
     setFlow(QListView::LeftToRight);
@@ -135,6 +137,7 @@ ImageCategorizedView::ImageCategorizedView(QWidget *parent)
     d->model->setWatchFlags(watchFlags);
 
     d->delegate = new ImageDelegate(this);
+    d->delegate->setSpacing(10);
     setItemDelegate(d->delegate);
     setCategoryDrawer(d->delegate->categoryDrawer());
 
@@ -145,11 +148,16 @@ ImageCategorizedView::ImageCategorizedView(QWidget *parent)
     connect(d->model, SIGNAL(signalImageInfosAdded(const QList<ImageInfo> &)),
             this, SLOT(slotImageInfosAdded()));
 
+    connect(d->delegate, SIGNAL(gridSizeChanged(const QSize &)),
+            this, SLOT(slotGridSizeChanged(const QSize &)));
+
     connect(d->delegate, SIGNAL(waitingForThumbnail(const QModelIndex &)),
             this, SLOT(slotDelegateWaitsForThumbnail(const QModelIndex &)));
 
     connect(this, SIGNAL(activated(const QModelIndex &)),
             this, SLOT(slotActivated(const ImageInfo &)));
+
+    updateDelegateSizes();
 
     /*
     if (KGlobalSettings::singleClick())
@@ -235,6 +243,11 @@ KUrl::List ImageCategorizedView::selectedUrls() const
     return urls;
 }
 
+void ImageCategorizedView::openAlbum(Album *album)
+{
+    d->model->openAlbum(album);
+}
+
 ThumbnailSize ImageCategorizedView::thumbnailSize() const
 {
     return d->model->thumbnailSize();
@@ -242,8 +255,7 @@ ThumbnailSize ImageCategorizedView::thumbnailSize() const
 
 void ImageCategorizedView::setThumbnailSize(int size)
 {
-    // FIXME : recursive loop to infinite = bye bye computer (:=)))
-    // setThumbnailSize(size);
+    setThumbnailSize(ThumbnailSize(size));
 }
 
 void ImageCategorizedView::setThumbnailSize(const ThumbnailSize &size)
@@ -298,6 +310,33 @@ void ImageCategorizedView::slotSetupChanged()
     viewport()->update();
 }
 
+void ImageCategorizedView::slotGridSizeChanged(const QSize &gridSize)
+{
+    setGridSize(gridSize);
+
+    horizontalScrollBar()->setSingleStep(gridSize.width() / 20);
+    verticalScrollBar()->setSingleStep(gridSize.height() / 20);
+}
+
+void ImageCategorizedView::updateDelegateSizes()
+{
+    QStyleOptionViewItem option = viewOptions();
+    /*int frameAroundContents = 0;
+    if (style()->styleHint(QStyle::SH_ScrollView_FrameOnlyAroundContents)) {
+        frameAroundContents = style()->pixelMetric(QStyle::PM_DefaultFrameWidth) * 2;
+    }
+    const int contentWidth = viewport()->width() - 1
+                                - frameAroundContents
+                                - style()->pixelMetric(QStyle::PM_ScrollBarExtent, 0, verticalScrollBar());
+    const int contentHeight = viewport()->height() - 1
+                                - frameAroundContents
+                                - style()->pixelMetric(QStyle::PM_ScrollBarExtent, 0, horizontalScrollBar());
+    option.rect = QRect(0, 0, contentWidth, contentHeight);
+    */
+    option.rect = QRect(QPoint(0,0), viewport()->size());
+    d->delegate->setDefaultViewOptions(option);
+}
+
 void ImageCategorizedView::slotActivated(const QModelIndex &index)
 {
     if (!d->mouseClickPosition.isNull())
@@ -318,17 +357,22 @@ void ImageCategorizedView::slotActivated(const QModelIndex &index)
 void ImageCategorizedView::reset()
 {
     KCategorizedView::reset();
+
     emit selectionChanged();
     emit selectionCleared();
 }
 
-void ImageCategorizedView::currentChanged(const QModelIndex &index, const QModelIndex &/*previous*/)
+void ImageCategorizedView::currentChanged(const QModelIndex &index, const QModelIndex &previous)
 {
+    KCategorizedView::currentChanged(index, previous);
+
     emit currentChanged(d->filterModel->imageInfo(index));
 }
 
 void ImageCategorizedView::selectionChanged(const QItemSelection &selectedItems, const QItemSelection &deselectedItems)
 {
+    KCategorizedView::selectionChanged(selectedItems, deselectedItems);
+
     emit selectionChanged();
     if (!selectedItems.isEmpty())
         emit selected(d->filterModel->imageInfos(selectedItems.indexes()));
@@ -373,6 +417,24 @@ void ImageCategorizedView::contextMenuEvent(QContextMenuEvent* event)
     }
     else
         showContextMenu(event);
+}
+
+void ImageCategorizedView::mousePressEvent(QMouseEvent *event)
+{
+    const QModelIndex index = indexAt(event->pos());
+
+    // Clear selection on click on empty area. Standard behavior, but not done by QAbstractItemView for some reason.
+    if (!index.isValid()) {
+        Qt::KeyboardModifiers modifiers = event->modifiers();
+        const Qt::MouseButton button = event->button();
+        const bool rightButtonPressed = button & Qt::RightButton;
+        const bool shiftKeyPressed = modifiers & Qt::ShiftModifier;
+        const bool controlKeyPressed = modifiers & Qt::ControlModifier;
+        if (!index.isValid() && !rightButtonPressed && !shiftKeyPressed && !controlKeyPressed)
+            clearSelection();
+    }
+
+    KCategorizedView::mousePressEvent(event);
 }
 
 void ImageCategorizedView::mouseReleaseEvent(QMouseEvent *event)
@@ -421,6 +483,11 @@ bool modelIndexByRowLessThan(const QModelIndex &i1, const QModelIndex &i2)
     return i1.row() < i2.row();
 }
 
+void ImageCategorizedView::slotDelegateWaitsForThumbnail(const QModelIndex &index)
+{
+    d->indexesToThumbnail << index;
+}
+
 void ImageCategorizedView::paintEvent(QPaintEvent *e)
 {
     // We want the thumbnails to be loaded in order.
@@ -439,9 +506,10 @@ void ImageCategorizedView::paintEvent(QPaintEvent *e)
     }
 }
 
-void ImageCategorizedView::slotDelegateWaitsForThumbnail(const QModelIndex &index)
+void ImageCategorizedView::resizeEvent(QResizeEvent *e)
 {
-    d->indexesToThumbnail << index;
+    KCategorizedView::resizeEvent(e);
+    updateDelegateSizes();
 }
 
 bool ImageCategorizedView::viewportEvent(QEvent *event)
@@ -449,8 +517,10 @@ bool ImageCategorizedView::viewportEvent(QEvent *event)
     switch (event->type())
     {
         case QEvent::FontChange:
-            d->delegate->setDefaultViewOptions(viewOptions());
+        {
+            updateDelegateSizes();
             break;
+        }
         case QEvent::ToolTip:
         {
             QHelpEvent *he = static_cast<QHelpEvent*>(event);
