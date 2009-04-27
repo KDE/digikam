@@ -490,21 +490,20 @@ void ImageGuideWidget::updatePixmap()
         for (int i = 0; i < d->selectedPoints.count(); ++i)
         {
             point = d->selectedPoints.point(i);
-            x = (int)(point.x() * (float)(d->width)  / (float) d->iface->originalWidth());
-            y = (int)(point.y() * (float)(d->height) / (float) d->iface->originalHeight());
-            x += d->rect.x() + 1;
-            y += d->rect.y() + 1;
+            point = translatePointPosition(point);
+            x = point.x();
+            y = point.y();
 
             p.save();
             p.setRenderHints(QPainter::Antialiasing);
             p.setPen(QPen(d->guideColor, 2, Qt::SolidLine));
             p.setBrush(QBrush(semiTransGuideColor));
-            p.drawEllipse(QPoint(x, y), 5, 5);
+            p.drawEllipse(point, 5, 5);
 
             p.restore();
             p.setPen(QPen(d->guideColor, 1, Qt::SolidLine));
             p.setBrush(Qt::NoBrush);
-            p.drawPoint(QPoint(x, y));
+            p.drawPoint(point);
             p.drawText(QPoint(x+10, y-5), QString::number(i+1));
 
             // draw line
@@ -513,12 +512,9 @@ void ImageGuideWidget::updatePixmap()
             {
                 p.save();
                 QPoint point2 = d->selectedPoints.point(i+1);
-                int x2 = (int)(point2.x() * (float)(d->width)  / (float) d->iface->originalWidth());
-                int y2 = (int)(point2.y() * (float)(d->height) / (float) d->iface->originalHeight());
-                x2 += d->rect.x() + 1;
-                y2 += d->rect.y() + 1;
+                point2 = translatePointPosition(point2);
                 p.setRenderHint(QPainter::Antialiasing, true);
-                p.drawLine(QPoint(x, y), QPoint(x2, y2));
+                p.drawLine(QPoint(x, y), point2);
                 p.restore();
             }
 
@@ -794,6 +790,15 @@ QImage ImageGuideWidget::getMask() const
 {
     QImage mask = d->maskPixmap->toImage();
     return mask;
+}
+
+QPoint ImageGuideWidget::translatePointPosition(QPoint &point)
+{
+    int x = (int)(point.x() * (float)(d->width)  / (float) d->iface->originalWidth());
+    int y = (int)(point.y() * (float)(d->height) / (float) d->iface->originalHeight());
+    x += d->rect.x() + 1;
+    y += d->rect.y() + 1;
+    return (QPoint(x,y));
 }
 
 }  // namespace Digikam
