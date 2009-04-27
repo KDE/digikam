@@ -176,6 +176,8 @@ QVariant ImageFilterModel::data(const QModelIndex &index, int role) const
 
     switch (role)
     {
+        case KCategorizedSortFilterProxyModel::CategoryDisplayRole:
+            return categoryIdentifier(d->imageModel->imageInfoRef(index));
         case CategorizationModeRole:
             return d->categorizationMode;
         case SortOrderRole:
@@ -655,6 +657,24 @@ int ImageFilterModel::categoryCount(const ImageInfo &info) const
             return d->categoryCountHashString[info.format()].size();
         default:
             return 0;
+    }
+}
+
+QString ImageFilterModel::categoryIdentifier(const ImageInfo &info) const
+{
+    Q_D(const ImageFilterModel);
+    switch (d->categorizationMode)
+    {
+        case NoCategories:
+            return QString();
+        case OneCategory:
+            return QString();
+        case CategoryByAlbum:
+            return QString::number(info.albumId());
+        case CategoryByFormat:
+            return info.format();
+        default:
+            return QString();
     }
 }
 

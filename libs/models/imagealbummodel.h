@@ -54,6 +54,8 @@ public:
 
     Album *currentAlbum() const;
 
+    bool hasScheduledRefresh() const;
+
 public Q_SLOTS:
 
     /**
@@ -64,7 +66,6 @@ public Q_SLOTS:
     void openAlbum(Album *album);
     /** Reloads the current album */
     void refresh();
-    bool hasScheduledRefresh() const;
 
 Q_SIGNALS:
 
