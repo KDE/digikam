@@ -38,6 +38,7 @@ namespace Digikam
 
 class ImageChangeset;
 namespace DatabaseFields { class Set; }
+class ImageModelDragDropHandler;
 class ImageModelPriv;
 
 class DIGIKAM_DATABASE_EXPORT ImageModel : public QAbstractListModel
@@ -86,6 +87,8 @@ public:
     ImageInfo imageInfo(const QModelIndex &index) const;
     ImageInfo &imageInfoRef(const QModelIndex &index) const;
     qlonglong imageId(const QModelIndex &index) const;
+    QList<ImageInfo> imageInfos(const QList<QModelIndex> &indexes) const;
+    QList<qlonglong> imageIds(const QList<QModelIndex> &indexes) const;
     /** Returns the ImageInfo object, reference or image id from the underlying data
      *  of the given row (parent is the invalid QModelIndex, column is 0).
      *  Note that imageInfoRef will crash if index is invalid. */
@@ -117,6 +120,22 @@ public:
 
     bool isEmpty() const;
 
+    // Drag and Drop
+    virtual Qt::DropActions supportedDropActions() const;
+    virtual QStringList mimeTypes() const;
+    virtual bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
+    virtual QMimeData * mimeData(const QModelIndexList &indexes) const;
+
+    /// Set a drag drop handler.
+    void setDragDropHandler(ImageModelDragDropHandler *handler);
+    /// Returns the drag drop handler, or 0 if none is installed
+    ImageModelDragDropHandler *dragDropHandler() const;
+
+    /** Switch on drag and drop globally for all items. Default is true.
+     *  For per-item cases reimplement flags(). */
+    void setEnableDrag(bool enable);
+    void setEnableDrop(bool enable);
+
     /**
      * Install an object as a preprocessor for ImageInfos added to this model.
      * For every QList of ImageInfos added to addImageInfo, the signal preprocess()
@@ -129,13 +148,6 @@ public:
      */
     void setPreprocessor(QObject *processor);
     void unsetPreprocessor(QObject *processor);
-
-    /*
-    virtual Qt::DropActions supportedDropActions() const;
-    virtual QStringList mimeTypes() const;
-    virtual bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
-    virtual QMimeData * mimeData(const QModelIndexList &indexes) const;
-    */
 
 Q_SIGNALS:
 

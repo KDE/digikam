@@ -40,6 +40,7 @@
 #include "databasewatch.h"
 #include "imageinfo.h"
 #include "imageinfolist.h"
+#include "imagemodeldragdrophandler.h"
 
 namespace Digikam
 {
@@ -52,17 +53,25 @@ public:
     {
         preprocessor      = 0;
         keepFilePathCache = false;
+        itemDrag          = true;
+        itemDrop          = true;
+        dragDropHandler   = 0;
     }
 
-    ImageInfoList   infos;
+    ImageInfoList         infos;
     QHash<qlonglong, int> idHash;
 
-    bool            keepFilePathCache;
-    QHash<QString, int> filePathHash;
+    bool                  itemDrag;
+    bool                  itemDrop;
+    ImageModelDragDropHandler
+                         *dragDropHandler;
 
-    QObject        *preprocessor;
+    bool                  keepFilePathCache;
+    QHash<QString, int>   filePathHash;
 
-    DatabaseFields::Set watchFlags;
+    QObject              *preprocessor;
+
+    DatabaseFields::Set   watchFlags;
 };
 
 ImageModel::ImageModel(QObject *parent)
@@ -77,6 +86,8 @@ ImageModel::~ImageModel()
 {
     delete d;
 }
+
+// ------------ Access methods -------------
 
 void ImageModel::setKeepsFilePathCache(bool keepCache)
 {
@@ -115,6 +126,22 @@ qlonglong ImageModel::imageId(const QModelIndex &index) const
     if (!index.isValid())
         return 0;
     return d->infos[index.row()].id();
+}
+
+QList<ImageInfo> ImageModel::imageInfos(const QList<QModelIndex> &indexes) const
+{
+    QList<ImageInfo> infos;
+    foreach (const QModelIndex &index, indexes)
+        infos << imageInfo(index);
+    return infos;
+}
+
+QList<qlonglong> ImageModel::imageIds(const QList<QModelIndex> &indexes) const
+{
+    QList<qlonglong> ids;
+    foreach (const QModelIndex &index, indexes)
+        ids << imageId(index);
+    return ids;
 }
 
 ImageInfo ImageModel::imageInfo(int row) const
@@ -246,6 +273,8 @@ bool ImageModel::hasImage(const ImageInfo &info) const
     return d->idHash.contains(info.id());
 }
 
+// ------------ Preprocessing -------------
+
 void ImageModel::setPreprocessor(QObject *preprocessor)
 {
     unsetPreprocessor(d->preprocessor);
@@ -284,6 +313,7 @@ void ImageModel::appendInfos(const QList<ImageInfo> &infos)
     emit imageInfosAdded(infos);
 }
 
+// ------------ QAbstractItemModel implementation -------------
 
 QVariant ImageModel::data(const QModelIndex &index, int role) const
 {
@@ -324,7 +354,12 @@ Qt::ItemFlags ImageModel::flags(const QModelIndex &index) const
     if (!index.isValid())
         return 0;
 
-    return Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsSelectable;
+    Qt::ItemFlags f = Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+    if (d->itemDrag)
+        f |= Qt::ItemIsDragEnabled;
+    if (d->itemDrop)
+        f |= Qt::ItemIsDropEnabled;
+    return f;
 }
 
 QModelIndex ImageModel::index(int row, int column, const QModelIndex &parent) const
@@ -335,31 +370,56 @@ QModelIndex ImageModel::index(int row, int column, const QModelIndex &parent) co
     return createIndex(row, 0);
 }
 
-/*
+// ------------ Drag and Drop -------------
+
 Qt::DropActions ImageModel::supportedDropActions() const
 {
-    //TODO
-    return QAbstractItemModel::supportedDropActions();
+    return Qt::CopyAction|Qt::MoveAction;
 }
 
 QStringList ImageModel::mimeTypes() const
 {
-    //TODO
-    return QAbstractItemModel::mimeTypes();
+    if (d->dragDropHandler)
+        return d->dragDropHandler->mimeTypes();
+    return QStringList();
 }
 
-bool ImageModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
+bool ImageModel::dropMimeData(const QMimeData *, Qt::DropAction, int, int, const QModelIndex &)
 {
-    //TODO
-    return QAbstractItemModel::dropMimeData(data, action, row, column, parent);
+    // we require custom solutions
+    return false;
 }
 
 QMimeData *ImageModel::mimeData(const QModelIndexList &indexes) const
 {
-    //TODO
-    return QAbstractItemModel::mimeData(indexes);
+    if (!d->dragDropHandler)
+        return 0;
+
+    QList<ImageInfo> infos = imageInfos(indexes);
+    return d->dragDropHandler->createMimeData(infos);
 }
-*/
+
+void ImageModel::setEnableDrag(bool enable)
+{
+    d->itemDrag = enable;
+}
+
+void ImageModel::setEnableDrop(bool enable)
+{
+    d->itemDrop = enable;
+}
+
+void ImageModel::setDragDropHandler(ImageModelDragDropHandler *handler)
+{
+    d->dragDropHandler = handler;
+}
+
+ImageModelDragDropHandler *ImageModel::dragDropHandler() const
+{
+    return d->dragDropHandler;
+}
+
+// ------------ Database watch -------------
 
 void ImageModel::slotImageChange(const ImageChangeset &changeset)
 {

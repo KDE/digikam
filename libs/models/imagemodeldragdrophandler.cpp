@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-04-16
- * Description : Qt Model for Albums - drag and drop handling
+ * Date        : 2009-04-26
+ * Description : Qt Model for Images - drag and drop handling
  *
  * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
