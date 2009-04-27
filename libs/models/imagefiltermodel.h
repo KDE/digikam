@@ -73,10 +73,12 @@ public:
     ImageModel *sourceModel() const;
 
     /// Convenience methods mapped to ImageModel
+    QList<QModelIndex> mapListToSource(const QList<QModelIndex> &indexes) const;
+    QList<QModelIndex> mapListFromSource(const QList<QModelIndex> &sourceIndexes) const;
     ImageInfo imageInfo(const QModelIndex &index) const;
     qlonglong imageId(const QModelIndex &index) const;
-    QList<ImageInfo> imageInfos(const QList<QModelIndex> &indexes);
-    QList<qlonglong> imageIds(const QList<QModelIndex> &indexes);
+    QList<ImageInfo> imageInfos(const QList<QModelIndex> &indexes) const;
+    QList<qlonglong> imageIds(const QList<QModelIndex> &indexes) const;
     QModelIndex indexForPath(const QString &filePath) const;
     QModelIndex indexForImageInfo(const ImageInfo &info) const;
     QModelIndex indexForImageId(qlonglong id) const;

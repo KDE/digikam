@@ -195,6 +195,22 @@ QVariant ImageFilterModel::data(const QModelIndex &index, int role) const
 
 // -------------- Convenience mappers --------------
 
+QList<QModelIndex> ImageFilterModel::mapListToSource(const QList<QModelIndex> &indexes) const
+{
+    QList<QModelIndex> sourceIndexes;
+    foreach (const QModelIndex &index, indexes)
+        sourceIndexes << mapToSource(index);
+    return sourceIndexes;
+}
+
+QList<QModelIndex> ImageFilterModel::mapListFromSource(const QList<QModelIndex> &sourceIndexes) const
+{
+    QList<QModelIndex> indexes;
+    foreach (const QModelIndex &index, sourceIndexes)
+        indexes << mapFromSource(index);
+    return indexes;
+}
+
 ImageInfo ImageFilterModel::imageInfo(const QModelIndex &index) const
 {
     Q_D(const ImageFilterModel);
@@ -207,7 +223,7 @@ qlonglong ImageFilterModel::imageId(const QModelIndex &index) const
     return d->imageModel->imageId(mapToSource(index));
 }
 
-QList<ImageInfo> ImageFilterModel::imageInfos(const QList<QModelIndex> &indexes)
+QList<ImageInfo> ImageFilterModel::imageInfos(const QList<QModelIndex> &indexes) const
 {
     Q_D(const ImageFilterModel);
     QList<ImageInfo> infos;
@@ -216,7 +232,7 @@ QList<ImageInfo> ImageFilterModel::imageInfos(const QList<QModelIndex> &indexes)
     return infos;
 }
 
-QList<qlonglong> ImageFilterModel::imageIds(const QList<QModelIndex> &indexes)
+QList<qlonglong> ImageFilterModel::imageIds(const QList<QModelIndex> &indexes) const
 {
     Q_D(const ImageFilterModel);
     QList<qlonglong> ids;
