@@ -61,6 +61,11 @@ public:
     ImageCategoryDrawer *categoryDrawer() const;
 
     virtual bool acceptsToolTip(const QPoint &pos, const QStyleOptionViewItem &option, const QModelIndex & index) const;
+    virtual bool acceptsActivation(const QPoint &pos, const QStyleOptionViewItem &option, const QModelIndex & index) const;
+
+Q_SIGNALS:
+
+    void waitingForThumbnail(const QModelIndex &index) const;
 
 protected Q_SLOTS:
 
@@ -69,6 +74,7 @@ protected Q_SLOTS:
 
 protected:
 
+    bool onActualPixmapRect(const QPoint &pos, const QStyleOptionViewItem &option, const QModelIndex & index) const;
     QRect actualPixmapRect(qlonglong imageid) const;
     void updateActualPixmapRect(qlonglong imageid, const QRect &rect);
 

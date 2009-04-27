@@ -205,6 +205,7 @@ void ImageDelegate::paint(QPainter * p, const QStyleOptionViewItem &option, cons
     }
     else
     {
+        emit waitingForThumbnail(index);
         // simplified
         p->drawPixmap(0, 0, pix);
     }
@@ -318,6 +319,16 @@ QSize ImageDelegate::sizeHint(const QStyleOptionViewItem &/*option*/, const QMod
 }
 
 bool ImageDelegate::acceptsToolTip(const QPoint& pos, const QStyleOptionViewItem& option, const QModelIndex& index) const
+{
+    return onActualPixmapRect(pos, option, index);
+}
+
+bool ImageDelegate::acceptsActivation(const QPoint& pos, const QStyleOptionViewItem& option, const QModelIndex& index) const
+{
+    return onActualPixmapRect(pos, option, index);
+}
+
+bool ImageDelegate::onActualPixmapRect(const QPoint& pos, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     qlonglong id = ImageModel::retrieveImageId(index);
 
