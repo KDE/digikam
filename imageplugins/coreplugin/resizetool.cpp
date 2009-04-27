@@ -482,8 +482,8 @@ void ResizeTool::prepareEffect()
     int w             = iface->previewWidth();
     int h             = iface->previewHeight();
     DImg imTemp       = iface->getOriginalImg()->smoothScale(w, h, Qt::ScaleMin);
-    int new_w         = w*d->wpInput->value()/100.0;
-    int new_h         = h*d->hpInput->value()/100.0;
+    int new_w         = (int)(w*d->wpInput->value()/100.0);
+    int new_h         = (int)(h*d->hpInput->value()/100.0);
 
     if (d->useGreycstorationBox->isChecked())
     {
