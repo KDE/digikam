@@ -49,8 +49,9 @@ public:
     virtual int categoryHeight(const QModelIndex &index, const QStyleOption &option) const;
     virtual void drawCategory(const QModelIndex &index, int sortRole, const QStyleOption &option, QPainter *painter) const;
 
+    void setLowerSpacing(int spacing);
     void setDefaultViewOptions(const QStyleOptionViewItem &option);
-    void updateRectsAndPixmaps();
+    void invalidatePaintingCache();
 
 private:
 

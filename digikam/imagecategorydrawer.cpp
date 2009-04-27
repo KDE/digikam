@@ -29,6 +29,7 @@
 
 // KDE includes
 
+#include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
 
@@ -49,11 +50,13 @@ public:
 
     ImageCategoryDrawerPriv()
     {
+        lowerSpacing = 0;
     }
 
     QFont   font;
     QRect   rect;
     QPixmap pixmap;
+    int     lowerSpacing;
 };
 
 ImageCategoryDrawer::ImageCategoryDrawer()
@@ -68,24 +71,40 @@ ImageCategoryDrawer::~ImageCategoryDrawer()
 
 int ImageCategoryDrawer::categoryHeight(const QModelIndex &/*index*/, const QStyleOption &/*option*/) const
 {
-    return d->rect.height();
+    return d->rect.height() + d->lowerSpacing;
+}
+
+void ImageCategoryDrawer::setLowerSpacing(int spacing)
+{
+    d->lowerSpacing = spacing;
 }
 
 void ImageCategoryDrawer::setDefaultViewOptions(const QStyleOptionViewItem &option)
 {
     d->font = option.font;
+    if (option.rect.width() != d->rect.width())
+        updateRectsAndPixmaps(option.rect.width());
+}
+
+void ImageCategoryDrawer::invalidatePaintingCache()
+{
+    if (d->rect.isNull())
+        return;
+    updateRectsAndPixmaps(d->rect.width());
 }
 
 void ImageCategoryDrawer::drawCategory(const QModelIndex &index, int /*sortRole*/,
                                        const QStyleOption &option, QPainter *p) const
 {
     if (option.rect.width() != d->rect.width())
-        const_cast<ImageCategoryDrawer*>(this)->updateRectsAndPixmaps();
+        const_cast<ImageCategoryDrawer*>(this)->updateRectsAndPixmaps(option.rect.width());
+
+    p->save();
+
+    p->translate(option.rect.topLeft());
 
     ImageFilterModel::CategorizationMode mode =
         (ImageFilterModel::CategorizationMode)index.data(ImageFilterModel::CategorizationModeRole).toInt();
-
-    QRect r(option.rect);
 
     p->drawPixmap(0, 0, d->pixmap);
 
@@ -116,16 +135,18 @@ void ImageCategoryDrawer::drawCategory(const QModelIndex &index, int /*sortRole*
     p->setFont(fontBold);
 
     QRect tr;
-    p->drawText(5, 5, r.width(), r.height(),
+    p->drawText(5, 5, d->rect.width(), d->rect.height(),
             Qt::AlignLeft | Qt::AlignTop,
             header, &tr);
 
-    r.setY(tr.height() + 2);
+    int y = tr.height() + 2;
 
     p->setFont(fontNormal);
 
-    p->drawText(5, r.y(), r.width(), r.height(),
+    p->drawText(5, y, d->rect.width(), d->rect.height() - y,
                 Qt::AlignLeft | Qt::AlignVCenter, subLine);
+
+    p->restore();
 }
 
 void ImageCategoryDrawer::textForAlbum(const QModelIndex &index, QString *header, QString *subLine) const
@@ -161,11 +182,6 @@ void ImageCategoryDrawer::textForAlbum(const QModelIndex &index, QString *header
 
         *header = album->prettyUrl().left(-1);
     }
-}
-
-void ImageCategoryDrawer::updateRectsAndPixmaps()
-{
-    updateRectsAndPixmaps(d->rect.width());
 }
 
 void ImageCategoryDrawer::updateRectsAndPixmaps(int width)
