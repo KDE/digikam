@@ -246,10 +246,10 @@ void ImageModel::addImageInfos(const QList<ImageInfo> &infos)
 
 void ImageModel::clearImageInfos()
 {
-    reset();
     d->infos.clear();
     d->idHash.clear();
     d->filePathHash.clear();
+    reset();
     imageInfosCleared();
 }
 
