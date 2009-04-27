@@ -5,6 +5,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Liquid Rescale plugin for digiKam
+Comment[nds]=digiKam-Moduul för't week Gröttännern
 Comment[pt]=Um 'plugin' de escala líquida para o digiKam
 Comment[pt_BR]=Plug-in do digiKam para escala líquida
 Comment[sv]=Liquid insticksprogram med omskalning för Digikam
