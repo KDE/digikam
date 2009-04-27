@@ -246,7 +246,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     d->redMaskTool->setCheckable(true);
     d->redMaskTool->setChecked(true);
     d->redMaskTool->setToolTip(i18n("Draw a suppression mask"));
-    d->redMaskTool->setWhatsThis(i18n("Click on this button to draw image's zones you want to suppress."));
+    d->redMaskTool->setWhatsThis(i18n("Click on this button to draw image's zones which are less important. Those zone will be deleted when reducing the picture, and duplicated when enlarging the picture"));
     d->redMaskTool->setEnabled(false);
     d->maskGroup->addButton(d->redMaskTool, ContentAwareResizeToolPriv::redMask);
 
@@ -270,11 +270,10 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     d->funcInput->addItem(i18n("Absolute value"));
     d->funcInput->setDefaultIndex(ContentAwareResizeToolPriv::Abs);
     d->funcInput->setWhatsThis(i18n("This option allows you to choose a gradient function. This function is used "
-                                    "to determine which pixels should be removed."));
-
+                                    "to determine which pixels should be removed or kept."));
 
     d->preserveSkinTones = new QCheckBox(i18n("Preserve Skin Tones"), d->gboxSettings->plainPage());
-    d->preserveSkinTones->setWhatsThis(i18n("Enable this option to add more energy to pixels whose color looks like a skin tone."));
+    d->preserveSkinTones->setWhatsThis(i18n("Enable this option to preserve pixels whose color looks like a skin tone."));
     d->preserveSkinTones->setChecked(false);
 
     // -------------------------------------------------------------

@@ -208,19 +208,16 @@ void ContentAwareResizer::cancelFilter()
 
 bool ContentAwareResizer::isSkinTone(DColor c) 
 {
-    int    R = c.red();
-    int    G = c.green();
-    int    B = c.blue();
-    int    S = R + G + B;
-    double r = R / S;
-    double g = G / S;
-    double b = B / S;
-    double s = r + g + b;
-
-    return( (b/g < 1.249)         &&
-            (s/3.0*r > 0.696)     &&
-            (1.0/3.0-b/s > 0.014) &&
-            (g/(3.0*s) <0.108)
+    c.convertToEightBit();
+    double R=c.red()/255.0;
+    double G=c.green()/255.0;
+    double B=c.blue()/255.0;
+    double S = R + G + B;
+    
+    return( (B/G < 1.249)         &&
+            (S/3.0*R > 0.696)     &&
+            (1.0/3.0-B/S > 0.014) &&
+            (G/(3.0*S) <0.108)
           );
 }
 
@@ -238,7 +235,10 @@ void ContentAwareResizer::buildSkinToneBias()
             {
                // There we have to calculate the correct k of d->bias
                if (isSkinTone(m_orgImage.getPixelColor(x,y)))
-                   d->bias[y*m_orgImage.width() + x] = 1.0;
+                   {
+                      kDebug(50003) << "Skin Tone detected at coordinates :" << x << y << endl;
+                      d->bias[y*m_orgImage.width() + x] = 1.0;
+                   }
                else
                    d->bias[y*m_orgImage.width() + x] = 0.0; 
             }
@@ -246,7 +246,8 @@ void ContentAwareResizer::buildSkinToneBias()
 
         kDebug(50003) << "Set LibLqr skin tone mask..." << endl;
         lqr_carver_bias_add(d->carver, d->bias, 1000000);
-    }
+        delete(d->bias);
+    } 
 }
 
 void ContentAwareResizer::buildBias(const QImage& mask)
@@ -280,6 +281,7 @@ void ContentAwareResizer::buildBias(const QImage& mask)
 
         kDebug(50003) << "Set LibLqr mask..." << endl;
         lqr_carver_bias_add(d->carver, d->bias, 1000000);
+        delete(d->bias);
     }
 }
 
