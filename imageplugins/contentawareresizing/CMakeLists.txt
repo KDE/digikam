@@ -11,6 +11,8 @@ SET(liblqr_SRCS
     lqr/lqr_progress.c
     lqr/lqr_vmap.c
     lqr/lqr_vmap_list.c
+    lqr/lqr_energy.c
+    lqr/lqr_rwindow.c
    )
 
 # Disable liblqr C code warnings.
