@@ -562,6 +562,16 @@ KMenu* TagsPopupMenu::buildSubMenu(int tagid)
         popup->addSeparator();
         d->toggleTagActions->addAction(action);
     }
+    else    // DISPLAY
+    {
+        TagToggleAction *action = new TagToggleAction(i18n("Go to this Tag"), d->toggleTagActions);
+        action->setData(album->id());
+        action->setCheckBoxHidden(true);
+        setAlbumIcon(action, album);
+        popup->addAction(action);
+        popup->addSeparator();
+        d->toggleTagActions->addAction(action);
+    }
 
     iterateAndBuildMenu(popup, album);
 
