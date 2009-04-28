@@ -50,6 +50,7 @@ WelcomePage::WelcomePage(KAssistantDialog* dlg)
                         "</qt>"));
 
     setContentsWidget(vbox);
+    setDigiKamLogo();
 }
 
 WelcomePage::~WelcomePage()

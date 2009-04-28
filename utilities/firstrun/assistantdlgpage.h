@@ -28,6 +28,7 @@
 
 #include <QWidget>
 #include <QString>
+#include <QPixmap>
 
 class KAssistantDialog;
 class KPageWidgetItem;
@@ -48,6 +49,8 @@ public:
     KPageWidgetItem* page() const;
 
     void setContentsWidget(QWidget* w);
+    void setPixmap(const QPixmap& pix);
+    void setDigiKamLogo();
 
 private:
 

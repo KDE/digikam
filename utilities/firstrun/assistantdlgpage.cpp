@@ -27,7 +27,6 @@
 
 #include <QHBoxLayout>
 #include <QLabel>
-#include <QPixmap>
 
 // KDE includes.
 
@@ -48,24 +47,25 @@ public:
     {
         hlay = 0;
         page = 0;
+        logo = 0;
     }
-
+    
+    QLabel          *logo;
     QHBoxLayout     *hlay;
+    
     KPageWidgetItem *page;
 };
 
 AssistantDlgPage::AssistantDlgPage(KAssistantDialog* dlg, const QString& title)
                 : QWidget(dlg), d(new AssistantDlgPagePriv)
 {
-    d->hlay      = new QHBoxLayout(this);
-    QLabel *logo = new QLabel(this);
-    logo->setAlignment(Qt::AlignTop);
-    logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
-                    .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-
+    d->hlay = new QHBoxLayout(this);
+    d->logo = new QLabel(this);
+    d->logo->setAlignment(Qt::AlignTop);
+    
     KSeparator *line = new KSeparator(Qt::Vertical, this);
 
-    d->hlay->addWidget(logo);
+    d->hlay->addWidget(d->logo);
     d->hlay->addWidget(line);
     d->hlay->setMargin(0);
     d->hlay->setSpacing(KDialog::spacingHint());
@@ -87,6 +87,17 @@ void AssistantDlgPage::setContentsWidget(QWidget* w)
 {
     d->hlay->addWidget(w);
     d->hlay->setStretchFactor(w, 10);
+}
+
+void AssistantDlgPage::setPixmap(const QPixmap& pix)
+{
+    d->logo->setPixmap(pix);
+}
+
+void AssistantDlgPage::setDigiKamLogo()
+{
+    setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
+                      .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 }
 
 }   // namespace Digikam

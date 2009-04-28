@@ -136,6 +136,7 @@ CollectionPage::CollectionPage(KAssistantDialog* dlg)
 
     widget->setMinimumSize(450, sizeHint().height());
     setContentsWidget(widget);
+    setDigiKamLogo();
 
     connect(d->rootAlbumPathRequester, SIGNAL(urlSelected(const KUrl&)),
             this, SLOT(slotAlbumRootChanged(const KUrl&)));
