@@ -526,6 +526,8 @@ void ContextMenuHelper::addGotoMenu(imageIds& ids)
 void ContextMenuHelper::addQueueManagerMenu()
 {
     KMenu* bqmMenu = new KMenu(i18n("Batch Queue Manager"), d->parent);
+    bqmMenu->menuAction()->setIcon(KIcon("bqm-diff"));
+
     QStringList queueActions;
     queueActions << QString("image_add_to_current_queue")
                  << QString("image_add_to_new_queue");
