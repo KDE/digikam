@@ -21,52 +21,33 @@
  *
  * ============================================================ */
 
-#ifndef ASSISTANT_DLG_H
-#define ASSISTANT_DLG_H
+#ifndef FIRSTRUNCONTAINER_H
+#define FIRSTRUNCONTAINER_H
 
 // Qt includes
 
-#include <QWidget>
-
-// KDE includes
-
-#include <kassistantdialog.h>
-
-// Local includes.
-
-#include "firstruncontainer.h"
-
-class KPageWidgetItem;
+#include <QString>
 
 namespace Digikam
 {
 
-class AssistantDlgPriv;
-
-class AssistantDlg : public KAssistantDialog
+class FirstRunContainer
 {
-    Q_OBJECT
 
 public:
 
-    AssistantDlg(QWidget* parent=0);
-    ~AssistantDlg();
+    FirstRunContainer()
+    {
+    };
 
-    FirstRunContainer firstRunSettings() const;
+    ~FirstRunContainer(){};
 
-public Q_SLOTS:
+public:
 
-    void next();
-
-private Q_SLOTS:
-
-    void slotPageChanged(KPageWidgetItem*, KPageWidgetItem*);
-
-private:
-
-    AssistantDlgPriv* const d;
+    QString rootAlbum;
+    QString dbPath;
 };
 
-}   // namespace Digikam
+}  // namespace Digikam
 
-#endif /* ASSISTANT_DLG_H */
+#endif  // FIRSTRUNCONTAINER_H

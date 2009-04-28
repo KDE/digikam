@@ -58,9 +58,10 @@ AssistantDlg::AssistantDlg(QWidget* parent)
 {
     setHelp("firstrundialog.anchor", "digikam");
 
-    d->welcomePage    = new WelcomePage(this);
+    d->welcomePage    = new WelcomePage(this);    // First assistant page
     d->collectionPage = new CollectionPage(this);
-    d->startScanPage  = new StartScanPage(this);
+    // NOTE: Added here new assistant pages...
+    d->startScanPage  = new StartScanPage(this);  // Last assistant page
 
     resize(600, 500);
 
@@ -73,14 +74,12 @@ AssistantDlg::~AssistantDlg()
     delete d;
 }
 
-QString AssistantDlg::firstAlbumPath() const
+FirstRunContainer AssistantDlg::firstRunSettings() const
 {
-    return d->collectionPage->firstAlbumPath();
-}
-
-QString AssistantDlg::databasePath() const
-{
-    return d->collectionPage->databasePath();
+    FirstRunContainer settings;
+    settings.rootAlbum = d->collectionPage->firstAlbumPath();
+    settings.dbPath    = d->collectionPage->databasePath();
+    return settings;
 }
 
 void AssistantDlg::next()

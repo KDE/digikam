@@ -7,7 +7,7 @@
  * Description : main program from digiKam
  *
  * Copyright (C) 2002-2006 by Renchi Raju <renchi at pooh.tam.uiuc.edu>
- * Copyright (C) 2002-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -63,6 +63,8 @@
 #include "digikamapp.h"
 #include "assistantdlg.h"
 
+using namespace Digikam;
+
 int main(int argc, char *argv[])
 {
     KAboutData aboutData("digikam", 0,
@@ -74,8 +76,7 @@ int main(int argc, char *argv[])
                          KLocalizedString(),
                          Digikam::webProjectUrl().url().toUtf8());
 
-
-    Digikam::authorsRegistration(aboutData);
+    authorsRegistration(aboutData);
 
     KCmdLineArgs::init( argc, argv, &aboutData );
 
@@ -127,13 +128,14 @@ int main(int argc, char *argv[])
         !dirInfo.isDir())
     {
         // Run the first run assistant.
-        Digikam::AssistantDlg firstRun;
+        AssistantDlg firstRun;
         app.setTopWidget(&firstRun);
         if (firstRun.exec() == QDialog::Rejected)
             return 1;
 
-        dbPath         = firstRun.databasePath();
-        firstAlbumPath = firstRun.firstAlbumPath();
+        FirstRunContainer settings = firstRun.firstRunSettings();
+        firstAlbumPath             = settings.rootAlbum;
+        dbPath                     = settings.dbPath;
     }
 
     kDebug(50003) << "Database Path: " << dbPath << endl;
@@ -152,11 +154,11 @@ int main(int argc, char *argv[])
     }
 
     // initialize database
-    Digikam::AlbumManager* man = Digikam::AlbumManager::instance();
+    AlbumManager* man = AlbumManager::instance();
     if (!man->setDatabase(dbPath, priorityDbPath, firstAlbumPath))
         return 1;
 
-    Digikam::DigikamApp *digikam = new Digikam::DigikamApp();
+    DigikamApp *digikam = new DigikamApp();
 
     app.setTopWidget(digikam);
     digikam->restoreSession();
