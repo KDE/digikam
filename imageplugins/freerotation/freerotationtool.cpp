@@ -196,8 +196,9 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     m_autoAdjustContainer         = new QGroupBox(i18n("Automatic Correction"));
     QGridLayout *containerLayout2 = new QGridLayout;
     QLabel *autoDescr             = new QLabel;
-    autoDescr->setText(i18n("Correct the horizon of your images automatically by assigning two points in the "
-                            "preview widget and clicking <i>Adjust</i>."));
+    autoDescr->setText(i18n("<p>Correct the horizon of your images automatically by assigning two points in the "
+                            "preview widget and clicking <i>Adjust</i>.<br/>"
+                            "Note that you can adjust either horizontal or vertical lines.</p>"));
     autoDescr->setAlignment(Qt::AlignHCenter);
     autoDescr->setWordWrap(true);
     containerLayout2->addWidget(autoDescr,               0, 0, 1,-1);
