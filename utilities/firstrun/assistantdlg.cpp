@@ -62,6 +62,8 @@ AssistantDlg::AssistantDlg(QWidget* parent)
     d->collectionPage = new CollectionPage(this);
     d->startScanPage  = new StartScanPage(this);
 
+    resize(600, 500);
+
     connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*, KPageWidgetItem*)),
             this, SLOT(slotPageChanged(KPageWidgetItem*, KPageWidgetItem*)));
 }
