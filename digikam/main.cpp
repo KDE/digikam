@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
         // Run the first run assistant.
         AssistantDlg firstRun;
         app.setTopWidget(&firstRun);
-        if (firstRun.exec() == QDialog::Rejected)
+        if (firstRun.exec() != AssistantDlg::User1)  // Finish button ?
             return 1;
 
         FirstRunContainer settings = firstRun.firstRunSettings();
