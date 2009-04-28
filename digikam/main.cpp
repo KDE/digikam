@@ -61,7 +61,7 @@
 #include "collectionmanager.h"
 #include "collectionlocation.h"
 #include "digikamapp.h"
-#include "digikamfirstrun.h"
+#include "assistantdlg.h"
 
 int main(int argc, char *argv[])
 {
@@ -126,8 +126,8 @@ int main(int argc, char *argv[])
         !dirInfo.exists() ||
         !dirInfo.isDir())
     {
-        // Run the first run
-        Digikam::DigikamFirstRun firstRun;
+        // Run the first run assistant.
+        Digikam::AssistantDlg firstRun;
         app.setTopWidget(&firstRun);
         if (firstRun.exec() == QDialog::Rejected)
             return 1;

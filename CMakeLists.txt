@@ -885,7 +885,6 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/contextmenuhelper.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/datefolderview.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamapp.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamfirstrun.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamimageview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamview.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dio.cpp 

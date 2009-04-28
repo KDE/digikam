@@ -54,6 +54,7 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/fuzzysearch
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/gpssearch
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/timeline
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/firstrun
                      ${CMAKE_CURRENT_SOURCE_DIR}/../digikam
 
                      # config-digikam.h
@@ -195,6 +196,7 @@ SET(digikam_SRCS ${libdimgimagewindow_SRCS}
                  ${libqueuemanager_SRCS}
                  ${libalbummodels_SRCS}
                  ${libdigikamgui_SRCS}
+                 ${libfirstrun_SRCS}
 
                  main.cpp
     )
