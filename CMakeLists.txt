@@ -650,6 +650,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/assistantdlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/assistantdlgpage.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/welcomepage.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/collectionpage.cpp
        )
 
     SET(libimagepropertiesdigikam_SRCS
