@@ -15,9 +15,9 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- 
+
  * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/> 
+ * along with this program; if not, see <http://www.gnu.org/licenses/>
  */
 
 #include <lqr/lqr_all.h>
@@ -104,7 +104,7 @@ lqr_cursor_next (LqrCursor * c)
       if (c->y == c->o->h - 1)
         {
           /* top-right corner, set eoc flag */
-	  c->eoc = 1;
+          c->eoc = 1;
           return;
         }
       /* end-of-line, carriage return */
@@ -143,7 +143,7 @@ lqr_cursor_prev (LqrCursor * c)
     {
       return;
     }
- 
+
   /* update coordinates */
   if (c->x == 0)
     {

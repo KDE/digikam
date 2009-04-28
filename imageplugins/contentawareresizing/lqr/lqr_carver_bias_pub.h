@@ -15,9 +15,9 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- 
+
  * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/> 
+ * along with this program; if not, see <http://www.gnu.org/licenses/>
  */
 
 #ifndef __LQR_CARVER_BIAS_PUB_H__
@@ -29,6 +29,7 @@
 
 /* PUBLIC BIAS-RELATED FUNCTIONS */
 
+LqrRetVal lqr_carver_bias_add_xy(LqrCarver *r, gdouble bias, gint x, gint y);
 LqrRetVal lqr_carver_bias_add_rgb_area(LqrCarver *r, guchar *buffer, gint bias_factor, gint channels, gint width, gint height, gint x_off, gint y_off);
 LqrRetVal lqr_carver_bias_add_rgb(LqrCarver *r, guchar *buffer, gint bias_factor, gint channels);
 LqrRetVal lqr_carver_bias_add_area(LqrCarver *r, gdouble *buffer, gint bias_factor, gint width, gint height, gint x_off, gint y_off);

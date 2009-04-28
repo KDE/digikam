@@ -15,14 +15,14 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- 
+
  * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/> 
+ * along with this program; if not, see <http://www.gnu.org/licenses/>
  */
 
 #include <glib.h>
 
-#include <lqr_all.h>
+#include <lqr/lqr_all.h>
 
 #ifdef __LQR_DEBUG__
 #include <assert.h>
@@ -31,7 +31,7 @@
 
 /**** CARVER LIST FUNCTIONS ****/
 
-LqrCarverList * 
+LqrCarverList *
 lqr_carver_list_append (LqrCarverList * list, LqrCarver * r)
 {
   LqrCarverList * prev = NULL;

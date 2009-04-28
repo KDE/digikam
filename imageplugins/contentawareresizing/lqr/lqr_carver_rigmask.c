@@ -15,9 +15,9 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- 
+
  * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/> 
+ * along with this program; if not, see <http://www.gnu.org/licenses/>
  */
 
 #include <lqr/lqr_all.h>
@@ -42,8 +42,8 @@ lqr_carver_rigmask_init (LqrCarver *r)
     {
       for (x = 0; x < r->w_start; x++)
         {
-	  r->rigidity_mask[y * r->w_start + x] = 1;
-	}
+          r->rigidity_mask[y * r->w_start + x] = 1;
+        }
     }
   return LQR_OK;
 }
@@ -152,7 +152,7 @@ lqr_carver_rigmask_add_rgb_area(LqrCarver *r, guchar *rgb, gint channels, gint w
           rigmask = (gdouble) sum / (255 * c_channels);
           if (has_alpha)
             {
-	      rigmask *= (gdouble) rgb[((y - y0) * width + (x - x0) + 1) * channels - 1] / 255;
+              rigmask *= (gdouble) rgb[((y - y0) * width + (x - x0) + 1) * channels - 1] / 255;
             }
 
           r->rigidity_mask[(y + y1) * r->w0 + (x + x1)] = (gfloat) rigmask;

@@ -15,25 +15,22 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- 
+
  * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/> 
+ * along with this program; if not, see <http://www.gnu.org/licenses/>
  */
 
 
 #ifndef __LQR_GRADIENT_PUB_H__
 #define __LQR_GRADIENT_PUB_H__
 
-/**** gradient functions for energy evluation ****/
-typedef double (*LqrGradFunc) (double, double);
-
 enum _LqrGradFuncType
 {
   LQR_GF_NORM,                  /* gradient norm : sqrt(x^2 + y^2)            */
-  LQR_GF_NORM_BIAS,             /* gradient biased norm : sqrt(x^2 + 0.1 y^2) */
+  LQR_GF_NORM_BIAS,             /* NOT IMPLEMENTED DO NOT USE                 */
   LQR_GF_SUMABS,                /* sum of absulte values : |x| + |y|          */
   LQR_GF_XABS,                  /* x absolute value : |x|                     */
-  LQR_GF_YABS,                  /* y absolute value : |y|                     */
+  LQR_GF_YABS,                  /* NOT IMPLEMENTED DO NOT USE                 */
   LQR_GF_NULL                   /* 0 */
 };
 

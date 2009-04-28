@@ -15,52 +15,36 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- 
+
  * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/> 
+ * along with this program; if not, see <http://www.gnu.org/licenses/>
  */
 
 
+#include <glib.h>
 #include <math.h>
 #include <lqr/lqr_gradient.h>
 
+
 /**** GRADIENT FUNCTIONS ****/
 
-double
-lqr_grad_norm (double x, double y)
+gfloat
+lqr_grad_norm (gdouble x, gdouble y)
 {
-  return sqrt (x * x + y * y);
+  return (gfloat) sqrt (x * x + y * y);
 }
 
-double
-lqr_grad_norm_bias (double x, double y)
+gfloat
+lqr_grad_sumabs (gdouble x, gdouble y)
 {
-  return sqrt (x * x + 0.1 * y * y);
+  return (gfloat) ((fabs (x) + fabs (y)) / 2);
 }
 
-double
-lqr_grad_sumabs (double x, double y)
+gfloat
+lqr_grad_xabs (gdouble x, gdouble y)
 {
-  return (fabs (x) + fabs (y)) / 2;
+  return (gfloat) fabs (x);
 }
-
-double
-lqr_grad_xabs (double x, double y)
-{
-  return fabs (x);
-}
-
-double
-lqr_grad_yabs (double x, double y)
-{
-  return fabs (y);
-}
-
-double
-lqr_grad_zero (double x, double y)
-{
-  return 0;
-}
-
 
 /**** END OF GRADIENT FUNCTIONS ****/
+

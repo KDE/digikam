@@ -15,9 +15,9 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- 
+
  * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/> 
+ * along with this program; if not, see <http://www.gnu.org/licenses/>
  */
 
 
@@ -30,6 +30,8 @@ G_BEGIN_DECLS
 
 #include <lqr/lqr_base.h>
 #include <lqr/lqr_gradient.h>
+#include <lqr/lqr_rwindow.h>
+#include <lqr/lqr_energy.h>
 #include <lqr/lqr_cursor.h>
 #include <lqr/lqr_progress.h>
 #include <lqr/lqr_vmap.h>

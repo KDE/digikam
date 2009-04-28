@@ -15,9 +15,9 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- 
+
  * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/> 
+ * along with this program; if not, see <http://www.gnu.org/licenses/>
  */
 
 #include <lqr/lqr_all.h>
@@ -95,7 +95,7 @@ lqr_vmap_dump (LqrCarver * r)
   LqrVMap * vmap;
   gint w, h, w1, x, y, z0, vs;
   gint * buffer;
-  gint depth; 
+  gint depth;
 
   /* save current size */
   w1 = r->w;
@@ -115,22 +115,22 @@ lqr_vmap_dump (LqrCarver * r)
       for (x = 0; x < r->w; x++)
         {
           vs = r->vs[r->c->now];
-	  if (!r->transposed)
-	    {
-	      z0 = y * r->w + x;
-	    }
-	  else
-	    {
-	      z0 = x * r->h + y;
-	    }
-	  if (vs == 0)
-	    {
-	      buffer[z0] = 0;
-	    }
-	  else
-	    {
-	      buffer[z0] = vs - depth;
-	    }
+          if (!r->transposed)
+            {
+              z0 = y * r->w + x;
+            }
+          else
+            {
+              z0 = x * r->h + y;
+            }
+          if (vs == 0)
+            {
+              buffer[z0] = 0;
+            }
+          else
+            {
+              buffer[z0] = vs - depth;
+            }
           lqr_cursor_next (r->c);
         }
     }
@@ -154,7 +154,7 @@ lqr_vmap_internal_dump (LqrCarver * r)
   LqrVMap * vmap;
   gint w, h, w1, x, y, z0, vs;
   gint * buffer;
-  gint depth; 
+  gint depth;
 
   CATCH_CANC (r);
 
@@ -176,22 +176,22 @@ lqr_vmap_internal_dump (LqrCarver * r)
       for (x = 0; x < r->w; x++)
         {
           vs = r->vs[r->c->now];
-	  if (!r->transposed)
-	    {
-	      z0 = y * r->w + x;
-	    }
-	  else
-	    {
-	      z0 = x * r->h + y;
-	    }
-	  if (vs == 0)
-	    {
-	      buffer[z0] = 0;
-	    }
-	  else
-	    {
-	      buffer[z0] = vs - depth;
-	    }
+          if (!r->transposed)
+            {
+              z0 = y * r->w + x;
+            }
+          else
+            {
+              z0 = x * r->h + y;
+            }
+          if (vs == 0)
+            {
+              buffer[z0] = 0;
+            }
+          else
+            {
+              buffer[z0] = vs - depth;
+            }
           lqr_cursor_next (r->c);
         }
     }
@@ -240,19 +240,19 @@ lqr_vmap_load (LqrCarver *r, LqrVMap *vmap)
   for (y = 0; y < r->h; y++)
     {
       for (x = 0; x < r->w; x++)
-	{
-	  if (!r->transposed)
-	    {
-	      z0 = y * r->w + x;
-	    }
-	  else
-	    {
-	      z0 = x * r->h + y;
-	    }
-	  z1 = y * r->w + x;
+        {
+          if (!r->transposed)
+            {
+              z0 = y * r->w + x;
+            }
+          else
+            {
+              z0 = x * r->h + y;
+            }
+          z1 = y * r->w + x;
 
-	  r->vs[z1] = vmap->buffer[z0];
-	}
+          r->vs[z1] = vmap->buffer[z0];
+        }
     }
 
   CATCH (lqr_carver_inflate(r, vmap->depth));

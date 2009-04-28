@@ -15,9 +15,9 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- 
+
  * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/> 
+ * along with this program; if not, see <http://www.gnu.org/licenses/>
  */
 
 
@@ -27,17 +27,10 @@
 #define LQR_MAX_NAME_LENGTH (1024)
 
 #ifdef _MSC_VER
-#define LQR_PUBLIC /* __declspec(dllexport) */
+#define LQR_PUBLIC
 #else
 #define LQR_PUBLIC __attribute__((visibility("default")))
 #endif /* _MSC_VER */
-
-#define TRY_N_N(assign) if ((assign) == NULL) { return NULL; }
-/*
-#define TRY_N_F(assign) if ((assign) == NULL) { return FALSE; }
-#define TRY_F_N(assign) if ((assign) == FALSE) { return NULL; }
-#define TRY_F_F(assign) if ((assign) == FALSE) { return FALSE; }
-*/
 
 
 #if 0
@@ -51,13 +44,22 @@
 /**** RETURN VALUES (signals) ****/
 enum _LqrRetVal
 {
-  LQR_ERROR,		/* generic error */
-  LQR_OK,		/* ok */ 
-  LQR_NOMEM,		/* not enough memory */
+  LQR_ERROR,            /* generic error */
+  LQR_OK,               /* ok */
+  LQR_NOMEM,            /* not enough memory */
   LQR_USRCANCEL         /* action cancelled by user */
 };
 
 typedef enum _LqrRetVal LqrRetVal;
+
+#define TRY_N_N(assign) if ((assign) == NULL) { return NULL; }
+#define TRY_E_N(assign) if ((assign) != LQR_OK) { return NULL; }
+#define TRY_F_N(assign) if ((assign) == FALSE) { return NULL; }
+/*
+#define TRY_N_F(assign) if ((assign) == NULL) { return FALSE; }
+#define TRY_F_F(assign) if ((assign) == FALSE) { return FALSE; }
+*/
+
 
 /* generic signal processing macros */
 #define CATCH(expr) G_STMT_START { \
@@ -110,6 +112,21 @@ enum _LqrResizeOrder
 };
 
 typedef enum _LqrResizeOrder LqrResizeOrder;
+
+/**** IMAGE TYPE ****/
+enum _LqrImageType
+{
+  LQR_RGB_IMAGE,
+  LQR_RGBA_IMAGE,
+  LQR_GREY_IMAGE,
+  LQR_GREYA_IMAGE,
+  LQR_CMY_IMAGE,
+  LQR_CMYK_IMAGE,
+  LQR_CMYKA_IMAGE,
+  LQR_CUSTOM_IMAGE
+};
+
+typedef enum _LqrImageType LqrImageType;
 
 /**** CLASSES DECLARATIONS ****/
 

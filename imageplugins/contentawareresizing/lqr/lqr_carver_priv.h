@@ -15,9 +15,9 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- 
+
  * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/> 
+ * along with this program; if not, see <http://www.gnu.org/licenses/>
  */
 
 #ifndef __LQR_CARVER_PRIV_H__
@@ -30,6 +30,14 @@
 #ifndef __LQR_GRADIENT_H__
 #error "lqr_gradient.h must be included prior to lqr_carver_priv.h"
 #endif /* __LQR_GRADIENT_H__ */
+
+#ifndef __LQR_READER_WINDOW_PUB_H__
+#error "lqr_rwindow_pub.h must be included prior to lqr_carver_priv.h"
+#endif /* __LQR_READER_WINDOW_PUB_H__ */
+
+#ifndef __LQR_ENERGY_H__
+#error "lqr_energy.h must be included prior to lqr_carver_priv.h"
+#endif /* __LQR_ENERGY_H__ */
 
 #ifndef __LQR_CARVER_LIST_H__
 #error "lqr_carver_list.h must be included prior to lqr_carver_priv.h"
@@ -55,86 +63,107 @@
 #define AS2_32F(x) ((lqr_t_32f**)x)
 #define AS2_64F(x) ((lqr_t_64f**)x)
 
-#define PXL_COPY(dest, dest_ind, src, src_ind, col_depth) \
-        do { \
-          switch (col_depth) \
-            { \
-              case LQR_COLDEPTH_8I: \
-                AS_8I(dest)[dest_ind] = AS_8I(src)[src_ind]; \
-                break; \
-              case LQR_COLDEPTH_16I: \
-                AS_16I(dest)[dest_ind] = AS_16I(src)[src_ind]; \
-                break; \
-              case LQR_COLDEPTH_32F: \
-                AS_32F(dest)[dest_ind] = AS_32F(src)[src_ind]; \
-                break; \
-              case LQR_COLDEPTH_64F: \
-                AS_64F(dest)[dest_ind] = AS_64F(src)[src_ind]; \
-                break; \
-            } \
-        } while (0)
+#define PXL_COPY(dest, dest_ind, src, src_ind, col_depth) G_STMT_START { \
+  switch (col_depth) \
+    { \
+      case LQR_COLDEPTH_8I: \
+        AS_8I(dest)[dest_ind] = AS_8I(src)[src_ind]; \
+        break; \
+      case LQR_COLDEPTH_16I: \
+        AS_16I(dest)[dest_ind] = AS_16I(src)[src_ind]; \
+        break; \
+      case LQR_COLDEPTH_32F: \
+        AS_32F(dest)[dest_ind] = AS_32F(src)[src_ind]; \
+        break; \
+      case LQR_COLDEPTH_64F: \
+        AS_64F(dest)[dest_ind] = AS_64F(src)[src_ind]; \
+        break; \
+    } \
+} G_STMT_END
 
-#define BUF_POINTER_COPY(dest, src, col_depth) \
-        do { \
-          switch (col_depth) \
-            { \
-              case LQR_COLDEPTH_8I: \
-                *AS2_8I(dest) = AS_8I(src); \
-                break; \
-              case LQR_COLDEPTH_16I: \
-                *AS2_16I(dest) = AS_16I(src); \
-                break; \
-              case LQR_COLDEPTH_32F: \
-                *AS2_32F(dest) = AS_32F(src); \
-                break; \
-              case LQR_COLDEPTH_64F: \
-                *AS2_64F(dest) = AS_64F(src); \
-                break; \
-            } \
-        } while (0)
+#define BUF_POINTER_COPY(dest, src, col_depth) G_STMT_START { \
+  switch (col_depth) \
+    { \
+      case LQR_COLDEPTH_8I: \
+        *AS2_8I(dest) = AS_8I(src); \
+        break; \
+      case LQR_COLDEPTH_16I: \
+        *AS2_16I(dest) = AS_16I(src); \
+        break; \
+      case LQR_COLDEPTH_32F: \
+        *AS2_32F(dest) = AS_32F(src); \
+        break; \
+      case LQR_COLDEPTH_64F: \
+        *AS2_64F(dest) = AS_64F(src); \
+        break; \
+    } \
+} G_STMT_END
 
-#define BUF_TRY_NEW_RET_POINTER(dest, size, col_depth) \
-        do { \
-          switch (col_depth) \
-            { \
-              case LQR_COLDEPTH_8I: \
-                TRY_N_N (dest = g_try_new (lqr_t_8i, size)); \
-                break; \
-              case LQR_COLDEPTH_16I: \
-                TRY_N_N (dest = g_try_new (lqr_t_16i, size)); \
-                break; \
-              case LQR_COLDEPTH_32F: \
-                TRY_N_N (dest = g_try_new (lqr_t_32f, size)); \
-                break; \
-              case LQR_COLDEPTH_64F: \
-                TRY_N_N (dest = g_try_new (lqr_t_64f, size)); \
-                break; \
-            } \
-        } while (0)
+#define BUF_TRY_NEW_RET_POINTER(dest, size, col_depth) G_STMT_START { \
+  switch (col_depth) \
+    { \
+      case LQR_COLDEPTH_8I: \
+        TRY_N_N (dest = g_try_new (lqr_t_8i, size)); \
+        break; \
+      case LQR_COLDEPTH_16I: \
+        TRY_N_N (dest = g_try_new (lqr_t_16i, size)); \
+        break; \
+      case LQR_COLDEPTH_32F: \
+        TRY_N_N (dest = g_try_new (lqr_t_32f, size)); \
+        break; \
+      case LQR_COLDEPTH_64F: \
+        TRY_N_N (dest = g_try_new (lqr_t_64f, size)); \
+        break; \
+    } \
+} G_STMT_END
 
-#define BUF_TRY_NEW0_RET_LQR(dest, size, col_depth) \
-        do { \
-          switch (col_depth) \
-            { \
-              case LQR_COLDEPTH_8I: \
-                CATCH_MEM (dest = g_try_new0 (lqr_t_8i, size)); \
-                break; \
-              case LQR_COLDEPTH_16I: \
-                CATCH_MEM (dest = g_try_new0 (lqr_t_16i, size)); \
-                break; \
-              case LQR_COLDEPTH_32F: \
-                CATCH_MEM (dest = g_try_new0 (lqr_t_32f, size)); \
-                break; \
-              case LQR_COLDEPTH_64F: \
-                CATCH_MEM (dest = g_try_new0 (lqr_t_64f, size)); \
-                break; \
-            } \
-        } while (0)
+#define BUF_TRY_NEW0_RET_POINTER(dest, size, col_depth) G_STMT_START { \
+  switch (col_depth) \
+    { \
+      case LQR_COLDEPTH_8I: \
+        TRY_N_N (dest = g_try_new0 (lqr_t_8i, size)); \
+        break; \
+      case LQR_COLDEPTH_16I: \
+        TRY_N_N (dest = g_try_new0 (lqr_t_16i, size)); \
+        break; \
+      case LQR_COLDEPTH_32F: \
+        TRY_N_N (dest = g_try_new0 (lqr_t_32f, size)); \
+        break; \
+      case LQR_COLDEPTH_64F: \
+        TRY_N_N (dest = g_try_new0 (lqr_t_64f, size)); \
+        break; \
+    } \
+} G_STMT_END
+
+#define BUF_TRY_NEW0_RET_LQR(dest, size, col_depth) G_STMT_START { \
+  switch (col_depth) \
+    { \
+      case LQR_COLDEPTH_8I: \
+        CATCH_MEM (dest = g_try_new0 (lqr_t_8i, size)); \
+        break; \
+      case LQR_COLDEPTH_16I: \
+        CATCH_MEM (dest = g_try_new0 (lqr_t_16i, size)); \
+        break; \
+      case LQR_COLDEPTH_32F: \
+        CATCH_MEM (dest = g_try_new0 (lqr_t_32f, size)); \
+        break; \
+      case LQR_COLDEPTH_64F: \
+        CATCH_MEM (dest = g_try_new0 (lqr_t_64f, size)); \
+        break; \
+    } \
+} G_STMT_END
 
 #define CATCH_CANC(carver) G_STMT_START { \
   if (g_atomic_int_get(&carver->state) == LQR_CARVER_STATE_CANCELLED) \
     { \
       return LQR_USRCANCEL; \
+    } \
+} G_STMT_END
+
+#define CATCH_CANC_N(carver) G_STMT_START { \
+  if (g_atomic_int_get(&carver->state) == LQR_CARVER_STATE_CANCELLED) \
+    { \
+      return NULL; \
     } \
 } G_STMT_END
 
@@ -168,11 +197,15 @@ struct _LqrCarver
                                    * since levels are shifted upon inflation
                                    */
 
+  LqrImageType image_type;        /* image type */
   gint channels;                  /* number of colour channels of the image */
+  gint alpha_channel;             /* opacity channel index (-1 if absent) */
+  gint black_channel;             /* black channel index (-1 if absent) */
   LqrColDepth col_depth;          /* image colour depth */
 
   gint transposed;                /* flag to set transposed state */
   gboolean active;                /* flag to set if carver is active */
+  gboolean nrg_active;            /* flag to set if carver energy is active */
   LqrCarver* root;                /* pointer to the root carver */
 
   gboolean resize_aux_layers;     /* flag to determine whether the auxiliary layers are resized */
@@ -201,13 +234,25 @@ struct _LqrCarver
   gint *vpath;                    /* array of array-coordinates representing a vertical seam */
   gint *vpath_x;                  /* array of abscisses representing a vertical seam */
 
-  LqrGradFunc gf;                 /* pointer to a gradient function */
-
   gint leftright;                 /* whether to favor left or right seams */
   gint lr_switch_frequency;       /* interval between leftright switches */
   gfloat enl_step;                /* maximum enlargement ratio in a single step */
 
   LqrProgress * progress;         /* pointer to progress update functions */
+
+  LqrEnergyFunc nrg;              /* pointer to a general energy function */
+  gint nrg_radius;                /* energy function radius */
+  LqrEnergyReaderType nrg_read_t; /* energy function reader type */
+  gpointer nrg_extra_data;        /* extra data to pass on to the energy function */
+  LqrReaderWindow * rwindow;      /* reader window for energy computation */
+
+  gint *nrg_xmin;                 /* auxiliary vector for energy update */
+  gint *nrg_xmax;                 /* auxiliary vector for energy update */
+
+  gboolean nrg_uptodate;          /* flag set if energy map is up to date */
+
+  gdouble * rcache;               /* array of brightness (or luma or else) levels for energy computation */
+  gboolean use_rcache;            /* wheter to cache brightness, luma etc. */
 
   LqrVMapList * flushed_vs;       /* linked list of pointers to flushed visibility maps buffers */
 
@@ -224,6 +269,9 @@ struct _LqrCarver
 /* constructor base */
 LqrCarver * lqr_carver_new_common (gint width, gint height, gint channels);
 
+/* Init energy related structures only */
+LqrRetVal lqr_carver_init_energy_related (LqrCarver *r);
+
 /* build maps */
 LqrRetVal lqr_carver_build_maps (LqrCarver * r, gint depth);     /* build all */
 LqrRetVal lqr_carver_build_emap (LqrCarver * r);     /* energy */
@@ -231,9 +279,8 @@ LqrRetVal lqr_carver_build_mmap (LqrCarver * r);     /* minpath */
 LqrRetVal lqr_carver_build_vsmap (LqrCarver * r, gint depth);    /* visibility */
 
 /* internal functions for maps computation */
-inline gfloat lqr_carver_read (LqrCarver * r, gint x, gint y); /* read the average value at given point */
-void lqr_carver_compute_e (LqrCarver * r, gint x, gint y);      /* compute energy of point at c (fast) */
-void lqr_carver_update_emap (LqrCarver * r);    /* update energy map after seam removal */
+LqrRetVal lqr_carver_compute_e (LqrCarver * r, gint x, gint y);      /* compute energy of point at c */
+LqrRetVal lqr_carver_update_emap (LqrCarver * r);    /* update energy map after seam removal */
 LqrRetVal lqr_carver_update_mmap (LqrCarver * r);    /* minpath */
 void lqr_carver_build_vpath (LqrCarver * r);    /* compute seam path */
 void lqr_carver_carve (LqrCarver * r);  /* updates the "raw" buffer */
