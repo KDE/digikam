@@ -24,9 +24,6 @@
 #include "assistantdlg.h"
 #include "assistantdlg.moc"
 
-// Qt includes
-
-
 // KDE includes
 
 #include <klocale.h>
@@ -34,6 +31,7 @@
 // Locale incudes.
 
 #include "welcomepage.h"
+#include "collectionpage.h"
 
 namespace Digikam
 {
@@ -44,10 +42,12 @@ public:
 
     AssistantDlgPriv()
     {
-        welcomePage = 0;
+        welcomePage    = 0;
+        collectionPage = 0;
     }
 
-    WelcomePage *welcomePage;
+    WelcomePage    *welcomePage;
+    CollectionPage *collectionPage;
 };
 
 AssistantDlg::AssistantDlg(QWidget* parent)
@@ -55,7 +55,11 @@ AssistantDlg::AssistantDlg(QWidget* parent)
 {
     setHelp("firstrundialog.anchor", "digikam");
 
-    d->welcomePage = new WelcomePage(this);
+    d->welcomePage    = new WelcomePage(this);
+    d->collectionPage = new CollectionPage(this);
+
+    connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*, KPageWidgetItem*)),
+            this, SLOT(slotPageChanged(KPageWidgetItem*, KPageWidgetItem*)));
 }
 
 AssistantDlg::~AssistantDlg()
@@ -71,6 +75,11 @@ QString AssistantDlg::firstAlbumPath() const
 QString AssistantDlg::databasePath() const
 {
     return QString();
+}
+
+void AssistantDlg::slotPageChanged(KPageWidgetItem* /*current*/, KPageWidgetItem* /*before*/)
+{
+    
 }
 
 }   // namespace Digikam

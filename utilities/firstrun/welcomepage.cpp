@@ -22,40 +22,38 @@
  * ============================================================ */
 
 #include "welcomepage.h"
-#include "welcomepage.moc"
 
 // Qt includes
 
-#include <QGridLayout>
+#include <QLabel>
 
 // KDE includes
 
+#include <kvbox.h>
 #include <klocale.h>
-#include <kapplication.h>
 
 namespace Digikam
 {
 
-class WelcomePagePriv
-{
-public:
-
-    WelcomePagePriv()
-    {
-    }
-
-};
-
 WelcomePage::WelcomePage(KAssistantDialog* dlg)
-           : AssistantDlgPage(dlg, i18n("Welcome To digiKam")), 
-             d(new WelcomePagePriv)
+           : AssistantDlgPage(dlg, i18n("Welcome To digiKam"))
 {
-    setContentsWidget(new QWidget(this));
+    KVBox *vbox   = new KVBox(this);
+    QLabel *title = new QLabel(vbox);
+    title->setWordWrap(true);
+    title->setText(i18n("<qt><p>"
+                        "<h1><b>Welcome To digiKam</b></h1>"
+                        "<p>digiKam is an advanced digital photo management application published "
+                        "in open-source.</p>"
+                        "This assistant will help you to configure first run settings to be able to "
+                        "use digiKam quickly."
+                        "</p></qt>"));
+
+    setContentsWidget(vbox);
 }
 
 WelcomePage::~WelcomePage()
 {
-    delete d;
 }
 
 }   // namespace Digikam

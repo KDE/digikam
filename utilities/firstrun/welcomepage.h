@@ -31,28 +31,12 @@
 namespace Digikam
 {
 
-class WelcomePagePriv;
-
 class WelcomePage : public AssistantDlgPage
 {
-    Q_OBJECT
-
 public:
 
     WelcomePage(KAssistantDialog* dlg);
     ~WelcomePage();
-
-Q_SIGNALS:
-
-
-
-private Q_SLOTS:
-
-
-
-private:
-
-    WelcomePagePriv* const d;
 };
 
 }   // namespace Digikam

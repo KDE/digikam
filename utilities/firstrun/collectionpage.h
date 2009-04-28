@@ -21,35 +21,26 @@
  *
  * ============================================================ */
 
-#ifndef ASSISTANT_DLG_H
-#define ASSISTANT_DLG_H
+#ifndef COLLECTION_PAGE_H
+#define COLLECTION_PAGE_H
 
-// Qt includes
+// Local includes
 
-#include <QWidget>
-
-// KDE includes
-
-#include <kassistantdialog.h>
-
-class KPageWidgetItem;
+#include "assistantdlgpage.h"
 
 namespace Digikam
 {
 
-class AssistantDlgPriv;
+class CollectionPagePriv;
 
-class AssistantDlg : public KAssistantDialog
+class CollectionPage : public AssistantDlgPage
 {
     Q_OBJECT
 
 public:
 
-    AssistantDlg(QWidget* parent=0);
-    ~AssistantDlg();
-
-    QString databasePath() const;
-    QString firstAlbumPath() const;
+    CollectionPage(KAssistantDialog* dlg);
+    ~CollectionPage();
 
 Q_SIGNALS:
 
@@ -57,13 +48,13 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-    void slotPageChanged(KPageWidgetItem*, KPageWidgetItem*);
+
 
 private:
 
-    AssistantDlgPriv* const d;
+    CollectionPagePriv* const d;
 };
 
 }   // namespace Digikam
 
-#endif /* ASSISTANT_DLG_H */
+#endif /* WELCOME_PAGE_H */
