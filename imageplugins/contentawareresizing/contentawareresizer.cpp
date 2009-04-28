@@ -205,10 +205,9 @@ void ContentAwareResizer::cancelFilter()
     DImgThreadedFilter::cancelFilter();
 }
 
-bool ContentAwareResizer::isSkinTone(const DColor& c) 
+bool ContentAwareResizer::isSkinTone(const DColor& color) 
 {
-    DColor color(c);
-    color.convertToEightBit();
+    // NOTE: color is previously converted to eight bits. 
     double R = color.red()   / 255.0;
     double G = color.green() / 255.0;
     double B = color.blue()  / 255.0;
@@ -223,14 +222,17 @@ bool ContentAwareResizer::isSkinTone(const DColor& c)
 
 void ContentAwareResizer::buildSkinToneBias()
 {
-   for(uint x=0; x < m_orgImage.width(); x++)
-   {
-      for(uint y=0; y < m_orgImage.height(); y++)
-      {
-          gdouble bias = 10000*isSkinTone(m_orgImage.getPixelColor(x,y));
-          lqr_carver_bias_add_xy(d->carver,bias,x,y);
-      }
-   }
+    DColor c;
+    for(uint x=0; x < m_orgImage.width(); x++)
+    {
+        for(uint y=0; y < m_orgImage.height(); y++)
+        {
+            c = m_orgImage.getPixelColor(x, y);
+            c.convertToEightBit();
+            gdouble bias = 10000*isSkinTone(c);
+            lqr_carver_bias_add_xy(d->carver,bias,x,y);
+        }
+    }
 }
 
 void ContentAwareResizer::buildBias(const QImage& mask)
