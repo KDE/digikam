@@ -64,7 +64,6 @@ public:
         height   = 0;
         carver   = 0;
         progress = 0;
-        bias     = 0;
     }
 
     uint         width;
@@ -73,7 +72,6 @@ public:
     LqrCarver   *carver;
     LqrProgress *progress;
 
-    gdouble     *bias;
 };
 
 ContentAwareResizer::ContentAwareResizer(DImg *orgImage, uint width, uint height,
@@ -225,69 +223,35 @@ bool ContentAwareResizer::isSkinTone(const DColor& c)
 
 void ContentAwareResizer::buildSkinToneBias()
 {
-    int biasSize = m_orgImage.width() * m_orgImage.height();
-    d->bias      = new gdouble[biasSize];
-
-    if(d->bias)
-    {
-        // Build bias table
-        for(uint x=0; x < m_orgImage.width(); x++)
-        {
-            for(uint y=0; y < m_orgImage.height(); y++)
-            {
-                // There we have to calculate the correct k of d->bias
-                if (isSkinTone(m_orgImage.getPixelColor(x,y)))
-                {
-                    {
-                        kDebug(50003) << "Skin Tone detected at coordinates :" << x << y << endl;
-                        d->bias[y*m_orgImage.width() + x] = 1.0;
-                    }
-                }
-                else
-                {
-                    d->bias[y*m_orgImage.width() + x] = 0.0; 
-                }
-            }
-        }
-
-        kDebug(50003) << "Set LibLqr skin tone mask..." << endl;
-        lqr_carver_bias_add(d->carver, d->bias, 1000000);
-        delete(d->bias);
-    } 
+   for(uint x=0; x < m_orgImage.width(); x++)
+   {
+      for(uint y=0; y < m_orgImage.height(); y++)
+      {
+          gdouble bias = 10000*isSkinTone(m_orgImage.getPixelColor(x,y));
+          lqr_carver_bias_add_xy(d->carver,bias,x,y);
+      }
+   }
 }
 
 void ContentAwareResizer::buildBias(const QImage& mask)
 {
     QColor pixColor;
     int    r,g,b,a;
-    int    biasSize = mask.width() * mask.height();
-    d->bias         = new gdouble[biasSize];
-
-    if(d->bias)
+    for(int x=0; x < mask.width(); x++)
     {
-        // Initialize the table of bias
-        for(int k=0; k < biasSize; k++)
-            d->bias[k] = 0.0;
-
-        // Build bias table
-        for(int x=0; x < mask.width(); x++)
+        for(int y=0; y < mask.height(); y++)
         {
-            for(int y=0; y < mask.height(); y++)
-            {
-                pixColor = QColor::fromRgba(mask.pixel(x,y));
-                pixColor.getRgb(&r, &g, &b, &a);
+            pixColor = QColor::fromRgba(mask.pixel(x,y));
+            pixColor.getRgb(&r, &g, &b, &a);
+            gdouble bias=0.0;
 
-                // There we have to calculate the correct k of d->bias
-                if(g == 255)
-                    d->bias[y*mask.width() + x] = 1.0;
-                else if(r == 255)
-                    d->bias[y*mask.width() + x] = -1.0;
-            }
+            if (g == 255)
+                bias=1000000.0;
+            if (r == 255)
+                bias=-1000000.0;
+
+            lqr_carver_bias_add_xy(d->carver,bias,x,y);
         }
-
-        kDebug(50003) << "Set LibLqr mask..." << endl;
-        lqr_carver_bias_add(d->carver, d->bias, 1000000);
-        delete(d->bias);
     }
 }
 
