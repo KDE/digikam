@@ -71,11 +71,11 @@ private Q_SLOTS:
 
 private:
 
-    void         setup(Mode mode);
-    void         clearPopup();
-    KMenu*       buildSubMenu(int tagid);
-    void         iterateAndBuildMenu(KMenu *menu, TAlbum *album);
-    void         setAlbumIcon(QAction *action, TAlbum *album);
+    void   setup(Mode mode);
+    void   clearPopup();
+    KMenu* buildSubMenu(int tagid);
+    void   iterateAndBuildMenu(KMenu *menu, TAlbum *album);
+    void   setAlbumIcon(QAction *action, TAlbum *album);
 
 private:
 

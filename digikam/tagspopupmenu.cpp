@@ -559,6 +559,7 @@ KMenu* TagsPopupMenu::buildSubMenu(int tagid)
         action->setCheckBoxHidden(true);
         setAlbumIcon(action, album);
         popup->addAction(action);
+        popup->addSeparator();
         d->toggleTagActions->addAction(action);
     }
 
