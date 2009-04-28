@@ -1,11 +1,15 @@
 [Desktop Entry]
 Name=ImagePlugin_ContentAwareResizing
+Name[nl]=Afbeeldingsplugin_Inhoudafhankelijk_GrootteWijzigen
 Name[sv]=Insticksprogram med innehållsberoende storleksändring
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Liquid Rescale plugin for digiKam
+Comment[et]=DigiKami sisutundliku pildi suuruse muutmise plugin
+Comment[gl]=Unha extensión de digiKam para un efecto líquido de reescalado
 Comment[nds]=digiKam-Moduul för't week Gröttännern
+Comment[nl]=digiKam-plugin voor vloeibaar herschalen
 Comment[pt]=Um 'plugin' de escala líquida para o digiKam
 Comment[pt_BR]=Plug-in do digiKam para escala líquida
 Comment[sv]=Liquid insticksprogram med omskalning för Digikam
