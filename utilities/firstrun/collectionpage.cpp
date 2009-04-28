@@ -149,6 +149,16 @@ CollectionPage::~CollectionPage()
     delete d;
 }
 
+QString CollectionPage::firstAlbumPath() const
+{
+    return d->rootAlbum;
+}
+
+QString CollectionPage::databasePath() const
+{
+    return d->dbPath;
+}
+
 bool CollectionPage::applySettings()
 {
     QString rootAlbumFolder;

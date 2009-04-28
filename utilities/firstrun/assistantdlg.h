@@ -51,9 +51,9 @@ public:
     QString databasePath() const;
     QString firstAlbumPath() const;
 
-Q_SIGNALS:
+public Q_SLOTS:
 
-
+    void next();
 
 private Q_SLOTS:
 

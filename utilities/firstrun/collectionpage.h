@@ -52,6 +52,9 @@ public:
 
     bool applySettings();
 
+    QString databasePath() const;
+    QString firstAlbumPath() const;
+
 private Q_SLOTS:
 
     void slotAlbumRootChanged(const KUrl& url);

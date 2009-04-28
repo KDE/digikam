@@ -69,12 +69,23 @@ AssistantDlg::~AssistantDlg()
 
 QString AssistantDlg::firstAlbumPath() const
 {
-    return QString();
+    return d->collectionPage->firstAlbumPath();
 }
 
 QString AssistantDlg::databasePath() const
 {
-    return QString();
+    return d->collectionPage->databasePath();
+}
+
+void AssistantDlg::next()
+{
+    if (currentPage() == d->collectionPage->page())
+    {
+        if (!d->collectionPage->applySettings())
+            return;
+    }
+
+    KAssistantDialog::next();
 }
 
 void AssistantDlg::slotPageChanged(KPageWidgetItem* /*current*/, KPageWidgetItem* /*before*/)
