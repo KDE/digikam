@@ -646,6 +646,12 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiinterface.cpp
        )
 
+    SET(libfirstrun_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/assistantdlg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/assistantdlgpage.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/welcomepage.cpp
+       )
+
     SET(libimagepropertiesdigikam_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiessidebarcamgui.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiessidebardb.cpp
