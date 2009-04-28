@@ -43,8 +43,8 @@ StartScanPage::StartScanPage(KAssistantDialog* dlg)
     title->setWordWrap(true);
     title->setText(i18n("<qt>"
                         "<p>Your minimal setup is done.</p>"
-                        "<p>Press \"Finish\" to lets digiKam scan your collection to register items to database. "
-                        "Note: this operation can take a while.</p>"
+                        "<p>Press \"Finish\" to lets digiKam scan your collection to register items to database.</p>"
+                        "<p>Note: this operation can take a while.</p>"
                         "</qt>"));
 
     setContentsWidget(vbox);
