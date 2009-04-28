@@ -241,22 +241,22 @@ QString ManualRenameInput::parse(const QString &fileName, const QString &cameraN
 
 QString ManualRenameInput::createToolTip()
 {
-    typedef QPair<QString, QString> p;
-    QList<p> tokenList;
+    typedef QPair<QString, QString> token;
+    QList<token> tokenList;
 
-    tokenList << p(QString("$"),              i18n("filename (original)"))
-              << p(QString("&"),              i18n("filename (upper case)"))
-              << p(QString("%"),              i18n("filename (lower case)"))
-              << p(QString("*"),              i18n("filename (first letter of each word upper case)"))
-              << p(QString("#"),              i18n("sequence number"))
-              << p(QString("#{start,step}"),  i18n("sequence number (custom start + step)"))
-              << p(QString("[cam]"),          i18n("camera name"))
-              << p(QString("[date:format]"),  i18n("date and time of the file"));
+    tokenList << token(QString("$"),              i18n("filename (original)"))
+              << token(QString("&"),              i18n("filename (upper case)"))
+              << token(QString("%"),              i18n("filename (lower case)"))
+              << token(QString("*"),              i18n("filename (first letter of each word upper case)"))
+              << token(QString("#"),              i18n("sequence number"))
+              << token(QString("#{start,step}"),  i18n("sequence number (custom start + step)"))
+              << token(QString("[cam]"),          i18n("camera name"))
+              << token(QString("[date:format]"),  i18n("date and time of the file"));
 
     QString tooltip;
     tooltip += QString("<table>");
 
-    foreach (const p &token, tokenList)
+    foreach (const token &token, tokenList)
     {
         tooltip += QString("<tr><td><b>%1</b></td><td>:</td><td>%2</td></tr>").arg(token.first)
                                                                               .arg(token.second);
