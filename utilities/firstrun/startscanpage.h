@@ -21,39 +21,24 @@
  *
  * ============================================================ */
 
-#include "welcomepage.h"
+#ifndef STAR_SCAN_PAGE_H
+#define STAR_SCAN_PAGE_H
 
-// Qt includes
+// Local includes
 
-#include <QLabel>
-
-// KDE includes
-
-#include <kvbox.h>
-#include <klocale.h>
+#include "assistantdlgpage.h"
 
 namespace Digikam
 {
 
-WelcomePage::WelcomePage(KAssistantDialog* dlg)
-           : AssistantDlgPage(dlg, i18n("Welcome To digiKam"))
+class StartScanPage : public AssistantDlgPage
 {
-    KVBox *vbox   = new KVBox(this);
-    QLabel *title = new QLabel(vbox);
-    title->setWordWrap(true);
-    title->setText(i18n("<qt>"
-                        "<p><h1><b>Welcome To digiKam</b></h1></p>"
-                        "<p>digiKam is an advanced digital photo management application published "
-                        "in open-source.</p>"
-                        "<p>This assistant will help you to configure first run settings to be able to "
-                        "use digiKam quickly.</p>"
-                        "</qt>"));
+public:
 
-    setContentsWidget(vbox);
-}
-
-WelcomePage::~WelcomePage()
-{
-}
+    StartScanPage(KAssistantDialog* dlg);
+    ~StartScanPage();
+};
 
 }   // namespace Digikam
+
+#endif /* STAR_SCAN_PAGE_H */

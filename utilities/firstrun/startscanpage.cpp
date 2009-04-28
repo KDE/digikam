@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "welcomepage.h"
+#include "startscanpage.h"
 
 // Qt includes
 
@@ -35,24 +35,22 @@
 namespace Digikam
 {
 
-WelcomePage::WelcomePage(KAssistantDialog* dlg)
-           : AssistantDlgPage(dlg, i18n("Welcome To digiKam"))
+StartScanPage::StartScanPage(KAssistantDialog* dlg)
+             : AssistantDlgPage(dlg, i18n("Scan Your Collection"))
 {
     KVBox *vbox   = new KVBox(this);
     QLabel *title = new QLabel(vbox);
     title->setWordWrap(true);
     title->setText(i18n("<qt>"
-                        "<p><h1><b>Welcome To digiKam</b></h1></p>"
-                        "<p>digiKam is an advanced digital photo management application published "
-                        "in open-source.</p>"
-                        "<p>This assistant will help you to configure first run settings to be able to "
-                        "use digiKam quickly.</p>"
+                        "<p>Your minimal setup is done.</p>"
+                        "<p>Press \"Finish\" to lets digiKam scan your collection to register items to database. "
+                        "Note: this operation can take a while.</p>"
                         "</qt>"));
 
     setContentsWidget(vbox);
 }
 
-WelcomePage::~WelcomePage()
+StartScanPage::~StartScanPage()
 {
 }
 

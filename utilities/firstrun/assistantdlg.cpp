@@ -32,6 +32,7 @@
 
 #include "welcomepage.h"
 #include "collectionpage.h"
+#include "startscanpage.h"
 
 namespace Digikam
 {
@@ -44,10 +45,12 @@ public:
     {
         welcomePage    = 0;
         collectionPage = 0;
+        startScanPage  = 0;
     }
 
     WelcomePage    *welcomePage;
     CollectionPage *collectionPage;
+    StartScanPage  *startScanPage;
 };
 
 AssistantDlg::AssistantDlg(QWidget* parent)
@@ -57,6 +60,7 @@ AssistantDlg::AssistantDlg(QWidget* parent)
 
     d->welcomePage    = new WelcomePage(this);
     d->collectionPage = new CollectionPage(this);
+    d->startScanPage  = new StartScanPage(this);
 
     connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*, KPageWidgetItem*)),
             this, SLOT(slotPageChanged(KPageWidgetItem*, KPageWidgetItem*)));
