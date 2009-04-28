@@ -35,13 +35,19 @@
 // KDE includes
 
 #include <kdialog.h>
+#include <kconfig.h>
 #include <kvbox.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <kstandarddirs.h>
 #include <kapplication.h>
 #include <kurlrequester.h>
 #include <kglobalsettings.h>
-#include <kurl.h>
+#include <kmessagebox.h>
+
+// Local includes
+
+#include "version.h"
 
 namespace Digikam
 {
@@ -131,16 +137,192 @@ CollectionPage::CollectionPage(KAssistantDialog* dlg)
     widget->setMinimumSize(450, sizeHint().height());
     setContentsWidget(widget);
 
-    connect(d->rootAlbumPathRequester, SIGNAL(urlSelected(const KUrl &)),
-            this, SLOT(slotAlbumRootChanged(const KUrl &)));
+    connect(d->rootAlbumPathRequester, SIGNAL(urlSelected(const KUrl&)),
+            this, SLOT(slotAlbumRootChanged(const KUrl&)));
 
-    connect(d->dbPathRequester, SIGNAL(urlSelected(const KUrl &)),
-            this, SLOT(slotDbPathChanged(const KUrl &)));
+    connect(d->dbPathRequester, SIGNAL(urlSelected(const KUrl&)),
+            this, SLOT(slotDbPathChanged(const KUrl&)));
 }
 
 CollectionPage::~CollectionPage()
 {
     delete d;
+}
+
+bool CollectionPage::applySettings()
+{
+    QString rootAlbumFolder;
+    if (!checkRootAlbum(rootAlbumFolder))
+        return false;
+
+    QString dbFolder;
+    if (!checkDatabase(dbFolder))
+        return false;
+
+    saveSettings(rootAlbumFolder, dbFolder);
+    return true;
+}
+
+void CollectionPage::saveSettings(const QString& rootAlbumFolder, const QString& dbFolder)
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group("General Settings");
+    group.writeEntry("Version", digikam_version);
+
+    group = config->group("Album Settings");
+    group.writeEntry("Database File Path", dbFolder);
+
+    d->rootAlbum = rootAlbumFolder;
+    d->dbPath    = dbFolder;
+
+    config->sync();
+}
+
+bool CollectionPage::checkRootAlbum(QString& rootAlbumFolder)
+{
+    rootAlbumFolder = d->rootAlbumPathRequester->url().toLocalFile();
+    kDebug(50003) << "Root album is : " << rootAlbumFolder << endl;
+
+    if (rootAlbumFolder.isEmpty())
+    {
+        KMessageBox::sorry(this, i18n("You must select a folder for digiKam to "
+                                      "use as the root album. All of your images will go there."));
+        return false;
+    }
+
+#ifndef _WIN32
+    if (!QDir::isAbsolutePath(rootAlbumFolder))
+    {
+        rootAlbumFolder.prepend(QDir::homePath());
+    }
+#endif
+
+    /*
+    if (KUrl(rootAlbumFolder).equals(KUrl(QDir::homePath()), KUrl::CompareWithoutFragment))
+    {
+        KMessageBox::sorry(this, i18n("digiKam will not use your home folder as the "
+                                      "root album. Please select another location."));
+        return false;
+    }
+    */
+
+    QDir targetPath(rootAlbumFolder);
+
+    if (!targetPath.exists())
+    {
+        int rc = KMessageBox::questionYesNo(this,
+                                   i18n("The folder to use as the root album path does not exist: "
+                                        "<p><b>%1</b></p>"
+                                        "Would you like digiKam to create it for you?",
+                                        rootAlbumFolder),
+                                   i18n("Create Root Album Folder?"));
+
+        if (rc == KMessageBox::No)
+        {
+            return false;
+        }
+
+        if (!targetPath.mkdir(rootAlbumFolder))
+        {
+            KMessageBox::sorry(this,
+                               i18n("digiKam could not create the folder to use as the root album.\n"
+                                    "Please select a different location."
+                                    "<p><b>%1</b></p>", rootAlbumFolder),
+                               i18n("Create Root Album Folder Failed"));
+            return false;
+        }
+    }
+
+    QFileInfo path(rootAlbumFolder);
+
+    if (!path.isWritable())
+    {
+        KMessageBox::information(this, i18n("You do not seem to have write access for the folder selected to be the root album.\n"
+                                            "Warning: Without write access, the comment and tag features "
+                                            "will not work."));
+    }
+
+    return true;
+}
+
+bool CollectionPage::checkDatabase(QString& dbFolder)
+{
+    dbFolder = d->dbPathRequester->url().toLocalFile();
+    kDebug(50003) << "DB folder is : " << dbFolder << endl;
+
+    if (dbFolder.isEmpty())
+    {
+        KMessageBox::sorry(this, i18n("You must select a folder for digiKam to "
+                                      "store information and meta-data in a database file."));
+        return false;
+    }
+
+#ifndef _WIN32
+    if (!QDir::isAbsolutePath(dbFolder))
+    {
+        dbFolder.prepend(QDir::homePath());
+    }
+#endif
+
+    /*
+    if (KUrl(dbFolder).equals(KUrl(QDir::homePath()), KUrl::CompareWithoutFragment))
+    {
+        KMessageBox::sorry(this, i18n("digiKam cannot use your home folder as "
+                                      "database file path."));
+        return false;
+    }
+    */
+
+    QDir targetPath(dbFolder);
+
+    if (!targetPath.exists())
+    {
+        int rc = KMessageBox::questionYesNo(this,
+                                   i18n("The folder to put your database in does not seem to exist: "
+                                        "<p><b>%1</b></p>"
+                                        "Would you like digiKam to create it for you?",
+                                        dbFolder),
+                                   i18n("Create Database Folder?"));
+
+        if (rc == KMessageBox::No)
+        {
+            return false;
+        }
+
+        if (!targetPath.mkdir(dbFolder))
+        {
+            KMessageBox::sorry(this,
+                               i18n("digiKam could not create the folder to host your database file.\n"
+                                    "Please select a different location."
+                                    "<p><b>%1</b></p>", dbFolder),
+                               i18n("Create Database Folder Failed"));
+            return false;
+        }
+    }
+
+    QFileInfo path(dbFolder);
+
+    if (!path.isWritable())
+    {
+        KMessageBox::information(this, i18n("<p>You do not seem to have write access for the folder to host the database file.<br/>"
+                                            "Please select a different location.</p>"
+                                            "<p><b>%1</b></p>", dbFolder),
+                                 i18n("No Database Write Access"));
+        return false;
+    }
+
+    return true;
+}
+
+void CollectionPage::slotAlbumRootChanged(const KUrl& url)
+{
+    if (!d->dbPathEdited)
+        d->dbPathRequester->setUrl(url);
+}
+
+void CollectionPage::slotDbPathChanged(const KUrl&)
+{
+    d->dbPathEdited = true;
 }
 
 }   // namespace Digikam

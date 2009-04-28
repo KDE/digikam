@@ -24,6 +24,14 @@
 #ifndef COLLECTION_PAGE_H
 #define COLLECTION_PAGE_H
 
+// Qt includes.
+
+#include <QString>
+
+// KDE includes.
+
+#include <kurl.h>
+
 // Local includes
 
 #include "assistantdlgpage.h"
@@ -42,13 +50,18 @@ public:
     CollectionPage(KAssistantDialog* dlg);
     ~CollectionPage();
 
-Q_SIGNALS:
-
-
+    bool applySettings();
 
 private Q_SLOTS:
 
+    void slotAlbumRootChanged(const KUrl& url);
+    void slotDbPathChanged(const KUrl& url);
 
+private:
+
+    void saveSettings(const QString& rootAlbumFolder, const QString& dbFolder);
+    bool checkRootAlbum(QString& rootAlbumFolder);
+    bool checkDatabase(QString& dbFolder);
 
 private:
 
