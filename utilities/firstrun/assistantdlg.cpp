@@ -34,6 +34,7 @@
 #include "collectionpage.h"
 #include "rawpage.h"
 #include "metadatapage.h"
+#include "previewpage.h"
 #include "startscanpage.h"
 
 namespace Digikam
@@ -49,6 +50,7 @@ public:
         collectionPage = 0;
         rawPage        = 0;
         metadataPage   = 0;
+        previewPage    = 0;
         startScanPage  = 0;
     }
 
@@ -56,6 +58,7 @@ public:
     CollectionPage *collectionPage;
     RawPage        *rawPage;
     MetadataPage   *metadataPage;
+    PreviewPage    *previewPage;
     StartScanPage  *startScanPage;
 };
 
@@ -68,6 +71,7 @@ AssistantDlg::AssistantDlg(QWidget* parent)
     d->collectionPage = new CollectionPage(this);
     d->rawPage        = new RawPage(this);
     d->metadataPage   = new MetadataPage(this);
+    d->previewPage    = new PreviewPage(this);
 
     // NOTE: Added here new assistant pages...
 
@@ -110,6 +114,7 @@ void AssistantDlg::slotFinishPressed()
     d->collectionPage->saveSettings();
     d->rawPage->saveSettings();
     d->metadataPage->saveSettings();
+    d->previewPage->saveSettings();
 }
 
 }   // namespace Digikam
