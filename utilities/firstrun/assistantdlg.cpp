@@ -65,8 +65,8 @@ AssistantDlg::AssistantDlg(QWidget* parent)
 
     resize(600, 500);
 
-    connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*, KPageWidgetItem*)),
-            this, SLOT(slotPageChanged(KPageWidgetItem*, KPageWidgetItem*)));
+    connect(this, SIGNAL(user1Clicked()),
+            this, SLOT(slotFinishPressed()));
 }
 
 AssistantDlg::~AssistantDlg()
@@ -86,16 +86,16 @@ void AssistantDlg::next()
 {
     if (currentPage() == d->collectionPage->page())
     {
-        if (!d->collectionPage->applySettings())
+        if (!d->collectionPage->checkSettings())
             return;
     }
-
     KAssistantDialog::next();
 }
 
-void AssistantDlg::slotPageChanged(KPageWidgetItem* /*current*/, KPageWidgetItem* /*before*/)
-{
-    
+void AssistantDlg::slotFinishPressed()
+{    
+    // Save settings to rc files.
+    d->collectionPage->saveSettings();
 }
 
 }   // namespace Digikam

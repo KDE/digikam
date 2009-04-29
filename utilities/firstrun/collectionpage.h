@@ -50,7 +50,8 @@ public:
     CollectionPage(KAssistantDialog* dlg);
     ~CollectionPage();
 
-    bool applySettings();
+    bool checkSettings();
+    void saveSettings();
 
     QString databasePath() const;
     QString firstAlbumPath() const;
@@ -62,7 +63,6 @@ private Q_SLOTS:
 
 private:
 
-    void saveSettings(const QString& rootAlbumFolder, const QString& dbFolder);
     bool checkRootAlbum(QString& rootAlbumFolder);
     bool checkDatabase(QString& dbFolder);
 

@@ -57,13 +57,19 @@ public:
 };
 
 AssistantDlgPage::AssistantDlgPage(KAssistantDialog* dlg, const QString& title)
-                : QWidget(dlg), d(new AssistantDlgPagePriv)
+                : QScrollArea(dlg), d(new AssistantDlgPagePriv)
 {
-    d->hlay = new QHBoxLayout(this);
-    d->logo = new QLabel(this);
+    QWidget *panel = new QWidget(viewport());
+    panel->setAutoFillBackground(false);
+    setWidget(panel);
+    setWidgetResizable(true);
+    viewport()->setAutoFillBackground(false);
+
+    d->hlay = new QHBoxLayout(panel);
+    d->logo = new QLabel(panel);
     d->logo->setAlignment(Qt::AlignTop);
     
-    KSeparator *line = new KSeparator(Qt::Vertical, this);
+    KSeparator *line = new KSeparator(Qt::Vertical, panel);
 
     d->hlay->addWidget(d->logo);
     d->hlay->addWidget(line);
@@ -83,21 +89,21 @@ KPageWidgetItem* AssistantDlgPage::page() const
     return d->page;
 }
 
-void AssistantDlgPage::setContentsWidget(QWidget* w)
+void AssistantDlgPage::setPageWidget(QWidget* w)
 {
     d->hlay->addWidget(w);
     d->hlay->setStretchFactor(w, 10);
 }
 
-void AssistantDlgPage::setPixmap(const QPixmap& pix)
+void AssistantDlgPage::setPixmapLogo(const QPixmap& pix)
 {
     d->logo->setPixmap(pix);
 }
 
 void AssistantDlgPage::setDigiKamLogo()
 {
-    setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
-                      .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    setPixmapLogo(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
+                          .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 }
 
 }   // namespace Digikam

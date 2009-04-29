@@ -47,7 +47,7 @@ StartScanPage::StartScanPage(KAssistantDialog* dlg)
                         "<p>Note: this operation can take a while.</p>"
                         "</qt>"));
 
-    setContentsWidget(vbox);
+    setPageWidget(vbox);
     setDigiKamLogo();
 }
 

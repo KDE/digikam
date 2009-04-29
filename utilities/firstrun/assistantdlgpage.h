@@ -26,7 +26,7 @@
 
 // Qt includes
 
-#include <QWidget>
+#include <QScrollArea>
 #include <QString>
 #include <QPixmap>
 
@@ -38,7 +38,7 @@ namespace Digikam
 
 class AssistantDlgPagePriv;
 
-class AssistantDlgPage : public QWidget
+class AssistantDlgPage : public QScrollArea
 {
 
 public:
@@ -48,8 +48,8 @@ public:
 
     KPageWidgetItem* page() const;
 
-    void setContentsWidget(QWidget* w);
-    void setPixmap(const QPixmap& pix);
+    void setPageWidget(QWidget* w);
+    void setPixmapLogo(const QPixmap& pix);
     void setDigiKamLogo();
 
 private:

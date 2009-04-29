@@ -49,7 +49,7 @@ WelcomePage::WelcomePage(KAssistantDialog* dlg)
                         "use digiKam quickly.</p>"
                         "</qt>"));
 
-    setContentsWidget(vbox);
+    setPageWidget(vbox);
     setDigiKamLogo();
 }
 

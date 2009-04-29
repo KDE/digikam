@@ -60,7 +60,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 
-    void slotPageChanged(KPageWidgetItem*, KPageWidgetItem*);
+    void slotFinishPressed();
 
 private:
 

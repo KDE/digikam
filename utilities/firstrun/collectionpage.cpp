@@ -135,7 +135,7 @@ CollectionPage::CollectionPage(KAssistantDialog* dlg)
     vlayout->setSpacing(KDialog::spacingHint());
 
     widget->setMinimumSize(450, sizeHint().height());
-    setContentsWidget(widget);
+    setPageWidget(widget);
     setDigiKamLogo();
 
     connect(d->rootAlbumPathRequester, SIGNAL(urlSelected(const KUrl&)),
@@ -160,7 +160,19 @@ QString CollectionPage::databasePath() const
     return d->dbPath;
 }
 
-bool CollectionPage::applySettings()
+void CollectionPage::saveSettings()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group("General Settings");
+    group.writeEntry("Version", digikam_version);
+
+    group = config->group("Album Settings");
+    group.writeEntry("Database File Path", d->dbPath);
+
+    config->sync();
+}
+
+bool CollectionPage::checkSettings()
 {
     QString rootAlbumFolder;
     if (!checkRootAlbum(rootAlbumFolder))
@@ -170,23 +182,10 @@ bool CollectionPage::applySettings()
     if (!checkDatabase(dbFolder))
         return false;
 
-    saveSettings(rootAlbumFolder, dbFolder);
-    return true;
-}
-
-void CollectionPage::saveSettings(const QString& rootAlbumFolder, const QString& dbFolder)
-{
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("General Settings");
-    group.writeEntry("Version", digikam_version);
-
-    group = config->group("Album Settings");
-    group.writeEntry("Database File Path", dbFolder);
-
     d->rootAlbum = rootAlbumFolder;
     d->dbPath    = dbFolder;
 
-    config->sync();
+    return true;
 }
 
 bool CollectionPage::checkRootAlbum(QString& rootAlbumFolder)
