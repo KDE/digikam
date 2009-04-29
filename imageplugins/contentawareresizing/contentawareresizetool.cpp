@@ -116,6 +116,7 @@ public:
         maskGroup         = 0;
         prevW             = 0;
         prevH             = 0;
+	maskPenSize       = 0;
     }
 
     int                 orgWidth;
@@ -290,9 +291,8 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     KSeparator *line2        = new KSeparator(Qt::Horizontal, d->gboxSettings->plainPage());
 
     QLabel *labelAdvSettings = new QLabel(i18n("Advanced Settings:"), d->gboxSettings->plainPage());
-
-    QLabel *labelRigidity = new QLabel(i18n("Overall rigidity:"), d->gboxSettings->plainPage());
-    d->rigidityInput      = new RDoubleNumInput(d->gboxSettings->plainPage());
+    QLabel *labelRigidity    = new QLabel(i18n("Overall rigidity:"), d->gboxSettings->plainPage());
+    d->rigidityInput         = new RDoubleNumInput(d->gboxSettings->plainPage());
     d->rigidityInput->input()->setRange(0.0, 10.0, 1.0, true);
     d->rigidityInput->setDefaultValue(0.0);
     d->rigidityInput->setWhatsThis(i18n("Use this value to give a negative bias to the seams which "
@@ -503,7 +503,7 @@ void ContentAwareResizeTool::slotValuesChanged()
     else if(s == "hpInput")
     {
         double val = d->hpInput->value();
-        int h = (int)(val * d->orgHeight / 100);
+        int h      = (int)(val * d->orgHeight / 100);
 
         d->hInput->setValue(h);
 
