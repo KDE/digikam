@@ -33,6 +33,7 @@
 #include "welcomepage.h"
 #include "collectionpage.h"
 #include "rawpage.h"
+#include "metadatapage.h"
 #include "startscanpage.h"
 
 namespace Digikam
@@ -47,12 +48,14 @@ public:
         welcomePage    = 0;
         collectionPage = 0;
         rawPage        = 0;
+        metadataPage   = 0;
         startScanPage  = 0;
     }
 
     WelcomePage    *welcomePage;
     CollectionPage *collectionPage;
     RawPage        *rawPage;
+    MetadataPage   *metadataPage;
     StartScanPage  *startScanPage;
 };
 
@@ -64,7 +67,10 @@ AssistantDlg::AssistantDlg(QWidget* parent)
     d->welcomePage    = new WelcomePage(this);    // First assistant page
     d->collectionPage = new CollectionPage(this);
     d->rawPage        = new RawPage(this);
+    d->metadataPage   = new MetadataPage(this);
+
     // NOTE: Added here new assistant pages...
+
     d->startScanPage  = new StartScanPage(this);  // Last assistant page
 
     resize(600, 500);
@@ -101,6 +107,7 @@ void AssistantDlg::slotFinishPressed()
     // Save settings to rc files.
     d->collectionPage->saveSettings();
     d->rawPage->saveSettings();
+    d->metadataPage->saveSettings();
 }
 
 }   // namespace Digikam

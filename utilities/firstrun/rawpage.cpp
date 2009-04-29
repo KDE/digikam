@@ -41,10 +41,6 @@
 #include <kstandarddirs.h>
 #include <kapplication.h>
 
-// Local includes
-
-#include "version.h"
-
 namespace Digikam
 {
 
@@ -69,10 +65,10 @@ RawPage::RawPage(KAssistantDialog* dlg)
        : AssistantDlgPage(dlg, i18n("<b>Configure Raw Files Handling</b>")), 
          d(new RawPagePriv)
 {
-    KVBox *vbox   = new KVBox(this);
-    QLabel *title = new QLabel(vbox);
-    title->setWordWrap(true);
-    title->setText(i18n("<qt>"
+    KVBox *vbox    = new KVBox(this);
+    QLabel *label1 = new QLabel(vbox);
+    label1->setWordWrap(true);
+    label1->setText(i18n("<qt>"
                         "<p>Configure Raw Files Handling.</p>"
                         "<p>Set here how you want to open Raw images in editor:</p>"
                         "</qt>"));
@@ -87,14 +83,19 @@ RawPage::RawPage(KAssistantDialog* dlg)
     d->rawHandling->addButton(d->openDirectly);
 
     d->useRawImport   = new QRadioButton(btns);
-    d->useRawImport->setText(i18n("Use Raw import tool to adjust corrections manually (for advanced users)"));
+    d->useRawImport->setText(i18n("Use Raw import tool to adjust corrections manually"));
     d->rawHandling->addButton(d->useRawImport);
 
     vlay->addWidget(d->openDirectly);
     vlay->addWidget(d->useRawImport);
-    vlay->addStretch();
     vlay->setMargin(KDialog::spacingHint());
     vlay->setSpacing(KDialog::spacingHint());
+
+    QLabel *label2 = new QLabel(vbox);
+    label2->setWordWrap(true);
+    label2->setText(i18n("<qt>"
+                         "<p>Note: Raw import tool is more dedicated to adanced users who want to have the best control over image. This require more time in your workfow.</p>"
+                         "</qt>"));
 
     setPageWidget(vbox);
     setDigiKamLogo();
