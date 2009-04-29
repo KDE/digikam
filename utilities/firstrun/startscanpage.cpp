@@ -43,9 +43,12 @@ StartScanPage::StartScanPage(KAssistantDialog* dlg)
     title->setWordWrap(true);
     title->setText(i18n("<qt>"
                         "<p>Congratulation. Your minimal setup is done.</p>"
-                        "<p>Press \"Finish\" to close this assistant. digiKam will scan your "
+                        "<p>You can customize more settings using digiKam configuration panel.</p>"
+                        "<p>Press <b>Finish</b> to close this assistant. digiKam will scan your "
                         "collection to register all items in database.</p>"
-                        "<p>Note: depending of your collection size, this operation can take a while.</p>"
+                        "<p><i>Note:</i> depending of your collection size, this operation can take a while. "
+                        "At next start-up digiKam will only scan your collection to identify new items. "
+                        "It will be more faster.</p>"
                         "</qt>"));
 
     setPageWidget(vbox);

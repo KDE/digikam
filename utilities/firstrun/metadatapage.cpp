@@ -95,7 +95,7 @@ MetadataPage::MetadataPage(KAssistantDialog* dlg)
     QLabel *label2 = new QLabel(vbox);
     label2->setWordWrap(true);
     label2->setText(i18n("<qt>"
-                         "<p>Note: recording informations to file metadata can slow down photo "
+                         "<p><i>Note:</i> recording informations to file metadata can slow down photo "
                          "management operations.</p>"
                          "</qt>"));
 

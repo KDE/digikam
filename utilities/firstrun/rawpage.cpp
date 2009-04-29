@@ -94,7 +94,9 @@ RawPage::RawPage(KAssistantDialog* dlg)
     QLabel *label2 = new QLabel(vbox);
     label2->setWordWrap(true);
     label2->setText(i18n("<qt>"
-                         "<p>Note: Raw import tool is more dedicated to adanced users who want to have the best control over image. This require more time in your workfow.</p>"
+                         "<p><i>Note:</i> Raw import tool is more dedicated to advanced users who "
+                         "want to have the best control over image. "
+                         "This require more time in your workfow.</p>"
                          "</qt>"));
 
     setPageWidget(vbox);

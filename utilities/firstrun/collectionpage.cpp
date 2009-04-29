@@ -121,7 +121,8 @@ CollectionPage::CollectionPage(KAssistantDialog* dlg)
     textLabel3->setText(i18n("<p>digiKam stores information and meta-data about your images in a database file. "
                              "Please set the location of this file or accept the default.</p>"
                              "<p><i>Note:</i> You need to have write access to the folder used here, "
-                             "and you cannot use a remote location on a networked server, using NFS or Samba.</p>"));
+                             "and you cannot use a remote location on a networked server, "
+                             "using NFS or Samba.</p>"));
 
     d->dbPathRequester = new KUrlRequester(widget);
     d->dbPathRequester->setMode(KFile::Directory | KFile::LocalOnly);
@@ -134,7 +135,6 @@ CollectionPage::CollectionPage(KAssistantDialog* dlg)
     vlayout->setMargin(0);
     vlayout->setSpacing(KDialog::spacingHint());
 
-    widget->setMinimumSize(450, sizeHint().height());
     setPageWidget(widget);
     setDigiKamLogo();
 
