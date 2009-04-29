@@ -392,7 +392,7 @@ QList<int> ImageInfo::tagIds() const
     if (!m_data->tagIdsCached)
     {
         m_data.constCastData()->tagIds = access.db()->getItemTagIDs(m_data->id);
-        m_data.constCastData()->imageSizeCached = true;
+        m_data.constCastData()->tagIdsCached = true;
     }
     return m_data->tagIds;
 }
