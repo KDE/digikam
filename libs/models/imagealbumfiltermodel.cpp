@@ -26,6 +26,7 @@
 
 // KDE includes
 
+#include <kdebug.h>
 #include <kstringhandler.h>
 
 // Local includes
@@ -116,8 +117,17 @@ int ImageAlbumFilterModel::compareInfosCategories(const ImageInfo &left, const I
             PAlbum *rightAlbum = AlbumManager::instance()->findPAlbum(right.albumId());
             if (!leftAlbum || !rightAlbum)
                 return -1;
-            if (d->sortOrder == SortByCreationDate || d->sortOrder == SortByModificationDate)
-                return leftAlbum->date() < rightAlbum->date();
+            if (d->sortOrder == SortByCreationDate || d->sortOrder == SortByModificationDate)   
+            {
+                QDate leftDate = leftAlbum->date();
+                QDate rightDate = rightAlbum->date();
+                if (leftDate == rightDate)
+                    return 0;
+                else if (leftDate < rightDate)
+                    return -1;
+                else
+                    return 1;
+            }
 
             return KStringHandler::naturalCompare(leftAlbum->albumPath(), rightAlbum->albumPath());
         }
