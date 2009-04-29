@@ -42,9 +42,10 @@ StartScanPage::StartScanPage(KAssistantDialog* dlg)
     QLabel *title = new QLabel(vbox);
     title->setWordWrap(true);
     title->setText(i18n("<qt>"
-                        "<p>Your minimal setup is done.</p>"
-                        "<p>Press \"Finish\" to lets digiKam scan your collection to register items in database.</p>"
-                        "<p>Note: this operation can take a while.</p>"
+                        "<p>Congratulation. Your minimal setup is done.</p>"
+                        "<p>Press \"Finish\" to close this assistant. digiKam will scan your "
+                        "collection to register all items in database.</p>"
+                        "<p>Note: depending of your collection size, this operation can take a while.</p>"
                         "</qt>"));
 
     setPageWidget(vbox);
