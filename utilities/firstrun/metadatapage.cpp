@@ -70,8 +70,8 @@ MetadataPage::MetadataPage(KAssistantDialog* dlg)
     label1->setWordWrap(true);
     label1->setText(i18n("<qt>"
                          "<p>Configure Metadata Storage to Files.</p>"
-                         "<p>Set here if you want to store digiKam informations assigned to items into files "
-                         "metadata to improve interoperability with others photomanagement programs:</p>"
+                         "<p>Set here if you want to store the information assigned to items in digiKam in the files' "
+                         "metadata, to improve interoperability with others photo management programs:</p>"
                          "</qt>"));
 
     QWidget *btns      = new QWidget(vbox);
@@ -84,7 +84,7 @@ MetadataPage::MetadataPage(KAssistantDialog* dlg)
     d->metadataStorage->addButton(d->doNothing);
 
     d->storeInFiles    = new QRadioButton(btns);
-    d->storeInFiles->setText(i18n("Store informations to files"));
+    d->storeInFiles->setText(i18n("Add information to files"));
     d->metadataStorage->addButton(d->storeInFiles);
 
     vlay->addWidget(d->doNothing);
@@ -95,7 +95,7 @@ MetadataPage::MetadataPage(KAssistantDialog* dlg)
     QLabel *label2 = new QLabel(vbox);
     label2->setWordWrap(true);
     label2->setText(i18n("<qt>"
-                         "<p><i>Note:</i> recording informations to file metadata can slow down photo "
+                         "<p><i>Note:</i> recording information to the files' metadata can slow down photo "
                          "management operations.</p>"
                          "</qt>"));
 

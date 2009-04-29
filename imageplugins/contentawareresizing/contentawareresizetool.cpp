@@ -211,25 +211,25 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     d->wpInput->input()->setRange(1.0, 200.0, 1.0, true);
     d->wpInput->setDefaultValue(100.0);
     d->wpInput->setObjectName("wpInput");
-    d->wpInput->setWhatsThis(i18n("New image width in percent (%)."));
+    d->wpInput->setWhatsThis(i18n("New image width, as a percentage (%)."));
 
     QLabel *labelHeightP = new QLabel(i18n("Height (%):"), d->gboxSettings->plainPage());
     d->hpInput           = new RDoubleNumInput(d->gboxSettings->plainPage());
     d->hpInput->input()->setRange(1.0, 200.0, 1.0, true);
     d->hpInput->setDefaultValue(100.0);
     d->hpInput->setObjectName("hpInput");
-    d->hpInput->setWhatsThis(i18n("New image height in percent (%)."));
+    d->hpInput->setWhatsThis(i18n("New image height, as a percentage (%)."));
 
     // -------------------------------------------------------------
 
     KSeparator *line3         = new KSeparator(Qt::Horizontal, d->gboxSettings->plainPage());
 
-    QLabel *labelMixedPercent = new QLabel(i18n("Percent of content aware rescale:"), d->gboxSettings->plainPage());
+    QLabel *labelMixedPercent = new QLabel(i18n("Content-aware rescale percentage:"), d->gboxSettings->plainPage());
     d->mixedRescaleInput      = new RDoubleNumInput(d->gboxSettings->plainPage());
     d->mixedRescaleInput->input()->setRange(0.0, 100.0, 1.0, true);
     d->mixedRescaleInput->setDefaultValue(100.0);
     d->mixedRescaleInput->setObjectName("mixedRescaleInput");
-    d->mixedRescaleInput->setWhatsThis(i18n("Set there how many percent of content aware rescale you want."));
+    d->mixedRescaleInput->setWhatsThis(i18n("Specify here your desired content-aware rescaling percentage."));
     d->mixedRescaleInput->setEnabled(true);
 
     // -------------------------------------------------------------
@@ -248,7 +248,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     d->redMaskTool->setCheckable(true);
     d->redMaskTool->setChecked(true);
     d->redMaskTool->setToolTip(i18n("Draw a suppression mask"));
-    d->redMaskTool->setWhatsThis(i18n("Click on this button to draw image's zones which are less important. Those zone will be deleted when reducing the picture, and duplicated when enlarging the picture"));
+    d->redMaskTool->setWhatsThis(i18n("Click on this button to draw zones marking which areas of the image are less important.  These zones will be deleted when reducing the picture, or duplicated when enlarging the picture."));
     d->redMaskTool->setEnabled(false);
     d->maskGroup->addButton(d->redMaskTool, ContentAwareResizeToolPriv::redMask);
 
@@ -257,17 +257,17 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     d->greenMaskTool->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/indicator-green.png")));
     d->greenMaskTool->setCheckable(true);
     d->greenMaskTool->setToolTip(i18n("Draw a preservation mask"));
-    d->greenMaskTool->setWhatsThis(i18n("Click on this button to draw image's zones you want to preserve."));
+    d->greenMaskTool->setWhatsThis(i18n("Click on this button to draw zones marking which areas of the image you want to preserve."));
     d->greenMaskTool->setEnabled(false);
     d->maskGroup->addButton(d->greenMaskTool, ContentAwareResizeToolPriv::greenMask);
 
-    QLabel *labelMaskPenSize = new QLabel(i18n("Pen's size:"), d->gboxSettings->plainPage());
+    QLabel *labelMaskPenSize = new QLabel(i18n("Pen size:"), d->gboxSettings->plainPage());
     d->maskPenSize           = new RIntNumInput(d->gboxSettings->plainPage());
     d->maskPenSize->setRange(1, 100, 1);
     d->maskPenSize->setDefaultValue(10);
     d->maskPenSize->setSliderEnabled(true);
     d->maskPenSize->setObjectName("maskPenSize");
-    d->maskPenSize->setWhatsThis(i18n("You can choose there the size of the pen used to paint masks."));
+    d->maskPenSize->setWhatsThis(i18n("Specify here the size of the pen used to paint masks."));
 
     // -------------------------------------------------------------
 
@@ -283,7 +283,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
                                     "to determine which pixels should be removed or kept."));
 
     d->preserveSkinTones = new QCheckBox(i18n("Preserve Skin Tones"), d->gboxSettings->plainPage());
-    d->preserveSkinTones->setWhatsThis(i18n("Enable this option to preserve pixels whose color looks like a skin tone."));
+    d->preserveSkinTones->setWhatsThis(i18n("Enable this option to preserve pixels whose color is close to a skin tone."));
     d->preserveSkinTones->setChecked(false);
 
     // -------------------------------------------------------------

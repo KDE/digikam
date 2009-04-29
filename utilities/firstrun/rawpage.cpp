@@ -62,15 +62,15 @@ public:
 };
 
 RawPage::RawPage(KAssistantDialog* dlg)
-       : AssistantDlgPage(dlg, i18n("<b>Configure Raw Files Handling</b>")), 
+       : AssistantDlgPage(dlg, i18n("<b>Configure Raw File Handling</b>")), 
          d(new RawPagePriv)
 {
     KVBox *vbox    = new KVBox(this);
     QLabel *label1 = new QLabel(vbox);
     label1->setWordWrap(true);
     label1->setText(i18n("<qt>"
-                        "<p>Configure Raw Files Handling.</p>"
-                        "<p>Set here how you want to open Raw images in editor:</p>"
+                        "<p>Configure Raw File Handling.</p>"
+                        "<p>Set here how you want to open Raw images in the editor:</p>"
                         "</qt>"));
 
     QWidget *btns     = new QWidget(vbox);
@@ -78,12 +78,12 @@ RawPage::RawPage(KAssistantDialog* dlg)
 
     d->rawHandling    = new QButtonGroup(btns);
     d->openDirectly   = new QRadioButton(btns);
-    d->openDirectly->setText(i18n("Open directy with automatic adjustements"));
+    d->openDirectly->setText(i18n("Open directly, with adjustments made automatically"));
     d->openDirectly->setChecked(true);
     d->rawHandling->addButton(d->openDirectly);
 
     d->useRawImport   = new QRadioButton(btns);
-    d->useRawImport->setText(i18n("Use Raw import tool to adjust corrections manually"));
+    d->useRawImport->setText(i18n("Use the Raw import tool to adjust corrections manually"));
     d->rawHandling->addButton(d->useRawImport);
 
     vlay->addWidget(d->openDirectly);
@@ -94,9 +94,9 @@ RawPage::RawPage(KAssistantDialog* dlg)
     QLabel *label2 = new QLabel(vbox);
     label2->setWordWrap(true);
     label2->setText(i18n("<qt>"
-                         "<p><i>Note:</i> Raw import tool is more dedicated to advanced users who "
-                         "want to have the best control over image. "
-                         "This require more time in your workfow.</p>"
+                         "<p><i>Note:</i> The Raw import tool is designed for advanced users who "
+                         "want to have the best control over the image. "
+                         "This requires more time in your workflow.</p>"
                          "</qt>"));
 
     setPageWidget(vbox);
