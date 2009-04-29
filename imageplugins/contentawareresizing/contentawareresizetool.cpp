@@ -137,6 +137,7 @@ public:
     RIntNumInput       *wInput;
     RIntNumInput       *hInput;
     RIntNumInput       *stepInput;
+    RIntNumInput       *maskPenSize;
 
     RDoubleNumInput    *wpInput;
     RDoubleNumInput    *hpInput;
@@ -259,6 +260,14 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     d->greenMaskTool->setEnabled(false);
     d->maskGroup->addButton(d->greenMaskTool, ContentAwareResizeToolPriv::greenMask);
 
+    QLabel *labelMaskPenSize = new QLabel(i18n("Pen's size:"), d->gboxSettings->plainPage());
+    d->maskPenSize           = new RIntNumInput(d->gboxSettings->plainPage());
+    d->maskPenSize->setRange(1, 100, 1);
+    d->maskPenSize->setDefaultValue(10);
+    d->maskPenSize->setSliderEnabled(true);
+    d->maskPenSize->setObjectName("maskPenSize");
+    d->maskPenSize->setWhatsThis(i18n("You can choose there the size of the pen used to paint masks."));
+
     // -------------------------------------------------------------
 
     KSeparator *line      = new KSeparator(Qt::Horizontal, d->gboxSettings->plainPage());
@@ -338,19 +347,21 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     grid->addWidget(d->redMaskTool,       10, 2, 1, 1);
     grid->addWidget(labeGreenMaskTool,    11, 0, 1, 3);
     grid->addWidget(d->greenMaskTool,     11, 2, 1, 1);
-    grid->addWidget(line,                 12, 0, 1, -1);
-    grid->addWidget(labelFunction,        13, 0, 1, 1);
-    grid->addWidget(d->funcInput,         13, 1, 1, 4);
-    grid->addWidget(d->preserveSkinTones, 14, 0, 1, 3);
-    grid->addWidget(line2,                15, 0, 1, -1);
-    grid->addWidget(labelAdvSettings,     16, 0, 1, 3);
-    grid->addWidget(labelRigidity,        17, 0, 1, 1);
-    grid->addWidget(d->rigidityInput,     17, 1, 1, 4);
-    grid->addWidget(labelStep,            18, 0, 1, 1);
-    grid->addWidget(d->stepInput,         18, 1, 1, 4);
-    grid->addWidget(labelResizeOrder,     19, 0, 1, 1);
-    grid->addWidget(d->resizeOrderInput,  19, 1, 1, 4);
-    grid->setRowStretch(20, 10);
+    grid->addWidget(labelMaskPenSize,     12, 0, 1, 1);
+    grid->addWidget(d->maskPenSize,       12, 1, 1, 4);
+    grid->addWidget(line,                 13, 0, 1, -1);
+    grid->addWidget(labelFunction,        14, 0, 1, 1);
+    grid->addWidget(d->funcInput,         14, 1, 1, 4);
+    grid->addWidget(d->preserveSkinTones, 15, 0, 1, 3);
+    grid->addWidget(line2,                16, 0, 1, -1);
+    grid->addWidget(labelAdvSettings,     17, 0, 1, 3);
+    grid->addWidget(labelRigidity,        18, 0, 1, 1);
+    grid->addWidget(d->rigidityInput,     18, 1, 1, 4);
+    grid->addWidget(labelStep,            19, 0, 1, 1);
+    grid->addWidget(d->stepInput,         19, 1, 1, 4);
+    grid->addWidget(labelResizeOrder,     20, 0, 1, 1);
+    grid->addWidget(d->resizeOrderInput,  20, 1, 1, 4);
+    grid->setRowStretch(21, 10);
     grid->setMargin(d->gboxSettings->spacingHint());
     grid->setSpacing(d->gboxSettings->spacingHint());
 
@@ -379,6 +390,9 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
 
     connect(d->maskGroup, SIGNAL(buttonClicked(int)),
             this, SLOT(slotMaskColorChanged(int)));
+
+    connect(d->maskPenSize, SIGNAL(valueChanged(int)),
+            this, SLOT(slotMaskPenSizeChanged(int)));
 }
 
 ContentAwareResizeTool::~ContentAwareResizeTool()
@@ -701,6 +715,11 @@ void ContentAwareResizeTool::slotWeightMaskBoxStateChanged(int state)
         else
             d->previewWidget->setPaintColor(QColor(0, 255, 0, 255));
     }
+}
+
+void ContentAwareResizeTool::slotMaskPenSizeChanged(int size)
+{
+    d->previewWidget->changeMaskPenSize(size);
 }
 
 } // namespace DigikamContentAwareResizingImagesPlugin

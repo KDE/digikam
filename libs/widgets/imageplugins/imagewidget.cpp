@@ -381,4 +381,9 @@ QImage ImageWidget::getMask() const
     return d->previewWidget->getMask();
 }
 
+void ImageWidget::changeMaskPenSize(int size)
+{
+    d->previewWidget->changeMaskPenSize(size);
+}
+
 }  // namespace Digikam

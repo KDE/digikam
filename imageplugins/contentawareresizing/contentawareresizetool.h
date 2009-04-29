@@ -67,6 +67,7 @@ private Q_SLOTS:
     void slotMixedRescaleValueChanged();
     void slotMaskColorChanged(int);
     void slotWeightMaskBoxStateChanged(int);
+    void slotMaskPenSizeChanged(int);
 
 private:
 

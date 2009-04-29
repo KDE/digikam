@@ -75,6 +75,7 @@ public:
         drawLineBetweenPoints     = false;
         drawingMask               = false;
         enableDrawMask            = false;
+        penWidth                  = 10;
     }
 
     bool        sixteenBit;
@@ -94,6 +95,7 @@ public:
     int         guideSize;
     int         flicker;
     int         renderingPreviewMode;
+    int         penWidth;
 
     // Current spot position in preview coordinates.
     QPoint      spot;
@@ -757,7 +759,7 @@ void ImageGuideWidget::resetPoints()
 
 void ImageGuideWidget::drawLineTo(const QPoint& endPoint)
 {
-    drawLineTo(10, d->paintColor, d->lastPoint, endPoint);
+    drawLineTo(d->penWidth, d->paintColor, d->lastPoint, endPoint);
 }
 
 void ImageGuideWidget::drawLineTo(int width, const QColor& color, const QPoint& start, const QPoint& end)
@@ -799,6 +801,11 @@ QPoint ImageGuideWidget::translatePointPosition(QPoint &point)
     x += d->rect.x() + 1;
     y += d->rect.y() + 1;
     return (QPoint(x,y));
+}
+
+void ImageGuideWidget::changeMaskPenSize(int size)
+{
+    d->penWidth = size;
 }
 
 }  // namespace Digikam
