@@ -128,6 +128,10 @@ ImageCategorizedView::ImageCategorizedView(QWidget *parent)
     d->filterModel = new ImageAlbumFilterModel(this);
     d->filterModel->setSourceImageModel(d->model);
 
+    d->filterModel->setSortOrder(ImageFilterModel::SortByFileName);
+    d->filterModel->setCategorizationMode(ImageFilterModel::CategoryByAlbum);
+    d->filterModel->sort(0);
+
     // set flags that we want to get dataChanged() signals for
     DatabaseFields::Set watchFlags;
     watchFlags |= DatabaseFields::Name | DatabaseFields::FileSize | DatabaseFields::ModificationDate;
@@ -145,7 +149,7 @@ ImageCategorizedView::ImageCategorizedView(QWidget *parent)
 
     setModel(d->filterModel);
 
-    connect(d->model, SIGNAL(signalImageInfosAdded(const QList<ImageInfo> &)),
+    connect(d->model, SIGNAL(imageInfosAdded(const QList<ImageInfo> &)),
             this, SLOT(slotImageInfosAdded()));
 
     connect(d->delegate, SIGNAL(gridSizeChanged(const QSize &)),
@@ -155,7 +159,7 @@ ImageCategorizedView::ImageCategorizedView(QWidget *parent)
             this, SLOT(slotDelegateWaitsForThumbnail(const QModelIndex &)));
 
     connect(this, SIGNAL(activated(const QModelIndex &)),
-            this, SLOT(slotActivated(const ImageInfo &)));
+            this, SLOT(slotActivated(const QModelIndex &)));
 
     updateDelegateSizes();
 
