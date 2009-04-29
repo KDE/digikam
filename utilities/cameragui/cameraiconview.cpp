@@ -622,7 +622,8 @@ void CameraIconView::slotContextMenu(IconItem * item, const QPoint&)
     CameraIconItem* camItem = static_cast<CameraIconItem*>(item);
 
     DPopupMenu menu(this);
-    QAction *viewAction      = menu.addAction(SmallIcon("editimage"), i18n("&View"));
+    QAction *viewAction      = menu.addAction(SmallIcon("editimage"),
+                                              i18nc("View the selected image", "&View"));
     menu.addSeparator();
     QAction *downAction      = menu.addAction(SmallIcon("computer"),i18n("Download"));
     QAction *downDelAction   = menu.addAction(SmallIcon("computer"),i18n("Download && Delete"));
