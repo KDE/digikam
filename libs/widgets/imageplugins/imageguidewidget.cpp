@@ -291,7 +291,7 @@ void ImageGuideWidget::updatePixmap()
         if (d->renderingPreviewMode == PreviewTargetImage ||
             d->renderingPreviewMode == PreviewToggleOnMouseOver)
         {
-            text = i18n("Target");
+            text     = i18n("Target");
             fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
             textRect.setTopLeft(QPoint(d->rect.x() + 20, d->rect.y() + 20));
             textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2 ) );
@@ -351,7 +351,7 @@ void ImageGuideWidget::updatePixmap()
 
         p.setPen(QPen(Qt::red, 1)) ;
 
-        text = i18n("Target");
+        text     = i18n("Target");
         fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
         textRect.setTopLeft(QPoint(d->rect.x() + d->rect.width()/2 + 20,
                                    d->rect.y() + 20));
@@ -360,7 +360,7 @@ void ImageGuideWidget::updatePixmap()
         p.drawRect(textRect);
         p.drawText(textRect, Qt::AlignCenter, text);
 
-        text = i18n("Original");
+        text     = i18n("Original");
         fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
         textRect.setTopLeft(QPoint(d->rect.x() + 20, d->rect.y() + 20));
         textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2 ) );
@@ -418,7 +418,7 @@ void ImageGuideWidget::updatePixmap()
 
         p.setPen(QPen(Qt::red, 1)) ;
 
-        text = i18n("Target");
+        text     = i18n("Target");
         fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
         textRect.setTopLeft(QPoint(d->rect.x() + 20,
                                    d->rect.y() + d->rect.height()/2 + 20));
@@ -427,7 +427,7 @@ void ImageGuideWidget::updatePixmap()
         p.drawRect(textRect);
         p.drawText(textRect, Qt::AlignCenter, text);
 
-        text = i18n("Original");
+        text     = i18n("Original");
         fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
         textRect.setTopLeft(QPoint(d->rect.x() + 20, d->rect.y() + 20));
         textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2 ) );
@@ -480,10 +480,10 @@ void ImageGuideWidget::updatePixmap()
     {
         QPainter::RenderHints hints = p.renderHints();
 
-        QColor semiTransGuideColor = QColor(d->guideColor.red(),
-                                            d->guideColor.green(),
-                                            d->guideColor.blue(),
-                                            75);
+        QColor semiTransGuideColor  = QColor(d->guideColor.red(),
+                                             d->guideColor.green(),
+                                             d->guideColor.blue(),
+                                             75);
 
         QPoint point;
         int x = 0;
@@ -493,8 +493,8 @@ void ImageGuideWidget::updatePixmap()
         {
             point = d->selectedPoints.point(i);
             point = translatePointPosition(point);
-            x = point.x();
-            y = point.y();
+            x     = point.x();
+            y     = point.y();
 
             p.save();
             p.setRenderHints(QPainter::Antialiasing);
@@ -514,7 +514,7 @@ void ImageGuideWidget::updatePixmap()
             {
                 p.save();
                 QPoint point2 = d->selectedPoints.point(i+1);
-                point2 = translatePointPosition(point2);
+                point2        = translatePointPosition(point2);
                 p.setRenderHint(QPainter::Antialiasing, true);
                 p.drawLine(QPoint(x, y), point2);
                 p.restore();
@@ -557,7 +557,9 @@ void ImageGuideWidget::timerEvent(QTimerEvent *e)
        updatePreview();
     }
     else
+    {
        QWidget::timerEvent(e);
+    }
 }
 
 void ImageGuideWidget::resizeEvent(QResizeEvent *e)
