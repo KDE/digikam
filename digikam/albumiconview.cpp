@@ -569,7 +569,7 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint&)
 
     // Temporary actions --------------------------------------
 
-    QAction  *viewAction = new QAction(SmallIcon("viewimage"), i18n("View"),  this);
+    QAction  *viewAction = new QAction(SmallIcon("viewimage"), i18nc("View the selected image", "View"),  this);
     viewAction->setEnabled(selectedImageIDs.count() == 1);
 
     // --------------------------------------------------------

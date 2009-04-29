@@ -350,7 +350,7 @@ void CameraUI::setupActions()
 
     // -- Image menu ---------------------------------------------
 
-    d->imageViewAction = new KAction(KIcon("editimage"), i18n("View"), this);
+    d->imageViewAction = new KAction(KIcon("editimage"), i18nc("View the selected image", "View"), this);
     connect(d->imageViewAction, SIGNAL(triggered()), this, SLOT(slotFileView()));
     actionCollection()->addAction("cameraui_imageview", d->imageViewAction);
     d->imageViewAction->setEnabled(false);
