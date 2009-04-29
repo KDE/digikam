@@ -343,9 +343,7 @@ void ImageCategorizedView::slotActivated(const QModelIndex &index)
     {
         // if the activation is caused by mouse click (not keyboard)
         // we need to check the hot area
-        QStyleOptionViewItem option = viewOptions();
-        option.rect = visualRect(index);
-        if (!d->delegate->acceptsToolTip(d->mouseClickPosition, option, index))
+        if (!d->delegate->acceptsToolTip(d->mouseClickPosition, visualRect(index), index))
             return;
     }
 
@@ -445,6 +443,23 @@ void ImageCategorizedView::mouseReleaseEvent(QMouseEvent *event)
     d->mouseClickPosition = QPoint();
 }
 
+void ImageCategorizedView::mouseMoveEvent(QMouseEvent *event)
+{
+    QModelIndex index = indexAt(event->pos());
+    if (index.isValid() &&
+        KGlobalSettings::changeCursorOverIcon() &&
+        d->delegate->acceptsActivation(event->pos(), visualRect(index), index))
+    {
+        setCursor(Qt::PointingHandCursor);
+    }
+    else
+    {
+        unsetCursor();
+    }
+
+    KCategorizedView::mouseMoveEvent(event);
+}
+
 void ImageCategorizedView::keyPressEvent(QKeyEvent *event)
 {
     if (event == QKeySequence::Copy)
@@ -530,8 +545,13 @@ bool ImageCategorizedView::viewportEvent(QEvent *event)
             QStyleOptionViewItem option = viewOptions();
             option.rect = visualRect(index);
             option.state |= (index == currentIndex() ? QStyle::State_HasFocus : QStyle::State_None);
-            if (d->delegate->acceptsToolTip(he->pos(), option, index))
+            QRect innerRect;
+            if (d->delegate->acceptsToolTip(he->pos(), option.rect, index, &innerRect))
+            {
+                if (!innerRect.isNull())
+                    option.rect = innerRect;
                 d->toolTip->show(he, option, index);
+            }
             return true;
         }
         default:

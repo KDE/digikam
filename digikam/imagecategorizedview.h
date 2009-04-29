@@ -119,6 +119,7 @@ protected:
     void dragMoveEvent(QDragMoveEvent *e);
     void dropEvent(QDropEvent *e);
     void keyPressEvent(QKeyEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void paintEvent(QPaintEvent *e);
