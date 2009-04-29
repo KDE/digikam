@@ -6,6 +6,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Liquid Rescale plugin for digiKam
+Comment[el]=Πρόσθετο υγρής κλιμάκωσης για το digiKam
 Comment[et]=DigiKami sisutundliku pildi suuruse muutmise plugin
 Comment[gl]=Unha extensión de digiKam para un efecto líquido de reescalado
 Comment[nds]=digiKam-Moduul för't week Gröttännern
