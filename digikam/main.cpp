@@ -133,9 +133,8 @@ int main(int argc, char *argv[])
         if (firstRun.exec() == QDialog::Rejected)
             return 1;
 
-        FirstRunContainer settings = firstRun.firstRunSettings();
-        firstAlbumPath             = settings.rootAlbum;
-        dbPath                     = settings.dbPath;
+        firstAlbumPath = firstRun.firstAlbumPath();
+        dbPath         = firstRun.databasePath();
     }
 
     kDebug(50003) << "Database Path: " << dbPath << endl;

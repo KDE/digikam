@@ -84,12 +84,14 @@ AssistantDlg::~AssistantDlg()
     delete d;
 }
 
-FirstRunContainer AssistantDlg::firstRunSettings() const
+QString AssistantDlg::firstAlbumPath() const
 {
-    FirstRunContainer settings;
-    settings.rootAlbum = d->collectionPage->firstAlbumPath();
-    settings.dbPath    = d->collectionPage->databasePath();
-    return settings;
+    return d->collectionPage->firstAlbumPath();
+}
+
+QString AssistantDlg::databasePath() const
+{
+    return d->collectionPage->databasePath();
 }
 
 void AssistantDlg::next()

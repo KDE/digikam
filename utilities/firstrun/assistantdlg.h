@@ -26,15 +26,12 @@
 
 // Qt includes
 
+#include <QString>
 #include <QWidget>
 
 // KDE includes
 
 #include <kassistantdialog.h>
-
-// Local includes.
-
-#include "firstruncontainer.h"
 
 class KPageWidgetItem;
 
@@ -52,7 +49,8 @@ public:
     AssistantDlg(QWidget* parent=0);
     ~AssistantDlg();
 
-    FirstRunContainer firstRunSettings() const;
+    QString firstAlbumPath() const;
+    QString databasePath() const;
 
 public Q_SLOTS:
 
