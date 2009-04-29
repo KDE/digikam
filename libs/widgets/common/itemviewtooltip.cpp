@@ -29,6 +29,8 @@
 
 // KDE includes
 
+#include <kdebug.h>
+
 // Local includes
 
 namespace Digikam
@@ -41,11 +43,13 @@ public:
     ItemViewToolTipPriv()
     {
         view = 0;
+        filterInstalled = false;
     }
 
     QAbstractItemView *view;
     QModelIndex        index;
     QRect              rect;
+    bool               filterInstalled;
 };
 
 ItemViewToolTip::ItemViewToolTip(QAbstractItemView *view)
@@ -75,7 +79,18 @@ void ItemViewToolTip::show(QHelpEvent *, const QStyleOptionViewItem &option, con
 {
     d->index = index;
     d->rect  = option.rect;
-    qApp->installEventFilter(this);
+    d->rect.moveTopLeft(d->view->mapToGlobal(d->rect.topLeft()));
+    updateToolTip();
+    reposition();
+    if (isHidden() && !toolTipIsEmpty())
+    {
+        if (!d->filterInstalled)
+        {
+            qApp->installEventFilter(this);
+            d->filterInstalled = true;
+        }
+        DItemToolTip::show();
+    }
 }
 
 QRect ItemViewToolTip::repositionRect()
@@ -87,7 +102,11 @@ void ItemViewToolTip::hideEvent(QHideEvent *)
 {
     d->rect  = QRect();
     d->index = QModelIndex();
-    qApp->removeEventFilter(this);
+    if (d->filterInstalled)
+    {
+        d->filterInstalled = false;
+        qApp->removeEventFilter(this);
+    }
 }
 
 // The following code is inspired by qtooltip.cpp,
@@ -103,7 +122,7 @@ bool ItemViewToolTip::eventFilter(QObject *o, QEvent *e)
         #ifdef Q_WS_MAC
         case QEvent::KeyPress:
         case QEvent::KeyRelease: 
-	{
+        {
             int key = static_cast<QKeyEvent *>(e)->key();
             Qt::KeyboardModifiers mody = static_cast<QKeyEvent *>(e)->modifiers();
             if (!(mody & Qt::KeyboardModifierMask)
@@ -114,7 +133,7 @@ bool ItemViewToolTip::eventFilter(QObject *o, QEvent *e)
         }
         #endif
         case QEvent::Leave:
-            hide();
+            hide(); // could add a 300ms timer here, like Qt
             break;
         case QEvent::WindowActivate:
         case QEvent::WindowDeactivate:
@@ -128,7 +147,8 @@ bool ItemViewToolTip::eventFilter(QObject *o, QEvent *e)
             break;
 
         case QEvent::MouseMove:
-            if (o == d->view && !d->rect.isNull() && !d->rect.contains(static_cast<QMouseEvent*>(e)->pos()))
+            // needs mouse tracking, obviously
+            if (o == d->view->viewport() && !d->rect.isNull() && !d->rect.contains(static_cast<QMouseEvent*>(e)->globalPos()))
                 hide();
         default:
             break;
