@@ -32,22 +32,26 @@
 #include <kvbox.h>
 #include <klocale.h>
 
+// Local includes
+
+#include "version.h"
+
 namespace Digikam
 {
 
 WelcomePage::WelcomePage(KAssistantDialog* dlg)
-           : AssistantDlgPage(dlg, i18n("Welcome To digiKam"))
+           : AssistantDlgPage(dlg, i18n("Welcome To digiKam %1", QString(digikam_version_short)))
 {
     KVBox *vbox   = new KVBox(this);
     QLabel *title = new QLabel(vbox);
     title->setWordWrap(true);
     title->setText(i18n("<qt>"
-                        "<p><h1><b>Welcome To digiKam</b></h1></p>"
+                        "<p><h1><b>Welcome To digiKam %1</b></h1></p>"
                         "<p>digiKam is an advanced digital photo management application published "
                         "in open-source.</p>"
                         "<p>This assistant will help you to configure first run settings to be able to "
                         "use digiKam quickly.</p>"
-                        "</qt>"));
+                        "</qt>", QString(digikam_version_short)));
 
     setPageWidget(vbox);
     setDigiKamLogo();
