@@ -64,6 +64,7 @@ public:
 
     ImageDelegatePriv()
     {
+        spacing        = 0;
         categoryDrawer = 0;
         // Pre-computed star polygon for a 15x15 pixmap.
         starPolygon << QPoint(0,  6);
@@ -196,24 +197,27 @@ void ImageDelegate::paint(QPainter * p, const QStyleOptionViewItem &option, cons
     {
         QPixmap thumbnail = thumbData.value<QPixmap>();
         r = d->pixmapRect;
-        p->drawPixmap(r.x() + (r.width()-thumbnail.width())/2,
+        /*p->drawPixmap(r.x() + (r.width()-thumbnail.width())/2,
                       r.y() + (r.height()-thumbnail.height())/2,
-                      thumbnail);
+                      thumbnail);*/
 
         QRect actualPixmapRect(r.x() + (r.width()-thumbnail.width())/2,
                                r.y() + (r.height()-thumbnail.height())/2,
                                thumbnail.width(), thumbnail.height());
         const_cast<ImageDelegate*>(this)->updateActualPixmapRect(info.id(), actualPixmapRect);
 
-        p->save();
+        /*p->save();
         QRegion pixmapClipRegion = QRegion(d->rect) - QRegion(actualPixmapRect);
-        p->setClipRegion(pixmapClipRegion);
+        p->setClipRegion(pixmapClipRegion);*/
         p->drawPixmap(0, 0, pix);
 
         QPixmap borderPix = thumbnailBorderPixmap(actualPixmapRect.size());
         p->drawPixmap(actualPixmapRect.x()-3, actualPixmapRect.y()-3, borderPix);
 
-        p->restore();
+        p->drawPixmap(r.x() + (r.width()-thumbnail.width())/2,
+                      r.y() + (r.height()-thumbnail.height())/2,
+                      thumbnail);
+        //p->restore();
     }
     else
     {
@@ -335,17 +339,17 @@ QSize ImageDelegate::gridSize() const
     return d->gridSize;
 }
 
-bool ImageDelegate::acceptsToolTip(const QPoint& pos, const QStyleOptionViewItem& option, const QModelIndex& index) const
+bool ImageDelegate::acceptsToolTip(const QPoint& pos, const QRect &visualRect, const QModelIndex& index, QRect *toolTipRect) const
 {
-    return onActualPixmapRect(pos, option, index);
+    return onActualPixmapRect(pos, visualRect, index, toolTipRect);
 }
 
-bool ImageDelegate::acceptsActivation(const QPoint& pos, const QStyleOptionViewItem& option, const QModelIndex& index) const
+bool ImageDelegate::acceptsActivation(const QPoint& pos, const QRect &visualRect, const QModelIndex& index, QRect *activationRect) const
 {
-    return onActualPixmapRect(pos, option, index);
+    return onActualPixmapRect(pos, visualRect, index, activationRect);
 }
 
-bool ImageDelegate::onActualPixmapRect(const QPoint& pos, const QStyleOptionViewItem& option, const QModelIndex& index) const
+bool ImageDelegate::onActualPixmapRect(const QPoint& pos, const QRect &visualRect, const QModelIndex& index, QRect *returnRect) const
 {
     qlonglong id = ImageModel::retrieveImageId(index);
 
@@ -356,7 +360,9 @@ bool ImageDelegate::onActualPixmapRect(const QPoint& pos, const QStyleOptionView
     if (actualRect.isNull())
         return false;
 
-    actualRect.translate(option.rect.topLeft());
+    actualRect.translate(visualRect.topLeft());
+    if (returnRect)
+        *returnRect = actualRect;
     return actualRect.contains(pos);
 }
 

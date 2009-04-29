@@ -65,8 +65,13 @@ public:
 
     ImageCategoryDrawer *categoryDrawer() const;
 
-    virtual bool acceptsToolTip(const QPoint &pos, const QStyleOptionViewItem &option, const QModelIndex & index) const;
-    virtual bool acceptsActivation(const QPoint &pos, const QStyleOptionViewItem &option, const QModelIndex & index) const;
+    /** These methods take four parameters: The position on viewport, the rect on viewport,
+     *  the index, and optionally a parameter into which, if the return value is true,
+     *  a rectangle can be written for which the return value will be true as well. */
+    virtual bool acceptsToolTip(const QPoint &pos, const QRect &visualRect,
+                                const QModelIndex & index, QRect *tooltipRect = 0) const;
+    virtual bool acceptsActivation(const QPoint &pos, const QRect &visualRect,
+                                   const QModelIndex & index, QRect *activationRect = 0) const;
 
 Q_SIGNALS:
 
@@ -80,7 +85,8 @@ protected Q_SLOTS:
 
 protected:
 
-    bool onActualPixmapRect(const QPoint &pos, const QStyleOptionViewItem &option, const QModelIndex & index) const;
+    bool onActualPixmapRect(const QPoint &pos, const QRect &visualRect,
+                            const QModelIndex & index, QRect *actualRect) const;
     QRect actualPixmapRect(qlonglong imageid) const;
     void updateActualPixmapRect(qlonglong imageid, const QRect &rect);
 
