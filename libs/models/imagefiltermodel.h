@@ -148,7 +148,7 @@ protected:
     /** Reimplement to customize sorting. Do not take categories into account here. */
     virtual bool infosLessThan(const ImageInfo &left, const ImageInfo &right) const;
     /** Returns a unique identifier for the category if info. The string need not be for user display. */
-    QString categoryIdentifier(const ImageInfo &info) const;
+    virtual QString categoryIdentifier(const ImageInfo &info) const;
 
     ImageFilterModelPrivate *const d_ptr;
     ImageFilterModel(ImageFilterModelPrivate &dd, QObject *parent);

@@ -30,6 +30,7 @@
 
 // KDE includes
 
+#include <kdebug.h>
 #include <kstringhandler.h>
 
 // Local includes
@@ -101,6 +102,8 @@ ImageFilterModel::ImageFilterModel(ImageFilterModelPrivate &dd, QObject *parent)
 void ImageFilterModelPrivate::init(ImageFilterModel *_q)
 {
     q = _q;
+
+    q->setDynamicSortFilter(true);
 
     updateFilterTimer  = new QTimer(this);
     updateFilterTimer->setSingleShot(true);
@@ -177,17 +180,17 @@ QVariant ImageFilterModel::data(const QModelIndex &index, int role) const
     switch (role)
     {
         case KCategorizedSortFilterProxyModel::CategoryDisplayRole:
-            return categoryIdentifier(d->imageModel->imageInfoRef(index));
+            return categoryIdentifier(d->imageModel->imageInfoRef(mapToSource(index)));
         case CategorizationModeRole:
             return d->categorizationMode;
         case SortOrderRole:
             return d->sortOrder;
         case CategoryCountRole:
-            return categoryCount(d->imageModel->imageInfoRef(index));
+            return categoryCount(d->imageModel->imageInfoRef(mapToSource(index)));
         case CategoryAlbumIdRole:
-            return d->imageModel->imageInfoRef(index).albumId();
+            return d->imageModel->imageInfoRef(mapToSource(index)).albumId();
         case CategoryFormatRole:
-            return d->imageModel->imageInfoRef(index).albumId();
+            return d->imageModel->imageInfoRef(mapToSource(index)).albumId();
         case ImageFilterModelPointerRole:
             return QVariant::fromValue(const_cast<ImageFilterModel*>(this));
     }
@@ -591,6 +594,7 @@ ImageFilterModel::SortOrder ImageFilterModel::sortOrder() const
 
 int ImageFilterModel::compareCategories(const QModelIndex &left, const QModelIndex &right) const
 {
+    // source indexes
     Q_D(const ImageFilterModel);
     if (!left.isValid() || !right.isValid())
         return -1;
@@ -599,6 +603,7 @@ int ImageFilterModel::compareCategories(const QModelIndex &left, const QModelInd
 
 bool ImageFilterModel::subSortLessThan(const QModelIndex &left, const QModelIndex &right) const
 {
+    // source indexes
     Q_D(const ImageFilterModel);
     if (!left.isValid() || !right.isValid())
         return true;
@@ -607,6 +612,7 @@ bool ImageFilterModel::subSortLessThan(const QModelIndex &left, const QModelInde
 
 int ImageFilterModel::compareInfosCategories(const ImageInfo &left, const ImageInfo &right) const
 {
+    // Note: reimplemented in ImageAlbumFilterModel
     Q_D(const ImageFilterModel);
     switch (d->categorizationMode)
     {
