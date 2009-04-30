@@ -101,13 +101,14 @@ SET(digikamcore_LIB_SRCS
                         ${librawimport_SRCS}
    )
 
-    KDE4_ADD_UI_FILES(digikamcore_LIB_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/printiface/printoptionspage.ui
-       )
+KDE4_ADD_UI_FILES(digikamcore_LIB_SRCS
+                  ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/printiface/printoptionspage.ui
+                 )
 
-    kde4_add_kcfg_files(digikamcore_LIB_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/printiface/digikamconfig.kcfgc
-       )
+KDE4_ADD_KCFG_FILES(digikamcore_LIB_SRCS
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/printiface/digikamconfig.kcfgc
+                   )
+
 KDE4_ADD_LIBRARY(digikamcore SHARED ${digikamcore_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(digikamcore
@@ -241,3 +242,4 @@ INSTALL(TARGETS digikam ${INSTALL_TARGETS_DEFAULT_ARGS})
 INSTALL(FILES digikam.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 INSTALL(FILES digikamui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam)
 INSTALL(FILES digikam_export.h DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+    
