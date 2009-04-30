@@ -48,7 +48,7 @@ public:
 };
 
 DigikamImageView::DigikamImageView(QWidget *parent)
-               : ImageCategorizedView(parent), d(new DigikamImageViewPriv)
+                : ImageCategorizedView(parent), d(new DigikamImageViewPriv)
 {
     imageFilterModel()->setCategorizationMode(ImageFilterModel::CategoryByAlbum);
     imageModel()->setThumbnailLoadThread(ThumbnailLoadThread::defaultIconViewThread());
@@ -59,15 +59,15 @@ DigikamImageView::~DigikamImageView()
     delete d;
 }
 
-void DigikamImageView::activated(const ImageInfo &info)
+void DigikamImageView::activated(const ImageInfo& /*info*/)
 {
 }
 
-void DigikamImageView::showContextMenu(QContextMenuEvent *event, const ImageInfo &info)
+void DigikamImageView::showContextMenu(QContextMenuEvent* /*event*/, const ImageInfo& /*info*/)
 {
 }
 
-void DigikamImageView::showContextMenu(QContextMenuEvent *event)
+void DigikamImageView::showContextMenu(QContextMenuEvent* /*event*/)
 {
 }
 
@@ -78,6 +78,5 @@ void DigikamImageView::copy()
 void DigikamImageView::paste()
 {
 }
-
 
 } // namespace Digikam

@@ -50,9 +50,9 @@ public Q_SLOTS:
 
 protected:
 
-    virtual void activated(const ImageInfo &info);
-    virtual void showContextMenu(QContextMenuEvent *event, const ImageInfo &info);
-    virtual void showContextMenu(QContextMenuEvent *event);
+    virtual void activated(const ImageInfo& info);
+    virtual void showContextMenu(QContextMenuEvent* event, const ImageInfo& info);
+    virtual void showContextMenu(QContextMenuEvent* event);
     virtual void copy();
     virtual void paste();
 
