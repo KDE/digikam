@@ -62,7 +62,7 @@ public:
 };
 
 PreviewPage::PreviewPage(KAssistantDialog* dlg)
-           : AssistantDlgPage(dlg, i18n("<b>Configure Preview Behavour</b>")), 
+           : AssistantDlgPage(dlg, i18n("<b>Configure Preview Behavior</b>")), 
              d(new PreviewPagePriv)
 {
     KVBox *vbox    = new KVBox(this);
@@ -94,11 +94,11 @@ PreviewPage::PreviewPage(KAssistantDialog* dlg)
     QLabel *label2 = new QLabel(vbox);
     label2->setWordWrap(true);
     label2->setText(i18n("<qt>"
-                         "<p><i>Note:</i> loading a reduced version of image is faster but view can be "
-                         "different than original, especialy with Raw. In this case, a JPEG version "
-                         "of Raw pre-processed by camera is loaded instead real image data. This JPEG "
-                         "image is embeded in file metadata and is used by camera to display "
-                         "speedly Raw image to a TV screen.</p>"
+                         "<p><i>Note:</i> Loading a reduced version of an image is faster but can differ "
+                         "from the original, especially with Raw. In this case, a JPEG version "
+                         "of Raw pre-processed by camera is loaded instead of the real image data. This JPEG "
+                         "image is embedded in the file metadata and is used by the camera to display "
+                         "a Raw image faster to a TV screen.</p>"
                          "</qt>"));
 
     setPageWidget(vbox);
