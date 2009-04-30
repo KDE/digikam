@@ -7,6 +7,7 @@ NEW FEATURES:
 General        : Add new Batch Queue Manager (http://www.digikam.org/node/427).
 General        : New tool bar animation banner.
 General        : Fix compilation under MSVC 9.
+General        : New first run assistant.
 
 ImageEditor    : New Liquid Rescale tool (http://www.digikam.org/node/439).
 
