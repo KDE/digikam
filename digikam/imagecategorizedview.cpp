@@ -464,6 +464,15 @@ void ImageCategorizedView::mouseMoveEvent(QMouseEvent *event)
     KCategorizedView::mouseMoveEvent(event);
 }
 
+void ImageCategorizedView::wheelEvent(QWheelEvent* event)
+{
+    // KCategorizedView updates the single step at some occasions in a private methody
+    horizontalScrollBar()->setSingleStep(d->delegate->gridSize().height() / 10);
+    verticalScrollBar()->setSingleStep(d->delegate->gridSize().width() / 10);
+
+    KCategorizedView::wheelEvent(event);
+}
+
 void ImageCategorizedView::keyPressEvent(QKeyEvent *event)
 {
     if (event == QKeySequence::Copy)

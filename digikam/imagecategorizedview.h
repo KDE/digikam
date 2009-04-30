@@ -125,6 +125,7 @@ protected:
     void paintEvent(QPaintEvent *e);
     void resizeEvent(QResizeEvent *e);
     bool viewportEvent(QEvent *event);
+    void wheelEvent(QWheelEvent* event);
 
 private Q_SLOTS:
 
