@@ -49,6 +49,7 @@
 #include "albumsettings.h"
 #include "constants.h"
 #include "imagecategorydrawer.h"
+#include "imagedelegateoverlay.h"
 #include "imagemodel.h"
 #include "imagefiltermodel.h"
 #include "themeengine.h"
@@ -92,9 +93,7 @@ public:
     int                       spacing;
     QSize                     gridSize;
 
-    QRect                     rectWithSpacing;
     QRect                     rect;
-    QRect                     tightPixmapRect;
     QRect                     ratingRect;
     QRect                     dateRect;
     QRect                     modDateRect;
@@ -126,6 +125,8 @@ public:
     QCache<QString, QString>  squeezedTextCache;
 
     ImageCategoryDrawer      *categoryDrawer;
+    QList<ImageDelegateOverlay *>
+                              overlays;
 };
 
 ImageDelegate::ImageDelegate(QObject *parent)
@@ -167,6 +168,46 @@ void ImageDelegate::setSpacing(int spacing)
 ImageCategoryDrawer *ImageDelegate::categoryDrawer() const
 {
     return d->categoryDrawer;
+}
+
+void ImageDelegate::installOverlay(ImageDelegateOverlay *overlay)
+{
+    overlay->setDelegate(this);
+    d->overlays << overlay;
+    overlay->setActive(true);
+}
+
+void ImageDelegate::removeOverlay(ImageDelegateOverlay *overlay)
+{
+    overlay->setActive(false);
+    overlay->setDelegate(0);
+    d->overlays.removeAll(overlay);
+}
+
+QRect ImageDelegate::rect() const
+{
+    return d->rect;
+}
+
+QRect ImageDelegate::ratingRect() const
+{
+    return d->ratingRect;
+}
+
+QRect ImageDelegate::commentsRect() const
+{
+    return d->commentsRect;
+}
+
+QRect ImageDelegate::tagsRect() const
+{
+    return d->tagRect;
+}
+
+void ImageDelegate::mouseMoved(QMouseEvent *e, const QRect &visualRect, const QModelIndex &index)
+{
+    foreach (ImageDelegateOverlay *overlay, d->overlays)
+        overlay->mouseMoved(e, visualRect, index);
 }
 
 void ImageDelegate::paint(QPainter * p, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -321,14 +362,15 @@ void ImageDelegate::paint(QPainter * p, const QStyleOptionViewItem &option, cons
 
     if (option.state & QStyle::State_MouseOver)
     {
-        //paintToggleSelectButton(p);
-
         r = d->rect;
         p->setPen(QPen(option.palette.color(QPalette::Highlight), 3, Qt::SolidLine));
         p->drawRect(1, 1, r.width()-3, r.height()-3);
     }
 
     p->restore();
+
+    foreach (ImageDelegateOverlay *overlay, d->overlays)
+        overlay->paint(p, option, index);
 }
 
 QSize ImageDelegate::sizeHint(const QStyleOptionViewItem &/*option*/, const QModelIndex &/*index*/) const
@@ -387,13 +429,15 @@ void ImageDelegate::slotSetupChanged()
 void ImageDelegate::invalidatePaintingCache()
 {
     QSize oldGridSize = d->gridSize;
-    d->categoryDrawer->invalidatePaintingCache();
     updateSizeRectsAndPixmaps();
+    d->categoryDrawer->invalidatePaintingCache();
     if (oldGridSize != d->gridSize)
     {
         emit gridSizeChanged(d->gridSize);
         // emit sizeHintChanged(QModelIndex());
     }
+
+    emit visualChange();
 }
 
 void ImageDelegate::updateSizeRectsAndPixmaps()

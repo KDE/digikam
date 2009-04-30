@@ -38,6 +38,8 @@ namespace Digikam
 {
 
 class ImageCategoryDrawer;
+class ImageCategorizedView;
+class ImageDelegateOverlay;
 class ImageFilterModel;
 class ImageModel;
 class ImageDelegatePriv;
@@ -69,14 +71,27 @@ public:
      *  the index, and optionally a parameter into which, if the return value is true,
      *  a rectangle can be written for which the return value will be true as well. */
     virtual bool acceptsToolTip(const QPoint &pos, const QRect &visualRect,
-                                const QModelIndex & index, QRect *tooltipRect = 0) const;
+                                const QModelIndex &index, QRect *tooltipRect = 0) const;
     virtual bool acceptsActivation(const QPoint &pos, const QRect &visualRect,
-                                   const QModelIndex & index, QRect *activationRect = 0) const;
+                                   const QModelIndex &index, QRect *activationRect = 0) const;
+
+    QRect rect() const;
+    QRect ratingRect() const;
+    QRect commentsRect() const;
+    QRect tagsRect() const;
+    QRect actualPixmapRect(qlonglong imageid) const;
+
+    // to be called by ImageCategorizedView only
+    void installOverlay(ImageDelegateOverlay *overlay);
+    void removeOverlay(ImageDelegateOverlay *overlay);
+    void mouseMoved(QMouseEvent *e, const QRect &visualRect, const QModelIndex &index);
 
 Q_SIGNALS:
 
     void gridSizeChanged(const QSize &newSize);
     void waitingForThumbnail(const QModelIndex &index) const;
+
+    void visualChange();
 
 protected Q_SLOTS:
 
@@ -87,7 +102,6 @@ protected:
 
     bool onActualPixmapRect(const QPoint &pos, const QRect &visualRect,
                             const QModelIndex & index, QRect *actualRect) const;
-    QRect actualPixmapRect(qlonglong imageid) const;
     void updateActualPixmapRect(qlonglong imageid, const QRect &rect);
 
     void invalidatePaintingCache();
