@@ -69,8 +69,8 @@ PreviewPage::PreviewPage(KAssistantDialog* dlg)
     QLabel *label1 = new QLabel(vbox);
     label1->setWordWrap(true);
     label1->setText(i18n("<qt>"
-                         "<p>Configure Preview Behavour.</p>"
-                         "<p>Set here how images are displayed in preview mode and light table:</p>"
+                         "<p>Configure Preview Behavior.</p>"
+                         "<p>Set here how images are displayed in preview mode and on the light table:</p>"
                          "</qt>"));
 
     QWidget *btns      = new QWidget(vbox);
@@ -96,7 +96,7 @@ PreviewPage::PreviewPage(KAssistantDialog* dlg)
     label2->setText(i18n("<qt>"
                          "<p><i>Note:</i> Loading a reduced version of an image is faster but can differ "
                          "from the original, especially with Raw. In this case, a JPEG version "
-                         "of Raw pre-processed by camera is loaded instead of the real image data. This JPEG "
+                         "of Raw pre-processed by camera is loaded, instead of the real image data. This JPEG "
                          "image is embedded in the file metadata and is used by the camera to display "
                          "a Raw image faster to a TV screen.</p>"
                          "</qt>"));
