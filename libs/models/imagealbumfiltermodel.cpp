@@ -109,12 +109,16 @@ int ImageAlbumFilterModel::compareInfosCategories(const ImageInfo &left, const I
     Q_D(const ImageAlbumFilterModel);
     switch (d->categorizationMode)
     {
-        case NoCategories:
-            return 0;
         case CategoryByAlbum:
         {
-            PAlbum *leftAlbum = AlbumManager::instance()->findPAlbum(left.albumId());
-            PAlbum *rightAlbum = AlbumManager::instance()->findPAlbum(right.albumId());
+            int leftAlbumId = left.albumId();
+            int rightAlbumId = right.albumId();
+
+            d->cacheCategoryCount(leftAlbumId, left.id());
+            d->cacheCategoryCount(rightAlbumId, right.id());
+
+            PAlbum *leftAlbum = AlbumManager::instance()->findPAlbum(leftAlbumId);
+            PAlbum *rightAlbum = AlbumManager::instance()->findPAlbum(rightAlbumId);
             if (!leftAlbum || !rightAlbum)
                 return -1;
             if (d->sortOrder == SortByCreationDate || d->sortOrder == SortByModificationDate)   
@@ -131,10 +135,8 @@ int ImageAlbumFilterModel::compareInfosCategories(const ImageInfo &left, const I
 
             return KStringHandler::naturalCompare(leftAlbum->albumPath(), rightAlbum->albumPath());
         }
-        case CategoryByFormat:
-            return KStringHandler::naturalCompare(left.format(), right.format());
         default:
-            return 0;
+            return ImageFilterModel::compareInfosCategories(left, right);
     }
 }
 
