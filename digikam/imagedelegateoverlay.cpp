@@ -39,7 +39,7 @@ namespace Digikam
 {
 
 ImageDelegateOverlay::ImageDelegateOverlay(QObject *parent)
-            : QObject(parent)
+                    : QObject(parent)
 {
 }
 
@@ -57,11 +57,11 @@ void ImageDelegateOverlay::visualChange()
 {
 }
 
-void ImageDelegateOverlay::mouseMoved(QMouseEvent *, const QRect &, const QModelIndex &)
+void ImageDelegateOverlay::mouseMoved(QMouseEvent *, const QRect&, const QModelIndex&)
 {
 }
 
-void ImageDelegateOverlay::paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &)
+void ImageDelegateOverlay::paint(QPainter *, const QStyleOptionViewItem&, const QModelIndex&)
 {
 }
 
@@ -112,8 +112,8 @@ ImageDelegate *ImageDelegateOverlay::delegate() const
 // -----------------------------
 
 HoverWidgetDelegateOverlay::HoverWidgetDelegateOverlay(QObject *parent)
-            : ImageDelegateOverlay(parent),
-              m_button(0)
+                          : ImageDelegateOverlay(parent),
+                            m_button(0)
 {
 }
 
@@ -158,14 +158,17 @@ void HoverWidgetDelegateOverlay::slotReset()
     m_button->reset();
 }
 
-void HoverWidgetDelegateOverlay::slotEntered(const QModelIndex &index)
+void HoverWidgetDelegateOverlay::slotEntered(const QModelIndex& index)
 {
     m_button->hide();
-    if (index.isValid()) {
+    if (index.isValid())
+    {
         m_button->setIndex(index);
         updateButton(index);
         m_button->show();
-    } else {
+    }
+    else
+    {
         m_button->setIndex(index);
     }
 }
@@ -180,7 +183,4 @@ void HoverWidgetDelegateOverlay::slotRowsRemoved(const QModelIndex &, int, int)
     m_button->hide();
 }
 
-
 } // namespace Digikam
-
-

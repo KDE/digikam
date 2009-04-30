@@ -83,6 +83,8 @@ protected:
     ImageDelegate        *m_delegate;
 };
 
+// -------------------------------------------------------------------------------------------
+
 class HoverWidgetDelegateOverlay : public ImageDelegateOverlay
 {
     Q_OBJECT
@@ -113,10 +115,9 @@ protected Q_SLOTS:
 
 protected:
 
-    ItemViewHoverButton     *m_button;
+    ItemViewHoverButton *m_button;
 };
-
 
 } // namespace Digikam
 
-#endif /* IMAGEDELEGATE_H */
+#endif /* IMAGEDELEGATEOVERLAY_H */
