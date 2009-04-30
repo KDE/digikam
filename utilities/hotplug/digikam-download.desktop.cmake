@@ -21,6 +21,7 @@ Name[lv]=Ielādēt fotogrāfijas ar digiKam
 Name[nb]=Last ned fotografier med digiKam
 Name[nds]=Fotos mit digiKam daalladen
 Name[nl]=Foto's met digiKam downloaden
+Name[nn]=Last ned foto med digiKam
 Name[pa]=ਡਿਜਿਕੈਮ ਨਾਲ ਫੋਟੋ ਡਾਊਨਲੋਡ ਕਰੋ
 Name[pl]=Pobierz zdjęcia za pomocą digiKam
 Name[pt]=Obter Fotos com o digiKam
