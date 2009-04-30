@@ -117,7 +117,7 @@ ImageCategorizedView::ImageCategorizedView(QWidget *parent)
     setResizeMode(QListView::Adjust);
     setMovement(QListView::Static);
     setWrapping(true);
-    // important optimization to make layouting O(1)
+    // important optimization for layouting
     setUniformItemSizes(true);
 
     setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -128,7 +128,6 @@ ImageCategorizedView::ImageCategorizedView(QWidget *parent)
     setMouseTracking(true);
 
     d->model = new ImageAlbumModel(this);
-    d->model->setThumbnailLoadThread(ThumbnailLoadThread::defaultIconViewThread());
     d->filterModel = new ImageAlbumFilterModel(this);
     d->filterModel->setSourceImageModel(d->model);
 

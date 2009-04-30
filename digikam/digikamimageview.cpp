@@ -32,7 +32,9 @@
 
 // Local includes
 
+#include "imagealbummodel.h"
 #include "imagealbumfiltermodel.h"
+#include "thumbnailloadthread.h"
 
 namespace Digikam
 {
@@ -49,6 +51,7 @@ DigikamImageView::DigikamImageView(QWidget *parent)
                : ImageCategorizedView(parent), d(new DigikamImageViewPriv)
 {
     imageFilterModel()->setCategorizationMode(ImageFilterModel::CategoryByAlbum);
+    imageModel()->setThumbnailLoadThread(ThumbnailLoadThread::defaultIconViewThread());
 }
 
 DigikamImageView::~DigikamImageView()
