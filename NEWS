@@ -54,5 +54,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 039 ==> 188062 : Synchronize Images with Database does not save Copyright, Credit, Source, By-line, By-line Title in IPTC.
 040 ==> 186823 : Several bugs in lens defect auto-correction plugin.
 041 ==> 190612 : digiKam and Showfoto crash.
-042 ==> 
+042 ==> 191092 : No images shown in digikam albums.
+043 ==> 
 
