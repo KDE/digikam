@@ -42,6 +42,7 @@ class Album;
 class ImageAlbumModel;
 class ImageAlbumFilterModel;
 class ImageDelegate;
+class ImageDelegateOverlay;
 class ImageCategorizedViewPriv;
 
 class ImageCategorizedView : public KCategorizedView
@@ -69,6 +70,12 @@ public:
     ThumbnailSize thumbnailSize() const;
     void setThumbnailSize(const ThumbnailSize &size);
 
+    /// Add and remove an overlay. It will as well be removed automatically when destroyed.
+    void addOverlay(ImageDelegateOverlay *overlay);
+    void removeOverlay(ImageDelegateOverlay *overlay);
+
+    void addSelectionOverlay();
+
 public Q_SLOTS:
 
     void openAlbum(Album *album);
@@ -93,6 +100,16 @@ Q_SIGNALS:
     /// Emitted when the selection is completely cleared.
     void selectionCleared();
 
+    /** For overlays: Like the respective parent class signals, but with additional info.
+     *  Do not change the mouse events.
+     */
+    void clicked(const QMouseEvent *e, const QModelIndex &index);
+    void entered(const QMouseEvent *e, const QModelIndex &index);
+    /**  Remember you may want to check if the event is accepted or ignored.
+     *   This signal is emitted after being handled by this widget.
+     *   You can accept it if ignored. */
+    void keyPressed(QKeyEvent *e);
+
 protected Q_SLOTS:
 
     void slotThemeChanged();
@@ -101,6 +118,8 @@ protected Q_SLOTS:
     void slotImageInfosAdded();
 
     void slotActivated(const QModelIndex &index);
+    void slotClicked(const QModelIndex &index);
+    void slotEntered(const QModelIndex &index);
 
 protected:
 

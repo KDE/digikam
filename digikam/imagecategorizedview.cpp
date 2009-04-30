@@ -33,6 +33,7 @@
 // KDE includes
 
 #include <kdebug.h>
+#include <kiconloader.h>
 
 // Local includes
 
@@ -40,10 +41,12 @@
 #include "databasefields.h"
 #include "imagealbummodel.h"
 #include "imagealbumfiltermodel.h"
+#include "imagecategorydrawer.h"
+#include "imagedelegate.h"
+#include "imagedelegateoverlay.h"
 #include "imagemodeldragdrophandler.h"
 #include "imagethumbnailmodel.h"
-#include "imagedelegate.h"
-#include "imagecategorydrawer.h"
+#include "imageselectionoverlay.h"
 #include "itemviewtooltip.h"
 #include "thumbnailloadthread.h"
 #include "tooltipfiller.h"
@@ -80,12 +83,13 @@ public:
 
     ImageCategorizedViewPriv()
     {
-        model          = 0;
-        filterModel    = 0;
-        delegate       = 0;
-        categoryDrawer = 0;
-        toolTip        = 0;
-        scrollToItemId = 0;
+        model              = 0;
+        filterModel        = 0;
+        delegate           = 0;
+        categoryDrawer     = 0;
+        toolTip            = 0;
+        scrollToItemId     = 0;
+        currentMouseEvent  = 0;
     }
 
     ImageAlbumModel         *model;
@@ -98,7 +102,7 @@ public:
     ThumbnailSize            thumbnailSize;
     qlonglong                scrollToItemId;
 
-    QPoint                   mouseClickPosition;
+    QMouseEvent             *currentMouseEvent;
     QList<QModelIndex>       indexesToThumbnail;
 };
 
@@ -161,7 +165,14 @@ ImageCategorizedView::ImageCategorizedView(QWidget *parent)
     connect(this, SIGNAL(activated(const QModelIndex &)),
             this, SLOT(slotActivated(const QModelIndex &)));
 
+    connect(this, SIGNAL(clicked(const QModelIndex &)),
+            this, SLOT(slotClicked(const QModelIndex &)));
+
+    connect(this, SIGNAL(entered(const QModelIndex &)),
+            this, SLOT(slotEntered(const QModelIndex &)));
+
     updateDelegateSizes();
+    addSelectionOverlay();
 
     /*
     if (KGlobalSettings::singleClick())
@@ -286,6 +297,23 @@ void ImageCategorizedView::setCurrentUrl(const KUrl &url)
     setCurrentIndex(index);
 }
 
+void ImageCategorizedView::addOverlay(ImageDelegateOverlay *overlay)
+{
+    overlay->setView(this);
+    d->delegate->installOverlay(overlay);
+}
+
+void ImageCategorizedView::removeOverlay(ImageDelegateOverlay *overlay)
+{
+    d->delegate->removeOverlay(overlay);
+    overlay->setView(0);
+}
+
+void ImageCategorizedView::addSelectionOverlay()
+{
+    addOverlay(new ImageSelectionOverlay(this));
+}
+
 void ImageCategorizedView::scrollToStoredItem()
 {
     if (d->scrollToItemId)
@@ -343,17 +371,29 @@ void ImageCategorizedView::updateDelegateSizes()
 
 void ImageCategorizedView::slotActivated(const QModelIndex &index)
 {
-    if (!d->mouseClickPosition.isNull())
+    if (d->currentMouseEvent)
     {
         // if the activation is caused by mouse click (not keyboard)
         // we need to check the hot area
-        if (!d->delegate->acceptsToolTip(d->mouseClickPosition, visualRect(index), index))
+        if (!d->delegate->acceptsActivation(d->currentMouseEvent->pos(), visualRect(index), index))
             return;
     }
 
     ImageInfo info = d->filterModel->imageInfo(index);
     if (!info.isNull())
         activated(info);
+}
+
+void ImageCategorizedView::slotClicked(const QModelIndex &index)
+{
+    if (d->currentMouseEvent)
+        emit clicked(d->currentMouseEvent, index);
+}
+
+void ImageCategorizedView::slotEntered(const QModelIndex &index)
+{
+    if (d->currentMouseEvent)
+        emit entered(d->currentMouseEvent, index);
 }
 
 void ImageCategorizedView::reset()
@@ -436,32 +476,42 @@ void ImageCategorizedView::mousePressEvent(QMouseEvent *event)
             clearSelection();
     }
 
+    // store event for entered(), clicked(), activated() signal handlers
+    d->currentMouseEvent = event;
     KCategorizedView::mousePressEvent(event);
+    d->currentMouseEvent = 0;
 }
 
 void ImageCategorizedView::mouseReleaseEvent(QMouseEvent *event)
 {
-    // we store the position because the signals provide only the index
-    d->mouseClickPosition = event->pos();
+    d->currentMouseEvent = event;
     KCategorizedView::mouseReleaseEvent(event);
-    d->mouseClickPosition = QPoint();
+    d->currentMouseEvent = 0;
 }
 
 void ImageCategorizedView::mouseMoveEvent(QMouseEvent *event)
 {
     QModelIndex index = indexAt(event->pos());
-    if (index.isValid() &&
-        KGlobalSettings::changeCursorOverIcon() &&
-        d->delegate->acceptsActivation(event->pos(), visualRect(index), index))
+    QRect indexVisualRect;
+    if (index.isValid())
     {
-        setCursor(Qt::PointingHandCursor);
+        indexVisualRect = visualRect(index);
+        if (KGlobalSettings::changeCursorOverIcon() &&
+            d->delegate->acceptsActivation(event->pos(), indexVisualRect, index))
+        {
+            setCursor(Qt::PointingHandCursor);
+        }
     }
     else
     {
         unsetCursor();
     }
 
+    d->currentMouseEvent = event;
     KCategorizedView::mouseMoveEvent(event);
+    d->currentMouseEvent = 0;
+
+    d->delegate->mouseMoved(event, indexVisualRect, index);
 }
 
 void ImageCategorizedView::wheelEvent(QWheelEvent* event)
@@ -504,6 +554,8 @@ void ImageCategorizedView::keyPressEvent(QKeyEvent *event)
     }
     */
     KCategorizedView::keyPressEvent(event);
+
+    emit keyPressed(event);
 }
 
 bool modelIndexByRowLessThan(const QModelIndex &i1, const QModelIndex &i2)
