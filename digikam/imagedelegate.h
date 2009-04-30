@@ -97,7 +97,6 @@ protected:
     QString dateToString(const QDateTime& datetime) const;
     QString squeezedText(QPainter* p, int width, const QString& text) const;
     QPixmap thumbnailBorderPixmap(const QSize &pixSize) const;
-    void clearThumbnailBorderCache();
 
 private:
 

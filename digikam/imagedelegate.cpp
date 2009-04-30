@@ -84,6 +84,7 @@ public:
 
         actualPixmapRectCache.setMaxCost(250);
         thumbnailBorderCache.setMaxCost(10);
+        squeezedTextCache.setMaxCost(1000);
 
         editingRating   = false;
     }
@@ -122,6 +123,7 @@ public:
 
     QCache<qlonglong, QRect>  actualPixmapRectCache;
     QCache<QString, QPixmap>  thumbnailBorderCache;
+    QCache<QString, QString>  squeezedTextCache;
 
     ImageCategoryDrawer      *categoryDrawer;
 };
@@ -564,7 +566,11 @@ void ImageDelegate::updateSizeRectsAndPixmaps()
         }
     }
 
-    clearThumbnailBorderCache();
+    // ---- Drawing related caches ----
+
+    d->actualPixmapRectCache.clear();
+    d->thumbnailBorderCache.clear();
+    d->squeezedTextCache.clear();
 }
 
 QPixmap ImageDelegate::ratingPixmap(int rating, bool selected) const
@@ -624,11 +630,6 @@ QPixmap ImageDelegate::thumbnailBorderPixmap(const QSize &pixSize) const
     return *cachePix;
 }
 
-void ImageDelegate::clearThumbnailBorderCache()
-{
-    d->thumbnailBorderCache.clear();
-}
-
 QString ImageDelegate::dateToString(const QDateTime& datetime) const
 {
     return KGlobal::locale()->formatDateTime(datetime, KLocale::ShortDate, false);
@@ -636,10 +637,18 @@ QString ImageDelegate::dateToString(const QDateTime& datetime) const
 
 QString ImageDelegate::squeezedText(QPainter* p, int width, const QString& text) const
 {
+    QCache<QString, QString> *cache = &const_cast<ImageDelegate*>(this)->d->squeezedTextCache;
+    // We do not need to include the font into cache key, the cache is cleared on font change
+    QString cacheKey = QString::number(width) + QString::number(qHash(text));
+    QString *cachedString = cache->object(cacheKey);
+    if (cachedString)
+        return *cachedString;
+
     QString fullText(text);
     fullText.replace('\n',' ');
     QFontMetrics fm(p->fontMetrics());
     int textWidth = fm.width(fullText);
+    QString result = fullText;
 
     if (textWidth > width)
     {
@@ -683,11 +692,13 @@ QString ImageDelegate::squeezedText(QPainter* p, int width, const QString& text)
 
         if (letters >= 5)
         {
-            return squeezedText;
+            
+            result = squeezedText;
         }
     }
 
-    return fullText;
+    cache->insert(cacheKey, new QString(result));
+    return result;
 }
 
 } // namespace Digikam
