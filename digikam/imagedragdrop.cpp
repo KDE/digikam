@@ -1,0 +1,370 @@
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2009-04-16
+ * Description : Qt Model for Albums - drag and drop handling
+ *
+ * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
+
+#include "imagedragdrop.h"
+#include "imagedragdrop.moc"
+
+// Qt includes
+
+#include <QDropEvent>
+
+// KDE includes
+
+#include <kdebug.h>
+#include <kiconloader.h>
+#include <kio/job.h>
+#include <klocale.h>
+#include <kmenu.h>
+
+// Local includes
+
+#include "albummanager.h"
+#include "cameraui.h"
+#include "ddragobjects.h"
+#include "dio.h"
+#include "imagecategorizedview.h"
+#include "imageinfo.h"
+#include "imageinfolist.h"
+
+namespace Digikam
+{
+
+ImageDragDropHandler::ImageDragDropHandler(ImageAlbumModel *model)
+                    : ImageModelDragDropHandler(model)
+{
+}
+
+static Qt::DropAction copyOrMove(const QDropEvent *e, QWidget *view)
+{
+    if (e->keyboardModifiers() & Qt::ControlModifier)
+        return Qt::CopyAction;
+    else if (e->keyboardModifiers() & Qt::ShiftModifier)
+        return Qt::MoveAction;
+
+    KMenu popMenu(view);
+    QAction *moveAction = popMenu.addAction( SmallIcon("go-jump"), i18n("&Move Here"));
+    QAction *copyAction = popMenu.addAction( SmallIcon("edit-copy"), i18n("&Copy Here"));
+    popMenu.addSeparator();
+    popMenu.addAction( SmallIcon("dialog-cancel"), i18n("C&ancel") );
+
+    popMenu.setMouseTracking(true);
+    QAction *choice = popMenu.exec(QCursor::pos());
+    if (choice == moveAction)
+        return Qt::MoveAction;
+    else if (choice == copyAction)
+        return Qt::CopyAction;
+
+    return Qt::IgnoreAction;
+}
+
+bool ImageDragDropHandler::dropEvent(QAbstractItemView *abstractview, const QDropEvent *e, const QModelIndex &droppedOn)
+{
+    ImageCategorizedView *view = static_cast<ImageCategorizedView*>(abstractview);
+    Album *album = view->albumAt(e->pos());
+
+    if (!album || album->isRoot())
+        return false;
+
+    PAlbum *palbum = 0;
+    if (album->type() == Album::PHYSICAL)
+        palbum = static_cast<PAlbum*>(album);
+    else if (model()->currentAlbum()->type() == Album::PHYSICAL)
+        palbum = static_cast<PAlbum*>(model()->currentAlbum());
+
+    TAlbum *talbum = 0;
+    if (album->type() == Album::TAG)
+        talbum = static_cast<TAlbum*>(album);
+    else if (model()->currentAlbum()->type() == Album::TAG)
+        talbum = static_cast<TAlbum*>(model()->currentAlbum());
+
+    if (DItemDrag::canDecode(e->mimeData()))
+    {
+        // Drag & drop inside of digiKam
+        KUrl::List urls;
+        KUrl::List kioURLs;
+        QList<int> albumIDs;
+        QList<int> imageIDs;
+
+        if (!DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
+            return false;
+
+        if (urls.isEmpty() || kioURLs.isEmpty() || albumIDs.isEmpty() || imageIDs.isEmpty())
+            return false;
+
+        if (palbum)
+        {
+            // Check if items dropped come from outside current album.
+            KUrl::List extUrls;
+            QList<qlonglong> extImageIDs;
+            for (QList<int>::const_iterator it = imageIDs.constBegin(); it != imageIDs.constEnd(); ++it)
+            {
+                ImageInfo info(*it);
+                if (info.albumId() != album->id())
+                {
+                    extUrls << info.databaseUrl();
+                    extImageIDs << *it;
+                }
+            }
+
+            if (extUrls.isEmpty())
+                return false;
+
+            Qt::DropAction action = copyOrMove(e, view);
+            if (action == Qt::MoveAction)
+            {
+                KIO::Job* job = DIO::move(extUrls, extImageIDs, palbum);
+                connect(job, SIGNAL(result(KJob*)),
+                         this, SLOT(slotDIOResult(KJob*)));
+            }
+            else if (action == Qt::CopyAction)
+            {
+                KIO::Job* job = DIO::copy(extUrls, extImageIDs, palbum);
+                connect(job, SIGNAL(result(KJob*)),
+                         this, SLOT(slotDIOResult(KJob*)));
+            }
+            return true;
+        }
+        else if (talbum)
+        {
+            QList<ImageInfo> infos;
+            for (QList<int>::const_iterator it = imageIDs.constBegin();
+                 it != imageIDs.constEnd(); ++it)
+            {
+                ImageInfo info(*it);
+                infos << info;
+            }
+
+            emit changeTagOnImageInfos(infos, QList<int>() << talbum->id(), true, true);
+            return true;
+        }
+        return false;
+    }
+    else if (KUrl::List::canDecode(e->mimeData()))
+    {
+        if (!palbum)
+            return false;
+
+        // Drag & drop outside of digiKam
+
+        KUrl::List srcURLs = KUrl::List::fromMimeData(e->mimeData());
+
+        Qt::DropAction action = copyOrMove(e, view);
+        if (action == Qt::MoveAction)
+        {
+            KIO::Job* job = DIO::move(srcURLs, palbum);
+            connect(job, SIGNAL(result(KJob*)),
+                    this, SLOT(slotDIOResult(KJob*)));
+        }
+        else if (action == Qt::CopyAction)
+        {
+            KIO::Job* job = DIO::copy(srcURLs, palbum);
+            connect(job, SIGNAL(result(KJob*)),
+                    this, SLOT(slotDIOResult(KJob*)));
+        }
+        return true;
+    }
+    else if(DTagDrag::canDecode(e->mimeData()))
+    {
+        int tagID;
+        if (!DTagDrag::decode(e->mimeData(), tagID))
+            return false;
+
+        TAlbum* talbum = AlbumManager::instance()->findTAlbum(tagID);
+        if (!talbum)
+            return false;
+
+        KMenu popMenu(view);
+
+        QList<ImageInfo> selectedInfos = view->selectedImageInfosCurrentFirst();
+
+        QAction *assignToSelectedAction = 0;
+        if (selectedInfos.count() > 1)
+            assignToSelectedAction =
+                    popMenu.addAction(SmallIcon("tag"), i18n("Assign '%1' to &Selected Items",talbum->tagPath().mid(1)));
+
+        QAction *assignToThisAction = 0;
+        if (droppedOn.isValid())
+            assignToThisAction =
+                    popMenu.addAction(SmallIcon("tag"), i18n("Assign '%1' to &This Item",talbum->tagPath().mid(1)));
+
+        QAction *assignToAllAction =
+            popMenu.addAction(SmallIcon("tag"), i18n("Assign '%1' to &All Items",talbum->tagPath().mid(1)));
+
+        popMenu.addSeparator();
+        popMenu.addAction(SmallIcon("dialog-cancel"), i18n("&Cancel"));
+
+        popMenu.setMouseTracking(true);
+        QAction *choice = popMenu.exec(QCursor::pos());
+        if (choice)
+        {
+            if (choice == assignToSelectedAction)    // Selected Items
+            {
+                emit changeTagOnImageInfos(selectedInfos, QList<int>() << tagID, true, true);
+            }
+            else if (choice == assignToAllAction)    // All Items
+            {
+                emit changeTagOnImageInfos(model()->imageInfos(), QList<int>() << tagID, true, true);
+            }
+            else if (choice == assignToThisAction)  // Dropped Item only.
+            {
+                emit changeTagOnImageInfos(QList<ImageInfo>() << model()->imageInfo(droppedOn), QList<int>() << tagID, true, false);
+            }
+        }
+        return true;
+    }
+    else if(DTagListDrag::canDecode(e->mimeData()))
+    {
+        QList<int> tagIDs;
+        DTagListDrag::decode(e->mimeData(), tagIDs);
+
+        KMenu popMenu(view);
+
+        QList<ImageInfo> selectedInfos = view->selectedImageInfosCurrentFirst();
+
+        QAction *assignToSelectedAction = 0;
+        if (selectedInfos.count() > 1)
+            assignToSelectedAction = popMenu.addAction(SmallIcon("tag"), i18n("Assign Tags to &Selected Items"));
+
+        QAction *assignToThisAction = 0;
+        if (droppedOn.isValid())
+            assignToThisAction = popMenu.addAction(SmallIcon("tag"), i18n("Assign Tags to &This Item"));
+
+        QAction *assignToAllAction =
+            popMenu.addAction(SmallIcon("tag"), i18n("Assign Tags to &All Items"));
+
+        popMenu.addSeparator();
+        popMenu.addAction(SmallIcon("dialog-cancel"), i18n("&Cancel"));
+
+        popMenu.setMouseTracking(true);
+        QAction *choice = popMenu.exec(QCursor::pos());
+        if (choice)
+        {
+            if (choice == assignToSelectedAction)    // Selected Items
+            {
+                emit changeTagOnImageInfos(selectedInfos, tagIDs, true, true);
+            }
+            else if (choice == assignToAllAction)    // All Items
+            {
+                emit changeTagOnImageInfos(model()->imageInfos(), tagIDs, true, true);
+            }
+            else if (choice == assignToThisAction)    // Dropped item only.
+            {
+                emit changeTagOnImageInfos(QList<ImageInfo>() << model()->imageInfo(droppedOn), tagIDs, true, false);
+            }
+        }
+        return true;
+    }
+    else if(DCameraItemListDrag::canDecode(e->mimeData()))
+    {
+        if (!palbum)
+            return false;
+
+        CameraUI *ui = dynamic_cast<CameraUI*>(e->source());
+        if (!ui)
+            return false;
+
+        KMenu popMenu(view);
+        popMenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
+        QAction *downAction    = popMenu.addAction(SmallIcon("file-export"),
+                                                    i18n("Download From Camera"));
+        QAction *downDelAction = popMenu.addAction(SmallIcon("file-export"),
+                                                    i18n("Download && Delete From Camera"));
+        popMenu.addSeparator();
+        popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
+        popMenu.setMouseTracking(true);
+        QAction *choice = popMenu.exec(QCursor::pos());
+        if (choice)
+        {
+            if (choice == downAction)
+                ui->slotDownload(true, false, palbum);
+            else if (choice == downDelAction)
+                ui->slotDownload(true, true, palbum);
+        }
+        return true;
+    }
+
+    return false;
+}
+
+Qt::DropAction ImageDragDropHandler::accepts(const QDropEvent *e, const QModelIndex &/*dropIndex*/)
+{
+    if (!model()->currentAlbum())
+        return Qt::IgnoreAction;
+
+    if (DItemDrag::canDecode(e->mimeData()) || KUrl::List::canDecode(e->mimeData()))
+    {
+        if (e->keyboardModifiers() & Qt::ControlModifier)
+            return Qt::CopyAction;
+        else if (e->keyboardModifiers() & Qt::ShiftModifier)
+            return Qt::MoveAction;
+        return Qt::MoveAction;
+    }
+
+    if (DTagDrag::canDecode(e->mimeData()) ||
+        DTagListDrag::canDecode(e->mimeData()) ||
+        DCameraItemListDrag::canDecode(e->mimeData()) ||
+        DCameraDragObject::canDecode(e->mimeData()))
+    {
+        return Qt::MoveAction;
+    }
+
+    return Qt::IgnoreAction;
+}
+
+QStringList ImageDragDropHandler::mimeTypes() const
+{
+    QStringList mimeTypes;
+    mimeTypes << DItemDrag::mimeTypes()
+              << DTagDrag::mimeTypes()
+              << DTagListDrag::mimeTypes()
+              << DCameraItemListDrag::mimeTypes()
+              << DCameraDragObject::mimeTypes()
+              << KUrl::List::mimeDataTypes();
+    return mimeTypes;
+}
+
+QMimeData *ImageDragDropHandler::createMimeData(const QList<ImageInfo> &infos)
+{
+    if (!model()->currentAlbum())
+        return 0;
+
+    KUrl::List urls;
+    KUrl::List kioURLs;
+    QList<int> albumIDs;
+    QList<int> imageIDs;
+
+    foreach (const ImageInfo &info, infos)
+    {
+        urls.append(info.fileUrl());
+        kioURLs.append(info.databaseUrl());
+        imageIDs.append(info.id());
+    }
+    albumIDs.append(model()->currentAlbum()->id());
+
+    if (urls.isEmpty())
+        return 0;
+
+    return new DItemDrag(urls, kioURLs, albumIDs, imageIDs);
+}
+
+} // namespace Digikam
