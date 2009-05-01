@@ -524,6 +524,15 @@ void ContentAwareResizeTool::slotValuesChanged()
     blockWidgetSignals(false);
 }
 
+void ContentAwareResizeTool::enableMaskSettings(bool b)
+{
+    bool c = b && d->weightMaskBox->isChecked();
+    d->weightMaskBox->setEnabled(b);
+    d->redMaskTool  ->setEnabled(c);
+    d->greenMaskTool->setEnabled(c);
+    d->maskPenSize  ->setEnabled(c);
+}
+
 void ContentAwareResizeTool::enableContentAwareSettings(bool b)
 {
     d->stepInput->setEnabled(b);
@@ -531,9 +540,7 @@ void ContentAwareResizeTool::enableContentAwareSettings(bool b)
     d->funcInput->setEnabled(b);
     d->preserveSkinTones->setEnabled(b);
     d->resizeOrderInput->setEnabled(b);
-    d->weightMaskBox->setEnabled(b);
-    d->redMaskTool->setEnabled(b);
-    d->greenMaskTool->setEnabled(b);
+    enableMaskSettings(b);
 }
 
 void ContentAwareResizeTool::slotMixedRescaleValueChanged()
@@ -655,15 +662,8 @@ void ContentAwareResizeTool::renderingFinished()
     d->hInput->setEnabled(true);
     d->wpInput->setEnabled(true);
     d->hpInput->setEnabled(true);
-    d->stepInput->setEnabled(true);
-    d->rigidityInput->setEnabled(true);
-    d->funcInput->setEnabled(true);
-    d->preserveSkinTones->setEnabled(true);
-    d->resizeOrderInput->setEnabled(true);
     d->mixedRescaleInput->setEnabled(true);
-    d->weightMaskBox->setEnabled(true);
-    d->redMaskTool->setEnabled(true);
-    d->greenMaskTool->setEnabled(true);
+    enableContentAwareSettings(true);
 }
 
 void ContentAwareResizeTool::putFinalData()
@@ -702,12 +702,14 @@ void ContentAwareResizeTool::slotWeightMaskBoxStateChanged(int state)
     {
         d->redMaskTool->setEnabled(false);
         d->greenMaskTool->setEnabled(false);
+        d->maskPenSize->setEnabled(false);
         d->previewWidget->setMaskEnabled(false);
     }
     else    // Checked
     {
         d->redMaskTool->setEnabled(true);
         d->greenMaskTool->setEnabled(true);
+        d->maskPenSize->setEnabled(true);
         d->previewWidget->setMaskEnabled(true);
 
         if (d->redMaskTool->isChecked())
