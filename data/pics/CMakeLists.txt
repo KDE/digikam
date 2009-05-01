@@ -47,6 +47,7 @@ INSTALL(FILES splash-digikam.png
               indicator-green.png
               indicator-red.png
               assistant-tooltips.png
+              assistant-preview.png
          DESTINATION ${DATA_INSTALL_DIR}/digikam/data 
        )
 
