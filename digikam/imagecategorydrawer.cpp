@@ -74,6 +74,11 @@ int ImageCategoryDrawer::categoryHeight(const QModelIndex &/*index*/, const QSty
     return d->rect.height() + d->lowerSpacing;
 }
 
+int ImageCategoryDrawer::maximumHeight() const
+{
+    return d->rect.height() + d->lowerSpacing;
+}
+
 void ImageCategoryDrawer::setLowerSpacing(int spacing)
 {
     d->lowerSpacing = spacing;
@@ -130,6 +135,7 @@ void ImageCategoryDrawer::drawCategory(const QModelIndex &index, int /*sortRole*
 
     if (mode == ImageFilterModel::CategoryByAlbum)
         textForAlbum(index, &header, &subLine);
+    //TODO: other modes
 
     p->setPen(ThemeEngine::instance()->textSelColor());
     p->setFont(fontBold);
