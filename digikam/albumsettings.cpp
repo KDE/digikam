@@ -625,10 +625,12 @@ QString AlbumSettings::getAudioFileFilter() const
 
 QString AlbumSettings::getRawFileFilter() const
 {
+    QStringList supportedRaws;
 #if KDCRAW_VERSION < 0x000400
-    QStringList supportedRaws = KDcrawIface::DcrawBinary::rawFilesList();
+    if (KDcrawIface::DcrawBinary::instance()->versionIsRight())
+        supportedRaws = KDcrawIface::DcrawBinary::rawFilesList();
 #else
-    QStringList supportedRaws = KDcrawIface::KDcraw::rawFilesList();
+    supportedRaws = KDcrawIface::KDcraw::rawFilesList();
 #endif
 
     QStringList imageSettings;
