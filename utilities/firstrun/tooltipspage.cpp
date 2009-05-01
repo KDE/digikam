@@ -103,7 +103,9 @@ TooltipsPage::TooltipsPage(KAssistantDialog* dlg)
                          "</qt>"));
 
     setPageWidget(vbox);
-    setDigiKamLogo();
+
+    QPixmap leftPix = KStandardDirs::locate("data","digikam/data/assistant-tooltips.png");
+    setPixmapLogo(leftPix.scaledToWidth(128, Qt::SmoothTransformation)); 
 }
 
 TooltipsPage::~TooltipsPage()
