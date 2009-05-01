@@ -365,27 +365,4 @@ QMimeData *AlbumDragDropHandler::createMimeData(const QList<Album*> &albums)
     return new DAlbumDrag(albums.first()->databaseUrl(), albums.first()->id());
 }
 
-/*
-AlbumDragDropHandler::AlbumDragDropHandler(AlbumModel *model)
-    : AlbumModelDragDropHandler(model)
-{
-}
-
-bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, QDropEvent *e, const QModelIndex &droppedOn)
-{
-}
-
-bool AlbumDragDropHandler::acceptsMimeData(const QMimeData *data, const QModelIndex &dropIndex)
-{
-}
-
-QStringList AlbumDragDropHandler::mimeTypes() const
-{
-}
-
-QMimeData *AlbumDragDropHandler::createMimeData(const QList<Album*>)
-{
-}
-*/
-
 } // namespace Digikam
