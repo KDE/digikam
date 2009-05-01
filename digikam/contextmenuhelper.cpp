@@ -57,7 +57,6 @@
 
 #include "album.h"
 #include "albumdb.h"
-#include "albumiconitem.h"
 #include "albummanager.h"
 #include "databaseaccess.h"
 #include "digikamapp.h"
