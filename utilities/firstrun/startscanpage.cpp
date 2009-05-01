@@ -38,18 +38,23 @@ namespace Digikam
 StartScanPage::StartScanPage(KAssistantDialog* dlg)
              : AssistantDlgPage(dlg, i18n("Scan Your Collection"))
 {
-    KVBox *vbox   = new KVBox(this);
-    QLabel *title = new QLabel(vbox);
-    title->setWordWrap(true);
-    title->setText(i18n("<qt>"
-                        "<p>Congratulation. Your minimal setup is done.</p>"
-                        "<p>You can customize more settings using digiKam configuration panel.</p>"
-                        "<p>Press <b>Finish</b> to close this assistant. digiKam will scan your "
-                        "collection to register all items in database.</p>"
-                        "<p><i>Note:</i> depending of your collection size, this operation can take a while. "
-                        "At next start-up digiKam will only scan your collection to identify new items. "
-                        "It will be more faster.</p>"
-                        "</qt>"));
+    KVBox *vbox  = new KVBox(this);
+    QLabel *text = new QLabel(vbox);
+    text->setWordWrap(true);
+    text->setOpenExternalLinks(true);
+    text->setText(i18n("<qt>"
+                       "<p>Congratulation. Your minimal setup is done.</p>"
+                       "<p>You can customize more settings using digiKam configuration panel. " 
+                       "To learn more about digiKam world, we recommend to read <b>digiKam handbook</b> "
+                       "using Help/Handbook menu entry (you need to install separate digiKam documentation package). "
+                       "You can also read manual online from "
+                       "<a href='http://www.digikam.org/docs'>digikam.org website</a>.</p>"
+                       "<p>Press <b>Finish</b> to close this assistant. digiKam will scan your "
+                       "collection to register all items in database.</p>"
+                       "<p><i>Note:</i> depending of your collection size, this operation can take a while. "
+                       "At next start-up digiKam will only scan your collection to identify new items. "
+                       "It will be more faster.</p>"
+                       "</qt>"));
 
     setPageWidget(vbox);
     setDigiKamLogo();
