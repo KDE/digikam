@@ -48,13 +48,20 @@ public:
 
 public Q_SLOTS:
 
+    virtual void copy();
+    virtual void paste();
+
+    void openInEditor(const ImageInfo &info);
+
+Q_SIGNALS:
+
+    void previewRequested(const ImageInfo &info);
+
 protected:
 
     virtual void activated(const ImageInfo& info);
     virtual void showContextMenu(QContextMenuEvent* event, const ImageInfo& info);
     virtual void showContextMenu(QContextMenuEvent* event);
-    virtual void copy();
-    virtual void paste();
 
 private:
 
