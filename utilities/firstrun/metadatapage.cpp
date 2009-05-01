@@ -100,7 +100,6 @@ MetadataPage::MetadataPage(KAssistantDialog* dlg)
                          "</qt>"));
 
     setPageWidget(vbox);
-    setDigiKamLogo();
 }
 
 MetadataPage::~MetadataPage()

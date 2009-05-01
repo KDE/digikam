@@ -136,7 +136,6 @@ CollectionPage::CollectionPage(KAssistantDialog* dlg)
     vlayout->setSpacing(KDialog::spacingHint());
 
     setPageWidget(widget);
-    setDigiKamLogo();
 
     connect(d->rootAlbumPathRequester, SIGNAL(urlSelected(const KUrl&)),
             this, SLOT(slotAlbumRootChanged(const KUrl&)));

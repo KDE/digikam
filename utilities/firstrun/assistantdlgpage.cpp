@@ -30,6 +30,7 @@
 
 // KDE includes.
 
+#include <kvbox.h>
 #include <kiconloader.h>
 #include <kseparator.h>
 #include <kstandarddirs.h>
@@ -45,12 +46,15 @@ public:
 
     AssistantDlgPagePriv()
     {
-        hlay = 0;
-        page = 0;
-        logo = 0;
+        hlay          = 0;
+        page          = 0;
+        logo          = 0;
+        leftBottomPix = 0;
     }
     
     QLabel          *logo;
+    QLabel          *leftBottomPix;
+
     QHBoxLayout     *hlay;
     
     KPageWidgetItem *page;
@@ -65,13 +69,21 @@ AssistantDlgPage::AssistantDlgPage(KAssistantDialog* dlg, const QString& title)
     setWidgetResizable(true);
     viewport()->setAutoFillBackground(false);
 
-    d->hlay = new QHBoxLayout(panel);
-    d->logo = new QLabel(panel);
+    d->hlay     = new QHBoxLayout(panel);
+    KVBox *vbox = new KVBox(panel);
+    d->logo     = new QLabel(vbox);
     d->logo->setAlignment(Qt::AlignTop);
+    d->logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
+                               .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     
+    QLabel *space    = new QLabel(vbox);
+    vbox->setStretchFactor(space, 10);
+    d->leftBottomPix = new QLabel(vbox);
+    d->leftBottomPix->setAlignment(Qt::AlignBottom);
+
     KSeparator *line = new KSeparator(Qt::Vertical, panel);
 
-    d->hlay->addWidget(d->logo);
+    d->hlay->addWidget(vbox);
     d->hlay->addWidget(line);
     d->hlay->setMargin(0);
     d->hlay->setSpacing(KDialog::spacingHint());
@@ -95,15 +107,9 @@ void AssistantDlgPage::setPageWidget(QWidget* w)
     d->hlay->setStretchFactor(w, 10);
 }
 
-void AssistantDlgPage::setPixmapLogo(const QPixmap& pix)
+void AssistantDlgPage::setLeftBottomPix(const QPixmap& pix)
 {
-    d->logo->setPixmap(pix);
-}
-
-void AssistantDlgPage::setDigiKamLogo()
-{
-    setPixmapLogo(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
-                          .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    d->leftBottomPix->setPixmap(pix);
 }
 
 }   // namespace Digikam

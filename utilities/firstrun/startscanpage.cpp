@@ -57,7 +57,6 @@ StartScanPage::StartScanPage(KAssistantDialog* dlg)
                        "</qt>"));
 
     setPageWidget(vbox);
-    setDigiKamLogo();
 }
 
 StartScanPage::~StartScanPage()

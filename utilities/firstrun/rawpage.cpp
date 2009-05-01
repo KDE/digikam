@@ -100,7 +100,6 @@ RawPage::RawPage(KAssistantDialog* dlg)
                          "</qt>"));
 
     setPageWidget(vbox);
-    setDigiKamLogo();
 }
 
 RawPage::~RawPage()

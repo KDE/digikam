@@ -49,8 +49,7 @@ public:
     KPageWidgetItem* page() const;
 
     void setPageWidget(QWidget* w);
-    void setPixmapLogo(const QPixmap& pix);
-    void setDigiKamLogo();
+    void setLeftBottomPix(const QPixmap& pix);
 
 private:
 
