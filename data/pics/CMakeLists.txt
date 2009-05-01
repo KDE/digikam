@@ -46,6 +46,7 @@ INSTALL(FILES splash-digikam.png
               indicator-gray.png
               indicator-green.png
               indicator-red.png
+              assistant-tooltips.png
          DESTINATION ${DATA_INSTALL_DIR}/digikam/data 
        )
 
@@ -56,4 +57,4 @@ INSTALL(FILES logo-showfoto.png
               splash-showfoto.png 
         DESTINATION ${DATA_INSTALL_DIR}/showfoto/data
        )
-        
+
