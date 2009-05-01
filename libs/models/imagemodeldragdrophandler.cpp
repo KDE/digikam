@@ -43,12 +43,12 @@ ImageModel *ImageModelDragDropHandler::model() const
     return m_model;
 }
 
-bool ImageModelDragDropHandler::dropEvent(QAbstractItemView *, QDropEvent *, const QModelIndex &)
+bool ImageModelDragDropHandler::dropEvent(QAbstractItemView *, const QDropEvent *, const QModelIndex &)
 {
     return false;
 }
 
-Qt::DropAction ImageModelDragDropHandler::accepts(const QMimeData *, const QModelIndex &)
+Qt::DropAction ImageModelDragDropHandler::accepts(const QDropEvent *, const QModelIndex &)
 {
     return Qt::IgnoreAction;
 }
