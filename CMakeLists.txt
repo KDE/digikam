@@ -905,6 +905,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagecategorydrawer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagedelegate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagedelegateoverlay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagedragdrop.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagepreviewview.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagepreviewbar.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imageselectionoverlay.cpp
