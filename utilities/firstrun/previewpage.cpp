@@ -105,7 +105,7 @@ PreviewPage::PreviewPage(KAssistantDialog* dlg)
 
     QPixmap leftPix = KStandardDirs::locate("data","digikam/data/assistant-preview.png");
     setPixmapLogo(leftPix.scaledToWidth(128, Qt::SmoothTransformation)); 
-}}
+}
 
 PreviewPage::~PreviewPage()
 {
