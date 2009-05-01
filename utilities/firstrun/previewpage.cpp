@@ -94,7 +94,7 @@ PreviewPage::PreviewPage(KAssistantDialog* dlg)
     QLabel *label2 = new QLabel(vbox);
     label2->setWordWrap(true);
     label2->setText(i18n("<qt>"
-                         "<p><i>Note:</i> Loading a reduced version of an image is faster but can differ "
+                         "<p><i>Note:</i> loading a reduced version of an image is faster but can differ "
                          "from the original, especially with Raw. In this case, a JPEG version "
                          "of Raw pre-processed by camera is loaded, instead of the real image data. This JPEG "
                          "image is embedded in the file metadata and is used by the camera to display "

@@ -102,7 +102,7 @@ CollectionPage::CollectionPage(KAssistantDialog* dlg)
                              "<br/> "
                              "More folders can be added later under the <i>Settings</i> menu. "
                              "</p> "
-                             "<p>Note: Removable media (such as USB drives or DVDs) and remote file systems "
+                             "<p>Note: removable media (such as USB drives or DVDs) and remote file systems "
                              "(such as NFS, or Samba mounted with cifs/smbfs) are supported.</p>") );
 #else
     textLabel1->setText(i18n("<p>Please enter a location where you want to store your images.</p> "
@@ -120,7 +120,7 @@ CollectionPage::CollectionPage(KAssistantDialog* dlg)
     textLabel3->setWordWrap(true);
     textLabel3->setText(i18n("<p>digiKam stores information and meta-data about your images in a database file. "
                              "Please set the location of this file or accept the default.</p>"
-                             "<p><i>Note:</i> You need to have write access to the folder used here, "
+                             "<p><i>Note:</i> you need to have write access to the folder used here, "
                              "and you cannot use a remote location on a networked server, "
                              "using NFS or Samba.</p>"));
 

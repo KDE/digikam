@@ -94,7 +94,7 @@ TooltipsPage::TooltipsPage(KAssistantDialog* dlg)
     QLabel *label2 = new QLabel(vbox);
     label2->setWordWrap(true);
     label2->setText(i18n("<qt>"
-                         "<p><i>Note:</i> Tooltips show photograph and digiKam meta-data on the fly, "
+                         "<p><i>Note:</i> tooltips show photograph and digiKam meta-data on the fly, "
                          "accordingly with mouse move over items. This can be usefull to make items "
                          "selection. Tooltips are displayed over album folder-view, "
                          "album icon-view, camera icon-view, batch queue list, and thumb-bar. "
