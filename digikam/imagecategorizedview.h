@@ -59,6 +59,8 @@ public:
 
     ImageDelegate *delegate() const;
 
+    Album *currentAlbum() const;
+
     ImageInfo currentInfo() const;
     QList<ImageInfo> selectedImageInfos() const;
     QList<ImageInfo> selectedImageInfosCurrentFirst() const;
@@ -69,6 +71,11 @@ public:
 
     ThumbnailSize thumbnailSize() const;
     void setThumbnailSize(const ThumbnailSize &size);
+
+    /** If the model is categorized by an album, returns the album of the category
+     *  that contains the position.
+     *  If this is not applicable, return the current album. May return 0. */
+    Album *albumAt(const QPoint &pos);
 
     /// Add and remove an overlay. It will as well be removed automatically when destroyed.
     void addOverlay(ImageDelegateOverlay *overlay);
@@ -129,6 +136,9 @@ protected:
     virtual void showContextMenu(QContextMenuEvent *event);
     virtual void copy();
     virtual void paste();
+
+    /** Returns an index that is representative for the category at position pos */
+    QModelIndex indexForCategoryAt(const QPoint &pos) const;
 
     // reimplemented from parent class
     void reset();

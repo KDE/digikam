@@ -38,6 +38,8 @@
 // Local includes
 
 #include "album.h"
+#include "albummanager.h"
+#include "albumsettings.h"
 #include "databasefields.h"
 #include "imagealbummodel.h"
 #include "imagealbumfiltermodel.h"
@@ -90,6 +92,7 @@ public:
         toolTip            = 0;
         scrollToItemId     = 0;
         currentMouseEvent  = 0;
+        showToolTip        = false;
     }
 
     ImageAlbumModel         *model;
@@ -98,6 +101,7 @@ public:
     ImageDelegate           *delegate;
     ImageCategoryDrawer     *categoryDrawer;
     ImageItemViewToolTip    *toolTip;
+    bool                     showToolTip;
 
     ThumbnailSize            thumbnailSize;
     qlonglong                scrollToItemId;
@@ -149,6 +153,7 @@ ImageCategorizedView::ImageCategorizedView(QWidget *parent)
     setCategoryDrawer(d->delegate->categoryDrawer());
 
     d->toolTip = new ImageItemViewToolTip(this);
+    d->showToolTip = AlbumSettings::instance()->getShowToolTips();
 
     setModel(d->filterModel);
 
@@ -206,6 +211,11 @@ ImageAlbumFilterModel *ImageCategorizedView::imageFilterModel() const
 ImageDelegate *ImageCategorizedView::delegate() const
 {
     return d->delegate;
+}
+
+Album *ImageCategorizedView::currentAlbum() const
+{
+    return d->model->currentAlbum();
 }
 
 ImageInfo ImageCategorizedView::currentInfo() const
@@ -338,6 +348,7 @@ void ImageCategorizedView::slotThemeChanged()
 
 void ImageCategorizedView::slotSetupChanged()
 {
+    d->showToolTip = AlbumSettings::instance()->getShowToolTips();
     viewport()->update();
 }
 
@@ -421,6 +432,57 @@ void ImageCategorizedView::selectionChanged(const QItemSelection &selectedItems,
         emit deselected(d->filterModel->imageInfos(deselectedItems.indexes()));
     if (!selectionModel()->hasSelection())
         emit selectionCleared();
+}
+
+Album *ImageCategorizedView::albumAt(const QPoint &pos)
+{
+    if (d->filterModel->categorizationMode() == ImageFilterModel::CategoryByAlbum)
+    {
+        QModelIndex categoryIndex = indexForCategoryAt(pos);
+        if (categoryIndex.isValid())
+        {
+            int albumId = categoryIndex.data(ImageFilterModel::CategoryAlbumIdRole).toInt();
+            return AlbumManager::instance()->findPAlbum(albumId);
+        }
+    }
+    return currentAlbum();
+}
+
+QModelIndex ImageCategorizedView::indexForCategoryAt(const QPoint &pos) const
+{
+    QModelIndex index = indexAt(pos);
+    if (index.isValid())
+        return index;
+
+    QRect viewportRect = viewport()->rect();
+    if (!viewportRect.contains(pos))
+        return QModelIndex();
+
+    // There is no indexesInRect() method. And no categoryRect(). We have to probe.
+    // Assumption: we test at the same y pos, going right from the left edge;
+    // then we go down in the middle of the first column until the bottom of the viewport is reached.
+
+    const int horizontalStep = 10;
+    const int rightEnd = qMin(gridSize().width() + 2*spacing() + 2*horizontalStep, viewportRect.width());
+    int y = pos.y();
+    for (int x=0; x<rightEnd; x+=horizontalStep)
+    {
+        index = indexAt(QPoint(x, y));
+        if (index.isValid())
+            return index;
+    }
+
+    const int verticalStep = 10;
+    const int bottomEnd = qMin(d->categoryDrawer->maximumHeight() + 2*gridSize().height() + 4*spacing(), viewportRect.height());
+    const int x = (gridSize().width() + 2*spacing()) / 2; // middle of first column
+    for (; y<bottomEnd; y += verticalStep)
+    {
+        index = indexAt(QPoint(x, y));
+        if (index.isValid())
+            return index;
+    }
+
+    return QModelIndex();
 }
 
 void ImageCategorizedView::activated(const ImageInfo &)
@@ -602,6 +664,8 @@ bool ImageCategorizedView::viewportEvent(QEvent *event)
         }
         case QEvent::ToolTip:
         {
+            if (!d->showToolTip)
+                return true;
             QHelpEvent *he = static_cast<QHelpEvent*>(event);
             const QModelIndex index = indexAt(he->pos());
             if (!index.isValid())
@@ -631,7 +695,7 @@ void ImageCategorizedView::dragMoveEvent(QDragMoveEvent *e)
     if (handler)
     {
         QModelIndex index = indexAt(e->pos());
-        Qt::DropAction action = handler->accepts(e->mimeData(), d->filterModel->mapToSource(index));
+        Qt::DropAction action = handler->accepts(e, d->filterModel->mapToSource(index));
         if (action == Qt::IgnoreAction)
             e->ignore();
         else
