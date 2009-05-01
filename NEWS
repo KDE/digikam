@@ -7,7 +7,7 @@ NEW FEATURES:
 General        : Add new Batch Queue Manager (http://www.digikam.org/node/427).
 General        : New tool bar animation banner.
 General        : Fix compilation under MSVC 9.
-General        : New first run assistant.
+General        : New first run assistant (http://www.digikam.org/node/442).
 
 ImageEditor    : New Liquid Rescale tool (http://www.digikam.org/node/439).
 
@@ -55,5 +55,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 040 ==> 186823 : Several bugs in lens defect auto-correction plugin.
 041 ==> 190612 : digiKam and Showfoto crash.
 042 ==> 191092 : No images shown in digikam albums.
-043 ==> 
-
+043 ==> 191203 : digiKam crashed on first load, after being installed on ubuntu 9.04.
+044 ==> 
