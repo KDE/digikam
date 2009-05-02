@@ -51,6 +51,7 @@ INSTALL(FILES splash-digikam.png
               assistant-tooltips.png
               assistant-metadata.png
               assistant-preview.png
+              assistant-openfile.png
               assistant-scancollection.png
          DESTINATION ${DATA_INSTALL_DIR}/digikam/data 
        )
