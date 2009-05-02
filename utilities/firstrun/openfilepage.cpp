@@ -99,10 +99,10 @@ OpenFilePage::OpenFilePage(KAssistantDialog* dlg)
     label2->setWordWrap(true);
     label2->setText(i18n("<qt>"
                          "<p><i>Note:</i> using preview is always faster than to use editor, "
-                         "especially to check a shots serie. But, you cannot change or fix image in "
+                         "especially to check a serie of shots. But, you cannot change or fix image with "
                          "preview mode. "
-                         "Anyway, if you to compare images quicly, the better way is to use light table. "
-                         "where you can display images side by side and perform synchronized zoom and pan.</p>"
+                         "Anyway, if you want to compare images quicly, the better way is to use light table. "
+                         "With this tool, you can display images side by side and perform synchronized zoom and pan.</p>"
                          "</qt>"));
 
     setPageWidget(vbox);
