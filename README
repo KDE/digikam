@@ -110,8 +110,8 @@ computer to compile digiKam.
 
 CMake compilation option de customized for digiKam:
 
-Use CMake "-DENABLE_GPHOTO2=no" flag to compile digiKam without libgphoto2 support (enabled by default).
-Use CMake "-DENABLE_GPHOTO2=yes" flag to compile digiKam theme designer (disabled by default).
+Use CMake "-DENABLE_GPHOTO2=no"        flag to compile digiKam without libgphoto2 support (enabled by default).
+Use CMake "-DENABLE_THEMEDESIGNER=yes" flag to compile digiKam theme designer (disabled by default).
 
 -- INSTALLATION --------------------------------------------------------
 
@@ -127,7 +127,12 @@ just use something like that:
 Usual CMake options :
 
 -DCMAKE_INSTALL_PREFIX : decide where the program will be install on your computer.
--DCMAKE_BUILD_TYPE     : decide which type of build you want. You can chose between "debugfull", "debug", "profile", "relwithdebinfo" and "release". The default is "relwithdebinfo" (-O2 -g).
+-DCMAKE_BUILD_TYPE     : decide which type of build you want. You can chose between:
+                         "debugfull".     : for hacking. Include all debug informations.
+                         "debug".
+                         "profile".
+                         "relwithdebinfo" : default. use gcc -O2 -g options.
+                         "release"        : generate stripped and optimized bin files. For packaging.
 
 Compared to old KDE3 autoconf options:
 
