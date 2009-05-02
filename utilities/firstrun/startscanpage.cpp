@@ -45,7 +45,7 @@ StartScanPage::StartScanPage(KAssistantDialog* dlg)
     text->setOpenExternalLinks(true);
     text->setText(i18n("<qt>"
                        "<p>Congratulation. Your minimal setup is done.</p>"
-                       "<p>You can customize more settings using the digiKam configuration panel. "
+                       "<p>Don't forget that you can customize more settings using the digiKam configuration panel. "
                        "To learn more about the digiKam world, we recommend to read the <b>digiKam handbook</b> "
                        "using the Help/Handbook menu entry (you need to install the separate digiKam documentation package). "
                        "You can also read the manual online from "
@@ -53,8 +53,9 @@ StartScanPage::StartScanPage(KAssistantDialog* dlg)
                        "<p>Press <b>Finish</b> to close this assistant. digiKam will scan your "
                        "collection to register all items in the database.</p>"
                        "<p><i>Note:</i> depending of your collection size, this operation can take a while. "
-                       "At next start-up digiKam will only scan your collection to identify new items. "
-                       "It will be more faster.</p>"
+		       "If you cancel scanning operation, it will start again at next digiKam session.</p>"
+                       "<p>When scanning will be completed, at next start-up, digiKam will check your collection "
+                       "to identify only new items. It will be more faster.</p>"
                        "</qt>"));
 
     setPageWidget(vbox);
