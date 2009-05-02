@@ -46,6 +46,7 @@ INSTALL(FILES splash-digikam.png
               indicator-gray.png
               indicator-green.png
               indicator-red.png
+              assistant-collection.png
               assistant-rawimport.png
               assistant-tooltips.png
               assistant-metadata.png
