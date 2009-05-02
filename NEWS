@@ -56,4 +56,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 041 ==> 190612 : digiKam and Showfoto crash.
 042 ==> 191092 : No images shown in digikam albums.
 043 ==> 191203 : digiKam crashed on first load, after being installed on ubuntu 9.04.
-044 ==> 
+044 ==> 151321 : Remaining space incorrectly calculated when using symlinks (import from camera).
+045 ==> 
