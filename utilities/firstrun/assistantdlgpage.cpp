@@ -77,9 +77,11 @@ AssistantDlgPage::AssistantDlgPage(KAssistantDialog* dlg, const QString& title)
                                .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     
     QLabel *space    = new QLabel(vbox);
-    vbox->setStretchFactor(space, 10);
     d->leftBottomPix = new QLabel(vbox);
     d->leftBottomPix->setAlignment(Qt::AlignBottom);
+    vbox->setStretchFactor(space, 10);
+    vbox->setMargin(KDialog::spacingHint());
+    vbox->setSpacing(KDialog::spacingHint());
 
     KSeparator *line = new KSeparator(Qt::Vertical, panel);
 
