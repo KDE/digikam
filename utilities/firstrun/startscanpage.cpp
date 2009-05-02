@@ -45,13 +45,13 @@ StartScanPage::StartScanPage(KAssistantDialog* dlg)
     text->setOpenExternalLinks(true);
     text->setText(i18n("<qt>"
                        "<p>Congratulation. Your minimal setup is done.</p>"
-                       "<p>You can customize more settings using digiKam configuration panel. " 
-                       "To learn more about digiKam world, we recommend to read <b>digiKam handbook</b> "
-                       "using Help/Handbook menu entry (you need to install separate digiKam documentation package). "
-                       "You can also read manual online from "
+                       "<p>You can customize more settings using the digiKam configuration panel. "
+                       "To learn more about the digiKam world, we recommend to read the <b>digiKam handbook</b> "
+                       "using the Help/Handbook menu entry (you need to install the separate digiKam documentation package). "
+                       "You can also read the manual online from "
                        "<a href='http://www.digikam.org/docs'>digikam.org website</a>.</p>"
                        "<p>Press <b>Finish</b> to close this assistant. digiKam will scan your "
-                       "collection to register all items in database.</p>"
+                       "collection to register all items in the database.</p>"
                        "<p><i>Note:</i> depending of your collection size, this operation can take a while. "
                        "At next start-up digiKam will only scan your collection to identify new items. "
                        "It will be more faster.</p>"
@@ -60,7 +60,7 @@ StartScanPage::StartScanPage(KAssistantDialog* dlg)
     setPageWidget(vbox);
 
     QPixmap leftPix = KStandardDirs::locate("data","digikam/data/assistant-scancollection.png");
-    setLeftBottomPix(leftPix.scaledToWidth(128, Qt::SmoothTransformation)); 
+    setLeftBottomPix(leftPix.scaledToWidth(128, Qt::SmoothTransformation));
 }
 
 StartScanPage::~StartScanPage()
