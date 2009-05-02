@@ -80,12 +80,11 @@ public:
 
     ContextMenuHelperPriv()
     {
+        parent              = 0;
         gotoAlbumAction     = 0;
         gotoDateAction      = 0;
-        parent              = 0;
         setThumbnailAction  = 0;
         stdActionCollection = 0;
-        parent              = 0;
         ABCmenu             = 0;
     }
 
