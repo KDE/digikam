@@ -38,7 +38,7 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "initializationobserver.h"
+#include "collectionscannerobserver.h"
 
 namespace Digikam
 {
@@ -55,6 +55,7 @@ class ScanController : public QThread, public InitializationObserver
 public:
 
     static ScanController *instance();
+    /** Wait for the thread to finish. Returns after all tasks are done. */
     void shutDown();
 
     enum Advice
@@ -98,6 +99,16 @@ public:
      * The scan is finished when returning from the method.
      */
     void scanFileDirectly(const QString &filePath);
+
+    /** If the controller is currently processing a database update
+     *  (typically after first run),
+     *  cancel this hard and as soon as possible. Any progress may be lost. */
+    void abortInitialization();
+
+    /** If the controller is currently doing a complete scan
+     *  (typically at startup), stop this operation.
+     *  It can be resumed later. */
+    void cancelCompleteScan();
 
     /** Temporarily suspend collection scanning.
      *  All scheduled scanning tasks are queued
@@ -163,8 +174,9 @@ private:
     virtual void moreSchemaUpdateSteps(int numberOfSteps);
     virtual void schemaUpdateProgress(const QString &message, int numberOfSteps);
     virtual void finishedSchemaUpdate(UpdateResult result);
-    virtual void connectCollectionScanner(CollectionScanner *scanner) ;
+    virtual void connectCollectionScanner(CollectionScanner *scanner);
     virtual void error(const QString &errorMessage);
+    virtual bool continueQuery();
 
     void createProgressDialog();
 

@@ -70,6 +70,20 @@
 namespace Digikam
 {
 
+class SimpleCollectionScannerObserver : public CollectionScannerObserver
+{
+public:
+
+    SimpleCollectionScannerObserver(bool *var) : m_continue(var)
+    {
+        *m_continue = true;
+    }
+
+    bool continueQuery() { return *m_continue; }
+
+    bool *m_continue;
+};
+
 class ScanControllerPriv
 {
 public:
@@ -99,6 +113,9 @@ public:
 
     QMutex                    mutex;
     QWaitCondition            condVar;
+
+    bool                      continueInitialization;
+    bool                      continueScan;
 
     QEventLoop               *eventLoop;
 
@@ -368,6 +385,20 @@ void ScanController::scanFileDirectly(const QString &filePath)
     resumeCollectionScan();
 }
 
+void ScanController::abortInitialization()
+{
+    QMutexLocker lock(&d->mutex);
+    d->needsInitialization = false;
+    d->continueInitialization = false;
+}
+
+void ScanController::cancelCompleteScan()
+{
+    QMutexLocker lock(&d->mutex);
+    d->needsCompleteScan = false;
+    d->continueScan = false;
+}
+
 void ScanController::suspendCollectionScan()
 {
     QMutexLocker lock(&d->mutex);
@@ -416,6 +447,7 @@ void ScanController::run()
 
         if (doInit)
         {
+            d->continueInitialization = true;
             // pass "this" as InitializationObserver
             bool success = DatabaseAccess::checkReadyForUse(this);
             // If d->advice has not been adjusted to a value indicating failure, do this here
@@ -429,6 +461,8 @@ void ScanController::run()
             connectCollectionScanner(&scanner);
             scanner.recordHints(d->albumHints);
             scanner.recordHints(d->itemHints);
+            SimpleCollectionScannerObserver observer(&d->continueScan);
+            scanner.setObserver(&observer);
             scanner.completeScan();
             emit completeScanDone();
         }
@@ -564,6 +598,13 @@ void ScanController::error(const QString &errorMessage)
 {
     // not from main thread
     emit errorFromInitialization(errorMessage);
+}
+
+// implementing InitializationObserver
+bool ScanController::continueQuery()
+{
+    // not from main thread
+    return d->continueInitialization;
 }
 
 void ScanController::slotErrorFromInitialization(const QString &errorMessage)
