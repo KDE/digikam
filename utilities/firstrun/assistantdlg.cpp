@@ -35,6 +35,7 @@
 #include "rawpage.h"
 #include "metadatapage.h"
 #include "previewpage.h"
+#include "openfilepage.h"
 #include "tooltipspage.h"
 #include "startscanpage.h"
 
@@ -52,6 +53,7 @@ public:
         rawPage        = 0;
         metadataPage   = 0;
         previewPage    = 0;
+        openFilePage   = 0;
         tooltipsPage   = 0;
         startScanPage  = 0;
     }
@@ -61,6 +63,7 @@ public:
     RawPage        *rawPage;
     MetadataPage   *metadataPage;
     PreviewPage    *previewPage;
+    OpenFilePage   *openFilePage;
     TooltipsPage   *tooltipsPage;
     StartScanPage  *startScanPage;
 };
@@ -75,6 +78,7 @@ AssistantDlg::AssistantDlg(QWidget* parent)
     d->rawPage        = new RawPage(this);
     d->metadataPage   = new MetadataPage(this);
     d->previewPage    = new PreviewPage(this);
+    d->openFilePage   = new OpenFilePage(this);
     d->tooltipsPage   = new TooltipsPage(this);
 
     // NOTE: Added here new assistant pages...
@@ -119,6 +123,7 @@ void AssistantDlg::slotFinishPressed()
     d->rawPage->saveSettings();
     d->metadataPage->saveSettings();
     d->previewPage->saveSettings();
+    d->openFilePage->saveSettings();
     d->tooltipsPage->saveSettings();
 }
 
