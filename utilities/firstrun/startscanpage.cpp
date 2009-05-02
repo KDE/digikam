@@ -31,6 +31,7 @@
 
 #include <kvbox.h>
 #include <klocale.h>
+#include <kstandarddirs.h>
 
 namespace Digikam
 {
@@ -57,6 +58,9 @@ StartScanPage::StartScanPage(KAssistantDialog* dlg)
                        "</qt>"));
 
     setPageWidget(vbox);
+
+    QPixmap leftPix = KStandardDirs::locate("data","digikam/data/assistant-scancollection.png");
+    setLeftBottomPix(leftPix.scaledToWidth(128, Qt::SmoothTransformation)); 
 }
 
 StartScanPage::~StartScanPage()
