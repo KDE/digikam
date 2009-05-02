@@ -102,7 +102,7 @@ CollectionPage::CollectionPage(KAssistantDialog* dlg)
                              "<br/> "
                              "More folders can be added later under the <i>Settings</i> menu. "
                              "</p> "
-                             "<p>Note: removable media (such as USB drives or DVDs) and remote file systems "
+                             "<p><i>Note:</i> removable media (such as USB drives or DVDs) and remote file systems "
                              "(such as NFS, or Samba mounted with cifs/smbfs) are supported.</p>") );
 #else
     textLabel1->setText(i18n("<p>Please enter a location where you want to store your images.</p> "
