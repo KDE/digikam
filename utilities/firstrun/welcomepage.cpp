@@ -40,13 +40,13 @@ namespace Digikam
 {
 
 WelcomePage::WelcomePage(KAssistantDialog* dlg)
-           : AssistantDlgPage(dlg, i18n("Welcome To digiKam %1", QString(digikam_version_short)))
+           : AssistantDlgPage(dlg, i18n("Welcome to digiKam %1", QString(digikam_version_short)))
 {
     KVBox *vbox   = new KVBox(this);
     QLabel *title = new QLabel(vbox);
     title->setWordWrap(true);
     title->setText(i18n("<qt>"
-                        "<p><h1><b>Welcome To digiKam %1</b></h1></p>"
+                        "<p><h1><b>Welcome to digiKam %1</b></h1></p>"
                         "<p>digiKam is an advanced digital photo management application published "
                         "in open-source.</p>"
                         "<p>This assistant will help you to configure first run settings to be able to "
