@@ -137,6 +137,9 @@ CollectionPage::CollectionPage(KAssistantDialog* dlg)
 
     setPageWidget(widget);
 
+    QPixmap leftPix = KStandardDirs::locate("data","digikam/data/assistant-collection.png");
+    setLeftBottomPix(leftPix.scaledToWidth(128, Qt::SmoothTransformation)); 
+
     connect(d->rootAlbumPathRequester, SIGNAL(urlSelected(const KUrl&)),
             this, SLOT(slotAlbumRootChanged(const KUrl&)));
 
