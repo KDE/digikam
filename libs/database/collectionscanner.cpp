@@ -57,6 +57,7 @@
 #include "databasetransaction.h"
 #include "imagescanner.h"
 #include "collectionscannerhints.h"
+#include "collectionscannerobserver.h"
 
 namespace Digikam
 {
@@ -89,6 +90,7 @@ public:
     CollectionScannerPriv()
     {
         wantSignals = false;
+        observer    = 0;
     }
 
     QSet<QString>     nameFilters;
@@ -106,8 +108,17 @@ public:
                       itemHints;
     QHash<int,int>    establishedSourceAlbums;
 
+    CollectionScannerObserver *observer;
+
     void resetRemovedItemsTime() { removedItemsTime = QDateTime(); }
     void removedItems() { removedItemsTime = QDateTime::currentDateTime(); }
+
+    inline bool checkObserver()
+    {
+        if (observer)
+            return observer->continueQuery();
+        return true;
+    }
 };
 
 CollectionScanner::CollectionScanner()
@@ -156,6 +167,11 @@ void CollectionScanner::loadNameFilters()
     d->nameFilters = d->imageFilterSet + d->audioFilterSet + d->videoFilterSet;
 }
 
+void CollectionScanner::setObserver(CollectionScannerObserver *observer)
+{
+    d->observer = observer;
+}
+
 void CollectionScanner::completeScan()
 {
     emit startCompleteScan();
@@ -179,17 +195,36 @@ void CollectionScanner::completeScan()
         emit totalFilesToScan(count);
     }
 
+    if (!d->checkObserver())
+    {
+        emit cancelled();
+        return;
+    }
+
     // if we have no hints to follow, clean up all stale albums
     if (d->albumHints.isEmpty())
         DatabaseAccess().db()->deleteStaleAlbums();
 
     scanForStaleAlbums(allLocations);
 
+    if (!d->checkObserver())
+    {
+        emit cancelled();
+        return;
+    }
+
     if (d->wantSignals)
         emit startScanningAlbumRoots();
 
     foreach (const CollectionLocation &location, allLocations)
         scanAlbumRoot(location);
+
+    // do not continue to clean up without a complete scan!
+    if (!d->checkObserver())
+    {
+        emit cancelled();
+        return;
+    }
 
     updateRemovedItemsTime();
     // Items may be set to status removed, without being definitely deleted.
@@ -257,10 +292,22 @@ void CollectionScanner::partialScan(const QString &albumRoot, const QString& alb
     //TODO: This can be optimized, no need to always scan the whole location
     scanForStaleAlbums(QList<CollectionLocation>() << location);
 
+    if (!d->checkObserver())
+    {
+        emit cancelled();
+        return;
+    }
+
     if (album == "/")
         scanAlbumRoot(location);
     else
         scanAlbum(location, album);
+
+    if (!d->checkObserver())
+    {
+        emit cancelled();
+        return;
+    }
 
     updateRemovedItemsTime();
 }
@@ -477,9 +524,6 @@ void CollectionScanner::scanAlbum(const CollectionLocation &location, const QStr
 
     int albumID = checkAlbum(location, album);
 
-    // mark album as scanned
-    d->scannedAlbums << albumID;
-
     QList<ItemScanInfo> scanInfos = DatabaseAccess().db()->getItemScanInfos(albumID);
 
     // create a hash filename -> index in list
@@ -496,6 +540,9 @@ void CollectionScanner::scanAlbum(const CollectionLocation &location, const QStr
 
     for (fi = list.constBegin(); fi != list.constEnd(); ++fi)
     {
+        if (!d->checkObserver())
+            return; // return directly, do not go to cleanup code after loop!
+
         if ( fi->isFile())
         {
             // filter with name filter
@@ -563,6 +610,9 @@ void CollectionScanner::scanAlbum(const CollectionLocation &location, const QStr
         DatabaseAccess().db()->removeItems(itemIdSet.toList(), QList<int>() << albumID);
         d->removedItems();
     }
+
+    // mark album as scanned
+    d->scannedAlbums << albumID;
 
     if (d->wantSignals)
         emit finishedScanningAlbum(location.albumRootPath(), album, list.count());

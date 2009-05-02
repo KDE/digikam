@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef INITIALIZATIONOBSERVER_H
-#define INITIALIZATIONOBSERVER_H
+#ifndef COLLECTIONSCANNEROBSERVER_H
+#define COLLECTIONSCANNEROBSERVER_H
 
 // Qt includes
 
@@ -37,7 +37,14 @@ namespace Digikam
 
 class CollectionScanner;
 
-class DIGIKAM_DATABASE_EXPORT InitializationObserver
+class DIGIKAM_DATABASE_EXPORT CollectionScannerObserver
+{
+public:
+    virtual ~CollectionScannerObserver() {}
+    virtual bool continueQuery() = 0;
+};
+
+class DIGIKAM_DATABASE_EXPORT InitializationObserver : public CollectionScannerObserver
 {
 public:
 
@@ -61,4 +68,4 @@ public:
 
 }  // namespace Digikam
 
-#endif // INITIALIZATIONOBSERVER_H
+#endif // COLLECTIONSCANNEROBSERVER_H

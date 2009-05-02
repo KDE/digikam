@@ -57,7 +57,7 @@
 #include "collectionlocation.h"
 #include "collectionscanner.h"
 #include "imagequerybuilder.h"
-#include "initializationobserver.h"
+#include "collectionscannerobserver.h"
 
 namespace Digikam
 {
@@ -84,6 +84,9 @@ bool SchemaUpdater::update()
 {
     kDebug(50003) << "SchemaUpdater update" << endl;
     bool success = startUpdates();
+    // cancelled?
+    if (m_observer && !m_observer->continueQuery())
+        return false;
     // even on failure, try to set current version - it may have incremented
     m_access->db()->setSetting("DBVersion",QString::number(m_currentVersion));
     if (!success)
@@ -249,19 +252,27 @@ bool SchemaUpdater::makeUpdates()
             if (!updateV4toV5())
             {
                 m_access->backend()->rollbackTransaction();
-                if (m_observer && !m_setError)
+                if (m_observer)
                 {
-                    QFileInfo currentDBFile(m_access->parameters().databaseName);
-                    QString errorMsg = i18n("The schema updating process from version 4 to 5 failed, "
-                                            "caused by an error that we did not expect. "
-                                            "You can try to discard your old database and start with an empty one. "
-                                            "(In this case, please move the database files "
-                                            "\"%1\" and \"%2\" from the directory \"%3\"). "
-                                            "More probably you will want to report this error to the digikam-devel@kde.org "
-                                            "mailing list. As well, please have a look at what digiKam prints on the console. ",
-                                            QString("digikam3.db"), QString("digikam4.db"), currentDBFile.dir().path());
-                    m_observer->error(errorMsg);
-                    m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
+                    // error or cancelled?
+                    if (!m_observer->continueQuery())
+                    {
+                        kDebug(50003) << "Schema update cancelled by user";
+                    }
+                    else if (!m_setError)
+                    {
+                        QFileInfo currentDBFile(m_access->parameters().databaseName);
+                        QString errorMsg = i18n("The schema updating process from version 4 to 5 failed, "
+                                                "caused by an error that we did not expect. "
+                                                "You can try to discard your old database and start with an empty one. "
+                                                "(In this case, please move the database files "
+                                                "\"%1\" and \"%2\" from the directory \"%3\"). "
+                                                "More probably you will want to report this error to the digikam-devel@kde.org "
+                                                "mailing list. As well, please have a look at what digiKam prints on the console. ",
+                                                QString("digikam3.db"), QString("digikam4.db"), currentDBFile.dir().path());
+                        m_observer->error(errorMsg);
+                        m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
+                    }
                 }
                 return false;
             }
@@ -810,7 +821,11 @@ bool SchemaUpdater::updateV4toV5()
 {
     kDebug(50003) << "updateV4toV5" << endl;
     if (m_observer)
+    {
+        if (!m_observer->continueQuery())
+            return false;
         m_observer->moreSchemaUpdateSteps(11);
+    }
 
     // This update was introduced from digikam version 0.9 to digikam 0.10
     // We operator on an SQLite3 database under a transaction (which will be rolled back on error)
@@ -839,7 +854,11 @@ bool SchemaUpdater::updateV4toV5()
     m_access->backend()->execSql(QString("DROP INDEX tag_index;"));
 
     if (m_observer)
+    {
+        if (!m_observer->continueQuery())
+            return false;
         m_observer->schemaUpdateProgress(i18n("Prepared table creation"));
+    }
     kDebug(50003) << "Dropped triggers" << endl;
 
     // --- Create new tables ---
@@ -848,7 +867,11 @@ bool SchemaUpdater::updateV4toV5()
         return false;
 
     if (m_observer)
+    {
+        if (!m_observer->continueQuery())
+            return false;
         m_observer->schemaUpdateProgress(i18n("Created tables"));
+    }
 
     // --- Populate AlbumRoots (from config) ---
 
@@ -896,7 +919,11 @@ bool SchemaUpdater::updateV4toV5()
     }
 
     if (m_observer)
+    {
+        if (!m_observer->continueQuery())
+            return false;
         m_observer->schemaUpdateProgress(i18n("Configured one album root"));
+    }
     kDebug(50003) << "Inserted album root" << endl;
 
     // --- With the album root, populate albums ---
@@ -912,7 +939,11 @@ bool SchemaUpdater::updateV4toV5()
         return false;
 
     if (m_observer)
+    {
+        if (!m_observer->continueQuery())
+            return false;
         m_observer->schemaUpdateProgress(i18n("Imported albums"));
+    }
     kDebug(50003) << "Populated albums" << endl;
 
     // --- Add images ---
@@ -931,7 +962,11 @@ bool SchemaUpdater::updateV4toV5()
     m_access->backend()->execSql(QString("DELETE FROM Images WHERE album NOT IN (SELECT id FROM Albums);"));
 
     if (m_observer)
+    {
+        if (!m_observer->continueQuery())
+            return false;
         m_observer->schemaUpdateProgress(i18n("Imported images information"));
+    }
 
     kDebug(50003) << "Populated Images" << endl;
 
@@ -1004,17 +1039,28 @@ bool SchemaUpdater::updateV4toV5()
     kDebug(50003) << "Set initial filter settings with user settings" << configImageFilter << endl;
 
     if (m_observer)
+    {
+        if (!m_observer->continueQuery())
+            return false;
         m_observer->schemaUpdateProgress(i18n("Initialized and imported file suffix filter"));
+    }
 
     // --- do a full scan ---
 
     CollectionScanner scanner;
     if (m_observer)
+    {
         m_observer->connectCollectionScanner(&scanner);
+        scanner.setObserver(m_observer);
+    }
     scanner.completeScan();
 
     if (m_observer)
+    {
+        if (!m_observer->continueQuery())
+            return false;
         m_observer->schemaUpdateProgress(i18n("Did the initial full scan"));
+    }
 
     // --- Port date, comment and rating (_after_ the scan) ---
 
@@ -1029,7 +1075,11 @@ bool SchemaUpdater::updateV4toV5()
          return false;
 
     if (m_observer)
+    {
+        if (!m_observer->continueQuery())
+            return false;
         m_observer->schemaUpdateProgress(i18n("Imported creation dates"));
+    }
 
     // Port ImagesV3.comment to ImageComments
     if (!m_access->backend()->execSql(QString(
@@ -1042,7 +1092,11 @@ bool SchemaUpdater::updateV4toV5()
          return false;
 
     if (m_observer)
+    {
+        if (!m_observer->continueQuery())
+            return false;
         m_observer->schemaUpdateProgress(i18n("Imported comments"));
+    }
 
     // Port rating storage in ImageProperties to ImageInformation
     if (!m_access->backend()->execSql(QString(
@@ -1059,7 +1113,11 @@ bool SchemaUpdater::updateV4toV5()
     m_access->backend()->execSql(QString("UPDATE ImageInformation SET rating=0 WHERE rating<0;"));
 
     if (m_observer)
+    {
+        if (!m_observer->continueQuery())
+            return false;
         m_observer->schemaUpdateProgress(i18n("Imported ratings"));
+    }
 
     // --- Drop old tables ---
 

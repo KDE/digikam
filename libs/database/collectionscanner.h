@@ -44,6 +44,7 @@ namespace Digikam
 {
 
 class CollectionLocation;
+class CollectionScannerObserver;
 class CollectionScannerPriv;
 class AlbumCopyMoveHint;
 class ItemCopyMoveHint;
@@ -106,7 +107,12 @@ public:
      * typically by setting the albums as orphan
      * and removing all entries from the albums
      */
-     void safelyRemoveAlbums(const QList<int> &albumIds);
+    void safelyRemoveAlbums(const QList<int> &albumIds);
+
+    /**
+     * Set an observer to be able to cancel a running scan
+     */
+    void setObserver(CollectionScannerObserver *observer);
 
 protected:
 
@@ -116,106 +122,6 @@ protected:
     int checkAlbum(const CollectionLocation &location, const QString &album);
     void scanNewFile(const QFileInfo &info, int albumId);
     void scanModifiedFile(const QFileInfo &info, const ItemScanInfo &scanInfo);
-
-#if 0
-    /**
-     * Sets a filter for the file formats which shall be included in the collection.
-     * The string is a list of name wildcards (understanding * and ?),
-     * separated by ';' characters.
-     * Example: "*.jpg;*.png"
-     */
-    void setNameFilters(const QString &filters);
-    /**
-     * Sets a filter for the file formats which shall be included in the collection.
-     * Each name filter in the list is a wildcard (globbing)
-     * filter that understands * and ? wildcards (see QDir::setNameFilters)
-     */
-    void setNameFilters(const QStringList &filters);
-
-    /**
-     * Carries out a full scan (for new albums + new pictures,
-     * stale albums, stale pictures) on the given path.
-     * @param filePath a folder somewhere in the collection
-     */
-    void scan(const QString &filePath);
-    /**
-     * Same procedure as above, but albumRoot and album is provided.
-     */
-    void scan(const QString &albumRoot, const QString& album);
-    /**
-     * Scans all album roots (for new albums + new pictures).
-     * Does not carry out the full scan, you need to call
-     * scanForStaleAlbums, removeStaleAlbums, removeStaleFiles yourself.
-     * Emits totalFilesToScan, startScanningAlbum, finishedScanningAlbum.
-     */
-    void scanAlbums();
-
-    /**
-     * Scans the album and all subalbums on the given path.
-     * (for new albums + new pictures)
-     */
-    void scanAlbum(const QString& filePath);
-    /**
-     * Scans the album and all subalbums on given album/albumRoot.
-     * (for new albums + new pictures)
-     */
-    void scanAlbum(const QString &albumRoot, const QString& album);
-
-    /**
-     * Scans all albums roots for stale albums, i.e. albums
-     * found in the db for which the corresponding folder on
-     * the disk does no longer exist.
-     */
-    void scanForStaleAlbums();
-    /**
-     * Scans the given albums root for stale albums, like the method above.
-     */
-    void scanForStaleAlbums(const QString &albumRoot);
-    /**
-     * Returns a list of the stale albums found by scanForStaleAlbums.
-     */
-    QStringList formattedListOfStaleAlbums();
-    /**
-     * Removes the stale albums found by scanForStaleAlbums from the database.
-     */
-    void removeStaleAlbums();
-
-    /**
-     * Returns a list of the stale files found by
-     * one of the scan/scanAlbum/scanAlbums methods.
-     * A stale file is a file which does not longer exist on disk,
-     * but still has an entry in the database.
-     */
-    QStringList formattedListOfStaleFiles();
-    /**
-     * Remove the found stale files from the database.
-     * See above for a definition of "stale files".
-     */
-    void removeStaleFiles();
-
-    /**
-     * Finds all items for which the date in not contained in the database,
-     * scan them and insert the date into the db.
-     */
-    void updateItemsWithoutDate();
-
-    // Tools
-    /**
-     * Adds an item with the given file name found in the album pointed to by
-     * albumID, albumRoot, album name to the database.
-     * This method should always be used when inserting new files found on disk.
-     * It reads metadata from the file and adds the data into the db.
-     */
-    static void addItem(int albumID, const QString& albumRoot, const QString &album, const QString &name);
-    static void addItem(DatabaseAccess &access, int albumID,
-                        const QString& albumRoot, const QString &album, const QString &name);
-    /**
-     * Updates the date field of the item. See above for parameter description.
-     */
-    static void updateItemDate(int albumID, const QString& albumRoot, const QString &album, const QString &fileName);
-    static void updateItemDate(Digikam::DatabaseAccess &access, int albumID,
-                               const QString& albumRoot, const QString &album, const QString &fileName);
-#endif
 
 Q_SIGNALS:
 
@@ -242,6 +148,10 @@ Q_SIGNALS:
     void finishedScanningAlbum(const QString &albumRoot, const QString &album, int filesScanned);
     void finishedScanningForStaleAlbums();
     void finishedCompleteScan();
+    /**
+     * Emitted when the observer told to cancel the scan
+     */
+    void cancelled();
 
 protected:
 
