@@ -98,7 +98,7 @@ OpenFilePage::OpenFilePage(KAssistantDialog* dlg)
     QLabel *label2 = new QLabel(vbox);
     label2->setWordWrap(true);
     label2->setText(i18n("<qt>"
-                         "<p><i>Note:</i> using preview is always faster than to use editor, 
+                         "<p><i>Note:</i> using preview is always faster than to use editor, "
                          "especially to check a shots serie. But, you cannot change or fix image in "
                          "preview mode. "
                          "Anyway, if you to compare images quicly, the better way is to use light table. "
