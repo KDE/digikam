@@ -100,6 +100,9 @@ RawPage::RawPage(KAssistantDialog* dlg)
                          "</qt>"));
 
     setPageWidget(vbox);
+
+    QPixmap leftPix = KStandardDirs::locate("data","digikam/data/assistant-rawimport.png");
+    setLeftBottomPix(leftPix.scaledToWidth(128, Qt::SmoothTransformation)); 
 }
 
 RawPage::~RawPage()
