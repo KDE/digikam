@@ -121,8 +121,8 @@ void OpenFilePage::saveSettings()
     KSharedConfig::Ptr config = KGlobal::config();
 
     KConfigGroup group = config->group("Album Settings");
-    group.writeEntry("Item Right Click Action", d->openInEditor->isChecked() ? 
-                                                AlbumSettings::StartEditor : AlbumSettings::ShowPreview);
+    group.writeEntry("Item Right Click Action", (int)(d->openInEditor->isChecked() ? 
+                                                AlbumSettings::StartEditor : AlbumSettings::ShowPreview));
 
     config->sync();
 }
