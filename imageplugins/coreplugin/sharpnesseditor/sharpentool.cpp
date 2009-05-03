@@ -63,8 +63,8 @@
 #include "imagepanelwidget.h"
 #include "editortoolsettings.h"
 #include "dimgsharpen.h"
-#include "unsharp.h"
-#include "refocus.h"
+#include "dimgunsharpmask.h"
+#include "dimgrefocus.h"
 
 using namespace KDcrawIface;
 using namespace Digikam;
@@ -474,7 +474,7 @@ void SharpenTool::prepareEffect()
             double a  = m_amountInput->value();
             double th = m_thresholdInput->value();
 
-            setFilter(dynamic_cast<DImgThreadedFilter*>(new DigikamImagesPluginCore::UnsharpMask(&img, this, r, a, th)));
+            setFilter(dynamic_cast<DImgThreadedFilter*>(new DImgUnsharpMask(&img, this, r, a, th)));
             break;
         }
 
@@ -500,7 +500,7 @@ void SharpenTool::prepareEffect()
             tmpRect.translate(2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
             DImg imTemp = m_img.copy(tmpRect);
 
-            setFilter(dynamic_cast<DImgThreadedFilter*>(new DigikamImagesPluginCore::Refocus(&imTemp, this, ms, r, g, c, n)));
+            setFilter(dynamic_cast<DImgThreadedFilter*>(new DImgRefocus(&imTemp, this, ms, r, g, c, n)));
             break;
         }
     }
@@ -550,7 +550,7 @@ void SharpenTool::prepareFinal()
             bool hasAlpha   = iface.originalHasAlpha();
             DImg orgImage = DImg(w, h, sixteenBit, hasAlpha ,data);
             delete [] data;
-            setFilter(dynamic_cast<DImgThreadedFilter*>(new DigikamImagesPluginCore::UnsharpMask(&orgImage, this, r, a, th)));
+            setFilter(dynamic_cast<DImgThreadedFilter*>(new DImgUnsharpMask(&orgImage, this, r, a, th)));
             break;
         }
 
@@ -569,7 +569,7 @@ void SharpenTool::prepareFinal()
             double c    = m_correlation->value();
             double n    = m_noise->value();
 
-            setFilter(dynamic_cast<DImgThreadedFilter*>(new DigikamImagesPluginCore::Refocus(&m_img, this, ms, r, g, c, n)));
+            setFilter(dynamic_cast<DImgThreadedFilter*>(new DImgRefocus(&m_img, this, ms, r, g, c, n)));
             break;
         }
     }
