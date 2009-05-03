@@ -145,6 +145,8 @@ void DProgressDlg::slotCancel()
     {
         close();
     }
+
+    emit signalCancelPressed();
 }
 
 void DProgressDlg::setButtonText(const QString &text)

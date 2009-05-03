@@ -62,6 +62,10 @@ public:
 
     int  value();
 
+Q_SIGNALS:
+
+    void signalCancelPressed();
+
 public Q_SLOTS:
 
     void setMaximum(int max);
