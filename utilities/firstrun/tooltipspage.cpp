@@ -95,11 +95,11 @@ TooltipsPage::TooltipsPage(KAssistantDialog* dlg)
     label2->setWordWrap(true);
     label2->setText(i18n("<qt>"
                          "<p><i>Note:</i> tooltips show photograph and digiKam meta-data on the fly, "
-                         "accordingly with mouse move over items. This can be usefull to make items "
-                         "selection. Tooltips are displayed over album folder-view, "
-                         "album icon-view, camera icon-view, batch queue list, and thumb-bar. "
-                         "From digiKam config dialog, you can customize tooltips contents, "
-                         "and fonts.</p>"
+                         "as the mouse moves over items. This can be useful when selecting items. "
+                         "Tooltips are displayed in the album folder view, "
+                         "album icon view, camera icon view, batch queue list, and thumb bar. "
+                         "From the digiKam configuration dialog, you can customize the contents of these "
+                         "tooltips and the fonts used.</p>"
                          "</qt>"));
 
     setPageWidget(vbox);

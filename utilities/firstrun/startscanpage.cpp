@@ -45,18 +45,18 @@ StartScanPage::StartScanPage(KAssistantDialog* dlg)
     text->setOpenExternalLinks(true);
     text->setText(i18n("<qt>"
                        "<p>Congratulation. Your minimal setup is done.</p>"
-                       "<p>Don't forget that you can customize more settings using the digiKam configuration panel. "
-                       "To learn more about the digiKam world, we recommend to read the <b>digiKam handbook</b> "
-                       "using the <b>Help/Handbook</b> menu entry (you need to install the separate digiKam documentation package). "
-                       "You can also read the manual online from "
+                       "<p>Remember, you can customize more settings using the digiKam configuration panel. "
+                       "To learn more about the digiKam world, we recommend reading the <b>digiKam handbook</b> "
+                       "using the <b>Help/Handbook</b> menu entry (you need to install the separate digiKam documentation package.) "
+                       "You can also read the manual online from the "
                        "<a href='http://www.digikam.org/docs'>digikam.org website</a>.</p>"
                        "<p>Press <b>Finish</b> to close this assistant. digiKam will scan your "
                        "collection to register all items in the database.</p>"
                        "<p><i>Note:</i> depending of your collection size, this operation can take a while. "
-		       "If you cancel scanning operation, it will start again at next digiKam session.</p>"
-                       "<p>When scanning will be completed, at next start-up, digiKam will check your collection "
-                       "to identify only new items. It will be more faster. This opeartion can be started also "
-                       "manually using <b>Tool/Scan for New Images</b> menu entry.</p>"
+		       "If you cancel the scanning operation, it will start again at next digiKam session.</p>"
+                       "<p>When scanning has completed, at next start-up, digiKam will only check your collection "
+                       "to identify new items - which is much faster. Scanning for images can also be started "
+                       "manually using the <b>Tool/Scan for New Images</b> menu entry.</p>"
                        "</qt>"));
 
     setPageWidget(vbox);
