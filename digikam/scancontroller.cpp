@@ -298,6 +298,14 @@ void ScanController::createProgressDialog()
 
     connect(this, SIGNAL(incrementProgressDialog(int)),
             d->progressDialog, SLOT(incrementMaximum(int)));
+
+    connect(d->progressDialog, SIGNAL(signalCancelPressed()),
+            this, SLOT(slotCancelPressed()));
+}
+
+void ScanController::slotCancelPressed()
+{
+    cancelCompleteScan();
 }
 
 void ScanController::slotTriggerShowProgressDialog()

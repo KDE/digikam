@@ -159,6 +159,7 @@ private Q_SLOTS:
 
     void slotShowProgressDialog();
     void slotTriggerShowProgressDialog();
+    void slotCancelPressed();
 
     void slotProgressFromInitialization(const QString &message, int numberOfSteps);
     void slotErrorFromInitialization(const QString &errorMessage);
