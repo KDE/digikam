@@ -1,5 +1,6 @@
 include_directories( dimg
                      dimg/filters
+                     dimg/filters/clapack
                      dimg/loaders
                      whitebalance
                      dmetadata 
