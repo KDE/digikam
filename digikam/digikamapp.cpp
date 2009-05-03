@@ -109,6 +109,7 @@
 #include "batchthumbsgenerator.h"
 #include "cameratype.h"
 #include "cameraui.h"
+#include "collectionscanner.h"
 #include "componentsinfo.h"
 #include "digikamadaptor.h"
 #include "dio.h"
@@ -161,7 +162,7 @@ DigikamApp::DigikamApp()
 
     // collection scan
     if (d->config->group("General Settings").readEntry("Scan At Start", true) ||
-        Digikam::DatabaseAccess().db()->getSetting("Scanned").isEmpty())
+        !CollectionScanner::databaseInitialScanDone())
     {
         Digikam::ScanController::instance()->completeCollectionScan(d->splashScreen);
     }
