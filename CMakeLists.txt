@@ -653,8 +653,9 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/welcomepage.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/collectionpage.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/rawpage.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/previewpage.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/tooltipspage.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/previewpage.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/openfilepage.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/metadatapage.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/startscanpage.cpp
        )
