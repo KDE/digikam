@@ -54,7 +54,7 @@ private:
     enum SharpenType {
 	SimpleSharp,
 	UnsharpMask,
-	Refocus,
+	Refocus
     };
 	
     void assignSettings2Widget();
