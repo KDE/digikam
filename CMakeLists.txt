@@ -435,11 +435,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     	${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/xerbla.c
        )
 
-    # Disable Clapack C code warnings.
-	FOREACH(_curentfile ${libclapack_SRCS})
-    	SET_SOURCE_FILES_PROPERTIES(${_curentfile} PROPERTIES COMPILE_FLAGS -w )
-	ENDFOREACH(_curentfile ${libclapack_SRCS})
-	
     SET(libdimgfilters_SRCS
         ${libclapack_SRCS}
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bcgmodifier.cpp

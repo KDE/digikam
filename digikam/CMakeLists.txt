@@ -70,6 +70,9 @@ INCLUDE_DIRECTORIES(
 
 # Shared libdigikamcore ################################################################
 
+# Disable Clapack C code warnings.
+SET_SOURCE_FILES_PROPERTIES(${libclapack_SRCS} PROPERTIES COMPILE_FLAGS "-w" )
+
 SET(digikamcore_LIB_SRCS
                         # basic libs
                         ${libdimg_SRCS}
