@@ -113,6 +113,8 @@ CMake compilation option de customized for digiKam:
 Use CMake "-DENABLE_GPHOTO2=no"        flag to compile digiKam without libgphoto2 support (enabled by default).
 Use CMake "-DENABLE_THEMEDESIGNER=yes" flag to compile digiKam theme designer (disabled by default).
 
+Video thumbs support under Linux : please install "mplayerthumbs" package.
+
 -- INSTALLATION --------------------------------------------------------
 
 In order to compile, especially when QT3/Qt4 are installed at the same time, 
