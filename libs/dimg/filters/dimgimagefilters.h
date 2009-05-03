@@ -120,7 +120,10 @@ public:   // Public methods.
                         int redMask, int greenMask, int blueMask);
     void gaussianBlurImage(uchar *data, int width, int height, bool sixteenBit, int radius);
     void sharpenImage(uchar *data, int width, int height, bool sixteenBit, int radius);
-
+    void unsharpMaskImage(uchar *data, int width, int height, bool sixteenBit, 
+    		int radius, double amount, double threshold);
+    void refocusImage(uchar *data, int width, int height, bool sixteenBit, int matrixSize, 
+    		double radius, double gauss, double correlation, double noise);
     void pixelAntiAliasing(uchar *data, int Width, int Height, double X, double Y,
                            uchar *A, uchar *R, uchar *G, uchar *B);
 

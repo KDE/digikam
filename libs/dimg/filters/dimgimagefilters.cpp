@@ -48,6 +48,8 @@
 #include "dcolor.h"
 #include "dimggaussianblur.h"
 #include "dimgsharpen.h"
+#include "dimgunsharpmask.h"
+#include "dimgrefocus.h"
 
 namespace Digikam
 {
@@ -880,7 +882,42 @@ void DImgImageFilters::sharpenImage(uchar *data, int width, int height, bool six
     DImgSharpen *filter = new DImgSharpen(&orgImage, 0L, radius);
     filter->startFilterDirectly();
     DImg imDest = filter->getTargetImage();
-    memcpy( data, imDest.bits(), imDest.numBytes() );
+    memcpy(data, imDest.bits(), imDest.numBytes());
+    delete filter;
+}
+
+void DImgImageFilters::unsharpMaskImage(uchar *data, int width, int height, bool sixteenBit,
+		int radius, double amount, double threshold)
+{
+    if (!data || !width || !height)
+    {
+       kWarning(50003) << ("DImgImageFilters::unsharpMaskImage: no image data available!") << endl;
+       return;
+    }
+
+    DImg orgImage(width, height, sixteenBit, true, data);
+    DImgUnsharpMask *filter = new DImgUnsharpMask(&orgImage, 0L, radius, amount, threshold);
+    filter->startFilterDirectly();
+    DImg imDest = filter->getTargetImage();
+    memcpy(data, imDest.bits(), imDest.numBytes());
+    delete filter;	
+}
+
+void DImgImageFilters::refocusImage(uchar *data, int width, int height, bool sixteenBit, 
+		int matrixSize, double radius, double gauss, double correlation, double noise)
+{
+    if (!data || !width || !height)
+    {
+       kWarning(50003) << ("DImgImageFilters::refocusImage: no image data available!") << endl;
+       return;
+    }
+
+    DImg orgImage(width, height, sixteenBit, true, data);
+    DImgRefocus *filter = new DImgRefocus(&orgImage, 0L, matrixSize, 
+    		radius, gauss, correlation, noise);
+    filter->startFilterDirectly();
+    DImg imDest = filter->getTargetImage();
+    memcpy(data, imDest.bits(), imDest.numBytes());
     delete filter;
 }
 
