@@ -41,6 +41,7 @@
 #include "flip.h"
 #include "watermark.h"
 #include "metadata.h"
+#include "sharpen.h"
 
 namespace Digikam
 {
@@ -70,6 +71,7 @@ BatchToolsManager::BatchToolsManager(QObject* parent)
     registerTool(new Restoration(this));
     registerTool(new WaterMark(this));
 //    registerTool(new Metadata(this));
+    registerTool(new Sharpen(this));
 }
 
 BatchToolsManager::~BatchToolsManager()
