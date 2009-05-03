@@ -305,6 +305,7 @@ void ScanController::createProgressDialog()
 
 void ScanController::slotCancelPressed()
 {
+    abortInitialization();
     cancelCompleteScan();
 }
 
@@ -316,8 +317,11 @@ void ScanController::slotTriggerShowProgressDialog()
 
 void ScanController::slotShowProgressDialog()
 {
-    if (d->progressDialog && !d->splash)
-        d->progressDialog->show();
+    if (d->progressDialog)
+    {
+        if (!d->splash || !CollectionScanner::databaseInitialScanDone())
+            d->progressDialog->show();
+    }
 }
 
 ScanController::Advice ScanController::databaseInitialization()
