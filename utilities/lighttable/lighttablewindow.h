@@ -71,7 +71,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    void slotItemsUpdated(const KUrl::List&);
+    void slotFileChanged(const QString &filePath);
 
 protected:
 

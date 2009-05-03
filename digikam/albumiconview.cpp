@@ -1056,14 +1056,6 @@ void AlbumIconView::insertToLightTable(const ImageInfoList& list, const ImageInf
 {
     LightTableWindow *ltview = LightTableWindow::lightTableWindow();
 
-    ltview->disconnect(this);
-
-    connect(ltview, SIGNAL(signalFileDeleted(const KUrl&)),
-           this, SLOT(slotFilesModified()));
-
-    connect(this, SIGNAL(signalItemsUpdated(const KUrl::List&)),
-           ltview, SLOT(slotItemsUpdated(const KUrl::List&)));
-
     // If addTo is false, the light table will be emptied before adding
     // the images.
     ltview->loadImageInfos(list, current, addTo);
@@ -1096,11 +1088,6 @@ void AlbumIconView::insertToQueueManager(const ImageInfoList& list, const ImageI
 {
     QueueMgrWindow *bqmview = QueueMgrWindow::queueManagerWindow();
 
-    bqmview->disconnect(this);
-
-    connect(this, SIGNAL(signalItemsUpdated(const KUrl::List&)),
-            bqmview, SLOT(slotItemsUpdated(const KUrl::List&)));
-
     if (bqmview->isHidden())
         bqmview->show();
 
@@ -1116,12 +1103,6 @@ void AlbumIconView::insertToQueueManager(const ImageInfoList& list, const ImageI
 void AlbumIconView::insertSilentToQueueManager(const ImageInfoList& list, const ImageInfo& /*current*/, int queueid)
 {
     QueueMgrWindow *bqmview = QueueMgrWindow::queueManagerWindow();
-
-    bqmview->disconnect(this);
-
-    connect(this, SIGNAL(signalItemsUpdated(const KUrl::List&)),
-            bqmview, SLOT(slotItemsUpdated(const KUrl::List&)));
-
     bqmview->loadImageInfos(list, queueid);
 }
 

@@ -72,6 +72,7 @@
 #include "dmetadata.h"
 #include "albumsettings.h"
 #include "albummanager.h"
+#include "loadingcacheinterface.h"
 #include "deletedialog.h"
 #include "imagewindow.h"
 #include "rawcameradlg.h"
@@ -354,6 +355,11 @@ void LightTableWindow::setupConnections()
 
     connect(this, SIGNAL(signalWindowHasMoved()),
             d->rightZoomBar, SLOT(slotUpdateTrackerPos()));
+
+    // -- FileWatch connections ------------------------------
+
+    LoadingCacheInterface::connectToSignalFileChanged(this,
+            SLOT(slotFileChanged(const QString &)));
 }
 
 void LightTableWindow::setupActions()
@@ -616,28 +622,26 @@ void LightTableWindow::refreshStatusBar()
                    d->barView->countItems()));
 }
 
-void LightTableWindow::slotItemsUpdated(const KUrl::List& urls)
+void LightTableWindow::slotFileChanged(const QString &path)
 {
-    d->barView->reloadThumbs(urls);
+    KUrl url = KUrl::fromPath(path);
+    d->barView->reloadThumbs(url);
 
-    for (KUrl::List::const_iterator it = urls.constBegin() ; it != urls.constEnd() ; ++it)
+    if (!d->previewView->leftImageInfo().isNull())
     {
-        if (!d->previewView->leftImageInfo().isNull())
+        if (d->previewView->leftImageInfo().fileUrl() == url)
         {
-            if (d->previewView->leftImageInfo().fileUrl() == *it)
-            {
-                d->previewView->leftReload();
-                d->leftSideBar->itemChanged(d->previewView->leftImageInfo());
-            }
+            d->previewView->leftReload();
+            d->leftSideBar->itemChanged(d->previewView->leftImageInfo());
         }
+    }
 
-        if (!d->previewView->rightImageInfo().isNull())
+    if (!d->previewView->rightImageInfo().isNull())
+    {
+        if (d->previewView->rightImageInfo().fileUrl() == url)
         {
-            if (d->previewView->rightImageInfo().fileUrl() == *it)
-            {
-                d->previewView->rightReload();
-                d->rightSideBar->itemChanged(d->previewView->rightImageInfo());
-            }
+            d->previewView->rightReload();
+            d->rightSideBar->itemChanged(d->previewView->rightImageInfo());
         }
     }
 }

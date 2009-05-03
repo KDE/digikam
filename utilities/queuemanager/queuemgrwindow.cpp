@@ -84,6 +84,7 @@
 #include "dmetadata.h"
 #include "albumsettings.h"
 #include "albummanager.h"
+#include "loadingcacheinterface.h"
 #include "imagewindow.h"
 #include "rawcameradlg.h"
 #include "imagedialog.h"
@@ -305,6 +306,11 @@ void QueueMgrWindow::setupConnections()
 
     connect(this, SIGNAL(signalWindowHasMoved()),
             d->queueSettingsView, SLOT(slotUpdateTrackerPos()));
+
+    // -- FileWatch connections ------------------------------
+
+    LoadingCacheInterface::connectToSignalFileChanged(this,
+            SLOT(slotFileChanged(const QString &)));
 }
 
 void QueueMgrWindow::setupActions()
@@ -433,7 +439,7 @@ void QueueMgrWindow::setupActions()
     d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
 }
 
-void QueueMgrWindow::slotItemsUpdated(const KUrl::List& /*urls*/)
+void QueueMgrWindow::slotFileChanged(const QString& /*filePath*/)
 {
     // TODO
 }
