@@ -114,6 +114,13 @@ public:
      */
     void setObserver(CollectionScannerObserver *observer);
 
+    /**
+     * Returns if the initial scan of the database has been done.
+     * This is the first complete scan after creation of a new database file
+     * (or update requiring a rescan)
+     */
+    static bool databaseInitialScanDone();
+
 protected:
 
     void scanForStaleAlbums(QList<CollectionLocation> locations);

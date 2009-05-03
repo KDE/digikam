@@ -695,6 +695,12 @@ void CollectionScanner::markDatabaseAsScanned()
     access.db()->setSetting("Scanned", QDateTime::currentDateTime().toString(Qt::ISODate));
 }
 
+bool CollectionScanner::databaseInitialScanDone()
+{
+    DatabaseAccess access;
+    return !access.db()->getSetting("Scanned").isEmpty();
+}
+
 void CollectionScanner::updateRemovedItemsTime()
 {
     // Called after a complete or partial scan finishes, to write the value
