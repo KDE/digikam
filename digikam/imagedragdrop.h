@@ -31,6 +31,8 @@
 #include "imagemodeldragdrophandler.h"
 #include "imagealbummodel.h"
 
+class KJob;
+
 namespace Digikam
 {
 
@@ -52,6 +54,7 @@ public:
 Q_SIGNALS:
 
     void changeTagOnImageInfos(const ImageInfoList &list, const QList<int> &tagIDs, bool addOrRemove, bool progress);
+    void dioResult(KJob *);
 };
 
 } // namespace Digikam

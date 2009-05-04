@@ -6,7 +6,10 @@
  * Date        : 2009-04-16
  * Description : Qt Model for Albums - drag and drop handling
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2002-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -134,13 +137,13 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView *abstractview, const QDro
             {
                 KIO::Job* job = DIO::move(extUrls, extImageIDs, palbum);
                 connect(job, SIGNAL(result(KJob*)),
-                         this, SLOT(slotDIOResult(KJob*)));
+                         this, SIGNAL(dioResult(KJob*)));
             }
             else if (action == Qt::CopyAction)
             {
                 KIO::Job* job = DIO::copy(extUrls, extImageIDs, palbum);
                 connect(job, SIGNAL(result(KJob*)),
-                         this, SLOT(slotDIOResult(KJob*)));
+                         this, SIGNAL(dioResult(KJob*)));
             }
             return true;
         }
@@ -173,13 +176,13 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView *abstractview, const QDro
         {
             KIO::Job* job = DIO::move(srcURLs, palbum);
             connect(job, SIGNAL(result(KJob*)),
-                    this, SLOT(slotDIOResult(KJob*)));
+                    this, SIGNAL(dioResult(KJob*)));
         }
         else if (action == Qt::CopyAction)
         {
             KIO::Job* job = DIO::copy(srcURLs, palbum);
             connect(job, SIGNAL(result(KJob*)),
-                    this, SLOT(slotDIOResult(KJob*)));
+                    this, SIGNAL(dioResult(KJob*)));
         }
         return true;
     }
