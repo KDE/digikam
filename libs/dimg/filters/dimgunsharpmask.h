@@ -6,7 +6,8 @@
  * Date        : 2005-17-07
  * Description : A Unsharp Mask threaded image filter.
  *
- * Copyright (C) 2998 by Matthias Welwarsky <matze at welwarsky dot de>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009 by Matthias Welwarsky <matze at welwarsky dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,14 +30,16 @@
 #include "digikam_export.h"
 #include "dimgthreadedfilter.h"
 
-namespace Digikam {
+namespace Digikam
+{
 
 class DIGIKAM_EXPORT DImgUnsharpMask : public DImgThreadedFilter
 {
+
 public:
 
-    DImgUnsharpMask(Digikam::DImg *orgImage, QObject *parent=0, int radius=1,
-            double amount=1.0, double threshold=0.05);
+    DImgUnsharpMask(DImg *orgImage, QObject *parent=0, int radius=1,
+                    double amount=1.0, double threshold=0.05);
 
     // Constructor for slave mode: execute immediately in current thread with specified master filter
     // DImgUnsharpMask(DImgThreadedFilter *parentFilter, const DImg &orgImage, const DImg &destImage,
@@ -46,17 +49,16 @@ public:
 
 private:
 
-	virtual void filterImage(void);
+    virtual void filterImage();
 
 private:
 
-	int    m_radius;
+    int    m_radius;
 
-	double m_amount;
-	double m_threshold;
-
+    double m_amount;
+    double m_threshold;
 };
 
-}
+} // namespace Digikam
 
 #endif /* DIMGUNSHARPMASK_H_ */

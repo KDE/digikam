@@ -6,7 +6,8 @@
  * Date        : 2005-17-07
  * Description : A Sharpen threaded image filter.
  *
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009 by Matthias Welwarsky <matze at welwarsky dot de>
  *
  * Original Sharpen algorithm copyright 2002
  * by Daniel M. Duley <mosfet@kde.org> from KImageEffect API.
@@ -45,9 +46,9 @@
 namespace Digikam 
 {
 
-DImgUnsharpMask::DImgUnsharpMask(Digikam::DImg *orgImage, QObject *parent, int radius,
-                         double amount, double threshold)
-           : DImgThreadedFilter(orgImage, parent, "UnsharpMask")
+DImgUnsharpMask::DImgUnsharpMask(DImg *orgImage, QObject *parent, int radius,
+                                 double amount, double threshold)
+               : DImgThreadedFilter(orgImage, parent, "UnsharpMask")
 {
     m_radius    = radius;
     m_amount    = amount;
@@ -61,8 +62,8 @@ void DImgUnsharpMask::filterImage()
     int    quantum;
     double quantumThreshold;
     double value;
-    Digikam::DColor p;
-    Digikam::DColor q;
+    DColor p;
+    DColor q;
 
     if (m_orgImage.isNull())
     {
@@ -70,7 +71,7 @@ void DImgUnsharpMask::filterImage()
        return;
     }
 
-    Digikam::DImgGaussianBlur(this, m_orgImage, m_destImage, 0, 10, (int)(m_radius));
+    DImgGaussianBlur(this, m_orgImage, m_destImage, 0, 10, (int)(m_radius));
 
     quantum          = m_destImage.sixteenBit() ? 65535 : 255;
     quantumThreshold = quantum*m_threshold;
@@ -131,4 +132,4 @@ void DImgUnsharpMask::filterImage()
     }
 }
 
-}
+} // namespace Digikam
