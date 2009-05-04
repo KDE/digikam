@@ -155,11 +155,13 @@ protected:
     void resizeEvent(QResizeEvent *e);
     bool viewportEvent(QEvent *event);
     void wheelEvent(QWheelEvent* event);
+    void startDrag(Qt::DropActions supportedActions);
 
 private Q_SLOTS:
 
     void slotGridSizeChanged(const QSize &);
     void slotDelegateWaitsForThumbnail(const QModelIndex &);
+    void slotFileChanged(const QString &filePath);
 
 private:
 

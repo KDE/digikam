@@ -50,6 +50,7 @@
 #include "imagethumbnailmodel.h"
 #include "imageselectionoverlay.h"
 #include "itemviewtooltip.h"
+#include "loadingcacheinterface.h"
 #include "thumbnailloadthread.h"
 #include "tooltipfiller.h"
 
@@ -137,7 +138,7 @@ ImageCategorizedView::ImageCategorizedView(QWidget *parent)
 
     d->filterModel->setSortOrder(ImageFilterModel::SortByFileName);
     d->filterModel->setCategorizationMode(ImageFilterModel::CategoryByAlbum);
-    d->filterModel->sort(0);
+    d->filterModel->sort(0); // an initial sorting is necessary
 
     // set flags that we want to get dataChanged() signals for
     DatabaseFields::Set watchFlags;
@@ -174,6 +175,9 @@ ImageCategorizedView::ImageCategorizedView(QWidget *parent)
 
     connect(this, SIGNAL(entered(const QModelIndex &)),
             this, SLOT(slotEntered(const QModelIndex &)));
+
+    LoadingCacheInterface::connectToSignalFileChanged(this,
+            SLOT(slotFileChanged(const QString &)));
 
     updateDelegateSizes();
     addSelectionOverlay();
@@ -377,6 +381,13 @@ void ImageCategorizedView::updateDelegateSizes()
     */
     option.rect = QRect(QPoint(0,0), viewport()->size());
     d->delegate->setDefaultViewOptions(option);
+}
+
+void ImageCategorizedView::slotFileChanged(const QString &filePath)
+{
+    QModelIndex index = d->filterModel->indexForPath(filePath);
+    if (index.isValid())
+        update(index);
 }
 
 void ImageCategorizedView::slotActivated(const QModelIndex &index)
@@ -686,6 +697,23 @@ bool ImageCategorizedView::viewportEvent(QEvent *event)
             break;
     }
     return KCategorizedView::viewportEvent(event);
+}
+
+void ImageCategorizedView::startDrag(Qt::DropActions supportedActions)
+{
+    QModelIndexList indexes = selectedIndexes();
+    if (indexes.count() > 0) {
+        QMimeData *data = d->filterModel->mimeData(indexes);
+        if (!data)
+            return;
+        QStyleOptionViewItem option = viewOptions();
+        option.rect = viewport()->rect();
+        QPixmap pixmap = d->delegate->pixmapForDrag(option, indexes);
+        QDrag *drag = new QDrag(this);
+        drag->setPixmap(pixmap);
+        drag->setMimeData(data);
+        drag->exec(supportedActions);
+    }
 }
 
 void ImageCategorizedView::dragMoveEvent(QDragMoveEvent *e)
