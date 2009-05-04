@@ -57,7 +57,7 @@ namespace Digikam
 {
 
 Sharpen::Sharpen(QObject *parent)
-	: BatchTool("Sharpen", BaseTool, parent)
+       : BatchTool("Sharpen", BaseTool, parent)
 {
     setToolTitle(i18n("Sharpen Image"));
     setToolDescription(i18n("A tool to sharpen images"));
@@ -200,28 +200,28 @@ BatchToolSettings Sharpen::defaultSettings()
     settings.insert("SimpleSharpRadius", 2);
     
     // unsharp mask
-    settings.insert("UnsharpMaskRadius", (int)1);
-    settings.insert("UnsharpMaskAmount", (double)1.0);
+    settings.insert("UnsharpMaskRadius",    (int)1);
+    settings.insert("UnsharpMaskAmount",    (double)1.0);
     settings.insert("UnsharpMaskThreshold", (double)0.05);
     
     // refocus
-    settings.insert("RefocusMatrixSize", (int)5);
-    settings.insert("RefocusRadius", (double)0.9);
-    settings.insert("RefocusGauss", (double)0.0);
+    settings.insert("RefocusMatrixSize",  (int)5);
+    settings.insert("RefocusRadius",      (double)0.9);
+    settings.insert("RefocusGauss",       (double)0.0);
     settings.insert("RefocusCorrelation", (double)0.5);
-    settings.insert("RefocusNoise", (double)0.01);
+    settings.insert("RefocusNoise",       (double)0.01);
     
     return settings;
 }
 
 void Sharpen::assignSettings2Widget()
 {
-	// sharpen method
-	int w = settings()["SharpenFilterType"].toInt();
-	m_sharpMethod->setCurrentIndex(w);
-	m_stack->setCurrentWidget(m_stack->widget(w));
-	
-	// simple sharp
+    // sharpen method
+    int w = settings()["SharpenFilterType"].toInt();
+    m_sharpMethod->setCurrentIndex(w);
+    m_stack->setCurrentWidget(m_stack->widget(w));
+
+    // simple sharp
     m_radiusInput->setValue(settings()["SimpleSharpRadius"].toInt());
     
     // unsharp mask
@@ -248,90 +248,94 @@ void Sharpen::slotSettingsChanged()
     settings.insert("SimpleSharpRadius", (int)m_radiusInput->value());
     
     // unsharp mask
-    settings.insert("UnsharpMaskRadius", (int)m_radiusInput2->value());
-    settings.insert("UnsharpMaskAmount", (double)m_amountInput->value());
+    settings.insert("UnsharpMaskRadius",    (int)m_radiusInput2->value());
+    settings.insert("UnsharpMaskAmount",    (double)m_amountInput->value());
     settings.insert("UnsharpMaskThreshold", (double)m_thresholdInput->value());
     
     // refocus
-    settings.insert("RefocusRadius", (double)m_radius->value());
+    settings.insert("RefocusRadius",      (double)m_radius->value());
     settings.insert("RefocusCorrelation", (double)m_correlation->value());
-    settings.insert("RefocusNoise", (double)m_noise->value());
-    settings.insert("RefocusGauss", (double)m_gauss->value());
-    settings.insert("RefocusMatrixSize", (double)m_matrixSize->value());
+    settings.insert("RefocusNoise",       (double)m_noise->value());
+    settings.insert("RefocusGauss",       (double)m_gauss->value());
+    settings.insert("RefocusMatrixSize",  (double)m_matrixSize->value());
 
     setSettings(settings);
 }
 
 void Sharpen::slotSharpMethodChanged(int w)
 {
-	m_stack->setCurrentWidget(m_stack->widget(w));
-	slotSettingsChanged();
+    m_stack->setCurrentWidget(m_stack->widget(w));
+    slotSettingsChanged();
 }
 
 bool Sharpen::toolOperations()
 {
     if (!loadToDImg())
-    	return false;
+        return false;
 
-    int filterType = settings()["SharpenFilterType"].toInt();
+    int filterType  = settings()["SharpenFilterType"].toInt();
 
-    uint width = image().width();
-    uint height = image().height();
-    uchar *data = image().bits();
+    uint width      = image().width();
+    uint height     = image().height();
+    uchar *data     = image().bits();
     bool sixteenBit = image().sixteenBit();
     
-	switch (filterType) {
-		case SimpleSharp: {
-		    double radius = settings()["SimpleSharpRadius"].toInt() / 10.0;
-		    double sigma;
-		    
-		    if (radius < 1.0)
-				sigma = radius;
-		    else
-		    	sigma = sqrt(radius);
-		    
-		    DImg orgImage(width, height, sixteenBit, true, data);
-		    DImgSharpen *filter = new DImgSharpen(&orgImage, 0L, radius, sigma);
-		    filter->startFilterDirectly();
-		    DImg imDest = filter->getTargetImage();
-		    memcpy( data, imDest.bits(), imDest.numBytes() );
-		    delete filter;
-		    break;
-		}
-		
-		case UnsharpMask: {
-		    int r = settings()["UnsharpMaskRadius"].toInt();
-		    double a = settings()["UnsharpMaskAmount"].toDouble();
-		    double th = settings()["UnsharpMaskThreshold"].toDouble();
+    switch (filterType)
+    {
+        case SimpleSharp:
+        {
+            double radius = settings()["SimpleSharpRadius"].toInt() / 10.0;
+            double sigma;
 
-		    DImg orgImage(width, height, sixteenBit, true, data);
-		    DImgUnsharpMask *filter = new DImgUnsharpMask(&orgImage, 0L, r, a, th);
-		    filter->startFilterDirectly();
-		    DImg imDest = filter->getTargetImage();
-		    memcpy( data, imDest.bits(), imDest.numBytes());
-		    delete filter;
-		    break;
-		}
-		
-		case Refocus: {
-			int matrixSize = settings()["RefocusMatrixSize"].toInt();
-			double radius = settings()["RefocusRadius"].toDouble();
-			double gauss = settings()["RefocusGauss"].toDouble(); 
-			double correlation = settings()["RefocusCorrelation"].toDouble(); 
-			double noise = settings()["RefocusNoise"].toDouble();
-			
-		    DImg orgImage(width, height, sixteenBit, true, data);
-		    DImgRefocus *filter = new DImgRefocus(&orgImage, 0L, matrixSize, 
-		    		radius, gauss, correlation, noise);
-		    filter->startFilterDirectly();
-		    DImg imDest = filter->getTargetImage();
-		    memcpy( data, imDest.bits(), imDest.numBytes());
-		    delete filter;
-		    break;
-		}
+            if (radius < 1.0)
+                sigma = radius;
+            else
+                sigma = sqrt(radius);
+
+            DImg orgImage(width, height, sixteenBit, true, data);
+            DImgSharpen *filter = new DImgSharpen(&orgImage, 0L, radius, sigma);
+            filter->startFilterDirectly();
+            DImg imDest = filter->getTargetImage();
+            memcpy( data, imDest.bits(), imDest.numBytes() );
+            delete filter;
+            break;
+        }
+
+        case UnsharpMask:
+        {
+            int r = settings()["UnsharpMaskRadius"].toInt();
+            double a = settings()["UnsharpMaskAmount"].toDouble();
+            double th = settings()["UnsharpMaskThreshold"].toDouble();
+
+            DImg orgImage(width, height, sixteenBit, true, data);
+            DImgUnsharpMask *filter = new DImgUnsharpMask(&orgImage, 0L, r, a, th);
+            filter->startFilterDirectly();
+            DImg imDest = filter->getTargetImage();
+            memcpy( data, imDest.bits(), imDest.numBytes());
+            delete filter;
+            break;
+        }
+        
+        case Refocus:
+        {
+            int matrixSize     = settings()["RefocusMatrixSize"].toInt();
+            double radius      = settings()["RefocusRadius"].toDouble();
+            double gauss       = settings()["RefocusGauss"].toDouble(); 
+            double correlation = settings()["RefocusCorrelation"].toDouble(); 
+            double noise       = settings()["RefocusNoise"].toDouble();
+                
+            DImg orgImage(width, height, sixteenBit, true, data);
+            DImgRefocus *filter = new DImgRefocus(&orgImage, 0L, matrixSize, 
+                                                  radius, gauss, correlation, noise);
+            filter->startFilterDirectly();
+            DImg imDest = filter->getTargetImage();
+            memcpy( data, imDest.bits(), imDest.numBytes());
+            delete filter;
+            break;
+        }
     }
 
     return savefromDImg();	
 }
 
-}
+} // namespace Digikam

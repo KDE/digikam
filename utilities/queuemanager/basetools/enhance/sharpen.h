@@ -28,9 +28,9 @@
 
 namespace KDcrawIface
 {
-class RIntNumInput;
-class RComboBox;
-class RDoubleNumInput;
+    class RIntNumInput;
+    class RComboBox;
+    class RDoubleNumInput;
 }
 
 class QStackedWidget;
@@ -51,12 +51,13 @@ public:
 
 private:
 
-    enum SharpenType {
-	SimpleSharp,
-	UnsharpMask,
-	Refocus
+    enum SharpenType
+    {
+        SimpleSharp,
+        UnsharpMask,
+        Refocus
     };
-	
+
     void assignSettings2Widget();
     bool toolOperations();
 
@@ -66,6 +67,7 @@ private Q_SLOTS:
     void slotSharpMethodChanged(int);
 
 private:
+
     QStackedWidget               *m_stack;
 
     KDcrawIface::RComboBox       *m_sharpMethod;
@@ -80,9 +82,8 @@ private:
     KDcrawIface::RDoubleNumInput *m_noise;
     KDcrawIface::RDoubleNumInput *m_amountInput;
     KDcrawIface::RDoubleNumInput *m_thresholdInput;
-    
 };
 
-}
+} // namespace Digikam
 
 #endif /* SHARPEN_H_ */
