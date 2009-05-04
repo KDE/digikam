@@ -55,7 +55,8 @@ public:
 
     virtual void paint(QPainter * painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     virtual QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex & index) const;
-    QSize gridSize() const;
+    virtual QSize gridSize() const;
+    virtual QPixmap pixmapForDrag(const QStyleOptionViewItem &option, const QList<QModelIndex> &indexes) const;
 
     /** You must set these options from the view */
     void setThumbnailSize(const ThumbnailSize &thumbSize);

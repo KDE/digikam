@@ -373,6 +373,33 @@ void ImageDelegate::paint(QPainter * p, const QStyleOptionViewItem &option, cons
         overlay->paint(p, option, index);
 }
 
+QPixmap ImageDelegate::pixmapForDrag(const QStyleOptionViewItem &option, const QList<QModelIndex> &indexes) const
+{
+    QPixmap icon(DesktopIcon("image-jp2", 48));
+    int w = icon.width();
+    int h = icon.height();
+
+    QPixmap pix(w+4, h+4);
+    QString text(QString::number(indexes.count()));
+
+    QPainter p(&pix);
+    p.fillRect(0, 0, pix.width()-1, pix.height()-1, QColor(Qt::white));
+    p.setPen(QPen(Qt::black, 1));
+    p.drawRect(0, 0, pix.width()-1, pix.height()-1);
+    p.drawPixmap(2, 2, icon);
+    QRect r = p.boundingRect(2, 2, w, h, Qt::AlignLeft|Qt::AlignTop, text);
+    r.setWidth(qMax(r.width(), r.height()));
+    r.setHeight(qMax(r.width(), r.height()));
+    p.fillRect(r, QColor(0, 80, 0));
+    p.setPen(Qt::white);
+    QFont f(option.font);
+    f.setBold(true);
+    p.setFont(f);
+    p.drawText(r, Qt::AlignCenter, text);
+
+    return pix;
+}
+
 QSize ImageDelegate::sizeHint(const QStyleOptionViewItem &/*option*/, const QModelIndex &/*index*/) const
 {
     return d->rect.size();
