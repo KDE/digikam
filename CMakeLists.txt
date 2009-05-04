@@ -948,6 +948,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagedragdrop.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagepreviewview.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagepreviewbar.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imageviewutilities.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imageselectionoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/kdateedit.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/kdatetimeedit.cpp 
