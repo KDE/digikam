@@ -111,6 +111,10 @@ ContentAwareResizer::ContentAwareResizer(DImg *orgImage, uint width, uint height
         // Always dump the vmaps
         //lqr_carver_set_dump_vmaps(d->carver);
 
+        // Set side switch and enlargement steps as suggested by Carlo Baldassi
+        lqr_carver_set_side_switch_frequency(d->carver,4);
+        lqr_carver_set_enl_step(d->carver, 1.5);
+
         // Choose a gradient function
         if(func == 0)
             lqr_carver_set_gradient_function(d->carver, LQR_GF_NORM);
