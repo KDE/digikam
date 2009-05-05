@@ -29,7 +29,7 @@
 
 /**** SEAMS BUFFER FUNCTIONS ****/
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrVMap*
 lqr_vmap_new (gint * buffer, gint width, gint height, gint depth, gint orientation)
 {
@@ -44,7 +44,7 @@ lqr_vmap_new (gint * buffer, gint width, gint height, gint depth, gint orientati
   return vmap;
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 void
 lqr_vmap_destroy (LqrVMap * vmap)
 {
@@ -52,35 +52,35 @@ lqr_vmap_destroy (LqrVMap * vmap)
   g_free (vmap);
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 gint *
 lqr_vmap_get_data (LqrVMap *vmap)
 {
   return vmap->buffer;
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 gint
 lqr_vmap_get_width (LqrVMap *vmap)
 {
   return vmap->width;
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 gint
 lqr_vmap_get_height (LqrVMap *vmap)
 {
   return vmap->height;
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 gint
 lqr_vmap_get_depth (LqrVMap *vmap)
 {
   return vmap->depth;
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 gint
 lqr_vmap_get_orientation (LqrVMap *vmap)
 {
@@ -88,7 +88,7 @@ lqr_vmap_get_orientation (LqrVMap *vmap)
 }
 
 /* dump the visibility level of the image */
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrVMap*
 lqr_vmap_dump (LqrCarver * r)
 {
@@ -147,7 +147,7 @@ lqr_vmap_dump (LqrCarver * r)
 
 
 /* dump the visibility level of the image */
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrRetVal
 lqr_vmap_internal_dump (LqrCarver * r)
 {
@@ -156,7 +156,7 @@ lqr_vmap_internal_dump (LqrCarver * r)
   gint * buffer;
   gint depth;
 
-  CATCH_CANC (r);
+  LQR_CATCH_CANC (r);
 
   /* save current size */
   w1 = r->w;
@@ -168,7 +168,7 @@ lqr_vmap_internal_dump (LqrCarver * r)
   h = lqr_carver_get_height (r);
   depth = r->w0 - r->w_start;
 
-  CATCH_MEM (buffer = g_try_new (gint, w * h));
+  LQR_CATCH_MEM (buffer = g_try_new (gint, w * h));
 
   lqr_cursor_reset (r->c);
   for (y = 0; y < r->h; y++)
@@ -200,15 +200,15 @@ lqr_vmap_internal_dump (LqrCarver * r)
   lqr_carver_set_width (r, w1);
   lqr_cursor_reset (r->c);
 
-  CATCH_MEM (vmap = lqr_vmap_new(buffer, w, h, depth, r->transposed));
+  LQR_CATCH_MEM (vmap = lqr_vmap_new(buffer, w, h, depth, r->transposed));
 
-  CATCH_MEM (r->flushed_vs = lqr_vmap_list_append(r->flushed_vs, vmap));
+  LQR_CATCH_MEM (r->flushed_vs = lqr_vmap_list_append(r->flushed_vs, vmap));
 
   return LQR_OK;
 }
 
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrRetVal
 lqr_vmap_load (LqrCarver *r, LqrVMap *vmap)
 {
@@ -218,23 +218,23 @@ lqr_vmap_load (LqrCarver *r, LqrVMap *vmap)
   w = vmap->width;
   h = vmap->height;
 
-  CATCH_CANC (r);
-  CATCH_F (!r->active);
+  LQR_CATCH_CANC (r);
+  LQR_CATCH_F (!r->active);
 
   if (!r->transposed)
     {
-      CATCH_F ((r->w_start == w ) && (r->h_start == h));
+      LQR_CATCH_F ((r->w_start == w ) && (r->h_start == h));
     }
   else
     {
-      CATCH_F ((r->w_start == h ) && (r->h_start == w));
+      LQR_CATCH_F ((r->w_start == h ) && (r->h_start == w));
     }
 
-  CATCH (lqr_carver_flatten(r));
+  LQR_CATCH (lqr_carver_flatten(r));
 
   if (vmap->orientation != r->transposed)
     {
-      CATCH (lqr_carver_transpose (r));
+      LQR_CATCH (lqr_carver_transpose (r));
     }
 
   for (y = 0; y < r->h; y++)
@@ -255,7 +255,7 @@ lqr_vmap_load (LqrCarver *r, LqrVMap *vmap)
         }
     }
 
-  CATCH (lqr_carver_inflate(r, vmap->depth));
+  LQR_CATCH (lqr_carver_inflate(r, vmap->depth));
 
   lqr_cursor_reset (r->c);
 

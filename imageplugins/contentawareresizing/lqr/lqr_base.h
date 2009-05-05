@@ -62,7 +62,7 @@ typedef enum _LqrRetVal LqrRetVal;
 
 
 /* generic signal processing macros */
-#define CATCH(expr) G_STMT_START { \
+#define LQR_CATCH(expr) G_STMT_START { \
   LqrRetVal ret_val; \
   if ((ret_val = (expr)) != LQR_OK) \
     { \
@@ -71,7 +71,7 @@ typedef enum _LqrRetVal LqrRetVal;
 } G_STMT_END
 
 /* convert a NULL assignment to an error signal */
-#define CATCH_MEM(expr) G_STMT_START { \
+#define LQR_CATCH_MEM(expr) G_STMT_START { \
   if ((expr) == NULL) \
     { \
       return LQR_NOMEM; \
@@ -79,12 +79,19 @@ typedef enum _LqrRetVal LqrRetVal;
 } G_STMT_END
 
 /* convert a boolean value to an error signal */
-#define CATCH_F(expr) G_STMT_START { \
+#define LQR_CATCH_F(expr) G_STMT_START { \
   if ((expr) == FALSE) \
     { \
       return LQR_ERROR; \
     } \
 } G_STMT_END
+
+/* legacy */
+#ifndef LQR_DISABLE_LEGACY_MACROS
+#define CATCH(expr) LQR_CATCH(expr)
+#define CATCH_MEM(expr) LQR_CATCH_MEM(expr)
+#define CATCH_F(expr) LQR_CATCH_F(expr)
+#endif /* LQR_DISABLE_LEGACY_MACROS */
 
 
 /**** IMAGE DEPTH ****/

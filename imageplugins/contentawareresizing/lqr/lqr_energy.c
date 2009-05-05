@@ -77,6 +77,8 @@ lqr_pixel_get_rgbcol (void *rgb, gint rgb_ind, LqrColDepth col_depth, LqrImageTy
       case LQR_CMYKA_IMAGE:
         black_fact = 1 - lqr_pixel_get_norm(rgb, rgb_ind + 3, col_depth);
         return black_fact * (1. - (lqr_pixel_get_norm (rgb, rgb_ind + channel, col_depth)));
+      case LQR_CUSTOM_IMAGE:
+        return 0;
       default:
 #ifdef __LQR_DEBUG__
         assert(0);
@@ -252,6 +254,7 @@ lqr_carver_read_rgba (LqrCarver * r, gint x, gint y, gint channel)
           case LQR_CMYKA_IMAGE:
             return lqr_pixel_get_rgbcol (r->rgb, now * r->channels, r->col_depth, r->image_type, channel);
           case LQR_CUSTOM_IMAGE:
+            return 0;
           default:
 #ifdef __LQR_DEBUG__
             assert(0);
@@ -302,11 +305,11 @@ lqr_carver_read_cached_custom (LqrCarver * r, gint x, gint y, gint channel)
 }
 
 gfloat
-lqr_energy_builtin_grad_all (gint x, gint y, gint img_width, gint img_height, LqrReaderWindow * rwindow, LqrGradFunc gf)
+lqr_energy_builtin_grad_all (gint x, gint y, gint img_width, gint img_height, LqrReadingWindow * rwindow, LqrGradFunc gf)
 {
   gdouble gx, gy;
 
-  gdouble (*bread_func) (LqrReaderWindow *, gint, gint);
+  gdouble (*bread_func) (LqrReadingWindow *, gint, gint);
 
   switch (lqr_rwindow_get_read_t(rwindow))
     {
@@ -353,55 +356,55 @@ lqr_energy_builtin_grad_all (gint x, gint y, gint img_width, gint img_height, Lq
 }
 
 gfloat
-lqr_energy_builtin_grad_norm (gint x, gint y, gint img_width, gint img_height, LqrReaderWindow * rwindow, gpointer extra_data)
+lqr_energy_builtin_grad_norm (gint x, gint y, gint img_width, gint img_height, LqrReadingWindow * rwindow, gpointer extra_data)
 {
   return lqr_energy_builtin_grad_all(x, y, img_width, img_height, rwindow, lqr_grad_norm);
 }
 
 gfloat
-lqr_energy_builtin_grad_sumabs (gint x, gint y, gint img_width, gint img_height, LqrReaderWindow * rwindow, gpointer extra_data)
+lqr_energy_builtin_grad_sumabs (gint x, gint y, gint img_width, gint img_height, LqrReadingWindow * rwindow, gpointer extra_data)
 {
   return lqr_energy_builtin_grad_all(x, y, img_width, img_height, rwindow, lqr_grad_sumabs);
 }
 
 gfloat
-lqr_energy_builtin_grad_xabs (gint x, gint y, gint img_width, gint img_height, LqrReaderWindow * rwindow, gpointer extra_data)
+lqr_energy_builtin_grad_xabs (gint x, gint y, gint img_width, gint img_height, LqrReadingWindow * rwindow, gpointer extra_data)
 {
   return lqr_energy_builtin_grad_all(x, y, img_width, img_height, rwindow, lqr_grad_xabs);
 }
 
 gfloat
-lqr_energy_builtin_null (gint x, gint y, gint img_width, gint img_height, LqrReaderWindow * rwindow, gpointer extra_data)
+lqr_energy_builtin_null (gint x, gint y, gint img_width, gint img_height, LqrReadingWindow * rwindow, gpointer extra_data)
 {
   return 0;
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrRetVal
 lqr_carver_set_energy_function_builtin (LqrCarver * r, LqrEnergyFuncBuiltinType ef_ind)
 {
   switch (ef_ind)
     {
       case LQR_EF_GRAD_NORM:
-        CATCH (lqr_carver_set_energy_function (r, lqr_energy_builtin_grad_norm, 1, LQR_ER_BRIGHT, NULL));
+        LQR_CATCH (lqr_carver_set_energy_function (r, lqr_energy_builtin_grad_norm, 1, LQR_ER_BRIGHT, NULL));
         break;
       case LQR_EF_GRAD_SUMABS:
-        CATCH (lqr_carver_set_energy_function (r, lqr_energy_builtin_grad_sumabs, 1, LQR_ER_BRIGHT, NULL));
+        LQR_CATCH (lqr_carver_set_energy_function (r, lqr_energy_builtin_grad_sumabs, 1, LQR_ER_BRIGHT, NULL));
         break;
       case LQR_EF_GRAD_XABS:
-        CATCH (lqr_carver_set_energy_function (r, lqr_energy_builtin_grad_xabs, 1, LQR_ER_BRIGHT, NULL));
+        LQR_CATCH (lqr_carver_set_energy_function (r, lqr_energy_builtin_grad_xabs, 1, LQR_ER_BRIGHT, NULL));
         break;
       case LQR_EF_LUMA_GRAD_NORM:
-        CATCH (lqr_carver_set_energy_function (r, lqr_energy_builtin_grad_norm, 1, LQR_ER_LUMA, NULL));
+        LQR_CATCH (lqr_carver_set_energy_function (r, lqr_energy_builtin_grad_norm, 1, LQR_ER_LUMA, NULL));
         break;
       case LQR_EF_LUMA_GRAD_SUMABS:
-        CATCH (lqr_carver_set_energy_function (r, lqr_energy_builtin_grad_sumabs, 1, LQR_ER_LUMA, NULL));
+        LQR_CATCH (lqr_carver_set_energy_function (r, lqr_energy_builtin_grad_sumabs, 1, LQR_ER_LUMA, NULL));
         break;
       case LQR_EF_LUMA_GRAD_XABS:
-        CATCH (lqr_carver_set_energy_function (r, lqr_energy_builtin_grad_xabs, 1, LQR_ER_LUMA, NULL));
+        LQR_CATCH (lqr_carver_set_energy_function (r, lqr_energy_builtin_grad_xabs, 1, LQR_ER_LUMA, NULL));
         break;
       case LQR_EF_NULL:
-        CATCH (lqr_carver_set_energy_function (r, lqr_energy_builtin_null, 0, LQR_ER_BRIGHT, NULL));
+        LQR_CATCH (lqr_carver_set_energy_function (r, lqr_energy_builtin_null, 0, LQR_ER_BRIGHT, NULL));
         break;
       default:
         return LQR_ERROR;
@@ -410,12 +413,12 @@ lqr_carver_set_energy_function_builtin (LqrCarver * r, LqrEnergyFuncBuiltinType 
   return LQR_OK;
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrRetVal
 lqr_carver_set_energy_function (LqrCarver * r, LqrEnergyFunc en_func, gint radius,
                 LqrEnergyReaderType reader_type, gpointer extra_data)
 {
-  CATCH_F (r->root == NULL);
+  LQR_CATCH_F (r->root == NULL);
 
   r->nrg = en_func;
   r->nrg_radius = radius;
@@ -430,11 +433,11 @@ lqr_carver_set_energy_function (LqrCarver * r, LqrEnergyFunc en_func, gint radiu
 
   if (reader_type == LQR_ER_CUSTOM)
     {
-      CATCH_MEM (r->rwindow = lqr_rwindow_new_custom (radius, r->use_rcache, r->channels));
+      LQR_CATCH_MEM (r->rwindow = lqr_rwindow_new_custom (radius, r->use_rcache, r->channels));
     }
   else
     {
-      CATCH_MEM (r->rwindow = lqr_rwindow_new (radius, reader_type, r->use_rcache));
+      LQR_CATCH_MEM (r->rwindow = lqr_rwindow_new (radius, reader_type, r->use_rcache));
     }
 
   return LQR_OK;
@@ -555,7 +558,8 @@ lqr_carver_generate_rcache (LqrCarver * r)
     }
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
+/*
 LqrCarver *
 lqr_energy_preview_new (void * buffer, gint width, gint height, gint channels, LqrColDepth colour_depth)
 {
@@ -566,10 +570,11 @@ lqr_energy_preview_new (void * buffer, gint width, gint height, gint channels, L
   lqr_carver_set_use_cache (r, TRUE);
   return r;
 }
+*/
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 gfloat *
-lqr_energy_preview_get_energy(LqrCarver * r, gint orientation)
+lqr_carver_get_energy(LqrCarver * r, gint orientation)
 {
   gint x, y;
   gint z0 = 0;
@@ -582,12 +587,18 @@ lqr_energy_preview_get_energy(LqrCarver * r, gint orientation)
   gfloat nrg_max = 0;
 
   TRY_E_N (orientation == 0 || orientation == 1);
-  TRY_F_N (r->nrg_active);
+  LQR_CATCH_CANC_N (r);
 
-  CATCH_CANC_N (r);
+  if (r->nrg_active == FALSE)
+    {
+      TRY_E_N (lqr_carver_init_energy_related (r));
+    }
 
   if (r->w != r->w_start - r->max_level + 1)
     {
+#ifdef __LQR_DEBUG__
+      assert (r->active);
+#endif /* __LQR_DEBUG__ */
       TRY_E_N (lqr_carver_flatten(r));
     }
 
@@ -615,11 +626,61 @@ lqr_energy_preview_get_energy(LqrCarver * r, gint orientation)
         }
     }
 
-  if (nrg_max > 0)
+  if (nrg_max > nrg_min)
     {
       for (z0 = 0; z0 < buf_size; z0++)
         {
           nrg_buffer[z0] = (nrg_buffer[z0] - nrg_min) / (nrg_max - nrg_min);
+        }
+    }
+
+  return nrg_buffer;
+}
+
+gfloat *
+lqr_carver_get_true_energy(LqrCarver * r, gint orientation)
+{
+  gint x, y;
+  gint z0 = 0;
+  gint w, h;
+  gint buf_size;
+  gint data;
+  gfloat * nrg_buffer;
+
+  TRY_E_N (orientation == 0 || orientation == 1);
+  LQR_CATCH_CANC_N (r);
+
+  if (r->nrg_active == FALSE)
+    {
+      TRY_E_N (lqr_carver_init_energy_related (r));
+    }
+
+  if (r->w != r->w_start - r->max_level + 1)
+    {
+#ifdef __LQR_DEBUG__
+      assert (r->active);
+#endif /* __LQR_DEBUG__ */
+      TRY_E_N (lqr_carver_flatten(r));
+    }
+
+  buf_size = r->w * r->h;
+  TRY_N_N (nrg_buffer = g_try_new (gfloat, buf_size));
+
+  if (orientation != lqr_carver_get_orientation(r))
+    {
+      TRY_E_N (lqr_carver_transpose(r));
+    }
+  TRY_E_N (lqr_carver_build_emap (r));
+
+  w = lqr_carver_get_width(r);
+  h = lqr_carver_get_height(r);
+
+  for (y = 0; y < h; y++)
+    {
+      for (x = 0; x < w; x++)
+        {
+          data = orientation == 0 ? r->raw[y][x] : r->raw[x][y];
+          nrg_buffer[z0++] = r->en[data];
         }
     }
 

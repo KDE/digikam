@@ -45,12 +45,13 @@ enum _LqrEnergyFuncBuiltinType
 
 typedef enum _LqrEnergyFuncBuiltinType LqrEnergyFuncBuiltinType;
 
-typedef gfloat (*LqrEnergyFunc) (gint x, gint y, gint img_width, gint img_height, LqrReaderWindow * rwindow, gpointer extra_data);
+typedef gfloat (*LqrEnergyFunc) (gint x, gint y, gint img_width, gint img_height, LqrReadingWindow * rwindow, gpointer extra_data);
 
-LqrRetVal lqr_carver_set_energy_function_builtin (LqrCarver * r, LqrEnergyFuncBuiltinType ef_ind);
-LqrRetVal lqr_carver_set_energy_function (LqrCarver * r, LqrEnergyFunc en_func, gint radius, LqrEnergyReaderType reader_type, gpointer extra_data);
+LqrRetVal lqr_carver_set_energy_function_builtin (LqrCarver * r, LqrEnergyFuncBuiltinType ef_ind) LQR_PUBLIC;
+LqrRetVal lqr_carver_set_energy_function (LqrCarver * r, LqrEnergyFunc en_func, gint radius, LqrEnergyReaderType reader_type, gpointer extra_data) LQR_PUBLIC;
 
-LqrCarver * lqr_energy_preview_new (void * buffer, gint width, gint height, gint channels, LqrColDepth colour_depth);
-gfloat * lqr_energy_preview_get_energy (LqrCarver * r, gint orientation);
+/* LqrCarver * lqr_energy_preview_new (void * buffer, gint width, gint height, gint channels, LqrColDepth colour_depth) LQR_PUBLIC; */
+gfloat * lqr_carver_get_energy (LqrCarver * r, gint orientation) LQR_PUBLIC;
+gfloat * lqr_carver_get_true_energy (LqrCarver * r, gint orientation) LQR_PUBLIC;
 
 #endif /* __LQR_ENERGY_PUB_H__ */

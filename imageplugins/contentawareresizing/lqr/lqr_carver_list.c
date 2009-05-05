@@ -70,14 +70,14 @@ lqr_carver_list_destroy(LqrCarverList * list)
     }
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrCarverList *
 lqr_carver_list_start (LqrCarver *r)
 {
   return r->attached_list;
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrCarverList *
 lqr_carver_list_next (LqrCarverList * list)
 {
@@ -85,7 +85,7 @@ lqr_carver_list_next (LqrCarverList * list)
   return list->next;
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrCarver *
 lqr_carver_list_current (LqrCarverList * list)
 {
@@ -93,28 +93,28 @@ lqr_carver_list_current (LqrCarverList * list)
   return list->current;
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrRetVal
 lqr_carver_list_foreach (LqrCarverList * list, LqrCarverFunc func, LqrDataTok data)
 {
   LqrCarverList * now = list;
   if (now != NULL)
     {
-      CATCH (func(now->current, data));
+      LQR_CATCH (func(now->current, data));
       return lqr_carver_list_foreach (now->next, func, data);
     }
   return LQR_OK;
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrRetVal
 lqr_carver_list_foreach_recursive (LqrCarverList * list, LqrCarverFunc func, LqrDataTok data)
 {
   LqrCarverList * now = list;
   if (now != NULL)
     {
-      CATCH (func(now->current, data));
-      CATCH (lqr_carver_list_foreach (now->current->attached_list, func, data));
+      LQR_CATCH (func(now->current, data));
+      LQR_CATCH (lqr_carver_list_foreach (now->current->attached_list, func, data));
       return lqr_carver_list_foreach (now->next, func, data);
     }
   return LQR_OK;

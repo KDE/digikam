@@ -139,33 +139,127 @@
   switch (col_depth) \
     { \
       case LQR_COLDEPTH_8I: \
-        CATCH_MEM (dest = g_try_new0 (lqr_t_8i, size)); \
+        LQR_CATCH_MEM (dest = g_try_new0 (lqr_t_8i, size)); \
         break; \
       case LQR_COLDEPTH_16I: \
-        CATCH_MEM (dest = g_try_new0 (lqr_t_16i, size)); \
+        LQR_CATCH_MEM (dest = g_try_new0 (lqr_t_16i, size)); \
         break; \
       case LQR_COLDEPTH_32F: \
-        CATCH_MEM (dest = g_try_new0 (lqr_t_32f, size)); \
+        LQR_CATCH_MEM (dest = g_try_new0 (lqr_t_32f, size)); \
         break; \
       case LQR_COLDEPTH_64F: \
-        CATCH_MEM (dest = g_try_new0 (lqr_t_64f, size)); \
+        LQR_CATCH_MEM (dest = g_try_new0 (lqr_t_64f, size)); \
         break; \
     } \
 } G_STMT_END
 
-#define CATCH_CANC(carver) G_STMT_START { \
+#define LQR_CATCH_CANC(carver) G_STMT_START { \
   if (g_atomic_int_get(&carver->state) == LQR_CARVER_STATE_CANCELLED) \
     { \
       return LQR_USRCANCEL; \
     } \
 } G_STMT_END
 
-#define CATCH_CANC_N(carver) G_STMT_START { \
+#define LQR_CATCH_CANC_N(carver) G_STMT_START { \
   if (g_atomic_int_get(&carver->state) == LQR_CARVER_STATE_CANCELLED) \
     { \
       return NULL; \
     } \
 } G_STMT_END
+
+/* Macros for update_mmap speedup : without rigidity */
+
+#define DATADOWN(y, x) (r->raw[(y) - 1][(x)])
+#define MDOWN(y, x) (r->m[DATADOWN((y), (x))])
+
+#define MMIN1G(y, x1) (least = DATADOWN((y), (x1)), MDOWN((y), (x1)))
+#define MMINTESTL(y, x1, x2) (MDOWN((y), (x1)) <= MDOWN((y), (x2)))
+#define MMINTESTR(y, x1, x2) (MDOWN((y), (x1)) < MDOWN((y), (x2)))
+
+#define MMINLGG1(y, n, x1, x2)      (MMINTESTL((y), (x1), (x2)) ? MMINL ## n ## G((y), (x1)) : MMINL ## n ## G((y), (x2)))
+#define MMINLGG2(y, n, x1, x2, ...) (MMINTESTL((y), (x1), (x2)) ? MMINL ## n ## G((y), (x1), __VA_ARGS__ ) : MMINL ## n ## G((y), (x2), __VA_ARGS__ ))
+#define MMINLGG3(y, n, x1, x2, ...) (MMINTESTL((y), (x1), (x2)) ? MMINL ## n ## G((y), (x1), __VA_ARGS__ ) : MMINL ## n ## G((y), (x2), __VA_ARGS__ ))
+#define MMINLGG4(y, n, x1, x2, ...) (MMINTESTL((y), (x1), (x2)) ? MMINL ## n ## G((y), (x1), __VA_ARGS__ ) : MMINL ## n ## G((y), (x2), __VA_ARGS__ ))
+
+#define MMINRGG1(y, n, x1, x2)      (MMINTESTR((y), (x1), (x2)) ? MMINR ## n ## G((y), (x1)) : MMINR ## n ## G((y), (x2)))
+#define MMINRGG2(y, n, x1, x2, ...) (MMINTESTR((y), (x1), (x2)) ? MMINR ## n ## G((y), (x1), __VA_ARGS__ ) : MMINR ## n ## G((y), (x2), __VA_ARGS__ ))
+#define MMINRGG3(y, n, x1, x2, ...) (MMINTESTR((y), (x1), (x2)) ? MMINR ## n ## G((y), (x1), __VA_ARGS__ ) : MMINR ## n ## G((y), (x2), __VA_ARGS__ ))
+#define MMINRGG4(y, n, x1, x2, ...) (MMINTESTR((y), (x1), (x2)) ? MMINR ## n ## G((y), (x1), __VA_ARGS__ ) : MMINR ## n ## G((y), (x2), __VA_ARGS__ ))
+
+#define MMINL1G(y, x1)                 MMIN1G((y), (x1))
+#define MMINL2G(y, x1, x2)             MMINLGG1(y, 1, (x1), (x2))
+#define MMINL3G(y, x1, x2, x3)         MMINLGG2(y, 2, (x1), (x2), (x3))
+#define MMINL4G(y, x1, x2, x3, x4)     MMINLGG3(y, 3, (x1), (x2), (x3), (x4))
+#define MMINL5G(y, x1, x2, x3, x4, x5) MMINLGG4(y, 4, (x1), (x2), (x3), (x4), (x5))
+
+#define MMINR1G(y, x1)                 MMIN1G((y), (x1))
+#define MMINR2G(y, x1, x2)             MMINRGG1(y, 1, (x1), (x2))
+#define MMINR3G(y, x1, x2, x3)         MMINRGG2(y, 2, (x1), (x2), (x3))
+#define MMINR4G(y, x1, x2, x3, x4)     MMINRGG3(y, 3, (x1), (x2), (x3), (x4))
+#define MMINR5G(y, x1, x2, x3, x4, x5) MMINRGG4(y, 4, (x1), (x2), (x3), (x4), (x5))
+
+#define MMINL1(y, x) MMINL1G((y), (x))
+#define MMINL2(y, x) MMINL2G((y), (x), (x) + 1)
+#define MMINL3(y, x) MMINL3G((y), (x), (x) + 1, (x) + 2)
+#define MMINL4(y, x) MMINL4G((y), (x), (x) + 1, (x) + 2, (x) + 3)
+#define MMINL5(y, x) MMINL5G((y), (x), (x) + 1, (x) + 2, (x) + 3, (x) + 4)
+
+#define MMINR1(y, x) MMINR1G((y), (x))
+#define MMINR2(y, x) MMINR2G((y), (x), (x) + 1)
+#define MMINR3(y, x) MMINR3G((y), (x), (x) + 1, (x) + 2)
+#define MMINR4(y, x) MMINR4G((y), (x), (x) + 1, (x) + 2, (x) + 3)
+#define MMINR5(y, x) MMINR5G((y), (x), (x) + 1, (x) + 2, (x) + 3, (x) + 4)
+
+/* Macros for update_mmap speedup : with rigidity */
+
+#define MRDOWN(y, x, dx) (r->m[DATADOWN((y), (x))] + r_fact * r->rigidity_map[(dx)])
+
+#define MRSET1(y, x, dx) (mc[(dx)] = MRDOWN((y), (x), (dx)))
+#define MRSET2(y, x, dx) (MRSET1((y), (x), (dx)), MRSET1((y), (x) + 1, (dx) + 1))
+#define MRSET3(y, x, dx) (MRSET2((y), (x), (dx)), MRSET1((y), (x) + 2, (dx) + 2))
+#define MRSET4(y, x, dx) (MRSET3((y), (x), (dx)), MRSET1((y), (x) + 3, (dx) + 3))
+#define MRSET5(y, x, dx) (MRSET4((y), (x), (dx)), MRSET1((y), (x) + 4, (dx) + 4))
+
+#define MRMIN1G(y, x1, dx1) (least = DATADOWN((y), (x1)), mc[(dx1)])
+#define MRMINTESTL(dx1, dx2) (mc[(dx1)] <= mc[(dx2)])
+#define MRMINTESTR(dx1, dx2) (mc[(dx1)] < mc[(dx2)])
+
+#define MRMINLGG1(y, n, x1, dx1, x2, dx2)      (MRMINTESTL((dx1), (dx2)) ? MRMINL ## n ## G((y), (x1), (dx1)) : MRMINL ## n ## G((y), (x2), (dx2)))
+#define MRMINLGG2(y, n, x1, dx1, x2, dx2, ...) (MRMINTESTL((dx1), (dx2)) ? MRMINL ## n ## G((y), (x1), (dx1), __VA_ARGS__ ) : MRMINL ## n ## G((y), (x2), (dx2), __VA_ARGS__ ))
+#define MRMINLGG3(y, n, x1, dx1, x2, dx2, ...) (MRMINTESTL((dx1), (dx2)) ? MRMINL ## n ## G((y), (x1), (dx1), __VA_ARGS__ ) : MRMINL ## n ## G((y), (x2), (dx2), __VA_ARGS__ ))
+#define MRMINLGG4(y, n, x1, dx1, x2, dx2, ...) (MRMINTESTL((dx1), (dx2)) ? MRMINL ## n ## G((y), (x1), (dx1), __VA_ARGS__ ) : MRMINL ## n ## G((y), (x2), (dx2), __VA_ARGS__ ))
+
+#define MRMINRGG1(y, n, x1, dx1, x2, dx2)      (MRMINTESTR((dx1), (dx2)) ? MRMINR ## n ## G((y), (x1), (dx1)) : MRMINR ## n ## G((y), (x2), (dx2)))
+#define MRMINRGG2(y, n, x1, dx1, x2, dx2, ...) (MRMINTESTR((dx1), (dx2)) ? MRMINR ## n ## G((y), (x1), (dx1), __VA_ARGS__ ) : MRMINR ## n ## G((y), (x2), (dx2), __VA_ARGS__ ))
+#define MRMINRGG3(y, n, x1, dx1, x2, dx2, ...) (MRMINTESTR((dx1), (dx2)) ? MRMINR ## n ## G((y), (x1), (dx1), __VA_ARGS__ ) : MRMINR ## n ## G((y), (x2), (dx2), __VA_ARGS__ ))
+#define MRMINRGG4(y, n, x1, dx1, x2, dx2, ...) (MRMINTESTR((dx1), (dx2)) ? MRMINR ## n ## G((y), (x1), (dx1), __VA_ARGS__ ) : MRMINR ## n ## G((y), (x2), (dx2), __VA_ARGS__ ))
+
+#define MRMINL1G(y, x1, dx1)                                     MRMIN1G((y), (x1), (dx1))
+#define MRMINL2G(y, x1, dx1, x2, dx2)                            MRMINLGG1(y, 1, (x1), (dx1), (x2), (dx2))
+#define MRMINL3G(y, x1, dx1, x2, dx2, x3, dx3)                   MRMINLGG2(y, 2, (x1), (dx1), (x2), (dx2), (x3), (dx3))
+#define MRMINL4G(y, x1, dx1, x2, dx2, x3, dx3, x4, dx4)          MRMINLGG3(y, 3, (x1), (dx1), (x2), (dx2), (x3), (dx3), (x4), (dx4))
+#define MRMINL5G(y, x1, dx1, x2, dx2, x3, dx3, x4, dx4, x5, dx5) MRMINLGG4(y, 4, (x1), (dx1), (x2), (dx2), (x3), (dx3), (x4), (dx4), (x5), (dx5))
+
+#define MRMINR1G(y, x1, dx1)                                     MRMIN1G((y), (x1), (dx1))
+#define MRMINR2G(y, x1, dx1, x2, dx2)                            MRMINRGG1(y, 1, (x1), (dx1), (x2), (dx2))
+#define MRMINR3G(y, x1, dx1, x2, dx2, x3, dx3)                   MRMINRGG2(y, 2, (x1), (dx1), (x2), (dx2), (x3), (dx3))
+#define MRMINR4G(y, x1, dx1, x2, dx2, x3, dx3, x4, dx4)          MRMINRGG3(y, 3, (x1), (dx1), (x2), (dx2), (x3), (dx3), (x4), (dx4))
+#define MRMINR5G(y, x1, dx1, x2, dx2, x3, dx3, x4, dx4, x5, dx5) MRMINRGG4(y, 4, (x1), (dx1), (x2), (dx2), (x3), (dx3), (x4), (dx4), (x5), (dx5))
+
+#define MRMINL1(y, x, dx) MRMINL1G((y), (x), (dx))
+#define MRMINL2(y, x, dx) MRMINL2G((y), (x), (dx), (x) + 1, (dx) + 1)
+#define MRMINL3(y, x, dx) MRMINL3G((y), (x), (dx), (x) + 1, (dx) + 1, (x) + 2, (dx) + 2)
+#define MRMINL4(y, x, dx) MRMINL4G((y), (x), (dx), (x) + 1, (dx) + 1, (x) + 2, (dx) + 2, (x) + 3, (dx) + 3)
+#define MRMINL5(y, x, dx) MRMINL5G((y), (x), (dx), (x) + 1, (dx) + 1, (x) + 2, (dx) + 2, (x) + 3, (dx) + 3, (x) + 4, (dx) + 4)
+
+#define MRMINR1(y, x, dx) MRMINR1G((y), (x), (dx))
+#define MRMINR2(y, x, dx) MRMINR2G((y), (x), (dx), (x) + 1, (dx) + 1)
+#define MRMINR3(y, x, dx) MRMINR3G((y), (x), (dx), (x) + 1, (dx) + 1, (x) + 2, (dx) + 2)
+#define MRMINR4(y, x, dx) MRMINR4G((y), (x), (dx), (x) + 1, (dx) + 1, (x) + 2, (dx) + 2, (x) + 3, (dx) + 3)
+#define MRMINR5(y, x, dx) MRMINR5G((y), (x), (dx), (x) + 1, (dx) + 1, (x) + 2, (dx) + 2, (x) + 3, (dx) + 3, (x) + 4, (dx) + 4)
+
+/* Tolerance for update_mmap */
+#define UPDATE_TOLERANCE (1e-5)
 
 /* Carver states */
 
@@ -239,12 +333,15 @@ struct _LqrCarver
   gfloat enl_step;                /* maximum enlargement ratio in a single step */
 
   LqrProgress * progress;         /* pointer to progress update functions */
+  gint session_update_step;       /* update step for the rescaling session */
+  gint session_rescale_total;     /* total amount of rescaling for the session */
+  gint session_rescale_current;   /* current amount of rescaling for the session */
 
   LqrEnergyFunc nrg;              /* pointer to a general energy function */
   gint nrg_radius;                /* energy function radius */
   LqrEnergyReaderType nrg_read_t; /* energy function reader type */
   gpointer nrg_extra_data;        /* extra data to pass on to the energy function */
-  LqrReaderWindow * rwindow;      /* reader window for energy computation */
+  LqrReadingWindow * rwindow;     /* reading window for energy computation */
 
   gint *nrg_xmin;                 /* auxiliary vector for energy update */
   gint *nrg_xmax;                 /* auxiliary vector for energy update */

@@ -27,7 +27,7 @@
 #include <lqr/lqr_base.h>
 #include <lqr/lqr_progress.h>
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrProgress *
 lqr_progress_new(void)
 {
@@ -46,7 +46,7 @@ lqr_progress_new(void)
 LqrRetVal
 lqr_progress_init(LqrProgress * p, const gchar * message)
 {
-  CATCH_F (p != NULL);
+  LQR_CATCH_F (p != NULL);
   if (p->init)
     {
       return p->init(message);
@@ -60,7 +60,7 @@ lqr_progress_init(LqrProgress * p, const gchar * message)
 LqrRetVal
 lqr_progress_update(LqrProgress * p, gdouble percentage)
 {
-  CATCH_F (p != NULL);
+  LQR_CATCH_F (p != NULL);
   if (p->update)
     {
       return p->update(percentage);
@@ -74,7 +74,7 @@ lqr_progress_update(LqrProgress * p, gdouble percentage)
 LqrRetVal
 lqr_progress_end(LqrProgress * p, const gchar * message)
 {
-  CATCH_F (p != NULL);
+  LQR_CATCH_F (p != NULL);
   if (p->end)
     {
       return p->end(message);
@@ -85,7 +85,7 @@ lqr_progress_end(LqrProgress * p, const gchar * message)
     }
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrRetVal
 lqr_progress_set_init(LqrProgress * p, LqrProgressFuncInit init_func)
 {
@@ -93,7 +93,7 @@ lqr_progress_set_init(LqrProgress * p, LqrProgressFuncInit init_func)
   return LQR_OK;
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrRetVal
 lqr_progress_set_update(LqrProgress * p, LqrProgressFuncUpdate update_func)
 {
@@ -101,7 +101,7 @@ lqr_progress_set_update(LqrProgress * p, LqrProgressFuncUpdate update_func)
   return LQR_OK;
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrRetVal
 lqr_progress_set_end(LqrProgress * p, LqrProgressFuncEnd end_func)
 {
@@ -109,7 +109,7 @@ lqr_progress_set_end(LqrProgress * p, LqrProgressFuncEnd end_func)
   return LQR_OK;
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrRetVal
 lqr_progress_set_update_step (LqrProgress *p, gfloat update_step)
 {
@@ -117,39 +117,39 @@ lqr_progress_set_update_step (LqrProgress *p, gfloat update_step)
   return LQR_OK;
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrRetVal
 lqr_progress_set_init_width_message(LqrProgress *p, const gchar * message)
 {
-  CATCH_F (p);
-  strncpy(p->init_width_message, message, LQR_PROGRESS_MAX_MESSAGE_LENGTH);
+  LQR_CATCH_F (p);
+  g_strlcpy(p->init_width_message, message, LQR_PROGRESS_MAX_MESSAGE_LENGTH);
   return LQR_OK;
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrRetVal
 lqr_progress_set_init_height_message(LqrProgress *p, const gchar * message)
 {
-  CATCH_F (p != NULL);
-  strncpy(p->init_height_message, message, LQR_PROGRESS_MAX_MESSAGE_LENGTH);
+  LQR_CATCH_F (p != NULL);
+  g_strlcpy(p->init_height_message, message, LQR_PROGRESS_MAX_MESSAGE_LENGTH);
   return LQR_OK;
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrRetVal
 lqr_progress_set_end_width_message(LqrProgress *p, const gchar * message)
 {
-  CATCH_F (p != NULL);
-  strncpy(p->end_width_message, message, LQR_PROGRESS_MAX_MESSAGE_LENGTH);
+  LQR_CATCH_F (p != NULL);
+  g_strlcpy(p->end_width_message, message, LQR_PROGRESS_MAX_MESSAGE_LENGTH);
   return LQR_OK;
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrRetVal
 lqr_progress_set_end_height_message(LqrProgress *p, const gchar * message)
 {
-  CATCH_F (p != NULL);
-  strncpy(p->end_height_message, message, LQR_PROGRESS_MAX_MESSAGE_LENGTH);
+  LQR_CATCH_F (p != NULL);
+  g_strlcpy(p->end_height_message, message, LQR_PROGRESS_MAX_MESSAGE_LENGTH);
   return LQR_OK;
 }
 

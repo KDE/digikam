@@ -62,6 +62,9 @@ LqrCarver * lqr_carver_new_common (gint width, gint height, gint channels)
   r->flushed_vs = NULL;
   r->preserve_in_buffer = FALSE;
   TRY_N_N (r->progress = lqr_progress_new());
+  r->session_update_step = 1;
+  r->session_rescale_total = 0;
+  r->session_rescale_current = 0;
 
   r->en = NULL;
   r->bias = NULL;
@@ -129,14 +132,14 @@ LqrCarver * lqr_carver_new_common (gint width, gint height, gint channels)
   return r;
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrCarver *
 lqr_carver_new (guchar * buffer, gint width, gint height, gint channels)
 {
   return lqr_carver_new_ext (buffer, width, height, channels, LQR_COLDEPTH_8I);
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrCarver *
 lqr_carver_new_ext (void * buffer, gint width, gint height, gint channels, LqrColDepth colour_depth)
 {
@@ -154,7 +157,7 @@ lqr_carver_new_ext (void * buffer, gint width, gint height, gint channels, LqrCo
 }
 
 /* destructor */
-LQR_PUBLIC
+/* LQR_PUBLIC */
 void
 lqr_carver_destroy (LqrCarver * r)
 {
@@ -198,12 +201,12 @@ lqr_carver_init_energy_related (LqrCarver *r)
 {
   gint y, x;
 
-  CATCH_F (r->active == FALSE);
-  CATCH_F (r->nrg_active == FALSE);
+  LQR_CATCH_F (r->active == FALSE);
+  LQR_CATCH_F (r->nrg_active == FALSE);
 
-  CATCH_MEM (r->en = g_try_new (gfloat, r->w * r->h));
-  CATCH_MEM (r->_raw = g_try_new (gint, r->h_start * r->w_start));
-  CATCH_MEM (r->raw = g_try_new (gint *, r->h_start));
+  LQR_CATCH_MEM (r->en = g_try_new (gfloat, r->w * r->h));
+  LQR_CATCH_MEM (r->_raw = g_try_new (gint, r->h_start * r->w_start));
+  LQR_CATCH_MEM (r->raw = g_try_new (gint *, r->h_start));
 
   for (y = 0; y < r->h; y++)
     {
@@ -220,27 +223,30 @@ lqr_carver_init_energy_related (LqrCarver *r)
 }
 
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrRetVal
 lqr_carver_init (LqrCarver *r, gint delta_x, gfloat rigidity)
 {
   gint x;
 
-  CATCH_CANC (r);
+  LQR_CATCH_CANC (r);
 
-  CATCH_F (r->active == FALSE);
+  LQR_CATCH_F (r->active == FALSE);
 
-  /* CATCH_MEM (r->bias = g_try_new0 (gfloat, r->w * r->h)); */
-  CATCH_MEM (r->m = g_try_new (gfloat, r->w * r->h));
-  CATCH_MEM (r->least = g_try_new (gint, r->w * r->h));
+  if (r->nrg_active == FALSE)
+    {
+      LQR_CATCH (lqr_carver_init_energy_related (r));
+    }
 
-  CATCH (lqr_carver_init_energy_related (r));
+  /* LQR_CATCH_MEM (r->bias = g_try_new0 (gfloat, r->w * r->h)); */
+  LQR_CATCH_MEM (r->m = g_try_new (gfloat, r->w * r->h));
+  LQR_CATCH_MEM (r->least = g_try_new (gint, r->w * r->h));
 
-  CATCH_MEM (r->vpath = g_try_new (gint, r->h));
-  CATCH_MEM (r->vpath_x = g_try_new (gint, r->h));
+  LQR_CATCH_MEM (r->vpath = g_try_new (gint, r->h));
+  LQR_CATCH_MEM (r->vpath_x = g_try_new (gint, r->h));
 
-  CATCH_MEM (r->nrg_xmin = g_try_new (gint, r->h));
-  CATCH_MEM (r->nrg_xmax = g_try_new (gint, r->h));
+  LQR_CATCH_MEM (r->nrg_xmin = g_try_new (gint, r->h));
+  LQR_CATCH_MEM (r->nrg_xmax = g_try_new (gint, r->h));
 
   /* set rigidity map */
   r->delta_x = delta_x;
@@ -261,11 +267,11 @@ lqr_carver_init (LqrCarver *r, gint delta_x, gfloat rigidity)
 
 /*** set attributes ***/
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrRetVal
 lqr_carver_set_image_type (LqrCarver * r, LqrImageType image_type)
 {
-  CATCH_CANC (r);
+  LQR_CATCH_CANC (r);
 
   switch (image_type) {
     case LQR_GREY_IMAGE:
@@ -317,7 +323,7 @@ lqr_carver_set_image_type (LqrCarver * r, LqrImageType image_type)
       r->black_channel = 3;
       break;
     case LQR_CUSTOM_IMAGE:
-      r->alpha_channel = r->channels - 1;
+      r->alpha_channel = -1;
       r->black_channel = -1;
       break;
     default:
@@ -332,46 +338,110 @@ lqr_carver_set_image_type (LqrCarver * r, LqrImageType image_type)
   return LQR_OK;
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrRetVal
 lqr_carver_set_alpha_channel (LqrCarver * r, gint channel_index)
 {
-  CATCH_CANC (r);
+  gboolean changed = TRUE;
+  LQR_CATCH_CANC (r);
 
-  if (channel_index < 0) {
-    r->alpha_channel = -1;
-  } else if (channel_index < r->channels) {
-    r->alpha_channel = channel_index;
-  } else {
-    return LQR_ERROR;
-  }
-  r->image_type = LQR_CUSTOM_IMAGE;
+  if (channel_index < 0)
+    {
+      if (r->alpha_channel != -1)
+        {
+          r->alpha_channel = -1;
+        }
+      else
+        {
+          changed = FALSE;
+        }
+    }
+  else if (channel_index < r->channels)
+    {
+      if (r->alpha_channel != channel_index)
+        {
+          if (r->black_channel == channel_index)
+            {
+              r->black_channel = -1;
+            }
+          r->alpha_channel = channel_index;
+        }
+      else
+        {
+          changed = FALSE;
+        }
+    }
+  else
+    {
+      return LQR_ERROR;
+    }
 
-  g_free(r->rcache);
-  r->rcache = NULL;
-  r->nrg_uptodate = FALSE;
+  if (r->image_type != LQR_CUSTOM_IMAGE)
+    {
+      r->image_type = LQR_CUSTOM_IMAGE;
+      changed = TRUE;
+    }
+
+  if (changed)
+    {
+      g_free(r->rcache);
+      r->rcache = NULL;
+      r->nrg_uptodate = FALSE;
+    }
 
   return LQR_OK;
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrRetVal
 lqr_carver_set_black_channel (LqrCarver * r, gint channel_index)
 {
-  CATCH_CANC (r);
+  gboolean changed = TRUE;
+  LQR_CATCH_CANC (r);
 
-  if (channel_index < 0) {
-    r->black_channel = -1;
-  } else if (channel_index < r->channels) {
-    r->black_channel = channel_index;
-  } else {
-    return LQR_ERROR;
-  }
-  r->image_type = LQR_CUSTOM_IMAGE;
+  if (channel_index < 0)
+    {
+      if (r->black_channel != -1)
+        {
+          r->black_channel = -1;
+        }
+      else
+        {
+          changed = FALSE;
+        }
+    }
+  else if (channel_index < r->channels)
+    {
+      if (r->black_channel != channel_index)
+        {
+          if (r->alpha_channel == channel_index)
+            {
+              r->alpha_channel = -1;
+            }
+          r->black_channel = channel_index;
+        }
+      else
+        {
+          changed = FALSE;
+        }
+    }
+  else
+    {
+      return LQR_ERROR;
+    }
 
-  g_free(r->rcache);
-  r->rcache = NULL;
-  r->nrg_uptodate = FALSE;
+  if (r->image_type != LQR_CUSTOM_IMAGE)
+    {
+      r->image_type = LQR_CUSTOM_IMAGE;
+      changed = TRUE;
+    }
+
+  if (changed)
+    {
+      g_free(r->rcache);
+      r->rcache = NULL;
+      r->nrg_uptodate = FALSE;
+    }
 
   return LQR_OK;
 }
@@ -379,7 +449,7 @@ lqr_carver_set_black_channel (LqrCarver * r, gint channel_index)
 /* set gradient function */
 /* WARNING: THIS FUNCTION IS ONLY MAINTAINED FOR BACK-COMPATIBILITY PURPOSES */
 /* lqr_carver_set_energy_function_builtin() should be used in newly written code instead */
-LQR_PUBLIC
+/* LQR_PUBLIC */
 void
 lqr_carver_set_gradient_function (LqrCarver * r, LqrGradFuncType gf_ind)
 {
@@ -409,15 +479,15 @@ lqr_carver_set_gradient_function (LqrCarver * r, LqrGradFuncType gf_ind)
 }
 
 /* attach carvers to be scaled along with the main one */
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrRetVal
 lqr_carver_attach (LqrCarver * r, LqrCarver * aux)
 {
-  CATCH_F (r->w0 == aux->w0);
-  CATCH_F (r->h0 == aux->h0);
-  CATCH_F (g_atomic_int_get(&r->state) == LQR_CARVER_STATE_STD);
-  CATCH_F (g_atomic_int_get(&aux->state) == LQR_CARVER_STATE_STD);
-  CATCH_MEM (r->attached_list = lqr_carver_list_append (r->attached_list, aux));
+  LQR_CATCH_F (r->w0 == aux->w0);
+  LQR_CATCH_F (r->h0 == aux->h0);
+  LQR_CATCH_F (g_atomic_int_get(&r->state) == LQR_CARVER_STATE_STD);
+  LQR_CATCH_F (g_atomic_int_get(&aux->state) == LQR_CARVER_STATE_STD);
+  LQR_CATCH_MEM (r->attached_list = lqr_carver_list_append (r->attached_list, aux));
   g_free(aux->vs);
   aux->vs = r->vs;
   aux->root = r;
@@ -426,7 +496,7 @@ lqr_carver_attach (LqrCarver * r, LqrCarver * aux)
 }
 
 /* set the seam output flag */
-LQR_PUBLIC
+/* LQR_PUBLIC */
 void
 lqr_carver_set_dump_vmaps (LqrCarver *r)
 {
@@ -434,7 +504,7 @@ lqr_carver_set_dump_vmaps (LqrCarver *r)
 }
 
 /* unset the seam output flag */
-LQR_PUBLIC
+/* LQR_PUBLIC */
 void
 lqr_carver_set_no_dump_vmaps (LqrCarver *r)
 {
@@ -442,7 +512,7 @@ lqr_carver_set_no_dump_vmaps (LqrCarver *r)
 }
 
 /* set order if rescaling in both directions */
-LQR_PUBLIC
+/* LQR_PUBLIC */
 void
 lqr_carver_set_resize_order (LqrCarver *r, LqrResizeOrder resize_order)
 {
@@ -450,7 +520,7 @@ lqr_carver_set_resize_order (LqrCarver *r, LqrResizeOrder resize_order)
 }
 
 /* set leftright switch interval */
-LQR_PUBLIC
+/* LQR_PUBLIC */
 void
 lqr_carver_set_side_switch_frequency (LqrCarver *r, guint switch_frequency)
 {
@@ -458,17 +528,17 @@ lqr_carver_set_side_switch_frequency (LqrCarver *r, guint switch_frequency)
 }
 
 /* set enlargement step */
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrRetVal
 lqr_carver_set_enl_step (LqrCarver *r, gfloat enl_step)
 {
-  CATCH_F ((enl_step > 1) && (enl_step <= 2));
-  CATCH_CANC (r);
+  LQR_CATCH_F ((enl_step > 1) && (enl_step <= 2));
+  LQR_CATCH_CANC (r);
   r->enl_step = enl_step;
   return LQR_OK;
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 void
 lqr_carver_set_use_cache (LqrCarver *r, gboolean use_cache)
 {
@@ -482,7 +552,7 @@ lqr_carver_set_use_cache (LqrCarver *r, gboolean use_cache)
 }
 
 /* set progress reprot */
-LQR_PUBLIC
+/* LQR_PUBLIC */
 void
 lqr_carver_set_progress (LqrCarver *r, LqrProgress *p)
 {
@@ -491,7 +561,7 @@ lqr_carver_set_progress (LqrCarver *r, LqrProgress *p)
 }
 
 /* flag the input buffer to avoid destruction */
-LQR_PUBLIC
+/* LQR_PUBLIC */
 void
 lqr_carver_set_preserve_input_image(LqrCarver *r)
 {
@@ -511,23 +581,23 @@ lqr_carver_build_maps (LqrCarver * r, gint depth)
   assert (depth >= 1);
 #endif /* __LQR_DEBUG__ */
 
-  CATCH_CANC (r);
+  LQR_CATCH_CANC (r);
 
   /* only go deeper if needed */
   if (depth > r->max_level)
     {
-      CATCH_F (r->active);
-      CATCH_F (r->root == NULL);
+      LQR_CATCH_F (r->active);
+      LQR_CATCH_F (r->root == NULL);
 
       /* set to minimum width reached so far */
       lqr_carver_set_width (r, r->w_start - r->max_level + 1);
 
       /* compute energy & minpath maps */
-      CATCH (lqr_carver_build_emap (r));
-      CATCH (lqr_carver_build_mmap (r));
+      LQR_CATCH (lqr_carver_build_emap (r));
+      LQR_CATCH (lqr_carver_build_mmap (r));
 
       /* compute visibility map */
-      CATCH (lqr_carver_build_vsmap (r, depth));
+      LQR_CATCH (lqr_carver_build_vsmap (r, depth));
     }
   return LQR_OK;
 }
@@ -538,7 +608,7 @@ lqr_carver_build_emap (LqrCarver * r)
 {
   gint x, y;
 
-  CATCH_CANC(r);
+  LQR_CATCH_CANC(r);
 
   if (r->nrg_uptodate)
     {
@@ -547,17 +617,17 @@ lqr_carver_build_emap (LqrCarver * r)
 
   if (r->use_rcache && r->rcache == NULL)
     {
-      CATCH_MEM (r->rcache = lqr_carver_generate_rcache (r));
+      LQR_CATCH_MEM (r->rcache = lqr_carver_generate_rcache (r));
     }
 
   for (y = 0; y < r->h; y++)
     {
-      CATCH_CANC(r);
+      LQR_CATCH_CANC(r);
       /* r->nrg_xmin[y] = 0; */
       /* r->nrg_xmax[y] = r->w - 1; */
       for (x = 0; x < r->w; x++)
         {
-          CATCH (lqr_carver_compute_e(r, x, y));
+          LQR_CATCH (lqr_carver_compute_e(r, x, y));
         }
     }
 
@@ -573,11 +643,11 @@ lqr_carver_compute_e (LqrCarver * r, gint x, gint y)
   gfloat b_add = 0;
 
   /* removed CANC check for performance reasons */
-  /* CATCH_CANC (r); */
+  /* LQR_CATCH_CANC (r); */
 
   data = r->raw[y][x];
 
-  CATCH (lqr_rwindow_fill (r->rwindow, r, x, y));
+  LQR_CATCH (lqr_rwindow_fill (r->rwindow, r, x, y));
   if (r->bias != NULL)
     {
       b_add = r->bias[data] / r->w_start;
@@ -606,7 +676,7 @@ lqr_carver_build_mmap (LqrCarver * r)
   gfloat m, m1, r_fact;
 
 
-  CATCH_CANC(r);
+  LQR_CATCH_CANC(r);
 
   /* span first row */
   for (x = 0; x < r->w; x++)
@@ -623,7 +693,7 @@ lqr_carver_build_mmap (LqrCarver * r)
     {
       for (x = 0; x < r->w; x++)
         {
-          CATCH_CANC(r);
+          LQR_CATCH_CANC(r);
 
           data = r->raw[y][x];
 #ifdef __LQR_DEBUG__
@@ -690,7 +760,6 @@ LqrRetVal
 lqr_carver_build_vsmap (LqrCarver * r, gint depth)
 {
   gint l;
-  gint update_step;
   gint lr_switch_interval = 0;
   LqrDataTok data_tok;
 
@@ -716,9 +785,6 @@ lqr_carver_build_vsmap (LqrCarver * r, gint depth)
    * lqr_carver_set_width(w_start - max_level + 1);
    * has been given */
 
-  /* update step for progress reprt*/
-  update_step = (gint) MAX ((depth - r->max_level) * r->progress->update_step, 1);
-
   /* left-right switch interval */
   if (r->lr_switch_frequency)
     {
@@ -728,12 +794,12 @@ lqr_carver_build_vsmap (LqrCarver * r, gint depth)
   /* cycle over levels */
   for (l = r->max_level; l < depth; l++)
     {
-      CATCH_CANC(r);
+      LQR_CATCH_CANC(r);
 
-      if ((l - r->max_level) % update_step == 0)
+      if ((l - r->max_level + r->session_rescale_current) % r->session_update_step == 0)
         {
-          lqr_progress_update (r->progress, (gdouble) (l - r->max_level) /
-                                (gdouble) (depth - r->max_level));
+          lqr_progress_update (r->progress, (gdouble) (l - r->max_level + r->session_rescale_current) /
+                                (gdouble) (r->session_rescale_total));
         }
 
 #ifdef __LQR_DEBUG__
@@ -759,19 +825,19 @@ lqr_carver_build_vsmap (LqrCarver * r, gint depth)
       if (r->w > 1)
         {
           /* update the energy */
-          /* CATCH (lqr_carver_build_emap (r));  */
-          CATCH (lqr_carver_update_emap (r));
+          /* LQR_CATCH (lqr_carver_build_emap (r));  */
+          LQR_CATCH (lqr_carver_update_emap (r));
 
           /* recalculate the minpath map */
           if ((r->lr_switch_frequency) && (((l - r->max_level + lr_switch_interval / 2) % lr_switch_interval) == 0))
             {
               r->leftright ^= 1;
-              CATCH (lqr_carver_build_mmap (r));
+              LQR_CATCH (lqr_carver_build_mmap (r));
             }
           else
             {
               /* lqr_carver_build_mmap (r); */
-              CATCH (lqr_carver_update_mmap (r));
+              LQR_CATCH (lqr_carver_update_mmap (r));
             }
         }
       else
@@ -782,13 +848,13 @@ lqr_carver_build_vsmap (LqrCarver * r, gint depth)
     }
 
   /* insert seams for image enlargement */
-  CATCH (lqr_carver_inflate (r, depth - 1));
+  LQR_CATCH (lqr_carver_inflate (r, depth - 1));
 
   /* reset image size */
   lqr_carver_set_width (r, r->w_start);
   /* repeat for auxiliary layers */
   data_tok.integer = r->w_start;
-  CATCH (lqr_carver_list_foreach_recursive (r->attached_list, lqr_carver_set_width_attached, data_tok));
+  LQR_CATCH (lqr_carver_list_foreach_recursive (r->attached_list, lqr_carver_set_width_attached, data_tok));
 
 #ifdef __LQR_VERBOSE__
   printf ("[ visibility map OK ]\n");
@@ -824,17 +890,17 @@ lqr_carver_inflate (LqrCarver * r, gint l)
   assert (l + 1 > r->max_level);        /* otherwise is useless */
 #endif /* __LQR_DEBUG__ */
 
-  CATCH_CANC (r);
+  LQR_CATCH_CANC (r);
 
   if (r->root == NULL)
     {
       prev_state = g_atomic_int_get(&r->state);
-      CATCH (lqr_carver_set_state(r, LQR_CARVER_STATE_INFLATING, TRUE));
+      LQR_CATCH (lqr_carver_set_state(r, LQR_CARVER_STATE_INFLATING, TRUE));
     }
 
   /* first iterate on attached carvers */
   data_tok.integer = l;
-  CATCH (lqr_carver_list_foreach (r->attached_list,  lqr_carver_inflate_attached, data_tok));
+  LQR_CATCH (lqr_carver_list_foreach (r->attached_list,  lqr_carver_inflate_attached, data_tok));
 
   /* scale to current maximum size
    * (this is the original size the first time) */
@@ -848,17 +914,17 @@ lqr_carver_inflate (LqrCarver * r, gint l)
 
   if (r->root == NULL)
     {
-      CATCH_MEM (new_vs = g_try_new0 (gint, w1 * r->h0));
+      LQR_CATCH_MEM (new_vs = g_try_new0 (gint, w1 * r->h0));
     }
   if (r->active)
     {
       if (r->bias)
         {
-          CATCH_MEM (new_bias = g_try_new0 (gfloat, w1 * r->h0));
+          LQR_CATCH_MEM (new_bias = g_try_new0 (gfloat, w1 * r->h0));
         }
       if (r->rigidity_mask)
         {
-          CATCH_MEM (new_rigmask = g_try_new (gfloat, w1 * r->h0));
+          LQR_CATCH_MEM (new_rigmask = g_try_new (gfloat, w1 * r->h0));
         }
     }
 
@@ -870,7 +936,7 @@ lqr_carver_inflate (LqrCarver * r, gint l)
   for (z0 = 0; z0 < w1 * r->h0; z0++, lqr_cursor_next (r->c))
     {
 
-      CATCH_CANC (r);
+      LQR_CATCH_CANC (r);
 
       /* read visibility */
       vs = r->vs[r->c->now];
@@ -1006,6 +1072,7 @@ lqr_carver_inflate (LqrCarver * r, gint l)
   g_free (r->bias);
   g_free (r->rigidity_mask);
 
+  r->bias = NULL;
   r->rcache = NULL;
   r->nrg_uptodate = FALSE;
 
@@ -1016,7 +1083,7 @@ lqr_carver_inflate (LqrCarver * r, gint l)
     {
       g_free (r->vs);
       r->vs = new_vs;
-      CATCH (lqr_carver_propagate_vsmap(r));
+      LQR_CATCH (lqr_carver_propagate_vsmap(r));
     }
   else
     {
@@ -1024,14 +1091,14 @@ lqr_carver_inflate (LqrCarver * r, gint l)
     }
   if (r->nrg_active)
     {
-      CATCH_MEM (r->en = g_try_new0 (gfloat, w1 * r->h0));
+      LQR_CATCH_MEM (r->en = g_try_new0 (gfloat, w1 * r->h0));
     }
   if (r->active)
     {
       r->bias = new_bias;
       r->rigidity_mask = new_rigmask;
-      CATCH_MEM (r->m = g_try_new0 (gfloat, w1 * r->h0));
-      CATCH_MEM (r->least = g_try_new0 (gint, w1 * r->h0));
+      LQR_CATCH_MEM (r->m = g_try_new0 (gfloat, w1 * r->h0));
+      LQR_CATCH_MEM (r->least = g_try_new0 (gint, w1 * r->h0));
     }
 
   /* set new widths & levels (w_start is kept for reference) */
@@ -1051,7 +1118,7 @@ lqr_carver_inflate (LqrCarver * r, gint l)
 
   if (r->root == NULL)
     {
-      CATCH (lqr_carver_set_state(r, prev_state, TRUE));
+      LQR_CATCH (lqr_carver_set_state(r, prev_state, TRUE));
     }
 
   return LQR_OK;
@@ -1108,16 +1175,16 @@ lqr_carver_update_emap (LqrCarver * r)
   gint x, y;
   gint y1, y1_min, y1_max;
 
+  LQR_CATCH_CANC (r);
+
   if (r->nrg_uptodate)
     {
       return LQR_OK;
     }
   if (r->use_rcache)
     {
-      CATCH_F (r->rcache != NULL);
+      LQR_CATCH_F (r->rcache != NULL);
     }
-
-  CATCH_CANC (r);
 
   for (y = 0; y < r->h; y++)
     {
@@ -1145,11 +1212,11 @@ lqr_carver_update_emap (LqrCarver * r)
 
   for (y = 0; y < r->h; y++)
     {
-      CATCH_CANC (r);
+      LQR_CATCH_CANC (r);
 
       for (x = r->nrg_xmin[y]; x <= r->nrg_xmax[y]; x++)
         {
-          CATCH (lqr_carver_compute_e (r, x, y));
+          LQR_CATCH (lqr_carver_compute_e (r, x, y));
         }
     }
 
@@ -1169,15 +1236,23 @@ lqr_carver_update_mmap (LqrCarver * r)
 {
   gint x, y;
   gint x_min, x_max;
-  gint x1;
+  gint x1, dx;
   gint x1_min, x1_max;
   gint data, data_down, least;
   gfloat m, m1, r_fact;
+  gfloat new_m;
+  gfloat * mc = NULL;
   gint stop;
   gint x_stop;
 
-  CATCH_CANC(r);
-  CATCH_F (r->nrg_uptodate);
+  LQR_CATCH_CANC(r);
+  LQR_CATCH_F (r->nrg_uptodate);
+
+  if (r->rigidity)
+    {
+      LQR_CATCH_MEM (mc = g_try_new(gfloat, 2 * r->delta_x + 1));
+      mc += r->delta_x;
+    }
 
   /* span first row */
   /* x_min = MAX (r->vpath_x[0] - r->delta_x, 0); */
@@ -1192,10 +1267,11 @@ lqr_carver_update_mmap (LqrCarver * r)
       r->m[data] = r->en[data];
     }
 
+
   /* other rows */
   for (y = 1; y < r->h; y++)
     {
-      CATCH_CANC(r);
+      LQR_CATCH_CANC(r);
 
       /* make sure to include the changed energy region */
       x_min = MIN (x_min, r->nrg_xmin[y]);
@@ -1219,68 +1295,121 @@ lqr_carver_update_mmap (LqrCarver * r)
 
           /* find the minimum in the previous rows
            * as in build_mmap() */
-          x1_min = MAX (-x, -r->delta_x);
-          x1_max = MIN (r->w - 1 - x, r->delta_x);
-          data_down = r->raw[y - 1][x + x1_min];
-          least = data_down;
+          x1_min = MAX (0, x - r->delta_x);
+          x1_max = MIN (r->w - 1, x + r->delta_x);
+
           if (r->rigidity)
             {
-              m = r->m[data_down] + r_fact * r->rigidity_map[x1_min];
-              for (x1 = x1_min + 1; x1 <= x1_max; x1++)
+              dx = x1_min - x;
+              switch (x1_max - x1_min + 1)
                 {
-                  data_down = r->raw[y - 1][x + x1];
-                  m1 = r->m[data_down] + r_fact * r->rigidity_map[x1];
-                  if ((m1 < m) || ((m1 == m) && (r->leftright == 1)))
-                    {
-                      m = m1;
-                      least = data_down;
-                    }
+                  case 1:
+                    MRSET1(y, x1_min, dx);
+                    m = r->leftright ? MRMINR1(y, x1_min, dx) : MRMINL1(y, x1_min, dx);
+                    break;
+                  case 2:
+                    MRSET2(y, x1_min, dx);
+                    m = r->leftright ? MRMINR2(y, x1_min, dx) : MRMINL2(y, x1_min, dx);
+                    break;
+                  case 3:
+                    MRSET3(y, x1_min, dx);
+                    m = r->leftright ? MRMINR3(y, x1_min, dx) : MRMINL3(y, x1_min, dx);
+                    break;
+                  case 4:
+                    MRSET4(y, x1_min, dx);
+                    m = r->leftright ? MRMINR4(y, x1_min, dx) : MRMINL4(y, x1_min, dx);
+                    break;
+                  case 5:
+                    MRSET5(y, x1_min, dx);
+                    m = r->leftright ? MRMINR5(y, x1_min, dx) : MRMINL5(y, x1_min, dx);
+                    break;
+                  default:
+                    data_down = r->raw[y - 1][x1_min];
+                    least = data_down;
+                    m = r->m[data_down] + r_fact * r->rigidity_map[dx++];
+                    /* fprintf(stderr, "y,x=%i,%i x1=%i dx=%i mr=%g MR=%g m=%g M=%g\n", y, x, x1_min, dx, m, MRDOWN(y, x1_min, dx), r->m[data_down], MDOWN(y, x1_min)); fflush(stderr);   */
+                    for (x1 = x1_min + 1; x1 <= x1_max; x1++, dx++)
+                      {
+                        data_down = r->raw[y - 1][x1];
+                        m1 = r->m[data_down] + r_fact * r->rigidity_map[dx];
+                        /* fprintf(stderr, "y,x=%i,%i x1=%i dx=%i mr=%g MR=%g m=%g M=%g\n", y, x, x1, dx, m1, MRDOWN(y, x1, dx), r->m[data_down], MDOWN(y, x1)); fflush(stderr);   */
+                        if ((m1 < m) || ((m1 == m) && (r->leftright == 1)))
+                          {
+                            m = m1;
+                            least = data_down;
+                          }
+                      }
                 }
+                /* fprintf(stderr, "y,x=%i,%i x1_min,max=%i,%i least=%i m=%g\n", y, x, x1_min, x1_max, least, m); fflush(stderr); */
             }
           else
             {
-              m = r->m[data_down];
-              for (x1 = x1_min + 1; x1 <= x1_max; x1++)
+              switch (x1_max - x1_min + 1)
                 {
-                  data_down = r->raw[y - 1][x + x1];
-                  m1 = r->m[data_down];
-                  if ((m1 < m) || ((m1 == m) && (r->leftright == 1)))
-                    {
-                      m = m1;
-                      least = data_down;
-                    }
+                  case 1:
+                    m = r->leftright ? MMINR1(y, x1_min) : MMINL1(y, x1_min);
+                    break;
+                  case 2:
+                    m = r->leftright ? MMINR2(y, x1_min) : MMINL2(y, x1_min);
+                    break;
+                  case 3:
+                    m = r->leftright ? MMINR3(y, x1_min) : MMINL3(y, x1_min);
+                    break;
+                  case 4:
+                    m = r->leftright ? MMINR4(y, x1_min) : MMINL4(y, x1_min);
+                    break;
+                  case 5:
+                    m = r->leftright ? MMINR5(y, x1_min) : MMINL5(y, x1_min);
+                    break;
+                  default:
+                    data_down = r->raw[y - 1][x1_min];
+                    least = data_down;
+                    m = r->m[data_down];
+                    for (x1 = x1_min + 1; x1 <= x1_max; x1++)
+                      {
+                        data_down = r->raw[y - 1][x1];
+                        m1 = r->m[data_down];
+                        if ((m1 < m) || ((m1 == m) && (r->leftright == 1)))
+                          {
+                            m = m1;
+                            least = data_down;
+                          }
+                      }
                 }
+                /* fprintf(stderr, "y,x=%i,%i x1_min,max=%i,%i least=%i m=%g\n", y, x, x1_min, x1_max, least, m); fflush(stderr);   */
             }
 
-          /* reduce the range if there's no difference
+          new_m = r->en[data] + m;
+
+          /* reduce the range if there's no (relevant) difference
            * with the previous map */
           if (r->least[data] == least)
             {
-              if ((x == x_min) && (x < r->nrg_xmin[y])
-                  && (r->m[data] == r->en[data] + m))
-                {
-                  x_min++;
-                }
-              if ((x > r->nrg_xmax[y]) && (r->m[data] == r->en[data] + m))
+              if (fabsf(r->m[data] - new_m) < UPDATE_TOLERANCE)
                 {
                   if (stop == 0)
                     {
                       x_stop = x;
                     }
                   stop = 1;
+                  new_m = r->m[data];
                 }
               else
                 {
                   stop = 0;
+                  r->m[data] = new_m;
+                }
+              if ((x == x_min) && stop)
+                {
+                  x_min++;
                 }
             }
           else
             {
               stop = 0;
+              r->m[data] = new_m;
             }
 
-          /* set current m */
-          r->m[data] = r->en[data] + m;
           r->least[data] = least;
 
           if ((x == x_max) && (stop))
@@ -1290,6 +1419,13 @@ lqr_carver_update_mmap (LqrCarver * r)
         }
 
     }
+
+  if (r->rigidity)
+    {
+      mc -= r->delta_x;
+      g_free(mc);
+    }
+
   return LQR_OK;
 }
 
@@ -1436,10 +1572,10 @@ lqr_carver_propagate_vsmap (LqrCarver * r)
 {
   LqrDataTok data_tok;
 
-  CATCH_CANC (r);
+  LQR_CATCH_CANC (r);
 
   data_tok.data = NULL;
-  CATCH (lqr_carver_list_foreach_recursive (r->attached_list,  lqr_carver_propagate_vsmap_attached, data_tok));
+  LQR_CATCH (lqr_carver_list_foreach_recursive (r->attached_list,  lqr_carver_propagate_vsmap_attached, data_tok));
   return LQR_OK;
 }
 
@@ -1450,7 +1586,7 @@ lqr_carver_propagate_vsmap_attached (LqrCarver * r, LqrDataTok data)
   data_tok.data = NULL;
   r->vs = r->root->vs;
   lqr_carver_scan_reset(r);
-  /* CATCH (lqr_carver_list_foreach (r->attached_list,  lqr_carver_propagate_vsmap_attached, data_tok)); */
+  /* LQR_CATCH (lqr_carver_list_foreach (r->attached_list,  lqr_carver_propagate_vsmap_attached, data_tok)); */
   return LQR_OK;
 }
 
@@ -1480,7 +1616,7 @@ lqr_carver_set_width_attached (LqrCarver * r, LqrDataTok data)
 
 /* flatten the image to its current state
  * (all maps are reset, invisible points are lost) */
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrRetVal
 lqr_carver_flatten (LqrCarver * r)
 {
@@ -1497,16 +1633,16 @@ lqr_carver_flatten (LqrCarver * r)
   fflush (stdout);
 #endif /* __LQR_VERBOSE__ */
 
-  CATCH_CANC(r);
+  LQR_CATCH_CANC(r);
 
   if (r->root == NULL)
     {
       prev_state = g_atomic_int_get(&r->state);
-      CATCH (lqr_carver_set_state (r, LQR_CARVER_STATE_FLATTENING, TRUE));
+      LQR_CATCH (lqr_carver_set_state (r, LQR_CARVER_STATE_FLATTENING, TRUE));
     }
 
   /* first iterate on attached carvers */
-  CATCH (lqr_carver_list_foreach (r->attached_list,  lqr_carver_flatten_attached, data_tok));
+  LQR_CATCH (lqr_carver_list_foreach (r->attached_list,  lqr_carver_flatten_attached, data_tok));
 
   /* free non needed maps first */
   g_free (r->en);
@@ -1522,21 +1658,21 @@ lqr_carver_flatten (LqrCarver * r)
 
   if (r->active)
     {
-      if (r->bias)
-        {
-          CATCH_MEM (new_bias = g_try_new0 (gfloat, r->w * r->h));
-        }
       if (r->rigidity_mask)
         {
-          CATCH_MEM (new_rigmask = g_try_new (gfloat, r->w * r->h));
+          LQR_CATCH_MEM (new_rigmask = g_try_new (gfloat, r->w * r->h));
         }
     }
   if (r->nrg_active)
     {
+      if (r->bias)
+        {
+          LQR_CATCH_MEM (new_bias = g_try_new0 (gfloat, r->w * r->h));
+        }
       g_free (r->_raw);
       g_free (r->raw);
-      CATCH_MEM (r->_raw = g_try_new (gint, r->w * r->h));
-      CATCH_MEM (r->raw = g_try_new (gint *, r->h));
+      LQR_CATCH_MEM (r->_raw = g_try_new (gint, r->w * r->h));
+      LQR_CATCH_MEM (r->raw = g_try_new (gint *, r->h));
     }
 
   /* span the image with the cursor and copy
@@ -1544,7 +1680,7 @@ lqr_carver_flatten (LqrCarver * r)
   lqr_cursor_reset (r->c);
   for (y = 0; y < r->h; y++)
     {
-      CATCH_CANC (r);
+      LQR_CATCH_CANC (r);
 
       if (r->nrg_active)
         {
@@ -1559,10 +1695,6 @@ lqr_carver_flatten (LqrCarver * r)
             }
           if (r->active)
             {
-              if (r->bias)
-                {
-                  new_bias[z0] = r->bias[r->c->now];
-                }
               if (r->rigidity_mask)
                 {
                   new_rigmask[z0] = r->rigidity_mask[r->c->now];
@@ -1570,6 +1702,10 @@ lqr_carver_flatten (LqrCarver * r)
             }
           if (r->nrg_active)
             {
+              if (r->bias)
+                {
+                  new_bias[z0] = r->bias[r->c->now];
+                }
               r->raw[y][x] = z0;
             }
           lqr_cursor_next (r->c);
@@ -1583,10 +1719,13 @@ lqr_carver_flatten (LqrCarver * r)
     }
   r->rgb = new_rgb;
   r->preserve_in_buffer = FALSE;
-  if (r->active)
+  if (r->nrg_active)
     {
       g_free (r->bias);
       r->bias = new_bias;
+    }
+  if (r->active)
+    {
       g_free (r->rigidity_mask);
       r->rigidity_mask = new_rigmask;
     }
@@ -1595,17 +1734,17 @@ lqr_carver_flatten (LqrCarver * r)
   if (r->root == NULL)
     {
       g_free (r->vs);
-      CATCH_MEM (r->vs = g_try_new0 (gint, r->w * r->h));
-      CATCH (lqr_carver_propagate_vsmap(r));
+      LQR_CATCH_MEM (r->vs = g_try_new0 (gint, r->w * r->h));
+      LQR_CATCH (lqr_carver_propagate_vsmap(r));
     }
   if (r->nrg_active)
     {
-      CATCH_MEM (r->en = g_try_new0 (gfloat, r->w * r->h));
+      LQR_CATCH_MEM (r->en = g_try_new0 (gfloat, r->w * r->h));
     }
   if (r->active)
     {
-      CATCH_MEM (r->m = g_try_new0 (gfloat, r->w * r->h));
-      CATCH_MEM (r->least = g_try_new (gint, r->w * r->h));
+      LQR_CATCH_MEM (r->m = g_try_new0 (gfloat, r->w * r->h));
+      LQR_CATCH_MEM (r->least = g_try_new (gint, r->w * r->h));
     }
 
   /* reset widths, heights & levels */
@@ -1623,7 +1762,7 @@ lqr_carver_flatten (LqrCarver * r)
 
   if (r->root == NULL)
     {
-      CATCH (lqr_carver_set_state (r, prev_state, TRUE));
+      LQR_CATCH (lqr_carver_set_state (r, prev_state, TRUE));
     }
 
   return LQR_OK;
@@ -1654,21 +1793,21 @@ lqr_carver_transpose (LqrCarver * r)
   fflush (stdout);
 #endif /* __LQR_VERBOSE__ */
 
-  CATCH_CANC (r);
+  LQR_CATCH_CANC (r);
 
   if (r->root == NULL)
     {
       prev_state = g_atomic_int_get(&r->state);
-      CATCH (lqr_carver_set_state (r, LQR_CARVER_STATE_TRANSPOSING, TRUE));
+      LQR_CATCH (lqr_carver_set_state (r, LQR_CARVER_STATE_TRANSPOSING, TRUE));
     }
 
   if (r->level > 1)
     {
-      CATCH (lqr_carver_flatten (r));
+      LQR_CATCH (lqr_carver_flatten (r));
     }
 
   /* first iterate on attached carvers */
-  CATCH (lqr_carver_list_foreach (r->attached_list,  lqr_carver_transpose_attached, data_tok));
+  LQR_CATCH (lqr_carver_list_foreach (r->attached_list,  lqr_carver_transpose_attached, data_tok));
 
   /* free non needed maps first */
   if (r->root == NULL)
@@ -1689,21 +1828,21 @@ lqr_carver_transpose (LqrCarver * r)
 
   if (r->active)
     {
-      if (r->bias)
-        {
-          CATCH_MEM (new_bias = g_try_new0 (gfloat, r->w0 * r->h0));
-        }
       if (r->rigidity_mask)
         {
-          CATCH_MEM (new_rigmask = g_try_new (gfloat, r->w0 * r->h0));
+          LQR_CATCH_MEM (new_rigmask = g_try_new (gfloat, r->w0 * r->h0));
         }
     }
   if (r->nrg_active)
     {
+      if (r->bias)
+        {
+          LQR_CATCH_MEM (new_bias = g_try_new0 (gfloat, r->w0 * r->h0));
+        }
       g_free (r->_raw);
       g_free (r->raw);
-      CATCH_MEM (r->_raw = g_try_new0 (gint, r->h0 * r->w0));
-      CATCH_MEM (r->raw = g_try_new0 (gint *, r->w0));
+      LQR_CATCH_MEM (r->_raw = g_try_new0 (gint, r->h0 * r->w0));
+      LQR_CATCH_MEM (r->raw = g_try_new0 (gint *, r->w0));
     }
 
   /* compute trasposed maps */
@@ -1723,10 +1862,6 @@ lqr_carver_transpose (LqrCarver * r)
             }
           if (r->active)
             {
-              if (r->bias)
-                {
-                  new_bias[z1] = r->bias[z0];
-                }
               if (r->rigidity_mask)
                 {
                   new_rigmask[z1] = r->rigidity_mask[z0];
@@ -1734,6 +1869,10 @@ lqr_carver_transpose (LqrCarver * r)
             }
           if (r->nrg_active)
             {
+              if (r->bias)
+                {
+                  new_bias[z1] = r->bias[z0];
+                }
               r->raw[x][y] = z1;
             }
         }
@@ -1747,10 +1886,13 @@ lqr_carver_transpose (LqrCarver * r)
   r->rgb = new_rgb;
   r->preserve_in_buffer = FALSE;
 
-  if (r->active)
+  if (r->nrg_active)
     {
       g_free (r->bias);
       r->bias = new_bias;
+    }
+  if (r->active)
+    {
       g_free (r->rigidity_mask);
       r->rigidity_mask = new_rigmask;
     }
@@ -1758,17 +1900,17 @@ lqr_carver_transpose (LqrCarver * r)
   /* init the other maps */
   if (r->root == NULL)
     {
-      CATCH_MEM (r->vs = g_try_new0 (gint, r->w0 * r->h0));
-      CATCH (lqr_carver_propagate_vsmap(r));
+      LQR_CATCH_MEM (r->vs = g_try_new0 (gint, r->w0 * r->h0));
+      LQR_CATCH (lqr_carver_propagate_vsmap(r));
     }
   if (r->nrg_active)
     {
-      CATCH_MEM (r->en = g_try_new0 (gfloat, r->w0 * r->h0));
+      LQR_CATCH_MEM (r->en = g_try_new0 (gfloat, r->w0 * r->h0));
     }
   if (r->active)
     {
-      CATCH_MEM (r->m = g_try_new0 (gfloat, r->w0 * r->h0));
-      CATCH_MEM (r->least = g_try_new (gint, r->w0 * r->h0));
+      LQR_CATCH_MEM (r->m = g_try_new0 (gfloat, r->w0 * r->h0));
+      LQR_CATCH_MEM (r->least = g_try_new (gint, r->w0 * r->h0));
     }
 
   /* switch widths & heights */
@@ -1788,13 +1930,13 @@ lqr_carver_transpose (LqrCarver * r)
   if (r->active)
     {
       g_free (r->vpath);
-      CATCH_MEM (r->vpath = g_try_new (gint, r->h));
+      LQR_CATCH_MEM (r->vpath = g_try_new (gint, r->h));
       g_free (r->vpath_x);
-      CATCH_MEM (r->vpath_x = g_try_new (gint, r->h));
+      LQR_CATCH_MEM (r->vpath_x = g_try_new (gint, r->h));
       g_free (r->nrg_xmin);
-      CATCH_MEM (r->nrg_xmin = g_try_new (gint, r->h));
+      LQR_CATCH_MEM (r->nrg_xmin = g_try_new (gint, r->h));
       g_free (r->nrg_xmax);
-      CATCH_MEM (r->nrg_xmax = g_try_new (gint, r->h));
+      LQR_CATCH_MEM (r->nrg_xmax = g_try_new (gint, r->h));
     }
 
   BUF_TRY_NEW0_RET_LQR(r->rgb_ro_buffer, r->w0 * r->channels, r->col_depth);
@@ -1819,7 +1961,7 @@ lqr_carver_transpose (LqrCarver * r)
 
   if (r->root == NULL)
     {
-      CATCH (lqr_carver_set_state (r, prev_state, TRUE));
+      LQR_CATCH (lqr_carver_set_state (r, prev_state, TRUE));
     }
 
   return LQR_OK;
@@ -1865,9 +2007,19 @@ lqr_carver_resize_width (LqrCarver * r, gint w1)
       delta_max = delta;
     }
 
-  CATCH_CANC (r);
-  CATCH_F (g_atomic_int_get(&r->state) == LQR_CARVER_STATE_STD);
-  CATCH (lqr_carver_set_state (r, LQR_CARVER_STATE_RESIZING, TRUE));
+  LQR_CATCH_CANC (r);
+  LQR_CATCH_F (g_atomic_int_get(&r->state) == LQR_CARVER_STATE_STD);
+  LQR_CATCH (lqr_carver_set_state (r, LQR_CARVER_STATE_RESIZING, TRUE));
+
+  /* update step for progress reprt*/
+  r->session_rescale_total = gamma > 0 ? gamma : -gamma;
+  r->session_rescale_current = 0;
+  r->session_update_step = (gint) MAX (r->session_rescale_total * r->progress->update_step, 1);
+
+  if (r->session_rescale_total)
+    {
+      lqr_progress_init (r->progress, r->progress->init_width_message);
+    }
 
   while (gamma)
     {
@@ -1877,25 +2029,25 @@ lqr_carver_resize_width (LqrCarver * r, gint w1)
       delta -= delta0;
       if (r->transposed)
         {
-          CATCH (lqr_carver_transpose (r));
+          LQR_CATCH (lqr_carver_transpose (r));
         }
       new_w = MIN (w1, r->w_start + delta_max);
       gamma = w1 - new_w;
-      lqr_progress_init (r->progress, r->progress->init_width_message);
-      CATCH (lqr_carver_build_maps (r, delta0 + 1));
+      LQR_CATCH (lqr_carver_build_maps (r, delta0 + 1));
       lqr_carver_set_width (r, new_w);
 
       data_tok.integer = new_w;
       lqr_carver_list_foreach_recursive (r->attached_list,  lqr_carver_set_width_attached, data_tok);
 
+      r->session_rescale_current = r->session_rescale_total - (gamma > 0 ? gamma : -gamma);
+
       if (r->dump_vmaps)
         {
-          CATCH (lqr_vmap_internal_dump (r));
+          LQR_CATCH (lqr_vmap_internal_dump (r));
         }
-      lqr_progress_end (r->progress, r->progress->end_width_message);
       if (new_w < w1)
         {
-          CATCH (lqr_carver_flatten(r));
+          LQR_CATCH (lqr_carver_flatten(r));
           delta_max = (gint) ((r->enl_step - 1) * r->w_start) - 1;
           if (delta_max < 1)
             {
@@ -1904,7 +2056,12 @@ lqr_carver_resize_width (LqrCarver * r, gint w1)
         }
     }
 
-  CATCH (lqr_carver_set_state (r, LQR_CARVER_STATE_STD, TRUE));
+  if (r->session_rescale_total)
+    {
+      lqr_progress_end (r->progress, r->progress->end_width_message);
+    }
+
+  LQR_CATCH (lqr_carver_set_state (r, LQR_CARVER_STATE_STD, TRUE));
 
   return LQR_OK;
 }
@@ -1939,9 +2096,19 @@ lqr_carver_resize_height (LqrCarver * r, gint h1)
     }
   delta = delta > 0 ? delta : -delta;
 
-  CATCH_CANC (r);
-  CATCH_F (g_atomic_int_get(&r->state) == LQR_CARVER_STATE_STD);
-  CATCH (lqr_carver_set_state (r, LQR_CARVER_STATE_RESIZING, TRUE));
+  LQR_CATCH_CANC (r);
+  LQR_CATCH_F (g_atomic_int_get(&r->state) == LQR_CARVER_STATE_STD);
+  LQR_CATCH (lqr_carver_set_state (r, LQR_CARVER_STATE_RESIZING, TRUE));
+
+  /* update step for progress reprt*/
+  r->session_rescale_total = gamma > 0 ? gamma : -gamma;
+  r->session_rescale_current = 0;
+  r->session_update_step = (gint) MAX (r->session_rescale_total * r->progress->update_step, 1);
+
+  if (r->session_rescale_total)
+    {
+      lqr_progress_init (r->progress, r->progress->init_height_message);
+    }
 
   while (gamma)
     {
@@ -1950,25 +2117,25 @@ lqr_carver_resize_height (LqrCarver * r, gint h1)
       delta -= delta0;
       if (!r->transposed)
         {
-          CATCH (lqr_carver_transpose (r));
+          LQR_CATCH (lqr_carver_transpose (r));
         }
       new_w = MIN (h1, r->w_start + delta_max);
       gamma = h1 - new_w;
-      lqr_progress_init (r->progress, r->progress->init_height_message);
-      CATCH (lqr_carver_build_maps (r, delta0 + 1));
+      LQR_CATCH (lqr_carver_build_maps (r, delta0 + 1));
       lqr_carver_set_width (r, new_w);
 
       data_tok.integer = new_w;
       lqr_carver_list_foreach_recursive (r->attached_list,  lqr_carver_set_width_attached, data_tok);
 
+      r->session_rescale_current = r->session_rescale_total - (gamma > 0 ? gamma : - gamma);
+
       if (r->dump_vmaps)
         {
-          CATCH (lqr_vmap_internal_dump (r));
+          LQR_CATCH (lqr_vmap_internal_dump (r));
         }
-      lqr_progress_end (r->progress, r->progress->end_height_message);
       if (new_w < h1)
         {
-          CATCH (lqr_carver_flatten(r));
+          LQR_CATCH (lqr_carver_flatten(r));
           delta_max = (gint) ((r->enl_step - 1) * r->w_start) - 1;
           if (delta_max < 1)
             {
@@ -1977,13 +2144,18 @@ lqr_carver_resize_height (LqrCarver * r, gint h1)
         }
     }
 
-  CATCH (lqr_carver_set_state (r, LQR_CARVER_STATE_STD, TRUE));
+  if (r->session_rescale_total)
+    {
+      lqr_progress_end (r->progress, r->progress->end_height_message);
+    }
+
+  LQR_CATCH (lqr_carver_set_state (r, LQR_CARVER_STATE_STD, TRUE));
 
   return LQR_OK;
 }
 
 /* liquid rescale public method */
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrRetVal
 lqr_carver_resize (LqrCarver * r, gint w1, gint h1)
 {
@@ -1991,21 +2163,21 @@ lqr_carver_resize (LqrCarver * r, gint w1, gint h1)
   printf("[ Rescale from %i,%i to %i,%i ]\n", (r->transposed ? r->h : r->w), (r->transposed ? r->w : r->h), w1, h1);
   fflush(stdout);
 #endif /* __LQR_VERBOSE__ */
-  CATCH_F ((w1 >= 1) && (h1 >= 1));
-  CATCH_F (r->root == NULL);
+  LQR_CATCH_F ((w1 >= 1) && (h1 >= 1));
+  LQR_CATCH_F (r->root == NULL);
 
-  CATCH_CANC (r);
-  CATCH_F (g_atomic_int_get(&r->state) == LQR_CARVER_STATE_STD);
+  LQR_CATCH_CANC (r);
+  LQR_CATCH_F (g_atomic_int_get(&r->state) == LQR_CARVER_STATE_STD);
 
   switch (r->resize_order)
     {
       case LQR_RES_ORDER_HOR:
-        CATCH (lqr_carver_resize_width(r, w1));
-        CATCH (lqr_carver_resize_height(r, h1));
+        LQR_CATCH (lqr_carver_resize_width(r, w1));
+        LQR_CATCH (lqr_carver_resize_height(r, h1));
         break;
       case LQR_RES_ORDER_VERT:
-        CATCH (lqr_carver_resize_height(r, h1));
-        CATCH (lqr_carver_resize_width(r, w1));
+        LQR_CATCH (lqr_carver_resize_height(r, h1));
+        LQR_CATCH (lqr_carver_resize_width(r, w1));
         break;
 #ifdef __LQR_DEBUG__
       default:
@@ -2027,7 +2199,7 @@ lqr_carver_set_state (LqrCarver * r, LqrCarverState state, gboolean skip_cancele
   LqrDataTok data_tok;
   gint lock_pos;
 
-  CATCH_F(r->root == NULL);
+  LQR_CATCH_F(r->root == NULL);
 
   lock_pos = g_atomic_int_exchange_and_add(&r->state_lock_queue, 1);
 
@@ -2044,7 +2216,7 @@ lqr_carver_set_state (LqrCarver * r, LqrCarverState state, gboolean skip_cancele
   g_atomic_int_set(&r->state, state);
 
   data_tok.integer = state;
-  CATCH (lqr_carver_list_foreach_recursive (r->attached_list, lqr_carver_set_state_attached, data_tok));
+  LQR_CATCH (lqr_carver_list_foreach_recursive (r->attached_list, lqr_carver_set_state_attached, data_tok));
 
   g_atomic_int_inc(&r->state_lock);
 
@@ -2059,13 +2231,13 @@ lqr_carver_set_state_attached (LqrCarver * r, LqrDataTok data)
 }
 
 /* cancel the current action from a different thread */
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrRetVal
 lqr_carver_cancel (LqrCarver * r)
 {
   LqrCarverState curr_state;
 
-  CATCH_F (r->root == NULL);
+  LQR_CATCH_F (r->root == NULL);
 
   curr_state = g_atomic_int_get (&r->state);
 
@@ -2074,20 +2246,20 @@ lqr_carver_cancel (LqrCarver * r)
       (curr_state == LQR_CARVER_STATE_TRANSPOSING) ||
       (curr_state == LQR_CARVER_STATE_FLATTENING))
     {
-      CATCH (lqr_carver_set_state (r, LQR_CARVER_STATE_CANCELLED, TRUE));
+      LQR_CATCH (lqr_carver_set_state (r, LQR_CARVER_STATE_CANCELLED, TRUE));
     }
   return LQR_OK;
 }
 
 /* get current size */
-LQR_PUBLIC
+/* LQR_PUBLIC */
 gint
 lqr_carver_get_width(LqrCarver* r)
 {
   return (r->transposed ? r->h : r->w);
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 gint
 lqr_carver_get_height(LqrCarver* r)
 {
@@ -2095,14 +2267,14 @@ lqr_carver_get_height(LqrCarver* r)
 }
 
 /* get reference size */
-LQR_PUBLIC
+/* LQR_PUBLIC */
 gint
 lqr_carver_get_ref_width(LqrCarver* r)
 {
   return (r->transposed ? r->h_start : r->w_start);
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 gint
 lqr_carver_get_ref_height(LqrCarver* r)
 {
@@ -2110,14 +2282,14 @@ lqr_carver_get_ref_height(LqrCarver* r)
 }
 
 /* get colour channels */
-LQR_PUBLIC
+/* LQR_PUBLIC */
 gint
 lqr_carver_get_channels (LqrCarver * r)
 {
   return r->channels;
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 gint
 lqr_carver_get_bpp (LqrCarver * r)
 {
@@ -2125,15 +2297,23 @@ lqr_carver_get_bpp (LqrCarver * r)
 }
 
 /* get colour depth */
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrColDepth
 lqr_carver_get_col_depth (LqrCarver * r)
 {
   return r->col_depth;
 }
 
+/* get image type */
+/* LQR_PUBLIC */
+LqrImageType
+lqr_carver_get_image_type (LqrCarver * r)
+{
+  return r->image_type;
+}
+
 /* get enlargement step */
-LQR_PUBLIC
+/* LQR_PUBLIC */
 gfloat
 lqr_carver_get_enl_step (LqrCarver * r)
 {
@@ -2141,7 +2321,7 @@ lqr_carver_get_enl_step (LqrCarver * r)
 }
 
 /* get orientation */
-LQR_PUBLIC
+/* LQR_PUBLIC */
 gint
 lqr_carver_get_orientation (LqrCarver* r)
 {
@@ -2149,7 +2329,7 @@ lqr_carver_get_orientation (LqrCarver* r)
 }
 
 /* get depth */
-LQR_PUBLIC
+/* LQR_PUBLIC */
 gint
 lqr_carver_get_depth (LqrCarver *r)
 {
@@ -2158,7 +2338,7 @@ lqr_carver_get_depth (LqrCarver *r)
 
 
 /* readout reset */
-LQR_PUBLIC
+/* LQR_PUBLIC */
 void
 lqr_carver_scan_reset (LqrCarver * r)
 {
@@ -2184,7 +2364,7 @@ lqr_carver_scan_reset_all (LqrCarver *r)
 
 
 /* readout all, pixel by bixel */
-LQR_PUBLIC
+/* LQR_PUBLIC */
 gboolean
 lqr_carver_scan (LqrCarver * r, gint * x, gint * y, guchar ** rgb)
 {
@@ -2209,7 +2389,7 @@ lqr_carver_scan (LqrCarver * r, gint * x, gint * y, guchar ** rgb)
   return TRUE;
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 gboolean
 lqr_carver_scan_ext (LqrCarver * r, gint * x, gint * y, void ** rgb)
 {
@@ -2233,14 +2413,14 @@ lqr_carver_scan_ext (LqrCarver * r, gint * x, gint * y, void ** rgb)
 }
 
 /* readout all, by line */
-LQR_PUBLIC
+/* LQR_PUBLIC */
 gboolean
 lqr_carver_scan_by_row (LqrCarver *r)
 {
   return r->transposed ? FALSE : TRUE;
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 gboolean
 lqr_carver_scan_line (LqrCarver * r, gint * n, guchar ** rgb)
 {
@@ -2251,7 +2431,7 @@ lqr_carver_scan_line (LqrCarver * r, gint * n, guchar ** rgb)
   return lqr_carver_scan_line_ext (r, n, (void**) rgb);
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 gboolean
 lqr_carver_scan_line_ext (LqrCarver * r, gint * n, void ** rgb)
 {

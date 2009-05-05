@@ -38,17 +38,17 @@ typedef LqrRetVal (*LqrProgressFuncEnd)(const gchar*);
 
 /* LQR_PROGRESS CLASS PUBLIC FUNCTIONS */
 
-LqrProgress * lqr_progress_new(void);
+LqrProgress * lqr_progress_new(void) LQR_PUBLIC;
 
-LqrRetVal lqr_progress_set_update_step(LqrProgress *p, gfloat update_step);
+LqrRetVal lqr_progress_set_update_step(LqrProgress *p, gfloat update_step) LQR_PUBLIC;
 
-LqrRetVal lqr_progress_set_init(LqrProgress * p, LqrProgressFuncInit init_func);
-LqrRetVal lqr_progress_set_update(LqrProgress * p, LqrProgressFuncUpdate update_func);
-LqrRetVal lqr_progress_set_end(LqrProgress * p, LqrProgressFuncEnd end_func);
+LqrRetVal lqr_progress_set_init(LqrProgress * p, LqrProgressFuncInit init_func) LQR_PUBLIC;
+LqrRetVal lqr_progress_set_update(LqrProgress * p, LqrProgressFuncUpdate update_func) LQR_PUBLIC;
+LqrRetVal lqr_progress_set_end(LqrProgress * p, LqrProgressFuncEnd end_func) LQR_PUBLIC;
 
-LqrRetVal lqr_progress_set_init_width_message(LqrProgress *p, const gchar * message);
-LqrRetVal lqr_progress_set_init_height_message(LqrProgress *p, const gchar * message);
-LqrRetVal lqr_progress_set_end_width_message(LqrProgress *p, const gchar * message);
-LqrRetVal lqr_progress_set_end_height_message(LqrProgress *p, const gchar * message);
+LqrRetVal lqr_progress_set_init_width_message(LqrProgress *p, const gchar * message) LQR_PUBLIC;
+LqrRetVal lqr_progress_set_init_height_message(LqrProgress *p, const gchar * message) LQR_PUBLIC;
+LqrRetVal lqr_progress_set_end_width_message(LqrProgress *p, const gchar * message) LQR_PUBLIC;
+LqrRetVal lqr_progress_set_end_height_message(LqrProgress *p, const gchar * message) LQR_PUBLIC;
 
 #endif /* __LQR_PROGRESS_PUB_H__ */

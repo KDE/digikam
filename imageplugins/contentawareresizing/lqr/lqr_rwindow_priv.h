@@ -28,7 +28,7 @@
 #error "lqr_base.h must be included prior to lqr_rwindow_priv.h"
 #endif /* __LQR_BASE_H__ */
 
-struct _LqrReaderWindow
+struct _LqrReadingWindow
 {
   gdouble ** buffer;
   gint radius;
@@ -45,20 +45,20 @@ typedef gdouble (*LqrReadFuncWithCh) (LqrCarver*, gint, gint, gint);
 /* typedef glfoat (*LqrReadFuncAbs) (LqrCarver*, gint, gint, gint, gint); */
 
 
-LqrRetVal lqr_rwindow_fill_std (LqrReaderWindow * rwindow, LqrCarver * r, gint x, gint y);
-LqrRetVal lqr_rwindow_fill_rgba (LqrReaderWindow * rwindow, LqrCarver * r, gint x, gint y);
-LqrRetVal lqr_rwindow_fill_custom (LqrReaderWindow * rwindow, LqrCarver * r, gint x, gint y);
-LqrRetVal lqr_rwindow_fill (LqrReaderWindow * rwindow, LqrCarver * r, gint x, gint y);
+LqrRetVal lqr_rwindow_fill_std (LqrReadingWindow * rwindow, LqrCarver * r, gint x, gint y);
+LqrRetVal lqr_rwindow_fill_rgba (LqrReadingWindow * rwindow, LqrCarver * r, gint x, gint y);
+LqrRetVal lqr_rwindow_fill_custom (LqrReadingWindow * rwindow, LqrCarver * r, gint x, gint y);
+LqrRetVal lqr_rwindow_fill (LqrReadingWindow * rwindow, LqrCarver * r, gint x, gint y);
 
-gdouble lqr_rwindow_read_bright (LqrReaderWindow * rwindow, gint x, gint y);
-gdouble lqr_rwindow_read_luma (LqrReaderWindow * rwindow, gint x, gint y);
-gdouble lqr_rwindow_read_rgba (LqrReaderWindow * rwindow, gint x, gint y, gint channel);
-gdouble lqr_rwindow_read_custom (LqrReaderWindow * rwindow, gint x, gint y, gint channel);
+gdouble lqr_rwindow_read_bright (LqrReadingWindow * rwindow, gint x, gint y);
+gdouble lqr_rwindow_read_luma (LqrReadingWindow * rwindow, gint x, gint y);
+gdouble lqr_rwindow_read_rgba (LqrReadingWindow * rwindow, gint x, gint y, gint channel);
+gdouble lqr_rwindow_read_custom (LqrReadingWindow * rwindow, gint x, gint y, gint channel);
 
-LqrReaderWindow * lqr_rwindow_new_std (gint radius, LqrEnergyReaderType read_func_type, gboolean use_rcache);
-LqrReaderWindow * lqr_rwindow_new_rgba (gint radius, gboolean use_rcache);
-LqrReaderWindow * lqr_rwindow_new_custom (gint radius, gboolean use_rcache, gint channels);
-LqrReaderWindow * lqr_rwindow_new (gint radius, LqrEnergyReaderType read_func_type, gboolean use_rcache);
-void lqr_rwindow_destroy (LqrReaderWindow * rwindow);
+LqrReadingWindow * lqr_rwindow_new_std (gint radius, LqrEnergyReaderType read_func_type, gboolean use_rcache);
+LqrReadingWindow * lqr_rwindow_new_rgba (gint radius, gboolean use_rcache);
+LqrReadingWindow * lqr_rwindow_new_custom (gint radius, gboolean use_rcache, gint channels);
+LqrReadingWindow * lqr_rwindow_new (gint radius, LqrEnergyReaderType read_func_type, gboolean use_rcache);
+void lqr_rwindow_destroy (LqrReadingWindow * rwindow);
 
 #endif /* __LQR_READER_WINDOW_PRIV_H__ */

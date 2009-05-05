@@ -28,62 +28,124 @@
 
 /**** LQR_CARVER_RIGMASK STRUCT FUNTIONS ****/
 
+/* LQR_PUBLIC */
+void
+lqr_carver_rigmask_clear(LqrCarver *r)
+{
+  g_free(r->rigidity_mask);
+  r->rigidity_mask = NULL;
+}
+
 LqrRetVal
 lqr_carver_rigmask_init (LqrCarver *r)
 {
-  gint y, x;
+  /* gint y, x; */
 
-  CATCH_CANC (r);
-  CATCH_F (r->active == TRUE);
+  LQR_CATCH_CANC (r);
 
-  CATCH_MEM (r->rigidity_mask = g_try_new (gfloat, r->w * r->h));
+  LQR_CATCH_F (r->active);
 
-  for (y = 0; y < r->h; y++)
+  LQR_CATCH_MEM (r->rigidity_mask = g_try_new0 (gfloat, r->w0 * r->h0));
+
+  /*
+  for (y = 0; y < r->h0; y++)
     {
-      for (x = 0; x < r->w_start; x++)
+      for (x = 0; x < r->w0; x++)
         {
-          r->rigidity_mask[y * r->w_start + x] = 1;
+          r->rigidity_mask[y * r->w0 + x] = 1;
         }
     }
+    */
   return LQR_OK;
 }
 
-
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrRetVal
-lqr_carver_rigmask_add_area(LqrCarver *r, gdouble *buffer, gint width, gint height, gint x_off, gint y_off)
+lqr_carver_rigmask_add_xy(LqrCarver *r, gdouble rigidity, gint x, gint y)
 {
-  gint x, y;
-  gint x1, y1, x2, y2;
+  gint xt, yt;
 
-  CATCH_CANC (r);
-  CATCH_F (r->active);
-  if (r->rigidity_mask == NULL)
+  LQR_CATCH_CANC (r);
+
+  LQR_CATCH_F (r->active);
+
+  if ((r->w != r->w0) || (r->w_start != r->w0) ||
+      (r->h != r->h0) || (r->h_start != r->h0))
     {
-      CATCH (lqr_carver_rigmask_init(r));
+      LQR_CATCH (lqr_carver_flatten(r));
     }
 
+  if (r->rigidity_mask == NULL)
+    {
+      LQR_CATCH (lqr_carver_rigmask_init(r));
+    }
 
+  /*
   if (r->rigidity == 0)
     {
       return LQR_OK;
     }
+    */
 
-  if (r->transposed)
+  xt = r->transposed ? y : x;
+  yt = r->transposed ? x : y;
+
+  r->rigidity_mask[yt * r->w0 + xt] += (gfloat) rigidity;
+
+  return LQR_OK;
+}
+
+
+
+/* LQR_PUBLIC */
+LqrRetVal
+lqr_carver_rigmask_add_area(LqrCarver *r, gdouble *buffer, gint width, gint height, gint x_off, gint y_off)
+{
+  gint x, y;
+  gint xt, yt;
+  gint wt, ht;
+  gint x0, y0, x1, y1, x2, y2;
+
+  LQR_CATCH_CANC (r);
+
+  LQR_CATCH_F (r->active);
+
+  if ((r->w != r->w0) || (r->w_start != r->w0) ||
+      (r->h != r->h0) || (r->h_start != r->h0))
     {
-      CATCH (lqr_carver_transpose(r));
+      LQR_CATCH (lqr_carver_flatten(r));
     }
 
+  /*
+  if (r->rigidity == 0)
+    {
+      return LQR_OK;
+    }
+    */
+
+  if (r->rigidity_mask == NULL)
+    {
+      LQR_CATCH (lqr_carver_rigmask_init(r));
+    }
+
+  wt = r->transposed ? r->h : r->w;
+  ht = r->transposed ? r->w : r->h;
+
+  x0 = MIN (0, x_off);
+  y0 = MIN (0, y_off);
   x1 = MAX (0, x_off);
   y1 = MAX (0, y_off);
-  x2 = MIN (r->w, width + x_off);
-  y2 = MIN (r->h, height + y_off);
+  x2 = MIN (wt, width + x_off);
+  y2 = MIN (ht, height + y_off);
 
   for (y = 0; y < y2 - y1; y++)
     {
       for (x = 0; x < x2 - x1; x++)
         {
-          r->rigidity_mask[(y + y1) * r->w0 + (x + x1)] = (gfloat) buffer[y * width + x];
+          xt = r->transposed ? y : x;
+          yt = r->transposed ? x : y;
+
+          r->rigidity_mask[(yt + y1) * r->w0 + (xt + x1)] = (gfloat) buffer[(y - y0) * width + (x - x0)];
         }
 
     }
@@ -92,52 +154,59 @@ lqr_carver_rigmask_add_area(LqrCarver *r, gdouble *buffer, gint width, gint heig
 }
 
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrRetVal
 lqr_carver_rigmask_add(LqrCarver *r, gdouble *buffer)
 {
   return lqr_carver_rigmask_add_area(r, buffer, r->w0, r->h0, 0, 0);
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrRetVal
 lqr_carver_rigmask_add_rgb_area(LqrCarver *r, guchar *rgb, gint channels, gint width, gint height, gint x_off, gint y_off)
 {
   gint x, y, k, c_channels;
   gboolean has_alpha;
+  gint xt, yt;
+  gint wt, ht;
   gint x0, y0, x1, y1, x2, y2;
-  gint transposed = 0;
   gint sum;
   gdouble rigmask;
 
-  CATCH_CANC (r);
-  CATCH_F (r->active);
-  if (r->rigidity_mask == NULL)
+  LQR_CATCH_CANC (r);
+
+  LQR_CATCH_F (r->active);
+
+  if ((r->w != r->w0) || (r->w_start != r->w0) ||
+      (r->h != r->h0) || (r->h_start != r->h0))
     {
-      CATCH (lqr_carver_rigmask_init(r));
+      LQR_CATCH (lqr_carver_flatten(r));
     }
 
+  /*
   if (r->rigidity == 0)
     {
-      return TRUE;
+      return LQR_OK;
     }
+    */
 
-  CATCH (lqr_carver_flatten(r));
-  if (r->transposed)
+  if (r->rigidity_mask == NULL)
     {
-      transposed = 1;
-      CATCH (lqr_carver_transpose(r));
+      LQR_CATCH (lqr_carver_rigmask_init(r));
     }
 
   has_alpha = (channels == 2 || channels >= 4);
   c_channels = channels - (has_alpha ? 1 : 0);
 
+  wt = r->transposed ? r->h : r->w;
+  ht = r->transposed ? r->w : r->h;
+
   x0 = MIN (0, x_off);
   y0 = MIN (0, y_off);
   x1 = MAX (0, x_off);
   y1 = MAX (0, y_off);
-  x2 = MIN (r->w0, width + x_off);
-  y2 = MIN (r->h0, height + y_off);
+  x2 = MIN (wt, width + x_off);
+  y2 = MIN (ht, height + y_off);
 
   for (y = 0; y < y2 - y1; y++)
     {
@@ -155,21 +224,19 @@ lqr_carver_rigmask_add_rgb_area(LqrCarver *r, guchar *rgb, gint channels, gint w
               rigmask *= (gdouble) rgb[((y - y0) * width + (x - x0) + 1) * channels - 1] / 255;
             }
 
-          r->rigidity_mask[(y + y1) * r->w0 + (x + x1)] = (gfloat) rigmask;
+          xt = r->transposed ? y : x;
+          yt = r->transposed ? x : y;
+
+          r->rigidity_mask[(yt + y1) * r->w0 + (xt + x1)] = (gfloat) rigmask;
 
         }
 
     }
 
-  if (transposed)
-    {
-      CATCH (lqr_carver_transpose(r));
-    }
-
   return LQR_OK;
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrRetVal
 lqr_carver_rigmask_add_rgb(LqrCarver *r, guchar *rgb, gint channels)
 {

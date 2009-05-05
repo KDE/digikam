@@ -69,14 +69,14 @@ lqr_vmap_list_destroy(LqrVMapList * list)
     }
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrVMapList *
 lqr_vmap_list_start (LqrCarver *r)
 {
   return r->flushed_vs;
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrVMapList *
 lqr_vmap_list_next (LqrVMapList * list)
 {
@@ -84,7 +84,7 @@ lqr_vmap_list_next (LqrVMapList * list)
   return list->next;
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrVMap *
 lqr_vmap_list_current (LqrVMapList * list)
 {
@@ -92,14 +92,14 @@ lqr_vmap_list_current (LqrVMapList * list)
   return list->current;
 }
 
-LQR_PUBLIC
+/* LQR_PUBLIC */
 LqrRetVal
 lqr_vmap_list_foreach (LqrVMapList * list, LqrVMapFunc func, gpointer data)
 {
   LqrVMapList * now = list;
   if (now != NULL)
     {
-      CATCH (func(now->current, data));
+      LQR_CATCH (func(now->current, data));
       return lqr_vmap_list_foreach (now->next, func, data);
     }
   return LQR_OK;

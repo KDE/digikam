@@ -49,11 +49,11 @@ typedef struct _LqrCarverList LqrCarverList;
 
 /* LQR_CARVER_LIST PUBLIC FUNCTIONS */
 
-LqrCarverList * lqr_carver_list_start (LqrCarver *r);
-LqrCarver * lqr_carver_list_current (LqrCarverList *list);
-LqrCarverList * lqr_carver_list_next (LqrCarverList * list);
-LqrRetVal lqr_carver_list_foreach (LqrCarverList * list, LqrCarverFunc func, LqrDataTok data);
-LqrRetVal lqr_carver_list_foreach_recursive (LqrCarverList * list, LqrCarverFunc func, LqrDataTok data);
+LqrCarverList * lqr_carver_list_start (LqrCarver *r) LQR_PUBLIC;
+LqrCarver * lqr_carver_list_current (LqrCarverList *list) LQR_PUBLIC;
+LqrCarverList * lqr_carver_list_next (LqrCarverList * list) LQR_PUBLIC;
+LqrRetVal lqr_carver_list_foreach (LqrCarverList * list, LqrCarverFunc func, LqrDataTok data) LQR_PUBLIC;
+LqrRetVal lqr_carver_list_foreach_recursive (LqrCarverList * list, LqrCarverFunc func, LqrDataTok data) LQR_PUBLIC;
 
 #endif /* __LQR_CARVER_LIST_PUB_H__ */
 
