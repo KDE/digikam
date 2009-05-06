@@ -463,7 +463,7 @@ void FreeRotationTool::updatePoints()
 
     // enable / disable adjustment buttons
     bool valid  = (pointIsValid(m_autoAdjustPoint1) && pointIsValid(m_autoAdjustPoint2))
-                  && !(m_autoAdjustPoint1 == m_autoAdjustPoint2);
+                  && (m_autoAdjustPoint1 != m_autoAdjustPoint2);
     m_autoAdjustBtn->setEnabled(valid);
 }
 
