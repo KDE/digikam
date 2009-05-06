@@ -130,7 +130,7 @@ Usual CMake options :
 
 -DCMAKE_INSTALL_PREFIX : decide where the program will be install on your computer.
 -DCMAKE_BUILD_TYPE     : decide which type of build you want. You can chose between:
-                         "debugfull".     : for hacking. Include all debug informations.
+                         "debugfull".     : for hacking. Include all debug information.
                          "debug".
                          "profile".
                          "relwithdebinfo" : default. use gcc -O2 -g options.
