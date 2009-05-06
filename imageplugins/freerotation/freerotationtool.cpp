@@ -462,7 +462,8 @@ void FreeRotationTool::updatePoints()
     m_previewWidget->setPoints(points, true);
 
     // enable / disable adjustment buttons
-    bool valid  = pointIsValid(m_autoAdjustPoint1) && pointIsValid(m_autoAdjustPoint2);
+    bool valid  = (pointIsValid(m_autoAdjustPoint1) && pointIsValid(m_autoAdjustPoint2))
+                  && !(m_autoAdjustPoint1 == m_autoAdjustPoint2);
     m_autoAdjustBtn->setEnabled(valid);
 }
 
