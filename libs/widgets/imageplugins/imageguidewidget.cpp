@@ -497,14 +497,15 @@ void ImageGuideWidget::updatePixmap()
             y     = point.y();
 
             p.save();
-            p.setRenderHints(QPainter::Antialiasing);
+            p.setRenderHint(QPainter::Antialiasing, true);
             p.setPen(QPen(d->guideColor, 2, Qt::SolidLine));
             p.setBrush(QBrush(semiTransGuideColor));
-            p.drawEllipse(point, 5, 5);
+            p.drawEllipse(point, 6, 6);
 
             p.restore();
             p.setPen(QPen(d->guideColor, 1, Qt::SolidLine));
             p.setBrush(Qt::NoBrush);
+            p.setRenderHint(QPainter::Antialiasing, false);
             p.drawPoint(point);
             p.drawText(QPoint(x+10, y-5), QString::number(i+1));
 
@@ -516,7 +517,7 @@ void ImageGuideWidget::updatePixmap()
                 QPoint point2 = d->selectedPoints.point(i+1);
                 point2        = translatePointPosition(point2);
                 p.setRenderHint(QPainter::Antialiasing, true);
-                p.drawLine(QPoint(x, y), point2);
+                p.drawLine(point, point2);
                 p.restore();
             }
 
