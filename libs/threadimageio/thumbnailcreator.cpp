@@ -156,6 +156,8 @@ QImage ThumbnailCreator::load(const QString &path)
 
     QImage qimage;
     bool regenerate = true;
+    QString tempFileName;
+    bool savedCorrectly = false;
 
     qimage = loadPNG(thumbPath);
     if (!qimage.isNull())
@@ -249,10 +251,15 @@ QImage ThumbnailCreator::load(const QString &path)
         temp.setSuffix(".png");
         if (temp.open())
         {
-            qimage.save(temp.fileName(), "PNG", 0);
-            ::rename(QFile::encodeName(temp.fileName()),
-                     QFile::encodeName(thumbPath));
+            tempFileName = temp.fileName();
+            qimage.save(tempFileName, "PNG", 0);
         }
+    }
+    if(savedCorrectly)
+    {
+        Q_ASSERT(!tempFileName.isEmpty());
+        KDE::rename(QFile::encodeName(tempFileName),
+                    QFile::encodeName(thumbPath));
     }
 
     qimage = qimage.scaled(d->thumbnailSize, d->thumbnailSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
