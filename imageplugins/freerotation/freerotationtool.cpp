@@ -178,7 +178,9 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     m_autoAdjustPoint2Btn->setMinimumWidth(minWidth);
 
     m_autoAdjustBtn = new QPushButton(i18nc("Automatic Adjustment", "Adjust"));
-    m_autoAdjustBtn->setMinimumHeight(50);
+    m_autoAdjustBtn->setSizePolicy(QSizePolicy::MinimumExpanding,
+                                   QSizePolicy::Expanding);
+//    m_autoAdjustBtn->setMinimumHeight(50);
 
     // -------------------------------------------------------------
 
