@@ -34,6 +34,7 @@ lqr_carver_bias_clear(LqrCarver *r)
 {
   g_free(r->bias);
   r->bias = NULL;
+  r->nrg_uptodate = FALSE;
 }
 
 /* LQR_PUBLIC */
@@ -67,6 +68,8 @@ lqr_carver_bias_add_xy(LqrCarver *r, gdouble bias, gint x, gint y)
   yt = r->transposed ? x : y;
 
   r->bias[yt * r->w0 + xt] += (gfloat) bias / 2;
+
+  r->nrg_uptodate = FALSE;
 
   return LQR_OK;
 }
@@ -128,6 +131,8 @@ lqr_carver_bias_add_area(LqrCarver *r, gdouble *buffer, gint bias_factor, gint w
         }
 
     }
+
+  r->nrg_uptodate = FALSE;
 
   return LQR_OK;
 }
@@ -212,6 +217,8 @@ lqr_carver_bias_add_rgb_area(LqrCarver *r, guchar *rgb, gint bias_factor, gint c
         }
 
     }
+
+  r->nrg_uptodate = FALSE;
 
   return LQR_OK;
 }

@@ -25,5 +25,6 @@
 
 #include <lqr/lqr_carver_pub.h>
 #include <lqr/lqr_carver_priv.h>
+#include <lqr/lqr_carver_macros_priv.h>
 
 #endif /* __LQR_CARVER_H__ */

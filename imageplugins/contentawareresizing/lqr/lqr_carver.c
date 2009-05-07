@@ -1303,26 +1303,7 @@ lqr_carver_update_mmap (LqrCarver * r)
               dx = x1_min - x;
               switch (x1_max - x1_min + 1)
                 {
-                  case 1:
-                    MRSET1(y, x1_min, dx);
-                    m = r->leftright ? MRMINR1(y, x1_min, dx) : MRMINL1(y, x1_min, dx);
-                    break;
-                  case 2:
-                    MRSET2(y, x1_min, dx);
-                    m = r->leftright ? MRMINR2(y, x1_min, dx) : MRMINL2(y, x1_min, dx);
-                    break;
-                  case 3:
-                    MRSET3(y, x1_min, dx);
-                    m = r->leftright ? MRMINR3(y, x1_min, dx) : MRMINL3(y, x1_min, dx);
-                    break;
-                  case 4:
-                    MRSET4(y, x1_min, dx);
-                    m = r->leftright ? MRMINR4(y, x1_min, dx) : MRMINL4(y, x1_min, dx);
-                    break;
-                  case 5:
-                    MRSET5(y, x1_min, dx);
-                    m = r->leftright ? MRMINR5(y, x1_min, dx) : MRMINL5(y, x1_min, dx);
-                    break;
+                  UPDATE_MMAP_OPTIMISED_CASES_RIG
                   default:
                     data_down = r->raw[y - 1][x1_min];
                     least = data_down;
@@ -1346,21 +1327,7 @@ lqr_carver_update_mmap (LqrCarver * r)
             {
               switch (x1_max - x1_min + 1)
                 {
-                  case 1:
-                    m = r->leftright ? MMINR1(y, x1_min) : MMINL1(y, x1_min);
-                    break;
-                  case 2:
-                    m = r->leftright ? MMINR2(y, x1_min) : MMINL2(y, x1_min);
-                    break;
-                  case 3:
-                    m = r->leftright ? MMINR3(y, x1_min) : MMINL3(y, x1_min);
-                    break;
-                  case 4:
-                    m = r->leftright ? MMINR4(y, x1_min) : MMINL4(y, x1_min);
-                    break;
-                  case 5:
-                    m = r->leftright ? MMINR5(y, x1_min) : MMINL5(y, x1_min);
-                    break;
+                  UPDATE_MMAP_OPTIMISED_CASES
                   default:
                     data_down = r->raw[y - 1][x1_min];
                     least = data_down;
@@ -1642,6 +1609,7 @@ lqr_carver_flatten (LqrCarver * r)
     }
 
   /* first iterate on attached carvers */
+  data_tok.data = NULL;
   LQR_CATCH (lqr_carver_list_foreach (r->attached_list,  lqr_carver_flatten_attached, data_tok));
 
   /* free non needed maps first */

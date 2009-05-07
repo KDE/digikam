@@ -38,7 +38,7 @@ lqr_progress_new(void)
   lqr_progress_set_init_height_message(progress, "Resizing height...");
   lqr_progress_set_end_width_message(progress, "done");
   lqr_progress_set_end_height_message(progress, "done");
-  lqr_progress_set_update_step(progress, 0.02);
+  lqr_progress_set_update_step(progress, (float) 0.02);
 
   return progress;
 }
