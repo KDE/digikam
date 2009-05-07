@@ -253,8 +253,8 @@ QImage ThumbnailCreator::load(const QString& path)
         temp.setSuffix(".png");
         if (temp.open())
         {
-            tempFileName = temp.fileName();
-            qimage.save(tempFileName, "PNG", 0);
+            tempFileName   = temp.fileName();
+            savedCorrectly = qimage.save(tempFileName, "PNG", 0);
         }
     }
     if(savedCorrectly)
