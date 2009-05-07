@@ -7,8 +7,8 @@
  * Description : Loader for thumbnails
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2003-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2003-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -65,7 +65,7 @@ public:
     /**
      * Create a thumbnail for the specified file.
      */
-    QImage load(const QString &filePath);
+    QImage load(const QString& filePath);
 
     /**
      * Sets the thumbnail size. This is the maximum size of the QImage
@@ -79,7 +79,7 @@ public:
      * is created by loading with DImg.
      * Note that DImg is not used in most cases (Raw files, JPEG)
      */
-    void setLoadingProperties(DImgLoaderObserver *observer, DRawDecoding settings);
+    void setLoadingProperties(DImgLoaderObserver* observer, const DRawDecoding& settings);
 
     /**
      * Set the Exif rotation property.
@@ -126,24 +126,24 @@ public:
      * Deletes all available thumbnails from the on-disk thumbnail cache.
      * A subsequent call to load() will recreate the thumbnail.
      */
-    static void deleteThumbnailsFromDisk(const QString &filePath);
+    static void deleteThumbnailsFromDisk(const QString& filePath);
 
 private:
 
-    QImage loadWithDImg(const QString &path);
+    QImage loadWithDImg(const QString& path);
     QImage loadImagePreview(const QString& path);
-    void handleAlphaChannel(QImage &thumb);
+    void handleAlphaChannel(QImage& thumb);
     void exifRotate(const QString& filePath, QImage& thumb, bool fromEmbeddedPreview);
 
     // implementations in thumbnailbasic.cpp
     static QString normalThumbnailDir();
     static QString largeThumbnailDir();
-    static QString thumbnailPath(const QString &filePath, const QString &basePath);
-    static QString thumbnailUri(const QString &filePath);
-    static QString thumbnailPathFromUri(const QString &uri, const QString &basePath);
+    static QString thumbnailPath(const QString& filePath, const QString& basePath);
+    static QString thumbnailUri(const QString& filePath);
+    static QString thumbnailPathFromUri(const QString &uri, const QString& basePath);
 
     void initThumbnailDirs();
-    QString thumbnailPath(const QString &uri);
+    QString thumbnailPath(const QString& uri);
     QImage loadPNG(const QString& path);
 
 private:
@@ -154,4 +154,3 @@ private:
 }  // namespace Digikam
 
 #endif // DIGIKAMTHUMBNAILCREATOR_H
-

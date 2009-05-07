@@ -7,8 +7,8 @@
  * Description : Loader for thumbnails
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2003-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2003-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,6 +48,8 @@
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
 #include <kurl.h>
+#include <kdeversion.h>
+#include <kde_file.h>
 
 // LibKDcraw includes
 
@@ -110,9 +112,9 @@ void ThumbnailCreator::setRemoveAlphaChannel(bool removeAlpha)
     d->removeAlphaChannel = removeAlpha;
 }
 
-void ThumbnailCreator::setLoadingProperties(DImgLoaderObserver *observer, DRawDecoding settings)
+void ThumbnailCreator::setLoadingProperties(DImgLoaderObserver *observer, const DRawDecoding& settings)
 {
-    d->observer = observer;
+    d->observer    = observer;
     d->rawSettings = settings;
 }
 
@@ -131,7 +133,7 @@ QString ThumbnailCreator::errorString() const
     return d->error;
 }
 
-QImage ThumbnailCreator::load(const QString &path)
+QImage ThumbnailCreator::load(const QString& path)
 {
     if (d->cachedSize <= 0)
     {
@@ -140,7 +142,7 @@ QImage ThumbnailCreator::load(const QString &path)
         return QImage();
     }
 
-    QString uri = thumbnailUri(path);
+    QString uri       = thumbnailUri(path);
     QString thumbPath = thumbnailPath(path);
 
     // stat the original file
@@ -155,8 +157,8 @@ QImage ThumbnailCreator::load(const QString &path)
     //       force to recompute it, else we use it.
 
     QImage qimage;
-    bool regenerate = true;
     QString tempFileName;
+    bool regenerate     = true;
     bool savedCorrectly = false;
 
     qimage = loadPNG(thumbPath);
@@ -170,8 +172,8 @@ QImage ThumbnailCreator::load(const QString &path)
     if (regenerate)
     {
         bool fromEmbeddedPreview = false;
-        bool failedAtDImg = false;
-        bool failedAtJPEGScaled = false;
+        bool failedAtDImg        = false;
+        bool failedAtJPEGScaled  = false;
 
         // -- Get the image preview --------------------------------
 
@@ -190,9 +192,9 @@ QImage ThumbnailCreator::load(const QString &path)
                 loadJPEGScaled(qimage, path, d->cachedSize);
                 failedAtJPEGScaled = qimage.isNull();
             }
-            else if (ext == QString("PNG")
-                     || ext == QString("TIFF")
-                     || ext == QString("TIF"))
+            else if (ext == QString("PNG")  ||
+                     ext == QString("TIFF") ||
+                     ext == QString("TIF"))
             {
                 qimage = loadWithDImg(path);
                 failedAtDImg = qimage.isNull();
@@ -258,8 +260,15 @@ QImage ThumbnailCreator::load(const QString &path)
     if(savedCorrectly)
     {
         Q_ASSERT(!tempFileName.isEmpty());
+#if KDE_IS_VERSION(4,2,85)
+        // KDE 4.3.0
         KDE::rename(QFile::encodeName(tempFileName),
                     QFile::encodeName(thumbPath));
+#else
+        // KDE 4.2.x or 4.1.x
+        KDE_rename(QFile::encodeName(tempFileName),
+                   QFile::encodeName(thumbPath));
+#endif
     }
 
     qimage = qimage.scaled(d->thumbnailSize, d->thumbnailSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -275,7 +284,7 @@ QImage ThumbnailCreator::load(const QString &path)
     return qimage;
 }
 
-QImage ThumbnailCreator::loadWithDImg(const QString &path)
+QImage ThumbnailCreator::loadWithDImg(const QString& path)
 {
     DImg img;
     if (d->observer)
@@ -298,7 +307,7 @@ QImage ThumbnailCreator::loadImagePreview(const QString& path)
     return image;
 }
 
-void ThumbnailCreator::handleAlphaChannel(QImage &qimage)
+void ThumbnailCreator::handleAlphaChannel(QImage& qimage)
 {
     switch (qimage.format())
     {
@@ -381,7 +390,7 @@ void ThumbnailCreator::exifRotate(const QString& filePath, QImage& thumb, bool f
     thumb = thumb.transformed( matrix );
 }
 
-void ThumbnailCreator::deleteThumbnailsFromDisk(const QString &filePath)
+void ThumbnailCreator::deleteThumbnailsFromDisk(const QString& filePath)
 {
     QFile smallThumb(thumbnailPath(filePath, normalThumbnailDir()));
     QFile largeThumb(thumbnailPath(filePath, largeThumbnailDir()));
