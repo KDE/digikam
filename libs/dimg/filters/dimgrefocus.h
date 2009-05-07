@@ -55,6 +55,8 @@ private:  // Refocus filter methods.
 
 private:  // Refocus filter data.
 
+    DImg   m_preImage;
+    
     int    m_matrixSize;
 
     double m_radius;

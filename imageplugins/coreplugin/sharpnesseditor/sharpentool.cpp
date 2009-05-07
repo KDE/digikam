@@ -21,9 +21,6 @@
  *
  * ============================================================ */
 
-#define MAX_MATRIX_SIZE 25
-
-
 #include "sharpentool.h"
 #include "sharpentool.moc"
 
@@ -68,6 +65,8 @@
 
 using namespace KDcrawIface;
 using namespace Digikam;
+
+#define MAX_MATRIX_SIZE 25
 
 namespace DigikamImagesPluginCore
 {
@@ -255,73 +254,6 @@ SharpenTool::SharpenTool(QObject* parent)
     connect(m_sharpMethod, SIGNAL(activated(int)),
             this, SLOT(slotSharpMethodActived(int)));
 
-    // -------------------------------------------------------------
-
-    // Image creation with dummy borders (mosaic mode) used by Refocus method. It needs to do
-    // it before to apply deconvolution filter on original image border pixels including
-    // on matrix size area. This way limit artifacts on image border.
-
-    ImageIface iface(0, 0);
-
-    uchar* data = iface.getOriginalImage();
-    int    w    = iface.originalWidth();
-    int    h    = iface.originalHeight();
-    bool   sb   = iface.originalSixteenBit();
-    bool   a    = iface.originalHasAlpha();
-
-    m_img = DImg( w + 4*MAX_MATRIX_SIZE, h + 4*MAX_MATRIX_SIZE, sb, a);
-
-    DImg tmp;
-    DImg org(w, h, sb, a, data);
-
-    // Copy original.
-    m_img.bitBltImage(&org, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
-
-    // Create dummy top border
-    tmp = org.copy(0, 0, w, 2*MAX_MATRIX_SIZE);
-    tmp.flip(DImg::VERTICAL);
-    m_img.bitBltImage(&tmp, 2*MAX_MATRIX_SIZE, 0);
-
-    // Create dummy bottom border
-    tmp = org.copy(0, h-2*MAX_MATRIX_SIZE, w, 2*MAX_MATRIX_SIZE);
-    tmp.flip(DImg::VERTICAL);
-    m_img.bitBltImage(&tmp, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE+h);
-
-    // Create dummy left border
-    tmp = org.copy(0, 0, 2*MAX_MATRIX_SIZE, h);
-    tmp.flip(DImg::HORIZONTAL);
-    m_img.bitBltImage(&tmp, 0, 2*MAX_MATRIX_SIZE);
-
-    // Create dummy right border
-    tmp = org.copy(w-2*MAX_MATRIX_SIZE, 0, 2*MAX_MATRIX_SIZE, h);
-    tmp.flip(DImg::HORIZONTAL);
-    m_img.bitBltImage(&tmp, w+2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
-
-    // Create dummy top/left corner
-    tmp = org.copy(0, 0, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
-    tmp.flip(DImg::HORIZONTAL);
-    tmp.flip(DImg::VERTICAL);
-    m_img.bitBltImage(&tmp, 0, 0);
-
-    // Create dummy top/right corner
-    tmp = org.copy(w-2*MAX_MATRIX_SIZE, 0, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
-    tmp.flip(DImg::HORIZONTAL);
-    tmp.flip(DImg::VERTICAL);
-    m_img.bitBltImage(&tmp, w+2*MAX_MATRIX_SIZE, 0);
-
-    // Create dummy bottom/left corner
-    tmp = org.copy(0, h-2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
-    tmp.flip(DImg::HORIZONTAL);
-    tmp.flip(DImg::VERTICAL);
-    m_img.bitBltImage(&tmp, 0, h+2*MAX_MATRIX_SIZE);
-
-    // Create dummy bottom/right corner
-    tmp = org.copy(w-2*MAX_MATRIX_SIZE, h-2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
-    tmp.flip(DImg::HORIZONTAL);
-    tmp.flip(DImg::VERTICAL);
-    m_img.bitBltImage(&tmp, w+2*MAX_MATRIX_SIZE, h+2*MAX_MATRIX_SIZE);
-
-    delete [] data;
 }
 
 SharpenTool::~SharpenTool()
@@ -486,21 +418,14 @@ void SharpenTool::prepareEffect()
             m_correlation->setEnabled(false);
             m_noise->setEnabled(false);
 
+            DImg   img    = m_previewWidget->getOriginalRegionImage();
             int    ms     = m_matrixSize->value();
             double r      = m_radius->value();
             double g      = m_gauss->value();
             double c      = m_correlation->value();
             double n      = m_noise->value();
-            QRect area    = m_previewWidget->getOriginalImageRegionToRender();
-            QRect tmpRect;
-            tmpRect.setLeft(area.left()-2*ms);
-            tmpRect.setRight(area.right()+2*ms);
-            tmpRect.setTop(area.top()-2*ms);
-            tmpRect.setBottom(area.bottom()+2*ms);
-            tmpRect.translate(2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
-            DImg imTemp = m_img.copy(tmpRect);
 
-            setFilter(dynamic_cast<DImgThreadedFilter*>(new DImgRefocus(&imTemp, this, ms, r, g, c, n)));
+            setFilter(dynamic_cast<DImgThreadedFilter*>(new DImgRefocus(&img, this, ms, r, g, c, n)));
             break;
         }
     }
@@ -508,6 +433,15 @@ void SharpenTool::prepareEffect()
 
 void SharpenTool::prepareFinal()
 {
+    ImageIface iface(0, 0);
+    uchar *data     = iface.getOriginalImage();
+    int w           = iface.originalWidth();
+    int h           = iface.originalHeight();
+    bool sixteenBit = iface.originalSixteenBit();
+    bool hasAlpha   = iface.originalHasAlpha();
+    DImg orgImage   = DImg(w, h, sixteenBit, hasAlpha ,data);
+    delete [] data;
+
     switch (m_stack->indexOf(m_stack->currentWidget()))
     {
         case SimpleSharp:
@@ -520,14 +454,6 @@ void SharpenTool::prepareFinal()
             if (radius < 1.0) sigma = radius;
             else sigma = sqrt(radius);
 
-            ImageIface iface(0, 0);
-            uchar *data     = iface.getOriginalImage();
-            int w           = iface.originalWidth();
-            int h           = iface.originalHeight();
-            bool sixteenBit = iface.originalSixteenBit();
-            bool hasAlpha   = iface.originalHasAlpha();
-            DImg orgImage   = DImg(w, h, sixteenBit, hasAlpha ,data);
-            delete [] data;
             setFilter(dynamic_cast<DImgThreadedFilter*>(new DImgSharpen(&orgImage, this, radius, sigma)));
             break;
         }
@@ -542,21 +468,12 @@ void SharpenTool::prepareFinal()
             double a  = m_amountInput->value();
             double th = m_thresholdInput->value();
 
-            ImageIface iface(0, 0);
-            uchar *data     = iface.getOriginalImage();
-            int w           = iface.originalWidth();
-            int h           = iface.originalHeight();
-            bool sixteenBit = iface.originalSixteenBit();
-            bool hasAlpha   = iface.originalHasAlpha();
-            DImg orgImage = DImg(w, h, sixteenBit, hasAlpha ,data);
-            delete [] data;
             setFilter(dynamic_cast<DImgThreadedFilter*>(new DImgUnsharpMask(&orgImage, this, r, a, th)));
             break;
         }
 
         case Refocus:
         {
-
             m_matrixSize->setEnabled(false);
             m_radius->setEnabled(false);
             m_gauss->setEnabled(false);
@@ -569,7 +486,7 @@ void SharpenTool::prepareFinal()
             double c    = m_correlation->value();
             double n    = m_noise->value();
 
-            setFilter(dynamic_cast<DImgThreadedFilter*>(new DImgRefocus(&m_img, this, ms, r, g, c, n)));
+            setFilter(dynamic_cast<DImgThreadedFilter*>(new DImgRefocus(&orgImage, this, ms, r, g, c, n)));
             break;
         }
     }
@@ -577,25 +494,8 @@ void SharpenTool::prepareFinal()
 
 void SharpenTool::putPreviewData()
 {
-    switch (m_stack->indexOf(m_stack->currentWidget()))
-    {
-        case SimpleSharp:
-        case UnsharpMask:
-        {
-            DImg imDest = filter()->getTargetImage();
-            m_previewWidget->setPreviewImage(imDest);
-            break;
-        }
-
-        case Refocus:
-        {
-            int   ms   = m_matrixSize->value();
-            QRect area = m_previewWidget->getOriginalImageRegionToRender();
-            DImg imDest = filter()->getTargetImage().copy(2*ms, 2*ms, area.width(), area.height());
-            m_previewWidget->setPreviewImage(imDest);
-            break;
-        }
-    }
+    DImg imDest = filter()->getTargetImage();
+    m_previewWidget->setPreviewImage(imDest);
 }
 
 void SharpenTool::putFinalData()
@@ -619,14 +519,7 @@ void SharpenTool::putFinalData()
 
         case Refocus:
         {
-            QRect area = m_previewWidget->getOriginalImageRegionToRender();
-            ImageIface iface(0, 0);
-
-            iface.putOriginalImage(i18n("Refocus"), filter()->getTargetImage()
-                                   .copy(2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE,
-                                         iface.originalWidth(),
-                                         iface.originalHeight())
-                                   .bits());
+            iface.putOriginalImage(i18n("Refocus"), imDest.bits());
             break;
         }
     }

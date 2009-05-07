@@ -39,6 +39,8 @@
 #include "dimgimagefilters.h"
 #include "matrix.h"
 
+#define MAX_MATRIX_SIZE 25
+
 namespace Digikam
 {
 
@@ -51,14 +53,80 @@ DImgRefocus::DImgRefocus(DImg *orgImage, QObject *parent, int matrixSize, double
     m_gauss       = gauss;
     m_correlation = correlation;
     m_noise       = noise;
+    
+    // initialize filter
     initFilter();
+
+    // initialize intermediate image
+    m_preImage = DImg(orgImage->width()+4*MAX_MATRIX_SIZE, 
+            orgImage->height()+4*MAX_MATRIX_SIZE, 
+            orgImage->sixteenBit(), orgImage->hasAlpha());    
 }
 
 void DImgRefocus::filterImage(void)
 {
-    refocusImage(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(),
-                 m_orgImage.sixteenBit(), m_matrixSize, m_radius, m_gauss,
+    bool sb = m_orgImage.sixteenBit();
+    bool a  = m_orgImage.hasAlpha();
+    int w = m_orgImage.width();
+    int h = m_orgImage.height();
+    
+    DImg img(w + 4*MAX_MATRIX_SIZE, h + 4*MAX_MATRIX_SIZE, sb, a);
+    DImg tmp;
+
+    // copy the original
+    img.bitBltImage(&m_orgImage, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
+    
+    // Create dummy top border
+    tmp = m_orgImage.copy(0, 0, w, 2*MAX_MATRIX_SIZE);
+    tmp.flip(DImg::VERTICAL);
+    img.bitBltImage(&tmp, 2*MAX_MATRIX_SIZE, 0);
+
+    // Create dummy bottom border
+    tmp = m_orgImage.copy(0, h-2*MAX_MATRIX_SIZE, w, 2*MAX_MATRIX_SIZE);
+    tmp.flip(DImg::VERTICAL);
+    img.bitBltImage(&tmp, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE+h);
+
+    // Create dummy left border
+    tmp = m_orgImage.copy(0, 0, 2*MAX_MATRIX_SIZE, h);
+    tmp.flip(DImg::HORIZONTAL);
+    img.bitBltImage(&tmp, 0, 2*MAX_MATRIX_SIZE);
+
+    // Create dummy right border
+    tmp = m_orgImage.copy(w-2*MAX_MATRIX_SIZE, 0, 2*MAX_MATRIX_SIZE, h);
+    tmp.flip(DImg::HORIZONTAL);
+    img.bitBltImage(&tmp, w+2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
+
+    // Create dummy top/left corner
+    tmp = m_orgImage.copy(0, 0, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
+    tmp.flip(DImg::HORIZONTAL);
+    tmp.flip(DImg::VERTICAL);
+    img.bitBltImage(&tmp, 0, 0);
+
+    // Create dummy top/right corner
+    tmp = m_orgImage.copy(w-2*MAX_MATRIX_SIZE, 0, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
+    tmp.flip(DImg::HORIZONTAL);
+    tmp.flip(DImg::VERTICAL);
+    img.bitBltImage(&tmp, w+2*MAX_MATRIX_SIZE, 0);
+
+    // Create dummy bottom/left corner
+    tmp = m_orgImage.copy(0, h-2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
+    tmp.flip(DImg::HORIZONTAL);
+    tmp.flip(DImg::VERTICAL);
+    img.bitBltImage(&tmp, 0, h+2*MAX_MATRIX_SIZE);
+
+    // Create dummy bottom/right corner
+    tmp = m_orgImage.copy(w-2*MAX_MATRIX_SIZE, h-2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE);
+    tmp.flip(DImg::HORIZONTAL);
+    tmp.flip(DImg::VERTICAL);
+    img.bitBltImage(&tmp, w+2*MAX_MATRIX_SIZE, h+2*MAX_MATRIX_SIZE);
+
+    // run filter algorithm on the prepared copy
+    refocusImage(img.bits(), img.width(), img.height(),
+                 img.sixteenBit(), m_matrixSize, m_radius, m_gauss,
                  m_correlation, m_noise);
+    
+    // copy the result from intermediate image to final image
+    m_destImage.bitBltImage(&m_preImage, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE, w, h, 0, 0);
 }
 
 void DImgRefocus::refocusImage(uchar* data, int width, int height, bool sixteenBit,
@@ -85,7 +153,7 @@ void DImgRefocus::refocusImage(uchar* data, int width, int height, bool sixteenB
 
     // Apply deconvolution kernel to image.
     kDebug(50006) << "DImgRefocus::Apply Matrix to image..." << endl;
-    convolveImage(data, m_destImage.bits(), width, height, sixteenBit,
+    convolveImage(data, m_preImage.bits(), width, height, sixteenBit,
                   matrix->data, 2 * matrixSize + 1);
 
     // Clean up memory

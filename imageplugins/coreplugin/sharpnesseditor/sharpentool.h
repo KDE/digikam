@@ -100,8 +100,6 @@ private:
     KDcrawIface::RDoubleNumInput *m_amountInput;
     KDcrawIface::RDoubleNumInput *m_thresholdInput;
 
-    Digikam::DImg                 m_img;
-
     Digikam::ImagePanelWidget    *m_previewWidget;
 
     Digikam::EditorToolSettings  *m_gboxSettings;
