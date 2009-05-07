@@ -165,6 +165,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
                                        false, ImageGuideWidget::HVGuideMode, false);
 
     setToolView(d->previewWidget);
+    d->previewWidget->setRenderingPreviewMode(ImageGuideWidget::PreviewToggleOnMouseOver);
 
     // -------------------------------------------------------------
 

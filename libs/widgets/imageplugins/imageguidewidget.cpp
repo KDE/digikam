@@ -206,6 +206,11 @@ int ImageGuideWidget::getRenderingPreviewMode()
     return (d->renderingPreviewMode);
 }
 
+void ImageGuideWidget::setRenderingPreviewMode(int mode)
+{
+    d->renderingPreviewMode = mode;
+}
+
 QPoint ImageGuideWidget::getSpotPosition()
 {
     return (QPoint( (int)((float)d->spot.x() * (float)d->iface->originalWidth()  / (float)d->width),
@@ -534,7 +539,7 @@ void ImageGuideWidget::paintEvent(QPaintEvent*)
     QPainter p(this);
     p.drawPixmap(0, 0, *d->pixmap);
 
-    if (d->enableDrawMask)
+    if (d->enableDrawMask && d->onMouseMovePreviewToggled == false )
     {
         p.setOpacity(0.7);
         p.drawPixmap(d->rect.x(), d->rect.y(), *d->maskPixmap);

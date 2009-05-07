@@ -95,6 +95,7 @@ public:
     DColor getSpotColor(int getColorFrom);
     void   setSpotVisible(bool spotVisible, bool blink=false);
     int    getRenderingPreviewMode();
+    void   setRenderingPreviewMode(int mode);
     void   resetSpotPosition();
     void   updatePreview();
     void   setPoints(const QPolygon& p, bool drawLine=false);
