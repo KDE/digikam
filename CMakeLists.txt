@@ -538,7 +538,9 @@ ENDIF(MSVC)
        )
 
     SET(libcommonwidgets_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/clicklabel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/colorgradientwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/comboboxutilities.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dcursortracker.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dlogoaction.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dfontselect.cpp
@@ -563,6 +565,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/searchtextbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/thumbbartooltip.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/thumbbar.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/visibilitycontroller.cpp
        )
 
     SET(libiccprofileswidgets_SRCS
@@ -878,7 +881,6 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/searchfieldgroup.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/searchfields.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/searchutilities.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/comboboxutilities.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/ratingsearchutilities.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/choicesearchutilities.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/searchfolderview.cpp

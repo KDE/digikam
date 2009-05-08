@@ -38,6 +38,8 @@
 namespace Digikam
 {
 
+class VisibilityControllerPriv;
+
 class DIGIKAM_EXPORT VisibilityObject
 {
 public:
@@ -47,8 +49,6 @@ public:
     virtual void setVisible(bool visible) = 0;
     virtual bool isVisible() = 0;
 };
-
-// -------------------------------------------------------------------------
 
 class DIGIKAM_EXPORT VisibilityController : public QObject
 {
@@ -69,6 +69,15 @@ public:
     /** Returns true if the contained objects are visible or becoming visible */
     bool isVisible() const;
 
+    enum Status
+    {
+        Unknown,
+        Hidden,
+        Showing,
+        Shown,
+        Hiding
+    };
+
 public Q_SLOTS:
 
     /// Shows/hides all added objects
@@ -79,15 +88,6 @@ public Q_SLOTS:
     void triggerVisibility();
 
 protected:
-
-    enum Status
-    {
-        Unknown,
-        Hidden,
-        Showing,
-        Shown,
-        Hiding
-    };
 
     virtual void beginStatusChange();
     void step();

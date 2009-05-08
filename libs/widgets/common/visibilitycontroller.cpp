@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-VisibilityControllerPriv
+class VisibilityControllerPriv
 {
 public:
 
@@ -46,9 +46,9 @@ public:
         containerWidget = 0;
     }
 
-    Status                    status;
-    QList<VisibilityObject *> objects;
-    QWidget                  *containerWidget;
+    VisibilityController::Status  status;
+    QList<VisibilityObject *>     objects;
+    QWidget                      *containerWidget;
 };
 
 class VisibilityWidgetWrapper : public QObject, public VisibilityObject

@@ -78,10 +78,12 @@ public:
 Q_SIGNALS:
 
     void leftClicked();
+    void activated();
 
 protected:
 
     virtual void mouseReleaseEvent(QMouseEvent* event);
+    virtual void keyPressEvent(QKeyEvent* event);
 };
 
 // -------------------------------------------------------------------------

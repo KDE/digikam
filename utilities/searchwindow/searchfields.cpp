@@ -61,6 +61,7 @@
 #include "albummanager.h"
 #include "album.h"
 #include "albummodel.h"
+#include "clicklabel.h"
 #include "kdateedit.h"
 #include "dmetadata.h"
 #include "imagescanner.h"

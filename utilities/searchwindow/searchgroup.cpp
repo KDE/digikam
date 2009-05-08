@@ -43,6 +43,7 @@
 
 // Local includes
 
+#include "clicklabel.h"
 #include "searchview.h"
 #include "searchfields.h"
 #include "searchfieldgroup.h"

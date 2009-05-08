@@ -77,6 +77,7 @@ void ClickLabel::keyPressEvent(QKeyEvent *e)
             emit activated();
             return;
         default:
+            break;
     }
 
     QLabel::keyPressEvent(e);
@@ -118,6 +119,7 @@ void SqueezedClickLabel::keyPressEvent(QKeyEvent *e)
             emit activated();
             return;
         default:
+            break;
     }
 
     QLabel::keyPressEvent(e);
