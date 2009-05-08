@@ -36,13 +36,15 @@
 
 // Local includes
 
+#include "digikam_export.h"
+
 class QVBoxLayout;
 class QTreeView;
 
 namespace Digikam
 {
 
-class ProxyLineEdit : public QLineEdit
+class DIGIKAM_EXPORT ProxyLineEdit : public QLineEdit
 {
     Q_OBJECT
 
@@ -87,7 +89,7 @@ protected:
 
 // -------------------------------------------------------------------------
 
-class ProxyClickLineEdit : public ProxyLineEdit
+class DIGIKAM_EXPORT ProxyClickLineEdit : public ProxyLineEdit
 {
     Q_OBJECT
 
@@ -113,7 +115,7 @@ protected:
 
 // -------------------------------------------------------------------------
 
-class ModelIndexBasedComboBox : public QComboBox
+class DIGIKAM_EXPORT ModelIndexBasedComboBox : public QComboBox
 {
 public:
 
@@ -139,7 +141,7 @@ protected:
 
 // -------------------------------------------------------------------------
 
-class StayPoppedUpComboBox : public ModelIndexBasedComboBox
+class DIGIKAM_EXPORT StayPoppedUpComboBox : public ModelIndexBasedComboBox
 {
     Q_OBJECT
 
@@ -177,7 +179,7 @@ protected:
 
 // -------------------------------------------------------------------------
 
-class TreeViewComboBox : public StayPoppedUpComboBox
+class DIGIKAM_EXPORT TreeViewComboBox : public StayPoppedUpComboBox
 {
     Q_OBJECT
 
@@ -206,7 +208,7 @@ protected:
 
 // -------------------------------------------------------------------------
 
-class ListViewComboBox : public StayPoppedUpComboBox
+class DIGIKAM_EXPORT ListViewComboBox : public StayPoppedUpComboBox
 {
     Q_OBJECT
 
@@ -235,7 +237,7 @@ protected:
 
 // -------------------------------------------------------------------------
 
-class TreeViewLineEditComboBox : public TreeViewComboBox
+class DIGIKAM_EXPORT TreeViewLineEditComboBox : public TreeViewComboBox
 {
 public:
     /** This class provides a TreeViewComboBox

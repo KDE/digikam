@@ -35,6 +35,7 @@
 
 // Local includes
 
+#include "clicklabel.h"
 #include "searchutilities.h"
 
 namespace Digikam
@@ -215,7 +216,7 @@ ChoiceSearchModel *ChoiceSearchComboBox::model() const
     return static_cast<ChoiceSearchModel*>(ListViewComboBox::model());
 }
 
-SearchSqueezedClickLabel *ChoiceSearchComboBox::label() const
+SqueezedClickLabel *ChoiceSearchComboBox::label() const
 {
     return m_label;
 }
@@ -240,7 +241,7 @@ void ChoiceSearchComboBox::installView()
     view()->setAlternatingRowColors(true);
 
     // create the label
-    m_label = new SearchSqueezedClickLabel;
+    m_label = new SqueezedClickLabel;
     m_label->setTextElideMode(Qt::ElideRight);
 
     // set a line edit that carries the label
@@ -253,7 +254,7 @@ void ChoiceSearchComboBox::installView()
     connect(lineEdit, SIGNAL(leftClicked()),
             this, SLOT(labelClicked()));
 
-    connect(m_label, SIGNAL(leftClicked()),
+    connect(m_label, SIGNAL(activated()),
             this, SLOT(labelClicked()));
 }
 

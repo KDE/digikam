@@ -36,6 +36,7 @@
 
 // Local includes
 
+#include "clicklabel.h"
 #include "themeengine.h"
 #include "searchgroup.h"
 #include "searchfields.h"
@@ -149,7 +150,7 @@ SearchFieldGroupLabel::SearchFieldGroupLabel(QWidget *parent)
 {
     QGridLayout *layout = new QGridLayout;
 
-    m_titleLabel = new SearchClickLabel;
+    m_titleLabel = new ClickLabel;
     m_titleLabel->setObjectName("SearchFieldGroupLabel_Label");
     m_expandLabel = new QLabel;
     QFrame *hline = new QFrame;
@@ -162,7 +163,7 @@ SearchFieldGroupLabel::SearchFieldGroupLabel(QWidget *parent)
     layout->setSpacing(2);
     setLayout(layout);
 
-    connect(m_titleLabel, SIGNAL(leftClicked()),
+    connect(m_titleLabel, SIGNAL(activated()),
             this, SIGNAL(clicked()));
 }
 

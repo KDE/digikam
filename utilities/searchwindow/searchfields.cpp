@@ -1617,7 +1617,7 @@ protected:
 protected:
 
     QString                    m_anyText;
-    SearchSqueezedClickLabel  *m_label;
+    SqueezedClickLabel        *m_label;
     QVBoxLayout               *m_vbox;
     QMap<int, QString>         m_choiceMap;
     QMap<QCheckBox*, int>      m_widgetMap;
@@ -1628,7 +1628,7 @@ SearchFieldChoice::SearchFieldChoice(SearchFieldGroup *parent)
     : SearchField(parent), m_vbox(0)
 {
     m_anyText = i18n("Any");
-    m_label = new SearchSqueezedClickLabel;
+    m_label = new SqueezedClickLabel;
     m_label->setObjectName("SearchFieldChoice_ClickLabel");
     m_controller = new VisibilityController(this);
     m_controller->setContainerWidget(parent);
@@ -1642,7 +1642,7 @@ void SearchFieldChoice::setupValueWidgets(QGridLayout *layout, int row, int colu
     m_label->setTextElideMode(Qt::ElideRight);
     m_vbox->addWidget(m_label);
 
-    connect(m_label, SIGNAL(leftClicked()),
+    connect(m_label, SIGNAL(activated()),
             this, SLOT(slotClicked()));
 
     setupChoiceWidgets();

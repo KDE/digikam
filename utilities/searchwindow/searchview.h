@@ -42,7 +42,6 @@ namespace Digikam
 
 class SearchGroup;
 class SearchViewBottomBar;
-class SearchClickLabel;
 class SearchXmlCachingReader;
 class SearchXmlWriter;
 

@@ -49,7 +49,7 @@ class SearchFieldGroupLabel;
 class SearchGroup;
 class SearchField;
 class VisibilityController;
-class SearchClickLabel;
+class ClickLabel;
 
 class SearchFieldGroup : public QWidget
 {
@@ -111,7 +111,7 @@ Q_SIGNALS:
 protected:
 
     QString            m_title;
-    SearchClickLabel  *m_titleLabel;
+    ClickLabel        *m_titleLabel;
     QLabel            *m_expandLabel;
 };
 

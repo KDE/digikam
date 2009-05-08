@@ -372,9 +372,9 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache *cache, SearchGrou
         logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
                 .scaled(96, 96, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
-        m_optionsLabel = new SearchClickLabel;
+        m_optionsLabel = new ClickLabel;
         m_optionsLabel->setObjectName("SearchGroupLabel_OptionsLabel");
-        connect(m_optionsLabel, SIGNAL(leftClicked()),
+        connect(m_optionsLabel, SIGNAL(activated()),
                  this, SLOT(toggleShowOptions()));
 
         QWidget *simpleHeader = new QWidget;
@@ -414,14 +414,14 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache *cache, SearchGrou
     }
     else
     {
-        m_groupOpLabel = new SearchClickLabel;
+        m_groupOpLabel = new ClickLabel;
         m_groupOpLabel->setObjectName("SearchGroupLabel_GroupOpLabel");
-        connect(m_groupOpLabel, SIGNAL(leftClicked()),
+        connect(m_groupOpLabel, SIGNAL(activated()),
                 this, SLOT(toggleGroupOperator()));
 
-        m_removeLabel = new SearchClickLabel(i18n("Remove Group"));
+        m_removeLabel = new ClickLabel(i18n("Remove Group"));
         m_removeLabel->setObjectName("SearchGroupLabel_RemoveLabel");
-        connect(m_removeLabel, SIGNAL(leftClicked()),
+        connect(m_removeLabel, SIGNAL(activated()),
                 this, SIGNAL(removeClicked()));
 
         m_layout->addWidget(m_groupOpLabel, 0, 0, 1, 1);

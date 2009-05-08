@@ -35,6 +35,7 @@
 
 #include "searchxml.h"
 #include "searchutilities.h"
+#include "visibilitycontroller.h"
 
 class QLabel;
 class QCheckBox;
@@ -53,7 +54,6 @@ namespace Digikam
 
 class SearchFieldGroup;
 class SqueezedComboBox;
-class SearchSqueezedClickLabel;
 class KDateEdit;
 class ChoiceSearchModel;
 class ChoiceSearchComboBox;
