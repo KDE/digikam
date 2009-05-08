@@ -259,16 +259,21 @@ QImage ThumbnailCreator::load(const QString& path)
     }
     if(savedCorrectly)
     {
+	int ret;
         Q_ASSERT(!tempFileName.isEmpty());
+
 #if KDE_IS_VERSION(4,2,85)
         // KDE 4.3.0
-        KDE::rename(QFile::encodeName(tempFileName),
-                    QFile::encodeName(thumbPath));
+        ret = KDE::rename(QFile::encodeName(tempFileName),
+                          QFile::encodeName(thumbPath));
 #else
         // KDE 4.2.x or 4.1.x
-        KDE_rename(QFile::encodeName(tempFileName),
-                   QFile::encodeName(thumbPath));
+        ret = KDE_rename(QFile::encodeName(tempFileName),
+                         QFile::encodeName(thumbPath));
 #endif
+
+	if (ret != 0) 
+	    kDebug(50003) << "Cannot write thumb file (" << thumbPath << ")..." << endl;
     }
 
     qimage = qimage.scaled(d->thumbnailSize, d->thumbnailSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -301,7 +306,7 @@ QImage ThumbnailCreator::loadImagePreview(const QString& path)
     if (metadata.getImagePreview(image))
     {
         kDebug(50003) << "Use Exif/IPTC preview extraction. Size of image: "
-                  << image.width() << "x" << image.height() << endl;
+                      << image.width() << "x" << image.height() << endl;
     }
 
     return image;
