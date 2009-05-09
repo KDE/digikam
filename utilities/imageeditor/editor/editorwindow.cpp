@@ -600,7 +600,7 @@ void EditorWindow::setupStatusBar()
             this, SLOT(slotToggleColorManagedView()));
 }
 
-void EditorWindow::printImage(KUrl /*url*/)
+void EditorWindow::printImage(const KUrl& /*url*/)
 {
     uchar* ptr      = m_canvas->interface()->getImage();
     int w           = m_canvas->interface()->origWidth();
@@ -1453,7 +1453,7 @@ void EditorWindow::startingSave(const KUrl& url)
 
     QString tempDir = url.directory(KUrl::AppendTrailingSlash);
     // use magic file extension which tells the digikamalbums ioslave to ignore the file
-    m_savingContext->saveTempFile       = new KTemporaryFile();
+    m_savingContext->saveTempFile = new KTemporaryFile();
     m_savingContext->saveTempFile->setPrefix(tempDir);
     m_savingContext->saveTempFile->setSuffix(".digikamtempfile.tmp");
     m_savingContext->saveTempFile->setAutoRemove(true);

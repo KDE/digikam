@@ -137,7 +137,7 @@ protected:
     void toggleStandardActions(bool val);
     void toggleZoomActions(bool val);
 
-    void printImage(KUrl url);
+    void printImage(const KUrl& url);
 
     void unLoadImagePlugins();
     void loadImagePlugins();
@@ -206,8 +206,8 @@ protected Q_SLOTS:
     void slotThemeChanged();
 
     virtual void slotLoadingStarted(const QString& filename);
-    virtual void slotLoadingFinished(const QString &filename, bool success);
-    virtual void slotSavingStarted(const QString &filename);
+    virtual void slotLoadingFinished(const QString& filename, bool success);
+    virtual void slotSavingStarted(const QString& filename);
 
     virtual void slotSetup(){ setup(); };
     virtual void slotChangeTheme(const QString& theme);
@@ -231,13 +231,13 @@ private Q_SLOTS:
     void slotToggleOverExposureIndicator();
     void slotToggleColorManagedView();
     void slotRotatedOrFlipped();
-    void slotSavingFinished(const QString &filename, bool success);
+    void slotSavingFinished(const QString& filename, bool success);
     void slotDonateMoney();
     void slotContribute();
     void slotToggleSlideShow();
     void slotZoomTo100Percents();
     void slotZoomSelected();
-    void slotZoomTextChanged(const QString &);
+    void slotZoomTextChanged(const QString&);
     void slotZoomChanged(bool isMax, bool isMin, double zoom);
     void slotSelectionChanged(const QRect& sel);
     void slotToggleFitToWindow();

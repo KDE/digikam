@@ -61,8 +61,8 @@ public:
                  const QString& caption=QString(),
                  bool allowSaving=true);
 
-    void loadImageInfos(const ImageInfoList &imageInfoList,
-                        const ImageInfo &imageInfoCurrent,
+    void loadImageInfos(const ImageInfoList& imageInfoList,
+                        const ImageInfo& imageInfoCurrent,
                         const QString& caption, bool allowSaving);
 
     static ImageWindow* imagewindow();
@@ -143,8 +143,8 @@ private Q_SLOTS:
     void slotAssignRatingFiveStar();
     void slotAssignRating(int rating);
 
-    void slotFileMetadataChanged(const KUrl &);
-    void slotCollectionImageChange(const CollectionImageChangeset &);
+    void slotFileMetadataChanged(const KUrl&);
+    void slotCollectionImageChange(const CollectionImageChangeset&);
 
     void slotChangeTheme(const QString& theme);
 

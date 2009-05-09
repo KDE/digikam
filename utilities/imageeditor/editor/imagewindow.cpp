@@ -500,7 +500,7 @@ void ImageWindow::loadURL(const KUrl::List& urlList, const KUrl& urlCurrent,
     loadCurrentList(caption, allowSaving);
 }
 
-void ImageWindow::loadImageInfos(const ImageInfoList &imageInfoList, const ImageInfo &imageInfoCurrent,
+void ImageWindow::loadImageInfos(const ImageInfoList& imageInfoList, const ImageInfo& imageInfoCurrent,
                                  const QString& caption, bool allowSaving)
 {
     // imageInfoCurrent is contained in imageInfoList.
@@ -577,7 +577,7 @@ void ImageWindow::slotLoadCurrent()
     setViewToURL(d->urlCurrent);
 }
 
-void ImageWindow::setViewToURL(const KUrl &url)
+void ImageWindow::setViewToURL(const KUrl& url)
 {
     emit signalURLChanged(url);
 }
@@ -1166,7 +1166,7 @@ bool ImageWindow::removeItem(int index)
     return false;
 }
 
-void ImageWindow::slotFileMetadataChanged(const KUrl &url)
+void ImageWindow::slotFileMetadataChanged(const KUrl& url)
 {
     if (url == d->urlCurrent)
     {
@@ -1174,7 +1174,7 @@ void ImageWindow::slotFileMetadataChanged(const KUrl &url)
     }
 }
 
-void ImageWindow::slotCollectionImageChange(const CollectionImageChangeset &changeset)
+void ImageWindow::slotCollectionImageChange(const CollectionImageChangeset& changeset)
 {
     // ignore when closed
     if (!isVisible())
@@ -1243,7 +1243,7 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
         // We have started image editor from Album GUI. we get picture comments from database.
 
         m_nameLabel->progressBarMode(StatusProgressBar::CancelProgressBarMode,
-                                    i18n("Preparing slideshow. Please wait..."));
+                                     i18n("Preparing slideshow. Please wait..."));
 
         cnt = (float)d->imageInfoList.count();
 
@@ -1265,7 +1265,7 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
         // We have started image editor from Camera GUI. we get picture comments from metadata.
 
         m_nameLabel->progressBarMode(StatusProgressBar::CancelProgressBarMode,
-                                    i18n("Preparing slideshow. Please wait..."));
+                                     i18n("Preparing slideshow. Please wait..."));
 
         cnt = (float)d->urlList.count();
         DMetadata meta;
