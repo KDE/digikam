@@ -300,6 +300,11 @@ QModelIndex AbstractAlbumModel::rootAlbumIndex() const
     return indexForAlbum(d->rootAlbum);
 }
 
+Album::Type AbstractAlbumModel::albumType() const
+{
+    return d->type;
+}
+
 QVariant AbstractAlbumModel::decorationRole(Album *) const
 {
     return QVariant();
