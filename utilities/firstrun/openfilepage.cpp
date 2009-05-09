@@ -74,7 +74,7 @@ OpenFilePage::OpenFilePage(KAssistantDialog* dlg)
     label1->setWordWrap(true);
     label1->setText(i18n("<qt>"
                          "<p>Configure Open File Behavior.</p>"
-                         "<p>Set here how images are open when user right-click on items from icon-view:</p>"
+                         "<p>Specify how images should be opened when right-clicked on in the icon view:</p>"
                          "</qt>"));
 
     QWidget *btns      = new QWidget(vbox);
@@ -82,12 +82,12 @@ OpenFilePage::OpenFilePage(KAssistantDialog* dlg)
 
     d->openFileBehavour = new QButtonGroup(btns);
     d->openAsPreview    = new QRadioButton(btns);
-    d->openAsPreview->setText(i18n("Open as preview"));
+    d->openAsPreview->setText(i18n("Open a preview"));
     d->openAsPreview->setChecked(true);
     d->openFileBehavour->addButton(d->openAsPreview);
 
     d->openInEditor = new QRadioButton(btns);
-    d->openInEditor->setText(i18n("Load on editor"));
+    d->openInEditor->setText(i18n("Open in the editor"));
     d->openFileBehavour->addButton(d->openInEditor);
 
     vlay->addWidget(d->openAsPreview);
@@ -98,11 +98,11 @@ OpenFilePage::OpenFilePage(KAssistantDialog* dlg)
     QLabel *label2 = new QLabel(vbox);
     label2->setWordWrap(true);
     label2->setText(i18n("<qt>"
-                         "<p><i>Note:</i> using preview is always faster than to use editor, "
-                         "especially to check a serie of shots. But, you cannot change or fix image with "
-                         "preview mode. "
-                         "Anyway, if you want to compare images quicly, the better way is to use light table. "
-                         "With this tool, you can display images side by side and perform synchronized zoom and pan.</p>"
+                         "<p><i>Note:</i> using a preview is always faster than using the editor, "
+                         "especially when checking a series of shots. However, you cannot change or fix the image "
+                         "in preview mode. "
+                         "Note that if you want to compare images quickly, it is often better to use the light table: "
+                         "images can be displayed side-by-side, and synchronized zooming and panning can be performed.</p>"
                          "</qt>"));
 
     setPageWidget(vbox);
