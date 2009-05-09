@@ -145,6 +145,10 @@ QImage ThumbnailCreator::load(const QString& path)
     QString uri       = thumbnailUri(path);
     QString thumbPath = thumbnailPath(path);
 
+    kDebug(50003) << "path= " << path << endl;
+    kDebug(50003) << "uri= " << uri << endl;
+    kDebug(50003) << "thumbPath= " << thumbPath << endl;
+
     // stat the original file
     struct stat st;
     if (::stat(QFile::encodeName(path), &st) != 0)
@@ -249,7 +253,7 @@ QImage ThumbnailCreator::load(const QString& path)
         qimage.setText(QString("Software").toLatin1(),     0, QString(DigiKamFingerPrint));
 
         KTemporaryFile temp;
-        temp.setPrefix(thumbPath + "-digikam-");
+        temp.setPrefix(QFileInfo(thumbPath).baseName() + "-digikam-");
         temp.setSuffix(".png");
         if (temp.open())
         {
