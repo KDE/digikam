@@ -58,4 +58,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 043 ==> 191203 : digiKam crashed on first load, after being installed on ubuntu 9.04.
 044 ==> 151321 : Remaining space incorrectly calculated when using symlinks (import from camera).
 045 ==> 189742 : Thumbnails not saved between sessions.
-046 ==> 
+046 ==> 180507 : Crash when dragging picture to another app with kwin_composite enabled. 
+047 ==> 
