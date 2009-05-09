@@ -921,6 +921,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumlister.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albummanager.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumpropsedit.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumselectcombobox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumselectwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumselectdialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumsettings.cpp 

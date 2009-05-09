@@ -52,6 +52,7 @@ class KSqueezedTextLabel;
 namespace Digikam
 {
 
+class AlbumSelectComboBox;
 class SearchFieldGroup;
 class SqueezedComboBox;
 class KDateEdit;
@@ -326,15 +327,12 @@ public:
 
 protected Q_SLOTS:
 
-    void checkStateChanged(Album *album, int state);
+    void updateState();
 
 protected:
 
-    void updateComboText();
-
-    TreeViewLineEditComboBox    *m_comboBox;
+    AlbumSelectComboBox         *m_comboBox;
     Type                         m_type;
-    QString                      m_anyText;
     AbstractCheckableAlbumModel *m_model;
 };
 

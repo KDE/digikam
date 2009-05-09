@@ -61,6 +61,7 @@
 #include "albummanager.h"
 #include "album.h"
 #include "albummodel.h"
+#include "albumselectcombobox.h"
 #include "clicklabel.h"
 #include "kdateedit.h"
 #include "dmetadata.h"
@@ -1799,66 +1800,33 @@ SearchFieldAlbum::SearchFieldAlbum(QObject *parent, Type type)
 
 void SearchFieldAlbum::setupValueWidgets(QGridLayout *layout, int row, int column)
 {
-    m_comboBox = new TreeViewLineEditComboBox;
+    m_comboBox = new AlbumSelectComboBox;
     m_comboBox->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
 
     if (m_type == TypeAlbum)
     {
-        m_model = new AlbumModel(AlbumModel::IgnoreRootAlbum, this);
-        m_anyText = i18n("Any Album");
+        m_comboBox->setDefaultAlbumModels();
+        m_comboBox->setNoSelectionText(i18n("Any Album"));
     }
     else if (m_type == TypeTag)
     {
-        m_model = new TagModel(AlbumModel::IgnoreRootAlbum, this);
-        m_anyText = i18n("Any Tag");
+        m_comboBox->setDefaultTagModels();
+        m_comboBox->setNoSelectionText(i18n("Any Tag"));
     }
 
-    m_model->setCheckable(true);
+    m_model = m_comboBox->model();
+
     connect(m_model, SIGNAL(checkStateChanged(Album*, int)),
             this, SLOT(checkStateChanged(Album*, int)));
 
-    QSortFilterProxyModel *sortModel = new QSortFilterProxyModel(this);
-    sortModel->setDynamicSortFilter(true);
-    sortModel->setSourceModel(m_model);
-
-    m_comboBox->setModel(sortModel);
-    m_comboBox->installView();
-    m_comboBox->view()->setSortingEnabled(true);
-    m_comboBox->view()->sortByColumn(0, Qt::AscendingOrder);
-    m_comboBox->view()->collapseAll();
-    if (m_type == TypeAlbum)
-        m_comboBox->view()->expandToDepth(0);
-    updateComboText();
+    updateState();
 
     layout->addWidget(m_comboBox, row, column, 1, 3);
 }
 
-void SearchFieldAlbum::checkStateChanged(Album *, int)
+void SearchFieldAlbum::updateState()
 {
-    updateComboText();
-}
-
-void SearchFieldAlbum::updateComboText()
-{
-    QList<Album *> checkedAlbums = m_model->checkedAlbums();
-    if (checkedAlbums.isEmpty())
-    {
-        m_comboBox->setLineEditText(m_anyText);
-        setValidValueState(false);
-    }
-    else if (checkedAlbums.count() == 1)
-    {
-        m_comboBox->setLineEditText(checkedAlbums.first()->title());
-        setValidValueState(true);
-    }
-    else
-    {
-        setValidValueState(true);
-        if (m_type == TypeAlbum)
-            m_comboBox->setLineEditText(i18np("1 Album selected", "%1 Albums selected", checkedAlbums.count()));
-        else
-            m_comboBox->setLineEditText(i18np("1 Tag selected", "%1 Tags selected", checkedAlbums.count()));
-    }
+    setValidValueState(!m_model->checkedAlbums().isEmpty());
 }
 
 void SearchFieldAlbum::read(SearchXmlCachingReader &reader)
