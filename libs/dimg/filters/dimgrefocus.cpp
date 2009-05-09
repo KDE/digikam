@@ -44,6 +44,11 @@
 namespace Digikam
 {
 
+int DImgRefocus::maxMatrixSize()
+{
+    return MAX_MATRIX_SIZE;
+}
+
 DImgRefocus::DImgRefocus(DImg *orgImage, QObject *parent, int matrixSize, double radius,
                          double gauss, double correlation, double noise)
            : DImgThreadedFilter(orgImage, parent, "Refocus")

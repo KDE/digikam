@@ -49,8 +49,6 @@
 #include "dimgunsharpmask.h"
 #include "dimgrefocus.h"
 
-#define MAX_MATRIX_SIZE 25
-
 using namespace KDcrawIface;
 
 namespace Digikam
@@ -196,14 +194,14 @@ Sharpen::Sharpen(QObject *parent)
 
     new QLabel(i18n("Matrix size:"), refocusSettings);
     m_matrixSize   = new RIntNumInput(refocusSettings);
-    m_matrixSize->setRange(0, MAX_MATRIX_SIZE, 1);
+    m_matrixSize->setRange(0, DImgRefocus::maxMatrixSize(), 1);
     m_matrixSize->setSliderEnabled(true);
     m_matrixSize->setDefaultValue(5);
     m_matrixSize->setWhatsThis( i18n("This parameter determines the size of the transformation matrix. "
                                      "Increasing the matrix width may give better results, especially when you have "
                                      "chosen large values for circular or Gaussian sharpness."));
 
-    connect(m_matrixSize, SIGNAL(valueChanged(double)), 
+    connect(m_matrixSize, SIGNAL(valueChanged(int)), 
             this, SLOT(slotSettingsChanged()));
 
     m_stack->insertWidget(Refocus, refocusSettings);
