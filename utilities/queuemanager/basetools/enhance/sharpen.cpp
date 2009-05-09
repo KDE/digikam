@@ -76,6 +76,9 @@ Sharpen::Sharpen(QObject *parent)
     m_sharpMethod->setDefaultIndex(SimpleSharp);
     m_sharpMethod->setWhatsThis( i18n("Select the sharpening method to apply to the image."));
 
+    connect(m_sharpMethod, SIGNAL(activated(int)),
+            this, SLOT(slotSharpMethodChanged(int)));
+
     /* ... and then a widget stack, ... */
     m_stack = new QStackedWidget(vbox);
     
@@ -91,6 +94,9 @@ Sharpen::Sharpen(QObject *parent)
                                       "that determines how much to sharpen the image."));
     QLabel *space = new QLabel(simpleSharpSettings);
     simpleSharpSettings->setStretchFactor(space, 10);
+
+    connect(m_radiusInput, SIGNAL(valueChanged(int)), 
+            this, SLOT(slotSettingsChanged()));
     
     m_stack->insertWidget(SimpleSharp, simpleSharpSettings);
     
@@ -104,6 +110,9 @@ Sharpen::Sharpen(QObject *parent)
     m_radiusInput2->setWhatsThis( i18n("Radius value is the Gaussian blur matrix radius value "
                                        "used to determines how much to blur the image.") );
 
+    connect(m_radiusInput2, SIGNAL(valueChanged(int)), 
+            this, SLOT(slotSettingsChanged()));
+
     new QLabel(i18n("Amount:"), unsharpMaskSettings);
     m_amountInput  = new RDoubleNumInput(unsharpMaskSettings);
     m_amountInput->setDecimals(1);
@@ -112,6 +121,9 @@ Sharpen::Sharpen(QObject *parent)
     m_amountInput->setWhatsThis( i18n("The value of the difference between the "
                                       "original and the blur image that is added back into the original.") );
 
+    connect(m_amountInput, SIGNAL(valueChanged(double)), 
+            this, SLOT(slotSettingsChanged()));
+
     new QLabel(i18n("Threshold:"), unsharpMaskSettings);
     m_thresholdInput = new RDoubleNumInput(unsharpMaskSettings);
     m_thresholdInput->setDecimals(2);
@@ -119,6 +131,9 @@ Sharpen::Sharpen(QObject *parent)
     m_thresholdInput->setDefaultValue(0.05);
     m_thresholdInput->setWhatsThis( i18n("The threshold, as a fraction of the maximum "
                                          "luminosity value, needed to apply the difference amount.") );
+
+    connect(m_thresholdInput, SIGNAL(valueChanged(double)), 
+            this, SLOT(slotSettingsChanged()));
 
     QLabel *space2 = new QLabel(unsharpMaskSettings);
     unsharpMaskSettings->setStretchFactor(space2, 10);
@@ -136,6 +151,9 @@ Sharpen::Sharpen(QObject *parent)
                                  "parameter for using this plugin. For most images the default value of 1.0 "
                                  "should give good results. Select a higher value when your image is very blurred."));
 
+    connect(m_radius, SIGNAL(valueChanged(double)), 
+            this, SLOT(slotSettingsChanged()));
+
     new QLabel(i18n("Correlation:"), refocusSettings);
     m_correlation  = new RDoubleNumInput(refocusSettings);
     m_correlation->setDecimals(2);
@@ -145,6 +163,9 @@ Sharpen::Sharpen(QObject *parent)
                                       "range from 0-1. Useful values are 0.5 and values close to 1, e.g. 0.95 and 0.99. "
                                       "Using a high value for the correlation will reduce the sharpening effect of the "
                                       "plugin."));
+
+    connect(m_correlation, SIGNAL(valueChanged(double)), 
+            this, SLOT(slotSettingsChanged()));
 
     new QLabel(i18n("Noise filter:"), refocusSettings);
     m_noise        = new RDoubleNumInput(refocusSettings);
@@ -157,6 +178,9 @@ Sharpen::Sharpen(QObject *parent)
                                 "Using a high value for the noise filter will reduce the sharpening "
                                 "effect of the plugin."));
 
+    connect(m_noise, SIGNAL(valueChanged(double)), 
+            this, SLOT(slotSettingsChanged()));
+
     new QLabel(i18n("Gaussian sharpness:"), refocusSettings);
     m_gauss        = new RDoubleNumInput(refocusSettings);
     m_gauss->setDecimals(2);
@@ -167,6 +191,9 @@ Sharpen::Sharpen(QObject *parent)
                                 "it causes nasty artifacts. When you use non-zero values, you will probably also have to "
                                 "increase the correlation and/or noise filter parameters."));
 
+    connect(m_gauss, SIGNAL(valueChanged(double)), 
+            this, SLOT(slotSettingsChanged()));
+
     new QLabel(i18n("Matrix size:"), refocusSettings);
     m_matrixSize   = new RIntNumInput(refocusSettings);
     m_matrixSize->setRange(0, MAX_MATRIX_SIZE, 1);
@@ -176,13 +203,14 @@ Sharpen::Sharpen(QObject *parent)
                                      "Increasing the matrix width may give better results, especially when you have "
                                      "chosen large values for circular or Gaussian sharpness."));
 
+    connect(m_matrixSize, SIGNAL(valueChanged(double)), 
+            this, SLOT(slotSettingsChanged()));
+
     m_stack->insertWidget(Refocus, refocusSettings);
         
     /* finally tell the batchtool about its settings widget */
     setSettingsWidget(vbox);
 
-    connect(m_sharpMethod, SIGNAL(activated(int)),
-            this, SLOT(slotSharpMethodChanged(int)));
 }
 
 Sharpen::~Sharpen()
