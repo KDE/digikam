@@ -54,13 +54,13 @@ public:
     MetadataManagerFileWorker *fileWorker;
 
     // Signal-emitter glue code
-    void assignTags(const QList<ImageInfo> &infos, const QList<int> &tagIDs)
+    void assignTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs)
         { emit signalAddTags(infos, tagIDs); }
-    void removeTags(const QList<ImageInfo> &infos, const QList<int> &tagIDs)
+    void removeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs)
         { emit signalRemoveTags(infos, tagIDs); }
-    void assignRating(const QList<ImageInfo> &infos, int rating)
+    void assignRating(const QList<ImageInfo>& infos, int rating)
         { emit signalAssignRating(infos, rating); }
-    void setExifOrientation(const QList<ImageInfo> &infos, int orientation)
+    void setExifOrientation(const QList<ImageInfo>& infos, int orientation)
         { emit signalSetExifOrientation(infos, orientation); }
 
     int               dbTodo;
@@ -77,7 +77,7 @@ public:
     // before sending to db worker
     void schedulingForDB(int numberOfInfos);
     // called by db worker to say what it is doing
-    void setDBAction(const QString &action);
+    void setDBAction(const QString& action);
     // db worker will send info to file worker if returns true
     bool shallSendForWriting(qlonglong id);
     // db worker progress info
@@ -88,9 +88,9 @@ public:
     void schedulingForWrite(int numberOfInfos);
     void schedulingForOrientationWrite(int numberOfInfos);
     // called by file worker to say what it is doing
-    void setWriterAction(const QString &action);
+    void setWriterAction(const QString& action);
     // file worker calls this when receiving a task
-    void startingToWrite(const QList<ImageInfo> &infos);
+    void startingToWrite(const QList<ImageInfo>& infos);
     // file worker calls this when finished
     void writtenToOne();
     void orientationWrittenToOne();
@@ -102,15 +102,15 @@ public:
 Q_SIGNALS:
 
     // connected to MetadataManager public signals
-    void progressMessageChanged(const QString &descriptionOfAction);
+    void progressMessageChanged(const QString& descriptionOfAction);
     void progressValueChanged(float percent);
     void progressFinished();
 
     // inter-thread signals: connected to database worker slots
-    void signalAddTags(const QList<ImageInfo> &infos, const QList<int> &tagIDs);
-    void signalRemoveTags(const QList<ImageInfo> &infos, const QList<int> &tagIDs);
-    void signalAssignRating(const QList<ImageInfo> &infos, int rating);
-    void signalSetExifOrientation(const QList<ImageInfo> &infos, int orientation);
+    void signalAddTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
+    void signalRemoveTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
+    void signalAssignRating(const QList<ImageInfo>& infos, int rating);
+    void signalSetExifOrientation(const QList<ImageInfo>& infos, int orientation);
 
 public Q_SLOTS:
 };
@@ -138,7 +138,7 @@ protected:
         Thread(QObject *parent = 0) : QThread(parent) {}
         virtual void run() { exec(); }
     };
-    Thread                  *thread;
+    Thread              *thread;
 
     MetadataManagerPriv *d;
 };
@@ -154,19 +154,19 @@ public:
 
 public Q_SLOTS:
 
-    void assignTags(const QList<ImageInfo> &infos, const QList<int> &tagIDs);
-    void removeTags(const QList<ImageInfo> &infos, const QList<int> &tagIDs);
-    void assignRating(const QList<ImageInfo> &infos, int rating);
-    void setExifOrientation(const QList<ImageInfo> &infos, int orientation);
+    void assignTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
+    void removeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
+    void assignRating(const QList<ImageInfo>& infos, int rating);
+    void setExifOrientation(const QList<ImageInfo>& infos, int orientation);
 
 Q_SIGNALS:
 
-    void writeMetadataToFiles(const QList<ImageInfo> &infos);
-    void writeOrientationToFiles(const QList<ImageInfo> &infos, int orientation);
+    void writeMetadataToFiles(const QList<ImageInfo>& infos);
+    void writeOrientationToFiles(const QList<ImageInfo>& infos, int orientation);
 
 protected:
 
-    void changeTags(const QList<ImageInfo> &infos, const QList<int> &tagIDs, bool addOrRemove);
+    void changeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs, bool addOrRemove);
 };
 
 class MetadataManagerFileWorker : public MetadataManagerWorker
@@ -180,15 +180,14 @@ public:
 
 public Q_SLOTS:
 
-    void writeOrientationToFiles(const QList<ImageInfo> &infos, int orientation);
-    void writeMetadataToFiles(const QList<ImageInfo> &infos);
+    void writeOrientationToFiles(const QList<ImageInfo>& infos, int orientation);
+    void writeMetadataToFiles(const QList<ImageInfo>& infos);
 
 Q_SIGNALS:
 
-    void orientationChangeFailed(const QStringList &failedFileNames);
+    void orientationChangeFailed(const QStringList& failedFileNames);
 };
 
 } // namespace Digikam
 
 #endif //METADATAMANAGER_P_H
-

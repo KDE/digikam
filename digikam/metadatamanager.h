@@ -50,18 +50,18 @@ public:
 
 public Q_SLOTS:
 
-    void assignTags(const QList<ImageInfo> &infos, const QList<int> &tagIDs);
-    void removeTags(const QList<ImageInfo> &infos, const QList<int> &tagIDs);
-    void assignRating(const QList<ImageInfo> &infos, int rating);
-    void setExifOrientation(const QList<ImageInfo> &infos, int orientation);
+    void assignTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
+    void removeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
+    void assignRating(const QList<ImageInfo>& infos, int rating);
+    void setExifOrientation(const QList<ImageInfo>& infos, int orientation);
 
 Q_SIGNALS:
 
-    void progressMessageChanged(const QString &descriptionOfAction);
+    void progressMessageChanged(const QString& descriptionOfAction);
     void progressValueChanged(float percent);
     void progressFinished();
 
-    void orientationChangeFailed(const QStringList &failedFileNames);
+    void orientationChangeFailed(const QStringList& failedFileNames);
 
 private:
 

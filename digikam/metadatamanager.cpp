@@ -55,7 +55,7 @@ MetadataManager* MetadataManager::instance()
 }
 
 MetadataManager::MetadataManager()
-              : d(new MetadataManagerPriv)
+               : d(new MetadataManagerPriv)
 {
     connect(d, SIGNAL(progressMessageChanged(const QString &)),
             this, SIGNAL(progressMessageChanged(const QString &)));
@@ -87,35 +87,35 @@ void MetadataManager::shutDown()
     d->fileWorker->shutDown();
 }
 
-void MetadataManager::assignTags(const QList<ImageInfo> &infos, const QList<int> &tagIDs)
+void MetadataManager::assignTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs)
 {
     d->schedulingForDB(infos.size());
     d->assignTags(infos, tagIDs);
 }
 
-void MetadataManager::removeTags(const QList<ImageInfo> &infos, const QList<int> &tagIDs)
+void MetadataManager::removeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs)
 {
     d->schedulingForDB(infos.size());
     d->removeTags(infos, tagIDs);
 }
 
-void MetadataManager::assignRating(const QList<ImageInfo> &infos, int rating)
+void MetadataManager::assignRating(const QList<ImageInfo>& infos, int rating)
 {
     d->schedulingForDB(infos.size());
     d->assignRating(infos, rating);
 }
 
-void MetadataManager::setExifOrientation(const QList<ImageInfo> &infos, int orientation)
+void MetadataManager::setExifOrientation(const QList<ImageInfo>& infos, int orientation)
 {
     d->schedulingForDB(infos.size());
     d->setExifOrientation(infos, orientation);
 }
 
-// -------------
+// --------------------------------------------------------------------------------------
 
 MetadataManagerPriv::MetadataManagerPriv()
 {
-    dbWorker = new MetadataManagerDatabaseWorker(this);
+    dbWorker   = new MetadataManagerDatabaseWorker(this);
     fileWorker = new MetadataManagerFileWorker(this);
 
     connect(this, SIGNAL(signalAddTags(const QList<ImageInfo> &, const QList<int> &)),
@@ -143,7 +143,7 @@ void MetadataManagerPriv::schedulingForDB(int numberOfInfos)
     updateProgress();
 }
 
-void MetadataManagerPriv::setDBAction(const QString &action)
+void MetadataManagerPriv::setDBAction(const QString& action)
 {
     dbMessage = action;
     updateProgressMessage();
@@ -187,13 +187,13 @@ void MetadataManagerPriv::schedulingForOrientationWrite(int numberOfInfos)
     schedulingForWrite(numberOfInfos);
 }
 
-void MetadataManagerPriv::setWriterAction(const QString &action)
+void MetadataManagerPriv::setWriterAction(const QString& action)
 {
     writerMessage = action;
     updateProgressMessage();
 }
 
-void MetadataManagerPriv::startingToWrite(const QList<ImageInfo> &infos)
+void MetadataManagerPriv::startingToWrite(const QList<ImageInfo>& infos)
 {
     QMutexLocker lock(&mutex);
     foreach (const ImageInfo &info, infos)
@@ -243,21 +243,21 @@ void MetadataManagerPriv::updateProgress()
     emit progressValueChanged(percent);
 }
 
-// -------------
+// -------------------------------------------------------------------------------
 
-void MetadataManagerDatabaseWorker::assignTags(const QList<ImageInfo> &infos, const QList<int> &tagIDs)
+void MetadataManagerDatabaseWorker::assignTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs)
 {
     d->setDBAction(i18n("Assigning image tags. Please wait..."));
     changeTags(infos, tagIDs, true);
 }
 
-void MetadataManagerDatabaseWorker::removeTags(const QList<ImageInfo> &infos, const QList<int> &tagIDs)
+void MetadataManagerDatabaseWorker::removeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs)
 {
     d->setDBAction(i18n("Removing image tags. Please wait..."));
     changeTags(infos, tagIDs, false);
 }
 
-void MetadataManagerDatabaseWorker::changeTags(const QList<ImageInfo> &infos, const QList<int> &tagIDs, bool addOrRemove)
+void MetadataManagerDatabaseWorker::changeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs, bool addOrRemove)
 {
     MetadataHub hub;
 
@@ -294,7 +294,7 @@ void MetadataManagerDatabaseWorker::changeTags(const QList<ImageInfo> &infos, co
     d->dbFinished(infos.size());
 }
 
-void MetadataManagerDatabaseWorker::assignRating(const QList<ImageInfo> &infos, int rating)
+void MetadataManagerDatabaseWorker::assignRating(const QList<ImageInfo>& infos, int rating)
 {
     d->setDBAction(i18n("Assigning image ratings. Please wait..."));
 
@@ -338,9 +338,9 @@ void MetadataManagerDatabaseWorker::setExifOrientation(const QList<ImageInfo> &i
     d->dbFinished(infos.size());
 }
 
-// -------------
+// ----------------------------------------------------------------------
 
-void MetadataManagerFileWorker::writeOrientationToFiles(const QList<ImageInfo> &infos, int orientation)
+void MetadataManagerFileWorker::writeOrientationToFiles(const QList<ImageInfo>& infos, int orientation)
 {
     d->setWriterAction(i18n("Revising Exif Orientation tags. Please wait..."));
 
@@ -374,7 +374,7 @@ void MetadataManagerFileWorker::writeOrientationToFiles(const QList<ImageInfo> &
     d->finishedWriting(infos.size());
 }
 
-void MetadataManagerFileWorker::writeMetadataToFiles(const QList<ImageInfo> &infos)
+void MetadataManagerFileWorker::writeMetadataToFiles(const QList<ImageInfo>& infos)
 {
     d->setWriterAction(i18n("Writing metadata to files. Please wait..."));
     d->startingToWrite(infos);
@@ -399,5 +399,3 @@ void MetadataManagerFileWorker::writeMetadataToFiles(const QList<ImageInfo> &inf
 }
 
 } // namespace Digikam
-
-
