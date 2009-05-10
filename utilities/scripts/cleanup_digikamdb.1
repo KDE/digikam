@@ -1,0 +1,30 @@
+.\"             -*-Nroff-*-
+.\"
+.TH cleanup_digikamdb 1 "10 May 2009 " " " "Linux User's Manual"
+.SH NAME
+cleanup_digikamdb \- Cleanup the digiKam database to reduce its size and increase access speed.
+.SH SYNOPSIS
+.B cleanup_digikamdb 
+
+.SH DESCRIPTION
+.B "cleanup_digikamdb "
+will cleanup and optimize the digiKam database file. This will, in most cases, lead to a smaller database file size
+and an increased access speed, because unneeded elements are removed from the database and data is optimized.
+
+The program will make sure that digiKam is not running at the moment, because it is more safe to have no database
+access during the optimization process. It then will read the digiKam configuration file for the current, active user and
+determine the database location. Note that 
+.B "cleanup_digikamdb "
+will only work on the currently set database path. 
+
+For further explanation, see the following description of the VACUUM command from the sqlite3 website:
+
+When an object (table, index, or trigger) is dropped from the database, it leaves behind empty space. This empty space will be reused the next time new information is added to the database. But in the meantime, the database file might be larger than strictly necessary. Also, frequent inserts, updates, and deletes can cause the information in the database to become fragmented - scrattered out all across the database file rather than clustered together in one place.
+
+The VACUUM command cleans the main database by copying its contents to a temporary database file and reloading the original database file from the copy. This eliminates free pages, aligns table data to be contiguous, and otherwise cleans up the database file structure.
+ 
+.PP
+
+.SH AUTHORS
+.B cleanup_digikamdb
+was written by Andi Clemens <andi clemens at gmx dot net>
