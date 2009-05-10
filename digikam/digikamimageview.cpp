@@ -53,7 +53,9 @@
 #include "imagealbummodel.h"
 #include "imagealbumfiltermodel.h"
 #include "imagedragdrop.h"
+#include "imageviewutilities.h"
 #include "imagewindow.h"
+#include "metadatamanager.h"
 #include "thumbnailloadthread.h"
 
 namespace Digikam
@@ -64,16 +66,32 @@ class DigikamImageViewPriv
 public:
     DigikamImageViewPriv()
     {
+        utilities = 0;
     }
+
+    ImageViewUtilities *utilities;
 };
 
 DigikamImageView::DigikamImageView(QWidget *parent)
                 : ImageCategorizedView(parent), d(new DigikamImageViewPriv)
 {
     imageFilterModel()->setCategorizationMode(ImageFilterModel::CategoryByAlbum);
+
     imageModel()->setThumbnailLoadThread(ThumbnailLoadThread::defaultIconViewThread());
     setThumbnailSize((ThumbnailSize::Size)AlbumSettings::instance()->getDefaultIconSize());
+
     imageModel()->setDragDropHandler(new ImageDragDropHandler(imageModel()));
+    setDragEnabled(true);
+    setAcceptDrops(true);
+    setDropIndicatorShown(false);
+
+    d->utilities = new ImageViewUtilities(this);
+
+    connect(d->utilities, SIGNAL(editorCurrentUrlChanged(const KUrl &)),
+            this, SLOT(setCurrentUrl(const KUrl &)));
+
+    connect(imageModel()->dragDropHandler(), SIGNAL(dioResult(KJob *)),
+            d->utilities, SLOT(slotDIOResult(KJob*)));
 }
 
 DigikamImageView::~DigikamImageView()
@@ -94,45 +112,7 @@ void DigikamImageView::activated(const ImageInfo& info)
 
 void DigikamImageView::openInEditor(const ImageInfo &info)
 {
-    if (info.isNull())
-        return;
-
-    QFileInfo fi(info.filePath());
-    QString imagefilter = AlbumSettings::instance()->getImageFileFilter();
-    imagefilter += AlbumSettings::instance()->getRawFileFilter();
-
-    // If the current item is not an image file.
-    if ( !imagefilter.contains(fi.suffix().toLower()) )
-    {
-        KMimeType::Ptr mimePtr = KMimeType::findByUrl(info.fileUrl(), 0, true, true);
-        const KService::List offers = KServiceTypeTrader::self()->query(mimePtr->name(), "Type == 'Application'");
-
-        if (offers.isEmpty())
-            return;
-
-        KService::Ptr ptr = offers.first();
-        // Run the dedicated app to show the item.
-        KRun::run(*ptr, info.fileUrl(), this);
-        return;
-    }
-
-    // Run digiKam ImageEditor with all image from current Album.
-
-    ImageWindow *imview = ImageWindow::imagewindow();
-
-    imview->disconnect(this);
-    connect(imview, SIGNAL(signalURLChanged(const KUrl&)),
-            this, SLOT(setCurrentUrl(const KUrl &)));
-
-    imview->loadImageInfos(imageInfos(), info,
-                           currentAlbum() ? i18n("Album \"%1\"", currentAlbum()->title()) : QString(),
-                           true);
-
-    if (imview->isHidden())
-        imview->show();
-    if (imview->isMinimized())
-        KWindowSystem::unminimizeWindow(imview->winId());
-    KWindowSystem::activateWindow(imview->winId());
+    d->utilities->openInEditor(info, imageInfos(), currentAlbum());
 }
 
 void DigikamImageView::showContextMenu(QContextMenuEvent* event, const ImageInfo& info)
@@ -170,7 +150,7 @@ void DigikamImageView::showContextMenu(QContextMenuEvent* event, const ImageInfo
     // --------------------------------------------------------
     cmhelper.addActionCopy(this, SLOT(copy()));
     cmhelper.addActionPaste(this, SLOT(paste()));
-    cmhelper.addActionItemDelete(this, SLOT(slotDeleteSelectedItems()), selectedImageIDs.count());
+    cmhelper.addActionItemDelete(this, SLOT(deleteSelected()), selectedImageIDs.count());
     popmenu.addSeparator();
     // --------------------------------------------------------
     cmhelper.addActionThumbnail(selectedImageIDs, currentAlbum());
@@ -184,28 +164,28 @@ void DigikamImageView::showContextMenu(QContextMenuEvent* event, const ImageInfo
     // special action handling --------------------------------
 
     connect(&cmhelper, SIGNAL(signalAssignTag(int)),
-            this, SLOT(slotAssignTag(int)));
+            this, SLOT(assignTagToSelected(int)));
 
     connect(&cmhelper, SIGNAL(signalRemoveTag(int)),
-            this, SLOT(slotRemoveTag(int)));
+            this, SLOT(removeTagFromSelected(int)));
 
     connect(&cmhelper, SIGNAL(signalGotoTag(int)),
-            this, SLOT(slotGotoTag(int)));
+            this, SIGNAL(gotoTagAndImage(int)));
 
     connect(&cmhelper, SIGNAL(signalGotoAlbum(ImageInfo&)),
-            this, SIGNAL(signalGotoAlbumAndItem(ImageInfo&)));
+            this, SIGNAL(gotoAlbumAndImage(ImageInfo&)));
 
     connect(&cmhelper, SIGNAL(signalGotoDate(ImageInfo&)),
-            this, SIGNAL(signalGotoDateAndItem(ImageInfo&)));
+            this, SIGNAL(gotoDateAndImage(ImageInfo&)));
 
     connect(&cmhelper, SIGNAL(signalAssignRating(int)),
-            this, SLOT(slotAssignRating(int)));
+            this, SLOT(assignRatingToSelected(int)));
 
     connect(&cmhelper, SIGNAL(signalSetThumbnail(ImageInfo&)),
-            this, SLOT(slotSetAlbumThumbnail(ImageInfo&)));
+            this, SLOT(setAsAlbumThumbnail(ImageInfo&)));
 
     connect(&cmhelper, SIGNAL(signalAddToExistingQueue(int)),
-            this, SIGNAL(signalAddToExistingQueue(int)));
+            this, SLOT(insertSelectedToExistingQueue(int)));
 
     // --------------------------------------------------------
 
@@ -265,22 +245,57 @@ void DigikamImageView::paste()
     imageModel()->dragDropHandler()->dropEvent(this, &event, index);
 }
 
-/*
-//TODO
-slotDeleteSelectedItems
-slotAssignTag
-slotRemoveTag
-slotAssignRating
-slotSetAlbumThumbnail
-slotGotoTag
-slotDIOResult
+void DigikamImageView::insertSelectedToLightTable(bool addTo)
+{
+    // Run Light Table with all selected image files in the current Album.
+    // If addTo is false, the light table will be emptied before adding
+    // the images.
+    ImageInfoList imageInfoList = selectedImageInfos();
+    d->utilities->insertToLightTable(imageInfoList, imageInfoList.first(), addTo);
+}
 
-changeTagOnImageInfos
+void DigikamImageView::insertSelectedToCurrentQueue()
+{
+    ImageInfoList imageInfoList = selectedImageInfos();
+    d->utilities->insertToQueueManager(imageInfoList, imageInfoList.first(), false);
+}
 
-signalGotoAlbumAndItem
-signalGotoDateAndItem
-signalAddToExistingQueue
-signalPreviewItem
-*/
+void DigikamImageView::insertSelectedToNewQueue()
+{
+    ImageInfoList imageInfoList = selectedImageInfos();
+    d->utilities->insertToQueueManager(imageInfoList, imageInfoList.first(), true);
+}
+
+void DigikamImageView::insertSelectedToExistingQueue(int queueid)
+{
+    ImageInfoList imageInfoList = selectedImageInfos();
+    d->utilities->insertSilentToQueueManager(imageInfoList, imageInfoList.first(), queueid);
+}
+
+void DigikamImageView::deleteSelected(bool permanently)
+{
+    ImageInfoList imageInfoList = selectedImageInfos();
+    d->utilities->deleteImages(imageInfoList, permanently);
+}
+
+void DigikamImageView::assignTagToSelected(int tagID)
+{
+    MetadataManager::instance()->assignTags(selectedImageInfos(), QList<int>() << tagID);
+}
+
+void DigikamImageView::removeTagFromSelected(int tagID)
+{
+    MetadataManager::instance()->removeTags(selectedImageInfos(), QList<int>() << tagID);
+}
+
+void DigikamImageView::assignRatingToSelected(int rating)
+{
+    MetadataManager::instance()->assignRating(selectedImageInfos(), rating);
+}
+
+void DigikamImageView::setAsAlbumThumbnail(const ImageInfo &setAsThumbnail)
+{
+    d->utilities->setAsAlbumThumbnail(currentAlbum(), setAsThumbnail);
+}
 
 } // namespace Digikam
