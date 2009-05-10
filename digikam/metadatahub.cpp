@@ -599,7 +599,7 @@ bool MetadataHub::write(const QString &filePath, WriteMode writeMode, const Meta
 {
     // if no DMetadata object is needed at all, don't construct one -
     // important optimization if writing to file is turned off in setup!
-    if (!needWriteMetadata(writeMode, settings))
+    if (!willWriteMetadata(writeMode, settings))
         return false;
 
     DMetadata metadata(filePath);
@@ -615,7 +615,7 @@ bool MetadataHub::write(const QString &filePath, WriteMode writeMode, const Meta
 bool MetadataHub::write(DImg &image, WriteMode writeMode, const MetadataWriteSettings &settings)
 {
     // if no DMetadata object is needed at all, don't construct one
-    if (!needWriteMetadata(writeMode, settings))
+    if (!willWriteMetadata(writeMode, settings))
         return false;
 
     // See DImgLoader::readMetadata() and saveMetadata()
@@ -643,7 +643,7 @@ bool MetadataHub::write(DImg &image, WriteMode writeMode, const MetadataWriteSet
     return false;
 }
 
-bool MetadataHub::needWriteMetadata(WriteMode writeMode, const MetadataWriteSettings &settings) const
+bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataWriteSettings &settings) const
 {
     // This is the same logic as in write(DMetadata) but without actually writing.
     // Adapt if the method above changes

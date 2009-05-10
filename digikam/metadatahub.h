@@ -251,6 +251,14 @@ public:
     */
     static MetadataWriteSettings defaultWriteSettings();
 
+    /**
+        With the currently applied changes, the given writeMode and settings,
+        returns if write(DMetadata), write(QString) or write(DImg) will actually
+        apply any changes.
+    */
+    bool willWriteMetadata(WriteMode writeMode,
+                           const MetadataWriteSettings &settings = defaultWriteSettings()) const;
+
     // --------------------------------------------------
 
     Status dateTimeStatus() const;
@@ -351,7 +359,6 @@ private:
     void load(const QDateTime &dateTime, const QString &comment, int rating);
     void loadTags(const QList<TAlbum *> &loadedTags);
     void loadTags(const QStringList &loadedTagPaths);
-    bool needWriteMetadata(WriteMode writeMode, const MetadataWriteSettings &settings) const;
 
 private:
 
