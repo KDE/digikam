@@ -111,6 +111,7 @@ void ImageAlbumModel::openAlbum(Album *album)
     if (d->currentAlbum == album)
         return;
 
+    d->currentAlbum = album;
     startLoadingAlbum(album);
 }
 
