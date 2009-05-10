@@ -132,7 +132,7 @@ void ImageViewUtilities::slotRenamed(KIO::Job*, const KUrl &, const KUrl&newURL)
     LoadingCacheInterface::fileChanged(fileURL.path());
 }
 
-void ImageViewUtilities::deleteItems(const QList<ImageInfo> &infos, bool deletePermanently)
+void ImageViewUtilities::deleteImages(const QList<ImageInfo> &infos, bool deletePermanently)
 {
     KUrl::List  urlList;
     KUrl::List  kioUrlList;
@@ -164,7 +164,7 @@ void ImageViewUtilities::deleteItems(const QList<ImageInfo> &infos, bool deleteP
             this, SLOT(slotDIOResult(KJob*)));
 }
 
-void ImageViewUtilities::deleteItemsDirectly(const QList<ImageInfo> &infos, bool useTrash)
+void ImageViewUtilities::deleteImagesDirectly(const QList<ImageInfo> &infos, bool useTrash)
 {
     // This method deletes the selected items directly, without confirmation.
     // It is not used in the default setup.
