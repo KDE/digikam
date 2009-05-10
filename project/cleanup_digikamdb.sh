@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# This script will read in the digiKam configuration file to determine the
+# database location. It will then make sure that digikam is not running and
+# call "sqlite3 DATABASE 'VACUUM;" on the database, to clean up and optimize
+# the tables.
+# This will often lead to great performance gain and a smaller database file
+# size.
+
 username=$(whoami)
 databasedir=$(cat $(kde4-config --localprefix)share/config/digikamrc | grep "Database File Path" | sed -e 's/Database File Path=//')
 proc="$(ps aux | grep $username | grep -v $0 | grep -w digikam | grep -v grep)"
