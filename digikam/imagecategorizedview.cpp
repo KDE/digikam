@@ -89,7 +89,6 @@ public:
         model              = 0;
         filterModel        = 0;
         delegate           = 0;
-        categoryDrawer     = 0;
         toolTip            = 0;
         scrollToItemId     = 0;
         currentMouseEvent  = 0;
@@ -100,7 +99,6 @@ public:
     ImageAlbumFilterModel   *filterModel;
 
     ImageDelegate           *delegate;
-    ImageCategoryDrawer     *categoryDrawer;
     ImageItemViewToolTip    *toolTip;
     bool                     showToolTip;
 
@@ -484,7 +482,7 @@ QModelIndex ImageCategorizedView::indexForCategoryAt(const QPoint &pos) const
     }
 
     const int verticalStep = 10;
-    const int bottomEnd = qMin(d->categoryDrawer->maximumHeight() + 2*gridSize().height() + 4*spacing(), viewportRect.height());
+    const int bottomEnd = qMin(d->delegate->categoryDrawer()->maximumHeight() + 2*gridSize().height() + 4*spacing(), viewportRect.height());
     const int x = (gridSize().width() + 2*spacing()) / 2; // middle of first column
     for (; y<bottomEnd; y += verticalStep)
     {
@@ -701,6 +699,11 @@ bool ImageCategorizedView::viewportEvent(QEvent *event)
 
 void ImageCategorizedView::startDrag(Qt::DropActions supportedActions)
 {
+    // workaround bug in KCategorizedView: should not need to call this at all!
+    // There are some private flags in KCategorizedView going mad if this method is overridden,
+    // but it is intended to be overridden, it's virtual!
+    KCategorizedView::startDrag(supportedActions);
+
     QModelIndexList indexes = selectedIndexes();
     if (indexes.count() > 0) {
         QMimeData *data = d->filterModel->mimeData(indexes);
