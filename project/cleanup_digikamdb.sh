@@ -16,10 +16,10 @@ cd $databasedir
 if [ $? == 0 ]
 then
     echo "Cleaning up databases in $(pwd)"
-    for F in $(find . -type f -name 'digikam*.db' -print)
+    for db in $(find . -type f -name 'digikam*.db' -print)
     do
-        echo -n "$F ... "
-        sqlite3 $F "VACUUM;"
+        echo -n "$db ... "
+        sqlite3 $db "VACUUM;"
         if [ $? == 0 ]
         then
             echo "done"
