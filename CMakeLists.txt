@@ -958,6 +958,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/kdatepickerpopup.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/mediaplayerview.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadatahub.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadatamanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/mimefilter.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/monthwidget.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/ratingbox.cpp
