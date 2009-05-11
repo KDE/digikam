@@ -74,13 +74,6 @@ class ContentAwareResizeToolPriv
 {
 public:
 
-    enum LQRFunc
-    {
-        Norme=0,
-        SumAbs,
-        Abs
-    };
-
     enum LQRResizeOrder
     {
         Horizontally=0,
@@ -262,13 +255,13 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     d->greenMaskTool->setEnabled(false);
     d->maskGroup->addButton(d->greenMaskTool, ContentAwareResizeToolPriv::greenMask);
 
-    QLabel *labelMaskPenSize = new QLabel(i18n("Pen size:"), d->gboxSettings->plainPage());
+    QLabel *labelMaskPenSize = new QLabel(i18n("Brush size:"), d->gboxSettings->plainPage());
     d->maskPenSize           = new RIntNumInput(d->gboxSettings->plainPage());
     d->maskPenSize->setRange(1, 100, 1);
     d->maskPenSize->setDefaultValue(10);
     d->maskPenSize->setSliderEnabled(true);
     d->maskPenSize->setObjectName("maskPenSize");
-    d->maskPenSize->setWhatsThis(i18n("Specify here the size of the pen used to paint masks."));
+    d->maskPenSize->setWhatsThis(i18n("Specify here the size of the brush used to paint masks."));
 
     // -------------------------------------------------------------
 
@@ -276,10 +269,14 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
 
     QLabel *labelFunction = new QLabel(i18n("Energy function:"), d->gboxSettings->plainPage());
     d->funcInput          = new RComboBox(d->gboxSettings->plainPage());
-    d->funcInput->addItem(i18n("Gradient norm"));
-    d->funcInput->addItem(i18n("Sum of absolute values"));
-    d->funcInput->addItem(i18n("Absolute value"));
-    d->funcInput->setDefaultIndex(ContentAwareResizeToolPriv::Abs);
+    d->funcInput->addItem(i18n("Norm of brightness gradient"));
+    d->funcInput->addItem(i18n("Sum of absolute values of brightness gradients"));
+    d->funcInput->addItem(i18n("Absolute value of brightness gradient"));
+    d->funcInput->addItem(i18n("Norm of luma gradient"));
+    d->funcInput->addItem(i18n("Sum of absolute values of luma gradients"));
+    d->funcInput->addItem(i18n("Absolute value of luma gradient"));
+  
+    d->funcInput->setDefaultIndex(LQR_EF_GRAD_XABS);
     d->funcInput->setWhatsThis(i18n("This option allows you to choose a gradient function. This function is used "
                                     "to determine which pixels should be removed or kept."));
 
@@ -567,7 +564,7 @@ void ContentAwareResizeTool::contentAwareResizeCore(DImg *image, int target_widt
     setFilter(dynamic_cast<DImgThreadedFilter*>(
               new ContentAwareResizer(image, target_width, target_height,
                                       d->stepInput->value(), d->rigidityInput->value(),
-                                      (LqrGradFuncType)d->funcInput->currentIndex(),
+                                      (LqrEnergyFuncBuiltinType)d->funcInput->currentIndex(),
                                       (LqrResizeOrder)d->resizeOrderInput->currentIndex(),
                                       mask, d->preserveSkinTones->isChecked(),this)));
 }

@@ -75,7 +75,7 @@ public:
 };
 
 ContentAwareResizer::ContentAwareResizer(DImg *orgImage, uint width, uint height,
-                                         int step, double rigidity, LqrGradFuncType func,
+                                         int step, double rigidity, LqrEnergyFuncBuiltinType func,
                                          LqrResizeOrder resize_order, const QImage& mask, 
                                          bool preserve_skin_tones, QObject *parent)
                    : Digikam::DImgThreadedFilter(orgImage, parent, "ContentAwareResizer"),
@@ -108,20 +108,12 @@ ContentAwareResizer::ContentAwareResizer(DImg *orgImage, uint width, uint height
         lqr_progress_set_end(d->progress, s_carverProgressEnd);
         lqr_carver_set_progress(d->carver, d->progress);
 
-        // Always dump the vmaps
-        //lqr_carver_set_dump_vmaps(d->carver);
-
         // Set side switch and enlargement steps as suggested by Carlo Baldassi
         lqr_carver_set_side_switch_frequency(d->carver,4);
         lqr_carver_set_enl_step(d->carver, 1.5);
 
         // Choose a gradient function
-        if(func == 0)
-            lqr_carver_set_gradient_function(d->carver, LQR_GF_NORM);
-        else if(func == 1)
-            lqr_carver_set_gradient_function(d->carver, LQR_GF_SUMABS);
-        else
-            lqr_carver_set_gradient_function(d->carver, LQR_GF_XABS);
+        lqr_carver_set_energy_function_builtin(d->carver, func);
 
         // Choose the resize order
         if(resize_order == 0)

@@ -51,7 +51,7 @@ class ContentAwareResizer : public Digikam::DImgThreadedFilter
 public:
 
     ContentAwareResizer(DImg *orgImage, uint width, uint height,
-                        int step=1, double rigidity=0.0, LqrGradFuncType func=LQR_GF_XABS,
+                        int step=1, double rigidity=0.0, LqrEnergyFuncBuiltinType func=LQR_EF_GRAD_XABS,
                         LqrResizeOrder resize_order=LQR_RES_ORDER_HOR, const QImage& mask=QImage(), 
                         bool preserve_skin_tones=false, QObject *parent=0);
     ~ContentAwareResizer();
