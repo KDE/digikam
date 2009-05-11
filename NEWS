@@ -59,4 +59,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 044 ==> 151321 : Remaining space incorrectly calculated when using symlinks (import from camera).
 045 ==> 189742 : Thumbnails not saved between sessions.
 046 ==> 180507 : Crash when dragging picture to another app with kwin_composite enabled. 
-047 ==> 
+047 ==> 190296 : Can not save images on Windows.
+048 ==> 
