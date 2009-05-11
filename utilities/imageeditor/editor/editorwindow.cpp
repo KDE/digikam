@@ -84,6 +84,8 @@
 #include <ktoolinvocation.h>
 #include <kwindowsystem.h>
 #include <kxmlguifactory.h>
+#include <kdeversion.h>
+#include <kde_file.h>
 
 // LibKDcraw includes
 
@@ -1729,7 +1731,17 @@ bool EditorWindow::moveFile()
     }
 #endif
     // rename tmp file to dest
-    if (::rename(QFile::encodeName(m_savingContext->saveTempFileName),dstFileName) != 0)
+    int ret;
+#if KDE_IS_VERSION(4,2,85)
+    // KDE 4.3.0
+    ret = KDE::rename(QFile::encodeName(m_savingContext->saveTempFileName),
+                       dstFileName);
+#else
+    // KDE 4.2.x or 4.1.x
+    ret = KDE_rename(QFile::encodeName(m_savingContext->saveTempFileName),
+                      dstFileName);
+#endif
+    if (ret != 0)
     {
         KMessageBox::error(this, i18n("Failed to overwrite original file"),
                            i18n("Error Saving File"));
