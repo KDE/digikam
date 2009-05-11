@@ -1456,7 +1456,7 @@ void EditorWindow::startingSave(const KUrl& url)
     m_savingContext->saveTempFile = new KTemporaryFile();
     m_savingContext->saveTempFile->setPrefix(tempDir);
     m_savingContext->saveTempFile->setSuffix(".digikamtempfile.tmp");
-    m_savingContext->saveTempFile->setAutoRemove(true);
+    m_savingContext->saveTempFile->setAutoRemove(false);
     m_savingContext->saveTempFile->open();
 
     if (!m_savingContext->saveTempFile->open())
@@ -1466,6 +1466,9 @@ void EditorWindow::startingSave(const KUrl& url)
                                       m_savingContext->saveTempFile->error()));
         return;
     }
+    m_savingContext->saveTempFileName = m_savingContext->saveTempFile->fileName();
+    delete m_savingContext->saveTempFile;
+    m_savingContext->saveTempFile = 0;
 
     m_savingContext->srcURL             = url;
     m_savingContext->destinationURL     = m_savingContext->srcURL;
@@ -1475,7 +1478,7 @@ void EditorWindow::startingSave(const KUrl& url)
     m_savingContext->abortingSaving     = false;
     m_savingContext->savingState        = SavingContextContainer::SavingStateSave;
 
-    m_canvas->saveAs(m_savingContext->saveTempFile->fileName(), m_IOFileSettings,
+    m_canvas->saveAs(m_savingContext->saveTempFileName, m_IOFileSettings,
                      m_setExifOrientationTag && (m_rotatedOrFlipped || m_canvas->exifRotated()));
 }
 
@@ -1650,7 +1653,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     m_savingContext->saveTempFile = new KTemporaryFile();
     m_savingContext->saveTempFile->setPrefix(tempDir);
     m_savingContext->saveTempFile->setSuffix(".digikamtempfile.tmp");
-    m_savingContext->saveTempFile->setAutoRemove(true);
+    m_savingContext->saveTempFile->setAutoRemove(false);
 
     if (!m_savingContext->saveTempFile->open())
     {
@@ -1659,13 +1662,16 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
                                       m_savingContext->saveTempFile->error()));
         return false;
     }
+    m_savingContext->saveTempFileName = m_savingContext->saveTempFile->fileName();
+    delete m_savingContext->saveTempFile;
+    m_savingContext->saveTempFile = 0;
 
     m_savingContext->destinationURL = newURL;
     m_savingContext->originalFormat = m_canvas->currentImageFileFormat();
     m_savingContext->savingState    = SavingContextContainer::SavingStateSaveAs;
     m_savingContext->abortingSaving = false;
 
-    m_canvas->saveAs(m_savingContext->saveTempFile->fileName(), m_IOFileSettings,
+    m_canvas->saveAs(m_savingContext->saveTempFileName, m_IOFileSettings,
                      m_setExifOrientationTag && (m_rotatedOrFlipped || m_canvas->exifRotated()),
                      m_savingContext->format.toLower());
 
@@ -1701,7 +1707,7 @@ bool EditorWindow::checkPermissions(const KUrl& url)
 
 bool EditorWindow::moveFile()
 {
-    QByteArray dstFileName = QFile::encodeName(m_savingContext->destinationURL.path());
+    QByteArray dstFileName = QFile::encodeName(m_savingContext->destinationURL.toLocalFile());
 #ifndef _WIN32
     // Store old permissions:
     // Just get the current umask.
@@ -1723,7 +1729,7 @@ bool EditorWindow::moveFile()
     }
 #endif
     // rename tmp file to dest
-    if (::rename(QFile::encodeName(m_savingContext->saveTempFile->fileName()), dstFileName) != 0)
+    if (::rename(QFile::encodeName(m_savingContext->saveTempFileName),dstFileName) != 0)
     {
         KMessageBox::error(this, i18n("Failed to overwrite original file"),
                            i18n("Error Saving File"));

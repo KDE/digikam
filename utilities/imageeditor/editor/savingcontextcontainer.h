@@ -82,6 +82,7 @@ public:
     KUrl                destinationURL;
 
     KTemporaryFile     *saveTempFile;
+    QString             saveTempFileName;
 };
 
 } // namespace Digikam
