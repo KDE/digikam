@@ -38,11 +38,9 @@ typedef struct _LqrVMapList LqrVMapList;
 
 /* LQR_VMAP_LIST CLASS PUBLIC FUNCTIONS */
 
-LqrVMapList * lqr_vmap_list_start(LqrCarver *r) LQR_PUBLIC;
-LqrVMap * lqr_vmap_list_current(LqrVMapList *list) LQR_PUBLIC;
-LqrVMapList * lqr_vmap_list_next (LqrVMapList * list) LQR_PUBLIC;
-LqrRetVal lqr_vmap_list_foreach (LqrVMapList * list, LqrVMapFunc func, gpointer data) LQR_PUBLIC;
+LQR_PUBLIC LqrVMapList *lqr_vmap_list_start(LqrCarver *r);
+LQR_PUBLIC LqrVMap *lqr_vmap_list_current(LqrVMapList *list);
+LQR_PUBLIC LqrVMapList *lqr_vmap_list_next(LqrVMapList *list);
+LQR_PUBLIC LqrRetVal lqr_vmap_list_foreach(LqrVMapList *list, LqrVMapFunc func, gpointer data);
 
 #endif /* __LQR_VMAP_LIST_PUB_H__ */
-
-

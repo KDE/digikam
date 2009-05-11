@@ -131,4 +131,3 @@
        MRSET05(y, x1_min, dx); \
        m = r->leftright ? MRMINR05(y, x1_min, dx) : MRMINL05(y, x1_min, dx); \
        break;
-

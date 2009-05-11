@@ -20,7 +20,6 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>
  */
 
-
 #ifndef __LQR_READER_WINDOW_H__
 #define __LQR_READER_WINDOW_H__
 
@@ -28,4 +27,3 @@
 #include <lqr/lqr_rwindow_priv.h>
 
 #endif /* __LQR_READER_WINDOW_H__ */
-

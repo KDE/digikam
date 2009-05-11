@@ -20,21 +20,18 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>
  */
 
-
 #ifndef __LQR_GRADIENT_PUB_H__
 #define __LQR_GRADIENT_PUB_H__
 
-enum _LqrGradFuncType
-{
-  LQR_GF_NORM,                  /* gradient norm : sqrt(x^2 + y^2)            */
-  LQR_GF_NORM_BIAS,             /* NOT IMPLEMENTED DO NOT USE                 */
-  LQR_GF_SUMABS,                /* sum of absulte values : |x| + |y|          */
-  LQR_GF_XABS,                  /* x absolute value : |x|                     */
-  LQR_GF_YABS,                  /* NOT IMPLEMENTED DO NOT USE                 */
-  LQR_GF_NULL                   /* 0 */
+enum _LqrGradFuncType {
+    LQR_GF_NORM,                        /* gradient norm : sqrt(x^2 + y^2)            */
+    LQR_GF_NORM_BIAS,                   /* NOT IMPLEMENTED DO NOT USE                 */
+    LQR_GF_SUMABS,                      /* sum of absulte values : |x| + |y|          */
+    LQR_GF_XABS,                        /* x absolute value : |x|                     */
+    LQR_GF_YABS,                        /* NOT IMPLEMENTED DO NOT USE                 */
+    LQR_GF_NULL                         /* 0 */
 };
 
 typedef enum _LqrGradFuncType LqrGradFuncType;
-
 
 #endif /* __LQR_GRADIENT_PUB_H__ */

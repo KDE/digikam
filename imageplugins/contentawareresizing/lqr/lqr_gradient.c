@@ -20,31 +20,32 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>
  */
 
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
 
 #include <glib.h>
 #include <math.h>
 #include <lqr/lqr_gradient.h>
 
-
 /**** GRADIENT FUNCTIONS ****/
 
 gfloat
-lqr_grad_norm (gdouble x, gdouble y)
+lqr_grad_norm(gdouble x, gdouble y)
 {
-  return (gfloat) sqrt (x * x + y * y);
+    return (gfloat) sqrt(x * x + y * y);
 }
 
 gfloat
-lqr_grad_sumabs (gdouble x, gdouble y)
+lqr_grad_sumabs(gdouble x, gdouble y)
 {
-  return (gfloat) ((fabs (x) + fabs (y)) / 2);
+    return (gfloat) ((fabs(x) + fabs(y)) / 2);
 }
 
 gfloat
-lqr_grad_xabs (gdouble x, gdouble y)
+lqr_grad_xabs(gdouble x, gdouble y)
 {
-  return (gfloat) fabs (x);
+    return (gfloat) fabs(x);
 }
 
 /**** END OF GRADIENT FUNCTIONS ****/
-

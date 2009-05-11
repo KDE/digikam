@@ -27,4 +27,3 @@
 #include <lqr/lqr_vmap_priv.h>
 
 #endif /* __LQR_VMAP_H__ */
-

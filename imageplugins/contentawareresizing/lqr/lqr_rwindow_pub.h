@@ -20,7 +20,6 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>
  */
 
-
 #ifndef __LQR_READER_WINDOW_PUB_H__
 #define __LQR_READER_WINDOW_PUB_H__
 
@@ -28,12 +27,11 @@
 #error "lqr_base.h must be included prior to lqr_rwindow_pub.h"
 #endif /* __LQR_BASE_H__ */
 
-enum _LqrEnergyReaderType
-{
-  LQR_ER_BRIGHT,                /* read brightness */
-  LQR_ER_LUMA,                  /* read luma */
-  LQR_ER_RGBA,                  /* read RGBA */
-  LQR_ER_CUSTOM                 /* read the buffer as-is*/
+enum _LqrEnergyReaderType {
+    LQR_ER_BRIGHTNESS,                  /* read brightness */
+    LQR_ER_LUMA,                        /* read luma */
+    LQR_ER_RGBA,                        /* read RGBA */
+    LQR_ER_CUSTOM                       /* read the buffer as-is */
 };
 
 typedef enum _LqrEnergyReaderType LqrEnergyReaderType;
@@ -42,11 +40,10 @@ struct _LqrReadingWindow;
 
 typedef struct _LqrReadingWindow LqrReadingWindow;
 
-gdouble lqr_rwindow_read (LqrReadingWindow * rwindow, gint x, gint y, gint channel) LQR_PUBLIC;
+LQR_PUBLIC gdouble lqr_rwindow_read(LqrReadingWindow *rwindow, gint x, gint y, gint channel);
 
-LqrEnergyReaderType lqr_rwindow_get_read_t (LqrReadingWindow * rwindow) LQR_PUBLIC;
-gint lqr_rwindow_get_radius (LqrReadingWindow * rwindow) LQR_PUBLIC;
-gint lqr_rwindow_get_channels (LqrReadingWindow * rwindow) LQR_PUBLIC;
+LQR_PUBLIC LqrEnergyReaderType lqr_rwindow_get_read_t(LqrReadingWindow *rwindow);
+LQR_PUBLIC gint lqr_rwindow_get_radius(LqrReadingWindow *rwindow);
+LQR_PUBLIC gint lqr_rwindow_get_channels(LqrReadingWindow *rwindow);
 
 #endif /* __LQR_READER_WINDOW_PUB_H__ */
-

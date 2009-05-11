@@ -29,7 +29,7 @@
 
 /* LQR_CURSOR CLASS DECLARATION */
 
-struct _LqrCursor;              /* a "smart" index to read the carver */
+struct _LqrCursor;                      /* a "smart" index to read the carver */
 typedef struct _LqrCursor LqrCursor;
 
 /* LQR_CURSOR CLASS PUBLIC FUNCTIONS */

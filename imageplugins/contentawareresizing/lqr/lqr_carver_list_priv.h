@@ -29,18 +29,14 @@
 
 /**** LQR_CARVER_LIST CLASS DEFINITION ****/
 
-struct _LqrCarverList
-{
-  LqrCarver * current;
-  LqrCarverList * next;
+struct _LqrCarverList {
+    LqrCarver *current;
+    LqrCarverList *next;
 };
 
 /* LQR_CARVER_LIST PRIVATE FUNCTIONS */
 
-LqrCarverList * lqr_carver_list_append (LqrCarverList * list, LqrCarver * buffer);
-void lqr_carver_list_destroy (LqrCarverList * list);
-
+LqrCarverList *lqr_carver_list_append(LqrCarverList *list, LqrCarver *buffer);
+void lqr_carver_list_destroy(LqrCarverList *list);
 
 #endif /* __LQR_CARVER_LIST_PRIV_H__ */
-
-

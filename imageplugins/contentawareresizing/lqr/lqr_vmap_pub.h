@@ -27,7 +27,6 @@
 #error "lqr_base.h must be included prior to lqr_vmap_pub.h"
 #endif /* __LQR_BASE_H__ */
 
-
 /*** LQR_VMAP CLASS DECLARATION ***/
 
 typedef struct _LqrVMap LqrVMap;
@@ -38,19 +37,17 @@ typedef LqrRetVal (*LqrVMapFunc) (LqrVMap *vmap, gpointer data);
 
 /* LQR_VMAP PUBLIC FUNCTIONS */
 
-LqrVMap* lqr_vmap_new (gint *buffer, gint width, gint heigth, gint depth, gint orientation) LQR_PUBLIC;
-void lqr_vmap_destroy (LqrVMap *vmap) LQR_PUBLIC;
+LQR_PUBLIC LqrVMap *lqr_vmap_new(gint *buffer, gint width, gint heigth, gint depth, gint orientation);
+LQR_PUBLIC void lqr_vmap_destroy(LqrVMap *vmap);
 
-gint * lqr_vmap_get_data (LqrVMap *vmap) LQR_PUBLIC;
-gint lqr_vmap_get_width (LqrVMap *vmap) LQR_PUBLIC;
-gint lqr_vmap_get_height (LqrVMap *vmap) LQR_PUBLIC;
-gint lqr_vmap_get_depth (LqrVMap *vmap) LQR_PUBLIC;
-gint lqr_vmap_get_orientation (LqrVMap *vmap) LQR_PUBLIC;
+LQR_PUBLIC gint *lqr_vmap_get_data(LqrVMap *vmap);
+LQR_PUBLIC gint lqr_vmap_get_width(LqrVMap *vmap);
+LQR_PUBLIC gint lqr_vmap_get_height(LqrVMap *vmap);
+LQR_PUBLIC gint lqr_vmap_get_depth(LqrVMap *vmap);
+LQR_PUBLIC gint lqr_vmap_get_orientation(LqrVMap *vmap);
 
-LqrRetVal lqr_vmap_internal_dump (LqrCarver *r) LQR_PUBLIC;
-LqrVMap* lqr_vmap_dump (LqrCarver *r) LQR_PUBLIC;
-LqrRetVal lqr_vmap_load (LqrCarver *r, LqrVMap *vmap) LQR_PUBLIC;
-
+LQR_PUBLIC LqrRetVal lqr_vmap_internal_dump(LqrCarver *r);
+LQR_PUBLIC LqrVMap *lqr_vmap_dump(LqrCarver *r);
+LQR_PUBLIC LqrRetVal lqr_vmap_load(LqrCarver *r, LqrVMap *vmap);
 
 #endif /* __LQR_VMAP_PUB_H__ */
-

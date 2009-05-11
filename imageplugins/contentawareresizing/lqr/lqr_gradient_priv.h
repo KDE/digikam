@@ -20,15 +20,14 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>
  */
 
-
 #ifndef __LQR_GRADIENT_PRIV_H__
 #define __LQR_GRADIENT_PRIV_H__
 
 /**** gradient functions for energy evluation ****/
 typedef gfloat (*LqrGradFunc) (gdouble, gdouble);
 
-gfloat lqr_grad_norm (gdouble x, gdouble y);
-gfloat lqr_grad_sumabs (gdouble x, gdouble y);
-gfloat lqr_grad_xabs (gdouble x, gdouble y);
+gfloat lqr_grad_norm(gdouble x, gdouble y);
+gfloat lqr_grad_sumabs(gdouble x, gdouble y);
+gfloat lqr_grad_xabs(gdouble x, gdouble y);
 
 #endif /* __LQR_GRADIENT_PRIV_H__ */

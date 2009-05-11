@@ -20,7 +20,6 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>
  */
 
-
 #ifndef __LQR_ENERGY_PUB_H__
 #define __LQR_ENERGY_PUB_H__
 
@@ -32,26 +31,28 @@
 #error "lqr_rwindow_pub.h must be included prior to lqr_energy_pub.h"
 #endif /* __LQR_READER_WINDOW_PUB_H__ */
 
-enum _LqrEnergyFuncBuiltinType
-{
-  LQR_EF_GRAD_NORM,                  /* gradient norm : sqrt(x^2 + y^2)            */
-  LQR_EF_GRAD_SUMABS,                /* sum of absulte values : |x| + |y|          */
-  LQR_EF_GRAD_XABS,                  /* x absolute value : |x|                     */
-  LQR_EF_LUMA_GRAD_NORM,             /* gradient norm : sqrt(x^2 + y^2)            */
-  LQR_EF_LUMA_GRAD_SUMABS,           /* sum of absulte values : |x| + |y|          */
-  LQR_EF_LUMA_GRAD_XABS,             /* x absolute value : |x|                     */
-  LQR_EF_NULL  	                     /* 0 */
+enum _LqrEnergyFuncBuiltinType {
+    LQR_EF_GRAD_NORM,                   /* gradient norm : sqrt(x^2 + y^2)            */
+    LQR_EF_GRAD_SUMABS,                 /* sum of absulte values : |x| + |y|          */
+    LQR_EF_GRAD_XABS,                   /* x absolute value : |x|                     */
+    LQR_EF_LUMA_GRAD_NORM,              /* gradient norm : sqrt(x^2 + y^2)            */
+    LQR_EF_LUMA_GRAD_SUMABS,            /* sum of absulte values : |x| + |y|          */
+    LQR_EF_LUMA_GRAD_XABS,              /* x absolute value : |x|                     */
+    LQR_EF_NULL                         /* 0 */
 };
 
 typedef enum _LqrEnergyFuncBuiltinType LqrEnergyFuncBuiltinType;
 
-typedef gfloat (*LqrEnergyFunc) (gint x, gint y, gint img_width, gint img_height, LqrReadingWindow * rwindow, gpointer extra_data);
+typedef gfloat (*LqrEnergyFunc) (gint x, gint y, gint img_width, gint img_height, LqrReadingWindow *rwindow,
+                                 gpointer extra_data);
 
-LqrRetVal lqr_carver_set_energy_function_builtin (LqrCarver * r, LqrEnergyFuncBuiltinType ef_ind) LQR_PUBLIC;
-LqrRetVal lqr_carver_set_energy_function (LqrCarver * r, LqrEnergyFunc en_func, gint radius, LqrEnergyReaderType reader_type, gpointer extra_data) LQR_PUBLIC;
+LQR_PUBLIC LqrRetVal lqr_carver_set_energy_function_builtin(LqrCarver *r, LqrEnergyFuncBuiltinType ef_ind);
+LQR_PUBLIC LqrRetVal lqr_carver_set_energy_function(LqrCarver *r, LqrEnergyFunc en_func, gint radius,
+                                                    LqrEnergyReaderType reader_type, gpointer extra_data);
 
-/* LqrCarver * lqr_energy_preview_new (void * buffer, gint width, gint height, gint channels, LqrColDepth colour_depth) LQR_PUBLIC; */
-gfloat * lqr_carver_get_energy (LqrCarver * r, gint orientation) LQR_PUBLIC;
-gfloat * lqr_carver_get_true_energy (LqrCarver * r, gint orientation) LQR_PUBLIC;
+LQR_PUBLIC LqrRetVal lqr_carver_get_energy(LqrCarver *r, gfloat *buffer, gint orientation);
+LQR_PUBLIC LqrRetVal lqr_carver_get_true_energy(LqrCarver *r, gfloat *buffer, gint orientation);
+LQR_PUBLIC LqrRetVal lqr_carver_get_energy_image(LqrCarver *r, void *buffer, gint orientation, LqrColDepth col_depth,
+                                                 LqrImageType image_type);
 
 #endif /* __LQR_ENERGY_PUB_H__ */

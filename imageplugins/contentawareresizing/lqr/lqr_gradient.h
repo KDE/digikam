@@ -20,7 +20,6 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>
  */
 
-
 #ifndef __LQR_GRADIENT_H__
 #define __LQR_GRADIENT_H__
 

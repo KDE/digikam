@@ -20,7 +20,6 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>
  */
 
-
 #ifndef __LQR_PROGRESS_H__
 #define __LQR_PROGRESS_H__
 
@@ -28,7 +27,3 @@
 #include <lqr/lqr_progress_priv.h>
 
 #endif /* __LQR_PROGRESS_H__ */
-
-
-
-

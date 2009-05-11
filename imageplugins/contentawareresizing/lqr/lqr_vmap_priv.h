@@ -29,13 +29,12 @@
 
 /*** LQR_VMAP CLASS DEFINITION ***/
 
-struct _LqrVMap
-{
-  gint * buffer;
-  gint width;
-  gint height;
-  gint depth;
-  gint orientation;
+struct _LqrVMap {
+    gint *buffer;
+    gint width;
+    gint height;
+    gint depth;
+    gint orientation;
 };
 
 /* LQR_VMAP CLASS PRIVATE FUNCTIONS */
@@ -43,4 +42,3 @@ struct _LqrVMap
 /* no private functions currently */
 
 #endif /* __LQR_VMAP_PRIV_H__ */
-

@@ -30,32 +30,31 @@
 /**** LQR_CURSOR CLASS DEFINITION ****/
 /* The lqr_cursors can scan a multisize image according to its
  * current visibility level, skipping invisible points */
-struct _LqrCursor
-{
+struct _LqrCursor {
 #ifdef __LQR_DEBUG__
-  gint initialized;             /* initialization flag */
+    gint initialized;                   /* initialization flag */
 #endif
-  gint x;                       /* x coordinate of current data */
-  gint y;                       /* y coordinate of current data */
-  gint now;                     /* current array position */
-  LqrCarver *o;                 /* pointer to owner carver */
-  gchar eoc;			/* end of carver flag */
+    gint x;                             /* x coordinate of current data */
+    gint y;                             /* y coordinate of current data */
+    gint now;                           /* current array position */
+    LqrCarver *o;                       /* pointer to owner carver */
+    gchar eoc;                          /* end of carver flag */
 };
 
 /* LQR_CURSOR CLASS PRIVATE FUNCTIONS */
 
 /* constructor */
-LqrCursor * lqr_cursor_create (LqrCarver * owner);
+LqrCursor *lqr_cursor_create(LqrCarver *owner);
 
 /* destructor */
-void lqr_cursor_destroy (LqrCursor * c);
+void lqr_cursor_destroy(LqrCursor *c);
 
 /* functions for moving around */
-void lqr_cursor_reset (LqrCursor * c);
-void lqr_cursor_next (LqrCursor * c);
-void lqr_cursor_prev (LqrCursor * c);
+void lqr_cursor_reset(LqrCursor *c);
+void lqr_cursor_next(LqrCursor *c);
+void lqr_cursor_prev(LqrCursor *c);
 
 /* methods for exploring neighborhoods */
-gint lqr_cursor_left (LqrCursor * c);
+gint lqr_cursor_left(LqrCursor *c);
 
 #endif /* __LQR_CURSOR_PRIV_H__ */

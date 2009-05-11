@@ -29,12 +29,13 @@
 
 /* PUBLIC BIAS-RELATED FUNCTIONS */
 
-void lqr_carver_bias_clear(LqrCarver *r) LQR_PUBLIC;
-LqrRetVal lqr_carver_bias_add_xy(LqrCarver *r, gdouble bias, gint x, gint y) LQR_PUBLIC;
-LqrRetVal lqr_carver_bias_add_rgb_area(LqrCarver *r, guchar *buffer, gint bias_factor, gint channels, gint width, gint height, gint x_off, gint y_off) LQR_PUBLIC;
-LqrRetVal lqr_carver_bias_add_rgb(LqrCarver *r, guchar *buffer, gint bias_factor, gint channels) LQR_PUBLIC;
-LqrRetVal lqr_carver_bias_add_area(LqrCarver *r, gdouble *buffer, gint bias_factor, gint width, gint height, gint x_off, gint y_off) LQR_PUBLIC;
-LqrRetVal lqr_carver_bias_add(LqrCarver *r, gdouble *buffer, gint bias_factor) LQR_PUBLIC;
-
+LQR_PUBLIC void lqr_carver_bias_clear(LqrCarver *r);
+LQR_PUBLIC LqrRetVal lqr_carver_bias_add_xy(LqrCarver *r, gdouble bias, gint x, gint y);
+LQR_PUBLIC LqrRetVal lqr_carver_bias_add_rgb_area(LqrCarver *r, guchar *buffer, gint bias_factor, gint channels,
+                                                  gint width, gint height, gint x_off, gint y_off);
+LQR_PUBLIC LqrRetVal lqr_carver_bias_add_rgb(LqrCarver *r, guchar *buffer, gint bias_factor, gint channels);
+LQR_PUBLIC LqrRetVal lqr_carver_bias_add_area(LqrCarver *r, gdouble *buffer, gint bias_factor, gint width, gint height,
+                                              gint x_off, gint y_off);
+LQR_PUBLIC LqrRetVal lqr_carver_bias_add(LqrCarver *r, gdouble *buffer, gint bias_factor);
 
 #endif /* __LQR_CARVER_BIAS_PUB_H__ */

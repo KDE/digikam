@@ -27,5 +27,3 @@
 #include <lqr/lqr_carver_list_priv.h>
 
 #endif /* __LQR_CARVER_LIST_H__ */
-
-
