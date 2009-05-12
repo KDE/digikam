@@ -11,11 +11,12 @@ cleanup_digikamdb \- Cleanup the digiKam database to reduce its size and increas
 will cleanup and optimize the digiKam database file. This will, in most cases, lead to a smaller database file size
 and an increased access speed, because unneeded elements are removed from the database and data is optimized.
 
-The program will make sure that digiKam is not running at the moment, because it is more safe to have no database
-access during the optimization process. It then will read the digiKam configuration file for the current, active user and
-determine the database location. Note that 
+The program will make sure that no instance of digiKam is running, because it is more safe to have no database
+access during the optimization process. It then will read the digiKam configuration file  and
+determine the database location. In a final step the database will be optimized by invoking the sqlite command 'VACUUM;'
+on it. If more then one database is found in this location,
 .B "cleanup_digikamdb "
-will only work on the currently set database path. 
+will optimize every database found in this path and below.
 
 For further explanation, see the following description of the VACUUM command from the sqlite3 website:
 
