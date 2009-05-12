@@ -128,9 +128,10 @@ private Q_SLOTS:
 protected:
 
     void startDrag();
-    void contentsDropEvent(QDropEvent *event);
+    void contentsDragEnterEvent(QDragEnterEvent *e);
+    void contentsDropEvent(QDropEvent *e);
     void updateItemRectsPixmap();
-    bool acceptToolTip(IconItem *item, const QPoint &mousePos);
+    bool acceptToolTip(IconItem *item, const QPoint& mousePos);
 
 private:
 

@@ -574,7 +574,7 @@ QString CameraIconView::getCasedName(const RenameCustomizer::Case ccase,
 
 void CameraIconView::slotSelectionChanged()
 {
-    bool selected               = false;
+    bool selected           = false;
     CameraIconItem* camItem = 0;
 
     for (IconItem* item = firstItem(); item; item = item->nextItem())
@@ -769,10 +769,25 @@ void CameraIconView::startDrag()
     drag->exec();
 }
 
+void CameraIconView::contentsDragEnterEvent(QDragEnterEvent *e)
+{
+    // Don't popup context menu if the camera is busy or if camera do not support upload.
+    if (d->cameraUI->isBusy() || !d->cameraUI->cameraUploadSupport())
+        return;
+
+    if ( (!KUrl::List::canDecode(e->mimeData()) && !DCameraDragObject::canDecode(e->mimeData()) )
+         || e->source() == this)
+    {
+        e->ignore();
+        return;
+    }
+    e->acceptProposedAction();
+}
+
 void CameraIconView::contentsDropEvent(QDropEvent *e)
 {
     // Don't popup context menu if the camera is busy or if camera do not support upload.
-    if (d->cameraUI->isBusy() || d->cameraUI->cameraUploadSupport())
+    if (d->cameraUI->isBusy() || !d->cameraUI->cameraUploadSupport())
         return;
 
     if ( (!KUrl::List::canDecode(e->mimeData()) && !DCameraDragObject::canDecode(e->mimeData()) )
