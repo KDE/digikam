@@ -7,6 +7,7 @@
  * Description : User interface for searches
  *
  * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,6 +30,7 @@
 #include <QObject>
 #include <QWidget>
 #include <QLabel>
+#include <QPixmap>
 
 // KDE includes
 
@@ -41,6 +43,8 @@
 namespace Digikam
 {
 
+class DLabelExpanderPriv;
+
 class DIGIKAM_EXPORT ClickLabel : public QLabel
 {
     Q_OBJECT
@@ -49,6 +53,7 @@ public:
 
     ClickLabel(QWidget *parent = 0);
     ClickLabel(const QString& text, QWidget *parent = 0);
+    ~ClickLabel(){};
 
 Q_SIGNALS:
 
@@ -73,6 +78,7 @@ public:
 
     SqueezedClickLabel(QWidget *parent = 0);
     SqueezedClickLabel(const QString& text, QWidget *parent = 0);
+    ~SqueezedClickLabel(){};
 
 Q_SIGNALS:
 
@@ -94,6 +100,7 @@ class DIGIKAM_EXPORT ArrowClickLabel : public QWidget
 public:
 
     ArrowClickLabel(QWidget *parent = 0);
+    ~ArrowClickLabel(){};
 
     void setArrowType(Qt::ArrowType arrowType);
     virtual QSize sizeHint () const;
@@ -112,6 +119,33 @@ protected:
     Qt::ArrowType m_arrowType;
     int           m_size;
     int           m_margin;
+};
+
+// -------------------------------------------------------------------------
+
+class DIGIKAM_EXPORT DLabelExpander : public QWidget
+{
+    Q_OBJECT
+
+public:
+
+    DLabelExpander(QWidget *parent = 0);
+    ~DLabelExpander();
+
+    void setLineVisible(bool b);
+    void setText(const QString& text);
+    void setPixmap(const QPixmap& pix);
+    void setContainer(QWidget* widget);
+
+    bool isExpanded();
+
+private slots:
+
+    void slotToggleContainer();
+
+private:
+
+    DLabelExpanderPriv* const d;
 };
 
 } // namespace Digikam

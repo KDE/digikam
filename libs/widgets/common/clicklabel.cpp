@@ -7,6 +7,7 @@
  * Description : User interface for searches
  *
  * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,11 +32,14 @@
 #include <QPen>
 #include <QStyle>
 #include <QStyleOption>
+#include <QGridLayout>
 
 // KDE includes
 
+#include <kseparator.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
+#include <kdialog.h>
 #include <klocale.h>
 
 // Local includes
@@ -231,6 +235,101 @@ void ArrowClickLabel::paintEvent(QPaintEvent*)
 QSize ArrowClickLabel::sizeHint() const
 {
     return QSize(m_size + 2*m_margin, m_size + 2*m_margin);
+}
+
+// ------------------------------------------------------------------------
+
+class DLabelExpanderPriv
+{
+
+public:
+
+    DLabelExpanderPriv()
+    {
+        clickLabel      = 0;
+        containerWidget = 0;
+        pixmapLabel     = 0;
+        grid            = 0;
+        arrow           = 0;
+        line            = 0;
+    }
+
+    QLabel             *pixmapLabel;
+    QWidget            *containerWidget;
+    QGridLayout        *grid;
+
+    KSeparator         *line;
+
+    ArrowClickLabel    *arrow;
+    SqueezedClickLabel *clickLabel;
+};
+
+DLabelExpander::DLabelExpander(QWidget *parent)
+              : QWidget(parent), d(new DLabelExpanderPriv)
+{
+    d->grid        = new QGridLayout(this);
+    d->line        = new KSeparator(Qt::Horizontal, this);
+    d->arrow       = new ArrowClickLabel(this);
+    d->pixmapLabel = new QLabel(this);
+    d->clickLabel  = new SqueezedClickLabel(this);
+
+    d->grid->addWidget(d->line,        0, 0, 1, 3);
+    d->grid->addWidget(d->arrow,       1, 0, 1, 1);
+    d->grid->addWidget(d->pixmapLabel, 1, 1, 1, 1);
+    d->grid->addWidget(d->clickLabel,  1, 2, 1, 1);
+    d->grid->setColumnStretch(2, 10);
+    d->grid->setMargin(KDialog::spacingHint());
+    d->grid->setSpacing(KDialog::spacingHint());
+
+    connect(d->arrow, SIGNAL(leftClicked()),
+            this, SLOT(slotToggleContainer()));
+
+    connect(d->clickLabel, SIGNAL(activated()),
+            this, SLOT(slotToggleContainer()));
+}
+
+DLabelExpander::~DLabelExpander()
+{
+    delete d;
+}
+
+void DLabelExpander::setLineVisible(bool b)
+{
+    d->line->setVisible(b);
+}
+
+void DLabelExpander::setText(const QString& text)
+{
+    d->clickLabel->setText(QString("<qt><b>%1</b></qt>").arg(text));
+}
+
+void DLabelExpander::setPixmap(const QPixmap& pix)
+{
+    d->pixmapLabel->setPixmap(pix);
+}
+
+void DLabelExpander::setContainer(QWidget* widget)
+{
+    if (widget)
+    {
+        d->containerWidget = widget;
+        d->containerWidget->setParent(this);
+        d->grid->addWidget(d->containerWidget, 2, 0, 1, 3);
+    }
+}
+
+bool DLabelExpander::isExpanded()
+{
+    if (d->containerWidget)
+        return (d->containerWidget->isVisible());
+
+    return false;
+}
+
+void DLabelExpander::slotToggleContainer()
+{
+    if(d->containerWidget)
+        d->containerWidget->setVisible(!d->containerWidget->isVisible());
 }
 
 } // namespace Digikam
