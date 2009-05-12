@@ -6,7 +6,7 @@
  * Date        : 2008-03-14
  * Description : User interface for searches
  *
- * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,7 +41,6 @@
 namespace Digikam
 {
 
-
 class DIGIKAM_EXPORT ClickLabel : public QLabel
 {
     Q_OBJECT
@@ -49,7 +48,7 @@ class DIGIKAM_EXPORT ClickLabel : public QLabel
 public:
 
     ClickLabel(QWidget *parent = 0);
-    ClickLabel(const QString &text, QWidget *parent = 0);
+    ClickLabel(const QString& text, QWidget *parent = 0);
 
 Q_SIGNALS:
 
@@ -73,7 +72,7 @@ class DIGIKAM_EXPORT SqueezedClickLabel : public KSqueezedTextLabel
 public:
 
     SqueezedClickLabel(QWidget *parent = 0);
-    SqueezedClickLabel(const QString &text, QWidget *parent = 0);
+    SqueezedClickLabel(const QString& text, QWidget *parent = 0);
 
 Q_SIGNALS:
 
@@ -112,7 +111,6 @@ protected:
     int           m_size;
     int           m_margin;
 };
-
 
 } // namespace Digikam
 
