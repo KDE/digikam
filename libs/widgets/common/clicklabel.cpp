@@ -318,6 +318,12 @@ void DLabelExpander::setContainer(QWidget* widget)
     }
 }
 
+void DLabelExpander::setExpanded(bool b)
+{
+    if (d->containerWidget)
+        d->containerWidget->setVisible(b);
+}
+
 bool DLabelExpander::isExpanded()
 {
     if (d->containerWidget)
@@ -328,8 +334,8 @@ bool DLabelExpander::isExpanded()
 
 void DLabelExpander::slotToggleContainer()
 {
-    if(d->containerWidget)
-        d->containerWidget->setVisible(!d->containerWidget->isVisible());
+    if (d->containerWidget)
+        setExpanded(!d->containerWidget->isVisible());
 }
 
 } // namespace Digikam

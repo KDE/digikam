@@ -137,6 +137,7 @@ public:
     void setPixmap(const QPixmap& pix);
     void setContainer(QWidget* widget);
 
+    void setExpanded(bool b);
     bool isExpanded();
 
 private slots:
