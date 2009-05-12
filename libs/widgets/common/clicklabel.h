@@ -107,6 +107,8 @@ protected:
     virtual void mouseReleaseEvent(QMouseEvent* event);
     virtual void paintEvent(QPaintEvent* event);
 
+protected:
+
     Qt::ArrowType m_arrowType;
     int           m_size;
     int           m_margin;
