@@ -272,6 +272,7 @@ DLabelExpander::DLabelExpander(QWidget *parent)
     d->arrow       = new ArrowClickLabel(this);
     d->pixmapLabel = new QLabel(this);
     d->clickLabel  = new SqueezedClickLabel(this);
+    d->pixmapLabel->installEventFilter(this);
 
     d->grid->addWidget(d->line,        0, 0, 1, 3);
     d->grid->addWidget(d->arrow,       1, 0, 1, 1);
@@ -336,6 +337,28 @@ void DLabelExpander::slotToggleContainer()
 {
     if (d->containerWidget)
         setExpanded(!d->containerWidget->isVisible());
+}
+
+bool DLabelExpander::eventFilter(QObject *obj, QEvent *ev)
+{
+    if ( obj == d->pixmapLabel )
+    {
+        if ( ev->type() == QEvent::MouseButtonRelease)
+        {
+
+            slotToggleContainer();
+            return false;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else
+    {
+        // pass the event on to the parent class
+        return QWidget::eventFilter(obj, ev);
+    }
 }
 
 } // namespace Digikam
