@@ -43,13 +43,6 @@ class CameraUIPriv
 {
 public:
 
-    enum SettingsTab
-    {
-        RENAMEFILEPAGE=0,
-        AUTOALBUMPAGE,
-        ONFLYPAGE
-    };
-
     enum DateFormatOptions
     {
         IsoDateFormat=0,
@@ -118,6 +111,9 @@ public:
         themeMenuAction           = 0;
         contributeAction          = 0;
         showMenuBarAction         = 0;
+        renameFileLabel           = 0;
+        autoAlbumLabel            = 0;
+        onFlyLabel                = 0;
     }
 
     bool                          busy;
@@ -136,7 +132,7 @@ public:
     KMenu                        *deleteMenu;
     KMenu                        *imageMenu;
 
-    QToolBox                     *advBox;
+    KVBox                        *advBox;
 
     QCheckBox                    *autoRotateCheck;
     QCheckBox                    *autoAlbumDateCheck;
@@ -206,6 +202,10 @@ public:
 
     FreeSpaceWidget              *albumLibraryFreeSpace;
     FreeSpaceWidget              *cameraFreeSpace;
+
+    DLabelExpander               *renameFileLabel;
+    DLabelExpander               *autoAlbumLabel;
+    DLabelExpander               *onFlyLabel;
 };
 
 }  // namespace Digikam
