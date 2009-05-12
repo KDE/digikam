@@ -277,38 +277,43 @@ bool UMSCamera::loadKDEThumbCreator(const QString& folder, const QString& itemNa
 {
     QString path     = folder + QString("/") + itemName;
     QString mimeType = KMimeType::findByUrl(path)->name();
-
     if (mimeType.isEmpty())
     {
         kDebug(50003) << "Mimetype not found" << endl;
         return false;
     }
 
-    QString mimeTypeAlt = mimeType.replace(QRegExp("/.*"), "/*");
-    QString plugin;
+    kDebug(50003) << "Mimetype : " << mimeType << endl;
 
-    if (!KServiceTypeTrader::self()) return false;
-
-    KService::List plugins = KServiceTypeTrader::self()->query("ThumbCreator");
-    for (KService::List::ConstIterator it = plugins.constBegin(); it != plugins.constEnd(); ++it)
+    if (!KMimeTypeTrader::self())
     {
-        QStringList mimeTypes = (*it)->property("MimeTypes").toStringList();
-        for (QStringList::ConstIterator mt = mimeTypes.constBegin(); mt != mimeTypes.constEnd(); ++mt)
-        {
-            if  ((*mt) == mimeType || (*mt) == mimeTypeAlt)
-            {
-                plugin = (*it)->library();
-                break;
-            }
-        }
+        kDebug(50003) << "No KMimeTypeTrader instance to get thumb from KDE" << endl;
+        return false;
+    }
 
-        if (!plugin.isEmpty())
-            break;
+    QString plugin;
+    KService::List offers = KMimeTypeTrader::self()->query(mimeType, QLatin1String("ThumbCreator"));
+    if (!offers.isEmpty())
+    {
+        KService::Ptr serv;
+        serv   = offers.first();
+        plugin = serv->library();
     }
 
     if (plugin.isEmpty())
     {
         kDebug(50003) << "No relevant plugin found " << endl;
+        return false;
+    }
+
+    kDebug(50003) << "plugin : " << plugin << endl;
+
+    // Don't use KLibFactory here, this is not a QObject and
+    // neither is ThumbCreator
+
+    if (!KMimeTypeTrader::self())
+    {
+        kDebug(50003) << "No KLibLoader instance to get thumb from KDE" << endl;
         return false;
     }
 
@@ -343,7 +348,7 @@ bool UMSCamera::loadKDEThumbCreator(const QString& folder, const QString& itemNa
 
 bool UMSCamera::getExif(const QString&, const QString&, char **, int&)
 {
-    // not necessary to implement this. read it directly from the file
+    // Not necessary to implement this. read data directly from the file
     // (done in camera controller)
     kWarning(50003) << "Exif implemented yet in camera controller" << endl;
     return false;
