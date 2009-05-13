@@ -276,6 +276,9 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
 
 bool UMSCamera::loadKDEThumbCreator(const QString& folder, const QString& itemName, QImage& thumbnail)
 {
+    // NOTE: see B.K.O #192294 : KDELibs crash here. 
+    return false;
+
     QString path     = folder + QString("/") + itemName;
     QString mimeType = KMimeType::findByUrl(path)->name();
     if (mimeType.isEmpty())
