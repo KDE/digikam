@@ -273,11 +273,11 @@ QImage ThumbnailCreator::load(const QString& path)
                          QFile::encodeName(thumbPath));
 #endif
 
-	if (ret != 0)
-	{
-	    kDebug(50003) << "Cannot rename thumb file (" << tempFileName << ")" << endl;
-	    kDebug(50003) << "to (" << thumbPath << ")..." << endl;
-	}
+        if (ret != 0)
+        {
+            kDebug(50003) << "Cannot rename thumb file (" << tempFileName << ")" << endl;
+            kDebug(50003) << "to (" << thumbPath << ")..." << endl;
+        }
     }
 
     qimage = qimage.scaled(d->thumbnailSize, d->thumbnailSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
