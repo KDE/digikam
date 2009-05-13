@@ -390,9 +390,9 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     d->renameDefaultCase->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
 
     d->renameDefaultCaseType = new KComboBox(d->renameDefaultBox);
-    d->renameDefaultCaseType->insertItem(0, i18n("Leave as-is"));
-    d->renameDefaultCaseType->insertItem(1, i18n("Upper"));
-    d->renameDefaultCaseType->insertItem(2, i18n("Lower"));
+    d->renameDefaultCaseType->insertItem(0, i18nc("Leave filename as it is", "Leave as-is"));
+    d->renameDefaultCaseType->insertItem(1, i18nc("Filename to uppercase", "Upper"));
+    d->renameDefaultCaseType->insertItem(2, i18nc("Filename to lowercase", "Lower"));
     d->renameDefaultCaseType->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
     d->renameDefaultCaseType->setWhatsThis( i18n("Set the method to use to change the case "
                                                  "of the image filenames."));
@@ -434,11 +434,18 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     QHBoxLayout *boxLayout2 = new QHBoxLayout(dateTimeWidget);
     d->dateTimeLabel        = new QLabel(i18n("Date format:"), dateTimeWidget);
     d->dateTimeFormat       = new KComboBox(dateTimeWidget);
-    d->dateTimeFormat->insertItem(RenameCustomizerPriv::DigikamStandard, i18n("Standard"));
-    d->dateTimeFormat->insertItem(RenameCustomizerPriv::IsoDateFormat,   i18n("ISO"));
-    d->dateTimeFormat->insertItem(RenameCustomizerPriv::TextDateFormat,  i18n("Full Text"));
-    d->dateTimeFormat->insertItem(RenameCustomizerPriv::LocalDateFormat, i18n("Local Settings"));
-    d->dateTimeFormat->insertItem(RenameCustomizerPriv::Advanced,        i18n("Advanced..."));
+
+    d->dateTimeFormat->insertItem(RenameCustomizerPriv::DigikamStandard,
+                                  i18nc("Standard time format", "Standard"));
+    d->dateTimeFormat->insertItem(RenameCustomizerPriv::IsoDateFormat,
+                                  i18nc("ISO time format", "ISO"));
+    d->dateTimeFormat->insertItem(RenameCustomizerPriv::TextDateFormat,
+                                  i18n("Full Text"));
+    d->dateTimeFormat->insertItem(RenameCustomizerPriv::LocalDateFormat,
+                                  i18n("Local Settings"));
+    d->dateTimeFormat->insertItem(RenameCustomizerPriv::Advanced,
+                                  i18nc("Advanced time format settings", "Advanced..."));
+
     d->dateTimeFormat->setWhatsThis( i18n("<p>Select your preferred date format for "
                     "creating the new albums. The options available are:</p>"
                     "<p><b>Standard</b>: the date format that has been used as a standard by digiKam. "
@@ -494,7 +501,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
 
     // ----------------------------------------------------------------------
 
-    d->renameManual      = new QRadioButton(i18n("Manual"), this);
+    d->renameManual      = new QRadioButton(i18nc("Manual Image Renaming", "Manual"), this);
     d->manualRenameInput = new ManualRenameInput;
     d->manualRenameInput->setTrackerAlignment(Qt::AlignRight);
     d->buttonGroup->addButton(d->renameManual);
