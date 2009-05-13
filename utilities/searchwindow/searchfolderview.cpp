@@ -50,6 +50,7 @@
 #include "album.h"
 #include "albummanager.h"
 #include "albumsettings.h"
+#include "contextmenuhelper.h"
 #include "folderitem.h"
 
 namespace Digikam
@@ -303,31 +304,58 @@ void SearchFolderView::slotSelectionChanged()
 
 void SearchFolderView::slotContextMenu(Q3ListViewItem* item, const QPoint&, int)
 {
-    if (item)
+    SearchFolderItem* sItem = dynamic_cast<SearchFolderItem*>(item);
+
+    // temporary actions  -------------------------------------
+
+    QAction *newAction = new QAction(SmallIcon("document-new"), i18n("New Search"), this);
+    QAction *delAction = new QAction(SmallIcon("edit-delete"), i18n("Delete Search"), this);
+    QAction *edtAction = new QAction(SmallIcon("edit-find"), i18n("Edit Search..."), this);
+
+    if (!item)
     {
-        SearchFolderItem* sItem = dynamic_cast<SearchFolderItem*>(item);
-        // QAction *edtadvSearch   = 0;
+        delAction->setEnabled(false);
+        edtAction->setEnabled(false);
+    }
+    if (item == m_currentSearchViewSearchItem)
+        delAction->setEnabled(false);
 
-        KMenu popmenu(this);
-        popmenu.addTitle(SmallIcon("digikam"),  i18n("My Searches"));
-        QAction *edtSearch = popmenu.addAction(SmallIcon("edit-find"), i18n("Edit Search..."));
+    // --------------------------------------------------------
 
-        QAction *delSearch = popmenu.addAction(SmallIcon("edit-delete"), i18n("Delete Search"));
-        if (item == m_currentSearchViewSearchItem)
-            delSearch->setEnabled(false);
-        QAction *choice    = popmenu.exec(QCursor::pos());
-        if (choice)
+    KMenu popmenu(this);
+    popmenu.addTitle(SmallIcon("digikam"),  i18n("My Searches"));
+    ContextMenuHelper cmhelper(&popmenu);
+
+    cmhelper.addAction(newAction);
+    popmenu.addSeparator();
+    cmhelper.addAction(edtAction);
+    cmhelper.addAction(delAction);
+
+    // special action handling --------------------------------
+
+    QAction* choice = cmhelper.exec(QCursor::pos());
+    if (choice)
+    {
+        if (choice == newAction)
         {
-            if (choice == edtSearch)
-            {
-                emit editSearch(sItem->album());
-            }
-            else if (choice == delSearch)
-            {
-                searchDelete(sItem->album());
-            }
+            emit newSearch();
+        }
+        else if (choice == edtAction)
+        {
+            emit editSearch(sItem->album());
+        }
+        else if (choice == delAction)
+        {
+            searchDelete(sItem->album());
         }
     }
+
+    // cleanup -----------------------
+
+    popmenu.deleteLater();
+    delete newAction;
+    delete edtAction;
+    delete delAction;
 }
 
 void SearchFolderView::slotDoubleClicked(Q3ListViewItem* item, const QPoint&, int)

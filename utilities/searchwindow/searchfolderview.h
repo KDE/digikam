@@ -63,6 +63,7 @@ public:
 
 Q_SIGNALS:
 
+    void newSearch();
     void editSearch(SAlbum *album);
     void selectedSearchChanged(SAlbum *album);
 

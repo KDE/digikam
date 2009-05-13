@@ -466,6 +466,9 @@ void DigikamView::setupConnections()
     connect(d->tagFolderView, SIGNAL(signalTextTagFilterMatch(bool)),
             d->tagSearchBar, SLOT(slotSearchResult(bool)));
 
+    connect(d->searchFolderView, SIGNAL(newSearch()),
+            d->searchTabHeader, SLOT(newAdvancedSearch()));
+
     connect(d->searchFolderView, SIGNAL(signalTextSearchFilterMatch(bool)),
             d->searchSearchBar, SLOT(slotSearchResult(bool)));
 
