@@ -31,10 +31,6 @@
 #include <QPixmap>
 #include <QTimer>
 
-// KDE includes
-
-#include <kiconloader.h>
-
 // Local includes
 
 #include "iconview.h"
@@ -278,7 +274,7 @@ void CameraIconItem::paintItem(QPainter *p)
         }
         case GPItemInfo::DownloadedYes:
         {
-            downloaded = SmallIcon("dialog-ok");
+            downloaded = view->downloadedPixmap();
             break;
         }
         case GPItemInfo::DownloadStarted:
@@ -300,12 +296,12 @@ void CameraIconItem::paintItem(QPainter *p)
         }
         case GPItemInfo::DownloadFailed:
         {
-            downloaded = SmallIcon("dialog-cancel");
+            downloaded = view->downloadFailedPixmap();
             break;
         }
         case GPItemInfo::DownloadUnknow:
         {
-            downloaded = view->unknowPicturePixmap();
+            downloaded = view->downloadUnknowPixmap();
             break;
         }
     }
@@ -316,7 +312,7 @@ void CameraIconItem::paintItem(QPainter *p)
     // If camera item is locked (read only), draw a "Lock" icon.
     if (d->itemInfo->writePermissions == 0)
     {
-        QPixmap locked = SmallIcon("object-locked");
+        QPixmap locked = view->lockedPixmap();
         p->drawPixmap(rect().width() - downloaded.width() - locked.width() - 10, 5, locked);
     }
 
