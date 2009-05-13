@@ -134,7 +134,8 @@ public:
     RIntNumInput       *hInput;
     RIntNumInput       *stepInput;
     RIntNumInput       *maskPenSize;
-
+    RIntNumInput       *sideSwitchInput;
+    
     RDoubleNumInput    *wpInput;
     RDoubleNumInput    *hpInput;
     RDoubleNumInput    *mixedRescaleInput;
@@ -292,7 +293,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     
     DLabelExpander* expAdvSettings = new DLabelExpander();
     expAdvSettings->setText(i18n("Advanced Settings:"));
-    //expAdvSettings->setPixmap(SmallIcon("insert-image"));
+    //expAdvSettings->setPixmap(SmallIcon("system-run"));
     expAdvSettings->setLineVisible(false);
     KVBox* vBoxAdvSettings = new KVBox();
     expAdvSettings->setContainer(vBoxAdvSettings);
@@ -324,7 +325,14 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
                                     "base line. Increasing the step value lets you overcome this "
                                     "limit, but may lead to the introduction of artifacts. In order "
                                     "to balance the situation, you can use the rigidity setting."));
-
+    
+    new QLabel(i18n("Side switch frequency:"), vBoxAdvSettings);
+    d->sideSwitchInput      = new RIntNumInput(vBoxAdvSettings);
+    d->sideSwitchInput->setRange(1, 20, 1);
+    d->sideSwitchInput->setDefaultValue(4);
+    d->sideSwitchInput->setSliderEnabled(true);
+    d->sideSwitchInput->setWhatsThis(i18n("Side switch frequency."));
+    
     new QLabel(i18n("Resize Order:"), vBoxAdvSettings);
     d->resizeOrderInput      = new RComboBox(vBoxAdvSettings);
     d->resizeOrderInput->addItem(i18n("Horizontally first"));
@@ -332,7 +340,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     d->resizeOrderInput->setDefaultIndex(ContentAwareResizeToolPriv::Horizontally);
     d->resizeOrderInput->setWhatsThis(i18n("Here you can set whether to resize horizontally first or "
                                            "vertically first."));
-    
+
     // -------------------------------------------------------------
 
     grid->addWidget(d->preserveRatioBox,  0, 0, 1, 3);
@@ -410,6 +418,7 @@ void ContentAwareResizeTool::readSettings()
 
     // NOTE: size settings are not restored here because they depands of image size.
     d->stepInput->setValue(group.readEntry("Step",                      d->stepInput->defaultValue()));
+    d->stepInput->setValue(group.readEntry("SideSwitch",                d->sideSwitchInput->defaultValue())); 
     d->rigidityInput->setValue(group.readEntry("Rigidity",              d->rigidityInput->defaultValue()));
     d->funcInput->setCurrentIndex(group.readEntry("Function",           d->funcInput->defaultIndex()));
     d->resizeOrderInput->setCurrentIndex(group.readEntry("Order",       d->resizeOrderInput->defaultIndex()));
@@ -427,6 +436,7 @@ void ContentAwareResizeTool::writeSettings()
 
     // NOTE: size settings are not saved here because they depands of image size.
     group.writeEntry("Step",              d->stepInput->value());
+    group.writeEntry("SideSwitch",        d->sideSwitchInput->value());
     group.writeEntry("Rigidity",          d->rigidityInput->value());
     group.writeEntry("Function",          d->funcInput->currentIndex());
     group.writeEntry("Order",             d->resizeOrderInput->currentIndex());
@@ -538,6 +548,7 @@ void ContentAwareResizeTool::enableContentAwareSettings(bool b)
 {
     d->stepInput->setEnabled(b);
     d->rigidityInput->setEnabled(b);
+    d->sideSwitchInput->setEnabled(b);
     d->funcInput->setEnabled(b);
     d->preserveSkinTones->setEnabled(b);
     d->resizeOrderInput->setEnabled(b);
@@ -567,6 +578,7 @@ void ContentAwareResizeTool::contentAwareResizeCore(DImg *image, int target_widt
     setFilter(dynamic_cast<DImgThreadedFilter*>(
               new ContentAwareResizer(image, target_width, target_height,
                                       d->stepInput->value(), d->rigidityInput->value(),
+                                      d->sideSwitchInput->value(),
                                       (LqrEnergyFuncBuiltinType)d->funcInput->currentIndex(),
                                       (LqrResizeOrder)d->resizeOrderInput->currentIndex(),
                                       mask, d->preserveSkinTones->isChecked(),this)));
