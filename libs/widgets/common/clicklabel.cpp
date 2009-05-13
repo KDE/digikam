@@ -132,7 +132,7 @@ void SqueezedClickLabel::keyPressEvent(QKeyEvent *e)
 // ------------------------------------------------------------------------
 
 ArrowClickLabel::ArrowClickLabel(QWidget *parent)
-               : QWidget(parent), m_arrowType(Qt::RightArrow)
+               : QWidget(parent), m_arrowType(Qt::DownArrow)
 {
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_size   = 8;
@@ -322,7 +322,13 @@ void DLabelExpander::setContainer(QWidget* widget)
 void DLabelExpander::setExpanded(bool b)
 {
     if (d->containerWidget)
+    {
         d->containerWidget->setVisible(b);
+        if (b)
+           d->arrow->setArrowType(Qt::DownArrow);
+        else
+           d->arrow->setArrowType(Qt::RightArrow);
+    }
 }
 
 bool DLabelExpander::isExpanded()
