@@ -1061,7 +1061,7 @@ void CameraUI::slotFileList(const GPItemInfoList& fileList)
     // Minolta camera in PTP mode
     fileExts.append("dps");
 
-    QMap<QDateTime, GPItemInfo> map;
+    QMultiMap<QDateTime, GPItemInfo> map;
     foreach(const GPItemInfo& item, fileList)
     {
         info.setFile(item.name);
@@ -1073,7 +1073,7 @@ void CameraUI::slotFileList(const GPItemInfoList& fileList)
     if (map.empty())
         return;
 
-    QMap<QDateTime, GPItemInfo>::iterator it = map.end();
+    QMultiMap<QDateTime, GPItemInfo>::iterator it = map.end();
 
     do
     {
@@ -1555,7 +1555,7 @@ void CameraUI::slotDownloaded(const QString& folder, const QString& file, int st
 }
 
 void CameraUI::slotDownloadComplete(const QString&, const QString&,
-                                     const QString& destFolder, const QString&)
+                                    const QString& destFolder, const QString&)
 {
     ScanController::instance()->scheduleCollectionScanRelaxed(destFolder);
 }
