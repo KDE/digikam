@@ -66,4 +66,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 051 ==> 182332 : Can't stop generating of thumbnails when import from a card reader.
 052 ==> 152382 : Unable to view photo.
 053 ==> 161744 : Filenames are lower case when imported via sd card reader, upper case when imported via usb cable directly from camera.
-054 ==> 
+054 ==> 187560 : Iptc data for author are missing while downloading images.
+055 ==> 
