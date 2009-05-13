@@ -135,6 +135,8 @@ public:
     RIntNumInput       *stepInput;
     RIntNumInput       *maskPenSize;
     RIntNumInput       *sideSwitchInput;
+  
+    DLabelExpander     *expAdvSettings;
     
     RDoubleNumInput    *wpInput;
     RDoubleNumInput    *hpInput;
@@ -291,12 +293,12 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
 
     KSeparator *line2        = new KSeparator(Qt::Horizontal, d->gboxSettings->plainPage());
     
-    DLabelExpander* expAdvSettings = new DLabelExpander();
-    expAdvSettings->setText(i18n("Advanced Settings:"));
+    d->expAdvSettings = new DLabelExpander();
+    d->expAdvSettings->setText(i18n("Advanced Settings:"));
     //expAdvSettings->setPixmap(SmallIcon("system-run"));
-    expAdvSettings->setLineVisible(false);
+    d->expAdvSettings->setLineVisible(false);
     KVBox* vBoxAdvSettings = new KVBox();
-    expAdvSettings->setContainer(vBoxAdvSettings);
+    d->expAdvSettings->setContainer(vBoxAdvSettings);
 
     new QLabel(i18n("Overall rigidity of the seams:"), vBoxAdvSettings);
     d->rigidityInput         = new RDoubleNumInput(vBoxAdvSettings);
@@ -368,7 +370,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     grid->addWidget(d->funcInput,         15, 0, 1, -1);
     grid->addWidget(d->preserveSkinTones, 16, 0, 1, 3);
     grid->addWidget(line2,                17, 0, 1, -1);
-    grid->addWidget(expAdvSettings,       18, 0, 1, -1);
+    grid->addWidget(d->expAdvSettings,       18, 0, 1, -1);
 
     grid->setRowStretch(19, 10);
     grid->setMargin(d->gboxSettings->spacingHint());
@@ -423,6 +425,9 @@ void ContentAwareResizeTool::readSettings()
     d->funcInput->setCurrentIndex(group.readEntry("Function",           d->funcInput->defaultIndex()));
     d->resizeOrderInput->setCurrentIndex(group.readEntry("Order",       d->resizeOrderInput->defaultIndex()));
     d->mixedRescaleInput->setValue(group.readEntry("MixedRescaleValue", d->mixedRescaleInput->defaultValue()));
+    d->maskPenSize->setValue(group.readEntry("BrushSize",               d->maskPenSize->defaultValue()));
+    d->preserveSkinTones->setChecked(group.readEntry("PreserveTones",   false));
+    d->expAdvSettings->setExpanded(group.readEntry("AdvSettingsShown",  false));
 
     enableContentAwareSettings(d->mixedRescaleInput->value() > 0.0);
 
@@ -441,6 +446,9 @@ void ContentAwareResizeTool::writeSettings()
     group.writeEntry("Function",          d->funcInput->currentIndex());
     group.writeEntry("Order",             d->resizeOrderInput->currentIndex());
     group.writeEntry("MixedRescaleValue", d->mixedRescaleInput->value());
+    group.writeEntry("BrushSize",         d->maskPenSize->value());
+    group.writeEntry("PreserveTones",     d->preserveSkinTones->isChecked()); 
+    group.writeEntry("AdvSettingsShown",  d->expAdvSettings->isExpanded());
 
     d->previewWidget->writeSettings();
     group.sync();
