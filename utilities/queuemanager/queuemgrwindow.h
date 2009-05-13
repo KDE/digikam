@@ -77,10 +77,13 @@ public:
 Q_SIGNALS:
 
     void signalWindowHasMoved();
+    void signalWindowLostFocus();
 
 protected:
 
     void moveEvent(QMoveEvent *e);
+    bool event(QEvent *e);
+
 
 public Q_SLOTS:
 

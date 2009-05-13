@@ -307,6 +307,9 @@ void QueueMgrWindow::setupConnections()
     connect(this, SIGNAL(signalWindowHasMoved()),
             d->queueSettingsView, SLOT(slotUpdateTrackerPos()));
 
+    connect(this, SIGNAL(signalWindowLostFocus()),
+            d->queueSettingsView, SLOT(slotHideToolTipTracker()));
+
     // -- FileWatch connections ------------------------------
 
     LoadingCacheInterface::connectToSignalFileChanged(this,
@@ -1110,6 +1113,19 @@ void QueueMgrWindow::moveEvent(QMoveEvent *e)
 {
     Q_UNUSED(e)
     emit signalWindowHasMoved();
+}
+
+bool QueueMgrWindow::event(QEvent *e)
+{
+    switch (e->type())
+    {
+        case QEvent::WindowDeactivate:
+            emit signalWindowLostFocus();
+            break;
+        default:
+            break;
+    }
+    return KXmlGuiWindow::event(e);
 }
 
 }  // namespace Digikam
