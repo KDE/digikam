@@ -58,7 +58,7 @@ public:
         int  size;
         bool exifRotate;
 
-        bool operator==(const PreviewParameters &other) const;
+        bool operator==(const PreviewParameters& other) const;
     };
 
     /**
@@ -72,13 +72,13 @@ public:
      * Use this for files that are not raw files.
      * Stores only the filePath.
      */
-    explicit LoadingDescription(const QString &filePath);
+    explicit LoadingDescription(const QString& filePath);
 
     /**
      * For raw files:
      * Stores filePath and RawDecodingSettings
      */
-    LoadingDescription(const QString &filePath, DRawDecoding settings);
+    LoadingDescription(const QString& filePath, DRawDecoding settings);
 
     /**
      * For preview and thumbnail jobs:
@@ -91,7 +91,7 @@ public:
      *    If size is not 0, the embedded preview will be loaded if available.
      *    If size is 0, DImg based loading will be used with default raw decoding settings.
      */
-    LoadingDescription(const QString &filePath, int size, bool exifRotate,
+    LoadingDescription(const QString& filePath, int size, bool exifRotate,
                        PreviewParameters::PreviewType = PreviewParameters::PreviewImage);
 
     QString           filePath;
@@ -128,27 +128,27 @@ public:
    /**
      * Returns whether the other loading task equals this one
      */
-    bool operator==(const LoadingDescription &other) const;
-    bool operator!=(const LoadingDescription &other) const
+    bool operator==(const LoadingDescription& other) const;
+    bool operator!=(const LoadingDescription& other) const
         { return !operator==(other); }
     /**
      * Returns whether the other loading task equals this one
      * ignoring parameters used to specify a reduced version.
      */
-    bool equalsIgnoreReducedVersion(const LoadingDescription &other) const;
+    bool equalsIgnoreReducedVersion(const LoadingDescription& other) const;
 
     /**
      * Returns whether this loading task equals the other one
      * or is superior to it, if the other one is a reduced version
      */
-    bool equalsOrBetterThan(const LoadingDescription &other) const;
+    bool equalsOrBetterThan(const LoadingDescription& other) const;
 
     /**
      * Returns all possible cacheKeys for the given file path
      * (all cache keys under which the given file could be stored in the cache).
      */
-    static QStringList possibleCacheKeys(const QString &filePath);
-    static QStringList possibleThumbnailCacheKeys(const QString &filePath);
+    static QStringList possibleCacheKeys(const QString& filePath);
+    static QStringList possibleThumbnailCacheKeys(const QString& filePath);
 };
 
 }   // namespace Digikam

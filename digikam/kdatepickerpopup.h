@@ -76,7 +76,7 @@ class KDatePickerPopup: public KMenu
        @param parent The object's parent.
        @param name The object's name.
     */
-    KDatePickerPopup( Items items = DatePicker, const QDate &date = QDate::currentDate(),
+    KDatePickerPopup( Items items = DatePicker, const QDate& date = QDate::currentDate(),
                       QWidget *parent = 0 );
 
     /**
@@ -85,7 +85,7 @@ class KDatePickerPopup: public KMenu
     */
     KDatePicker *datePicker() const;
 
-    void setDate( const QDate &date );
+    void setDate( const QDate& date );
 
 #if 0
     /** Set items which should be shown and rebuilds the menu afterwards. Only if the menu is not visible.

@@ -489,7 +489,7 @@ void SearchTabHeader::editStoredAdvancedSearch()
     }
 }
 
-void SearchTabHeader::advancedSearchEdited(int id, const QString &query)
+void SearchTabHeader::advancedSearchEdited(int id, const QString& query)
 {
     // if the user just pressed the button, but did not change anything in the window,
     // the search is effectively still a keyword search.
@@ -513,7 +513,7 @@ void SearchTabHeader::advancedSearchEdited(int id, const QString &query)
     }
 }
 
-void SearchTabHeader::setCurrentSearch(DatabaseSearch::Type type, const QString &query, bool selectCurrentAlbum)
+void SearchTabHeader::setCurrentSearch(DatabaseSearch::Type type, const QString& query, bool selectCurrentAlbum)
 {
     SAlbum *album = AlbumManager::instance()->findSAlbum(SearchFolderView::currentSearchViewSearchName());
     if (album)
@@ -531,7 +531,7 @@ void SearchTabHeader::setCurrentSearch(DatabaseSearch::Type type, const QString 
         emit searchShallBeSelected(album);
 }
 
-QString SearchTabHeader::queryFromKeywords(const QString &keywords)
+QString SearchTabHeader::queryFromKeywords(const QString& keywords)
 {
     QStringList keywordList = KeywordSearch::split(keywords);
     // create xml
@@ -539,7 +539,7 @@ QString SearchTabHeader::queryFromKeywords(const QString &keywords)
     return writer.xml(keywordList);
 }
 
-QString SearchTabHeader::keywordsFromQuery(const QString &query)
+QString SearchTabHeader::keywordsFromQuery(const QString& query)
 {
     KeywordSearchReader reader(query);
     QStringList keywordList = reader.keywords();

@@ -224,7 +224,7 @@ void ColorFXTool::slotResetSettings()
     slotEffect();
 }
 
-void ColorFXTool::slotColorSelectedFromTarget( const DColor &color )
+void ColorFXTool::slotColorSelectedFromTarget( const DColor& color )
 {
     m_gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }

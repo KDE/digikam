@@ -71,7 +71,7 @@ public:
     *
     * Multiplies this matrix with another matrix
     */
-    void   multiply(const Matrix &matrix1);
+    void   multiply(const Matrix& matrix1);
 
     /**
     * transformPoint:

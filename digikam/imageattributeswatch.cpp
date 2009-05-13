@@ -69,7 +69,7 @@ ImageAttributesWatch *ImageAttributesWatch::instance()
     return m_instance;
 }
 
-void ImageAttributesWatch::slotImageChange(const ImageChangeset &changeset)
+void ImageAttributesWatch::slotImageChange(const ImageChangeset& changeset)
 {
     DatabaseFields::Set set = changeset.changes();
 
@@ -91,7 +91,7 @@ void ImageAttributesWatch::slotImageChange(const ImageChangeset &changeset)
     }
 }
 
-void ImageAttributesWatch::slotImageTagChange(const ImageTagChangeset &changeset)
+void ImageAttributesWatch::slotImageTagChange(const ImageTagChangeset& changeset)
 {
     foreach(qlonglong imageId, changeset.ids())
         emit signalImageTagsChanged(imageId);
@@ -146,7 +146,7 @@ void ImageAttributesWatch::imageCaptionChanged(qint64 imageId)
 }
 */
 
-void ImageAttributesWatch::fileMetadataChanged(const KUrl &url)
+void ImageAttributesWatch::fileMetadataChanged(const KUrl& url)
 {
     emit signalFileMetadataChanged(url);
 }

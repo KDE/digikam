@@ -79,7 +79,7 @@ ThumbnailSize ImageThumbnailModel::thumbnailSize() const
     return d->thumbSize;
 }
 
-void ImageThumbnailModel::setThumbnailSize(const ThumbnailSize &size)
+void ImageThumbnailModel::setThumbnailSize(const ThumbnailSize& size)
 {
     if (d->thumbSize == size)
         return;
@@ -87,20 +87,20 @@ void ImageThumbnailModel::setThumbnailSize(const ThumbnailSize &size)
     d->thread->setThumbnailSize(d->thumbSize.size());
 }
 
-void ImageThumbnailModel::prepareThumbnails(const QList<QModelIndex> &indexesToPrepare)
+void ImageThumbnailModel::prepareThumbnails(const QList<QModelIndex>& indexesToPrepare)
 {
     if (!d->thread)
         return;
 
     QStringList filePaths;
-    foreach(const QModelIndex &index, indexesToPrepare)
+    foreach(const QModelIndex& index, indexesToPrepare)
     {
         filePaths << imageInfoRef(index).filePath();
     }
     d->thread->findGroup(filePaths);
 }
 
-QVariant ImageThumbnailModel::data(const QModelIndex &index, int role) const
+QVariant ImageThumbnailModel::data(const QModelIndex& index, int role) const
 {
     if (d->thread && role == ThumbnailRole && index.isValid())
     {
@@ -117,7 +117,7 @@ QVariant ImageThumbnailModel::data(const QModelIndex &index, int role) const
     return ImageModel::data(index, role);
 }
 
-void ImageThumbnailModel::slotThumbnailLoaded(const LoadingDescription &loadingDescription, const QPixmap& thumb)
+void ImageThumbnailModel::slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumb)
 {
     if (thumb.isNull())
         return;

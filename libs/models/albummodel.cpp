@@ -50,7 +50,7 @@ AlbumModel::AlbumModel(RootAlbumBehavior rootBehavior, QObject *parent)
     setupThumbnailLoading();
 }
 
-PAlbum *AlbumModel::albumForIndex(const QModelIndex &index) const
+PAlbum *AlbumModel::albumForIndex(const QModelIndex& index) const
 {
     return static_cast<PAlbum*>(AbstractCheckableAlbumModel::albumForIndex(index));
 }
@@ -77,7 +77,7 @@ TagModel::TagModel(RootAlbumBehavior rootBehavior, QObject *parent)
     setupThumbnailLoading();
 }
 
-TAlbum *TagModel::albumForIndex(const QModelIndex &index) const
+TAlbum *TagModel::albumForIndex(const QModelIndex& index) const
 {
     return static_cast<TAlbum*>(AbstractCheckableAlbumModel::albumForIndex(index));
 }
@@ -101,7 +101,7 @@ SearchModel::SearchModel(QObject *parent)
 {
 }
 
-SAlbum *SearchModel::albumForIndex(const QModelIndex &index) const
+SAlbum *SearchModel::albumForIndex(const QModelIndex& index) const
 {
     return static_cast<SAlbum*>(AbstractSpecificAlbumModel::albumForIndex(index));
 }
@@ -126,7 +126,7 @@ void SearchModel::setReplaceNames(QHash<QString, QString> replaceNames)
     m_replaceNames = replaceNames;
 }
 
-void SearchModel::setPixmap(const QPixmap &pix)
+void SearchModel::setPixmap(const QPixmap& pix)
 {
     m_pixmap = pix;
 }
@@ -168,12 +168,12 @@ DateAlbumModel::DateAlbumModel(QObject *parent)
 {
 }
 
-DAlbum *DateAlbumModel::albumForIndex(const QModelIndex &index) const
+DAlbum *DateAlbumModel::albumForIndex(const QModelIndex& index) const
 {
     return static_cast<DAlbum*>(AbstractCountingAlbumModel::albumForIndex(index));
 }
 
-void DateAlbumModel::setPixmaps(const QPixmap &forYearAlbums, const QPixmap &forMonthAlbums)
+void DateAlbumModel::setPixmaps(const QPixmap& forYearAlbums, const QPixmap& forMonthAlbums)
 {
     m_yearPixmap = forYearAlbums;
     m_monthPixmap = forMonthAlbums;

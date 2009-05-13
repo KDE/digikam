@@ -57,10 +57,10 @@ public:
      */
     ImagePosition(qlonglong imageId);
 
-    ImagePosition(const ImagePosition &other);
+    ImagePosition(const ImagePosition& other);
     ~ImagePosition();
 
-    ImagePosition &operator=(const ImagePosition &other);
+    ImagePosition& operator=(const ImagePosition& other);
 
     bool isNull() const;
     /**
@@ -118,7 +118,7 @@ public:
      * Sets the latitude/longitude from the GPSCoordinate string as described by XMP.
      * Returns true if the format is accepted.
      */
-    bool setLatitude(const QString &latitude);
+    bool setLatitude(const QString& latitude);
     bool setLongitude(const QString longitude);
     /**
      * Sets the latitude/longitude from a double floating point number,
@@ -135,7 +135,7 @@ public:
     void setTilt(double tilt);
     void setRoll(double roll);
     void setAccuracy(double accuracy);
-    void setDescription(const QString &description);
+    void setDescription(const QString& description);
 
     /**
      * Apply all changes made to this object.

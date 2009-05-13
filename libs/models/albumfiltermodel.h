@@ -48,7 +48,7 @@ public:
 
     AbstractAlbumModel *sourceAlbumModel() const;
 
-    Album *albumForIndex(const QModelIndex &index) const;
+    Album *albumForIndex(const QModelIndex& index) const;
     QModelIndex indexForAlbum(Album *album) const;
     QModelIndex rootAlbumIndex() const;
 
@@ -70,7 +70,7 @@ public:
         SpecialMatch
     };
     MatchResult matches(Album *album) const;
-    MatchResult matches(const QModelIndex &index) const;
+    MatchResult matches(const QModelIndex& index) const;
 
 public Q_SLOTS:
 
@@ -85,8 +85,8 @@ protected:
     // use setSourceAlbumModel please
     virtual void setSourceModel(QAbstractItemModel* model);
 
-    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
-    bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
+    bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
+    bool lessThan(const QModelIndex& left, const QModelIndex& right) const;
 
 protected:
 

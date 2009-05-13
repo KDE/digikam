@@ -121,7 +121,7 @@ public:
      *  Up or below the min and max values of the list given,
      *  default stepping is used.
      */
-    void setSuggestedValues(const QList<double> &values);
+    void setSuggestedValues(const QList<double>& values);
 
     /** Sets the value that should be set as first value
      *  when first moving away from the minimum value. */
@@ -173,7 +173,7 @@ public:
      *  Up or below the min and max values of the list given,
      *  default stepping is used.
      */
-    void setSuggestedValues(const QList<int> &values);
+    void setSuggestedValues(const QList<int>& values);
 
     /** Sets the value that should be set as first value
      *  when first moving away from the minimum value. */
@@ -187,7 +187,7 @@ public:
 
     /** Call this with a fraction prefix (like "1/") to enable
      *  magic handling of the value as fraction denominator. */
-    void enableFractionMagic(const QString &prefix);
+    void enableFractionMagic(const QString& prefix);
 
     /** Resets to minimum value */
     void reset();
@@ -199,7 +199,7 @@ public:
 protected:
 
     virtual QString textFromValue(int value) const;
-    virtual int valueFromText(const QString &text) const;
+    virtual int valueFromText(const QString& text) const;
     virtual StepEnabled stepEnabled() const;
 
 private Q_SLOTS:

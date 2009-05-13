@@ -34,7 +34,7 @@ class kio_digikamsearch : public KIO::SlaveBase
 
 public:
 
-    kio_digikamsearch(const QByteArray &pool_socket, const QByteArray &app_socket);
+    kio_digikamsearch(const QByteArray& pool_socket, const QByteArray& app_socket);
     ~kio_digikamsearch();
 
     void special(const QByteArray& data);

@@ -92,7 +92,7 @@ ImageFilterModel::ImageFilterModel(QObject *parent)
     d_ptr->init(this);
 }
 
-ImageFilterModel::ImageFilterModel(ImageFilterModelPrivate &dd, QObject *parent)
+ImageFilterModel::ImageFilterModel(ImageFilterModelPrivate& dd, QObject *parent)
                 : KCategorizedSortFilterProxyModel(parent),
                   d_ptr(&dd)
 {
@@ -171,7 +171,7 @@ void ImageFilterModel::setSourceImageModel(ImageModel *sourceModel)
     setSourceModel(d->imageModel);
 }
 
-QVariant ImageFilterModel::data(const QModelIndex &index, int role) const
+QVariant ImageFilterModel::data(const QModelIndex& index, int role) const
 {
     Q_D(const ImageFilterModel);
     if (!index.isValid())
@@ -200,59 +200,59 @@ QVariant ImageFilterModel::data(const QModelIndex &index, int role) const
 
 // -------------- Convenience mappers --------------
 
-QList<QModelIndex> ImageFilterModel::mapListToSource(const QList<QModelIndex> &indexes) const
+QList<QModelIndex> ImageFilterModel::mapListToSource(const QList<QModelIndex>& indexes) const
 {
     QList<QModelIndex> sourceIndexes;
-    foreach (const QModelIndex &index, indexes)
+    foreach (const QModelIndex& index, indexes)
         sourceIndexes << mapToSource(index);
     return sourceIndexes;
 }
 
-QList<QModelIndex> ImageFilterModel::mapListFromSource(const QList<QModelIndex> &sourceIndexes) const
+QList<QModelIndex> ImageFilterModel::mapListFromSource(const QList<QModelIndex>& sourceIndexes) const
 {
     QList<QModelIndex> indexes;
-    foreach (const QModelIndex &index, sourceIndexes)
+    foreach (const QModelIndex& index, sourceIndexes)
         indexes << mapFromSource(index);
     return indexes;
 }
 
-ImageInfo ImageFilterModel::imageInfo(const QModelIndex &index) const
+ImageInfo ImageFilterModel::imageInfo(const QModelIndex& index) const
 {
     Q_D(const ImageFilterModel);
     return d->imageModel->imageInfo(mapToSource(index));
 }
 
-qlonglong ImageFilterModel::imageId(const QModelIndex &index) const
+qlonglong ImageFilterModel::imageId(const QModelIndex& index) const
 {
     Q_D(const ImageFilterModel);
     return d->imageModel->imageId(mapToSource(index));
 }
 
-QList<ImageInfo> ImageFilterModel::imageInfos(const QList<QModelIndex> &indexes) const
+QList<ImageInfo> ImageFilterModel::imageInfos(const QList<QModelIndex>& indexes) const
 {
     Q_D(const ImageFilterModel);
     QList<ImageInfo> infos;
-    foreach (const QModelIndex &index, indexes)
+    foreach (const QModelIndex& index, indexes)
         infos << d->imageModel->imageInfo(mapToSource(index));
     return infos;
 }
 
-QList<qlonglong> ImageFilterModel::imageIds(const QList<QModelIndex> &indexes) const
+QList<qlonglong> ImageFilterModel::imageIds(const QList<QModelIndex>& indexes) const
 {
     Q_D(const ImageFilterModel);
     QList<qlonglong> ids;
-    foreach (const QModelIndex &index, indexes)
+    foreach (const QModelIndex& index, indexes)
         ids << d->imageModel->imageId(mapToSource(index));
     return ids;
 }
 
-QModelIndex ImageFilterModel::indexForPath(const QString &filePath) const
+QModelIndex ImageFilterModel::indexForPath(const QString& filePath) const
 {
     Q_D(const ImageFilterModel);
     return mapFromSource(d->imageModel->indexForPath(filePath));
 }
 
-QModelIndex ImageFilterModel::indexForImageInfo(const ImageInfo &info) const
+QModelIndex ImageFilterModel::indexForImageInfo(const ImageInfo& info) const
 {
     Q_D(const ImageFilterModel);
     return mapFromSource(d->imageModel->indexForImageInfo(info));
@@ -315,7 +315,7 @@ void ImageFilterModel::setTextFilter(const SearchTextSettings& settings)
     setImageFilterSettings(d->filter);
 }
 
-void ImageFilterModel::setImageFilterSettings(const ImageFilterSettings &settings)
+void ImageFilterModel::setImageFilterSettings(const ImageFilterSettings& settings)
 {
     Q_D(ImageFilterModel);
 
@@ -367,7 +367,7 @@ void ImageFilterModel::slotModelReset()
     d->categoryCountHashString.clear();
 }
 
-bool ImageFilterModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
+bool ImageFilterModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
 {
     Q_D(const ImageFilterModel);
     if (source_parent.isValid())
@@ -384,7 +384,7 @@ bool ImageFilterModel::filterAcceptsRow(int source_row, const QModelIndex &sourc
 
 // -------------- Threaded preparation & filtering --------------
 
-void ImageFilterModelPrivate::preprocessInfos(const QList<ImageInfo> &infos)
+void ImageFilterModelPrivate::preprocessInfos(const QList<ImageInfo>& infos)
 {
     infosToProcess(infos, true);
 }
@@ -418,7 +418,7 @@ void ImageFilterModelPrivate::setupWorkers()
             this, SLOT(packageDiscarded(const ImageFilterModelTodoPackage &)));
 }
 
-void ImageFilterModelPrivate::infosToProcess(const QList<ImageInfo> &infos, bool forReAdd)
+void ImageFilterModelPrivate::infosToProcess(const QList<ImageInfo>& infos, bool forReAdd)
 {
     // prepare and filter in chunks
     const int size = infos.size();
@@ -444,7 +444,7 @@ void ImageFilterModelPrivate::infosToProcess(const QList<ImageInfo> &infos, bool
     }
 }
 
-void ImageFilterModelPrivate::packageFinished(const ImageFilterModelTodoPackage &package)
+void ImageFilterModelPrivate::packageFinished(const ImageFilterModelTodoPackage& package)
 {
     // check if it got discarded on the journey
     if (package.version != version)
@@ -476,7 +476,7 @@ void ImageFilterModelPrivate::packageFinished(const ImageFilterModelTodoPackage 
     }
 }
 
-void ImageFilterModelPrivate::packageDiscarded(const ImageFilterModelTodoPackage &package)
+void ImageFilterModelPrivate::packageDiscarded(const ImageFilterModelTodoPackage& package)
 {
     // Either, the model was reset, or the filter changed
     // In the former case throw all away, in the latter case, recycle
@@ -510,7 +510,7 @@ void ImageFilterModelPreparer::process(ImageFilterModelTodoPackage package)
     //TODO: Make efficient!!
     if (needPrepareComments)
     {
-        foreach(const ImageInfo &info, package.infos)
+        foreach(const ImageInfo& info, package.infos)
         {
             info.comment();
         }
@@ -525,7 +525,7 @@ void ImageFilterModelPreparer::process(ImageFilterModelTodoPackage package)
     //TODO: Make efficient!!
     if (needPrepareTags)
     {
-        foreach(const ImageInfo &info, package.infos)
+        foreach(const ImageInfo& info, package.infos)
         {
             info.tagIds();
         }
@@ -549,7 +549,7 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
         localFilter = d->filterCopy;
     }
 
-    foreach (const ImageInfo &info, package.infos)
+    foreach (const ImageInfo& info, package.infos)
     {
         package.filterResults[info.id()] = localFilter.matches(info);
     }
@@ -592,7 +592,7 @@ ImageFilterModel::SortOrder ImageFilterModel::sortOrder() const
     return d->sortOrder;
 }
 
-int ImageFilterModel::compareCategories(const QModelIndex &left, const QModelIndex &right) const
+int ImageFilterModel::compareCategories(const QModelIndex& left, const QModelIndex& right) const
 {
     // source indexes
     Q_D(const ImageFilterModel);
@@ -601,7 +601,7 @@ int ImageFilterModel::compareCategories(const QModelIndex &left, const QModelInd
     return compareInfosCategories(d->imageModel->imageInfoRef(left), d->imageModel->imageInfoRef(right));
 }
 
-bool ImageFilterModel::subSortLessThan(const QModelIndex &left, const QModelIndex &right) const
+bool ImageFilterModel::subSortLessThan(const QModelIndex& left, const QModelIndex& right) const
 {
     // source indexes
     Q_D(const ImageFilterModel);
@@ -610,7 +610,7 @@ bool ImageFilterModel::subSortLessThan(const QModelIndex &left, const QModelInde
     return infosLessThan(d->imageModel->imageInfoRef(left), d->imageModel->imageInfoRef(right));
 }
 
-int ImageFilterModel::compareInfosCategories(const ImageInfo &left, const ImageInfo &right) const
+int ImageFilterModel::compareInfosCategories(const ImageInfo& left, const ImageInfo& right) const
 {
     // Note: reimplemented in ImageAlbumFilterModel
     Q_D(const ImageFilterModel);
@@ -649,7 +649,7 @@ int ImageFilterModel::compareInfosCategories(const ImageInfo &left, const ImageI
     }
 }
 
-int ImageFilterModel::categoryCount(const ImageInfo &info) const
+int ImageFilterModel::categoryCount(const ImageInfo& info) const
 {
     Q_D(const ImageFilterModel);
     switch (d->categorizationMode)
@@ -666,7 +666,7 @@ int ImageFilterModel::categoryCount(const ImageInfo &info) const
     }
 }
 
-QString ImageFilterModel::categoryIdentifier(const ImageInfo &info) const
+QString ImageFilterModel::categoryIdentifier(const ImageInfo& info) const
 {
     Q_D(const ImageFilterModel);
     switch (d->categorizationMode)
@@ -684,7 +684,7 @@ QString ImageFilterModel::categoryIdentifier(const ImageInfo &info) const
     }
 }
 
-bool ImageFilterModel::infosLessThan(const ImageInfo &left, const ImageInfo &right) const
+bool ImageFilterModel::infosLessThan(const ImageInfo& left, const ImageInfo& right) const
 {
     Q_D(const ImageFilterModel);
     switch (d->sortOrder)
@@ -714,7 +714,7 @@ bool ImageFilterModel::infosLessThan(const ImageInfo &left, const ImageInfo &rig
 
 // -------------- Watching changes --------------
 
-void ImageFilterModel::slotImageTagChange(const ImageTagChangeset &changeset)
+void ImageFilterModel::slotImageTagChange(const ImageTagChangeset& changeset)
 {
     Q_D(ImageFilterModel);
 
@@ -741,7 +741,7 @@ void ImageFilterModel::slotImageTagChange(const ImageTagChangeset &changeset)
     }
 }
 
-void ImageFilterModel::slotImageChange(const ImageChangeset &changeset)
+void ImageFilterModel::slotImageChange(const ImageChangeset& changeset)
 {
     Q_D(ImageFilterModel);
 

@@ -55,15 +55,15 @@ public:
     /** This method return the drawing line history
      *  as XML, to be stored in database as SAlbum data.
      */
-    void sketchImageToXML(QXmlStreamWriter &writer);
+    void sketchImageToXML(QXmlStreamWriter& writer);
     QString sketchImageToXML();
 
     /** This method set sketch image using XML data based
      *  on drawing line history.
      *  Return true if data are imported successfully.
      */
-    bool setSketchImageFromXML(QXmlStreamReader &reader);
-    bool setSketchImageFromXML(const QString &xml);
+    bool setSketchImageFromXML(QXmlStreamReader& reader);
+    bool setSketchImageFromXML(const QString& xml);
 
 Q_SIGNALS:
 
@@ -90,9 +90,9 @@ private:
     void replayEvents(int index);
     void drawLineTo(const QPoint& endPoint);
     void drawLineTo(int width, const QColor& color, const QPoint& start, const QPoint& end);
-    void drawPath(int width, const QColor& color, const QPainterPath &path);
-    void addPath(QXmlStreamReader &reader);
-    //QDomElement addXmlTextElement(QDomDocument &document, QDomElement &target,
+    void drawPath(int width, const QColor& color, const QPainterPath& path);
+    void addPath(QXmlStreamReader& reader);
+    //QDomElement addXmlTextElement(QDomDocument& document, QDomElement& target,
     //                              const QString& tag, const QString& text);
 
 private:

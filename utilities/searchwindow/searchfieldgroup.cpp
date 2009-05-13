@@ -77,7 +77,7 @@ void SearchFieldGroup::setLabel(SearchFieldGroupLabel *label)
             this, SLOT(slotLabelClicked()));
 }
 
-SearchField *SearchFieldGroup::fieldForName(const QString &fieldName)
+SearchField *SearchFieldGroup::fieldForName(const QString& fieldName)
 {
     foreach(SearchField *field, m_fields)
     {
@@ -87,7 +87,7 @@ SearchField *SearchFieldGroup::fieldForName(const QString &fieldName)
     return 0;
 }
 
-void SearchFieldGroup::write(SearchXmlWriter &writer)
+void SearchFieldGroup::write(SearchXmlWriter& writer)
 {
     foreach(SearchField *field, m_fields)
     {
@@ -167,7 +167,7 @@ SearchFieldGroupLabel::SearchFieldGroupLabel(QWidget *parent)
             this, SIGNAL(clicked()));
 }
 
-void SearchFieldGroupLabel::setTitle(const QString &title)
+void SearchFieldGroupLabel::setTitle(const QString& title)
 {
     m_title = title;
     m_titleLabel->setText(title);

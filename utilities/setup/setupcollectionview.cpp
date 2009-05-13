@@ -71,16 +71,16 @@ public:
     SetupCollectionDelegate(QAbstractItemView *view, QObject *parent = 0);
     ~SetupCollectionDelegate();
 
-    virtual QWidget* createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    virtual bool editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem&option, const QModelIndex &index);
-    virtual void paint(QPainter*painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    virtual void setEditorData(QWidget *editor, const QModelIndex &index) const;
-    virtual void setModelData(QWidget *editor,QAbstractItemModel *model, const QModelIndex &index) const;
-    virtual QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    virtual void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    virtual QWidget* createEditor(QWidget *parent, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    virtual bool editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem&option, const QModelIndex& index);
+    virtual void paint(QPainter*painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    virtual void setEditorData(QWidget *editor, const QModelIndex& index) const;
+    virtual void setModelData(QWidget *editor,QAbstractItemModel *model, const QModelIndex& index) const;
+    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    virtual void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem& option, const QModelIndex& index) const;
 
     virtual QList<QWidget*> createItemWidgets() const;
-    virtual void updateItemWidgets(const QList<QWidget*> widgets, const QStyleOptionViewItem &option, const QPersistentModelIndex &index) const;
+    virtual void updateItemWidgets(const QList<QWidget*> widgets, const QStyleOptionViewItem& option, const QPersistentModelIndex& index) const;
 
 signals:
 
@@ -163,7 +163,7 @@ QList<QWidget*> SetupCollectionDelegate::createItemWidgets() const
     return list;
 }
 
-QSize SetupCollectionDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+QSize SetupCollectionDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     // get default size hint
     QSize hint = m_styledDelegate->sizeHint(option, index);
@@ -173,7 +173,7 @@ QSize SetupCollectionDelegate::sizeHint(const QStyleOptionViewItem &option, cons
     {
         // get the largest size hint for the icon/text of all category entries
         int maxStyledWidth = 0;
-        foreach(const QModelIndex &catIndex, static_cast<const SetupCollectionModel*>(index.model())->categoryIndexes())
+        foreach(const QModelIndex& catIndex, static_cast<const SetupCollectionModel*>(index.model())->categoryIndexes())
             maxStyledWidth = qMax(maxStyledWidth, m_styledDelegate->sizeHint(option, catIndex).width());
         const_cast<SetupCollectionDelegate*>(this)->m_categoryMaxStyledWidth = maxStyledWidth;
 
@@ -201,7 +201,7 @@ QSize SetupCollectionDelegate::sizeHint(const QStyleOptionViewItem &option, cons
 }
 
 void SetupCollectionDelegate::updateItemWidgets(const QList<QWidget*> widgets,
-        const QStyleOptionViewItem &option, const QPersistentModelIndex &index) const
+        const QStyleOptionViewItem& option, const QPersistentModelIndex& index) const
 {
     QPushButton *pushButton = static_cast<QPushButton*>(widgets[0]);
     QToolButton *toolButton = static_cast<QToolButton*>(widgets[1]);
@@ -241,35 +241,35 @@ void SetupCollectionDelegate::updateItemWidgets(const QList<QWidget*> widgets,
     }
 }
 
-QWidget* SetupCollectionDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
+QWidget* SetupCollectionDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     return m_styledDelegate->createEditor(parent, option, index);
 }
 
 bool SetupCollectionDelegate::editorEvent(QEvent *event, QAbstractItemModel *model,
-                                          const QStyleOptionViewItem &option, const QModelIndex&index)
+                                          const QStyleOptionViewItem& option, const QModelIndex&index)
 {
     return static_cast<QAbstractItemDelegate*>(m_styledDelegate)->editorEvent(event, model, option, index);
 }
 
-void SetupCollectionDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void SetupCollectionDelegate::paint(QPainter *painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     m_styledDelegate->paint(painter, option, index);
 
     paintWidgets(painter, option, index);
 }
 
-void SetupCollectionDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
+void SetupCollectionDelegate::setEditorData(QWidget *editor, const QModelIndex& index) const
 {
     m_styledDelegate->setEditorData(editor, index);
 }
 
-void SetupCollectionDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
+void SetupCollectionDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex& index) const
 {
     m_styledDelegate->setModelData(editor, model, index);
 }
 
-void SetupCollectionDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void SetupCollectionDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     m_styledDelegate->updateEditorGeometry(editor, option, index);
 }
@@ -345,13 +345,13 @@ SetupCollectionModel::Item::Item()
 {
 }
 
-SetupCollectionModel::Item::Item(const CollectionLocation &location)
+SetupCollectionModel::Item::Item(const CollectionLocation& location)
     : location(location), deleted(false)
 {
     parentId = SetupCollectionModel::typeToCategory(location.type());
 }
 
-SetupCollectionModel::Item::Item(const QString &path, const QString &label, SetupCollectionModel::Category category)
+SetupCollectionModel::Item::Item(const QString& path, const QString& label, SetupCollectionModel::Category category)
     : label(label), path(path), parentId(category), deleted(false)
 {
 }
@@ -384,7 +384,7 @@ void SetupCollectionModel::loadCollections()
     m_collections.clear();
 
     QList<CollectionLocation> locations = CollectionManager::instance()->allLocations();
-    foreach(const CollectionLocation &location, locations)
+    foreach(const CollectionLocation& location, locations)
     {
         m_collections << Item(location);
     }
@@ -398,7 +398,7 @@ void SetupCollectionModel::apply()
     QList<int> newItems, deletedItems, renamedItems;
     for (int i=0; i<m_collections.count(); ++i)
     {
-        const Item &item = m_collections[i];
+        const Item& item = m_collections[i];
         if (item.deleted && !item.location.isNull())
             // if item was deleted and had a valid location, i.e. exists in DB
             deletedItems << i;
@@ -416,7 +416,7 @@ void SetupCollectionModel::apply()
     // Delete deleted items
     foreach (int i, deletedItems)
     {
-        Item &item = m_collections[i];
+        Item& item = m_collections[i];
         CollectionManager::instance()->removeLocation(item.location);
         item.location = CollectionLocation();
     }
@@ -425,7 +425,7 @@ void SetupCollectionModel::apply()
     QList<Item> failedItems;
     foreach (int i, newItems)
     {
-        Item &item = m_collections[i];
+        Item& item = m_collections[i];
         CollectionLocation location;
         if (item.parentId == CategoryRemote)
             location = CollectionManager::instance()->addNetworkLocation(KUrl::fromPath(item.path), item.label);
@@ -445,7 +445,7 @@ void SetupCollectionModel::apply()
     // Rename collections
     foreach (int i, renamedItems)
     {
-        Item &item = m_collections[i];
+        Item& item = m_collections[i];
         CollectionManager::instance()->setLabel(item.location, item.label);
         item.label = QString();
     }
@@ -454,7 +454,7 @@ void SetupCollectionModel::apply()
     if (!failedItems.isEmpty())
     {
         QStringList failedPaths;
-        foreach(const Item &item, failedItems)
+        foreach(const Item& item, failedItems)
             failedPaths << item.path;
         KMessageBox::errorList(m_dialogParentWidget,
                                i18n("It was not possible to add a collection for the following paths:"),
@@ -496,7 +496,7 @@ void SetupCollectionModel::addCollection(int category)
     // Check path: First check with manager
     QString messageFromManager, deviceIcon;
     QList<CollectionLocation> assumeDeleted;
-    foreach (const Item &item, m_collections)
+    foreach (const Item& item, m_collections)
     {
         if (item.deleted && !item.location.isNull())
             assumeDeleted << item.location;
@@ -510,7 +510,7 @@ void SetupCollectionModel::addCollection(int category)
                                              &messageFromManager, &deviceIcon);
 
     // If there are other added collections then CollectionManager does not know about them. Check here.
-    foreach (const Item &item, m_collections)
+    foreach (const Item& item, m_collections)
     {
         if (!item.deleted && item.location.isNull())
         {
@@ -610,7 +610,7 @@ void SetupCollectionModel::deleteCollection(int internalId)
     if (!index.isValid() || internalId >= m_collections.count())
         return;
 
-    Item &item = m_collections[index.internalId()];
+    Item& item = m_collections[index.internalId()];
 
     // Ask for confirmation
     QString label = data(indexForId(internalId, (int)ColumnName), Qt::DisplayRole).toString();
@@ -630,7 +630,7 @@ void SetupCollectionModel::deleteCollection(int internalId)
     }
 }
 
-QVariant SetupCollectionModel::data(const QModelIndex &index, int role) const
+QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid())
         return QVariant();
@@ -668,7 +668,7 @@ QVariant SetupCollectionModel::data(const QModelIndex &index, int role) const
     }
     else
     {
-        const Item &item = m_collections[index.internalId()];
+        const Item& item = m_collections[index.internalId()];
         switch(index.column())
         {
             case ColumnName:
@@ -766,7 +766,7 @@ QVariant SetupCollectionModel::headerData(int section, Qt::Orientation orientati
     return QVariant();
 }
 
-int SetupCollectionModel::rowCount(const QModelIndex &parent) const
+int SetupCollectionModel::rowCount(const QModelIndex& parent) const
 {
     if (!parent.isValid())
         return NumberOfCategories; // Level 0: the three top level items
@@ -780,7 +780,7 @@ int SetupCollectionModel::rowCount(const QModelIndex &parent) const
     // Level 1: item children count
     int parentId = parent.row();
     int rowCount = 0;
-    foreach (const Item &item, m_collections)
+    foreach (const Item& item, m_collections)
     {
         if (!item.deleted && item.parentId == parentId)
             rowCount++;
@@ -793,7 +793,7 @@ int SetupCollectionModel::columnCount(const QModelIndex &/*parent*/) const
     return 4;
 }
 
-Qt::ItemFlags SetupCollectionModel::flags(const QModelIndex &index) const
+Qt::ItemFlags SetupCollectionModel::flags(const QModelIndex& index) const
 {
     if (!index.isValid())
         return Qt::NoItemFlags;
@@ -812,12 +812,12 @@ Qt::ItemFlags SetupCollectionModel::flags(const QModelIndex &index) const
     }
 }
 
-bool SetupCollectionModel::setData(const QModelIndex &index, const QVariant &value, int role)
+bool SetupCollectionModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
     // only editable in one case
     if (index.isValid() && index.internalId() != -1 && index.column() == ColumnName && role == Qt::EditRole)
     {
-        Item &item = m_collections[index.internalId()];
+        Item& item = m_collections[index.internalId()];
         item.label = value.toString();
         emit dataChanged(index, index);
     }
@@ -825,7 +825,7 @@ bool SetupCollectionModel::setData(const QModelIndex &index, const QVariant &val
     return false;
 }
 
-QModelIndex SetupCollectionModel::index(int row, int column, const QModelIndex &parent) const
+QModelIndex SetupCollectionModel::index(int row, int column, const QModelIndex& parent) const
 {
     if (!parent.isValid())
     {
@@ -840,7 +840,7 @@ QModelIndex SetupCollectionModel::index(int row, int column, const QModelIndex &
         int rowCount = 0;
         for (int i=0; i<m_collections.count(); ++i)
         {
-            const Item &item = m_collections[i];
+            const Item& item = m_collections[i];
             if (!item.deleted && item.parentId == parentId)
             {
                 if (rowCount == row)
@@ -852,7 +852,7 @@ QModelIndex SetupCollectionModel::index(int row, int column, const QModelIndex &
     return QModelIndex();
 }
 
-QModelIndex SetupCollectionModel::parent(const QModelIndex &index) const
+QModelIndex SetupCollectionModel::parent(const QModelIndex& index) const
 {
     if (!index.isValid())
         return QModelIndex();
@@ -860,7 +860,7 @@ QModelIndex SetupCollectionModel::parent(const QModelIndex &index) const
     if (index.internalId() == -1)
         return QModelIndex(); // one of the three toplevel items
 
-    const Item &item = m_collections[index.internalId()];
+    const Item& item = m_collections[index.internalId()];
     return createIndex(item.parentId, 0, -1);
 }
 
@@ -880,10 +880,10 @@ QList<QModelIndex> SetupCollectionModel::categoryIndexes() const
 QModelIndex SetupCollectionModel::indexForId(int id, int column) const
 {
     int row = 0;
-    const Item &indexItem = m_collections[id];
+    const Item& indexItem = m_collections[id];
     for (int i=0; i<m_collections.count(); ++i)
     {
-        const Item &item = m_collections[i];
+        const Item& item = m_collections[i];
         if (!item.deleted && item.parentId == indexItem.parentId)
         {
             if (i == id)
@@ -905,14 +905,14 @@ SetupCollectionModel::Category SetupCollectionModel::typeToCategory(CollectionLo
     }
 }
 
-int SetupCollectionModel::categoryButtonMapId(const QModelIndex &index) const
+int SetupCollectionModel::categoryButtonMapId(const QModelIndex& index) const
 {
     if (!index.isValid() || index.parent().isValid())
         return -1;
     return index.row();
 }
 
-int SetupCollectionModel::buttonMapId(const QModelIndex &index) const
+int SetupCollectionModel::buttonMapId(const QModelIndex& index) const
 {
     if (!index.isValid() || index.internalId() == -1)
         return -1;

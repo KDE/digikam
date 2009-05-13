@@ -132,7 +132,7 @@ QString ManualRenameInput::text() const
     return d->parseStringLineEdit->text();
 }
 
-void ManualRenameInput::setText(const QString &text)
+void ManualRenameInput::setText(const QString& text)
 {
     d->parseStringLineEdit->setText(text);
 }
@@ -153,7 +153,7 @@ void ManualRenameInput::slotHideToolTipTracker()
     slotToolTipButtonToggled(false);
 }
 
-QString ManualRenameInput::parser(const QString &parse,
+QString ManualRenameInput::parser(const QString& parse,
                                   const QString &fileName, const QString &cameraName,
                                   const QDateTime &dateTime, int index)
 {
@@ -240,7 +240,7 @@ QString ManualRenameInput::parser(const QString &parse,
     return parsedString;
 }
 
-QString ManualRenameInput::parse(const QString &fileName, const QString &cameraName,
+QString ManualRenameInput::parse(const QString& fileName, const QString& cameraName,
                                  const QDateTime &dateTime, int index) const
 {
     QString parseString = d->parseStringLineEdit->text();
@@ -264,7 +264,7 @@ QString ManualRenameInput::createToolTip()
     QString tooltip;
     tooltip += QString("<table>");
 
-    foreach (const token &token, tokenList)
+    foreach (const token& token, tokenList)
     {
         tooltip += QString("<tr><td><b>%1</b></td><td>:</td><td>%2</td></tr>").arg(token.first)
                                                                               .arg(token.second);
@@ -585,7 +585,7 @@ int RenameCustomizer::startIndex() const
     return d->startIndexInput->value();
 }
 
-QString RenameCustomizer::newName(const QString &fileName, const QDateTime &dateTime,
+QString RenameCustomizer::newName(const QString& fileName, const QDateTime& dateTime,
                                   int index, const QString &extension) const
 {
 

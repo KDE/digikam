@@ -76,25 +76,25 @@ public:
     /**
      * Constructor. Creates an ImageInfo object from a file url.
      */
-    ImageInfo(const KUrl &url);
+    ImageInfo(const KUrl& url);
 
     /**
      * Constructor. Creates an ImageInfo object where the provided information
      * will initially be available cached, without database access.
      */
-    ImageInfo(const ImageListerRecord &record);
+    ImageInfo(const ImageListerRecord& record);
 
-    ImageInfo(const ImageInfo &info);
+    ImageInfo(const ImageInfo& info);
 
     /**
      * Destructor
      */
     ~ImageInfo();
 
-    ImageInfo &operator=(const ImageInfo &info);
+    ImageInfo& operator=(const ImageInfo& info);
 
-    bool operator==(const ImageInfo &info) const;
-    bool operator<(const ImageInfo &info) const;
+    bool operator==(const ImageInfo& info) const;
+    bool operator<(const ImageInfo& info) const;
     uint hash() const;
 
     /**
@@ -192,7 +192,7 @@ public:
      * You need to hold DatabaseAccess to ensure the validity.
      * For simple, cached read access see comment().
      */
-    ImageComments imageComments(DatabaseAccess &access) const;
+    ImageComments imageComments(DatabaseAccess& access) const;
 
     /**
      * Retrieve the ImagePosition object for this item.
@@ -224,7 +224,7 @@ public:
      * Adds tags in the list to the item.
      * Tags are created if they do not yet exist
      */
-    void        addTagPaths(const QStringList &tagPaths);
+    void        addTagPaths(const QStringList& tagPaths);
 
     /**
      * Remove a tag from the item (removes it from database)
@@ -250,7 +250,7 @@ public:
      * @return an ImageInfo object of the new item
      */
     //TODO: Move to album?
-    ImageInfo   copyItem(int dstAlbumID, const QString &dstFileName);
+    ImageInfo   copyItem(int dstAlbumID, const QString& dstFileName);
 
 private:
 
@@ -260,7 +260,7 @@ private:
     DSharedDataPointer<ImageInfoData> m_data;
 };
 
-inline uint qHash(const ImageInfo &info) { return info.hash(); }
+inline uint qHash(const ImageInfo& info) { return info.hash(); }
 
 }  // namespace Digikam
 

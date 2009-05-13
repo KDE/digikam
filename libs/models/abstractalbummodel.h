@@ -82,19 +82,19 @@ public:
                        QObject *parent = 0);
     ~AbstractAlbumModel();
 
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
-    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
-    virtual bool hasChildren(const QModelIndex &parent = QModelIndex()) const;
-    virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-    virtual QModelIndex parent(const QModelIndex &index) const;
+    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
+    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
+    virtual bool hasChildren(const QModelIndex& parent = QModelIndex()) const;
+    virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
+    virtual QModelIndex parent(const QModelIndex& index) const;
 
     virtual Qt::DropActions supportedDropActions() const;
     virtual QStringList mimeTypes() const;
-    virtual bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
-    virtual QMimeData * mimeData(const QModelIndexList &indexes) const;
+    virtual bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex& parent);
+    virtual QMimeData * mimeData(const QModelIndexList& indexes) const;
 
     /// Set a drag drop handler.
     void setDragDropHandler(AlbumModelDragDropHandler *handler);
@@ -103,7 +103,7 @@ public:
     AlbumModelDragDropHandler *dragDropHandler() const;
 
     /** Returns the album object associated with the given model index */
-    Album *albumForIndex(const QModelIndex &index) const;
+    Album *albumForIndex(const QModelIndex& index) const;
     /** Return the QModelIndex for the given album, or an invalid index if 
         the album is not contained in this model. */
     QModelIndex indexForAlbum(Album *album) const;
@@ -177,7 +177,7 @@ public:
 protected:
 
     virtual QString  columnHeader() const;
-    void setColumnHeader(const QString &header);
+    void setColumnHeader(const QString& header);
 
     /// You need to call this from your constructor if you intend to load the thumbnail facilities of this class
     void setupThumbnailLoading();
@@ -222,10 +222,10 @@ public Q_SLOTS:
     /** Displays only the count of the album, without adding child albums' counts.
      *  This is the default.
      *  Can connect to QTreeView's expanded() signal. */
-    void excludeChildrenCount(const QModelIndex &index);
+    void excludeChildrenCount(const QModelIndex& index);
     /** Displays sum of the count of the album and child albums' counts.
      *  Can connect to QTreeView's collapsed() signal. */
-    void includeChildrenCount(const QModelIndex &index);
+    void includeChildrenCount(const QModelIndex& index);
 
 protected:
 
@@ -305,8 +305,8 @@ Q_SIGNALS:
 protected:
 
     virtual QVariant albumData(Album *a, int role) const;
-    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
-    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole );
+    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
+    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
 
     virtual void albumCleared(Album *album);
     virtual void allAlbumsCleared();

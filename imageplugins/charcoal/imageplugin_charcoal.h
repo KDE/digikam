@@ -42,7 +42,7 @@ class ImagePlugin_Charcoal : public Digikam::ImagePlugin
 
 public:
 
-    ImagePlugin_Charcoal(QObject *parent, const QVariantList &args);
+    ImagePlugin_Charcoal(QObject *parent, const QVariantList& args);
     ~ImagePlugin_Charcoal();
 
     void setEnabledActions(bool enable);

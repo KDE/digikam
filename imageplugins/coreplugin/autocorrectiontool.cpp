@@ -187,7 +187,7 @@ AutoCorrectionTool::~AutoCorrectionTool()
        delete [] m_destinationPreviewData;
 }
 
-void AutoCorrectionTool::slotColorSelectedFromTarget(const DColor &color)
+void AutoCorrectionTool::slotColorSelectedFromTarget(const DColor& color)
 {
     m_gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }

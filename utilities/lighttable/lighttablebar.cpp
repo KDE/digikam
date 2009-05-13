@@ -226,7 +226,7 @@ void LightTableBar::slotAssignRatingFiveStar()
     slotAssignRating(5);
 }
 
-void LightTableBar::setOnLeftPanel(const ImageInfo &info)
+void LightTableBar::setOnLeftPanel(const ImageInfo& info)
 {
     for (ThumbBarItem *item = firstItem(); item; item = item->next())
     {
@@ -255,7 +255,7 @@ void LightTableBar::setOnLeftPanel(const ImageInfo &info)
     }
 }
 
-void LightTableBar::setOnRightPanel(const ImageInfo &info)
+void LightTableBar::setOnRightPanel(const ImageInfo& info)
 {
     for (ThumbBarItem *item = firstItem(); item; item = item->next())
     {
@@ -299,7 +299,7 @@ void LightTableBar::slotItemSelected(ThumbBarItem* item)
     emit signalLightTableBarItemSelected(ImageInfo());
 }
 
-void LightTableBar::removeItemByInfo(const ImageInfo &info)
+void LightTableBar::removeItemByInfo(const ImageInfo& info)
 {
     if (info.isNull()) return;
 
@@ -651,7 +651,7 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
 
 // -------------------------------------------------------------------------
 
-LightTableBarItem::LightTableBarItem(LightTableBar *view, const ImageInfo &info)
+LightTableBarItem::LightTableBarItem(LightTableBar *view, const ImageInfo& info)
                  : ImagePreviewBarItem(view, info.fileUrl()),
                    d(new LightTableBarItemPriv)
 {

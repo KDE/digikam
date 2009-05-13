@@ -54,7 +54,7 @@ DImgGaussianBlur::DImgGaussianBlur(DImg *orgImage, QObject *parent, double radiu
 }
 
 DImgGaussianBlur::DImgGaussianBlur(DImgThreadedFilter *parentFilter,
-                                   const DImg &orgImage, const DImg &destImage,
+                                   const DImg& orgImage, const DImg& destImage,
                                    int progressBegin, int progressEnd, double radius)
                 : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
                                      parentFilter->filterName() + ": GaussianBlur")

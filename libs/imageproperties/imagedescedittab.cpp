@@ -521,7 +521,7 @@ void ImageDescEditTab::slotApplyAllChanges()
 
         DatabaseTransaction transaction;
 
-        foreach(const ImageInfo &info, d->currInfos)
+        foreach(const ImageInfo& info, d->currInfos)
         {
             // apply to database
             hub.write(info);
@@ -538,7 +538,7 @@ void ImageDescEditTab::slotApplyAllChanges()
                                    i18n("Writing metadata to files. Please wait..."));
         int i = 0;
 
-        foreach(const ImageInfo &info, d->currInfos)
+        foreach(const ImageInfo& info, d->currInfos)
         {
             QString filePath = info.filePath();
 
@@ -577,7 +577,7 @@ void ImageDescEditTab::slotRevertAllChanges()
     setInfos(d->currInfos);
 }
 
-void ImageDescEditTab::setItem(const ImageInfo &info)
+void ImageDescEditTab::setItem(const ImageInfo& info)
 {
     slotChangingItems();
     ImageInfoList list;
@@ -586,13 +586,13 @@ void ImageDescEditTab::setItem(const ImageInfo &info)
     setInfos(list);
 }
 
-void ImageDescEditTab::setItems(const ImageInfoList &infos)
+void ImageDescEditTab::setItems(const ImageInfoList& infos)
 {
     slotChangingItems();
     setInfos(infos);
 }
 
-void ImageDescEditTab::setInfos(const ImageInfoList &infos)
+void ImageDescEditTab::setInfos(const ImageInfoList& infos)
 {
     if (infos.isEmpty())
     {
@@ -612,7 +612,7 @@ void ImageDescEditTab::setInfos(const ImageInfoList &infos)
     d->applyBtn->setEnabled(false);
     d->revertBtn->setEnabled(false);
 
-    foreach(const ImageInfo &info, d->currInfos)
+    foreach(const ImageInfo& info, d->currInfos)
     {
         d->hub.load(info);
     }
@@ -640,7 +640,7 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
     // This requires a new ScanController/CollectionScanner/ImageScanner method.
     // This method must care about stuff like merging existing tags with metadata etc.
 
-    foreach(const ImageInfo &info, d->currInfos)
+    foreach(const ImageInfo& info, d->currInfos)
     {
         // A batch operation: a hub for each single file, not the common hub
         MetadataHub fileHub(MetadataHub::NewTagsImport);
@@ -670,7 +670,7 @@ void ImageDescEditTab::slotWriteToFileMetadataFromDatabase()
     MetadataWriteSettings writeSettings = MetadataHub::defaultWriteSettings();
 
     int i=0;
-    foreach(const ImageInfo &info, d->currInfos)
+    foreach(const ImageInfo& info, d->currInfos)
     {
         MetadataHub fileHub;
         // read in from database
@@ -1549,7 +1549,7 @@ void ImageDescEditTab::reloadForMetadataChange(qlonglong imageId)
     else
     {
         // if image id is in our list, update
-        foreach(const ImageInfo &info, d->currInfos)
+        foreach(const ImageInfo& info, d->currInfos)
         {
             if (info.id() == imageId)
             {

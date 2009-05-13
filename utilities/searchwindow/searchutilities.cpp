@@ -346,7 +346,7 @@ void CustomStepsDoubleSpinBox::stepBy(int steps)
     }
 }
 
-void CustomStepsDoubleSpinBox::setSuggestedValues(const QList<double> &values)
+void CustomStepsDoubleSpinBox::setSuggestedValues(const QList<double>& values)
 {
     connect(this, SIGNAL(valueChanged(double)),
             this, SLOT(slotValueChanged(double)));
@@ -477,7 +477,7 @@ void CustomStepsIntSpinBox::stepBy(int steps)
     }
 }
 
-void CustomStepsIntSpinBox::setSuggestedValues(const QList<int> &values)
+void CustomStepsIntSpinBox::setSuggestedValues(const QList<int>& values)
 {
     connect(this, SIGNAL(valueChanged(int)),
             this, SLOT(slotValueChanged(int)));
@@ -502,7 +502,7 @@ void CustomStepsIntSpinBox::setInvertStepping(bool invert)
     m_invertStepping = invert;
 }
 
-void CustomStepsIntSpinBox::enableFractionMagic(const QString &prefix)
+void CustomStepsIntSpinBox::enableFractionMagic(const QString& prefix)
 {
     m_fractionPrefix = prefix;
     qSort(m_values.begin(), m_values.end(), qGreater<int>());
@@ -526,7 +526,7 @@ QString CustomStepsIntSpinBox::textFromValue(int value) const
         return QSpinBox::textFromValue(value);
 }
 
-int CustomStepsIntSpinBox::valueFromText(const QString &text) const
+int CustomStepsIntSpinBox::valueFromText(const QString& text) const
 {
     // reimplemented for fraction magic handling
     if (m_fractionPrefix.isNull())

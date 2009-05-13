@@ -42,7 +42,7 @@ class ImagePlugin_Border : public Digikam::ImagePlugin
 
 public:
 
-    ImagePlugin_Border(QObject *parent, const QVariantList &args);
+    ImagePlugin_Border(QObject *parent, const QVariantList& args);
     ~ImagePlugin_Border();
 
     void setEnabledActions(bool enable);

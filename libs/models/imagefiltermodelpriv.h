@@ -50,7 +50,7 @@ public:
 
     ImageFilterModelTodoPackage()
         : version(0), isForReAdd(false) {}
-    ImageFilterModelTodoPackage(const QVector<ImageInfo> &infos, int version, bool isForReAdd)
+    ImageFilterModelTodoPackage(const QVector<ImageInfo>& infos, int version, bool isForReAdd)
         : infos(infos), version(version), isForReAdd(isForReAdd) {}
 
     QVector<ImageInfo>         infos;
@@ -73,7 +73,7 @@ public:
 
     void init(ImageFilterModel *q);
     void setupWorkers();
-    void infosToProcess(const QList<ImageInfo> &infos, bool forReAdd);
+    void infosToProcess(const QList<ImageInfo>& infos, bool forReAdd);
 
 public:
 
@@ -113,20 +113,20 @@ public:
 
     void cacheCategoryCount(int id, qlonglong imageid) const
     { const_cast<ImageFilterModelPrivate*>(this)->categoryCountHashInt[id].insert(imageid); }
-    void cacheCategoryCount(const QString &id, qlonglong imageid) const
+    void cacheCategoryCount(const QString& id, qlonglong imageid) const
     { const_cast<ImageFilterModelPrivate*>(this)->categoryCountHashString[id].insert(imageid); }
 
 public Q_SLOTS:
 
-    void preprocessInfos(const QList<ImageInfo> &infos);
-    void packageFinished(const ImageFilterModelTodoPackage &package);
-    void packageDiscarded(const ImageFilterModelTodoPackage &package);
+    void preprocessInfos(const QList<ImageInfo>& infos);
+    void packageFinished(const ImageFilterModelTodoPackage& package);
+    void packageDiscarded(const ImageFilterModelTodoPackage& package);
 
 Q_SIGNALS:
 
-    void packageToPrepare(const ImageFilterModelTodoPackage &package);
-    void packageToFilter(const ImageFilterModelTodoPackage &package);
-    void reAddImageInfos(const QList<ImageInfo> &infos);
+    void packageToPrepare(const ImageFilterModelTodoPackage& package);
+    void packageToFilter(const ImageFilterModelTodoPackage& package);
+    void reAddImageInfos(const QList<ImageInfo>& infos);
 };
 
 } // namespace Digikam

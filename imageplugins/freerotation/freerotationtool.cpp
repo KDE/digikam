@@ -423,7 +423,7 @@ void FreeRotationTool::renderingFinished()
     kapp->restoreOverrideCursor();
 }
 
-QString FreeRotationTool::generatePointLabel(const QPoint &p)
+QString FreeRotationTool::generatePointLabel(const QPoint& p)
 {
     if (!pointIsValid(p))
         return QString(i18n("Click to set"));
@@ -523,7 +523,7 @@ void FreeRotationTool::slotAutoAdjustClicked()
     resetPoints();
 }
 
-QPixmap FreeRotationTool::generateBtnPixmap(const QString &label, const QColor &color)
+QPixmap FreeRotationTool::generateBtnPixmap(const QString& label, const QColor& color)
 {
     QPixmap pm(22, 22);
     pm.fill(Qt::transparent);
@@ -545,7 +545,7 @@ double FreeRotationTool::calculateAutoAngle()
     return calculateAngle(m_autoAdjustPoint1, m_autoAdjustPoint2);
 }
 
-double FreeRotationTool::calculateAngle(const QPoint &p1, const QPoint &p2)
+double FreeRotationTool::calculateAngle(const QPoint& p1, const QPoint& p2)
 {
     // check if all points are valid
     if (!pointIsValid(p1) && !pointIsValid(p2))
@@ -578,13 +578,13 @@ double FreeRotationTool::calculateAngle(const QPoint &p1, const QPoint &p2)
     return angle;
 }
 
-void FreeRotationTool::setPointInvalid(QPoint &p)
+void FreeRotationTool::setPointInvalid(QPoint& p)
 {
     p.setX(-1);
     p.setY(-1);
 }
 
-bool FreeRotationTool::pointIsValid(const QPoint &p)
+bool FreeRotationTool::pointIsValid(const QPoint& p)
 {
     bool valid = true;
     if (p.x() == -1 || p.y() == -1)

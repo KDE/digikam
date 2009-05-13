@@ -84,7 +84,7 @@ void AbstractSearchGroupContainer::startReadingGroups(SearchXmlCachingReader &)
     m_groupIndex = 0;
 }
 
-void AbstractSearchGroupContainer::readGroup(SearchXmlCachingReader &reader)
+void AbstractSearchGroupContainer::readGroup(SearchXmlCachingReader& reader)
 {
     SearchGroup *group = 0;
     if (m_groupIndex >= m_groups.size())
@@ -108,7 +108,7 @@ void AbstractSearchGroupContainer::finishReadingGroups()
         m_groups.first()->reset();
 }
 
-void AbstractSearchGroupContainer::writeGroups(SearchXmlWriter &writer)
+void AbstractSearchGroupContainer::writeGroups(SearchXmlWriter& writer)
 {
     foreach (SearchGroup *group, m_groups)
         group->write(writer);
@@ -208,7 +208,7 @@ void SearchView::setBottomBar(SearchViewBottomBar *bar)
             this, SLOT(slotResetButton()));
 }
 
-void SearchView::read(const QString &xml)
+void SearchView::read(const QString& xml)
 {
     SearchXmlCachingReader reader(xml);
 

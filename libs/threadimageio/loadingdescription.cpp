@@ -26,25 +26,25 @@
 namespace Digikam
 {
 
-bool LoadingDescription::PreviewParameters::operator==(const PreviewParameters &other) const
+bool LoadingDescription::PreviewParameters::operator==(const PreviewParameters& other) const
 {
     return type          == other.type
            && size       == other.size
            && exifRotate == other.exifRotate;
 }
 
-LoadingDescription::LoadingDescription(const QString &filePath)
+LoadingDescription::LoadingDescription(const QString& filePath)
                   : filePath(filePath)
 {
     rawDecodingSettings = DRawDecoding();
 }
 
-LoadingDescription::LoadingDescription(const QString &filePath, DRawDecoding settings)
+LoadingDescription::LoadingDescription(const QString& filePath, DRawDecoding settings)
                   : filePath(filePath), rawDecodingSettings(settings)
 {
 }
 
-LoadingDescription::LoadingDescription(const QString &filePath, int size, bool exifRotate,
+LoadingDescription::LoadingDescription(const QString& filePath, int size, bool exifRotate,
                                        LoadingDescription::PreviewParameters::PreviewType type)
                   : filePath(filePath)
 {
@@ -113,19 +113,19 @@ bool LoadingDescription::isReducedVersion() const
         || previewParameters.type != PreviewParameters::NoPreview;
 }
 
-bool LoadingDescription::operator==(const LoadingDescription &other) const
+bool LoadingDescription::operator==(const LoadingDescription& other) const
 {
     return filePath == other.filePath &&
             rawDecodingSettings == other.rawDecodingSettings &&
             previewParameters == other.previewParameters;
 }
 
-bool LoadingDescription::equalsIgnoreReducedVersion(const LoadingDescription &other) const
+bool LoadingDescription::equalsIgnoreReducedVersion(const LoadingDescription& other) const
 {
     return filePath == other.filePath;
 }
 
-bool LoadingDescription::equalsOrBetterThan(const LoadingDescription &other) const
+bool LoadingDescription::equalsOrBetterThan(const LoadingDescription& other) const
 {
     // This method is similar to operator==. But it returns true as well if other
     // Loads a "better" version than this.
@@ -156,7 +156,7 @@ bool LoadingDescription::isPreviewImage() const
     return previewParameters.type == PreviewParameters::PreviewImage;
 }
 
-QStringList LoadingDescription::possibleCacheKeys(const QString &filePath)
+QStringList LoadingDescription::possibleCacheKeys(const QString& filePath)
 {
     QStringList keys;
     keys << filePath + "-16";
@@ -168,7 +168,7 @@ QStringList LoadingDescription::possibleCacheKeys(const QString &filePath)
     return keys;
 }
 
-QStringList LoadingDescription::possibleThumbnailCacheKeys(const QString &filePath)
+QStringList LoadingDescription::possibleThumbnailCacheKeys(const QString& filePath)
 {
     QStringList keys;
     // there are 256 possible keys...

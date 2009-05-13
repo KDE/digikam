@@ -120,7 +120,7 @@ public:
     * @param semiMajorAxis The equatorial radius.
     * @param semiMinorAxis The polar radius.
     */
-    static Ellipsoid createEllipsoid(const QString &name,
+    static Ellipsoid createEllipsoid(const QString& name,
                                      double semiMajorAxis, double semiMinorAxis);
 
     /**
@@ -131,7 +131,7 @@ public:
     * @param inverseFlattening The inverse flattening value.
     *                          values.
     */
-    static Ellipsoid createFlattenedSphere(const QString &name,
+    static Ellipsoid createFlattenedSphere(const QString& name,
                                            double semiMajorAxis, double inverseFlattening);
 
     /**
@@ -231,9 +231,9 @@ protected:
     * @see #createEllipsoid
     * @see #createFlattenedSphere
     */
-    Ellipsoid(const QString &name, double semiMajorAxis, double  semiMinorAxis,
+    Ellipsoid(const QString& name, double semiMajorAxis, double  semiMinorAxis,
               double inverseFlattening, bool ivfDefinitive);
-    Ellipsoid(const QString &name, double radius, bool ivfDefinitive);
+    Ellipsoid(const QString& name, double radius, bool ivfDefinitive);
 
     QString name;
 
@@ -295,7 +295,7 @@ class DIGIKAM_EXPORT GeodeticCalculator
 
 public:
 
-    GeodeticCalculator(const Ellipsoid &e = Ellipsoid::WGS84());
+    GeodeticCalculator(const Ellipsoid& e = Ellipsoid::WGS84());
 
 
     /**

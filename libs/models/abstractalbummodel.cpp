@@ -77,7 +77,7 @@ AbstractAlbumModel::~AbstractAlbumModel()
     delete d;
 }
 
-QVariant AbstractAlbumModel::data(const QModelIndex &index, int role) const
+QVariant AbstractAlbumModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid())
         return QVariant();
@@ -114,7 +114,7 @@ QVariant AbstractAlbumModel::headerData(int section, Qt::Orientation orientation
     return QVariant();
 }
 
-int AbstractAlbumModel::rowCount(const QModelIndex &parent) const
+int AbstractAlbumModel::rowCount(const QModelIndex& parent) const
 {
     if (parent.isValid())
     {
@@ -138,7 +138,7 @@ int AbstractAlbumModel::columnCount(const QModelIndex &/*parent*/) const
     return 1;
 }
 
-Qt::ItemFlags AbstractAlbumModel::flags(const QModelIndex &index) const
+Qt::ItemFlags AbstractAlbumModel::flags(const QModelIndex& index) const
 {
     if (!index.isValid())
         return 0;
@@ -147,7 +147,7 @@ Qt::ItemFlags AbstractAlbumModel::flags(const QModelIndex &index) const
     return itemFlags(a);
 }
 
-bool AbstractAlbumModel::hasChildren(const QModelIndex &parent) const
+bool AbstractAlbumModel::hasChildren(const QModelIndex& parent) const
 {
     if (parent.isValid())
     {
@@ -166,7 +166,7 @@ bool AbstractAlbumModel::hasChildren(const QModelIndex &parent) const
     }
 }
 
-QModelIndex AbstractAlbumModel::index(int row, int column, const QModelIndex &parent) const
+QModelIndex AbstractAlbumModel::index(int row, int column, const QModelIndex& parent) const
 {
     if (column != 0)
         return QModelIndex();
@@ -198,7 +198,7 @@ QModelIndex AbstractAlbumModel::index(int row, int column, const QModelIndex &pa
     return QModelIndex();
 }
 
-QModelIndex AbstractAlbumModel::parent(const QModelIndex &index) const
+QModelIndex AbstractAlbumModel::parent(const QModelIndex& index) const
 {
     if (index.isValid())
     {
@@ -226,13 +226,13 @@ bool AbstractAlbumModel::dropMimeData(const QMimeData *, Qt::DropAction, int, in
     return false;
 }
 
-QMimeData *AbstractAlbumModel::mimeData(const QModelIndexList &indexes) const
+QMimeData *AbstractAlbumModel::mimeData(const QModelIndexList& indexes) const
 {
     if (!d->dragDropHandler)
         return 0;
 
     QList<Album*> albums;
-    foreach (const QModelIndex &index, indexes)
+    foreach (const QModelIndex& index, indexes)
     {
         Album *a = albumForIndex(index);
         if (a)
@@ -285,7 +285,7 @@ QModelIndex AbstractAlbumModel::indexForAlbum(Album *a) const
     return createIndex(row, 0, a);
 }
 
-Album *AbstractAlbumModel::albumForIndex(const QModelIndex &index) const
+Album *AbstractAlbumModel::albumForIndex(const QModelIndex& index) const
 {
     return static_cast<Album*>(index.internalPointer());
 }
@@ -434,7 +434,7 @@ QString AbstractSpecificAlbumModel::columnHeader() const
     return m_columnHeader;
 }
 
-void AbstractSpecificAlbumModel::setColumnHeader(const QString &header)
+void AbstractSpecificAlbumModel::setColumnHeader(const QString& header)
 {
     m_columnHeader = header;
     emit headerDataChanged(Qt::Horizontal, 0, 0);
@@ -505,7 +505,7 @@ bool AbstractCountingAlbumModel::showCount() const
     return m_showCount;
 }
 
-void AbstractCountingAlbumModel::excludeChildrenCount(const QModelIndex &index)
+void AbstractCountingAlbumModel::excludeChildrenCount(const QModelIndex& index)
 {
     Album *album = albumForIndex(index);
     if (!album)
@@ -514,7 +514,7 @@ void AbstractCountingAlbumModel::excludeChildrenCount(const QModelIndex &index)
     updateCount(album);
 }
 
-void AbstractCountingAlbumModel::includeChildrenCount(const QModelIndex &index)
+void AbstractCountingAlbumModel::includeChildrenCount(const QModelIndex& index)
 {
     Album *album = albumForIndex(index);
     if (!album)
@@ -728,12 +728,12 @@ QVariant AbstractCheckableAlbumModel::albumData(Album *a, int role) const
     return AbstractCountingAlbumModel::albumData(a, role);
 }
 
-Qt::ItemFlags AbstractCheckableAlbumModel::flags(const QModelIndex &index) const
+Qt::ItemFlags AbstractCheckableAlbumModel::flags(const QModelIndex& index) const
 {
     return AbstractCountingAlbumModel::flags(index) | m_extraFlags;
 }
 
-bool AbstractCheckableAlbumModel::setData(const QModelIndex &index, const QVariant &value, int role)
+bool AbstractCheckableAlbumModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
     if (role == Qt::CheckStateRole)
     {

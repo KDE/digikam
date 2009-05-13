@@ -35,18 +35,18 @@
 namespace Digikam
 {
 
-DatabaseUrl DatabaseUrl::fromFileUrl(const KUrl &fileUrl,
-                                     const KUrl &albumRoot,
-                                     const DatabaseParameters &parameters)
+DatabaseUrl DatabaseUrl::fromFileUrl(const KUrl& fileUrl,
+                                     const KUrl& albumRoot,
+                                     const DatabaseParameters& parameters)
 {
     CollectionLocation location = CollectionManager::instance()->locationForAlbumRoot(albumRoot);
     return fromFileUrl(fileUrl, albumRoot, location.id(), parameters);
 }
 
-DatabaseUrl DatabaseUrl::fromFileUrl(const KUrl &fileUrl,
-                                     const KUrl &albumRoot,
+DatabaseUrl DatabaseUrl::fromFileUrl(const KUrl& fileUrl,
+                                     const KUrl& albumRoot,
                                      int   albumRootId,
-                                     const DatabaseParameters &parameters)
+                                     const DatabaseParameters& parameters)
 {
     DatabaseUrl url;
     url.setProtocol("digikamalbums");
@@ -61,20 +61,20 @@ DatabaseUrl DatabaseUrl::fromFileUrl(const KUrl &fileUrl,
     return url;
 }
 
-DatabaseUrl DatabaseUrl::fromAlbumAndName(const QString &name,
-                                          const QString &album,
-                                          const KUrl &albumRoot,
-                                          const DatabaseParameters &parameters)
+DatabaseUrl DatabaseUrl::fromAlbumAndName(const QString& name,
+                                          const QString& album,
+                                          const KUrl& albumRoot,
+                                          const DatabaseParameters& parameters)
 {
     CollectionLocation location = CollectionManager::instance()->locationForAlbumRoot(albumRoot);
     return fromAlbumAndName(name, album, albumRoot, location.id(), parameters);
 }
 
-DatabaseUrl DatabaseUrl::fromAlbumAndName(const QString &name,
-                                          const QString &album,
-                                          const KUrl &albumRoot,
+DatabaseUrl DatabaseUrl::fromAlbumAndName(const QString& name,
+                                          const QString& album,
+                                          const KUrl& albumRoot,
                                           int   albumRootId,
-                                          const DatabaseParameters &parameters)
+                                          const DatabaseParameters& parameters)
 {
     DatabaseUrl url;
     url.setProtocol("digikamalbums");
@@ -89,7 +89,7 @@ DatabaseUrl DatabaseUrl::fromAlbumAndName(const QString &name,
     return url;
 }
 
-DatabaseUrl DatabaseUrl::albumUrl(const DatabaseParameters &parameters)
+DatabaseUrl DatabaseUrl::albumUrl(const DatabaseParameters& parameters)
 {
     DatabaseUrl url;
     url.setProtocol("digikamalbums");
@@ -97,8 +97,8 @@ DatabaseUrl DatabaseUrl::albumUrl(const DatabaseParameters &parameters)
     return url;
 }
 
-DatabaseUrl DatabaseUrl::fromTagIds(const QList<int> &tagIds,
-                                   const DatabaseParameters &parameters)
+DatabaseUrl DatabaseUrl::fromTagIds(const QList<int>& tagIds,
+                                   const DatabaseParameters& parameters)
 {
     DatabaseUrl url;
     url.setProtocol("digikamtags");
@@ -112,7 +112,7 @@ DatabaseUrl DatabaseUrl::fromTagIds(const QList<int> &tagIds,
     return url;
 }
 
-DatabaseUrl DatabaseUrl::dateUrl(const DatabaseParameters &parameters)
+DatabaseUrl DatabaseUrl::dateUrl(const DatabaseParameters& parameters)
 {
     DatabaseUrl url;
     url.setProtocol("digikamdates");
@@ -120,8 +120,8 @@ DatabaseUrl DatabaseUrl::dateUrl(const DatabaseParameters &parameters)
     return url;
 }
 
-DatabaseUrl DatabaseUrl::fromDateForMonth(const QDate &date,
-                                   const DatabaseParameters &parameters)
+DatabaseUrl DatabaseUrl::fromDateForMonth(const QDate& date,
+                                   const DatabaseParameters& parameters)
 {
     QDate firstDayOfMonth(date.year(), date.month(), 1);
     QDate firstDayOfNextMonth = firstDayOfMonth.addMonths(1);
@@ -129,8 +129,8 @@ DatabaseUrl DatabaseUrl::fromDateForMonth(const QDate &date,
     return fromDateRange(firstDayOfMonth, firstDayOfNextMonth, parameters);
 }
 
-DatabaseUrl DatabaseUrl::fromDateForYear(const QDate &date,
-                                  const DatabaseParameters &parameters)
+DatabaseUrl DatabaseUrl::fromDateForYear(const QDate& date,
+                                  const DatabaseParameters& parameters)
 {
     QDate firstDayOfYear(date.year(), 1, 1);
     QDate firstDayOfNextYear = firstDayOfYear.addYears(1);
@@ -138,9 +138,9 @@ DatabaseUrl DatabaseUrl::fromDateForYear(const QDate &date,
     return fromDateRange(firstDayOfYear, firstDayOfNextYear, parameters);
 }
 
-DatabaseUrl DatabaseUrl::fromDateRange(const QDate &startDate,
-                                       const QDate &endDate,
-                                       const DatabaseParameters &parameters)
+DatabaseUrl DatabaseUrl::fromDateRange(const QDate& startDate,
+                                       const QDate& endDate,
+                                       const DatabaseParameters& parameters)
 {
     DatabaseUrl url;
     url.setProtocol("digikamdates");
@@ -152,7 +152,7 @@ DatabaseUrl DatabaseUrl::fromDateRange(const QDate &startDate,
 }
 
 DatabaseUrl DatabaseUrl::searchUrl(int id,
-                                   const DatabaseParameters &parameters)
+                                   const DatabaseParameters& parameters)
 {
     DatabaseUrl url;
     url.setProtocol("digikamsearch");
@@ -161,12 +161,12 @@ DatabaseUrl DatabaseUrl::searchUrl(int id,
     return url;
 }
 
-DatabaseUrl::DatabaseUrl(const KUrl &digikamalbumsUrl)
+DatabaseUrl::DatabaseUrl(const KUrl& digikamalbumsUrl)
            : KUrl(digikamalbumsUrl)
 {
 }
 
-DatabaseUrl::DatabaseUrl(const DatabaseUrl &url)
+DatabaseUrl::DatabaseUrl(const DatabaseUrl& url)
            : KUrl(url)
 {
 }
@@ -175,19 +175,19 @@ DatabaseUrl::DatabaseUrl()
 {
 }
 
-DatabaseUrl &DatabaseUrl::operator=(const KUrl &digikamalbumsUrl)
+DatabaseUrl& DatabaseUrl::operator=(const KUrl& digikamalbumsUrl)
 {
     KUrl::operator=(digikamalbumsUrl);
     return *this;
 }
 
-DatabaseUrl &DatabaseUrl::operator=(const DatabaseUrl &url)
+DatabaseUrl& DatabaseUrl::operator=(const DatabaseUrl& url)
 {
     KUrl::operator=(url);
     return *this;
 }
 
-bool DatabaseUrl::operator==(const KUrl &digikamalbumsUrl)
+bool DatabaseUrl::operator==(const KUrl& digikamalbumsUrl)
 {
     return KUrl::operator==(digikamalbumsUrl);
 }
@@ -206,7 +206,7 @@ DatabaseParameters DatabaseUrl::parameters() const
     return DatabaseParameters(*this);
 }
 
-void DatabaseUrl::setParameters(const DatabaseParameters &parameters)
+void DatabaseUrl::setParameters(const DatabaseParameters& parameters)
 {
     parameters.insertInUrl(*this);
 }

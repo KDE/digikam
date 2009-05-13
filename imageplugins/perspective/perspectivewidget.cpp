@@ -236,7 +236,7 @@ void PerspectiveWidget::slotToggleDrawGrid(bool grid)
     repaint();
 }
 
-void PerspectiveWidget::slotChangeGuideColor(const QColor &color)
+void PerspectiveWidget::slotChangeGuideColor(const QColor& color)
 {
     m_guideColor = color;
     updatePixmap();
@@ -514,7 +514,7 @@ QPoint PerspectiveWidget::buildPerspective(QPoint orignTopLeft, QPoint orignBott
 }
 
 void PerspectiveWidget::transformAffine(Digikam::DImg *orgImage, Digikam::DImg *destImage,
-                                        const Matrix &matrix, Digikam::DColor background)
+                                        const Matrix& matrix, Digikam::DColor background)
 {
     Matrix      m(matrix), inv(matrix);
 

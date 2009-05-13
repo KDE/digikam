@@ -303,9 +303,9 @@ public:
     /// Constructor for root album
     PAlbum(const QString& title);
     /// Constructor for album root albums
-    PAlbum(int albumRoot, const QString &label);
+    PAlbum(int albumRoot, const QString& label);
     /// Constructor for normal albums
-    PAlbum(int albumRoot, const QString &parentPath, const QString& title, int id);
+    PAlbum(int albumRoot, const QString& parentPath, const QString& title, int id);
     ~PAlbum();
 
     void setCaption(const QString& caption);
@@ -418,7 +418,7 @@ class SAlbum : public Album
 {
 public:
 
-    SAlbum(const QString &title, int id, bool root=false);
+    SAlbum(const QString& title, int id, bool root=false);
     ~SAlbum();
 
     DatabaseUrl          databaseUrl() const;
@@ -434,7 +434,7 @@ public:
 
 private:
 
-    void setSearch(DatabaseSearch::Type type, const QString &query);
+    void setSearch(DatabaseSearch::Type type, const QString& query);
 
 private:
 

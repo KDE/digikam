@@ -37,7 +37,7 @@ class ImagePlugin_AdjustCurves : public Digikam::ImagePlugin
 
 public:
 
-    ImagePlugin_AdjustCurves(QObject *parent, const QList<QVariant> &args);
+    ImagePlugin_AdjustCurves(QObject *parent, const QList<QVariant>& args);
     ~ImagePlugin_AdjustCurves();
 
     void setEnabledActions(bool enable);

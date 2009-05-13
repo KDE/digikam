@@ -54,7 +54,7 @@ public:
      * Read the given search into the search widgets.
      * The id will be emitted with the searchEdited signal.
      */
-    void readSearch(int id, const QString &query);
+    void readSearch(int id, const QString& query);
 
     /**
      * Reset the search widget to an empty search.
@@ -73,7 +73,7 @@ Q_SIGNALS:
      * Signals that the user has finished editing the search.
      * The given query is the same as search().
      */
-    void searchEdited(int id, const QString &query);
+    void searchEdited(int id, const QString& query);
 
 protected Q_SLOTS:
 

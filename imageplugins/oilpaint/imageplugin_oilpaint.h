@@ -41,7 +41,7 @@ class ImagePlugin_OilPaint : public Digikam::ImagePlugin
 
 public:
 
-    ImagePlugin_OilPaint(QObject *parent, const QVariantList &args);
+    ImagePlugin_OilPaint(QObject *parent, const QVariantList& args);
     ~ImagePlugin_OilPaint();
 
     void setEnabledActions(bool enable);

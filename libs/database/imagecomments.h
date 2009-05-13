@@ -94,12 +94,12 @@ public:
      * Create a ImageComments object for the image with the specified id.
      * The existing DatabaseAccess object will be used to access the database.
      */
-    ImageComments(DatabaseAccess &access, qlonglong imageid);
+    ImageComments(DatabaseAccess& access, qlonglong imageid);
 
-    ImageComments(const ImageComments &other);
+    ImageComments(const ImageComments& other);
     ~ImageComments();
 
-    ImageComments &operator=(const ImageComments &other);
+    ImageComments& operator=(const ImageComments& other);
 
     bool isNull() const;
 
@@ -122,7 +122,7 @@ public:
      * Matching behavior can be specified.
      * Optionally also returns the index with which you can access further information about the comment.
      */
-    QString commentForLanguage(const QString &languageCode, int *index = 0,
+    QString commentForLanguage(const QString& languageCode, int *index = 0,
                                LanguageChoiceBehavior behavior = ReturnMatchingDefaultOrFirstLanguage) const;
 
     /** Returns the number of comments available. */
@@ -143,49 +143,49 @@ public:
      * the default language ("x-default").
      * If you just want to change the one comment of the image, call addComment(myComment);
      */
-    void addComment(const QString &comment,
-                    const QString &language = QString(),
-                    const QString &author = QString(),
-                    const QDateTime &date = QDateTime(),
+    void addComment(const QString& comment,
+                    const QString& language = QString(),
+                    const QString& author = QString(),
+                    const QDateTime& date = QDateTime(),
                     DatabaseComment::Type type = DatabaseComment::Comment);
 
     /** Convenience method to add a comment of type Headline. Calls addComment, see above for more info. */
-    void addHeadline(const QString &comment,
-                     const QString &language = QString(),
-                     const QString &author = QString(),
-                     const QDateTime &date = QDateTime());
+    void addHeadline(const QString& comment,
+                     const QString& language = QString(),
+                     const QString& author = QString(),
+                     const QDateTime& date = QDateTime());
     /** Convenience method to add a comment of type Headline. Calls addComment, see above for more info. */
-    void addTitle(const QString &comment,
-                  const QString &language = QString(),
-                  const QString &author = QString(),
-                  const QDateTime &date = QDateTime());
+    void addTitle(const QString& comment,
+                  const QString& language = QString(),
+                  const QString& author = QString(),
+                  const QDateTime& date = QDateTime());
 
     /**
      * Access individual properties.
      * Please ensure that the specified index is a valid index
      */
 
-    void changeComment(int index, const QString &comment);
-    void changeLanguage(int index, const QString &language);
-    void changeAuthor(int index, const QString &author);
-    void changeDate(int index, const QDateTime &date);
+    void changeComment(int index, const QString& comment);
+    void changeLanguage(int index, const QString& language);
+    void changeAuthor(int index, const QString& author);
+    void changeDate(int index, const QDateTime& date);
     void changeType(int index, DatabaseComment::Type type);
 
     /**
      * Apply all changes.
      */
     void apply();
-    void apply(DatabaseAccess &access);
+    void apply(DatabaseAccess& access);
 
     // If you need more methods, add your methods here!
 
 protected:
 
-    void addCommentDirect(const QString &comment,
-                          const QString &language,
-                          const QString &author,
+    void addCommentDirect(const QString& comment,
+                          const QString& language,
+                          const QString& author,
                           DatabaseComment::Type type,
-                          const QDateTime &date);
+                          const QDateTime& date);
 
 protected:
 

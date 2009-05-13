@@ -41,7 +41,7 @@ class ImagePlugin_InsertText : public Digikam::ImagePlugin
 
 public:
 
-    ImagePlugin_InsertText(QObject *parent, const QVariantList &args);
+    ImagePlugin_InsertText(QObject *parent, const QVariantList& args);
     ~ImagePlugin_InsertText();
 
     void setEnabledActions(bool enable);

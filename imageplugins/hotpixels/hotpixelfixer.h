@@ -72,11 +72,11 @@ private:
 
     virtual void filterImage();
 
-    void interpolate (Digikam::DImg &img,HotPixel &hp, int method);
-    void weightPixels (Digikam::DImg &img, HotPixel &px, int method,
+    void interpolate (Digikam::DImg& img,HotPixel& hp, int method);
+    void weightPixels (Digikam::DImg& img, HotPixel& px, int method,
                        Direction dir, int maxComponent);
 
-    inline bool validPoint(Digikam::DImg &img, QPoint p)
+    inline bool validPoint(Digikam::DImg& img, QPoint p)
     {
         return (p.x()>=0 && p.y()>=0 && p.x()<(long) img.width() && p.y()<(long) img.height());
     };

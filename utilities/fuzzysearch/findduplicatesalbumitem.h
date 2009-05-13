@@ -56,7 +56,7 @@ public:
 
     void setThumb(const QPixmap& pix);
 
-    bool operator<(const QTreeWidgetItem &other) const;
+    bool operator<(const QTreeWidgetItem& other) const;
 
 private:
 

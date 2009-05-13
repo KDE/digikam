@@ -398,7 +398,7 @@ void DigikamApp::autoDetect()
     QTimer::singleShot(0, this, SLOT(slotCameraAutoDetect()));
 }
 
-void DigikamApp::downloadFrom(const QString &cameraGuiPath)
+void DigikamApp::downloadFrom(const QString& cameraGuiPath)
 {
     // Called from main if command line option is set
 
@@ -411,7 +411,7 @@ void DigikamApp::downloadFrom(const QString &cameraGuiPath)
     }
 }
 
-void DigikamApp::downloadFromUdi(const QString &udi)
+void DigikamApp::downloadFromUdi(const QString& udi)
 {
     // Called from main if command line option is set
 
@@ -1506,7 +1506,7 @@ void DigikamApp::slotCameraAutoDetect()
     }
 }
 
-void DigikamApp::slotOpenCameraUiFromPath(const QString &path)
+void DigikamApp::slotOpenCameraUiFromPath(const QString& path)
 {
     if (path.isEmpty())
         return;
@@ -1552,7 +1552,7 @@ void DigikamApp::slotOpenManualCamera(QAction *action)
     }
 }
 
-void DigikamApp::slotOpenSolidDevice(const QString &udi)
+void DigikamApp::slotOpenSolidDevice(const QString& udi)
 {
     // Identifies device as either Camera or StorageAccess and calls methods accordingly
 
@@ -1585,7 +1585,7 @@ void DigikamApp::slotOpenSolidCamera(QAction *action)
     openSolidCamera(udi, action->iconText());
 }
 
-void DigikamApp::openSolidCamera(const QString &udi, const QString &cameraLabel)
+void DigikamApp::openSolidCamera(const QString& udi, const QString& cameraLabel)
 {
     // if there is already an open CameraUI for the device, show and raise it, and be done
     if (d->cameraUIMap.contains(udi))
@@ -1645,7 +1645,7 @@ void DigikamApp::slotOpenSolidUsmDevice(QAction *action)
     openSolidUsmDevice(udi, action->iconText());
 }
 
-void DigikamApp::openSolidUsmDevice(const QString &udi, const QString &givenLabel)
+void DigikamApp::openSolidUsmDevice(const QString& udi, const QString& givenLabel)
 {
     QString mediaLabel = givenLabel;
 
@@ -1731,7 +1731,7 @@ void DigikamApp::slotSolidSetupDone(Solid::ErrorType errorType, QVariant errorDa
     }
 }
 
-void DigikamApp::slotSolidDeviceChanged(const QString &udi)
+void DigikamApp::slotSolidDeviceChanged(const QString& udi)
 {
     Solid::Device device(udi);
 
@@ -1742,7 +1742,7 @@ void DigikamApp::slotSolidDeviceChanged(const QString &udi)
     }
 }
 
-bool DigikamApp::checkSolidCamera(const Solid::Device &cameraDevice)
+bool DigikamApp::checkSolidCamera(const Solid::Device& cameraDevice)
 {
     const Solid::Camera *camera = cameraDevice.as<Solid::Camera>();
 
@@ -1776,7 +1776,7 @@ bool DigikamApp::checkSolidCamera(const Solid::Device &cameraDevice)
     return true;
 }
 
-QString DigikamApp::labelForSolidCamera(const Solid::Device &cameraDevice)
+QString DigikamApp::labelForSolidCamera(const Solid::Device& cameraDevice)
 {
     QString vendor = cameraDevice.vendor();
     QString product = cameraDevice.product();
@@ -1821,7 +1821,7 @@ void DigikamApp::fillSolidMenus()
 
     QList<Solid::Device> cameraDevices = Solid::Device::listFromType(Solid::DeviceInterface::Camera);
 
-    foreach(const Solid::Device &cameraDevice, cameraDevices)
+    foreach(const Solid::Device& cameraDevice, cameraDevices)
     {
         // USM camera: will be handled below
         if (cameraDevice.is<Solid::StorageAccess>())
@@ -1847,7 +1847,7 @@ void DigikamApp::fillSolidMenus()
 
     QList<Solid::Device> storageDevices = Solid::Device::listFromType(Solid::DeviceInterface::StorageAccess);
 
-    foreach(const Solid::Device &accessDevice, storageDevices)
+    foreach(const Solid::Device& accessDevice, storageDevices)
     {
         // check for StorageAccess
         if (!accessDevice.is<Solid::StorageAccess>())

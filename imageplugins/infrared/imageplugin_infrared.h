@@ -42,7 +42,7 @@ class ImagePlugin_Infrared : public Digikam::ImagePlugin
 
 public:
 
-    ImagePlugin_Infrared(QObject *parent, const QVariantList &args);
+    ImagePlugin_Infrared(QObject *parent, const QVariantList& args);
     ~ImagePlugin_Infrared();
 
     void setEnabledActions(bool enable);

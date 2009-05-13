@@ -38,7 +38,7 @@ public:
     /// Create a model containing all physical albums
     AlbumModel(RootAlbumBehavior rootBehavior = IncludeRootAlbum, QObject *parent = 0);
 
-    PAlbum *albumForIndex(const QModelIndex &index) const;
+    PAlbum *albumForIndex(const QModelIndex& index) const;
 
 protected:
 
@@ -55,7 +55,7 @@ public:
     /// Create a model containing all tags
     TagModel(RootAlbumBehavior rootBehavior = IncludeRootAlbum, QObject *parent = 0);
 
-    TAlbum *albumForIndex(const QModelIndex &index) const;
+    TAlbum *albumForIndex(const QModelIndex& index) const;
 
 protected:
 
@@ -72,7 +72,7 @@ public:
     /// Create a model containing searches
     SearchModel(QObject *parent = 0);
 
-    SAlbum *albumForIndex(const QModelIndex &index) const;
+    SAlbum *albumForIndex(const QModelIndex& index) const;
 
     /** Set the DatabaseSearch::Type. */
     void setSearchType(DatabaseSearch::Type type);
@@ -83,7 +83,7 @@ public:
     void setReplaceNames(QHash<QString, QString> replaceNames);
 
     /** Set a pixmap for the DecorationRole */
-    void setPixmap(const QPixmap &pix);
+    void setPixmap(const QPixmap& pix);
 
 protected:
 
@@ -108,10 +108,10 @@ public:
     /// A model for date based albums
     DateAlbumModel(QObject *parent = 0);
 
-    DAlbum *albumForIndex(const QModelIndex &index) const;
+    DAlbum *albumForIndex(const QModelIndex& index) const;
 
     /** Set pixmaps for the DecorationRole */
-    void setPixmaps(const QPixmap &forYearAlbums, const QPixmap &forMonthAlbums);
+    void setPixmaps(const QPixmap& forYearAlbums, const QPixmap& forMonthAlbums);
 
 public Q_SLOTS:
 

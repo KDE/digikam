@@ -69,7 +69,7 @@ private:
 private Q_SLOTS:
 
     void slotEffect();
-    void slotColorSelectedFromTarget( const Digikam::DColor &color );
+    void slotColorSelectedFromTarget( const Digikam::DColor& color );
 
 private:
 

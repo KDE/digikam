@@ -81,7 +81,7 @@ protected:
 private Q_SLOTS:
 
     void slotLoadingProgress(const LoadingDescription& description, float progress);
-    void slotImageLoaded(const LoadingDescription& description, const DImg &image);
+    void slotImageLoaded(const LoadingDescription& description, const DImg& image);
     void slotThemeChanged();
     void slotCornerButtonPressed();
     void slotPanIconSelectionMoved(const QRect&, bool);

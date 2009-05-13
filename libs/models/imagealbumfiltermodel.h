@@ -46,17 +46,17 @@ public:
     ImageAlbumFilterModel(QObject *parent = 0);
     ~ImageAlbumFilterModel();
 
-    virtual void setImageFilterSettings(const ImageFilterSettings &settings);
+    virtual void setImageFilterSettings(const ImageFilterSettings& settings);
 
     void setSourceImageModel(ImageAlbumModel* model);
     ImageAlbumModel *sourceModel() const;
 
     // convenience mappers
-    void prepareThumbnails(const QList<QModelIndex> &indexesToPrepare);
+    void prepareThumbnails(const QList<QModelIndex>& indexesToPrepare);
 
 protected:
 
-    virtual int compareInfosCategories(const ImageInfo &left, const ImageInfo &right) const;
+    virtual int compareInfosCategories(const ImageInfo& left, const ImageInfo& right) const;
 
 protected Q_SLOTS:
 

@@ -653,7 +653,7 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
     }
 }
 
-void TagFilterView::slotAssignTags(int tagId, const QList<int> &imageIDs)
+void TagFilterView::slotAssignTags(int tagId, const QList<int>& imageIDs)
 {
     TAlbum *destAlbum = AlbumManager::instance()->findTAlbum(tagId);
     if (!destAlbum)

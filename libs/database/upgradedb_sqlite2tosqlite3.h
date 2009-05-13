@@ -35,7 +35,7 @@
 namespace Digikam
 {
 
-extern bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPath);
+extern bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess& access, const QString& sql2DBPath);
 
 }  // namespace Digikam
 

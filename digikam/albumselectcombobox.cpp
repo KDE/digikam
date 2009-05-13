@@ -88,7 +88,7 @@ void AlbumSelectComboBox::setModels(AbstractCheckableAlbumModel *model, QSortFil
     updateText();
 }
 
-void AlbumSelectComboBox::setNoSelectionText(const QString &text)
+void AlbumSelectComboBox::setNoSelectionText(const QString& text)
 {
     m_noSelectionText = text;
     updateText();

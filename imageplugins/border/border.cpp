@@ -179,7 +179,7 @@ void Border::filterImage(void)
 
 // -- Methods to preserve aspect ratio of image ------------------------------------------
 
-void Border::solid(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg, int borderWidth)
+void Border::solid(Digikam::DImg& src, Digikam::DImg& dest, const Digikam::DColor& fg, int borderWidth)
 {
     if (m_orgWidth > m_orgHeight)
     {
@@ -197,16 +197,16 @@ void Border::solid(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColo
     }
 }
 
-void Border::niepce(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg,
-                    int borderWidth, const Digikam::DColor &bg, int lineWidth)
+void Border::niepce(Digikam::DImg& src, Digikam::DImg& dest, const Digikam::DColor& fg,
+                    int borderWidth, const Digikam::DColor& bg, int lineWidth)
 {
     Digikam::DImg tmp;
     solid(src, tmp, bg, lineWidth);
     solid(tmp, dest, fg, borderWidth);
 }
 
-void Border::bevel(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &topColor,
-                   const Digikam::DColor &btmColor, int borderWidth)
+void Border::bevel(Digikam::DImg& src, Digikam::DImg& dest, const Digikam::DColor& topColor,
+                   const Digikam::DColor& btmColor, int borderWidth)
 {
     int width, height;
 
@@ -274,8 +274,8 @@ void Border::bevel(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColo
         dest.bitBltImage(&src, borderWidth, (dest.height() - src.height()) / 2);
 }
 
-void Border::pattern(Digikam::DImg &src, Digikam::DImg &dest, int borderWidth,
-                     const Digikam::DColor &firstColor, const Digikam::DColor &secondColor,
+void Border::pattern(Digikam::DImg& src, Digikam::DImg& dest, int borderWidth,
+                     const Digikam::DColor& firstColor, const Digikam::DColor& secondColor,
                      int firstWidth, int secondWidth)
 {
     // Original image with the first solid border around.
@@ -324,7 +324,7 @@ void Border::pattern(Digikam::DImg &src, Digikam::DImg &dest, int borderWidth,
 // -- Methods to not-preserve aspect ratio of image ------------------------------------------
 
 
-void Border::solid2(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg, int borderWidth)
+void Border::solid2(Digikam::DImg& src, Digikam::DImg& dest, const Digikam::DColor& fg, int borderWidth)
 {
     dest = Digikam::DImg(src.width() + borderWidth*2, src.height() + borderWidth*2,
                          src.sixteenBit(), src.hasAlpha());
@@ -332,16 +332,16 @@ void Border::solid2(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DCol
     dest.bitBltImage(&src, borderWidth, borderWidth);
 }
 
-void Border::niepce2(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg, int borderWidth,
-                     const Digikam::DColor &bg, int lineWidth)
+void Border::niepce2(Digikam::DImg& src, Digikam::DImg& dest, const Digikam::DColor& fg, int borderWidth,
+                     const Digikam::DColor& bg, int lineWidth)
 {
     Digikam::DImg tmp;
     solid2(src, tmp, bg, lineWidth);
     solid2(tmp, dest, fg, borderWidth);
 }
 
-void Border::bevel2(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &topColor,
-                    const Digikam::DColor &btmColor, int borderWidth)
+void Border::bevel2(Digikam::DImg& src, Digikam::DImg& dest, const Digikam::DColor& topColor,
+                    const Digikam::DColor& btmColor, int borderWidth)
 {
     int x, y;
     int wc;
@@ -386,8 +386,8 @@ void Border::bevel2(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DCol
     dest.bitBltImage(&src, borderWidth, borderWidth);
 }
 
-void Border::pattern2(Digikam::DImg &src, Digikam::DImg &dest, int borderWidth,
-                      const Digikam::DColor &firstColor, const Digikam::DColor &secondColor,
+void Border::pattern2(Digikam::DImg& src, Digikam::DImg& dest, int borderWidth,
+                      const Digikam::DColor& firstColor, const Digikam::DColor& secondColor,
                       int firstWidth, int secondWidth)
 {
     // Border tile.

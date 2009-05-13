@@ -66,24 +66,24 @@ public:
 
     ImageQueryBuilder();
 
-    QString buildQuery(const QString &q, QList<QVariant> *boundValues, ImageQueryPostHooks *hooks) const;
+    QString buildQuery(const QString& q, QList<QVariant> *boundValues, ImageQueryPostHooks *hooks) const;
     QString buildQueryFromUrl(const KUrl& url, QList<QVariant> *boundValues) const;
-    QString buildQueryFromXml(const QString &xml, QList<QVariant> *boundValues, ImageQueryPostHooks *hooks) const;
+    QString buildQueryFromXml(const QString& xml, QList<QVariant> *boundValues, ImageQueryPostHooks *hooks) const;
     QString convertFromUrlToXml(const KUrl& url) const;
 
 protected:
 
-    void buildGroup(QString &sql, SearchXmlCachingReader &reader,
+    void buildGroup(QString& sql, SearchXmlCachingReader& reader,
                     QList<QVariant> *boundValues, ImageQueryPostHooks *hooks) const;
-    void buildField(QString &sql, SearchXmlCachingReader &reader, const QString &name,
+    void buildField(QString& sql, SearchXmlCachingReader& reader, const QString& name,
                     QList<QVariant> *boundValues, ImageQueryPostHooks *hooks) const;
 
     QString possibleDate(const QString& str, bool& exact) const;
 
 public:
 
-    static void addSqlOperator(QString &sql, SearchXml::Operator op, bool isFirst);
-    static void addSqlRelation(QString &sql, SearchXml::Relation rel);
+    static void addSqlOperator(QString& sql, SearchXml::Operator op, bool isFirst);
+    static void addSqlRelation(QString& sql, SearchXml::Relation rel);
 
 protected:
 

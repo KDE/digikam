@@ -305,7 +305,7 @@ bool SchemaUpdater::makeUpdates()
     return true;
 }
 
-void SchemaUpdater::defaultFilterSettings(QStringList &defaultImageFilter,
+void SchemaUpdater::defaultFilterSettings(QStringList& defaultImageFilter,
                                           QStringList &defaultVideoFilter,
                                           QStringList &defaultAudioFilter)
 {
@@ -712,7 +712,7 @@ bool SchemaUpdater::createTriggersV5()
     return true;
 }
 
-bool SchemaUpdater::copyV3toV4(const QString &digikam3DBPath, const QString &currentDBPath)
+bool SchemaUpdater::copyV3toV4(const QString& digikam3DBPath, const QString& currentDBPath)
 {
     if (m_observer)
         m_observer->moreSchemaUpdateSteps(2);
@@ -766,7 +766,7 @@ bool SchemaUpdater::copyV3toV4(const QString &digikam3DBPath, const QString &cur
     return true;
 }
 
-bool SchemaUpdater::updateV2toV4(const QString &sqlite2DBPath)
+bool SchemaUpdater::updateV2toV4(const QString& sqlite2DBPath)
 {
     if (m_observer)
         m_observer->moreSchemaUpdateSteps(1);
@@ -807,7 +807,7 @@ static QStringList cleanUserFilterString(const QString &filterString)
         sep = QChar(' ');
 
     QStringList sepList = filterString.split(sep, QString::SkipEmptyParts);
-    foreach (const QString &f, sepList)
+    foreach (const QString& f, sepList)
     {
         if (f.startsWith(wildcard))
             filterList << f.mid(2).trimmed().toLower();

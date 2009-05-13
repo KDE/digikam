@@ -132,7 +132,7 @@ public:
     virtual void showPopup();
 
     QModelIndex currentIndex() const;
-    void setCurrentIndex(const QModelIndex &index);
+    void setCurrentIndex(const QModelIndex& index);
 
 protected:
 
@@ -258,7 +258,7 @@ public:
 
     /** Set the text of the line edit (the text that is visible
         if the popup is not opened) */
-    void setLineEditText(const QString &text);
+    void setLineEditText(const QString& text);
 
 protected:
 

@@ -49,7 +49,7 @@ public:
 
     bool isNull() const;
     uint qHash() const;
-    bool operator==(const Album &other) const;
+    bool operator==(const Album& other) const;
 
     int albumRootId;
     int albumId;
@@ -61,11 +61,11 @@ class DIGIKAM_DATABASE_EXPORT DstPath
 {
 public:
     DstPath();
-    DstPath(int albumRootId, const QString &relativePath);
+    DstPath(int albumRootId, const QString& relativePath);
 
     bool isNull() const;
     uint qHash() const;
-    bool operator==(const DstPath &other) const;
+    bool operator==(const DstPath& other) const;
 
     int albumRootId;
     QString relativePath;
@@ -81,14 +81,14 @@ public:
 
     bool isNull() const;
     uint qHash() const;
-    bool operator==(const Item &other) const;
+    bool operator==(const Item& other) const;
 
     qlonglong id;
 };
 
-inline uint qHash(const Album &src)   { return src.qHash();  }
-inline uint qHash(const DstPath &dst) { return dst.qHash();  }
-inline uint qHash(const Item &item)   { return item.qHash(); }
+inline uint qHash(const Album& src)   { return src.qHash();  }
+inline uint qHash(const DstPath& dst) { return dst.qHash();  }
+inline uint qHash(const Item& item)   { return item.qHash(); }
 
 } // namespace CollectionScannerHints
 
@@ -105,7 +105,7 @@ public:
 
     AlbumCopyMoveHint();
     AlbumCopyMoveHint(int srcAlbumRootId, int srcAlbum,
-                      int dstAlbumRootId, const QString &dstRelativePath);
+                      int dstAlbumRootId, const QString& dstRelativePath);
 
     int albumRootIdSrc() const;
     int albumIdSrc() const;
@@ -114,16 +114,16 @@ public:
 
     int albumRootIdDst() const;
     QString relativePathDst() const;
-    bool isDstAlbum(int albumRootId, const QString &relativePath) const;
+    bool isDstAlbum(int albumRootId, const QString& relativePath) const;
     CollectionScannerHints::DstPath dst() const { return m_dst; }
 
     uint qHash() const;
 
-    bool operator==(const CollectionScannerHints::Album &src)   { return src == m_src; }
-    bool operator==(const CollectionScannerHints::DstPath &dst) { return dst == m_dst; }
+    bool operator==(const CollectionScannerHints::Album& src)   { return src == m_src; }
+    bool operator==(const CollectionScannerHints::DstPath& dst) { return dst == m_dst; }
 
-    AlbumCopyMoveHint &operator<<(const QDBusArgument &argument);
-    const AlbumCopyMoveHint &operator>>(QDBusArgument &argument) const;
+    AlbumCopyMoveHint& operator<<(const QDBusArgument& argument);
+    const AlbumCopyMoveHint& operator>>(QDBusArgument& argument) const;
 
     operator const CollectionScannerHints::Album &() const   { return m_src; }
     operator const CollectionScannerHints::DstPath &() const { return m_dst; }
@@ -158,10 +158,10 @@ public:
     QStringList dstNames() const;
     QString dstName(qlonglong id) const;
 
-    bool operator==(const CollectionScannerHints::Album &dst) { return dst == m_dst; }
+    bool operator==(const CollectionScannerHints::Album& dst) { return dst == m_dst; }
 
-    ItemCopyMoveHint &operator<<(const QDBusArgument &argument);
-    const ItemCopyMoveHint &operator>>(QDBusArgument &argument) const;
+    ItemCopyMoveHint& operator<<(const QDBusArgument& argument);
+    const ItemCopyMoveHint& operator>>(QDBusArgument& argument) const;
 
     operator const CollectionScannerHints::Album&() const { return m_dst; }
 
@@ -173,7 +173,7 @@ protected:
 };
 
 
-inline uint qHash(const Digikam::AlbumCopyMoveHint &hint) { return hint.qHash(); }
+inline uint qHash(const Digikam::AlbumCopyMoveHint& hint) { return hint.qHash(); }
 
 } // namespace Digikam
 

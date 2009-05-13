@@ -196,10 +196,10 @@ public:
     static QString volumeIdentifier(const SolidVolumeInfo &info);
 
     /// Create a volume identifier based on the path only
-    QString volumeIdentifier(const QString &path);
+    QString volumeIdentifier(const QString& path);
 
     /// Create a network share identifier based on the mountpath
-    QString networkShareIdentifier(const QString &path);
+    QString networkShareIdentifier(const QString& path);
 
     /// Return the path, if location has a path-only identifier. Else returns a null string.
     QString pathFromIdentifier(const AlbumRootLocation *location);
@@ -208,10 +208,10 @@ public:
     QString networkShareMountPathFromIdentifier(const AlbumRootLocation *location);
 
     /// Create an MD5 hash of the top-level entries (file names, not file content) of the given path
-    static QString directoryHash(const QString &path);
+    static QString directoryHash(const QString& path);
 
     /// Check if a location for specified path exists, assuming the given list of locations was deleted
-    bool checkIfExists(const QString &path, QList<CollectionLocation> assumeDeleted);
+    bool checkIfExists(const QString& path, QList<CollectionLocation> assumeDeleted);
 
     CollectionManager *s;
 };
@@ -279,7 +279,7 @@ QList<SolidVolumeInfo> CollectionManagerPrivate::actuallyListVolumes()
     QList<Solid::Device> devices = Solid::Device::listFromType(Solid::DeviceInterface::StorageAccess);
     kDebug(50003) << "got listFromType" << endl;
 
-    foreach(const Solid::Device &accessDevice, devices)
+    foreach(const Solid::Device& accessDevice, devices)
     {
         // check for StorageAccess
         if (!accessDevice.is<Solid::StorageAccess>())
@@ -336,7 +336,7 @@ QList<SolidVolumeInfo> CollectionManagerPrivate::actuallyListVolumes()
     return volumes;
 }
 
-QString CollectionManagerPrivate::volumeIdentifier(const SolidVolumeInfo &volume)
+QString CollectionManagerPrivate::volumeIdentifier(const SolidVolumeInfo& volume)
 {
     KUrl url;
     url.setProtocol("volumeid");
@@ -364,7 +364,7 @@ QString CollectionManagerPrivate::volumeIdentifier(const SolidVolumeInfo &volume
     return url.url();
 }
 
-QString CollectionManagerPrivate::volumeIdentifier(const QString &path)
+QString CollectionManagerPrivate::volumeIdentifier(const QString& path)
 {
     KUrl url;
     url.setProtocol("volumeid");
@@ -372,7 +372,7 @@ QString CollectionManagerPrivate::volumeIdentifier(const QString &path)
     return url.url();
 }
 
-QString CollectionManagerPrivate::networkShareIdentifier(const QString &path)
+QString CollectionManagerPrivate::networkShareIdentifier(const QString& path)
 {
     KUrl url;
     url.setProtocol("networkshareid");
@@ -400,14 +400,14 @@ QString CollectionManagerPrivate::networkShareMountPathFromIdentifier(const Albu
     return url.queryItem("mountpath");
 }
 
-QString CollectionManagerPrivate::directoryHash(const QString &path)
+QString CollectionManagerPrivate::directoryHash(const QString& path)
 {
     QDir dir(path);
     if (dir.isReadable())
     {
         QStringList entries = dir.entryList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
         KMD5 hash;
-        foreach (const QString &entry, entries)
+        foreach (const QString& entry, entries)
         {
             hash.update(entry.toUtf8());
         }
@@ -426,7 +426,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForLocation(const AlbumRootL
 
     if (!(queryItem = url.queryItem("uuid")).isNull())
     {
-        foreach (const SolidVolumeInfo &volume, volumes)
+        foreach (const SolidVolumeInfo& volume, volumes)
         {
             if (volume.uuid == queryItem)
                 return volume;
@@ -440,7 +440,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForLocation(const AlbumRootL
 
         // find all available volumes with the given label (usually one)
         QList<SolidVolumeInfo> candidateVolumes;
-        foreach (const SolidVolumeInfo &volume, volumes)
+        foreach (const SolidVolumeInfo& volume, volumes)
         {
             if (volume.label == queryItem)
                 candidateVolumes << volume;
@@ -482,7 +482,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForLocation(const AlbumRootL
             }
 
             // match against directory hash
-            foreach (const SolidVolumeInfo &volume, candidateVolumes)
+            foreach (const SolidVolumeInfo& volume, candidateVolumes)
             {
                 QString volumeDirHash = directoryHash(volume.path);
                 if (volumeDirHash == dirHash)
@@ -493,7 +493,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForLocation(const AlbumRootL
     }
     else if (!(queryItem = url.queryItem("mountpath")).isNull())
     {
-        foreach (const SolidVolumeInfo &volume, volumes)
+        foreach (const SolidVolumeInfo& volume, volumes)
         {
             if (volume.isMounted && volume.path == queryItem)
                 return volume;
@@ -504,7 +504,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForLocation(const AlbumRootL
     return SolidVolumeInfo();
 }
 
-SolidVolumeInfo CollectionManagerPrivate::findVolumeForUrl(const KUrl &url, const QList<SolidVolumeInfo> volumes)
+SolidVolumeInfo CollectionManagerPrivate::findVolumeForUrl(const KUrl& url, const QList<SolidVolumeInfo> volumes)
 {
     SolidVolumeInfo volume;
     QString path = url.path(KUrl::RemoveTrailingSlash);
@@ -512,7 +512,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForUrl(const KUrl &url, cons
 
     //FIXME: Network shares! Here we get only the volume of the mount path...
     // This is probably not really clean. But Solid does not help us.
-    foreach (const SolidVolumeInfo &v, volumes)
+    foreach (const SolidVolumeInfo& v, volumes)
     {
         if (v.isMounted && !v.path.isEmpty() && path.startsWith(v.path))
         {
@@ -533,7 +533,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForUrl(const KUrl &url, cons
     return volume;
 }
 
-bool CollectionManagerPrivate::checkIfExists(const QString &filePath, QList<CollectionLocation> assumeDeleted)
+bool CollectionManagerPrivate::checkIfExists(const QString& filePath, QList<CollectionLocation> assumeDeleted)
 {
     DatabaseAccess access;
     foreach (AlbumRootLocation *location, locations)
@@ -543,7 +543,7 @@ bool CollectionManagerPrivate::checkIfExists(const QString &filePath, QList<Coll
         if (!locationPath.isEmpty() && filePath.startsWith(locationPath))
         {
             bool isDeleted = false;
-            foreach (const CollectionLocation &deletedLoc, assumeDeleted)
+            foreach (const CollectionLocation& deletedLoc, assumeDeleted)
             {
                 if (deletedLoc.id() == location->id())
                 {
@@ -615,7 +615,7 @@ void CollectionManager::refresh()
     updateLocations();
 }
 
-CollectionLocation CollectionManager::addLocation(const KUrl &fileUrl, const QString &label)
+CollectionLocation CollectionManager::addLocation(const KUrl& fileUrl, const QString& label)
 {
     kDebug(50003) << "addLocation " << fileUrl << endl;
     QString path = fileUrl.path(KUrl::RemoveTrailingSlash);
@@ -664,7 +664,7 @@ CollectionLocation CollectionManager::addLocation(const KUrl &fileUrl, const QSt
     return locationForPath(path);
 }
 
-CollectionLocation CollectionManager::addNetworkLocation(const KUrl &fileUrl, const QString &label)
+CollectionLocation CollectionManager::addNetworkLocation(const KUrl& fileUrl, const QString& label)
 {
     kDebug(50003) << "addLocation " << fileUrl << endl;
     QString path = fileUrl.path(KUrl::RemoveTrailingSlash);
@@ -681,7 +681,7 @@ CollectionLocation CollectionManager::addNetworkLocation(const KUrl &fileUrl, co
     return locationForPath(path);
 }
 
-CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KUrl &fileUrl,
+CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KUrl& fileUrl,
         QList<CollectionLocation> assumeDeleted, QString *message, QString *iconName)
 {
     QString path = fileUrl.path(KUrl::RemoveTrailingSlash);
@@ -804,7 +804,7 @@ CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KU
     }
 }
 
-CollectionManager::LocationCheckResult CollectionManager::checkNetworkLocation(const KUrl &fileUrl,
+CollectionManager::LocationCheckResult CollectionManager::checkNetworkLocation(const KUrl& fileUrl,
         QList<CollectionLocation> assumeDeleted, QString *message, QString *iconName)
 {
     QString path = fileUrl.path(KUrl::RemoveTrailingSlash);
@@ -837,7 +837,7 @@ CollectionManager::LocationCheckResult CollectionManager::checkNetworkLocation(c
     return LocationAllRight;
 }
 
-void CollectionManager::removeLocation(const CollectionLocation &location)
+void CollectionManager::removeLocation(const CollectionLocation& location)
 {
     {
         DatabaseAccess access;
@@ -861,7 +861,7 @@ void CollectionManager::removeLocation(const CollectionLocation &location)
     updateLocations();
 }
 
-void CollectionManager::setLabel(const CollectionLocation &location, const QString &label)
+void CollectionManager::setLabel(const CollectionLocation& location, const QString& label)
 {
     DatabaseAccess access;
 
@@ -922,12 +922,12 @@ CollectionLocation CollectionManager::locationForAlbumRootId(int id)
         return CollectionLocation();
 }
 
-CollectionLocation CollectionManager::locationForAlbumRoot(const KUrl &fileUrl)
+CollectionLocation CollectionManager::locationForAlbumRoot(const KUrl& fileUrl)
 {
     return locationForAlbumRootPath(fileUrl.path(KUrl::RemoveTrailingSlash));
 }
 
-CollectionLocation CollectionManager::locationForAlbumRootPath(const QString &albumRootPath)
+CollectionLocation CollectionManager::locationForAlbumRootPath(const QString& albumRootPath)
 {
     DatabaseAccess access;
     QString path = albumRootPath;
@@ -939,12 +939,12 @@ CollectionLocation CollectionManager::locationForAlbumRootPath(const QString &al
     return CollectionLocation();
 }
 
-CollectionLocation CollectionManager::locationForUrl(const KUrl &fileUrl)
+CollectionLocation CollectionManager::locationForUrl(const KUrl& fileUrl)
 {
     return locationForPath(fileUrl.path(KUrl::RemoveTrailingSlash));
 }
 
-CollectionLocation CollectionManager::locationForPath(const QString &filePath)
+CollectionLocation CollectionManager::locationForPath(const QString& filePath)
 {
     DatabaseAccess access;
     foreach (AlbumRootLocation *location, d->locations)
@@ -968,17 +968,17 @@ QString CollectionManager::albumRootPath(int id)
     return QString();
 }
 
-KUrl CollectionManager::albumRoot(const KUrl &fileUrl)
+KUrl CollectionManager::albumRoot(const KUrl& fileUrl)
 {
     return KUrl::fromPath(albumRootPath(fileUrl.path(KUrl::LeaveTrailingSlash)));
 }
 
-QString CollectionManager::albumRootPath(const KUrl &fileUrl)
+QString CollectionManager::albumRootPath(const KUrl& fileUrl)
 {
     return albumRootPath(fileUrl.path(KUrl::LeaveTrailingSlash));
 }
 
-QString CollectionManager::albumRootPath(const QString &filePath)
+QString CollectionManager::albumRootPath(const QString& filePath)
 {
     DatabaseAccess access;
     foreach (AlbumRootLocation *location, d->locations)
@@ -990,12 +990,12 @@ QString CollectionManager::albumRootPath(const QString &filePath)
     return QString();
 }
 
-bool CollectionManager::isAlbumRoot(const KUrl &fileUrl)
+bool CollectionManager::isAlbumRoot(const KUrl& fileUrl)
 {
     return isAlbumRoot(fileUrl.path(KUrl::RemoveTrailingSlash));
 }
 
-bool CollectionManager::isAlbumRoot(const QString &filePath)
+bool CollectionManager::isAlbumRoot(const QString& filePath)
 {
     DatabaseAccess access;
     foreach (AlbumRootLocation *location, d->locations)
@@ -1006,12 +1006,12 @@ bool CollectionManager::isAlbumRoot(const QString &filePath)
     return false;
 }
 
-QString CollectionManager::album(const KUrl &fileUrl)
+QString CollectionManager::album(const KUrl& fileUrl)
 {
     return album(fileUrl.path(KUrl::RemoveTrailingSlash));
 }
 
-QString CollectionManager::album(const QString &filePath)
+QString CollectionManager::album(const QString& filePath)
 {
     DatabaseAccess access;
     foreach (AlbumRootLocation *location, d->locations)
@@ -1036,12 +1036,12 @@ QString CollectionManager::album(const QString &filePath)
     return QString();
 }
 
-QString CollectionManager::album(const CollectionLocation &location, const KUrl &fileUrl)
+QString CollectionManager::album(const CollectionLocation& location, const KUrl& fileUrl)
 {
     return album(location, fileUrl.path(KUrl::RemoveTrailingSlash));
 }
 
-QString CollectionManager::album(const CollectionLocation &location, const QString &filePath)
+QString CollectionManager::album(const CollectionLocation& location, const QString& filePath)
 {
     if (location.isNull())
         return QString();
@@ -1073,7 +1073,7 @@ QString CollectionManager::oneAlbumRootPath()
     return QString();
 }
 
-void CollectionManager::deviceChange(const QString &udi)
+void CollectionManager::deviceChange(const QString& udi)
 {
     Solid::Device device(udi);
     if (device.is<Solid::StorageAccess>())
@@ -1098,7 +1098,7 @@ void CollectionManager::updateLocations()
         // synchronize map with database
         QMap<int, AlbumRootLocation *> locs = d->locations;
         d->locations.clear();
-        foreach (const AlbumRootInfo &info, infos)
+        foreach (const AlbumRootInfo& info, infos)
         {
             if (locs.contains(info.id))
             {
@@ -1187,7 +1187,7 @@ void CollectionManager::updateLocations()
     }
 }
 
-void CollectionManager::slotAlbumRootChange(const AlbumRootChangeset &changeset)
+void CollectionManager::slotAlbumRootChange(const AlbumRootChangeset& changeset)
 {
     if (d->changingDB)
         return;
@@ -1208,7 +1208,7 @@ void CollectionManager::slotAlbumRootChange(const AlbumRootChangeset &changeset)
                     if (location)
                     {
                         QList<AlbumRootInfo> infos = access.db()->getAlbumRoots();
-                        foreach (const AlbumRootInfo &info, infos)
+                        foreach (const AlbumRootInfo& info, infos)
                         {
                             if (info.id == location->id())
                             {

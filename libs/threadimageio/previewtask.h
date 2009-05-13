@@ -48,7 +48,7 @@ public:
 
 private:
 
-    bool needToScale(const QSize &imageSize, int previewSize);
+    bool needToScale(const QSize& imageSize, int previewSize);
     bool loadImagePreview(QImage& image, const QString& path);
 };
 

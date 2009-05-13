@@ -583,7 +583,7 @@ void LightTableWindow::slotThumbbarDroppedItems(const ImageInfoList& list)
 //     c) albumiconview.cpp: AlbumIconView::insertToLightTable
 //          calls ltview->loadImageInfos(list, current);
 // - via drag&drop, i.e. calls issued by the ...Dropped... routines
-void LightTableWindow::loadImageInfos(const ImageInfoList &list,
+void LightTableWindow::loadImageInfos(const ImageInfoList& list,
                                       const ImageInfo &givenImageInfoCurrent,
                                       bool addTo)
 {
@@ -622,7 +622,7 @@ void LightTableWindow::refreshStatusBar()
                    d->barView->countItems()));
 }
 
-void LightTableWindow::slotFileChanged(const QString &path)
+void LightTableWindow::slotFileChanged(const QString& path)
 {
     KUrl url = KUrl::fromPath(path);
     d->barView->reloadThumbs(url);
@@ -703,7 +703,7 @@ void LightTableWindow::slotRightPreviewLoaded(bool b)
     }
 }
 
-void LightTableWindow::slotItemSelected(const ImageInfo &info)
+void LightTableWindow::slotItemSelected(const ImageInfo& info)
 {
     if (!info.isNull())
     {
@@ -810,7 +810,7 @@ void LightTableWindow::slotRightDroppedItems(const ImageInfoList& list)
 }
 
 // Set the images for the left and right panel.
-void LightTableWindow::setLeftRightItems(const ImageInfoList &list, bool addTo)
+void LightTableWindow::setLeftRightItems(const ImageInfoList& list, bool addTo)
 {
     ImageInfoList l = list;
 
@@ -881,7 +881,7 @@ void LightTableWindow::slotSetItemRight()
     }
 }
 
-void LightTableWindow::slotSetItemOnLeftPanel(const ImageInfo &info)
+void LightTableWindow::slotSetItemOnLeftPanel(const ImageInfo& info)
 {
     d->previewView->setLeftImageInfo(info);
     if (!info.isNull())
@@ -890,7 +890,7 @@ void LightTableWindow::slotSetItemOnLeftPanel(const ImageInfo &info)
         d->leftSideBar->slotNoCurrentItem();
 }
 
-void LightTableWindow::slotSetItemOnRightPanel(const ImageInfo &info)
+void LightTableWindow::slotSetItemOnRightPanel(const ImageInfo& info)
 {
     d->previewView->setRightImageInfo(info);
     if (!info.isNull())
@@ -923,7 +923,7 @@ void LightTableWindow::slotDeleteItem()
         slotDeleteItem(d->barView->currentItemImageInfo());
 }
 
-void LightTableWindow::slotDeleteItem(const ImageInfo &info)
+void LightTableWindow::slotDeleteItem(const ImageInfo& info)
 {
     bool ask         = true;
     bool permanently = false;
@@ -982,7 +982,7 @@ void LightTableWindow::slotRemoveItem()
         slotRemoveItem(d->barView->currentItemImageInfo());
 }
 
-void LightTableWindow::slotRemoveItem(const ImageInfo &info)
+void LightTableWindow::slotRemoveItem(const ImageInfo& info)
 {
 /*    if (!d->previewView->leftImageInfo().isNull())
     {
@@ -1231,7 +1231,7 @@ void LightTableWindow::slotEditItem()
         slotEditItem(d->barView->currentItemImageInfo());
 }
 
-void LightTableWindow::slotEditItem(const ImageInfo &info)
+void LightTableWindow::slotEditItem(const ImageInfo& info)
 {
     ImageWindow *im    = ImageWindow::imagewindow();
     ImageInfoList list = d->barView->itemsImageInfoList();

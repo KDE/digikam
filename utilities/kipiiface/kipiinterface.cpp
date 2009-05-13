@@ -160,12 +160,12 @@ void KipiInterface::refreshImages(const KUrl::List& urls)
     m_albumManager->refreshItemHandler(urls);
 
     QSet<QString> dirs;
-    foreach (const KUrl &url, urls)
+    foreach (const KUrl& url, urls)
     {
         LoadingCacheInterface::fileChanged(url.path());
         dirs << url.directory();
     }
-    foreach (const QString &dir, dirs)
+    foreach (const QString& dir, dirs)
         ScanController::instance()->scheduleCollectionScan(dir);
 
 }

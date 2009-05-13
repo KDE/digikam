@@ -70,8 +70,8 @@ private Q_SLOTS:
     void slotResetSettings();
     void slotResetCurrentChannel();
     void slotCurveTypeChanged(int type);
-    void slotSpotColorChanged(const Digikam::DColor &color);
-    void slotColorSelectedFromTarget(const Digikam::DColor &color);
+    void slotSpotColorChanged(const Digikam::DColor& color);
+    void slotColorSelectedFromTarget(const Digikam::DColor& color);
     void slotPickerColorButtonActived();
     void slotChannelChanged();
     void slotScaleChanged();

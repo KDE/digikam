@@ -66,13 +66,13 @@ private Q_SLOTS:
     void saveSearch();
     void storedKeywordChanged();
     void editStoredAdvancedSearch();
-    void advancedSearchEdited(int id, const QString &query);
+    void advancedSearchEdited(int id, const QString& query);
 
 private:
 
-    void setCurrentSearch(DatabaseSearch::Type type, const QString &query, bool selectCurrentAlbum = true);
-    QString queryFromKeywords(const QString &keywords);
-    QString keywordsFromQuery(const QString &query);
+    void setCurrentSearch(DatabaseSearch::Type type, const QString& query, bool selectCurrentAlbum = true);
+    QString queryFromKeywords(const QString& keywords);
+    QString keywordsFromQuery(const QString& query);
     SearchWindow *searchWindow();
 
     SearchTabHeaderPriv* const d;

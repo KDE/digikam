@@ -71,23 +71,23 @@ public:
      * Files no longer found in the specified path however are not completely
      * removed, but only marked as removed. They will be removed only after a complete scan.
      */
-    void partialScan(const QString &filePath);
+    void partialScan(const QString& filePath);
 
     /**
      * Same procedure as above, but albumRoot and album is provided.
      */
-    void partialScan(const QString &albumRoot, const QString& album);
+    void partialScan(const QString& albumRoot, const QString& album);
 
     /**
      * The specified file will be added to the database if it is not included,
      * or rescanned as if it was modified if it is found in the database.
      */
-    void scanFile(const QString &filePath);
+    void scanFile(const QString& filePath);
 
     /**
      * Same procedure as above, but albumRoot and album is provided.
      */
-    void scanFile(const QString &albumRoot, const QString &album, const QString &fileName);
+    void scanFile(const QString& albumRoot, const QString& album, const QString& fileName);
 
     /**
      * Call this to enable the progress info signals.
@@ -98,8 +98,8 @@ public:
     /**
      * Record hints for the collection scanner.
      */
-    void recordHints(const QList<AlbumCopyMoveHint> &hint);
-    void recordHints(const QList<ItemCopyMoveHint> &hint);
+    void recordHints(const QList<AlbumCopyMoveHint>& hint);
+    void recordHints(const QList<ItemCopyMoveHint>& hint);
 
     /**
      * Utility method:
@@ -107,7 +107,7 @@ public:
      * typically by setting the albums as orphan
      * and removing all entries from the albums
      */
-    void safelyRemoveAlbums(const QList<int> &albumIds);
+    void safelyRemoveAlbums(const QList<int>& albumIds);
 
     /**
      * Set an observer to be able to cancel a running scan
@@ -124,11 +124,11 @@ public:
 protected:
 
     void scanForStaleAlbums(QList<CollectionLocation> locations);
-    void scanAlbumRoot(const CollectionLocation &location);
-    void scanAlbum(const CollectionLocation &location, const QString &album);
-    int checkAlbum(const CollectionLocation &location, const QString &album);
-    void scanNewFile(const QFileInfo &info, int albumId);
-    void scanModifiedFile(const QFileInfo &info, const ItemScanInfo &scanInfo);
+    void scanAlbumRoot(const CollectionLocation& location);
+    void scanAlbum(const CollectionLocation& location, const QString& album);
+    int checkAlbum(const CollectionLocation& location, const QString& album);
+    void scanNewFile(const QFileInfo& info, int albumId);
+    void scanModifiedFile(const QFileInfo& info, const ItemScanInfo& scanInfo);
 
 Q_SIGNALS:
 
@@ -142,8 +142,8 @@ Q_SIGNALS:
      * Notifies the begin of the scanning of the specified album root,
      * album, of stale files, or of the whole collection (after stale files)
      */
-    void startScanningAlbumRoot(const QString &albumRoot);
-    void startScanningAlbum(const QString &albumRoot, const QString &album);
+    void startScanningAlbumRoot(const QString& albumRoot);
+    void startScanningAlbum(const QString& albumRoot, const QString& album);
     void startScanningForStaleAlbums();
     void startScanningAlbumRoots();
     void startCompleteScan();
@@ -151,8 +151,8 @@ Q_SIGNALS:
     /**
      * Emitted when the scanning has finished.
      */
-    void finishedScanningAlbumRoot(const QString &albumRoot);
-    void finishedScanningAlbum(const QString &albumRoot, const QString &album, int filesScanned);
+    void finishedScanningAlbumRoot(const QString& albumRoot);
+    void finishedScanningAlbum(const QString& albumRoot, const QString& album, int filesScanned);
     void finishedScanningForStaleAlbums();
     void finishedCompleteScan();
     /**
@@ -169,7 +169,7 @@ protected:
     bool checkDeleteRemoved();
     void loadNameFilters();
     int countItemsInFolder(const QString& directory);
-    DatabaseItem::Category category(const QFileInfo &info);
+    DatabaseItem::Category category(const QFileInfo& info);
 
 private:
 

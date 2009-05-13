@@ -113,7 +113,7 @@ DImg::DImg(uint width, uint height, bool sixteenBit, bool alpha, uchar* data, bo
     putImageData(width, height, sixteenBit, alpha, data, copyData);
 }
 
-DImg::DImg(const DImg &image, int w, int h)
+DImg::DImg(const DImg& image, int w, int h)
     : m_priv(new DImgPrivate)
 {
     // This private constructor creates a copy of everything except the data.
@@ -1246,7 +1246,7 @@ void DImg::bitBltImage(const uchar* src, int sx, int sy, int w, int h, int dx, i
     bitBlt(src, bits(), sx, sy, w, h, dx, dy, swidth, sheight, width(), height(), sixteenBit(), sdepth, bytesDepth());
 }
 
-bool DImg::normalizeRegionArguments(int &sx, int &sy, int &w, int &h, int &dx, int &dy,
+bool DImg::normalizeRegionArguments(int& sx, int& sy, int& w, int& h, int& dx, int& dy,
                                     uint swidth, uint sheight, uint dwidth, uint dheight)
 {
     if (sx < 0)
@@ -2038,7 +2038,7 @@ QByteArray DImg::getUniqueHash()
     return hash;
 }
 
-QByteArray DImg::getUniqueHash(const QString &filePath)
+QByteArray DImg::getUniqueHash(const QString& filePath)
 {
     return DImgLoader::uniqueHash(filePath, DImg(), true);
 }

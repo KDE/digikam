@@ -74,7 +74,7 @@ public:
     QProgressBar *progress;
 };
 
-DProgressDlg::DProgressDlg(QWidget *parent, const QString &caption)
+DProgressDlg::DProgressDlg(QWidget *parent, const QString& caption)
             : KDialog(parent), d(new DProgressDlgPriv)
 {
     setCaption(caption);
@@ -149,17 +149,17 @@ void DProgressDlg::slotCancel()
     emit signalCancelPressed();
 }
 
-void DProgressDlg::setButtonText(const QString &text)
+void DProgressDlg::setButtonText(const QString& text)
 {
     KDialog::setButtonText(Cancel, text);
 }
 
-void DProgressDlg::setButtonGuiItem(const KGuiItem &item)
+void DProgressDlg::setButtonGuiItem(const KGuiItem& item)
 {
     KDialog::setButtonGuiItem(Cancel, item);
 }
 
-void DProgressDlg::addedAction(const QPixmap& itemPix, const QString &text)
+void DProgressDlg::addedAction(const QPixmap& itemPix, const QString& text)
 {
     QPixmap pix = itemPix;
     QTreeWidgetItem *item = new QTreeWidgetItem(d->actionsList, QStringList() << QString() << text);
@@ -212,12 +212,12 @@ int DProgressDlg::value()
     return d->progress->value();
 }
 
-void DProgressDlg::setLabel(const QString &text)
+void DProgressDlg::setLabel(const QString& text)
 {
     d->label->setText(text);
 }
 
-void DProgressDlg::setTitle(const QString &text)
+void DProgressDlg::setTitle(const QString& text)
 {
     d->title->setText(text);
 }

@@ -34,8 +34,8 @@ class kio_digikamdates : public KIO::SlaveBase
 
 public:
 
-    kio_digikamdates(const QByteArray &pool_socket,
-                     const QByteArray &app_socket);
+    kio_digikamdates(const QByteArray& pool_socket,
+                     const QByteArray& app_socket);
     ~kio_digikamdates();
 
     void special(const QByteArray& data);

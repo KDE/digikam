@@ -98,13 +98,13 @@ ImagePluginLoader::ImagePluginLoader(QObject *parent, SplashScreen *splash)
     QStringList imagePluginsList2Load;
 
     const KService::List offers = KServiceTypeTrader::self()->query("Digikam/ImagePlugin");
-    foreach (const KService::Ptr &service, offers)
+    foreach (const KService::Ptr& service, offers)
     {
         if (service)
             d->pluginServiceMap[service->name()] = service;
     }
 
-    foreach (const KService::Ptr &service, d->pluginServiceMap)
+    foreach (const KService::Ptr& service, d->pluginServiceMap)
     {
         if (!d->obsoleteImagePluginsList.contains(service->library()))
             imagePluginsList2Load.append(service->name());
@@ -116,7 +116,7 @@ ImagePluginLoader::ImagePluginLoader(QObject *parent, SplashScreen *splash)
 ImagePluginLoader::~ImagePluginLoader()
 {
     QList<QString> pluginNames = d->pluginMap.keys();
-    foreach(const QString &name, pluginNames)
+    foreach(const QString& name, pluginNames)
     {
         ImagePlugin *plugin = d->pluginMap.value(name);
         KService::Ptr service = d->pluginServiceMap.value(name);
@@ -165,7 +165,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
 
     // Load all other image plugins after (make a coherent menu construction in Image Editor).
 
-    foreach (const QString &name, pluginsToLoad)
+    foreach (const QString& name, pluginsToLoad)
     {
         KService::Ptr service = d->pluginServiceMap.value(name);
         ImagePlugin *plugin;
@@ -209,7 +209,7 @@ ImagePlugin* ImagePluginLoader::pluginIsLoaded(const QString& name)
 
 ImagePlugin* ImagePluginLoader::pluginInstance(const QString& libraryName)
 {
-    foreach (const KService::Ptr &service, d->pluginServiceMap)
+    foreach (const KService::Ptr& service, d->pluginServiceMap)
     {
         if(service->library() == libraryName)
         {
@@ -227,7 +227,7 @@ ImagePlugin* ImagePluginLoader::corePluginInstance()
 
 bool ImagePluginLoader::pluginLibraryIsLoaded(const QString& libraryName)
 {
-    foreach (const KService::Ptr &service, d->pluginServiceMap)
+    foreach (const KService::Ptr& service, d->pluginServiceMap)
     {
         if(service->library() == libraryName)
         {

@@ -141,7 +141,7 @@ public:
 
     struct ItemContainer
     {
-        ItemContainer(ItemContainer *p, ItemContainer *n, const QRect &r)
+        ItemContainer(ItemContainer *p, ItemContainer *n, const QRect& r)
             : prev(p), next(n), rect(r)
         {
             if (prev)
@@ -2068,7 +2068,7 @@ int IconView::cmpItems(const void *n1, const void *n2)
     return i1->group->compare( i2->group );
 }
 
-QPixmap IconView::thumbnailBorderPixmap(const QSize &pixSize)
+QPixmap IconView::thumbnailBorderPixmap(const QSize& pixSize)
 {
     const int radius         = 3;
     const QColor borderColor = QColor(0, 0, 0, 128);

@@ -169,7 +169,7 @@ BCGTool::~BCGTool()
        delete [] m_destinationPreviewData;
 }
 
-void BCGTool::slotColorSelectedFromTarget( const DColor &color )
+void BCGTool::slotColorSelectedFromTarget( const DColor& color )
 {
     m_gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }

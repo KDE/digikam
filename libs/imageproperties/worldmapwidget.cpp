@@ -188,14 +188,14 @@ void WorldMapWidget::setGPSPositions(const GPSInfoList& list)
 #endif // HAVE_MARBLEWIDGET
 }
 
-QDomElement WorldMapWidget::addKmlElement(QDomDocument &kmlDocument, QDomElement &target, const QString& tag)
+QDomElement WorldMapWidget::addKmlElement(QDomDocument& kmlDocument, QDomElement& target, const QString& tag)
 {
     QDomElement kmlElement = kmlDocument.createElement(tag);
     target.appendChild(kmlElement);
     return kmlElement;
 }
 
-QDomElement WorldMapWidget::addKmlTextElement(QDomDocument &kmlDocument, QDomElement &target,
+QDomElement WorldMapWidget::addKmlTextElement(QDomDocument& kmlDocument, QDomElement& target,
                                               const QString& tag, const QString& text)
 {
     QDomElement kmlElement  = kmlDocument.createElement(tag);

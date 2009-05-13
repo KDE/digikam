@@ -42,7 +42,7 @@ class ImagePlugin_Emboss : public Digikam::ImagePlugin
 
 public:
 
-    ImagePlugin_Emboss(QObject *parent, const QVariantList &args);
+    ImagePlugin_Emboss(QObject *parent, const QVariantList& args);
     ~ImagePlugin_Emboss();
 
     void setEnabledActions(bool enable);

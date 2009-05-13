@@ -104,8 +104,8 @@ public:
       * When parameters have been set or changed, the new one will be opened on-demand,
       * i.e. when the first DatabaseAccess object is constructed.
       */
-    static void setParameters(const DatabaseParameters &parameters);
-    static void setParameters(const DatabaseParameters &parameters, ApplicationStatus status);
+    static void setParameters(const DatabaseParameters& parameters);
+    static void setParameters(const DatabaseParameters& parameters, ApplicationStatus status);
 
     /**
       * Method to one-time initialize a database when new parameters have been set:
@@ -135,7 +135,7 @@ public:
     /**
       * Set the "last error" message. This method is not for public use.
       */
-    void setLastError(const QString &error);
+    void setLastError(const QString& error);
 
 private:
 

@@ -38,8 +38,8 @@ class Weights
 public:
 
     Weights(){}
-    Weights(const Weights &w);
-    void operator=(const Weights &w);
+    Weights(const Weights& w);
+    void operator=(const Weights& w);
 
     ~Weights()
     {

@@ -48,14 +48,14 @@ QStringList ImageCopyright::creator()
     QList<CopyrightInfo> infos = DatabaseAccess().db()->getImageCopyright(m_id, 
          ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreator));
     QStringList list;
-    foreach(const CopyrightInfo &info, infos)
+    foreach(const CopyrightInfo& info, infos)
     {
         list << info.value;
     }
     return list;
 }
 
-void ImageCopyright::setCreator(const QString &creator, ReplaceMode mode)
+void ImageCopyright::setCreator(const QString& creator, ReplaceMode mode)
 {
     AlbumDB::CopyrightPropertyUnique uniqueness;
     if (mode == ReplaceAllEntries)
@@ -72,27 +72,27 @@ QString ImageCopyright::provider()
     return readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreProvider));
 }
 
-void ImageCopyright::setProvider(const QString &provider)
+void ImageCopyright::setProvider(const QString& provider)
 {
     setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreProvider), provider);
 }
 
-QString ImageCopyright::copyrightNotice(const QString &languageCode)
+QString ImageCopyright::copyrightNotice(const QString& languageCode)
 {
     return readLanguageProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCopyrightNotice), languageCode);
 }
 
-void ImageCopyright::setCopyrightNotice(const QString &notice, const QString &languageCode, ReplaceMode mode)
+void ImageCopyright::setCopyrightNotice(const QString& notice, const QString& languageCode, ReplaceMode mode)
 {
     setLanguageProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCopyrightNotice), notice, languageCode, mode);
 }
 
-QString ImageCopyright::rightsUsageTerms(const QString &languageCode)
+QString ImageCopyright::rightsUsageTerms(const QString& languageCode)
 {
     return readLanguageProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreRightsUsageTerms), languageCode);
 }
 
-void ImageCopyright::setRightsUsageTerms(const QString &term, const QString &languageCode, ReplaceMode mode)
+void ImageCopyright::setRightsUsageTerms(const QString& term, const QString& languageCode, ReplaceMode mode)
 {
     setLanguageProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreRightsUsageTerms), term, languageCode, mode);
 }
@@ -102,7 +102,7 @@ QString ImageCopyright::source()
     return readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreSource));
 }
 
-void ImageCopyright::setSource(const QString &source)
+void ImageCopyright::setSource(const QString& source)
 {
     setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreSource), source);
 }
@@ -112,7 +112,7 @@ QString ImageCopyright::creatorJobTitle()
     return readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreatorJobTitle));
 }
 
-void ImageCopyright::setCreatorJobTitle(const QString &title)
+void ImageCopyright::setCreatorJobTitle(const QString& title)
 {
     setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreatorJobTitle), title);
 }
@@ -122,13 +122,13 @@ QString ImageCopyright::instructions()
     return readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreInstructions));
 }
 
-void ImageCopyright::setInstructions(const QString &instructions)
+void ImageCopyright::setInstructions(const QString& instructions)
 {
     setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreInstructions), instructions);
 }
 
 
-QString ImageCopyright::readSimpleProperty(const QString &property)
+QString ImageCopyright::readSimpleProperty(const QString& property)
 {
     QList<CopyrightInfo> infos = DatabaseAccess().db()->getImageCopyright(m_id, property);
     if (infos.isEmpty())
@@ -137,12 +137,12 @@ QString ImageCopyright::readSimpleProperty(const QString &property)
         return infos.first().value;
 }
 
-void ImageCopyright::setSimpleProperty(const QString &property, const QString &value)
+void ImageCopyright::setSimpleProperty(const QString& property, const QString& value)
 {
     DatabaseAccess().db()->setImageCopyrightProperty(m_id, property, value, QString(), AlbumDB::PropertyUnique);
 }
 
-QString ImageCopyright::readLanguageProperty(const QString &property, const QString &languageCode)
+QString ImageCopyright::readLanguageProperty(const QString& property, const QString& languageCode)
 {
     QList<CopyrightInfo> infos = DatabaseAccess().db()->getImageCopyright(m_id, property);
     int index = languageMatch(infos, languageCode);
@@ -152,8 +152,8 @@ QString ImageCopyright::readLanguageProperty(const QString &property, const QStr
         return infos[index].value;
 }
 
-void ImageCopyright::setLanguageProperty(const QString &property, const QString &value, 
-                                         const QString &languageCode, ReplaceMode mode)
+void ImageCopyright::setLanguageProperty(const QString& property, const QString& value, 
+                                         const QString& languageCode, ReplaceMode mode)
 {
     AlbumDB::CopyrightPropertyUnique uniqueness;
     if (mode == ReplaceAllEntries)
@@ -170,7 +170,7 @@ void ImageCopyright::setLanguageProperty(const QString &property, const QString 
     DatabaseAccess().db()->setImageCopyrightProperty(m_id, property, value, language, uniqueness);
 }
 
-int ImageCopyright::languageMatch(const QList<CopyrightInfo> infos, const QString &languageCode) const
+int ImageCopyright::languageMatch(const QList<CopyrightInfo> infos, const QString& languageCode) const
 {
     QString langCode;
     QString fullCode = languageCode;
@@ -213,7 +213,7 @@ int ImageCopyright::languageMatch(const QList<CopyrightInfo> infos, const QStrin
 
     for (int i=0; i<infos.size(); ++i)
     {
-        const CopyrightInfo &info = infos[i];
+        const CopyrightInfo& info = infos[i];
 
         if (info.extraValue == fullCode)
         {

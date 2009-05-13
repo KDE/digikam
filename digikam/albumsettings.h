@@ -116,7 +116,7 @@ public:
     ItemRightClickAction getItemRightClickAction() const;
 
     QString getImageFileFilter() const;
-    void addToImageFileFilter(const QString &extensions);
+    void addToImageFileFilter(const QString& extensions);
 
     QString getMovieFileFilter() const;
 

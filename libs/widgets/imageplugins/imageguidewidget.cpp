@@ -246,7 +246,7 @@ void ImageGuideWidget::setSpotVisible(bool spotVisible, bool blink)
     updatePreview();
 }
 
-void ImageGuideWidget::slotChangeGuideColor(const QColor &color)
+void ImageGuideWidget::slotChangeGuideColor(const QColor& color)
 {
     d->guideColor = color;
     updatePreview();
@@ -753,7 +753,7 @@ void ImageGuideWidget::leaveEvent(QEvent*)
     }
 }
 
-void ImageGuideWidget::setPoints(const QPolygon &p, bool drawLine)
+void ImageGuideWidget::setPoints(const QPolygon& p, bool drawLine)
 {
     d->selectedPoints        = p;
     d->drawLineBetweenPoints = drawLine;
@@ -802,7 +802,7 @@ QImage ImageGuideWidget::getMask() const
     return mask;
 }
 
-QPoint ImageGuideWidget::translatePointPosition(QPoint &point)
+QPoint ImageGuideWidget::translatePointPosition(QPoint& point)
 {
     int x = (int)(point.x() * (float)(d->width)  / (float) d->iface->originalWidth());
     int y = (int)(point.y() * (float)(d->height) / (float) d->iface->originalHeight());

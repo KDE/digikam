@@ -171,7 +171,7 @@ public:
     */
     MetadataHub(DatabaseMode dbmode = ManagedTags);
     ~MetadataHub();
-    MetadataHub &operator=(const MetadataHub &);
+    MetadataHub& operator=(const MetadataHub &);
     MetadataHub(const MetadataHub &);
 
     void reset();
@@ -184,19 +184,19 @@ public:
         can be called multiple times on the same MetadataHub object.
         In this case, the metadata will be combined.
     */
-    void load(const ImageInfo &info);
+    void load(const ImageInfo& info);
 
     /**
         Add metadata information from the DMetadata object
     */
-    void load(const DMetadata &metadata);
+    void load(const DMetadata& metadata);
 
     /**
         Load metadata information from the given file.
         (Uses DMetadata, QFileInfo)
         @returns True if the metadata could be loaded
     */
-    bool load(const QString &filePath);
+    bool load(const QString& filePath);
 
     // --------------------------------------------------
 
@@ -226,8 +226,8 @@ public:
         metadata field is not touched.
         @return Returns true if the metadata object has been touched
     */
-    bool write(DMetadata &metadata, WriteMode writeMode = FullWrite,
-               const MetadataWriteSettings &settings = defaultWriteSettings());
+    bool write(DMetadata& metadata, WriteMode writeMode = FullWrite,
+               const MetadataWriteSettings& settings = defaultWriteSettings());
 
     /**
         Constructs a DMetadata object for given filePath,
@@ -235,16 +235,16 @@ public:
         and notifies the ImageAttributesWatch.
         @return Returns if the file has been touched
     */
-    bool write(const QString &filePath, WriteMode writeMode = FullWrite,
-               const MetadataWriteSettings &settings = defaultWriteSettings());
+    bool write(const QString& filePath, WriteMode writeMode = FullWrite,
+               const MetadataWriteSettings& settings = defaultWriteSettings());
 
     /**
         Constructs a DMetadata object from the metadata stored in the given DImg object,
         calls the above method, and changes the stored metadata in the DImg object.
         @return Returns if the DImg object has been touched
     */
-    bool write(DImg &image, WriteMode writeMode = FullWrite,
-               const MetadataWriteSettings &settings = defaultWriteSettings());
+    bool write(DImg& image, WriteMode writeMode = FullWrite,
+               const MetadataWriteSettings& settings = defaultWriteSettings());
 
     /**
         Constructs a MetadataWriteSettings object from the global AlbumSettings object.
@@ -257,7 +257,7 @@ public:
         apply any changes.
     */
     bool willWriteMetadata(WriteMode writeMode,
-                           const MetadataWriteSettings &settings = defaultWriteSettings()) const;
+                           const MetadataWriteSettings& settings = defaultWriteSettings()) const;
 
     // --------------------------------------------------
 
@@ -267,7 +267,7 @@ public:
 
     TagStatus tagStatus(TAlbum *album) const;
     TagStatus tagStatus(int albumId) const;
-    TagStatus tagStatus(const QString &tagPath) const;
+    TagStatus tagStatus(const QString& tagPath) const;
 
     /**
         Returns if the metadata field has been changed
@@ -304,13 +304,13 @@ public:
         If status is MetadataAvailable, the values are the same.
         If status is MetadataInvalid, invalid dates are returned.
     */
-    void                dateTimeInterval(QDateTime &lowest, QDateTime &highest) const;
+    void                dateTimeInterval(QDateTime& lowest, QDateTime& highest) const;
     /**
         Returns the lowest and highest rating.
         If status is MetadataAvailable, the values are the same.
         If status is MetadataInvalid, -1 is returned.
     */
-    void                ratingInterval(int &lowest, int &highest) const;
+    void                ratingInterval(int& lowest, int& highest) const;
 
     /**
         Returns a QStringList with all tags with status MetadataAvailable.
@@ -342,8 +342,8 @@ public:
     /**
         Set dateTime to the given value, and the dateTime status to MetadataAvailable
     */
-    void setDateTime(const QDateTime &dateTime, Status status = MetadataAvailable);
-    void setComment(const QString &comment, Status status = MetadataAvailable);
+    void setDateTime(const QDateTime& dateTime, Status status = MetadataAvailable);
+    void setComment(const QString& comment, Status status = MetadataAvailable);
     void setRating(int rating, Status status = MetadataAvailable);
     void setTag(TAlbum *tag, bool hasTag, Status status = MetadataAvailable);
     void setTag(int albumID, bool hasTag, Status status = MetadataAvailable);
@@ -356,9 +356,9 @@ public:
 
 private:
 
-    void load(const QDateTime &dateTime, const QString &comment, int rating);
-    void loadTags(const QList<TAlbum *> &loadedTags);
-    void loadTags(const QStringList &loadedTagPaths);
+    void load(const QDateTime& dateTime, const QString& comment, int rating);
+    void loadTags(const QList<TAlbum *>& loadedTags);
+    void loadTags(const QStringList& loadedTagPaths);
 
 private:
 

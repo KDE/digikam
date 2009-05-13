@@ -74,7 +74,7 @@ ImageInfo::ImageInfo()
 {
 }
 
-ImageInfo::ImageInfo(const ImageListerRecord &record)
+ImageInfo::ImageInfo(const ImageListerRecord& record)
 {
     DatabaseAccess access;
     m_data                         = access.imageInfoCache()->infoForId(record.imageID);
@@ -126,7 +126,7 @@ ImageInfo::ImageInfo(qlonglong ID)
     }
 }
 
-ImageInfo::ImageInfo(const KUrl &url)
+ImageInfo::ImageInfo(const KUrl& url)
 {
     DatabaseAccess access;
 
@@ -168,12 +168,12 @@ ImageInfo::~ImageInfo()
         DatabaseAccess().imageInfoCache()->dropInfo(olddata);
 }
 
-ImageInfo::ImageInfo(const ImageInfo &info)
+ImageInfo::ImageInfo(const ImageInfo& info)
 {
     m_data = info.m_data;
 }
 
-ImageInfo &ImageInfo::operator=(const ImageInfo &info)
+ImageInfo& ImageInfo::operator=(const ImageInfo& info)
 {
     if (m_data == info.m_data)
         return *this;
@@ -190,7 +190,7 @@ bool ImageInfo::isNull() const
     return !m_data;
 }
 
-bool ImageInfo::operator==(const ImageInfo &info) const
+bool ImageInfo::operator==(const ImageInfo& info) const
 {
     if (m_data && info.m_data)
     {
@@ -204,7 +204,7 @@ bool ImageInfo::operator==(const ImageInfo &info) const
     }
 }
 
-bool ImageInfo::operator<(const ImageInfo &info) const
+bool ImageInfo::operator<(const ImageInfo& info) const
 {
     if (m_data)
     {
@@ -431,7 +431,7 @@ QString ImageInfo::filePath() const
         return albumRoot + album + "/" + m_data->name;
 }
 
-ImageComments ImageInfo::imageComments(DatabaseAccess &access) const
+ImageComments ImageInfo::imageComments(DatabaseAccess& access) const
 {
     if (!m_data)
         return ImageComments();
@@ -537,7 +537,7 @@ void ImageInfo::removeAllTags()
     access.db()->removeItemAllTags(m_data->id);
 }
 
-void ImageInfo::addTagPaths(const QStringList &tagPaths)
+void ImageInfo::addTagPaths(const QStringList& tagPaths)
 {
     DatabaseAccess access;
     QList<int> list = access.db()->getTagsFromTagPaths(tagPaths, false);
@@ -545,7 +545,7 @@ void ImageInfo::addTagPaths(const QStringList &tagPaths)
         access.db()->addItemTag(m_data->id, list[i]);
 }
 
-ImageInfo ImageInfo::copyItem(int dstAlbumID, const QString &dstFileName)
+ImageInfo ImageInfo::copyItem(int dstAlbumID, const QString& dstFileName)
 {
     DatabaseAccess access;
     //kDebug(50003) << "ImageInfo::copyItem " << m_data->albumId << " " << m_data->name << " to " << dstAlbumID << " " << dstFileName << endl;

@@ -205,7 +205,7 @@ void ImagePreviewView::reload()
     setImagePath(d->path);
 }
 
-void ImagePreviewView::setPreviousNextPaths(const QString& previous, const QString &next)
+void ImagePreviewView::setPreviousNextPaths(const QString& previous, const QString& next)
 {
     d->nextPath     = next;
     d->previousPath = previous;
@@ -245,7 +245,7 @@ void ImagePreviewView::setImagePath(const QString& path)
         d->previewThread->load(LoadingDescription(path, d->previewSize, AlbumSettings::instance()->getExifRotate()));
 }
 
-void ImagePreviewView::slotGotImagePreview(const LoadingDescription &description, const DImg& preview)
+void ImagePreviewView::slotGotImagePreview(const LoadingDescription& description, const DImg& preview)
 {
     if (description.filePath != d->path || description.isThumbnail())
         return;
@@ -307,7 +307,7 @@ void ImagePreviewView::slotNextPreload()
                                       AlbumSettings::instance()->getExifRotate()));
 }
 
-void ImagePreviewView::setImageInfo(const ImageInfo & info, const ImageInfo &previous, const ImageInfo &next)
+void ImagePreviewView::setImageInfo(const ImageInfo & info, const ImageInfo& previous, const ImageInfo& next)
 {
     d->imageInfo = info;
     d->hasPrev   = previous.isNull() ? false : true;

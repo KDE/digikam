@@ -218,7 +218,7 @@ bool DImgLoader::checkExifWorkingColorSpace()
     return false;
 }
 
-QByteArray DImgLoader::uniqueHash(const QString &filePath, const DImg &img, bool loadMetadata)
+QByteArray DImgLoader::uniqueHash(const QString& filePath, const DImg& img, bool loadMetadata)
 {
     QByteArray bv;
 

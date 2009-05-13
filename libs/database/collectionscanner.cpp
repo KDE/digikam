@@ -136,16 +136,16 @@ void CollectionScanner::setSignalsEnabled(bool on)
     d->wantSignals = on;
 }
 
-void CollectionScanner::recordHints(const QList<AlbumCopyMoveHint> &hints)
+void CollectionScanner::recordHints(const QList<AlbumCopyMoveHint>& hints)
 {
-    foreach(const AlbumCopyMoveHint &hint, hints)
+    foreach(const AlbumCopyMoveHint& hint, hints)
         // automagic casting to src and dst
         d->albumHints[hint] = hint;
 }
 
-void CollectionScanner::recordHints(const QList<ItemCopyMoveHint> &hints)
+void CollectionScanner::recordHints(const QList<ItemCopyMoveHint>& hints)
 {
-    foreach(const ItemCopyMoveHint &hint, hints)
+    foreach(const ItemCopyMoveHint& hint, hints)
     {
         QList<qlonglong> ids = hint.srcIds();
         QStringList dstNames = hint.dstNames();
@@ -189,7 +189,7 @@ void CollectionScanner::completeScan()
     {
         // count for progress info
         int count = 0;
-        foreach (const CollectionLocation &location, allLocations)
+        foreach (const CollectionLocation& location, allLocations)
             count += countItemsInFolder(location.albumRootPath());
 
         emit totalFilesToScan(count);
@@ -216,7 +216,7 @@ void CollectionScanner::completeScan()
     if (d->wantSignals)
         emit startScanningAlbumRoots();
 
-    foreach (const CollectionLocation &location, allLocations)
+    foreach (const CollectionLocation& location, allLocations)
         scanAlbumRoot(location);
 
     // do not continue to clean up without a complete scan!
@@ -247,7 +247,7 @@ void CollectionScanner::completeScan()
     emit finishedCompleteScan();
 }
 
-void CollectionScanner::partialScan(const QString &filePath)
+void CollectionScanner::partialScan(const QString& filePath)
 {
     QString albumRoot = CollectionManager::instance()->albumRootPath(filePath);
     if (albumRoot.isNull())
@@ -256,7 +256,7 @@ void CollectionScanner::partialScan(const QString &filePath)
     partialScan(albumRoot, album);
 }
 
-void CollectionScanner::partialScan(const QString &albumRoot, const QString& album)
+void CollectionScanner::partialScan(const QString& albumRoot, const QString& album)
 {
     if (album.isEmpty())
     {
@@ -312,7 +312,7 @@ void CollectionScanner::partialScan(const QString &albumRoot, const QString& alb
     updateRemovedItemsTime();
 }
 
-void CollectionScanner::scanFile(const QString &filePath)
+void CollectionScanner::scanFile(const QString& filePath)
 {
     QFileInfo info(filePath);
     QString dirPath = info.path(); // strip off filename
@@ -323,7 +323,7 @@ void CollectionScanner::scanFile(const QString &filePath)
     scanFile(albumRoot, album, info.fileName());
 }
 
-void CollectionScanner::scanFile(const QString &albumRoot, const QString &album, const QString &fileName)
+void CollectionScanner::scanFile(const QString& albumRoot, const QString& album, const QString& fileName)
 {
     if (album.isEmpty() || fileName.isEmpty())
     {
@@ -373,7 +373,7 @@ void CollectionScanner::scanFile(const QString &albumRoot, const QString &album,
     }
 }
 
-void CollectionScanner::scanAlbumRoot(const CollectionLocation &location)
+void CollectionScanner::scanAlbumRoot(const CollectionLocation& location)
 {
     if (d->wantSignals)
         emit startScanningAlbumRoot(location.albumRootPath());
@@ -404,7 +404,7 @@ void CollectionScanner::scanForStaleAlbums(QList<CollectionLocation> locations)
     QList<int> toBeDeleted;
 
     QHash<int, CollectionLocation> albumRoots;
-    foreach (const CollectionLocation &location, locations)
+    foreach (const CollectionLocation& location, locations)
         albumRoots[location.id()] = location;
 
     QList<AlbumShortInfo>::const_iterator it;
@@ -461,7 +461,7 @@ void CollectionScanner::scanForStaleAlbums(QList<CollectionLocation> locations)
         emit finishedScanningForStaleAlbums();
 }
 
-void CollectionScanner::safelyRemoveAlbums(const QList<int> &albumIds)
+void CollectionScanner::safelyRemoveAlbums(const QList<int>& albumIds)
 {
     // Remove the items (orphan items, detach them from the album, but keep entries for a certain time)
     // Make album orphan (no album root, keep entries until next application start)
@@ -477,7 +477,7 @@ void CollectionScanner::safelyRemoveAlbums(const QList<int> &albumIds)
     }
 }
 
-int CollectionScanner::checkAlbum(const CollectionLocation &location, const QString &album)
+int CollectionScanner::checkAlbum(const CollectionLocation& location, const QString& album)
 {
     // get album id if album exists
     int albumID = DatabaseAccess().db()->getAlbumForPath(location.id(), album, false);
@@ -503,7 +503,7 @@ int CollectionScanner::checkAlbum(const CollectionLocation &location, const QStr
     return albumID;
 }
 
-void CollectionScanner::scanAlbum(const CollectionLocation &location, const QString &album)
+void CollectionScanner::scanAlbum(const CollectionLocation& location, const QString& album)
 {
     // + Adds album if it does not yet exist in the db.
     // + Recursively scans subalbums of album.
@@ -618,7 +618,7 @@ void CollectionScanner::scanAlbum(const CollectionLocation &location, const QStr
         emit finishedScanningAlbum(location.albumRootPath(), album, list.count());
 }
 
-void CollectionScanner::scanNewFile(const QFileInfo &info, int albumId)
+void CollectionScanner::scanNewFile(const QFileInfo& info, int albumId)
 {
     ImageScanner scanner(info);
     scanner.setCategory(category(info));
@@ -643,7 +643,7 @@ void CollectionScanner::scanNewFile(const QFileInfo &info, int albumId)
     }
 }
 
-void CollectionScanner::scanModifiedFile(const QFileInfo &info, const ItemScanInfo &scanInfo)
+void CollectionScanner::scanModifiedFile(const QFileInfo& info, const ItemScanInfo& scanInfo)
 {
     ImageScanner scanner(info, scanInfo);
     scanner.setCategory(category(info));
@@ -676,7 +676,7 @@ int CollectionScanner::countItemsInFolder(const QString& directory)
     return items;
 }
 
-DatabaseItem::Category CollectionScanner::category(const QFileInfo &info)
+DatabaseItem::Category CollectionScanner::category(const QFileInfo& info)
 {
     QString suffix = info.suffix().toLower();
     if (d->imageFilterSet.contains(suffix))
@@ -779,7 +779,7 @@ void CollectionScanner::scanForStaleAlbums()
         scanForStaleAlbums(*it);
 }
 
-void CollectionScanner::scanForStaleAlbums(const QString &albumRoot)
+void CollectionScanner::scanForStaleAlbums(const QString& albumRoot)
 {
     Q_UNUSED(albumRoot);
     QList<AlbumShortInfo> albumList = DatabaseAccess().db()->getAlbumShortInfos();
@@ -861,7 +861,7 @@ void CollectionScanner::scanAlbums()
         QStringList fileList(dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot));
 
         DatabaseTransaction transaction;
-        foreach (const QString &dir, fileList)
+        foreach (const QString& dir, fileList)
         {
             scanAlbum(*it, '/' + dir);
         }
@@ -885,7 +885,7 @@ void CollectionScanner::scan(const QString& folderPath)
     scan(albumRoot, album);
 }
 
-void CollectionScanner::scan(const QString &albumRoot, const QString& album)
+void CollectionScanner::scan(const QString& albumRoot, const QString& album)
 {
     // Step one: remove invalid albums
     scanForStaleAlbums(albumRoot);
@@ -923,7 +923,7 @@ void CollectionScanner::scanAlbum(const QString& filePath)
     scanAlbum(CollectionManager::instance()->albumRootPath(url), CollectionManager::instance()->album(url));
 }
 
-void CollectionScanner::scanAlbum(const QString &albumRoot, const QString& album)
+void CollectionScanner::scanAlbum(const QString& albumRoot, const QString& album)
 {
     // + Adds album if it does not yet exist in the db.
     // + Recursively scans subalbums of album.
@@ -1082,14 +1082,14 @@ void CollectionScanner::markDatabaseAsScanned()
 
 // ------------------- Tools ------------------------
 
-void CollectionScanner::addItem(int albumID, const QString& albumRoot, const QString &album, const QString &fileName)
+void CollectionScanner::addItem(int albumID, const QString& albumRoot, const QString& album, const QString& fileName)
 {
     DatabaseAccess access;
     addItem(access, albumID, albumRoot, album, fileName);
 }
 
-void CollectionScanner::addItem(Digikam::DatabaseAccess &access, int albumID,
-                                const QString& albumRoot, const QString &album, const QString &fileName)
+void CollectionScanner::addItem(Digikam::DatabaseAccess& access, int albumID,
+                                const QString& albumRoot, const QString& album, const QString& fileName)
 {
     QString filePath = albumRoot + album + '/' + fileName;
 
@@ -1130,14 +1130,14 @@ void CollectionScanner::addItem(Digikam::DatabaseAccess &access, int albumID,
     access.db()->addItem(albumID, fileName, datetime, comment, rating, keywords);
 }
 
-void CollectionScanner::updateItemDate(int albumID, const QString& albumRoot, const QString &album, const QString &fileName)
+void CollectionScanner::updateItemDate(int albumID, const QString& albumRoot, const QString& album, const QString& fileName)
 {
     DatabaseAccess access;
     updateItemDate(access, albumID, albumRoot, album, fileName);
 }
 
-void CollectionScanner::updateItemDate(Digikam::DatabaseAccess &access, int albumID,
-                                 const QString& albumRoot, const QString &album, const QString &fileName)
+void CollectionScanner::updateItemDate(Digikam::DatabaseAccess& access, int albumID,
+                                 const QString& albumRoot, const QString& album, const QString& fileName)
 {
     QString filePath = albumRoot + album + '/' + fileName;
 
@@ -1163,13 +1163,13 @@ void CollectionScanner::updateItemDate(Digikam::DatabaseAccess &access, int albu
 /*
 // ------------------------- Ioslave scanning code ----------------------------------
 
-void CollectionScanner::scanAlbum(const QString &albumRoot, const QString &album)
+void CollectionScanner::scanAlbum(const QString& albumRoot, const QString& album)
 {
     scanOneAlbum(albumRoot, album);
     removeInvalidAlbums(albumRoot);
 }
 
-void CollectionScanner::scanOneAlbum(const QString &albumRoot, const QString &album)
+void CollectionScanner::scanOneAlbum(const QString& albumRoot, const QString& album)
 {
     kDebug(50003) << "CollectionScanner::scanOneAlbum " << albumRoot << "/" << album << endl;
     QDir dir(albumRoot + album);
@@ -1281,7 +1281,7 @@ void CollectionScanner::scanOneAlbum(const QString &albumRoot, const QString &al
     }
 }
 
-void CollectionScanner::removeInvalidAlbums(const QString &albumRoot)
+void CollectionScanner::removeInvalidAlbums(const QString& albumRoot)
 {
     DatabaseAccess access;
 

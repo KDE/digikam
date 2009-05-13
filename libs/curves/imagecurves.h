@@ -93,8 +93,8 @@ public:
 
     // Methods for to save/load the curves values to/from a Gimp curves text file.
 
-    bool   saveCurvesToGimpCurvesFile(const KUrl &fileUrl);
-    bool   loadCurvesFromGimpCurvesFile(const KUrl &fileUrl);
+    bool   saveCurvesToGimpCurvesFile(const KUrl& fileUrl);
+    bool   loadCurvesFromGimpCurvesFile(const KUrl& fileUrl);
 
 private:
 

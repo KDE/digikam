@@ -86,7 +86,7 @@ private:
     void    buildDefaultTheme();
     bool    loadTheme();
     void    changePalette();
-    QString resourceValue(const QDomElement &rootElem, const QString& key);
+    QString resourceValue(const QDomElement& rootElem, const QString& key);
 
 Q_SIGNALS:
 

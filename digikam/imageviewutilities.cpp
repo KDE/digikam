@@ -66,7 +66,7 @@ ImageViewUtilities::ImageViewUtilities(QWidget *parentWidget)
     m_widget = parentWidget;
 }
 
-void ImageViewUtilities::setAsAlbumThumbnail(Album *album, const ImageInfo &imageInfo)
+void ImageViewUtilities::setAsAlbumThumbnail(Album *album, const ImageInfo& imageInfo)
 {
     if(!album)
         return;
@@ -92,7 +92,7 @@ void ImageViewUtilities::setAsAlbumThumbnail(Album *album, const ImageInfo &imag
     }
 }
 
-void ImageViewUtilities::rename(const ImageInfo &renameInfo)
+void ImageViewUtilities::rename(const ImageInfo& renameInfo)
 {
     if (renameInfo.isNull())
         return;
@@ -132,12 +132,12 @@ void ImageViewUtilities::slotRenamed(KIO::Job*, const KUrl &, const KUrl&newURL)
     LoadingCacheInterface::fileChanged(fileURL.path());
 }
 
-void ImageViewUtilities::deleteImages(const QList<ImageInfo> &infos, bool deletePermanently)
+void ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos, bool deletePermanently)
 {
     KUrl::List  urlList;
     KUrl::List  kioUrlList;
 
-    foreach (const ImageInfo &info, infos)
+    foreach (const ImageInfo& info, infos)
     {
         urlList << info.fileUrl();
         kioUrlList << info.databaseUrl();
@@ -164,7 +164,7 @@ void ImageViewUtilities::deleteImages(const QList<ImageInfo> &infos, bool delete
             this, SLOT(slotDIOResult(KJob*)));
 }
 
-void ImageViewUtilities::deleteImagesDirectly(const QList<ImageInfo> &infos, bool useTrash)
+void ImageViewUtilities::deleteImagesDirectly(const QList<ImageInfo>& infos, bool useTrash)
 {
     // This method deletes the selected items directly, without confirmation.
     // It is not used in the default setup.
@@ -172,7 +172,7 @@ void ImageViewUtilities::deleteImagesDirectly(const QList<ImageInfo> &infos, boo
     KUrl::List kioUrlList;
     KUrl::List urlList;
 
-    foreach (const ImageInfo &info, infos)
+    foreach (const ImageInfo& info, infos)
     {
         urlList << info.fileUrl();
         kioUrlList << info.databaseUrl();
@@ -201,7 +201,7 @@ void ImageViewUtilities::slotDIOResult(KJob* kjob)
 
 void ImageViewUtilities::notifyFileContentChanged(const KUrl::List& urls)
 {
-    foreach (const KUrl &url, urls)
+    foreach (const KUrl& url, urls)
     {
         QString path = url.toLocalFile();
         ThumbnailLoadThread::deleteThumbnail(path);
@@ -210,12 +210,12 @@ void ImageViewUtilities::notifyFileContentChanged(const KUrl::List& urls)
     }
 }
 
-void ImageViewUtilities::createNewAlbumForInfos(const QList<ImageInfo> &infos, Album *currentAlbum)
+void ImageViewUtilities::createNewAlbumForInfos(const QList<ImageInfo>& infos, Album *currentAlbum)
 {
     KUrl::List kioURLs;
     QList<qlonglong> imageIDs;
 
-    foreach (const ImageInfo &info, infos)
+    foreach (const ImageInfo& info, infos)
     {
         imageIDs << info.id();
         kioURLs << info.databaseUrl();
@@ -239,7 +239,7 @@ void ImageViewUtilities::createNewAlbumForInfos(const QList<ImageInfo> &infos, A
             this, SLOT(slotDIOResult(KJob*)));
 }
 
-void ImageViewUtilities::insertToLightTable(const QList<ImageInfo>& list, const ImageInfo &current, bool addTo)
+void ImageViewUtilities::insertToLightTable(const QList<ImageInfo>& list, const ImageInfo& current, bool addTo)
 {
     LightTableWindow *ltview = LightTableWindow::lightTableWindow();
 
@@ -280,7 +280,7 @@ void ImageViewUtilities::insertSilentToQueueManager(const QList<ImageInfo>& list
     bqmview->loadImageInfos(list, queueid);
 }
 
-void ImageViewUtilities::openInEditor(const ImageInfo &info, const QList<ImageInfo> &allInfosToOpen, Album *currentAlbum)
+void ImageViewUtilities::openInEditor(const ImageInfo& info, const QList<ImageInfo>& allInfosToOpen, Album *currentAlbum)
 {
     if (info.isNull())
         return;

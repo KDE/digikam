@@ -140,7 +140,7 @@ private:
     static QString largeThumbnailDir();
     static QString thumbnailPath(const QString& filePath, const QString& basePath);
     static QString thumbnailUri(const QString& filePath);
-    static QString thumbnailPathFromUri(const QString &uri, const QString& basePath);
+    static QString thumbnailPathFromUri(const QString& uri, const QString& basePath);
 
     void initThumbnailDirs();
     QString thumbnailPath(const QString& uri);

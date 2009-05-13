@@ -115,7 +115,7 @@ void ImageLister::setListOnlyAvailable(bool listOnlyAvailable)
     m_listOnlyAvailableImages = listOnlyAvailable;
 }
 
-KIO::TransferJob *ImageLister::startListJob(const DatabaseUrl &url, int extraValue)
+KIO::TransferJob *ImageLister::startListJob(const DatabaseUrl& url, int extraValue)
 {
     QByteArray ba;
     QDataStream ds(&ba, QIODevice::WriteOnly);
@@ -126,7 +126,7 @@ KIO::TransferJob *ImageLister::startListJob(const DatabaseUrl &url, int extraVal
     return new KIO::SpecialJob(url, ba);
 }
 
-void ImageLister::list(ImageListerReceiver *receiver, const DatabaseUrl &url)
+void ImageLister::list(ImageListerReceiver *receiver, const DatabaseUrl& url)
 {
     if (url.isAlbumUrl())
     {
@@ -305,7 +305,7 @@ void ImageLister::listTag(ImageListerReceiver *receiver, int tagId)
     }
 }
 
-void ImageLister::listDateRange(ImageListerReceiver *receiver, const QDate &startDate, const QDate &endDate)
+void ImageLister::listDateRange(ImageListerReceiver *receiver, const QDate& startDate, const QDate& endDate)
 {
     QList<QVariant> values;
 
@@ -477,7 +477,7 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
     }
 }
 
-void ImageLister::listHaarSearch(ImageListerReceiver *receiver, const QString &xml)
+void ImageLister::listHaarSearch(ImageListerReceiver *receiver, const QString& xml)
 {
     SearchXmlReader reader(xml);
     reader.readToFirstField();
@@ -635,7 +635,7 @@ QSet<int> ImageLister::albumRootsToList()
 
     QList<CollectionLocation> locations = CollectionManager::instance()->allAvailableLocations();
     QSet<int> ids;
-    foreach (const CollectionLocation &location, locations)
+    foreach (const CollectionLocation& location, locations)
         ids << location.id();
     return ids;
 }

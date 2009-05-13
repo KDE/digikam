@@ -84,7 +84,7 @@ KUrl FindDuplicatesAlbumItem::refUrl() const
     return m_refImgInfo.fileUrl();
 }
 
-bool FindDuplicatesAlbumItem::operator<(const QTreeWidgetItem &other) const
+bool FindDuplicatesAlbumItem::operator<(const QTreeWidgetItem& other) const
 {
     int column = treeWidget()->sortColumn();
     int result = KStringHandler::naturalCompare(text(column), other.text(column));

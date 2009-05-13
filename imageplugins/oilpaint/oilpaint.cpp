@@ -73,7 +73,7 @@ void OilPaint::filterImage(void)
  *                     a matrix and simply write at the original position.
  */
 
-void OilPaint::oilpaintImage(Digikam::DImg &orgImage, Digikam::DImg &destImage, int BrushSize, int Smoothness)
+void OilPaint::oilpaintImage(Digikam::DImg& orgImage, Digikam::DImg& destImage, int BrushSize, int Smoothness)
 {
     int    progress;
     Digikam::DColor mostFrequentColor;
@@ -130,7 +130,7 @@ void OilPaint::oilpaintImage(Digikam::DImg &orgImage, Digikam::DImg &destImage, 
  *                     the center of this matrix and find the most frequently color
  */
 
-Digikam::DColor OilPaint::MostFrequentColor(Digikam::DImg &src, int X, int Y, int Radius, int Intensity)
+Digikam::DColor OilPaint::MostFrequentColor(Digikam::DImg& src, int X, int Y, int Radius, int Intensity)
 {
     int  i, w, h, I, Width, Height;
     uint red, green, blue;

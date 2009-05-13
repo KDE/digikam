@@ -81,10 +81,10 @@ public:
     /** Adds an image to the index in the database.
      */
     bool indexImage(const QString& filename);
-    bool indexImage(const QString& filename, const QImage &image);
-    bool indexImage(const QString& filename, const DImg &image);
-    bool indexImage(qlonglong imageid, const QImage &image);
-    bool indexImage(qlonglong imageid, const DImg &image);
+    bool indexImage(const QString& filename, const QImage& image);
+    bool indexImage(const QString& filename, const DImg& image);
+    bool indexImage(qlonglong imageid, const QImage& image);
+    bool indexImage(qlonglong imageid, const DImg& image);
 
     /** Searches the database for the best matches for the specified query image.
      *  The numberOfResults best matches are returned.
@@ -104,7 +104,7 @@ public:
     /** Calculates the Haar signature, bring it in a form as stored in the DB,
      *  and encode it to Ascii data. Can be used for bestMatchesForSignature.
      */
-    QString signatureAsText(const QImage &image);
+    QString signatureAsText(const QImage& image);
 
     /** For a given signature, find out the highest and lowest possible score
      *  that any other signature could reach, compared to the given signature.
@@ -126,13 +126,13 @@ public:
     QMap< qlonglong, QList<qlonglong> > findDuplicatesFast(HaarProgressObserver *observer = 0);
 
     /** Calls findDuplicates with all images in the given album ids */
-    QMap< qlonglong, QList<qlonglong> > findDuplicatesInAlbums(const QList<int> &albums2Scan, double requiredPercentage,
+    QMap< qlonglong, QList<qlonglong> > findDuplicatesInAlbums(const QList<int>& albums2Scan, double requiredPercentage,
                                                                HaarProgressObserver *observer = 0, bool fast = false);
 
     /** Rebuilds the special search albums in the database that contain a list of possible candidates
      *  for duplicate images (one album per group of duplicates)
      */
-    void rebuildDuplicatesAlbums(const QList<int> &albums2Scan, double requiredPercentage,
+    void rebuildDuplicatesAlbums(const QList<int>& albums2Scan, double requiredPercentage,
                                  HaarProgressObserver *observer = 0, bool fast = false);
 
     /** Retrieve the Haar signature from database using image id.
@@ -148,7 +148,7 @@ public:
 
 private:
 
-    QImage loadQImage(const QString &filename);
+    QImage loadQImage(const QString& filename);
 
     bool   indexImage(qlonglong imageid);
 
@@ -157,8 +157,8 @@ private:
                                               double requiredPercentage, SketchType type);
 
     QMap<qlonglong, double> searchDatabase(Haar::SignatureData *data, SketchType type);
-    double calculateScore(Haar::SignatureData &querySig, Haar::SignatureData &targetSig,
-                          Haar::Weights &weights, Haar::SignatureMap** queryMaps);
+    double calculateScore(Haar::SignatureData& querySig, Haar::SignatureData& targetSig,
+                          Haar::Weights& weights, Haar::SignatureMap** queryMaps);
 
 private:
 

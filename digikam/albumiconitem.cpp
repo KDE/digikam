@@ -76,7 +76,7 @@ public:
     AlbumIconView *view;
 };
 
-AlbumIconItem::AlbumIconItem(IconGroupItem* parent, const ImageInfo &info)
+AlbumIconItem::AlbumIconItem(IconGroupItem* parent, const ImageInfo& info)
              : IconItem(parent), d(new AlbumIconItemPriv)
 {
     d->view = (AlbumIconView*) parent->iconView();

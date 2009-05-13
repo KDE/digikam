@@ -457,7 +457,7 @@ void AlbumIconView::slotImageListerNewItems(const ImageInfoList& itemList)
     emit signalItemsAdded();
 }
 
-void AlbumIconView::slotImageListerDeleteItem(const ImageInfo &item)
+void AlbumIconView::slotImageListerDeleteItem(const ImageInfo& item)
 {
     QHash<ImageInfo, AlbumIconItem*>::ConstIterator itMap = d->itemInfoMap.constFind(item);
     if (itMap == d->itemInfoMap.constEnd())
@@ -786,7 +786,7 @@ void AlbumIconView::slotPaste()
     }
 }
 
-void AlbumIconView::slotSetAlbumThumbnail(ImageInfo &imageInfo)
+void AlbumIconView::slotSetAlbumThumbnail(ImageInfo& imageInfo)
 {
     if(!d->currentAlbum)
         return;
@@ -939,7 +939,7 @@ void AlbumIconView::slotFilesModified(const KUrl& url)
     refreshItems(url);
 }
 
-void AlbumIconView::slotImageWindowURLChanged(const KUrl &url)
+void AlbumIconView::slotImageWindowURLChanged(const KUrl& url)
 {
     IconItem* item = findItem(url.url());
     if (item)
@@ -1052,7 +1052,7 @@ void AlbumIconView::insertSelectionToLightTable(bool addTo)
     insertToLightTable(imageInfoList, imageInfoList.first(), addTo);
 }
 
-void AlbumIconView::insertToLightTable(const ImageInfoList& list, const ImageInfo &current, bool addTo)
+void AlbumIconView::insertToLightTable(const ImageInfoList& list, const ImageInfo& current, bool addTo)
 {
     LightTableWindow *ltview = LightTableWindow::lightTableWindow();
 
@@ -1486,7 +1486,7 @@ void AlbumIconView::contentsDropEvent(QDropEvent *e)
     }
 }
 
-void AlbumIconView::slotChangeTagOnImageInfos(const ImageInfoList &list, const QList<int> &tagIDs, bool addOrRemove, bool progress)
+void AlbumIconView::slotChangeTagOnImageInfos(const ImageInfoList& list, const QList<int>& tagIDs, bool addOrRemove, bool progress)
 {
     float cnt = list.count();
     int i     = 0;
@@ -1504,7 +1504,7 @@ void AlbumIconView::slotChangeTagOnImageInfos(const ImageInfoList &list, const Q
     d->imageLister->blockSignals(true);
     ScanController::instance()->suspendCollectionScan();
     DatabaseTransaction transaction;
-    foreach(const ImageInfo &info, list)
+    foreach(const ImageInfo& info, list)
     {
         MetadataHub hub;
 
@@ -1540,7 +1540,7 @@ void AlbumIconView::slotChangeTagOnImageInfos(const ImageInfoList &list, const Q
     updateContents();
 }
 
-bool AlbumIconView::acceptToolTip(IconItem *item, const QPoint &mousePos)
+bool AlbumIconView::acceptToolTip(IconItem *item, const QPoint& mousePos)
 {
     AlbumIconItem *iconItem = dynamic_cast<AlbumIconItem*>(item);
 
@@ -1688,7 +1688,7 @@ void AlbumIconView::refreshItems(const KUrl::List& urlList)
     triggerRearrangement();
 }
 
-void AlbumIconView::slotFileChanged(const QString &filePath)
+void AlbumIconView::slotFileChanged(const QString& filePath)
 {
     if (!d->currentAlbum || filePath.isEmpty())
         return;
@@ -1703,7 +1703,7 @@ void AlbumIconView::slotFileChanged(const QString &filePath)
     emit signalItemsUpdated(KUrl::List() << url);
 }
 
-void AlbumIconView::slotThumbnailLoaded(const LoadingDescription &loadingDescription, const QPixmap&)
+void AlbumIconView::slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap&)
 {
     AlbumIconItem* iconItem = findItem(KUrl::fromPath(loadingDescription.filePath).url());
     if (!iconItem)
@@ -1712,7 +1712,7 @@ void AlbumIconView::slotThumbnailLoaded(const LoadingDescription &loadingDescrip
     iconItem->update();
 }
 
-void AlbumIconView::prepareRepaint(const QList<IconItem *> &itemsToRepaint)
+void AlbumIconView::prepareRepaint(const QList<IconItem *>& itemsToRepaint)
 {
     QStringList filePaths;
     foreach(IconItem *iconItem, itemsToRepaint)
@@ -2199,7 +2199,7 @@ void AlbumIconView::slotAssignRating(int rating)
     d->imageLister->blockSignals(true);
     ScanController::instance()->suspendCollectionScan();
     DatabaseTransaction transaction;
-    foreach (const ImageInfo &info, infos)
+    foreach (const ImageInfo& info, infos)
     {
         hub.load(info);
 

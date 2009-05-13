@@ -223,7 +223,7 @@ void LightTablePreview::reload()
     setImagePath(d->path);
 }
 
-void LightTablePreview::setPreviousNextPaths(const QString& previous, const QString &next)
+void LightTablePreview::setPreviousNextPaths(const QString& previous, const QString& next)
 {
     d->nextPath     = next;
     d->previousPath = previous;
@@ -265,7 +265,7 @@ void LightTablePreview::setImagePath(const QString& path)
                           AlbumSettings::instance()->getExifRotate()));
 }
 
-void LightTablePreview::slotGotImagePreview(const LoadingDescription &description, const DImg& preview)
+void LightTablePreview::slotGotImagePreview(const LoadingDescription& description, const DImg& preview)
 {
     if (description.filePath != d->path)
         return;
@@ -319,7 +319,7 @@ void LightTablePreview::slotNextPreload()
                                   AlbumSettings::instance()->getExifRotate()));
 }
 
-void LightTablePreview::setImageInfo(const ImageInfo &info, const ImageInfo &previous, const ImageInfo &next)
+void LightTablePreview::setImageInfo(const ImageInfo& info, const ImageInfo& previous, const ImageInfo& next)
 {
     d->imageInfo = info;
     d->hasPrev   = !previous.isNull();

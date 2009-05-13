@@ -58,8 +58,8 @@
 #include "collectionscanner.h"
 #include "imagelister.h"
 
-kio_digikamalbums::kio_digikamalbums(const QByteArray &pool_socket,
-                                     const QByteArray &app_socket)
+kio_digikamalbums::kio_digikamalbums(const QByteArray& pool_socket,
+                                     const QByteArray& app_socket)
                  : SlaveBase("kio_digikamalbums", pool_socket, app_socket)
 {
     m_eventLoop = new QEventLoop(this);
@@ -154,7 +154,7 @@ void kio_digikamalbums::put(const KUrl& url, int permissions, KIO::JobFlags flag
     finished();
 }
 
-void kio_digikamalbums::copy( const KUrl &src, const KUrl &dst, int mode, KIO::JobFlags flags )
+void kio_digikamalbums::copy( const KUrl& src, const KUrl& dst, int mode, KIO::JobFlags flags )
 {
     kDebug(50004) << "Src: " << src.path() << ", Dst: " << dst.path();
 
@@ -521,12 +521,12 @@ void kio_digikamalbums::slotResult(KJob *job)
     }
 }
 
-void kio_digikamalbums::slotWarning(KJob* /*job*/, const QString &msg)
+void kio_digikamalbums::slotWarning(KJob* /*job*/, const QString& msg)
 {
     warning(msg);
 }
 
-void kio_digikamalbums::slotInfoMessage(KJob* /*job*/, const QString &msg)
+void kio_digikamalbums::slotInfoMessage(KJob* /*job*/, const QString& msg)
 {
     infoMessage(msg);
 }
@@ -546,7 +546,7 @@ void kio_digikamalbums::slotSpeed(KJob* /*job*/, unsigned long bytesPerSecond)
     speed(bytesPerSecond);
 }
 
-void kio_digikamalbums::slotRedirection(KIO::Job *job, const KUrl &url)
+void kio_digikamalbums::slotRedirection(KIO::Job *job, const KUrl& url)
 {
     redirection(url);
 
@@ -558,7 +558,7 @@ void kio_digikamalbums::slotRedirection(KIO::Job *job, const KUrl &url)
 }
 
 void kio_digikamalbums::slotEntries(KIO::Job* /*job*/,
-                                      const KIO::UDSEntryList &entries)
+                                      const KIO::UDSEntryList& entries)
 {
     /*
     KIO::UDSEntryList final_entries = entries;
@@ -576,18 +576,18 @@ void kio_digikamalbums::slotEntries(KIO::Job* /*job*/,
     listEntries(entries);
 }
 
-void kio_digikamalbums::slotData(KIO::Job* /*job*/, const QByteArray &_data)
+void kio_digikamalbums::slotData(KIO::Job* /*job*/, const QByteArray& _data)
 {
     data(_data);
 }
 
-void kio_digikamalbums::slotDataReq(KIO::Job* /*job*/, QByteArray &data)
+void kio_digikamalbums::slotDataReq(KIO::Job* /*job*/, QByteArray& data)
 {
     dataReq();
     readData(data);
 }
 
-void kio_digikamalbums::slotMimetype (KIO::Job* /*job*/, const QString &type)
+void kio_digikamalbums::slotMimetype (KIO::Job* /*job*/, const QString& type)
 {
     mimeType(type);
 }

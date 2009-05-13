@@ -72,7 +72,7 @@ public:
     unsigned long kBSize() const;
     unsigned long kBUsed() const;
     unsigned long kBAvail() const;
-    unsigned long kBAvail(const QString &path) const;
+    unsigned long kBAvail(const QString& path) const;
 
     void          refresh();
 

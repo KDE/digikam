@@ -26,7 +26,7 @@
 namespace Digikam
 {
 
-SearchXmlReader::SearchXmlReader(const QString &xml)
+SearchXmlReader::SearchXmlReader(const QString& xml)
                : QXmlStreamReader(xml)
 {
     m_defaultFieldOperator = SearchXml::And;
@@ -289,7 +289,7 @@ QList<double> SearchXmlReader::valueToDoubleOrDoubleList()
     return list;
 }
 
-SearchXml::Operator SearchXmlReader::readOperator(const QString &attributeName,
+SearchXml::Operator SearchXmlReader::readOperator(const QString& attributeName,
                                                   SearchXml::Operator defaultOperator) const
 {
     QStringRef op = attributes().value(attributeName);
@@ -305,7 +305,7 @@ SearchXml::Operator SearchXmlReader::readOperator(const QString &attributeName,
     return defaultOperator;
 }
 
-SearchXml::Relation SearchXmlReader::readRelation(const QString &attributeName,
+SearchXml::Relation SearchXmlReader::readRelation(const QString& attributeName,
                                                   SearchXml::Relation defaultRelation) const
 {
     QStringRef relation = attributes().value(attributeName);
@@ -343,7 +343,7 @@ SearchXml::Relation SearchXmlReader::readRelation(const QString &attributeName,
     return defaultRelation;
 }
 
-bool SearchXmlReader::readToStartOfElement(const QString &elementName)
+bool SearchXmlReader::readToStartOfElement(const QString& elementName)
 {
     // go to next start element
     forever
@@ -452,7 +452,7 @@ void SearchXmlWriter::setGroupOperator(SearchXml::Operator op)
         writeOperator("operator", op);
 }
 
-void SearchXmlWriter::setGroupCaption(const QString &caption)
+void SearchXmlWriter::setGroupCaption(const QString& caption)
 {
     if (!caption.isNull())
         writeAttribute("caption", caption);
@@ -464,7 +464,7 @@ void SearchXmlWriter::setDefaultFieldOperator(SearchXml::Operator op)
         writeOperator("fieldoperator", op);
 }
 
-void SearchXmlWriter::writeField(const QString &name, SearchXml::Relation relation)
+void SearchXmlWriter::writeField(const QString& name, SearchXml::Relation relation)
 {
     writeStartElement("field");
     writeAttribute("name", name);
@@ -476,7 +476,7 @@ void SearchXmlWriter::setFieldOperator(SearchXml::Operator op)
     writeOperator("operator", op);
 }
 
-void SearchXmlWriter::writeValue(const QString &value)
+void SearchXmlWriter::writeValue(const QString& value)
 {
     writeCharacters(value);
 }
@@ -496,12 +496,12 @@ void SearchXmlWriter::writeValue(double value, int precision)
     writeCharacters(QString::number(value, 'g', precision));
 }
 
-void SearchXmlWriter::writeValue(const QDateTime &dateTime)
+void SearchXmlWriter::writeValue(const QDateTime& dateTime)
 {
     writeCharacters(dateTime.toString(Qt::ISODate));
 }
 
-void SearchXmlWriter::writeValue(const QList<int> &valueList)
+void SearchXmlWriter::writeValue(const QList<int>& valueList)
 {
     QString listitem("listitem");
     foreach(int i, valueList)
@@ -510,7 +510,7 @@ void SearchXmlWriter::writeValue(const QList<int> &valueList)
     }
 }
 
-void SearchXmlWriter::writeValue(const QList<qlonglong> &valueList)
+void SearchXmlWriter::writeValue(const QList<qlonglong>& valueList)
 {
     QString listitem("listitem");
     foreach(int i, valueList)
@@ -519,7 +519,7 @@ void SearchXmlWriter::writeValue(const QList<qlonglong> &valueList)
     }
 }
 
-void SearchXmlWriter::writeValue(const QList<double> &valueList, int precision)
+void SearchXmlWriter::writeValue(const QList<double>& valueList, int precision)
 {
     QString listitem("listitem");
     foreach(double i, valueList)
@@ -528,19 +528,19 @@ void SearchXmlWriter::writeValue(const QList<double> &valueList, int precision)
     }
 }
 
-void SearchXmlWriter::writeValue(const QList<QDateTime> &valueList)
+void SearchXmlWriter::writeValue(const QList<QDateTime>& valueList)
 {
     QString listitem("listitem");
-    foreach(const QDateTime &dt, valueList)
+    foreach(const QDateTime& dt, valueList)
     {
         writeTextElement(listitem, dt.toString(Qt::ISODate));
     }
 }
 
-void SearchXmlWriter::writeValue(const QStringList &valueList)
+void SearchXmlWriter::writeValue(const QStringList& valueList)
 {
     QString listitem("listitem");
-    foreach(const QString &str, valueList)
+    foreach(const QString& str, valueList)
     {
         writeTextElement(listitem, str);
     }
@@ -561,7 +561,7 @@ void SearchXmlWriter::finish()
     writeEndDocument();
 }
 
-void SearchXmlWriter::writeOperator(const QString &attributeName, SearchXml::Operator op)
+void SearchXmlWriter::writeOperator(const QString& attributeName, SearchXml::Operator op)
 {
     switch (op)
     {
@@ -581,7 +581,7 @@ void SearchXmlWriter::writeOperator(const QString &attributeName, SearchXml::Ope
     }
 }
 
-void SearchXmlWriter::writeRelation(const QString &attributeName, SearchXml::Relation op)
+void SearchXmlWriter::writeRelation(const QString& attributeName, SearchXml::Relation op)
 {
     switch (op)
     {
@@ -634,7 +634,7 @@ void SearchXmlWriter::writeRelation(const QString &attributeName, SearchXml::Rel
     }
 }
 
-QString SearchXmlWriter::keywordSearch(const QString &keyword)
+QString SearchXmlWriter::keywordSearch(const QString& keyword)
 {
     SearchXmlWriter writer;
     writer.writeGroup();
@@ -648,7 +648,7 @@ QString SearchXmlWriter::keywordSearch(const QString &keyword)
 
 // ---------------------------------------- //
 
-QStringList KeywordSearch::split(const QString &keywords)
+QStringList KeywordSearch::split(const QString& keywords)
 {
     // get groups with quotation marks
     QStringList quotationMarkList = keywords.split('"', QString::KeepEmptyParts);
@@ -656,7 +656,7 @@ QStringList KeywordSearch::split(const QString &keywords)
     // split down to single words
     QStringList keywordList;
     int quotationMarkCount = (keywords.startsWith('"') ? 1 : 0);
-    foreach (const QString &group, quotationMarkList)
+    foreach (const QString& group, quotationMarkList)
     {
         if (quotationMarkCount % 2)
         {
@@ -675,7 +675,7 @@ QStringList KeywordSearch::split(const QString &keywords)
     return keywordList;
 }
 
-QString KeywordSearch::merge(const QStringList &keywordList)
+QString KeywordSearch::merge(const QStringList& keywordList)
 {
     QStringList list(keywordList);
     // group keyword with spaces in quotation marks
@@ -688,7 +688,7 @@ QString KeywordSearch::merge(const QStringList &keywordList)
     return list.join(" ");
 }
 
-QString KeywordSearch::merge(const QString &previousContent, const QString &newEntry)
+QString KeywordSearch::merge(const QString& previousContent, const QString& newEntry)
 {
     QString ne(newEntry);
     QString pc(previousContent);
@@ -699,7 +699,7 @@ QString KeywordSearch::merge(const QString &previousContent, const QString &newE
 
 // ---------------------------------------- //
 
-KeywordSearchReader::KeywordSearchReader(const QString &xml)
+KeywordSearchReader::KeywordSearchReader(const QString& xml)
                    : SearchXmlReader(xml)
 {
 }
@@ -722,7 +722,7 @@ QStringList KeywordSearchReader::keywords()
     return list;
 }
 
-void KeywordSearchReader::readGroup(QStringList &list)
+void KeywordSearchReader::readGroup(QStringList& list)
 {
     SearchXml::Element element;
     while (!atEnd())
@@ -815,10 +815,10 @@ KeywordSearchWriter::KeywordSearchWriter()
 {
 }
 
-QString KeywordSearchWriter::xml(const QStringList &keywordList)
+QString KeywordSearchWriter::xml(const QStringList& keywordList)
 {
     writeGroup();
-    foreach (const QString &keyword, keywordList)
+    foreach (const QString& keyword, keywordList)
     {
         writeField("keyword", SearchXml::Like);
         writeValue(keyword);
@@ -832,7 +832,7 @@ QString KeywordSearchWriter::xml(const QStringList &keywordList)
 
 // ---------------------------------------- //
 
-SearchXmlCachingReader::SearchXmlCachingReader(const QString &xml)
+SearchXmlCachingReader::SearchXmlCachingReader(const QString& xml)
                       : SearchXmlReader(xml),
                         m_groupOperator(SearchXml::And), m_fieldOperator(SearchXml::And),
                         m_fieldRelation(SearchXml::Equal), m_readValue(false)
@@ -938,7 +938,7 @@ QList<int> SearchXmlCachingReader::valueToIntList()
     // we convert here from string list (equivalent result)
     QStringList list = valueToStringList();
     QList<int> intList;
-    foreach (const QString &s, list)
+    foreach (const QString& s, list)
         intList << s.toInt();
     return intList;
 }
@@ -949,7 +949,7 @@ QList<qlonglong> SearchXmlCachingReader::valueToLongLongList()
     // we convert here from string list (equivalent result)
     QStringList list = valueToStringList();
     QList<qlonglong> qlonglongList;
-    foreach (const QString &s, list)
+    foreach (const QString& s, list)
         qlonglongList << s.toLongLong();
     return qlonglongList;
 }
@@ -960,7 +960,7 @@ QList<double> SearchXmlCachingReader::valueToDoubleList()
     // we convert here from string list (equivalent result)
     QStringList list = valueToStringList();
     QList<double> doubleList;
-    foreach (const QString &s, list)
+    foreach (const QString& s, list)
         doubleList << s.toDouble();
     return doubleList;
 }
@@ -971,7 +971,7 @@ QList<QDateTime> SearchXmlCachingReader::valueToDateTimeList()
     // we convert here from string list (equivalent result)
     QStringList list = valueToStringList();
     QList<QDateTime> doubleList;
-    foreach (const QString &s, list)
+    foreach (const QString& s, list)
         doubleList << QDateTime::fromString(s, Qt::ISODate);
     return doubleList;
 }
@@ -1000,7 +1000,7 @@ QList<int> SearchXmlCachingReader::valueToIntOrIntList()
     }
     QList<int> intList;
     QList<QVariant> varList = m_value.toList();
-    foreach (const QVariant &var, varList)
+    foreach (const QVariant& var, varList)
         intList << var.toInt();
     return intList;
 }
@@ -1019,7 +1019,7 @@ QList<double> SearchXmlCachingReader::valueToDoubleOrDoubleList()
     }
     QList<double> doubleList;
     QList<QVariant> varList = m_value.toList();
-    foreach (const QVariant &var, varList)
+    foreach (const QVariant& var, varList)
         doubleList << var.toDouble();
     return doubleList;
 }

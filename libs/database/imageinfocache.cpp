@@ -83,7 +83,7 @@ void ImageInfoCache::dropInfo(ImageInfoData *infodata)
         delete infodata;
 }
 
-QString ImageInfoCache::albumName(DatabaseAccess &access, int albumId)
+QString ImageInfoCache::albumName(DatabaseAccess& access, int albumId)
 {
     QHash<int, QString>::iterator it = m_albums.find(albumId);
     if (it == m_albums.end())
@@ -95,7 +95,7 @@ QString ImageInfoCache::albumName(DatabaseAccess &access, int albumId)
     return (*it);
 }
 
-void ImageInfoCache::slotImageChanged(const ImageChangeset &changeset)
+void ImageInfoCache::slotImageChanged(const ImageChangeset& changeset)
 {
     // we cannot know if we have databaseaccess lock here as well
     DatabaseAccess access;
@@ -127,7 +127,7 @@ void ImageInfoCache::slotImageChanged(const ImageChangeset &changeset)
     }
 }
 
-void ImageInfoCache::slotImageTagChanged(const ImageTagChangeset &changeset)
+void ImageInfoCache::slotImageTagChanged(const ImageTagChangeset& changeset)
 {
     DatabaseAccess access;
 
@@ -139,7 +139,7 @@ void ImageInfoCache::slotImageTagChanged(const ImageTagChangeset &changeset)
     }
 }
 
-void ImageInfoCache::slotAlbumChange(const AlbumChangeset &changeset)
+void ImageInfoCache::slotAlbumChange(const AlbumChangeset& changeset)
 {
     DatabaseAccess access;
 

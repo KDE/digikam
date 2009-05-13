@@ -116,7 +116,7 @@ public:
       * obtained below, or used as is when SmallerSize is requested anyway.
       * @return Returns true if icon is loaded asynchronously.
       */
-    bool getTagThumbnail(TAlbum *album, QPixmap &icon);
+    bool getTagThumbnail(TAlbum *album, QPixmap& icon);
 
     /**
       * Loads tag thumbnail,
@@ -147,7 +147,7 @@ public:
      * icon of variable size and tagIcon is 12 pixels smaller.
      * If height(dstIcon) < minBlendSize we return tagIcon verbatim.
      */
-    QPixmap blendIcons(QPixmap dstIcon, const QPixmap &tagIcon);
+    QPixmap blendIcons(QPixmap dstIcon, const QPixmap& tagIcon);
 
 Q_SIGNALS:
 
@@ -170,13 +170,13 @@ Q_SIGNALS:
      */
     void signalReloadThumbnails();
 
-    void signalDispatchThumbnailInternal(int albumID, const QPixmap &thumbnail);
+    void signalDispatchThumbnailInternal(int albumID, const QPixmap& thumbnail);
 
 protected Q_SLOTS:
 
-    void slotGotThumbnailFromIcon(const LoadingDescription &loadingDescription, const QPixmap &pixmap);
+    void slotGotThumbnailFromIcon(const LoadingDescription& loadingDescription, const QPixmap& pixmap);
     void slotIconChanged(Album* album);
-    void slotDispatchThumbnailInternal(int albumID, const QPixmap &thumbnail);
+    void slotDispatchThumbnailInternal(int albumID, const QPixmap& thumbnail);
 
 private:
 
@@ -185,9 +185,9 @@ private:
     ~AlbumThumbnailLoader();
     AlbumThumbnailLoaderPrivate* const d;
 
-    void    addUrl(Album *album, const KUrl &url);
-    QPixmap loadIcon(const QString &name, int size = 0);
-    QPixmap createTagThumbnail(const QPixmap &albumThumbnail);
+    void    addUrl(Album *album, const KUrl& url);
+    QPixmap loadIcon(const QString& name, int size = 0);
+    QPixmap createTagThumbnail(const QPixmap& albumThumbnail);
     int     computeIconSize(RelativeSize size);
     QRect   computeBlendRect(int iconSize);
 };

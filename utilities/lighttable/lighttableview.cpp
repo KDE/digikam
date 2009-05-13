@@ -375,13 +375,13 @@ ImageInfo LightTableView::rightImageInfo() const
     return d->rightPreview->getImageInfo();
 }
 
-void LightTableView::setLeftImageInfo(const ImageInfo &info)
+void LightTableView::setLeftImageInfo(const ImageInfo& info)
 {
     d->leftLoading = true;
     d->leftPreview->setImageInfo(info);
 }
 
-void LightTableView::setRightImageInfo(const ImageInfo &info)
+void LightTableView::setRightImageInfo(const ImageInfo& info)
 {
     d->rightLoading = true;
     d->rightPreview->setImageInfo(info);
@@ -423,7 +423,7 @@ void LightTableView::checkForSyncPreview()
     emit signalToggleOnSyncPreview(d->syncPreview);
 }
 
-void LightTableView::checkForSelection(const ImageInfo &info)
+void LightTableView::checkForSelection(const ImageInfo& info)
 {
     if (info.isNull())
     {

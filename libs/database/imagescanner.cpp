@@ -47,12 +47,12 @@
 namespace Digikam
 {
 
-ImageScanner::ImageScanner(const QFileInfo &info, const ItemScanInfo &scanInfo)
+ImageScanner::ImageScanner(const QFileInfo& info, const ItemScanInfo& scanInfo)
             : m_fileInfo(info), m_scanInfo(scanInfo)
 {
 }
 
-ImageScanner::ImageScanner(const QFileInfo &info)
+ImageScanner::ImageScanner(const QFileInfo& info)
             : m_fileInfo(info)
 {
 }
@@ -433,7 +433,7 @@ void ImageScanner::scanImageCopyright()
     {
         QList<QVariant> list = metadataInfos[1].toList();
         ImageCopyright::ReplaceMode mode = ImageCopyright::ReplaceAllEntries;
-        foreach(const QVariant &var, list)
+        foreach(const QVariant& var, list)
         {
             copyright.setCreator(var.toString(), mode);
             mode = ImageCopyright::AddEntryToExisting;
@@ -502,7 +502,7 @@ void ImageScanner::scanIPTCCore()
         {
             QStringList list = var.toStringList();
             QString property = iptcCorePropertyName(fields[i]);
-            foreach(const QString &str, list)
+            foreach(const QString& str, list)
                 access.db()->setImageProperty(m_scanInfo.id, property, str);
         }
     }
@@ -571,7 +571,7 @@ void ImageScanner::scanVideoFile()
     if (metaInfo.isValid())
     {
         QStringList keys = metaInfo.keys();
-        foreach (const QString &key, keys)
+        foreach (const QString& key, keys)
         {
             KFileMetaInfoItem item = metaInfo.item(key);
             kDebug() << item.name() << item.value();
@@ -690,7 +690,7 @@ QString ImageScanner::detectAudioFormat()
     return suffix;
 }
 
-QString ImageScanner::formatToString(const QString &format)
+QString ImageScanner::formatToString(const QString& format)
 {
     if (format == "JPG")
     {

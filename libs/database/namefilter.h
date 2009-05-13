@@ -48,12 +48,12 @@ public:
      * (file suffixes),
      * separated by ';' characters.
      */
-    NameFilter(const QString &filter);
+    NameFilter(const QString& filter);
 
     /**
      * Returns if the specified name matches this filter
      */
-    bool matches(const QString &name);
+    bool matches(const QString& name);
 
 protected:
 

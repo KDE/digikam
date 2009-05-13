@@ -137,7 +137,7 @@ DeleteWidget::DeleteWidget(QWidget *parent)
     m_shouldDelete->setChecked(deleteInstead);
 }
 
-void DeleteWidget::setFiles(const KUrl::List &files)
+void DeleteWidget::setFiles(const KUrl::List& files)
 {
     m_fileList->clear();
     for( KUrl::List::ConstIterator it = files.begin(); it != files.end(); ++it)
@@ -285,7 +285,7 @@ bool DeleteDialog::confirmDeleteList(const KUrl::List& condemnedFiles,
     return exec() == QDialog::Accepted;
 }
 
-void DeleteDialog::setURLs(const KUrl::List &files)
+void DeleteDialog::setURLs(const KUrl::List& files)
 {
     m_widget->setFiles(files);
 }

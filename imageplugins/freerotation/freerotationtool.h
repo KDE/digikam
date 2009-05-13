@@ -81,15 +81,15 @@ private:
     void putFinalData();
     void renderingFinished();
 
-    double  calculateAngle(const QPoint &p1, const QPoint &p2);
+    double  calculateAngle(const QPoint& p1, const QPoint& p2);
     double  calculateAutoAngle();
-    QPixmap generateBtnPixmap(const QString &label, const QColor &color);
+    QPixmap generateBtnPixmap(const QString& label, const QColor& color);
 
-    bool    pointIsValid(const QPoint &p);
-    void    setPointInvalid(QPoint &p);
+    bool    pointIsValid(const QPoint& p);
+    void    setPointInvalid(QPoint& p);
     void    updatePoints();
     void    resetPoints();
-    QString generatePointLabel(const QPoint &p);
+    QString generatePointLabel(const QPoint& p);
 
 private:
 

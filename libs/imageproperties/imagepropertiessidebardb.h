@@ -60,10 +60,10 @@ public:
 
     ~ImagePropertiesSideBarDB();
 
-    virtual void itemChanged(const KUrl& url, const QRect &rect = QRect(), DImg *img = 0);
+    virtual void itemChanged(const KUrl& url, const QRect& rect = QRect(), DImg *img = 0);
 
-    virtual void itemChanged(const ImageInfo &info, const QRect &rect = QRect(), DImg *img = 0);
-    virtual void itemChanged(const ImageInfoList &infos);
+    virtual void itemChanged(const ImageInfo& info, const QRect& rect = QRect(), DImg *img = 0);
+    virtual void itemChanged(const ImageInfoList& infos);
 
     void populateTags(void);
     void refreshTagsView();
@@ -92,13 +92,13 @@ public Q_SLOTS:
 private Q_SLOTS:
 
     void slotChangedTab(QWidget* tab);
-    void slotFileMetadataChanged(const KUrl &url);
-    void slotImageChangeDatabase(const ImageChangeset &changeset);
+    void slotFileMetadataChanged(const KUrl& url);
+    void slotImageChangeDatabase(const ImageChangeset& changeset);
 
 private:
 
-    void itemChanged(const KUrl& url, const ImageInfo &info, const QRect &rect, DImg *img);
-    void itemChanged(const ImageInfoList infos, const QRect &rect, DImg *img);
+    void itemChanged(const KUrl& url, const ImageInfo& info, const QRect& rect, DImg *img);
+    void itemChanged(const ImageInfoList infos, const QRect& rect, DImg *img);
     void setImagePropertiesInformation(const KUrl& url);
 
 private:

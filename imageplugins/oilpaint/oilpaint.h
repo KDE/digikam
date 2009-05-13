@@ -45,9 +45,9 @@ private:
 
     virtual void filterImage(void);
 
-    void oilpaintImage(Digikam::DImg &orgImage, Digikam::DImg &destImage, int BrushSize, int Smoothness);
+    void oilpaintImage(Digikam::DImg& orgImage, Digikam::DImg& destImage, int BrushSize, int Smoothness);
 
-    Digikam::DColor MostFrequentColor (Digikam::DImg &src,
+    Digikam::DColor MostFrequentColor (Digikam::DImg& src,
                             int X, int Y, int Radius, int Intensity);
 
     // Function to calculate the color intensity and return the luminance (Y)

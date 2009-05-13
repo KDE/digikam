@@ -148,7 +148,7 @@ inline void DColor::demultiply8(int alphaValue)
     setBlue ((blue()  << 8) / Da);
 }
 
-inline void DColor::blendAdd(const DColor &src)
+inline void DColor::blendAdd(const DColor& src)
 {
     setRed  (red()   + src.red());
     setGreen(green() + src.green());

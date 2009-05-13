@@ -147,7 +147,7 @@ ImageDelegate::~ImageDelegate()
     delete d;
 }
 
-void ImageDelegate::setThumbnailSize(const ThumbnailSize &thumbSize)
+void ImageDelegate::setThumbnailSize(const ThumbnailSize& thumbSize)
 {
     if ( d->thumbSize != thumbSize)
     {
@@ -204,13 +204,13 @@ QRect ImageDelegate::tagsRect() const
     return d->tagRect;
 }
 
-void ImageDelegate::mouseMoved(QMouseEvent *e, const QRect &visualRect, const QModelIndex &index)
+void ImageDelegate::mouseMoved(QMouseEvent *e, const QRect& visualRect, const QModelIndex& index)
 {
     foreach (ImageDelegateOverlay *overlay, d->overlays)
         overlay->mouseMoved(e, visualRect, index);
 }
 
-void ImageDelegate::paint(QPainter * p, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void ImageDelegate::paint(QPainter * p, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     ImageInfo info = ImageModel::retrieveImageInfo(index);
 
@@ -373,7 +373,7 @@ void ImageDelegate::paint(QPainter * p, const QStyleOptionViewItem &option, cons
         overlay->paint(p, option, index);
 }
 
-QPixmap ImageDelegate::pixmapForDrag(const QStyleOptionViewItem &option, const QList<QModelIndex> &indexes) const
+QPixmap ImageDelegate::pixmapForDrag(const QStyleOptionViewItem& option, const QList<QModelIndex>& indexes) const
 {
     QPixmap icon(DesktopIcon("image-jp2", 48));
     int w = icon.width();
@@ -410,17 +410,17 @@ QSize ImageDelegate::gridSize() const
     return d->gridSize;
 }
 
-bool ImageDelegate::acceptsToolTip(const QPoint& pos, const QRect &visualRect, const QModelIndex& index, QRect *toolTipRect) const
+bool ImageDelegate::acceptsToolTip(const QPoint& pos, const QRect& visualRect, const QModelIndex& index, QRect *toolTipRect) const
 {
     return onActualPixmapRect(pos, visualRect, index, toolTipRect);
 }
 
-bool ImageDelegate::acceptsActivation(const QPoint& pos, const QRect &visualRect, const QModelIndex& index, QRect *activationRect) const
+bool ImageDelegate::acceptsActivation(const QPoint& pos, const QRect& visualRect, const QModelIndex& index, QRect *activationRect) const
 {
     return onActualPixmapRect(pos, visualRect, index, activationRect);
 }
 
-bool ImageDelegate::onActualPixmapRect(const QPoint& pos, const QRect &visualRect, const QModelIndex& index, QRect *returnRect) const
+bool ImageDelegate::onActualPixmapRect(const QPoint& pos, const QRect& visualRect, const QModelIndex& index, QRect *returnRect) const
 {
     qlonglong id = ImageModel::retrieveImageId(index);
 
@@ -437,7 +437,7 @@ bool ImageDelegate::onActualPixmapRect(const QPoint& pos, const QRect &visualRec
     return actualRect.contains(pos);
 }
 
-void ImageDelegate::setDefaultViewOptions(const QStyleOptionViewItem &option)
+void ImageDelegate::setDefaultViewOptions(const QStyleOptionViewItem& option)
 {
     d->font = option.font;
     d->categoryDrawer->setDefaultViewOptions(option);
@@ -674,14 +674,14 @@ QRect ImageDelegate::actualPixmapRect(qlonglong imageid) const
         return d->pixmapRect;
 }
 
-void ImageDelegate::updateActualPixmapRect(qlonglong imageid, const QRect &rect)
+void ImageDelegate::updateActualPixmapRect(qlonglong imageid, const QRect& rect)
 {
     QRect *old = d->actualPixmapRectCache.object(imageid);
     if (!old || *old != rect)
         d->actualPixmapRectCache.insert(imageid, new QRect(rect));
 }
 
-QPixmap ImageDelegate::thumbnailBorderPixmap(const QSize &pixSize) const
+QPixmap ImageDelegate::thumbnailBorderPixmap(const QSize& pixSize) const
 {
     const int radius         = 3;
     const QColor borderColor = QColor(0, 0, 0, 128);

@@ -37,8 +37,8 @@ class kio_digikamtagsProtocol : public KIO::SlaveBase
 {
 public:
 
-    kio_digikamtagsProtocol(const QByteArray &pool_socket,
-                            const QByteArray &app_socket);
+    kio_digikamtagsProtocol(const QByteArray& pool_socket,
+                            const QByteArray& app_socket);
     virtual ~kio_digikamtagsProtocol();
 
     void special(const QByteArray& data);

@@ -64,7 +64,7 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotResetSettings();
-    void slotFontPropertiesChanged(const QFont &font);
+    void slotFontPropertiesChanged(const QFont& font);
     void slotUpdatePreview();
     void slotAlignModeChanged(int mode);
 

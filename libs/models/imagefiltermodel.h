@@ -73,21 +73,21 @@ public:
     ImageModel *sourceModel() const;
 
     /// Convenience methods mapped to ImageModel
-    QList<QModelIndex> mapListToSource(const QList<QModelIndex> &indexes) const;
-    QList<QModelIndex> mapListFromSource(const QList<QModelIndex> &sourceIndexes) const;
-    ImageInfo imageInfo(const QModelIndex &index) const;
-    qlonglong imageId(const QModelIndex &index) const;
-    QList<ImageInfo> imageInfos(const QList<QModelIndex> &indexes) const;
-    QList<qlonglong> imageIds(const QList<QModelIndex> &indexes) const;
-    QModelIndex indexForPath(const QString &filePath) const;
-    QModelIndex indexForImageInfo(const ImageInfo &info) const;
+    QList<QModelIndex> mapListToSource(const QList<QModelIndex>& indexes) const;
+    QList<QModelIndex> mapListFromSource(const QList<QModelIndex>& sourceIndexes) const;
+    ImageInfo imageInfo(const QModelIndex& index) const;
+    qlonglong imageId(const QModelIndex& index) const;
+    QList<ImageInfo> imageInfos(const QList<QModelIndex>& indexes) const;
+    QList<qlonglong> imageIds(const QList<QModelIndex>& indexes) const;
+    QModelIndex indexForPath(const QString& filePath) const;
+    QModelIndex indexForImageInfo(const ImageInfo& info) const;
     QModelIndex indexForImageId(qlonglong id) const;
     /** Returns a list of all image infos, sorted according to this model.
      *  If you do not need a sorted list, use ImageModel's imageInfos() method. */
     QList<ImageInfo> imageInfosSorted() const;
 
     /** Changes the current image filter settings and refilters. */
-    virtual void setImageFilterSettings(const ImageFilterSettings &settings);
+    virtual void setImageFilterSettings(const ImageFilterSettings& settings);
     ImageFilterSettings imageFilterSettings() const;
 
     /** Adjust the current ImageFilterSettings.
@@ -129,37 +129,37 @@ public:
     void setSortOrder(SortOrder order);
     SortOrder sortOrder() const;
 
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 
 protected:
 
     virtual void setSourceModel(QAbstractItemModel* model);
 
-    virtual bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
+    virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
 
-    virtual int  compareCategories(const QModelIndex &left, const QModelIndex &right) const;
-    virtual bool subSortLessThan(const QModelIndex &left, const QModelIndex &right) const;
-    virtual int  categoryCount(const ImageInfo &info) const;
+    virtual int  compareCategories(const QModelIndex& left, const QModelIndex& right) const;
+    virtual bool subSortLessThan(const QModelIndex& left, const QModelIndex& right) const;
+    virtual int  categoryCount(const ImageInfo& info) const;
 
     /** Reimplement to customize category sorting,
      *  Return negative if category of left < category right,
      *  Return 0 if left and right are in the same category, else return positive. */
-    virtual int compareInfosCategories(const ImageInfo &left, const ImageInfo &right) const;
+    virtual int compareInfosCategories(const ImageInfo& left, const ImageInfo& right) const;
     /** Reimplement to customize sorting. Do not take categories into account here. */
-    virtual bool infosLessThan(const ImageInfo &left, const ImageInfo &right) const;
+    virtual bool infosLessThan(const ImageInfo& left, const ImageInfo& right) const;
     /** Returns a unique identifier for the category if info. The string need not be for user display. */
-    virtual QString categoryIdentifier(const ImageInfo &info) const;
+    virtual QString categoryIdentifier(const ImageInfo& info) const;
 
     ImageFilterModelPrivate *const d_ptr;
-    ImageFilterModel(ImageFilterModelPrivate &dd, QObject *parent);
+    ImageFilterModel(ImageFilterModelPrivate& dd, QObject *parent);
 
 protected Q_SLOTS:
 
     void slotModelReset();
     void slotUpdateFilter();
 
-    void slotImageTagChange(const ImageTagChangeset &changeset);
-    void slotImageChange(const ImageChangeset &changeset);
+    void slotImageTagChange(const ImageTagChangeset& changeset);
+    void slotImageChange(const ImageChangeset& changeset);
 
 private:
 

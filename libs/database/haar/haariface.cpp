@@ -83,7 +83,7 @@ public:
 
     /** Read the QByteArray into the Haar::SignatureData.
      */
-    void read(const QByteArray &array, Haar::SignatureData *data)
+    void read(const QByteArray& array, Haar::SignatureData *data)
     {
         QDataStream stream(array);
 
@@ -215,7 +215,7 @@ bool HaarIface::indexImage(const QString& filename)
     return indexImage(filename, image);
 }
 
-bool HaarIface::indexImage(const QString& filename, const QImage &image)
+bool HaarIface::indexImage(const QString& filename, const QImage& image)
 {
     ImageInfo info(KUrl::fromPath(filename));
     if (info.isNull())
@@ -223,7 +223,7 @@ bool HaarIface::indexImage(const QString& filename, const QImage &image)
     return indexImage(info.id(), image);
 }
 
-bool HaarIface::indexImage(const QString& filename, const DImg &image)
+bool HaarIface::indexImage(const QString& filename, const DImg& image)
 {
     ImageInfo info(KUrl::fromPath(filename));
     if (info.isNull())
@@ -280,7 +280,7 @@ bool HaarIface::indexImage(qlonglong imageid)
     return true;
 }
 
-QString HaarIface::signatureAsText(const QImage &image)
+QString HaarIface::signatureAsText(const QImage& image)
 {
     d->createLoadingBuffer();
     d->data->fillPixelData(image);
@@ -516,9 +516,9 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData *querySig,
     // read cached signature map if possible
     else
     {
-        foreach (const qlonglong &imageid, sigMap.keys())
+        foreach (const qlonglong& imageid, sigMap.keys())
         {
-            double              &score = scores[imageid];
+            double& score              = scores[imageid];
             Haar::SignatureData &qSig  = *querySig;
             Haar::SignatureData &tSig  = sigMap[imageid];
 
@@ -530,7 +530,7 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData *querySig,
     return scores;
 }
 
-QImage HaarIface::loadQImage(const QString &filename)
+QImage HaarIface::loadQImage(const QString& filename)
 {
     // NOTE: Can be optimized using DImg.
 
@@ -602,7 +602,7 @@ void HaarIface::getBestAndWorstPossibleScore(Haar::SignatureData *sig, SketchTyp
     *lowestAndBestScore = score;
 }
 
-void HaarIface::rebuildDuplicatesAlbums(const QList<int> &albums2Scan, double requiredPercentage,
+void HaarIface::rebuildDuplicatesAlbums(const QList<int>& albums2Scan, double requiredPercentage,
                                         HaarProgressObserver *observer, bool fast)
 {
     // Carry out search. This takes long.
@@ -640,7 +640,7 @@ void HaarIface::rebuildDuplicatesAlbums(const QList<int> &albums2Scan, double re
 }
 
 
-QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesInAlbums(const QList<int> &albums2Scan,
+QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesInAlbums(const QList<int>& albums2Scan,
                                                double requiredPercentage, HaarProgressObserver *observer, bool fast)
 {
     QList<qlonglong> idList;
@@ -694,7 +694,7 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlongl
                     resultsMap.insert(*it, list);
                     resultsCandidates << *it;
 
-                    foreach (const qlonglong &id, list)
+                    foreach (const qlonglong& id, list)
                     {
                         resultsCandidates << id;
                     }
@@ -770,7 +770,7 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesFast(HaarProgressOb
      * Step 2: get all image ids for each duplicate fingerprint
      */
     QList<qlonglong> ids;
-    foreach(const QByteArray &matrix, matrixList)
+    foreach(const QByteArray& matrix, matrixList)
     {
         QSqlQuery imageQuery = access.backend()->prepareQuery(QString(
                 "SELECT Images.id "
@@ -803,8 +803,8 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesFast(HaarProgressOb
     return resultsMap;
 }
 
-double HaarIface::calculateScore(Haar::SignatureData &querySig, Haar::SignatureData &targetSig,
-                                 Haar::Weights &weights, Haar::SignatureMap** queryMaps)
+double HaarIface::calculateScore(Haar::SignatureData& querySig, Haar::SignatureData& targetSig,
+                                 Haar::Weights& weights, Haar::SignatureMap** queryMaps)
 {
     double score = 0.0;
 

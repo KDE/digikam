@@ -70,12 +70,12 @@ public:
      */
     void dropInfo(ImageInfoData *infodata);
 
-    QString albumName(DatabaseAccess &access, int albumId);
+    QString albumName(DatabaseAccess& access, int albumId);
 
 private Q_SLOTS:
 
-    void slotImageChanged(const ImageChangeset &changeset);
-    void slotImageTagChanged(const ImageTagChangeset &changeset);
+    void slotImageChanged(const ImageChangeset& changeset);
+    void slotImageTagChanged(const ImageTagChangeset& changeset);
     void slotAlbumChange(const AlbumChangeset &);
 
 private:

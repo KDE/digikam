@@ -747,7 +747,7 @@ void AlbumFolderView::albumDelete(AlbumFolderViewItem *item)
             this, SLOT(slotDIOResult(KJob *)));
 }
 
-void AlbumFolderView::addAlbumChildrenToList(KUrl::List &list, Album *album)
+void AlbumFolderView::addAlbumChildrenToList(KUrl::List& list, Album *album)
 {
     // simple recursive helper function
     if (album)

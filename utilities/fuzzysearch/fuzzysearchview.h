@@ -72,7 +72,7 @@ protected:
 private:
 
     void setCurrentImage(qlonglong imageid);
-    void setCurrentImage(const ImageInfo &info);
+    void setCurrentImage(const ImageInfo& info);
 
     void readConfig();
     void writeConfig();

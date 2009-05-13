@@ -50,15 +50,15 @@ public:
       * The values can be read from and written to a KUrl.
       */
 
-    DatabaseParameters(const QString &type,
-                       const QString &databaseName,
-                       const QString &connectOptions = QString(),
-                       const QString &hostName = QString(),
+    DatabaseParameters(const QString& type,
+                       const QString& databaseName,
+                       const QString& connectOptions = QString(),
+                       const QString& hostName = QString(),
                        int   port = -1,
-                       const QString &userName = QString(),
-                       const QString &password = QString());
+                       const QString& userName = QString(),
+                       const QString& password = QString());
 
-    DatabaseParameters(const KUrl &url);
+    DatabaseParameters(const KUrl& url);
     DatabaseParameters();
 
     QString databaseType;
@@ -69,9 +69,9 @@ public:
     QString userName;
     QString password;
 
-    void insertInUrl(KUrl &url) const;
-    bool operator==(const DatabaseParameters &other);
-    bool operator!=(const DatabaseParameters &other);
+    void insertInUrl(KUrl& url) const;
+    bool operator==(const DatabaseParameters& other);
+    bool operator!=(const DatabaseParameters& other);
 
     bool isSQLite() const;
     QString SQLiteDatabaseFile() const;
@@ -85,10 +85,10 @@ public:
      * Convenience method to create a DatabaseParameters object for an
      * SQLITE 3 database specified by the local file path.
      */
-    static DatabaseParameters parametersForSQLite(const QString &databaseFile);
-    static DatabaseParameters parametersForSQLiteDefaultFile(const QString &directory);
+    static DatabaseParameters parametersForSQLite(const QString& databaseFile);
+    static DatabaseParameters parametersForSQLiteDefaultFile(const QString& directory);
 
-    static void removeFromUrl(KUrl &url);
+    static void removeFromUrl(KUrl& url);
 };
 
 }  // namespace Digikam

@@ -41,7 +41,7 @@ class ImagePlugin_NoiseReduction : public Digikam::ImagePlugin
 
 public:
 
-    ImagePlugin_NoiseReduction(QObject *parent, const QVariantList &args);
+    ImagePlugin_NoiseReduction(QObject *parent, const QVariantList& args);
     ~ImagePlugin_NoiseReduction();
 
     void setEnabledActions(bool enable);

@@ -235,7 +235,7 @@ QList<ImageInfo> ImageCategorizedView::selectedImageInfosCurrentFirst() const
     QList<QModelIndex> indexes = selectedIndexes();
     QModelIndex        current = currentIndex();
     QList<ImageInfo>   infos;
-    foreach (const QModelIndex &index, indexes)
+    foreach (const QModelIndex& index, indexes)
     {
         ImageInfo info = d->filterModel->imageInfo(index);
         if (index == current)
@@ -255,7 +255,7 @@ KUrl::List ImageCategorizedView::urls() const
 {
     QList<ImageInfo> infos = imageInfos();
     KUrl::List urls;
-    foreach (const ImageInfo &info, infos)
+    foreach (const ImageInfo& info, infos)
         urls << info.fileUrl();
     return urls;
 }
@@ -264,7 +264,7 @@ KUrl::List ImageCategorizedView::selectedUrls() const
 {
     QList<ImageInfo> infos = selectedImageInfos();
     KUrl::List urls;
-    foreach (const ImageInfo &info, infos)
+    foreach (const ImageInfo& info, infos)
         urls << info.fileUrl();
     return urls;
 }
@@ -284,7 +284,7 @@ void ImageCategorizedView::setThumbnailSize(int size)
     setThumbnailSize(ThumbnailSize(size));
 }
 
-void ImageCategorizedView::setThumbnailSize(const ThumbnailSize &size)
+void ImageCategorizedView::setThumbnailSize(const ThumbnailSize& size)
 {
     d->model->setThumbnailSize(size);
     d->delegate->setThumbnailSize(size);
@@ -296,7 +296,7 @@ void ImageCategorizedView::scrollToWhenAvailable(qlonglong imageId)
     d->scrollToItemId = imageId;
 }
 
-void ImageCategorizedView::setCurrentUrl(const KUrl &url)
+void ImageCategorizedView::setCurrentUrl(const KUrl& url)
 {
     QString path = url.path();
     QModelIndex index = d->filterModel->indexForPath(path);
@@ -354,7 +354,7 @@ void ImageCategorizedView::slotSetupChanged()
     viewport()->update();
 }
 
-void ImageCategorizedView::slotGridSizeChanged(const QSize &gridSize)
+void ImageCategorizedView::slotGridSizeChanged(const QSize& gridSize)
 {
     setGridSize(gridSize);
 
@@ -381,14 +381,14 @@ void ImageCategorizedView::updateDelegateSizes()
     d->delegate->setDefaultViewOptions(option);
 }
 
-void ImageCategorizedView::slotFileChanged(const QString &filePath)
+void ImageCategorizedView::slotFileChanged(const QString& filePath)
 {
     QModelIndex index = d->filterModel->indexForPath(filePath);
     if (index.isValid())
         update(index);
 }
 
-void ImageCategorizedView::slotActivated(const QModelIndex &index)
+void ImageCategorizedView::slotActivated(const QModelIndex& index)
 {
     if (d->currentMouseEvent)
     {
@@ -403,13 +403,13 @@ void ImageCategorizedView::slotActivated(const QModelIndex &index)
         activated(info);
 }
 
-void ImageCategorizedView::slotClicked(const QModelIndex &index)
+void ImageCategorizedView::slotClicked(const QModelIndex& index)
 {
     if (d->currentMouseEvent)
         emit clicked(d->currentMouseEvent, index);
 }
 
-void ImageCategorizedView::slotEntered(const QModelIndex &index)
+void ImageCategorizedView::slotEntered(const QModelIndex& index)
 {
     if (d->currentMouseEvent)
         emit entered(d->currentMouseEvent, index);
@@ -423,14 +423,14 @@ void ImageCategorizedView::reset()
     emit selectionCleared();
 }
 
-void ImageCategorizedView::currentChanged(const QModelIndex &index, const QModelIndex &previous)
+void ImageCategorizedView::currentChanged(const QModelIndex& index, const QModelIndex& previous)
 {
     KCategorizedView::currentChanged(index, previous);
 
     emit currentChanged(d->filterModel->imageInfo(index));
 }
 
-void ImageCategorizedView::selectionChanged(const QItemSelection &selectedItems, const QItemSelection &deselectedItems)
+void ImageCategorizedView::selectionChanged(const QItemSelection& selectedItems, const QItemSelection& deselectedItems)
 {
     KCategorizedView::selectionChanged(selectedItems, deselectedItems);
 
@@ -443,7 +443,7 @@ void ImageCategorizedView::selectionChanged(const QItemSelection &selectedItems,
         emit selectionCleared();
 }
 
-Album *ImageCategorizedView::albumAt(const QPoint &pos)
+Album *ImageCategorizedView::albumAt(const QPoint& pos)
 {
     if (d->filterModel->categorizationMode() == ImageFilterModel::CategoryByAlbum)
     {
@@ -457,7 +457,7 @@ Album *ImageCategorizedView::albumAt(const QPoint &pos)
     return currentAlbum();
 }
 
-QModelIndex ImageCategorizedView::indexForCategoryAt(const QPoint &pos) const
+QModelIndex ImageCategorizedView::indexForCategoryAt(const QPoint& pos) const
 {
     QModelIndex index = indexAt(pos);
     if (index.isValid())
@@ -628,12 +628,12 @@ void ImageCategorizedView::keyPressEvent(QKeyEvent *event)
     emit keyPressed(event);
 }
 
-bool modelIndexByRowLessThan(const QModelIndex &i1, const QModelIndex &i2)
+bool modelIndexByRowLessThan(const QModelIndex& i1, const QModelIndex& i2)
 {
     return i1.row() < i2.row();
 }
 
-void ImageCategorizedView::slotDelegateWaitsForThumbnail(const QModelIndex &index)
+void ImageCategorizedView::slotDelegateWaitsForThumbnail(const QModelIndex& index)
 {
     d->indexesToThumbnail << index;
 }

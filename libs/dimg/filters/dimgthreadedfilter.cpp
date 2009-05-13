@@ -67,8 +67,8 @@ DImgThreadedFilter::DImgThreadedFilter(DImg *orgImage, QObject *parent,
     m_progressSpan  = 100;
 }
 
-DImgThreadedFilter::DImgThreadedFilter(DImgThreadedFilter *master, const DImg &orgImage,
-                                       const DImg &destImage, int progressBegin, int progressEnd,
+DImgThreadedFilter::DImgThreadedFilter(DImgThreadedFilter *master, const DImg& orgImage,
+                                       const DImg& destImage, int progressBegin, int progressEnd,
                                        const QString& name)
 {
     setOriginalImage(orgImage);

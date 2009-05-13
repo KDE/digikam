@@ -125,19 +125,19 @@ ImagePropertiesSideBarDB::~ImagePropertiesSideBarDB()
     delete d;
 }
 
-void ImagePropertiesSideBarDB::itemChanged(const ImageInfo &info,
-                                           const QRect &rect, DImg *img)
+void ImagePropertiesSideBarDB::itemChanged(const ImageInfo& info,
+                                           const QRect& rect, DImg *img)
 {
     itemChanged(info.fileUrl(), info, rect, img);
 }
 
-void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, const QRect &rect, DImg *img)
+void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, const QRect& rect, DImg *img)
 {
     itemChanged(url, ImageInfo(), rect, img);
 }
 
-void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, const ImageInfo &info,
-                                           const QRect &rect, DImg *img)
+void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, const ImageInfo& info,
+                                           const QRect& rect, DImg *img)
 {
     if ( !url.isValid() )
         return;
@@ -151,7 +151,7 @@ void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, const ImageInfo &inf
     itemChanged(list, rect, img);
 }
 
-void ImagePropertiesSideBarDB::itemChanged(const ImageInfoList &infos)
+void ImagePropertiesSideBarDB::itemChanged(const ImageInfoList& infos)
 {
     if (infos.isEmpty())
         return;
@@ -161,7 +161,7 @@ void ImagePropertiesSideBarDB::itemChanged(const ImageInfoList &infos)
     itemChanged(infos, QRect(), 0);
 }
 
-void ImagePropertiesSideBarDB::itemChanged(ImageInfoList infos, const QRect &rect, DImg *img)
+void ImagePropertiesSideBarDB::itemChanged(ImageInfoList infos, const QRect& rect, DImg *img)
 {
     m_currentRect = rect;
     m_image       = img;
@@ -356,7 +356,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
     unsetCursor();
 }
 
-void ImagePropertiesSideBarDB::slotFileMetadataChanged(const KUrl &url)
+void ImagePropertiesSideBarDB::slotFileMetadataChanged(const KUrl& url)
 {
     if (url == m_currentURL)
     {
@@ -371,7 +371,7 @@ void ImagePropertiesSideBarDB::slotFileMetadataChanged(const KUrl &url)
     }
 }
 
-void ImagePropertiesSideBarDB::slotImageChangeDatabase(const ImageChangeset &changeset)
+void ImagePropertiesSideBarDB::slotImageChangeDatabase(const ImageChangeset& changeset)
 {
     if (!d->currentInfos.isEmpty())
     {
@@ -380,7 +380,7 @@ void ImagePropertiesSideBarDB::slotImageChangeDatabase(const ImageChangeset &cha
 
         if (tab == m_propertiesTab || tab == m_gpsTab)
         {
-            ImageInfo &info = d->currentInfos.first();
+            ImageInfo& info = d->currentInfos.first();
             if (changeset.ids().contains(info.id()))
             {
                 // trigger an update, if changes touch the tab's information
@@ -445,7 +445,7 @@ void ImagePropertiesSideBarDB::refreshTagsView()
 
 void ImagePropertiesSideBarDB::setImagePropertiesInformation(const KUrl& url)
 {
-    foreach(const ImageInfo &info, d->currentInfos)
+    foreach(const ImageInfo& info, d->currentInfos)
     {
         if (info.fileUrl() == url)
         {

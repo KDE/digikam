@@ -40,7 +40,7 @@ void LoadingCacheInterface::cleanUp()
     LoadingCache::cleanUp();
 }
 
-void LoadingCacheInterface::fileChanged(const QString &filePath)
+void LoadingCacheInterface::fileChanged(const QString& filePath)
 {
     LoadingCache *cache = LoadingCache::cache();
     LoadingCache::CacheLock lock(cache);
@@ -71,7 +71,7 @@ void LoadingCacheInterface::cleanCache()
     cache->removeImages();
 }
 
-void LoadingCacheInterface::putImage(const QString &filePath, const DImg &img)
+void LoadingCacheInterface::putImage(const QString& filePath, const DImg& img)
 {
     LoadingCache *cache = LoadingCache::cache();
     LoadingCache::CacheLock lock(cache);

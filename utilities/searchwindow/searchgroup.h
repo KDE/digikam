@@ -65,8 +65,8 @@ public:
 
     void setup(Type type = FirstGroup);
 
-    void read(SearchXmlCachingReader &reader);
-    void write(SearchXmlWriter &writer);
+    void read(SearchXmlCachingReader& reader);
+    void write(SearchXmlWriter& writer);
     void reset();
 
     Type groupType() const;

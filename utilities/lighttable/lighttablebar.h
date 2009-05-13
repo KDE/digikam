@@ -45,10 +45,10 @@ public:
                   bool exifRotate=true);
     ~LightTableBar();
 
-    void setOnLeftPanel(const ImageInfo &info);
-    void setOnRightPanel(const ImageInfo &info);
+    void setOnLeftPanel(const ImageInfo& info);
+    void setOnRightPanel(const ImageInfo& info);
 
-    void removeItemByInfo(const ImageInfo &info);
+    void removeItemByInfo(const ImageInfo& info);
 
     void setNavigateByPair(bool b);
 
@@ -95,7 +95,7 @@ class LightTableBarItem : public ImagePreviewBarItem
 {
 public:
 
-    LightTableBarItem(LightTableBar *view, const ImageInfo &info);
+    LightTableBarItem(LightTableBar *view, const ImageInfo& info);
     ~LightTableBarItem();
 
     void setOnLeftPanel(bool on);

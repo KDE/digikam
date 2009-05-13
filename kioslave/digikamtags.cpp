@@ -51,8 +51,8 @@
 #include "imagelister.h"
 #include "imagelisterreceiver.h"
 
-kio_digikamtagsProtocol::kio_digikamtagsProtocol(const QByteArray &pool_socket,
-                                                 const QByteArray &app_socket)
+kio_digikamtagsProtocol::kio_digikamtagsProtocol(const QByteArray& pool_socket,
+                                                 const QByteArray& app_socket)
                        : SlaveBase("kio_digikamtags", pool_socket, app_socket)
 {
 }

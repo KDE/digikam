@@ -98,8 +98,8 @@ public:
     Unit data2[NumberOfPixelsSquared];
     Unit data3[NumberOfPixelsSquared];
 
-    void fillPixelData(const QImage &image);
-    void fillPixelData(const DImg &image);
+    void fillPixelData(const QImage& image);
+    void fillPixelData(const DImg& image);
 };
 
 // ---------------------------------------------------------------------------------

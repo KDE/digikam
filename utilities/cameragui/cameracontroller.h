@@ -114,13 +114,13 @@ Q_SIGNALS:
     void signalExifFromFile(const QString& folder, const QString& file);
     void signalExifData(const QByteArray& exifData);
 
-    void signalInternalCheckRename(const QString &folder, const QString &file, 
-                                   const QString &destination, const QString &temp);
-    void signalInternalDownloadFailed(const QString &folder, const QString &file);
-    void signalInternalUploadFailed(const QString &folder, const QString &file, const QString &src);
-    void signalInternalDeleteFailed(const QString &folder, const QString &file);
-    void signalInternalLockFailed(const QString &folder, const QString &file);
-    void signalInternalOpen(const QString &folder, const QString &file, const QString &dest);
+    void signalInternalCheckRename(const QString& folder, const QString& file, 
+                                   const QString& destination, const QString& temp);
+    void signalInternalDownloadFailed(const QString& folder, const QString& file);
+    void signalInternalUploadFailed(const QString& folder, const QString& file, const QString& src);
+    void signalInternalDeleteFailed(const QString& folder, const QString& file);
+    void signalInternalLockFailed(const QString& folder, const QString& file);
+    void signalInternalOpen(const QString& folder, const QString& file, const QString& dest);
 
 public Q_SLOTS:
 
@@ -134,13 +134,13 @@ protected:
 
 private Q_SLOTS:
 
-    void slotCheckRename(const QString &folder, const QString &file, 
-                         const QString &destination, const QString& temp);
-    void slotDownloadFailed(const QString &folder, const QString &file);
-    void slotUploadFailed(const QString &folder, const QString &file, const QString &src);
-    void slotDeleteFailed(const QString &folder, const QString &file);
-    void slotLockFailed(const QString &folder, const QString &file);
-    void slotOpen(const QString &folder, const QString &file, const QString &dest);
+    void slotCheckRename(const QString& folder, const QString& file, 
+                         const QString& destination, const QString& temp);
+    void slotDownloadFailed(const QString& folder, const QString& file);
+    void slotUploadFailed(const QString& folder, const QString& file, const QString& src);
+    void slotDeleteFailed(const QString& folder, const QString& file);
+    void slotLockFailed(const QString& folder, const QString& file);
+    void slotOpen(const QString& folder, const QString& file, const QString& dest);
 
 private:
 

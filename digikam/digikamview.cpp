@@ -137,7 +137,7 @@ public:
         thumbSize             = ThumbnailSize::Medium;
     }
 
-    QString userPresentableAlbumTitle(const QString &album);
+    QString userPresentableAlbumTitle(const QString& album);
 
     bool                      needDispatchSelection;
     bool                      cancelSlideShow;
@@ -984,21 +984,21 @@ void DigikamView::clearHistory()
     d->parent->enableAlbumForwardHistory(false);
 }
 
-void DigikamView::getBackwardHistory(QStringList &titles)
+void DigikamView::getBackwardHistory(QStringList& titles)
 {
     d->albumHistory->getBackwardHistory(titles);
     for (int i=0; i<titles.size(); ++i)
         titles[i] = d->userPresentableAlbumTitle(titles[i]);
 }
 
-void DigikamView::getForwardHistory(QStringList &titles)
+void DigikamView::getForwardHistory(QStringList& titles)
 {
     d->albumHistory->getForwardHistory(titles);
     for (int i=0; i<titles.size(); ++i)
         titles[i] = d->userPresentableAlbumTitle(titles[i]);
 }
 
-QString DigikamViewPriv::userPresentableAlbumTitle(const QString &title)
+QString DigikamViewPriv::userPresentableAlbumTitle(const QString& title)
 {
     if (title == FuzzySearchFolderView::currentFuzzySketchSearchName())
         return i18n("Fuzzy Sketch Search");
@@ -1031,7 +1031,7 @@ void DigikamView::slotSelectAlbum(const KUrl &)
     */
 }
 
-void DigikamView::slotGotoAlbumAndItem(ImageInfo &imageInfo)
+void DigikamView::slotGotoAlbumAndItem(ImageInfo& imageInfo)
 {
     KUrl url( imageInfo.fileUrl() );
     url.cleanPath();
@@ -1057,7 +1057,7 @@ void DigikamView::slotGotoAlbumAndItem(ImageInfo &imageInfo)
     d->albumManager->setCurrentAlbum(album);
 }
 
-void DigikamView::slotGotoDateAndItem(ImageInfo &imageInfo)
+void DigikamView::slotGotoDateAndItem(ImageInfo& imageInfo)
 {
     KUrl url( imageInfo.fileUrl() );
     url.cleanPath();
@@ -1721,7 +1721,7 @@ void DigikamView::slotItemsInfoFromAlbums(const ImageInfoList& infoList)
     slideShow(list);
 }
 
-void DigikamView::slideShow(ImageInfoList &infoList)
+void DigikamView::slideShow(ImageInfoList& infoList)
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("ImageViewer Settings");

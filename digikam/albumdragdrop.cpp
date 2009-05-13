@@ -56,7 +56,7 @@ AlbumDragDropHandler::AlbumDragDropHandler(AlbumModel *model)
 {
 }
 
-bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, QDropEvent *e, const QModelIndex &droppedOn)
+bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, QDropEvent *e, const QModelIndex& droppedOn)
 {
     if(accepts(e->mimeData(), droppedOn) == Qt::IgnoreAction)
         return false;
@@ -302,7 +302,7 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, QDropEvent *e, con
     return false;
 }
 
-Qt::DropAction AlbumDragDropHandler::accepts(const QMimeData *data, const QModelIndex &dropIndex)
+Qt::DropAction AlbumDragDropHandler::accepts(const QMimeData *data, const QModelIndex& dropIndex)
 {
     PAlbum *destAlbum = model()->albumForIndex(dropIndex);
 
@@ -357,7 +357,7 @@ QStringList AlbumDragDropHandler::mimeTypes() const
     return mimeTypes;
 }
 
-QMimeData *AlbumDragDropHandler::createMimeData(const QList<Album*> &albums)
+QMimeData *AlbumDragDropHandler::createMimeData(const QList<Album*>& albums)
 {
     if (albums.isEmpty())
         return 0;

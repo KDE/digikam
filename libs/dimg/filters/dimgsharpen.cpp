@@ -54,7 +54,7 @@ DImgSharpen::DImgSharpen(DImg *orgImage, QObject *parent, double radius, double 
 }
 
 DImgSharpen::DImgSharpen(DImgThreadedFilter *parentFilter,
-                         const DImg &orgImage, const DImg &destImage,
+                         const DImg& orgImage, const DImg& destImage,
                          int progressBegin, int progressEnd, double radius, double sigma)
            : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
                                 parentFilter->filterName() + ": Sharpen")

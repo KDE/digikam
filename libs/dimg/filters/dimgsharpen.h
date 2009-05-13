@@ -40,7 +40,7 @@ public:
     DImgSharpen(DImg *orgImage, QObject *parent=0, double radius=0.0, double sigma=1.0);
 
     // Constructor for slave mode: execute immediately in current thread with specified master filter
-    DImgSharpen(DImgThreadedFilter *parentFilter, const DImg &orgImage, const DImg &destImage,
+    DImgSharpen(DImgThreadedFilter *parentFilter, const DImg& orgImage, const DImg& destImage,
                 int progressBegin=0, int progressEnd=100, double radius=0.0, double sigma=1.0);
 
     ~DImgSharpen(){};

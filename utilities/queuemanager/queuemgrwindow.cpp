@@ -722,7 +722,7 @@ int QueueMgrWindow::currentQueueId()
     return (d->queuePool->currentIndex());
 }
 
-void QueueMgrWindow::loadImageInfos(const ImageInfoList &list, int queueId)
+void QueueMgrWindow::loadImageInfos(const ImageInfoList& list, int queueId)
 {
     QueueListView* queue = d->queuePool->findQueueById(queueId);
     if (queue) queue->slotAddItems(list);

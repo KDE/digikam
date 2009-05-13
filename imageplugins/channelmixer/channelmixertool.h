@@ -74,7 +74,7 @@ private Q_SLOTS:
     void slotChannelChanged();
     void slotGainsChanged();
     void slotMonochromeActived(bool mono);
-    void slotColorSelectedFromTarget(const Digikam::DColor &color);
+    void slotColorSelectedFromTarget(const Digikam::DColor& color);
 
 private:
 

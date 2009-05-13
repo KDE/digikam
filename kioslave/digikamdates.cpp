@@ -49,8 +49,8 @@
 #include "albumdb.h"
 #include "databaseaccess.h"
 
-kio_digikamdates::kio_digikamdates(const QByteArray &pool_socket,
-                                   const QByteArray &app_socket)
+kio_digikamdates::kio_digikamdates(const QByteArray& pool_socket,
+                                   const QByteArray& app_socket)
                 : SlaveBase("kio_digikamdates", pool_socket, app_socket)
 {
 }

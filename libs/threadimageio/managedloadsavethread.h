@@ -110,7 +110,7 @@ public:
     void stopSaving(const QString& filePath = QString());
 
     // Append a task to save the image to the task list
-    void save(DImg &image, const QString& filePath, const QString &format);
+    void save(DImg& image, const QString& filePath, const QString& format);
 
     void setTerminationPolicy(TerminationPolicy terminationPolicy);
 
@@ -126,10 +126,10 @@ protected:
 private:
 
     LoadingTask *checkLoadingTask(class LoadSaveTask *task, LoadingTaskFilter filter);
-    LoadingTask *findExistingTask(const LoadingDescription &description);
-    LoadingTask *createLoadingTask(const LoadingDescription &description, bool preloading, 
+    LoadingTask *findExistingTask(const LoadingDescription& description);
+    LoadingTask *createLoadingTask(const LoadingDescription& description, bool preloading, 
                                    LoadingMode loadingMode, AccessMode accessMode);
-    void removeLoadingTasks(const LoadingDescription &description, LoadingTaskFilter filter);
+    void removeLoadingTasks(const LoadingDescription& description, LoadingTaskFilter filter);
 
     TerminationPolicy m_terminationPolicy;
 };

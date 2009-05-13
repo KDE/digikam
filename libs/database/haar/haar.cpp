@@ -62,7 +62,7 @@ public:
     Unit d;   // [f]abs(a[i])
     int  i;   // index i of a[i]
 
-    bool operator< (const valStruct &right) const
+    bool operator< (const valStruct& right) const
     {
         return d > right.d;
     }
@@ -74,7 +74,7 @@ typedef std::priority_queue<valStruct> valqueue;
 
 /** Write pixels of a QImage in three arrays (one per color channel, pixels linearly)
  */
-void ImageData::fillPixelData(const QImage &im)
+void ImageData::fillPixelData(const QImage& im)
 {
     QImage image = im.scaled(Haar::NumberOfPixels, Haar::NumberOfPixels, Qt::IgnoreAspectRatio);
     int cn = 0;
@@ -98,7 +98,7 @@ void ImageData::fillPixelData(const QImage &im)
 
 /** Write pixels of a DImg in three arrays (one per color channel, pixels linearly)
  */
-void ImageData::fillPixelData(const DImg &im)
+void ImageData::fillPixelData(const DImg& im)
 {
     DImg image(im);
     image.convertToEightBit();

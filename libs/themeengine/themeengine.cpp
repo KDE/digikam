@@ -683,7 +683,7 @@ bool ThemeEngine::loadTheme()
     return true;
 }
 
-QString ThemeEngine::resourceValue(const QDomElement &rootElem, const QString& key)
+QString ThemeEngine::resourceValue(const QDomElement& rootElem, const QString& key)
 {
     for (QDomNode node = rootElem.firstChild();
          !node.isNull(); node = node.nextSibling())

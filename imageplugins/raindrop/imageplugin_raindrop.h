@@ -41,7 +41,7 @@ class ImagePlugin_RainDrop : public Digikam::ImagePlugin
 
 public:
 
-    ImagePlugin_RainDrop(QObject *parent, const QVariantList &args);
+    ImagePlugin_RainDrop(QObject *parent, const QVariantList& args);
     ~ImagePlugin_RainDrop();
 
     void setEnabledActions(bool enable);

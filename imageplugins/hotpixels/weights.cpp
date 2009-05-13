@@ -33,12 +33,12 @@
 namespace DigikamHotPixelsImagesPlugin
 {
 
-Weights::Weights(const Weights &w)
+Weights::Weights(const Weights& w)
 {
     (*this) = w;
 }
 
-void Weights::operator=(const Weights &w)
+void Weights::operator=(const Weights& w)
 {
     mHeight            = w.height();
     mWidth             = w.width();

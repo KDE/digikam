@@ -62,7 +62,7 @@ public:
     static bool            queueManagerWindowCreated();
 
     void addNewQueue();
-    void loadImageInfos(const ImageInfoList &list, int queueId);
+    void loadImageInfos(const ImageInfoList& list, int queueId);
     void refreshView();
     void applySettings();
 

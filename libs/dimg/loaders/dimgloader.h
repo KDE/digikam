@@ -69,7 +69,7 @@ public:
     virtual bool isReadOnly() const = 0;
     virtual bool hasLoadedData() const;
 
-    static QByteArray uniqueHash(const QString &filePath, const DImg &img, bool loadMetadata);
+    static QByteArray uniqueHash(const QString& filePath, const DImg& img, bool loadMetadata);
 
 protected:
 

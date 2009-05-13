@@ -82,7 +82,7 @@ LoadingTask *ManagedLoadSaveThread::checkLoadingTask(LoadSaveTask *task, Loading
     return 0;
 }
 
-LoadingTask *ManagedLoadSaveThread::findExistingTask(const LoadingDescription &loadingDescription)
+LoadingTask *ManagedLoadSaveThread::findExistingTask(const LoadingDescription& loadingDescription)
 {
     LoadingTask *loadingTask;
     if (m_currentTask)
@@ -318,7 +318,7 @@ void ManagedLoadSaveThread::prependThumbnailGroup(QList<LoadingDescription> desc
     m_condVar.wakeAll();
 }
 
-LoadingTask *ManagedLoadSaveThread::createLoadingTask(const LoadingDescription &description,
+LoadingTask *ManagedLoadSaveThread::createLoadingTask(const LoadingDescription& description,
                                                       bool preloading, LoadingMode loadingMode, 
                                                       AccessMode accessMode)
 {
@@ -379,7 +379,7 @@ void ManagedLoadSaveThread::stopSaving(const QString& filePath)
     }
 }
 
-void ManagedLoadSaveThread::removeLoadingTasks(const LoadingDescription &description, LoadingTaskFilter filter)
+void ManagedLoadSaveThread::removeLoadingTasks(const LoadingDescription& description, LoadingTaskFilter filter)
 {
     LoadingTask *loadingTask;
 
@@ -406,7 +406,7 @@ void ManagedLoadSaveThread::removeLoadingTasks(const LoadingDescription &descrip
     }
 }
 
-void ManagedLoadSaveThread::save(DImg &image, const QString& filePath, const QString &format)
+void ManagedLoadSaveThread::save(DImg& image, const QString& filePath, const QString& format)
 {
     QMutexLocker lock(&m_mutex);
     LoadingTask *loadingTask;

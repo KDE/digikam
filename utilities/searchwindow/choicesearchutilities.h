@@ -76,23 +76,23 @@ public:
     /** Returns the display text of all entries that are selected */
     QStringList checkedDisplayTexts() const;
     /** Sets the check state of the entry with given key */
-    template <typename T> void setChecked(const T &key, bool checked = true);
+    template <typename T> void setChecked(const T& key, bool checked = true);
     /** Sets the check state of all the entries whose key is found in the list to checked. */
-    template <typename T> void setChecked(const QList<T> &keys, bool checked = true);
+    template <typename T> void setChecked(const QList<T>& keys, bool checked = true);
     /** Sets the check state of all entries. The check state is determined by
      *  the key of an entry, the relation, and a constant value.
      *  Think of "Set to checked if key is less than 5".
      *  Supported for Int and QString types*/
-    template <typename T> void setChecked(const T &value, SearchXml::Relation relation);
+    template <typename T> void setChecked(const T& value, SearchXml::Relation relation);
 
     /** Sets all entries to unchecked. */
     void resetChecked();
 
     virtual int rowCount(const QModelIndex & parent) const;
-    virtual QVariant data(const QModelIndex &index, int role) const;
-    virtual QModelIndex index(int row, int column = 0, const QModelIndex &parent = QModelIndex()) const;
+    virtual QVariant data(const QModelIndex& index, int role) const;
+    virtual QModelIndex index(int row, int column = 0, const QModelIndex& parent = QModelIndex()) const;
     virtual Qt::ItemFlags flags ( const QModelIndex & index ) const;
-    virtual bool setData(const QModelIndex &index, const QVariant &value, int role);
+    virtual bool setData(const QModelIndex& index, const QVariant& value, int role);
 
 Q_SIGNALS:
 
@@ -112,15 +112,15 @@ protected:
         QString      display;
         bool         checkState;
 
-        bool operator==(const Entry &other);
-        bool operator==(const QVariant &other);
+        bool operator==(const Entry& other);
+        bool operator==(const QVariant& other);
     };
 
     QList<Entry> m_entries;
 };
 
 template <typename T>
-void ChoiceSearchModel::setChecked(const T &key, bool checked)
+void ChoiceSearchModel::setChecked(const T& key, bool checked)
 {
     QVariant variantKey(key);
     for (int i=0; i<m_entries.size(); ++i)
@@ -131,7 +131,7 @@ void ChoiceSearchModel::setChecked(const T &key, bool checked)
 }
 
 template <typename T>
-void ChoiceSearchModel::setChecked(const T &value, SearchXml::Relation relation)
+void ChoiceSearchModel::setChecked(const T& value, SearchXml::Relation relation)
 {
     for (int i=0; i<m_entries.size(); ++i)
     {
@@ -140,7 +140,7 @@ void ChoiceSearchModel::setChecked(const T &value, SearchXml::Relation relation)
 }
 
 template <typename T>
-void ChoiceSearchModel::setChecked(const QList<T> &keys, bool checked)
+void ChoiceSearchModel::setChecked(const QList<T>& keys, bool checked)
 {
     foreach(T key, keys)
         setChecked(key, checked);
@@ -177,7 +177,7 @@ public:
      *  Can only be called once for a widget. */
     void setModel(ChoiceSearchModel *model);
     /** Updates the text on the line edit area */
-    void setLabelText(const QString &text);
+    void setLabelText(const QString& text);
 
     ChoiceSearchModel *model() const;
     SqueezedClickLabel *label() const;

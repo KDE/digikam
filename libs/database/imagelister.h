@@ -56,7 +56,7 @@ public:
      * @param extraValue If -1, nothing is sent. If it takes another value,
      *                   this value will be sent as a second parameter.
      */
-    static KIO::TransferJob *startListJob(const DatabaseUrl &url, int extraValue = -1);
+    static KIO::TransferJob *startListJob(const DatabaseUrl& url, int extraValue = -1);
 
     ImageLister();
 
@@ -75,14 +75,14 @@ public:
      * Convenience method for Album, Tag and Date URLs, _not_ for Search URLs.
      */
     void list(ImageListerReceiver *receiver,
-              const DatabaseUrl &url);
+              const DatabaseUrl& url);
 
     /**
       * List images in the Album (physical album) specified by albumRoot, album.
       * The results will be fed to the specified receiver.
       */
     void listAlbum(ImageListerReceiver *receiver,
-                   int albumRootId, const QString &album);
+                   int albumRootId, const QString& album);
 
     /**
      * List the images which have assigned the tag specified by tagId
@@ -92,7 +92,7 @@ public:
       * List those images whose date lies in the range beginning with startDate (inclusive)
       * and ending before endDate (exclusive).
       */
-    void listDateRange(ImageListerReceiver *receiver, const QDate &startDate, const QDate &endDate);
+    void listDateRange(ImageListerReceiver *receiver, const QDate& startDate, const QDate& endDate);
 
     /**
      * Execute the search specified by search XML
@@ -100,7 +100,7 @@ public:
      * @param limit limit the count of the result set. If limit = 0, then no limit is set.
      */
     void listSearch(ImageListerReceiver *receiver,
-                    const QString &xml,
+                    const QString& xml,
                     int limit = 0);
 
     /**
@@ -109,7 +109,7 @@ public:
      * @param limit limit the count of the result set. If limit = 0, then no limit is set.
      */
     void listHaarSearch(ImageListerReceiver *receiver,
-                        const QString &xml);
+                        const QString& xml);
 
 private:
 

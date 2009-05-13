@@ -141,7 +141,7 @@ public:
     inline void premultiply8(int alpha);
     inline void demultiply16(int alpha);
     inline void demultiply8(int alpha);
-    inline void blendAdd(const DColor &src);
+    inline void blendAdd(const DColor& src);
     inline void blendClamp8();
     inline void blendClamp16();
     inline void multiply(float factor);

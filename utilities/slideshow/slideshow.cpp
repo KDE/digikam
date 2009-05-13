@@ -325,7 +325,7 @@ void SlideShow::loadPrevImage()
     }
 }
 
-void SlideShow::slotGotImagePreview(const LoadingDescription &desc, const DImg& preview)
+void SlideShow::slotGotImagePreview(const LoadingDescription& desc, const DImg& preview)
 {
     if (desc.filePath != d->currentImage.path() || desc.isThumbnail())
         return;
@@ -544,7 +544,7 @@ void SlideShow::updatePixmap()
     }
 }
 
-void SlideShow::printInfoText(QPainter &p, int &offset, const QString& str)
+void SlideShow::printInfoText(QPainter& p, int& offset, const QString& str)
 {
     if (!str.isEmpty())
     {
@@ -559,7 +559,7 @@ void SlideShow::printInfoText(QPainter &p, int &offset, const QString& str)
     }
 }
 
-void SlideShow::printComments(QPainter &p, int &offset, const QString& comments)
+void SlideShow::printComments(QPainter& p, int& offset, const QString& comments)
 {
     QStringList commentsByLines;
 
@@ -711,7 +711,7 @@ void SlideShow::keyPressEvent(QKeyEvent *event)
     d->toolBar->keyPressEvent(event);
 }
 
-static void makeCornerRectangles(const QRect &desktopRect, const QSize &size,
+static void makeCornerRectangles(const QRect& desktopRect, const QSize& size,
                                  QRect *topLeft, QRect *topRight, QRect *bottomLeft, QRect *bottomRight,
                                  QRect *topLeftLarger, QRect *topRightLarger, QRect *bottomLeftLarger, QRect *bottomRightLarger)
 {

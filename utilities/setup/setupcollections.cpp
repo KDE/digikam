@@ -197,7 +197,7 @@ void SetupCollections::readSettings()
     d->collectionModel->loadCollections();
 }
 
-void SetupCollections::slotChangeDatabasePath(const KUrl &result)
+void SetupCollections::slotChangeDatabasePath(const KUrl& result)
 {
     QFileInfo targetPath(result.path());
 

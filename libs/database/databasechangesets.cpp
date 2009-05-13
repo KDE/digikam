@@ -56,7 +56,7 @@ DatabaseFields::Set ImageChangeset::changes() const
     return m_changes;
 }
 
-ImageChangeset &ImageChangeset::operator<<(const QDBusArgument &argument)
+ImageChangeset& ImageChangeset::operator<<(const QDBusArgument& argument)
 {
     argument.beginStructure();
     argument >> m_ids >> m_changes;
@@ -64,7 +64,7 @@ ImageChangeset &ImageChangeset::operator<<(const QDBusArgument &argument)
     return *this;
 }
 
-const ImageChangeset &ImageChangeset::operator>>(QDBusArgument &argument) const
+const ImageChangeset& ImageChangeset::operator>>(QDBusArgument& argument) const
 {
     argument.beginStructure();
     argument << m_ids << m_changes;
@@ -97,7 +97,7 @@ ImageTagChangeset::ImageTagChangeset(qlonglong id, int tag, Operation op)
     m_tags << tag;
 }
 
-ImageTagChangeset &ImageTagChangeset::operator<<(const ImageTagChangeset &other)
+ImageTagChangeset& ImageTagChangeset::operator<<(const ImageTagChangeset& other)
 {
     if (m_operation != other.m_operation)
         m_operation = Unknown;
@@ -108,7 +108,7 @@ ImageTagChangeset &ImageTagChangeset::operator<<(const ImageTagChangeset &other)
     return *this;
 }
 
-ImageTagChangeset &ImageTagChangeset::operator<<(const QDBusArgument &argument)
+ImageTagChangeset& ImageTagChangeset::operator<<(const QDBusArgument& argument)
 {
     argument.beginStructure();
     int intValue;
@@ -118,7 +118,7 @@ ImageTagChangeset &ImageTagChangeset::operator<<(const QDBusArgument &argument)
     return *this;
 }
 
-const ImageTagChangeset &ImageTagChangeset::operator>>(QDBusArgument &argument) const
+const ImageTagChangeset& ImageTagChangeset::operator>>(QDBusArgument& argument) const
 {
     argument.beginStructure();
     argument << m_ids << m_tags << (int)m_operation;
@@ -176,7 +176,7 @@ CollectionImageChangeset::CollectionImageChangeset(qlonglong id, int album, Oper
     m_albums << album;
 }
 
-CollectionImageChangeset &CollectionImageChangeset::operator<<(const CollectionImageChangeset &other)
+CollectionImageChangeset& CollectionImageChangeset::operator<<(const CollectionImageChangeset& other)
 {
     if (m_operation != other.m_operation)
         m_operation = Unknown;
@@ -187,7 +187,7 @@ CollectionImageChangeset &CollectionImageChangeset::operator<<(const CollectionI
     return *this;
 }
 
-CollectionImageChangeset &CollectionImageChangeset::operator<<(const QDBusArgument &argument)
+CollectionImageChangeset& CollectionImageChangeset::operator<<(const QDBusArgument& argument)
 {
     argument.beginStructure();
     int intValue;
@@ -197,7 +197,7 @@ CollectionImageChangeset &CollectionImageChangeset::operator<<(const QDBusArgume
     return *this;
 }
 
-const CollectionImageChangeset &CollectionImageChangeset::operator>>(QDBusArgument &argument) const
+const CollectionImageChangeset& CollectionImageChangeset::operator>>(QDBusArgument& argument) const
 {
     argument.beginStructure();
     argument << m_ids << m_albums << (int)m_operation;
@@ -252,7 +252,7 @@ AlbumChangeset::Operation AlbumChangeset::operation() const
     return m_operation;
 }
 
-AlbumChangeset &AlbumChangeset::operator<<(const QDBusArgument &argument)
+AlbumChangeset& AlbumChangeset::operator<<(const QDBusArgument& argument)
 {
     argument.beginStructure();
     int intValue;
@@ -262,7 +262,7 @@ AlbumChangeset &AlbumChangeset::operator<<(const QDBusArgument &argument)
     return *this;
 }
 
-const AlbumChangeset &AlbumChangeset::operator>>(QDBusArgument &argument) const
+const AlbumChangeset& AlbumChangeset::operator>>(QDBusArgument& argument) const
 {
     argument.beginStructure();
     argument << m_id << (int)m_operation;
@@ -292,7 +292,7 @@ TagChangeset::Operation TagChangeset::operation() const
     return m_operation;
 }
 
-TagChangeset &TagChangeset::operator<<(const QDBusArgument &argument)
+TagChangeset& TagChangeset::operator<<(const QDBusArgument& argument)
 {
     argument.beginStructure();
     int intValue;
@@ -302,7 +302,7 @@ TagChangeset &TagChangeset::operator<<(const QDBusArgument &argument)
     return *this;
 }
 
-const TagChangeset &TagChangeset::operator>>(QDBusArgument &argument) const
+const TagChangeset& TagChangeset::operator>>(QDBusArgument& argument) const
 {
     argument.beginStructure();
     argument << m_id << (int)m_operation;
@@ -332,7 +332,7 @@ AlbumRootChangeset::Operation AlbumRootChangeset::operation() const
     return m_operation;
 }
 
-AlbumRootChangeset &AlbumRootChangeset::operator<<(const QDBusArgument &argument)
+AlbumRootChangeset& AlbumRootChangeset::operator<<(const QDBusArgument& argument)
 {
     argument.beginStructure();
     int intValue;
@@ -342,7 +342,7 @@ AlbumRootChangeset &AlbumRootChangeset::operator<<(const QDBusArgument &argument
     return *this;
 }
 
-const AlbumRootChangeset &AlbumRootChangeset::operator>>(QDBusArgument &argument) const
+const AlbumRootChangeset& AlbumRootChangeset::operator>>(QDBusArgument& argument) const
 {
     argument.beginStructure();
     argument << m_id << (int)m_operation;
@@ -372,7 +372,7 @@ SearchChangeset::Operation SearchChangeset::operation() const
     return m_operation;
 }
 
-SearchChangeset &SearchChangeset::operator<<(const QDBusArgument &argument)
+SearchChangeset& SearchChangeset::operator<<(const QDBusArgument& argument)
 {
     argument.beginStructure();
     int intValue;
@@ -382,7 +382,7 @@ SearchChangeset &SearchChangeset::operator<<(const QDBusArgument &argument)
     return *this;
 }
 
-const SearchChangeset &SearchChangeset::operator>>(QDBusArgument &argument) const
+const SearchChangeset& SearchChangeset::operator>>(QDBusArgument& argument) const
 {
     argument.beginStructure();
     argument << m_id << (int)m_operation;
@@ -392,7 +392,7 @@ const SearchChangeset &SearchChangeset::operator>>(QDBusArgument &argument) cons
 
 // ---------------------------------------------------------------------------------
 
-DatabaseFields::Set &DatabaseFields::Set::operator<<(const QDBusArgument &argument)
+DatabaseFields::Set& DatabaseFields::Set::operator<<(const QDBusArgument& argument)
 {
     argument.beginStructure();
 
@@ -416,7 +416,7 @@ DatabaseFields::Set &DatabaseFields::Set::operator<<(const QDBusArgument &argume
     return *this;
 }
 
-const DatabaseFields::Set &DatabaseFields::Set::operator>>(QDBusArgument &argument) const
+const DatabaseFields::Set& DatabaseFields::Set::operator>>(QDBusArgument& argument) const
 {
     argument.beginStructure();
     argument << (int)images

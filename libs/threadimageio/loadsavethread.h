@@ -52,15 +52,15 @@ public:
 
     virtual ~LoadSaveNotifier() {};
 
-    virtual void imageStartedLoading(const LoadingDescription &loadingDescription) = 0;
-    virtual void loadingProgress(const LoadingDescription &loadingDescription, float progress) = 0;
-    virtual void imageLoaded(const LoadingDescription &loadingDescription, const DImg& img) = 0;
-    virtual void moreCompleteLoadingAvailable(const LoadingDescription &oldLoadingDescription,
-                                              const LoadingDescription &newLoadingDescription) = 0;
+    virtual void imageStartedLoading(const LoadingDescription& loadingDescription) = 0;
+    virtual void loadingProgress(const LoadingDescription& loadingDescription, float progress) = 0;
+    virtual void imageLoaded(const LoadingDescription& loadingDescription, const DImg& img) = 0;
+    virtual void moreCompleteLoadingAvailable(const LoadingDescription& oldLoadingDescription,
+                                              const LoadingDescription& newLoadingDescription) = 0;
     virtual void imageStartedSaving(const QString& filePath) = 0;
     virtual void savingProgress(const QString& filePath, float progress) = 0;
     virtual void imageSaved(const QString& filePath, bool success) = 0;
-    virtual void thumbnailLoaded(const LoadingDescription &loadingDescription, const QImage& img) = 0;
+    virtual void thumbnailLoaded(const LoadingDescription& loadingDescription, const QImage& img) = 0;
 };
 
 class DIGIKAM_EXPORT LoadSaveThread : public QThread, public LoadSaveNotifier
@@ -101,7 +101,7 @@ public:
     /** Append a task to load the given file to the task list */
     void load(LoadingDescription description);
     /** Append a task to save the image to the task list */
-    void save(DImg &image, const QString& filePath, const QString &format);
+    void save(DImg& image, const QString& filePath, const QString& format);
 
     void setNotificationPolicy(NotificationPolicy notificationPolicy);
 
@@ -114,7 +114,7 @@ public:
      * Returns true if the image has actually been rotated or flipped.
      * Returns false if a rotation was not needed.
      */
-    static bool exifRotate(DImg &image, const QString& filePath);
+    static bool exifRotate(DImg& image, const QString& filePath);
 
 Q_SIGNALS:
 
@@ -124,18 +124,18 @@ Q_SIGNALS:
      */
 
     /** This signal is emitted when the loading process begins. */
-    void signalImageStartedLoading(const LoadingDescription &loadingDescription);
+    void signalImageStartedLoading(const LoadingDescription& loadingDescription);
     /**
      * This signal is emitted whenever new progress info is available
      * and the notification policy allows emitting the signal.
      * No progress info will be sent for preloaded images (ManagedLoadSaveThread).
      */
-    void signalLoadingProgress(const LoadingDescription &loadingDescription, float progress);
+    void signalLoadingProgress(const LoadingDescription& loadingDescription, float progress);
     /**
      * This signal is emitted when the loading process has finished.
      * If the process failed, img is null.
      */
-    void signalImageLoaded(const LoadingDescription &loadingDescription, const DImg& img);
+    void signalImageLoaded(const LoadingDescription& loadingDescription, const DImg& img);
     /**
      * This signal is emitted if
      *  - you are doing shared loading (SharedLoadSaveThread)
@@ -144,26 +144,26 @@ Q_SIGNALS:
      *  - another thread started a loading operation for a more complete version
      * You may want to cancel the current operation and start with the given loadingDescription
      */
-    void signalMoreCompleteLoadingAvailable(const LoadingDescription &oldLoadingDescription,
-                                            const LoadingDescription &newLoadingDescription);
+    void signalMoreCompleteLoadingAvailable(const LoadingDescription& oldLoadingDescription,
+                                            const LoadingDescription& newLoadingDescription);
 
     void signalImageStartedSaving(const QString& filePath);
     void signalSavingProgress(const QString& filePath, float progress);
     void signalImageSaved(const QString& filePath, bool success);
 
-    void signalThumbnailLoaded(const LoadingDescription &loadingDescription, const QImage& img);
+    void signalThumbnailLoaded(const LoadingDescription& loadingDescription, const QImage& img);
 
 public:
 
-    virtual void imageStartedLoading(const LoadingDescription &loadingDescription);
-    virtual void loadingProgress(const LoadingDescription &loadingDescription, float progress);
-    virtual void imageLoaded(const LoadingDescription &loadingDescription, const DImg& img);
-    virtual void moreCompleteLoadingAvailable(const LoadingDescription &oldLoadingDescription,
-                                      const LoadingDescription &newLoadingDescription);
+    virtual void imageStartedLoading(const LoadingDescription& loadingDescription);
+    virtual void loadingProgress(const LoadingDescription& loadingDescription, float progress);
+    virtual void imageLoaded(const LoadingDescription& loadingDescription, const DImg& img);
+    virtual void moreCompleteLoadingAvailable(const LoadingDescription& oldLoadingDescription,
+                                      const LoadingDescription& newLoadingDescription);
     virtual void imageStartedSaving(const QString& filePath);
     virtual void savingProgress(const QString& filePath, float progress);
     virtual void imageSaved(const QString& filePath, bool success);
-    virtual void thumbnailLoaded(const LoadingDescription &loadingDescription, const QImage& img);
+    virtual void thumbnailLoaded(const LoadingDescription& loadingDescription, const QImage& img);
 
     virtual bool querySendNotifyEvent();
     virtual void taskHasFinished();

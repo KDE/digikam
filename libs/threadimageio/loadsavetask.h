@@ -171,7 +171,7 @@ public:
         SavingTaskStatusStopping
     };
 
-    SavingTask(LoadSaveThread* thread, DImg &img, const QString &filePath, const QString &format)
+    SavingTask(LoadSaveThread* thread, DImg& img, const QString& filePath, const QString& format)
         : LoadSaveTask(thread), m_filePath(filePath), m_format(format), m_img(img)
         {};
 

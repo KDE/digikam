@@ -108,14 +108,14 @@ public:
     * A return value of false during startup indicates termination of the program
     * (user is informed)
     */
-    bool setDatabase(const QString &dbPath, bool priority, const QString &suggestedAlbumRoot = QString());
+    bool setDatabase(const QString& dbPath, bool priority, const QString& suggestedAlbumRoot = QString());
 
     /**
     * Sets new database when chosen by the user in setup.
     * Handles user notification about problems.
     * Call this instead of setDatabase when digikam is up and running.
     */
-    void changeDatabase(const QString &dbPath);
+    void changeDatabase(const QString& dbPath);
 
     /**
     * Stop ongoing operations, prepare for application shutdown
@@ -125,7 +125,7 @@ public:
     /**
     * Checks if the given database path is equal to the current one
     */
-    bool databaseEqual(const QString &dbPath) const;
+    bool databaseEqual(const QString& dbPath) const;
 
     /**
     * starts scanning the libraryPath and listing the albums. If the
@@ -232,13 +232,13 @@ public:
      * @return a TAlbum with given tag path, or 0 if not found
      * @param tagPath the tag path ("People/Friend/John")
      */
-    TAlbum*   findTAlbum(const QString &tagPath) const;
+    TAlbum*   findTAlbum(const QString& tagPath) const;
 
     /**
      * @return a SAlbum with given name, or 0 if not found
      * @param tagPath the name of the search
      */
-    SAlbum*   findSAlbum(const QString &name) const;
+    SAlbum*   findSAlbum(const QString& name) const;
     //@}
 
     /** @name Operations on PAlbum
@@ -280,7 +280,7 @@ public:
      * Overloaded method. Here you can supply a collection location (which
      * must be available).
      */
-    PAlbum* createPAlbum(const CollectionLocation &location, const QString& name,
+    PAlbum* createPAlbum(const CollectionLocation& location, const QString& name,
                          const QString& caption, const QDate& date,
                          const QString& category,
                          QString& errMsg);
@@ -339,7 +339,7 @@ public:
      * @param tagPath A list of tag paths
      * @returns A list of all TAlbums for the list (already existing or newly created)
     */
-    AlbumList findOrCreateTAlbums(const QStringList &tagPaths);
+    AlbumList findOrCreateTAlbums(const QStringList& tagPaths);
 
     /**
      * Delete a TAlbum.
@@ -373,7 +373,7 @@ public:
      * @param errMsg this will contain the error message describing why the
      * operation failed
      */
-    bool moveTAlbum(TAlbum* album, TAlbum *newParent, QString &errMsg);
+    bool moveTAlbum(TAlbum* album, TAlbum *newParent, QString& errMsg);
 
     /**
      * Update the icon for a TAlbum. 
@@ -400,13 +400,13 @@ public:
      * @return A list with the tag paths for a list of tag IDs.
      * @param tagIDs list of tag album IDs
      */
-    QStringList tagPaths(const QList<int> &tagIDs, bool leadingSlash=true) const;
+    QStringList tagPaths(const QList<int>& tagIDs, bool leadingSlash=true) const;
 
     /**
      * @return A list with the tag names for a list of tag IDs.
      * @param tagIDs list of tag album IDs
      */
-    QStringList tagNames(const QList<int> &tagIDs) const;
+    QStringList tagNames(const QList<int>& tagIDs) const;
 
     /**
      * @return A hash with the tag paths for all tag IDs.
@@ -435,7 +435,7 @@ public:
      * @param simple indicates whether the Search album is of simple type or
      * extended type
      */
-    SAlbum* createSAlbum(const QString &name, DatabaseSearch::Type type, const QString &query);
+    SAlbum* createSAlbum(const QString& name, DatabaseSearch::Type type, const QString& query);
 
     /**
      * Update the url for a SAlbum
@@ -445,8 +445,8 @@ public:
      * @param changedName a new name, or null to keep the current name
      * @param type a new type, or UndefinedType to keep the current type
      */
-    bool updateSAlbum(SAlbum* album, const QString &changedQuery,
-                      const QString &changedName = QString(), DatabaseSearch::Type type = DatabaseSearch::UndefinedType);
+    bool updateSAlbum(SAlbum* album, const QString& changedQuery,
+                      const QString& changedName = QString(), DatabaseSearch::Type type = DatabaseSearch::UndefinedType);
 
     /**
      * Delete a SAlbum from the database
@@ -503,14 +503,14 @@ private Q_SLOTS:
     void slotKioFileMoved(const QString& urlFrom, const QString& urlTo);
     void slotKioFilesDeleted(const QStringList& urls);
     void slotKioFilesAdded(const QString& directory);
-    void slotNotifyFileChange(const QString &directory);
+    void slotNotifyFileChange(const QString& directory);
     void slotCollectionLocationStatusChanged(const CollectionLocation &, int);
-    void slotCollectionLocationPropertiesChanged(const CollectionLocation &location);
-    void slotAlbumChange(const AlbumChangeset &changeset);
-    void slotTagChange(const TagChangeset &changeset);
-    void slotSearchChange(const SearchChangeset &changeset);
-    void slotCollectionImageChange(const CollectionImageChangeset &changeset);
-    void slotImageTagChange(const ImageTagChangeset &changeset);
+    void slotCollectionLocationPropertiesChanged(const CollectionLocation& location);
+    void slotAlbumChange(const AlbumChangeset& changeset);
+    void slotTagChange(const TagChangeset& changeset);
+    void slotSearchChange(const SearchChangeset& changeset);
+    void slotCollectionImageChange(const CollectionImageChangeset& changeset);
+    void slotImageTagChange(const ImageTagChangeset& changeset);
 
     /**
      * Scan albums directly from database and creates new PAlbums
@@ -554,10 +554,10 @@ private:
 
     void notifyAlbumDeletion(Album *album);
 
-    void addAlbumRoot(const CollectionLocation &location);
-    void removeAlbumRoot(const CollectionLocation &location);
+    void addAlbumRoot(const CollectionLocation& location);
+    void removeAlbumRoot(const CollectionLocation& location);
 
-    void handleKioNotification(const KUrl &url);
+    void handleKioNotification(const KUrl& url);
 
     template <class T> friend class AlbumPointer;
     friend class Album;
@@ -586,7 +586,7 @@ public:
     AlbumPointer() : album(0) {}
     AlbumPointer(T *a) : album(a)
     { AlbumManager::instance()->addGuardedPointer(album, &album); }
-    AlbumPointer(const AlbumPointer<T> &p) : album(p.album)
+    AlbumPointer(const AlbumPointer<T>& p) : album(p.album)
     { AlbumManager::instance()->addGuardedPointer(album, &album); }
 
     ~AlbumPointer()
@@ -599,7 +599,7 @@ public:
         AlbumManager::instance()->changeGuardedPointer(oldAlbum, album, &album);
         return *this;
     }
-    AlbumPointer<T> operator=(const AlbumPointer<T> &p)
+    AlbumPointer<T> operator=(const AlbumPointer<T>& p)
     {
         Album *oldAlbum = album;
         album = p.album;

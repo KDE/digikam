@@ -75,7 +75,7 @@ QModelIndex ItemViewToolTip::currentIndex() const
     return d->index;
 }
 
-void ItemViewToolTip::show(QHelpEvent *, const QStyleOptionViewItem &option, const QModelIndex &index)
+void ItemViewToolTip::show(QHelpEvent *, const QStyleOptionViewItem& option, const QModelIndex& index)
 {
     d->index = index;
     d->rect  = option.rect;

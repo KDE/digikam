@@ -48,12 +48,12 @@ public:
      * and ItemScanInfo object.
      * This constructor shall be used with fileModified() or fullScan().
      */
-    ImageScanner(const QFileInfo &info, const ItemScanInfo &Iteminfo);
+    ImageScanner(const QFileInfo& info, const ItemScanInfo& Iteminfo);
     /**
      * Construct an ImageScanner from an existing QFileInfo object.
      * Use this constructor if you intend to call newFile().
      */
-    ImageScanner(const QFileInfo &info);
+    ImageScanner(const QFileInfo& info);
     /**
      * Construct an ImageScanner for an image in the database.
      * File info, Scan info and the category will be retrieved from the database.
@@ -109,7 +109,7 @@ public:
     /**
      * Helper methods to translate enum values to user presentable strings
      */
-    static QString formatToString(const QString &format);
+    static QString formatToString(const QString& format);
     static QString colorModelToString(DImg::COLORMODEL colorModel);
 
     /**

@@ -196,7 +196,7 @@ void MetadataManagerPriv::setWriterAction(const QString& action)
 void MetadataManagerPriv::startingToWrite(const QList<ImageInfo>& infos)
 {
     QMutexLocker lock(&mutex);
-    foreach (const ImageInfo &info, infos)
+    foreach (const ImageInfo& info, infos)
         scheduledToWrite.remove(info.id());
 }
 
@@ -265,7 +265,7 @@ void MetadataManagerDatabaseWorker::changeTags(const QList<ImageInfo>& infos, co
 
     ScanController::instance()->suspendCollectionScan();
     DatabaseTransaction transaction;
-    foreach(const ImageInfo &info, infos)
+    foreach(const ImageInfo& info, infos)
     {
 
         hub.load(info);
@@ -305,7 +305,7 @@ void MetadataManagerDatabaseWorker::assignRating(const QList<ImageInfo>& infos, 
 
     ScanController::instance()->suspendCollectionScan();
     DatabaseTransaction transaction;
-    foreach (const ImageInfo &info, infos)
+    foreach (const ImageInfo& info, infos)
     {
         hub.load(info);
         hub.setRating(rating);
@@ -328,7 +328,7 @@ void MetadataManagerDatabaseWorker::assignRating(const QList<ImageInfo>& infos, 
     d->dbFinished(infos.size());
 }
 
-void MetadataManagerDatabaseWorker::setExifOrientation(const QList<ImageInfo> &infos, int orientation)
+void MetadataManagerDatabaseWorker::setExifOrientation(const QList<ImageInfo>& infos, int orientation)
 {
     d->setDBAction(i18n("Updating orientation in database. Please wait..."));
     //TODO: update db
@@ -346,7 +346,7 @@ void MetadataManagerFileWorker::writeOrientationToFiles(const QList<ImageInfo>& 
 
     QStringList failedItems;
 
-    foreach (const ImageInfo &info, infos)
+    foreach (const ImageInfo& info, infos)
     {
         //kDebug(50003) << "Setting Exif Orientation tag to " << orientation << endl;
 
@@ -382,7 +382,7 @@ void MetadataManagerFileWorker::writeMetadataToFiles(const QList<ImageInfo>& inf
     MetadataHub hub;
 
     ScanController::instance()->suspendCollectionScan();
-    foreach(const ImageInfo &info, infos)
+    foreach(const ImageInfo& info, infos)
     {
 
         hub.load(info);

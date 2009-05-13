@@ -92,25 +92,25 @@ public:
     /**
      * Sets the main filter settings of the database. Should only be called at schema update.
      */
-    void setFilterSettings(const QStringList &imageFilter, const QStringList &videoFilter, const QStringList &audioFilter);
+    void setFilterSettings(const QStringList& imageFilter, const QStringList& videoFilter, const QStringList& audioFilter);
 
     /**
      * Sets the user-configurable filter settings. The lists shall be as specified for getFilterSettings.
      * They may include entries starting with "-", which indicates that this format shall be removed from
      * the list, if it is included in the main settings list.
      */
-    void setUserFilterSettings(const QStringList &imageFilter, const QStringList &videoFilter, const QStringList &audioFilter);
+    void setUserFilterSettings(const QStringList& imageFilter, const QStringList& videoFilter, const QStringList& audioFilter);
 
     /**
      * Sets the user-configurable filter settings. The strings shall be lists joined either by ";" or " ".
      * Extra whitespace, dots and wildcard characters (*.) are removed.
      */
-    void setUserFilterSettings(const QString &imageFilterString, const QString &videoFilterString, const QString &audioFilterString);
+    void setUserFilterSettings(const QString& imageFilterString, const QString& videoFilterString, const QString& audioFilterString);
 
     /**
      * Adds the given filters to the user image filter settings
      */
-    void addToUserImageFilterSettings(const QString &filterString);
+    void addToUserImageFilterSettings(const QString& filterString);
 
     /**
      * Returns a UUID for the database file.
@@ -136,7 +136,7 @@ public:
      * @param label        An (optional) user-visible label
      * @returns the album root id of the newly created root
      */
-    int addAlbumRoot(AlbumRoot::Type type, const QString &identifier, const QString &specificPath, const QString &label);
+    int addAlbumRoot(AlbumRoot::Type type, const QString& identifier, const QString& specificPath, const QString& label);
 
     /**
      * Deletes an album  root from the database.
@@ -148,7 +148,7 @@ public:
      * Changes the label of the specified album root
      * @param rootId the id of the album root
      */
-    void setAlbumRootLabel(int rootId, const QString &newLabel);
+    void setAlbumRootLabel(int rootId, const QString& newLabel);
 
     /**
      * Sets the type of the specified album root to a new value.
@@ -211,7 +211,7 @@ public:
      */
     int  getAlbumForPath(int albumRootId, const QString& relativePath, bool create = true);
 
-    //int  getAlbumForPath(const QString &albumRoot, const QString& relativePath, bool create = true);
+    //int  getAlbumForPath(const QString& albumRoot, const QString& relativePath, bool create = true);
 
     /**
      * Find out the album ids for a given relative path, including the subalbums.
@@ -226,7 +226,7 @@ public:
      * @param onlyDirectSubalbums if this is true, only first-level subalbums are returned,
      *                            if false, all levels of children are returned (include subalbums of subalbums).
      */
-    //QStringList getSubalbumsForPath(const QString &albumRoot, const QString& path, bool onlyDirectSubalbums = true);
+    //QStringList getSubalbumsForPath(const QString& albumRoot, const QString& path, bool onlyDirectSubalbums = true);
 
     /**
      * Find out all album ids of a given album root
@@ -371,7 +371,7 @@ public:
      * @param create create new tags if necessary
      * @returns a list of albumIDs of the tags in tagPaths
      */
-    QList<int> getTagsFromTagPaths(const QStringList &tagPaths, bool create);
+    QList<int> getTagsFromTagPaths(const QStringList& tagPaths, bool create);
 
     /**
      * Get a list of recently assigned tags (only last 6 tags are listed)
@@ -432,7 +432,7 @@ public:
      * @param url        url of the search
      * @return the id of the album added or -1 if it failed
      */
-    int addSearch(DatabaseSearch::Type type, const QString& name, const QString &query);
+    int addSearch(DatabaseSearch::Type type, const QString& name, const QString& query);
 
     /**
      * Updates Search with new attributes
@@ -441,7 +441,7 @@ public:
      * @param url        url of the search
      */
     void updateSearch(int searchID, DatabaseSearch::Type type,
-                      const QString& name, const QString &query);
+                      const QString& name, const QString& query);
 
     /**
      * Delete a search from the database.
@@ -672,7 +672,7 @@ public:
      * You can leave out entries from this list, which will then be filled with null values.
      * Indicate the values that you have passed in the ImageInformation flag in the third parameters.
      */
-    void addImageInformation(qlonglong imageID, const QVariantList &infos,
+    void addImageInformation(qlonglong imageID, const QVariantList& infos,
                              DatabaseFields::ImageInformation fields = DatabaseFields::ImageInformationAll);
 
     /**
@@ -681,7 +681,7 @@ public:
      * This method does nothing if the item does not yet have an entry in the ImageInformation table.
      * The parameters are as for the method above.
      */
-    void changeImageInformation(qlonglong imageID, const QVariantList &infos,
+    void changeImageInformation(qlonglong imageID, const QVariantList& infos,
                                 DatabaseFields::ImageInformation fields = DatabaseFields::ImageInformationAll);
 
     /**
@@ -714,7 +714,7 @@ public:
      * You can leave out entries from this list. Indicate the values that you have
      * passed in the ImageMetadata flag in the third parameters.
      */
-    void addImageMetadata(qlonglong imageID, const QVariantList &infos,
+    void addImageMetadata(qlonglong imageID, const QVariantList& infos,
                            DatabaseFields::ImageMetadata fields = DatabaseFields::ImageMetadataAll);
 
     /**
@@ -722,7 +722,7 @@ public:
      * This method does nothing if the item does not yet have an entry in the ImageInformation table.
      * The parameters are as for the method above.
      */
-    void changeImageMetadata(qlonglong imageID, const QVariantList &infos,
+    void changeImageMetadata(qlonglong imageID, const QVariantList& infos,
                              DatabaseFields::ImageMetadata fields = DatabaseFields::ImageMetadataAll);
 
     /**
@@ -748,7 +748,7 @@ public:
      * You can leave out entries from this list. Indicate the values that you have
      * passed in the ImageInfo flag in the third parameters.
      */
-    void addImagePosition(qlonglong imageID, const QVariantList &infos,
+    void addImagePosition(qlonglong imageID, const QVariantList& infos,
                            DatabaseFields::ImagePositions fields = DatabaseFields::ImagePositionsAll);
 
     /**
@@ -756,7 +756,7 @@ public:
      * This method does nothing if the item does not yet have an entry in the ImageInformation table.
      * The parameters are as for the method above.
      */
-    void changeImagePosition(qlonglong imageID, const QVariantList &infos,
+    void changeImagePosition(qlonglong imageID, const QVariantList& infos,
                              DatabaseFields::ImagePositions fields = DatabaseFields::ImagePositionsAll);
 
     /**
@@ -790,9 +790,9 @@ public:
      *                 If not supported by the source, pass a null string.
      * @returns the comment ID of the comment
      */
-    int setImageComment(qlonglong imageID, const QString &comment, DatabaseComment::Type type,
-                        const QString &language = QString(), const QString &author = QString(),
-                        const QDateTime &date = QDateTime());
+    int setImageComment(qlonglong imageID, const QString& comment, DatabaseComment::Type type,
+                        const QString& language = QString(), const QString& author = QString(),
+                        const QDateTime& date = QDateTime());
 
     /**
      * Changes the properties of a comment.
@@ -803,7 +803,7 @@ public:
      * 3) DateTime  Date
      * 4) String    Comment
      */
-    void changeImageComment(int commentId, qlonglong imageID, const QVariantList &infos,
+    void changeImageComment(int commentId, qlonglong imageID, const QVariantList& infos,
                             DatabaseFields::ImageComments fields = DatabaseFields::ImageCommentsAll);
 
 
@@ -815,18 +815,18 @@ public:
     /**
      * Returns the property with the specified name for the specified image
      */
-    QString getImageProperty(qlonglong imageID, const QString &property);
+    QString getImageProperty(qlonglong imageID, const QString& property);
 
     /**
      * Sets the property with the given name for the given image to the specified value
      */
-    void setImageProperty(qlonglong imageID, const QString &property, const QString &value);
+    void setImageProperty(qlonglong imageID, const QString& property, const QString& value);
 
     /**
      * Returns the copyright properties of the specified image.
      * If property is not null, only the given property is returned.
      */
-    QList<CopyrightInfo> getImageCopyright(qlonglong imageID, const QString &property = QString());
+    QList<CopyrightInfo> getImageCopyright(qlonglong imageID, const QString& property = QString());
 
     /**
      * Sets the property with the given name for the given image to the specified value and extraValue
@@ -837,8 +837,8 @@ public:
         PropertyExtraValueUnique,
         PropertyNoConstraint
     };
-    void setImageCopyrightProperty(qlonglong imageID, const QString &property,
-                                   const QString &value, const QString &extraValue = QString(),
+    void setImageCopyrightProperty(qlonglong imageID, const QString& property,
+                                   const QString& value, const QString& extraValue = QString(),
                                    CopyrightPropertyUnique uniqueness = PropertyUnique);
 
     /**
@@ -1064,13 +1064,13 @@ public:
      * Search for the specified fingerprint in the download history table.
      * Returns the id of the entry, or -1 if not found.
      */
-    int findInDownloadHistory(const QString &identifier, const QString &name, int fileSize, const QDateTime &date);
+    int findInDownloadHistory(const QString& identifier, const QString& name, int fileSize, const QDateTime& date);
 
     /**
      * Add the specified fingerprint to the download history table.
      * Returns the id of the entry.
      */
-    int addToDownloadHistory(const QString &identifier, const QString &name, int fileSize, const QDateTime &date);
+    int addToDownloadHistory(const QString& identifier, const QString& name, int fileSize, const QDateTime& date);
 
     // ----------- Static helper methods for constructing SQL queries -----------
 
@@ -1079,7 +1079,7 @@ public:
     static QStringList imageMetadataFieldList(DatabaseFields::ImageMetadata fields);
     static QStringList imagePositionsFieldList(DatabaseFields::ImagePositions fields);
     static QStringList imageCommentsFieldList(DatabaseFields::ImageComments fields);
-    static void addBoundValuePlaceholders(QString &query, int count);
+    static void addBoundValuePlaceholders(QString& query, int count);
 
 private:
 

@@ -58,8 +58,8 @@ public:
     static LightTableWindow *lightTableWindow();
     static bool              lightTableWindowCreated();
 
-    void loadImageInfos(const ImageInfoList &list, const ImageInfo &imageInfoCurrent, bool addTo);
-    void setLeftRightItems(const ImageInfoList &list, bool addTo);
+    void loadImageInfos(const ImageInfoList& list, const ImageInfo& imageInfoCurrent, bool addTo);
+    void setLeftRightItems(const ImageInfoList& list, bool addTo);
     void applySettings();
     void refreshView();
     bool isEmpty() const;
@@ -71,7 +71,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    void slotFileChanged(const QString &filePath);
+    void slotFileChanged(const QString& filePath);
 
 protected:
 

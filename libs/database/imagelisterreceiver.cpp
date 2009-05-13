@@ -76,7 +76,7 @@ ImageListerSlaveBasePartsSendingReceiver::ImageListerSlaveBasePartsSendingReceiv
 {
 }
 
-void ImageListerSlaveBasePartsSendingReceiver::receive(const ImageListerRecord &record)
+void ImageListerSlaveBasePartsSendingReceiver::receive(const ImageListerRecord& record)
 {
     ImageListerSlaveBaseReceiver::receive(record);
     if (++m_count > m_limit)

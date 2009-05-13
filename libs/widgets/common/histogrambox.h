@@ -78,7 +78,7 @@ public:
     HistogramWidget* histogram() const;
 
     void setGradientVisible(bool visible);
-    void setGradientColors(const QColor &from, const QColor &to);
+    void setGradientColors(const QColor& from, const QColor& to);
 
     int  channel() const;
     void setChannel(int channel);

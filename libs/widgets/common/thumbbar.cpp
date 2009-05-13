@@ -291,7 +291,7 @@ int ThumbBarView::getRadius()
     return d->radius;
 }
 
-void ThumbBarView::setToolTipSettings(const ThumbBarToolTipSettings &settings)
+void ThumbBarView::setToolTipSettings(const ThumbBarToolTipSettings& settings)
 {
     d->toolTipSettings = settings;
 }
@@ -462,7 +462,7 @@ void ThumbBarView::reloadThumb(ThumbBarItem* item)
     d->thumbLoadThread->find(item->url().toLocalFile(), d->tileSize);
 }
 
-bool ThumbBarView::pixmapForItem(ThumbBarItem *item, QPixmap &pix) const
+bool ThumbBarView::pixmapForItem(ThumbBarItem *item, QPixmap& pix) const
 {
     if (d->tileSize > d->maxTileSize)
     {

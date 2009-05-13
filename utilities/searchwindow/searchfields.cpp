@@ -76,7 +76,7 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-SearchField *SearchField::createField(const QString &name, SearchFieldGroup *parent)
+SearchField *SearchField::createField(const QString& name, SearchFieldGroup *parent)
 {
     if (name == "albumid")
     {
@@ -523,18 +523,18 @@ void SearchField::setupLabels(QGridLayout *layout, int line)
     layout->addWidget(m_detailLabel, line, 2);
 }
 
-void SearchField::setFieldName(const QString &fieldName)
+void SearchField::setFieldName(const QString& fieldName)
 {
     m_name = fieldName;
 }
 
-void SearchField::setText(const QString &label, const QString &detailLabel)
+void SearchField::setText(const QString& label, const QString& detailLabel)
 {
     m_label->setText(label);
     m_detailLabel->setText(detailLabel);
 }
 
-bool SearchField::supportsField(const QString &fieldName)
+bool SearchField::supportsField(const QString& fieldName)
 {
     return m_name == fieldName;
 }
@@ -615,13 +615,13 @@ void SearchFieldText::setupValueWidgets(QGridLayout *layout, int row, int column
             this, SLOT(valueChanged(const QString &)));
 }
 
-void SearchFieldText::read(SearchXmlCachingReader &reader)
+void SearchFieldText::read(SearchXmlCachingReader& reader)
 {
     QString value = reader.value();
     m_edit->setText(value);
 }
 
-void SearchFieldText::write(SearchXmlWriter &writer)
+void SearchFieldText::write(SearchXmlWriter& writer)
 {
     QString value = m_edit->text();
     if (!value.isEmpty())
@@ -649,7 +649,7 @@ QList<QRect> SearchFieldText::valueWidgetRects() const
     return rects;
 }
 
-void SearchFieldText::valueChanged(const QString &text)
+void SearchFieldText::valueChanged(const QString& text)
 {
     setValidValueState(!text.isEmpty());
 }
@@ -661,16 +661,16 @@ SearchFieldKeyword::SearchFieldKeyword(QObject *parent)
 {
 }
 
-void SearchFieldKeyword::read(SearchXmlCachingReader &reader)
+void SearchFieldKeyword::read(SearchXmlCachingReader& reader)
 {
     QString keyword = reader.value();
     m_edit->setText(KeywordSearch::merge(m_edit->text(), keyword));
 }
 
-void SearchFieldKeyword::write(SearchXmlWriter &writer)
+void SearchFieldKeyword::write(SearchXmlWriter& writer)
 {
     QStringList keywordList = KeywordSearch::split(m_edit->text());
-    foreach (const QString &keyword, keywordList)
+    foreach (const QString& keyword, keywordList)
     {
         if (!keyword.isEmpty())
         {
@@ -743,12 +743,12 @@ void SearchFieldRangeDate::setupValueWidgets(QGridLayout *layout, int row, int c
             this, SLOT(valueChanged()));
 }
 
-void SearchFieldRangeDate::setBetweenText(const QString &between)
+void SearchFieldRangeDate::setBetweenText(const QString& between)
 {
     m_betweenLabel->setText(between);
 }
 
-void SearchFieldRangeDate::read(SearchXmlCachingReader &reader)
+void SearchFieldRangeDate::read(SearchXmlCachingReader& reader)
 {
     SearchXml::Relation relation = reader.fieldRelation();
     if (relation == SearchXml::Interval || relation == SearchXml::IntervalOpen)
@@ -815,7 +815,7 @@ void SearchFieldRangeDate::read(SearchXmlCachingReader &reader)
     }
 }
 
-void SearchFieldRangeDate::write(SearchXmlWriter &writer)
+void SearchFieldRangeDate::write(SearchXmlWriter& writer)
 {
     if (m_firstDateEdit->date().isValid() && m_secondDateEdit->date().isValid())
     {
@@ -941,7 +941,7 @@ void SearchFieldRangeInt::setupValueWidgets(QGridLayout *layout, int row, int co
             this, SLOT(valueChanged()));
 }
 
-void SearchFieldRangeInt::read(SearchXmlCachingReader &reader)
+void SearchFieldRangeInt::read(SearchXmlCachingReader& reader)
 {
     SearchXml::Relation relation = reader.fieldRelation();
     if (m_reciprocal)
@@ -1008,7 +1008,7 @@ void SearchFieldRangeInt::read(SearchXmlCachingReader &reader)
     }
 }
 
-void SearchFieldRangeInt::write(SearchXmlWriter &writer)
+void SearchFieldRangeInt::write(SearchXmlWriter& writer)
 {
     if (m_firstBox->value() != m_firstBox->minimum()
         && m_secondBox->value() != m_secondBox->minimum())
@@ -1068,12 +1068,12 @@ void SearchFieldRangeInt::write(SearchXmlWriter &writer)
     }
 }
 
-void SearchFieldRangeInt::setBetweenText(const QString &text)
+void SearchFieldRangeInt::setBetweenText(const QString& text)
 {
     m_betweenLabel->setText(text);
 }
 
-void SearchFieldRangeInt::setNumberPrefixAndSuffix(const QString &prefix, const QString &suffix)
+void SearchFieldRangeInt::setNumberPrefixAndSuffix(const QString& prefix, const QString& suffix)
 {
     m_firstBox->setPrefix(prefix);
     m_secondBox->setPrefix(prefix);
@@ -1103,7 +1103,7 @@ void SearchFieldRangeInt::setBoundary(int min, int max, int step)
     m_secondBox->setValue(m_min);
 }
 
-void SearchFieldRangeInt::enableFractionMagic(const QString &prefix)
+void SearchFieldRangeInt::enableFractionMagic(const QString& prefix)
 {
     m_reciprocal = true;
 
@@ -1114,7 +1114,7 @@ void SearchFieldRangeInt::enableFractionMagic(const QString &prefix)
     m_secondBox->setInvertStepping(true);
 }
 
-void SearchFieldRangeInt::setSuggestedValues(const QList<int> &values)
+void SearchFieldRangeInt::setSuggestedValues(const QList<int>& values)
 {
     m_firstBox->setSuggestedValues(values);
     m_secondBox->setSuggestedValues(values);
@@ -1252,7 +1252,7 @@ void SearchFieldRangeDouble::setupValueWidgets(QGridLayout *layout, int row, int
             this, SLOT(valueChanged()));
 }
 
-void SearchFieldRangeDouble::read(SearchXmlCachingReader &reader)
+void SearchFieldRangeDouble::read(SearchXmlCachingReader& reader)
 {
     SearchXml::Relation relation = reader.fieldRelation();
     if (relation == SearchXml::GreaterThanOrEqual || relation == SearchXml::GreaterThan)
@@ -1269,7 +1269,7 @@ void SearchFieldRangeDouble::read(SearchXmlCachingReader &reader)
     }
 }
 
-void SearchFieldRangeDouble::write(SearchXmlWriter &writer)
+void SearchFieldRangeDouble::write(SearchXmlWriter& writer)
 {
     if (m_firstBox->value() != m_firstBox->minimum()
         && m_secondBox->value() != m_secondBox->minimum())
@@ -1306,18 +1306,18 @@ void SearchFieldRangeDouble::write(SearchXmlWriter &writer)
     }
 }
 
-void SearchFieldRangeDouble::setBetweenText(const QString &text)
+void SearchFieldRangeDouble::setBetweenText(const QString& text)
 {
     m_betweenLabel->setText(text);
 }
 
-void SearchFieldRangeDouble::setNoValueText(const QString &text)
+void SearchFieldRangeDouble::setNoValueText(const QString& text)
 {
     m_firstBox->setSpecialValueText(text);
     m_secondBox->setSpecialValueText(text);
 }
 
-void SearchFieldRangeDouble::setNumberPrefixAndSuffix(const QString &prefix, const QString &suffix)
+void SearchFieldRangeDouble::setNumberPrefixAndSuffix(const QString& prefix, const QString& suffix)
 {
     m_firstBox->setPrefix(prefix);
     m_secondBox->setPrefix(prefix);
@@ -1346,7 +1346,7 @@ void SearchFieldRangeDouble::setFactor(double factor)
     m_factor = factor;
 }
 
-void SearchFieldRangeDouble::setSuggestedValues(const QList<double> &values)
+void SearchFieldRangeDouble::setSuggestedValues(const QList<double>& values)
 {
     m_firstBox->setSuggestedValues(values);
     m_secondBox->setSuggestedValues(values);
@@ -1449,19 +1449,19 @@ void SearchFieldChoice::setupValueWidgets(QGridLayout *layout, int row, int colu
     layout->addWidget(m_comboBox, row, column, 1, 3);
 }
 
-void SearchFieldChoice::setChoice(const QMap<int, QString> &map)
+void SearchFieldChoice::setChoice(const QMap<int, QString>& map)
 {
     m_type = QVariant::Int;
     m_model->setChoice(map);
 }
 
-void SearchFieldChoice::setChoice(const QStringList &choice)
+void SearchFieldChoice::setChoice(const QStringList& choice)
 {
     m_type = QVariant::String;
     m_model->setChoice(choice);
 }
 
-void SearchFieldChoice::setAnyText(const QString &anyText)
+void SearchFieldChoice::setAnyText(const QString& anyText)
 {
     m_anyText = anyText;
 }
@@ -1491,7 +1491,7 @@ void SearchFieldChoice::updateComboText()
     }
 }
 
-void SearchFieldChoice::read(SearchXmlCachingReader &reader)
+void SearchFieldChoice::read(SearchXmlCachingReader& reader)
 {
     SearchXml::Relation relation = reader.fieldRelation();
     QList<int> values;
@@ -1517,7 +1517,7 @@ void SearchFieldChoice::read(SearchXmlCachingReader &reader)
     }
 }
 
-void SearchFieldChoice::write(SearchXmlWriter &writer)
+void SearchFieldChoice::write(SearchXmlWriter& writer)
 {
     if (m_type == QVariant::Int)
     {
@@ -1715,7 +1715,7 @@ QString SearchFieldChoice::valueText() const
     }
 }
 
-void SearchFieldChoice::read(SearchXmlCachingReader &reader)
+void SearchFieldChoice::read(SearchXmlCachingReader& reader)
 {
     SearchXml::Relation relation = reader.fieldRelation();
     QList<int> values;
@@ -1729,7 +1729,7 @@ void SearchFieldChoice::read(SearchXmlCachingReader &reader)
     }
 }
 
-void SearchFieldChoice::write(SearchXmlWriter &writer)
+void SearchFieldChoice::write(SearchXmlWriter& writer)
 {
     QList<int> v = values();
     if (!v.isEmpty())
@@ -1754,12 +1754,12 @@ void SearchFieldChoice::reset()
     setValues(QList<int>());
 }
 
-void SearchFieldChoice::setChoice(const QMap<int, QString> &map)
+void SearchFieldChoice::setChoice(const QMap<int, QString>& map)
 {
     m_choiceMap = map;
 }
 
-void SearchFieldChoice::setValues(const QList<int> &values)
+void SearchFieldChoice::setValues(const QList<int>& values)
 {
     QMap<QCheckBox*, int>::const_iterator it;
     for (it = m_widgetMap.begin(); it != m_widgetMap.end(); ++it)
@@ -1829,7 +1829,7 @@ void SearchFieldAlbum::updateState()
     setValidValueState(!m_model->checkedAlbums().isEmpty());
 }
 
-void SearchFieldAlbum::read(SearchXmlCachingReader &reader)
+void SearchFieldAlbum::read(SearchXmlCachingReader& reader)
 {
     QList<int> ids = reader.valueToIntOrIntList();
     foreach(int id, ids)
@@ -1847,7 +1847,7 @@ void SearchFieldAlbum::read(SearchXmlCachingReader &reader)
     }
 }
 
-void SearchFieldAlbum::write(SearchXmlWriter &writer)
+void SearchFieldAlbum::write(SearchXmlWriter& writer)
 {
     QList<Album *> checkedAlbums = m_model->checkedAlbums();
 
@@ -1906,7 +1906,7 @@ void SearchFieldRating::setupValueWidgets(QGridLayout *layout, int row, int colu
             this, SLOT(secondValueChanged()));
 }
 
-void SearchFieldRating::read(SearchXmlCachingReader &reader)
+void SearchFieldRating::read(SearchXmlCachingReader& reader)
 {
     SearchXml::Relation relation = reader.fieldRelation();
     switch (relation)
@@ -1941,7 +1941,7 @@ void SearchFieldRating::read(SearchXmlCachingReader &reader)
     }
 }
 
-void SearchFieldRating::write(SearchXmlWriter &writer)
+void SearchFieldRating::write(SearchXmlWriter& writer)
 {
     RatingComboBox::RatingValue first = m_firstBox->ratingValue();
     RatingComboBox::RatingValue second = m_secondBox->ratingValue();
@@ -1982,7 +1982,7 @@ void SearchFieldRating::write(SearchXmlWriter &writer)
     }
 }
 
-void SearchFieldRating::setBetweenText(const QString &text)
+void SearchFieldRating::setBetweenText(const QString& text)
 {
     m_betweenLabel->setText(text);
 }
@@ -2072,7 +2072,7 @@ void SearchFieldColorDepth::setupValueWidgets(QGridLayout *layout, int row, int 
             this, SLOT(indexChanged(int)));
 }
 
-void SearchFieldColorDepth::read(SearchXmlCachingReader &reader)
+void SearchFieldColorDepth::read(SearchXmlCachingReader& reader)
 {
     SearchXml::Relation relation = reader.fieldRelation();
     if (relation == SearchXml::Equal)
@@ -2085,7 +2085,7 @@ void SearchFieldColorDepth::read(SearchXmlCachingReader &reader)
     }
 }
 
-void SearchFieldColorDepth::write(SearchXmlWriter &writer)
+void SearchFieldColorDepth::write(SearchXmlWriter& writer)
 {
     int index = m_comboBox->currentIndex();
     if (index != -1)

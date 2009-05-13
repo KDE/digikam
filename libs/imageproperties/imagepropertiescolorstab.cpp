@@ -362,7 +362,7 @@ ImagePropertiesColorsTab::~ImagePropertiesColorsTab()
     delete d;
 }
 
-void ImagePropertiesColorsTab::setData(const KUrl& url, const QRect &selectionArea,
+void ImagePropertiesColorsTab::setData(const KUrl& url, const QRect& selectionArea,
                                        DImg *img)
 {
     // We might be getting duplicate events from AlbumIconView,
@@ -481,7 +481,7 @@ void ImagePropertiesColorsTab::loadImageFromUrl(const KUrl& url)
     d->iccProfileWidget->setDataLoading();
 }
 
-void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const LoadingDescription &loadingDescription, const DImg& img)
+void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const LoadingDescription& loadingDescription, const DImg& img)
 {
     // Discard any leftover messages from previous, possibly aborted loads
     if ( !loadingDescription.equalsOrBetterThan(d->currentLoadingDescription) )
@@ -506,8 +506,8 @@ void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const LoadingDescrip
     }
 }
 
-void ImagePropertiesColorsTab::slotMoreCompleteLoadingAvailable(const LoadingDescription &oldLoadingDescription,
-                                                                const LoadingDescription &newLoadingDescription)
+void ImagePropertiesColorsTab::slotMoreCompleteLoadingAvailable(const LoadingDescription& oldLoadingDescription,
+                                                                const LoadingDescription& newLoadingDescription)
 {
     if (oldLoadingDescription == d->currentLoadingDescription &&
         newLoadingDescription.equalsOrBetterThan(d->currentLoadingDescription))
@@ -522,7 +522,7 @@ void ImagePropertiesColorsTab::slotMoreCompleteLoadingAvailable(const LoadingDes
     }
 }
 
-void ImagePropertiesColorsTab::setSelection(const QRect &selectionArea)
+void ImagePropertiesColorsTab::setSelection(const QRect& selectionArea)
 {
     // This is necessary to stop computation because d->image.bits() is currently used by
     // threaded histogram algorithm.

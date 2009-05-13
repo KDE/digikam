@@ -50,14 +50,14 @@ public:
                       double gamma=1.0, double saturation=1.0);
 
     static void autoExposureAdjustement(uchar* data, int width, int height, bool sb,
-                                        double &black, double &expo); 
+                                        double& black, double& expo); 
 
-    static void autoWBAdjustementFromColor(const QColor &tc, double &temperature, double &green); 
+    static void autoWBAdjustementFromColor(const QColor& tc, double& temperature, double& green); 
 
 private:
 
     void setRGBmult();
-    static void setRGBmult(double &temperature, double &green, float &mr, float &mg, float &mb);
+    static void setRGBmult(double& temperature, double& green, float& mr, float& mg, float& mb);
     void setLUTv();
     void adjustWhiteBalance(uchar *data, int width, int height, bool sixteenBit);
     inline unsigned short pixelColor(int colorMult, int index, int value);

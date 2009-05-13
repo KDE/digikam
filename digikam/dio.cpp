@@ -69,7 +69,7 @@ KIO::Job *copy(const KUrl::List& srcList, const QList<qlonglong> ids, const PAlb
     KUrl destUrl(dest->databaseUrl());
 
     QStringList filenames;
-    foreach(const KUrl &url, srcList)
+    foreach(const KUrl& url, srcList)
         filenames << url.fileName();
     ScanController::instance()->hintAtMoveOrCopyOfItems(ids, dest, filenames);
 
@@ -81,7 +81,7 @@ KIO::Job *move(const KUrl::List& srcList, const QList<qlonglong> ids, const PAlb
     KUrl destUrl(dest->databaseUrl());
 
     QStringList filenames;
-    foreach(const KUrl &url, srcList)
+    foreach(const KUrl& url, srcList)
         filenames << url.fileName();
     ScanController::instance()->hintAtMoveOrCopyOfItems(ids, dest, filenames);
 
@@ -116,7 +116,7 @@ KIO::Job* move(const KUrl::List& srcList, const PAlbum *dest)
     return KIO::move(srcList, destUrl);
 }
 
-KIO::CopyJob *rename(const ImageInfo &info, const QString newName)
+KIO::CopyJob *rename(const ImageInfo& info, const QString newName)
 {
     KUrl oldUrl = info.databaseUrl();
     KUrl newUrl = oldUrl;

@@ -52,11 +52,11 @@ class DateValidator : public QValidator
 {
     public:
 
-        DateValidator( const QStringList &keywords, QWidget* parent )
+        DateValidator( const QStringList& keywords, QWidget* parent )
             : QValidator( parent ), mKeywords( keywords )
         {}
 
-        virtual State validate( QString &str, int& ) const
+        virtual State validate( QString& str, int& ) const
         {
             int length = str.length();
 
@@ -192,7 +192,7 @@ void KDateEdit::showPopup()
     }
 }
 
-void KDateEdit::dateSelected( const QDate &date )
+void KDateEdit::dateSelected( const QDate& date )
 {
     if (assignDate( date ) )
     {
@@ -206,7 +206,7 @@ void KDateEdit::dateSelected( const QDate &date )
     }
 }
 
-void KDateEdit::dateEntered( const QDate &date )
+void KDateEdit::dateEntered( const QDate& date )
 {
     if (assignDate( date ) )
     {

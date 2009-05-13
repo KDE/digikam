@@ -712,7 +712,7 @@ void EditorWindow::slotZoomSelected()
     slotZoomTextChanged(txt);
 }
 
-void EditorWindow::slotZoomTextChanged(const QString &txt)
+void EditorWindow::slotZoomTextChanged(const QString& txt)
 {
     bool r      = false;
     double zoom = KGlobal::locale()->readNumber(txt, &r) / 100.0;
@@ -1535,7 +1535,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     QString defaultMimeType;
     // inspired by kimageio.cpp, typeForMime(). This here is "mimeForType".
     KService::List services   = KServiceTypeTrader::self()->query("QImageIOPlugins");
-    foreach(const KService::Ptr &service, services)
+    foreach(const KService::Ptr& service, services)
     {
         if (service->property("X-KDE-ImageFormat").toStringList().contains(ext))
         {

@@ -61,15 +61,15 @@ public:
     void setImage(const DImg& image);
     DImg& getImage() const;
 
-    void setImageInfo(const ImageInfo &info = ImageInfo(),
-                      const ImageInfo &previous = ImageInfo(),
-                      const ImageInfo &next = ImageInfo());
+    void setImageInfo(const ImageInfo& info = ImageInfo(),
+                      const ImageInfo& previous = ImageInfo(),
+                      const ImageInfo& next = ImageInfo());
 
     ImageInfo getImageInfo() const;
 
     void reload();
     void setImagePath(const QString& path=QString());
-    void setPreviousNextPaths(const QString& previous, const QString &next);
+    void setPreviousNextPaths(const QString& previous, const QString& next);
 
 Q_SIGNALS:
 
@@ -95,7 +95,7 @@ protected:
 
 private Q_SLOTS:
 
-    void slotGotImagePreview(const LoadingDescription &loadingDescription, const DImg &image);
+    void slotGotImagePreview(const LoadingDescription& loadingDescription, const DImg& image);
     void slotNextPreload();
     void slotContextMenu();
     void slotAssignTag(int tagID);

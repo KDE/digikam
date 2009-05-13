@@ -140,7 +140,7 @@ void BatchAlbumsSyncMetadata::slotAlbumParsed(const ImageInfoList& list)
     {
         addedAction(pix, imageInfoList.first().fileUrl().directory());
 
-        foreach(const ImageInfo &info, imageInfoList)
+        foreach(const ImageInfo& info, imageInfoList)
         {
             MetadataHub fileHub;
             // read in from database

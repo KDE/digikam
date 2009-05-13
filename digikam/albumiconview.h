@@ -160,7 +160,7 @@ Q_SIGNALS:
     void signalGotoTagAndItem(int);
     void signalFindSimilar();
 
-    void changeTagOnImageInfos(const ImageInfoList &list, const QList<int> &tagIDs,
+    void changeTagOnImageInfos(const ImageInfoList& list, const QList<int>& tagIDs,
                                bool addOrRemove, bool progress);
 
 public Q_SLOTS:
@@ -171,7 +171,7 @@ public Q_SLOTS:
     void slotDeleteSelectedItemsDirectly(bool useTrash);
     void slotDisplayItem(AlbumIconItem *item=0);
     void slotAlbumModified();
-    void slotSetAlbumThumbnail(ImageInfo &imageInfo);
+    void slotSetAlbumThumbnail(ImageInfo& imageInfo);
     void slotCopy();
     void slotPaste();
     void slotNewAlbumFromSelection();
@@ -193,27 +193,27 @@ protected:
     void contentsDragEnterEvent(QDragEnterEvent *e);
     void contentsDropEvent(QDropEvent *e);
 
-    void prepareRepaint(const QList<IconItem *> &itemsToRepaint);
+    void prepareRepaint(const QList<IconItem *>& itemsToRepaint);
 
-    bool acceptToolTip(IconItem *item, const QPoint &mousePos);
+    bool acceptToolTip(IconItem *item, const QPoint& mousePos);
 
 private Q_SLOTS:
 
     void slotImageListerNewItems(const ImageInfoList& itemList);
-    void slotImageListerDeleteItem(const ImageInfo &item);
+    void slotImageListerDeleteItem(const ImageInfo& item);
     void slotImageListerClear();
 
     void slotDoubleClicked(IconItem *item);
     void slotRightButtonClicked(const QPoint& pos);
     void slotRightButtonClicked(IconItem *item, const QPoint& pos);
 
-    void slotThumbnailLoaded(const LoadingDescription &loadingDescription, const QPixmap& thumb);
+    void slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumb);
     void slotSelectionChanged();
 
     void slotFilesModified();
     void slotFilesModified(const KUrl& url);
     void slotFileChanged(const QString &);
-    void slotImageWindowURLChanged(const KUrl &url);
+    void slotImageWindowURLChanged(const KUrl& url);
 
     void slotShowToolTip(IconItem* item);
 
@@ -232,7 +232,7 @@ private Q_SLOTS:
     void slotImageAttributesChanged(qlonglong imageId);
     void slotAlbumImagesChanged(int albumId);
 
-    void slotChangeTagOnImageInfos(const ImageInfoList &list, const QList<int> &tagIDs,
+    void slotChangeTagOnImageInfos(const ImageInfoList& list, const QList<int>& tagIDs,
                                    bool addOrRemove, bool progress);
 
 private:

@@ -687,7 +687,7 @@ void CameraController::sendInfo(const QString& msg)
         emit signalInfoMsg(msg);
 }
 
-void CameraController::slotCheckRename(const QString &folder, const QString &file,
+void CameraController::slotCheckRename(const QString& folder, const QString& file,
                                        const QString &destination, const QString &temp)
 {
     // this is the direct continuation of executeCommand, case CameraCommand::gp_download
@@ -786,7 +786,7 @@ void CameraController::slotCheckRename(const QString &folder, const QString &fil
     }
 }
 
-void CameraController::slotDownloadFailed(const QString &folder, const QString &file)
+void CameraController::slotDownloadFailed(const QString& folder, const QString& file)
 {
     Q_UNUSED(folder);
     QString msg = i18n("Failed to download file \"%1\".", file);
@@ -807,7 +807,7 @@ void CameraController::slotDownloadFailed(const QString &folder, const QString &
     }
 }
 
-void CameraController::slotUploadFailed(const QString &folder, const QString &file, const QString &src)
+void CameraController::slotUploadFailed(const QString& folder, const QString& file, const QString& src)
 {
     Q_UNUSED(folder);
     Q_UNUSED(src);
@@ -830,7 +830,7 @@ void CameraController::slotUploadFailed(const QString &folder, const QString &fi
     }
 }
 
-void CameraController::slotDeleteFailed(const QString &folder, const QString &file)
+void CameraController::slotDeleteFailed(const QString& folder, const QString& file)
 {
     emit signalDeleted(folder, file, false);
 
@@ -852,7 +852,7 @@ void CameraController::slotDeleteFailed(const QString &folder, const QString &fi
     }
 }
 
-void CameraController::slotLockFailed(const QString &folder, const QString &file)
+void CameraController::slotLockFailed(const QString& folder, const QString& file)
 {
     emit signalLocked(folder, file, false);
 
@@ -874,7 +874,7 @@ void CameraController::slotLockFailed(const QString &folder, const QString &file
     }
 }
 
-void CameraController::slotOpen(const QString &folder, const QString &file, const QString &dest)
+void CameraController::slotOpen(const QString& folder, const QString& file, const QString& dest)
 {
     Q_UNUSED(folder);
     Q_UNUSED(file);

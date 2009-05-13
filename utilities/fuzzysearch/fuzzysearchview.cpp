@@ -903,7 +903,7 @@ void FuzzySearchView::setCurrentImage(qlonglong imageid)
     setCurrentImage(ImageInfo(imageid));
 }
 
-void FuzzySearchView::setCurrentImage(const ImageInfo &info)
+void FuzzySearchView::setCurrentImage(const ImageInfo& info)
 {
     d->imageInfo = info;
     d->labelFile->setText(d->imageInfo.name());

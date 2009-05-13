@@ -54,7 +54,7 @@ static QList<A*> selectedAlbums(QItemSelectionModel *selModel, AlbumFilterModel 
 {
     QList<QModelIndex> indexes = selModel->selectedIndexes();
     QList<A*> albums;
-    foreach (const QModelIndex &index, indexes)
+    foreach (const QModelIndex& index, indexes)
         albums << static_cast<A*>(filterModel->albumForIndex(index));
     return albums;
 }
@@ -101,7 +101,7 @@ void AbstractAlbumTreeView::setSelectOnSingleClick(bool doThat)
     m_expandOnSingleClick = doThat;
 }
 
-QModelIndex AbstractAlbumTreeView::indexVisuallyAt(const QPoint &p)
+QModelIndex AbstractAlbumTreeView::indexVisuallyAt(const QPoint& p)
 {
     if (viewport()->rect().contains(p)) {
         QModelIndex index = indexAt(p);
@@ -141,7 +141,7 @@ void AbstractAlbumTreeView::slotRootAlbumAvailable()
     expand(m_albumFilterModel->rootAlbumIndex());
 }
 
-bool AbstractAlbumTreeView::checkExpandedState(const QModelIndex &index)
+bool AbstractAlbumTreeView::checkExpandedState(const QModelIndex& index)
 {
     bool anyMatch = false;
 
@@ -267,7 +267,7 @@ AbstractCountingAlbumTreeView::AbstractCountingAlbumTreeView(AbstractCountingAlb
     updateShowCountState(QModelIndex(), true);
 }
 
-void AbstractCountingAlbumTreeView::updateShowCountState(const QModelIndex &index, bool recurse)
+void AbstractCountingAlbumTreeView::updateShowCountState(const QModelIndex& index, bool recurse)
 {
     if (isExpanded(index))
         slotExpanded(index);
@@ -282,12 +282,12 @@ void AbstractCountingAlbumTreeView::updateShowCountState(const QModelIndex &inde
     }
 }
 
-void AbstractCountingAlbumTreeView::slotCollapsed(const QModelIndex &index)
+void AbstractCountingAlbumTreeView::slotCollapsed(const QModelIndex& index)
 {
     static_cast<AbstractCountingAlbumModel*>(m_albumModel)->includeChildrenCount(m_albumFilterModel->mapToSource(index));
 }
 
-void AbstractCountingAlbumTreeView::slotExpanded(const QModelIndex &index)
+void AbstractCountingAlbumTreeView::slotExpanded(const QModelIndex& index)
 {
     static_cast<AbstractCountingAlbumModel*>(m_albumModel)->excludeChildrenCount(m_albumFilterModel->mapToSource(index));
 }
@@ -297,7 +297,7 @@ void AbstractCountingAlbumTreeView::slotSetShowCount()
     static_cast<AbstractCountingAlbumModel*>(m_albumModel)->setShowCount(AlbumSettings::instance()->getShowFolderTreeViewItemsCount());
 }
 
-void AbstractCountingAlbumTreeView::slotRowsInserted(const QModelIndex &parent, int start, int end)
+void AbstractCountingAlbumTreeView::slotRowsInserted(const QModelIndex& parent, int start, int end)
 {
     // initialize showCount state when items are added
     for (int i=start; i<=end; ++i)

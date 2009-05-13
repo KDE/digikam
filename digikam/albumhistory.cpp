@@ -225,7 +225,7 @@ void AlbumHistory::deleteAlbum(Album *album)
         forward();
 }
 
-void AlbumHistory::getBackwardHistory(QStringList &list) const
+void AlbumHistory::getBackwardHistory(QStringList& list) const
 {
     if(m_backwardStack->isEmpty())
         return;
@@ -237,7 +237,7 @@ void AlbumHistory::getBackwardHistory(QStringList &list) const
     }
 }
 
-void AlbumHistory::getForwardHistory(QStringList &list) const
+void AlbumHistory::getForwardHistory(QStringList& list) const
 {
     if(m_forwardStack->isEmpty())
         return;

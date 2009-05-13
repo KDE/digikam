@@ -66,7 +66,7 @@ namespace DIO
     KIO::Job* del(const KUrl::List& srcList, bool useTrash = true);
 
     /// Rename item to new name
-    KIO::CopyJob *rename(const ImageInfo &info, const QString newName);
+    KIO::CopyJob *rename(const ImageInfo& info, const QString newName);
 }
 
 } // namespace Digikam

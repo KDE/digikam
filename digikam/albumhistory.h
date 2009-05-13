@@ -61,8 +61,8 @@ public:
     void            forward(Album **album, QWidget **widget, unsigned int steps=1);
     void            getCurrentAlbum(Album **album, QWidget **widget) const;
 
-    void            getBackwardHistory(QStringList &list) const;
-    void            getForwardHistory(QStringList &list) const;
+    void            getBackwardHistory(QStringList& list) const;
+    void            getForwardHistory(QStringList& list) const;
 
     bool            isForwardEmpty() const;
     bool            isBackwardEmpty() const;

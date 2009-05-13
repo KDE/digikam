@@ -50,7 +50,7 @@ public:
     QAbstractItemView *view() const;
     QModelIndex currentIndex() const;
 
-    void show(QHelpEvent *event, const QStyleOptionViewItem &option, const QModelIndex &index);
+    void show(QHelpEvent *event, const QStyleOptionViewItem& option, const QModelIndex& index);
 
 protected:
 

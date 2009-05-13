@@ -80,7 +80,7 @@ public:
     DeleteWidget(QWidget *parent = 0);
     virtual ~DeleteWidget(){};
 
-    void setFiles(const KUrl::List &files);
+    void setFiles(const KUrl::List& files);
     void setListMode(DeleteDialogMode::ListMode mode);
     void setDeleteMode(DeleteDialogMode::DeleteMode deleteMode);
 
@@ -131,12 +131,12 @@ public:
     DeleteDialog(QWidget *parent);
     virtual ~DeleteDialog(){};
 
-    bool confirmDeleteList(const KUrl::List &condemnedURLs,
+    bool confirmDeleteList(const KUrl::List& condemnedURLs,
                            DeleteDialogMode::ListMode listMode,
                            DeleteDialogMode::DeleteMode deleteMode);
     bool shouldDelete() const;
 
-    void setURLs(const KUrl::List &files);
+    void setURLs(const KUrl::List& files);
     void presetDeleteMode(DeleteDialogMode::DeleteMode mode);
     void setListMode(DeleteDialogMode::ListMode mode);
 

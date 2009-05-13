@@ -59,7 +59,7 @@ public:
     ImageInfo     currentItemImageInfo() const;
     ImageInfoList itemsImageInfoList();
 
-    ImagePreviewBarItem* findItemByInfo(const ImageInfo &info) const;
+    ImagePreviewBarItem* findItemByInfo(const ImageInfo& info) const;
     ImagePreviewBarItem* findItemByPos(const QPoint& pos) const;
 
     /** Read tool tip settings from Album Settings instance */
@@ -106,7 +106,7 @@ class ImagePreviewBarItem : public ThumbBarItem
 {
 public:
 
-    ImagePreviewBarItem(ImagePreviewBar *view, const ImageInfo &info);
+    ImagePreviewBarItem(ImagePreviewBar *view, const ImageInfo& info);
     ~ImagePreviewBarItem();
 
     ImageInfo info();

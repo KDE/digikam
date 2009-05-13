@@ -90,12 +90,12 @@ void ImageAlbumFilterModel::slotListedAlbumChanged(Album *album)
 }
 */
 
-void ImageAlbumFilterModel::prepareThumbnails(const QList<QModelIndex> &indexesToPrepare)
+void ImageAlbumFilterModel::prepareThumbnails(const QList<QModelIndex>& indexesToPrepare)
 {
     sourceModel()->prepareThumbnails(mapListToSource(indexesToPrepare));
 }
 
-void ImageAlbumFilterModel::setImageFilterSettings(const ImageFilterSettings &s)
+void ImageAlbumFilterModel::setImageFilterSettings(const ImageFilterSettings& s)
 {
     Q_D(ImageAlbumFilterModel);
     ImageFilterSettings settings(s);
@@ -104,7 +104,7 @@ void ImageAlbumFilterModel::setImageFilterSettings(const ImageFilterSettings &s)
     ImageFilterModel::setImageFilterSettings(settings);
 }
 
-int ImageAlbumFilterModel::compareInfosCategories(const ImageInfo &left, const ImageInfo &right) const
+int ImageAlbumFilterModel::compareInfosCategories(const ImageInfo& left, const ImageInfo& right) const
 {
     Q_D(const ImageAlbumFilterModel);
     switch (d->categorizationMode)

@@ -174,11 +174,11 @@ enum CustomEnumFlags
 Q_DECLARE_FLAGS(CustomEnum, CustomEnumFlags)
 
 #define DATABASEFIELDS_SET_DECLARE_METHODS(Flag, variable) \
-    Set(const Flag &f) { initialize(); variable = f; } \
-    Set(const Flag##Field &f) { initialize(); variable = f; } \
-    inline Flag &operator=(const Flag &f) { return variable.operator=(f); } \
-    inline Flag &operator|=(Flag f) { return variable.operator|=(f); } \
-    inline Flag &operator^=(Flag f) { return variable.operator^=(f); } \
+    Set(const Flag& f) { initialize(); variable = f; } \
+    Set(const Flag##Field& f) { initialize(); variable = f; } \
+    inline Flag& operator=(const Flag& f) { return variable.operator=(f); } \
+    inline Flag& operator|=(Flag f) { return variable.operator|=(f); } \
+    inline Flag& operator^=(Flag f) { return variable.operator^=(f); } \
     inline Flag operator|(Flag f) const { return variable.operator|(f); } \
     inline Flag operator^(Flag f) const { return variable.operator^(f); } \
     inline Flag operator&(Flag f) const { return variable.operator&(f); } \
@@ -213,22 +213,22 @@ public:
     DATABASEFIELDS_SET_DECLARE_METHODS(ImageComments, imageComments)
     DATABASEFIELDS_SET_DECLARE_METHODS(ImagePositions, imagePositions)
 
-    inline bool operator&(const Set &other)
+    inline bool operator&(const Set& other)
     { return (images & other.images) || (imageInformation & other.imageInformation)  ||
              (imageMetadata & other.imageMetadata) || (imageComments & other.imageComments) ||
              (imagePositions & other.imagePositions) || (customEnum & other.customEnum); }
 
-    inline CustomEnum &operator=(const CustomEnum &f) { return customEnum.operator=(f); }
-    inline CustomEnum &operator|=(CustomEnum f)       { return customEnum.operator|=(f); }
-    inline CustomEnum &operator^=(CustomEnum f)       { return customEnum.operator^=(f); }
+    inline CustomEnum& operator=(const CustomEnum& f) { return customEnum.operator=(f); }
+    inline CustomEnum& operator|=(CustomEnum f)       { return customEnum.operator|=(f); }
+    inline CustomEnum& operator^=(CustomEnum f)       { return customEnum.operator^=(f); }
     inline CustomEnum operator|(CustomEnum f) const   { return customEnum.operator|(f); }
     inline CustomEnum operator^(CustomEnum f) const   { return customEnum.operator^(f); }
     inline CustomEnum operator&(CustomEnum f) const   { return customEnum.operator&(f); }
 
 
     // databasechangesets.cpp
-    Set &operator<<(const QDBusArgument &argument);
-    const Set &operator>>(QDBusArgument &argument) const;
+    Set& operator<<(const QDBusArgument& argument);
+    const Set& operator>>(QDBusArgument& argument) const;
 
 private:
 
@@ -241,17 +241,17 @@ private:
 };
 
 #define DATABASEFIELDS_HASH_DECLARE_METHODS(Key, method) \
-    int remove(const Key &key) { return QHash<unsigned int, T>::remove(method(key)); } \
-    T take(const Key &key) { return QHash<unsigned int, T>::take(method(key)); } \
+    int remove(const Key& key) { return QHash<unsigned int, T>::remove(method(key)); } \
+    T take(const Key& key) { return QHash<unsigned int, T>::take(method(key)); } \
     \
-    bool contains(const Key &key) const { return QHash<unsigned int, T>::contains(method(key)); } \
-    const T value(const Key &key) const { return QHash<unsigned int, T>::value(method(key)); } \
-    const T value(const Key &key, const T &defaultValue) const { return QHash<unsigned int, T>::value(method(key), defaultValue); } \
-    T &operator[](const Key &key) { return QHash<unsigned int, T>::operator[](method(key)); } \
-    const T operator[](const Key &key) const { return QHash<unsigned int, T>::operator[](method(key)); } \
+    bool contains(const Key& key) const { return QHash<unsigned int, T>::contains(method(key)); } \
+    const T value(const Key& key) const { return QHash<unsigned int, T>::value(method(key)); } \
+    const T value(const Key& key, const T& defaultValue) const { return QHash<unsigned int, T>::value(method(key), defaultValue); } \
+    T& operator[](const Key& key) { return QHash<unsigned int, T>::operator[](method(key)); } \
+    const T operator[](const Key& key) const { return QHash<unsigned int, T>::operator[](method(key)); } \
     \
-    QList<T> values(const Key &key) const { return QHash<unsigned int, T>::value(method(key)); } \
-    int count(const Key &key) const { return QHash<unsigned int, T>::count(method(key)); }
+    QList<T> values(const Key& key) const { return QHash<unsigned int, T>::value(method(key)); } \
+    int count(const Key& key) const { return QHash<unsigned int, T>::count(method(key)); }
 
 /**
  * This class provides a hash on all DatabaseFields enums,

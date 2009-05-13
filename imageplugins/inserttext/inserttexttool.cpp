@@ -328,7 +328,7 @@ void InsertTextTool::slotAlignModeChanged(int mode)
     emit signalUpdatePreview();
 }
 
-void InsertTextTool::slotFontPropertiesChanged(const QFont &font)
+void InsertTextTool::slotFontPropertiesChanged(const QFont& font)
 {
     m_textFont = font;
     emit signalUpdatePreview();

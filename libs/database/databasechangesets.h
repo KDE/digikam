@@ -57,8 +57,8 @@ public:
     bool containsImage(qlonglong id) const;
     DatabaseFields::Set changes() const;
 
-    ImageChangeset &operator<<(const QDBusArgument &argument);
-    const ImageChangeset &operator>>(QDBusArgument &argument) const;
+    ImageChangeset& operator<<(const QDBusArgument& argument);
+    const ImageChangeset& operator>>(QDBusArgument& argument) const;
 
 private:
 
@@ -99,10 +99,10 @@ public:
      * the operation is set to Unknown if it differs.
      * This is especially not suitable for RemovedAll changesets.
      */
-    ImageTagChangeset &operator<<(const ImageTagChangeset &other);
+    ImageTagChangeset& operator<<(const ImageTagChangeset& other);
 
-    ImageTagChangeset &operator<<(const QDBusArgument &argument);
-    const ImageTagChangeset &operator>>(QDBusArgument &argument) const;
+    ImageTagChangeset& operator<<(const QDBusArgument& argument);
+    const ImageTagChangeset& operator>>(QDBusArgument& argument) const;
 
     QList<qlonglong> ids() const;
     bool containsImage(qlonglong id) const;
@@ -190,10 +190,10 @@ public:
      * the operation is set to Unknown if it differs.
      * This is especially not suitable for RemovedAll changesets.
      */
-    CollectionImageChangeset &operator<<(const CollectionImageChangeset &other);
+    CollectionImageChangeset& operator<<(const CollectionImageChangeset& other);
 
-    CollectionImageChangeset &operator<<(const QDBusArgument &argument);
-    const CollectionImageChangeset &operator>>(QDBusArgument &argument) const;
+    CollectionImageChangeset& operator<<(const QDBusArgument& argument);
+    const CollectionImageChangeset& operator>>(QDBusArgument& argument) const;
 
     /** Specification of this changeset.
      *  All special cases where the returned list may be empty are noted above.
@@ -231,8 +231,8 @@ public:
     int albumId() const;
     Operation operation() const;
 
-    AlbumChangeset &operator<<(const QDBusArgument &argument);
-    const AlbumChangeset &operator>>(QDBusArgument &argument) const;
+    AlbumChangeset& operator<<(const QDBusArgument& argument);
+    const AlbumChangeset& operator>>(QDBusArgument& argument) const;
 
 private:
 
@@ -260,8 +260,8 @@ public:
     int tagId() const;
     Operation operation() const;
 
-    TagChangeset &operator<<(const QDBusArgument &argument);
-    const TagChangeset &operator>>(QDBusArgument &argument) const;
+    TagChangeset& operator<<(const QDBusArgument& argument);
+    const TagChangeset& operator>>(QDBusArgument& argument) const;
 
 private:
 
@@ -287,8 +287,8 @@ public:
     int albumRootId() const;
     Operation operation() const;
 
-    AlbumRootChangeset &operator<<(const QDBusArgument &argument);
-    const AlbumRootChangeset &operator>>(QDBusArgument &argument) const;
+    AlbumRootChangeset& operator<<(const QDBusArgument& argument);
+    const AlbumRootChangeset& operator>>(QDBusArgument& argument) const;
 
 private:
 
@@ -314,8 +314,8 @@ public:
     int searchId() const;
     Operation operation() const;
 
-    SearchChangeset &operator<<(const QDBusArgument &argument);
-    const SearchChangeset &operator>>(QDBusArgument &argument) const;
+    SearchChangeset& operator<<(const QDBusArgument& argument);
+    const SearchChangeset& operator>>(QDBusArgument& argument) const;
 
 private:
 

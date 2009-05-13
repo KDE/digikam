@@ -294,7 +294,7 @@ void AdjustCurvesTool::slotPickerColorButtonActived()
     m_previewWidget->setRenderingPreviewMode(ImageGuideWidget::PreviewOriginalImage);
 }
 
-void AdjustCurvesTool::slotSpotColorChanged(const DColor &color)
+void AdjustCurvesTool::slotSpotColorChanged(const DColor& color)
 {
     DColor sc = color;
 
@@ -347,7 +347,7 @@ void AdjustCurvesTool::slotSpotColorChanged(const DColor &color)
     slotEffect();
 }
 
-void AdjustCurvesTool::slotColorSelectedFromTarget( const DColor &color )
+void AdjustCurvesTool::slotColorSelectedFromTarget( const DColor& color )
 {
     m_gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }

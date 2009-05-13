@@ -41,7 +41,7 @@ class ImagePlugin_ShearTool : public Digikam::ImagePlugin
 
 public:
 
-    ImagePlugin_ShearTool(QObject *parent, const QVariantList &args);
+    ImagePlugin_ShearTool(QObject *parent, const QVariantList& args);
     ~ImagePlugin_ShearTool();
 
     void setEnabledActions(bool enable);

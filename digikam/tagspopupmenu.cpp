@@ -69,8 +69,8 @@ class TagToggleAction : public QWidgetAction
 {
 public:
 
-    TagToggleAction(const QString &text, QObject *parent);
-    TagToggleAction(const KIcon &icon, const QString &text, QObject *parent);
+    TagToggleAction(const QString& text, QObject *parent);
+    TagToggleAction(const KIcon& icon, const QString& text, QObject *parent);
     virtual QWidget *createWidget(QWidget * parent);
 
     void setSpecialChecked(bool checked);
@@ -296,7 +296,7 @@ QRect TagToggleMenuWidget::checkIndicatorSize(QStyleOption *option) const
 
 // ------------------------------------------------------------------------
 
-TagToggleAction::TagToggleAction(const QString &text, QObject *parent)
+TagToggleAction::TagToggleAction(const QString& text, QObject *parent)
                : QWidgetAction(parent)
 {
     m_checked = false;
@@ -305,7 +305,7 @@ TagToggleAction::TagToggleAction(const QString &text, QObject *parent)
     setCheckable(true);
 }
 
-TagToggleAction::TagToggleAction(const KIcon &icon, const QString &text, QObject *parent)
+TagToggleAction::TagToggleAction(const KIcon& icon, const QString& text, QObject *parent)
                : QWidgetAction(parent)
 {
     m_checked = false;

@@ -62,8 +62,8 @@ public:
     void addField(SearchField *field);
     void setLabel(SearchFieldGroupLabel *label);
 
-    SearchField *fieldForName(const QString &fieldName);
-    void write(SearchXmlWriter &writer);
+    SearchField *fieldForName(const QString& fieldName);
+    void write(SearchXmlWriter& writer);
 
     void reset();
 
@@ -97,7 +97,7 @@ public:
 
     SearchFieldGroupLabel(QWidget *parent);
 
-    void setTitle(const QString &title);
+    void setTitle(const QString& title);
 
 public Q_SLOTS:
 

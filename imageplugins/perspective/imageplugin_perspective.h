@@ -41,7 +41,7 @@ class ImagePlugin_Perspective : public Digikam::ImagePlugin
 
 public:
 
-    ImagePlugin_Perspective(QObject *parent, const QVariantList &args);
+    ImagePlugin_Perspective(QObject *parent, const QVariantList& args);
     ~ImagePlugin_Perspective();
 
     void setEnabledActions(bool enable);

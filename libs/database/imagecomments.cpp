@@ -52,8 +52,8 @@ public:
     QSet<int>                     newIndices;
     ImageComments::UniqueBehavior unique;
 
-    void languageMatch(const QString &fullCode, const QString &langCode,
-                        int &fullCodeMatch, int &langCodeMatch, int &defaultCodeMatch, int &firstMatch) const
+    void languageMatch(const QString& fullCode, const QString& langCode,
+                        int& fullCodeMatch, int& langCodeMatch, int& defaultCodeMatch, int& firstMatch) const
     {
         // if you change the algorithm, please take a look at ImageCopyright as well
         fullCodeMatch    = -1;
@@ -79,7 +79,7 @@ public:
 
         for (int i=0; i<infos.size(); ++i)
         {
-            const CommentInfo &info = infos[i];
+            const CommentInfo& info = infos[i];
             if (info.type == DatabaseComment::Comment)
             {
                 if (info.language == fullCode)
@@ -112,14 +112,14 @@ ImageComments::ImageComments(qlonglong imageid)
     d->infos = access.db()->getImageComments(imageid);
 }
 
-ImageComments::ImageComments(DatabaseAccess &access, qlonglong imageid)
+ImageComments::ImageComments(DatabaseAccess& access, qlonglong imageid)
 {
     d = new ImageCommentsPriv;
     d->id    = imageid;
     d->infos = access.db()->getImageComments(imageid);
 }
 
-ImageComments::ImageComments(const ImageComments &other)
+ImageComments::ImageComments(const ImageComments& other)
 {
     d = other.d;
 }
@@ -129,7 +129,7 @@ ImageComments::~ImageComments()
     apply();
 }
 
-ImageComments &ImageComments::operator=(const ImageComments &other)
+ImageComments& ImageComments::operator=(const ImageComments& other)
 {
     d = other.d;
     return *this;
@@ -170,7 +170,7 @@ QString ImageComments::defaultComment(int *index) const
         return d->infos[chosen].comment;
 }
 
-QString ImageComments::commentForLanguage(const QString &languageCode, int *index, 
+QString ImageComments::commentForLanguage(const QString& languageCode, int *index, 
                                           LanguageChoiceBehavior behavior) const
 {
     if (!d)
@@ -262,8 +262,8 @@ void ImageComments::setUniqueBehavior(UniqueBehavior behavior)
     d->unique = behavior;
 }
 
-void ImageComments::addComment(const QString &comment, const QString &lang, const QString &author,
-                               const QDateTime &date, DatabaseComment::Type type)
+void ImageComments::addComment(const QString& comment, const QString& lang, const QString& author,
+                               const QDateTime& date, DatabaseComment::Type type)
 {
     if (!d)
         return;
@@ -275,7 +275,7 @@ void ImageComments::addComment(const QString &comment, const QString &lang, cons
 
     for (int i=0; i<d->infos.size(); ++i)
     {
-        CommentInfo &info = d->infos[i];
+        CommentInfo& info = d->infos[i];
 
         // some extra considerations on replacing
         if (info.type == DatabaseComment::Comment && info.language == language)
@@ -304,20 +304,20 @@ void ImageComments::addComment(const QString &comment, const QString &lang, cons
     return addCommentDirect(comment, language, author, type, date);
 }
 
-void ImageComments::addHeadline(const QString &comment, const QString &lang,
-                                const QString &author, const QDateTime &date)
+void ImageComments::addHeadline(const QString& comment, const QString& lang,
+                                const QString& author, const QDateTime& date)
 {
     return addComment(comment, lang, author, date, DatabaseComment::Headline);
 }
 
-void ImageComments::addTitle(const QString &comment, const QString &lang,
-                             const QString &author, const QDateTime &date)
+void ImageComments::addTitle(const QString& comment, const QString& lang,
+                             const QString& author, const QDateTime& date)
 {
     return addComment(comment, lang, author, date, DatabaseComment::Title);
 }
 
-void ImageComments::addCommentDirect(const QString &comment, const QString &language, const QString &author,
-                                     DatabaseComment::Type type, const QDateTime &date)
+void ImageComments::addCommentDirect(const QString& comment, const QString& language, const QString& author,
+                                     DatabaseComment::Type type, const QDateTime& date)
 {
     CommentInfo info;
     info.comment  = comment;
@@ -330,7 +330,7 @@ void ImageComments::addCommentDirect(const QString &comment, const QString &lang
     d->infos      << info;
 }
 
-void ImageComments::changeComment(int index, const QString &comment)
+void ImageComments::changeComment(int index, const QString& comment)
 {
     if (!d)
         return;
@@ -339,7 +339,7 @@ void ImageComments::changeComment(int index, const QString &comment)
     d->dirtyIndices << index;
 }
 
-void ImageComments::changeLanguage(int index, const QString &language)
+void ImageComments::changeLanguage(int index, const QString& language)
 {
      if (!d)
         return;
@@ -348,7 +348,7 @@ void ImageComments::changeLanguage(int index, const QString &language)
     d->dirtyIndices << index;
 }
 
-void ImageComments::changeAuthor(int index, const QString &author)
+void ImageComments::changeAuthor(int index, const QString& author)
 {
     if (!d)
         return;
@@ -357,7 +357,7 @@ void ImageComments::changeAuthor(int index, const QString &author)
     d->dirtyIndices << index;
 }
 
-void ImageComments::changeDate(int index, const QDateTime &date)
+void ImageComments::changeDate(int index, const QDateTime& date)
 {
     if (!d)
         return;
@@ -384,14 +384,14 @@ void ImageComments::apply()
     apply(access);
 }
 
-void ImageComments::apply(DatabaseAccess &access)
+void ImageComments::apply(DatabaseAccess& access)
 {
     if (!d)
         return;
 
     foreach(int index, d->newIndices)
     {
-        CommentInfo &info = d->infos[index];
+        CommentInfo& info = d->infos[index];
         DatabaseAccess access;
         info.id = access.db()->setImageComment(d->id, info.comment, info.type, info.language, info.author, info.date);
     }
@@ -401,7 +401,7 @@ void ImageComments::apply(DatabaseAccess &access)
     foreach(int index, d->dirtyIndices)
     {
         QVariantList values;
-        CommentInfo &info = d->infos[index];
+        CommentInfo& info = d->infos[index];
         values << (int)info.type << info.language << info.author << info.date << info.comment;
         access.db()->changeImageComment(info.id, d->id, values);
     }

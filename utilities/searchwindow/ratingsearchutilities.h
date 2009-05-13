@@ -81,7 +81,7 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
 
-    void currentValueChanged(const QModelIndex &current, const QModelIndex &previous);
+    void currentValueChanged(const QModelIndex& current, const QModelIndex& previous);
     void ratingWidgetChanged(int);
 
 protected:
@@ -156,8 +156,8 @@ public:
     RatingComboBoxModel(QObject *parent = 0);
 
     virtual int rowCount(const QModelIndex & parent) const;
-    virtual QVariant data(const QModelIndex &index, int role) const;
-    virtual QModelIndex index(int row, int column = 0, const QModelIndex &parent = QModelIndex()) const;
+    virtual QVariant data(const QModelIndex& index, int role) const;
+    virtual QModelIndex index(int row, int column = 0, const QModelIndex& parent = QModelIndex()) const;
 
     QModelIndex indexForRatingValue(RatingComboBox::RatingValue value) const;
 
@@ -181,7 +181,7 @@ public:
 
 protected:
 
-    void drawRating(QPainter *painter, const QRect &rect, int rating, bool selectable) const;
+    void drawRating(QPainter *painter, const QRect& rect, int rating, bool selectable) const;
 };
 
 } // namespace Digikam

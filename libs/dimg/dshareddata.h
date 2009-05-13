@@ -65,7 +65,7 @@ public:
 
 private:
     // using the assignment operator would lead to corruption in the ref-counting
-    DSharedData &operator=(const DSharedData &);
+    DSharedData& operator=(const DSharedData &);
 };
 
 template <class T> class DSharedDataPointer
@@ -84,8 +84,8 @@ public:
      */
 
     /** Various operators for accessing the pointer const and non-const */
-    inline T &operator*() { return *d; }
-    inline const T &operator*() const { return *d; }
+    inline T& operator*() { return *d; }
+    inline const T& operator*() const { return *d; }
     inline T *operator->() { return d; }
     inline const T *operator->() const { return d; }
     inline operator T *() { return d; }
@@ -102,8 +102,8 @@ public:
      */
     inline T* constCastData() const { return const_cast<T*>(d); }
 
-    inline bool operator==(const DSharedDataPointer<T> &other) const { return d == other.d; }
-    inline bool operator!=(const DSharedDataPointer<T> &other) const { return d != other.d; }
+    inline bool operator==(const DSharedDataPointer<T>& other) const { return d == other.d; }
+    inline bool operator!=(const DSharedDataPointer<T>& other) const { return d != other.d; }
 
     inline DSharedDataPointer() { d = 0; }
 
@@ -113,16 +113,16 @@ public:
     inline ~DSharedDataPointer()
         { if (d && !d->ref.deref()) delete d; }
 
-    inline DSharedDataPointer(const DSharedDataPointer<T> &o) : d(o.d)
+    inline DSharedDataPointer(const DSharedDataPointer<T>& o) : d(o.d)
         { if (d) d->ref.ref(); }
 
-    inline DSharedDataPointer<T> & operator=(const DSharedDataPointer<T> &o)
+    inline DSharedDataPointer<T> & operator=(const DSharedDataPointer<T>& o)
     {
         delete assign(o);
         return *this;
     }
 
-    inline DSharedDataPointer &operator=(T *o)
+    inline DSharedDataPointer& operator=(T *o)
     {
         delete assign(o);
         return *this;
@@ -137,7 +137,7 @@ public:
      * @returns A T object with reference count 0, which may be deleted;
      *          or 0 if no object need to be dropped.
      */
-    inline T *assign(const DSharedDataPointer<T> &o)
+    inline T *assign(const DSharedDataPointer<T>& o)
     {
         if (o.d != d)
         {

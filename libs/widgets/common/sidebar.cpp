@@ -196,7 +196,7 @@ void Sidebar::restore()
     KMultiTabBar::show();
 }
 
-void Sidebar::restore(const QList<QWidget*> thirdWidgetsToRestore, const QList<int> &sizes)
+void Sidebar::restore(const QList<QWidget*> thirdWidgetsToRestore, const QList<int>& sizes)
 {
     restore();
 
@@ -207,7 +207,7 @@ void Sidebar::restore(const QList<QWidget*> thirdWidgetsToRestore, const QList<i
     }
 }
 
-void Sidebar::appendTab(QWidget *w, const QPixmap &pic, const QString &title)
+void Sidebar::appendTab(QWidget *w, const QPixmap& pic, const QString& title)
 {
     // Store state (but not on initialization)
     if (isVisible())
@@ -441,7 +441,7 @@ SidebarSplitter::~SidebarSplitter()
     delete d;
 }
 
-void SidebarSplitter::restoreState(KConfigGroup &group, const char *key)
+void SidebarSplitter::restoreState(KConfigGroup& group, const char *key)
 {
     if (!key)
         key = "SplitterState";
@@ -454,7 +454,7 @@ void SidebarSplitter::restoreState(KConfigGroup &group, const char *key)
     }
 }
 
-void SidebarSplitter::saveState(KConfigGroup &group, const char *key)
+void SidebarSplitter::saveState(KConfigGroup& group, const char *key)
 {
     if (!key)
         key = "SplitterState";

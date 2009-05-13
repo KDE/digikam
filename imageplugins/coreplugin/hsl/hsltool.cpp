@@ -186,7 +186,7 @@ HSLTool::~HSLTool()
        delete [] m_destinationPreviewData;
 }
 
-void HSLTool::slotColorSelectedFromTarget(const DColor &color)
+void HSLTool::slotColorSelectedFromTarget(const DColor& color)
 {
     m_gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }

@@ -243,7 +243,7 @@ int CIETongueWidget::grids(double val) const
     return (int) floor(val * d->gridside + 0.5);
 }
 
-bool CIETongueWidget::setProfileData(const QByteArray &profileData)
+bool CIETongueWidget::setProfileData(const QByteArray& profileData)
 {
     if (!profileData.isEmpty())
     {

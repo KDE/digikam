@@ -78,7 +78,7 @@ public:
     void setExifRotate(bool exifRotate);
     bool getExifRotate();
 
-    void setToolTipSettings(const ThumbBarToolTipSettings &settings);
+    void setToolTipSettings(const ThumbBarToolTipSettings& settings);
     ThumbBarToolTipSettings& getToolTipSettings() const;
 
     ThumbBarItem* currentItem() const;
@@ -117,7 +117,7 @@ protected:
     int  getMargin();
     int  getRadius();
 
-    bool pixmapForItem(ThumbBarItem *item, QPixmap &pix) const;
+    bool pixmapForItem(ThumbBarItem *item, QPixmap& pix) const;
     void preloadPixmapForItem(ThumbBarItem *item) const;
 
     void insertItem(ThumbBarItem* item);

@@ -44,7 +44,7 @@ class ImagePlugin_DistortionFX : public Digikam::ImagePlugin
 
 public:
 
-    ImagePlugin_DistortionFX(QObject *parent, const QVariantList &args);
+    ImagePlugin_DistortionFX(QObject *parent, const QVariantList& args);
     ~ImagePlugin_DistortionFX();
 
     void setEnabledActions(bool enable);

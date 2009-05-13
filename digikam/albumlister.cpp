@@ -230,7 +230,7 @@ void AlbumLister::slotNextRefresh()
         refresh();
 }
 
-void AlbumLister::startListJob(const KUrl &url)
+void AlbumLister::startListJob(const KUrl& url)
 {
     d->job = ImageLister::startListJob(url);
     d->job->addMetaData("listAlbumsRecursively", d->recurseAlbums ? "true" : "false");
@@ -312,7 +312,7 @@ void AlbumLister::setTextFilter(const SearchTextSettings& settings)
         d->filterTimer->start();
 }
 
-bool AlbumLister::matchesFilter(const ImageInfo &info, bool &foundText)
+bool AlbumLister::matchesFilter(const ImageInfo& info, bool& foundText)
 {
     if (!filterIsActive())
         return true;
@@ -509,7 +509,7 @@ void AlbumLister::stop()
     }
 }
 
-void AlbumLister::invalidateItem(const ImageInfo &item)
+void AlbumLister::invalidateItem(const ImageInfo& item)
 {
     d->invalidatedItems << item.id();
 }
@@ -556,7 +556,7 @@ void AlbumLister::slotFilterItems()
     if (!deleteFilteredItemsList.isEmpty())
     {
         /*
-        foreach(const ImageInfo &info, deleteFilteredItemsList)
+        foreach(const ImageInfo& info, deleteFilteredItemsList)
             emit signalDeleteFilteredItem(info);
         */
         emit signalClear();
@@ -655,7 +655,7 @@ void AlbumLister::slotData(KIO::Job*, const QByteArray& data)
     slotFilterItems();
 }
 
-void AlbumLister::slotImageChange(const ImageChangeset &changeset)
+void AlbumLister::slotImageChange(const ImageChangeset& changeset)
 {
     if (!d->currAlbum)
         return;
@@ -706,7 +706,7 @@ void AlbumLister::slotImageChange(const ImageChangeset &changeset)
     }
 }
 
-void AlbumLister::slotImageTagChange(const ImageTagChangeset &changeset)
+void AlbumLister::slotImageTagChange(const ImageTagChangeset& changeset)
 {
     if (!d->currAlbum)
         return;
@@ -735,7 +735,7 @@ void AlbumLister::slotImageTagChange(const ImageTagChangeset &changeset)
     }
 }
 
-void AlbumLister::slotCollectionImageChange(const CollectionImageChangeset &changeset)
+void AlbumLister::slotCollectionImageChange(const CollectionImageChangeset& changeset)
 {
     if (!d->currAlbum)
         return;
@@ -787,7 +787,7 @@ void AlbumLister::slotCollectionImageChange(const CollectionImageChangeset &chan
     }
 }
 
-void AlbumLister::slotSearchChange(const SearchChangeset &changeset)
+void AlbumLister::slotSearchChange(const SearchChangeset& changeset)
 {
     if (!d->currAlbum)
         return;

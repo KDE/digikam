@@ -282,7 +282,7 @@ void DImgInterface::setExposureSettings(ExposureSettingsContainer *expoSettings)
     d->expoSettings = expoSettings;
 }
 
-void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription, const DImg& img)
+void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription, const DImg& img)
 {
     const QString &fileName = loadingDescription.filePath;
 
@@ -453,7 +453,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription &loadingDescription
     setModified();
 }
 
-void DImgInterface::slotLoadingProgress(const LoadingDescription &loadingDescription, float progress)
+void DImgInterface::slotLoadingProgress(const LoadingDescription& loadingDescription, float progress)
 {
     if (loadingDescription.filePath == d->filename)
         emit signalLoadingProgress(loadingDescription.filePath, progress);
@@ -674,7 +674,7 @@ void DImgInterface::setModified()
     emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
 }
 
-void DImgInterface::readMetadataFromFile(const QString &file)
+void DImgInterface::readMetadataFromFile(const QString& file)
 {
     DMetadata meta(file);
 
@@ -1087,12 +1087,12 @@ uchar* DImgInterface::getImage()
     }
 }
 
-void DImgInterface::putImage(const QString &caller, uchar* data, int w, int h)
+void DImgInterface::putImage(const QString& caller, uchar* data, int w, int h)
 {
     putImage(caller, data, w, h, d->image.sixteenBit());
 }
 
-void DImgInterface::putImage(const QString &caller, uchar* data, int w, int h, bool sixteenBit)
+void DImgInterface::putImage(const QString& caller, uchar* data, int w, int h, bool sixteenBit)
 {
     d->undoMan->addAction(new UndoActionIrreversible(this, caller));
     putImage(data, w, h, sixteenBit);
@@ -1163,7 +1163,7 @@ uchar* DImgInterface::getImageSelection()
     return 0;
 }
 
-void DImgInterface::putImageSelection(const QString &caller, uchar* data)
+void DImgInterface::putImageSelection(const QString& caller, uchar* data)
 {
     if (!data || d->image.isNull())
         return;
@@ -1175,12 +1175,12 @@ void DImgInterface::putImageSelection(const QString &caller, uchar* data)
     setModified();
 }
 
-void DImgInterface::getUndoHistory(QStringList &titles)
+void DImgInterface::getUndoHistory(QStringList& titles)
 {
     d->undoMan->getUndoHistory(titles);
 }
 
-void DImgInterface::getRedoHistory(QStringList &titles)
+void DImgInterface::getRedoHistory(QStringList& titles)
 {
     d->undoMan->getRedoHistory(titles);
 }

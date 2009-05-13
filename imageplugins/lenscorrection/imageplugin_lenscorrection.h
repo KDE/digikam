@@ -40,7 +40,7 @@ class ImagePlugin_LensCorrection : public Digikam::ImagePlugin
 
 public:
 
-    ImagePlugin_LensCorrection(QObject *parent, const QVariantList &args);
+    ImagePlugin_LensCorrection(QObject *parent, const QVariantList& args);
     ~ImagePlugin_LensCorrection();
 
     void setEnabledActions(bool enable);

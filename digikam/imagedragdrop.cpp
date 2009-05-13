@@ -80,7 +80,7 @@ static Qt::DropAction copyOrMove(const QDropEvent *e, QWidget *view)
     return Qt::IgnoreAction;
 }
 
-bool ImageDragDropHandler::dropEvent(QAbstractItemView *abstractview, const QDropEvent *e, const QModelIndex &droppedOn)
+bool ImageDragDropHandler::dropEvent(QAbstractItemView *abstractview, const QDropEvent *e, const QModelIndex& droppedOn)
 {
     ImageCategorizedView *view = static_cast<ImageCategorizedView*>(abstractview);
     Album *album = view->albumAt(e->pos());
@@ -346,7 +346,7 @@ QStringList ImageDragDropHandler::mimeTypes() const
     return mimeTypes;
 }
 
-QMimeData *ImageDragDropHandler::createMimeData(const QList<ImageInfo> &infos)
+QMimeData *ImageDragDropHandler::createMimeData(const QList<ImageInfo>& infos)
 {
     if (!model()->currentAlbum())
         return 0;
@@ -356,7 +356,7 @@ QMimeData *ImageDragDropHandler::createMimeData(const QList<ImageInfo> &infos)
     QList<int> albumIDs;
     QList<int> imageIDs;
 
-    foreach (const ImageInfo &info, infos)
+    foreach (const ImageInfo& info, infos)
     {
         urls.append(info.fileUrl());
         kioURLs.append(info.databaseUrl());

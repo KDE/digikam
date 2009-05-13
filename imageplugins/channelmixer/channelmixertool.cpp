@@ -263,7 +263,7 @@ void ChannelMixerTool::slotResetCurrentChannel()
     m_gboxSettings->histogramBox()->histogram()->reset();
 }
 
-void ChannelMixerTool::slotColorSelectedFromTarget( const DColor &color )
+void ChannelMixerTool::slotColorSelectedFromTarget( const DColor& color )
 {
     m_gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }

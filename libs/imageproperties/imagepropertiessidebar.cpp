@@ -94,7 +94,7 @@ ImagePropertiesSideBar::~ImagePropertiesSideBar()
 {
 }
 
-void ImagePropertiesSideBar::itemChanged(const KUrl& url, const QRect &rect, DImg *img)
+void ImagePropertiesSideBar::itemChanged(const KUrl& url, const QRect& rect, DImg *img)
 {
     if (!url.isValid())
         return;
@@ -125,7 +125,7 @@ void ImagePropertiesSideBar::slotNoCurrentItem()
     m_dirtyGpsTab        = false;
 }
 
-void ImagePropertiesSideBar::slotImageSelectionChanged(const QRect &rect)
+void ImagePropertiesSideBar::slotImageSelectionChanged(const QRect& rect)
 {
     m_currentRect = rect;
 

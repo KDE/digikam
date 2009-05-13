@@ -52,7 +52,7 @@ public:
      *  Returns true if the given ImageInfo matches the filter criteria.
      *  Optionally, foundText is set to true if it matched by text search.
      */
-    bool matches(const ImageInfo &info, bool *foundText = 0) const;
+    bool matches(const ImageInfo& info, bool *foundText = 0) const;
 
     /// --- Tags filter ---
 
@@ -98,8 +98,8 @@ public:
     /// Helpers for text search: Set these if you want to search album or tag names with text search
     QHash<int, QString> tagNameHash;
     QHash<int, QString> albumNameHash;
-    void setTagNames(const QHash<int, QString> &tagNameHash);
-    void setAlbumNames(const QHash<int, QString> &albumNameHash);
+    void setTagNames(const QHash<int, QString>& tagNameHash);
+    void setAlbumNames(const QHash<int, QString>& albumNameHash);
 
     /// --- Mime filter ---
 

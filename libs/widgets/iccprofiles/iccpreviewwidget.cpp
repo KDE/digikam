@@ -62,7 +62,7 @@ ICCPreviewWidget::~ICCPreviewWidget()
 {
 }
 
-void ICCPreviewWidget::showPreview( const KUrl &url)
+void ICCPreviewWidget::showPreview( const KUrl& url)
 {
     clearPreview();
     QFileInfo fInfo(url.path());

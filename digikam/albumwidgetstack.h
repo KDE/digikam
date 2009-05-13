@@ -69,9 +69,9 @@ public:
     AlbumIconView    *albumIconView();
     ImagePreviewView *imagePreviewView();
 
-    void setPreviewItem(const ImageInfo &info = ImageInfo(),
-                        const ImageInfo &previous = ImageInfo(),
-                        const ImageInfo &next = ImageInfo());
+    void setPreviewItem(const ImageInfo& info = ImageInfo(),
+                        const ImageInfo& previous = ImageInfo(),
+                        const ImageInfo& next = ImageInfo());
     int  previewMode();
     void setPreviewMode(int mode);
     void previewLoaded();

@@ -67,7 +67,7 @@ ColorGradientWidget::~ColorGradientWidget()
     delete d;
 }
 
-void ColorGradientWidget::setColors( const QColor &col1, const QColor &col2 )
+void ColorGradientWidget::setColors( const QColor& col1, const QColor& col2 )
 {
     d->color1 = col1;
     d->color2 = col2;

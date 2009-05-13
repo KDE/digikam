@@ -90,7 +90,7 @@ void HotPixelFixer::filterImage()
 }
 
 // Interpolates a pixel block
-void HotPixelFixer::interpolate (Digikam::DImg &img, HotPixel &hp, int method)
+void HotPixelFixer::interpolate (Digikam::DImg& img, HotPixel& hp, int method)
 {
     const int xPos = hp.x();
     const int yPos = hp.y();
@@ -183,7 +183,7 @@ void HotPixelFixer::interpolate (Digikam::DImg &img, HotPixel &hp, int method)
     }
 }
 
-void HotPixelFixer::weightPixels (Digikam::DImg &img, HotPixel &px, int method, Direction dir, int maxComponent)
+void HotPixelFixer::weightPixels (Digikam::DImg& img, HotPixel& px, int method, Direction dir, int maxComponent)
 {
     //TODO: implement direction here too
 

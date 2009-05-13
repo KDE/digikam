@@ -275,12 +275,12 @@ const DMetadata::MetaDataMap& MetadataWidget::getMetadataMap()
     return d->metaDataMap;
 }
 
-void MetadataWidget::setIfdList(const DMetadata::MetaDataMap &ifds, const QStringList& tagsFilter)
+void MetadataWidget::setIfdList(const DMetadata::MetaDataMap& ifds, const QStringList& tagsFilter)
 {
     d->view->setIfdList(ifds, tagsFilter);
 }
 
-void MetadataWidget::setIfdList(const DMetadata::MetaDataMap &ifds, const QStringList& keysFilter,
+void MetadataWidget::setIfdList(const DMetadata::MetaDataMap& ifds, const QStringList& keysFilter,
                                 const QStringList& tagsFilter)
 {
     d->view->setIfdList(ifds, keysFilter, tagsFilter);

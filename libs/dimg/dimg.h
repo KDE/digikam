@@ -425,7 +425,7 @@ private:
     void       setImageData(bool null, uint width, uint height, bool sixteenBit, bool alpha);
     void       setImageDimension(uint width, uint height);
     int        allocateData();
-    DImg(const DImg &image, int w, int h);
+    DImg(const DImg& image, int w, int h);
     static void bitBlt(const uchar *src, uchar *dest,
                        int sx, int sy, int w, int h, int dx, int dy,
                        uint swidth, uint sheight, uint dwidth, uint dheight,
@@ -435,7 +435,7 @@ private:
                          uint swidth, uint sheight, uint dwidth, uint dheight,
                          bool sixteenBit, int sdepth, int ddepth,
                          DColorComposer::MultiplicationFlags multiplicationFlags);
-    static bool normalizeRegionArguments(int &sx, int &sy, int &w, int &h, int &dx, int &dy,
+    static bool normalizeRegionArguments(int& sx, int& sy, int& w, int& h, int& dx, int& dy,
                                          uint swidth, uint sheight, uint dwidth, uint dheight);
 
     friend class DImgLoader;

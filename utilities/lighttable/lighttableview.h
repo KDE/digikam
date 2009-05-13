@@ -53,8 +53,8 @@ public:
     void   setSyncPreview(bool sync);
     void   setNavigateByPair(bool b);
 
-    void   setLeftImageInfo(const ImageInfo &info = ImageInfo());
-    void   setRightImageInfo(const ImageInfo &info = ImageInfo());
+    void   setLeftImageInfo(const ImageInfo& info = ImageInfo());
+    void   setRightImageInfo(const ImageInfo& info = ImageInfo());
 
     ImageInfo leftImageInfo() const;
     ImageInfo rightImageInfo() const;
@@ -64,7 +64,7 @@ public:
     void   setLeftZoomFactor(double z);
     void   setRightZoomFactor(double z);
 
-    void   checkForSelection(const ImageInfo &info);
+    void   checkForSelection(const ImageInfo& info);
 
     double leftZoomMax();
     double leftZoomMin();

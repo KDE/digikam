@@ -115,9 +115,9 @@ private Q_SLOTS:
 
     void slotDeleteCurrentItemResult(KJob*);
 
-    void slotLoadingStarted(const QString &filename);
-    void slotLoadingFinished(const QString &filename, bool success);
-    void slotSavingStarted(const QString &filename);
+    void slotLoadingStarted(const QString& filename);
+    void slotLoadingFinished(const QString& filename, bool success);
+    void slotSavingStarted(const QString& filename);
 
     void slotContextMenu();
     void slotRevert();

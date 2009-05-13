@@ -465,7 +465,7 @@ void WhiteBalanceTool::slotPickerColorButtonActived()
     m_previewWidget->setRenderingPreviewMode(ImageGuideWidget::PreviewOriginalImage);
 }
 
-void WhiteBalanceTool::slotColorSelectedFromOriginal(const DColor &color)
+void WhiteBalanceTool::slotColorSelectedFromOriginal(const DColor& color)
 {
     if ( m_pickTemperature->isChecked() )
     {
@@ -488,7 +488,7 @@ void WhiteBalanceTool::slotColorSelectedFromOriginal(const DColor &color)
     slotEffect();
 }
 
-void WhiteBalanceTool::slotColorSelectedFromTarget( const DColor &color )
+void WhiteBalanceTool::slotColorSelectedFromTarget( const DColor& color )
 {
     m_gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }

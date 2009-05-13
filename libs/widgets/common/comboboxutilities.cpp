@@ -199,7 +199,7 @@ QModelIndex ModelIndexBasedComboBox::currentIndex() const
     return m_currentIndex;
 }
 
-void ModelIndexBasedComboBox::setCurrentIndex(const QModelIndex &index)
+void ModelIndexBasedComboBox::setCurrentIndex(const QModelIndex& index)
 {
     m_currentIndex = index;
     view()->selectionModel()->setCurrentIndex(m_currentIndex, QItemSelectionModel::ClearAndSelect);
@@ -372,7 +372,7 @@ TreeViewLineEditComboBox::TreeViewLineEditComboBox(QWidget *parent)
 {
 }
 
-void TreeViewLineEditComboBox::setLineEditText(const QString &text)
+void TreeViewLineEditComboBox::setLineEditText(const QString& text)
 {
     m_comboLineEdit->setText(text);
 }

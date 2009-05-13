@@ -58,7 +58,7 @@ BlackFrameListView::BlackFrameListView(QWidget* parent)
 
 // ----------------------------------------------------------------------------
 
-BlackFrameListViewItem::BlackFrameListViewItem(BlackFrameListView* parent, const KUrl &url)
+BlackFrameListViewItem::BlackFrameListViewItem(BlackFrameListView* parent, const KUrl& url)
                       : QObject(parent), QTreeWidgetItem(parent)
 {
     m_parent        = parent;

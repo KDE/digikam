@@ -69,12 +69,12 @@ public:
      * If the pixmap is not found in the cache, load() is called to start the loading process,
      * false is returned and pixmap is not touched.
      */
-    bool find(const QString &filePath, QPixmap &pixmap);
+    bool find(const QString& filePath, QPixmap& pixmap);
 
     /**
      * Same as above, but does not use the global size, but an extra specified size.
      */
-    bool find(const QString &filePath, QPixmap &pixmap, int size);
+    bool find(const QString& filePath, QPixmap& pixmap, int size);
 
     /**
      * Find a thumbnail.
@@ -82,25 +82,25 @@ public:
      * If you certainly need asynchronous return, connect with Qt::QueuedConnection to the signals.
      * If you connect directly, the signals may be sent from within the method call.
      */
-    void find(const QString &filePath);
+    void find(const QString& filePath);
 
     /**
      * Same as above, but does not use the global size, but an extra specified size.
      */
-    void find(const QString &filePath, int size);
+    void find(const QString& filePath, int size);
 
     /**
      * Find a group of thumbnails. The items will be loaded in order and signals will be sent.
      * Can be used to ensure that thumbnails are loaded in a particular order
      */
-    void findGroup(const QStringList &filePaths);
-    void findGroup(const QStringList &filePaths, int size);
+    void findGroup(const QStringList& filePaths);
+    void findGroup(const QStringList& filePaths, int size);
 
     /**
      * Preload the thumbnail.
      */
-    void preload(const QString &filePath);
-    void preload(const QString &filePath, int size);
+    void preload(const QString& filePath);
+    void preload(const QString& filePath, int size);
 
     /**
      * Load a thumbnail.
@@ -108,7 +108,7 @@ public:
      * The LoadingDescription shall be constructed with the constructor for preview/thumbnail jobs.
      * (in the description constructor, you need to specify file path, thumbnail size and Exif rotation)
      */
-    void load(const LoadingDescription &description);
+    void load(const LoadingDescription& description);
 
     /// If the thread is currently loading thumbnails, there is no guarantee as to when
     /// the property change by one of the following methods takes effect.
@@ -174,12 +174,12 @@ public:
      * Use this method if you know that the contents of the file has changed.
      * This method works independently from the multithreaded thumbnail loading.
      */
-    static void deleteThumbnail(const QString &filePath);
+    static void deleteThumbnail(const QString& filePath);
 
 Q_SIGNALS:
 
     // See LoadSaveThread for a QImage-based thumbnailLoaded() signal.
-    void signalThumbnailLoaded(const LoadingDescription &loadingDescription, const QPixmap& pix);
+    void signalThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& pix);
 
 public:
 
@@ -188,14 +188,14 @@ public:
 
 protected:
 
-    virtual void thumbnailLoaded(const LoadingDescription &loadingDescription, const QImage& img);
+    virtual void thumbnailLoaded(const LoadingDescription& loadingDescription, const QImage& img);
 
 private:
 
-    void load(const LoadingDescription &description, bool preload);
-    void loadWithKDE(const LoadingDescription &description);
+    void load(const LoadingDescription& description, bool preload);
+    void loadWithKDE(const LoadingDescription& description);
     void startKdePreviewJob();
-    QPixmap surrogatePixmap(const LoadingDescription &loadingDescription);
+    QPixmap surrogatePixmap(const LoadingDescription& loadingDescription);
     bool checkSize(int size);
 
 Q_SIGNALS:
@@ -206,8 +206,8 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotThumbnailsAvailable();
-    void slotThumbnailLoaded(const LoadingDescription &loadingDescription, const QImage& thumb);
-    void gotKDEPreview(const KFileItem &, const QPixmap &pix);
+    void slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QImage& thumb);
+    void gotKDEPreview(const KFileItem &, const QPixmap& pix);
     void failedKDEPreview(const KFileItem &);
     void kdePreviewFinished(KJob *);
 

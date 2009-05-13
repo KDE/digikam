@@ -84,18 +84,18 @@ void DRubberBand::setActive(bool active)
         hide();
 }
 
-void DRubberBand::setFirstPointOnViewport(const QPoint &p)
+void DRubberBand::setFirstPointOnViewport(const QPoint& p)
 {
     d->firstPoint = p;
     d->active = true;
 }
 
-void DRubberBand::setFirstPointOnContents(const QPoint &p)
+void DRubberBand::setFirstPointOnContents(const QPoint& p)
 {
     setFirstPointOnViewport(d->scrollView->contentsToViewport(p));
 }
 
-void DRubberBand::setSecondPointOnViewport(const QPoint &p)
+void DRubberBand::setSecondPointOnViewport(const QPoint& p)
 {
     d->secondPoint = p;
 
@@ -105,23 +105,23 @@ void DRubberBand::setSecondPointOnViewport(const QPoint &p)
         show();
 }
 
-void DRubberBand::setSecondPointOnContents(const QPoint &p)
+void DRubberBand::setSecondPointOnContents(const QPoint& p)
 {
     setSecondPointOnViewport(d->scrollView->contentsToViewport(p));
 }
 
-void DRubberBand::setRestrictionOnContents(const QRect &rect)
+void DRubberBand::setRestrictionOnContents(const QRect& rect)
 {
     d->restriction = rect;
 }
 
-void DRubberBand::setRectOnContents(const QRect &rect)
+void DRubberBand::setRectOnContents(const QRect& rect)
 {
     setFirstPointOnContents(rect.topLeft());
     setSecondPointOnContents(rect.bottomRight());
 }
 
-void DRubberBand::setRectOnViewport(const QRect &rect)
+void DRubberBand::setRectOnViewport(const QRect& rect)
 {
     setFirstPointOnViewport(rect.topLeft());
     setSecondPointOnViewport(rect.bottomRight());

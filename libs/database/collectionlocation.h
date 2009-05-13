@@ -105,6 +105,6 @@ protected:
 
 }  // namespace Digikam
 
-inline uint qHash(const Digikam::CollectionLocation &loc) { return loc.hash(); }
+inline uint qHash(const Digikam::CollectionLocation& loc) { return loc.hash(); }
 
 #endif // COLLECTIONLOCATION_H

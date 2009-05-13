@@ -113,7 +113,7 @@ ImagePosition::ImagePosition(qlonglong imageId)
     }
 }
 
-ImagePosition::ImagePosition(const ImagePosition &other)
+ImagePosition::ImagePosition(const ImagePosition& other)
 {
     d = other.d;
 }
@@ -123,7 +123,7 @@ ImagePosition::~ImagePosition()
     apply();
 }
 
-ImagePosition &ImagePosition::operator=(const ImagePosition &other)
+ImagePosition &ImagePosition::operator=(const ImagePosition& other)
 {
     d = other.d;
     return *this;
@@ -259,7 +259,7 @@ QString ImagePosition::description() const
     return d->description;
 }
 
-bool ImagePosition::setLatitude(const QString &latitude)
+bool ImagePosition::setLatitude(const QString& latitude)
 {
     if (!d)
         return false;
@@ -360,7 +360,7 @@ void ImagePosition::setAccuracy(double accuracy)
     d->dirtyFields |= DatabaseFields::PositionAccuracy;
 }
 
-void ImagePosition::setDescription(const QString &description)
+void ImagePosition::setDescription(const QString& description)
 {
     if (!d)
         return;

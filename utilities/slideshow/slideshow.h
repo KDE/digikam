@@ -81,8 +81,8 @@ private:
     void loadPrevImage();
     void preloadNextImage();
     void updatePixmap();
-    void printInfoText(QPainter &p, int &offset, const QString& str);
-    void printComments(QPainter &p, int &offset, const QString& comments);
+    void printInfoText(QPainter& p, int& offset, const QString& str);
+    void printComments(QPainter& p, int& offset, const QString& comments);
     void setupRatingPixmap(const QColor& ratingColor);
     void inhibitScreenSaver();
     void allowScreenSaver();

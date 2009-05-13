@@ -42,7 +42,7 @@ public:
                     double amount=1.0, double threshold=0.05);
 
     // Constructor for slave mode: execute immediately in current thread with specified master filter
-    // DImgUnsharpMask(DImgThreadedFilter *parentFilter, const DImg &orgImage, const DImg &destImage,
+    // DImgUnsharpMask(DImgThreadedFilter *parentFilter, const DImg& orgImage, const DImg& destImage,
     //            int progressBegin=0, int progressEnd=100, double radius=0.0, double sigma=1.0);
 
     ~DImgUnsharpMask(){};

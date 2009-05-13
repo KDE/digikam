@@ -42,7 +42,7 @@ class ImagePlugin_FreeRotation : public Digikam::ImagePlugin
 
 public:
 
-    ImagePlugin_FreeRotation(QObject *parent, const QVariantList &args);
+    ImagePlugin_FreeRotation(QObject *parent, const QVariantList& args);
     ~ImagePlugin_FreeRotation();
 
     void setEnabledActions(bool enable);

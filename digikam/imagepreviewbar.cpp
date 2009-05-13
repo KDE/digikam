@@ -335,7 +335,7 @@ ImageInfoList ImagePreviewBar::itemsImageInfoList()
     return list;
 }
 
-ImagePreviewBarItem* ImagePreviewBar::findItemByInfo(const ImageInfo &info) const
+ImagePreviewBarItem* ImagePreviewBar::findItemByInfo(const ImageInfo& info) const
 {
     if (!info.isNull())
     {
@@ -715,7 +715,7 @@ QRect ImagePreviewBar::clickToRateRect(ImagePreviewBarItem* item)
 
 // -------------------------------------------------------------------------
 
-ImagePreviewBarItem::ImagePreviewBarItem(ImagePreviewBar *view, const ImageInfo &info)
+ImagePreviewBarItem::ImagePreviewBarItem(ImagePreviewBar *view, const ImageInfo& info)
                    : ThumbBarItem(view, info.fileUrl())
 {
     m_info = info;

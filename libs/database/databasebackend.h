@@ -59,13 +59,13 @@ public:
     /**
      * Checks if the parameters can be used for this database backend.
      */
-    bool isCompatible(const DatabaseParameters &parameters);
+    bool isCompatible(const DatabaseParameters& parameters);
 
     /**
      * Open the database connection.
      * @returns true on success
      */
-    bool open(const DatabaseParameters &parameters);
+    bool open(const DatabaseParameters& parameters);
 
     /**
      * Initialize the database schema to the current version,
@@ -117,47 +117,47 @@ public:
      * If you want the last inserted id (and your query is suitable), sett lastInsertId to the address of a QVariant.
      */
     bool execSql(const QString& sql, QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
-    bool execSql(const QString& sql, const QVariant &boundValue1,
+    bool execSql(const QString& sql, const QVariant& boundValue1,
                  QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
     bool execSql(const QString& sql,
-                 const QVariant &boundValue1, const QVariant &boundValue2,
+                 const QVariant& boundValue1, const QVariant& boundValue2,
                  QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
     bool execSql(const QString& sql,
-                 const QVariant &boundValue1, const QVariant &boundValue2, const QVariant &boundValue3,
+                 const QVariant& boundValue1, const QVariant& boundValue2, const QVariant& boundValue3,
                  QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
     bool execSql(const QString& sql,
-                 const QVariant &boundValue1, const QVariant &boundValue2,
-                 const QVariant &boundValue3, const QVariant &boundValue4,
+                 const QVariant& boundValue1, const QVariant& boundValue2,
+                 const QVariant& boundValue3, const QVariant& boundValue4,
                  QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
-    bool execSql(const QString& sql, const QList<QVariant> &boundValues, QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
+    bool execSql(const QString& sql, const QList<QVariant>& boundValues, QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
 
     /**
      * Executes the statement and returns the query object.
      * Methods are provided for up to four bound values (positional binding), or for a list of bound values.
      */
     QSqlQuery execQuery(const QString& sql);
-    QSqlQuery execQuery(const QString& sql, const QVariant &boundValue1);
+    QSqlQuery execQuery(const QString& sql, const QVariant& boundValue1);
     QSqlQuery execQuery(const QString& sql,
-                        const QVariant &boundValue1, const QVariant &boundValue2);
+                        const QVariant& boundValue1, const QVariant& boundValue2);
     QSqlQuery execQuery(const QString& sql,
-                        const QVariant &boundValue1, const QVariant &boundValue2, const QVariant &boundValue3);
+                        const QVariant& boundValue1, const QVariant& boundValue2, const QVariant& boundValue3);
     QSqlQuery execQuery(const QString& sql,
-                        const QVariant &boundValue1, const QVariant &boundValue2,
-                        const QVariant &boundValue3, const QVariant &boundValue4);
-    QSqlQuery execQuery(const QString& sql, const QList<QVariant> &boundValues);
+                        const QVariant& boundValue1, const QVariant& boundValue2,
+                        const QVariant& boundValue3, const QVariant& boundValue4);
+    QSqlQuery execQuery(const QString& sql, const QList<QVariant>& boundValues);
 
     /**
      * Calls exec/execBatch on the query, and handles debug output if something went wrong
      */
-    bool exec(QSqlQuery &query);
-    bool execBatch(QSqlQuery &query);
+    bool exec(QSqlQuery& query);
+    bool execBatch(QSqlQuery& query);
 
     /**
      * Creates a query object prepared with the statement, waiting for bound values
      */
-    QSqlQuery prepareQuery(const QString &sql);
+    QSqlQuery prepareQuery(const QString& sql);
 
-    QList<QVariant> readToList(QSqlQuery &query);
+    QList<QVariant> readToList(QSqlQuery& query);
 
     /**
      * Begin a database transaction

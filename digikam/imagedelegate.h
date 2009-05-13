@@ -53,28 +53,28 @@ public:
     ImageDelegate(QObject *parent = 0);
     ~ImageDelegate();
 
-    virtual void paint(QPainter * painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    virtual QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex & index) const;
+    virtual void paint(QPainter * painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex & index) const;
     virtual QSize gridSize() const;
-    virtual QPixmap pixmapForDrag(const QStyleOptionViewItem &option, const QList<QModelIndex> &indexes) const;
+    virtual QPixmap pixmapForDrag(const QStyleOptionViewItem& option, const QList<QModelIndex>& indexes) const;
 
     /** You must set these options from the view */
-    void setThumbnailSize(const ThumbnailSize &thumbSize);
+    void setThumbnailSize(const ThumbnailSize& thumbSize);
     void setSpacing(int spacing);
     /** Style option with standard values to use for cached rendering.
      *  option.rect shall be the viewport rectangle.
      *  Call on resize, font change.*/
-    void setDefaultViewOptions(const QStyleOptionViewItem &option);
+    void setDefaultViewOptions(const QStyleOptionViewItem& option);
 
     ImageCategoryDrawer *categoryDrawer() const;
 
     /** These methods take four parameters: The position on viewport, the rect on viewport,
      *  the index, and optionally a parameter into which, if the return value is true,
      *  a rectangle can be written for which the return value will be true as well. */
-    virtual bool acceptsToolTip(const QPoint &pos, const QRect &visualRect,
-                                const QModelIndex &index, QRect *tooltipRect = 0) const;
-    virtual bool acceptsActivation(const QPoint &pos, const QRect &visualRect,
-                                   const QModelIndex &index, QRect *activationRect = 0) const;
+    virtual bool acceptsToolTip(const QPoint& pos, const QRect& visualRect,
+                                const QModelIndex& index, QRect *tooltipRect = 0) const;
+    virtual bool acceptsActivation(const QPoint& pos, const QRect& visualRect,
+                                   const QModelIndex& index, QRect *activationRect = 0) const;
 
     QRect rect() const;
     QRect ratingRect() const;
@@ -85,12 +85,12 @@ public:
     // to be called by ImageCategorizedView only
     void installOverlay(ImageDelegateOverlay *overlay);
     void removeOverlay(ImageDelegateOverlay *overlay);
-    void mouseMoved(QMouseEvent *e, const QRect &visualRect, const QModelIndex &index);
+    void mouseMoved(QMouseEvent *e, const QRect& visualRect, const QModelIndex& index);
 
 Q_SIGNALS:
 
-    void gridSizeChanged(const QSize &newSize);
-    void waitingForThumbnail(const QModelIndex &index) const;
+    void gridSizeChanged(const QSize& newSize);
+    void waitingForThumbnail(const QModelIndex& index) const;
 
     void visualChange();
 
@@ -101,9 +101,9 @@ protected Q_SLOTS:
 
 protected:
 
-    bool onActualPixmapRect(const QPoint &pos, const QRect &visualRect,
+    bool onActualPixmapRect(const QPoint& pos, const QRect& visualRect,
                             const QModelIndex & index, QRect *actualRect) const;
-    void updateActualPixmapRect(qlonglong imageid, const QRect &rect);
+    void updateActualPixmapRect(qlonglong imageid, const QRect& rect);
 
     void invalidatePaintingCache();
     void updateSizeRectsAndPixmaps();
@@ -111,7 +111,7 @@ protected:
     QPixmap ratingPixmap(int rating, bool selected) const;
     QString dateToString(const QDateTime& datetime) const;
     QString squeezedText(QPainter* p, int width, const QString& text) const;
-    QPixmap thumbnailBorderPixmap(const QSize &pixSize) const;
+    QPixmap thumbnailBorderPixmap(const QSize& pixSize) const;
 
 private:
 

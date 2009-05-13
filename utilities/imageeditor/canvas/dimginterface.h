@@ -76,7 +76,7 @@ public:
     void   switchToLastSaved(const QString& newFilename);
     void   abortSaving();
     void   setModified();
-    void   readMetadataFromFile(const QString &file);
+    void   readMetadataFromFile(const QString& file);
     void   clearUndoManager();
     void   setUndoManagerOrigin();
     void   updateUndoState();
@@ -128,19 +128,19 @@ public:
 
     void   convertDepth(int depth);
 
-    void   getUndoHistory(QStringList &titles);
-    void   getRedoHistory(QStringList &titles);
+    void   getUndoHistory(QStringList& titles);
+    void   getRedoHistory(QStringList& titles);
 
     DImg*  getImg();
     uchar* getImage();
 
     void   putImage(uchar* data, int w, int h);
     void   putImage(uchar* data, int w, int h, bool sixteenBit);
-    void   putImage(const QString &caller, uchar* data, int w, int h);
-    void   putImage(const QString &caller, uchar* data, int w, int h, bool sixteenBit);
+    void   putImage(const QString& caller, uchar* data, int w, int h);
+    void   putImage(const QString& caller, uchar* data, int w, int h, bool sixteenBit);
 
     uchar* getImageSelection();
-    void   putImageSelection(const QString &caller, uchar* data);
+    void   putImageSelection(const QString& caller, uchar* data);
 
     void   setEmbeddedICCToOriginalImage( QString profilePath);
 
@@ -164,9 +164,9 @@ public:
 
 protected Q_SLOTS:
 
-    void   slotImageLoaded(const LoadingDescription &loadingDescription, const DImg& img);
+    void   slotImageLoaded(const LoadingDescription& loadingDescription, const DImg& img);
     void   slotImageSaved(const QString& filePath, bool success);
-    void   slotLoadingProgress(const LoadingDescription &loadingDescription, float progress);
+    void   slotLoadingProgress(const LoadingDescription& loadingDescription, float progress);
     void   slotSavingProgress(const QString& filePath, float progress);
 
 Q_SIGNALS:

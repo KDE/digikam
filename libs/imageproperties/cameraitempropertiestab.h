@@ -53,9 +53,9 @@ public:
     ~CameraItemPropertiesTab();
 
     void setCurrentItem(const GPItemInfo* itemInfo=0,
-                        const QString &newFileName=QString(),
+                        const QString& newFileName=QString(),
                         const QByteArray& exifData=QByteArray(),
-                        const KUrl &currentURL = KUrl());
+                        const KUrl& currentURL = KUrl());
 
 private:
 

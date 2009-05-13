@@ -53,7 +53,7 @@ public:
 
 public Q_SLOTS:
 
-    void showPreview(const KUrl &url);
+    void showPreview(const KUrl& url);
 
 private Q_SLOTS:
 

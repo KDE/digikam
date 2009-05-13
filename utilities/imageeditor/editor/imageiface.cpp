@@ -244,7 +244,7 @@ void ImageIface::putPreviewImage(uchar* data)
     }
 }
 
-void ImageIface::putOriginalImage(const QString &caller, uchar* data, int w, int h)
+void ImageIface::putOriginalImage(const QString& caller, uchar* data, int w, int h)
 {
     if (!data)
         return;
@@ -257,7 +257,7 @@ void ImageIface::setEmbeddedICCToOriginalImage(const QString& profilePath)
     DImgInterface::defaultInterface()->setEmbeddedICCToOriginalImage( profilePath );
 }
 
-void ImageIface::putImageSelection(const QString &caller, uchar* data)
+void ImageIface::putImageSelection(const QString& caller, uchar* data)
 {
     if (!data)
         return;

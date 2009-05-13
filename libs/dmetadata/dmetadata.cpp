@@ -960,7 +960,7 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field)
     }
 }
 
-QVariantList DMetadata::getMetadataFields(const MetadataFields &fields)
+QVariantList DMetadata::getMetadataFields(const MetadataFields& fields)
 {
     QVariantList list;
     foreach (MetadataInfo::Field field, fields)
@@ -970,7 +970,7 @@ QVariantList DMetadata::getMetadataFields(const MetadataFields &fields)
     return list;
 }
 
-QString DMetadata::valueToString (const QVariant &value, MetadataInfo::Field field)
+QString DMetadata::valueToString (const QVariant& value, MetadataInfo::Field field)
 {
     KExiv2 exiv2Iface;
 
@@ -1173,7 +1173,7 @@ QString DMetadata::valueToString (const QVariant &value, MetadataInfo::Field fie
     }
 }
 
-QStringList DMetadata::valuesToString(const QVariantList &values, const MetadataFields &fields)
+QStringList DMetadata::valuesToString(const QVariantList& values, const MetadataFields& fields)
 {
     int size = values.size();
     Q_ASSERT(size == values.size());

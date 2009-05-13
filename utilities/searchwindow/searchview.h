@@ -75,13 +75,13 @@ public Q_SLOTS:
 protected:
 
     /// Call before reading the XML part that could contain group elements
-    void startReadingGroups(SearchXmlCachingReader &reader);
+    void startReadingGroups(SearchXmlCachingReader& reader);
     /// Call when a group element is the current element
-    void readGroup(SearchXmlCachingReader &reader);
+    void readGroup(SearchXmlCachingReader& reader);
     /// Call when the XML part is finished
     void finishReadingGroups();
     /// Write contained groups to writer
-    void writeGroups(SearchXmlWriter &writer);
+    void writeGroups(SearchXmlWriter& writer);
     /// Collects the data from the same method of all contained groups (position relative to this widget)
     QList<QRect> startupAnimationAreaOfGroups() const;
     /// Re-implement: create and setup a search group
@@ -115,7 +115,7 @@ public:
     void setup();
     void setBottomBar(SearchViewBottomBar *bar);
 
-    void read(const QString &search);
+    void read(const QString& search);
     QString write();
 
 Q_SIGNALS:

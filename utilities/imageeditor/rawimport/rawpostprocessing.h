@@ -40,7 +40,7 @@ public:
     RawPostProcessing(DImg *orgImage, QObject *parent=0, const DRawDecoding& settings=DRawDecoding());
 
     // Constructor for slave mode: execute immediately in current thread with specified master filter
-    RawPostProcessing(DImgThreadedFilter *parentFilter, const DImg &orgImage, const DImg &destImage,
+    RawPostProcessing(DImgThreadedFilter *parentFilter, const DImg& orgImage, const DImg& destImage,
                       int progressBegin=0, int progressEnd=100, const DRawDecoding& settings=DRawDecoding());
 
     ~RawPostProcessing(){};

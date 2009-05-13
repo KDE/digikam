@@ -68,8 +68,8 @@ public:
 
     virtual ~LoadingCacheFileWatch();
     /// Called by the thread when a new entry is added to the cache
-    virtual void addedImage(const QString &filePath);
-    virtual void addedThumbnail(const QString &filePath);
+    virtual void addedImage(const QString& filePath);
+    virtual void addedThumbnail(const QString& filePath);
 
 protected:
 
@@ -80,7 +80,7 @@ protected:
      * Calling this method is fast, you do not need to check if the file is contained in the cache.
      * Do not hold the CacheLock when calling this method.
      */
-    void notifyFileChanged(const QString &filePath);
+    void notifyFileChanged(const QString& filePath);
 
     class LoadingCache *m_cache;
 };
@@ -95,12 +95,12 @@ public:
 
     ClassicLoadingCacheFileWatch();
     ~ClassicLoadingCacheFileWatch();
-    virtual void addedImage(const QString &filePath);
-    virtual void addedThumbnail(const QString &filePath);
+    virtual void addedImage(const QString& filePath);
+    virtual void addedThumbnail(const QString& filePath);
 
 private Q_SLOTS:
 
-    void slotFileDirty(const QString &path);
+    void slotFileDirty(const QString& path);
     void slotUpdateDirWatch();
 
 Q_SIGNALS:
@@ -145,7 +145,7 @@ public:
      * Retrieves an image for the given string from the cache,
      * or 0 if no image is found.
      */
-    DImg *retrieveImage(const QString &cacheKey);
+    DImg *retrieveImage(const QString& cacheKey);
     /// Returns whether the given DImg fits in the cache.
     bool isCacheable(const DImg *img);
     /** Put image into for given string into the cache.
@@ -155,11 +155,11 @@ public:
      *  The third parameter specifies a file path that will be watched.
      *  If this file changes, the object will be removed from the cache.
      */
-    bool putImage(const QString &cacheKey, DImg *img, const QString &filePath);
+    bool putImage(const QString& cacheKey, DImg *img, const QString& filePath);
     /**
      *  Remove entries for the given cacheKey from the cache
      */
-    void removeImage(const QString &cacheKey);
+    void removeImage(const QString& cacheKey);
     /**
      *  Remove all entries from the cache
      */
@@ -170,7 +170,7 @@ public:
     /**
      *  Find the loading process for given cacheKey, or 0 if not found
      */
-    LoadingProcess *retrieveLoadingProcess(const QString &cacheKey);
+    LoadingProcess *retrieveLoadingProcess(const QString& cacheKey);
     /**
      *  Add a loading process to the list. Only one loading process
      *  for the same cache key is registered at a time.
@@ -199,17 +199,17 @@ public:
      * Retrieves a thumbnail for the given filePath from the thumbnail cache,
      * or a 0 if the thumbnail is not found.
      */
-    const QImage *retrieveThumbnail(const QString &cacheKey);
-    const QPixmap *retrieveThumbnailPixmap(const QString &cacheKey);
+    const QImage *retrieveThumbnail(const QString& cacheKey);
+    const QPixmap *retrieveThumbnailPixmap(const QString& cacheKey);
     /**
      * Puts a thumbnail into the thumbnail cache.
      */
-    void putThumbnail(const QString &cacheKey, const QImage  &thumb, const QString &filePath);
-    void putThumbnail(const QString &cacheKey, const QPixmap &thumb, const QString &filePath);
+    void putThumbnail(const QString& cacheKey, const QImage& thumb, const QString& filePath);
+    void putThumbnail(const QString& cacheKey, const QPixmap& thumb, const QString& filePath);
     /**
      * Remove the thumbnail for the given file path from the thumbnail cache
      */
-    void removeThumbnail(const QString &cacheKey);
+    void removeThumbnail(const QString& cacheKey);
     /**
      * Remove all thumbnails
      */
@@ -247,7 +247,7 @@ public:
      * Remove all entries from cache that were loaded from filePath.
      * Emits relevant signals.
      */
-    void notifyFileChanged(const QString &filePath);
+    void notifyFileChanged(const QString& filePath);
 
 Q_SIGNALS:
 
@@ -256,13 +256,13 @@ Q_SIGNALS:
      * There is no information in this signal if the file was ever contained in the cache.
      * The signal may be emitted under CacheLock. Strongly consider a queued connection.
      */
-    void fileChanged(const QString &filePath);
+    void fileChanged(const QString& filePath);
     /**
      * This signal is emitted when the cache is notified that a file was changed,
      * and the given cache key was removed from the cache.
      * The signal may be emitted under CacheLock. Strongly consider a queued connection.
      */
-    void fileChanged(const QString &filePath, const QString &cacheKey);
+    void fileChanged(const QString& filePath, const QString& cacheKey);
 
 private:
 

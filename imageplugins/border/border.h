@@ -100,22 +100,22 @@ private:
 
 
     /** Methods to preserve aspect ratio of image. */
-    void solid(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg, int borderWidth);
-    void niepce(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg, int borderWidth,
-                const Digikam::DColor &bg, int lineWidth);
-    void bevel(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &topColor,
-               const Digikam::DColor &btmColor, int borderWidth);
-    void pattern(Digikam::DImg &src, Digikam::DImg &dest, int borderWidth, const Digikam::DColor &firstColor,
-                 const Digikam::DColor &secondColor, int firstWidth, int secondWidth);
+    void solid(Digikam::DImg& src, Digikam::DImg& dest, const Digikam::DColor& fg, int borderWidth);
+    void niepce(Digikam::DImg& src, Digikam::DImg& dest, const Digikam::DColor& fg, int borderWidth,
+                const Digikam::DColor& bg, int lineWidth);
+    void bevel(Digikam::DImg& src, Digikam::DImg& dest, const Digikam::DColor& topColor,
+               const Digikam::DColor& btmColor, int borderWidth);
+    void pattern(Digikam::DImg& src, Digikam::DImg& dest, int borderWidth, const Digikam::DColor& firstColor,
+                 const Digikam::DColor& secondColor, int firstWidth, int secondWidth);
 
     /** Methods to not-preserve aspect ratio of image. */
-    void solid2(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg, int borderWidth);
-    void niepce2(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &fg, int borderWidth,
-                 const Digikam::DColor &bg, int lineWidth);
-    void bevel2(Digikam::DImg &src, Digikam::DImg &dest, const Digikam::DColor &topColor,
-                const Digikam::DColor &btmColor, int borderWidth);
-    void pattern2(Digikam::DImg &src, Digikam::DImg &dest, int borderWidth, const Digikam::DColor &firstColor,
-                  const Digikam::DColor &secondColor, int firstWidth, int secondWidth);
+    void solid2(Digikam::DImg& src, Digikam::DImg& dest, const Digikam::DColor& fg, int borderWidth);
+    void niepce2(Digikam::DImg& src, Digikam::DImg& dest, const Digikam::DColor& fg, int borderWidth,
+                 const Digikam::DColor& bg, int lineWidth);
+    void bevel2(Digikam::DImg& src, Digikam::DImg& dest, const Digikam::DColor& topColor,
+                const Digikam::DColor& btmColor, int borderWidth);
+    void pattern2(Digikam::DImg& src, Digikam::DImg& dest, int borderWidth, const Digikam::DColor& firstColor,
+                  const Digikam::DColor& secondColor, int firstWidth, int secondWidth);
 
 private:
 

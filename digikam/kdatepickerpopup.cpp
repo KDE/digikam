@@ -71,7 +71,7 @@ private:
     QWidget *mOriginalParent;
 };
 
-KDatePickerPopup::KDatePickerPopup( Items items, const QDate &date, QWidget *parent )
+KDatePickerPopup::KDatePickerPopup( Items items, const QDate& date, QWidget *parent )
                 : KMenu( parent )
 {
     mItems = items;
@@ -129,7 +129,7 @@ KDatePicker *KDatePickerPopup::datePicker() const
     return mDatePicker;
 }
 
-void KDatePickerPopup::setDate( const QDate &date )
+void KDatePickerPopup::setDate( const QDate& date )
 {
     mDatePicker->setDate( date );
 }
@@ -142,7 +142,7 @@ void KDatePickerPopup::setItems( int items )
 }
 #endif
 
-void KDatePickerPopup::slotDateChanged( const QDate &date )
+void KDatePickerPopup::slotDateChanged( const QDate& date )
 {
     emit dateChanged( date );
     hide();

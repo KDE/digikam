@@ -51,7 +51,7 @@ ChoiceSearchModel::Entry::Entry(QVariant key, const QString userDisplay)
 {
 }
 
-bool ChoiceSearchModel::Entry::operator==(const Entry &other)
+bool ChoiceSearchModel::Entry::operator==(const Entry& other)
 {
     return key == other.key;
 }
@@ -159,7 +159,7 @@ int ChoiceSearchModel::rowCount(const QModelIndex & parent) const
     return m_entries.count();
 }
 
-QVariant ChoiceSearchModel::data(const QModelIndex &index, int role) const
+QVariant ChoiceSearchModel::data(const QModelIndex& index, int role) const
 {
     if (index.isValid())
     {
@@ -173,7 +173,7 @@ QVariant ChoiceSearchModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-QModelIndex ChoiceSearchModel::index(int row, int column, const QModelIndex &parent) const
+QModelIndex ChoiceSearchModel::index(int row, int column, const QModelIndex& parent) const
 {
     if (parent.isValid() || column != 0 || row >= m_entries.size())
         return QModelIndex();
@@ -181,12 +181,12 @@ QModelIndex ChoiceSearchModel::index(int row, int column, const QModelIndex &par
     return createIndex(row, 0);
 }
 
-Qt::ItemFlags ChoiceSearchModel::flags(const QModelIndex &index) const
+Qt::ItemFlags ChoiceSearchModel::flags(const QModelIndex& index) const
 {
     return QAbstractListModel::flags(index) | Qt::ItemIsUserCheckable;
 }
 
-bool ChoiceSearchModel::setData(const QModelIndex &index, const QVariant &value, int role)
+bool ChoiceSearchModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
     if (role == Qt::CheckStateRole)
     {
@@ -221,7 +221,7 @@ SqueezedClickLabel *ChoiceSearchComboBox::label() const
     return m_label;
 }
 
-void ChoiceSearchComboBox::setLabelText(const QString &text)
+void ChoiceSearchComboBox::setLabelText(const QString& text)
 {
     m_label->setText(text);
 }

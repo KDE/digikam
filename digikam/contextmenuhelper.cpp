@@ -631,7 +631,7 @@ QAction* ContextMenuHelper::exec(const QPoint& pos, QAction* at)
     return choice;
 }
 
-void ContextMenuHelper::setSelectedIds(imageIds &ids)
+void ContextMenuHelper::setSelectedIds(imageIds& ids)
 {
     if (d->selectedIds.isEmpty())
         d->selectedIds = ids;

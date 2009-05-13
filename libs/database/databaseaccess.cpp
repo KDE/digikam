@@ -155,7 +155,7 @@ DatabaseParameters DatabaseAccess::parameters()
     return DatabaseParameters();
 }
 
-void DatabaseAccess::setParameters(const DatabaseParameters &parameters)
+void DatabaseAccess::setParameters(const DatabaseParameters& parameters)
 {
     //TODO 0.11: Refine API
     setParameters(parameters, DatabaseSlave);
@@ -163,7 +163,7 @@ void DatabaseAccess::setParameters(const DatabaseParameters &parameters)
         d->databaseWatch->doAnyProcessing();
 }
 
-void DatabaseAccess::setParameters(const DatabaseParameters &parameters, ApplicationStatus status)
+void DatabaseAccess::setParameters(const DatabaseParameters& parameters, ApplicationStatus status)
 {
     if (!d)
     {
@@ -264,7 +264,7 @@ QString DatabaseAccess::lastError()
     return d->lastError;
 }
 
-void DatabaseAccess::setLastError(const QString &error)
+void DatabaseAccess::setLastError(const QString& error)
 {
     d->lastError = error;
 }

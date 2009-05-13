@@ -554,12 +554,12 @@ void BWSepiaTool::slotScaleChanged()
     m_curvesWidget->repaint();
 }
 
-void BWSepiaTool::slotSpotColorChanged(const DColor &color)
+void BWSepiaTool::slotSpotColorChanged(const DColor& color)
 {
     m_curvesWidget->setCurveGuide(color);
 }
 
-void BWSepiaTool::slotColorSelectedFromTarget( const DColor &color )
+void BWSepiaTool::slotColorSelectedFromTarget( const DColor& color )
 {
     m_gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }

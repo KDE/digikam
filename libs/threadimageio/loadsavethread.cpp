@@ -98,7 +98,7 @@ void LoadSaveThread::load(LoadingDescription description)
     m_condVar.wakeAll();
 }
 
-void LoadSaveThread::save(DImg &image, const QString& filePath, const QString &format)
+void LoadSaveThread::save(DImg& image, const QString& filePath, const QString& format)
 {
     QMutexLocker lock(&m_mutex);
     m_todo << new SavingTask(this, image, filePath, format);
@@ -157,26 +157,26 @@ void LoadSaveThread::taskHasFinished()
     m_currentTask = 0;
 }
 
-void LoadSaveThread::imageStartedLoading(const LoadingDescription &loadingDescription)
+void LoadSaveThread::imageStartedLoading(const LoadingDescription& loadingDescription)
 {
     notificationReceived();
     emit signalImageStartedLoading(loadingDescription);
 }
 
-void LoadSaveThread::loadingProgress(const LoadingDescription &loadingDescription, float progress)
+void LoadSaveThread::loadingProgress(const LoadingDescription& loadingDescription, float progress)
 {
     notificationReceived();
     emit signalLoadingProgress(loadingDescription, progress);
 }
 
-void LoadSaveThread::imageLoaded(const LoadingDescription &loadingDescription, const DImg& img)
+void LoadSaveThread::imageLoaded(const LoadingDescription& loadingDescription, const DImg& img)
 {
     notificationReceived();
     emit signalImageLoaded(loadingDescription, img);
 }
 
-void LoadSaveThread::moreCompleteLoadingAvailable(const LoadingDescription &oldLoadingDescription,
-                          const LoadingDescription &newLoadingDescription)
+void LoadSaveThread::moreCompleteLoadingAvailable(const LoadingDescription& oldLoadingDescription,
+                          const LoadingDescription& newLoadingDescription)
 {
     notificationReceived();
     emit signalMoreCompleteLoadingAvailable(oldLoadingDescription, newLoadingDescription);
@@ -200,7 +200,7 @@ void LoadSaveThread::imageSaved(const QString& filePath, bool success)
     emit signalImageSaved(filePath, success);
 }
 
-void LoadSaveThread::thumbnailLoaded(const LoadingDescription &loadingDescription, const QImage& img)
+void LoadSaveThread::thumbnailLoaded(const LoadingDescription& loadingDescription, const QImage& img)
 {
     notificationReceived();
     emit signalThumbnailLoaded(loadingDescription, img);
@@ -269,7 +269,7 @@ bool LoadSaveThread::isShuttingDown()
     return isRunning() && !d->running;
 }
 
-bool LoadSaveThread::exifRotate(DImg &image, const QString& filePath)
+bool LoadSaveThread::exifRotate(DImg& image, const QString& filePath)
 {
     // Keep in sync with the variant in thumbnailcreator.cpp
     QVariant attribute(image.attribute("exifRotated"));

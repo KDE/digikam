@@ -42,7 +42,7 @@ class ImagePlugin_InPainting : public Digikam::ImagePlugin
 
 public:
 
-    ImagePlugin_InPainting(QObject *parent, const QVariantList &args);
+    ImagePlugin_InPainting(QObject *parent, const QVariantList& args);
     ~ImagePlugin_InPainting();
 
     void setEnabledActions(bool enable);

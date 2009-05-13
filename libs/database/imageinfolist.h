@@ -44,7 +44,7 @@ class DIGIKAM_DATABASE_EXPORT ImageInfoList : public QList<ImageInfo>
 public:
 
     ImageInfoList() {}
-    ImageInfoList(const QList<ImageInfo> &list)
+    ImageInfoList(const QList<ImageInfo>& list)
         : QList<ImageInfo>(list) {}
 };
 

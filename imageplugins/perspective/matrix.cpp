@@ -72,7 +72,7 @@ void Matrix::scale(double x, double y)
     coeff[1][2] *= y;
 }
 
-void Matrix::multiply(const Matrix &matrix)
+void Matrix::multiply(const Matrix& matrix)
 {
     int      i, j;
     Matrix   tmp;

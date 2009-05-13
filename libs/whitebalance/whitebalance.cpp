@@ -135,7 +135,7 @@ void WhiteBalance::whiteBalance(uchar *data, int width, int height, bool sixteen
     adjustWhiteBalance(data, width, height, sixteenBit);
 }
 
-void WhiteBalance::autoWBAdjustementFromColor(const QColor &tc, double &temperature, double &green)
+void WhiteBalance::autoWBAdjustementFromColor(const QColor& tc, double& temperature, double& green)
 {
     // Calculate Temperature and Green component from color picked.
 
@@ -169,7 +169,7 @@ void WhiteBalance::autoWBAdjustementFromColor(const QColor &tc, double &temperat
 }
 
 void WhiteBalance::autoExposureAdjustement(uchar* data, int width, int height, bool sb,
-                                           double &black, double &expo)
+                                           double& black, double& expo)
 {
     // Create an histogram of original image.
 
@@ -203,7 +203,7 @@ void WhiteBalance::autoExposureAdjustement(uchar* data, int width, int height, b
     delete histogram;
 }
 
-void WhiteBalance::setRGBmult(double &temperature, double &green, float &mr, float &mg, float &mb)
+void WhiteBalance::setRGBmult(double& temperature, double& green, float& mr, float& mg, float& mb)
 {
     float mi;
     double xD, yD, X, Y, Z;

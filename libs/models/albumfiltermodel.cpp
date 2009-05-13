@@ -78,7 +78,7 @@ AbstractAlbumModel *AlbumFilterModel::sourceAlbumModel() const
     return static_cast<AbstractAlbumModel*>(sourceModel());
 }
 
-Album *AlbumFilterModel::albumForIndex(const QModelIndex &index) const
+Album *AlbumFilterModel::albumForIndex(const QModelIndex& index) const
 {
     return sourceAlbumModel()->albumForIndex(mapToSource(index));
 }
@@ -93,7 +93,7 @@ QModelIndex AlbumFilterModel::rootAlbumIndex() const
     return mapFromSource(sourceAlbumModel()->rootAlbumIndex());
 }
 
-AlbumFilterModel::MatchResult AlbumFilterModel::matches(const QModelIndex &index) const
+AlbumFilterModel::MatchResult AlbumFilterModel::matches(const QModelIndex& index) const
 {
     return matches(sourceAlbumModel()->albumForIndex(mapToSource(index)));
 }
@@ -135,7 +135,7 @@ AlbumFilterModel::MatchResult AlbumFilterModel::matches(Album *album) const
     return NoMatch;
 }
 
-bool AlbumFilterModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
+bool AlbumFilterModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
 {
     QModelIndex index = sourceAlbumModel()->index(source_row, 0, source_parent);
     Album *album = sourceAlbumModel()->albumForIndex(index);
@@ -145,7 +145,7 @@ bool AlbumFilterModel::filterAcceptsRow(int source_row, const QModelIndex &sourc
     return result;
 }
 
-bool AlbumFilterModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
+bool AlbumFilterModel::lessThan(const QModelIndex& left, const QModelIndex& right) const
 {
     QVariant valLeft = left.data(sortRole());
     QVariant valRight = right.data(sortRole());

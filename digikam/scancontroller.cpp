@@ -196,7 +196,7 @@ public:
 
 private slots:
 
-    void slotImageChanged(const ImageChangeset &changeset);
+    void slotImageChanged(const ImageChangeset& changeset);
 };
 
 // for ScanControllerLoadingCacheFileWatch
@@ -360,7 +360,7 @@ void ScanController::completeCollectionScan(SplashScreen *splash)
     d->splash         = 0;
 }
 
-void ScanController::scheduleCollectionScan(const QString &path)
+void ScanController::scheduleCollectionScan(const QString& path)
 {
     QMutexLocker lock(&d->mutex);
     if (!d->scanTasks.contains(path))
@@ -368,7 +368,7 @@ void ScanController::scheduleCollectionScan(const QString &path)
     d->condVar.wakeAll();
 }
 
-void ScanController::scheduleCollectionScanRelaxed(const QString &path)
+void ScanController::scheduleCollectionScanRelaxed(const QString& path)
 {
     if (!d->relaxedTimer->isActive())
         d->relaxedTimer->start();
@@ -386,7 +386,7 @@ void ScanController::slotRelaxedScanning()
     d->condVar.wakeAll();
 }
 
-void ScanController::scanFileDirectly(const QString &filePath)
+void ScanController::scanFileDirectly(const QString& filePath)
 {
     suspendCollectionScan();
 
@@ -522,7 +522,7 @@ void ScanController::slotTotalFilesToScan(int count)
         d->progressDialog->incrementMaximum(count);
 }
 
-void ScanController::slotStartScanningAlbum(const QString &albumRoot, const QString &album)
+void ScanController::slotStartScanningAlbum(const QString& albumRoot, const QString& album)
 {
     Q_UNUSED(albumRoot);
     if (d->progressDialog)
@@ -535,7 +535,7 @@ void ScanController::slotFinishedScanningAlbum(const QString &, const QString &,
         d->progressDialog->advance(filesScanned);
 }
 
-void ScanController::slotStartScanningAlbumRoot(const QString &albumRoot)
+void ScanController::slotStartScanningAlbumRoot(const QString& albumRoot)
 {
     if (d->progressDialog)
         d->progressDialog->addedAction(d->rootPixmap(), albumRoot);
@@ -568,7 +568,7 @@ void ScanController::moreSchemaUpdateSteps(int numberOfSteps)
 }
 
 // implementing InitializationObserver
-void ScanController::schemaUpdateProgress(const QString &message, int numberOfSteps)
+void ScanController::schemaUpdateProgress(const QString& message, int numberOfSteps)
 {
     // not from main thread
     emit progressFromInitialization(message, numberOfSteps);
@@ -606,7 +606,7 @@ void ScanController::finishedSchemaUpdate(UpdateResult result)
 }
 
 // implementing InitializationObserver
-void ScanController::error(const QString &errorMessage)
+void ScanController::error(const QString& errorMessage)
 {
     // not from main thread
     emit errorFromInitialization(errorMessage);
@@ -619,7 +619,7 @@ bool ScanController::continueQuery()
     return d->continueInitialization;
 }
 
-void ScanController::slotErrorFromInitialization(const QString &errorMessage)
+void ScanController::slotErrorFromInitialization(const QString& errorMessage)
 {
     // main thread
     QString message = i18n("Error");
@@ -631,8 +631,8 @@ void ScanController::slotErrorFromInitialization(const QString &errorMessage)
     KMessageBox::error(d->progressDialog, errorMessage);
 }
 
-static AlbumCopyMoveHint hintForAlbum(const PAlbum *album, int dstAlbumRootId, const QString &relativeDstPath,
-                                      const QString &albumName)
+static AlbumCopyMoveHint hintForAlbum(const PAlbum *album, int dstAlbumRootId, const QString& relativeDstPath,
+                                      const QString& albumName)
 {
     QString dstAlbumPath;
     if (relativeDstPath == "/")
@@ -645,7 +645,7 @@ static AlbumCopyMoveHint hintForAlbum(const PAlbum *album, int dstAlbumRootId, c
 }
 
 static QList<AlbumCopyMoveHint> hintsForAlbum(const PAlbum *album, int dstAlbumRootId, QString relativeDstPath,
-                                              const QString &albumName)
+                                              const QString& albumName)
 {
     QList<AlbumCopyMoveHint> newHints;
 
@@ -664,7 +664,7 @@ static QList<AlbumCopyMoveHint> hintsForAlbum(const PAlbum *album, int dstAlbumR
     return newHints;
 }
 
-void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum *album, const QString &dstPath, const QString &newAlbumName)
+void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum *album, const QString& dstPath, const QString& newAlbumName)
 {
     // get album root and album from dst path
     CollectionLocation location = CollectionManager::instance()->locationForPath(dstPath);
@@ -683,7 +683,7 @@ void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum *album, const QString 
     d->albumHints << newHints;
 }
 
-void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum *album, const PAlbum *dstAlbum, const QString &newAlbumName)
+void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum *album, const PAlbum *dstAlbum, const QString& newAlbumName)
 {
     QList<AlbumCopyMoveHint> newHints = hintsForAlbum(album, dstAlbum->albumRootId(), dstAlbum->albumPath(),
                                                       newAlbumName.isNull() ? album->title() : newAlbumName);
@@ -722,7 +722,7 @@ ScanControllerLoadingCacheFileWatch::ScanControllerLoadingCacheFileWatch()
             Qt::QueuedConnection);
 }
 
-void ScanControllerLoadingCacheFileWatch::slotImageChanged(const ImageChangeset &changeset)
+void ScanControllerLoadingCacheFileWatch::slotImageChanged(const ImageChangeset& changeset)
 {
     DatabaseAccess access;
 

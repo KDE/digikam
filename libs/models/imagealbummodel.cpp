@@ -142,7 +142,7 @@ void ImageAlbumModel::startLoadingAlbum(Album *album)
     startListJob(album->databaseUrl());
 }
 
-void ImageAlbumModel::startListJob(const KUrl &url)
+void ImageAlbumModel::startListJob(const KUrl& url)
 {
     d->job = ImageLister::startListJob(url);
     d->job->addMetaData("listAlbumsRecursively", d->recurseAlbums ? "true" : "false");
@@ -205,7 +205,7 @@ void ImageAlbumModel::slotNextRefresh()
         refresh();
 }
 
-void ImageAlbumModel::slotImageChange(const ImageChangeset &changeset)
+void ImageAlbumModel::slotImageChange(const ImageChangeset& changeset)
 {
     if (!d->currentAlbum)
         return;
@@ -232,7 +232,7 @@ void ImageAlbumModel::slotImageChange(const ImageChangeset &changeset)
     ImageModel::slotImageChange(changeset);
 }
 
-void ImageAlbumModel::slotCollectionImageChange(const CollectionImageChangeset &changeset)
+void ImageAlbumModel::slotCollectionImageChange(const CollectionImageChangeset& changeset)
 {
     if (!d->currentAlbum)
         return;
@@ -284,7 +284,7 @@ void ImageAlbumModel::slotCollectionImageChange(const CollectionImageChangeset &
     }
 }
 
-void ImageAlbumModel::slotSearchChange(const SearchChangeset &changeset)
+void ImageAlbumModel::slotSearchChange(const SearchChangeset& changeset)
 {
     if (!d->currentAlbum)
         return;

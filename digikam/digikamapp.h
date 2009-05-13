@@ -78,8 +78,8 @@ public:
     const QList<QAction*>& menuExportActions();
 
     void autoDetect();
-    void downloadFrom(const QString &cameraGuiPath);
-    void downloadFromUdi(const QString &udi);
+    void downloadFrom(const QString& cameraGuiPath);
+    void downloadFromUdi(const QString& udi);
     void enableZoomPlusAction(bool val);
     void enableZoomMinusAction(bool val);
     void enableAlbumBackwardHistory(bool enable);
@@ -99,8 +99,8 @@ Q_SIGNALS:
 
     void signalWindowHasMoved();
 
-    void queuedOpenCameraUiFromPath(const QString &path);
-    void queuedOpenSolidDevice(const QString &udi);
+    void queuedOpenCameraUiFromPath(const QString& path);
+    void queuedOpenSolidDevice(const QString& udi);
 
 protected:
 
@@ -119,10 +119,10 @@ private:
     void loadCameras();
     void populateThemes();
     void fillSolidMenus();
-    bool checkSolidCamera(const Solid::Device &cameraDevice);
-    QString labelForSolidCamera(const Solid::Device &cameraDevice);
-    void openSolidCamera(const QString &udi, const QString &label = QString());
-    void openSolidUsmDevice(const QString &udi, const QString &label = QString());
+    bool checkSolidCamera(const Solid::Device& cameraDevice);
+    QString labelForSolidCamera(const Solid::Device& cameraDevice);
+    void openSolidCamera(const QString& udi, const QString& label = QString());
+    void openSolidUsmDevice(const QString& udi, const QString& label = QString());
     void runFingerPrintsGenerator(bool rebuildAll);
 
 private Q_SLOTS:
@@ -153,10 +153,10 @@ private Q_SLOTS:
     void slotOpenSolidCamera(QAction *);
     void slotOpenManualCamera(QAction *);
     void slotOpenSolidUsmDevice(QAction *);
-    void slotOpenSolidDevice(const QString &udi);
-    void slotOpenCameraUiFromPath(const QString &path);
-    void slotSolidSetupDone(Solid::ErrorType errorType, QVariant errorData, const QString &udi);
-    void slotSolidDeviceChanged(const QString &udi);
+    void slotOpenSolidDevice(const QString& udi);
+    void slotOpenCameraUiFromPath(const QString& path);
+    void slotSolidSetupDone(Solid::ErrorType errorType, QVariant errorData, const QString& udi);
+    void slotSolidDeviceChanged(const QString& udi);
     void slotCameraAdded(CameraType *ctype);
     void slotCameraRemoved(CameraType *ctype);
     void slotCameraAutoDetect();

@@ -127,7 +127,7 @@ public:
       * Trigger a recreation of the given ImageInfo object
       * for the next refresh.
       */
-    void invalidateItem(const ImageInfo &item);
+    void invalidateItem(const ImageInfo& item);
 
     bool tagFiltersIsActive();
     bool filterIsActive();
@@ -135,9 +135,9 @@ public:
 Q_SIGNALS:
 
     void signalNewItems(const ImageInfoList& items);
-    void signalDeleteItem(const ImageInfo &item);
+    void signalDeleteItem(const ImageInfo& item);
     void signalNewFilteredItems(const ImageInfoList& items);
-    void signalDeleteFilteredItem(const ImageInfo &item);
+    void signalDeleteFilteredItem(const ImageInfo& item);
     void signalClear();
     void signalCompleted();
     void signalItemsTextFilterMatch(bool);
@@ -151,16 +151,16 @@ private Q_SLOTS:
     void slotData(KIO::Job* job, const QByteArray& data);
 
     void slotNextRefresh();
-    void slotImageChange(const ImageChangeset &changeset);
-    void slotImageTagChange(const ImageTagChangeset &changeset);
-    void slotCollectionImageChange(const CollectionImageChangeset &changeset);
-    void slotSearchChange(const SearchChangeset &changeset);
+    void slotImageChange(const ImageChangeset& changeset);
+    void slotImageTagChange(const ImageTagChangeset& changeset);
+    void slotCollectionImageChange(const CollectionImageChangeset& changeset);
+    void slotSearchChange(const SearchChangeset& changeset);
 
 private:
 
     AlbumLister();
-    bool matchesFilter(const ImageInfo &info, bool& foundText);
-    void startListJob(const KUrl &url);
+    bool matchesFilter(const ImageInfo& info, bool& foundText);
+    void startListJob(const KUrl& url);
 
 private:
 

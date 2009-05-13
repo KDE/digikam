@@ -57,10 +57,10 @@ public:
     ImagePropertiesColorsTab(QWidget* parent);
     ~ImagePropertiesColorsTab();
 
-    void setData(const KUrl& url=KUrl(), const QRect &selectionArea = QRect(),
+    void setData(const KUrl& url=KUrl(), const QRect& selectionArea = QRect(),
                  DImg *img=0);
 
-    void setSelection(const QRect &selectionArea);
+    void setSelection(const QRect& selectionArea);
 
 private:
 
@@ -83,9 +83,9 @@ private Q_SLOTS:
     void slotUpdateInterval(int min, int max);
     void slotUpdateIntervRange(int range);
 
-    void slotLoadImageFromUrlComplete(const LoadingDescription &loadingDescription, const DImg& img);
-    void slotMoreCompleteLoadingAvailable(const LoadingDescription &oldLoadingDescription,
-                                          const LoadingDescription &newLoadingDescription);
+    void slotLoadImageFromUrlComplete(const LoadingDescription& loadingDescription, const DImg& img);
+    void slotMoreCompleteLoadingAvailable(const LoadingDescription& oldLoadingDescription,
+                                          const LoadingDescription& newLoadingDescription);
 
 private:
 

@@ -171,7 +171,7 @@ bool SketchWidget::isClear() const
     return d->isClear;
 }
 
-void SketchWidget::setPenColor(const QColor &newColor)
+void SketchWidget::setPenColor(const QColor& newColor)
 {
     d->penColor = newColor;
     d->ensureNewDrawEvent();
@@ -235,7 +235,7 @@ void SketchWidget::replayEvents(int index)
     update();
 }
 
-void SketchWidget::sketchImageToXML(QXmlStreamWriter &writer)
+void SketchWidget::sketchImageToXML(QXmlStreamWriter& writer)
 {
     writer.writeStartElement("SketchImage");
 
@@ -288,7 +288,7 @@ QString SketchWidget::sketchImageToXML()
     return xml;
 }
 
-bool SketchWidget::setSketchImageFromXML(const QString &xml)
+bool SketchWidget::setSketchImageFromXML(const QString& xml)
 {
     QXmlStreamReader reader(xml);
     QXmlStreamReader::TokenType element;
@@ -301,7 +301,7 @@ bool SketchWidget::setSketchImageFromXML(const QString &xml)
     return false;
 }
 
-bool SketchWidget::setSketchImageFromXML(QXmlStreamReader &reader)
+bool SketchWidget::setSketchImageFromXML(QXmlStreamReader& reader)
 {
     QXmlStreamReader::TokenType element;
 
@@ -340,7 +340,7 @@ bool SketchWidget::setSketchImageFromXML(QXmlStreamReader &reader)
     return true;
 }
 
-void SketchWidget::addPath(QXmlStreamReader &reader)
+void SketchWidget::addPath(QXmlStreamReader& reader)
 {
     QXmlStreamReader::TokenType element;
 
@@ -499,7 +499,7 @@ void SketchWidget::drawLineTo(int width, const QColor& color, const QPoint& star
     d->lastPoint = end;
 }
 
-void SketchWidget::drawPath(int width, const QColor& color, const QPainterPath &path)
+void SketchWidget::drawPath(int width, const QColor& color, const QPainterPath& path)
 {
     QPainter painter(&d->pixmap);
     painter.setPen(QPen(color, width, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));

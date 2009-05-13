@@ -78,7 +78,7 @@ public:
 
     /* Load the image or icon for the tag thumbnail */
     static QPixmap getTagThumbnail(TAlbum *album);
-    static QPixmap getTagThumbnail(const QString &name, int size);
+    static QPixmap getTagThumbnail(const QString& name, int size);
 
 private:
 

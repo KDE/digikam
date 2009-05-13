@@ -91,7 +91,7 @@ ImageQueryBuilder::ImageQueryBuilder()
     }
 }
 
-QString ImageQueryBuilder::buildQuery(const QString &q, QList<QVariant> *boundValues, ImageQueryPostHooks *hooks) const
+QString ImageQueryBuilder::buildQuery(const QString& q, QList<QVariant> *boundValues, ImageQueryPostHooks *hooks) const
 {
     // Handle legacy query descriptions
     if (q.startsWith("digikamsearch:"))
@@ -100,7 +100,7 @@ QString ImageQueryBuilder::buildQuery(const QString &q, QList<QVariant> *boundVa
         return buildQueryFromXml(q, boundValues, hooks);
 }
 
-QString ImageQueryBuilder::buildQueryFromXml(const QString &xml, QList<QVariant> *boundValues, ImageQueryPostHooks *hooks) const
+QString ImageQueryBuilder::buildQueryFromXml(const QString& xml, QList<QVariant> *boundValues, ImageQueryPostHooks *hooks) const
 {
     SearchXmlCachingReader reader(xml);
     QString sql;
@@ -126,7 +126,7 @@ QString ImageQueryBuilder::buildQueryFromXml(const QString &xml, QList<QVariant>
     return sql;
 }
 
-void ImageQueryBuilder::buildGroup(QString &sql, SearchXmlCachingReader &reader,
+void ImageQueryBuilder::buildGroup(QString& sql, SearchXmlCachingReader& reader,
                                    QList<QVariant> *boundValues, ImageQueryPostHooks *hooks) const
 {
     sql += " (";
@@ -206,7 +206,7 @@ public:
         else return str;
     }
 
-    void addIntField(const QString &name)
+    void addIntField(const QString& name)
     {
         if (relation == SearchXml::Interval || relation == SearchXml::IntervalOpen)
         {
@@ -236,7 +236,7 @@ public:
         }
     }
 
-    void addDoubleField(const QString &name)
+    void addDoubleField(const QString& name)
     {
         if (relation == SearchXml::Interval || relation == SearchXml::IntervalOpen)
         {
@@ -266,7 +266,7 @@ public:
         }
     }
 
-    void addStringField(const QString &name)
+    void addStringField(const QString& name)
     {
         sql += " (" + name + ' ';
         ImageQueryBuilder::addSqlRelation(sql, relation);
@@ -274,7 +274,7 @@ public:
         *boundValues << prepareForLike(reader.value());
     }
 
-    void addDateField(const QString &name)
+    void addDateField(const QString& name)
     {
         if (relation == SearchXml::Equal)
         {
@@ -349,7 +349,7 @@ public:
         }
     }
 
-    void addChoiceIntField(const QString &name)
+    void addChoiceIntField(const QString& name)
     {
         if (relation == SearchXml::OneOf)
         {
@@ -371,7 +371,7 @@ public:
         }
     }
 
-    void addLongListField(const QString &name)
+    void addLongListField(const QString& name)
     {
         if (relation == SearchXml::OneOf)
         {
@@ -389,7 +389,7 @@ public:
         }
     }
 
-    void addIntBitmaskField(const QString &name)
+    void addIntBitmaskField(const QString& name)
     {
         if (relation == SearchXml::OneOf)
         {
@@ -421,7 +421,7 @@ public:
         }
     }
 
-    void addChoiceStringField(const QString &name)
+    void addChoiceStringField(const QString& name)
     {
         if (relation == SearchXml::OneOf)
         {
@@ -433,7 +433,7 @@ public:
             }
 
             QStringList simpleValues, wildcards;
-            foreach(const QString &value, values)
+            foreach(const QString& value, values)
             {
                 if (value.contains("*"))
                     wildcards << value;
@@ -447,7 +447,7 @@ public:
                 firstCondition = false;
                 sql += name + " IN (";
                 AlbumDB::addBoundValuePlaceholders(sql, simpleValues.size());
-                foreach(const QString &value, simpleValues)
+                foreach(const QString& value, simpleValues)
                     *boundValues << value;
                 sql += " ) ";
             }
@@ -658,7 +658,7 @@ public:
 };
 
 
-void ImageQueryBuilder::buildField(QString &sql, SearchXmlCachingReader &reader, const QString &name,
+void ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader, const QString& name,
                                    QList<QVariant> *boundValues, ImageQueryPostHooks *hooks) const
 {
     SearchXml::Relation relation = reader.fieldRelation();
@@ -1027,7 +1027,7 @@ void ImageQueryBuilder::buildField(QString &sql, SearchXmlCachingReader &reader,
     }
 }
 
-void ImageQueryBuilder::addSqlOperator(QString &sql, SearchXml::Operator op, bool isFirst)
+void ImageQueryBuilder::addSqlOperator(QString& sql, SearchXml::Operator op, bool isFirst)
 {
     if (isFirst)
     {
@@ -1053,7 +1053,7 @@ void ImageQueryBuilder::addSqlOperator(QString &sql, SearchXml::Operator op, boo
     }
 }
 
-void ImageQueryBuilder::addSqlRelation(QString &sql, SearchXml::Relation rel)
+void ImageQueryBuilder::addSqlRelation(QString& sql, SearchXml::Relation rel)
 {
     switch (rel)
     {

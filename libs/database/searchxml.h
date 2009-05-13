@@ -108,7 +108,7 @@ class DIGIKAM_DATABASE_EXPORT SearchXmlReader : public QXmlStreamReader
 {
 public:
 
-    SearchXmlReader(const QString &xml);
+    SearchXmlReader(const QString& xml);
 
     /** Continue parsing the document. Returns the type of the current element */
     SearchXml::Element  readNext();
@@ -151,7 +151,7 @@ public:
      *  there down the hierarchy, but not further up in the hierarchy.
      *  Returns false if the element is not found.
      */
-    bool readToStartOfElement(const QString &name);
+    bool readToStartOfElement(const QString& name);
     /** General helper method: Reads XML until the end element of the current
         start element in reached.
      */
@@ -187,7 +187,7 @@ public:
         Default value is OR. */
     void setGroupOperator(SearchXml::Operator op);
     /** Sets an optional caption */
-    void setGroupCaption(const QString &caption);
+    void setGroupCaption(const QString& caption);
     /** Sets the default operator for fields in this group "(field1 AND field2 AND ... fieldn)".
         The default operator can in each field be overridden. Default value is AND. */
     void setDefaultFieldOperator(SearchXml::Operator op);
@@ -197,20 +197,20 @@ public:
         For a reference of valid field names, look into ImageQueryBuilder.
         The general rule is that names are like the database fields, but all lower-case.
      */
-    void writeField(const QString &name, SearchXml::Relation relation);
+    void writeField(const QString& name, SearchXml::Relation relation);
     /** Adds an optional operator overriding the default field operator of the group. */
     void setFieldOperator(SearchXml::Operator op);
     /** Adds the value, "4" in the case of "Rating less than 4" */
-    void writeValue(const QString &value);
+    void writeValue(const QString& value);
     void writeValue(int value);
     void writeValue(qlonglong value);
     void writeValue(double value, int precision = 8);
-    void writeValue(const QDateTime &dateTime);
-    void writeValue(const QList<int> &valueList);
-    void writeValue(const QList<qlonglong> &valueList);
-    void writeValue(const QList<double> &valueList, int precision = 8);
-    void writeValue(const QStringList &valueList);
-    void writeValue(const QList<QDateTime> &valueList);
+    void writeValue(const QDateTime& dateTime);
+    void writeValue(const QList<int>& valueList);
+    void writeValue(const QList<qlonglong>& valueList);
+    void writeValue(const QList<double>& valueList, int precision = 8);
+    void writeValue(const QStringList& valueList);
+    void writeValue(const QList<QDateTime>& valueList);
 
     /** Finish writing the current field.
      *  You shall call this method before adding another field, or closing the group.
@@ -236,7 +236,7 @@ public:
     /** Returns ready-made XML for a query of type "keyword" with the specified
      *  text as keyword.
      */
-    static QString keywordSearch(const QString &keyword);
+    static QString keywordSearch(const QString& keyword);
 
 protected:
 
@@ -252,24 +252,24 @@ namespace KeywordSearch
     /** Splits a given string to a list of keywords.
         Splits at whitespace, but recognizes quotation marks
         to group words in a single keyword */
-    DIGIKAM_DATABASE_EXPORT QStringList split(const QString &string);
+    DIGIKAM_DATABASE_EXPORT QStringList split(const QString& string);
 
     /** Reverse of split().
         From a list of keywords, gives a single string for a text entry field. */
-    DIGIKAM_DATABASE_EXPORT QString merge(const QStringList &keywordList);
+    DIGIKAM_DATABASE_EXPORT QString merge(const QStringList& keywordList);
 
     /** Assuming previousContent is a string
         as accepted by split and returned by merge,
         adds newEntry as another (single) keyword to the string,
         returning the combined result. */
-    DIGIKAM_DATABASE_EXPORT QString merge(const QString &previousContent, const QString &newEntry);
+    DIGIKAM_DATABASE_EXPORT QString merge(const QString& previousContent, const QString& newEntry);
 }
 
 class DIGIKAM_DATABASE_EXPORT KeywordSearchReader : public SearchXmlReader
 {
 public:
 
-    KeywordSearchReader(const QString &xml);
+    KeywordSearchReader(const QString& xml);
 
     /// Returns the keywords from this search, merged in a list
     QStringList keywords();
@@ -278,7 +278,7 @@ public:
 
 private:
 
-    void readGroup(QStringList &list);
+    void readGroup(QStringList& list);
     bool isSimpleKeywordSearchGroup();
     QString readField();
 };
@@ -289,7 +289,7 @@ public:
 
     KeywordSearchWriter();
 
-    QString xml(const QStringList &keywordList);
+    QString xml(const QStringList& keywordList);
 };
 
 
@@ -306,7 +306,7 @@ public:
         with all calls possible multiple times.
     */
 
-    SearchXmlCachingReader(const QString &xml);
+    SearchXmlCachingReader(const QString& xml);
     SearchXml::Element  readNext();
 
     SearchXml::Operator groupOperator() const;

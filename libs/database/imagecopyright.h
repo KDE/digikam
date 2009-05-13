@@ -79,9 +79,9 @@ public:
      *  If you want to add it to a list of existing entries, pass AddEntryToExisting.
      *  You shall not use ReplaceLanguageEntry for this method, creators have no language associated.
      */
-    void setCreator(const QString &creator, ReplaceMode mode = ReplaceAllEntries);
-    void setAuthor(const QString &author, ReplaceMode mode = ReplaceAllEntries) { setCreator(author, mode); }
-    void setByLine(const QString &byline, ReplaceMode mode = ReplaceAllEntries) { setCreator(byline, mode); }
+    void setCreator(const QString& creator, ReplaceMode mode = ReplaceAllEntries);
+    void setAuthor(const QString& author, ReplaceMode mode = ReplaceAllEntries) { setCreator(author, mode); }
+    void setByLine(const QString& byline, ReplaceMode mode = ReplaceAllEntries) { setCreator(byline, mode); }
 
     /** Returns the credit/provider.
      *  This is Photoshop Credit.
@@ -92,8 +92,8 @@ public:
     QString provider();
     QString credit() { return provider(); }
 
-    void setProvider(const QString &provider);
-    void setCredit(const QString &credit) { setProvider(credit); }
+    void setProvider(const QString& provider);
+    void setCredit(const QString& credit) { setProvider(credit); }
 
     /** Returns the copyright notice.
      *  This is Photoshop Copyright Notice.
@@ -111,16 +111,16 @@ public:
      *  If a default-language entry is not available, the first entry is returned.
      *  If you pass a null string as languageCode, the local language is returned.
      */
-    QString copyrightNotice(const QString &languageCode = QString());
-    QString rights(const QString &languageCode = QString()) { return copyrightNotice(languageCode); }
+    QString copyrightNotice(const QString& languageCode = QString());
+    QString rights(const QString& languageCode = QString()) { return copyrightNotice(languageCode); }
 
     /** Sets the copyright notice. If you supply a null QString as language code,
      *  this is regarded as an entry for the default language ("x-default").
      *  The ReplaceMode determines how existing entries are handled.
      */
-    void setCopyrightNotice(const QString &notice, const QString &languageCode = QString(),
+    void setCopyrightNotice(const QString& notice, const QString& languageCode = QString(),
                             ReplaceMode mode = ReplaceLanguageEntry);
-    void setRights(const QString &notice, const QString &languageCode = QString(),
+    void setRights(const QString& notice, const QString& languageCode = QString(),
                    ReplaceMode mode = ReplaceLanguageEntry)
         { setCopyrightNotice(notice, languageCode, mode); }
 
@@ -130,9 +130,9 @@ public:
      *  Language matching is done as with copyrightNotice().
      *  "Free text instructions on how this news object can be legally used."
      */
-    QString rightsUsageTerms(const QString &languageCode = QString());
+    QString rightsUsageTerms(const QString& languageCode = QString());
 
-    void setRightsUsageTerms(const QString &term, const QString &languageCode = QString(),
+    void setRightsUsageTerms(const QString& term, const QString& languageCode = QString(),
                              ReplaceMode mode = ReplaceLanguageEntry);
 
     /** Returns the source.
@@ -146,7 +146,7 @@ public:
      *    or deleted after the information is entered following the news object's initial creation."
      */
     QString source();
-    void setSource(const QString &source);
+    void setSource(const QString& source);
 
     /** Returns the creator's job title.
      *  This is Photoshop AuthorsPosition.
@@ -160,9 +160,9 @@ public:
     QString authorsPosition() { return creatorJobTitle(); }
     QString byLineTitle()     { return creatorJobTitle(); }
 
-    void setCreatorJobTitle(const QString &title);
-     void setAuthorsPosition(const QString &position) { setCreatorJobTitle(position); }
-     void setByLineTitle(const QString &title)        { setCreatorJobTitle(title); }
+    void setCreatorJobTitle(const QString& title);
+     void setAuthorsPosition(const QString& position) { setCreatorJobTitle(position); }
+     void setByLineTitle(const QString& title)        { setCreatorJobTitle(title); }
 
     /** Returns the instructions.
      *  This is Photoshop Instructions.
@@ -176,15 +176,15 @@ public:
      *    credits required when publishing. "
      */
     QString instructions();
-    void setInstructions(const QString &instructions);
+    void setInstructions(const QString& instructions);
 
 protected:
 
-    QString readSimpleProperty(const QString &property);
-    void setSimpleProperty(const QString &property, const QString &value);
-    QString readLanguageProperty(const QString &property, const QString &languageCode);
-    void setLanguageProperty(const QString &property, const QString &value, const QString &languageCode, ReplaceMode mode);
-    int languageMatch(const QList<CopyrightInfo> infos, const QString &languageCode) const;
+    QString readSimpleProperty(const QString& property);
+    void setSimpleProperty(const QString& property, const QString& value);
+    QString readLanguageProperty(const QString& property, const QString& languageCode);
+    void setLanguageProperty(const QString& property, const QString& value, const QString& languageCode, ReplaceMode mode);
+    int languageMatch(const QList<CopyrightInfo> infos, const QString& languageCode) const;
 
     qlonglong m_id;
 };

@@ -37,7 +37,7 @@ namespace Digikam
 
 using namespace Coordinates;
 
-GeodeticCalculator::GeodeticCalculator(const Ellipsoid &e)
+GeodeticCalculator::GeodeticCalculator(const Ellipsoid& e)
                   : m_ellipsoid(e),
                     m_lat1(0), m_long1(0), m_lat2(0), m_long2(0),
                     m_distance(0), m_azimuth(0),
@@ -607,20 +607,20 @@ Ellipsoid Ellipsoid::SPHERE()
     return createEllipsoid("SPHERE", 6371000, 6371000);
 }
 
-Ellipsoid::Ellipsoid(const QString &name, double semiMajorAxis, double  semiMinorAxis,
+Ellipsoid::Ellipsoid(const QString& name, double semiMajorAxis, double  semiMinorAxis,
                      double inverseFlattening, bool ivfDefinitive)
          : name(name), m_semiMajorAxis(semiMajorAxis), m_semiMinorAxis(semiMinorAxis),
            m_inverseFlattening(inverseFlattening), m_ivfDefinitive(ivfDefinitive), m_isSphere(false)
 {
 }
 
-Ellipsoid::Ellipsoid(const QString &name, double radius, bool ivfDefinitive)
+Ellipsoid::Ellipsoid(const QString& name, double radius, bool ivfDefinitive)
          : name(name), m_semiMajorAxis(radius), m_semiMinorAxis(radius),
            m_inverseFlattening(DBL_MAX), m_ivfDefinitive(ivfDefinitive), m_isSphere(true)
 {
 }
 
-Ellipsoid Ellipsoid::createEllipsoid(const QString &name,
+Ellipsoid Ellipsoid::createEllipsoid(const QString& name,
                                       double m_semiMajorAxis, double m_semiMinorAxis)
 {
     if (m_semiMajorAxis == m_semiMinorAxis)
@@ -634,7 +634,7 @@ Ellipsoid Ellipsoid::createEllipsoid(const QString &name,
     }
 }
 
-Ellipsoid Ellipsoid::createFlattenedSphere(const QString &name,
+Ellipsoid Ellipsoid::createFlattenedSphere(const QString& name,
                                            double m_semiMajorAxis, double m_inverseFlattening)
 {
     if (m_inverseFlattening == DBL_MAX)

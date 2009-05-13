@@ -269,7 +269,7 @@ CameraType* CameraList::autoDetect(bool& retry)
     return ctype;
 }
 
-bool CameraList::findConnectedCamera(int vendorId, int productId, QString &model, QString &port)
+bool CameraList::findConnectedCamera(int vendorId, int productId, QString& model, QString& port)
 {
     return GPCamera::findConnectedUsbCamera(vendorId, productId, model, port);
 }

@@ -46,14 +46,14 @@ public:
 
     ImageAlbumModel *model() const { return static_cast<ImageAlbumModel*>(m_model); }
 
-    virtual bool dropEvent(QAbstractItemView *view, const QDropEvent *e, const QModelIndex &droppedOn);
-    virtual Qt::DropAction accepts(const QDropEvent *e, const QModelIndex &dropIndex);
+    virtual bool dropEvent(QAbstractItemView *view, const QDropEvent *e, const QModelIndex& droppedOn);
+    virtual Qt::DropAction accepts(const QDropEvent *e, const QModelIndex& dropIndex);
     virtual QStringList mimeTypes() const;
     virtual QMimeData *createMimeData(const QList<ImageInfo> &);
 
 Q_SIGNALS:
 
-    void changeTagOnImageInfos(const ImageInfoList &list, const QList<int> &tagIDs, bool addOrRemove, bool progress);
+    void changeTagOnImageInfos(const ImageInfoList& list, const QList<int>& tagIDs, bool addOrRemove, bool progress);
     void dioResult(KJob *);
 };
 

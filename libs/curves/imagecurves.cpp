@@ -654,7 +654,7 @@ void ImageCurves::setCurveType(int channel, CurveType type)
        d->curves->curve_type[channel] = type;
 }
 
-bool ImageCurves::loadCurvesFromGimpCurvesFile(const KUrl &fileUrl)
+bool ImageCurves::loadCurvesFromGimpCurvesFile(const KUrl& fileUrl)
 {
     // TODO : support KUrl !
 
@@ -714,7 +714,7 @@ bool ImageCurves::loadCurvesFromGimpCurvesFile(const KUrl &fileUrl)
     return true;
 }
 
-bool ImageCurves::saveCurvesToGimpCurvesFile(const KUrl &fileUrl)
+bool ImageCurves::saveCurvesToGimpCurvesFile(const KUrl& fileUrl)
 {
     // TODO : support KUrl !
 

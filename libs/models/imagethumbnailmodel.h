@@ -60,23 +60,23 @@ public:
      *  The thumbnail size of this thread will be adjusted. */
     void setThumbnailLoadThread(ThumbnailLoadThread *thread);
     /// Set the thumbnail size to use
-    void setThumbnailSize(const ThumbnailSize &thumbSize);
+    void setThumbnailSize(const ThumbnailSize& thumbSize);
 
     ThumbnailSize thumbnailSize() const;
 
     /** Prepare the thumbnail loading for the given indexes */
-    void prepareThumbnails(const QList<QModelIndex> &indexesToPrepare);
+    void prepareThumbnails(const QList<QModelIndex>& indexesToPrepare);
 
     /** Handles the ThumbnailRole.
      *  If the pixmap is available, returns it in the QVariant.
      *  If it still needs to be loaded, returns a null QVariant and emits
      *  thumbnailAvailable() as soon as it is available.
      */
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 
 protected Q_SLOTS:
 
-    void slotThumbnailLoaded(const LoadingDescription &loadingDescription, const QPixmap& thumb);
+    void slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumb);
 
 private:
 

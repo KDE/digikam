@@ -256,7 +256,7 @@ ImagePreviewView* AlbumWidgetStack::imagePreviewView()
     return d->imagePreviewView;
 }
 
-void AlbumWidgetStack::setPreviewItem(const ImageInfo & info, const ImageInfo &previous, const ImageInfo &next)
+void AlbumWidgetStack::setPreviewItem(const ImageInfo & info, const ImageInfo& previous, const ImageInfo& next)
 {
     if (info.isNull())
     {

@@ -312,7 +312,7 @@ void Canvas::setModified()
     d->im->setModified();
 }
 
-void Canvas::readMetadataFromFile(const QString &file)
+void Canvas::readMetadataFromFile(const QString& file)
 {
     d->im->readMetadataFromFile(file);
 }
@@ -1157,12 +1157,12 @@ void Canvas::slotUndo(int steps)
     }
 }
 
-void Canvas::getUndoHistory(QStringList &titles)
+void Canvas::getUndoHistory(QStringList& titles)
 {
     d->im->getUndoHistory(titles);
 }
 
-void Canvas::getRedoHistory(QStringList &titles)
+void Canvas::getRedoHistory(QStringList& titles)
 {
     d->im->getRedoHistory(titles);
 }

@@ -84,8 +84,8 @@ public:
 
 private:
 
-    QDomElement addKmlElement(QDomDocument &kmlDocument, QDomElement &target, const QString& tag);
-    QDomElement addKmlTextElement(QDomDocument &kmlDocument, QDomElement &target, const QString& tag, const QString& text);
+    QDomElement addKmlElement(QDomDocument& kmlDocument, QDomElement& target, const QString& tag);
+    QDomElement addKmlTextElement(QDomDocument& kmlDocument, QDomElement& target, const QString& tag, const QString& text);
 
 private:
 

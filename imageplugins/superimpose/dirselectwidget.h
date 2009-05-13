@@ -61,7 +61,7 @@ public:
 
 Q_SIGNALS:
 
-    void folderItemSelected(const KUrl &url);
+    void folderItemSelected(const KUrl& url);
 
 protected Q_SLOTS:
 

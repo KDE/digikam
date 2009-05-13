@@ -104,42 +104,42 @@ bool ImageModel::isEmpty() const
     return d->infos.isEmpty();
 }
 
-void ImageModel::setWatchFlags(const DatabaseFields::Set &set)
+void ImageModel::setWatchFlags(const DatabaseFields::Set& set)
 {
     d->watchFlags = set;
 }
 
-ImageInfo ImageModel::imageInfo(const QModelIndex &index) const
+ImageInfo ImageModel::imageInfo(const QModelIndex& index) const
 {
     if (!index.isValid())
         return ImageInfo();
     return d->infos[index.row()];
 }
 
-ImageInfo &ImageModel::imageInfoRef(const QModelIndex &index) const
+ImageInfo& ImageModel::imageInfoRef(const QModelIndex& index) const
 {
     return d->infos[index.row()];
 }
 
-qlonglong ImageModel::imageId(const QModelIndex &index) const
+qlonglong ImageModel::imageId(const QModelIndex& index) const
 {
     if (!index.isValid())
         return 0;
     return d->infos[index.row()].id();
 }
 
-QList<ImageInfo> ImageModel::imageInfos(const QList<QModelIndex> &indexes) const
+QList<ImageInfo> ImageModel::imageInfos(const QList<QModelIndex>& indexes) const
 {
     QList<ImageInfo> infos;
-    foreach (const QModelIndex &index, indexes)
+    foreach (const QModelIndex& index, indexes)
         infos << imageInfo(index);
     return infos;
 }
 
-QList<qlonglong> ImageModel::imageIds(const QList<QModelIndex> &indexes) const
+QList<qlonglong> ImageModel::imageIds(const QList<QModelIndex>& indexes) const
 {
     QList<qlonglong> ids;
-    foreach (const QModelIndex &index, indexes)
+    foreach (const QModelIndex& index, indexes)
         ids << imageId(index);
     return ids;
 }
@@ -151,7 +151,7 @@ ImageInfo ImageModel::imageInfo(int row) const
     return d->infos[row];
 }
 
-ImageInfo &ImageModel::imageInfoRef(int row) const
+ImageInfo& ImageModel::imageInfoRef(int row) const
 {
     return d->infos[row];
 }
@@ -163,7 +163,7 @@ qlonglong ImageModel::imageId(int row) const
     return d->infos[row].id();
 }
 
-QModelIndex ImageModel::indexForImageInfo(const ImageInfo &info) const
+QModelIndex ImageModel::indexForImageInfo(const ImageInfo& info) const
 {
     return indexForImageId(info.id());
 }
@@ -177,7 +177,7 @@ QModelIndex ImageModel::indexForImageId(qlonglong id) const
 }
 
 // static method
-ImageInfo ImageModel::retrieveImageInfo(const QModelIndex &index)
+ImageInfo ImageModel::retrieveImageInfo(const QModelIndex& index)
 {
     if (!index.isValid())
         return ImageInfo();
@@ -188,7 +188,7 @@ ImageInfo ImageModel::retrieveImageInfo(const QModelIndex &index)
 }
 
 // static method
-qlonglong ImageModel::retrieveImageId(const QModelIndex &index)
+qlonglong ImageModel::retrieveImageId(const QModelIndex& index)
 {
     if (!index.isValid())
         return 0;
@@ -198,7 +198,7 @@ qlonglong ImageModel::retrieveImageId(const QModelIndex &index)
     return model->imageId(row);
 }
 
-QModelIndex ImageModel::indexForPath(const QString &filePath) const
+QModelIndex ImageModel::indexForPath(const QString& filePath) const
 {
     if (d->keepFilePathCache)
     {
@@ -216,7 +216,7 @@ QModelIndex ImageModel::indexForPath(const QString &filePath) const
     return QModelIndex();
 }
 
-ImageInfo ImageModel::imageInfo(const QString &filePath) const
+ImageInfo ImageModel::imageInfo(const QString& filePath) const
 {
     if (d->keepFilePathCache)
     {
@@ -226,14 +226,14 @@ ImageInfo ImageModel::imageInfo(const QString &filePath) const
     }
     else
     {
-        foreach (const ImageInfo &info, d->infos)
+        foreach (const ImageInfo& info, d->infos)
             if (info.filePath() == filePath)
                 return info;
     }
     return ImageInfo();
 }
 
-void ImageModel::addImageInfos(const QList<ImageInfo> &infos)
+void ImageModel::addImageInfos(const QList<ImageInfo>& infos)
 {
     if (infos.isEmpty())
         return;
@@ -268,7 +268,7 @@ bool ImageModel::hasImage(qlonglong id) const
     return d->idHash.contains(id);
 }
 
-bool ImageModel::hasImage(const ImageInfo &info) const
+bool ImageModel::hasImage(const ImageInfo& info) const
 {
     return d->idHash.contains(info.id());
 }
@@ -290,12 +290,12 @@ void ImageModel::unsetPreprocessor(QObject *preprocessor)
     }
 }
 
-void ImageModel::reAddImageInfos(const QList<ImageInfo> &infos)
+void ImageModel::reAddImageInfos(const QList<ImageInfo>& infos)
 {
     appendInfos(infos);
 }
 
-void ImageModel::appendInfos(const QList<ImageInfo> &infos)
+void ImageModel::appendInfos(const QList<ImageInfo>& infos)
 {
     emit imageInfosAboutToBeAdded(infos);
     int firstNewIndex = d->infos.size();
@@ -315,7 +315,7 @@ void ImageModel::appendInfos(const QList<ImageInfo> &infos)
 
 // ------------ QAbstractItemModel implementation -------------
 
-QVariant ImageModel::data(const QModelIndex &index, int role) const
+QVariant ImageModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid())
         return QVariant();
@@ -341,7 +341,7 @@ QVariant ImageModel::headerData(int section, Qt::Orientation orientation, int ro
     return QVariant();
 }
 
-int ImageModel::rowCount(const QModelIndex &parent) const
+int ImageModel::rowCount(const QModelIndex& parent) const
 {
     if (parent.isValid())
         return 0;
@@ -349,7 +349,7 @@ int ImageModel::rowCount(const QModelIndex &parent) const
     return d->infos.size();
 }
 
-Qt::ItemFlags ImageModel::flags(const QModelIndex &index) const
+Qt::ItemFlags ImageModel::flags(const QModelIndex& index) const
 {
     if (!index.isValid())
         return 0;
@@ -362,7 +362,7 @@ Qt::ItemFlags ImageModel::flags(const QModelIndex &index) const
     return f;
 }
 
-QModelIndex ImageModel::index(int row, int column, const QModelIndex &parent) const
+QModelIndex ImageModel::index(int row, int column, const QModelIndex& parent) const
 {
     if (column != 0 || row < 0 || parent.isValid() || row >= d->infos.size())
         return QModelIndex();
@@ -390,7 +390,7 @@ bool ImageModel::dropMimeData(const QMimeData *, Qt::DropAction, int, int, const
     return false;
 }
 
-QMimeData *ImageModel::mimeData(const QModelIndexList &indexes) const
+QMimeData *ImageModel::mimeData(const QModelIndexList& indexes) const
 {
     if (!d->dragDropHandler)
         return 0;
@@ -421,7 +421,7 @@ ImageModelDragDropHandler *ImageModel::dragDropHandler() const
 
 // ------------ Database watch -------------
 
-void ImageModel::slotImageChange(const ImageChangeset &changeset)
+void ImageModel::slotImageChange(const ImageChangeset& changeset)
 {
     if (d->infos.isEmpty())
         return;
@@ -437,7 +437,7 @@ void ImageModel::slotImageChange(const ImageChangeset &changeset)
         }
         if (!items.isEmpty())
         {
-            foreach (const QItemSelectionRange &range, items)
+            foreach (const QItemSelectionRange& range, items)
                 emit dataChanged(range.topLeft(), range.bottomRight());
         }
     }

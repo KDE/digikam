@@ -51,13 +51,13 @@ Q_SIGNALS:
      * Notifies of changes in the database.
      * Connect to the set of signals that you are interested in.
      */
-    void imageChange(const ImageChangeset &changeset);
-    void imageTagChange(const ImageTagChangeset &changeset);
-    void collectionImageChange(const CollectionImageChangeset &changeset);
-    void albumChange(const AlbumChangeset &changeset);
-    void tagChange(const TagChangeset &changeset);
-    void albumRootChange(const AlbumRootChangeset &changeset);
-    void searchChange(const SearchChangeset &changeset);
+    void imageChange(const ImageChangeset& changeset);
+    void imageTagChange(const ImageTagChangeset& changeset);
+    void collectionImageChange(const CollectionImageChangeset& changeset);
+    void albumChange(const AlbumChangeset& changeset);
+    void tagChange(const TagChangeset& changeset);
+    void albumRootChange(const AlbumRootChangeset& changeset);
+    void searchChange(const SearchChangeset& changeset);
 
 protected:
 
@@ -71,52 +71,52 @@ protected Q_SLOTS:
     // If moc does not get the namespace in its literal, DBus connections will silently break.
 
     // DBus slots, for internal use
-    void slotImageChangeDBus(const QString &databaseIdentifier,
-                           const QString &applicationIdentifier,
-                           const Digikam::ImageChangeset &changeset);
-    void slotImageTagChangeDBus(const QString &databaseIdentifier,
-                           const QString &applicationIdentifier,
-                           const Digikam::ImageTagChangeset &changeset);
-    void slotCollectionImageChangeDBus(const QString &databaseIdentifier,
-                           const QString &applicationIdentifier,
-                           const Digikam::CollectionImageChangeset &changeset);
-    void slotAlbumChangeDBus(const QString &databaseIdentifier,
-                           const QString &applicationIdentifier,
-                           const Digikam::AlbumChangeset &changeset);
-    void slotTagChangeDBus(const QString &databaseIdentifier,
-                           const QString &applicationIdentifier,
-                           const Digikam::TagChangeset &changeset);
-    void slotAlbumRootChangeDBus(const QString &databaseIdentifier,
-                           const QString &applicationIdentifier,
-                           const Digikam::AlbumRootChangeset &changeset);
-    void slotSearchChangeDBus(const QString &databaseIdentifier,
-                           const QString &applicationIdentifier,
-                           const Digikam::SearchChangeset &changeset);
+    void slotImageChangeDBus(const QString& databaseIdentifier,
+                           const QString& applicationIdentifier,
+                           const Digikam::ImageChangeset& changeset);
+    void slotImageTagChangeDBus(const QString& databaseIdentifier,
+                           const QString& applicationIdentifier,
+                           const Digikam::ImageTagChangeset& changeset);
+    void slotCollectionImageChangeDBus(const QString& databaseIdentifier,
+                           const QString& applicationIdentifier,
+                           const Digikam::CollectionImageChangeset& changeset);
+    void slotAlbumChangeDBus(const QString& databaseIdentifier,
+                           const QString& applicationIdentifier,
+                           const Digikam::AlbumChangeset& changeset);
+    void slotTagChangeDBus(const QString& databaseIdentifier,
+                           const QString& applicationIdentifier,
+                           const Digikam::TagChangeset& changeset);
+    void slotAlbumRootChangeDBus(const QString& databaseIdentifier,
+                           const QString& applicationIdentifier,
+                           const Digikam::AlbumRootChangeset& changeset);
+    void slotSearchChangeDBus(const QString& databaseIdentifier,
+                           const QString& applicationIdentifier,
+                           const Digikam::SearchChangeset& changeset);
 
 Q_SIGNALS:
 
     // DBus signals, for internal use
-    void imageChange(const QString &databaseIdentifier,
-                           const QString &applicationIdentifier,
-                           const Digikam::ImageChangeset &changeset);
-    void imageTagChange(const QString &databaseIdentifier,
-                           const QString &applicationIdentifier,
-                           const Digikam::ImageTagChangeset &changeset);
-    void collectionImageChange(const QString &databaseIdentifier,
-                           const QString &applicationIdentifier,
-                           const Digikam::CollectionImageChangeset &changeset);
-    void albumChange(const QString &databaseIdentifier,
-                           const QString &applicationIdentifier,
-                           const Digikam::AlbumChangeset &changeset);
-    void tagChange(const QString &databaseIdentifier,
-                           const QString &applicationIdentifier,
-                           const Digikam::TagChangeset &changeset);
-    void albumRootChange(const QString &databaseIdentifier,
-                           const QString &applicationIdentifier,
-                           const Digikam::AlbumRootChangeset &changeset);
-    void searchChange(const QString &databaseIdentifier,
-                           const QString &applicationIdentifier,
-                           const Digikam::SearchChangeset &changeset);
+    void imageChange(const QString& databaseIdentifier,
+                           const QString& applicationIdentifier,
+                           const Digikam::ImageChangeset& changeset);
+    void imageTagChange(const QString& databaseIdentifier,
+                           const QString& applicationIdentifier,
+                           const Digikam::ImageTagChangeset& changeset);
+    void collectionImageChange(const QString& databaseIdentifier,
+                           const QString& applicationIdentifier,
+                           const Digikam::CollectionImageChangeset& changeset);
+    void albumChange(const QString& databaseIdentifier,
+                           const QString& applicationIdentifier,
+                           const Digikam::AlbumChangeset& changeset);
+    void tagChange(const QString& databaseIdentifier,
+                           const QString& applicationIdentifier,
+                           const Digikam::TagChangeset& changeset);
+    void albumRootChange(const QString& databaseIdentifier,
+                           const QString& applicationIdentifier,
+                           const Digikam::AlbumRootChangeset& changeset);
+    void searchChange(const QString& databaseIdentifier,
+                           const QString& applicationIdentifier,
+                           const Digikam::SearchChangeset& changeset);
 
 public:
 
@@ -132,18 +132,18 @@ public:
 
     void initializeRemote(DatabaseMode mode);
     void doAnyProcessing();
-    void setDatabaseIdentifier(const QString &identifier);
-    void setApplicationIdentifier(const QString &identifier);
+    void setDatabaseIdentifier(const QString& identifier);
+    void setApplicationIdentifier(const QString& identifier);
 
     // library-internal signal-trigger methods
 
-    void sendImageChange(const ImageChangeset &changeset);
-    void sendImageTagChange(const ImageTagChangeset &changeset);
-    void sendCollectionImageChange(const CollectionImageChangeset &changeset);
-    void sendAlbumChange(const AlbumChangeset &changeset);
-    void sendTagChange(const TagChangeset &changeset);
-    void sendAlbumRootChange(const AlbumRootChangeset &changeset);
-    void sendSearchChange(const SearchChangeset &changeset);
+    void sendImageChange(const ImageChangeset& changeset);
+    void sendImageTagChange(const ImageTagChangeset& changeset);
+    void sendCollectionImageChange(const CollectionImageChangeset& changeset);
+    void sendAlbumChange(const AlbumChangeset& changeset);
+    void sendTagChange(const TagChangeset& changeset);
+    void sendAlbumRootChange(const AlbumRootChangeset& changeset);
+    void sendSearchChange(const SearchChangeset& changeset);
 
 private:
 

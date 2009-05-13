@@ -51,27 +51,27 @@ Q_SIGNALS:
     // signals and slots are required to make moc pick them up.
     // If moc does not get the namespace in its literal, DBus connections will silently break.
 
-    void imageChange(const QString &databaseIdentifier,
-                           const QString &applicationIdentifier,
-                           const Digikam::ImageChangeset &changeset);
-    void imageTagChange(const QString &databaseIdentifier,
-                           const QString &applicationIdentifier,
-                           const Digikam::ImageTagChangeset &changeset);
-    void collectionImageChange(const QString &databaseIdentifier,
-                           const QString &applicationIdentifier,
-                           const Digikam::CollectionImageChangeset &changeset);
-    void albumChange(const QString &databaseIdentifier,
-                           const QString &applicationIdentifier,
-                           const Digikam::AlbumChangeset &changeset);
-    void tagChange(const QString &databaseIdentifier,
-                           const QString &applicationIdentifier,
-                           const Digikam::TagChangeset &changeset);
-    void albumRootChange(const QString &databaseIdentifier,
-                           const QString &applicationIdentifier,
-                           const Digikam::AlbumRootChangeset &changeset);
-    void searchChange(const QString &databaseIdentifier,
-                           const QString &applicationIdentifier,
-                           const Digikam::SearchChangeset &changeset);
+    void imageChange(const QString& databaseIdentifier,
+                           const QString& applicationIdentifier,
+                           const Digikam::ImageChangeset& changeset);
+    void imageTagChange(const QString& databaseIdentifier,
+                           const QString& applicationIdentifier,
+                           const Digikam::ImageTagChangeset& changeset);
+    void collectionImageChange(const QString& databaseIdentifier,
+                           const QString& applicationIdentifier,
+                           const Digikam::CollectionImageChangeset& changeset);
+    void albumChange(const QString& databaseIdentifier,
+                           const QString& applicationIdentifier,
+                           const Digikam::AlbumChangeset& changeset);
+    void tagChange(const QString& databaseIdentifier,
+                           const QString& applicationIdentifier,
+                           const Digikam::TagChangeset& changeset);
+    void albumRootChange(const QString& databaseIdentifier,
+                           const QString& applicationIdentifier,
+                           const Digikam::AlbumRootChangeset& changeset);
+    void searchChange(const QString& databaseIdentifier,
+                           const QString& applicationIdentifier,
+                           const Digikam::SearchChangeset& changeset);
 };
 
 #endif // DATABASEWATCHADAPTOR_H

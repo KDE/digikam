@@ -62,9 +62,9 @@ public:
      *  setting a second point. Sets rubberband to active.
      *  Coordinates are contents coordinates of the scrollview.
      */
-    void setFirstPointOnContents(const QPoint &p);
+    void setFirstPointOnContents(const QPoint& p);
     /** Same as above, coordinates are viewport coordinates of the scrollview. */
-    void setFirstPointOnViewport(const QPoint &p);
+    void setFirstPointOnViewport(const QPoint& p);
 
     /** Sets the second one of the two points of the rubberband,
      *  diagonal to the first one. The rubberband is shown after
@@ -72,19 +72,19 @@ public:
      *  Call setActive(false) to hide it again.
      *  Coordinates are contents coordinates of the scrollview.
      */
-    void setSecondPointOnContents(const QPoint &p);
+    void setSecondPointOnContents(const QPoint& p);
     /** Same as above, coordinates are viewport coordinates of the scrollview. */
-    void setSecondPointOnViewport(const QPoint &p);
+    void setSecondPointOnViewport(const QPoint& p);
 
     /** Installs a restriction which the rubber band cannot exceed.
      *  Any point set as first or second point outside the restriction will be cut to
      *  the restriction borders.
      *  Call with a null rectangle to reset.*/
-    void setRestrictionOnContents(const QRect &rect);
+    void setRestrictionOnContents(const QRect& rect);
 
     /** Combines setFirstPoint and setSecondPoint */
-    void setRectOnViewport(const QRect &rect);
-    void setRectOnContents(const QRect &rect);
+    void setRectOnViewport(const QRect& rect);
+    void setRectOnContents(const QRect& rect);
 
 protected:
 

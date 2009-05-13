@@ -112,7 +112,7 @@ public:
 
     void setDelayedRearrangement(bool delayed);
 
-    QPixmap thumbnailBorderPixmap(const QSize &pixSize);
+    QPixmap thumbnailBorderPixmap(const QSize& pixSize);
     void    clearThumbnailBorderCache();
 
     QPixmap selectPixmap() const;
@@ -149,7 +149,7 @@ protected:
 
     virtual void startDrag();
 
-    virtual void prepareRepaint(const QList<IconItem*> &itemsToRepaint);
+    virtual void prepareRepaint(const QList<IconItem*>& itemsToRepaint);
 
     void drawFrameRaised(QPainter* p);
     void drawFrameSunken(QPainter* p);

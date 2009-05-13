@@ -385,7 +385,7 @@ void MonthWidget::slotAddItems(const ImageInfoList& items)
     update();
 }
 
-void MonthWidget::slotDeleteItem(const ImageInfo &item)
+void MonthWidget::slotDeleteItem(const ImageInfo& item)
 {
     if (!d->active || item.isNull())
         return;

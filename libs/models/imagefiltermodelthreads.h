@@ -45,7 +45,7 @@ public:
 
     void shutDown() { thread->quit(); thread->wait(); }
 
-    bool checkVersion(const ImageFilterModelTodoPackage &package)
+    bool checkVersion(const ImageFilterModelTodoPackage& package)
     { return d->version == package.version; }
 
 public Q_SLOTS:
@@ -54,8 +54,8 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 
-    void processed(const ImageFilterModelTodoPackage &package);
-    void discarded(const ImageFilterModelTodoPackage &package);
+    void processed(const ImageFilterModelTodoPackage& package);
+    void discarded(const ImageFilterModelTodoPackage& package);
 
 protected:
 

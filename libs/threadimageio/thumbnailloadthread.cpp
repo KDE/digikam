@@ -182,12 +182,12 @@ ThumbnailCreator *ThumbnailLoadThread::thumbnailCreator() const
     return d->creator;
 }
 
-bool ThumbnailLoadThread::find(const QString &filePath, QPixmap &retPixmap)
+bool ThumbnailLoadThread::find(const QString& filePath, QPixmap& retPixmap)
 {
     return find(filePath, retPixmap, d->size);
 }
 
-bool ThumbnailLoadThread::find(const QString &filePath, QPixmap &retPixmap, int size)
+bool ThumbnailLoadThread::find(const QString& filePath, QPixmap& retPixmap, int size)
 {
     const QPixmap *pix;
     LoadingDescription description(filePath, size, d->exifRotate, LoadingDescription::PreviewParameters::Thumbnail);
@@ -208,12 +208,12 @@ bool ThumbnailLoadThread::find(const QString &filePath, QPixmap &retPixmap, int 
     return false;
 }
 
-void ThumbnailLoadThread::find(const QString &filePath)
+void ThumbnailLoadThread::find(const QString& filePath)
 {
     find(filePath, d->size);
 }
 
-void ThumbnailLoadThread::find(const QString &filePath, int size)
+void ThumbnailLoadThread::find(const QString& filePath, int size)
 {
     const QPixmap *pix;
     LoadingDescription description(filePath, size, d->exifRotate, LoadingDescription::PreviewParameters::Thumbnail);
@@ -233,12 +233,12 @@ void ThumbnailLoadThread::find(const QString &filePath, int size)
     load(description);
 }
 
-void ThumbnailLoadThread::findGroup(const QStringList &filePaths)
+void ThumbnailLoadThread::findGroup(const QStringList& filePaths)
 {
     findGroup(filePaths, d->size);
 }
 
-void ThumbnailLoadThread::findGroup(const QStringList &filePaths, int size)
+void ThumbnailLoadThread::findGroup(const QStringList& filePaths, int size)
 {
     if (!checkSize(size))
         return;
@@ -257,12 +257,12 @@ void ThumbnailLoadThread::findGroup(const QStringList &filePaths, int size)
     ManagedLoadSaveThread::prependThumbnailGroup(descriptions);
 }
 
-void ThumbnailLoadThread::preload(const QString &filePath)
+void ThumbnailLoadThread::preload(const QString& filePath)
 {
     preload(filePath, d->size);
 }
 
-void ThumbnailLoadThread::preload(const QString &filePath, int size)
+void ThumbnailLoadThread::preload(const QString& filePath, int size)
 {
     LoadingDescription description(filePath, size, d->exifRotate, LoadingDescription::PreviewParameters::Thumbnail);
 
@@ -276,12 +276,12 @@ void ThumbnailLoadThread::preload(const QString &filePath, int size)
     load(description, true);
 }
 
-void ThumbnailLoadThread::load(const LoadingDescription &desc)
+void ThumbnailLoadThread::load(const LoadingDescription& desc)
 {
     load(desc, false);
 }
 
-void ThumbnailLoadThread::load(const LoadingDescription &constDescription, bool preload)
+void ThumbnailLoadThread::load(const LoadingDescription& constDescription, bool preload)
 {
     LoadingDescription description(constDescription);
 
@@ -313,7 +313,7 @@ bool ThumbnailLoadThread::checkSize(int size)
 
 // virtual method overridden from LoadSaveNotifier, implemented first by LoadSaveThread
 // called by ThumbnailTask from working thread
-void ThumbnailLoadThread::thumbnailLoaded(const LoadingDescription &loadingDescription, const QImage& img)
+void ThumbnailLoadThread::thumbnailLoaded(const LoadingDescription& loadingDescription, const QImage& img)
 {
     // call parent to send signalThumbnailLoaded(LoadingDescription, QImage) - signal is part of public API
     ManagedLoadSaveThread::thumbnailLoaded(loadingDescription, img);
@@ -343,11 +343,11 @@ void ThumbnailLoadThread::slotThumbnailsAvailable()
         d->notifiedForResults = false;
     }
 
-    foreach(const ThumbnailResult &result, results)
+    foreach(const ThumbnailResult& result, results)
         slotThumbnailLoaded(result.loadingDescription, result.image);
 }
 
-void ThumbnailLoadThread::slotThumbnailLoaded(const LoadingDescription &description, const QImage& thumb)
+void ThumbnailLoadThread::slotThumbnailLoaded(const LoadingDescription& description, const QImage& thumb)
 {
     if (thumb.isNull())
         loadWithKDE(description);
@@ -376,7 +376,7 @@ void ThumbnailLoadThread::slotThumbnailLoaded(const LoadingDescription &descript
     emit signalThumbnailLoaded(description, pix);
 }
 
-void ThumbnailLoadThread::loadWithKDE(const LoadingDescription &description)
+void ThumbnailLoadThread::loadWithKDE(const LoadingDescription& description)
 {
     d->kdeTodo << description;
     startKdePreviewJob();
@@ -407,7 +407,7 @@ void ThumbnailLoadThread::startKdePreviewJob()
             this, SLOT(kdePreviewFinished(KJob*)));
 }
 
-void ThumbnailLoadThread::gotKDEPreview(const KFileItem &item, const QPixmap &kdepix)
+void ThumbnailLoadThread::gotKDEPreview(const KFileItem& item, const QPixmap& kdepix)
 {
     QPixmap pix(kdepix);
     LoadingDescription description = d->kdeJobHash[item.url()];
@@ -426,7 +426,7 @@ void ThumbnailLoadThread::gotKDEPreview(const KFileItem &item, const QPixmap &kd
     emit signalThumbnailLoaded(description, pix);
 }
 
-void ThumbnailLoadThread::failedKDEPreview(const KFileItem &item)
+void ThumbnailLoadThread::failedKDEPreview(const KFileItem& item)
 {
     gotKDEPreview(item, QPixmap());
 }
@@ -437,7 +437,7 @@ void ThumbnailLoadThread::kdePreviewFinished(KJob *)
     startKdePreviewJob();    
 }
 
-QPixmap ThumbnailLoadThread::surrogatePixmap(const LoadingDescription &description)
+QPixmap ThumbnailLoadThread::surrogatePixmap(const LoadingDescription& description)
 {
     QPixmap pix;
 
@@ -491,14 +491,14 @@ QPixmap ThumbnailLoadThread::surrogatePixmap(const LoadingDescription &descripti
     return pix;
 }
 
-void ThumbnailLoadThread::deleteThumbnail(const QString &filePath)
+void ThumbnailLoadThread::deleteThumbnail(const QString& filePath)
 {
     {
         LoadingCache *cache = LoadingCache::cache();
         LoadingCache::CacheLock lock(cache);
 
         QStringList possibleKeys = LoadingDescription::possibleThumbnailCacheKeys(filePath);
-        foreach(const QString &cacheKey, possibleKeys)
+        foreach(const QString& cacheKey, possibleKeys)
             cache->removeThumbnail(cacheKey);
     }
 

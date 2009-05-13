@@ -41,7 +41,7 @@ class ImagePlugin_ContentAwareResizing : public Digikam::ImagePlugin
 
 public:
 
-    ImagePlugin_ContentAwareResizing(QObject *parent, const QVariantList &args);
+    ImagePlugin_ContentAwareResizing(QObject *parent, const QVariantList& args);
     ~ImagePlugin_ContentAwareResizing();
 
     void setEnabledActions(bool enable);

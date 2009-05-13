@@ -49,11 +49,11 @@ class DIGIKAM_EXPORT DProgressDlg : public KDialog
 
 public:
 
-    DProgressDlg(QWidget *parent=0, const QString &caption=QString());
+    DProgressDlg(QWidget *parent=0, const QString& caption=QString());
     ~DProgressDlg();
 
-    void setLabel(const QString &text);
-    void setTitle(const QString &text);
+    void setLabel(const QString& text);
+    void setTitle(const QString& text);
     void setActionListVSBarVisible(bool visible);
     void showCancelButton(bool show);
     void setAllowCancel(bool allowCancel);
@@ -73,9 +73,9 @@ public Q_SLOTS:
     void advance(int offset);
     void setValue(int value);
 
-    void setButtonText(const QString &text);
-    void setButtonGuiItem(const KGuiItem &item);
-    void addedAction(const QPixmap& pix, const QString &text);
+    void setButtonText(const QString& text);
+    void setButtonGuiItem(const KGuiItem& item);
+    void addedAction(const QPixmap& pix, const QString& text);
     void reset();
 
 protected Q_SLOTS:

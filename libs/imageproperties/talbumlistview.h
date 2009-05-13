@@ -99,11 +99,11 @@ protected:
 private Q_SLOTS:
 
     void slotRefresh(const QMap<int, int>&);
-    void slotAssignTags(int tagId, const QList<int> &imageIDs);
+    void slotAssignTags(int tagId, const QList<int>& imageIDs);
 
 Q_SIGNALS: // private
 
-    void assignTags(int tagId, const QList<int> &imageIDs);
+    void assignTags(int tagId, const QList<int>& imageIDs);
 
 private:
 

@@ -49,7 +49,7 @@ class DIGIKAM_DATABASE_EXPORT ImageListerReceiver
 public:
 
     virtual ~ImageListerReceiver() {};
-    virtual void receive(const ImageListerRecord &record) = 0;
+    virtual void receive(const ImageListerRecord& record) = 0;
     virtual void error(const QString &/*errMsg*/) {};
 };
 
@@ -64,8 +64,8 @@ public:
     QList<ImageListerRecord> records;
     bool                     hasError;
 
-    virtual void receive(const ImageListerRecord &record);
-    virtual void error(const QString &errMsg);
+    virtual void receive(const ImageListerRecord& record);
+    virtual void error(const QString& errMsg);
 };
 
 class DIGIKAM_DATABASE_EXPORT ImageListerSlaveBaseReceiver : public ImageListerValueListReceiver
@@ -74,7 +74,7 @@ class DIGIKAM_DATABASE_EXPORT ImageListerSlaveBaseReceiver : public ImageListerV
 public:
 
     ImageListerSlaveBaseReceiver(KIO::SlaveBase *slave);
-    virtual void error(const QString &errMsg);
+    virtual void error(const QString& errMsg);
     void sendData();
 
 protected:
@@ -89,7 +89,7 @@ class DIGIKAM_DATABASE_EXPORT ImageListerSlaveBasePartsSendingReceiver
 public:
 
     ImageListerSlaveBasePartsSendingReceiver(KIO::SlaveBase *slave, int limit);
-    virtual void receive(const ImageListerRecord &record);
+    virtual void receive(const ImageListerRecord& record);
 
 protected:
 

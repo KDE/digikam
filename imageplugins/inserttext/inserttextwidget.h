@@ -113,7 +113,7 @@ protected:
     QRect composeImage(Digikam::DImg *image, QPainter *destPainter,
                        int x, int y,
                        QFont font, float pointSize, int textRotation, QColor textColor,
-                       int alignMode, const QString &textString,
+                       int alignMode, const QString& textString,
                        bool transparentBackground, QColor backgroundColor,
                        BorderMode borderMode, int borderWidth, int spacing);
 

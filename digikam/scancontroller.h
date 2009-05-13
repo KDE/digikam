@@ -83,7 +83,7 @@ public:
      * Schedules a scan of the specified part of the collection.
      * Asynchronous, returns immediately.
      */
-    void scheduleCollectionScan(const QString &path);
+    void scheduleCollectionScan(const QString& path);
 
     /**
      * Schedules a scan of the specified part of the collection.
@@ -92,13 +92,13 @@ public:
      * so that you can call this often without checking for duplicates.
      * This method must only be used from the main thread.
      */
-    void scheduleCollectionScanRelaxed(const QString &path);
+    void scheduleCollectionScanRelaxed(const QString& path);
 
     /**
      * The file pointed to by file path will be scanned.
      * The scan is finished when returning from the method.
      */
-    void scanFileDirectly(const QString &filePath);
+    void scanFileDirectly(const QString& filePath);
 
     /** If the controller is currently processing a database update
      *  (typically after first run),
@@ -127,8 +127,8 @@ public:
      *  dstPath is the new parent directory of the album, so
      *  do not include the album name to dstPath.
      */
-    void hintAtMoveOrCopyOfAlbum(const PAlbum *album, const PAlbum *dstAlbum, const QString &newAlbumName = QString());
-    void hintAtMoveOrCopyOfAlbum(const PAlbum *album, const QString &dstPath, const QString &newAlbumName = QString());
+    void hintAtMoveOrCopyOfAlbum(const PAlbum *album, const PAlbum *dstAlbum, const QString& newAlbumName = QString());
+    void hintAtMoveOrCopyOfAlbum(const PAlbum *album, const QString& dstPath, const QString& newAlbumName = QString());
 
     /** Hint at the imminent copy, move or rename of items, so that the
      *  collection scanner is informed about this.
@@ -151,9 +151,9 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotTotalFilesToScan(int count);
-    void slotStartScanningAlbum(const QString &albumRoot, const QString &album);
+    void slotStartScanningAlbum(const QString& albumRoot, const QString& album);
     void slotFinishedScanningAlbum(const QString &, const QString &, int filesScanned);
-    void slotStartScanningAlbumRoot(const QString &albumRoot);
+    void slotStartScanningAlbumRoot(const QString& albumRoot);
     void slotStartScanningForStaleAlbums();
     void slotStartScanningAlbumRoots();
 
@@ -161,8 +161,8 @@ private Q_SLOTS:
     void slotTriggerShowProgressDialog();
     void slotCancelPressed();
 
-    void slotProgressFromInitialization(const QString &message, int numberOfSteps);
-    void slotErrorFromInitialization(const QString &errorMessage);
+    void slotProgressFromInitialization(const QString& message, int numberOfSteps);
+    void slotErrorFromInitialization(const QString& errorMessage);
 
     void slotRelaxedScanning();
 
@@ -173,10 +173,10 @@ protected:
 private:
 
     virtual void moreSchemaUpdateSteps(int numberOfSteps);
-    virtual void schemaUpdateProgress(const QString &message, int numberOfSteps);
+    virtual void schemaUpdateProgress(const QString& message, int numberOfSteps);
     virtual void finishedSchemaUpdate(UpdateResult result);
     virtual void connectCollectionScanner(CollectionScanner *scanner);
-    virtual void error(const QString &errorMessage);
+    virtual void error(const QString& errorMessage);
     virtual bool continueQuery();
 
     void createProgressDialog();

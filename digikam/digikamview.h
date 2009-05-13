@@ -59,8 +59,8 @@ public:
     void applySettings();
     void refreshView();
     void clearHistory();
-    void getForwardHistory(QStringList &titles);
-    void getBackwardHistory(QStringList &titles);
+    void getForwardHistory(QStringList& titles);
+    void getBackwardHistory(QStringList& titles);
     void showSideBars();
     void hideSideBars();
     void setThumbSize(int size);
@@ -99,7 +99,7 @@ public Q_SLOTS:
     void slotNewAlbumFromSelection();
     void slotSortAlbums(int order);
     void slotDeleteAlbum();
-    void slotSelectAlbum(const KUrl &url);
+    void slotSelectAlbum(const KUrl& url);
     void slotAlbumPropsEdit();
     void slotAlbumOpenInKonqui();
     void slotAlbumRefresh();
@@ -112,8 +112,8 @@ public Q_SLOTS:
     void slotAlbumSyncPicturesMetadataDone();
     void slotAlbumSelected(Album* album);
 
-    void slotGotoAlbumAndItem(ImageInfo &imageInfo);
-    void slotGotoDateAndItem(ImageInfo &imageInfo);
+    void slotGotoAlbumAndItem(ImageInfo& imageInfo);
+    void slotGotoDateAndItem(ImageInfo& imageInfo);
     void slotGotoTagAndItem(int tagID);
 
     // Tag action slots
@@ -167,7 +167,7 @@ private:
     void saveViewState();
     void changeAlbumFromHistory(Album *album, QWidget *widget);
     void imageEdit(AlbumIconItem* iconItem=0);
-    void slideShow(ImageInfoList &infoList);
+    void slideShow(ImageInfoList& infoList);
 
 private Q_SLOTS:
 

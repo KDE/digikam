@@ -64,7 +64,7 @@ public:
 protected:
 
     virtual ItemViewHoverButton *createButton();
-    virtual void updateButton(const QModelIndex &index);
+    virtual void updateButton(const QModelIndex& index);
 
 protected Q_SLOTS:
 

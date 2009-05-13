@@ -891,7 +891,7 @@ void CameraUI::finishDialog()
 
     d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
                                           i18n("Scanning for new files, please wait..."));
-    foreach (const QString &folder, d->foldersToScan)
+    foreach (const QString& folder, d->foldersToScan)
         ScanController::instance()->scheduleCollectionScan(folder);
     d->foldersToScan.clear();
 

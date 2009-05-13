@@ -137,7 +137,7 @@ private:
     void   updatePixmap();
     void   drawLineTo(const QPoint& endPoint);
     void   drawLineTo(int width, const QColor& color, const QPoint& start, const QPoint& end);
-    QPoint translatePointPosition(QPoint &point);
+    QPoint translatePointPosition(QPoint& point);
 
 private:
 

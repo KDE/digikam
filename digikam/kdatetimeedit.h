@@ -83,7 +83,7 @@ Q_SIGNALS:
      *  This signal is emitted whenever the user modifies the date or time.
      *  The passed date and time can be invalid.
      */
-    void dateTimeChanged( const QDateTime &dateTime );
+    void dateTimeChanged( const QDateTime& dateTime );
 
 private:
 

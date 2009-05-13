@@ -42,7 +42,7 @@ class ImagePlugin_WhiteBalance : public Digikam::ImagePlugin
 
 public:
 
-    ImagePlugin_WhiteBalance(QObject *parent, const QVariantList &args);
+    ImagePlugin_WhiteBalance(QObject *parent, const QVariantList& args);
     ~ImagePlugin_WhiteBalance();
 
     void setEnabledActions(bool enable);

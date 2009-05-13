@@ -164,13 +164,13 @@ QRect AlbumThumbnailLoader::computeBlendRect(int iconSize)
     return QRect(lround(x), lround(y), lround(size), lround(size));
 }
 
-QPixmap AlbumThumbnailLoader::loadIcon(const QString &name, int size)
+QPixmap AlbumThumbnailLoader::loadIcon(const QString& name, int size)
 {
     KIconLoader *iconLoader = KIconLoader::global();
     return iconLoader->loadIcon(name, KIconLoader::NoGroup, size);
 }
 
-bool AlbumThumbnailLoader::getTagThumbnail(TAlbum *album, QPixmap &icon)
+bool AlbumThumbnailLoader::getTagThumbnail(TAlbum *album, QPixmap& icon)
 {
     int size = computeIconSize(SmallerSize);
     /*
@@ -265,7 +265,7 @@ QPixmap AlbumThumbnailLoader::getAlbumThumbnailDirectly(PAlbum *album)
     return getStandardAlbumIcon(album);
 }
 
-void AlbumThumbnailLoader::addUrl(Album *album, const KUrl &url)
+void AlbumThumbnailLoader::addUrl(Album *album, const KUrl& url)
 {
     /*
     QPixmap* pix = d->cache->find(album->iconKURL().path());
@@ -370,7 +370,7 @@ int AlbumThumbnailLoader::thumbnailSize() const
     return d->iconSize;
 }
 
-void AlbumThumbnailLoader::slotGotThumbnailFromIcon(const LoadingDescription &loadingDescription, const QPixmap &thumbnail)
+void AlbumThumbnailLoader::slotGotThumbnailFromIcon(const LoadingDescription& loadingDescription, const QPixmap& thumbnail)
 {
     // We need to find all albums for which the given url has been requested,
     // and emit a signal for each album.
@@ -427,7 +427,7 @@ void AlbumThumbnailLoader::slotGotThumbnailFromIcon(const LoadingDescription &lo
     }
 }
 
-void AlbumThumbnailLoader::slotDispatchThumbnailInternal(int albumID, const QPixmap &thumbnail)
+void AlbumThumbnailLoader::slotDispatchThumbnailInternal(int albumID, const QPixmap& thumbnail)
 {
     // for cached thumbnails
 
@@ -450,7 +450,7 @@ void AlbumThumbnailLoader::slotIconChanged(Album* album)
     d->thumbnailMap.remove(album->globalID());
 }
 
-QPixmap AlbumThumbnailLoader::createTagThumbnail(const QPixmap &albumThumbnail)
+QPixmap AlbumThumbnailLoader::createTagThumbnail(const QPixmap& albumThumbnail)
 {
     // tag thumbnails are cropped
 
@@ -477,7 +477,7 @@ QPixmap AlbumThumbnailLoader::createTagThumbnail(const QPixmap &albumThumbnail)
     return tagThumbnail;
 }
 
-QPixmap AlbumThumbnailLoader::blendIcons(QPixmap dstIcon, const QPixmap &tagIcon)
+QPixmap AlbumThumbnailLoader::blendIcons(QPixmap dstIcon, const QPixmap& tagIcon)
 {
     int dstIconSize = qMax(dstIcon.width(), dstIcon.height());
 

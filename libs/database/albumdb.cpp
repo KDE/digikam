@@ -112,7 +112,7 @@ QList<AlbumRootInfo> AlbumDB::getAlbumRoots()
     return list;
 }
 
-int AlbumDB::addAlbumRoot(AlbumRoot::Type type, const QString &identifier, const QString &specificPath, const QString &label)
+int AlbumDB::addAlbumRoot(AlbumRoot::Type type, const QString& identifier, const QString& specificPath, const QString& label)
 {
     QVariant id;
     d->db->execSql( QString("REPLACE INTO AlbumRoots (type, label, status, identifier, specificPath) "
@@ -130,7 +130,7 @@ void AlbumDB::deleteAlbumRoot(int rootId)
     d->db->recordChangeset(AlbumRootChangeset(rootId, AlbumRootChangeset::Deleted));
 }
 
-void AlbumDB::setAlbumRootLabel(int rootId, const QString &newLabel)
+void AlbumDB::setAlbumRootLabel(int rootId, const QString& newLabel)
 {
     d->db->execSql( QString("UPDATE AlbumRoots SET label=? WHERE id=?;"),
                     newLabel, rootId);
@@ -292,7 +292,7 @@ QList<AlbumShortInfo> AlbumDB::getAlbumShortInfos()
 }
 
 /*
-QStringList AlbumDB::getSubalbumsForPath(const QString &albumRoot,
+QStringList AlbumDB::getSubalbumsForPath(const QString& albumRoot,
                                          const QString& path,
                                          bool onlyDirectSubalbums)
 {
@@ -332,7 +332,7 @@ QStringList AlbumDB::getSubalbumsForPath(const QString &albumRoot,
 */
 
 /*
-int AlbumDB::addAlbum(const QString &albumRoot, const QString& relativePath,
+int AlbumDB::addAlbum(const QString& albumRoot, const QString& relativePath,
                       const QString& caption,
                       const QDate& date, const QString& collection)
 {
@@ -556,7 +556,7 @@ void AlbumDB::setTagParentID(int tagID, int newParentTagID)
     d->db->recordChangeset(TagChangeset(tagID, TagChangeset::Reparented));
 }
 
-int AlbumDB::addSearch(DatabaseSearch::Type type, const QString& name, const QString &query)
+int AlbumDB::addSearch(DatabaseSearch::Type type, const QString& name, const QString& query)
 {
     QVariant id;
     if (!d->db->execSql(QString("INSERT INTO Searches (type, name, query) VALUES(?, ?, ?);"),
@@ -655,7 +655,7 @@ static QStringList joinMainAndUserFilterString(const QString &filter, const QStr
 
     filterSet = filter.split(';', QString::SkipEmptyParts).toSet();
     userFilterList = userFilter.split(';', QString::SkipEmptyParts);
-    foreach (const QString &userFormat, userFilterList)
+    foreach (const QString& userFormat, userFilterList)
     {
         if (userFormat.startsWith('-'))
             filterSet.remove(userFormat.mid(1));
@@ -701,7 +701,7 @@ void AlbumDB::getUserFilterSettings(QString *imageFilterString, QString *videoFi
         *audioFilterString = getSetting("databaseUserAudioFormats");
 }
 
-void AlbumDB::setFilterSettings(const QStringList &imageFilter, const QStringList &videoFilter, const QStringList &audioFilter)
+void AlbumDB::setFilterSettings(const QStringList& imageFilter, const QStringList& videoFilter, const QStringList& audioFilter)
 {
     setSetting("databaseImageFormats", imageFilter.join(";"));
     setSetting("databaseVideoFormats", videoFilter.join(";"));
@@ -724,7 +724,7 @@ static QStringList cleanUserFilterString(const QString &filterString)
         sep = QChar( ' ' );
 
     QStringList sepList = filterString.split(sep, QString::SkipEmptyParts);
-    foreach (const QString &f, sepList)
+    foreach (const QString& f, sepList)
     {
         if (f.startsWith(wildcard))
             filterList << f.mid(2).trimmed().toLower();
@@ -740,28 +740,28 @@ static QStringList cleanUserFilterString(const QString &filterString)
     return filterList;
 }
 
-void AlbumDB::setUserFilterSettings(const QString &imageFilterString, const QString &videoFilterString, const QString &audioFilterString)
+void AlbumDB::setUserFilterSettings(const QString& imageFilterString, const QString& videoFilterString, const QString& audioFilterString)
 {
     setUserFilterSettings(cleanUserFilterString(imageFilterString),
                           cleanUserFilterString(videoFilterString),
                           cleanUserFilterString(audioFilterString));
 }
 
-void AlbumDB::setUserFilterSettings(const QStringList &imageFilter, const QStringList &videoFilter, const QStringList &audioFilter)
+void AlbumDB::setUserFilterSettings(const QStringList& imageFilter, const QStringList& videoFilter, const QStringList& audioFilter)
 {
     setSetting("databaseUserImageFormats", imageFilter.join(";"));
     setSetting("databaseUserVideoFormats", videoFilter.join(";"));
     setSetting("databaseUserAudioFormats", audioFilter.join(";"));
 }
 
-void AlbumDB::addToUserImageFilterSettings(const QString &filterString)
+void AlbumDB::addToUserImageFilterSettings(const QString& filterString)
 {
     QStringList addList = cleanUserFilterString(filterString);
 
     QStringList currentList = getSetting("databaseUserImageFormats").split(';', QString::SkipEmptyParts);
 
     // merge lists
-    foreach(const QString &addedFilter, addList)
+    foreach(const QString& addedFilter, addList)
     {
         if (!currentList.contains(addedFilter))
             currentList << addedFilter;
@@ -1119,7 +1119,7 @@ QVariantList AlbumDB::getImagePosition(qlonglong imageID, DatabaseFields::ImageP
     return values;
 }
 
-void AlbumDB::addImageInformation(qlonglong imageID, const QVariantList &infos, DatabaseFields::ImageInformation fields)
+void AlbumDB::addImageInformation(qlonglong imageID, const QVariantList& infos, DatabaseFields::ImageInformation fields)
 {
     if (fields == DatabaseFields::ImageInformationNone)
         return;
@@ -1139,7 +1139,7 @@ void AlbumDB::addImageInformation(qlonglong imageID, const QVariantList &infos, 
     // Take care for datetime values
     if (fields & DatabaseFields::CreationDate || fields & DatabaseFields::DigitizationDate)
     {
-        foreach (const QVariant &value, infos)
+        foreach (const QVariant& value, infos)
         {
             if (value.type() == QVariant::DateTime || value.type() == QVariant::Date)
                 boundValues << value.toDateTime().toString(Qt::ISODate);
@@ -1154,7 +1154,7 @@ void AlbumDB::addImageInformation(qlonglong imageID, const QVariantList &infos, 
     d->db->recordChangeset(ImageChangeset(imageID, fields));
 }
 
-void AlbumDB::changeImageInformation(qlonglong imageId, const QVariantList &infos,
+void AlbumDB::changeImageInformation(qlonglong imageId, const QVariantList& infos,
                                      DatabaseFields::ImageInformation fields)
 {
     if (fields == DatabaseFields::ImageInformationNone)
@@ -1172,7 +1172,7 @@ void AlbumDB::changeImageInformation(qlonglong imageId, const QVariantList &info
     // Take care for datetime values
     if (fields & DatabaseFields::CreationDate || fields & DatabaseFields::DigitizationDate)
     {
-        foreach (const QVariant &value, infos)
+        foreach (const QVariant& value, infos)
         {
             if (value.type() == QVariant::DateTime || value.type() == QVariant::Date)
                 boundValues << value.toDateTime().toString(Qt::ISODate);
@@ -1188,7 +1188,7 @@ void AlbumDB::changeImageInformation(qlonglong imageId, const QVariantList &info
     d->db->recordChangeset(ImageChangeset(imageId, fields));
 }
 
-void AlbumDB::addImageMetadata(qlonglong imageID, const QVariantList &infos, DatabaseFields::ImageMetadata fields)
+void AlbumDB::addImageMetadata(qlonglong imageID, const QVariantList& infos, DatabaseFields::ImageMetadata fields)
 {
     if (fields == DatabaseFields::ImageMetadataNone)
         return;
@@ -1210,7 +1210,7 @@ void AlbumDB::addImageMetadata(qlonglong imageID, const QVariantList &infos, Dat
     d->db->recordChangeset(ImageChangeset(imageID, fields));
 }
 
-void AlbumDB::changeImageMetadata(qlonglong imageId, const QVariantList &infos,
+void AlbumDB::changeImageMetadata(qlonglong imageId, const QVariantList& infos,
                                   DatabaseFields::ImageMetadata fields)
 {
     if (fields == DatabaseFields::ImageMetadataNone)
@@ -1231,7 +1231,7 @@ void AlbumDB::changeImageMetadata(qlonglong imageId, const QVariantList &infos,
     d->db->recordChangeset(ImageChangeset(imageId, fields));
 }
 
-void AlbumDB::addImagePosition(qlonglong imageID, const QVariantList &infos, DatabaseFields::ImagePositions fields)
+void AlbumDB::addImagePosition(qlonglong imageID, const QVariantList& infos, DatabaseFields::ImagePositions fields)
 {
     if (fields == DatabaseFields::ImagePositionsNone)
         return;
@@ -1253,7 +1253,7 @@ void AlbumDB::addImagePosition(qlonglong imageID, const QVariantList &infos, Dat
     d->db->recordChangeset(ImageChangeset(imageID, fields));
 }
 
-void AlbumDB::changeImagePosition(qlonglong imageId, const QVariantList &infos,
+void AlbumDB::changeImagePosition(qlonglong imageId, const QVariantList& infos,
                                    DatabaseFields::ImagePositions fields)
 {
     if (fields == DatabaseFields::ImagePositionsNone)
@@ -1315,8 +1315,8 @@ QList<CommentInfo> AlbumDB::getImageComments(qlonglong imageID)
     return list;
 }
 
-int AlbumDB::setImageComment(qlonglong imageID, const QString &comment, DatabaseComment::Type type,
-                             const QString &language, const QString &author, const QDateTime &date)
+int AlbumDB::setImageComment(qlonglong imageID, const QString& comment, DatabaseComment::Type type,
+                             const QString& language, const QString& author, const QDateTime& date)
 {
     QVariantList boundValues;
     boundValues << imageID << (int)type << language << author << date << comment;
@@ -1331,7 +1331,7 @@ int AlbumDB::setImageComment(qlonglong imageID, const QString &comment, Database
     return id.toInt();
 }
 
-void AlbumDB::changeImageComment(int commentId, qlonglong imageID, const QVariantList &infos, DatabaseFields::ImageComments fields)
+void AlbumDB::changeImageComment(int commentId, qlonglong imageID, const QVariantList& infos, DatabaseFields::ImageComments fields)
 {
     if (fields == DatabaseFields::ImageCommentsNone)
         return;
@@ -1358,7 +1358,7 @@ void AlbumDB::removeImageComment(int commentid, qlonglong imageid)
     d->db->recordChangeset(ImageChangeset(imageid, DatabaseFields::ImageCommentsAll));
 }
 
-QString AlbumDB::getImageProperty(qlonglong imageID, const QString &property)
+QString AlbumDB::getImageProperty(qlonglong imageID, const QString& property)
 {
     QList<QVariant> values;
 
@@ -1373,7 +1373,7 @@ QString AlbumDB::getImageProperty(qlonglong imageID, const QString &property)
         return QString();
 }
 
-void AlbumDB::setImageProperty(qlonglong imageID, const QString &property, const QString &value)
+void AlbumDB::setImageProperty(qlonglong imageID, const QString& property, const QString& value)
 {
     d->db->execSql( QString ("REPLACE INTO ImageProperties "
                              "(imageid, property, value) "
@@ -1381,7 +1381,7 @@ void AlbumDB::setImageProperty(qlonglong imageID, const QString &property, const
                     imageID, property, value);
 }
 
-QList<CopyrightInfo> AlbumDB::getImageCopyright(qlonglong imageID, const QString &property)
+QList<CopyrightInfo> AlbumDB::getImageCopyright(qlonglong imageID, const QString& property)
 {
     QList<CopyrightInfo> list;
 
@@ -1417,8 +1417,8 @@ QList<CopyrightInfo> AlbumDB::getImageCopyright(qlonglong imageID, const QString
     return list;
 }
 
-void AlbumDB::setImageCopyrightProperty(qlonglong imageID, const QString &property,
-                                        const QString &value, const QString &extraValue,
+void AlbumDB::setImageCopyrightProperty(qlonglong imageID, const QString& property,
+                                        const QString& value, const QString& extraValue,
                                         CopyrightPropertyUnique uniqueness)
 {
     if (uniqueness == PropertyUnique)
@@ -1707,7 +1707,7 @@ QStringList AlbumDB::imageCommentsFieldList(DatabaseFields::ImageComments fields
 }
 
 
-void AlbumDB::addBoundValuePlaceholders(QString &query, int count)
+void AlbumDB::addBoundValuePlaceholders(QString& query, int count)
 {
     // adds no spaces at beginning or end
     QString questionMarks;
@@ -1722,7 +1722,7 @@ void AlbumDB::addBoundValuePlaceholders(QString &query, int count)
     query += questionMarks;
 }
 
-int AlbumDB::findInDownloadHistory(const QString &identifier, const QString &name, int fileSize, const QDateTime &date)
+int AlbumDB::findInDownloadHistory(const QString& identifier, const QString& name, int fileSize, const QDateTime& date)
 {
     QList<QVariant> values;
     d->db->execSql( QString("SELECT id FROM DownloadHistory WHERE "
@@ -1734,7 +1734,7 @@ int AlbumDB::findInDownloadHistory(const QString &identifier, const QString &nam
     return values.first().toInt();
 }
 
-int AlbumDB::addToDownloadHistory(const QString &identifier, const QString &name, int fileSize, const QDateTime &date)
+int AlbumDB::addToDownloadHistory(const QString& identifier, const QString& name, int fileSize, const QDateTime& date)
 {
     QVariant id;
     d->db->execSql( QString("REPLACE INTO DownloadHistory "
@@ -1936,7 +1936,7 @@ QList<QDateTime> AlbumDB::getAllCreationDates()
                     " WHERE Images.status=1;", &values );
 
     QList<QDateTime> list;
-    foreach (const QVariant &value, values)
+    foreach (const QVariant& value, values)
     {
         if (!value.isNull())
             list << QDateTime::fromString(value.toString(), Qt::ISODate);
@@ -1952,7 +1952,7 @@ QMap<QDateTime, int> AlbumDB::getAllCreationDatesAndNumberOfImages()
                     " WHERE Images.status=1;", &values );
 
     QMap<QDateTime, int> datesStatMap;
-    foreach (const QVariant &value, values)
+    foreach (const QVariant& value, values)
     {
         if (!value.isNull())
         {
@@ -2063,7 +2063,7 @@ QList<QPair<QString, QDateTime> > AlbumDB::getItemsAndDate()
 */
 
 /*
-int AlbumDB::getAlbumForPath(const QString &albumRoot, const QString& folder, bool create)
+int AlbumDB::getAlbumForPath(const QString& albumRoot, const QString& folder, bool create)
 {
     CollectionLocation location = CollectionManager::instance()->locationForAlbumRootPath(albumRoot);
     if (location.isNull())
@@ -2161,7 +2161,7 @@ void AlbumDB::updateItem(qlonglong imageID, DatabaseItem::Category category,
                                                  | DatabaseFields::UniqueHash ));
 }
 
-QList<int> AlbumDB::getTagsFromTagPaths(const QStringList &keywordsList, bool create)
+QList<int> AlbumDB::getTagsFromTagPaths(const QStringList& keywordsList, bool create)
 {
     if (keywordsList.isEmpty())
         return QList<int>();

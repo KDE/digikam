@@ -334,7 +334,7 @@ void AdjustLevelsTool::slotPickerColorButtonActived()
     m_previewWidget->setRenderingPreviewMode(ImageGuideWidget::PreviewOriginalImage);
 }
 
-void AdjustLevelsTool::slotSpotColorChanged(const DColor &color)
+void AdjustLevelsTool::slotSpotColorChanged(const DColor& color)
 {
     if ( m_pickBlack->isChecked() )
     {
@@ -369,7 +369,7 @@ void AdjustLevelsTool::slotSpotColorChanged(const DColor &color)
     slotEffect();
 }
 
-void AdjustLevelsTool::slotColorSelectedFromTarget( const DColor &color )
+void AdjustLevelsTool::slotColorSelectedFromTarget( const DColor& color )
 {
     m_gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }

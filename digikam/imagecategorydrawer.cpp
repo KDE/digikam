@@ -84,7 +84,7 @@ void ImageCategoryDrawer::setLowerSpacing(int spacing)
     d->lowerSpacing = spacing;
 }
 
-void ImageCategoryDrawer::setDefaultViewOptions(const QStyleOptionViewItem &option)
+void ImageCategoryDrawer::setDefaultViewOptions(const QStyleOptionViewItem& option)
 {
     d->font = option.font;
     if (option.rect.width() != d->rect.width())
@@ -98,8 +98,8 @@ void ImageCategoryDrawer::invalidatePaintingCache()
     updateRectsAndPixmaps(d->rect.width());
 }
 
-void ImageCategoryDrawer::drawCategory(const QModelIndex &index, int /*sortRole*/,
-                                       const QStyleOption &option, QPainter *p) const
+void ImageCategoryDrawer::drawCategory(const QModelIndex& index, int /*sortRole*/,
+                                       const QStyleOption& option, QPainter *p) const
 {
     if (option.rect.width() != d->rect.width())
         const_cast<ImageCategoryDrawer*>(this)->updateRectsAndPixmaps(option.rect.width());
@@ -155,7 +155,7 @@ void ImageCategoryDrawer::drawCategory(const QModelIndex &index, int /*sortRole*
     p->restore();
 }
 
-void ImageCategoryDrawer::textForAlbum(const QModelIndex &index, QString *header, QString *subLine) const
+void ImageCategoryDrawer::textForAlbum(const QModelIndex& index, QString *header, QString *subLine) const
 {
     int albumId   = index.data(ImageFilterModel::CategoryAlbumIdRole).toInt();
     PAlbum* album = AlbumManager::instance()->findPAlbum(albumId);

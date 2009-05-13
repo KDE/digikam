@@ -230,7 +230,7 @@ bool UndoManager::anyMoreRedo()
     return !d->redoActions.isEmpty();
 }
 
-void UndoManager::getUndoHistory(QStringList &titles)
+void UndoManager::getUndoHistory(QStringList& titles)
 {
     QList<UndoAction*>::iterator it;
 
@@ -240,7 +240,7 @@ void UndoManager::getUndoHistory(QStringList &titles)
     }
 }
 
-void UndoManager::getRedoHistory(QStringList &titles)
+void UndoManager::getRedoHistory(QStringList& titles)
 {
     QList<UndoAction*>::iterator it;
 

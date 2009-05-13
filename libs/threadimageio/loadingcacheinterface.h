@@ -47,10 +47,10 @@ public:
      * Remove an image from the cache
      * because it may have changed on disk
      */
-    static void fileChanged(const QString &filePath);
+    static void fileChanged(const QString& filePath);
     /**
      * Connect the given object/slot to the signal
-     *  void fileChanged(const QString &filePath);
+     *  void fileChanged(const QString& filePath);
      * which is emitted when the cache gains knowledge about a possible
      * change of this file on disk.
      */
@@ -61,7 +61,7 @@ public:
      */
     static void cleanCache();
     /** add a copy of the image to cache */
-    static void putImage(const QString &filePath, const DImg &img);
+    static void putImage(const QString& filePath, const DImg& img);
     /**
      * Set cache size in Megabytes.
      * Set to 0 to disable caching.

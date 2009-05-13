@@ -291,7 +291,7 @@ void BorderTool::renderingFinished()
     toggleBorderSlider(m_preserveAspectRatio->isChecked());
 }
 
-void BorderTool::slotColorForegroundChanged(const QColor &color)
+void BorderTool::slotColorForegroundChanged(const QColor& color)
 {
     switch (m_borderType->currentIndex())
     {
@@ -330,7 +330,7 @@ void BorderTool::slotColorForegroundChanged(const QColor &color)
     slotEffect();
 }
 
-void BorderTool::slotColorBackgroundChanged(const QColor &color)
+void BorderTool::slotColorBackgroundChanged(const QColor& color)
 {
     switch (m_borderType->currentIndex())
     {

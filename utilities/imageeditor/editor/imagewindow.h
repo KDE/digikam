@@ -99,7 +99,7 @@ private:
 
     void saveIsComplete();
     void saveAsIsComplete();
-    void setViewToURL(const KUrl &url);
+    void setViewToURL(const KUrl& url);
     void deleteCurrentItem(bool ask, bool permanently);
     bool removeItem(int index);
 

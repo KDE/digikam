@@ -633,12 +633,12 @@ void ICCProofTool::processLCMSUrl(const QString& url)
     KToolInvocation::invokeBrowser(url);
 }
 
-void ICCProofTool::slotSpotColorChanged(const DColor &color)
+void ICCProofTool::slotSpotColorChanged(const DColor& color)
 {
     m_curvesWidget->setCurveGuide(color);
 }
 
-void ICCProofTool::slotColorSelectedFromTarget( const DColor &color )
+void ICCProofTool::slotColorSelectedFromTarget( const DColor& color )
 {
     m_gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }

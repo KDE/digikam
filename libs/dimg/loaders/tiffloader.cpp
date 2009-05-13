@@ -830,7 +830,7 @@ bool TIFFLoader::sixteenBit() const
 }
 
 void TIFFLoader::tiffSetExifAsciiTag(TIFF* tif, ttag_t tiffTag,
-                                     const DMetadata &metaData, const char* exifTagName)
+                                     const DMetadata& metaData, const char* exifTagName)
 {
     QByteArray tag = metaData.getExifTagData(exifTagName);
     if (!tag.isEmpty())
@@ -841,7 +841,7 @@ void TIFFLoader::tiffSetExifAsciiTag(TIFF* tif, ttag_t tiffTag,
 }
 
 void TIFFLoader::tiffSetExifDataTag(TIFF* tif, ttag_t tiffTag,
-                                    const DMetadata &metaData, const char* exifTagName)
+                                    const DMetadata& metaData, const char* exifTagName)
 {
     QByteArray tag = metaData.getExifTagData(exifTagName);
     if (!tag.isEmpty())

@@ -110,7 +110,7 @@ void DigikamImageView::activated(const ImageInfo& info)
         openInEditor(info);
 }
 
-void DigikamImageView::openInEditor(const ImageInfo &info)
+void DigikamImageView::openInEditor(const ImageInfo& info)
 {
     d->utilities->openInEditor(info, imageInfos(), currentAlbum());
 }
@@ -293,7 +293,7 @@ void DigikamImageView::assignRatingToSelected(int rating)
     MetadataManager::instance()->assignRating(selectedImageInfos(), rating);
 }
 
-void DigikamImageView::setAsAlbumThumbnail(const ImageInfo &setAsThumbnail)
+void DigikamImageView::setAsAlbumThumbnail(const ImageInfo& setAsThumbnail)
 {
     d->utilities->setAsAlbumThumbnail(currentAlbum(), setAsThumbnail);
 }

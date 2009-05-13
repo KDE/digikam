@@ -54,11 +54,11 @@ public:
      *  p must be in the viewport currently. Decoration will not be included.
      *  Suitable for mouse click positions.
      */
-    QModelIndex indexVisuallyAt(const QPoint &p);
+    QModelIndex indexVisuallyAt(const QPoint& p);
 
 public Q_SLOTS:
 
-    void setSearchTextSettings(const SearchTextSettings &settings);
+    void setSearchTextSettings(const SearchTextSettings& settings);
 
 Q_SIGNALS:
 
@@ -80,7 +80,7 @@ protected Q_SLOTS:
 
 protected:
 
-    bool checkExpandedState(const QModelIndex &index);
+    bool checkExpandedState(const QModelIndex& index);
     void mousePressEvent(QMouseEvent *e);
 
     void dragEnterEvent(QDragEnterEvent *e);
@@ -110,11 +110,11 @@ public:
 
 private Q_SLOTS:
 
-    void slotCollapsed(const QModelIndex &index);
-    void slotExpanded(const QModelIndex &index);
+    void slotCollapsed(const QModelIndex& index);
+    void slotExpanded(const QModelIndex& index);
     void slotSetShowCount();
-    void slotRowsInserted(const QModelIndex &parent, int start, int end);
-    void updateShowCountState(const QModelIndex &index, bool recurse);
+    void slotRowsInserted(const QModelIndex& parent, int start, int end);
+    void updateShowCountState(const QModelIndex& index, bool recurse);
 };
 
 class AbstractCheckableAlbumTreeView : public AbstractCountingAlbumTreeView

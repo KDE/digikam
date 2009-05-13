@@ -223,12 +223,12 @@ void DatabaseWatch::doAnyProcessing()
     loop.processEvents();
 }
 
-void DatabaseWatch::setDatabaseIdentifier(const QString &identifier)
+void DatabaseWatch::setDatabaseIdentifier(const QString& identifier)
 {
     d->databaseId = identifier;
 }
 
-void DatabaseWatch::setApplicationIdentifier(const QString &identifier)
+void DatabaseWatch::setApplicationIdentifier(const QString& identifier)
 {
     d->applicationId = identifier;
 }
@@ -236,7 +236,7 @@ void DatabaseWatch::setApplicationIdentifier(const QString &identifier)
 
 // --- methods to dispatch changes from database to listeners (local and remote) ---
 
-void DatabaseWatch::sendImageChange(const ImageChangeset &cset)
+void DatabaseWatch::sendImageChange(const ImageChangeset& cset)
 {
     // send local signal
     emit imageChange(cset);
@@ -244,37 +244,37 @@ void DatabaseWatch::sendImageChange(const ImageChangeset &cset)
     emit imageChange(d->databaseId, d->applicationId, cset);
 }
 
-void DatabaseWatch::sendImageTagChange(const ImageTagChangeset &cset)
+void DatabaseWatch::sendImageTagChange(const ImageTagChangeset& cset)
 {
     emit imageTagChange(cset);
     emit imageTagChange(d->databaseId, d->applicationId, cset);
 }
 
-void DatabaseWatch::sendCollectionImageChange(const CollectionImageChangeset &cset)
+void DatabaseWatch::sendCollectionImageChange(const CollectionImageChangeset& cset)
 {
     emit collectionImageChange(cset);
     emit collectionImageChange(d->databaseId, d->applicationId, cset);
 }
 
-void DatabaseWatch::sendAlbumChange(const AlbumChangeset &cset)
+void DatabaseWatch::sendAlbumChange(const AlbumChangeset& cset)
 {
     emit albumChange(cset);
     emit albumChange(d->databaseId, d->applicationId, cset);
 }
 
-void DatabaseWatch::sendTagChange(const TagChangeset &cset)
+void DatabaseWatch::sendTagChange(const TagChangeset& cset)
 {
     emit tagChange(cset);
     emit tagChange(d->databaseId, d->applicationId, cset);
 }
 
-void DatabaseWatch::sendAlbumRootChange(const AlbumRootChangeset &cset)
+void DatabaseWatch::sendAlbumRootChange(const AlbumRootChangeset& cset)
 {
     emit albumRootChange(cset);
     emit albumRootChange(d->databaseId, d->applicationId, cset);
 }
 
-void DatabaseWatch::sendSearchChange(const SearchChangeset &cset)
+void DatabaseWatch::sendSearchChange(const SearchChangeset& cset)
 {
     emit searchChange(cset);
     emit searchChange(d->databaseId, d->applicationId, cset);
@@ -283,63 +283,63 @@ void DatabaseWatch::sendSearchChange(const SearchChangeset &cset)
 
 // --- methods to dispatch from slave or peer to local listeners ---
 
-void DatabaseWatch::slotImageChangeDBus(const QString &databaseIdentifier,
-                                        const QString &applicationIdentifier,
-                                        const ImageChangeset &changeset)
+void DatabaseWatch::slotImageChangeDBus(const QString& databaseIdentifier,
+                                        const QString& applicationIdentifier,
+                                        const ImageChangeset& changeset)
 {
     if (applicationIdentifier != d->applicationId &&
         databaseIdentifier == d->databaseId)
         emit imageChange(changeset);
 }
 
-void DatabaseWatch::slotImageTagChangeDBus(const QString &databaseIdentifier,
-                                           const QString &applicationIdentifier,
-                                           const ImageTagChangeset &changeset)
+void DatabaseWatch::slotImageTagChangeDBus(const QString& databaseIdentifier,
+                                           const QString& applicationIdentifier,
+                                           const ImageTagChangeset& changeset)
 {
     if (applicationIdentifier != d->applicationId &&
         databaseIdentifier == d->databaseId)
         emit imageTagChange(changeset);
 }
 
-void DatabaseWatch::slotCollectionImageChangeDBus(const QString &databaseIdentifier,
-                                                  const QString &applicationIdentifier,
-                                                  const CollectionImageChangeset &changeset)
+void DatabaseWatch::slotCollectionImageChangeDBus(const QString& databaseIdentifier,
+                                                  const QString& applicationIdentifier,
+                                                  const CollectionImageChangeset& changeset)
 {
     if (applicationIdentifier != d->applicationId &&
         databaseIdentifier == d->databaseId)
         emit collectionImageChange(changeset);
 }
 
-void DatabaseWatch::slotAlbumChangeDBus(const QString &databaseIdentifier,
-                                        const QString &applicationIdentifier,
-                                        const AlbumChangeset &changeset)
+void DatabaseWatch::slotAlbumChangeDBus(const QString& databaseIdentifier,
+                                        const QString& applicationIdentifier,
+                                        const AlbumChangeset& changeset)
 {
     if (applicationIdentifier != d->applicationId &&
         databaseIdentifier == d->databaseId)
         emit albumChange(changeset);
 }
 
-void DatabaseWatch::slotTagChangeDBus(const QString &databaseIdentifier,
-                                      const QString &applicationIdentifier,
-                                      const TagChangeset &changeset)
+void DatabaseWatch::slotTagChangeDBus(const QString& databaseIdentifier,
+                                      const QString& applicationIdentifier,
+                                      const TagChangeset& changeset)
 {
     if (applicationIdentifier != d->applicationId &&
         databaseIdentifier == d->databaseId)
         emit tagChange(changeset);
 }
 
-void DatabaseWatch::slotAlbumRootChangeDBus(const QString &databaseIdentifier,
-                                            const QString &applicationIdentifier,
-                                            const AlbumRootChangeset &changeset)
+void DatabaseWatch::slotAlbumRootChangeDBus(const QString& databaseIdentifier,
+                                            const QString& applicationIdentifier,
+                                            const AlbumRootChangeset& changeset)
 {
     if (applicationIdentifier != d->applicationId &&
         databaseIdentifier == d->databaseId)
         emit albumRootChange(changeset);
 }
 
-void DatabaseWatch::slotSearchChangeDBus(const QString &databaseIdentifier,
-                                         const QString &applicationIdentifier,
-                                         const SearchChangeset &changeset)
+void DatabaseWatch::slotSearchChangeDBus(const QString& databaseIdentifier,
+                                         const QString& applicationIdentifier,
+                                         const SearchChangeset& changeset)
 {
     if (applicationIdentifier != d->applicationId &&
         databaseIdentifier == d->databaseId)

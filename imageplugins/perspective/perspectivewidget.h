@@ -83,7 +83,7 @@ public Q_SLOTS:
     void slotToggleDrawWhileMoving(bool draw);
     void slotToggleDrawGrid(bool grid);
 
-    void slotChangeGuideColor(const QColor &color);
+    void slotChangeGuideColor(const QColor& color);
     void slotChangeGuideSize(int size);
     void slotInverseTransformationChanged(bool isEnabled);
 
@@ -105,7 +105,7 @@ private:  // Widget methods.
     void   updatePixmap();
 
     void   transformAffine(Digikam::DImg *orgImage, Digikam::DImg *destImage,
-                           const Matrix &matrix, Digikam::DColor background);
+                           const Matrix& matrix, Digikam::DColor background);
 
     QPoint buildPerspective(QPoint orignTopLeft, QPoint orignBottomRight,
                             QPoint transTopLeft, QPoint transTopRight,

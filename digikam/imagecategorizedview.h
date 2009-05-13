@@ -70,12 +70,12 @@ public:
     KUrl::List selectedUrls() const;
 
     ThumbnailSize thumbnailSize() const;
-    void setThumbnailSize(const ThumbnailSize &size);
+    void setThumbnailSize(const ThumbnailSize& size);
 
     /** If the model is categorized by an album, returns the album of the category
      *  that contains the position.
      *  If this is not applicable, return the current album. May return 0. */
-    Album *albumAt(const QPoint &pos);
+    Album *albumAt(const QPoint& pos);
 
     /// Add and remove an overlay. It will as well be removed automatically when destroyed.
     void addOverlay(ImageDelegateOverlay *overlay);
@@ -91,27 +91,27 @@ public Q_SLOTS:
     /** Scroll the view to the given item when it becomes available */
     void scrollToWhenAvailable(qlonglong imageId);
     /** Set as current item the item identified by its file url */
-    void setCurrentUrl(const KUrl &url);
+    void setCurrentUrl(const KUrl& url);
 
 Q_SIGNALS:
 
-    void currentChanged(const ImageInfo &info);
+    void currentChanged(const ImageInfo& info);
     /// Emitted when any selection change occurs. Any of the signals below will be emitted before.
     void selectionChanged();
     /// Emitted when new items are selected. The parameter includes only the newly selected infos,
     /// there may be other already selected infos.
-    void selected(const QList<ImageInfo> &newSelectedInfos);
+    void selected(const QList<ImageInfo>& newSelectedInfos);
     /// Emitted when items are deselected. There may be other selected infos left.
     /// This signal is not emitted when the model is reset; then only selectionCleared is emitted.
-    void deselected(const QList<ImageInfo> &nowDeselectedInfos);
+    void deselected(const QList<ImageInfo>& nowDeselectedInfos);
     /// Emitted when the selection is completely cleared.
     void selectionCleared();
 
     /** For overlays: Like the respective parent class signals, but with additional info.
      *  Do not change the mouse events.
      */
-    void clicked(const QMouseEvent *e, const QModelIndex &index);
-    void entered(const QMouseEvent *e, const QModelIndex &index);
+    void clicked(const QMouseEvent *e, const QModelIndex& index);
+    void entered(const QMouseEvent *e, const QModelIndex& index);
     /**  Remember you may want to check if the event is accepted or ignored.
      *   This signal is emitted after being handled by this widget.
      *   You can accept it if ignored. */
@@ -124,25 +124,25 @@ protected Q_SLOTS:
 
     void slotImageInfosAdded();
 
-    void slotActivated(const QModelIndex &index);
-    void slotClicked(const QModelIndex &index);
-    void slotEntered(const QModelIndex &index);
+    void slotActivated(const QModelIndex& index);
+    void slotClicked(const QModelIndex& index);
+    void slotEntered(const QModelIndex& index);
 
 protected:
 
     /// Reimplement these in a subclass
-    virtual void activated(const ImageInfo &info);
-    virtual void showContextMenu(QContextMenuEvent *event, const ImageInfo &info);
+    virtual void activated(const ImageInfo& info);
+    virtual void showContextMenu(QContextMenuEvent *event, const ImageInfo& info);
     virtual void showContextMenu(QContextMenuEvent *event);
     virtual void copy();
     virtual void paste();
 
     /** Returns an index that is representative for the category at position pos */
-    QModelIndex indexForCategoryAt(const QPoint &pos) const;
+    QModelIndex indexForCategoryAt(const QPoint& pos) const;
 
     // reimplemented from parent class
     void reset();
-    void currentChanged(const QModelIndex &index, const QModelIndex &previous);
+    void currentChanged(const QModelIndex& index, const QModelIndex& previous);
     void selectionChanged(const QItemSelection &, const QItemSelection &);
     void contextMenuEvent(QContextMenuEvent* event);
     void dragMoveEvent(QDragMoveEvent *e);
@@ -161,7 +161,7 @@ private Q_SLOTS:
 
     void slotGridSizeChanged(const QSize &);
     void slotDelegateWaitsForThumbnail(const QModelIndex &);
-    void slotFileChanged(const QString &filePath);
+    void slotFileChanged(const QString& filePath);
 
 private:
 

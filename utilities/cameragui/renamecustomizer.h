@@ -52,19 +52,19 @@ public:
     ~ManualRenameInput();
 
     QString text() const;
-    void    setText(const QString &text);
+    void    setText(const QString& text);
 
     void setTrackerAlignment(Qt::Alignment alignment);
 
     KLineEdit* input() const;
 
 
-    QString parse(const QString &fileName, const QString &cameraName,
-                  const QDateTime &dateTime, int index) const;
+    QString parse(const QString& fileName, const QString& cameraName,
+                  const QDateTime& dateTime, int index) const;
 
     static QString parser(const QString& parseString,
-                          const QString &fileName, const QString &cameraName,
-                          const QDateTime &dateTime, int index);
+                          const QString& fileName, const QString& cameraName,
+                          const QDateTime& dateTime, int index);
 
 Q_SIGNALS:
 
@@ -110,7 +110,7 @@ public:
 
     void    setUseDefault(bool val);
     bool    useDefault() const;
-    QString newName(const QString &fileName, const QDateTime &date, int index, const QString &extension) const;
+    QString newName(const QString& fileName, const QDateTime& date, int index, const QString& extension) const;
     Case    changeCase() const;
     int     startIndex() const;
 

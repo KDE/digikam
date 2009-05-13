@@ -244,7 +244,7 @@ void PreviewLoadingTask::execute()
     }
 }
 
-bool PreviewLoadingTask::needToScale(const QSize &imageSize, int previewSize)
+bool PreviewLoadingTask::needToScale(const QSize& imageSize, int previewSize)
 {
     int maxSize = imageSize.width() > imageSize.height() ? imageSize.width() : imageSize.height();
     int acceptableUpperSize = lround(1.25 * (double)previewSize);

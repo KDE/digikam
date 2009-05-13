@@ -72,8 +72,8 @@ public:
     DatabaseItem::Category category;
 };
 
-DIGIKAM_DATABASE_EXPORT QDataStream &operator<<(QDataStream &os, const ImageListerRecord &record);
-DIGIKAM_DATABASE_EXPORT QDataStream &operator>>(QDataStream &ds, ImageListerRecord &record);
+DIGIKAM_DATABASE_EXPORT QDataStream& operator<<(QDataStream& os, const ImageListerRecord& record);
+DIGIKAM_DATABASE_EXPORT QDataStream& operator>>(QDataStream& ds, ImageListerRecord& record);
 
 }  // namespace Digikam
 

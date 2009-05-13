@@ -49,18 +49,18 @@ private:
 
     bool startUpdates();
     bool makeUpdates();
-    void defaultFilterSettings(QStringList &defaultImageFilter,
-                               QStringList &defaultVideoFilter,
-                               QStringList &defaultAudioFilter);
+    void defaultFilterSettings(QStringList& defaultImageFilter,
+                               QStringList& defaultVideoFilter,
+                               QStringList& defaultAudioFilter);
     bool createFilterSettings();
     bool updateFilterSettings();
     bool createDatabase();
     bool createTablesV5();
     bool createIndicesV5();
     bool createTriggersV5();
-    bool copyV3toV4(const QString &digikam3DBPath, const QString &currentDBPath);
+    bool copyV3toV4(const QString& digikam3DBPath, const QString& currentDBPath);
     bool updateV4toV5();
-    bool updateV2toV4(const QString &sqlite2DBPath);
+    bool updateV2toV4(const QString& sqlite2DBPath);
     bool createTablesV3();
 
 private:

@@ -79,17 +79,17 @@ QString ThumbnailCreator::largeThumbnailDir()
     return  QDir::homePath() + "/.thumbnails/large/";
 }
 
-QString ThumbnailCreator::thumbnailPath(const QString &filePath, const QString &basePath)
+QString ThumbnailCreator::thumbnailPath(const QString& filePath, const QString& basePath)
 {
     return thumbnailPathFromUri(thumbnailUri(filePath), basePath);
 }
 
-QString ThumbnailCreator::thumbnailUri(const QString &filePath)
+QString ThumbnailCreator::thumbnailUri(const QString& filePath)
 {
      return "file://" + QDir::cleanPath(filePath);
 }
 
-QString ThumbnailCreator::thumbnailPathFromUri(const QString &uri, const QString &basePath)
+QString ThumbnailCreator::thumbnailPathFromUri(const QString& uri, const QString& basePath)
 {
     KMD5 md5( QFile::encodeName(uri) );
     return basePath + QFile::encodeName( md5.hexDigest() ) + ".png";
@@ -106,7 +106,7 @@ void ThumbnailCreator::initThumbnailDirs()
     KStandardDirs::makeDir(d->bigThumbPath, 0700);
 }
 
-QString ThumbnailCreator::thumbnailPath(const QString &filePath)
+QString ThumbnailCreator::thumbnailPath(const QString& filePath)
 {
     QString basePath = (d->cachedSize == 128) ? d->smallThumbPath : d->bigThumbPath;
     return thumbnailPath(filePath, basePath);

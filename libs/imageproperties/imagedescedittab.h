@@ -57,8 +57,8 @@ public:
     ~ImageDescEditTab();
 
     void assignRating(int rating);
-    void setItem(const ImageInfo &info = ImageInfo());
-    void setItems(const ImageInfoList &infos);
+    void setItem(const ImageInfo& info = ImageInfo());
+    void setItems(const ImageInfoList& infos);
     void populateTags();
     void refreshTagsView();
 
@@ -76,7 +76,7 @@ protected:
 
 private:
 
-    void setInfos(const ImageInfoList &infos);
+    void setInfos(const ImageInfoList& infos);
     void focusLastSelectedWidget();
 
     void updateTagsView();

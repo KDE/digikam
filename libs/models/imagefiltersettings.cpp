@@ -97,17 +97,17 @@ void ImageFilterSettings::setTextFilter(const SearchTextSettings& settings)
     textFilterSettings = settings;
 }
 
-void ImageFilterSettings::setTagNames(const QHash<int, QString> &hash)
+void ImageFilterSettings::setTagNames(const QHash<int, QString>& hash)
 {
     tagNameHash = hash;
 }
 
-void ImageFilterSettings::setAlbumNames(const QHash<int, QString> &hash)
+void ImageFilterSettings::setAlbumNames(const QHash<int, QString>& hash)
 {
     albumNameHash = hash;
 }
 
-bool ImageFilterSettings::matches(const ImageInfo &info, bool *foundText) const
+bool ImageFilterSettings::matches(const ImageInfo& info, bool *foundText) const
 {
     if (!isFiltering())
         return true;

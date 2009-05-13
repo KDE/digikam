@@ -93,8 +93,8 @@ public:
     MetadataHub::Status                    ratingStatus;
     MetadataHub::DatabaseMode              dbmode;
 
-    template <class T> void loadWithInterval(const T &data, T &storage, T &highestStorage, MetadataHub::Status &status);
-    template <class T> void loadSingleValue(const T &data, T &storage, MetadataHub::Status &status);
+    template <class T> void loadWithInterval(const T &data, T &storage, T &highestStorage, MetadataHub::Status& status);
+    template <class T> void loadSingleValue(const T &data, T &storage, MetadataHub::Status& status);
 };
 
 MetadataWriteSettings::MetadataWriteSettings()
@@ -133,7 +133,7 @@ MetadataHub::MetadataHub(DatabaseMode dbmode)
     d->dbmode = dbmode;
 }
 
-MetadataHub::MetadataHub(const MetadataHub &other)
+MetadataHub::MetadataHub(const MetadataHub& other)
            : d(new MetadataHubPriv(*other.d))
 {
 }
@@ -143,7 +143,7 @@ MetadataHub::~MetadataHub()
     delete d;
 }
 
-MetadataHub &MetadataHub::operator=(const MetadataHub &other)
+MetadataHub& MetadataHub::operator=(const MetadataHub& other)
 {
     (*d) = (*other.d);
     return *this;
@@ -156,7 +156,7 @@ void MetadataHub::reset()
 
 // --------------------------------------------------
 
-void MetadataHub::load(const ImageInfo &info)
+void MetadataHub::load(const ImageInfo& info)
 {
     d->count++;
 
@@ -188,7 +188,7 @@ void MetadataHub::load(const ImageInfo &info)
     }
 }
 
-void MetadataHub::load(const DMetadata &metadata)
+void MetadataHub::load(const DMetadata& metadata)
 {
     d->count++;
 
@@ -253,7 +253,7 @@ void MetadataHub::load(const DMetadata &metadata)
     }
 }
 
-bool MetadataHub::load(const QString &filePath)
+bool MetadataHub::load(const QString& filePath)
 {
     DMetadata metadata;
     bool success = metadata.load(filePath);
@@ -262,7 +262,7 @@ bool MetadataHub::load(const QString &filePath)
 }
 
 // private common code to merge tags
-void MetadataHub::loadTags(const QList<TAlbum *> &loadedTags)
+void MetadataHub::loadTags(const QList<TAlbum *>& loadedTags)
 {
     // get copy of tags
     QList<TAlbum *> previousTags = d->tags.keys();
@@ -307,7 +307,7 @@ void MetadataHub::loadTags(const QList<TAlbum *> &loadedTags)
 }
 
 // private code to merge tags with d->tagList
-void MetadataHub::loadTags(const QStringList &loadedTagPaths)
+void MetadataHub::loadTags(const QStringList& loadedTagPaths)
 {
     if (d->count == 1)
     {
@@ -330,7 +330,7 @@ void MetadataHub::loadTags(const QStringList &loadedTagPaths)
 }
 
 // private common code to load dateTime, comment, rating
-void MetadataHub::load(const QDateTime &dateTime, const QString &comment, int rating)
+void MetadataHub::load(const QDateTime& dateTime, const QString& comment, int rating)
 {
     if (dateTime.isValid())
     {
@@ -343,7 +343,7 @@ void MetadataHub::load(const QDateTime &dateTime, const QString &comment, int ra
 }
 
 // template method to share code for dateTime and rating
-template <class T> void MetadataHubPriv::loadWithInterval(const T &data, T &storage, T &highestStorage, MetadataHub::Status &status)
+template <class T> void MetadataHubPriv::loadWithInterval(const T& data, T& storage, T& highestStorage, MetadataHub::Status& status)
 {
     switch (status)
     {
@@ -378,7 +378,7 @@ template <class T> void MetadataHubPriv::loadWithInterval(const T &data, T &stor
 }
 
 // template method used by comment
-template <class T> void MetadataHubPriv::loadSingleValue(const T &data, T &storage, MetadataHub::Status &status)
+template <class T> void MetadataHubPriv::loadSingleValue(const T& data, T& storage, MetadataHub::Status& status)
 {
     switch (status)
     {
@@ -476,7 +476,7 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
     return changed;
 }
 
-bool MetadataHub::write(DMetadata &metadata, WriteMode writeMode, const MetadataWriteSettings &settings)
+bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const MetadataWriteSettings& settings)
 {
     bool dirty = false;
 
@@ -595,7 +595,7 @@ bool MetadataHub::write(DMetadata &metadata, WriteMode writeMode, const Metadata
     return dirty;
 }
 
-bool MetadataHub::write(const QString &filePath, WriteMode writeMode, const MetadataWriteSettings &settings)
+bool MetadataHub::write(const QString& filePath, WriteMode writeMode, const MetadataWriteSettings& settings)
 {
     // if no DMetadata object is needed at all, don't construct one -
     // important optimization if writing to file is turned off in setup!
@@ -612,7 +612,7 @@ bool MetadataHub::write(const QString &filePath, WriteMode writeMode, const Meta
     return false;
 }
 
-bool MetadataHub::write(DImg &image, WriteMode writeMode, const MetadataWriteSettings &settings)
+bool MetadataHub::write(DImg& image, WriteMode writeMode, const MetadataWriteSettings& settings)
 {
     // if no DMetadata object is needed at all, don't construct one
     if (!willWriteMetadata(writeMode, settings))
@@ -643,7 +643,7 @@ bool MetadataHub::write(DImg &image, WriteMode writeMode, const MetadataWriteSet
     return false;
 }
 
-bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataWriteSettings &settings) const
+bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataWriteSettings& settings) const
 {
     // This is the same logic as in write(DMetadata) but without actually writing.
     // Adapt if the method above changes
@@ -722,7 +722,7 @@ MetadataHub::TagStatus MetadataHub::tagStatus(int albumId) const
     return tagStatus(AlbumManager::instance()->findTAlbum(albumId));
 }
 
-MetadataHub::TagStatus MetadataHub::tagStatus(const QString &tagPath) const
+MetadataHub::TagStatus MetadataHub::tagStatus(const QString& tagPath) const
 {
     if (d->dbmode == NewTagsImport)
         return TagStatus(MetadataInvalid);
@@ -775,7 +775,7 @@ int MetadataHub::rating() const
     return d->rating;
 }
 
-void MetadataHub::dateTimeInterval(QDateTime &lowest, QDateTime &highest) const
+void MetadataHub::dateTimeInterval(QDateTime& lowest, QDateTime& highest) const
 {
     switch (d->dateTimeStatus)
     {
@@ -792,7 +792,7 @@ void MetadataHub::dateTimeInterval(QDateTime &lowest, QDateTime &highest) const
     }
 }
 
-void MetadataHub::ratingInterval(int &lowest, int &highest) const
+void MetadataHub::ratingInterval(int& lowest, int& highest) const
 {
     switch (d->ratingStatus)
     {
@@ -844,14 +844,14 @@ QMap<int, MetadataHub::TagStatus> MetadataHub::tagIDs() const
 
 // --------------------------------------------------
 
-void MetadataHub::setDateTime(const QDateTime &dateTime, Status status)
+void MetadataHub::setDateTime(const QDateTime& dateTime, Status status)
 {
     d->dateTimeStatus  = status;
     d->dateTime        = dateTime;
     d->dateTimeChanged = true;
 }
 
-void MetadataHub::setComment(const QString &comment, Status status)
+void MetadataHub::setComment(const QString& comment, Status status)
 {
     d->commentStatus  = status;
     d->comment        = comment;

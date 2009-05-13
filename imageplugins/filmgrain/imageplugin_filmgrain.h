@@ -42,7 +42,7 @@ class ImagePlugin_FilmGrain : public Digikam::ImagePlugin
 
 public:
 
-    ImagePlugin_FilmGrain(QObject *parent, const QVariantList &args);
+    ImagePlugin_FilmGrain(QObject *parent, const QVariantList& args);
     ~ImagePlugin_FilmGrain();
 
     void setEnabledActions(bool enable);

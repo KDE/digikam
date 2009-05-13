@@ -73,8 +73,8 @@ private Q_SLOTS:
     void slotLoadSettings();
     void slotResetSettings();
     void slotEffect();
-    void slotColorSelectedFromOriginal(const Digikam::DColor &color);
-    void slotColorSelectedFromTarget(const Digikam::DColor &color);
+    void slotColorSelectedFromOriginal(const Digikam::DColor& color);
+    void slotColorSelectedFromTarget(const Digikam::DColor& color);
     void slotTemperatureChanged(double temperature);
     void slotTemperaturePresetChanged(int tempPreset);
     void slotAutoAdjustExposure(void);

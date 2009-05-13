@@ -47,7 +47,7 @@ public:
     ColorGradientWidget(Qt::Orientation orientation, int size, QWidget *parent=0);
     ~ColorGradientWidget();
 
-    void setColors(const QColor &col1, const QColor &col2);
+    void setColors(const QColor& col1, const QColor& col2);
 
 protected:
 

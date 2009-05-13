@@ -77,7 +77,7 @@ Q_OBJECT
 
 public:
 
-    BlackFrameListViewItem(BlackFrameListView* parent, const KUrl &url);
+    BlackFrameListViewItem(BlackFrameListView* parent, const KUrl& url);
     ~BlackFrameListViewItem(){};
 
 Q_SIGNALS:

@@ -55,23 +55,23 @@ public:
 
 public Q_SLOTS:
 
-    void createNewAlbumForInfos(const QList<ImageInfo> &infos, Album *currentAlbum);
-    void deleteImages(const QList<ImageInfo> &infos, bool deletePermanently);
-    void deleteImagesDirectly(const QList<ImageInfo> &infos, bool useTrash);
+    void createNewAlbumForInfos(const QList<ImageInfo>& infos, Album *currentAlbum);
+    void deleteImages(const QList<ImageInfo>& infos, bool deletePermanently);
+    void deleteImagesDirectly(const QList<ImageInfo>& infos, bool useTrash);
 
-    void insertToLightTable(const QList<ImageInfo>& list, const ImageInfo &current, bool emptyBeforeAdding);
+    void insertToLightTable(const QList<ImageInfo>& list, const ImageInfo& current, bool emptyBeforeAdding);
     void insertToQueueManager(const QList<ImageInfo>& list, const ImageInfo& currentInfo, bool newQueue);
     void insertSilentToQueueManager(const QList<ImageInfo>& list, const ImageInfo& currentInfo, int queueid);
 
     void notifyFileContentChanged(const KUrl::List& urls);
 
-    void openInEditor(const ImageInfo &info, const QList<ImageInfo> &allInfosToOpen, Album *currentAlbum);
-    void rename(const ImageInfo &renameInfo);
-    void setAsAlbumThumbnail(Album *album, const ImageInfo &imageInfo);
+    void openInEditor(const ImageInfo& info, const QList<ImageInfo>& allInfosToOpen, Album *currentAlbum);
+    void rename(const ImageInfo& renameInfo);
+    void setAsAlbumThumbnail(Album *album, const ImageInfo& imageInfo);
 
 Q_SIGNALS:
 
-    void editorCurrentUrlChanged(const KUrl &url);
+    void editorCurrentUrlChanged(const KUrl& url);
 
 protected Q_SLOTS:
 

@@ -542,7 +542,7 @@ void UMSCamera::getUUIDFromSolid()
 {
     QList<Solid::Device> devices = Solid::Device::listFromType(Solid::DeviceInterface::StorageAccess);
 
-    foreach(const Solid::Device &accessDevice, devices)
+    foreach(const Solid::Device& accessDevice, devices)
     {
         // check for StorageAccess
         if (!accessDevice.is<Solid::StorageAccess>())

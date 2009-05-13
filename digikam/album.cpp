@@ -258,7 +258,7 @@ PAlbum::PAlbum(const QString& title)
     m_path             = QString();
 }
 
-PAlbum::PAlbum(int albumRoot, const QString &label)
+PAlbum::PAlbum(int albumRoot, const QString& label)
       : Album(Album::PHYSICAL, -1, false)
 {
     // set the id to -1 (line above). AlbumManager may change that later.
@@ -269,7 +269,7 @@ PAlbum::PAlbum(int albumRoot, const QString &label)
     m_path             = QString();
 }
 
-PAlbum::PAlbum(int albumRoot, const QString &parentPath, const QString& title, int id)
+PAlbum::PAlbum(int albumRoot, const QString& parentPath, const QString& title, int id)
       : Album(Album::PHYSICAL, id, false)
 {
     // If path is /holidays/2007, title is only "2007", path is "/holidays"
@@ -485,7 +485,7 @@ DatabaseUrl DAlbum::databaseUrl() const
 
 // --------------------------------------------------------------------------
 
-SAlbum::SAlbum(const QString &title, int id, bool root)
+SAlbum::SAlbum(const QString& title, int id, bool root)
       : Album(Album::SEARCH, id, root),
         m_type(DatabaseSearch::UndefinedType)
 {
@@ -496,7 +496,7 @@ SAlbum::~SAlbum()
 {
 }
 
-void SAlbum::setSearch(DatabaseSearch::Type type, const QString &query)
+void SAlbum::setSearch(DatabaseSearch::Type type, const QString& query)
 {
     m_type  = type;
     m_query = query;

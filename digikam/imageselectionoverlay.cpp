@@ -95,7 +95,7 @@ ItemViewHoverButton *ImageSelectionOverlay::createButton()
     return new ImageSelectionOverlayButton(view());
 }
 
-void ImageSelectionOverlay::updateButton(const QModelIndex &index)
+void ImageSelectionOverlay::updateButton(const QModelIndex& index)
 {
     const QRect rect = m_view->visualRect(index);
 
@@ -123,7 +123,7 @@ void ImageSelectionOverlay::slotClicked(bool checked)
     }
 }
 
-void ImageSelectionOverlay::slotSelectionChanged(const QItemSelection& selected, const QItemSelection &deselected)
+void ImageSelectionOverlay::slotSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
 {
     QModelIndex index = m_button->index();
     if (index.isValid()) {

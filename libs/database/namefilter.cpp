@@ -32,7 +32,7 @@
 namespace Digikam
 {
 
-NameFilter::NameFilter(const QString &filter)
+NameFilter::NameFilter(const QString& filter)
 {
     if ( filter.isEmpty() )
         return;
@@ -53,7 +53,7 @@ NameFilter::NameFilter(const QString &filter)
     }
 }
 
-bool NameFilter::matches(const QString &name)
+bool NameFilter::matches(const QString& name)
 {
     QList<QRegExp>::const_iterator rit = m_filterList.constBegin();
     while ( rit != m_filterList.constEnd() ) {

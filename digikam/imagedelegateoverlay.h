@@ -59,8 +59,8 @@ public:
      *  For all other events, connect to the view's signals.
      *  There are a few signals specifically for overlays and all
      *  QAbstractItemView standard signals. */
-    virtual void mouseMoved(QMouseEvent *e, const QRect &visualRect, const QModelIndex &index);
-    virtual void paint(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index);
+    virtual void mouseMoved(QMouseEvent *e, const QRect& visualRect, const QModelIndex& index);
+    virtual void paint(QPainter *p, const QStyleOptionViewItem& option, const QModelIndex& index);
 
     void setView(ImageCategorizedView *view);
     ImageCategorizedView *view() const;
@@ -69,7 +69,7 @@ public:
 
 Q_SIGNALS:
 
-    void update(const QModelIndex &index);
+    void update(const QModelIndex& index);
 
 protected Q_SLOTS:
 
@@ -102,14 +102,14 @@ protected:
     virtual ItemViewHoverButton *createButton() = 0;
     /** Called when a new index is entered. Reposition your button here,
      *  adjust and store state. */
-    virtual void updateButton(const QModelIndex &index) = 0;
+    virtual void updateButton(const QModelIndex& index) = 0;
 
     virtual void visualChange();
 
 protected Q_SLOTS:
 
     void slotReset();
-    void slotEntered(const QModelIndex &index);
+    void slotEntered(const QModelIndex& index);
     void slotViewportEntered();
     void slotRowsRemoved(const QModelIndex& parent, int start, int end);
 

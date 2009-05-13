@@ -94,7 +94,7 @@ class KDateEdit : public QComboBox
       This signal is emitted whenever the user modifies the date.
       The passed date can be invalid.
      */
-    void dateChanged( const QDate &date );
+    void dateChanged( const QDate& date );
 
   public Q_SLOTS:
     /**
@@ -103,7 +103,7 @@ class KDateEdit : public QComboBox
       @param date The new date to display. This date must be valid or
                   it will not be set
      */
-    void setDate( const QDate &date );
+    void setDate( const QDate& date );
 
   protected Q_SLOTS:
 
@@ -128,7 +128,7 @@ class KDateEdit : public QComboBox
       @return True if the date was set, false if it was considered invalid and
               remains unchanged.
      */
-    virtual bool assignDate( const QDate &date );
+    virtual bool assignDate( const QDate& date );
 
     /**
       Fills the keyword map. Re-implement it if you want additional

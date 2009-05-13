@@ -100,20 +100,20 @@ public:
     void apply();
 
     // QAbstractItemModel implementation
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
-    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
-    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole );
-    virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-    virtual QModelIndex parent(const QModelIndex &index) const;
+    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
+    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
+    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
+    virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
+    virtual QModelIndex parent(const QModelIndex& index) const;
 
     /*
     virtual Qt::DropActions supportedDropActions() const;
     virtual QStringList mimeTypes() const;
-    virtual bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
-    virtual QMimeData * mimeData(const QModelIndexList &indexes) const;
+    virtual bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex& parent);
+    virtual QMimeData * mimeData(const QModelIndexList& indexes) const;
     */
 
     QModelIndex indexForCategory(Category category) const;
@@ -144,8 +144,8 @@ protected:
 
     QModelIndex indexForId(int id, int column) const;
 
-    int categoryButtonMapId(const QModelIndex &index) const;
-    int buttonMapId(const QModelIndex &index) const;
+    int categoryButtonMapId(const QModelIndex& index) const;
+    int buttonMapId(const QModelIndex& index) const;
 
     static Category typeToCategory(CollectionLocation::Type type);
 
@@ -154,8 +154,8 @@ protected:
     public:
 
         Item();
-        Item(const CollectionLocation &location);
-        Item(const QString &path, const QString &label, SetupCollectionModel::Category category);
+        Item(const CollectionLocation& location);
+        Item(const QString& path, const QString& label, SetupCollectionModel::Category category);
 
         CollectionLocation location;
         QString            label;

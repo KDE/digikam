@@ -61,8 +61,8 @@ public:
     QWaitCondition                  condVar;
     LoadingCacheFileWatch*          watch;
 
-    void mapImageFilePath(const QString &filePath, const QString &cacheKey);
-    void mapThumbnailFilePath(const QString &filePath, const QString &cacheKey);
+    void mapImageFilePath(const QString& filePath, const QString& cacheKey);
+    void mapThumbnailFilePath(const QString& filePath, const QString& cacheKey);
     void cleanUpImageFilePathHash();
     void cleanUpThumbnailFilePathHash();
     LoadingCacheFileWatch *fileWatch();
@@ -103,12 +103,12 @@ LoadingCache::~LoadingCache()
     m_instance = 0;
 }
 
-DImg *LoadingCache::retrieveImage(const QString &cacheKey)
+DImg *LoadingCache::retrieveImage(const QString& cacheKey)
 {
     return d->imageCache[cacheKey];
 }
 
-bool LoadingCache::putImage(const QString &cacheKey, DImg *img, const QString &filePath)
+bool LoadingCache::putImage(const QString& cacheKey, DImg *img, const QString& filePath)
 {
     bool successfulyInserted;
 
@@ -131,7 +131,7 @@ bool LoadingCache::putImage(const QString &cacheKey, DImg *img, const QString &f
     return successfulyInserted;
 }
 
-void LoadingCache::removeImage(const QString &cacheKey)
+void LoadingCache::removeImage(const QString& cacheKey)
 {
     d->imageCache.remove(cacheKey);
 }
@@ -152,7 +152,7 @@ void LoadingCache::addLoadingProcess(LoadingProcess *process)
     d->loadingDict[process->cacheKey()] = process;
 }
 
-LoadingProcess *LoadingCache::retrieveLoadingProcess(const QString &cacheKey)
+LoadingProcess *LoadingCache::retrieveLoadingProcess(const QString& cacheKey)
 {
     return d->loadingDict.value(cacheKey);
 }
@@ -178,17 +178,17 @@ void LoadingCache::setCacheSize(int megabytes)
 
 // --- Thumbnails ----
 
-const QImage *LoadingCache::retrieveThumbnail(const QString &cacheKey)
+const QImage *LoadingCache::retrieveThumbnail(const QString& cacheKey)
 {
     return d->thumbnailImageCache[cacheKey];
 }
 
-const QPixmap *LoadingCache::retrieveThumbnailPixmap(const QString &cacheKey)
+const QPixmap *LoadingCache::retrieveThumbnailPixmap(const QString& cacheKey)
 {
     return d->thumbnailPixmapCache[cacheKey];
 }
 
-void LoadingCache::putThumbnail(const QString &cacheKey, const QImage &thumb, const QString &filePath)
+void LoadingCache::putThumbnail(const QString& cacheKey, const QImage& thumb, const QString& filePath)
 {
     int cost = thumb.numBytes();
     if (d->thumbnailImageCache.insert(cacheKey, new QImage(thumb), cost))
@@ -199,7 +199,7 @@ void LoadingCache::putThumbnail(const QString &cacheKey, const QImage &thumb, co
 
 }
 
-void LoadingCache::putThumbnail(const QString &cacheKey, const QPixmap &thumb, const QString &filePath)
+void LoadingCache::putThumbnail(const QString& cacheKey, const QPixmap& thumb, const QString& filePath)
 {
     int cost = thumb.width() * thumb.height() * thumb.depth() / 8;
     if (d->thumbnailPixmapCache.insert(cacheKey, new QPixmap(thumb), cost))
@@ -209,7 +209,7 @@ void LoadingCache::putThumbnail(const QString &cacheKey, const QPixmap &thumb, c
     }
 }
 
-void LoadingCache::removeThumbnail(const QString &cacheKey)
+void LoadingCache::removeThumbnail(const QString& cacheKey)
 {
     d->thumbnailImageCache.remove(cacheKey);
     d->thumbnailPixmapCache.remove(cacheKey);
@@ -246,17 +246,17 @@ QStringList LoadingCache::thumbnailFilePathsInCache() const
     return d->thumbnailFilePathHash.uniqueKeys();
 }
 
-void LoadingCache::notifyFileChanged(const QString &filePath)
+void LoadingCache::notifyFileChanged(const QString& filePath)
 {
     QList<QString> keys = d->imageFilePathHash.values(filePath);
-    foreach(const QString &cacheKey, keys)
+    foreach(const QString& cacheKey, keys)
     {
         if (d->imageCache.remove(cacheKey))
             emit fileChanged(filePath, cacheKey);
     }
 
     keys = d->thumbnailFilePathHash.values(filePath);
-    foreach(const QString &cacheKey, keys)
+    foreach(const QString& cacheKey, keys)
     {
         if (d->thumbnailImageCache.remove(cacheKey) ||
             d->thumbnailPixmapCache.remove(cacheKey))
@@ -275,7 +275,7 @@ LoadingCacheFileWatch *LoadingCachePriv::fileWatch()
     return watch;
 }
 
-void LoadingCachePriv::mapImageFilePath(const QString &filePath, const QString &cacheKey)
+void LoadingCachePriv::mapImageFilePath(const QString& filePath, const QString& cacheKey)
 {
     if (imageFilePathHash.size() > 5*imageCache.size())
         cleanUpImageFilePathHash();
@@ -283,7 +283,7 @@ void LoadingCachePriv::mapImageFilePath(const QString &filePath, const QString &
     imageFilePathHash.insert(filePath, cacheKey);
 }
 
-void LoadingCachePriv::mapThumbnailFilePath(const QString &filePath, const QString &cacheKey)
+void LoadingCachePriv::mapThumbnailFilePath(const QString& filePath, const QString& cacheKey)
 {
     if (thumbnailFilePathHash.size() > 5*(thumbnailImageCache.size() + thumbnailPixmapCache.size()))
         cleanUpThumbnailFilePathHash();
@@ -332,7 +332,7 @@ LoadingCacheFileWatch::~LoadingCacheFileWatch()
     }
 }
 
-void LoadingCacheFileWatch::notifyFileChanged(const QString &filePath)
+void LoadingCacheFileWatch::notifyFileChanged(const QString& filePath)
 {
     if (m_cache)
     {
@@ -377,7 +377,7 @@ ClassicLoadingCacheFileWatch::~ClassicLoadingCacheFileWatch()
     delete m_watch;
 }
 
-void ClassicLoadingCacheFileWatch::addedImage(const QString &filePath)
+void ClassicLoadingCacheFileWatch::addedImage(const QString& filePath)
 {
     Q_UNUSED(filePath)
     // schedule update of file m_watch
@@ -385,13 +385,13 @@ void ClassicLoadingCacheFileWatch::addedImage(const QString &filePath)
     emit signalUpdateDirWatch();
 }
 
-void ClassicLoadingCacheFileWatch::addedThumbnail(const QString &filePath)
+void ClassicLoadingCacheFileWatch::addedThumbnail(const QString& filePath)
 {
     Q_UNUSED(filePath);
     // ignore, we do not m_watch thumbnails
 }
 
-void ClassicLoadingCacheFileWatch::slotFileDirty(const QString &path)
+void ClassicLoadingCacheFileWatch::slotFileDirty(const QString& path)
 {
     // Signal comes from main thread
     kDebug(50003) << "LoadingCache slotFileDirty " << path << endl;
@@ -412,7 +412,7 @@ void ClassicLoadingCacheFileWatch::slotUpdateDirWatch()
     QStringList toBeRemoved = m_watchedFiles;
 
     QList<QString> filePaths = m_cache->imageFilePathsInCache();
-    foreach(const QString &m_watchPath, filePaths)
+    foreach(const QString& m_watchPath, filePaths)
     {
         if (!m_watchPath.isEmpty())
         {

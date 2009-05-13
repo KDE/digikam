@@ -106,7 +106,7 @@ QSize RatingComboBoxDelegate::sizeHint ( const QStyleOptionViewItem & option, co
     }
 }
 
-void RatingComboBoxDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
+void RatingComboBoxDelegate::paint(QPainter *painter, const QStyleOptionViewItem& option, 
                                    const QModelIndex &index) const
 {
     QVariant value  = index.data(Qt::DisplayRole);
@@ -129,7 +129,7 @@ void RatingComboBoxDelegate::paint(QPainter *painter, const QStyleOptionViewItem
     }
 }
 
-void RatingComboBoxDelegate::drawRating(QPainter *painter, const QRect &rect, int rating, bool selectable) const
+void RatingComboBoxDelegate::drawRating(QPainter *painter, const QRect& rect, int rating, bool selectable) const
 {
     painter->save();
 
@@ -168,7 +168,7 @@ int RatingComboBoxModel::rowCount(const QModelIndex & parent) const
     return m_entries.size();
 }
 
-QVariant RatingComboBoxModel::data(const QModelIndex &index, int role) const
+QVariant RatingComboBoxModel::data(const QModelIndex& index, int role) const
 {
     if (index.isValid())
     {
@@ -200,7 +200,7 @@ QVariant RatingComboBoxModel::ratingValueToDisplay(RatingComboBox::RatingValue v
     return QVariant();
 }
 
-QModelIndex RatingComboBoxModel::index(int row, int column, const QModelIndex &parent) const
+QModelIndex RatingComboBoxModel::index(int row, int column, const QModelIndex& parent) const
 {
     if (parent.isValid() || column != 0 || row >= m_entries.size())
         return QModelIndex();
@@ -369,7 +369,7 @@ RatingComboBox::RatingValue RatingComboBox::ratingValue() const
     return (RatingValue)view()->currentIndex().data(RatingComboBoxModel::RatingRole).toInt();
 }
 
-void RatingComboBox::currentValueChanged(const QModelIndex &current, const QModelIndex &)
+void RatingComboBox::currentValueChanged(const QModelIndex& current, const QModelIndex &)
 {
     if (m_syncing)
         return;

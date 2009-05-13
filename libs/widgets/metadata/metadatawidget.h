@@ -97,8 +97,8 @@ protected:
     void   setMetadataMap(const DMetadata::MetaDataMap& data=DMetadata::MetaDataMap());
     const  DMetadata::MetaDataMap& getMetadataMap();
 
-    void   setIfdList(const DMetadata::MetaDataMap &ifds, const QStringList& tagsFilter=QStringList());
-    void   setIfdList(const DMetadata::MetaDataMap &ifds, const QStringList& keysFilter,
+    void   setIfdList(const DMetadata::MetaDataMap& ifds, const QStringList& tagsFilter=QStringList());
+    void   setIfdList(const DMetadata::MetaDataMap& ifds, const QStringList& keysFilter,
                       const QStringList& tagsFilter);
 
     KUrl   saveMetadataToFile(const QString& caption, const QString& fileFilter);

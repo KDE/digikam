@@ -77,7 +77,7 @@ public:
     void  switchToLastSaved(const QString& newFilename);
     void  abortSaving();
     void  setModified();
-    void  readMetadataFromFile(const QString &file);
+    void  readMetadataFromFile(const QString& file);
     void  clearUndoHistory();
     void  setUndoHistoryOrigin();
     void  updateUndoState();
@@ -121,8 +121,8 @@ public:
     void  increaseContrast();
     void  decreaseContrast();
 
-    void  getUndoHistory(QStringList &titles);
-    void  getRedoHistory(QStringList &titles);
+    void  getUndoHistory(QStringList& titles);
+    void  getRedoHistory(QStringList& titles);
 
     void  toggleFitToWindow();
     void  fitToSelect();
@@ -139,11 +139,11 @@ Q_SIGNALS:
     void signalShowNextImage();
     void signalShowPrevImage();
     void signalPrepareToLoad();
-    void signalLoadingStarted(const QString &filename);
-    void signalLoadingFinished(const QString &filename, bool success);
+    void signalLoadingStarted(const QString& filename);
+    void signalLoadingFinished(const QString& filename, bool success);
     void signalLoadingProgress(const QString& filePath, float progress);
-    void signalSavingStarted(const QString &filename);
-    void signalSavingFinished(const QString &filename, bool success);
+    void signalSavingStarted(const QString& filename);
+    void signalSavingFinished(const QString& filename, bool success);
     void signalSavingProgress(const QString& filePath, float progress);
     void signalSelectionChanged(const QRect&);
     void signalToggleOffFitToWindow();

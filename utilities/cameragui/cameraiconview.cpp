@@ -794,7 +794,7 @@ void CameraIconView::slotThemeChanged()
     viewport()->update();
 }
 
-bool CameraIconView::acceptToolTip(IconItem *item, const QPoint &mousePos)
+bool CameraIconView::acceptToolTip(IconItem *item, const QPoint& mousePos)
 {
     CameraIconItem *iconItem = dynamic_cast<CameraIconItem*>(item);
 

@@ -81,7 +81,7 @@ public:
      * @param pic icon which is shown in this tab
      * @param title text which is shown it this tab
      */
-    void appendTab(QWidget *w, const QPixmap &pic, const QString &title);
+    void appendTab(QWidget *w, const QPixmap& pic, const QString& title);
 
     /**
      * Deletes a tab from the tabbar
@@ -134,7 +134,7 @@ public:
      * Show sidebar and restore minimized state.
      * Restores other widgets' sizes in splitter.
      */
-    void restore(const QList<QWidget*> thirdWidgetsToRestore, const QList<int> &sizes);
+    void restore(const QList<QWidget*> thirdWidgetsToRestore, const QList<int>& sizes);
 
     /**
      * return the visible status of current sidebar tab.
@@ -199,12 +199,12 @@ public:
      * Saves the splitter state to group, handling minimized sidebars correctly.
      * If key is 0 (default), the config key will be "SplitterState".
      */
-    void saveState(KConfigGroup &group, const char *key = 0);
+    void saveState(KConfigGroup& group, const char *key = 0);
     /**
      * Restores the splitter state from group, handling minimized sidebars correctly.
      * If key is 0 (default), the config key will be "SplitterState".
      */
-    void restoreState(KConfigGroup &group, const char *key = 0);
+    void restoreState(KConfigGroup& group, const char *key = 0);
 
     /**
      * Returns the value of sizes() that corresponds to the given Sidebar or splitter child widget.

@@ -47,8 +47,8 @@
 #include "albumdb.h"
 #include "haariface.h"
 
-kio_digikamsearch::kio_digikamsearch(const QByteArray &pool_socket,
-                                     const QByteArray &app_socket)
+kio_digikamsearch::kio_digikamsearch(const QByteArray& pool_socket,
+                                     const QByteArray& app_socket)
                  : SlaveBase("kio_digikamsearch", pool_socket, app_socket)
 {
 }
@@ -111,7 +111,7 @@ void kio_digikamsearch::special(const QByteArray& data)
         // get albums to scan
         QStringList idsStringList = idsString.split(',');
         QList<int> albumIds;
-        foreach(const QString &idString, idsStringList)
+        foreach(const QString& idString, idsStringList)
         {
             bool ok;
             int albumId = idString.toInt(&ok);

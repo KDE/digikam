@@ -66,16 +66,16 @@ class SearchField : public QObject, public VisibilityObject
 
 public:
 
-    static SearchField *createField(const QString &fieldName, SearchFieldGroup *parent);
+    static SearchField *createField(const QString& fieldName, SearchFieldGroup *parent);
 
     SearchField(QObject *parent);
     void setup(QGridLayout *layout, int row = -1);
-    void setFieldName(const QString &fieldName);
-    virtual void setText(const QString &label, const QString &detailLabel);
+    void setFieldName(const QString& fieldName);
+    virtual void setText(const QString& label, const QString& detailLabel);
 
-    virtual bool supportsField(const QString &fieldName);
-    virtual void read(SearchXmlCachingReader &reader) = 0;
-    virtual void write(SearchXmlWriter &writer) = 0;
+    virtual bool supportsField(const QString& fieldName);
+    virtual void read(SearchXmlCachingReader& reader) = 0;
+    virtual void write(SearchXmlWriter& writer) = 0;
     virtual void reset() = 0;
 
     virtual void setVisible(bool visible);
@@ -121,15 +121,15 @@ public:
     SearchFieldText(QObject *parent);
 
     virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
-    virtual void read(SearchXmlCachingReader &reader);
-    virtual void write(SearchXmlWriter &writer);
+    virtual void read(SearchXmlCachingReader& reader);
+    virtual void write(SearchXmlWriter& writer);
     virtual void setValueWidgetsVisible(bool visible);
     virtual void reset();
     virtual QList<QRect> valueWidgetRects() const;
 
 protected Q_SLOTS:
 
-    void valueChanged(const QString &text);
+    void valueChanged(const QString& text);
 
 protected:
 
@@ -142,8 +142,8 @@ public:
 
     SearchFieldKeyword(QObject *parent);
 
-    virtual void read(SearchXmlCachingReader &reader);
-    virtual void write(SearchXmlWriter &writer);
+    virtual void read(SearchXmlCachingReader& reader);
+    virtual void write(SearchXmlWriter& writer);
 };
 
 class SearchFieldRangeInt : public SearchField
@@ -155,19 +155,19 @@ public:
     SearchFieldRangeInt(QObject *parent);
 
     virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
-    virtual void read(SearchXmlCachingReader &reader);
-    virtual void write(SearchXmlWriter &writer);
+    virtual void read(SearchXmlCachingReader& reader);
+    virtual void write(SearchXmlWriter& writer);
     virtual void reset();
     virtual void setValueWidgetsVisible(bool visible);
     virtual QList<QRect> valueWidgetRects() const;
 
-    void setBetweenText(const QString &text);
-    void setNoValueText(const QString &text);
-    void setNumberPrefixAndSuffix(const QString &prefix, const QString &suffix);
+    void setBetweenText(const QString& text);
+    void setNoValueText(const QString& text);
+    void setNumberPrefixAndSuffix(const QString& prefix, const QString& suffix);
     void setBoundary(int min, int max, int step = 1);
-    void enableFractionMagic(const QString &prefix);
+    void enableFractionMagic(const QString& prefix);
 
-    void setSuggestedValues(const QList<int> &values);
+    void setSuggestedValues(const QList<int>& values);
     void setSuggestedInitialValue(int initialValue);
     void setSingleSteps(int smaller, int larger);
     void setInvertStepping(bool invert);
@@ -197,19 +197,19 @@ public:
     SearchFieldRangeDouble(QObject *parent);
 
     virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
-    virtual void read(SearchXmlCachingReader &reader);
-    virtual void write(SearchXmlWriter &writer);
+    virtual void read(SearchXmlCachingReader& reader);
+    virtual void write(SearchXmlWriter& writer);
     virtual void reset();
     virtual void setValueWidgetsVisible(bool visible);
     virtual QList<QRect> valueWidgetRects() const;
 
-    void setBetweenText(const QString &text);
-    void setNoValueText(const QString &text);
-    void setNumberPrefixAndSuffix(const QString &prefix, const QString &suffix);
+    void setBetweenText(const QString& text);
+    void setNoValueText(const QString& text);
+    void setNumberPrefixAndSuffix(const QString& prefix, const QString& suffix);
     void setBoundary(double min, double max, int decimals, double step);
     void setFactor(double factor);
 
-    void setSuggestedValues(const QList<double> &values);
+    void setSuggestedValues(const QList<double>& values);
     void setSuggestedInitialValue(double initialValue);
     void setSingleSteps(double smaller, double larger);
     void setInvertStepping(bool invert);
@@ -245,13 +245,13 @@ public:
     SearchFieldRangeDate(QObject *parent, Type type);
 
     virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
-    virtual void read(SearchXmlCachingReader &reader);
-    virtual void write(SearchXmlWriter &writer);
+    virtual void read(SearchXmlCachingReader& reader);
+    virtual void write(SearchXmlWriter& writer);
     virtual void reset();
     virtual void setValueWidgetsVisible(bool visible);
     virtual QList<QRect> valueWidgetRects() const;
 
-    void setBetweenText(const QString &between);
+    void setBetweenText(const QString& between);
     void setBoundary(QDateTime min, QDateTime max);
 
 protected Q_SLOTS:
@@ -277,13 +277,13 @@ public:
 
     SearchFieldChoice(QObject *parent);
 
-    void setChoice(const QMap<int, QString> &map);
-    void setChoice(const QStringList &choice);
-    void setAnyText(const QString &anyText);
+    void setChoice(const QMap<int, QString>& map);
+    void setChoice(const QStringList& choice);
+    void setAnyText(const QString& anyText);
 
     virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
-    virtual void read(SearchXmlCachingReader &reader);
-    virtual void write(SearchXmlWriter &writer);
+    virtual void read(SearchXmlCachingReader& reader);
+    virtual void write(SearchXmlWriter& writer);
     virtual void reset();
     virtual void setValueWidgetsVisible(bool visible);
     virtual QList<QRect> valueWidgetRects() const;
@@ -319,8 +319,8 @@ public:
     SearchFieldAlbum(QObject *parent, Type type);
 
     virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
-    virtual void read(SearchXmlCachingReader &reader);
-    virtual void write(SearchXmlWriter &writer);
+    virtual void read(SearchXmlCachingReader& reader);
+    virtual void write(SearchXmlWriter& writer);
     virtual void reset();
     virtual void setValueWidgetsVisible(bool visible);
     virtual QList<QRect> valueWidgetRects() const;
@@ -345,13 +345,13 @@ public:
     SearchFieldRating(QObject *parent);
 
     virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
-    virtual void read(SearchXmlCachingReader &reader);
-    virtual void write(SearchXmlWriter &writer);
+    virtual void read(SearchXmlCachingReader& reader);
+    virtual void write(SearchXmlWriter& writer);
     virtual void reset();
     virtual void setValueWidgetsVisible(bool visible);
     virtual QList<QRect> valueWidgetRects() const;
 
-    void setBetweenText(const QString &text);
+    void setBetweenText(const QString& text);
 
 protected Q_SLOTS:
 
@@ -374,8 +374,8 @@ public:
     SearchFieldColorDepth(QObject *parent);
 
     virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
-    virtual void read(SearchXmlCachingReader &reader);
-    virtual void write(SearchXmlWriter &writer);
+    virtual void read(SearchXmlCachingReader& reader);
+    virtual void write(SearchXmlWriter& writer);
     virtual void reset();
     virtual void setValueWidgetsVisible(bool visible);
     virtual QList<QRect> valueWidgetRects() const;

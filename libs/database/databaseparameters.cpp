@@ -39,13 +39,13 @@ DatabaseParameters::DatabaseParameters()
 {
 }
 
-DatabaseParameters::DatabaseParameters(const QString &type,
-                                       const QString &databaseName,
-                                       const QString &connectOptions,
-                                       const QString &hostName,
+DatabaseParameters::DatabaseParameters(const QString& type,
+                                       const QString& databaseName,
+                                       const QString& connectOptions,
+                                       const QString& hostName,
                                        int port,
-                                       const QString &userName,
-                                       const QString &password)
+                                       const QString& userName,
+                                       const QString& password)
                   : databaseType(type), databaseName(databaseName),
                     connectOptions(connectOptions), hostName(hostName),
                     port(port), userName(userName),
@@ -53,7 +53,7 @@ DatabaseParameters::DatabaseParameters(const QString &type,
 {
 }
 
-DatabaseParameters::DatabaseParameters(const KUrl &url)
+DatabaseParameters::DatabaseParameters(const KUrl& url)
                   : port(-1)
 {
     databaseType   = url.queryItem("databaseType");
@@ -67,7 +67,7 @@ DatabaseParameters::DatabaseParameters(const KUrl &url)
     password       = url.queryItem("password");
 }
 
-bool DatabaseParameters::operator==(const DatabaseParameters &other)
+bool DatabaseParameters::operator==(const DatabaseParameters& other)
 {
     return databaseType   == other.databaseType &&
            databaseName   == other.databaseName &&
@@ -78,7 +78,7 @@ bool DatabaseParameters::operator==(const DatabaseParameters &other)
            password       == other.password;
 }
 
-bool DatabaseParameters::operator!=(const DatabaseParameters &other)
+bool DatabaseParameters::operator!=(const DatabaseParameters& other)
 {
     return !operator==(other);
 }
@@ -108,20 +108,20 @@ QByteArray DatabaseParameters::hash() const
     return md5.hexDigest();
 }
 
-DatabaseParameters DatabaseParameters::parametersForSQLite(const QString &databaseFile)
+DatabaseParameters DatabaseParameters::parametersForSQLite(const QString& databaseFile)
 {
     // only the database name is needed
     return DatabaseParameters("QSQLITE", databaseFile);
 }
 
-DatabaseParameters DatabaseParameters::parametersForSQLiteDefaultFile(const QString &directory)
+DatabaseParameters DatabaseParameters::parametersForSQLiteDefaultFile(const QString& directory)
 {
     QString filePath = directory + '/' + "digikam4.db";
     filePath = QDir::cleanPath(filePath);
     return parametersForSQLite(filePath);
 }
 
-void DatabaseParameters::insertInUrl(KUrl &url) const
+void DatabaseParameters::insertInUrl(KUrl& url) const
 {
     removeFromUrl(url);
 
@@ -139,7 +139,7 @@ void DatabaseParameters::insertInUrl(KUrl &url) const
         url.addQueryItem("password", password);
 }
 
-void DatabaseParameters::removeFromUrl(KUrl &url)
+void DatabaseParameters::removeFromUrl(KUrl& url)
 {
     url.removeQueryItem("databaseType");
     url.removeQueryItem("databaseName");

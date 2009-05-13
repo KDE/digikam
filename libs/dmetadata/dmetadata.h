@@ -86,13 +86,13 @@ public:
         of the format of the QVariant.
      */
     QVariant     getMetadataField(MetadataInfo::Field field);
-    QVariantList getMetadataFields(const MetadataFields &fields);
+    QVariantList getMetadataFields(const MetadataFields& fields);
 
     /** Convert a QVariant value of the specified field to a user-presentable, i18n'ed string.
         The QVariant must be of the type as specified in metadatainfo.h and as obtained by getMetadataField.
      */
-    static QString     valueToString (const QVariant &value, MetadataInfo::Field field);
-    static QStringList valuesToString(const QVariantList &list, const MetadataFields &fields);
+    static QString     valueToString (const QVariant& value, MetadataInfo::Field field);
+    static QStringList valuesToString(const QVariantList& list, const MetadataFields& fields);
 
     /** Returns a map of possible enum values and their user-presentable, i18n'ed representation.
         Valid fields are those which are described as "enum from" or "bit mask from" in metadatainfo.h.

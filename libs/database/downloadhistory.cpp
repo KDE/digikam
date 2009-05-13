@@ -31,7 +31,7 @@
 namespace Digikam
 {
 
-DownloadHistory::Status DownloadHistory::status(const QString &identifier, const QString &name, 
+DownloadHistory::Status DownloadHistory::status(const QString& identifier, const QString& name, 
                                                 int fileSize, const QDateTime &date)
 {
     int id = DatabaseAccess().db()->findInDownloadHistory(identifier, name, fileSize, date);
@@ -42,7 +42,7 @@ DownloadHistory::Status DownloadHistory::status(const QString &identifier, const
         return NotDownloaded;
 }
 
-void DownloadHistory::setDownloaded(const QString &identifier, const QString &name, 
+void DownloadHistory::setDownloaded(const QString& identifier, const QString& name, 
                                     int fileSize, const QDateTime &date)
 {
     DatabaseAccess().db()->addToDownloadHistory(identifier, name, fileSize, date);

@@ -48,7 +48,7 @@ class AlbumIconItem : public IconItem
 
 public:
 
-    AlbumIconItem(IconGroupItem* parent, const ImageInfo &info);
+    AlbumIconItem(IconGroupItem* parent, const ImageInfo& info);
     ~AlbumIconItem();
 
     ImageInfo imageInfo() const;

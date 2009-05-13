@@ -108,7 +108,7 @@ SearchWindow::~SearchWindow()
     delete d;
 }
 
-void SearchWindow::readSearch(int id, const QString &xml)
+void SearchWindow::readSearch(int id, const QString& xml)
 {
     d->currentId = id;
     d->hasTouchedXml = false;

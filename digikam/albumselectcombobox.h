@@ -60,7 +60,7 @@ public:
 
     /** Sets the text that is used to describe the state when no album is selected.
         This may be something like "Any album" or "No tag selected" */
-    void setNoSelectionText(const QString &text);
+    void setNoSelectionText(const QString& text);
 
     /** Returns the source model. Retrieve selection information from here. */
     AbstractCheckableAlbumModel *model() const;

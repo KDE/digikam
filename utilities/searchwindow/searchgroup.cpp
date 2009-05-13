@@ -222,7 +222,7 @@ void SearchGroup::setup(Type type)
     reset();
 }
 
-void SearchGroup::read(SearchXmlCachingReader &reader)
+void SearchGroup::read(SearchXmlCachingReader& reader)
 {
     reset();
 
@@ -285,7 +285,7 @@ void SearchGroup::addGroupToLayout(SearchGroup *group)
     m_subgroupLayout->addWidget(group);
 }
 
-void SearchGroup::write(SearchXmlWriter &writer)
+void SearchGroup::write(SearchXmlWriter& writer)
 {
     writer.writeGroup();
     writer.setGroupOperator(m_label->groupOperator());

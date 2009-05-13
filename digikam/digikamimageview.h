@@ -51,7 +51,7 @@ public Q_SLOTS:
     virtual void copy();
     virtual void paste();
 
-    void openInEditor(const ImageInfo &info);
+    void openInEditor(const ImageInfo& info);
 
     void insertSelectedToLightTable(bool addTo);
     void insertSelectedToCurrentQueue();
@@ -62,14 +62,14 @@ public Q_SLOTS:
     void assignTagToSelected(int tagID);
     void removeTagFromSelected(int tagID);
     void assignRatingToSelected(int rating);
-    void setAsAlbumThumbnail(const ImageInfo &setAsThumbnail);
+    void setAsAlbumThumbnail(const ImageInfo& setAsThumbnail);
 
 Q_SIGNALS:
 
-    void previewRequested(const ImageInfo &info);
-    void gotoAlbumAndImage(const ImageInfo &info);
+    void previewRequested(const ImageInfo& info);
+    void gotoAlbumAndImage(const ImageInfo& info);
     void gotoTagAndImage(int tagId);
-    void gotoDataAndImage(const ImageInfo &info);
+    void gotoDataAndImage(const ImageInfo& info);
 
 protected:
 

@@ -75,7 +75,7 @@ namespace DImgScale
     int*     dimgCalcApoints(int s, int d, int up);
 
     DImgScaleInfo* dimgFreeScaleInfo(DImgScaleInfo *isi);
-    DImgScaleInfo *dimgCalcScaleInfo(const DImg &img,
+    DImgScaleInfo *dimgCalcScaleInfo(const DImg& img,
                                      int sw, int sh,
                                      int dw, int dh,
                                      bool sixteenBit,
@@ -381,7 +381,7 @@ int* DImgScale::dimgCalcApoints(int s, int d, int up)
     return(p);
 }
 
-DImgScaleInfo* DImgScale::dimgCalcScaleInfo(const DImg &img,
+DImgScaleInfo* DImgScale::dimgCalcScaleInfo(const DImg& img,
                                             int sw, int sh,
                                             int dw, int dh,
                                             bool /*sixteenBit*/,
