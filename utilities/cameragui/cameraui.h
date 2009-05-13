@@ -127,7 +127,7 @@ private Q_SLOTS:
     void slotCapture();
     void slotCameraInformation(const QString&, const QString&, const QString&);
     void slotCameraFreeSpaceInfo(unsigned long kBSize, unsigned long kBAvail);
-    void slotCollectionLocationStatusChanged(const CollectionLocation &location, int oldStatus);
+    void slotCollectionLocationStatusChanged(const CollectionLocation& location, int oldStatus);
 
     void slotFolderList(const QStringList& folderList);
     void slotFileList(const GPItemInfoList& fileList);
@@ -156,8 +156,8 @@ private Q_SLOTS:
 
     void slotUploaded(const GPItemInfo&);
     void slotDownloaded(const QString&, const QString&, int);
-    void slotDownloadCompleted(const QString &sourceFolder, const QString &sourceFile,
-                               const QString destFolder, const QString &destFile);
+    void slotDownloadComplete(const QString& sourceFolder, const QString& sourceFile,
+                              const QString& destFolder, const QString& destFile);
     void slotSkipped(const QString&, const QString&);
     void slotDeleted(const QString&, const QString&, bool);
     void slotLocked(const QString&, const QString&, bool);
