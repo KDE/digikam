@@ -232,9 +232,9 @@ QString ManualRenameInput::parser(const QString &parse,
     // parse simple / remaining tokens ------------------------
     {
         parsedString.replace("[cam]", cameraName);
-        parsedString.replace("$",     fi.baseName());
-        parsedString.replace("&",     fi.baseName().toUpper());
-        parsedString.replace("%",     fi.baseName().toLower());
+        parsedString.replace('$',     fi.baseName());
+        parsedString.replace('&',     fi.baseName().toUpper());
+        parsedString.replace('%',     fi.baseName().toLower());
     }
 
     return parsedString;
