@@ -586,6 +586,9 @@ void CameraUI::setupConnections()
     connect(this, SIGNAL(signalWindowHasMoved()),
             d->renameCustomizer, SLOT(slotUpdateTrackerPos()));
 
+    connect(this, SIGNAL(signalWindowLostFocus()),
+            d->renameCustomizer, SLOT(slotHideToolTipTracker()));
+
     // -------------------------------------------------------------------------
 
     connect(CollectionManager::instance(), SIGNAL(locationStatusChanged(const CollectionLocation &, int)),
@@ -811,6 +814,19 @@ void CameraUI::moveEvent(QMoveEvent *e)
 {
     Q_UNUSED(e)
     emit signalWindowHasMoved();
+}
+
+bool CameraUI::event(QEvent *e)
+{
+    switch (e->type())
+    {
+        case QEvent::WindowDeactivate:
+            emit signalWindowLostFocus();
+            break;
+        default:
+            break;
+    }
+    return KXmlGuiWindow::event(e);
 }
 
 void CameraUI::slotClose()

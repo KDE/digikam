@@ -120,6 +120,7 @@ public Q_SLOTS:
 
     void restoreFocus();
     void slotUpdateTrackerPos();
+    void slotHideToolTipTracker();
 
 private:
 

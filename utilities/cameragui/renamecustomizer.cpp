@@ -814,4 +814,9 @@ void RenameCustomizer::slotUpdateTrackerPos()
     d->manualRenameInput->slotUpdateTrackerPos();
 }
 
+void RenameCustomizer::slotHideToolTipTracker()
+{
+    d->manualRenameInput->slotHideToolTipTracker();
+}
+
 }  // namespace Digikam
