@@ -39,24 +39,24 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QRadioButton>
-#include <QTimer>
 #include <QTextStream>
+#include <QTimer>
 #include <QToolButton>
 
 // KDE includes
 
 #include <kapplication.h>
 #include <kcombobox.h>
-#include <kdebug.h>
 #include <kconfig.h>
+#include <kdebug.h>
 #include <kdialog.h>
 #include <khbox.h>
+#include <kicon.h>
 #include <kiconloader.h>
 #include <kinputdialog.h>
 #include <klineedit.h>
 #include <klocale.h>
 #include <knuminput.h>
-#include <kicon.h>
 
 // Local includes
 
