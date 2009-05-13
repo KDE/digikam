@@ -43,6 +43,9 @@
 
 #include "gpiteminfo.h"
 
+class KFileItem;
+class KJob;
+
 namespace Digikam
 {
 
@@ -115,6 +118,7 @@ private:
     void hideToolBars();
     void refreshFreeSpace();
     void refreshCollectionFreeSpace();
+    void startKdePreviewJob();
 
 private Q_SLOTS:
 
@@ -134,6 +138,10 @@ private Q_SLOTS:
     void slotFolderList(const QStringList& folderList);
     void slotFileList(const GPItemInfoList& fileList);
     void slotThumbnail(const QString&, const QString&, const QImage&);
+    void slotThumbnailFailed(const QString&, const QString&);
+    void slotGotKDEPreview(const KFileItem&, const QPixmap&);
+    void slotFailedKDEPreview(const KFileItem&);
+    void slotKdePreviewFinished(KJob*);
 
     void slotIncreaseThumbSize();
     void slotDecreaseThumbSize();

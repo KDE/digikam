@@ -47,12 +47,8 @@ extern "C"
 #include <kcodecs.h>
 #include <kdebug.h>
 #include <kio/global.h>
-#include <kio/thumbcreator.h>
-#include <klibloader.h>
-#include <ksharedptr.h>
 #include <klocale.h>
 #include <kmimetype.h>
-#include <ktrader.h>
 #include <solid/device.h>
 #include <solid/storageaccess.h>
 #include <solid/storagedrive.h>
@@ -267,89 +263,7 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
         thumbnail = dimgThumb.copyQImage();
         return true;
     }
-
-    if (loadKDEThumbCreator(folder, itemName, thumbnail))
-        return true;
-
-    return false;
-}
-
-bool UMSCamera::loadKDEThumbCreator(const QString& folder, const QString& itemName, QImage& thumbnail)
-{
-    // NOTE: see B.K.O #192294 : KDELibs crash here. 
-    return false;
-
-    QString path     = folder + QString("/") + itemName;
-    QString mimeType = KMimeType::findByUrl(path)->name();
-    if (mimeType.isEmpty())
-    {
-        kDebug(50003) << "Mimetype not found" << endl;
-        return false;
-    }
-
-    kDebug(50003) << "Mimetype : " << mimeType << endl;
-
-    KMimeTypeTrader *trader = KMimeTypeTrader::self();
-    if (!trader)
-    {
-        kDebug(50003) << "No KMimeTypeTrader instance to get thumb from KDE" << endl;
-        return false;
-    }
-
-    QString plugin;
-    KService::List offers = trader->query(mimeType, QLatin1String("ThumbCreator"));
-    if (!offers.isEmpty())
-    {
-        KService::Ptr serv = offers.first();
-        if (!serv.isNull())
-            plugin = serv->library();
-    }
-
-    if (plugin.isEmpty())
-    {
-        kDebug(50003) << "No relevant plugin found " << endl;
-        return false;
-    }
-
-    kDebug(50003) << "plugin : " << plugin << endl;
-
-    // Don't use KLibFactory here, this is not a QObject and
-    // neither is ThumbCreator
-
-    KLibLoader* loader = KLibLoader::self();
-    if (!loader)
-    {
-        kDebug(50003) << "No KLibLoader instance to get thumb from KDE" << endl;
-        return false;
-    }
-
-    KLibrary *library = loader->library(QFile::encodeName(plugin));
-    if (!library)
-    {
-        kDebug(50003) << "Plugin library not found " << plugin << endl;
-        return false;
-    }
-
-    ThumbCreator *creator = 0;
-    newCreator create     = (newCreator)library->resolveSymbol("new_creator");
-    if (create)
-        creator = create();
-
-    if (!creator)
-    {
-        kDebug(50003) << "Cannot load ThumbCreator " << plugin << endl;
-        return false;
-    }
-
-    if (!creator->create(path, 256, 256, thumbnail))
-    {
-        kDebug(50003) << "Cannot create thumbnail for " << path << endl;
-        delete creator;
-        return false;
-    }
-
-    delete creator;
-    return true;
+  return false;
 }
 
 bool UMSCamera::getExif(const QString&, const QString&, char **, int&)

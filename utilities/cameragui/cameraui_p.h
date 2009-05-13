@@ -114,6 +114,7 @@ public:
         renameFileLabel           = 0;
         autoAlbumLabel            = 0;
         onFlyLabel                = 0;
+        kdeJob                    = 0;
     }
 
     bool                          busy;
@@ -144,6 +145,8 @@ public:
 
     QLabel                       *formatLabel;
     QLabel                       *folderDateLabel;
+
+    KUrl::List                    kdeTodo;
 
     SidebarSplitter              *splitter;
 
@@ -185,6 +188,8 @@ public:
     KHelpMenu                    *helpMenu;
 
     KDateTimeEdit                *dateTimeEdit;
+
+    KIO::PreviewJob              *kdeJob;
 
     CameraController             *controller;
 

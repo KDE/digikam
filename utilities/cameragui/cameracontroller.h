@@ -110,6 +110,7 @@ Q_SIGNALS:
     void signalDeleted(const QString& folder, const QString& file, bool status);
     void signalLocked(const QString& folder, const QString& file, bool status);
     void signalThumbnail(const QString& folder, const QString& file, const QImage& thumb);
+    void signalThumbnailFailed(const QString& folder, const QString& file);
     void signalExifFromFile(const QString& folder, const QString& file);
     void signalExifData(const QByteArray& exifData);
 

@@ -440,9 +440,13 @@ void CameraController::executeCommand(CameraCommand *cmd)
             {
                 thumbnail = thumbnail.scaled(ThumbnailSize::Huge, ThumbnailSize::Huge,
                                              Qt::KeepAspectRatio);
-            }
 
-            emit signalThumbnail(folder, file, thumbnail);
+                emit signalThumbnail(folder, file, thumbnail);
+            }
+            else
+            {
+                emit signalThumbnailFailed(folder, file);
+            }
 
             break;
         }

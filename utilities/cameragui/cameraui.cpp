@@ -67,6 +67,7 @@
 #include <kimageio.h>
 #include <kinputdialog.h>
 #include <kio/global.h>
+#include <kio/previewjob.h>
 #include <klocale.h>
 #include <kmenu.h>
 #include <kmenubar.h>
@@ -670,6 +671,9 @@ void CameraUI::setupCameraController(const QString& model, const QString& port, 
     connect(d->controller, SIGNAL(signalThumbnail(const QString&, const QString&, const QImage&)),
             this, SLOT(slotThumbnail(const QString&, const QString&, const QImage&)));
 
+    connect(d->controller, SIGNAL(signalThumbnailFailed(const QString&, const QString&)),
+            this, SLOT(slotThumbnailFailed(const QString&, const QString&)));
+
     connect(d->controller, SIGNAL(signalDownloaded(const QString&, const QString&, int)),
             this, SLOT(slotDownloaded(const QString&, const QString&, int)));
 
@@ -1132,6 +1136,71 @@ void CameraUI::slotThumbnail(const QString& folder, const QString& file,
     d->view->setThumbnail(folder, file, thumb);
     int curr = d->statusProgressBar->progressValue();
     d->statusProgressBar->setProgressValue(curr+1);
+}
+
+void CameraUI::slotThumbnailFailed(const QString& folder, const QString& file)
+{
+    if (d->controller->cameraDriverType() == DKCamera::UMSDriver)
+    {
+        KUrl url = KUrl::fromPath(folder + QString("/") + file);
+        d->kdeTodo << url;
+        startKdePreviewJob();
+    }
+    }
+    else
+    {
+        // This call must be run outside Camera Controller thread.
+        thumb = d->controller->mimeTypeThumbnail(file).toImage();
+        d->view->setThumbnail(folder, file, thumb);
+    }
+
+    int curr = d->statusProgressBar->progressValue();
+    d->statusProgressBar->setProgressValue(curr+1);
+}
+
+void CameraUI::startKdePreviewJob()
+{
+    if (d->kdeJob || d->kdeTodo.isEmpty())
+        return;
+
+    KUrl::List list = d->kdeTodo;
+    d->kdeTodo.clear();
+    d->kdeJob = KIO::filePreview(list, 256);
+
+    connect(d->kdeJob, SIGNAL(gotPreview(const KFileItem&, const QPixmap&)),
+            this, SLOT(slotGotKDEPreview(const KFileItem&, const QPixmap&)));
+
+    connect(d->kdeJob, SIGNAL(failed(const KFileItem&)),
+            this, SLOT(slotFailedKDEPreview(const KFileItem&)));
+
+    connect(d->kdeJob, SIGNAL(finished(KJob*)),
+            this, SLOT(slotKdePreviewFinished(KJob*)));
+}
+
+void CameraUI::slotGotKDEPreview(const KFileItem& item, const QPixmap& pix)
+{
+    QString file   = item.url().fileName();
+    QString folder = item.url().path().remove(QString("/") + file);
+    QImage thumb   = pix.toImage();
+    if (thumb.isNull())
+    {
+        // This call must be run outside Camera Controller thread.
+        thumb = d->controller->mimeTypeThumbnail(file).toImage();
+    }
+    d->view->setThumbnail(folder, file, thumb);
+}
+
+void CameraUI::slotFailedKDEPreview(const KFileItem& item)
+{
+    QString file   = item.url().fileName();
+    QString folder = item.url().path().remove(QString("/") + file);
+    QImage thumb   = d->controller->mimeTypeThumbnail(file).toImage();
+    d->view->setThumbnail(folder, file, thumb);
+}
+
+void CameraUI::slotKdePreviewFinished(KJob*)
+{
+    d->kdeJob = 0;
 }
 
 void CameraUI::slotCapture()

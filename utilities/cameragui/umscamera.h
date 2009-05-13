@@ -83,8 +83,6 @@ private:
      */
     void getUUIDFromSolid();
 
-    bool loadKDEThumbCreator(const QString& folder, const QString& itemName, QImage& thumbnail);
-
 private:
 
     bool m_cancel;
