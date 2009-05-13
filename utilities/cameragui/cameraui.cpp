@@ -1146,11 +1146,10 @@ void CameraUI::slotThumbnailFailed(const QString& folder, const QString& file)
         d->kdeTodo << url;
         startKdePreviewJob();
     }
-    }
     else
     {
         // This call must be run outside Camera Controller thread.
-        thumb = d->controller->mimeTypeThumbnail(file).toImage();
+        QImage thumb = d->controller->mimeTypeThumbnail(file).toImage();
         d->view->setThumbnail(folder, file, thumb);
     }
 
