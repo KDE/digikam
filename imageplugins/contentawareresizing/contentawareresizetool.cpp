@@ -48,6 +48,7 @@
 #include <kseparator.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kvbox.h>
 
 // LibKDraw includes
 
@@ -63,6 +64,7 @@
 #include "imagewidget.h"
 #include "dimgimagefilters.h"
 #include "contentawareresizer.h"
+#include "clicklabel.h"
 
 using namespace Digikam;
 using namespace KDcrawIface;
@@ -287,10 +289,16 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     // -------------------------------------------------------------
 
     KSeparator *line2        = new KSeparator(Qt::Horizontal, d->gboxSettings->plainPage());
+    
+    DLabelExpander* expAdvSettings = new DLabelExpander();
+    expAdvSettings->setText(i18n("Advanced Settings:"));
+    //expAdvSettings->setPixmap(SmallIcon("insert-image"));
+    expAdvSettings->setLineVisible(false);
+    KVBox* vBoxAdvSettings = new KVBox();
+    expAdvSettings->setContainer(vBoxAdvSettings);
 
-    QLabel *labelAdvSettings = new QLabel(i18n("Advanced Settings:"), d->gboxSettings->plainPage());
-    QLabel *labelRigidity    = new QLabel(i18n("Overall rigidity:"), d->gboxSettings->plainPage());
-    d->rigidityInput         = new RDoubleNumInput(d->gboxSettings->plainPage());
+    new QLabel(i18n("Overall rigidity of the seams:"), vBoxAdvSettings);
+    d->rigidityInput         = new RDoubleNumInput(vBoxAdvSettings);
     d->rigidityInput->input()->setRange(0.0, 10.0, 1.0, true);
     d->rigidityInput->setDefaultValue(0.0);
     d->rigidityInput->setWhatsThis(i18n("Use this value to give a negative bias to the seams which "
@@ -302,8 +310,8 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
                                         "coordinate between each two successive points, elevated to the power "
                                         "of 1.5, and summed up for the whole seam."));
 
-    QLabel *labelStep = new QLabel(i18n("Steps:"), d->gboxSettings->plainPage());
-    d->stepInput      = new RIntNumInput(d->gboxSettings->plainPage());
+    new QLabel(i18n("Maximum number of transversal steps:"), vBoxAdvSettings);
+    d->stepInput      = new RIntNumInput(vBoxAdvSettings);
     d->stepInput->setRange(1, 5, 1);
     d->stepInput->setDefaultValue(1);
     d->stepInput->setSliderEnabled(true);
@@ -317,14 +325,14 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
                                     "limit, but may lead to the introduction of artifacts. In order "
                                     "to balance the situation, you can use the rigidity setting."));
 
-    QLabel *labelResizeOrder = new QLabel(i18n("Resize Order:"), d->gboxSettings->plainPage());
-    d->resizeOrderInput      = new RComboBox(d->gboxSettings->plainPage());
+    new QLabel(i18n("Resize Order:"), vBoxAdvSettings);
+    d->resizeOrderInput      = new RComboBox(vBoxAdvSettings);
     d->resizeOrderInput->addItem(i18n("Horizontally first"));
     d->resizeOrderInput->addItem(i18n("Vertically first"));
     d->resizeOrderInput->setDefaultIndex(ContentAwareResizeToolPriv::Horizontally);
     d->resizeOrderInput->setWhatsThis(i18n("Here you can set whether to resize horizontally first or "
                                            "vertically first."));
-
+    
     // -------------------------------------------------------------
 
     grid->addWidget(d->preserveRatioBox,  0, 0, 1, 3);
@@ -348,18 +356,13 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     grid->addWidget(labelMaskPenSize,     12, 0, 1, 1);
     grid->addWidget(d->maskPenSize,       12, 1, 1, 4);
     grid->addWidget(line,                 13, 0, 1, -1);
-    grid->addWidget(labelFunction,        14, 0, 1, 1);
-    grid->addWidget(d->funcInput,         14, 1, 1, 4);
-    grid->addWidget(d->preserveSkinTones, 15, 0, 1, 3);
-    grid->addWidget(line2,                16, 0, 1, -1);
-    grid->addWidget(labelAdvSettings,     17, 0, 1, 3);
-    grid->addWidget(labelRigidity,        18, 0, 1, 1);
-    grid->addWidget(d->rigidityInput,     18, 1, 1, 4);
-    grid->addWidget(labelStep,            19, 0, 1, 1);
-    grid->addWidget(d->stepInput,         19, 1, 1, 4);
-    grid->addWidget(labelResizeOrder,     20, 0, 1, 1);
-    grid->addWidget(d->resizeOrderInput,  20, 1, 1, 4);
-    grid->setRowStretch(21, 10);
+    grid->addWidget(labelFunction,        14, 0, 1, 4);
+    grid->addWidget(d->funcInput,         15, 0, 1, -1);
+    grid->addWidget(d->preserveSkinTones, 16, 0, 1, 3);
+    grid->addWidget(line2,                17, 0, 1, -1);
+    grid->addWidget(expAdvSettings,       18, 0, 1, -1);
+
+    grid->setRowStretch(19, 10);
     grid->setMargin(d->gboxSettings->spacingHint());
     grid->setSpacing(d->gboxSettings->spacingHint());
 
