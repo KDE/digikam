@@ -115,6 +115,9 @@ ManualRenameInput::ManualRenameInput(QWidget* parent)
 
     connect(d->parseStringLineEdit, SIGNAL(textChanged(const QString&)),
             this, SIGNAL(signalTextChanged(const QString&)));
+
+    connect(d->tooltipTracker, SIGNAL(signalClicked()),
+            this, SLOT(slotHideToolTipTracker()));
 }
 
 ManualRenameInput::~ManualRenameInput()
