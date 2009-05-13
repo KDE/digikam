@@ -311,7 +311,7 @@ bool UMSCamera::loadKDEThumbCreator(const QString& folder, const QString& itemNa
     // Don't use KLibFactory here, this is not a QObject and
     // neither is ThumbCreator
 
-    if (!KMimeTypeTrader::self())
+    if (!KLibLoader::self())
     {
         kDebug(50003) << "No KLibLoader instance to get thumb from KDE" << endl;
         return false;
