@@ -59,6 +59,7 @@ public:
     void setText(const QString& txt);
     void setEnable(bool b);
     void setKeepOpen(bool b);
+    void setTrackerAlignment(Qt::Alignment alignment);
 
     void triggerAutoShow(int timeout = 2000);
     void refresh();

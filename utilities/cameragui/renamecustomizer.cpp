@@ -137,6 +137,11 @@ void ManualRenameInput::setText(const QString &text)
     d->parseStringLineEdit->setText(text);
 }
 
+void ManualRenameInput::setTrackerAlignment(Qt::Alignment alignment)
+{
+    d->tooltipTracker->setTrackerAlignment(alignment);
+}
+
 KLineEdit* ManualRenameInput::input() const
 {
     return d->parseStringLineEdit;
@@ -491,6 +496,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
 
     d->renameManual      = new QRadioButton(i18n("Manual"), this);
     d->manualRenameInput = new ManualRenameInput;
+    d->manualRenameInput->setTrackerAlignment(Qt::AlignRight);
     d->buttonGroup->addButton(d->renameManual);
 
     mainLayout->addWidget(d->renameDefault,     0, 0, 1, 2);

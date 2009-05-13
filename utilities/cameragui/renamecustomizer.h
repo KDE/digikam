@@ -54,6 +54,8 @@ public:
     QString text() const;
     void    setText(const QString &text);
 
+    void setTrackerAlignment(Qt::Alignment alignment);
+
     KLineEdit* input() const;
 
 

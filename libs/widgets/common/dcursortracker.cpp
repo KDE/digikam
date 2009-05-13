@@ -109,6 +109,11 @@ void DCursorTracker::setKeepOpen(bool b)
     d->keepOpen = b;
 }
 
+void DCursorTracker::setTrackerAlignment(Qt::Alignment alignment)
+{
+    d->alignment = alignment;
+}
+
 void DCursorTracker::triggerAutoShow(int timeout)
 {
     if (d->enable)
