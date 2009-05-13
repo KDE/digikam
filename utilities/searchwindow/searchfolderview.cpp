@@ -308,9 +308,9 @@ void SearchFolderView::slotContextMenu(Q3ListViewItem* item, const QPoint&, int)
 
     // temporary actions  -------------------------------------
 
-    QAction *newAction = new QAction(SmallIcon("document-new"), i18n("New Search"), this);
-    QAction *delAction = new QAction(SmallIcon("edit-delete"), i18n("Delete Search"), this);
+    QAction *newAction = new QAction(SmallIcon("document-new"), i18n("New Search..."), this);
     QAction *edtAction = new QAction(SmallIcon("edit-find"), i18n("Edit Search..."), this);
+    QAction *delAction = new QAction(SmallIcon("edit-delete"), i18n("Delete Search"), this);
 
     if (!item)
     {
