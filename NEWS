@@ -64,4 +64,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 049 ==> 181951 : digiKam crashes (SIGABRT) during the importing of pictures from Kodak V530 camera.
 050 ==> 166392 : File-Renaming: custom sequence-number doesn't work.
 051 ==> 182332 : Can't stop generating of thumbnails when import from a card reader.
-052 ==> 
+052 ==> 152382 : Unable to view photo.
+053 ==> 
