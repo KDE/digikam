@@ -62,4 +62,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 047 ==> 190296 : Can not save images on Windows.
 048 ==> 141240 : Camera download: file rename with regexps.
 049 ==> 181951 : digiKam crashes (SIGABRT) during the importing of pictures from Kodak V530 camera.
-050 ==> 
+050 ==> 166392 : File-Renaming: custom sequence-number doesn't work.
+051 ==> 
