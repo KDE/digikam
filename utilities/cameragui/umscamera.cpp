@@ -49,6 +49,7 @@ extern "C"
 #include <kio/global.h>
 #include <kio/thumbcreator.h>
 #include <klibloader.h>
+#include <ksharedptr.h>
 #include <klocale.h>
 #include <kmimetype.h>
 #include <ktrader.h>
@@ -285,19 +286,20 @@ bool UMSCamera::loadKDEThumbCreator(const QString& folder, const QString& itemNa
 
     kDebug(50003) << "Mimetype : " << mimeType << endl;
 
-    if (!KMimeTypeTrader::self())
+    KMimeTypeTrader *trader = KMimeTypeTrader::self();
+    if (!trader)
     {
         kDebug(50003) << "No KMimeTypeTrader instance to get thumb from KDE" << endl;
         return false;
     }
 
     QString plugin;
-    KService::List offers = KMimeTypeTrader::self()->query(mimeType, QLatin1String("ThumbCreator"));
+    KService::List offers = trader->query(mimeType, QLatin1String("ThumbCreator"));
     if (!offers.isEmpty())
     {
-        KService::Ptr serv;
-        serv   = offers.first();
-        plugin = serv->library();
+        KService::Ptr serv = offers.first();
+        if (!serv.isNull())
+            plugin = serv->library();
     }
 
     if (plugin.isEmpty())
@@ -311,13 +313,14 @@ bool UMSCamera::loadKDEThumbCreator(const QString& folder, const QString& itemNa
     // Don't use KLibFactory here, this is not a QObject and
     // neither is ThumbCreator
 
-    if (!KLibLoader::self())
+    KLibLoader* loader = KLibLoader::self();
+    if (!loader)
     {
         kDebug(50003) << "No KLibLoader instance to get thumb from KDE" << endl;
         return false;
     }
 
-    KLibrary *library = KLibLoader::self()->library(QFile::encodeName(plugin));
+    KLibrary *library = loader->library(QFile::encodeName(plugin));
     if (!library)
     {
         kDebug(50003) << "Plugin library not found " << plugin << endl;
