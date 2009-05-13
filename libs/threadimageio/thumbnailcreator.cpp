@@ -260,7 +260,7 @@ QImage ThumbnailCreator::load(const QString& path)
     }
     if(savedCorrectly)
     {
-	int ret;
+        int ret = 0;
         Q_ASSERT(!tempFileName.isEmpty());
 
 #if KDE_IS_VERSION(4,2,85)
