@@ -761,16 +761,16 @@ void RenameCustomizer::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
 
     KConfigGroup group   = config->group("Camera Settings");
-    int def              = group.readEntry("Rename Method", 2);
-    bool addSeqNumb      = group.readEntry("Add Sequence Number", true);
-    bool adddateTime     = group.readEntry("Add Date Time", false);
-    bool addCamName      = group.readEntry("Add Camera Name", false);
-    int chcaseT          = group.readEntry("Case Type", (int)NONE);
-    QString prefix       = group.readEntry("Rename Prefix", i18n("photo"));
-    QString suffix       = group.readEntry("Rename Postfix", QString());
-    int dateTime         = group.readEntry("Date Time Format", (int)RenameCustomizerPriv::IsoDateFormat);
+    int def              = group.readEntry("Rename Method",           2);
+    bool addSeqNumb      = group.readEntry("Add Sequence Number",     true);
+    bool adddateTime     = group.readEntry("Add Date Time",           false);
+    bool addCamName      = group.readEntry("Add Camera Name",         false);
+    int chcaseT          = group.readEntry("Case Type",               (int)NONE);
+    QString prefix       = group.readEntry("Rename Prefix",           i18n("photo"));
+    QString suffix       = group.readEntry("Rename Postfix",          QString());
+    int dateTime         = group.readEntry("Date Time Format",        (int)RenameCustomizerPriv::IsoDateFormat);
     QString format       = group.readEntry("Date Time Format String", QString("yyyyMMddThhmmss"));
-    QString manualRename = group.readEntry("Manual Rename String", QString());
+    QString manualRename = group.readEntry("Manual Rename String",    QString());
 
     switch(def)
     {
