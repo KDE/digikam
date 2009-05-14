@@ -68,4 +68,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 053 ==> 161744 : Filenames are lower case when imported via sd card reader, upper case when imported via usb cable directly from camera.
 054 ==> 187560 : Iptc data for author are missing while downloading images.
 055 ==> 192294 : digiKam crash when i try to import photos from my card reader.
-056 ==> 
+056 ==> 192413 : Missing items from right-click search menu. 
+057 ==> 
