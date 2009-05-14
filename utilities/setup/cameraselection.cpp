@@ -7,7 +7,7 @@
  * Description : Camera type selection dialog
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -323,7 +323,7 @@ void CameraSelection::slotPTPCameraLinkUsed()
 }
 
 void CameraSelection::setCamera(const QString& title, const QString& model,
-                                const QString& port, const QString& path)
+                                const QString& port,  const QString& path)
 {
     QString camModel(model);
 
@@ -344,6 +344,7 @@ void CameraSelection::setCamera(const QString& title, const QString& model,
         if (port.contains("usb"))
         {
             d->usbButton->setChecked(true);
+            slotPortChanged();
         }
         else if (port.contains("serial"))
         {
@@ -357,6 +358,7 @@ void CameraSelection::setCamera(const QString& title, const QString& model,
                     break;
                 }
             }
+            slotPortChanged();
         }
 
         d->umsMountURL->setUrl(path);
