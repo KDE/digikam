@@ -110,7 +110,6 @@ private:
     void saveSettings();
     bool createAutoAlbum(const KUrl& parentURL, const QString& sub,
                          const QDate& date, QString& errMsg);
-    void addFileExtension(const QString& ext);
 
     bool dialogClosed();
     void finishDialog();

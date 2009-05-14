@@ -1599,7 +1599,6 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
         downloadSettings.dest = downloadUrl.path();
 
         d->controller->download(downloadSettings);
-        addFileExtension(QFileInfo(downloadUrl.path()).suffix());
         ++total;
     }
 
@@ -1998,11 +1997,6 @@ bool CameraUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,
         return false;
     }
     return AlbumManager::instance()->createPAlbum(parent, sub, QString(), date, QString(), errMsg);
-}
-
-void CameraUI::addFileExtension(const QString& ext)
-{
-    AlbumSettings::instance()->addToImageFileFilter(ext);
 }
 
 void CameraUI::slotFirstItem()
