@@ -879,8 +879,8 @@ void CameraUI::finishDialog()
     if (d->view->itemsDownloaded() > 0)
     {
         CameraList* clist = CameraList::defaultList();
-        if (clist)
-            clist->changeCameraAccessTime(d->cameraTitle, QDateTime::currentDateTime());
+/*FIXME        if (clist)
+            clist->changeCameraAccessTime(d->cameraTitle, QDateTime::currentDateTime());*/
     }
 
     // When a directory is created, a watch is put on it to spot new files

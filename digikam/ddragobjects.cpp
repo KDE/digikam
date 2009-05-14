@@ -6,7 +6,7 @@
  * Date        : 2008-02-29
  * Description : Drag object info containers.
  *
- * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,7 +30,6 @@
 // KDE includes
 
 #include <kdebug.h>
-
 
 namespace Digikam
 {
@@ -329,7 +328,6 @@ DCameraDragObject::DCameraDragObject(const CameraType& ctype)
     ds << ctype.model();
     ds << ctype.port();
     ds << ctype.path();
-    ds << ctype.lastAccess();
     setData("camera/unknown", ba);
 }
 
@@ -348,17 +346,15 @@ bool DCameraDragObject::decode(const QMimeData* e, CameraType& ctype)
     QByteArray ba = e->data("camera/unknown");
     if (ba.size())
     {
-        QString   title, model, port, path;
-        QDateTime lastAccess;
+        QString title, model, port, path;
 
         QDataStream ds(ba);
         ds >> title;
         ds >> model;
         ds >> port;
         ds >> path;
-        ds >> lastAccess;
 
-        ctype = CameraType(title, model, port, path, lastAccess);
+        ctype = CameraType(title, model, port, path);
 
         return true;
     }

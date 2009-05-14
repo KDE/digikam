@@ -192,7 +192,6 @@ SetupCamera::SetupCamera( QWidget* parent )
             labels.append(ctype->model());
             labels.append(ctype->port());
             labels.append(ctype->path());
-            labels.append(ctype->lastAccess().toString(Qt::ISODate));
             new QTreeWidgetItem(d->listView, labels);
         }
     }
@@ -333,13 +332,8 @@ void SetupCamera::applySettings()
             QTreeWidgetItem *item = *it;
             if (item)
             {
-                QDateTime lastAccess = QDateTime::currentDateTime();
-
-                if (!item->text(4).isEmpty())
-                    lastAccess = QDateTime::fromString(item->text(4), Qt::ISODate);
-
                 CameraType *ctype = new CameraType(item->text(0), item->text(1), item->text(2),
-                                                   item->text(3), lastAccess);
+                                                   item->text(3));
                 clist->insert(ctype);
             }
             ++it;

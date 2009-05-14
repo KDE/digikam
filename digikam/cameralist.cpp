@@ -114,16 +114,11 @@ bool CameraList::load()
         if (e.isNull()) continue;
         if (e.tagName() != "item") continue;
 
-        QString title        = e.attribute("title");
-        QString model        = e.attribute("model");
-        QString port         = e.attribute("port");
-        QString path         = e.attribute("path");
-        QDateTime lastAccess = QDateTime::currentDateTime();
-
-        if (!e.attribute("lastaccess").isEmpty())
-            lastAccess = QDateTime::fromString(e.attribute("lastaccess"), Qt::ISODate);
-
-        CameraType *ctype = new CameraType(title, model, port, path, lastAccess);
+        QString title     = e.attribute("title");
+        QString model     = e.attribute("model");
+        QString port      = e.attribute("port");
+        QString path      = e.attribute("path");
+        CameraType *ctype = new CameraType(title, model, port, path);
         insertPrivate(ctype);
     }
 
@@ -147,9 +142,8 @@ bool CameraList::save()
        QDomElement elem = doc.createElement("item");
        elem.setAttribute("title", ctype->title());
        elem.setAttribute("model", ctype->model());
-       elem.setAttribute("port", ctype->port());
-       elem.setAttribute("path", ctype->path());
-       elem.setAttribute("lastaccess", ctype->lastAccess().toString(Qt::ISODate));
+       elem.setAttribute("port",  ctype->port());
+       elem.setAttribute("path",  ctype->path());
        docElem.appendChild(elem);
     }
 
@@ -164,20 +158,6 @@ bool CameraList::save()
     cfile.close();
 
     return true;
-}
-
-bool CameraList::changeCameraAccessTime(const QString& cameraTitle, const QDateTime& newDate)
-{
-    CameraType* cam = find(cameraTitle);
-    if (cam)
-    {
-        cam->setLastAccess(newDate);
-        d->modified = true;
-        save();
-        return true;
-    }
-
-    return false;
 }
 
 void CameraList::insert(CameraType* ctype)
@@ -263,7 +243,7 @@ CameraType* CameraList::autoDetect(bool& retry)
     if (port.startsWith("usb:"))
         port = "usb:";
 
-    CameraType* ctype = new CameraType(model, model, port, "/", QDateTime::currentDateTime());
+    CameraType* ctype = new CameraType(model, model, port, "/");
     insert(ctype);
 
     return ctype;

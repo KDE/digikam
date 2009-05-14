@@ -7,7 +7,7 @@
  * Description : Camera settings container.
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,7 +28,6 @@
 // Qt includes
 
 #include <QString>
-#include <QDateTime>
 #include <QPointer>
 
 class KAction;
@@ -47,7 +46,7 @@ public:
     CameraType();
     CameraType(const QString& title, const QString& model,
                const QString& port, const QString& path,
-               const QDateTime& lastAccess, KAction* action=0);
+               KAction* action=0);
     ~CameraType();
 
     CameraType(const CameraType& ctype);
@@ -57,7 +56,6 @@ public:
     void setModel(const QString& model);
     void setPort(const QString& port);
     void setPath(const QString& path);
-    void setLastAccess(const QDateTime& lastAccess);
     void setAction(KAction *action);
     void setValid(bool valid);
     void setCurrentCameraUI(CameraUI *cameraui);
@@ -66,7 +64,6 @@ public:
     QString   model()           const;
     QString   port()            const;
     QString   path()            const;
-    QDateTime lastAccess()      const;
     KAction*  action()          const;
     bool      valid()           const;
     CameraUI* currentCameraUI() const;

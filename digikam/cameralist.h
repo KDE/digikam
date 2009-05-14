@@ -59,8 +59,6 @@ public:
     CameraType*            autoDetect(bool& retry);
     Q3PtrList<CameraType>* cameraList();
 
-    bool changeCameraAccessTime(const QString& cameraTitle, const QDateTime& newDate);
-
     static bool findConnectedCamera(int vendorId, int productId, QString& model, QString& port);
 
     static CameraList* defaultList();
