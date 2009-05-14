@@ -379,7 +379,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     // ----------------------------------------------------------------
 
     d->renameDefault = new QRadioButton(i18n("Camera filenames"), this);
-    d->buttonGroup->addButton(d->renameDefault);
+    d->buttonGroup->addButton(d->renameDefault, 0);
     d->renameDefault->setWhatsThis(i18n("Turn on this option to use the camera "
                                         "provided image filenames without modifications."));
 
@@ -406,7 +406,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     // -------------------------------------------------------------
 
     d->renameCustom = new QRadioButton(i18n("Customize"), this);
-    d->buttonGroup->addButton(d->renameCustom);
+    d->buttonGroup->addButton(d->renameCustom, 1);
     d->renameCustom->setWhatsThis(i18n("Turn on this option to customize the image filenames "
                                        "during download."));
 
@@ -415,7 +415,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
 
     QLabel* prefixLabel   = new QLabel(i18n("Prefix:"), d->renameCustomBox);
     d->renameCustomPrefix = new KLineEdit(d->renameCustomBox);
-    d->focusedWidget = d->renameCustomPrefix;
+    d->focusedWidget      = d->renameCustomPrefix;
     d->renameCustomPrefix->setWhatsThis( i18n("Set the prefix which will be added to "
                                               "the image filenames."));
 
@@ -504,7 +504,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     d->renameManual      = new QRadioButton(i18nc("Manual Image Renaming", "Manual"), this);
     d->manualRenameInput = new ManualRenameInput;
     d->manualRenameInput->setTrackerAlignment(Qt::AlignRight);
-    d->buttonGroup->addButton(d->renameManual);
+    d->buttonGroup->addButton(d->renameManual, 2);
 
     mainLayout->addWidget(d->renameDefault,     0, 0, 1, 2);
     mainLayout->addWidget(d->renameDefaultBox,  1, 0, 1, 2);
@@ -761,7 +761,7 @@ void RenameCustomizer::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
 
     KConfigGroup group   = config->group("Camera Settings");
-    bool def             = group.readEntry("Rename Use Default", true);
+    int def              = group.readEntry("Rename Method", 2);
     bool addSeqNumb      = group.readEntry("Add Sequence Number", true);
     bool adddateTime     = group.readEntry("Add Date Time", false);
     bool addCamName      = group.readEntry("Add Camera Name", false);
@@ -772,23 +772,38 @@ void RenameCustomizer::readSettings()
     QString format       = group.readEntry("Date Time Format String", QString("yyyyMMddThhmmss"));
     QString manualRename = group.readEntry("Manual Rename String", QString());
 
-    if (def)
+    switch(def)
     {
-        d->renameDefault->setChecked(true);
-        d->renameDefaultBox->setEnabled(true);
-        d->renameCustom->setChecked(false);
-        d->renameCustomBox->setEnabled(false);
-        d->renameManual->setChecked(false);
-        d->manualRenameInput->setEnabled(false);
-    }
-    else
-    {
-        d->renameDefault->setChecked(false);
-        d->renameDefaultBox->setEnabled(false);
-        d->renameCustom->setChecked(true);
-        d->renameCustomBox->setEnabled(true);
-        d->renameManual->setChecked(true);
-        d->manualRenameInput->setEnabled(true);
+        case 0:
+        {
+            d->renameDefault->setChecked(true);
+            d->renameDefaultBox->setEnabled(true);
+            d->renameCustom->setChecked(false);
+            d->renameCustomBox->setEnabled(false);
+            d->renameManual->setChecked(false);
+            d->manualRenameInput->setEnabled(false);
+            break;
+        }
+        case 1:
+        {
+            d->renameDefault->setChecked(false);
+            d->renameDefaultBox->setEnabled(false);
+            d->renameCustom->setChecked(true);
+            d->renameCustomBox->setEnabled(true);
+            d->renameManual->setChecked(false);
+            d->manualRenameInput->setEnabled(false);
+            break;
+        }
+        default:
+        {
+            d->renameDefault->setChecked(false);
+            d->renameDefaultBox->setEnabled(false);
+            d->renameCustom->setChecked(false);
+            d->renameCustomBox->setEnabled(false);
+            d->renameManual->setChecked(true);
+            d->manualRenameInput->setEnabled(true);
+            break;
+        }
     }
 
     d->addDateTimeBox->setChecked(adddateTime);
@@ -808,16 +823,16 @@ void RenameCustomizer::saveSettings()
     KSharedConfig::Ptr config = KGlobal::config();
 
     KConfigGroup group = config->group("Camera Settings");
-    group.writeEntry("Rename Use Default", d->renameDefault->isChecked());
-    group.writeEntry("Add Camera Name", d->addCameraNameBox->isChecked());
-    group.writeEntry("Add Date Time", d->addDateTimeBox->isChecked());
-    group.writeEntry("Add Sequence Number", d->addSeqNumberBox->isChecked());
-    group.writeEntry("Case Type", d->renameDefaultCaseType->currentIndex());
-    group.writeEntry("Rename Prefix", d->renameCustomPrefix->text());
-    group.writeEntry("Rename Suffix", d->renameCustomSuffix->text());
-    group.writeEntry("Date Time Format", d->dateTimeFormat->currentIndex());
+    group.writeEntry("Rename Method",           d->buttonGroup->checkedId());
+    group.writeEntry("Add Camera Name",         d->addCameraNameBox->isChecked());
+    group.writeEntry("Add Date Time",           d->addDateTimeBox->isChecked());
+    group.writeEntry("Add Sequence Number",     d->addSeqNumberBox->isChecked());
+    group.writeEntry("Case Type",               d->renameDefaultCaseType->currentIndex());
+    group.writeEntry("Rename Prefix",           d->renameCustomPrefix->text());
+    group.writeEntry("Rename Suffix",           d->renameCustomSuffix->text());
+    group.writeEntry("Date Time Format",        d->dateTimeFormat->currentIndex());
     group.writeEntry("Date Time Format String", d->dateTimeFormatString);
-    group.writeEntry("Manual Rename String", d->manualRenameInput->text());
+    group.writeEntry("Manual Rename String",    d->manualRenameInput->text());
     config->sync();
 }
 
