@@ -587,7 +587,9 @@ int RenameCustomizer::startIndex() const
 
 void RenameCustomizer::setStartIndex(int startIndex)
 {
+    d->startIndexInput->blockSignals(true);
     d->startIndexInput->setValue(startIndex);
+    d->startIndexInput->blockSignals(false);
 }
 
 QString RenameCustomizer::newName(const QString& fileName, const QDateTime& dateTime,
