@@ -132,7 +132,7 @@ namespace Digikam
 
 CameraUI::CameraUI(QWidget* parent, const QString& cameraTitle,
                    const QString& model, const QString& port,
-                   const QString& path, const QDateTime lastAccess)
+                   const QString& path, const QDateTime& lastAccess)
         : KXmlGuiWindow(parent), d(new CameraUIPriv)
 
 {
