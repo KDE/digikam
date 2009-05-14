@@ -1487,20 +1487,21 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
     }
 
     // -- Download camera items -------------------------------
+    // Since we show camera items in reverse order, downloading need to be done also in reverse order.
 
     QSet<QString> usedDownloadPaths;
 
-    for (IconItem* item = d->view->firstItem(); item;
-         item = item->nextItem())
+    for (IconItem* item = d->view->lastItem(); item;
+         item = item->prevItem())
     {
         if (onlySelected && !(item->isSelected()))
             continue;
 
         CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
-        downloadSettings.folder      = iconItem->itemInfo()->folder;
-        downloadSettings.file        = iconItem->itemInfo()->name;
-        downloadName                 = iconItem->getDownloadName();
-        dateTime                     = iconItem->itemInfo()->mtime;
+        downloadSettings.folder  = iconItem->itemInfo()->folder;
+        downloadSettings.file    = iconItem->itemInfo()->name;
+        downloadName             = iconItem->getDownloadName();
+        dateTime                 = iconItem->itemInfo()->mtime;
 
         KUrl downloadUrl(url);
         QString errMsg;
