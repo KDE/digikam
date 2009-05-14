@@ -4,7 +4,7 @@ DEVELOPPERS WHO WORKS ON DIGIKAM KDE4 PORT:
 Gilles Caulier <caulier dot gilles at gmail dot com>
 Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
 Laurent Montel <montel at kde dot org>
-Andi Clemens <andi dot clemens at gmx dot net>
+Andi Clemens   <andi dot clemens at gmx dot net>
 Angelo Naselli <anaselli at linux dot it>
 Rainer Krienke <krienke at uni-koblenz dot de>
 
@@ -94,6 +94,7 @@ DIRECTORIES / FILES                     DONE BY     SHOWFOTO DIGIKAM   PORT     
     gpiteminfo.cpp                      Gilles                 X       DONE        DONE
     renamecustomizer.cpp                Gilles                 X       DONE        DONE
     umscamera.cpp                       Gilles                 X       DONE        DONE
+|---firstrun                            Gilles                 X       DONE        DONE
 |---fuzzysearch                         Gilles                 X       DONE        DONE
 |---gpssearch                           Gilles                 X       DONE        DONE
 |---hotplug                             Marcel                         DONE        -
