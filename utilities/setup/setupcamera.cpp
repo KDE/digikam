@@ -33,6 +33,7 @@
 #include <QGridLayout>
 #include <QPixmap>
 #include <QVBoxLayout>
+#include <QHeaderView>
 #include <QTreeWidget>
 #include <QTreeWidgetItemIterator>
 
@@ -58,6 +59,41 @@
 
 namespace Digikam
 {
+
+class SetupCameraItem : public QTreeWidgetItem
+{
+
+public:
+
+    SetupCameraItem(QTreeWidget *parent, CameraType *ctype)
+        : QTreeWidgetItem(parent)
+    {
+        setCameraType(ctype);
+    };
+
+    ~SetupCameraItem(){};
+
+    void setCameraType(CameraType *ctype)
+    {
+        m_ctype = ctype;
+        if (m_ctype)
+        {
+            setText(0, m_ctype->title());
+            setText(1, m_ctype->model());
+            setText(2, m_ctype->port());
+            setText(3, m_ctype->path());
+        }
+    };
+
+    CameraType* cameraType() const { return m_ctype; };
+
+private:
+
+    CameraType* m_ctype;
+};
+
+// -------------------------------------------------------------------
+
 class SetupCameraPriv
 {
 public:
@@ -90,25 +126,24 @@ SetupCamera::SetupCamera( QWidget* parent )
 
     QGridLayout* grid = new QGridLayout(panel);
     d->listView       = new QTreeWidget(panel);
-    d->listView->setColumnCount(5);
+    d->listView->setColumnCount(4);
     d->listView->setRootIsDecorated(false);
     d->listView->setSelectionMode(QAbstractItemView::SingleSelection);
     d->listView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->listView->setAllColumnsShowFocus(true);
-    d->listView->setWhatsThis( i18n("Here you can see the digital camera list used by digiKam "
-                                    "via the Gphoto interface."));
+    d->listView->setWhatsThis(i18n("Here you can see the digital camera list used by digiKam "
+                                   "via the Gphoto interface."));
 
     QStringList labels;
     labels.append( i18n("Title") );
     labels.append( i18n("Model") );
     labels.append( i18n("Port") );
     labels.append( i18n("Path") );
-
-    // No i18n here. Hidden column with the last starting number used to rename camera items.
-    labels.append( "Last Starting Number" );
-
     d->listView->setHeaderLabels(labels);
-    d->listView->hideColumn(4);
+    d->listView->header()->setResizeMode(0, QHeaderView::ResizeToContents);
+    d->listView->header()->setResizeMode(1, QHeaderView::Stretch);
+    d->listView->header()->setResizeMode(2, QHeaderView::Stretch);
+    d->listView->header()->setResizeMode(3, QHeaderView::Stretch);
 
     // -------------------------------------------------------------
 
@@ -187,16 +222,9 @@ SetupCamera::SetupCamera( QWidget* parent )
     {
         Q3PtrList<CameraType>* cl = clist->cameraList();
 
-        for (CameraType *ctype = cl->first(); ctype;
-             ctype = cl->next())
+        for (CameraType *ctype = cl->first() ; ctype ; ctype = cl->next())
         {
-            QStringList labels;
-            labels.append(ctype->title());
-            labels.append(ctype->model());
-            labels.append(ctype->port());
-            labels.append(ctype->path());
-            labels.append(QString::number(ctype->startingNumber()));
-            new QTreeWidgetItem(d->listView, labels);
+            new SetupCameraItem(d->listView, ctype);
         }
     }
 }
@@ -247,11 +275,14 @@ void SetupCamera::slotRemoveCamera()
 
 void SetupCamera::slotEditCamera()
 {
-    QTreeWidgetItem *item = d->listView->currentItem();
+    SetupCameraItem *item = dynamic_cast<SetupCameraItem*>(d->listView->currentItem());
     if (!item) return;
 
+    CameraType* ctype = item->cameraType();
+    if (!ctype) return;
+
     CameraSelection *select = new CameraSelection;
-    select->setCamera(item->text(0), item->text(1), item->text(2), item->text(3));
+    select->setCamera(ctype->title(), ctype->model(), ctype->port(), ctype->path());
 
     connect(select, SIGNAL(signalOkClicked(const QString&, const QString&,
                                            const QString&, const QString&)),
@@ -288,57 +319,51 @@ void SetupCamera::slotAutoDetectCamera()
     else
     {
         KMessageBox::information(this, i18n("Found camera '%1' (%2) and added it to the list.", model, port));
-        QStringList labels;
-        labels.append(model);
-        labels.append(model);
-        labels.append(port);
-        labels.append("/");
-        labels.append(QDateTime::currentDateTime().toString(Qt::ISODate));
-        new QTreeWidgetItem(d->listView, labels);
+        slotAddedCamera(model, model, port, QString("/"));
     }
 }
 
 void SetupCamera::slotAddedCamera(const QString& title, const QString& model,
                                   const QString& port, const QString& path)
 {
-    QStringList labels;
-    labels.append(title);
-    labels.append(model);
-    labels.append(port);
-    labels.append(path);
-    labels.append(QString("1"));
-    new QTreeWidgetItem(d->listView, labels);
+    CameraType *ctype = new CameraType(title, model, port, path, 1);
+    new SetupCameraItem(d->listView, ctype);
 }
 
 void SetupCamera::slotEditedCamera(const QString& title, const QString& model,
                                    const QString& port, const QString& path)
 {
-    QTreeWidgetItem *item = d->listView->currentItem();
+    SetupCameraItem *item = dynamic_cast<SetupCameraItem*>(d->listView->currentItem());
     if (!item) return;
 
-    item->setText(0, title);
-    item->setText(1, model);
-    item->setText(2, port);
-    item->setText(3, path);
+    CameraType* ctype = item->cameraType();
+    if (!ctype) return;
+
+    ctype->setTitle(title);
+    ctype->setModel(model);
+    ctype->setPort(port);
+    ctype->setPath(path);
+    item->setCameraType(ctype);
 }
 
 void SetupCamera::applySettings()
 {
     CameraList* clist = CameraList::defaultList();
-
     if (clist)
     {
-        clist->clear();
-
         QTreeWidgetItemIterator it(d->listView);
         while (*it)
         {
-            QTreeWidgetItem *item = *it;
+            SetupCameraItem *item = dynamic_cast<SetupCameraItem*>(*it);
             if (item)
             {
-                CameraType *ctype = new CameraType(item->text(0), item->text(1), item->text(2),
-                                                   item->text(3), item->text(4).toInt());
-                clist->insert(ctype);
+                CameraType* ctype = item->cameraType();
+                if (ctype)
+                {
+                    CameraType* ctype2 = new CameraType(*ctype);
+                    clist->remove(ctype);
+                    clist->insert(ctype2);
+                }
             }
             ++it;
         }
