@@ -150,8 +150,6 @@ public:
 
     SidebarSplitter              *splitter;
 
-    QDateTime                     lastAccess;
-
     KAction                      *cameraCancelAction;
     KAction                      *cameraCaptureAction;
     KAction                      *cameraInfoAction;
