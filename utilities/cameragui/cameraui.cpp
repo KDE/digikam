@@ -1066,6 +1066,9 @@ void CameraUI::slotFileList(const GPItemInfoList& fileList)
     if (fileList.empty())
         return;
 
+    AlbumSettings* settings = AlbumSettings::instance();
+    if (!settings) return;
+
     // We sort the map by time stamp
     // and we remove internal camera files which are not image/video/sounds.
     QStringList fileNames, fileExts;
@@ -1081,13 +1084,19 @@ void CameraUI::slotFileList(const GPItemInfoList& fileList)
     // Minolta camera in PTP mode
     fileExts.append("dps");
 
+    // NOTE: see B.K.O #181726: list of accepted file extensions from Album Settings.
+    QStringList list = settings->getAllFileFilter().toLower().split(" ");
+
     QMultiMap<QDateTime, GPItemInfo> map;
     foreach(const GPItemInfo& item, fileList)
     {
         info.setFile(item.name);
         if (!fileNames.contains(info.fileName().toLower()) &&
-            !fileExts.contains(info.suffix().toLower()))
+            !fileExts.contains(info.suffix().toLower())    &&
+            list.contains(QString("*.%1").arg(info.suffix().toLower())))
+        {
             map.insertMulti(item.mtime, item);
+        }
     }
 
     if (map.empty())
