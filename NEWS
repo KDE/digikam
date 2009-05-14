@@ -70,5 +70,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 055 ==> 192294 : digiKam crash when i try to import photos from my card reader.
 056 ==> 192413 : Missing items from right-click search menu. 
 057 ==> 131551 : Camera port info deleted when editing camera title.
-058 ==> 
+058 ==> 181726 : digiKam collect video, music when I connect usb key.
+059 ==> 
 
