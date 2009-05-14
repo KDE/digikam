@@ -328,6 +328,7 @@ DCameraDragObject::DCameraDragObject(const CameraType& ctype)
     ds << ctype.model();
     ds << ctype.port();
     ds << ctype.path();
+    ds << ctype.startingNumber();
     setData("camera/unknown", ba);
 }
 
@@ -346,6 +347,7 @@ bool DCameraDragObject::decode(const QMimeData* e, CameraType& ctype)
     QByteArray ba = e->data("camera/unknown");
     if (ba.size())
     {
+        int     startingNumber;
         QString title, model, port, path;
 
         QDataStream ds(ba);
@@ -353,8 +355,9 @@ bool DCameraDragObject::decode(const QMimeData* e, CameraType& ctype)
         ds >> model;
         ds >> port;
         ds >> path;
+        ds >> startingNumber;
 
-        ctype = CameraType(title, model, port, path);
+        ctype = CameraType(title, model, port, path, startingNumber);
 
         return true;
     }

@@ -132,7 +132,7 @@ namespace Digikam
 
 CameraUI::CameraUI(QWidget* parent, const QString& cameraTitle,
                    const QString& model, const QString& port,
-                   const QString& path)
+                   const QString& path, int startingNumber)
         : KXmlGuiWindow(parent), d(new CameraUIPriv)
 
 {
@@ -161,6 +161,7 @@ CameraUI::CameraUI(QWidget* parent, const QString& cameraTitle,
 
     setupCameraController(model, port, path);
 
+    d->renameCustomizer->setStartIndex(startingNumber);
     d->view->setFocus();
     QTimer::singleShot(0, d->controller, SLOT(slotConnect()));
 }
@@ -874,13 +875,15 @@ bool CameraUI::dialogClosed()
 void CameraUI::finishDialog()
 {
     // Look if an item have been downloaded to computer during camera GUI session.
-    // If yes, update the lastAccess date property of camera in digiKam camera list.
+    // If yes, update the starting number value used to rename camera items from camera list.
 
     if (d->view->itemsDownloaded() > 0)
     {
         CameraList* clist = CameraList::defaultList();
-/*FIXME        if (clist)
-            clist->changeCameraAccessTime(d->cameraTitle, QDateTime::currentDateTime());*/
+        if (clist)
+        {
+            clist->changeCameraStartingNumber(d->cameraTitle, d->renameCustomizer->startIndex());
+        }
     }
 
     // When a directory is created, a watch is put on it to spot new files
@@ -1636,6 +1639,7 @@ void CameraUI::slotDownloaded(const QString& folder, const QString& file, int st
         {
             int curr = d->statusProgressBar->progressValue();
             d->statusProgressBar->setProgressValue(curr+1);
+            d->renameCustomizer->setStartIndex(d->renameCustomizer->startIndex() + 1);
 
             DownloadHistory::setDownloaded(d->controller->cameraMD5ID(),
                                            iconItem->itemInfo()->name,

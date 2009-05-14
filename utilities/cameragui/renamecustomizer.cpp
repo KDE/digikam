@@ -585,6 +585,11 @@ int RenameCustomizer::startIndex() const
     return d->startIndexInput->value();
 }
 
+void RenameCustomizer::setStartIndex(int startIndex)
+{
+    d->startIndexInput->setValue(startIndex);
+}
+
 QString RenameCustomizer::newName(const QString& fileName, const QDateTime& dateTime,
                                   int index, const QString &extension) const
 {
@@ -753,7 +758,7 @@ void RenameCustomizer::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
 
-    KConfigGroup group = config->group("Camera Settings");
+    KConfigGroup group   = config->group("Camera Settings");
     bool def             = group.readEntry("Rename Use Default", true);
     bool addSeqNumb      = group.readEntry("Add Sequence Number", true);
     bool adddateTime     = group.readEntry("Add Date Time", false);
@@ -761,7 +766,6 @@ void RenameCustomizer::readSettings()
     int chcaseT          = group.readEntry("Case Type", (int)NONE);
     QString prefix       = group.readEntry("Rename Prefix", i18n("photo"));
     QString suffix       = group.readEntry("Rename Postfix", QString());
-    int startIndex       = group.readEntry("Rename Start Index", 1);
     int dateTime         = group.readEntry("Date Time Format", (int)RenameCustomizerPriv::IsoDateFormat);
     QString format       = group.readEntry("Date Time Format String", QString("yyyyMMddThhmmss"));
     QString manualRename = group.readEntry("Manual Rename String", QString());
@@ -791,7 +795,6 @@ void RenameCustomizer::readSettings()
     d->renameDefaultCaseType->setCurrentIndex(chcaseT);
     d->renameCustomPrefix->setText(prefix);
     d->renameCustomSuffix->setText(suffix);
-    d->startIndexInput->setValue(startIndex);
     d->dateTimeFormat->setCurrentIndex(dateTime);
     d->dateTimeFormatString = format;
     d->manualRenameInput->setText(manualRename);
@@ -810,7 +813,6 @@ void RenameCustomizer::saveSettings()
     group.writeEntry("Case Type", d->renameDefaultCaseType->currentIndex());
     group.writeEntry("Rename Prefix", d->renameCustomPrefix->text());
     group.writeEntry("Rename Suffix", d->renameCustomSuffix->text());
-    group.writeEntry("Rename Start Index", d->startIndexInput->value());
     group.writeEntry("Date Time Format", d->dateTimeFormat->currentIndex());
     group.writeEntry("Date Time Format String", d->dateTimeFormatString);
     group.writeEntry("Manual Rename String", d->manualRenameInput->text());

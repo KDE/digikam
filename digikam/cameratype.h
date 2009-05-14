@@ -46,7 +46,7 @@ public:
     CameraType();
     CameraType(const QString& title, const QString& model,
                const QString& port, const QString& path,
-               KAction* action=0);
+               int startingNumber, KAction* action=0);
     ~CameraType();
 
     CameraType(const CameraType& ctype);
@@ -56,6 +56,7 @@ public:
     void setModel(const QString& model);
     void setPort(const QString& port);
     void setPath(const QString& path);
+    void setStartingNumber(int sn);
     void setAction(KAction *action);
     void setValid(bool valid);
     void setCurrentCameraUI(CameraUI *cameraui);
@@ -64,6 +65,7 @@ public:
     QString   model()           const;
     QString   port()            const;
     QString   path()            const;
+    int       startingNumber()  const;
     KAction*  action()          const;
     bool      valid()           const;
     CameraUI* currentCameraUI() const;

@@ -41,11 +41,14 @@ public:
 
     CameraTypePrivate()
     {
-        valid  = false;
-        action = 0;
+        valid          = false;
+        action         = 0;
+        startingNumber = 1;
     }
 
     bool                valid;
+
+    int                 startingNumber;
 
     QString             title;
     QString             model;
@@ -64,15 +67,16 @@ CameraType::CameraType()
 
 CameraType::CameraType(const QString& title, const QString& model,
                        const QString& port, const QString& path,
-                       KAction *action)
+                       int startingNumber, KAction *action)
           : d(new CameraTypePrivate)
 {
-    d->title  = title;
-    d->model  = model;
-    d->port   = port;
-    d->path   = path;
-    d->action = action;
-    d->valid  = true;
+    setTitle(title);
+    setModel(model);
+    setPort(port);
+    setPath(path);
+    setStartingNumber(startingNumber);
+    setAction(action);
+    d->valid = true;
 }
 
 CameraType::~CameraType()
@@ -83,24 +87,26 @@ CameraType::~CameraType()
 CameraType::CameraType(const CameraType& ctype)
           : d(new CameraTypePrivate)
 {
-    d->title  = ctype.d->title;
-    d->model  = ctype.d->model;
-    d->port   = ctype.d->port;
-    d->path   = ctype.d->path;
-    d->action = ctype.d->action;
-    d->valid  = ctype.d->valid;
+    d->title          = ctype.d->title;
+    d->model          = ctype.d->model;
+    d->port           = ctype.d->port;
+    d->path           = ctype.d->path;
+    d->startingNumber = ctype.d->startingNumber;
+    d->action         = ctype.d->action;
+    d->valid          = ctype.d->valid;
 }
 
 CameraType& CameraType::operator=(const CameraType& ctype)
 {
     if (this != &ctype)
     {
-        d->title  = ctype.d->title;
-        d->model  = ctype.d->model;
-        d->port   = ctype.d->port;
-        d->path   = ctype.d->path;
-        d->action = ctype.d->action;
-        d->valid  = ctype.d->valid;
+        d->title          = ctype.d->title;
+        d->model          = ctype.d->model;
+        d->port           = ctype.d->port;
+        d->path           = ctype.d->path;
+        d->startingNumber = ctype.d->startingNumber;
+        d->action         = ctype.d->action;
+        d->valid          = ctype.d->valid;
     }
     return *this;
 }
@@ -123,6 +129,11 @@ void CameraType::setPort(const QString& port)
 void CameraType::setPath(const QString& path)
 {
     d->path = path;
+}
+
+void CameraType::setStartingNumber(int sn)
+{
+    d->startingNumber = sn;
 }
 
 void CameraType::setAction(KAction *action)
@@ -158,6 +169,11 @@ QString CameraType::port() const
 QString CameraType::path() const
 {
     return d->path;
+}
+
+int CameraType::startingNumber() const
+{
+    return d->startingNumber;
 }
 
 KAction* CameraType::action() const

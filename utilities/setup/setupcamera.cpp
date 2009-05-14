@@ -103,7 +103,10 @@ SetupCamera::SetupCamera( QWidget* parent )
     labels.append( i18n("Model") );
     labels.append( i18n("Port") );
     labels.append( i18n("Path") );
-    labels.append( "Last Access Date" );  // No i18n here. Hidden column with the last access date.
+
+    // No i18n here. Hidden column with the last starting number used to rename camera items.
+    labels.append( "Last Starting Number" );
+
     d->listView->setHeaderLabels(labels);
     d->listView->hideColumn(4);
 
@@ -192,6 +195,7 @@ SetupCamera::SetupCamera( QWidget* parent )
             labels.append(ctype->model());
             labels.append(ctype->port());
             labels.append(ctype->path());
+            labels.append(QString::number(ctype->startingNumber()));
             new QTreeWidgetItem(d->listView, labels);
         }
     }
@@ -302,7 +306,7 @@ void SetupCamera::slotAddedCamera(const QString& title, const QString& model,
     labels.append(model);
     labels.append(port);
     labels.append(path);
-    labels.append(QDateTime::currentDateTime().toString(Qt::ISODate));
+    labels.append(QString("1"));
     new QTreeWidgetItem(d->listView, labels);
 }
 
@@ -333,7 +337,7 @@ void SetupCamera::applySettings()
             if (item)
             {
                 CameraType *ctype = new CameraType(item->text(0), item->text(1), item->text(2),
-                                                   item->text(3));
+                                                   item->text(3), item->text(4).toInt());
                 clist->insert(ctype);
             }
             ++it;

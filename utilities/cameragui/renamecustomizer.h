@@ -112,7 +112,9 @@ public:
     bool    useDefault() const;
     QString newName(const QString& fileName, const QDateTime& date, int index, const QString& extension) const;
     Case    changeCase() const;
+
     int     startIndex() const;
+    void    setStartIndex(int startIndex);
 
 Q_SIGNALS:
 

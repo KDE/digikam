@@ -118,7 +118,8 @@ bool CameraList::load()
         QString model     = e.attribute("model");
         QString port      = e.attribute("port");
         QString path      = e.attribute("path");
-        CameraType *ctype = new CameraType(title, model, port, path);
+        int sn            = e.attribute("startingnumber").toInt();
+        CameraType *ctype = new CameraType(title, model, port, path, sn);
         insertPrivate(ctype);
     }
 
@@ -132,7 +133,7 @@ bool CameraList::save()
         return true;
 
     QDomDocument doc("cameralist");
-    doc.setContent(QString("<!DOCTYPE XMLCameraList><cameralist version=\"1.1\" client=\"digikam\"/>"));
+    doc.setContent(QString("<!DOCTYPE XMLCameraList><cameralist version=\"1.2\" client=\"digikam\"/>"));
 
     QDomElement docElem=doc.documentElement();
 
@@ -140,10 +141,11 @@ bool CameraList::save()
          ctype = d->clist.next())
     {
        QDomElement elem = doc.createElement("item");
-       elem.setAttribute("title", ctype->title());
-       elem.setAttribute("model", ctype->model());
-       elem.setAttribute("port",  ctype->port());
-       elem.setAttribute("path",  ctype->path());
+       elem.setAttribute("title",          ctype->title());
+       elem.setAttribute("model",          ctype->model());
+       elem.setAttribute("port",           ctype->port());
+       elem.setAttribute("path",           ctype->path());
+       elem.setAttribute("startingnumber", QString::number(ctype->startingNumber()));
        docElem.appendChild(elem);
     }
 
@@ -243,7 +245,7 @@ CameraType* CameraList::autoDetect(bool& retry)
     if (port.startsWith("usb:"))
         port = "usb:";
 
-    CameraType* ctype = new CameraType(model, model, port, "/");
+    CameraType* ctype = new CameraType(model, model, port, "/", 1);
     insert(ctype);
 
     return ctype;
@@ -263,6 +265,19 @@ void CameraList::clear()
         remove(ctype);
         ctype = d->clist.first();
     }
+}
+
+bool CameraList::changeCameraStartingNumber(const QString& cameraTitle, int sn)
+{
+    CameraType* cam = find(cameraTitle);
+    if (cam)
+    {
+        cam->setStartingNumber(sn);
+        d->modified = true;
+        save();
+        return true;
+    }
+    return false;
 }
 
 }  // namespace Digikam
