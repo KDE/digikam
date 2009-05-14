@@ -265,12 +265,30 @@ void SetupCamera::slotAddCamera()
     select->show();
 }
 
+void SetupCamera::slotAddedCamera(const QString& title, const QString& model,
+                                  const QString& port, const QString& path)
+{
+    CameraType *ctype = new CameraType(title, model, port, path, 1);
+    new SetupCameraItem(d->listView, ctype);
+}
+
 void SetupCamera::slotRemoveCamera()
 {
-    QTreeWidgetItem *item = d->listView->currentItem();
-    if (!item) return;
-
-    delete item;
+    SetupCameraItem *item = dynamic_cast<SetupCameraItem*>(d->listView->currentItem());
+    if (item)
+    {
+        CameraType* ctype = item->cameraType();
+        if (ctype)
+        {
+            CameraList* clist = CameraList::defaultList();
+            if (clist)
+            {
+                clist->remove(ctype);
+                clist->save();
+            }
+            delete item;
+        }
+    }
 }
 
 void SetupCamera::slotEditCamera()
@@ -290,6 +308,22 @@ void SetupCamera::slotEditCamera()
                                           const QString&, const QString&)));
 
     select->show();
+}
+
+void SetupCamera::slotEditedCamera(const QString& title, const QString& model,
+                                   const QString& port, const QString& path)
+{
+    SetupCameraItem *item = dynamic_cast<SetupCameraItem*>(d->listView->currentItem());
+    if (!item) return;
+
+    CameraType* ctype = item->cameraType();
+    if (!ctype) return;
+
+    ctype->setTitle(title);
+    ctype->setModel(model);
+    ctype->setPort(port);
+    ctype->setPath(path);
+    item->setCameraType(ctype);
 }
 
 void SetupCamera::slotAutoDetectCamera()
@@ -321,29 +355,6 @@ void SetupCamera::slotAutoDetectCamera()
         KMessageBox::information(this, i18n("Found camera '%1' (%2) and added it to the list.", model, port));
         slotAddedCamera(model, model, port, QString("/"));
     }
-}
-
-void SetupCamera::slotAddedCamera(const QString& title, const QString& model,
-                                  const QString& port, const QString& path)
-{
-    CameraType *ctype = new CameraType(title, model, port, path, 1);
-    new SetupCameraItem(d->listView, ctype);
-}
-
-void SetupCamera::slotEditedCamera(const QString& title, const QString& model,
-                                   const QString& port, const QString& path)
-{
-    SetupCameraItem *item = dynamic_cast<SetupCameraItem*>(d->listView->currentItem());
-    if (!item) return;
-
-    CameraType* ctype = item->cameraType();
-    if (!ctype) return;
-
-    ctype->setTitle(title);
-    ctype->setModel(model);
-    ctype->setPort(port);
-    ctype->setPath(path);
-    item->setCameraType(ctype);
 }
 
 void SetupCamera::applySettings()
