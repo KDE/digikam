@@ -228,7 +228,7 @@ void MonthWidget::paintEvent(QPaintEvent*)
 
             }
 
-            index++;
+            ++index;
         }
     }
 
@@ -246,7 +246,7 @@ void MonthWidget::paintEvent(QPaintEvent*)
         p.drawText(rsmall, Qt::AlignVCenter|Qt::AlignHCenter,
                            KGlobal::locale()->calendar()->weekDayName(i, KCalendarSystem::ShortDayName)
                            .remove(2,1));
-        index++;
+        ++index;
     }
 
     r = QRect(0, 0, cr.width(), 2*d->currh);
@@ -318,7 +318,7 @@ void MonthWidget::mousePressEvent(QMouseEvent *e)
                 for (int i2=firstSelected ; i2 <= endSelection; ++i2)
                     d->days[i2].selected = true;
             else if (endSelection < firstSelected)
-                for (int i2=lastSelected ; i2 >= endSelection; i2--)
+                for (int i2=lastSelected ; i2 >= endSelection; --i2)
                     d->days[i2].selected = true;
         }
         else

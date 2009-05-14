@@ -300,14 +300,14 @@ void CustomStepsDoubleSpinBox::stepBy(int steps)
             {
                 if (v <= m_values[nextStep])
                 {
-                    nextStep++;
+                    ++nextStep;
                     break;
                 }
             }
 
             // go as many steps in m_values as we need
             int stepsToGo = steps;
-            for ( ; stepsToGo > 0 && nextStep < m_values.count(); stepsToGo--)
+            for ( ; stepsToGo > 0 && nextStep < m_values.count(); --stepsToGo)
             {
                 v = m_values[nextStep++];
             }
@@ -320,17 +320,17 @@ void CustomStepsDoubleSpinBox::stepBy(int steps)
         }
         else
         {
-            for (nextStep=m_values.count() - 1; nextStep>= 0; nextStep--)
+            for (nextStep=m_values.count() - 1; nextStep>= 0; --nextStep)
             {
                 if (v >= m_values[nextStep])
                 {
-                    nextStep--;
+                    --nextStep;
                     break;
                 }
             }
 
             int stepsToGo = -steps;
-            for ( ; stepsToGo > 0 && nextStep >= 0; stepsToGo--)
+            for ( ; stepsToGo > 0 && nextStep >= 0; --stepsToGo)
             {
                 v = m_values[nextStep--];
             }
@@ -431,14 +431,14 @@ void CustomStepsIntSpinBox::stepBy(int steps)
             {
                 if (v <= m_values[nextStep])
                 {
-                    nextStep++;
+                    ++nextStep;
                     break;
                 }
             }
 
             // go as many steps in m_values as we need
             int stepsToGo = steps;
-            for ( ; stepsToGo > 0 && nextStep < m_values.count(); stepsToGo--)
+            for ( ; stepsToGo > 0 && nextStep < m_values.count(); --stepsToGo)
             {
                 v = m_values[nextStep++];
             }
@@ -451,17 +451,17 @@ void CustomStepsIntSpinBox::stepBy(int steps)
         }
         else
         {
-            for (nextStep=m_values.count() - 1; nextStep>= 0; nextStep--)
+            for (nextStep=m_values.count() - 1; nextStep>= 0; --nextStep)
             {
                 if (v >= m_values[nextStep])
                 {
-                    nextStep--;
+                    --nextStep;
                     break;
                 }
             }
 
             int stepsToGo = -steps;
-            for ( ; stepsToGo > 0 && nextStep >= 0; stepsToGo--)
+            for ( ; stepsToGo > 0 && nextStep >= 0; --stepsToGo)
             {
                 v = m_values[nextStep--];
             }

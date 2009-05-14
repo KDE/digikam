@@ -209,7 +209,7 @@ QModelIndex ImageModel::indexForPath(const QString& filePath) const
     else
     {
         const int size = d->infos.size();
-        for (int i=0; i<size; i++)
+        for (int i=0; i<size; ++i)
             if (d->infos[i].filePath() == filePath)
                 return createIndex(i, 0);
     }
@@ -302,7 +302,7 @@ void ImageModel::appendInfos(const QList<ImageInfo>& infos)
     int lastNewIndex = d->infos.size() + infos.size() - 1;
     beginInsertRows(QModelIndex(), firstNewIndex, lastNewIndex);
     d->infos << infos;
-    for (int i=firstNewIndex; i<=lastNewIndex; i++)
+    for (int i=firstNewIndex; i<=lastNewIndex; ++i)
     {
         ImageInfo &info = d->infos[i];
         d->idHash[info.id()] = i;

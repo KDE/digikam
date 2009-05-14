@@ -89,7 +89,7 @@ void ImageData::fillPixelData(const QImage& im)
             data1[cn] = qRed  (pixel);
             data2[cn] = qGreen(pixel);
             data3[cn] = qBlue (pixel);
-            cn++;
+            ++cn;
         }
     }
 }
@@ -114,7 +114,7 @@ void ImageData::fillPixelData(const DImg& im)
             data2[cn] = ptr[1];
             data3[cn] = ptr[0];
             ptr += 4;
-            cn++;
+            ++cn;
         }
     }
 }
@@ -190,7 +190,7 @@ void Calculator::haar2D(Unit a[])
 
             h1 = h >> 1;        // h = 2*h1
             C *= 0.7071;        // 1/sqrt(2)
-            for (k = 0, j1 = j2 = i; k < h1; k++, j1++, j2 += 2)
+            for (k = 0, j1 = j2 = i; k < h1; ++k, ++j1, j2 += 2)
             {
                 int j21 = j2+1;
                 t[k]    = (a[j2] - a[j21]) * C;
@@ -221,7 +221,7 @@ void Calculator::haar2D(Unit a[])
 
             h1 = h >> 1;
             C *= 0.7071;       // 1/sqrt(2) = 0.7071
-            for (k = 0, j1 = j2 = i; k < h1; k++, j1 += NumberOfPixels, j2 += 2*NumberOfPixels)
+            for (k = 0, j1 = j2 = i; k < h1; ++k, j1 += NumberOfPixels, j2 += 2*NumberOfPixels)
             {
                 int j21 = j2+NumberOfPixels;
                 t[k]    = (a[j2] - a[j21]) * C;
@@ -229,7 +229,7 @@ void Calculator::haar2D(Unit a[])
             }
 
             // Write back subtraction results:
-            for (k = 0, j1 = i+h1*NumberOfPixels; k < h1; k++, j1 += NumberOfPixels)
+            for (k = 0, j1 = i+h1*NumberOfPixels; k < h1; ++k, j1 += NumberOfPixels)
             {
                 a[j1]=t[k];
             }

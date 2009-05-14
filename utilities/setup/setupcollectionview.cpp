@@ -783,7 +783,7 @@ int SetupCollectionModel::rowCount(const QModelIndex& parent) const
     foreach (const Item& item, m_collections)
     {
         if (!item.deleted && item.parentId == parentId)
-            rowCount++;
+            ++rowCount;
     }
     return rowCount;
 }
@@ -845,7 +845,7 @@ QModelIndex SetupCollectionModel::index(int row, int column, const QModelIndex& 
             {
                 if (rowCount == row)
                     return createIndex(row, column, i);
-                rowCount++;
+                ++rowCount;
             }
         }
     }
@@ -888,7 +888,7 @@ QModelIndex SetupCollectionModel::indexForId(int id, int column) const
         {
             if (i == id)
                 return createIndex(row, column, i);
-            row++;
+            ++row;
         }
     }
     return QModelIndex();

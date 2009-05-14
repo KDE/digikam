@@ -682,7 +682,7 @@ void TagFolderView::tagDelete(TagFolderViewItem *item)
     AlbumIterator iter(tag);
     while(iter.current())
     {
-        children++;
+        ++children;
         ++iter;
     }
 

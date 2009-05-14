@@ -105,7 +105,7 @@ void MetadataListView::setCurrentItemByKey(const QString& itemKey)
                 }
             }
         }
-        i++;
+        ++i;
     }
     while (item);
 }
@@ -168,7 +168,7 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
                 {
                     QString tagTitle = m_parent->getTagTitle(it.key());
                     new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.value());
-                    subItems++;
+                    ++subItems;
                 }
             }
             else
@@ -177,7 +177,7 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
 
                 QString tagTitle = m_parent->getTagTitle(it.key());
                 new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.value());
-                subItems++;
+                ++subItems;
             }
         }
     }
@@ -225,7 +225,7 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
                         {
                             QString tagTitle = m_parent->getTagTitle(it.key());
                             new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.value());
-                            subItems++;
+                            ++subItems;
                         }
                     }
                     else
@@ -234,7 +234,7 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
 
                         QString tagTitle = m_parent->getTagTitle(it.key());
                         new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.value());
-                        subItems++;
+                        ++subItems;
                     }
                 }
             }

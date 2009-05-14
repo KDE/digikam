@@ -1591,7 +1591,7 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
 
         d->controller->download(downloadSettings);
         addFileExtension(QFileInfo(downloadUrl.path()).suffix());
-        total++;
+        ++total;
     }
 
     if (total <= 0)
@@ -1673,7 +1673,7 @@ void CameraUI::slotToggleLock()
                 lock = false;
 
             d->controller->lockFile(folder, file, lock);
-            count++;
+            ++count;
         }
     }
 

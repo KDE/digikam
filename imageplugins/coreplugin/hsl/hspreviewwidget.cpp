@@ -105,7 +105,7 @@ void HSPreviewWidget::updatePixmap()
     QColor  col;
     uint   *p;
 
-    for ( int s = ySize-1 ; s >= 0 ; s-- )
+    for ( int s = ySize-1 ; s >= 0 ; --s )
     {
         p = (uint *)image.scanLine(ySize - s - 1);
 
@@ -113,7 +113,7 @@ void HSPreviewWidget::updatePixmap()
         {
             col.setHsv( 359*h/(xSize-1), 255, 192 );
             *p = col.rgb();
-            p++;
+            ++p;
         }
     }
 

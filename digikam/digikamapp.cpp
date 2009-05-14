@@ -358,7 +358,7 @@ void DigikamApp::restoreSession()
                 restore(n, false);
                 break;
             }
-            n++;
+            ++n;
         }
     }
 }

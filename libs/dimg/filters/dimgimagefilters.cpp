@@ -258,7 +258,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
 
     memset(&intensity, 0, sizeof(struct double_packet));
 
-    for(high.red = histogram->getHistogramSegments()-1 ; high.red != 0 ; high.red--)
+    for(high.red = histogram->getHistogramSegments()-1 ; high.red != 0 ; --high.red)
     {
        intensity.red += histogram->getValue(ImageHistogram::RedChannel, (int)high.red);
 
@@ -271,7 +271,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
        threshold_intensity = 0;
        memset(&intensity, 0, sizeof(struct double_packet));
 
-       for(low.red = 0 ; low.red < histogram->getHistogramSegments()-1 ; low.red++)
+       for(low.red = 0 ; low.red < histogram->getHistogramSegments()-1 ; ++low.red)
        {
           intensity.red += histogram->getValue(ImageHistogram::RedChannel, (int)low.red);
 
@@ -281,7 +281,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
 
        memset(&intensity, 0, sizeof(struct double_packet));
 
-       for(high.red = histogram->getHistogramSegments()-1 ; high.red != 0 ; high.red--)
+       for(high.red = histogram->getHistogramSegments()-1 ; high.red != 0 ; --high.red)
        {
           intensity.red += histogram->getValue(ImageHistogram::RedChannel, (int)high.red);
 
@@ -294,7 +294,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
 
     memset(&intensity, 0, sizeof(struct double_packet));
 
-    for(high.green = histogram->getHistogramSegments()-1 ; high.green != 0 ; high.green--)
+    for(high.green = histogram->getHistogramSegments()-1 ; high.green != 0 ; --high.green)
     {
        intensity.green += histogram->getValue(ImageHistogram::GreenChannel, (int)high.green);
 
@@ -307,7 +307,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
        threshold_intensity = 0;
        memset(&intensity, 0, sizeof(struct double_packet));
 
-       for(low.green = 0 ; low.green < histogram->getHistogramSegments()-1 ; low.green++)
+       for(low.green = 0 ; low.green < histogram->getHistogramSegments()-1 ; ++low.green)
        {
           intensity.green += histogram->getValue(ImageHistogram::GreenChannel, (int)low.green);
 
@@ -317,7 +317,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
 
        memset(&intensity, 0, sizeof(struct double_packet));
 
-       for(high.green = histogram->getHistogramSegments()-1 ; high.green != 0 ; high.green--)
+       for(high.green = histogram->getHistogramSegments()-1 ; high.green != 0 ; --high.green)
        {
           intensity.green += histogram->getValue(ImageHistogram::GreenChannel, (int)high.green);
 
@@ -330,7 +330,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
 
     memset(&intensity, 0, sizeof(struct double_packet));
 
-    for(high.blue = histogram->getHistogramSegments()-1 ; high.blue != 0 ; high.blue--)
+    for(high.blue = histogram->getHistogramSegments()-1 ; high.blue != 0 ; --high.blue)
     {
        intensity.blue += histogram->getValue(ImageHistogram::BlueChannel, (int)high.blue);
 
@@ -343,7 +343,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
        threshold_intensity = 0;
        memset(&intensity, 0, sizeof(struct double_packet));
 
-       for(low.blue = 0 ; low.blue < histogram->getHistogramSegments()-1 ; low.blue++)
+       for(low.blue = 0 ; low.blue < histogram->getHistogramSegments()-1 ; ++low.blue)
        {
           intensity.blue += histogram->getValue(ImageHistogram::BlueChannel, (int)low.blue);
 
@@ -353,7 +353,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
 
        memset(&intensity, 0, sizeof(struct double_packet));
 
-       for(high.blue = histogram->getHistogramSegments()-1 ; high.blue != 0 ; high.blue--)
+       for(high.blue = histogram->getHistogramSegments()-1 ; high.blue != 0 ; --high.blue)
        {
           intensity.blue += histogram->getValue(ImageHistogram::BlueChannel, (int)high.blue);
 
@@ -366,7 +366,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
 
     memset(&intensity, 0, sizeof(struct double_packet));
 
-    for(high.alpha = histogram->getHistogramSegments()-1 ; high.alpha != 0 ; high.alpha--)
+    for(high.alpha = histogram->getHistogramSegments()-1 ; high.alpha != 0 ; --high.alpha)
     {
        intensity.alpha += histogram->getValue(ImageHistogram::AlphaChannel, (int)high.alpha);
 
@@ -379,7 +379,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
        threshold_intensity = 0;
        memset(&intensity, 0, sizeof(struct double_packet));
 
-       for(low.alpha = 0 ; low.alpha < histogram->getHistogramSegments()-1 ; low.alpha++)
+       for(low.alpha = 0 ; low.alpha < histogram->getHistogramSegments()-1 ; ++low.alpha)
        {
           intensity.alpha += histogram->getValue(ImageHistogram::AlphaChannel, (int)low.alpha);
 
@@ -389,7 +389,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
 
        memset(&intensity, 0, sizeof(struct double_packet));
 
-       for(high.alpha = histogram->getHistogramSegments()-1 ; high.alpha != 0 ; high.alpha--)
+       for(high.alpha = histogram->getHistogramSegments()-1 ; high.alpha != 0 ; --high.alpha)
        {
           intensity.alpha += histogram->getValue(ImageHistogram::AlphaChannel, (int)high.alpha);
 
@@ -900,10 +900,10 @@ void DImgImageFilters::unsharpMaskImage(uchar *data, int width, int height, bool
     filter->startFilterDirectly();
     DImg imDest = filter->getTargetImage();
     memcpy(data, imDest.bits(), imDest.numBytes());
-    delete filter;	
+    delete filter;
 }
 
-void DImgImageFilters::refocusImage(uchar *data, int width, int height, bool sixteenBit, 
+void DImgImageFilters::refocusImage(uchar *data, int width, int height, bool sixteenBit,
 		int matrixSize, double radius, double gauss, double correlation, double noise)
 {
     if (!data || !width || !height)
@@ -913,7 +913,7 @@ void DImgImageFilters::refocusImage(uchar *data, int width, int height, bool six
     }
 
     DImg orgImage(width, height, sixteenBit, true, data);
-    DImgRefocus *filter = new DImgRefocus(&orgImage, 0L, matrixSize, 
+    DImgRefocus *filter = new DImgRefocus(&orgImage, 0L, matrixSize,
     		radius, gauss, correlation, noise);
     filter->startFilterDirectly();
     DImg imDest = filter->getTargetImage();
@@ -951,13 +951,13 @@ void DImgImageFilters::pixelAntiAliasing(uchar *data, int Width, int Height, dou
             j = setPositionAdjusted (Width, Height, nX + loopx, nY + loopy);
 
             lfTotalB += ((double)data[j] * lfWeight);
-            j++;
+            ++j;
             lfTotalG += ((double)data[j] * lfWeight);
-            j++;
+            ++j;
             lfTotalR += ((double)data[j] * lfWeight);
-            j++;
+            ++j;
             lfTotalA += ((double)data[j] * lfWeight);
-            j++;
+            ++j;
         }
     }
 
@@ -998,13 +998,13 @@ void DImgImageFilters::pixelAntiAliasing16(unsigned short *data, int Width, int 
             j = setPositionAdjusted (Width, Height, nX + loopx, nY + loopy);
 
             lfTotalB += ((double)data[j] * lfWeight);
-            j++;
+            ++j;
             lfTotalG += ((double)data[j] * lfWeight);
-            j++;
+            ++j;
             lfTotalR += ((double)data[j] * lfWeight);
-            j++;
+            ++j;
             lfTotalA += ((double)data[j] * lfWeight);
-            j++;
+            ++j;
         }
     }
 

@@ -118,13 +118,13 @@ QString AlbumIconItem::squeezedText(QPainter* p, int width, const QString& text)
             // add letters while text < label
             do
             {
-                letters++;
+                ++letters;
                 squeezedText  = fullText.left(letters) + "...";
                 squeezedWidth = fm.width(squeezedText);
             }
             while (squeezedWidth < width);
 
-            letters--;
+            --letters;
             squeezedText = fullText.left(letters) + "...";
         }
         else if (squeezedWidth > width)
@@ -133,7 +133,7 @@ QString AlbumIconItem::squeezedText(QPainter* p, int width, const QString& text)
             // remove letters while text > label
             do
             {
-                letters--;
+                --letters;
                 squeezedText  = fullText.left(letters) + "...";
                 squeezedWidth = fm.width(squeezedText);
             }

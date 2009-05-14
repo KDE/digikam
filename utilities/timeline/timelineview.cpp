@@ -495,7 +495,7 @@ void TimeLineView::slotAlbumSelected(SAlbum* salbum)
                         start = reader.valueToDateTime();
                     else if (numberOfFields == 1)
                         end = reader.valueToDateTime();
-                    numberOfFields++;
+                    ++numberOfFields;
                 }
             }
             if (numberOfFields)

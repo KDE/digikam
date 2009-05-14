@@ -138,7 +138,7 @@ void FolderItem::setup()
     FolderView *fv = dynamic_cast<FolderView*>(listView());
     int h = fv->itemHeight();
     if (h % 2 > 0)
-        h++;
+        ++h;
 
     setHeight(h);
 }
@@ -287,7 +287,7 @@ void FolderCheckListItem::setup()
     FolderView *fv = dynamic_cast<FolderView*>(listView());
     int h = fv->itemHeight();
     if (h % 2 > 0)
-        h++;
+        ++h;
 
     setHeight(h);
 }

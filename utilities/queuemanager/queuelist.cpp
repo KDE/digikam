@@ -729,7 +729,7 @@ int QueueListView::itemsCount()
     while (*it)
     {
         QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(*it);
-        if (item) count++;
+        if (item) ++count;
         ++it;
     }
     return count;
@@ -825,7 +825,7 @@ void QueueListView::updateDestFileNames()
             item->setDestFileName(QString("%1.%2").arg(baseName).arg(newSuffix));
         }
         ++it;
-        index++;
+        ++index;
     }
 }
 

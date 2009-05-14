@@ -202,8 +202,8 @@ void ArrowClickLabel::paintEvent(QPaintEvent*)
     /*
     if (isDown()) 
     {
-        x++;
-        y++;
+        ++x;
+        ++y;
     }
     */
 

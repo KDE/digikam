@@ -329,7 +329,7 @@ Mat *RefocusMatrix::copy_vec (const CMat * const mat, const int m)
         for (x = -m; x <= m; ++x)
         {
             *mat_eltptr (result, index, 0) = c_mat_elt (mat, x, y);
-            index++;
+            ++index;
         }
     }
 
@@ -347,7 +347,7 @@ Mat *RefocusMatrix::copy_cvec (const CMat * const mat, const int m)
         for (x = 0; x <= y; ++x)
         {
             *mat_eltptr (result, index, 0) = c_mat_elt (mat, x, y);
-            index++;
+            ++index;
         }
     }
 

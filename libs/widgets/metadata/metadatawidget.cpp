@@ -319,11 +319,11 @@ void MetadataWidget::slotCopy2Clipboard()
                     textmetadata.append(lvItem2->text(1));
                     textmetadata.append("\n");
                 }
-                j++;
+                ++j;
             }
             while (item2);
         }
-        i++;
+        ++i;
     }
     while (item);
 
@@ -362,11 +362,11 @@ void MetadataWidget::slotPrintMetadata()
                     textmetadata.append(lvItem2->text(1));
                     textmetadata.append("</i><br/>");
                 }
-                j++;
+                ++j;
             }
             while (item2);
         }
-        i++;
+        ++i;
     }
     while (item);
 

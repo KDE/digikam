@@ -655,7 +655,7 @@ void CurvesWidget::mousePressEvent(QMouseEvent *e)
 
             d->leftMost = -1;
 
-            for (i = closest_point - 1 ; i >= 0 ; i--)
+            for (i = closest_point - 1 ; i >= 0 ; --i)
             {
                 if (d->curves->getCurvePointX(m_channelType, i) != -1)
                 {

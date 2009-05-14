@@ -782,7 +782,7 @@ void ShowFoto::slotUpdateItemInfo()
             {
                 break;
             }
-            index++;
+            ++index;
         }
 
         text = i18nc("<Image file name> (<Image number> of <Images in album>)",

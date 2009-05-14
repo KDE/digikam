@@ -461,7 +461,7 @@ void CIETongueWidget::fillTongue()
         {
             if (QColor(Img.pixel(x + d->xBias, y)) != QColor(Qt::black))
             {
-                for (xe = d->pxcols - 1; xe >= x; xe--)
+                for (xe = d->pxcols - 1; xe >= x; --xe)
                 {
                     if (QColor(Img.pixel(xe + d->xBias, y)) != QColor(Qt::black))
                     {

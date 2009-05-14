@@ -106,7 +106,7 @@ public:
         // Remove all draw events from history map which are upper than current index.
         // If user redo actions and make new draw events, theses one will be queued at
         // end of history and will replace removed items.
-        for (int i = drawEventList.count() - 1; i > eventIndex;  i--)
+        for (int i = drawEventList.count() - 1; i > eventIndex;  --i)
         {
             drawEventList.removeAt(i);
         }
@@ -128,7 +128,7 @@ public:
             DrawEvent event(penWidth, penColor);
             event.path.moveTo(drawEventList.last().path.currentPosition());
             drawEventList << event;
-            eventIndex++;
+            ++eventIndex;
         }
         return drawEventList.last();
     }

@@ -207,7 +207,7 @@ QByteArray WelcomePageView::fileToString(const QString& aFileName)
     if (1 && result[len-1]!='\n')
     {
         result[len++] = '\n';
-        readLen++;
+        ++readLen;
     }
     result[len] = '\0';
 

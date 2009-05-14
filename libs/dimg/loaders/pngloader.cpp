@@ -1005,7 +1005,7 @@ size_t PNGLoader::concatenateString(char *destination, const char *source, const
     i = length;
 
     while ((i-- != 0) && (*q != '\0'))
-        q++;
+        ++q;
 
     count = (size_t) (q-destination);
     i     = length-count;
@@ -1018,9 +1018,9 @@ size_t PNGLoader::concatenateString(char *destination, const char *source, const
         if (i != 1)
         {
             *q++=(*p);
-            i--;
+            --i;
         }
-        p++;
+        ++p;
     }
 
     *q='\0';

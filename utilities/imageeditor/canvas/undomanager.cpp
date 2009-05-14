@@ -214,7 +214,7 @@ void UndoManager::clearRedoActions()
         action = *it;
         d->undoCache->erase(level);
         delete action;
-        level++;
+        ++level;
     }
     d->undoCache->erase(level);
     d->redoActions.clear();

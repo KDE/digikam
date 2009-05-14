@@ -264,7 +264,7 @@ void HotPixelsTool::slotBlackFrame(QList<HotPixel> hpList, const KUrl& blackFram
     int i = 0;
     QList <HotPixel>::Iterator end(m_hotPixelsList.end());
 
-    for (it = m_hotPixelsList.begin() ; it != end ; ++it, i++)
+    for (it = m_hotPixelsList.begin() ; it != end ; ++it, ++i)
        pointList.setPoint(i, (*it).rect.center());
 
     m_previewWidget->setPanIconHighLightPoints(pointList);

@@ -67,7 +67,7 @@ ImageFilterModelPrivate::ImageFilterModelPrivate()
 ImageFilterModelPrivate::~ImageFilterModelPrivate()
 {
     // facilitate thread stopping
-    version++;
+    ++version;
     preparer->shutDown();
     filterer->shutDown();
     delete preparer;
@@ -269,7 +269,7 @@ QList<ImageInfo> ImageFilterModel::imageInfosSorted() const
     Q_D(const ImageFilterModel);
     QList<ImageInfo> infos;
     const int size = rowCount();
-    for (int i=0; i<size; i++)
+    for (int i=0; i<size; ++i)
     {
         QModelIndex index = createIndex(i, 0);
         infos << d->imageModel->imageInfo(mapToSource(index));
@@ -433,9 +433,9 @@ void ImageFilterModelPrivate::infosToProcess(const QList<ImageInfo>& infos, bool
         it = end;
         index += vector.size();
 
-        sentOut++;
+        ++sentOut;
         if (forReAdd)
-            sentOutForReAdd++;
+            ++sentOutForReAdd;
 
         if (needPrepare)
             emit packageToPrepare(ImageFilterModelTodoPackage(vector, version, forReAdd));
@@ -463,9 +463,9 @@ void ImageFilterModelPrivate::packageFinished(const ImageFilterModelTodoPackage&
         emit reAddImageInfos(package.infos.toList());
 
     // decrement counters
-    sentOut--;
+    --sentOut;
     if (package.isForReAdd)
-        sentOutForReAdd--;
+        --sentOutForReAdd;
 
     // If all packages have returned, filtered and readded,
     // and there is need to tell the filter result to the view, do that

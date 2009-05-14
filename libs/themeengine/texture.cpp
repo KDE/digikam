@@ -478,10 +478,10 @@ void Texture::buildImage()
     for (p =0; p < d->width*d->height; ++p)
     {
         *bits = 0xff << 24 | *pr << 16 | *pg << 8 | *pb;
-        bits++;
-        pr++;
-        pg++;
-        pb++;
+        ++bits;
+        ++pr;
+        ++pg;
+        ++pb;
     }
 
     d->pixmap = QPixmap::fromImage(image);

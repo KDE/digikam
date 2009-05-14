@@ -716,7 +716,7 @@ void CollectionScanner::incrementDeleteRemovedCompleteScanCount()
 {
     DatabaseAccess access;
     int count = access.db()->getSetting("DeleteRemovedCompleteScanCount").toInt();
-    count++;
+    ++count;
     access.db()->setSetting("DeleteRemovedCompleteScanCount", QString::number(count));
 }
 

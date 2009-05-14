@@ -706,7 +706,7 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlongl
         if (!resultsCandidates.contains(*it))
             d->sigMap->remove(*it);
 
-        progress++;
+        ++progress;
 
         if (observer && (progress == total || progress % progressStep == 0))
         {

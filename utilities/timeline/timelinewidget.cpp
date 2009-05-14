@@ -167,7 +167,7 @@ int TimeLineWidget::totalIndex()
     do
     {
         dt = nextDateTime(dt);
-        i++;
+        ++i;
     }
     while(dt < d->maxDateTime);
 
@@ -185,7 +185,7 @@ int TimeLineWidget::indexForDateTime(const QDateTime& date)
     do
     {
         dt = nextDateTime(dt);
-        i++;
+        ++i;
     }
     while(dt < date);
 
@@ -213,7 +213,7 @@ void TimeLineWidget::setCurrentIndex(int index)
     do
     {
         dt = nextDateTime(dt);
-        i++;
+        ++i;
     }
     while(i <= index);
 
@@ -1363,14 +1363,14 @@ TimeLineWidget::SelectionMode TimeLineWidget::checkSelectionForDaysRange(const Q
         it = d->dayStatMap.find(TimeLineWidgetPriv::YearRefPair(year, day));
         if ( it != d->dayStatMap.end() )
         {
-            items++;
+            ++items;
 
             if (it.value().second != Unselected)
             {
                 if (it.value().second == FuzzySelection)
-                    itemsFuz++;
+                    ++itemsFuz;
                 else
-                    itemsSel++;
+                    ++itemsSel;
             }
         }
         dt = dt.addDays(1);

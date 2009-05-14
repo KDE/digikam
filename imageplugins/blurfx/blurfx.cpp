@@ -196,7 +196,7 @@ void BlurFX::zoomBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int X, 
                     sumR += color.red();
                     sumG += color.green();
                     sumB += color.blue();
-                    nCount++;
+                    ++nCount;
                 }
             }
 
@@ -315,7 +315,7 @@ void BlurFX::radialBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int X
                     sumR += color.red();
                     sumG += color.green();
                     sumB += color.blue();
-                    nCount++;
+                    ++nCount;
                 }
             }
 
@@ -628,7 +628,7 @@ void BlurFX::smartBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Ra
                     }
 
                     // increment counter
-                    nCount++;
+                    ++nCount;
                 }
             }
 
@@ -691,7 +691,7 @@ void BlurFX::smartBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Ra
                     }
 
                     // increment counter
-                    nCount++;
+                    ++nCount;
                 }
             }
 
@@ -1204,7 +1204,7 @@ Digikam::DColor BlurFX::RandomColor(uchar *Bits, int Width, int Height, bool six
                 color.setColor(Bits + offset, sixteenBit);
                 I = GetIntensity (color.red(), color.green(), color.blue());
                 IntensityCount[I]++;
-                counter++;
+                ++counter;
 
                 if (IntensityCount[I] == 1)
                 {
@@ -1246,12 +1246,12 @@ Digikam::DColor BlurFX::RandomColor(uchar *Bits, int Width, int Height, bool six
         do
         {
             count += IntensityCount[Index];
-            Index++;
+            ++Index;
         }
         while (count < RandNumber && !m_cancel);
 
         J = Index - 1;
-        ErrorCount++;
+        ++ErrorCount;
     }
     while ((IntensityCount[J] == 0) && (ErrorCount <= counter)  && !m_cancel);
 

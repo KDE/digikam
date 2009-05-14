@@ -144,7 +144,7 @@ CameraFolderItem* CameraFolderView::findFolder(const QString& folderPath)
             if (lvItem && lvItem->folderPath() == folderPath)
                 return lvItem;
         }
-        i++;
+        ++i;
     }
     while (item);
 

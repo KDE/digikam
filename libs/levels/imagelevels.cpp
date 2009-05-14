@@ -171,7 +171,7 @@ void ImageLevels::levelsAuto(ImageHistogram *hist)
 
     for (int channel = ImageHistogram::RedChannel ;
          channel <= ImageHistogram::BlueChannel ;
-         channel++)
+         ++channel)
     {
        levelsChannelAuto(hist, channel);
     }
@@ -219,7 +219,7 @@ void ImageLevels::levelsChannelAuto(ImageHistogram *hist, int channel)
 
        new_count = 0.0;
 
-       for (i = (d->sixteenBit ? 65535 : 255) ; i > 0 ; i--)
+       for (i = (d->sixteenBit ? 65535 : 255) ; i > 0 ; --i)
        {
           new_count       += hist->getValue(channel, i);
           percentage      = new_count / count;

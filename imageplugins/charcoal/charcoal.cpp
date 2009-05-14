@@ -195,7 +195,7 @@ bool Charcoal::convolveImage(const unsigned int order, const double *kernel)
                     green += (*k)*(color.green() * 257.0);
                     blue  += (*k)*(color.blue()  * 257.0);
                     alpha += (*k)*(color.alpha() * 257.0);
-                    k++;
+                    ++k;
                 }
             }
 

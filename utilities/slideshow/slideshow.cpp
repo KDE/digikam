@@ -551,7 +551,7 @@ void SlideShow::printInfoText(QPainter& p, int& offset, const QString& str)
         offset += 20;
         p.setPen(Qt::black);
         for (int x=9; x<=11; ++x)
-            for (int y=offset+1; y>=offset-1; y--)
+            for (int y=offset+1; y>=offset-1; --y)
                 p.drawText(x, height()-y, str);
 
         p.setPen(Qt::white);
@@ -576,7 +576,7 @@ void SlideShow::printComments(QPainter& p, int& offset, const QString& comments)
         uint commentsLinesLengthLocal = MAXSTRINGLEN;
 
         for (currIndex = commentsIndex ;
-             currIndex < (uint)comments.length() && !breakLine ; currIndex++ )
+             currIndex < (uint)comments.length() && !breakLine ; ++currIndex )
         {
             if( comments[currIndex] == QChar('\n') || comments[currIndex].isSpace() )
                 breakLine = true;
@@ -590,7 +590,7 @@ void SlideShow::printComments(QPainter& p, int& offset, const QString& comments)
         for (currIndex = commentsIndex ;
              currIndex <= commentsIndex + commentsLinesLengthLocal &&
              currIndex < (uint)comments.length() && !breakLine ;
-             currIndex++ )
+             ++currIndex )
             {
                 breakLine = (comments[currIndex] == QChar('\n')) ? true : false;
 
@@ -607,7 +607,7 @@ void SlideShow::printComments(QPainter& p, int& offset, const QString& comments)
             while (!newLine.endsWith(' '))
             {
                 newLine.truncate(newLine.length() - 1);
-                commentsIndex--;
+                --commentsIndex;
             }
         }
 

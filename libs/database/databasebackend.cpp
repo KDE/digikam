@@ -526,7 +526,7 @@ bool DatabaseBackend::exec(QSqlQuery& query)
                 do
                 {
                     sotoSleep::sleep(1);
-                    limit--;
+                    --limit;
                     if (query.exec())
                         return true;
                 }

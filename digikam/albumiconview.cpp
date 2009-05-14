@@ -1876,7 +1876,7 @@ QPixmap AlbumIconView::ratingPixmap(int rating, bool selected) const
         return pix;
     }
 
-    rating--;
+    --rating;
     if (selected)
         return d->ratingPixmaps[5 + rating];
     else

@@ -157,7 +157,7 @@ void AssignedListView::setCurrentTool(int index)
                 return;
             }
         }
-        count++;
+        ++count;
         ++it;
     }
 }
@@ -175,7 +175,7 @@ int AssignedListView::toolIndex(BatchTool* tool)
             if (item->toolSet().tool == tool)
                 return index;
         }
-        index++;
+        ++index;
         ++it;
     }
     return -1;
@@ -194,7 +194,7 @@ AssignedBatchTools AssignedListView::assignedList()
         {
             map.insert(index, item->toolSet());
         }
-        index++;
+        ++index;
         ++it;
     }
 
@@ -347,7 +347,7 @@ AssignedListViewItem* AssignedListView::findTool(int index)
         if (count == index)
             return item;
 
-        count++;
+        ++count;
         ++it;
     }
     return 0;

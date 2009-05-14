@@ -400,7 +400,7 @@ void KLFDeviceSelector::slotUpdateCombos()
             m_model->combo()->addItem( (*it)->Model, b );
        }
 
-       it++;
+       ++it;
     }
 
     // Fill Lens list for current Maker & Model
@@ -427,7 +427,7 @@ void KLFDeviceSelector::slotUpdateLensCombo()
         KLFDeviceSelector::LensPtr lens = *lenses;
         QVariant b                      = qVariantFromValue(lens);
         m_lens->combo()->addItem((*lenses)->Model, b);
-        lenses++;
+        ++lenses;
     }
 
     emit(signalLensSettingsChanged());
@@ -546,7 +546,7 @@ void KLensFunFilter::filterImage()
                     m_destImage.setPixelColor(x, y, destPixel);
                     src += 2 * 3;
                 }
-                loop++;
+                ++loop;
             }
 
             // Update progress bar in dialog.
@@ -581,7 +581,7 @@ void KLensFunFilter::filterImage()
                                                      1, m_destImage.bytesDepth(), 0))
             {
                 data += m_destImage.height() * m_destImage.bytesDepth();
-                loop++;
+                ++loop;
             }
 
             // Update progress bar in dialog.

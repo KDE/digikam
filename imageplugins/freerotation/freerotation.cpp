@@ -147,8 +147,8 @@ void FreeRotation::filterImage(void)
                         else
                             pResBits16[i] = pBits16[j];
 
-                        i++;
-                        j++;
+                        ++i;
+                        ++j;
                     }
                 }
             }

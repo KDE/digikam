@@ -627,7 +627,7 @@ void FolderView::collapseView(CollapseMode mode)
     {
         iter.current()->setOpen(false);
         iter.current()->setVisible(true);
-        iter++;
+        ++iter;
     }
 
     switch (mode)
@@ -663,7 +663,7 @@ void FolderView::collapseView(CollapseMode mode)
                         break;
                     }
                 }
-                iter++;
+                ++iter;
             }
             if (restoredItem)
                 ensureItemVisible(restoredItem);
@@ -688,7 +688,7 @@ void FolderView::collapseView(CollapseMode mode)
                         break;
                     }
                 }
-                iter++;
+                ++iter;
             }
             if (restoredItem)
                 ensureItemVisible(restoredItem);

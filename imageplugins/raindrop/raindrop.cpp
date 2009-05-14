@@ -192,7 +192,7 @@ void RainDrop::rainDropsImage(Digikam::DImg *orgImage, Digikam::DImg *destImage,
                                     pResBits, pStatusBits,
                                     nRandX, nRandY, nRandSize, Coeff, bLimitRange);
 
-            nCounter++;
+            ++nCounter;
         }
         while ((bResp == false) && (nCounter < 10000) && !m_cancel);
 
@@ -375,7 +375,7 @@ bool RainDrop::CreateRainDrop(uchar *pBits, int Width, int Height, bool sixteenB
                                 nTotalR += imageData.red();
                                 nTotalG += imageData.green();
                                 nTotalB += imageData.blue();
-                                nBlurPixels++;
+                                ++nBlurPixels;
                             }
                         }
                     }

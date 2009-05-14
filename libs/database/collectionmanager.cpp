@@ -1182,7 +1182,7 @@ void CollectionManager::updateLocations()
             {
                 emit locationStatusChanged(*location, oldStatus[i]);
             }
-            i++;
+            ++i;
         }
     }
 }

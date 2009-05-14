@@ -146,7 +146,7 @@ DImg::DImg(const QImage& image)
             dptr[3] = qAlpha(*sptr);
 
             dptr += 4;
-            sptr++;
+            ++sptr;
         }
 
         putImageData(w, h, false, image.hasAlphaChannel(), data, false);
@@ -1034,10 +1034,10 @@ DColor DImg::getSubPixelColor(float x, float y) const
     int _dx  = (int)(x * 4096.0) - (xs << 12);
     int dy   = (int)(y * 4096.0) - (ys << 12);
 
-    for (; ys <= ye; ys++, dy -= 4096)
+    for (; ys <= ye; ++ys, dy -= 4096)
     {
         int xc, dx = _dx;
-        for (xc = xs; xc <= xe; xc++, dx -= 4096)
+        for (xc = xs; xc <= xe; ++xc, dx -= 4096)
         {
             DColor src(0, 0, 0, 0xFFFF, sixteenBit());
             if (xc >= 0 && ys >= 0 && xc < (int)width() && ys < (int)height())
@@ -1621,7 +1621,7 @@ void DImg::rotate(ANGLE angle)
             ullong *from = (ullong*) m_priv->data;
             ullong *to;
 
-            for (int y = w-1; y >=0; y--)
+            for (int y = w-1; y >=0; --y)
             {
                 to = newData + y;
 
@@ -1644,7 +1644,7 @@ void DImg::rotate(ANGLE angle)
             uint *from = (uint*) m_priv->data;
             uint *to;
 
-            for (int y = w-1; y >=0; y--)
+            for (int y = w-1; y >=0; --y)
             {
                 to = newData + y;
 
@@ -1691,8 +1691,8 @@ void DImg::rotate(ANGLE angle)
                     *line1 = *line2;
                     *line2 = tmp;
 
-                    line1++;
-                    line2--;
+                    ++line1;
+                    --line2;
                     if ((int)y == middle_line && x * 2 >= w)
                         break;
                 }
@@ -1718,8 +1718,8 @@ void DImg::rotate(ANGLE angle)
                     *line1 = *line2;
                     *line2 = tmp;
 
-                    line1++;
-                    line2--;
+                    ++line1;
+                    --line2;
                     if ((int)y == middle_line && x * 2 >= w)
                         break;
                 }

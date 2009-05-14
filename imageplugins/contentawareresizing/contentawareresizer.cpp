@@ -221,9 +221,9 @@ bool ContentAwareResizer::isSkinTone(const DColor& color)
 void ContentAwareResizer::buildSkinToneBias()
 {
     DColor c;
-    for(uint x=0; x < m_orgImage.width(); x++)
+    for(uint x=0; x < m_orgImage.width(); ++x)
     {
-        for(uint y=0; y < m_orgImage.height(); y++)
+        for(uint y=0; y < m_orgImage.height(); ++y)
         {
             c = m_orgImage.getPixelColor(x, y);
             c.convertToEightBit();
@@ -237,9 +237,9 @@ void ContentAwareResizer::buildBias(const QImage& mask)
 {
     QColor pixColor;
     int    r,g,b,a;
-    for(int x=0; x < mask.width(); x++)
+    for(int x=0; x < mask.width(); ++x)
     {
-        for(int y=0; y < mask.height(); y++)
+        for(int y=0; y < mask.height(); ++y)
         {
             pixColor = QColor::fromRgba(mask.pixel(x,y));
             pixColor.getRgb(&r, &g, &b, &a);

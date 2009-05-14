@@ -611,7 +611,7 @@ void ImageWindow::slotBackward()
 
     if (index != -1)
     {
-        index--;
+        --index;
 
         if (index != d->urlList.size())
         {
@@ -1196,7 +1196,7 @@ void ImageWindow::slotCollectionImageChange(const CollectionImageChangeset& chan
                     }
                     else
                         removeItem(i);
-                    i--;
+                    --i;
                 }
             }
             break;
@@ -1213,7 +1213,7 @@ void ImageWindow::slotCollectionImageChange(const CollectionImageChangeset& chan
                     }
                     else
                         removeItem(i);
-                    i--;
+                    --i;
                 }
             }
             break;

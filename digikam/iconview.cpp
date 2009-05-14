@@ -312,7 +312,7 @@ int IconView::countSelected() const
     {
         for (IconItem *it = group->firstItem(); it; it = it->nextItem())
             if (it->isSelected())
-                c++;
+                ++c;
     }
 
     return c;
@@ -323,7 +323,7 @@ int IconView::groupCount() const
     int c = 0;
     for (IconGroupItem* group = d->firstGroup; group; group = group->nextGroup())
     {
-        c++;
+        ++c;
     }
 
     return c;
@@ -771,7 +771,7 @@ bool IconView::arrangeItems()
         {
             changed = item->move(x, y) || changed;
             x       += itemW + d->spacing;
-            col++;
+            ++col;
 
             if (col >= numItemsPerRow)
             {

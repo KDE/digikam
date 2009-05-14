@@ -248,7 +248,7 @@ QImage ThumbnailCreator::loadPNG(const QString& path)
     while (num_text--)
     {
         qimage.setText(text_ptr->key,0,text_ptr->text);
-        text_ptr++;
+        ++text_ptr;
     }
 
     png_read_end(png_ptr, info_ptr);

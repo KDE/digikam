@@ -110,8 +110,8 @@ public:
                 br.append(str[i]);
             }
 
-            i++;
-            count++;
+            ++i;
+            ++count;
         }
         return br;
     };

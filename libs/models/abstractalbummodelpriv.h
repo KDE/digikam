@@ -84,7 +84,7 @@ public:
             a = a->next();
             if (!a)
                 return -1;
-            i++;
+            ++i;
         }
         return i;
     }
@@ -95,7 +95,7 @@ public:
         int count = 0;
         while (a)
         {
-            count++;
+            ++count;
             a = a->next();
         }
         return count;

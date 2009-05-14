@@ -251,10 +251,10 @@ void IconGroupItem::sort()
 
     IconItem *prev = 0;
     item = 0;
-    for ( i = 0; i < (int)count(); ++i ) 
+    for ( i = 0; i < (int)count(); ++i )
     {
         item = items[ i ].item;
-        if ( item ) 
+        if ( item )
         {
             item->m_prev = prev;
             if ( item->m_prev )

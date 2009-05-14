@@ -276,7 +276,7 @@ int CameraIconView::countItemsByFolder(QString folder)
         if (itemFolder.endsWith('/')) itemFolder.truncate(itemFolder.length()-1);
 
         if (folder == itemFolder)
-            count++;
+            ++count;
     }
 
     return count;
@@ -365,7 +365,7 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
                 else
                     downloadName = getCasedName( d->renamer->changeCase(), viewItem->itemInfo() );
 
-                startIndex++;
+                ++startIndex;
             }
 
             if (convertLossLessJpeg && !downloadName.isEmpty())
@@ -408,7 +408,7 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
             }
 
             viewItem->setDownloadName( downloadName );
-            startIndex++;
+            ++startIndex;
         }
     }
 
@@ -822,7 +822,7 @@ int CameraIconView::itemsDownloaded()
         CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
 
         if (iconItem->itemInfo()->downloaded == GPItemInfo::DownloadedYes)
-            downloaded++;
+            ++downloaded;
     }
 
     return downloaded;

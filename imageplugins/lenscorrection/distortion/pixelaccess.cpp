@@ -86,7 +86,7 @@ void PixelAccess::pixelAccessSelectRegion(int n)
     c    = m_tileMinY[n];
     d    = m_tileMaxY[n];
 
-    for( i = n ; i > 0 ; i--)
+    for( i = n ; i > 0 ; --i)
     {
         m_buffer[i]   = m_buffer[i-1];
         m_tileMinX[i] = m_tileMinX[i-1];

@@ -227,7 +227,7 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
             uchar *in = img.scanLine(j) + cinfo.output_width * 3;
             QRgb *out = (QRgb*)img.scanLine(j);
 
-            for (uint i = cinfo.output_width; i--; ) {
+            for (uint i = cinfo.output_width; --i; ) {
                 in -= 3;
                 out[i] = qRgb(in[0], in[1], in[2]);
             }
@@ -237,7 +237,7 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
             uchar *in = img.scanLine(j) + cinfo.output_width * 4;
             QRgb *out = (QRgb*)img.scanLine(j);
 
-            for (uint i = cinfo.output_width; i--; ) {
+            for (uint i = cinfo.output_width; --i; ) {
                 in -= 4;
                 int k = in[3];
                 out[i] = qRgb(k * in[0] / 255, k * in[1] / 255, k * in[2] / 255);

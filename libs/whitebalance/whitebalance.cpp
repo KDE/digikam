@@ -186,7 +186,7 @@ void WhiteBalance::autoExposureAdjustement(uchar* data, int width, int height, b
 
     stop = width * height / 200;
 
-    for (i = rgbMax, sum = 0; (i >= 0) && (sum < stop); i--)
+    for (i = rgbMax, sum = 0; (i >= 0) && (sum < stop); --i)
         sum += histogram->getValue(Digikam::ImageHistogram::ValueChannel, i);
 
     expo = -log((float)(i+1) / rgbMax) / log(2);

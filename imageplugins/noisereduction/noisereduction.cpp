@@ -347,7 +347,7 @@ void NoiseReduction::blur_line(float* const data, float* const data2, float* con
 
     // Calculate radius factors
 
-    for (row = 0, idx = 0 ; !m_cancel && (idx < len) ; row += 4, idx++)
+    for (row = 0, idx = 0 ; !m_cancel && (idx < len) ; row += 4, ++idx)
     {
         // Color weights are chosen proportional to Bayer Sensor pixel count
 
@@ -373,7 +373,7 @@ void NoiseReduction::blur_line(float* const data, float* const data2, float* con
 
     for (b = 0 ; !m_cancel && (b < 3) ; ++b)
     {
-        for (row = b, idx = 0 ; !m_cancel && (idx < len) ; row += 4, idx++)
+        for (row = b, idx = 0 ; !m_cancel && (idx < len) ; row += 4, ++idx)
         {
             if (m_orgImage.sixteenBit())       // 16 bits image
                 data[idx] = (float)src16[row] / (float)m_clampMax;
@@ -383,7 +383,7 @@ void NoiseReduction::blur_line(float* const data, float* const data2, float* con
 
         filter(data, data2, buffer, rbuf, tbuf, len, b);
 
-        for (row = b, idx = 0 ; !m_cancel && (idx < len) ; row += 4, idx++)
+        for (row = b, idx = 0 ; !m_cancel && (idx < len) ; row += 4, ++idx)
         {
             int value = (int)(data[idx] * (float)m_clampMax + 0.5);
 
@@ -488,8 +488,8 @@ void NoiseReduction::iir_filter(float* const start, float* const end, float* dst
 
             d1 = d2 = d3 = *dest;
             dend -= 6;
-            src--;
-            dest--;
+            --src;
+            --dest;
 
             while (dest < dend)
             {
@@ -545,8 +545,8 @@ void NoiseReduction::iir_filter(float* const start, float* const end, float* dst
             d1 = d2 = d3 = 0.0;
             dest[0] = dest[ofs] = 0.0;
             dend -= 6;
-            dest--;
-            src--;
+            --dest;
+            --src;
 
             while (dest < dend)
             {
@@ -776,7 +776,7 @@ void NoiseReduction::filter(float *buffer, float *data, float *data2, float *rbu
 
         // backward pass
 
-        for ( rbuf = rbufrp +(int) m_phase ; rbuf >= rbuflp; src--, dest--, rbuf--)
+        for ( rbuf = rbufrp +(int) m_phase ; rbuf >= rbuflp; --src, --dest, --rbuf)
         {
             // NOTE: commented from original implementation
             //fbw = fabs( rbuf[ofs2]*ll2+rbuf[ofs2+1]*rl2);

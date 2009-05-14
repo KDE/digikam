@@ -154,7 +154,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             if (components[3] > 0)
             {
                 m_hasAlpha = true;
-                number_components++;
+                ++number_components;
             }
             colorModel = DImg::RGB;
             break;
@@ -188,7 +188,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             if (components[3] > 0)
             {
                 m_hasAlpha = true;
-                number_components++;
+                ++number_components;
             }
             // FIXME : image->colorspace=YCbCrColorspace;
             colorModel = DImg::YCBCR;

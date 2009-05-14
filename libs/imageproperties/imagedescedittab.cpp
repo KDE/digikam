@@ -412,13 +412,13 @@ void ImageDescEditTab::slotChangingItems()
 
         int changedFields = 0;
         if (d->hub.commentChanged())
-            changedFields++;
+            ++changedFields;
         if (d->hub.dateTimeChanged())
-            changedFields++;
+            ++changedFields;
         if (d->hub.ratingChanged())
-            changedFields++;
+            ++changedFields;
         if (d->hub.tagsChanged())
-            changedFields++;
+            ++changedFields;
 
         QString text;
         if (changedFields == 1)

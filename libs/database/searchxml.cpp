@@ -371,7 +371,7 @@ bool SearchXmlReader::readToStartOfElement(const QString& elementName)
             {
                 if (name() == elementName)
                     return true;
-                stack++;
+                ++stack;
             }
             case EndElement:
                 if (!--stack)
@@ -395,7 +395,7 @@ void SearchXmlReader::readToEndOfElement()
             switch (QXmlStreamReader::readNext())
             {
                 case StartElement:
-                    stack++;
+                    ++stack;
                 case EndElement:
                     if (!--stack)
                         return;
@@ -670,7 +670,7 @@ QStringList KeywordSearch::split(const QString& keywords)
             keywordList << group.split(QRegExp("\\s+"), QString::SkipEmptyParts);
         }
 
-        quotationMarkCount++;
+        ++quotationMarkCount;
     }
     return keywordList;
 }
