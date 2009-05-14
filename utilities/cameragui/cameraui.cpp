@@ -7,7 +7,7 @@
  * Description : Camera interface dialog
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -1190,9 +1190,10 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
     }
 
     // -- Download camera items -------------------------------
+    // Since we show camera items in reverse order, downloading need to be done also in reverse order.
 
-    for (IconItem* item = d->view->firstItem(); item;
-         item = item->nextItem())
+    for (IconItem* item = d->view->lastItem(); item;
+         item = item->prevItem())
     {
         if (onlySelected && !(item->isSelected()))
             continue;
@@ -1663,7 +1664,7 @@ void CameraUI::addFileExtension(const QString& ext)
     emit signalAlbumSettingsChanged();
 }
 
-void CameraUI::slotFirstItem(void)
+void CameraUI::slotFirstItem()
 {
     CameraIconViewItem *currItem = dynamic_cast<CameraIconViewItem*>(d->view->firstItem());
     d->view->clearSelection();
@@ -1672,7 +1673,7 @@ void CameraUI::slotFirstItem(void)
        d->view->setCurrentItem(currItem);
 }
 
-void CameraUI::slotPrevItem(void)
+void CameraUI::slotPrevItem()
 {
     CameraIconViewItem *currItem = dynamic_cast<CameraIconViewItem*>(d->view->currentItem());
     d->view->clearSelection();
@@ -1681,7 +1682,7 @@ void CameraUI::slotPrevItem(void)
        d->view->setCurrentItem(currItem->prevItem());
 }
 
-void CameraUI::slotNextItem(void)
+void CameraUI::slotNextItem()
 {
     CameraIconViewItem *currItem = dynamic_cast<CameraIconViewItem*>(d->view->currentItem());
     d->view->clearSelection();
