@@ -5,21 +5,21 @@
  *
  * Date        : 2003-02-10
  * Description : Camera type selection dialog
- * 
+ *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -88,7 +88,7 @@ public:
     QStringList    serialPortList;
 
     QListView     *listView;
-    
+
     KLineEdit     *titleEdit;
 
     KURLRequester *umsMountURL;
@@ -111,7 +111,7 @@ CameraSelection::CameraSelection( QWidget* parent )
     QGridLayout* mainBoxLayout = new QGridLayout(plainPage(), 6, 1, 0, KDialog::spacingHint());
     mainBoxLayout->setColStretch(0, 10);
     mainBoxLayout->setRowStretch(6, 10);
-    
+
     // --------------------------------------------------------------
 
     d->listView = new QListView(plainPage());
@@ -125,16 +125,16 @@ CameraSelection::CameraSelection( QWidget* parent )
                                       "using the gphoto2 library installed on your computer.</p>"));
 
     d->searchBar = new SearchTextBar(plainPage(), "CameraSelectionSearchBar");
-    
+
     // --------------------------------------------------------------
 
     QVGroupBox* titleBox = new QVGroupBox( i18n("Camera Title"), plainPage() );
     d->titleEdit = new KLineEdit( titleBox );
     QWhatsThis::add(d->titleEdit, i18n("<p>Set here the name used in digiKam interface to "
                                        "identify this camera.</p>"));
-    
+
     // --------------------------------------------------------------
-    
+
     d->portButtonGroup = new QVButtonGroup( i18n("Camera Port Type"), plainPage() );
     d->portButtonGroup->setRadioButtonExclusive( true );
 
@@ -149,7 +149,7 @@ CameraSelection::CameraSelection( QWidget* parent )
                     "computer using a serial cable.</p>"));
 
     // --------------------------------------------------------------
-    
+
     QVGroupBox* portPathBox = new QVGroupBox( i18n( "Camera Port Path" ), plainPage() );
     d->portPathLabel = new QLabel( portPathBox);
     d->portPathLabel->setText( i18n( "Note: only for serial port camera" ) );
@@ -195,7 +195,7 @@ CameraSelection::CameraSelection( QWidget* parent )
                         "(which uses the Picture Transfer Protocol), please<br>"
                         "use <a href=\"ptpcamera\">%1</a> from the camera list.</p>")
                         .arg(d->PTPCameraNameShown));
-                           
+
     KActiveLabel* explanation = new KActiveLabel(box2);
     explanation->setText(i18n("<p>A complete list of camera settings to use is<br>"
                               "available at <a href='http://www.teaser.fr/~hfiguiere/linux/digicam.html'>"
@@ -207,7 +207,7 @@ CameraSelection::CameraSelection( QWidget* parent )
     box2Layout->addMultiCellWidget(explanation, 4, 5, 1, 1);
 
     // --------------------------------------------------------------
-    
+
     mainBoxLayout->addMultiCellWidget(d->listView,        0, 5, 0, 0);
     mainBoxLayout->addMultiCellWidget(d->searchBar,       6, 6, 0, 0);
     mainBoxLayout->addMultiCellWidget(titleBox,           0, 0, 1, 1);
@@ -220,16 +220,16 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     disconnect(link, SIGNAL(linkClicked(const QString &)),
                link, SLOT(openLink(const QString &)));
-    
+
     connect(link, SIGNAL(linkClicked(const QString &)),
             this, SLOT(slotUMSCameraLinkUsed()));
 
     disconnect(link2, SIGNAL(linkClicked(const QString &)),
                link2, SLOT(openLink(const QString &)));
-    
+
     connect(link2, SIGNAL(linkClicked(const QString &)),
             this, SLOT(slotPTPCameraLinkUsed()));
-                
+
     connect(d->listView, SIGNAL(selectionChanged(QListViewItem *)),
             this, SLOT(slotSelectionChanged(QListViewItem *)));
 
@@ -241,9 +241,9 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     connect(d->searchBar, SIGNAL(signalTextChanged(const QString&)),
             this, SLOT(slotSearchTextChanged(const QString&)));
-    
+
     // Initialize  --------------------------------------------------
-    
+
     getCameraList();
     getSerialPortList();
     kapp->restoreOverrideCursor();
@@ -275,7 +275,7 @@ void CameraSelection::slotPTPCameraLinkUsed()
 }
 
 void CameraSelection::setCamera(const QString& title, const QString& model,
-                                const QString& port, const QString& path)
+                                const QString& port,  const QString& path)
 {
     QString camModel(model);
 
@@ -287,11 +287,14 @@ void CameraSelection::setCamera(const QString& title, const QString& model,
 
     d->listView->setSelected(item, true);
     d->listView->ensureItemVisible(item);
-    
+
     d->titleEdit->setText(title);
 
     if (port.contains("usb"))
+    {
         d->usbButton->setChecked(true);
+        slotPortChanged();
+    }
     else if (port.contains("serial")) 
     {
         d->serialButton->setChecked(true);
@@ -304,6 +307,7 @@ void CameraSelection::setCamera(const QString& title, const QString& model,
                 break;
             }
         }
+        slotPortChanged();
     }
 
     d->umsMountURL->setURL(path);
@@ -314,9 +318,9 @@ void CameraSelection::getCameraList()
     int count = 0;
     QStringList clist;
     QString cname;
-    
+
     GPCamera::getSupportedCameras(count, clist);
-    
+
     for (int i = 0 ; i < count ; i++) 
     {
         cname = clist[i];
@@ -334,8 +338,8 @@ void CameraSelection::getSerialPortList()
     GPCamera::getSupportedPorts(plist);
 
     d->serialPortList.clear();
-    
-    for (unsigned int i=0; i<plist.count(); i++) 
+
+    for (unsigned int i=0; i<plist.count(); i++)
     {
         if ((plist[i]).startsWith("serial:"))
             d->serialPortList.append(plist[i]);
@@ -347,13 +351,13 @@ void CameraSelection::slotSelectionChanged(QListViewItem *item)
     if (!item) return;
 
     QString model(item->text(0));
-    
+
     if (model == d->UMSCameraNameShown) 
     {
         model = d->UMSCameraNameActual;
 
         d->titleEdit->setText(model);
-        
+
         d->serialButton->setEnabled(true);
         d->serialButton->setChecked(false);
         d->serialButton->setEnabled(false);
@@ -378,7 +382,7 @@ void CameraSelection::slotSelectionChanged(QListViewItem *item)
     }
 
     d->titleEdit->setText(model);
-    
+
     QStringList plist;
     GPCamera::getCameraSupportedPorts(model, plist);
 
@@ -430,7 +434,7 @@ void CameraSelection::slotPortChanged()
 
 QString CameraSelection::currentTitle()
 {
-    return d->titleEdit->text();    
+    return d->titleEdit->text();
 }
 
 QString CameraSelection::currentModel()
