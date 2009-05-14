@@ -296,7 +296,7 @@ CameraSelection::~CameraSelection()
 
 void CameraSelection::slotUMSCameraLinkUsed()
 {
-    QList<QTreeWidgetItem *> list = d->listView->findItems(d->UMSCameraNameShown, Qt::MatchExactly, 0);
+    QList<QTreeWidgetItem*> list = d->listView->findItems(d->UMSCameraNameShown, Qt::MatchExactly, 0);
     if (!list.isEmpty())
     {
         QTreeWidgetItem *item = list.first();
@@ -310,7 +310,7 @@ void CameraSelection::slotUMSCameraLinkUsed()
 
 void CameraSelection::slotPTPCameraLinkUsed()
 {
-    QList<QTreeWidgetItem *> list = d->listView->findItems(d->PTPCameraNameShown, Qt::MatchExactly, 0);
+    QList<QTreeWidgetItem*> list = d->listView->findItems(d->PTPCameraNameShown, Qt::MatchExactly, 0);
     if (!list.isEmpty())
     {
         QTreeWidgetItem *item = list.first();
@@ -330,7 +330,7 @@ void CameraSelection::setCamera(const QString& title, const QString& model,
     if (camModel == d->UMSCameraNameActual)
         camModel = d->UMSCameraNameShown;
 
-    QList<QTreeWidgetItem *> list = d->listView->findItems(camModel, Qt::MatchExactly, 0);
+    QList<QTreeWidgetItem*> list = d->listView->findItems(camModel, Qt::MatchExactly, 0);
     if (!list.isEmpty())
     {
         QTreeWidgetItem *item = list.first();
