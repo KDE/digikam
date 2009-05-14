@@ -19,7 +19,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 187569 : Crash on star removing when filtering by stars.
 005 ==> 186549 : digiKam crashes when hovering the bottom part of its.
 006 ==> 187641 : Error while loading shared libraries: libkdcraw.so.5.
-007 ==> 187429 : Crash on Launch after disable KIPI plugins rotate. 
+007 ==> 187429 : Crash on Launch after disable KIPI plugins rotate.
 008 ==> 187937 : Writing tags to files doesn't update modification timestamp.
 009 ==> 184687 : Crash after deleting an empty album.
 010 ==> 186766 : Crash after finish resize and rename of images in folder.
@@ -27,13 +27,13 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 012 ==> 187508 : Spontaneous crash whilst doing nothing in particular.
 013 ==> 188235 : Assigning a color profile to TIFF images does not work anymore with 0.10.0.
 014 ==> 187748 : Install application icons to right path for non-KDE desktops.
-015 ==> 186255 : digiKam crashes when switching collection database. 
-016 ==> 178292 : AspectRatioCrop is slow and jumps around in first second. 
+015 ==> 186255 : digiKam crashes when switching collection database.
+016 ==> 178292 : AspectRatioCrop is slow and jumps around in first second.
 017 ==> 181892 : AspectRatioCrop: some properties should be disabled.
 018 ==> 188573 : RW2 converter broken for low light images.
 019 ==> 188642 : GPS data in Digikam shows the wrong places on the map.
 020 ==> 188907 : Album view should display subfolders, like tag view does.
-021 ==> 183038 : "Select All" action interrupts other widgets. 
+021 ==> 183038 : "Select All" action interrupts other widgets.
 022 ==> 189022 : Better guessing of proportions with 'inverse transformation' option.
 023 ==> 189286 : EXIF info lost while converting from NEF to TIFF.
 024 ==> 189336 : Preview of RAW look different than actual image.
@@ -44,7 +44,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 029 ==> 187265 : Advanced search crashes if a selected album has been deleted.
 030 ==> 185177 : Searches are not updated when changes are made to the resulting image set.
 031 ==> 189542 : Crash on opening download dialog.
-032 ==> 114225 : Free rotation using an horizontal line. 
+032 ==> 114225 : Free rotation using an horizontal line.
 033 ==> 189843 : Crash on ubuntu jaunty beta.
 034 ==> 167836 : Image preview is too large.
 035 ==> 189250 : Editing a canon camera jpeg adds broken sRGB profile.
@@ -58,7 +58,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 043 ==> 191203 : digiKam crashed on first load, after being installed on ubuntu 9.04.
 044 ==> 151321 : Remaining space incorrectly calculated when using symlinks (import from camera).
 045 ==> 189742 : Thumbnails not saved between sessions.
-046 ==> 180507 : Crash when dragging picture to another app with kwin_composite enabled. 
+046 ==> 180507 : Crash when dragging picture to another app with kwin_composite enabled.
 047 ==> 190296 : Can not save images on Windows.
 048 ==> 141240 : Camera download: file rename with regexps.
 049 ==> 181951 : digiKam crashes (SIGABRT) during the importing of pictures from Kodak V530 camera.
@@ -68,8 +68,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 053 ==> 161744 : Filenames are lower case when imported via sd card reader, upper case when imported via usb cable directly from camera.
 054 ==> 187560 : Iptc data for author are missing while downloading images.
 055 ==> 192294 : digiKam crash when i try to import photos from my card reader.
-056 ==> 192413 : Missing items from right-click search menu. 
+056 ==> 192413 : Missing items from right-click search menu.
 057 ==> 131551 : Camera port info deleted when editing camera title.
 058 ==> 181726 : digiKam collect video, music when I connect usb key.
-059 ==> 
+059 ==> 154626 : Autodetect starting number for "appending numbers" when downloading images.
+060 ==> 
 
