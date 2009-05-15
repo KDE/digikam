@@ -33,6 +33,8 @@
 class QString;
 class QDateTime;
 
+class KAction;
+
 namespace Digikam
 {
 
@@ -68,7 +70,7 @@ public:
 Q_SIGNALS:
 
     void signalCameraAdded(CameraType*);
-    void signalCameraRemoved(CameraType*);
+    void signalCameraRemoved(KAction*);
 
 private:
 

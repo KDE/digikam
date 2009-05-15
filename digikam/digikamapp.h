@@ -46,6 +46,8 @@
 #include "albumlister.h"
 #include "digikam_export.h"
 
+class KAction;
+
 namespace Solid { class Device; }
 
 namespace Digikam
@@ -157,8 +159,8 @@ private Q_SLOTS:
     void slotOpenCameraUiFromPath(const QString& path);
     void slotSolidSetupDone(Solid::ErrorType errorType, QVariant errorData, const QString& udi);
     void slotSolidDeviceChanged(const QString& udi);
-    void slotCameraAdded(CameraType *ctype);
-    void slotCameraRemoved(CameraType *ctype);
+    void slotCameraAdded(CameraType*);
+    void slotCameraRemoved(KAction*);
     void slotCameraAutoDetect();
     void downloadImages(const QString& folder);
     void cameraAutoDetect();

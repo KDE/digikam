@@ -81,10 +81,7 @@ CameraList::CameraList(QObject *parent, const QString& file)
 CameraList::~CameraList()
 {
     save();
-
-    while (!d->clist.isEmpty())
-        delete d->clist.takeFirst();
-
+    clear();
     delete d;
 
     if (m_defaultList == this)
@@ -180,17 +177,25 @@ void CameraList::remove(CameraType* ctype)
 void CameraList::insertPrivate(CameraType* ctype)
 {
     if (!ctype) return;
-    emit signalCameraAdded(ctype);
     d->clist.append(ctype);
+    emit signalCameraAdded(ctype);
 }
 
 void CameraList::removePrivate(CameraType* ctype)
 {
     if (!ctype) return;
-    emit signalCameraRemoved(ctype);
+
+    emit signalCameraRemoved(ctype->action());
+
     int i = d->clist.indexOf(ctype);
     if (i != -1)
         delete d->clist.takeAt(i);
+}
+
+void CameraList::clear()
+{
+    while (!d->clist.isEmpty())
+        removePrivate( d->clist.first());
 }
 
 QList<CameraType*>* CameraList::cameraList()
@@ -253,16 +258,6 @@ CameraType* CameraList::autoDetect(bool& retry)
 bool CameraList::findConnectedCamera(int vendorId, int productId, QString& model, QString& port)
 {
     return GPCamera::findConnectedUsbCamera(vendorId, productId, model, port);
-}
-
-void CameraList::clear()
-{
-    CameraType *ctype = d->clist.first();
-    while (ctype)
-    {
-        remove(ctype);
-        ctype = d->clist.first();
-    }
 }
 
 bool CameraList::changeCameraStartIndex(const QString& cameraTitle, int startIndex)

@@ -66,16 +66,23 @@ class SetupCameraItem : public QTreeWidgetItem
 public:
 
     SetupCameraItem(QTreeWidget *parent, CameraType *ctype)
-        : QTreeWidgetItem(parent)
+        : QTreeWidgetItem(parent), m_ctype(0)
     {
         setCameraType(ctype);
     };
 
-    ~SetupCameraItem(){};
+    ~SetupCameraItem()
+    {
+        delete m_ctype;
+    };
 
     void setCameraType(CameraType *ctype)
     {
-        m_ctype = ctype;
+        if (m_ctype)
+            delete m_ctype;
+
+        m_ctype = new CameraType(*ctype);
+
         if (m_ctype)
         {
             setText(0, m_ctype->title());
@@ -85,7 +92,10 @@ public:
         }
     };
 
-    CameraType* cameraType() const { return m_ctype; };
+    CameraType* cameraType() const
+    {
+        return m_ctype;
+    };
 
 private:
 
@@ -107,12 +117,12 @@ public:
         autoDetectButton = 0;
     }
 
-    QPushButton *addButton;
-    QPushButton *removeButton;
-    QPushButton *editButton;
-    QPushButton *autoDetectButton;
+    QPushButton         *addButton;
+    QPushButton         *removeButton;
+    QPushButton         *editButton;
+    QPushButton         *autoDetectButton;
 
-    QTreeWidget *listView;
+    QTreeWidget         *listView;
 };
 
 SetupCamera::SetupCamera( QWidget* parent )
@@ -214,7 +224,7 @@ SetupCamera::SetupCamera( QWidget* parent )
     connect(d->autoDetectButton, SIGNAL(clicked()),
             this, SLOT(slotAutoDetectCamera()));
 
-    // Add cameras --------------------------------------
+    // Populate cameras --------------------------------------
 
     CameraList* clist = CameraList::defaultList();
 
@@ -268,27 +278,15 @@ void SetupCamera::slotAddCamera()
 void SetupCamera::slotAddedCamera(const QString& title, const QString& model,
                                   const QString& port,  const QString& path)
 {
-    CameraType *ctype = new CameraType(title, model, port, path, 1);
-    new SetupCameraItem(d->listView, ctype);
+    CameraType ctype(title, model, port, path, 1);
+    new SetupCameraItem(d->listView, &ctype);
 }
 
 void SetupCamera::slotRemoveCamera()
 {
     SetupCameraItem *item = dynamic_cast<SetupCameraItem*>(d->listView->currentItem());
     if (item)
-    {
-        CameraType* ctype = item->cameraType();
-        if (ctype)
-        {
-            CameraList* clist = CameraList::defaultList();
-            if (clist)
-            {
-                clist->remove(ctype);
-                clist->save();
-            }
-            delete item;
-        }
-    }
+        delete item;
 }
 
 void SetupCamera::slotEditCamera()
@@ -316,21 +314,15 @@ void SetupCamera::slotEditedCamera(const QString& title, const QString& model,
     SetupCameraItem *item = dynamic_cast<SetupCameraItem*>(d->listView->currentItem());
     if (!item) return;
 
-    CameraType* ctype = item->cameraType();
-    if (!ctype) return;
-
-    ctype->setTitle(title);
-    ctype->setModel(model);
-    ctype->setPort(port);
-    ctype->setPath(path);
-    item->setCameraType(ctype);
+    CameraType ctype(title, model, port, path, 1);
+    item->setCameraType(&ctype);
 }
 
 void SetupCamera::slotAutoDetectCamera()
 {
     QString model, port;
 
-    kapp->setOverrideCursor( Qt::WaitCursor );
+    kapp->setOverrideCursor(Qt::WaitCursor);
     int ret = GPCamera::autoDetect(model, port);
     kapp->restoreOverrideCursor();
 
@@ -362,6 +354,8 @@ void SetupCamera::applySettings()
     CameraList* clist = CameraList::defaultList();
     if (clist)
     {
+        clist->clear();
+
         QTreeWidgetItemIterator it(d->listView);
         while (*it)
         {
@@ -371,10 +365,7 @@ void SetupCamera::applySettings()
                 CameraType* ctype = item->cameraType();
                 if (ctype)
                 {
-                    CameraType* ctype2 = new CameraType(*ctype);
-                    clist->remove(ctype);
-                    clist->insert(ctype2);
-                    delete ctype;
+                    clist->insert(new CameraType(*ctype));
                 }
             }
             ++it;

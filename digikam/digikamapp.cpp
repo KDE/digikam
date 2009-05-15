@@ -191,11 +191,11 @@ DigikamApp::DigikamApp()
 
     d->cameraList = new CameraList(this, KStandardDirs::locateLocal("appdata", "cameras.xml"));
 
-    connect(d->cameraList, SIGNAL(signalCameraAdded(CameraType *)),
-            this, SLOT(slotCameraAdded(CameraType *)));
+    connect(d->cameraList, SIGNAL(signalCameraAdded(CameraType*)),
+            this, SLOT(slotCameraAdded(CameraType*)));
 
-    connect(d->cameraList, SIGNAL(signalCameraRemoved(CameraType *)),
-            this, SLOT(slotCameraRemoved(CameraType *)));
+    connect(d->cameraList, SIGNAL(signalCameraRemoved(KAction*)),
+            this, SLOT(slotCameraRemoved(KAction*)));
 
     setupView();
     setupStatusBar();
@@ -1478,12 +1478,8 @@ void DigikamApp::slotCameraAdded(CameraType *ctype)
     ctype->setAction(cAction);
 }
 
-void DigikamApp::slotCameraRemoved(CameraType *ctype)
+void DigikamApp::slotCameraRemoved(KAction *cAction)
 {
-    if (!ctype) return;
-
-    KAction *cAction = ctype->action();
-
     if (cAction)
         d->manuallyAddedCamerasMenu->removeAction(cAction);
 }
