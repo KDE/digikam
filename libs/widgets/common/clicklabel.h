@@ -36,6 +36,7 @@
 // KDE includes
 
 #include <ksqueezedtextlabel.h>
+#include <kconfiggroup.h>
 
 // Local includes
 
@@ -141,6 +142,9 @@ public:
     void setExpanded(bool b);
     bool isExpanded();
 
+    void setExpandByDefault(bool b);
+    bool expandByDefault();
+
 private slots:
 
     void slotToggleContainer();
@@ -174,6 +178,9 @@ public:
 
     void setItemExpanded(int index, bool b);
     bool itemIsExpanded(int index);
+
+    void readSettings(KConfigGroup& group);
+    void writeSettings(KConfigGroup& group);
 
 private:
 

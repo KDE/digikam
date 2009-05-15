@@ -253,7 +253,10 @@ public:
         grid            = 0;
         arrow           = 0;
         line            = 0;
+	expandByDefault = true;
     }
+
+    bool                expandByDefault;
 
     QLabel             *pixmapLabel;
     QWidget            *containerWidget;
@@ -318,6 +321,16 @@ void DLabelExpander::setContainer(QWidget* widget)
         d->containerWidget->setParent(this);
         d->grid->addWidget(d->containerWidget, 2, 0, 1, 3);
     }
+}
+
+void DLabelExpander::setExpandByDefault(bool b)
+{
+    d->expandByDefault = b;
+}
+
+bool DLabelExpander::expandByDefault()
+{
+    return d->expandByDefault;
 }
 
 void DLabelExpander::setExpanded(bool b)
@@ -440,6 +453,30 @@ bool DExpanderBox::itemIsExpanded(int index)
     if (!exp) return false;
 
     return (exp->isExpanded());
+}
+
+void DExpanderBox::readSettings(KConfigGroup& group)
+{
+    for (int i = 0 ; i < count(); ++i)
+    {
+        DLabelExpander *exp = d->wList[i];
+        if (exp)
+        {
+            exp->setExpanded(group.readEntry(QString("%1 Expanded").arg(exp->objectName()), exp->expandByDefault()));
+        }
+    }
+}
+
+void DExpanderBox::writeSettings(KConfigGroup& group)
+{
+    for (int i = 0 ; i < count(); ++i)
+    {
+        DLabelExpander *exp = d->wList[i];
+        if (exp)
+        {
+            group.writeEntry(QString("%1 Expanded").arg(exp->objectName()), exp->isExpanded());
+        }
+    }
 }
 
 } // namespace Digikam
