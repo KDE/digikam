@@ -598,12 +598,12 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
             albumRename(item);
         }
     }
-
-    // cleanup -----------------------
-
-    popmenu.deleteLater();
-    delete renameAction;
-    delete resetIconAction;
+// TODO: DELETE ME?
+//    // cleanup -----------------------
+//
+//    popmenu.deleteLater();
+//    delete renameAction;
+//    delete resetIconAction;
 }
 
 void AlbumFolderView::albumNew()

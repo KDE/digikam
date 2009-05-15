@@ -195,11 +195,11 @@ void DigikamImageView::showContextMenu(QContextMenuEvent* event, const ImageInfo
         if (choice == viewAction)
             emit previewRequested(info);
     }
-
-    // cleanup -----------------------
-
-    popmenu.deleteLater();
-    delete viewAction;
+// TODO: DELETE ME?
+//    // cleanup -----------------------
+//
+//    popmenu.deleteLater();
+//    delete viewAction;
 }
 
 void DigikamImageView::showContextMenu(QContextMenuEvent* event)

@@ -172,13 +172,13 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
             else if (choice == removeAction)     emit signalRemoveItem(item->info());
             else if (choice == clearAllAction)   emit signalClearAll();
         }
-
-        popmenu.deleteLater();
-        delete leftPanelAction;
-        delete rightPanelAction;
-        delete editAction;
-        delete removeAction;
-        delete clearAllAction;
+// TODO: DELETE ME?
+//        popmenu.deleteLater();
+//        delete leftPanelAction;
+//        delete rightPanelAction;
+//        delete editAction;
+//        delete removeAction;
+//        delete clearAllAction;
     }
 }
 

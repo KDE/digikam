@@ -408,13 +408,13 @@ void ImagePreviewView::slotContextMenu()
         else if (choice == nextAction)       emit signalNextItem();
         else if (choice == back2AlbumAction) emit signalBack2Album();
     }
-
-    // cleanup -------------------------
-
-    popmenu.deleteLater();
-    delete back2AlbumAction;
-    delete prevAction;
-    delete nextAction;
+// TODO: DELETE ME?
+//    // cleanup -------------------------
+//
+//    popmenu.deleteLater();
+//    delete back2AlbumAction;
+//    delete prevAction;
+//    delete nextAction;
 }
 
 void ImagePreviewView::slotAssignTag(int tagID)

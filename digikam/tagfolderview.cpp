@@ -576,9 +576,9 @@ void TagFolderView::slotContextMenu(Q3ListViewItem *item, const QPoint &, int)
             d->albumMan->updateTAlbumIcon(tag->album(), QString("tag"), 0, errMsg);
         }
     }
-
-    popmenu.deleteLater();
-    delete resetIconAction;
+// TODO: DELETE ME?
+//    popmenu.deleteLater();
+//    delete resetIconAction;
 }
 
 void TagFolderView::slotTagNewFromABCMenu(const QString& name)
