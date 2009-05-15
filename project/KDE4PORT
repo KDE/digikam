@@ -141,9 +141,9 @@ DIRECTORIES / FILES                     DONE BY     SHOWFOTO DIGIKAM   PORT     
     albumpropsedit.cpp                  Laurent                X       DONE        DONE
     albumsettings.cpp                   Gilles                 X       DONE        DONE
     albumthumbnailloader.cpp            Gilles                 X       DONE        DONE
-    albumselectdialog.cpp               Gilles                 X       DONE
+    albumselectdialog.cpp               Gilles                 X       DONE        DONE
     albumwidgetstack.cpp                Gilles                 X       DONE        DONE
-    cameralist.cpp                      Laurent                X       DONE                 Still to use Q3PtrList
+    cameralist.cpp                      Laurent                X       DONE        DONE
     cameratype.cpp                      Gilles                 X       DONE        DONE
     datefolderview.cpp                  Laurent                X       DONE                 Port to Qt4 and Model/View
     digikamapp.cpp                      Gilles                 X       DONE        DONE
