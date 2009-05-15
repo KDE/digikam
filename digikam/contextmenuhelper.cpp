@@ -322,6 +322,7 @@ void ContextMenuHelper::addAssignTagsMenu(imageIds& ids)
 
     KMenu* assignTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::ASSIGN, d->parent);
     assignTagsPopup->menuAction()->setText(i18n("Assign Tag"));
+    assignTagsPopup->menuAction()->setIcon(SmallIcon("tag"));
     d->parent->addMenu(assignTagsPopup);
 
     connect(assignTagsPopup, SIGNAL(signalTagActivated(int)),
@@ -334,6 +335,7 @@ void ContextMenuHelper::addRemoveTagsMenu(imageIds& ids)
 
     KMenu* removeTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::REMOVE, d->parent);
     removeTagsPopup->menuAction()->setText(i18n("Remove Tag"));
+    removeTagsPopup->menuAction()->setIcon(SmallIcon("tag"));
     d->parent->addMenu(removeTagsPopup);
 
     // Performance: Only check for tags if there are <250 images selected
