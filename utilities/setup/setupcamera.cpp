@@ -220,9 +220,9 @@ SetupCamera::SetupCamera( QWidget* parent )
 
     if (clist)
     {
-        Q3PtrList<CameraType>* cl = clist->cameraList();
+        QList<CameraType*>* cl = clist->cameraList();
 
-        for (CameraType *ctype = cl->first() ; ctype ; ctype = cl->next())
+        foreach (CameraType *ctype, *cl)
         {
             new SetupCameraItem(d->listView, ctype);
         }

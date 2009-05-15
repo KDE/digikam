@@ -7,7 +7,7 @@
  * Description : Cameras list container
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,7 +27,7 @@
 
 // Qt includes
 
-#include <Q3PtrList>
+#include <QList>
 #include <QObject>
 
 class QString;
@@ -55,9 +55,9 @@ public:
     void insert(CameraType* ctype);
     void remove(CameraType* ctype);
 
-    CameraType*            find(const QString& title);
-    CameraType*            autoDetect(bool& retry);
-    Q3PtrList<CameraType>* cameraList();
+    CameraType*         find(const QString& title);
+    CameraType*         autoDetect(bool& retry);
+    QList<CameraType*>* cameraList();
 
     bool changeCameraStartingNumber(const QString& cameraTitle, int sn);
 
