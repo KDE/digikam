@@ -226,13 +226,13 @@ RatioCropTool::RatioCropTool(QObject* parent)
     grid->addWidget(label,               0, 0, 1, 1);
     grid->addWidget(m_ratioCB,           0, 1, 1, 3);
     grid->addWidget(m_preciseCrop,       0, 4, 1, 1);
-    grid->addWidget(m_orientLabel,       2, 0, 1, 1);
-    grid->addWidget(m_orientCB,          2, 1, 1, 3);
-    grid->addWidget(m_autoOrientation,   2, 4, 1, 1);
     grid->addWidget(m_customLabel1,      1, 0, 1, 1);
     grid->addWidget(m_customRatioNInput, 1, 1, 1, 1);
     grid->addWidget(m_customLabel2,      1, 2, 1, 1);
     grid->addWidget(m_customRatioDInput, 1, 3, 1, 1);
+    grid->addWidget(m_orientLabel,       2, 0, 1, 1);
+    grid->addWidget(m_orientCB,          2, 1, 1, 3);
+    grid->addWidget(m_autoOrientation,   2, 4, 1, 1);
     grid->addWidget(m_xInput,            3, 0, 1, 4);
     grid->addWidget(m_widthInput,        4, 0, 1, 4);
     grid->addWidget(m_centerWidth,       4, 4, 1, 1);
