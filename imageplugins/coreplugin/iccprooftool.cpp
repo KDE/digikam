@@ -8,7 +8,7 @@
  *               colors using an ICC color profile
  *
  * Copyright (C) 2005-2006 by F.J. Cruz <fj.cruz@supercable.es>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -206,15 +206,16 @@ ICCProofTool::ICCProofTool(QObject* parent)
                 "specific color.</li></ul>"));
 
     KUrlLabel *lcmsLogoLabel = new KUrlLabel(generalOptions);
+    lcmsLogoLabel->setAlignment(Qt::AlignRight);
     lcmsLogoLabel->setText(QString());
     lcmsLogoLabel->setUrl("http://www.littlecms.com");
     lcmsLogoLabel->setPixmap( QPixmap( KStandardDirs::locate("data", "digikam/data/logo-lcms.png" ) ));
     lcmsLogoLabel->setToolTip(i18n("Visit Little CMS project website"));
 
     zeroPageLayout->addWidget(m_doSoftProofBox,     0, 0, 1, 1);
+    zeroPageLayout->addWidget(lcmsLogoLabel,        0, 1, 1, 1);
     zeroPageLayout->addWidget(m_checkGamutBox,      1, 0, 1, 1);
     zeroPageLayout->addWidget(m_embeddProfileBox,   2, 0, 1, 1);
-    zeroPageLayout->addWidget(lcmsLogoLabel,        0, 1, 3, 1);
     zeroPageLayout->addWidget(m_BPCBox,             3, 0, 1, 1);
     zeroPageLayout->addWidget(intent,               4, 0, 1, 1);
     zeroPageLayout->addWidget(m_renderingIntentsCB, 4, 1, 1, 1);
