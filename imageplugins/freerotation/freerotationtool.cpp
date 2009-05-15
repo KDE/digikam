@@ -35,7 +35,6 @@
 
 #include <QCheckBox>
 #include <QGridLayout>
-#include <QGroupBox>
 #include <QImage>
 #include <QLabel>
 #include <QLayout>
@@ -64,6 +63,7 @@
 
 // Local includes
 
+#include "clicklabel.h"
 #include "daboutdata.h"
 #include "dimg.h"
 #include "editortoolsettings.h"
@@ -105,6 +105,7 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
                                             EditorToolSettings::Ok|
                                             EditorToolSettings::Cancel,
                                             EditorToolSettings::ColorGuide);
+
 
     QLabel *label1  = new QLabel(i18n("New width:"));
     m_newWidthLabel = new QLabel(temp.setNum( iface.originalWidth()) + i18n(" px"));
@@ -184,7 +185,8 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    m_manualAdjustContainer      = new QGroupBox(i18n("Manual Adjustment"));
+//    m_manualAdjustContainer      = new QGroupBox(i18n("Manual Adjustment"));
+    m_manualAdjustContainer      = new QWidget;
     QGridLayout *containerLayout = new QGridLayout;
     containerLayout->addWidget(label3,              0, 0, 1, 1);
     containerLayout->addWidget(m_angleInput,        1, 0, 1, 1);
@@ -195,7 +197,8 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    m_autoAdjustContainer         = new QGroupBox(i18n("Automatic Correction"));
+//    m_autoAdjustContainer         = new QGroupBox(i18n("Automatic Correction"));
+    m_autoAdjustContainer         = new QWidget;
     QGridLayout *containerLayout2 = new QGridLayout;
     QLabel *autoDescr             = new QLabel;
     autoDescr->setText(i18n("<p>Correct the rotation of your images automatically by assigning two points in the "
@@ -213,7 +216,21 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
 
     // -------------------------------------------------------------
 
+    QWidget* settingsContainer = new QWidget;
+    QGridLayout* containerLayout3 = new QGridLayout;
+    containerLayout3->addWidget(m_antialiasInput, 0, 0, 1,-1);
+    containerLayout3->addWidget(label5,           1, 0, 1, 1);
+    containerLayout3->addWidget(m_autoCropCB,     1, 1, 1, 1);
+    settingsContainer->setLayout(containerLayout3);
+
+    // -------------------------------------------------------------
+
     KSeparator *line  = new KSeparator(Qt::Horizontal);
+    m_expanderBox = new DExpanderBox;
+    m_expanderBox->addItem(m_autoAdjustContainer,   SmallIcon("freerotation"), i18n("Automatic Correction"));
+    m_expanderBox->addItem(m_manualAdjustContainer, SmallIcon("freerotation"), i18n("Manual Adjustment"));
+    m_expanderBox->addItem(settingsContainer,       SmallIcon("freerotation"), i18n("Additional Settings"));
+    m_expanderBox->addStretch();
 
     // -------------------------------------------------------------
 
@@ -223,12 +240,8 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     mainLayout->addWidget(label2,                  1, 0, 1, 1);
     mainLayout->addWidget(m_newHeightLabel,        1, 1, 1, 1);
     mainLayout->addWidget(line,                    2, 0, 1,-1);
-    mainLayout->addWidget(m_autoAdjustContainer,   3, 0, 1,-1);
-    mainLayout->addWidget(m_manualAdjustContainer, 4, 0, 1,-1);
-    mainLayout->addWidget(m_antialiasInput,        5, 0, 1,-1);
-    mainLayout->addWidget(label5,                  6, 0, 1, 1);
-    mainLayout->addWidget(m_autoCropCB,            6, 1, 1, 1);
-    mainLayout->setRowStretch(10, 10);
+    mainLayout->addWidget(m_expanderBox,           3, 0, 1,-1);
+    mainLayout->setRowStretch(3, 10);
     mainLayout->setMargin(m_gboxSettings->spacingHint());
     mainLayout->setSpacing(m_gboxSettings->spacingHint());
     m_gboxSettings->plainPage()->setLayout(mainLayout);

@@ -31,7 +31,6 @@
 #include "editortool.h"
 
 class QCheckBox;
-class QGroupBox;
 class QLabel;
 class QPixmap;
 class QPoint;
@@ -46,6 +45,7 @@ class RIntNumInput;
 
 namespace Digikam
 {
+class DExpanderBox;
 class EditorToolSettings;
 class ImageWidget;
 }
@@ -93,30 +93,32 @@ private:
 
 private:
 
-    QLabel                       *m_newWidthLabel;
-    QLabel                       *m_newHeightLabel;
+    QLabel*                       m_newWidthLabel;
+    QLabel*                       m_newHeightLabel;
 
-    QCheckBox                    *m_antialiasInput;
+    QCheckBox*                    m_antialiasInput;
 
-    QPushButton                  *m_autoAdjustBtn;
-    QPushButton                  *m_autoAdjustPoint1Btn;
-    QPushButton                  *m_autoAdjustPoint2Btn;
+    QPushButton*                  m_autoAdjustBtn;
+    QPushButton*                  m_autoAdjustPoint1Btn;
+    QPushButton*                  m_autoAdjustPoint2Btn;
 
     QPoint                        m_autoAdjustPoint1;
     QPoint                        m_autoAdjustPoint2;
 
-    QGroupBox                    *m_autoAdjustContainer;
-    QGroupBox                    *m_manualAdjustContainer;
+    QWidget*                      m_autoAdjustContainer;
+    QWidget*                      m_manualAdjustContainer;
 
-    KDcrawIface::RComboBox       *m_autoCropCB;
+    KDcrawIface::RComboBox*       m_autoCropCB;
 
-    KDcrawIface::RIntNumInput    *m_angleInput;
+    KDcrawIface::RIntNumInput*    m_angleInput;
 
-    KDcrawIface::RDoubleNumInput *m_fineAngleInput;
+    KDcrawIface::RDoubleNumInput* m_fineAngleInput;
 
-    Digikam::ImageWidget         *m_previewWidget;
+    Digikam::ImageWidget*         m_previewWidget;
 
-    Digikam::EditorToolSettings  *m_gboxSettings;
+    Digikam::DExpanderBox*        m_expanderBox;
+
+    Digikam::EditorToolSettings*  m_gboxSettings;
 };
 
 }  // namespace DigikamFreeRotationImagesPlugin
