@@ -105,9 +105,6 @@ private:
     QPoint                        m_autoAdjustPoint1;
     QPoint                        m_autoAdjustPoint2;
 
-    QWidget*                      m_autoAdjustContainer;
-    QWidget*                      m_manualAdjustContainer;
-
     KDcrawIface::RComboBox*       m_autoCropCB;
 
     KDcrawIface::RIntNumInput*    m_angleInput;

@@ -184,18 +184,18 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    m_manualAdjustContainer      = new QWidget;
-    QGridLayout *containerLayout = new QGridLayout;
+    QWidget* manualAdjustContainer = new QWidget;
+    QGridLayout *containerLayout   = new QGridLayout;
     containerLayout->addWidget(label3,              0, 0, 1, 1);
     containerLayout->addWidget(m_angleInput,        1, 0, 1, 1);
     containerLayout->addWidget(label4,              2, 0, 1, 1);
     containerLayout->addWidget(m_fineAngleInput,    3, 0, 1, 1);
     containerLayout->setMargin(KDialog::marginHint());
-    m_manualAdjustContainer->setLayout(containerLayout);
+    manualAdjustContainer->setLayout(containerLayout);
 
     // -------------------------------------------------------------
 
-    m_autoAdjustContainer         = new QWidget;
+    QWidget* autoAdjustContainer  = new QWidget;
     QGridLayout *containerLayout2 = new QGridLayout;
     QLabel *autoDescr             = new QLabel;
     autoDescr->setText(i18n("<p>Correct the rotation of your images automatically by assigning two points in the "
@@ -209,7 +209,7 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     containerLayout2->addWidget(m_autoAdjustPoint2Btn,   2, 0, 1, 1);
     containerLayout2->setColumnStretch(1, 10);
     containerLayout2->setMargin(KDialog::marginHint());
-    m_autoAdjustContainer->setLayout(containerLayout2);
+    autoAdjustContainer->setLayout(containerLayout2);
 
     // -------------------------------------------------------------
 
@@ -224,8 +224,8 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
 
     KSeparator *line  = new KSeparator(Qt::Horizontal);
     m_expanderBox = new DExpanderBox;
-    m_expanderBox->addItem(m_autoAdjustContainer,   SmallIcon("freerotation"), i18n("Automatic Correction"));
-    m_expanderBox->addItem(m_manualAdjustContainer, SmallIcon("freerotation"), i18n("Manual Adjustment"));
+    m_expanderBox->addItem(autoAdjustContainer,   SmallIcon("freerotation"), i18n("Automatic Correction"));
+    m_expanderBox->addItem(manualAdjustContainer, SmallIcon("freerotation"), i18n("Manual Adjustment"));
     m_expanderBox->addItem(settingsContainer,       SmallIcon("freerotation"), i18n("Additional Settings"));
     m_expanderBox->addStretch();
 
@@ -334,12 +334,7 @@ void FreeRotationTool::slotResetSettings()
 void FreeRotationTool::prepareEffect()
 {
     kapp->setOverrideCursor(Qt::WaitCursor);
-    m_angleInput->setEnabled(false);
-    m_fineAngleInput->setEnabled(false);
-    m_antialiasInput->setEnabled(false);
-    m_autoCropCB->setEnabled(false);
-    m_autoAdjustContainer->setEnabled(false);
-    m_manualAdjustContainer->setEnabled(false);
+    m_expanderBox->setEnabled(false);
 
     double angle      = m_angleInput->value() + m_fineAngleInput->value();
     bool antialiasing = m_antialiasInput->isChecked();
@@ -362,12 +357,7 @@ void FreeRotationTool::prepareEffect()
 
 void FreeRotationTool::prepareFinal()
 {
-    m_angleInput->setEnabled(false);
-    m_fineAngleInput->setEnabled(false);
-    m_antialiasInput->setEnabled(false);
-    m_autoCropCB->setEnabled(false);
-    m_autoAdjustContainer->setEnabled(false);
-    m_manualAdjustContainer->setEnabled(false);
+    m_expanderBox->setEnabled(false);
 
     double angle      = m_angleInput->value() + m_fineAngleInput->value();
     bool antialiasing = m_antialiasInput->isChecked();
@@ -423,13 +413,7 @@ void FreeRotationTool::putFinalData(void)
 
 void FreeRotationTool::renderingFinished()
 {
-    m_angleInput->setEnabled(true);
-    m_fineAngleInput->setEnabled(true);
-    m_antialiasInput->setEnabled(true);
-    m_autoCropCB->setEnabled(true);
-    m_autoAdjustContainer->setEnabled(true);
-    m_manualAdjustContainer->setEnabled(true);
-
+    m_expanderBox->setEnabled(true);
     kapp->restoreOverrideCursor();
 }
 
