@@ -46,14 +46,18 @@ class RIntNumInput;
 namespace Digikam
 {
 class EditorToolSettings;
+class DExpanderBox;
 }
+
+using namespace Digikam;
+using namespace KDcrawIface;
 
 namespace DigikamImagesPluginCore
 {
 
 class ImageSelectionWidget;
 
-class RatioCropTool : public Digikam::EditorTool
+class RatioCropTool : public EditorTool
 {
     Q_OBJECT
 
@@ -100,42 +104,44 @@ private:
 
 private:
 
-    bool                         m_originalIsLandscape;
+    bool                  m_originalIsLandscape;
 
-    QLabel                      *m_customLabel1;
-    QLabel                      *m_customLabel2;
-    QLabel                      *m_orientLabel;
-    QLabel                      *m_colorGuideLabel;
+    QLabel               *m_customLabel1;
+    QLabel               *m_customLabel2;
+    QLabel               *m_orientLabel;
+    QLabel               *m_colorGuideLabel;
 
-    QToolButton                 *m_centerWidth;
-    QToolButton                 *m_centerHeight;
+    QToolButton          *m_centerWidth;
+    QToolButton          *m_centerHeight;
 
-    QCheckBox                   *m_goldenSectionBox;
-    QCheckBox                   *m_goldenSpiralSectionBox;
-    QCheckBox                   *m_goldenSpiralBox;
-    QCheckBox                   *m_goldenTriangleBox;
-    QCheckBox                   *m_flipHorBox;
-    QCheckBox                   *m_flipVerBox;
-    QCheckBox                   *m_autoOrientation;
-    QCheckBox                   *m_preciseCrop;
+    QCheckBox            *m_goldenSectionBox;
+    QCheckBox            *m_goldenSpiralSectionBox;
+    QCheckBox            *m_goldenSpiralBox;
+    QCheckBox            *m_goldenTriangleBox;
+    QCheckBox            *m_flipHorBox;
+    QCheckBox            *m_flipVerBox;
+    QCheckBox            *m_autoOrientation;
+    QCheckBox            *m_preciseCrop;
 
-    KDcrawIface::RComboBox      *m_ratioCB;
-    KDcrawIface::RComboBox      *m_orientCB;
-    KDcrawIface::RComboBox      *m_guideLinesCB;
+    RComboBox            *m_ratioCB;
+    RComboBox            *m_orientCB;
+    RComboBox            *m_guideLinesCB;
 
-    KDcrawIface::RIntNumInput   *m_customRatioDInput;
-    KDcrawIface::RIntNumInput   *m_customRatioNInput;
-    KDcrawIface::RIntNumInput   *m_guideSize;
-    KDcrawIface::RIntNumInput   *m_heightInput;
-    KDcrawIface::RIntNumInput   *m_widthInput;
-    KDcrawIface::RIntNumInput   *m_xInput;
-    KDcrawIface::RIntNumInput   *m_yInput;
+    RIntNumInput         *m_customRatioDInput;
+    RIntNumInput         *m_customRatioNInput;
+    RIntNumInput         *m_guideSize;
+    RIntNumInput         *m_heightInput;
+    RIntNumInput         *m_widthInput;
+    RIntNumInput         *m_xInput;
+    RIntNumInput         *m_yInput;
 
-    KColorButton                *m_guideColorBt;
+    KColorButton         *m_guideColorBt;
 
-    ImageSelectionWidget        *m_imageSelectionWidget;
+    ImageSelectionWidget *m_imageSelectionWidget;
 
-    Digikam::EditorToolSettings *m_gboxSettings;
+    DExpanderBox         *m_expbox;
+
+    EditorToolSettings   *m_gboxSettings;
 };
 
 }  // namespace DigikamImagesPluginCore

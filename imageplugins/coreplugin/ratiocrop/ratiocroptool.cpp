@@ -60,6 +60,7 @@
 
 // Local includes
 
+#include "clicklabel.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageselectionwidget.h"
@@ -111,11 +112,10 @@ RatioCropTool::RatioCropTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QGridLayout *gridBox2 = new QGridLayout(m_gboxSettings->plainPage());
-
-    QFrame *cropSelection = new QFrame( m_gboxSettings->plainPage() );
-    QGridLayout* grid     = new QGridLayout(cropSelection);
-    cropSelection->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    QVBoxLayout* vlay      = new QVBoxLayout(m_gboxSettings->plainPage());
+    m_expbox               = new DExpanderBox(m_gboxSettings->plainPage());
+    QWidget *cropSelection = new QWidget(m_expbox);
+    QGridLayout* grid      = new QGridLayout(cropSelection);
 
     QLabel *label = new QLabel(i18n("Aspect ratio:"), cropSelection);
     m_ratioCB     = new RComboBox(cropSelection);
@@ -223,17 +223,39 @@ RatioCropTool::RatioCropTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QFrame* compositionGuide = new QFrame( m_gboxSettings->plainPage() );
-    QGridLayout* grid2       = new QGridLayout(compositionGuide);
-    compositionGuide->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    grid->addWidget(label,               0, 0, 1, 1);
+    grid->addWidget(m_ratioCB,           0, 1, 1, 3);
+    grid->addWidget(m_preciseCrop,       0, 4, 1, 1);
+    grid->addWidget(m_orientLabel,       2, 0, 1, 1);
+    grid->addWidget(m_orientCB,          2, 1, 1, 3);
+    grid->addWidget(m_autoOrientation,   2, 4, 1, 1);
+    grid->addWidget(m_customLabel1,      1, 0, 1, 1);
+    grid->addWidget(m_customRatioNInput, 1, 1, 1, 1);
+    grid->addWidget(m_customLabel2,      1, 2, 1, 1);
+    grid->addWidget(m_customRatioDInput, 1, 3, 1, 1);
+    grid->addWidget(m_xInput,            3, 0, 1, 4);
+    grid->addWidget(m_widthInput,        4, 0, 1, 4);
+    grid->addWidget(m_centerWidth,       4, 4, 1, 1);
+    grid->addWidget(m_yInput,            5, 0, 1, 4);
+    grid->addWidget(m_heightInput,       6, 0, 1, 4);
+    grid->addWidget(m_centerHeight,      6, 4, 1, 1);
+    grid->setMargin(m_gboxSettings->spacingHint());
+    grid->setSpacing(m_gboxSettings->spacingHint());
 
-    QLabel *labelGuideLines = new QLabel(i18n("Composition guide:"), compositionGuide);
-    m_guideLinesCB = new RComboBox(compositionGuide);
+    m_expbox->addItem(cropSelection, SmallIcon("transform-crop-and-resize"), i18n("Crop Settings"));
+
+    // -------------------------------------------------------------
+
+    QWidget* compositionGuide = new QWidget(m_expbox);
+    QGridLayout* grid2        = new QGridLayout(compositionGuide);
+
+    QLabel *labelGuideLines = new QLabel(i18n("Geometric form:"), compositionGuide);
+    m_guideLinesCB          = new RComboBox(compositionGuide);
     m_guideLinesCB->addItem(i18n("Rules of Thirds"));
     m_guideLinesCB->addItem(i18n("Diagonal Method"));
     m_guideLinesCB->addItem(i18n("Harmonious Triangles"));
     m_guideLinesCB->addItem(i18n("Golden Mean"));
-    m_guideLinesCB->addItem(i18nc("no composition guide", "None"));
+    m_guideLinesCB->addItem(i18nc("no geometric form", "None"));
     m_guideLinesCB->setDefaultIndex(ImageSelectionWidget::GuideNone);
     m_guideLinesCB->setCurrentIndex(3);
     m_guideLinesCB->setWhatsThis( i18n("With this option, you can display guide lines "
@@ -268,25 +290,6 @@ RatioCropTool::RatioCropTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    grid->addWidget(label,               0, 0, 1, 1);
-    grid->addWidget(m_ratioCB,           0, 1, 1, 3);
-    grid->addWidget(m_preciseCrop,       0, 4, 1, 1);
-    grid->addWidget(m_orientLabel,       2, 0, 1, 1);
-    grid->addWidget(m_orientCB,          2, 1, 1, 3);
-    grid->addWidget(m_autoOrientation,   2, 4, 1, 1);
-    grid->addWidget(m_customLabel1,      1, 0, 1, 1);
-    grid->addWidget(m_customRatioNInput, 1, 1, 1, 1);
-    grid->addWidget(m_customLabel2,      1, 2, 1, 1);
-    grid->addWidget(m_customRatioDInput, 1, 3, 1, 1);
-    grid->addWidget(m_xInput,            3, 0, 1, 4);
-    grid->addWidget(m_widthInput,        4, 0, 1, 4);
-    grid->addWidget(m_centerWidth,       4, 4, 1, 1);
-    grid->addWidget(m_yInput,            5, 0, 1, 4);
-    grid->addWidget(m_heightInput,       6, 0, 1, 4);
-    grid->addWidget(m_centerHeight,      6, 4, 1, 1);
-    grid->setMargin(m_gboxSettings->spacingHint());
-    grid->setSpacing(m_gboxSettings->spacingHint());
-
     grid2->addWidget(labelGuideLines,          0, 0, 1, 1);
     grid2->addWidget(m_guideLinesCB,           0, 1, 1, 2);
     grid2->addWidget(m_goldenSectionBox,       1, 0, 1, 3);
@@ -301,16 +304,18 @@ RatioCropTool::RatioCropTool(QObject* parent)
     grid2->setMargin(m_gboxSettings->spacingHint());
     grid2->setSpacing(m_gboxSettings->spacingHint());
 
-    gridBox2->addWidget(cropSelection,          0, 0, 1, 1);
-    gridBox2->addWidget(compositionGuide,       1, 0, 1, 1);
-    gridBox2->setRowStretch(2, 10);
-    gridBox2->setMargin(m_gboxSettings->spacingHint());
-    gridBox2->setSpacing(m_gboxSettings->spacingHint());
-
-    setToolSettings(m_gboxSettings);
-    init();
+    m_expbox->addItem(compositionGuide, SmallIcon("tools-wizard"), i18n("Composition Guides"));
+    m_expbox->addStretch();
 
     // -------------------------------------------------------------
+
+    vlay->addWidget(m_expbox, 10);
+    vlay->addStretch();
+    vlay->setMargin(0);
+    vlay->setSpacing(0);
+    setToolSettings(m_gboxSettings);
+
+    init();
 
     // Sets current region selection
     slotSelectionChanged(m_imageSelectionWidget->getRegionSelection());
@@ -412,6 +417,9 @@ void RatioCropTool::readSettings()
 
     blockWidgetSignals(true);
 
+    m_expbox->setItemExpanded(0, group.readEntry("CropSelection Expanded",    true));
+    m_expbox->setItemExpanded(1, group.readEntry("CompositionGuide Expanded", true));
+
     // No guide lines per default.
     m_guideLinesCB->setCurrentIndex(group.readEntry("Guide Lines Type",
                                     (int)ImageSelectionWidget::GuideNone));
@@ -477,6 +485,9 @@ void RatioCropTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("aspectratiocrop Tool");
+
+    group.writeEntry("CropSelection Expanded",    m_expbox->itemIsExpanded(0));
+    group.writeEntry("CompositionGuide Expanded", m_expbox->itemIsExpanded(1));
 
     if (m_originalIsLandscape)
     {
