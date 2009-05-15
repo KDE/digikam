@@ -62,7 +62,7 @@ public:
 
     CameraUI(QWidget* parent, const QString& cameraTitle,
              const QString& model, const QString& port,
-             const QString& path, int startingNumber);
+             const QString& path, int startIndex);
     ~CameraUI();
 
     bool isBusy() const;

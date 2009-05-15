@@ -59,7 +59,7 @@ public:
     CameraType*         autoDetect(bool& retry);
     QList<CameraType*>* cameraList();
 
-    bool changeCameraStartingNumber(const QString& cameraTitle, int sn);
+    bool changeCameraStartIndex(const QString& cameraTitle, int startIndex);
 
     static bool findConnectedCamera(int vendorId, int productId, QString& model, QString& port);
 

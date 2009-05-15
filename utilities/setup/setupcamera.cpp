@@ -266,7 +266,7 @@ void SetupCamera::slotAddCamera()
 }
 
 void SetupCamera::slotAddedCamera(const QString& title, const QString& model,
-                                  const QString& port, const QString& path)
+                                  const QString& port,  const QString& path)
 {
     CameraType *ctype = new CameraType(title, model, port, path, 1);
     new SetupCameraItem(d->listView, ctype);
@@ -374,6 +374,7 @@ void SetupCamera::applySettings()
                     CameraType* ctype2 = new CameraType(*ctype);
                     clist->remove(ctype);
                     clist->insert(ctype2);
+                    delete ctype;
                 }
             }
             ++it;

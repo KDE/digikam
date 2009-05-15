@@ -265,12 +265,12 @@ void CameraList::clear()
     }
 }
 
-bool CameraList::changeCameraStartingNumber(const QString& cameraTitle, int sn)
+bool CameraList::changeCameraStartIndex(const QString& cameraTitle, int startIndex)
 {
     CameraType* cam = find(cameraTitle);
     if (cam)
     {
-        cam->setStartingNumber(sn);
+        cam->setStartingNumber(startIndex);
         d->modified = true;
         save();
         return true;

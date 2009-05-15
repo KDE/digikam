@@ -132,7 +132,7 @@ namespace Digikam
 
 CameraUI::CameraUI(QWidget* parent, const QString& cameraTitle,
                    const QString& model, const QString& port,
-                   const QString& path, int startingNumber)
+                   const QString& path, int startIndex)
         : KXmlGuiWindow(parent), d(new CameraUIPriv)
 
 {
@@ -161,7 +161,7 @@ CameraUI::CameraUI(QWidget* parent, const QString& cameraTitle,
 
     setupCameraController(model, port, path);
 
-    d->renameCustomizer->setStartIndex(startingNumber);
+    d->renameCustomizer->setStartIndex(startIndex);
     d->view->setFocus();
     QTimer::singleShot(0, d->controller, SLOT(slotConnect()));
 }
@@ -708,20 +708,19 @@ void CameraUI::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Camera Settings");
 
-    d->renameFileLabel->setExpanded(group.readEntry("RenameFile Expanded", false));
-    d->autoAlbumLabel->setExpanded(group.readEntry("AutoAlbum Expanded", false));
-    d->onFlyLabel->setExpanded(group.readEntry("OnFly Expanded", true));
-    d->autoRotateCheck->setChecked(group.readEntry("AutoRotate", true));
-    d->autoAlbumDateCheck->setChecked(group.readEntry("AutoAlbumDate", false));
-    d->autoAlbumExtCheck->setChecked(group.readEntry("AutoAlbumExt", false));
-    d->fixDateTimeCheck->setChecked(group.readEntry("FixDateTime", false));
-    d->setPhotographerId->setChecked(group.readEntry("SetPhotographerId", false));
-    d->setCredits->setChecked(group.readEntry("SetCredits", false));
-    d->convertJpegCheck->setChecked(group.readEntry("ConvertJpeg", false));
-    d->losslessFormat->setCurrentIndex(group.readEntry("LossLessFormat", 0));   // PNG by default
+    d->renameFileLabel->setExpanded(group.readEntry("RenameFile Expanded",   false));
+    d->autoAlbumLabel->setExpanded(group.readEntry("AutoAlbum Expanded",     false));
+    d->onFlyLabel->setExpanded(group.readEntry("OnFly Expanded",             true));
+    d->autoRotateCheck->setChecked(group.readEntry("AutoRotate",             true));
+    d->autoAlbumDateCheck->setChecked(group.readEntry("AutoAlbumDate",       false));
+    d->autoAlbumExtCheck->setChecked(group.readEntry("AutoAlbumExt",         false));
+    d->fixDateTimeCheck->setChecked(group.readEntry("FixDateTime",           false));
+    d->setPhotographerId->setChecked(group.readEntry("SetPhotographerId",    false));
+    d->setCredits->setChecked(group.readEntry("SetCredits",                  false));
+    d->convertJpegCheck->setChecked(group.readEntry("ConvertJpeg",           false));
+    d->losslessFormat->setCurrentIndex(group.readEntry("LossLessFormat",     0));   // PNG by default
     d->folderDateFormat->setCurrentIndex(group.readEntry("FolderDateFormat", (int)CameraUIPriv::IsoDateFormat));
-
-    d->view->setThumbnailSize(group.readEntry("ThumbnailSize", (int)ThumbnailSize::Large));
+    d->view->setThumbnailSize(group.readEntry("ThumbnailSize",               (int)ThumbnailSize::Large));
 
     d->splitter->restoreState(group);
 
@@ -835,8 +834,10 @@ bool CameraUI::event(QEvent *e)
 
 void CameraUI::slotClose()
 {
-/*FIXME    if (dialogClosed())
-        reject();*/
+/*FIXME
+    if (dialogClosed())
+        reject();
+*/
 }
 
 bool CameraUI::dialogClosed()
@@ -882,7 +883,7 @@ void CameraUI::finishDialog()
         CameraList* clist = CameraList::defaultList();
         if (clist)
         {
-            clist->changeCameraStartingNumber(d->cameraTitle, d->renameCustomizer->startIndex());
+            clist->changeCameraStartIndex(d->cameraTitle, d->renameCustomizer->startIndex());
         }
     }
 
