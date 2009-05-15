@@ -93,6 +93,15 @@ private:
 
 private:
 
+    enum ExpanderWidgets
+    {
+        AutomaticItem = 0,
+        ManualItem,
+        AdditionalItem
+    };
+
+private:
+
     QLabel*                       m_newWidthLabel;
     QLabel*                       m_newHeightLabel;
 
