@@ -93,7 +93,7 @@ private:
 
 private:
 
-    enum ExpanderWidgets
+    enum ExpanderItems
     {
         AutomaticItem = 0,
         ManualItem,
@@ -102,29 +102,26 @@ private:
 
 private:
 
-    QLabel*                       m_newWidthLabel;
-    QLabel*                       m_newHeightLabel;
-
     QCheckBox*                    m_antialiasInput;
+
+    QLabel*                       m_newHeightLabel;
+    QLabel*                       m_newWidthLabel;
+
+    QPoint                        m_autoAdjustPoint1;
+    QPoint                        m_autoAdjustPoint2;
 
     QPushButton*                  m_autoAdjustBtn;
     QPushButton*                  m_autoAdjustPoint1Btn;
     QPushButton*                  m_autoAdjustPoint2Btn;
 
-    QPoint                        m_autoAdjustPoint1;
-    QPoint                        m_autoAdjustPoint2;
-
-    KDcrawIface::RComboBox*       m_autoCropCB;
-
-    KDcrawIface::RIntNumInput*    m_angleInput;
-
-    KDcrawIface::RDoubleNumInput* m_fineAngleInput;
-
+    Digikam::DExpanderBox*        m_expanderBox;
+    Digikam::EditorToolSettings*  m_gboxSettings;
     Digikam::ImageWidget*         m_previewWidget;
 
-    Digikam::DExpanderBox*        m_expanderBox;
+    KDcrawIface::RComboBox*       m_autoCropCB;
+    KDcrawIface::RDoubleNumInput* m_fineAngleInput;
+    KDcrawIface::RIntNumInput*    m_angleInput;
 
-    Digikam::EditorToolSettings*  m_gboxSettings;
 };
 
 }  // namespace DigikamFreeRotationImagesPlugin

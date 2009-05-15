@@ -223,6 +223,7 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     // -------------------------------------------------------------
 
     KSeparator *line  = new KSeparator(Qt::Horizontal);
+
     m_expanderBox = new DExpanderBox;
     // order matters, see ExpanderWidgets enum
     m_expanderBox->addItem(autoAdjustContainer,   SmallIcon("freerotation"), i18n("Automatic Correction"));
@@ -233,12 +234,12 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     // -------------------------------------------------------------
 
     QGridLayout* mainLayout = new QGridLayout;
-    mainLayout->addWidget(label1,                  0, 0, 1, 1);
-    mainLayout->addWidget(m_newWidthLabel,         0, 1, 1, 1);
-    mainLayout->addWidget(label2,                  1, 0, 1, 1);
-    mainLayout->addWidget(m_newHeightLabel,        1, 1, 1, 1);
-    mainLayout->addWidget(line,                    2, 0, 1,-1);
-    mainLayout->addWidget(m_expanderBox,           3, 0, 1,-1);
+    mainLayout->addWidget(label1,               0, 0, 1, 1);
+    mainLayout->addWidget(m_newWidthLabel,      0, 1, 1, 1);
+    mainLayout->addWidget(label2,               1, 0, 1, 1);
+    mainLayout->addWidget(m_newHeightLabel,     1, 1, 1, 1);
+    mainLayout->addWidget(line,                 2, 0, 1,-1);
+    mainLayout->addWidget(m_expanderBox,        3, 0, 1,-1);
     mainLayout->setRowStretch(3, 10);
     mainLayout->setMargin(m_gboxSettings->spacingHint());
     mainLayout->setSpacing(m_gboxSettings->spacingHint());
