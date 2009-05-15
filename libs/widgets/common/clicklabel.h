@@ -31,6 +31,7 @@
 #include <QWidget>
 #include <QLabel>
 #include <QPixmap>
+#include <QScrollArea>
 
 // KDE includes
 
@@ -42,8 +43,6 @@
 
 namespace Digikam
 {
-
-class DLabelExpanderPriv;
 
 class DIGIKAM_EXPORT ClickLabel : public QLabel
 {
@@ -123,6 +122,8 @@ protected:
 
 // -------------------------------------------------------------------------
 
+class DLabelExpanderPriv;
+
 class DIGIKAM_EXPORT DLabelExpander : public QWidget
 {
     Q_OBJECT
@@ -151,6 +152,32 @@ private:
 private:
 
     DLabelExpanderPriv* const d;
+};
+
+// -------------------------------------------------------------------------
+
+class DExpanderBoxPriv;
+
+class DIGIKAM_EXPORT DExpanderBox : public QScrollArea
+{
+    Q_OBJECT
+
+public:
+
+    DExpanderBox(QWidget *parent = 0);
+    ~DExpanderBox();
+
+    void addItem(QWidget *w, const QPixmap& pix, const QString& txt);
+    void addStretch();
+
+    int count();
+
+    void setItemExpanded(int index, bool b);
+    bool itemIsExpanded(int index);
+
+private:
+
+    DExpanderBoxPriv* const d;
 };
 
 } // namespace Digikam

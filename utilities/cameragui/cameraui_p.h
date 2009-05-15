@@ -111,9 +111,6 @@ public:
         themeMenuAction           = 0;
         contributeAction          = 0;
         showMenuBarAction         = 0;
-        renameFileLabel           = 0;
-        autoAlbumLabel            = 0;
-        onFlyLabel                = 0;
         kdeJob                    = 0;
     }
 
@@ -129,12 +126,6 @@ public:
     QStringList                   cameraFolderList;
     QSet<QString>                 foldersToScan;
 
-    KMenu                        *downloadMenu;
-    KMenu                        *deleteMenu;
-    KMenu                        *imageMenu;
-
-    KVBox                        *advBox;
-
     QCheckBox                    *autoRotateCheck;
     QCheckBox                    *autoAlbumDateCheck;
     QCheckBox                    *autoAlbumExtCheck;
@@ -146,9 +137,11 @@ public:
     QLabel                       *formatLabel;
     QLabel                       *folderDateLabel;
 
-    KUrl::List                    kdeTodo;
+    KMenu                        *downloadMenu;
+    KMenu                        *deleteMenu;
+    KMenu                        *imageMenu;
 
-    SidebarSplitter              *splitter;
+    KUrl::List                    kdeTodo;
 
     KAction                      *cameraCancelAction;
     KAction                      *cameraCaptureAction;
@@ -189,6 +182,10 @@ public:
 
     KIO::PreviewJob              *kdeJob;
 
+    DExpanderBox                 *advBox;
+
+    SidebarSplitter              *splitter;
+
     CameraController             *controller;
 
     CameraIconView               *view;
@@ -205,10 +202,6 @@ public:
 
     FreeSpaceWidget              *albumLibraryFreeSpace;
     FreeSpaceWidget              *cameraFreeSpace;
-
-    DLabelExpander               *renameFileLabel;
-    DLabelExpander               *autoAlbumLabel;
-    DLabelExpander               *onFlyLabel;
 };
 
 }  // namespace Digikam

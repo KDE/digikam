@@ -36,6 +36,7 @@
 
 // KDE includes
 
+#include <kvbox.h>
 #include <kseparator.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
@@ -365,6 +366,80 @@ bool DLabelExpander::eventFilter(QObject *obj, QEvent *ev)
         // pass the event on to the parent class
         return QWidget::eventFilter(obj, ev);
     }
+}
+
+// ------------------------------------------------------------------------
+
+class DExpanderBoxPriv
+{
+
+public:
+
+    DExpanderBoxPriv()
+    {
+        vbox = 0;
+    }
+
+    QList<DLabelExpander*>  wList;
+
+    KVBox                  *vbox;
+};
+
+DExpanderBox::DExpanderBox(QWidget *parent)
+            : QScrollArea(parent), d(new DExpanderBoxPriv)
+{
+    setFrameStyle(QFrame::NoFrame);
+    setWidgetResizable(true);
+    d->vbox = new KVBox(viewport());
+    d->vbox->setMargin(0);
+    d->vbox->setSpacing(KDialog::spacingHint());
+    setWidget(d->vbox);
+}
+
+DExpanderBox::~DExpanderBox()
+{
+    delete d;
+}
+
+void DExpanderBox::addItem(QWidget *w, const QPixmap& pix, const QString& txt)
+{
+    DLabelExpander *exp = new DLabelExpander(d->vbox);
+    exp->setText(txt);
+    exp->setPixmap(pix);
+    exp->setContainer(w);
+    exp->setLineVisible(!d->wList.isEmpty());
+    d->wList.append(exp);
+}
+
+void DExpanderBox::addStretch()
+{
+    QLabel *space = new QLabel(d->vbox);
+    d->vbox->setStretchFactor(space, 10);
+}
+
+int DExpanderBox::count()
+{
+    return d->wList.count();
+}
+
+void DExpanderBox::setItemExpanded(int index, bool b)
+{
+    if (index > d->wList.count()) return;
+
+    DLabelExpander *exp = d->wList[index];
+    if (!exp) return;
+
+    exp->setExpanded(b);
+}
+
+bool DExpanderBox::itemIsExpanded(int index)
+{
+    if (index > d->wList.count()) return false;
+
+    DLabelExpander *exp = d->wList[index];
+    if (!exp) return false;
+
+    return (exp->isExpanded());
 }
 
 } // namespace Digikam

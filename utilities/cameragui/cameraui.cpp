@@ -190,22 +190,12 @@ void CameraUI::setupUserArea()
 
     // -------------------------------------------------------------------------
 
-    QScrollArea *sv     = new QScrollArea(d->rightSideBar);
-    sv->setFrameStyle(QFrame::NoFrame);
-    sv->setWidgetResizable(true);
-
-    d->advBox           = new KVBox(sv->viewport());
-    sv->setWidget(d->advBox);
+    d->advBox           = new DExpanderBox(d->rightSideBar);
 
     d->renameCustomizer = new RenameCustomizer(d->advBox, d->cameraTitle);
     d->renameCustomizer->setWhatsThis( i18n("Set how digiKam will rename files as they are downloaded."));
     d->view->setRenameCustomizer(d->renameCustomizer);
-
-    d->renameFileLabel = new DLabelExpander(d->advBox);
-    d->renameFileLabel->setText(i18n("File Renaming Options"));
-    d->renameFileLabel->setPixmap(SmallIcon("insert-image"));
-    d->renameFileLabel->setContainer(d->renameCustomizer);
-    d->renameFileLabel->setLineVisible(false);
+    d->advBox->addItem(d->renameCustomizer, SmallIcon("insert-image"), i18n("File Renaming Options"));
 
     // -- Albums Auto-creation options -----------------------------------------
 
@@ -242,10 +232,7 @@ void CameraUI::setupUserArea()
                      "E.g.: <i>Thu Aug 24 2006</i></p>"
                      "<p><b>Local Settings</b>: the date format depending on KDE control panel settings.</p>"));
 
-    d->autoAlbumLabel = new DLabelExpander(d->advBox);
-    d->autoAlbumLabel->setText(i18n("Auto-creation of Albums"));
-    d->autoAlbumLabel->setPixmap(SmallIcon("folder-new"));
-    d->autoAlbumLabel->setContainer(albumBox);
+    d->advBox->addItem(albumBox, SmallIcon("folder-new"), i18n("Auto-creation of Albums"));
 
     // -- On the Fly options ---------------------------------------------------
 
@@ -291,15 +278,10 @@ void CameraUI::setupUserArea()
     d->losslessFormat->setWhatsThis( i18n("Select your preferred lossless image file format to "
                      "convert to. <b>Note:</b> All metadata will be preserved during the conversion."));
 
-    d->onFlyLabel = new DLabelExpander(d->advBox);
-    d->onFlyLabel->setText(i18n("On the Fly Operations (JPEG only)"));
-    d->onFlyLabel->setPixmap(SmallIcon("system-run"));
-    d->onFlyLabel->setContainer(onFlyBox);
+    d->advBox->addItem(onFlyBox, SmallIcon("system-run"), i18n("On the Fly Operations (JPEG only)"));
+    d->advBox->addStretch();
 
-    QLabel *space = new QLabel(d->advBox);
-    d->advBox->setStretchFactor(space, 10),
-
-    d->rightSideBar->appendTab(sv, SmallIcon("configure"), i18n("Settings"));
+    d->rightSideBar->appendTab(d->advBox, SmallIcon("configure"), i18n("Settings"));
     d->rightSideBar->loadViewState();
 
     // -------------------------------------------------------------------------
@@ -708,9 +690,9 @@ void CameraUI::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Camera Settings");
 
-    d->renameFileLabel->setExpanded(group.readEntry("RenameFile Expanded",   false));
-    d->autoAlbumLabel->setExpanded(group.readEntry("AutoAlbum Expanded",     false));
-    d->onFlyLabel->setExpanded(group.readEntry("OnFly Expanded",             true));
+    d->advBox->setItemExpanded(0, group.readEntry("RenameFile Expanded",     false));
+    d->advBox->setItemExpanded(1, group.readEntry("AutoAlbum Expanded",      false));
+    d->advBox->setItemExpanded(2, group.readEntry("OnFly Expanded",          true));
     d->autoRotateCheck->setChecked(group.readEntry("AutoRotate",             true));
     d->autoAlbumDateCheck->setChecked(group.readEntry("AutoAlbumDate",       false));
     d->autoAlbumExtCheck->setChecked(group.readEntry("AutoAlbumExt",         false));
@@ -736,9 +718,9 @@ void CameraUI::saveSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Camera Settings");
 
-    group.writeEntry("RenameFile Expanded", d->renameFileLabel->isExpanded());
-    group.writeEntry("AutoAlbum Expanded",  d->autoAlbumLabel->isExpanded());
-    group.writeEntry("OnFly Expanded",      d->onFlyLabel->isExpanded());
+    group.writeEntry("RenameFile Expanded", d->advBox->itemIsExpanded(0));
+    group.writeEntry("AutoAlbum Expanded",  d->advBox->itemIsExpanded(1));
+    group.writeEntry("OnFly Expanded",      d->advBox->itemIsExpanded(2));
     group.writeEntry("AutoRotate",          d->autoRotateCheck->isChecked());
     group.writeEntry("AutoAlbumDate",       d->autoAlbumDateCheck->isChecked());
     group.writeEntry("AutoAlbumExt",        d->autoAlbumExtCheck->isChecked());
