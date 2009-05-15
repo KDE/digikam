@@ -15,6 +15,10 @@ SET(liblqr_SRCS
     lqr/lqr_rwindow.c
    )
 
+IF(WIN32)
+    ADD_DEFINITIONS(-DLQR_DISABLE_DECLSPEC)
+ENDIF(WIN32)
+
 # Disable liblqr C code warnings.
 FOREACH(_curentfile ${liblqr_SRCS})
     SET_SOURCE_FILES_PROPERTIES(${_curentfile} PROPERTIES COMPILE_FLAGS -w)
