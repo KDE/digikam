@@ -106,8 +106,7 @@ private:
 
     bool                  m_originalIsLandscape;
 
-    QLabel               *m_customLabel1;
-    QLabel               *m_customLabel2;
+    QLabel               *m_customLabel;
     QLabel               *m_orientLabel;
     QLabel               *m_colorGuideLabel;
 

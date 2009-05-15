@@ -147,30 +147,30 @@ RatioCropTool::RatioCropTool(QObject* parent)
                                   "is considered visually harmonious but can be unadapted to print on "
                                   "standard photographic paper.</p>"));
 
-    m_preciseCrop = new QCheckBox(i18n("Exact"), cropSelection);
-    m_preciseCrop->setWhatsThis( i18n("Enable this option to force exact aspect ratio crop."));
+    m_preciseCrop = new QCheckBox(cropSelection);
+    m_preciseCrop->setToolTip(i18n("Exact aspect"));
+    m_preciseCrop->setWhatsThis(i18n("Enable this option to force exact aspect ratio crop."));
 
     m_orientLabel = new QLabel(i18n("Orientation:"), cropSelection);
     m_orientCB    = new RComboBox( cropSelection );
     m_orientCB->addItem( i18n("Landscape") );
     m_orientCB->addItem( i18n("Portrait") );
-    m_orientCB->setWhatsThis( i18n("Select constrained aspect ratio orientation."));
+    m_orientCB->setWhatsThis(i18n("Select constrained aspect ratio orientation."));
 
-    m_autoOrientation = new QCheckBox(i18n("Auto"), cropSelection);
+    m_autoOrientation = new QCheckBox(cropSelection);
+    m_autoOrientation->setToolTip(i18n("Auto"));
     m_autoOrientation->setWhatsThis( i18n("Enable this option to automatically set the orientation."));
 
     // -------------------------------------------------------------
 
-    m_customLabel1 = new QLabel(i18n("Custom ratio:"), cropSelection);
-    m_customLabel1->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
+    m_customLabel = new QLabel(i18n("Custom ratio:"), cropSelection);
+    m_customLabel->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
     m_customRatioNInput = new RIntNumInput(cropSelection);
     m_customRatioNInput->setRange(1, 10000, 1);
     m_customRatioNInput->setDefaultValue(1);
     m_customRatioNInput->setSliderEnabled(false);
     m_customRatioNInput->setWhatsThis( i18n("Set here the desired custom aspect numerator value."));
 
-    m_customLabel2 = new QLabel(" : ", cropSelection);
-    m_customLabel2->setAlignment(Qt::AlignCenter|Qt::AlignVCenter);
     m_customRatioDInput = new RIntNumInput(cropSelection);
     m_customRatioDInput->setRange(1, 10000, 1);
     m_customRatioDInput->setDefaultValue(1);
@@ -226,19 +226,18 @@ RatioCropTool::RatioCropTool(QObject* parent)
     grid->addWidget(label,               0, 0, 1, 1);
     grid->addWidget(m_ratioCB,           0, 1, 1, 3);
     grid->addWidget(m_preciseCrop,       0, 4, 1, 1);
-    grid->addWidget(m_customLabel1,      1, 0, 1, 1);
+    grid->addWidget(m_customLabel,       1, 0, 1, 1);
     grid->addWidget(m_customRatioNInput, 1, 1, 1, 1);
-    grid->addWidget(m_customLabel2,      1, 2, 1, 1);
-    grid->addWidget(m_customRatioDInput, 1, 3, 1, 1);
-    grid->addWidget(m_orientLabel,       2, 0, 1, 1);
-    grid->addWidget(m_orientCB,          2, 1, 1, 3);
-    grid->addWidget(m_autoOrientation,   2, 4, 1, 1);
-    grid->addWidget(m_xInput,            3, 0, 1, 4);
-    grid->addWidget(m_widthInput,        4, 0, 1, 4);
-    grid->addWidget(m_centerWidth,       4, 4, 1, 1);
-    grid->addWidget(m_yInput,            5, 0, 1, 4);
-    grid->addWidget(m_heightInput,       6, 0, 1, 4);
-    grid->addWidget(m_centerHeight,      6, 4, 1, 1);
+    grid->addWidget(m_customRatioDInput, 2, 1, 1, 1);
+    grid->addWidget(m_orientLabel,       3, 0, 1, 1);
+    grid->addWidget(m_orientCB,          3, 1, 1, 3);
+    grid->addWidget(m_autoOrientation,   3, 4, 1, 1);
+    grid->addWidget(m_xInput,            4, 0, 1, 4);
+    grid->addWidget(m_widthInput,        5, 0, 1, 4);
+    grid->addWidget(m_centerWidth,       5, 4, 1, 1);
+    grid->addWidget(m_yInput,            6, 0, 1, 4);
+    grid->addWidget(m_heightInput,       7, 0, 1, 4);
+    grid->addWidget(m_centerHeight,      7, 4, 1, 1);
     grid->setMargin(m_gboxSettings->spacingHint());
     grid->setSpacing(m_gboxSettings->spacingHint());
 
@@ -685,8 +684,7 @@ void RatioCropTool::applyRatioChanges(int a)
 
     if (a == ImageSelectionWidget::RATIOCUSTOM)
     {
-        m_customLabel1->setEnabled(true);
-        m_customLabel2->setEnabled(true);
+        m_customLabel->setEnabled(true);
         m_customRatioNInput->setEnabled(true);
         m_customRatioDInput->setEnabled(true);
         m_orientLabel->setEnabled(true);
@@ -699,8 +697,7 @@ void RatioCropTool::applyRatioChanges(int a)
         m_orientLabel->setEnabled(false);
         m_orientCB->setEnabled(false);
         m_autoOrientation->setEnabled(false);
-        m_customLabel1->setEnabled(false);
-        m_customLabel2->setEnabled(false);
+        m_customLabel->setEnabled(false);
         m_customRatioNInput->setEnabled(false);
         m_customRatioDInput->setEnabled(false);
     }
@@ -709,8 +706,7 @@ void RatioCropTool::applyRatioChanges(int a)
         m_orientLabel->setEnabled(true);
         m_orientCB->setEnabled(!m_autoOrientation->isChecked());
         m_autoOrientation->setEnabled(true);
-        m_customLabel1->setEnabled(false);
-        m_customLabel2->setEnabled(false);
+        m_customLabel->setEnabled(false);
         m_customRatioNInput->setEnabled(false);
         m_customRatioDInput->setEnabled(false);
     }
