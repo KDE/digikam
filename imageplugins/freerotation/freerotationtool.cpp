@@ -181,11 +181,9 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     m_autoAdjustBtn = new QPushButton(i18nc("Automatic Adjustment", "Adjust"));
     m_autoAdjustBtn->setSizePolicy(QSizePolicy::MinimumExpanding,
                                    QSizePolicy::Expanding);
-//    m_autoAdjustBtn->setMinimumHeight(50);
 
     // -------------------------------------------------------------
 
-//    m_manualAdjustContainer      = new QGroupBox(i18n("Manual Adjustment"));
     m_manualAdjustContainer      = new QWidget;
     QGridLayout *containerLayout = new QGridLayout;
     containerLayout->addWidget(label3,              0, 0, 1, 1);
@@ -197,7 +195,6 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-//    m_autoAdjustContainer         = new QGroupBox(i18n("Automatic Correction"));
     m_autoAdjustContainer         = new QWidget;
     QGridLayout *containerLayout2 = new QGridLayout;
     QLabel *autoDescr             = new QLabel;
