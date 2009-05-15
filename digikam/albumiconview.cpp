@@ -581,13 +581,13 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint&)
     cmhelper.addAction(viewAction);
     cmhelper.addAction("image_edit");
     cmhelper.addServicesMenu(selectedItems());
+    cmhelper.addKipiActions();
     popmenu.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAction("image_find_similar");
     cmhelper.addActionLightTable();
     cmhelper.addQueueManagerMenu();
     cmhelper.addGotoMenu(selectedImageIDs);
-    cmhelper.addKipiActions();
     cmhelper.addAction("image_rename");
     popmenu.addSeparator();
     // --------------------------------------------------------

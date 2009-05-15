@@ -138,13 +138,13 @@ void DigikamImageView::showContextMenu(QContextMenuEvent* event, const ImageInfo
     cmhelper.addAction(viewAction);
     cmhelper.addAction("image_edit");
     cmhelper.addServicesMenu(selectedUrls());
+    cmhelper.addKipiActions();
     popmenu.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAction("image_find_similar");
     cmhelper.addActionLightTable();
     cmhelper.addQueueManagerMenu();
     cmhelper.addGotoMenu(selectedImageIDs);
-    cmhelper.addKipiActions();
     cmhelper.addAction("image_rename");
     popmenu.addSeparator();
     // --------------------------------------------------------
