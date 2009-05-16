@@ -260,6 +260,8 @@ DigikamView::DigikamView(QWidget *parent)
     d->rightSideBar->appendTab(d->tagFilterBox, SmallIcon("tag-assigned"), i18n("Tag Filters"));
 
     d->selectionTimer = new QTimer(this);
+    d->selectionTimer->setSingleShot(true);
+    d->selectionTimer->setInterval(75);
     d->thumbSizeTimer = new QTimer(this);
     d->thumbSizeTimer->setSingleShot(true);
     d->thumbSizeTimer->setInterval(300);
@@ -363,6 +365,12 @@ void DigikamView::setupConnections()
             this, SLOT(slotImageSelected()));
 
     connect(d->iconView->model(), SIGNAL(layoutChanged()),
+            this, SLOT(slotImageSelected()));
+
+    connect(d->iconView, SIGNAL(currentChanged()),
+            this, SLOT(slotImageSelected()));
+
+    connect(d->iconView, SIGNAL(selectionChanged()),
             this, SLOT(slotImageSelected()));
 
     connect(d->iconView, SIGNAL(previewRequested(const ImageInfo &)),
@@ -1149,8 +1157,7 @@ void DigikamView::slotImageSelected()
 {
     // delay to slotDispatchImageSelected
     d->needDispatchSelection = true;
-    d->selectionTimer->setSingleShot(true);
-    d->selectionTimer->start(75);
+    d->selectionTimer->start();
 }
 
 void DigikamView::slotDispatchImageSelected()
