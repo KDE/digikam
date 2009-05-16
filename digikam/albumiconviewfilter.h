@@ -35,7 +35,7 @@
 // Local includes
 
 #include "searchtextbar.h"
-#include "albumlister.h"
+#include "imagefiltersettings.h"
 
 class QEvent;
 class QObject;
@@ -57,16 +57,18 @@ public:
     void readSettings();
     void saveSettings();
 
+public Q_SLOTS:
+
+    void slotFilterMatches(bool);
+    void slotFilterMatchesForText(bool);
+    void slotFilterSettingsChanged(const ImageFilterSettings &settings);
+
 Q_SIGNALS:
 
-    void signalResetTagFilters();
-
-private Q_SLOTS:
-
-    void slotRatingFilterChanged(int, AlbumLister::RatingCondition);
-    void slotMimeTypeFilterChanged(int);
-    void slotTextFilterChanged(const SearchTextSettings&);
-    void slotItemsFilterMatch(bool);
+    void resetTagFilters();
+    void ratingFilterChanged(int, ImageFilterSettings::RatingCondition);
+    void mimeTypeFilterChanged(int);
+    void textFilterChanged(const SearchTextSettings&);
 
 private:
 

@@ -67,6 +67,8 @@ public:
     MimeFilter    *mimeFilter;
 
     RatingFilter  *ratingFilter;
+
+    ImageFilterSettings settings;
 };
 
 AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
@@ -100,22 +102,14 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
     setSpacing(KDialog::spacingHint());
     setMargin(0);
 
-    connect(d->ratingFilter, SIGNAL(signalRatingFilterChanged(int, AlbumLister::RatingCondition)),
-            this, SLOT(slotRatingFilterChanged(int, AlbumLister::RatingCondition)));
+    connect(d->ratingFilter, SIGNAL(signalRatingFilterChanged(int, ImageFilterSettings::RatingCondition)),
+            this, SIGNAL(ratingFilterChanged(int, ImageFilterSettings::RatingCondition)));
 
     connect(d->mimeFilter, SIGNAL(activated(int)),
-            this, SLOT(slotMimeTypeFilterChanged(int)));
+            this, SIGNAL(mimeTypeFilterChanged(int)));
 
     connect(d->textFilter, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            this, SLOT(slotTextFilterChanged(const SearchTextSettings&)));
-
-#if KDE_IS_VERSION(4,1,0)
-    connect(AlbumLister::instance(), SIGNAL(signalItemsTextFilterMatch(bool)),
-            d->textFilter, SLOT(slotSearchResult(bool)));
-#endif
-
-    connect(AlbumLister::instance(), SIGNAL(signalItemsFilterMatch(bool)),
-            this, SLOT(slotItemsFilterMatch(bool)));
+            this, SIGNAL(textFilterChanged(const SearchTextSettings&)));
 }
 
 AlbumIconViewFilter::~AlbumIconViewFilter()
@@ -126,7 +120,7 @@ AlbumIconViewFilter::~AlbumIconViewFilter()
 void AlbumIconViewFilter::readSettings()
 {
     AlbumSettings *settings = AlbumSettings::instance();
-    d->ratingFilter->setRatingFilterCondition((Digikam::AlbumLister::RatingCondition)
+    d->ratingFilter->setRatingFilterCondition((Digikam::ImageFilterSettings::RatingCondition)
                                               (settings->getRatingFilterCond()));
     /*
     Bug 181705: always enable filters
@@ -142,22 +136,7 @@ void AlbumIconViewFilter::saveSettings()
     AlbumSettings::instance()->setRatingFilterCond(d->ratingFilter->ratingFilterCondition());
 }
 
-void AlbumIconViewFilter::slotRatingFilterChanged(int rating, AlbumLister::RatingCondition cond)
-{
-    AlbumLister::instance()->setRatingFilter(rating, cond);
-}
-
-void AlbumIconViewFilter::slotMimeTypeFilterChanged(int mimeTypeFilter)
-{
-    AlbumLister::instance()->setMimeTypeFilter(mimeTypeFilter);
-}
-
-void AlbumIconViewFilter::slotTextFilterChanged(const SearchTextSettings& settings)
-{
-    AlbumLister::instance()->setTextFilter(settings);
-}
-
-void AlbumIconViewFilter::slotItemsFilterMatch(bool match)
+void AlbumIconViewFilter::slotFilterMatches(bool match)
 {
     QStringList filtersList;
     QString     message;
@@ -168,10 +147,10 @@ void AlbumIconViewFilter::slotItemsFilterMatch(bool match)
     if (d->mimeFilter->mimeFilter() != MimeFilter::AllFiles)
         filtersList.append(i18n("<br/><nobr><i>Mime Type</i></nobr>"));
 
-    if (d->ratingFilter->rating() != 0 || d->ratingFilter->ratingFilterCondition() != AlbumLister::GreaterEqualCondition)
+    if (d->ratingFilter->rating() != 0 || d->ratingFilter->ratingFilterCondition() != ImageFilterSettings::GreaterEqualCondition)
         filtersList.append(i18n("<br/><nobr><i>Rating</i></nobr>"));
 
-    if (AlbumLister::instance()->tagFiltersIsActive())
+    if (d->settings.isFilteringByTags())
         filtersList.append(i18n("<br/><nobr><i>Tags</i></nobr>"));
 
     if (filtersList.count() > 1)
@@ -193,6 +172,18 @@ void AlbumIconViewFilter::slotItemsFilterMatch(bool match)
     }
 }
 
+void AlbumIconViewFilter::slotFilterMatchesForText(bool match)
+{
+#if KDE_IS_VERSION(4,1,0)
+    d->textFilter->slotSearchResult(match);
+#endif
+}
+
+void AlbumIconViewFilter::slotFilterSettingsChanged(const ImageFilterSettings &settings)
+{
+    d->settings = settings;
+}
+
 bool AlbumIconViewFilter::eventFilter(QObject *object, QEvent *e)
 {
     QWidget *widget = static_cast<QWidget*>(object);
@@ -205,9 +196,9 @@ bool AlbumIconViewFilter::eventFilter(QObject *object, QEvent *e)
             // Reset all filters settings.
             d->textFilter->setText(QString());
             d->ratingFilter->setRating(0);
-            d->ratingFilter->setRatingFilterCondition(AlbumLister::GreaterEqualCondition);
+            d->ratingFilter->setRatingFilterCondition(ImageFilterSettings::GreaterEqualCondition);
             d->mimeFilter->setMimeFilter(MimeFilter::AllFiles);
-            emit signalResetTagFilters();
+            emit resetTagFilters();
         }
     }
 
