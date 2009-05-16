@@ -35,6 +35,7 @@
 namespace Digikam
 {
 
+class ImageViewUtilities;
 class DigikamImageViewPriv;
 
 class DigikamImageView : public ImageCategorizedView
@@ -46,12 +47,15 @@ public:
     DigikamImageView(QWidget *parent = 0);
     ~DigikamImageView();
 
+    ImageViewUtilities *utilities() const;
+
 public Q_SLOTS:
 
     virtual void copy();
     virtual void paste();
 
     void openInEditor(const ImageInfo& info);
+    void openCurrentInEditor();
 
     void insertSelectedToLightTable(bool addTo);
     void insertSelectedToCurrentQueue();
@@ -59,23 +63,28 @@ public Q_SLOTS:
     void insertSelectedToExistingQueue(int queueid);
 
     void deleteSelected(bool permanently = false);
+    void deleteSelectedDirectly(bool permanently = false);
     void assignTagToSelected(int tagID);
     void removeTagFromSelected(int tagID);
     void assignRatingToSelected(int rating);
     void setAsAlbumThumbnail(const ImageInfo& setAsThumbnail);
+    void createNewAlbumForSelected();
+    void setExifOrientationOfSelected(int orientation);
+    void renameCurrent();
 
 Q_SIGNALS:
 
     void previewRequested(const ImageInfo& info);
-    void gotoAlbumAndImage(const ImageInfo& info);
-    void gotoTagAndImage(int tagId);
-    void gotoDataAndImage(const ImageInfo& info);
+    void gotoAlbumAndImageRequested(const ImageInfo& info);
+    void gotoTagAndImageRequested(int tagId);
+    void gotoDataAndImageRequested(const ImageInfo& info);
 
 protected:
 
     virtual void activated(const ImageInfo& info);
     virtual void showContextMenu(QContextMenuEvent* event, const ImageInfo& info);
     virtual void showContextMenu(QContextMenuEvent* event);
+    virtual void slotSetupChanged();
 
 private:
 

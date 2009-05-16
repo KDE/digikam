@@ -85,6 +85,8 @@ DigikamImageView::DigikamImageView(QWidget *parent)
     setAcceptDrops(true);
     setDropIndicatorShown(false);
 
+    setToolTipEnabled(AlbumSettings::instance()->getShowToolTips());
+
     d->utilities = new ImageViewUtilities(this);
 
     connect(d->utilities, SIGNAL(editorCurrentUrlChanged(const KUrl &)),
@@ -97,6 +99,17 @@ DigikamImageView::DigikamImageView(QWidget *parent)
 DigikamImageView::~DigikamImageView()
 {
     delete d;
+}
+
+ImageViewUtilities *DigikamImageView::utilities() const
+{
+    return d->utilities;
+}
+
+void DigikamImageView::slotSetupChanged()
+{
+    setToolTipEnabled(AlbumSettings::instance()->getShowToolTips());
+    ImageCategorizedView::slotSetupChanged();
 }
 
 void DigikamImageView::activated(const ImageInfo& info)
@@ -113,6 +126,13 @@ void DigikamImageView::activated(const ImageInfo& info)
 void DigikamImageView::openInEditor(const ImageInfo& info)
 {
     d->utilities->openInEditor(info, imageInfos(), currentAlbum());
+}
+
+void DigikamImageView::openCurrentInEditor()
+{
+    ImageInfo info = currentInfo();
+    if (!info.isNull())
+        d->utilities->openInEditor(info, imageInfos(), currentAlbum());
 }
 
 void DigikamImageView::showContextMenu(QContextMenuEvent* event, const ImageInfo& info)
@@ -170,13 +190,13 @@ void DigikamImageView::showContextMenu(QContextMenuEvent* event, const ImageInfo
             this, SLOT(removeTagFromSelected(int)));
 
     connect(&cmhelper, SIGNAL(signalGotoTag(int)),
-            this, SIGNAL(gotoTagAndImage(int)));
+            this, SIGNAL(gotoTagAndImageRequested(int)));
 
     connect(&cmhelper, SIGNAL(signalGotoAlbum(ImageInfo&)),
-            this, SIGNAL(gotoAlbumAndImage(ImageInfo&)));
+            this, SIGNAL(gotoAlbumAndImageRequested(ImageInfo&)));
 
     connect(&cmhelper, SIGNAL(signalGotoDate(ImageInfo&)),
-            this, SIGNAL(gotoDateAndImage(ImageInfo&)));
+            this, SIGNAL(gotoDateAndImageRequested(ImageInfo&)));
 
     connect(&cmhelper, SIGNAL(signalAssignRating(int)),
             this, SLOT(assignRatingToSelected(int)));
@@ -278,6 +298,12 @@ void DigikamImageView::deleteSelected(bool permanently)
     d->utilities->deleteImages(imageInfoList, permanently);
 }
 
+void DigikamImageView::deleteSelectedDirectly(bool permanently)
+{
+    ImageInfoList imageInfoList = selectedImageInfos();
+    d->utilities->deleteImagesDirectly(imageInfoList, permanently);
+}
+
 void DigikamImageView::assignTagToSelected(int tagID)
 {
     MetadataManager::instance()->assignTags(selectedImageInfos(), QList<int>() << tagID);
@@ -296,6 +322,21 @@ void DigikamImageView::assignRatingToSelected(int rating)
 void DigikamImageView::setAsAlbumThumbnail(const ImageInfo& setAsThumbnail)
 {
     d->utilities->setAsAlbumThumbnail(currentAlbum(), setAsThumbnail);
+}
+
+void DigikamImageView::createNewAlbumForSelected()
+{
+    d->utilities->createNewAlbumForInfos(selectedImageInfos(), currentAlbum());
+}
+
+void DigikamImageView::setExifOrientationOfSelected(int orientation)
+{
+    MetadataManager::instance()->setExifOrientation(selectedImageInfos(), orientation);
+}
+
+void DigikamImageView::renameCurrent()
+{
+    d->utilities->rename(currentInfo());
 }
 
 } // namespace Digikam
