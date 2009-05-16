@@ -271,8 +271,7 @@ QList<ImageInfo> ImageFilterModel::imageInfosSorted() const
     const int size = rowCount();
     for (int i=0; i<size; ++i)
     {
-        QModelIndex index = createIndex(i, 0);
-        infos << d->imageModel->imageInfo(mapToSource(index));
+        infos << d->imageModel->imageInfo(mapToSource(index(i, 0)));
     }
     return infos;
 }
