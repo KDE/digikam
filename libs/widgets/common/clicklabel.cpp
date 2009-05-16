@@ -258,16 +258,16 @@ public:
         expandByDefault = true;
     }
 
-    bool                expandByDefault;
+    bool             expandByDefault;
 
-    QLabel             *pixmapLabel;
-    QWidget            *containerWidget;
-    QGridLayout        *grid;
+    QLabel          *pixmapLabel;
+    QWidget         *containerWidget;
+    QGridLayout     *grid;
 
-    KSeparator         *line;
+    KSeparator      *line;
 
-    ArrowClickLabel    *arrow;
-    SqueezedClickLabel *clickLabel;
+    ArrowClickLabel *arrow;
+    ClickLabel      *clickLabel;
 };
 
 DLabelExpander::DLabelExpander(QWidget *parent)
@@ -277,7 +277,7 @@ DLabelExpander::DLabelExpander(QWidget *parent)
     d->line        = new KSeparator(Qt::Horizontal, this);
     d->arrow       = new ArrowClickLabel(this);
     d->pixmapLabel = new QLabel(this);
-    d->clickLabel  = new SqueezedClickLabel(this);
+    d->clickLabel  = new ClickLabel(this);
     d->pixmapLabel->installEventFilter(this);
     d->pixmapLabel->setCursor(Qt::PointingHandCursor);
 
