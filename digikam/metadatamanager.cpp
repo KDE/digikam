@@ -55,13 +55,13 @@ MetadataManager* MetadataManager::instance()
 }
 
 MetadataManager::MetadataManager()
-               : d(new MetadataManagerPriv)
+               : d(new MetadataManagerPriv(this))
 {
     connect(d, SIGNAL(progressMessageChanged(const QString &)),
             this, SIGNAL(progressMessageChanged(const QString &)));
 
-    connect(d, SIGNAL(progressValueChanged(int)),
-            this, SIGNAL(progressValueChanged(int)));
+    connect(d, SIGNAL(progressValueChanged(float)),
+            this, SIGNAL(progressValueChanged(float)));
 
     connect(d, SIGNAL(progressFinished()),
             this, SIGNAL(progressFinished()));
@@ -72,6 +72,7 @@ MetadataManager::MetadataManager()
 
 MetadataManager::~MetadataManager()
 {
+    shutDown();
     delete d;
 }
 
@@ -113,7 +114,8 @@ void MetadataManager::setExifOrientation(const QList<ImageInfo>& infos, int orie
 
 // --------------------------------------------------------------------------------------
 
-MetadataManagerPriv::MetadataManagerPriv()
+MetadataManagerPriv::MetadataManagerPriv(MetadataManager *q)
+            : q(q)
 {
     dbWorker   = new MetadataManagerDatabaseWorker(this);
     fileWorker = new MetadataManagerFileWorker(this);
@@ -130,11 +132,17 @@ MetadataManagerPriv::MetadataManagerPriv()
     connect(this, SIGNAL(signalSetExifOrientation(const QList<ImageInfo> &, int)),
             dbWorker, SLOT(setExifOrientation(const QList<ImageInfo> &, int)));
 
-    connect(dbWorker, SIGNAL(writeMetadataToFiles(const QList<ImageInfo> &, int)),
-            fileWorker, SLOT(writeMetadataToFiles(const QList<ImageInfo> &, int)));
+    connect(dbWorker, SIGNAL(writeMetadataToFiles(const QList<ImageInfo> &)),
+            fileWorker, SLOT(writeMetadataToFiles(const QList<ImageInfo> &)));
 
     connect(dbWorker, SIGNAL(writeOrientationToFiles(const QList<ImageInfo> &, int)),
             fileWorker, SLOT(writeOrientationToFiles(const QList<ImageInfo> &, int)));
+}
+
+MetadataManagerPriv::~MetadataManagerPriv()
+{
+    delete dbWorker;
+    delete fileWorker;
 }
 
 void MetadataManagerPriv::schedulingForDB(int numberOfInfos)

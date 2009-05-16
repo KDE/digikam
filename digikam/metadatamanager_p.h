@@ -48,7 +48,8 @@ class MetadataManagerPriv : public QObject
 
 public:
 
-    MetadataManagerPriv();
+    MetadataManagerPriv(MetadataManager *q);
+    ~MetadataManagerPriv();
 
     MetadataManagerDatabaseWorker *dbWorker;
     MetadataManagerFileWorker *fileWorker;
@@ -71,6 +72,8 @@ public:
     QString           dbMessage;
     QString           writerMessage;
     QMutex            mutex;
+
+    MetadataManager  *q;
 
     // -- Workflow controlling --
 
@@ -112,7 +115,6 @@ Q_SIGNALS:
     void signalAssignRating(const QList<ImageInfo>& infos, int rating);
     void signalSetExifOrientation(const QList<ImageInfo>& infos, int orientation);
 
-public Q_SLOTS:
 };
 
 class MetadataManagerWorker : public QObject
@@ -121,7 +123,7 @@ class MetadataManagerWorker : public QObject
 public:
 
     MetadataManagerWorker(MetadataManagerPriv *d)
-        : QObject(d), d(d)
+        : d(d) // do not install d as QObject parent, moveToThread wont work then
     {
         thread = new Thread(this);
         moveToThread(thread);
