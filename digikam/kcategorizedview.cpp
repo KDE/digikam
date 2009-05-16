@@ -1543,7 +1543,6 @@ void KCategorizedView::rowsInsertedArtifficial(const QModelIndex &parent,
         QModelIndex sample = d->proxyModel->index(rowCount - 1, modelColumn(), rootIndex());
         d->biggestItemSize = sizeHintForIndex(sample);
     }
-    d->modelIndexList->reserve(rowCount);
 
     for (int k = 0; k < rowCount; ++k)
     {
