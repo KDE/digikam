@@ -61,7 +61,6 @@ class PAlbum;
 class TAlbum;
 class DAlbum;
 class SAlbum;
-class AlbumItemHandler;
 class AlbumChangeset;
 class TagChangeset;
 class SearchChangeset;
@@ -458,11 +457,6 @@ public:
     bool deleteSAlbum(SAlbum* album);
     //@}
 
-    void setItemHandler(AlbumItemHandler *handler);
-    AlbumItemHandler* getItemHandler();
-    void refreshItemHandler(const KUrl::List& itemList=KUrl::List());
-    void emitAlbumItemsSelected(bool val);
-
 Q_SIGNALS:
 
     /// An album is about to be added to the given parent (0 if album is root)
@@ -477,7 +471,6 @@ Q_SIGNALS:
     /// The album is deleted, the object can no longer be accessed.
     /// For identification purposes, the former album pointer is passed.
     void signalAlbumHasBeenDeleted(void *);
-    void signalAlbumItemsSelected(bool selected);
     void signalAlbumsCleared();
     void signalAlbumCurrentChanged(Album* album);
     void signalAllAlbumsLoaded();

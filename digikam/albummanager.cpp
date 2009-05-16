@@ -73,7 +73,6 @@ extern "C"
 
 #include "album.h"
 #include "albumdb.h"
-#include "albumitemhandler.h"
 #include "albumsettings.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
@@ -144,7 +143,6 @@ public:
         albumListJob       = 0;
         tagListJob         = 0;
         dirWatch           = 0;
-        itemHandler        = 0;
         rootPAlbum         = 0;
         rootTAlbum         = 0;
         rootDAlbum         = 0;
@@ -172,8 +170,6 @@ public:
     KIO::TransferJob           *tagListJob;
 
     KDirWatch                  *dirWatch;
-
-    AlbumItemHandler           *itemHandler;
 
     PAlbum                     *rootPAlbum;
     TAlbum                     *rootTAlbum;
@@ -2199,29 +2195,6 @@ void AlbumManager::removeTAlbum(TAlbum *album)
 void AlbumManager::notifyAlbumDeletion(Album *album)
 {
     invalidateGuardedPointers(album);
-}
-
-void AlbumManager::emitAlbumItemsSelected(bool val)
-{
-    emit signalAlbumItemsSelected(val);
-}
-
-void AlbumManager::setItemHandler(AlbumItemHandler *handler)
-{
-    d->itemHandler = handler;
-}
-
-AlbumItemHandler* AlbumManager::getItemHandler()
-{
-    return d->itemHandler;
-}
-
-void AlbumManager::refreshItemHandler(const KUrl::List& itemList)
-{
-    if (itemList.empty())
-        d->itemHandler->refresh();
-    else
-        d->itemHandler->refreshItems(itemList);
 }
 
 void AlbumManager::slotAlbumsJobResult(KJob* job)

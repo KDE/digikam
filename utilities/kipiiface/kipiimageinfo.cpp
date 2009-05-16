@@ -111,7 +111,7 @@ void KipiImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec)
     }
 
     m_info.setDateTime(time);
-    AlbumManager::instance()->refreshItemHandler( _url );
+    //AlbumManager::instance()->refreshItemHandler( _url );
 }
 
 void KipiImageInfo::cloneData( ImageInfoShared* other )

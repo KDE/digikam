@@ -40,6 +40,8 @@
 #include "albumsettings.h"
 #include "collectionmanager.h"
 #include "databaseaccess.h"
+#include "digikamapp.h"
+#include "digikamview.h"
 #include "loadingcacheinterface.h"
 #include "scancontroller.h"
 #include "imageattributeswatch.h"
@@ -57,11 +59,8 @@ KipiInterface::KipiInterface(QObject *parent, const char *name)
     m_thumbLoadThread = ThumbnailLoadThread::defaultThread();
     m_albumManager    = AlbumManager::instance();
 
-    connect(m_albumManager, SIGNAL(signalAlbumItemsSelected(bool)),
+    connect(DigikamApp::instance()->view(), SIGNAL(signalSelectionChanged(bool)),
             this, SLOT(slotSelectionChanged(bool)));
-
-    connect(m_albumManager, SIGNAL(signalAlbumCurrentChanged(Album*)),
-            this, SLOT(slotCurrentAlbumChanged(Album*)));
 
     connect(m_thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
@@ -157,12 +156,12 @@ void KipiInterface::refreshImages(const KUrl::List& urls)
     KUrl::List ulist = urls;
 
     // Hard Refresh
-    m_albumManager->refreshItemHandler(urls);
-
     QSet<QString> dirs;
     foreach (const KUrl& url, urls)
     {
-        LoadingCacheInterface::fileChanged(url.path());
+        QString path = url.toLocalFile();
+        ThumbnailLoadThread::deleteThumbnail(path);
+        LoadingCacheInterface::fileChanged(path);
         dirs << url.directory();
     }
     foreach (const QString& dir, dirs)
@@ -201,7 +200,7 @@ bool KipiInterface::addImage( const KUrl& url, QString& errmsg )
         return false;
     }
 
-    m_albumManager->refreshItemHandler( url );
+    //m_albumManager->refreshItemHandler( url );
 
     return true;
 }

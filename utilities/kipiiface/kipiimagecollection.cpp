@@ -40,12 +40,13 @@
 // Local includes
 
 #include "constants.h"
-#include "albumitemhandler.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albumsettings.h"
 #include "collectionmanager.h"
 #include "databaseaccess.h"
+#include "digikamapp.h"
+#include "digikamview.h"
 #include "namefilter.h"
 
 namespace Digikam
@@ -132,15 +133,8 @@ KUrl::List KipiImageCollection::images()
             else if (m_album->type() == Album::DATE ||
                     m_album->type() == Album::SEARCH)
             {
-                AlbumItemHandler* handler = AlbumManager::instance()->getItemHandler();
-
-                if (handler)
-                {
-                    return handler->allItems();
-                }
-
-                return KUrl::List();
-        }
+                return DigikamApp::instance()->view()->allUrls();
+            }
             else
             {
                 kWarning(50003) << "Unknown album type" << endl;
@@ -151,16 +145,7 @@ KUrl::List KipiImageCollection::images()
         }
         case SelectedItems:
         {
-            AlbumItemHandler* handler = AlbumManager::instance()->getItemHandler();
-
-            if (handler)
-            {
-                return handler->selectedItems();
-            }
-
-            return KUrl::List();
-
-            break;
+            return DigikamApp::instance()->view()->selectedUrls();
         }
         default:
             break;
