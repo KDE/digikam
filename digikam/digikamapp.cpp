@@ -290,9 +290,14 @@ DigikamApp::~DigikamApp()
     delete d;
 }
 
-DigikamApp* DigikamApp::getinstance()
+DigikamApp* DigikamApp::instance()
 {
     return m_instance;
+}
+
+DigikamView *DigikamApp::view() const
+{
+    return d->view;
 }
 
 void DigikamApp::show()

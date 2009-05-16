@@ -53,6 +53,7 @@ namespace Solid { class Device; }
 namespace Digikam
 {
 
+class DigikamView;
 class ImageInfo;
 class ImageInfoList;
 class CameraType;
@@ -70,7 +71,7 @@ public:
     virtual void show();
     void restoreSession();
 
-    static DigikamApp* getinstance();
+    static DigikamApp* instance();
 
     // KIPI Actions collections access.
     const QList<QAction*>& menuImageActions();
@@ -86,6 +87,8 @@ public:
     void enableZoomMinusAction(bool val);
     void enableAlbumBackwardHistory(bool enable);
     void enableAlbumForwardHistory(bool enable);
+
+    DigikamView *view() const;
 
 Q_SIGNALS:
 

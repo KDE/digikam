@@ -110,7 +110,7 @@ ContextMenuHelper::ContextMenuHelper(QMenu* parent, KActionCollection* actionCol
     d->parent = parent;
 
     if (!actionCollection)
-        d->stdActionCollection = DigikamApp::getinstance()->actionCollection();
+        d->stdActionCollection = DigikamApp::instance()->actionCollection();
     else
         d->stdActionCollection = actionCollection;
 }
@@ -434,7 +434,7 @@ void ContextMenuHelper::addSelectTagsMenu(Q3ListViewItem *item)
 void ContextMenuHelper::addImportMenu()
 {
     KMenu* menuImport = new KMenu(i18n("Import"), d->parent);
-    const QList<QAction*> importActions = DigikamApp::getinstance()->menuImportActions();
+    const QList<QAction*> importActions = DigikamApp::instance()->menuImportActions();
 
     if(!importActions.isEmpty())
         menuImport->addActions(importActions);
@@ -445,7 +445,7 @@ void ContextMenuHelper::addImportMenu()
 void ContextMenuHelper::addExportMenu()
 {
     KMenu* menuExport = new KMenu(i18n("Export"), d->parent);
-    const QList<QAction*> exportActions = DigikamApp::getinstance()->menuExportActions();
+    const QList<QAction*> exportActions = DigikamApp::instance()->menuExportActions();
 
     if(!exportActions.isEmpty())
         menuExport->addActions(exportActions);
@@ -456,7 +456,7 @@ void ContextMenuHelper::addExportMenu()
 void ContextMenuHelper::addBatchMenu()
 {
     KMenu* menuKIPIBatch = new KMenu(i18n("Batch Process"), d->parent);
-    const QList<QAction*>& batchActions = DigikamApp::getinstance()->menuBatchActions();
+    const QList<QAction*>& batchActions = DigikamApp::instance()->menuBatchActions();
 
     if(!batchActions.isEmpty())
         menuKIPIBatch->addActions(batchActions);
@@ -466,7 +466,7 @@ void ContextMenuHelper::addBatchMenu()
 
 void ContextMenuHelper::addAlbumActions()
 {
-    const QList<QAction*>& albumActions = DigikamApp::getinstance()->menuAlbumActions();
+    const QList<QAction*>& albumActions = DigikamApp::instance()->menuAlbumActions();
     if(!albumActions.isEmpty())
         d->parent->addActions(albumActions);
 }
