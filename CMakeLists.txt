@@ -910,12 +910,7 @@ ENDIF(MSVC)
     SET(libdigikamgui_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumdragdrop.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumiconview.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumiconviewfilter.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumiconviewtooltip.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumicongroupitem.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumiconitem.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumitemhandler.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumfolderview.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumhistory.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumlister.cpp 
