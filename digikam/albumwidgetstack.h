@@ -43,7 +43,7 @@
 namespace Digikam
 {
 
-class AlbumIconView;
+class DigikamImageView;
 class ImagePreviewView;
 class AlbumWidgetStackPriv;
 
@@ -66,7 +66,7 @@ public:
     AlbumWidgetStack(QWidget *parent=0);
     ~AlbumWidgetStack();
 
-    AlbumIconView    *albumIconView();
+    DigikamImageView *imageIconView();
     ImagePreviewView *imagePreviewView();
 
     void setPreviewItem(const ImageInfo& info = ImageInfo(),
@@ -120,7 +120,7 @@ public Q_SLOTS:
 private Q_SLOTS:
 
     void slotZoomFactorChanged(double);
-    void slotItemsUpdated(const KUrl::List&);
+    void slotFileChanged(const QString &path);
     void slotItemsAddedOrRemoved();
     void updateThumbbar();
 

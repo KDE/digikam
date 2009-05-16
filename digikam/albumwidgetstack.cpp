@@ -44,10 +44,12 @@
 // Local includes
 
 #include "albumsettings.h"
-#include "albumiconview.h"
-#include "albumiconitem.h"
+#include "digikamimageview.h"
+#include "imagealbummodel.h"
+#include "imagealbumfiltermodel.h"
 #include "imagepreviewview.h"
 #include "imagepreviewbar.h"
+#include "loadingcacheinterface.h"
 #include "welcomepageview.h"
 #include "mediaplayerview.h"
 
@@ -61,7 +63,7 @@ public:
 
     AlbumWidgetStackPriv()
     {
-        albumIconView      = 0;
+        imageIconView      = 0;
         imagePreviewView   = 0;
         welcomePageView    = 0;
         mediaPlayerView    = 0;
@@ -76,7 +78,7 @@ public:
 
     ImagePreviewBar  *thumbBar;
 
-    AlbumIconView    *albumIconView;
+    DigikamImageView *imageIconView;
 
     ImagePreviewView *imagePreviewView;
 
@@ -94,7 +96,7 @@ public:
 AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
                 : QStackedWidget(parent), d(new AlbumWidgetStackPriv)
 {
-    d->albumIconView    = new AlbumIconView(this);
+    d->imageIconView    = new DigikamImageView(this);
     d->splitter         = new QSplitter(Qt::Vertical, this);
     d->imagePreviewView = new ImagePreviewView(d->splitter, this);
     d->thumbBar         = new ImagePreviewBar(d->splitter, Qt::Horizontal,
@@ -120,7 +122,7 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
     d->welcomePageView  = new WelcomePageView(this);
     d->mediaPlayerView  = new MediaPlayerView(this);
 
-    insertWidget(PreviewAlbumMode, d->albumIconView);
+    insertWidget(PreviewAlbumMode, d->imageIconView);
     insertWidget(PreviewImageMode, d->splitter);
     insertWidget(WelcomePageMode,  d->welcomePageView->view());
     insertWidget(MediaPlayerMode,  d->mediaPlayerView);
@@ -177,16 +179,16 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
     connect(d->imagePreviewView, SIGNAL(signalAddToExistingQueue(int)),
             this, SIGNAL(signalAddToExistingQueue(int)));
 
-    connect(d->albumIconView, SIGNAL(signalItemsAdded()),
+    connect(d->imageIconView->imageFilterModel(), SIGNAL(rowsInserted(const QModelIndex &, int, int)),
             this, SLOT(slotItemsAddedOrRemoved()));
 
-    connect(d->albumIconView, SIGNAL(signalItemsRearranged()),
+    connect(d->imageIconView->imageFilterModel(), SIGNAL(rowsRemoved(const QModelIndex &, int, int)),
             this, SLOT(slotItemsAddedOrRemoved()));
 
-    connect(d->albumIconView, SIGNAL(signalItemDeleted(AlbumIconItem*)),
+    connect(d->imageIconView->imageFilterModel(), SIGNAL(layoutChanged),
             this, SLOT(slotItemsAddedOrRemoved()));
 
-    connect(d->albumIconView, SIGNAL(signalCleared()),
+    connect(d->imageIconView->imageFilterModel(), SIGNAL(modelReset()),
             this, SLOT(slotItemsAddedOrRemoved()));
 
     connect(d->thumbBar, SIGNAL(signalUrlSelected(const KUrl&)),
@@ -194,6 +196,9 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
 
     connect(d->thumbbarTimer, SIGNAL(timeout()),
             this, SLOT(updateThumbbar()));
+
+    LoadingCacheInterface::connectToSignalFileChanged(this,
+            SLOT(slotFileChanged(const QString &)));
 }
 
 AlbumWidgetStack::~AlbumWidgetStack()
@@ -246,9 +251,9 @@ void AlbumWidgetStack::slotEscapePreview()
         d->mediaPlayerView->escapePreview();
 }
 
-AlbumIconView* AlbumWidgetStack::albumIconView()
+DigikamImageView* AlbumWidgetStack::imageIconView()
 {
-    return d->albumIconView;
+    return d->imageIconView;
 }
 
 ImagePreviewView* AlbumWidgetStack::imagePreviewView()
@@ -271,7 +276,7 @@ void AlbumWidgetStack::setPreviewItem(const ImageInfo & info, const ImageInfo& p
 
         // Special case to cleanup thumbbar if Image Lister do not query item accordingly to
         // IconView Filters.
-        if (d->albumIconView->count() == 0)
+        if (d->imageIconView->imageModel()->isEmpty())
             d->thumbBar->clear();
     }
     else
@@ -322,7 +327,7 @@ void AlbumWidgetStack::setPreviewMode(int mode)
     if (mode == PreviewAlbumMode || mode == WelcomePageMode)
     {
         if (mode == PreviewAlbumMode && currentIndex() != mode)
-            d->albumIconView->setFocus();
+            d->imageIconView->setFocus();
         setPreviewItem();
         setCurrentIndex(mode);
         emit signalToggledToPreviewMode(false);
@@ -348,7 +353,7 @@ void AlbumWidgetStack::slotZoomFactorChanged(double z)
         emit signalZoomFactorChanged(z);
 }
 
-void AlbumWidgetStack::slotItemsUpdated(const KUrl::List& urls)
+void AlbumWidgetStack::slotFileChanged(const QString &path)
 {
     // If item are updated from Icon View, and if we are in Preview Mode,
     // We will check if the current item preview need to be reloaded.
@@ -358,15 +363,13 @@ void AlbumWidgetStack::slotItemsUpdated(const KUrl::List& urls)
         previewMode() == MediaPlayerMode)    // What we can do with media player ?
         return;
 
-    if (urls.contains(imagePreviewView()->getImageInfo().fileUrl()))
+    if (path == imagePreviewView()->getImageInfo().filePath())
         d->imagePreviewView->reload();
 
-    for (KUrl::List::const_iterator it = urls.constBegin();
-         it != urls.constEnd(); ++it)
-    {
-        ThumbBarItem* foundItem = d->thumbBar->findItemByUrl(*it);
+    KUrl url = KUrl::fromPath(path);
+    ThumbBarItem* foundItem = d->thumbBar->findItemByUrl(url);
+    if (foundItem)
         d->thumbBar->reloadThumb(foundItem);
-    }
 }
 
 void AlbumWidgetStack::slotItemsAddedOrRemoved()
@@ -380,10 +383,10 @@ void AlbumWidgetStack::slotItemsAddedOrRemoved()
 
     d->thumbbarTimer->start(50);
 
-    AlbumIconItem *iconItem = dynamic_cast<AlbumIconItem*>(d->albumIconView->currentItem());
-    if (iconItem)
+    KUrl currentUrl = d->imageIconView->currentUrl();
+    if (currentUrl != KUrl())
     {
-        ThumbBarItem* item = d->thumbBar->findItemByUrl(iconItem->imageInfo().fileUrl());
+        ThumbBarItem* item = d->thumbBar->findItemByUrl(currentUrl);
         d->thumbBar->setSelected(item);
     }
 }
@@ -396,7 +399,7 @@ void AlbumWidgetStack::updateThumbbar()
 
     d->thumbBar->clear();
 
-    ImageInfoList list = d->albumIconView->allImageInfos();
+    ImageInfoList list = d->imageIconView->imageInfos();
 
     d->thumbBar->blockSignals(true);
     for (ImageInfoList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
