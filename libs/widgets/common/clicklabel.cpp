@@ -405,6 +405,7 @@ DExpanderBox::DExpanderBox(QWidget *parent)
 {
     setFrameStyle(QFrame::NoFrame);
     setWidgetResizable(true);
+    viewport()->setAutoFillBackground(false);
     d->vbox = new KVBox(viewport());
     d->vbox->setMargin(0);
     d->vbox->setSpacing(KDialog::spacingHint());
