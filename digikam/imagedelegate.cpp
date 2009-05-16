@@ -143,6 +143,8 @@ ImageDelegate::ImageDelegate(QObject *parent)
 
 ImageDelegate::~ImageDelegate()
 {
+    foreach (ImageDelegateOverlay *overlay, d->overlays)
+        removeOverlay(overlay);
     delete d->categoryDrawer;
     delete d;
 }
@@ -283,7 +285,7 @@ void ImageDelegate::paint(QPainter * p, const QStyleOptionViewItem& option, cons
     {
         r = d->nameRect;
         p->setFont(d->fontReg);
-        p->drawText(r, Qt::AlignCenter, squeezedText(p, r.width(), info.name()));
+        p->drawText(r, Qt::AlignCenter, squeezedTextCached(p, r.width(), info.name()));
     }
 
     p->setFont(d->fontCom);
@@ -293,7 +295,7 @@ void ImageDelegate::paint(QPainter * p, const QStyleOptionViewItem& option, cons
         QString comments = info.comment();
 
         r = d->commentsRect;
-        p->drawText(r, Qt::AlignCenter, squeezedText(p, r.width(), comments));
+        p->drawText(r, Qt::AlignCenter, squeezedTextCached(p, r.width(), comments));
     }
 
     p->setFont(d->fontXtra);
@@ -306,7 +308,7 @@ void ImageDelegate::paint(QPainter * p, const QStyleOptionViewItem& option, cons
         p->setFont(d->fontXtra);
         QString str = dateToString(date);
         str = i18nc("date of image creation", "created : %1",str);
-        p->drawText(r, Qt::AlignCenter, squeezedText(p, r.width(), str));
+        p->drawText(r, Qt::AlignCenter, squeezedTextCached(p, r.width(), str));
     }
 
     if (settings->getIconShowModDate())
@@ -317,7 +319,7 @@ void ImageDelegate::paint(QPainter * p, const QStyleOptionViewItem& option, cons
         p->setFont(d->fontXtra);
         QString str = dateToString(date);
         str = i18nc("date of last image modification", "modified : %1",str);
-        p->drawText(r, Qt::AlignCenter, squeezedText(p, r.width(), str));
+        p->drawText(r, Qt::AlignCenter, squeezedTextCached(p, r.width(), str));
     }
 
     if (settings->getIconShowResolution())
@@ -331,7 +333,7 @@ void ImageDelegate::paint(QPainter * p, const QStyleOptionViewItem& option, cons
                                            : i18nc("%1 width, %2 height, %3 mpixels", "%1x%2 (%3Mpx)",
                                                    dims.width(),dims.height(),mpixels);
             r = d->resolutionRect;
-            p->drawText(r, Qt::AlignCenter, squeezedText(p, r.width(), resolution));
+            p->drawText(r, Qt::AlignCenter, squeezedTextCached(p, r.width(), resolution));
         }
     }
 
@@ -339,7 +341,7 @@ void ImageDelegate::paint(QPainter * p, const QStyleOptionViewItem& option, cons
     {
         r = d->sizeRect;
         p->drawText(r, Qt::AlignCenter,
-                    squeezedText(p, r.width(), KIO::convertSize(info.fileSize())));
+                    squeezedTextCached(p, r.width(), KIO::convertSize(info.fileSize())));
     }
 
     p->setFont(d->fontCom);
@@ -350,7 +352,7 @@ void ImageDelegate::paint(QPainter * p, const QStyleOptionViewItem& option, cons
         QString tags = AlbumManager::instance()->tagNames(info.tagIds()).join(", ");
 
         r = d->tagRect;
-        p->drawText(r, Qt::AlignCenter, squeezedText(p, r.width(), tags));
+        p->drawText(r, Qt::AlignCenter, squeezedTextCached(p, r.width(), tags));
     }
 
     if (option.state & QStyle::State_HasFocus) //?? is current item
@@ -706,7 +708,7 @@ QString ImageDelegate::dateToString(const QDateTime& datetime) const
     return KGlobal::locale()->formatDateTime(datetime, KLocale::ShortDate, false);
 }
 
-QString ImageDelegate::squeezedText(QPainter* p, int width, const QString& text) const
+QString ImageDelegate::squeezedTextCached(QPainter* p, int width, const QString& text) const
 {
     QCache<QString, QString> *cache = &const_cast<ImageDelegate*>(this)->d->squeezedTextCache;
     // We do not need to include the font into cache key, the cache is cleared on font change
@@ -715,9 +717,16 @@ QString ImageDelegate::squeezedText(QPainter* p, int width, const QString& text)
     if (cachedString)
         return *cachedString;
 
+    QString result = squeezedText(p->fontMetrics(), width, text);
+
+    cache->insert(cacheKey, new QString(result));
+    return result;
+}
+
+QString ImageDelegate::squeezedText(const QFontMetrics &fm, int width, const QString& text)
+{
     QString fullText(text);
     fullText.replace('\n',' ');
-    QFontMetrics fm(p->fontMetrics());
     int textWidth = fm.width(fullText);
     QString result = fullText;
 
@@ -767,8 +776,6 @@ QString ImageDelegate::squeezedText(QPainter* p, int width, const QString& text)
             result = squeezedText;
         }
     }
-
-    cache->insert(cacheKey, new QString(result));
     return result;
 }
 

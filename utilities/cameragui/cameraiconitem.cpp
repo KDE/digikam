@@ -36,6 +36,7 @@
 #include "iconview.h"
 #include "thumbnailsize.h"
 #include "albumiconitem.h"
+#include "imagedelegate.h"
 #include "gpiteminfo.h"
 #include "themeengine.h"
 #include "cameraiconview.h"
@@ -218,8 +219,8 @@ void CameraIconItem::paintItem(QPainter *p)
     QFont fn(view->font());
     QRect r(rect());
 
-    QString itemName     = AlbumIconItem::squeezedText(p, r.width()-5, d->itemInfo->name);
-    QString downloadName = AlbumIconItem::squeezedText(p, r.width()-5, d->downloadName);
+    QString itemName     = ImageDelegate::squeezedText(p->fontMetrics(), r.width()-5, d->itemInfo->name);
+    QString downloadName = ImageDelegate::squeezedText(p->fontMetrics(), r.width()-5, d->downloadName);
 
     calcRect(itemName, downloadName);
 

@@ -54,8 +54,6 @@
 
 #include "album.h"
 #include "albumdb.h"
-#include "albumiconitem.h"
-#include "albumiconview.h"
 #include "albummanager.h"
 #include "albumthumbnailloader.h"
 #include "tageditdlg.h"

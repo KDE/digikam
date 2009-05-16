@@ -87,6 +87,8 @@ public:
     void removeOverlay(ImageDelegateOverlay *overlay);
     void mouseMoved(QMouseEvent *e, const QRect& visualRect, const QModelIndex& index);
 
+    static QString squeezedText(const QFontMetrics &fm, int width, const QString& text);
+
 Q_SIGNALS:
 
     void gridSizeChanged(const QSize& newSize);
@@ -110,7 +112,7 @@ protected:
 
     QPixmap ratingPixmap(int rating, bool selected) const;
     QString dateToString(const QDateTime& datetime) const;
-    QString squeezedText(QPainter* p, int width, const QString& text) const;
+    QString squeezedTextCached(QPainter* p, int width, const QString& text) const;
     QPixmap thumbnailBorderPixmap(const QSize& pixSize) const;
 
 private:
