@@ -42,18 +42,19 @@
 
 // KDE includes
 
-#include <kdebug.h>
-#include <kpushbutton.h>
-#include <klocale.h>
 #include <kapplication.h>
 #include <kconfig.h>
-#include <kdialog.h>
-#include <krun.h>
-#include <kiconloader.h>
-#include <kstandarddirs.h>
-#include <kglobal.h>
-#include <kvbox.h>
 #include <kconfiggroup.h>
+#include <kdebug.h>
+#include <kdialog.h>
+#include <kglobal.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kpushbutton.h>
+#include <krun.h>
+#include <kstandarddirs.h>
+#include <kvbox.h>
 
 // LibKDcraw includes
 
@@ -65,6 +66,7 @@
 #include "album.h"
 #include "albumfolderview.h"
 #include "albumhistory.h"
+#include "albumiconviewfilter.h"
 #include "albummanager.h"
 #include "albummodel.h"
 #include "albumsettings.h"
@@ -80,10 +82,12 @@
 #include "fuzzysearchview.h"
 #include "gpssearchfolderview.h"
 #include "gpssearchview.h"
+#include "imagealbumfiltermodel.h"
 #include "imageinfoalbumsjob.h"
 #include "imagepreviewview.h"
 #include "imagepropertiessidebardb.h"
 #include "imageviewutilities.h"
+#include "metadatamanager.h"
 #include "queuemgrwindow.h"
 #include "searchfolderview.h"
 #include "searchtabheader.h"
@@ -417,9 +421,6 @@ void DigikamView::setupConnections()
     connect(d->tagFolderView, SIGNAL(signalProgressValue(int)),
             d->parent, SLOT(slotProgressValue(int)));
 
-    connect(d->parent, SIGNAL(signalResetTagFilters()),
-            d->tagFilterView, SLOT(slotResetTagFilters()));
-
     connect(d->fuzzySearchView, SIGNAL(signalUpdateFingerPrints()),
             d->parent, SLOT(slotRebuildAllFingerPrints()));
 
@@ -460,6 +461,11 @@ void DigikamView::setupConnections()
 
     connect(d->tagFilterView, SIGNAL(signalTextTagFilterMatch(bool)),
             d->tagFilterSearchBar, SLOT(slotSearchResult(bool)));
+
+    connect(d->tagFilterView,
+            SIGNAL(tagFilterChanged(const QList<int>&, ImageFilterSettings::MatchingCondition, bool)),
+            d->iconView->imageFilterModel(),
+            SLOT(setTagFilter(const QList<int>&, ImageFilterSettings::MatchingCondition, bool)));
 
     // -- Preview image widget Connections ------------------------
 
@@ -502,14 +508,28 @@ void DigikamView::setupConnections()
     connect(d->albumWidgetStack, SIGNAL(signalAddToExistingQueue(int)),
             this, SLOT(slotImageAddToExistingQueue(int)));
 
-    connect(d->albumWidgetStack, SIGNAL(signalGotoAlbumAndItem(ImageInfo&)),
+    connect(d->albumWidgetStack, SIGNAL(signalGotoAlbumAndItem(const ImageInfo&)),
             this, SLOT(slotGotoAlbumAndItem(const ImageInfo&)));
 
-    connect(d->albumWidgetStack, SIGNAL(signalGotoDateAndItem(ImageInfo&)),
+    connect(d->albumWidgetStack, SIGNAL(signalGotoDateAndItem(const ImageInfo&)),
             this, SLOT(slotGotoDateAndItem(const ImageInfo&)));
 
     connect(d->albumWidgetStack, SIGNAL(signalGotoTagAndItem(int)),
             this, SLOT(slotGotoTagAndItem(int)));
+
+    // -- MetadataManager progress ---------------
+
+    connect(MetadataManager::instance(), SIGNAL(progressMessageChanged(const QString&)),
+            this, SLOT(slotProgressMessageChanged(const QString&)));
+
+    connect(MetadataManager::instance(), SIGNAL(progressValueChanged(float)),
+            this, SLOT(slotProgressValueChanged(float)));
+
+    connect(MetadataManager::instance(), SIGNAL(progressFinished()),
+            this, SLOT(slotProgressFinished()));
+
+    connect(MetadataManager::instance(), SIGNAL(orientationChangeFailed(const QStringList&)),
+            this, SLOT(slotOrientationChangeFailed(const QStringList&)));
 
     // -- timers ---------------
 
@@ -523,6 +543,32 @@ void DigikamView::setupConnections()
 
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSidebarTabTitleStyleChanged()));
+}
+
+void DigikamView::connectIconViewFilter(AlbumIconViewFilter *filter)
+{
+    ImageAlbumFilterModel *model = d->iconView->imageFilterModel();
+
+    connect(filter, SIGNAL(ratingFilterChanged(int, ImageFilterSettings::RatingCondition)),
+            model, SLOT(setRatingFilter(int, ImageFilterSettings::RatingCondition)));
+
+    connect(filter, SIGNAL(mimeTypeFilterChanged(int)),
+            model, SLOT(setMimeTypeFilter(int)));
+
+    connect(filter, SIGNAL(textFilterChanged(const SearchTextSettings&)),
+            model, SLOT(setTextFilter(const SearchTextSettings&)));
+
+    connect(model, SIGNAL(filterMatches(bool)),
+            filter, SLOT(slotFilterMatches(bool)));
+
+    connect(model, SIGNAL(filterMatchesForText(bool)),
+            filter, SLOT(slotFilterMatchesForText(bool)));
+
+    connect(model, SIGNAL(filterSettingsChanged(const ImageFilterSettings&)),
+            filter, SLOT(slotFilterSettingsChanged(const ImageFilterSettings&)));
+
+    connect(filter, SIGNAL(resetTagFilters()),
+            d->tagFilterView, SLOT(slotResetTagFilters()));
 }
 
 void DigikamView::loadViewState()
@@ -1662,6 +1708,38 @@ void DigikamView::slotSidebarTabTitleStyleChanged()
 {
     d->leftSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
     d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
+}
+
+void DigikamView::slotProgressMessageChanged(const QString& descriptionOfAction)
+{
+    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode, descriptionOfAction);
+}
+
+void DigikamView::slotProgressValueChanged(float percent)
+{
+    emit signalProgressValue(lround(percent * 100));
+}
+
+void DigikamView::slotProgressFinished()
+{
+    emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
+}
+
+void DigikamView::slotOrientationChangeFailed(const QStringList& failedFileNames)
+{
+    if (failedFileNames.isEmpty())
+        return;
+
+    if (failedFileNames.count() == 1)
+    {
+        KMessageBox::error(0, i18n("Failed to revise Exif orientation for file %1.",
+                                    failedFileNames[0]));
+    }
+    else
+    {
+        KMessageBox::errorList(0, i18n("Failed to revise Exif orientation these files:"),
+                                        failedFileNames);
+    }
 }
 
 }  // namespace Digikam

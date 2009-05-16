@@ -45,6 +45,7 @@ namespace Digikam
 class AlbumIconItem;
 class AlbumSettings;
 class Album;
+class AlbumIconViewFilter;
 class DigikamViewPriv;
 
 class DigikamView : public KHBox
@@ -66,6 +67,8 @@ public:
     void setThumbSize(int size);
     void toggleShowBar(bool);
 
+    void connectIconViewFilter(AlbumIconViewFilter *filter);
+
     KUrl::List allUrls() const;
     KUrl::List selectedUrls() const;
 
@@ -82,7 +85,7 @@ Q_SIGNALS:
     void signalZoomChanged(double, int);
     void signalTogglePreview(bool);
 
-    void signalGotoAlbumAndItem(ImageInfo&);
+    void signalGotoAlbumAndItem(const ImageInfo&);
     void signalGotoDateAndItem(AlbumIconItem *);
     void signalGotoTagAndItem(int tagID);
     void signalChangedTab(QWidget*);
@@ -199,6 +202,11 @@ private Q_SLOTS:
     void slotZoomFactorChanged(double);
 
     void slotSidebarTabTitleStyleChanged();
+
+    void slotProgressMessageChanged(const QString& descriptionOfAction);
+    void slotProgressValueChanged(float percent);
+    void slotProgressFinished();
+    void slotOrientationChangeFailed(const QStringList& failedFileNames);
 
 private:
 
