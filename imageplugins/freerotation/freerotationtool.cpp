@@ -213,24 +213,23 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QWidget* settingsContainer = new QWidget;
+    QWidget* additionalSettingsContainer = new QWidget;
     QGridLayout* containerLayout3 = new QGridLayout;
     containerLayout3->addWidget(m_antialiasInput, 0, 0, 1,-1);
     containerLayout3->addWidget(label5,           1, 0, 1, 1);
     containerLayout3->addWidget(m_autoCropCB,     1, 1, 1, 1);
-    settingsContainer->setLayout(containerLayout3);
+    additionalSettingsContainer->setLayout(containerLayout3);
 
     // -------------------------------------------------------------
 
     KSeparator *line  = new KSeparator(Qt::Horizontal);
 
     m_expanderBox = new DExpanderBox;
-    // order matters, see ExpanderWidgets enum
-    m_expanderBox->addItem(autoAdjustContainer,   SmallIcon("freerotation"), i18n("Automatic Correction"),
+    m_expanderBox->addItem(autoAdjustContainer, SmallIcon("freerotation"), i18n("Automatic Correction"),
                            QString("AutoAdjustContainer"), true);
     m_expanderBox->addItem(manualAdjustContainer, SmallIcon("freerotation"), i18n("Manual Adjustment"),
                            QString("ManualAdjustContainer"), true);
-    m_expanderBox->addItem(settingsContainer,     SmallIcon("freerotation"), i18n("Additional Settings"),
+    m_expanderBox->addItem(additionalSettingsContainer, SmallIcon("freerotation"), i18n("Additional Settings"),
                            QString("SettingsContainer"), true);
     m_expanderBox->addStretch();
 

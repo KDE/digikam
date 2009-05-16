@@ -93,15 +93,6 @@ private:
 
 private:
 
-    enum ExpanderItems
-    {
-        AutomaticItem = 0,
-        ManualItem,
-        AdditionalItem
-    };
-
-private:
-
     QCheckBox*                    m_antialiasInput;
 
     QLabel*                       m_newHeightLabel;
