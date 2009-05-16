@@ -170,6 +170,7 @@ protected:
     void reset();
     void currentChanged(const QModelIndex& index, const QModelIndex& previous);
     void selectionChanged(const QItemSelection &, const QItemSelection &);
+    QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers);
     void contextMenuEvent(QContextMenuEvent* event);
     void dragMoveEvent(QDragMoveEvent *e);
     void dropEvent(QDropEvent *e);

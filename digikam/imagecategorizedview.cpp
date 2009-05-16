@@ -563,6 +563,39 @@ QModelIndex ImageCategorizedView::indexForCategoryAt(const QPoint& pos) const
     return QModelIndex();
 }
 
+QModelIndex ImageCategorizedView::moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers)
+{
+    QModelIndex current = currentIndex();
+    if (!current.isValid() || modifiers != Qt::NoModifier)
+        return KCategorizedView::moveCursor(cursorAction, modifiers);
+
+    // We want a simple wrapping navigation.
+    // Default behavior we dont want: right/left does never change row; Next/Previous is equivalent to Down/Up
+    switch (cursorAction)
+    {
+        case MoveNext:
+        case MoveRight:
+        {
+            QModelIndex next = d->filterModel->index(current.row() + 1, 0);
+            if (next.isValid())
+                return next;
+            break;
+        }
+        case MovePrevious:
+        case MoveLeft:
+        {
+            QModelIndex previous = d->filterModel->index(current.row() - 1, 0);
+            if (previous.isValid())
+                return previous;
+            break;
+        }
+        default:
+            break;
+    }
+
+    return KCategorizedView::moveCursor(cursorAction, modifiers);
+}
+
 void ImageCategorizedView::activated(const ImageInfo &)
 {
     // implemented in subclass
