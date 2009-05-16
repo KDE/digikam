@@ -184,6 +184,8 @@ public:
 
     int  count();
 
+    DLabelExpander* widget(int index) const;
+
     void setItemExpanded(int index, bool b);
     bool itemIsExpanded(int index);
 

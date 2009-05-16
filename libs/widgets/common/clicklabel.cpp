@@ -441,9 +441,16 @@ int DExpanderBox::count()
     return d->wList.count();
 }
 
+DLabelExpander* DExpanderBox::widget(int index) const
+{
+    if (index > d->wList.count() || index < 0) return 0;
+
+    return d->wList[index];
+}
+
 void DExpanderBox::setItemExpanded(int index, bool b)
 {
-    if (index > d->wList.count()) return;
+    if (index > d->wList.count() || index < 0) return;
 
     DLabelExpander *exp = d->wList[index];
     if (!exp) return;
@@ -453,7 +460,7 @@ void DExpanderBox::setItemExpanded(int index, bool b)
 
 bool DExpanderBox::itemIsExpanded(int index)
 {
-    if (index > d->wList.count()) return false;
+    if (index > d->wList.count() || index < 0) return false;
 
     DLabelExpander *exp = d->wList[index];
     if (!exp) return false;
