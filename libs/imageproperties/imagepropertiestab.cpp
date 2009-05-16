@@ -280,7 +280,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
     glay3->setMargin(KDialog::spacingHint());
     glay3->setSpacing(0);
 
-    addItem(w3, SmallIcon("applications-graphics"),
+    addItem(w3, SmallIcon("camera-photo"),
             i18n("Photograph Properties"), QString("PhotographProperties"), true);
 
     addStretch();
