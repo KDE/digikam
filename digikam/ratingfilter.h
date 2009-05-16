@@ -27,7 +27,7 @@
 
 // Local includes
 
-#include "albumlister.h"
+#include "imagefiltersettings.h"
 #include "ratingwidget.h"
 
 namespace Digikam
@@ -44,12 +44,12 @@ public:
     RatingFilter(QWidget* parent);
     ~RatingFilter();
 
-    void setRatingFilterCondition(AlbumLister::RatingCondition cond);
-    AlbumLister::RatingCondition ratingFilterCondition();
+    void setRatingFilterCondition(ImageFilterSettings::RatingCondition cond);
+    ImageFilterSettings::RatingCondition ratingFilterCondition();
 
 Q_SIGNALS:
 
-    void signalRatingFilterChanged(int, AlbumLister::RatingCondition);
+    void signalRatingFilterChanged(int, ImageFilterSettings::RatingCondition);
 
 protected:
 

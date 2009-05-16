@@ -58,14 +58,15 @@ public:
     {
         dirty         = false;
         ratingTracker = 0;
-        filterCond    = AlbumLister::GreaterEqualCondition;
+        filterCond    = ImageFilterSettings::GreaterEqualCondition;
     }
 
     bool                          dirty;
 
     DTipTracker                  *ratingTracker;
 
-    AlbumLister::RatingCondition  filterCond;
+    ImageFilterSettings::
+        RatingCondition           filterCond;
 };
 
 RatingFilter::RatingFilter(QWidget* parent)
@@ -95,14 +96,14 @@ void RatingFilter::slotRatingChanged()
     emit signalRatingFilterChanged(rating(), d->filterCond);
 }
 
-void RatingFilter::setRatingFilterCondition(AlbumLister::RatingCondition cond)
+void RatingFilter::setRatingFilterCondition(ImageFilterSettings::RatingCondition cond)
 {
     d->filterCond = cond;
     updateRatingTooltip();
     slotRatingChanged();
 }
 
-AlbumLister::RatingCondition RatingFilter::ratingFilterCondition()
+ImageFilterSettings::RatingCondition RatingFilter::ratingFilterCondition()
 {
     return d->filterCond;
 }
@@ -156,13 +157,13 @@ void RatingFilter::mousePressEvent(QMouseEvent* e)
 
         switch(d->filterCond)
         {
-            case AlbumLister::GreaterEqualCondition:
+            case ImageFilterSettings::GreaterEqualCondition:
                 geCondAction->setChecked(true);
                 break;
-            case AlbumLister::EqualCondition:
+            case ImageFilterSettings::EqualCondition:
                 eqCondAction->setChecked(true);
                 break;
-            case AlbumLister::LessEqualCondition:
+            case ImageFilterSettings::LessEqualCondition:
                 leCondAction->setChecked(true);
                 break;
         }
@@ -172,15 +173,15 @@ void RatingFilter::mousePressEvent(QMouseEvent* e)
         {
             if (choice == geCondAction)
             {
-                setRatingFilterCondition(AlbumLister::GreaterEqualCondition);
+                setRatingFilterCondition(ImageFilterSettings::GreaterEqualCondition);
             }
             else if (choice == eqCondAction)
             {
-                setRatingFilterCondition(AlbumLister::EqualCondition);
+                setRatingFilterCondition(ImageFilterSettings::EqualCondition);
             }
             else if (choice == leCondAction)
             {
-                setRatingFilterCondition(AlbumLister::LessEqualCondition);
+                setRatingFilterCondition(ImageFilterSettings::LessEqualCondition);
             }
         }
     }
@@ -197,17 +198,17 @@ void RatingFilter::updateRatingTooltip()
 
     switch(d->filterCond)
     {
-        case AlbumLister::GreaterEqualCondition:
+        case ImageFilterSettings::GreaterEqualCondition:
         {
             d->ratingTracker->setText(i18n("Rating greater than or equal to %1.", rating()));
             break;
         }
-        case AlbumLister::EqualCondition:
+        case ImageFilterSettings::EqualCondition:
         {
             d->ratingTracker->setText(i18n("Rating equal to %1.", rating()));
             break;
         }
-        case AlbumLister::LessEqualCondition:
+        case ImageFilterSettings::LessEqualCondition:
         {
             d->ratingTracker->setText( i18n("Rating less than or equal to %1.", rating()));
             break;
