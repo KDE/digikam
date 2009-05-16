@@ -37,6 +37,7 @@ namespace Digikam
 {
 
 class ImageChangeset;
+class ImageTagChangeset;
 namespace DatabaseFields { class Set; }
 class ImageModelDragDropHandler;
 class ImageModelPriv;
@@ -170,11 +171,14 @@ protected:
     // Called when the internal storage is cleared
     virtual void imageInfosCleared() {};
 
+    void emitDataChangedForAll();
+
 protected Q_SLOTS:
 
     void appendInfos(const QList<ImageInfo>& infos);
 
     virtual void slotImageChange(const ImageChangeset& changeset);
+    virtual void slotImageTagChange(const ImageTagChangeset& changeset);
 
 private:
 

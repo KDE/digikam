@@ -80,6 +80,9 @@ ImageModel::ImageModel(QObject *parent)
 {
     connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset &)),
             this, SLOT(slotImageChange(const ImageChangeset &)));
+
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(const ImageTagChangeset &)),
+            this, SLOT(slotImageTagChange(const ImageTagChangeset &)));
 }
 
 ImageModel::~ImageModel()
@@ -273,6 +276,15 @@ bool ImageModel::hasImage(const ImageInfo& info) const
     return d->idHash.contains(info.id());
 }
 
+void ImageModel::emitDataChangedForAll()
+{
+    if (d->infos.isEmpty())
+        return;
+    QModelIndex first = createIndex(0, 0);
+    QModelIndex last = createIndex(d->infos.size() - 1, 0);
+    emit dataChanged(first, last);
+}
+
 // ------------ Preprocessing -------------
 
 void ImageModel::setPreprocessor(QObject *preprocessor)
@@ -440,6 +452,25 @@ void ImageModel::slotImageChange(const ImageChangeset& changeset)
             foreach (const QItemSelectionRange& range, items)
                 emit dataChanged(range.topLeft(), range.bottomRight());
         }
+    }
+}
+
+void ImageModel::slotImageTagChange(const ImageTagChangeset& changeset)
+{
+    if (d->infos.isEmpty())
+        return;
+
+    QItemSelection items;
+    foreach(qlonglong id, changeset.ids())
+    {
+        QModelIndex index = indexForImageId(id);
+        if (index.isValid())
+            items.select(index, index);
+    }
+    if (!items.isEmpty())
+    {
+        foreach (const QItemSelectionRange& range, items)
+            emit dataChanged(range.topLeft(), range.bottomRight());
     }
 }
 

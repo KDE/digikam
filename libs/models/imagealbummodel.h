@@ -83,6 +83,11 @@ protected Q_SLOTS:
 
     void slotRecurseSettingsChanged();
 
+    void slotAlbumAdded(Album *album);
+    void slotAlbumDeleted(Album *album);
+    void slotAlbumRenamed(Album *album);
+    void slotAlbumsCleared();
+
 protected:
 
     void startLoadingAlbum(Album *album);

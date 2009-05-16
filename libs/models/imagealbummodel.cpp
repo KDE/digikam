@@ -88,6 +88,18 @@ ImageAlbumModel::ImageAlbumModel(QObject *parent)
     connect(DatabaseAccess::databaseWatch(), SIGNAL(searchChange(const SearchChangeset &)),
             this, SLOT(slotSearchChange(const SearchChangeset &)));
 
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
+            this, SLOT(slotAlbumAdded(Album*)));
+
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumDeleted(Album*)),
+            this, SLOT(slotAlbumDeleted(Album*)));
+
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumRenamed(Album*)),
+            this, SLOT(slotAlbumRenamed(Album*)));
+
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
+            this, SLOT(slotAlbumsCleared()));
+
 }
 
 ImageAlbumModel::~ImageAlbumModel()
@@ -251,6 +263,18 @@ void ImageAlbumModel::slotCollectionImageChange(const CollectionImageChangeset& 
                 case Album::PHYSICAL:
                     // that's easy: try if our album is affected
                     doRefresh = changeset.containsAlbum(d->currentAlbum->id());
+                    if (!doRefresh && d->recurseAlbums)
+                    {
+                        foreach (int albumId, changeset.ids())
+                        {
+                            Album *a = AlbumManager::instance()->findPAlbum(albumId);
+                            if (a && d->currentAlbum->isAncestorOf(a))
+                            {
+                                doRefresh = true;
+                                break;
+                            }
+                        }
+                    }
                     break;
                 default:
                     // we cannot easily know if we are affected
@@ -299,6 +323,34 @@ void ImageAlbumModel::slotSearchChange(const SearchChangeset& changeset)
         if (!d->refreshTimer->isActive())
             d->refreshTimer->start(100);
     }
+}
+
+
+void ImageAlbumModel::slotAlbumAdded(Album */*album*/)
+{
+}
+
+void ImageAlbumModel::slotAlbumDeleted(Album *album)
+{
+    // display changed tags
+    if (album->type() == Album::TAG)
+    {
+        emitDataChangedForAll();
+    }
+
+}
+
+void ImageAlbumModel::slotAlbumRenamed(Album *album)
+{
+    // display changed names
+    if (album == d->currentAlbum)
+        emitDataChangedForAll();
+}
+
+void ImageAlbumModel::slotAlbumsCleared()
+{
+    d->currentAlbum = 0;
+    clearImageInfos();
 }
 
 } // namespace Digikam
