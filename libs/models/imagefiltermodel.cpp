@@ -665,6 +665,23 @@ int ImageFilterModel::categoryCount(const ImageInfo& info) const
     }
 }
 
+// Feel free to optimize. QString::number is 3x slower.
+static inline QString fastNumberToString(int id)
+{
+    const int size = sizeof(int) * 2;
+    char c[size+1];
+    c[size] = '\0';
+    char *p = c;
+    int number = id;
+    for (int i=0; i<size; i++)
+    {
+        *p = 'a' + (number & 0xF);
+        number >>= 4;
+        p++;
+    }
+    return QString::fromLatin1(c);
+}
+
 QString ImageFilterModel::categoryIdentifier(const ImageInfo& info) const
 {
     Q_D(const ImageFilterModel);
@@ -675,7 +692,7 @@ QString ImageFilterModel::categoryIdentifier(const ImageInfo& info) const
         case OneCategory:
             return QString();
         case CategoryByAlbum:
-            return QString::number(info.albumId());
+            return fastNumberToString(info.albumId());
         case CategoryByFormat:
             return info.format();
         default:
