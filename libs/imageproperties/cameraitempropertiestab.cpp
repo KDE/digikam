@@ -6,7 +6,7 @@
  * Date        : 2006-02-08
  * Description : A tab to display camera item information
  *
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,7 +39,6 @@
 #include <kdialog.h>
 #include <kfileitem.h>
 #include <kmimetype.h>
-#include <kseparator.h>
 
 // Local includes
 
@@ -56,7 +55,6 @@ public:
 
     CameraItemPropertiesTabPriv()
     {
-        title                  = 0;
         file                   = 0;
         folder                 = 0;
         date                   = 0;
@@ -67,7 +65,6 @@ public:
         dimensions             = 0;
         newFileName            = 0;
         downloaded             = 0;
-        title2                 = 0;
         make                   = 0;
         model                  = 0;
         photoDate              = 0;
@@ -102,7 +99,6 @@ public:
         labelPhotoWhiteBalance = 0;
     }
 
-    QLabel          *title;
     DTextLabelName  *file;
     DTextLabelName  *folder;
     DTextLabelName  *date;
@@ -114,7 +110,6 @@ public:
     DTextLabelName  *newFileName;
     DTextLabelName  *downloaded;
 
-    QLabel          *title2;
     DTextLabelName  *make;
     DTextLabelName  *model;
     DTextLabelName  *photoDate;
@@ -152,139 +147,124 @@ public:
 };
 
 CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent)
-                       : QScrollArea(parent), d(new CameraItemPropertiesTabPriv)
+                       : DExpanderBox(parent), d(new CameraItemPropertiesTabPriv)
 {
     setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
     setLineWidth( style()->pixelMetric(QStyle::PM_DefaultFrameWidth) );
-    setWidgetResizable(true);
-
-    QWidget *settingsArea       = new QWidget(viewport());
-    QGridLayout *settingsLayout = new QGridLayout(settingsArea);
-    setWidget(settingsArea);
-
-    viewport()->setAutoFillBackground(false);
-    settingsArea->setAutoFillBackground(false);
 
     // --------------------------------------------------
 
-    d->title                  = new QLabel(i18n("<big><b>Camera File Properties</b></big>"), settingsArea);
-    d->file                   = new DTextLabelName(i18n("File: "), settingsArea);
-    d->folder                 = new DTextLabelName(i18n("Folder: "), settingsArea);
-    d->date                   = new DTextLabelName(i18n("Date: "), settingsArea);
-    d->size                   = new DTextLabelName(i18n("Size: "), settingsArea);
-    d->isReadable             = new DTextLabelName(i18n("Readable: "), settingsArea);
-    d->isWritable             = new DTextLabelName(i18n("Writable: "), settingsArea);
-    d->mime                   = new DTextLabelName(i18n("Type: "), settingsArea);
-    d->dimensions             = new DTextLabelName(i18n("Dimensions: "), settingsArea);
-    d->newFileName            = new DTextLabelName(i18n("New Name: "), settingsArea);
-    d->downloaded             = new DTextLabelName(i18n("Downloaded: "), settingsArea);
+    QWidget *w1               = new QWidget(this);
+    QGridLayout *glay1        = new QGridLayout(w1);
 
-    KSeparator *line          = new KSeparator (Qt::Horizontal, settingsArea);
-    d->title2                 = new QLabel(i18n("<big><b>Photograph Properties</b></big>"), settingsArea);
-    d->make                   = new DTextLabelName(i18n("Make: "), settingsArea);
-    d->model                  = new DTextLabelName(i18n("Model: "), settingsArea);
-    d->photoDate              = new DTextLabelName(i18n("Created: "), settingsArea);
-    d->lens                   = new DTextLabelName(i18n("Lens: "), settingsArea);
-    d->aperture               = new DTextLabelName(i18n("Aperture: "), settingsArea);
-    d->focalLength            = new DTextLabelName(i18n("Focal: "), settingsArea);
-    d->exposureTime           = new DTextLabelName(i18n("Exposure: "), settingsArea);
-    d->sensitivity            = new DTextLabelName(i18n("Sensitivity: "), settingsArea);
-    d->exposureMode           = new DTextLabelName(i18n("Mode/Program: "), settingsArea);
-    d->flash                  = new DTextLabelName(i18n("Flash: "), settingsArea);
-    d->whiteBalance           = new DTextLabelName(i18n("White balance: "), settingsArea);
+    d->file                   = new DTextLabelName(i18n("File: "),       w1);
+    d->folder                 = new DTextLabelName(i18n("Folder: "),     w1);
+    d->date                   = new DTextLabelName(i18n("Date: "),       w1);
+    d->size                   = new DTextLabelName(i18n("Size: "),       w1);
+    d->isReadable             = new DTextLabelName(i18n("Readable: "),   w1);
+    d->isWritable             = new DTextLabelName(i18n("Writable: "),   w1);
+    d->mime                   = new DTextLabelName(i18n("Type: "),       w1);
+    d->dimensions             = new DTextLabelName(i18n("Dimensions: "), w1);
+    d->newFileName            = new DTextLabelName(i18n("New Name: "),   w1);
+    d->downloaded             = new DTextLabelName(i18n("Downloaded: "), w1);
 
-    d->labelFile              = new DTextLabelValue(0, settingsArea);
-    d->labelFolder            = new DTextLabelValue(0, settingsArea);
-    d->labelFileDate          = new DTextLabelValue(0, settingsArea);
-    d->labelFileSize          = new DTextLabelValue(0, settingsArea);
-    d->labelFileIsReadable    = new DTextLabelValue(0, settingsArea);
-    d->labelFileIsWritable    = new DTextLabelValue(0, settingsArea);
-    d->labelImageMime         = new DTextLabelValue(0, settingsArea);
-    d->labelImageDimensions   = new DTextLabelValue(0, settingsArea);
-    d->labelNewFileName       = new DTextLabelValue(0, settingsArea);
-    d->labelAlreadyDownloaded = new DTextLabelValue(0, settingsArea);
+    d->labelFile              = new DTextLabelValue(0, w1);
+    d->labelFolder            = new DTextLabelValue(0, w1);
+    d->labelFileDate          = new DTextLabelValue(0, w1);
+    d->labelFileSize          = new DTextLabelValue(0, w1);
+    d->labelFileIsReadable    = new DTextLabelValue(0, w1);
+    d->labelFileIsWritable    = new DTextLabelValue(0, w1);
+    d->labelImageMime         = new DTextLabelValue(0, w1);
+    d->labelImageDimensions   = new DTextLabelValue(0, w1);
+    d->labelNewFileName       = new DTextLabelValue(0, w1);
+    d->labelAlreadyDownloaded = new DTextLabelValue(0, w1);
 
-    d->labelPhotoMake         = new DTextLabelValue(0, settingsArea);
-    d->labelPhotoModel        = new DTextLabelValue(0, settingsArea);
-    d->labelPhotoDateTime     = new DTextLabelValue(0, settingsArea);
-    d->labelPhotoLens         = new DTextLabelValue(0, settingsArea);
-    d->labelPhotoAperture     = new DTextLabelValue(0, settingsArea);
-    d->labelPhotoFocalLength  = new DTextLabelValue(0, settingsArea);
-    d->labelPhotoExposureTime = new DTextLabelValue(0, settingsArea);
-    d->labelPhotoSensitivity  = new DTextLabelValue(0, settingsArea);
-    d->labelPhotoExposureMode = new DTextLabelValue(0, settingsArea);
-    d->labelPhotoFlash        = new DTextLabelValue(0, settingsArea);
-    d->labelPhotoWhiteBalance = new DTextLabelValue(0, settingsArea);
+    glay1->addWidget(d->file,                   0, 0, 1, 1);
+    glay1->addWidget(d->labelFile,              0, 1, 1, 1);
+    glay1->addWidget(d->folder,                 1, 0, 1, 1);
+    glay1->addWidget(d->labelFolder,            1, 1, 1, 1);
+    glay1->addWidget(d->date,                   2, 0, 1, 1);
+    glay1->addWidget(d->labelFileDate,          2, 1, 1, 1);
+    glay1->addWidget(d->size,                   3, 0, 1, 1);
+    glay1->addWidget(d->labelFileSize,          3, 1, 1, 1);
+    glay1->addWidget(d->isReadable,             4, 0, 1, 1);
+    glay1->addWidget(d->labelFileIsReadable,    4, 1, 1, 1);
+    glay1->addWidget(d->isWritable,             5, 0, 1, 1);
+    glay1->addWidget(d->labelFileIsWritable,    5, 1, 1, 1);
+    glay1->addWidget(d->mime,                   6, 0, 1, 1);
+    glay1->addWidget(d->labelImageMime,         6, 1, 1, 1);
+    glay1->addWidget(d->dimensions,             7, 0, 1, 1);
+    glay1->addWidget(d->labelImageDimensions,   7, 1, 1, 1);
+    glay1->addWidget(d->newFileName,            8, 0, 1, 1);
+    glay1->addWidget(d->labelNewFileName,       8, 1, 1, 1);
+    glay1->addWidget(d->downloaded,             9, 0, 1, 1);
+    glay1->addWidget(d->labelAlreadyDownloaded, 9, 1, 1, 1);
+    glay1->setColumnStretch(1, 10);
+    glay1->setMargin(KDialog::spacingHint());
+    glay1->setSpacing(0);
 
-    d->title->setAlignment(Qt::AlignCenter);
-    d->title2->setAlignment(Qt::AlignCenter);
+    addItem(w1, SmallIcon("dialog-information"),
+            i18n("Camera File Properties"), QString("FileProperties"), true);
 
     // --------------------------------------------------
 
-    settingsLayout->addWidget(d->title,                  0, 0, 1, 2);
-    settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
-                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding),
-                                                          1, 1, 0, 1);
-    settingsLayout->addWidget(d->file,                    2, 0, 1, 1);
-    settingsLayout->addWidget(d->labelFile,               2, 1, 1, 1);
-    settingsLayout->addWidget(d->folder,                  3, 0, 1, 1);
-    settingsLayout->addWidget(d->labelFolder,             3, 1, 1, 1);
-    settingsLayout->addWidget(d->date,                    4, 0, 1, 1);
-    settingsLayout->addWidget(d->labelFileDate,           4, 1, 1, 1);
-    settingsLayout->addWidget(d->size,                    5, 0, 1, 1);
-    settingsLayout->addWidget(d->labelFileSize,           5, 1, 1, 1);
-    settingsLayout->addWidget(d->isReadable,              6, 0, 1, 1);
-    settingsLayout->addWidget(d->labelFileIsReadable,     6, 1, 1, 1);
-    settingsLayout->addWidget(d->isWritable,              7, 0, 1, 1);
-    settingsLayout->addWidget(d->labelFileIsWritable,     7, 1, 1, 1);
-    settingsLayout->addWidget(d->mime,                    8, 0, 1, 1);
-    settingsLayout->addWidget(d->labelImageMime,          8, 1, 1, 1);
-    settingsLayout->addWidget(d->dimensions,              9, 0, 1, 1);
-    settingsLayout->addWidget(d->labelImageDimensions,    9, 1, 1, 1);
-    settingsLayout->addWidget(d->newFileName,            10, 0, 1, 1);
-    settingsLayout->addWidget(d->labelNewFileName,       10, 1, 1, 1);
-    settingsLayout->addWidget(d->downloaded,             11, 0, 1, 1);
-    settingsLayout->addWidget(d->labelAlreadyDownloaded, 11, 1, 1, 1);
+    QWidget *w2               = new QWidget(this);
+    QGridLayout *glay2        = new QGridLayout(w2);
 
-    settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
-                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding),
-                                                         12, 0, 0, 1);
-    settingsLayout->addWidget(line,                      13, 0, 1, 2);
-    settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
-                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding),
-                                                         14, 0, 0, 1);
+    d->make                   = new DTextLabelName(i18n("Make: "),          w2);
+    d->model                  = new DTextLabelName(i18n("Model: "),         w2);
+    d->photoDate              = new DTextLabelName(i18n("Created: "),       w2);
+    d->lens                   = new DTextLabelName(i18n("Lens: "),          w2);
+    d->aperture               = new DTextLabelName(i18n("Aperture: "),      w2);
+    d->focalLength            = new DTextLabelName(i18n("Focal: "),         w2);
+    d->exposureTime           = new DTextLabelName(i18n("Exposure: "),      w2);
+    d->sensitivity            = new DTextLabelName(i18n("Sensitivity: "),   w2);
+    d->exposureMode           = new DTextLabelName(i18n("Mode/Program: "),  w2);
+    d->flash                  = new DTextLabelName(i18n("Flash: "),         w2);
+    d->whiteBalance           = new DTextLabelName(i18n("White balance: "), w2);
 
-    settingsLayout->addWidget(d->title2,                 15, 0, 1, 2);
-    settingsLayout->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
-                                QSizePolicy::Minimum, QSizePolicy::MinimumExpanding),
-                                                         16, 0, 0, 1);
-    settingsLayout->addWidget(d->make,                   17, 0, 1, 1);
-    settingsLayout->addWidget(d->labelPhotoMake,         17, 1, 1, 1);
-    settingsLayout->addWidget(d->model,                  18, 0, 1, 1);
-    settingsLayout->addWidget(d->labelPhotoModel,        18, 1, 1, 1);
-    settingsLayout->addWidget(d->photoDate,              19, 0, 1, 1);
-    settingsLayout->addWidget(d->labelPhotoDateTime,     19, 1, 1, 1);
-    settingsLayout->addWidget(d->lens,                   20, 0, 1, 1);
-    settingsLayout->addWidget(d->labelPhotoLens,         20, 1, 1, 1);
-    settingsLayout->addWidget(d->aperture,               21, 0, 1, 1);
-    settingsLayout->addWidget(d->labelPhotoAperture,     21, 1, 1, 1);
-    settingsLayout->addWidget(d->focalLength,            22, 0, 1, 1);
-    settingsLayout->addWidget(d->labelPhotoFocalLength,  22, 1, 1, 1);
-    settingsLayout->addWidget(d->exposureTime,           23, 0, 1, 1);
-    settingsLayout->addWidget(d->labelPhotoExposureTime, 23, 1, 1, 1);
-    settingsLayout->addWidget(d->sensitivity,            24, 0, 1, 1);
-    settingsLayout->addWidget(d->labelPhotoSensitivity,  24, 1, 1, 1);
-    settingsLayout->addWidget(d->exposureMode,           25, 0, 1, 1);
-    settingsLayout->addWidget(d->labelPhotoExposureMode, 25, 1, 1, 1);
-    settingsLayout->addWidget(d->flash,                  26, 0, 1, 1);
-    settingsLayout->addWidget(d->labelPhotoFlash,        26, 1, 1, 1);
-    settingsLayout->addWidget(d->whiteBalance,           27, 0, 1, 1);
-    settingsLayout->addWidget(d->labelPhotoWhiteBalance, 27, 1, 1, 1);
+    d->labelPhotoMake         = new DTextLabelValue(0, w2);
+    d->labelPhotoModel        = new DTextLabelValue(0, w2);
+    d->labelPhotoDateTime     = new DTextLabelValue(0, w2);
+    d->labelPhotoLens         = new DTextLabelValue(0, w2);
+    d->labelPhotoAperture     = new DTextLabelValue(0, w2);
+    d->labelPhotoFocalLength  = new DTextLabelValue(0, w2);
+    d->labelPhotoExposureTime = new DTextLabelValue(0, w2);
+    d->labelPhotoSensitivity  = new DTextLabelValue(0, w2);
+    d->labelPhotoExposureMode = new DTextLabelValue(0, w2);
+    d->labelPhotoFlash        = new DTextLabelValue(0, w2);
+    d->labelPhotoWhiteBalance = new DTextLabelValue(0, w2);
 
-    settingsLayout->setRowStretch(28, 10);
-    settingsLayout->setColumnStretch(1, 10);
-    settingsLayout->setMargin(KDialog::spacingHint());
-    settingsLayout->setSpacing(0);
+    glay2->addWidget(d->make,                    0, 0, 1, 1);
+    glay2->addWidget(d->labelPhotoMake,          0, 1, 1, 1);
+    glay2->addWidget(d->model,                   1, 0, 1, 1);
+    glay2->addWidget(d->labelPhotoModel,         1, 1, 1, 1);
+    glay2->addWidget(d->photoDate,               2, 0, 1, 1);
+    glay2->addWidget(d->labelPhotoDateTime,      2, 1, 1, 1);
+    glay2->addWidget(d->lens,                    3, 0, 1, 1);
+    glay2->addWidget(d->labelPhotoLens,          3, 1, 1, 1);
+    glay2->addWidget(d->aperture,                4, 0, 1, 1);
+    glay2->addWidget(d->labelPhotoAperture,      4, 1, 1, 1);
+    glay2->addWidget(d->focalLength,             5, 0, 1, 1);
+    glay2->addWidget(d->labelPhotoFocalLength,   5, 1, 1, 1);
+    glay2->addWidget(d->exposureTime,            6, 0, 1, 1);
+    glay2->addWidget(d->labelPhotoExposureTime,  6, 1, 1, 1);
+    glay2->addWidget(d->sensitivity,             7, 0, 1, 1);
+    glay2->addWidget(d->labelPhotoSensitivity,   7, 1, 1, 1);
+    glay2->addWidget(d->exposureMode,            8, 0, 1, 1);
+    glay2->addWidget(d->labelPhotoExposureMode,  8, 1, 1, 1);
+    glay2->addWidget(d->flash,                   9, 0, 1, 1);
+    glay2->addWidget(d->labelPhotoFlash,         9, 1, 1, 1);
+    glay2->addWidget(d->whiteBalance,           10, 0, 1, 1);
+    glay2->addWidget(d->labelPhotoWhiteBalance, 10, 1, 1, 1);
+    glay2->setColumnStretch(1, 10);
+    glay2->setMargin(KDialog::spacingHint());
+    glay2->setSpacing(0);
+
+    addItem(w2, SmallIcon("camera-photo"),
+            i18n("Photograph Properties"), QString("PhotographProperties"), true);
+
+    addStretch();
 }
 
 CameraItemPropertiesTab::~CameraItemPropertiesTab()
@@ -441,57 +421,9 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
     PhotoInfoContainer photoInfo = metaData.getPhotographInformation();
 
     if (photoInfo.isEmpty())
-    {
-        d->title2->hide();
-        d->make->hide();
-        d->model->hide();
-        d->photoDate->hide();
-        d->lens->hide();
-        d->aperture->hide();
-        d->focalLength->hide();
-        d->exposureTime->hide();
-        d->sensitivity->hide();
-        d->exposureMode->hide();
-        d->flash->hide();
-        d->whiteBalance->hide();
-        d->labelPhotoMake->hide();
-        d->labelPhotoModel->hide();
-        d->labelPhotoDateTime->hide();
-        d->labelPhotoLens->hide();
-        d->labelPhotoAperture->hide();
-        d->labelPhotoFocalLength->hide();
-        d->labelPhotoExposureTime->hide();
-        d->labelPhotoSensitivity->hide();
-        d->labelPhotoExposureMode->hide();
-        d->labelPhotoFlash->hide();
-        d->labelPhotoWhiteBalance->hide();
-    }
+        widget(1)->hide();
     else
-    {
-        d->title2->show();
-        d->make->show();
-        d->model->show();
-        d->photoDate->show();
-        d->lens->show();
-        d->aperture->show();
-        d->focalLength->show();
-        d->exposureTime->show();
-        d->sensitivity->show();
-        d->exposureMode->show();
-        d->flash->show();
-        d->whiteBalance->show();
-        d->labelPhotoMake->show();
-        d->labelPhotoModel->show();
-        d->labelPhotoDateTime->show();
-        d->labelPhotoLens->show();
-        d->labelPhotoAperture->show();
-        d->labelPhotoFocalLength->show();
-        d->labelPhotoExposureTime->show();
-        d->labelPhotoSensitivity->show();
-        d->labelPhotoExposureMode->show();
-        d->labelPhotoFlash->show();
-        d->labelPhotoWhiteBalance->show();
-    }
+        widget(1)->show();
 
     d->labelPhotoMake->setText(photoInfo.make.isEmpty() ? unavailable : photoInfo.make);
     d->labelPhotoModel->setText(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);

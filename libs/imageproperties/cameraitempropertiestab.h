@@ -6,7 +6,7 @@
  * Date        : 2006-02-08
  * Description : A tab to display camera item information
  *
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,7 +26,6 @@
 
 // Qt includes
 
-#include <QScrollArea>
 #include <QString>
 
 // KDE includes
@@ -36,6 +35,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "clicklabel.h"
 
 namespace Digikam
 {
@@ -43,7 +43,7 @@ namespace Digikam
 class GPItemInfo;
 class CameraItemPropertiesTabPriv;
 
-class CameraItemPropertiesTab : public QScrollArea
+class CameraItemPropertiesTab : public DExpanderBox
 {
     Q_OBJECT
 
