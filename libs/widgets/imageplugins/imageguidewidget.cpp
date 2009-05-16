@@ -514,11 +514,12 @@ void ImageGuideWidget::updatePixmap()
             p.drawPoint(point);
             p.drawText(QPoint(x+10, y-5), QString::number(i+1));
 
-            // draw line
+            // draw a line between the points
             if (d->drawLineBetweenPoints &&
                (i+1) < d->selectedPoints.count() && !d->selectedPoints.point(i+1).isNull())
             {
                 p.save();
+                p.setPen(QPen(d->guideColor, d->guideSize, Qt::SolidLine));
                 QPoint point2 = d->selectedPoints.point(i+1);
                 point2        = translatePointPosition(point2);
                 p.setRenderHint(QPainter::Antialiasing, true);
