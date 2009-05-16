@@ -192,24 +192,24 @@ void DigikamImageView::showContextMenu(QContextMenuEvent* event, const ImageInfo
     connect(&cmhelper, SIGNAL(signalGotoTag(int)),
             this, SIGNAL(gotoTagAndImageRequested(int)));
 
-    connect(&cmhelper, SIGNAL(signalGotoAlbum(ImageInfo&)),
-            this, SIGNAL(gotoAlbumAndImageRequested(ImageInfo&)));
+    connect(&cmhelper, SIGNAL(signalGotoAlbum(const ImageInfo&)),
+            this, SIGNAL(gotoAlbumAndImageRequested(const ImageInfo&)));
 
-    connect(&cmhelper, SIGNAL(signalGotoDate(ImageInfo&)),
-            this, SIGNAL(gotoDateAndImageRequested(ImageInfo&)));
+    connect(&cmhelper, SIGNAL(signalGotoDate(const ImageInfo&)),
+            this, SIGNAL(gotoDateAndImageRequested(const ImageInfo&)));
 
     connect(&cmhelper, SIGNAL(signalAssignRating(int)),
             this, SLOT(assignRatingToSelected(int)));
 
-    connect(&cmhelper, SIGNAL(signalSetThumbnail(ImageInfo&)),
-            this, SLOT(setAsAlbumThumbnail(ImageInfo&)));
+    connect(&cmhelper, SIGNAL(signalSetThumbnail(const ImageInfo&)),
+            this, SLOT(setAsAlbumThumbnail(const ImageInfo&)));
 
     connect(&cmhelper, SIGNAL(signalAddToExistingQueue(int)),
             this, SLOT(insertSelectedToExistingQueue(int)));
 
     // --------------------------------------------------------
 
-    QAction *choice = cmhelper.exec(event->pos());
+    QAction *choice = cmhelper.exec(event->globalPos());
     if (choice)
     {
         if (choice == viewAction)

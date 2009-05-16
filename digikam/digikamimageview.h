@@ -77,7 +77,7 @@ Q_SIGNALS:
     void previewRequested(const ImageInfo& info);
     void gotoAlbumAndImageRequested(const ImageInfo& info);
     void gotoTagAndImageRequested(int tagId);
-    void gotoDataAndImageRequested(const ImageInfo& info);
+    void gotoDateAndImageRequested(const ImageInfo& info);
 
 protected:
 
