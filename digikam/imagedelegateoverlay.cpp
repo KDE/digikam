@@ -131,7 +131,7 @@ void HoverWidgetDelegateOverlay::setActive(bool active)
         connect(m_view->model(), SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
                 this, SLOT(slotRowsRemoved(const QModelIndex&, int, int)));
 
-        connect(m_view->model(), SIGNAL(reset()),
+        connect(m_view->model(), SIGNAL(modelReset()),
                 this, SLOT(slotReset()));
 
         connect(m_view, SIGNAL(entered(const QModelIndex &)),
