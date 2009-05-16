@@ -38,6 +38,7 @@ ImageInfoCache::ImageInfoCache()
 {
     qRegisterMetaType<ImageInfo>("ImageInfo");
     qRegisterMetaType<ImageInfoList>("ImageInfoList");
+    qRegisterMetaType<QList<ImageInfo> >("QList<ImageInfo>");
 
     DatabaseWatch *dbwatch = DatabaseAccess::databaseWatch();
 
