@@ -137,11 +137,11 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
 
     // -----------------------------------------------------------------
 
-    connect(d->imagePreviewView, SIGNAL(signalGotoAlbumAndItem(ImageInfo&)),
-            this, SIGNAL(signalGotoAlbumAndItem(ImageInfo&)));
+    connect(d->imagePreviewView, SIGNAL(signalGotoAlbumAndItem(const ImageInfo&)),
+            this, SIGNAL(signalGotoAlbumAndItem(const ImageInfo&)));
 
-    connect(d->imagePreviewView, SIGNAL(signalGotoDateAndItem(ImageInfo&)),
-            this, SIGNAL(signalGotoDateAndItem(ImageInfo&)));
+    connect(d->imagePreviewView, SIGNAL(signalGotoDateAndItem(const ImageInfo&)),
+            this, SIGNAL(signalGotoDateAndItem(const ImageInfo&)));
 
     connect(d->imagePreviewView, SIGNAL(signalGotoTagAndItem(int)),
             this, SIGNAL(signalGotoTagAndItem(int)));
@@ -185,7 +185,7 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
     connect(d->imageIconView->imageFilterModel(), SIGNAL(rowsRemoved(const QModelIndex &, int, int)),
             this, SLOT(slotItemsAddedOrRemoved()));
 
-    connect(d->imageIconView->imageFilterModel(), SIGNAL(layoutChanged),
+    connect(d->imageIconView->imageFilterModel(), SIGNAL(layoutChanged()),
             this, SLOT(slotItemsAddedOrRemoved()));
 
     connect(d->imageIconView->imageFilterModel(), SIGNAL(modelReset()),

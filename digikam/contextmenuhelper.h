@@ -79,9 +79,9 @@ public:
 
 Q_SIGNALS:
 
-    void signalSetThumbnail(ImageInfo&);
-    void signalGotoAlbum(ImageInfo&);
-    void signalGotoDate(ImageInfo&);
+    void signalSetThumbnail(const ImageInfo&);
+    void signalGotoAlbum(const ImageInfo&);
+    void signalGotoDate(const ImageInfo&);
     void signalGotoTag(int);
     void signalAssignTag(int);
     void signalRemoveTag(int);

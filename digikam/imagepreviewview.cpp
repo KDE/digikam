@@ -393,11 +393,11 @@ void ImagePreviewView::slotContextMenu()
     connect(&cmhelper, SIGNAL(signalGotoTag(int)),
             this, SLOT(slotGotoTag(int)));
 
-    connect(&cmhelper, SIGNAL(signalGotoAlbum(ImageInfo&)),
-            this, SIGNAL(signalGotoAlbumAndItem(ImageInfo&)));
+    connect(&cmhelper, SIGNAL(signalGotoAlbum(const ImageInfo&)),
+            this, SIGNAL(signalGotoAlbumAndItem(const ImageInfo&)));
 
-    connect(&cmhelper, SIGNAL(signalGotoDate(ImageInfo&)),
-            this, SIGNAL(signalGotoDateAndItem(ImageInfo&)));
+    connect(&cmhelper, SIGNAL(signalGotoDate(const ImageInfo&)),
+            this, SIGNAL(signalGotoDateAndItem(const ImageInfo&)));
 
     // handle temporary actions
 

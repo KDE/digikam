@@ -85,8 +85,8 @@ Q_SIGNALS:
     void signalFindSimilar();
     void signalAddToExistingQueue(int);
 
-    void signalGotoAlbumAndItem(ImageInfo&);
-    void signalGotoDateAndItem(ImageInfo&);
+    void signalGotoAlbumAndItem(const ImageInfo&);
+    void signalGotoDateAndItem(const ImageInfo&);
     void signalGotoTagAndItem(int);
 
 protected:
