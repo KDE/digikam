@@ -263,7 +263,7 @@ public:
         ABCMenu        = 0;
         timer          = 0;
         toggleAutoTags = TagFilterView::NoToggleAuto;
-        matchingCond   = AlbumLister::OrCondition;
+        matchingCond   = ImageFilterSettings::OrCondition;
     }
 
     QTimer                         *timer;
@@ -272,7 +272,7 @@ public:
 
     TagFilterView::ToggleAutoTags   toggleAutoTags;
 
-    AlbumLister::MatchingCondition  matchingCond;
+    ImageFilterSettings::MatchingCondition  matchingCond;
 };
 
 
@@ -344,8 +344,8 @@ TagFilterView::TagFilterView(QWidget* parent)
 
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("Tag Filters View");
-    d->matchingCond = (AlbumLister::MatchingCondition)(group.readEntry("Matching Condition",
-                                                       (int)AlbumLister::OrCondition));
+    d->matchingCond = (ImageFilterSettings::MatchingCondition)(group.readEntry("Matching Condition",
+                                                       (int)ImageFilterSettings::OrCondition));
 
     d->toggleAutoTags = (ToggleAutoTags)(group.readEntry("Toggle Auto Tags", (int)NoToggleAuto));
 }
@@ -885,7 +885,7 @@ void TagFilterView::slotTimeOut()
         ++it;
     }
 
-    AlbumLister::instance()->setTagFilter(filterTags, d->matchingCond, showUnTagged);
+    emit tagFilterChanged(filterTags, d->matchingCond, showUnTagged);
 }
 
 void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)
@@ -966,7 +966,7 @@ void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)
     QAction *orBetweenAction = matchingCondAction->addAction(i18n("Or Between Tags"));
     QAction *andBetweenAction = matchingCondAction->addAction(i18n("And Between Tags"));
 
-    if (d->matchingCond == AlbumLister::OrCondition)
+    if (d->matchingCond == ImageFilterSettings::OrCondition)
         orBetweenAction->setChecked(true);
     else
         andBetweenAction->setChecked(true);
@@ -1105,12 +1105,12 @@ void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)
         }
         else if (choice == orBetweenAction)         // Or Between Tags.
         {
-            d->matchingCond = AlbumLister::OrCondition;
+            d->matchingCond = ImageFilterSettings::OrCondition;
             triggerChange();
         }
         else if (choice == andBetweenAction)        // And Between Tags.
         {
-            d->matchingCond = AlbumLister::AndCondition;
+            d->matchingCond = ImageFilterSettings::AndCondition;
             triggerChange();
         }
         else                                        // ABC menu

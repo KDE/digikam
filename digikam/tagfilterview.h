@@ -35,6 +35,7 @@
 // Local includes
 
 #include "searchtextbar.h"
+#include "imagefiltersettings.h"
 #include "folderview.h"
 
 class QDrag;
@@ -75,6 +76,9 @@ Q_SIGNALS:
     void signalProgressBarMode(int, const QString&);
     void signalProgressValue(int);
     void signalTextTagFilterMatch(bool);
+
+    void tagFilterChanged(const QList<int>& tags, ImageFilterSettings::MatchingCondition matchingCond,
+                          bool showUnTagged);
 
 public Q_SLOTS:
 
