@@ -86,23 +86,7 @@ public:
      *  If you do not need a sorted list, use ImageModel's imageInfos() method. */
     QList<ImageInfo> imageInfosSorted() const;
 
-    /** Changes the current image filter settings and refilters. */
-    virtual void setImageFilterSettings(const ImageFilterSettings& settings);
     ImageFilterSettings imageFilterSettings() const;
-
-    /** Adjust the current ImageFilterSettings.
-     *  Equivalent to retrieving the current filter settings, adjusting the parameter
-     *  and calling setImageFilterSettings.
-     *  Provided for convenience.
-     *  It is encouraged to use setImageFilterSettings if you change more than one
-     *  parameter at a time.
-     */
-    void setDayFilter(const QList<QDateTime>& days);
-    void setTagFilter(const QList<int>& tags, ImageFilterSettings::MatchingCondition matchingCond,
-                      bool showUnTagged=false);
-    void setRatingFilter(int rating, ImageFilterSettings::RatingCondition ratingCond);
-    void setMimeTypeFilter(int mimeTypeFilter);
-    void setTextFilter(const SearchTextSettings& settings);
 
     enum CategorizationMode
     {
@@ -123,13 +107,45 @@ public:
         SortByImageSize // pixel number
     };
 
-    void setCategorizationMode(CategorizationMode mode);
     CategorizationMode categorizationMode() const;
-
-    void setSortOrder(SortOrder order);
     SortOrder sortOrder() const;
 
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+
+public Q_SLOTS:
+
+    /** Changes the current image filter settings and refilters. */
+    virtual void setImageFilterSettings(const ImageFilterSettings& settings);
+
+    /** Adjust the current ImageFilterSettings.
+     *  Equivalent to retrieving the current filter settings, adjusting the parameter
+     *  and calling setImageFilterSettings.
+     *  Provided for convenience.
+     *  It is encouraged to use setImageFilterSettings if you change more than one
+     *  parameter at a time.
+     */
+    void setDayFilter(const QList<QDateTime>& days);
+    void setTagFilter(const QList<int>& tags, ImageFilterSettings::MatchingCondition matchingCond,
+                      bool showUnTagged=false);
+    void setRatingFilter(int rating, ImageFilterSettings::RatingCondition ratingCond);
+    void setMimeTypeFilter(int mimeTypeFilter);
+    void setTextFilter(const SearchTextSettings& settings);
+
+    void setCategorizationMode(CategorizationMode mode);
+    void setSortOrder(SortOrder order);
+
+Q_SIGNALS:
+
+    /// Signals that the set filter matches at least one index
+    void filterMatches(bool matches);
+    /** Signals that the set text filter matches at least one entry.
+        If no text filter is set, this signal is emitted
+        with 'false' when filterMatches() is emitted. */
+    void filterMatchesForText(bool matchesByText);
+
+    /** Emitted when the filter settings have been changed
+        (the model may not yet have been updated) */
+    void filterSettingsChanged(const ImageFilterSettings &settings);
 
 protected:
 

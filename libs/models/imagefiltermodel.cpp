@@ -60,6 +60,8 @@ ImageFilterModelPrivate::ImageFilterModelPrivate()
     needPrepareTags       = false;
     preparer              = 0;
     filterer              = 0;
+    hasOneMatch           = false;
+    hasOneMatchForText    = false;
 
     setupWorkers();
 }
@@ -75,7 +77,7 @@ ImageFilterModelPrivate::~ImageFilterModelPrivate()
 }
 
 ImageFilterModelWorker::ImageFilterModelWorker(ImageFilterModelPrivate *d)
-    : d(d)
+    : d(d) // do not install d as QObject parent, moveToThread wont work then
 {
     thread = new Thread(this);
     moveToThread(thread);
@@ -332,8 +334,11 @@ void ImageFilterModel::setImageFilterSettings(const ImageFilterSettings& setting
     }
 
     d->filterResults.clear();
+    d->hasOneMatch = false;
+    d->hasOneMatchForText = false;
     if (d->imageModel)
         d->infosToProcess(d->imageModel->imageInfos(), false);
+    emit filterSettingsChanged(settings);
 }
 
 void ImageFilterModel::slotUpdateFilter()
@@ -341,6 +346,8 @@ void ImageFilterModel::slotUpdateFilter()
     Q_D(ImageFilterModel);
 
     d->filterResults.clear();
+    d->hasOneMatch = false;
+    d->hasOneMatchForText = false;
     if (d->imageModel)
         d->infosToProcess(d->imageModel->imageInfos(), false);
 }
@@ -355,6 +362,8 @@ void ImageFilterModel::slotModelReset()
 {
     Q_D(ImageFilterModel);
     d->filterResults.clear();
+    d->hasOneMatch = false;
+    d->hasOneMatchForText = false;
     d->sentOut = 0;
     // discard all packages that are marked as send out for re-add
     d->lastDiscardVersion = d->version;
@@ -472,6 +481,8 @@ void ImageFilterModelPrivate::packageFinished(const ImageFilterModelTodoPackage&
     {
         lastFilteredVersion = version;
         q->invalidate();
+        emit q->filterMatches(hasOneMatch);
+        emit q->filterMatchesForText(hasOneMatchForText);
     }
 }
 
@@ -548,11 +559,38 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
         localFilter = d->filterCopy;
     }
 
-    foreach (const ImageInfo& info, package.infos)
+    // Actual filtering. The variants to spare checking hasOneMatch over and over again.
+    if (d->hasOneMatch && d->hasOneMatchForText)
     {
-        package.filterResults[info.id()] = localFilter.matches(info);
+        foreach (const ImageInfo& info, package.infos)
+        {
+            package.filterResults[info.id()] = localFilter.matches(info);
+        }
     }
-
+    else if (d->hasOneMatch)
+    {
+        bool matchForText;
+        foreach (const ImageInfo& info, package.infos)
+        {
+            package.filterResults[info.id()] = localFilter.matches(info, &matchForText);
+            if (matchForText)
+                d->hasOneMatchForText = true;
+        }
+    }
+    else
+    {
+        bool result, matchForText;
+        foreach (const ImageInfo& info, package.infos)
+        {
+            result = localFilter.matches(info, &matchForText);
+            package.filterResults[info.id()] = result;
+            if (result)
+                d->hasOneMatch = true;
+            if (matchForText)
+                d->hasOneMatchForText = true;
+        }
+    }
+    
     emit processed(package);
 }
 

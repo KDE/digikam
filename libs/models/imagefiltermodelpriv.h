@@ -105,6 +105,8 @@ public:
     ImageFilterModelFilterer  *filterer;
 
     QHash<qlonglong, bool>     filterResults;
+    bool                       hasOneMatch;
+    bool                       hasOneMatchForText;
 
     QHash<int, QSet<qlonglong> >
                                categoryCountHashInt;
