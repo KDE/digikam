@@ -30,6 +30,7 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPen>
+#include <QCursor>
 #include <QStyle>
 #include <QStyleOption>
 #include <QGridLayout>
@@ -135,6 +136,7 @@ void SqueezedClickLabel::keyPressEvent(QKeyEvent *e)
 ArrowClickLabel::ArrowClickLabel(QWidget *parent)
                : QWidget(parent), m_arrowType(Qt::DownArrow)
 {
+    setCursor(Qt::PointingHandCursor);
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_size   = 8;
     m_margin = 2;
@@ -253,7 +255,7 @@ public:
         grid            = 0;
         arrow           = 0;
         line            = 0;
-	expandByDefault = true;
+        expandByDefault = true;
     }
 
     bool                expandByDefault;
@@ -277,6 +279,7 @@ DLabelExpander::DLabelExpander(QWidget *parent)
     d->pixmapLabel = new QLabel(this);
     d->clickLabel  = new SqueezedClickLabel(this);
     d->pixmapLabel->installEventFilter(this);
+    d->pixmapLabel->setCursor(Qt::PointingHandCursor);
 
     d->grid->addWidget(d->line,        0, 0, 1, 3);
     d->grid->addWidget(d->arrow,       1, 0, 1, 1);
@@ -365,7 +368,6 @@ bool DLabelExpander::eventFilter(QObject *obj, QEvent *ev)
     {
         if ( ev->type() == QEvent::MouseButtonRelease)
         {
-
             slotToggleContainer();
             return false;
         }
@@ -465,7 +467,8 @@ void DExpanderBox::readSettings(KConfigGroup& group)
         DLabelExpander *exp = d->wList[i];
         if (exp)
         {
-            exp->setExpanded(group.readEntry(QString("%1 Expanded").arg(exp->objectName()), exp->expandByDefault()));
+            exp->setExpanded(group.readEntry(QString("%1 Expanded").arg(exp->objectName()),
+                                             exp->expandByDefault()));
         }
     }
 }
@@ -477,7 +480,8 @@ void DExpanderBox::writeSettings(KConfigGroup& group)
         DLabelExpander *exp = d->wList[i];
         if (exp)
         {
-            group.writeEntry(QString("%1 Expanded").arg(exp->objectName()), exp->isExpanded());
+            group.writeEntry(QString("%1 Expanded").arg(exp->objectName()),
+                             exp->isExpanded());
         }
     }
 }
