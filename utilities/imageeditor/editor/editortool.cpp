@@ -229,9 +229,12 @@ public:
 
     EditorToolThreadedPriv()
     {
+        delFilter            = true;
         threadedFilter       = 0;
         currentRenderingMode = EditorToolThreaded::NoneRendering;
     }
+
+    bool                               delFilter;
 
     EditorToolThreaded::RenderingMode  currentRenderingMode;
 
@@ -400,7 +403,7 @@ void EditorToolThreaded::slotOk()
     EditorToolIface::editorToolIface()->setToolStartProgress(d->progressMess.isEmpty() ? toolName() : d->progressMess);
     kapp->setOverrideCursor( Qt::WaitCursor );
 
-    if (d->threadedFilter)
+    if (d->delFilter && d->threadedFilter)
     {
         delete d->threadedFilter;
         d->threadedFilter = 0;
@@ -426,7 +429,7 @@ void EditorToolThreaded::slotEffect()
 
     EditorToolIface::editorToolIface()->setToolStartProgress(d->progressMess.isEmpty() ? toolName() : d->progressMess);
 
-    if (d->threadedFilter)
+    if (d->delFilter && d->threadedFilter)
     {
         delete d->threadedFilter;
         d->threadedFilter = 0;
@@ -441,6 +444,11 @@ void EditorToolThreaded::slotCancel()
     slotAbort();
     kapp->restoreOverrideCursor();
     emit cancelClicked();
+}
+
+void EditorToolThreaded::deleteFilterInstance(bool b)
+{
+    d->delFilter = b;
 }
 
 }  // namespace Digikam

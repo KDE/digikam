@@ -226,9 +226,12 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
 
     m_expanderBox = new DExpanderBox;
     // order matters, see ExpanderWidgets enum
-    m_expanderBox->addItem(autoAdjustContainer,   SmallIcon("freerotation"), i18n("Automatic Correction"));
-    m_expanderBox->addItem(manualAdjustContainer, SmallIcon("freerotation"), i18n("Manual Adjustment"));
-    m_expanderBox->addItem(settingsContainer,     SmallIcon("freerotation"), i18n("Additional Settings"));
+    m_expanderBox->addItem(autoAdjustContainer,   SmallIcon("freerotation"), i18n("Automatic Correction"),
+                           QString("AutoAdjustContainer"), true);
+    m_expanderBox->addItem(manualAdjustContainer, SmallIcon("freerotation"), i18n("Manual Adjustment"),
+                           QString("ManualAdjustContainer"), true);
+    m_expanderBox->addItem(settingsContainer,     SmallIcon("freerotation"), i18n("Additional Settings"),
+                           QString("SettingsContainer"), true);
     m_expanderBox->addStretch();
 
     // -------------------------------------------------------------
@@ -291,9 +294,7 @@ void FreeRotationTool::readSettings()
     KConfigGroup group        = config->group("freerotation Tool");
     m_autoCropCB->setCurrentIndex(group.readEntry("Auto Crop Type", m_autoCropCB->defaultIndex()));
     m_antialiasInput->setChecked(group.readEntry("Anti Aliasing", true));
-    m_expanderBox->setItemExpanded(AutomaticItem,  group.readEntry("AutomaticCorrection Expanded", true));
-    m_expanderBox->setItemExpanded(ManualItem,     group.readEntry("ManualCorrection Expanded", true));
-    m_expanderBox->setItemExpanded(AdditionalItem, group.readEntry("AdditionalSettings Expanded", true));
+    m_expanderBox->readSettings(group);
 
     m_angleInput->blockSignals(true);
     m_fineAngleInput->blockSignals(true);
@@ -313,9 +314,7 @@ void FreeRotationTool::writeSettings()
     KConfigGroup group        = config->group("freerotation Tool");
     group.writeEntry("Auto Crop Type", m_autoCropCB->currentIndex());
     group.writeEntry("Anti Aliasing", m_antialiasInput->isChecked());
-    group.writeEntry("AutomaticCorrection Expanded", m_expanderBox->itemIsExpanded(AutomaticItem));
-    group.writeEntry("ManualCorrection Expanded", m_expanderBox->itemIsExpanded(ManualItem));
-    group.writeEntry("AdditionalSettings Expanded", m_expanderBox->itemIsExpanded(AdditionalItem));
+    m_expanderBox->writeSettings(group);
     m_previewWidget->writeSettings();
     group.sync();
 }

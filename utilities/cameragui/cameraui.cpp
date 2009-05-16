@@ -195,7 +195,8 @@ void CameraUI::setupUserArea()
     d->renameCustomizer = new RenameCustomizer(d->advBox, d->cameraTitle);
     d->renameCustomizer->setWhatsThis( i18n("Set how digiKam will rename files as they are downloaded."));
     d->view->setRenameCustomizer(d->renameCustomizer);
-    d->advBox->addItem(d->renameCustomizer, SmallIcon("insert-image"), i18n("File Renaming Options"));
+    d->advBox->addItem(d->renameCustomizer, SmallIcon("insert-image"), i18n("File Renaming Options"),
+                       QString("RenameCustomizer"), true);
 
     // -- Albums Auto-creation options -----------------------------------------
 
@@ -232,7 +233,8 @@ void CameraUI::setupUserArea()
                      "E.g.: <i>Thu Aug 24 2006</i></p>"
                      "<p><b>Local Settings</b>: the date format depending on KDE control panel settings.</p>"));
 
-    d->advBox->addItem(albumBox, SmallIcon("folder-new"), i18n("Auto-creation of Albums"));
+    d->advBox->addItem(albumBox, SmallIcon("folder-new"), i18n("Auto-creation of Albums"),
+                       QString("AlbumBox"), false);
 
     // -- On the Fly options ---------------------------------------------------
 
@@ -278,7 +280,8 @@ void CameraUI::setupUserArea()
     d->losslessFormat->setWhatsThis( i18n("Select your preferred lossless image file format to "
                      "convert to. <b>Note:</b> All metadata will be preserved during the conversion."));
 
-    d->advBox->addItem(onFlyBox, SmallIcon("system-run"), i18n("On the Fly Operations (JPEG only)"));
+    d->advBox->addItem(onFlyBox, SmallIcon("system-run"), i18n("On the Fly Operations (JPEG only)"),
+                       QString("OnFlyBox"), true);
     d->advBox->addStretch();
 
     d->rightSideBar->appendTab(d->advBox, SmallIcon("configure"), i18n("Settings"));

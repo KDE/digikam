@@ -414,13 +414,16 @@ DExpanderBox::~DExpanderBox()
     delete d;
 }
 
-void DExpanderBox::addItem(QWidget *w, const QPixmap& pix, const QString& txt)
+void DExpanderBox::addItem(QWidget *w, const QPixmap& pix, const QString& txt,
+                           const QString& objName, bool expandBydefault)
 {
     DLabelExpander *exp = new DLabelExpander(d->vbox);
     exp->setText(txt);
     exp->setPixmap(pix);
     exp->setContainer(w);
     exp->setLineVisible(!d->wList.isEmpty());
+    exp->setObjectName(objName);
+    exp->setExpandByDefault(expandBydefault);
     d->wList.append(exp);
 }
 

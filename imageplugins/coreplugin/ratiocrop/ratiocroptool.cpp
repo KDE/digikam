@@ -241,7 +241,8 @@ RatioCropTool::RatioCropTool(QObject* parent)
     grid->setMargin(m_gboxSettings->spacingHint());
     grid->setSpacing(m_gboxSettings->spacingHint());
 
-    m_expbox->addItem(cropSelection, SmallIcon("transform-crop-and-resize"), i18n("Crop Settings"));
+    m_expbox->addItem(cropSelection, SmallIcon("transform-crop-and-resize"),
+                      i18n("Crop Settings"), QString("CropSelection"), true);
 
     // -------------------------------------------------------------
 
@@ -303,7 +304,8 @@ RatioCropTool::RatioCropTool(QObject* parent)
     grid2->setMargin(m_gboxSettings->spacingHint());
     grid2->setSpacing(m_gboxSettings->spacingHint());
 
-    m_expbox->addItem(compositionGuide, SmallIcon("tools-wizard"), i18n("Composition Guides"));
+    m_expbox->addItem(compositionGuide, SmallIcon("tools-wizard"),
+                      i18n("Composition Guides"), QString("CompositionGuide"), true);
     m_expbox->addStretch();
 
     // -------------------------------------------------------------
@@ -416,8 +418,7 @@ void RatioCropTool::readSettings()
 
     blockWidgetSignals(true);
 
-    m_expbox->setItemExpanded(0, group.readEntry("CropSelection Expanded",    true));
-    m_expbox->setItemExpanded(1, group.readEntry("CompositionGuide Expanded", true));
+    m_expbox->readSettings(group);
 
     // No guide lines per default.
     m_guideLinesCB->setCurrentIndex(group.readEntry("Guide Lines Type",
@@ -485,8 +486,7 @@ void RatioCropTool::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("aspectratiocrop Tool");
 
-    group.writeEntry("CropSelection Expanded",    m_expbox->itemIsExpanded(0));
-    group.writeEntry("CompositionGuide Expanded", m_expbox->itemIsExpanded(1));
+    m_expbox->writeSettings(group);
 
     if (m_originalIsLandscape)
     {

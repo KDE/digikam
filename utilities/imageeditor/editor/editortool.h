@@ -123,7 +123,6 @@ public:
      */
     void setProgressMessage(const QString& mess);
 
-
     /** return the current tool rendering mode.
      */
     RenderingMode renderingMode() const;
@@ -136,6 +135,11 @@ protected:
 
     DImgThreadedFilter* filter() const;
     void setFilter(DImgThreadedFilter *filter);
+
+    /** If true, delete filter instance when preview or final rendering is processed.
+        If false, filter instance will be managed outside for ex. with ContentAwareResizing tool.
+     */
+    void deleteFilterInstance(bool b=true);
 
     virtual void setToolView(QWidget *view);
     virtual void prepareEffect(){};

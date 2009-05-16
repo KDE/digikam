@@ -171,10 +171,18 @@ public:
     DExpanderBox(QWidget *parent = 0);
     ~DExpanderBox();
 
-    void addItem(QWidget *w, const QPixmap& pix, const QString& txt);
+    /** Add a DLabelExpander item to the box with all settings :
+        'w'               : the widget hosted by DLabelExpander.
+        'pix'             : pixmap used as icon to item title.
+        'txt'             : text used as item title.
+        'objName'         : item object name used to read/save expanded settings to rc file.
+        'expandBydefault' : item state by default (expanded or not).
+     */
+    void addItem(QWidget *w, const QPixmap& pix, const QString& txt,
+                 const QString& objName, bool expandBydefault);
     void addStretch();
 
-    int count();
+    int  count();
 
     void setItemExpanded(int index, bool b);
     bool itemIsExpanded(int index);
