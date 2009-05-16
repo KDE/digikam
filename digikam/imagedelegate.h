@@ -83,8 +83,10 @@ public:
     QRect actualPixmapRect(qlonglong imageid) const;
 
     // to be called by ImageCategorizedView only
+    // NOTE: Once using overlays, it is one-delegate-per-view!
     void installOverlay(ImageDelegateOverlay *overlay);
     void removeOverlay(ImageDelegateOverlay *overlay);
+    void removeAllOverlays();
     void mouseMoved(QMouseEvent *e, const QRect& visualRect, const QModelIndex& index);
 
     static QString squeezedText(const QFontMetrics &fm, int width, const QString& text);

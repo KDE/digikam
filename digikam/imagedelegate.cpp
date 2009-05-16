@@ -143,8 +143,6 @@ ImageDelegate::ImageDelegate(QObject *parent)
 
 ImageDelegate::~ImageDelegate()
 {
-    foreach (ImageDelegateOverlay *overlay, d->overlays)
-        removeOverlay(overlay);
     delete d->categoryDrawer;
     delete d;
 }
@@ -184,6 +182,17 @@ void ImageDelegate::removeOverlay(ImageDelegateOverlay *overlay)
     overlay->setActive(false);
     overlay->setDelegate(0);
     d->overlays.removeAll(overlay);
+}
+
+void ImageDelegate::removeAllOverlays()
+{
+    foreach (ImageDelegateOverlay *overlay, d->overlays)
+    {
+        overlay->setActive(false);
+        overlay->setDelegate(0);
+        overlay->setView(0);
+    }
+    d->overlays.clear();
 }
 
 QRect ImageDelegate::rect() const

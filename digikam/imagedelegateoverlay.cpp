@@ -28,6 +28,8 @@
 
 // KDE includes
 
+#include <kdebug.h>
+
 // Local includes
 
 #include "imagecategorizedview.h"
