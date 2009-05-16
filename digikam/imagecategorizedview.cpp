@@ -152,7 +152,6 @@ ImageCategorizedView::ImageCategorizedView(QWidget *parent)
     setCategoryDrawer(d->delegate->categoryDrawer());
 
     d->toolTip = new ImageItemViewToolTip(this);
-    d->showToolTip = AlbumSettings::instance()->getShowToolTips();
 
     setModel(d->filterModel);
 
@@ -196,6 +195,7 @@ ImageCategorizedView::ImageCategorizedView(QWidget *parent)
 
 ImageCategorizedView::~ImageCategorizedView()
 {
+    d->delegate->removeAllOverlays();
     delete d->toolTip;
     delete d;
 }
@@ -223,6 +223,11 @@ Album *ImageCategorizedView::currentAlbum() const
 ImageInfo ImageCategorizedView::currentInfo() const
 {
     return d->filterModel->imageInfo(currentIndex());
+}
+
+KUrl ImageCategorizedView::currentUrl() const
+{
+    return currentInfo().fileUrl();
 }
 
 QList<ImageInfo> ImageCategorizedView::selectedImageInfos() const
@@ -269,6 +274,61 @@ KUrl::List ImageCategorizedView::selectedUrls() const
     return urls;
 }
 
+ImageInfo ImageCategorizedView::nextInOrder(const ImageInfo &startingPoint, int nth)
+{
+    QModelIndex index = d->filterModel->indexForImageInfo(startingPoint);
+    if (!index.isValid())
+        return ImageInfo();
+    return d->filterModel->imageInfo(d->filterModel->index(index.row() + nth, 0, QModelIndex()));
+}
+
+void ImageCategorizedView::toFirstIndex()
+{
+    QModelIndex index = moveCursor(MoveHome, Qt::NoModifier);
+    setCurrentIndex(index);
+    scrollToTop();
+}
+
+void ImageCategorizedView::toLastIndex()
+{
+    QModelIndex index = moveCursor(MoveEnd, Qt::NoModifier);
+    setCurrentIndex(index);
+    scrollToBottom();
+}
+
+void ImageCategorizedView::toNextIndex()
+{
+    toIndex(moveCursor(MoveNext, Qt::NoModifier));
+}
+
+void ImageCategorizedView::toPreviousIndex()
+{
+    toIndex(moveCursor(MovePrevious, Qt::NoModifier));
+}
+
+void ImageCategorizedView::toIndex(const KUrl& url)
+{
+    QModelIndex index = d->model->indexForPath(url.path());
+    toIndex(d->filterModel->mapFromSource(index));
+}
+
+void ImageCategorizedView::toIndex(const QModelIndex& index)
+{
+    if (!index.isValid())
+        return;
+    setCurrentIndex(index);
+    scrollTo(index);
+}
+
+void ImageCategorizedView::invertSelection()
+{
+    const QModelIndex topLeft = d->filterModel->index(0, 0);
+    const QModelIndex bottomRight = d->filterModel->index(d->filterModel->rowCount() - 1, 0);
+
+    const QItemSelection selection(topLeft, bottomRight);
+    selectionModel()->select(selection, QItemSelectionModel::Toggle);
+}
+
 void ImageCategorizedView::openAlbum(Album *album)
 {
     d->model->openAlbum(album);
@@ -289,6 +349,16 @@ void ImageCategorizedView::setThumbnailSize(const ThumbnailSize& size)
     d->model->setThumbnailSize(size);
     d->delegate->setThumbnailSize(size);
     //viewport()->update();
+}
+
+void ImageCategorizedView::setToolTipEnabled(bool enable)
+{
+    d->showToolTip = enable;
+}
+
+bool ImageCategorizedView::isToolTipEnabled() const
+{
+    return d->showToolTip;
 }
 
 void ImageCategorizedView::scrollToWhenAvailable(qlonglong imageId)
@@ -350,7 +420,6 @@ void ImageCategorizedView::slotThemeChanged()
 
 void ImageCategorizedView::slotSetupChanged()
 {
-    d->showToolTip = AlbumSettings::instance()->getShowToolTips();
     viewport()->update();
 }
 
@@ -589,6 +658,15 @@ void ImageCategorizedView::wheelEvent(QWheelEvent* event)
     // KCategorizedView updates the single step at some occasions in a private methody
     horizontalScrollBar()->setSingleStep(d->delegate->gridSize().height() / 10);
     verticalScrollBar()->setSingleStep(d->delegate->gridSize().width() / 10);
+
+    if (event->modifiers() & Qt::ControlModifier) {
+        const int delta = event->delta();
+        if (delta > 0)
+            emit zoomInStep();
+        else if (delta < 0)
+            emit zoomOutStep();
+        event->accept();
+    }
 
     KCategorizedView::wheelEvent(event);
 }

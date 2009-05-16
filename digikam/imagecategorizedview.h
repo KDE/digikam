@@ -62,12 +62,32 @@ public:
     Album *currentAlbum() const;
 
     ImageInfo currentInfo() const;
+    KUrl currentUrl() const;
+
     QList<ImageInfo> selectedImageInfos() const;
     QList<ImageInfo> selectedImageInfosCurrentFirst() const;
-    QList<ImageInfo> imageInfos() const;
-
-    KUrl::List urls() const;
     KUrl::List selectedUrls() const;
+
+    QList<ImageInfo> imageInfos() const;
+    KUrl::List urls() const;
+
+    /** Selects the index as current and scrolls to it */
+    void toFirstIndex();
+    void toLastIndex();
+    void toNextIndex();
+    void toPreviousIndex();
+    void toIndex(const KUrl& url);
+    void toIndex(const QModelIndex& index);
+    /** Returns the n-th info after the given one.
+     *  Specifically, return the previous info for nth = -1
+     *  and the next info for n = 1.
+     *  Returns a null info if either startingPoint or the nth info are
+     *  not contained in the model */
+    ImageInfo nextInOrder(const ImageInfo &startingPoint, int nth);
+    ImageInfo previousInfo(const ImageInfo &info) { return nextInOrder(info, -1); }
+    ImageInfo nextInfo(const ImageInfo &info) { return nextInOrder(info, 1); }
+
+    void invertSelection();
 
     ThumbnailSize thumbnailSize() const;
     void setThumbnailSize(const ThumbnailSize& size);
@@ -80,6 +100,9 @@ public:
     /// Add and remove an overlay. It will as well be removed automatically when destroyed.
     void addOverlay(ImageDelegateOverlay *overlay);
     void removeOverlay(ImageDelegateOverlay *overlay);
+
+    void setToolTipEnabled(bool enabled);
+    bool isToolTipEnabled() const;
 
     void addSelectionOverlay();
 
@@ -107,6 +130,9 @@ Q_SIGNALS:
     /// Emitted when the selection is completely cleared.
     void selectionCleared();
 
+    void zoomOutStep();
+    void zoomInStep();
+
     /** For overlays: Like the respective parent class signals, but with additional info.
      *  Do not change the mouse events.
      */
@@ -119,8 +145,8 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
 
-    void slotThemeChanged();
-    void slotSetupChanged();
+    virtual void slotThemeChanged();
+    virtual void slotSetupChanged();
 
     void slotImageInfosAdded();
 
