@@ -1322,7 +1322,7 @@ QModelIndex KCategorizedView::moveCursor(CursorAction cursorAction,
         if (cursorAction == MoveEnd)
         {
             current = model()->index(model()->rowCount() - 1, 0, QModelIndex());
-            d->forcedSelectionPosition = d->elementsInfo[current.row()].relativeOffsetToCategory % elementsPerRow;
+            //d->forcedSelectionPosition = d->elementsInfo[current.row()].relativeOffsetToCategory % elementsPerRow;
         }
         else
         {
@@ -1420,7 +1420,7 @@ QModelIndex KCategorizedView::moveCursor(CursorAction cursorAction,
                 if (!(d->elementsInfo[current.row() + 1].relativeOffsetToCategory % elementsPerRow))
                     return current;
 
-                d->forcedSelectionPosition = d->elementsInfo[current.row() + 1].relativeOffsetToCategory % elementsPerRow;
+                //d->forcedSelectionPosition = d->elementsInfo[current.row() + 1].relativeOffsetToCategory % elementsPerRow;
 
 #if 0 //follow qt view behavior. lateral movements won't change visual row
                 if (d->forcedSelectionPosition < 0)
@@ -1433,7 +1433,7 @@ QModelIndex KCategorizedView::moveCursor(CursorAction cursorAction,
             if (!(d->elementsInfo[current.row()].relativeOffsetToCategory % elementsPerRow))
                 return current;
 
-            d->forcedSelectionPosition = d->elementsInfo[current.row() - 1].relativeOffsetToCategory % elementsPerRow;
+            //d->forcedSelectionPosition = d->elementsInfo[current.row() - 1].relativeOffsetToCategory % elementsPerRow;
 
 #if 0 //follow qt view behavior. lateral movements won't change visual row
             if (d->forcedSelectionPosition < 0)
@@ -1448,7 +1448,7 @@ QModelIndex KCategorizedView::moveCursor(CursorAction cursorAction,
                 if (!(d->elementsInfo[current.row()].relativeOffsetToCategory % elementsPerRow))
                     return current;
 
-                d->forcedSelectionPosition = d->elementsInfo[current.row() - 1].relativeOffsetToCategory % elementsPerRow;
+                //d->forcedSelectionPosition = d->elementsInfo[current.row() - 1].relativeOffsetToCategory % elementsPerRow;
 
 #if 0 //follow qt view behavior. lateral movements won't change visual row
                 if (d->forcedSelectionPosition < 0)
@@ -1461,7 +1461,7 @@ QModelIndex KCategorizedView::moveCursor(CursorAction cursorAction,
             if (!(d->elementsInfo[current.row() + 1].relativeOffsetToCategory % elementsPerRow))
                 return current;
 
-            d->forcedSelectionPosition = d->elementsInfo[current.row() + 1].relativeOffsetToCategory % elementsPerRow;
+            //d->forcedSelectionPosition = d->elementsInfo[current.row() + 1].relativeOffsetToCategory % elementsPerRow;
 
 #if 0 //follow qt view behavior. lateral movements won't change visual row
             if (d->forcedSelectionPosition < 0)
@@ -1653,8 +1653,7 @@ void KCategorizedView::currentChanged(const QModelIndex &current,
     if (!elementsPerRow)
         elementsPerRow++;
 
-    if (d->mouseButtonPressed || d->rightMouseButtonPressed)
-        d->forcedSelectionPosition = d->elementsInfo[current.row()].relativeOffsetToCategory % elementsPerRow;
+    d->forcedSelectionPosition = d->elementsInfo[current.row()].relativeOffsetToCategory % elementsPerRow;
 
     QListView::currentChanged(current, previous);
 }
