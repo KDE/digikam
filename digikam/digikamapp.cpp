@@ -300,6 +300,11 @@ DigikamView *DigikamApp::view() const
     return d->view;
 }
 
+AlbumIconViewFilter *DigikamApp::iconViewFilter() const
+{
+    return d->albumIconViewFilter;
+}
+
 void DigikamApp::show()
 {
     // Remove Splashscreen.
@@ -468,6 +473,7 @@ void DigikamApp::setupStatusBar()
 
     d->albumIconViewFilter = new AlbumIconViewFilter(statusBar());
     statusBar()->addWidget(d->albumIconViewFilter, 100);
+    d->view->connectIconViewFilter(d->albumIconViewFilter);
 
     //------------------------------------------------------------------------------
 
@@ -498,9 +504,6 @@ void DigikamApp::setupStatusBar()
 
     connect(d->view, SIGNAL(signalTogglePreview(bool)),
             this, SLOT(slotTogglePreview(bool)));
-
-    connect(d->albumIconViewFilter, SIGNAL(signalResetTagFilters()),
-            this, SIGNAL(signalResetTagFilters()));
 
     connect(d->statusNavigateBar, SIGNAL(signalFirstItem()),
             d->view, SLOT(slotFirstItem()));

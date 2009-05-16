@@ -53,6 +53,7 @@ namespace Solid { class Device; }
 namespace Digikam
 {
 
+class AlbumIconViewFilter;
 class DigikamView;
 class ImageInfo;
 class ImageInfoList;
@@ -89,6 +90,7 @@ public:
     void enableAlbumForwardHistory(bool enable);
 
     DigikamView *view() const;
+    AlbumIconViewFilter *iconViewFilter() const;
 
 Q_SIGNALS:
 
@@ -100,7 +102,6 @@ Q_SIGNALS:
     void signalCopyAlbumItemsSelection();
     void signalPasteAlbumItemsSelection();
     void signalCancelButtonPressed();
-    void signalResetTagFilters();
 
     void signalWindowHasMoved();
 
