@@ -1534,15 +1534,28 @@ void KCategorizedView::rowsInsertedArtifficial(const QModelIndex &parent,
     QModelIndexList modelIndexList;
     struct Private::ElementInfo elementInfo;
     int offset = -1;
-    for (int k = 0; k < d->proxyModel->rowCount(); ++k)
+    const int rowCount = d->proxyModel->rowCount();
+    const int sortColumn = d->proxyModel->sortColumn();
+    const bool uniformSizes = uniformItemSizes();
+    if (uniformSizes)
     {
-        QModelIndex index = d->proxyModel->index(k, d->proxyModel->sortColumn());
-        QModelIndex indexSize = d->proxyModel->index(k, 0);
+        // use last index as sample
+        QModelIndex sample = d->proxyModel->index(rowCount - 1, modelColumn(), rootIndex());
+        d->biggestItemSize = sizeHintForIndex(sample);
+    }
+    d->modelIndexList->reserve(rowCount);
 
-        d->biggestItemSize = QSize(qMax(sizeHintForIndex(indexSize).width(),
-                                        d->biggestItemSize.width()),
-                                   qMax(sizeHintForIndex(indexSize).height(),
-                                        d->biggestItemSize.height()));
+    for (int k = 0; k < rowCount; ++k)
+    {
+        QModelIndex index = d->proxyModel->index(k, sortColumn);
+        QModelIndex indexSize = sortColumn == 0 ? index : d->proxyModel->index(k, 0);
+
+        if (!uniformSizes)
+        {
+            QSize hint = sizeHintForIndex(indexSize);
+            d->biggestItemSize = QSize(qMax(hint.width(), d->biggestItemSize.width()),
+                                       qMax(hint.height(), d->biggestItemSize.height()));
+        }
 
         d->modelIndexList << index;
 
