@@ -37,7 +37,7 @@ class KCategoryDrawer;
   *
   * @author Rafael Fernández López <ereslibre@kde.org>
   */
-class KDEUI_EXPORT KCategorizedView
+class /*KDEUI_EXPORT*/ KCategorizedView
     : public QListView
 {
     Q_OBJECT
