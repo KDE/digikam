@@ -66,12 +66,16 @@ public:
     void setThumbSize(int size);
     void toggleShowBar(bool);
 
+    KUrl::List allUrls() const;
+    KUrl::List selectedUrls() const;
+
 Q_SIGNALS:
 
     void signalAlbumSelected(bool val);
     void signalTagSelected(bool val);
-    void signalImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&);
+    void signalImageSelected(const ImageInfoList& selectedImage, bool hasPrevious, bool hasNext, const ImageInfoList& allImages);
     void signalNoCurrentItem();
+    void signalSelectionChanged(bool hasSelection);
     void signalProgressBarMode(int, const QString&);
     void signalProgressValue(int);
     void signalThumbSizeChanged(int);
@@ -112,8 +116,8 @@ public Q_SLOTS:
     void slotAlbumSyncPicturesMetadataDone();
     void slotAlbumSelected(Album* album);
 
-    void slotGotoAlbumAndItem(ImageInfo& imageInfo);
-    void slotGotoDateAndItem(ImageInfo& imageInfo);
+    void slotGotoAlbumAndItem(const ImageInfo& imageInfo);
+    void slotGotoDateAndItem(const ImageInfo& imageInfo);
     void slotGotoTagAndItem(int tagID);
 
     // Tag action slots
@@ -136,7 +140,7 @@ public Q_SLOTS:
     void slotImageEdit();
     void slotImageFindSimilar();
     void slotImageExifOrientation(int orientation);
-    void slotImageRename(AlbumIconItem* iconItem=0);
+    void slotImageRename();
     void slotImageDelete();
     void slotImageDeletePermanently();
     void slotImageDeletePermanentlyDirectly();
@@ -166,18 +170,16 @@ private:
     void loadViewState();
     void saveViewState();
     void changeAlbumFromHistory(Album *album, QWidget *widget);
-    void imageEdit(AlbumIconItem* iconItem=0);
-    void slideShow(ImageInfoList& infoList);
+    void slideShow(const ImageInfoList& infoList);
 
 private Q_SLOTS:
 
     void slotAllAlbumsLoaded();
 
     void slotAlbumsCleared();
-    void slotAlbumHighlight();
 
     void slotImageSelected();
-    void slotTogglePreviewMode(AlbumIconItem *iconItem=0);
+    void slotTogglePreviewMode(const ImageInfo& info);
     void slotDispatchImageSelected();
     void slotItemsInfoFromAlbums(const ImageInfoList&);
 
