@@ -358,8 +358,7 @@ void LightTableWindow::setupConnections()
 
     // -- FileWatch connections ------------------------------
 
-    LoadingCacheInterface::connectToSignalFileChanged(this,
-            SLOT(slotFileChanged(const QString &)));
+    LoadingCacheInterface::connectToSignalFileChanged(this, SLOT(slotFileChanged(const QString&)));
 }
 
 void LightTableWindow::setupActions()

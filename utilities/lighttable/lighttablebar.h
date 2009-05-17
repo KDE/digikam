@@ -31,6 +31,7 @@
 namespace Digikam
 {
 
+class CollectionImageChangeset;
 class LightTableBarItem;
 class LightTableBarItemPriv;
 class LightTableBarPriv;
@@ -49,6 +50,9 @@ public:
     void setOnRightPanel(const ImageInfo& info);
 
     void removeItemByInfo(const ImageInfo& info);
+    ImagePreviewBarItem* removeItemById(qlonglong id);
+
+    ImagePreviewBarItem* findItemById(qlonglong id) const;
 
     void setNavigateByPair(bool b);
 
@@ -81,6 +85,8 @@ private Q_SLOTS:
     void slotAssignRatingFourStar();
     void slotAssignRatingFiveStar();
     void slotAssignRating(int);
+
+    void slotCollectionImageChange(const CollectionImageChangeset&);
 
 private:
 

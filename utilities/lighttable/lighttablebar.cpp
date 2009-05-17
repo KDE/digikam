@@ -61,6 +61,8 @@
 #include "imageattributeswatch.h"
 #include "metadatahub.h"
 #include "ratingpopupmenu.h"
+#include "databasewatch.h"
+#include "databasechangesets.h"
 #include "themeengine.h"
 
 namespace Digikam
@@ -100,6 +102,10 @@ LightTableBar::LightTableBar(QWidget* parent, int orientation, bool exifRotate)
 {
     connect(this, SIGNAL(signalItemSelected(ThumbBarItem*)),
             this, SLOT(slotItemSelected(ThumbBarItem*)));
+
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset&)),
+            this, SLOT(slotCollectionImageChange(const CollectionImageChangeset&)),
+            Qt::QueuedConnection);
 }
 
 LightTableBar::~LightTableBar()
@@ -306,6 +312,32 @@ void LightTableBar::removeItemByInfo(const ImageInfo& info)
     ImagePreviewBarItem* ltItem = findItemByInfo(info);
     ThumbBarItem *item          = dynamic_cast<ThumbBarItem*>(ltItem);
     if (item) ThumbBarView::removeItem(item);
+}
+
+ImagePreviewBarItem* LightTableBar::removeItemById(qlonglong id)
+{
+    ImagePreviewBarItem* ltItem = findItemById(id);
+    ThumbBarItem *item          = dynamic_cast<ThumbBarItem*>(ltItem);
+    if (item)
+    {
+        ThumbBarView::removeItem(item);
+        return ltItem;
+    }
+    return 0;
+}
+
+ImagePreviewBarItem* LightTableBar::findItemById(qlonglong id) const
+{
+    for (ThumbBarItem *item = firstItem(); item; item = item->next())
+    {
+        ImagePreviewBarItem *ltItem = dynamic_cast<ImagePreviewBarItem*>(item);
+        if (ltItem)
+        {
+            if (ltItem->info().id() == id)
+                return ltItem;
+        }
+    }
+    return 0;
 }
 
 void LightTableBar::viewportPaintEvent(QPaintEvent* e)
@@ -646,6 +678,31 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
     else
     {
         e->ignore();
+    }
+}
+
+void LightTableBar::slotCollectionImageChange(const CollectionImageChangeset& changeset)
+{
+    // ignore when closed
+    if (!isVisible())
+        return;
+
+    switch(changeset.operation())
+    {
+        case CollectionImageChangeset::Removed:
+        case CollectionImageChangeset::RemovedAll:
+        {
+            foreach(qlonglong id, changeset.ids())
+            {
+                ImagePreviewBarItem* item = removeItemById(id);
+                emit signalRemoveItem(item->info());
+            }
+            break;
+        }
+        default:
+        {
+            break;
+        }
     }
 }
 
