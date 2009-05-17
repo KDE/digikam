@@ -97,7 +97,7 @@
 #include "statusprogressbar.h"
 #include "statusnavigatebar.h"
 #include "dlogoaction.h"
-#include "clicklabel.h"
+#include "dexpanderbox.h"
 #include "thumbnailsize.h"
 #include "kdatetimeedit.h"
 #include "sidebar.h"

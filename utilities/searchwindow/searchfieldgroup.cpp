@@ -36,7 +36,7 @@
 
 // Local includes
 
-#include "clicklabel.h"
+#include "dexpanderbox.h"
 #include "themeengine.h"
 #include "searchgroup.h"
 #include "searchfields.h"

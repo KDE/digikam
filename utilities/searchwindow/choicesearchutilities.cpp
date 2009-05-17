@@ -35,7 +35,7 @@
 
 // Local includes
 
-#include "clicklabel.h"
+#include "dexpanderbox.h"
 #include "searchutilities.h"
 
 namespace Digikam

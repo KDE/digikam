@@ -64,7 +64,7 @@
 #include "imagewidget.h"
 #include "dimgimagefilters.h"
 #include "contentawareresizer.h"
-#include "clicklabel.h"
+#include "dexpanderbox.h"
 
 using namespace Digikam;
 using namespace KDcrawIface;
