@@ -35,7 +35,7 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "clicklabel.h"
+#include "dexpanderbox.h"
 
 namespace Digikam
 {
