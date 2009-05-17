@@ -60,7 +60,7 @@
 
 // Local includes
 
-#include "clicklabel.h"
+#include "dexpanderbox.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageselectionwidget.h"

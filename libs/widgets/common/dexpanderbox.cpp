@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#include "clicklabel.h"
-#include "clicklabel.moc"
+#include "dexpanderbox.h"
+#include "dexpanderbox.moc"
 
 // Qt includes
 
