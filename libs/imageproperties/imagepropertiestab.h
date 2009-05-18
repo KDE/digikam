@@ -35,7 +35,7 @@
 
 // Local includes
 
-#include "dexpanderbox.h"
+#include "rexpanderbox.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -43,7 +43,7 @@ namespace Digikam
 
 class ImagePropertiesTabPriv;
 
-class DIGIKAM_EXPORT ImagePropertiesTab : public DExpanderBox
+class DIGIKAM_EXPORT ImagePropertiesTab : public RExpanderBox
 {
     Q_OBJECT
 

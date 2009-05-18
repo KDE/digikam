@@ -60,7 +60,7 @@
 
 // Local includes
 
-#include "dexpanderbox.h"
+#include "rexpanderbox.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageselectionwidget.h"
@@ -113,7 +113,7 @@ RatioCropTool::RatioCropTool(QObject* parent)
     // -------------------------------------------------------------
 
     QVBoxLayout* vlay      = new QVBoxLayout(m_gboxSettings->plainPage());
-    m_expbox               = new DExpanderBox(m_gboxSettings->plainPage());
+    m_expbox               = new RExpanderBox(m_gboxSettings->plainPage());
     QWidget *cropSelection = new QWidget(m_expbox);
     QGridLayout* grid      = new QGridLayout(cropSelection);
 

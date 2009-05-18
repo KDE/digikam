@@ -36,7 +36,7 @@
 
 // Local includes
 
-#include "dexpanderbox.h"
+#include "rexpanderbox.h"
 #include "themeengine.h"
 #include "searchgroup.h"
 #include "searchfields.h"
@@ -150,7 +150,7 @@ SearchFieldGroupLabel::SearchFieldGroupLabel(QWidget *parent)
 {
     QGridLayout *layout = new QGridLayout;
 
-    m_titleLabel = new ClickLabel;
+    m_titleLabel  = new RClickLabel;
     m_titleLabel->setObjectName("SearchFieldGroupLabel_Label");
     m_expandLabel = new QLabel;
     QFrame *hline = new QFrame;

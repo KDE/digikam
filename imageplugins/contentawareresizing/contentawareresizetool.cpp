@@ -61,7 +61,7 @@
 #include "dimgimagefilters.h"
 #include "contentawareresizer.h"
 #include "daboutdata.h"
-#include "dexpanderbox.h"
+#include "rexpanderbox.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imagewidget.h"
@@ -394,7 +394,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     advancedSettingsContainer->setLayout(advancedSettingsLayout);
 
     // -------------------------------------------------------------
-    DExpanderBox * m_expanderBox = new DExpanderBox;
+    RExpanderBox * m_expanderBox = new RExpanderBox;
     m_expanderBox->addItem(sizeSettingsContainer, SmallIcon("transform-scale"), i18n("Target size"),
                            QString("SizeSettingsContainer"), true);
     m_expanderBox->addItem(mixedRescaleContainer, SmallIcon("transform-scale"), i18n("Content-aware rescale percentage"),

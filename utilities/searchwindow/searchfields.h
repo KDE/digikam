@@ -178,14 +178,12 @@ protected Q_SLOTS:
 
 protected:
 
-    int             m_min;
-    int             m_max;
-    bool            m_reciprocal;
-    CustomStepsIntSpinBox
-                   *m_firstBox;
-    CustomStepsIntSpinBox
-                   *m_secondBox;
-    QLabel         *m_betweenLabel;
+    int                    m_min;
+    int                    m_max;
+    bool                   m_reciprocal;
+    CustomStepsIntSpinBox *m_firstBox;
+    CustomStepsIntSpinBox *m_secondBox;
+    QLabel                *m_betweenLabel;
 };
 
 class SearchFieldRangeDouble : public SearchField
@@ -220,14 +218,12 @@ protected Q_SLOTS:
 
 protected:
 
-    double          m_min;
-    double          m_max;
-    double          m_factor;
-    CustomStepsDoubleSpinBox
-                   *m_firstBox;
-    CustomStepsDoubleSpinBox
-                   *m_secondBox;
-    QLabel         *m_betweenLabel;
+    double                    m_min;
+    double                    m_max;
+    double                    m_factor;
+    CustomStepsDoubleSpinBox *m_firstBox;
+    CustomStepsDoubleSpinBox *m_secondBox;
+    QLabel                   *m_betweenLabel;
 };
 
 class SearchFieldRangeDate : public SearchField
@@ -389,8 +385,6 @@ protected:
     QComboBox      *m_comboBox;
 };
 
-}
+} // namespace Digikam
 
-#endif
-
-
+#endif /* SEARCHFIELDS_H */

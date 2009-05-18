@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class SqueezedClickLabel;
+class RSqueezedClickLabel;
 
 class ChoiceSearchModel : public QAbstractListModel
 {
@@ -180,7 +180,7 @@ public:
     void setLabelText(const QString& text);
 
     ChoiceSearchModel *model() const;
-    SqueezedClickLabel *label() const;
+    RSqueezedClickLabel *label() const;
 
 Q_SIGNALS:
 
@@ -194,7 +194,7 @@ protected:
 
     virtual void installView();
 
-    SqueezedClickLabel *m_label;
+    RSqueezedClickLabel *m_label;
 };
 
 } // namespace Digikam

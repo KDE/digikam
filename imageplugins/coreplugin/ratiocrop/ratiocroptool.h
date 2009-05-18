@@ -46,7 +46,7 @@ class RIntNumInput;
 namespace Digikam
 {
 class EditorToolSettings;
-class DExpanderBox;
+class RExpanderBox;
 }
 
 using namespace Digikam;
@@ -138,7 +138,7 @@ private:
 
     ImageSelectionWidget *m_imageSelectionWidget;
 
-    DExpanderBox         *m_expbox;
+    RExpanderBox         *m_expbox;
 
     EditorToolSettings   *m_gboxSettings;
 };

@@ -1,7 +1,7 @@
 /* ============================================================
  *
- * This file is a part of digiKam project
- * http://www.digikam.org
+ * This file is a part of kipi-plugins project
+ * http://www.kipi-plugins.org
  *
  * Date        : 2008-03-14
  * Description : A widget to host settings as expander box
@@ -22,16 +22,16 @@
  *
  * ============================================================ */
 
-#ifndef DEXPANDERBOX_H
-#define DEXPANDERBOX_H
+#ifndef REXPANDERBOX_H
+#define REXPANDERBOX_H
 
 // Qt includes
 
-#include <QObject>
-#include <QWidget>
-#include <QLabel>
-#include <QPixmap>
-#include <QScrollArea>
+#include <QtCore/QObject>
+#include <QtGui/QPixmap>
+#include <QtGui/QLabel>
+#include <QtGui/QWidget>
+#include <QtGui/QScrollArea>
 
 // KDE includes
 
@@ -45,15 +45,15 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT ClickLabel : public QLabel
+class DIGIKAM_EXPORT RClickLabel : public QLabel
 {
     Q_OBJECT
 
 public:
 
-    ClickLabel(QWidget *parent = 0);
-    ClickLabel(const QString& text, QWidget *parent = 0);
-    ~ClickLabel(){};
+    RClickLabel(QWidget *parent = 0);
+    RClickLabel(const QString& text, QWidget *parent = 0);
+    ~RClickLabel(){};
 
 Q_SIGNALS:
 
@@ -70,15 +70,15 @@ protected:
 
 // -------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT SqueezedClickLabel : public KSqueezedTextLabel
+class DIGIKAM_EXPORT RSqueezedClickLabel : public KSqueezedTextLabel
 {
     Q_OBJECT
 
 public:
 
-    SqueezedClickLabel(QWidget *parent = 0);
-    SqueezedClickLabel(const QString& text, QWidget *parent = 0);
-    ~SqueezedClickLabel(){};
+    RSqueezedClickLabel(QWidget *parent = 0);
+    RSqueezedClickLabel(const QString& text, QWidget *parent = 0);
+    ~RSqueezedClickLabel(){};
 
 Q_SIGNALS:
 
@@ -93,14 +93,14 @@ protected:
 
 // -------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT ArrowClickLabel : public QWidget
+class DIGIKAM_EXPORT RArrowClickLabel : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    ArrowClickLabel(QWidget *parent = 0);
-    ~ArrowClickLabel(){};
+    RArrowClickLabel(QWidget *parent = 0);
+    ~RArrowClickLabel(){};
 
     void setArrowType(Qt::ArrowType arrowType);
     virtual QSize sizeHint () const;
@@ -123,16 +123,16 @@ protected:
 
 // -------------------------------------------------------------------------
 
-class DLabelExpanderPriv;
+class RLabelExpanderPriv;
 
-class DIGIKAM_EXPORT DLabelExpander : public QWidget
+class DIGIKAM_EXPORT RLabelExpander : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    DLabelExpander(QWidget *parent = 0);
-    ~DLabelExpander();
+    RLabelExpander(QWidget *parent = 0);
+    ~RLabelExpander();
 
     void setLineVisible(bool b);
     void setText(const QString& text);
@@ -155,21 +155,21 @@ private:
 
 private:
 
-    DLabelExpanderPriv* const d;
+    RLabelExpanderPriv* const d;
 };
 
 // -------------------------------------------------------------------------
 
-class DExpanderBoxPriv;
+class RExpanderBoxPriv;
 
-class DIGIKAM_EXPORT DExpanderBox : public QScrollArea
+class DIGIKAM_EXPORT RExpanderBox : public QScrollArea
 {
     Q_OBJECT
 
 public:
 
-    DExpanderBox(QWidget *parent = 0);
-    ~DExpanderBox();
+    RExpanderBox(QWidget *parent = 0);
+    ~RExpanderBox();
 
     /** Add a DLabelExpander item to the box with all settings :
         'w'               : the widget hosted by DLabelExpander.
@@ -180,11 +180,17 @@ public:
      */
     void addItem(QWidget *w, const QPixmap& pix, const QString& txt,
                  const QString& objName, bool expandBydefault);
+    void addItem(QWidget *w, const QString& txt,
+                 const QString& objName, bool expandBydefault);
+
+    void removeItem(int index);
+
+    void setItemIcon(int index, const QPixmap& pix);
     void addStretch();
 
     int  count();
 
-    DLabelExpander* widget(int index) const;
+    RLabelExpander* widget(int index) const;
 
     void setItemExpanded(int index, bool b);
     bool itemIsExpanded(int index);
@@ -194,9 +200,9 @@ public:
 
 private:
 
-    DExpanderBoxPriv* const d;
+    RExpanderBoxPriv* const d;
 };
 
 } // namespace Digikam
 
-#endif // DEXPANDERBOX_H
+#endif // REXPANDERBOX_H

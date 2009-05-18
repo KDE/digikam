@@ -47,7 +47,7 @@ namespace Digikam
 class SearchGroupLabel;
 class SearchFieldGroup;
 class SearchFieldGroupLabel;
-class ClickLabel;
+class RClickLabel;
 
 class SearchGroup : public AbstractSearchGroupContainer
 {
@@ -135,13 +135,13 @@ private:
     SearchXml::Operator            m_fieldOp;
     QGridLayout                   *m_layout;
     //QComboBox                     *m_groupOpBox;
-    ClickLabel                    *m_groupOpLabel;
+    RClickLabel                   *m_groupOpLabel;
     QRadioButton                  *m_allBox;
     QRadioButton                  *m_anyBox;
     QRadioButton                  *m_noneBox;
     QRadioButton                  *m_oneNotBox;
-    ClickLabel                    *m_optionsLabel;
-    ClickLabel                    *m_removeLabel;
+    RClickLabel                    *m_optionsLabel;
+    RClickLabel                    *m_removeLabel;
     QStackedLayout                *m_stackedLayout;
     SearchViewThemedPartsCache    *m_themeCache;
 };

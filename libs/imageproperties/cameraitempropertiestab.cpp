@@ -147,7 +147,7 @@ public:
 };
 
 CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* parent)
-                       : DExpanderBox(parent), d(new CameraItemPropertiesTabPriv)
+                       : RExpanderBox(parent), d(new CameraItemPropertiesTabPriv)
 {
     setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
     setLineWidth( style()->pixelMetric(QStyle::PM_DefaultFrameWidth) );

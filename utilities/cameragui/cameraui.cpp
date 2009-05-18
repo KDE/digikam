@@ -97,7 +97,7 @@
 #include "statusprogressbar.h"
 #include "statusnavigatebar.h"
 #include "dlogoaction.h"
-#include "dexpanderbox.h"
+#include "rexpanderbox.h"
 #include "thumbnailsize.h"
 #include "kdatetimeedit.h"
 #include "sidebar.h"
@@ -190,7 +190,7 @@ void CameraUI::setupUserArea()
 
     // -------------------------------------------------------------------------
 
-    d->advBox           = new DExpanderBox(d->rightSideBar);
+    d->advBox           = new RExpanderBox(d->rightSideBar);
 
     d->renameCustomizer = new RenameCustomizer(d->advBox, d->cameraTitle);
     d->renameCustomizer->setWhatsThis( i18n("Set how digiKam will rename files as they are downloaded."));

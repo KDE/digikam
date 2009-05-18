@@ -57,7 +57,7 @@
 // Local includes
 
 #include "daboutdata.h"
-#include "dexpanderbox.h"
+#include "rexpanderbox.h"
 #include "dimg.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
@@ -88,12 +88,10 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
                                             EditorToolSettings::Try,
                                             EditorToolSettings::PanIcon);
 
-    QGridLayout* grid = new QGridLayout( m_gboxSettings->plainPage() );
-
-    QWidget* firstPage        = new QWidget( );
+    QGridLayout* grid  = new QGridLayout( m_gboxSettings->plainPage() );
+    QWidget* firstPage = new QWidget();
     QGridLayout* grid1 = new QGridLayout(firstPage);
-
-    QLabel *label1 = new QLabel(i18n("Radius:"), firstPage);
+    QLabel *label1     = new QLabel(i18n("Radius:"), firstPage);
 
     m_radiusInput  = new RDoubleNumInput(firstPage);
     m_radiusInput->setDecimals(1);
@@ -264,7 +262,7 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
     grid2->setMargin(m_gboxSettings->spacingHint());
     grid2->setSpacing(m_gboxSettings->spacingHint());
 
-    m_expanderBox = new DExpanderBox;
+    m_expanderBox = new RExpanderBox;
     m_expanderBox->addItem(firstPage, SmallIcon("noisereduction"), i18n("Details"),
                            QString("DetailsContainer"), true);
     m_expanderBox->addItem(secondPage, SmallIcon("noisereduction"), i18n("Advanced settings"),

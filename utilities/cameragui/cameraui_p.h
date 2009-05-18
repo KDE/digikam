@@ -182,7 +182,7 @@ public:
 
     KIO::PreviewJob              *kdeJob;
 
-    DExpanderBox                 *advBox;
+    RExpanderBox                 *advBox;
 
     SidebarSplitter              *splitter;
 

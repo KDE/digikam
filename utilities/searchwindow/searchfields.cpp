@@ -62,7 +62,7 @@
 #include "album.h"
 #include "albummodel.h"
 #include "albumselectcombobox.h"
-#include "dexpanderbox.h"
+#include "rexpanderbox.h"
 #include "kdateedit.h"
 #include "dmetadata.h"
 #include "imagescanner.h"

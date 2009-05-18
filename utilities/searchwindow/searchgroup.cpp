@@ -43,7 +43,7 @@
 
 // Local includes
 
-#include "dexpanderbox.h"
+#include "rexpanderbox.h"
 #include "searchview.h"
 #include "searchfields.h"
 #include "searchfieldgroup.h"
@@ -373,14 +373,14 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache *cache, SearchGrou
         logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
                 .scaled(96, 96, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
-        m_optionsLabel = new ClickLabel;
+        m_optionsLabel = new RClickLabel;
         m_optionsLabel->setObjectName("SearchGroupLabel_OptionsLabel");
         connect(m_optionsLabel, SIGNAL(activated()),
                  this, SLOT(toggleShowOptions()));
 
-        QWidget *simpleHeader = new QWidget;
+        QWidget *simpleHeader     = new QWidget;
         QVBoxLayout *headerLayout = new QVBoxLayout;
-        QLabel *simpleLabel1 = new QLabel;
+        QLabel *simpleLabel1      = new QLabel;
         //simpleLabel->setText(i18n("Find Pictures meeting all of these conditions"));
         //simpleLabel->setPixmap(SmallIcon("edit-find", 128));
         simpleLabel1->setText(i18n("Search your collection<br>for pictures meeting the following conditions"));
@@ -391,7 +391,7 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache *cache, SearchGrou
         headerLayout->setMargin(0);
         simpleHeader->setLayout(headerLayout);
 
-        QWidget *optionsBox = new QWidget;
+        QWidget *optionsBox        = new QWidget;
         QGridLayout *optionsLayout = new QGridLayout;
         optionsLayout->addWidget(m_allBox,    0, 0);
         optionsLayout->addWidget(m_anyBox,    1, 0);
@@ -415,12 +415,12 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache *cache, SearchGrou
     }
     else
     {
-        m_groupOpLabel = new ClickLabel;
+        m_groupOpLabel = new RClickLabel;
         m_groupOpLabel->setObjectName("SearchGroupLabel_GroupOpLabel");
         connect(m_groupOpLabel, SIGNAL(activated()),
                 this, SLOT(toggleGroupOperator()));
 
-        m_removeLabel = new ClickLabel(i18n("Remove Group"));
+        m_removeLabel = new RClickLabel(i18n("Remove Group"));
         m_removeLabel->setObjectName("SearchGroupLabel_RemoveLabel");
         connect(m_removeLabel, SIGNAL(activated()),
                 this, SIGNAL(removeClicked()));

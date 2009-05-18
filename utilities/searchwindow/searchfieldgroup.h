@@ -49,7 +49,7 @@ class SearchFieldGroupLabel;
 class SearchGroup;
 class SearchField;
 class VisibilityController;
-class ClickLabel;
+class RClickLabel;
 
 class SearchFieldGroup : public QWidget
 {
@@ -110,9 +110,9 @@ Q_SIGNALS:
 
 protected:
 
-    QString            m_title;
-    ClickLabel        *m_titleLabel;
-    QLabel            *m_expandLabel;
+    QString      m_title;
+    RClickLabel *m_titleLabel;
+    QLabel      *m_expandLabel;
 };
 
 } // namespace Digikam

@@ -538,7 +538,7 @@ ENDIF(MSVC)
        )
 
     SET(libcommonwidgets_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dexpanderbox.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/rexpanderbox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/colorgradientwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/comboboxutilities.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dcursortracker.cpp

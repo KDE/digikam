@@ -148,7 +148,7 @@ public:
 };
 
 ImagePropertiesTab::ImagePropertiesTab(QWidget* parent)
-                  : DExpanderBox(parent), d(new ImagePropertiesTabPriv)
+                  : RExpanderBox(parent), d(new ImagePropertiesTabPriv)
 {
     setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
     setLineWidth( style()->pixelMetric(QStyle::PM_DefaultFrameWidth) );

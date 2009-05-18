@@ -63,7 +63,7 @@
 
 // Local includes
 
-#include "dexpanderbox.h"
+#include "rexpanderbox.h"
 #include "daboutdata.h"
 #include "dimg.h"
 #include "editortoolsettings.h"
