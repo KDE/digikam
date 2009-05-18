@@ -45,7 +45,7 @@ class RIntNumInput;
 
 namespace Digikam
 {
-class DExpanderBox;
+class RExpanderBox;
 class EditorToolSettings;
 class ImageWidget;
 }
@@ -105,7 +105,7 @@ private:
     QPushButton*                  m_autoAdjustPoint1Btn;
     QPushButton*                  m_autoAdjustPoint2Btn;
 
-    Digikam::DExpanderBox*        m_expanderBox;
+    Digikam::RExpanderBox*        m_expanderBox;
     Digikam::EditorToolSettings*  m_gboxSettings;
     Digikam::ImageWidget*         m_previewWidget;
 

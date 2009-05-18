@@ -224,7 +224,7 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
 
     KSeparator *line  = new KSeparator(Qt::Horizontal);
 
-    m_expanderBox = new DExpanderBox;
+    m_expanderBox = new RExpanderBox;
     m_expanderBox->addItem(autoAdjustContainer, SmallIcon("freerotation"), i18n("Automatic Correction"),
                            QString("AutoAdjustContainer"), true);
     m_expanderBox->addItem(manualAdjustContainer, SmallIcon("freerotation"), i18n("Manual Adjustment"),
