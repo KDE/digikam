@@ -363,10 +363,10 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     d->sideSwitchInput->setDefaultValue(4);
     d->sideSwitchInput->setSliderEnabled(true);
     d->sideSwitchInput->setWhatsThis(i18n(" During the carving process,at each step "
-                                          "the optimal seam to be carved is choosen based on "
+                                          "the optimal seam to be carved is chosen based on "
                                           "the relevance value for each pixel. However, in the case two "
                                           "seams are equivalent (which may happen when large portions of the "
-                                          "image have the same colour, for example), the algorithm always "
+                                          "image have the same color, for example), the algorithm always "
                                           "chooses the seams from one side, which might be a problem "
                                           "(e.g. an object centered in the original image might not be "
                                           "centered any more in the resulting image). In order to overcome "
