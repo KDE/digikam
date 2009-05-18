@@ -6,7 +6,7 @@
  * Date        : 2008-08-11
  * Description : Raw import settings box
  *
- * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,6 +53,7 @@
 
 // Local includes
 
+#include "rexpanderbox.h"
 #include "histogrambox.h"
 #include "imagedialog.h"
 #include "imagehistogram.h"
@@ -120,13 +121,13 @@ public:
 
     QToolButton         *resetCurveBtn;
 
-    QToolBox            *postProcessSettingsBox;
-
     KTabWidget          *tabView;
 
     CurvesWidget        *curveWidget;
 
     ImageDialogPreview  *infoBox;
+
+    RExpanderBox        *postProcessSettingsBox;
 
     RIntNumInput        *contrastInput;
     RIntNumInput        *brightnessInput;
@@ -177,7 +178,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    d->postProcessSettingsBox = new QToolBox(d->tabView);
+    d->postProcessSettingsBox = new RExpanderBox(d->tabView);
     d->infoBox                = new ImageDialogPreview(d->postProcessSettingsBox);
     d->infoBox->showPreview(url);
 
@@ -275,10 +276,11 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    d->postProcessSettingsBox->addItem(d->advExposureBox, i18n("Exposure"));
-    d->postProcessSettingsBox->addItem(d->curveBox,       i18n("Luminosity Curve"));
+    d->postProcessSettingsBox->addItem(d->advExposureBox, i18n("Exposure"), QString("exposure"), true);
+    d->postProcessSettingsBox->addItem(d->curveBox,       i18n("Luminosity Curve"), QString("luminositycurve"), false);
     d->postProcessSettingsBox->setItemIcon(0, SmallIcon("contrast"));
     d->postProcessSettingsBox->setItemIcon(1, SmallIcon("adjustcurves"));
+    d->postProcessSettingsBox->addStretch();
 
     d->decodingSettingsBox->setItemIcon(DcrawSettingsWidget::DEMOSAICING,     SmallIcon("kdcraw"));
     d->decodingSettingsBox->setItemIcon(DcrawSettingsWidget::WHITEBALANCE,    SmallIcon("whitebalance"));
@@ -469,7 +471,7 @@ void RawSettingsBox::readSettings()
 #else
     d->decodingSettingsBox->readSettings(group);
 #endif
-    d->postProcessSettingsBox->setCurrentIndex(group.readEntry("Post Processing Settings Tab", 0));
+    d->postProcessSettingsBox->readSettings(group);
 
 //    slotChannelChanged();
 //    slotScaleChanged(histogramScale());
@@ -530,7 +532,7 @@ void RawSettingsBox::writeSettings()
 #else
     d->decodingSettingsBox->writeSettings(group);
 #endif
-    group.writeEntry("Post Processing Settings Tab", d->postProcessSettingsBox->currentIndex());
+    d->postProcessSettingsBox->writeSettings(group);
     group.sync();
 }
 
