@@ -1,7 +1,7 @@
 /* ============================================================
  *
- * This file is a part of kipi-plugins project
- * http://www.kipi-plugins.org
+ * This file is a part of digiKam project
+ * http://www.digikam.org
  *
  * Date        : 2008-03-14
  * Description : A widget to host settings as expander box
