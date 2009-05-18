@@ -129,50 +129,71 @@ DIRECTORIES / FILES                     DONE BY     SHOWFOTO DIGIKAM   PORT     
 
 |-digikam
     album.cpp                           Laurent                X       DONE        DONE
+    albumdragdrop.cpp                   Marcel                 X       DONE        DONE
     albumfolderview.cpp                 Gilles                 X       DONE                 Still use Q3ScrollView. Port to QScrollArea and Model/View
     albumhistory.cpp                    Laurent                X       DONE        DONE
     albumicongroupitem.cpp              Gilles                 X       DONE        DONE
     albumiconitem.cpp                   Gilles                 X       DONE                 Port to Qt4 and Model/View
     albumiconview.cpp                   Gilles                 X       DONE                 Port to Qt4 and Model/View
+    albumiconviewfilter.cpp             Gilles                 X       DONE        DONE
     albumiconviewtooltip.cpp            Gilles                 X       DONE        DONE
-    albumitemhandler.cpp                Laurent                X       DONE        DONE
     albumlister.cpp                     Gilles                 X       DONE        DONE
     albummanager.cpp                    Gilles                 X       DONE        DONE
     albumpropsedit.cpp                  Laurent                X       DONE        DONE
+    albumselectcombobox.cpp             Marcel                 X       DONE        DONE
+    albumselectdialog.cpp               Gilles                 X       DONE        DONE
+    albumselectwidget.cpp               Gilles                 X       DONE        DONE
     albumsettings.cpp                   Gilles                 X       DONE        DONE
     albumthumbnailloader.cpp            Gilles                 X       DONE        DONE
-    albumselectdialog.cpp               Gilles                 X       DONE        DONE
+    albumtreeview.cpp                   Marcel                 X       DONE        DONE
     albumwidgetstack.cpp                Gilles                 X       DONE        DONE
     cameralist.cpp                      Laurent                X       DONE        DONE
     cameratype.cpp                      Gilles                 X       DONE        DONE
+    contextmenuhelper.cpp               Andi                   X       DONE        DONE
     datefolderview.cpp                  Laurent                X       DONE                 Port to Qt4 and Model/View
+    ddragobjects.cpp                    Gilles                 X       DONE        DONE
+    digikamadaptor.cpp                  Laurent                X       DONE        DONE
     digikamapp.cpp                      Gilles                 X       DONE        DONE
-    digikamfirstrun.cpp                 Laurent                X       DONE        DONE
+    digikamimageview.cpp                Marcel                 X       DONE        DONE
     digikamview.cpp                     Gilles                 X       DONE        DONE
     dio.cpp                             Laurent                X       DONE        DONE
-    ddragobjects.cpp                    Gilles                 X       DONE        DONE
     folderitem.cpp                      Gilles                 X       DONE                 Port to Qt4 and Model/View
     folderview.cpp                      Gilles                 X       DONE                 Still use Q3ScrollView. Port to QScrollArea and Model/View
+    folderviewtooltip.cpp               Marcel                 X       DONE        DONE
     icongroupitem.cpp                   Gilles                 X       DONE        DONE
     iconitem.cpp                        Gilles                 X       DONE                 Port to Qt4 and Model/View
     iconview.cpp                        Gilles                 X       DONE                 Still use Q3ScrollView. Port to QScrollArea and Model/View
     imageattributeswatch.cpp            Gilles                 X       DONE        DONE
+    imagecategorizedview.cpp            Marcel                 X       DONE        DONE
+    imagecategorydrawer.cpp             Marcel                 X       DONE        DONE
+    imagedelegate.cpp                   Marcel                 X       DONE        DONE
+    imagedelegateoverlay.cpp            Marcel                 X       DONE        DONE
+    imagedragdrop.cpp                   Marcel                 X       DONE        DONE
     imagepreviewbar.cpp                 Gilles                 X       DONE        DONE
     imagepreviewview.cpp                Gilles                 X       DONE        DONE
+    imageselectionoverlay.cpp           Marcel                 X       DONE        DONE
+    imageviewutilities.cpp              Marcel                 X       DONE        DONE
+    kcategorizedview.cpp                Marcel                 X       DONE        DONE
     kdateedit.cpp                       Gilles                 X       DONE        DONE
     kdatepickerpopup.cpp                Gilles                 X       DONE        DONE
     kdatetimeedit.cpp                   Gilles                 X       DONE        DONE
     main.cpp                            Gilles                 X       DONE        DONE
     mediaplayerview.cpp                 Gilles                 X       DONE        DONE
     metadatahub.cpp                     Gilles                 X       DONE        DONE
+    metadatamanager.cpp                 Marcel                 X       DONE        DONE
+    mimefilter.cpp                      Gilles                 X       DONE        DONE
     monthwidget.cpp                     Gilles                 X       DONE        DONE
+    ratingbox.cpp                       Gilles                 X       DONE        DONE
+    ratingfilter.cpp                    Gilles                 X       DONE        DONE
     ratingpopupmenu.cpp                 Gilles                 X       DONE        DONE
     ratingwidget.cpp                    Gilles                 X       DONE        DONE
+    scancontroller.cpp                  Marcel                 X       DONE        DONE
     syncjob.cpp                         Gilles                 X       DONE        DONE
     tageditdlg.cpp                      Gilles                 X       DONE        DONE
     tagfilterview.cpp                   Gilles                 X       DONE                 Still use Q3ScrollView. Port to QScrollArea and Model/View
     tagfolderview.cpp                   Gilles                 X       DONE                 Still use Q3ScrollView. Port to QScrollArea and Model/View
     tagspopupmenu.cpp                   Gilles                 X       DONE        DONE
+    tooltipfiller.cpp                   Marcel                 X       DONE        DONE
     treefolderitem.cpp                  Gilles                 X       DONE        DONE
     welcomepageview.cpp                 Laurent                X       DONE        DONE
 
