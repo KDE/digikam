@@ -165,6 +165,11 @@ QMap<int, QString> QueueMgrWindow::queuesMap() const
     return QMap<int, QString>();
 }
 
+bool QueueMgrWindow::isBusy() const
+{
+    return d->busy;
+}
+
 void QueueMgrWindow::closeEvent(QCloseEvent* e)
 {
     if (!e) return;

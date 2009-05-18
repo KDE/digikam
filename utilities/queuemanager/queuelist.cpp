@@ -53,6 +53,8 @@
 #include "ddragobjects.h"
 #include "queuemgrwindow.h"
 #include "queuetooltip.h"
+#include "databasewatch.h"
+#include "databasechangesets.h"
 
 namespace Digikam
 {
@@ -249,6 +251,10 @@ QueueListView::QueueListView(QWidget *parent)
     d->toolTipTimer = new QTimer(this);
 
     // -----------------------------------------------------------
+
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset&)),
+            this, SLOT(slotCollectionImageChange(const CollectionImageChangeset&)),
+            Qt::QueuedConnection);
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
@@ -668,6 +674,11 @@ void QueueListView::removeItems(int removeType)
 
 void QueueListView::removeItemByInfo(const ImageInfo& info)
 {
+    removeItemById(info.id());
+}
+
+void QueueListView::removeItemById(qlonglong id)
+{
     hideToolTip();
 
     bool find;
@@ -678,7 +689,7 @@ void QueueListView::removeItemByInfo(const ImageInfo& info)
         while (*it)
         {
             QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(*it);
-            if (item->info() == info)
+            if (item->info().id() == id)
             {
                 delete item;
                 find = true;
@@ -694,16 +705,20 @@ void QueueListView::removeItemByInfo(const ImageInfo& info)
 
 bool QueueListView::findItemByInfo(const ImageInfo& info)
 {
+    return findItemById(info.id());
+}
+
+bool QueueListView::findItemById(qlonglong id)
+{
     QTreeWidgetItemIterator it(this);
     while (*it)
     {
         QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(*it);
-        if (item->info() == info)
+        if (item->info().id() == id)
             return true;
 
         ++it;
     }
-
     return false;
 }
 
@@ -837,6 +852,29 @@ void QueueListView::slotContextMenu()
     popmenu.addSeparator();
     popmenu.addAction(acol->action("queuemgr_clearlist"));
     popmenu.exec(QCursor::pos());
+}
+
+void QueueListView::slotCollectionImageChange(const CollectionImageChangeset& changeset)
+{
+    if (QueueMgrWindow::queueManagerWindow()->isBusy())
+        return;
+
+    switch(changeset.operation())
+    {
+        case CollectionImageChangeset::Removed:
+        case CollectionImageChangeset::RemovedAll:
+        {
+            foreach(qlonglong id, changeset.ids())
+            {
+                removeItemById(id);
+            }
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
 }
 
 }  // namespace Digikam

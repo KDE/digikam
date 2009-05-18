@@ -683,10 +683,6 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
 
 void LightTableBar::slotCollectionImageChange(const CollectionImageChangeset& changeset)
 {
-    // ignore when closed
-    if (!isVisible())
-        return;
-
     switch(changeset.operation())
     {
         case CollectionImageChangeset::Removed:

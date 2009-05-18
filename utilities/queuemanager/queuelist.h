@@ -83,6 +83,7 @@ private:
 
 // -------------------------------------------------------------------------
 
+class CollectionImageChangeset;
 class QueueListViewPriv;
 
 class QueueListView : public QTreeWidget
@@ -96,6 +97,7 @@ public:
 
     int  itemsCount();
     void removeItemByInfo(const ImageInfo& info);
+    void removeItemById(qlonglong id);
 
     ImageInfoList pendingItemsList();
     int           pendingItemsCount();
@@ -125,6 +127,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 
+    void slotCollectionImageChange(const CollectionImageChangeset&);
     void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
     void slotContextMenu();
     void slotToolTip();
@@ -132,6 +135,7 @@ private Q_SLOTS:
 private:
 
     bool findItemByInfo(const ImageInfo& info);
+    bool findItemById(qlonglong id);
     void removeItems(int removeType);
     void updateDestFileNames();
     void hideToolTip();

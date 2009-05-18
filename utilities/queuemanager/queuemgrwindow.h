@@ -61,6 +61,7 @@ public:
     static QueueMgrWindow *queueManagerWindow();
     static bool            queueManagerWindowCreated();
 
+    bool isBusy() const;
     void addNewQueue();
     void loadImageInfos(const ImageInfoList& list, int queueId);
     void refreshView();
