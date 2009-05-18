@@ -184,10 +184,10 @@ DigikamApp::DigikamApp()
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
 
-    d->cameraSolidMenu          = new KMenu(this);
-    d->usbMediaMenu             = new KMenu(this);
-    d->cardReaderMenu           = new KMenu(this);
-    d->manuallyAddedCamerasMenu = new KMenu(this);
+    d->cameraSolidMenu          = new KActionMenu(this);
+    d->usbMediaMenu             = new KActionMenu(this);
+    d->cardReaderMenu           = new KActionMenu(this);
+    d->manuallyAddedCamerasMenu = new KActionMenu(this);
 
     d->cameraList = new CameraList(this, KStandardDirs::locateLocal("appdata", "cameras.xml"));
 
@@ -1413,19 +1413,19 @@ void DigikamApp::cameraAutoDetect()
 
 void DigikamApp::loadCameras()
 {
-    d->cameraSolidMenu->menuAction()->setText(i18n("Cameras (Auto-detected)"));
-    d->cameraSolidMenu->menuAction()->setIcon(KIcon("camera-photo"));
-    d->usbMediaMenu->menuAction()->setText(i18n("USB Storage Devices"));
-    d->usbMediaMenu->menuAction()->setIcon(KIcon("drive-removable-media-usb"));
-    d->cardReaderMenu->menuAction()->setText(i18n("Card Readers"));
-    d->cardReaderMenu->menuAction()->setIcon(KIcon("media-flash-smart-media"));
-    d->manuallyAddedCamerasMenu->menuAction()->setText(i18n("Cameras (Add)"));
-    d->manuallyAddedCamerasMenu->menuAction()->setIcon(KIcon("preferences-other"));
+    d->cameraSolidMenu->setText(i18n("Cameras (Auto-detected)"));
+    d->cameraSolidMenu->setIcon(KIcon("camera-photo"));
+    d->usbMediaMenu->setText(i18n("USB Storage Devices"));
+    d->usbMediaMenu->setIcon(KIcon("drive-removable-media-usb"));
+    d->cardReaderMenu->setText(i18n("Card Readers"));
+    d->cardReaderMenu->setIcon(KIcon("media-flash-smart-media"));
+    d->manuallyAddedCamerasMenu->setText(i18n("Cameras (Add)"));
+    d->manuallyAddedCamerasMenu->setIcon(KIcon("preferences-other"));
 
-    actionCollection()->addAction("camera_solid", d->cameraSolidMenu->menuAction());
-    actionCollection()->addAction("usb_media", d->usbMediaMenu->menuAction());
-    actionCollection()->addAction("card_reader", d->cardReaderMenu->menuAction());
-    actionCollection()->addAction("camera_addedmanually", d->manuallyAddedCamerasMenu->menuAction());
+    actionCollection()->addAction("camera_solid", d->cameraSolidMenu);
+    actionCollection()->addAction("usb_media", d->usbMediaMenu);
+    actionCollection()->addAction("card_reader", d->cardReaderMenu);
+    actionCollection()->addAction("camera_addedmanually", d->manuallyAddedCamerasMenu);
 
     KAction *cameraAction = new KAction(i18n("Add Camera..."), this);
     connect(cameraAction, SIGNAL(triggered()), this, SLOT(slotSetupCamera()));
@@ -1816,9 +1816,9 @@ QString DigikamApp::labelForSolidCamera(const Solid::Device& cameraDevice)
 
 void DigikamApp::fillSolidMenus()
 {
-    d->cameraSolidMenu->clear();
-    d->usbMediaMenu->clear();
-    d->cardReaderMenu->clear();
+    d->cameraSolidMenu->menu()->clear();
+    d->usbMediaMenu->menu()->clear();
+    d->cardReaderMenu->menu()->clear();
 
     QList<Solid::Device> cameraDevices = Solid::Device::listFromType(Solid::DeviceInterface::Camera);
 
@@ -2023,9 +2023,9 @@ void DigikamApp::fillSolidMenus()
     d->cardReaderMenu->menuAction()->setVisible(!d->cardReaderMenu->isEmpty());
     */
     // disable empty menus
-    d->cameraSolidMenu->menuAction()->setEnabled(!d->cameraSolidMenu->isEmpty());
-    d->usbMediaMenu->menuAction()->setEnabled(!d->usbMediaMenu->isEmpty());
-    d->cardReaderMenu->menuAction()->setEnabled(!d->cardReaderMenu->isEmpty());
+    d->cameraSolidMenu->setEnabled(!d->cameraSolidMenu->menu()->isEmpty());
+    d->usbMediaMenu->setEnabled(!d->usbMediaMenu->menu()->isEmpty());
+    d->cardReaderMenu->setEnabled(!d->cardReaderMenu->menu()->isEmpty());
 }
 
 void DigikamApp::slotSetup()

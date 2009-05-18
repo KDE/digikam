@@ -186,10 +186,10 @@ public:
     QList<QAction*>                     kipiBatchActions;
     QList<QAction*>                     kipiAlbumActions;
 
-    KMenu                              *cameraSolidMenu;
-    KMenu                              *usbMediaMenu;
-    KMenu                              *cardReaderMenu;
-    KMenu                              *manuallyAddedCamerasMenu;
+    KActionMenu                        *cameraSolidMenu;
+    KActionMenu                        *usbMediaMenu;
+    KActionMenu                        *cardReaderMenu;
+    KActionMenu                        *manuallyAddedCamerasMenu;
 
     KSharedConfig::Ptr                  config;
 
