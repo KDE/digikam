@@ -32,11 +32,11 @@
 
 // Qt includes
 
+#include <QButtonGroup>
+#include <QCheckBox>
 #include <QGridLayout>
 #include <QLabel>
-#include <QCheckBox>
 #include <QToolButton>
-#include <QButtonGroup>
 
 // KDE includes
 
@@ -46,26 +46,26 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <kseparator.h>
 #include <klocale.h>
+#include <kseparator.h>
 #include <kstandarddirs.h>
 #include <kvbox.h>
 
 // LibKDraw includes
 
-#include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>
+#include <libkdcraw/rnuminput.h>
 
 // Local includes
 
-#include "version.h"
+#include "dimgimagefilters.h"
+#include "contentawareresizer.h"
 #include "daboutdata.h"
+#include "dexpanderbox.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imagewidget.h"
-#include "dimgimagefilters.h"
-#include "contentawareresizer.h"
-#include "dexpanderbox.h"
+#include "version.h"
 
 using namespace Digikam;
 using namespace KDcrawIface;
@@ -112,7 +112,7 @@ public:
         maskGroup         = 0;
         prevW             = 0;
         prevH             = 0;
-	maskPenSize       = 0;
+        maskPenSize       = 0;
     }
 
     int                 orgWidth;
@@ -136,7 +136,7 @@ public:
     RIntNumInput       *stepInput;
     RIntNumInput       *maskPenSize;
     RIntNumInput       *sideSwitchInput;
-      
+
     RDoubleNumInput    *wpInput;
     RDoubleNumInput    *hpInput;
     RDoubleNumInput    *mixedRescaleInput;
@@ -151,7 +151,7 @@ public:
     QButtonGroup       *maskGroup;
 };
 
-ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent) 
+ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
                       : EditorToolThreaded(parent), d(new ContentAwareResizeToolPriv)
 {
     setObjectName("liquidrescale");
@@ -184,7 +184,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
 
     // -------------------------------------------------------------
 
-    QWidget* sizeSettingsContainer = new QWidget;
+    QWidget* sizeSettingsContainer  = new QWidget;
     QGridLayout* sizeSettingsLayout = new QGridLayout;
 
     d->preserveRatioBox = new QCheckBox(i18n("Maintain aspect ratio"), d->gboxSettings->plainPage());
@@ -220,7 +220,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     d->hpInput->setDefaultValue(100.0);
     d->hpInput->setObjectName("hpInput");
     d->hpInput->setWhatsThis(i18n("New image height, as a percentage (%)."));
- 
+
     sizeSettingsLayout->addWidget(d->preserveRatioBox,  0, 0, 1, 3);
     sizeSettingsLayout->addWidget(labelWidth,           1, 0, 1, 1);
     sizeSettingsLayout->addWidget(d->wInput,            1, 1, 1, 4);
@@ -230,15 +230,15 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     sizeSettingsLayout->addWidget(d->wpInput,           3, 1, 1, 4);
     sizeSettingsLayout->addWidget(labelHeightP,         4, 0, 1, 1);
     sizeSettingsLayout->addWidget(d->hpInput,           4, 1, 1, 4);
- 
+
     sizeSettingsContainer->setLayout(sizeSettingsLayout);
 
     // -------------------------------------------------------------
-    
-    QWidget* mixedRescaleContainer = new QWidget;
+
+    QWidget* mixedRescaleContainer  = new QWidget;
     QGridLayout* mixedRescaleLayout = new QGridLayout;
 
-    d->mixedRescaleInput      = new RDoubleNumInput(d->gboxSettings->plainPage());
+    d->mixedRescaleInput = new RDoubleNumInput(d->gboxSettings->plainPage());
     d->mixedRescaleInput->input()->setRange(0.0, 100.0, 1.0, true);
     d->mixedRescaleInput->setDefaultValue(100.0);
     d->mixedRescaleInput->setObjectName("mixedRescaleInput");
@@ -246,18 +246,19 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     d->mixedRescaleInput->setEnabled(true);
 
     mixedRescaleLayout->addWidget(d->mixedRescaleInput,  0, 0, 1, 1);
-    
+
     mixedRescaleContainer->setLayout(mixedRescaleLayout);
 
     // -------------------------------------------------------------
 
-    QWidget* maskSettingsContainer = new QWidget;
+    QWidget* maskSettingsContainer  = new QWidget;
     QGridLayout* maskSettingsLayout = new QGridLayout;
 
     d->weightMaskBox  = new QCheckBox(i18n("Add weight masks"), d->gboxSettings->plainPage());
     d->weightMaskBox->setWhatsThis(i18n("Enable this option to add suppression and preservation masks."));
     d->weightMaskBox->setChecked(false);
-    d->maskGroup      = new QButtonGroup(d->gboxSettings->plainPage());
+
+    d->maskGroup = new QButtonGroup(d->gboxSettings->plainPage());
     d->maskGroup->setExclusive(true);
 
     QLabel *labeRedMaskTool = new QLabel(i18n("Suppression weight mask:"), d->gboxSettings->plainPage());
@@ -298,18 +299,18 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     maskSettingsContainer->setLayout(maskSettingsLayout);
 
     // -------------------------------------------------------------
-  
-    QWidget* energyFunctionsContainer = new QWidget;
+
+    QWidget* energyFunctionsContainer  = new QWidget;
     QGridLayout* energyFunctionsLayout = new QGridLayout;
 
-    d->funcInput          = new RComboBox(d->gboxSettings->plainPage());
+    d->funcInput = new RComboBox(d->gboxSettings->plainPage());
     d->funcInput->addItem(i18n("Norm of brightness gradient"));
     d->funcInput->addItem(i18n("Sum of absolute values of brightness gradients"));
     d->funcInput->addItem(i18n("Absolute value of brightness gradient"));
     d->funcInput->addItem(i18n("Norm of luma gradient"));
     d->funcInput->addItem(i18n("Sum of absolute values of luma gradients"));
     d->funcInput->addItem(i18n("Absolute value of luma gradient"));
-  
+
     d->funcInput->setDefaultIndex(LQR_EF_GRAD_XABS);
     d->funcInput->setWhatsThis(i18n("This option allows you to choose a gradient function. This function is used "
                                     "to determine which pixels should be removed or kept."));
@@ -318,18 +319,18 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     d->preserveSkinTones->setWhatsThis(i18n("Enable this option to preserve pixels whose color is close to a skin tone."));
     d->preserveSkinTones->setChecked(false);
 
-    energyFunctionsLayout->addWidget(d->funcInput,         1, 0, 1, -1);
+    energyFunctionsLayout->addWidget(d->funcInput,         1, 0, 1,-1);
     energyFunctionsLayout->addWidget(d->preserveSkinTones, 2, 0, 1, 3);
-    
+
     energyFunctionsContainer->setLayout(energyFunctionsLayout);
 
     // -------------------------------------------------------------
-    
-    QWidget* advancedSettingsContainer = new QWidget;
+
+    QWidget* advancedSettingsContainer  = new QWidget;
     QGridLayout* advancedSettingsLayout = new QGridLayout;
-      
+
     QLabel * labelRigidity = new QLabel(i18n("Overall rigidity of the seams:"), d->gboxSettings->plainPage());
-    d->rigidityInput         = new RDoubleNumInput(d->gboxSettings->plainPage());
+    d->rigidityInput       = new RDoubleNumInput(d->gboxSettings->plainPage());
     d->rigidityInput->input()->setRange(0.0, 10.0, 1.0, true);
     d->rigidityInput->setDefaultValue(0.0);
     d->rigidityInput->setWhatsThis(i18n("Use this value to give a negative bias to the seams which "
@@ -342,7 +343,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
                                         "of 1.5, and summed up for the whole seam."));
 
     QLabel * labelSteps = new QLabel(i18n("Maximum number of transversal steps:"),d->gboxSettings->plainPage());
-    d->stepInput      = new RIntNumInput(d->gboxSettings->plainPage());
+    d->stepInput        = new RIntNumInput(d->gboxSettings->plainPage());
     d->stepInput->setRange(1, 5, 1);
     d->stepInput->setDefaultValue(1);
     d->stepInput->setSliderEnabled(true);
@@ -355,16 +356,26 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
                                     "base line. Increasing the step value lets you overcome this "
                                     "limit, but may lead to the introduction of artifacts. In order "
                                     "to balance the situation, you can use the rigidity setting."));
-    
+
     QLabel * labelSideSwitch = new QLabel(i18n("Side switch frequency:"),d->gboxSettings->plainPage());
-    d->sideSwitchInput      = new RIntNumInput(d->gboxSettings->plainPage());
+    d->sideSwitchInput       = new RIntNumInput(d->gboxSettings->plainPage());
     d->sideSwitchInput->setRange(1, 20, 1);
     d->sideSwitchInput->setDefaultValue(4);
     d->sideSwitchInput->setSliderEnabled(true);
-    d->sideSwitchInput->setWhatsThis(i18n(" During the carving process,at each step the optimal seam to be carved is choosen based on the relevance value for each pixel. However, in the case two seams are equivalent (which may happen when large portions of the image have the same colour, for example), the algorithm always chooses the seams from one side, which might be a problem (e.g. an object centered in the original image might not be centered any more in the resulting image). In order to overcome this effect, this setting is given to automatically switch the favoured side during rescaling, at the cost of a slightly worse performance."));
-    
+    d->sideSwitchInput->setWhatsThis(i18n(" During the carving process,at each step "
+                                          "the optimal seam to be carved is choosen based on "
+                                          "the relevance value for each pixel. However, in the case two "
+                                          "seams are equivalent (which may happen when large portions of the "
+                                          "image have the same colour, for example), the algorithm always "
+                                          "chooses the seams from one side, which might be a problem "
+                                          "(e.g. an object centered in the original image might not be "
+                                          "centered any more in the resulting image). In order to overcome "
+                                          "this effect, this setting is given to automatically switch the "
+                                          "favoured side during rescaling, at the cost of a slightly "
+                                          "worse performance."));
+
     QLabel * labelResizeOrder = new QLabel(i18n("Resize Order:"),d->gboxSettings->plainPage());
-    d->resizeOrderInput      = new RComboBox(d->gboxSettings->plainPage());
+    d->resizeOrderInput       = new RComboBox(d->gboxSettings->plainPage());
     d->resizeOrderInput->addItem(i18n("Horizontally first"));
     d->resizeOrderInput->addItem(i18n("Vertically first"));
     d->resizeOrderInput->setDefaultIndex(ContentAwareResizeToolPriv::Horizontally);
@@ -372,20 +383,20 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
                                            "vertically first."));
 
     advancedSettingsLayout->addWidget(labelRigidity,        1, 0, 1, 4);
-    advancedSettingsLayout->addWidget(d->rigidityInput,     2, 0, 1, -1);
+    advancedSettingsLayout->addWidget(d->rigidityInput,     2, 0, 1,-1);
     advancedSettingsLayout->addWidget(labelSteps,           3, 0, 1, 4);
-    advancedSettingsLayout->addWidget(d->stepInput,         4, 0, 1, -1);
+    advancedSettingsLayout->addWidget(d->stepInput,         4, 0, 1,-1);
     advancedSettingsLayout->addWidget(labelSideSwitch,      5, 0, 1, 4);
-    advancedSettingsLayout->addWidget(d->sideSwitchInput,   6, 0, 1, -1);
+    advancedSettingsLayout->addWidget(d->sideSwitchInput,   6, 0, 1,-1);
     advancedSettingsLayout->addWidget(labelResizeOrder,     7, 0, 1, 4);
-    advancedSettingsLayout->addWidget(d->resizeOrderInput,  8, 0, 1, -1);
-    
+    advancedSettingsLayout->addWidget(d->resizeOrderInput,  8, 0, 1,-1);
+
     advancedSettingsContainer->setLayout(advancedSettingsLayout);
 
     // -------------------------------------------------------------
     DExpanderBox * m_expanderBox = new DExpanderBox;
     m_expanderBox->addItem(sizeSettingsContainer, SmallIcon("transform-scale"), i18n("Target size"),
-                           QString("SizeSettingsContainer"), true);  
+                           QString("SizeSettingsContainer"), true);
     m_expanderBox->addItem(mixedRescaleContainer, SmallIcon("transform-scale"), i18n("Content-aware rescale percentage"),
                            QString("MixedRescaleContainer"), true);
     m_expanderBox->addItem(maskSettingsContainer, SmallIcon("transform-scale"), i18n("Mask Settings"),
@@ -393,11 +404,11 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     m_expanderBox->addItem(energyFunctionsContainer, SmallIcon("transform-scale"), i18n("Energy function"),
                            QString("EnergyFunctionsContainer"), true);
     m_expanderBox->addItem(advancedSettingsContainer, SmallIcon("system-run"), i18n("Advanced Settings"),
-                           QString("AdvancedSettingsContainer"), true);    
+                           QString("AdvancedSettingsContainer"), true);
     m_expanderBox->addStretch();
-    
-    grid->addWidget(m_expanderBox, 1, 0, 1, -1);
-    grid->setRowStretch(1, 1);
+
+    grid->addWidget(m_expanderBox, 0, 0, 1, -1);
+    grid->setRowStretch(0, 1);
     grid->setMargin(d->gboxSettings->spacingHint());
     grid->setSpacing(d->gboxSettings->spacingHint());
 
@@ -445,7 +456,7 @@ void ContentAwareResizeTool::readSettings()
 
     // NOTE: size settings are not restored here because they depands of image size.
     d->stepInput->setValue(group.readEntry("Step",                      d->stepInput->defaultValue()));
-    d->stepInput->setValue(group.readEntry("SideSwitch",                d->sideSwitchInput->defaultValue())); 
+    d->stepInput->setValue(group.readEntry("SideSwitch",                d->sideSwitchInput->defaultValue()));
     d->rigidityInput->setValue(group.readEntry("Rigidity",              d->rigidityInput->defaultValue()));
     d->funcInput->setCurrentIndex(group.readEntry("Function",           d->funcInput->defaultIndex()));
     d->resizeOrderInput->setCurrentIndex(group.readEntry("Order",       d->resizeOrderInput->defaultIndex()));
@@ -471,7 +482,7 @@ void ContentAwareResizeTool::writeSettings()
     group.writeEntry("Order",             d->resizeOrderInput->currentIndex());
     group.writeEntry("MixedRescaleValue", d->mixedRescaleInput->value());
     group.writeEntry("BrushSize",         d->maskPenSize->value());
-    group.writeEntry("PreserveTones",     d->preserveSkinTones->isChecked()); 
+    group.writeEntry("PreserveTones",     d->preserveSkinTones->isChecked());
 
     d->previewWidget->writeSettings();
     group.sync();
