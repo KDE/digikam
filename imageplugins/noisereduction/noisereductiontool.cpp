@@ -361,16 +361,16 @@ void NoiseReductionTool::writeSettings()
 
 void NoiseReductionTool::slotResetSettings()
 {
-    m_csmoothInput->setEnabled(true);
-    m_dampingInput->setEnabled(true);
-    m_gammaInput->setEnabled(true);
-    m_lookaheadInput->setEnabled(true);
-    m_lumToleranceInput->setEnabled(true);
-    m_phaseInput->setEnabled(true);
-    m_radiusInput->setEnabled(true);
-    m_sharpnessInput->setEnabled(true);
-    m_textureInput->setEnabled(true);
-    m_thresholdInput->setEnabled(true);
+    m_csmoothInput->setEnabled(false);
+    m_dampingInput->setEnabled(false);
+    m_gammaInput->setEnabled(false);
+    m_lookaheadInput->setEnabled(false);
+    m_lumToleranceInput->setEnabled(false);
+    m_phaseInput->setEnabled(false);
+    m_radiusInput->setEnabled(false);
+    m_sharpnessInput->setEnabled(false);
+    m_textureInput->setEnabled(false);
+    m_thresholdInput->setEnabled(false);
 
     m_csmoothInput->slotReset();
     m_dampingInput->slotReset();
@@ -383,16 +383,16 @@ void NoiseReductionTool::slotResetSettings()
     m_textureInput->slotReset();
     m_thresholdInput->slotReset();
 
-    m_csmoothInput->setEnabled(false);
-    m_dampingInput->setEnabled(false);
-    m_gammaInput->setEnabled(false);
-    m_lookaheadInput->setEnabled(false);
-    m_lumToleranceInput->setEnabled(false);
-    m_phaseInput->setEnabled(false);
-    m_radiusInput->setEnabled(false);
-    m_sharpnessInput->setEnabled(false);
-    m_textureInput->setEnabled(false);
-    m_thresholdInput->setEnabled(false);
+    m_csmoothInput->setEnabled(true);
+    m_dampingInput->setEnabled(true);
+    m_gammaInput->setEnabled(true);
+    m_lookaheadInput->setEnabled(true);
+    m_lumToleranceInput->setEnabled(true);
+    m_phaseInput->setEnabled(true);
+    m_radiusInput->setEnabled(true);
+    m_sharpnessInput->setEnabled(true);
+    m_textureInput->setEnabled(true);
+    m_thresholdInput->setEnabled(true);
 }
 
 void NoiseReductionTool::prepareEffect()
