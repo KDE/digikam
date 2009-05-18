@@ -81,10 +81,10 @@ void ImageFilterSettings::setTagFilter(const QList<int>& tags, MatchingCondition
     untaggedFilter = showUnTagged;
 }
 
-void ImageFilterSettings::setRatingFilter(int rating, RatingCondition ratingCond)
+void ImageFilterSettings::setRatingFilter(int rating, RatingCondition ratingCondition)
 {
     ratingFilter = rating;
-    ratingCond   = ratingCond;
+    ratingCond   = ratingCondition;
 }
 
 void ImageFilterSettings::setMimeTypeFilter(int mime)
