@@ -1,17 +1,17 @@
 INSTALL(FILES histogramwidget.h
               histogrambox.h
               colorgradientwidget.h 
-              curveswidget.h 
+              curveswidget.h
               sidebar.h
-              dpopupmenu.h 
+              dpopupmenu.h
               dlogoaction.h
-              statuszoombar.h 
+              statuszoombar.h
               statusnavigatebar.h
-              statusprogressbar.h 
+              statusprogressbar.h
               statusled.h
-              dcursortracker.h 
-              paniconwidget.h 
-              previewwidget.h  
+              dcursortracker.h
+              paniconwidget.h
+              previewwidget.h
               searchtextbar.h
               dgradientslider.h
          DESTINATION ${INCLUDE_INSTALL_DIR}/digikam COMPONENT Devel)
