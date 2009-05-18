@@ -464,7 +464,11 @@ void RawSettingsBox::readSettings()
     d->curveWidget->curves()->curvesCalculateCurve(ImageHistogram::ValueChannel);
 
     d->tabView->setCurrentIndex(group.readEntry("Settings Page", 0));
+#if KDCRAW_VERSION <= 0x000500
     d->decodingSettingsBox->setCurrentIndex(group.readEntry("Decoding Settings Tab", (int)DcrawSettingsWidget::DEMOSAICING));
+#else
+    d->decodingSettingsBox->readSettings(group);
+#endif
     d->postProcessSettingsBox->setCurrentIndex(group.readEntry("Post Processing Settings Tab", 0));
 
 //    slotChannelChanged();
@@ -521,7 +525,11 @@ void RawSettingsBox::writeSettings()
     }
 
     group.writeEntry("Settings Page", d->tabView->currentIndex());
+#if KDCRAW_VERSION <= 0x000500
     group.writeEntry("Decoding Settings Tab", d->decodingSettingsBox->currentIndex());
+#else
+    d->decodingSettingsBox->writeSettings(group);
+#endif
     group.writeEntry("Post Processing Settings Tab", d->postProcessSettingsBox->currentIndex());
     group.sync();
 }
