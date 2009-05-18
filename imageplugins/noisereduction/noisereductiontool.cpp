@@ -63,6 +63,7 @@
 #include "imagepanelwidget.h"
 #include "editortoolsettings.h"
 #include "noisereduction.h"
+#include "dexpanderbox.h"
 
 using namespace KDcrawIface;
 using namespace Digikam;
@@ -89,11 +90,8 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
 
     QGridLayout* grid = new QGridLayout( m_gboxSettings->plainPage() );
 
-    KTabWidget *mainTab       = new KTabWidget(m_gboxSettings->plainPage());
-    QWidget* firstPage        = new QWidget( mainTab );
+    QWidget* firstPage        = new QWidget( );
     QGridLayout* grid1 = new QGridLayout(firstPage);
-
-    mainTab->addTab( firstPage, i18n("Details") );
 
     QLabel *label1 = new QLabel(i18n("Radius:"), firstPage);
 
@@ -197,9 +195,8 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QWidget* secondPage = new QWidget( mainTab );
+    QWidget* secondPage = new QWidget();
     QGridLayout* grid2  = new QGridLayout( secondPage );
-    mainTab->addTab( secondPage, i18nc("advanced settings", "Advanced") );
 
     QLabel *label2      = new QLabel(i18n("Luminance:"), secondPage);
 
@@ -266,8 +263,15 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
     grid2->setRowStretch(4, 10);
     grid2->setMargin(m_gboxSettings->spacingHint());
     grid2->setSpacing(m_gboxSettings->spacingHint());
-
-    grid->addWidget(mainTab, 0, 0, 1, 1);
+    
+    DExpanderBox * m_expanderBox = new DExpanderBox;
+    m_expanderBox->addItem(firstPage, SmallIcon("noisereduction"), i18n("Details"),
+                           QString("DetailsContainer"), true);
+    m_expanderBox->addItem(secondPage, SmallIcon("noisereduction"), i18n("Advanced settings"),
+                           QString("AdvancedSettingsContainer"), true);
+    m_expanderBox->addStretch();
+    
+    grid->addWidget(m_expanderBox, 0, 0, 1, 1);
     grid->setRowStretch(1, 10);
     grid->setMargin(m_gboxSettings->spacingHint());
     grid->setSpacing(m_gboxSettings->spacingHint());
