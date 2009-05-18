@@ -67,13 +67,14 @@ using namespace Digikam;
 
 int main(int argc, char *argv[])
 {
-    KAboutData aboutData("digikam", 0,
+    KAboutData aboutData("digikam",
+                         0,
                          ki18n("digiKam"),
                          digiKamVersion().toAscii(),
                          Digikam::digiKamSlogan(),
                          KAboutData::License_GPL,
                          Digikam::copyright(),
-                         KLocalizedString(),
+                         Digikam::buildDate(),
                          Digikam::webProjectUrl().url().toUtf8());
 
     authorsRegistration(aboutData);
