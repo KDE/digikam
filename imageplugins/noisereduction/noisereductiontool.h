@@ -35,6 +35,7 @@ class RDoubleNumInput;
 
 namespace Digikam
 {
+class DExpanderBox;
 class EditorToolSettings;
 class ImagePanelWidget;
 }
@@ -83,6 +84,8 @@ private:
 
 
     Digikam::ImagePanelWidget    *m_previewWidget;
+
+    Digikam::DExpanderBox        *m_expanderBox;
 
     Digikam::EditorToolSettings  *m_gboxSettings;
 };

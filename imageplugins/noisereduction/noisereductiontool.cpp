@@ -264,7 +264,7 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
     grid2->setMargin(m_gboxSettings->spacingHint());
     grid2->setSpacing(m_gboxSettings->spacingHint());
 
-    DExpanderBox * m_expanderBox = new DExpanderBox;
+    m_expanderBox = new DExpanderBox;
     m_expanderBox->addItem(firstPage, SmallIcon("noisereduction"), i18n("Details"),
                            QString("DetailsContainer"), true);
     m_expanderBox->addItem(secondPage, SmallIcon("noisereduction"), i18n("Advanced settings"),
@@ -290,16 +290,7 @@ NoiseReductionTool::~NoiseReductionTool()
 
 void NoiseReductionTool::renderingFinished()
 {
-    m_radiusInput->setEnabled(true);
-    m_lumToleranceInput->setEnabled(true);
-    m_thresholdInput->setEnabled(true);
-    m_textureInput->setEnabled(true);
-    m_sharpnessInput->setEnabled(true);
-    m_csmoothInput->setEnabled(true);
-    m_lookaheadInput->setEnabled(true);
-    m_gammaInput->setEnabled(true);
-    m_dampingInput->setEnabled(true);
-    m_phaseInput->setEnabled(true);
+    m_expanderBox->setEnabled(true);
 }
 
 void NoiseReductionTool::readSettings()
@@ -307,16 +298,7 @@ void NoiseReductionTool::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("noisereduction Tool");
 
-    m_csmoothInput->setEnabled(false);
-    m_dampingInput->setEnabled(false);
-    m_gammaInput->setEnabled(false);
-    m_lookaheadInput->setEnabled(false);
-    m_lumToleranceInput->setEnabled(false);
-    m_phaseInput->setEnabled(false);
-    m_radiusInput->setEnabled(false);
-    m_sharpnessInput->setEnabled(false);
-    m_textureInput->setEnabled(false);
-    m_thresholdInput->setEnabled(false);
+    m_expanderBox->setEnabled(false);
 
     m_csmoothInput->setValue(group.readEntry("CsmoothAdjustment", m_csmoothInput->defaultValue()));
     m_dampingInput->setValue(group.readEntry("DampingAdjustment", m_dampingInput->defaultValue()));
@@ -329,16 +311,7 @@ void NoiseReductionTool::readSettings()
     m_textureInput->setValue(group.readEntry("TextureAdjustment", m_textureInput->defaultValue()));
     m_thresholdInput->setValue(group.readEntry("ThresholdAdjustment", m_thresholdInput->defaultValue()));
 
-    m_csmoothInput->setEnabled(true);
-    m_dampingInput->setEnabled(true);
-    m_gammaInput->setEnabled(true);
-    m_lookaheadInput->setEnabled(true);
-    m_lumToleranceInput->setEnabled(true);
-    m_phaseInput->setEnabled(true);
-    m_radiusInput->setEnabled(true);
-    m_sharpnessInput->setEnabled(true);
-    m_textureInput->setEnabled(true);
-    m_thresholdInput->setEnabled(true);
+    m_expanderBox->setEnabled(true);
 }
 
 void NoiseReductionTool::writeSettings()
@@ -361,16 +334,7 @@ void NoiseReductionTool::writeSettings()
 
 void NoiseReductionTool::slotResetSettings()
 {
-    m_csmoothInput->setEnabled(false);
-    m_dampingInput->setEnabled(false);
-    m_gammaInput->setEnabled(false);
-    m_lookaheadInput->setEnabled(false);
-    m_lumToleranceInput->setEnabled(false);
-    m_phaseInput->setEnabled(false);
-    m_radiusInput->setEnabled(false);
-    m_sharpnessInput->setEnabled(false);
-    m_textureInput->setEnabled(false);
-    m_thresholdInput->setEnabled(false);
+    m_expanderBox->setEnabled(false);
 
     m_csmoothInput->slotReset();
     m_dampingInput->slotReset();
@@ -383,30 +347,12 @@ void NoiseReductionTool::slotResetSettings()
     m_textureInput->slotReset();
     m_thresholdInput->slotReset();
 
-    m_csmoothInput->setEnabled(true);
-    m_dampingInput->setEnabled(true);
-    m_gammaInput->setEnabled(true);
-    m_lookaheadInput->setEnabled(true);
-    m_lumToleranceInput->setEnabled(true);
-    m_phaseInput->setEnabled(true);
-    m_radiusInput->setEnabled(true);
-    m_sharpnessInput->setEnabled(true);
-    m_textureInput->setEnabled(true);
-    m_thresholdInput->setEnabled(true);
+    m_expanderBox->setEnabled(true);
 }
 
 void NoiseReductionTool::prepareEffect()
 {
-    m_radiusInput->setEnabled(false);
-    m_lumToleranceInput->setEnabled(false);
-    m_thresholdInput->setEnabled(false);
-    m_textureInput->setEnabled(false);
-    m_sharpnessInput->setEnabled(false);
-    m_csmoothInput->setEnabled(false);
-    m_lookaheadInput->setEnabled(false);
-    m_gammaInput->setEnabled(false);
-    m_dampingInput->setEnabled(false);
-    m_phaseInput->setEnabled(false);
+    m_expanderBox->setEnabled(false);
 
     double r   = m_radiusInput->value();
     double l   = m_lumToleranceInput->value();
@@ -425,16 +371,7 @@ void NoiseReductionTool::prepareEffect()
 
 void NoiseReductionTool::prepareFinal()
 {
-    m_radiusInput->setEnabled(false);
-    m_lumToleranceInput->setEnabled(false);
-    m_thresholdInput->setEnabled(false);
-    m_textureInput->setEnabled(false);
-    m_sharpnessInput->setEnabled(false);
-    m_csmoothInput->setEnabled(false);
-    m_lookaheadInput->setEnabled(false);
-    m_gammaInput->setEnabled(false);
-    m_dampingInput->setEnabled(false);
-    m_phaseInput->setEnabled(false);
+    m_expanderBox->setEnabled(false);
 
     double r  = m_radiusInput->value();
     double l  = m_lumToleranceInput->value();
