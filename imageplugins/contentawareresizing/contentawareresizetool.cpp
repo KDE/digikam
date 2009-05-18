@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2009 by Julien Pontabry <julien dot pontabry at ulp dot u-strasbg dot fr>
  * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009 by Julien Narboux <julien at narboux dot fr>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -135,9 +136,7 @@ public:
     RIntNumInput       *stepInput;
     RIntNumInput       *maskPenSize;
     RIntNumInput       *sideSwitchInput;
-  
-    DLabelExpander     *expAdvSettings;
-    
+      
     RDoubleNumInput    *wpInput;
     RDoubleNumInput    *hpInput;
     RDoubleNumInput    *mixedRescaleInput;
@@ -185,6 +184,9 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
 
     // -------------------------------------------------------------
 
+    QWidget* sizeSettingsContainer = new QWidget;
+    QGridLayout* sizeSettingsLayout = new QGridLayout;
+
     d->preserveRatioBox = new QCheckBox(i18n("Maintain aspect ratio"), d->gboxSettings->plainPage());
     d->preserveRatioBox->setWhatsThis(i18n("Enable this option to maintain aspect ratio with new image sizes."));
     d->preserveRatioBox->setChecked(true);
@@ -218,12 +220,24 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     d->hpInput->setDefaultValue(100.0);
     d->hpInput->setObjectName("hpInput");
     d->hpInput->setWhatsThis(i18n("New image height, as a percentage (%)."));
+ 
+    sizeSettingsLayout->addWidget(d->preserveRatioBox,  0, 0, 1, 3);
+    sizeSettingsLayout->addWidget(labelWidth,           1, 0, 1, 1);
+    sizeSettingsLayout->addWidget(d->wInput,            1, 1, 1, 4);
+    sizeSettingsLayout->addWidget(labelHeight,          2, 0, 1, 1);
+    sizeSettingsLayout->addWidget(d->hInput,            2, 1, 1, 4);
+    sizeSettingsLayout->addWidget(labelWidthP,          3, 0, 1, 1);
+    sizeSettingsLayout->addWidget(d->wpInput,           3, 1, 1, 4);
+    sizeSettingsLayout->addWidget(labelHeightP,         4, 0, 1, 1);
+    sizeSettingsLayout->addWidget(d->hpInput,           4, 1, 1, 4);
+ 
+    sizeSettingsContainer->setLayout(sizeSettingsLayout);
 
     // -------------------------------------------------------------
+    
+    QWidget* mixedRescaleContainer = new QWidget;
+    QGridLayout* mixedRescaleLayout = new QGridLayout;
 
-    KSeparator *line3         = new KSeparator(Qt::Horizontal, d->gboxSettings->plainPage());
-
-    QLabel *labelMixedPercent = new QLabel(i18n("Content-aware rescale percentage:"), d->gboxSettings->plainPage());
     d->mixedRescaleInput      = new RDoubleNumInput(d->gboxSettings->plainPage());
     d->mixedRescaleInput->input()->setRange(0.0, 100.0, 1.0, true);
     d->mixedRescaleInput->setDefaultValue(100.0);
@@ -231,9 +245,14 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     d->mixedRescaleInput->setWhatsThis(i18n("Specify here your desired content-aware rescaling percentage."));
     d->mixedRescaleInput->setEnabled(true);
 
+    mixedRescaleLayout->addWidget(d->mixedRescaleInput,  0, 0, 1, 1);
+    
+    mixedRescaleContainer->setLayout(mixedRescaleLayout);
+
     // -------------------------------------------------------------
 
-    KSeparator *line4 = new KSeparator(Qt::Horizontal, d->gboxSettings->plainPage());
+    QWidget* maskSettingsContainer = new QWidget;
+    QGridLayout* maskSettingsLayout = new QGridLayout;
 
     d->weightMaskBox  = new QCheckBox(i18n("Add weight masks"), d->gboxSettings->plainPage());
     d->weightMaskBox->setWhatsThis(i18n("Enable this option to add suppression and preservation masks."));
@@ -268,11 +287,21 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     d->maskPenSize->setObjectName("maskPenSize");
     d->maskPenSize->setWhatsThis(i18n("Specify here the size of the brush used to paint masks."));
 
+    maskSettingsLayout->addWidget(d->weightMaskBox,     1, 0, 1, -1);
+    maskSettingsLayout->addWidget(labeRedMaskTool,      2, 0, 1, 3);
+    maskSettingsLayout->addWidget(d->redMaskTool,       2, 2, 1, 1);
+    maskSettingsLayout->addWidget(labeGreenMaskTool,    3, 0, 1, 3);
+    maskSettingsLayout->addWidget(d->greenMaskTool,     3, 2, 1, 1);
+    maskSettingsLayout->addWidget(labelMaskPenSize,     4, 0, 1, 1);
+    maskSettingsLayout->addWidget(d->maskPenSize,       4, 1, 1, 4);
+
+    maskSettingsContainer->setLayout(maskSettingsLayout);
+
     // -------------------------------------------------------------
+  
+    QWidget* energyFunctionsContainer = new QWidget;
+    QGridLayout* energyFunctionsLayout = new QGridLayout;
 
-    KSeparator *line      = new KSeparator(Qt::Horizontal, d->gboxSettings->plainPage());
-
-    QLabel *labelFunction = new QLabel(i18n("Energy function:"), d->gboxSettings->plainPage());
     d->funcInput          = new RComboBox(d->gboxSettings->plainPage());
     d->funcInput->addItem(i18n("Norm of brightness gradient"));
     d->funcInput->addItem(i18n("Sum of absolute values of brightness gradients"));
@@ -289,19 +318,18 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     d->preserveSkinTones->setWhatsThis(i18n("Enable this option to preserve pixels whose color is close to a skin tone."));
     d->preserveSkinTones->setChecked(false);
 
-    // -------------------------------------------------------------
-
-    KSeparator *line2        = new KSeparator(Qt::Horizontal, d->gboxSettings->plainPage());
+    energyFunctionsLayout->addWidget(d->funcInput,         1, 0, 1, -1);
+    energyFunctionsLayout->addWidget(d->preserveSkinTones, 2, 0, 1, 3);
     
-    d->expAdvSettings = new DLabelExpander();
-    d->expAdvSettings->setText(i18n("Advanced Settings:"));
-    //expAdvSettings->setPixmap(SmallIcon("system-run"));
-    d->expAdvSettings->setLineVisible(false);
-    KVBox* vBoxAdvSettings = new KVBox();
-    d->expAdvSettings->setContainer(vBoxAdvSettings);
+    energyFunctionsContainer->setLayout(energyFunctionsLayout);
 
-    new QLabel(i18n("Overall rigidity of the seams:"), vBoxAdvSettings);
-    d->rigidityInput         = new RDoubleNumInput(vBoxAdvSettings);
+    // -------------------------------------------------------------
+    
+    QWidget* advancedSettingsContainer = new QWidget;
+    QGridLayout* advancedSettingsLayout = new QGridLayout;
+      
+    QLabel * labelRigidity = new QLabel(i18n("Overall rigidity of the seams:"), d->gboxSettings->plainPage());
+    d->rigidityInput         = new RDoubleNumInput(d->gboxSettings->plainPage());
     d->rigidityInput->input()->setRange(0.0, 10.0, 1.0, true);
     d->rigidityInput->setDefaultValue(0.0);
     d->rigidityInput->setWhatsThis(i18n("Use this value to give a negative bias to the seams which "
@@ -313,8 +341,8 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
                                         "coordinate between each two successive points, elevated to the power "
                                         "of 1.5, and summed up for the whole seam."));
 
-    new QLabel(i18n("Maximum number of transversal steps:"), vBoxAdvSettings);
-    d->stepInput      = new RIntNumInput(vBoxAdvSettings);
+    QLabel * labelSteps = new QLabel(i18n("Maximum number of transversal steps:"),d->gboxSettings->plainPage());
+    d->stepInput      = new RIntNumInput(d->gboxSettings->plainPage());
     d->stepInput->setRange(1, 5, 1);
     d->stepInput->setDefaultValue(1);
     d->stepInput->setSliderEnabled(true);
@@ -328,51 +356,48 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
                                     "limit, but may lead to the introduction of artifacts. In order "
                                     "to balance the situation, you can use the rigidity setting."));
     
-    new QLabel(i18n("Side switch frequency:"), vBoxAdvSettings);
-    d->sideSwitchInput      = new RIntNumInput(vBoxAdvSettings);
+    QLabel * labelSideSwitch = new QLabel(i18n("Side switch frequency:"),d->gboxSettings->plainPage());
+    d->sideSwitchInput      = new RIntNumInput(d->gboxSettings->plainPage());
     d->sideSwitchInput->setRange(1, 20, 1);
     d->sideSwitchInput->setDefaultValue(4);
     d->sideSwitchInput->setSliderEnabled(true);
     d->sideSwitchInput->setWhatsThis(i18n("Side switch frequency."));
     
-    new QLabel(i18n("Resize Order:"), vBoxAdvSettings);
-    d->resizeOrderInput      = new RComboBox(vBoxAdvSettings);
+    QLabel * labelResizeOrder = new QLabel(i18n("Resize Order:"),d->gboxSettings->plainPage());
+    d->resizeOrderInput      = new RComboBox(d->gboxSettings->plainPage());
     d->resizeOrderInput->addItem(i18n("Horizontally first"));
     d->resizeOrderInput->addItem(i18n("Vertically first"));
     d->resizeOrderInput->setDefaultIndex(ContentAwareResizeToolPriv::Horizontally);
     d->resizeOrderInput->setWhatsThis(i18n("Here you can set whether to resize horizontally first or "
                                            "vertically first."));
 
+    advancedSettingsLayout->addWidget(labelRigidity,        1, 0, 1, 4);
+    advancedSettingsLayout->addWidget(d->rigidityInput,     2, 0, 1, -1);
+    advancedSettingsLayout->addWidget(labelSteps,           3, 0, 1, 4);
+    advancedSettingsLayout->addWidget(d->stepInput,         4, 0, 1, -1);
+    advancedSettingsLayout->addWidget(labelSideSwitch,      5, 0, 1, 4);
+    advancedSettingsLayout->addWidget(d->sideSwitchInput,   6, 0, 1, -1);
+    advancedSettingsLayout->addWidget(labelResizeOrder,     7, 0, 1, 4);
+    advancedSettingsLayout->addWidget(d->resizeOrderInput,  8, 0, 1, -1);
+    
+    advancedSettingsContainer->setLayout(advancedSettingsLayout);
+
     // -------------------------------------------------------------
-
-    grid->addWidget(d->preserveRatioBox,  0, 0, 1, 3);
-    grid->addWidget(labelWidth,           1, 0, 1, 1);
-    grid->addWidget(d->wInput,            1, 1, 1, 4);
-    grid->addWidget(labelHeight,          2, 0, 1, 1);
-    grid->addWidget(d->hInput,            2, 1, 1, 4);
-    grid->addWidget(labelWidthP,          3, 0, 1, 1);
-    grid->addWidget(d->wpInput,           3, 1, 1, 4);
-    grid->addWidget(labelHeightP,         4, 0, 1, 1);
-    grid->addWidget(d->hpInput,           4, 1, 1, 4);
-    grid->addWidget(line3,                5, 0, 1, -1);
-    grid->addWidget(labelMixedPercent,    6, 0, 1, 3);
-    grid->addWidget(d->mixedRescaleInput, 7, 0, 1, -1);
-    grid->addWidget(line4,                8, 0, 1, -1);
-    grid->addWidget(d->weightMaskBox,     9, 0, 1, -1);
-    grid->addWidget(labeRedMaskTool,      10, 0, 1, 3);
-    grid->addWidget(d->redMaskTool,       10, 2, 1, 1);
-    grid->addWidget(labeGreenMaskTool,    11, 0, 1, 3);
-    grid->addWidget(d->greenMaskTool,     11, 2, 1, 1);
-    grid->addWidget(labelMaskPenSize,     12, 0, 1, 1);
-    grid->addWidget(d->maskPenSize,       12, 1, 1, 4);
-    grid->addWidget(line,                 13, 0, 1, -1);
-    grid->addWidget(labelFunction,        14, 0, 1, 4);
-    grid->addWidget(d->funcInput,         15, 0, 1, -1);
-    grid->addWidget(d->preserveSkinTones, 16, 0, 1, 3);
-    grid->addWidget(line2,                17, 0, 1, -1);
-    grid->addWidget(d->expAdvSettings,       18, 0, 1, -1);
-
-    grid->setRowStretch(19, 10);
+    DExpanderBox * m_expanderBox = new DExpanderBox;
+    m_expanderBox->addItem(sizeSettingsContainer, SmallIcon("transform-scale"), i18n("Target size"),
+                           QString("SizeSettingsContainer"), true);  
+    m_expanderBox->addItem(mixedRescaleContainer, SmallIcon("transform-scale"), i18n("Content-aware rescale percentage"),
+                           QString("MixedRescaleContainer"), true);
+    m_expanderBox->addItem(maskSettingsContainer, SmallIcon("transform-scale"), i18n("Mask Settings"),
+                           QString("MaskSettingsContainer"), true);
+    m_expanderBox->addItem(energyFunctionsContainer, SmallIcon("transform-scale"), i18n("Energy function"),
+                           QString("EnergyFunctionsContainer"), true);
+    m_expanderBox->addItem(advancedSettingsContainer, SmallIcon("system-run"), i18n("Advanced Settings"),
+                           QString("AdvancedSettingsContainer"), true);    
+    m_expanderBox->addStretch();
+    
+    grid->addWidget(m_expanderBox, 1, 0, 1, -1);
+    grid->setRowStretch(1, 1);
     grid->setMargin(d->gboxSettings->spacingHint());
     grid->setSpacing(d->gboxSettings->spacingHint());
 
@@ -427,7 +452,6 @@ void ContentAwareResizeTool::readSettings()
     d->mixedRescaleInput->setValue(group.readEntry("MixedRescaleValue", d->mixedRescaleInput->defaultValue()));
     d->maskPenSize->setValue(group.readEntry("BrushSize",               d->maskPenSize->defaultValue()));
     d->preserveSkinTones->setChecked(group.readEntry("PreserveTones",   false));
-    d->expAdvSettings->setExpanded(group.readEntry("AdvSettingsShown",  false));
 
     enableContentAwareSettings(d->mixedRescaleInput->value() > 0.0);
 
@@ -448,7 +472,6 @@ void ContentAwareResizeTool::writeSettings()
     group.writeEntry("MixedRescaleValue", d->mixedRescaleInput->value());
     group.writeEntry("BrushSize",         d->maskPenSize->value());
     group.writeEntry("PreserveTones",     d->preserveSkinTones->isChecked()); 
-    group.writeEntry("AdvSettingsShown",  d->expAdvSettings->isExpanded());
 
     d->previewWidget->writeSettings();
     group.sync();
