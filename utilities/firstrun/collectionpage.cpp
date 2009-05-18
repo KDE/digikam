@@ -44,6 +44,7 @@
 #include <kurlrequester.h>
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
+#include <ktemporaryfile.h>
 
 // Local includes
 
@@ -247,7 +248,15 @@ bool CollectionPage::checkRootAlbum(QString& rootAlbumFolder)
 
     QFileInfo path(rootAlbumFolder);
 
+#ifdef _WIN32
+    // Work around B.K.O #189168
+    KTemporaryFile temp;
+    temp.setPrefix(rootAlbumFolder);
+
+    if (!temp.open())
+#else
     if (!path.isWritable())
+#endif
     {
         KMessageBox::information(this, i18n("You do not seem to have write access for the folder selected to be the root album.\n"
                                             "Warning: Without write access, the comment and tag features "
@@ -314,7 +323,15 @@ bool CollectionPage::checkDatabase(QString& dbFolder)
 
     QFileInfo path(dbFolder);
 
+#ifdef _WIN32
+    // Work around B.K.O #189168
+    KTemporaryFile temp;
+    temp.setPrefix(dbFolder);
+
+    if (!temp.open())
+#else
     if (!path.isWritable())
+#endif
     {
         KMessageBox::information(this, i18n("<p>You do not seem to have write access for the folder to host the database file.<br/>"
                                             "Please select a different location.</p>"

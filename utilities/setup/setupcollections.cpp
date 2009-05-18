@@ -45,6 +45,7 @@
 #include <kurl.h>
 #include <kmessagebox.h>
 #include <kurlrequester.h>
+#include <ktemporaryfile.h>
 
 // Local includes
 
@@ -199,9 +200,18 @@ void SetupCollections::readSettings()
 
 void SetupCollections::slotChangeDatabasePath(const KUrl& result)
 {
-    QFileInfo targetPath(result.path());
+#ifdef _WIN32
+    // Work around B.K.O #189168
+    KTemporaryFile temp;
+    temp.setPrefix(result.toLocalFile(KUrl::AddTrailingSlash));
+    temp.open();
+
+    if (!result.isEmpty() && !temp.open())
+#else
+    QFileInfo targetPath(result.toLocalFile());
 
     if (!result.isEmpty() && !targetPath.isWritable())
+#endif
     {
         KMessageBox::information(0, i18n("You do not seem to have write access to this database folder.\n"
                                          "Without this access, the caption and tag features will not work."));
@@ -212,10 +222,12 @@ void SetupCollections::slotChangeDatabasePath(const KUrl& result)
 
 void SetupCollections::slotDatabasePathEdited(const QString& newPath)
 {
-    if (!newPath.isEmpty() && !newPath.startsWith('/'))
+#ifndef _WIN32
+    if (!newPath.isEmpty() && !QDir::isAbsolutePath(newPath))
     {
         d->databasePathEdit->setUrl(QDir::homePath() + '/' + newPath);
     }
+#endif
 
     checkDBPath();
 }
@@ -224,7 +236,7 @@ void SetupCollections::checkDBPath()
 {
     bool dbOk = false;
     bool pathUnchanged = true;
-    QString newPath = d->databasePathEdit->url().path();
+    QString newPath = d->databasePathEdit->url().toLocalFile();
     if (!d->databasePathEdit->url().path().isEmpty())
     {
         QDir dbDir(newPath);
