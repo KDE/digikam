@@ -57,21 +57,34 @@ DIRECTORIES / FILES                     DONE BY     SHOWFOTO DIGIKAM   PORT     
 |---widgets
 |-----common
     colorgradientwidget.cpp             Gilles          X      X       DONE        DONE
+    comboboxutilities.cpp               Marcel          X      X       DONE        DONE
     curveswidget.cpp                    Gilles          X      X       DONE        DONE
     dcursortracker.cpp                  Gilles          X      X       DONE        DONE
+    dexpanderbox.cpp                    Marcel          X      X       DONE        DONE
+    dfontselect.cpp                     Gilles          X      X       DONE        DONE
+    dgradientslider.cpp                 Gilles          X      X       DONE        DONE
+    ditemtooltip.cpp                    Gilles          X      X       DONE        DONE
+    dlogoaction.cpp                     Gilles          X      X       DONE        DONE
     dpopupmenu.cpp                      Gilles          X      X       DONE        DONE
+    drubberband.cpp                     Marcel          X      X       DONE        DONE     Still use Q3ScrollView. Port to QScrollArea and Model/View
     filesaveoptionsbox.cpp              Gilles          X      X       DONE        DONE
+    histogrambox.cpp                    Andi            X      X       DONE        DONE
     histogramwidget.cpp                 Gilles          X      X       DONE        DONE
+    itemviewhoverbutton.cpp             Marcel          X      X       DONE        DONE
+    itemviewtooltip.cpp                 Marcel          X      X       DONE        DONE
     paniconwidget.cpp                   Gilles          X      X       DONE        DONE
     previewwidget.cpp                   Gilles          X      X       DONE        DONE     Still use Q3ScrollView. Port to QScrollArea and Model/View
+    searchtextbar.cpp                   Gilles          X      X       DONE        DONE
     sidebar.cpp                         Gilles          X      X       DONE        DONE
     splashscreen.cpp                    Gilles          X      X       DONE        DONE
-    squeezedcombobox.cpp                Gilles          X      X       DONE        DONE
+    statusled.cpp                       Gilles          X      X       DONE        DONE
     statusnavigatebar.cpp               Gilles          X      X       DONE        DONE
     statusprogressbar.cpp               Gilles          X      X       DONE        DONE
-    statuszoombar.cpp	                Gilles          X      X       DONE        DONE
-    statusled.cpp                       Gilles                 X       DONE        DONE
+    statuszoombar.cpp                   Gilles          X      X       DONE        DONE
     thumbbar.cpp                        Gilles          X      X       DONE        DONE     Still use Q3ScrollView. Port to QScrollArea and Model/View
+    thumbbartooltip.cpp                 Gilles          X      X       DONE        DONE
+    visibilitycontroller.cpp            Marcel          X      X       DONE        DONE
+
 |-----iccprofiles                       Gilles          X      X       DONE        DONE
 |-----imageplugins                      Gilles          X      X       DONE        DONE
 |-----metadata                          Gilles          X      X       DONE        DONE
