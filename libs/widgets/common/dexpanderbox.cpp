@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2008-03-14
- * Description : User interface for searches
+ * Description : A widget to host settings as expander box
  *
  * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>

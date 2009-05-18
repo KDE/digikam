@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2008-03-14
- * Description : User interface for searches
+ * Description : A widget to host settings as expander box
  *
  * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef CLICKLABEL_H
-#define CLICKLABEL_H
+#ifndef DEXPANDERBOX_H
+#define DEXPANDERBOX_H
 
 // Qt includes
 
@@ -199,4 +199,4 @@ private:
 
 } // namespace Digikam
 
-#endif // CLICKLABEL_H
+#endif // DEXPANDERBOX_H
