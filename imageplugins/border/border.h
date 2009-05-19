@@ -28,9 +28,9 @@
 
 // Qt includes
 
-#include <QString>
 #include <QColor>
 #include <QImage>
+#include <QString>
 
 // Local includes
 
@@ -39,6 +39,8 @@
 namespace DigikamBorderImagesPlugin
 {
 
+class BorderPriv;
+
 class Border : public Digikam::DImgThreadedFilter
 {
 
@@ -46,7 +48,7 @@ public:
 
     enum BorderTypes
     {
-        SolidBorder=0,
+        SolidBorder = 0,
         NiepceBorder,
         BeveledBorder,
         PineBorder,
@@ -92,12 +94,11 @@ public:
            Digikam::DColor decorativeFirstColor = Digikam::DColor(),
            Digikam::DColor decorativeSecondColor = Digikam::DColor());
 
-    ~Border(){};
+    ~Border();
 
 private:
 
     virtual void filterImage(void);
-
 
     /** Methods to preserve aspect ratio of image. */
     void solid(Digikam::DImg& src, Digikam::DImg& dest, const Digikam::DColor& fg, int borderWidth);
@@ -119,32 +120,7 @@ private:
 
 private:
 
-    bool            m_preserveAspectRatio;
-
-    int             m_orgWidth;
-    int             m_orgHeight;
-
-    int             m_borderType;
-
-    int             m_borderWidth1;
-    int             m_borderWidth2;
-    int             m_borderWidth3;
-    int             m_borderWidth4;
-
-    int             m_borderMainWidth;
-    int             m_border2ndWidth;
-
-    float           m_orgRatio;
-
-    QString         m_borderPath;
-
-    Digikam::DColor m_solidColor;
-    Digikam::DColor m_niepceBorderColor;
-    Digikam::DColor m_niepceLineColor;
-    Digikam::DColor m_bevelUpperLeftColor;
-    Digikam::DColor m_bevelLowerRightColor;
-    Digikam::DColor m_decorativeFirstColor;
-    Digikam::DColor m_decorativeSecondColor;
+    BorderPriv* const d;
 };
 
 }  // namespace DigikamBorderImagesPlugin
