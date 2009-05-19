@@ -7,7 +7,7 @@
  * Description : a digiKam image plugin to reduce
  *               vignetting on an image.
  *
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,22 +29,10 @@
 
 #include "editortool.h"
 
-class QLabel;
-
-namespace KDcrawIface
-{
-class RIntNumInput;
-class RDoubleNumInput;
-}
-
-namespace Digikam
-{
-class EditorToolSettings;
-class ImageWidget;
-}
-
 namespace DigikamAntiVignettingImagesPlugin
 {
+
+class AntiVignettingToolPriv;
 
 class AntiVignettingTool : public Digikam::EditorToolThreaded
 {
@@ -72,19 +60,7 @@ private:
 
 private:
 
-    QLabel                       *m_maskPreviewLabel;
-
-    KDcrawIface::RIntNumInput    *m_brightnessInput;
-    KDcrawIface::RIntNumInput    *m_contrastInput;
-
-    KDcrawIface::RDoubleNumInput *m_gammaInput;
-    KDcrawIface::RDoubleNumInput *m_densityInput;
-    KDcrawIface::RDoubleNumInput *m_powerInput;
-    KDcrawIface::RDoubleNumInput *m_radiusInput;
-
-    Digikam::ImageWidget         *m_previewWidget;
-
-    Digikam::EditorToolSettings  *m_gboxSettings;
+    AntiVignettingToolPriv* const d;
 };
 
 }  // namespace DigikamAntiVignettingImagesPlugin
