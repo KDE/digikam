@@ -6,8 +6,8 @@
  * Date        : 2004-09-30
  * Description : a plugin to add rain drop over an image
  *
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,8 +56,8 @@
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imagewidget.h"
-#include "version.h"
 #include "raindrop.h"
+#include "version.h"
 
 using namespace KDcrawIface;
 using namespace Digikam;
@@ -65,81 +65,103 @@ using namespace Digikam;
 namespace DigikamRainDropImagesPlugin
 {
 
+class RainDropToolPriv
+{
+public:
+
+    RainDropToolPriv()
+    {
+        dropInput     = 0;
+        amountInput   = 0;
+        coeffInput    = 0;
+        previewWidget = 0;
+        gboxSettings  = 0;
+    }
+
+    RIntNumInput*       dropInput;
+    RIntNumInput*       amountInput;
+    RIntNumInput*       coeffInput;
+
+    ImageWidget*        previewWidget;
+    EditorToolSettings* gboxSettings;
+};
+
 RainDropTool::RainDropTool(QObject* parent)
-            : EditorToolThreaded(parent)
+            : EditorToolThreaded(parent),
+              d(new RainDropToolPriv)
 {
     setObjectName("raindrops");
     setToolName(i18n("Raindrops"));
     setToolIcon(SmallIcon("raindrop"));
 
-    m_previewWidget = new ImageWidget("raindrops Tool", 0,
+    d->previewWidget = new ImageWidget("raindrops Tool", 0,
                                       i18n("This is the preview of the Raindrop effect."
                                            "<p>Note: if you have previously selected an area in the editor, "
                                            "this will be unaffected by the filter. You can use this method to "
                                            "disable the Raindrops effect on a human face, for example.</p>"),
                                       false);
 
-    setToolView(m_previewWidget);
+    setToolView(d->previewWidget);
 
     // -------------------------------------------------------------
 
-    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                            EditorToolSettings::Ok|
-                                            EditorToolSettings::Cancel);
+    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                             EditorToolSettings::Ok|
+                                             EditorToolSettings::Cancel);
 
-    QGridLayout* gridSettings = new QGridLayout(m_gboxSettings->plainPage());
+    QGridLayout* gridSettings = new QGridLayout(d->gboxSettings->plainPage());
 
-    QLabel *label1 = new QLabel(i18n("Drop size:"), m_gboxSettings->plainPage());
+    QLabel *label1 = new QLabel(i18n("Drop size:"), d->gboxSettings->plainPage());
 
-    m_dropInput = new RIntNumInput(m_gboxSettings->plainPage());
-    m_dropInput->setRange(0, 200, 1);
-    m_dropInput->setSliderEnabled(true);
-    m_dropInput->setDefaultValue(80);
-    m_dropInput->setWhatsThis( i18n("Set here the raindrops' size."));
-
-    // -------------------------------------------------------------
-
-    QLabel *label2 = new QLabel(i18n("Number:"), m_gboxSettings->plainPage());
-
-    m_amountInput = new RIntNumInput(m_gboxSettings->plainPage());
-    m_amountInput->setRange(1, 500, 1);
-    m_amountInput->setSliderEnabled(true);
-    m_amountInput->setDefaultValue(150);
-    m_amountInput->setWhatsThis( i18n("This value controls the maximum number of raindrops."));
+    d->dropInput = new RIntNumInput(d->gboxSettings->plainPage());
+    d->dropInput->setRange(0, 200, 1);
+    d->dropInput->setSliderEnabled(true);
+    d->dropInput->setDefaultValue(80);
+    d->dropInput->setWhatsThis( i18n("Set here the raindrops' size."));
 
     // -------------------------------------------------------------
 
-    QLabel *label3 = new QLabel(i18n("Fish eyes:"), m_gboxSettings->plainPage());
+    QLabel *label2 = new QLabel(i18n("Number:"), d->gboxSettings->plainPage());
 
-    m_coeffInput = new RIntNumInput(m_gboxSettings->plainPage());
-    m_coeffInput->setRange(1, 100, 1);
-    m_coeffInput->setSliderEnabled(true);
-    m_coeffInput->setDefaultValue(30);
-    m_coeffInput->setWhatsThis( i18n("This value is the fish-eye-effect optical "
+    d->amountInput = new RIntNumInput(d->gboxSettings->plainPage());
+    d->amountInput->setRange(1, 500, 1);
+    d->amountInput->setSliderEnabled(true);
+    d->amountInput->setDefaultValue(150);
+    d->amountInput->setWhatsThis( i18n("This value controls the maximum number of raindrops."));
+
+    // -------------------------------------------------------------
+
+    QLabel *label3 = new QLabel(i18n("Fish eyes:"), d->gboxSettings->plainPage());
+
+    d->coeffInput = new RIntNumInput(d->gboxSettings->plainPage());
+    d->coeffInput->setRange(1, 100, 1);
+    d->coeffInput->setSliderEnabled(true);
+    d->coeffInput->setDefaultValue(30);
+    d->coeffInput->setWhatsThis( i18n("This value is the fish-eye-effect optical "
                                      "distortion coefficient."));
 
     gridSettings->addWidget(label1,         0, 0, 1, 3);
-    gridSettings->addWidget(m_dropInput,    1, 0, 1, 3);
+    gridSettings->addWidget(d->dropInput,   1, 0, 1, 3);
     gridSettings->addWidget(label2,         2, 0, 1, 3);
-    gridSettings->addWidget(m_amountInput,  3, 0, 1, 3);
+    gridSettings->addWidget(d->amountInput, 3, 0, 1, 3);
     gridSettings->addWidget(label3,         4, 0, 1, 3);
-    gridSettings->addWidget(m_coeffInput,   5, 0, 1, 3);
+    gridSettings->addWidget(d->coeffInput,  5, 0, 1, 3);
     gridSettings->setRowStretch(6, 10);
-    gridSettings->setMargin(m_gboxSettings->spacingHint());
+    gridSettings->setMargin(d->gboxSettings->spacingHint());
     gridSettings->setSpacing(0);
 
-    setToolSettings(m_gboxSettings);
+    setToolSettings(d->gboxSettings);
     init();
 
     // -------------------------------------------------------------
 
-    connect(m_dropInput, SIGNAL(valueChanged(int)),
+    connect(d->dropInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
 
-    connect(m_amountInput, SIGNAL(valueChanged(int)),
+    connect(d->amountInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
 
-    connect(m_coeffInput, SIGNAL(valueChanged(int)),
+    connect(d->coeffInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
 }
 
@@ -149,9 +171,9 @@ RainDropTool::~RainDropTool()
 
 void RainDropTool::renderingFinished()
 {
-    m_dropInput->setEnabled(true);
-    m_amountInput->setEnabled(true);
-    m_coeffInput->setEnabled(true);
+    d->dropInput->setEnabled(true);
+    d->amountInput->setEnabled(true);
+    d->coeffInput->setEnabled(true);
 }
 
 void RainDropTool::readSettings()
@@ -161,9 +183,9 @@ void RainDropTool::readSettings()
 
     blockWidgetSignals(true);
 
-    m_dropInput->setValue(group.readEntry("DropAdjustment", m_dropInput->defaultValue()));
-    m_amountInput->setValue(group.readEntry("AmountAdjustment", m_amountInput->defaultValue()));
-    m_coeffInput->setValue(group.readEntry("CoeffAdjustment", m_coeffInput->defaultValue()));
+    d->dropInput->setValue(group.readEntry("DropAdjustment", d->dropInput->defaultValue()));
+    d->amountInput->setValue(group.readEntry("AmountAdjustment", d->amountInput->defaultValue()));
+    d->coeffInput->setValue(group.readEntry("CoeffAdjustment", d->coeffInput->defaultValue()));
 
     blockWidgetSignals(false);
 
@@ -174,10 +196,10 @@ void RainDropTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("raindrops Tool");
-    group.writeEntry("DropAdjustment", m_dropInput->value());
-    group.writeEntry("AmountAdjustment", m_amountInput->value());
-    group.writeEntry("CoeffAdjustment", m_coeffInput->value());
-    m_previewWidget->writeSettings();
+    group.writeEntry("DropAdjustment", d->dropInput->value());
+    group.writeEntry("AmountAdjustment", d->amountInput->value());
+    group.writeEntry("CoeffAdjustment", d->coeffInput->value());
+    d->previewWidget->writeSettings();
     group.sync();
 }
 
@@ -185,9 +207,9 @@ void RainDropTool::slotResetSettings()
 {
     blockWidgetSignals(true);
 
-    m_dropInput->slotReset();
-    m_amountInput->slotReset();
-    m_coeffInput->slotReset();
+    d->dropInput->slotReset();
+    d->amountInput->slotReset();
+    d->coeffInput->slotReset();
 
     blockWidgetSignals(false);
 
@@ -196,33 +218,33 @@ void RainDropTool::slotResetSettings()
 
 void RainDropTool::prepareEffect()
 {
-    m_dropInput->setEnabled(false);
-    m_amountInput->setEnabled(false);
-    m_coeffInput->setEnabled(false);
+    d->dropInput->setEnabled(false);
+    d->amountInput->setEnabled(false);
+    d->coeffInput->setEnabled(false);
 
-    int d        = m_dropInput->value();
-    int a        = m_amountInput->value();
-    int c        = m_coeffInput->value();
+    int drop   = d->dropInput->value();
+    int amount = d->amountInput->value();
+    int coeff  = d->coeffInput->value();
 
-    ImageIface* iface = m_previewWidget->imageIface();
+    ImageIface* iface = d->previewWidget->imageIface();
 
     // Selected data from the image
     QRect selection( iface->selectedXOrg(), iface->selectedYOrg(),
                      iface->selectedWidth(), iface->selectedHeight() );
 
     setFilter(dynamic_cast<DImgThreadedFilter *>(
-                       new RainDrop(iface->getOriginalImg(), this, d, a, c, &selection)));
+                       new RainDrop(iface->getOriginalImg(), this, drop, amount, coeff, &selection)));
 }
 
 void RainDropTool::prepareFinal()
 {
-    m_dropInput->setEnabled(false);
-    m_amountInput->setEnabled(false);
-    m_coeffInput->setEnabled(false);
+    d->dropInput->setEnabled(false);
+    d->amountInput->setEnabled(false);
+    d->coeffInput->setEnabled(false);
 
-    int d       = m_dropInput->value();
-    int a       = m_amountInput->value();
-    int c       = m_coeffInput->value();
+    int drop   = d->dropInput->value();
+    int amount = d->amountInput->value();
+    int coeff  = d->coeffInput->value();
 
     ImageIface iface(0, 0);
 
@@ -231,18 +253,18 @@ void RainDropTool::prepareFinal()
                      iface.selectedWidth(), iface.selectedHeight() );
 
     setFilter(dynamic_cast<DImgThreadedFilter *>(
-                       new RainDrop(iface.getOriginalImg(), this, d, a, c, &selection)));
+                       new RainDrop(iface.getOriginalImg(), this, drop, amount, coeff, &selection)));
 }
 
 void RainDropTool::putPreviewData(void)
 {
-    ImageIface* iface = m_previewWidget->imageIface();
+    ImageIface* iface = d->previewWidget->imageIface();
 
     DImg imDest = filter()->getTargetImage()
             .smoothScale(iface->previewWidth(), iface->previewHeight());
     iface->putPreviewImage(imDest.bits());
 
-    m_previewWidget->updatePreview();
+    d->previewWidget->updatePreview();
 }
 
 void RainDropTool::putFinalData(void)
@@ -255,9 +277,9 @@ void RainDropTool::putFinalData(void)
 
 void RainDropTool::blockWidgetSignals(bool b)
 {
-    m_dropInput->blockSignals(b);
-    m_amountInput->blockSignals(b);
-    m_coeffInput->blockSignals(b);
+    d->dropInput->blockSignals(b);
+    d->amountInput->blockSignals(b);
+    d->coeffInput->blockSignals(b);
 }
 
 }  // namespace DigikamRainDropImagesPlugin
