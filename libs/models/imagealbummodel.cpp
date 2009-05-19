@@ -325,8 +325,7 @@ void ImageAlbumModel::slotSearchChange(const SearchChangeset& changeset)
     }
 }
 
-
-void ImageAlbumModel::slotAlbumAdded(Album */*album*/)
+void ImageAlbumModel::slotAlbumAdded(Album* /*album*/)
 {
 }
 
