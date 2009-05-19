@@ -70,6 +70,7 @@
 #include "colorgradientwidget.h"
 #include "curveswidget.h"
 #include "daboutdata.h"
+#include "dimg.h"
 #include "dimgimagefilters.h"
 #include "editortoolsettings.h"
 #include "histogrambox.h"

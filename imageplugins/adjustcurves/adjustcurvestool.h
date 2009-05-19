@@ -27,7 +27,11 @@
 // Local includes
 
 #include "editortool.h"
-#include "dimg.h"
+
+namespace Digikam
+{
+class DColor;
+}
 
 namespace DigikamAdjustCurvesImagesPlugin
 {
