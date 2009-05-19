@@ -71,15 +71,15 @@ int main(int argc, char *argv[])
                          0,
                          ki18n("digiKam"),
                          digiKamVersion().toAscii(),
-                         Digikam::digiKamSlogan(),
+                         digiKamSlogan(),
                          KAboutData::License_GPL,
-                         Digikam::copyright(),
-                         Digikam::buildDate(),
-                         Digikam::webProjectUrl().url().toUtf8());
+                         copyright(),
+                         buildDate(),
+                         webProjectUrl().url().toUtf8());
 
     authorsRegistration(aboutData);
 
-    KCmdLineArgs::init( argc, argv, &aboutData );
+    KCmdLineArgs::init(argc, argv, &aboutData);
 
     KCmdLineOptions options;
     options.add("download-from <path>", ki18n("Open camera dialog at <path>"));

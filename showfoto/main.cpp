@@ -44,20 +44,22 @@
 #include "daboutdata.h"
 #include "showfoto.h"
 
+using namespace Digikam;
+
 int main(int argc, char *argv[])
 {
     KAboutData aboutData("showfoto", "digikam",
                          ki18n("showFoto"),
                          digiKamVersion().toAscii(),  // NOTE: showFoto version = digiKam version
-                         Digikam::digiKamSlogan(),
+                         digiKamSlogan(),
                          KAboutData::License_GPL,
-                         Digikam::copyright(),
-                         Digikam::buildDate(),
-                         Digikam::webProjectUrl().url().toUtf8());
+                         copyright(),
+                         buildDate(),
+                         webProjectUrl().url().toUtf8());
 
-    Digikam::authorsRegistration(aboutData);
+    authorsRegistration(aboutData);
 
-    KCmdLineArgs::init( argc, argv, &aboutData );
+    KCmdLineArgs::init(argc, argv, &aboutData);
 
     KCmdLineOptions options;
     options.add("+[file(s) or folder(s)]", ki18n("File(s) or folder(s) to open"));

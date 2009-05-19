@@ -65,11 +65,6 @@ static inline KUrl webProjectUrl()
     return KUrl("http://www.digikam.org");
 }
 
-static inline KLocalizedString buildDate()
-{
-    return ki18n("Build date: %1").subs(__DATE__);
-}
-
 static inline void authorsRegistration(KAboutData& aboutData)
 {
     aboutData.addAuthor ( ki18n("Caulier Gilles"),

@@ -31,10 +31,14 @@
 // KDE includes.
 
 #include <klocale.h>
+#include <klocalizedstring.h>
 
 // Local includes.
 
 #include "svnversion.h"
+
+namespace Digikam
+{
 
 static const char digikam_version_short[] = "${DIGIKAM_VERSION_SHORT}";
 static const char digikam_version[]       = "${DIGIKAM_VERSION_STRING}";
@@ -51,4 +55,11 @@ static inline const QString digiKamVersion()
     return digiKamVer;
 }
 
-#endif // DIGIKAM_VERSION_H
+static inline KLocalizedString buildDate()
+{
+    return ki18n("Build date: %1").subs(__DATE__);
+}
+
+}  // namespace Digikam
+
+#endif /* DIGIKAM_VERSION_H */
