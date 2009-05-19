@@ -7,8 +7,8 @@
  * Description : a digiKam image editor plugin to emboss
  *               an image.
  *
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,21 +50,36 @@
 // Local includes
 
 #include "editortoolsettings.h"
+#include "emboss.h"
 #include "imageiface.h"
 #include "imagepanelwidget.h"
 #include "version.h"
-#include "emboss.h"
 
 using namespace KDcrawIface;
 using namespace Digikam;
 
-using namespace KDcrawIface;
-
 namespace DigikamEmbossImagesPlugin
 {
 
+class EmbossToolPriv
+{
+public:
+
+    EmbossToolPriv()
+    {
+        depthInput    = 0;
+        previewWidget = 0;
+        gboxSettings  = 0;
+    }
+
+    RIntNumInput*       depthInput;
+    ImagePanelWidget*   previewWidget;
+    EditorToolSettings* gboxSettings;
+};
+
 EmbossTool::EmbossTool(QObject* parent)
-          : EditorToolThreaded(parent)
+          : EditorToolThreaded(parent),
+            d(new EmbossToolPriv)
 {
     setObjectName("emboss");
     setToolName(i18n("Emboss"));
@@ -72,41 +87,41 @@ EmbossTool::EmbossTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                            EditorToolSettings::Ok|
-                                            EditorToolSettings::Cancel|
-                                            EditorToolSettings::PanIcon);
+    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                             EditorToolSettings::Ok|
+                                             EditorToolSettings::Cancel|
+                                             EditorToolSettings::PanIcon);
 
-    QGridLayout* grid = new QGridLayout( m_gboxSettings->plainPage() );
+    QGridLayout* grid = new QGridLayout( d->gboxSettings->plainPage() );
 
-    QLabel *label1 = new QLabel(i18n("Depth:"), m_gboxSettings->plainPage());
+    QLabel *label1 = new QLabel(i18n("Depth:"), d->gboxSettings->plainPage());
 
-    m_depthInput   = new RIntNumInput(m_gboxSettings->plainPage());
-    m_depthInput->setRange(10, 300, 1);
-    m_depthInput->setSliderEnabled(true);
-    m_depthInput->setDefaultValue(30);
-    m_depthInput->setWhatsThis( i18n("Set here the depth of the embossing image effect.") );
+    d->depthInput   = new RIntNumInput(d->gboxSettings->plainPage());
+    d->depthInput->setRange(10, 300, 1);
+    d->depthInput->setSliderEnabled(true);
+    d->depthInput->setDefaultValue(30);
+    d->depthInput->setWhatsThis( i18n("Set here the depth of the embossing image effect.") );
 
     // -------------------------------------------------------------
 
-    grid->addWidget(label1,       0, 0, 1, 2);
-    grid->addWidget(m_depthInput, 1, 0, 1, 2);
+    grid->addWidget(label1,        0, 0, 1, 2);
+    grid->addWidget(d->depthInput, 1, 0, 1, 2);
     grid->setRowStretch(2, 10);
-    grid->setMargin(m_gboxSettings->spacingHint());
-    grid->setSpacing(m_gboxSettings->spacingHint());
+    grid->setMargin(d->gboxSettings->spacingHint());
+    grid->setSpacing(d->gboxSettings->spacingHint());
 
-    setToolSettings(m_gboxSettings);
+    setToolSettings(d->gboxSettings);
 
     // -------------------------------------------------------------
 
-    m_previewWidget = new ImagePanelWidget(470, 350, "emboss Tool", m_gboxSettings->panIconView());
+    d->previewWidget = new ImagePanelWidget(470, 350, "emboss Tool", d->gboxSettings->panIconView());
 
-    setToolView(m_previewWidget);
+    setToolView(d->previewWidget);
     init();
 
     // -------------------------------------------------------------
 
-    connect(m_depthInput, SIGNAL(valueChanged (int)),
+    connect(d->depthInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotTimer()));
 }
 
@@ -116,51 +131,51 @@ EmbossTool::~EmbossTool()
 
 void EmbossTool::renderingFinished()
 {
-    m_depthInput->setEnabled(true);
+    d->depthInput->setEnabled(true);
 }
 
 void EmbossTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("emboss Tool");
-    m_depthInput->blockSignals(true);
-    m_depthInput->setValue(group.readEntry("DepthAdjustment", m_depthInput->defaultValue()));
-    m_depthInput->blockSignals(false);
+    d->depthInput->blockSignals(true);
+    d->depthInput->setValue(group.readEntry("DepthAdjustment", d->depthInput->defaultValue()));
+    d->depthInput->blockSignals(false);
 }
 
 void EmbossTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("emboss Tool");
-    group.writeEntry("DepthAdjustment", m_depthInput->value());
-    m_previewWidget->writeSettings();
+    group.writeEntry("DepthAdjustment", d->depthInput->value());
+    d->previewWidget->writeSettings();
     group.sync();
 }
 
 void EmbossTool::slotResetSettings()
 {
-    m_depthInput->blockSignals(true);
-    m_depthInput->slotReset();
-    m_depthInput->blockSignals(false);
+    d->depthInput->blockSignals(true);
+    d->depthInput->slotReset();
+    d->depthInput->blockSignals(false);
 
     slotEffect();
 }
 
 void EmbossTool::prepareEffect()
 {
-    m_depthInput->setEnabled(false);
+    d->depthInput->setEnabled(false);
 
-    DImg image = m_previewWidget->getOriginalRegionImage();
-    int depth  = m_depthInput->value();
+    DImg image = d->previewWidget->getOriginalRegionImage();
+    int depth  = d->depthInput->value();
 
     setFilter(dynamic_cast<DImgThreadedFilter*>(new Emboss(&image, this, depth)));
 }
 
 void EmbossTool::prepareFinal()
 {
-    m_depthInput->setEnabled(false);
+    d->depthInput->setEnabled(false);
 
-    int depth = m_depthInput->value();
+    int depth = d->depthInput->value();
 
     ImageIface iface(0, 0);
     setFilter(dynamic_cast<DImgThreadedFilter*>(new Emboss(iface.getOriginalImg(), this, depth)));
@@ -168,7 +183,7 @@ void EmbossTool::prepareFinal()
 
 void EmbossTool::putPreviewData()
 {
-    m_previewWidget->setPreviewImage(filter()->getTargetImage());
+    d->previewWidget->setPreviewImage(filter()->getTargetImage());
 }
 
 void EmbossTool::putFinalData()
