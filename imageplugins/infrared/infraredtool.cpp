@@ -7,8 +7,8 @@
  * Description : a digiKam image editor plugin for simulate
  *               infrared film.
  *
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,44 +29,65 @@
 
 // Qt includes
 
-#include <QImage>
-#include <QLabel>
-#include <QLCDNumber>
-#include <QSlider>
-#include <QDateTime>
 #include <QCheckBox>
+#include <QDateTime>
 #include <QGridLayout>
+#include <QImage>
+#include <QLCDNumber>
+#include <QLabel>
+#include <QSlider>
 
 // KDE includes
 
-#include <kdebug.h>
-#include <klocale.h>
 #include <kaboutdata.h>
-#include <kiconloader.h>
 #include <kapplication.h>
-#include <kstandarddirs.h>
 #include <kconfig.h>
-#include <kglobal.h>
 #include <kconfiggroup.h>
+#include <kdebug.h>
+#include <kglobal.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kstandarddirs.h>
 
 // Local includes
 
-#include "version.h"
 #include "daboutdata.h"
 #include "dimg.h"
+#include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imagepanelwidget.h"
-#include "editortoolsettings.h"
 #include "infrared.h"
+#include "version.h"
 
 using namespace Digikam;
 
 namespace DigikamInfraredImagesPlugin
 {
 
+class InfraredToolPriv
+{
+public:
+
+    InfraredToolPriv()
+    {
+        addFilmGrain          = 0;
+        sensibilitySlider     = 0;
+        sensibilityLCDValue   = 0;
+        previewWidget         = 0;
+        gboxSettings          = 0;
+    }
+
+    QCheckBox*          addFilmGrain;
+    QSlider*            sensibilitySlider;
+    QLCDNumber*         sensibilityLCDValue;
+    ImagePanelWidget*   previewWidget;
+    EditorToolSettings* gboxSettings;
+};
+
 
 InfraredTool::InfraredTool(QObject* parent)
-            : EditorToolThreaded(parent)
+            : EditorToolThreaded(parent),
+              d(new InfraredToolPriv)
 {
     setObjectName("infrared");
     setToolName(i18n("Infrared"));
@@ -74,26 +95,25 @@ InfraredTool::InfraredTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                            EditorToolSettings::Ok|
-                                            EditorToolSettings::Cancel,
-                                            EditorToolSettings::PanIcon);
-    QGridLayout* grid = new QGridLayout( m_gboxSettings->plainPage() );
+    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                             EditorToolSettings::Ok|
+                                             EditorToolSettings::Cancel,
+                                             EditorToolSettings::PanIcon);
+    QGridLayout* grid = new QGridLayout( d->gboxSettings->plainPage() );
 
-    QLabel *label1            = new QLabel(i18n("Sensitivity (ISO):"), m_gboxSettings->plainPage());
+    QLabel *label1       = new QLabel(i18n("Sensitivity (ISO):"), d->gboxSettings->plainPage());
+    d->sensibilitySlider = new QSlider(Qt::Horizontal, d->gboxSettings->plainPage());
+    d->sensibilitySlider->setMinimum(2);
+    d->sensibilitySlider->setMaximum(30);
+    d->sensibilitySlider->setPageStep(1);
+    d->sensibilitySlider->setValue(12);
+    d->sensibilitySlider->setTracking ( false );
+    d->sensibilitySlider->setTickInterval(1);
+    d->sensibilitySlider->setTickPosition(QSlider::TicksBelow);
 
-    m_sensibilitySlider = new QSlider(Qt::Horizontal, m_gboxSettings->plainPage());
-    m_sensibilitySlider->setMinimum(2);
-    m_sensibilitySlider->setMaximum(30);
-    m_sensibilitySlider->setPageStep(1);
-    m_sensibilitySlider->setValue(12);
-    m_sensibilitySlider->setTracking ( false );
-    m_sensibilitySlider->setTickInterval(1);
-    m_sensibilitySlider->setTickPosition(QSlider::TicksBelow);
-
-    m_sensibilityLCDValue = new QLCDNumber (4, m_gboxSettings->plainPage());
-    m_sensibilityLCDValue->setSegmentStyle ( QLCDNumber::Flat );
-    m_sensibilityLCDValue->display( QString::number(200) );
+    d->sensibilityLCDValue = new QLCDNumber (4, d->gboxSettings->plainPage());
+    d->sensibilityLCDValue->setSegmentStyle ( QLCDNumber::Flat );
+    d->sensibilityLCDValue->display( QString::number(200) );
     QString whatsThis = i18n("<p>Set here the ISO-sensitivity of the simulated infrared film. "
                              "Increasing this value will increase the proportion of green color in the mix. "
                              "It will also increase the halo effect on the highlights, and the film "
@@ -104,52 +124,52 @@ InfraredTool::InfraredTool(QObject* parent)
                              "This last one creates a more "
                              "dramatic photographic style.</p>");
 
-    m_sensibilityLCDValue->setWhatsThis( whatsThis);
-    m_sensibilitySlider->setWhatsThis( whatsThis);
+    d->sensibilityLCDValue->setWhatsThis( whatsThis);
+    d->sensibilitySlider->setWhatsThis( whatsThis);
 
     // -------------------------------------------------------------
 
-    m_addFilmGrain = new QCheckBox( i18n("Add film grain"), m_gboxSettings->plainPage());
-    m_addFilmGrain->setChecked( true );
-    m_addFilmGrain->setWhatsThis( i18n("This option adds infrared film grain to "
+    d->addFilmGrain = new QCheckBox( i18n("Add film grain"), d->gboxSettings->plainPage());
+    d->addFilmGrain->setChecked( true );
+    d->addFilmGrain->setWhatsThis( i18n("This option adds infrared film grain to "
                                        "the image depending on ISO-sensitivity."));
 
     // -------------------------------------------------------------
 
-    grid->addWidget(label1,                0, 0, 1, 2);
-    grid->addWidget(m_sensibilitySlider,   1, 0, 1, 1);
-    grid->addWidget(m_sensibilityLCDValue, 1, 1, 1, 1);
-    grid->addWidget(m_addFilmGrain,        2, 0, 1, 2);
+    grid->addWidget(label1,                 0, 0, 1, 2);
+    grid->addWidget(d->sensibilitySlider,   1, 0, 1, 1);
+    grid->addWidget(d->sensibilityLCDValue, 1, 1, 1, 1);
+    grid->addWidget(d->addFilmGrain,        2, 0, 1, 2);
     grid->setRowStretch(3, 10);
-    grid->setMargin(m_gboxSettings->spacingHint());
-    grid->setSpacing(m_gboxSettings->spacingHint());
+    grid->setMargin(d->gboxSettings->spacingHint());
+    grid->setSpacing(d->gboxSettings->spacingHint());
 
-    setToolSettings(m_gboxSettings);
+    setToolSettings(d->gboxSettings);
 
     // -------------------------------------------------------------
 
-    m_previewWidget = new ImagePanelWidget(470, 350, "infrared Tool", m_gboxSettings->panIconView());
+    d->previewWidget = new ImagePanelWidget(470, 350, "infrared Tool", d->gboxSettings->panIconView());
 
-    setToolView(m_previewWidget);
+    setToolView(d->previewWidget);
     init();
 
     // -------------------------------------------------------------
 
-    connect( m_sensibilitySlider, SIGNAL(valueChanged(int)),
+    connect( d->sensibilitySlider, SIGNAL(valueChanged(int)),
              this, SLOT(slotTimer()) );
 
-    connect(m_previewWidget, SIGNAL(signalOriginalClipFocusChanged()),
+    connect(d->previewWidget, SIGNAL(signalOriginalClipFocusChanged()),
             this, SLOT(slotTimer()));
 
     // this connection is necessary to change the LCD display when
     // the value is changed by single clicking on the slider
-    connect(m_sensibilitySlider, SIGNAL(valueChanged(int)),
+    connect(d->sensibilitySlider, SIGNAL(valueChanged(int)),
             this, SLOT(slotSliderMoved(int)));
 
-    connect(m_sensibilitySlider, SIGNAL(sliderMoved(int)),
+    connect(d->sensibilitySlider, SIGNAL(sliderMoved(int)),
             this, SLOT(slotSliderMoved(int)));
 
-    connect(m_addFilmGrain, SIGNAL(toggled (bool)),
+    connect(d->addFilmGrain, SIGNAL(toggled (bool)),
             this, SLOT(slotEffect()));
 }
 
@@ -159,21 +179,21 @@ InfraredTool::~InfraredTool()
 
 void InfraredTool::renderingFinished()
 {
-    m_sensibilitySlider->setEnabled(true);
-    m_addFilmGrain->setEnabled(true);
+    d->sensibilitySlider->setEnabled(true);
+    d->addFilmGrain->setEnabled(true);
 }
 
 void InfraredTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("infrared Tool");
-    m_sensibilitySlider->blockSignals(true);
-    m_addFilmGrain->blockSignals(true);
-    m_sensibilitySlider->setValue(group.readEntry("SensitivityAdjustment", 1));
-    m_addFilmGrain->setChecked(group.readEntry("AddFilmGrain", false));
-    m_sensibilitySlider->blockSignals(false);
-    m_addFilmGrain->blockSignals(false);
-    slotSliderMoved(m_sensibilitySlider->value());
+    d->sensibilitySlider->blockSignals(true);
+    d->addFilmGrain->blockSignals(true);
+    d->sensibilitySlider->setValue(group.readEntry("SensitivityAdjustment", 1));
+    d->addFilmGrain->setChecked(group.readEntry("AddFilmGrain", false));
+    d->sensibilitySlider->blockSignals(false);
+    d->addFilmGrain->blockSignals(false);
+    slotSliderMoved(d->sensibilitySlider->value());
     slotEffect();
 }
 
@@ -181,46 +201,46 @@ void InfraredTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("infrared Tool");
-    group.writeEntry("SensitivityAdjustment", m_sensibilitySlider->value());
-    group.writeEntry("AddFilmGrain", m_addFilmGrain->isChecked());
-    m_previewWidget->writeSettings();
+    group.writeEntry("SensitivityAdjustment", d->sensibilitySlider->value());
+    group.writeEntry("AddFilmGrain", d->addFilmGrain->isChecked());
+    d->previewWidget->writeSettings();
     group.sync();
 }
 
 void InfraredTool::slotResetSettings()
 {
-    m_sensibilitySlider->blockSignals(true);
-    m_addFilmGrain->blockSignals(true);
-    m_sensibilitySlider->setValue(1);
-    m_addFilmGrain->setChecked(false);
-    m_sensibilitySlider->blockSignals(false);
-    m_addFilmGrain->blockSignals(false);
+    d->sensibilitySlider->blockSignals(true);
+    d->addFilmGrain->blockSignals(true);
+    d->sensibilitySlider->setValue(1);
+    d->addFilmGrain->setChecked(false);
+    d->sensibilitySlider->blockSignals(false);
+    d->addFilmGrain->blockSignals(false);
 }
 
 void InfraredTool::slotSliderMoved(int v)
 {
-    m_sensibilityLCDValue->display( QString::number(100 + 100 * v) );
+    d->sensibilityLCDValue->display( QString::number(100 + 100 * v) );
 }
 
 void InfraredTool::prepareEffect()
 {
-    m_addFilmGrain->setEnabled(false);
-    m_sensibilitySlider->setEnabled(false);
+    d->addFilmGrain->setEnabled(false);
+    d->sensibilitySlider->setEnabled(false);
 
-    DImg image = m_previewWidget->getOriginalRegionImage();
-    int  s     = 100 + 100 * m_sensibilitySlider->value();
-    bool g     = m_addFilmGrain->isChecked();
+    DImg image = d->previewWidget->getOriginalRegionImage();
+    int  s     = 100 + 100 * d->sensibilitySlider->value();
+    bool g     = d->addFilmGrain->isChecked();
 
     setFilter(dynamic_cast<DImgThreadedFilter*>(new Infrared(&image, this, s, g)));
 }
 
 void InfraredTool::prepareFinal()
 {
-    m_addFilmGrain->setEnabled(false);
-    m_sensibilitySlider->setEnabled(false);
+    d->addFilmGrain->setEnabled(false);
+    d->sensibilitySlider->setEnabled(false);
 
-    int  s = 100 + 100 * m_sensibilitySlider->value();
-    bool g = m_addFilmGrain->isChecked();
+    int  s = 100 + 100 * d->sensibilitySlider->value();
+    bool g = d->addFilmGrain->isChecked();
 
     ImageIface iface(0, 0);
     setFilter(dynamic_cast<DImgThreadedFilter*>(new Infrared(iface.getOriginalImg(), this, s, g)));
@@ -228,7 +248,7 @@ void InfraredTool::prepareFinal()
 
 void InfraredTool::putPreviewData()
 {
-    m_previewWidget->setPreviewImage(filter()->getTargetImage());
+    d->previewWidget->setPreviewImage(filter()->getTargetImage());
 }
 
 void InfraredTool::putFinalData()
