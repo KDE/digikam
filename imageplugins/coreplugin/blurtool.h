@@ -29,19 +29,10 @@
 
 #include "editortool.h"
 
-namespace KDcrawIface
-{
-class RDoubleNumInput;
-}
-
-namespace Digikam
-{
-class EditorToolSettings;
-class ImagePanelWidget;
-}
-
 namespace DigikamImagesPluginCore
 {
+
+class BlurToolPriv;
 
 class BlurTool : public Digikam::EditorToolThreaded
 {
@@ -69,11 +60,7 @@ private:
 
 private:
 
-    KDcrawIface::RDoubleNumInput   *m_radiusInput;
-
-    Digikam::ImagePanelWidget      *m_previewWidget;
-
-    Digikam::EditorToolSettings    *m_gboxSettings;
+    BlurToolPriv* const d;
 };
 
 }  // namespace DigikamImagesPluginCore

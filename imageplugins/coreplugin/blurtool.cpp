@@ -60,48 +60,65 @@ using namespace Digikam;
 namespace DigikamImagesPluginCore
 {
 
+class BlurToolPriv
+{
+public:
+
+    BlurToolPriv()
+    {
+        radiusInput   = 0;
+        previewWidget = 0;
+        gboxSettings  = 0;
+    }
+
+    RDoubleNumInput*    radiusInput;
+    ImagePanelWidget*   previewWidget;
+    EditorToolSettings* gboxSettings;
+};
+
 BlurTool::BlurTool(QObject* parent)
-        : EditorToolThreaded(parent)
+        : EditorToolThreaded(parent),
+          d(new BlurToolPriv)
 {
     setObjectName("gaussianblur");
     setToolName(i18n("Blur"));
     setToolIcon(SmallIcon("blurimage"));
     setToolHelp("blursharpentool.anchor");
 
-    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                            EditorToolSettings::Ok|
-                                            EditorToolSettings::Cancel,
-                                            EditorToolSettings::PanIcon);
-    QGridLayout* grid = new QGridLayout( m_gboxSettings->plainPage() );
+    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                             EditorToolSettings::Ok|
+                                             EditorToolSettings::Cancel,
+                                             EditorToolSettings::PanIcon);
+    QGridLayout* grid = new QGridLayout( d->gboxSettings->plainPage() );
 
-    QLabel *label = new QLabel(i18n("Smoothness:"), m_gboxSettings->plainPage());
+    QLabel *label = new QLabel(i18n("Smoothness:"), d->gboxSettings->plainPage());
 
-    m_radiusInput = new RDoubleNumInput(m_gboxSettings->plainPage());
-    m_radiusInput->setRange(0.0, 100.0, 0.1);
-    m_radiusInput->setDefaultValue(0.0);
-    m_radiusInput->setWhatsThis( i18n("A smoothness of 0 has no effect, "
+    d->radiusInput = new RDoubleNumInput(d->gboxSettings->plainPage());
+    d->radiusInput->setRange(0.0, 100.0, 0.1);
+    d->radiusInput->setDefaultValue(0.0);
+    d->radiusInput->setWhatsThis(i18n("A smoothness of 0 has no effect, "
                                       "1 and above determine the Gaussian blur matrix radius "
                                       "that determines how much to blur the image."));
 
-    grid->addWidget(label,         0, 0, 1, 2);
-    grid->addWidget(m_radiusInput, 1, 0, 1, 2);
+    grid->addWidget(label,          0, 0, 1, 2);
+    grid->addWidget(d->radiusInput, 1, 0, 1, 2);
     grid->setRowStretch(2, 10);
-    grid->setMargin(m_gboxSettings->spacingHint());
-    grid->setSpacing(m_gboxSettings->spacingHint());
+    grid->setMargin(d->gboxSettings->spacingHint());
+    grid->setSpacing(d->gboxSettings->spacingHint());
 
-    setToolSettings(m_gboxSettings);
+    setToolSettings(d->gboxSettings);
 
-    m_previewWidget = new ImagePanelWidget(470, 350, "gaussianblur Tool", m_gboxSettings->panIconView());
+    d->previewWidget = new ImagePanelWidget(470, 350, "gaussianblur Tool", d->gboxSettings->panIconView());
 
-    setToolView(m_previewWidget);
+    setToolView(d->previewWidget);
     init();
 
     // --------------------------------------------------------
 
-    connect(m_radiusInput, SIGNAL(valueChanged(double)),
+    connect(d->radiusInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotTimer()));
 
-    connect(m_previewWidget, SIGNAL(signalOriginalClipFocusChanged()),
+    connect(d->previewWidget, SIGNAL(signalOriginalClipFocusChanged()),
             this, SLOT(slotTimer()));
 }
 
@@ -113,52 +130,52 @@ void BlurTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("gaussianblur Tool");
-    m_radiusInput->setValue(group.readEntry("RadiusAdjustment", m_radiusInput->defaultValue()));
+    d->radiusInput->setValue(group.readEntry("RadiusAdjustment", d->radiusInput->defaultValue()));
 }
 
 void BlurTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("gaussianblur Tool");
-    group.writeEntry("RadiusAdjustment", m_radiusInput->value());
-    m_previewWidget->writeSettings();
+    group.writeEntry("RadiusAdjustment", d->radiusInput->value());
+    d->previewWidget->writeSettings();
     config->sync();
 }
 
 void BlurTool::slotResetSettings()
 {
-    m_radiusInput->blockSignals(true);
-    m_radiusInput->slotReset();
-    m_radiusInput->blockSignals(false);
+    d->radiusInput->blockSignals(true);
+    d->radiusInput->slotReset();
+    d->radiusInput->blockSignals(false);
 }
 
 void BlurTool::prepareEffect()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    m_radiusInput->setEnabled(false);
-    DImg img = m_previewWidget->getOriginalRegionImage();
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new DImgGaussianBlur(&img, this, m_radiusInput->value())));
+    d->radiusInput->setEnabled(false);
+    DImg img = d->previewWidget->getOriginalRegionImage();
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new DImgGaussianBlur(&img, this, d->radiusInput->value())));
 }
 
 void BlurTool::prepareFinal()
 {
-    m_radiusInput->setEnabled(false);
+    d->radiusInput->setEnabled(false);
 
     ImageIface iface(0, 0);
-    uchar *data            = iface.getOriginalImage();
-    int w                  = iface.originalWidth();
-    int h                  = iface.originalHeight();
-    bool sixteenBit        = iface.originalSixteenBit();
-    bool hasAlpha          = iface.originalHasAlpha();
+    uchar *data      = iface.getOriginalImage();
+    int w            = iface.originalWidth();
+    int h            = iface.originalHeight();
+    bool sixteenBit  = iface.originalSixteenBit();
+    bool hasAlpha    = iface.originalHasAlpha();
     DImg orgImage = DImg(w, h, sixteenBit, hasAlpha ,data);
     delete [] data;
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new DImgGaussianBlur(&orgImage, this, m_radiusInput->value())));
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new DImgGaussianBlur(&orgImage, this, d->radiusInput->value())));
 }
 
 void BlurTool::putPreviewData()
 {
     DImg imDest = filter()->getTargetImage();
-    m_previewWidget->setPreviewImage(imDest);
+    d->previewWidget->setPreviewImage(imDest);
 }
 
 void BlurTool::putFinalData()
@@ -171,7 +188,7 @@ void BlurTool::putFinalData()
 void BlurTool::renderingFinished(void)
 {
     QApplication::restoreOverrideCursor();
-    m_radiusInput->setEnabled(true);
+    d->radiusInput->setEnabled(true);
 }
 
 }  // namespace DigikamImagesPluginCore
