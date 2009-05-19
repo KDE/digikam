@@ -167,6 +167,7 @@ RainDropTool::RainDropTool(QObject* parent)
 
 RainDropTool::~RainDropTool()
 {
+    delete d;
 }
 
 void RainDropTool::renderingFinished()

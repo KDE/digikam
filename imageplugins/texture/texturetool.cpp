@@ -162,6 +162,7 @@ TextureTool::TextureTool(QObject* parent)
 
 TextureTool::~TextureTool()
 {
+    delete d;
 }
 
 void TextureTool::renderingFinished()

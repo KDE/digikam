@@ -345,6 +345,7 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
 AdjustCurvesTool::~AdjustCurvesTool()
 {
     delete [] d->destinationPreviewData;
+    delete d;
 }
 
 void AdjustCurvesTool::slotPickerColorButtonActived()

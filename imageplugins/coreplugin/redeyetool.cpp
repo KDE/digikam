@@ -229,6 +229,8 @@ RedEyeTool::~RedEyeTool()
 {
     if (d->destinationPreviewData)
        delete [] d->destinationPreviewData;
+
+    delete d;
 }
 
 void RedEyeTool::slotHSChanged(int h, int s)

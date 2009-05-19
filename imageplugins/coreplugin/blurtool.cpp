@@ -124,6 +124,7 @@ BlurTool::BlurTool(QObject* parent)
 
 BlurTool::~BlurTool()
 {
+    delete d;
 }
 
 void BlurTool::readSettings()

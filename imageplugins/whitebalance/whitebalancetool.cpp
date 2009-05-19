@@ -399,6 +399,8 @@ WhiteBalanceTool::~WhiteBalanceTool()
 {
     if (d->destinationPreviewData)
        delete [] d->destinationPreviewData;
+
+    delete d;
 }
 
 void WhiteBalanceTool::slotTemperatureChanged(double temperature)

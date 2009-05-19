@@ -208,6 +208,7 @@ SuperImposeTool::SuperImposeTool(QObject* parent)
 
 SuperImposeTool::~SuperImposeTool()
 {
+    delete d;
 }
 
 void SuperImposeTool::populateTemplates(void)

@@ -127,6 +127,7 @@ EmbossTool::EmbossTool(QObject* parent)
 
 EmbossTool::~EmbossTool()
 {
+    delete d;
 }
 
 void EmbossTool::renderingFinished()

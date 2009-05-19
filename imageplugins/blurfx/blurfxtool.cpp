@@ -188,6 +188,7 @@ BlurFXTool::BlurFXTool(QObject* parent)
 
 BlurFXTool::~BlurFXTool()
 {
+    delete d;
 }
 
 void BlurFXTool::renderingFinished()

@@ -250,6 +250,7 @@ BorderTool::BorderTool(QObject* parent)
 
 BorderTool::~BorderTool()
 {
+    delete d;
 }
 
 void BorderTool::readSettings()

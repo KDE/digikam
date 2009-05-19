@@ -175,6 +175,7 @@ InfraredTool::InfraredTool(QObject* parent)
 
 InfraredTool::~InfraredTool()
 {
+    delete d;
 }
 
 void InfraredTool::renderingFinished()
