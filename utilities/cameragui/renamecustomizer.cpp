@@ -157,6 +157,9 @@ QString ManualRenameInput::parser(const QString& parse,
                                   const QString &fileName, const QString &cameraName,
                                   const QDateTime &dateTime, int index)
 {
+    if (parse.isEmpty())
+        return fileName;
+
     QFileInfo fi(fileName);
     QString parsedString = parse;
 
