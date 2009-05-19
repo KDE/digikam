@@ -259,8 +259,7 @@ bool CollectionPage::checkRootAlbum(QString& rootAlbumFolder)
 #endif
     {
         KMessageBox::information(this, i18n("You do not seem to have write access for the folder selected to be the root album.\n"
-                                            "Warning: Without write access, the comment and tag features "
-                                            "will not work."));
+                                            "Warning: Without write access, items cannot be edited."));
     }
 
     return true;
