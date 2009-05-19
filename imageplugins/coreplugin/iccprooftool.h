@@ -30,33 +30,18 @@
 
 #include "editortool.h"
 
-class QButtonGroup;
-class QCheckBox;
-class QRadioButton;
-class QToolBox;
-
-class KUrlRequester;
-
-namespace KDcrawIface
-{
-class RIntNumInput;
-class RComboBox;
-}
+class QByteArray;
+class QString;
 
 namespace Digikam
 {
-class ColorGradientWidget;
-class CurvesWidget;
 class DColor;
-class DImg;
-class EditorToolSettings;
-class HistogramWidget;
-class ICCPreviewWidget;
-class ImageWidget;
 }
 
 namespace DigikamImagesPluginCore
 {
+
+class ICCProofToolPriv;
 
 class ICCProofTool : public Digikam::EditorTool
 {
@@ -111,65 +96,16 @@ private:
 
     enum ICCSettingsTab
     {
-        GENERALPAGE=0,
+        GENERALPAGE = 0,
         INPUTPAGE,
         WORKSPACEPAGE,
         PROOFINGPAGE,
         LIGHTNESSPAGE
     };
 
-    bool                            m_cmEnabled;
-    bool                            m_hasICC;
+private:
 
-    uchar                          *m_destinationPreviewData;
-
-    QCheckBox                      *m_doSoftProofBox;
-    QCheckBox                      *m_checkGamutBox;
-    QCheckBox                      *m_embeddProfileBox;
-    QCheckBox                      *m_BPCBox;
-
-    QRadioButton                   *m_useEmbeddedProfile;
-    QRadioButton                   *m_useInDefaultProfile;
-    QRadioButton                   *m_useInSelectedProfile;
-    QRadioButton                   *m_useProofDefaultProfile;
-    QRadioButton                   *m_useProofSelectedProfile;
-    QRadioButton                   *m_useSpaceDefaultProfile;
-    QRadioButton                   *m_useSpaceSelectedProfile;
-    QRadioButton                   *m_useSRGBDefaultProfile;
-
-    QString                         m_inPath;
-    QString                         m_spacePath;
-    QString                         m_proofPath;
-
-    QButtonGroup                   *m_optionsBG;
-    QButtonGroup                   *m_inProfileBG;
-    QButtonGroup                   *m_spaceProfileBG;
-    QButtonGroup                   *m_proofProfileBG;
-    QButtonGroup                   *m_renderingIntentBG;
-    QButtonGroup                   *m_profilesBG;
-
-    QByteArray                      m_embeddedICC;
-
-    QToolBox                       *m_toolBoxWidgets;
-
-    KUrlRequester                  *m_inProfilesPath;
-    KUrlRequester                  *m_spaceProfilePath;
-    KUrlRequester                  *m_proofProfilePath;
-
-    KDcrawIface::RIntNumInput      *m_cInput;
-    KDcrawIface::RComboBox         *m_renderingIntentsCB;
-
-    Digikam::DImg                  *m_originalImage;
-
-    Digikam::CurvesWidget          *m_curvesWidget;
-
-    Digikam::ImageWidget           *m_previewWidget;
-
-    Digikam::ICCPreviewWidget      *m_iccInPreviewWidget;
-    Digikam::ICCPreviewWidget      *m_iccSpacePreviewWidget;
-    Digikam::ICCPreviewWidget      *m_iccProofPreviewWidget;
-
-    Digikam::EditorToolSettings    *m_gboxSettings;
+    ICCProofToolPriv* const d;
 };
 
 }  // namespace DigikamImagesPluginCore

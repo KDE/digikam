@@ -51,11 +51,11 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
+#include <kdebug.h>
 #include <kfile.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
-#include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -69,8 +69,8 @@
 
 // LibKDcraw includes
 
-#include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>
+#include <libkdcraw/rnuminput.h>
 
 // Local includes
 
@@ -80,8 +80,8 @@
 #include "dimg.h"
 #include "dimgimagefilters.h"
 #include "editortoolsettings.h"
-#include "histogramwidget.h"
 #include "histogrambox.h"
+#include "histogramwidget.h"
 #include "iccpreviewwidget.h"
 #include "iccprofileinfodlg.h"
 #include "icctransform.h"
@@ -96,75 +96,169 @@ using namespace Digikam;
 namespace DigikamImagesPluginCore
 {
 
+class ICCProofToolPriv
+{
+public:
+
+    ICCProofToolPriv()
+    {
+        cmEnabled                 = false;
+        hasICC                    = false;
+        destinationPreviewData    = 0;
+        doSoftProofBox            = 0;
+        checkGamutBox             = 0;
+        embeddProfileBox          = 0;
+        BPCBox                    = 0;
+        useEmbeddedProfile        = 0;
+        useInDefaultProfile       = 0;
+        useInSelectedProfile      = 0;
+        useProofDefaultProfile    = 0;
+        useProofSelectedProfile   = 0;
+        useSpaceDefaultProfile    = 0;
+        useSpaceSelectedProfile   = 0;
+        useSRGBDefaultProfile     = 0;
+        optionsBG                 = 0;
+        inProfileBG               = 0;
+        spaceProfileBG            = 0;
+        proofProfileBG            = 0;
+        renderingIntentBG         = 0;
+        profilesBG                = 0;
+        toolBoxWidgets            = 0;
+        inProfilesPath            = 0;
+        spaceProfilePath          = 0;
+        proofProfilePath          = 0;
+        cInput                    = 0;
+        renderingIntentsCB        = 0;
+        originalImage             = 0;
+        curvesWidget              = 0;
+        previewWidget             = 0;
+        iccInPreviewWidget        = 0;
+        iccSpacePreviewWidget     = 0;
+        iccProofPreviewWidget     = 0;
+        gboxSettings              = 0;
+    }
+
+    bool                cmEnabled;
+    bool                hasICC;
+
+    uchar*              destinationPreviewData;
+
+    QCheckBox*          doSoftProofBox;
+    QCheckBox*          checkGamutBox;
+    QCheckBox*          embeddProfileBox;
+    QCheckBox*          BPCBox;
+
+    QRadioButton*       useEmbeddedProfile;
+    QRadioButton*       useInDefaultProfile;
+    QRadioButton*       useInSelectedProfile;
+    QRadioButton*       useProofDefaultProfile;
+    QRadioButton*       useProofSelectedProfile;
+    QRadioButton*       useSpaceDefaultProfile;
+    QRadioButton*       useSpaceSelectedProfile;
+    QRadioButton*       useSRGBDefaultProfile;
+
+    QString             inPath;
+    QString             spacePath;
+    QString             proofPath;
+
+    QButtonGroup*       optionsBG;
+    QButtonGroup*       inProfileBG;
+    QButtonGroup*       spaceProfileBG;
+    QButtonGroup*       proofProfileBG;
+    QButtonGroup*       renderingIntentBG;
+    QButtonGroup*       profilesBG;
+
+    QByteArray          embeddedICC;
+
+    QToolBox*           toolBoxWidgets;
+
+    KUrlRequester*      inProfilesPath;
+    KUrlRequester*      spaceProfilePath;
+    KUrlRequester*      proofProfilePath;
+
+    ICCPreviewWidget*   iccInPreviewWidget;
+    ICCPreviewWidget*   iccSpacePreviewWidget;
+    ICCPreviewWidget*   iccProofPreviewWidget;
+
+    RIntNumInput*       cInput;
+    RComboBox*          renderingIntentsCB;
+
+    DImg*               originalImage;
+    CurvesWidget*       curvesWidget;
+    ImageWidget*        previewWidget;
+    EditorToolSettings* gboxSettings;
+};
+
 ICCProofTool::ICCProofTool(QObject* parent)
-            : EditorTool(parent)
+            : EditorTool(parent),
+              d(new ICCProofToolPriv)
 {
     setObjectName("colormanagement");
     setToolName(i18n("Color Management"));
     setToolIcon(SmallIcon("colormanagement"));
 
-    m_destinationPreviewData = 0;
-    m_cmEnabled              = true;
-    m_hasICC                 = false;
+    d->destinationPreviewData = 0;
+    d->cmEnabled              = true;
+    d->hasICC                 = false;
 
     ImageIface iface(0, 0);
-    m_originalImage = iface.getOriginalImg();
-    m_embeddedICC   = iface.getEmbeddedICCFromOriginalImage();
+    d->originalImage = iface.getOriginalImg();
+    d->embeddedICC   = iface.getEmbeddedICCFromOriginalImage();
 
-    m_previewWidget = new ImageWidget("colormanagement Tool",0,
-                                      i18n("<p>A preview of the image after "
-                                           "applying a color profile is shown here.</p>"));
-    setToolView(m_previewWidget);
+    d->previewWidget = new ImageWidget("colormanagement Tool",0,
+                                       i18n("<p>A preview of the image after "
+                                            "applying a color profile is shown here.</p>"));
+    setToolView(d->previewWidget);
 
     // -------------------------------------------------------------------
 
-    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                            EditorToolSettings::Load|
-                                            EditorToolSettings::SaveAs|
-                                            EditorToolSettings::Ok|
-                                            EditorToolSettings::Cancel,
-                                            EditorToolSettings::Histogram);
+    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                             EditorToolSettings::Load|
+                                             EditorToolSettings::SaveAs|
+                                             EditorToolSettings::Ok|
+                                             EditorToolSettings::Cancel,
+                                             EditorToolSettings::Histogram);
 
 
-    QGridLayout *gridSettings = new QGridLayout(m_gboxSettings->plainPage());
+    QGridLayout *gridSettings = new QGridLayout(d->gboxSettings->plainPage());
 
     // -------------------------------------------------------------
 
-    m_toolBoxWidgets         = new QToolBox(m_gboxSettings->plainPage());
-    QWidget *generalOptions  = new QWidget(m_toolBoxWidgets);
-    QWidget *inProfiles      = new QWidget(m_toolBoxWidgets);
-    QWidget *spaceProfiles   = new QWidget(m_toolBoxWidgets);
-    QWidget *proofProfiles   = new QWidget(m_toolBoxWidgets);
-    QWidget *lightnessadjust = new QWidget(m_toolBoxWidgets);
+    d->toolBoxWidgets        = new QToolBox(d->gboxSettings->plainPage());
+    QWidget *generalOptions  = new QWidget(d->toolBoxWidgets);
+    QWidget *inProfiles      = new QWidget(d->toolBoxWidgets);
+    QWidget *spaceProfiles   = new QWidget(d->toolBoxWidgets);
+    QWidget *proofProfiles   = new QWidget(d->toolBoxWidgets);
+    QWidget *lightnessadjust = new QWidget(d->toolBoxWidgets);
 
     //---------- "General" Page Setup ----------------------------------
 
-    m_toolBoxWidgets->insertItem(GENERALPAGE, generalOptions,
-                                 SmallIcon("system-run"), i18n("General Settings"));
+    d->toolBoxWidgets->insertItem(GENERALPAGE, generalOptions,
+                                  SmallIcon("system-run"), i18n("General Settings"));
     generalOptions->setWhatsThis( i18n("<p>Here you can set general parameters.</p>"));
 
     QGridLayout *zeroPageLayout = new QGridLayout(generalOptions);
 
-    m_doSoftProofBox = new QCheckBox(generalOptions);
-    m_doSoftProofBox->setText(i18n("Soft-proofing"));
-    m_doSoftProofBox->setWhatsThis( i18n("Rendering emulation of the device described "
+    d->doSoftProofBox = new QCheckBox(generalOptions);
+    d->doSoftProofBox->setText(i18n("Soft-proofing"));
+    d->doSoftProofBox->setWhatsThis(i18n("Rendering emulation of the device described "
                                          "by the \"Proofing\" profile. Useful to preview the final "
                                          "result without rendering to a physical medium."));
 
-    m_checkGamutBox = new QCheckBox(generalOptions);
-    m_checkGamutBox->setText(i18n("Check gamut"));
-    m_checkGamutBox->setWhatsThis( i18n("You can use this option if you want to show "
+    d->checkGamutBox = new QCheckBox(generalOptions);
+    d->checkGamutBox->setText(i18n("Check gamut"));
+    d->checkGamutBox->setWhatsThis(i18n("You can use this option if you want to show "
                                         "the colors that are outside the printer's gamut"));
 
-    m_embeddProfileBox = new QCheckBox(generalOptions);
-    m_embeddProfileBox->setChecked(true);
-    m_embeddProfileBox->setText(i18n("Assign profile"));
-    m_embeddProfileBox->setWhatsThis( i18n("You can use this option to embed "
+    d->embeddProfileBox = new QCheckBox(generalOptions);
+    d->embeddProfileBox->setChecked(true);
+    d->embeddProfileBox->setText(i18n("Assign profile"));
+    d->embeddProfileBox->setWhatsThis(i18n("You can use this option to embed "
                                            "the selected workspace color profile into the image."));
 
-    m_BPCBox = new QCheckBox(generalOptions);
-    m_BPCBox->setText(i18n("Use BPC"));
-    m_BPCBox->setWhatsThis( i18n("<p>The Black Point Compensation (BPC) feature works in conjunction "
+    d->BPCBox = new QCheckBox(generalOptions);
+    d->BPCBox->setText(i18n("Use BPC"));
+    d->BPCBox->setWhatsThis(i18n("<p>The Black Point Compensation (BPC) feature works in conjunction "
                                  "with Relative Colorimetric Intent. With Perceptual Intent, it should make no "
                                  "difference, since BPC is always on, and with Absolute Colorimetric, "
                                  "Intent it is always turned off.</p>"
@@ -172,14 +266,14 @@ ICCProofTool::ICCProofTool(QObject* parent)
                                  "With BPC the dark tones are optimally mapped (no clipping) from original the medium "
                                  "to the destination rendering medium, e.g. the combination of paper and ink.</p>"));
 
-    QLabel *intent       = new QLabel(i18n("Rendering Intent:"), generalOptions);
-    m_renderingIntentsCB = new RComboBox(generalOptions);
-    m_renderingIntentsCB->addItem("Perceptual");
-    m_renderingIntentsCB->addItem("Absolute Colorimetric");
-    m_renderingIntentsCB->addItem("Relative Colorimetric");
-    m_renderingIntentsCB->addItem("Saturation");
-    m_renderingIntentsCB->setDefaultIndex(0);
-    m_renderingIntentsCB->setWhatsThis( i18n("<ul><li>Perceptual intent causes the full gamut "
+    QLabel *intent        = new QLabel(i18n("Rendering Intent:"), generalOptions);
+    d->renderingIntentsCB = new RComboBox(generalOptions);
+    d->renderingIntentsCB->addItem("Perceptual");
+    d->renderingIntentsCB->addItem("Absolute Colorimetric");
+    d->renderingIntentsCB->addItem("Relative Colorimetric");
+    d->renderingIntentsCB->addItem("Saturation");
+    d->renderingIntentsCB->setDefaultIndex(0);
+    d->renderingIntentsCB->setWhatsThis( i18n("<ul><li>Perceptual intent causes the full gamut "
                 "of the image to be compressed or expanded to fill the gamut of the destination media, "
                 "so that gray balance is preserved but colorimetric accuracy may not be preserved.<br/>"
                 "In other words, if certain colors in an image fall outside of the range of colors that "
@@ -212,20 +306,20 @@ ICCProofTool::ICCProofTool(QObject* parent)
     lcmsLogoLabel->setPixmap( QPixmap( KStandardDirs::locate("data", "digikam/data/logo-lcms.png" ) ));
     lcmsLogoLabel->setToolTip(i18n("Visit Little CMS project website"));
 
-    zeroPageLayout->addWidget(m_doSoftProofBox,     0, 0, 1, 1);
-    zeroPageLayout->addWidget(lcmsLogoLabel,        0, 1, 1, 1);
-    zeroPageLayout->addWidget(m_checkGamutBox,      1, 0, 1, 1);
-    zeroPageLayout->addWidget(m_embeddProfileBox,   2, 0, 1, 1);
-    zeroPageLayout->addWidget(m_BPCBox,             3, 0, 1, 1);
-    zeroPageLayout->addWidget(intent,               4, 0, 1, 1);
-    zeroPageLayout->addWidget(m_renderingIntentsCB, 4, 1, 1, 1);
+    zeroPageLayout->addWidget(d->doSoftProofBox,     0, 0, 1, 1);
+    zeroPageLayout->addWidget(lcmsLogoLabel,         0, 1, 1, 1);
+    zeroPageLayout->addWidget(d->checkGamutBox,      1, 0, 1, 1);
+    zeroPageLayout->addWidget(d->embeddProfileBox,   2, 0, 1, 1);
+    zeroPageLayout->addWidget(d->BPCBox,             3, 0, 1, 1);
+    zeroPageLayout->addWidget(intent,                4, 0, 1, 1);
+    zeroPageLayout->addWidget(d->renderingIntentsCB, 4, 1, 1, 1);
     zeroPageLayout->setRowStretch(5, 10);
-    zeroPageLayout->setMargin(m_gboxSettings->spacingHint());
-    zeroPageLayout->setSpacing(m_gboxSettings->spacingHint());
+    zeroPageLayout->setMargin(d->gboxSettings->spacingHint());
+    zeroPageLayout->setSpacing(d->gboxSettings->spacingHint());
 
     //---------- "Input" Page Setup ----------------------------------
 
-    m_toolBoxWidgets->insertItem(INPUTPAGE, inProfiles, SmallIcon("camera-photo"), i18n("Input Profile"));
+    d->toolBoxWidgets->insertItem(INPUTPAGE, inProfiles, SmallIcon("camera-photo"), i18n("Input Profile"));
     inProfiles->setWhatsThis( i18n("<p>Set here all parameters relevant to Input Color "
                                    "Profiles.</p>"));
 
@@ -233,39 +327,39 @@ ICCProofTool::ICCProofTool(QObject* parent)
 
     QWidget *box1      = new QWidget(inProfiles);
     QVBoxLayout *hlay1 = new QVBoxLayout(box1);
-    m_inProfileBG      = new QButtonGroup(inProfiles);
+    d->inProfileBG     = new QButtonGroup(inProfiles);
 
-    m_useEmbeddedProfile = new QRadioButton(box1);
-    m_useEmbeddedProfile->setText(i18n("Use embedded profile"));
-    m_inProfileBG->addButton(m_useEmbeddedProfile, 0);
+    d->useEmbeddedProfile = new QRadioButton(box1);
+    d->useEmbeddedProfile->setText(i18n("Use embedded profile"));
+    d->inProfileBG->addButton(d->useEmbeddedProfile, 0);
 
-    m_useSRGBDefaultProfile = new QRadioButton(box1);
-    m_useSRGBDefaultProfile->setText(i18n("Use built-in sRGB profile"));
-    m_useSRGBDefaultProfile->setCheckable(true);
-    m_inProfileBG->addButton(m_useSRGBDefaultProfile, 1);
+    d->useSRGBDefaultProfile = new QRadioButton(box1);
+    d->useSRGBDefaultProfile->setText(i18n("Use built-in sRGB profile"));
+    d->useSRGBDefaultProfile->setCheckable(true);
+    d->inProfileBG->addButton(d->useSRGBDefaultProfile, 1);
 
-    m_useInDefaultProfile = new QRadioButton(box1);
-    m_useInDefaultProfile->setText(i18n("Use default profile"));
-    m_inProfileBG->addButton(m_useInDefaultProfile, 2);
+    d->useInDefaultProfile = new QRadioButton(box1);
+    d->useInDefaultProfile->setText(i18n("Use default profile"));
+    d->inProfileBG->addButton(d->useInDefaultProfile, 2);
 
-    m_useInSelectedProfile = new QRadioButton(box1);
-    m_useInSelectedProfile->setText(i18n("Use selected profile"));
-    m_inProfileBG->addButton(m_useInSelectedProfile, 3);
+    d->useInSelectedProfile = new QRadioButton(box1);
+    d->useInSelectedProfile->setText(i18n("Use selected profile"));
+    d->inProfileBG->addButton(d->useInSelectedProfile, 3);
 
-    hlay1->addWidget(m_useEmbeddedProfile);
-    hlay1->addWidget(m_useSRGBDefaultProfile);
-    hlay1->addWidget(m_useInDefaultProfile);
-    hlay1->addWidget(m_useInSelectedProfile);
+    hlay1->addWidget(d->useEmbeddedProfile);
+    hlay1->addWidget(d->useSRGBDefaultProfile);
+    hlay1->addWidget(d->useInDefaultProfile);
+    hlay1->addWidget(d->useInSelectedProfile);
     hlay1->setMargin(0);
     hlay1->setSpacing(0);
 
-    m_inProfilesPath = new KUrlRequester(inProfiles);
-    m_inProfilesPath->setMode(KFile::File|KFile::ExistingOnly);
-    m_inProfilesPath->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
+    d->inProfilesPath = new KUrlRequester(inProfiles);
+    d->inProfilesPath->setMode(KFile::File|KFile::ExistingOnly);
+    d->inProfilesPath->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
 
-    KFileDialog *inProfiles_dialog = m_inProfilesPath->fileDialog();
-    m_iccInPreviewWidget = new ICCPreviewWidget(inProfiles_dialog);
-    inProfiles_dialog->setPreviewWidget(m_iccInPreviewWidget);
+    KFileDialog *inProfiles_dialog = d->inProfilesPath->fileDialog();
+    d->iccInPreviewWidget = new ICCPreviewWidget(inProfiles_dialog);
+    inProfiles_dialog->setPreviewWidget(d->iccInPreviewWidget);
 
     QPushButton *inProfilesInfo = new QPushButton(i18n("Info..."), inProfiles);
 
@@ -283,21 +377,21 @@ ICCProofTool::ICCProofTool(QObject* parent)
     infoGrid->addWidget(make2,  0, 1, 1, 1);
     infoGrid->addWidget(model1, 1, 0, 1, 1);
     infoGrid->addWidget(model2, 1, 1, 1, 1);
-    infoGrid->setMargin(m_gboxSettings->spacingHint());
+    infoGrid->setMargin(d->gboxSettings->spacingHint());
     infoGrid->setSpacing(0);
 
-    firstPageLayout->addWidget(box1,             0, 0, 2, 1);
-    firstPageLayout->addWidget(inProfilesInfo,   0, 2, 1, 1);
-    firstPageLayout->addWidget(m_inProfilesPath, 2, 0, 1, 3);
-    firstPageLayout->addWidget(pictureInfo,      3, 0, 1, 3);
+    firstPageLayout->addWidget(box1,              0, 0, 2, 1);
+    firstPageLayout->addWidget(inProfilesInfo,    0, 2, 1, 1);
+    firstPageLayout->addWidget(d->inProfilesPath, 2, 0, 1, 3);
+    firstPageLayout->addWidget(pictureInfo,       3, 0, 1, 3);
     firstPageLayout->setColumnStretch(1, 10);
     firstPageLayout->setRowStretch(4, 10);
-    firstPageLayout->setMargin(m_gboxSettings->spacingHint());
-    firstPageLayout->setSpacing(m_gboxSettings->spacingHint());
+    firstPageLayout->setMargin(d->gboxSettings->spacingHint());
+    firstPageLayout->setSpacing(d->gboxSettings->spacingHint());
 
     //---------- "Workspace" Page Setup ---------------------------------
 
-    m_toolBoxWidgets->insertItem(WORKSPACEPAGE, spaceProfiles,
+    d->toolBoxWidgets->insertItem(WORKSPACEPAGE, spaceProfiles,
                                  SmallIcon("input-tablet"), i18n("Workspace Profile"));
     spaceProfiles->setWhatsThis( i18n("<p>Set here all parameters relevant to Color Workspace "
                                       "Profiles.</p>"));
@@ -306,86 +400,86 @@ ICCProofTool::ICCProofTool(QObject* parent)
 
     QWidget *box2      = new QWidget(spaceProfiles);
     QVBoxLayout *hlay2 = new QVBoxLayout(box2);
-    m_spaceProfileBG   = new QButtonGroup(box2);
+    d->spaceProfileBG  = new QButtonGroup(box2);
 
-    m_useSpaceDefaultProfile = new QRadioButton(box2);
-    m_useSpaceDefaultProfile->setText(i18n("Use default workspace profile"));
-    m_spaceProfileBG->addButton(m_useSpaceDefaultProfile, 0);
+    d->useSpaceDefaultProfile = new QRadioButton(box2);
+    d->useSpaceDefaultProfile->setText(i18n("Use default workspace profile"));
+    d->spaceProfileBG->addButton(d->useSpaceDefaultProfile, 0);
 
-    m_useSpaceSelectedProfile = new QRadioButton(box2);
-    m_useSpaceSelectedProfile->setText(i18n("Use selected profile"));
-    m_spaceProfileBG->addButton(m_useSpaceSelectedProfile, 1);
+    d->useSpaceSelectedProfile = new QRadioButton(box2);
+    d->useSpaceSelectedProfile->setText(i18n("Use selected profile"));
+    d->spaceProfileBG->addButton(d->useSpaceSelectedProfile, 1);
 
-    hlay2->addWidget(m_useSpaceDefaultProfile);
-    hlay2->addWidget(m_useSpaceSelectedProfile);
+    hlay2->addWidget(d->useSpaceDefaultProfile);
+    hlay2->addWidget(d->useSpaceSelectedProfile);
     hlay2->setMargin(0);
     hlay2->setSpacing(0);
 
-    m_spaceProfilePath = new KUrlRequester(spaceProfiles);
-    m_spaceProfilePath->setMode(KFile::File|KFile::ExistingOnly);
-    m_spaceProfilePath->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
+    d->spaceProfilePath = new KUrlRequester(spaceProfiles);
+    d->spaceProfilePath->setMode(KFile::File|KFile::ExistingOnly);
+    d->spaceProfilePath->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
 
-    KFileDialog *spaceProfiles_dialog = m_spaceProfilePath->fileDialog();
-    m_iccSpacePreviewWidget = new ICCPreviewWidget(spaceProfiles_dialog);
-    spaceProfiles_dialog->setPreviewWidget(m_iccSpacePreviewWidget);
+    KFileDialog *spaceProfiles_dialog = d->spaceProfilePath->fileDialog();
+    d->iccSpacePreviewWidget = new ICCPreviewWidget(spaceProfiles_dialog);
+    spaceProfiles_dialog->setPreviewWidget(d->iccSpacePreviewWidget);
 
     QPushButton *spaceProfilesInfo = new QPushButton(i18n("Info..."), box2);
 
-    secondPageLayout->addWidget(box2,               0, 0, 2, 1);
-    secondPageLayout->addWidget(spaceProfilesInfo,  0, 2, 1, 1);
-    secondPageLayout->addWidget(m_spaceProfilePath, 2, 0, 1, 3);
+    secondPageLayout->addWidget(box2,                0, 0, 2, 1);
+    secondPageLayout->addWidget(spaceProfilesInfo,   0, 2, 1, 1);
+    secondPageLayout->addWidget(d->spaceProfilePath, 2, 0, 1, 3);
     secondPageLayout->setColumnStretch(1, 10);
     secondPageLayout->setRowStretch(3, 10);
-    secondPageLayout->setMargin(m_gboxSettings->spacingHint());
-    secondPageLayout->setSpacing(m_gboxSettings->spacingHint());
+    secondPageLayout->setMargin(d->gboxSettings->spacingHint());
+    secondPageLayout->setSpacing(d->gboxSettings->spacingHint());
 
     //---------- "Proofing" Page Setup ---------------------------------
 
-    m_toolBoxWidgets->insertItem(PROOFINGPAGE, proofProfiles,
+    d->toolBoxWidgets->insertItem(PROOFINGPAGE, proofProfiles,
                                  SmallIcon("printer"), i18n("Proofing Profile"));
     proofProfiles->setWhatsThis( i18n("<p>Set here all parameters relevant to Proofing Color "
                                       "Profiles.</p>"));
 
     QGridLayout *thirdPageLayout = new QGridLayout(proofProfiles);
 
-    QWidget *box3      = new QWidget(proofProfiles);
-    QVBoxLayout *hlay3 = new QVBoxLayout(box3);
-    m_proofProfileBG   = new QButtonGroup(box3);
+    QWidget *box3       = new QWidget(proofProfiles);
+    QVBoxLayout *hlay3  = new QVBoxLayout(box3);
+    d->proofProfileBG   = new QButtonGroup(box3);
 
-    m_useProofDefaultProfile = new QRadioButton(box3);
-    m_useProofDefaultProfile->setText(i18n("Use default proof profile"));
-    m_proofProfileBG->addButton(m_useProofDefaultProfile, 0);
+    d->useProofDefaultProfile = new QRadioButton(box3);
+    d->useProofDefaultProfile->setText(i18n("Use default proof profile"));
+    d->proofProfileBG->addButton(d->useProofDefaultProfile, 0);
 
-    m_useProofSelectedProfile = new QRadioButton(box3);
-    m_useProofSelectedProfile->setText(i18n("Use selected profile"));
-    m_proofProfileBG->addButton(m_useProofSelectedProfile, 1);
+    d->useProofSelectedProfile = new QRadioButton(box3);
+    d->useProofSelectedProfile->setText(i18n("Use selected profile"));
+    d->proofProfileBG->addButton(d->useProofSelectedProfile, 1);
 
-    hlay3->addWidget(m_useProofDefaultProfile);
-    hlay3->addWidget(m_useProofSelectedProfile);
+    hlay3->addWidget(d->useProofDefaultProfile);
+    hlay3->addWidget(d->useProofSelectedProfile);
     hlay3->setMargin(0);
     hlay3->setSpacing(0);
 
-    m_proofProfilePath = new KUrlRequester(proofProfiles);
-    m_proofProfilePath->setMode(KFile::File|KFile::ExistingOnly);
-    m_proofProfilePath->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
+    d->proofProfilePath = new KUrlRequester(proofProfiles);
+    d->proofProfilePath->setMode(KFile::File|KFile::ExistingOnly);
+    d->proofProfilePath->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
 
-    KFileDialog *proofProfiles_dialog = m_proofProfilePath->fileDialog();
-    m_iccProofPreviewWidget = new ICCPreviewWidget(proofProfiles_dialog);
-    proofProfiles_dialog->setPreviewWidget(m_iccProofPreviewWidget);
+    KFileDialog *proofProfiles_dialog = d->proofProfilePath->fileDialog();
+    d->iccProofPreviewWidget = new ICCPreviewWidget(proofProfiles_dialog);
+    proofProfiles_dialog->setPreviewWidget(d->iccProofPreviewWidget);
 
     QPushButton *proofProfilesInfo = new QPushButton(i18n("Info..."), box3);
 
-    thirdPageLayout->addWidget(box3,               0, 0, 2, 1);
-    thirdPageLayout->addWidget(proofProfilesInfo,  0, 2, 1, 1);
-    thirdPageLayout->addWidget(m_proofProfilePath, 2, 0, 1, 3);
+    thirdPageLayout->addWidget(box3,                0, 0, 2, 1);
+    thirdPageLayout->addWidget(proofProfilesInfo,   0, 2, 1, 1);
+    thirdPageLayout->addWidget(d->proofProfilePath, 2, 0, 1, 3);
     thirdPageLayout->setColumnStretch(1, 10);
     thirdPageLayout->setRowStretch(3, 10);
-    thirdPageLayout->setMargin(m_gboxSettings->spacingHint());
-    thirdPageLayout->setSpacing(m_gboxSettings->spacingHint());
+    thirdPageLayout->setMargin(d->gboxSettings->spacingHint());
+    thirdPageLayout->setSpacing(d->gboxSettings->spacingHint());
 
     //---------- "Lightness" Page Setup ----------------------------------
 
-    m_toolBoxWidgets->insertItem(LIGHTNESSPAGE, lightnessadjust,
+    d->toolBoxWidgets->insertItem(LIGHTNESSPAGE, lightnessadjust,
                                  SmallIcon("format-stroke-color"), i18n("Lightness Adjustments"));
     lightnessadjust->setWhatsThis( i18n("<p>Set here all lightness adjustments to the target image.</p>"));
 
@@ -397,10 +491,10 @@ ICCProofTool::ICCProofTool(QObject* parent)
     QLabel *spacev = new QLabel(lightnessadjust);
     spacev->setFixedWidth(1);
 
-    m_curvesWidget = new CurvesWidget(256, 192, m_originalImage->bits(), m_originalImage->width(),
-                                                m_originalImage->height(), m_originalImage->sixteenBit(),
-                                                lightnessadjust);
-    m_curvesWidget->setWhatsThis( i18n("This is the curve adjustment of the image luminosity"));
+    d->curvesWidget = new CurvesWidget(256, 192, d->originalImage->bits(), d->originalImage->width(),
+                                                 d->originalImage->height(), d->originalImage->sixteenBit(),
+                                                 lightnessadjust);
+    d->curvesWidget->setWhatsThis( i18n("This is the curve adjustment of the image luminosity"));
 
     QLabel *spaceh = new QLabel(lightnessadjust);
     spaceh->setFixedHeight(1);
@@ -408,32 +502,32 @@ ICCProofTool::ICCProofTool(QObject* parent)
     ColorGradientWidget *hGradient = new ColorGradientWidget(Qt::Horizontal, 10, lightnessadjust);
     hGradient->setColors( QColor( "black" ), QColor( "white" ) );
 
-    m_cInput = new RIntNumInput(lightnessadjust);
-    m_cInput->input()->setLabel(i18n("Contrast:"), Qt::AlignLeft | Qt::AlignVCenter);
-    m_cInput->setRange(-100, 100, 1);
-    m_cInput->setSliderEnabled(true);
-    m_cInput->setDefaultValue(0);
-    m_cInput->setWhatsThis( i18n("Set here the contrast adjustment of the image."));
+    d->cInput = new RIntNumInput(lightnessadjust);
+    d->cInput->input()->setLabel(i18n("Contrast:"), Qt::AlignLeft | Qt::AlignVCenter);
+    d->cInput->setRange(-100, 100, 1);
+    d->cInput->setSliderEnabled(true);
+    d->cInput->setDefaultValue(0);
+    d->cInput->setWhatsThis( i18n("Set here the contrast adjustment of the image."));
 
-    fourPageLayout->addWidget(vGradient,      0, 0, 1, 1);
-    fourPageLayout->addWidget(spacev,         0, 1, 1, 1);
-    fourPageLayout->addWidget(m_curvesWidget, 0, 2, 1, 1);
-    fourPageLayout->addWidget(spaceh,         1, 2, 1, 1);
-    fourPageLayout->addWidget(hGradient,      2, 2, 1, 1);
-    fourPageLayout->addWidget(m_cInput,       4, 0, 1, 3);
-    fourPageLayout->setRowMinimumHeight(3, m_gboxSettings->spacingHint());
+    fourPageLayout->addWidget(vGradient,       0, 0, 1, 1);
+    fourPageLayout->addWidget(spacev,          0, 1, 1, 1);
+    fourPageLayout->addWidget(d->curvesWidget, 0, 2, 1, 1);
+    fourPageLayout->addWidget(spaceh,          1, 2, 1, 1);
+    fourPageLayout->addWidget(hGradient,       2, 2, 1, 1);
+    fourPageLayout->addWidget(d->cInput,       4, 0, 1, 3);
+    fourPageLayout->setRowMinimumHeight(3, d->gboxSettings->spacingHint());
     fourPageLayout->setRowStretch(5, 10);
-    fourPageLayout->setMargin(m_gboxSettings->spacingHint());
+    fourPageLayout->setMargin(d->gboxSettings->spacingHint());
     fourPageLayout->setSpacing(0);
 
     // -------------------------------------------------------------
 
-    gridSettings->addWidget(m_toolBoxWidgets, 0, 0, 1, 3);
-    gridSettings->setMargin(m_gboxSettings->spacingHint());
-    gridSettings->setSpacing(m_gboxSettings->spacingHint());
+    gridSettings->addWidget(d->toolBoxWidgets, 0, 0, 1, 3);
+    gridSettings->setMargin(d->gboxSettings->spacingHint());
+    gridSettings->setSpacing(d->gboxSettings->spacingHint());
 
-    setToolSettings(m_gboxSettings);
-    m_gboxSettings->enableButton(EditorToolSettings::Ok, false);
+    setToolSettings(d->gboxSettings);
+    d->gboxSettings->enableButton(EditorToolSettings::Ok, false);
     init();
 
     // -------------------------------------------------------------
@@ -441,57 +535,57 @@ ICCProofTool::ICCProofTool(QObject* parent)
     connect(lcmsLogoLabel, SIGNAL(leftClickedUrl(const QString&)),
             this, SLOT(processLCMSUrl(const QString&)));
 
-    connect(m_curvesWidget, SIGNAL(signalCurvesChanged()),
+    connect(d->curvesWidget, SIGNAL(signalCurvesChanged()),
             this, SLOT(slotTimer()));
 
-    connect(m_cInput, SIGNAL(valueChanged (int)),
+    connect(d->cInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotTimer()));
 
-    connect(m_renderingIntentsCB, SIGNAL(activated(int)),
+    connect(d->renderingIntentsCB, SIGNAL(activated(int)),
             this, SLOT(slotEffect()));
 
     //-- Check box options connections -------------------------------------------
 
-    connect(m_doSoftProofBox, SIGNAL(toggled(bool)),
+    connect(d->doSoftProofBox, SIGNAL(toggled(bool)),
             this, SLOT(slotEffect()));
 
-    connect(m_checkGamutBox, SIGNAL(toggled(bool)),
+    connect(d->checkGamutBox, SIGNAL(toggled(bool)),
             this, SLOT(slotEffect()));
 
-    connect(m_BPCBox, SIGNAL(toggled(bool)),
+    connect(d->BPCBox, SIGNAL(toggled(bool)),
             this, SLOT(slotEffect()));
 
     //-- Button Group ICC profile options connections ----------------------------
 
-    connect(m_inProfileBG, SIGNAL(buttonReleased(int)),
+    connect(d->inProfileBG, SIGNAL(buttonReleased(int)),
             this, SLOT(slotEffect()));
 
-    connect(m_spaceProfileBG, SIGNAL(buttonReleased(int)),
+    connect(d->spaceProfileBG, SIGNAL(buttonReleased(int)),
             this, SLOT(slotEffect()));
 
-    connect(m_proofProfileBG, SIGNAL(buttonReleased(int)),
+    connect(d->proofProfileBG, SIGNAL(buttonReleased(int)),
             this, SLOT(slotEffect()));
 
     //-- url requester ICC profile connections -----------------------------------
 
-    connect(m_inProfilesPath, SIGNAL(urlSelected(const Kurl&)),
+    connect(d->inProfilesPath, SIGNAL(urlSelected(const Kurl&)),
             this, SLOT(slotEffect()));
 
-    connect(m_spaceProfilePath, SIGNAL(urlSelected(const Kurl&)),
+    connect(d->spaceProfilePath, SIGNAL(urlSelected(const Kurl&)),
             this, SLOT(slotEffect()));
 
-    connect(m_proofProfilePath, SIGNAL(urlSelected(const Kurl&)),
+    connect(d->proofProfilePath, SIGNAL(urlSelected(const Kurl&)),
             this, SLOT(slotEffect()));
 
     //-- Image preview widget connections ----------------------------
 
-    connect(m_previewWidget, SIGNAL(signalResized()),
+    connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
 
-    connect(m_previewWidget, SIGNAL(spotPositionChangedFromOriginal(const Digikam::DColor&, const QPoint&)),
+    connect(d->previewWidget, SIGNAL(spotPositionChangedFromOriginal(const Digikam::DColor&, const QPoint&)),
             this, SLOT(slotSpotColorChanged(const Digikam::DColor&)));
 
-    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
+    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
             this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
 
     //-- ICC profile preview connections -----------------------------
@@ -508,7 +602,8 @@ ICCProofTool::ICCProofTool(QObject* parent)
 
 ICCProofTool::~ICCProofTool()
 {
-    delete [] m_destinationPreviewData;
+    delete [] d->destinationPreviewData;
+    delete d;
 }
 
 void ICCProofTool::readSettings()
@@ -521,14 +616,14 @@ void ICCProofTool::readSettings()
 
     if (!group.readEntry("EnableCM", false))
     {
-        m_cmEnabled = false;
+        d->cmEnabled = false;
         slotToggledWidgets(false);
     }
     else
     {
-        m_inPath      = group.readEntry("InProfileFile");
-        m_spacePath   = group.readEntry("WorkProfileFile");
-        m_proofPath   = group.readEntry("ProofProfileFile");
+        d->inPath      = group.readEntry("InProfileFile");
+        d->spacePath   = group.readEntry("WorkProfileFile");
+        d->proofPath   = group.readEntry("ProofProfileFile");
 
         if (QFile::exists(group.readPathEntry("DefaultPath", QString())))
         {
@@ -548,47 +643,47 @@ void ICCProofTool::readSettings()
     group = config->group("colormanagement Tool");
 
 
-    m_toolBoxWidgets->setCurrentIndex(group.readEntry("Settings Tab", (int)GENERALPAGE));
-    m_inProfilesPath->setUrl(group.readPathEntry("InputProfilePath", defaultICCPath));
-    m_proofProfilePath->setUrl(group.readPathEntry("ProofProfilePath", defaultICCPath));
-    m_spaceProfilePath->setUrl(group.readPathEntry("SpaceProfilePath", defaultICCPath));
-    m_renderingIntentsCB->setCurrentIndex(group.readEntry("RenderingIntent", m_renderingIntentsCB->defaultIndex()));
-    m_doSoftProofBox->setChecked(group.readEntry("DoSoftProof", false));
-    m_checkGamutBox->setChecked(group.readEntry("CheckGamut", false));
-    m_embeddProfileBox->setChecked(group.readEntry("EmbeddProfile", true));
-    m_BPCBox->setChecked(group.readEntry("BPC", true));
-    m_inProfileBG->button(group.readEntry("InputProfileMethod", 0))->setChecked(true);
-    m_spaceProfileBG->button(group.readEntry("SpaceProfileMethod", 0))->setChecked(true);
-    m_proofProfileBG->button(group.readEntry("ProofProfileMethod", 0))->setChecked(true);
-    m_cInput->setValue(group.readEntry("ContrastAdjustment", m_cInput->defaultValue()));
+    d->toolBoxWidgets->setCurrentIndex(group.readEntry("Settings Tab", (int)GENERALPAGE));
+    d->inProfilesPath->setUrl(group.readPathEntry("InputProfilePath", defaultICCPath));
+    d->proofProfilePath->setUrl(group.readPathEntry("ProofProfilePath", defaultICCPath));
+    d->spaceProfilePath->setUrl(group.readPathEntry("SpaceProfilePath", defaultICCPath));
+    d->renderingIntentsCB->setCurrentIndex(group.readEntry("RenderingIntent", d->renderingIntentsCB->defaultIndex()));
+    d->doSoftProofBox->setChecked(group.readEntry("DoSoftProof", false));
+    d->checkGamutBox->setChecked(group.readEntry("CheckGamut", false));
+    d->embeddProfileBox->setChecked(group.readEntry("EmbeddProfile", true));
+    d->BPCBox->setChecked(group.readEntry("BPC", true));
+    d->inProfileBG->button(group.readEntry("InputProfileMethod", 0))->setChecked(true);
+    d->spaceProfileBG->button(group.readEntry("SpaceProfileMethod", 0))->setChecked(true);
+    d->proofProfileBG->button(group.readEntry("ProofProfileMethod", 0))->setChecked(true);
+    d->cInput->setValue(group.readEntry("ContrastAdjustment", d->cInput->defaultValue()));
 
     for (int i = 0 ; i < 5 ; ++i)
-        m_curvesWidget->curves()->curvesChannelReset(i);
+        d->curvesWidget->curves()->curvesChannelReset(i);
 
-    m_curvesWidget->curves()->setCurveType(m_curvesWidget->m_channelType, ImageCurves::CURVE_SMOOTH);
-    m_curvesWidget->reset();
+    d->curvesWidget->curves()->setCurveType(d->curvesWidget->m_channelType, ImageCurves::CURVE_SMOOTH);
+    d->curvesWidget->reset();
 
     for (int j = 0 ; j < 17 ; ++j)
     {
         QPoint disable(-1, -1);
         QPoint p = group.readEntry(QString("CurveAdjustmentPoint%1").arg(j), disable);
 
-        if (m_originalImage->sixteenBit() && p.x() != -1)
+        if (d->originalImage->sixteenBit() && p.x() != -1)
         {
             p.setX(p.x()*255);
             p.setY(p.y()*255);
         }
 
-        m_curvesWidget->curves()->setCurvePoint(ImageHistogram::ValueChannel, j, p);
+        d->curvesWidget->curves()->setCurvePoint(ImageHistogram::ValueChannel, j, p);
     }
 
     for (int i = 0 ; i < 5 ; ++i)
-        m_curvesWidget->curves()->curvesCalculateCurve(i);
+        d->curvesWidget->curves()->curvesCalculateCurve(i);
 
     // we need to call the set methods here, otherwise the curve will not be updated correctly
-    m_gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
+    d->gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
                     (int)EditorToolSettings::LuminosityChannel));
-    m_gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
+    d->gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
                     (int)CurvesWidget::LogScaleHistogram));
 }
 
@@ -596,27 +691,27 @@ void ICCProofTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("colormanagement Tool");
-    group.writeEntry("Settings Tab", m_toolBoxWidgets->currentIndex());
-    group.writeEntry("Histogram Channel", m_gboxSettings->histogramBox()->channel());
-    group.writeEntry("Histogram Scale", m_gboxSettings->histogramBox()->scale());
-    group.writeEntry("InputProfilePath", m_inProfilesPath->url());
-    group.writeEntry("ProofProfilePath", m_proofProfilePath->url());
-    group.writeEntry("SpaceProfilePath", m_spaceProfilePath->url());
-    group.writeEntry("RenderingIntent", m_renderingIntentsCB->currentIndex());
-    group.writeEntry("DoSoftProof", m_doSoftProofBox->isChecked());
-    group.writeEntry("CheckGamut", m_checkGamutBox->isChecked());
-    group.writeEntry("EmbeddProfile", m_embeddProfileBox->isChecked());
-    group.writeEntry("BPC", m_BPCBox->isChecked());
-    group.writeEntry("InputProfileMethod", m_inProfileBG->checkedId());
-    group.writeEntry("SpaceProfileMethod", m_spaceProfileBG->checkedId());
-    group.writeEntry("ProofProfileMethod", m_proofProfileBG->checkedId());
-    group.writeEntry("ContrastAdjustment", m_cInput->value());
+    group.writeEntry("Settings Tab", d->toolBoxWidgets->currentIndex());
+    group.writeEntry("Histogram Channel", d->gboxSettings->histogramBox()->channel());
+    group.writeEntry("Histogram Scale", d->gboxSettings->histogramBox()->scale());
+    group.writeEntry("InputProfilePath", d->inProfilesPath->url());
+    group.writeEntry("ProofProfilePath", d->proofProfilePath->url());
+    group.writeEntry("SpaceProfilePath", d->spaceProfilePath->url());
+    group.writeEntry("RenderingIntent", d->renderingIntentsCB->currentIndex());
+    group.writeEntry("DoSoftProof", d->doSoftProofBox->isChecked());
+    group.writeEntry("CheckGamut", d->checkGamutBox->isChecked());
+    group.writeEntry("EmbeddProfile", d->embeddProfileBox->isChecked());
+    group.writeEntry("BPC", d->BPCBox->isChecked());
+    group.writeEntry("InputProfileMethod", d->inProfileBG->checkedId());
+    group.writeEntry("SpaceProfileMethod", d->spaceProfileBG->checkedId());
+    group.writeEntry("ProofProfileMethod", d->proofProfileBG->checkedId());
+    group.writeEntry("ContrastAdjustment", d->cInput->value());
 
     for (int j = 0 ; j < 17 ; ++j)
     {
-        QPoint p = m_curvesWidget->curves()->getCurvePoint(ImageHistogram::ValueChannel, j);
+        QPoint p = d->curvesWidget->curves()->getCurvePoint(ImageHistogram::ValueChannel, j);
 
-        if (m_originalImage->sixteenBit() && p.x() != -1)
+        if (d->originalImage->sixteenBit() && p.x() != -1)
         {
             p.setX(p.x()/255);
             p.setY(p.y()/255);
@@ -625,7 +720,7 @@ void ICCProofTool::writeSettings()
         group.writeEntry(QString("CurveAdjustmentPoint%1").arg(j), p);
     }
 
-    m_previewWidget->writeSettings();
+    d->previewWidget->writeSettings();
     group.sync();
 }
 
@@ -636,24 +731,24 @@ void ICCProofTool::processLCMSUrl(const QString& url)
 
 void ICCProofTool::slotSpotColorChanged(const DColor& color)
 {
-    m_curvesWidget->setCurveGuide(color);
+    d->curvesWidget->setCurveGuide(color);
 }
 
 void ICCProofTool::slotColorSelectedFromTarget( const DColor& color )
 {
-    m_gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
+    d->gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }
 
 void ICCProofTool::slotResetSettings()
 {
-    m_cInput->blockSignals(true);
-    m_cInput->slotReset();
+    d->cInput->blockSignals(true);
+    d->cInput->slotReset();
 
     for (int i = 0 ; i < 5 ; ++i)
-       m_curvesWidget->curves()->curvesChannelReset(i);
+       d->curvesWidget->curves()->curvesChannelReset(i);
 
-    m_curvesWidget->reset();
-    m_cInput->blockSignals(false);
+    d->curvesWidget->reset();
+    d->cInput->blockSignals(false);
 
     slotEffect();
 }
@@ -661,22 +756,22 @@ void ICCProofTool::slotResetSettings()
 void ICCProofTool::slotEffect()
 {
     kapp->setOverrideCursor(Qt::WaitCursor);
-    m_gboxSettings->enableButton(EditorToolSettings::Ok, true);
-    m_gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
+    d->gboxSettings->enableButton(EditorToolSettings::Ok, true);
+    d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
     IccTransform transform;
 
-    if (m_destinationPreviewData)
-       delete [] m_destinationPreviewData;
+    if (d->destinationPreviewData)
+       delete [] d->destinationPreviewData;
 
-    ImageIface *iface = m_previewWidget->imageIface();
-    m_destinationPreviewData   = iface->getPreviewImage();
+    ImageIface *iface = d->previewWidget->imageIface();
+    d->destinationPreviewData   = iface->getPreviewImage();
     int  w                     = iface->previewWidth();
     int  h                     = iface->previewHeight();
     bool a                     = iface->previewHasAlpha();
     bool sb                    = iface->previewSixteenBit();
 
-    DImg preview(w, h, sb, a, m_destinationPreviewData);
+    DImg preview(w, h, sb, a, d->destinationPreviewData);
 
     QString tmpInPath;
     QString tmpProofPath;
@@ -689,11 +784,11 @@ void ICCProofTool::slotEffect()
 
     if (useDefaultInProfile())
     {
-        tmpInPath = m_inPath;
+        tmpInPath = d->inPath;
     }
     else if (useSelectedInProfile())
     {
-        tmpInPath = m_inProfilesPath->url().path();
+        tmpInPath = d->inProfilesPath->url().path();
         QFileInfo info(tmpInPath);
         if (!info.exists() || !info.isReadable() || !info.isFile() )
         {
@@ -708,11 +803,11 @@ void ICCProofTool::slotEffect()
 
     if (useDefaultProofProfile())
     {
-        tmpProofPath = m_proofPath;
+        tmpProofPath = d->proofPath;
     }
     else
     {
-        tmpProofPath = m_proofProfilePath->url().path();
+        tmpProofPath = d->proofProfilePath->url().path();
         QFileInfo info(tmpProofPath);
         if (!info.exists() || !info.isReadable() || !info.isFile() )
         {
@@ -723,18 +818,18 @@ void ICCProofTool::slotEffect()
         }
     }
 
-    if (m_doSoftProofBox->isChecked())
+    if (d->doSoftProofBox->isChecked())
         proofCondition = tmpProofPath.isEmpty();
 
     //-- Workspace profile parameters --------------
 
     if (useDefaultSpaceProfile())
     {
-        tmpSpacePath = m_spacePath;
+        tmpSpacePath = d->spacePath;
     }
     else
     {
-        tmpSpacePath = m_spaceProfilePath->url().path();
+        tmpSpacePath = d->spaceProfilePath->url().path();
         QFileInfo info(tmpSpacePath);
         if (!info.exists() || !info.isReadable() || !info.isFile() )
         {
@@ -749,11 +844,11 @@ void ICCProofTool::slotEffect()
 
     //-- Perform the color transformations ------------------
 
-    transform.getTransformType(m_doSoftProofBox->isChecked());
+    transform.getTransformType(d->doSoftProofBox->isChecked());
 
-    if (m_doSoftProofBox->isChecked())
+    if (d->doSoftProofBox->isChecked())
     {
-        if (m_useEmbeddedProfile->isChecked())
+        if (d->useEmbeddedProfile->isChecked())
         {
             transform.setProfiles( tmpSpacePath, tmpProofPath, true );
         }
@@ -764,7 +859,7 @@ void ICCProofTool::slotEffect()
     }
     else
     {
-        if (m_useEmbeddedProfile->isChecked())
+        if (d->useEmbeddedProfile->isChecked())
         {
             transform.setProfiles( tmpSpacePath );
         }
@@ -784,52 +879,52 @@ void ICCProofTool::slotEffect()
                         "<p>If you want to do a \"soft-proof\" transform, in addition to these profiles "
                         "you need a \"Proof\" profile.</p>");
         KMessageBox::information(kapp->activeWindow(), error);
-        m_gboxSettings->enableButton(EditorToolSettings::Ok, false);
+        d->gboxSettings->enableButton(EditorToolSettings::Ok, false);
     }
     else
     {
-        if (m_useEmbeddedProfile->isChecked())
+        if (d->useEmbeddedProfile->isChecked())
         {
-            transform.apply(preview, m_embeddedICC, m_renderingIntentsCB->currentIndex(), useBPC(),
-                            m_checkGamutBox->isChecked(), useBuiltinProfile());
+            transform.apply(preview, d->embeddedICC, d->renderingIntentsCB->currentIndex(), useBPC(),
+                            d->checkGamutBox->isChecked(), useBuiltinProfile());
         }
         else
         {
             QByteArray fakeProfile = QByteArray();
-            transform.apply(preview, fakeProfile, m_renderingIntentsCB->currentIndex(), useBPC(),
-                            m_checkGamutBox->isChecked(), useBuiltinProfile());
+            transform.apply(preview, fakeProfile, d->renderingIntentsCB->currentIndex(), useBPC(),
+                            d->checkGamutBox->isChecked(), useBuiltinProfile());
         }
 
         //-- Calculate and apply the curve on image after transformation -------------
 
         DImg preview2(w, h, sb, a, 0, false);
-        m_curvesWidget->curves()->curvesLutSetup(ImageHistogram::AlphaChannel);
-        m_curvesWidget->curves()->curvesLutProcess(preview.bits(), preview2.bits(), w, h);
+        d->curvesWidget->curves()->curvesLutSetup(ImageHistogram::AlphaChannel);
+        d->curvesWidget->curves()->curvesLutProcess(preview.bits(), preview2.bits(), w, h);
 
         //-- Adjust contrast ---------------------------------------------------------
 
         BCGModifier cmod;
-        cmod.setContrast((double)(m_cInput->value()/100.0) + 1.00);
+        cmod.setContrast((double)(d->cInput->value()/100.0) + 1.00);
         cmod.applyBCG(preview2);
 
         iface->putPreviewImage(preview2.bits());
-        m_previewWidget->updatePreview();
+        d->previewWidget->updatePreview();
 
         //-- Update histogram --------------------------------------------------------
 
-        memcpy(m_destinationPreviewData, preview2.bits(), preview2.numBytes());
-        m_gboxSettings->histogramBox()->histogram()->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
+        memcpy(d->destinationPreviewData, preview2.bits(), preview2.numBytes());
+        d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData, w, h, sb, 0, 0, 0, false);
         kapp->restoreOverrideCursor();
     }
 }
 
 void ICCProofTool::finalRendering()
 {
-    if (!m_doSoftProofBox->isChecked())
+    if (!d->doSoftProofBox->isChecked())
     {
         kapp->setOverrideCursor( Qt::WaitCursor );
 
-        ImageIface *iface = m_previewWidget->imageIface();
+        ImageIface *iface = d->previewWidget->imageIface();
         uchar *data                = iface->getOriginalImage();
         int w                      = iface->originalWidth();
         int h                      = iface->originalHeight();
@@ -851,11 +946,11 @@ void ICCProofTool::finalRendering()
 
             if (useDefaultInProfile())
             {
-                tmpInPath = m_inPath;
+                tmpInPath = d->inPath;
             }
             else if (useSelectedInProfile())
             {
-                tmpInPath = m_inProfilesPath->url().path();
+                tmpInPath = d->inProfilesPath->url().path();
                 QFileInfo info(tmpInPath);
                 if (!info.exists() || !info.isReadable() || !info.isFile() )
                 {
@@ -870,11 +965,11 @@ void ICCProofTool::finalRendering()
 
             if (useDefaultProofProfile())
             {
-                tmpProofPath = m_proofPath;
+                tmpProofPath = d->proofPath;
             }
             else
             {
-                tmpProofPath = m_proofProfilePath->url().path();
+                tmpProofPath = d->proofProfilePath->url().path();
                 QFileInfo info(tmpProofPath);
                 if (!info.exists() || !info.isReadable() || !info.isFile() )
                 {
@@ -892,11 +987,11 @@ void ICCProofTool::finalRendering()
 
             if (useDefaultSpaceProfile())
             {
-                tmpSpacePath = m_spacePath;
+                tmpSpacePath = d->spacePath;
             }
             else
             {
-                tmpSpacePath = m_spaceProfilePath->url().path();
+                tmpSpacePath = d->spaceProfilePath->url().path();
                 QFileInfo info(tmpSpacePath);
                 if (!info.exists() || !info.isReadable() || !info.isFile() )
                 {
@@ -909,11 +1004,11 @@ void ICCProofTool::finalRendering()
 
             //-- Perform the color transformations ------------------
 
-            transform.getTransformType(m_doSoftProofBox->isChecked());
+            transform.getTransformType(d->doSoftProofBox->isChecked());
 
-            if (m_doSoftProofBox->isChecked())
+            if (d->doSoftProofBox->isChecked())
             {
-                if (m_useEmbeddedProfile->isChecked())
+                if (d->useEmbeddedProfile->isChecked())
                 {
                     transform.setProfiles( tmpSpacePath, tmpProofPath, true );
                 }
@@ -924,7 +1019,7 @@ void ICCProofTool::finalRendering()
             }
             else
             {
-                if (m_useEmbeddedProfile->isChecked())
+                if (d->useEmbeddedProfile->isChecked())
                 {
                     transform.setProfiles( tmpSpacePath );
                 }
@@ -934,21 +1029,21 @@ void ICCProofTool::finalRendering()
                 }
             }
 
-            if (m_useEmbeddedProfile->isChecked())
+            if (d->useEmbeddedProfile->isChecked())
             {
-                transform.apply(img, m_embeddedICC, m_renderingIntentsCB->currentIndex(), useBPC(),
-                                m_checkGamutBox->isChecked(), useBuiltinProfile());
+                transform.apply(img, d->embeddedICC, d->renderingIntentsCB->currentIndex(), useBPC(),
+                                d->checkGamutBox->isChecked(), useBuiltinProfile());
             }
             else
             {
                 QByteArray fakeProfile = QByteArray();
-                transform.apply(img, fakeProfile, m_renderingIntentsCB->currentIndex(), useBPC(),
-                                m_checkGamutBox->isChecked(), useBuiltinProfile());
+                transform.apply(img, fakeProfile, d->renderingIntentsCB->currentIndex(), useBPC(),
+                                d->checkGamutBox->isChecked(), useBuiltinProfile());
             }
 
             //-- Embed the workspace profile if necessary --------------------------------
 
-            if (m_embeddProfileBox->isChecked())
+            if (d->embeddProfileBox->isChecked())
             {
                 iface->setEmbeddedICCToOriginalImage( tmpSpacePath );
                 kDebug(50006) << QFile::encodeName(tmpSpacePath) << endl;
@@ -957,13 +1052,13 @@ void ICCProofTool::finalRendering()
             //-- Calculate and apply the curve on image after transformation -------------
 
             DImg img2(w, h, sb, a, 0, false);
-            m_curvesWidget->curves()->curvesLutSetup(ImageHistogram::AlphaChannel);
-            m_curvesWidget->curves()->curvesLutProcess(img.bits(), img2.bits(), w, h);
+            d->curvesWidget->curves()->curvesLutSetup(ImageHistogram::AlphaChannel);
+            d->curvesWidget->curves()->curvesLutProcess(img.bits(), img2.bits(), w, h);
 
             //-- Adjust contrast ---------------------------------------------------------
 
             BCGModifier cmod;
-            cmod.setContrast((double)(m_cInput->value()/100.0) + 1.00);
+            cmod.setContrast((double)(d->cInput->value()/100.0) + 1.00);
             cmod.applyBCG(img2);
 
             iface->putOriginalImage("Color Management", img2.bits());
@@ -976,16 +1071,16 @@ void ICCProofTool::finalRendering()
 
 void ICCProofTool::slotToggledWidgets( bool t)
 {
-    m_useInDefaultProfile->setEnabled(t);
-    m_useProofDefaultProfile->setEnabled(t);
-    m_useSpaceDefaultProfile->setEnabled(t);
+    d->useInDefaultProfile->setEnabled(t);
+    d->useProofDefaultProfile->setEnabled(t);
+    d->useSpaceDefaultProfile->setEnabled(t);
 }
 
 void ICCProofTool::slotInICCInfo()
 {
     if (useEmbeddedProfile())
     {
-        getICCInfo(m_embeddedICC);
+        getICCInfo(d->embeddedICC);
     }
     else if(useBuiltinProfile())
     {
@@ -996,11 +1091,11 @@ void ICCProofTool::slotInICCInfo()
     }
     else if (useDefaultInProfile())
     {
-        getICCInfo(m_inPath);
+        getICCInfo(d->inPath);
     }
     else if (useSelectedInProfile())
     {
-        getICCInfo(m_inProfilesPath->url().path());
+        getICCInfo(d->inProfilesPath->url().path());
     }
 }
 
@@ -1008,11 +1103,11 @@ void ICCProofTool::slotProofICCInfo()
 {
     if (useDefaultProofProfile())
     {
-        getICCInfo(m_proofPath);
+        getICCInfo(d->proofPath);
     }
     else
     {
-        getICCInfo(m_proofProfilePath->url().path());
+        getICCInfo(d->proofProfilePath->url().path());
     }
 }
 
@@ -1020,11 +1115,11 @@ void ICCProofTool::slotSpaceICCInfo()
 {
     if (useDefaultSpaceProfile())
     {
-        getICCInfo(m_spacePath);
+        getICCInfo(d->spacePath);
     }
     else
     {
-        getICCInfo(m_spaceProfilePath->url().path());
+        getICCInfo(d->spaceProfilePath->url().path());
     }
 }
 
@@ -1057,7 +1152,7 @@ void ICCProofTool::getICCInfo(const QByteArray& profile)
 
 void ICCProofTool::slotCMDisabledWarning()
 {
-    if (!m_cmEnabled)
+    if (!d->cmEnabled)
     {
         QString message = i18n("<p>You have not enabled Color Management in the digiKam preferences.</p>");
         message.append( i18n("<p>\"Use of default profile\" options will be disabled now.</p>"));
@@ -1070,58 +1165,58 @@ void ICCProofTool::slotCMDisabledWarning()
 
 bool ICCProofTool::useBPC()
 {
-    return m_BPCBox->isChecked();
+    return d->BPCBox->isChecked();
 }
 
 bool ICCProofTool::doProof()
 {
-    return m_doSoftProofBox->isChecked();
+    return d->doSoftProofBox->isChecked();
 }
 
 bool ICCProofTool::checkGamut()
 {
-    return m_checkGamutBox->isChecked();
+    return d->checkGamutBox->isChecked();
 }
 
 bool ICCProofTool::embedProfile()
 {
-    return m_embeddProfileBox->isChecked();
+    return d->embeddProfileBox->isChecked();
 }
 
 //-- Input Tab ---------------------------
 
 bool ICCProofTool::useEmbeddedProfile()
 {
-    return m_useEmbeddedProfile->isChecked();
+    return d->useEmbeddedProfile->isChecked();
 }
 
 bool ICCProofTool::useBuiltinProfile()
 {
-    return m_useSRGBDefaultProfile->isChecked();
+    return d->useSRGBDefaultProfile->isChecked();
 }
 
 bool ICCProofTool::useDefaultInProfile()
 {
-    return m_useInDefaultProfile->isChecked();
+    return d->useInDefaultProfile->isChecked();
 }
 
 bool ICCProofTool::useSelectedInProfile()
 {
-    return m_useInSelectedProfile->isChecked();
+    return d->useInSelectedProfile->isChecked();
 }
 
 //-- Workspace Tab ---------------------------
 
 bool ICCProofTool::useDefaultSpaceProfile()
 {
-    return m_useSpaceDefaultProfile->isChecked();
+    return d->useSpaceDefaultProfile->isChecked();
 }
 
 //-- Proofing Tab ---------------------------
 
 bool ICCProofTool::useDefaultProofProfile()
 {
-    return m_useProofDefaultProfile->isChecked();
+    return d->useProofDefaultProfile->isChecked();
 }
 
 //-- Load all settings from file --------------------------------------
@@ -1151,24 +1246,24 @@ void ICCProofTool::slotLoadSettings()
 
         blockSignals(true);
 
-        m_renderingIntentsCB->setCurrentIndex( stream.readLine().toInt() );
-        m_doSoftProofBox->setChecked( (bool)(stream.readLine().toUInt()) );
-        m_checkGamutBox->setChecked( (bool)(stream.readLine().toUInt()) );
-        m_embeddProfileBox->setChecked( (bool)(stream.readLine().toUInt()) );
-        m_BPCBox->setChecked( (bool)(stream.readLine().toUInt()) );
-        m_inProfileBG->button( stream.readLine().toInt() )->setChecked(true);
-        m_spaceProfileBG->button( stream.readLine().toInt() )->setChecked(true);
-        m_proofProfileBG->button( stream.readLine().toInt() )->setChecked(true);
-        m_inProfilesPath->setUrl( stream.readLine() );
-        m_proofProfilePath->setUrl( stream.readLine() );
-        m_spaceProfilePath->setUrl( stream.readLine() );
-        m_cInput->setValue( stream.readLine().toInt() );
+        d->renderingIntentsCB->setCurrentIndex( stream.readLine().toInt() );
+        d->doSoftProofBox->setChecked( (bool)(stream.readLine().toUInt()) );
+        d->checkGamutBox->setChecked( (bool)(stream.readLine().toUInt()) );
+        d->embeddProfileBox->setChecked( (bool)(stream.readLine().toUInt()) );
+        d->BPCBox->setChecked( (bool)(stream.readLine().toUInt()) );
+        d->inProfileBG->button( stream.readLine().toInt() )->setChecked(true);
+        d->spaceProfileBG->button( stream.readLine().toInt() )->setChecked(true);
+        d->proofProfileBG->button( stream.readLine().toInt() )->setChecked(true);
+        d->inProfilesPath->setUrl( stream.readLine() );
+        d->proofProfilePath->setUrl( stream.readLine() );
+        d->spaceProfilePath->setUrl( stream.readLine() );
+        d->cInput->setValue( stream.readLine().toInt() );
 
         for (int i = 0 ; i < 5 ; ++i)
-            m_curvesWidget->curves()->curvesChannelReset(i);
+            d->curvesWidget->curves()->curvesChannelReset(i);
 
-        m_curvesWidget->curves()->setCurveType(m_curvesWidget->m_channelType, ImageCurves::CURVE_SMOOTH);
-        m_curvesWidget->reset();
+        d->curvesWidget->curves()->setCurveType(d->curvesWidget->m_channelType, ImageCurves::CURVE_SMOOTH);
+        d->curvesWidget->reset();
 
         for (int j = 0 ; j < 17 ; ++j)
         {
@@ -1177,21 +1272,21 @@ void ICCProofTool::slotLoadSettings()
             p.setX( stream.readLine().toInt() );
             p.setY( stream.readLine().toInt() );
 
-            if (m_originalImage->sixteenBit() && p != disable)
+            if (d->originalImage->sixteenBit() && p != disable)
             {
                 p.setX(p.x()*255);
                 p.setY(p.y()*255);
             }
 
-            m_curvesWidget->curves()->setCurvePoint(ImageHistogram::ValueChannel, j, p);
+            d->curvesWidget->curves()->setCurvePoint(ImageHistogram::ValueChannel, j, p);
         }
 
         blockSignals(false);
 
         for (int i = 0 ; i < 5 ; ++i)
-           m_curvesWidget->curves()->curvesCalculateCurve(i);
+           d->curvesWidget->curves()->curvesCalculateCurve(i);
 
-        m_gboxSettings->histogramBox()->histogram()->reset();
+        d->gboxSettings->histogramBox()->histogram()->reset();
         slotEffect();
     }
     else
@@ -1217,23 +1312,23 @@ void ICCProofTool::slotSaveAsSettings()
     {
         QTextStream stream( &file );
         stream << "# Color Management Configuration File\n";
-        stream << m_renderingIntentsCB->currentIndex() << "\n";
-        stream << m_doSoftProofBox->isChecked() << "\n";
-        stream << m_checkGamutBox->isChecked() << "\n";
-        stream << m_embeddProfileBox->isChecked() << "\n";
-        stream << m_BPCBox->isChecked() << "\n";
-        stream << m_inProfileBG->checkedId() << "\n";
-        stream << m_spaceProfileBG->checkedId() << "\n";
-        stream << m_proofProfileBG->checkedId() << "\n";
-        stream << m_inProfilesPath->url().path() << "\n";
-        stream << m_proofProfilePath->url().path() << "\n";
-        stream << m_spaceProfilePath->url().path() << "\n";
-        stream << m_cInput->value() << "\n";
+        stream << d->renderingIntentsCB->currentIndex() << "\n";
+        stream << d->doSoftProofBox->isChecked() << "\n";
+        stream << d->checkGamutBox->isChecked() << "\n";
+        stream << d->embeddProfileBox->isChecked() << "\n";
+        stream << d->BPCBox->isChecked() << "\n";
+        stream << d->inProfileBG->checkedId() << "\n";
+        stream << d->spaceProfileBG->checkedId() << "\n";
+        stream << d->proofProfileBG->checkedId() << "\n";
+        stream << d->inProfilesPath->url().path() << "\n";
+        stream << d->proofProfilePath->url().path() << "\n";
+        stream << d->spaceProfilePath->url().path() << "\n";
+        stream << d->cInput->value() << "\n";
 
         for (int j = 0 ; j < 17 ; ++j)
         {
-            QPoint p = m_curvesWidget->curves()->getCurvePoint(ImageHistogram::ValueChannel, j);
-            if (m_originalImage->sixteenBit())
+            QPoint p = d->curvesWidget->curves()->getCurvePoint(ImageHistogram::ValueChannel, j);
+            if (d->originalImage->sixteenBit())
             {
                 p.setX(p.x()/255);
                 p.setY(p.y()/255);
