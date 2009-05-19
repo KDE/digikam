@@ -367,9 +367,6 @@ void DigikamView::setupConnections()
     connect(d->iconView->model(), SIGNAL(layoutChanged()),
             this, SLOT(slotImageSelected()));
 
-    connect(d->iconView, SIGNAL(currentChanged()),
-            this, SLOT(slotImageSelected()));
-
     connect(d->iconView, SIGNAL(selectionChanged()),
             this, SLOT(slotImageSelected()));
 
