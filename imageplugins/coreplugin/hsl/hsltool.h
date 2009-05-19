@@ -7,7 +7,7 @@
  * Description : digiKam image editor to adjust Hue, Saturation,
  *               and Lightness of picture.
  *
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,24 +29,15 @@
 
 #include "editortool.h"
 
-class KHueSaturationSelector;
-
-namespace KDcrawIface
-{
-class RDoubleNumInput;
-}
-
 namespace Digikam
 {
-class ColorGradientWidget;
 class DColor;
-class EditorToolSettings;
-class ImageWidget;
 }
 
 namespace DigikamImagesPluginCore
 {
-class HSPreviewWidget;
+
+class HSLToolPriv;
 
 class HSLTool : public Digikam::EditorTool
 {
@@ -61,7 +52,7 @@ private Q_SLOTS:
 
     void slotEffect();
     void slotResetSettings();
-    void slotColorSelectedFromTarget( const Digikam::DColor& color );
+    void slotColorSelectedFromTarget(const Digikam::DColor& color);
     void slotHSChanged(int h, int s);
     void slotHChanged(double h);
     void slotSChanged(double s);
@@ -74,19 +65,7 @@ private:
 
 private:
 
-    uchar                        *m_destinationPreviewData;
-
-    KHueSaturationSelector       *m_HSSelector;
-
-    KDcrawIface::RDoubleNumInput *m_hInput;
-    KDcrawIface::RDoubleNumInput *m_sInput;
-    KDcrawIface::RDoubleNumInput *m_lInput;
-
-    HSPreviewWidget              *m_HSPreview;
-
-    Digikam::ImageWidget         *m_previewWidget;
-
-    Digikam::EditorToolSettings  *m_gboxSettings;
+    HSLToolPriv* const d;
 };
 
 }  // namespace DigikamImagesPluginCore

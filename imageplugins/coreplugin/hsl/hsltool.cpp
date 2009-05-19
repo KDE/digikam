@@ -7,7 +7,7 @@
  * Description : digiKam image editor to adjust Hue, Saturation,
  *               and Lightness of picture.
  *
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -61,12 +61,12 @@
 #include "colorgradientwidget.h"
 #include "dimg.h"
 #include "editortoolsettings.h"
+#include "histogrambox.h"
+#include "histogramwidget.h"
 #include "hslmodifier.h"
+#include "hspreviewwidget.h"
 #include "imageiface.h"
 #include "imagewidget.h"
-#include "hspreviewwidget.h"
-#include "histogramwidget.h"
-#include "histogrambox.h"
 
 using namespace KDcrawIface;
 using namespace Digikam;
@@ -74,121 +74,154 @@ using namespace Digikam;
 namespace DigikamImagesPluginCore
 {
 
+class HSLToolPriv
+{
+public:
+
+    HSLToolPriv()
+    {
+        destinationPreviewData    = 0;
+        HSSelector                = 0;
+        hInput                    = 0;
+        sInput                    = 0;
+        lInput                    = 0;
+        HSPreview                 = 0;
+        previewWidget             = 0;
+        gboxSettings              = 0;
+    }
+
+    uchar*                  destinationPreviewData;
+
+    KHueSaturationSelector* HSSelector;
+
+    RDoubleNumInput*        hInput;
+    RDoubleNumInput*        sInput;
+    RDoubleNumInput*        lInput;
+
+    HSPreviewWidget*        HSPreview;
+
+    ImageWidget*            previewWidget;
+    EditorToolSettings*     gboxSettings;
+};
+
 HSLTool::HSLTool(QObject* parent)
-       : EditorTool(parent)
+       : EditorTool(parent),
+         d(new HSLToolPriv)
 {
     setObjectName("adjusthsl");
     setToolName(i18n("Hue / Saturation / Lightness"));
     setToolIcon(SmallIcon("adjusthsl"));
     setToolHelp("hsladjusttool.anchor");
 
-    m_destinationPreviewData = 0;
+    d->destinationPreviewData = 0;
 
-    m_previewWidget = new ImageWidget("hsladjust Tool", 0,
+    d->previewWidget = new ImageWidget("hsladjust Tool", 0,
                                       i18n("The Hue/Saturation/Lightness adjustment preview "
                                            "is shown here. "
                                            "Picking a color on the image will show the "
                                            "corresponding color level on the histogram."));
-    setToolView(m_previewWidget);
+    setToolView(d->previewWidget);
 
     // -------------------------------------------------------------
 
-    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                            EditorToolSettings::Ok|
-                                            EditorToolSettings::Cancel,
-                                            EditorToolSettings::Histogram);
+    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                             EditorToolSettings::Ok|
+                                             EditorToolSettings::Cancel,
+                                             EditorToolSettings::Histogram);
 
-    QGridLayout* gridSettings = new QGridLayout(m_gboxSettings->plainPage());
+    QGridLayout* gridSettings = new QGridLayout(d->gboxSettings->plainPage());
 
     // -------------------------------------------------------------
 
-    m_HSSelector = new KHueSaturationSelector(m_gboxSettings->plainPage());
-    m_HSSelector->setWhatsThis(i18n("Select the hue and saturation adjustments of the image."));
-    m_HSSelector->setMinimumSize(256, 142);
+    d->HSSelector = new KHueSaturationSelector(d->gboxSettings->plainPage());
+    d->HSSelector->setWhatsThis(i18n("Select the hue and saturation adjustments of the image."));
+    d->HSSelector->setMinimumSize(256, 142);
 
-    m_HSPreview = new HSPreviewWidget(m_gboxSettings->plainPage(), m_gboxSettings->spacingHint());
-    m_HSPreview->setWhatsThis(i18n("You can see here a color preview of the hue and "
+    d->HSPreview = new HSPreviewWidget(d->gboxSettings->plainPage(), d->gboxSettings->spacingHint());
+    d->HSPreview->setWhatsThis(i18n("You can see here a color preview of the hue and "
                                    "saturation adjustments."));
-    m_HSPreview->setMinimumSize(256, 15);
+    d->HSPreview->setMinimumSize(256, 15);
 
-    QLabel *label2 = new QLabel(i18n("Hue:"), m_gboxSettings->plainPage());
-    m_hInput = new RDoubleNumInput(m_gboxSettings->plainPage());
-    m_hInput->setDecimals(0);
-    m_hInput->input()->setRange(-180.0, 180.0, 1.0, true);
-    m_hInput->setDefaultValue(0.0);
-    m_hInput->setWhatsThis(i18n("Set here the hue adjustment of the image."));
+    QLabel *label2 = new QLabel(i18n("Hue:"), d->gboxSettings->plainPage());
+    d->hInput      = new RDoubleNumInput(d->gboxSettings->plainPage());
+    d->hInput->setDecimals(0);
+    d->hInput->input()->setRange(-180.0, 180.0, 1.0, true);
+    d->hInput->setDefaultValue(0.0);
+    d->hInput->setWhatsThis(i18n("Set here the hue adjustment of the image."));
 
-    QLabel *label3 = new QLabel(i18n("Saturation:"), m_gboxSettings->plainPage());
-    m_sInput = new RDoubleNumInput(m_gboxSettings->plainPage());
-    m_sInput->setDecimals(2);
-    m_sInput->input()->setRange(-100.0, 100.0, 0.01, true);
-    m_sInput->setDefaultValue(0.0);
-    m_sInput->setWhatsThis(i18n("Set here the saturation adjustment of the image."));
+    QLabel *label3 = new QLabel(i18n("Saturation:"), d->gboxSettings->plainPage());
+    d->sInput      = new RDoubleNumInput(d->gboxSettings->plainPage());
+    d->sInput->setDecimals(2);
+    d->sInput->input()->setRange(-100.0, 100.0, 0.01, true);
+    d->sInput->setDefaultValue(0.0);
+    d->sInput->setWhatsThis(i18n("Set here the saturation adjustment of the image."));
 
-    QLabel *label4 = new QLabel(i18n("Lightness:"), m_gboxSettings->plainPage());
-    m_lInput = new RDoubleNumInput(m_gboxSettings->plainPage());
-    m_lInput->setDecimals(2);
-    m_lInput->input()->setRange(-100.0, 100.0, 0.01, true);
-    m_lInput->setDefaultValue(0.0);
-    m_lInput->setWhatsThis(i18n("Set here the lightness adjustment of the image."));
+    QLabel *label4 = new QLabel(i18n("Lightness:"), d->gboxSettings->plainPage());
+    d->lInput      = new RDoubleNumInput(d->gboxSettings->plainPage());
+    d->lInput->setDecimals(2);
+    d->lInput->input()->setRange(-100.0, 100.0, 0.01, true);
+    d->lInput->setDefaultValue(0.0);
+    d->lInput->setWhatsThis(i18n("Set here the lightness adjustment of the image."));
 
     // -------------------------------------------------------------
 
-    gridSettings->addWidget(m_HSSelector, 0, 0, 1, 5);
-    gridSettings->addWidget(m_HSPreview,  1, 0, 1, 5);
-    gridSettings->addWidget(label2,       2, 0, 1, 5);
-    gridSettings->addWidget(m_hInput,     3, 0, 1, 5);
-    gridSettings->addWidget(label3,       4, 0, 1, 5);
-    gridSettings->addWidget(m_sInput,     5, 0, 1, 5);
-    gridSettings->addWidget(label4,       6, 0, 1, 5);
-    gridSettings->addWidget(m_lInput,     7, 0, 1, 5);
+    gridSettings->addWidget(d->HSSelector, 0, 0, 1, 5);
+    gridSettings->addWidget(d->HSPreview,  1, 0, 1, 5);
+    gridSettings->addWidget(label2,        2, 0, 1, 5);
+    gridSettings->addWidget(d->hInput,     3, 0, 1, 5);
+    gridSettings->addWidget(label3,        4, 0, 1, 5);
+    gridSettings->addWidget(d->sInput,     5, 0, 1, 5);
+    gridSettings->addWidget(label4,        6, 0, 1, 5);
+    gridSettings->addWidget(d->lInput,     7, 0, 1, 5);
     gridSettings->setRowStretch(8, 10);
-    gridSettings->setMargin(m_gboxSettings->spacingHint());
-    gridSettings->setSpacing(m_gboxSettings->spacingHint());
+    gridSettings->setMargin(d->gboxSettings->spacingHint());
+    gridSettings->setSpacing(d->gboxSettings->spacingHint());
 
-    setToolSettings(m_gboxSettings);
+    setToolSettings(d->gboxSettings);
     init();
 
     // -------------------------------------------------------------
 
-    connect(m_HSSelector, SIGNAL(valueChanged(int, int)),
+    connect(d->HSSelector, SIGNAL(valueChanged(int, int)),
             this, SLOT(slotHSChanged(int, int)));
 
-    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
+    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
 
-    connect(m_hInput, SIGNAL(valueChanged (double)),
+    connect(d->hInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));
 
-    connect(m_hInput, SIGNAL(valueChanged (double)),
+    connect(d->hInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotHChanged(double)));
 
-    connect(m_sInput, SIGNAL(valueChanged (double)),
+    connect(d->sInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));
 
-    connect(m_sInput, SIGNAL(valueChanged (double)),
+    connect(d->sInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotSChanged(double)));
 
-    connect(m_lInput, SIGNAL(valueChanged (double)),
+    connect(d->lInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));
 
-    connect(m_previewWidget, SIGNAL(signalResized()),
+    connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
 
     // -------------------------------------------------------------
 
-    m_gboxSettings->enableButton(EditorToolSettings::Ok, false);
+    d->gboxSettings->enableButton(EditorToolSettings::Ok, false);
 }
 
 HSLTool::~HSLTool()
 {
-    if (m_destinationPreviewData)
-       delete [] m_destinationPreviewData;
+    if (d->destinationPreviewData)
+       delete [] d->destinationPreviewData;
+
+    delete d;
 }
 
 void HSLTool::slotColorSelectedFromTarget(const DColor& color)
 {
-    m_gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
+    d->gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }
 
 void HSLTool::slotHSChanged(int h, int s)
@@ -199,12 +232,12 @@ void HSLTool::slotHSChanged(int h, int s)
 
     double sat = ((double)s * (200.0/255.0)) - 100.0;
 
-    m_hInput->blockSignals(true);
-    m_sInput->blockSignals(true);
-    m_hInput->setValue(hue);
-    m_sInput->setValue(sat);
-    m_hInput->blockSignals(false);
-    m_sInput->blockSignals(false);
+    d->hInput->blockSignals(true);
+    d->sInput->blockSignals(true);
+    d->hInput->setValue(hue);
+    d->sInput->setValue(sat);
+    d->hInput->blockSignals(false);
+    d->sInput->blockSignals(false);
     slotTimer();
 }
 
@@ -214,18 +247,18 @@ void HSLTool::slotHChanged(double h)
     if (h >= -180 && h < 0)
         hue = int(h) + 359;
 
-    m_HSSelector->blockSignals(true);
-    m_HSSelector->setXValue(hue);
-    m_HSSelector->blockSignals(false);
+    d->HSSelector->blockSignals(true);
+    d->HSSelector->setXValue(hue);
+    d->HSSelector->blockSignals(false);
 }
 
 void HSLTool::slotSChanged(double s)
 {
     int sat = (int)((s + 100.0) * (255.0/200.0));
 
-    m_HSSelector->blockSignals(true);
-    m_HSSelector->setYValue(sat);
-    m_HSSelector->blockSignals(false);
+    d->HSSelector->blockSignals(true);
+    d->HSSelector->setYValue(sat);
+    d->HSSelector->blockSignals(false);
 }
 
 void HSLTool::readSettings()
@@ -233,47 +266,47 @@ void HSLTool::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("hsladjust Tool");
 
-    m_gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
+    d->gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
                         (int)EditorToolSettings::LuminosityChannel));
-    m_gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
+    d->gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
                         (int)HistogramWidget::LogScaleHistogram));
 
-    m_hInput->setValue(group.readEntry("HueAdjustment", m_hInput->defaultValue()));
-    m_sInput->setValue(group.readEntry("SaturationAdjustment", m_sInput->defaultValue()));
-    m_lInput->setValue(group.readEntry("LighnessAdjustment", m_lInput->defaultValue()));
-    slotHChanged(m_hInput->value());
-    slotSChanged(m_sInput->value());
+    d->hInput->setValue(group.readEntry("HueAdjustment", d->hInput->defaultValue()));
+    d->sInput->setValue(group.readEntry("SaturationAdjustment", d->sInput->defaultValue()));
+    d->lInput->setValue(group.readEntry("LighnessAdjustment", d->lInput->defaultValue()));
+    slotHChanged(d->hInput->value());
+    slotSChanged(d->sInput->value());
 }
 
 void HSLTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("hsladjust Tool");
-    group.writeEntry("Histogram Channel", m_gboxSettings->histogramBox()->channel());
-    group.writeEntry("Histogram Scale", m_gboxSettings->histogramBox()->scale());
-    group.writeEntry("HueAdjustment", m_hInput->value());
-    group.writeEntry("SaturationAdjustment", m_sInput->value());
-    group.writeEntry("LighnessAdjustment", m_lInput->value());
-    m_previewWidget->writeSettings();
+    group.writeEntry("Histogram Channel", d->gboxSettings->histogramBox()->channel());
+    group.writeEntry("Histogram Scale", d->gboxSettings->histogramBox()->scale());
+    group.writeEntry("HueAdjustment", d->hInput->value());
+    group.writeEntry("SaturationAdjustment", d->sInput->value());
+    group.writeEntry("LighnessAdjustment", d->lInput->value());
+    d->previewWidget->writeSettings();
     config->sync();
 }
 
 void HSLTool::slotResetSettings()
 {
-    m_hInput->blockSignals(true);
-    m_sInput->blockSignals(true);
-    m_lInput->blockSignals(true);
+    d->hInput->blockSignals(true);
+    d->sInput->blockSignals(true);
+    d->lInput->blockSignals(true);
 
-    m_hInput->slotReset();
-    m_sInput->slotReset();
-    m_lInput->slotReset();
+    d->hInput->slotReset();
+    d->sInput->slotReset();
+    d->lInput->slotReset();
 
-    slotHChanged(m_hInput->defaultValue());
-    slotSChanged(m_sInput->defaultValue());
+    slotHChanged(d->hInput->defaultValue());
+    slotSChanged(d->sInput->defaultValue());
 
-    m_hInput->blockSignals(false);
-    m_sInput->blockSignals(false);
-    m_lInput->blockSignals(false);
+    d->hInput->blockSignals(false);
+    d->sInput->blockSignals(false);
+    d->lInput->blockSignals(false);
 
     slotEffect();
 }
@@ -282,27 +315,27 @@ void HSLTool::slotEffect()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
 
-    double hu  = m_hInput->value();
-    double sa  = m_sInput->value();
-    double lu  = m_lInput->value();
+    double hu  = d->hInput->value();
+    double sa  = d->sInput->value();
+    double lu  = d->lInput->value();
 
-    m_gboxSettings->enableButton(EditorToolSettings::Ok,
+    d->gboxSettings->enableButton(EditorToolSettings::Ok,
                                 (hu != 0.0 || sa != 0.0 || lu != 0.0));
 
-    m_HSPreview->setHS(hu, sa);
-    m_gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
+    d->HSPreview->setHS(hu, sa);
+    d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
-    if (m_destinationPreviewData)
-       delete [] m_destinationPreviewData;
+    if (d->destinationPreviewData)
+       delete [] d->destinationPreviewData;
 
-    ImageIface* iface = m_previewWidget->imageIface();
-    m_destinationPreviewData   = iface->getPreviewImage();
+    ImageIface* iface = d->previewWidget->imageIface();
+    d->destinationPreviewData   = iface->getPreviewImage();
     int w                      = iface->previewWidth();
     int h                      = iface->previewHeight();
     bool a                     = iface->previewHasAlpha();
     bool sb                    = iface->previewSixteenBit();
 
-    DImg preview(w, h, sb, a, m_destinationPreviewData);
+    DImg preview(w, h, sb, a, d->destinationPreviewData);
     HSLModifier cmod;
     cmod.setHue(hu);
     cmod.setSaturation(sa);
@@ -310,12 +343,12 @@ void HSLTool::slotEffect()
     cmod.applyHSL(preview);
     iface->putPreviewImage(preview.bits());
 
-    m_previewWidget->updatePreview();
+    d->previewWidget->updatePreview();
 
     // Update histogram.
 
-    memcpy(m_destinationPreviewData, preview.bits(), preview.numBytes());
-    m_gboxSettings->histogramBox()->histogram()->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
+    memcpy(d->destinationPreviewData, preview.bits(), preview.numBytes());
+    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData, w, h, sb, 0, 0, 0, false);
 
     kapp->restoreOverrideCursor();
 }
@@ -324,11 +357,11 @@ void HSLTool::finalRendering()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
 
-    double hu  = m_hInput->value();
-    double sa  = m_sInput->value();
-    double lu  = m_lInput->value();
+    double hu  = d->hInput->value();
+    double sa  = d->sInput->value();
+    double lu  = d->lInput->value();
 
-    ImageIface* iface = m_previewWidget->imageIface();
+    ImageIface* iface = d->previewWidget->imageIface();
     uchar *data                = iface->getOriginalImage();
     int w                      = iface->originalWidth();
     int h                      = iface->originalHeight();
