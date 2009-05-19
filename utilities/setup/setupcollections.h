@@ -28,7 +28,7 @@
 
 #include <QScrollArea>
 
-class QTreeWidgetItem;
+class QString;
 
 class KPageDialog;
 class KUrl;

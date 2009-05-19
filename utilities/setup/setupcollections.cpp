@@ -82,8 +82,7 @@ public:
 SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
                 : QScrollArea(parent), d(new SetupCollectionsPriv)
 {
-    d->mainDialog = dialog;
-
+    d->mainDialog  = dialog;
     QWidget *panel = new QWidget(viewport());
     panel->setAutoFillBackground(false);
     setWidget(panel);
@@ -157,8 +156,8 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
 
     // --------------------------------------------------------
 
-    connect(d->databasePathEdit, SIGNAL(urlSelected(const KUrl &)),
-            this, SLOT(slotChangeDatabasePath(const KUrl &)));
+    connect(d->databasePathEdit, SIGNAL(urlSelected(const KUrl&)),
+            this, SLOT(slotChangeDatabasePath(const KUrl&)));
 
     connect(d->databasePathEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotDatabasePathEdited(const QString&)));
@@ -234,14 +233,14 @@ void SetupCollections::slotDatabasePathEdited(const QString& newPath)
 
 void SetupCollections::checkDBPath()
 {
-    bool dbOk = false;
+    bool dbOk          = false;
     bool pathUnchanged = true;
-    QString newPath = d->databasePathEdit->url().toLocalFile();
+    QString newPath    = d->databasePathEdit->url().toLocalFile();
     if (!d->databasePathEdit->url().path().isEmpty())
     {
         QDir dbDir(newPath);
         QDir oldDir(d->originalDbPath);
-        dbOk = dbDir.exists();
+        dbOk          = dbDir.exists();
         pathUnchanged = (dbDir == oldDir);
     }
 
