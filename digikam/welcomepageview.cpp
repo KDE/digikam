@@ -92,8 +92,7 @@ WelcomePageView::WelcomePageView(QWidget* parent)
 WelcomePageView::~WelcomePageView()
 {
     if (m_infoPageCssFile)
-        m_infoPageCssFile->remove();
-    delete m_infoPageCssFile;
+        delete m_infoPageCssFile;
 }
 
 void WelcomePageView::slotUrlOpen(const KUrl& url)
@@ -229,7 +228,7 @@ QByteArray WelcomePageView::fileToString(const QString& aFileName)
     return result;
 }
 
-void WelcomePageView::updateInfoPageCss()
+QString WelcomePageView::updateInfoPageCss()
 {
     QColor background = ThemeEngine::instance()->baseColor();
     QColor text       = ThemeEngine::instance()->textRegColor();
@@ -257,25 +256,23 @@ void WelcomePageView::updateInfoPageCss()
                            .arg(KStandardDirs::locate("data", "digikam/about/box-bottom-middle.png")); // %18
 
     m_infoPageCssFile->open();
-    QFile file(m_infoPageCssFile->fileName());
-    file.open(QIODevice::WriteOnly);
-    QTextStream stream(&file);
+    QTextStream stream(m_infoPageCssFile);
     stream << infoPageCss;
-    file.close();
+    QString cssFile = m_infoPageCssFile->fileName();
+    m_infoPageCssFile->close();
+    return cssFile;
 }
 
 void WelcomePageView::slotThemeChanged()
 {
     if (m_infoPageCssFile)
-        m_infoPageCssFile->remove();
-    delete m_infoPageCssFile;
+        delete m_infoPageCssFile;
 
     m_infoPageCssFile = new KTemporaryFile;
     m_infoPageCssFile->setSuffix(".css");
-    m_infoPageCssFile->setAutoRemove(false);
+    m_infoPageCssFile->setAutoRemove(true);
 
-    updateInfoPageCss();
-
+    QString locationCss      = updateInfoPageCss();
     QString fontSize         = QString::number(12);
     QString appTitle         = i18n("digiKam");
     QString slogan           = digiKamSlogan().toString();
@@ -283,7 +280,6 @@ void WelcomePageView::slotThemeChanged()
     QString locationRtl      = KStandardDirs::locate("data", "digikam/about/infopage_rtl.css" );
     QString rtl              = kapp->isRightToLeft() ? QString("@import \"%1\";" ).arg(locationRtl)
                                                      : QString();
-    QString locationCss      = m_infoPageCssFile->fileName();
 
     begin(KUrl(locationHtml));
 
@@ -294,6 +290,8 @@ void WelcomePageView::slotThemeChanged()
                              .arg(appTitle)           // %4
                              .arg(slogan)             // %5
                              .arg(infoPage());        // %6
+
+    //kDebug(50003) << content << endl;
 
     write(content);
     end();
