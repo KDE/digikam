@@ -47,7 +47,6 @@
 #include <klocale.h>
 #include <kshortcut.h>
 #include <kstandarddirs.h>
-#include <ktemporaryfile.h>
 #include <ktoolinvocation.h>
 #include <kurl.h>
 
@@ -63,8 +62,6 @@ namespace Digikam
 WelcomePageView::WelcomePageView(QWidget* parent)
                : KHTMLPart(parent)
 {
-    m_infoPageCssFile = 0;
-
     widget()->setFocusPolicy(Qt::WheelFocus);
     // Let's better be paranoid and disable plugins (it defaults to enabled):
     setPluginsEnabled(false);
@@ -91,8 +88,6 @@ WelcomePageView::WelcomePageView(QWidget* parent)
 
 WelcomePageView::~WelcomePageView()
 {
-    if (m_infoPageCssFile)
-        delete m_infoPageCssFile;
 }
 
 void WelcomePageView::slotUrlOpen(const KUrl& url)
@@ -255,24 +250,12 @@ QString WelcomePageView::updateInfoPageCss()
                            .arg(KStandardDirs::locate("data", "digikam/about/box-bottom-right.png"))   // %17
                            .arg(KStandardDirs::locate("data", "digikam/about/box-bottom-middle.png")); // %18
 
-    m_infoPageCssFile->open();
-    QTextStream stream(m_infoPageCssFile);
-    stream << infoPageCss;
-    QString cssFile = m_infoPageCssFile->fileName();
-    m_infoPageCssFile->close();
-    return cssFile;
+    return infoPageCss;
 }
 
 void WelcomePageView::slotThemeChanged()
 {
-    if (m_infoPageCssFile)
-        delete m_infoPageCssFile;
-
-    m_infoPageCssFile = new KTemporaryFile;
-    m_infoPageCssFile->setSuffix(".css");
-    m_infoPageCssFile->setAutoRemove(true);
-
-    QString locationCss      = updateInfoPageCss();
+    QString infoPageCss      = updateInfoPageCss();
     QString fontSize         = QString::number(12);
     QString appTitle         = i18n("digiKam");
     QString slogan           = digiKamSlogan().toString();
@@ -284,14 +267,14 @@ void WelcomePageView::slotThemeChanged()
     begin(KUrl(locationHtml));
 
     QString content = fileToString(locationHtml);
-    content         = content.arg(locationCss)        // %1
+    content         = content.arg(infoPageCss)        // %1
                              .arg(rtl)                // %2
                              .arg(fontSize)           // %3
                              .arg(appTitle)           // %4
                              .arg(slogan)             // %5
                              .arg(infoPage());        // %6
 
-    //kDebug(50003) << content << endl;
+    //qDebug() << content << endl;
 
     write(content);
     end();

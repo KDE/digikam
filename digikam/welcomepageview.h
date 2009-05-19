@@ -39,8 +39,6 @@
 
 #include "digikam_export.h"
 
-class KTemporaryFile;
-
 namespace Digikam
 {
 
@@ -64,10 +62,6 @@ private Q_SLOTS:
 
     void slotUrlOpen(const KUrl&);
     void slotThemeChanged();
-
-private:
-
-    KTemporaryFile *m_infoPageCssFile;
 };
 
 }  // namespace Digikam
