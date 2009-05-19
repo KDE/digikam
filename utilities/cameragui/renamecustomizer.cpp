@@ -764,7 +764,7 @@ void RenameCustomizer::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
 
     KConfigGroup group   = config->group("Camera Settings");
-    int def              = group.readEntry("Rename Method",           2);
+    int def              = group.readEntry("Rename Method",           0);
     bool addSeqNumb      = group.readEntry("Add Sequence Number",     true);
     bool adddateTime     = group.readEntry("Add Date Time",           false);
     bool addCamName      = group.readEntry("Add Camera Name",         false);
