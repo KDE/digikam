@@ -88,6 +88,8 @@ public:
         squeezedTextCache.setMaxCost(1000);
 
         editingRating   = false;
+
+        thumbSize       = 0;
     }
 
     int                       spacing;

@@ -47,6 +47,7 @@ public:
     ImageThumbnailModelPriv()
     {
         thread    = 0;
+        thumbSize = 0;
     }
 
     ThumbnailLoadThread       *thread;
@@ -71,7 +72,8 @@ void ImageThumbnailModel::setThumbnailLoadThread(ThumbnailLoadThread *thread)
     connect(d->thread, SIGNAL(signalThumbnailLoaded(const LoadingDescription &, const QPixmap&)),
             this, SLOT(slotThumbnailLoaded(const LoadingDescription &, const QPixmap&)));
 
-    d->thread->setThumbnailSize(d->thumbSize.size());
+    if (d->thumbSize.size())
+        d->thread->setThumbnailSize(d->thumbSize.size());
 }
 
 ThumbnailSize ImageThumbnailModel::thumbnailSize() const
