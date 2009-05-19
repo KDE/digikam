@@ -6,8 +6,8 @@
  * Date        : 2005-02-11
  * Description : a plugin to apply Distortion FX to an image.
  *
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * Original Distortion algorithms copyrighted 2004-2005 by
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
@@ -54,18 +54,18 @@
 
 // LibKDcraw includes
 
-#include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>
+#include <libkdcraw/rnuminput.h>
 
 // Local includes
 
 #include "daboutdata.h"
 #include "dimg.h"
+#include "distortionfx.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imagewidget.h"
 #include "version.h"
-#include "distortionfx.h"
 
 using namespace KDcrawIface;
 using namespace Digikam;
@@ -73,51 +73,81 @@ using namespace Digikam;
 namespace DigikamDistortionFXImagesPlugin
 {
 
+class DistortionFXToolPriv
+{
+public:
+
+    DistortionFXToolPriv()
+    {
+        effectTypeLabel   = 0;
+        levelLabel        = 0;
+        iterationLabel    = 0;
+        effectType        = 0;
+        levelInput        = 0;
+        iterationInput    = 0;
+        previewWidget     = 0;
+        gboxSettings      = 0;
+    }
+
+    QLabel*             effectTypeLabel;
+    QLabel*             levelLabel;
+    QLabel*             iterationLabel;
+
+    RComboBox*          effectType;
+
+    RIntNumInput*       levelInput;
+    RIntNumInput*       iterationInput;
+
+    ImageWidget*        previewWidget;
+    EditorToolSettings* gboxSettings;
+};
+
 DistortionFXTool::DistortionFXTool(QObject* parent)
-                : EditorToolThreaded(parent)
+                : EditorToolThreaded(parent),
+                  d(new DistortionFXToolPriv)
 {
     setObjectName("distortionfx");
     setToolName(i18n("Distortion Effects"));
     setToolIcon(SmallIcon("distortionfx"));
 
-    m_previewWidget = new ImageWidget("distortionfx Tool", 0,
+    d->previewWidget = new ImageWidget("distortionfx Tool", 0,
                                       i18n("This is the preview of the distortion effect "
                                            "applied to the photograph."),
                                       false, ImageGuideWidget::HVGuideMode);
 
-    setToolView(m_previewWidget);
+    setToolView(d->previewWidget);
 
     // -------------------------------------------------------------
 
-    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                            EditorToolSettings::Ok|
-                                            EditorToolSettings::Cancel,
-                                            EditorToolSettings::ColorGuide);
+    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                             EditorToolSettings::Ok|
+                                             EditorToolSettings::Cancel,
+                                             EditorToolSettings::ColorGuide);
 
 
-    QGridLayout* gridSettings = new QGridLayout(m_gboxSettings->plainPage());
+    QGridLayout* gridSettings = new QGridLayout(d->gboxSettings->plainPage());
 
-    m_effectTypeLabel = new QLabel(i18n("Type:"), m_gboxSettings->plainPage());
+    d->effectTypeLabel = new QLabel(i18n("Type:"), d->gboxSettings->plainPage());
 
-    m_effectType = new RComboBox(m_gboxSettings->plainPage());
-    m_effectType->addItem(i18n("Fish Eyes"));
-    m_effectType->addItem(i18n("Twirl"));
-    m_effectType->addItem(i18n("Cylindrical Hor."));
-    m_effectType->addItem(i18n("Cylindrical Vert."));
-    m_effectType->addItem(i18n("Cylindrical H/V."));
-    m_effectType->addItem(i18n("Caricature"));
-    m_effectType->addItem(i18n("Multiple Corners"));
-    m_effectType->addItem(i18n("Waves Hor."));
-    m_effectType->addItem(i18n("Waves Vert."));
-    m_effectType->addItem(i18n("Block Waves 1"));
-    m_effectType->addItem(i18n("Block Waves 2"));
-    m_effectType->addItem(i18n("Circular Waves 1"));
-    m_effectType->addItem(i18n("Circular Waves 2"));
-    m_effectType->addItem(i18n("Polar Coordinates"));
-    m_effectType->addItem(i18n("Unpolar Coordinates"));
-    m_effectType->addItem(i18n("Tile"));
-    m_effectType->setDefaultIndex(DistortionFX::FishEye);
-    m_effectType->setWhatsThis( i18n("<p>Here, select the type of effect to apply to an image.</p>"
+    d->effectType = new RComboBox(d->gboxSettings->plainPage());
+    d->effectType->addItem(i18n("Fish Eyes"));
+    d->effectType->addItem(i18n("Twirl"));
+    d->effectType->addItem(i18n("Cylindrical Hor."));
+    d->effectType->addItem(i18n("Cylindrical Vert."));
+    d->effectType->addItem(i18n("Cylindrical H/V."));
+    d->effectType->addItem(i18n("Caricature"));
+    d->effectType->addItem(i18n("Multiple Corners"));
+    d->effectType->addItem(i18n("Waves Hor."));
+    d->effectType->addItem(i18n("Waves Vert."));
+    d->effectType->addItem(i18n("Block Waves 1"));
+    d->effectType->addItem(i18n("Block Waves 2"));
+    d->effectType->addItem(i18n("Circular Waves 1"));
+    d->effectType->addItem(i18n("Circular Waves 2"));
+    d->effectType->addItem(i18n("Polar Coordinates"));
+    d->effectType->addItem(i18n("Unpolar Coordinates"));
+    d->effectType->addItem(i18n("Tile"));
+    d->effectType->setDefaultIndex(DistortionFX::FishEye);
+    d->effectType->setWhatsThis(i18n("<p>Here, select the type of effect to apply to an image.</p>"
                                      "<p><b>Fish Eyes</b>: warps the photograph around a 3D spherical shape to "
                                             "reproduce the common photograph 'Fish Eyes' effect.</p>"
                                      "<p><b>Twirl</b>: spins the photograph to produce a Twirl pattern.</p>"
@@ -142,62 +172,63 @@ DistortionFXTool::DistortionFXTool(QObject* parent)
                                             "them randomly inside the image.</p>"
                                      ));
 
-    m_levelLabel = new QLabel(i18nc("level of the effect", "Level:"), m_gboxSettings->plainPage());
-    m_levelInput = new RIntNumInput(m_gboxSettings->plainPage());
-    m_levelInput->setRange(0, 100, 1);
-    m_levelInput->setSliderEnabled(true);
-    m_levelInput->setDefaultValue(50);
-    m_levelInput->setWhatsThis( i18n("Set here the level of the effect."));
+    d->levelLabel = new QLabel(i18nc("level of the effect", "Level:"), d->gboxSettings->plainPage());
+    d->levelInput = new RIntNumInput(d->gboxSettings->plainPage());
+    d->levelInput->setRange(0, 100, 1);
+    d->levelInput->setSliderEnabled(true);
+    d->levelInput->setDefaultValue(50);
+    d->levelInput->setWhatsThis( i18n("Set here the level of the effect."));
 
-    m_iterationLabel = new QLabel(i18n("Iteration:"), m_gboxSettings->plainPage());
-    m_iterationInput = new RIntNumInput(m_gboxSettings->plainPage());
-    m_iterationInput->setRange(0, 100, 1);
-    m_iterationInput->setSliderEnabled(true);
-    m_iterationInput->setDefaultValue(10);
-    m_iterationInput->setWhatsThis( i18n("This value controls the iterations to use for Waves, "
+    d->iterationLabel = new QLabel(i18n("Iteration:"), d->gboxSettings->plainPage());
+    d->iterationInput = new RIntNumInput(d->gboxSettings->plainPage());
+    d->iterationInput->setRange(0, 100, 1);
+    d->iterationInput->setSliderEnabled(true);
+    d->iterationInput->setDefaultValue(10);
+    d->iterationInput->setWhatsThis( i18n("This value controls the iterations to use for Waves, "
                                          "Tile, and Neon effects."));
 
     // -------------------------------------------------------------
 
-    gridSettings->addWidget(m_effectTypeLabel,  0, 0, 1, 3);
-    gridSettings->addWidget(m_effectType,       1, 0, 1, 3);
-    gridSettings->addWidget(m_levelLabel,       2, 0, 1, 3);
-    gridSettings->addWidget(m_levelInput,       3, 0, 1, 3);
-    gridSettings->addWidget(m_iterationLabel,   4, 0, 1, 3);
-    gridSettings->addWidget(m_iterationInput,   5, 0, 1, 3);
+    gridSettings->addWidget(d->effectTypeLabel,  0, 0, 1, 3);
+    gridSettings->addWidget(d->effectType,       1, 0, 1, 3);
+    gridSettings->addWidget(d->levelLabel,       2, 0, 1, 3);
+    gridSettings->addWidget(d->levelInput,       3, 0, 1, 3);
+    gridSettings->addWidget(d->iterationLabel,   4, 0, 1, 3);
+    gridSettings->addWidget(d->iterationInput,   5, 0, 1, 3);
     gridSettings->setRowStretch(6, 10);
-    gridSettings->setMargin(m_gboxSettings->spacingHint());
-    gridSettings->setSpacing(m_gboxSettings->spacingHint());
+    gridSettings->setMargin(d->gboxSettings->spacingHint());
+    gridSettings->setSpacing(d->gboxSettings->spacingHint());
 
-    setToolSettings(m_gboxSettings);
+    setToolSettings(d->gboxSettings);
     init();
 
     // -------------------------------------------------------------
 
-    connect(m_effectType, SIGNAL(activated(int)),
+    connect(d->effectType, SIGNAL(activated(int)),
             this, SLOT(slotEffectTypeChanged(int)));
 
-    connect(m_levelInput, SIGNAL(valueChanged(int)),
+    connect(d->levelInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
 
-    connect(m_iterationInput, SIGNAL(valueChanged(int)),
+    connect(d->iterationInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
 }
 
 DistortionFXTool::~DistortionFXTool()
 {
+    delete d;
 }
 
 void DistortionFXTool::renderingFinished()
 {
-    m_effectTypeLabel->setEnabled(true);
-    m_effectType->setEnabled(true);
-    m_levelInput->setEnabled(true);
-    m_levelLabel->setEnabled(true);
-    m_iterationInput->setEnabled(true);
-    m_iterationLabel->setEnabled(true);
+    d->effectTypeLabel->setEnabled(true);
+    d->effectType->setEnabled(true);
+    d->levelInput->setEnabled(true);
+    d->levelLabel->setEnabled(true);
+    d->iterationInput->setEnabled(true);
+    d->iterationLabel->setEnabled(true);
 
-    switch (m_effectType->currentIndex())
+    switch (d->effectType->currentIndex())
     {
         case DistortionFX::FishEye:
         case DistortionFX::Twirl:
@@ -210,8 +241,8 @@ void DistortionFXTool::renderingFinished()
 
         case DistortionFX::PolarCoordinates:
         case DistortionFX::UnpolarCoordinates:
-            m_levelInput->setEnabled(false);
-            m_levelLabel->setEnabled(false);
+            d->levelInput->setEnabled(false);
+            d->levelLabel->setEnabled(false);
             break;
 
         case DistortionFX::WavesHorizontal:
@@ -221,8 +252,8 @@ void DistortionFXTool::renderingFinished()
         case DistortionFX::CircularWaves1:
         case DistortionFX::CircularWaves2:
         case DistortionFX::Tile:
-            m_iterationInput->setEnabled(true);
-            m_iterationLabel->setEnabled(true);
+            d->iterationInput->setEnabled(true);
+            d->iterationLabel->setEnabled(true);
             break;
     }
 }
@@ -232,17 +263,17 @@ void DistortionFXTool::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("distortionfx Tool");
 
-    m_effectType->blockSignals(true);
-    m_iterationInput->blockSignals(true);
-    m_levelInput->blockSignals(true);
+    d->effectType->blockSignals(true);
+    d->iterationInput->blockSignals(true);
+    d->levelInput->blockSignals(true);
 
-    m_effectType->setCurrentIndex(group.readEntry("EffectType", (int)DistortionFX::FishEye));
-    m_iterationInput->setValue(group.readEntry("IterationAdjustment", 10));
-    m_levelInput->setValue(group.readEntry("LevelAdjustment", 50));
+    d->effectType->setCurrentIndex(group.readEntry("EffectType", (int)DistortionFX::FishEye));
+    d->iterationInput->setValue(group.readEntry("IterationAdjustment", 10));
+    d->levelInput->setValue(group.readEntry("LevelAdjustment", 50));
 
-    m_effectType->blockSignals(false);
-    m_iterationInput->blockSignals(false);
-    m_levelInput->blockSignals(false);
+    d->effectType->blockSignals(false);
+    d->iterationInput->blockSignals(false);
+    d->levelInput->blockSignals(false);
 
     slotEffect();
 }
@@ -251,46 +282,46 @@ void DistortionFXTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("distortionfx Tool");
-    group.writeEntry("EffectType", m_effectType->currentIndex());
-    group.writeEntry("IterationAdjustment", m_iterationInput->value());
-    group.writeEntry("LevelAdjustment", m_levelInput->value());
-    m_previewWidget->writeSettings();
+    group.writeEntry("EffectType", d->effectType->currentIndex());
+    group.writeEntry("IterationAdjustment", d->iterationInput->value());
+    group.writeEntry("LevelAdjustment", d->levelInput->value());
+    d->previewWidget->writeSettings();
     config->sync();
 }
 
 void DistortionFXTool::slotResetSettings()
 {
-    m_effectType->blockSignals(true);
-    m_iterationInput->blockSignals(true);
-    m_levelInput->blockSignals(true);
+    d->effectType->blockSignals(true);
+    d->iterationInput->blockSignals(true);
+    d->levelInput->blockSignals(true);
 
-    m_effectType->slotReset();
-    m_iterationInput->slotReset();
-    m_levelInput->slotReset();
-    slotEffectTypeChanged(m_effectType->defaultIndex());
+    d->effectType->slotReset();
+    d->iterationInput->slotReset();
+    d->levelInput->slotReset();
+    slotEffectTypeChanged(d->effectType->defaultIndex());
 
-    m_effectType->blockSignals(false);
-    m_iterationInput->blockSignals(false);
-    m_levelInput->blockSignals(false);
+    d->effectType->blockSignals(false);
+    d->iterationInput->blockSignals(false);
+    d->levelInput->blockSignals(false);
 }
 
 void DistortionFXTool::slotEffectTypeChanged(int type)
 {
-    m_levelInput->setEnabled(true);
-    m_levelLabel->setEnabled(true);
+    d->levelInput->setEnabled(true);
+    d->levelLabel->setEnabled(true);
 
-    m_levelInput->blockSignals(true);
-    m_iterationInput->blockSignals(true);
-    m_levelInput->setRange(0, 100, 1);
-    m_levelInput->setSliderEnabled(true);
-    m_levelInput->setValue(25);
+    d->levelInput->blockSignals(true);
+    d->iterationInput->blockSignals(true);
+    d->levelInput->setRange(0, 100, 1);
+    d->levelInput->setSliderEnabled(true);
+    d->levelInput->setValue(25);
 
     switch (type)
     {
         case DistortionFX::Twirl:
-            m_levelInput->setRange(-50, 50, 1);
-            m_levelInput->setSliderEnabled(true);
-            m_levelInput->setValue(10);
+            d->levelInput->setRange(-50, 50, 1);
+            d->levelInput->setSliderEnabled(true);
+            d->levelInput->setValue(10);
             break;
 
         case DistortionFX::FishEye:
@@ -298,15 +329,15 @@ void DistortionFXTool::slotEffectTypeChanged(int type)
         case DistortionFX::CilindricalVert:
         case DistortionFX::CilindricalHV:
         case DistortionFX::Caricature:
-            m_levelInput->setRange(0, 200, 1);
-            m_levelInput->setSliderEnabled(true);
-            m_levelInput->setValue(50);
+            d->levelInput->setRange(0, 200, 1);
+            d->levelInput->setSliderEnabled(true);
+            d->levelInput->setValue(50);
             break;
 
         case DistortionFX::MultipleCorners:
-            m_levelInput->setRange(1, 10, 1);
-            m_levelInput->setSliderEnabled(true);
-            m_levelInput->setValue(4);
+            d->levelInput->setRange(1, 10, 1);
+            d->levelInput->setSliderEnabled(true);
+            d->levelInput->setValue(4);
             break;
 
         case DistortionFX::WavesHorizontal:
@@ -316,40 +347,40 @@ void DistortionFXTool::slotEffectTypeChanged(int type)
         case DistortionFX::CircularWaves1:
         case DistortionFX::CircularWaves2:
         case DistortionFX::Tile:
-            m_iterationInput->setEnabled(true);
-            m_iterationLabel->setEnabled(true);
-            m_iterationInput->setRange(0, 200, 1);
-            m_iterationInput->setSliderEnabled(true);
-            m_iterationInput->setValue(10);
+            d->iterationInput->setEnabled(true);
+            d->iterationLabel->setEnabled(true);
+            d->iterationInput->setRange(0, 200, 1);
+            d->iterationInput->setSliderEnabled(true);
+            d->iterationInput->setValue(10);
             break;
 
         case DistortionFX::PolarCoordinates:
         case DistortionFX::UnpolarCoordinates:
-            m_levelInput->setEnabled(false);
-            m_levelLabel->setEnabled(false);
+            d->levelInput->setEnabled(false);
+            d->levelLabel->setEnabled(false);
             break;
     }
 
-    m_levelInput->blockSignals(false);
-    m_iterationInput->blockSignals(false);
+    d->levelInput->blockSignals(false);
+    d->iterationInput->blockSignals(false);
 
     slotEffect();
 }
 
 void DistortionFXTool::prepareEffect()
 {
-    m_effectTypeLabel->setEnabled(false);
-    m_effectType->setEnabled(false);
-    m_levelInput->setEnabled(false);
-    m_levelLabel->setEnabled(false);
-    m_iterationInput->setEnabled(false);
-    m_iterationLabel->setEnabled(false);
+    d->effectTypeLabel->setEnabled(false);
+    d->effectType->setEnabled(false);
+    d->levelInput->setEnabled(false);
+    d->levelLabel->setEnabled(false);
+    d->iterationInput->setEnabled(false);
+    d->iterationLabel->setEnabled(false);
 
-    int l = m_levelInput->value();
-    int f = m_iterationInput->value();
-    int e = m_effectType->currentIndex();
+    int l = d->levelInput->value();
+    int f = d->iterationInput->value();
+    int e = d->effectType->currentIndex();
 
-    ImageIface* iface = m_previewWidget->imageIface();
+    ImageIface* iface = d->previewWidget->imageIface();
 
     uchar *data = iface->getPreviewImage();
     DImg image(iface->previewWidth(), iface->previewHeight(), iface->previewSixteenBit(),
@@ -362,16 +393,16 @@ void DistortionFXTool::prepareEffect()
 
 void DistortionFXTool::prepareFinal()
 {
-    m_effectTypeLabel->setEnabled(false);
-    m_effectType->setEnabled(false);
-    m_levelInput->setEnabled(false);
-    m_levelLabel->setEnabled(false);
-    m_iterationInput->setEnabled(false);
-    m_iterationLabel->setEnabled(false);
+    d->effectTypeLabel->setEnabled(false);
+    d->effectType->setEnabled(false);
+    d->levelInput->setEnabled(false);
+    d->levelLabel->setEnabled(false);
+    d->iterationInput->setEnabled(false);
+    d->iterationLabel->setEnabled(false);
 
-    int l = m_levelInput->value();
-    int f = m_iterationInput->value();
-    int e = m_effectType->currentIndex();
+    int l = d->levelInput->value();
+    int f = d->iterationInput->value();
+    int e = d->effectType->currentIndex();
 
     ImageIface iface(0, 0);
 
@@ -381,13 +412,13 @@ void DistortionFXTool::prepareFinal()
 
 void DistortionFXTool::putPreviewData(void)
 {
-    ImageIface* iface = m_previewWidget->imageIface();
+    ImageIface* iface = d->previewWidget->imageIface();
 
     DImg imDest = filter()->getTargetImage()
             .smoothScale(iface->previewWidth(), iface->previewHeight());
     iface->putPreviewImage(imDest.bits());
 
-    m_previewWidget->updatePreview();
+    d->previewWidget->updatePreview();
 }
 
 void DistortionFXTool::putFinalData(void)

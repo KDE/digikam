@@ -6,8 +6,8 @@
  * Date        : 2005-02-11
  * Description : a plugin to apply Distortion FX to an image.
  *
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * Original Distortion algorithms copyrighted 2004-2005 by
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
@@ -32,22 +32,10 @@
 
 #include "editortool.h"
 
-class QLabel;
-
-namespace KDcrawIface
-{
-class RComboBox;
-class RIntNumInput;
-}
-
-namespace Digikam
-{
-class EditorToolSettings;
-class ImageWidget;
-}
-
 namespace DigikamDistortionFXImagesPlugin
 {
+
+class DistortionFXToolPriv;
 
 class DistortionFXTool : public Digikam::EditorToolThreaded
 {
@@ -75,18 +63,7 @@ private:
 
 private:
 
-    QLabel                      *m_effectTypeLabel;
-    QLabel                      *m_levelLabel;
-    QLabel                      *m_iterationLabel;
-
-    KDcrawIface::RComboBox      *m_effectType;
-
-    KDcrawIface::RIntNumInput   *m_levelInput;
-    KDcrawIface::RIntNumInput   *m_iterationInput;
-
-    Digikam::ImageWidget        *m_previewWidget;
-
-    Digikam::EditorToolSettings *m_gboxSettings;
+    DistortionFXToolPriv* const d;
 };
 
 }  // namespace DigikamDistortionFXImagesPlugin
