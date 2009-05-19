@@ -78,72 +78,114 @@ using namespace KDcrawIface;
 namespace DigikamFreeRotationImagesPlugin
 {
 
+class FreeRotationToolPriv
+{
+public:
+
+    FreeRotationToolPriv()
+    {
+        antialiasInput      = 0;
+        newHeightLabel      = 0;
+        newWidthLabel       = 0;
+        autoAdjustBtn       = 0;
+        autoAdjustPoint1Btn = 0;
+        autoAdjustPoint2Btn = 0;
+        expanderBox         = 0;
+        gboxSettings        = 0;
+        previewWidget       = 0;
+        autoCropCB          = 0;
+        fineAngleInput      = 0;
+        angleInput          = 0;
+    }
+
+    QCheckBox*           antialiasInput;
+
+    QLabel*              newHeightLabel;
+    QLabel*              newWidthLabel;
+
+    QPoint               autoAdjustPoint1;
+    QPoint               autoAdjustPoint2;
+
+    QPushButton*         autoAdjustBtn;
+    QPushButton*         autoAdjustPoint1Btn;
+    QPushButton*         autoAdjustPoint2Btn;
+
+    RExpanderBox*        expanderBox;
+    EditorToolSettings*  gboxSettings;
+    ImageWidget*         previewWidget;
+
+    RComboBox*           autoCropCB;
+    RDoubleNumInput*     fineAngleInput;
+    RIntNumInput*        angleInput;
+};
+
 FreeRotationTool::FreeRotationTool(QObject* parent)
-                : EditorToolThreaded(parent)
+                : EditorToolThreaded(parent),
+                  d(new FreeRotationToolPriv)
 {
     setObjectName("freerotation");
     setToolName(i18n("Free Rotation"));
     setToolIcon(SmallIcon("freerotation"));
 
-    m_previewWidget = new ImageWidget("freerotation Tool", 0,
-                                      i18n("This is the free rotation operation preview. "
-                                           "If you move the mouse cursor on this preview, "
-                                           "a vertical and horizontal dashed line will be drawn "
-                                           "to guide you in adjusting the free rotation correction. "
-                                           "Release the left mouse button to freeze the dashed "
-                                           "line's position."),
-                                      false, ImageGuideWidget::HVGuideMode);
+    d->previewWidget = new ImageWidget("freerotation Tool", 0,
+                                       i18n("This is the free rotation operation preview. "
+                                            "If you move the mouse cursor on this preview, "
+                                            "a vertical and horizontal dashed line will be drawn "
+                                            "to guide you in adjusting the free rotation correction. "
+                                            "Release the left mouse button to freeze the dashed "
+                                            "line's position."),
+                                       false, ImageGuideWidget::HVGuideMode);
 
-    setToolView(m_previewWidget);
+    setToolView(d->previewWidget);
 
     // -------------------------------------------------------------
 
     QString temp;
     Digikam::ImageIface iface(0, 0);
 
-    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                            EditorToolSettings::Ok|
-                                            EditorToolSettings::Cancel,
-                                            EditorToolSettings::ColorGuide);
+    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                             EditorToolSettings::Ok|
+                                             EditorToolSettings::Cancel,
+                                             EditorToolSettings::ColorGuide);
 
 
-    QLabel *label1  = new QLabel(i18n("New width:"));
-    m_newWidthLabel = new QLabel(temp.setNum( iface.originalWidth()) + i18n(" px"));
-    m_newWidthLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
+    QLabel *label1   = new QLabel(i18n("New width:"));
+    d->newWidthLabel = new QLabel(temp.setNum( iface.originalWidth()) + i18n(" px"));
+    d->newWidthLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
 
-    QLabel *label2   = new QLabel(i18n("New height:"));
-    m_newHeightLabel = new QLabel(temp.setNum( iface.originalHeight()) + i18n(" px"));
-    m_newHeightLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
+    QLabel *label2    = new QLabel(i18n("New height:"));
+    d->newHeightLabel = new QLabel(temp.setNum( iface.originalHeight()) + i18n(" px"));
+    d->newHeightLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
 
-    QLabel *label3 = new QLabel(i18n("Main angle:"));
-    m_angleInput   = new RIntNumInput;
-    m_angleInput->setRange(-180, 180, 1);
-    m_angleInput->setSliderEnabled(true);
-    m_angleInput->setDefaultValue(0);
-    m_angleInput->setWhatsThis(i18n("An angle in degrees by which to rotate the image. "
-                                    "A positive angle rotates the image clockwise; "
-                                    "a negative angle rotates it counter-clockwise."));
+    QLabel *label3  = new QLabel(i18n("Main angle:"));
+    d->angleInput   = new RIntNumInput;
+    d->angleInput->setRange(-180, 180, 1);
+    d->angleInput->setSliderEnabled(true);
+    d->angleInput->setDefaultValue(0);
+    d->angleInput->setWhatsThis(i18n("An angle in degrees by which to rotate the image. "
+                                     "A positive angle rotates the image clockwise; "
+                                     "a negative angle rotates it counter-clockwise."));
 
-    QLabel *label4   = new QLabel(i18n("Fine angle:"));
-    m_fineAngleInput = new RDoubleNumInput;
-    m_fineAngleInput->input()->setRange(-5.0, 5.0, 0.01, true);
-    m_fineAngleInput->setDefaultValue(0);
-    m_fineAngleInput->setWhatsThis(i18n("This value in degrees will be added to main angle value "
-                                        "to set fine target angle."));
+    QLabel *label4    = new QLabel(i18n("Fine angle:"));
+    d->fineAngleInput = new RDoubleNumInput;
+    d->fineAngleInput->input()->setRange(-5.0, 5.0, 0.01, true);
+    d->fineAngleInput->setDefaultValue(0);
+    d->fineAngleInput->setWhatsThis(i18n("This value in degrees will be added to main angle value "
+                                         "to set fine target angle."));
 
-    m_antialiasInput = new QCheckBox(i18n("Anti-Aliasing"));
-    m_antialiasInput->setWhatsThis(i18n("Enable this option to apply the anti-aliasing filter "
-                                        "to the rotated image. "
-                                        "In order to smooth the target image, it will be blurred a little."));
+    d->antialiasInput = new QCheckBox(i18n("Anti-Aliasing"));
+    d->antialiasInput->setWhatsThis(i18n("Enable this option to apply the anti-aliasing filter "
+                                         "to the rotated image. "
+                                         "In order to smooth the target image, it will be blurred a little."));
 
-    QLabel *label5 = new QLabel(i18n("Auto-crop:"));
-    m_autoCropCB   = new RComboBox;
-    m_autoCropCB->addItem(i18nc("no autocrop", "None"));
-    m_autoCropCB->addItem(i18n("Widest Area"));
-    m_autoCropCB->addItem(i18n("Largest Area"));
-    m_autoCropCB->setDefaultIndex(FreeRotation::NoAutoCrop);
-    m_autoCropCB->setWhatsThis(i18n("Select the method to process image auto-cropping "
-                                    "to remove black frames around a rotated image here."));
+    QLabel *label5  = new QLabel(i18n("Auto-crop:"));
+    d->autoCropCB   = new RComboBox;
+    d->autoCropCB->addItem(i18nc("no autocrop", "None"));
+    d->autoCropCB->addItem(i18n("Widest Area"));
+    d->autoCropCB->addItem(i18n("Largest Area"));
+    d->autoCropCB->setDefaultIndex(FreeRotation::NoAutoCrop);
+    d->autoCropCB->setWhatsThis(i18n("Select the method to process image auto-cropping "
+                                     "to remove black frames around a rotated image here."));
 
     // -------------------------------------------------------------
 
@@ -151,45 +193,45 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
                                 "then click this button to assign the point for auto-correction.");
 
     QPixmap pm1 = generateBtnPixmap(QString("1"), Qt::black);
-    m_autoAdjustPoint1Btn = new QPushButton;
-    m_autoAdjustPoint1Btn->setIcon(pm1);
-    m_autoAdjustPoint1Btn->setText(i18n("Click to set"));
-    m_autoAdjustPoint1Btn->setSizePolicy(QSizePolicy::MinimumExpanding,
-                                         QSizePolicy::MinimumExpanding);
+    d->autoAdjustPoint1Btn = new QPushButton;
+    d->autoAdjustPoint1Btn->setIcon(pm1);
+    d->autoAdjustPoint1Btn->setText(i18n("Click to set"));
+    d->autoAdjustPoint1Btn->setSizePolicy(QSizePolicy::MinimumExpanding,
+                                          QSizePolicy::MinimumExpanding);
 
     QPixmap pm2 = generateBtnPixmap(QString("2"), Qt::black);
-    m_autoAdjustPoint2Btn = new QPushButton;
-    m_autoAdjustPoint2Btn->setIcon(pm2);
-    m_autoAdjustPoint2Btn->setText(i18n("Click to set"));
-    m_autoAdjustPoint2Btn->setSizePolicy(QSizePolicy::MinimumExpanding,
-                                         QSizePolicy::MinimumExpanding);
+    d->autoAdjustPoint2Btn = new QPushButton;
+    d->autoAdjustPoint2Btn->setIcon(pm2);
+    d->autoAdjustPoint2Btn->setText(i18n("Click to set"));
+    d->autoAdjustPoint2Btn->setSizePolicy(QSizePolicy::MinimumExpanding,
+                                          QSizePolicy::MinimumExpanding);
 
-    m_autoAdjustPoint1Btn->setToolTip(btnWhatsThis);
-    m_autoAdjustPoint1Btn->setWhatsThis(btnWhatsThis);
-    m_autoAdjustPoint2Btn->setToolTip(btnWhatsThis);
-    m_autoAdjustPoint2Btn->setWhatsThis(btnWhatsThis);
+    d->autoAdjustPoint1Btn->setToolTip(btnWhatsThis);
+    d->autoAdjustPoint1Btn->setWhatsThis(btnWhatsThis);
+    d->autoAdjustPoint2Btn->setToolTip(btnWhatsThis);
+    d->autoAdjustPoint2Btn->setWhatsThis(btnWhatsThis);
 
     // try to determine the maximum text width, to set the button minwidth
-    QFont fnt = m_autoAdjustPoint1Btn->font();
+    QFont fnt = d->autoAdjustPoint1Btn->font();
     QFontMetrics fm(fnt);
     int minWidth = fm.width(QString("(1234, 1234)")) + pm1.width() * 2 + 5;
 
     // set new minwidth
-    m_autoAdjustPoint1Btn->setMinimumWidth(minWidth);
-    m_autoAdjustPoint2Btn->setMinimumWidth(minWidth);
+    d->autoAdjustPoint1Btn->setMinimumWidth(minWidth);
+    d->autoAdjustPoint2Btn->setMinimumWidth(minWidth);
 
-    m_autoAdjustBtn = new QPushButton(i18nc("Automatic Adjustment", "Adjust"));
-    m_autoAdjustBtn->setSizePolicy(QSizePolicy::MinimumExpanding,
-                                   QSizePolicy::Expanding);
+    d->autoAdjustBtn = new QPushButton(i18nc("Automatic Adjustment", "Adjust"));
+    d->autoAdjustBtn->setSizePolicy(QSizePolicy::MinimumExpanding,
+                                    QSizePolicy::Expanding);
 
     // -------------------------------------------------------------
 
     QWidget* manualAdjustContainer = new QWidget;
     QGridLayout *containerLayout   = new QGridLayout;
     containerLayout->addWidget(label3,              0, 0, 1, 1);
-    containerLayout->addWidget(m_angleInput,        1, 0, 1, 1);
+    containerLayout->addWidget(d->angleInput,       1, 0, 1, 1);
     containerLayout->addWidget(label4,              2, 0, 1, 1);
-    containerLayout->addWidget(m_fineAngleInput,    3, 0, 1, 1);
+    containerLayout->addWidget(d->fineAngleInput,   3, 0, 1, 1);
     containerLayout->setMargin(KDialog::marginHint());
     manualAdjustContainer->setLayout(containerLayout);
 
@@ -203,10 +245,10 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
                             "Note that you can adjust either horizontal or vertical lines.</p>"));
     autoDescr->setAlignment(Qt::AlignJustify);
     autoDescr->setWordWrap(true);
-    containerLayout2->addWidget(autoDescr,               0, 0, 1,-1);
-    containerLayout2->addWidget(m_autoAdjustPoint1Btn,   1, 0, 1, 1);
-    containerLayout2->addWidget(m_autoAdjustBtn,         1, 2, 2, 1);
-    containerLayout2->addWidget(m_autoAdjustPoint2Btn,   2, 0, 1, 1);
+    containerLayout2->addWidget(autoDescr,              0, 0, 1,-1);
+    containerLayout2->addWidget(d->autoAdjustPoint1Btn, 1, 0, 1, 1);
+    containerLayout2->addWidget(d->autoAdjustBtn,       1, 2, 2, 1);
+    containerLayout2->addWidget(d->autoAdjustPoint2Btn, 2, 0, 1, 1);
     containerLayout2->setColumnStretch(1, 10);
     containerLayout2->setMargin(KDialog::marginHint());
     autoAdjustContainer->setLayout(containerLayout2);
@@ -215,92 +257,93 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
 
     QWidget* additionalSettingsContainer = new QWidget;
     QGridLayout* containerLayout3 = new QGridLayout;
-    containerLayout3->addWidget(m_antialiasInput, 0, 0, 1,-1);
-    containerLayout3->addWidget(label5,           1, 0, 1, 1);
-    containerLayout3->addWidget(m_autoCropCB,     1, 1, 1, 1);
+    containerLayout3->addWidget(d->antialiasInput, 0, 0, 1,-1);
+    containerLayout3->addWidget(label5,            1, 0, 1, 1);
+    containerLayout3->addWidget(d->autoCropCB,     1, 1, 1, 1);
     additionalSettingsContainer->setLayout(containerLayout3);
 
     // -------------------------------------------------------------
 
     KSeparator *line  = new KSeparator(Qt::Horizontal);
 
-    m_expanderBox = new RExpanderBox;
-    m_expanderBox->addItem(autoAdjustContainer, SmallIcon("freerotation"), i18n("Automatic Correction"),
-                           QString("AutoAdjustContainer"), true);
-    m_expanderBox->addItem(manualAdjustContainer, SmallIcon("freerotation"), i18n("Manual Adjustment"),
-                           QString("ManualAdjustContainer"), true);
-    m_expanderBox->addItem(additionalSettingsContainer, SmallIcon("freerotation"), i18n("Additional Settings"),
-                           QString("SettingsContainer"), true);
-    m_expanderBox->addStretch();
+    d->expanderBox = new RExpanderBox;
+    d->expanderBox->addItem(autoAdjustContainer, SmallIcon("freerotation"), i18n("Automatic Correction"),
+                            QString("AutoAdjustContainer"), true);
+    d->expanderBox->addItem(manualAdjustContainer, SmallIcon("freerotation"), i18n("Manual Adjustment"),
+                            QString("ManualAdjustContainer"), true);
+    d->expanderBox->addItem(additionalSettingsContainer, SmallIcon("freerotation"), i18n("Additional Settings"),
+                            QString("SettingsContainer"), true);
+    d->expanderBox->addStretch();
 
     // -------------------------------------------------------------
 
     QGridLayout* mainLayout = new QGridLayout;
     mainLayout->addWidget(label1,               0, 0, 1, 1);
-    mainLayout->addWidget(m_newWidthLabel,      0, 1, 1, 1);
+    mainLayout->addWidget(d->newWidthLabel,     0, 1, 1, 1);
     mainLayout->addWidget(label2,               1, 0, 1, 1);
-    mainLayout->addWidget(m_newHeightLabel,     1, 1, 1, 1);
+    mainLayout->addWidget(d->newHeightLabel,    1, 1, 1, 1);
     mainLayout->addWidget(line,                 2, 0, 1,-1);
-    mainLayout->addWidget(m_expanderBox,        3, 0, 1,-1);
+    mainLayout->addWidget(d->expanderBox,       3, 0, 1,-1);
     mainLayout->setRowStretch(3, 10);
-    mainLayout->setMargin(m_gboxSettings->spacingHint());
-    mainLayout->setSpacing(m_gboxSettings->spacingHint());
-    m_gboxSettings->plainPage()->setLayout(mainLayout);
+    mainLayout->setMargin(d->gboxSettings->spacingHint());
+    mainLayout->setSpacing(d->gboxSettings->spacingHint());
+    d->gboxSettings->plainPage()->setLayout(mainLayout);
 
-    setToolSettings(m_gboxSettings);
+    setToolSettings(d->gboxSettings);
     init();
 
     // -------------------------------------------------------------
 
-    connect(m_angleInput, SIGNAL(valueChanged(int)),
+    connect(d->angleInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
 
-    connect(m_fineAngleInput, SIGNAL(valueChanged(double)),
+    connect(d->fineAngleInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotTimer()));
 
-    connect(m_antialiasInput, SIGNAL(toggled(bool)),
+    connect(d->antialiasInput, SIGNAL(toggled(bool)),
             this, SLOT(slotEffect()));
 
-    connect(m_autoCropCB, SIGNAL(activated(int)),
+    connect(d->autoCropCB, SIGNAL(activated(int)),
             this, SLOT(slotEffect()));
 
-    connect(m_gboxSettings, SIGNAL(signalColorGuideChanged()),
+    connect(d->gboxSettings, SIGNAL(signalColorGuideChanged()),
             this, SLOT(slotColorGuideChanged()));
 
-    connect(m_autoAdjustPoint1Btn, SIGNAL(clicked()),
+    connect(d->autoAdjustPoint1Btn, SIGNAL(clicked()),
             this, SLOT(slotAutoAdjustP1Clicked()));
 
-    connect(m_autoAdjustPoint2Btn, SIGNAL(clicked()),
+    connect(d->autoAdjustPoint2Btn, SIGNAL(clicked()),
             this, SLOT(slotAutoAdjustP2Clicked()));
 
-    connect(m_autoAdjustBtn, SIGNAL(clicked()),
+    connect(d->autoAdjustBtn, SIGNAL(clicked()),
             this, SLOT(slotAutoAdjustClicked()));
 }
 
 FreeRotationTool::~FreeRotationTool()
 {
+    delete d;
 }
 
 void FreeRotationTool::slotColorGuideChanged()
 {
-    m_previewWidget->slotChangeGuideColor(m_gboxSettings->guideColor());
-    m_previewWidget->slotChangeGuideSize(m_gboxSettings->guideSize());
+    d->previewWidget->slotChangeGuideColor(d->gboxSettings->guideColor());
+    d->previewWidget->slotChangeGuideSize(d->gboxSettings->guideSize());
 }
 
 void FreeRotationTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("freerotation Tool");
-    m_autoCropCB->setCurrentIndex(group.readEntry("Auto Crop Type", m_autoCropCB->defaultIndex()));
-    m_antialiasInput->setChecked(group.readEntry("Anti Aliasing", true));
-    m_expanderBox->readSettings(group);
+    d->autoCropCB->setCurrentIndex(group.readEntry("Auto Crop Type", d->autoCropCB->defaultIndex()));
+    d->antialiasInput->setChecked(group.readEntry("Anti Aliasing", true));
+    d->expanderBox->readSettings(group);
 
-    m_angleInput->blockSignals(true);
-    m_fineAngleInput->blockSignals(true);
-    m_angleInput->slotReset();
-    m_fineAngleInput->slotReset();
-    m_angleInput->blockSignals(false);
-    m_fineAngleInput->blockSignals(false);
+    d->angleInput->blockSignals(true);
+    d->fineAngleInput->blockSignals(true);
+    d->angleInput->slotReset();
+    d->fineAngleInput->slotReset();
+    d->angleInput->blockSignals(false);
+    d->fineAngleInput->blockSignals(false);
 
     resetPoints();
     slotColorGuideChanged();
@@ -311,27 +354,27 @@ void FreeRotationTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("freerotation Tool");
-    group.writeEntry("Auto Crop Type", m_autoCropCB->currentIndex());
-    group.writeEntry("Anti Aliasing", m_antialiasInput->isChecked());
-    m_expanderBox->writeSettings(group);
-    m_previewWidget->writeSettings();
+    group.writeEntry("Auto Crop Type", d->autoCropCB->currentIndex());
+    group.writeEntry("Anti Aliasing", d->antialiasInput->isChecked());
+    d->expanderBox->writeSettings(group);
+    d->previewWidget->writeSettings();
     group.sync();
 }
 
 void FreeRotationTool::slotResetSettings()
 {
-    m_angleInput->blockSignals(true);
-    m_antialiasInput->blockSignals(true);
-    m_autoCropCB->blockSignals(true);
+    d->angleInput->blockSignals(true);
+    d->antialiasInput->blockSignals(true);
+    d->autoCropCB->blockSignals(true);
 
-    m_angleInput->slotReset();
-    m_fineAngleInput->slotReset();
-    m_antialiasInput->setChecked(true);
-    m_autoCropCB->slotReset();
+    d->angleInput->slotReset();
+    d->fineAngleInput->slotReset();
+    d->antialiasInput->setChecked(true);
+    d->autoCropCB->slotReset();
 
-    m_angleInput->blockSignals(false);
-    m_antialiasInput->blockSignals(false);
-    m_autoCropCB->blockSignals(false);
+    d->angleInput->blockSignals(false);
+    d->antialiasInput->blockSignals(false);
+    d->autoCropCB->blockSignals(false);
 
     resetPoints();
     slotEffect();
@@ -340,14 +383,14 @@ void FreeRotationTool::slotResetSettings()
 void FreeRotationTool::prepareEffect()
 {
     kapp->setOverrideCursor(Qt::WaitCursor);
-    m_expanderBox->setEnabled(false);
+    d->expanderBox->setEnabled(false);
 
-    double angle      = m_angleInput->value() + m_fineAngleInput->value();
-    bool antialiasing = m_antialiasInput->isChecked();
-    int autocrop      = m_autoCropCB->currentIndex();
+    double angle      = d->angleInput->value() + d->fineAngleInput->value();
+    bool antialiasing = d->antialiasInput->isChecked();
+    int autocrop      = d->autoCropCB->currentIndex();
     QColor background = toolView()->backgroundRole();
 
-    ImageIface* iface = m_previewWidget->imageIface();
+    ImageIface* iface = d->previewWidget->imageIface();
     int orgW          = iface->originalWidth();
     int orgH          = iface->originalHeight();
 
@@ -363,11 +406,11 @@ void FreeRotationTool::prepareEffect()
 
 void FreeRotationTool::prepareFinal()
 {
-    m_expanderBox->setEnabled(false);
+    d->expanderBox->setEnabled(false);
 
-    double angle      = m_angleInput->value() + m_fineAngleInput->value();
-    bool antialiasing = m_antialiasInput->isChecked();
-    int autocrop      = m_autoCropCB->currentIndex();
+    double angle      = d->angleInput->value() + d->fineAngleInput->value();
+    bool antialiasing = d->antialiasInput->isChecked();
+    int autocrop      = d->autoCropCB->currentIndex();
     QColor background = Qt::black;
 
     ImageIface iface(0, 0);
@@ -386,7 +429,7 @@ void FreeRotationTool::prepareFinal()
 
 void FreeRotationTool::putPreviewData(void)
 {
-    ImageIface* iface = m_previewWidget->imageIface();
+    ImageIface* iface = d->previewWidget->imageIface();
     int w = iface->previewWidth();
     int h = iface->previewHeight();
 
@@ -401,11 +444,11 @@ void FreeRotationTool::putPreviewData(void)
     iface->putPreviewImage((imDest.smoothScale(iface->previewWidth(),
                                                iface->previewHeight())).bits());
 
-    m_previewWidget->updatePreview();
+    d->previewWidget->updatePreview();
     QSize newSize = dynamic_cast<FreeRotation *>(filter())->getNewSize();
     QString temp;
-    m_newWidthLabel->setText(temp.setNum( newSize.width()) + i18n(" px") );
-    m_newHeightLabel->setText(temp.setNum( newSize.height()) + i18n(" px") );
+    d->newWidthLabel->setText(temp.setNum( newSize.width()) + i18n(" px") );
+    d->newHeightLabel->setText(temp.setNum( newSize.height()) + i18n(" px") );
 }
 
 void FreeRotationTool::putFinalData(void)
@@ -419,7 +462,7 @@ void FreeRotationTool::putFinalData(void)
 
 void FreeRotationTool::renderingFinished()
 {
-    m_expanderBox->setEnabled(true);
+    d->expanderBox->setEnabled(true);
     kapp->restoreOverrideCursor();
 }
 
@@ -438,52 +481,52 @@ void FreeRotationTool::updatePoints()
 {
     // set labels
     QString tmp;
-    tmp = generatePointLabel(m_autoAdjustPoint1);
-    m_autoAdjustPoint1Btn->setText(tmp);
+    tmp = generatePointLabel(d->autoAdjustPoint1);
+    d->autoAdjustPoint1Btn->setText(tmp);
 
-    tmp = generatePointLabel(m_autoAdjustPoint2);
-    m_autoAdjustPoint2Btn->setText(tmp);
+    tmp = generatePointLabel(d->autoAdjustPoint2);
+    d->autoAdjustPoint2Btn->setText(tmp);
 
     // set points in preview widget, don't add invalid points
     QPolygon points;
-    if (pointIsValid(m_autoAdjustPoint1))
+    if (pointIsValid(d->autoAdjustPoint1))
     {
-        points << m_autoAdjustPoint1;
-        m_autoAdjustPoint2Btn->setEnabled(true);
+        points << d->autoAdjustPoint1;
+        d->autoAdjustPoint2Btn->setEnabled(true);
     }
     else
     {
-        m_autoAdjustPoint2Btn->setEnabled(false);
+        d->autoAdjustPoint2Btn->setEnabled(false);
     }
-    if (pointIsValid(m_autoAdjustPoint2))
+    if (pointIsValid(d->autoAdjustPoint2))
     {
-        points << m_autoAdjustPoint2;
+        points << d->autoAdjustPoint2;
     }
-    m_previewWidget->setPoints(points, true);
+    d->previewWidget->setPoints(points, true);
 
     // enable / disable adjustment buttons
-    bool valid  = (pointIsValid(m_autoAdjustPoint1) && pointIsValid(m_autoAdjustPoint2))
-                  && (m_autoAdjustPoint1 != m_autoAdjustPoint2);
-    m_autoAdjustBtn->setEnabled(valid);
+    bool valid  = (pointIsValid(d->autoAdjustPoint1) && pointIsValid(d->autoAdjustPoint2))
+                  && (d->autoAdjustPoint1 != d->autoAdjustPoint2);
+    d->autoAdjustBtn->setEnabled(valid);
 }
 
 void FreeRotationTool::resetPoints()
 {
-    setPointInvalid(m_autoAdjustPoint1);
-    setPointInvalid(m_autoAdjustPoint2);
-    m_previewWidget->resetPoints();
+    setPointInvalid(d->autoAdjustPoint1);
+    setPointInvalid(d->autoAdjustPoint2);
+    d->previewWidget->resetPoints();
     updatePoints();
 }
 
 void FreeRotationTool::slotAutoAdjustP1Clicked()
 {
-    m_autoAdjustPoint1 = m_previewWidget->getSpotPosition();
+    d->autoAdjustPoint1 = d->previewWidget->getSpotPosition();
     updatePoints();
 }
 
 void FreeRotationTool::slotAutoAdjustP2Clicked()
 {
-    m_autoAdjustPoint2 = m_previewWidget->getSpotPosition();
+    d->autoAdjustPoint2 = d->previewWidget->getSpotPosition();
     updatePoints();
 }
 
@@ -499,7 +542,7 @@ void FreeRotationTool::slotAutoAdjustClicked()
     }
 
     // we need to add the calculated angle to the currently set angle
-    angle = (double)m_angleInput->value() + m_fineAngleInput->value() + angle;
+    angle = (double)d->angleInput->value() + d->fineAngleInput->value() + angle;
 
     // convert the angle to a string so we can easily split it up
     QString angleStr       = QString::number(angle, 'f', 2);
@@ -516,8 +559,8 @@ void FreeRotationTool::slotAutoAdjustClicked()
         fineAngle = (angle < 0.0) ? -fineAngle : fineAngle;
         if (!ok) fineAngle = 0.0;
 
-        m_angleInput->setValue(mainAngle);
-        m_fineAngleInput->setValue(fineAngle);
+        d->angleInput->setValue(mainAngle);
+        d->fineAngleInput->setValue(fineAngle);
     }
 
     resetPoints();
@@ -542,7 +585,7 @@ QPixmap FreeRotationTool::generateBtnPixmap(const QString& label, const QColor& 
 
 double FreeRotationTool::calculateAutoAngle()
 {
-    return calculateAngle(m_autoAdjustPoint1, m_autoAdjustPoint2);
+    return calculateAngle(d->autoAdjustPoint1, d->autoAdjustPoint2);
 }
 
 double FreeRotationTool::calculateAngle(const QPoint& p1, const QPoint& p2)

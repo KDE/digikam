@@ -30,28 +30,13 @@
 
 #include "editortool.h"
 
-class QCheckBox;
-class QLabel;
 class QPixmap;
-class QPoint;
-class QPushButton;
-
-namespace KDcrawIface
-{
-class RComboBox;
-class RDoubleNumInput;
-class RIntNumInput;
-}
-
-namespace Digikam
-{
-class RExpanderBox;
-class EditorToolSettings;
-class ImageWidget;
-}
+class QString;
 
 namespace DigikamFreeRotationImagesPlugin
 {
+
+class FreeRotationToolPriv;
 
 class FreeRotationTool : public Digikam::EditorToolThreaded
 {
@@ -93,26 +78,7 @@ private:
 
 private:
 
-    QCheckBox*                    m_antialiasInput;
-
-    QLabel*                       m_newHeightLabel;
-    QLabel*                       m_newWidthLabel;
-
-    QPoint                        m_autoAdjustPoint1;
-    QPoint                        m_autoAdjustPoint2;
-
-    QPushButton*                  m_autoAdjustBtn;
-    QPushButton*                  m_autoAdjustPoint1Btn;
-    QPushButton*                  m_autoAdjustPoint2Btn;
-
-    Digikam::RExpanderBox*        m_expanderBox;
-    Digikam::EditorToolSettings*  m_gboxSettings;
-    Digikam::ImageWidget*         m_previewWidget;
-
-    KDcrawIface::RComboBox*       m_autoCropCB;
-    KDcrawIface::RDoubleNumInput* m_fineAngleInput;
-    KDcrawIface::RIntNumInput*    m_angleInput;
-
+    FreeRotationToolPriv* const d;
 };
 
 }  // namespace DigikamFreeRotationImagesPlugin
