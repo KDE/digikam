@@ -24,29 +24,16 @@
 #ifndef PERSPECTIVETOOL_H
 #define PERSPECTIVETOOL_H
 
-// Qt includes
-
-#include <QRect>
-
 // Local includes
 
 #include "editortool.h"
 
-class QLabel;
-class QCheckBox;
-class QSpinBox;
-
-class KColorButton;
-
-namespace Digikam
-{
-class EditorToolSettings;
-}
+class QRect;
 
 namespace DigikamPerspectiveImagesPlugin
 {
 
-class PerspectiveWidget;
+class PerspectiveToolPriv;
 
 class PerspectiveTool : public Digikam::EditorTool
 {
@@ -72,24 +59,7 @@ private:
 
 private:
 
-    QLabel                      *m_newWidthLabel;
-    QLabel                      *m_newHeightLabel;
-    QLabel                      *m_topLeftAngleLabel;
-    QLabel                      *m_topRightAngleLabel;
-    QLabel                      *m_bottomLeftAngleLabel;
-    QLabel                      *m_bottomRightAngleLabel;
-
-    QCheckBox                   *m_drawWhileMovingCheckBox;
-    QCheckBox                   *m_drawGridCheckBox;
-    QCheckBox                   *m_inverseTransformation;
-
-    QSpinBox                    *m_guideSize;
-
-    KColorButton                *m_guideColorBt;
-
-    PerspectiveWidget           *m_previewWidget;
-
-    Digikam::EditorToolSettings *m_gboxSettings;
+    PerspectiveToolPriv* const d;
 };
 
 }  // namespace DigikamPerspectiveImagesPlugin
