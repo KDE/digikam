@@ -24,24 +24,12 @@
 
 // Local includes
 
-#include "dimg.h"
 #include "editortool.h"
-
-class QCheckBox;
-class QLabel;
-class QWidget;
-
-
-namespace Digikam
-{
-class EditorToolSettings;
-class ImageWidget;
-}
 
 namespace DigikamAutoCorrectionImagesPlugin
 {
 
-class KLFDeviceSelector;
+class AutoCorrectionToolPriv;
 
 class AutoCorrectionTool : public Digikam::EditorToolThreaded
 {
@@ -70,20 +58,7 @@ private:
 
 private:
 
-    QLabel                      *m_maskPreviewLabel;
-
-    QCheckBox                   *m_showGrid;
-    QCheckBox                   *m_filterCCA;
-    QCheckBox                   *m_filterVig;
-    QCheckBox                   *m_filterCCI;
-    QCheckBox                   *m_filterDist;
-    QCheckBox                   *m_filterGeom;
-
-    KLFDeviceSelector           *m_cameraSelector;
-
-    Digikam::ImageWidget        *m_previewWidget;
-
-    Digikam::EditorToolSettings *m_gboxSettings;
+    AutoCorrectionToolPriv* const d;
 };
 
 }  // namespace DigikamAutoCorrectionImagesPlugin
