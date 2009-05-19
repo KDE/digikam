@@ -7,7 +7,7 @@
  * Description : Red eyes correction tool for image editor
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,22 +34,11 @@
 #include "editortool.h"
 
 class QColor;
-class QLabel;
-
-class KHueSaturationSelector;
-class KColorValueSelector;
-
-namespace KDcrawIface
-{
-class RIntNumInput;
-}
 
 namespace Digikam
 {
-class DColor;
 class DImg;
-class ImageWidget;
-class EditorToolSettings;
+class DColor;
 }
 
 namespace DigikamImagesPluginCore
@@ -75,6 +64,8 @@ private:
 
     QWidget* m_parent;
 };
+
+class RedEyeToolPriv;
 
 class RedEyeTool : public Digikam::EditorTool
 {
@@ -105,27 +96,11 @@ private:
 
     enum RedThresold
     {
-        Mild=0,
+        Mild = 0,
         Aggressive
     };
 
-    uchar                        *m_destinationPreviewData;
-
-    QColor                        m_selColor;
-
-    QLabel                       *m_thresholdLabel;
-    QLabel                       *m_smoothLabel;
-
-    KHueSaturationSelector       *m_HSSelector;
-    KColorValueSelector          *m_VSelector;
-
-    KDcrawIface::RIntNumInput    *m_tintLevel;
-    KDcrawIface::RIntNumInput    *m_redThreshold;
-    KDcrawIface::RIntNumInput    *m_smoothLevel;
-
-    Digikam::ImageWidget         *m_previewWidget;
-
-    Digikam::EditorToolSettings  *m_gboxSettings;
+    RedEyeToolPriv* const d;
 };
 
 }  // namespace DigikamImagesPluginCore

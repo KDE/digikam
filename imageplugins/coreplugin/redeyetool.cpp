@@ -7,7 +7,7 @@
  * Description : Red eyes correction tool for image editor
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -76,129 +76,166 @@ using namespace Digikam;
 namespace DigikamImagesPluginCore
 {
 
+class RedEyeToolPriv
+{
+public:
+
+    RedEyeToolPriv()
+    {
+        destinationPreviewData = 0;
+        thresholdLabel         = 0;
+        smoothLabel            = 0;
+        HSSelector             = 0;
+        VSelector              = 0;
+        tintLevel              = 0;
+        redThreshold           = 0;
+        smoothLevel            = 0;
+        previewWidget          = 0;
+        gboxSettings           = 0;
+    }
+
+    uchar*                  destinationPreviewData;
+
+    QColor                  selColor;
+
+    QLabel*                 thresholdLabel;
+    QLabel*                 smoothLabel;
+
+    KHueSaturationSelector* HSSelector;
+    KColorValueSelector*    VSelector;
+
+    RIntNumInput*           tintLevel;
+    RIntNumInput*           redThreshold;
+    RIntNumInput*           smoothLevel;
+
+    ImageWidget*            previewWidget;
+    EditorToolSettings*     gboxSettings;
+};
+
 RedEyeTool::RedEyeTool(QObject* parent)
-          : EditorTool(parent)
+          : EditorTool(parent),
+            d(new RedEyeToolPriv)
 {
     setObjectName("redeye");
     setToolName(i18n("Red Eye"));
     setToolIcon(SmallIcon("redeyes"));
     setToolHelp("redeyecorrectiontool.anchor");
 
-    m_destinationPreviewData = 0;
+    d->destinationPreviewData = 0;
 
-    m_previewWidget = new ImageWidget("redeye Tool", 0,
+    d->previewWidget = new ImageWidget("redeye Tool", 0,
                                       i18n("Here you can see the image selection preview with "
                                            "red eye reduction applied."),
                                       true, ImageGuideWidget::PickColorMode, true, true);
-    setToolView(m_previewWidget);
+    setToolView(d->previewWidget);
 
     // -------------------------------------------------------------
 
-    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                            EditorToolSettings::Ok|
-                                            EditorToolSettings::Cancel,
-                                            EditorToolSettings::Histogram);
+    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                             EditorToolSettings::Ok|
+                                             EditorToolSettings::Cancel,
+                                             EditorToolSettings::Histogram);
 
-    QGridLayout* gridSettings = new QGridLayout(m_gboxSettings->plainPage());
+    QGridLayout* gridSettings = new QGridLayout(d->gboxSettings->plainPage());
 
     // -------------------------------------------------------------
 
-    m_thresholdLabel = new QLabel(i18n("Sensitivity:"), m_gboxSettings->plainPage());
-    m_redThreshold   = new RIntNumInput(m_gboxSettings->plainPage());
-    m_redThreshold->setRange(10, 90, 1);
-    m_redThreshold->setSliderEnabled(true);
-    m_redThreshold->setDefaultValue(20);
-    m_redThreshold->setWhatsThis(i18n("<p>Control the red pixel selection threshold.</p>"
-                                      "<p>Low values will select more red pixels "
-                                      "(aggressive correction), high values will select fewer (mild correction). "
-                                      "Use a low value if an eye has been selected exactly. "
-                                      "Use a high value if other parts of the face have been selected too.</p>"));
+    d->thresholdLabel = new QLabel(i18n("Sensitivity:"), d->gboxSettings->plainPage());
+    d->redThreshold   = new RIntNumInput(d->gboxSettings->plainPage());
+    d->redThreshold->setRange(10, 90, 1);
+    d->redThreshold->setSliderEnabled(true);
+    d->redThreshold->setDefaultValue(20);
+    d->redThreshold->setWhatsThis(i18n("<p>Control the red pixel selection threshold.</p>"
+                                       "<p>Low values will select more red pixels "
+                                       "(aggressive correction), high values will select fewer (mild correction). "
+                                       "Use a low value if an eye has been selected exactly. "
+                                       "Use a high value if other parts of the face have been selected too.</p>"));
 
-    m_smoothLabel = new QLabel(i18nc("Smoothness when blurring border of changed pixels",
-                                     "Smooth:"), m_gboxSettings->plainPage());
-    m_smoothLevel = new RIntNumInput(m_gboxSettings->plainPage());
-    m_smoothLevel->setRange(0, 5, 1);
-    m_smoothLevel->setSliderEnabled(true);
-    m_smoothLevel->setDefaultValue(1);
-    m_smoothLevel->setWhatsThis(i18n("Sets the smoothness value when blurring the border "
-                                     "of the changed pixels. "
-                                     "This leads to a more naturally looking pupil."));
+    d->smoothLabel = new QLabel(i18nc("Smoothness when blurring border of changed pixels",
+                                      "Smooth:"), d->gboxSettings->plainPage());
+    d->smoothLevel = new RIntNumInput(d->gboxSettings->plainPage());
+    d->smoothLevel->setRange(0, 5, 1);
+    d->smoothLevel->setSliderEnabled(true);
+    d->smoothLevel->setDefaultValue(1);
+    d->smoothLevel->setWhatsThis(i18n("Sets the smoothness value when blurring the border "
+                                      "of the changed pixels. "
+                                      "This leads to a more naturally looking pupil."));
 
-    QLabel *label3 = new QLabel(i18n("Coloring Tint:"), m_gboxSettings->plainPage());
+    QLabel *label3 = new QLabel(i18n("Coloring Tint:"), d->gboxSettings->plainPage());
 
-    m_HSSelector   = new KHueSaturationSelector(m_gboxSettings->plainPage());
-    m_HSSelector->setWhatsThis(i18n("Sets a custom color when re-colorizing the eyes."));
-    m_HSSelector->setMinimumSize(200, 142);
-    m_HSSelector->setChooserMode(ChooserValue);
-    m_HSSelector->setColorValue(255);
+    d->HSSelector   = new KHueSaturationSelector(d->gboxSettings->plainPage());
+    d->HSSelector->setWhatsThis(i18n("Sets a custom color when re-colorizing the eyes."));
+    d->HSSelector->setMinimumSize(200, 142);
+    d->HSSelector->setChooserMode(ChooserValue);
+    d->HSSelector->setColorValue(255);
 
-    m_VSelector    = new KColorValueSelector(m_gboxSettings->plainPage());
-    m_VSelector->setChooserMode(ChooserValue);
-    m_VSelector->setMinimumSize(26, 142);
-    m_VSelector->setIndent(false);
+    d->VSelector    = new KColorValueSelector(d->gboxSettings->plainPage());
+    d->VSelector->setChooserMode(ChooserValue);
+    d->VSelector->setMinimumSize(26, 142);
+    d->VSelector->setIndent(false);
 
-    QLabel *label4 = new QLabel(i18n("Tint Level:"), m_gboxSettings->plainPage());
-    m_tintLevel    = new RIntNumInput(m_gboxSettings->plainPage());
-    m_tintLevel->setRange(1, 200, 1);
-    m_tintLevel->setSliderEnabled(true);
-    m_tintLevel->setDefaultValue(128);
-    m_tintLevel->setWhatsThis(i18n("Set the tint level to adjust the luminosity of "
+    QLabel *label4 = new QLabel(i18n("Tint Level:"), d->gboxSettings->plainPage());
+    d->tintLevel   = new RIntNumInput(d->gboxSettings->plainPage());
+    d->tintLevel->setRange(1, 200, 1);
+    d->tintLevel->setSliderEnabled(true);
+    d->tintLevel->setDefaultValue(128);
+    d->tintLevel->setWhatsThis(i18n("Set the tint level to adjust the luminosity of "
                                    "the new color of the pupil."));
 
     // -------------------------------------------------------------
 
-    gridSettings->addWidget(m_thresholdLabel, 0, 0, 1, 5);
-    gridSettings->addWidget(m_redThreshold,   1, 0, 1, 5);
-    gridSettings->addWidget(m_smoothLabel,    2, 0, 1, 5);
-    gridSettings->addWidget(m_smoothLevel,    3, 0, 1, 5);
-    gridSettings->addWidget(label3,           4, 0, 1, 5);
-    gridSettings->addWidget(m_HSSelector,     5, 0, 1, 4);
-    gridSettings->addWidget(m_VSelector,      5, 4, 1, 1);
-    gridSettings->addWidget(label4,           6, 0, 1, 5);
-    gridSettings->addWidget(m_tintLevel,      7, 0, 1, 5);
+    gridSettings->addWidget(d->thresholdLabel, 0, 0, 1, 5);
+    gridSettings->addWidget(d->redThreshold,   1, 0, 1, 5);
+    gridSettings->addWidget(d->smoothLabel,    2, 0, 1, 5);
+    gridSettings->addWidget(d->smoothLevel,    3, 0, 1, 5);
+    gridSettings->addWidget(label3,            4, 0, 1, 5);
+    gridSettings->addWidget(d->HSSelector,     5, 0, 1, 4);
+    gridSettings->addWidget(d->VSelector,      5, 4, 1, 1);
+    gridSettings->addWidget(label4,            6, 0, 1, 5);
+    gridSettings->addWidget(d->tintLevel,      7, 0, 1, 5);
     gridSettings->setRowStretch(8, 10);
     gridSettings->setColumnStretch(3, 10);
-    gridSettings->setMargin(m_gboxSettings->spacingHint());
-    gridSettings->setSpacing(m_gboxSettings->spacingHint());
+    gridSettings->setMargin(d->gboxSettings->spacingHint());
+    gridSettings->setSpacing(d->gboxSettings->spacingHint());
 
-    setToolSettings(m_gboxSettings);
+    setToolSettings(d->gboxSettings);
     init();
 
     // -------------------------------------------------------------
 
-    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
+    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
             this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
 
-    connect(m_previewWidget, SIGNAL(signalResized()),
+    connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
 
-    connect(m_redThreshold, SIGNAL(valueChanged(int)),
+    connect(d->redThreshold, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
 
-    connect(m_smoothLevel, SIGNAL(valueChanged(int)),
+    connect(d->smoothLevel, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
 
-    connect(m_HSSelector, SIGNAL(valueChanged(int, int)),
+    connect(d->HSSelector, SIGNAL(valueChanged(int, int)),
             this, SLOT(slotHSChanged(int, int)));
 
-    connect(m_VSelector, SIGNAL(valueChanged(int)),
+    connect(d->VSelector, SIGNAL(valueChanged(int)),
             this, SLOT(slotVChanged(int)));
 
-    connect(m_tintLevel, SIGNAL(valueChanged(int)),
+    connect(d->tintLevel, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
 }
 
 RedEyeTool::~RedEyeTool()
 {
-    if (m_destinationPreviewData)
-       delete [] m_destinationPreviewData;
+    if (d->destinationPreviewData)
+       delete [] d->destinationPreviewData;
 }
 
 void RedEyeTool::slotHSChanged(int h, int s)
 {
     QColor color;
 
-    int val = m_selColor.value();
+    int val = d->selColor.value();
 
     color.setHsv(h, s, val);
     setColor(color);
@@ -208,8 +245,8 @@ void RedEyeTool::slotVChanged(int v)
 {
     QColor color;
 
-    int hue = m_selColor.hue();
-    int sat = m_selColor.saturation();
+    int hue = d->selColor.hue();
+    int sat = d->selColor.saturation();
 
     color.setHsv(hue, sat, v);
     setColor(color);
@@ -219,28 +256,28 @@ void RedEyeTool::setColor(QColor c)
 {
     if (c.isValid())
     {
-        m_selColor = c;
+        d->selColor = c;
 
         // set values
-        m_HSSelector->setValues(c.hue(), c.saturation());
-        m_VSelector->setValue(c.value());
+        d->HSSelector->setValues(c.hue(), c.saturation());
+        d->VSelector->setValue(c.value());
 
         // set colors
-        m_HSSelector->blockSignals(true);
-        m_HSSelector->setHue(c.hue());
-        m_HSSelector->setSaturation(c.saturation());
-        m_HSSelector->setColorValue(c.value());
-        m_HSSelector->updateContents();
-        m_HSSelector->blockSignals(false);
-        m_HSSelector->repaint();
+        d->HSSelector->blockSignals(true);
+        d->HSSelector->setHue(c.hue());
+        d->HSSelector->setSaturation(c.saturation());
+        d->HSSelector->setColorValue(c.value());
+        d->HSSelector->updateContents();
+        d->HSSelector->blockSignals(false);
+        d->HSSelector->repaint();
 
-        m_VSelector->blockSignals(true);
-        m_VSelector->setHue(c.hue());
-        m_VSelector->setSaturation(c.saturation());
-        m_VSelector->setColorValue(c.value());
-        m_VSelector->updateContents();
-        m_VSelector->blockSignals(false);
-        m_VSelector->repaint();
+        d->VSelector->blockSignals(true);
+        d->VSelector->setHue(c.hue());
+        d->VSelector->setSaturation(c.saturation());
+        d->VSelector->setColorValue(c.value());
+        d->VSelector->updateContents();
+        d->VSelector->blockSignals(false);
+        d->VSelector->repaint();
 
         slotTimer();
     }
@@ -248,7 +285,7 @@ void RedEyeTool::setColor(QColor c)
 
 void RedEyeTool::slotColorSelectedFromTarget(const DColor& color)
 {
-    m_gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
+    d->gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }
 
 void RedEyeTool::readSettings()
@@ -256,22 +293,22 @@ void RedEyeTool::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("redeye Tool");
 
-    m_gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
+    d->gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
                         (int)EditorToolSettings::LuminosityChannel));
-    m_gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
+    d->gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
                         (int)HistogramWidget::LogScaleHistogram));
 
-    m_redThreshold->setValue(group.readEntry("RedThreshold", m_redThreshold->defaultValue()));
-    m_smoothLevel->setValue(group.readEntry("SmoothLevel", m_smoothLevel->defaultValue()));
-    m_HSSelector->setHue(group.readEntry("HueColoringTint", 0));
-    m_HSSelector->setSaturation(group.readEntry("SatColoringTint", 128));
-    m_VSelector->setValue(group.readEntry("ValColoringTint", 255));
-    m_tintLevel->setValue(group.readEntry("TintLevel", m_tintLevel->defaultValue()));
+    d->redThreshold->setValue(group.readEntry("RedThreshold", d->redThreshold->defaultValue()));
+    d->smoothLevel->setValue(group.readEntry("SmoothLevel", d->smoothLevel->defaultValue()));
+    d->HSSelector->setHue(group.readEntry("HueColoringTint", 0));
+    d->HSSelector->setSaturation(group.readEntry("SatColoringTint", 128));
+    d->VSelector->setValue(group.readEntry("ValColoringTint", 255));
+    d->tintLevel->setValue(group.readEntry("TintLevel", d->tintLevel->defaultValue()));
 
     QColor col;
-    col.setHsv(m_HSSelector->hue(),
-               m_HSSelector->saturation(),
-               m_VSelector->value());
+    col.setHsv(d->HSSelector->hue(),
+               d->HSSelector->saturation(),
+               d->VSelector->value());
     setColor(col);
 }
 
@@ -279,38 +316,38 @@ void RedEyeTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("redeye Tool");
-    group.writeEntry("Histogram Channel", m_gboxSettings->histogramBox()->channel());
-    group.writeEntry("Histogram Scale", m_gboxSettings->histogramBox()->scale());
-    group.writeEntry("RedThreshold", m_redThreshold->value());
-    group.writeEntry("SmoothLevel", m_smoothLevel->value());
-    group.writeEntry("HueColoringTint", m_HSSelector->hue());
-    group.writeEntry("SatColoringTint", m_HSSelector->saturation());
-    group.writeEntry("ValColoringTint", m_VSelector->value());
-    group.writeEntry("TintLevel", m_tintLevel->value());
-    m_previewWidget->writeSettings();
+    group.writeEntry("Histogram Channel", d->gboxSettings->histogramBox()->channel());
+    group.writeEntry("Histogram Scale", d->gboxSettings->histogramBox()->scale());
+    group.writeEntry("RedThreshold", d->redThreshold->value());
+    group.writeEntry("SmoothLevel", d->smoothLevel->value());
+    group.writeEntry("HueColoringTint", d->HSSelector->hue());
+    group.writeEntry("SatColoringTint", d->HSSelector->saturation());
+    group.writeEntry("ValColoringTint", d->VSelector->value());
+    group.writeEntry("TintLevel", d->tintLevel->value());
+    d->previewWidget->writeSettings();
     config->sync();
 }
 
 void RedEyeTool::slotResetSettings()
 {
-    m_redThreshold->blockSignals(true);
-    m_HSSelector->blockSignals(true);
-    m_VSelector->blockSignals(true);
-    m_tintLevel->blockSignals(true);
+    d->redThreshold->blockSignals(true);
+    d->HSSelector->blockSignals(true);
+    d->VSelector->blockSignals(true);
+    d->tintLevel->blockSignals(true);
 
-    m_redThreshold->slotReset();
-    m_smoothLevel->slotReset();
-    m_tintLevel->slotReset();
+    d->redThreshold->slotReset();
+    d->smoothLevel->slotReset();
+    d->tintLevel->slotReset();
 
     // Black color by default
     QColor col;
     col.setHsv(0, 0, 0);
     setColor(col);
 
-    m_redThreshold->blockSignals(false);
-    m_HSSelector->blockSignals(false);
-    m_VSelector->blockSignals(false);
-    m_tintLevel->blockSignals(false);
+    d->redThreshold->blockSignals(false);
+    d->HSSelector->blockSignals(false);
+    d->VSelector->blockSignals(false);
+    d->tintLevel->blockSignals(false);
 
     slotEffect();
 }
@@ -319,33 +356,33 @@ void RedEyeTool::slotEffect()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
 
-    m_gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
+    d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
-    if (m_destinationPreviewData)
-       delete [] m_destinationPreviewData;
+    if (d->destinationPreviewData)
+       delete [] d->destinationPreviewData;
 
     // Here, we need to use the real selection image data because we will apply
     // a Gaussian blur filter on pixels and we cannot use directly the preview scaled image
     // else the blur radius will not give the same result between preview and final rendering.
-    ImageIface* iface = m_previewWidget->imageIface();
-    m_destinationPreviewData   = iface->getImageSelection();
+    ImageIface* iface = d->previewWidget->imageIface();
+    d->destinationPreviewData  = iface->getImageSelection();
     int w                      = iface->selectedWidth();
     int h                      = iface->selectedHeight();
     bool sb                    = iface->originalSixteenBit();
     bool a                     = iface->originalHasAlpha();
-    DImg selection(w, h, sb, a, m_destinationPreviewData);
+    DImg selection(w, h, sb, a, d->destinationPreviewData);
 
     redEyeFilter(selection);
 
     DImg preview = selection.smoothScale(iface->previewWidth(), iface->previewHeight());
 
     iface->putPreviewImage(preview.bits());
-    m_previewWidget->updatePreview();
+    d->previewWidget->updatePreview();
 
     // Update histogram.
 
-    memcpy(m_destinationPreviewData, selection.bits(), selection.numBytes());
-    m_gboxSettings->histogramBox()->histogram()->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
+    memcpy(d->destinationPreviewData, selection.bits(), selection.numBytes());
+    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData, w, h, sb, 0, 0, 0, false);
 
     kapp->restoreOverrideCursor();
 }
@@ -354,12 +391,12 @@ void RedEyeTool::finalRendering()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
 
-    ImageIface* iface = m_previewWidget->imageIface();
-    uchar *data                = iface->getImageSelection();
-    int w                      = iface->selectedWidth();
-    int h                      = iface->selectedHeight();
-    bool sixteenBit            = iface->originalSixteenBit();
-    bool hasAlpha              = iface->originalHasAlpha();
+    ImageIface* iface = d->previewWidget->imageIface();
+    uchar *data       = iface->getImageSelection();
+    int w             = iface->selectedWidth();
+    int h             = iface->selectedHeight();
+    bool sixteenBit   = iface->originalSixteenBit();
+    bool hasAlpha     = iface->originalHasAlpha();
     DImg selection(w, h, sixteenBit, hasAlpha, data);
     delete [] data;
 
@@ -376,10 +413,10 @@ void RedEyeTool::redEyeFilter(DImg& selection)
                        selection.bits(), true);
 
     selection          = mask.copy();
-    float redThreshold = m_redThreshold->value()/10.0f;
-    int hue            = m_VSelector->hue();
-    int sat            = m_VSelector->saturation();
-    int val            = m_VSelector->value();
+    float redThreshold = d->redThreshold->value()/10.0f;
+    int hue            = d->VSelector->hue();
+    int sat            = d->VSelector->saturation();
+    int val            = d->VSelector->value();
     QColor coloring    = QColor::fromHsv(hue, sat, val);
 
     struct channel
@@ -404,7 +441,7 @@ void RedEyeTool::redEyeFilter(DImg& selection)
     blue_chan.blue_gain   = 1.0f;
 
     float red_norm, green_norm, blue_norm;
-    int   level = 201 - m_tintLevel->value();
+    int   level = 201 - d->tintLevel->value();
 
     red_norm   = 1.0f / (red_chan.red_gain   + red_chan.green_gain   + red_chan.blue_gain);
     green_norm = 1.0f / (green_chan.red_gain + green_chan.green_gain + green_chan.blue_gain);
@@ -496,7 +533,7 @@ void RedEyeTool::redEyeFilter(DImg& selection)
     DImg mask2 = mask.copy();
     DImgImageFilters filter;
     filter.gaussianBlurImage(mask2.bits(), mask2.width(), mask2.height(),
-                             mask2.sixteenBit(), m_smoothLevel->value());
+                             mask2.sixteenBit(), d->smoothLevel->value());
 
     if (!selection.sixteenBit())         // 8 bits image.
     {
