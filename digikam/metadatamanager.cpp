@@ -32,6 +32,7 @@
 
 // KDE includes
 
+#include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
 
@@ -119,6 +120,11 @@ MetadataManagerPriv::MetadataManagerPriv(MetadataManager *q)
 {
     dbWorker   = new MetadataManagerDatabaseWorker(this);
     fileWorker = new MetadataManagerFileWorker(this);
+
+    dbTodo     = 0;
+    dbDone     = 0;
+    writerTodo = 0;
+    writerDone = 0;
 
     connect(this, SIGNAL(signalAddTags(const QList<ImageInfo> &, const QList<int> &)),
             dbWorker, SLOT(assignTags(const QList<ImageInfo> &, const QList<int> &)));
