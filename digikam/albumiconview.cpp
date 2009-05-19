@@ -638,11 +638,6 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint&)
         if (choice == viewAction)
             emit signalPreviewItem(iconItem);
     }
-// TODO: DELETE ME?
-//    // cleanup -----------------------
-//
-//    popmenu.deleteLater();
-//    delete viewAction;
 }
 
 void AlbumIconView::slotCopy()

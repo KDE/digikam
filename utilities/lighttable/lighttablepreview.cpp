@@ -406,14 +406,6 @@ void LightTablePreview::slotContextMenu()
         else if (choice == zoomOutAction)   slotDecreaseZoom();
         else if (choice == fitWindowAction) fitToWindow();
     }
-// TODO: DELETE ME?
-//    popmenu.deleteLater();
-//    delete zoomInAction;
-//    delete zoomOutAction;
-//    delete fitWindowAction;
-//    delete slideshowAction;
-//    delete editAction;
-//    delete trashAction;
 }
 
 void LightTablePreview::slotAssignTag(int tagID)

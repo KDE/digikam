@@ -352,13 +352,6 @@ void SearchFolderView::slotContextMenu(Q3ListViewItem* item, const QPoint&, int)
             searchDelete(sItem->album());
         }
     }
-// TODO: DELETE ME?
-//    // cleanup -----------------------
-//
-//    popmenu.deleteLater();
-//    delete newAction;
-//    delete edtAction;
-//    delete delAction;
 }
 
 void SearchFolderView::slotDoubleClicked(Q3ListViewItem* item, const QPoint&, int)
