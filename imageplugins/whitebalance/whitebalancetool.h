@@ -26,36 +26,19 @@
 #ifndef WHITEBALANCETOOL_H
 #define WHITEBALANCETOOL_H
 
-// Qt includes
-
-#include <QColor>
-
 // Local includes
 
 #include "editortool.h"
 
-class QPushButton;
-class QLabel;
-class QPushButton;
-class QToolButton;
-
-namespace KDcrawIface
-{
-class RDoubleNumInput;
-class RComboBox;
-}
-
 namespace Digikam
 {
-class HistogramWidget;
-class ColorGradientWidget;
-class ImageWidget;
 class DColor;
-class EditorToolSettings;
 }
 
 namespace DigikamWhiteBalanceImagesPlugin
 {
+
+class WhiteBalanceToolPriv;
 
 class WhiteBalanceTool : public Digikam::EditorTool
 {
@@ -65,7 +48,6 @@ public:
 
     WhiteBalanceTool(QObject* parent);
     ~WhiteBalanceTool();
-
 
 private Q_SLOTS:
 
@@ -107,39 +89,9 @@ private:
         None
     };
 
-    uchar                        *m_destinationPreviewData;
+private:
 
-    int                           m_currentPreviewMode;
-
-    QToolButton                  *m_pickTemperature;
-    QToolButton                  *m_autoAdjustExposure;
-
-    QLabel                       *m_adjTemperatureLabel;
-    QLabel                       *m_temperaturePresetLabel;
-    QLabel                       *m_darkLabel;
-    QLabel                       *m_blackLabel;
-    QLabel                       *m_mainExposureLabel;
-    QLabel                       *m_fineExposureLabel;
-    QLabel                       *m_gammaLabel;
-    QLabel                       *m_saturationLabel;
-    QLabel                       *m_greenLabel;
-    QLabel                       *m_exposureLabel;
-    QLabel                       *m_temperatureLabel;
-
-    KDcrawIface::RComboBox       *m_temperaturePresetCB;
-
-    KDcrawIface::RDoubleNumInput *m_temperatureInput;
-    KDcrawIface::RDoubleNumInput *m_darkInput;
-    KDcrawIface::RDoubleNumInput *m_blackInput;
-    KDcrawIface::RDoubleNumInput *m_mainExposureInput;
-    KDcrawIface::RDoubleNumInput *m_fineExposureInput;
-    KDcrawIface::RDoubleNumInput *m_gammaInput;
-    KDcrawIface::RDoubleNumInput *m_saturationInput;
-    KDcrawIface::RDoubleNumInput *m_greenInput;
-
-    Digikam::ImageWidget         *m_previewWidget;
-
-    Digikam::EditorToolSettings  *m_gboxSettings;
+    WhiteBalanceToolPriv* const d;
 };
 
 }  // namespace DigikamWhiteBalanceImagesPlugin
