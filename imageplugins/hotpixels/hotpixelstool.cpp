@@ -7,7 +7,7 @@
  * Description : a digiKam image plugin for fixing dots produced by
  *               hot/stuck/dead pixels from a CCD.
  *
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2006 by Unai Garro <ugarro at users dot sourceforge dot net>
  *
  * This program is free software; you can redistribute it
@@ -53,15 +53,16 @@
 
 // Local includes
 
-#include "version.h"
+#include "blackframelistview.h"
 #include "daboutdata.h"
 #include "dimg.h"
-#include "imageiface.h"
-#include "imagepanelwidget.h"
 #include "editortooliface.h"
 #include "editortoolsettings.h"
+#include "hotpixelfixer.h"
 #include "imagedialog.h"
-#include "blackframelistview.h"
+#include "imageiface.h"
+#include "imagepanelwidget.h"
+#include "version.h"
 
 using namespace KDcrawIface;
 using namespace Digikam;
@@ -69,8 +70,36 @@ using namespace Digikam;
 namespace DigikamHotPixelsImagesPlugin
 {
 
+class HotPixelsToolPriv
+{
+public:
+
+    HotPixelsToolPriv()
+    {
+        blackFrameButton   = 0;
+        progressBar        = 0;
+        filterMethodCombo  = 0;
+        blackFrameListView = 0;
+        previewWidget      = 0;
+        gboxSettings       = 0;
+    }
+
+    QPushButton*        blackFrameButton;
+    QProgressBar*       progressBar;
+    QList<HotPixel>     hotPixelsList;
+
+    KUrl                blackFrameURL;
+
+    RComboBox*          filterMethodCombo;
+
+    BlackFrameListView* blackFrameListView;
+    ImagePanelWidget*   previewWidget;
+    EditorToolSettings* gboxSettings;
+};
+
 HotPixelsTool::HotPixelsTool(QObject* parent)
-             : EditorToolThreaded(parent)
+             : EditorToolThreaded(parent),
+               d(new HotPixelsToolPriv)
 {
     setObjectName("hotpixels");
     setToolName(i18n("Hot Pixels"));
@@ -78,73 +107,74 @@ HotPixelsTool::HotPixelsTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Ok|
-                                            EditorToolSettings::Try|
-                                            EditorToolSettings::Cancel,
-                                            EditorToolSettings::PanIcon);
-    QGridLayout* grid = new QGridLayout(m_gboxSettings->plainPage());
+    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Ok|
+                                             EditorToolSettings::Try|
+                                             EditorToolSettings::Cancel,
+                                             EditorToolSettings::PanIcon);
+    QGridLayout* grid = new QGridLayout(d->gboxSettings->plainPage());
 
-    QLabel *filterMethodLabel = new QLabel(i18n("Filter:"), m_gboxSettings->plainPage());
-    m_filterMethodCombo       = new RComboBox(m_gboxSettings->plainPage());
-    m_filterMethodCombo->addItem(i18nc("average filter mode", "Average"));
-    m_filterMethodCombo->addItem(i18nc("linear filter mode", "Linear"));
-    m_filterMethodCombo->addItem(i18nc("quadratic filter mode", "Quadratic"));
-    m_filterMethodCombo->addItem(i18nc("cubic filter mode", "Cubic"));
-    m_filterMethodCombo->setDefaultIndex(HotPixelFixer::QUADRATIC_INTERPOLATION);
+    QLabel *filterMethodLabel = new QLabel(i18n("Filter:"), d->gboxSettings->plainPage());
+    d->filterMethodCombo      = new RComboBox(d->gboxSettings->plainPage());
+    d->filterMethodCombo->addItem(i18nc("average filter mode", "Average"));
+    d->filterMethodCombo->addItem(i18nc("linear filter mode", "Linear"));
+    d->filterMethodCombo->addItem(i18nc("quadratic filter mode", "Quadratic"));
+    d->filterMethodCombo->addItem(i18nc("cubic filter mode", "Cubic"));
+    d->filterMethodCombo->setDefaultIndex(HotPixelFixer::QUADRATIC_INTERPOLATION);
 
-    m_blackFrameButton = new QPushButton(i18n("Black Frame..."), m_gboxSettings->plainPage());
-    m_blackFrameButton->setWhatsThis(i18n("Use this button to add a new black frame file which will "
+    d->blackFrameButton = new QPushButton(i18n("Black Frame..."), d->gboxSettings->plainPage());
+    d->blackFrameButton->setWhatsThis(i18n("Use this button to add a new black frame file which will "
                                           "be used by the hot pixels removal filter.") );
 
-    m_blackFrameListView = new BlackFrameListView(m_gboxSettings->plainPage());
+    d->blackFrameListView = new BlackFrameListView(d->gboxSettings->plainPage());
 
     // -------------------------------------------------------------
 
-    grid->addWidget(filterMethodLabel,    0, 0, 1, 1);
-    grid->addWidget(m_filterMethodCombo,  0, 1, 1, 1);
-    grid->addWidget(m_blackFrameButton,   0, 2, 1, 1);
-    grid->addWidget(m_blackFrameListView, 1, 0, 2, 3);
+    grid->addWidget(filterMethodLabel,     0, 0, 1, 1);
+    grid->addWidget(d->filterMethodCombo,  0, 1, 1, 1);
+    grid->addWidget(d->blackFrameButton,   0, 2, 1, 1);
+    grid->addWidget(d->blackFrameListView, 1, 0, 2, 3);
     grid->setRowStretch(3, 10);
-    grid->setMargin(m_gboxSettings->spacingHint());
-    grid->setSpacing(m_gboxSettings->spacingHint());
+    grid->setMargin(d->gboxSettings->spacingHint());
+    grid->setSpacing(d->gboxSettings->spacingHint());
 
-    setToolSettings(m_gboxSettings);
+    setToolSettings(d->gboxSettings);
 
     // -------------------------------------------------------------
 
-    m_previewWidget = new ImagePanelWidget(470, 350, "hotpixels Tool", m_gboxSettings->panIconView(),
-                                           0, ImagePanelWidget::SeparateViewDuplicate);
+    d->previewWidget = new ImagePanelWidget(470, 350, "hotpixels Tool", d->gboxSettings->panIconView(),
+                                            0, ImagePanelWidget::SeparateViewDuplicate);
 
-    setToolView(m_previewWidget);
+    setToolView(d->previewWidget);
     init();
 
     // -------------------------------------------------------------
 
-    connect(m_filterMethodCombo, SIGNAL(activated(int)),
+    connect(d->filterMethodCombo, SIGNAL(activated(int)),
             this, SLOT(slotEffect()));
 
-    connect(m_blackFrameButton, SIGNAL(clicked()),
+    connect(d->blackFrameButton, SIGNAL(clicked()),
             this, SLOT(slotAddBlackFrame()));
 
-    connect(m_blackFrameListView, SIGNAL(blackFrameSelected(QList<HotPixel>, const KUrl&)),
+    connect(d->blackFrameListView, SIGNAL(blackFrameSelected(QList<HotPixel>, const KUrl&)),
             this, SLOT(slotBlackFrame(QList<HotPixel>, const KUrl&)));
 }
 
 HotPixelsTool::~HotPixelsTool()
 {
+    delete d;
 }
 
 void HotPixelsTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("hotpixels Tool");
-    m_blackFrameURL = KUrl(group.readEntry("Last Black Frame File", QString()));
-    m_filterMethodCombo->setCurrentIndex(group.readEntry("Filter Method", m_filterMethodCombo->defaultIndex()));
+    d->blackFrameURL = KUrl(group.readEntry("Last Black Frame File", QString()));
+    d->filterMethodCombo->setCurrentIndex(group.readEntry("Filter Method", d->filterMethodCombo->defaultIndex()));
 
-    if (m_blackFrameURL.isValid())
+    if (d->blackFrameURL.isValid())
     {
         EditorToolIface::editorToolIface()->setToolStartProgress(i18n("Loading: "));
-        BlackFrameListViewItem *item = new BlackFrameListViewItem(m_blackFrameListView, m_blackFrameURL);
+        BlackFrameListViewItem *item = new BlackFrameListViewItem(d->blackFrameListView, d->blackFrameURL);
 
         connect(item, SIGNAL(signalLoadingProgress(float)),
                 this, SLOT(slotLoadingProgress(float)));
@@ -168,29 +198,29 @@ void HotPixelsTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("hotpixels Tool");
-    group.writeEntry("Last Black Frame File", m_blackFrameURL.url());
-    group.writeEntry("Filter Method", m_filterMethodCombo->currentIndex());
-    m_previewWidget->writeSettings();
+    group.writeEntry("Last Black Frame File", d->blackFrameURL.url());
+    group.writeEntry("Filter Method", d->filterMethodCombo->currentIndex());
+    d->previewWidget->writeSettings();
     group.sync();
 }
 
 void HotPixelsTool::slotResetSettings()
 {
-    m_filterMethodCombo->blockSignals(true);
-    m_filterMethodCombo->slotReset();
-    m_filterMethodCombo->blockSignals(false);
+    d->filterMethodCombo->blockSignals(true);
+    d->filterMethodCombo->slotReset();
+    d->filterMethodCombo->blockSignals(false);
 }
 
 void HotPixelsTool::slotAddBlackFrame()
 {
-    KUrl url = ImageDialog::getImageURL(kapp->activeWindow(), m_blackFrameURL, i18n("Select Black Frame Image"));
+    KUrl url = ImageDialog::getImageURL(kapp->activeWindow(), d->blackFrameURL, i18n("Select Black Frame Image"));
     if (!url.isEmpty())
     {
         // Load the selected file and insert into the list.
 
-        m_blackFrameURL = url;
-        m_blackFrameListView->clear();
-        BlackFrameListViewItem *item = new BlackFrameListViewItem(m_blackFrameListView, m_blackFrameURL);
+        d->blackFrameURL = url;
+        d->blackFrameListView->clear();
+        BlackFrameListViewItem *item = new BlackFrameListViewItem(d->blackFrameListView, d->blackFrameURL);
 
         connect(item, SIGNAL(signalLoadingProgress(float)),
                 this, SLOT(slotLoadingProgress(float)));
@@ -202,23 +232,23 @@ void HotPixelsTool::slotAddBlackFrame()
 
 void HotPixelsTool::renderingFinished()
 {
-    m_filterMethodCombo->setEnabled(true);
-    m_blackFrameListView->setEnabled(true);
+    d->filterMethodCombo->setEnabled(true);
+    d->blackFrameListView->setEnabled(true);
 }
 
 void HotPixelsTool::prepareEffect()
 {
-    m_filterMethodCombo->setEnabled(false);
-    m_blackFrameListView->setEnabled(false);
+    d->filterMethodCombo->setEnabled(false);
+    d->blackFrameListView->setEnabled(false);
 
-    DImg image              = m_previewWidget->getOriginalRegionImage();
-    int interpolationMethod = m_filterMethodCombo->currentIndex();
+    DImg image              = d->previewWidget->getOriginalRegionImage();
+    int interpolationMethod = d->filterMethodCombo->currentIndex();
 
     QList<HotPixel> hotPixelsRegion;
-    QRect area = m_previewWidget->getOriginalImageRegionToRender();
-    QList<HotPixel>::Iterator end(m_hotPixelsList.end());
+    QRect area = d->previewWidget->getOriginalImageRegionToRender();
+    QList<HotPixel>::Iterator end(d->hotPixelsList.end());
 
-    for (QList<HotPixel>::Iterator it = m_hotPixelsList.begin() ; it != end ; ++it )
+    for (QList<HotPixel>::Iterator it = d->hotPixelsList.begin() ; it != end ; ++it )
     {
         HotPixel hp = (*it);
 
@@ -234,18 +264,18 @@ void HotPixelsTool::prepareEffect()
 
 void HotPixelsTool::prepareFinal()
 {
-    m_filterMethodCombo->setEnabled(false);
-    m_blackFrameListView->setEnabled(false);
+    d->filterMethodCombo->setEnabled(false);
+    d->blackFrameListView->setEnabled(false);
 
-    int interpolationMethod = m_filterMethodCombo->currentIndex();
+    int interpolationMethod = d->filterMethodCombo->currentIndex();
 
     ImageIface iface(0, 0);
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new HotPixelFixer(iface.getOriginalImg(), this, m_hotPixelsList, interpolationMethod)));
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new HotPixelFixer(iface.getOriginalImg(), this, d->hotPixelsList, interpolationMethod)));
 }
 
 void HotPixelsTool::putPreviewData()
 {
-    m_previewWidget->setPreviewImage(filter()->getTargetImage());
+    d->previewWidget->setPreviewImage(filter()->getTargetImage());
 }
 
 void HotPixelsTool::putFinalData()
@@ -256,18 +286,18 @@ void HotPixelsTool::putFinalData()
 
 void HotPixelsTool::slotBlackFrame(QList<HotPixel> hpList, const KUrl& blackFrameURL)
 {
-    m_blackFrameURL = blackFrameURL;
-    m_hotPixelsList = hpList;
+    d->blackFrameURL = blackFrameURL;
+    d->hotPixelsList = hpList;
 
-    QPolygon pointList(m_hotPixelsList.size());
+    QPolygon pointList(d->hotPixelsList.size());
     QList <HotPixel>::Iterator it;
     int i = 0;
-    QList <HotPixel>::Iterator end(m_hotPixelsList.end());
+    QList <HotPixel>::Iterator end(d->hotPixelsList.end());
 
-    for (it = m_hotPixelsList.begin() ; it != end ; ++it, ++i)
+    for (it = d->hotPixelsList.begin() ; it != end ; ++it, ++i)
        pointList.setPoint(i, (*it).rect.center());
 
-    m_previewWidget->setPanIconHighLightPoints(pointList);
+    d->previewWidget->setPanIconHighLightPoints(pointList);
 
     slotEffect();
 }
