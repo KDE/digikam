@@ -7,8 +7,8 @@
  * Description : a digiKam image editor plugin for add film
  *               grain on an image.
  *
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,41 +29,62 @@
 
 // Qt includes
 
-#include <QLabel>
-#include <QLCDNumber>
-#include <QSlider>
-#include <QImage>
 #include <QGridLayout>
+#include <QImage>
+#include <QLCDNumber>
+#include <QLabel>
+#include <QSlider>
 
 // KDE includes
 
-#include <kdebug.h>
-#include <klocale.h>
 #include <kaboutdata.h>
-#include <kiconloader.h>
 #include <kapplication.h>
-#include <kstandarddirs.h>
 #include <kconfig.h>
-#include <kglobal.h>
 #include <kconfiggroup.h>
+#include <kdebug.h>
+#include <kglobal.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kstandarddirs.h>
 
 // Local includes
 
-#include "version.h"
 #include "daboutdata.h"
 #include "dimg.h"
-#include "imageiface.h"
-#include "imagepanelwidget.h"
 #include "editortoolsettings.h"
 #include "filmgrain.h"
+#include "imageiface.h"
+#include "imagepanelwidget.h"
+#include "version.h"
 
 using namespace Digikam;
 
 namespace DigikamFilmGrainImagesPlugin
 {
 
+class FilmGrainToolPriv
+{
+public:
+
+    FilmGrainToolPriv()
+    {
+        sensibilitySlider   = 0;
+        sensibilityLCDValue = 0;
+        previewWidget       = 0;
+        gboxSettings        = 0;
+    }
+
+    QSlider*            sensibilitySlider;
+
+    QLCDNumber*         sensibilityLCDValue;
+
+    ImagePanelWidget*   previewWidget;
+    EditorToolSettings* gboxSettings;
+};
+
 FilmGrainTool::FilmGrainTool(QObject* parent)
-             : EditorToolThreaded(parent)
+             : EditorToolThreaded(parent),
+               d(new FilmGrainToolPriv)
 {
     setObjectName("filmgrain");
     setToolName(i18n("Film Grain"));
@@ -71,120 +92,120 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    m_gboxSettings      = new EditorToolSettings(EditorToolSettings::Default|
-                                                 EditorToolSettings::Ok|
-                                                 EditorToolSettings::Cancel|
-                                                 EditorToolSettings::Try,
-                                                 EditorToolSettings::PanIcon);
-    QGridLayout* grid   = new QGridLayout( m_gboxSettings->plainPage() );
+    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                             EditorToolSettings::Ok|
+                                             EditorToolSettings::Cancel|
+                                             EditorToolSettings::Try,
+                                             EditorToolSettings::PanIcon);
+    QGridLayout* grid = new QGridLayout( d->gboxSettings->plainPage() );
 
-    QLabel *label1      = new QLabel(i18n("Sensitivity (ISO):"), m_gboxSettings->plainPage());
+    QLabel *label1       = new QLabel(i18n("Sensitivity (ISO):"), d->gboxSettings->plainPage());
+    d->sensibilitySlider = new QSlider(Qt::Horizontal, d->gboxSettings->plainPage());
+    d->sensibilitySlider->setMinimum(2);
+    d->sensibilitySlider->setMaximum(30);
+    d->sensibilitySlider->setPageStep(1);
+    d->sensibilitySlider->setValue(12);
+    d->sensibilitySlider->setTracking(false);
+    d->sensibilitySlider->setTickInterval(1);
+    d->sensibilitySlider->setTickPosition(QSlider::TicksBelow);
 
-    m_sensibilitySlider = new QSlider(Qt::Horizontal, m_gboxSettings->plainPage());
-    m_sensibilitySlider->setMinimum(2);
-    m_sensibilitySlider->setMaximum(30);
-    m_sensibilitySlider->setPageStep(1);
-    m_sensibilitySlider->setValue(12);
-    m_sensibilitySlider->setTracking(false);
-    m_sensibilitySlider->setTickInterval(1);
-    m_sensibilitySlider->setTickPosition(QSlider::TicksBelow);
-
-    m_sensibilityLCDValue = new QLCDNumber(4, m_gboxSettings->plainPage());
-    m_sensibilityLCDValue->setSegmentStyle( QLCDNumber::Flat );
-    m_sensibilityLCDValue->display( QString::number(2400) );
+    d->sensibilityLCDValue = new QLCDNumber(4, d->gboxSettings->plainPage());
+    d->sensibilityLCDValue->setSegmentStyle( QLCDNumber::Flat );
+    d->sensibilityLCDValue->display( QString::number(2400) );
     QString whatsThis = i18n("Set here the film ISO-sensitivity to use for "
                              "simulating the film graininess.");
 
-    m_sensibilityLCDValue->setWhatsThis( whatsThis);
-    m_sensibilitySlider->setWhatsThis( whatsThis);
+    d->sensibilityLCDValue->setWhatsThis( whatsThis);
+    d->sensibilitySlider->setWhatsThis( whatsThis);
 
     // -------------------------------------------------------------
 
-    grid->addWidget(label1,                0, 0, 1, 2);
-    grid->addWidget(m_sensibilitySlider,   1, 0, 1, 1);
-    grid->addWidget(m_sensibilityLCDValue, 1, 1, 1, 1);
+    grid->addWidget(label1,                 0, 0, 1, 2);
+    grid->addWidget(d->sensibilitySlider,   1, 0, 1, 1);
+    grid->addWidget(d->sensibilityLCDValue, 1, 1, 1, 1);
     grid->setRowStretch(2, 10);
-    grid->setMargin(m_gboxSettings->spacingHint());
-    grid->setSpacing(m_gboxSettings->spacingHint());
+    grid->setMargin(d->gboxSettings->spacingHint());
+    grid->setSpacing(d->gboxSettings->spacingHint());
 
-    setToolSettings(m_gboxSettings);
+    setToolSettings(d->gboxSettings);
 
     // -------------------------------------------------------------
 
-    m_previewWidget = new ImagePanelWidget(470, 350, "filmgrain Tool", m_gboxSettings->panIconView());
+    d->previewWidget = new ImagePanelWidget(470, 350, "filmgrain Tool", d->gboxSettings->panIconView());
 
-    setToolView(m_previewWidget);
+    setToolView(d->previewWidget);
     init();
 
     // -------------------------------------------------------------
 
-    connect(m_sensibilitySlider, SIGNAL(valueChanged(int)),
+    connect(d->sensibilitySlider, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()) );
 
     // this connection is necessary to change the LCD display when
     // the value is changed by single clicking on the slider
-    connect(m_sensibilitySlider, SIGNAL(valueChanged(int)),
+    connect(d->sensibilitySlider, SIGNAL(valueChanged(int)),
             this, SLOT(slotSliderMoved(int)) );
 
-    connect(m_sensibilitySlider, SIGNAL(sliderMoved(int)),
+    connect(d->sensibilitySlider, SIGNAL(sliderMoved(int)),
             this, SLOT(slotSliderMoved(int)) );
 }
 
 FilmGrainTool::~FilmGrainTool()
 {
+    delete d;
 }
 
 void FilmGrainTool::renderingFinished()
 {
-    m_sensibilitySlider->setEnabled(true);
+    d->sensibilitySlider->setEnabled(true);
 }
 
 void FilmGrainTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("filmgrain Tool");
-    m_sensibilitySlider->blockSignals(true);
-    m_sensibilitySlider->setValue(group.readEntry("SensitivityAdjustment", 12));
-    m_sensibilitySlider->blockSignals(false);
-    slotSliderMoved(m_sensibilitySlider->value());
+    d->sensibilitySlider->blockSignals(true);
+    d->sensibilitySlider->setValue(group.readEntry("SensitivityAdjustment", 12));
+    d->sensibilitySlider->blockSignals(false);
+    slotSliderMoved(d->sensibilitySlider->value());
 }
 
 void FilmGrainTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("filmgrain Tool");
-    group.writeEntry("SensitivityAdjustment", m_sensibilitySlider->value());
-    m_previewWidget->writeSettings();
+    group.writeEntry("SensitivityAdjustment", d->sensibilitySlider->value());
+    d->previewWidget->writeSettings();
     config->sync();
 }
 
 void FilmGrainTool::slotResetSettings()
 {
-    m_sensibilitySlider->blockSignals(true);
-    m_sensibilitySlider->setValue(12);
-    m_sensibilitySlider->blockSignals(false);
+    d->sensibilitySlider->blockSignals(true);
+    d->sensibilitySlider->setValue(12);
+    d->sensibilitySlider->blockSignals(false);
 }
 
 void FilmGrainTool::slotSliderMoved(int v)
 {
-    m_sensibilityLCDValue->display( QString::number(400+200*v) );
+    d->sensibilityLCDValue->display( QString::number(400+200*v) );
 }
 
 void FilmGrainTool::prepareEffect()
 {
-    m_sensibilitySlider->setEnabled(false);
+    d->sensibilitySlider->setEnabled(false);
 
-    DImg image = m_previewWidget->getOriginalRegionImage();
-    int s      = 400 + 200 * m_sensibilitySlider->value();
+    DImg image = d->previewWidget->getOriginalRegionImage();
+    int s      = 400 + 200 * d->sensibilitySlider->value();
 
     setFilter(dynamic_cast<DImgThreadedFilter*>(new FilmGrain(&image, this, s)));
 }
 
 void FilmGrainTool::prepareFinal()
 {
-    m_sensibilitySlider->setEnabled(false);
+    d->sensibilitySlider->setEnabled(false);
 
-    int s = 400 + 200 * m_sensibilitySlider->value();
+    int s = 400 + 200 * d->sensibilitySlider->value();
 
     ImageIface iface(0, 0);
 
@@ -193,7 +214,7 @@ void FilmGrainTool::prepareFinal()
 
 void FilmGrainTool::putPreviewData()
 {
-    m_previewWidget->setPreviewImage(filter()->getTargetImage());
+    d->previewWidget->setPreviewImage(filter()->getTargetImage());
 }
 
 void FilmGrainTool::putFinalData()
