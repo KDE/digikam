@@ -397,6 +397,9 @@ void AlbumSettings::readSettings()
     d->showTrashDeleteDialog = group.readEntry("Show Trash Delete Dialog", true);
     d->sidebarApplyDirectly  = group.readEntry("Apply Sidebar Changes Directly", false);
     d->scanAtStart           = group.readEntry("Scan At Start", true);
+
+    emit setupChanged();
+    emit recurseSettingsChanged();
 }
 
 void AlbumSettings::saveSettings()
