@@ -6,8 +6,8 @@
  * Date        : 2004-12-27
  * Description : a plugin to reduce lens distortions to an image.
  *
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -61,8 +61,8 @@
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imagewidget.h"
-#include "version.h"
 #include "lensdistortion.h"
+#include "version.h"
 
 using namespace KDcrawIface;
 using namespace Digikam;
@@ -70,108 +70,137 @@ using namespace Digikam;
 namespace DigikamLensDistortionImagesPlugin
 {
 
+class LensDistortionToolPriv
+{
+public:
+
+    LensDistortionToolPriv()
+    {
+        maskPreviewLabel  = 0;
+        mainInput         = 0;
+        edgeInput         = 0;
+        rescaleInput      = 0;
+        brightenInput     = 0;
+        previewWidget     = 0;
+        gboxSettings      = 0;
+    }
+
+    QLabel*              maskPreviewLabel;
+
+    RDoubleNumInput*     mainInput;
+    RDoubleNumInput*     edgeInput;
+    RDoubleNumInput*     rescaleInput;
+    RDoubleNumInput*     brightenInput;
+
+    DImg                 previewRasterImage;
+
+    ImageWidget*         previewWidget;
+    EditorToolSettings*  gboxSettings;
+};
+
 LensDistortionTool::LensDistortionTool(QObject* parent)
-                  : EditorToolThreaded(parent)
+                  : EditorToolThreaded(parent),
+                    d(new LensDistortionToolPriv)
 {
     setObjectName("lensdistortion");
     setToolName(i18n("Lens Distortion"));
     setToolIcon(SmallIcon("lensdistortion"));
 
-    m_previewWidget = new ImageWidget("lensdistortion Tool", 0, QString(),
+    d->previewWidget = new ImageWidget("lensdistortion Tool", 0, QString(),
                                       false, ImageGuideWidget::HVGuideMode);
 
-    setToolView(m_previewWidget);
+    setToolView(d->previewWidget);
 
     // -------------------------------------------------------------
 
-    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
                                             EditorToolSettings::Ok|
                                             EditorToolSettings::Cancel,
                                             EditorToolSettings::ColorGuide);
 
-    QGridLayout* gridSettings = new QGridLayout(m_gboxSettings->plainPage());
+    QGridLayout* gridSettings = new QGridLayout(d->gboxSettings->plainPage());
 
-    m_maskPreviewLabel = new QLabel(m_gboxSettings->plainPage());
-    m_maskPreviewLabel->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
-    m_maskPreviewLabel->setWhatsThis( i18n("You can see here a thumbnail preview of the "
+    d->maskPreviewLabel = new QLabel(d->gboxSettings->plainPage());
+    d->maskPreviewLabel->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
+    d->maskPreviewLabel->setWhatsThis( i18n("You can see here a thumbnail preview of the "
                                            "distortion correction applied to a cross pattern.") );
 
     // -------------------------------------------------------------
 
-    QLabel *label1 = new QLabel(i18nc("value for amount of distortion", "Main:"), m_gboxSettings->plainPage());
+    QLabel *label1 = new QLabel(i18nc("value for amount of distortion", "Main:"), d->gboxSettings->plainPage());
 
-    m_mainInput = new RDoubleNumInput(m_gboxSettings->plainPage());
-    m_mainInput->setDecimals(1);
-    m_mainInput->input()->setRange(-100.0, 100.0, 0.1, true);
-    m_mainInput->setDefaultValue(0.0);
-    m_mainInput->setWhatsThis( i18n("This value controls the amount of distortion. Negative values "
+    d->mainInput = new RDoubleNumInput(d->gboxSettings->plainPage());
+    d->mainInput->setDecimals(1);
+    d->mainInput->input()->setRange(-100.0, 100.0, 0.1, true);
+    d->mainInput->setDefaultValue(0.0);
+    d->mainInput->setWhatsThis( i18n("This value controls the amount of distortion. Negative values "
                                     "correct lens barrel distortion, while positive values correct lens "
                                     "pincushion distortion."));
 
     // -------------------------------------------------------------
 
-    QLabel *label2 = new QLabel(i18n("Edge:"), m_gboxSettings->plainPage());
+    QLabel *label2 = new QLabel(i18n("Edge:"), d->gboxSettings->plainPage());
 
-    m_edgeInput = new RDoubleNumInput(m_gboxSettings->plainPage());
-    m_edgeInput->setDecimals(1);
-    m_edgeInput->input()->setRange(-100.0, 100.0, 0.1, true);
-    m_edgeInput->setDefaultValue(0.0);
-    m_edgeInput->setWhatsThis( i18n("This value controls in the same manner as the Main control, "
+    d->edgeInput = new RDoubleNumInput(d->gboxSettings->plainPage());
+    d->edgeInput->setDecimals(1);
+    d->edgeInput->input()->setRange(-100.0, 100.0, 0.1, true);
+    d->edgeInput->setDefaultValue(0.0);
+    d->edgeInput->setWhatsThis( i18n("This value controls in the same manner as the Main control, "
                                     "but has more effect at the edges of the image than at the center."));
 
     // -------------------------------------------------------------
 
-    QLabel *label3 = new QLabel(i18n("Zoom:"), m_gboxSettings->plainPage());
+    QLabel *label3 = new QLabel(i18n("Zoom:"), d->gboxSettings->plainPage());
 
-    m_rescaleInput = new RDoubleNumInput(m_gboxSettings->plainPage());
-    m_rescaleInput->setDecimals(1);
-    m_rescaleInput->input()->setRange(-100.0, 100.0, 0.1, true);
-    m_rescaleInput->setDefaultValue(0.0);
-    m_rescaleInput->setWhatsThis( i18n("This value rescales the overall image size."));
-
-    // -------------------------------------------------------------
-
-    QLabel *label4 = new QLabel(i18n("Brighten:"), m_gboxSettings->plainPage());
-
-    m_brightenInput = new RDoubleNumInput(m_gboxSettings->plainPage());
-    m_brightenInput->setDecimals(1);
-    m_brightenInput->input()->setRange(-100.0, 100.0, 0.1, true);
-    m_brightenInput->setDefaultValue(0.0);
-    m_brightenInput->setWhatsThis( i18n("This value adjusts the brightness in image corners."));
+    d->rescaleInput = new RDoubleNumInput(d->gboxSettings->plainPage());
+    d->rescaleInput->setDecimals(1);
+    d->rescaleInput->input()->setRange(-100.0, 100.0, 0.1, true);
+    d->rescaleInput->setDefaultValue(0.0);
+    d->rescaleInput->setWhatsThis( i18n("This value rescales the overall image size."));
 
     // -------------------------------------------------------------
 
-    gridSettings->addWidget(m_maskPreviewLabel, 0, 0, 1, 2);
+    QLabel *label4 = new QLabel(i18n("Brighten:"), d->gboxSettings->plainPage());
+
+    d->brightenInput = new RDoubleNumInput(d->gboxSettings->plainPage());
+    d->brightenInput->setDecimals(1);
+    d->brightenInput->input()->setRange(-100.0, 100.0, 0.1, true);
+    d->brightenInput->setDefaultValue(0.0);
+    d->brightenInput->setWhatsThis( i18n("This value adjusts the brightness in image corners."));
+
+    // -------------------------------------------------------------
+
+    gridSettings->addWidget(d->maskPreviewLabel, 0, 0, 1, 2);
     gridSettings->addWidget(label1,             1, 0, 1, 2);
-    gridSettings->addWidget(m_mainInput,        2, 0, 1, 2);
+    gridSettings->addWidget(d->mainInput,        2, 0, 1, 2);
     gridSettings->addWidget(label2,             3, 0, 1, 2);
-    gridSettings->addWidget(m_edgeInput,        4, 0, 1, 2);
+    gridSettings->addWidget(d->edgeInput,        4, 0, 1, 2);
     gridSettings->addWidget(label3,             5, 0, 1, 2);
-    gridSettings->addWidget(m_rescaleInput,     6, 0, 1, 2);
+    gridSettings->addWidget(d->rescaleInput,     6, 0, 1, 2);
     gridSettings->addWidget(label4,             7, 0, 1, 2);
-    gridSettings->addWidget(m_brightenInput,    8, 0, 1, 2);
+    gridSettings->addWidget(d->brightenInput,    8, 0, 1, 2);
     gridSettings->setRowStretch(9, 10);
-    gridSettings->setMargin(m_gboxSettings->spacingHint());
-    gridSettings->setSpacing(m_gboxSettings->spacingHint());
+    gridSettings->setMargin(d->gboxSettings->spacingHint());
+    gridSettings->setSpacing(d->gboxSettings->spacingHint());
 
-    setToolSettings(m_gboxSettings);
+    setToolSettings(d->gboxSettings);
     init();
 
     // -------------------------------------------------------------
 
-    connect(m_mainInput, SIGNAL(valueChanged (double)),
+    connect(d->mainInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));
 
-    connect(m_edgeInput, SIGNAL(valueChanged (double)),
+    connect(d->edgeInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));
 
-    connect(m_rescaleInput, SIGNAL(valueChanged (double)),
+    connect(d->rescaleInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));
 
-    connect(m_brightenInput, SIGNAL(valueChanged (double)),
+    connect(d->brightenInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));
 
-    connect(m_gboxSettings, SIGNAL(signalColorGuideChanged()),
+    connect(d->gboxSettings, SIGNAL(signalColorGuideChanged()),
                 this, SLOT(slotColorGuideChanged()));
 
     // -------------------------------------------------------------
@@ -194,17 +223,18 @@ LensDistortionTool::LensDistortionTool(QObject* parent)
     pt.drawRect(0, 0, pix.width(), pix.height());
     pt.end();
     QImage preview       = pix.toImage();
-    m_previewRasterImage = DImg(preview.width(), preview.height(), false, false, preview.bits());
+    d->previewRasterImage = DImg(preview.width(), preview.height(), false, false, preview.bits());
 }
 
 LensDistortionTool::~LensDistortionTool()
 {
+    delete d;
 }
 
 void LensDistortionTool::slotColorGuideChanged()
 {
-    m_previewWidget->slotChangeGuideColor(m_gboxSettings->guideColor());
-    m_previewWidget->slotChangeGuideSize(m_gboxSettings->guideSize());
+    d->previewWidget->slotChangeGuideColor(d->gboxSettings->guideColor());
+    d->previewWidget->slotChangeGuideSize(d->gboxSettings->guideSize());
 }
 
 void LensDistortionTool::readSettings()
@@ -214,10 +244,10 @@ void LensDistortionTool::readSettings()
 
     blockWidgetSignals(true);
 
-    m_mainInput->setValue(group.readEntry("2nd Order Distortion", m_mainInput->defaultValue()));
-    m_edgeInput->setValue(group.readEntry("4th Order Distortion", m_edgeInput->defaultValue()));
-    m_rescaleInput->setValue(group.readEntry("Zoom Factor", m_rescaleInput->defaultValue()));
-    m_brightenInput->setValue(group.readEntry("Brighten", m_brightenInput->defaultValue()));
+    d->mainInput->setValue(group.readEntry("2nd Order Distortion", d->mainInput->defaultValue()));
+    d->edgeInput->setValue(group.readEntry("4th Order Distortion", d->edgeInput->defaultValue()));
+    d->rescaleInput->setValue(group.readEntry("Zoom Factor", d->rescaleInput->defaultValue()));
+    d->brightenInput->setValue(group.readEntry("Brighten", d->brightenInput->defaultValue()));
 
     blockWidgetSignals(false);
 
@@ -229,11 +259,11 @@ void LensDistortionTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("lensdistortion Tool");
-    group.writeEntry("2nd Order Distortion", m_mainInput->value());
-    group.writeEntry("4th Order Distortion", m_edgeInput->value());
-    group.writeEntry("Zoom Factor", m_rescaleInput->value());
-    group.writeEntry("Brighten", m_brightenInput->value());
-    m_previewWidget->writeSettings();
+    group.writeEntry("2nd Order Distortion", d->mainInput->value());
+    group.writeEntry("4th Order Distortion", d->edgeInput->value());
+    group.writeEntry("Zoom Factor", d->rescaleInput->value());
+    group.writeEntry("Brighten", d->brightenInput->value());
+    d->previewWidget->writeSettings();
     config->sync();
 }
 
@@ -241,10 +271,10 @@ void LensDistortionTool::slotResetSettings()
 {
     blockWidgetSignals(true);
 
-    m_mainInput->slotReset();
-    m_edgeInput->slotReset();
-    m_rescaleInput->slotReset();
-    m_brightenInput->slotReset();
+    d->mainInput->slotReset();
+    d->edgeInput->slotReset();
+    d->rescaleInput->slotReset();
+    d->brightenInput->slotReset();
 
     blockWidgetSignals(false);
 
@@ -253,21 +283,21 @@ void LensDistortionTool::slotResetSettings()
 
 void LensDistortionTool::prepareEffect()
 {
-    m_mainInput->setEnabled(false);
-    m_edgeInput->setEnabled(false);
-    m_rescaleInput->setEnabled(false);
-    m_brightenInput->setEnabled(false);
+    d->mainInput->setEnabled(false);
+    d->edgeInput->setEnabled(false);
+    d->rescaleInput->setEnabled(false);
+    d->brightenInput->setEnabled(false);
 
-    double m = m_mainInput->value();
-    double e = m_edgeInput->value();
-    double r = m_rescaleInput->value();
-    double b = m_brightenInput->value();
+    double m = d->mainInput->value();
+    double e = d->edgeInput->value();
+    double r = d->rescaleInput->value();
+    double b = d->brightenInput->value();
 
-    LensDistortion transformPreview(&m_previewRasterImage, 0, m, e, r, b, 0, 0);
+    LensDistortion transformPreview(&d->previewRasterImage, 0, m, e, r, b, 0, 0);
     transformPreview.startFilterDirectly();       // Run filter without to use multithreading.
-    m_maskPreviewLabel->setPixmap(transformPreview.getTargetImage().convertToPixmap());
+    d->maskPreviewLabel->setPixmap(transformPreview.getTargetImage().convertToPixmap());
 
-    ImageIface* iface = m_previewWidget->imageIface();
+    ImageIface* iface = d->previewWidget->imageIface();
 
     setFilter(dynamic_cast<DImgThreadedFilter *>(
                        new LensDistortion(iface->getOriginalImg(), this, m, e, r, b, 0, 0)));
@@ -275,15 +305,15 @@ void LensDistortionTool::prepareEffect()
 
 void LensDistortionTool::prepareFinal()
 {
-    m_mainInput->setEnabled(false);
-    m_edgeInput->setEnabled(false);
-    m_rescaleInput->setEnabled(false);
-    m_brightenInput->setEnabled(false);
+    d->mainInput->setEnabled(false);
+    d->edgeInput->setEnabled(false);
+    d->rescaleInput->setEnabled(false);
+    d->brightenInput->setEnabled(false);
 
-    double m = m_mainInput->value();
-    double e = m_edgeInput->value();
-    double r = m_rescaleInput->value();
-    double b = m_brightenInput->value();
+    double m = d->mainInput->value();
+    double e = d->edgeInput->value();
+    double r = d->rescaleInput->value();
+    double b = d->brightenInput->value();
 
     ImageIface iface(0, 0);
 
@@ -293,13 +323,13 @@ void LensDistortionTool::prepareFinal()
 
 void LensDistortionTool::putPreviewData()
 {
-    ImageIface* iface = m_previewWidget->imageIface();
+    ImageIface* iface = d->previewWidget->imageIface();
 
     DImg imDest = filter()->getTargetImage()
             .smoothScale(iface->previewWidth(), iface->previewHeight());
     iface->putPreviewImage(imDest.bits());
 
-    m_previewWidget->updatePreview();
+    d->previewWidget->updatePreview();
 }
 
 void LensDistortionTool::putFinalData()
@@ -312,18 +342,18 @@ void LensDistortionTool::putFinalData()
 
 void LensDistortionTool::renderingFinished()
 {
-    m_mainInput->setEnabled(true);
-    m_edgeInput->setEnabled(true);
-    m_rescaleInput->setEnabled(true);
-    m_brightenInput->setEnabled(true);
+    d->mainInput->setEnabled(true);
+    d->edgeInput->setEnabled(true);
+    d->rescaleInput->setEnabled(true);
+    d->brightenInput->setEnabled(true);
 }
 
 void LensDistortionTool::blockWidgetSignals(bool b)
 {
-    m_mainInput->blockSignals(b);
-    m_edgeInput->blockSignals(b);
-    m_rescaleInput->blockSignals(b);
-    m_brightenInput->blockSignals(b);
+    d->mainInput->blockSignals(b);
+    d->edgeInput->blockSignals(b);
+    d->rescaleInput->blockSignals(b);
+    d->brightenInput->blockSignals(b);
 }
 
 }  // namespace DigikamLensDistortionImagesPlugin

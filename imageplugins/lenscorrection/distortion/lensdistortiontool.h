@@ -6,8 +6,8 @@
  * Date        : 2004-12-27
  * Description : a plugin to reduce lens distortions to an image.
  *
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,30 +25,14 @@
 #ifndef LENSDISTORTIONTOOL_H
 #define LENSDISTORTIONTOOL_H
 
-// Qt includes
-
-#include <QImage>
-
 // Local includes
 
-#include "dimg.h"
 #include "editortool.h"
-
-class QLabel;
-
-namespace KDcrawIface
-{
-class RDoubleNumInput;
-}
-
-namespace Digikam
-{
-class EditorToolSettings;
-class ImageWidget;
-}
 
 namespace DigikamLensDistortionImagesPlugin
 {
+
+class LensDistortionToolPriv;
 
 class LensDistortionTool : public Digikam::EditorToolThreaded
 {
@@ -77,18 +61,7 @@ private:
 
 private:
 
-    QLabel                       *m_maskPreviewLabel;
-
-    KDcrawIface::RDoubleNumInput *m_mainInput;
-    KDcrawIface::RDoubleNumInput *m_edgeInput;
-    KDcrawIface::RDoubleNumInput *m_rescaleInput;
-    KDcrawIface::RDoubleNumInput *m_brightenInput;
-
-    Digikam::DImg                 m_previewRasterImage;
-
-    Digikam::ImageWidget         *m_previewWidget;
-
-    Digikam::EditorToolSettings  *m_gboxSettings;
+    LensDistortionToolPriv* const d;
 };
 
 }  // namespace DigikamLensDistortionImagesPlugin
