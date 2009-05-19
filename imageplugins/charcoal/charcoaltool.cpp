@@ -7,7 +7,7 @@
  * Description : a digikam image editor plugin to
  *               simulate charcoal drawing.
  *
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,16 +33,16 @@
 
 // KDE includes
 
-#include <kconfig.h>
-#include <klocale.h>
 #include <kaboutdata.h>
-#include <kdebug.h>
-#include <kiconloader.h>
 #include <kapplication.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kdebug.h>
+#include <kglobal.h>
+#include <kiconloader.h>
+#include <klocale.h>
 #include <knuminput.h>
 #include <kstandarddirs.h>
-#include <kglobal.h>
-#include <kconfiggroup.h>
 
 // LibKDcraw includes
 
@@ -50,13 +50,13 @@
 
 // Local includes
 
-#include "version.h"
+#include "charcoal.h"
 #include "daboutdata.h"
 #include "dimg.h"
+#include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imagepanelwidget.h"
-#include "editortoolsettings.h"
-#include "charcoal.h"
+#include "version.h"
 
 using namespace KDcrawIface;
 using namespace Digikam;
@@ -64,8 +64,28 @@ using namespace Digikam;
 namespace DigikamCharcoalImagesPlugin
 {
 
+class CharcoalToolPriv
+{
+public:
+
+    CharcoalToolPriv()
+    {
+        pencilInput   = 0;
+        smoothInput   = 0;
+        previewWidget = 0;
+        gboxSettings  = 0;
+    }
+
+    RIntNumInput*       pencilInput;
+    RIntNumInput*       smoothInput;
+
+    ImagePanelWidget*   previewWidget;
+    EditorToolSettings* gboxSettings;
+};
+
 CharcoalTool::CharcoalTool(QObject* parent)
-            : EditorToolThreaded(parent)
+            : EditorToolThreaded(parent),
+              d(new CharcoalToolPriv)
 {
     setObjectName("charcoal");
     setToolName(i18n("Charcoal"));
@@ -73,121 +93,120 @@ CharcoalTool::CharcoalTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                            EditorToolSettings::Ok|
-                                            EditorToolSettings::Cancel|
-                                            EditorToolSettings::Try,
-                                            EditorToolSettings::PanIcon);
-    QGridLayout* grid = new QGridLayout(m_gboxSettings->plainPage());
+    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                             EditorToolSettings::Ok|
+                                             EditorToolSettings::Cancel|
+                                             EditorToolSettings::Try,
+                                             EditorToolSettings::PanIcon);
+    QGridLayout* grid = new QGridLayout(d->gboxSettings->plainPage());
 
-    QLabel *label1 = new QLabel(i18n("Pencil size:"), m_gboxSettings->plainPage());
-
-    m_pencilInput  = new RIntNumInput(m_gboxSettings->plainPage());
-    m_pencilInput->setRange(1, 100, 1);
-    m_pencilInput->setSliderEnabled(true);
-    m_pencilInput->setDefaultValue(5);
-    m_pencilInput->setWhatsThis( i18n("Set here the charcoal pencil size used to simulate the drawing."));
-
-    // -------------------------------------------------------------
-
-    QLabel *label2 = new QLabel(i18nc("smoothing value of the pencil", "Smooth:"), m_gboxSettings->plainPage());
-
-    m_smoothInput = new RIntNumInput(m_gboxSettings->plainPage());
-    m_smoothInput->setRange(1, 100, 1);
-    m_smoothInput->setSliderEnabled(true);
-    m_smoothInput->setDefaultValue(10);
-    m_smoothInput->setWhatsThis( i18n("This value controls the smoothing effect of the pencil "
-                                      "under the canvas."));
+    QLabel *label1 = new QLabel(i18n("Pencil size:"), d->gboxSettings->plainPage());
+    d->pencilInput = new RIntNumInput(d->gboxSettings->plainPage());
+    d->pencilInput->setRange(1, 100, 1);
+    d->pencilInput->setSliderEnabled(true);
+    d->pencilInput->setDefaultValue(5);
+    d->pencilInput->setWhatsThis( i18n("Set here the charcoal pencil size used to simulate the drawing."));
 
     // -------------------------------------------------------------
 
-    grid->addWidget(label1,        0, 0, 1, 2);
-    grid->addWidget(m_pencilInput, 1, 0, 1, 2);
-    grid->addWidget(label2,        2, 0, 1, 2);
-    grid->addWidget(m_smoothInput, 3, 0, 1, 2);
+    QLabel *label2 = new QLabel(i18nc("smoothing value of the pencil", "Smooth:"), d->gboxSettings->plainPage());
+    d->smoothInput = new RIntNumInput(d->gboxSettings->plainPage());
+    d->smoothInput->setRange(1, 100, 1);
+    d->smoothInput->setSliderEnabled(true);
+    d->smoothInput->setDefaultValue(10);
+    d->smoothInput->setWhatsThis( i18n("This value controls the smoothing effect of the pencil "
+                                       "under the canvas."));
+
+    // -------------------------------------------------------------
+
+    grid->addWidget(label1,         0, 0, 1, 2);
+    grid->addWidget(d->pencilInput, 1, 0, 1, 2);
+    grid->addWidget(label2,         2, 0, 1, 2);
+    grid->addWidget(d->smoothInput, 3, 0, 1, 2);
     grid->setRowStretch(4, 10);
-    grid->setMargin(m_gboxSettings->spacingHint());
-    grid->setSpacing(m_gboxSettings->spacingHint());
+    grid->setMargin(d->gboxSettings->spacingHint());
+    grid->setSpacing(d->gboxSettings->spacingHint());
 
-    setToolSettings(m_gboxSettings);
+    setToolSettings(d->gboxSettings);
 
     // -------------------------------------------------------------
 
-    m_previewWidget = new ImagePanelWidget(470, 350, "charcoal Tool", m_gboxSettings->panIconView());
+    d->previewWidget = new ImagePanelWidget(470, 350, "charcoal Tool", d->gboxSettings->panIconView());
 
-    setToolView(m_previewWidget);
+    setToolView(d->previewWidget);
     init();
 
     // -------------------------------------------------------------
 
-    connect(m_pencilInput, SIGNAL(valueChanged(int)),
+    connect(d->pencilInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
 
-    connect(m_smoothInput, SIGNAL(valueChanged(int)),
+    connect(d->smoothInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
 }
 
 CharcoalTool::~CharcoalTool()
 {
+    delete d;
 }
 
 void CharcoalTool::renderingFinished()
 {
-    m_pencilInput->setEnabled(true);
-    m_smoothInput->setEnabled(true);
+    d->pencilInput->setEnabled(true);
+    d->smoothInput->setEnabled(true);
 }
 
 void CharcoalTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("charcoal Tool");
-    m_pencilInput->blockSignals(true);
-    m_smoothInput->blockSignals(true);
-    m_pencilInput->setValue(group.readEntry("PencilAdjustment", m_pencilInput->defaultValue()));
-    m_smoothInput->setValue(group.readEntry("SmoothAdjustment", m_smoothInput->defaultValue()));
-    m_pencilInput->blockSignals(false);
-    m_smoothInput->blockSignals(false);
+    d->pencilInput->blockSignals(true);
+    d->smoothInput->blockSignals(true);
+    d->pencilInput->setValue(group.readEntry("PencilAdjustment", d->pencilInput->defaultValue()));
+    d->smoothInput->setValue(group.readEntry("SmoothAdjustment", d->smoothInput->defaultValue()));
+    d->pencilInput->blockSignals(false);
+    d->smoothInput->blockSignals(false);
 }
 
 void CharcoalTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("charcoal Tool");
-    group.writeEntry("PencilAdjustment", m_pencilInput->value());
-    group.writeEntry("SmoothAdjustment", m_smoothInput->value());
-    m_previewWidget->writeSettings();
+    group.writeEntry("PencilAdjustment", d->pencilInput->value());
+    group.writeEntry("SmoothAdjustment", d->smoothInput->value());
+    d->previewWidget->writeSettings();
     config->sync();
 }
 
 void CharcoalTool::slotResetSettings()
 {
-    m_pencilInput->blockSignals(true);
-    m_smoothInput->blockSignals(true);
-    m_pencilInput->slotReset();
-    m_smoothInput->slotReset();
-    m_pencilInput->blockSignals(false);
-    m_smoothInput->blockSignals(false);
+    d->pencilInput->blockSignals(true);
+    d->smoothInput->blockSignals(true);
+    d->pencilInput->slotReset();
+    d->smoothInput->slotReset();
+    d->pencilInput->blockSignals(false);
+    d->smoothInput->blockSignals(false);
 }
 
 void CharcoalTool::prepareEffect()
 {
-    m_pencilInput->setEnabled(false);
-    m_smoothInput->setEnabled(false);
+    d->pencilInput->setEnabled(false);
+    d->smoothInput->setEnabled(false);
 
-    double pencil = (double)m_pencilInput->value()/10.0;
-    double smooth = (double)m_smoothInput->value();
-    DImg image    = m_previewWidget->getOriginalRegionImage();
+    double pencil = (double)d->pencilInput->value()/10.0;
+    double smooth = (double)d->smoothInput->value();
+    DImg image    = d->previewWidget->getOriginalRegionImage();
 
     setFilter(dynamic_cast<DImgThreadedFilter*>(new Charcoal(&image, this, pencil, smooth)));
 }
 
 void CharcoalTool::prepareFinal()
 {
-    m_pencilInput->setEnabled(false);
-    m_smoothInput->setEnabled(false);
+    d->pencilInput->setEnabled(false);
+    d->smoothInput->setEnabled(false);
 
-    double pencil = (double)m_pencilInput->value()/10.0;
-    double smooth = (double)m_smoothInput->value();
+    double pencil = (double)d->pencilInput->value()/10.0;
+    double smooth = (double)d->smoothInput->value();
 
     ImageIface iface(0, 0);
     setFilter(dynamic_cast<DImgThreadedFilter*>(new Charcoal(iface.getOriginalImg(), this, pencil, smooth)));
@@ -195,7 +214,7 @@ void CharcoalTool::prepareFinal()
 
 void CharcoalTool::putPreviewData()
 {
-    m_previewWidget->setPreviewImage(filter()->getTargetImage());
+    d->previewWidget->setPreviewImage(filter()->getTargetImage());
 }
 
 void CharcoalTool::putFinalData()
