@@ -25,26 +25,16 @@
 #ifndef RESTORATIONTOOL_H
 #define RESTORATIONTOOL_H
 
-// Qt includes
-
-#include <QString>
-
 // Local includes
 
 #include "editortool.h"
 
-class KComboBox;
-class KTabWidget;
-
-namespace Digikam
-{
-class GreycstorationWidget;
-class EditorToolSettings;
-class ImagePanelWidget;
-}
+class QString;
 
 namespace DigikamRestorationImagesPlugin
 {
+
+class RestorationToolPriv;
 
 class RestorationTool : public Digikam::EditorToolThreaded
 {
@@ -77,21 +67,15 @@ private:
 
     enum RestorationFilteringPreset
     {
-        NoPreset=0,
+        NoPreset = 0,
         ReduceUniformNoise,
         ReduceJPEGArtefacts,
         ReduceTexturing
     };
 
-    KTabWidget                    *m_mainTab;
+private:
 
-    KComboBox                     *m_restorationTypeCB;
-
-    Digikam::GreycstorationWidget *m_settingsWidget;
-
-    Digikam::ImagePanelWidget     *m_previewWidget;
-
-    Digikam::EditorToolSettings   *m_gboxSettings;
+    RestorationToolPriv* const d;
 };
 
 }  // namespace DigikamRestorationImagesPlugin

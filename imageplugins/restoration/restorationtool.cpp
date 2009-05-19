@@ -52,21 +52,45 @@
 
 // Local includes
 
-#include "version.h"
-#include "imageiface.h"
-#include "imagepanelwidget.h"
 #include "editortoolsettings.h"
+#include "greycstorationiface.h"
 #include "greycstorationsettings.h"
 #include "greycstorationwidget.h"
-#include "greycstorationiface.h"
+#include "imageiface.h"
+#include "imagepanelwidget.h"
+#include "version.h"
 
 using namespace Digikam;
 
 namespace DigikamRestorationImagesPlugin
 {
 
+class RestorationToolPriv
+{
+public:
+
+    RestorationToolPriv()
+    {
+        mainTab           = 0;
+        restorationTypeCB = 0;
+        settingsWidget    = 0;
+        previewWidget     = 0;
+        gboxSettings      = 0;
+    }
+
+
+    KTabWidget*           mainTab;
+
+    KComboBox*            restorationTypeCB;
+
+    GreycstorationWidget* settingsWidget;
+    ImagePanelWidget*     previewWidget;
+    EditorToolSettings*   gboxSettings;
+};
+
 RestorationTool::RestorationTool(QObject* parent)
-               : EditorToolThreaded(parent)
+               : EditorToolThreaded(parent),
+                 d(new RestorationToolPriv)
 {
     setObjectName("restoration");
     setToolName(i18n("Restoration"));
@@ -74,20 +98,20 @@ RestorationTool::RestorationTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                            EditorToolSettings::Ok|
-                                            EditorToolSettings::Cancel|
-                                            EditorToolSettings::Load|
-                                            EditorToolSettings::SaveAs|
-                                            EditorToolSettings::Try,
-                                            EditorToolSettings::PanIcon);
+    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                             EditorToolSettings::Ok|
+                                             EditorToolSettings::Cancel|
+                                             EditorToolSettings::Load|
+                                             EditorToolSettings::SaveAs|
+                                             EditorToolSettings::Try,
+                                             EditorToolSettings::PanIcon);
 
-    QGridLayout* gridSettings = new QGridLayout(m_gboxSettings->plainPage());
-    m_mainTab = new KTabWidget( m_gboxSettings->plainPage() );
+    QGridLayout* gridSettings = new QGridLayout(d->gboxSettings->plainPage());
+    d->mainTab = new KTabWidget( d->gboxSettings->plainPage() );
 
-    QWidget* firstPage = new QWidget( m_mainTab );
+    QWidget* firstPage = new QWidget( d->mainTab );
     QGridLayout* grid  = new QGridLayout(firstPage);
-    m_mainTab->addTab( firstPage, i18n("Preset") );
+    d->mainTab->addTab( firstPage, i18n("Preset") );
 
     KUrlLabel *cimgLogoLabel = new KUrlLabel(firstPage);
     cimgLogoLabel->setText(QString());
@@ -97,41 +121,41 @@ RestorationTool::RestorationTool(QObject* parent)
 
     QLabel *typeLabel   = new QLabel(i18n("Filtering type:"), firstPage);
     typeLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
-    m_restorationTypeCB = new KComboBox(firstPage);
-    m_restorationTypeCB->addItem( i18nc("no restoration preset", "None") );
-    m_restorationTypeCB->addItem( i18n("Reduce Uniform Noise") );
-    m_restorationTypeCB->addItem( i18n("Reduce JPEG Artifacts") );
-    m_restorationTypeCB->addItem( i18n("Reduce Texturing") );
-    m_restorationTypeCB->setWhatsThis( i18n("<p>Select the filter preset to use for photograph restoration here:</p>"
+    d->restorationTypeCB = new KComboBox(firstPage);
+    d->restorationTypeCB->addItem( i18nc("no restoration preset", "None") );
+    d->restorationTypeCB->addItem( i18n("Reduce Uniform Noise") );
+    d->restorationTypeCB->addItem( i18n("Reduce JPEG Artifacts") );
+    d->restorationTypeCB->addItem( i18n("Reduce Texturing") );
+    d->restorationTypeCB->setWhatsThis(i18n("<p>Select the filter preset to use for photograph restoration here:</p>"
                                             "<p><b>None</b>: Most common values. Puts settings to default.<br/>"
                                             "<b>Reduce Uniform Noise</b>: reduce small image artifacts such as sensor noise.<br/>"
                                             "<b>Reduce JPEG Artifacts</b>: reduce large image artifacts, such as a JPEG compression mosaic.<br/>"
                                             "<b>Reduce Texturing</b>: reduce image artifacts, such as paper texture, or Moire patterns "
                                             "on scanned images.</p>"));
 
-    grid->addWidget(cimgLogoLabel,       0, 1, 1, 1);
-    grid->addWidget(typeLabel,           1, 0, 1, 1);
-    grid->addWidget(m_restorationTypeCB, 1, 1, 1, 1);
+    grid->addWidget(cimgLogoLabel,        0, 1, 1, 1);
+    grid->addWidget(typeLabel,            1, 0, 1, 1);
+    grid->addWidget(d->restorationTypeCB, 1, 1, 1, 1);
     grid->setRowStretch(1, 10);
-    grid->setMargin(m_gboxSettings->spacingHint());
+    grid->setMargin(d->gboxSettings->spacingHint());
     grid->setSpacing(0);
 
     // -------------------------------------------------------------
 
-    m_settingsWidget = new GreycstorationWidget( m_mainTab );
-    gridSettings->addWidget(m_mainTab,                               0, 1, 1, 1);
-    gridSettings->addWidget(new QLabel(m_gboxSettings->plainPage()), 1, 1, 1, 1);
-    gridSettings->setMargin(m_gboxSettings->spacingHint());
-    gridSettings->setSpacing(m_gboxSettings->spacingHint());
+    d->settingsWidget = new GreycstorationWidget( d->mainTab );
+    gridSettings->addWidget(d->mainTab,                               0, 1, 1, 1);
+    gridSettings->addWidget(new QLabel(d->gboxSettings->plainPage()), 1, 1, 1, 1);
+    gridSettings->setMargin(d->gboxSettings->spacingHint());
+    gridSettings->setSpacing(d->gboxSettings->spacingHint());
     gridSettings->setRowStretch(2, 10);
 
-    setToolSettings(m_gboxSettings);
+    setToolSettings(d->gboxSettings);
 
     // -------------------------------------------------------------
 
-    m_previewWidget = new ImagePanelWidget(470, 350, "restoration Tool", m_gboxSettings->panIconView());
+    d->previewWidget = new ImagePanelWidget(470, 350, "restoration Tool", d->gboxSettings->panIconView());
 
-    setToolView(m_previewWidget);
+    setToolView(d->previewWidget);
     init();
 
     // -------------------------------------------------------------
@@ -139,24 +163,25 @@ RestorationTool::RestorationTool(QObject* parent)
     connect(cimgLogoLabel, SIGNAL(leftClickedUrl(const QString&)),
             this, SLOT(processCImgUrl(const QString&)));
 
-    connect(m_restorationTypeCB, SIGNAL(activated(int)),
+    connect(d->restorationTypeCB, SIGNAL(activated(int)),
             this, SLOT(slotResetValues(int)));
 
     // -------------------------------------------------------------
 
     GreycstorationSettings defaults;
     defaults.setRestorationDefaultSettings();
-    m_settingsWidget->setDefaultSettings(defaults);
+    d->settingsWidget->setDefaultSettings(defaults);
 }
 
 RestorationTool::~RestorationTool()
 {
+    delete d;
 }
 
 void RestorationTool::renderingFinished()
 {
-    m_previewWidget->setEnable(true);
-    m_mainTab->setEnabled(true);
+    d->previewWidget->setEnable(true);
+    d->mainTab->setEnabled(true);
 }
 
 void RestorationTool::readSettings()
@@ -181,22 +206,22 @@ void RestorationTool::readSettings()
     settings.nbIter     = group.readEntry("Iteration",     defaults.nbIter);
     settings.tile       = group.readEntry("Tile",          defaults.tile);
     settings.btile      = group.readEntry("BTile",         defaults.btile);
-    m_settingsWidget->setSettings(settings);
+    d->settingsWidget->setSettings(settings);
 
     int p = group.readEntry("Preset", (int)NoPreset);
-    m_restorationTypeCB->setCurrentIndex(p);
+    d->restorationTypeCB->setCurrentIndex(p);
     if (p == NoPreset)
-        m_settingsWidget->setEnabled(true);
+        d->settingsWidget->setEnabled(true);
     else
-        m_settingsWidget->setEnabled(false);
+        d->settingsWidget->setEnabled(false);
 }
 
 void RestorationTool::writeSettings()
 {
-    GreycstorationSettings settings = m_settingsWidget->getSettings();
+    GreycstorationSettings settings = d->settingsWidget->getSettings();
     KSharedConfig::Ptr config       = KGlobal::config();
     KConfigGroup group              = config->group("restoration Tool");
-    group.writeEntry("Preset",        m_restorationTypeCB->currentIndex());
+    group.writeEntry("Preset",        d->restorationTypeCB->currentIndex());
     group.writeEntry("FastApprox",    settings.fastApprox);
     group.writeEntry("Interpolation", settings.interp);
     group.writeEntry("Amplitude",     (double)settings.amplitude);
@@ -210,16 +235,16 @@ void RestorationTool::writeSettings()
     group.writeEntry("Iteration",     settings.nbIter);
     group.writeEntry("Tile",          settings.tile);
     group.writeEntry("BTile",         settings.btile);
-    m_previewWidget->writeSettings();
+    d->previewWidget->writeSettings();
     group.sync();
 }
 
 void RestorationTool::slotResetValues(int i)
 {
     if (i == NoPreset)
-        m_settingsWidget->setEnabled(true);
+        d->settingsWidget->setEnabled(true);
     else
-        m_settingsWidget->setEnabled(false);
+        d->settingsWidget->setEnabled(false);
 
     slotResetSettings();
 }
@@ -229,7 +254,7 @@ void RestorationTool::slotResetSettings()
     GreycstorationSettings settings;
     settings.setRestorationDefaultSettings();
 
-    switch(m_restorationTypeCB->currentIndex())
+    switch(d->restorationTypeCB->currentIndex())
     {
         case ReduceUniformNoise:
         {
@@ -256,7 +281,7 @@ void RestorationTool::slotResetSettings()
         }
     }
 
-    m_settingsWidget->setSettings(settings);
+    d->settingsWidget->setSettings(settings);
 }
 
 void RestorationTool::processCImgUrl(const QString& url)
@@ -266,18 +291,18 @@ void RestorationTool::processCImgUrl(const QString& url)
 
 void RestorationTool::prepareEffect()
 {
-    m_mainTab->setEnabled(false);
+    d->mainTab->setEnabled(false);
 
-    DImg previewImage = m_previewWidget->getOriginalRegionImage();
+    DImg previewImage = d->previewWidget->getOriginalRegionImage();
 
     setFilter(dynamic_cast<DImgThreadedFilter*>(new GreycstorationIface(&previewImage,
-                                                m_settingsWidget->getSettings(), GreycstorationIface::Restore,
+                                                d->settingsWidget->getSettings(), GreycstorationIface::Restore,
                                                 0, 0, QImage(), this)));
 }
 
 void RestorationTool::prepareFinal()
 {
-    m_mainTab->setEnabled(false);
+    d->mainTab->setEnabled(false);
 
     ImageIface iface(0, 0);
     uchar *data = iface.getOriginalImage();
@@ -285,7 +310,7 @@ void RestorationTool::prepareFinal()
                        iface.originalSixteenBit(), iface.originalHasAlpha(), data);
 
     setFilter(dynamic_cast<DImgThreadedFilter*>(new GreycstorationIface(&originalImage,
-                                                m_settingsWidget->getSettings(), GreycstorationIface::Restore,
+                                                d->settingsWidget->getSettings(), GreycstorationIface::Restore,
                                                 0, 0, QImage(), this)));
 
     delete [] data;
@@ -294,7 +319,7 @@ void RestorationTool::prepareFinal()
 void RestorationTool::putPreviewData()
 {
     DImg imDest = filter()->getTargetImage();
-    m_previewWidget->setPreviewImage(imDest);
+    d->previewWidget->setPreviewImage(imDest);
 }
 
 void RestorationTool::putFinalData()
@@ -315,7 +340,7 @@ void RestorationTool::slotLoadSettings()
 
     if ( file.open(QIODevice::ReadOnly) )
     {
-        if (!m_settingsWidget->loadSettings(file, QString("# Photograph Restoration Configuration File V2")))
+        if (!d->settingsWidget->loadSettings(file, QString("# Photograph Restoration Configuration File V2")))
         {
            KMessageBox::error(kapp->activeWindow(),
                         i18n("\"%1\" is not a Photograph Restoration settings text file.",
@@ -330,10 +355,10 @@ void RestorationTool::slotLoadSettings()
         KMessageBox::error(kapp->activeWindow(), i18n("Cannot load settings from the Photograph Restoration text file."));
 
     file.close();
-    m_restorationTypeCB->blockSignals(true);
-    m_restorationTypeCB->setCurrentIndex((int)NoPreset);
-    m_restorationTypeCB->blockSignals(false);
-    m_settingsWidget->setEnabled(true);
+    d->restorationTypeCB->blockSignals(true);
+    d->restorationTypeCB->setCurrentIndex((int)NoPreset);
+    d->restorationTypeCB->blockSignals(false);
+    d->settingsWidget->setEnabled(true);
 }
 
 void RestorationTool::slotSaveAsSettings()
@@ -347,7 +372,7 @@ void RestorationTool::slotSaveAsSettings()
     QFile file(saveRestorationFile.path());
 
     if ( file.open(QIODevice::WriteOnly) )
-        m_settingsWidget->saveSettings(file, QString("# Photograph Restoration Configuration File V2"));
+        d->settingsWidget->saveSettings(file, QString("# Photograph Restoration Configuration File V2"));
     else
         KMessageBox::error(kapp->activeWindow(), i18n("Cannot save settings to the Photograph Restoration text file."));
 
