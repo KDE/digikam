@@ -73,6 +73,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 058 ==> 181726 : digiKam collect video, music when I connect usb key.
 059 ==> 154626 : Autodetect starting number for "appending numbers" when downloading images.
 060 ==> 188316 : Missing NEF files when importing from USB disk.
-061 ==> 
-
-
+061 ==> 193163 : digiKam ignores settings on the rating stars.
+062 ==> 
