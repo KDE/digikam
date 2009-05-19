@@ -141,16 +141,20 @@ QString WelcomePageView::infoPage()
         "--- end of comment ---",
 
         "<h2 style='margin-top: 0px;'>"
-        "Welcome to digiKam %1"
+            "Welcome to digiKam %1"
         "</h2>"
 
-        "<p>digiKam is an open source photo management program "
-        "designed to import, organize, enhance, search and export your "
-        "digital images to and from your computer.</p>"
+        "<p>"
+            "digiKam is an open source photo management program "
+            "designed to import, organize, enhance, search and export your "
+            "digital images to and from your computer."
+        "</p>"
 
-        "<p>Currently, you are in the Album view mode of digiKam. Albums are the places "
-        "where your files are stored, and are identical to the folders "
-        "on your hard disk.</p>"
+        "<p>"
+            "Currently, you are in the Album view mode of digiKam. Albums are the places "
+            "where your files are stored, and are identical to the folders "
+            "on your hard disk."
+        "</p>"
 
         "<p>"
             "<ul>"
@@ -167,8 +171,10 @@ QString WelcomePageView::infoPage()
 
         "<p>%7</p>"
 
-        "<p>Some of the new features in this release of digiKam include "
-            "(compared to digiKam %4):</p>"
+        "<p>"
+            "Some of the new features in this release of digiKam include "
+            "(compared to digiKam %4):"
+        "</p>"
 
         "<p>"
             "<ul>%5</ul>"
