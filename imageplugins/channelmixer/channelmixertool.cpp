@@ -6,7 +6,7 @@
  * Date        : 2005-02-26
  * Description : image channels mixer.
  *
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Load and save mixer gains methods inspired from
  * Gimp 2.2.3 and copyrighted 2002 by Martin Guldahl <mguldahl at xmission dot com>
@@ -84,8 +84,8 @@
 #include "dimg.h"
 #include "dimgimagefilters.h"
 #include "editortoolsettings.h"
-#include "histogramwidget.h"
 #include "histogrambox.h"
+#include "histogramwidget.h"
 #include "imagehistogram.h"
 #include "imageiface.h"
 #include "imagewidget.h"
@@ -97,8 +97,66 @@ using namespace Digikam;
 namespace DigikamChannelMixerImagesPlugin
 {
 
+class ChannelMixerToolPriv
+{
+public:
+
+    ChannelMixerToolPriv()
+    {
+        destinationPreviewData = 0;
+        redRedGain             = 0.0;
+        redGreenGain           = 0.0;
+        redBlueGain            = 0.0;
+        greenRedGain           = 0.0;
+        greenGreenGain         = 0.0;
+        greenBlueGain          = 0.0;
+        blueRedGain            = 0.0;
+        blueGreenGain          = 0.0;
+        blueBlueGain           = 0.0;
+        blackRedGain           = 0.0;
+        blackGreenGain         = 0.0;
+        blackBlueGain          = 0.0;
+        resetButton            = 0;
+        preserveLuminosity     = 0;
+        monochrome             = 0;
+        redGain                = 0;
+        greenGain              = 0;
+        blueGain               = 0;
+        previewWidget          = 0;
+        gboxSettings           = 0;
+    }
+
+    uchar*              destinationPreviewData;
+
+    double              redRedGain;
+    double              redGreenGain;
+    double              redBlueGain;
+    double              greenRedGain;
+    double              greenGreenGain;
+    double              greenBlueGain;
+    double              blueRedGain;
+    double              blueGreenGain;
+    double              blueBlueGain;
+    double              blackRedGain;
+    double              blackGreenGain;
+    double              blackBlueGain;
+
+    QPushButton*        resetButton;
+
+    QCheckBox*          preserveLuminosity;
+    QCheckBox*          monochrome;
+
+    RDoubleNumInput*    redGain;
+    RDoubleNumInput*    greenGain;
+    RDoubleNumInput*    blueGain;
+
+    ImageWidget*        previewWidget;
+    EditorToolSettings* gboxSettings;
+};
+
 ChannelMixerTool::ChannelMixerTool(QObject* parent)
-                : EditorTool(parent)
+                : EditorTool(parent),
+                  d(new ChannelMixerToolPriv)
 {
     setObjectName("channelmixer");
     setToolName(i18n("Channel Mixer"));
@@ -106,196 +164,198 @@ ChannelMixerTool::ChannelMixerTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    m_destinationPreviewData = 0;
+    d->destinationPreviewData = 0;
 
-    m_previewWidget = new ImageWidget("channelmixer Tool", 0,
+    d->previewWidget = new ImageWidget("channelmixer Tool", 0,
                                       i18n("You can see here the image's color channels' "
                                            "gain adjustments preview. You can pick a color on the image "
                                            "to see the corresponding color level on the histogram."));
-    setToolView(m_previewWidget);
+    setToolView(d->previewWidget);
 
     // -------------------------------------------------------------
 
-    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                            EditorToolSettings::Load|
-                                            EditorToolSettings::SaveAs|
-                                            EditorToolSettings::Ok|
-                                            EditorToolSettings::Cancel,
-                                            EditorToolSettings::Histogram,
-                                            HistogramBox::RGB);
+    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                             EditorToolSettings::Load|
+                                             EditorToolSettings::SaveAs|
+                                             EditorToolSettings::Ok|
+                                             EditorToolSettings::Cancel,
+                                             EditorToolSettings::Histogram,
+                                             HistogramBox::RGB);
 
-    QGridLayout* grid     = new QGridLayout(m_gboxSettings->plainPage());
+    QGridLayout* grid = new QGridLayout(d->gboxSettings->plainPage());
 
     // -------------------------------------------------------------
 
-    QLabel *redLabel = new QLabel(i18n("Red:"), m_gboxSettings->plainPage());
-    m_redGain = new RDoubleNumInput(m_gboxSettings->plainPage());
-    m_redGain->setDecimals(0);
-    m_redGain->setRange(-200.0, 200.0, 1);
-    m_redGain->setDefaultValue(0);
-    m_redGain->setWhatsThis(i18n("Select the red color gain, as a percentage, "
+    QLabel *redLabel = new QLabel(i18n("Red:"), d->gboxSettings->plainPage());
+    d->redGain       = new RDoubleNumInput(d->gboxSettings->plainPage());
+    d->redGain->setDecimals(0);
+    d->redGain->setRange(-200.0, 200.0, 1);
+    d->redGain->setDefaultValue(0);
+    d->redGain->setWhatsThis(i18n("Select the red color gain, as a percentage, "
                                  "for the current channel."));
 
-    QLabel *greenLabel = new QLabel(i18n("Green:"), m_gboxSettings->plainPage());
-    m_greenGain = new RDoubleNumInput(m_gboxSettings->plainPage());
-    m_greenGain->setDecimals(0);
-    m_greenGain->setRange(-200.0, 200.0, 1);
-    m_greenGain->setDefaultValue(0);
-    m_greenGain->setWhatsThis(i18n("Select the green color gain, as a percentage, "
+    QLabel *greenLabel = new QLabel(i18n("Green:"), d->gboxSettings->plainPage());
+    d->greenGain       = new RDoubleNumInput(d->gboxSettings->plainPage());
+    d->greenGain->setDecimals(0);
+    d->greenGain->setRange(-200.0, 200.0, 1);
+    d->greenGain->setDefaultValue(0);
+    d->greenGain->setWhatsThis(i18n("Select the green color gain, as a percentage, "
+                                    "for the current channel."));
+
+    QLabel *blueLabel = new QLabel(i18n("Blue:"), d->gboxSettings->plainPage());
+    d->blueGain       = new RDoubleNumInput(d->gboxSettings->plainPage());
+    d->blueGain->setDecimals(0);
+    d->blueGain->setRange(-200.0, 200.0, 1);
+    d->blueGain->setDefaultValue(0);
+    d->blueGain->setWhatsThis(i18n("Select the blue color gain, as a percentage, "
                                    "for the current channel."));
 
-    QLabel *blueLabel = new QLabel(i18n("Blue:"), m_gboxSettings->plainPage());
-    m_blueGain = new RDoubleNumInput(m_gboxSettings->plainPage());
-    m_blueGain->setDecimals(0);
-    m_blueGain->setRange(-200.0, 200.0, 1);
-    m_blueGain->setDefaultValue(0);
-    m_blueGain->setWhatsThis(i18n("Select the blue color gain, as a percentage, "
-                                  "for the current channel."));
-
-    m_resetButton = new QPushButton(i18n("&Reset"), m_gboxSettings->plainPage());
-    m_resetButton->setIcon(KIconLoader::global()->loadIcon("document-revert", KIconLoader::Toolbar));
-    m_resetButton->setWhatsThis(i18n("Reset color channels' gains settings from "
-                                     "the currently selected channel."));
+    d->resetButton = new QPushButton(i18n("&Reset"), d->gboxSettings->plainPage());
+    d->resetButton->setIcon(KIconLoader::global()->loadIcon("document-revert", KIconLoader::Toolbar));
+    d->resetButton->setWhatsThis(i18n("Reset color channels' gains settings from "
+                                      "the currently selected channel."));
 
     // -------------------------------------------------------------
 
-    m_monochrome = new QCheckBox(i18n("Monochrome"), m_gboxSettings->plainPage());
-    m_monochrome->setWhatsThis(i18n("Enable this option if you want the image rendered "
-                                    "in monochrome mode. "
-                                    "In this mode, the histogram will display only luminosity values."));
+    d->monochrome = new QCheckBox(i18n("Monochrome"), d->gboxSettings->plainPage());
+    d->monochrome->setWhatsThis(i18n("Enable this option if you want the image rendered "
+                                     "in monochrome mode. "
+                                     "In this mode, the histogram will display only luminosity values."));
 
-    m_preserveLuminosity = new QCheckBox(i18n("Preserve luminosity"), m_gboxSettings->plainPage());
-    m_preserveLuminosity->setWhatsThis(i18n("Enable this option is you want preserve "
-                                            "the image luminosity."));
+    d->preserveLuminosity = new QCheckBox(i18n("Preserve luminosity"), d->gboxSettings->plainPage());
+    d->preserveLuminosity->setWhatsThis(i18n("Enable this option is you want preserve "
+                                             "the image luminosity."));
 
     // -------------------------------------------------------------
 
     grid->addWidget(redLabel,               0, 0, 1, 1);
-    grid->addWidget(m_redGain,              0, 1, 1, 4);
+    grid->addWidget(d->redGain,             0, 1, 1, 4);
     grid->addWidget(greenLabel,             1, 0, 1, 1);
-    grid->addWidget(m_greenGain,            1, 1, 1, 4);
+    grid->addWidget(d->greenGain,           1, 1, 1, 4);
     grid->addWidget(blueLabel,              2, 0, 1, 1);
-    grid->addWidget(m_blueGain,             2, 1, 1, 4);
-    grid->addWidget(m_resetButton,          3, 0, 1, 2);
-    grid->addWidget(m_monochrome,           4, 0, 1, 5);
-    grid->addWidget(m_preserveLuminosity,   5, 0, 1, 5);
+    grid->addWidget(d->blueGain,            2, 1, 1, 4);
+    grid->addWidget(d->resetButton,         3, 0, 1, 2);
+    grid->addWidget(d->monochrome,          4, 0, 1, 5);
+    grid->addWidget(d->preserveLuminosity,  5, 0, 1, 5);
     grid->setRowStretch(6, 10);
-    grid->setMargin(m_gboxSettings->spacingHint());
-    grid->setSpacing(m_gboxSettings->spacingHint());
+    grid->setMargin(d->gboxSettings->spacingHint());
+    grid->setSpacing(d->gboxSettings->spacingHint());
 
-    setToolSettings(m_gboxSettings);
+    setToolSettings(d->gboxSettings);
     init();
 
     // -------------------------------------------------------------
     // Channels and scale selection slots.
 
-    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
+    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
 
-    connect(m_previewWidget, SIGNAL(signalResized()),
+    connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
 
     // -------------------------------------------------------------
     // Gains settings slots.
 
-    connect(m_redGain, SIGNAL(valueChanged(double)),
+    connect(d->redGain, SIGNAL(valueChanged(double)),
             this, SLOT(slotGainsChanged()));
 
-    connect(m_greenGain, SIGNAL(valueChanged(double)),
+    connect(d->greenGain, SIGNAL(valueChanged(double)),
             this, SLOT(slotGainsChanged()));
 
-    connect(m_blueGain, SIGNAL(valueChanged(double)),
+    connect(d->blueGain, SIGNAL(valueChanged(double)),
             this, SLOT(slotGainsChanged()));
 
-    connect(m_preserveLuminosity, SIGNAL(toggled (bool)),
+    connect(d->preserveLuminosity, SIGNAL(toggled (bool)),
             this, SLOT(slotEffect()));
 
-    connect(m_monochrome, SIGNAL(toggled (bool)),
+    connect(d->monochrome, SIGNAL(toggled (bool)),
             this, SLOT(slotMonochromeActived(bool)));
 
     // -------------------------------------------------------------
     // Buttons slots.
 
-    connect(m_resetButton, SIGNAL(clicked()),
+    connect(d->resetButton, SIGNAL(clicked()),
             this, SLOT(slotResetCurrentChannel()));
 }
 
 ChannelMixerTool::~ChannelMixerTool()
 {
-    if (m_destinationPreviewData)
-       delete [] m_destinationPreviewData;
+    if (d->destinationPreviewData)
+       delete [] d->destinationPreviewData;
+
+    delete d;
 }
 
 void ChannelMixerTool::slotResetCurrentChannel()
 {
-    switch (m_gboxSettings->histogramBox()->channel())
+    switch (d->gboxSettings->histogramBox()->channel())
     {
         case EditorToolSettings::GreenChannel:         // Green.
-            m_greenRedGain = 0.0;
-            m_greenGreenGain = 1.0;
-            m_greenBlueGain = 0.0;
+            d->greenRedGain     = 0.0;
+            d->greenGreenGain   = 1.0;
+            d->greenBlueGain    = 0.0;
             break;
 
         case EditorToolSettings::BlueChannel:          // Blue.
-            m_blueRedGain = 0.0;
-            m_blueGreenGain = 0.0;
-            m_blueBlueGain = 1.0;
+            d->blueRedGain      = 0.0;
+            d->blueGreenGain    = 0.0;
+            d->blueBlueGain     = 1.0;
             break;
 
         default:                        // Red or monochrome.
-            if (m_monochrome->isChecked())
+            if (d->monochrome->isChecked())
             {
-                m_blackRedGain = 1.0;
-                m_blackGreenGain = 0.0;
-                m_blackBlueGain = 0.0;
+                d->blackRedGain   = 1.0;
+                d->blackGreenGain = 0.0;
+                d->blackBlueGain  = 0.0;
             }
             else
             {
-                m_redRedGain = 1.0;
-                m_redGreenGain = 0.0;
-                m_redBlueGain = 0.0;
+                d->redRedGain = 1.0;
+                d->redGreenGain = 0.0;
+                d->redBlueGain = 0.0;
             }
             break;
     }
 
     adjustSliders();
     slotEffect();
-    m_gboxSettings->histogramBox()->histogram()->reset();
+    d->gboxSettings->histogramBox()->histogram()->reset();
 }
 
 void ChannelMixerTool::slotColorSelectedFromTarget( const DColor& color )
 {
-    m_gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
+    d->gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }
 
 void ChannelMixerTool::slotGainsChanged()
 {
-    switch(m_gboxSettings->histogramBox()->channel())
+    switch(d->gboxSettings->histogramBox()->channel())
     {
        case EditorToolSettings::GreenChannel:           // Green.
-          m_greenRedGain   = m_redGain->value()   / 100.0;
-          m_greenGreenGain = m_greenGain->value() / 100.0;
-          m_greenBlueGain  = m_blueGain->value()  / 100.0;
+          d->greenRedGain   = d->redGain->value()   / 100.0;
+          d->greenGreenGain = d->greenGain->value() / 100.0;
+          d->greenBlueGain  = d->blueGain->value()  / 100.0;
           break;
 
        case EditorToolSettings::BlueChannel:            // Blue.
-          m_blueRedGain   = m_redGain->value()   / 100.0;
-          m_blueGreenGain = m_greenGain->value() / 100.0;
-          m_blueBlueGain  = m_blueGain->value()  / 100.0;
+          d->blueRedGain   = d->redGain->value()   / 100.0;
+          d->blueGreenGain = d->greenGain->value() / 100.0;
+          d->blueBlueGain  = d->blueGain->value()  / 100.0;
           break;
 
        default:                         // Red or monochrome.
-          if ( m_monochrome->isChecked() )
+          if ( d->monochrome->isChecked() )
           {
-             m_blackRedGain   = m_redGain->value()   / 100.0;
-             m_blackGreenGain = m_greenGain->value() / 100.0;
-             m_blackBlueGain  = m_blueGain->value()  / 100.0;
+             d->blackRedGain   = d->redGain->value()   / 100.0;
+             d->blackGreenGain = d->greenGain->value() / 100.0;
+             d->blackBlueGain  = d->blueGain->value()  / 100.0;
           }
           else
           {
-             m_redRedGain   = m_redGain->value()   / 100.0;
-             m_redGreenGain = m_greenGain->value() / 100.0;
-             m_redBlueGain  = m_blueGain->value()  / 100.0;
+             d->redRedGain   = d->redGain->value()   / 100.0;
+             d->redGreenGain = d->greenGain->value() / 100.0;
+             d->redBlueGain  = d->blueGain->value()  / 100.0;
           }
           break;
     }
@@ -305,100 +365,100 @@ void ChannelMixerTool::slotGainsChanged()
 
 void ChannelMixerTool::adjustSliders()
 {
-    m_redGain->blockSignals(true);
-    m_greenGain->blockSignals(true);
-    m_blueGain->blockSignals(true);
+    d->redGain->blockSignals(true);
+    d->greenGain->blockSignals(true);
+    d->blueGain->blockSignals(true);
 
-    switch(m_gboxSettings->histogramBox()->channel())
+    switch(d->gboxSettings->histogramBox()->channel())
     {
        case EditorToolSettings::GreenChannel:           // Green.
-          m_redGain->setValue(m_greenRedGain     * 100.0);
-          m_greenGain->setValue(m_greenGreenGain * 100.0);
-          m_blueGain->setValue(m_greenBlueGain   * 100.0);
+          d->redGain->setValue(d->greenRedGain     * 100.0);
+          d->greenGain->setValue(d->greenGreenGain * 100.0);
+          d->blueGain->setValue(d->greenBlueGain   * 100.0);
           break;
 
        case EditorToolSettings::BlueChannel:            // Blue.
-          m_redGain->setValue(m_blueRedGain     * 100.0);
-          m_greenGain->setValue(m_blueGreenGain * 100.0);
-          m_blueGain->setValue(m_blueBlueGain   * 100.0);
+          d->redGain->setValue(d->blueRedGain     * 100.0);
+          d->greenGain->setValue(d->blueGreenGain * 100.0);
+          d->blueGain->setValue(d->blueBlueGain   * 100.0);
           break;
 
        default:          // Red or monochrome.
-          if ( m_monochrome->isChecked() )
+          if ( d->monochrome->isChecked() )
           {
-             m_redGain->setValue(m_blackRedGain     * 100.0);
-             m_greenGain->setValue(m_blackGreenGain * 100.0);
-             m_blueGain->setValue(m_blackBlueGain   * 100.0);
+             d->redGain->setValue(d->blackRedGain     * 100.0);
+             d->greenGain->setValue(d->blackGreenGain * 100.0);
+             d->blueGain->setValue(d->blackBlueGain   * 100.0);
           }
           else
           {
-             m_redGain->setValue(m_redRedGain     * 100.0);
-             m_greenGain->setValue(m_redGreenGain * 100.0);
-             m_blueGain->setValue(m_redBlueGain   * 100.0);
+             d->redGain->setValue(d->redRedGain     * 100.0);
+             d->greenGain->setValue(d->redGreenGain * 100.0);
+             d->blueGain->setValue(d->redBlueGain   * 100.0);
           }
           break;
     }
 
-    m_redGain->blockSignals(false);
-    m_greenGain->blockSignals(false);
-    m_blueGain->blockSignals(false);
+    d->redGain->blockSignals(false);
+    d->greenGain->blockSignals(false);
+    d->blueGain->blockSignals(false);
 }
 
 void ChannelMixerTool::slotMonochromeActived(bool mono)
 {
-    m_gboxSettings->histogramBox()->setChannelEnabled(!mono);
-    m_gboxSettings->histogramBox()->setChannel(EditorToolSettings::RedChannel);
+    d->gboxSettings->histogramBox()->setChannelEnabled(!mono);
+    d->gboxSettings->histogramBox()->setChannel(EditorToolSettings::RedChannel);
 }
 
 void ChannelMixerTool::slotEffect()
 {
-    ImageIface* iface = m_previewWidget->imageIface();
+    ImageIface* iface = d->previewWidget->imageIface();
     uchar *data                = iface->getPreviewImage();
     int w                      = iface->previewWidth();
     int h                      = iface->previewHeight();
     bool sb                    = iface->previewSixteenBit();
 
     // Create the new empty destination image data space.
-    m_gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
+    d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
-    if (m_destinationPreviewData)
-       delete [] m_destinationPreviewData;
+    if (d->destinationPreviewData)
+       delete [] d->destinationPreviewData;
 
-    m_destinationPreviewData = new uchar[w*h*(sb ? 8 : 4)];
+    d->destinationPreviewData = new uchar[w*h*(sb ? 8 : 4)];
     DImgImageFilters filter;
 
-    if (m_monochrome->isChecked())
+    if (d->monochrome->isChecked())
     {
        filter.channelMixerImage(data, w, h, sb,                                 // Image data.
-                m_preserveLuminosity->isChecked(),                              // Preserve luminosity.
-                m_monochrome->isChecked(),                                      // Monochrome.
-                m_blackRedGain, m_blackGreenGain, m_blackBlueGain,              // Red channel gains.
+                d->preserveLuminosity->isChecked(),                              // Preserve luminosity.
+                d->monochrome->isChecked(),                                      // Monochrome.
+                d->blackRedGain, d->blackGreenGain, d->blackBlueGain,              // Red channel gains.
                 0.0,            1.0,              0.0,                          // Green channel gains (not used).
                 0.0,            0.0,              1.0);                         // Blue channel gains (not used).
     }
     else
     {
        filter.channelMixerImage(data, w, h, sb,                                 // Image data.
-                m_preserveLuminosity->isChecked(),                              // Preserve luminosity.
-                m_monochrome->isChecked(),                                      // Monochrome.
-                m_redRedGain,   m_redGreenGain,   m_redBlueGain,                // Red channel gains.
-                m_greenRedGain, m_greenGreenGain, m_greenBlueGain,              // Green channel gains.
-                m_blueRedGain,  m_blueGreenGain,  m_blueBlueGain);              // Blue channel gains.
+                d->preserveLuminosity->isChecked(),                              // Preserve luminosity.
+                d->monochrome->isChecked(),                                      // Monochrome.
+                d->redRedGain,   d->redGreenGain,   d->redBlueGain,                // Red channel gains.
+                d->greenRedGain, d->greenGreenGain, d->greenBlueGain,              // Green channel gains.
+                d->blueRedGain,  d->blueGreenGain,  d->blueBlueGain);              // Blue channel gains.
     }
 
     iface->putPreviewImage(data);
-    m_previewWidget->updatePreview();
+    d->previewWidget->updatePreview();
 
     // Update histogram.
-    memcpy (m_destinationPreviewData, data, w*h*(sb ? 8 : 4));
-    m_gboxSettings->histogramBox()->histogram()->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
+    memcpy (d->destinationPreviewData, data, w*h*(sb ? 8 : 4));
+    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData, w, h, sb, 0, 0, 0, false);
     delete [] data;
 }
 
 void ChannelMixerTool::finalRendering()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
-    ImageIface* iface = m_previewWidget->imageIface();
+    ImageIface* iface = d->previewWidget->imageIface();
     uchar *data                = iface->getOriginalImage();
     int w                      = iface->originalWidth();
     int h                      = iface->originalHeight();
@@ -406,23 +466,23 @@ void ChannelMixerTool::finalRendering()
 
     DImgImageFilters filter;
 
-    if (m_monochrome->isChecked())
+    if (d->monochrome->isChecked())
     {
        filter.channelMixerImage(data, w, h, sb,                     // Image data.
-                m_preserveLuminosity->isChecked(),                  // Preserve luminosity.
-                m_monochrome->isChecked(),                          // Monochrome.
-                m_blackRedGain, m_blackGreenGain, m_blackBlueGain,  // Red channel gains.
+                d->preserveLuminosity->isChecked(),                  // Preserve luminosity.
+                d->monochrome->isChecked(),                          // Monochrome.
+                d->blackRedGain, d->blackGreenGain, d->blackBlueGain,  // Red channel gains.
                 0.0,            1.0,              0.0,              // Green channel gains (not used).
                 0.0,            0.0,              1.0);             // Blue channel gains (not used).
     }
     else
     {
        filter.channelMixerImage(data, w, h, sb,                     // Image data.
-                m_preserveLuminosity->isChecked(),                  // Preserve luminosity.
-                m_monochrome->isChecked(),                          // Monochrome.
-                m_redRedGain,   m_redGreenGain,   m_redBlueGain,    // Red channel gains.
-                m_greenRedGain, m_greenGreenGain, m_greenBlueGain,  // Green channel gains.
-                m_blueRedGain,  m_blueGreenGain,  m_blueBlueGain);  // Blue channel gains.
+                d->preserveLuminosity->isChecked(),                  // Preserve luminosity.
+                d->monochrome->isChecked(),                          // Monochrome.
+                d->redRedGain,   d->redGreenGain,   d->redBlueGain,    // Red channel gains.
+                d->greenRedGain, d->greenGreenGain, d->greenBlueGain,  // Green channel gains.
+                d->blueRedGain,  d->blueGreenGain,  d->blueBlueGain);  // Blue channel gains.
     }
 
     iface->putOriginalImage(i18n("Channel Mixer"), data);
@@ -432,8 +492,8 @@ void ChannelMixerTool::finalRendering()
 
 void ChannelMixerTool::slotChannelChanged()
 {
-    if (m_monochrome->isChecked())
-        m_gboxSettings->histogramBox()->setGradientColors(QColor("black"), QColor("white"));
+    if (d->monochrome->isChecked())
+        d->gboxSettings->histogramBox()->setGradientColors(QColor("black"), QColor("white"));
 
     adjustSliders();
     slotEffect();
@@ -444,34 +504,34 @@ void ChannelMixerTool::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("channelmixer Tool");
 
-    m_monochrome->setChecked(group.readEntry("Monochrome", false));
-    m_preserveLuminosity->setChecked(group.readEntry("PreserveLuminosity", false));
+    d->monochrome->setChecked(group.readEntry("Monochrome", false));
+    d->preserveLuminosity->setChecked(group.readEntry("PreserveLuminosity", false));
 
-    m_redRedGain     = group.readEntry("RedRedGain", 1.0);
-    m_redGreenGain   = group.readEntry("RedGreenGain", 0.0);
-    m_redBlueGain    = group.readEntry("RedBlueGain", 0.0);
+    d->redRedGain     = group.readEntry("RedRedGain", 1.0);
+    d->redGreenGain   = group.readEntry("RedGreenGain", 0.0);
+    d->redBlueGain    = group.readEntry("RedBlueGain", 0.0);
 
-    m_greenRedGain   = group.readEntry("GreenRedGain", 0.0);
-    m_greenGreenGain = group.readEntry("GreenGreenGain", 1.0);
-    m_greenBlueGain  = group.readEntry("GreenBlueGain", 0.0);
+    d->greenRedGain   = group.readEntry("GreenRedGain", 0.0);
+    d->greenGreenGain = group.readEntry("GreenGreenGain", 1.0);
+    d->greenBlueGain  = group.readEntry("GreenBlueGain", 0.0);
 
-    m_blueRedGain    = group.readEntry("BlueRedGain", 0.0);
-    m_blueGreenGain  = group.readEntry("BlueGreenGain", 0.0);
-    m_blueBlueGain   = group.readEntry("BlueBlueGain", 1.0);
+    d->blueRedGain    = group.readEntry("BlueRedGain", 0.0);
+    d->blueGreenGain  = group.readEntry("BlueGreenGain", 0.0);
+    d->blueBlueGain   = group.readEntry("BlueBlueGain", 1.0);
 
-    m_blackRedGain   = group.readEntry("BlackRedGain", 1.0);
-    m_blackGreenGain = group.readEntry("BlackGreenGain", 0.0);
-    m_blackBlueGain  = group.readEntry("BlackBlueGain", 0.0);
+    d->blackRedGain   = group.readEntry("BlackRedGain", 1.0);
+    d->blackGreenGain = group.readEntry("BlackGreenGain", 0.0);
+    d->blackBlueGain  = group.readEntry("BlackBlueGain", 0.0);
 
     adjustSliders();
 
     // we need to call the set methods here, otherwise the histogram will not be updated correctly
-    m_gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
+    d->gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
                         (int)EditorToolSettings::LuminosityChannel));
-    m_gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
+    d->gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
                         (int)HistogramWidget::LogScaleHistogram));
 
-    m_gboxSettings->histogramBox()->histogram()->reset();
+    d->gboxSettings->histogramBox()->histogram()->reset();
 }
 
 void ChannelMixerTool::writeSettings()
@@ -479,60 +539,60 @@ void ChannelMixerTool::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("channelmixer Tool");
 
-    group.writeEntry("Histogram Channel", m_gboxSettings->histogramBox()->channel());
-    group.writeEntry("Histogram Scale", m_gboxSettings->histogramBox()->scale());
+    group.writeEntry("Histogram Channel", d->gboxSettings->histogramBox()->channel());
+    group.writeEntry("Histogram Scale", d->gboxSettings->histogramBox()->scale());
 
-    group.writeEntry("Monochrome", m_monochrome->isChecked());
-    group.writeEntry("PreserveLuminosity", m_preserveLuminosity->isChecked());
+    group.writeEntry("Monochrome", d->monochrome->isChecked());
+    group.writeEntry("PreserveLuminosity", d->preserveLuminosity->isChecked());
 
-    group.writeEntry("RedRedGain", m_redRedGain);
-    group.writeEntry("RedGreenGain", m_redGreenGain);
-    group.writeEntry("RedBlueGain", m_redBlueGain);
+    group.writeEntry("RedRedGain", d->redRedGain);
+    group.writeEntry("RedGreenGain", d->redGreenGain);
+    group.writeEntry("RedBlueGain", d->redBlueGain);
 
-    group.writeEntry("GreenRedGain", m_greenRedGain);
-    group.writeEntry("GreenGreenGain", m_greenGreenGain);
-    group.writeEntry("GreenBlueGain", m_greenBlueGain);
+    group.writeEntry("GreenRedGain", d->greenRedGain);
+    group.writeEntry("GreenGreenGain", d->greenGreenGain);
+    group.writeEntry("GreenBlueGain", d->greenBlueGain);
 
-    group.writeEntry("BlueRedGain", m_blueRedGain);
-    group.writeEntry("BlueGreenGain", m_blueGreenGain);
-    group.writeEntry("BlueBlueGain", m_blueBlueGain);
+    group.writeEntry("BlueRedGain", d->blueRedGain);
+    group.writeEntry("BlueGreenGain", d->blueGreenGain);
+    group.writeEntry("BlueBlueGain", d->blueBlueGain);
 
-    group.writeEntry("BlackRedGain", m_blackRedGain);
-    group.writeEntry("BlackGreenGain", m_blackGreenGain);
-    group.writeEntry("BlackBlueGain", m_blackBlueGain);
+    group.writeEntry("BlackRedGain", d->blackRedGain);
+    group.writeEntry("BlackGreenGain", d->blackGreenGain);
+    group.writeEntry("BlackBlueGain", d->blackBlueGain);
 
-    m_previewWidget->writeSettings();
+    d->previewWidget->writeSettings();
 
     config->sync();
 }
 
 void ChannelMixerTool::slotResetSettings()
 {
-    m_monochrome->blockSignals(true);
-    m_preserveLuminosity->blockSignals(true);
+    d->monochrome->blockSignals(true);
+    d->preserveLuminosity->blockSignals(true);
 
-    m_redRedGain     = 1.0;
-    m_redGreenGain   = 0.0;
-    m_redBlueGain    = 0.0;
+    d->redRedGain     = 1.0;
+    d->redGreenGain   = 0.0;
+    d->redBlueGain    = 0.0;
 
-    m_greenRedGain   = 0.0;
-    m_greenGreenGain = 1.0;
-    m_greenBlueGain  = 0.0;
+    d->greenRedGain   = 0.0;
+    d->greenGreenGain = 1.0;
+    d->greenBlueGain  = 0.0;
 
-    m_blueRedGain    = 0.0;
-    m_blueGreenGain  = 0.0;
-    m_blueBlueGain   = 1.0;
+    d->blueRedGain    = 0.0;
+    d->blueGreenGain  = 0.0;
+    d->blueBlueGain   = 1.0;
 
-    m_blackRedGain   = 1.0;
-    m_blackGreenGain = 0.0;
-    m_blackBlueGain  = 0.0;
+    d->blackRedGain   = 1.0;
+    d->blackGreenGain = 0.0;
+    d->blackBlueGain  = 0.0;
 
     adjustSliders();
 
-    m_monochrome->blockSignals(false);
-    m_preserveLuminosity->blockSignals(false);
-    m_gboxSettings->histogramBox()->histogram()->reset();
-    m_gboxSettings->histogramBox()->setChannel(EditorToolSettings::RedChannel);
+    d->monochrome->blockSignals(false);
+    d->preserveLuminosity->blockSignals(false);
+    d->gboxSettings->histogramBox()->histogram()->reset();
+    d->gboxSettings->histogramBox()->setChannel(EditorToolSettings::RedChannel);
 }
 
 // Load all gains.
@@ -584,35 +644,35 @@ void ChannelMixerTool::slotLoadSettings()
         fscanf (fp, "%*s %s", buf1);
 
         if (strcmp (buf1, "true") == 0)
-            m_preserveLuminosity->setChecked(true);
+            d->preserveLuminosity->setChecked(true);
         else
-            m_preserveLuminosity->setChecked(false);
+            d->preserveLuminosity->setChecked(false);
 
         fscanf (fp, "%*s %s %s %s", buf1, buf2, buf3);
-        m_redRedGain = atof(buf1);
-        m_redGreenGain = atof(buf2);
-        m_redBlueGain = atof(buf3);
+        d->redRedGain = atof(buf1);
+        d->redGreenGain = atof(buf2);
+        d->redBlueGain = atof(buf3);
 
         fscanf (fp, "%*s %s %s %s", buf1, buf2, buf3);
-        m_greenRedGain = atof(buf1);
-        m_greenGreenGain = atof(buf2);
-        m_greenBlueGain = atof(buf3);
+        d->greenRedGain = atof(buf1);
+        d->greenGreenGain = atof(buf2);
+        d->greenBlueGain = atof(buf3);
 
         fscanf (fp, "%*s %s %s %s", buf1, buf2, buf3);
-        m_blueRedGain = atof(buf1);
-        m_blueGreenGain = atof(buf2);
-        m_blueBlueGain = atof(buf3);
+        d->blueRedGain = atof(buf1);
+        d->blueGreenGain = atof(buf2);
+        d->blueBlueGain = atof(buf3);
 
         fscanf (fp, "%*s %s %s %s", buf1, buf2, buf3);
-        m_blackRedGain = atof(buf1);
-        m_blackGreenGain = atof(buf2);
-        m_blackBlueGain = atof(buf3);
+        d->blackRedGain = atof(buf1);
+        d->blackGreenGain = atof(buf2);
+        d->blackBlueGain = atof(buf3);
 
         fclose(fp);
 
         // Refresh settings.
-        m_monochrome->setChecked(monochrome);
-        m_gboxSettings->histogramBox()->setChannel(currentOutputChannel);
+        d->monochrome->setChecked(monochrome);
+        d->gboxSettings->histogramBox()->setChannel(currentOutputChannel);
     }
     else
     {
@@ -643,7 +703,7 @@ void ChannelMixerTool::slotSaveAsSettings()
         char        buf2[256];
         char        buf3[256];
 
-        switch (m_gboxSettings->histogramBox()->channel())
+        switch (d->gboxSettings->histogramBox()->channel())
         {
            case EditorToolSettings::RedChannel:
               str = "RED";
@@ -664,28 +724,28 @@ void ChannelMixerTool::slotSaveAsSettings()
         fprintf (fp, "CHANNEL: %s\n", str);
         fprintf (fp, "PREVIEW: %s\n", "true"); // preserved for compatibility
         fprintf (fp, "MONOCHROME: %s\n",
-                 m_monochrome->isChecked() ? "true" : "false");
+                 d->monochrome->isChecked() ? "true" : "false");
         fprintf (fp, "PRESERVE_LUMINOSITY: %s\n",
-                 m_preserveLuminosity->isChecked() ? "true" : "false");
+                 d->preserveLuminosity->isChecked() ? "true" : "false");
 
-        sprintf (buf1, "%5.3f", m_redRedGain);
-        sprintf (buf2, "%5.3f", m_redGreenGain);
-        sprintf (buf3, "%5.3f", m_redBlueGain);
+        sprintf (buf1, "%5.3f", d->redRedGain);
+        sprintf (buf2, "%5.3f", d->redGreenGain);
+        sprintf (buf3, "%5.3f", d->redBlueGain);
         fprintf (fp, "RED: %s %s %s\n", buf1, buf2,buf3);
 
-        sprintf (buf1, "%5.3f", m_greenRedGain);
-        sprintf (buf2, "%5.3f", m_greenGreenGain);
-        sprintf (buf3, "%5.3f", m_greenBlueGain);
+        sprintf (buf1, "%5.3f", d->greenRedGain);
+        sprintf (buf2, "%5.3f", d->greenGreenGain);
+        sprintf (buf3, "%5.3f", d->greenBlueGain);
         fprintf (fp, "GREEN: %s %s %s\n", buf1, buf2,buf3);
 
-        sprintf (buf1, "%5.3f", m_blueRedGain);
-        sprintf (buf2, "%5.3f", m_blueGreenGain);
-        sprintf (buf3, "%5.3f", m_blueBlueGain);
+        sprintf (buf1, "%5.3f", d->blueRedGain);
+        sprintf (buf2, "%5.3f", d->blueGreenGain);
+        sprintf (buf3, "%5.3f", d->blueBlueGain);
         fprintf (fp, "BLUE: %s %s %s\n", buf1, buf2,buf3);
 
-        sprintf (buf1, "%5.3f", m_blackRedGain);
-        sprintf (buf2, "%5.3f", m_blackGreenGain);
-        sprintf (buf3, "%5.3f", m_blackBlueGain);
+        sprintf (buf1, "%5.3f", d->blackRedGain);
+        sprintf (buf2, "%5.3f", d->blackGreenGain);
+        sprintf (buf3, "%5.3f", d->blackBlueGain);
         fprintf (fp, "BLACK: %s %s %s\n", buf1, buf2,buf3);
 
         fclose (fp);
