@@ -28,11 +28,11 @@
 
 // Qt includes
 
-#include <QTimer>
-#include <QWidget>
 #include <QFile>
 #include <QFileInfo>
 #include <QTextStream>
+#include <QTimer>
+#include <QWidget>
 
 // KDE includes
 
@@ -54,8 +54,8 @@
 // Local includes
 
 #include "daboutdata.h"
-#include "version.h"
 #include "themeengine.h"
+#include "version.h"
 
 namespace Digikam
 {
@@ -210,7 +210,9 @@ QByteArray WelcomePageView::fileToString(const QString& aFileName)
     if (aFileName.isEmpty() || len <= 0 ||
         !info.exists() || info.isDir() || !info.isReadable() ||
         !file.open(QIODevice::Unbuffered|QIODevice::ReadOnly))
+    {
         return QByteArray();
+    }
 
     result.resize(len + 2);
     readLen = file.read(result.data(), len);
