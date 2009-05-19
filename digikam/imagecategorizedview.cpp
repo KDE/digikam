@@ -566,7 +566,7 @@ QModelIndex ImageCategorizedView::indexForCategoryAt(const QPoint& pos) const
 QModelIndex ImageCategorizedView::moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers)
 {
     QModelIndex current = currentIndex();
-    if (!current.isValid() || modifiers != Qt::NoModifier)
+    if (!current.isValid())
         return KCategorizedView::moveCursor(cursorAction, modifiers);
 
     // We want a simple wrapping navigation.
