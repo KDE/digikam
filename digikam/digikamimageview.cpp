@@ -242,7 +242,7 @@ void DigikamImageView::showContextMenu(QContextMenuEvent* event)
         paste->setEnabled(false);
 
     popmenu.addAction(paste);
-    popmenu.exec(event->pos());
+    popmenu.exec(event->globalPos());
     delete paste;
 }
 

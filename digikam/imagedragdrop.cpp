@@ -217,7 +217,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView *abstractview, const QDro
         popMenu.addAction(SmallIcon("dialog-cancel"), i18n("&Cancel"));
 
         popMenu.setMouseTracking(true);
-        QAction *choice = popMenu.exec(QCursor::pos());
+        QAction *choice = popMenu.exec(view->mapToGlobal(e->pos()));
         if (choice)
         {
             if (choice == assignToSelectedAction)    // Selected Items
@@ -259,7 +259,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView *abstractview, const QDro
         popMenu.addAction(SmallIcon("dialog-cancel"), i18n("&Cancel"));
 
         popMenu.setMouseTracking(true);
-        QAction *choice = popMenu.exec(QCursor::pos());
+        QAction *choice = popMenu.exec(view->mapToGlobal(e->pos()));
         if (choice)
         {
             if (choice == assignToSelectedAction)    // Selected Items
@@ -295,7 +295,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView *abstractview, const QDro
         popMenu.addSeparator();
         popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
         popMenu.setMouseTracking(true);
-        QAction *choice = popMenu.exec(QCursor::pos());
+        QAction *choice = popMenu.exec(view->mapToGlobal(e->pos()));
         if (choice)
         {
             if (choice == downAction)
