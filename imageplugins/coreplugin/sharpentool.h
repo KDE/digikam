@@ -6,7 +6,7 @@
  * Date        : 2004-07-09
  * Description : a tool to sharp an image
  *
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,27 +26,12 @@
 
 // Local includes
 
-#include <dimg.h>
 #include "editortool.h"
-
-class QStackedWidget;
-
-namespace KDcrawIface
-{
-class RIntNumInput;
-class RDoubleNumInput;
-class RComboBox;
-}
-
-namespace Digikam
-{
-class DImg;
-class EditorToolSettings;
-class ImagePanelWidget;
-}
 
 namespace DigikamImagesPluginCore
 {
+
+class SharpenToolPriv;
 
 class SharpenTool : public Digikam::EditorToolThreaded
 {
@@ -80,29 +65,14 @@ private:
 
     enum SharpingMethods
     {
-        SimpleSharp=0,
+        SimpleSharp = 0,
         UnsharpMask,
         Refocus
     };
 
-    QStackedWidget               *m_stack;
+private:
 
-    KDcrawIface::RComboBox       *m_sharpMethod;
-
-    KDcrawIface::RIntNumInput    *m_matrixSize;
-    KDcrawIface::RIntNumInput    *m_radiusInput;
-    KDcrawIface::RIntNumInput    *m_radiusInput2;
-
-    KDcrawIface::RDoubleNumInput *m_radius;
-    KDcrawIface::RDoubleNumInput *m_gauss;
-    KDcrawIface::RDoubleNumInput *m_correlation;
-    KDcrawIface::RDoubleNumInput *m_noise;
-    KDcrawIface::RDoubleNumInput *m_amountInput;
-    KDcrawIface::RDoubleNumInput *m_thresholdInput;
-
-    Digikam::ImagePanelWidget    *m_previewWidget;
-
-    Digikam::EditorToolSettings  *m_gboxSettings;
+    SharpenToolPriv* const d;
 };
 
 }  // namespace DigikamImagesPluginCore
