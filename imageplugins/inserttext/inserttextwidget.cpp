@@ -6,8 +6,8 @@
  * Date        : 2005-02-14
  * Description : a widget to insert a text over an image.
  *
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,67 +33,121 @@
 
 // Qt includes
 
-#include <QPainter>
 #include <QFont>
 #include <QFontMetrics>
-#include <QPaintEvent>
-#include <QResizeEvent>
-#include <QPixmap>
 #include <QMouseEvent>
+#include <QPaintEvent>
+#include <QPainter>
+#include <QPixmap>
+#include <QResizeEvent>
 
 // KDE includes
 
-#include <kstandarddirs.h>
 #include <kcursor.h>
 #include <kglobal.h>
+#include <kstandarddirs.h>
 
 // Local includes
 
 #include "imageiface.h"
 
+using namespace Digikam;
 
 namespace DigikamInsertTextImagesPlugin
 {
 
-InsertTextWidget::InsertTextWidget(int w, int h, QWidget *parent)
-                : QWidget(parent)
+class InsertTextWidgetPriv
 {
-    m_currentMoving = false;
+public:
 
-    m_iface  = new Digikam::ImageIface(w, h);
-    m_data   = m_iface->getPreviewImage();
-    m_w      = m_iface->previewWidth();
-    m_h      = m_iface->previewHeight();
-    m_pixmap = new QPixmap(w, h);
-    m_pixmap->fill(palette().color(QPalette::Background));
+    InsertTextWidgetPriv()
+    {
+        data              = 0;
+        currentMoving     = false;
+        textBorder        = false;
+        textTransparent   = false;
+        alignMode         = 0;
+        h                 = 0;
+        textRotation      = 0;
+        transparency      = 0;
+        w                 = 0;
+        xpos              = 0;
+        ypos              = 0;
+        pixmap            = 0;
+        iface             = 0;
+    }
+
+    uchar*      data;
+
+    bool        currentMoving;
+    bool        textBorder;
+    bool        textTransparent;
+
+    int         alignMode;
+    int         h;
+    int         textRotation;
+    int         transparency;
+    int         w;
+    int         xpos;
+    int         ypos;
+
+    QColor      backgroundColor;
+    QColor      textColor;
+
+    QFont       textFont;
+
+    QPixmap*    pixmap;
+
+    QRect       positionHint;
+    QRect       rect;
+    QRect       textRect;
+
+    QString     textString;
+
+    ImageIface* iface;
+};
+
+InsertTextWidget::InsertTextWidget(int w, int h, QWidget *parent)
+                : QWidget(parent),
+                  d(new InsertTextWidgetPriv)
+{
+    d->currentMoving = false;
+
+    d->iface  = new Digikam::ImageIface(w, h);
+    d->data   = d->iface->getPreviewImage();
+    d->w      = d->iface->previewWidth();
+    d->h      = d->iface->previewHeight();
+    d->pixmap = new QPixmap(w, h);
+    d->pixmap->fill(palette().color(QPalette::Background));
 
     setMinimumSize(w, h);
     setMouseTracking(true);
     setAttribute(Qt::WA_DeleteOnClose);
 
-    m_rect = QRect(width()/2-m_w/2, height()/2-m_h/2, m_w, m_h);
-    m_textRect = QRect();
+    d->rect = QRect(width()/2-d->w/2, height()/2-d->h/2, d->w, d->h);
+    d->textRect = QRect();
 
-    m_backgroundColor = QColor(0xCC, 0xCC, 0xCC);
-    m_transparency    = 210;
+    d->backgroundColor = QColor(0xCC, 0xCC, 0xCC);
+    d->transparency    = 210;
 }
 
 InsertTextWidget::~InsertTextWidget()
 {
-    delete [] m_data;
-    delete m_iface;
-    delete m_pixmap;
+    delete [] d->data;
+    delete d->iface;
+    delete d->pixmap;
+    delete d;
 }
 
 Digikam::ImageIface* InsertTextWidget::imageIface()
 {
-    return m_iface;
+    return d->iface;
 }
 
 void InsertTextWidget::resetEdit()
 {
     // signal this needs to be filled by makePixmap
-    m_textRect = QRect();
+    d->textRect = QRect();
     makePixmap();
     repaint();
 }
@@ -101,44 +155,44 @@ void InsertTextWidget::resetEdit()
 void InsertTextWidget::setText(QString text, QFont font, QColor color, int alignMode,
                                bool border, bool transparent, int rotation)
 {
-    m_textString      = text;
-    m_textColor       = color;
-    m_textBorder      = border;
-    m_textTransparent = transparent;
-    m_textRotation    = rotation;
+    d->textString      = text;
+    d->textColor       = color;
+    d->textBorder      = border;
+    d->textTransparent = transparent;
+    d->textRotation    = rotation;
 
     switch (alignMode)
     {
         case ALIGN_LEFT:
-            m_alignMode = Qt::AlignLeft;
+            d->alignMode = Qt::AlignLeft;
             break;
 
         case ALIGN_RIGHT:
-            m_alignMode = Qt::AlignRight;
+            d->alignMode = Qt::AlignRight;
             break;
 
         case ALIGN_CENTER:
-            m_alignMode = Qt::AlignHCenter;
+            d->alignMode = Qt::AlignHCenter;
             break;
 
         case ALIGN_BLOCK:
-            m_alignMode = Qt::AlignJustify;
+            d->alignMode = Qt::AlignJustify;
             break;
     }
 
     // Center text if top left corner text area is not visible.
 
     /*
-    if ( m_textFont.pointSize() != font.pointSize() &&
-         !rect().contains( m_textRect.x(), m_textRect.y() ) )
+    if ( d->textFont.pointSize() != font.pointSize() &&
+         !rect().contains( d->textRect.x(), d->textRect.y() ) )
     {
-        m_textFont = font;
+        d->textFont = font;
         resetEdit();
         return;
     }
     */
 
-    m_textFont = font;
+    d->textFont = font;
 
     makePixmap();
     repaint();
@@ -147,11 +201,11 @@ void InsertTextWidget::setText(QString text, QFont font, QColor color, int align
 void InsertTextWidget::setPositionHint(QRect hint)
 {
     // interpreted by composeImage
-    m_positionHint = hint;
-    if (m_textRect.isValid())
+    d->positionHint = hint;
+    if (d->textRect.isValid())
     {
         // invalidate current position so that hint is certainly interpreted
-        m_textRect = QRect();
+        d->textRect = QRect();
         makePixmap();
         repaint();
     }
@@ -160,30 +214,30 @@ void InsertTextWidget::setPositionHint(QRect hint)
 QRect InsertTextWidget::getPositionHint()
 {
     QRect hint;
-    if (m_textRect.isValid())
+    if (d->textRect.isValid())
     {
         // We normalize on the size of the image, but we store as int. Precision loss is no problem.
-        hint.setX(      (int) ((float)(m_textRect.x() - m_rect.x())     / (float)m_rect.width()  * 10000.0) );
-        hint.setY(      (int) ((float)(m_textRect.y() - m_rect.y())     / (float)m_rect.height() * 10000.0) );
-        hint.setWidth(  (int) ((float)m_textRect.width()  / (float)m_rect.width()  * 10000.0) );
-        hint.setHeight( (int) ((float)m_textRect.height() / (float)m_rect.height() * 10000.0) );
+        hint.setX(      (int) ((float)(d->textRect.x() - d->rect.x())     / (float)d->rect.width()  * 10000.0) );
+        hint.setY(      (int) ((float)(d->textRect.y() - d->rect.y())     / (float)d->rect.height() * 10000.0) );
+        hint.setWidth(  (int) ((float)d->textRect.width()  / (float)d->rect.width()  * 10000.0) );
+        hint.setHeight( (int) ((float)d->textRect.height() / (float)d->rect.height() * 10000.0) );
     }
     return hint;
 }
 
 Digikam::DImg InsertTextWidget::makeInsertText(void)
 {
-    int orgW = m_iface->originalWidth();
-    int orgH = m_iface->originalHeight();
-    float ratioW = (float)orgW/(float)m_w;
-    float ratioH = (float)orgH/(float)m_h;
+    int orgW = d->iface->originalWidth();
+    int orgH = d->iface->originalHeight();
+    float ratioW = (float)orgW/(float)d->w;
+    float ratioH = (float)orgH/(float)d->h;
 
     int x, y;
-    if (m_textRect.isValid())
+    if (d->textRect.isValid())
     {
         // convert from widget to image coordinates, then to original size
-        x = lroundf( (m_textRect.x() - m_rect.x()) * ratioW);
-        y = lroundf( (m_textRect.y() - m_rect.y()) * ratioH);
+        x = lroundf( (d->textRect.x() - d->rect.x()) * ratioW);
+        y = lroundf( (d->textRect.y() - d->rect.y()) * ratioH);
     }
     else
     {
@@ -192,32 +246,32 @@ Digikam::DImg InsertTextWidget::makeInsertText(void)
     }
 
     // Get original image
-    Digikam::DImg image = m_iface->getOriginalImg()->copy();
+    Digikam::DImg image = d->iface->getOriginalImg()->copy();
 
     int borderWidth = qMax(1, (int)lroundf(ratioW));
     // compose and draw result on image
     composeImage(&image, 0, x, y,
-                  m_textFont, m_textFont.pointSizeF(),
-                  m_textRotation, m_textColor, m_alignMode, m_textString,
-                  m_textTransparent, m_backgroundColor,
-                  m_textBorder ? BORDER_NORMAL : BORDER_NONE, borderWidth, borderWidth);
+                  d->textFont, d->textFont.pointSizeF(),
+                  d->textRotation, d->textColor, d->alignMode, d->textString,
+                  d->textTransparent, d->backgroundColor,
+                  d->textBorder ? BORDER_NORMAL : BORDER_NONE, borderWidth, borderWidth);
 
     return image;
 }
 
 void InsertTextWidget::makePixmap(void)
 {
-    int orgW = m_iface->originalWidth();
-    int orgH = m_iface->originalHeight();
-    float ratioW = (float)m_w / (float)orgW;
-    float ratioH = (float)m_h / (float)orgH;
+    int orgW = d->iface->originalWidth();
+    int orgH = d->iface->originalHeight();
+    float ratioW = (float)d->w / (float)orgW;
+    float ratioH = (float)d->h / (float)orgH;
 
     int x, y;
-    if (m_textRect.isValid())
+    if (d->textRect.isValid())
     {
         // convert from widget to image coordinates
-        x = m_textRect.x() - m_rect.x();
-        y = m_textRect.y() - m_rect.y();
+        x = d->textRect.x() - d->rect.x();
+        y = d->textRect.y() - d->rect.y();
     }
     else
     {
@@ -226,38 +280,38 @@ void InsertTextWidget::makePixmap(void)
     }
 
     // get preview image data
-    uchar *data = m_iface->getPreviewImage();
-    Digikam::DImg image(m_iface->previewWidth(), m_iface->previewHeight(), m_iface->previewSixteenBit(),
-                        m_iface->previewHasAlpha(), data);
+    uchar *data = d->iface->getPreviewImage();
+    Digikam::DImg image(d->iface->previewWidth(), d->iface->previewHeight(), d->iface->previewSixteenBit(),
+                        d->iface->previewHasAlpha(), data);
     delete [] data;
 
     // paint pixmap for drawing this widget
     // First, fill with background color
-    m_pixmap->fill(palette().color(QPalette::Background));
-    QPainter p(m_pixmap);
+    d->pixmap->fill(palette().color(QPalette::Background));
+    QPainter p(d->pixmap);
     // Convert image to pixmap and draw it
     QPixmap imagePixmap = image.convertToPixmap();
-    p.drawPixmap(m_rect.x(), m_rect.y(),
+    p.drawPixmap(d->rect.x(), d->rect.y(),
                  imagePixmap, 0, 0, imagePixmap.width(), imagePixmap.height());
 
     // prepare painter for use by compose image
-    p.setClipRect(m_rect);
-    p.translate(m_rect.x(), m_rect.y());
+    p.setClipRect(d->rect);
+    p.translate(d->rect.x(), d->rect.y());
 
     // compose image and draw result directly on pixmap, with correct offset
     QRect textRect = composeImage(&image, &p, x, y,
-                                   m_textFont, m_textFont.pointSizeF() * ((ratioW > ratioH) ? ratioW : ratioH),
-                                   m_textRotation, m_textColor, m_alignMode, m_textString,
-                                   m_textTransparent, m_backgroundColor,
-                                   m_textBorder ? BORDER_NORMAL : BORDER_SUPPORT, 1, 1);
+                                   d->textFont, d->textFont.pointSizeF() * ((ratioW > ratioH) ? ratioW : ratioH),
+                                   d->textRotation, d->textColor, d->alignMode, d->textString,
+                                   d->textTransparent, d->backgroundColor,
+                                   d->textBorder ? BORDER_NORMAL : BORDER_SUPPORT, 1, 1);
 
     p.end();
 
     // store new text rectangle
     // convert from image to widget coordinates
-    m_textRect.setX(textRect.x() + m_rect.x());
-    m_textRect.setY(textRect.y() + m_rect.y());
-    m_textRect.setSize(textRect.size());
+    d->textRect.setX(textRect.x() + d->rect.x());
+    d->textRect.setY(textRect.y() + d->rect.y());
+    d->textRect.setSize(textRect.size());
 }
 
 /*
@@ -320,17 +374,17 @@ QRect InsertTextWidget::composeImage(Digikam::DImg *image, QPainter *destPainter
     if (x == -1 && y == -1)
     {
         // was a valid position hint stored from last use?
-        if (m_positionHint.isValid())
+        if (d->positionHint.isValid())
         {
             // We assume that people tend to orient text along the edges,
             // so we do some guessing so that positions such as "in the lower right corner"
             // will be remembered across different image sizes.
 
             // get relative positions
-            float fromTop =          (float)m_positionHint.top()    / 10000.0;
-            float fromBottom = 1.0 - (float)m_positionHint.bottom() / 10000.0;
-            float fromLeft =         (float)m_positionHint.left()   / 10000.0;
-            float fromRight =  1.0 - (float)m_positionHint.right()  / 10000.0;
+            float fromTop =          (float)d->positionHint.top()    / 10000.0;
+            float fromBottom = 1.0 - (float)d->positionHint.bottom() / 10000.0;
+            float fromLeft =         (float)d->positionHint.left()   / 10000.0;
+            float fromRight =  1.0 - (float)d->positionHint.right()  / 10000.0;
 
             // calculate horizontal position
             if (fromLeft < fromRight)
@@ -373,7 +427,7 @@ QRect InsertTextWidget::composeImage(Digikam::DImg *image, QPainter *destPainter
             }
 
             // invalidate position hint, use only once
-            m_positionHint = QRect();
+            d->positionHint = QRect();
         }
         else
         {
@@ -408,7 +462,7 @@ QRect InsertTextWidget::composeImage(Digikam::DImg *image, QPainter *destPainter
     {
         Digikam::DImg transparentLayer(textAreaBackgroundRect.width(), textAreaBackgroundRect.height(), textArea.sixteenBit(), true);
         Digikam::DColor transparent(backgroundColor);
-        transparent.setAlpha(m_transparency);
+        transparent.setAlpha(d->transparency);
         if (image->sixteenBit())
             transparent.convertToSixteenBit();
         transparentLayer.fill(transparent);
@@ -535,43 +589,43 @@ QRect InsertTextWidget::composeImage(Digikam::DImg *image, QPainter *destPainter
 void InsertTextWidget::paintEvent( QPaintEvent * )
 {
     QPainter p(this);
-    p.drawPixmap(0, 0, *m_pixmap);
+    p.drawPixmap(0, 0, *d->pixmap);
     p.end();
 }
 
 void InsertTextWidget::resizeEvent(QResizeEvent * e)
 {
     blockSignals(true);
-    delete m_pixmap;
+    delete d->pixmap;
 
     int w = e->size().width();
     int h = e->size().height();
 
-    int textX = m_textRect.x() - m_rect.x();
-    int textY = m_textRect.y() - m_rect.y();
-    int old_w = m_w;
-    int old_h = m_h;
-    m_data    = m_iface->setPreviewImageSize(w, h);
-    m_w       = m_iface->previewWidth();
-    m_h       = m_iface->previewHeight();
+    int textX = d->textRect.x() - d->rect.x();
+    int textY = d->textRect.y() - d->rect.y();
+    int old_w = d->w;
+    int old_h = d->h;
+    d->data    = d->iface->setPreviewImageSize(w, h);
+    d->w       = d->iface->previewWidth();
+    d->h       = d->iface->previewHeight();
 
-    m_pixmap = new QPixmap(w, h);
-    m_rect = QRect(w/2-m_w/2, h/2-m_h/2, m_w, m_h);
+    d->pixmap = new QPixmap(w, h);
+    d->rect = QRect(w/2-d->w/2, h/2-d->h/2, d->w, d->h);
 
-    if (m_textRect.isValid())
+    if (d->textRect.isValid())
     {
-        int textWidth  = m_textRect.width();
-        int textHeight = m_textRect.height();
+        int textWidth  = d->textRect.width();
+        int textHeight = d->textRect.height();
 
-        textX = lroundf( textX * (float)m_w / (float)old_w );
-        textY = lroundf( textY * (float)m_h / (float)old_h );
-        textWidth  = lroundf(textWidth  * (float)m_w / (float)old_w );
-        textHeight = lroundf(textHeight * (float)m_h / (float)old_h );
+        textX = lroundf( textX * (float)d->w / (float)old_w );
+        textY = lroundf( textY * (float)d->h / (float)old_h );
+        textWidth  = lroundf(textWidth  * (float)d->w / (float)old_w );
+        textHeight = lroundf(textHeight * (float)d->h / (float)old_h );
 
-        m_textRect.setX(textX + m_rect.x());
-        m_textRect.setY(textY + m_rect.y());
-        m_textRect.setWidth(textWidth);
-        m_textRect.setHeight(textHeight);
+        d->textRect.setX(textX + d->rect.x());
+        d->textRect.setY(textY + d->rect.y());
+        d->textRect.setWidth(textWidth);
+        d->textRect.setHeight(textHeight);
         makePixmap();
     }
 
@@ -581,40 +635,40 @@ void InsertTextWidget::resizeEvent(QResizeEvent * e)
 void InsertTextWidget::mousePressEvent ( QMouseEvent * e )
 {
     if ( e->button() == Qt::LeftButton &&
-         m_textRect.contains( e->x(), e->y() ) )
+         d->textRect.contains( e->x(), e->y() ) )
     {
-        m_xpos = e->x();
-        m_ypos = e->y();
+        d->xpos = e->x();
+        d->ypos = e->y();
         setCursor ( Qt::SizeAllCursor );
-        m_currentMoving = true;
+        d->currentMoving = true;
     }
 }
 
 void InsertTextWidget::mouseReleaseEvent ( QMouseEvent * )
 {
     setCursor ( Qt::ArrowCursor );
-    m_currentMoving = false;
+    d->currentMoving = false;
 }
 
 void InsertTextWidget::mouseMoveEvent ( QMouseEvent * e )
 {
     if ( rect().contains( e->x(), e->y() ) )
     {
-        if ( e->buttons() == Qt::LeftButton && m_currentMoving )
+        if ( e->buttons() == Qt::LeftButton && d->currentMoving )
         {
             uint newxpos = e->x();
             uint newypos = e->y();
 
-            m_textRect.translate(newxpos - m_xpos, newypos - m_ypos);
+            d->textRect.translate(newxpos - d->xpos, newypos - d->ypos);
 
             makePixmap();
             repaint();
 
-            m_xpos = newxpos;
-            m_ypos = newypos;
+            d->xpos = newxpos;
+            d->ypos = newypos;
             setCursor( Qt::PointingHandCursor );
         }
-        else if ( m_textRect.contains( e->x(), e->y() ) )
+        else if ( d->textRect.contains( e->x(), e->y() ) )
         {
             setCursor ( Qt::SizeAllCursor );
         }

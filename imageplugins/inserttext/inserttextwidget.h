@@ -5,21 +5,21 @@
  *
  * Date        : 2005-02-14
  * Description : a widget to insert a text over an image.
- * 
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * 
+ *
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef INSERTTEXTWIDGET_H
@@ -27,17 +27,17 @@
 
 // Qt includes
 
-#include <QWidget>
-#include <QImage>
-#include <QRect>
-#include <QSize>
-#include <QPixmap>
-#include <QString>
-#include <QFont>
 #include <QColor>
-#include <QResizeEvent>
+#include <QFont>
+#include <QImage>
 #include <QMouseEvent>
 #include <QPaintEvent>
+#include <QPixmap>
+#include <QRect>
+#include <QResizeEvent>
+#include <QSize>
+#include <QString>
+#include <QWidget>
 
 // KDE includes
 
@@ -59,7 +59,7 @@ namespace DigikamInsertTextImagesPlugin
 
 enum Action
 {
-    ALIGN_LEFT=0,
+    ALIGN_LEFT = 0,
     ALIGN_RIGHT,
     ALIGN_CENTER,
     ALIGN_BLOCK,
@@ -69,7 +69,7 @@ enum Action
 
 enum TextRotation
 {
-    ROTATION_NONE=0,
+    ROTATION_NONE = 0,
     ROTATION_90,
     ROTATION_180,
     ROTATION_270
@@ -77,10 +77,12 @@ enum TextRotation
 
 enum BorderMode
 {
-    BORDER_NONE,
+    BORDER_NONE = 0,
     BORDER_SUPPORT,
     BORDER_NORMAL
 };
+
+class InsertTextWidgetPriv;
 
 class InsertTextWidget : public QWidget
 {
@@ -119,38 +121,7 @@ protected:
 
 private:
 
-    bool                 m_currentMoving;
-    bool                 m_textBorder;
-    bool                 m_textTransparent;
-
-    int                  m_alignMode;
-    int                  m_textRotation;
-
-    uchar               *m_data;
-    int                  m_w;
-    int                  m_h;
-
-    int                  m_xpos;
-    int                  m_ypos;
-    
-    int                  m_transparency;
-
-    QPixmap             *m_pixmap;
-
-    QRect                m_rect;
-    QRect                m_textRect;
-
-    QString              m_textString;
-
-    QFont                m_textFont;
-
-    QColor               m_textColor;
-
-    QColor               m_backgroundColor;
-
-    QRect                m_positionHint;
-
-    Digikam::ImageIface *m_iface;
+    InsertTextWidgetPriv* const d;
 };
 
 }  // namespace DigikamInsertTextImagesPlugin
