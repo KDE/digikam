@@ -6,8 +6,8 @@
  * Date        : 2005-03-10
  * Description : a plugin to apply texture over an image
  *
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,20 +33,10 @@
 
 #include "editortool.h"
 
-namespace KDcrawIface
-{
-class RIntNumInput;
-class RComboBox;
-}
-
-namespace Digikam
-{
-class EditorToolSettings;
-class ImagePanelWidget;
-}
-
 namespace DigikamTextureImagesPlugin
 {
+
+class TextureToolPriv;
 
 class TextureTool : public Digikam::EditorToolThreaded
 {
@@ -97,13 +87,9 @@ private:
         StoneTexture
     };
 
-    KDcrawIface::RComboBox      *m_textureType;
+private:
 
-    KDcrawIface::RIntNumInput   *m_blendGain;
-
-    Digikam::ImagePanelWidget   *m_previewWidget;
-
-    Digikam::EditorToolSettings *m_gboxSettings;
+    TextureToolPriv* const d;
 };
 
 }  // namespace DigikamTextureImagesPlugin
