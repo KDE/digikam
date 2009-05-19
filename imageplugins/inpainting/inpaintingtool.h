@@ -27,8 +27,6 @@
 
 // Qt includes
 
-#include <QImage>
-#include <QRect>
 #include <QString>
 
 // KDE includes
@@ -37,19 +35,7 @@
 
 // Local includes
 
-#include "dimg.h"
 #include "editortool.h"
-
-
-class KComboBox;
-class KTabWidget;
-
-namespace Digikam
-{
-class GreycstorationWidget;
-class ImageWidget;
-class EditorToolSettings;
-}
 
 namespace DigikamInPaintingImagesPlugin
 {
@@ -70,6 +56,8 @@ private:
 };
 
 //-----------------------------------------------------------
+
+class InPaintingToolPriv;
 
 class InPaintingTool : public Digikam::EditorToolThreaded
 {
@@ -102,30 +90,15 @@ private:
 
     enum InPaintingFilteringPreset
     {
-        NoPreset=0,
+        NoPreset = 0,
         RemoveSmallArtefact,
         RemoveMediumArtefact,
         RemoveLargeArtefact
     };
 
-    bool                           m_isComputed;
+private:
 
-    QRect                          m_maskRect;
-
-    QImage                         m_maskImage;
-
-    KTabWidget                    *m_mainTab;
-
-    KComboBox                     *m_inpaintingTypeCB;
-
-    Digikam::DImg                  m_originalImage;
-    Digikam::DImg                  m_cropImage;
-
-    Digikam::GreycstorationWidget *m_settingsWidget;
-
-    Digikam::ImageWidget          *m_previewWidget;
-
-    Digikam::EditorToolSettings   *m_gboxSettings;
+    InPaintingToolPriv* const d;
 };
 
 }  // namespace DigikamInPaintingImagesPlugin

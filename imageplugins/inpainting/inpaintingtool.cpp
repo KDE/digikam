@@ -69,48 +69,83 @@
 
 // Local includes
 
-#include "version.h"
 #include "daboutdata.h"
-#include "imageiface.h"
-#include "imagewidget.h"
 #include "editortoolsettings.h"
+#include "greycstorationiface.h"
 #include "greycstorationsettings.h"
 #include "greycstorationwidget.h"
-#include "greycstorationiface.h"
+#include "imageiface.h"
+#include "imagewidget.h"
+#include "version.h"
 
 using namespace Digikam;
 
 namespace DigikamInPaintingImagesPlugin
 {
 
+class InPaintingToolPriv
+{
+public:
+
+    InPaintingToolPriv()
+    {
+        isComputed        = false;
+        mainTab           = 0;
+        inpaintingTypeCB  = 0;
+        settingsWidget    = 0;
+        previewWidget     = 0;
+        gboxSettings      = 0;
+    }
+
+    bool                  isComputed;
+
+    QRect                 maskRect;
+
+    QImage                maskImage;
+
+    KTabWidget*           mainTab;
+
+    KComboBox*            inpaintingTypeCB;
+
+    DImg                  originalImage;
+    DImg                  cropImage;
+
+    GreycstorationWidget* settingsWidget;
+
+    ImageWidget*          previewWidget;
+
+    EditorToolSettings*   gboxSettings;
+};
+
 InPaintingTool::InPaintingTool(QObject* parent)
-              : EditorToolThreaded(parent)
+              : EditorToolThreaded(parent),
+                d(new InPaintingToolPriv)
 {
     setObjectName("inpainting");
     setToolName(i18n("In-painting"));
     setToolIcon(SmallIcon("inpainting"));
 
-    m_isComputed    = false;
-    m_previewWidget = new ImageWidget("inpainting Tool", 0,
+    d->previewWidget = new ImageWidget("inpainting Tool", 0,
                                       i18n("The image selection preview with in-painting applied "
                                            "is shown here."),
                                            true, ImageGuideWidget::HVGuideMode, false, true);
-    setToolView(m_previewWidget);
+    setToolView(d->previewWidget);
 
     // -------------------------------------------------------------
 
-    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                            EditorToolSettings::Try|
-                                            EditorToolSettings::Load|
-                                            EditorToolSettings::SaveAs|
-                                            EditorToolSettings::Ok|
-                                            EditorToolSettings::Cancel);
-    QGridLayout* gridSettings = new QGridLayout(m_gboxSettings->plainPage());
-    m_mainTab                 = new KTabWidget( m_gboxSettings->plainPage());
+    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                             EditorToolSettings::Try|
+                                             EditorToolSettings::Load|
+                                             EditorToolSettings::SaveAs|
+                                             EditorToolSettings::Ok|
+                                             EditorToolSettings::Cancel);
 
-    QWidget* firstPage = new QWidget(m_mainTab);
+    QGridLayout* gridSettings = new QGridLayout(d->gboxSettings->plainPage());
+    d->mainTab                = new KTabWidget( d->gboxSettings->plainPage());
+
+    QWidget* firstPage = new QWidget(d->mainTab);
     QGridLayout* grid  = new QGridLayout(firstPage);
-    m_mainTab->addTab(firstPage, i18n("Preset"));
+    d->mainTab->addTab(firstPage, i18n("Preset"));
 
     KUrlLabel *cimgLogoLabel = new KUrlLabel(firstPage);
     cimgLogoLabel->setText(QString());
@@ -120,59 +155,60 @@ InPaintingTool::InPaintingTool(QObject* parent)
 
     QLabel *typeLabel  = new QLabel(i18n("Filtering type:"), firstPage);
     typeLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    m_inpaintingTypeCB = new KComboBox(firstPage);
-    m_inpaintingTypeCB->addItem(i18nc("no inpainting type", "None"));
-    m_inpaintingTypeCB->addItem(i18n("Remove Small Artifact"));
-    m_inpaintingTypeCB->addItem(i18n("Remove Medium Artifact"));
-    m_inpaintingTypeCB->addItem(i18n("Remove Large Artifact"));
-    m_inpaintingTypeCB->setWhatsThis( i18n("<p>Select the filter preset to use for photograph restoration here:</p>"
+    d->inpaintingTypeCB = new KComboBox(firstPage);
+    d->inpaintingTypeCB->addItem(i18nc("no inpainting type", "None"));
+    d->inpaintingTypeCB->addItem(i18n("Remove Small Artifact"));
+    d->inpaintingTypeCB->addItem(i18n("Remove Medium Artifact"));
+    d->inpaintingTypeCB->addItem(i18n("Remove Large Artifact"));
+    d->inpaintingTypeCB->setWhatsThis(i18n("<p>Select the filter preset to use for photograph restoration here:</p>"
                                            "<p><b>None</b>: Most common values. Puts settings to default.<br/>"
                                            "<b>Remove Small Artifact</b>: in-paint small image artifacts, such as image glitches.<br/>"
                                            "<b>Remove Medium Artifact</b>: in-paint medium image artifacts.<br/>"
                                            "<b>Remove Large Artifact</b>: in-paint large image artifacts, such as unwanted objects.</p>"));
 
-    grid->addWidget(cimgLogoLabel,      0, 1, 1, 1);
-    grid->addWidget(typeLabel,          1, 0, 1, 1);
-    grid->addWidget(m_inpaintingTypeCB, 1, 1, 1, 1);
+    grid->addWidget(cimgLogoLabel,       0, 1, 1, 1);
+    grid->addWidget(typeLabel,           1, 0, 1, 1);
+    grid->addWidget(d->inpaintingTypeCB, 1, 1, 1, 1);
     grid->setRowStretch(1, 10);
-    grid->setMargin(m_gboxSettings->spacingHint());
-    grid->setSpacing(m_gboxSettings->spacingHint());
+    grid->setMargin(d->gboxSettings->spacingHint());
+    grid->setSpacing(d->gboxSettings->spacingHint());
 
     // -------------------------------------------------------------
 
-    m_settingsWidget = new GreycstorationWidget(m_mainTab);
+    d->settingsWidget = new GreycstorationWidget(d->mainTab);
 
-    gridSettings->addWidget(m_mainTab,                               0, 1, 1, 1);
-    gridSettings->addWidget(new QLabel(m_gboxSettings->plainPage()), 1, 1, 1, 1);
-    gridSettings->setMargin(m_gboxSettings->spacingHint());
-    gridSettings->setSpacing(m_gboxSettings->spacingHint());
+    gridSettings->addWidget(d->mainTab,                               0, 1, 1, 1);
+    gridSettings->addWidget(new QLabel(d->gboxSettings->plainPage()), 1, 1, 1, 1);
+    gridSettings->setMargin(d->gboxSettings->spacingHint());
+    gridSettings->setSpacing(d->gboxSettings->spacingHint());
     gridSettings->setRowStretch(1, 10);
 
-    setToolSettings(m_gboxSettings);
+    setToolSettings(d->gboxSettings);
 
     // -------------------------------------------------------------
 
     connect(cimgLogoLabel, SIGNAL(leftClickedUrl(const QString&)),
             this, SLOT(processCImgUrl(const QString&)));
 
-    connect(m_inpaintingTypeCB, SIGNAL(activated(int)),
+    connect(d->inpaintingTypeCB, SIGNAL(activated(int)),
             this, SLOT(slotResetValues(int)));
 
     // -------------------------------------------------------------
 
     GreycstorationSettings defaults;
     defaults.setInpaintingDefaultSettings();
-    m_settingsWidget->setDefaultSettings(defaults);
+    d->settingsWidget->setDefaultSettings(defaults);
     init();
 }
 
 InPaintingTool::~InPaintingTool()
 {
+    delete d;
 }
 
 void InPaintingTool::renderingFinished()
 {
-    m_mainTab->setEnabled(true);
+    d->mainTab->setEnabled(true);
 }
 
 void InPaintingTool::readSettings()
@@ -197,22 +233,22 @@ void InPaintingTool::readSettings()
     settings.nbIter     = group.readEntry("Iteration",     defaults.nbIter);
     settings.tile       = group.readEntry("Tile",          defaults.tile);
     settings.btile      = group.readEntry("BTile",         defaults.btile);
-    m_settingsWidget->setSettings(settings);
+    d->settingsWidget->setSettings(settings);
 
     int p = group.readEntry("Preset", (int)NoPreset);
-    m_inpaintingTypeCB->setCurrentIndex(p);
+    d->inpaintingTypeCB->setCurrentIndex(p);
     if (p == NoPreset)
-        m_settingsWidget->setEnabled(true);
+        d->settingsWidget->setEnabled(true);
     else
-        m_settingsWidget->setEnabled(false);
+        d->settingsWidget->setEnabled(false);
 }
 
 void InPaintingTool::writeSettings()
 {
-    GreycstorationSettings settings = m_settingsWidget->getSettings();
+    GreycstorationSettings settings = d->settingsWidget->getSettings();
     KSharedConfig::Ptr config       = KGlobal::config();
     KConfigGroup group              = config->group("inpainting Tool");
-    group.writeEntry("Preset",        m_inpaintingTypeCB->currentIndex());
+    group.writeEntry("Preset",        d->inpaintingTypeCB->currentIndex());
     group.writeEntry("FastApprox",    settings.fastApprox);
     group.writeEntry("Interpolation", settings.interp);
     group.writeEntry("Amplitude",     (double)settings.amplitude);
@@ -226,16 +262,16 @@ void InPaintingTool::writeSettings()
     group.writeEntry("Iteration",     settings.nbIter);
     group.writeEntry("Tile",          settings.tile);
     group.writeEntry("BTile",         settings.btile);
-    m_previewWidget->writeSettings();
+    d->previewWidget->writeSettings();
     config->sync();
 }
 
 void InPaintingTool::slotResetValues(int i)
 {
     if (i == NoPreset)
-        m_settingsWidget->setEnabled(true);
+        d->settingsWidget->setEnabled(true);
     else
-        m_settingsWidget->setEnabled(false);
+        d->settingsWidget->setEnabled(false);
 
     slotResetSettings();
 }
@@ -245,7 +281,7 @@ void InPaintingTool::slotResetSettings()
     GreycstorationSettings settings;
     settings.setInpaintingDefaultSettings();
 
-    switch(m_inpaintingTypeCB->currentIndex())
+    switch(d->inpaintingTypeCB->currentIndex())
     {
         case RemoveSmallArtefact:
             // We use default settings here.
@@ -266,7 +302,7 @@ void InPaintingTool::slotResetSettings()
         }
     }
 
-    m_settingsWidget->setSettings(settings);
+    d->settingsWidget->setSettings(settings);
 }
 
 void InPaintingTool::processCImgUrl(const QString& url)
@@ -276,12 +312,12 @@ void InPaintingTool::processCImgUrl(const QString& url)
 
 void InPaintingTool::prepareEffect()
 {
-    m_mainTab->setEnabled(false);
+    d->mainTab->setEnabled(false);
 
     ImageIface iface(0, 0);
     uchar *data     = iface.getOriginalImage();
-    m_originalImage = DImg(iface.originalWidth(), iface.originalHeight(),
-                           iface.originalSixteenBit(), iface.originalHasAlpha(), data);
+    d->originalImage = DImg(iface.originalWidth(), iface.originalHeight(),
+                            iface.originalSixteenBit(), iface.originalHasAlpha(), data);
     delete [] data;
 
     // Selected area from the image and mask creation:
@@ -304,37 +340,37 @@ void InPaintingTool::prepareEffect()
     p.fillRect( selectionRect, QBrush(Qt::white) );
     p.end();
 
-    GreycstorationSettings settings = m_settingsWidget->getSettings();
+    GreycstorationSettings settings = d->settingsWidget->getSettings();
 
     int x1 = (int)(selectionRect.left()   - 2*settings.amplitude);
     int y1 = (int)(selectionRect.top()    - 2*settings.amplitude);
     int x2 = (int)(selectionRect.right()  + 2*settings.amplitude);
     int y2 = (int)(selectionRect.bottom() + 2*settings.amplitude);
-    m_maskRect = QRect(x1, y1, x2-x1, y2-y1);
+    d->maskRect = QRect(x1, y1, x2-x1, y2-y1);
 
     // Mask area normalization.
     // We need to check if mask area is out of image size else inpainting give strange results.
 
-    if (m_maskRect.left()   < 0) m_maskRect.setLeft(0);
-    if (m_maskRect.top()    < 0) m_maskRect.setTop(0);
-    if (m_maskRect.right()  > iface.originalWidth())  m_maskRect.setRight(iface.originalWidth());
-    if (m_maskRect.bottom() > iface.originalHeight()) m_maskRect.setBottom(iface.originalHeight());
+    if (d->maskRect.left()   < 0) d->maskRect.setLeft(0);
+    if (d->maskRect.top()    < 0) d->maskRect.setTop(0);
+    if (d->maskRect.right()  > iface.originalWidth())  d->maskRect.setRight(iface.originalWidth());
+    if (d->maskRect.bottom() > iface.originalHeight()) d->maskRect.setBottom(iface.originalHeight());
 
-    m_maskImage = inPaintingMask.toImage().copy(m_maskRect);
-    m_cropImage = m_originalImage.copy(m_maskRect);
+    d->maskImage = inPaintingMask.toImage().copy(d->maskRect);
+    d->cropImage = d->originalImage.copy(d->maskRect);
 
     setFilter(dynamic_cast<DImgThreadedFilter*>(
                        new GreycstorationIface(
-                                    &m_cropImage,
+                                    &d->cropImage,
                                     settings,
                                     GreycstorationIface::InPainting,
                                     0, 0,
-                                    m_maskImage, this)));
+                                    d->maskImage, this)));
 }
 
 void InPaintingTool::prepareFinal()
 {
-    if (!m_isComputed)
+    if (!d->isComputed)
     {
         prepareEffect();
     }
@@ -346,30 +382,30 @@ void InPaintingTool::prepareFinal()
 
 void InPaintingTool::putPreviewData()
 {
-    ImageIface* iface               = m_previewWidget->imageIface();
-    GreycstorationSettings settings = m_settingsWidget->getSettings();
+    ImageIface* iface               = d->previewWidget->imageIface();
+    GreycstorationSettings settings = d->settingsWidget->getSettings();
 
-    m_cropImage = filter()->getTargetImage();
+    d->cropImage = filter()->getTargetImage();
     QRect cropSel((int)(2*settings.amplitude), (int)(2*settings.amplitude),
                   iface->selectedWidth(), iface->selectedHeight());
-    DImg imDest = m_cropImage.copy(cropSel);
+    DImg imDest = d->cropImage.copy(cropSel);
 
     iface->putPreviewImage((imDest.smoothScale(iface->previewWidth(),
                                                iface->previewHeight())).bits());
-    m_previewWidget->updatePreview();
-    m_isComputed = true;
+    d->previewWidget->updatePreview();
+    d->isComputed = true;
 }
 
 void InPaintingTool::putFinalData()
 {
     ImageIface iface(0, 0);
 
-    if (!m_isComputed)
-        m_cropImage = filter()->getTargetImage();
+    if (!d->isComputed)
+        d->cropImage = filter()->getTargetImage();
 
-    m_originalImage.bitBltImage(&m_cropImage, m_maskRect.left(), m_maskRect.top());
+    d->originalImage.bitBltImage(&d->cropImage, d->maskRect.left(), d->maskRect.top());
 
-    iface.putOriginalImage(i18n("In-Painting"), m_originalImage.bits());
+    iface.putOriginalImage(i18n("In-Painting"), d->originalImage.bits());
 }
 
 void InPaintingTool::slotLoadSettings()
@@ -384,7 +420,7 @@ void InPaintingTool::slotLoadSettings()
 
     if ( file.open(QIODevice::ReadOnly) )
     {
-        if (!m_settingsWidget->loadSettings(file, QString("# Photograph Inpainting Configuration File V2")))
+        if (!d->settingsWidget->loadSettings(file, QString("# Photograph Inpainting Configuration File V2")))
         {
            KMessageBox::error(kapp->activeWindow(),
                         i18n("\"%1\" is not a Photograph In-Painting settings text file.",
@@ -397,10 +433,10 @@ void InPaintingTool::slotLoadSettings()
         KMessageBox::error(kapp->activeWindow(), i18n("Cannot load settings from the Photograph In-Painting text file."));
 
     file.close();
-    m_inpaintingTypeCB->blockSignals(true);
-    m_inpaintingTypeCB->setCurrentIndex(NoPreset);
-    m_inpaintingTypeCB->blockSignals(false);
-    m_settingsWidget->setEnabled(true);
+    d->inpaintingTypeCB->blockSignals(true);
+    d->inpaintingTypeCB->setCurrentIndex(NoPreset);
+    d->inpaintingTypeCB->blockSignals(false);
+    d->settingsWidget->setEnabled(true);
 }
 
 void InPaintingTool::slotSaveAsSettings()
@@ -414,7 +450,7 @@ void InPaintingTool::slotSaveAsSettings()
     QFile file(saveRestorationFile.path());
 
     if ( file.open(QIODevice::WriteOnly) )
-        m_settingsWidget->saveSettings(file, QString("# Photograph Inpainting Configuration File V2"));
+        d->settingsWidget->saveSettings(file, QString("# Photograph Inpainting Configuration File V2"));
     else
         KMessageBox::error(kapp->activeWindow(), i18n("Cannot save settings to the Photograph In-Painting text file."));
 
