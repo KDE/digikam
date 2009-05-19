@@ -1,6 +1,5 @@
 
-INCLUDE_DIRECTORIES(../../imageplugins/coreplugin/sharpnesseditor
-                    ../../imageplugins/coreplugin/hsl
+INCLUDE_DIRECTORIES(../../imageplugins/coreplugin/hsl
                     ../../imageplugins/coreplugin/ratiocrop
                    )
 
@@ -8,17 +7,17 @@ SET(digikamimageplugin_core_PART_SRCS
     ../../imageplugins/coreplugin/autocorrectiontool.cpp 
     ../../imageplugins/coreplugin/bcgtool.cpp
     ../../imageplugins/coreplugin/bwsepiatool.cpp
-    ../../imageplugins/coreplugin/hsl/hsltool.cpp
-    ../../imageplugins/coreplugin/hsl/hspreviewwidget.cpp
     ../../imageplugins/coreplugin/iccprooftool.cpp
     ../../imageplugins/coreplugin/blurtool.cpp
     ../../imageplugins/coreplugin/imageplugin_core.cpp
-    ../../imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp
-    ../../imageplugins/coreplugin/ratiocrop/ratiocroptool.cpp
     ../../imageplugins/coreplugin/resizetool.cpp
     ../../imageplugins/coreplugin/redeyetool.cpp
     ../../imageplugins/coreplugin/rgbtool.cpp
-    ../../imageplugins/coreplugin/sharpnesseditor/sharpentool.cpp
+    ../../imageplugins/coreplugin/sharpentool.cpp
+    ../../imageplugins/coreplugin/hsl/hsltool.cpp
+    ../../imageplugins/coreplugin/hsl/hspreviewwidget.cpp
+    ../../imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp
+    ../../imageplugins/coreplugin/ratiocrop/ratiocroptool.cpp
    )
 
 
