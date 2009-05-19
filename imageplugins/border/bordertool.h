@@ -7,8 +7,8 @@
  * Description : a digiKam image plugin to add a border
  *               around an image.
  *
- * Copyright 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,26 +34,12 @@
 
 #include "editortool.h"
 
-class QLabel;
-class QCheckBox;
 class QColor;
-
-class KColorButton;
-
-namespace KDcrawIface
-{
-class RIntNumInput;
-class RComboBox;
-}
-
-namespace Digikam
-{
-class ImageWidget;
-class EditorToolSettings;
-}
 
 namespace DigikamBorderImagesPlugin
 {
+
+class BorderToolPriv;
 
 class BorderTool : public Digikam::EditorToolThreaded
 {
@@ -88,32 +74,7 @@ private:
 
 private:
 
-    QLabel                      *m_labelBorderPercent;
-    QLabel                      *m_labelBorderWidth;
-    QLabel                      *m_labelForeground;
-    QLabel                      *m_labelBackground;
-
-    QCheckBox                   *m_preserveAspectRatio;
-
-    QColor                       m_solidColor;
-    QColor                       m_niepceBorderColor;
-    QColor                       m_niepceLineColor;
-    QColor                       m_bevelUpperLeftColor;
-    QColor                       m_bevelLowerRightColor;
-    QColor                       m_decorativeFirstColor;
-    QColor                       m_decorativeSecondColor;
-
-    KDcrawIface::RComboBox      *m_borderType;
-
-    KDcrawIface::RIntNumInput   *m_borderPercent;
-    KDcrawIface::RIntNumInput   *m_borderWidth;
-
-    KColorButton                *m_firstColorButton;
-    KColorButton                *m_secondColorButton;
-
-    Digikam::ImageWidget        *m_previewWidget;
-
-    Digikam::EditorToolSettings *m_gboxSettings;
+    BorderToolPriv* const d;
 };
 
 }  // namespace DigikamBorderImagesPlugin
