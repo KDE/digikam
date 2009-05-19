@@ -93,7 +93,7 @@ public:
 
     KLFDeviceSelector*  cameraSelector;
 
- ImageWidget*           previewWidget;
+    ImageWidget*        previewWidget;
     EditorToolSettings* gboxSettings;
 };
 
@@ -106,7 +106,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
     setToolIcon(SmallIcon("lensdistortion"));
 
     d->previewWidget = new ImageWidget("antivignetting Tool", 0, QString(),
-                                      true, ImageGuideWidget::HVGuideMode, true);
+                                       true, ImageGuideWidget::HVGuideMode, true);
 
     setToolView(d->previewWidget);
 
