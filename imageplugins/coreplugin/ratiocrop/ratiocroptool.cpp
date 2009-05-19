@@ -49,21 +49,21 @@
 #include <kconfiggroup.h>
 #include <kcursor.h>
 #include <klocale.h>
+#include <kpushbutton.h>
 #include <kstandarddirs.h>
 #include <kstandardguiitem.h>
-#include <kpushbutton.h>
 
 // LibKDcraw includes
 
-#include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>
+#include <libkdcraw/rnuminput.h>
 
 // Local includes
 
-#include "rexpanderbox.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageselectionwidget.h"
+#include "rexpanderbox.h"
 
 using namespace KDcrawIface;
 using namespace Digikam;
@@ -71,8 +71,82 @@ using namespace Digikam;
 namespace DigikamImagesPluginCore
 {
 
+class RatioCropToolPriv
+{
+public:
+
+    RatioCropToolPriv()
+    {
+        originalIsLandscape       = false;
+        customLabel               = 0;
+        orientLabel               = 0;
+        colorGuideLabel           = 0;
+        centerWidth               = 0;
+        centerHeight              = 0;
+        goldenSectionBox          = 0;
+        goldenSpiralSectionBox    = 0;
+        goldenSpiralBox           = 0;
+        goldenTriangleBox         = 0;
+        flipHorBox                = 0;
+        flipVerBox                = 0;
+        autoOrientation           = 0;
+        preciseCrop               = 0;
+        ratioCB                   = 0;
+        orientCB                  = 0;
+        guideLinesCB              = 0;
+        customRatioDInput         = 0;
+        customRatioNInput         = 0;
+        guideSize                 = 0;
+        heightInput               = 0;
+        widthInput                = 0;
+        xInput                    = 0;
+        yInput                    = 0;
+        guideColorBt              = 0;
+        imageSelectionWidget      = 0;
+        expbox                    = 0;
+        gboxSettings              = 0;
+    }
+
+    bool                  originalIsLandscape;
+
+    QLabel*               customLabel;
+    QLabel*               orientLabel;
+    QLabel*               colorGuideLabel;
+
+    QToolButton*          centerWidth;
+    QToolButton*          centerHeight;
+
+    QCheckBox*            goldenSectionBox;
+    QCheckBox*            goldenSpiralSectionBox;
+    QCheckBox*            goldenSpiralBox;
+    QCheckBox*            goldenTriangleBox;
+    QCheckBox*            flipHorBox;
+    QCheckBox*            flipVerBox;
+    QCheckBox*            autoOrientation;
+    QCheckBox*            preciseCrop;
+
+    RComboBox*            ratioCB;
+    RComboBox*            orientCB;
+    RComboBox*            guideLinesCB;
+
+    RIntNumInput*         customRatioDInput;
+    RIntNumInput*         customRatioNInput;
+    RIntNumInput*         guideSize;
+    RIntNumInput*         heightInput;
+    RIntNumInput*         widthInput;
+    RIntNumInput*         xInput;
+    RIntNumInput*         yInput;
+
+    KColorButton*         guideColorBt;
+
+    ImageSelectionWidget* imageSelectionWidget;
+    RExpanderBox*         expbox;
+    EditorToolSettings*   gboxSettings;
+};
+
 RatioCropTool::RatioCropTool(QObject* parent)
-             : EditorTool(parent)
+             : EditorTool(parent),
+               d(new RatioCropToolPriv)
 {
     setObjectName("aspectratiocrop");
     setToolName(i18n("Aspect Ratio Crop"));
@@ -81,30 +155,30 @@ RatioCropTool::RatioCropTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    m_imageSelectionWidget = new ImageSelectionWidget(480, 320);
-    m_imageSelectionWidget->setWhatsThis(i18n("<p>Here you can see the aspect ratio selection preview "
-                                              "used for cropping. You can use the mouse to move and "
-                                              "resize the crop area.</p>"
-                                              "<p>Press and hold the <b>CTRL</b> key to move the opposite corner too.</p>"
-                                              "<p>Press and hold the <b>SHIFT</b> key to move the closest corner to the "
-                                              "mouse pointer.</p>"));
+    d->imageSelectionWidget = new ImageSelectionWidget(480, 320);
+    d->imageSelectionWidget->setWhatsThis(i18n("<p>Here you can see the aspect ratio selection preview "
+                                               "used for cropping. You can use the mouse to move and "
+                                               "resize the crop area.</p>"
+                                               "<p>Press and hold the <b>CTRL</b> key to move the opposite corner too.</p>"
+                                               "<p>Press and hold the <b>SHIFT</b> key to move the closest corner to the "
+                                               "mouse pointer.</p>"));
 
-    m_originalIsLandscape = ((m_imageSelectionWidget->getOriginalImageWidth()) >
-    (m_imageSelectionWidget->getOriginalImageHeight()));
+    d->originalIsLandscape = ((d->imageSelectionWidget->getOriginalImageWidth()) >
+    (d->imageSelectionWidget->getOriginalImageHeight()));
 
-    setToolView(m_imageSelectionWidget);
+    setToolView(d->imageSelectionWidget);
 
     // -------------------------------------------------------------
 
-    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                            EditorToolSettings::Ok|
-                                            EditorToolSettings::Try|
-                                            EditorToolSettings::Cancel);
+    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                             EditorToolSettings::Ok|
+                                             EditorToolSettings::Try|
+                                             EditorToolSettings::Cancel);
 
     // -------------------------------------------------------------
 
     // need to set the button to a KStdGuiItem that has no icon
-    KPushButton *tryBtn = m_gboxSettings->button(EditorToolSettings::Try);
+    KPushButton *tryBtn = d->gboxSettings->button(EditorToolSettings::Try);
     tryBtn->setGuiItem(KStandardGuiItem::Test);
     tryBtn->setText(i18n("Max. Aspect"));
     tryBtn->setToolTip(i18n("Set selection area to the maximum size according "
@@ -112,300 +186,301 @@ RatioCropTool::RatioCropTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QVBoxLayout* vlay      = new QVBoxLayout(m_gboxSettings->plainPage());
-    m_expbox               = new RExpanderBox(m_gboxSettings->plainPage());
-    QWidget *cropSelection = new QWidget(m_expbox);
+    QVBoxLayout* vlay      = new QVBoxLayout(d->gboxSettings->plainPage());
+    d->expbox              = new RExpanderBox(d->gboxSettings->plainPage());
+    QWidget *cropSelection = new QWidget(d->expbox);
     QGridLayout* grid      = new QGridLayout(cropSelection);
 
     QLabel *label = new QLabel(i18n("Aspect ratio:"), cropSelection);
-    m_ratioCB     = new RComboBox(cropSelection);
-    m_ratioCB->addItem(i18nc("custom aspect ratio crop settings", "Custom"));
-    m_ratioCB->addItem("1:1");
-    m_ratioCB->addItem("2:3");
-    m_ratioCB->addItem("3:4");
-    m_ratioCB->addItem("4:5");
-    m_ratioCB->addItem("5:7");
-    m_ratioCB->addItem("7:10");
-    m_ratioCB->addItem(i18n("Golden Ratio"));
-    m_ratioCB->addItem(i18nc("no crop mode", "None"));
-    m_ratioCB->setDefaultIndex(ImageSelectionWidget::RATIO03X04);
+    d->ratioCB    = new RComboBox(cropSelection);
+    d->ratioCB->addItem(i18nc("custom aspect ratio crop settings", "Custom"));
+    d->ratioCB->addItem("1:1");
+    d->ratioCB->addItem("2:3");
+    d->ratioCB->addItem("3:4");
+    d->ratioCB->addItem("4:5");
+    d->ratioCB->addItem("5:7");
+    d->ratioCB->addItem("7:10");
+    d->ratioCB->addItem(i18n("Golden Ratio"));
+    d->ratioCB->addItem(i18nc("no crop mode", "None"));
+    d->ratioCB->setDefaultIndex(ImageSelectionWidget::RATIO03X04);
     setRatioCBText(ImageSelectionWidget::Landscape);
-    m_ratioCB->setWhatsThis( i18n("<p>Select your constrained aspect ratio for cropping. "
-                                  "Aspect Ratio Crop tool uses a relative ratio. That means it "
-                                  "is the same if you use centimeters or inches and it does not "
-                                  "specify the physical size.</p>"
-                                  "<p>You can see below a correspondence list of traditional photographic "
-                                  "paper sizes and aspect ratio crop:</p>"
-                                  "<p><b>2:3</b>: 10x15cm, 20x30cm, 30x45cm, 4x6\", 8x12\", "
-                                  "12x18\", 16x24\", 20x30\"</p>"
-                                  "<p><b>3:4</b>: 6x8cm, 15x20cm, 18x24cm, 30x40cm, 3.75x5\", 4.5x6\", "
-                                  "6x8\", 7.5x10\", 9x12\"</p>"
-                                  "<p><b>4:5</b>: 20x25cm, 40x50cm, 8x10\", 16x20\"</p>"
-                                  "<p><b>5:7</b>: 15x21cm, 30x42cm, 5x7\"</p>"
-                                  "<p><b>7:10</b>: 21x30cm, 42x60cm, 3.5x5\"</p>"
-                                  "<p>The <b>Golden Ratio</b> is 1:1.618. A composition following this rule "
-                                  "is considered visually harmonious but can be unadapted to print on "
-                                  "standard photographic paper.</p>"));
+    d->ratioCB->setWhatsThis( i18n("<p>Select your constrained aspect ratio for cropping. "
+                                   "Aspect Ratio Crop tool uses a relative ratio. That means it "
+                                   "is the same if you use centimeters or inches and it does not "
+                                   "specify the physical size.</p>"
+                                   "<p>You can see below a correspondence list of traditional photographic "
+                                   "paper sizes and aspect ratio crop:</p>"
+                                   "<p><b>2:3</b>: 10x15cm, 20x30cm, 30x45cm, 4x6\", 8x12\", "
+                                   "12x18\", 16x24\", 20x30\"</p>"
+                                   "<p><b>3:4</b>: 6x8cm, 15x20cm, 18x24cm, 30x40cm, 3.75x5\", 4.5x6\", "
+                                   "6x8\", 7.5x10\", 9x12\"</p>"
+                                   "<p><b>4:5</b>: 20x25cm, 40x50cm, 8x10\", 16x20\"</p>"
+                                   "<p><b>5:7</b>: 15x21cm, 30x42cm, 5x7\"</p>"
+                                   "<p><b>7:10</b>: 21x30cm, 42x60cm, 3.5x5\"</p>"
+                                   "<p>The <b>Golden Ratio</b> is 1:1.618. A composition following this rule "
+                                   "is considered visually harmonious but can be unadapted to print on "
+                                   "standard photographic paper.</p>"));
 
-    m_preciseCrop = new QCheckBox(cropSelection);
-    m_preciseCrop->setToolTip(i18n("Exact aspect"));
-    m_preciseCrop->setWhatsThis(i18n("Enable this option to force exact aspect ratio crop."));
+    d->preciseCrop = new QCheckBox(cropSelection);
+    d->preciseCrop->setToolTip(i18n("Exact aspect"));
+    d->preciseCrop->setWhatsThis(i18n("Enable this option to force exact aspect ratio crop."));
 
-    m_orientLabel = new QLabel(i18n("Orientation:"), cropSelection);
-    m_orientCB    = new RComboBox( cropSelection );
-    m_orientCB->addItem( i18n("Landscape") );
-    m_orientCB->addItem( i18n("Portrait") );
-    m_orientCB->setWhatsThis(i18n("Select constrained aspect ratio orientation."));
+    d->orientLabel = new QLabel(i18n("Orientation:"), cropSelection);
+    d->orientCB    = new RComboBox( cropSelection );
+    d->orientCB->addItem( i18n("Landscape") );
+    d->orientCB->addItem( i18n("Portrait") );
+    d->orientCB->setWhatsThis(i18n("Select constrained aspect ratio orientation."));
 
-    m_autoOrientation = new QCheckBox(cropSelection);
-    m_autoOrientation->setToolTip(i18n("Auto"));
-    m_autoOrientation->setWhatsThis( i18n("Enable this option to automatically set the orientation."));
-
-    // -------------------------------------------------------------
-
-    m_customLabel = new QLabel(i18n("Custom ratio:"), cropSelection);
-    m_customLabel->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
-    m_customRatioNInput = new RIntNumInput(cropSelection);
-    m_customRatioNInput->setRange(1, 10000, 1);
-    m_customRatioNInput->setDefaultValue(1);
-    m_customRatioNInput->setSliderEnabled(false);
-    m_customRatioNInput->setWhatsThis( i18n("Set here the desired custom aspect numerator value."));
-
-    m_customRatioDInput = new RIntNumInput(cropSelection);
-    m_customRatioDInput->setRange(1, 10000, 1);
-    m_customRatioDInput->setDefaultValue(1);
-    m_customRatioDInput->setSliderEnabled(false);
-    m_customRatioDInput->setWhatsThis( i18n("Set here the desired custom aspect denominator value."));
+    d->autoOrientation = new QCheckBox(cropSelection);
+    d->autoOrientation->setToolTip(i18n("Auto"));
+    d->autoOrientation->setWhatsThis( i18n("Enable this option to automatically set the orientation."));
 
     // -------------------------------------------------------------
 
-    m_xInput = new RIntNumInput(cropSelection);
-    m_xInput->setWhatsThis( i18n("Set here the top left selection corner position for cropping."));
-    m_xInput->input()->setLabel(i18nc("top left corner position for cropping", "X:"), Qt::AlignLeft|Qt::AlignVCenter);
-    m_xInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth(), 1);
-    m_xInput->setSliderEnabled(true);
-    m_xInput->setDefaultValue(50);
+    d->customLabel = new QLabel(i18n("Custom ratio:"), cropSelection);
+    d->customLabel->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
+    d->customRatioNInput = new RIntNumInput(cropSelection);
+    d->customRatioNInput->setRange(1, 10000, 1);
+    d->customRatioNInput->setDefaultValue(1);
+    d->customRatioNInput->setSliderEnabled(false);
+    d->customRatioNInput->setWhatsThis( i18n("Set here the desired custom aspect numerator value."));
 
-    m_widthInput = new RIntNumInput(cropSelection);
-    m_widthInput->input()->setLabel(i18n("Width:"), Qt::AlignLeft|Qt::AlignVCenter);
-    m_widthInput->setWhatsThis( i18n("Set here the width selection for cropping."));
-    m_widthInput->setRange(m_imageSelectionWidget->getMinWidthRange(),
-                           m_imageSelectionWidget->getMaxWidthRange(),
-                           m_imageSelectionWidget->getWidthStep());
-    m_widthInput->setSliderEnabled(true);
-    m_widthInput->setDefaultValue(800);
-
-    m_centerWidth = new QToolButton(cropSelection);
-    m_centerWidth->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/centerwidth.png")));
-    m_centerWidth->setWhatsThis( i18n("Set width position to center."));
+    d->customRatioDInput = new RIntNumInput(cropSelection);
+    d->customRatioDInput->setRange(1, 10000, 1);
+    d->customRatioDInput->setDefaultValue(1);
+    d->customRatioDInput->setSliderEnabled(false);
+    d->customRatioDInput->setWhatsThis( i18n("Set here the desired custom aspect denominator value."));
 
     // -------------------------------------------------------------
 
-    m_yInput = new RIntNumInput(cropSelection);
-    m_yInput->input()->setLabel(i18n("Y:"), Qt::AlignLeft|Qt::AlignVCenter);
-    m_yInput->setWhatsThis( i18n("Set here the top left selection corner position for cropping."));
-    m_yInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth(), 1);
-    m_yInput->setSliderEnabled(true);
-    m_yInput->setDefaultValue(50);
+    d->xInput = new RIntNumInput(cropSelection);
+    d->xInput->setWhatsThis( i18n("Set here the top left selection corner position for cropping."));
+    d->xInput->input()->setLabel(i18nc("top left corner position for cropping", "X:"), Qt::AlignLeft|Qt::AlignVCenter);
+    d->xInput->setRange(0, d->imageSelectionWidget->getOriginalImageWidth(), 1);
+    d->xInput->setSliderEnabled(true);
+    d->xInput->setDefaultValue(50);
 
-    m_heightInput = new RIntNumInput(cropSelection);
-    m_heightInput->input()->setLabel(i18n("Height:"), Qt::AlignLeft|Qt::AlignVCenter);
-    m_heightInput->setWhatsThis( i18n("Set here the height selection for cropping."));
-    m_heightInput->setRange(m_imageSelectionWidget->getMinHeightRange(),
-                            m_imageSelectionWidget->getMaxHeightRange(),
-                            m_imageSelectionWidget->getHeightStep());
-    m_heightInput->setSliderEnabled(true);
-    m_heightInput->setDefaultValue(600);
+    d->widthInput = new RIntNumInput(cropSelection);
+    d->widthInput->input()->setLabel(i18n("Width:"), Qt::AlignLeft|Qt::AlignVCenter);
+    d->widthInput->setWhatsThis( i18n("Set here the width selection for cropping."));
+    d->widthInput->setRange(d->imageSelectionWidget->getMinWidthRange(),
+                           d->imageSelectionWidget->getMaxWidthRange(),
+                           d->imageSelectionWidget->getWidthStep());
+    d->widthInput->setSliderEnabled(true);
+    d->widthInput->setDefaultValue(800);
 
-    m_centerHeight = new QToolButton(cropSelection);
-    m_centerHeight->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/centerheight.png")));
-    m_centerHeight->setWhatsThis( i18n("Set height position to center."));
+    d->centerWidth = new QToolButton(cropSelection);
+    d->centerWidth->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/centerwidth.png")));
+    d->centerWidth->setWhatsThis( i18n("Set width position to center."));
 
     // -------------------------------------------------------------
 
-    grid->addWidget(label,               0, 0, 1, 1);
-    grid->addWidget(m_ratioCB,           0, 1, 1, 3);
-    grid->addWidget(m_preciseCrop,       0, 4, 1, 1);
-    grid->addWidget(m_customLabel,       1, 0, 1, 1);
-    grid->addWidget(m_customRatioNInput, 1, 1, 1, 1);
-    grid->addWidget(m_customRatioDInput, 2, 1, 1, 1);
-    grid->addWidget(m_orientLabel,       3, 0, 1, 1);
-    grid->addWidget(m_orientCB,          3, 1, 1, 3);
-    grid->addWidget(m_autoOrientation,   3, 4, 1, 1);
-    grid->addWidget(m_xInput,            4, 0, 1, 4);
-    grid->addWidget(m_widthInput,        5, 0, 1, 4);
-    grid->addWidget(m_centerWidth,       5, 4, 1, 1);
-    grid->addWidget(m_yInput,            6, 0, 1, 4);
-    grid->addWidget(m_heightInput,       7, 0, 1, 4);
-    grid->addWidget(m_centerHeight,      7, 4, 1, 1);
-    grid->setMargin(m_gboxSettings->spacingHint());
-    grid->setSpacing(m_gboxSettings->spacingHint());
+    d->yInput = new RIntNumInput(cropSelection);
+    d->yInput->input()->setLabel(i18n("Y:"), Qt::AlignLeft|Qt::AlignVCenter);
+    d->yInput->setWhatsThis( i18n("Set here the top left selection corner position for cropping."));
+    d->yInput->setRange(0, d->imageSelectionWidget->getOriginalImageWidth(), 1);
+    d->yInput->setSliderEnabled(true);
+    d->yInput->setDefaultValue(50);
 
-    m_expbox->addItem(cropSelection, SmallIcon("transform-crop-and-resize"),
+    d->heightInput = new RIntNumInput(cropSelection);
+    d->heightInput->input()->setLabel(i18n("Height:"), Qt::AlignLeft|Qt::AlignVCenter);
+    d->heightInput->setWhatsThis( i18n("Set here the height selection for cropping."));
+    d->heightInput->setRange(d->imageSelectionWidget->getMinHeightRange(),
+                             d->imageSelectionWidget->getMaxHeightRange(),
+                             d->imageSelectionWidget->getHeightStep());
+    d->heightInput->setSliderEnabled(true);
+    d->heightInput->setDefaultValue(600);
+
+    d->centerHeight = new QToolButton(cropSelection);
+    d->centerHeight->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/centerheight.png")));
+    d->centerHeight->setWhatsThis( i18n("Set height position to center."));
+
+    // -------------------------------------------------------------
+
+    grid->addWidget(label,                0, 0, 1, 1);
+    grid->addWidget(d->ratioCB,           0, 1, 1, 3);
+    grid->addWidget(d->preciseCrop,       0, 4, 1, 1);
+    grid->addWidget(d->customLabel,       1, 0, 1, 1);
+    grid->addWidget(d->customRatioNInput, 1, 1, 1, 1);
+    grid->addWidget(d->customRatioDInput, 2, 1, 1, 1);
+    grid->addWidget(d->orientLabel,       3, 0, 1, 1);
+    grid->addWidget(d->orientCB,          3, 1, 1, 3);
+    grid->addWidget(d->autoOrientation,   3, 4, 1, 1);
+    grid->addWidget(d->xInput,            4, 0, 1, 4);
+    grid->addWidget(d->widthInput,        5, 0, 1, 4);
+    grid->addWidget(d->centerWidth,       5, 4, 1, 1);
+    grid->addWidget(d->yInput,            6, 0, 1, 4);
+    grid->addWidget(d->heightInput,       7, 0, 1, 4);
+    grid->addWidget(d->centerHeight,      7, 4, 1, 1);
+    grid->setMargin(d->gboxSettings->spacingHint());
+    grid->setSpacing(d->gboxSettings->spacingHint());
+
+    d->expbox->addItem(cropSelection, SmallIcon("transform-crop-and-resize"),
                       i18n("Crop Settings"), QString("CropSelection"), true);
 
     // -------------------------------------------------------------
 
-    QWidget* compositionGuide = new QWidget(m_expbox);
+    QWidget* compositionGuide = new QWidget(d->expbox);
     QGridLayout* grid2        = new QGridLayout(compositionGuide);
 
     QLabel *labelGuideLines = new QLabel(i18n("Geometric form:"), compositionGuide);
-    m_guideLinesCB          = new RComboBox(compositionGuide);
-    m_guideLinesCB->addItem(i18n("Rules of Thirds"));
-    m_guideLinesCB->addItem(i18n("Diagonal Method"));
-    m_guideLinesCB->addItem(i18n("Harmonious Triangles"));
-    m_guideLinesCB->addItem(i18n("Golden Mean"));
-    m_guideLinesCB->addItem(i18nc("no geometric form", "None"));
-    m_guideLinesCB->setDefaultIndex(ImageSelectionWidget::GuideNone);
-    m_guideLinesCB->setCurrentIndex(3);
-    m_guideLinesCB->setWhatsThis( i18n("With this option, you can display guide lines "
-                                       "to help compose your photograph."));
+    d->guideLinesCB         = new RComboBox(compositionGuide);
+    d->guideLinesCB->addItem(i18n("Rules of Thirds"));
+    d->guideLinesCB->addItem(i18n("Diagonal Method"));
+    d->guideLinesCB->addItem(i18n("Harmonious Triangles"));
+    d->guideLinesCB->addItem(i18n("Golden Mean"));
+    d->guideLinesCB->addItem(i18nc("no geometric form", "None"));
+    d->guideLinesCB->setDefaultIndex(ImageSelectionWidget::GuideNone);
+    d->guideLinesCB->setCurrentIndex(3);
+    d->guideLinesCB->setWhatsThis( i18n("With this option, you can display guide lines "
+                                        "to help compose your photograph."));
 
-    m_goldenSectionBox = new QCheckBox(i18n("Golden sections"), compositionGuide);
-    m_goldenSectionBox->setWhatsThis(i18n("Enable this option to show golden sections."));
+    d->goldenSectionBox = new QCheckBox(i18n("Golden sections"), compositionGuide);
+    d->goldenSectionBox->setWhatsThis(i18n("Enable this option to show golden sections."));
 
-    m_goldenSpiralSectionBox = new QCheckBox(i18n("Golden spiral sections"), compositionGuide);
-    m_goldenSpiralSectionBox->setWhatsThis(i18n("Enable this option to show golden spiral sections."));
+    d->goldenSpiralSectionBox = new QCheckBox(i18n("Golden spiral sections"), compositionGuide);
+    d->goldenSpiralSectionBox->setWhatsThis(i18n("Enable this option to show golden spiral sections."));
 
-    m_goldenSpiralBox = new QCheckBox(i18n("Golden spiral"), compositionGuide);
-    m_goldenSpiralBox->setWhatsThis(i18n("Enable this option to show a golden spiral guide."));
+    d->goldenSpiralBox = new QCheckBox(i18n("Golden spiral"), compositionGuide);
+    d->goldenSpiralBox->setWhatsThis(i18n("Enable this option to show a golden spiral guide."));
 
-    m_goldenTriangleBox = new QCheckBox(i18n("Golden triangles"), compositionGuide);
-    m_goldenTriangleBox->setWhatsThis(i18n("Enable this option to show golden triangles."));
+    d->goldenTriangleBox = new QCheckBox(i18n("Golden triangles"), compositionGuide);
+    d->goldenTriangleBox->setWhatsThis(i18n("Enable this option to show golden triangles."));
 
-    m_flipHorBox = new QCheckBox(i18n("Flip horizontally"), compositionGuide);
-    m_flipHorBox->setWhatsThis(i18n("Enable this option to flip the guidelines horizontally."));
+    d->flipHorBox = new QCheckBox(i18n("Flip horizontally"), compositionGuide);
+    d->flipHorBox->setWhatsThis(i18n("Enable this option to flip the guidelines horizontally."));
 
-    m_flipVerBox = new QCheckBox(i18n("Flip vertically"), compositionGuide);
-    m_flipVerBox->setWhatsThis(i18n("Enable this option to flip the guidelines vertically."));
+    d->flipVerBox = new QCheckBox(i18n("Flip vertically"), compositionGuide);
+    d->flipVerBox->setWhatsThis(i18n("Enable this option to flip the guidelines vertically."));
 
-    m_colorGuideLabel = new QLabel(i18n("Color and width:"), compositionGuide);
-    m_guideColorBt    = new KColorButton( QColor( 250, 250, 255 ), compositionGuide );
-    m_guideSize       = new RIntNumInput(compositionGuide);
-    m_guideSize->setRange(1, 5, 1);
-    m_guideSize->setSliderEnabled(false);
-    m_guideSize->setDefaultValue(1);
-    m_guideColorBt->setWhatsThis(i18n("Set here the color used to draw composition guides."));
-    m_guideSize->setWhatsThis(i18n("Set here the width in pixels used to draw composition guides."));
+    d->colorGuideLabel = new QLabel(i18n("Color and width:"), compositionGuide);
+    d->guideColorBt    = new KColorButton( QColor( 250, 250, 255 ), compositionGuide );
+    d->guideSize       = new RIntNumInput(compositionGuide);
+    d->guideSize->setRange(1, 5, 1);
+    d->guideSize->setSliderEnabled(false);
+    d->guideSize->setDefaultValue(1);
+    d->guideColorBt->setWhatsThis(i18n("Set here the color used to draw composition guides."));
+    d->guideSize->setWhatsThis(i18n("Set here the width in pixels used to draw composition guides."));
 
     // -------------------------------------------------------------
 
-    grid2->addWidget(labelGuideLines,          0, 0, 1, 1);
-    grid2->addWidget(m_guideLinesCB,           0, 1, 1, 2);
-    grid2->addWidget(m_goldenSectionBox,       1, 0, 1, 3);
-    grid2->addWidget(m_goldenSpiralSectionBox, 2, 0, 1, 3);
-    grid2->addWidget(m_goldenSpiralBox,        3, 0, 1, 3);
-    grid2->addWidget(m_goldenTriangleBox,      4, 0, 1, 3);
-    grid2->addWidget(m_flipHorBox,             5, 0, 1, 3);
-    grid2->addWidget(m_flipVerBox,             6, 0, 1, 3);
-    grid2->addWidget(m_colorGuideLabel,        7, 0, 1, 1);
-    grid2->addWidget(m_guideColorBt,           7, 1, 1, 1);
-    grid2->addWidget(m_guideSize,              7, 2, 1, 1);
-    grid2->setMargin(m_gboxSettings->spacingHint());
-    grid2->setSpacing(m_gboxSettings->spacingHint());
+    grid2->addWidget(labelGuideLines,           0, 0, 1, 1);
+    grid2->addWidget(d->guideLinesCB,           0, 1, 1, 2);
+    grid2->addWidget(d->goldenSectionBox,       1, 0, 1, 3);
+    grid2->addWidget(d->goldenSpiralSectionBox, 2, 0, 1, 3);
+    grid2->addWidget(d->goldenSpiralBox,        3, 0, 1, 3);
+    grid2->addWidget(d->goldenTriangleBox,      4, 0, 1, 3);
+    grid2->addWidget(d->flipHorBox,             5, 0, 1, 3);
+    grid2->addWidget(d->flipVerBox,             6, 0, 1, 3);
+    grid2->addWidget(d->colorGuideLabel,        7, 0, 1, 1);
+    grid2->addWidget(d->guideColorBt,           7, 1, 1, 1);
+    grid2->addWidget(d->guideSize,              7, 2, 1, 1);
+    grid2->setMargin(d->gboxSettings->spacingHint());
+    grid2->setSpacing(d->gboxSettings->spacingHint());
 
-    m_expbox->addItem(compositionGuide, SmallIcon("tools-wizard"),
+    d->expbox->addItem(compositionGuide, SmallIcon("tools-wizard"),
                       i18n("Composition Guides"), QString("CompositionGuide"), true);
-    m_expbox->addStretch();
+    d->expbox->addStretch();
 
     // -------------------------------------------------------------
 
-    vlay->addWidget(m_expbox, 10);
+    vlay->addWidget(d->expbox, 10);
     vlay->addStretch();
     vlay->setMargin(0);
     vlay->setSpacing(0);
-    setToolSettings(m_gboxSettings);
+    setToolSettings(d->gboxSettings);
 
     init();
 
     // Sets current region selection
-    slotSelectionChanged(m_imageSelectionWidget->getRegionSelection());
+    slotSelectionChanged(d->imageSelectionWidget->getRegionSelection());
     readSettings();
 
     // -------------------------------------------------------------
 
-    connect(m_ratioCB, SIGNAL(activated(int)),
+    connect(d->ratioCB, SIGNAL(activated(int)),
             this, SLOT(slotRatioChanged(int)));
 
-    connect(m_preciseCrop, SIGNAL(toggled(bool)),
+    connect(d->preciseCrop, SIGNAL(toggled(bool)),
             this, SLOT(slotPreciseCropChanged(bool)));
 
-    connect(m_orientCB, SIGNAL(activated(int)),
+    connect(d->orientCB, SIGNAL(activated(int)),
             this, SLOT(slotOrientChanged(int)));
 
-    connect(m_autoOrientation, SIGNAL(toggled(bool)),
+    connect(d->autoOrientation, SIGNAL(toggled(bool)),
             this, SLOT(slotAutoOrientChanged(bool)));
 
-    connect(m_xInput, SIGNAL(valueChanged(int)),
+    connect(d->xInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotXChanged(int)));
 
-    connect(m_yInput, SIGNAL(valueChanged(int)),
+    connect(d->yInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotYChanged(int)));
 
-    connect(m_customRatioNInput, SIGNAL(valueChanged(int)),
+    connect(d->customRatioNInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotCustomRatioChanged()));
 
-    connect(m_customRatioDInput, SIGNAL(valueChanged(int)),
+    connect(d->customRatioDInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotCustomRatioChanged()));
 
-    connect(m_guideLinesCB, SIGNAL(activated(int)),
+    connect(d->guideLinesCB, SIGNAL(activated(int)),
             this, SLOT(slotGuideTypeChanged(int)));
 
-    connect(m_goldenSectionBox, SIGNAL(toggled(bool)),
+    connect(d->goldenSectionBox, SIGNAL(toggled(bool)),
             this, SLOT(slotGoldenGuideTypeChanged()));
 
-    connect(m_goldenSpiralSectionBox, SIGNAL(toggled(bool)),
+    connect(d->goldenSpiralSectionBox, SIGNAL(toggled(bool)),
             this, SLOT(slotGoldenGuideTypeChanged()));
 
-    connect(m_goldenSpiralBox, SIGNAL(toggled(bool)),
+    connect(d->goldenSpiralBox, SIGNAL(toggled(bool)),
             this, SLOT(slotGoldenGuideTypeChanged()));
 
-    connect(m_goldenTriangleBox, SIGNAL(toggled(bool)),
+    connect(d->goldenTriangleBox, SIGNAL(toggled(bool)),
             this, SLOT(slotGoldenGuideTypeChanged()));
 
-    connect(m_flipHorBox, SIGNAL(toggled(bool)),
+    connect(d->flipHorBox, SIGNAL(toggled(bool)),
             this, SLOT(slotGoldenGuideTypeChanged()));
 
-    connect(m_flipVerBox, SIGNAL(toggled(bool)),
+    connect(d->flipVerBox, SIGNAL(toggled(bool)),
             this, SLOT(slotGoldenGuideTypeChanged()));
 
-    connect(m_guideColorBt, SIGNAL(changed(const QColor&)),
-            m_imageSelectionWidget, SLOT(slotChangeGuideColor(const QColor&)));
+    connect(d->guideColorBt, SIGNAL(changed(const QColor&)),
+            d->imageSelectionWidget, SLOT(slotChangeGuideColor(const QColor&)));
 
-    connect(m_guideSize, SIGNAL(valueChanged(int)),
-            m_imageSelectionWidget, SLOT(slotChangeGuideSize(int)));
+    connect(d->guideSize, SIGNAL(valueChanged(int)),
+            d->imageSelectionWidget, SLOT(slotChangeGuideSize(int)));
 
-    connect(m_widthInput, SIGNAL(valueChanged(int)),
+    connect(d->widthInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotWidthChanged(int)));
 
-    connect(m_heightInput, SIGNAL(valueChanged(int)),
+    connect(d->heightInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotHeightChanged(int)));
 
-    connect(m_imageSelectionWidget, SIGNAL(signalSelectionChanged(const QRect&)),
+    connect(d->imageSelectionWidget, SIGNAL(signalSelectionChanged(const QRect&)),
             this, SLOT(slotSelectionChanged(const QRect&)));
 
-    connect(m_imageSelectionWidget, SIGNAL(signalSelectionMoved(const QRect&)),
+    connect(d->imageSelectionWidget, SIGNAL(signalSelectionMoved(const QRect&)),
             this, SLOT(slotSelectionChanged(const QRect&)));
 
-    connect(m_imageSelectionWidget, SIGNAL(signalSelectionOrientationChanged(int)),
+    connect(d->imageSelectionWidget, SIGNAL(signalSelectionOrientationChanged(int)),
             this, SLOT(slotSelectionOrientationChanged(int)));
 
-    connect(m_centerWidth, SIGNAL(clicked()),
+    connect(d->centerWidth, SIGNAL(clicked()),
             this, SLOT(slotCenterWidth()));
 
-    connect(m_centerHeight, SIGNAL(clicked()),
+    connect(d->centerHeight, SIGNAL(clicked()),
             this, SLOT(slotCenterHeight()));
 
     // we need to disconnect the standard connection of the Try button first
-    disconnect(m_gboxSettings, SIGNAL(signalTryClicked()),
+    disconnect(d->gboxSettings, SIGNAL(signalTryClicked()),
                this, SLOT(slotEffect()));
 
-    connect(m_gboxSettings, SIGNAL(signalTryClicked()),
+    connect(d->gboxSettings, SIGNAL(signalTryClicked()),
             this, SLOT(slotMaxAspectRatio()));
 }
 
 RatioCropTool::~RatioCropTool()
 {
+    delete d;
 }
 
 void RatioCropTool::readSettings()
@@ -418,65 +493,65 @@ void RatioCropTool::readSettings()
 
     blockWidgetSignals(true);
 
-    m_expbox->readSettings(group);
+    d->expbox->readSettings(group);
 
     // No guide lines per default.
-    m_guideLinesCB->setCurrentIndex(group.readEntry("Guide Lines Type",
+    d->guideLinesCB->setCurrentIndex(group.readEntry("Guide Lines Type",
                                     (int)ImageSelectionWidget::GuideNone));
-    m_goldenSectionBox->setChecked(group.readEntry("Golden Section", true));
-    m_goldenSpiralSectionBox->setChecked(group.readEntry("Golden Spiral Section", false));
-    m_goldenSpiralBox->setChecked(group.readEntry("Golden Spiral", false));
-    m_goldenTriangleBox->setChecked(group.readEntry("Golden Triangle", false));
-    m_flipHorBox->setChecked(group.readEntry("Golden Flip Horizontal", false));
-    m_flipVerBox->setChecked(group.readEntry("Golden Flip Vertical", false));
-    m_guideColorBt->setColor(group.readEntry("Guide Color", defaultGuideColor));
-    m_guideSize->setValue(group.readEntry("Guide Width", m_guideSize->defaultValue()));
-    m_imageSelectionWidget->slotGuideLines(m_guideLinesCB->currentIndex());
-    m_imageSelectionWidget->slotChangeGuideColor(m_guideColorBt->color());
+    d->goldenSectionBox->setChecked(group.readEntry("Golden Section", true));
+    d->goldenSpiralSectionBox->setChecked(group.readEntry("Golden Spiral Section", false));
+    d->goldenSpiralBox->setChecked(group.readEntry("Golden Spiral", false));
+    d->goldenTriangleBox->setChecked(group.readEntry("Golden Triangle", false));
+    d->flipHorBox->setChecked(group.readEntry("Golden Flip Horizontal", false));
+    d->flipVerBox->setChecked(group.readEntry("Golden Flip Vertical", false));
+    d->guideColorBt->setColor(group.readEntry("Guide Color", defaultGuideColor));
+    d->guideSize->setValue(group.readEntry("Guide Width", d->guideSize->defaultValue()));
+    d->imageSelectionWidget->slotGuideLines(d->guideLinesCB->currentIndex());
+    d->imageSelectionWidget->slotChangeGuideColor(d->guideColorBt->color());
 
-    m_preciseCrop->setChecked( group.readEntry("Precise Aspect Ratio Crop", false) );
-    m_imageSelectionWidget->setPreciseCrop( m_preciseCrop->isChecked() );
+    d->preciseCrop->setChecked( group.readEntry("Precise Aspect Ratio Crop", false) );
+    d->imageSelectionWidget->setPreciseCrop( d->preciseCrop->isChecked() );
 
     // Empty selection so it can be moved w/out size constraint
-    m_widthInput->setValue(0);
-    m_heightInput->setValue(0);
+    d->widthInput->setValue(0);
+    d->heightInput->setValue(0);
 
-    m_xInput->setValue(group.readEntry("Hor.Oriented Custom Aspect Ratio Xpos",
-                       m_xInput->defaultValue()));
-    m_yInput->setValue(group.readEntry("Hor.Oriented Custom Aspect Ratio Ypos",
-                       m_yInput->defaultValue()));
+    d->xInput->setValue(group.readEntry("Hor.Oriented Custom Aspect Ratio Xpos",
+                        d->xInput->defaultValue()));
+    d->yInput->setValue(group.readEntry("Hor.Oriented Custom Aspect Ratio Ypos",
+                        d->yInput->defaultValue()));
 
-    m_widthInput->setValue(group.readEntry("Hor.Oriented Custom Aspect Ratio Width",
-                           m_widthInput->defaultValue()));
-    m_heightInput->setValue(group.readEntry("Hor.Oriented Custom Aspect Ratio Height",
-                            m_heightInput->defaultValue()));
+    d->widthInput->setValue(group.readEntry("Hor.Oriented Custom Aspect Ratio Width",
+                            d->widthInput->defaultValue()));
+    d->heightInput->setValue(group.readEntry("Hor.Oriented Custom Aspect Ratio Height",
+                             d->heightInput->defaultValue()));
 
-    m_imageSelectionWidget->setSelectionOrientation(m_orientCB->currentIndex());
+    d->imageSelectionWidget->setSelectionOrientation(d->orientCB->currentIndex());
 
-    m_customRatioNInput->setValue(group.readEntry("Hor.Oriented Custom Aspect Ratio Num",
-                                  m_customRatioNInput->defaultValue()));
-    m_customRatioDInput->setValue(group.readEntry("Hor.Oriented Custom Aspect Ratio Den",
-                                  m_customRatioDInput->defaultValue()));
-    m_ratioCB->setCurrentIndex(group.readEntry("Hor.Oriented Aspect Ratio",
-                               m_ratioCB->defaultIndex()));
+    d->customRatioNInput->setValue(group.readEntry("Hor.Oriented Custom Aspect Ratio Num",
+                                   d->customRatioNInput->defaultValue()));
+    d->customRatioDInput->setValue(group.readEntry("Hor.Oriented Custom Aspect Ratio Den",
+                                   d->customRatioDInput->defaultValue()));
+    d->ratioCB->setCurrentIndex(group.readEntry("Hor.Oriented Aspect Ratio",
+                                d->ratioCB->defaultIndex()));
 
-    if (m_originalIsLandscape)
+    if (d->originalIsLandscape)
     {
-        m_orientCB->setCurrentIndex(group.readEntry("Hor.Oriented Aspect Ratio Orientation",
+        d->orientCB->setCurrentIndex(group.readEntry("Hor.Oriented Aspect Ratio Orientation",
                                     (int)ImageSelectionWidget::Landscape));
-        m_orientCB->setDefaultIndex(ImageSelectionWidget::Landscape);
+        d->orientCB->setDefaultIndex(ImageSelectionWidget::Landscape);
     }
     else
     {
-        m_orientCB->setCurrentIndex(group.readEntry("Ver.Oriented Aspect Ratio Orientation",
+        d->orientCB->setCurrentIndex(group.readEntry("Ver.Oriented Aspect Ratio Orientation",
                                     (int)ImageSelectionWidget::Portrait));
-        m_orientCB->setDefaultIndex(ImageSelectionWidget::Portrait);
+        d->orientCB->setDefaultIndex(ImageSelectionWidget::Portrait);
     }
 
-    applyRatioChanges(m_ratioCB->currentIndex());
-    m_autoOrientation->setChecked(group.readEntry("Auto Orientation", false));
-    slotAutoOrientChanged( m_autoOrientation->isChecked() );
-    slotGuideTypeChanged(m_guideLinesCB->currentIndex());
+    applyRatioChanges(d->ratioCB->currentIndex());
+    d->autoOrientation->setChecked(group.readEntry("Auto Orientation", false));
+    slotAutoOrientChanged( d->autoOrientation->isChecked() );
+    slotGuideTypeChanged(d->guideLinesCB->currentIndex());
 
     blockWidgetSignals(false);
 }
@@ -486,120 +561,120 @@ void RatioCropTool::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("aspectratiocrop Tool");
 
-    m_expbox->writeSettings(group);
+    d->expbox->writeSettings(group);
 
-    if (m_originalIsLandscape)
+    if (d->originalIsLandscape)
     {
-        group.writeEntry("Hor.Oriented Aspect Ratio", m_ratioCB->currentIndex());
-        group.writeEntry("Hor.Oriented Aspect Ratio Orientation", m_orientCB->currentIndex());
-        group.writeEntry("Hor.Oriented Custom Aspect Ratio Num", m_customRatioNInput->value());
-        group.writeEntry("Hor.Oriented Custom Aspect Ratio Den", m_customRatioDInput->value());
+        group.writeEntry("Hor.Oriented Aspect Ratio", d->ratioCB->currentIndex());
+        group.writeEntry("Hor.Oriented Aspect Ratio Orientation", d->orientCB->currentIndex());
+        group.writeEntry("Hor.Oriented Custom Aspect Ratio Num", d->customRatioNInput->value());
+        group.writeEntry("Hor.Oriented Custom Aspect Ratio Den", d->customRatioDInput->value());
 
-        group.writeEntry("Hor.Oriented Custom Aspect Ratio Xpos", m_xInput->value());
-        group.writeEntry("Hor.Oriented Custom Aspect Ratio Ypos", m_yInput->value());
-        group.writeEntry("Hor.Oriented Custom Aspect Ratio Width", m_widthInput->value());
-        group.writeEntry("Hor.Oriented Custom Aspect Ratio Height", m_heightInput->value());
+        group.writeEntry("Hor.Oriented Custom Aspect Ratio Xpos", d->xInput->value());
+        group.writeEntry("Hor.Oriented Custom Aspect Ratio Ypos", d->yInput->value());
+        group.writeEntry("Hor.Oriented Custom Aspect Ratio Width", d->widthInput->value());
+        group.writeEntry("Hor.Oriented Custom Aspect Ratio Height", d->heightInput->value());
     }
     else
     {
-        group.writeEntry("Ver.Oriented Aspect Ratio", m_ratioCB->currentIndex());
-        group.writeEntry("Ver.Oriented Aspect Ratio Orientation", m_orientCB->currentIndex());
-        group.writeEntry("Ver.Oriented Custom Aspect Ratio Num", m_customRatioNInput->value());
-        group.writeEntry("Ver.Oriented Custom Aspect Ratio Den", m_customRatioDInput->value());
+        group.writeEntry("Ver.Oriented Aspect Ratio", d->ratioCB->currentIndex());
+        group.writeEntry("Ver.Oriented Aspect Ratio Orientation", d->orientCB->currentIndex());
+        group.writeEntry("Ver.Oriented Custom Aspect Ratio Num", d->customRatioNInput->value());
+        group.writeEntry("Ver.Oriented Custom Aspect Ratio Den", d->customRatioDInput->value());
 
-        group.writeEntry("Ver.Oriented Custom Aspect Ratio Xpos", m_xInput->value());
-        group.writeEntry("Ver.Oriented Custom Aspect Ratio Ypos", m_yInput->value());
-        group.writeEntry("Ver.Oriented Custom Aspect Ratio Width", m_widthInput->value());
-        group.writeEntry("Ver.Oriented Custom Aspect Ratio Height", m_heightInput->value());
+        group.writeEntry("Ver.Oriented Custom Aspect Ratio Xpos", d->xInput->value());
+        group.writeEntry("Ver.Oriented Custom Aspect Ratio Ypos", d->yInput->value());
+        group.writeEntry("Ver.Oriented Custom Aspect Ratio Width", d->widthInput->value());
+        group.writeEntry("Ver.Oriented Custom Aspect Ratio Height", d->heightInput->value());
     }
 
-    group.writeEntry("Precise Aspect Ratio Crop", m_preciseCrop->isChecked());
-    group.writeEntry("Auto Orientation", m_autoOrientation->isChecked());
-    group.writeEntry("Guide Lines Type", m_guideLinesCB->currentIndex());
-    group.writeEntry("Golden Section", m_goldenSectionBox->isChecked());
-    group.writeEntry("Golden Spiral Section", m_goldenSpiralSectionBox->isChecked());
-    group.writeEntry("Golden Spiral", m_goldenSpiralBox->isChecked());
-    group.writeEntry("Golden Triangle", m_goldenTriangleBox->isChecked());
-    group.writeEntry("Golden Flip Horizontal", m_flipHorBox->isChecked());
-    group.writeEntry("Golden Flip Vertical", m_flipVerBox->isChecked());
-    group.writeEntry("Guide Color", m_guideColorBt->color());
-    group.writeEntry("Guide Width", m_guideSize->value());
+    group.writeEntry("Precise Aspect Ratio Crop", d->preciseCrop->isChecked());
+    group.writeEntry("Auto Orientation", d->autoOrientation->isChecked());
+    group.writeEntry("Guide Lines Type", d->guideLinesCB->currentIndex());
+    group.writeEntry("Golden Section", d->goldenSectionBox->isChecked());
+    group.writeEntry("Golden Spiral Section", d->goldenSpiralSectionBox->isChecked());
+    group.writeEntry("Golden Spiral", d->goldenSpiralBox->isChecked());
+    group.writeEntry("Golden Triangle", d->goldenTriangleBox->isChecked());
+    group.writeEntry("Golden Flip Horizontal", d->flipHorBox->isChecked());
+    group.writeEntry("Golden Flip Vertical", d->flipVerBox->isChecked());
+    group.writeEntry("Guide Color", d->guideColorBt->color());
+    group.writeEntry("Guide Width", d->guideSize->value());
     group.sync();
 }
 
 void RatioCropTool::slotResetSettings()
 {
-    m_imageSelectionWidget->resetSelection();
+    d->imageSelectionWidget->resetSelection();
 }
 
 void RatioCropTool::slotMaxAspectRatio()
 {
-    m_imageSelectionWidget->maxAspectSelection();
+    d->imageSelectionWidget->maxAspectSelection();
 }
 
 void RatioCropTool::slotCenterWidth()
 {
-    m_imageSelectionWidget->setCenterSelection(ImageSelectionWidget::CenterWidth);
+    d->imageSelectionWidget->setCenterSelection(ImageSelectionWidget::CenterWidth);
 }
 
 void RatioCropTool::slotCenterHeight()
 {
-    m_imageSelectionWidget->setCenterSelection(ImageSelectionWidget::CenterHeight);
+    d->imageSelectionWidget->setCenterSelection(ImageSelectionWidget::CenterHeight);
 }
 
 void RatioCropTool::slotSelectionChanged(const QRect& rect)
 {
     blockWidgetSignals(true);
 
-    m_xInput->setRange(0, m_imageSelectionWidget->getOriginalImageWidth() - rect.width(), 1);
-    m_yInput->setRange(0, m_imageSelectionWidget->getOriginalImageHeight() - rect.height(), 1);
-    m_widthInput->setRange(m_imageSelectionWidget->getMinWidthRange(),
-                           m_imageSelectionWidget->getMaxWidthRange(),
-                           m_imageSelectionWidget->getWidthStep());
-    m_heightInput->setRange(m_imageSelectionWidget->getMinHeightRange(),
-                            m_imageSelectionWidget->getMaxHeightRange(),
-                            m_imageSelectionWidget->getHeightStep());
+    d->xInput->setRange(0, d->imageSelectionWidget->getOriginalImageWidth() - rect.width(), 1);
+    d->yInput->setRange(0, d->imageSelectionWidget->getOriginalImageHeight() - rect.height(), 1);
+    d->widthInput->setRange(d->imageSelectionWidget->getMinWidthRange(),
+                            d->imageSelectionWidget->getMaxWidthRange(),
+                            d->imageSelectionWidget->getWidthStep());
+    d->heightInput->setRange(d->imageSelectionWidget->getMinHeightRange(),
+                             d->imageSelectionWidget->getMaxHeightRange(),
+                             d->imageSelectionWidget->getHeightStep());
 
-    m_xInput->setValue(rect.x());
-    m_yInput->setValue(rect.y());
-    m_widthInput->setValue(rect.width());
-    m_heightInput->setValue(rect.height());
+    d->xInput->setValue(rect.x());
+    d->yInput->setValue(rect.y());
+    d->widthInput->setValue(rect.width());
+    d->heightInput->setValue(rect.height());
 
-    m_gboxSettings->enableButton(EditorToolSettings::Ok,
+    d->gboxSettings->enableButton(EditorToolSettings::Ok,
                                  rect.isValid());
 
-    m_preciseCrop->setEnabled(m_imageSelectionWidget->preciseCropAvailable());
+    d->preciseCrop->setEnabled(d->imageSelectionWidget->preciseCropAvailable());
 
     blockWidgetSignals(false);
 }
 
 void RatioCropTool::setRatioCBText(int orientation)
 {
-    int item = m_ratioCB->currentIndex();
-    m_ratioCB->blockSignals(true);
-    m_ratioCB->combo()->clear();
-    m_ratioCB->addItem(i18nc("custom ratio crop settings", "Custom"));
-    m_ratioCB->addItem("1:1");
+    int item = d->ratioCB->currentIndex();
+    d->ratioCB->blockSignals(true);
+    d->ratioCB->combo()->clear();
+    d->ratioCB->addItem(i18nc("custom ratio crop settings", "Custom"));
+    d->ratioCB->addItem("1:1");
     if (orientation == ImageSelectionWidget::Landscape)
     {
-        m_ratioCB->addItem("3:2");
-        m_ratioCB->addItem("4:3");
-        m_ratioCB->addItem("5:4");
-        m_ratioCB->addItem("7:5");
-        m_ratioCB->addItem("10:7");
+        d->ratioCB->addItem("3:2");
+        d->ratioCB->addItem("4:3");
+        d->ratioCB->addItem("5:4");
+        d->ratioCB->addItem("7:5");
+        d->ratioCB->addItem("10:7");
     }
     else
     {
-        m_ratioCB->addItem("2:3");
-        m_ratioCB->addItem("3:4");
-        m_ratioCB->addItem("4:5");
-        m_ratioCB->addItem("5:7");
-        m_ratioCB->addItem("7:10");
+        d->ratioCB->addItem("2:3");
+        d->ratioCB->addItem("3:4");
+        d->ratioCB->addItem("4:5");
+        d->ratioCB->addItem("5:7");
+        d->ratioCB->addItem("7:10");
     }
-    m_ratioCB->addItem(i18n("Golden Ratio"));
-    m_ratioCB->addItem(i18nc("no aspect ratio", "None"));
-    m_ratioCB->setCurrentIndex(item);
-    m_ratioCB->blockSignals(false);
+    d->ratioCB->addItem(i18n("Golden Ratio"));
+    d->ratioCB->addItem(i18nc("no aspect ratio", "None"));
+    d->ratioCB->setCurrentIndex(item);
+    d->ratioCB->blockSignals(false);
 }
 
 void RatioCropTool::slotSelectionOrientationChanged(int newOrientation)
@@ -610,55 +685,55 @@ void RatioCropTool::slotSelectionOrientationChanged(int newOrientation)
 
     // Change Orientation ComboBox
 
-    m_orientCB->setCurrentIndex(newOrientation);
+    d->orientCB->setCurrentIndex(newOrientation);
 
     // Reverse custom values
 
-    if ( ( m_customRatioNInput->value() < m_customRatioDInput->value() &&
+    if ( ( d->customRatioNInput->value() < d->customRatioDInput->value() &&
            newOrientation == ImageSelectionWidget::Landscape ) ||
-         ( m_customRatioNInput->value() > m_customRatioDInput->value() &&
+         ( d->customRatioNInput->value() > d->customRatioDInput->value() &&
            newOrientation == ImageSelectionWidget::Portrait ) )
     {
-        m_customRatioNInput->blockSignals(true);
-        m_customRatioDInput->blockSignals(true);
+        d->customRatioNInput->blockSignals(true);
+        d->customRatioDInput->blockSignals(true);
 
-        int tmp = m_customRatioNInput->value();
-        m_customRatioNInput->setValue(m_customRatioDInput->value());
-        m_customRatioDInput->setValue(tmp);
+        int tmp = d->customRatioNInput->value();
+        d->customRatioNInput->setValue(d->customRatioDInput->value());
+        d->customRatioDInput->setValue(tmp);
 
-        m_customRatioNInput->blockSignals(false);
-        m_customRatioDInput->blockSignals(false);
+        d->customRatioNInput->blockSignals(false);
+        d->customRatioDInput->blockSignals(false);
     }
 }
 
 void RatioCropTool::slotXChanged(int x)
 {
-    m_imageSelectionWidget->setSelectionX(x);
+    d->imageSelectionWidget->setSelectionX(x);
 }
 
 void RatioCropTool::slotYChanged(int y)
 {
-    m_imageSelectionWidget->setSelectionY(y);
+    d->imageSelectionWidget->setSelectionY(y);
 }
 
 void RatioCropTool::slotWidthChanged(int w)
 {
-    m_imageSelectionWidget->setSelectionWidth(w);
+    d->imageSelectionWidget->setSelectionWidth(w);
 }
 
 void RatioCropTool::slotHeightChanged(int h)
 {
-    m_imageSelectionWidget->setSelectionHeight(h);
+    d->imageSelectionWidget->setSelectionHeight(h);
 }
 
 void RatioCropTool::slotPreciseCropChanged(bool a)
 {
-    m_imageSelectionWidget->setPreciseCrop(a);
+    d->imageSelectionWidget->setPreciseCrop(a);
 }
 
 void RatioCropTool::slotOrientChanged(int o)
 {
-    m_imageSelectionWidget->setSelectionOrientation(o);
+    d->imageSelectionWidget->setSelectionOrientation(o);
 
     // Reset selection area.
     slotResetSettings();
@@ -666,8 +741,8 @@ void RatioCropTool::slotOrientChanged(int o)
 
 void RatioCropTool::slotAutoOrientChanged(bool a)
 {
-    m_orientCB->setEnabled(!a /*|| m_ratioCB->currentIndex() == ImageSelectionWidget::RATIONONE*/);
-    m_imageSelectionWidget->setAutoOrientation(a);
+    d->orientCB->setEnabled(!a /*|| d->ratioCB->currentIndex() == ImageSelectionWidget::RATIONONE*/);
+    d->imageSelectionWidget->setAutoOrientation(a);
 }
 
 void RatioCropTool::slotRatioChanged(int a)
@@ -680,97 +755,97 @@ void RatioCropTool::slotRatioChanged(int a)
 
 void RatioCropTool::applyRatioChanges(int a)
 {
-    m_imageSelectionWidget->setSelectionAspectRatioType(a);
+    d->imageSelectionWidget->setSelectionAspectRatioType(a);
 
     if (a == ImageSelectionWidget::RATIOCUSTOM)
     {
-        m_customLabel->setEnabled(true);
-        m_customRatioNInput->setEnabled(true);
-        m_customRatioDInput->setEnabled(true);
-        m_orientLabel->setEnabled(true);
-        m_orientCB->setEnabled(!m_autoOrientation->isChecked());
-        m_autoOrientation->setEnabled(true);
+        d->customLabel->setEnabled(true);
+        d->customRatioNInput->setEnabled(true);
+        d->customRatioDInput->setEnabled(true);
+        d->orientLabel->setEnabled(true);
+        d->orientCB->setEnabled(!d->autoOrientation->isChecked());
+        d->autoOrientation->setEnabled(true);
         slotCustomRatioChanged();
     }
     else if (a == ImageSelectionWidget::RATIONONE)
     {
-        m_orientLabel->setEnabled(false);
-        m_orientCB->setEnabled(false);
-        m_autoOrientation->setEnabled(false);
-        m_customLabel->setEnabled(false);
-        m_customRatioNInput->setEnabled(false);
-        m_customRatioDInput->setEnabled(false);
+        d->orientLabel->setEnabled(false);
+        d->orientCB->setEnabled(false);
+        d->autoOrientation->setEnabled(false);
+        d->customLabel->setEnabled(false);
+        d->customRatioNInput->setEnabled(false);
+        d->customRatioDInput->setEnabled(false);
     }
     else // Pre-config ratio selected.
     {
-        m_orientLabel->setEnabled(true);
-        m_orientCB->setEnabled(!m_autoOrientation->isChecked());
-        m_autoOrientation->setEnabled(true);
-        m_customLabel->setEnabled(false);
-        m_customRatioNInput->setEnabled(false);
-        m_customRatioDInput->setEnabled(false);
+        d->orientLabel->setEnabled(true);
+        d->orientCB->setEnabled(!d->autoOrientation->isChecked());
+        d->autoOrientation->setEnabled(true);
+        d->customLabel->setEnabled(false);
+        d->customRatioNInput->setEnabled(false);
+        d->customRatioDInput->setEnabled(false);
     }
 }
 
 void RatioCropTool::slotGuideTypeChanged(int t)
 {
-    m_goldenSectionBox->setEnabled(false);
-    m_goldenSpiralSectionBox->setEnabled(false);
-    m_goldenSpiralBox->setEnabled(false);
-    m_goldenTriangleBox->setEnabled(false);
-    m_flipHorBox->setEnabled(false);
-    m_flipVerBox->setEnabled(false);
-    m_colorGuideLabel->setEnabled(true);
-    m_guideColorBt->setEnabled(true);
-    m_guideSize->setEnabled(true);
+    d->goldenSectionBox->setEnabled(false);
+    d->goldenSpiralSectionBox->setEnabled(false);
+    d->goldenSpiralBox->setEnabled(false);
+    d->goldenTriangleBox->setEnabled(false);
+    d->flipHorBox->setEnabled(false);
+    d->flipVerBox->setEnabled(false);
+    d->colorGuideLabel->setEnabled(true);
+    d->guideColorBt->setEnabled(true);
+    d->guideSize->setEnabled(true);
 
     switch (t)
     {
         case ImageSelectionWidget::GuideNone:
-            m_colorGuideLabel->setEnabled(false);
-            m_guideColorBt->setEnabled(false);
-            m_guideSize->setEnabled(false);
+            d->colorGuideLabel->setEnabled(false);
+            d->guideColorBt->setEnabled(false);
+            d->guideSize->setEnabled(false);
             break;
         case ImageSelectionWidget::HarmoniousTriangles:
-            m_flipHorBox->setEnabled(true);
-            m_flipVerBox->setEnabled(true);
+            d->flipHorBox->setEnabled(true);
+            d->flipVerBox->setEnabled(true);
             break;
         case ImageSelectionWidget::GoldenMean:
-            m_flipHorBox->setEnabled(true);
-            m_flipVerBox->setEnabled(true);
-            m_goldenSectionBox->setEnabled(true);
-            m_goldenSpiralSectionBox->setEnabled(true);
-            m_goldenSpiralBox->setEnabled(true);
-            m_goldenTriangleBox->setEnabled(true);
+            d->flipHorBox->setEnabled(true);
+            d->flipVerBox->setEnabled(true);
+            d->goldenSectionBox->setEnabled(true);
+            d->goldenSpiralSectionBox->setEnabled(true);
+            d->goldenSpiralBox->setEnabled(true);
+            d->goldenTriangleBox->setEnabled(true);
             break;
     }
 
-    m_imageSelectionWidget->setGoldenGuideTypes(m_goldenSectionBox->isChecked(),
-                                                m_goldenSpiralSectionBox->isChecked(),
-                                                m_goldenSpiralBox->isChecked(),
-                                                m_goldenTriangleBox->isChecked(),
-                                                m_flipHorBox->isChecked(),
-                                                m_flipVerBox->isChecked());
-    m_imageSelectionWidget->slotGuideLines(t);
+    d->imageSelectionWidget->setGoldenGuideTypes(d->goldenSectionBox->isChecked(),
+                                                d->goldenSpiralSectionBox->isChecked(),
+                                                d->goldenSpiralBox->isChecked(),
+                                                d->goldenTriangleBox->isChecked(),
+                                                d->flipHorBox->isChecked(),
+                                                d->flipVerBox->isChecked());
+    d->imageSelectionWidget->slotGuideLines(t);
 }
 
 void RatioCropTool::slotGoldenGuideTypeChanged()
 {
-    slotGuideTypeChanged(m_guideLinesCB->currentIndex());
+    slotGuideTypeChanged(d->guideLinesCB->currentIndex());
 }
 
 void RatioCropTool::slotCustomNRatioChanged(int a)
 {
-    if ( ! m_autoOrientation->isChecked() )
+    if ( ! d->autoOrientation->isChecked() )
     {
-        if ( ( m_orientCB->currentIndex() == ImageSelectionWidget::Portrait &&
-               m_customRatioDInput->value() < a ) ||
-             ( m_orientCB->currentIndex() == ImageSelectionWidget::Landscape &&
-               m_customRatioDInput->value() > a ) )
+        if ( ( d->orientCB->currentIndex() == ImageSelectionWidget::Portrait &&
+               d->customRatioDInput->value() < a ) ||
+             ( d->orientCB->currentIndex() == ImageSelectionWidget::Landscape &&
+               d->customRatioDInput->value() > a ) )
         {
-            m_customRatioDInput->blockSignals(true);
-            m_customRatioDInput->setValue(a);
-            m_customRatioDInput->blockSignals(false);
+            d->customRatioDInput->blockSignals(true);
+            d->customRatioDInput->setValue(a);
+            d->customRatioDInput->blockSignals(false);
         }
     }
 
@@ -779,16 +854,16 @@ void RatioCropTool::slotCustomNRatioChanged(int a)
 
 void RatioCropTool::slotCustomDRatioChanged(int a)
 {
-    if ( ! m_autoOrientation->isChecked() )
+    if ( ! d->autoOrientation->isChecked() )
     {
-        if ( ( m_orientCB->currentIndex() == ImageSelectionWidget::Landscape &&
-               m_customRatioNInput->value() < a ) ||
-             ( m_orientCB->currentIndex() == ImageSelectionWidget::Portrait &&
-               m_customRatioNInput->value() > a ) )
+        if ( ( d->orientCB->currentIndex() == ImageSelectionWidget::Landscape &&
+               d->customRatioNInput->value() < a ) ||
+             ( d->orientCB->currentIndex() == ImageSelectionWidget::Portrait &&
+               d->customRatioNInput->value() > a ) )
         {
-            m_customRatioNInput->blockSignals(true);
-            m_customRatioNInput->setValue(a);
-            m_customRatioNInput->blockSignals(false);
+            d->customRatioNInput->blockSignals(true);
+            d->customRatioNInput->setValue(a);
+            d->customRatioNInput->blockSignals(false);
         }
     }
 
@@ -797,8 +872,8 @@ void RatioCropTool::slotCustomDRatioChanged(int a)
 
 void RatioCropTool::slotCustomRatioChanged()
 {
-    m_imageSelectionWidget->setSelectionAspectRatioValue(
-            m_customRatioNInput->value(), m_customRatioDInput->value() );
+    d->imageSelectionWidget->setSelectionAspectRatioValue(
+            d->customRatioNInput->value(), d->customRatioDInput->value() );
 
     // Reset selection area.
     slotResetSettings();
@@ -808,8 +883,8 @@ void RatioCropTool::finalRendering()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
 
-    QRect currentRegion = m_imageSelectionWidget->getRegionSelection();
-    ImageIface* iface   = m_imageSelectionWidget->imageIface();
+    QRect currentRegion = d->imageSelectionWidget->getRegionSelection();
+    ImageIface* iface   = d->imageSelectionWidget->imageIface();
     uchar *data         = iface->getOriginalImage();
     int w               = iface->originalWidth();
     int h               = iface->originalHeight();
@@ -832,21 +907,21 @@ void RatioCropTool::finalRendering()
 
 void RatioCropTool::blockWidgetSignals(bool b)
 {
-    m_customRatioDInput->blockSignals(b);
-    m_customRatioNInput->blockSignals(b);
-    m_flipHorBox->blockSignals(b);
-    m_flipVerBox->blockSignals(b);
-    m_goldenSectionBox->blockSignals(b);
-    m_goldenSpiralBox->blockSignals(b);
-    m_goldenSpiralSectionBox->blockSignals(b);
-    m_goldenTriangleBox->blockSignals(b);
-    m_guideLinesCB->blockSignals(b);
-    m_heightInput->blockSignals(b);
-    m_imageSelectionWidget->blockSignals(b);
-    m_preciseCrop->blockSignals(b);
-    m_widthInput->blockSignals(b);
-    m_xInput->blockSignals(b);
-    m_yInput->blockSignals(b);
+    d->customRatioDInput->blockSignals(b);
+    d->customRatioNInput->blockSignals(b);
+    d->flipHorBox->blockSignals(b);
+    d->flipVerBox->blockSignals(b);
+    d->goldenSectionBox->blockSignals(b);
+    d->goldenSpiralBox->blockSignals(b);
+    d->goldenSpiralSectionBox->blockSignals(b);
+    d->goldenTriangleBox->blockSignals(b);
+    d->guideLinesCB->blockSignals(b);
+    d->heightInput->blockSignals(b);
+    d->imageSelectionWidget->blockSignals(b);
+    d->preciseCrop->blockSignals(b);
+    d->widthInput->blockSignals(b);
+    d->xInput->blockSignals(b);
+    d->yInput->blockSignals(b);
 }
 
 }  // namespace DigikamImagesPluginCore

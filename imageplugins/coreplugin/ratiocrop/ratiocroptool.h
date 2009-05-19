@@ -30,34 +30,14 @@
 
 #include "editortool.h"
 
-class QCheckBox;
-class QLabel;
-class QSpinBox;
-class QToolButton;
-
-class KColorButton;
-
-namespace KDcrawIface
-{
-class RComboBox;
-class RIntNumInput;
-}
-
-namespace Digikam
-{
-class EditorToolSettings;
-class RExpanderBox;
-}
-
-using namespace Digikam;
-using namespace KDcrawIface;
+class QRect;
 
 namespace DigikamImagesPluginCore
 {
 
-class ImageSelectionWidget;
+class RatioCropToolPriv;
 
-class RatioCropTool : public EditorTool
+class RatioCropTool : public Digikam::EditorTool
 {
     Q_OBJECT
 
@@ -104,43 +84,7 @@ private:
 
 private:
 
-    bool                  m_originalIsLandscape;
-
-    QLabel               *m_customLabel;
-    QLabel               *m_orientLabel;
-    QLabel               *m_colorGuideLabel;
-
-    QToolButton          *m_centerWidth;
-    QToolButton          *m_centerHeight;
-
-    QCheckBox            *m_goldenSectionBox;
-    QCheckBox            *m_goldenSpiralSectionBox;
-    QCheckBox            *m_goldenSpiralBox;
-    QCheckBox            *m_goldenTriangleBox;
-    QCheckBox            *m_flipHorBox;
-    QCheckBox            *m_flipVerBox;
-    QCheckBox            *m_autoOrientation;
-    QCheckBox            *m_preciseCrop;
-
-    RComboBox            *m_ratioCB;
-    RComboBox            *m_orientCB;
-    RComboBox            *m_guideLinesCB;
-
-    RIntNumInput         *m_customRatioDInput;
-    RIntNumInput         *m_customRatioNInput;
-    RIntNumInput         *m_guideSize;
-    RIntNumInput         *m_heightInput;
-    RIntNumInput         *m_widthInput;
-    RIntNumInput         *m_xInput;
-    RIntNumInput         *m_yInput;
-
-    KColorButton         *m_guideColorBt;
-
-    ImageSelectionWidget *m_imageSelectionWidget;
-
-    RExpanderBox         *m_expbox;
-
-    EditorToolSettings   *m_gboxSettings;
+    RatioCropToolPriv* const d;
 };
 
 }  // namespace DigikamImagesPluginCore
