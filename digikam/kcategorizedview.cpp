@@ -1504,6 +1504,66 @@ void KCategorizedView::rowsInserted(const QModelIndex &parent,
     rowsInsertedArtifficial(parent, start, end);
 }
 
+int KCategorizedView::Private::categoryUpperBound(int begin, int averageSize)
+{
+    int end = modelIndexList.size();
+    QString category = proxyModel->data(modelIndexList[begin],
+                                        KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
+
+    // First case: Small category with <10 entries
+    const int smallEnd = qMin(end, begin + 10);
+    for (int k=begin; k < smallEnd; ++k)
+    {
+        if (category != proxyModel->data(modelIndexList[k],
+                        KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString())
+            return k;
+    }
+    begin += 10;
+
+    // Second case: only one category, test last value
+    QString value = proxyModel->data(modelIndexList[end - 1],
+                    KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
+    if (value == category)
+        return end - 1;
+
+    // Third case: use average of last category sizes
+    if (averageSize && begin + averageSize < end)
+    {
+        if (category != proxyModel->data(modelIndexList[begin + averageSize],
+                        KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString())
+            end = begin + averageSize;
+        else if (begin + 2*averageSize < end)
+        {
+            if (category != proxyModel->data(modelIndexList[begin + 2*averageSize],
+                            KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString())
+                end = begin + 2 * averageSize;
+        }
+    }
+
+    // now apply a binary search - the model is sorted by category
+    // from qUpperBound, Copyright (C) 2008 Nokia Corporation and/or its subsidiary(-ies)
+    int middle;
+    int n = end - begin;
+    int half;
+
+    while (n > 0)
+    {
+        half = n >> 1;
+        middle = begin + half;
+        if (category != proxyModel->data(modelIndexList[middle],
+                        KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString())
+        {
+            n = half;
+        }
+        else
+        {
+            begin = middle + 1;
+            n -= half + 1;
+        }
+    }
+    return begin;
+}
+
 void KCategorizedView::rowsInsertedArtifficial(const QModelIndex &parent,
                                                int start,
                                                int end)
@@ -1529,61 +1589,89 @@ void KCategorizedView::rowsInsertedArtifficial(const QModelIndex &parent,
     }
 
     // Add all elements mapped to the source model and explore categories
-    QString prevCategory = d->proxyModel->data(d->proxyModel->index(0, d->proxyModel->sortColumn()), KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
+    const int rowCount = d->proxyModel->rowCount();
+    const int sortColumn = d->proxyModel->sortColumn();
+    QString prevCategory = d->proxyModel->data(d->proxyModel->index(0, sortColumn), KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
     QString lastCategory = prevCategory;
     QModelIndexList modelIndexList;
     struct Private::ElementInfo elementInfo;
     int offset = -1;
-    const int rowCount = d->proxyModel->rowCount();
-    const int sortColumn = d->proxyModel->sortColumn();
-    const bool uniformSizes = uniformItemSizes();
-    if (uniformSizes)
+
+    if (uniformItemSizes())
     {
-        // use last index as sample
+        int categorySizes = 0;
+        int categoryCounts = 0;
+
+        // use last index as sample for size hint
         QModelIndex sample = d->proxyModel->index(rowCount - 1, modelColumn(), rootIndex());
         d->biggestItemSize = sizeHintForIndex(sample);
-    }
 
-    for (int k = 0; k < rowCount; ++k)
-    {
-        QModelIndex index = d->proxyModel->index(k, sortColumn);
-        QModelIndex indexSize = sortColumn == 0 ? index : d->proxyModel->index(k, 0);
+        // pre-fill modelIndexList
+        for (int k = 0; k < rowCount; ++k)
+            d->modelIndexList << d->proxyModel->index(k, sortColumn);
 
-        if (!uniformSizes)
+        for (int k = 0; k < rowCount; )
         {
+            lastCategory = d->proxyModel->data(d->modelIndexList[k], KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
+
+            int upperBound = d->categoryUpperBound(k, categorySizes / ++categoryCounts);
+            categorySizes += upperBound - k;
+
+            offset = 0;
+            modelIndexList.clear();
+            for (int i=k; i<=upperBound; i++, offset++)
+            {
+                modelIndexList << d->modelIndexList[i];
+                elementInfo.category = lastCategory;
+                elementInfo.relativeOffsetToCategory = offset;
+                d->elementsInfo.insert(i, elementInfo);
+            }
+            k = upperBound + 1;
+
+            d->categoriesIndexes.insert(lastCategory, modelIndexList);
+            d->categories << lastCategory;
+        }
+    }
+    else
+    {
+        for (int k = 0; k < rowCount; ++k)
+        {
+            QModelIndex index = d->proxyModel->index(k, sortColumn);
+            QModelIndex indexSize = sortColumn == 0 ? index : d->proxyModel->index(k, 0);
+
             QSize hint = sizeHintForIndex(indexSize);
             d->biggestItemSize = QSize(qMax(hint.width(), d->biggestItemSize.width()),
                                        qMax(hint.height(), d->biggestItemSize.height()));
+
+            d->modelIndexList << index;
+
+            lastCategory = d->proxyModel->data(index, KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
+
+            elementInfo.category = lastCategory;
+
+            if (prevCategory != lastCategory)
+            {
+                offset = 0;
+                d->categoriesIndexes.insert(prevCategory, modelIndexList);
+                d->categories << prevCategory;
+                modelIndexList.clear();
+            }
+            else
+            {
+                offset++;
+            }
+
+            elementInfo.relativeOffsetToCategory = offset;
+
+            modelIndexList << index;
+            prevCategory = lastCategory;
+
+            d->elementsInfo.insert(index.row(), elementInfo);
         }
 
-        d->modelIndexList << index;
-
-        lastCategory = d->proxyModel->data(index, KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
-
-        elementInfo.category = lastCategory;
-
-        if (prevCategory != lastCategory)
-        {
-            offset = 0;
-            d->categoriesIndexes.insert(prevCategory, modelIndexList);
-            d->categories << prevCategory;
-            modelIndexList.clear();
-        }
-        else
-        {
-            offset++;
-        }
-
-        elementInfo.relativeOffsetToCategory = offset;
-
-        modelIndexList << index;
-        prevCategory = lastCategory;
-
-        d->elementsInfo.insert(index.row(), elementInfo);
+        d->categoriesIndexes.insert(prevCategory, modelIndexList);
+        d->categories << prevCategory;
     }
-
-    d->categoriesIndexes.insert(prevCategory, modelIndexList);
-    d->categories << prevCategory;
 
     d->updateScrollbars();
 

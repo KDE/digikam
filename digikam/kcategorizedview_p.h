@@ -114,6 +114,11 @@ public:
 
     void layoutChanged(bool forceItemReload = false);
 
+    /**
+      * This method will, starting from the index at begin in the current (sorted) modelIndex List,
+      * find the last index having the same category as the index to begin with.
+      */
+    int categoryUpperBound(int begin, int averageSize = 0);
 
     // Attributes
 
