@@ -6,7 +6,7 @@
  * Date        : 2004-12-01
  * Description : image histogram adjust curves.
  *
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,23 +29,10 @@
 #include "editortool.h"
 #include "dimg.h"
 
-class QWidget;
-class QPushButton;
-class QToolButton;
-class QButtonGroup;
-
-class KComboBox;
-
-namespace Digikam
-{
-class CurvesWidget;
-class ColorGradientWidget;
-class ImageWidget;
-class EditorToolSettings;
-}
-
 namespace DigikamAdjustCurvesImagesPlugin
 {
+
+class AdjustCurvesToolPriv;
 
 class AdjustCurvesTool : public Digikam::EditorTool
 {
@@ -91,35 +78,9 @@ private:
         FreeDrawing
     };
 
-    uchar                        *m_destinationPreviewData;
+private:
 
-    int                           m_histoSegments;
-    int                           m_currentPreviewMode;
-
-    QWidget                      *m_pickerBox;
-
-    QPushButton                  *m_resetButton;
-    QToolButton                  *m_pickBlack;
-    QToolButton                  *m_pickGray;
-    QToolButton                  *m_pickWhite;
-    QToolButton                  *m_curveFree;
-    QToolButton                  *m_curveSmooth;
-
-    QButtonGroup                 *m_pickerColorButtonGroup;
-    QButtonGroup                 *m_curveType;
-
-    KComboBox                    *m_channelCB;
-
-    Digikam::CurvesWidget        *m_curvesWidget;
-
-    Digikam::ColorGradientWidget *m_hGradient;
-    Digikam::ColorGradientWidget *m_vGradient;
-
-    Digikam::ImageWidget         *m_previewWidget;
-
-    Digikam::DImg                *m_originalImage;
-
-    Digikam::EditorToolSettings  *m_gboxSettings;
+    AdjustCurvesToolPriv* const d;
 };
 
 }  // namespace DigikamAdjustCurvesImagesPlugin
