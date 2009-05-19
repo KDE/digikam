@@ -8,7 +8,7 @@
                  Contrast, and Gamma of picture.
  *
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -65,11 +65,10 @@
 #include "colorgradientwidget.h"
 #include "dimg.h"
 #include "editortoolsettings.h"
-#include "histogramwidget.h"
 #include "histogrambox.h"
+#include "histogramwidget.h"
 #include "imageiface.h"
 #include "imagewidget.h"
-
 
 using namespace KDcrawIface;
 using namespace Digikam;
@@ -77,101 +76,129 @@ using namespace Digikam;
 namespace DigikamImagesPluginCore
 {
 
+class BCGToolPriv
+{
+public:
+
+    BCGToolPriv()
+    {
+        destinationPreviewData = 0;
+        bInput                 = 0;
+        cInput                 = 0;
+        gInput                 = 0;
+        previewWidget          = 0;
+        gboxSettings           = 0;
+    }
+
+    uchar*               destinationPreviewData;
+
+    RIntNumInput*        bInput;
+    RIntNumInput*        cInput;
+
+    RDoubleNumInput*     gInput;
+
+    ImageWidget*         previewWidget;
+    EditorToolSettings*  gboxSettings;
+};
+
 BCGTool::BCGTool(QObject* parent)
-       : EditorTool(parent)
+       : EditorTool(parent),
+         d(new BCGToolPriv)
 {
     setObjectName("bcgadjust");
     setToolName(i18n("Brightness / Contrast / Gamma"));
     setToolIcon(SmallIcon("contrast"));
     setToolHelp("bcgadjusttool.anchor");
 
-    m_destinationPreviewData = 0;
+    d->destinationPreviewData = 0;
 
-    m_previewWidget = new ImageWidget("bcgadjust Tool", 0,
+    d->previewWidget = new ImageWidget("bcgadjust Tool", 0,
                                       i18n("The image brightness-contrast-gamma adjustment preview "
                                            "is shown here. "
                                            "Picking a color on the image will show the "
                                            "corresponding color level on the histogram."));
-    setToolView(m_previewWidget);
+    setToolView(d->previewWidget);
 
     // -------------------------------------------------------------
 
-    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                            EditorToolSettings::Ok|
-                                            EditorToolSettings::Cancel,
-                                            EditorToolSettings::Histogram);
+    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                             EditorToolSettings::Ok|
+                                             EditorToolSettings::Cancel,
+                                             EditorToolSettings::Histogram);
 
-    QGridLayout* gridSettings = new QGridLayout(m_gboxSettings->plainPage());
-
-    // -------------------------------------------------------------
-
-    QLabel *label2 = new QLabel(i18n("Brightness:"), m_gboxSettings->plainPage());
-    m_bInput       = new RIntNumInput(m_gboxSettings->plainPage());
-    m_bInput->setRange(-100, 100, 1);
-    m_bInput->setSliderEnabled(true);
-    m_bInput->setDefaultValue(0);
-    m_bInput->setWhatsThis( i18n("Set here the brightness adjustment of the image."));
-
-    QLabel *label3 = new QLabel(i18n("Contrast:"), m_gboxSettings->plainPage());
-    m_cInput       = new RIntNumInput(m_gboxSettings->plainPage());
-    m_cInput->setRange(-100, 100, 1);
-    m_cInput->setSliderEnabled(true);
-    m_cInput->setDefaultValue(0);
-    m_cInput->setWhatsThis( i18n("Set here the contrast adjustment of the image."));
-
-    QLabel *label4 = new QLabel(i18n("Gamma:"), m_gboxSettings->plainPage());
-    m_gInput = new RDoubleNumInput(m_gboxSettings->plainPage());
-    m_gInput->setDecimals(2);
-    m_gInput->input()->setRange(0.1, 3.0, 0.01, true);
-    m_gInput->setDefaultValue(1.0);
-    m_gInput->setWhatsThis( i18n("Set here the gamma adjustment of the image."));
+    QGridLayout* gridSettings = new QGridLayout(d->gboxSettings->plainPage());
 
     // -------------------------------------------------------------
 
-    gridSettings->addWidget(label2,   0, 0, 1, 5);
-    gridSettings->addWidget(m_bInput, 1, 0, 1, 5);
-    gridSettings->addWidget(label3,   2, 0, 1, 5);
-    gridSettings->addWidget(m_cInput, 3, 0, 1, 5);
-    gridSettings->addWidget(label4,   4, 0, 1, 5);
-    gridSettings->addWidget(m_gInput, 5, 0, 1, 5);
+    QLabel *label2 = new QLabel(i18n("Brightness:"), d->gboxSettings->plainPage());
+    d->bInput      = new RIntNumInput(d->gboxSettings->plainPage());
+    d->bInput->setRange(-100, 100, 1);
+    d->bInput->setSliderEnabled(true);
+    d->bInput->setDefaultValue(0);
+    d->bInput->setWhatsThis( i18n("Set here the brightness adjustment of the image."));
+
+    QLabel *label3 = new QLabel(i18n("Contrast:"), d->gboxSettings->plainPage());
+    d->cInput      = new RIntNumInput(d->gboxSettings->plainPage());
+    d->cInput->setRange(-100, 100, 1);
+    d->cInput->setSliderEnabled(true);
+    d->cInput->setDefaultValue(0);
+    d->cInput->setWhatsThis( i18n("Set here the contrast adjustment of the image."));
+
+    QLabel *label4 = new QLabel(i18n("Gamma:"), d->gboxSettings->plainPage());
+    d->gInput      = new RDoubleNumInput(d->gboxSettings->plainPage());
+    d->gInput->setDecimals(2);
+    d->gInput->input()->setRange(0.1, 3.0, 0.01, true);
+    d->gInput->setDefaultValue(1.0);
+    d->gInput->setWhatsThis( i18n("Set here the gamma adjustment of the image."));
+
+    // -------------------------------------------------------------
+
+    gridSettings->addWidget(label2,    0, 0, 1, 5);
+    gridSettings->addWidget(d->bInput, 1, 0, 1, 5);
+    gridSettings->addWidget(label3,    2, 0, 1, 5);
+    gridSettings->addWidget(d->cInput, 3, 0, 1, 5);
+    gridSettings->addWidget(label4,    4, 0, 1, 5);
+    gridSettings->addWidget(d->gInput, 5, 0, 1, 5);
     gridSettings->setRowStretch(6, 10);
-    gridSettings->setMargin(m_gboxSettings->spacingHint());
-    gridSettings->setSpacing(m_gboxSettings->spacingHint());
+    gridSettings->setMargin(d->gboxSettings->spacingHint());
+    gridSettings->setSpacing(d->gboxSettings->spacingHint());
 
-    setToolSettings(m_gboxSettings);
+    setToolSettings(d->gboxSettings);
     init();
 
     // -------------------------------------------------------------
 
-    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
+    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
 
-    connect(m_bInput, SIGNAL(valueChanged(int)),
+    connect(d->bInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
 
-    connect(m_cInput, SIGNAL(valueChanged(int)),
+    connect(d->cInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
 
-    connect(m_gInput, SIGNAL(valueChanged(double)),
+    connect(d->gInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotTimer()));
 
-    connect(m_previewWidget, SIGNAL(signalResized()),
+    connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
 
     // -------------------------------------------------------------
 
-    m_gboxSettings->enableButton(EditorToolSettings::Ok, false);
+    d->gboxSettings->enableButton(EditorToolSettings::Ok, false);
 }
 
 BCGTool::~BCGTool()
 {
-    if (m_destinationPreviewData)
-       delete [] m_destinationPreviewData;
+    if (d->destinationPreviewData)
+       delete [] d->destinationPreviewData;
+
+    delete d;
 }
 
 void BCGTool::slotColorSelectedFromTarget( const DColor& color )
 {
-    m_gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
+    d->gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }
 
 void BCGTool::readSettings()
@@ -179,42 +206,42 @@ void BCGTool::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("bcgadjust Tool");
 
-    m_gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
+    d->gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
                         (int)EditorToolSettings::LuminosityChannel));
-    m_gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
+    d->gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
                         (int)HistogramWidget::LogScaleHistogram));
 
-    m_bInput->setValue(group.readEntry("BrightnessAdjustment", m_bInput->defaultValue()));
-    m_cInput->setValue(group.readEntry("ContrastAdjustment", m_cInput->defaultValue()));
-    m_gInput->setValue(group.readEntry("GammaAdjustment", m_gInput->defaultValue()));
+    d->bInput->setValue(group.readEntry("BrightnessAdjustment", d->bInput->defaultValue()));
+    d->cInput->setValue(group.readEntry("ContrastAdjustment", d->cInput->defaultValue()));
+    d->gInput->setValue(group.readEntry("GammaAdjustment", d->gInput->defaultValue()));
 }
 
 void BCGTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("bcgadjust Tool");
-    group.writeEntry("Histogram Channel", m_gboxSettings->histogramBox()->channel());
-    group.writeEntry("Histogram Scale", m_gboxSettings->histogramBox()->scale());
-    group.writeEntry("BrightnessAdjustment", m_bInput->value());
-    group.writeEntry("ContrastAdjustment", m_cInput->value());
-    group.writeEntry("GammaAdjustment", m_gInput->value());
-    m_previewWidget->writeSettings();
+    group.writeEntry("Histogram Channel", d->gboxSettings->histogramBox()->channel());
+    group.writeEntry("Histogram Scale", d->gboxSettings->histogramBox()->scale());
+    group.writeEntry("BrightnessAdjustment", d->bInput->value());
+    group.writeEntry("ContrastAdjustment", d->cInput->value());
+    group.writeEntry("GammaAdjustment", d->gInput->value());
+    d->previewWidget->writeSettings();
     config->sync();
 }
 
 void BCGTool::slotResetSettings()
 {
-    m_bInput->blockSignals(true);
-    m_cInput->blockSignals(true);
-    m_gInput->blockSignals(true);
+    d->bInput->blockSignals(true);
+    d->cInput->blockSignals(true);
+    d->gInput->blockSignals(true);
 
-    m_bInput->slotReset();
-    m_cInput->slotReset();
-    m_gInput->slotReset();
+    d->bInput->slotReset();
+    d->cInput->slotReset();
+    d->gInput->slotReset();
 
-    m_bInput->blockSignals(false);
-    m_cInput->blockSignals(false);
-    m_gInput->blockSignals(false);
+    d->bInput->blockSignals(false);
+    d->cInput->blockSignals(false);
+    d->gInput->blockSignals(false);
 
     slotEffect();
 }
@@ -223,26 +250,26 @@ void BCGTool::slotEffect()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
 
-    double b = (double)m_bInput->value()/250.0;
-    double c = (double)(m_cInput->value()/100.0) + 1.00;
-    double g = m_gInput->value();
+    double b = (double)d->bInput->value()/250.0;
+    double c = (double)(d->cInput->value()/100.0) + 1.00;
+    double g = d->gInput->value();
 
-    m_gboxSettings->enableButton(EditorToolSettings::Ok,
+    d->gboxSettings->enableButton(EditorToolSettings::Ok,
                                  ( b != 0.0 || c != 1.0 || g != 1.0 ));
 
-    m_gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
+    d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
-    if (m_destinationPreviewData)
-       delete [] m_destinationPreviewData;
+    if (d->destinationPreviewData)
+       delete [] d->destinationPreviewData;
 
-    ImageIface* iface = m_previewWidget->imageIface();
-    m_destinationPreviewData   = iface->getPreviewImage();
+    ImageIface* iface = d->previewWidget->imageIface();
+    d->destinationPreviewData  = iface->getPreviewImage();
     int w                      = iface->previewWidth();
     int h                      = iface->previewHeight();
     bool a                     = iface->previewHasAlpha();
     bool sb                    = iface->previewSixteenBit();
 
-    DImg preview(w, h, sb, a, m_destinationPreviewData);
+    DImg preview(w, h, sb, a, d->destinationPreviewData);
     BCGModifier cmod;
     cmod.setGamma(g);
     cmod.setBrightness(b);
@@ -250,12 +277,12 @@ void BCGTool::slotEffect()
     cmod.applyBCG(preview);
     iface->putPreviewImage(preview.bits());
 
-    m_previewWidget->updatePreview();
+    d->previewWidget->updatePreview();
 
     // Update histogram.
 
-    memcpy(m_destinationPreviewData, preview.bits(), preview.numBytes());
-    m_gboxSettings->histogramBox()->histogram()->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
+    memcpy(d->destinationPreviewData, preview.bits(), preview.numBytes());
+    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData, w, h, sb, 0, 0, 0, false);
 
     kapp->restoreOverrideCursor();
 }
@@ -263,11 +290,11 @@ void BCGTool::slotEffect()
 void BCGTool::finalRendering()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
-    ImageIface* iface = m_previewWidget->imageIface();
+    ImageIface* iface = d->previewWidget->imageIface();
 
-    double b = (double)m_bInput->value()/250.0;
-    double c = (double)(m_cInput->value()/100.0) + 1.00;
-    double g = m_gInput->value();
+    double b = (double)d->bInput->value()/250.0;
+    double c = (double)(d->cInput->value()/100.0) + 1.00;
+    double g = d->gInput->value();
 
     iface->setOriginalBCG(b, c, g);
     kapp->restoreOverrideCursor();
