@@ -28,20 +28,10 @@
 
 #include "editortool.h"
 
-namespace KDcrawIface
-{
-class RDoubleNumInput;
-}
-
-namespace Digikam
-{
-class RExpanderBox;
-class EditorToolSettings;
-class ImagePanelWidget;
-}
-
 namespace DigikamNoiseReductionImagesPlugin
 {
+
+class NoiseReductionToolPriv;
 
 class NoiseReductionTool : public Digikam::EditorToolThreaded
 {
@@ -70,24 +60,7 @@ private Q_SLOTS:
 
 private:
 
-    KDcrawIface::RDoubleNumInput *m_radiusInput;
-    KDcrawIface::RDoubleNumInput *m_lumToleranceInput;
-    KDcrawIface::RDoubleNumInput *m_thresholdInput;
-    KDcrawIface::RDoubleNumInput *m_textureInput;
-    KDcrawIface::RDoubleNumInput *m_sharpnessInput;
-
-    KDcrawIface::RDoubleNumInput *m_csmoothInput;
-    KDcrawIface::RDoubleNumInput *m_lookaheadInput;
-    KDcrawIface::RDoubleNumInput *m_gammaInput;
-    KDcrawIface::RDoubleNumInput *m_dampingInput;
-    KDcrawIface::RDoubleNumInput *m_phaseInput;
-
-
-    Digikam::ImagePanelWidget    *m_previewWidget;
-
-    Digikam::RExpanderBox        *m_expanderBox;
-
-    Digikam::EditorToolSettings  *m_gboxSettings;
+    NoiseReductionToolPriv* const d;
 };
 
 }  // namespace DigikamNoiseReductionImagesPlugin
