@@ -8,7 +8,7 @@
  *               effect to an image.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -59,8 +59,8 @@
 
 // LibKDcraw includes
 
-#include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>
+#include <libkdcraw/rnuminput.h>
 
 // Local includes
 
@@ -69,8 +69,8 @@
 #include "dimg.h"
 #include "dimgimagefilters.h"
 #include "editortoolsettings.h"
-#include "histogramwidget.h"
 #include "histogrambox.h"
+#include "histogramwidget.h"
 #include "imagecurves.h"
 #include "imagehistogram.h"
 #include "imageiface.h"
@@ -83,42 +83,74 @@ using namespace Digikam;
 namespace DigikamColorFXImagesPlugin
 {
 
+class ColorFXToolPriv
+{
+public:
+
+    ColorFXToolPriv()
+    {
+        destinationPreviewData = 0;
+        effectTypeLabel        = 0;
+        levelLabel             = 0;
+        iterationLabel         = 0;
+        effectType             = 0;
+        levelInput             = 0;
+        iterationInput         = 0;
+        previewWidget          = 0;
+        gboxSettings           = 0;
+    }
+
+    uchar*               destinationPreviewData;
+
+    QLabel*              effectTypeLabel;
+    QLabel*              levelLabel;
+    QLabel*              iterationLabel;
+
+    RComboBox*           effectType;
+
+    RIntNumInput*        levelInput;
+    RIntNumInput*        iterationInput;
+
+    ImageWidget*         previewWidget;
+    EditorToolSettings*  gboxSettings;
+};
+
 ColorFXTool::ColorFXTool(QObject* parent)
-           : EditorTool(parent)
+           : EditorTool(parent),
+             d(new ColorFXToolPriv)
 {
     setObjectName("coloreffects");
     setToolName(i18n("Color Effects"));
     setToolIcon(SmallIcon("colorfx"));
 
-    m_destinationPreviewData = 0;
+    d->destinationPreviewData = 0;
 
     // -------------------------------------------------------------
 
-    m_previewWidget = new ImageWidget("coloreffects Tool", 0,
+    d->previewWidget = new ImageWidget("coloreffects Tool", 0,
                                       i18n("This is the color effects preview"));
 
-    setToolView(m_previewWidget);
+    setToolView(d->previewWidget);
 
     // -------------------------------------------------------------
 
-    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                                              EditorToolSettings::Ok|
-                                                              EditorToolSettings::Cancel,
-                                                              EditorToolSettings::Histogram);
+    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                             EditorToolSettings::Ok|
+                                             EditorToolSettings::Cancel,
+                                             EditorToolSettings::Histogram);
 
-    QGridLayout* gridSettings = new QGridLayout(m_gboxSettings->plainPage());
+    QGridLayout* gridSettings = new QGridLayout(d->gboxSettings->plainPage());
 
     // -------------------------------------------------------------
 
-    m_effectTypeLabel = new QLabel(i18n("Type:"), m_gboxSettings->plainPage());
-
-    m_effectType = new RComboBox(m_gboxSettings->plainPage());
-    m_effectType->addItem(i18n("Solarize"));
-    m_effectType->addItem(i18n("Vivid"));
-    m_effectType->addItem(i18n("Neon"));
-    m_effectType->addItem(i18n("Find Edges"));
-    m_effectType->setDefaultIndex(Solarize);
-    m_effectType->setWhatsThis( i18n("<p>Select the effect type to apply to the image here.</p>"
+    d->effectTypeLabel = new QLabel(i18n("Type:"), d->gboxSettings->plainPage());
+    d->effectType      = new RComboBox(d->gboxSettings->plainPage());
+    d->effectType->addItem(i18n("Solarize"));
+    d->effectType->addItem(i18n("Vivid"));
+    d->effectType->addItem(i18n("Neon"));
+    d->effectType->addItem(i18n("Find Edges"));
+    d->effectType->setDefaultIndex(Solarize);
+    d->effectType->setWhatsThis(i18n("<p>Select the effect type to apply to the image here.</p>"
                                      "<p><b>Solarize</b>: simulates solarization of photograph.</p>"
                                      "<p><b>Vivid</b>: simulates the Velvia(tm) slide film colors.</p>"
                                      "<p><b>Neon</b>: coloring the edges in a photograph to "
@@ -126,56 +158,58 @@ ColorFXTool::ColorFXTool(QObject* parent)
                                      "<p><b>Find Edges</b>: detects the edges in a photograph "
                                      "and their strength.</p>"));
 
-    m_levelLabel = new QLabel(i18nc("level of the effect", "Level:"), m_gboxSettings->plainPage());
-    m_levelInput = new RIntNumInput(m_gboxSettings->plainPage());
-    m_levelInput->setRange(0, 100, 1);
-    m_levelInput->setSliderEnabled(true);
-    m_levelInput->setDefaultValue(0);
-    m_levelInput->setWhatsThis( i18n("Set here the level of the effect."));
+    d->levelLabel = new QLabel(i18nc("level of the effect", "Level:"), d->gboxSettings->plainPage());
+    d->levelInput = new RIntNumInput(d->gboxSettings->plainPage());
+    d->levelInput->setRange(0, 100, 1);
+    d->levelInput->setSliderEnabled(true);
+    d->levelInput->setDefaultValue(0);
+    d->levelInput->setWhatsThis( i18n("Set here the level of the effect."));
 
-    m_iterationLabel = new QLabel(i18n("Iteration:"), m_gboxSettings->plainPage());
-    m_iterationInput = new RIntNumInput(m_gboxSettings->plainPage());
-    m_iterationInput->setRange(0, 100, 1);
-    m_iterationInput->setSliderEnabled(true);
-    m_iterationInput->setDefaultValue(0);
-    m_iterationInput->setWhatsThis( i18n("This value controls the number of iterations "
+    d->iterationLabel = new QLabel(i18n("Iteration:"), d->gboxSettings->plainPage());
+    d->iterationInput = new RIntNumInput(d->gboxSettings->plainPage());
+    d->iterationInput->setRange(0, 100, 1);
+    d->iterationInput->setSliderEnabled(true);
+    d->iterationInput->setDefaultValue(0);
+    d->iterationInput->setWhatsThis( i18n("This value controls the number of iterations "
                                          "to use with the Neon and Find Edges effects."));
 
-    gridSettings->addWidget(m_effectTypeLabel,  0, 0, 1, 5);
-    gridSettings->addWidget(m_effectType,       1, 0, 1, 5);
-    gridSettings->addWidget(m_levelLabel,       2, 0, 1, 5);
-    gridSettings->addWidget(m_levelInput,       3, 0, 1, 5);
-    gridSettings->addWidget(m_iterationLabel,   4, 0, 1, 5);
-    gridSettings->addWidget(m_iterationInput,   5, 0, 1, 5);
+    gridSettings->addWidget(d->effectTypeLabel,  0, 0, 1, 5);
+    gridSettings->addWidget(d->effectType,       1, 0, 1, 5);
+    gridSettings->addWidget(d->levelLabel,       2, 0, 1, 5);
+    gridSettings->addWidget(d->levelInput,       3, 0, 1, 5);
+    gridSettings->addWidget(d->iterationLabel,   4, 0, 1, 5);
+    gridSettings->addWidget(d->iterationInput,   5, 0, 1, 5);
     gridSettings->setRowStretch(6, 10);
-    gridSettings->setMargin(m_gboxSettings->spacingHint());
-    gridSettings->setSpacing(m_gboxSettings->spacingHint());
+    gridSettings->setMargin(d->gboxSettings->spacingHint());
+    gridSettings->setSpacing(d->gboxSettings->spacingHint());
 
-    setToolSettings(m_gboxSettings);
+    setToolSettings(d->gboxSettings);
     init();
 
     // -------------------------------------------------------------
 
-    connect(m_previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
+    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
             this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
 
-    connect(m_levelInput, SIGNAL(valueChanged(int)),
+    connect(d->levelInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
 
-    connect(m_iterationInput, SIGNAL(valueChanged(int)),
+    connect(d->iterationInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
 
-    connect(m_previewWidget, SIGNAL(signalResized()),
+    connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
 
-    connect(m_effectType, SIGNAL(activated(int)),
+    connect(d->effectType, SIGNAL(activated(int)),
             this, SLOT(slotEffectTypeChanged(int)));
 }
 
 ColorFXTool::~ColorFXTool()
 {
-    if (m_destinationPreviewData)
-       delete [] m_destinationPreviewData;
+    if (d->destinationPreviewData)
+       delete [] d->destinationPreviewData;
+
+    delete d;
 }
 
 void ColorFXTool::readSettings()
@@ -183,96 +217,96 @@ void ColorFXTool::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("coloreffect Tool");
 
-    m_gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
+    d->gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
                         (int)EditorToolSettings::LuminosityChannel));
-    m_gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
+    d->gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
                         (int)HistogramWidget::LogScaleHistogram));
 
-    m_effectType->setCurrentIndex(group.readEntry("EffectType", m_effectType->defaultIndex()));
-    m_levelInput->setValue(group.readEntry("LevelAdjustment", m_levelInput->defaultValue()));
-    m_iterationInput->setValue(group.readEntry("IterationAdjustment", m_iterationInput->defaultValue()));
-    slotEffectTypeChanged(m_effectType->currentIndex());  //check for enable/disable of iteration
+    d->effectType->setCurrentIndex(group.readEntry("EffectType", d->effectType->defaultIndex()));
+    d->levelInput->setValue(group.readEntry("LevelAdjustment", d->levelInput->defaultValue()));
+    d->iterationInput->setValue(group.readEntry("IterationAdjustment", d->iterationInput->defaultValue()));
+    slotEffectTypeChanged(d->effectType->currentIndex());  //check for enable/disable of iteration
 }
 
 void ColorFXTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("coloreffect Tool");
-    group.writeEntry("Histogram Channel", m_gboxSettings->histogramBox()->channel());
-    group.writeEntry("Histogram Scale", m_gboxSettings->histogramBox()->scale());
-    group.writeEntry("EffectType", m_effectType->currentIndex());
-    group.writeEntry("LevelAdjustment", m_levelInput->value());
-    group.writeEntry("IterationAdjustment", m_iterationInput->value());
-    m_previewWidget->writeSettings();
+    group.writeEntry("Histogram Channel", d->gboxSettings->histogramBox()->channel());
+    group.writeEntry("Histogram Scale", d->gboxSettings->histogramBox()->scale());
+    group.writeEntry("EffectType", d->effectType->currentIndex());
+    group.writeEntry("LevelAdjustment", d->levelInput->value());
+    group.writeEntry("IterationAdjustment", d->iterationInput->value());
+    d->previewWidget->writeSettings();
     group.sync();
 }
 
 void ColorFXTool::slotResetSettings()
 {
-    m_effectType->blockSignals(true);
-    m_levelInput->blockSignals(true);
-    m_iterationInput->blockSignals(true);
+    d->effectType->blockSignals(true);
+    d->levelInput->blockSignals(true);
+    d->iterationInput->blockSignals(true);
 
-    m_effectType->slotReset();
-    m_levelInput->slotReset();
-    m_iterationInput->slotReset();
+    d->effectType->slotReset();
+    d->levelInput->slotReset();
+    d->iterationInput->slotReset();
 
-    m_effectType->blockSignals(false);
-    m_levelInput->blockSignals(false);
-    m_iterationInput->blockSignals(false);
+    d->effectType->blockSignals(false);
+    d->levelInput->blockSignals(false);
+    d->iterationInput->blockSignals(false);
 
     slotEffect();
 }
 
 void ColorFXTool::slotColorSelectedFromTarget( const DColor& color )
 {
-    m_gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
+    d->gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }
 
 void ColorFXTool::slotEffectTypeChanged(int type)
 {
-    m_levelInput->setEnabled(true);
-    m_levelLabel->setEnabled(true);
+    d->levelInput->setEnabled(true);
+    d->levelLabel->setEnabled(true);
 
-    m_levelInput->blockSignals(true);
-    m_iterationInput->blockSignals(true);
-    m_levelInput->setRange(0, 100, 1);
-    m_levelInput->setSliderEnabled(true);
-    m_levelInput->setValue(25);
+    d->levelInput->blockSignals(true);
+    d->iterationInput->blockSignals(true);
+    d->levelInput->setRange(0, 100, 1);
+    d->levelInput->setSliderEnabled(true);
+    d->levelInput->setValue(25);
 
     switch (type)
     {
         case Solarize:
-            m_levelInput->setRange(0, 100, 1);
-            m_levelInput->setSliderEnabled(true);
-            m_levelInput->setValue(0);
-            m_iterationInput->setEnabled(false);
-            m_iterationLabel->setEnabled(false);
+            d->levelInput->setRange(0, 100, 1);
+            d->levelInput->setSliderEnabled(true);
+            d->levelInput->setValue(0);
+            d->iterationInput->setEnabled(false);
+            d->iterationLabel->setEnabled(false);
             break;
 
         case Vivid:
-            m_levelInput->setRange(0, 50, 1);
-            m_levelInput->setSliderEnabled(true);
-            m_levelInput->setValue(5);
-            m_iterationInput->setEnabled(false);
-            m_iterationLabel->setEnabled(false);
+            d->levelInput->setRange(0, 50, 1);
+            d->levelInput->setSliderEnabled(true);
+            d->levelInput->setValue(5);
+            d->iterationInput->setEnabled(false);
+            d->iterationLabel->setEnabled(false);
             break;
 
         case Neon:
         case FindEdges:
-            m_levelInput->setRange(0, 5, 1);
-            m_levelInput->setSliderEnabled(true);
-            m_levelInput->setValue(3);
-            m_iterationInput->setEnabled(true);
-            m_iterationLabel->setEnabled(true);
-            m_iterationInput->setRange(0, 5, 1);
-            m_iterationInput->setSliderEnabled(true);
-            m_iterationInput->setValue(2);
+            d->levelInput->setRange(0, 5, 1);
+            d->levelInput->setSliderEnabled(true);
+            d->levelInput->setValue(3);
+            d->iterationInput->setEnabled(true);
+            d->iterationLabel->setEnabled(true);
+            d->iterationInput->setRange(0, 5, 1);
+            d->iterationInput->setSliderEnabled(true);
+            d->iterationInput->setValue(2);
             break;
     }
 
-    m_levelInput->blockSignals(false);
-    m_iterationInput->blockSignals(false);
+    d->levelInput->blockSignals(false);
+    d->iterationInput->blockSignals(false);
 
     slotEffect();
 }
@@ -281,25 +315,25 @@ void ColorFXTool::slotEffect()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
 
-    m_gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
+    d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
-    if (m_destinationPreviewData)
-       delete [] m_destinationPreviewData;
+    if (d->destinationPreviewData)
+       delete [] d->destinationPreviewData;
 
-    ImageIface* iface        = m_previewWidget->imageIface();
-    m_destinationPreviewData = iface->getPreviewImage();
-    int w                    = iface->previewWidth();
-    int h                    = iface->previewHeight();
-    bool sb                  = iface->previewSixteenBit();
+    ImageIface* iface         = d->previewWidget->imageIface();
+    d->destinationPreviewData = iface->getPreviewImage();
+    int w                     = iface->previewWidth();
+    int h                     = iface->previewHeight();
+    bool sb                   = iface->previewSixteenBit();
 
-    colorEffect(m_destinationPreviewData, w, h, sb);
+    colorEffect(d->destinationPreviewData, w, h, sb);
 
-    iface->putPreviewImage(m_destinationPreviewData);
-    m_previewWidget->updatePreview();
+    iface->putPreviewImage(d->destinationPreviewData);
+    d->previewWidget->updatePreview();
 
     // Update histogram.
 
-    m_gboxSettings->histogramBox()->histogram()->updateData(m_destinationPreviewData, w, h, sb, 0, 0, 0, false);
+    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData, w, h, sb, 0, 0, 0, false);
 
     kapp->restoreOverrideCursor();
 }
@@ -307,18 +341,18 @@ void ColorFXTool::slotEffect()
 void ColorFXTool::finalRendering()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
-    ImageIface* iface = m_previewWidget->imageIface();
-    uchar *data                = iface->getOriginalImage();
-    int w                      = iface->originalWidth();
-    int h                      = iface->originalHeight();
-    bool sb                    = iface->originalSixteenBit();
+    ImageIface* iface = d->previewWidget->imageIface();
+    uchar *data       = iface->getOriginalImage();
+    int w             = iface->originalWidth();
+    int h             = iface->originalHeight();
+    bool sb           = iface->originalSixteenBit();
 
     if (data)
     {
         colorEffect(data, w, h, sb);
         QString name;
 
-        switch (m_effectType->currentIndex())
+        switch (d->effectType->currentIndex())
         {
             case Solarize:
                 name = i18n("ColorFX");
@@ -346,22 +380,22 @@ void ColorFXTool::finalRendering()
 
 void ColorFXTool::colorEffect(uchar *data, int w, int h, bool sb)
 {
-    switch (m_effectType->currentIndex())
+    switch (d->effectType->currentIndex())
     {
         case Solarize:
-            solarize(m_levelInput->value(), data, w, h, sb);
+            solarize(d->levelInput->value(), data, w, h, sb);
             break;
 
         case Vivid:
-            vivid(m_levelInput->value(), data, w, h, sb);
+            vivid(d->levelInput->value(), data, w, h, sb);
             break;
 
         case Neon:
-            neon(data, w, h, sb, m_levelInput->value(), m_iterationInput->value());
+            neon(data, w, h, sb, d->levelInput->value(), d->iterationInput->value());
             break;
 
         case FindEdges:
-            findEdges(data, w, h, sb, m_levelInput->value(), m_iterationInput->value());
+            findEdges(data, w, h, sb, d->levelInput->value(), d->iterationInput->value());
             break;
     }
 }
