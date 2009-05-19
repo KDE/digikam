@@ -75,5 +75,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 060 ==> 188316 : Missing NEF files when importing from USB disk.
 061 ==> 193163 : digiKam ignores settings on the rating stars.
 062 ==> 189168 : You do not have write access to your home directory base path.
-063 ==> 
+063 ==> 193226 : Data loss on downloading photos from camera.
+064 ==> 
 
