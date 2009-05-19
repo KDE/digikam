@@ -113,6 +113,7 @@ public:
         prevW             = 0;
         prevH             = 0;
         maskPenSize       = 0;
+        expanderBox       = 0;
     }
 
     int                 orgWidth;
@@ -144,6 +145,8 @@ public:
 
     RComboBox          *funcInput;
     RComboBox          *resizeOrderInput;
+
+    RExpanderBox       *expanderBox;
 
     QToolButton        *redMaskTool;
     QToolButton        *greenMaskTool;
@@ -394,20 +397,21 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     advancedSettingsContainer->setLayout(advancedSettingsLayout);
 
     // -------------------------------------------------------------
-    RExpanderBox * m_expanderBox = new RExpanderBox;
-    m_expanderBox->addItem(sizeSettingsContainer, SmallIcon("transform-scale"), i18n("Target size"),
-                           QString("SizeSettingsContainer"), true);
-    m_expanderBox->addItem(mixedRescaleContainer, SmallIcon("transform-scale"), i18n("Content-aware rescale percentage"),
-                           QString("MixedRescaleContainer"), true);
-    m_expanderBox->addItem(maskSettingsContainer, SmallIcon("transform-scale"), i18n("Mask Settings"),
-                           QString("MaskSettingsContainer"), true);
-    m_expanderBox->addItem(energyFunctionsContainer, SmallIcon("transform-scale"), i18n("Energy function"),
-                           QString("EnergyFunctionsContainer"), true);
-    m_expanderBox->addItem(advancedSettingsContainer, SmallIcon("system-run"), i18n("Advanced Settings"),
-                           QString("AdvancedSettingsContainer"), true);
-    m_expanderBox->addStretch();
 
-    grid->addWidget(m_expanderBox, 0, 0, 1, -1);
+    d->expanderBox = new RExpanderBox;
+    d->expanderBox->addItem(sizeSettingsContainer, SmallIcon("transform-scale"), i18n("Target size"),
+                           QString("SizeSettingsContainer"), true);
+    d->expanderBox->addItem(mixedRescaleContainer, SmallIcon("transform-scale"), i18n("Content-aware rescale percentage"),
+                           QString("MixedRescaleContainer"), true);
+    d->expanderBox->addItem(maskSettingsContainer, SmallIcon("transform-scale"), i18n("Mask Settings"),
+                           QString("MaskSettingsContainer"), true);
+    d->expanderBox->addItem(energyFunctionsContainer, SmallIcon("transform-scale"), i18n("Energy function"),
+                           QString("EnergyFunctionsContainer"), true);
+    d->expanderBox->addItem(advancedSettingsContainer, SmallIcon("system-run"), i18n("Advanced Settings"),
+                           QString("AdvancedSettingsContainer"), true);
+    d->expanderBox->addStretch();
+
+    grid->addWidget(d->expanderBox, 0, 0, 1, -1);
     grid->setRowStretch(0, 1);
     grid->setMargin(d->gboxSettings->spacingHint());
     grid->setSpacing(d->gboxSettings->spacingHint());
@@ -463,6 +467,7 @@ void ContentAwareResizeTool::readSettings()
     d->mixedRescaleInput->setValue(group.readEntry("MixedRescaleValue", d->mixedRescaleInput->defaultValue()));
     d->maskPenSize->setValue(group.readEntry("BrushSize",               d->maskPenSize->defaultValue()));
     d->preserveSkinTones->setChecked(group.readEntry("PreserveTones",   false));
+    d->expanderBox->readSettings(group);
 
     enableContentAwareSettings(d->mixedRescaleInput->value() > 0.0);
 
@@ -483,6 +488,7 @@ void ContentAwareResizeTool::writeSettings()
     group.writeEntry("MixedRescaleValue", d->mixedRescaleInput->value());
     group.writeEntry("BrushSize",         d->maskPenSize->value());
     group.writeEntry("PreserveTones",     d->preserveSkinTones->isChecked());
+    d->expanderBox->writeSettings(group);
 
     d->previewWidget->writeSettings();
     group.sync();
