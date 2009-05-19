@@ -6,7 +6,7 @@
  * Date        : 2004-12-23
  * Description : a plugin to shear an image
  *
- * Copyright (C) 2004-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,23 +28,10 @@
 
 #include "editortool.h"
 
-class QCheckBox;
-class QLabel;
-
-namespace Digikam
-{
-class ImageWidget;
-class EditorToolSettings;
-}
-
-namespace KDcrawIface
-{
-class RIntNumInput;
-class RDoubleNumInput;
-}
-
 namespace DigikamShearToolImagesPlugin
 {
+
+class ShearToolPriv;
 
 class ShearTool : public Digikam::EditorToolThreaded
 {
@@ -72,20 +59,7 @@ private:
 
 private:
 
-    QLabel                       *m_newWidthLabel;
-    QLabel                       *m_newHeightLabel;
-
-    QCheckBox                    *m_antialiasInput;
-
-    KDcrawIface::RIntNumInput    *m_mainHAngleInput;
-    KDcrawIface::RIntNumInput    *m_mainVAngleInput;
-
-    KDcrawIface::RDoubleNumInput *m_fineHAngleInput;
-    KDcrawIface::RDoubleNumInput *m_fineVAngleInput;
-
-    Digikam::ImageWidget         *m_previewWidget;
-
-    Digikam::EditorToolSettings  *m_gboxSettings;
+    ShearToolPriv* const d;
 };
 
 }  // namespace DigikamShearToolImagesPlugin
