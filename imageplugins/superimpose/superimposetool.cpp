@@ -7,8 +7,8 @@
  * Description : a Digikam image editor plugin for superimpose a
  *               template to an image.
  *
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -73,8 +73,30 @@ using namespace Digikam;
 namespace DigikamSuperImposeImagesPlugin
 {
 
+class SuperImposeToolPriv
+{
+public:
+
+    SuperImposeToolPriv()
+    {
+        thumbnailsBar = 0;
+        gboxSettings  = 0;
+        previewWidget = 0;
+        dirSelect     = 0;
+    }
+
+    KUrl                templatesUrl;
+    KUrl                templatesRootUrl;
+
+    ThumbBarView*       thumbnailsBar;
+    EditorToolSettings* gboxSettings;
+    SuperImposeWidget*  previewWidget;
+    DirSelectWidget*    dirSelect;
+};
+
 SuperImposeTool::SuperImposeTool(QObject* parent)
-               : EditorTool(parent)
+               : EditorTool(parent),
+                 d(new SuperImposeToolPriv)
 {
     setObjectName("superimpose");
     setToolName(i18n("Template Superimpose"));
@@ -86,8 +108,8 @@ SuperImposeTool::SuperImposeTool(QObject* parent)
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
 
     QGridLayout* gridFrame = new QGridLayout(frame);
-    m_previewWidget        = new SuperImposeWidget(400, 300, frame);
-    m_previewWidget->setWhatsThis( i18n("This previews the template superimposed onto the image."));
+    d->previewWidget       = new SuperImposeWidget(400, 300, frame);
+    d->previewWidget->setWhatsThis( i18n("This previews the template superimposed onto the image."));
 
     // -------------------------------------------------------------
 
@@ -128,7 +150,7 @@ SuperImposeTool::SuperImposeTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    gridFrame->addWidget(m_previewWidget,   0, 0, 1, 3);
+    gridFrame->addWidget(d->previewWidget,  0, 0, 1, 3);
     gridFrame->addWidget(toolBox,           1, 1, 1, 1);
     gridFrame->setColumnStretch(0, 10);
     gridFrame->setColumnStretch(2, 10);
@@ -140,39 +162,40 @@ SuperImposeTool::SuperImposeTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    m_gboxSettings    = new EditorToolSettings(EditorToolSettings::Default|
-                                               EditorToolSettings::Ok|
-                                               EditorToolSettings::Cancel);
+    d->gboxSettings    = new EditorToolSettings(EditorToolSettings::Default|
+                                                EditorToolSettings::Ok|
+                                                EditorToolSettings::Cancel);
 
-    QGridLayout* grid = new QGridLayout(m_gboxSettings->plainPage());
+    QGridLayout* grid = new QGridLayout(d->gboxSettings->plainPage());
 
-    m_thumbnailsBar   = new ThumbBarView(m_gboxSettings->plainPage());
-    m_thumbnailsBar->setToolTip(new ThumbBarToolTip(m_thumbnailsBar));
-    m_dirSelect       = new DirSelectWidget(m_gboxSettings->plainPage());
-    QPushButton *templateDirButton = new QPushButton(i18n("Root Directory..."), m_gboxSettings->plainPage());
+    d->thumbnailsBar = new ThumbBarView(d->gboxSettings->plainPage());
+    d->thumbnailsBar->setToolTip(new ThumbBarToolTip(d->thumbnailsBar));
+
+    d->dirSelect = new DirSelectWidget(d->gboxSettings->plainPage());
+    QPushButton *templateDirButton = new QPushButton(i18n("Root Directory..."), d->gboxSettings->plainPage());
     templateDirButton->setWhatsThis(i18n("Set here the current templates' root directory."));
 
     // -------------------------------------------------------------
 
-    grid->addWidget(m_thumbnailsBar,    0, 0, 2, 1);
-    grid->addWidget(m_dirSelect,        0, 1, 1, 1);
+    grid->addWidget(d->thumbnailsBar,   0, 0, 2, 1);
+    grid->addWidget(d->dirSelect,       0, 1, 1, 1);
     grid->addWidget(templateDirButton,  1, 1, 1, 1);
     grid->setColumnStretch(1, 10);
-    grid->setMargin(m_gboxSettings->spacingHint());
-    grid->setSpacing(m_gboxSettings->spacingHint());
+    grid->setMargin(d->gboxSettings->spacingHint());
+    grid->setSpacing(d->gboxSettings->spacingHint());
 
-    setToolSettings(m_gboxSettings);
+    setToolSettings(d->gboxSettings);
     init();
 
     // -------------------------------------------------------------
 
     connect(bGroup, SIGNAL(released(int)),
-            m_previewWidget, SLOT(slotEditModeChanged(int)));
+            d->previewWidget, SLOT(slotEditModeChanged(int)));
 
-    connect(m_thumbnailsBar, SIGNAL(signalUrlSelected(const KUrl&)),
-            m_previewWidget, SLOT(slotSetCurrentTemplate(const KUrl&)));
+    connect(d->thumbnailsBar, SIGNAL(signalUrlSelected(const KUrl&)),
+            d->previewWidget, SLOT(slotSetCurrentTemplate(const KUrl&)));
 
-    connect(m_dirSelect, SIGNAL(folderItemSelected(const KUrl &)),
+    connect(d->dirSelect, SIGNAL(folderItemSelected(const KUrl &)),
             this, SLOT(slotTemplateDirChanged(const KUrl &)));
 
     connect(templateDirButton, SIGNAL(clicked()),
@@ -189,12 +212,12 @@ SuperImposeTool::~SuperImposeTool()
 
 void SuperImposeTool::populateTemplates(void)
 {
-    m_thumbnailsBar->clear(true);
+    d->thumbnailsBar->clear(true);
 
-    if (!m_templatesUrl.isValid() || !m_templatesUrl.isLocalFile())
+    if (!d->templatesUrl.isValid() || !d->templatesUrl.isLocalFile())
        return;
 
-    QDir dir(m_templatesUrl.path(), "*.png *.PNG");
+    QDir dir(d->templatesUrl.path(), "*.png *.PNG");
 
     if (!dir.exists())
        return;
@@ -209,7 +232,7 @@ void SuperImposeTool::populateTemplates(void)
 
     for (fi = fileinfolist.constBegin(); fi != fileinfolist.constEnd(); ++fi)
     {
-        new ThumbBarItem( m_thumbnailsBar, KUrl(fi->filePath()) );
+        new ThumbBarItem( d->thumbnailsBar, KUrl(fi->filePath()) );
     }
 }
 
@@ -220,35 +243,35 @@ void SuperImposeTool::readSettings()
     KUrl albumDBUrl( group.readEntry("Album Path", KGlobalSettings::documentPath()) );
     group = config->group("superimpose Tool");
     group = config->group("Template Superimpose Tool Settings");
-    m_templatesRootUrl.setPath( group.readEntry("Templates Root URL", albumDBUrl.path()) );
-    m_templatesUrl.setPath( group.readEntry("Templates URL", albumDBUrl.path()) );
-    m_dirSelect->setRootPath(m_templatesRootUrl, m_templatesUrl);
+    d->templatesRootUrl.setPath( group.readEntry("Templates Root URL", albumDBUrl.path()) );
+    d->templatesUrl.setPath( group.readEntry("Templates URL", albumDBUrl.path()) );
+    d->dirSelect->setRootPath(d->templatesRootUrl, d->templatesUrl);
 }
 
 void SuperImposeTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("superimpose Tool");
-    group.writeEntry( "Templates Root URL", m_dirSelect->rootPath().path() );
-    group.writeEntry( "Templates URL", m_templatesUrl.path() );
+    group.writeEntry( "Templates Root URL", d->dirSelect->rootPath().path() );
+    group.writeEntry( "Templates URL", d->templatesUrl.path() );
     group.sync();
 }
 
 void SuperImposeTool::slotResetSettings()
 {
-    m_previewWidget->resetEdit();
+    d->previewWidget->resetEdit();
 }
 
 void SuperImposeTool::slotRootTemplateDirChanged(void)
 {
-    KUrl url = KFileDialog::getExistingDirectory(m_templatesRootUrl.path(), kapp->activeWindow(),
+    KUrl url = KFileDialog::getExistingDirectory(d->templatesRootUrl.path(), kapp->activeWindow(),
                                                  i18n("Select Template Root Directory to Use"));
 
     if( url.isValid() )
     {
-        m_dirSelect->setRootPath(url);
-        m_templatesRootUrl = url;
-        m_templatesUrl = url;
+        d->dirSelect->setRootPath(url);
+        d->templatesRootUrl = url;
+        d->templatesUrl = url;
         populateTemplates();
     }
 }
@@ -257,25 +280,25 @@ void SuperImposeTool::slotTemplateDirChanged(const KUrl& url)
 {
     if (url.isValid())
     {
-        m_templatesUrl = url;
+        d->templatesUrl = url;
         populateTemplates();
     }
 }
 
 void SuperImposeTool::finalRendering()
 {
-    m_previewWidget->setEnabled(false);
-    m_dirSelect->setEnabled(false);
-    m_thumbnailsBar->setEnabled(false);
+    d->previewWidget->setEnabled(false);
+    d->dirSelect->setEnabled(false);
+    d->thumbnailsBar->setEnabled(false);
 
     ImageIface iface(0, 0);
-    DImg img = m_previewWidget->makeSuperImpose();
+    DImg img = d->previewWidget->makeSuperImpose();
     iface.putOriginalImage(i18n("Super Impose"), img.bits(),
                            img.width(), img.height() );
 
-    m_previewWidget->setEnabled(true);
-    m_dirSelect->setEnabled(true);
-    m_thumbnailsBar->setEnabled(true);
+    d->previewWidget->setEnabled(true);
+    d->dirSelect->setEnabled(true);
+    d->thumbnailsBar->setEnabled(true);
 }
 
 }  // namespace DigikamSuperImposeImagesPlugin
