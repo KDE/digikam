@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-
 #include "noisereductiontool.h"
 #include "noisereductiontool.moc"
 
@@ -308,6 +307,7 @@ void NoiseReductionTool::readSettings()
     m_sharpnessInput->setValue(group.readEntry("SharpnessAdjustment", m_sharpnessInput->defaultValue()));
     m_textureInput->setValue(group.readEntry("TextureAdjustment", m_textureInput->defaultValue()));
     m_thresholdInput->setValue(group.readEntry("ThresholdAdjustment", m_thresholdInput->defaultValue()));
+    m_expanderBox->readSettings(group);
 
     m_expanderBox->setEnabled(true);
 }
@@ -326,6 +326,7 @@ void NoiseReductionTool::writeSettings()
     group.writeEntry("GammaAdjustment", m_gammaInput->value());
     group.writeEntry("DampingAdjustment", m_dampingInput->value());
     group.writeEntry("PhaseAdjustment", m_phaseInput->value());
+    m_expanderBox->writeSettings(group);
     m_previewWidget->writeSettings();
     group.sync();
 }
@@ -434,7 +435,9 @@ void NoiseReductionTool::slotLoadSettings()
 //         slotEffect();
     }
     else
+    {
         KMessageBox::error(kapp->activeWindow(), i18n("Cannot load settings from the Photograph Noise Reduction text file."));
+    }
 
     file.close();
 }
@@ -466,7 +469,9 @@ void NoiseReductionTool::slotSaveAsSettings()
 
     }
     else
+    {
         KMessageBox::error(kapp->activeWindow(), i18n("Cannot save settings to the Photograph Noise Reduction text file."));
+    }
 
     file.close();
 }
