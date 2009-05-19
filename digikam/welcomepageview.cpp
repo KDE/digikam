@@ -152,23 +152,27 @@ QString WelcomePageView::infoPage()
         "where your files are stored, and are identical to the folders "
         "on your hard disk.</p>"
 
-        "<ul>"
-            "<li>"
-                "digiKam has many powerful features which are described in the "
-                "<a href=\"%2\">documentation</a>"
-            "</li>"
-            "<li>"
-                "The <a href=\"%3\">digiKam homepage</A> provides information about "
-                "new versions of digiKam."
-            "</li>"
-        "</ul>"
+        "<p>"
+            "<ul>"
+                "<li>"
+                    "digiKam has many powerful features which are described in the "
+                    "<a href=\"%2\">documentation</a>"
+                "</li>"
+                "<li>"
+                    "The <a href=\"%3\">digiKam homepage</A> provides information about "
+                    "new versions of digiKam."
+                "</li>"
+            "</ul>"
+        "</p>"
 
         "<p>%7</p>"
 
         "<p>Some of the new features in this release of digiKam include "
             "(compared to digiKam %4):</p>"
 
-        "<ul>%5</ul>"
+        "<p>"
+            "<ul>%5</ul>"
+        "</p>"
 
         "<p>%6</p>"
 
