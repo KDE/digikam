@@ -693,9 +693,6 @@ void CameraUI::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Camera Settings");
 
-    d->advBox->setItemExpanded(0, group.readEntry("RenameFile Expanded",     false));
-    d->advBox->setItemExpanded(1, group.readEntry("AutoAlbum Expanded",      false));
-    d->advBox->setItemExpanded(2, group.readEntry("OnFly Expanded",          true));
     d->autoRotateCheck->setChecked(group.readEntry("AutoRotate",             true));
     d->autoAlbumDateCheck->setChecked(group.readEntry("AutoAlbumDate",       false));
     d->autoAlbumExtCheck->setChecked(group.readEntry("AutoAlbumExt",         false));
@@ -707,6 +704,7 @@ void CameraUI::readSettings()
     d->folderDateFormat->setCurrentIndex(group.readEntry("FolderDateFormat", (int)CameraUIPriv::IsoDateFormat));
     d->view->setThumbnailSize(group.readEntry("ThumbnailSize",               (int)ThumbnailSize::Large));
 
+    d->advBox->readSettings(group);
     d->splitter->restoreState(group);
 
     d->dateTimeEdit->setEnabled(d->fixDateTimeCheck->isChecked());
@@ -721,9 +719,6 @@ void CameraUI::saveSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Camera Settings");
 
-    group.writeEntry("RenameFile Expanded", d->advBox->itemIsExpanded(0));
-    group.writeEntry("AutoAlbum Expanded",  d->advBox->itemIsExpanded(1));
-    group.writeEntry("OnFly Expanded",      d->advBox->itemIsExpanded(2));
     group.writeEntry("AutoRotate",          d->autoRotateCheck->isChecked());
     group.writeEntry("AutoAlbumDate",       d->autoAlbumDateCheck->isChecked());
     group.writeEntry("AutoAlbumExt",        d->autoAlbumExtCheck->isChecked());
@@ -734,6 +729,8 @@ void CameraUI::saveSettings()
     group.writeEntry("LossLessFormat",      d->losslessFormat->currentIndex());
     group.writeEntry("ThumbnailSize",       d->view->thumbnailSize());
     group.writeEntry("FolderDateFormat",    d->folderDateFormat->currentIndex());
+
+    d->advBox->writeSettings(group);
     d->splitter->saveState(group);
     config->sync();
 }
