@@ -41,8 +41,10 @@
 #include "constants.h"
 #include "databasetransaction.h"
 #include "imageattributeswatch.h"
+#include "loadingcacheinterface.h"
 #include "metadatahub.h"
 #include "scancontroller.h"
+#include "thumbnailloadthread.h"
 
 namespace Digikam
 {
@@ -375,6 +377,8 @@ void MetadataManagerFileWorker::writeOrientationToFiles(const QList<ImageInfo>& 
         }
         else
         {
+            ThumbnailLoadThread::deleteThumbnail(path);
+            LoadingCacheInterface::fileChanged(path);
             KUrl url = KUrl::fromPath(path);
             ImageAttributesWatch::instance()->fileMetadataChanged(url);
         }
