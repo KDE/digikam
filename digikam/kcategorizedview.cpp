@@ -1520,7 +1520,7 @@ int KCategorizedView::Private::categoryUpperBound(int begin, int averageSize)
     QString value = proxyModel->data(modelIndexList[end - 1],
                     KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
     if (value == category)
-        return end - 1;
+        return end;
 
     // Third case: use average of last category sizes
     if (averageSize && begin + averageSize < end)
@@ -1623,18 +1623,18 @@ void KCategorizedView::rowsInsertedArtifficial(const QModelIndex &parent,
         lastCategory = d->proxyModel->data(d->modelIndexList[k], KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
 
         int upperBound = d->categoryUpperBound(k, categorySizes / ++categoryCounts);
-        categorySizes += upperBound - k + 1;
+        categorySizes += upperBound - k;
 
         offset = 0;
-        modelIndexList = QVector<QModelIndex>(upperBound - k + 1);
-        for (int i=k; i<=upperBound; i++, offset++)
+        modelIndexList = QVector<QModelIndex>(upperBound - k);
+        for (int i=k; i<upperBound; i++, offset++)
         {
             modelIndexList[offset] = d->modelIndexList[i];
             struct Private::ElementInfo &elementInfo = d->elementsInfo[i];
             elementInfo.category = lastCategory;
             elementInfo.relativeOffsetToCategory = offset;
         }
-        k = upperBound + 1;
+        k = upperBound;
 
         d->categoriesIndexes.insert(lastCategory, modelIndexList);
         d->categories << lastCategory;
