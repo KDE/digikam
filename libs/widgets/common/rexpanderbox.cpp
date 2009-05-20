@@ -34,10 +34,10 @@
 #include <QStyle>
 #include <QStyleOption>
 #include <QGridLayout>
+#include <QHBoxLayout>
 
 // KDE includes
 
-#include <khbox.h>
 #include <kseparator.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
@@ -257,14 +257,14 @@ public:
         expandByDefault = true;
     }
 
-    bool             expandByDefault;
+    bool              expandByDefault;
 
-    QLabel          *pixmapLabel;
-    QWidget         *containerWidget;
-    QGridLayout     *grid;
+    QLabel           *pixmapLabel;
+    QWidget          *containerWidget;
+    QGridLayout      *grid;
 
-    KSeparator      *line;
-    KHBox           *hbox;
+    KSeparator       *line;
+    QWidget          *hbox;
 
     RArrowClickLabel *arrow;
     RClickLabel      *clickLabel;
@@ -275,18 +275,22 @@ RLabelExpander::RLabelExpander(QWidget *parent)
 {
     d->grid        = new QGridLayout(this);
     d->line        = new KSeparator(Qt::Horizontal, this);
-    d->hbox        = new KHBox(this);
+    d->hbox        = new QWidget(this);
     d->arrow       = new RArrowClickLabel(d->hbox);
     d->pixmapLabel = new QLabel(d->hbox);
     d->clickLabel  = new RClickLabel(d->hbox);
 
+    QHBoxLayout *hlay = new QHBoxLayout(d->hbox);
+    hlay->addWidget(d->arrow);
+    hlay->addWidget(d->pixmapLabel);
+    hlay->addWidget(d->clickLabel, 10);
+    hlay->setMargin(0);
+    hlay->setSpacing(KDialog::spacingHint());
+
     d->pixmapLabel->installEventFilter(this);
     d->pixmapLabel->setCursor(Qt::PointingHandCursor);
 
-    d->hbox->installEventFilter(this);
     d->hbox->setCursor(Qt::PointingHandCursor);
-    d->hbox->setMargin(0);
-    d->hbox->setSpacing(KDialog::spacingHint());
 
     d->grid->addWidget(d->line, 0, 0, 1, 3);
     d->grid->addWidget(d->hbox, 1, 0, 1, 3);
@@ -389,7 +393,7 @@ void RLabelExpander::slotToggleContainer()
 
 bool RLabelExpander::eventFilter(QObject *obj, QEvent *ev)
 {
-    if ( obj == d->pixmapLabel || obj == d->hbox)
+    if ( obj == d->pixmapLabel)
     {
         if ( ev->type() == QEvent::MouseButtonRelease)
         {
