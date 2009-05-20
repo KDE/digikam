@@ -37,7 +37,7 @@
 
 // KDE includes
 
-#include <kvbox.h>
+#include <khbox.h>
 #include <kseparator.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
@@ -273,16 +273,19 @@ RLabelExpander::RLabelExpander(QWidget *parent)
 {
     d->grid        = new QGridLayout(this);
     d->line        = new KSeparator(Qt::Horizontal, this);
-    d->arrow       = new RArrowClickLabel(this);
-    d->pixmapLabel = new QLabel(this);
-    d->clickLabel  = new RClickLabel(this);
+    KHBox *hbox    = new KHBox(this);
+    d->arrow       = new RArrowClickLabel(hbox);
+    d->pixmapLabel = new QLabel(hbox);
+    d->clickLabel  = new RClickLabel(hbox);
     d->pixmapLabel->installEventFilter(this);
     d->pixmapLabel->setCursor(Qt::PointingHandCursor);
 
-    d->grid->addWidget(d->line,        0, 0, 1, 3);
-    d->grid->addWidget(d->arrow,       1, 0, 1, 1);
-    d->grid->addWidget(d->pixmapLabel, 1, 1, 1, 1);
-    d->grid->addWidget(d->clickLabel,  1, 2, 1, 1);
+    hbox->setCursor(Qt::PointingHandCursor);
+    hbox->setMargin(0);
+    hbox->setSpacing(KDialog::spacingHint());
+
+    d->grid->addWidget(d->line, 0, 0, 1, 3);
+    d->grid->addWidget(hbox,    1, 0, 1, 3);
     d->grid->setColumnStretch(2, 10);
     d->grid->setMargin(KDialog::spacingHint());
     d->grid->setSpacing(KDialog::spacingHint());
@@ -304,17 +307,32 @@ void RLabelExpander::setLineVisible(bool b)
     d->line->setVisible(b);
 }
 
-void RLabelExpander::setText(const QString& text)
+bool RLabelExpander::lineIsVisible() const
 {
-    d->clickLabel->setText(QString("<qt><b>%1</b></qt>").arg(text));
+    return d->line->isVisible();
 }
 
-void RLabelExpander::setPixmap(const QPixmap& pix)
+void RLabelExpander::setText(const QString& txt)
+{
+    d->clickLabel->setText(QString("<qt><b>%1</b></qt>").arg(txt));
+}
+
+QString RLabelExpander::text() const
+{
+    return d->clickLabel->text();
+}
+
+void RLabelExpander::setIcon(const QPixmap& pix)
 {
     d->pixmapLabel->setPixmap(pix);
 }
 
-void RLabelExpander::setContainer(QWidget* widget)
+const QPixmap* RLabelExpander::icon() const
+{
+    return d->pixmapLabel->pixmap();
+}
+
+void RLabelExpander::setWidget(QWidget* widget)
 {
     if (widget)
     {
@@ -324,12 +342,17 @@ void RLabelExpander::setContainer(QWidget* widget)
     }
 }
 
+QWidget* RLabelExpander::widget() const
+{
+    return d->containerWidget;
+}
+
 void RLabelExpander::setExpandByDefault(bool b)
 {
     d->expandByDefault = b;
 }
 
-bool RLabelExpander::expandByDefault()
+bool RLabelExpander::isExpandByDefault() const
 {
     return d->expandByDefault;
 }
@@ -346,7 +369,7 @@ void RLabelExpander::setExpanded(bool b)
     }
 }
 
-bool RLabelExpander::isExpanded()
+bool RLabelExpander::isExpanded() const
 {
     if (d->containerWidget)
         return (d->containerWidget->isVisible());
@@ -421,8 +444,8 @@ void RExpanderBox::addItem(QWidget *w, const QPixmap& pix, const QString& txt,
 {
     RLabelExpander *exp = new RLabelExpander(viewport());
     exp->setText(txt);
-    exp->setPixmap(pix);
-    exp->setContainer(w);
+    exp->setIcon(pix);
+    exp->setWidget(w);
     exp->setLineVisible(!d->wList.isEmpty());
     exp->setObjectName(objName);
     exp->setExpandByDefault(expandBydefault);
@@ -446,8 +469,8 @@ void RExpanderBox::insertItem(int index, QWidget *w, const QPixmap& pix, const Q
 {
     RLabelExpander *exp = new RLabelExpander(viewport());
     exp->setText(txt);
-    exp->setPixmap(pix);
-    exp->setContainer(w);
+    exp->setIcon(pix);
+    exp->setWidget(w);
     exp->setLineVisible(!d->wList.isEmpty());
     exp->setObjectName(objName);
     exp->setExpandByDefault(expandBydefault);
@@ -473,15 +496,57 @@ void RExpanderBox::removeItem(int index)
     d->wList.removeAt(index);
 }
 
+void RExpanderBox::setItemText(int index, const QString& txt)
+{
+    if (index > d->wList.count() || index < 0) return;
+    d->wList[index]->setText(txt);
+}
+
+QString RExpanderBox::itemText(int index) const
+{
+    if (index > d->wList.count() || index < 0) return QString();
+    return d->wList[index]->text();
+}
+
 void RExpanderBox::setItemIcon(int index, const QPixmap& pix)
 {
     if (index > d->wList.count() || index < 0) return;
-    d->wList[index]->setPixmap(pix);
+    d->wList[index]->setIcon(pix);
 }
 
-int RExpanderBox::count()
+const QPixmap* RExpanderBox::itemIcon(int index) const
+{
+    if (index > d->wList.count() || index < 0) return 0;
+    return d->wList[index]->icon();
+}
+
+int RExpanderBox::count() const
 {
     return d->wList.count();
+}
+
+void RExpanderBox::setItemToolTip(int index, const QString& tip)
+{
+    if (index > d->wList.count() || index < 0) return;
+    d->wList[index]->setToolTip(tip);
+}
+
+QString RExpanderBox::itemToolTip(int index) const
+{
+    if (index > d->wList.count() || index < 0) return QString();
+    return d->wList[index]->toolTip();
+}
+
+void RExpanderBox::setItemEnabled(int index, bool enabled)
+{
+    if (index > d->wList.count() || index < 0) return;
+    d->wList[index]->setEnabled(enabled);
+}
+
+bool RExpanderBox::isItemEnabled(int index) const
+{
+    if (index > d->wList.count() || index < 0) return false;
+    return d->wList[index]->isEnabled();
 }
 
 RLabelExpander* RExpanderBox::widget(int index) const
@@ -489,6 +554,17 @@ RLabelExpander* RExpanderBox::widget(int index) const
     if (index > d->wList.count() || index < 0) return 0;
 
     return d->wList[index];
+}
+
+int RExpanderBox::indexOf(RLabelExpander *widget) const
+{
+    for (int i = 0 ; i < count(); ++i)
+    {
+        RLabelExpander *exp = d->wList[i];
+        if (widget == exp)
+            return i;
+    }
+    return -1;
 }
 
 void RExpanderBox::setItemExpanded(int index, bool b)
@@ -501,7 +577,7 @@ void RExpanderBox::setItemExpanded(int index, bool b)
     exp->setExpanded(b);
 }
 
-bool RExpanderBox::itemIsExpanded(int index)
+bool RExpanderBox::isItemExpanded(int index) const
 {
     if (index > d->wList.count() || index < 0) return false;
 
@@ -519,7 +595,7 @@ void RExpanderBox::readSettings(KConfigGroup& group)
         if (exp)
         {
             exp->setExpanded(group.readEntry(QString("%1 Expanded").arg(exp->objectName()),
-                                             exp->expandByDefault()));
+                                             exp->isExpandByDefault()));
         }
     }
 }

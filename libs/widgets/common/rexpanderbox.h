@@ -135,17 +135,24 @@ public:
     ~RLabelExpander();
 
     void setLineVisible(bool b);
-    void setText(const QString& text);
-    void setPixmap(const QPixmap& pix);
-    void setContainer(QWidget* widget);
+    bool lineIsVisible() const;
+
+    void setText(const QString& txt);
+    QString text() const;
+
+    void setIcon(const QPixmap& pix);
+    const QPixmap* icon() const;
+
+    void setWidget(QWidget* widget);
+    QWidget* widget() const;
 
     void setExpanded(bool b);
-    bool isExpanded();
+    bool isExpanded() const;
 
     void setExpandByDefault(bool b);
-    bool expandByDefault();
+    bool isExpandByDefault() const;
 
-private slots:
+private Q_SLOTS:
 
     void slotToggleContainer();
 
@@ -172,7 +179,7 @@ public:
     ~RExpanderBox();
 
     /** Add RLabelExpander item at end of box layout with these settings :
-        'w'               : the widget hosted by DLabelExpander.
+        'w'               : the widget hosted by RLabelExpander.
         'pix'             : pixmap used as icon to item title.
         'txt'             : text used as item title.
         'objName'         : item object name used to read/save expanded settings to rc file.
@@ -184,7 +191,7 @@ public:
                  const QString& objName, bool expandBydefault);
 
     /** Insert RLabelExpander item at box layout index with these settings :
-        'w'               : the widget hosted by DLabelExpander.
+        'w'               : the widget hosted by RLabelExpander.
         'pix'             : pixmap used as icon to item title.
         'txt'             : text used as item title.
         'objName'         : item object name used to read/save expanded settings to rc file.
@@ -197,17 +204,28 @@ public:
 
     void removeItem(int index);
 
+    void setItemText(int index, const QString& txt);
+    QString itemText (int index) const;
+
     void setItemIcon(int index, const QPixmap& pix);
+    const QPixmap* itemIcon(int index) const;
+
+    void setItemToolTip(int index, const QString& tip);
+    QString itemToolTip(int index) const;
+
+    void setItemEnabled(int index, bool enabled);
+    bool isItemEnabled(int index) const;
 
     void addStretch();
     void insertStretch(int index);
 
-    int  count();
+    void setItemExpanded(int index, bool b);
+    bool isItemExpanded(int index) const;
+
+    int  count() const;
 
     RLabelExpander* widget(int index) const;
-
-    void setItemExpanded(int index, bool b);
-    bool itemIsExpanded(int index);
+    int indexOf(RLabelExpander *widget) const;
 
     void readSettings(KConfigGroup& group);
     void writeSettings(KConfigGroup& group);
