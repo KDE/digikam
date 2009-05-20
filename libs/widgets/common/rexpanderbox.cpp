@@ -157,7 +157,7 @@ void RArrowClickLabel::mouseReleaseEvent(QMouseEvent* event)
 void RArrowClickLabel::paintEvent(QPaintEvent*)
 {
     // Inspired by karrowbutton.cpp,
-    // Copyright (C) 2001 Frerich Raabe <raabe@kde.org>
+    //  Copyright (C) 2001 Frerich Raabe <raabe@kde.org>
 
     QPainter p(this);
 
@@ -179,21 +179,21 @@ void RArrowClickLabel::paintEvent(QPaintEvent*)
         return; // don't draw arrows if we are too small
 
     unsigned int x = 0, y = 0;
-    if (m_arrowType == Qt::DownArrow) 
+    if (m_arrowType == Qt::DownArrow)
     {
         x = (width() - m_size) / 2;
         y = height() - (m_size + m_margin);
-    } 
-    else if (m_arrowType == Qt::UpArrow) 
+    }
+    else if (m_arrowType == Qt::UpArrow)
     {
         x = (width() - m_size) / 2;
         y = m_margin;
     }
-    else if (m_arrowType == Qt::RightArrow) 
+    else if (m_arrowType == Qt::RightArrow)
     {
         x = width() - (m_size + m_margin);
         y = (height() - m_size) / 2;
-    } 
+    }
     else // arrowType == LeftArrow
     {
         x = m_margin;
@@ -201,7 +201,7 @@ void RArrowClickLabel::paintEvent(QPaintEvent*)
     }
 
     /*
-    if (isDown()) 
+    if (isDown())
     {
         ++x;
         ++y;
@@ -256,13 +256,13 @@ public:
         expandByDefault = true;
     }
 
-    bool              expandByDefault;
+    bool             expandByDefault;
 
-    QLabel           *pixmapLabel;
-    QWidget          *containerWidget;
-    QGridLayout      *grid;
+    QLabel          *pixmapLabel;
+    QWidget         *containerWidget;
+    QGridLayout     *grid;
 
-    KSeparator       *line;
+    KSeparator      *line;
 
     RArrowClickLabel *arrow;
     RClickLabel      *clickLabel;
@@ -395,7 +395,7 @@ public:
 
     QList<RLabelExpander*>  wList;
 
-    KVBox                  *vbox;
+    QVBoxLayout            *vbox;
 };
 
 RExpanderBox::RExpanderBox(QWidget *parent)
@@ -404,10 +404,11 @@ RExpanderBox::RExpanderBox(QWidget *parent)
     setFrameStyle(QFrame::NoFrame);
     setWidgetResizable(true);
     viewport()->setAutoFillBackground(false);
-    d->vbox = new KVBox(viewport());
+    QWidget *main = new QWidget(viewport());
+    d->vbox       = new QVBoxLayout(main);
     d->vbox->setMargin(0);
     d->vbox->setSpacing(KDialog::spacingHint());
-    setWidget(d->vbox);
+    setWidget(main);
 }
 
 RExpanderBox::~RExpanderBox()
@@ -418,13 +419,14 @@ RExpanderBox::~RExpanderBox()
 void RExpanderBox::addItem(QWidget *w, const QPixmap& pix, const QString& txt,
                            const QString& objName, bool expandBydefault)
 {
-    RLabelExpander *exp = new RLabelExpander(d->vbox);
+    RLabelExpander *exp = new RLabelExpander(viewport());
     exp->setText(txt);
     exp->setPixmap(pix);
     exp->setContainer(w);
     exp->setLineVisible(!d->wList.isEmpty());
     exp->setObjectName(objName);
     exp->setExpandByDefault(expandBydefault);
+    d->vbox->addWidget(exp);
     d->wList.append(exp);
 }
 
@@ -432,6 +434,36 @@ void RExpanderBox::addItem(QWidget *w, const QString& txt,
                            const QString& objName, bool expandBydefault)
 {
     addItem(w, QPixmap(), txt, objName, expandBydefault);
+}
+
+void RExpanderBox::addStretch()
+{
+    d->vbox->addStretch(10);
+}
+
+void RExpanderBox::insertItem(int index, QWidget *w, const QPixmap& pix, const QString& txt,
+                              const QString& objName, bool expandBydefault)
+{
+    RLabelExpander *exp = new RLabelExpander(viewport());
+    exp->setText(txt);
+    exp->setPixmap(pix);
+    exp->setContainer(w);
+    exp->setLineVisible(!d->wList.isEmpty());
+    exp->setObjectName(objName);
+    exp->setExpandByDefault(expandBydefault);
+    d->vbox->insertWidget(index, exp);
+    d->wList.insert(index, exp);
+}
+
+void RExpanderBox::insertItem(int index, QWidget *w, const QString& txt,
+                              const QString& objName, bool expandBydefault)
+{
+    insertItem(index, w, QPixmap(), txt, objName, expandBydefault);
+}
+
+void RExpanderBox::insertStretch(int index)
+{
+    d->vbox->insertStretch(index, 10);
 }
 
 void RExpanderBox::removeItem(int index)
@@ -445,12 +477,6 @@ void RExpanderBox::setItemIcon(int index, const QPixmap& pix)
 {
     if (index > d->wList.count() || index < 0) return;
     d->wList[index]->setPixmap(pix);
-}
-
-void RExpanderBox::addStretch()
-{
-    QLabel *space = new QLabel(d->vbox);
-    d->vbox->setStretchFactor(space, 10);
 }
 
 int RExpanderBox::count()

@@ -171,7 +171,7 @@ public:
     RExpanderBox(QWidget *parent = 0);
     ~RExpanderBox();
 
-    /** Add a DLabelExpander item to the box with all settings :
+    /** Add RLabelExpander item at end of box layout with these settings :
         'w'               : the widget hosted by DLabelExpander.
         'pix'             : pixmap used as icon to item title.
         'txt'             : text used as item title.
@@ -183,10 +183,24 @@ public:
     void addItem(QWidget *w, const QString& txt,
                  const QString& objName, bool expandBydefault);
 
+    /** Insert RLabelExpander item at box layout index with these settings :
+        'w'               : the widget hosted by DLabelExpander.
+        'pix'             : pixmap used as icon to item title.
+        'txt'             : text used as item title.
+        'objName'         : item object name used to read/save expanded settings to rc file.
+        'expandBydefault' : item state by default (expanded or not).
+     */
+    void insertItem(int index, QWidget *w, const QPixmap& pix, const QString& txt,
+                    const QString& objName, bool expandBydefault);
+    void insertItem(int index, QWidget *w, const QString& txt,
+                    const QString& objName, bool expandBydefault);
+
     void removeItem(int index);
 
     void setItemIcon(int index, const QPixmap& pix);
+
     void addStretch();
+    void insertStretch(int index);
 
     int  count();
 
