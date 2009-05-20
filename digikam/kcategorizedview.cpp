@@ -1148,7 +1148,7 @@ void KCategorizedView::mouseReleaseEvent(QMouseEvent *event)
                 selectionModel())
             {
                 QItemSelection selection = selectionModel()->selection();
-                QModelIndexList indexList = d->categoriesIndexes[category];
+                const QVector<QModelIndex> &indexList = d->categoriesIndexes[category];
 
                 foreach (const QModelIndex &index, indexList)
                 {
@@ -1587,86 +1587,57 @@ void KCategorizedView::rowsInsertedArtifficial(const QModelIndex &parent,
     // Add all elements mapped to the source model and explore categories
     const int rowCount = d->proxyModel->rowCount();
     const int sortColumn = d->proxyModel->sortColumn();
-    QString prevCategory = d->proxyModel->data(d->proxyModel->index(0, sortColumn), KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
-    QString lastCategory = prevCategory;
-    QModelIndexList modelIndexList;
-    struct Private::ElementInfo elementInfo;
+    QString lastCategory = d->proxyModel->data(d->proxyModel->index(0, sortColumn), KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
+    QVector<QModelIndex> modelIndexList;
     int offset = -1;
+
+    d->modelIndexList = QVector<QModelIndex>(rowCount);
+    for (int k = 0; k < rowCount; ++k)
+        d->modelIndexList[k] = d->proxyModel->index(k, sortColumn);
+
+    d->elementsInfo = QVector<struct Private::ElementInfo>(rowCount);
+
+    int categorySizes = 0;
+    int categoryCounts = 0;
 
     if (uniformItemSizes())
     {
-        int categorySizes = 0;
-        int categoryCounts = 0;
-
         // use last index as sample for size hint
         QModelIndex sample = d->proxyModel->index(rowCount - 1, modelColumn(), rootIndex());
         d->biggestItemSize = sizeHintForIndex(sample);
-
-        // pre-fill modelIndexList
-        for (int k = 0; k < rowCount; ++k)
-            d->modelIndexList << d->proxyModel->index(k, sortColumn);
-
-        for (int k = 0; k < rowCount; )
-        {
-            lastCategory = d->proxyModel->data(d->modelIndexList[k], KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
-
-            int upperBound = d->categoryUpperBound(k, categorySizes / ++categoryCounts);
-            categorySizes += upperBound - k;
-
-            offset = 0;
-            modelIndexList.clear();
-            for (int i=k; i<=upperBound; i++, offset++)
-            {
-                modelIndexList << d->modelIndexList[i];
-                elementInfo.category = lastCategory;
-                elementInfo.relativeOffsetToCategory = offset;
-                d->elementsInfo.insert(i, elementInfo);
-            }
-            k = upperBound + 1;
-
-            d->categoriesIndexes.insert(lastCategory, modelIndexList);
-            d->categories << lastCategory;
-        }
     }
     else
     {
+        QStyleOptionViewItem option = viewOptions();
         for (int k = 0; k < rowCount; ++k)
         {
-            QModelIndex index = d->proxyModel->index(k, sortColumn);
-            QModelIndex indexSize = sortColumn == 0 ? index : d->proxyModel->index(k, 0);
-
-            QSize hint = sizeHintForIndex(indexSize);
+            QModelIndex indexSize = (sortColumn == 0) ? d->modelIndexList[k] : d->proxyModel->index(k, 0);
+            QSize hint = itemDelegate(indexSize)->sizeHint(option, indexSize);
             d->biggestItemSize = QSize(qMax(hint.width(), d->biggestItemSize.width()),
                                        qMax(hint.height(), d->biggestItemSize.height()));
-
-            d->modelIndexList << index;
-
-            lastCategory = d->proxyModel->data(index, KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
-
-            elementInfo.category = lastCategory;
-
-            if (prevCategory != lastCategory)
-            {
-                offset = 0;
-                d->categoriesIndexes.insert(prevCategory, modelIndexList);
-                d->categories << prevCategory;
-                modelIndexList.clear();
-            }
-            else
-            {
-                offset++;
-            }
-
-            elementInfo.relativeOffsetToCategory = offset;
-
-            modelIndexList << index;
-            prevCategory = lastCategory;
-
-            d->elementsInfo.insert(index.row(), elementInfo);
         }
+    }
 
-        d->categoriesIndexes.insert(prevCategory, modelIndexList);
-        d->categories << prevCategory;
+    for (int k = 0; k < rowCount; )
+    {
+        lastCategory = d->proxyModel->data(d->modelIndexList[k], KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
+
+        int upperBound = d->categoryUpperBound(k, categorySizes / ++categoryCounts);
+        categorySizes += upperBound - k + 1;
+
+        offset = 0;
+        modelIndexList = QVector<QModelIndex>(upperBound - k + 1);
+        for (int i=k; i<=upperBound; i++, offset++)
+        {
+            modelIndexList[offset] = d->modelIndexList[i];
+            struct Private::ElementInfo &elementInfo = d->elementsInfo[i];
+            elementInfo.category = lastCategory;
+            elementInfo.relativeOffsetToCategory = offset;
+        }
+        k = upperBound + 1;
+
+        d->categoriesIndexes.insert(lastCategory, modelIndexList);
+        d->categories << lastCategory;
     }
 
     d->updateScrollbars();
@@ -1737,7 +1708,8 @@ void KCategorizedView::currentChanged(const QModelIndex &current,
     if (!elementsPerRow)
         elementsPerRow++;
 
-    d->forcedSelectionPosition = d->elementsInfo[current.row()].relativeOffsetToCategory % elementsPerRow;
+    if (current.isValid())
+        d->forcedSelectionPosition = d->elementsInfo[current.row()].relativeOffsetToCategory % elementsPerRow;
 
     QListView::currentChanged(current, previous);
 }

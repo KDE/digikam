@@ -147,9 +147,9 @@ public:
     // Cache data
     // We cannot merge some of them into structs because it would affect
     // performance
-    QHash<int, struct ElementInfo> elementsInfo;
+    QVector<struct ElementInfo> elementsInfo;
     QHash<int, QRect> elementsPosition;
-    QHash<QString, QModelIndexList> categoriesIndexes;
+    QHash<QString, QVector<QModelIndex> > categoriesIndexes;
     QHash<QString, QRect> categoriesPosition;
     QStringList categories;
     QModelIndexList intersectedIndexes;
@@ -163,7 +163,7 @@ public:
 
     // Attributes for speed reasons
     KCategorizedSortFilterProxyModel *proxyModel;
-    QModelIndexList modelIndexList;
+    QVector<QModelIndex> modelIndexList;
 };
 
 #endif // KCATEGORIZEDVIEW_P_H
