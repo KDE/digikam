@@ -78,5 +78,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 063 ==> 193226 : Data loss on downloading photos from camera.
 064 ==> 189460 : digiKam crash when goelocating image in the marble tab.
 065 ==> 186046 : Crash after calling settings.
-066 ==> 
+066 ==> 193348 : Can't build digikam on kde 4.2.3.
+067 ==> 
 
