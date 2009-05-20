@@ -253,6 +253,7 @@ public:
         grid            = 0;
         arrow           = 0;
         line            = 0;
+        hbox            = 0;
         expandByDefault = true;
     }
 
@@ -263,6 +264,7 @@ public:
     QGridLayout     *grid;
 
     KSeparator      *line;
+    KHBox           *hbox;
 
     RArrowClickLabel *arrow;
     RClickLabel      *clickLabel;
@@ -273,19 +275,21 @@ RLabelExpander::RLabelExpander(QWidget *parent)
 {
     d->grid        = new QGridLayout(this);
     d->line        = new KSeparator(Qt::Horizontal, this);
-    KHBox *hbox    = new KHBox(this);
-    d->arrow       = new RArrowClickLabel(hbox);
-    d->pixmapLabel = new QLabel(hbox);
-    d->clickLabel  = new RClickLabel(hbox);
+    d->hbox        = new KHBox(this);
+    d->arrow       = new RArrowClickLabel(d->hbox);
+    d->pixmapLabel = new QLabel(d->hbox);
+    d->clickLabel  = new RClickLabel(d->hbox);
+
     d->pixmapLabel->installEventFilter(this);
     d->pixmapLabel->setCursor(Qt::PointingHandCursor);
 
-    hbox->setCursor(Qt::PointingHandCursor);
-    hbox->setMargin(0);
-    hbox->setSpacing(KDialog::spacingHint());
+    d->hbox->installEventFilter(this);
+    d->hbox->setCursor(Qt::PointingHandCursor);
+    d->hbox->setMargin(0);
+    d->hbox->setSpacing(KDialog::spacingHint());
 
     d->grid->addWidget(d->line, 0, 0, 1, 3);
-    d->grid->addWidget(hbox,    1, 0, 1, 3);
+    d->grid->addWidget(d->hbox, 1, 0, 1, 3);
     d->grid->setColumnStretch(2, 10);
     d->grid->setMargin(KDialog::spacingHint());
     d->grid->setSpacing(KDialog::spacingHint());
@@ -385,7 +389,7 @@ void RLabelExpander::slotToggleContainer()
 
 bool RLabelExpander::eventFilter(QObject *obj, QEvent *ev)
 {
-    if ( obj == d->pixmapLabel )
+    if ( obj == d->pixmapLabel || obj == d->hbox)
     {
         if ( ev->type() == QEvent::MouseButtonRelease)
         {
