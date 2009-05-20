@@ -77,5 +77,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 062 ==> 189168 : You do not have write access to your home directory base path.
 063 ==> 193226 : Data loss on downloading photos from camera.
 064 ==> 189460 : digiKam crash when goelocating image in the marble tab.
-065 ==> 
+065 ==> 186046 : Crash after calling settings.
+066 ==> 
 
