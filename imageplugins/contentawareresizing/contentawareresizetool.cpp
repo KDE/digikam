@@ -365,16 +365,16 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     d->sideSwitchInput->setRange(1, 20, 1);
     d->sideSwitchInput->setDefaultValue(4);
     d->sideSwitchInput->setSliderEnabled(true);
-    d->sideSwitchInput->setWhatsThis(i18n(" During the carving process,at each step "
+    d->sideSwitchInput->setWhatsThis(i18n("During the carving process, at each step "
                                           "the optimal seam to be carved is chosen based on "
-                                          "the relevance value for each pixel. However, in the case two "
-                                          "seams are equivalent (which may happen when large portions of the "
-                                          "image have the same color, for example), the algorithm always "
-                                          "chooses the seams from one side, which might be a problem "
-                                          "(e.g. an object centered in the original image might not be "
-                                          "centered any more in the resulting image). In order to overcome "
-                                          "this effect, this setting is given to automatically switch the "
-                                          "favoured side during rescaling, at the cost of a slightly "
+                                          "the relevance value for each pixel. However, in the case where two "
+                                          "seams are equivalent (which may happen, for instance, when large portions "
+                                          "of the image have the same color), the algorithm always "
+                                          "chooses the seams from one side.  In some cases, this can pose "
+                                          "problems, e.g. an object centered in the original image might not be "
+                                          "centered in the resulting image. In order to overcome "
+                                          "this effect, this setting allows the favored side to be switched "
+                                          "automatically during rescaling, at the cost of slightly "
                                           "worse performance."));
 
     QLabel * labelResizeOrder = new QLabel(i18n("Resize Order:"),d->gboxSettings->plainPage());
