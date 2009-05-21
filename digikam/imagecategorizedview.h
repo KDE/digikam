@@ -153,6 +153,8 @@ protected Q_SLOTS:
     void slotActivated(const QModelIndex& index);
     void slotClicked(const QModelIndex& index);
     void slotEntered(const QModelIndex& index);
+    void layoutAboutToBeChanged();
+    void layoutWasChanged();
 
 protected:
 
@@ -167,27 +169,27 @@ protected:
     QModelIndex indexForCategoryAt(const QPoint& pos) const;
 
     // reimplemented from parent class
-    void reset();
-    void currentChanged(const QModelIndex& index, const QModelIndex& previous);
-    void selectionChanged(const QItemSelection &, const QItemSelection &);
-    QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers);
     void contextMenuEvent(QContextMenuEvent* event);
+    void currentChanged(const QModelIndex& index, const QModelIndex& previous);
     void dragMoveEvent(QDragMoveEvent *e);
     void dropEvent(QDropEvent *e);
     void keyPressEvent(QKeyEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
+    QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers);
     void paintEvent(QPaintEvent *e);
     void resizeEvent(QResizeEvent *e);
+    void reset();
+    void rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end);
+    void selectionChanged(const QItemSelection &, const QItemSelection &);
+    void startDrag(Qt::DropActions supportedActions);
     bool viewportEvent(QEvent *event);
     void wheelEvent(QWheelEvent* event);
-    void startDrag(Qt::DropActions supportedActions);
 
 private Q_SLOTS:
 
     void slotGridSizeChanged(const QSize &);
-    void slotDelegateWaitsForThumbnail(const QModelIndex &);
     void slotFileChanged(const QString& filePath);
 
 private:

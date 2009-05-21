@@ -93,6 +93,7 @@ public:
         scrollToItemId     = 0;
         currentMouseEvent  = 0;
         showToolTip        = false;
+        ensureOneSelectedItem = false;
     }
 
     ImageAlbumModel         *model;
@@ -106,7 +107,7 @@ public:
     qlonglong                scrollToItemId;
 
     QMouseEvent             *currentMouseEvent;
-    QList<QModelIndex>       indexesToThumbnail;
+    bool                     ensureOneSelectedItem;
 };
 
 // -------------------------------------------------------------------------------
@@ -122,6 +123,8 @@ ImageCategorizedView::ImageCategorizedView(QWidget *parent)
     setWrapping(true);
     // important optimization for layouting
     setUniformItemSizes(true);
+    // disable "feature" from KCategorizedView
+    setDrawDraggedItems(false);
 
     setSelectionMode(QAbstractItemView::ExtendedSelection);
 
@@ -139,12 +142,7 @@ ImageCategorizedView::ImageCategorizedView(QWidget *parent)
     d->filterModel->sort(0); // an initial sorting is necessary
 
     // set flags that we want to get dataChanged() signals for
-    DatabaseFields::Set watchFlags;
-    watchFlags |= DatabaseFields::Name | DatabaseFields::FileSize | DatabaseFields::ModificationDate;
-    watchFlags |= DatabaseFields::Rating | DatabaseFields::CreationDate | DatabaseFields::Orientation |
-                  DatabaseFields::Width | DatabaseFields::Height;
-    watchFlags |= DatabaseFields::Comment;
-    d->model->setWatchFlags(watchFlags);
+    d->model->setWatchFlags(d->filterModel->suggestedWatchFlags());
 
     d->delegate = new ImageDelegate(this);
     d->delegate->setSpacing(10);
@@ -155,14 +153,18 @@ ImageCategorizedView::ImageCategorizedView(QWidget *parent)
 
     setModel(d->filterModel);
 
+    connect(d->filterModel, SIGNAL(layoutAboutToBeChanged()),
+            this, SLOT(layoutAboutToBeChanged()));
+
+    connect(d->filterModel, SIGNAL(layoutChanged()),
+            this, SLOT(layoutWasChanged()),
+            Qt::QueuedConnection);
+
     connect(d->model, SIGNAL(imageInfosAdded(const QList<ImageInfo> &)),
             this, SLOT(slotImageInfosAdded()));
 
     connect(d->delegate, SIGNAL(gridSizeChanged(const QSize &)),
             this, SLOT(slotGridSizeChanged(const QSize &)));
-
-    connect(d->delegate, SIGNAL(waitingForThumbnail(const QModelIndex &)),
-            this, SLOT(slotDelegateWaitsForThumbnail(const QModelIndex &)));
 
     connect(this, SIGNAL(activated(const QModelIndex &)),
             this, SLOT(slotActivated(const QModelIndex &)));
@@ -512,6 +514,46 @@ void ImageCategorizedView::selectionChanged(const QItemSelection& selectedItems,
         emit selectionCleared();
 }
 
+void ImageCategorizedView::rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end)
+{
+    KCategorizedView::rowsAboutToBeRemoved(parent, start, end);
+
+    // Ensure one current item
+    QModelIndex current = currentIndex();
+    if (current.isValid() && current.row() >= start && current.row() <= end)
+    {
+        int totalToRemove = end - start + 1;
+        if (model()->rowCount(parent) > totalToRemove)
+        {
+            selectionModel()->select(model()->index(start > 0 ? start - 1 : end + 1, 0),
+                                     QItemSelectionModel::SelectCurrent);
+        }
+    }
+}
+
+void ImageCategorizedView::layoutAboutToBeChanged()
+{
+    d->ensureOneSelectedItem = selectionModel()->hasSelection();
+}
+
+void ImageCategorizedView::layoutWasChanged()
+{
+    // connected queued to layoutChanged()
+    // ensure we have a selection if there was one before
+    if (d->ensureOneSelectedItem)
+    {
+        d->ensureOneSelectedItem = false;
+        if (model()->rowCount() && selectionModel()->selection().isEmpty())
+        {
+            QModelIndex index = currentIndex();
+            if (!index.isValid())
+                index = model()->index(0,0);
+            if (index.isValid())
+                selectionModel()->select(index, QItemSelectionModel::SelectCurrent);
+        }
+    }
+}
+
 Album *ImageCategorizedView::albumAt(const QPoint& pos)
 {
     if (d->filterModel->categorizationMode() == ImageFilterModel::CategoryByAlbum)
@@ -526,6 +568,8 @@ Album *ImageCategorizedView::albumAt(const QPoint& pos)
     return currentAlbum();
 }
 
+/*
+//Remove when API changes are accepted for KCategorizedView
 QModelIndex ImageCategorizedView::indexForCategoryAt(const QPoint& pos) const
 {
     QModelIndex index = indexAt(pos);
@@ -561,6 +605,12 @@ QModelIndex ImageCategorizedView::indexForCategoryAt(const QPoint& pos) const
     }
 
     return QModelIndex();
+}
+*/
+
+QModelIndex ImageCategorizedView::indexForCategoryAt(const QPoint& pos) const
+{
+    return categoryAt(pos);
 }
 
 QModelIndex ImageCategorizedView::moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers)
@@ -739,6 +789,13 @@ void ImageCategorizedView::keyPressEvent(QKeyEvent *event)
     emit keyPressed(event);
 }
 
+/*
+//Remove when API changes are accepted for KCategorizedView
+//Also remove code from delegate.
+
+    connect(d->delegate, SIGNAL(waitingForThumbnail(const QModelIndex &)),
+            this, SLOT(slotDelegateWaitsForThumbnail(const QModelIndex &)));
+
 bool modelIndexByRowLessThan(const QModelIndex& i1, const QModelIndex& i2)
 {
     return i1.row() < i2.row();
@@ -765,6 +822,16 @@ void ImageCategorizedView::paintEvent(QPaintEvent *e)
         d->filterModel->prepareThumbnails(d->indexesToThumbnail);
         d->indexesToThumbnail.clear();
     }
+}
+*/
+
+void ImageCategorizedView::paintEvent(QPaintEvent *e)
+{
+    // We want the thumbnails to be loaded in order.
+    QModelIndexList indexesToThumbnail = categorizedIndexesIn(viewport()->rect());
+    d->filterModel->prepareThumbnails(indexesToThumbnail);
+
+    KCategorizedView::paintEvent(e);
 }
 
 void ImageCategorizedView::resizeEvent(QResizeEvent *e)
@@ -810,11 +877,6 @@ bool ImageCategorizedView::viewportEvent(QEvent *event)
 
 void ImageCategorizedView::startDrag(Qt::DropActions supportedActions)
 {
-    // workaround bug in KCategorizedView: should not need to call this at all!
-    // There are some private flags in KCategorizedView going mad if this method is overridden,
-    // but it is intended to be overridden, it's virtual!
-    KCategorizedView::startDrag(supportedActions);
-
     QModelIndexList indexes = selectedIndexes();
     if (indexes.count() > 0) {
         QMimeData *data = d->filterModel->mimeData(indexes);
