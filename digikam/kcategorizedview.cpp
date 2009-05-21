@@ -623,6 +623,52 @@ QRect KCategorizedView::visualRect(const QModelIndex &index) const
     return d->visualRect(index);
 }
 
+QRect KCategorizedView::categoryVisualRect(const QModelIndex &index) const
+{
+    if (!d->proxyModel || !d->categoryDrawer || !d->proxyModel->isCategorizedModel())
+    {
+        return QRect();
+    }
+
+    if (!index.isValid())
+    {
+        return QRect();
+    }
+
+    QString category = d->elementsInfo[index.row()].category;
+    return d->categoryVisualRect(category);
+}
+
+QModelIndex KCategorizedView::categoryAt(const QPoint &point) const
+{
+    if (!d->proxyModel || !d->categoryDrawer || !d->proxyModel->isCategorizedModel())
+    {
+        return QModelIndex();
+    }
+
+    int y = 0;
+    QString lastCategory, foundCategory;
+    foreach (const QString &category, d->categories)
+    {
+        QRect visualRect = d->categoryVisualRect(category);
+
+        if (point.y() >= y && point.y() < visualRect.top())
+        {
+            foundCategory = lastCategory;
+            break;
+        }
+
+        y = visualRect.top();
+        lastCategory = category;
+    }
+
+    if (!foundCategory.isNull())
+    {
+        return d->categoriesIndexes[foundCategory][0];
+    }
+    return QModelIndex();
+}
+
 KCategoryDrawer *KCategorizedView::categoryDrawer() const
 {
     return d->categoryDrawer;
@@ -699,6 +745,16 @@ QModelIndex KCategorizedView::indexAt(const QPoint &point) const
     }
 
     return index;
+}
+
+QModelIndexList KCategorizedView::categorizedIndexesIn(const QRect &rect) const
+{
+    if (!d->proxyModel || !d->categoryDrawer || !d->proxyModel->isCategorizedModel())
+    {
+        return QModelIndexList();
+    }
+
+    return d->intersectionSet(rect);
 }
 
 void KCategorizedView::reset()

@@ -59,6 +59,26 @@ public:
 
     virtual QModelIndex indexAt(const QPoint &point) const;
 
+    /**
+      * This method will return all indexes whose visual rect intersects @param rect.
+      * @note Returns an empty list if the view is not categorized.
+      */
+    virtual QModelIndexList categorizedIndexesIn(const QRect &rect) const;
+
+    /**
+      * This method will return the visual rect of the header of the category
+      * in which @param index is sorted.
+      * @note Returns QRect() if the view is not categorized.
+      */
+    virtual QRect categoryVisualRect(const QModelIndex &index) const;
+
+    /**
+      * This method will return the first index of the category
+      * in the region of which @param point is found.
+      * @note Returns QModelIndex() if the view is not categorized.
+      */
+    virtual QModelIndex categoryAt(const QPoint &point) const;
+
 public Q_SLOTS:
     virtual void reset();
 
