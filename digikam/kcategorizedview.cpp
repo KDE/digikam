@@ -45,8 +45,8 @@ KCategorizedView::Private::Private(KCategorizedView *listView)
     , biggestItemSize(QSize(0, 0))
     , mouseButtonPressed(false)
     , rightMouseButtonPressed(false)
-    , isDragging(false)
     , dragLeftViewport(false)
+    , drawItemsWhileDragging(true)
     , proxyModel(0)
 {
 }
@@ -728,6 +728,11 @@ void KCategorizedView::setCategoryDrawer(KCategoryDrawer *categoryDrawer)
     }
 }
 
+void KCategorizedView::setDrawDraggedItems(bool drawDraggedItems)
+{
+    d->drawItemsWhileDragging = drawDraggedItems;
+}
+
 QModelIndex KCategorizedView::indexAt(const QPoint &point) const
 {
     if (!d->proxyModel || !d->categoryDrawer || !d->proxyModel->isCategorizedModel())
@@ -885,7 +890,7 @@ void KCategorizedView::paintEvent(QPaintEvent *event)
 
     if ((selectionMode() != SingleSelection) && (selectionMode() != NoSelection))
     {
-        if (d->mouseButtonPressed && !d->isDragging)
+        if (d->mouseButtonPressed && QListView::state() != DraggingState)
         {
             QPoint start, end, initialPressPosition;
 
@@ -917,7 +922,7 @@ void KCategorizedView::paintEvent(QPaintEvent *event)
         }
     }
 
-    if (d->isDragging && !d->dragLeftViewport)
+    if (d->drawItemsWhileDragging && QListView::state() == DraggingState && !d->dragLeftViewport)
     {
         painter.setOpacity(0.5);
         d->drawDraggedItems(&painter);
@@ -1085,6 +1090,16 @@ void KCategorizedView::mouseMoveEvent(QMouseEvent *event)
 {
     QListView::mouseMoveEvent(event);
 
+    // was a dragging started?
+    if (state() == DraggingState)
+    {
+        d->mouseButtonPressed = false;
+        d->rightMouseButtonPressed = false;
+
+        if (d->drawItemsWhileDragging)
+            viewport()->update(d->lastDraggedItemsRect);
+    }
+
     if (!d->proxyModel || !d->categoryDrawer || !d->proxyModel->isCategorizedModel())
     {
         return;
@@ -1122,7 +1137,7 @@ void KCategorizedView::mouseMoveEvent(QMouseEvent *event)
     }
 
     QRect rect;
-    if (d->mouseButtonPressed && !d->isDragging)
+    if (d->mouseButtonPressed && QListView::state() != DraggingState)
     {
         QPoint start, end, initialPressPosition;
 
@@ -1221,7 +1236,7 @@ void KCategorizedView::mouseReleaseEvent(QMouseEvent *event)
     }
 
     QRect rect;
-    if (!d->isDragging)
+    if (state() != DraggingState)
     {
         QPoint start, end, initialPressPosition;
 
@@ -1274,26 +1289,11 @@ void KCategorizedView::startDrag(Qt::DropActions supportedActions)
 #else
     QListView::startDrag(supportedActions);
 #endif
-
-    d->isDragging = false;
-    d->mouseButtonPressed = false;
-    d->rightMouseButtonPressed = false;
-
-    viewport()->update(d->lastDraggedItemsRect);
 }
 
 void KCategorizedView::dragMoveEvent(QDragMoveEvent *event)
 {
     d->mousePosition = event->pos();
-
-    if (d->mouseButtonPressed)
-    {
-        d->isDragging = true;
-    }
-    else
-    {
-        d->isDragging = false;
-    }
 
     d->dragLeftViewport = false;
 

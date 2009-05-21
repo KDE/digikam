@@ -136,8 +136,8 @@ public:
     // Behavior data
     bool mouseButtonPressed;
     bool rightMouseButtonPressed;
-    bool isDragging;
     bool dragLeftViewport;
+    bool drawItemsWhileDragging;
     QModelIndex hovered;
     QString hoveredCategory;
     QPoint initialPressPosition;

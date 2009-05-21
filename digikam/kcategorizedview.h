@@ -79,6 +79,13 @@ public:
       */
     virtual QModelIndex categoryAt(const QPoint &point) const;
 
+    /**
+      * Switch on drawing of dragged items. Default: on.
+      * While dragging over the view, dragged items will be drawn transparently
+      * following the mouse cursor.
+      */
+    void setDrawDraggedItems(bool drawDraggedItems);
+
 public Q_SLOTS:
     virtual void reset();
 
