@@ -105,8 +105,6 @@ void ImageFilterModelPrivate::init(ImageFilterModel *_q)
 {
     q = _q;
 
-    q->setDynamicSortFilter(true);
-
     updateFilterTimer  = new QTimer(this);
     updateFilterTimer->setSingleShot(true);
     updateFilterTimer->setInterval(250);
@@ -168,6 +166,12 @@ void ImageFilterModel::setSourceImageModel(ImageModel *sourceModel)
 
         connect(d->imageModel, SIGNAL(modelReset()),
                 this, SLOT(slotModelReset()));
+
+        connect(d->imageModel, SIGNAL(imageChange(const ImageChangeset &, const QItemSelection &)),
+                this, SLOT(invalidate()));
+
+        connect(d->imageModel, SIGNAL(imageTagChange(const ImageChangeset &, const QItemSelection &)),
+                this, SLOT(invalidate()));
     }
 
     setSourceModel(d->imageModel);
@@ -198,6 +202,16 @@ QVariant ImageFilterModel::data(const QModelIndex& index, int role) const
     }
 
     return KCategorizedSortFilterProxyModel::data(index, role);
+}
+
+DatabaseFields::Set ImageFilterModel::suggestedWatchFlags() const
+{
+    DatabaseFields::Set watchFlags;
+    watchFlags |= DatabaseFields::Name | DatabaseFields::FileSize | DatabaseFields::ModificationDate;
+    watchFlags |= DatabaseFields::Rating | DatabaseFields::CreationDate | DatabaseFields::Orientation |
+                  DatabaseFields::Width | DatabaseFields::Height;
+    watchFlags |= DatabaseFields::Comment;
+    return watchFlags;
 }
 
 // -------------- Convenience mappers --------------

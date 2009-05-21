@@ -285,6 +285,15 @@ void ImageModel::emitDataChangedForAll()
     emit dataChanged(first, last);
 }
 
+void ImageModel::emitDataChangedForSelection(const QItemSelection &selection)
+{
+    if (!selection.isEmpty())
+    {
+        foreach (const QItemSelectionRange& range, selection)
+            emit dataChanged(range.topLeft(), range.bottomRight());
+    }
+}
+
 // ------------ Preprocessing -------------
 
 void ImageModel::setPreprocessor(QObject *preprocessor)
@@ -449,8 +458,8 @@ void ImageModel::slotImageChange(const ImageChangeset& changeset)
         }
         if (!items.isEmpty())
         {
-            foreach (const QItemSelectionRange& range, items)
-                emit dataChanged(range.topLeft(), range.bottomRight());
+            emitDataChangedForSelection(items);
+            emit imageChange(changeset, items);
         }
     }
 }
@@ -469,8 +478,8 @@ void ImageModel::slotImageTagChange(const ImageTagChangeset& changeset)
     }
     if (!items.isEmpty())
     {
-        foreach (const QItemSelectionRange& range, items)
-            emit dataChanged(range.topLeft(), range.bottomRight());
+        emitDataChangedForSelection(items);
+        emit imageTagChange(changeset, items);
     }
 }
 

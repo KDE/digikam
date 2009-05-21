@@ -85,6 +85,9 @@ public:
     /** Returns a list of all image infos, sorted according to this model.
      *  If you do not need a sorted list, use ImageModel's imageInfos() method. */
     QList<ImageInfo> imageInfosSorted() const;
+    /** Returns a set of DatabaseFields suggested to set as watch flags on the source ImageModel.
+     *  The contained flags will be those that this model can sort or filter by. */
+    DatabaseFields::Set suggestedWatchFlags() const;
 
     ImageFilterSettings imageFilterSettings() const;
 

@@ -33,6 +33,8 @@
 #include "imageinfo.h"
 #include "digikam_export.h"
 
+class QItemSelection;
+
 namespace Digikam
 {
 
@@ -162,6 +164,13 @@ Q_SIGNALS:
     /** Connect to this signal only if you are the current preprocessor */
     void preprocess(const QList<ImageInfo>& infos);
 
+    /** If an ImageChangeset affected indexes of this model with changes as set in watchFlags(),
+     *  this signal contains the changeset and the affected indexes. */
+    void imageChange(const ImageChangeset &, const QItemSelection &);
+    /** If an ImageTagChangeset affected indexes of this model,
+     *  this signal contains the changeset and the affected indexes. */
+    void imageTagChange(const ImageTagChangeset &, const QItemSelection &);
+
 public Q_SLOTS:
 
     void reAddImageInfos(const QList<ImageInfo>& infos);
@@ -172,6 +181,7 @@ protected:
     virtual void imageInfosCleared() {};
 
     void emitDataChangedForAll();
+    void emitDataChangedForSelection(const QItemSelection &selection);
 
 protected Q_SLOTS:
 
