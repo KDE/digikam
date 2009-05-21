@@ -309,7 +309,9 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
     // ---------------------------------------------------------------
 
     gridSettings->addWidget(d->tabView,   0, 0, 1, 5);
+#if KDCRAW_VERSION <= 0x000500
     gridSettings->setRowStretch(1, 10);
+#endif
     gridSettings->setColumnStretch(2, 10);
     gridSettings->setSpacing(spacingHint());
     gridSettings->setMargin(0);
