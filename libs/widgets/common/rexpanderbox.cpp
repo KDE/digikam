@@ -375,6 +375,8 @@ void RLabelExpander::setExpanded(bool b)
         else
            d->arrow->setArrowType(Qt::RightArrow);
     }
+
+    emit signalExpanded(b);
 }
 
 bool RLabelExpander::isExpanded() const
@@ -459,6 +461,9 @@ void RExpanderBox::addItem(QWidget *w, const QPixmap& pix, const QString& txt,
     exp->setExpandByDefault(expandBydefault);
     d->vbox->addWidget(exp);
     d->wList.append(exp);
+
+    connect(exp, SIGNAL(signalExpanded(bool)),
+            this, SLOT(slotItemExpanded(bool)));
 }
 
 void RExpanderBox::addItem(QWidget *w, const QString& txt,
@@ -484,6 +489,19 @@ void RExpanderBox::insertItem(int index, QWidget *w, const QPixmap& pix, const Q
     exp->setExpandByDefault(expandBydefault);
     d->vbox->insertWidget(index, exp);
     d->wList.insert(index, exp);
+
+    connect(exp, SIGNAL(signalExpanded(bool)),
+            this, SLOT(slotItemExpanded(bool)));
+}
+
+void RExpanderBox::slotItemExpanded(bool b)
+{
+    RLabelExpander* exp = dynamic_cast<RLabelExpander*>(sender());
+    if (exp)
+    {
+        int index = indexOf(exp);
+        emit signalItemExpanded(index, b);
+    }
 }
 
 void RExpanderBox::insertItem(int index, QWidget *w, const QString& txt,

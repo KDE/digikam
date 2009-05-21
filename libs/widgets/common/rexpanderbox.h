@@ -152,6 +152,10 @@ public:
     void setExpandByDefault(bool b);
     bool isExpandByDefault() const;
 
+Q_SIGNALS:
+
+    void signalExpanded(bool b);
+
 private Q_SLOTS:
 
     void slotToggleContainer();
@@ -229,6 +233,14 @@ public:
 
     void readSettings(KConfigGroup& group);
     void writeSettings(KConfigGroup& group);
+
+Q_SIGNALS:
+
+    void signalItemExpanded(int index, bool b);
+
+private Q_SLOTS:
+
+    void slotItemExpanded(bool b);
 
 private:
 
