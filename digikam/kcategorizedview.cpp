@@ -1644,7 +1644,9 @@ void KCategorizedView::rowsInsertedArtifficial(const QModelIndex &parent,
 
     // FIXME: We need to safely save the last selection. This is on my TODO
     // list (ereslibre).
-    selectionModel()->clear();
+    // Note: QItemSelectionModel will save it selection in persistend indexes
+    // on layoutChanged(). All works fine for me.
+    //selectionModel()->clear();
 }
 
 void KCategorizedView::rowsRemoved(const QModelIndex &parent,
