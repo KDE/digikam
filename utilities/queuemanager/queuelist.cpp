@@ -37,24 +37,24 @@
 
 // KDE includes
 
-#include <klocale.h>
-#include <kiconloader.h>
-#include <kdebug.h>
 #include <kaction.h>
-#include <kmenu.h>
 #include <kactioncollection.h>
+#include <kdebug.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kmenu.h>
 
 // Local includes
 
 #include "albumdb.h"
-#include "thumbnailsize.h"
-#include "thumbnailloadthread.h"
-#include "renamecustomizer.h"
+#include "databasechangesets.h"
+#include "databasewatch.h"
 #include "ddragobjects.h"
+#include "manualrenameinput.h"
 #include "queuemgrwindow.h"
 #include "queuetooltip.h"
-#include "databasewatch.h"
-#include "databasechangesets.h"
+#include "thumbnailloadthread.h"
+#include "thumbnailsize.h"
 
 namespace Digikam
 {

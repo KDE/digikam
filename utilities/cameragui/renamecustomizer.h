@@ -40,56 +40,6 @@ class KLineEdit;
 namespace Digikam
 {
 
-class ManualRenameInputPriv;
-
-class ManualRenameInput : public QWidget
-{
-    Q_OBJECT
-
-public:
-
-    ManualRenameInput(QWidget* parent = 0);
-    ~ManualRenameInput();
-
-    QString text() const;
-    void    setText(const QString& text);
-
-    void setTrackerAlignment(Qt::Alignment alignment);
-
-    KLineEdit* input() const;
-
-
-    QString parse(const QString& fileName, const QString& cameraName,
-                  const QDateTime& dateTime, int index) const;
-
-    static QString parser(const QString& parseString,
-                          const QString& fileName, const QString& cameraName,
-                          const QDateTime& dateTime, int index);
-
-Q_SIGNALS:
-
-    void signalTextChanged(const QString&);
-
-public Q_SLOTS:
-
-    void slotUpdateTrackerPos();
-    void slotHideToolTipTracker();
-
-private Q_SLOTS:
-
-    void slotToolTipButtonToggled(bool);
-
-private:
-
-    QString createToolTip();
-
-private:
-
-    ManualRenameInputPriv* const d;
-};
-
-// ------------------------------------------------------------
-
 class RenameCustomizerPriv;
 
 class RenameCustomizer : public QWidget

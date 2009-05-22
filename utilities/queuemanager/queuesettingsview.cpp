@@ -48,7 +48,7 @@
 #include "batchtool.h"
 #include "album.h"
 #include "albumselectwidget.h"
-#include "renamecustomizer.h"
+#include "manualrenameinput.h"
 
 namespace Digikam
 {
