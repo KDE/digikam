@@ -452,18 +452,7 @@ RExpanderBox::~RExpanderBox()
 void RExpanderBox::addItem(QWidget *w, const QPixmap& pix, const QString& txt,
                            const QString& objName, bool expandBydefault)
 {
-    RLabelExpander *exp = new RLabelExpander(viewport());
-    exp->setText(txt);
-    exp->setIcon(pix);
-    exp->setWidget(w);
-    exp->setLineVisible(!d->wList.isEmpty());
-    exp->setObjectName(objName);
-    exp->setExpandByDefault(expandBydefault);
-    d->vbox->addWidget(exp);
-    d->wList.append(exp);
-
-    connect(exp, SIGNAL(signalExpanded(bool)),
-            this, SLOT(slotItemExpanded(bool)));
+    createItem(-1, w, pix, txt, objName, expandBydefault);
 }
 
 void RExpanderBox::addItem(QWidget *w, const QString& txt,
@@ -480,6 +469,12 @@ void RExpanderBox::addStretch()
 void RExpanderBox::insertItem(int index, QWidget *w, const QPixmap& pix, const QString& txt,
                               const QString& objName, bool expandBydefault)
 {
+    createItem(index, w, pix, txt, objName, expandBydefault);
+}
+
+void RExpanderBox::createItem(int index, QWidget *w, const QPixmap& pix, const QString& txt,
+                              const QString& objName, bool expandBydefault)
+{
     RLabelExpander *exp = new RLabelExpander(viewport());
     exp->setText(txt);
     exp->setIcon(pix);
@@ -487,8 +482,17 @@ void RExpanderBox::insertItem(int index, QWidget *w, const QPixmap& pix, const Q
     exp->setLineVisible(!d->wList.isEmpty());
     exp->setObjectName(objName);
     exp->setExpandByDefault(expandBydefault);
-    d->vbox->insertWidget(index, exp);
-    d->wList.insert(index, exp);
+
+    if (index >= 0)
+    {
+        d->vbox->insertWidget(index, exp);
+        d->wList.insert(index, exp);
+    }
+    else
+    {
+        d->vbox->addWidget(exp);
+        d->wList.append(exp);
+    }
 
     connect(exp, SIGNAL(signalExpanded(bool)),
             this, SLOT(slotItemExpanded(bool)));
