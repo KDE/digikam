@@ -42,7 +42,6 @@
 #include <QPushButton>
 #include <QRadioButton>
 #include <QTextStream>
-#include <QToolBox>
 #include <QToolButton>
 #include <QVBoxLayout>
 
@@ -74,6 +73,7 @@
 
 // Local includes
 
+#include "rexpanderbox.h"
 #include "bcgmodifier.h"
 #include "colorgradientwidget.h"
 #include "curveswidget.h"
@@ -170,8 +170,6 @@ public:
 
     QByteArray          embeddedICC;
 
-    QToolBox*           toolBoxWidgets;
-
     KUrlRequester*      inProfilesPath;
     KUrlRequester*      spaceProfilePath;
     KUrlRequester*      proofProfilePath;
@@ -187,6 +185,7 @@ public:
     CurvesWidget*       curvesWidget;
     ImageWidget*        previewWidget;
     EditorToolSettings* gboxSettings;
+    RExpanderBox*       toolBoxWidgets;
 };
 
 ICCProofTool::ICCProofTool(QObject* parent)
@@ -224,7 +223,7 @@ ICCProofTool::ICCProofTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->toolBoxWidgets        = new QToolBox(d->gboxSettings->plainPage());
+    d->toolBoxWidgets        = new RExpanderBox(d->gboxSettings->plainPage());
     QWidget *generalOptions  = new QWidget(d->toolBoxWidgets);
     QWidget *inProfiles      = new QWidget(d->toolBoxWidgets);
     QWidget *spaceProfiles   = new QWidget(d->toolBoxWidgets);
@@ -233,13 +232,12 @@ ICCProofTool::ICCProofTool(QObject* parent)
 
     //---------- "General" Page Setup ----------------------------------
 
-    d->toolBoxWidgets->insertItem(GENERALPAGE, generalOptions,
-                                  SmallIcon("system-run"), i18n("General Settings"));
+    d->toolBoxWidgets->insertItem(GENERALPAGE, generalOptions, SmallIcon("system-run"), i18n("General Settings"),
+                                  QString("generalsettings"), false);
     generalOptions->setWhatsThis( i18n("<p>Here you can set general parameters.</p>"));
 
     QGridLayout *zeroPageLayout = new QGridLayout(generalOptions);
-
-    d->doSoftProofBox = new QCheckBox(generalOptions);
+    d->doSoftProofBox           = new QCheckBox(generalOptions);
     d->doSoftProofBox->setText(i18n("Soft-proofing"));
     d->doSoftProofBox->setWhatsThis(i18n("Rendering emulation of the device described "
                                          "by the \"Proofing\" profile. Useful to preview the final "
@@ -319,17 +317,16 @@ ICCProofTool::ICCProofTool(QObject* parent)
 
     //---------- "Input" Page Setup ----------------------------------
 
-    d->toolBoxWidgets->insertItem(INPUTPAGE, inProfiles, SmallIcon("camera-photo"), i18n("Input Profile"));
+    d->toolBoxWidgets->insertItem(INPUTPAGE, inProfiles, SmallIcon("camera-photo"), i18n("Input Profile"),
+                                  QString("inputprofile"), true);
     inProfiles->setWhatsThis( i18n("<p>Set here all parameters relevant to Input Color "
                                    "Profiles.</p>"));
 
     QGridLayout *firstPageLayout = new QGridLayout(inProfiles);
-
-    QWidget *box1      = new QWidget(inProfiles);
-    QVBoxLayout *hlay1 = new QVBoxLayout(box1);
-    d->inProfileBG     = new QButtonGroup(inProfiles);
-
-    d->useEmbeddedProfile = new QRadioButton(box1);
+    QWidget *box1                = new QWidget(inProfiles);
+    QVBoxLayout *hlay1           = new QVBoxLayout(box1);
+    d->inProfileBG               = new QButtonGroup(inProfiles);
+    d->useEmbeddedProfile        = new QRadioButton(box1);
     d->useEmbeddedProfile->setText(i18n("Use embedded profile"));
     d->inProfileBG->addButton(d->useEmbeddedProfile, 0);
 
@@ -391,18 +388,16 @@ ICCProofTool::ICCProofTool(QObject* parent)
 
     //---------- "Workspace" Page Setup ---------------------------------
 
-    d->toolBoxWidgets->insertItem(WORKSPACEPAGE, spaceProfiles,
-                                 SmallIcon("input-tablet"), i18n("Workspace Profile"));
+    d->toolBoxWidgets->insertItem(WORKSPACEPAGE, spaceProfiles, SmallIcon("input-tablet"), i18n("Workspace Profile"),
+                                  QString("workspaceprofile"), true);
     spaceProfiles->setWhatsThis( i18n("<p>Set here all parameters relevant to Color Workspace "
                                       "Profiles.</p>"));
 
     QGridLayout *secondPageLayout = new QGridLayout(spaceProfiles);
-
-    QWidget *box2      = new QWidget(spaceProfiles);
-    QVBoxLayout *hlay2 = new QVBoxLayout(box2);
-    d->spaceProfileBG  = new QButtonGroup(box2);
-
-    d->useSpaceDefaultProfile = new QRadioButton(box2);
+    QWidget *box2                 = new QWidget(spaceProfiles);
+    QVBoxLayout *hlay2            = new QVBoxLayout(box2);
+    d->spaceProfileBG             = new QButtonGroup(box2);
+    d->useSpaceDefaultProfile     = new QRadioButton(box2);
     d->useSpaceDefaultProfile->setText(i18n("Use default workspace profile"));
     d->spaceProfileBG->addButton(d->useSpaceDefaultProfile, 0);
 
@@ -435,18 +430,16 @@ ICCProofTool::ICCProofTool(QObject* parent)
 
     //---------- "Proofing" Page Setup ---------------------------------
 
-    d->toolBoxWidgets->insertItem(PROOFINGPAGE, proofProfiles,
-                                 SmallIcon("printer"), i18n("Proofing Profile"));
+    d->toolBoxWidgets->insertItem(PROOFINGPAGE, proofProfiles, SmallIcon("printer"), i18n("Proofing Profile"),
+                                  QString("proofprofile"), false);
     proofProfiles->setWhatsThis( i18n("<p>Set here all parameters relevant to Proofing Color "
                                       "Profiles.</p>"));
 
     QGridLayout *thirdPageLayout = new QGridLayout(proofProfiles);
-
-    QWidget *box3       = new QWidget(proofProfiles);
-    QVBoxLayout *hlay3  = new QVBoxLayout(box3);
-    d->proofProfileBG   = new QButtonGroup(box3);
-
-    d->useProofDefaultProfile = new QRadioButton(box3);
+    QWidget *box3                = new QWidget(proofProfiles);
+    QVBoxLayout *hlay3           = new QVBoxLayout(box3);
+    d->proofProfileBG            = new QButtonGroup(box3);
+    d->useProofDefaultProfile    = new QRadioButton(box3);
     d->useProofDefaultProfile->setText(i18n("Use default proof profile"));
     d->proofProfileBG->addButton(d->useProofDefaultProfile, 0);
 
@@ -479,12 +472,12 @@ ICCProofTool::ICCProofTool(QObject* parent)
 
     //---------- "Lightness" Page Setup ----------------------------------
 
-    d->toolBoxWidgets->insertItem(LIGHTNESSPAGE, lightnessadjust,
-                                 SmallIcon("format-stroke-color"), i18n("Lightness Adjustments"));
+    d->toolBoxWidgets->insertItem(LIGHTNESSPAGE, lightnessadjust, SmallIcon("format-stroke-color"),
+                                  i18n("Lightness Adjustments"), QString("lightnessadjustments"), false);
+    d->toolBoxWidgets->addStretch();
     lightnessadjust->setWhatsThis( i18n("<p>Set here all lightness adjustments to the target image.</p>"));
 
-    QGridLayout *fourPageLayout = new QGridLayout( lightnessadjust );
-
+    QGridLayout *fourPageLayout    = new QGridLayout( lightnessadjust );
     ColorGradientWidget* vGradient = new ColorGradientWidget(Qt::Vertical, 10, lightnessadjust);
     vGradient->setColors( QColor( "white" ), QColor( "black" ) );
 
@@ -608,7 +601,7 @@ ICCProofTool::~ICCProofTool()
 
 void ICCProofTool::readSettings()
 {
-    QString defaultICCPath = KGlobalSettings::documentPath();
+    QString defaultICCPath    = KGlobalSettings::documentPath();
     KSharedConfig::Ptr config = KGlobal::config();
 
     // General settings of digiKam Color Management
@@ -642,8 +635,7 @@ void ICCProofTool::readSettings()
     // Plugin settings.
     group = config->group("colormanagement Tool");
 
-
-    d->toolBoxWidgets->setCurrentIndex(group.readEntry("Settings Tab", (int)GENERALPAGE));
+    d->toolBoxWidgets->readSettings(group);
     d->inProfilesPath->setUrl(group.readPathEntry("InputProfilePath", defaultICCPath));
     d->proofProfilePath->setUrl(group.readPathEntry("ProofProfilePath", defaultICCPath));
     d->spaceProfilePath->setUrl(group.readPathEntry("SpaceProfilePath", defaultICCPath));
@@ -690,8 +682,8 @@ void ICCProofTool::readSettings()
 void ICCProofTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("colormanagement Tool");
-    group.writeEntry("Settings Tab", d->toolBoxWidgets->currentIndex());
+    KConfigGroup group        = config->group("colormanagement Tool");
+    d->toolBoxWidgets->writeSettings(group);
     group.writeEntry("Histogram Channel", d->gboxSettings->histogramBox()->channel());
     group.writeEntry("Histogram Scale", d->gboxSettings->histogramBox()->scale());
     group.writeEntry("InputProfilePath", d->inProfilesPath->url());
