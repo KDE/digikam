@@ -6,7 +6,7 @@
  * Date        : 2008-09-30
  * Description : a widget to display an image histogram and its control widgets
  *
- * Copyright (C) 2008 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2008-2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +32,8 @@
 
 #include "digikam_export.h"
 
+class QColor;
+
 namespace Digikam
 {
 
@@ -46,7 +48,7 @@ public:
 
     enum HistogramCode
     {
-        RGB=0,
+        RGB = 0,
         RGBA,
         LRGB,
         LRGBA,
@@ -56,13 +58,13 @@ public:
 
     enum HistogramScale
     {
-        Linear=0,
+        Linear = 0,
         Logarithmic
     };
 
     enum ColorChannel
     {
-        LuminosityChannel=0,
+        LuminosityChannel = 0,
         RedChannel,
         GreenChannel,
         BlueChannel,

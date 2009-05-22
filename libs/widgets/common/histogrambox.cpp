@@ -6,7 +6,7 @@
  * Date        : 2008-09-30
  * Description : a widget to display an image histogram and its control widgets
  *
- * Copyright (C) 2008 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2008-2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QButtonGroup>
+#include <QColor>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -58,33 +59,30 @@ public:
 
     HistogramBoxPriv()
     {
+        scaleBG         = 0;
+        linHistoButton  = 0;
+        logHistoButton  = 0;
         channelCB       = 0;
         colorsCB        = 0;
-        scaleBG         = 0;
-        histogramWidget = 0;
         hGradient       = 0;
+        histogramWidget = 0;
     }
 
-    QButtonGroup        *scaleBG;
+    QButtonGroup*        scaleBG;
 
-    QToolButton         *linHistoButton;
-    QToolButton         *logHistoButton;
+    QToolButton*         linHistoButton;
+    QToolButton*         logHistoButton;
 
-    KComboBox           *channelCB;
-    KComboBox           *colorsCB;
+    KComboBox*           channelCB;
+    KComboBox*           colorsCB;
 
-    ColorGradientWidget *hGradient;
-
-    HistogramWidget     *histogramWidget;
+    ColorGradientWidget* hGradient;
+    HistogramWidget*     histogramWidget;
 };
 
 HistogramBox::HistogramBox(QWidget *parent, int histogramType, bool selectMode)
             : QWidget(parent), d(new HistogramBoxPriv)
 {
-    QGridLayout* gridLayout = new QGridLayout(this);
-    QLabel *channelLabel    = new QLabel(i18n("Channel:"), this);
-    channelLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-
     d->channelCB = new KComboBox(this);
 
     // all possible channels for histogram widget are defined in this map
@@ -95,25 +93,26 @@ HistogramBox::HistogramBox(QWidget *parent, int histogramType, bool selectMode)
 
     // those pairs hold the combobox text and WhatsThis description for each channel item
     typedef QPair<QString, QString> ChannelPair;
-    ChannelPair luminosityPair (i18nc("The luminosity channel", "Luminosity"),
-                                i18n("<b>Luminosity</b>: display the image's luminosity values."));
 
-    ChannelPair redPair        (i18nc("The red channel", "Red"),
-                                i18n("<b>Red</b>: display the red image-channel values."));
+    ChannelPair luminosityPair(i18nc("The luminosity channel", "Luminosity"),
+                               i18n("<b>Luminosity</b>: display the image's luminosity values."));
 
-    ChannelPair greenPair      (i18nc("The green channel", "Green"),
-                                i18n("<b>Green</b>: display the green image-channel values."));
+    ChannelPair redPair(i18nc("The red channel", "Red"),
+                        i18n("<b>Red</b>: display the red image-channel values."));
 
-    ChannelPair bluePair       (i18nc("The blue channel", "Blue"),
-                                i18n("<b>Blue</b>: display the blue image-channel values."));
+    ChannelPair greenPair(i18nc("The green channel", "Green"),
+                          i18n("<b>Green</b>: display the green image-channel values."));
 
-    ChannelPair colorsPair     (i18nc("The colors channel", "Colors"),
-                                i18n("<b>Colors</b>: Display all color channel values at the same time."));
+    ChannelPair bluePair(i18nc("The blue channel", "Blue"),
+                         i18n("<b>Blue</b>: display the blue image-channel values."));
 
-    ChannelPair alphaPair      (i18nc("The alpha channel", "Alpha"),
-                                i18n("<b>Alpha</b>: display the alpha image-channel values. "
-                                                         "This channel corresponds to the transparency value and "
-                                                         "is supported by some image formats, such as PNG or TIF."));
+    ChannelPair colorsPair(i18nc("The colors channel", "Colors"),
+                           i18n("<b>Colors</b>: Display all color channel values at the same time."));
+
+    ChannelPair alphaPair(i18nc("The alpha channel", "Alpha"),
+                          i18n("<b>Alpha</b>: display the alpha image-channel values. "
+                               "This channel corresponds to the transparency value and "
+                               "is supported by some image formats, such as PNG or TIF."));
 
     channelDescMap.insert(LuminosityChannel, luminosityPair);
     channelDescMap.insert(RedChannel, redPair);
@@ -214,6 +213,11 @@ HistogramBox::HistogramBox(QWidget *parent, int histogramType, bool selectMode)
 
     d->channelCB->setWhatsThis(channelCBDescr);
 
+    // --------------------------------------------------------
+
+    QLabel *channelLabel    = new QLabel(i18n("Channel:"), this);
+    channelLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+
     QWidget *scaleBox = new QWidget(this);
     QHBoxLayout *hlay = new QHBoxLayout(scaleBox);
     d->scaleBG        = new QButtonGroup(scaleBox);
@@ -273,15 +277,17 @@ HistogramBox::HistogramBox(QWidget *parent, int histogramType, bool selectMode)
     histoBoxLayout->setMargin(0);
     histoBox->setLayout(histoBoxLayout);
 
-    gridLayout->addWidget(channelLabel, 0, 0, 1, 1);
-    gridLayout->addWidget(d->channelCB, 0, 1, 1, 1);
-    gridLayout->addWidget(scaleBox,     0, 3, 1, 2);
-    gridLayout->addWidget(colorsLabel,  1, 0, 1, 1);
-    gridLayout->addWidget(d->colorsCB,  1, 1, 1, 1);
-    gridLayout->addWidget(histoBox,     2, 0, 1, 5);
-    gridLayout->setColumnStretch(2, 10);
-    gridLayout->setSpacing(5);
-    gridLayout->setMargin(0);
+    QGridLayout* mainLayout = new QGridLayout;
+    mainLayout->addWidget(channelLabel, 0, 0, 1, 1);
+    mainLayout->addWidget(d->channelCB, 0, 1, 1, 1);
+    mainLayout->addWidget(scaleBox,     0, 3, 1, 2);
+    mainLayout->addWidget(colorsLabel,  1, 0, 1, 1);
+    mainLayout->addWidget(d->colorsCB,  1, 1, 1, 1);
+    mainLayout->addWidget(histoBox,     2, 0, 1, 5);
+    mainLayout->setColumnStretch(2, 10);
+    mainLayout->setSpacing(5);
+    mainLayout->setMargin(0);
+    setLayout(mainLayout);
 
     switch (histogramType)
     {
