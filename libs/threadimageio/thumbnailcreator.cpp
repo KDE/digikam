@@ -249,7 +249,7 @@ QImage ThumbnailCreator::load(const QString& path)
         qimage.setText(QString("Software").toLatin1(),     0, QString(DigiKamFingerPrint));
 
         KTemporaryFile temp;
-        temp.setPrefix(QFileInfo(thumbPath).baseName() + "-digikam-");
+        temp.setPrefix(thumbPath + "-digikam-");
         temp.setSuffix(".png");
         temp.setAutoRemove(false);
         if (temp.open())
