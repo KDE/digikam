@@ -29,6 +29,10 @@
 #include <QWidget>
 #include <QString>
 
+// Local includes
+
+#include "digikam_export.h"
+
 class QDateTime;
 
 class KLineEdit;
@@ -38,7 +42,7 @@ namespace Digikam
 
 class ManualRenameInputPriv;
 
-class ManualRenameInput : public QWidget
+class DIGIKAM_EXPORT ManualRenameInput : public QWidget
 {
     Q_OBJECT
 
