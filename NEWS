@@ -54,7 +54,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 039 ==> 188062 : Synchronize Images with Database does not save Copyright, Credit, Source, By-line, By-line Title in IPTC.
 040 ==> 186823 : Several bugs in lens defect auto-correction plugin.
 041 ==> 190612 : digiKam and Showfoto crash.
-042 ==> 191092 : No images shown in digikam albums.
+042 ==> 191092 : No images shown in digiKam albums.
 043 ==> 191203 : digiKam crashed on first load, after being installed on ubuntu 9.04.
 044 ==> 151321 : Remaining space incorrectly calculated when using symlinks (import from camera).
 045 ==> 189742 : Thumbnails not saved between sessions.
@@ -78,6 +78,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 063 ==> 193226 : Data loss on downloading photos from camera.
 064 ==> 189460 : digiKam crash when goelocating image in the marble tab.
 065 ==> 186046 : Crash after calling settings.
-066 ==> 193348 : Can't build digikam on kde 4.2.3.
-067 ==> 
+066 ==> 193348 : Can't build digiKam on kde 4.2.3.
+067 ==> 150072 : Download with digiKam doesn't work with the first start of digiKam.
+068 ==> 
 
