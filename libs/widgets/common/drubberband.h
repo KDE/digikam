@@ -27,7 +27,7 @@
 // Qt includes
 
 #include <Qt3Support/Q3ScrollView>
-#include <QRubberBand>
+#include <QtGui/QRubberBand>
 
 // Local includes
 

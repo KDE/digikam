@@ -26,8 +26,8 @@
 
 // Qt includes
 
-#include <QAbstractButton>
-#include <QAbstractItemView>
+#include <QtGui/QAbstractButton>
+#include <QtGui/QAbstractItemView>
 
 // KDE includes
 

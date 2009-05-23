@@ -26,12 +26,12 @@
 
 // Qt includes
 
-#include <QFont>
-#include <QFrame>
-#include <QString>
-#include <QEvent>
-#include <QResizeEvent>
-#include <QTextDocument>
+#include <QtGui/QFont>
+#include <QtGui/QFrame>
+#include <QtCore/QString>
+#include <QtCore/QEvent>
+#include <QtGui/QResizeEvent>
+#include <QtGui/QTextDocument>
 
 // KDE includes
 

@@ -27,11 +27,11 @@
 
 // Qt includes
 
-#include <QPainter>
-#include <QPaintEvent>
-#include <QRect>
-#include <QTimer>
-#include <QTimeLine>
+#include <QtGui/QPainter>
+#include <QtGui/QPaintEvent>
+#include <QtCore/QRect>
+#include <QtCore/QTimer>
+#include <QtCore/QTimeLine>
 
 // KDE includes
 

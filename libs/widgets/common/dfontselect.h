@@ -26,7 +26,7 @@
 
 // Qt includes
 
-#include <QFont>
+#include <QtGui/QFont>
 
 // KDE includes
 

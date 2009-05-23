@@ -26,7 +26,7 @@
 
 // Qt includes
 
-#include <QAbstractItemView>
+#include <QtGui/QAbstractItemView>
 
 // KDE includes
 

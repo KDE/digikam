@@ -26,11 +26,11 @@
 
 // Qt includes
 
-#include <QLabel>
-#include <QLineEdit>
-#include <QListView>
-#include <QComboBox>
-#include <QPersistentModelIndex>
+#include <QtGui/QLabel>
+#include <QtGui/QLineEdit>
+#include <QtGui/QListView>
+#include <QtGui/QComboBox>
+#include <QtCore/QPersistentModelIndex>
 
 // KDE includes
 
