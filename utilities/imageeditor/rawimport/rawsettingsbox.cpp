@@ -47,21 +47,21 @@
 
 // LibKDcraw includes
 
-#include <libkdcraw/version.h>
 #include <libkdcraw/dcrawsettingswidget.h>
 #include <libkdcraw/rnuminput.h>
+#include <libkdcraw/version.h>
 
 // Local includes
 
-#include "rexpanderbox.h"
+#include "colorgradientwidget.h"
+#include "curveswidget.h"
 #include "histogrambox.h"
+#include "histogramwidget.h"
+#include "iccpreviewwidget.h"
+#include "imagecurves.h"
 #include "imagedialog.h"
 #include "imagehistogram.h"
-#include "imagecurves.h"
-#include "iccpreviewwidget.h"
-#include "histogramwidget.h"
-#include "curveswidget.h"
-#include "colorgradientwidget.h"
+#include "rexpanderbox.h"
 
 using namespace KDcrawIface;
 
@@ -74,7 +74,7 @@ public:
 
     enum AllColorsColorType
     {
-        AllColorsRed=0,
+        AllColorsRed = 0,
         AllColorsGreen,
         AllColorsBlue
     };
@@ -310,7 +310,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
 
     gridSettings->addWidget(d->tabView,   0, 0, 1, 5);
 #if KDCRAW_VERSION <= 0x000500
-    gridSettings->setRowStretch(1, 10);
+    gridSettings->setRowStretch(0, 10);
 #endif
     gridSettings->setColumnStretch(2, 10);
     gridSettings->setSpacing(spacingHint());
