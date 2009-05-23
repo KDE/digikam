@@ -80,5 +80,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 065 ==> 186046 : Crash after calling settings.
 066 ==> 193348 : Can't build digiKam on kde 4.2.3.
 067 ==> 150072 : Download with digiKam doesn't work with the first start of digiKam.
-068 ==> 
+068 ==> 193738 : Have the image editor status bar show the current color depth.
+069 ==> 
 
