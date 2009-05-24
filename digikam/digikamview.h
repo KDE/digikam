@@ -66,6 +66,8 @@ public:
     void hideSideBars();
     void setThumbSize(int size);
     void toggleShowBar(bool);
+    void setRecurseAlbums(bool recursive);
+    void setRecurseTags(bool recursive);
 
     void connectIconViewFilter(AlbumIconViewFilter *filter);
 

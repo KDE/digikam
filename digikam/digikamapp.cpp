@@ -2460,12 +2460,12 @@ void DigikamApp::slotContribute()
 
 void DigikamApp::slotRecurseAlbums(bool checked)
 {
-    AlbumLister::instance()->setRecurseAlbums(checked);
+    d->view->setRecurseAlbums(checked);
 }
 
 void DigikamApp::slotRecurseTags(bool checked)
 {
-    AlbumLister::instance()->setRecurseTags(checked);
+    d->view->setRecurseTags(checked);
 }
 
 void DigikamApp::slotZoomSliderChanged(int size)

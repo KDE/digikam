@@ -83,6 +83,7 @@
 #include "gpssearchfolderview.h"
 #include "gpssearchview.h"
 #include "imagealbumfiltermodel.h"
+#include "imagealbummodel.h"
 #include "imageinfoalbumsjob.h"
 #include "imagepreviewview.h"
 #include "imagepropertiessidebardb.h"
@@ -1706,6 +1707,16 @@ void DigikamView::slotCancelSlideShow()
 void DigikamView::toggleShowBar(bool b)
 {
     d->albumWidgetStack->toggleShowBar(b);
+}
+
+void DigikamView::setRecurseAlbums(bool recursive)
+{
+    d->iconView->imageModel()->setRecurseAlbums(recursive);
+}
+
+void DigikamView::setRecurseTags(bool recursive)
+{
+    d->iconView->imageModel()->setRecurseTags(recursive);
 }
 
 void DigikamView::slotSidebarTabTitleStyleChanged()
