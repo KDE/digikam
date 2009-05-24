@@ -82,5 +82,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 067 ==> 150072 : Download with digiKam doesn't work with the first start of digiKam.
 068 ==> 193738 : Have the image editor status bar show the current color depth.
 069 ==> 191678 : Exif rotation for Pentax Pef not working.
-070 ==> 
+070 ==> 146455 : Image rotation and auto-rotate don't work. 
+071 ==> 
 
