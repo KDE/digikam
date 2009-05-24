@@ -83,5 +83,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 068 ==> 193738 : Have the image editor status bar show the current color depth.
 069 ==> 191678 : Exif rotation for Pentax Pef not working.
 070 ==> 146455 : Image rotation and auto-rotate don't work. 
-071 ==> 
+071 ==> 152877 : Thumbnails: URI does not follow Thumbnail Managing Standard.
+072 ==> 
 
