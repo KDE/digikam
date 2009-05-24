@@ -127,7 +127,8 @@ void BatchThumbsGenerator::slotRebuildThumbs()
 
 void BatchThumbsGenerator::processOne()
 {
-    if (d->cancel) return;
+    if (d->cancel || d->allPicturesPath.isEmpty()) return;
+
     QString path = d->allPicturesPath.first();
 
     if (d->rebuildAll)
@@ -147,8 +148,9 @@ void BatchThumbsGenerator::complete()
 
 void BatchThumbsGenerator::slotGotThumbnail(const LoadingDescription& desc, const QPixmap& pix)
 {
-    if (d->allPicturesPath.first() != desc.filePath)
-        return;
+    if (d->cancel || d->allPicturesPath.isEmpty()) return;
+
+    if (d->allPicturesPath.first() != desc.filePath) return;
 
     addedAction(pix, desc.filePath);
     advance(1);
