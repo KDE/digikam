@@ -67,16 +67,20 @@ ManualRenameInput::ManualRenameInput(QWidget* parent)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
-    QGridLayout* mainLayout = new QGridLayout(this);
-    d->parseStringLineEdit  = new KLineEdit(this);
-    d->tooltipToggleButton  = new QToolButton(this);
+    // --------------------------------------------------------
+
+    d->parseStringLineEdit  = new KLineEdit;
+    d->tooltipToggleButton  = new QToolButton;
     d->tooltipToggleButton->setCheckable(true);
     d->tooltipToggleButton->setIcon(SmallIcon("dialog-information"));
 
+    QGridLayout* mainLayout = new QGridLayout;
     mainLayout->addWidget(d->parseStringLineEdit, 1, 1, 1, 1);
     mainLayout->addWidget(d->tooltipToggleButton, 1, 2, 1, 1);
     mainLayout->setColumnStretch(1, 10);
     setLayout(mainLayout);
+
+    // --------------------------------------------------------
 
     QString tooltip   = createToolTip();
     d->tooltipTracker = new DTipTracker(tooltip, d->parseStringLineEdit, Qt::AlignLeft);
@@ -90,6 +94,8 @@ ManualRenameInput::ManualRenameInput(QWidget* parent)
     d->parseStringLineEdit->setWhatsThis(tooltip + additionalInfo);
     d->parseStringLineEdit->setClearButtonShown(true);
     d->parseStringLineEdit->setCompletionMode(KGlobalSettings::CompletionAuto);
+
+    // --------------------------------------------------------
 
     connect(d->tooltipToggleButton, SIGNAL(toggled(bool)),
             this, SLOT(slotToolTipButtonToggled(bool)));
@@ -217,9 +223,9 @@ QString ManualRenameInput::parser(const QString& parse,
     // parse simple / remaining tokens ------------------------
     {
         parsedString.replace("[cam]", cameraName);
-        parsedString.replace('$',     fi.baseName());
-        parsedString.replace('&',     fi.baseName().toUpper());
-        parsedString.replace('%',     fi.baseName().toLower());
+        parsedString.replace('$', fi.baseName());
+        parsedString.replace('&', fi.baseName().toUpper());
+        parsedString.replace('%', fi.baseName().toLower());
     }
 
     return parsedString;
