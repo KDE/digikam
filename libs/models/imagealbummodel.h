@@ -24,8 +24,6 @@
 #ifndef IMAGEALBUMMODEL_H
 #define IMAGEALBUMMODEL_H
 
-// Qt includes
-
 // Local includes
 
 #include "imagethumbnailmodel.h"
@@ -103,4 +101,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IOSLAVEIMAGEMODEL_H
+#endif // IMAGEALBUMMODEL_H

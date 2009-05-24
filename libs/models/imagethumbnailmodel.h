@@ -24,10 +24,6 @@
 #ifndef IMAGETHUMBNAILMODEL_H
 #define IMAGETHUMBNAILMODEL_H
 
-// Qt includes
-
-// KDE includes
-
 // Local includes
 
 #include "imagemodel.h"
@@ -83,7 +79,6 @@ private:
     ImageThumbnailModelPriv* const d;
 };
 
-}
+} // namespace Digikam
 
-#endif
-
+#endif /* IMAGETHUMBNAILMODEL_H */
