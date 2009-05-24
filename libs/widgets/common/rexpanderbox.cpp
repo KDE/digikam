@@ -421,18 +421,47 @@ class RExpanderBoxPriv
 
 public:
 
-    RExpanderBoxPriv()
+    RExpanderBoxPriv(RExpanderBox* box)
     {
-        vbox = 0;
+        parent = box;
+        vbox   = 0;
+    }
+
+    void createItem(int index, QWidget *w, const QPixmap& pix, const QString& txt,
+                    const QString& objName, bool expandBydefault)
+    {
+        RLabelExpander *exp = new RLabelExpander(parent->viewport());
+        exp->setText(txt);
+        exp->setIcon(pix);
+        exp->setWidget(w);
+        exp->setLineVisible(!wList.isEmpty());
+        exp->setObjectName(objName);
+        exp->setExpandByDefault(expandBydefault);
+
+        if (index >= 0)
+        {
+            vbox->insertWidget(index, exp);
+            wList.insert(index, exp);
+        }
+        else
+        {
+            vbox->addWidget(exp);
+            wList.append(exp);
+        }
+
+        parent->connect(exp, SIGNAL(signalExpanded(bool)),
+                        parent, SLOT(slotItemExpanded(bool)));
     }
 
     QList<RLabelExpander*>  wList;
 
     QVBoxLayout            *vbox;
+
+    RExpanderBox           *parent;
 };
 
 RExpanderBox::RExpanderBox(QWidget *parent)
-            : QScrollArea(parent), d(new RExpanderBoxPriv)
+            : QScrollArea(parent), d(new RExpanderBoxPriv(this))
 {
     setFrameStyle(QFrame::NoFrame);
     setWidgetResizable(true);
@@ -452,7 +481,7 @@ RExpanderBox::~RExpanderBox()
 void RExpanderBox::addItem(QWidget *w, const QPixmap& pix, const QString& txt,
                            const QString& objName, bool expandBydefault)
 {
-    createItem(-1, w, pix, txt, objName, expandBydefault);
+    d->createItem(-1, w, pix, txt, objName, expandBydefault);
 }
 
 void RExpanderBox::addItem(QWidget *w, const QString& txt,
@@ -469,33 +498,7 @@ void RExpanderBox::addStretch()
 void RExpanderBox::insertItem(int index, QWidget *w, const QPixmap& pix, const QString& txt,
                               const QString& objName, bool expandBydefault)
 {
-    createItem(index, w, pix, txt, objName, expandBydefault);
-}
-
-void RExpanderBox::createItem(int index, QWidget *w, const QPixmap& pix, const QString& txt,
-                              const QString& objName, bool expandBydefault)
-{
-    RLabelExpander *exp = new RLabelExpander(viewport());
-    exp->setText(txt);
-    exp->setIcon(pix);
-    exp->setWidget(w);
-    exp->setLineVisible(!d->wList.isEmpty());
-    exp->setObjectName(objName);
-    exp->setExpandByDefault(expandBydefault);
-
-    if (index >= 0)
-    {
-        d->vbox->insertWidget(index, exp);
-        d->wList.insert(index, exp);
-    }
-    else
-    {
-        d->vbox->addWidget(exp);
-        d->wList.append(exp);
-    }
-
-    connect(exp, SIGNAL(signalExpanded(bool)),
-            this, SLOT(slotItemExpanded(bool)));
+    d->createItem(index, w, pix, txt, objName, expandBydefault);
 }
 
 void RExpanderBox::slotItemExpanded(bool b)

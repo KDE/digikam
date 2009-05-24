@@ -244,11 +244,6 @@ private Q_SLOTS:
 
 private:
 
-    void createItem(int index, QWidget *w, const QPixmap& pix, const QString& txt,
-                    const QString& objName, bool expandBydefault);
-
-private:
-
     RExpanderBoxPriv* const d;
 };
 
