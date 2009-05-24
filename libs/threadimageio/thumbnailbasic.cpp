@@ -86,13 +86,13 @@ QString ThumbnailCreator::thumbnailPath(const QString& filePath, const QString& 
 
 QString ThumbnailCreator::thumbnailUri(const QString& filePath)
 {
-     return "file://" + QDir::cleanPath(filePath);
+     return KUrl(filePath).url();
 }
 
 QString ThumbnailCreator::thumbnailPathFromUri(const QString& uri, const QString& basePath)
 {
     KMD5 md5( QFile::encodeName(uri) );
-    return basePath + QFile::encodeName( md5.hexDigest() ) + ".png";
+    return basePath + QFile::encodeName( md5.hexDigest() ) + QString(".png");
 }
 
 // --- non-static methods ---
