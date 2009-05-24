@@ -36,7 +36,6 @@
 // Local includes
 
 #include "albummanager.h"
-#include "albumsettings.h"
 #include "databaseaccess.h"
 #include "databasechangesets.h"
 #include "databasewatch.h"
@@ -56,6 +55,8 @@ public:
         currentAlbum        = 0;
         job                 = 0;
         refreshTimer        = 0;
+        recurseAlbums       = false;
+        recurseTags         = false;
     }
 
     Album                   *currentAlbum;
@@ -73,14 +74,8 @@ ImageAlbumModel::ImageAlbumModel(QObject *parent)
     d->refreshTimer = new QTimer(this);
     d->refreshTimer->setSingleShot(true);
 
-    d->recurseAlbums = AlbumSettings::instance()->getRecurseAlbums();
-    d->recurseTags   = AlbumSettings::instance()->getRecurseTags();
-
     connect(d->refreshTimer, SIGNAL(timeout()),
             this, SLOT(slotNextRefresh()));
-
-    connect(AlbumSettings::instance(), SIGNAL(recurseSettingsChanged()),
-            this, SLOT(slotRecurseSettingsChanged()));
 
     connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset &)),
             this, SLOT(slotCollectionImageChange(const CollectionImageChangeset &)));
@@ -135,6 +130,34 @@ void ImageAlbumModel::refresh()
 bool ImageAlbumModel::hasScheduledRefresh() const
 {
     return d->refreshTimer->isActive();
+}
+
+void ImageAlbumModel::setRecurseAlbums(bool recursiveListing)
+{
+    if (d->recurseAlbums != recursiveListing)
+    {
+        d->recurseAlbums = recursiveListing;
+        refresh();
+    }
+}
+
+void ImageAlbumModel::setRecurseTags(bool recursiveListing)
+{
+    if (d->recurseTags != recursiveListing)
+    {
+        d->recurseTags = recursiveListing;
+        refresh();
+    }
+}
+
+bool ImageAlbumModel::isRecursingAlbums() const
+{
+    return d->recurseAlbums;
+}
+
+bool ImageAlbumModel::isRecursingTags() const
+{
+    return d->recurseTags;
 }
 
 void ImageAlbumModel::startLoadingAlbum(Album *album)
@@ -198,13 +221,6 @@ void ImageAlbumModel::slotData(KIO::Job*, const QByteArray& data)
     }
 
     addImageInfos(newItemsList);
-}
-
-void ImageAlbumModel::slotRecurseSettingsChanged()
-{
-    d->recurseAlbums = AlbumSettings::instance()->getRecurseAlbums();
-    d->recurseTags   = AlbumSettings::instance()->getRecurseTags();
-    refresh();
 }
 
 void ImageAlbumModel::slotNextRefresh()

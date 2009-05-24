@@ -55,6 +55,8 @@ public:
     Album *currentAlbum() const;
 
     bool hasScheduledRefresh() const;
+    bool isRecursingAlbums() const;
+    bool isRecursingTags() const;
 
 public Q_SLOTS:
 
@@ -66,6 +68,9 @@ public Q_SLOTS:
     void openAlbum(Album *album);
     /** Reloads the current album */
     void refresh();
+
+    void setRecurseAlbums(bool recursiveListing);
+    void setRecurseTags(bool recursiveListing);
 
 Q_SIGNALS:
 
@@ -80,8 +85,6 @@ protected Q_SLOTS:
     virtual void slotImageChange(const ImageChangeset& changeset);
     void slotCollectionImageChange(const CollectionImageChangeset& changeset);
     void slotSearchChange(const SearchChangeset& changeset);
-
-    void slotRecurseSettingsChanged();
 
     void slotAlbumAdded(Album *album);
     void slotAlbumDeleted(Album *album);
