@@ -1136,13 +1136,13 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    KAction *rebuildThumbsAction = new KAction(KIcon("run-build"), i18n("Rebuild All Thumbnails..."), this);
-    connect(rebuildThumbsAction, SIGNAL(triggered()), this, SLOT(slotRebuildAllThumbs()));
-    actionCollection()->addAction("thumbs_rebuild", rebuildThumbsAction);
+    KAction *rebuildThumbnailsAction = new KAction(KIcon("view-process-all"), i18n("Rebuild Thumbnails..."), this);
+    connect(rebuildThumbnailsAction, SIGNAL(triggered()), this, SLOT(slotRebuildThumbnails()));
+    actionCollection()->addAction("thumbnails_rebuild", rebuildThumbnailsAction);
 
     // -----------------------------------------------------------
 
-    KAction *rebuildFingerPrintsAction = new KAction(KIcon("run-build"), i18n("Rebuild All Fingerprints..."), this);
+    KAction *rebuildFingerPrintsAction = new KAction(KIcon("run-build"), i18n("Rebuild Fingerprints..."), this);
     connect(rebuildFingerPrintsAction, SIGNAL(triggered()), this, SLOT(slotRebuildAllFingerPrints()));
     actionCollection()->addAction("fingerprints_rebuild", rebuildFingerPrintsAction);
 
@@ -2393,18 +2393,6 @@ void DigikamApp::slotDatabaseRescan()
         QueueMgrWindow::queueManagerWindow()->refreshView();
 }
 
-void DigikamApp::slotRebuildAllThumbs()
-{
-    QString msg = i18n("Rebuilding all image thumbnails can take some time.\n"
-                       "Do you want to continue?");
-    int result = KMessageBox::warningContinueCancel(this, msg);
-    if (result != KMessageBox::Continue)
-        return;
-
-    BatchThumbsGenerator *thumbsGenerator = new BatchThumbsGenerator(this);
-    thumbsGenerator->show();
-}
-
 void DigikamApp::slotSyncAllPicturesMetadata()
 {
     QString msg = i18n("Updating the metadata database can take some time. \nDo you want to continue?");
@@ -2414,6 +2402,29 @@ void DigikamApp::slotSyncAllPicturesMetadata()
 
     BatchAlbumsSyncMetadata *syncMetadata = new BatchAlbumsSyncMetadata(this);
     syncMetadata->show();
+}
+
+void DigikamApp::slotRebuildThumbnails()
+{
+    QString msg = i18n("Image thumbnailing can take some time.\n"
+                       "Which would you prefer?\n"
+                       "- Scan for missing thumbnails (quick)\n"
+                       "- Rebuild all thumbnails (takes a long time)");
+    int result = KMessageBox::questionYesNoCancel(this, msg,
+                                                  i18n("Warning"),
+                                                  KGuiItem(i18n("Scan")),
+                                                  KGuiItem(i18n("Rebuild All")));
+
+    if (result == KMessageBox::Cancel)
+        return;
+
+    runThumbnailsGenerator(result == KMessageBox::Yes ? false : true);
+}
+
+void DigikamApp::runThumbnailsGenerator(bool rebuildAll)
+{
+    BatchThumbsGenerator *thumbsGenerator = new BatchThumbsGenerator(this, rebuildAll);
+    thumbsGenerator->show();
 }
 
 void DigikamApp::slotRebuildAllFingerPrints()

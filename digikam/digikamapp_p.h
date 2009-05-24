@@ -249,10 +249,6 @@ public:
     QAction                            *zoomMinusAction;
     KAction                            *zoomFitToWindowAction;
     KAction                            *zoomTo100percents;
-    KActionMenu                        *slideShowAction;
-    KAction                            *slideShowAllAction;
-    KAction                            *slideShowSelectionAction;
-    KAction                            *slideShowRecursiveAction;
     KSelectAction                      *imageSortAction;
     KSelectAction                      *albumSortAction;
     KToggleAction                      *recurseAlbumsAction;
@@ -266,6 +262,12 @@ public:
     KAction                            *rating3Star;
     KAction                            *rating4Star;
     KAction                            *rating5Star;
+
+    // Tools Actions
+    KActionMenu                        *slideShowAction;
+    KAction                            *slideShowAllAction;
+    KAction                            *slideShowSelectionAction;
+    KAction                            *slideShowRecursiveAction;
 
     // Application Actions
     KAction                            *rawCameraListAction;

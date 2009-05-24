@@ -6,7 +6,7 @@
  * Date        : 2006-30-08
  * Description : batch thumbnails generator
  *
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -62,11 +62,13 @@ public:
     BatchThumbsGeneratorPriv()
     {
         cancel          = false;
+        rebuildAll      = true;
         thumbLoadThread = 0;
         duration.start();
     }
 
     bool                 cancel;
+    bool                 rebuildAll;
 
     QTime                duration;
 
@@ -75,10 +77,11 @@ public:
     ThumbnailLoadThread *thumbLoadThread;
 };
 
-BatchThumbsGenerator::BatchThumbsGenerator(QWidget* /*parent*/)
+BatchThumbsGenerator::BatchThumbsGenerator(QWidget* /*parent*/, bool rebuildAll)
                     : DProgressDlg(0), d(new BatchThumbsGeneratorPriv)
 {
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
+    d->rebuildAll      = rebuildAll;
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotGotThumbnail(const LoadingDescription&, const QPixmap&)));
@@ -126,14 +129,16 @@ void BatchThumbsGenerator::processOne()
 {
     if (d->cancel) return;
     QString path = d->allPicturesPath.first();
-    d->thumbLoadThread->deleteThumbnail(path);
+
+    if (d->rebuildAll)
+        d->thumbLoadThread->deleteThumbnail(path);
+
     d->thumbLoadThread->find(path);
 }
 
 void BatchThumbsGenerator::complete()
 {
-    QTime t;
-    t = t.addMSecs(d->duration.elapsed());
+    QTime t = t.addMSecs(d->duration.elapsed());
     setLabel(i18n("<b>The thumbnails database has been updated.</b>"));
     setTitle(i18n("Duration: %1", t.toString()));
     setButtonText(i18n("&Close"));
