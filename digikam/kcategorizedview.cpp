@@ -1173,6 +1173,8 @@ void KCategorizedView::mousePressEvent(QMouseEvent *event)
 {
     d->dragLeftViewport = false;
 
+    QListView::mousePressEvent(event);
+
     if (event->button() == Qt::LeftButton)
     {
         d->mouseButtonPressed = true;
@@ -1187,8 +1189,6 @@ void KCategorizedView::mousePressEvent(QMouseEvent *event)
     {
         d->rightMouseButtonPressed = true;
     }
-
-    QListView::mousePressEvent(event);
 
     if (selectionModel())
     {
