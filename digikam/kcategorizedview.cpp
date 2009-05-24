@@ -960,17 +960,21 @@ void KCategorizedView::setSelection(const QRect &rect,
     if (!flags)
         return;
 
+    if (flags & QItemSelectionModel::Clear)
+    {
+        selectionModel()->clearSelection();
+        d->lastSelection.clear();
+    }
+
     QModelIndexList dirtyIndexes = d->intersectionSet(rect);
 
     // no items affected, just leave
     if (!dirtyIndexes.count())
     {
-        selectionModel()->select(QItemSelection(), flags);
+        selectionModel()->select(d->lastSelection, QItemSelectionModel::SelectCurrent);
+
         return;
     }
-
-    if (flags & QItemSelectionModel::Clear)
-        d->lastSelection.clear();
 
     QModelIndex topLeft;
     QModelIndex bottomRight;
