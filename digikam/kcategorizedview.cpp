@@ -646,25 +646,27 @@ QModelIndex KCategorizedView::categoryAt(const QPoint &point) const
         return QModelIndex();
     }
 
-    int y = 0;
-    QString lastCategory, foundCategory;
+    // We traverse the categories and find the first where point.y() is below the visualRect
+    int y = 0, lastY = 0;
+    QString lastCategory;
     foreach (const QString &category, d->categories)
     {
-        QRect visualRect = d->categoryVisualRect(category);
+        y = d->categoryVisualRect(category).top();
 
-        if (point.y() >= y && point.y() < visualRect.top())
+        if (point.y() >= lastY && point.y() < y)
         {
-            foundCategory = lastCategory;
             break;
         }
 
-        y = visualRect.top();
+        lastY = y;
+        y = 0;
         lastCategory = category;
     }
 
-    if (!foundCategory.isNull())
+    // if lastCategory is the last one in the list y will be 0
+    if (!lastCategory.isNull() && point.y() >= lastY && (point.y() < y || !y))
     {
-        return d->categoriesIndexes[foundCategory][0];
+        return d->categoriesIndexes[lastCategory][0];
     }
     return QModelIndex();
 }
