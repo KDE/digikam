@@ -24,7 +24,7 @@
 #ifndef DCOLOR_H
 #define DCOLOR_H
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 

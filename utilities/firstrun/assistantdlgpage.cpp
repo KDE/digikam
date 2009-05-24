@@ -28,7 +28,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 
-// KDE includes.
+// KDE includes
 
 #include <kvbox.h>
 #include <kiconloader.h>

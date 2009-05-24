@@ -24,11 +24,11 @@
 #ifndef COLLECTION_PAGE_H
 #define COLLECTION_PAGE_H
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 
-// KDE includes.
+// KDE includes
 
 #include <kurl.h>
 

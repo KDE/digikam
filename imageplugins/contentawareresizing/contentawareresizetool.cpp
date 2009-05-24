@@ -26,7 +26,7 @@
 #include "contentawareresizetool.h"
 #include "contentawareresizetool.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cstdio>
 

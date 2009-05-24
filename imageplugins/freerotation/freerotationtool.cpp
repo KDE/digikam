@@ -27,7 +27,7 @@
 #include "freerotationtool.h"
 #include "freerotationtool.moc"
 
-// C++ includes.
+// C++ includes
 
 #include <cmath>
 
