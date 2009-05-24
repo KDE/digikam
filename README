@@ -87,10 +87,10 @@ http://dev.robotbattle.com/bugs/main_page.php
 Name            Version                       URL                                        Remarks
 
 CMake           >= 2.4.x (2.4.3 recommended)  http://www.cmake.org
-libqt           >= 4.3.x (4.5.x recommended)  http://www.qtsoftware.com                  Including SQLite3 database plugin
+libqt           >= 4.3.x (4.5.x recommended)  http://www.qtsoftware.com                  Including run-time SQLite3 database plugin
 kdelibs         >= 4.0.x (4.2.x recommended)  http://www.kde.org
 libkipi         >= 0.2.0                      http://www.digikam.org/sharedlibs
-libkexiv2       >= 0.5.0                      http://www.digikam.org/sharedlibs          Version from trunk KDE svn repository. Will be released with KDE 4.2. Exiv2 0.18.x shared library recommended.
+libkexiv2       >= 0.5.0                      http://www.digikam.org/sharedlibs          Version from trunk KDE svn repository. Will be released with KDE 4.2. Exiv2 >= 0.18.1 shared library recommended.
 libkdcraw       >= 0.4.0                      http://www.digikam.org/sharedlibs          Version from trunk KDE svn repository. Will be released with KDE 4.2.
 liblcms         >= 1.14.x                     http://www.littlecms.com
 libtiff         >= 3.8.2                      http://www.remotesensing.org/libtiff
