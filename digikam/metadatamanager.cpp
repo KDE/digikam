@@ -38,6 +38,7 @@
 
 // Local includes
 
+#include "albumsettings.h"
 #include "constants.h"
 #include "databasetransaction.h"
 #include "imageattributeswatch.h"
@@ -118,7 +119,7 @@ void MetadataManager::setExifOrientation(const QList<ImageInfo>& infos, int orie
 // --------------------------------------------------------------------------------------
 
 MetadataManagerPriv::MetadataManagerPriv(MetadataManager *q)
-            : q(q)
+                   : q(q)
 {
     dbWorker   = new MetadataManagerDatabaseWorker(this);
     fileWorker = new MetadataManagerFileWorker(this);
@@ -370,6 +371,7 @@ void MetadataManagerFileWorker::writeOrientationToFiles(const QList<ImageInfo>& 
         DMetadata metadata(path);
         DMetadata::ImageOrientation o = (DMetadata::ImageOrientation)orientation;
         metadata.setImageOrientation(o);
+        metadata.setWriteRawFiles(AlbumSettings::instance()->getWriteRawFiles());
 
         if (!metadata.applyChanges())
         {
