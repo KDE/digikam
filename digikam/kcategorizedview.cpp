@@ -1056,7 +1056,7 @@ void KCategorizedView::setSelection(const QRect &rect,
         QModelIndexList theoricDirty(dirtyIndexes);
         dirtyIndexes.clear();
         int first = model()->rowCount();
-        int last = 0;
+        int last = -1;
 
         foreach (const QModelIndex &index, theoricDirty)
         {
