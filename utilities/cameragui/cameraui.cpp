@@ -773,6 +773,7 @@ void CameraUI::slotBusy(bool val)
 
         d->busy = false;
         d->cancelBtn->setEnabled(false);
+        d->view->viewport()->setEnabled(true);
 
         d->advBox->setEnabled(true);
         // B.K.O #127614: The Focus need to be restored in custom prefix widget.
@@ -804,6 +805,11 @@ void CameraUI::slotBusy(bool val)
 
         d->busy = true;
         d->cancelBtn->setEnabled(true);
+
+        // Has camera icon view item selection is used to control download post processing,
+        // all selection actions are disable when camera interface is busy.
+        d->view->viewport()->setEnabled(false);
+
         // Settings tab is disabled in slotDownload, selectively when downloading
         // Fast dis/enabling would create the impression of flicker, e.g. when retrieving EXIF from camera
         //d->advBox->setEnabled(false);
