@@ -206,9 +206,9 @@ void CameraIconViewItem::setDownloaded(int status)
     repaint();
 }
 
-int CameraIconViewItem::isDownloaded() const
+bool CameraIconViewItem::isDownloaded() const
 {
-    return d->itemInfo->downloaded;
+    return (d->itemInfo->downloaded == GPItemInfo::DownloadedYes);
 }
 
 void CameraIconViewItem::toggleLock()
