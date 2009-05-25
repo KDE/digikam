@@ -87,11 +87,7 @@ ManualRenameInput::ManualRenameInput(QWidget* parent)
     d->tooltipTracker->setEnable(false);
     d->tooltipTracker->setKeepOpen(true);
 
-    QString additionalInfo = i18n("<p><i>Example:</i><br/>"
-                                  "<b>new_$_###</b><br/>"
-                                  "=> new_MyImageName_001.jpg"
-                                  "</p>");
-    d->parseStringLineEdit->setWhatsThis(tooltip + additionalInfo);
+    d->parseStringLineEdit->setWhatsThis(tooltip);
     d->parseStringLineEdit->setClearButtonShown(true);
     d->parseStringLineEdit->setCompletionMode(KGlobalSettings::CompletionAuto);
 
@@ -253,7 +249,7 @@ QString ManualRenameInput::createToolTip()
               << token(QString("[date:format]"),  i18n("date and time of the file"));
 
     QString tooltip;
-    tooltip += QString("<table>");
+    tooltip += QString("<p><table>");
 
     foreach (const token& token, tokenList)
     {
@@ -261,7 +257,13 @@ QString ManualRenameInput::createToolTip()
                                                                               .arg(token.second);
     }
 
-    tooltip += QString("</table>");
+    tooltip += QString("</table></p>");
+
+    tooltip += i18n("<p><table>"
+                        "<tr><td><i>Example:</i></td><td></td></tr>"
+                        "<tr><td></td><td><b>new_$_###</b></td></tr>"
+                        "<tr><td>=></td><td>new_MyImageName_001.jpg</td></tr>"
+                    "</table></p>");
     return tooltip;
 }
 
