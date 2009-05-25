@@ -115,7 +115,7 @@ QString CameraIconItem::getDownloadName() const
 void CameraIconItem::setDownloaded(int status)
 {
     d->itemInfo->downloaded = status;
-    d->progressCount                  = 0;
+    d->progressCount        = 0;
 
     if(d->itemInfo->downloaded == GPItemInfo::DownloadStarted)
         d->progressTimer->start(500);
@@ -123,6 +123,11 @@ void CameraIconItem::setDownloaded(int status)
         d->progressTimer->stop();
 
     update();
+}
+
+int CameraIconItem::isDownloaded() const
+{
+    return d->itemInfo->downloaded;
 }
 
 void CameraIconItem::toggleLock()

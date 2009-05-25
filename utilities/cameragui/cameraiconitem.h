@@ -56,6 +56,7 @@ public:
     void    setDownloadName(const QString& downloadName);
     QString getDownloadName() const;
     void    setDownloaded(int status);
+    int     isDownloaded() const;
 
     void    toggleLock();
 
