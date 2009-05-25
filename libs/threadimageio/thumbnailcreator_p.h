@@ -42,6 +42,8 @@ public:
         exifRotate          = true;
         removeAlphaChannel  = true;
         onlyLargeThumbnails = false;
+
+        digiKamFingerPrint  = QString("Digikam Thumbnail Generator");
     }
 
     bool                exifRotate;
@@ -54,6 +56,7 @@ public:
     QString             error;
     QString             bigThumbPath;
     QString             smallThumbPath;
+    QString             digiKamFingerPrint;
 
     DImgLoaderObserver* observer;
     DRawDecoding        rawSettings;

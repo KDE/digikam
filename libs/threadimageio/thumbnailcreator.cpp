@@ -62,10 +62,6 @@
 #include "dmetadata.h"
 #include "jpegutils.h"
 
-// Definitions
-
-#define DigiKamFingerPrint "Digikam Thumbnail Generator"
-
 namespace Digikam
 {
 
@@ -165,7 +161,7 @@ QImage ThumbnailCreator::load(const QString& path)
     if (!qimage.isNull())
     {
         if (qimage.text("Thumb::MTime") == QString::number(st.st_mtime) &&
-            qimage.text("Software")     == QString(DigiKamFingerPrint))
+            qimage.text("Software")     == d->digiKamFingerPrint)
             regenerate = false;
     }
 
@@ -246,7 +242,7 @@ QImage ThumbnailCreator::load(const QString& path)
 
         qimage.setText(QString("Thumb::URI").toLatin1(),   0, uri);
         qimage.setText(QString("Thumb::MTime").toLatin1(), 0, QString::number(st.st_mtime));
-        qimage.setText(QString("Software").toLatin1(),     0, QString(DigiKamFingerPrint));
+        qimage.setText(QString("Software").toLatin1(),     0, d->digiKamFingerPrint);
 
         KTemporaryFile temp;
         temp.setPrefix(thumbPath + "-digikam-");
@@ -280,7 +276,8 @@ QImage ThumbnailCreator::load(const QString& path)
         }
     }
 
-    qimage = qimage.scaled(d->thumbnailSize, d->thumbnailSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    // See B.K.O #193967 : no need to use SmoothTransformation here.
+    qimage = qimage.scaled(d->thumbnailSize, d->thumbnailSize, Qt::KeepAspectRatio, Qt::FastTransformation);
 
     handleAlphaChannel(qimage);
 
@@ -338,7 +335,9 @@ void ThumbnailCreator::handleAlphaChannel(QImage& qimage)
             break;
         }
         default: // indexed and monochrome formats
+        {
             qimage = qimage.convertToFormat(QImage::Format_RGB32);
+        }
     }
 }
 
@@ -396,7 +395,7 @@ void ThumbnailCreator::exifRotate(const QString& filePath, QImage& thumb, bool f
     }
 
     // transform accordingly
-    thumb = thumb.transformed( matrix );
+    thumb = thumb.transformed(matrix);
 }
 
 void ThumbnailCreator::deleteThumbnailsFromDisk(const QString& filePath)
