@@ -901,6 +901,8 @@ void CameraUI::slotFileList(const GPItemInfoList& fileList)
     if (fileList.empty())
         return;
 
+    kdDebug() << fileList.count() << endl;
+
     // We sort the map by time stamp
     // and we remove internal camera files which are not image/video/sounds.
     QStringList fileNames, fileExts;
@@ -917,38 +919,44 @@ void CameraUI::slotFileList(const GPItemInfoList& fileList)
     fileExts.append("dps");
 
     // We sort the map by time stamp.
-    QMap<QDateTime, GPItemInfo>    map;
+    GPItemInfoList                 sfileList;
     GPItemInfoList::const_iterator it;
-    QDateTime                      dt;
-    
+    GPItemInfoList::iterator       it2;
+
     for(it = fileList.begin() ; it != fileList.end() ; ++it)
     {
         info.setFile((*it).name);
         if (!fileNames.contains(info.fileName().lower()) &&
             !fileExts.contains(info.extension(false).lower()))
         {
-            dt.setTime_t((*it).mtime);
-            map.insert(dt, *it, false);
+            kdDebug() << info.fileName() << " : " << (*it).mtime << endl;
+
+            for(it2 = sfileList.begin() ; it2 != sfileList.end() ; ++it2)
+                if ((*it2).mtime <= (*it).mtime) break;
+
+            sfileList.insert(it2, *it);
         }
     }
 
-    if (map.empty())
+    if (sfileList.empty())
         return;
 
-    QMap<QDateTime, GPItemInfo>::iterator it2 = map.end();
+    kdDebug() << sfileList.count() << endl;
+
+    GPItemInfoList::const_iterator it3 = sfileList.begin();
 
     do
     {
-        --it2;
-        GPItemInfo item = *it2;
+        GPItemInfo item = *it3;
 
         if (item.mtime > (time_t)d->lastAccess.toTime_t() && item.downloaded == GPItemInfo::DownloadUnknow)
            item.downloaded = GPItemInfo::NewPicture;
 
         d->view->addItem(item);
         d->controller->getThumbnail(item.folder, item.name);
+        ++it3;
     }
-    while(it2 != map.begin());
+    while(it3 != sfileList.end());
 
     d->progress->setTotalSteps(d->progress->totalSteps() + fileList.count());
 }
