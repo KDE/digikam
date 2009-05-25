@@ -87,4 +87,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 072 ==> 140615 : Pre-Creating of image thumbnails in whole digiKam/all subfolders.
 073 ==> 193967 : VERY fast loading of thumbnails [PATCH].
 074 ==> 191492 : digiKam hangs on startup "reading database".
-075 ==> 
+075 ==> 171950 : Lost pictures after 'download/delete all' when target dir had same file names.
+076 ==> 
