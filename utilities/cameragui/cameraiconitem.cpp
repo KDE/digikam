@@ -2,24 +2,24 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2004-09-21
- * Description : camera icon view item 
- * 
+ * Description : camera icon view item
+ *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Qt includes.
@@ -104,7 +104,7 @@ void CameraIconViewItem::paintItem()
         pix = *(view->itemBaseSelPixmap());
     else
         pix = *(view->itemBaseRegPixmap());
-    
+
     ThemeEngine* te = ThemeEngine::instance();
 
     QPainter p(&pix);
@@ -139,7 +139,7 @@ void CameraIconViewItem::paintItem()
 
     // Draw download status icon.
     QPixmap downloaded;
-    
+
     switch (d->itemInfo->downloaded)
     {
         case GPItemInfo::NewPicture:
@@ -162,10 +162,10 @@ void CameraIconViewItem::paintItem()
             downloaded = SmallIcon( "button_cancel" );
             break;
         }
-        /* TODO: see B.K.O #107316 : disable temporally the unknow download status until     
-                 a new method to identify the already downloaded pictures from camera is 
+        /* TODO: see B.K.O #107316 : disable temporally the unknow download status until
+                 a new method to identify the already downloaded pictures from camera is
                  implemented.
-  
+
         case GPItemInfo::DownloadUnknow:
         {
             downloaded = view->unknowPicturePixmap();
@@ -204,6 +204,11 @@ void CameraIconViewItem::setDownloaded(int status)
 {
     d->itemInfo->downloaded = status;
     repaint();
+}
+
+int CameraIconViewItem::isDownloaded() const
+{
+    return d->itemInfo->downloaded;
 }
 
 void CameraIconViewItem::toggleLock()
@@ -255,7 +260,7 @@ void CameraIconViewItem::calcRect(const QString& itemName, const QString& downlo
         d->textRect.setWidth(QMAX(d->textRect.width(), d->extraRect.width()));
         d->textRect.setHeight(d->textRect.height() + d->extraRect.height());
     }
-    
+
     int w = QMAX(d->textRect.width(), d->pixRect.width() );
     int h = d->textRect.height() + d->pixRect.height() ;
 
@@ -279,7 +284,7 @@ void CameraIconViewItem::calcRect(const QString& itemName, const QString& downlo
 QRect CameraIconViewItem::clickToOpenRect()
 {
     QRect r(rect());
-    
+
     if (d->pixmap.isNull())
     {
         QRect pixRect(d->pixRect);
