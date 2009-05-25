@@ -85,5 +85,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 070 ==> 146455 : Image rotation and auto-rotate don't work. 
 071 ==> 152877 : Thumbnails: URI does not follow Thumbnail Managing Standard.
 072 ==> 140615 : Pre-Creating of image thumbnails in whole digiKam/all subfolders.
-073 ==> 
+073 ==> 193967 : VERY fast loading of thumbnails [PATCH].
+074 ==> 
 
