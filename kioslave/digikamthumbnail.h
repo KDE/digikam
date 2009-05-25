@@ -7,7 +7,7 @@
  * Description : digiKam KIO slave to get image thumbnails.
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2003-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -66,6 +66,7 @@ private:
     int           argc_;
     char        **argv_;
 
+    QString       digiKamFingerPrint;
     QString       smallThumbPath_;
     QString       bigThumbPath_;
 

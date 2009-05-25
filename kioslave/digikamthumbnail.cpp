@@ -2,7 +2,7 @@
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
- * 
+ *
  * Date        : 2003-01-15
  * Description : digiKam KIO slave to get image thumbnails. 
  *               This kio-slave support this freedesktop 
@@ -10,14 +10,14 @@
  *               http://jens.triq.net/thumbnail-spec
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2003-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * 
+ * Copyright (C) 2003-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -27,7 +27,6 @@
 
 #define XMD_H
 #define PNG_BYTES_TO_CHECK 4
-#define DigiKamFingerPrint "Digikam Thumbnail Generator"
 
 // C++ includes.
 
@@ -103,10 +102,10 @@ using namespace Digikam;
 kio_digikamthumbnailProtocol::kio_digikamthumbnailProtocol(int argc, char** argv) 
                             : SlaveBase("kio_digikamthumbnail", argv[2], argv[3])
 {
-    argc_ = argc;
-    argv_ = argv;
-    app_  = 0;
-
+    argc_              = argc;
+    argv_              = argv;
+    app_               = 0;
+    digiKamFingerPrint = QString("Digikam Thumbnail Generator");
     createThumbnailDirs();
 }
 
@@ -114,7 +113,7 @@ kio_digikamthumbnailProtocol::~kio_digikamthumbnailProtocol()
 {
 }
 
-void kio_digikamthumbnailProtocol::get(const KURL& url )
+void kio_digikamthumbnailProtocol::get(const KURL& url)
 {
     int  size =  metaData("size").toInt();
     bool exif = (metaData("exif") == "yes");
@@ -129,7 +128,7 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
     }
 
     // generate the thumbnail path
-    QString uri = "file://" + QDir::cleanDirPath(url.path(-1));
+    QString uri = KURL(url.path()).url();     // "file://" uri
     KMD5 md5( QFile::encodeName(uri) );
     QString thumbPath = (cachedSize_ == 128) ? smallThumbPath_ : bigThumbPath_;
     thumbPath += QFile::encodeName( md5.hexDigest() ) + ".png";
@@ -152,7 +151,7 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
     if (!img.isNull())
     {
         if (img.text("Thumb::MTime") == QString::number(st.st_mtime) &&
-            img.text("Software")     == QString(DigiKamFingerPrint))
+            img.text("Software")     == digiKamFingerPrint)
             regenerate = false;
     }
 
@@ -196,7 +195,7 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
 
         img.setText(QString("Thumb::URI").latin1(),   0, uri);
         img.setText(QString("Thumb::MTime").latin1(), 0, QString::number(st.st_mtime));
-        img.setText(QString("Software").latin1(),     0, QString(DigiKamFingerPrint));
+        img.setText(QString("Software").latin1(),     0, digiKamFingerPrint);
 
         KTempFile temp(thumbPath + "-digikam-", ".png");
         if (temp.status() == 0)
@@ -207,7 +206,8 @@ void kio_digikamthumbnailProtocol::get(const KURL& url )
         }
     }
 
-    img = img.smoothScale(size, size, QImage::ScaleMin);
+    // See B.K.O #193967 : no need to use SmoothScale here.
+    img = img.scale(size, size, QImage::ScaleMin);
 
     if (img.isNull())
     {
@@ -257,11 +257,11 @@ bool kio_digikamthumbnailProtocol::loadByExtension(QImage& image, const QString&
     if (!fileInfo.exists())
         return false;
 
-    // Try to use embedded preview image from metadata.    
+    // Try to use embedded preview image from metadata.
     DMetadata metadata(path);
     if (metadata.getImagePreview(image))
     {
-        kdDebug() << "Use Exif/Iptc preview extraction. Size of image: " 
+        kdDebug() << "Use Exif/Iptc preview extraction. Size of image: "
                   << image.width() << "x" << image.height() << endl;
         return true;
     }
@@ -345,7 +345,7 @@ void kio_digikamthumbnailProtocol::exifRotate(const QString& filePath, QImage& t
     }
 
     // transform accordingly
-    thumb = thumb.xForm( matrix );
+    thumb = thumb.xForm(matrix);
 }
 
 QImage kio_digikamthumbnailProtocol::loadPNG(const QString& path)
