@@ -34,16 +34,16 @@ namespace ShowFoto
 
 class SetupPrivate;
 
-class Setup : public KPageDialog 
+class Setup : public KPageDialog
 {
     Q_OBJECT
 
 public:
 
-    enum Page 
+    enum Page
     {
         LastPageUsed = -1,
-        EditorPage=0,
+        EditorPage = 0,
         ToolTipPage,
         DcrawPage,
         IOFilesPage,

@@ -26,21 +26,21 @@
 
 // KDE includes
 
-#include <klocale.h>
-#include <kiconloader.h>
-#include <kconfig.h>
 #include <kapplication.h>
+#include <kconfig.h>
 #include <kglobal.h>
+#include <kiconloader.h>
+#include <klocale.h>
 #include <kvbox.h>
 
 // Local includes
 
-#include "setuptooltip.h"
-#include "setupeditor.h"
 #include "setupdcraw.h"
+#include "setupeditor.h"
+#include "setupicc.h"
 #include "setupiofiles.h"
 #include "setupslideshow.h"
-#include "setupicc.h"
+#include "setuptooltip.h"
 
 namespace ShowFoto
 {
@@ -65,20 +65,20 @@ public:
         page_icc       = 0;
     }
 
-    KPageWidgetItem         *page_editor;
-    KPageWidgetItem         *page_tooltip;
-    KPageWidgetItem         *page_dcraw;
-    KPageWidgetItem         *page_iofiles;
-    KPageWidgetItem         *page_slideshow;
-    KPageWidgetItem         *page_icc;
+    KPageWidgetItem*         page_editor;
+    KPageWidgetItem*         page_tooltip;
+    KPageWidgetItem*         page_dcraw;
+    KPageWidgetItem*         page_iofiles;
+    KPageWidgetItem*         page_slideshow;
+    KPageWidgetItem*         page_icc;
 
-    SetupEditor             *editorPage;
-    SetupToolTip            *toolTipPage;
+    SetupEditor*             editorPage;
+    SetupToolTip*            toolTipPage;
 
-    Digikam::SetupDcraw     *dcrawPage;
-    Digikam::SetupIOFiles   *iofilesPage;
-    Digikam::SetupSlideShow *slideshowPage;
-    Digikam::SetupICC       *iccPage;
+    Digikam::SetupDcraw*     dcrawPage;
+    Digikam::SetupIOFiles*   iofilesPage;
+    Digikam::SetupSlideShow* slideshowPage;
+    Digikam::SetupICC*       iccPage;
 };
 
 Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
