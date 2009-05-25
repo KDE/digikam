@@ -52,6 +52,7 @@ public:
 
     CameraUIPriv()
     {
+        deleteAfter               = false;
         busy                      = false;
         closed                    = false;
         fullScreen                = false;
@@ -114,6 +115,7 @@ public:
         kdeJob                    = 0;
     }
 
+    bool                          deleteAfter;
     bool                          busy;
     bool                          closed;
     bool                          fullScreen;

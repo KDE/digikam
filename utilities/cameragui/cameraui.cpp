@@ -897,6 +897,7 @@ void CameraUI::slotBusy(bool val)
 
         d->busy = false;
         d->cameraCancelAction->setEnabled(false);
+        d->view->viewport()->setEnabled(true);
 
         d->advBox->setEnabled(true);
         // B.K.O #127614: The Focus need to be restored in custom prefix widget.
@@ -937,6 +938,11 @@ void CameraUI::slotBusy(bool val)
             d->anim->start();
 
         d->busy = true;
+
+        // Has camera icon view item selection is used to control download post processing,
+        // all selection actions are disable when camera interface is busy.
+        d->view->viewport()->setEnabled(false);
+
         d->cameraCancelAction->setEnabled(true);
         d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
 
@@ -1600,13 +1606,7 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
     // Only needs to be disabled while downloading
     d->advBox->setEnabled(false);
 
-    if (deleteAfter)
-    {
-        if (onlySelected)
-            slotDeleteSelected();
-        else
-            slotDeleteAll();
-    }
+    d->deleteAfter = deleteAfter;
 }
 
 void CameraUI::slotDownloaded(const QString& folder, const QString& file, int status)
@@ -1630,6 +1630,13 @@ void CameraUI::slotDownloaded(const QString& folder, const QString& file, int st
                                            iconItem->itemInfo()->size,
                                            iconItem->itemInfo()->mtime);
         }
+    }
+
+    // Download all items is complete.
+    if (d->statusProgressBar->progressValue() == d->statusProgressBar->progressTotalSteps())
+    {
+        if (d->deleteAfter)
+            deleteItems(true, true);
     }
 }
 
@@ -1697,30 +1704,62 @@ void CameraUI::slotLocked(const QString& folder, const QString& file, bool statu
     d->statusProgressBar->setProgressValue(curr+1);
 }
 
-void CameraUI::slotDeleteSelected()
+
+void CameraUI::checkItem4Deletion(CameraIconItem* iconItem, QStringList& folders, QStringList& files,
+                                  QStringList& deleteList, QStringList& lockedList)
+{
+    if (iconItem->itemInfo()->writePermissions != 0)  // Item not locked ?
+    {
+        QString folder = iconItem->itemInfo()->folder;
+        QString file   = iconItem->itemInfo()->name;
+        folders.append(folder);
+        files.append(file);
+        deleteList.append(folder + QString("/") + file);
+    }
+    else
+    {
+        lockedList.append(iconItem->itemInfo()->name);
+    }
+}
+
+void CameraUI::deleteItems(bool onlySelected, bool onlyDownloaded)
 {
     QStringList folders;
     QStringList files;
     QStringList deleteList;
     QStringList lockedList;
 
-    for (IconItem* item = d->view->firstItem(); item;
-         item = item->nextItem())
+    for (IconItem* item = d->view->firstItem(); item; item = item->nextItem())
     {
-        CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
-        if (iconItem->isSelected())
+        CameraIconItem* iconItem = dynamic_cast<CameraIconItem*>(item);
+        if (iconItem)
         {
-            if (iconItem->itemInfo()->writePermissions != 0)  // Item not locked ?
+            if (onlySelected)
             {
-                QString folder = iconItem->itemInfo()->folder;
-                QString file   = iconItem->itemInfo()->name;
-                folders.append(folder);
-                files.append(file);
-                deleteList.append(folder + QString("/") + file);
+                if (iconItem->isSelected())
+                {
+                    if (onlyDownloaded)
+                    {
+                        if (iconItem->isDownloaded())
+                            checkItem4Deletion(iconItem, folders, files, deleteList, lockedList);
+                    }
+                    else
+                    {
+                        checkItem4Deletion(iconItem, folders, files, deleteList, lockedList);
+                    }
+                }
             }
-            else
+            else    // All items
             {
-                lockedList.append(iconItem->itemInfo()->name);
+                if (onlyDownloaded)
+                {
+                    if (iconItem->isDownloaded())
+                        checkItem4Deletion(iconItem, folders, files, deleteList, lockedList);
+                }
+                else
+                {
+                    checkItem4Deletion(iconItem, folders, files, deleteList, lockedList);
+                }
             }
         }
     }
@@ -1767,69 +1806,14 @@ void CameraUI::slotDeleteSelected()
     }
 }
 
+void CameraUI::slotDeleteSelected()
+{
+    deleteItems(true, false);
+}
+
 void CameraUI::slotDeleteAll()
 {
-    QStringList folders;
-    QStringList files;
-    QStringList deleteList;
-    QStringList lockedList;
-
-    for (IconItem* item = d->view->firstItem(); item;
-         item = item->nextItem())
-    {
-        CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
-        if (iconItem->itemInfo()->writePermissions != 0)  // Item not locked ?
-        {
-            QString folder = iconItem->itemInfo()->folder;
-            QString file   = iconItem->itemInfo()->name;
-            folders.append(folder);
-            files.append(file);
-            deleteList.append(folder + QString("/") + file);
-        }
-        else
-        {
-            lockedList.append(iconItem->itemInfo()->name);
-        }
-    }
-
-    // If we want to delete some locked files, just give a feedback to user.
-    if (!lockedList.isEmpty())
-    {
-        QString infoMsg(i18n("The items listed below are locked by camera (read-only). "
-                             "These items will not be deleted. If you really want to delete these items, "
-                             "please unlock them and try again."));
-        KMessageBox::informationList(this, infoMsg, lockedList, i18n("Information"));
-    }
-
-    if (folders.isEmpty())
-        return;
-
-    QString warnMsg(i18np("About to delete this image. "
-                          "Deleted file is unrecoverable. "
-                          "Are you sure?",
-                          "About to delete these %1 images. "
-                          "Deleted files are unrecoverable. "
-                          "Are you sure?",
-                          deleteList.count()));
-    if (KMessageBox::warningContinueCancelList(this, warnMsg,
-                                               deleteList,
-                                               i18n("Warning"),
-                                               KGuiItem(i18n("Delete")))
-        ==  KMessageBox::Continue)
-    {
-        QStringList::iterator itFolder = folders.begin();
-        QStringList::iterator itFile   = files.begin();
-
-        d->statusProgressBar->setProgressValue(0);
-        d->statusProgressBar->setProgressTotalSteps(deleteList.count());
-        d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
-
-        for ( ; itFolder != folders.end(); ++itFolder, ++itFile)
-        {
-            d->controller->deleteFile(*itFolder, *itFile);
-            d->currentlyDeleting.append(*itFolder + *itFile);
-        }
-    }
+    deleteItems(false, false);
 }
 
 void CameraUI::slotDeleted(const QString& folder, const QString& file, bool status)
