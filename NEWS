@@ -88,4 +88,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 073 ==> 193967 : VERY fast loading of thumbnails [PATCH].
 074 ==> 191492 : digiKam hangs on startup "reading database".
 075 ==> 171950 : Lost pictures after 'download/delete all' when target dir had same file names.
-076 ==> 
+076 ==> 191774 : digiKam download sorting slow, and wrong with multiple folders.
+077 ==> 
