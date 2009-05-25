@@ -92,6 +92,9 @@ private:
                          const QDate& date, QString& errMsg);
     void addFileExtension(const QString& ext);
     void finishDialog();
+    void deleteItems(bool onlySelected, bool onlyDownloaded);
+    void checkItem4Deletion(CameraIconViewItem* iconItem, QStringList& folders, QStringList& files,
+                            QStringList& deleteList, QStringList& lockedList);
 
 private slots:
 
