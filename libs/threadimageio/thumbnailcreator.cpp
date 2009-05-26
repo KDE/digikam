@@ -276,8 +276,7 @@ QImage ThumbnailCreator::load(const QString& path)
         }
     }
 
-    // See B.K.O #193967 : no need to use SmoothTransformation here.
-    qimage = qimage.scaled(d->thumbnailSize, d->thumbnailSize, Qt::KeepAspectRatio, Qt::FastTransformation);
+    qimage = qimage.scaled(d->thumbnailSize, d->thumbnailSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
     handleAlphaChannel(qimage);
 
