@@ -80,6 +80,7 @@
 #include <kurllabel.h>
 #include <kvbox.h>
 #include <ktoggleaction.h>
+#include <kpassivepopup.h>
 
 // Libkdcraw includes
 
@@ -1646,11 +1647,19 @@ void CameraUI::slotDownloaded(const QString& folder, const QString& file, int st
         }
     }
 
-    // Download all items is complete.
+    // Download all items is complete ?
     if (d->statusProgressBar->progressValue() == d->statusProgressBar->progressTotalSteps())
     {
         if (d->deleteAfter)
+        {
+            // No need passive pop-up here, because wil ask to confirm items deletion with dialog.
             deleteItems(true, true);
+        }
+        else
+        {
+            // Pop-up a message to bring user when all is done.
+            KPassivePopup::message(cameraTitle(), i18n("Download is completed..."), this);
+        }
     }
 }
 
