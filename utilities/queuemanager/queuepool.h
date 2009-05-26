@@ -70,6 +70,8 @@ public:
     bool customRenamingRulesAreValid();
     bool assignedBatchToolsListsAreValid();
 
+    void setBusy(bool b);
+
 Q_SIGNALS:
 
     void signalItemSelectionChanged();

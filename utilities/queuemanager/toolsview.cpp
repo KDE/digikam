@@ -87,6 +87,15 @@ ToolsView::~ToolsView()
     delete d;
 }
 
+void ToolsView::setBusy(bool b)
+{
+    for (int i = 0; i < count(); ++i)
+    {
+        ToolsListView* view = dynamic_cast<ToolsListView*>(widget(i));
+        view->viewport()->setEnabled(!b);
+    }
+}
+
 void ToolsView::addTool(BatchTool* tool)
 {
     if (!tool) return;

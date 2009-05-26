@@ -141,6 +141,11 @@ AssignedListView::~AssignedListView()
 {
 }
 
+void AssignedListView::setBusy(bool b)
+{
+    viewport()->setEnabled(!b);
+}
+
 void AssignedListView::setCurrentTool(int index)
 {
     int count = 0;
@@ -549,8 +554,8 @@ void AssignedListView::assignTools(const QMap<int, QString>& map, AssignedListVi
         BatchTool *tool                 = QueueMgrWindow::queueManagerWindow()->batchToolsManager()
                                                                                 ->findTool(name, group);
         BatchToolSet set;
-        set.tool     = tool;
-        set.settings = tool->defaultSettings();
+        set.tool                   = tool;
+        set.settings               = tool->defaultSettings();
         AssignedListViewItem* item = insertTool(preceding, set);
         setCurrentItem(item);
     }
@@ -558,6 +563,8 @@ void AssignedListView::assignTools(const QMap<int, QString>& map, AssignedListVi
 
 void AssignedListView::slotContextMenu()
 {
+    if (!viewport()->isEnabled()) return;
+
     KActionCollection *acol = QueueMgrWindow::queueManagerWindow()->actionCollection();
     KMenu popmenu(this);
     popmenu.addAction(acol->action("queuemgr_toolup"));

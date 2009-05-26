@@ -246,7 +246,8 @@ QStringList ToolsListView::mimeTypes() const
 
 void ToolsListView::mouseDoubleClickEvent(QMouseEvent*)
 {
-    slotAssignTools();
+    if (viewport()->isEnabled())
+        slotAssignTools();
 }
 
 void ToolsListView::slotAssignTools()

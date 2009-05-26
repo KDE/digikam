@@ -46,6 +46,8 @@ public:
     ToolSettingsView(QWidget *parent=0);
     ~ToolSettingsView();
 
+    void setBusy(bool b);
+
 Q_SIGNALS:
 
     void signalSettingsChanged(const BatchToolSet&);

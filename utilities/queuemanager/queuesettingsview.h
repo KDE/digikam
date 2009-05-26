@@ -84,6 +84,8 @@ public:
     QueueSettingsView(QWidget *parent=0);
     ~QueueSettingsView();
 
+    void setBusy(bool b);
+
 Q_SIGNALS:
 
     void signalSettingsChanged(const QueueSettings&);

@@ -179,6 +179,12 @@ QueueSettingsView::~QueueSettingsView()
     delete d;
 }
 
+void QueueSettingsView::setBusy(bool b)
+{
+    for (int i = 0; i < count(); ++i)
+        widget(i)->setEnabled(!b);
+}
+
 void QueueSettingsView::slotResetSettings()
 {
     blockSignals(true);

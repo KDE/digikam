@@ -846,6 +846,8 @@ void QueueListView::updateDestFileNames()
 
 void QueueListView::slotContextMenu()
 {
+    if (!viewport()->isEnabled()) return;
+
     KActionCollection *acol = QueueMgrWindow::queueManagerWindow()->actionCollection();
     KMenu popmenu(this);
     popmenu.addAction(acol->action("queuemgr_removeitemssel"));

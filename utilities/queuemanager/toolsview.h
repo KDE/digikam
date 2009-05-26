@@ -46,6 +46,8 @@ public:
     void addTool(BatchTool* tool);
     bool removeTool(BatchTool* tool);
 
+    void setBusy(bool b);
+
 Q_SIGNALS:
 
     void signalAssignTools(const QMap<int, QString>&);

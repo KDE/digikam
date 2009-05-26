@@ -86,6 +86,7 @@ public:
 
     void setCurrentTool(int index);
     void reset();
+    void setBusy(bool b);
 
 Q_SIGNALS:
 

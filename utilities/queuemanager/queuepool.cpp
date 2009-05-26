@@ -61,6 +61,15 @@ QueuePool::~QueuePool()
 {
 }
 
+void QueuePool::setBusy(bool b)
+{
+    for (int i = 0; i < count(); ++i)
+    {
+        QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
+        queue->viewport()->setEnabled(!b);
+    }
+}
+
 QueueListView* QueuePool::currentQueue() const
 {
     return (dynamic_cast<QueueListView*>(currentWidget()));

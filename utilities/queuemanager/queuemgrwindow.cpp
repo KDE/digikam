@@ -1021,12 +1021,13 @@ void QueueMgrWindow::busy(bool busy)
     d->removeItemsSelAction->setEnabled(!d->busy);
     d->removeItemsDoneAction->setEnabled(!d->busy);
     d->clearQueueAction->setEnabled(!d->busy);
-    d->queuePool->setEnabled(!d->busy);
-    d->queueSettingsView->setEnabled(!d->busy);
-    d->toolsView->setEnabled(!d->busy);
-    d->assignedList->setEnabled(!d->busy);
-    d->toolSettings->setEnabled(!d->busy);
     d->stopAction->setEnabled(d->busy);
+
+    d->queuePool->setBusy(d->busy);
+    d->queueSettingsView->setBusy(d->busy);
+    d->toolsView->setBusy(d->busy);
+    d->assignedList->setBusy(d->busy);
+    d->toolSettings->setBusy(d->busy);
 
     // To update status of Tools actions.
     slotAssignedToolsChanged(d->assignedList->assignedList());

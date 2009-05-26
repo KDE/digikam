@@ -130,6 +130,12 @@ ToolSettingsView::~ToolSettingsView()
     delete d;
 }
 
+void ToolSettingsView::setBusy(bool b)
+{
+    d->settingsView->viewport()->setEnabled(!b);
+    d->settingsViewReset->setEnabled(!b);
+}
+
 void ToolSettingsView::setToolSettingsWidget(QWidget *w)
 {
     QWidget *wdt = 0;
