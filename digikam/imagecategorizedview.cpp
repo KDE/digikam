@@ -559,6 +559,7 @@ Album *ImageCategorizedView::albumAt(const QPoint& pos)
     if (d->filterModel->categorizationMode() == ImageFilterModel::CategoryByAlbum)
     {
         QModelIndex categoryIndex = indexForCategoryAt(pos);
+        kDebug() << categoryIndex;
         if (categoryIndex.isValid())
         {
             int albumId = categoryIndex.data(ImageFilterModel::CategoryAlbumIdRole).toInt();

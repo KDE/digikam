@@ -666,6 +666,8 @@ QModelIndex KCategorizedView::categoryAt(const QPoint &point) const
     // if lastCategory is the last one in the list y will be 0
     if (!lastCategory.isNull() && point.y() >= lastY && (point.y() < y || !y))
     {
+        Q_ASSERT(d->categoriesIndexes.contains(lastCategory));
+        Q_ASSERT(d->categoriesIndexes[lastCategory].size());
         return d->categoriesIndexes[lastCategory][0];
     }
     return QModelIndex();
