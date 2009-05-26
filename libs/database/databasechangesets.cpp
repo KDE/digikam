@@ -141,7 +141,7 @@ QList<int> ImageTagChangeset::tags() const
     return m_tags;
 }
 
-bool ImageTagChangeset::containsTag(int id)
+bool ImageTagChangeset::containsTag(int id) const
 {
     return (m_operation == RemovedAll) || m_tags.contains(id);
 }

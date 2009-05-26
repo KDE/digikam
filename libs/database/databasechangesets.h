@@ -107,7 +107,7 @@ public:
     QList<qlonglong> ids() const;
     bool containsImage(qlonglong id) const;
     QList<int> tags() const;
-    bool containsTag(int id);
+    bool containsTag(int id) const;
     Operation operation() const;
 
     bool tagsWereAdded() const
