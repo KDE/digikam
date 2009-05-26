@@ -109,6 +109,9 @@ void ImageFilterSettings::setAlbumNames(const QHash<int, QString>& hash)
 
 bool ImageFilterSettings::matches(const ImageInfo& info, bool *foundText) const
 {
+    if (foundText)
+        *foundText = false;
+
     if (!isFiltering())
         return true;
 
