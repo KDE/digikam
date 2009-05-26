@@ -432,7 +432,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             QString folder = cmd->map["folder"].toString();
             QString file   = cmd->map["file"].toString();
 
-            sendInfo(i18n("Getting thumbnails..."));
+            sendInfo(i18n("Getting thumbnails..."), folder, file);
 
             QImage thumbnail;
 
@@ -461,7 +461,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             }
             else
             {
-                sendInfo(i18n("Getting EXIF information for %1...", file));
+                sendInfo(i18n("Getting EXIF information for %1...", file), folder, file);
 
                 char* edata = 0;
                 int   esize = 0;
@@ -496,7 +496,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             QString   copyright         = cmd->map["copyright"].toString();
             bool      convertJpeg       = cmd->map["convertJpeg"].toBool();
             QString   losslessFormat    = cmd->map["losslessFormat"].toString();
-            sendInfo(i18n("Downloading file %1...", file));
+            sendInfo(i18n("Downloading file %1...", file), folder, file);
 
             // download to a temp file
 
@@ -523,14 +523,14 @@ void CameraController::executeCommand(CameraCommand *cmd)
                 if (autoRotate)
                 {
                     kDebug(50003) << "Exif autorotate: " << file << " using (" << tempURL << ")" << endl;
-                    sendInfo(i18n("EXIF rotating file %1...", file));
+                    sendInfo(i18n("EXIF rotating file %1...", file), folder, file);
                     exifTransform(tempURL.path(), file);
                 }
 
                 if (fixDateTime || setPhotographerId || setCredits)
                 {
                     kDebug(50003) << "Set metadata from: " << file << " using (" << tempURL << ")" << endl;
-                    sendInfo(i18n("Setting Metadata tags to file %1...", file));
+                    sendInfo(i18n("Setting Metadata tags to file %1...", file), folder, file);
                     DMetadata metadata(tempURL.path());
 
                     if (fixDateTime)
@@ -551,7 +551,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
                 if (convertJpeg)
                 {
                     kDebug(50003) << "Convert to LossLess: " << file << " using (" << tempURL << ")" << endl;
-                    sendInfo(i18n("Converting %1 to lossless file format...", file));
+                    sendInfo(i18n("Converting %1 to lossless file format...", file), folder, file);
 
                     KUrl tempURL2(dest);
                     tempURL2 = tempURL2.upUrl();
@@ -584,7 +584,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             QString file   = cmd->map["file"].toString();
             QString dest   = cmd->map["dest"].toString();
 
-            sendInfo(i18n("Retrieving file %1 from camera...", file));
+            sendInfo(i18n("Retrieving file %1 from camera...", file), folder, file);
 
             bool result = d->camera->downloadItem(folder, file, dest);
 
@@ -594,7 +594,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             }
             else
             {
-                sendError(i18n("Failed to retrieve file %1 from camera.", file));
+                sendError(i18n("Failed to retrieve file %1 from camera.", file), folder, file);
             }
             break;
         }
@@ -609,7 +609,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             // The source file path to download in camera.
             QString src    = cmd->map["srcFilePath"].toString();
 
-            sendInfo(i18n("Uploading file %1 to camera...", file));
+            sendInfo(i18n("Uploading file %1 to camera...", file), folder, file);
 
             GPItemInfo itemsInfo;
 
@@ -630,7 +630,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             QString folder = cmd->map["folder"].toString();
             QString file   = cmd->map["file"].toString();
 
-            sendInfo(i18n("Deleting file %1...", file));
+            sendInfo(i18n("Deleting file %1...", file), folder, file);
 
             bool result = d->camera->deleteItem(folder, file);
 
@@ -650,7 +650,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             QString file   = cmd->map["file"].toString();
             bool    lock   = cmd->map["lock"].toBool();
 
-            sendInfo(i18n("Toggle lock file %1...", file));
+            sendInfo(i18n("Toggle lock file %1...", file), folder, file);
 
             bool result = d->camera->setLockItem(folder, file, lock);
 
@@ -676,15 +676,15 @@ void CameraController::sendBusy(bool val)
     emit signalBusy(val);
 }
 
-void CameraController::sendError(const QString& msg)
+void CameraController::sendError(const QString& msg, const QString& folder, const QString& file)
 {
-    emit signalErrorMsg(msg);
+    emit signalErrorMsg(msg, folder, file);
 }
 
-void CameraController::sendInfo(const QString& msg)
+void CameraController::sendInfo(const QString& msg, const QString& folder, const QString& file)
 {
     if (!d->canceled)
-        emit signalInfoMsg(msg);
+        emit signalInfoMsg(msg, folder, file);
 }
 
 void CameraController::slotCheckRename(const QString& folder, const QString& file,
@@ -767,7 +767,7 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
     else if (skip)
     {
         unlink(QFile::encodeName(temp));
-        sendInfo(i18n("Skipped file %1", file));
+        sendInfo(i18n("Skipped file %1", file), folder, file);
         emit signalSkipped(folder, file);
         return;
     }

@@ -518,6 +518,9 @@ void CameraUI::setupConnections()
     connect(d->fixDateTimeCheck, SIGNAL(toggled(bool)),
             d->dateTimeEdit, SLOT(setEnabled(bool)));
 
+    connect(d->log, SIGNAL(signalEntryClicked(const QString&, const QString&)),
+            this, SLOT(slotLogEntryClicked(const QString&, const QString&)));
+
     // -------------------------------------------------------------------------
 
     connect(d->view, SIGNAL(signalSelected(CameraIconItem*, bool)),
@@ -647,11 +650,11 @@ void CameraUI::setupCameraController(const QString& model, const QString& port, 
     connect(d->controller, SIGNAL(signalConnected(bool)),
             this, SLOT(slotConnected(bool)));
 
-    connect(d->controller, SIGNAL(signalInfoMsg(const QString&)),
-            this, SLOT(slotInfoMsg(const QString&)));
+    connect(d->controller, SIGNAL(signalInfoMsg(const QString&, const QString&, const QString&)),
+            this, SLOT(slotInfoMsg(const QString&, const QString&, const QString&)));
 
-    connect(d->controller, SIGNAL(signalErrorMsg(const QString&)),
-            this, SLOT(slotErrorMsg(const QString&)));
+    connect(d->controller, SIGNAL(signalErrorMsg(const QString&, const QString&, const QString&)),
+            this, SLOT(slotErrorMsg(const QString&, const QString&, const QString&)));
 
     connect(d->controller, SIGNAL(signalCameraInformation(const QString&, const QString&, const QString&)),
             this, SLOT(slotCameraInformation(const QString&, const QString&, const QString&)));
@@ -2229,16 +2232,16 @@ void CameraUI::slotSidebarTabTitleStyleChanged()
     d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
 }
 
-void CameraUI::slotErrorMsg(const QString& msg)
+void CameraUI::slotErrorMsg(const QString& msg, const QString& folder, const QString& file)
 {
     d->statusProgressBar->setProgressText(msg);
-    d->log->addedLogEntry(QString(), QString(), msg, LogView::ErrorEntry);
+    d->log->addedLogEntry(folder, file, msg, LogView::ErrorEntry);
 }
 
-void CameraUI::slotInfoMsg(const QString& msg)
+void CameraUI::slotInfoMsg(const QString& msg, const QString& folder, const QString& file)
 {
     d->statusProgressBar->setProgressText(msg);
-    d->log->addedLogEntry(QString(), QString(), msg, LogView::ProgressEntry);
+    d->log->addedLogEntry(folder, file, msg, LogView::ProgressEntry);
 }
 
 void CameraUI::slotShowLog()
@@ -2247,6 +2250,11 @@ void CameraUI::slotShowLog()
         d->log->show();
     else
         d->log->hide();
+}
+
+void CameraUI::slotLogEntryClicked(const QString& folder, const QString& file)
+{
+    d->view->ensureItemVisible(folder, file);
 }
 
 }  // namespace Digikam
