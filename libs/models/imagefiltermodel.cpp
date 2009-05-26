@@ -112,12 +112,6 @@ void ImageFilterModelPrivate::init(ImageFilterModel *_q)
     connect(updateFilterTimer, SIGNAL(timeout()),
             q, SLOT(slotUpdateFilter()));
 
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(const ImageChangeset &)),
-            q, SLOT(slotImageChange(const ImageChangeset &)));
-
-    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(const ImageTagChangeset &)),
-            q, SLOT(slotImageTagChange(const ImageTagChangeset &)));
-
     // inter-thread redirection
     qRegisterMetaType<ImageFilterModelTodoPackage>("ImageFilterModelTodoPackage");
 }
@@ -168,10 +162,10 @@ void ImageFilterModel::setSourceImageModel(ImageModel *sourceModel)
                 this, SLOT(slotModelReset()));
 
         connect(d->imageModel, SIGNAL(imageChange(const ImageChangeset &, const QItemSelection &)),
-                this, SLOT(invalidate()));
+                this, SLOT(slotImageChange(const ImageChangeset &)));
 
-        connect(d->imageModel, SIGNAL(imageTagChange(const ImageChangeset &, const QItemSelection &)),
-                this, SLOT(invalidate()));
+        connect(d->imageModel, SIGNAL(imageTagChange(const ImageTagChangeset &, const QItemSelection &)),
+                this, SLOT(slotImageTagChange(const ImageTagChangeset &)));
     }
 
     setSourceModel(d->imageModel);
