@@ -873,6 +873,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/freespacetooltip.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/capturewidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/capturedlg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/logview.cpp
        )
 
     SET(libsearchwindow_SRCS
