@@ -431,6 +431,7 @@ void CameraUI::setupActions()
                           "cameraui_fullscreen", this, SLOT(slotToggleFullScreen()));
 
     d->showLogAction = new KToggleAction(KIcon("view-history"), i18n("Show Log"), this);
+    d->showLogAction->setShortcut(Qt::CTRL+Qt::Key_L);
     connect(d->showLogAction, SIGNAL(triggered()), this, SLOT(slotShowLog()));
     actionCollection()->addAction("cameraui_showlog", d->showLogAction);
 
@@ -2246,10 +2247,7 @@ void CameraUI::slotInfoMsg(const QString& msg, const QString& folder, const QStr
 
 void CameraUI::slotShowLog()
 {
-    if (d->showLogAction->isChecked())
-        d->log->show();
-    else
-        d->log->hide();
+    d->showLogAction->isChecked() ? d->log->show() : d->log->hide();
 }
 
 void CameraUI::slotLogEntryClicked(const QString& folder, const QString& file)
