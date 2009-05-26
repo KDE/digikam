@@ -90,4 +90,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 075 ==> 171950 : Lost pictures after 'download/delete all' when target dir had same file names.
 076 ==> 191774 : digiKam download sorting slow, and wrong with multiple folders.
 077 ==> 191842 : digiKam download forgets to download some pictures (multiple big folders).
-078 ==> 
+078 ==> 187902 : Status bar gives wrong picture filename and position in list after "Save As". 
+079 ==> 
