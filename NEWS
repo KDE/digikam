@@ -94,4 +94,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 077 ==> 191842 : digiKam download forgets to download some pictures (multiple big folders).
 078 ==> 187902 : Status bar gives wrong picture filename and position in list after "Save As". 
 079 ==> 193894 : Pop up "Copy Finished!" dialogue when done downloading from camera.
-080 ==> 
+080 ==> 193870 : digiKam freezes after second exif rotation on same file.
+081 ==> 
