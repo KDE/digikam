@@ -112,7 +112,9 @@ public:
     static ImageInfo retrieveImageInfo(const QModelIndex& index);
     static qlonglong retrieveImageId(const QModelIndex& index);
 
+    /** Main entry point for subclasses adding image infos to the model. */
     void addImageInfos(const QList<ImageInfo>& infos);
+    /** Clears image infos and resets model. */
     void clearImageInfos();
 
     QList<ImageInfo> imageInfos() const;
@@ -176,6 +178,9 @@ public Q_SLOTS:
     void reAddImageInfos(const QList<ImageInfo>& infos);
 
 protected:
+
+    void startIncrementalRefresh();
+    void finishIncrementalRefresh();
 
     // Called when the internal storage is cleared
     virtual void imageInfosCleared() {};
