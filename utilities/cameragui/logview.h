@@ -58,11 +58,11 @@ public:
     LogView(QWidget *parent);
     virtual ~LogView();
 
-    void addedLogEntry(const QString& path, const QString& name, const QString& text, LogEntryType type);
+    void addedLogEntry(const QString& folder, const QString& file, const QString& text, LogEntryType type);
 
 Q_SIGNALS:
 
-    void signalEntryClicked(const QString& path, const QString& name);
+    void signalEntryClicked(const QString& folder, const QString& file);
 
 private Q_SLOTS:
 

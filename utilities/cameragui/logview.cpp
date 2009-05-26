@@ -43,12 +43,12 @@ class LogViewItem : public QTreeWidgetItem
 {
 public:
 
-    LogViewItem(QTreeWidget *parent, const QString& path, const QString& name,
+    LogViewItem(QTreeWidget *parent, const QString& folder, const QString& file,
                 const QString& text, LogView::LogEntryType entryType)
         : QTreeWidgetItem(parent, QStringList())
     {
-        m_path = path;
-        m_name = name;
+        m_folder = folder;
+        m_file   = file;
 
         switch(entryType)
         {
@@ -76,20 +76,20 @@ public:
         setText(1, text);
     }
 
-    QString path() const
+    QString folder() const
     {
-        return m_path;
+        return m_folder;
     }
 
-    QString name() const
+    QString file() const
     {
-        return m_name;
+        return m_file;
     }
 
 private:
 
-    QString m_path;
-    QString m_name;
+    QString m_folder;
+    QString m_file;
 };
 
 // ---------------------------------------------------------------------------
@@ -117,9 +117,9 @@ LogView::~LogView()
 {
 }
 
-void LogView::addedLogEntry(const QString& path, const QString& name, const QString& text, LogEntryType type)
+void LogView::addedLogEntry(const QString& folder, const QString& file, const QString& text, LogEntryType type)
 {
-    LogViewItem *item = new LogViewItem(this, path, name, text, type);
+    LogViewItem *item = new LogViewItem(this, folder, file, text, type);
     setCurrentItem(item);
 }
 
@@ -128,8 +128,8 @@ void LogView::slotItemDoubleClicked(QTreeWidgetItem* item)
     LogViewItem* lvi = dynamic_cast<LogViewItem*>(item);
     if (lvi)
     {
-        if (!lvi->path().isEmpty() && !lvi->name().isEmpty())
-            emit signalEntryClicked(lvi->path(), lvi->name());
+        if (!lvi->folder().isEmpty() && !lvi->file().isEmpty())
+            emit signalEntryClicked(lvi->folder(), lvi->file());
     }
 }
 
