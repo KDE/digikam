@@ -55,6 +55,7 @@ public:
         currentAlbum        = 0;
         job                 = 0;
         refreshTimer        = 0;
+        incrementalTimer    = 0;
         recurseAlbums       = false;
         recurseTags         = false;
     }
@@ -62,6 +63,7 @@ public:
     Album                   *currentAlbum;
     KIO::TransferJob        *job;
     QTimer                  *refreshTimer;
+    QTimer                  *incrementalTimer;
 
     bool                     recurseAlbums;
     bool                     recurseTags;
@@ -74,8 +76,14 @@ ImageAlbumModel::ImageAlbumModel(QObject *parent)
     d->refreshTimer = new QTimer(this);
     d->refreshTimer->setSingleShot(true);
 
+    d->incrementalTimer = new QTimer(this);
+    d->incrementalTimer->setSingleShot(true);
+
     connect(d->refreshTimer, SIGNAL(timeout()),
             this, SLOT(slotNextRefresh()));
+
+    connect(d->incrementalTimer, SIGNAL(timeout()),
+            this, SLOT(slotNextIncrementalRefresh()));
 
     connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset &)),
             this, SLOT(slotCollectionImageChange(const CollectionImageChangeset &)));
@@ -113,25 +121,6 @@ Album *ImageAlbumModel::currentAlbum() const
     return d->currentAlbum;
 }
 
-void ImageAlbumModel::openAlbum(Album *album)
-{
-    if (d->currentAlbum == album)
-        return;
-
-    d->currentAlbum = album;
-    startLoadingAlbum(album);
-}
-
-void ImageAlbumModel::refresh()
-{
-    startLoadingAlbum(d->currentAlbum);
-}
-
-bool ImageAlbumModel::hasScheduledRefresh() const
-{
-    return d->refreshTimer->isActive();
-}
-
 void ImageAlbumModel::setRecurseAlbums(bool recursiveListing)
 {
     if (d->recurseAlbums != recursiveListing)
@@ -160,7 +149,17 @@ bool ImageAlbumModel::isRecursingTags() const
     return d->recurseTags;
 }
 
-void ImageAlbumModel::startLoadingAlbum(Album *album)
+void ImageAlbumModel::openAlbum(Album *album)
+{
+    if (d->currentAlbum == album)
+        return;
+
+    d->currentAlbum = album;
+    emit listedAlbumChanged(d->currentAlbum);
+    refresh();
+}
+
+void ImageAlbumModel::refresh()
 {
     if (d->job)
     {
@@ -169,12 +168,65 @@ void ImageAlbumModel::startLoadingAlbum(Album *album)
     }
 
     clearImageInfos();
-    emit listedAlbumChanged(album);
 
-    if (!album)
+    if (!d->currentAlbum)
         return;
 
-    startListJob(album->databaseUrl());
+    startListJob(d->currentAlbum->databaseUrl());
+}
+
+void ImageAlbumModel::incrementalRefresh()
+{
+    if (!d->currentAlbum)
+        return;
+
+    if (d->job)
+    {
+        d->job->kill();
+        d->job = 0;
+    }
+
+    startIncrementalRefresh();
+
+    startListJob(d->currentAlbum->databaseUrl());
+}
+
+bool ImageAlbumModel::hasScheduledRefresh() const
+{
+    return d->refreshTimer->isActive() || d->incrementalTimer->isActive();
+}
+
+void ImageAlbumModel::scheduleRefresh()
+{
+    if (!d->refreshTimer->isActive())
+    {
+        d->incrementalTimer->stop();
+        d->refreshTimer->start(100);
+    }
+}
+
+void ImageAlbumModel::scheduleIncrementalRefresh()
+{
+    if (!d->incrementalTimer->isActive() && !d->refreshTimer->isActive())
+        d->incrementalTimer->start(100);
+}
+
+void ImageAlbumModel::slotNextRefresh()
+{
+    // Refresh, unless job is running, then postpone restart until job is finished
+    // Rationale: Let the job run, don't stop it possibly several times
+    if (d->job)
+        d->refreshTimer->start(50);
+    else
+        refresh();
+}
+
+void ImageAlbumModel::slotNextIncrementalRefresh()
+{
+    if (d->job)
+        d->incrementalTimer->start(50);
+    else
+        incrementalRefresh();
 }
 
 void ImageAlbumModel::startListJob(const KUrl& url)
@@ -192,7 +244,12 @@ void ImageAlbumModel::startListJob(const KUrl& url)
 
 void ImageAlbumModel::slotResult(KJob* job)
 {
+    if (job != d->job)
+        return;
     d->job = 0;
+
+    // can be called in any case even if refresh is not incremental
+    finishIncrementalRefresh();
 
     if (job->error())
     {
@@ -223,23 +280,13 @@ void ImageAlbumModel::slotData(KIO::Job*, const QByteArray& data)
     addImageInfos(newItemsList);
 }
 
-void ImageAlbumModel::slotNextRefresh()
-{
-    // Refresh, unless job is running, then postpone restart until job is finished
-    // Rationale: Let the job run, don't stop it possibly several times
-    if (d->job)
-        d->refreshTimer->start(50);
-    else
-        refresh();
-}
-
 void ImageAlbumModel::slotImageChange(const ImageChangeset& changeset)
 {
     if (!d->currentAlbum)
         return;
 
     // already scheduled to refresh?
-    if (d->refreshTimer->isActive())
+    if (hasScheduledRefresh())
         return;
 
     if (d->currentAlbum->type() == Album::SEARCH)
@@ -251,13 +298,42 @@ void ImageAlbumModel::slotImageChange(const ImageChangeset& changeset)
             // if one matching image id is found, trigger a refresh
             if (hasImage(id))
             {
-                d->refreshTimer->start(100);
+                scheduleIncrementalRefresh();
                 return;
             }
         }
     }
 
     ImageModel::slotImageChange(changeset);
+}
+
+void ImageAlbumModel::slotImageTagChange(const ImageTagChangeset& changeset)
+{
+    if (!d->currentAlbum)
+        return;
+
+    bool doRefresh = false;
+    if (d->currentAlbum->type() == Album::TAG)
+    {
+        doRefresh = changeset.containsTag(d->currentAlbum->id());
+        if (!doRefresh && d->recurseTags)
+        {
+            foreach (int tagId, changeset.tags())
+            {
+                Album *a = AlbumManager::instance()->findTAlbum(tagId);
+                if (a && d->currentAlbum->isAncestorOf(a))
+                {
+                    doRefresh = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    if (doRefresh)
+        scheduleIncrementalRefresh();
+
+    ImageModel::slotImageTagChange(changeset);
 }
 
 void ImageAlbumModel::slotCollectionImageChange(const CollectionImageChangeset& changeset)
@@ -317,11 +393,7 @@ void ImageAlbumModel::slotCollectionImageChange(const CollectionImageChangeset& 
     }
 
     if (doRefresh)
-    {
-        // use timer: there may be several signals in a row
-        if (!d->refreshTimer->isActive())
-            d->refreshTimer->start(100);
-    }
+        scheduleIncrementalRefresh();
 }
 
 void ImageAlbumModel::slotSearchChange(const SearchChangeset& changeset)
@@ -335,10 +407,7 @@ void ImageAlbumModel::slotSearchChange(const SearchChangeset& changeset)
     SAlbum *album = AlbumManager::instance()->findSAlbum(changeset.searchId());
 
     if (album && d->currentAlbum == album)
-    {
-        if (!d->refreshTimer->isActive())
-            d->refreshTimer->start(100);
-    }
+        scheduleIncrementalRefresh();
 }
 
 void ImageAlbumModel::slotAlbumAdded(Album* /*album*/)

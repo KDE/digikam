@@ -76,11 +76,17 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
 
+    void scheduleRefresh();
+    void scheduleIncrementalRefresh();
+
     void slotResult(KJob* job);
     void slotData(KIO::Job* job, const QByteArray& data);
 
     void slotNextRefresh();
+    void slotNextIncrementalRefresh();
+
     virtual void slotImageChange(const ImageChangeset& changeset);
+    virtual void slotImageTagChange(const ImageTagChangeset& changeset);
     void slotCollectionImageChange(const CollectionImageChangeset& changeset);
     void slotSearchChange(const SearchChangeset& changeset);
 
@@ -91,7 +97,7 @@ protected Q_SLOTS:
 
 protected:
 
-    void startLoadingAlbum(Album *album);
+    void incrementalRefresh();
     void startListJob(const KUrl& url);
 
 private:
