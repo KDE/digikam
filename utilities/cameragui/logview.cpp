@@ -44,8 +44,8 @@ class LogViewItem : public QTreeWidgetItem
 {
 public:
 
-    LogViewItem(QTreeWidget *parent, const QString& folder, const QString& file,
-                const QString& text, LogView::LogEntryType entryType)
+    LogViewItem(QTreeWidget *parent, const QString& folder, LogView::LogEntryType entryType,
+                const QString& file, const QString& text)
         : QTreeWidgetItem(parent, QStringList())
     {
         m_folder = folder;
@@ -119,9 +119,9 @@ LogView::~LogView()
 {
 }
 
-void LogView::addedLogEntry(const QString& folder, const QString& file, const QString& text, LogEntryType type)
+void LogView::addedLogEntry(const QString& folder, LogEntryType type, const QString& file, const QString& text)
 {
-    LogViewItem *item = new LogViewItem(this, folder, file, text, type);
+    LogViewItem *item = new LogViewItem(this, folder, type, file, text);
     setCurrentItem(item);
 }
 

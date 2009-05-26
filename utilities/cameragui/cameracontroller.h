@@ -39,6 +39,7 @@
 #include "downloadsettingscontainer.h"
 #include "gpiteminfo.h"
 #include "dkcamera.h"
+#include "logview.h"
 
 namespace Digikam
 {
@@ -92,8 +93,7 @@ public:
 Q_SIGNALS:
 
     void signalBusy(bool val);
-    void signalInfoMsg(const QString& msg, const QString& folder, const QString& file);
-    void signalErrorMsg(const QString& msg, const QString& folder, const QString& file);
+    void signalLogMsg(const QString& msg, LogView::LogEntryType type, const QString& folder, const QString& file);
     void signalCameraInformation(const QString& summary, const QString& manual,
                                  const QString& about);
     void signalFreeSpace(unsigned long kBSize, unsigned long kBAvail);
@@ -145,8 +145,8 @@ private Q_SLOTS:
 private:
 
     void sendBusy(bool val);
-    void sendError(const QString& msg, const QString& folder=QString(), const QString& file=QString());
-    void sendInfo(const QString& msg, const QString& folder=QString(), const QString& file=QString());
+    void sendLogMsg(const QString& msg, LogView::LogEntryType type=LogView::StartingEntry,
+                    const QString& folder=QString(), const QString& file=QString());
 
     void addCommand(CameraCommand *cmd);
     bool queueIsEmpty();

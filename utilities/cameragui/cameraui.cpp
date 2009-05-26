@@ -117,7 +117,6 @@
 #include "collectionmanager.h"
 #include "collectionlocation.h"
 #include "scancontroller.h"
-#include "logview.h"
 #include "rawcameradlg.h"
 #include "capturedlg.h"
 #include "camerafolderdialog.h"
@@ -635,6 +634,8 @@ void CameraUI::setupStatusBar()
 
 void CameraUI::setupCameraController(const QString& model, const QString& port, const QString& path)
 {
+    qRegisterMetaType<LogView::LogEntryType>("LogView::LogEntryType");
+
     d->controller = new CameraController(this, d->cameraTitle, model, port, path);
 
     if (d->controller->cameraDriverType() == DKCamera::GPhotoDriver)
@@ -652,11 +653,8 @@ void CameraUI::setupCameraController(const QString& model, const QString& port, 
     connect(d->controller, SIGNAL(signalConnected(bool)),
             this, SLOT(slotConnected(bool)));
 
-    connect(d->controller, SIGNAL(signalInfoMsg(const QString&, const QString&, const QString&)),
-            this, SLOT(slotInfoMsg(const QString&, const QString&, const QString&)));
-
-    connect(d->controller, SIGNAL(signalErrorMsg(const QString&, const QString&, const QString&)),
-            this, SLOT(slotErrorMsg(const QString&, const QString&, const QString&)));
+    connect(d->controller, SIGNAL(signalLogMsg(const QString&, LogView::LogEntryType, const QString&, const QString&)),
+            this, SLOT(slotLogMsg(const QString&, LogView::LogEntryType, const QString&, const QString&)));
 
     connect(d->controller, SIGNAL(signalCameraInformation(const QString&, const QString&, const QString&)),
             this, SLOT(slotCameraInformation(const QString&, const QString&, const QString&)));
@@ -2242,16 +2240,11 @@ void CameraUI::slotSidebarTabTitleStyleChanged()
     d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
 }
 
-void CameraUI::slotErrorMsg(const QString& msg, const QString& folder, const QString& file)
+void CameraUI::slotLogMsg(const QString& msg, LogView::LogEntryType type,
+                          const QString& folder, const QString& file)
 {
     d->statusProgressBar->setProgressText(msg);
-    d->log->addedLogEntry(folder, file, msg, LogView::ErrorEntry);
-}
-
-void CameraUI::slotInfoMsg(const QString& msg, const QString& folder, const QString& file)
-{
-    d->statusProgressBar->setProgressText(msg);
-    d->log->addedLogEntry(folder, file, msg, LogView::ProgressEntry);
+    d->log->addedLogEntry(folder, type, file, msg);
 }
 
 void CameraUI::slotShowLog()

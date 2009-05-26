@@ -342,22 +342,22 @@ void CameraController::executeCommand(CameraCommand *cmd)
     {
         case(CameraCommand::gp_connect):
         {
-            sendInfo(i18n("Connecting to camera..."));
+            sendLogMsg(i18n("Connecting to camera..."));
 
             bool result = d->camera->doConnect();
 
             emit signalConnected(result);
 
             if (result)
-                sendInfo(i18n("Connection established."));
+                sendLogMsg(i18n("Connection established."));
             else
-                sendInfo(i18n("Connection failed."));
+                sendLogMsg(i18n("Connection failed."));
 
             break;
         }
         case(CameraCommand::gp_cameraInformation):
         {
-            sendInfo(i18n("Getting camera information..."));
+            sendLogMsg(i18n("Getting camera information..."));
 
             QString summary, manual, about;
 
@@ -370,7 +370,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
         }
         case(CameraCommand::gp_freeSpace):
         {
-            sendInfo(i18n("Getting available free space on camera..."));
+            sendLogMsg(i18n("Getting available free space on camera..."));
             unsigned long kBSize  = 0;
             unsigned long kBAvail = 0;
             d->camera->getFreeSpace(kBSize, kBAvail);
@@ -379,7 +379,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
         }
         case(CameraCommand::gp_preview):
         {
-            sendInfo(i18n("Getting preview..."));
+            sendLogMsg(i18n("Getting preview..."));
             QImage preview;
             d->camera->getPreview(preview);
             emit signalPreview(preview);
@@ -387,7 +387,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
         }
         case(CameraCommand::gp_capture):
         {
-            sendInfo(i18n("Capture image..."));
+            sendLogMsg(i18n("Capture image..."));
             GPItemInfo itemInfo;
             d->camera->capture(itemInfo);
             emit signalUploaded(itemInfo);
@@ -395,14 +395,14 @@ void CameraController::executeCommand(CameraCommand *cmd)
         }
         case(CameraCommand::gp_listfolders):
         {
-            sendInfo(i18n("Listing folders..."));
+            sendLogMsg(i18n("Listing folders..."));
 
             QStringList folderList;
             folderList.append(d->camera->path());
             d->camera->getAllFolders(d->camera->path(), folderList);
 
             emit signalFolderList(folderList);
-            sendInfo(i18n("The folders have been listed."));
+            sendLogMsg(i18n("The folders have been listed."));
 
             break;
         }
@@ -410,12 +410,12 @@ void CameraController::executeCommand(CameraCommand *cmd)
         {
             QString folder = cmd->map["folder"].toString();
 
-            sendInfo(i18n("Listing files in %1...", folder));
+            sendLogMsg(i18n("Listing files in %1...", folder));
 
             GPItemInfoList itemsList;
             if (!d->camera->getItemsInfoList(folder, itemsList, true))
             {
-                sendError(i18n("Failed to list files in %1.", folder));
+                sendLogMsg(i18n("Failed to list files in %1.", folder), LogView::ErrorEntry);
             }
 
             if (!itemsList.isEmpty())
@@ -423,7 +423,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
                 emit signalFileList(itemsList);
             }
 
-            sendInfo(i18n("The files in %1 have been listed.", folder));
+            sendLogMsg(i18n("The files in %1 have been listed.", folder));
 
             break;
         }
@@ -432,7 +432,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             QString folder = cmd->map["folder"].toString();
             QString file   = cmd->map["file"].toString();
 
-            sendInfo(i18n("Getting thumbnails for %1...", file), folder, file);
+            sendLogMsg(i18n("Getting thumbnails for %1...", file), LogView::StartingEntry, folder, file);
 
             QImage thumbnail;
 
@@ -461,7 +461,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             }
             else
             {
-                sendInfo(i18n("Getting EXIF information for %1...", file), folder, file);
+                sendLogMsg(i18n("Getting EXIF information for %1...", file), LogView::StartingEntry, folder, file);
 
                 char* edata = 0;
                 int   esize = 0;
@@ -496,7 +496,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             QString   copyright         = cmd->map["copyright"].toString();
             bool      convertJpeg       = cmd->map["convertJpeg"].toBool();
             QString   losslessFormat    = cmd->map["losslessFormat"].toString();
-            sendInfo(i18n("Downloading file %1...", file), folder, file);
+            sendLogMsg(i18n("Downloading file %1...", file), LogView::StartingEntry, folder, file);
 
             // download to a temp file
 
@@ -514,7 +514,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             {
                 unlink(QFile::encodeName(tempURL.path()));
                 emit signalDownloaded(folder, file, GPItemInfo::DownloadFailed);
-                sendError(i18n("Failed to download %1...", file), folder, file);
+                sendLogMsg(i18n("Failed to download %1...", file), LogView::ErrorEntry, folder, file);
                 break;
             }
             else if (isJpegImage(tempURL.path()))
@@ -524,14 +524,14 @@ void CameraController::executeCommand(CameraCommand *cmd)
                 if (autoRotate)
                 {
                     kDebug(50003) << "Exif autorotate: " << file << " using (" << tempURL << ")" << endl;
-                    sendInfo(i18n("EXIF rotating file %1...", file), folder, file);
+                    sendLogMsg(i18n("EXIF rotating file %1...", file), LogView::StartingEntry, folder, file);
                     exifTransform(tempURL.path(), file);
                 }
 
                 if (fixDateTime || setPhotographerId || setCredits)
                 {
                     kDebug(50003) << "Set metadata from: " << file << " using (" << tempURL << ")" << endl;
-                    sendInfo(i18n("Setting Metadata tags to file %1...", file), folder, file);
+                    sendLogMsg(i18n("Setting Metadata tags to file %1...", file), LogView::StartingEntry, folder, file);
                     DMetadata metadata(tempURL.path());
 
                     if (fixDateTime)
@@ -552,7 +552,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
                 if (convertJpeg)
                 {
                     kDebug(50003) << "Convert to LossLess: " << file << " using (" << tempURL << ")" << endl;
-                    sendInfo(i18n("Converting %1 to lossless file format...", file), folder, file);
+                    sendLogMsg(i18n("Converting %1 to lossless file format...", file), LogView::StartingEntry, folder, file);
 
                     KUrl tempURL2(dest);
                     tempURL2 = tempURL2.upUrl();
@@ -585,7 +585,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             QString file   = cmd->map["file"].toString();
             QString dest   = cmd->map["dest"].toString();
 
-            sendInfo(i18n("Retrieving file %1 from camera...", file), folder, file);
+            sendLogMsg(i18n("Retrieving file %1 from camera...", file), LogView::StartingEntry, folder, file);
 
             bool result = d->camera->downloadItem(folder, file, dest);
 
@@ -595,7 +595,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             }
             else
             {
-                sendError(i18n("Failed to retrieve file %1 from camera.", file), folder, file);
+                sendLogMsg(i18n("Failed to retrieve file %1 from camera.", file), LogView::ErrorEntry, folder, file);
             }
             break;
         }
@@ -610,7 +610,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             // The source file path to download in camera.
             QString src    = cmd->map["srcFilePath"].toString();
 
-            sendInfo(i18n("Uploading file %1 to camera...", file), folder, file);
+            sendLogMsg(i18n("Uploading file %1 to camera...", file), LogView::StartingEntry, folder, file);
 
             GPItemInfo itemsInfo;
 
@@ -631,7 +631,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             QString folder = cmd->map["folder"].toString();
             QString file   = cmd->map["file"].toString();
 
-            sendInfo(i18n("Deleting file %1...", file), folder, file);
+            sendLogMsg(i18n("Deleting file %1...", file), LogView::StartingEntry, folder, file);
 
             bool result = d->camera->deleteItem(folder, file);
 
@@ -651,7 +651,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             QString file   = cmd->map["file"].toString();
             bool    lock   = cmd->map["lock"].toBool();
 
-            sendInfo(i18n("Toggle lock file %1...", file), folder, file);
+            sendLogMsg(i18n("Toggle lock file %1...", file), LogView::StartingEntry, folder, file);
 
             bool result = d->camera->setLockItem(folder, file, lock);
 
@@ -677,15 +677,11 @@ void CameraController::sendBusy(bool val)
     emit signalBusy(val);
 }
 
-void CameraController::sendError(const QString& msg, const QString& folder, const QString& file)
-{
-    emit signalErrorMsg(msg, folder, file);
-}
-
-void CameraController::sendInfo(const QString& msg, const QString& folder, const QString& file)
+void CameraController::sendLogMsg(const QString& msg, LogView::LogEntryType type,
+                                  const QString& folder, const QString& file)
 {
     if (!d->canceled)
-        emit signalInfoMsg(msg, folder, file);
+        emit signalLogMsg(msg, type, folder, file);
 }
 
 void CameraController::slotCheckRename(const QString& folder, const QString& file,
@@ -768,7 +764,7 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
     else if (skip)
     {
         unlink(QFile::encodeName(temp));
-        sendInfo(i18n("Skipped file %1", file), folder, file);
+        sendLogMsg(i18n("Skipped file %1", file), LogView::WarningEntry, folder, file);
         emit signalSkipped(folder, file);
         return;
     }
@@ -779,20 +775,20 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
         // rename failed. delete the temp file
         unlink(QFile::encodeName(temp));
         emit signalDownloaded(folder, file, GPItemInfo::DownloadFailed);
-        sendError(i18n("Failed to download %1...", file), folder, file);
+        sendLogMsg(i18n("Failed to download %1...", file), LogView::ErrorEntry,  folder, file);
     }
     else
     {
         emit signalDownloaded(folder, file, GPItemInfo::DownloadedYes);
         emit signalDownloadComplete(folder, file, info.path(), info.fileName());
-        sendInfo(i18n("Download sucessfully %1...", file), folder, file);
+        sendLogMsg(i18n("Download sucessfully %1...", file), LogView::StartingEntry, folder, file);
     }
 }
 
 void CameraController::slotDownloadFailed(const QString& folder, const QString& file)
 {
     QString msg = i18n("Failed to download file \"%1\".", file);
-    sendError(i18n("Failed to download %1...", file), folder, file);
+    sendLogMsg(i18n("Failed to download %1...", file), LogView::ErrorEntry, folder, file);
 
     if (!d->canceled)
     {
@@ -816,7 +812,7 @@ void CameraController::slotUploadFailed(const QString& folder, const QString& fi
     Q_UNUSED(src);
 
     QString msg = i18n("Failed to upload file \"%1\".", file);
-    sendError(i18n("Failed to upload %1...", file));
+    sendLogMsg(i18n("Failed to upload %1...", file), LogView::ErrorEntry);
 
     if (!d->canceled)
     {
@@ -837,7 +833,7 @@ void CameraController::slotUploadFailed(const QString& folder, const QString& fi
 void CameraController::slotDeleteFailed(const QString& folder, const QString& file)
 {
     emit signalDeleted(folder, file, false);
-    sendError(i18n("Failed to delete %1...", file), folder, file);
+    sendLogMsg(i18n("Failed to delete %1...", file), LogView::ErrorEntry, folder, file);
 
     QString msg = i18n("Failed to delete file \"%1\".",file);
 
@@ -860,7 +856,7 @@ void CameraController::slotDeleteFailed(const QString& folder, const QString& fi
 void CameraController::slotLockFailed(const QString& folder, const QString& file)
 {
     emit signalLocked(folder, file, false);
-    sendError(i18n("Failed to lock %1...", file), folder, file);
+    sendLogMsg(i18n("Failed to lock %1...", file), LogView::ErrorEntry, folder, file);
 
     QString msg = i18n("Failed to toggle lock file \"%1\".",file);
 
