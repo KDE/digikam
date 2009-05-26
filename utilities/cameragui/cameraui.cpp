@@ -116,6 +116,7 @@
 #include "collectionmanager.h"
 #include "collectionlocation.h"
 #include "scancontroller.h"
+#include "logview.h"
 #include "rawcameradlg.h"
 #include "capturedlg.h"
 #include "camerafolderdialog.h"
@@ -179,7 +180,9 @@ void CameraUI::setupUserArea()
 {
     KHBox* widget   = new KHBox(this);
     d->splitter     = new SidebarSplitter(widget);
-    d->view         = new CameraIconView(this, d->splitter);
+    KVBox* vbox     = new KVBox(d->splitter);
+    d->view         = new CameraIconView(this, vbox);
+    d->log          = new LogView(vbox);
     d->rightSideBar = new ImagePropertiesSideBarCamGui(widget, d->splitter, KMultiTabBar::Right, true);
     d->rightSideBar->setObjectName("CameraGui Sidebar Right");
     d->splitter->setFrameStyle( QFrame::NoFrame );
@@ -187,6 +190,11 @@ void CameraUI::setupUserArea()
     d->splitter->setFrameShape( QFrame::NoFrame );
     d->splitter->setOpaqueResize(false);
     d->splitter->setStretchFactor(0, 10);      // set iconview default size to max.
+
+    vbox->setStretchFactor(d->view, 10);
+    vbox->setStretchFactor(d->log,  2);
+    vbox->setMargin(0);
+    vbox->setSpacing(0);
 
     // -------------------------------------------------------------------------
 
@@ -422,6 +430,10 @@ void CameraUI::setupActions()
     d->fullScreenAction = actionCollection()->addAction(KStandardAction::FullScreen,
                           "cameraui_fullscreen", this, SLOT(slotToggleFullScreen()));
 
+    d->showLogAction = new KToggleAction(KIcon("view-history"), i18n("Show Log"), this);
+    connect(d->showLogAction, SIGNAL(triggered()), this, SLOT(slotShowLog()));
+    actionCollection()->addAction("cameraui_showlog", d->showLogAction);
+
     // -- Standard 'Configure' menu actions ----------------------------------------
 
     d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), actionCollection());
@@ -636,7 +648,7 @@ void CameraUI::setupCameraController(const QString& model, const QString& port, 
             this, SLOT(slotConnected(bool)));
 
     connect(d->controller, SIGNAL(signalInfoMsg(const QString&)),
-            d->statusProgressBar, SLOT(setProgressText(const QString&)));
+            this, SLOT(slotInfoMsg(const QString&)));
 
     connect(d->controller, SIGNAL(signalErrorMsg(const QString&)),
             this, SLOT(slotErrorMsg(const QString&)));
@@ -703,6 +715,7 @@ void CameraUI::readSettings()
     d->losslessFormat->setCurrentIndex(group.readEntry("LossLessFormat",     0));   // PNG by default
     d->folderDateFormat->setCurrentIndex(group.readEntry("FolderDateFormat", (int)CameraUIPriv::IsoDateFormat));
     d->view->setThumbnailSize(group.readEntry("ThumbnailSize",               (int)ThumbnailSize::Large));
+    d->showLogAction->setChecked(group.readEntry("ShowLog",                  false));
 
     d->advBox->readSettings(group);
     d->splitter->restoreState(group);
@@ -712,6 +725,7 @@ void CameraUI::readSettings()
     d->formatLabel->setEnabled(convertLosslessJpegFiles());
     d->folderDateFormat->setEnabled(d->autoAlbumDateCheck->isChecked());
     d->folderDateLabel->setEnabled(d->autoAlbumDateCheck->isChecked());
+    slotShowLog();
 }
 
 void CameraUI::saveSettings()
@@ -729,6 +743,7 @@ void CameraUI::saveSettings()
     group.writeEntry("LossLessFormat",      d->losslessFormat->currentIndex());
     group.writeEntry("ThumbnailSize",       d->view->thumbnailSize());
     group.writeEntry("FolderDateFormat",    d->folderDateFormat->currentIndex());
+    group.writeEntry("ShowLog",             d->showLogAction->isChecked());
 
     d->advBox->writeSettings(group);
     d->splitter->saveState(group);
@@ -1223,11 +1238,6 @@ void CameraUI::slotCameraInformation(const QString& summary, const QString& manu
 {
     CameraInfoDialog *infoDlg = new CameraInfoDialog(this, summary, manual, about);
     infoDlg->show();
-}
-
-void CameraUI::slotErrorMsg(const QString& msg)
-{
-    KMessageBox::error(this, msg);
 }
 
 void CameraUI::slotUpload()
@@ -2217,6 +2227,26 @@ void CameraUI::slotShowMenuBar()
 void CameraUI::slotSidebarTabTitleStyleChanged()
 {
     d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
+}
+
+void CameraUI::slotErrorMsg(const QString& msg)
+{
+    d->statusProgressBar->setProgressText(msg);
+    d->log->addedLogEntry(QString(), QString(), msg, LogView::ErrorEntry);
+}
+
+void CameraUI::slotInfoMsg(const QString& msg)
+{
+    d->statusProgressBar->setProgressText(msg);
+    d->log->addedLogEntry(QString(), QString(), msg, LogView::ProgressEntry);
+}
+
+void CameraUI::slotShowLog()
+{
+    if (d->showLogAction->isChecked())
+        d->log->show();
+    else
+        d->log->hide();
 }
 
 }  // namespace Digikam

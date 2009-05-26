@@ -112,7 +112,9 @@ public:
         themeMenuAction           = 0;
         contributeAction          = 0;
         showMenuBarAction         = 0;
+        showLogAction             = 0;
         kdeJob                    = 0;
+        log                       = 0;
     }
 
     bool                          deleteAfter;
@@ -170,6 +172,7 @@ public:
     KAction                      *selectNoneAction;
     KAction                      *uploadAction;
     KToggleAction                *showMenuBarAction;
+    KToggleAction                *showLogAction;
 
     KComboBox                    *losslessFormat;
     KComboBox                    *folderDateFormat;
@@ -204,6 +207,8 @@ public:
 
     FreeSpaceWidget              *albumLibraryFreeSpace;
     FreeSpaceWidget              *cameraFreeSpace;
+
+    LogView                      *log;
 };
 
 }  // namespace Digikam

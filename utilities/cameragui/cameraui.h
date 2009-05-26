@@ -128,9 +128,11 @@ private Q_SLOTS:
     void slotCancelButton();
     void slotProcessUrl(const QString& url);
 
+    void slotShowLog();
     void slotConnected(bool val);
     void slotBusy(bool val);
     void slotErrorMsg(const QString& msg);
+    void slotInfoMsg(const QString& msg);
     void slotInformation();
     void slotCapture();
     void slotCameraInformation(const QString&, const QString&, const QString&);
