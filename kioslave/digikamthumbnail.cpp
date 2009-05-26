@@ -206,8 +206,7 @@ void kio_digikamthumbnailProtocol::get(const KURL& url)
         }
     }
 
-    // See B.K.O #193967 : no need to use SmoothScale here.
-    img = img.scale(size, size, QImage::ScaleMin);
+    img = img.smoothScale(size, size, QImage::ScaleMin);
 
     if (img.isNull())
     {
