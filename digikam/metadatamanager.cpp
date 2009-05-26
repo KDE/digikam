@@ -146,6 +146,9 @@ MetadataManagerPriv::MetadataManagerPriv(MetadataManager *q)
 
     connect(dbWorker, SIGNAL(writeOrientationToFiles(const QList<ImageInfo> &, int)),
             fileWorker, SLOT(writeOrientationToFiles(const QList<ImageInfo> &, int)));
+
+    connect(fileWorker, SIGNAL(deleteThumbnail(const QString &)),
+            this, SLOT(slotDeleteThumbnail(const QString &)));
 }
 
 MetadataManagerPriv::~MetadataManagerPriv()
@@ -258,6 +261,12 @@ void MetadataManagerPriv::updateProgress()
     float allDone = dbDone + 10*writerDone;
     float percent = allDone / allTodo;
     emit progressValueChanged(percent);
+}
+
+void MetadataManagerPriv::slotDeleteThumbnail(const QString &path)
+{
+    // must be done from the UI thread, touches pixmaps
+    ThumbnailLoadThread::deleteThumbnail(path);
 }
 
 // -------------------------------------------------------------------------------
@@ -379,7 +388,7 @@ void MetadataManagerFileWorker::writeOrientationToFiles(const QList<ImageInfo>& 
         }
         else
         {
-            ThumbnailLoadThread::deleteThumbnail(path);
+            emit deleteThumbnail(path);
             LoadingCacheInterface::fileChanged(path);
             KUrl url = KUrl::fromPath(path);
             ImageAttributesWatch::instance()->fileMetadataChanged(url);

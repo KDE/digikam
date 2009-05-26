@@ -102,6 +102,10 @@ public:
     void updateProgress();
     void updateProgressMessage();
 
+public Q_SLOTS:
+
+    void slotDeleteThumbnail(const QString &path);
+
 Q_SIGNALS:
 
     // connected to MetadataManager public signals
@@ -187,6 +191,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 
+    void deleteThumbnail(const QString &path);
     void orientationChangeFailed(const QStringList& failedFileNames);
 };
 
