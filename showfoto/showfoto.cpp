@@ -1061,6 +1061,7 @@ void ShowFoto::saveAsIsComplete()
     d->thumbBar->setSelected(foundItem);
     d->thumbBar->blockSignals(false);
     d->currentItem = foundItem;
+    slotUpdateItemInfo();
 }
 
 bool ShowFoto::save()
