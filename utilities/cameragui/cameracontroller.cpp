@@ -767,7 +767,7 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
     else if (skip)
     {
         unlink(QFile::encodeName(temp));
-        emit signalInfoMsg(i18n("Skipped file %1", file));
+        sendInfo(i18n("Skipped file %1", file));
         emit signalSkipped(folder, file);
         return;
     }
