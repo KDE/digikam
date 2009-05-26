@@ -432,7 +432,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             QString folder = cmd->map["folder"].toString();
             QString file   = cmd->map["file"].toString();
 
-            sendInfo(i18n("Getting thumbnails..."), folder, file);
+            sendInfo(i18n("Getting thumbnails for %1...", file), folder, file);
 
             QImage thumbnail;
 
@@ -514,6 +514,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             {
                 unlink(QFile::encodeName(tempURL.path()));
                 emit signalDownloaded(folder, file, GPItemInfo::DownloadFailed);
+                sendError(i18n("Failed to download %1...", file), folder, file);
                 break;
             }
             else if (isJpegImage(tempURL.path()))
@@ -688,7 +689,7 @@ void CameraController::sendInfo(const QString& msg, const QString& folder, const
 }
 
 void CameraController::slotCheckRename(const QString& folder, const QString& file,
-                                       const QString &destination, const QString &temp)
+                                       const QString& destination, const QString& temp)
 {
     // this is the direct continuation of executeCommand, case CameraCommand::gp_download
 
@@ -778,18 +779,20 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
         // rename failed. delete the temp file
         unlink(QFile::encodeName(temp));
         emit signalDownloaded(folder, file, GPItemInfo::DownloadFailed);
+        sendError(i18n("Failed to download %1...", file), folder, file);
     }
     else
     {
         emit signalDownloaded(folder, file, GPItemInfo::DownloadedYes);
         emit signalDownloadComplete(folder, file, info.path(), info.fileName());
+        sendInfo(i18n("Download sucessfully %1...", file), folder, file);
     }
 }
 
 void CameraController::slotDownloadFailed(const QString& folder, const QString& file)
 {
-    Q_UNUSED(folder);
     QString msg = i18n("Failed to download file \"%1\".", file);
+    sendError(i18n("Failed to download %1...", file), folder, file);
 
     if (!d->canceled)
     {
@@ -812,7 +815,8 @@ void CameraController::slotUploadFailed(const QString& folder, const QString& fi
     Q_UNUSED(folder);
     Q_UNUSED(src);
 
-    QString msg = i18n("Failed to upload file \"%1\".",file);
+    QString msg = i18n("Failed to upload file \"%1\".", file);
+    sendError(i18n("Failed to upload %1...", file));
 
     if (!d->canceled)
     {
@@ -833,6 +837,7 @@ void CameraController::slotUploadFailed(const QString& folder, const QString& fi
 void CameraController::slotDeleteFailed(const QString& folder, const QString& file)
 {
     emit signalDeleted(folder, file, false);
+    sendError(i18n("Failed to delete %1...", file), folder, file);
 
     QString msg = i18n("Failed to delete file \"%1\".",file);
 
@@ -855,6 +860,7 @@ void CameraController::slotDeleteFailed(const QString& folder, const QString& fi
 void CameraController::slotLockFailed(const QString& folder, const QString& file)
 {
     emit signalLocked(folder, file, false);
+    sendError(i18n("Failed to lock %1...", file), folder, file);
 
     QString msg = i18n("Failed to toggle lock file \"%1\".",file);
 
