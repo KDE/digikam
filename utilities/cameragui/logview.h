@@ -67,6 +67,10 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotItemDoubleClicked(QTreeWidgetItem*);
+
+private:
+
+    void mouseMoveEvent(QMouseEvent*);
 };
 
 }  // namespace Digikam

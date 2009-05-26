@@ -29,6 +29,7 @@
 #include <QHeaderView>
 #include <QPixmap>
 #include <QStringList>
+#include <QMouseEvent>
 
 // KDE includes
 
@@ -106,6 +107,7 @@ LogView::LogView(QWidget *parent)
     setHeaderHidden(true);
     setRootIsDecorated(false);
     setDragEnabled(true);
+    viewport()->setMouseTracking(true);
     header()->setResizeMode(0, QHeaderView::ResizeToContents);
     header()->setResizeMode(1, QHeaderView::Stretch);
 
@@ -131,6 +133,19 @@ void LogView::slotItemDoubleClicked(QTreeWidgetItem* item)
         if (!lvi->folder().isEmpty() && !lvi->file().isEmpty())
             emit signalEntryClicked(lvi->folder(), lvi->file());
     }
+}
+
+void LogView::mouseMoveEvent(QMouseEvent* e)
+{
+    LogViewItem* lvi = dynamic_cast<LogViewItem*>(itemAt(e->pos()));
+    if (lvi)
+    {
+        if (!lvi->folder().isEmpty() && !lvi->file().isEmpty())
+            setCursor(Qt::PointingHandCursor);
+        else
+            unsetCursor();
+    }
+    QTreeWidget::mouseMoveEvent(e);
 }
 
 }  // namespace Digikam
