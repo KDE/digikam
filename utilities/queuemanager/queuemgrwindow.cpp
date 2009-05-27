@@ -982,10 +982,11 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
                 case KIO::R_RENAME:
                 {
                     dest = dlg.newDestUrl();
-                    addHistoryMessage(i18n("Item renamed..."), DHistoryView::WarningEntry);
+                    addHistoryMessage(i18n("Item renamed to %1...", dest.filename()), DHistoryView::WarningEntry);
                     break;
                 }
                 default:    // Overwrite.
+                    addHistoryMessage(i18n("Item overwrited..."), DHistoryView::WarningEntry);
                     break;
             }
         }
