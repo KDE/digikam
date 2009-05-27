@@ -1026,6 +1026,12 @@ public:
      */
     QMap<int, int> getNumberOfImagesInTags();
 
+    /**
+     * Returns a QMap<QString,int> of ImageInformation.format
+     * -> count of items with that format.
+     */
+    QMap<QString,int> getImageFormatStatistics();
+
     // ----------- Moving and Copying Items -----------
 
     /**

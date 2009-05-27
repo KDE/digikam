@@ -2038,6 +2038,24 @@ QMap<int, int> AlbumDB::getNumberOfImagesInTags()
     return tagsStatMap;
 }
 
+QMap<QString,int> AlbumDB::getImageFormatStatistics()
+{
+    QList<QVariant> values, allFormats;
+    QMap<QString, int>  map;
+
+    d->db->execSql("SELECT DISTINCT format FROM ImageInformation;", &allFormats);
+
+    QSqlQuery query = d->db->prepareQuery( QString("SELECT count() FROM ImageInformation WHERE format=?;") );
+
+    foreach (const QVariant &format, allFormats)
+    {
+        d->db->execSql("SELECT count() FROM ImageInformation WHERE format=?;", format, &values);
+        map[format.toString()] = values.isEmpty() ? 0 : values.first().toInt();
+    }
+
+    return map;
+}
+
 /*
 QList<QPair<QString, QDateTime> > AlbumDB::getItemsAndDate()
 {
