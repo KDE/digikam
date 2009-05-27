@@ -148,7 +148,7 @@ void AssignedListView::setBusy(bool b)
 
 void AssignedListView::setCurrentTool(int index)
 {
-    int count = 0;
+    int count = 1;
 
     QTreeWidgetItemIterator it(this);
     while (*it)
