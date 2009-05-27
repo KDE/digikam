@@ -58,11 +58,8 @@ public:
 
 protected:
 
-    bool eventFilter(QObject* obj, QEvent* event);
     void enterEvent(QEvent* event);
     void leaveEvent(QEvent* event);
-    void mousePressEvent(QMouseEvent* event);
-    void mouseReleaseEvent(QMouseEvent* event);
     void paintEvent(QPaintEvent* event);
 
     /// Return your icon here. Will be queried again on toggle.
@@ -83,7 +80,6 @@ protected:
 
     QPersistentModelIndex m_index;
     bool                  m_isHovered;
-    bool                  m_leftMouseButtonPressed;
     int                   m_fadingValue;
     QPixmap               m_icon;
     QTimeLine            *m_fadingTimeLine;

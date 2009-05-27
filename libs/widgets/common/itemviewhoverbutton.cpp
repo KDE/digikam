@@ -49,24 +49,17 @@ namespace Digikam
 ItemViewHoverButton::ItemViewHoverButton(QAbstractItemView* view) :
     QAbstractButton(view->viewport()),
     m_isHovered(false),
-    m_leftMouseButtonPressed(false),
     m_fadingValue(0),
     m_icon(),
     m_fadingTimeLine(0)
 {
-    setFocusPolicy(Qt::NoFocus);
-
     const bool animate = KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects;
     const int duration = animate ? 600 : 1;
     m_fadingTimeLine = new QTimeLine(duration, this);
     m_fadingTimeLine->setFrameRange(0, 255);
 
-    view->viewport()->installEventFilter(this);
-
     setCheckable(true);
     setChecked(false);
-
-    hide();
 
     connect(m_fadingTimeLine, SIGNAL(frameChanged(int)),
             this, SLOT(setFadingValue(int)));
@@ -119,32 +112,6 @@ void ItemViewHoverButton::setVisible(bool visible)
 
 }
 
-bool ItemViewHoverButton::eventFilter(QObject* obj, QEvent* event)
-{
-    if (obj == parent()) {
-        switch (event->type()) {
-        case QEvent::Leave:
-            hide();
-            break;
-
-        case QEvent::MouseMove:
-            if (m_leftMouseButtonPressed) {
-                // Don't forward mouse move events to the viewport,
-                // otherwise a rubberband selection will be shown when
-                // clicking on the selection toggle and moving the mouse
-                // above the viewport.
-                return true;
-            }
-            break;
-
-        default:
-            break;
-        }
-    }
-
-    return QAbstractButton::eventFilter(obj, event);
-}
-
 void ItemViewHoverButton::enterEvent(QEvent* event)
 {
     QAbstractButton::enterEvent(event);
@@ -152,9 +119,7 @@ void ItemViewHoverButton::enterEvent(QEvent* event)
     // if the mouse cursor is above the button, display
     // it immediately without fading timer
     m_isHovered = true;
-    if (m_fadingTimeLine != 0) {
-        m_fadingTimeLine->stop();
-    }
+    m_fadingTimeLine->stop();
     m_fadingValue = 255;
     updateToolTip();
     update();
@@ -165,18 +130,6 @@ void ItemViewHoverButton::leaveEvent(QEvent* event)
     QAbstractButton::leaveEvent(event);
     m_isHovered = false;
     update();
-}
-
-void ItemViewHoverButton::mousePressEvent(QMouseEvent* event)
-{
-    QAbstractButton::mousePressEvent(event);
-    m_leftMouseButtonPressed = (event->buttons() & Qt::LeftButton);
-}
-
-void ItemViewHoverButton::mouseReleaseEvent(QMouseEvent* event)
-{
-    QAbstractButton::mouseReleaseEvent(event);
-    m_leftMouseButtonPressed = (event->buttons() & Qt::LeftButton);
 }
 
 void ItemViewHoverButton::paintEvent(QPaintEvent* event)
@@ -248,7 +201,8 @@ void ItemViewHoverButton::refreshIcon()
 
 void ItemViewHoverButton::startFading()
 {
-    m_fadingTimeLine->start();
+    if (m_fadingTimeLine->state() != QTimeLine::Running)
+        m_fadingTimeLine->start();
     m_fadingValue = 0;
 }
 

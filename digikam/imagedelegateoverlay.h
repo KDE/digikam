@@ -110,16 +110,20 @@ protected Q_SLOTS:
 
 protected:
 
+    bool eventFilter(QObject* obj, QEvent* event);
+
     QWidget *m_widget;
+
+    bool m_mouseButtonPressedOnWidget;
 };
 
-class HoverWidgetDelegateOverlay : public AbstractWidgetDelegateOverlay
+class HoverButtonDelegateOverlay : public AbstractWidgetDelegateOverlay
 {
     Q_OBJECT
 
 public:
 
-    HoverWidgetDelegateOverlay(QObject *parent);
+    HoverButtonDelegateOverlay(QObject *parent);
 
     /** Will call createButton(). */
     virtual void setActive(bool active);

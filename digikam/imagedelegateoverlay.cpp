@@ -26,6 +26,9 @@
 
 // Qt includes
 
+#include <QEvent>
+#include <QMouseEvent>
+
 // KDE includes
 
 #include <kdebug.h>
@@ -115,7 +118,8 @@ ImageDelegate *ImageDelegateOverlay::delegate() const
 
 AbstractWidgetDelegateOverlay::AbstractWidgetDelegateOverlay(QObject *parent)
                           : ImageDelegateOverlay(parent),
-                            m_widget(0)
+                            m_widget(0),
+                            m_mouseButtonPressedOnWidget(false)
 {
 }
 
@@ -126,6 +130,12 @@ void AbstractWidgetDelegateOverlay::setActive(bool active)
         if (m_widget)
             delete m_widget;
         m_widget = createWidget();
+
+        m_widget->setFocusPolicy(Qt::NoFocus);
+        m_widget->hide();
+
+        m_view->viewport()->installEventFilter(this);
+        m_widget->installEventFilter(this);
 
         connect(m_view->model(), SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
                 this, SLOT(slotRowsRemoved(const QModelIndex&, int, int)));
@@ -143,6 +153,7 @@ void AbstractWidgetDelegateOverlay::setActive(bool active)
     {
         delete m_widget;
         m_widget = 0;
+        m_view->viewport()->removeEventFilter(this);
         disconnect(m_view->model(), 0, this, 0);
         disconnect(m_view, 0, this, 0);
     }
@@ -169,44 +180,87 @@ void AbstractWidgetDelegateOverlay::slotRowsRemoved(const QModelIndex &, int, in
     m_widget->hide();
 }
 
+bool AbstractWidgetDelegateOverlay::eventFilter(QObject* obj, QEvent* event)
+{
+    // events on view's viewport
+    if (obj == m_widget->parent()) {
+        switch (event->type()) {
+            case QEvent::Leave:
+                m_widget->hide();
+                break;
+
+            case QEvent::MouseMove:
+                if (m_mouseButtonPressedOnWidget) {
+                    // Don't forward mouse move events to the viewport,
+                    // otherwise a rubberband selection will be shown when
+                    // clicking on the selection toggle and moving the mouse
+                    // above the viewport.
+                    return true;
+                }
+                break;
+            case QEvent::MouseButtonRelease:
+                m_mouseButtonPressedOnWidget = false;
+                break;
+            default:
+                break;
+        }
+    }
+    else if (obj == m_widget)
+    {
+        switch (event->type()) {
+            case QEvent::MouseButtonPress:
+                if (static_cast<QMouseEvent*>(event)->buttons() & Qt::LeftButton)
+                    m_mouseButtonPressedOnWidget = true;
+                break;
+            case QEvent::MouseButtonRelease:
+                m_mouseButtonPressedOnWidget = false;
+                break;
+            default:
+                break;
+        }
+    }
+
+    return ImageDelegateOverlay::eventFilter(obj, event);
+}
+
 // -----------------------------
 
-HoverWidgetDelegateOverlay::HoverWidgetDelegateOverlay(QObject *parent)
+HoverButtonDelegateOverlay::HoverButtonDelegateOverlay(QObject *parent)
                           : AbstractWidgetDelegateOverlay(parent)
 {
 }
 
-ItemViewHoverButton *HoverWidgetDelegateOverlay::button() const
+ItemViewHoverButton *HoverButtonDelegateOverlay::button() const
 {
     return static_cast<ItemViewHoverButton*>(m_widget);
 }
 
-void HoverWidgetDelegateOverlay::setActive(bool active)
+void HoverButtonDelegateOverlay::setActive(bool active)
 {
     AbstractWidgetDelegateOverlay::setActive(active);
     if (active)
         button()->initIcon();
 }
 
-QWidget *HoverWidgetDelegateOverlay::createWidget()
+QWidget *HoverButtonDelegateOverlay::createWidget()
 {
     return createButton();
 }
 
-void HoverWidgetDelegateOverlay::visualChange()
+void HoverButtonDelegateOverlay::visualChange()
 {
     if (button() && button()->isVisible())
         updateButton(button()->index());
 }
 
-void HoverWidgetDelegateOverlay::slotReset()
+void HoverButtonDelegateOverlay::slotReset()
 {
     AbstractWidgetDelegateOverlay::slotReset();
 
     button()->reset();
 }
 
-void HoverWidgetDelegateOverlay::slotEntered(const QModelIndex& index)
+void HoverButtonDelegateOverlay::slotEntered(const QModelIndex& index)
 {
     AbstractWidgetDelegateOverlay::slotEntered(index);
 
