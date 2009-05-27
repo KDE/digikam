@@ -2244,7 +2244,7 @@ void CameraUI::slotLogMsg(const QString& msg, LogView::LogEntryType type,
                           const QString& folder, const QString& file)
 {
     d->statusProgressBar->setProgressText(msg);
-    d->log->addedLogEntry(folder, type, file, msg);
+    d->log->addedLogEntry(msg, type, folder, file);
 }
 
 void CameraUI::slotShowLog()

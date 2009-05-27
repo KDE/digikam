@@ -53,7 +53,7 @@ public:
     LogView(QWidget *parent);
     virtual ~LogView();
 
-    void addedLogEntry(const QString& folder, LogEntryType type, const QString& file, const QString& text);
+    void addedLogEntry(const QString& msg, LogEntryType type, const QString& folder, const QString& file);
 
 Q_SIGNALS:
 

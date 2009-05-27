@@ -50,8 +50,8 @@ class LogViewItem : public QTreeWidgetItem
 {
 public:
 
-    LogViewItem(QTreeWidget *parent, const QString& folder, LogView::LogEntryType entryType,
-                const QString& file, const QString& text)
+    LogViewItem(QTreeWidget *parent, const QString& msg, LogView::LogEntryType entryType,
+                const QString& folder, const QString& file)
         : QTreeWidgetItem(parent, QStringList())
     {
         m_folder = folder;
@@ -81,7 +81,7 @@ public:
         }
 
         setText(1, QTime::currentTime().toString(Qt::ISODate));
-        setText(2, text);
+        setText(2, msg);
     }
 
     QString folder() const
@@ -161,9 +161,9 @@ void LogView::slotCopy2ClipBoard()
     QApplication::clipboard()->setMimeData(mimeData, QClipboard::Clipboard);
 }
 
-void LogView::addedLogEntry(const QString& folder, LogEntryType type, const QString& file, const QString& text)
+void LogView::addedLogEntry(const QString& msg, LogEntryType type, const QString& folder, const QString& file)
 {
-    LogViewItem *item = new LogViewItem(this, folder, type, file, text);
+    LogViewItem *item = new LogViewItem(this, msg, type, folder, file);
     setCurrentItem(item);
 }
 
