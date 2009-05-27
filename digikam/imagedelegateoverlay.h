@@ -101,8 +101,12 @@ protected:
     /** Create your widget here. Pass view() as parent. */
     virtual QWidget *createWidget() = 0;
 
+    /// Returns the widget to be used as parent for your widget created in createWidget()
+    QWidget *parentWidget() const;
+
 protected Q_SLOTS:
 
+    /** Default implementation shows or hides the widget if index is valid or not valid */
     virtual void slotEntered(const QModelIndex& index);
     virtual void slotReset();
     virtual void slotViewportEntered();

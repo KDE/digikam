@@ -52,7 +52,7 @@ protected:
     virtual void updateToolTip();
 };
 
-class ImageSelectionOverlay : public HoverWidgetDelegateOverlay
+class ImageSelectionOverlay : public HoverButtonDelegateOverlay
 {
     Q_OBJECT
 

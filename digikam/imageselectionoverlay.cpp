@@ -65,13 +65,13 @@ void ImageSelectionOverlayButton::updateToolTip()
 }
 
 ImageSelectionOverlay::ImageSelectionOverlay(QObject *parent)
-            : HoverWidgetDelegateOverlay(parent)
+            : HoverButtonDelegateOverlay(parent)
 {
 }
 
 void ImageSelectionOverlay::setActive(bool active)
 {
-    HoverWidgetDelegateOverlay::setActive(active);
+    HoverButtonDelegateOverlay::setActive(active);
 
     if (active)
     {

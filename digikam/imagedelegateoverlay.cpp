@@ -159,6 +159,11 @@ void AbstractWidgetDelegateOverlay::setActive(bool active)
     }
 }
 
+QWidget *AbstractWidgetDelegateOverlay::parentWidget() const
+{
+    return m_view->viewport();
+}
+
 void AbstractWidgetDelegateOverlay::slotReset()
 {
 }
@@ -249,7 +254,7 @@ QWidget *HoverButtonDelegateOverlay::createWidget()
 
 void HoverButtonDelegateOverlay::visualChange()
 {
-    if (button() && button()->isVisible())
+    if (m_widget && m_widget->isVisible())
         updateButton(button()->index());
 }
 
