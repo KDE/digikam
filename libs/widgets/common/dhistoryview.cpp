@@ -98,6 +98,8 @@ private:
 DHistoryView::DHistoryView(QWidget *parent)
             : QTreeWidget(parent)
 {
+    qRegisterMetaType<EntryType>("DHistoryView::EntryType");
+
     setContextMenuPolicy(Qt::CustomContextMenu);
     setIconSize(QSize(22, 22));
     setSelectionMode(QAbstractItemView::SingleSelection);

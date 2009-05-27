@@ -114,7 +114,7 @@ public:
         showMenuBarAction         = 0;
         showLogAction             = 0;
         kdeJob                    = 0;
-        log                       = 0;
+        historyView               = 0;
     }
 
     bool                          deleteAfter;
@@ -208,7 +208,7 @@ public:
     FreeSpaceWidget              *albumLibraryFreeSpace;
     FreeSpaceWidget              *cameraFreeSpace;
 
-    LogView                      *log;
+    DHistoryView                 *historyView;
 };
 
 }  // namespace Digikam

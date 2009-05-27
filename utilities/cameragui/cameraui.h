@@ -42,7 +42,7 @@
 // Local includes
 
 #include "gpiteminfo.h"
-#include "logview.h"
+#include "dhistoryview.h"
 
 class KFileItem;
 class KJob;
@@ -132,13 +132,13 @@ private Q_SLOTS:
     void slotShowLog();
     void slotConnected(bool val);
     void slotBusy(bool val);
-    void slotLogMsg(const QString& msg, LogView::LogEntryType type, const QString& folder, const QString& file);
+    void slotLogMsg(const QString& msg, DHistoryView::EntryType type, const QString& folder, const QString& file);
     void slotInformation();
     void slotCapture();
     void slotCameraInformation(const QString&, const QString&, const QString&);
     void slotCameraFreeSpaceInfo(unsigned long kBSize, unsigned long kBAvail);
     void slotCollectionLocationStatusChanged(const CollectionLocation& location, int oldStatus);
-    void slotLogEntryClicked(const QString&, const QString&);
+    void slotHistoryEntryClicked(const QVariant&);
 
     void slotFolderList(const QStringList& folderList);
     void slotFileList(const GPItemInfoList& fileList);

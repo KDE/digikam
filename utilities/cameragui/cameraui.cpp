@@ -182,7 +182,7 @@ void CameraUI::setupUserArea()
     d->splitter     = new SidebarSplitter(widget);
     KVBox* vbox     = new KVBox(d->splitter);
     d->view         = new CameraIconView(this, vbox);
-    d->log          = new LogView(vbox);
+    d->historyView  = new DHistoryView(vbox);
     d->rightSideBar = new ImagePropertiesSideBarCamGui(widget, d->splitter, KMultiTabBar::Right, true);
     d->rightSideBar->setObjectName("CameraGui Sidebar Right");
     d->splitter->setFrameStyle( QFrame::NoFrame );
@@ -192,7 +192,7 @@ void CameraUI::setupUserArea()
     d->splitter->setStretchFactor(0, 10);      // set iconview default size to max.
 
     vbox->setStretchFactor(d->view, 10);
-    vbox->setStretchFactor(d->log,  2);
+    vbox->setStretchFactor(d->historyView,  2);
     vbox->setMargin(0);
     vbox->setSpacing(0);
 
@@ -519,8 +519,8 @@ void CameraUI::setupConnections()
     connect(d->fixDateTimeCheck, SIGNAL(toggled(bool)),
             d->dateTimeEdit, SLOT(setEnabled(bool)));
 
-    connect(d->log, SIGNAL(signalEntryClicked(const QString&, const QString&)),
-            this, SLOT(slotLogEntryClicked(const QString&, const QString&)));
+    connect(d->historyView, SIGNAL(signalEntryClicked(const QVariant&)),
+            this, SLOT(slotHistoryEntryClicked(const QVariant&)));
 
     // -------------------------------------------------------------------------
 
@@ -634,8 +634,6 @@ void CameraUI::setupStatusBar()
 
 void CameraUI::setupCameraController(const QString& model, const QString& port, const QString& path)
 {
-    qRegisterMetaType<LogView::LogEntryType>("LogView::LogEntryType");
-
     d->controller = new CameraController(this, d->cameraTitle, model, port, path);
 
     if (d->controller->cameraDriverType() == DKCamera::GPhotoDriver)
@@ -653,8 +651,8 @@ void CameraUI::setupCameraController(const QString& model, const QString& port, 
     connect(d->controller, SIGNAL(signalConnected(bool)),
             this, SLOT(slotConnected(bool)));
 
-    connect(d->controller, SIGNAL(signalLogMsg(const QString&, LogView::LogEntryType, const QString&, const QString&)),
-            this, SLOT(slotLogMsg(const QString&, LogView::LogEntryType, const QString&, const QString&)));
+    connect(d->controller, SIGNAL(signalLogMsg(const QString&, DHistoryView::EntryType, const QString&, const QString&)),
+            this, SLOT(slotLogMsg(const QString&, DHistoryView::EntryType, const QString&, const QString&)));
 
     connect(d->controller, SIGNAL(signalCameraInformation(const QString&, const QString&, const QString&)),
             this, SLOT(slotCameraInformation(const QString&, const QString&, const QString&)));
@@ -1656,7 +1654,7 @@ void CameraUI::slotDownloaded(const QString& folder, const QString& file, int st
         else
         {
             // Pop-up a message to bring user when all is done.
-            KPassivePopup::message(cameraTitle(), i18n("Download is completed..."), this);
+            KPassivePopup::message(windowTitle(), i18n("Download is completed..."), this);
         }
     }
 }
@@ -2240,20 +2238,25 @@ void CameraUI::slotSidebarTabTitleStyleChanged()
     d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
 }
 
-void CameraUI::slotLogMsg(const QString& msg, LogView::LogEntryType type,
+void CameraUI::slotLogMsg(const QString& msg, DHistoryView::EntryType type,
                           const QString& folder, const QString& file)
 {
     d->statusProgressBar->setProgressText(msg);
-    d->log->addedLogEntry(msg, type, folder, file);
+    QStringList meta;
+    meta << folder << file;
+    d->historyView->addedEntry(msg, type, QVariant(meta));
 }
 
 void CameraUI::slotShowLog()
 {
-    d->showLogAction->isChecked() ? d->log->show() : d->log->hide();
+    d->showLogAction->isChecked() ? d->historyView->show() : d->historyView->hide();
 }
 
-void CameraUI::slotLogEntryClicked(const QString& folder, const QString& file)
+void CameraUI::slotHistoryEntryClicked(const QVariant& metadata)
 {
+    QStringList meta = metadata.toStringList();
+    QString folder   = meta[0];
+    QString file     = meta[1];
     d->view->ensureItemVisible(folder, file);
 }
 
