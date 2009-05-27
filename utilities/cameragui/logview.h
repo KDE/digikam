@@ -30,11 +30,6 @@
 #include <QWidget>
 #include <QString>
 
-// Local includes
-
-#include "batchtool.h"
-#include "batchtoolsmanager.h"
-
 namespace Digikam
 {
 
