@@ -131,35 +131,6 @@ LogView::~LogView()
 {
 }
 
-void LogView::addedLogEntry(const QString& folder, LogEntryType type, const QString& file, const QString& text)
-{
-    LogViewItem *item = new LogViewItem(this, folder, type, file, text);
-    setCurrentItem(item);
-}
-
-void LogView::slotItemDoubleClicked(QTreeWidgetItem* item)
-{
-    LogViewItem* lvi = dynamic_cast<LogViewItem*>(item);
-    if (lvi)
-    {
-        if (!lvi->folder().isEmpty() && !lvi->file().isEmpty())
-            emit signalEntryClicked(lvi->folder(), lvi->file());
-    }
-}
-
-void LogView::mouseMoveEvent(QMouseEvent* e)
-{
-    LogViewItem* lvi = dynamic_cast<LogViewItem*>(itemAt(e->pos()));
-    if (lvi)
-    {
-        if (!lvi->folder().isEmpty() && !lvi->file().isEmpty())
-            setCursor(Qt::PointingHandCursor);
-        else
-            unsetCursor();
-    }
-    QTreeWidget::mouseMoveEvent(e);
-}
-
 void LogView::slotContextMenu()
 {
     KMenu popmenu(this);
@@ -188,6 +159,35 @@ void LogView::slotCopy2ClipBoard()
     QMimeData *mimeData = new QMimeData();
     mimeData->setText(textInfo);
     QApplication::clipboard()->setMimeData(mimeData, QClipboard::Clipboard);
+}
+
+void LogView::addedLogEntry(const QString& folder, LogEntryType type, const QString& file, const QString& text)
+{
+    LogViewItem *item = new LogViewItem(this, folder, type, file, text);
+    setCurrentItem(item);
+}
+
+void LogView::slotItemDoubleClicked(QTreeWidgetItem* item)
+{
+    LogViewItem* lvi = dynamic_cast<LogViewItem*>(item);
+    if (lvi)
+    {
+        if (!lvi->folder().isEmpty() && !lvi->file().isEmpty())
+            emit signalEntryClicked(lvi->folder(), lvi->file());
+    }
+}
+
+void LogView::mouseMoveEvent(QMouseEvent* e)
+{
+    LogViewItem* lvi = dynamic_cast<LogViewItem*>(itemAt(e->pos()));
+    if (lvi)
+    {
+        if (!lvi->folder().isEmpty() && !lvi->file().isEmpty())
+            setCursor(Qt::PointingHandCursor);
+        else
+            unsetCursor();
+    }
+    QTreeWidget::mouseMoveEvent(e);
 }
 
 }  // namespace Digikam
