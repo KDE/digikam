@@ -55,6 +55,7 @@
 #include <ktoolinvocation.h>
 #include <kwindowsystem.h>
 #include <kxmlguifactory.h>
+#include <kpassivepopup.h>
 #include <kio/renamedialog.h>
 
 // Libkdcraw includes
@@ -822,6 +823,8 @@ void QueueMgrWindow::processOne()
 {
     if (d->itemsList.empty())
     {
+        // Pop-up a message to bring user when all is done.
+        KPassivePopup::message(windowTitle(), i18n("Batch queue is completed..."), this);
         processingAborted();
         return;
     }
