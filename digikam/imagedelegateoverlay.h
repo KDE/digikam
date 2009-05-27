@@ -85,7 +85,35 @@ protected:
 
 // -------------------------------------------------------------------------------------------
 
-class HoverWidgetDelegateOverlay : public ImageDelegateOverlay
+class AbstractWidgetDelegateOverlay : public ImageDelegateOverlay
+{
+    Q_OBJECT
+
+public:
+
+    AbstractWidgetDelegateOverlay(QObject *parent);
+
+    /** Will call createWidget(). */
+    virtual void setActive(bool active);
+
+protected:
+
+    /** Create your widget here. Pass view() as parent. */
+    virtual QWidget *createWidget() = 0;
+
+protected Q_SLOTS:
+
+    virtual void slotEntered(const QModelIndex& index);
+    virtual void slotReset();
+    virtual void slotViewportEntered();
+    virtual void slotRowsRemoved(const QModelIndex& parent, int start, int end);
+
+protected:
+
+    QWidget *m_widget;
+};
+
+class HoverWidgetDelegateOverlay : public AbstractWidgetDelegateOverlay
 {
     Q_OBJECT
 
@@ -96,6 +124,8 @@ public:
     /** Will call createButton(). */
     virtual void setActive(bool active);
 
+    ItemViewHoverButton *button() const;
+
 protected:
 
     /** Create your widget here. Pass view() as parent. */
@@ -104,18 +134,15 @@ protected:
      *  adjust and store state. */
     virtual void updateButton(const QModelIndex& index) = 0;
 
+    virtual QWidget *createWidget();
     virtual void visualChange();
+
 
 protected Q_SLOTS:
 
-    void slotReset();
-    void slotEntered(const QModelIndex& index);
-    void slotViewportEntered();
-    void slotRowsRemoved(const QModelIndex& parent, int start, int end);
+    virtual void slotEntered(const QModelIndex& index);
+    virtual void slotReset();
 
-protected:
-
-    ItemViewHoverButton *m_button;
 };
 
 } // namespace Digikam

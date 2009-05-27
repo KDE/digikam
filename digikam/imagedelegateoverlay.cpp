@@ -113,20 +113,19 @@ ImageDelegate *ImageDelegateOverlay::delegate() const
 
 // -----------------------------
 
-HoverWidgetDelegateOverlay::HoverWidgetDelegateOverlay(QObject *parent)
+AbstractWidgetDelegateOverlay::AbstractWidgetDelegateOverlay(QObject *parent)
                           : ImageDelegateOverlay(parent),
-                            m_button(0)
+                            m_widget(0)
 {
 }
 
-void HoverWidgetDelegateOverlay::setActive(bool active)
+void AbstractWidgetDelegateOverlay::setActive(bool active)
 {
     if (active)
     {
-        if (m_button)
-            delete m_button;
-        m_button = createButton();
-        m_button->initIcon();
+        if (m_widget)
+            delete m_widget;
+        m_widget = createWidget();
 
         connect(m_view->model(), SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
                 this, SLOT(slotRowsRemoved(const QModelIndex&, int, int)));
@@ -142,47 +141,84 @@ void HoverWidgetDelegateOverlay::setActive(bool active)
     }
     else
     {
-        delete m_button;
-        m_button = 0;
+        delete m_widget;
+        m_widget = 0;
         disconnect(m_view->model(), 0, this, 0);
         disconnect(m_view, 0, this, 0);
     }
 }
 
+void AbstractWidgetDelegateOverlay::slotReset()
+{
+}
+
+void AbstractWidgetDelegateOverlay::slotEntered(const QModelIndex& index)
+{
+    m_widget->hide();
+    if (index.isValid())
+        m_widget->show();
+}
+
+void AbstractWidgetDelegateOverlay::slotViewportEntered()
+{
+    m_widget->hide();
+}
+
+void AbstractWidgetDelegateOverlay::slotRowsRemoved(const QModelIndex &, int, int)
+{
+    m_widget->hide();
+}
+
+// -----------------------------
+
+HoverWidgetDelegateOverlay::HoverWidgetDelegateOverlay(QObject *parent)
+                          : AbstractWidgetDelegateOverlay(parent)
+{
+}
+
+ItemViewHoverButton *HoverWidgetDelegateOverlay::button() const
+{
+    return static_cast<ItemViewHoverButton*>(m_widget);
+}
+
+void HoverWidgetDelegateOverlay::setActive(bool active)
+{
+    AbstractWidgetDelegateOverlay::setActive(active);
+    if (active)
+        button()->initIcon();
+}
+
+QWidget *HoverWidgetDelegateOverlay::createWidget()
+{
+    return createButton();
+}
+
 void HoverWidgetDelegateOverlay::visualChange()
 {
-    if (m_button && m_button->isVisible())
-        updateButton(m_button->index());
+    if (button() && button()->isVisible())
+        updateButton(button()->index());
 }
 
 void HoverWidgetDelegateOverlay::slotReset()
 {
-    m_button->reset();
+    AbstractWidgetDelegateOverlay::slotReset();
+
+    button()->reset();
 }
 
 void HoverWidgetDelegateOverlay::slotEntered(const QModelIndex& index)
 {
-    m_button->hide();
+    AbstractWidgetDelegateOverlay::slotEntered(index);
+
     if (index.isValid())
     {
-        m_button->setIndex(index);
+        button()->setIndex(index);
         updateButton(index);
-        m_button->show();
     }
     else
     {
-        m_button->setIndex(index);
+        button()->setIndex(index);
     }
-}
-
-void HoverWidgetDelegateOverlay::slotViewportEntered()
-{
-    m_button->hide();
-}
-
-void HoverWidgetDelegateOverlay::slotRowsRemoved(const QModelIndex &, int, int)
-{
-    m_button->hide();
 }
 
 } // namespace Digikam

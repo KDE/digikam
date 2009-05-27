@@ -75,7 +75,7 @@ void ImageSelectionOverlay::setActive(bool active)
 
     if (active)
     {
-        connect(m_button, SIGNAL(clicked(bool)),
+        connect(button(), SIGNAL(clicked(bool)),
                 this, SLOT(slotClicked(bool)));
 
         connect(m_view->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
@@ -102,15 +102,15 @@ void ImageSelectionOverlay::updateButton(const QModelIndex& index)
     const int gap = 5;
     const int x = rect.left() + gap;
     const int y = rect.top() + gap;
-    m_button->move(QPoint(x, y));
+    button()->move(QPoint(x, y));
 
     QItemSelectionModel* selModel = m_view->selectionModel();
-    m_button->setChecked(selModel->isSelected(index));
+    button()->setChecked(selModel->isSelected(index));
 }
 
 void ImageSelectionOverlay::slotClicked(bool checked)
 {
-    QModelIndex index = m_button->index();
+    QModelIndex index = button()->index();
     if (index.isValid())
     {
         QItemSelectionModel* selModel = m_view->selectionModel();
@@ -125,12 +125,12 @@ void ImageSelectionOverlay::slotClicked(bool checked)
 
 void ImageSelectionOverlay::slotSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
 {
-    QModelIndex index = m_button->index();
+    QModelIndex index = button()->index();
     if (index.isValid()) {
         if (selected.contains(index))
-            m_button->setChecked(true);
+            button()->setChecked(true);
         else if (deselected.contains(index))
-            m_button->setChecked(false);
+            button()->setChecked(false);
     }
 }
 
