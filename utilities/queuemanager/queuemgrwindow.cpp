@@ -251,12 +251,12 @@ void QueueMgrWindow::setupUserArea()
 void QueueMgrWindow::setupStatusBar()
 {
     d->statusProgressBar = new StatusProgressBar(statusBar());
-    d->statusProgressBar->setAlignment(Qt::AlignLeft);
+    d->statusProgressBar->setAlignment(Qt::AlignCenter);
     d->statusProgressBar->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addWidget(d->statusProgressBar, 60);
 
     d->statusLabel = new QLabel(statusBar());
-    d->statusLabel->setAlignment(Qt::AlignRight);
+    d->statusLabel->setAlignment(Qt::AlignCenter);
     d->statusLabel->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addWidget(d->statusLabel, 40);
 }
