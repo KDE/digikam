@@ -430,7 +430,7 @@ void CameraUI::setupActions()
     d->fullScreenAction = actionCollection()->addAction(KStandardAction::FullScreen,
                           "cameraui_fullscreen", this, SLOT(slotToggleFullScreen()));
 
-    d->showLogAction = new KToggleAction(KIcon("view-history"), i18n("Show Log"), this);
+    d->showLogAction = new KToggleAction(KIcon("view-history"), i18n("Show History"), this);
     d->showLogAction->setShortcut(Qt::CTRL+Qt::Key_L);
     connect(d->showLogAction, SIGNAL(triggered()), this, SLOT(slotShowLog()));
     actionCollection()->addAction("cameraui_showlog", d->showLogAction);
