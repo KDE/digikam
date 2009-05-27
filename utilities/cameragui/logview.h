@@ -67,6 +67,8 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotItemDoubleClicked(QTreeWidgetItem*);
+    void slotContextMenu();
+    void slotCopy2ClipBoard();
 
 private:
 

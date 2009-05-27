@@ -30,9 +30,15 @@
 #include <QPixmap>
 #include <QStringList>
 #include <QMouseEvent>
+#include <QMimeData>
+#include <QClipboard>
+#include <QApplication>
+#include <QTime>
 
 // KDE includes
 
+#include <kaction.h>
+#include <kmenu.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -74,7 +80,8 @@ public:
                 setIcon(0, SmallIcon("dialog-information"));
         }
 
-        setText(1, text);
+        setText(1, QTime::currentTime().toString(Qt::ISODate));
+        setText(2, text);
     }
 
     QString folder() const
@@ -98,21 +105,26 @@ private:
 LogView::LogView(QWidget *parent)
        : QTreeWidget(parent)
 {
+    setContextMenuPolicy(Qt::CustomContextMenu);
     setIconSize(QSize(22, 22));
     setSelectionMode(QAbstractItemView::SingleSelection);
     setSortingEnabled(false);
     setAllColumnsShowFocus(true);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    setColumnCount(2);
+    setColumnCount(3);
     setHeaderHidden(true);
     setRootIsDecorated(false);
     setDragEnabled(true);
     viewport()->setMouseTracking(true);
-    header()->setResizeMode(0, QHeaderView::ResizeToContents);
-    header()->setResizeMode(1, QHeaderView::Stretch);
+    header()->setResizeMode(0, QHeaderView::ResizeToContents);  // Icon
+    header()->setResizeMode(1, QHeaderView::ResizeToContents);  // Time
+    header()->setResizeMode(2, QHeaderView::Stretch);           // Message
 
     connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)),
             this, SLOT(slotItemDoubleClicked(QTreeWidgetItem*)));
+
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint&)),
+            this, SLOT(slotContextMenu()));
 }
 
 LogView::~LogView()
@@ -146,6 +158,36 @@ void LogView::mouseMoveEvent(QMouseEvent* e)
             unsetCursor();
     }
     QTreeWidget::mouseMoveEvent(e);
+}
+
+void LogView::slotContextMenu()
+{
+    KMenu popmenu(this);
+    KAction *action = new KAction(KIcon("edit-copy"), i18n("Copy to Clipboard"), this);
+    connect(action, SIGNAL(triggered(bool) ),
+            this, SLOT(slotCopy2ClipBoard()));
+
+    popmenu.addAction(action);
+    popmenu.exec(QCursor::pos());
+}
+
+void LogView::slotCopy2ClipBoard()
+{
+    QString textInfo;
+
+    QTreeWidgetItemIterator it(this);
+    while (*it)
+    {
+        textInfo.append((*it)->text(1));
+        textInfo.append(" :: ");
+        textInfo.append((*it)->text(2));
+        textInfo.append("\n");
+        ++it;
+    }
+
+    QMimeData *mimeData = new QMimeData();
+    mimeData->setText(textInfo);
+    QApplication::clipboard()->setMimeData(mimeData, QClipboard::Clipboard);
 }
 
 }  // namespace Digikam
