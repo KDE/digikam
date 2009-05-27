@@ -182,6 +182,10 @@ void DHistoryView::mouseMoveEvent(QMouseEvent* e)
         else
             unsetCursor();
     }
+    else
+    {
+        unsetCursor();
+    }
     QTreeWidget::mouseMoveEvent(e);
 }
 
