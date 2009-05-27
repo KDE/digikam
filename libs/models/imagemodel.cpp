@@ -342,6 +342,9 @@ void ImageModel::reAddImageInfos(const QList<ImageInfo>& infos)
 
 void ImageModel::appendInfos(const QList<ImageInfo>& infos)
 {
+    if (infos.isEmpty())
+        return;
+
     emit imageInfosAboutToBeAdded(infos);
     int firstNewIndex = d->infos.size();
     int lastNewIndex = d->infos.size() + infos.size() - 1;
