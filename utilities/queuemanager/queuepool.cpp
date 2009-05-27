@@ -24,6 +24,10 @@
 #include "queuepool.h"
 #include "queuepool.moc"
 
+// Qt includes
+
+#include <QTabBar>
+
 // KDE includes
 
 #include <kmessagebox.h>
@@ -63,6 +67,8 @@ QueuePool::~QueuePool()
 
 void QueuePool::setBusy(bool b)
 {
+    tabBar()->setEnabled(!b);
+
     for (int i = 0; i < count(); ++i)
     {
         QueueListView* queue = dynamic_cast<QueueListView*>(widget(i));
