@@ -705,21 +705,21 @@ void QueueListView::removeItemById(qlonglong id)
 
 bool QueueListView::findItemByInfo(const ImageInfo& info)
 {
-    return findItemById(info.id());
+    return (findItemById(info.id()) ? true : false);
 }
 
-bool QueueListView::findItemById(qlonglong id)
+QueueListViewItem* QueueListView::findItemById(qlonglong id)
 {
     QTreeWidgetItemIterator it(this);
     while (*it)
     {
         QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(*it);
         if (item->info().id() == id)
-            return true;
+            return item;
 
         ++it;
     }
-    return false;
+    return 0;
 }
 
 QueueListViewItem* QueueListView::findItemByUrl(const KUrl& url)

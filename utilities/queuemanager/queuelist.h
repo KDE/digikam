@@ -104,6 +104,7 @@ public:
     int           pendingTasksCount();
 
     QueueListViewItem* findItemByUrl(const KUrl& url);
+    QueueListViewItem*  findItemById(qlonglong id);
 
     void setSettings(const QueueSettings& settings);
     QueueSettings settings();
@@ -135,7 +136,7 @@ private Q_SLOTS:
 private:
 
     bool findItemByInfo(const ImageInfo& info);
-    bool findItemById(qlonglong id);
+
     void removeItems(int removeType);
     void updateDestFileNames();
     void hideToolTip();

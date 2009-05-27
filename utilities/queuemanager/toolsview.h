@@ -58,6 +58,11 @@ public:
 Q_SIGNALS:
 
     void signalAssignTools(const QMap<int, QString>&);
+    void signalHistoryEntryClicked(int, qlonglong);
+
+private Q_SLOTS:
+
+    void slotHistoryEntryClicked(const QVariant&);
 
 private:
 

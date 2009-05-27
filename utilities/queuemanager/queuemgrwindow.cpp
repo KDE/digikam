@@ -316,6 +316,9 @@ void QueueMgrWindow::setupConnections()
     connect(this, SIGNAL(signalWindowLostFocus()),
             d->queueSettingsView, SLOT(slotHideToolTipTracker()));
 
+    connect(d->toolsView, SIGNAL(signalHistoryEntryClicked(int, qlonglong)),
+            this, SLOT(slotHistoryEntryClicked(int, qlonglong)));
+
     // -- FileWatch connections ------------------------------
 
     LoadingCacheInterface::connectToSignalFileChanged(this,
@@ -1163,6 +1166,24 @@ void QueueMgrWindow::addHistoryMessage(const QString& msg, DHistoryView::EntryTy
     else
     {
         d->toolsView->addHistoryEntry(msg, type);
+    }
+}
+
+void QueueMgrWindow::slotHistoryEntryClicked(int queueId, qlonglong itemId)
+{
+    if (d->busy) return;
+
+    QueueListView* view = d->queuePool->findQueueById(queueId);
+    if (view)
+    {
+        QueueListViewItem* item = view->findItemById(itemId);
+        if (item)
+        {
+            d->queuePool->setCurrentIndex(queueId);
+            view->scrollToItem(item);
+            view->setCurrentItem(item);
+            item->setSelected(true);
+        }
     }
 }
 

@@ -89,6 +89,9 @@ ToolsView::ToolsView(QWidget *parent)
 
     connect(d->customTools, SIGNAL(signalAssignTools(const QMap<int, QString>&)),
             this, SIGNAL(signalAssignTools(const QMap<int, QString>&)));
+
+    connect(d->historyView, SIGNAL(signalEntryClicked(const QVariant&)),
+            this, SLOT(slotHistoryEntryClicked(const QVariant&)));
 }
 
 ToolsView::~ToolsView()
@@ -163,6 +166,17 @@ void ToolsView::addHistoryEntry(const QString& msg, DHistoryView::EntryType type
 void ToolsView::showHistory()
 {
     setCurrentWidget(d->historyView);
+}
+
+void ToolsView::slotHistoryEntryClicked(const QVariant& metadata)
+{
+    QList<QVariant> list = metadata.toList();
+    if (!list.isEmpty())
+    {
+        int queueId      = list[0].toInt();
+        qlonglong itemId = list[1].toLongLong();
+        emit signalHistoryEntryClicked(queueId, itemId);
+    }
 }
 
 }  // namespace Digikam

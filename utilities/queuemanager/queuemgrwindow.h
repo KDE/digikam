@@ -134,6 +134,7 @@ private Q_SLOTS:
     void slotComponentsInfo();
     void slotAction(const ActionData&);
     void slotProgressTimerDone();
+    void slotHistoryEntryClicked(int, qlonglong);
     void slotAssignedToolsChanged(const AssignedBatchTools&);
     void slotQueueContentsChanged();
     void slotItemSelectionChanged();
