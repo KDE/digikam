@@ -39,6 +39,7 @@
 
 #include "imageinfo.h"
 #include "setup.h"
+#include "dhistoryview.h"
 
 class KAction;
 
@@ -106,6 +107,7 @@ private:
     void refreshStatusBar();
     void populateToolsList();
     void setup(Setup::Page page);
+    void addHistoryMessage(const QString& msg, DHistoryView::EntryType type);
 
     bool checkTargetAlbum(int queueId);
     void busy(bool busy);

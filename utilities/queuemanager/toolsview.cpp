@@ -27,10 +27,12 @@
 // Qt includes
 
 #include <QWidget>
+#include <QList>
 
 // KDE includes
 
 #include <klocale.h>
+#include <kiconloader.h>
 
 // Local includes
 
@@ -49,10 +51,13 @@ public:
     {
         baseTools   = 0;
         customTools = 0;
+        historyView = 0;
     }
 
     ToolsListView *baseTools;
     ToolsListView *customTools;
+
+    DHistoryView  *historyView;
 };
 
 ToolsView::ToolsView(QWidget *parent)
@@ -66,12 +71,16 @@ ToolsView::ToolsView(QWidget *parent)
     d->baseTools = new ToolsListView(this);
     d->baseTools->setWhatsThis(i18n("This is the list of digiKam batch tools available."));
     new ToolListViewGroup(d->baseTools, BatchTool::BaseTool);
-    addTab(d->baseTools, i18n("Base"));
+    addTab(d->baseTools, SmallIcon("digikam"), i18n("Base Tools"));
 
     d->customTools = new ToolsListView(this);
     d->customTools->setWhatsThis(i18n("This is the list of user customized batch tools."));
     new ToolListViewGroup(d->customTools, BatchTool::CustomTool);
-    addTab(d->customTools, i18n("Custom"));
+    addTab(d->customTools, SmallIcon("user-properties"), i18n("Custom Tools"));
+
+    d->historyView = new DHistoryView(this);
+    d->historyView->setWhatsThis(i18n("You can see below the history of last batch operations processed."));
+    addTab(d->historyView, SmallIcon("view-history"), i18n("History"));
 
     // --------------------------------------------------------
 
@@ -92,7 +101,8 @@ void ToolsView::setBusy(bool b)
     for (int i = 0; i < count(); ++i)
     {
         ToolsListView* view = dynamic_cast<ToolsListView*>(widget(i));
-        view->viewport()->setEnabled(!b);
+        if (view)
+            view->viewport()->setEnabled(!b);
     }
 }
 
@@ -134,6 +144,25 @@ bool ToolsView::removeTool(BatchTool* tool)
         }
     }
     return ret;
+}
+
+void ToolsView::addHistoryEntry(const QString& msg, DHistoryView::EntryType type, int queueId, qlonglong itemId)
+{
+    if (queueId != -1 && itemId != -1)
+    {
+        QList<QVariant> list;
+        list << queueId << itemId;
+        d->historyView->addedEntry(msg, type, QVariant(list));
+    }
+    else
+    {
+        d->historyView->addedEntry(msg, type, QVariant());
+    }
+}
+
+void ToolsView::showHistory()
+{
+    setCurrentWidget(d->historyView);
 }
 
 }  // namespace Digikam

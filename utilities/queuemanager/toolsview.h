@@ -28,6 +28,10 @@
 
 #include <ktabwidget.h>
 
+// Local includes
+
+#include "dhistoryview.h"
+
 namespace Digikam
 {
 
@@ -47,6 +51,9 @@ public:
     bool removeTool(BatchTool* tool);
 
     void setBusy(bool b);
+
+    void showHistory();
+    void addHistoryEntry(const QString& msg, DHistoryView::EntryType type, int queueId=-1, qlonglong itemId=-1);
 
 Q_SIGNALS:
 

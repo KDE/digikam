@@ -65,6 +65,8 @@ public:
 
     QMap<int, QString> queuesMap() const;
 
+    QString queueTitle(int index) const;
+
     void setEnableToolTips(bool b);
 
     bool customRenamingRulesAreValid();

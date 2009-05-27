@@ -37,6 +37,7 @@
 
 // KDE includes
 
+#include <kiconloader.h>
 #include <klocale.h>
 #include <kdialog.h>
 #include <kconfig.h>
@@ -91,7 +92,7 @@ QueueSettingsView::QueueSettingsView(QWidget *parent)
     // --------------------------------------------------------
 
     d->albumSel = new AlbumSelectWidget(this);
-    addTab(d->albumSel, i18n("Target"));
+    addTab(d->albumSel, SmallIcon("folder-image"), i18n("Target"));
 
     // --------------------------------------------------------
 
@@ -125,7 +126,7 @@ QueueSettingsView::QueueSettingsView(QWidget *parent)
     layout->setSpacing(KDialog::spacingHint());
     layout->addStretch();
 
-    addTab(sv, i18n("Behavior"));
+    addTab(sv, SmallIcon("dialog-information"), i18n("Behavior"));
 
     // --------------------------------------------------------
 
@@ -153,7 +154,7 @@ QueueSettingsView::QueueSettingsView(QWidget *parent)
     vbox2->setMargin(KDialog::spacingHint());
     vbox2->setSpacing(KDialog::spacingHint());
 
-    addTab(sv2, i18n("File Renaming"));
+    addTab(sv2, SmallIcon("insert-image"), i18n("File Renaming"));
 
     // --------------------------------------------------------
 

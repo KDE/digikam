@@ -90,8 +90,14 @@ QMap<int, QString> QueuePool::queuesMap() const
 {
     QMap<int, QString> map;
     for (int i = 0; i < count(); ++i)
-        map.insert(i, tabText(i));
+        map.insert(i, queueTitle(i));
     return map;
+}
+
+QString QueuePool::queueTitle(int index) const
+{
+    // NOTE: clean up tab title. With KTabWidget, it sound like mistake is added, as '&' and space.
+    return (tabText(index).remove("&").remove(" "));
 }
 
 void QueuePool::slotAddQueue()
@@ -219,7 +225,7 @@ void QueuePool::removeTab(int index)
         int ret = KMessageBox::questionYesNo(this,
                   i18np("There is still 1 unprocessed item in \"%2\". Do you want to close this queue?",
                         "There are still %1 unprocessed items in \"%2\". Do you want to close this queue?",
-                  count, tabText(index)));
+                  count, queueTitle(index)));
         if (ret == KMessageBox::No)
             return;
     }
@@ -271,7 +277,7 @@ bool QueuePool::customRenamingRulesAreValid()
             if (queue->settings().renamingRule == QueueSettings::CUSTOMIZE &&
                 queue->settings().renamingParser.isEmpty())
             {
-                list.append(tabText(i));
+                list.append(queueTitle(i));
             }
         }
     }
@@ -296,7 +302,7 @@ bool QueuePool::assignedBatchToolsListsAreValid()
         {
             if (queue->assignedTools().toolsMap.isEmpty())
             {
-                list.append(tabText(i));
+                list.append(queueTitle(i));
             }
         }
     }

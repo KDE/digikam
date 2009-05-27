@@ -204,7 +204,7 @@ void QueueMgrWindow::setupUserArea()
 
     // ------------------------------------------------------------------------------
 
-    QGroupBox *toolsBox = new QGroupBox(i18n("Batch Tools Available"), mainW);
+    QGroupBox *toolsBox = new QGroupBox(i18n("Batch Tools Available / History"), mainW);
     QVBoxLayout *vlay3  = new QVBoxLayout(toolsBox);
     d->toolsView        = new ToolsView(toolsBox);
     vlay3->addWidget(d->toolsView);
@@ -791,6 +791,7 @@ void QueueMgrWindow::slotRun()
     d->statusProgressBar->setProgressValue(0);
     d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
     d->queueSettingsView->slotHideToolTipTracker();
+    d->toolsView->showHistory();
     busy(true);
 
     processOne();
@@ -931,6 +932,7 @@ void QueueMgrWindow::processing(const KUrl& url)
         d->currentProcessItem->reset();
         d->queuePool->currentQueue()->setCurrentItem(d->currentProcessItem);
         d->queuePool->currentQueue()->scrollToItem(d->currentProcessItem);
+        addHistoryMessage(i18n("Processing..."), DHistoryView::StartingEntry);
     }
 
     d->progressCount = 0;
@@ -960,6 +962,7 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
                 case KIO::R_CANCEL:
                 {
                     slotStop();
+                    addHistoryMessage(i18n("Process Cancelled..."), DHistoryView::WarningEntry);
                     return;
                     break;
                 }
@@ -967,12 +970,16 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
                 {
                     dest = KUrl();
                     if (d->currentProcessItem)
+                    {
                         d->currentProcessItem->setCanceled();
+                        addHistoryMessage(i18n("Item skipped..."), DHistoryView::WarningEntry);
+                    }
                     break;
                 }
                 case KIO::R_RENAME:
                 {
                     dest = dlg.newDestUrl();
+                    addHistoryMessage(i18n("Item renamed..."), DHistoryView::WarningEntry);
                     break;
                 }
                 default:    // Overwrite.
@@ -985,9 +992,11 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
     {
         if (::rename(QFile::encodeName(tmp.path()), QFile::encodeName(dest.path())) != 0)
         {
-            KMessageBox::error(this, i18n("Failed to save image %1", dest.fileName()));
             if (d->currentProcessItem)
+            {
                 d->currentProcessItem->setFailed();
+                addHistoryMessage(i18n("Failed to save item..."), DHistoryView::ErrorEntry);
+            }
         }
         else
         {
@@ -995,6 +1004,7 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
             {
                 d->currentProcessItem->setDestFileName(dest.fileName());
                 d->currentProcessItem->setDone();
+                addHistoryMessage(i18n("Item processed successfuly..."), DHistoryView::SuccessEntry);
             }
 
             // TODO: assign attributes from original image.
@@ -1007,7 +1017,10 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
 void QueueMgrWindow::processingFailed(const KUrl&)
 {
     if (d->currentProcessItem)
+    {
         d->currentProcessItem->setCanceled();
+        addHistoryMessage(i18n("Failed to process item..."), DHistoryView::ErrorEntry);
+    }
 
     if (d->currentTaskItem)
         d->currentTaskItem->setCanceled();
@@ -1090,7 +1103,7 @@ bool QueueMgrWindow::checkTargetAlbum(int queueId)
     if (!queue)
         return false;
 
-    QString queueName              = d->queuePool->tabText(queueId);
+    QString queueName              = d->queuePool->queueTitle(queueId);
     KUrl    processedItemsAlbumUrl = queue->settings().targetUrl;
     kDebug(50003) << "Target album for queue " << queueName << " is: " << processedItemsAlbumUrl.path() << endl;
 
@@ -1135,6 +1148,22 @@ bool QueueMgrWindow::event(QEvent *e)
             break;
     }
     return KXmlGuiWindow::event(e);
+}
+
+void QueueMgrWindow::addHistoryMessage(const QString& msg, DHistoryView::EntryType type)
+{
+    if (d->currentProcessItem)
+    {
+        int queueId  = d->queuePool->currentIndex();
+        int itemId   = d->currentProcessItem->info().id();
+        QString text = i18n("Item \"%1\" from queue \"%2\" : %3", d->currentProcessItem->info().name(),
+                            d->queuePool->queueTitle(queueId), msg);
+        d->toolsView->addHistoryEntry(text, type, queueId, itemId);
+    }
+    else
+    {
+        d->toolsView->addHistoryEntry(msg, type);
+    }
 }
 
 }  // namespace Digikam
