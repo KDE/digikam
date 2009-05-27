@@ -32,6 +32,7 @@
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QVBoxLayout>
+#include <QLabel>
 
 // KDE includes
 
@@ -250,9 +251,14 @@ void QueueMgrWindow::setupUserArea()
 void QueueMgrWindow::setupStatusBar()
 {
     d->statusProgressBar = new StatusProgressBar(statusBar());
-    d->statusProgressBar->setAlignment(Qt::AlignCenter);
+    d->statusProgressBar->setAlignment(Qt::AlignLeft);
     d->statusProgressBar->setMaximumHeight(fontMetrics().height()+2);
-    statusBar()->addWidget(d->statusProgressBar, 100);
+    statusBar()->addWidget(d->statusProgressBar, 60);
+
+    d->statusLabel = new QLabel(statusBar());
+    d->statusLabel->setAlignment(Qt::AlignRight);
+    d->statusLabel->setMaximumHeight(fontMetrics().height()+2);
+    statusBar()->addWidget(d->statusLabel, 40);
 }
 
 void QueueMgrWindow::setupConnections()
@@ -541,10 +547,11 @@ void QueueMgrWindow::refreshStatusBar()
             break;
     }
 
-    d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, message);
+    d->statusLabel->setText(message);
 
     if (!d->busy)
     {
+        d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18n("Ready"));
         bool b = (items != 0) ? true : false;
         d->removeItemsSelAction->setEnabled(b);
         d->removeItemsDoneAction->setEnabled(b);

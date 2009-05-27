@@ -59,6 +59,7 @@ public:
         fullScreenAction       = 0;
         donateMoneyAction      = 0;
         statusProgressBar      = 0;
+        statusLabel            = 0;
         runAction              = 0;
         stopAction             = 0;
         removeQueueAction      = 0;
@@ -93,6 +94,8 @@ public:
     QTimer                    *progressTimer;
 
     QPixmap                    progressPix;
+
+    QLabel                    *statusLabel;
 
     KAction                   *clearQueueAction;
     KAction                   *removeItemsSelAction;
