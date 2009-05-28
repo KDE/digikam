@@ -29,6 +29,7 @@
 #include <QStringList>
 #include <QString>
 #include <QLabel>
+#include <QFont>
 #include <QLayout>
 #include <QGridLayout>
 #include <QTreeWidget>
@@ -143,8 +144,14 @@ DBStatDlg::DBStatDlg(QWidget *parent)
     }
     setInfoMap(map);
 
-    // To see total count at end of list.
-    new QTreeWidgetItem(d->listView, QStringList() << i18n("Total") << QString::number(total));
+    // To see total count of items at end of list.
+    QTreeWidgetItem *ti = new QTreeWidgetItem(d->listView, QStringList() << i18n("Total Items") << QString::number(total));
+    QFont ft = ti->font(0);
+    ft.setBold(true);
+    ti->setFont(0, ft);
+    ft = ti->font(1);
+    ft.setBold(true);
+    ti->setFont(1, ft);
 
     kapp->restoreOverrideCursor();
 }
