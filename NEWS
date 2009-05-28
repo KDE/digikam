@@ -100,6 +100,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 082 ==> 194177 : digiKam crashes always on startup and causes signal 11 (SIGSEGSV) - app not useable.
 083 ==> 169213 : digiKam should not enter new album after creating it.
 084 ==> 191634 : Statistics of the database, and all pictures?
-085 ==> 
-
-
+085 ==> 193228 : Experimental option "write metadata to RAW files" corrupts Nikon NEFs.
+086 ==> 
