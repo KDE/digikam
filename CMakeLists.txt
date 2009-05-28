@@ -649,6 +649,7 @@ ENDIF(MSVC)
     # digiKam target parts
 
     SET(libdialogs_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/infodlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/iccprofileinfodlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/dprogressdlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/imagedialog.cpp
