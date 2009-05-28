@@ -71,7 +71,7 @@ static inline void showDigikamComponentsInfo()
     list.insert(i18n("LibKipi"),    KIPI::Interface::version());
 
     LibsInfoDlg *dlg = new LibsInfoDlg(kapp->activeWindow());
-    dlg->setComponentsInfoMap(list);
+    dlg->setInfoMap(list);
     dlg->show();
 }
 

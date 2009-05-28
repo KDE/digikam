@@ -54,83 +54,10 @@
 namespace Digikam
 {
 
-class DBStatDlgPriv
-{
-public:
-
-    DBStatDlgPriv()
-    {
-        listView = 0;
-    }
-
-    QTreeWidget *listView;
-};
-
 DBStatDlg::DBStatDlg(QWidget *parent)
-         : KDialog(parent), d(new DBStatDlgPriv)
+         : InfoDlg(parent)
 {
-    setButtons(Help|User1|Ok);
-    setDefaultButton(Ok);
-    setModal(false);
-    setHelp("digikam");
     setCaption(i18n("Database Statistic"));
-    setButtonText(User1, i18n("Copy to Clipboard"));
-
-    QWidget *page     = new QWidget(this);
-    setMainWidget(page);
-    QGridLayout* grid = new QGridLayout(page);
-
-    // --------------------------------------------------------
-
-    QLabel *logo = new QLabel(page);
-    if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
-        logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
-                                .scaled(92, 92, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    else
-        logo->setPixmap(QPixmap(KStandardDirs::locate("data", "showfoto/data/logo-showfoto.png"))
-                                .scaled(92, 92, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-
-    // --------------------------------------------------------
-
-    QLabel *header = new QLabel(page);
-    header->setWordWrap(true);
-    header->setText(i18n("<font size=\"5\">%1</font><br/><b>Version %2</b>"
-                         "<p>%3</p>",
-                    KGlobal::mainComponent().aboutData()->programName(),
-                    KGlobal::mainComponent().aboutData()->version(),
-                    digiKamSlogan().toString()));
-
-    // --------------------------------------------------------
-
-    d->listView = new QTreeWidget(page);
-    d->listView->setSortingEnabled(false);
-    d->listView->setRootIsDecorated(false);
-    d->listView->setSelectionMode(QAbstractItemView::SingleSelection);
-    d->listView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    d->listView->setAllColumnsShowFocus(true);
-    d->listView->setColumnCount(2);
-    d->listView->setHeaderLabels(QStringList() << i18n("Format") << i18n("Count"));
-    d->listView->header()->setResizeMode(QHeaderView::Stretch);
-
-    // --------------------------------------------------------
-
-    grid->addWidget(logo,        0, 0, 1, 1);
-    grid->addWidget(header,      0, 1, 1, 2);
-    grid->addWidget(d->listView, 1, 0, 1, 2);
-    grid->setColumnStretch(1, 10);
-    grid->setRowStretch(1, 10);
-    grid->setMargin(0);
-    grid->setSpacing(KDialog::spacingHint());
-
-    // --------------------------------------------------------
-
-    connect(this, SIGNAL(user1Clicked()),
-            this, SLOT(slotCopy2ClipBoard()));
-
-    resize(400, 500);
-
-    // --------------------------------------------------------
-
     kapp->setOverrideCursor(Qt::WaitCursor);
 
     int total                   = 0;
@@ -145,7 +72,7 @@ DBStatDlg::DBStatDlg(QWidget *parent)
     setInfoMap(map);
 
     // To see total count of items at end of list.
-    QTreeWidgetItem *ti = new QTreeWidgetItem(d->listView, QStringList() << i18n("Total Items") << QString::number(total));
+    QTreeWidgetItem *ti = new QTreeWidgetItem(listView(), QStringList() << i18n("Total Items") << QString::number(total));
     QFont ft = ti->font(0);
     ft.setBold(true);
     ti->setFont(0, ft);
@@ -158,37 +85,6 @@ DBStatDlg::DBStatDlg(QWidget *parent)
 
 DBStatDlg::~DBStatDlg()
 {
-    delete d;
-}
-
-void DBStatDlg::setInfoMap(const QMap<QString, QString>& list)
-{
-    for (QMap<QString, QString>::const_iterator it = list.constBegin(); it != list.constEnd() ; ++it)
-        new QTreeWidgetItem(d->listView, QStringList() << it.key() << it.value());
-}
-
-void DBStatDlg::slotCopy2ClipBoard()
-{
-    QString textInfo;
-
-    textInfo.append(KGlobal::mainComponent().aboutData()->programName());
-    textInfo.append(" version ");
-    textInfo.append(KGlobal::mainComponent().aboutData()->version());
-    textInfo.append("\n");
-
-    QTreeWidgetItemIterator it(d->listView);
-    while (*it)
-    {
-        textInfo.append((*it)->text(0));
-        textInfo.append(": ");
-        textInfo.append((*it)->text(1));
-        textInfo.append("\n");
-        ++it;
-    }
-
-    QMimeData *mimeData = new QMimeData();
-    mimeData->setText(textInfo);
-    QApplication::clipboard()->setMimeData(mimeData, QClipboard::Clipboard);
 }
 
 }  // namespace Digikam

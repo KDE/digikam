@@ -169,7 +169,12 @@ InfoDlg::~InfoDlg()
     delete d;
 }
 
-void InfoDlg::setComponentsInfoMap(const QMap<QString, QString>& list)
+QTreeWidget* InfoDlg::listView() const
+{
+    return d->listView;
+}
+
+void InfoDlg::setInfoMap(const QMap<QString, QString>& list)
 {
     for (QMap<QString, QString>::const_iterator it = list.constBegin(); it != list.constEnd() ; ++it)
         new QTreeWidgetItem(d->listView, QStringList() << it.key() << it.value());

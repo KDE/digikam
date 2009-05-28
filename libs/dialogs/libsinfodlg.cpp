@@ -87,81 +87,10 @@ extern "C"
 namespace Digikam
 {
 
-class LibsInfoDlgPriv
-{
-public:
-
-    LibsInfoDlgPriv()
-    {
-        listView = 0;
-    }
-
-    QTreeWidget *listView;
-};
-
 LibsInfoDlg::LibsInfoDlg(QWidget *parent)
-           : KDialog(parent), d(new LibsInfoDlgPriv)
+           : InfoDlg(parent)
 {
-    setButtons(Help|User1|Ok);
-    setDefaultButton(Ok);
-    setModal(false);
-    setHelp("digikam");
     setCaption(i18n("Shared Libraries and Components Information"));
-    setButtonText(User1, i18n("Copy to Clipboard"));
-
-    QWidget *page = new QWidget(this);
-    setMainWidget(page);
-    QGridLayout* grid = new QGridLayout(page);
-
-    // --------------------------------------------------------
-
-    QLabel *logo = new QLabel(page);
-    if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
-        logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
-                                .scaled(92, 92, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    else
-        logo->setPixmap(QPixmap(KStandardDirs::locate("data", "showfoto/data/logo-showfoto.png"))
-                                .scaled(92, 92, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-
-    // --------------------------------------------------------
-
-    QLabel *header = new QLabel(page);
-    header->setWordWrap(true);
-    header->setText(i18n("<font size=\"5\">%1</font><br/><b>Version %2</b>"
-                         "<p>%3</p>",
-                    KGlobal::mainComponent().aboutData()->programName(),
-                    KGlobal::mainComponent().aboutData()->version(),
-                    digiKamSlogan().toString()));
-
-    // --------------------------------------------------------
-
-    d->listView = new QTreeWidget(page);
-    d->listView->setSortingEnabled(false);
-    d->listView->setRootIsDecorated(false);
-    d->listView->setSelectionMode(QAbstractItemView::SingleSelection);
-    d->listView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    d->listView->setAllColumnsShowFocus(true);
-    d->listView->setColumnCount(2);
-    d->listView->setHeaderLabels(QStringList() << i18n("Component") << i18n("Info"));
-    d->listView->header()->setResizeMode(QHeaderView::Stretch);
-
-    // --------------------------------------------------------
-
-    grid->addWidget(logo,        0, 0, 1, 1);
-    grid->addWidget(header,      0, 1, 1, 2);
-    grid->addWidget(d->listView, 1, 0, 1, 2);
-    grid->setColumnStretch(1, 10);
-    grid->setRowStretch(1, 10);
-    grid->setMargin(0);
-    grid->setSpacing(KDialog::spacingHint());
-
-    // --------------------------------------------------------
-
-    connect(this, SIGNAL(user1Clicked()),
-            this, SLOT(slotCopy2ClipBoard()));
-
-    resize(400, 500);
-
     // --------------------------------------------------------
     // By default set a list of common components information used by Showfoto and digiKam.
 
@@ -205,42 +134,11 @@ LibsInfoDlg::LibsInfoDlg(QWidget *parent)
     list.insert(i18n("Marble widget"),               QString(MARBLE_VERSION_STRING));
 #endif //HAVE_MARBLEWIDGET
 
-    setComponentsInfoMap(list);
+    setInfoMap(list);
 }
 
 LibsInfoDlg::~LibsInfoDlg()
 {
-    delete d;
-}
-
-void LibsInfoDlg::setComponentsInfoMap(const QMap<QString, QString>& list)
-{
-    for (QMap<QString, QString>::const_iterator it = list.constBegin(); it != list.constEnd() ; ++it)
-        new QTreeWidgetItem(d->listView, QStringList() << it.key() << it.value());
-}
-
-void LibsInfoDlg::slotCopy2ClipBoard()
-{
-    QString textInfo;
-
-    textInfo.append(KGlobal::mainComponent().aboutData()->programName());
-    textInfo.append(" version ");
-    textInfo.append(KGlobal::mainComponent().aboutData()->version());
-    textInfo.append("\n");
-
-    QTreeWidgetItemIterator it(d->listView);
-    while (*it)
-    {
-        textInfo.append((*it)->text(0));
-        textInfo.append(": ");
-        textInfo.append((*it)->text(1));
-        textInfo.append("\n");
-        ++it;
-    }
-
-    QMimeData *mimeData = new QMimeData();
-    mimeData->setText(textInfo);
-    QApplication::clipboard()->setMimeData(mimeData, QClipboard::Clipboard);
 }
 
 }  // namespace Digikam

@@ -35,13 +35,12 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "infodlg.h"
 
 namespace Digikam
 {
 
-class DBStatDlgPriv;
-
-class DIGIKAM_DATABASE_EXPORT DBStatDlg : public KDialog
+class DIGIKAM_DATABASE_EXPORT DBStatDlg : public InfoDlg
 {
     Q_OBJECT
 
@@ -49,16 +48,6 @@ public:
 
     DBStatDlg(QWidget* parent);
     ~DBStatDlg();
-
-    void setInfoMap(const QMap<QString, QString>& list);
-
-private Q_SLOTS:
-
-    void slotCopy2ClipBoard();
-
-private:
-
-    DBStatDlgPriv* const d;
 };
 
 }  // namespace Digikam

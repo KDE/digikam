@@ -37,6 +37,8 @@
 
 #include "digikam_export.h"
 
+class QTreeWidget;
+
 namespace Digikam
 {
 
@@ -51,7 +53,8 @@ public:
     InfoDlg(QWidget* parent);
     virtual ~InfoDlg();
 
-    virtual void setComponentsInfoMap(const QMap<QString, QString>& list);
+    virtual void setInfoMap(const QMap<QString, QString>& list);
+    QTreeWidget* listView() const;
 
 private Q_SLOTS:
 
