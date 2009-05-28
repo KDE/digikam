@@ -433,6 +433,11 @@ void QueueMgrWindow::setupActions()
     connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
     actionCollection()->addAction("queuemgr_librariesinfo", d->libsInfoAction);
 
+    d->dbStatAction = new KAction(KIcon("application-vnd.oasis.opendocument.database"),
+                                  i18n("Database Statistic"), this);
+    connect(d->dbStatAction, SIGNAL(triggered()), this, SLOT(slotDBStat()));
+    actionCollection()->addAction("queuemgr_dbstat", d->dbStatAction);
+
     // Provides a menu entry that allows showing/hiding the toolbar(s)
     setStandardToolBarMenuEnabled(true);
 
@@ -724,6 +729,11 @@ void QueueMgrWindow::slotChangeTheme(const QString& theme)
 void QueueMgrWindow::slotComponentsInfo()
 {
     showDigikamComponentsInfo();
+}
+
+void QueueMgrWindow::slotDBStat()
+{
+    showDigikamDatabaseStat();
 }
 
 void QueueMgrWindow::addNewQueue()

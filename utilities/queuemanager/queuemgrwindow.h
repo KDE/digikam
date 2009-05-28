@@ -132,6 +132,7 @@ private Q_SLOTS:
     void slotSetup();
     void slotRawCameraList();
     void slotComponentsInfo();
+    void slotDBStat();
     void slotAction(const ActionData&);
     void slotProgressTimerDone();
     void slotHistoryEntryClicked(int, qlonglong);
