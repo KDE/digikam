@@ -143,6 +143,7 @@ public:
         tipAction                            = 0;
         rawCameraListAction                  = 0;
         libsInfoAction                       = 0;
+        dbStatAction                         = 0;
         kipiHelpAction                       = 0;
         donateMoneyAction                    = 0;
         addCameraSeparatorAction             = 0;
@@ -272,6 +273,7 @@ public:
     // Application Actions
     KAction                            *rawCameraListAction;
     KAction                            *libsInfoAction;
+    KAction                            *dbStatAction;
     KAction                            *kipiHelpAction;
     KAction                            *donateMoneyAction;
     KAction                            *contributeAction;

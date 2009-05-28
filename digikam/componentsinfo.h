@@ -42,6 +42,7 @@
 
 #include "config-digikam.h"
 #include "libsinfodlg.h"
+#include "dbstatdlg.h"
 
 #ifdef ENABLE_GPHOTO2
 
@@ -70,6 +71,12 @@ static inline void showDigikamComponentsInfo()
 
     LibsInfoDlg *dlg = new LibsInfoDlg(kapp->activeWindow());
     dlg->setComponentsInfoMap(list);
+    dlg->show();
+}
+
+static inline void showDigikamDatabaseStat()
+{
+    DBStatDlg *dlg = new DBStatDlg(kapp->activeWindow());
     dlg->show();
 }
 

@@ -144,6 +144,7 @@ private Q_SLOTS:
     void slotContribute();
     void slotRawCameraList();
     void slotComponentsInfo();
+    void slotDBStat();
 
     void slotRecurseAlbums(bool);
     void slotRecurseTags(bool);
