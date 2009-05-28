@@ -493,7 +493,7 @@ void ImageLister::listHaarSearch(ImageListerReceiver *receiver, const QString& x
     QStringRef thresholdString  = reader.attributes().value("threshold");
     QStringRef sketchTypeString = reader.attributes().value("sketchtype");
 
-    double threeshold           = 0.9;
+    double threshold            = 0.9;
     int numberOfResults         = 20;
     HaarIface::SketchType sketchType = HaarIface::ScannedSketch;
 
@@ -501,7 +501,7 @@ void ImageLister::listHaarSearch(ImageListerReceiver *receiver, const QString& x
         numberOfResults = qMax(numResultsString.toString().toInt(), 1);
 
     if (!thresholdString.isNull())
-        threeshold = qMax(thresholdString.toString().toDouble(), 0.1);
+        threshold = qMax(thresholdString.toString().toDouble(), 0.1);
 
     if (sketchTypeString == "handdrawn")
         sketchType = HaarIface::HanddrawnSketch;
@@ -523,7 +523,7 @@ void ImageLister::listHaarSearch(ImageListerReceiver *receiver, const QString& x
         HaarIface iface;
         if (m_listOnlyAvailableImages)
             iface.setAlbumRootsToSearch(albumRootsToList());
-        list = iface.bestMatchesForImageWithThreshold(id, threeshold, sketchType);
+        list = iface.bestMatchesForImageWithThreshold(id, threshold, sketchType);
     }
 
     listFromIdList(receiver, list);
