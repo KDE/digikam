@@ -149,6 +149,7 @@ private Q_SLOTS:
     void slotChangeTheme(const QString& theme);
 
     void slotComponentsInfo();
+    void slotDBStat();
 
     void slotSidebarTabTitleStyleChanged();
 

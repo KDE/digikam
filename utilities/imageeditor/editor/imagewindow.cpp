@@ -157,6 +157,8 @@ public:
     KAction                  *fileDeletePermanentlyDirectlyAction;
     KAction                  *fileTrashDirectlyAction;
 
+    KAction                  *dbStatAction;
+
     ImageInfoList             imageInfoList;
     ImageInfo                 imageInfoCurrent;
 
@@ -441,6 +443,13 @@ void ImageWindow::setupActions()
     connect(d->fileTrashDirectlyAction, SIGNAL(triggered()),
             this, SLOT(slotTrashCurrentItemDirectly()));
     actionCollection()->addAction("image_trash_directly", d->fileTrashDirectlyAction);
+
+    // ---------------------------------------------------------------------------------
+
+    d->dbStatAction = new KAction(KIcon("application-vnd.oasis.opendocument.database"),
+                                  i18n("Database Statistic"), this);
+    connect(d->dbStatAction, SIGNAL(triggered()), this, SLOT(slotDBStat()));
+    actionCollection()->addAction("editorwindow_dbstat", d->dbStatAction);
 
     // ---------------------------------------------------------------------------------
 
@@ -1449,6 +1458,11 @@ Sidebar *ImageWindow::rightSideBar() const
 void ImageWindow::slotComponentsInfo()
 {
     showDigikamComponentsInfo();
+}
+
+void ImageWindow::slotDBStat()
+{
+    showDigikamDatabaseStat();
 }
 
 void ImageWindow::slotSidebarTabTitleStyleChanged()

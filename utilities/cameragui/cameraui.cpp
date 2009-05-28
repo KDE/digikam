@@ -117,7 +117,6 @@
 #include "collectionmanager.h"
 #include "collectionlocation.h"
 #include "scancontroller.h"
-#include "rawcameradlg.h"
 #include "capturedlg.h"
 #include "camerafolderdialog.h"
 #include "camerainfodialog.h"
@@ -2189,8 +2188,7 @@ bool CameraUI::cameraDelDirSupport()
 
 void CameraUI::slotRawCameraList()
 {
-    RawCameraDlg dlg(this);
-    dlg.exec();
+    showRawCameraList();
 }
 
 void CameraUI::slotThemeChanged()

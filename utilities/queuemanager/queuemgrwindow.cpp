@@ -88,7 +88,6 @@
 #include "albummanager.h"
 #include "loadingcacheinterface.h"
 #include "imagewindow.h"
-#include "rawcameradlg.h"
 #include "imagedialog.h"
 #include "thumbnailsize.h"
 #include "queuemgrwindow_p.h"
@@ -700,8 +699,7 @@ void QueueMgrWindow::setup(Setup::Page page)
 
 void QueueMgrWindow::slotRawCameraList()
 {
-    RawCameraDlg dlg(this);
-    dlg.exec();
+    showRawCameraList();
 }
 
 void QueueMgrWindow::slotThemeChanged()

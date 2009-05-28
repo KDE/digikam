@@ -75,7 +75,6 @@
 #include "loadingcacheinterface.h"
 #include "deletedialog.h"
 #include "imagewindow.h"
-#include "rawcameradlg.h"
 #include "slideshow.h"
 #include "setup.h"
 #include "syncjob.h"
@@ -1574,8 +1573,7 @@ void LightTableWindow::slotToggleNavigateByPair()
 
 void LightTableWindow::slotRawCameraList()
 {
-    RawCameraDlg dlg(this);
-    dlg.exec();
+    showRawCameraList();
 }
 
 void LightTableWindow::slotThemeChanged()
