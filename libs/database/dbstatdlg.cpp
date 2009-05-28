@@ -57,7 +57,7 @@ namespace Digikam
 DBStatDlg::DBStatDlg(QWidget *parent)
          : InfoDlg(parent)
 {
-    setCaption(i18n("Database Statistic"));
+    setCaption(i18n("Database Statistics"));
     kapp->setOverrideCursor(Qt::WaitCursor);
 
     int total                   = 0;
