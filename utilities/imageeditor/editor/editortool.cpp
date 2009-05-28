@@ -123,27 +123,6 @@ void EditorTool::setToolView(QWidget *view)
     d->view->blockSignals(true);
 }
 
-void EditorTool::slotInit()
-{
-    readSettings();
-    // Unlock signals from preview widget when init is done.
-    d->view->blockSignals(false);
-}
-
-void EditorTool::setToolHelp(const QString& anchor)
-{
-    d->helpAnchor = anchor;
-    // TODO: use this anchor with editor Help menu
-}
-
-QString EditorTool::toolHelp() const
-{
-    if (d->helpAnchor.isEmpty())
-        return (objectName() + QString(".anchor"));
-
-    return d->helpAnchor;
-}
-
 EditorToolSettings* EditorTool::toolSettings() const
 {
     return d->settings;
@@ -152,6 +131,10 @@ EditorToolSettings* EditorTool::toolSettings() const
 void EditorTool::setToolSettings(EditorToolSettings *settings)
 {
     d->settings = settings;
+
+    // Will be unblocked in slotInit()
+    // This will prevent signals emit during tool init.
+    d->settings->blockSignals(true);
 
     connect(d->settings, SIGNAL(signalOkClicked()),
             this, SLOT(slotOk()));
@@ -179,6 +162,28 @@ void EditorTool::setToolSettings(EditorToolSettings *settings)
 
     connect(d->settings, SIGNAL(signalScaleChanged()),
             this, SLOT(slotScaleChanged()));
+}
+
+void EditorTool::slotInit()
+{
+    readSettings();
+    // Unlock signals from preview and settings widgets when init is done.
+    d->view->blockSignals(false);
+    d->settings->blockSignals(false);
+}
+
+void EditorTool::setToolHelp(const QString& anchor)
+{
+    d->helpAnchor = anchor;
+    // TODO: use this anchor with editor Help menu
+}
+
+QString EditorTool::toolHelp() const
+{
+    if (d->helpAnchor.isEmpty())
+        return (objectName() + QString(".anchor"));
+
+    return d->helpAnchor;
 }
 
 void EditorTool::setBusy(bool state)
