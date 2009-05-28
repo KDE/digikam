@@ -42,6 +42,7 @@
 
 #include "config-digikam.h"
 #include "libsinfodlg.h"
+#include "rawcameradlg.h"
 #include "dbstatdlg.h"
 
 #ifdef ENABLE_GPHOTO2
@@ -77,6 +78,12 @@ static inline void showDigikamComponentsInfo()
 static inline void showDigikamDatabaseStat()
 {
     DBStatDlg *dlg = new DBStatDlg(kapp->activeWindow());
+    dlg->show();
+}
+
+static inline void showRawCameraList()
+{
+    RawCameraDlg *dlg = new RawCameraDlg(kapp->activeWindow());
     dlg->show();
 }
 

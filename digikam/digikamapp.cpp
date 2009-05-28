@@ -122,7 +122,6 @@
 #include "queuemgrwindow.h"
 #include "loadingcache.h"
 #include "loadingcacheinterface.h"
-#include "rawcameradlg.h"
 #include "scancontroller.h"
 #include "setup.h"
 #include "setupeditor.h"
@@ -2178,8 +2177,7 @@ void DigikamApp::slotShowKipiHelp()
 
 void DigikamApp::slotRawCameraList()
 {
-    RawCameraDlg dlg(this);
-    dlg.exec();
+    showRawCameraList();
 }
 
 void DigikamApp::slotComponentsInfo()
