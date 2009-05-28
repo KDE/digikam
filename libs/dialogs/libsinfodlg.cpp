@@ -28,20 +28,13 @@
 
 #include <QStringList>
 #include <QString>
-#include <QLabel>
-#include <QLayout>
-#include <QGridLayout>
 #include <QTreeWidget>
 #include <QHeaderView>
-#include <QMimeData>
-#include <QClipboard>
 
 // KDE includes
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kapplication.h>
-#include <kstandarddirs.h>
 #include <kaboutdata.h>
 
 #include "config-digikam.h"
@@ -134,6 +127,7 @@ LibsInfoDlg::LibsInfoDlg(QWidget *parent)
     list.insert(i18n("Marble widget"),               QString(MARBLE_VERSION_STRING));
 #endif //HAVE_MARBLEWIDGET
 
+    listView()->setHeaderLabels(QStringList() << i18n("Component") << i18n("Info"));
     setInfoMap(list);
 }
 

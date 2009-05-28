@@ -28,14 +28,9 @@
 
 #include <QStringList>
 #include <QString>
-#include <QLabel>
 #include <QFont>
-#include <QLayout>
-#include <QGridLayout>
 #include <QTreeWidget>
 #include <QHeaderView>
-#include <QMimeData>
-#include <QClipboard>
 
 // KDE includes
 
@@ -57,8 +52,10 @@ namespace Digikam
 DBStatDlg::DBStatDlg(QWidget *parent)
          : InfoDlg(parent)
 {
-    setCaption(i18n("Database Statistics"));
     kapp->setOverrideCursor(Qt::WaitCursor);
+
+    setCaption(i18n("Database Statistics"));
+    listView()->setHeaderLabels(QStringList() << i18n("Format") << i18n("Count"));
 
     int total                   = 0;
     QMap<QString, int>     stat = DatabaseAccess().db()->getImageFormatStatistics();

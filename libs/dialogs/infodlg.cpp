@@ -143,7 +143,6 @@ InfoDlg::InfoDlg(QWidget *parent)
     d->listView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->listView->setAllColumnsShowFocus(true);
     d->listView->setColumnCount(2);
-    d->listView->setHeaderLabels(QStringList() << i18n("Component") << i18n("Info"));
     d->listView->header()->setResizeMode(QHeaderView::Stretch);
 
     // --------------------------------------------------------
