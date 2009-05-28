@@ -695,7 +695,6 @@ void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
             item->setOpen(true);
 
         ensureItemVisible(newItem);
-        setSelected(newItem, true);
     }
 }
 
