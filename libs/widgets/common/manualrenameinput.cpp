@@ -86,6 +86,7 @@ ManualRenameInput::ManualRenameInput(QWidget* parent)
     d->tooltipTracker = new DTipTracker(tooltip, d->parseStringLineEdit, Qt::AlignLeft);
     d->tooltipTracker->setEnable(false);
     d->tooltipTracker->setKeepOpen(true);
+    d->tooltipTracker->setOpenExternalLinks(true);
 
     d->parseStringLineEdit->setWhatsThis(tooltip);
     d->parseStringLineEdit->setClearButtonShown(true);
@@ -246,7 +247,10 @@ QString ManualRenameInput::createToolTip()
               << token(QString("#"),              i18n("sequence number"))
               << token(QString("#{start,step}"),  i18n("sequence number (custom start + step)"))
               << token(QString("[cam]"),          i18n("camera name"))
-              << token(QString("[date:format]"),  i18n("date and time of the file"));
+              << token(QString("[date:format]"),  i18n("date and time of the file ("
+                                                       "<a href='http://doc.trolltech.com/latest/qdatetime.html#toString'>"
+                                                           "format settings"
+                                                       "</a>)"));
 
     QString tooltip;
     tooltip += QString("<p><table>");
