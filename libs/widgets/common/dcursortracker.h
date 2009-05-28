@@ -64,17 +64,9 @@ public:
     void triggerAutoShow(int timeout = 2000);
     void refresh();
 
-Q_SIGNALS:
-
-    void signalClicked();
-
 protected:
 
     bool eventFilter(QObject*, QEvent*);
-
-protected Q_SLOTS:
-
-    void mouseReleaseEvent(QMouseEvent* e);
 
 private Q_SLOTS:
 

@@ -83,12 +83,6 @@ DCursorTracker::~DCursorTracker()
     delete d;
 }
 
-void DCursorTracker::mouseReleaseEvent(QMouseEvent* e)
-{
-    if (e->button() == Qt::LeftButton)
-        emit signalClicked();
-}
-
 /**
  * Overload to make sure the widget size is correct
  */
