@@ -49,13 +49,13 @@ class DIGIKAM_EXPORT InfoDlg : public KDialog
 public:
 
     InfoDlg(QWidget* parent);
-    ~InfoDlg();
+    virtual ~InfoDlg();
 
-    void setComponentsInfoMap(const QMap<QString, QString>& list);
+    virtual void setComponentsInfoMap(const QMap<QString, QString>& list);
 
 private Q_SLOTS:
 
-    void slotCopy2ClipBoard();
+    virtual void slotCopy2ClipBoard();
 
 private:
 
