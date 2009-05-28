@@ -1875,13 +1875,13 @@ void EditorWindow::slotToggleSlideShow()
 void EditorWindow::slotSelectionChanged(const QRect& sel)
 {
     d->selectLabel->setText(QString("(%1, %2) (%3 x %4)").arg(sel.x()).arg(sel.y())
-                           .arg(sel.width()).arg(sel.height()));
+                            .arg(sel.width()).arg(sel.height()));
 }
 
 void EditorWindow::slotRawCameraList()
 {
-    RawCameraDlg dlg(this);
-    dlg.exec();
+    RawCameraDlg *dlg = new RawCameraDlg(kapp->activeWindow());
+    dlg->show();
 }
 
 void EditorWindow::slotThemeChanged()
