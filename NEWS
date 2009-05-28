@@ -97,6 +97,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 080 ==> 193870 : digiKam freezes after second exif rotation on same file.
 081 ==> 194342 : What is the right rename pattern to get names like 2009.02.18_09h56m30s?
 082 ==> 194177 : digiKam crashes always on startup and causes signal 11 (SIGSEGSV) - app not useable.
-083 ==> 
+083 ==> 169213 : digiKam should not enter new album after creating it.
+084 ==> 
 
 
