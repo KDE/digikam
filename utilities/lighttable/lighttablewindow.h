@@ -150,6 +150,7 @@ private Q_SLOTS:
     void slotSetup();
     void slotRawCameraList();
     void slotComponentsInfo();
+    void slotDBStat();
 
     void slotThemeChanged();
     void slotChangeTheme(const QString& theme);

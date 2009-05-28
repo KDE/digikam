@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="27" name="lighttablewindow" >
+<gui version="28" name="lighttablewindow" >
 
 <MenuBar>
 
@@ -37,6 +37,7 @@
     <Menu name="help" ><text>&amp;Help</text>
         <Action name="lighttable_rawcameralist"/>
         <Action name="lighttable_librariesinfo"/>
+        <Action name="lighttable_dbstat"/>
         <Action name="lighttable_donatemoney" />
         <Action name="lighttable_contribute" />
     </Menu>

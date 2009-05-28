@@ -92,6 +92,7 @@ public:
         navigateByPairAction   = 0;
         rawCameraListAction    = 0;
         libsInfoAction         = 0;
+        dbStatAction           = 0;
         themeMenuAction        = 0;
         contributeAction       = 0;
         showMenuBarAction      = 0;
@@ -136,6 +137,7 @@ public:
     KAction                  *contributeAction;
     KAction                  *rawCameraListAction;
     KAction                  *libsInfoAction;
+    KAction                  *dbStatAction;
 
     KSelectAction            *themeMenuAction;
 

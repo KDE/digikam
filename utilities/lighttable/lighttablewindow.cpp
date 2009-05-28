@@ -506,6 +506,11 @@ void LightTableWindow::setupActions()
     connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
     actionCollection()->addAction("lighttable_librariesinfo", d->libsInfoAction);
 
+    d->dbStatAction = new KAction(KIcon("application-vnd.oasis.opendocument.database"),
+                                  i18n("Database Statistic"), this);
+    connect(d->dbStatAction, SIGNAL(triggered()), this, SLOT(slotDBStat()));
+    actionCollection()->addAction("lighttable_dbstat", d->dbStatAction);
+
     // Provides a menu entry that allows showing/hiding the toolbar(s)
     setStandardToolBarMenuEnabled(true);
 
@@ -1598,6 +1603,11 @@ void LightTableWindow::slotChangeTheme(const QString& theme)
 void LightTableWindow::slotComponentsInfo()
 {
     showDigikamComponentsInfo();
+}
+
+void LightTableWindow::slotDBStat()
+{
+    showDigikamDatabaseStat();
 }
 
 void LightTableWindow::slotShowMenuBar()
