@@ -132,10 +132,6 @@ void EditorTool::setToolSettings(EditorToolSettings *settings)
 {
     d->settings = settings;
 
-    // Will be unblocked in slotInit()
-    // This will prevent signals emit during tool init.
-    d->settings->blockSignals(true);
-
     connect(d->settings, SIGNAL(signalOkClicked()),
             this, SLOT(slotOk()));
 
@@ -162,6 +158,10 @@ void EditorTool::setToolSettings(EditorToolSettings *settings)
 
     connect(d->settings, SIGNAL(signalScaleChanged()),
             this, SLOT(slotScaleChanged()));
+
+    // Will be unblocked in slotInit()
+    // This will prevent signals emit during tool init.
+    d->settings->blockSignals(true);
 }
 
 void EditorTool::slotInit()
