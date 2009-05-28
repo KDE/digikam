@@ -8,7 +8,7 @@ General        : Add new Batch Queue Manager (http://www.digikam.org/node/427).
 General        : New tool bar animation banner.
 General        : Fix compilation under MSVC 9.
 General        : New first run assistant (http://www.digikam.org/node/442).
-General        : New dialog to show Database statistic.
+General        : New dialog to show Database statistics.
 
 ImageEditor    : New Liquid Rescale tool (http://www.digikam.org/node/439).
 
