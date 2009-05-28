@@ -2043,13 +2043,20 @@ QMap<QString,int> AlbumDB::getImageFormatStatistics()
     QList<QVariant> values, allFormats;
     QMap<QString, int>  map;
 
-    d->db->execSql("SELECT DISTINCT format FROM ImageInformation;", &allFormats);
+    //    d->db->execSql("SELECT DISTINCT format FROM ImageInformation;", &allFormats);
+    d->db->execSql("SELECT DISTINCT II.format "
+                   "    FROM ImageInformation AS II, Images "
+                   "    WHERE Images.id == II.imageid AND Images.status == 1;", &allFormats);
 
-    QSqlQuery query = d->db->prepareQuery( QString("SELECT count() FROM ImageInformation WHERE format=?;") );
+    // FIXME: What is this for? Old code?
+    //        I disabled it for now because it seems to do nothing.
+    //    QSqlQuery query = d->db->prepareQuery( QString("SELECT count() FROM ImageInformation WHERE format=?;") );
 
     foreach (const QVariant &format, allFormats)
     {
-        d->db->execSql("SELECT count() FROM ImageInformation WHERE format=?;", format, &values);
+        d->db->execSql("SELECT count() FROM ImageInformation AS II, Images "
+                       "    WHERE II.imageid == Images.id AND Images.status== 1 "
+                       "        AND format=?;", format, &values);
         map[format.toString()] = values.isEmpty() ? 0 : values.first().toInt();
     }
 
