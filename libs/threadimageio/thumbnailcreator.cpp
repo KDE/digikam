@@ -230,8 +230,14 @@ QImage ThumbnailCreator::load(const QString& path)
             return QImage();
         }
 
-        if (qMax(qimage.width(),qimage.height()) != d->cachedSize)
-            qimage = qimage.scaled(d->cachedSize, d->cachedSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        int maxSize = qMax(qimage.width(), qimage.height());
+        if (maxSize != d->cachedSize)
+        {
+            // Perform cheat scaling (http://labs.trolltech.com/blogs/2009/01/26/creating-thumbnail-preview)
+            int cheatSize = maxSize - (3*(maxSize - d->cachedSize) / 4);
+            qimage        = qimage.scaled(cheatSize, cheatSize, Qt::KeepAspectRatio, Qt::FastTransformation);
+            qimage        = qimage.scaled(d->cachedSize, d->cachedSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        }
 
         // required by spec
         if (qimage.format() != QImage::Format_ARGB32)
