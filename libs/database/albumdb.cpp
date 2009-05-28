@@ -2054,6 +2054,7 @@ QMap<QString,int> AlbumDB::getImageFormatStatistics()
 
     foreach (const QVariant &format, allFormats)
     {
+        //        d->db->execSql("SELECT count() FROM ImageInformation WHERE format=?;", format, &values);
         d->db->execSql("SELECT count() FROM ImageInformation AS II, Images "
                        "    WHERE II.imageid == Images.id AND Images.status== 1 "
                        "        AND II.format=?;", format, &values);
