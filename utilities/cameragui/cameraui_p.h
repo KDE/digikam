@@ -109,6 +109,7 @@ public:
         cameraFreeSpace           = 0;
         rawCameraListAction       = 0;
         libsInfoAction            = 0;
+        dbStatAction              = 0;
         themeMenuAction           = 0;
         contributeAction          = 0;
         showMenuBarAction         = 0;
@@ -162,9 +163,10 @@ public:
     KAction                      *fullScreenAction;
     KAction                      *imageViewAction;
     KAction                      *increaseThumbsAction;
-    KAction                      *libsInfoAction;
-    KAction                      *lockAction;
     KAction                      *rawCameraListAction;
+    KAction                      *libsInfoAction;
+    KAction                      *dbStatAction;
+    KAction                      *lockAction;
     KAction                      *selectAllAction;
     KAction                      *selectInvertAction;
     KAction                      *selectLockedItemsAction;
