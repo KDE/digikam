@@ -162,51 +162,6 @@ InfoDlg::InfoDlg(QWidget *parent)
             this, SLOT(slotCopy2ClipBoard()));
 
     resize(400, 500);
-
-    // --------------------------------------------------------
-    // By default set a list of common components information used by Showfoto and digiKam.
-
-    QMap<QString, QString> list;
-    list.insert(i18n("LibQt"),                       qVersion());
-    list.insert(i18n("LibKDE"),                      KDE::versionString());
-    list.insert(i18n("LibKdcraw"),                   KDcrawIface::KDcraw::version());
-#if KDCRAW_VERSION < 0x000400
-    list.insert(i18n("Dcraw program"),               KDcrawIface::DcrawBinary::internalVersion());
-#else
-    list.insert(i18n("LibRaw"),                      KDcrawIface::KDcraw::librawVersion());
-#endif
-
-#if KDCRAW_VERSION >= 0x000500
-    list.insert(i18n("Parallelized demosaicing"),    KDcrawIface::KDcraw::librawUseGomp() ?
-                                                     i18n("Yes") : i18n("No"));
-#endif
-    list.insert(i18n("LibKExiv2"),                   KExiv2Iface::KExiv2::version());
-    list.insert(i18n("LibExiv2"),                    KExiv2Iface::KExiv2::Exiv2Version());
-    list.insert(i18n("Exiv2 supports XMP metadata"), KExiv2Iface::KExiv2::supportXmp() ?
-                                                     i18n("Yes") : i18n("No"));
-#if KEXIV2_VERSION >= 0x000300
-    list.insert(i18n("Exiv2 can write to Jpeg"),     KExiv2Iface::KExiv2::supportMetadataWritting("image/jpeg") ?
-                                                     i18n("Yes") : i18n("No"));
-    list.insert(i18n("Exiv2 can write to Tiff"),     KExiv2Iface::KExiv2::supportMetadataWritting("image/tiff") ?
-                                                     i18n("Yes") : i18n("No"));
-    list.insert(i18n("Exiv2 can write to Png"),      KExiv2Iface::KExiv2::supportMetadataWritting("image/png") ?
-                                                     i18n("Yes") : i18n("No"));
-    list.insert(i18n("Exiv2 can write to Jp2"),      KExiv2Iface::KExiv2::supportMetadataWritting("image/jp2") ?
-                                                     i18n("Yes") : i18n("No"));
-#endif
-
-    list.insert(i18n("LibPNG"),                      QString(PNG_LIBPNG_VER_STRING));
-    list.insert(i18n("LibTIFF"),                     QString(TIFFLIB_VERSION_STR).replace('\n', ' '));
-    list.insert(i18n("LibJPEG"),                     QString::number(JPEG_LIB_VERSION));
-    list.insert(i18n("LibJasper"),                   QString(jas_getversion()));
-    list.insert(i18n("LibCImg"),                     GreycstorationIface::cimgVersionString());
-    list.insert(i18n("LibLCMS"),                     QString::number(LCMS_VERSION));
-
-#ifdef HAVE_MARBLEWIDGET
-    list.insert(i18n("Marble widget"),               QString(MARBLE_VERSION_STRING));
-#endif //HAVE_MARBLEWIDGET
-
-    setComponentsInfoMap(list);
 }
 
 InfoDlg::~InfoDlg()
