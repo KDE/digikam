@@ -2056,7 +2056,7 @@ QMap<QString,int> AlbumDB::getImageFormatStatistics()
     {
         d->db->execSql("SELECT count() FROM ImageInformation AS II, Images "
                        "    WHERE II.imageid == Images.id AND Images.status== 1 "
-                       "        AND format=?;", format, &values);
+                       "        AND II.format=?;", format, &values);
         map[format.toString()] = values.isEmpty() ? 0 : values.first().toInt();
     }
 
