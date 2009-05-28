@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=ImagePlugin_LensCorrection
+Name[bg]=Приставка за снимки - Поправка на аберации от обективи
 Name[de]=Bildmodul_Linsenkorrektur
 Name[el]=ΠρόσθετοΕικόνας_ΠαραμόρφωσηΦακών
 Name[fi]=LinssivääristymänKorjaus
@@ -15,6 +16,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Lens aberrations correction tools
+Comment[bg]=Инструменти за поправка на аберации
 Comment[ca]=Eines de correcció d'aberracions dels objectius
 Comment[cs]=Nástroje pro korekci aberací čočky
 Comment[da]=Værktøjer til rettelse af linseforvrængning

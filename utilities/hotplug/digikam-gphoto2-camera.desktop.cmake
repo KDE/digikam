@@ -2,6 +2,7 @@
 Exec=@digikamhelperdir@/digikam-camera detect %u
 Icon=digikam
 Name=digiKam Detect and Download
+Name[bg]=Откриване и изтегляне
 Name[ca]=Detecta i descarrega amb el digiKam
 Name[da]=Detektér og download med digiKam
 Name[de]=digiKam - Entdecken und herunterladen
