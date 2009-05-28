@@ -507,7 +507,7 @@ void LightTableWindow::setupActions()
     actionCollection()->addAction("lighttable_librariesinfo", d->libsInfoAction);
 
     d->dbStatAction = new KAction(KIcon("application-vnd.oasis.opendocument.database"),
-                                  i18n("Database Statistic"), this);
+                                  i18n("Database Statistics"), this);
     connect(d->dbStatAction, SIGNAL(triggered()), this, SLOT(slotDBStat()));
     actionCollection()->addAction("lighttable_dbstat", d->dbStatAction);
 
