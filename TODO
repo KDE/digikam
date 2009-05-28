@@ -1,7 +1,7 @@
 Note : see also KDE4PORT TODO list
 
 ------------------------------------------------------------------------------------
-0.9.x TODO LIST
+1.0.0 TODO LIST
 ------------------------------------------------------------------------------------
 
 * right hand side sidebar (allee):
@@ -41,14 +41,8 @@ Note : see also KDE4PORT TODO list
                 ditto for unmounting in usm case 
 
 ------------------------------------------------------------------------------------
-LATER 0.9.4 TODO LIST
+LATER 1.0.0 TODO LIST
 ------------------------------------------------------------------------------------
-
-* Improving metadata support:
-   - Writing Metadata into PNG file like JPEG (Exiv2).
-   - Writing Metadata into TIFF file like JPEG (Exiv2).
-   - Writing Metadata to DNG format (=TIFF see Adobe DNG sdk)
-   - Writing Metadata to JPEG 2k files like JPEG (Exiv2).
 
 * Database:
    - Implement versioning of picture based on Image editor 'Action List' feature.
@@ -56,14 +50,10 @@ LATER 0.9.4 TODO LIST
 * New CD/DVD album folders+database backup/restore tool :
    - Take a look of music database backup in amarok.
    - Take a look of image database backup in showimg.
-    
+
 * Showfoto improvements :
    - Add DBUS interface.
    - Add Support KUrl for better konqueror interactions.
 
 * General:
-   - Custom ordering of images
-   - Re-implement KIO::Job* scan() method in dio.cpp, also take a look at
-     this bugreport for further details:
-     http://bugs.kde.org/show_bug.cgi?id=160564
-     
+   - Custom ordering of images in icon view.
