@@ -53,6 +53,22 @@ public:
 ImageAlbumFilterModel::ImageAlbumFilterModel(QObject *parent)
                      : ImageFilterModel(*new ImageAlbumFilterModelPrivate, parent)
 {
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
+            this, SLOT(slotAlbumAdded(Album*)));
+
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumAboutToBeDeleted(Album*)),
+            this, SLOT(slotAlbumAboutToBeDeleted(Album*)));
+
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
+            this, SLOT(slotAlbumsCleared()));
+
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumRenamed(Album*)),
+            this, SLOT(slotAlbumRenamed(Album*)));
+
+    foreach (Album *a, AlbumManager::instance()->allPAlbums())
+        albumChange(a);
+    foreach (Album *a, AlbumManager::instance()->allTAlbums())
+        albumChange(a);
 }
 
 ImageAlbumFilterModel::~ImageAlbumFilterModel()
@@ -61,34 +77,14 @@ ImageAlbumFilterModel::~ImageAlbumFilterModel()
 
 void ImageAlbumFilterModel::setSourceImageModel(ImageAlbumModel* model)
 {
-    /*
-    Q_D(ImageAlbumFilterModel)
-    if (dynamic_cast<IoslaveImageModel*>(d->imageModel))
-    {
-        disconnect(d->imageModel, SIGNAL(listedAlbumChanged(Album*)),
-                   this, SLOT(slotListedAlbumChanged(Album *)));
-    }
-
-    connect(model, SIGNAL(listedAlbumChanged(Album*)),
-            this, SLOT(slotListedAlbumChanged(Album *)));
-            */
-
     ImageFilterModel::setSourceImageModel(model);
 }
 
 ImageAlbumModel *ImageAlbumFilterModel::sourceModel() const
 {
-    Q_D(const ImageFilterModel);
+    Q_D(const ImageAlbumFilterModel);
     return static_cast<ImageAlbumModel*>(d->imageModel);
 }
-
-/*
-void ImageAlbumFilterModel::slotListedAlbumChanged(Album *album)
-{
-    Q_D(ImageAlbumFilterModel)
-    d->currentAlbum = album;
-}
-*/
 
 void ImageAlbumFilterModel::prepareThumbnails(const QList<QModelIndex>& indexesToPrepare)
 {
@@ -170,6 +166,13 @@ void ImageAlbumFilterModel::slotAlbumAdded(Album *album)
 void ImageAlbumFilterModel::slotAlbumAboutToBeDeleted(Album *album)
 {
     albumChange(album);
+}
+
+void ImageAlbumFilterModel::slotAlbumsCleared()
+{
+    Q_D(ImageAlbumFilterModel);
+    d->albumNamesHash.clear();
+    d->tagNamesHash.clear();
 }
 
 } // namespace Digikam

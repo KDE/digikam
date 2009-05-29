@@ -60,10 +60,10 @@ protected:
 
 protected Q_SLOTS:
 
-    //void slotListedAlbumChanged(Album *album);
     void slotAlbumRenamed(Album *album);
     void slotAlbumAdded(Album *album);
     void slotAlbumAboutToBeDeleted(Album *album);
+    void slotAlbumsCleared();
 
 private:
 
