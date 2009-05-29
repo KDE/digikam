@@ -1037,8 +1037,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->dbStatAction = new KAction(KIcon("application-vnd.oasis.opendocument.database"),
-                                  i18n("Database Statistics"), this);
+    d->dbStatAction = new KAction(KIcon("network-server-database"), i18n("Database Statistics"), this);
     connect(d->dbStatAction, SIGNAL(triggered()), this, SLOT(slotDBStat()));
     actionCollection()->addAction("help_dbstat", d->dbStatAction);
 
