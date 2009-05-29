@@ -41,6 +41,7 @@ namespace Digikam
 {
 
 class SchemaUpdater;
+class ThumbnailSchemaUpdater;
 class DatabaseWatch;
 class DatabaseBackendPriv;
 
@@ -73,6 +74,7 @@ public:
      * Shall only be called from the thread that called open().
      */
     bool initSchema(SchemaUpdater *updater);
+    bool initSchema(ThumbnailSchemaUpdater *updater);
 
     /**
      * Close the database connection.

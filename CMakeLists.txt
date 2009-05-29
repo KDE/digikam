@@ -738,9 +738,9 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/albumdb.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/albumdb_sqlite2.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collectionscanner.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagescanner.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collectionmanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collectionlocation.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collectionscannerhints.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseaccess.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasewatch.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasebackend.cpp
@@ -748,22 +748,25 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasetransaction.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseurl.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasechangesets.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collectionscannerhints.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/downloadhistory.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/dbstatdlg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagecomments.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imageinfo.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imageinfolist.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imageinfocache.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagelister.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagelisterreceiver.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagecomments.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imageposition.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagecopyright.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/downloadhistory.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagequerybuilder.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/searchxml.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagescanner.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/namefilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/searchxml.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/schemaupdater.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/thumbnaildatabaseaccess.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/thumbnaildb.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/thumbnailschemaupdater.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/upgradedb_sqlite2tosqlite3.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/dbstatdlg.cpp
        )
 
     SET(libsqlite2_SRCS

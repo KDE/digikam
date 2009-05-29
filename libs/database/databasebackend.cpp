@@ -40,6 +40,7 @@
 // Local includes
 
 #include "schemaupdater.h"
+#include "thumbnailschemaupdater.h"
 #include "databasewatch.h"
 
 namespace Digikam
@@ -298,6 +299,20 @@ bool DatabaseBackend::open(const DatabaseParameters& parameters)
 }
 
 bool DatabaseBackend::initSchema(SchemaUpdater *updater)
+{
+    if (d->status == OpenSchemaChecked)
+        return true;
+    if (d->status == Unavailable)
+        return false;
+    if (updater->update())
+    {
+        d->status = OpenSchemaChecked;
+        return true;
+    }
+    return false;
+}
+
+bool DatabaseBackend::initSchema(ThumbnailSchemaUpdater *updater)
 {
     if (d->status == OpenSchemaChecked)
         return true;
