@@ -195,7 +195,7 @@ bool ThumbnailSchemaUpdater::createTablesV1()
         return false;
     }
 
-
+    return true;
 }
 
 bool ThumbnailSchemaUpdater::createIndicesV1()
