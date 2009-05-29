@@ -17,6 +17,17 @@ rcdir=$(kde4-config --localprefix)share/config
 rcfile="digikamrc"
 rcpath=$rcdir/$rcfile
 
+# check if config file is readable
+if [ ! -e "$rcpath" ]
+then
+    echo "Error reading $processname's configuration file."
+    echo "I searched for $rcpath, but I was not able to find it."
+    echo "Make sure you started $processname at least once, to generate the "
+    echo "appropiate files in your home folder."
+    echo "Also make sure that you are currently logged into a KDE session".
+    exit 1
+fi
+
 # database
 databasekey="Database File Path"
 databasedir=$(cat $rcpath | grep "$databasekey" | sed -e "s/$databasekey=//")
