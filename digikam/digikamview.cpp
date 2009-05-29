@@ -1156,6 +1156,7 @@ void DigikamView::slotImageSelected()
     // delay to slotDispatchImageSelected
     d->needDispatchSelection = true;
     d->selectionTimer->start();
+    emit signalSelectionChanged(d->iconView->numberOfSelectedIndexes());
 }
 
 void DigikamView::slotDispatchImageSelected()
@@ -1172,7 +1173,6 @@ void DigikamView::slotDispatchImageSelected()
             d->albumWidgetStack->setPreviewItem();
             emit signalImageSelected(list, false, false, allImages);
             emit signalNoCurrentItem();
-            emit signalSelectionChanged(false);
         }
         else
         {
@@ -1185,7 +1185,6 @@ void DigikamView::slotDispatchImageSelected()
                 d->albumWidgetStack->setPreviewItem(list.first(), previousInfo, nextInfo);
 
             emit signalImageSelected(list, !previousInfo.isNull(), !nextInfo.isNull(), allImages);
-            emit signalSelectionChanged(true);
         }
 
         d->needDispatchSelection = false;

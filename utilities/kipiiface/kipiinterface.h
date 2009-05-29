@@ -100,7 +100,7 @@ public:
 
 public Q_SLOTS:
 
-    void slotSelectionChanged( bool b );
+    void slotSelectionChanged(int count);
     void slotCurrentAlbumChanged( Album *palbum );
 
 private Q_SLOTS:

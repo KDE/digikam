@@ -458,6 +458,9 @@ void DigikamApp::setupView()
     connect(d->view, SIGNAL(signalTagSelected(bool)),
             this, SLOT(slotTagSelected(bool)));
 
+    connect(d->view, SIGNAL(signalSelectionChanged(int)),
+            this, SLOT(slotSelectionChanged(int)));
+
     connect(d->view, SIGNAL(signalImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)),
             this, SLOT(slotImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)));
 }
@@ -1324,19 +1327,7 @@ void DigikamApp::slotImageSelected(const ImageInfoList& selection, bool hasPrev,
                                    const ImageInfoList& listAll)
 {
     int num_images = listAll.count();
-    bool val       = selection.isEmpty() ? false : true;
     QString text;
-
-    d->imageViewAction->setEnabled(val);
-    d->imagePreviewAction->setEnabled(val);
-    d->imageLightTableAction->setEnabled(val);
-    d->imageAddLightTableAction->setEnabled(val);
-    d->imageFindSimilarAction->setEnabled(val);
-    d->imageRenameAction->setEnabled(val);
-    d->imageDeleteAction->setEnabled(val);
-    d->imageExifOrientationActionMenu->setEnabled(val);
-    d->slideShowSelectionAction->setEnabled(selection.count() != 0);
-    d->newAlbumFromSelectionAction->setEnabled(false);
 
     switch (selection.count())
     {
@@ -1359,19 +1350,26 @@ void DigikamApp::slotImageSelected(const ImageInfoList& selection, bool hasPrev,
             d->statusBarSelectionText = i18np("%2/%1 item selected",
                                               "%2/%1 items selected",
                                               num_images, selection.count());
-
-            // multiple images selected
-            d->imageViewAction->setEnabled(false);
-            d->imagePreviewAction->setEnabled(false);
-            d->imageRenameAction->setEnabled(false);
-            d->imageFindSimilarAction->setEnabled(false);
-            d->newAlbumFromSelectionAction->setEnabled(true);
             break;
         }
     }
 
     d->statusProgressBar->setText(d->statusBarSelectionText);
     d->statusNavigateBar->setNavigateBarState(hasPrev, hasNext);
+}
+
+void DigikamApp::slotSelectionChanged(int selectionCount)
+{
+    d->imageViewAction->setEnabled(selectionCount == 1);
+    d->imagePreviewAction->setEnabled(selectionCount == 1);
+    d->imageFindSimilarAction->setEnabled(selectionCount == 1);
+    d->imageRenameAction->setEnabled(selectionCount == 1);
+    d->imageLightTableAction->setEnabled(selectionCount > 0);
+    d->imageAddLightTableAction->setEnabled(selectionCount > 0);
+    d->imageDeleteAction->setEnabled(selectionCount > 0);
+    d->imageExifOrientationActionMenu->setEnabled(selectionCount > 0);
+    d->slideShowSelectionAction->setEnabled(selectionCount > 0);
+    d->newAlbumFromSelectionAction->setEnabled(selectionCount > 1);
 }
 
 void DigikamApp::slotProgressBarMode(int mode, const QString& text)

@@ -59,8 +59,8 @@ KipiInterface::KipiInterface(QObject *parent, const char *name)
     m_thumbLoadThread = ThumbnailLoadThread::defaultThread();
     m_albumManager    = AlbumManager::instance();
 
-    connect(DigikamApp::instance()->view(), SIGNAL(signalSelectionChanged(bool)),
-            this, SLOT(slotSelectionChanged(bool)));
+    connect(DigikamApp::instance()->view(), SIGNAL(signalSelectionChanged(int)),
+            this, SLOT(slotSelectionChanged(int)));
 
     connect(m_thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
@@ -228,9 +228,9 @@ void KipiInterface::delImage( const KUrl& url )
     }
 }
 
-void KipiInterface::slotSelectionChanged( bool b )
+void KipiInterface::slotSelectionChanged(int count)
 {
-    emit selectionChanged( b );
+    emit selectionChanged(count);
 }
 
 void KipiInterface::slotCurrentAlbumChanged( Album *album )

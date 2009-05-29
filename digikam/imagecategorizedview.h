@@ -67,6 +67,7 @@ public:
     QList<ImageInfo> selectedImageInfos() const;
     QList<ImageInfo> selectedImageInfosCurrentFirst() const;
     KUrl::List selectedUrls() const;
+    int numberOfSelectedIndexes() const;
 
     QList<ImageInfo> imageInfos() const;
     KUrl::List urls() const;

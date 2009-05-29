@@ -253,6 +253,11 @@ QList<ImageInfo> ImageCategorizedView::selectedImageInfosCurrentFirst() const
     return infos;
 }
 
+int ImageCategorizedView::numberOfSelectedIndexes() const
+{
+    return selectedIndexes().size();
+}
+
 QList<ImageInfo> ImageCategorizedView::imageInfos() const
 {
     return d->filterModel->imageInfosSorted();

@@ -80,7 +80,7 @@ Q_SIGNALS:
     void signalTagSelected(bool val);
     void signalImageSelected(const ImageInfoList& selectedImage, bool hasPrevious, bool hasNext, const ImageInfoList& allImages);
     void signalNoCurrentItem();
-    void signalSelectionChanged(bool hasSelection);
+    void signalSelectionChanged(int numberOfSelectedItems);
     void signalProgressBarMode(int, const QString&);
     void signalProgressValue(int);
     void signalThumbSizeChanged(int);
