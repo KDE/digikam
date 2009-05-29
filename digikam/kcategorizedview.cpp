@@ -436,7 +436,8 @@ void KCategorizedView::Private::drawNewCategory(const QModelIndex &index,
 void KCategorizedView::Private::updateScrollbars()
 {
     // find the last index in the last category
-    QModelIndex lastIndex = categoriesIndexes.isEmpty() ? QModelIndex() : categoriesIndexes[categories.last()].last();
+    QModelIndex lastIndex = categoriesIndexes.isEmpty() ? QModelIndex() :
+                            proxyModel->index(categoriesIndexes[categories.last()].last(), 0);
 
     int lastItemBottom = cachedRectIndex(lastIndex).top() +
                          listView->spacing() + (listView->gridSize().isEmpty() ? biggestItemSize.height() : listView->gridSize().height()) - listView->viewport()->height();
@@ -561,7 +562,6 @@ void KCategorizedView::setModel(QAbstractItemModel *model)
     d->categoriesPosition.clear();
     d->categories.clear();
     d->intersectedIndexes.clear();
-    d->modelIndexList.clear();
     d->hovered = QModelIndex();
     d->mouseButtonPressed = false;
     d->rightMouseButtonPressed = false;
@@ -666,9 +666,7 @@ QModelIndex KCategorizedView::categoryAt(const QPoint &point) const
     // if lastCategory is the last one in the list y will be 0
     if (!lastCategory.isNull() && point.y() >= lastY && (point.y() < y || !y))
     {
-        Q_ASSERT(d->categoriesIndexes.contains(lastCategory));
-        Q_ASSERT(d->categoriesIndexes[lastCategory].size());
-        return d->categoriesIndexes[lastCategory][0];
+        return d->proxyModel->index(d->categoriesIndexes[lastCategory][0], d->proxyModel->sortColumn());
     }
     return QModelIndex();
 }
@@ -688,7 +686,6 @@ void KCategorizedView::setCategoryDrawer(KCategoryDrawer *categoryDrawer)
     d->categoriesPosition.clear();
     d->categories.clear();
     d->intersectedIndexes.clear();
-    d->modelIndexList.clear();
     d->hovered = QModelIndex();
     d->mouseButtonPressed = false;
     d->rightMouseButtonPressed = false;
@@ -778,7 +775,6 @@ void KCategorizedView::reset()
     d->categoriesPosition.clear();
     d->categories.clear();
     d->intersectedIndexes.clear();
-    d->modelIndexList.clear();
     d->hovered = QModelIndex();
     d->biggestItemSize = QSize(0, 0);
     d->mouseButtonPressed = false;
@@ -880,7 +876,7 @@ void KCategorizedView::paintEvent(QPaintEvent *event)
         {
             intersectedInThePast = true;
 
-            QModelIndex indexToDraw = d->proxyModel->index(d->categoriesIndexes[category][0].row(), d->proxyModel->sortColumn());
+            QModelIndex indexToDraw = d->proxyModel->index(d->categoriesIndexes[category][0], d->proxyModel->sortColumn());
 
             d->drawNewCategory(indexToDraw,
                                d->proxyModel->sortRole(), otherOption, &painter);
@@ -1227,11 +1223,11 @@ void KCategorizedView::mouseReleaseEvent(QMouseEvent *event)
                 selectionModel())
             {
                 QItemSelection selection = selectionModel()->selection();
-                const QVector<QModelIndex> &indexList = d->categoriesIndexes[category];
+                const QVector<int> &indexList = d->categoriesIndexes[category];
 
-                foreach (const QModelIndex &index, indexList)
+                foreach (int row, indexList)
                 {
-                    QModelIndex selectIndex = index.model()->index(index.row(), 0);
+                    QModelIndex selectIndex = d->proxyModel->index(row, 0);
 
                     selection << QItemSelectionRange(selectIndex);
                 }
@@ -1552,7 +1548,6 @@ void KCategorizedView::rowsInserted(const QModelIndex &parent,
         d->categoriesPosition.clear();
         d->categories.clear();
         d->intersectedIndexes.clear();
-        d->modelIndexList.clear();
         d->hovered = QModelIndex();
         d->biggestItemSize = QSize(0, 0);
         d->mouseButtonPressed = false;
@@ -1564,7 +1559,7 @@ void KCategorizedView::rowsInserted(const QModelIndex &parent,
     rowsInsertedArtifficial(parent, start, end);
 }
 
-int KCategorizedView::Private::categoryUpperBound(int begin, int averageSize)
+int KCategorizedView::Private::categoryUpperBound(const QVector<QModelIndex> &modelIndexList, int begin, int averageSize)
 {
     int end = modelIndexList.size();
     QString category = proxyModel->data(modelIndexList[begin],
@@ -1637,7 +1632,6 @@ void KCategorizedView::rowsInsertedArtifficial(const QModelIndex &parent,
     d->categoriesPosition.clear();
     d->categories.clear();
     d->intersectedIndexes.clear();
-    d->modelIndexList.clear();
     d->hovered = QModelIndex();
     d->biggestItemSize = QSize(0, 0);
     d->mouseButtonPressed = false;
@@ -1652,12 +1646,11 @@ void KCategorizedView::rowsInsertedArtifficial(const QModelIndex &parent,
     const int rowCount = d->proxyModel->rowCount();
     const int sortColumn = d->proxyModel->sortColumn();
     QString lastCategory = d->proxyModel->data(d->proxyModel->index(0, sortColumn), KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
-    QVector<QModelIndex> modelIndexList;
     int offset = -1;
 
-    d->modelIndexList = QVector<QModelIndex>(rowCount);
+    QVector<QModelIndex> modelIndexList(rowCount);
     for (int k = 0; k < rowCount; ++k)
-        d->modelIndexList[k] = d->proxyModel->index(k, sortColumn);
+        modelIndexList[k] = d->proxyModel->index(k, sortColumn);
 
     d->elementsInfo = QVector<struct Private::ElementInfo>(rowCount);
 
@@ -1675,7 +1668,7 @@ void KCategorizedView::rowsInsertedArtifficial(const QModelIndex &parent,
         QStyleOptionViewItem option = viewOptions();
         for (int k = 0; k < rowCount; ++k)
         {
-            QModelIndex indexSize = (sortColumn == 0) ? d->modelIndexList[k] : d->proxyModel->index(k, 0);
+            QModelIndex indexSize = (sortColumn == 0) ? modelIndexList[k] : d->proxyModel->index(k, 0);
             QSize hint = itemDelegate(indexSize)->sizeHint(option, indexSize);
             d->biggestItemSize = QSize(qMax(hint.width(), d->biggestItemSize.width()),
                                        qMax(hint.height(), d->biggestItemSize.height()));
@@ -1684,23 +1677,23 @@ void KCategorizedView::rowsInsertedArtifficial(const QModelIndex &parent,
 
     for (int k = 0; k < rowCount; )
     {
-        lastCategory = d->proxyModel->data(d->modelIndexList[k], KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
+        lastCategory = d->proxyModel->data(modelIndexList[k], KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
 
-        int upperBound = d->categoryUpperBound(k, categorySizes / ++categoryCounts);
+        int upperBound = d->categoryUpperBound(modelIndexList, k, categorySizes / ++categoryCounts);
         categorySizes += upperBound - k;
 
         offset = 0;
-        modelIndexList = QVector<QModelIndex>(upperBound - k);
+        QVector<int> rows(upperBound - k);
         for (int i=k; i<upperBound; i++, offset++)
         {
-            modelIndexList[offset] = d->modelIndexList[i];
+            rows[offset] = i;
             struct Private::ElementInfo &elementInfo = d->elementsInfo[i];
             elementInfo.category = lastCategory;
             elementInfo.relativeOffsetToCategory = offset;
         }
         k = upperBound;
 
-        d->categoriesIndexes.insert(lastCategory, modelIndexList);
+        d->categoriesIndexes.insert(lastCategory, rows);
         d->categories << lastCategory;
     }
 

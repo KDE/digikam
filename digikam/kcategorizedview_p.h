@@ -115,10 +115,10 @@ public:
     void layoutChanged(bool forceItemReload = false);
 
     /**
-      * This method will, starting from the index at begin in the current (sorted) modelIndex List,
+      * This method will, starting from the index at begin in the given (sorted) modelIndex List,
       * find the last index having the same category as the index to begin with.
       */
-    int categoryUpperBound(int begin, int averageSize = 0);
+    int categoryUpperBound(const QVector<QModelIndex> &modelIndexList, int begin, int averageSize = 0);
 
     // Attributes
 
@@ -149,7 +149,7 @@ public:
     // performance
     QVector<struct ElementInfo> elementsInfo;
     QHash<int, QRect> elementsPosition;
-    QHash<QString, QVector<QModelIndex> > categoriesIndexes;
+    QHash<QString, QVector<int> > categoriesIndexes;
     QHash<QString, QRect> categoriesPosition;
     QStringList categories;
     QModelIndexList intersectedIndexes;
@@ -163,7 +163,6 @@ public:
 
     // Attributes for speed reasons
     KCategorizedSortFilterProxyModel *proxyModel;
-    QVector<QModelIndex> modelIndexList;
 };
 
 #endif // KCATEGORIZEDVIEW_P_H
