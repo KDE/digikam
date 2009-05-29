@@ -8,10 +8,13 @@
 # size.
 
 username=$(whoami)
+
 rcdir=$(kde4-config --localprefix)share/config
 rcfile="digikamrc"
+
 databasekey="Database File Path"
 databasedir=$(cat $rcdir/$rcfile | grep "$databasekey" | sed -e "s/$databasekey=//")
+
 proc="$(ps aux | grep $username | grep -v $0 | grep -w digikam | grep -v grep)"
 if [ "$proc" != "" ]
 then
