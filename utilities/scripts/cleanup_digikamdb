@@ -1,14 +1,16 @@
 #!/bin/bash
 
 # This script will read in the digiKam configuration file to determine the
-# database location. It will then make sure that digikam is not running and
+# database location. It will then make sure that digiKam is not running and
 # call "sqlite3 DATABASE 'VACUUM;" on the database, to clean up and optimize
 # the tables.
 # This will often lead to great performance gain and a smaller database file
 # size.
 
 username=$(whoami)
-databasedir=$(cat $(kde4-config --localprefix)share/config/digikamrc | grep "Database File Path" | sed -e 's/Database File Path=//')
+rcdir=$(kde4-config --localprefix)share/config
+rcfile=digikamrc
+databasedir=$(cat $rcdir/$rcfile | grep "Database File Path" | sed -e 's/Database File Path=//')
 proc="$(ps aux | grep $username | grep -v $0 | grep -w digikam | grep -v grep)"
 if [ "$proc" != "" ]
 then
@@ -19,7 +21,7 @@ fi
 
 curdir=$(pwd)
 
-cd $databasedir
+cd $databasedir 2&> /dev/null
 if [ $? == 0 ]
 then
     echo "Cleaning up databases in $(pwd)"
@@ -31,12 +33,15 @@ then
         then
             echo "done"
         else
+            echo "failed!"
             echo "sqlite3 was not able to cleanup the database."
         fi
     done
+    echo "Job finished";
 else
-    echo -e "\n !!!! Something went terrible wrong here.... I was not able to enter the database folder.\n"
+    echo -e "\nI was not able to enter the database folder ($databasedir).\n"
+    echo "Make sure that the variable 'Database File Path' in $rcdir/$rcfile "
+    echo "is set correctly and that you have permissions to enter this folder."
 fi
-echo "Job finished";
 
 cd $curdir
