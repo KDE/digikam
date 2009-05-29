@@ -37,7 +37,7 @@ then
             echo "sqlite3 was not able to cleanup the database."
         fi
     done
-    echo "Job finished";
+    echo "Finished";
 else
     echo -e "\nI was not able to enter the database folder ($databasedir).\n"
     echo "Make sure that the variable 'Database File Path' in $rcdir/$rcfile "
