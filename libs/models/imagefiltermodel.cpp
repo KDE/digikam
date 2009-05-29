@@ -344,6 +344,8 @@ void ImageFilterModel::setImageFilterSettings(const ImageFilterSettings& setting
     d->filterResults.clear();
     d->hasOneMatch = false;
     d->hasOneMatchForText = false;
+    d->categoryCountHashInt.clear();
+    d->categoryCountHashString.clear();
     if (d->imageModel)
         d->infosToProcess(d->imageModel->imageInfos(), false);
     emit filterSettingsChanged(settings);
