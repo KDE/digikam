@@ -21,7 +21,7 @@ rcpath=$rcdir/$rcfile
 if [ ! -e "$rcpath" ]
 then
     echo "Error reading $programname's configuration file."
-    echo "I searched for $rcpath, but I was not able to find it."
+    echo "I searched for $rcpath, but was not able to find it."
     echo "Make sure you started $programname at least once, to generate the "
     echo "appropiate files in your home folder."
     echo "Also make sure that you are currently logged into a KDE session".
