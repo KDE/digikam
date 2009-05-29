@@ -11,9 +11,10 @@ username=$(whoami)
 
 rcdir=$(kde4-config --localprefix)share/config
 rcfile="digikamrc"
+rcpath=$rcdir/$rcfile
 
 databasekey="Database File Path"
-databasedir=$(cat $rcdir/$rcfile | grep "$databasekey" | sed -e "s/$databasekey=//")
+databasedir=$(cat $rcpath | grep "$databasekey" | sed -e "s/$databasekey=//")
 
 proc="$(ps aux | grep $username | grep -v $0 | grep -w digikam | grep -v grep)"
 if [ "$proc" != "" ]
@@ -44,7 +45,7 @@ then
     echo "Finished";
 else
     echo -e "\nI was not able to enter the database folder ($databasedir).\n"
-    echo "Make sure that the variable 'Database File Path' in $rcdir/$rcfile "
+    echo "Make sure that the variable 'Database File Path' in $rcpath "
     echo "is set correctly and that you have permissions to enter this folder."
 fi
 
