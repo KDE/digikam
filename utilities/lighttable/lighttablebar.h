@@ -50,7 +50,7 @@ public:
     void setOnRightPanel(const ImageInfo& info);
 
     void removeItemByInfo(const ImageInfo& info);
-    ImagePreviewBarItem* removeItemById(qlonglong id);
+    void removeItemById(qlonglong id);
 
     ImagePreviewBarItem* findItemById(qlonglong id) const;
 

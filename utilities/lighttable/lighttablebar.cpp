@@ -304,19 +304,15 @@ void LightTableBar::removeItemByInfo(const ImageInfo& info)
 
     ImagePreviewBarItem* ltItem = findItemByInfo(info);
     ThumbBarItem *item          = dynamic_cast<ThumbBarItem*>(ltItem);
-    if (item) ThumbBarView::removeItem(item);
+    if (item)
+        removeItem(item);
 }
 
-ImagePreviewBarItem* LightTableBar::removeItemById(qlonglong id)
+void LightTableBar::removeItemById(qlonglong id)
 {
-    ImagePreviewBarItem* ltItem = findItemById(id);
-    ThumbBarItem *item          = dynamic_cast<ThumbBarItem*>(ltItem);
+    ImagePreviewBarItem* item = findItemById(id);
     if (item)
-    {
-        ThumbBarView::removeItem(item);
-        return ltItem;
-    }
-    return 0;
+        removeItem(item);
 }
 
 ImagePreviewBarItem* LightTableBar::findItemById(qlonglong id) const
@@ -681,10 +677,16 @@ void LightTableBar::slotCollectionImageChange(const CollectionImageChangeset& ch
         case CollectionImageChangeset::Removed:
         case CollectionImageChangeset::RemovedAll:
         {
+            ImageInfo info;
             foreach(qlonglong id, changeset.ids())
             {
-                ImagePreviewBarItem* item = removeItemById(id);
-                emit signalRemoveItem(item->info());
+                ImagePreviewBarItem* item = findItemById(id);
+                if (item)
+                {
+                    info = item->info();
+                    removeItem(item);
+                    emit signalRemoveItem(info);
+                }
             }
             break;
         }
