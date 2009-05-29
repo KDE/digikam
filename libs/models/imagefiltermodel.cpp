@@ -188,13 +188,7 @@ QVariant ImageFilterModel::data(const QModelIndex& index, int role) const
         case CategoryCountRole:
             return categoryCount(d->imageModel->imageInfoRef(mapToSource(index)));
         case CategoryAlbumIdRole:
-        {
-            kDebug() << "Query album id of" << index << rowCount() << d->imageModel->rowCount();
-            QModelIndex source_index = mapToSource(index);
-            ImageInfo info = d->imageModel->imageInfo(source_index);
-            kDebug() << source_index << info.id() << info.isNull();
             return d->imageModel->imageInfoRef(mapToSource(index)).albumId();
-        }
         case CategoryFormatRole:
             return d->imageModel->imageInfoRef(mapToSource(index)).albumId();
         case ImageFilterModelPointerRole:
