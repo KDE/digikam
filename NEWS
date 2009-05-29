@@ -101,4 +101,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 083 ==> 169213 : digiKam should not enter new album after creating it.
 084 ==> 191634 : Statistics of the database, and all pictures?
 085 ==> 193228 : Experimental option "write metadata to RAW files" corrupts Nikon NEFs.
-086 ==> 
+086 ==> 194116 : digiKam crashed for no obvious reason.
+087 ==> 
+
