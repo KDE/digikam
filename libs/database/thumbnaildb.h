@@ -62,6 +62,11 @@ private:
     ThumbnailDB(DatabaseBackend *backend);
     ~ThumbnailDB();
 
+    /** PGF image data to QImage */
+    bool readPGFImageData(const QByteArray& data, QImage& img);
+    /** QImage to PGF image data */
+    bool writePGFImageData(const QImage& img, QByteArray& data);
+
 private:
 
     ThumbnailDBPriv* const d;
