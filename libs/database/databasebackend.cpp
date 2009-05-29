@@ -585,9 +585,11 @@ QSqlQuery DatabaseBackend::prepareQuery(const QString& sql)
 
 bool DatabaseBackend::beginTransaction()
 {
+    // Call databaseForThread before touching transaction count - open() will reset the count
+    QSqlDatabase db = d->databaseForThread();
     if (d->incrementTransactionCount())
     {
-        if (!d->databaseForThread().transaction())
+        if (!db.transaction())
         {
             d->decrementTransactionCount();
             return false;
