@@ -7,29 +7,37 @@
 # This will often lead to great performance gain and a smaller database file
 # size.
 
+# general information
 username=$(whoami)
+programname="digiKam"
+processname="digikam"
 
+# config file
 rcdir=$(kde4-config --localprefix)share/config
 rcfile="digikamrc"
 rcpath=$rcdir/$rcfile
 
+# database
 databasekey="Database File Path"
 databasedir=$(cat $rcpath | grep "$databasekey" | sed -e "s/$databasekey=//")
 
-proc="$(ps aux | grep $username | grep -v $0 | grep -w digikam | grep -v grep)"
+# make sure digiKam is not running
+proc="$(ps aux | grep $username | grep -v $0 | grep -w $processname | grep -v grep)"
 if [ "$proc" != "" ]
 then
-    echo "Please make sure to shutdown digiKam first."
-    echo "Cleaning up the database while the program is running might not be as safe as if the application has been shut down."
+    echo "Please make sure to shutdown $programname first."
+    echo "Cleaning up the database while $programname is running might not be as safe as if the application has been shut down."
     exit 1
 fi
 
+# backup current working dir
 curdir=$(pwd)
 
+# try to enter the database directory
 cd $databasedir 2&> /dev/null
 if [ $? == 0 ]
 then
-    echo "Cleaning up databases in $(pwd)"
+    echo "Cleaning up $programname databases in $(pwd)"
     for db in $(find . -type f -name 'digikam*.db' -print)
     do
         echo -n "$db ... "
