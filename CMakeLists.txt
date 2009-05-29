@@ -769,6 +769,15 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/upgradedb_sqlite2tosqlite3.cpp
        )
 
+    SET(libpgf_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/libpgf/Decoder.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/libpgf/Encoder.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/libpgf/PGFimage.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/libpgf/Stream.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/libpgf/Subband.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/libpgf/WaveletTransform.cpp
+       )
+
     SET(libsqlite2_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/attach.c
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/auth.c

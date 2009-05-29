@@ -27,6 +27,7 @@ INCLUDE_DIRECTORIES(
                      # database libs
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database/sqlite2
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database/libpgf
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database/haar
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/models
 
@@ -158,10 +159,16 @@ FOREACH(_curentfile ${libsqlite2_SRCS})
     SET_SOURCE_FILES_PROPERTIES(${_curentfile} PROPERTIES COMPILE_FLAGS -w)
 ENDFOREACH(_curentfile ${libsqlite2_SRCS})
 
+# Disable libpgf warnings.
+FOREACH(_curentfile ${libpgf_SRCS})
+    SET_SOURCE_FILES_PROPERTIES(${_curentfile} PROPERTIES COMPILE_FLAGS -w)
+ENDFOREACH(_curentfile ${libpgf_SRCS})
+
 SET(digikamdatabase_LIB_SRCS ${libdatabase_SRCS}
                              ${libhaar_SRCS}
                              ${libdatabasemodels_SRCS}
                              ${libsqlite2_SRCS}
+                             ${libpgf_SRCS}
    )
 
 KDE4_ADD_LIBRARY(digikamdatabase SHARED ${digikamdatabase_LIB_SRCS})
