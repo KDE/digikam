@@ -207,57 +207,79 @@ void FreeRotation::filterImage(void)
 
         case LargestArea:
         {
-           // 'Largest Area' method (by Gerhard Kulzer).
+            // 'Largest Area' method (by Gerhard Kulzer).
 
-           float gamma = atan((float)nHeight / (float)nWidth);
+            float gamma = 0.0f;
 
-           if (absAngle < 90.0)
-           {
-                autoCrop.setWidth( (int)((float)nHeight / cos(absAngle*DEG2RAD) /
-                                   ( tan(gamma) + tan(absAngle*DEG2RAD) )) );
-                autoCrop.setHeight( (int)((float)autoCrop.width() * tan(gamma)) );
-           }
-           else
-           {
-                autoCrop.setHeight( (int)((float)nHeight / cos((absAngle-90.0)*DEG2RAD) /
-                                   ( tan(gamma) + tan((absAngle-90.0)*DEG2RAD) )) );
-                autoCrop.setWidth( (int)((float)autoCrop.height() * tan(gamma)) );
-           }
+            if (nHeight > nWidth)
+            {
+                gamma = atan((float)nWidth / (float)nHeight);
 
-           autoCrop.moveCenter( QPoint(nNewWidth/2, nNewHeight/2));
+                if (absAngle < 90.0)
+                {
+                    autoCrop.setHeight( (int)((float)nWidth / cos(absAngle*DEG2RAD) /
+                            ( tan(gamma) + tan(absAngle*DEG2RAD) )) );
+                    autoCrop.setWidth( (int)((float)autoCrop.height() * tan(gamma)) );
+                }
+                else
+                {
+                    autoCrop.setWidth( (int)((float)nWidth / cos((absAngle-90.0)*DEG2RAD) /
+                            ( tan(gamma) + tan((absAngle-90.0)*DEG2RAD) )) );
+                    autoCrop.setHeight( (int)((float)autoCrop.width() * tan(gamma)) );
+                }
+            }
+            else
+            {
+                gamma = atan((float)nHeight / (float)nWidth);
 
-           if (!autoCrop.isValid())
-           {
+                if (absAngle < 90.0)
+                {
+                    autoCrop.setWidth( (int)((float)nHeight / cos(absAngle*DEG2RAD) /
+                            ( tan(gamma) + tan(absAngle*DEG2RAD) )) );
+                    autoCrop.setHeight( (int)((float)autoCrop.width() * tan(gamma)) );
+                }
+                else
+                {
+                    autoCrop.setHeight( (int)((float)nHeight / cos((absAngle-90.0)*DEG2RAD) /
+                            ( tan(gamma) + tan((absAngle-90.0)*DEG2RAD) )) );
+                    autoCrop.setWidth( (int)((float)autoCrop.height() * tan(gamma)) );
+                }
+            }
+
+            autoCrop.moveCenter( QPoint(nNewWidth/2, nNewHeight/2));
+
+            if (!autoCrop.isValid())
+            {
                 m_destImage = Digikam::DImg(m_orgImage.width(), m_orgImage.height(),
-                              m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
+                                            m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
                 m_destImage.fill( Digikam::DColor(m_backgroundColor.rgb(), sixteenBit) );
                 m_newSize = QSize();
-           }
-           else
-           {
+            }
+            else
+            {
                 m_destImage = m_destImage.copy(autoCrop);
                 gamma = atan((float)m_orgH / (float)m_orgW);
 
                 if (absAngle < 90.0)
                 {
                     m_newSize.setWidth( (int)((float)m_orgH / cos(absAngle*DEG2RAD) /
-                                        ( tan(gamma) + tan(absAngle*DEG2RAD) )) );
+                            ( tan(gamma) + tan(absAngle*DEG2RAD) )) );
                     m_newSize.setHeight( (int)((float)m_newSize.width() * tan(gamma)) );
                 }
                 else
                 {
                     m_newSize.setHeight( (int)((float)m_orgH / cos((absAngle-90.0)*DEG2RAD) /
-                                        ( tan(gamma) + tan((absAngle-90.0)*DEG2RAD) )) );
+                            ( tan(gamma) + tan((absAngle-90.0)*DEG2RAD) )) );
                     m_newSize.setWidth( (int)((float)m_newSize.height() * tan(gamma)) );
                 }
-           }
-           break;
+            }
+            break;
         }
         default:   // No auto cropping.
         {
-           m_newSize.setWidth( W );
-           m_newSize.setHeight( H );
-           break;
+            m_newSize.setWidth( W );
+            m_newSize.setHeight( H );
+            break;
         }
     }
 }
