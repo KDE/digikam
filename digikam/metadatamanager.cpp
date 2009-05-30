@@ -416,9 +416,13 @@ void MetadataManagerFileWorker::writeMetadataToFiles(const QList<ImageInfo>& inf
 
         hub.load(info);
         QString filePath = info.filePath();
-        bool fileChanged = hub.write(filePath, MetadataHub::FullWriteIfChanged);
+        bool fileChanged = hub.write(filePath, MetadataHub::FullWrite);
         if (fileChanged)
+        {
             ScanController::instance()->scanFileDirectly(filePath);
+            KUrl url = KUrl::fromPath(filePath);
+            ImageAttributesWatch::instance()->fileMetadataChanged(url);
+        }
 
         d->writtenToOne();
     }
