@@ -127,7 +127,7 @@ void ImageRatingOverlay::updateRating()
 
 void ImageRatingOverlay::slotRatingChanged(int rating)
 {
-    if (m_index.isValid())
+    if (m_widget && m_widget->isVisible() && m_index.isValid())
         emit ratingEdited(m_index, rating);
 }
 
@@ -143,7 +143,7 @@ void ImageRatingOverlay::slotEntered(const QModelIndex& index)
 
 void ImageRatingOverlay::slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
 {
-    if (m_index.isValid() && QItemSelectionRange(topLeft, bottomRight).contains(m_index))
+    if (m_widget && m_widget->isVisible() && QItemSelectionRange(topLeft, bottomRight).contains(m_index))
         updateRating();
 }
 
