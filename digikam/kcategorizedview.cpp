@@ -1473,7 +1473,8 @@ QModelIndex KCategorizedView::moveCursor(CursorAction cursorAction,
         case QAbstractItemView::MoveLeft:
             if (layoutDirection() == Qt::RightToLeft)
             {
-                if (!(d->elementsInfo[current.row() + 1].relativeOffsetToCategory % elementsPerRow))
+                if (current.row() + 1 == d->elementsInfo.size() ||
+                    !(d->elementsInfo[current.row() + 1].relativeOffsetToCategory % elementsPerRow))
                     return current;
 
                 //d->forcedSelectionPosition = d->elementsInfo[current.row() + 1].relativeOffsetToCategory % elementsPerRow;
@@ -1486,7 +1487,8 @@ QModelIndex KCategorizedView::moveCursor(CursorAction cursorAction,
                 return d->proxyModel->index(current.row() + 1, 0);
             }
 
-            if (!(d->elementsInfo[current.row()].relativeOffsetToCategory % elementsPerRow))
+            if (current.row() == 0 || 
+                !(d->elementsInfo[current.row()].relativeOffsetToCategory % elementsPerRow))
                 return current;
 
             //d->forcedSelectionPosition = d->elementsInfo[current.row() - 1].relativeOffsetToCategory % elementsPerRow;
@@ -1501,7 +1503,8 @@ QModelIndex KCategorizedView::moveCursor(CursorAction cursorAction,
         case QAbstractItemView::MoveRight:
             if (layoutDirection() == Qt::RightToLeft)
             {
-                if (!(d->elementsInfo[current.row()].relativeOffsetToCategory % elementsPerRow))
+                if (current.row() == 0 ||
+                    !(d->elementsInfo[current.row()].relativeOffsetToCategory % elementsPerRow))
                     return current;
 
                 //d->forcedSelectionPosition = d->elementsInfo[current.row() - 1].relativeOffsetToCategory % elementsPerRow;
@@ -1514,7 +1517,8 @@ QModelIndex KCategorizedView::moveCursor(CursorAction cursorAction,
                 return d->proxyModel->index(current.row() - 1, 0);
             }
 
-            if (!(d->elementsInfo[current.row() + 1].relativeOffsetToCategory % elementsPerRow))
+            if (current.row() + 1 == d->elementsInfo.size() ||
+                !(d->elementsInfo[current.row() + 1].relativeOffsetToCategory % elementsPerRow))
                 return current;
 
             //d->forcedSelectionPosition = d->elementsInfo[current.row() + 1].relativeOffsetToCategory % elementsPerRow;
