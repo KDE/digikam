@@ -117,7 +117,13 @@ struct PGFPostHeader {
 
 union ROIBlockHeader {
 	ROIBlockHeader(UINT16 v) { val = v; }
-	ROIBlockHeader(UINT32 size, bool end)	{ ASSERT(size < (1 << RLblockSizeLen)); bufferSize = size; tileEnd = end; }
+	ROIBlockHeader(UINT32 size, bool end)
+	{ 
+	    ASSERT(1);
+	    ASSERT(size < (1 << RLblockSizeLen));
+	    bufferSize = size; 
+	    tileEnd = end;
+	}
 
 	UINT16 val;
 	struct {

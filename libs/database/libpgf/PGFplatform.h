@@ -151,7 +151,9 @@ typedef bool (__cdecl *CallbackPtr)(double percent, bool escapeAllowed);
 	#ifdef _DEBUG
 		#define ASSERT(x)	assert(x)
 	#else
-		#if _MSC_VER >= 1300
+		#if defined(__GNUC__)
+			#define ASSERT(ignore)((void) 0)
+		#elif _MSC_VER >= 1300
 			#define ASSERT		__noop
 		#else
 			#define ASSERT ((void)0)
