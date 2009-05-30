@@ -82,6 +82,10 @@ public:
     QRect tagsRect() const;
     QRect actualPixmapRect(qlonglong imageid) const;
 
+    /** Can be used to temporarily disable drawing of the rating.
+     *  Call with QModelIndex() afterwards. */
+    void setRatingEdited(const QModelIndex &index);
+
     // to be called by ImageCategorizedView only
     // NOTE: Once using overlays, it is one-delegate-per-view!
     void installOverlay(ImageDelegateOverlay *overlay);

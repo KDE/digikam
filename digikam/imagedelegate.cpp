@@ -87,8 +87,6 @@ public:
         thumbnailBorderCache.setMaxCost(10);
         squeezedTextCache.setMaxCost(1000);
 
-        editingRating   = false;
-
         thumbSize       = 0;
     }
 
@@ -120,7 +118,7 @@ public:
 
     ThumbnailSize             thumbSize;
 
-    bool                      editingRating;
+    QPersistentModelIndex     editingRating;
 
     QCache<qlonglong, QRect>  actualPixmapRectCache;
     QCache<QString, QPixmap>  thumbnailBorderCache;
@@ -217,6 +215,11 @@ QRect ImageDelegate::tagsRect() const
     return d->tagRect;
 }
 
+void ImageDelegate::setRatingEdited(const QModelIndex &index)
+{
+    d->editingRating = index;
+}
+
 void ImageDelegate::mouseMoved(QMouseEvent *e, const QRect& visualRect, const QModelIndex& index)
 {
     foreach (ImageDelegateOverlay *overlay, d->overlays)
@@ -286,7 +289,7 @@ void ImageDelegate::paint(QPainter * p, const QStyleOptionViewItem& option, cons
     {
         r = d->ratingRect;
 
-        if (!d->editingRating)
+        if (d->editingRating != index)
             p->drawPixmap(r, ratingPixmap(info.rating(), isSelected));
         else
             p->drawPixmap(r, ratingPixmap(-1, isSelected));
