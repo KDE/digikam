@@ -1,19 +1,17 @@
 /* ============================================================
  *
- * This file is a part of digiKam project
- * http://www.digikam.org
+ * This file is a part of kipi-plugins project
+ * http://www.kipi-plugins.org
  *
- * Date        : 2009-05-29
- * Description : database thumbnail interface.
+ * Date        : 2009-02-04
+ * Description : a command line tool to test qt PGF interface
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com> 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
- * either version 2, or (at your option)
- * any later version.
+ * either version 2, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -22,78 +20,48 @@
  *
  * ============================================================ */
 
-#include "thumbnaildb.h"
+// Qt includes.
 
-// Qt includes
-
-#include <QFile>
-#include <QFileInfo>
-#include <QDir>
 #include <QImage>
+#include <QString>
 #include <QByteArray>
 
-// KDE includes
+// KDE includes.
 
-#include <kdebug.h>
-#include <klocale.h>
+#include "kdebug.h"
 
 // LibPGF includes
 
 #include "PGFimage.h"
 
-// Local includes
+/** PGF image data to QImage */
+static bool readPGFImageData(const QByteArray& data, QImage& img);
+/** QImage to PGF image data */
+static bool writePGFImageData(const QImage& img, QByteArray& data);
 
-#include "databasebackend.h"
-#include "collectionmanager.h"
-#include "collectionlocation.h"
-
-namespace Digikam
+int main(int /*argc*/, char** /*argv*/)
 {
+    QImage     img;
+    QByteArray data;
 
-class ThumbnailDBPriv
-{
-
-public:
-
-    ThumbnailDBPriv()
+    img.load("test.png");
+    if (!writePGFImageData(img, data))
     {
-        db = 0;
+        kDebug(50003) << "writePGFImageData failed..." << endl;
+        return -1;
     }
 
-    DatabaseBackend *db;
-};
+    if (!readPGFImageData(data, img))
+    {
+        kDebug(50003) << "readPGFImageData failed..." << endl;
+        return -1;
+    }
+    img.save("result.png", "PNG");
 
-ThumbnailDB::ThumbnailDB(DatabaseBackend *backend)
-           : d(new ThumbnailDBPriv)
-{
-    d->db = backend;
+    return 0;
 }
 
-ThumbnailDB::~ThumbnailDB()
-{
-    delete d;
-}
-
-void ThumbnailDB::setSetting(const QString& keyword, const QString& value )
-{
-    d->db->execSql( QString("REPLACE into Settings VALUES (?,?);"),
-                    keyword, value );
-}
-
-QString ThumbnailDB::getSetting(const QString& keyword)
-{
-    QList<QVariant> values;
-    d->db->execSql( QString("SELECT value FROM Settings "
-                            "WHERE keyword=?;"),
-                    keyword, &values );
-
-    if (values.isEmpty())
-        return QString();
-    else
-        return values.first().toString();
-}
-
-bool ThumbnailDB::readPGFImageData(const QByteArray& data, QImage& img)
+bool readPGFImageData(const QByteArray& data, QImage& img)
 {
     try
     {
@@ -124,7 +92,7 @@ bool ThumbnailDB::readPGFImageData(const QByteArray& data, QImage& img)
     return true;
 }
 
-bool ThumbnailDB::writePGFImageData(const QImage& img, QByteArray& data)
+bool writePGFImageData(const QImage& img, QByteArray& data)
 {
     try
     {
@@ -145,7 +113,7 @@ bool ThumbnailDB::writePGFImageData(const QImage& img, QByteArray& data)
         header.bpp      = 8;
         header.channels = 3;
         header.quality  = 10;
-        header.mode     = ImageModeRGBColor;    
+        header.mode     = ImageModeRGBColor;
         header.background.rgbtBlue = header.background.rgbtGreen = header.background.rgbtRed = 0;
         pgfImg.SetHeader(header);
 
@@ -169,5 +137,3 @@ bool ThumbnailDB::writePGFImageData(const QImage& img, QByteArray& data)
 
     return true;
 }
-
-}  // namespace Digikam

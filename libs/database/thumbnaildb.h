@@ -63,9 +63,9 @@ private:
     ~ThumbnailDB();
 
     /** PGF image data to QImage */
-    bool readPGFImageData(const QByteArray& data, QImage& img);
+    static bool readPGFImageData(const QByteArray& data, QImage& img);
     /** QImage to PGF image data */
-    bool writePGFImageData(const QImage& img, QByteArray& data);
+    static bool writePGFImageData(const QImage& img, QByteArray& data);
 
 private:
 
