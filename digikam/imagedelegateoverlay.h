@@ -91,15 +91,26 @@ class AbstractWidgetDelegateOverlay : public ImageDelegateOverlay
 
 public:
 
+    /** This class provides functionality for using a widget in an overlay.
+     *  You must reimplement at least createWidget to return your widget.
+     *  Per default it will be shown when the cursor enters an index and hidden when left.
+     *  Reimplement slotEntered() and mouseMove() for more fine grained control. */
     AbstractWidgetDelegateOverlay(QObject *parent);
 
-    /** Will call createWidget(). */
+    /** If active is true, this will call createWidget(), initialize the widget for use,
+     *  and setup connections for the virtual slots.
+     *  If active is false, this will delete the widget and
+     *  disconnect all signal from model and view to this object (!) */
     virtual void setActive(bool active);
 
 protected:
 
-    /** Create your widget here. Pass view() as parent. */
+    /** Create your widget here. When creating the object, pass parentWidget() as parent widget.
+     *  Ownership of the object is passed. It will be deleted in setActive(false). */
     virtual QWidget *createWidget() = 0;
+    /** Called when the widget shall be hidden (mouse cursor left index, viewport, uninstalled etc.).
+     *  Default implementation hide()s m_widget. */
+    virtual void hide();
 
     /// Returns the widget to be used as parent for your widget created in createWidget()
     QWidget *parentWidget() const;
@@ -108,6 +119,7 @@ protected Q_SLOTS:
 
     /** Default implementation shows or hides the widget if index is valid or not valid */
     virtual void slotEntered(const QModelIndex& index);
+    /** Default implementations of these three slots call hide() */
     virtual void slotReset();
     virtual void slotViewportEntered();
     virtual void slotRowsRemoved(const QModelIndex& parent, int start, int end);

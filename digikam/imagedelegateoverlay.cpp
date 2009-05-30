@@ -132,7 +132,7 @@ void AbstractWidgetDelegateOverlay::setActive(bool active)
         m_widget = createWidget();
 
         m_widget->setFocusPolicy(Qt::NoFocus);
-        m_widget->hide();
+        m_widget->hide(); // hide per default
 
         m_view->viewport()->installEventFilter(this);
         m_widget->installEventFilter(this);
@@ -159,6 +159,12 @@ void AbstractWidgetDelegateOverlay::setActive(bool active)
     }
 }
 
+void AbstractWidgetDelegateOverlay::hide()
+{
+    if (m_widget)
+        m_widget->hide();
+}
+
 QWidget *AbstractWidgetDelegateOverlay::parentWidget() const
 {
     return m_view->viewport();
@@ -166,32 +172,32 @@ QWidget *AbstractWidgetDelegateOverlay::parentWidget() const
 
 void AbstractWidgetDelegateOverlay::slotReset()
 {
+    hide();
 }
 
 void AbstractWidgetDelegateOverlay::slotEntered(const QModelIndex& index)
 {
-    m_widget->hide();
+    hide();
     if (index.isValid())
         m_widget->show();
 }
 
 void AbstractWidgetDelegateOverlay::slotViewportEntered()
 {
-    m_widget->hide();
+    hide();
 }
 
 void AbstractWidgetDelegateOverlay::slotRowsRemoved(const QModelIndex &, int, int)
 {
-    m_widget->hide();
+    hide();
 }
 
 bool AbstractWidgetDelegateOverlay::eventFilter(QObject* obj, QEvent* event)
 {
-    // events on view's viewport
-    if (obj == m_widget->parent()) {
+    if (obj == m_widget->parent()) { // events on view's viewport
         switch (event->type()) {
             case QEvent::Leave:
-                m_widget->hide();
+                hide();
                 break;
 
             case QEvent::MouseMove:
