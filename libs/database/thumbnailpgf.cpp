@@ -53,6 +53,14 @@ bool ThumbnailPGF::readPGFImageData(const QByteArray& data, QImage& img)
             return false;
         }
 
+        const PGFHeader* header = pgfImg.GetHeader();
+        kDebug(50003) << "PGF width    = " << header->width    << endl;
+        kDebug(50003) << "PGF height   = " << header->height   << endl;
+        kDebug(50003) << "PGF bbp      = " << header->bpp      << endl;
+        kDebug(50003) << "PGF channels = " << header->channels << endl;
+        kDebug(50003) << "PGF quality  = " << header->quality  << endl;
+        kDebug(50003) << "PGF mode     = " << header->mode     << endl;
+
         img = QImage(pgfImg.Width(), pgfImg.Height(), QImage::Format_RGB32);
         pgfImg.Read();
         pgfImg.GetBitmap(img.bytesPerLine(), (UINT8*)img.bits(), 8);
