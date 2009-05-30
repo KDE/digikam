@@ -49,7 +49,6 @@ int main(int /*argc*/, char** /*argv*/)
 
     // QImage => PGF conversion
 
-
     img.load("test.png");
     if (!ThumbnailPGF::writePGFImageData(img, data, 3))
     {

@@ -81,7 +81,8 @@ bool ThumbnailPGF::writePGFImageData(const QImage& img, QByteArray& data, int qu
         }
 
         // No need Alpha to optimize space on DB.
-        img.convertToFormat(QImage::Format_RGB32);
+        if (img.format() != QImage::Format_ARGB32)
+            img.convertToFormat(QImage::Format_ARGB32);
 
         CPGFImage pgfImg;
 
