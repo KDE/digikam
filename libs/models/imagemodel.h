@@ -186,16 +186,17 @@ protected:
     virtual void imageInfosCleared() {};
 
     void emitDataChangedForAll();
-    void emitDataChangedForSelection(const QItemSelection &selection);
+    void emitDataChangedForSelection(const QItemSelection& selection);
 
 protected Q_SLOTS:
-
-    void appendInfos(const QList<ImageInfo>& infos);
 
     virtual void slotImageChange(const ImageChangeset& changeset);
     virtual void slotImageTagChange(const ImageTagChangeset& changeset);
 
 private:
+
+    void appendInfos(const QList<ImageInfo>& infos);
+    void publiciseInfos(const QList<ImageInfo>& infos);
 
     ImageModelPriv *const d;
 };

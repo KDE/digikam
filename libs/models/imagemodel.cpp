@@ -258,13 +258,7 @@ void ImageModel::addImageInfos(const QList<ImageInfo>& infos)
         return;
 
     if (d->incrementalUpdater)
-    {
         d->incrementalUpdater->appendInfos(infos);
-        return;
-    }
-
-    if (d->preprocessor)
-        emit preprocess(infos);
     else
         appendInfos(infos);
 }
@@ -309,7 +303,7 @@ void ImageModel::emitDataChangedForAll()
     emit dataChanged(first, last);
 }
 
-void ImageModel::emitDataChangedForSelection(const QItemSelection &selection)
+void ImageModel::emitDataChangedForSelection(const QItemSelection& selection)
 {
     if (!selection.isEmpty())
     {
@@ -331,16 +325,28 @@ void ImageModel::unsetPreprocessor(QObject *preprocessor)
     if (preprocessor && d->preprocessor == preprocessor)
     {
         disconnect(this, SIGNAL(preprocess(const QList<ImageInfo> &)), 0, 0);
-        disconnect(d->preprocessor, 0, this, SLOT(appendInfos(const QList<ImageInfo> &)));
+        disconnect(d->preprocessor, 0, this, SLOT(reAddImageInfos(const QList<ImageInfo> &)));
     }
+}
+
+void ImageModel::appendInfos(const QList<ImageInfo>& infos)
+{
+    if (infos.isEmpty())
+        return;
+
+    if (d->preprocessor)
+        emit preprocess(infos);
+    else
+        publiciseInfos(infos);
 }
 
 void ImageModel::reAddImageInfos(const QList<ImageInfo>& infos)
 {
-    appendInfos(infos);
+    // addImageInfos -> appendInfos -> preprocessor -> reAddImageInfos
+    publiciseInfos(infos);
 }
 
-void ImageModel::appendInfos(const QList<ImageInfo>& infos)
+void ImageModel::publiciseInfos(const QList<ImageInfo>& infos)
 {
     if (infos.isEmpty())
         return;
