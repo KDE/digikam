@@ -53,6 +53,7 @@
 #include "imagealbummodel.h"
 #include "imagealbumfiltermodel.h"
 #include "imagedragdrop.h"
+#include "imageratingoverlay.h"
 #include "imageviewutilities.h"
 #include "imagewindow.h"
 #include "metadatamanager.h"
@@ -87,6 +88,9 @@ DigikamImageView::DigikamImageView(QWidget *parent)
 
     setToolTipEnabled(AlbumSettings::instance()->getShowToolTips());
 
+    ImageRatingOverlay *ratingOverlay = new ImageRatingOverlay(this);
+    addOverlay(ratingOverlay);
+
     d->utilities = new ImageViewUtilities(this);
 
     connect(d->utilities, SIGNAL(editorCurrentUrlChanged(const KUrl &)),
@@ -94,6 +98,9 @@ DigikamImageView::DigikamImageView(QWidget *parent)
 
     connect(imageModel()->dragDropHandler(), SIGNAL(dioResult(KJob *)),
             d->utilities, SLOT(slotDIOResult(KJob*)));
+
+    connect(ratingOverlay, SIGNAL(ratingEdited(const QModelIndex &, int)),
+            this, SLOT(assignRating(const QModelIndex &,int)));
 }
 
 DigikamImageView::~DigikamImageView()
@@ -312,6 +319,11 @@ void DigikamImageView::removeTagFromSelected(int tagID)
 void DigikamImageView::assignRatingToSelected(int rating)
 {
     MetadataManager::instance()->assignRating(selectedImageInfos(), rating);
+}
+
+void DigikamImageView::assignRating(const QModelIndex &index, int rating)
+{
+    MetadataManager::instance()->assignRating(QList<ImageInfo>() << imageFilterModel()->imageInfo(index), rating);
 }
 
 void DigikamImageView::setAsAlbumThumbnail(const ImageInfo& setAsThumbnail)

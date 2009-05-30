@@ -72,6 +72,8 @@ public Q_SLOTS:
     void setExifOrientationOfSelected(int orientation);
     void renameCurrent();
 
+    void assignRating(const QModelIndex &index, int rating);
+
 Q_SIGNALS:
 
     void previewRequested(const ImageInfo& info);

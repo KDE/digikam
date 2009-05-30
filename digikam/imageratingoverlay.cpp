@@ -58,45 +58,93 @@ QWidget *ImageRatingOverlay::createWidget()
     return new RatingBox(parentWidget());
 }
 
-void ImageRatingOverlay::mouseMoved(QMouseEvent *e, const QRect& visualRect, const QModelIndex&)
+void ImageRatingOverlay::setActive(bool active)
 {
+    AbstractWidgetDelegateOverlay::setActive(active);
+
+    if (active)
+    {
+        connect(ratingBox(), SIGNAL(signalRatingChanged(int)),
+                this, SLOT(slotRatingChanged(int)));
+
+        connect(view()->model(), SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
+                this, SLOT(slotDataChanged(const QModelIndex &, const QModelIndex &)));
+    }
+}
+
+void ImageRatingOverlay::mouseMoved(QMouseEvent *e, const QRect& visualRect, const QModelIndex &index)
+{
+    if (index != m_index)
+        return;
+
     QRect rect = delegate()->ratingRect();
     rect.translate(visualRect.topLeft());
 
     if (rect.contains(e->pos()))
+    {
+        delegate()->setRatingEdited(m_index);
+        view()->update(m_index);
         m_widget->show();
+    }
     else
-        m_widget->hide();
+    {
+        hide();
+    }
 }
 
 void ImageRatingOverlay::visualChange()
 {
     if (m_widget && m_widget->isVisible())
-        updateBox(m_index);
+        updatePosition();
 }
 
-void ImageRatingOverlay::updateBox(const QModelIndex& index)
+void ImageRatingOverlay::hide()
 {
+    delegate()->setRatingEdited(QModelIndex());
+    AbstractWidgetDelegateOverlay::hide();
+}
+
+void ImageRatingOverlay::updatePosition()
+{
+    if (!m_index.isValid())
+        return;
+
     QRect rect = delegate()->ratingRect();
-    QRect visualRect = m_view->visualRect(index);
+    QRect visualRect = m_view->visualRect(m_index);
     rect.translate(visualRect.topLeft());
 
     m_widget->setFixedSize(rect.width() + 1, rect.height() + 1);
     m_widget->move(rect.topLeft());
 }
 
+void ImageRatingOverlay::updateRating()
+{
+    if (!m_index.isValid())
+        return;
+    ImageInfo info = ImageModel::retrieveImageInfo(m_index);
+    ratingBox()->setRating(info.rating());
+}
+
+void ImageRatingOverlay::slotRatingChanged(int rating)
+{
+    if (m_index.isValid())
+        emit ratingEdited(m_index, rating);
+}
+
 void ImageRatingOverlay::slotEntered(const QModelIndex& index)
 {
-    // do _not_ call base class
+    // do _not_ call base class, which shows the widget
 
     m_index = index;
 
-    if (m_index.isValid())
-    {
-        ImageInfo info = ImageModel::retrieveImageInfo(m_index);
-        ratingBox()->setRating(info.rating());
-        updateBox(m_index);
-    }
+    updatePosition();
+    updateRating();
+}
+
+void ImageRatingOverlay::slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
+{
+    if (m_index.isValid() && QItemSelectionRange(topLeft, bottomRight).contains(m_index))
+        updateRating();
 }
 
 } // namespace Digikam

@@ -50,16 +50,26 @@ public:
 
     RatingBox *ratingBox() const;
 
+Q_SIGNALS:
+
+    void ratingEdited(const QModelIndex &index, int rating);
+
+protected Q_SLOTS:
+
+    void slotRatingChanged(int);
+    void slotDataChanged(const QModelIndex &, const QModelIndex &);
+
 protected:
 
     virtual QWidget *createWidget();
+    virtual void setActive(bool);
     virtual void visualChange();
+    virtual void hide();
     virtual void mouseMoved(QMouseEvent *e, const QRect& visualRect, const QModelIndex& index);
     virtual void slotEntered(const QModelIndex& index);
 
-protected:
-
-    void updateBox(const QModelIndex &index);
+    void updatePosition();
+    void updateRating();
 
     QModelIndex m_index;
 };
