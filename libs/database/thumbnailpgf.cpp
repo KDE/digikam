@@ -90,8 +90,8 @@ bool ThumbnailPGF::writePGFImageData(const QImage& img, QByteArray& data)
         header.height   = img.height();
         header.bpp      = 8;
         header.channels = 3;
-        header.quality  = 10;
-        header.mode     = ImageModeRGBColor;    
+        header.quality  = 3;
+        header.mode     = ImageModeRGBColor;
         header.background.rgbtBlue = header.background.rgbtGreen = header.background.rgbtRed = 0;
         pgfImg.SetHeader(header);
 
