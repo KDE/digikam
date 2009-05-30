@@ -671,6 +671,24 @@ QModelIndex KCategorizedView::categoryAt(const QPoint &point) const
     return QModelIndex();
 }
 
+QItemSelectionRange KCategorizedView::categoryRange(const QModelIndex &index) const
+{
+    if (!d->proxyModel || !d->categoryDrawer || !d->proxyModel->isCategorizedModel())
+    {
+        return QItemSelectionRange();
+    }
+
+    if (!index.isValid())
+    {
+        return QItemSelectionRange();
+    }
+
+    QString category = d->elementsInfo[index.row()].category;
+    QModelIndex first = d->proxyModel->index(d->categoriesIndexes[category].first(), d->proxyModel->sortColumn());
+    QModelIndex last  = d->proxyModel->index(d->categoriesIndexes[category].last(), d->proxyModel->sortColumn());
+    return QItemSelectionRange(first, last);
+}
+
 KCategoryDrawer *KCategorizedView::categoryDrawer() const
 {
     return d->categoryDrawer;

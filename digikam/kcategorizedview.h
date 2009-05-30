@@ -80,6 +80,13 @@ public:
     virtual QModelIndex categoryAt(const QPoint &point) const;
 
     /**
+      * This method returns the range of indexes contained
+      * in the category in which @param index is sorted.
+      * @note Returns an empty range if the view is no categorized.
+      */
+    virtual QItemSelectionRange categoryRange(const QModelIndex &index) const;
+
+    /**
       * Switch on drawing of dragged items. Default: on.
       * While dragging over the view, dragged items will be drawn transparently
       * following the mouse cursor.
