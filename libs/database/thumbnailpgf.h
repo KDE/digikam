@@ -46,7 +46,7 @@ public:
     /** PGF image data to QImage */
     static bool readPGFImageData(const QByteArray& data, QImage& img);
     /** QImage to PGF image data */
-    static bool writePGFImageData(const QImage& img, QByteArray& data);
+    static bool writePGFImageData(const QImage& img, QByteArray& data, int quality);
 };
 
 }  // namespace Digikam

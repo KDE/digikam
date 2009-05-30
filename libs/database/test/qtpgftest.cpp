@@ -51,7 +51,7 @@ int main(int /*argc*/, char** /*argv*/)
 
 
     img.load("test.png");
-    if (!ThumbnailPGF::writePGFImageData(img, data))
+    if (!ThumbnailPGF::writePGFImageData(img, data, 3))
     {
         kDebug(50003) << "writePGFImageData failed..." << endl;
         return -1;
@@ -65,7 +65,7 @@ int main(int /*argc*/, char** /*argv*/)
         kDebug(50003) << "Cannot open PGF file to write..." << endl;
         return -1;
     }
-    QDataStream stream( &file );
+    QDataStream stream(&file);
     stream.writeRawData(data.data(), data.size());
     file.close();
 

@@ -70,7 +70,7 @@ bool ThumbnailPGF::readPGFImageData(const QByteArray& data, QImage& img)
     return true;
 }
 
-bool ThumbnailPGF::writePGFImageData(const QImage& img, QByteArray& data)
+bool ThumbnailPGF::writePGFImageData(const QImage& img, QByteArray& data, int quality)
 {
     try
     {
@@ -88,14 +88,15 @@ bool ThumbnailPGF::writePGFImageData(const QImage& img, QByteArray& data)
         PGFHeader header;
         header.width    = img.width();
         header.height   = img.height();
-        header.bpp      = 8;
+        header.bpp      = img.depth();
         header.channels = 3;
-        header.quality  = 3;
+        header.quality  = quality;
         header.mode     = ImageModeRGBColor;
         header.background.rgbtBlue = header.background.rgbtGreen = header.background.rgbtRed = 0;
         pgfImg.SetHeader(header);
 
-        pgfImg.ImportBitmap(img.bytesPerLine(), (UINT8*)img.bits(), 8);
+        int channelMap[] = { 3, 2, 1 };
+        pgfImg.ImportBitmap(img.bytesPerLine(), (UINT8*)img.bits(), 8, channelMap);
 
         // TODO : optimize memory allocation...
         CPGFMemoryStream stream(256000);
