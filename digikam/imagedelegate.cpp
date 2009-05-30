@@ -49,6 +49,7 @@
 #include "albumsettings.h"
 #include "constants.h"
 #include "imagecategorydrawer.h"
+#include "imagecategorizedview.h"
 #include "imagedelegateoverlay.h"
 #include "imagemodel.h"
 #include "imagefiltermodel.h"
@@ -129,7 +130,7 @@ public:
                               overlays;
 };
 
-ImageDelegate::ImageDelegate(QObject *parent)
+ImageDelegate::ImageDelegate(ImageCategorizedView *parent)
              : QAbstractItemDelegate(parent), d(new ImageDelegatePriv)
 {
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
@@ -138,7 +139,7 @@ ImageDelegate::ImageDelegate(QObject *parent)
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
 
-    d->categoryDrawer = new ImageCategoryDrawer;
+    d->categoryDrawer = new ImageCategoryDrawer(parent);
 }
 
 ImageDelegate::~ImageDelegate()

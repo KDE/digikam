@@ -50,7 +50,7 @@ class ImageDelegate : public QAbstractItemDelegate
 
 public:
 
-    ImageDelegate(QObject *parent = 0);
+    ImageDelegate(ImageCategorizedView *parent);
     ~ImageDelegate();
 
     virtual void paint(QPainter * painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
@@ -87,7 +87,6 @@ public:
     void setRatingEdited(const QModelIndex &index);
 
     // to be called by ImageCategorizedView only
-    // NOTE: Once using overlays, it is one-delegate-per-view!
     void installOverlay(ImageDelegateOverlay *overlay);
     void removeOverlay(ImageDelegateOverlay *overlay);
     void removeAllOverlays();

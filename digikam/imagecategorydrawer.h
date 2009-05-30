@@ -37,13 +37,14 @@ class QStyleOptionViewItem;
 namespace Digikam
 {
 
+class ImageCategorizedView;
 class ImageCategoryDrawerPriv;
 
 class ImageCategoryDrawer : public KCategoryDrawer
 {
 public:
 
-    ImageCategoryDrawer();
+    ImageCategoryDrawer(ImageCategorizedView *parent);
     ~ImageCategoryDrawer();
 
     virtual int categoryHeight(const QModelIndex& index, const QStyleOption& option) const;

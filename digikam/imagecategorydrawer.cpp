@@ -37,6 +37,7 @@
 
 #include "album.h"
 #include "albummanager.h"
+#include "imagecategorizedview.h"
 #include "imagedelegate.h"
 #include "imagefiltermodel.h"
 #include "themeengine.h"
@@ -51,17 +52,20 @@ public:
     ImageCategoryDrawerPriv()
     {
         lowerSpacing = 0;
+        view         = 0;
     }
 
-    QFont   font;
-    QRect   rect;
-    QPixmap pixmap;
-    int     lowerSpacing;
+    QFont                 font;
+    QRect                 rect;
+    QPixmap               pixmap;
+    int                   lowerSpacing;
+    ImageCategorizedView  *view;
 };
 
-ImageCategoryDrawer::ImageCategoryDrawer()
+ImageCategoryDrawer::ImageCategoryDrawer(ImageCategorizedView *parent)
                    : d(new ImageCategoryDrawerPriv)
 {
+    d->view = parent;
 }
 
 ImageCategoryDrawer::~ImageCategoryDrawer()
@@ -162,7 +166,7 @@ void ImageCategoryDrawer::textForAlbum(const QModelIndex& index, QString *header
 
     if (album)
     {
-        int count  = index.data(ImageFilterModel::CategoryCountRole).toInt();
+        int count  = d->view->categoryRange(index).height();
         QDate date = album->date();
 
         KLocale tmpLocale(*KGlobal::locale());
