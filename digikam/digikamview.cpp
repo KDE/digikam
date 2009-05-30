@@ -88,8 +88,10 @@
 #include "imagepreviewview.h"
 #include "imagepropertiessidebardb.h"
 #include "imageviewutilities.h"
+#include "loadingcacheinterface.h"
 #include "metadatamanager.h"
 #include "queuemgrwindow.h"
+#include "scancontroller.h"
 #include "searchfolderview.h"
 #include "searchtabheader.h"
 #include "sidebar.h"
@@ -1147,8 +1149,14 @@ void DigikamView::slotAlbumOpenInKonqui()
 
 void DigikamView::slotAlbumRefresh()
 {
-    //TODO: Decide what to do with refresh()
-    //d->iconView->refreshItems(d->iconView->allItems());
+    // force reloading of thumbnails
+    LoadingCacheInterface::cleanThumbnailCache();
+    Album *album = d->iconView->currentAlbum();
+    // if physical album, schedule a collection scan of current album's path
+    if (album && album->type() == Album::PHYSICAL)
+        ScanController::instance()->scheduleCollectionScan(static_cast<PAlbum*>(album)->folderPath());
+    // force reload. Should normally not be necessary, but we may have bugs
+    d->iconView->imageModel()->refresh();
 }
 
 void DigikamView::slotImageSelected()
