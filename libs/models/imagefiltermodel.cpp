@@ -185,8 +185,8 @@ QVariant ImageFilterModel::data(const QModelIndex& index, int role) const
             return d->categorizationMode;
         case SortOrderRole:
             return d->sortOrder;
-        case CategoryCountRole:
-            return categoryCount(d->imageModel->imageInfoRef(mapToSource(index)));
+        //case CategoryCountRole:
+          //  return categoryCount(d->imageModel->imageInfoRef(mapToSource(index)));
         case CategoryAlbumIdRole:
             return d->imageModel->imageInfoRef(mapToSource(index)).albumId();
         case CategoryFormatRole:
@@ -344,8 +344,8 @@ void ImageFilterModel::setImageFilterSettings(const ImageFilterSettings& setting
     d->filterResults.clear();
     d->hasOneMatch = false;
     d->hasOneMatchForText = false;
-    d->categoryCountHashInt.clear();
-    d->categoryCountHashString.clear();
+    //d->categoryCountHashInt.clear();
+    //d->categoryCountHashString.clear();
     if (d->imageModel)
         d->infosToProcess(d->imageModel->imageInfos(), false);
     emit filterSettingsChanged(settings);
@@ -381,8 +381,8 @@ void ImageFilterModel::slotModelReset()
     // cause all packages on the way to be discarded
     d->version++;
 
-    d->categoryCountHashInt.clear();
-    d->categoryCountHashString.clear();
+    //d->categoryCountHashInt.clear();
+    //d->categoryCountHashString.clear();
 }
 
 bool ImageFilterModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
@@ -613,8 +613,8 @@ void ImageFilterModel::setCategorizationMode(ImageFilterModel::CategorizationMod
         return;
     d->categorizationMode = mode;
     setCategorizedModel(mode != NoCategories);
-    d->categoryCountHashInt.clear();
-    d->categoryCountHashString.clear();
+    //d->categoryCountHashInt.clear();
+    //d->categoryCountHashString.clear();
     invalidate();
 }
 
@@ -670,9 +670,11 @@ int ImageFilterModel::compareInfosCategories(const ImageInfo& left, const ImageI
         {
             int leftAlbum = left.albumId();
             int rightAlbum = right.albumId();
+
             // update count hash
-            d->cacheCategoryCount(leftAlbum, left.id());
-            d->cacheCategoryCount(rightAlbum, right.id());
+            //d->cacheCategoryCount(leftAlbum, left.id());
+            //d->cacheCategoryCount(rightAlbum, right.id());
+
             // return comparation result
             if (leftAlbum == rightAlbum)
                 return 0;
@@ -686,8 +688,8 @@ int ImageFilterModel::compareInfosCategories(const ImageInfo& left, const ImageI
             QString leftFormat = left.format();
             QString rightFormat = right.format();
 
-            d->cacheCategoryCount(leftFormat, left.id());
-            d->cacheCategoryCount(rightFormat, right.id());
+            //d->cacheCategoryCount(leftFormat, left.id());
+            //d->cacheCategoryCount(rightFormat, right.id());
 
             return KStringHandler::naturalCompare(leftFormat, rightFormat);
         }
@@ -696,6 +698,7 @@ int ImageFilterModel::compareInfosCategories(const ImageInfo& left, const ImageI
     }
 }
 
+/*
 int ImageFilterModel::categoryCount(const ImageInfo& info) const
 {
     Q_D(const ImageFilterModel);
@@ -712,6 +715,7 @@ int ImageFilterModel::categoryCount(const ImageInfo& info) const
             return 0;
     }
 }
+*/
 
 // Feel free to optimize. QString::number is 3x slower.
 static inline QString fastNumberToString(int id)

@@ -55,12 +55,12 @@ public:
         CategorizationModeRole = ImageModel::FilterModelRoles + 1,
         /// Returns the current sort order
         SortOrderRole          = ImageModel::FilterModelRoles + 2,
-        /// Returns the number of items in the index' category
-        CategoryCountRole      = ImageModel::FilterModelRoles + 3,
+        // / Returns the number of items in the index' category
+        //CategoryCountRole      = ImageModel::FilterModelRoles + 3,
         /// Returns the id of the PAlbum of the index which is used for category
-        CategoryAlbumIdRole    = ImageModel::FilterModelRoles + 4,
+        CategoryAlbumIdRole    = ImageModel::FilterModelRoles + 3,
         /// Returns the format of the PAlbum of the index which is used for category
-        CategoryFormatRole     = ImageModel::FilterModelRoles + 5,
+        CategoryFormatRole     = ImageModel::FilterModelRoles + 4,
         ImageFilterModelPointerRole  = ImageModel::FilterModelRoles + 50
     };
 
@@ -158,7 +158,7 @@ protected:
 
     virtual int  compareCategories(const QModelIndex& left, const QModelIndex& right) const;
     virtual bool subSortLessThan(const QModelIndex& left, const QModelIndex& right) const;
-    virtual int  categoryCount(const ImageInfo& info) const;
+    //virtual int  categoryCount(const ImageInfo& info) const;
 
     /** Reimplement to customize category sorting,
      *  Return negative if category of left < category right,

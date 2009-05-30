@@ -110,8 +110,8 @@ int ImageAlbumFilterModel::compareInfosCategories(const ImageInfo& left, const I
             int leftAlbumId = left.albumId();
             int rightAlbumId = right.albumId();
 
-            d->cacheCategoryCount(leftAlbumId, left.id());
-            d->cacheCategoryCount(rightAlbumId, right.id());
+            //d->cacheCategoryCount(leftAlbumId, left.id());
+            //d->cacheCategoryCount(rightAlbumId, right.id());
 
             PAlbum *leftAlbum = AlbumManager::instance()->findPAlbum(leftAlbumId);
             PAlbum *rightAlbum = AlbumManager::instance()->findPAlbum(rightAlbumId);

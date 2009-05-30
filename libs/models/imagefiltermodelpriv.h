@@ -108,7 +108,7 @@ public:
     bool                       hasOneMatch;
     bool                       hasOneMatchForText;
 
-    QHash<int, QSet<qlonglong> >
+    /*QHash<int, QSet<qlonglong> >
                                categoryCountHashInt;
     QHash<QString, QSet<qlonglong> >
                                categoryCountHashString;
@@ -116,7 +116,7 @@ public:
     void cacheCategoryCount(int id, qlonglong imageid) const
     { const_cast<ImageFilterModelPrivate*>(this)->categoryCountHashInt[id].insert(imageid); }
     void cacheCategoryCount(const QString& id, qlonglong imageid) const
-    { const_cast<ImageFilterModelPrivate*>(this)->categoryCountHashString[id].insert(imageid); }
+    { const_cast<ImageFilterModelPrivate*>(this)->categoryCountHashString[id].insert(imageid); }*/
 
 public Q_SLOTS:
 
