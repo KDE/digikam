@@ -93,7 +93,8 @@ public:
         scrollToItemId     = 0;
         currentMouseEvent  = 0;
         showToolTip        = false;
-        ensureOneSelectedItem = false;
+        ensureOneSelectedItem     = false;
+        ensureInitialSelectedItem = false;
     }
 
     ImageAlbumModel         *model;
@@ -108,6 +109,7 @@ public:
 
     QMouseEvent             *currentMouseEvent;
     bool                     ensureOneSelectedItem;
+    bool                     ensureInitialSelectedItem;
 };
 
 // -------------------------------------------------------------------------------
@@ -497,6 +499,8 @@ void ImageCategorizedView::reset()
 
     emit selectionChanged();
     emit selectionCleared();
+
+    d->ensureInitialSelectedItem = true;
 }
 
 void ImageCategorizedView::currentChanged(const QModelIndex& index, const QModelIndex& previous)
@@ -517,18 +521,29 @@ void ImageCategorizedView::selectionChanged(const QItemSelection& selectedItems,
         emit deselected(d->filterModel->imageInfos(deselectedItems.indexes()));
     if (!selectionModel()->hasSelection())
         emit selectionCleared();
+    userInteraction();
+}
+
+void ImageCategorizedView::rowsInserted(const QModelIndex &parent, int start, int end)
+{
+    KCategorizedView::rowsInserted(parent, start, end);
+    if (start == 0)
+        ensureSelectionAfterChanges();
 }
 
 void ImageCategorizedView::rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end)
 {
     KCategorizedView::rowsAboutToBeRemoved(parent, start, end);
 
-    // Ensure one current item
-    QModelIndex current = currentIndex();
-    if (current.isValid() && current.row() >= start && current.row() <= end)
+    // Ensure one selected item
+    int totalToRemove = end - start + 1;
+    if (selectionModel()->hasSelection() && model()->rowCount(parent) > totalToRemove)
     {
-        int totalToRemove = end - start + 1;
-        if (model()->rowCount(parent) > totalToRemove)
+        // find out which selected indexes are left after rows are removed
+        QItemSelection selected = selectionModel()->selection();
+        QItemSelection removed(model()->index(start, 0), model()->index(end, 0));
+        selected.merge(removed, QItemSelectionModel::Deselect);
+        if (selected.isEmpty())
         {
             selectionModel()->select(model()->index(start > 0 ? start - 1 : end + 1, 0),
                                      QItemSelectionModel::SelectCurrent);
@@ -544,9 +559,40 @@ void ImageCategorizedView::layoutAboutToBeChanged()
 void ImageCategorizedView::layoutWasChanged()
 {
     // connected queued to layoutChanged()
-    // ensure we have a selection if there was one before
-    if (d->ensureOneSelectedItem)
+    ensureSelectionAfterChanges();
+    d->ensureOneSelectedItem = false;
+}
+
+void ImageCategorizedView::userInteraction()
+{
+    // as soon as the user did anything affecting selection, we don't interfer anymore
+    d->ensureInitialSelectedItem = false;
+}
+
+void ImageCategorizedView::ensureSelectionAfterChanges()
+{
+    if (d->ensureInitialSelectedItem && model()->rowCount())
     {
+        // Ensure the item (0,0) is selected, if the model was reset previously
+        // and the user did not change the selection since reset.
+        // Caveat: Item at (0,0) may have changed.
+        bool hadInitial = d->ensureInitialSelectedItem;
+        d->ensureInitialSelectedItem = false;
+
+        QModelIndex index = model()->index(0,0);
+        if (index.isValid())
+        {
+            selectionModel()->select(index, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Clear);
+            // we want ensureInitial set to false if and only if the selection
+            // is done from any other place than the previous line (i.e., by user action)
+            // Effect: we select whatever is the current index(0,0)
+            if (hadInitial)
+                d->ensureInitialSelectedItem = true;
+        }
+    }
+    else if (d->ensureOneSelectedItem)
+    {
+        // ensure we have a selection if there was one before
         d->ensureOneSelectedItem = false;
         if (model()->rowCount() && selectionModel()->selection().isEmpty())
         {
@@ -564,7 +610,6 @@ Album *ImageCategorizedView::albumAt(const QPoint& pos)
     if (d->filterModel->categorizationMode() == ImageFilterModel::CategoryByAlbum)
     {
         QModelIndex categoryIndex = indexForCategoryAt(pos);
-        kDebug() << categoryIndex;
         if (categoryIndex.isValid())
         {
             int albumId = categoryIndex.data(ImageFilterModel::CategoryAlbumIdRole).toInt();
@@ -679,6 +724,7 @@ void ImageCategorizedView::paste()
 
 void ImageCategorizedView::contextMenuEvent(QContextMenuEvent* event)
 {
+    userInteraction();
     QModelIndex index = indexAt(event->pos());
     if (index.isValid())
     {
@@ -691,6 +737,7 @@ void ImageCategorizedView::contextMenuEvent(QContextMenuEvent* event)
 
 void ImageCategorizedView::mousePressEvent(QMouseEvent *event)
 {
+    userInteraction();
     const QModelIndex index = indexAt(event->pos());
 
     // Clear selection on click on empty area. Standard behavior, but not done by QAbstractItemView for some reason.
@@ -712,6 +759,7 @@ void ImageCategorizedView::mousePressEvent(QMouseEvent *event)
 
 void ImageCategorizedView::mouseReleaseEvent(QMouseEvent *event)
 {
+    userInteraction();
     d->currentMouseEvent = event;
     KCategorizedView::mouseReleaseEvent(event);
     d->currentMouseEvent = 0;
@@ -762,6 +810,7 @@ void ImageCategorizedView::wheelEvent(QWheelEvent* event)
 
 void ImageCategorizedView::keyPressEvent(QKeyEvent *event)
 {
+    userInteraction();
     if (event == QKeySequence::Copy)
     {
         copy();

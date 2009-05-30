@@ -183,6 +183,7 @@ protected:
     void resizeEvent(QResizeEvent *e);
     void reset();
     void rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end);
+    void rowsInserted(const QModelIndex &parent, int start, int end);
     void selectionChanged(const QItemSelection &, const QItemSelection &);
     void startDrag(Qt::DropActions supportedActions);
     bool viewportEvent(QEvent *event);
@@ -197,6 +198,8 @@ private:
 
     void updateDelegateSizes();
     void scrollToStoredItem();
+    void userInteraction();
+    void ensureSelectionAfterChanges();
 
 private:
 
