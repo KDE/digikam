@@ -23,8 +23,10 @@
 // Qt includes.
 
 #include <QImage>
-#include <QString>
+#include <QFile>
+#include <QIODevice>
 #include <QByteArray>
+#include <QDataStream>
 
 // KDE includes.
 
@@ -45,12 +47,29 @@ int main(int /*argc*/, char** /*argv*/)
     QImage     img;
     QByteArray data;
 
+    // QImage => PGF conversion
+
+
     img.load("test.png");
     if (!ThumbnailPGF::writePGFImageData(img, data))
     {
         kDebug(50003) << "writePGFImageData failed..." << endl;
         return -1;
     }
+
+    // Write PGF file.
+
+    QFile file("result.pgf");
+    if ( !file.open(QIODevice::WriteOnly) )
+    {
+        kDebug(50003) << "Cannot open PGF file to write..." << endl;
+        return -1;
+    }
+    QDataStream stream( &file );
+    stream.writeRawData(data.data(), data.size());
+    file.close();
+
+    // PGF => QImage conversion
 
     if (!ThumbnailPGF::readPGFImageData(data, img))
     {
