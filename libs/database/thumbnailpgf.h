@@ -40,9 +40,9 @@ namespace Digikam
 {
 
     /** PGF image data to QImage */
-    DIGIKAM_DATABASE_EXPORT bool readPGFImageData(const QByteArray& data, QImage& img);
+    bool readPGFImageData(const QByteArray& data, QImage& img);
     /** QImage to PGF image data */
-    DIGIKAM_DATABASE_EXPORT bool writePGFImageData(const QImage& img, QByteArray& data, int quality);
+    bool writePGFImageData(const QImage& img, QByteArray& data, int quality);
 
 }  // namespace Digikam
 

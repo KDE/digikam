@@ -8,7 +8,7 @@ FOREACH(_curentfile ${libpgf_SRCS})
 ENDFOREACH(_curentfile ${libpgf_SRCS})
 
 SET(qtpgftest_SRCS qtpgftest.cpp
-                   ../thumbnailpgf.cpp
+                   ${CMAKE_CURRENT_SOURCE_DIR}/../thumbnailpgf.cpp
                    ${libpgf_SRCS}
    )
 
