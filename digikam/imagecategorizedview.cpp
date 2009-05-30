@@ -680,6 +680,8 @@ QModelIndex ImageCategorizedView::moveCursor(CursorAction cursorAction, Qt::Keyb
             QModelIndex next = d->filterModel->index(current.row() + 1, 0);
             if (next.isValid())
                 return next;
+            else
+                return current;
             break;
         }
         case MovePrevious:
@@ -688,6 +690,8 @@ QModelIndex ImageCategorizedView::moveCursor(CursorAction cursorAction, Qt::Keyb
             QModelIndex previous = d->filterModel->index(current.row() - 1, 0);
             if (previous.isValid())
                 return previous;
+            else
+                return current;
             break;
         }
         default:
