@@ -50,7 +50,7 @@ int main(int /*argc*/, char** /*argv*/)
     // QImage => PGF conversion
 
     img.load("test.png");
-    if (!ThumbnailPGF::writePGFImageData(img, data, 3))
+    if (!writePGFImageData(img, data, 3))
     {
         kDebug(50003) << "writePGFImageData failed..." << endl;
         return -1;
@@ -70,7 +70,7 @@ int main(int /*argc*/, char** /*argv*/)
 
     // PGF => QImage conversion
 
-    if (!ThumbnailPGF::readPGFImageData(data, img))
+    if (!readPGFImageData(data, img))
     {
         kDebug(50003) << "readPGFImageData failed..." << endl;
         return -1;

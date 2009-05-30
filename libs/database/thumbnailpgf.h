@@ -39,15 +39,10 @@
 namespace Digikam
 {
 
-class DIGIKAM_DATABASE_EXPORT ThumbnailPGF
-{
-public:
-
     /** PGF image data to QImage */
-    static bool readPGFImageData(const QByteArray& data, QImage& img);
+    DIGIKAM_DATABASE_EXPORT bool readPGFImageData(const QByteArray& data, QImage& img);
     /** QImage to PGF image data */
-    static bool writePGFImageData(const QImage& img, QByteArray& data, int quality);
-};
+    DIGIKAM_DATABASE_EXPORT bool writePGFImageData(const QImage& img, QByteArray& data, int quality);
 
 }  // namespace Digikam
 

@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-bool ThumbnailPGF::readPGFImageData(const QByteArray& data, QImage& img)
+bool readPGFImageData(const QByteArray& data, QImage& img)
 {
     try
     {
@@ -77,7 +77,7 @@ bool ThumbnailPGF::readPGFImageData(const QByteArray& data, QImage& img)
     return true;
 }
 
-bool ThumbnailPGF::writePGFImageData(const QImage& img, QByteArray& data, int quality)
+bool writePGFImageData(const QImage& img, QByteArray& data, int quality)
 {
     try
     {
