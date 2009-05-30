@@ -236,7 +236,7 @@ void DigikamImageView::showContextMenu(QContextMenuEvent* event)
     }
 
     KMenu popmenu(this);
-    KAction *paste        = KStandardAction::paste(this, SLOT(slotPaste()), 0);
+    KAction *paste        = KStandardAction::paste(this, SLOT(paste()), 0);
     const QMimeData *data = kapp->clipboard()->mimeData(QClipboard::Clipboard);
 
     //TODO
