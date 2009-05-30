@@ -119,7 +119,6 @@ union ROIBlockHeader {
 	ROIBlockHeader(UINT16 v) { val = v; }
 	ROIBlockHeader(UINT32 size, bool end)
 	{ 
-	    ASSERT(1);
 	    ASSERT(size < (1 << RLblockSizeLen));
 	    bufferSize = size; 
 	    tileEnd = end;
