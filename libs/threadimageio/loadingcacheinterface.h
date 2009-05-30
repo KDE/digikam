@@ -58,8 +58,14 @@ public:
     /**
      * remove all images from the cache
      * (e.g. when loading settings changed)
+     * Does not affect thumbnails.
      */
     static void cleanCache();
+    /**
+     * Remove all thumbnails from the thumbnail cache.
+     * Does not affect main image cache.
+     */
+    static void cleanThumbnailCache();
     /** add a copy of the image to cache */
     static void putImage(const QString& filePath, const DImg& img);
     /**
