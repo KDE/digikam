@@ -52,7 +52,7 @@ bool ThumbnailPGF::readPGFImageData(const QByteArray& data, QImage& img)
             kDebug(50003) << "PGF channels not supported" << endl;
             return false;
         }
-
+/*
         const PGFHeader* header = pgfImg.GetHeader();
         kDebug(50003) << "PGF width    = " << header->width    << endl;
         kDebug(50003) << "PGF height   = " << header->height   << endl;
@@ -60,11 +60,10 @@ bool ThumbnailPGF::readPGFImageData(const QByteArray& data, QImage& img)
         kDebug(50003) << "PGF channels = " << header->channels << endl;
         kDebug(50003) << "PGF quality  = " << header->quality  << endl;
         kDebug(50003) << "PGF mode     = " << header->mode     << endl;
-
+*/
         img = QImage(pgfImg.Width(), pgfImg.Height(), QImage::Format_ARGB32);
         pgfImg.Read();
         pgfImg.GetBitmap(img.bytesPerLine(), (UINT8*)img.bits(), img.depth());
-        img = img.rgbSwapped();
     }
     catch(IOException& e)
     {
@@ -103,16 +102,15 @@ bool ThumbnailPGF::writePGFImageData(const QImage& img, QByteArray& data, int qu
         header.mode     = ImageModeRGBA;
         header.background.rgbtBlue = header.background.rgbtGreen = header.background.rgbtRed = 0;
         pgfImg.SetHeader(header);
-
+/*
         kDebug(50003) << "PGF width    = " << header.width    << endl;
         kDebug(50003) << "PGF height   = " << header.height   << endl;
         kDebug(50003) << "PGF bbp      = " << header.bpp      << endl;
         kDebug(50003) << "PGF channels = " << header.channels << endl;
         kDebug(50003) << "PGF quality  = " << header.quality  << endl;
         kDebug(50003) << "PGF mode     = " << header.mode     << endl;
-
-        //int channelMap[] = { 3, 2, 1 };
-        pgfImg.ImportBitmap(img.bytesPerLine(), (UINT8*)img.bits(), img.depth()/*, channelMap*/);
+*/
+        pgfImg.ImportBitmap(img.bytesPerLine(), (UINT8*)img.bits(), img.depth());
 
         // TODO : optimize memory allocation...
         CPGFMemoryStream stream(256000);

@@ -50,7 +50,7 @@ int main(int /*argc*/, char** /*argv*/)
     // QImage => PGF conversion
 
     img.load("test.png");
-    if (!ThumbnailPGF::writePGFImageData(img, data, 3))
+    if (!ThumbnailPGF::writePGFImageData(img, data, 10))
     {
         kDebug(50003) << "writePGFImageData failed..." << endl;
         return -1;
@@ -58,7 +58,7 @@ int main(int /*argc*/, char** /*argv*/)
 
     // Write PGF file.
 
-    QFile file("result.pgf");
+    QFile file("test.pgf");
     if ( !file.open(QIODevice::WriteOnly) )
     {
         kDebug(50003) << "Cannot open PGF file to write..." << endl;
@@ -75,7 +75,7 @@ int main(int /*argc*/, char** /*argv*/)
         kDebug(50003) << "readPGFImageData failed..." << endl;
         return -1;
     }
-    img.save("result.png", "PNG");
+    img.save("test2.png", "PNG");
 
     return 0;
 }
