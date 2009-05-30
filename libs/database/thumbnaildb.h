@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-06-18
- * Description :database album interface.
+ * Description : database album interface.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -61,11 +61,6 @@ private:
 
     ThumbnailDB(DatabaseBackend *backend);
     ~ThumbnailDB();
-
-    /** PGF image data to QImage */
-    bool readPGFImageData(const QByteArray& data, QImage& img);
-    /** QImage to PGF image data */
-    bool writePGFImageData(const QImage& img, QByteArray& data);
 
 private:
 
