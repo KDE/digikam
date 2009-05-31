@@ -86,7 +86,7 @@ private:  // BlurFX filter methods.
                    bool bInversed=false, QRect pArea=QRect());
     void farBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Distance);
     void motionBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Distance, double Angle=0.0);
-    void smartBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Radius, int Strenght);
+    void smartBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Radius, int Strength);
     void mosaic(Digikam::DImg *orgImage, Digikam::DImg *destImage, int SizeW, int SizeH);
 
 private:  // Internal filter methods.

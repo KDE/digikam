@@ -550,7 +550,7 @@ void BlurFX::farBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Dist
  * Width            => Width of image.
  * Height           => Height of image.
  * Radius           => blur matrix radius.
- * Strenght         => Color strenght.
+ * Strength         => Color strength.
  *
  * Theory           => Similar to SmartBlur from Photoshop, this function has the
  *                     same engine as Blur function, but, in a matrix with n
