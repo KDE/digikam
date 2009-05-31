@@ -554,7 +554,7 @@ void BlurFX::farBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Dist
  *
  * Theory           => Similar to SmartBlur from Photoshop, this function has the
  *                     same engine as Blur function, but, in a matrix with n
- *                     dimentions, we take only colors that pass by sensibility filter
+ *                     dimensions, we take only colors that pass by sensibility filter
  *                     The result is a clean image, not totally blurred, but a image
  *                     with correction between pixels.
  */
