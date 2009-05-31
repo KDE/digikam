@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-04-30
- * Description : Qt item view mouse hover button
+ * Description : rating icon view item at mouse hover
  *
  * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -52,12 +52,12 @@ public:
 
 Q_SIGNALS:
 
-    void ratingEdited(const QModelIndex &index, int rating);
+    void ratingEdited(const QModelIndex& index, int rating);
 
 protected Q_SLOTS:
 
     void slotRatingChanged(int);
-    void slotDataChanged(const QModelIndex &, const QModelIndex &);
+    void slotDataChanged(const QModelIndex&, const QModelIndex&);
 
 protected:
 
@@ -73,7 +73,6 @@ protected:
 
     QModelIndex m_index;
 };
-
 
 } // namespace Digikam
 

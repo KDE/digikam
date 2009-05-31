@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-04-30
- * Description : Qt item view mouse hover button
+ * Description : rating icon view item at mouse hover
  *
  * Copyright (C) 2008 by Peter Penz <peter.penz@gmx.at>
  * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
@@ -44,7 +44,7 @@ namespace Digikam
 {
 
 ImageRatingOverlay::ImageRatingOverlay(QObject *parent)
-            : AbstractWidgetDelegateOverlay(parent)
+                  : AbstractWidgetDelegateOverlay(parent)
 {
 }
 
@@ -72,7 +72,7 @@ void ImageRatingOverlay::setActive(bool active)
     }
 }
 
-void ImageRatingOverlay::mouseMoved(QMouseEvent *e, const QRect& visualRect, const QModelIndex &index)
+void ImageRatingOverlay::mouseMoved(QMouseEvent *e, const QRect& visualRect, const QModelIndex& index)
 {
     if (index != m_index)
         return;
@@ -141,11 +141,10 @@ void ImageRatingOverlay::slotEntered(const QModelIndex& index)
     updateRating();
 }
 
-void ImageRatingOverlay::slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
+void ImageRatingOverlay::slotDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
 {
     if (m_widget && m_widget->isVisible() && QItemSelectionRange(topLeft, bottomRight).contains(m_index))
         updateRating();
 }
 
 } // namespace Digikam
-
