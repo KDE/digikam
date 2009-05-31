@@ -47,6 +47,7 @@
 #include "databaseaccess.h"
 #include "digikamapp.h"
 #include "digikamview.h"
+#include "imagesortsettings.h"
 #include "namefilter.h"
 
 namespace Digikam
@@ -165,16 +166,16 @@ KUrl::List KipiImageCollection::imagesFromPAlbum(PAlbum* album) const
     switch (AlbumSettings::instance()->getImageSortOrder())
     {
         default:
-        case AlbumSettings::ByIName:
+        case ImageSortSettings::SortByFileName:
             sortOrder = AlbumDB::ByItemName;
             break;
-        case AlbumSettings::ByIPath:
+        case ImageSortSettings::SortByFilePath:
             sortOrder = AlbumDB::ByItemPath;
             break;
-        case AlbumSettings::ByIDate:
+        case ImageSortSettings::SortByCreationDate:
             sortOrder = AlbumDB::ByItemDate;
             break;
-        case AlbumSettings::ByIRating:
+        case ImageSortSettings::SortByRating:
             sortOrder = AlbumDB::ByItemRating;
             break;
         // ByISize not supported

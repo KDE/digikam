@@ -59,15 +59,6 @@ public:
         ByDate
     };
 
-    enum ImageSortOrder
-    {
-        ByIName = 0,
-        ByIPath,
-        ByIDate,
-        ByISize,
-        ByIRating
-    };
-
     enum ItemRightClickAction
     {
         ShowPreview = 0,
@@ -109,8 +100,8 @@ public:
     void setAlbumSortOrder(const AlbumSortOrder order);
     AlbumSortOrder getAlbumSortOrder() const;
 
-    void setImageSortOrder(const ImageSortOrder order);
-    ImageSortOrder getImageSortOrder() const;
+    void setImageSortOrder(int order);
+    int getImageSortOrder() const;
 
     void setItemRightClickAction(const ItemRightClickAction action);
     ItemRightClickAction getItemRightClickAction() const;

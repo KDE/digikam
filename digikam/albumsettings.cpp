@@ -51,7 +51,8 @@
 #include "mimefilter.h"
 #include "databaseaccess.h"
 #include "albumdb.h"
-#include "albumlister.h"
+#include "imagefiltersettings.h"
+#include "imagesortsettings.h"
 
 namespace Digikam
 {
@@ -166,7 +167,7 @@ public:
     AlbumSettings::AlbumSortOrder       albumSortOrder;
 
     // icon view settings
-    AlbumSettings::ImageSortOrder       imageSortOrder;
+    int                                 imageSortOrder;
     AlbumSettings::ItemRightClickAction itemRightClickAction;
 };
 
@@ -205,7 +206,7 @@ void AlbumSettings::init()
     d->albumCategoryNames.sort();
 
     d->albumSortOrder               = AlbumSettings::ByFolder;
-    d->imageSortOrder               = AlbumSettings::ByIName;
+    d->imageSortOrder               = ImageSortSettings::SortByFileName;
     d->itemRightClickAction         = AlbumSettings::ShowPreview;
 
     d->thumbnailSize                = ThumbnailSize::Medium;
@@ -213,7 +214,7 @@ void AlbumSettings::init()
     d->treeviewFont                 = KGlobalSettings::generalFont();
     d->sidebarTitleStyle            = KMultiTabBar::VSNET;
 
-    d->ratingFilterCond             = AlbumLister::GreaterEqualCondition;
+    d->ratingFilterCond             = ImageFilterSettings::GreaterEqualCondition;
 
     d->showSplash                   = true;
     d->useTrash                     = true;
@@ -299,8 +300,7 @@ void AlbumSettings::readSettings()
     d->albumSortOrder = AlbumSettings::AlbumSortOrder(group.readEntry("Album Sort Order",
                                                       (int)AlbumSettings::ByFolder));
 
-    d->imageSortOrder               = AlbumSettings::ImageSortOrder(group.readEntry("Image Sort Order",
-                                                                    (int)AlbumSettings::ByIName));
+    d->imageSortOrder               = group.readEntry("Image Sort Order", (int)ImageSortSettings::SortByFileName);;
 
     d->itemRightClickAction         = AlbumSettings::ItemRightClickAction(group.readEntry(
                                                                          "Item Right Click Action",
@@ -314,7 +314,7 @@ void AlbumSettings::readSettings()
 
 
     d->ratingFilterCond             = group.readEntry("Rating Filter Condition",
-                                                      (int)AlbumLister::GreaterEqualCondition);
+                                                      (int)ImageFilterSettings::GreaterEqualCondition);
     d->recursiveAlbums              = group.readEntry("Recursive Albums", false);
     d->recursiveTags                = group.readEntry("Recursive Tags", true);
 
@@ -576,12 +576,12 @@ AlbumSettings::AlbumSortOrder AlbumSettings::getAlbumSortOrder() const
     return d->albumSortOrder;
 }
 
-void AlbumSettings::setImageSortOrder(const ImageSortOrder order)
+void AlbumSettings::setImageSortOrder(int order)
 {
     d->imageSortOrder = order;
 }
 
-AlbumSettings::ImageSortOrder AlbumSettings::getImageSortOrder() const
+int AlbumSettings::getImageSortOrder() const
 {
     return d->imageSortOrder;
 }

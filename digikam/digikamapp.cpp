@@ -117,6 +117,7 @@
 #include "fingerprintsgenerator.h"
 #include "imageattributeswatch.h"
 #include "imageinfo.h"
+#include "imagesortsettings.h"
 #include "imagewindow.h"
 #include "lighttablewindow.h"
 #include "queuemgrwindow.h"
@@ -833,17 +834,28 @@ void DigikamApp::setupActions()
 
     d->imageSortAction = new KSelectAction(i18n("&Sort Images"), this);
     d->imageSortAction->setWhatsThis(i18n("Sort Albums' contents."));
-    connect(d->imageSortAction, SIGNAL(triggered(int)), d->view, SLOT(slotSortImages(int)));
+    QSignalMapper *imageSortMapper = new QSignalMapper(this);
+    connect(imageSortMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImages(int)));
     actionCollection()->addAction("image_sort", d->imageSortAction);
 
-    // Use same list order as in albumsettings enum
-    QStringList sortImagesActionList;
-    sortImagesActionList.append(i18n("By Name"));
-    sortImagesActionList.append(i18n("By Path"));
-    sortImagesActionList.append(i18n("By Date"));
-    sortImagesActionList.append(i18n("By File Size"));
-    sortImagesActionList.append(i18n("By Rating"));
-    d->imageSortAction->setItems(sortImagesActionList);
+    // map to ImageSortSettings enum
+    QAction *sortByNameAction = d->imageSortAction->addAction(i18n("By Name"));
+    QAction *sortByPathAction = d->imageSortAction->addAction(i18n("By Path"));
+    QAction *sortByDateAction = d->imageSortAction->addAction(i18n("By Date"));
+    QAction *sortByFileSizeAction = d->imageSortAction->addAction(i18n("By File Size"));
+    QAction *sortByRatingAction = d->imageSortAction->addAction(i18n("By Rating"));
+
+    connect(sortByNameAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByPathAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByDateAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByFileSizeAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByRatingAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+
+    imageSortMapper->setMapping(sortByNameAction, (int)ImageSortSettings::SortByFileName);
+    imageSortMapper->setMapping(sortByPathAction, (int)ImageSortSettings::SortByFilePath);
+    imageSortMapper->setMapping(sortByDateAction, (int)ImageSortSettings::SortByCreationDate);
+    imageSortMapper->setMapping(sortByFileSizeAction, (int)ImageSortSettings::SortByFileSize);
+    imageSortMapper->setMapping(sortByRatingAction, (int)ImageSortSettings::SortByRating);
 
     // -----------------------------------------------------------------
 

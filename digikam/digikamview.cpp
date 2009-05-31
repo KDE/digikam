@@ -1554,13 +1554,13 @@ void DigikamView::slotSelectInvert()
     d->iconView->invertSelection();
 }
 
-void DigikamView::slotSortImages(int order)
+void DigikamView::slotSortImages(int sortRole)
 {
-    //TODO!!!
     AlbumSettings* settings = AlbumSettings::instance();
     if (!settings)
         return;
-    settings->setImageSortOrder((AlbumSettings::ImageSortOrder) order);
+    settings->setImageSortOrder(sortRole);
+    d->iconView->imageFilterModel()->setSortRole((ImageSortSettings::SortRole) sortRole);
 }
 
 void DigikamView::slotLeftSidebarChangedTab(QWidget* w)

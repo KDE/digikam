@@ -139,8 +139,8 @@ ImageCategorizedView::ImageCategorizedView(QWidget *parent)
     d->filterModel = new ImageAlbumFilterModel(this);
     d->filterModel->setSourceImageModel(d->model);
 
-    d->filterModel->setSortOrder(ImageFilterModel::SortByFileName);
-    d->filterModel->setCategorizationMode(ImageFilterModel::CategoryByAlbum);
+    d->filterModel->setSortRole(ImageSortSettings::SortByFileName);
+    d->filterModel->setCategorizationMode(ImageSortSettings::CategoryByAlbum);
     d->filterModel->sort(0); // an initial sorting is necessary
 
     // set flags that we want to get dataChanged() signals for
@@ -607,7 +607,7 @@ void ImageCategorizedView::ensureSelectionAfterChanges()
 
 Album *ImageCategorizedView::albumAt(const QPoint& pos)
 {
-    if (d->filterModel->categorizationMode() == ImageFilterModel::CategoryByAlbum)
+    if (d->filterModel->imageSortSettings().categorizationMode == ImageSortSettings::CategoryByAlbum)
     {
         QModelIndex categoryIndex = indexForCategoryAt(pos);
         if (categoryIndex.isValid())

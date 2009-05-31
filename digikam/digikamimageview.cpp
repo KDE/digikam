@@ -76,7 +76,7 @@ public:
 DigikamImageView::DigikamImageView(QWidget *parent)
                 : ImageCategorizedView(parent), d(new DigikamImageViewPriv)
 {
-    imageFilterModel()->setCategorizationMode(ImageFilterModel::CategoryByAlbum);
+    imageFilterModel()->setCategorizationMode(ImageSortSettings::CategoryByAlbum);
 
     imageModel()->setThumbnailLoadThread(ThumbnailLoadThread::defaultIconViewThread());
     setThumbnailSize((ThumbnailSize::Size)AlbumSettings::instance()->getDefaultIconSize());

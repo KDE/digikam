@@ -112,8 +112,8 @@ void ImageCategoryDrawer::drawCategory(const QModelIndex& index, int /*sortRole*
 
     p->translate(option.rect.topLeft());
 
-    ImageFilterModel::CategorizationMode mode =
-        (ImageFilterModel::CategorizationMode)index.data(ImageFilterModel::CategorizationModeRole).toInt();
+    ImageSortSettings::CategorizationMode mode =
+        (ImageSortSettings::CategorizationMode)index.data(ImageFilterModel::CategorizationModeRole).toInt();
 
     p->drawPixmap(0, 0, d->pixmap);
 
@@ -137,7 +137,7 @@ void ImageCategoryDrawer::drawCategory(const QModelIndex& index, int /*sortRole*
     QString header;
     QString subLine;
 
-    if (mode == ImageFilterModel::CategoryByAlbum)
+    if (mode == ImageSortSettings::CategoryByAlbum)
         textForAlbum(index, &header, &subLine);
     //TODO: other modes
 
