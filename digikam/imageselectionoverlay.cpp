@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-04-30
- * Description : Qt item view mouse hover button
+ * Description : selection icon view item at mouse hover
  *
  * Copyright (C) 2008 by Peter Penz <peter.penz@gmx.at>
  * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
@@ -41,7 +41,7 @@ namespace Digikam
 {
 
 ImageSelectionOverlayButton::ImageSelectionOverlayButton(QAbstractItemView *parentView)
-            : ItemViewHoverButton(parentView)
+                           : ItemViewHoverButton(parentView)
 {
 }
 
@@ -64,8 +64,10 @@ void ImageSelectionOverlayButton::updateToolTip()
                              i18nc("@info:tooltip", "Select Item"));
 }
 
+// --------------------------------------------------------------------
+
 ImageSelectionOverlay::ImageSelectionOverlay(QObject *parent)
-            : HoverButtonDelegateOverlay(parent)
+                     : HoverButtonDelegateOverlay(parent)
 {
 }
 
@@ -100,8 +102,8 @@ void ImageSelectionOverlay::updateButton(const QModelIndex& index)
     const QRect rect = m_view->visualRect(index);
 
     const int gap = 5;
-    const int x = rect.left() + gap;
-    const int y = rect.top() + gap;
+    const int x   = rect.left() + gap;
+    const int y   = rect.top() + gap;
     button()->move(QPoint(x, y));
 
     QItemSelectionModel* selModel = m_view->selectionModel();
@@ -114,9 +116,12 @@ void ImageSelectionOverlay::slotClicked(bool checked)
     if (index.isValid())
     {
         QItemSelectionModel* selModel = m_view->selectionModel();
-        if (checked) {
+        if (checked)
+        {
             selModel->select(index, QItemSelectionModel::Select);
-        } else {
+        }
+        else
+        {
             selModel->select(index, QItemSelectionModel::Deselect);
         }
         selModel->setCurrentIndex(index, QItemSelectionModel::Current);
@@ -126,7 +131,8 @@ void ImageSelectionOverlay::slotClicked(bool checked)
 void ImageSelectionOverlay::slotSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
 {
     QModelIndex index = button()->index();
-    if (index.isValid()) {
+    if (index.isValid())
+    {
         if (selected.contains(index))
             button()->setChecked(true);
         else if (deselected.contains(index))
@@ -134,6 +140,4 @@ void ImageSelectionOverlay::slotSelectionChanged(const QItemSelection& selected,
     }
 }
 
-
 } // namespace Digikam
-

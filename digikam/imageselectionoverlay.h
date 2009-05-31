@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-04-30
- * Description : Qt item view mouse hover button
+ * Description : selection icon view item at mouse hover
  *
  * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -52,6 +52,8 @@ protected:
     virtual void updateToolTip();
 };
 
+// --------------------------------------------------------------------
+
 class ImageSelectionOverlay : public HoverButtonDelegateOverlay
 {
     Q_OBJECT
@@ -71,7 +73,6 @@ protected Q_SLOTS:
     void slotClicked(bool checked);
     void slotSelectionChanged(const QItemSelection&, const QItemSelection&);
 };
-
 
 } // namespace Digikam
 
