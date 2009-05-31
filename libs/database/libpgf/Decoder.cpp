@@ -442,7 +442,7 @@ void CDecoder::DecodeBuffer() THROW_ {
 #else
 	ASSERT(h.bufferSize == BufferSize);
 #endif
-	BitplaneDecode(h.bufferSize);
+	BitplaneDecode(h.b.bufferSize);
 
 	// data is available
 	m_bufferIsAvailable = true;

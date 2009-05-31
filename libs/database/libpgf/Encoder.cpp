@@ -387,10 +387,10 @@ void CEncoder::EncodeBuffer(ROIBlockHeader h) THROW_ {
 	ASSERT(h.bufferSize == BufferSize);
 #endif
 
-	UINT32 codeLen = BitplaneEncode(h.bufferSize);
+	UINT32 codeLen = BitplaneEncode(h.b.bufferSize);
 	UINT16 wordLen = UINT16(AlignWordPos(codeLen)/WordWidth);
 	ASSERT(wordLen <= BufferSize);
-	
+
 	long count = sizeof(UINT16);
 
 #ifdef __BIGENDIAN__
