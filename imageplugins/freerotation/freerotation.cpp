@@ -165,6 +165,12 @@ void FreeRotation::filterImage(void)
     int W, H;
     double absAngle = fabs(m_angle);
 
+    // stop here when no angle was set
+    if (absAngle == 0.0)
+    {
+        return;
+    }
+
     if (absAngle < 90.0)
     {
         W = (int)(m_orgW * cos(absAngle * DEG2RAD) + m_orgH * sin(absAngle * DEG2RAD));
