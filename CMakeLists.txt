@@ -824,6 +824,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagefiltermodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagefiltersettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagemodeldragdrophandler.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagesortsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagethumbnailmodel.cpp
        )
 
