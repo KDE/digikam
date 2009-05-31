@@ -118,17 +118,17 @@ struct PGFPostHeader {
 union ROIBlockHeader {
 	ROIBlockHeader(UINT16 v) { val = v; }
 	ROIBlockHeader(UINT32 size, bool end)
-	{
+	{ 
 	    ASSERT(size < (1 << RLblockSizeLen));
-	    b.bufferSize = size;
-	    b.tileEnd = end;
+	    bufferSize = size; 
+	    tileEnd = end;
 	}
 
 	UINT16 val;
 	struct {
 		UINT16 bufferSize: RLblockSizeLen;	// number of uncoded UINT32 values in a block
 		UINT16 tileEnd   :				1;	// 1: last part of a tile
-	} b;
+	};
 	// total: 2 Bytes
 };
 
