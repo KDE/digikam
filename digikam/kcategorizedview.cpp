@@ -1763,6 +1763,12 @@ void KCategorizedView::slotLayoutChanged()
 void KCategorizedView::currentChanged(const QModelIndex &current,
                                       const QModelIndex &previous)
 {
+    if (!d->proxyModel || !d->categoryDrawer || !d->proxyModel->isCategorizedModel())
+    {
+        QListView::currentChanged(current, previous);
+        return;
+    }
+
     // We need to update the forcedSelectionPosition property in order to correctly
     // navigate after with keyboard using up & down keys
 
@@ -1798,6 +1804,12 @@ void KCategorizedView::currentChanged(const QModelIndex &current,
 void KCategorizedView::dataChanged(const QModelIndex &topLeft,
                                    const QModelIndex &bottomRight)
 {
+    if (!d->proxyModel || !d->categoryDrawer || !d->proxyModel->isCategorizedModel())
+    {
+        QListView::dataChanged(topLeft, bottomRight);
+        return;
+    }
+
     if (topLeft == bottomRight)
     {
         d->cacheIndex(topLeft);
