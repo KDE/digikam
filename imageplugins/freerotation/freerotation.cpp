@@ -70,19 +70,19 @@ void FreeRotation::filterImage(void)
 
     // first of all, we need to calculate the sin and cos of the given angle
 
-    lfSin = sin (m_angle * -DEG2RAD);
-    lfCos = cos (m_angle * -DEG2RAD);
+    lfSin = sin(m_angle * -DEG2RAD);
+    lfCos = cos(m_angle * -DEG2RAD);
 
     // now, we have to calc the new size for the destination image
 
     if ((lfSin * lfCos) < 0)
     {
-        nNewWidth  = ROUND (fabs (nWidth * lfCos - nHeight * lfSin));
+        nNewWidth = ROUND (fabs (nWidth * lfCos - nHeight * lfSin));
         nNewHeight = ROUND (fabs (nWidth * lfSin - nHeight * lfCos));
     }
     else
     {
-        nNewWidth  = ROUND (fabs (nWidth * lfCos + nHeight * lfSin));
+        nNewWidth = ROUND (fabs (nWidth * lfCos + nHeight * lfSin));
         nNewHeight = ROUND (fabs (nWidth * lfSin + nHeight * lfCos));
     }
 
@@ -155,9 +155,9 @@ void FreeRotation::filterImage(void)
         }
 
         // Update the progress bar in dialog.
-        progress = (int)(((double)h * 100.0) / nNewHeight);
-        if (progress%5 == 0)
-            postProgress( progress );
+        progress = (int) (((double) h * 100.0) / nNewHeight);
+        if (progress % 5 == 0)
+            postProgress(progress);
     }
 
     // Compute the rotated destination image size using original image dimensions.
@@ -178,31 +178,31 @@ void FreeRotation::filterImage(void)
     // Auto-cropping destination image without black holes around.
     QRect autoCrop;
 
-    switch(m_autoCrop)
+    switch (m_autoCrop)
     {
         case WidestArea:
         {
-           // 'Widest Area' method (by Renchi Raju).
+            // 'Widest Area' method (by Renchi Raju).
 
-           autoCrop.setX( (int)(nHeight * sin(absAngle * DEG2RAD)) );
-           autoCrop.setY( (int)(nWidth  * sin(absAngle * DEG2RAD)) );
-           autoCrop.setWidth(  (int)(nNewWidth  - 2*nHeight * sin(absAngle * DEG2RAD)) );
-           autoCrop.setHeight( (int)(nNewHeight - 2*nWidth  * sin(absAngle * DEG2RAD)) );
+            autoCrop.setX((int) (nHeight * sin(absAngle * DEG2RAD)));
+            autoCrop.setY((int) (nWidth * sin(absAngle * DEG2RAD)));
+            autoCrop.setWidth((int) (nNewWidth - 2* nHeight * sin(absAngle * DEG2RAD)));
+            autoCrop.setHeight((int) (nNewHeight - 2* nWidth * sin(absAngle * DEG2RAD)));
 
-           if (!autoCrop.isValid())
-           {
-                m_destImage = Digikam::DImg(m_orgImage.width(), m_orgImage.height(),
-                               m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
-                m_destImage.fill( Digikam::DColor(m_backgroundColor.rgb(), sixteenBit) );
+            if (!autoCrop.isValid())
+            {
+                m_destImage = Digikam::DImg(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(),
+                                            m_orgImage.hasAlpha());
+                m_destImage.fill(Digikam::DColor(m_backgroundColor.rgb(), sixteenBit));
                 m_newSize = QSize();
-           }
-           else
-           {
+            }
+            else
+            {
                 m_destImage = m_destImage.copy(autoCrop);
-                m_newSize.setWidth(  (int)(W - 2*m_orgH * sin(absAngle * DEG2RAD)) );
-                m_newSize.setHeight( (int)(H - 2*m_orgW * sin(absAngle * DEG2RAD)) );
-           }
-           break;
+                m_newSize.setWidth((int) (W - 2* m_orgH * sin(absAngle * DEG2RAD)));
+                m_newSize.setHeight((int) (H - 2* m_orgW * sin(absAngle * DEG2RAD)));
+            }
+            break;
         }
 
         case LargestArea:
@@ -213,72 +213,72 @@ void FreeRotation::filterImage(void)
 
             if (nHeight > nWidth)
             {
-                gamma = atan((float)nWidth / (float)nHeight);
+                gamma = atan((float) nWidth / (float) nHeight);
 
                 if (absAngle < 90.0)
                 {
-                    autoCrop.setHeight( (int)((float)nWidth / cos(absAngle*DEG2RAD) /
-                            ( tan(gamma) + tan(absAngle*DEG2RAD) )) );
-                    autoCrop.setWidth( (int)((float)autoCrop.height() * tan(gamma)) );
+                    autoCrop.setHeight((int) ((float) nWidth / cos(absAngle * DEG2RAD) / (tan(gamma) + tan(
+                                        absAngle * DEG2RAD))));
+                    autoCrop.setWidth((int) ((float) autoCrop.height() * tan(gamma)));
                 }
                 else
                 {
-                    autoCrop.setWidth( (int)((float)nWidth / cos((absAngle-90.0)*DEG2RAD) /
-                            ( tan(gamma) + tan((absAngle-90.0)*DEG2RAD) )) );
-                    autoCrop.setHeight( (int)((float)autoCrop.width() * tan(gamma)) );
+                    autoCrop.setWidth((int) ((float) nWidth / cos((absAngle - 90.0) * DEG2RAD) / (tan(gamma)
+                                      + tan((absAngle - 90.0) * DEG2RAD))));
+                    autoCrop.setHeight((int) ((float) autoCrop.width() * tan(gamma)));
                 }
             }
             else
             {
-                gamma = atan((float)nHeight / (float)nWidth);
+                gamma = atan((float) nHeight / (float) nWidth);
 
                 if (absAngle < 90.0)
                 {
-                    autoCrop.setWidth( (int)((float)nHeight / cos(absAngle*DEG2RAD) /
-                            ( tan(gamma) + tan(absAngle*DEG2RAD) )) );
-                    autoCrop.setHeight( (int)((float)autoCrop.width() * tan(gamma)) );
+                    autoCrop.setWidth((int) ((float) nHeight / cos(absAngle * DEG2RAD) / (tan(gamma) + tan(
+                                      absAngle * DEG2RAD))));
+                    autoCrop.setHeight((int) ((float) autoCrop.width() * tan(gamma)));
                 }
                 else
                 {
-                    autoCrop.setHeight( (int)((float)nHeight / cos((absAngle-90.0)*DEG2RAD) /
-                            ( tan(gamma) + tan((absAngle-90.0)*DEG2RAD) )) );
-                    autoCrop.setWidth( (int)((float)autoCrop.height() * tan(gamma)) );
+                    autoCrop.setHeight((int) ((float) nHeight / cos((absAngle - 90.0) * DEG2RAD)
+                                       / (tan(gamma) + tan((absAngle - 90.0) * DEG2RAD))));
+                    autoCrop.setWidth((int) ((float) autoCrop.height() * tan(gamma)));
                 }
             }
 
-            autoCrop.moveCenter( QPoint(nNewWidth/2, nNewHeight/2));
+            autoCrop.moveCenter(QPoint(nNewWidth / 2, nNewHeight / 2));
 
             if (!autoCrop.isValid())
             {
-                m_destImage = Digikam::DImg(m_orgImage.width(), m_orgImage.height(),
-                                            m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
-                m_destImage.fill( Digikam::DColor(m_backgroundColor.rgb(), sixteenBit) );
+                m_destImage = Digikam::DImg(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(),
+                                            m_orgImage.hasAlpha());
+                m_destImage.fill(Digikam::DColor(m_backgroundColor.rgb(), sixteenBit));
                 m_newSize = QSize();
             }
             else
             {
                 m_destImage = m_destImage.copy(autoCrop);
-                gamma = atan((float)m_orgH / (float)m_orgW);
+                gamma = atan((float) m_orgH / (float) m_orgW);
 
                 if (absAngle < 90.0)
                 {
-                    m_newSize.setWidth( (int)((float)m_orgH / cos(absAngle*DEG2RAD) /
-                            ( tan(gamma) + tan(absAngle*DEG2RAD) )) );
-                    m_newSize.setHeight( (int)((float)m_newSize.width() * tan(gamma)) );
+                    m_newSize.setWidth((int) ((float) m_orgH / cos(absAngle * DEG2RAD) / (tan(gamma) + tan(
+                                       absAngle * DEG2RAD))));
+                    m_newSize.setHeight((int) ((float) m_newSize.width() * tan(gamma)));
                 }
                 else
                 {
-                    m_newSize.setHeight( (int)((float)m_orgH / cos((absAngle-90.0)*DEG2RAD) /
-                            ( tan(gamma) + tan((absAngle-90.0)*DEG2RAD) )) );
-                    m_newSize.setWidth( (int)((float)m_newSize.height() * tan(gamma)) );
+                    m_newSize.setHeight((int) ((float) m_orgH / cos((absAngle - 90.0) * DEG2RAD)
+                                        / (tan(gamma) + tan((absAngle - 90.0) * DEG2RAD))));
+                    m_newSize.setWidth((int) ((float) m_newSize.height() * tan(gamma)));
                 }
             }
             break;
         }
-        default:   // No auto cropping.
+        default: // No auto cropping.
         {
-            m_newSize.setWidth( W );
-            m_newSize.setHeight( H );
+            m_newSize.setWidth(W);
+            m_newSize.setHeight(H);
             break;
         }
     }
