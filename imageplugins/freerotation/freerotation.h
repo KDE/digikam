@@ -54,7 +54,7 @@ public:
 
     enum AutoCropTypes
     {
-        NoAutoCrop=0,
+        NoAutoCrop = 0,
         WidestArea,
         LargestArea
     };
