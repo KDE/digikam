@@ -103,33 +103,35 @@ void ImageAlbumFilterModel::setImageFilterSettings(const ImageFilterSettings& s)
 int ImageAlbumFilterModel::compareInfosCategories(const ImageInfo& left, const ImageInfo& right) const
 {
     Q_D(const ImageAlbumFilterModel);
-    switch (d->categorizationMode)
+    switch (d->sorter.categorizationMode)
     {
-        case CategoryByAlbum:
+        case ImageSortSettings::CategoryByAlbum:
         {
             int leftAlbumId = left.albumId();
             int rightAlbumId = right.albumId();
-
-            //d->cacheCategoryCount(leftAlbumId, left.id());
-            //d->cacheCategoryCount(rightAlbumId, right.id());
 
             PAlbum *leftAlbum = AlbumManager::instance()->findPAlbum(leftAlbumId);
             PAlbum *rightAlbum = AlbumManager::instance()->findPAlbum(rightAlbumId);
             if (!leftAlbum || !rightAlbum)
                 return -1;
-            if (d->sortOrder == SortByCreationDate || d->sortOrder == SortByModificationDate)   
+            if (d->sorter.sortRole == ImageSortSettings::SortByCreationDate ||
+                d->sorter.sortRole == ImageSortSettings::SortByModificationDate)
             {
                 QDate leftDate = leftAlbum->date();
                 QDate rightDate = rightAlbum->date();
+                int result;
                 if (leftDate == rightDate)
-                    return 0;
+                    result = 0;
                 else if (leftDate < rightDate)
-                    return -1;
+                    result = -1;
                 else
-                    return 1;
+                    result = 1;
+                return ImageSortSettings::compareByOrder(result, d->sorter.currentSortOrder);
             }
 
-            return KStringHandler::naturalCompare(leftAlbum->albumPath(), rightAlbum->albumPath());
+            return ImageSortSettings::naturalCompare(leftAlbum->albumPath(), rightAlbum->albumPath(),
+                                                     d->sorter.currentCategorizationSortOrder,
+                                                     d->sorter.categorizationCaseSensitivity);
         }
         default:
             return ImageFilterModel::compareInfosCategories(left, right);

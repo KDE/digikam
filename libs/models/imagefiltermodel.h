@@ -34,6 +34,7 @@
 
 #include "imagefiltersettings.h"
 #include "imagemodel.h"
+#include "imagesortsettings.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -90,28 +91,7 @@ public:
     DatabaseFields::Set suggestedWatchFlags() const;
 
     ImageFilterSettings imageFilterSettings() const;
-
-    enum CategorizationMode
-    {
-        NoCategories, /// categorization switched off
-        OneCategory, /// all items in one global category
-        CategoryByAlbum,
-        CategoryByFormat
-    };
-
-    enum SortOrder
-    {
-        SortByFileName,
-        SortByFilePath,
-        SortByFileSize,
-        SortByModificationDate,
-        SortByCreationDate,
-        SortByRating,
-        SortByImageSize // pixel number
-    };
-
-    CategorizationMode categorizationMode() const;
-    SortOrder sortOrder() const;
+    ImageSortSettings   imageSortSettings() const;
 
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 
@@ -119,6 +99,8 @@ public Q_SLOTS:
 
     /** Changes the current image filter settings and refilters. */
     virtual void setImageFilterSettings(const ImageFilterSettings& settings);
+    /** Changes the current image sort settings and resorts. */
+    virtual void setImageSortSettings(const ImageSortSettings &settings);
 
     /** Adjust the current ImageFilterSettings.
      *  Equivalent to retrieving the current filter settings, adjusting the parameter
@@ -134,8 +116,9 @@ public Q_SLOTS:
     void setMimeTypeFilter(int mimeTypeFilter);
     void setTextFilter(const SearchTextSettings& settings);
 
-    void setCategorizationMode(CategorizationMode mode);
-    void setSortOrder(SortOrder order);
+    void setCategorizationMode(ImageSortSettings::CategorizationMode mode);
+    void setSortRole(ImageSortSettings::SortRole role);
+    void setSortOrder(ImageSortSettings::SortOrder order);
 
 Q_SIGNALS:
 

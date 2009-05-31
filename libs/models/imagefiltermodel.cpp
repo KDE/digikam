@@ -47,8 +47,6 @@ namespace Digikam
 ImageFilterModelPrivate::ImageFilterModelPrivate()
 {
     imageModel            = 0;
-    sortOrder             = ImageFilterModel::SortByFileName;
-    categorizationMode    = ImageFilterModel::NoCategories;
     version               = 0;
     lastDiscardVersion    = 0;
     lastFilteredVersion   = 0;
@@ -182,9 +180,9 @@ QVariant ImageFilterModel::data(const QModelIndex& index, int role) const
         case KCategorizedSortFilterProxyModel::CategoryDisplayRole:
             return categoryIdentifier(d->imageModel->imageInfoRef(mapToSource(index)));
         case CategorizationModeRole:
-            return d->categorizationMode;
+            return d->sorter.categorizationMode;
         case SortOrderRole:
-            return d->sortOrder;
+            return d->sorter.sortRole;
         //case CategoryCountRole:
           //  return categoryCount(d->imageModel->imageInfoRef(mapToSource(index)));
         case CategoryAlbumIdRole:
@@ -366,6 +364,12 @@ ImageFilterSettings ImageFilterModel::imageFilterSettings() const
 {
     Q_D(const ImageFilterModel);
     return d->filter;
+}
+
+ImageSortSettings ImageFilterModel::imageSortSettings() const
+{
+    Q_D(const ImageFilterModel);
+    return d->sorter;
 }
 
 void ImageFilterModel::slotModelReset()
@@ -606,37 +610,33 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
 
 // -------------- Sorting and Categorization --------------
 
-void ImageFilterModel::setCategorizationMode(ImageFilterModel::CategorizationMode mode)
+void ImageFilterModel::setImageSortSettings(const ImageSortSettings &sorter)
 {
     Q_D(ImageFilterModel);
-    if (mode == d->categorizationMode)
-        return;
-    d->categorizationMode = mode;
-    setCategorizedModel(mode != NoCategories);
-    //d->categoryCountHashInt.clear();
-    //d->categoryCountHashString.clear();
+    d->sorter = sorter;
+    setCategorizedModel(d->sorter.categorizationMode != ImageSortSettings::NoCategories);
     invalidate();
 }
 
-ImageFilterModel::CategorizationMode ImageFilterModel::categorizationMode() const
-{
-    Q_D(const ImageFilterModel);
-    return d->categorizationMode;
-}
-
-void ImageFilterModel::setSortOrder(ImageFilterModel::SortOrder order)
+void ImageFilterModel::setCategorizationMode(ImageSortSettings::CategorizationMode mode)
 {
     Q_D(ImageFilterModel);
-    if (d->sortOrder == order)
-        return;
-    d->sortOrder = order;
-    invalidate();
+    d->sorter.setCategorizationMode(mode);
+    setImageSortSettings(d->sorter);
 }
 
-ImageFilterModel::SortOrder ImageFilterModel::sortOrder() const
+void ImageFilterModel::setSortRole(ImageSortSettings::SortRole role)
 {
-    Q_D(const ImageFilterModel);
-    return d->sortOrder;
+    Q_D(ImageFilterModel);
+    d->sorter.setSortRole(role);
+    setImageSortSettings(d->sorter);
+}
+
+void ImageFilterModel::setSortOrder(ImageSortSettings::SortOrder order)
+{
+    Q_D(ImageFilterModel);
+    d->sorter.setSortOrder(order);
+    setImageSortSettings(d->sorter);
 }
 
 int ImageFilterModel::compareCategories(const QModelIndex& left, const QModelIndex& right) const
@@ -661,61 +661,8 @@ int ImageFilterModel::compareInfosCategories(const ImageInfo& left, const ImageI
 {
     // Note: reimplemented in ImageAlbumFilterModel
     Q_D(const ImageFilterModel);
-    switch (d->categorizationMode)
-    {
-        case NoCategories:
-        case OneCategory:
-            return 0;
-        case CategoryByAlbum:
-        {
-            int leftAlbum = left.albumId();
-            int rightAlbum = right.albumId();
-
-            // update count hash
-            //d->cacheCategoryCount(leftAlbum, left.id());
-            //d->cacheCategoryCount(rightAlbum, right.id());
-
-            // return comparation result
-            if (leftAlbum == rightAlbum)
-                return 0;
-            else if (leftAlbum < rightAlbum)
-                return -1;
-            else
-                return 1;
-        }
-        case CategoryByFormat:
-        {
-            QString leftFormat = left.format();
-            QString rightFormat = right.format();
-
-            //d->cacheCategoryCount(leftFormat, left.id());
-            //d->cacheCategoryCount(rightFormat, right.id());
-
-            return KStringHandler::naturalCompare(leftFormat, rightFormat);
-        }
-        default:
-            return 0;
-    }
+    return d->sorter.compareCategories(left, right);
 }
-
-/*
-int ImageFilterModel::categoryCount(const ImageInfo& info) const
-{
-    Q_D(const ImageFilterModel);
-    switch (d->categorizationMode)
-    {
-        case NoCategories:
-        case OneCategory:
-            return rowCount();
-        case CategoryByAlbum:
-            return d->categoryCountHashInt[info.albumId()].size();
-        case CategoryByFormat:
-            return d->categoryCountHashString[info.format()].size();
-        default:
-            return 0;
-    }
-}
-*/
 
 // Feel free to optimize. QString::number is 3x slower.
 static inline QString fastNumberToString(int id)
@@ -737,15 +684,15 @@ static inline QString fastNumberToString(int id)
 QString ImageFilterModel::categoryIdentifier(const ImageInfo& info) const
 {
     Q_D(const ImageFilterModel);
-    switch (d->categorizationMode)
+    switch (d->sorter.categorizationMode)
     {
-        case NoCategories:
+        case ImageSortSettings::NoCategories:
             return QString();
-        case OneCategory:
+        case ImageSortSettings::OneCategory:
             return QString();
-        case CategoryByAlbum:
+        case ImageSortSettings::CategoryByAlbum:
             return fastNumberToString(info.albumId());
-        case CategoryByFormat:
+        case ImageSortSettings::CategoryByFormat:
             return info.format();
         default:
             return QString();
@@ -755,29 +702,7 @@ QString ImageFilterModel::categoryIdentifier(const ImageInfo& info) const
 bool ImageFilterModel::infosLessThan(const ImageInfo& left, const ImageInfo& right) const
 {
     Q_D(const ImageFilterModel);
-    switch (d->sortOrder)
-    {
-        case SortByFileName:
-            return KStringHandler::naturalCompare(left.name(), right.name()) < 0;
-        case SortByFilePath:
-            return KStringHandler::naturalCompare(left.filePath(), right.filePath()) < 0;
-        case SortByFileSize:
-            return left.fileSize() < right.fileSize();
-        case SortByModificationDate:
-            return left.modDateTime() < right.modDateTime();
-        case SortByCreationDate:
-            return left.dateTime() < right.dateTime();
-        case SortByRating:
-            return left.rating() < right.rating();
-        case SortByImageSize:
-        {
-            QSize leftSize = left.dimensions();
-            QSize rightSize = right.dimensions();
-            return leftSize.width() * leftSize.height() < rightSize.width() * rightSize.height();
-        }
-        default:
-            return false;
-    }
+    return d->sorter.lessThan(left, right);
 }
 
 // -------------- Watching changes --------------

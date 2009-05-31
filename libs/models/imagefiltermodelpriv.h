@@ -82,10 +82,7 @@ public:
     ImageModel                *imageModel;
 
     ImageFilterSettings        filter;
-
-    ImageFilterModel::SortOrder sortOrder;
-    ImageFilterModel::CategorizationMode
-                               categorizationMode;
+    ImageSortSettings          sorter;
 
     volatile unsigned int      version;
     unsigned int               lastDiscardVersion;
