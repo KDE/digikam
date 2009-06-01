@@ -25,6 +25,7 @@
 #define PGF_PGFPLATFORM_H
 
 #include <cassert>
+#include <cmath>
 
 //-------------------------------------------------------------------------------
 // ROI support
