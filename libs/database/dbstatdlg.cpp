@@ -22,7 +22,6 @@
  * ============================================================ */
 
 #include "dbstatdlg.h"
-#include "dbstatdlg.moc"
 
 // Qt includes
 

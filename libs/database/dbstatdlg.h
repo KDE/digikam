@@ -40,10 +40,8 @@
 namespace Digikam
 {
 
-class DIGIKAM_DATABASE_EXPORT DBStatDlg : public InfoDlg
+class DIGIKAM_EXPORT DBStatDlg : public InfoDlg
 {
-    Q_OBJECT
-
 public:
 
     DBStatDlg(QWidget* parent);
