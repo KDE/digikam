@@ -34,13 +34,12 @@
 
 // Local includes
 
-#include "digikam_export.h"
 #include "infodlg.h"
 
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DBStatDlg : public InfoDlg
+class DBStatDlg : public InfoDlg
 {
 public:
 
