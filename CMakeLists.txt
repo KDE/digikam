@@ -98,7 +98,9 @@ MACRO_BOOL_TO_01(LENSFUN_FOUND HAVE_LENSFUN)
 
 # Check GLib2 library for liquid rescale tool.
 MACRO_OPTIONAL_FIND_PACKAGE(GLIB2)
+
 MACRO_OPTIONAL_FIND_PACKAGE(Lqr-1)
+MACRO_BOOL_TO_01(LQR-1_FOUND USE_EXT_LIBLQR-1)
 
 # Set config file depending of optional depencies
 
