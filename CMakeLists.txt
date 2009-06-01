@@ -749,7 +749,6 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseurl.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasechangesets.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/downloadhistory.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/dbstatdlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagecomments.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imageinfo.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imageinfolist.cpp
@@ -945,6 +944,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/cameratype.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/contextmenuhelper.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/datefolderview.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dbstatdlg.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamapp.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamimageview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamview.cpp 
