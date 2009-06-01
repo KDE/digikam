@@ -185,6 +185,7 @@ DIRECTORIES / FILES                     DONE BY     SHOWFOTO DIGIKAM   PORT     
     imagepreviewbar.cpp                 Gilles                 X       DONE        DONE
     imagepreviewview.cpp                Gilles                 X       DONE        DONE
     imageselectionoverlay.cpp           Marcel                 X       DONE        DONE
+    imagerotationoverlay.cpp            Gilles                 X       DONE        DONE
     imageviewutilities.cpp              Marcel                 X       DONE        DONE
     kcategorizedview.cpp                Marcel                 X       DONE        DONE
     kdateedit.cpp                       Gilles                 X       DONE        DONE
