@@ -7,6 +7,7 @@
  * Description : Qt item view for images
  *
  * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +33,8 @@
 // KDE includes
 
 #include <kaction.h>
+#include <kactionmenu.h>
+#include <kactioncollection.h>
 #include <kapplication.h>
 #include <kdebug.h>
 #include <kmenu.h>
@@ -48,12 +51,14 @@
 #include "albumsettings.h"
 #include "contextmenuhelper.h"
 #include "ddragobjects.h"
+#include "digikamapp.h"
 #include "dio.h"
 #include "dpopupmenu.h"
 #include "imagealbummodel.h"
 #include "imagealbumfiltermodel.h"
 #include "imagedragdrop.h"
 #include "imageratingoverlay.h"
+#include "imagerotationoverlay.h"
 #include "imageviewutilities.h"
 #include "imagewindow.h"
 #include "metadatamanager.h"
@@ -88,19 +93,31 @@ DigikamImageView::DigikamImageView(QWidget *parent)
 
     setToolTipEnabled(AlbumSettings::instance()->getShowToolTips());
 
-    ImageRatingOverlay *ratingOverlay = new ImageRatingOverlay(this);
+    ImageRotateLeftOverlay *rotateLeftOverlay   = new ImageRotateLeftOverlay(this);
+    addOverlay(rotateLeftOverlay);
+
+    ImageRotateRightOverlay *rotateRightOverlay = new ImageRotateRightOverlay(this);
+    addOverlay(rotateRightOverlay);
+
+    ImageRatingOverlay *ratingOverlay           = new ImageRatingOverlay(this);
     addOverlay(ratingOverlay);
 
     d->utilities = new ImageViewUtilities(this);
 
-    connect(d->utilities, SIGNAL(editorCurrentUrlChanged(const KUrl &)),
-            this, SLOT(setCurrentUrl(const KUrl &)));
+    connect(d->utilities, SIGNAL(editorCurrentUrlChanged(const KUrl&)),
+            this, SLOT(setCurrentUrl(const KUrl&)));
 
-    connect(imageModel()->dragDropHandler(), SIGNAL(dioResult(KJob *)),
+    connect(imageModel()->dragDropHandler(), SIGNAL(dioResult(KJob*)),
             d->utilities, SLOT(slotDIOResult(KJob*)));
 
     connect(ratingOverlay, SIGNAL(ratingEdited(const QModelIndex &, int)),
-            this, SLOT(assignRating(const QModelIndex &,int)));
+            this, SLOT(assignRating(const QModelIndex&, int)));
+
+    connect(rotateLeftOverlay, SIGNAL(signalRotateLeft()),
+            this, SLOT(slotRotateLeft()));
+
+    connect(rotateRightOverlay, SIGNAL(signalRotateRight()),
+            this, SLOT(slotRotateRight()));
 }
 
 DigikamImageView::~DigikamImageView()
@@ -344,6 +361,34 @@ void DigikamImageView::setExifOrientationOfSelected(int orientation)
 void DigikamImageView::renameCurrent()
 {
     d->utilities->rename(currentInfo());
+}
+
+void DigikamImageView::slotRotateLeft()
+{
+    KActionMenu* action = dynamic_cast<KActionMenu*>(ContextMenuHelper::kipiRotateAction());
+    if (action)
+    {
+        QList<QAction*> list = action->menu()->actions();
+        foreach(QAction* ac, list)
+        {
+            if (ac->objectName() == QString("rotate_ccw"))
+                ac->trigger();
+        }
+    }
+}
+
+void DigikamImageView::slotRotateRight()
+{
+    KActionMenu* action = dynamic_cast<KActionMenu*>(ContextMenuHelper::kipiRotateAction());
+    if (action)
+    {
+        QList<QAction*> list = action->menu()->actions();
+        foreach(QAction* ac, list)
+        {
+            if (ac->objectName() == QString("rotate_cw"))
+                ac->trigger();
+        }
+    }
 }
 
 } // namespace Digikam
