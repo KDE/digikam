@@ -6,8 +6,8 @@
  * Date        : 2008-11-15
  * Description : collections setup tab model/view
  *
- * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,7 +47,6 @@ class SetupCollectionModelPriv;
 
 class SetupCollectionModel : public QAbstractItemModel
 {
-
     Q_OBJECT
 
 public:
@@ -164,10 +163,11 @@ protected:
         bool               deleted;
     };
 
-    QList<Item> m_collections;
-    QWidget    *m_dialogParentWidget;
-
+    QList<Item>  m_collections;
+    QWidget     *m_dialogParentWidget;
 };
+
+// -----------------------------------------------------------------------
 
 class SetupCollectionTreeView : public QTreeView
 {
@@ -191,5 +191,4 @@ private:
 
 } // namespace Digikam
 
-#endif
-
+#endif /* SETUPCOLLECTIONVIEW_H */

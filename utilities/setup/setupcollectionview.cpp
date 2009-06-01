@@ -6,8 +6,8 @@
  * Date        : 2008-11-15
  * Description : collections setup tab model/view
  *
- * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,6 +40,7 @@
 
 // KDE includes
 
+#include <kdeversion.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <klineedit.h>
@@ -99,10 +100,10 @@ protected:
     QSignalMapper       *m_buttonMapper;
 };
 
-
 // for delegate
 #include "setupcollectionview.moc"
 
+// -----------------------------------------------------------------------
 
 SetupCollectionDelegate::SetupCollectionDelegate(QAbstractItemView *view, QObject *parent)
                        : KWidgetItemDelegate(view, parent),
@@ -113,12 +114,14 @@ SetupCollectionDelegate::SetupCollectionDelegate(QAbstractItemView *view, QObjec
     m_styledDelegate = new QStyledItemDelegate(parent);
 
     // forward all signals
-    connect(m_styledDelegate, SIGNAL(closeEditor(QWidget *, QAbstractItemDelegate::EndEditHint)),
-            this, SIGNAL(closeEditor(QWidget *, QAbstractItemDelegate::EndEditHint)));
+    connect(m_styledDelegate, SIGNAL(closeEditor(QWidget*, QAbstractItemDelegate::EndEditHint)),
+            this, SIGNAL(closeEditor(QWidget*, QAbstractItemDelegate::EndEditHint)));
+
     connect(m_styledDelegate, SIGNAL(commitData(QWidget*)),
             this, SIGNAL(commitData(QWidget*)));
-    connect(m_styledDelegate, SIGNAL(sizeHintChanged(const QModelIndex &)),
-            this, SIGNAL(sizeHintChanged(const QModelIndex &)));
+
+    connect(m_styledDelegate, SIGNAL(sizeHintChanged(const QModelIndex&)),
+            this, SIGNAL(sizeHintChanged(const QModelIndex&)));
 
     // For size hint. To get a valid size hint, the widgets seem to need a parent widget
     m_samplePushButton = new QPushButton(view);
@@ -247,16 +250,20 @@ QWidget* SetupCollectionDelegate::createEditor(QWidget *parent, const QStyleOpti
 }
 
 bool SetupCollectionDelegate::editorEvent(QEvent *event, QAbstractItemModel *model,
-                                          const QStyleOptionViewItem& option, const QModelIndex&index)
+                                          const QStyleOptionViewItem& option, const QModelIndex& index)
 {
     return static_cast<QAbstractItemDelegate*>(m_styledDelegate)->editorEvent(event, model, option, index);
 }
 
 void SetupCollectionDelegate::paint(QPainter *painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
+#if KDE_IS_VERSION(4,1,68)
     m_styledDelegate->paint(painter, option, index);
-
+#else
+    m_styledDelegate->paint(painter, option, index);
+    // Only mandatory for KDE 4.1.x
     paintWidgets(painter, option, index);
+#endif
 }
 
 void SetupCollectionDelegate::setEditorData(QWidget *editor, const QModelIndex& index) const
@@ -341,18 +348,18 @@ void SetupCollectionTreeView::modelLoadedCollections()
 // ------------- Model ----------------- //
 
 SetupCollectionModel::Item::Item()
-    : parentId(-1), deleted(false)
+                    : parentId(-1), deleted(false)
 {
 }
 
 SetupCollectionModel::Item::Item(const CollectionLocation& location)
-    : location(location), deleted(false)
+                    : location(location), deleted(false)
 {
     parentId = SetupCollectionModel::typeToCategory(location.type());
 }
 
 SetupCollectionModel::Item::Item(const QString& path, const QString& label, SetupCollectionModel::Category category)
-    : label(label), path(path), parentId(category), deleted(false)
+                    : label(label), path(path), parentId(category), deleted(false)
 {
 }
 
@@ -747,7 +754,7 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
                         return buttonMapId(index);
                 }
         }
-}
+    }
     return QVariant();
 }
 
