@@ -78,7 +78,7 @@ public:
     ImageRotateLeftOverlay(QObject *parent);
     virtual void setActive(bool active);
 
-Q_SIGNALS :
+Q_SIGNALS:
 
     void signalRotateLeft();
 
@@ -86,6 +86,10 @@ protected:
 
     virtual ItemViewHoverButton *createButton();
     virtual void updateButton(const QModelIndex& index);
+
+private Q_SLOTS:
+
+    void slotClicked();
 };
 
 // --------------------------------------------------------------------
@@ -99,7 +103,7 @@ public:
     ImageRotateRightOverlay(QObject *parent);
     virtual void setActive(bool active);
 
-Q_SIGNALS :
+Q_SIGNALS:
 
     void signalRotateRight();
 
@@ -107,6 +111,10 @@ protected:
 
     virtual ItemViewHoverButton *createButton();
     virtual void updateButton(const QModelIndex& index);
+
+private Q_SLOTS:
+
+    void slotClicked();
 };
 
 } // namespace Digikam

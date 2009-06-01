@@ -95,7 +95,7 @@ void ImageRotateLeftOverlay::setActive(bool active)
     if (active)
     {
         connect(button(), SIGNAL(clicked(bool)),
-                this, SIGNAL(signalRotateLeft()));
+                this, SLOT(slotClicked()));
     }
 }
 
@@ -113,6 +113,19 @@ void ImageRotateLeftOverlay::updateButton(const QModelIndex& index)
     button()->move(QPoint(x, y));
 }
 
+void ImageRotateLeftOverlay::slotClicked()
+{
+    QModelIndex index = button()->index();
+    if (index.isValid())
+    {
+        QItemSelectionModel* selModel = m_view->selectionModel();
+        selModel->reset();
+        selModel->select(index, QItemSelectionModel::Select);
+        selModel->setCurrentIndex(index, QItemSelectionModel::Current);
+        emit signalRotateLeft();
+    }
+}
+
 // --------------------------------------------------------------------
 
 ImageRotateRightOverlay::ImageRotateRightOverlay(QObject *parent)
@@ -127,7 +140,7 @@ void ImageRotateRightOverlay::setActive(bool active)
     if (active)
     {
         connect(button(), SIGNAL(clicked(bool)),
-                this, SIGNAL(signalRotateRight()));
+                this, SLOT(slotClicked()));
     }
 }
 
@@ -143,6 +156,19 @@ void ImageRotateRightOverlay::updateButton(const QModelIndex& index)
     const int x      = rect.right() - gap - 16;
     const int y      = rect.top() + gap;
     button()->move(QPoint(x, y));
+}
+
+void ImageRotateRightOverlay::slotClicked()
+{
+    QModelIndex index = button()->index();
+    if (index.isValid())
+    {
+        QItemSelectionModel* selModel = m_view->selectionModel();
+        selModel->reset();
+        selModel->select(index, QItemSelectionModel::Select);
+        selModel->setCurrentIndex(index, QItemSelectionModel::Current);
+        emit signalRotateRight();
+    }
 }
 
 } // namespace Digikam
