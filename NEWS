@@ -1,6 +1,6 @@
 
 *********************************************************************************************************
-digiKam 1.0.0-beta1 - Release date: 2009-05-31
+digiKam 1.0.0-beta1 - Release date: 2009-06-07
 
 NEW FEATURES:
 
@@ -9,6 +9,9 @@ General        : New tool bar animation banner.
 General        : Fix compilation under MSVC 9.
 General        : New first run assistant (http://www.digikam.org/node/442).
 General        : New dialog to show Database statistics.
+
+AlbumGui       : Icon view is now based on pure Qt4 model/view.
+AlbumGui       : New overlay button over icon view items to perform lossless rotations.
 
 ImageEditor    : New Liquid Rescale tool (http://www.digikam.org/node/439).
 
@@ -103,5 +106,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 085 ==> 193228 : Experimental option "write metadata to RAW files" corrupts Nikon NEFs.
 086 ==> 194116 : digiKam crashed for no obvious reason.
 087 ==> 179766 : Auto crop does not fully remove black corners created by free rotation. 
-088 ==> 
+088 ==> 134308 : Add arrow buttons on thumbnail to perform lossless rotation.
+089 ==> 
 
