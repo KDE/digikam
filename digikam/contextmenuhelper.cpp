@@ -295,6 +295,13 @@ void ContextMenuHelper::slotOpenWith(QAction* action)
 
 void ContextMenuHelper::addKipiActions()
 {
+    KAction* action = kipiRotateAction();
+    if (action)
+        d->parent->addAction(action);
+}
+
+KAction* ContextMenuHelper::kipiRotateAction()
+{
     KIPI::PluginLoader* kipiPluginLoader      = KIPI::PluginLoader::instance();
     KIPI::PluginLoader::PluginList pluginList = kipiPluginLoader->pluginList();
 
@@ -310,10 +317,11 @@ void ContextMenuHelper::addKipiActions()
             foreach (KAction* action, actionList)
             {
                 if (action->objectName().toLatin1() == QString::fromLatin1("jpeglossless_rotate"))
-                    d->parent->addAction(action);
+                    return(action);
             }
         }
     }
+    return 0;
 }
 
 void ContextMenuHelper::addAssignTagsMenu(imageIds& ids)

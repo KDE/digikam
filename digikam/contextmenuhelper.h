@@ -38,6 +38,7 @@ class QMenu;
 class QPoint;
 class QString;
 
+class KAction;
 class KActionCollection;
 
 namespace Digikam
@@ -317,6 +318,8 @@ public:
      * @return the triggered action
      */
     QAction* exec(const QPoint& pos, QAction* at = 0);
+
+    static KAction* kipiRotateAction();
 
 private Q_SLOTS:
 
