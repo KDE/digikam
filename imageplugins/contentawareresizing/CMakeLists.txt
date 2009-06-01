@@ -1,28 +1,40 @@
 
-INCLUDE_DIRECTORIES(${GLIB2_INCLUDE_DIR} lqr)
+INCLUDE_DIRECTORIES(${GLIB2_INCLUDE_DIR})
 
-SET(liblqr_SRCS
-    lqr/lqr_carver_bias.c
-    lqr/lqr_carver.c
-    lqr/lqr_carver_list.c
-    lqr/lqr_carver_rigmask.c
-    lqr/lqr_cursor.c
-    lqr/lqr_gradient.c
-    lqr/lqr_progress.c
-    lqr/lqr_vmap.c
-    lqr/lqr_vmap_list.c
-    lqr/lqr_energy.c
-    lqr/lqr_rwindow.c
-   )
+IF(LQR-1_FOUND)
 
-IF(WIN32)
-    ADD_DEFINITIONS(-DLQR_DISABLE_DECLSPEC)
-ENDIF(WIN32)
+    INCLUDE_DIRECTORIES(${LQR-1_INCLUDE_DIRS})
+    
+    SET(liblqr_LIBS ${LQR-1_LIBRARIES})
 
-# Disable liblqr C code warnings.
-FOREACH(_curentfile ${liblqr_SRCS})
-    SET_SOURCE_FILES_PROPERTIES(${_curentfile} PROPERTIES COMPILE_FLAGS -w)
-ENDFOREACH(_curentfile ${liblqr_SRCS})
+ELSE(LQR-1_FOUND)
+
+    INCLUDE_DIRECTORIES(lqr)
+
+    SET(liblqr_SRCS
+        lqr/lqr_carver_bias.c
+        lqr/lqr_carver.c
+        lqr/lqr_carver_list.c
+        lqr/lqr_carver_rigmask.c
+        lqr/lqr_cursor.c
+        lqr/lqr_gradient.c
+        lqr/lqr_progress.c
+        lqr/lqr_vmap.c
+        lqr/lqr_vmap_list.c
+        lqr/lqr_energy.c
+        lqr/lqr_rwindow.c
+       )
+
+    IF(WIN32)
+        ADD_DEFINITIONS(-DLQR_DISABLE_DECLSPEC)
+    ENDIF(WIN32)
+
+    # Disable liblqr C code warnings.
+    FOREACH(_curentfile ${liblqr_SRCS})
+        SET_SOURCE_FILES_PROPERTIES(${_curentfile} PROPERTIES COMPILE_FLAGS -w)
+    ENDFOREACH(_curentfile ${liblqr_SRCS})
+
+ENDIF(LQR-1_FOUND)
 
 SET(digikamimageplugin_contentawareresizing_PART_SRCS
     imageplugin_contentawareresizing.cpp
@@ -41,6 +53,7 @@ TARGET_LINK_LIBRARIES(digikamimageplugin_contentawareresizing
                       ${QT_QTCORE_LIBRARY}
                       ${QT_QTGUI_LIBRARY}
                       ${GLIB2_LIBRARIES}
+                      ${liblqr_LIBS}
                      )
 
 INSTALL(TARGETS digikamimageplugin_contentawareresizing DESTINATION ${PLUGIN_INSTALL_DIR})

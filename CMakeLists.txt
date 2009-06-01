@@ -98,6 +98,7 @@ MACRO_BOOL_TO_01(LENSFUN_FOUND HAVE_LENSFUN)
 
 # Check GLib2 library for liquid rescale tool.
 MACRO_OPTIONAL_FIND_PACKAGE(GLIB2)
+MACRO_OPTIONAL_FIND_PACKAGE(Lqr-1)
 
 # Set config file depending of optional depencies
 
@@ -258,6 +259,11 @@ ENDIF(LENSFUN_FOUND)
 
 IF(GLIB2_FOUND)
     MESSAGE(STATUS " libglib2 library found.............. YES (optional)")
+    IF(LQR-1_FOUND)
+        MESSAGE(STATUS " liblqr-1 library found.............. YES (optional)")
+    ELSE(LQR-1_FOUND)
+        MESSAGE(STATUS " liblqr-1 library found.............. NO  (optional)")
+    ENDIF(LQR-1_FOUND)
 ELSE(GLIB2_FOUND)
     MESSAGE(STATUS " libglib2 library found.............. NO  (optional)")
     MESSAGE(STATUS "")
