@@ -62,7 +62,7 @@ public:
         fadingTimeLine = 0;
         fadingValue    = 0;
         offset         = 0;
-        duration       = 1500;   // ms
+        duration       = 600;   // ms
 
         // Pre-computed star polygon for a 15x15 pixmap.
         starPolygon << QPoint(0,  6);
@@ -328,11 +328,11 @@ void RatingWidget::paintEvent(QPaintEvent*)
     }
     else
     {
-        int x = d->offset;
-
+        int x       = d->offset;
+        int rate    = d->rating != NoRating ? d->rating : 0;
         QPixmap sel = d->selPixmap;
         applyFading(sel);
-        for (int i = 0; i < d->rating; ++i)
+        for (int i = 0; i < rate; ++i)
         {
             p.drawPixmap(x, 0, sel);
             x += sel.width()+1;
@@ -340,7 +340,7 @@ void RatingWidget::paintEvent(QPaintEvent*)
 
         QPixmap reg = d->regPixmap;
         applyFading(reg);
-        for (int i = d->rating; i < RatingMax; ++i)
+        for (int i = rate; i < RatingMax; ++i)
         {
             p.drawPixmap(x, 0, reg);
             x += reg.width()+1;
