@@ -34,7 +34,12 @@
 #include <QPainter>
 #include <QPalette>
 #include <QPixmap>
+#include <QTimeLine>
 #include <QPolygon>
+
+// KDE includes
+
+#include <kdebug.h>
 
 // Local includes
 
@@ -50,8 +55,14 @@ public:
 
     RatingWidgetPriv()
     {
-        tracking = true;
-        rating   = 0;
+        tracking       = true;
+        isHovered      = false;
+        fading         = false;
+        rating         = 0;
+        fadingTimeLine = 0;
+        fadingValue    = 0;
+        offset         = 0;
+        duration       = 1500;   // ms
 
         // Pre-computed star polygon for a 15x15 pixmap.
         starPolygon << QPoint(0,  6);
@@ -66,15 +77,22 @@ public:
         starPolygon << QPoint(4,  9);
     }
 
-    bool     tracking;
+    bool          tracking;
+    bool          isHovered;
+    bool          fading;
 
-    int      rating;
+    int           rating;
+    int           fadingValue;
+    int           duration;
+    int           offset;
 
-    QPolygon starPolygon;
+    QTimeLine    *fadingTimeLine;
 
-    QPixmap  selPixmap;      // Selected star.
-    QPixmap  regPixmap;      // Regular star.
-    QPixmap  disPixmap;      // Disable star.
+    QPolygon      starPolygon;
+
+    QPixmap       selPixmap;      // Selected star.
+    QPixmap       regPixmap;      // Regular star.
+    QPixmap       disPixmap;      // Disable star.
 };
 
 RatingWidget::RatingWidget(QWidget* parent)
@@ -91,6 +109,20 @@ RatingWidget::~RatingWidget()
     delete d;
 }
 
+void RatingWidget::setupTimeLine()
+{
+    if (d->fadingTimeLine)
+        delete d->fadingTimeLine;
+
+    d->fadingTimeLine = new QTimeLine(d->duration, this);
+    d->fadingTimeLine->setFrameRange(0, 255);
+
+    connect(d->fadingTimeLine, SIGNAL(frameChanged(int)),
+            this, SLOT(setFadingValue(int)));
+
+    d->fadingTimeLine->start();
+}
+
 int RatingWidget::regPixmapWidth() const
 {
     return d->regPixmap.width();
@@ -101,7 +133,8 @@ void RatingWidget::setRating(int val)
     if ((val < RatingMin || val > RatingMax) && val != NoRating) return;
 
     d->rating = val;
-    emit signalRatingChanged(d->rating);
+    if (d->tracking)
+        emit signalRatingChanged(d->rating);
     update();
 }
 
@@ -120,81 +153,45 @@ bool RatingWidget::hasTracking() const
     return d->tracking;
 }
 
-void RatingWidget::mousePressEvent(QMouseEvent* e)
+void RatingWidget::setFading(bool fading)
 {
-    int pos = e->x() / d->regPixmap.width() +1;
+    d->fading = fading;
+}
 
-    if (d->rating == pos)
+bool RatingWidget::hasFading() const
+{
+    return d->fading;
+}
+
+void RatingWidget::setFadingValue(int value)
+{
+    d->fadingValue = value;
+    if (d->fadingValue >= 255)
     {
-        d->rating--;
+        d->fadingTimeLine->stop();
     }
-    else
-    {
-        d->rating = pos;
-    }
-
-    if (d->tracking)
-        emit signalRatingChanged(d->rating);
-
     update();
 }
 
-void RatingWidget::mouseMoveEvent(QMouseEvent* e)
+void RatingWidget::startFading()
 {
-    int pos = e->x() / d->regPixmap.width() +1;
+    if (!hasFading()) return;
 
-    if (d->rating != pos)
-    {
-        if (pos > RatingMax)       // B.K.O.: # 151357
-            pos = RatingMax;
-        if (pos < RatingMin)
-            pos = RatingMin;
-
-        d->rating = pos;
-
-        if (d->tracking)
-            emit signalRatingChanged(d->rating);
-
-        update();
-    }
+    d->isHovered   = true;
+    d->fadingValue = 0;
+    setupTimeLine();
 }
 
-void RatingWidget::mouseReleaseEvent(QMouseEvent*)
+void RatingWidget::stopFading()
 {
-    emit signalRatingChanged(d->rating);
-}
+    if (!hasFading()) return;
 
-void RatingWidget::paintEvent(QPaintEvent*)
-{
-    QPainter p(this);
+    if (d->fadingTimeLine)
+        d->fadingTimeLine->stop();
 
-    // Widget is disable : drawing grayed frame.
-    if (!isEnabled())
-    {
-        int x = 0;
-        for (int i = 0; i < RatingMax; ++i)
-        {
-            p.drawPixmap(x, 0, d->disPixmap);
-            x += d->disPixmap.width()+1;
-        }
-    }
-    else
-    {
-        int x = 0;
-        for (int i = 0; i < d->rating; ++i)
-        {
-            p.drawPixmap(x, 0, d->selPixmap);
-            x += d->selPixmap.width()+1;
-        }
-
-        for (int i = d->rating; i < RatingMax; ++i)
-        {
-            p.drawPixmap(x, 0, d->regPixmap);
-            x += d->regPixmap.width()+1;
-        }
-    }
-
-    p.end();
+    d->isHovered   = false;
+    d->fadingValue = 0;
+    update();
 }
 
 QPixmap RatingWidget::starPixmapDisabled() const
@@ -215,6 +212,56 @@ QPixmap RatingWidget::starPixmap() const
 void RatingWidget::regeneratePixmaps()
 {
     slotThemeChanged();
+}
+
+void RatingWidget::mousePressEvent(QMouseEvent* e)
+{
+    if (hasFading() && d->fadingValue < 255) return;
+
+    int pos = (e->x() - d->offset) / d->regPixmap.width() +1;
+
+    if (d->rating == pos)
+    {
+        d->rating--;
+    }
+    else
+    {
+        d->rating = pos;
+    }
+
+    if (d->tracking)
+        emit signalRatingChanged(d->rating);
+
+    update();
+}
+
+void RatingWidget::mouseMoveEvent(QMouseEvent* e)
+{
+    if (hasFading() && d->fadingValue < 255) return;
+
+    int pos = (e->x() - d->offset) / d->regPixmap.width() +1;
+
+    if (d->rating != pos)
+    {
+        if (pos > RatingMax)       // B.K.O.: # 151357
+            pos = RatingMax;
+        if (pos < RatingMin)
+            pos = RatingMin;
+
+        d->rating = pos;
+
+        if (d->tracking)
+            emit signalRatingChanged(d->rating);
+
+        update();
+    }
+}
+
+void RatingWidget::mouseReleaseEvent(QMouseEvent*)
+{
+    if (hasFading() && d->fadingValue < 255) return;
+
+    emit signalRatingChanged(d->rating);
 }
 
 void RatingWidget::slotThemeChanged()
@@ -247,8 +294,70 @@ void RatingWidget::slotThemeChanged()
     p3.drawPolygon(d->starPolygon, Qt::WindingFill);
     p3.end();
 
-    setFixedSize(QSize((d->regPixmap.width()+1)*RatingMax, d->regPixmap.height()));
+    setMinimumSize(QSize((d->regPixmap.width()+1)*RatingMax, d->regPixmap.height()));
     update();
+}
+
+void RatingWidget::enterEvent(QEvent* e)
+{
+    QWidget::enterEvent(e);
+    startFading();
+}
+
+void RatingWidget::leaveEvent(QEvent* e)
+{
+    QWidget::leaveEvent(e);
+    stopFading();
+}
+
+void RatingWidget::paintEvent(QPaintEvent*)
+{
+    QPainter p(this);
+
+    d->offset = (width() - RatingMax * (d->disPixmap.width()+1)) / 2;
+
+    // Widget is disable : drawing grayed frame.
+    if (!isEnabled())
+    {
+        int x = d->offset;
+        for (int i = 0; i < RatingMax; ++i)
+        {
+            p.drawPixmap(x, 0, d->disPixmap);
+            x += d->disPixmap.width()+1;
+        }
+    }
+    else
+    {
+        int x = d->offset;
+
+        QPixmap sel = d->selPixmap;
+        applyFading(sel);
+        for (int i = 0; i < d->rating; ++i)
+        {
+            p.drawPixmap(x, 0, sel);
+            x += sel.width()+1;
+        }
+
+        QPixmap reg = d->regPixmap;
+        applyFading(reg);
+        for (int i = d->rating; i < RatingMax; ++i)
+        {
+            p.drawPixmap(x, 0, reg);
+            x += reg.width()+1;
+        }
+    }
+    p.end();
+}
+
+void RatingWidget::applyFading(QPixmap& pix)
+{
+    if (hasFading() && d->fadingValue < 255)
+    {
+        QPixmap alphaMask(pix.width(), pix.height());
+        const QColor color(d->fadingValue, d->fadingValue, d->fadingValue);
+        alphaMask.fill(color);
+        pix.setAlphaChannel(alphaMask);
+    }
 }
 
 }  // namespace Digikam

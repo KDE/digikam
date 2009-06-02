@@ -60,7 +60,7 @@
 #include "imageattributeswatch.h"
 #include "metadatahub.h"
 #include "ratingpopupmenu.h"
-#include "ratingbox.h"
+#include "ratingwidget.h"
 #include "dpopupmenu.h"
 #include "themeengine.h"
 #include "tooltipfiller.h"
@@ -86,8 +86,9 @@ public:
         starPolygon << QPoint(7,  11);
         starPolygon << QPoint(3,  14);
         starPolygon << QPoint(4,  9);
-        ratingItem = 0;
-        ratingBox  = 0;
+
+        ratingItem   = 0;
+        ratingWidget = 0;
     }
 
     QPolygon      starPolygon;
@@ -96,7 +97,7 @@ public:
 
     ThumbBarItem *ratingItem;
 
-    RatingBox    *ratingBox;
+    RatingWidget *ratingWidget;
 };
 
 ImagePreviewBar::ImagePreviewBar(QWidget* parent, int orientation, bool exifRotate)
@@ -119,8 +120,9 @@ ImagePreviewBar::ImagePreviewBar(QWidget* parent, int orientation, bool exifRota
     painter.drawPolygon(d->starPolygon, Qt::WindingFill);
     painter.end();
 
-    d->ratingBox = new RatingBox(viewport());
-    d->ratingBox->installEventFilter(this);
+    d->ratingWidget = new RatingWidget(viewport());
+    d->ratingWidget->setTracking(false);
+    d->ratingWidget->installEventFilter(this);
 
     if (orientation == Qt::Vertical)
         setMinimumWidth(d->ratingPixmap.width()*5 + 6 + 2*getMargin() + 2*getRadius());
@@ -137,7 +139,7 @@ ImagePreviewBar::ImagePreviewBar(QWidget* parent, int orientation, bool exifRota
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 
-    connect(d->ratingBox, SIGNAL(signalRatingChanged(int)),
+    connect(d->ratingWidget, SIGNAL(signalRatingChanged(int)),
             this, SLOT(slotEditRatingFromItem(int)));
 }
 
@@ -151,7 +153,7 @@ void ImagePreviewBar::clear(bool updateView)
     if (d->ratingItem)
     {
         unsetCursor();
-        d->ratingBox->hide();
+        d->ratingWidget->hide();
         ThumbBarItem *item = d->ratingItem;
         d->ratingItem = 0;
         item->repaint();
@@ -167,7 +169,7 @@ void ImagePreviewBar::takeItem(ThumbBarItem* item)
     if (d->ratingItem == item)
     {
         unsetCursor();
-        d->ratingBox->hide();
+        d->ratingWidget->hide();
         d->ratingItem = 0;
         item->repaint();
     }
@@ -182,7 +184,7 @@ void ImagePreviewBar::removeItem(ThumbBarItem* item)
     if (d->ratingItem == item)
     {
         unsetCursor();
-        d->ratingBox->hide();
+        d->ratingWidget->hide();
         d->ratingItem = 0;
         item->repaint();
     }
@@ -195,7 +197,7 @@ void ImagePreviewBar::rearrangeItems()
     if (d->ratingItem)
     {
         unsetCursor();
-        d->ratingBox->hide();
+        d->ratingWidget->hide();
         ThumbBarItem *item = d->ratingItem;
         d->ratingItem      = 0;
         item->repaint();
@@ -211,7 +213,7 @@ void ImagePreviewBar::ensureItemVisible(ThumbBarItem* item)
     if (d->ratingItem)
     {
         unsetCursor();
-        d->ratingBox->hide();
+        d->ratingWidget->hide();
         ThumbBarItem *item = d->ratingItem;
         d->ratingItem      = 0;
         item->repaint();
@@ -225,7 +227,7 @@ void ImagePreviewBar::leaveEvent(QEvent* e)
     if (d->ratingItem)
     {
         unsetCursor();
-        d->ratingBox->hide();
+        d->ratingWidget->hide();
         ThumbBarItem *item = d->ratingItem;
         d->ratingItem      = 0;
         item->repaint();
@@ -239,7 +241,7 @@ void ImagePreviewBar::focusOutEvent(QFocusEvent* e)
     if (d->ratingItem)
     {
         unsetCursor();
-        d->ratingBox->hide();
+        d->ratingWidget->hide();
         ThumbBarItem *item = d->ratingItem;
         d->ratingItem      = 0;
         item->repaint();
@@ -253,7 +255,7 @@ void ImagePreviewBar::contentsWheelEvent(QWheelEvent* e)
     if (d->ratingItem)
     {
         unsetCursor();
-        d->ratingBox->hide();
+        d->ratingWidget->hide();
         ThumbBarItem *item = d->ratingItem;
         d->ratingItem = 0;
         item->repaint();
@@ -457,15 +459,15 @@ void ImagePreviewBar::contentsMouseMoveEvent(QMouseEvent* e)
                 item->repaint();
 
                 rect.moveTopLeft(contentsToViewport(rect.topLeft()));
-                d->ratingBox->setFixedSize(rect.size());
-                d->ratingBox->move(rect.topLeft().x()-1, rect.topLeft().y());
-                d->ratingBox->setRating(item->info().rating());
-                d->ratingBox->show();
+                d->ratingWidget->setFixedSize(rect.size());
+                d->ratingWidget->move(rect.topLeft().x()-1, rect.topLeft().y());
+                d->ratingWidget->setRating(item->info().rating());
+                d->ratingWidget->show();
             }
             else
             {
                 unsetCursor();
-                d->ratingBox->hide();
+                d->ratingWidget->hide();
                 d->ratingItem = 0;
                 item->repaint();
             }
@@ -473,7 +475,7 @@ void ImagePreviewBar::contentsMouseMoveEvent(QMouseEvent* e)
         else
         {
             unsetCursor();
-            d->ratingBox->hide();
+            d->ratingWidget->hide();
             d->ratingItem = 0;
         }
     }
@@ -683,17 +685,17 @@ void ImagePreviewBar::slotThemeChanged()
 
 bool ImagePreviewBar::eventFilter(QObject *obj, QEvent *ev)
 {
-    if ( obj == d->ratingBox )
+    if ( obj == d->ratingWidget )
     {
         if ( ev->type() == QEvent::Leave)
         {
-            // Cave: ratingBox->hide can recurse here again! See bug 184473
+            // Cave: ratingWidget->hide can recurse here again! See bug 184473
             ThumbBarItem *item = d->ratingItem;
             if (item)
             {
                 unsetCursor();
                 d->ratingItem = 0;
-                d->ratingBox->hide();
+                d->ratingWidget->hide();
                 item->repaint();
             }
         }

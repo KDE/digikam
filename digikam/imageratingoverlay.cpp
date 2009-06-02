@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2008 by Peter Penz <peter.penz@gmx.at>
  * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,7 +39,7 @@
 #include "imagedelegate.h"
 #include "imagemodel.h"
 #include "imagecategorizedview.h"
-#include "ratingbox.h"
+#include "ratingwidget.h"
 
 namespace Digikam
 {
@@ -48,14 +49,17 @@ ImageRatingOverlay::ImageRatingOverlay(QObject *parent)
 {
 }
 
-RatingBox *ImageRatingOverlay::ratingBox() const
+RatingWidget *ImageRatingOverlay::ratingWidget() const
 {
-    return static_cast<RatingBox*>(m_widget);
+    return static_cast<RatingWidget*>(m_widget);
 }
 
 QWidget *ImageRatingOverlay::createWidget()
 {
-    return new RatingBox(parentWidget());
+    RatingWidget* w = new RatingWidget(parentWidget());
+    w->setFading(true);
+    w->setTracking(false);
+    return w;
 }
 
 void ImageRatingOverlay::setActive(bool active)
@@ -64,7 +68,7 @@ void ImageRatingOverlay::setActive(bool active)
 
     if (active)
     {
-        connect(ratingBox(), SIGNAL(signalRatingChanged(int)),
+        connect(ratingWidget(), SIGNAL(signalRatingChanged(int)),
                 this, SLOT(slotRatingChanged(int)));
 
         connect(view()->model(), SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
@@ -122,7 +126,7 @@ void ImageRatingOverlay::updateRating()
     if (!m_index.isValid())
         return;
     ImageInfo info = ImageModel::retrieveImageInfo(m_index);
-    ratingBox()->setRating(info.rating());
+    ratingWidget()->setRating(info.rating());
 }
 
 void ImageRatingOverlay::slotRatingChanged(int rating)

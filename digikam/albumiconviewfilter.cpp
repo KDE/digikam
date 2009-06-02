@@ -57,18 +57,18 @@ public:
          digiKam crash. Text Filter bar is replaced by a simple QLineEdit in this case.
  */
 #if KDE_IS_VERSION(4,1,0)
-    SearchTextBar *textFilter;
+    SearchTextBar       *textFilter;
 #else
-    QLineEdit     *textFilter;
+    QLineEdit           *textFilter;
 #endif
 
-    StatusLed     *led;
+    StatusLed           *led;
 
-    MimeFilter    *mimeFilter;
+    MimeFilter          *mimeFilter;
 
-    RatingFilter  *ratingFilter;
+    RatingFilter        *ratingFilter;
 
-    ImageFilterSettings settings;
+    ImageFilterSettings  settings;
 };
 
 AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
@@ -99,6 +99,7 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
     d->mimeFilter   = new MimeFilter(this);
     d->ratingFilter = new RatingFilter(this);
 
+    layout()->setAlignment(d->ratingFilter, Qt::AlignCenter);
     setSpacing(KDialog::spacingHint());
     setMargin(0);
 

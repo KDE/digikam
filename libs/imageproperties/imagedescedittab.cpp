@@ -176,6 +176,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     KHBox *ratingBox = new KHBox(settingsArea);
     new QLabel(i18n("Rating:"), ratingBox);
     d->ratingWidget  = new RatingWidget(ratingBox);
+    ratingBox->layout()->setAlignment(d->ratingWidget, Qt::AlignVCenter|Qt::AlignRight);
 
     // Tags view ---------------------------------------------------
 

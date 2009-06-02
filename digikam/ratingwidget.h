@@ -51,6 +51,12 @@ public:
     void setTracking(bool tracking);
     bool hasTracking() const;
 
+    void setFading(bool fading);
+    bool hasFading() const;
+
+    void startFading();
+    void stopFading();
+
 Q_SIGNALS:
 
     void signalRatingChanged(int);
@@ -62,6 +68,8 @@ protected:
     virtual void mousePressEvent(QMouseEvent*);
     virtual void mouseMoveEvent(QMouseEvent*);
     virtual void mouseReleaseEvent(QMouseEvent*);
+    virtual void enterEvent(QEvent*);
+    virtual void leaveEvent(QEvent*);
     virtual void paintEvent(QPaintEvent*);
 
     QPixmap starPixmap() const;
@@ -69,6 +77,12 @@ protected:
     QPixmap starPixmapDisabled() const;
 
     void regeneratePixmaps();
+    void setupTimeLine();
+    void applyFading(QPixmap& pix);
+
+protected Q_SLOTS:
+
+    void setFadingValue(int value);
 
 private Q_SLOTS:
 

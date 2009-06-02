@@ -7,6 +7,7 @@
  * Description : rating icon view item at mouse hover
  *
  * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,7 +39,7 @@
 namespace Digikam
 {
 
-class RatingBox;
+class RatingWidget;
 
 class ImageRatingOverlay : public AbstractWidgetDelegateOverlay
 {
@@ -48,7 +49,7 @@ public:
 
     ImageRatingOverlay(QObject *parent);
 
-    RatingBox *ratingBox() const;
+    RatingWidget *ratingWidget() const;
 
 Q_SIGNALS:
 

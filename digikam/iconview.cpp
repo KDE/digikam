@@ -56,7 +56,7 @@
 
 // Local includes
 
-#include "ratingbox.h"
+#include "ratingwidget.h"
 #include "drubberband.h"
 #include "thumbbar.h"
 #include "iconitem.h"
@@ -79,7 +79,7 @@ public:
         anchorItem               = 0;
         clearing                 = false;
         spacing                  = 10;
-        ratingBox                = 0;
+        ratingWidget             = 0;
         ratingItem               = 0;
 
         rubber                   = 0;
@@ -137,7 +137,7 @@ public:
     IconGroupItem            *firstGroup;
     IconGroupItem            *lastGroup;
 
-    RatingBox                *ratingBox;
+    RatingWidget             *ratingWidget;
 
     struct ItemContainer
     {
@@ -176,7 +176,8 @@ IconView::IconView(QWidget* parent, const char* name)
     d->rearrangeTimer = new QTimer(this);
     d->toolTipTimer   = new QTimer(this);
     d->rubber         = new DRubberBand(this);
-    d->ratingBox      = new RatingBox(viewport());
+    d->ratingWidget   = new RatingWidget(viewport());
+    d->ratingWidget->setTracking(false);
 
     connect(d->rearrangeTimer, SIGNAL(timeout()),
             this, SLOT(slotRearrange()));
@@ -187,7 +188,7 @@ IconView::IconView(QWidget* parent, const char* name)
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotIconViewFontChanged()));
 
-    connect(d->ratingBox, SIGNAL(signalRatingChanged(int)),
+    connect(d->ratingWidget, SIGNAL(signalRatingChanged(int)),
             this, SLOT(slotEditRatingFromItem(int)));
 
     slotIconViewFontChanged();
@@ -342,7 +343,7 @@ void IconView::clear(bool update)
         d->ratingItem->setEditRating(false);
         d->ratingItem = 0;
         unsetCursor();
-        d->ratingBox->hide();
+        d->ratingWidget->hide();
     }
 
     deleteContainers();
@@ -586,7 +587,7 @@ void IconView::takeItem(IconItem* item)
         d->ratingItem->setEditRating(false);
         d->ratingItem = 0;
         unsetCursor();
-        d->ratingBox->hide();
+        d->ratingWidget->hide();
     }
 
     // if it is current item, change the current item
@@ -698,7 +699,7 @@ void IconView::slotRearrange()
         d->ratingItem->setEditRating(false);
         d->ratingItem = 0;
         unsetCursor();
-        d->ratingBox->hide();
+        d->ratingWidget->hide();
     }
 
     // hide tooltip
@@ -989,7 +990,7 @@ void IconView::focusOutEvent(QFocusEvent* e)
         d->ratingItem->setEditRating(false);
         d->ratingItem = 0;
         unsetCursor();
-        d->ratingBox->hide();
+        d->ratingWidget->hide();
     }
 
     // hide tooltip
@@ -1185,7 +1186,7 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
         if (item && KGlobalSettings::changeCursorOverIcon() && item->clickToOpenRect().contains(e->pos()))
         {
             setCursor(Qt::PointingHandCursor);
-            d->ratingBox->hide();
+            d->ratingWidget->hide();
             if (d->ratingItem)
                 d->ratingItem->setEditRating(false);
             d->ratingItem = 0;
@@ -1199,15 +1200,15 @@ void IconView::contentsMouseMoveEvent(QMouseEvent* e)
 
             QRect rect = item->clickToRateRect();
             rect.moveTopLeft(contentsToViewport(rect.topLeft()));
-            d->ratingBox->setFixedSize(rect.width()+1, rect.height()+1);
-            d->ratingBox->move(rect.topLeft().x(), rect.topLeft().y());
-            d->ratingBox->setRating(item->rating());
-            d->ratingBox->show();
+            d->ratingWidget->setFixedSize(rect.width()+1, rect.height()+1);
+            d->ratingWidget->move(rect.topLeft().x(), rect.topLeft().y());
+            d->ratingWidget->setRating(item->rating());
+            d->ratingWidget->show();
         }
         else
         {
             unsetCursor();
-            d->ratingBox->hide();
+            d->ratingWidget->hide();
             if (d->ratingItem)
                 d->ratingItem->setEditRating(false);
             d->ratingItem = 0;
@@ -1359,7 +1360,7 @@ void IconView::contentsWheelEvent(QWheelEvent* e)
         d->ratingItem->setEditRating(false);
         d->ratingItem = 0;
         unsetCursor();
-        d->ratingBox->hide();
+        d->ratingWidget->hide();
     }
 
     d->toolTipItem = 0;
@@ -1863,7 +1864,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
             d->ratingItem->setEditRating(false);
             d->ratingItem = 0;
             unsetCursor();
-            d->ratingBox->hide();
+            d->ratingWidget->hide();
         }
 
         emit signalSelectionChanged();
