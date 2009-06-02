@@ -107,5 +107,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 086 ==> 194116 : digiKam crashed for no obvious reason.
 087 ==> 179766 : Auto crop does not fully remove black corners created by free rotation. 
 088 ==> 134308 : Add arrow buttons on thumbnail to perform lossless rotation.
-089 ==> 
+089 ==> 194804 : Tag, rate, rotate and delete via slideshow.
+090 ==> 
 
