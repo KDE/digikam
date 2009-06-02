@@ -29,7 +29,6 @@
 #include <QDateTime>
 #include <QFileInfo>
 #include <QGridLayout>
-#include <QTextStream>
 #include <QToolButton>
 
 // KDE includes
@@ -165,12 +164,8 @@ QString ManualRenameInput::parser(const QString& parse,
                 start   = regExp.cap(3).isEmpty() ? 1 : regExp.cap(3).toInt();
                 step    = regExp.cap(4).isEmpty() ? 1 : regExp.cap(4).toInt();
 
-                QString tmp;
-                QTextStream seqStream(&tmp);
-                seqStream.setFieldWidth(slength);
-                seqStream.setFieldAlignment(QTextStream::AlignRight);
-                seqStream.setPadChar('0');
-                seqStream << start + ((index-1) * step);
+                int number  = start + ((index-1) * step);
+                QString tmp = QString("%1").arg(number, slength, 10, QChar('0'));
                 parsedString.replace(pos, regExp.matchedLength(), tmp);
             }
         }
