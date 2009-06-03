@@ -2040,7 +2040,6 @@ QMap<int, int> AlbumDB::getNumberOfImagesInTags()
 
 QMap<QString,int> AlbumDB::getImageFormatStatistics()
 {
-    QList<QVariant> values, allFormats;
     QMap<QString, int>  map;
 
     QSqlQuery query;
