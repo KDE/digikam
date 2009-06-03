@@ -57,6 +57,8 @@ public:
     void startFading();
     void stopFading();
 
+    void setVisible(bool visible);
+
 Q_SIGNALS:
 
     void signalRatingChanged(int);
@@ -68,9 +70,10 @@ protected:
     virtual void mousePressEvent(QMouseEvent*);
     virtual void mouseMoveEvent(QMouseEvent*);
     virtual void mouseReleaseEvent(QMouseEvent*);
-    virtual void enterEvent(QEvent*);
-    virtual void leaveEvent(QEvent*);
     virtual void paintEvent(QPaintEvent*);
+
+/*    virtual void enterEvent(QEvent*);
+    virtual void leaveEvent(QEvent*);*/
 
     QPixmap starPixmap() const;
     QPixmap starPixmapFilled() const;

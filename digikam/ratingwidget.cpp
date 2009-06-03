@@ -173,13 +173,26 @@ void RatingWidget::setFadingValue(int value)
     update();
 }
 
+void RatingWidget::setVisible(bool visible)
+{
+    QWidget::setVisible(visible);
+
+    if (visible)
+        startFading();
+    else
+        stopFading();
+}
+
 void RatingWidget::startFading()
 {
     if (!hasFading()) return;
 
-    d->isHovered   = true;
-    d->fadingValue = 0;
-    setupTimeLine();
+    if (!d->isHovered)
+    {
+        d->isHovered   = true;
+        d->fadingValue = 0;
+        setupTimeLine();
+    }
 }
 
 void RatingWidget::stopFading()
@@ -297,7 +310,7 @@ void RatingWidget::slotThemeChanged()
     setMinimumSize(QSize((d->regPixmap.width()+1)*RatingMax, d->regPixmap.height()));
     update();
 }
-
+/*
 void RatingWidget::enterEvent(QEvent* e)
 {
     QWidget::enterEvent(e);
@@ -309,7 +322,7 @@ void RatingWidget::leaveEvent(QEvent* e)
     QWidget::leaveEvent(e);
     stopFading();
 }
-
+*/
 void RatingWidget::paintEvent(QPaintEvent*)
 {
     QPainter p(this);

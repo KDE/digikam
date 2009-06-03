@@ -81,7 +81,7 @@ void ImageRatingOverlay::mouseMoved(QMouseEvent *e, const QRect& visualRect, con
     if (index != m_index)
         return;
 
-    QRect rect = delegate()->ratingRect();
+    QRect rect = delegate()->rect();
     rect.translate(visualRect.topLeft());
 
     if (rect.contains(e->pos()))
