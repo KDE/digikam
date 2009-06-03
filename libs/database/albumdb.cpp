@@ -2053,7 +2053,9 @@ QMap<QString,int> AlbumDB::getImageFormatStatistics()
         {
             QString quantity = query.value(0).toString();
             QString format   = query.value(1).toString();
-            map[format]      = quantity.isEmpty() ? 0 : quantity.toInt();
+            if (format.isEmpty())
+                continue;
+            map[format] = quantity.isEmpty() ? 0 : quantity.toInt();
         }
     }
 
