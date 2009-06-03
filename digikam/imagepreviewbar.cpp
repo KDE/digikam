@@ -123,6 +123,7 @@ ImagePreviewBar::ImagePreviewBar(QWidget* parent, int orientation, bool exifRota
     d->ratingWidget = new RatingWidget(viewport());
     d->ratingWidget->setTracking(false);
     d->ratingWidget->installEventFilter(this);
+    d->ratingWidget->hide();
 
     if (orientation == Qt::Vertical)
         setMinimumWidth(d->ratingPixmap.width()*5 + 6 + 2*getMargin() + 2*getRadius());
