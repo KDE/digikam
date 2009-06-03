@@ -33,6 +33,7 @@
 // KDE includes
 
 #include <klocale.h>
+#include <kglobalsettings.h>
 
 // Local includes
 
@@ -56,8 +57,9 @@ RatingWidget *ImageRatingOverlay::ratingWidget() const
 
 QWidget *ImageRatingOverlay::createWidget()
 {
-    RatingWidget* w = new RatingWidget(parentWidget());
-    w->setFading(true);
+    const bool animate = KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects;
+    RatingWidget* w    = new RatingWidget(parentWidget());
+    w->setFading(animate);
     w->setTracking(false);
     return w;
 }
