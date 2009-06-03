@@ -12,7 +12,6 @@ Implementation:
 Gui:
 - Add picture preview of the seams and of the energy
 - Mouse wheel should change brush size
-- Within preview widget the mouse pointer should be a circle whose diameter is brush size
 - Skin tones should be previewed as an orange mask
 
 Features:

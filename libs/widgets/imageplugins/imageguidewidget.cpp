@@ -722,7 +722,15 @@ void ImageGuideWidget::mouseMoveEvent(QMouseEvent *e)
         }
         else if ((e->buttons() & Qt::LeftButton) && d->drawingMask)
         {
-            setCursor(Qt::CrossCursor);
+            int size = d->penWidth;
+            if (size>64)
+              size=64; // it is not possible to have larger cursors
+            QPixmap pix(size,size);
+            pix.fill(Qt::transparent);
+            QPainter p(&pix);
+            p.drawEllipse( 0, 0, size-1, size-1);
+            setCursor(QCursor(pix));
+            
             QPoint currentPos = QPoint(e->x()-d->rect.x(), e->y()-d->rect.y());
             drawLineTo(currentPos);
             updatePreview();
