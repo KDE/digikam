@@ -146,8 +146,8 @@ DIRECTORIES / FILES                     DONE BY     SHOWFOTO DIGIKAM   PORT     
     albumfolderview.cpp                 Gilles                 X       DONE                 Still use Q3ScrollView. Port to QScrollArea and Model/View
     albumhistory.cpp                    Laurent                X       DONE        DONE
     albumicongroupitem.cpp              Gilles                 X       DONE        DONE
-    albumiconitem.cpp                   Gilles                 X       DONE                 Port to Qt4 and Model/View
-    albumiconview.cpp                   Gilles                 X       DONE                 Port to Qt4 and Model/View
+    albumiconitem.cpp                   Gilles                 X       DONE                 Obsolete. Replaced by imagedelegate.cpp
+    albumiconview.cpp                   Gilles                 X       DONE                 Obsolete. Replaced by imagecategorizedview.cpp
     albumiconviewfilter.cpp             Gilles                 X       DONE        DONE
     albumiconviewtooltip.cpp            Gilles                 X       DONE        DONE
     albumlister.cpp                     Gilles                 X       DONE        DONE
@@ -164,6 +164,7 @@ DIRECTORIES / FILES                     DONE BY     SHOWFOTO DIGIKAM   PORT     
     cameratype.cpp                      Gilles                 X       DONE        DONE
     contextmenuhelper.cpp               Andi                   X       DONE        DONE
     datefolderview.cpp                  Laurent                X       DONE                 Port to Qt4 and Model/View
+    dbstatdlg.cpp                       Gilles                 X       DONE        DONE
     ddragobjects.cpp                    Gilles                 X       DONE        DONE
     digikamadaptor.cpp                  Laurent                X       DONE        DONE
     digikamapp.cpp                      Gilles                 X       DONE        DONE
@@ -197,7 +198,6 @@ DIRECTORIES / FILES                     DONE BY     SHOWFOTO DIGIKAM   PORT     
     metadatamanager.cpp                 Marcel                 X       DONE        DONE
     mimefilter.cpp                      Gilles                 X       DONE        DONE
     monthwidget.cpp                     Gilles                 X       DONE        DONE
-    ratingbox.cpp                       Gilles                 X       DONE        DONE
     ratingfilter.cpp                    Gilles                 X       DONE        DONE
     ratingpopupmenu.cpp                 Gilles                 X       DONE        DONE
     ratingwidget.cpp                    Gilles                 X       DONE        DONE
