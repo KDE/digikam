@@ -573,13 +573,12 @@ void ImageGuideWidget::resizeEvent(QResizeEvent *e)
 {
     blockSignals(true);
     delete d->pixmap;
-    delete d->maskPixmap;
 
     int w     = e->size().width();
     int h     = e->size().height();
     int old_w = d->width;
     int old_h = d->height;
-
+    
     uchar *data     = d->iface->setPreviewImageSize(w, h);
     d->width        = d->iface->previewWidth();
     d->height       = d->iface->previewHeight();
@@ -591,8 +590,7 @@ void ImageGuideWidget::resizeEvent(QResizeEvent *e)
 
     d->pixmap       = new QPixmap(w, h);
     d->rect         = QRect(w/2-d->width/2, h/2-d->height/2, d->width, d->height);
-    d->maskPixmap   = new QPixmap(d->rect.width(), d->rect.height());
-    d->maskPixmap->fill(QColor(0,0,0,0));
+    *d->maskPixmap  = d->maskPixmap->scaled(d->width,d->height,Qt::IgnoreAspectRatio);
 
     d->spot.setX((int)((float)d->spot.x() * ( (float)d->width  / (float)old_w)));
     d->spot.setY((int)((float)d->spot.y() * ( (float)d->height / (float)old_h)));

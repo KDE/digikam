@@ -1,7 +1,5 @@
 TODO list for content aware resizing.
 
-Known bug (to be solved before 1.0.0): mask is deleted when window is resized
-
 Speed:
 - study how to perform "real time" seamcarving by using Lqr properly
 - study parallelization of the carving process
