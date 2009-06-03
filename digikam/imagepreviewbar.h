@@ -51,7 +51,6 @@ public:
                     bool exifRotate=true);
     virtual ~ImagePreviewBar();
 
-
     ThumbBarItem* ratingItem() const;
 
     void setSelectedItem(ImagePreviewBarItem* ltItem);
