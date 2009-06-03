@@ -122,6 +122,7 @@ ImagePreviewBar::ImagePreviewBar(QWidget* parent, int orientation, bool exifRota
 
     d->ratingWidget = new RatingWidget(viewport());
     d->ratingWidget->setTracking(false);
+    d->ratingWidget->setFading(true);
     d->ratingWidget->installEventFilter(this);
     d->ratingWidget->hide();
 
