@@ -109,5 +109,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 088 ==> 134308 : Add arrow buttons on thumbnail to perform lossless rotation.
 089 ==> 194804 : Tag, rate, rotate and delete via slideshow.
 090 ==> 192425 : Star rating setting under thumbnails is a nuisance.
-091 ==> 
+091 ==> 194330 : digiKam crashed when deleting image.
+092 ==> 
 
