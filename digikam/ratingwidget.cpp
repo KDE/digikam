@@ -242,6 +242,11 @@ void RatingWidget::mousePressEvent(QMouseEvent* e)
         d->rating = pos;
     }
 
+    if (d->rating > RatingMax)
+        d->rating = RatingMax;
+    if (d->rating < RatingMin)
+        d->rating = RatingMin;
+
     if (d->tracking)
         emit signalRatingChanged(d->rating);
 
