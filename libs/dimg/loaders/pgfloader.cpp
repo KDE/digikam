@@ -185,8 +185,16 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 break;
         }
 
+        const PGFHeader* header = pgf.GetHeader();
+        kDebug(50003) << "PGF width    = " << header->width    << endl;
+        kDebug(50003) << "PGF height   = " << header->height   << endl;
+        kDebug(50003) << "PGF bbp      = " << header->bpp      << endl;
+        kDebug(50003) << "PGF channels = " << header->channels << endl;
+        kDebug(50003) << "PGF quality  = " << header->quality  << endl;
+        kDebug(50003) << "PGF mode     = " << header->mode     << endl;
+
         int width        = pgf.Width();
-        int height       = pgf.Height();;
+        int height       = pgf.Height();
         uchar *data      = 0;
         int channelMap[] = { 0, 1, 2, 3 };
 
@@ -194,6 +202,9 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             data = new uchar[width*height*8];  // 16 bits/color/pixel
         else
             data = new uchar[width*height*4];  // 8 bits/color/pixel
+
+        // Fill all with 255 including alpha channel.
+        memset(data, sizeof(data), 0xFF);
 
         pgf.Read(0, CallbackForLibPGF, this);
         pgf.GetBitmap(m_sixteenBit ? width*8 : width*4, (UINT8*)data, m_sixteenBit ? 64 : 32,
@@ -255,20 +266,13 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
     try
     {
-        int channelMap[] = { 0, 1, 2, 3 };
+        int channelMapBGRA[] = { 0, 1, 2, 3 };
+        int channelMapBGR[]  = { 0, 1, 2 };
         QVariant qualityAttr = imageGetAttribute("quality");
-        int quality          = qualityAttr.isValid() ? qualityAttr.toInt() : 90;
-
-        if (quality < 0)
-            quality = 90;
-        if (quality > 100)
-            quality = 100;
-
-        // NOTE: to have a lossless compression use quality=100.
-        int rate= quality / 100.0F;
+//        int quality          = qualityAttr.isValid() ? qualityAttr.toInt() : 90;
+        int quality          = 1;
 
         kDebug(50003) << "PGF quality: " << quality << endl;
-        kDebug(50003) << "PGF rate " << rate << endl;
 
         CPGFFileStream stream(fd);
         CPGFImage      pgf;
@@ -277,16 +281,27 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         header.height   = imageHeight();
         header.channels = imageHasAlpha() ? 4 : 3;
         header.bpp      = imageBitsDepth() * header.channels;
-        header.quality  = rate;
+        header.quality  = quality;
         header.mode     = imageHasAlpha() ? ImageModeRGBA : ImageModeRGBColor;
         header.background.rgbtBlue = header.background.rgbtGreen = header.background.rgbtRed = 0;
         pgf.SetHeader(header);
 
-        pgf.ImportBitmap(header.bpp*imageWidth(), (UINT8*)imageData(), header.bpp,
-                         channelMap, CallbackForLibPGF, this);
+        pgf.ImportBitmap(header.channels * imageWidth() * (imageSixteenBit() ? 2 : 1),
+                         (UINT8*)imageData(),
+                         header.bpp,
+                         imageHasAlpha() ? channelMapBGRA : channelMapBGR,
+                         CallbackForLibPGF, this);
 
         UINT32 nWrittenBytes = 0;
         pgf.Write(&stream, 0, CallbackForLibPGF, &nWrittenBytes, this);
+
+        kDebug(50003) << "PGF width     = " << header.width    << endl;
+        kDebug(50003) << "PGF height    = " << header.height   << endl;
+        kDebug(50003) << "PGF bbp       = " << header.bpp      << endl;
+        kDebug(50003) << "PGF channels  = " << header.channels << endl;
+        kDebug(50003) << "PGF quality   = " << header.quality  << endl;
+        kDebug(50003) << "PGF mode      = " << header.mode     << endl;
+        kDebug(50003) << "Bytes Written = " << nWrittenBytes   << endl;
 
 #ifdef WIN32
         CloseHandle(fd);
