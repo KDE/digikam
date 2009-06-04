@@ -72,9 +72,6 @@ protected:
     virtual void mouseReleaseEvent(QMouseEvent*);
     virtual void paintEvent(QPaintEvent*);
 
-/*    virtual void enterEvent(QEvent*);
-    virtual void leaveEvent(QEvent*);*/
-
     QPixmap starPixmap() const;
     QPixmap starPixmapFilled() const;
     QPixmap starPixmapDisabled() const;

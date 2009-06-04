@@ -310,19 +310,7 @@ void RatingWidget::slotThemeChanged()
     setMinimumSize(QSize((d->regPixmap.width()+1)*RatingMax, d->regPixmap.height()));
     update();
 }
-/*
-void RatingWidget::enterEvent(QEvent* e)
-{
-    QWidget::enterEvent(e);
-    startFading();
-}
 
-void RatingWidget::leaveEvent(QEvent* e)
-{
-    QWidget::leaveEvent(e);
-    stopFading();
-}
-*/
 void RatingWidget::paintEvent(QPaintEvent*)
 {
     QPainter p(this);
