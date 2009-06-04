@@ -5,7 +5,6 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/loaders
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/clapack
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/whitebalance
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dmetadata
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/histogram
@@ -39,6 +38,7 @@ INCLUDE_DIRECTORIES(
                      # specific libs and utilities
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/3rdparty/sqlite2
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/3rdparty/libpgf
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/3rdparty/clapack
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/themeengine
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/kipiiface
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui

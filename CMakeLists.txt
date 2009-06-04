@@ -412,37 +412,37 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(libclapack_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/abort_.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/dgesv.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/dlaswp.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/endfile.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/idamax.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/open.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/sig_die.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/wref.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/close.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/dgetf2.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/dscal.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/err.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/ieeeck.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/s_cmp.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/s_stop.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/wrtfmt.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/dgemm.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/dgetrf.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/dswap.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/fmt.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/ilaenv.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/s_copy.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/wsfe.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/dger.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/dgetrs.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/dtrsm.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/fmtlib.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/lsame.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/sfe.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/util.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/xerbla.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/abort_.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dgesv.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dlaswp.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/endfile.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/idamax.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/open.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/sig_die.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/wref.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/close.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dgetf2.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dscal.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/err.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/ieeeck.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/s_cmp.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/s_stop.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/wrtfmt.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dgemm.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dgetrf.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dswap.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/fmt.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/ilaenv.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/s_copy.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/wsfe.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dger.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dgetrs.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/dtrsm.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/fmtlib.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/lsame.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/sfe.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/util.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/clapack/xerbla.c
        )
 
     SET(libdimgfilters_SRCS
