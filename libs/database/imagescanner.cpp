@@ -637,6 +637,8 @@ QString ImageScanner::detectFormat()
             return "PPM";
         case DImg::JP2K:
             return "JP2k";
+        case DImg::PGF:
+            return "PGF";
         case DImg::RAW:
         {
             QString format = "RAW-";

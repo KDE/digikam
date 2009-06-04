@@ -3,9 +3,7 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/..
                    )
 
 # Disable libpgf warnings.
-FOREACH(_curentfile ${libpgf_SRCS})
-    SET_SOURCE_FILES_PROPERTIES(${_curentfile} PROPERTIES COMPILE_FLAGS -w)
-ENDFOREACH(_curentfile ${libpgf_SRCS})
+SET_SOURCE_FILES_PROPERTIES(${libpgf_SRCS} PROPERTIES COMPILE_FLAGS "-w")
 
 SET(qtpgftest_SRCS qtpgftest.cpp
                    ${CMAKE_CURRENT_SOURCE_DIR}/../thumbnailpgf.cpp

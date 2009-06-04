@@ -70,6 +70,7 @@ extern "C"
 #include "ppmloader.h"
 #include "rawloader.h"
 #include "jp2kloader.h"
+#include "pgfloader.h"
 #include "qimageloader.h"
 #include "icctransform.h"
 #include "exposurecontainer.h"
@@ -440,6 +441,21 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
             }
             break;
         }
+        case(PGF):
+        {
+            kDebug(50003) << filePath << " : PGF file identified" << endl;
+            PGFLoader loader(this);
+            loader.setLoadFlags(loadFlags);
+            if (loader.load(filePath, observer))
+            {
+                m_priv->null       = !loader.hasLoadedData();
+                m_priv->alpha      = loader.hasAlpha();
+                m_priv->sixteenBit = loader.sixteenBit();
+                m_priv->isReadOnly = loader.isReadOnly();
+                return true;
+            }
+            break;
+        }
         default:
         {
             kDebug(50003) << filePath << " : QIMAGE file identified" << endl;
@@ -496,6 +512,11 @@ QString DImg::formatToMimeType(FORMAT frm)
             format = QString("JP2");
             break;
         }
+        case(PGF):
+        {
+            format = QString("PGF");
+            break;
+        }
         default:
         {
             // For QImage based.
@@ -548,6 +569,11 @@ bool DImg::save(const QString& filePath, const QString& format, DImgLoaderObserv
         JP2KLoader loader(this);
         return loader.save(filePath, observer);
     }
+    if (frm == "PGF")
+    {
+        PGFLoader loader(this);
+        return loader.save(filePath, observer);
+    }
     else
     {
         setAttribute("format", format);
@@ -594,6 +620,8 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
             ext == QString("JPC") || ext == QString("J2K") || // JPEG2000 code stream
             ext == QString("PGX"))                            // JPEG2000 WM format
             return JP2K;
+        else if (ext == QString("PGF"))
+            return PGF;
     }
 
     // In second, we trying to parse file header.
@@ -625,6 +653,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
     uchar pngID[8]     = { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A };
     uchar jp2ID[5]     = { 0x6A, 0x50, 0x20, 0x20, 0x0D, };
     uchar jpcID[2]     = { 0xFF, 0x4F };
+    uchar pgfID[3]     = { 0x50, 0x47, 0x46 };
 
     if (memcmp(&header, &jpegID, 2) == 0)            // JPEG file ?
     {
@@ -665,10 +694,14 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
     {
         return TIFF;
     }
-    else if (memcmp(&header[4], &jp2ID, 5) == 0 ||         // JPEG2000 file ?
+    else if (memcmp(&header[4], &jp2ID, 5) == 0 ||   // JPEG2000 file ?
              memcmp(&header,    &jpcID, 2) == 0)
     {
         return JP2K;
+    }
+    else if (memcmp(&header, &pgfID, 3) == 0)        // PGF file ?
+    {
+        return PNG;
     }
 
     // In others cases, QImage will be used to try to open file.

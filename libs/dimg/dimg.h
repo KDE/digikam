@@ -66,6 +66,7 @@ public:
         RAW,
         PPM,
         JP2K,
+        PGF,
         QIMAGE
     };
 
