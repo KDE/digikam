@@ -671,7 +671,8 @@ bool AlbumManager::setDatabase(const QString& dbPath, bool priority, const QStri
         else
         {
             Digikam::CollectionManager::instance()->addLocation(suggestedAlbumRoot);
-            ScanController::instance()->completeCollectionScan();
+            // Not needed? See bug #188959
+            //ScanController::instance()->completeCollectionScan();
         }
     }
 
