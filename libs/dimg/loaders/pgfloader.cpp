@@ -194,7 +194,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         else
             data = new uchar[width*height*4];  // 8 bits/color/pixel
 
-        pgf.Read();
+        pgf.Read(0, CallbackForLibPGF, this);
         pgf.GetBitmap(m_sixteenBit ? width*8 : width*4, (UINT8*)data, m_sixteenBit ? 64 : 32, channelMap, CallbackForLibPGF, this);
 
         if (observer)
@@ -444,21 +444,13 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
         return false;
     }
-
+*/
     if (observer)
         observer->progressInfo(m_image, 1.0);
 
-    imageSetAttribute("savedformat", "JP2K");
-
+    imageSetAttribute("savedformat", "PGF");
     saveMetadata(filePath);
 
-    jas_image_destroy(jp2_image);
-    jas_stream_close(jp2_stream);
-    for (i = 0 ; i < (long)number_components ; ++i)
-        jas_matrix_destroy(pixels[i]);
-
-    jas_cleanup();
-*/
     return false;
 }
 
