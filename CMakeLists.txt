@@ -513,18 +513,18 @@ ENDIF(MSVC)
     # support 'nofinal' compilation option.
     KDE4_NO_ENABLE_FINAL(liblprof)
     SET(liblprof_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/lprof/cmshull.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/lprof/cmslm.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/lprof/cmslnr.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/lprof/cmsmatn.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/lprof/cmsmkmsh.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/lprof/cmsmntr.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/lprof/cmsoutl.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/lprof/cmspcoll.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/lprof/cmsprf.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/lprof/cmsreg.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/lprof/cmsscn.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/lprof/cmssheet.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmshull.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmslm.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmslnr.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmsmatn.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmsmkmsh.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmsmntr.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmsoutl.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmspcoll.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmsprf.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmsreg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmsscn.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lprof/cmssheet.cpp
        )
 
     SET(libthreadimageio_SRCS
