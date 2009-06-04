@@ -70,15 +70,27 @@ extern "C"
 namespace Digikam
 {
 
+static bool CallbackForLibPGF(double percent, bool escapeAllowed, void *data)
+{
+    if (data)
+    {
+        PGFLoader *d = static_cast<PGFLoader*>(data);
+        if (d) return d->progressCallback(percent, escapeAllowed);
+    }
+    return false;
+}
+
 PGFLoader::PGFLoader(DImg* image)
          : DImgLoader(image)
 {
     m_hasAlpha   = false;
     m_sixteenBit = false;
+    m_observer   = 0;
 }
 
 bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 {
+    m_observer = observer;
     readMetadata(filePath, DImg::PGF);
 
     FILE *file = fopen(QFile::encodeName(filePath), "rb");
@@ -183,7 +195,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             data = new uchar[width*height*4];  // 8 bits/color/pixel
 
         pgf.Read();
-        pgf.GetBitmap(m_sixteenBit ? width*8 : width*4, (UINT8*)data, m_sixteenBit ? 64 : 32, channelMap,0);
+        pgf.GetBitmap(m_sixteenBit ? width*8 : width*4, (UINT8*)data, m_sixteenBit ? 64 : 32, channelMap, CallbackForLibPGF, this);
 
         if (observer)
             observer->progressInfo(m_image, 1.0);
@@ -215,6 +227,8 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
 bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 {
+    m_observer = observer;
+
 /*    FILE *file = fopen(QFile::encodeName(filePath), "wb");
     if (!file)
         return false;
@@ -456,6 +470,19 @@ bool PGFLoader::hasAlpha() const
 bool PGFLoader::sixteenBit() const
 {
     return m_sixteenBit;
+}
+
+bool PGFLoader::progressCallback(double percent, bool escapeAllowed)
+{
+    if (m_observer)
+    {
+        m_observer->progressInfo(m_image, percent);
+
+    if (escapeAllowed)
+        return (!m_observer->continueQuery(m_image));
+    }
+
+    return false;
 }
 
 }  // namespace Digikam

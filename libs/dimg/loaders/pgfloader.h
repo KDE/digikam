@@ -47,10 +47,14 @@ public:
     virtual bool sixteenBit() const;
     virtual bool isReadOnly() const { return false; };
 
+    bool progressCallback(double percent, bool escapeAllowed);
+
 private:
 
     bool m_sixteenBit;
     bool m_hasAlpha;
+
+    DImgLoaderObserver *m_observer;
 };
 
 }  // namespace Digikam
