@@ -72,7 +72,10 @@ INCLUDE_DIRECTORIES(
 # Shared libdigikamcore ################################################################
 
 # Disable Clapack C code warnings.
-SET_SOURCE_FILES_PROPERTIES(${libclapack_SRCS} PROPERTIES COMPILE_FLAGS "-w" )
+SET_SOURCE_FILES_PROPERTIES(${libclapack_SRCS} PROPERTIES COMPILE_FLAGS "-w")
+
+# Disable libpgf warnings.
+SET_SOURCE_FILES_PROPERTIES(${libpgf_SRCS} PROPERTIES COMPILE_FLAGS "-w")
 
 SET(digikamcore_LIB_SRCS
                         # basic libs
@@ -89,6 +92,7 @@ SET(digikamcore_LIB_SRCS
                         ${libgreycstoration_SRCS}
                         ${libthreadimageio_SRCS}
                         ${libthemeengine_SRCS}
+                        ${libpgf_SRCS}
 
                         # widgets and dialogs
                         ${libcommonwidgets_SRCS}
@@ -155,14 +159,9 @@ INSTALL(TARGETS digikamcore ${INSTALL_TARGETS_DEFAULT_ARGS})
 # Shared libdigikamdatabase ########################################################
 
 # Disable libsqlite2 C code warnings.
-FOREACH(_curentfile ${libsqlite2_SRCS})
-    SET_SOURCE_FILES_PROPERTIES(${_curentfile} PROPERTIES COMPILE_FLAGS -w)
-ENDFOREACH(_curentfile ${libsqlite2_SRCS})
-
+SET_SOURCE_FILES_PROPERTIES(${libsqlite2_SRCS} PROPERTIES COMPILE_FLAGS -w)
 # Disable libpgf warnings.
-FOREACH(_curentfile ${libpgf_SRCS})
-    SET_SOURCE_FILES_PROPERTIES(${_curentfile} PROPERTIES COMPILE_FLAGS -w)
-ENDFOREACH(_curentfile ${libpgf_SRCS})
+SET_SOURCE_FILES_PROPERTIES(${libpgf_SRCS} PROPERTIES COMPILE_FLAGS "-w")
 
 SET(digikamdatabase_LIB_SRCS ${libdatabase_SRCS}
                              ${libhaar_SRCS}
