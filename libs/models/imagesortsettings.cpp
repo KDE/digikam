@@ -170,12 +170,23 @@ bool ImageSortSettings::lessThan(const ImageInfo& left, const ImageInfo& right) 
         case SortByCreationDate:
             return lessThan(left.dateTime(), right.dateTime(), currentSortOrder);
         case SortByRating:
-            return lessThan(left.rating(), right.rating(), currentSortOrder);
+        {
+            int leftRating = left.rating();
+            int rightRating = right.rating();
+            // second order sorting by name: Many images can have the same rating!
+            if (leftRating == rightRating)
+                return naturalCompare(left.name(), right.name(), currentSortOrder, sortCaseSensitivity) < 0;
+            return lessThan(leftRating, rightRating, currentSortOrder);
+        }
         case SortByImageSize:
         {
             QSize leftSize = left.dimensions();
             QSize rightSize = right.dimensions();
-            return lessThan(leftSize.width() * leftSize.height(), rightSize.width() * rightSize.height(), currentSortOrder);
+            int leftPixels = leftSize.width() * leftSize.height();
+            int rightPixels = rightSize.width() * rightSize.height();
+            if (leftPixels == rightPixels)
+                return naturalCompare(left.name(), right.name(), currentSortOrder, sortCaseSensitivity) < 0;
+            return lessThan(leftPixels, rightPixels, currentSortOrder);
         }
         default:
             return false;
