@@ -337,11 +337,12 @@ void ImageFilterModel::setImageFilterSettings(const ImageFilterSettings& setting
         d->needPrepareComments = settings.isFilteringByText();
         d->needPrepareTags     = settings.isFilteringByTags();
         d->needPrepare         = d->needPrepareComments || d->needPrepareTags;
+
+        d->hasOneMatch         = false;
+        d->hasOneMatchForText  = false;
     }
 
     d->filterResults.clear();
-    d->hasOneMatch = false;
-    d->hasOneMatchForText = false;
     //d->categoryCountHashInt.clear();
     //d->categoryCountHashString.clear();
     if (d->imageModel)
@@ -353,9 +354,16 @@ void ImageFilterModel::slotUpdateFilter()
 {
     Q_D(ImageFilterModel);
 
+    {
+        QMutexLocker lock(&d->mutex);
+        // do not touch version, sentOut or sentOutForReAdd here.
+        // filter did not change.
+        d->hasOneMatch         = false;
+        d->hasOneMatchForText  = false;
+    }
+
     d->filterResults.clear();
-    d->hasOneMatch = false;
-    d->hasOneMatchForText = false;
+
     if (d->imageModel)
         d->infosToProcess(d->imageModel->imageInfos(), false);
 }
@@ -375,18 +383,19 @@ ImageSortSettings ImageFilterModel::imageSortSettings() const
 void ImageFilterModel::slotModelReset()
 {
     Q_D(ImageFilterModel);
-    d->filterResults.clear();
-    d->hasOneMatch = false;
-    d->hasOneMatchForText = false;
-    d->sentOut = 0;
-    // discard all packages that are marked as send out for re-add
-    d->lastDiscardVersion = d->version;
-    d->sentOutForReAdd = 0;
-    // cause all packages on the way to be discarded
-    d->version++;
+    {
+        QMutexLocker lock(&d->mutex);
+        // cause all packages on the way to be discarded
+        d->version++;
+        d->sentOut = 0;
+        // discard all packages that are marked as send out for re-add
+        d->lastDiscardVersion = d->version;
+        d->sentOutForReAdd = 0;
 
-    //d->categoryCountHashInt.clear();
-    //d->categoryCountHashString.clear();
+        d->hasOneMatch = false;
+        d->hasOneMatchForText = false;
+    }
+    d->filterResults.clear();
 }
 
 bool ImageFilterModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
@@ -568,27 +577,31 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
 
     // get thread-local copy
     ImageFilterSettings localFilter;
+    bool hasOneMatch;
+    bool hasOneMatchForText;
     {
         QMutexLocker lock(&d->mutex);
         localFilter = d->filterCopy;
+        hasOneMatch = d->hasOneMatch;
+        hasOneMatchForText = d->hasOneMatchForText;
     }
 
     // Actual filtering. The variants to spare checking hasOneMatch over and over again.
-    if (d->hasOneMatch && d->hasOneMatchForText)
+    if (hasOneMatch && hasOneMatchForText)
     {
         foreach (const ImageInfo& info, package.infos)
         {
             package.filterResults[info.id()] = localFilter.matches(info);
         }
     }
-    else if (d->hasOneMatch)
+    else if (hasOneMatch)
     {
         bool matchForText;
         foreach (const ImageInfo& info, package.infos)
         {
             package.filterResults[info.id()] = localFilter.matches(info, &matchForText);
             if (matchForText)
-                d->hasOneMatchForText = true;
+                hasOneMatchForText = true;
         }
     }
     else
@@ -599,12 +612,19 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
             result = localFilter.matches(info, &matchForText);
             package.filterResults[info.id()] = result;
             if (result)
-                d->hasOneMatch = true;
+                hasOneMatch = true;
             if (matchForText)
-                d->hasOneMatchForText = true;
+                hasOneMatchForText = true;
         }
     }
     
+    if (checkVersion(package))
+    {
+        QMutexLocker lock(&d->mutex);
+        d->hasOneMatch = hasOneMatchForText;
+        d->hasOneMatchForText = hasOneMatchForText;
+    }
+
     emit processed(package);
 }
 
