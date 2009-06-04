@@ -149,7 +149,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 colorModel = DImg::RGB;
                 break;
             default:
-                kDebug(50003) << "Cannot load PGF image: color mode not supported..." << endl;
+                kDebug(50003) << "Cannot load PGF image: color mode not supported (" << pgf.Mode() << ")" << endl;
                 return false;
                 break;
         }
@@ -162,7 +162,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 m_hasAlpha = true;
                 break;
             default:
-                kDebug(50003) << "Cannot load PGF image: color channels number not supported..." << endl;
+                kDebug(50003) << "Cannot load PGF image: color channels number not supported (" << pgf.Channels() << ")" << endl;
                 return false;
                 break;
         }
@@ -180,7 +180,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 m_sixteenBit = true;
                 break;
             default:
-                kDebug(50003) << "Cannot load PGF image: color bits depth not supported..." << endl;
+                kDebug(50003) << "Cannot load PGF image: color bits depth not supported (" << bitDepth << ")" << endl;
                 return false;
                 break;
         }
@@ -275,14 +275,14 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         PGFHeader      header;
         header.width    = imageWidth();
         header.height   = imageHeight();
-        header.bpp      = imageBitsDepth();
         header.channels = imageHasAlpha() ? 4 : 3;
+        header.bpp      = imageBitsDepth() * header.channels;
         header.quality  = rate;
         header.mode     = imageHasAlpha() ? ImageModeRGBA : ImageModeRGBColor;
         header.background.rgbtBlue = header.background.rgbtGreen = header.background.rgbtRed = 0;
         pgf.SetHeader(header);
 
-        pgf.ImportBitmap(imageBytesDepth()*imageWidth(), (UINT8*)imageData(), imageBitsDepth(),
+        pgf.ImportBitmap(header.bpp*imageWidth(), (UINT8*)imageData(), header.bpp,
                          channelMap, CallbackForLibPGF, this);
 
         UINT32 nWrittenBytes = 0;
