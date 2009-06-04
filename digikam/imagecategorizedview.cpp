@@ -583,6 +583,7 @@ void ImageCategorizedView::ensureSelectionAfterChanges()
         if (index.isValid())
         {
             selectionModel()->select(index, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Clear);
+            setCurrentIndex(index);
             // we want ensureInitial set to false if and only if the selection
             // is done from any other place than the previous line (i.e., by user action)
             // Effect: we select whatever is the current index(0,0)
@@ -600,7 +601,10 @@ void ImageCategorizedView::ensureSelectionAfterChanges()
             if (!index.isValid())
                 index = model()->index(0,0);
             if (index.isValid())
+            {
                 selectionModel()->select(index, QItemSelectionModel::SelectCurrent);
+                setCurrentIndex(index);
+            }
         }
     }
 }
