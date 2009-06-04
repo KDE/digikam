@@ -27,7 +27,6 @@ INCLUDE_DIRECTORIES(
                      # database libs
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database/sqlite2
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database/libpgf
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database/haar
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/models
 
@@ -39,6 +38,7 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/rawimport
 
                      # specific libs and utilities
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/3rdparty/libpgf
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/themeengine
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/kipiiface
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui

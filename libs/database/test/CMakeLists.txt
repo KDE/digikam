@@ -1,5 +1,5 @@
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/..
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../libpgf
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../../3rdparty/libpgf
                    )
 
 # Disable libpgf warnings.

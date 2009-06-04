@@ -411,38 +411,38 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/jp2ksettings.cpp
        )
 
-	SET(libclapack_SRCS 
-    	${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/abort_.c
-    	${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/dgesv.c 
-    	${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/dlaswp.c
-    	${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/endfile.c 
-    	${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/idamax.c 
-    	${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/open.c 
-    	${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/sig_die.c 
-    	${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/wref.c 
-    	${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/close.c 
-    	${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/dgetf2.c 
-    	${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/dscal.c 
-    	${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/err.c 
-    	${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/ieeeck.c 
-    	${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/s_cmp.c 
-    	${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/s_stop.c 
-    	${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/wrtfmt.c 
-    	${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/dgemm.c 
-    	${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/dgetrf.c 
-    	${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/dswap.c 
-    	${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/fmt.c 
-    	${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/ilaenv.c 
-    	${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/s_copy.c 
-    	${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/wsfe.c 
-    	${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/dger.c 
-    	${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/dgetrs.c 
-    	${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/dtrsm.c 
-    	${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/fmtlib.c 
-    	${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/lsame.c 
-    	${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/sfe.c 
-    	${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/util.c 
-    	${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/xerbla.c
+    SET(libclapack_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/abort_.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/dgesv.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/dlaswp.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/endfile.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/idamax.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/open.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/sig_die.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/wref.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/close.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/dgetf2.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/dscal.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/err.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/ieeeck.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/s_cmp.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/s_stop.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/wrtfmt.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/dgemm.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/dgetrf.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/dswap.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/fmt.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/ilaenv.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/s_copy.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/wsfe.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/dger.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/dgetrs.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/dtrsm.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/fmtlib.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/lsame.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/sfe.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/util.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/clapack/xerbla.c
        )
 
     SET(libdimgfilters_SRCS
@@ -780,12 +780,12 @@ ENDIF(MSVC)
        )
 
     SET(libpgf_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/libpgf/Decoder.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/libpgf/Encoder.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/libpgf/PGFimage.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/libpgf/Stream.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/libpgf/Subband.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/libpgf/WaveletTransform.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Decoder.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Encoder.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/PGFimage.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Stream.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Subband.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/WaveletTransform.cpp
        )
 
     SET(libsqlite2_SRCS
@@ -872,7 +872,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert/convert2jp2.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/autocorrection.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/restoration.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/sharpen.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/sharpen.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/transform/rotate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/transform/flip.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/transform/resize.cpp
