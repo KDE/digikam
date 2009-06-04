@@ -22,7 +22,6 @@ include_directories( dimg
                      ${PNG_INCLUDE_DIR}
                      ${JASPER_INCLUDE_DIR}
                    )
-add_subdirectory( lprof )
 add_subdirectory( curves )
 add_subdirectory( levels )
 add_subdirectory( histogram )

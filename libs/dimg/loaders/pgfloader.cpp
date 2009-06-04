@@ -95,7 +95,10 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     FILE *file = fopen(QFile::encodeName(filePath), "rb");
     if (!file)
+    {
+        kDebug(50003) << "Error: Could not open source file." << endl;
         return false;
+    }
 
     unsigned char header[3];
 
@@ -123,7 +126,6 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     HANDLE fd = CreateFile(QFile::encodeName(filePath), GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
     if (fd == INVALID_HANDLE_VALUE)
         return false;
-
 #else
     int fd = open(QFile::encodeName(filePath), O_RDONLY);
     if (fd == -1)
@@ -229,12 +231,28 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 {
     m_observer = observer;
 
-/*    FILE *file = fopen(QFile::encodeName(filePath), "wb");
-    if (!file)
+#ifdef WIN32
+    HANDLE fd = CreateFile(dest, GENERIC_WRITE, 0, 0, CREATE_ALWAYS, 0, 0);
+    if (fd == INVALID_HANDLE_VALUE)
+    {
+        kDebug(50003) << "Error: Could not open destination file." << endl;
         return false;
+    }
 
-    fclose(file);
+#elif defined(__POSIX__)
+    int fd = open(dest, O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+    if (fd == -1)
+    {
+        kDebug(50003) << "Error: Could not open destination file." << endl;
+        return false;
+    }
+#endif
 
+    // create stream object
+    CPGFFileStream stream(fd);
+
+    CPGFImage pgf;
+/*
     // -------------------------------------------------------------------
     // Initialize JPEG 2000 API.
 
