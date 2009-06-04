@@ -55,9 +55,13 @@ static inline const QString digiKamVersion()
     return digiKamVer;
 }
 
-static inline KLocalizedString buildDate()
+static inline KLocalizedString additionalInformation()
 {
-    return ki18n("Build date: %1").subs(__DATE__);
+    return ki18n("IRC:\n"
+                 "irc.freenode.net - #digikam\n\n"
+                 "Feedback:\n"
+                 "digikam-devel@kde.org\n\n"
+                 "Buil date: %1").subs(__DATE__);
 }
 
 }  // namespace Digikam

@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
                          digiKamSlogan(),
                          KAboutData::License_GPL,
                          copyright(),
-                         buildDate(),
+                         additionalInformation(),
                          webProjectUrl().url().toUtf8());
 
     authorsRegistration(aboutData);
