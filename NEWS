@@ -110,5 +110,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 089 ==> 194804 : Tag, rate, rotate and delete via slideshow.
 090 ==> 192425 : Star rating setting under thumbnails is a nuisance.
 091 ==> 194330 : digiKam crashed when deleting image.
-092 ==> 
-
+092 ==> 188959 : On first use, digiKam should not scan for images without user confirmation.
+093 ==> 
