@@ -2501,6 +2501,10 @@ void AlbumManager::slotDirWatchDirty(const QString& path)
         QDir dir(path);
         QFileInfo dbFile(params.SQLiteDatabaseFile());
 
+        // Workaround for broken KDirWatch in KDE 4.2.4
+        if (path.startsWith(dbFile.filePath()))
+            return;
+
         // is the signal for the directory containing the database file?
         if (dbFile.dir() == dir)
         {
