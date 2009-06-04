@@ -232,7 +232,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     m_observer = observer;
 
 #ifdef WIN32
-    HANDLE fd = CreateFile(dest, GENERIC_WRITE, 0, 0, CREATE_ALWAYS, 0, 0);
+    HANDLE fd = CreateFile(QFile::encodeName(filePath), GENERIC_WRITE, 0, 0, CREATE_ALWAYS, 0, 0);
     if (fd == INVALID_HANDLE_VALUE)
     {
         kDebug(50003) << "Error: Could not open destination file." << endl;
@@ -240,7 +240,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     }
 
 #elif defined(__POSIX__)
-    int fd = open(dest, O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+    int fd = open(QFile::encodeName(filePath), O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
     if (fd == -1)
     {
         kDebug(50003) << "Error: Could not open destination file." << endl;
