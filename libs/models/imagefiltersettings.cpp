@@ -29,6 +29,7 @@
 
 // Local includes
 
+#include "databasefields.h"
 #include "imageinfo.h"
 
 namespace Digikam
@@ -70,7 +71,7 @@ bool ImageFilterSettings::isFilteringByText() const
 bool ImageFilterSettings::isFiltering() const
 {
     return !dayFilter.isEmpty() || !tagFilter.isEmpty() || !textFilterSettings.text.isEmpty()
-            || untaggedFilter || ratingFilter!=-1;
+            || untaggedFilter || ratingFilter >= 0 || mimeTypeFilter != MimeFilter::AllFiles;
 }
 
 void ImageFilterSettings::setTagFilter(const QList<int>& tags, MatchingCondition matchingCond,
@@ -294,6 +295,35 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool *foundText) const
     }
 
     return match;
+}
+
+DatabaseFields::Set ImageFilterSettings::watchFlags() const
+{
+    DatabaseFields::Set set;
+
+    if (!dayFilter.isEmpty())
+    {
+        set |= DatabaseFields::CreationDate;
+    }
+
+    if (!textFilterSettings.text.isEmpty())
+    {
+        set |= DatabaseFields::Name;
+        set |= DatabaseFields::Comment;
+    }
+
+    if (ratingFilter >= 0)
+    {
+        set |= DatabaseFields::Rating;
+    }
+    
+    if (mimeTypeFilter != MimeFilter::AllFiles)
+    {
+        set |= DatabaseFields::Category;
+        set |= DatabaseFields::Format;
+    }
+
+    return set;
 }
 
 } // namespace Digikam

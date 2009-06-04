@@ -33,6 +33,7 @@
 
 // Local includes
 
+#include "databasefields.h"
 #include "imageinfo.h"
 
 namespace Digikam
@@ -181,6 +182,47 @@ bool ImageSortSettings::lessThan(const ImageInfo& left, const ImageInfo& right) 
     }
 }
 
+DatabaseFields::Set ImageSortSettings::watchFlags() const
+{
+    DatabaseFields::Set set;
+    switch (sortRole)
+    {
+        case SortByFileName:
+            set |= DatabaseFields::Name;
+            break;
+        case SortByFilePath:
+            set |= DatabaseFields::Name;
+            break;
+        case SortByFileSize:
+            set |= DatabaseFields::FileSize;
+            break;
+        case SortByModificationDate:
+            set |= DatabaseFields::ModificationDate;
+            break;
+        case SortByCreationDate:
+            set |= DatabaseFields::CreationDate;
+            break;
+        case SortByRating:
+            set |= DatabaseFields::Rating;
+            break;
+        case SortByImageSize:
+            set |= DatabaseFields::Width | DatabaseFields::Height;
+            break;
+    }
+   
+    switch (categorizationMode)
+    {
+        case NoCategories:
+        case OneCategory:
+        case CategoryByAlbum:
+            break;
+        case CategoryByFormat:
+            set |= DatabaseFields::Format;
+            break;
+    }
+
+    return set;
+}
 
 
 } // namespace Digikam

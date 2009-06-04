@@ -43,6 +43,7 @@ namespace Digikam
 {
 
 class ImageInfo;
+namespace DatabaseFields { class Set; }
 
 class DIGIKAM_DATABASE_EXPORT ImageSortSettings
 {
@@ -116,6 +117,11 @@ public:
 
     static Qt::SortOrder defaultSortOrderForCategorizationMode(CategorizationMode mode);
     static Qt::SortOrder defaultSortOrderForSortRole(SortRole role);
+
+    /// --- Change notification ---
+
+    /** Returns database fields a change in which would affect the current sorting */
+    DatabaseFields::Set watchFlags() const;
 
     /// --- Utilities ---
 

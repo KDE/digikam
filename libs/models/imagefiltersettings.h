@@ -41,6 +41,7 @@ namespace Digikam
 {
 
 class ImageInfo;
+namespace DatabaseFields { class Set; }
 
 class DIGIKAM_DATABASE_EXPORT ImageFilterSettings
 {
@@ -112,6 +113,14 @@ public:
     bool isFilteringByText() const;
     /// Returns if images will be filtered by these criteria at all
     bool isFiltering() const;
+
+    /// --- Change notification ---
+
+    /** Returns database fields a change in which would affect the current filtering.
+     *  To find out if an image tag change affects filtering, test isFilteringByTags().
+     *  The text filter will also be affected by changes in tags and album names.*/
+    DatabaseFields::Set watchFlags() const;
+
 };
 
 } // namespace Digikam
