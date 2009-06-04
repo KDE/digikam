@@ -26,7 +26,6 @@ INCLUDE_DIRECTORIES(
 
                      # database libs
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database/sqlite2
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database/haar
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/models
 
@@ -38,6 +37,7 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/rawimport
 
                      # specific libs and utilities
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/3rdparty/sqlite2
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/3rdparty/libpgf
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/themeengine
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/kipiiface
@@ -159,7 +159,7 @@ INSTALL(TARGETS digikamcore ${INSTALL_TARGETS_DEFAULT_ARGS})
 # Shared libdigikamdatabase ########################################################
 
 # Disable libsqlite2 C code warnings.
-SET_SOURCE_FILES_PROPERTIES(${libsqlite2_SRCS} PROPERTIES COMPILE_FLAGS -w)
+SET_SOURCE_FILES_PROPERTIES(${libsqlite2_SRCS} PROPERTIES COMPILE_FLAGS "-w")
 # Disable libpgf warnings.
 SET_SOURCE_FILES_PROPERTIES(${libpgf_SRCS} PROPERTIES COMPILE_FLAGS "-w")
 

@@ -789,38 +789,38 @@ ENDIF(MSVC)
        )
 
     SET(libsqlite2_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/attach.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/auth.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/btree.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/btree_rb.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/build.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/copy.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/date.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/delete.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/encode.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/expr.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/func.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/hash.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/insert.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/main.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/opcodes.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/os.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/pager.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/parse.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/pragma.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/printf.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/random.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/select.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/shell.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/table.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/tokenize.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/trigger.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/update.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/util.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/vacuum.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/vdbe.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/vdbeaux.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlite2/where.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/attach.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/auth.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/btree.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/btree_rb.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/build.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/copy.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/date.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/delete.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/encode.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/expr.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/func.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/hash.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/insert.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/main.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/opcodes.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/os.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/pager.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/parse.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/pragma.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/printf.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/random.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/select.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/shell.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/table.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/tokenize.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/trigger.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/update.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/util.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/vacuum.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/vdbe.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/vdbeaux.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/sqlite2/where.c
        )
 
     SET(libhaar_SRCS
