@@ -621,7 +621,7 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
     if (checkVersion(package))
     {
         QMutexLocker lock(&d->mutex);
-        d->hasOneMatch = hasOneMatchForText;
+        d->hasOneMatch = hasOneMatch;
         d->hasOneMatchForText = hasOneMatchForText;
     }
 
