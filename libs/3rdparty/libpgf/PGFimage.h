@@ -62,7 +62,8 @@ public:
 	/// It might throw an IOException.
 	/// @param level The image level of the resulting image in the internal image buffer.
 	/// @param cb A pointer to a callback procedure. The procedure is called after reading a single level. If cb returns true, then it stops proceeding.
-	void Read(int level = 0, CallbackPtr cb = NULL) THROW_;
+    /// @param data Data Pointer to C++ class container to host callback procedure.
+	void Read(int level = 0, CallbackPtr cb = NULL, void *data = NULL) THROW_;
 
 #ifdef __PGFROISUPPORT__
 	//////////////////////////////////////////////////////////////////////
@@ -73,7 +74,8 @@ public:
 	/// @param rect [inout] Rectangular region of interest (ROI). The rect might be cropped.
 	/// @param level The image level of the resulting image in the internal image buffer.
 	/// @param cb A pointer to a callback procedure. The procedure is called after reading a single level. If cb returns true, then it stops proceeding.
-	void Read(PGFRect& rect, int level = 0, CallbackPtr cb = NULL) THROW_;
+    /// @param data Data Pointer to C++ class container to host callback procedure.
+	void Read(PGFRect& rect, int level = 0, CallbackPtr cb = NULL, void *data = NULL) THROW_;
 #endif
 
 	//////////////////////////////////////////////////////////////////////
@@ -121,7 +123,8 @@ public:
 	/// @param bpp The number of bits per pixel used in image buffer.
 	/// @param channelMap A integer array containing the mapping of PGF channel ordering to expected channel ordering.
 	/// @param cb A pointer to a callback procedure. The procedure is called after each copied buffer row. If cb returns true, then it stops proceeding.
-	void GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] = NULL, CallbackPtr cb = NULL) const THROW_; // throws IOException
+    /// @param data Data Pointer to C++ class container to host callback procedure.
+	void GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] = NULL, CallbackPtr cb = NULL, void *data = NULL) const THROW_; // throws IOException
 
 	//////////////////////////////////////////////////////////////////////
 	/// Import an image from a specified image buffer.
@@ -138,7 +141,8 @@ public:
 	/// @param bpp The number of bits per pixel used in image buffer.
 	/// @param channelMap A integer array containing the mapping of input channel ordering to expected channel ordering.
 	/// @param cb A pointer to a callback procedure. The procedure is called after each imported buffer row. If cb returns true, then it stops proceeding.
-	void ImportBitmap(int pitch, UINT8 *buff, BYTE bpp, int channelMap[] = NULL, CallbackPtr cb = NULL) THROW_;
+    /// @param data Data Pointer to C++ class container to host callback procedure.
+	void ImportBitmap(int pitch, UINT8 *buff, BYTE bpp, int channelMap[] = NULL, CallbackPtr cb = NULL, void *data = NULL) THROW_;
 
 	//////////////////////////////////////////////////////////////////////
 	/// Encode and write a PGF image at current stream position.
@@ -153,7 +157,8 @@ public:
 	/// @param levels The positive number of levels used in layering or 0 meaning a useful number of levels is computed.
 	/// @param cb A pointer to a callback procedure. The procedure is called after reading a single level. If cb returns true, then it stops proceeding.
 	/// @param nWrittenBytes [in-out] The number of bytes written into stream are added to the input value.
-	void Write(CPGFStream* stream, int levels = 0, CallbackPtr cb = NULL, UINT32* nWrittenBytes = NULL) THROW_;
+    /// @param data Data Pointer to C++ class container to host callback procedure.
+	void Write(CPGFStream* stream, int levels = 0, CallbackPtr cb = NULL, UINT32* nWrittenBytes = NULL, void *data = NULL) THROW_;
 
 	//////////////////////////////////////////////////////////////////////
 	/// Set background of an RGB image with transparency channel or reset to default background.
@@ -416,7 +421,7 @@ private:
 	RefreshCB m_cb;					// pointer to refresh callback procedure
 	void *m_cbArg;					// refresh callback argument
 
-	void RgbToYuv(int pitch, UINT8* rgbBuff, BYTE bpp, int channelMap[], CallbackPtr cb) THROW_;
+	void RgbToYuv(int pitch, UINT8* rgbBuff, BYTE bpp, int channelMap[], CallbackPtr cb, void *data) THROW_;
 	void Downsample(int nChannel);
 	void Init() THROW_;
 

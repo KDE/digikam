@@ -248,7 +248,8 @@ const UINT8* CPGFImage::GetUserData(UINT32& size) const {
 // It might throw an IOException.
 // @param level The image level of the resulting image in the internal image buffer.
 // @param cb A pointer to a callback procedure. The procedure is called after reading a single level. If cb returns true, then it stops proceeding.
-void CPGFImage::Read(int level /*= 0*/, CallbackPtr cb /*= NULL*/) THROW_ {
+// @param data Data Pointer to C++ class container to host callback procedure.
+void CPGFImage::Read(int level /*= 0*/, CallbackPtr cb /*= NULL*/, void *data /*=NULL*/) THROW_ {
 	ASSERT((level >= 0 && level < m_header.nLevels) || m_header.nLevels == 0); // m_header.nLevels == 0: image didn't use wavelet transform
 	ASSERT(m_decoder);
 	int i;
@@ -257,7 +258,7 @@ void CPGFImage::Read(int level /*= 0*/, CallbackPtr cb /*= NULL*/) THROW_ {
 	if (ROIisSupported() && m_header.nLevels > 0) {
 		// new encoding scheme supporting ROI
 		PGFRect rect(0, 0, m_header.width, m_header.height);
-		Read(rect, level, cb);
+		Read(rect, level, cb, data);
 		return;
 	}
 #endif
@@ -300,7 +301,7 @@ void CPGFImage::Read(int level /*= 0*/, CallbackPtr cb /*= NULL*/) THROW_ {
 				// now update progress
 				if (i < m_header.channels - 1 && cb) {
 					percent += 3*p/m_header.channels;
-					(*cb)(percent, false);
+					(*cb)(percent, false, data);
 				}
 			}
 			// now we have to refresh the display
@@ -311,7 +312,7 @@ void CPGFImage::Read(int level /*= 0*/, CallbackPtr cb /*= NULL*/) THROW_ {
 			// now update progress
 			if (cb) {
 				percent += 3*p/m_header.channels;
-				if ((*cb)(percent, true)) ReturnWithError(EscapePressed);
+				if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 			}
 		}
 	}
@@ -370,7 +371,8 @@ void CPGFImage::SetROI(PGFRect rect) {
 /// @param rect [inout] Rectangular region of interest (ROI). The rect might be cropped.
 /// @param level The image level of the resulting image in the internal image buffer.
 /// @param cb A pointer to a callback procedure. The procedure is called after reading a single level. If cb returns true, then it stops proceeding.
-void CPGFImage::Read(PGFRect& rect, int level /*= 0*/, CallbackPtr cb /*= NULL*/) THROW_ {
+/// @param data Data Pointer to C++ class container to host callback procedure.
+void CPGFImage::Read(PGFRect& rect, int level /*= 0*/, CallbackPtr cb /*= NULL*/, void *data /*=NULL*/) THROW_ {
 	ASSERT((level >= 0 && level < m_header.nLevels) || m_header.nLevels == 0); // m_header.nLevels == 0: image didn't use wavelet transform
 	ASSERT(m_decoder);
 	int i;
@@ -437,7 +439,7 @@ void CPGFImage::Read(PGFRect& rect, int level /*= 0*/, CallbackPtr cb /*= NULL*/
 				// now update progress
 				if (i < m_header.channels - 1 && cb) {
 					percent += 3*p/m_header.channels;
-					(*cb)(percent, false);
+					(*cb)(percent, false, data);
 				}
 			}
 			// now we have to refresh the display
@@ -449,7 +451,7 @@ void CPGFImage::Read(PGFRect& rect, int level /*= 0*/, CallbackPtr cb /*= NULL*/
 			// now update progress
 			if (cb) {
 				percent += 3*p/m_header.channels;
-				if ((*cb)(percent, true)) ReturnWithError(EscapePressed);
+				if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 			}
 		}
 	}
@@ -688,12 +690,13 @@ BYTE CPGFImage::UsedBitsPerChannel() const {
 // @param bpp The number of bits per pixel used in image buffer.
 // @param channelMap A integer array containing the mapping of input channel ordering to expected channel ordering.
 // @param cb A pointer to a callback procedure. The procedure is called after each imported buffer row. If cb returns true, then it stops proceeding.
-void CPGFImage::ImportBitmap(int pitch, UINT8 *buff, BYTE bpp, int channelMap[] /*= NULL */, CallbackPtr cb /*= NULL*/) THROW_ {
+// @param data Data Pointer to C++ class container to host callback procedure.
+void CPGFImage::ImportBitmap(int pitch, UINT8 *buff, BYTE bpp, int channelMap[] /*= NULL */, CallbackPtr cb /*= NULL*/, void *data /*=NULL*/) THROW_ {
 	ASSERT(buff);
 	ASSERT(m_channel[0]);
 
 	// color transform
-	RgbToYuv(pitch, buff, bpp, channelMap, cb);
+	RgbToYuv(pitch, buff, bpp, channelMap, cb, data);
 
 	if (m_downsample) {
 		// Subsampling of the chrominance and alpha channels
@@ -798,7 +801,8 @@ BYTE CPGFImage::ComputeLevels(UINT32 width, UINT32 height) {
 // @param levels The positive number of levels used in layering or 0 meaning a useful number of levels is computed.
 // @param cb A pointer to a callback procedure. The procedure is called after reading a single level. If cb returns true, then it stops proceeding.
 // @param nWrittenBytes [in-out] The number of bytes written into stream are added to the input value.
-void CPGFImage::Write(CPGFStream* stream, int levels /* = 0*/, CallbackPtr cb /*= NULL*/, UINT32* nWrittenBytes /*= NULL*/) THROW_ {
+// @param data Data Pointer to C++ class container to host callback procedure.
+void CPGFImage::Write(CPGFStream* stream, int levels /* = 0*/, CallbackPtr cb /*= NULL*/, UINT32* nWrittenBytes /*= NULL*/, void *data /*=NULL*/) THROW_ {
 	ASSERT(stream);
 	ASSERT(m_preHeader.hSize);
 	int i;
@@ -882,7 +886,7 @@ void CPGFImage::Write(CPGFStream* stream, int levels /* = 0*/, CallbackPtr cb /*
 				// now update progress
 				if (cb) {
 					percent *= 4;
-					if ((*cb)(percent, true)) ReturnWithError(EscapePressed);
+					if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 				}
 			}
 		} else 
@@ -914,7 +918,7 @@ void CPGFImage::Write(CPGFStream* stream, int levels /* = 0*/, CallbackPtr cb /*
 				// now update progress
 				if (cb) {
 					percent *= 4;
-					if ((*cb)(percent, true)) ReturnWithError(EscapePressed);
+					if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 				}
 			}
 		}
@@ -1018,7 +1022,7 @@ void CPGFImage::SetColorTable(UINT32 iFirstColor, UINT32 nColors, const RGBQUAD*
 // The sequence of input channels in the input image buffer does not need to be the same as expected from PGF. In case of different sequences you have to
 // provide a channelMap of size of expected channels (depending on image mode). For example, PGF expects in RGB color mode a channel sequence BGR.
 // If your provided image buffer contains a channel sequence ARGB, then the channelMap looks like { 3, 2, 1 }.
-void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], CallbackPtr cb) THROW_ {
+void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], CallbackPtr cb, void *data) THROW_ {
 	ASSERT(buff);
 	int yPos = 0, cnt = 0;
 	double percent = 0;
@@ -1039,7 +1043,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 
 			for (UINT32 h=0; h < m_header.height; h++) {
 				if (cb) {
-					if ((*cb)(percent, true)) ReturnWithError(EscapePressed);
+					if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 					percent += dP;
 				}
 
@@ -1063,7 +1067,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 
 			for (UINT32 h=0; h < m_header.height; h++) {
 				if (cb) {
-					if ((*cb)(percent, true)) ReturnWithError(EscapePressed);
+					if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 					percent += dP;
 				}
 
@@ -1093,7 +1097,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 
 			for (UINT32 h=0; h < m_header.height; h++) {
 				if (cb) {
-					if ((*cb)(percent, true)) ReturnWithError(EscapePressed);
+					if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 					percent += dP;
 				}
 
@@ -1123,7 +1127,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 
 			for (UINT32 h=0; h < m_header.height; h++) {
 				if (cb) {
-					if ((*cb)(percent, true)) ReturnWithError(EscapePressed);
+					if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 					percent += dP;
 				}
 
@@ -1161,7 +1165,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 
 			for (UINT32 h=0; h < m_header.height; h++) {
 				if (cb) {
-					if ((*cb)(percent, true)) ReturnWithError(EscapePressed);
+					if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 					percent += dP;
 				}
 
@@ -1197,7 +1201,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 
 			for (UINT32 h=0; h < m_header.height; h++) {
 				if (cb) {
-					if ((*cb)(percent, true)) ReturnWithError(EscapePressed);
+					if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 					percent += dP;
 				}
 
@@ -1236,7 +1240,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 
 			for (UINT32 h=0; h < m_header.height; h++) {
 				if (cb) {
-					if ((*cb)(percent, true)) ReturnWithError(EscapePressed);
+					if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 					percent += dP;
 				}
 
@@ -1270,7 +1274,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 
 			for (UINT32 h=0; h < m_header.height; h++) {
 				if (cb) {
-					if ((*cb)(percent, true)) ReturnWithError(EscapePressed);
+					if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 					percent += dP;
 				}
 
@@ -1296,7 +1300,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 
 			for (UINT32 h=0; h < m_header.height; h++) {
 				if (cb) {
-					if ((*cb)(percent, true)) ReturnWithError(EscapePressed);
+					if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 					percent += dP;
 				}
 
@@ -1346,7 +1350,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 
 			for (UINT32 h=0; h < m_header.height; h++) {
 				if (cb) {
-					if ((*cb)(percent, true)) ReturnWithError(EscapePressed);
+					if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 					percent += dP;
 				}
 				for (UINT32 w=0; w < m_header.width; w++) {
@@ -1386,7 +1390,8 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 // @param bpp The number of bits per pixel used in image buffer.
 // @param channelMap A integer array containing the mapping of PGF channel ordering to expected channel ordering.
 // @param cb A pointer to a callback procedure. The procedure is called after each copied buffer row. If cb returns true, then it stops proceeding.
-void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*= NULL */, CallbackPtr cb /*= NULL*/) const THROW_ {
+// @param data Data Pointer to C++ class container to host callback procedure.
+void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*= NULL */, CallbackPtr cb /*= NULL*/, void *data /*= NULL*/) const THROW_ {
 	ASSERT(buff);
 	UINT32 w = m_width[0];
 	UINT32 h = m_height[0];
@@ -1440,7 +1445,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 
 				if (cb) {
 					percent += dP;
-					if ((*cb)(percent, true)) ReturnWithError(EscapePressed);
+					if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 				}
 			}
 			break;
@@ -1469,7 +1474,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 
 				if (cb) {
 					percent += dP;
-					if ((*cb)(percent, true)) ReturnWithError(EscapePressed);
+					if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 				}
 			}
 			break;
@@ -1501,7 +1506,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 
 					if (cb) {
 						percent += dP;
-						if ((*cb)(percent, true)) ReturnWithError(EscapePressed);
+						if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 					}
 				}
 			} else {
@@ -1521,7 +1526,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 
 					if (cb) {
 						percent += dP;
-						if ((*cb)(percent, true)) ReturnWithError(EscapePressed);
+						if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 					}
 				}
 			}
@@ -1565,7 +1570,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 
 				if (cb) {
 					percent += dP;
-					if ((*cb)(percent, true)) ReturnWithError(EscapePressed);
+					if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 				}
 			}
 			break;
@@ -1614,7 +1619,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 
 					if (cb) {
 						percent += dP;
-						if ((*cb)(percent, true)) ReturnWithError(EscapePressed);
+						if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 					}
 				}
 			} else {
@@ -1647,7 +1652,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 
 					if (cb) {
 						percent += dP;
-						if ((*cb)(percent, true)) ReturnWithError(EscapePressed);
+						if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 					}
 				}
 			}
@@ -1688,7 +1693,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 
 				if (cb) {
 					percent += dP;
-					if ((*cb)(percent, true)) ReturnWithError(EscapePressed);
+					if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 				}
 			}
 			break;
@@ -1735,7 +1740,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 
 					if (cb) {
 						percent += dP;
-						if ((*cb)(percent, true)) ReturnWithError(EscapePressed);
+						if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 					}
 				}
 			} else {
@@ -1766,7 +1771,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 
 					if (cb) {
 						percent += dP;
-						if ((*cb)(percent, true)) ReturnWithError(EscapePressed);
+						if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 					}
 				}
 			}
@@ -1814,7 +1819,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 
 				if (cb) {
 					percent += dP;
-					if ((*cb)(percent, true)) ReturnWithError(EscapePressed);
+					if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 				}
 			}
 			break;
@@ -1867,7 +1872,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 
 					if (cb) {
 						percent += dP;
-						if ((*cb)(percent, true)) ReturnWithError(EscapePressed);
+						if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 					}
 				}
 			} else {
@@ -1903,7 +1908,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 
 					if (cb) {
 						percent += dP;
-						if ((*cb)(percent, true)) ReturnWithError(EscapePressed);
+						if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 					}
 				}
 			}
@@ -1931,7 +1936,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 
 					if (cb) {
 						percent += dP;
-						if ((*cb)(percent, true)) ReturnWithError(EscapePressed);
+						if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 					}
 				}
 			} else {
@@ -1945,7 +1950,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 
 					if (cb) {
 						percent += dP;
-						if ((*cb)(percent, true)) ReturnWithError(EscapePressed);
+						if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 					}
 				}
 			}
@@ -1986,7 +1991,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 
 				if (cb) {
 					percent += dP;
-					if ((*cb)(percent, true)) ReturnWithError(EscapePressed);
+					if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 				}
 			}
 			break;
@@ -2017,7 +2022,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 
 				if (cb) {
 					percent += dP;
-					if ((*cb)(percent, true)) ReturnWithError(EscapePressed);
+					if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
 				}
 			}
 			break;

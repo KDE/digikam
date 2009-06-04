@@ -140,7 +140,7 @@ typedef signed __int64		LONGLONG;
 // other types
 //-------------------------------------------------------------------------------
 typedef long OSError;
-typedef bool (__cdecl *CallbackPtr)(double percent, bool escapeAllowed);
+typedef bool (__cdecl *CallbackPtr)(double percent, bool escapeAllowed, void *data);
 
 //-------------------------------------------------------------------------------
 // struct type definitions
@@ -339,7 +339,7 @@ typedef int					HANDLE;
 typedef unsigned long		ULONG_PTR;
 typedef void*				PVOID;
 typedef char*				LPTSTR;
-typedef bool (*CallbackPtr)(double percent, bool escapeAllowed);
+typedef bool (*CallbackPtr)(double percent, bool escapeAllowed, void *data);
 
 //-------------------------------------------------------------------------------
 // struct type definitions
