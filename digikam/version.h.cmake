@@ -61,7 +61,7 @@ static inline KLocalizedString additionalInformation()
                  "irc.freenode.net - #digikam\n\n"
                  "Feedback:\n"
                  "digikam-devel@kde.org\n\n"
-                 "Buil date: %1").subs(__DATE__);
+                 "Build date: %1").subs(__DATE__);
 }
 
 }  // namespace Digikam
