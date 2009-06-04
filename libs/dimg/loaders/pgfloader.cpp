@@ -140,6 +140,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     {
         // open pgf image
         pgf.Open(&stream);
+        pgf.Read(0, CallbackForLibPGF, this);
 
         switch (pgf.Mode())
         {
@@ -158,6 +159,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         {
             case 3:
                 m_hasAlpha = false;
+                break;
             case 4:
                 m_hasAlpha = true;
                 break;
@@ -185,14 +187,6 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 break;
         }
 
-        const PGFHeader* header = pgf.GetHeader();
-        kDebug(50003) << "PGF width    = " << header->width    << endl;
-        kDebug(50003) << "PGF height   = " << header->height   << endl;
-        kDebug(50003) << "PGF bbp      = " << header->bpp      << endl;
-        kDebug(50003) << "PGF channels = " << header->channels << endl;
-        kDebug(50003) << "PGF quality  = " << header->quality  << endl;
-        kDebug(50003) << "PGF mode     = " << header->mode     << endl;
-
         int width        = pgf.Width();
         int height       = pgf.Height();
         uchar *data      = 0;
@@ -206,7 +200,6 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         // Fill all with 255 including alpha channel.
         memset(data, sizeof(data), 0xFF);
 
-        pgf.Read(0, CallbackForLibPGF, this);
         pgf.GetBitmap(m_sixteenBit ? width*8 : width*4, (UINT8*)data, m_sixteenBit ? 64 : 32,
                       channelMap, CallbackForLibPGF, this);
 
@@ -220,11 +213,22 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         imageSetAttribute("originalColorModel", colorModel);
         imageSetAttribute("originalBitDepth", bitDepth);
 
+        const PGFHeader* header = pgf.GetHeader();
+        kDebug(50003) << "PGF width    = " << header->width    << endl;
+        kDebug(50003) << "PGF height   = " << header->height   << endl;
+        kDebug(50003) << "PGF bbp      = " << header->bpp      << endl;
+        kDebug(50003) << "PGF channels = " << header->channels << endl;
+        kDebug(50003) << "PGF quality  = " << header->quality  << endl;
+        kDebug(50003) << "PGF mode     = " << header->mode     << endl;
+        kDebug(50003) << "Has Alpha    = " << m_hasAlpha       << endl;
+        kDebug(50003) << "Is 16 bits   = " << m_sixteenBit     << endl;
+
 #ifdef WIN32
         CloseHandle(fd);
 #else
         close(fd);
 #endif
+
         return true;
     }
     catch(IOException& e)
