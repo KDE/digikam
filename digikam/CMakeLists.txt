@@ -10,7 +10,6 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/histogram
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/curves
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/levels
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/lprof
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/jpegutils
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/greycstoration
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/threadimageio
@@ -36,6 +35,7 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/rawimport
 
                      # specific libs and utilities
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/3rdparty/lprof
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/3rdparty/sqlite2
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/3rdparty/libpgf
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/3rdparty/clapack
