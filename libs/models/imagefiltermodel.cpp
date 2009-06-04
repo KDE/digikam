@@ -353,19 +353,7 @@ void ImageFilterModel::setImageFilterSettings(const ImageFilterSettings& setting
 void ImageFilterModel::slotUpdateFilter()
 {
     Q_D(ImageFilterModel);
-
-    {
-        QMutexLocker lock(&d->mutex);
-        // do not touch version, sentOut or sentOutForReAdd here.
-        // filter did not change.
-        d->hasOneMatch         = false;
-        d->hasOneMatchForText  = false;
-    }
-
-    d->filterResults.clear();
-
-    if (d->imageModel)
-        d->infosToProcess(d->imageModel->imageInfos(), false);
+    setImageFilterSettings(d->filter);
 }
 
 ImageFilterSettings ImageFilterModel::imageFilterSettings() const
@@ -503,7 +491,7 @@ void ImageFilterModelPrivate::packageFinished(const ImageFilterModelTodoPackage&
     if (sentOut == 0 && sentOutForReAdd == 0 && version != lastFilteredVersion)
     {
         lastFilteredVersion = version;
-        q->invalidate();
+        q->invalidate(); // use invalidate, not invalidateFilter only. Sorting may have changed as well.
         emit q->filterMatches(hasOneMatch);
         emit q->filterMatchesForText(hasOneMatchForText);
     }
@@ -765,27 +753,32 @@ void ImageFilterModel::slotImageChange(const ImageChangeset& changeset)
     if (d->updateFilterTimer->isActive())
         return;
 
-    // do we filter at all?
-    if (!d->filter.isFiltering())
-        return;
-
-    // is one of the values affected that we filter by?
+    // is one of the values affected that we filter or sort by?
     DatabaseFields::Set set = changeset.changes();
-    if (!(set & DatabaseFields::CreationDate) && !(set & DatabaseFields::Rating)
-        && !(set & DatabaseFields::Category) && !(set & DatabaseFields::Format)
-        && !(set & DatabaseFields::Name) && !(set & DatabaseFields::Comment))
+    bool sortAffected = (set & d->sorter.watchFlags());
+    bool filterAffected = (set & d->filter.watchFlags());
+
+    if (!sortAffected && !filterAffected)
         return;
 
     // is one of our images affected?
+    bool imageAffected = false;
     foreach(qlonglong id, changeset.ids())
     {
         // if one matching image id is found, trigger a refresh
         if (d->imageModel->hasImage(id))
         {
-            d->updateFilterTimer->start();
-            return;
+            imageAffected = true;
+            break;
         }
     }
+    if (!imageAffected)
+        return;
+
+    if (filterAffected)
+        d->updateFilterTimer->start();
+    else
+        invalidate(); // just resort, reuse filter results
 }
 
 } // namespace Digikam
