@@ -14,4 +14,4 @@ Gui:
 
 Features:
 - Add more energy functions (prewit and sobel filter for instance)
-- Mask: add an eraser (painting using fully transparent color)
+- Add a button to rescale down and up automatically to remove the red mask

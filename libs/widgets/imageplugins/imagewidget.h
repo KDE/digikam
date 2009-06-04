@@ -80,7 +80,8 @@ public:
 
     void   setPaintColor(const QColor& color);
     void   setMaskEnabled(bool enabled);
-    void   changeMaskPenSize(int size);
+    void   setMaskPenSize(int size);
+    void   setEraseMode(bool erase);
 
     QImage getMask() const;
 

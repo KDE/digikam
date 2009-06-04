@@ -76,6 +76,7 @@ public:
         drawingMask               = false;
         enableDrawMask            = false;
         penWidth                  = 10;
+        eraseMask                 = false;
     }
 
     bool        sixteenBit;
@@ -87,6 +88,7 @@ public:
     bool        drawLineBetweenPoints;
     bool        drawingMask;
     bool        enableDrawMask;
+    bool        eraseMask;
 
     int         width;
     int         height;
@@ -774,14 +776,19 @@ void ImageGuideWidget::resetPoints()
 
 void ImageGuideWidget::drawLineTo(const QPoint& endPoint)
 {
-    drawLineTo(d->penWidth, d->paintColor, d->lastPoint, endPoint);
+    drawLineTo(d->penWidth, d->eraseMask, d->paintColor, d->lastPoint, endPoint);
 }
 
-void ImageGuideWidget::drawLineTo(int width, const QColor& color, const QPoint& start, const QPoint& end)
+void ImageGuideWidget::drawLineTo(int width, bool erase, const QColor& color, const QPoint& start, const QPoint& end)
 {
     QPainter painter(d->maskPixmap);
-
-    painter.setPen(QPen(color, width, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    if (erase) 
+      {
+       painter.setPen(QPen(QBrush(Qt::transparent), width, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+       painter.setCompositionMode(QPainter::CompositionMode_Clear);
+      }
+    else
+       painter.setPen(QPen(color, width, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter.drawLine(start, end);
 
     int rad = (width / 2) + 2;
@@ -803,6 +810,11 @@ void ImageGuideWidget::setMaskEnabled(bool enabled)
     updatePreview();
 }
 
+void ImageGuideWidget::setEraseMode(bool erase)
+{
+    d->eraseMask = erase;
+}
+
 QImage ImageGuideWidget::getMask() const
 {
     QImage mask = d->maskPixmap->toImage();
@@ -818,7 +830,7 @@ QPoint ImageGuideWidget::translatePointPosition(QPoint& point)
     return (QPoint(x,y));
 }
 
-void ImageGuideWidget::changeMaskPenSize(int size)
+void ImageGuideWidget::setMaskPenSize(int size)
 {
     d->penWidth = size;
 }

@@ -381,9 +381,14 @@ QImage ImageWidget::getMask() const
     return d->previewWidget->getMask();
 }
 
-void ImageWidget::changeMaskPenSize(int size)
+void ImageWidget::setMaskPenSize(int size)
 {
-    d->previewWidget->changeMaskPenSize(size);
+    d->previewWidget->setMaskPenSize(size);
+}
+
+void ImageWidget::setEraseMode(bool erase)
+{
+    d->previewWidget->setEraseMode(erase);
 }
 
 }  // namespace Digikam

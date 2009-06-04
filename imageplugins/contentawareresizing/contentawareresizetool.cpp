@@ -86,7 +86,8 @@ public:
     enum MaskTool
     {
         redMask=0,
-        greenMask
+        greenMask,
+        eraseMask
     };
 
 public:
@@ -109,6 +110,7 @@ public:
         resizeOrderInput  = 0;
         redMaskTool       = 0;
         greenMaskTool     = 0;
+        eraseMaskTool     = 0;
         maskGroup         = 0;
         prevW             = 0;
         prevH             = 0;
@@ -150,6 +152,7 @@ public:
 
     QToolButton        *redMaskTool;
     QToolButton        *greenMaskTool;
+    QToolButton        *eraseMaskTool;
 
     QButtonGroup       *maskGroup;
 };
@@ -283,6 +286,15 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     d->greenMaskTool->setEnabled(false);
     d->maskGroup->addButton(d->greenMaskTool, ContentAwareResizeToolPriv::greenMask);
 
+    QLabel *labeEraseMaskTool = new QLabel(i18n("Erase mask:"), d->gboxSettings->plainPage());
+    d->eraseMaskTool          = new QToolButton(d->gboxSettings->plainPage());
+    d->eraseMaskTool->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/indicator-gray.png")));
+    d->eraseMaskTool->setCheckable(true);
+    d->eraseMaskTool->setToolTip(i18n("Erase mask"));
+    d->eraseMaskTool->setWhatsThis(i18n("Click on this button to erase mask regions."));
+    d->eraseMaskTool->setEnabled(false);
+    d->maskGroup->addButton(d->eraseMaskTool, ContentAwareResizeToolPriv::eraseMask);
+
     QLabel *labelMaskPenSize = new QLabel(i18n("Brush size:"), d->gboxSettings->plainPage());
     d->maskPenSize           = new RIntNumInput(d->gboxSettings->plainPage());
     d->maskPenSize->setRange(1, 100, 1);
@@ -296,8 +308,10 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     maskSettingsLayout->addWidget(d->redMaskTool,       2, 2, 1, 1);
     maskSettingsLayout->addWidget(labeGreenMaskTool,    3, 0, 1, 3);
     maskSettingsLayout->addWidget(d->greenMaskTool,     3, 2, 1, 1);
-    maskSettingsLayout->addWidget(labelMaskPenSize,     4, 0, 1, 1);
-    maskSettingsLayout->addWidget(d->maskPenSize,       4, 1, 1, 4);
+    maskSettingsLayout->addWidget(labeEraseMaskTool,    4, 0, 1, 3);
+    maskSettingsLayout->addWidget(d->eraseMaskTool,     4, 2, 1, 1);
+    maskSettingsLayout->addWidget(labelMaskPenSize,     5, 0, 1, 1);
+    maskSettingsLayout->addWidget(d->maskPenSize,       5, 1, 1, 4);
 
     maskSettingsContainer->setLayout(maskSettingsLayout);
 
@@ -589,6 +603,7 @@ void ContentAwareResizeTool::enableMaskSettings(bool b)
     d->weightMaskBox->setEnabled(b);
     d->redMaskTool  ->setEnabled(c);
     d->greenMaskTool->setEnabled(c);
+    d->eraseMaskTool->setEnabled(c);
     d->maskPenSize  ->setEnabled(c);
 }
 
@@ -747,14 +762,19 @@ void ContentAwareResizeTool::blockWidgetSignals(bool b)
     d->weightMaskBox->blockSignals(b);
     d->redMaskTool->blockSignals(b);
     d->greenMaskTool->blockSignals(b);
+    d->eraseMaskTool->blockSignals(b);
 }
 
 void ContentAwareResizeTool::slotMaskColorChanged(int type)
 {
+    d->previewWidget->setEraseMode(type == ContentAwareResizeToolPriv::eraseMask);
+
     if (type == ContentAwareResizeToolPriv::redMask)
-        d->previewWidget->setPaintColor(QColor(255, 0, 0, 255));
-    else // green mask
-        d->previewWidget->setPaintColor(QColor(0, 255, 0, 255));
+        d->previewWidget->setPaintColor(QColor(255, 0, 0));
+    else if (type == ContentAwareResizeToolPriv::greenMask)
+        d->previewWidget->setPaintColor(QColor(0, 255, 0));
+    else // erase
+        d->previewWidget->setPaintColor(QColor(255, 255, 0));
 }
 
 void ContentAwareResizeTool::slotWeightMaskBoxStateChanged(int state)
@@ -763,6 +783,7 @@ void ContentAwareResizeTool::slotWeightMaskBoxStateChanged(int state)
     {
         d->redMaskTool->setEnabled(false);
         d->greenMaskTool->setEnabled(false);
+        d->eraseMaskTool->setEnabled(false);
         d->maskPenSize->setEnabled(false);
         d->previewWidget->setMaskEnabled(false);
     }
@@ -770,6 +791,7 @@ void ContentAwareResizeTool::slotWeightMaskBoxStateChanged(int state)
     {
         d->redMaskTool->setEnabled(true);
         d->greenMaskTool->setEnabled(true);
+        d->eraseMaskTool->setEnabled(true);
         d->maskPenSize->setEnabled(true);
         d->previewWidget->setMaskEnabled(true);
 
@@ -782,7 +804,7 @@ void ContentAwareResizeTool::slotWeightMaskBoxStateChanged(int state)
 
 void ContentAwareResizeTool::slotMaskPenSizeChanged(int size)
 {
-    d->previewWidget->changeMaskPenSize(size);
+    d->previewWidget->setMaskPenSize(size);
 }
 
 } // namespace DigikamContentAwareResizingImagesPlugin
