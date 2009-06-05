@@ -6,8 +6,8 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/..
 SET_SOURCE_FILES_PROPERTIES(${libpgf_SRCS} PROPERTIES COMPILE_FLAGS "-w")
 
 SET(qtpgftest_SRCS qtpgftest.cpp
-                   ${CMAKE_CURRENT_SOURCE_DIR}/../thumbnailpgf.cpp
                    ${libpgf_SRCS}
+                   ${pgfutils_SRCS}
    )
 
 KDE4_ADD_EXECUTABLE(qtpgftest NOGUI ${qtpgftest_SRCS})

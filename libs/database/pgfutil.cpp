@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-05-29
- * Description : PGF thumbnail interface.
+ * Description : PGF util.
  *
  * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,12 +21,23 @@
  *
  * ============================================================ */
 
-#include "thumbnailpgf.h"
+#include "pgfutil.h"
+
+// C Ansi includes
+
+extern "C"
+{
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+}
 
 // Qt includes
 
 #include <QImage>
 #include <QByteArray>
+#include <QFile>
 
 // KDE includes
 
@@ -44,7 +55,7 @@ bool readPGFImageData(const QByteArray& data, QImage& img)
     try
     {
         CPGFMemoryStream stream((UINT8*)data.data(), (size_t)data.size());
-        CPGFImage pgfImg;
+        CPGFImage        pgfImg;
         pgfImg.Open(&stream);
 
         if (pgfImg.Channels() != 4)
@@ -52,15 +63,7 @@ bool readPGFImageData(const QByteArray& data, QImage& img)
             kDebug(50003) << "PGF channels not supported" << endl;
             return false;
         }
-/*
-        const PGFHeader* header = pgfImg.GetHeader();
-        kDebug(50003) << "PGF width    = " << header->width    << endl;
-        kDebug(50003) << "PGF height   = " << header->height   << endl;
-        kDebug(50003) << "PGF bbp      = " << header->bpp      << endl;
-        kDebug(50003) << "PGF channels = " << header->channels << endl;
-        kDebug(50003) << "PGF quality  = " << header->quality  << endl;
-        kDebug(50003) << "PGF mode     = " << header->mode     << endl;
-*/
+
         img = QImage(pgfImg.Width(), pgfImg.Height(), QImage::Format_ARGB32);
         pgfImg.Read();
         pgfImg.GetBitmap(img.bytesPerLine(), (UINT8*)img.bits(), img.depth());
@@ -102,14 +105,6 @@ bool writePGFImageData(const QImage& img, QByteArray& data, int quality)
         header.mode     = ImageModeRGBA;
         header.background.rgbtBlue = header.background.rgbtGreen = header.background.rgbtRed = 0;
         pgfImg.SetHeader(header);
-/*
-        kDebug(50003) << "PGF width    = " << header.width    << endl;
-        kDebug(50003) << "PGF height   = " << header.height   << endl;
-        kDebug(50003) << "PGF bbp      = " << header.bpp      << endl;
-        kDebug(50003) << "PGF channels = " << header.channels << endl;
-        kDebug(50003) << "PGF quality  = " << header.quality  << endl;
-        kDebug(50003) << "PGF mode     = " << header.mode     << endl;
-*/
         pgfImg.ImportBitmap(img.bytesPerLine(), (UINT8*)img.bits(), img.depth());
 
         // TODO : optimize memory allocation...
@@ -118,6 +113,69 @@ bool writePGFImageData(const QImage& img, QByteArray& data, int quality)
         pgfImg.Write(&stream, 0, NULL, &nWrittenBytes);
 
         data = QByteArray((const char*)stream.GetBuffer(), nWrittenBytes);
+    }
+    catch(IOException& e)
+    {
+        int err = e.error;
+
+        if (err >= AppError) err -= AppError;
+        kDebug(50003) << "Error running libpgf (" << err << ")!" << endl;
+        return false;
+    }
+
+    return true;
+}
+
+bool loadPGFScaled(QImage& img, const QString& path)
+{
+    FILE *file = fopen(QFile::encodeName(path), "rb");
+    if (!file)
+    {
+        kDebug(50003) << "Error: Could not open source file." << endl;
+        return false;
+    }
+
+    unsigned char header[3];
+
+    if (fread(&header, 3, 1, file) != 1)
+    {
+        fclose(file);
+        return false;
+    }
+
+    unsigned char pgfID[3] = { 0x50, 0x47, 0x46 };
+
+    if (memcmp(&header[0], &pgfID, 3) != 0)
+    {
+        // not a PGF file
+        fclose(file);
+        return false;
+    }
+
+    fclose(file);
+
+    // -------------------------------------------------------------------
+    // Initialize PGF API.
+
+#ifdef WIN32
+    HANDLE fd = CreateFile(QFile::encodeName(path), GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
+    if (fd == INVALID_HANDLE_VALUE)
+        return false;
+#else
+    int fd = open(QFile::encodeName(path), O_RDONLY);
+    if (fd == -1)
+        return false;
+#endif
+
+    try
+    {
+        CPGFFileStream stream(fd);
+        CPGFImage      pgfImg;
+        pgfImg.Open(&stream);
+
+        img = QImage(pgfImg.Width(), pgfImg.Height(), QImage::Format_ARGB32);
+        pgfImg.ReadPreview();
+        pgfImg.GetBitmap(img.bytesPerLine(), (UINT8*)img.bits(), img.depth());
     }
     catch(IOException& e)
     {

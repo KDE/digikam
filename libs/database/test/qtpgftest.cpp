@@ -32,13 +32,9 @@
 
 #include "kdebug.h"
 
-// LibPGF includes
-
-#include "PGFimage.h"
-
 // Local includes.
 
-#include "thumbnailpgf.h"
+#include "pgfutil.h"
 
 using namespace Digikam;
 

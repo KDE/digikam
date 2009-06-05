@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-05-29
- * Description : PGF thumbnail interface.
+ * Description : PGF util.
  *
  * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef THUMBNAILPGF_H
-#define THUMBNAILPGF_H
+#ifndef PGFUTIL_H
+#define PGFUTIL_H
 
 // Qt includes
 
@@ -41,9 +41,13 @@ namespace Digikam
 
     /** PGF image data to QImage */
     bool readPGFImageData(const QByteArray& data, QImage& img);
+
     /** QImage to PGF image data */
     bool writePGFImageData(const QImage& img, QByteArray& data, int quality);
 
+    /** Load a reduced version of PGF file */
+    bool loadPGFScaled(QImage& img, const QString& path);
+
 }  // namespace Digikam
 
-#endif /* THUMBNAILPGF_H */
+#endif /* PGFUTIL_H */
