@@ -115,4 +115,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 094 ==> 161749 : Raw Converter needs more options.
 095 ==> 150598 : File rename during image upload fails silently.
 096 ==> 161865 : Image not placed in New Tag category.
-097 ==> 
+097 ==> 136897 : THM files are not uploaded.
+098 ==> 
+
