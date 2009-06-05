@@ -46,7 +46,7 @@ namespace Digikam
     bool writePGFImageData(const QImage& img, QByteArray& data, int quality);
 
     /** Load a reduced version of PGF file */
-    bool loadPGFScaled(QImage& img, const QString& path);
+    bool loadPGFScaled(QImage& img, const QString& path, int maximumSize);
 
 }  // namespace Digikam
 

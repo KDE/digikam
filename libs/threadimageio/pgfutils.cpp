@@ -126,7 +126,7 @@ bool writePGFImageData(const QImage& img, QByteArray& data, int quality)
     return true;
 }
 
-bool loadPGFScaled(QImage& img, const QString& path)
+bool loadPGFScaled(QImage& img, const QString& path, int maximumSize)
 {
     FILE *file = fopen(QFile::encodeName(path), "rb");
     if (!file)
@@ -172,9 +172,21 @@ bool loadPGFScaled(QImage& img, const QString& path)
         CPGFFileStream stream(fd);
         CPGFImage      pgf;
         pgf.Open(&stream);
-        pgf.ReadPreview();
 
-        img = QImage(pgf.Width(pgf.Levels()-1), pgf.Height(pgf.Levels()-1), QImage::Format_ARGB32);
+        // Try to find the right PGF level to get reduced image accordingly
+        // with preview size wanted.
+        int i, w, h, s;
+        for (i=pgf.Levels()-1 ; i>=0 ; --i)
+        {
+            w = pgf.Width(i);
+            h = pgf.Height(i);
+            s = qMin(w, h);
+            if (s > maximumSize)
+                break;
+        }
+
+        pgf.Read(i);  // Read PGF image at reduced level i.
+        img = QImage(w, h, QImage::Format_RGB32);
         pgf.GetBitmap(img.bytesPerLine(), (UINT8*)img.bits(), img.depth());
     }
     catch(IOException& e)

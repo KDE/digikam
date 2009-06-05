@@ -200,7 +200,7 @@ QImage ThumbnailCreator::load(const QString& path)
           else if (ext == QString("PGF"))
             {
                 // use pgf library to extract reduced version
-                loadPGFScaled(qimage, path);
+                loadPGFScaled(qimage, path, d->cachedSize);
                 failedAtPGFScaled = qimage.isNull();
             }
         }
@@ -235,7 +235,7 @@ QImage ThumbnailCreator::load(const QString& path)
         if (qimage.isNull() && !failedAtPGFScaled)
         {
             // use jpegutils
-            loadPGFScaled(qimage, path);
+            loadPGFScaled(qimage, path, d->cachedSize);
         }
 
         if (qimage.isNull())
