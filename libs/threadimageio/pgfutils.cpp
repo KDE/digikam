@@ -170,12 +170,12 @@ bool loadPGFScaled(QImage& img, const QString& path)
     try
     {
         CPGFFileStream stream(fd);
-        CPGFImage      pgfImg;
-        pgfImg.Open(&stream);
+        CPGFImage      pgf;
+        pgf.Open(&stream);
+        pgf.ReadPreview();
 
-        img = QImage(pgfImg.Width(), pgfImg.Height(), QImage::Format_ARGB32);
-        pgfImg.ReadPreview();
-        pgfImg.GetBitmap(img.bytesPerLine(), (UINT8*)img.bits(), img.depth());
+        img = QImage(pgf.Width(pgf.Levels()-1), pgf.Height(pgf.Levels()-1), QImage::Format_ARGB32);
+        pgf.GetBitmap(img.bytesPerLine(), (UINT8*)img.bits(), img.depth());
     }
     catch(IOException& e)
     {
