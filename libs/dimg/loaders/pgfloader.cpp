@@ -140,7 +140,16 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     {
         // open pgf image
         pgf.Open(&stream);
-        pgf.Read(0, CallbackForLibPGF, this);
+
+        const PGFHeader* header = pgf.GetHeader();
+        kDebug(50003) << "PGF width    = " << header->width    << endl;
+        kDebug(50003) << "PGF height   = " << header->height   << endl;
+        kDebug(50003) << "PGF bbp      = " << header->bpp      << endl;
+        kDebug(50003) << "PGF channels = " << header->channels << endl;
+        kDebug(50003) << "PGF quality  = " << header->quality  << endl;
+        kDebug(50003) << "PGF mode     = " << header->mode     << endl;
+        kDebug(50003) << "Has Alpha    = " << m_hasAlpha       << endl;
+        kDebug(50003) << "Is 16 bits   = " << m_sixteenBit     << endl;
 
         switch (pgf.Mode())
         {
@@ -152,6 +161,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             case ImageModeRGBA:
                 m_hasAlpha = true;
                 colorModel = DImg::RGB;
+                break;
             default:
                 kDebug(50003) << "Cannot load PGF image: color mode not supported (" << pgf.Mode() << ")" << endl;
                 return false;
@@ -200,6 +210,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         // Fill all with 255 including alpha channel.
         memset(data, sizeof(data), 0xFF);
 
+        pgf.Read(0, CallbackForLibPGF, this);
         pgf.GetBitmap(m_sixteenBit ? width*8 : width*4, (UINT8*)data, m_sixteenBit ? 64 : 32,
                       channelMap, CallbackForLibPGF, this);
 
@@ -212,16 +223,6 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         imageSetAttribute("format", "PGF");
         imageSetAttribute("originalColorModel", colorModel);
         imageSetAttribute("originalBitDepth", bitDepth);
-
-        const PGFHeader* header = pgf.GetHeader();
-        kDebug(50003) << "PGF width    = " << header->width    << endl;
-        kDebug(50003) << "PGF height   = " << header->height   << endl;
-        kDebug(50003) << "PGF bbp      = " << header->bpp      << endl;
-        kDebug(50003) << "PGF channels = " << header->channels << endl;
-        kDebug(50003) << "PGF quality  = " << header->quality  << endl;
-        kDebug(50003) << "PGF mode     = " << header->mode     << endl;
-        kDebug(50003) << "Has Alpha    = " << m_hasAlpha       << endl;
-        kDebug(50003) << "Is 16 bits   = " << m_sixteenBit     << endl;
 
 #ifdef WIN32
         CloseHandle(fd);
@@ -282,7 +283,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         PGFHeader      header;
         header.width    = imageWidth();
         header.height   = imageHeight();
-        header.channels = 4;
+        header.channels = imageHasAlpha() ? 4 : 3;
         header.bpp      = imageBitsDepth() * header.channels;
         header.quality  = quality;
         header.mode     = imageHasAlpha() ? ImageModeRGBA : ImageModeRGBColor;
@@ -291,7 +292,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
         pgf.ImportBitmap(4 * imageWidth() * (imageSixteenBit() ? 2 : 1),
                          (UINT8*)imageData(),
-                         header.bpp,
+                         imageBitsDepth() * 4,
                          channelMap,
                          CallbackForLibPGF, this);
 
