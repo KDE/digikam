@@ -111,4 +111,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 090 ==> 192425 : Star rating setting under thumbnails is a nuisance.
 091 ==> 194330 : digiKam crashed when deleting image.
 092 ==> 188959 : On first use, digiKam should not scan for images without user confirmation.
-093 ==> 
+093 ==> 195202 : Thumbnail rename fails (cross-device link) and so cache doesn't work.
+094 ==> 
