@@ -34,7 +34,7 @@
 
 // Local includes.
 
-#include "pgfutil.h"
+#include "pgfutils.h"
 
 using namespace Digikam;
 
