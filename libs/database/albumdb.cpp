@@ -2475,17 +2475,15 @@ QStringList AlbumDB::getItemURLsInAlbum(int albumID, ItemSortOrder sortOrder)
             break;
         case ByItemDate:
             sqlString = QString("SELECT Albums.relativePath, Images.name "
-                                 "FROM Images "
-                                 "  LEFT OUTER JOIN Albums ON Albums.id=Images.album "
-                                 "  LEFT OUTER JOIN ImageInformation ON ImageInformation.imageid=Images.id "
+                                 "FROM Images JOIN Albums ON Albums.id=Images.album "
+                                 "            JOIN ImageInformation ON ImageInformation.imageid=Images.id "
                                  "WHERE Albums.id=? "
                                  "ORDER BY ImageInformation.creationDate;");
             break;
         case ByItemRating:
             sqlString = QString("SELECT Albums.relativePath, Images.name "
-                                 "FROM Images "
-                                 "  LEFT OUTER JOIN Albums ON Albums.id=Images.album "
-                                 "  LEFT OUTER JOIN ImageInformation ON ImageInformation.imageid=Images.id "
+                                 "FROM Images JOIN Albums ON Albums.id=Images.album "
+                                 "            JOIN ImageInformation ON ImageInformation.imageid=Images.id "
                                  "WHERE Albums.id=? "
                                  "ORDER BY ImageInformation.rating DESC;");
             break;
