@@ -125,8 +125,8 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
     if(!inputFile)
         return false;
 
-    struct jpeg_decompress_struct cinfo;
-    struct jpegutils_jpeg_error_mgr       jerr;
+    struct jpeg_decompress_struct   cinfo;
+    struct jpegutils_jpeg_error_mgr jerr;
 
     // JPEG error handling - thanks to Marcus Meissner
     cinfo.err                 = jpeg_std_error(&jerr);
@@ -145,7 +145,8 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
 #ifdef Q_CC_MSVC
     QFile inFile(path);
     QByteArray buffer;
-    if(inFile.open(QIODevice::ReadOnly)) {
+    if(inFile.open(QIODevice::ReadOnly))
+    {
         buffer = inFile.readAll();
         inFile.close();
     }
@@ -215,39 +216,50 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
 
     uchar* data = img.bits();
     int bpl = img.bytesPerLine();
-    while (cinfo.output_scanline < cinfo.output_height) {
+    while (cinfo.output_scanline < cinfo.output_height)
+    {
         uchar *d = data + cinfo.output_scanline * bpl;
         jpeg_read_scanlines(&cinfo, &d, 1);
     }
     jpeg_finish_decompress(&cinfo);
 
-    if (cinfo.output_components == 3) {
+    if (cinfo.output_components == 3)
+    {
         // Expand 24->32 bpp.
-        for (uint j=0; j<cinfo.output_height; ++j) {
+        for (uint j=0; j<cinfo.output_height; ++j)
+        {
             uchar *in = img.scanLine(j) + cinfo.output_width * 3;
             QRgb *out = (QRgb*)img.scanLine(j);
 
-            for (uint i = cinfo.output_width; --i; ) {
+            for (uint i = cinfo.output_width; --i; )
+            {
                 in -= 3;
                 out[i] = qRgb(in[0], in[1], in[2]);
             }
         }
-    } else if (cinfo.out_color_space == JCS_CMYK) {
-        for (uint j = 0; j < cinfo.output_height; ++j) {
+    }
+    else if (cinfo.out_color_space == JCS_CMYK)
+    {
+        for (uint j = 0; j < cinfo.output_height; ++j)
+        {
             uchar *in = img.scanLine(j) + cinfo.output_width * 4;
             QRgb *out = (QRgb*)img.scanLine(j);
 
-            for (uint i = cinfo.output_width; --i; ) {
+            for (uint i = cinfo.output_width; --i; )
+            {
                 in -= 4;
                 int k = in[3];
                 out[i] = qRgb(k * in[0] / 255, k * in[1] / 255, k * in[2] / 255);
             }
         }
     }
-    if (cinfo.density_unit == 1) {
+    if (cinfo.density_unit == 1)
+    {
         img.setDotsPerMeterX(int(100. * cinfo.X_density / 2.54));
         img.setDotsPerMeterY(int(100. * cinfo.Y_density / 2.54));
-    } else if (cinfo.density_unit == 2) {
+    }
+    else if (cinfo.density_unit == 2)
+    {
         img.setDotsPerMeterX(int(100. * cinfo.X_density));
         img.setDotsPerMeterY(int(100. * cinfo.Y_density));
     }
