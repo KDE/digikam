@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "pgfutil.h"
+#include "pgfutils.h"
 
 // C Ansi includes
 
