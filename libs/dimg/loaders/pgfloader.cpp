@@ -141,16 +141,6 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         // open pgf image
         pgf.Open(&stream);
 
-        const PGFHeader* header = pgf.GetHeader();
-        kDebug(50003) << "PGF width    = " << header->width    << endl;
-        kDebug(50003) << "PGF height   = " << header->height   << endl;
-        kDebug(50003) << "PGF bbp      = " << header->bpp      << endl;
-        kDebug(50003) << "PGF channels = " << header->channels << endl;
-        kDebug(50003) << "PGF quality  = " << header->quality  << endl;
-        kDebug(50003) << "PGF mode     = " << header->mode     << endl;
-        kDebug(50003) << "Has Alpha    = " << m_hasAlpha       << endl;
-        kDebug(50003) << "Is 16 bits   = " << m_sixteenBit     << endl;
-
         switch (pgf.Mode())
         {
             case ImageModeRGBColor:
@@ -197,10 +187,19 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 break;
         }
 
-        int width        = pgf.Width();
-        int height       = pgf.Height();
-        uchar *data      = 0;
-        int channelMap[] = { 0, 1, 2, 3 };
+        const PGFHeader* header = pgf.GetHeader();
+        kDebug(50003) << "PGF width    = " << header->width    << endl;
+        kDebug(50003) << "PGF height   = " << header->height   << endl;
+        kDebug(50003) << "PGF bbp      = " << header->bpp      << endl;
+        kDebug(50003) << "PGF channels = " << header->channels << endl;
+        kDebug(50003) << "PGF quality  = " << header->quality  << endl;
+        kDebug(50003) << "PGF mode     = " << header->mode     << endl;
+        kDebug(50003) << "Has Alpha    = " << m_hasAlpha       << endl;
+        kDebug(50003) << "Is 16 bits   = " << m_sixteenBit     << endl;
+
+        int width   = pgf.Width();
+        int height  = pgf.Height();
+        uchar *data = 0;
 
         if (m_sixteenBit)
             data = new uchar[width*height*8];  // 16 bits/color/pixel
@@ -211,8 +210,11 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         memset(data, sizeof(data), 0xFF);
 
         pgf.Read(0, CallbackForLibPGF, this);
-        pgf.GetBitmap(m_sixteenBit ? width*8 : width*4, (UINT8*)data, m_sixteenBit ? 64 : 32,
-                      channelMap, CallbackForLibPGF, this);
+        pgf.GetBitmap(m_sixteenBit ? width*8 : width*4,
+                      (UINT8*)data,
+                      m_sixteenBit ? 64 : 32,
+                      NULL,
+                      CallbackForLibPGF, this);
 
         if (observer)
             observer->progressInfo(m_image, 1.0);
@@ -271,7 +273,6 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
     try
     {
-        int channelMap[]     = { 0, 1, 2, 3 };
         QVariant qualityAttr = imageGetAttribute("quality");
 //        int quality          = qualityAttr.isValid() ? qualityAttr.toInt() : 90;
         int quality          = 1;
@@ -283,17 +284,47 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         PGFHeader      header;
         header.width    = imageWidth();
         header.height   = imageHeight();
-        header.channels = imageHasAlpha() ? 4 : 3;
-        header.bpp      = imageBitsDepth() * header.channels;
         header.quality  = quality;
-        header.mode     = imageHasAlpha() ? ImageModeRGBA : ImageModeRGBColor;
+
+        if (imageHasAlpha())
+        {
+            if (imageSixteenBit())
+            {
+                // NOTE : there is no PGF color mode in 16 bits with alpha.
+                header.channels = 3;
+                header.bpp      = 48;
+                header.mode     = ImageModeRGB48;  
+            }
+            else
+            {
+                header.channels = 4;
+                header.bpp      = 32;
+                header.mode     = ImageModeRGBA;
+            }
+        }
+        else
+        {
+            if (imageSixteenBit())
+            {
+                header.channels = 3;
+                header.bpp      = 48;
+                header.mode     = ImageModeRGB48;
+            }
+            else
+            {
+                header.channels = 3;
+                header.bpp      = 24;
+                header.mode = ImageModeRGBColor;
+            }
+        }
+
         header.background.rgbtBlue = header.background.rgbtGreen = header.background.rgbtRed = 0;
         pgf.SetHeader(header);
 
         pgf.ImportBitmap(4 * imageWidth() * (imageSixteenBit() ? 2 : 1),
                          (UINT8*)imageData(),
                          imageBitsDepth() * 4,
-                         channelMap,
+                         NULL,
                          CallbackForLibPGF, this);
 
         UINT32 nWrittenBytes = 0;
