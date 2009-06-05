@@ -112,4 +112,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 091 ==> 194330 : digiKam crashed when deleting image.
 092 ==> 188959 : On first use, digiKam should not scan for images without user confirmation.
 093 ==> 195202 : Thumbnail rename fails (cross-device link) and so cache doesn't work.
-094 ==> 
+094 ==> 161749 : Raw Converter needs more options.
+095 ==> 150598 : File rename during image upload fails silently.
+096 ==> 
