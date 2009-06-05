@@ -114,4 +114,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 093 ==> 195202 : Thumbnail rename fails (cross-device link) and so cache doesn't work.
 094 ==> 161749 : Raw Converter needs more options.
 095 ==> 150598 : File rename during image upload fails silently.
-096 ==> 
+096 ==> 161865 : Image not placed in New Tag category.
+097 ==> 
