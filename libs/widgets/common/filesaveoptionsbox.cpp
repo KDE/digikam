@@ -66,6 +66,7 @@ public:
         PNGOptions      = 0;
         TIFFOptions     = 0;
         JPEG2000Options = 0;
+        PGFOptions      = 0;
     }
 
     QWidget      *noneOptions;
@@ -81,6 +82,8 @@ public:
     TIFFSettings *TIFFOptions;
 
     JP2KSettings *JPEG2000Options;
+
+    JP2KSettings *PGFOptions;      // PGF settings panel is the same than JPEG 2000
 };
 
 FileSaveOptionsBox::FileSaveOptionsBox(QWidget *parent)
@@ -113,6 +116,10 @@ FileSaveOptionsBox::FileSaveOptionsBox(QWidget *parent)
 
     d->JPEG2000Options = new JP2KSettings(this);
 
+    //-- PGF Settings -------------------------------------------------
+
+    d->PGFOptions = new JP2KSettings(this);
+
     //-----------------------------------------------------------------------
 
     insertWidget(DImg::NONE, d->noneOptions);
@@ -120,6 +127,7 @@ FileSaveOptionsBox::FileSaveOptionsBox(QWidget *parent)
     insertWidget(DImg::PNG,  d->PNGOptions);
     insertWidget(DImg::TIFF, d->TIFFOptions);
     insertWidget(DImg::JP2K, d->JPEG2000Options);
+    insertWidget(DImg::PGF,  d->PGFOptions);
 
     //-----------------------------------------------------------------------
 
@@ -160,6 +168,8 @@ void FileSaveOptionsBox::toggleFormatOptions(const QString& format)
         setCurrentIndex(DImg::TIFF);
     else if (format == QString("JP2") || format == QString("J2K"))
         setCurrentIndex(DImg::JP2K);
+    else if (format == QString("PGF"))
+        setCurrentIndex(DImg::PGF);
     else
         setCurrentIndex(DImg::NONE);
 }
@@ -168,12 +178,14 @@ void FileSaveOptionsBox::applySettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("ImageViewer Settings");
-    group.writeEntry("JPEGCompression", d->JPEGOptions->getCompressionValue());
-    group.writeEntry("JPEGSubSampling", d->JPEGOptions->getSubSamplingValue());
-    group.writeEntry("PNGCompression", d->PNGOptions->getCompressionValue());
-    group.writeEntry("TIFFCompression", d->TIFFOptions->getCompression());
+    group.writeEntry("JPEGCompression",     d->JPEGOptions->getCompressionValue());
+    group.writeEntry("JPEGSubSampling",     d->JPEGOptions->getSubSamplingValue());
+    group.writeEntry("PNGCompression",      d->PNGOptions->getCompressionValue());
+    group.writeEntry("TIFFCompression",     d->TIFFOptions->getCompression());
     group.writeEntry("JPEG2000Compression", d->JPEG2000Options->getCompressionValue());
-    group.writeEntry("JPEG2000LossLess", d->JPEG2000Options->getLossLessCompression());
+    group.writeEntry("JPEG2000LossLess",    d->JPEG2000Options->getLossLessCompression());
+    group.writeEntry("PGFCompression",      d->PGFOptions->getCompressionValue());
+    group.writeEntry("PGFLossLess",         d->PGFOptions->getLossLessCompression());
     config->sync();
 }
 
@@ -187,6 +199,8 @@ void FileSaveOptionsBox::readSettings()
     d->TIFFOptions->setCompression( group.readEntry("TIFFCompression", false) );
     d->JPEG2000Options->setCompressionValue( group.readEntry("JPEG2000Compression", 75) );
     d->JPEG2000Options->setLossLessCompression( group.readEntry("JPEG2000LossLess", true) );
+    d->PGFOptions->setCompressionValue( group.readEntry("PGFCompression", 75) );
+    d->PGFOptions->setLossLessCompression( group.readEntry("PGFLossLess", true) );
 }
 
 }  // namespace Digikam
