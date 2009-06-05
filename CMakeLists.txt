@@ -774,9 +774,12 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/schemaupdater.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/thumbnaildatabaseaccess.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/thumbnaildb.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/thumbnailpgf.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/thumbnailschemaupdater.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/upgradedb_sqlite2tosqlite3.cpp
+       )
+
+    SET(pgfutils_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/pgfutil.cpp
        )
 
     SET(libpgf_SRCS
