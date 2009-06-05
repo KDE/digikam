@@ -779,7 +779,7 @@ ENDIF(MSVC)
        )
 
     SET(pgfutils_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/pgfutil.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/pgfutils.cpp
        )
 
     SET(libpgf_SRCS
