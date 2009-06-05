@@ -2461,8 +2461,7 @@ QStringList AlbumDB::getItemURLsInAlbum(int albumID, ItemSortOrder sortOrder)
     {
         case ByItemName:
             sqlString = QString("SELECT Albums.relativePath, Images.name "
-                                 "FROM Images "
-                                 "  LEFT OUTER JOIN Albums ON Albums.id=Images.album "
+                                 "FROM Images JOIN Albums ON Albums.id=Images.album "
                                  "WHERE Albums.id=? "
                                  "ORDER BY Images.name COLLATE NOCASE;");
             break;
@@ -2470,8 +2469,7 @@ QStringList AlbumDB::getItemURLsInAlbum(int albumID, ItemSortOrder sortOrder)
             // Don't collate on the path - this is to maintain the same behavior
             // that happens when sort order is "By Path"
             sqlString = QString("SELECT Albums.relativePath, Images.name "
-                                 "FROM Images "
-                                 "  LEFT OUTER JOIN Albums ON Albums.id=Images.album "
+                                 "FROM Images JOIN Albums ON Albums.id=Images.album "
                                  "WHERE Albums.id=? "
                                  "ORDER BY Albums.relativePath,Images.name;");
             break;
