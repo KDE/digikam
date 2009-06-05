@@ -93,6 +93,7 @@ SET(digikamcore_LIB_SRCS
                         ${libthreadimageio_SRCS}
                         ${libthemeengine_SRCS}
                         ${libpgf_SRCS}
+                        ${pgfutils_SRCS}
 
                         # widgets and dialogs
                         ${libcommonwidgets_SRCS}
@@ -123,6 +124,7 @@ KDE4_ADD_LIBRARY(digikamcore SHARED ${digikamcore_LIB_SRCS})
 TARGET_LINK_LIBRARIES(digikamcore
                       ${KDE4_KDECORE_LIBS}
                       ${KDE4_KIO_LIBS}
+                      ${KDE4_KFILE_LIBS}
                       ${KDE4_KHTML_LIBS}
                       ${KDE4_KDEUI_LIBS}
                       ${KDE4_KUTILS_LIBS}
@@ -168,6 +170,7 @@ SET(digikamdatabase_LIB_SRCS ${libdatabase_SRCS}
                              ${libdatabasemodels_SRCS}
                              ${libsqlite2_SRCS}
                              ${libpgf_SRCS}
+                             ${pgfutils_SRCS}
    )
 
 KDE4_ADD_LIBRARY(digikamdatabase SHARED ${digikamdatabase_LIB_SRCS})
