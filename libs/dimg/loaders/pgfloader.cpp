@@ -187,9 +187,9 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 break;
         }
 
-        const PGFHeader* header = pgf.GetHeader();
 
 #ifdef ENABLE_DEBUG_MESSAGES
+        const PGFHeader* header = pgf.GetHeader();
         kDebug(50003) << "PGF width    = " << header->width    << endl;
         kDebug(50003) << "PGF height   = " << header->height   << endl;
         kDebug(50003) << "PGF bbp      = " << header->bpp      << endl;
