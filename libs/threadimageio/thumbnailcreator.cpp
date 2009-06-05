@@ -61,7 +61,7 @@
 #include "dimg.h"
 #include "dmetadata.h"
 #include "jpegutils.h"
-#include "pgfutil.h"
+#include "pgfutils.h"
 
 namespace Digikam
 {
