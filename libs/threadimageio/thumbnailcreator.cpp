@@ -61,6 +61,7 @@
 #include "dimg.h"
 #include "dmetadata.h"
 #include "jpegutils.h"
+#include "pgfutil.h"
 
 namespace Digikam
 {
@@ -170,6 +171,7 @@ QImage ThumbnailCreator::load(const QString& path)
         bool fromEmbeddedPreview = false;
         bool failedAtDImg        = false;
         bool failedAtJPEGScaled  = false;
+        bool failedAtPGFScaled   = false;
 
         // -- Get the image preview --------------------------------
 
@@ -194,6 +196,12 @@ QImage ThumbnailCreator::load(const QString& path)
             {
                 qimage       = loadWithDImg(path);
                 failedAtDImg = qimage.isNull();
+            }
+          else if (ext == QString("PGF"))
+            {
+                // use pgf library to extract reduced version
+                loadPGFScaled(qimage, path);
+                failedAtPGFScaled = qimage.isNull();
             }
         }
 
@@ -221,6 +229,13 @@ QImage ThumbnailCreator::load(const QString& path)
         if (qimage.isNull() && !failedAtDImg)
         {
             qimage = loadWithDImg(path);
+        }
+
+        // Try PGF anyway
+        if (qimage.isNull() && !failedAtPGFScaled)
+        {
+            // use jpegutils
+            loadPGFScaled(qimage, path);
         }
 
         if (qimage.isNull())
