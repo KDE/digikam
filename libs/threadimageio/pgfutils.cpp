@@ -175,13 +175,12 @@ bool loadPGFScaled(QImage& img, const QString& path, int maximumSize)
 
         // Try to find the right PGF level to get reduced image accordingly
         // with preview size wanted.
-        int i, w, h, s;
+        int i, w, h;
         for (i=pgf.Levels()-1 ; i>=0 ; --i)
         {
             w = pgf.Width(i);
             h = pgf.Height(i);
-            s = qMin(w, h);
-            if (s > maximumSize)
+            if (qMin(w, h) >= maximumSize)
                 break;
         }
 

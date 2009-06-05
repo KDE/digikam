@@ -47,6 +47,7 @@ extern "C"
 // Qt includes
 
 #include <QFile>
+#include <QVariant>
 #include <QByteArray>
 #include <QTextStream>
 
@@ -206,6 +207,31 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
         if (m_loadFlags & LoadImageData)
         {
+            // -------------------------------------------------------------------
+            // Find out if we do the fast-track loading with reduced size. PGF specific.
+            int scaledLoadingSize = 0;
+            int level             = 0;
+            QVariant attribute = imageGetAttribute("pgfScaledLoadingSize");
+            if (attribute.isValid())
+            {
+                scaledLoadingSize = attribute.toInt();
+                int i, w, h;
+                for (i=pgf.Levels()-1 ; i>=0 ; --i)
+                {
+                    w = pgf.Width(i);
+                    h = pgf.Height(i);
+                    if (qMin(w, h) >= scaledLoadingSize)
+                        break;
+                }
+
+                width  = w;
+                height = h;
+                level  = i;
+                kDebug(50003) << "Loading PGF scaled version at level " << i
+                              << " (" << w << " x " << h << ") for size "
+                              << scaledLoadingSize << endl;
+            }
+
             if (m_sixteenBit)
                 data = new uchar[width*height*8];  // 16 bits/color/pixel
             else
@@ -214,12 +240,12 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             // Fill all with 255 including alpha channel.
             memset(data, sizeof(data), 0xFF);
 
-            pgf.Read(0, CallbackForLibPGF, this);
+            pgf.Read(level, CallbackForLibPGF, this);
             pgf.GetBitmap(m_sixteenBit ? width*8 : width*4,
-                        (UINT8*)data,
-                        m_sixteenBit ? 64 : 32,
-                        NULL,
-                        CallbackForLibPGF, this);
+                          (UINT8*)data,
+                          m_sixteenBit ? 64 : 32,
+                          NULL,
+                          CallbackForLibPGF, this);
 
             if (observer)
                 observer->progressInfo(m_image, 1.0);

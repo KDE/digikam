@@ -185,6 +185,7 @@ void PreviewLoadingTask::execute()
     {
         // Set a hint to try to load a JPEG with the fast scale-before-decoding method
         img.setAttribute("jpegScaledLoadingSize", size);
+        img.setAttribute("pgfScaledLoadingSize", size);
         img.load(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
     }
 
