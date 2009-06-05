@@ -2494,8 +2494,7 @@ QStringList AlbumDB::getItemURLsInAlbum(int albumID, ItemSortOrder sortOrder)
         case NoItemSorting:
         default:
             sqlString = QString("SELECT Albums.relativePath, Images.name "
-                                 "FROM Images "
-                                 "  LEFT OUTER JOIN Albums ON Albums.id=Images.album "
+                                 "FROM Images JOIN Albums ON Albums.id=Images.album "
                                  "WHERE Albums.id=?;");
             break;
     }
