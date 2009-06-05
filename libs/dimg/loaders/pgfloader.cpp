@@ -188,6 +188,8 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         }
 
         const PGFHeader* header = pgf.GetHeader();
+
+#ifdef ENABLE_DEBUG_MESSAGES
         kDebug(50003) << "PGF width    = " << header->width    << endl;
         kDebug(50003) << "PGF height   = " << header->height   << endl;
         kDebug(50003) << "PGF bbp      = " << header->bpp      << endl;
@@ -196,28 +198,32 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         kDebug(50003) << "PGF mode     = " << header->mode     << endl;
         kDebug(50003) << "Has Alpha    = " << m_hasAlpha       << endl;
         kDebug(50003) << "Is 16 bits   = " << m_sixteenBit     << endl;
+#endif
 
         int width   = pgf.Width();
         int height  = pgf.Height();
         uchar *data = 0;
 
-        if (m_sixteenBit)
-            data = new uchar[width*height*8];  // 16 bits/color/pixel
-        else
-            data = new uchar[width*height*4];  // 8 bits/color/pixel
+        if (m_loadFlags & LoadImageData)
+        {
+            if (m_sixteenBit)
+                data = new uchar[width*height*8];  // 16 bits/color/pixel
+            else
+                data = new uchar[width*height*4];  // 8 bits/color/pixel
 
-        // Fill all with 255 including alpha channel.
-        memset(data, sizeof(data), 0xFF);
+            // Fill all with 255 including alpha channel.
+            memset(data, sizeof(data), 0xFF);
 
-        pgf.Read(0, CallbackForLibPGF, this);
-        pgf.GetBitmap(m_sixteenBit ? width*8 : width*4,
-                      (UINT8*)data,
-                      m_sixteenBit ? 64 : 32,
-                      NULL,
-                      CallbackForLibPGF, this);
+            pgf.Read(0, CallbackForLibPGF, this);
+            pgf.GetBitmap(m_sixteenBit ? width*8 : width*4,
+                        (UINT8*)data,
+                        m_sixteenBit ? 64 : 32,
+                        NULL,
+                        CallbackForLibPGF, this);
 
-        if (observer)
-            observer->progressInfo(m_image, 1.0);
+            if (observer)
+                observer->progressInfo(m_image, 1.0);
+        }
 
         imageWidth()  = width;
         imageHeight() = height;
@@ -261,7 +267,6 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         kDebug(50003) << "Error: Could not open destination file." << endl;
         return false;
     }
-
 #elif defined(__POSIX__)
     int fd = open(QFile::encodeName(filePath), O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
     if (fd == -1)
@@ -282,9 +287,9 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         CPGFFileStream stream(fd);
         CPGFImage      pgf;
         PGFHeader      header;
-        header.width    = imageWidth();
-        header.height   = imageHeight();
-        header.quality  = quality;
+        header.width   = imageWidth();
+        header.height  = imageHeight();
+        header.quality = quality;
 
         if (imageHasAlpha())
         {
@@ -330,6 +335,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         UINT32 nWrittenBytes = 0;
         pgf.Write(&stream, 0, CallbackForLibPGF, &nWrittenBytes, this);
 
+#ifdef ENABLE_DEBUG_MESSAGES
         kDebug(50003) << "PGF width     = " << header.width    << endl;
         kDebug(50003) << "PGF height    = " << header.height   << endl;
         kDebug(50003) << "PGF bbp       = " << header.bpp      << endl;
@@ -337,6 +343,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         kDebug(50003) << "PGF quality   = " << header.quality  << endl;
         kDebug(50003) << "PGF mode      = " << header.mode     << endl;
         kDebug(50003) << "Bytes Written = " << nWrittenBytes   << endl;
+#endif
 
 #ifdef WIN32
         CloseHandle(fd);
