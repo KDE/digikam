@@ -85,6 +85,9 @@ ImageAlbumModel::ImageAlbumModel(QObject *parent)
     connect(d->incrementalTimer, SIGNAL(timeout()),
             this, SLOT(slotNextIncrementalRefresh()));
 
+    connect(this, SIGNAL(readyForIncrementalRefresh()),
+            this, SLOT(incrementalRefresh()));
+
     connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset &)),
             this, SLOT(slotCollectionImageChange(const CollectionImageChangeset &)));
 
@@ -177,6 +180,11 @@ void ImageAlbumModel::refresh()
 
 void ImageAlbumModel::incrementalRefresh()
 {
+    // The path to this method is:
+    // scheduleIncrementalRefresh -> incrementalTimer waits 100ms -> slotNextIncrementalRefresh
+    // -> ImageModel::requestIncrementalRefresh -> waits until model is ready, maybe immediately
+    // -> to this method via SIGNAL(readyForIncrementalRefresh())
+
     if (!d->currentAlbum)
         return;
 
@@ -193,7 +201,7 @@ void ImageAlbumModel::incrementalRefresh()
 
 bool ImageAlbumModel::hasScheduledRefresh() const
 {
-    return d->refreshTimer->isActive() || d->incrementalTimer->isActive();
+    return d->refreshTimer->isActive() || d->incrementalTimer->isActive() || hasIncrementalRefreshPending();
 }
 
 void ImageAlbumModel::scheduleRefresh()
@@ -207,7 +215,7 @@ void ImageAlbumModel::scheduleRefresh()
 
 void ImageAlbumModel::scheduleIncrementalRefresh()
 {
-    if (!d->incrementalTimer->isActive() && !d->refreshTimer->isActive())
+    if (!hasScheduledRefresh())
         d->incrementalTimer->start(100);
 }
 
@@ -226,7 +234,7 @@ void ImageAlbumModel::slotNextIncrementalRefresh()
     if (d->job)
         d->incrementalTimer->start(50);
     else
-        incrementalRefresh();
+        requestIncrementalRefresh();
 }
 
 void ImageAlbumModel::startListJob(const KUrl& url)
@@ -357,7 +365,7 @@ void ImageAlbumModel::slotCollectionImageChange(const CollectionImageChangeset& 
                     doRefresh = changeset.containsAlbum(d->currentAlbum->id());
                     if (!doRefresh && d->recurseAlbums)
                     {
-                        foreach (int albumId, changeset.ids())
+                        foreach (int albumId, changeset.albums())
                         {
                             Album *a = AlbumManager::instance()->findPAlbum(albumId);
                             if (a && d->currentAlbum->isAncestorOf(a))

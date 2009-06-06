@@ -156,6 +156,9 @@ void ImageFilterModel::setSourceImageModel(ImageModel *sourceModel)
         connect(d, SIGNAL(reAddImageInfos(const QList<ImageInfo> &)),
                 d->imageModel, SLOT(reAddImageInfos(const QList<ImageInfo> &)));
 
+        connect(d, SIGNAL(reAddingFinished()),
+                d->imageModel, SLOT(reAddingFinished()));
+
         connect(d->imageModel, SIGNAL(modelReset()),
                 this, SLOT(slotModelReset()));
 
@@ -479,7 +482,11 @@ void ImageFilterModelPrivate::packageFinished(const ImageFilterModelTodoPackage&
 
     // re-add if necessary
     if (package.isForReAdd)
+    {
         emit reAddImageInfos(package.infos.toList());
+        if (sentOutForReAdd == 1) // last package
+            emit reAddingFinished();
+    }
 
     // decrement counters
     --sentOut;

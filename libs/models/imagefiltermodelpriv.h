@@ -126,6 +126,7 @@ Q_SIGNALS:
     void packageToPrepare(const ImageFilterModelTodoPackage& package);
     void packageToFilter(const ImageFilterModelTodoPackage& package);
     void reAddImageInfos(const QList<ImageInfo>& infos);
+    void reAddingFinished();
 };
 
 } // namespace Digikam

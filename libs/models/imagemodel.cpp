@@ -57,6 +57,8 @@ public:
         itemDrop           = true;
         dragDropHandler    = 0;
         incrementalUpdater = 0;
+        reAdding           = false;
+        incrementalRefreshRequested = false;
     }
 
     ImageInfoList         infos;
@@ -71,6 +73,8 @@ public:
     QHash<QString, int>   filePathHash;
 
     QObject              *preprocessor;
+    bool                  reAdding;
+    bool                  incrementalRefreshRequested;
 
     DatabaseFields::Set   watchFlags;
 
@@ -270,6 +274,8 @@ void ImageModel::clearImageInfos()
     d->filePathHash.clear();
     delete d->incrementalUpdater;
     d->incrementalUpdater = 0;
+    d->reAdding = false;
+    d->incrementalRefreshRequested = false;
     reset();
     imageInfosCleared();
 }
@@ -326,6 +332,7 @@ void ImageModel::unsetPreprocessor(QObject *preprocessor)
     {
         disconnect(this, SIGNAL(preprocess(const QList<ImageInfo> &)), 0, 0);
         disconnect(d->preprocessor, 0, this, SLOT(reAddImageInfos(const QList<ImageInfo> &)));
+        disconnect(d->preprocessor, 0, this, SLOT(reAddingFinished()));
     }
 }
 
@@ -335,7 +342,10 @@ void ImageModel::appendInfos(const QList<ImageInfo>& infos)
         return;
 
     if (d->preprocessor)
+    {
+        d->reAdding = true;
         emit preprocess(infos);
+    }
     else
         publiciseInfos(infos);
 }
@@ -344,6 +354,16 @@ void ImageModel::reAddImageInfos(const QList<ImageInfo>& infos)
 {
     // addImageInfos -> appendInfos -> preprocessor -> reAddImageInfos
     publiciseInfos(infos);
+}
+
+void ImageModel::reAddingFinished()
+{
+    d->reAdding = false;
+    if (d->incrementalRefreshRequested)
+    {
+        d->incrementalRefreshRequested = false;
+        emit readyForIncrementalRefresh();
+    }
 }
 
 void ImageModel::publiciseInfos(const QList<ImageInfo>& infos)
@@ -365,6 +385,23 @@ void ImageModel::publiciseInfos(const QList<ImageInfo>& infos)
     }
     endInsertRows();
     emit imageInfosAdded(infos);
+}
+
+void ImageModel::requestIncrementalRefresh()
+{
+    if (d->reAdding)
+    {
+        d->incrementalRefreshRequested = true;
+    }
+    else
+    {
+        emit readyForIncrementalRefresh();
+    }
+}
+
+bool ImageModel::hasIncrementalRefreshPending() const
+{
+    return d->incrementalRefreshRequested;
 }
 
 void ImageModel::startIncrementalRefresh()

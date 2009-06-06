@@ -95,9 +95,10 @@ protected Q_SLOTS:
     void slotAlbumRenamed(Album *album);
     void slotAlbumsCleared();
 
+    void incrementalRefresh();
+
 protected:
 
-    void incrementalRefresh();
     void startListJob(const KUrl& url);
 
 private:

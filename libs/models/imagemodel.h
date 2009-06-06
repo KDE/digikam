@@ -147,8 +147,10 @@ public:
      * will be emitted. The preprocessor may process the items and shall then readd
      * them by calling reAddImageInfos(). It may take some time to process.
      * It shall discard any held infos when the modelReset() signal is sent.
-     * This means that only after calling this method, you shall make the two connections,
-     * and have a third connection to modelReset().
+     * It shall call readdFinished() when no reset occurred and all infos on the way have been readded.
+     * This means that only after calling this method, you shall make three connections
+     * (preprocess -> your slot, your signal -> reAddImageInfos, your signal -> reAddingFinished)
+     * and make or already hold a connection modelReset() -> your slot.
      * There is only one preprocessor at a time, a previously set object will be disconnected.
      */
     void setPreprocessor(QObject *processor);
@@ -173,12 +175,25 @@ Q_SIGNALS:
      *  this signal contains the changeset and the affected indexes. */
     void imageTagChange(const ImageTagChangeset &, const QItemSelection &);
 
+    /** Signals that the model is right now ready to start an incremental refresh.
+     *  This is guaranteed only for the scope of emitting this signal. */
+    void readyForIncrementalRefresh();
+
 public Q_SLOTS:
 
     void reAddImageInfos(const QList<ImageInfo>& infos);
+    void reAddingFinished();
 
 protected:
 
+    /** As soon as the model is ready to start an incremental refresh, the signal
+     *  readyForIncrementalRefresh() will be emitted. The signal will be emitted inline
+     *  if the model is ready right now. */
+    void requestIncrementalRefresh();
+    bool hasIncrementalRefreshPending() const;
+    /** Starts an incremental refresh operation. You shall only call this method from a slot
+     *  connected to readyForIncrementalRefresh(). To initiate an incremental refresh,
+     *  call requestIncrementalRefresh() */
     void startIncrementalRefresh();
     void finishIncrementalRefresh();
 
