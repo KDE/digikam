@@ -116,5 +116,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 095 ==> 150598 : File rename during image upload fails silently.
 096 ==> 161865 : Image not placed in New Tag category.
 097 ==> 136897 : THM files are not uploaded.
-098 ==> 
-
+098 ==> 195494 : Deleting and cancelling a picture with the keyboard still delete the picture.
+099 ==> 
