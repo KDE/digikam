@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-05-29
- * Description : PGF util.
+ * Description : PGF utils.
  *
  * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -188,6 +188,11 @@ bool loadPGFScaled(QImage& img, const QString& path, int maximumSize)
 
         if (i<0) i=0;
 
+        pgf.Read(i);  // Read PGF image at reduced level i.
+        int map[] = { 0, 1, 2 };
+        img = QImage(pgf.Width(i), pgf.Height(i), QImage::Format_RGB32);
+
+/*
         const PGFHeader* header = pgf.GetHeader();
         kDebug(50003) << "PGF width    = " << header->width    << endl;
         kDebug(50003) << "PGF height   = " << header->height   << endl;
@@ -198,10 +203,10 @@ bool loadPGFScaled(QImage& img, const QString& path, int maximumSize)
         kDebug(50003) << "PGF levels   = " << header->nLevels  << endl;
         kDebug(50003) << "Level (w x h)= " << i << "(" << pgf.Width(i)
                       << " x " << pgf.Height(i) << ")" << endl;
+        kDebug(50003) << "QImage depth = " << img.depth() << endl;
+*/
 
-        pgf.Read(i);  // Read PGF image at reduced level i.
-        img = QImage(pgf.Width(i), pgf.Height(i), QImage::Format_RGB32);
-        pgf.GetBitmap(img.bytesPerLine(), (UINT8*)img.bits(), img.depth());
+        pgf.GetBitmap(img.bytesPerLine(), (UINT8*)img.bits(), img.depth(), map);
     }
     catch(IOException& e)
     {
