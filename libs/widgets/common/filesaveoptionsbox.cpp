@@ -50,6 +50,7 @@
 #include "pngsettings.h"
 #include "tiffsettings.h"
 #include "jp2ksettings.h"
+#include "pgfsettings.h"
 
 namespace Digikam
 {
@@ -83,7 +84,7 @@ public:
 
     JP2KSettings *JPEG2000Options;
 
-    JP2KSettings *PGFOptions;      // PGF settings panel is the same than JPEG 2000
+    PGFSettings  *PGFOptions;
 };
 
 FileSaveOptionsBox::FileSaveOptionsBox(QWidget *parent)
@@ -118,7 +119,7 @@ FileSaveOptionsBox::FileSaveOptionsBox(QWidget *parent)
 
     //-- PGF Settings -------------------------------------------------
 
-    d->PGFOptions = new JP2KSettings(this);
+    d->PGFOptions = new PGFSettings(this);
 
     //-----------------------------------------------------------------------
 
@@ -199,7 +200,7 @@ void FileSaveOptionsBox::readSettings()
     d->TIFFOptions->setCompression( group.readEntry("TIFFCompression", false) );
     d->JPEG2000Options->setCompressionValue( group.readEntry("JPEG2000Compression", 75) );
     d->JPEG2000Options->setLossLessCompression( group.readEntry("JPEG2000LossLess", true) );
-    d->PGFOptions->setCompressionValue( group.readEntry("PGFCompression", 75) );
+    d->PGFOptions->setCompressionValue( group.readEntry("PGFCompression", 3) );
     d->PGFOptions->setLossLessCompression( group.readEntry("PGFLossLess", true) );
 }
 

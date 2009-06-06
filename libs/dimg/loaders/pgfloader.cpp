@@ -305,8 +305,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     try
     {
         QVariant qualityAttr = imageGetAttribute("quality");
-//        int quality          = qualityAttr.isValid() ? qualityAttr.toInt() : 90;
-        int quality          = 1;
+        int quality          = qualityAttr.isValid() ? qualityAttr.toInt() : 3;
 
         kDebug(50003) << "PGF quality: " << quality << endl;
 
