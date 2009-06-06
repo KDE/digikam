@@ -51,17 +51,26 @@ class ThumbnailCreatorPriv;
 class DIGIKAM_EXPORT ThumbnailInfo
 {
 public:
-    ThumbnailInfo()
-    {
-        isAccessible = false;
-        fileSize     = 0;
-    }
 
+    ThumbnailInfo();
+
+    /** The file path from which the thumbnail shall be generated */
     QString   filePath;
+    /** The modification date of the original file.
+     *  Thumbnail will be regenerated if thumb's modification date is older than this.
+     */
     QDateTime modificationDate;
+    /** If the original file is at all accessible on disk.
+     *  May be false if a file on a removable device is used. */
     bool      isAccessible;
+    /** If available, the uniqueHash + fileSize pair for identification
+     *  of the original file by content. */
     QString   uniqueHash;
-    int       fileSize; // for uniqueHash
+    int       fileSize;
+    /** Gives a hint at the orientation of the image.
+     *  This can be used to supersede the Exif information in the file.
+     *  Will not be used if DMetadata::ORIENTATION_UNSPECIFIED (default value) */
+    int       orientationHint;
 };
 
 class DIGIKAM_EXPORT ThumbnailInfoProvider

@@ -66,6 +66,13 @@
 namespace Digikam
 {
 
+ThumbnailInfo::ThumbnailInfo()
+{
+    isAccessible    = false;
+    fileSize        = 0;
+    orientationHint = DMetadata::ORIENTATION_UNSPECIFIED;
+}
+
 ThumbnailCreator::ThumbnailCreator(StorageMethod method)
                 : d(new ThumbnailCreatorPriv)
 {
@@ -176,10 +183,20 @@ QImage ThumbnailCreator::load(const QString& path)
                     storeInDatabase(info, image);
                     break;
                 case FreeDesktopStandard:
+                    // image is stored rotated
+                    if (d->exifRotate)
+                        image.qimage = exifRotate(image.qimage, image.exifOrientation);
                     storeFreedesktop(info, image);
                     break;
             }
         }
+    }
+
+    if (d->thumbnailStorage == PGFDatabase)
+    {
+        // image is stored, or created, unrotated, and is now rotated for display
+        if (d->exifRotate)
+            image.qimage = exifRotate(image.qimage, image.exifOrientation);
     }
 
     if (image.isNull())
@@ -484,6 +501,8 @@ ThumbnailImage ThumbnailCreator::loadFreedesktop(const ThumbnailInfo &info)
         {
             ThumbnailImage info;
             info.qimage = qimage;
+            // is stored rotated. Not needed to rotate.
+            info.exifOrientation = DMetadata::ORIENTATION_NORMAL;
             return info;
         }
     }
@@ -501,9 +520,6 @@ void ThumbnailCreator::storeFreedesktop(const ThumbnailInfo &info, const Thumbna
     // required by spec
     if (qimage.format() != QImage::Format_ARGB32)
         qimage = qimage.convertToFormat(QImage::Format_ARGB32);
-
-    if (d->exifRotate)
-        qimage = exifRotate(qimage, image.exifOrientation);
 
     qimage.setText(QString("Thumb::URI").toLatin1(),   0, uri);
     qimage.setText(QString("Thumb::MTime").toLatin1(), 0, QString::number(info.modificationDate.toTime_t()));

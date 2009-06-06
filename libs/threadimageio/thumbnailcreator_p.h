@@ -38,7 +38,7 @@ class ThumbnailImage
 public:
     ThumbnailImage()
     {
-        exifOrientation = DMetadata::ORIENTATION_NORMAL;
+        exifOrientation = DMetadata::ORIENTATION_UNSPECIFIED;
     }
 
     bool isNull() const { return qimage.isNull(); }
