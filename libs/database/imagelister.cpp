@@ -179,7 +179,7 @@ void ImageLister::listAlbum(ImageListerReceiver *receiver,
                     "       Images.modificationDate, Images.fileSize, "
                     "       ImageInformation.width, ImageInformation.height "
                     " FROM Images "
-                    "       LEFT OUTER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
+                    "       JOIN ImageInformation ON Images.id=ImageInformation.imageid "
                     " WHERE Images.status=1 AND ";
 
     if (m_recursive)
