@@ -2544,8 +2544,7 @@ QMap<qlonglong, QString> AlbumDB::getItemIDsAndURLsInAlbum(int albumID)
     QList<QVariant> values;
 
     d->db->execSql( QString("SELECT Images.id, Albums.relativePath, Images.name "
-                            "FROM Images "
-                            "  LEFT OUTER JOIN Albums ON Albums.id=Images.album "
+                            "FROM Images JOIN Albums ON Albums.id=Images.album "
                             "WHERE Albums.id=?;"),
                     albumID, &values );
 
@@ -2663,8 +2662,7 @@ QStringList AlbumDB::getItemURLsInTag(int tagID, bool recursive)
     }
 
     d->db->execSql( QString("SELECT Albums.albumRoot, Albums.relativePath, Images.name "
-                            "FROM Images "
-                            "  LEFT OUTER JOIN Albums ON Albums.id=Images.album "
+                            "FROM Images JOIN Albums ON Albums.id=Images.album "
                             "WHERE Images.status=1 AND Images.id IN (%1);")
                     .arg(imagesIdClause), boundValues, &values );
 
@@ -2693,15 +2691,13 @@ QList<qlonglong> AlbumDB::getItemIDsInTag(int tagID, bool recursive)
     QList<QVariant> values;
 
     if (recursive)
-        d->db->execSql( QString("SELECT imageid FROM ImageTags "
-                                " LEFT JOIN Images ON ImageTags.imageid=Images.id "
+        d->db->execSql( QString("SELECT imageid FROM ImageTags JOIN Images ON ImageTags.imageid=Images.id "
                                 " WHERE Images.status=1 AND "
                                 " ( tagid=? "
                                 "   OR tagid IN (SELECT id FROM TagsTree WHERE pid=?) );"),
                         tagID, tagID, &values );
     else
-        d->db->execSql( QString("SELECT imageid FROM ImageTags "
-                                " LEFT JOIN Images ON ImageTags.imageid=Images.id "
+        d->db->execSql( QString("SELECT imageid FROM ImageTags JOIN Images ON ImageTags.imageid=Images.id "
                                 " WHERE Images.status=1 AND tagid=?;"),
                  tagID, &values );
 
@@ -2753,7 +2749,7 @@ QDate AlbumDB::getAlbumLowestDate(int albumID)
 {
     QList<QVariant> values;
     d->db->execSql( "SELECT MIN(creationDate) FROM ImageInformation "
-                    " LEFT JOIN Images ON Images.id=ImageInformation.imageid "
+                    " JOIN Images ON Images.id=ImageInformation.imageid "
                     " WHERE Images.album=? GROUP BY Images.album;",
                     albumID, &values );
     if (!values.isEmpty())
@@ -2766,7 +2762,7 @@ QDate AlbumDB::getAlbumHighestDate(int albumID)
 {
     QList<QVariant> values;
     d->db->execSql( "SELECT MAX(creationDate) FROM ImageInformation "
-                    " LEFT JOIN Images ON Images.id=ImageInformation.imageid "
+                    " JOIN Images ON Images.id=ImageInformation.imageid "
                     " WHERE Images.album=? GROUP BY Images.album;",
                     albumID , &values );
     if (!values.isEmpty())
@@ -2779,7 +2775,7 @@ QDate AlbumDB::getAlbumAverageDate(int albumID)
 {
     QList<QVariant> values;
     d->db->execSql( "SELECT creationDate FROM ImageInformation "
-                    " LEFT JOIN Images ON Images.id=ImageInformation.imageid "
+                    " JOIN Images ON Images.id=ImageInformation.imageid "
                     " WHERE Images.album=?;",
                     albumID , &values);
 
