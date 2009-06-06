@@ -294,9 +294,9 @@ void FindDuplicatesView::slotFindDuplicates()
     QList<QVariant> matrixSizeList;
     qulonglong matrixSize = 0;
     access.backend()->execSql(QString("SELECT SUM(LENGTH(matrix)) "
-                                      "FROM Imagehaarmatrix, Images "
-                                      "WHERE Images.id == Imagehaarmatrix.imageid "
-                                      "AND Images.status == 1;"),
+                                      "FROM Imagehaarmatrix "
+                                      "    INNER JOIN Images ON Images.id=Imagehaarmatrix.imageid "
+                                      "WHERE Images.status=1;"),
                                       &matrixSizeList);
     bool ok = false;
     if (!matrixSizeList.isEmpty())

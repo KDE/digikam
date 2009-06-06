@@ -2046,7 +2046,7 @@ QMap<QString,int> AlbumDB::getImageFormatStatistics()
     query = d->db->prepareQuery("SELECT COUNT(*), II.format "
                                 "FROM ImageInformation AS II "
                                 "   INNER JOIN Images ON II.imageid=images.id "
-                                "WHERE Images.status == 1 "
+                                "WHERE Images.status=1 "
                                 "GROUP BY II.format;");
     if (d->db->exec(query))
     {
