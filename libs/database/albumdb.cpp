@@ -153,8 +153,8 @@ AlbumInfo::List AlbumDB::scanAlbums()
     QList<QVariant> values;
     d->db->execSql( "SELECT A.albumRoot, A.id, A.relativePath, A.date, A.caption, A.collection, B.albumRoot, B.relativePath, I.name \n "
                     "FROM Albums AS A \n "
-                    "  LEFT OUTER JOIN Images AS I ON A.icon=I.id \n"
-                    "  LEFT OUTER JOIN Albums AS B ON B.id=I.album \n"
+                    "  LEFT JOIN Images AS I ON A.icon=I.id \n"
+                    "  LEFT JOIN Albums AS B ON B.id=I.album \n"
                     " WHERE A.albumRoot != 0;", // exclude stale albums
                     &values);
 
@@ -199,8 +199,8 @@ TagInfo::List AlbumDB::scanTags()
     QList<QVariant> values;
     d->db->execSql( "SELECT T.id, T.pid, T.name, A.relativePath, I.name, T.iconkde, A.albumRoot \n "
                     "FROM Tags AS T \n"
-                    "  LEFT OUTER JOIN Images AS I ON I.id=T.icon \n "
-                    "  LEFT OUTER JOIN Albums AS A ON A.id=I.album; ", &values );
+                    "  LEFT JOIN Images AS I ON I.id=T.icon \n "
+                    "  LEFT JOIN Albums AS A ON A.id=I.album; ", &values );
 
     QString iconName, iconKDE, albumURL;
     int iconAlbumRootId;
@@ -396,8 +396,8 @@ bool AlbumDB::getAlbumIcon(int albumID, int *albumRootId, QString *iconRelativeP
     QList<QVariant> values;
     d->db->execSql( QString("SELECT B.relativePath, I.name, B.albumRoot \n "
                             "FROM Albums AS A \n "
-                            "  LEFT OUTER JOIN Images AS I ON I.id=A.icon \n "
-                            "  LEFT OUTER JOIN Albums AS B ON B.id=I.album \n "
+                            "  LEFT JOIN Images AS I ON I.id=A.icon \n "
+                            "  LEFT JOIN Albums AS B ON B.id=I.album \n "
                             "WHERE A.id=?;"),
                     albumID, &values );
     if (values.isEmpty())
@@ -513,8 +513,8 @@ bool AlbumDB::getTagIcon(int tagID, int *iconAlbumRootId, QString *iconAlbumRela
     QList<QVariant> values;
     d->db->execSql( QString("SELECT A.relativePath, I.name, T.iconkde, A.albumRoot \n "
                             "FROM Tags AS T \n "
-                            "  LEFT OUTER JOIN Images AS I ON I.id=T.icon \n "
-                            "  LEFT OUTER JOIN Albums AS A ON A.id=I.album \n "
+                            "  LEFT JOIN Images AS I ON I.id=T.icon \n "
+                            "  LEFT JOIN Albums AS A ON A.id=I.album \n "
                             "WHERE T.id=?;"),
                     tagID, &values );
 
@@ -904,7 +904,7 @@ ItemShortInfo AlbumDB::getItemShortInfo(qlonglong imageID)
 
     d->db->execSql( QString("SELECT Images.name, Albums.albumRoot, Albums.relativePath, Albums.id "
                             "FROM Images "
-                            "  LEFT OUTER JOIN Albums ON Albums.id=Images.album "
+                            "  LEFT JOIN Albums ON Albums.id=Images.album "
                             "WHERE Images.id=?;"),
                     imageID,
                     &values );
@@ -1458,7 +1458,7 @@ QList<qlonglong> AlbumDB::getDirtyOrMissingFingerprints()
     QList<QVariant> values;
 
     d->db->execSql( QString("SELECT id FROM Images "
-                            "LEFT OUTER JOIN ImageHaarMatrix ON Images.id=ImageHaarMatrix.imageid "
+                            "LEFT JOIN ImageHaarMatrix ON Images.id=ImageHaarMatrix.imageid "
                             " WHERE Images.status=1 AND "
                             " ( ImageHaarMatrix.imageid IS NULL "
                             "   OR Images.modificationDate != ImageHaarMatrix.modificationDate "
@@ -1478,8 +1478,8 @@ QStringList AlbumDB::getDirtyOrMissingFingerprintURLs()
     QList<QVariant> values;
 
     d->db->execSql( QString("SELECT Albums.albumRoot, Albums.relativePath, Images.name FROM Images "
-                            "LEFT OUTER JOIN ImageHaarMatrix ON Images.id=ImageHaarMatrix.imageid "
-                            "LEFT OUTER JOIN Albums ON Albums.id=Images.album "
+                            "LEFT JOIN ImageHaarMatrix ON Images.id=ImageHaarMatrix.imageid "
+                            "LEFT JOIN Albums ON Albums.id=Images.album "
                             " WHERE Images.status=1 AND "
                             " ( ImageHaarMatrix.imageid IS NULL "
                             "   OR Images.modificationDate != ImageHaarMatrix.modificationDate "
@@ -1914,8 +1914,8 @@ QStringList AlbumDB::getAllItemURLsWithoutDate()
     QList<QVariant> values;
     d->db->execSql( QString("SELECT AlbumRoots.absolutePath||Albums.relativePath||'/'||Images.name "
                             "FROM Images "
-                            "  LEFT OUTER JOIN Albums ON Images.album=Albums.id "
-                            "  LEFT OUTER JOIN AlbumRoots ON AlbumRoots.id=Albums.albumRoot "
+                            "  LEFT JOIN Albums ON Images.album=Albums.id "
+                            "  LEFT JOIN AlbumRoots ON AlbumRoots.id=Albums.albumRoot "
                             "WHERE (Images.datetime is null or "
                             "       Images.datetime == '');"),
                     &values );

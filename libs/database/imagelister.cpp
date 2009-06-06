@@ -393,10 +393,10 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
                "       ImageInformation.width, ImageInformation.height, "
                "       ImagePositions.latitudeNumber, ImagePositions.longitudeNumber "
                " FROM Images "
-               "       LEFT OUTER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
-               "       LEFT OUTER JOIN ImageMetadata    ON Images.id=ImageMetadata.imageid "
-               "       LEFT OUTER JOIN ImagePositions   ON Images.id=ImagePositions.imageid "
-               "       LEFT OUTER JOIN Albums           ON Albums.id=Images.album "
+               "       LEFT JOIN ImageInformation ON Images.id=ImageInformation.imageid "
+               "       LEFT JOIN ImageMetadata    ON Images.id=ImageMetadata.imageid "
+               "       LEFT JOIN ImagePositions   ON Images.id=ImagePositions.imageid "
+               "       LEFT JOIN Albums           ON Albums.id=Images.album "
                "WHERE Images.status=1 AND ( ";
 
     // query body
@@ -549,7 +549,7 @@ void ImageLister::listFromIdList(ImageListerReceiver *receiver, QList<qlonglong>
                     "       Images.modificationDate, Images.fileSize, "
                     "       ImageInformation.width, ImageInformation.height "
                     " FROM Images "
-                    "       LEFT OUTER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
+                    "       LEFT JOIN ImageInformation ON Images.id=ImageInformation.imageid "
                     " WHERE Images.id = ?;"
                                                                 ));
 
@@ -565,8 +565,8 @@ void ImageLister::listFromIdList(ImageListerReceiver *receiver, QList<qlonglong>
                              "       Images.modificationDate, Images.fileSize, "
                              "       ImageInformation.width, ImageInformation.height "
                              " FROM Images "
-                             "       LEFT OUTER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
-                             "       LEFT OUTER JOIN Albums ON Albums.id=Images.album "
+                             "       LEFT JOIN ImageInformation ON Images.id=ImageInformation.imageid "
+                             "       LEFT JOIN Albums ON Albums.id=Images.album "
                              " WHERE Images.status=1 AND Images.id = ?;"
                                                                 ));
 
