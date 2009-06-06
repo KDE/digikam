@@ -2461,7 +2461,7 @@ QStringList AlbumDB::getItemURLsInAlbum(int albumID, ItemSortOrder sortOrder)
     {
         case ByItemName:
             sqlString = QString("SELECT Albums.relativePath, Images.name "
-                                 "FROM Images JOIN Albums ON Albums.id=Images.album "
+                                 "FROM Images INNER JOIN Albums ON Albums.id=Images.album "
                                  "WHERE Albums.id=? "
                                  "ORDER BY Images.name COLLATE NOCASE;");
             break;
@@ -2469,28 +2469,28 @@ QStringList AlbumDB::getItemURLsInAlbum(int albumID, ItemSortOrder sortOrder)
             // Don't collate on the path - this is to maintain the same behavior
             // that happens when sort order is "By Path"
             sqlString = QString("SELECT Albums.relativePath, Images.name "
-                                 "FROM Images JOIN Albums ON Albums.id=Images.album "
+                                 "FROM Images INNER JOIN Albums ON Albums.id=Images.album "
                                  "WHERE Albums.id=? "
                                  "ORDER BY Albums.relativePath,Images.name;");
             break;
         case ByItemDate:
             sqlString = QString("SELECT Albums.relativePath, Images.name "
-                                 "FROM Images JOIN Albums ON Albums.id=Images.album "
-                                 "            JOIN ImageInformation ON ImageInformation.imageid=Images.id "
+                                 "FROM Images INNER JOIN Albums ON Albums.id=Images.album "
+                                 "            INNER JOIN ImageInformation ON ImageInformation.imageid=Images.id "
                                  "WHERE Albums.id=? "
                                  "ORDER BY ImageInformation.creationDate;");
             break;
         case ByItemRating:
             sqlString = QString("SELECT Albums.relativePath, Images.name "
-                                 "FROM Images JOIN Albums ON Albums.id=Images.album "
-                                 "            JOIN ImageInformation ON ImageInformation.imageid=Images.id "
+                                 "FROM Images INNER JOIN Albums ON Albums.id=Images.album "
+                                 "            INNER JOIN ImageInformation ON ImageInformation.imageid=Images.id "
                                  "WHERE Albums.id=? "
                                  "ORDER BY ImageInformation.rating DESC;");
             break;
         case NoItemSorting:
         default:
             sqlString = QString("SELECT Albums.relativePath, Images.name "
-                                 "FROM Images JOIN Albums ON Albums.id=Images.album "
+                                 "FROM Images INNER JOIN Albums ON Albums.id=Images.album "
                                  "WHERE Albums.id=?;");
             break;
     }
