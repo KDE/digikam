@@ -254,7 +254,7 @@ DeleteDialog::DeleteDialog(QWidget *parent)
               m_trashGuiItem(i18n("&Move to Trash"), "user-trash-full")
 {
     setButtons(Ok | Cancel);
-    setDefaultButton(Ok);
+    setDefaultButton(Cancel);
     setModal(true);
     m_widget = new DeleteWidget(this);
     setMainWidget(m_widget);
