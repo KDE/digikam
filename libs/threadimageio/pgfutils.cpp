@@ -188,6 +188,17 @@ bool loadPGFScaled(QImage& img, const QString& path, int maximumSize)
 
         if (i<0) i=0;
 
+        const PGFHeader* header = pgf.GetHeader();
+        kDebug(50003) << "PGF width    = " << header->width    << endl;
+        kDebug(50003) << "PGF height   = " << header->height   << endl;
+        kDebug(50003) << "PGF bbp      = " << header->bpp      << endl;
+        kDebug(50003) << "PGF channels = " << header->channels << endl;
+        kDebug(50003) << "PGF quality  = " << header->quality  << endl;
+        kDebug(50003) << "PGF mode     = " << header->mode     << endl;
+        kDebug(50003) << "PGF levels   = " << header->nLevels  << endl;
+        kDebug(50003) << "Level (w x h)= " << i << "(" << pgf.Width(i)
+                      << " x " << pgf.Height(i) << ")" << endl;
+
         pgf.Read(i);  // Read PGF image at reduced level i.
         img = QImage(pgf.Width(i), pgf.Height(i), QImage::Format_RGB32);
         pgf.GetBitmap(img.bytesPerLine(), (UINT8*)img.bits(), img.depth());
