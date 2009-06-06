@@ -26,8 +26,26 @@
 #ifndef DIGIKAMTHUMBNAILCREATORPRIV_H
 #define DIGIKAMTHUMBNAILCREATORPRIV_H
 
+// Local includes
+
+#include "dmetadata.h"
+
 namespace Digikam
 {
+
+class ThumbnailImage
+{
+public:
+    ThumbnailImage()
+    {
+        exifOrientation = DMetadata::ORIENTATION_NORMAL;
+    }
+
+    bool isNull() const { return qimage.isNull(); }
+
+    QImage qimage;
+    int    exifOrientation;
+};
 
 class ThumbnailCreatorPriv
 {
@@ -39,6 +57,9 @@ public:
         cachedSize          = 0;
         observer            = 0;
 
+        thumbnailStorage    = ThumbnailCreator::FreeDesktopStandard;
+        infoProvider        = 0;
+
         exifRotate          = true;
         removeAlphaChannel  = true;
         onlyLargeThumbnails = false;
@@ -49,6 +70,9 @@ public:
     bool                exifRotate;
     bool                removeAlphaChannel;
     bool                onlyLargeThumbnails;
+
+    ThumbnailCreator::StorageMethod thumbnailStorage;
+    ThumbnailInfoProvider          *infoProvider;
 
     int                 thumbnailSize;
     int                 cachedSize;

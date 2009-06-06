@@ -102,7 +102,8 @@ K_GLOBAL_STATIC(ThumbnailLoadThread, defaultThumbBarObject)
 ThumbnailLoadThread::ThumbnailLoadThread()
                    : d(new ThumbnailLoadThreadPriv)
 {
-    d->creator = new ThumbnailCreator();
+    d->creator = new ThumbnailCreator(ThumbnailCreator::FreeDesktopStandard);
+    d->creator->initialize();
     d->creator->setOnlyLargeThumbnails(true);
     d->creator->setRemoveAlphaChannel(true);
     setPixmapRequested(true);
@@ -502,7 +503,7 @@ void ThumbnailLoadThread::deleteThumbnail(const QString& filePath)
             cache->removeThumbnail(cacheKey);
     }
 
-    ThumbnailCreator::deleteThumbnailsFromDisk(filePath);
+    ThumbnailCreator(ThumbnailCreator::FreeDesktopStandard).deleteThumbnailsFromDisk(filePath);
 }
 
 }   // namespace Digikam
