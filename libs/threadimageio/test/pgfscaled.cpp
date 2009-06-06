@@ -64,7 +64,7 @@ int main(int argc, char** argv)
         kDebug(50003) << "loadPGFScaled failed..." << endl;
         return -1;
     }
-    img.save(file.fileName()+QString("-scaled"), "PNG");
+    img.save(file.fileName()+QString("-scaled.png"), "PNG");
 
     return 0;
 }
