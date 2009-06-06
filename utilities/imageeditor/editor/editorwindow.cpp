@@ -1587,6 +1587,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
             imgExtList << "JPG";
             imgExtList << "JPE";
             imgExtList << "J2K";
+            imgExtList << "JP2";
 
             if ( !imgExtList.contains( m_savingContext->format.toUpper() ) )
             {
