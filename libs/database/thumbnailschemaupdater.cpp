@@ -187,10 +187,39 @@ bool ThumbnailSchemaUpdater::createDatabase()
 bool ThumbnailSchemaUpdater::createTablesV1()
 {
     if (!m_access->backend()->execSql(
-                    QString("CREATE TABLE Thumbnail\n"
-                            " (id INTEGER PRIMARY KEY,\n"
-                            "  ...,\n"
-                            "  UNIQUE(identifier, specificPath));") ))
+                    QString("CREATE TABLE Thumbnails "
+                            "(id INTEGER PRIMARY KEY, "
+                            " type INTEGER, "
+                            " modificationDate DATETIME, "
+                            " orientationHint INTEGER, "
+                            " data BLOB);") ))
+    {
+        return false;
+    }
+
+    if (!m_access->backend()->execSql(
+                    QString("CREATE TABLE UniqueHashes "
+                            "(uniqueHash TEXT, "
+                            " fileSize INTEGER, "
+                            " thumbId INTEGER, "
+                            " UNIQUE(uniqueHash, fileSize))") ))
+    {
+        return false;
+    }
+
+    if (!m_access->backend()->execSql(
+                    QString("CREATE TABLE FilePaths "
+                            "(path TEXT, "
+                            " thumbId INTEGER, "
+                            " UNIQUE(path));") ))
+    {
+        return false;
+    }
+
+    if (!m_access->backend()->execSql(
+                    QString("CREATE TABLE Settings         \n"
+                            "(keyword TEXT NOT NULL UNIQUE,\n"
+                            " value TEXT);") ))
     {
         return false;
     }
@@ -200,11 +229,18 @@ bool ThumbnailSchemaUpdater::createTablesV1()
 
 bool ThumbnailSchemaUpdater::createIndicesV1()
 {
+    m_access->backend()->execSql("CREATE INDEX id_uniqueHashes ON UniqueHashes (thumbId);");
+    m_access->backend()->execSql("CREATE INDEX id_filePaths ON FilePaths (thumbId);");
     return true;
 }
 
 bool ThumbnailSchemaUpdater::createTriggersV1()
 {
+    m_access->backend()->execSql("CREATE TRIGGER delete_thumbnails DELETE ON Thumbnails "
+                                 "BEGIN "
+                                 " DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = OLD.id; "
+                                 " DELETE FROM FilePaths WHERE FilePaths.thumbId = OLD.id; "
+                                 "END;");
     return true;
 }
 

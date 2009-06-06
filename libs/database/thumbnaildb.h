@@ -48,12 +48,45 @@ namespace Digikam
 class DatabaseBackend;
 class ThumbnailDBPriv;
 
+namespace DatabaseThumbnail {
+enum Type
+{
+    UndefinedType = 0,
+    NoThumbnail,
+    PgfBlob,
+    FilePath
+};
+}
+
+class DIGIKAM_DATABASE_EXPORT DatabaseThumbnailInfo
+{
+public:
+    DatabaseThumbnailInfo()
+            : id(-1), type(DatabaseThumbnail::UndefinedType)
+    {
+    }
+
+    int                     id;
+    DatabaseThumbnail::Type type;
+    QDateTime               modificationDate;
+    int                     orientationHint;
+    QByteArray              data;
+};
+
 class DIGIKAM_DATABASE_EXPORT ThumbnailDB
 {
+
 public:
 
     void setSetting(const QString& keyword, const QString& value);
     QString getSetting(const QString& keyword);
+
+    DatabaseThumbnailInfo findByHash(const QString &uniqueHash, int fileSize);
+    DatabaseThumbnailInfo findByFilePath(const QString &path);
+    void insertUniqueHash(const QString &uniqueHash, int fileSize, int thumbId);
+    void insertFilePath(const QString &path, int thumbId);
+    int insertThumbnail(const DatabaseThumbnailInfo &info);
+    void replaceThumbnail(const DatabaseThumbnailInfo &info);
 
 private:
 
@@ -61,8 +94,6 @@ private:
 
     ThumbnailDB(DatabaseBackend *backend);
     ~ThumbnailDB();
-
-private:
 
     ThumbnailDBPriv* const d;
 };
