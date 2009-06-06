@@ -454,18 +454,18 @@ QImage ThumbnailCreator::exifRotate(const QImage& thumb, int orientation)
 // --------------- PGF Database thumbnail storage -----------------------
 
 
-void ThumbnailCreator::storeInDatabase(const ThumbnailInfo &info, const ThumbnailImage &image)
+void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& /*info*/, const ThumbnailImage& /*image*/)
 {
     //TODO
 }
 
-ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo &info)
+ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& /*info*/)
 {
     //TODO
     return ThumbnailImage();
 }
 
-void ThumbnailCreator::deleteFromDatabase(const ThumbnailInfo &info)
+void ThumbnailCreator::deleteFromDatabase(const ThumbnailInfo& /*info*/)
 {
     //TODO
 }
