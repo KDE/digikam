@@ -785,6 +785,10 @@ void ImageCategorizedView::mouseMoveEvent(QMouseEvent *event)
         {
             setCursor(Qt::PointingHandCursor);
         }
+        else
+        {
+            unsetCursor();
+        }
     }
     else
     {
