@@ -168,7 +168,7 @@ public:
     AlbumList allSAlbums() const;
 
     /**
-     * @return a list of all SAlbums
+     * @return a list of all DAlbums
      */
     AlbumList allDAlbums() const;
 
