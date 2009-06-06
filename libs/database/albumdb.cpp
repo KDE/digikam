@@ -1932,7 +1932,7 @@ QList<QDateTime> AlbumDB::getAllCreationDates()
 {
     QList<QVariant> values;
     d->db->execSql( "SELECT creationDate FROM ImageInformation "
-                    " LEFT JOIN Images ON Images.id=ImageInformation.imageid "
+                    " INNER JOIN Images ON Images.id=ImageInformation.imageid "
                     " WHERE Images.status=1;", &values );
 
     QList<QDateTime> list;
@@ -1948,7 +1948,7 @@ QMap<QDateTime, int> AlbumDB::getAllCreationDatesAndNumberOfImages()
 {
     QList<QVariant> values;
     d->db->execSql( "SELECT creationDate FROM ImageInformation "
-                    " LEFT JOIN Images ON Images.id=ImageInformation.imageid "
+                    " INNER JOIN Images ON Images.id=ImageInformation.imageid "
                     " WHERE Images.status=1;", &values );
 
     QMap<QDateTime, int> datesStatMap;
