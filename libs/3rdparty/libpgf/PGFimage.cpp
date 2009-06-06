@@ -1589,7 +1589,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 			UINT16 g;
 			int cnt, channels;
 
-			if (bpp%16 == 0) {
+			if (bpp%16 == 0 && bpp > 32) {
 				UINT16 *buff16 = (UINT16 *)buff;
 				int pitch16 = pitch/2;
 				channels = bpp/16; ASSERT(channels >= m_header.channels);
