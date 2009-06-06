@@ -51,7 +51,7 @@ int main(int /*argc*/, char** /*argv*/)
 
     // PGF => QImage conversion
 
-    if (!loadPGFScaled(img, file.fileName(), 1280)
+    if (!loadPGFScaled(img, file.fileName(), 1280))
     {
         kDebug(50003) << "loadPGFScaled failed..." << endl;
         return -1;
