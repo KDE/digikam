@@ -179,7 +179,7 @@ void ImageLister::listAlbum(ImageListerReceiver *receiver,
                     "       Images.modificationDate, Images.fileSize, "
                     "       ImageInformation.width, ImageInformation.height "
                     " FROM Images "
-                    "       JOIN ImageInformation ON Images.id=ImageInformation.imageid "
+                    "       INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
                     " WHERE Images.status=1 AND ";
 
     if (m_recursive)
@@ -245,8 +245,8 @@ void ImageLister::listTag(ImageListerReceiver *receiver, int tagId)
                              "       Images.modificationDate, Images.fileSize, "
                              "       ImageInformation.width, ImageInformation.height "
                              " FROM Images "
-                             "       JOIN ImageInformation ON Images.id=ImageInformation.imageid "
-                             "       JOIN Albums ON Albums.id=Images.album "
+                             "       INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
+                             "       INNER JOIN Albums ON Albums.id=Images.album "
                              " WHERE Images.status=1 AND Images.id IN "
                              "       (SELECT imageid FROM ImageTags "
                              "        WHERE tagid=? ");
@@ -318,8 +318,8 @@ void ImageLister::listDateRange(ImageListerReceiver *receiver, const QDate& star
                                           "       Images.modificationDate, Images.fileSize, "
                                           "       ImageInformation.width, ImageInformation.height "
                                           " FROM Images "
-                                          "       JOIN ImageInformation ON Images.id=ImageInformation.imageid "
-                                          "       JOIN Albums ON Albums.id=Images.album "
+                                          "       INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
+                                          "       INNER JOIN Albums ON Albums.id=Images.album "
                                           " WHERE Images.status=1 "
                                           "   AND ImageInformation.creationDate < ? "
                                           "   AND ImageInformation.creationDate >= ? "

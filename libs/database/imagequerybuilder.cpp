@@ -216,7 +216,7 @@ public:
                 kWarning() << "Relation Interval requires a list of two values";
                 return;
             }
-            
+
             sql += " (" + name + ' ';
             ImageQueryBuilder::addSqlRelation(sql,
                 relation == SearchXml::Interval ? SearchXml::GreaterThanOrEqual : SearchXml::GreaterThan);
@@ -747,7 +747,7 @@ void ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
                 sql += " (Images.id IN ";
             else
                 sql += " (Images.id NOT IN ";
-            sql += "   (SELECT ImageTags.imageid FROM ImageTags JOIN TagsTree on ImageTags.tagid = TagsTree.id "
+            sql += "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
                    "    WHERE ";
 
             bool firstCondition = true;
@@ -784,7 +784,7 @@ void ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
         else if (relation == SearchXml::InTree)
         {
             sql += " (Images.id IN "
-                   "   (SELECT ImageTags.imageid FROM ImageTags JOIN TagsTree on ImageTags.tagid = TagsTree.id "
+                   "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
                    "    WHERE TagsTree.pid = (SELECT id FROM Tags WHERE name LIKE ?) "
                    "    or ImageTags.tagid = (SELECT id FROM Tags WHERE name LIKE ?) )) ";
             *boundValues << tagname << tagname;
@@ -792,7 +792,7 @@ void ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
         else if (relation == SearchXml::NotInTree)
         {
             sql += " (Images.id NOT IN "
-                   "   (SELECT ImageTags.imageid FROM ImageTags JOIN TagsTree on ImageTags.tagid = TagsTree.id "
+                   "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
                    "    WHERE TagsTree.pid = (SELECT id FROM Tags WHERE name LIKE ?) "
                    "    or ImageTags.tagid = (SELECT id FROM Tags WHERE name LIKE ?) )) ";
             *boundValues << tagname << tagname;
@@ -1487,14 +1487,14 @@ QString SubQueryBuilder::build(enum SKey key, enum SOperator op,
             else if (op == LIKE)
             {
                 query = " (Images.id IN "
-                        "   (SELECT ImageTags.imageid FROM ImageTags JOIN TagsTree on ImageTags.tagid = TagsTree.id "
+                        "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
                         "    WHERE TagsTree.pid = ? or ImageTags.tagid = ? )) ";
                 *boundValues << val.toInt() << val.toInt();
             }
             else // op == NLIKE
             {
                 query = " (Images.id NOT IN "
-                        "   (SELECT ImageTags.imageid FROM ImageTags JOIN TagsTree on ImageTags.tagid = TagsTree.id "
+                        "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
                         "    WHERE TagsTree.pid = ? or ImageTags.tagid = ? )) ";
                 *boundValues << val.toInt() << val.toInt();
             }

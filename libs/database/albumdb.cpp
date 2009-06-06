@@ -2749,7 +2749,7 @@ QDate AlbumDB::getAlbumLowestDate(int albumID)
 {
     QList<QVariant> values;
     d->db->execSql( "SELECT MIN(creationDate) FROM ImageInformation "
-                    " JOIN Images ON Images.id=ImageInformation.imageid "
+                    " INNER JOIN Images ON Images.id=ImageInformation.imageid "
                     " WHERE Images.album=? GROUP BY Images.album;",
                     albumID, &values );
     if (!values.isEmpty())
@@ -2762,7 +2762,7 @@ QDate AlbumDB::getAlbumHighestDate(int albumID)
 {
     QList<QVariant> values;
     d->db->execSql( "SELECT MAX(creationDate) FROM ImageInformation "
-                    " JOIN Images ON Images.id=ImageInformation.imageid "
+                    " INNER JOIN Images ON Images.id=ImageInformation.imageid "
                     " WHERE Images.album=? GROUP BY Images.album;",
                     albumID , &values );
     if (!values.isEmpty())
@@ -2775,7 +2775,7 @@ QDate AlbumDB::getAlbumAverageDate(int albumID)
 {
     QList<QVariant> values;
     d->db->execSql( "SELECT creationDate FROM ImageInformation "
-                    " JOIN Images ON Images.id=ImageInformation.imageid "
+                    " INNER JOIN Images ON Images.id=ImageInformation.imageid "
                     " WHERE Images.album=?;",
                     albumID , &values);
 
