@@ -1,5 +1,5 @@
 
-ADD_SUBDIRECTORY( filters )
+ADD_SUBDIRECTORY( loaders filters )
 
 INSTALL( FILES dimg.h 
                dcolor.h 

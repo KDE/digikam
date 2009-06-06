@@ -212,7 +212,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             int scaledLoadingSize = 0;
             int level             = 0;
             QVariant attribute = imageGetAttribute("pgfScaledLoadingSize");
-            if (attribute.isValid())
+            if (attribute.isValid() && pgf.Levels() > 0)
             {
                 scaledLoadingSize = attribute.toInt();
                 int i, w, h;
@@ -224,12 +224,15 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                         break;
                 }
 
-                width  = w;
-                height = h;
-                level  = i;
-                kDebug(50003) << "Loading PGF scaled version at level " << i
-                              << " (" << w << " x " << h << ") for size "
-                              << scaledLoadingSize << endl;
+                if (i >= 0)
+                {
+                    width  = w;
+                    height = h;
+                    level  = i;
+                    kDebug(50003) << "Loading PGF scaled version at level " << i
+                                  << " (" << w << " x " << h << ") for size "
+                                  << scaledLoadingSize << endl;
+                }
             }
 
             if (m_sixteenBit)

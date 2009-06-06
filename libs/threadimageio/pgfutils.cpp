@@ -175,17 +175,21 @@ bool loadPGFScaled(QImage& img, const QString& path, int maximumSize)
 
         // Try to find the right PGF level to get reduced image accordingly
         // with preview size wanted.
-        int i, w, h;
-        for (i=pgf.Levels()-1 ; i>=0 ; --i)
+        int i=0;
+
+        if (pgf.Levels() > 0)
         {
-            w = pgf.Width(i);
-            h = pgf.Height(i);
-            if (qMin(w, h) >= maximumSize)
-                break;
+            for (i=pgf.Levels()-1 ; i>=0 ; --i)
+            {
+                if (qMin((int)pgf.Width(i), (int)pgf.Height(i)) >= maximumSize)
+                    break;
+            }
         }
 
+        if (i<0) i=0;
+
         pgf.Read(i);  // Read PGF image at reduced level i.
-        img = QImage(w, h, QImage::Format_RGB32);
+        img = QImage(pgf.Width(i), pgf.Height(i), QImage::Format_RGB32);
         pgf.GetBitmap(img.bytesPerLine(), (UINT8*)img.bits(), img.depth());
     }
     catch(IOException& e)
