@@ -66,13 +66,12 @@ protected:
     virtual void setActive(bool);
     virtual void visualChange();
     virtual void hide();
-    virtual void mouseMoved(QMouseEvent *e, const QRect& visualRect, const QModelIndex& index);
     virtual void slotEntered(const QModelIndex& index);
 
     void updatePosition();
     void updateRating();
 
-    QModelIndex m_index;
+    QPersistentModelIndex m_index;
 };
 
 } // namespace Digikam

@@ -78,26 +78,6 @@ void ImageRatingOverlay::setActive(bool active)
     }
 }
 
-void ImageRatingOverlay::mouseMoved(QMouseEvent *e, const QRect& visualRect, const QModelIndex& index)
-{
-    if (index != m_index)
-        return;
-
-    QRect rect = delegate()->rect();
-    rect.translate(visualRect.topLeft());
-
-    if (rect.contains(e->pos()))
-    {
-        delegate()->setRatingEdited(m_index);
-        view()->update(m_index);
-        m_widget->show();
-    }
-    else
-    {
-        hide();
-    }
-}
-
 void ImageRatingOverlay::visualChange()
 {
     if (m_widget && m_widget->isVisible())
@@ -139,12 +119,15 @@ void ImageRatingOverlay::slotRatingChanged(int rating)
 
 void ImageRatingOverlay::slotEntered(const QModelIndex& index)
 {
-    // do _not_ call base class, which shows the widget
+    AbstractWidgetDelegateOverlay::slotEntered(index);
 
     m_index = index;
 
     updatePosition();
     updateRating();
+
+    delegate()->setRatingEdited(m_index);
+    view()->update(m_index);
 }
 
 void ImageRatingOverlay::slotDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
