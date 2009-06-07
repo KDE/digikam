@@ -59,15 +59,15 @@ public:
 
     enum FORMAT
     {
-	// NOTE: Order is important here:
-	// See filesaveoptionbox.cpp which use these values to fill a combobox.
+        // NOTE: Order is important here:
+        // See filesaveoptionbox.cpp which use these values to fill a combobox.
         NONE = 0,
         JPEG,
         PNG,
         TIFF,
         JP2K,
         PGF,
-	// Others file formats.
+        // Others file formats.
         RAW,
         PPM,
         QIMAGE
