@@ -150,21 +150,22 @@ QString ManualRenameInput::parser(const QString& parse,
     // parse sequence number token ----------------------------
     {
         QRegExp regExp("(#+)(\\{(\\d+)\\s*,\\s*(\\d+)\\})?");
-        int pos = 0;
+        int pos     = 0;
+        int slength = 0;
+        int start   = 0;
+        int step    = 0;
+        int number  = 0;
+
         while (pos > -1)
         {
             pos = regExp.indexIn(parsedString, pos);
             if (pos > -1)
             {
-                int slength = 0;
-                int start   = 0;
-                int step    = 0;
-
                 slength = regExp.cap(1).length();
                 start   = regExp.cap(3).isEmpty() ? 1 : regExp.cap(3).toInt();
                 step    = regExp.cap(4).isEmpty() ? 1 : regExp.cap(4).toInt();
 
-                int number  = start + ((index-1) * step);
+                number  = start + ((index-1) * step);
                 QString tmp = QString("%1").arg(number, slength, 10, QChar('0'));
                 parsedString.replace(pos, regExp.matchedLength(), tmp);
             }
@@ -180,8 +181,7 @@ QString ManualRenameInput::parser(const QString& parse,
             pos  = regExp.indexIn(parsedString, pos);
             if (pos > -1)
             {
-                QString tmp;
-                tmp = dateTime.toString(regExp.cap(1));
+                QString tmp = dateTime.toString(regExp.cap(1));
                 parsedString.replace(pos, regExp.matchedLength(), tmp);
             }
         }
@@ -190,6 +190,7 @@ QString ManualRenameInput::parser(const QString& parse,
     {
         QRegExp regExp("\\*{1}");
         regExp.setMinimal(true);
+
         int pos = 0;
         while (pos > -1)
         {
