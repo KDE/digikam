@@ -389,8 +389,7 @@ void ThumbnailLoadThread::startKdePreviewJob()
         return;
 
     KUrl::List list;
-    // FIXME: const ref?
-    foreach (const LoadingDescription description, d->kdeTodo)
+    foreach (const LoadingDescription& description, d->kdeTodo)
     {
         KUrl url = KUrl::fromPath(description.filePath);
         list << url;
