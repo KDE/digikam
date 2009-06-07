@@ -76,6 +76,7 @@ extern "C"
 
 #include "daboutdata.h"
 #include "greycstorationiface.h"
+#include "pgfutils.h"
 
 namespace Digikam
 {
@@ -122,6 +123,7 @@ LibsInfoDlg::LibsInfoDlg(QWidget *parent)
     list.insert(i18n("LibJasper"),                   QString(jas_getversion()));
     list.insert(i18n("LibCImg"),                     GreycstorationIface::cimgVersionString());
     list.insert(i18n("LibLCMS"),                     QString::number(LCMS_VERSION));
+    list.insert(i18n("LibPGF"),                      libPGFVersion());
 
 #ifdef HAVE_MARBLEWIDGET
     list.insert(i18n("Marble widget"),               QString(MARBLE_VERSION_STRING));

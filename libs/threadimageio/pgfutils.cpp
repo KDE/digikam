@@ -224,4 +224,9 @@ bool loadPGFScaled(QImage& img, const QString& path, int maximumSize)
     return true;
 }
 
+QString libPGFVersion()
+{
+    return (QString(PGFCodecVersion));
+}
+
 }  // namespace Digikam

@@ -48,6 +48,8 @@ namespace Digikam
     /** Load a reduced version of PGF file */
     bool loadPGFScaled(QImage& img, const QString& path, int maximumSize);
 
+    QString libPGFVersion();
+
 }  // namespace Digikam
 
 #endif /* PGFUTIL_H */
