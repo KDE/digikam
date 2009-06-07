@@ -9,6 +9,7 @@ General        : New tool bar animation banner.
 General        : Fix compilation under MSVC 9.
 General        : New first run assistant (http://www.digikam.org/node/442).
 General        : New dialog to show Database statistics.
+General        : Add support of wavelets image file format PGF (http://www.libpgf.org).
 
 AlbumGui       : Icon view is now based on pure Qt4 model/view.
 AlbumGui       : New overlay button over icon view items to perform lossless rotations.
