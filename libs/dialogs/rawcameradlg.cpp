@@ -74,6 +74,7 @@ RawCameraDlg::RawCameraDlg(QWidget *parent)
 {
     setButtons(Help|Ok);
     setDefaultButton(Ok);
+    setButtonFocus(Ok);
     setModal(false);
     setHelp("digitalstillcamera.anchor", "digikam");
     setCaption(i18n("List of supported RAW cameras"));

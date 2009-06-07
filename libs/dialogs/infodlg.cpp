@@ -105,6 +105,7 @@ InfoDlg::InfoDlg(QWidget *parent)
 {
     setButtons(Help|User1|Ok);
     setDefaultButton(Ok);
+    setButtonFocus(Ok);
     setModal(false);
     setHelp("digikam");
     setCaption(i18n("Shared Libraries and Components Information"));
