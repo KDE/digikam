@@ -158,7 +158,7 @@ bool loadPGFScaled(QImage& img, const QString& path, int maximumSize)
     // Initialize PGF API.
 
 #ifdef WIN32
-    HANDLE fd = CreateFile(QFile::encodeName(path), GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
+    HANDLE fd = CreateFile((LPCWSTR)(QFile::encodeName(path).constData()), GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
     if (fd == INVALID_HANDLE_VALUE)
         return false;
 #else

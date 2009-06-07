@@ -124,7 +124,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     // Initialize PGF API.
 
 #ifdef WIN32
-    HANDLE fd = CreateFile(QFile::encodeName(filePath), GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
+    HANDLE fd = CreateFile((LPCWSTR)(QFile::encodeName(filePath).constData()), GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
     if (fd == INVALID_HANDLE_VALUE)
         return false;
 #else
@@ -290,7 +290,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     m_observer = observer;
 
 #ifdef WIN32
-    HANDLE fd = CreateFile(QFile::encodeName(filePath), GENERIC_WRITE, 0, 0, CREATE_ALWAYS, 0, 0);
+    HANDLE fd = CreateFile((LPCWSTR)(QFile::encodeName(filePath).constData()), GENERIC_WRITE, 0, 0, CREATE_ALWAYS, 0, 0);
     if (fd == INVALID_HANDLE_VALUE)
     {
         kDebug(50003) << "Error: Could not open destination file." << endl;
