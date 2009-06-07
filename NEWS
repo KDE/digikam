@@ -118,4 +118,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 097 ==> 136897 : THM files are not uploaded.
 098 ==> 195494 : Deleting and cancelling a picture with the keyboard still delete the picture.
 099 ==> 120994 : Print preview generates HUGE postscript files. 
-100 ==> 
+100 ==> 191633 : Rename a folder, press F5 and see thumbnails go away. 
+101 ==> 195565 : Loading next image while in curves tool does not confirm and loads nothing.
+102 ==> 
