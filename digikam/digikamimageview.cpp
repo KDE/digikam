@@ -163,7 +163,7 @@ void DigikamImageView::showContextMenu(QContextMenuEvent* event, const ImageInfo
 {
     QList<ImageInfo> selectedInfos = selectedImageInfosCurrentFirst();
     QList<qlonglong> selectedImageIDs;
-    foreach (ImageInfo info, selectedInfos)
+    foreach (const ImageInfo& info, selectedInfos)
     {
         selectedImageIDs << info.id();
     }

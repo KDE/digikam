@@ -248,7 +248,7 @@ void ThumbnailLoadThread::findGroup(const QStringList& filePaths, int size)
     {
         LoadingCache *cache = LoadingCache::cache();
         LoadingCache::CacheLock lock(cache);
-        foreach(const QString filePath, filePaths)
+        foreach(const QString& filePath, filePaths)
         {
             LoadingDescription description(filePath, size, d->exifRotate, LoadingDescription::PreviewParameters::Thumbnail);
             if (!cache->retrieveThumbnailPixmap(description.cacheKey()))
@@ -389,6 +389,7 @@ void ThumbnailLoadThread::startKdePreviewJob()
         return;
 
     KUrl::List list;
+    // FIXME: const ref?
     foreach (const LoadingDescription description, d->kdeTodo)
     {
         KUrl url = KUrl::fromPath(description.filePath);
@@ -435,7 +436,7 @@ void ThumbnailLoadThread::failedKDEPreview(const KFileItem& item)
 void ThumbnailLoadThread::kdePreviewFinished(KJob *)
 {
     d->kdeJob = 0;
-    startKdePreviewJob();    
+    startKdePreviewJob();
 }
 
 QPixmap ThumbnailLoadThread::surrogatePixmap(const LoadingDescription& description)

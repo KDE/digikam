@@ -722,7 +722,7 @@ void AlbumManager::startScan()
 
     // create albums for album roots
     QList<CollectionLocation> locations = CollectionManager::instance()->allAvailableLocations();
-    foreach(const CollectionLocation location, locations)
+    foreach(const CollectionLocation& location, locations)
         addAlbumRoot(location);
 
     // listen to location status changes
