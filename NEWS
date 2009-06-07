@@ -120,4 +120,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 099 ==> 120994 : Print preview generates HUGE postscript files. 
 100 ==> 191633 : Rename a folder, press F5 and see thumbnails go away. 
 101 ==> 195565 : Loading next image while in curves tool does not confirm and loads nothing.
-102 ==> 
+102 ==> 189046 : digiKam crashes finding duplicates in fingerprints. 
+103 ==> 
