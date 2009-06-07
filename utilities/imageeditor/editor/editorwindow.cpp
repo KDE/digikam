@@ -58,6 +58,7 @@
 #include <kdebug.h>
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
+#include <kfilefiltercombo.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
@@ -1489,19 +1490,11 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     if (m_savingContext->savingState != SavingContextContainer::SavingStateNone)
         return false;
 
-    QStringList writableMimetypes = KImageIO::mimeTypes(KImageIO::Writing);
-    // Put first class citizens at first place
-    writableMimetypes.removeAll("image/jpeg");
-    writableMimetypes.removeAll("image/tiff");
-    writableMimetypes.removeAll("image/png");
-    writableMimetypes.removeAll("image/jpeg2000");
-    writableMimetypes.removeAll("image/jp2");
-    writableMimetypes.insert(0, "image/png");
-    writableMimetypes.insert(1, "image/jpeg");
-    writableMimetypes.insert(2, "image/tiff");
-    writableMimetypes.insert(3, "image/jp2");
-
-    kDebug(50003) << "startingSaveAs: Offered mimetypes: " << writableMimetypes << endl;
+    QString pattern             = KImageIO::pattern(KImageIO::Writing);
+    QStringList writablePattern = pattern.split(QChar('\n'));
+    kDebug(50003) << "KDE Offered pattern: " << writablePattern << endl;
+    writablePattern.append(QString("*.jp2|") + i18n("JPEG 2000 image"));
+    writablePattern.append(QString("*.pgf|") + i18n("Progressive Graphics File"));
 
     m_savingContext->srcURL = url;
 
@@ -1512,11 +1505,11 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
                                                        this,
                                                        options);
 
-    connect(imageFileSaveDialog, SIGNAL(filterChanged(const QString &)),
-            options, SLOT(slotImageFileFormatChanged(const QString &)));
+    connect(imageFileSaveDialog, SIGNAL(filterChanged(const QString&)),
+            options, SLOT(slotImageFileFormatChanged(const QString&)));
 
     connect(imageFileSaveDialog, SIGNAL(fileSelected(const QString &)),
-            options, SLOT(slotImageFileSelected(const QString &)));
+            options, SLOT(slotImageFileSelected(const QString&)));
 
     ImageDialogPreview *preview = new ImageDialogPreview(imageFileSaveDialog);
     imageFileSaveDialog->setPreviewWidget(preview);
@@ -1531,21 +1524,21 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     QString ext               = group.readEntry("LastSavedImageTypeMime", "png");
     QString fileName          = info.baseName() + QString(".") + ext;
 
-    // Determine the default mime type from LastSavedImageTypeMime
-    QString defaultMimeType;
-    // inspired by kimageio.cpp, typeForMime(). This here is "mimeForType".
-    KService::List services   = KServiceTypeTrader::self()->query("QImageIOPlugins");
-    foreach(const KService::Ptr& service, services)
+    // Determine the default filter from LastSavedImageTypeMime
+    QString defaultFilter;
+    foreach(QString filter, writablePattern)
     {
-        if (service->property("X-KDE-ImageFormat").toStringList().contains(ext))
+        if (filter.contains(QString("*.%1").arg(ext.toLower())))
         {
-            defaultMimeType = service->property("X-KDE-MimeType").toString();
+            defaultFilter = filter;
             break;
         }
     }
-    imageFileSaveDialog->setMimeFilter(writableMimetypes, defaultMimeType);
+    imageFileSaveDialog->filterWidget()->setDefaultFilter(defaultFilter);
+    imageFileSaveDialog->setFilter(writablePattern.join(QChar('\n')));
     imageFileSaveDialog->setSelection(fileName);
-    options->slotImageFileFormatChanged(defaultMimeType);
+
+    options->slotImageFileFormatChanged(ext);
 
     // Start dialog and check if canceled.
     if ( imageFileSaveDialog->exec() != KFileDialog::Accepted )
@@ -1588,6 +1581,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
             imgExtList << "JPE";
             imgExtList << "J2K";
             imgExtList << "JP2";
+            imgExtList << "PGF";
 
             if ( !imgExtList.contains( m_savingContext->format.toUpper() ) )
             {

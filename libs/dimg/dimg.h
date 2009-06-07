@@ -63,10 +63,10 @@ public:
         JPEG,
         PNG,
         TIFF,
-        RAW,
-        PPM,
         JP2K,
         PGF,
+        RAW,
+        PPM,
         QIMAGE
     };
 

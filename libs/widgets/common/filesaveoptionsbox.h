@@ -58,7 +58,6 @@ public Q_SLOTS:
 
 private:
 
-    void toggleFormatOptions(const QString& format);
     void readSettings();
 
 private:

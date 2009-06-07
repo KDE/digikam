@@ -43,6 +43,7 @@
 #include <kimageio.h>
 #include <klocale.h>
 #include <knuminput.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -143,33 +144,23 @@ FileSaveOptionsBox::~FileSaveOptionsBox()
 void FileSaveOptionsBox::slotImageFileSelected(const QString& file)
 {
     QString format = QImageReader::imageFormat(file);
-    toggleFormatOptions(format);
+    slotImageFileFormatChanged(format);
 }
 
-void FileSaveOptionsBox::slotImageFileFormatChanged(const QString& filter)
+void FileSaveOptionsBox::slotImageFileFormatChanged(const QString& ext)
 {
-    // TODO: KDE4PORT: KImageIO::typeForMime return a StringList now.
-    //                 Check if we use 1st item of list is enough.
+    kDebug(50003) << "Format selected: " << ext << endl;
+    QString format = ext.toUpper();
 
-    // we need to save the list first to prevent indexing errors if mimetype is unknown
-    QStringList type = KImageIO::typeForMime(filter);
-    if (type.isEmpty())
-        type << "unknown";
-    QString format = type[0].toUpper();
-    toggleFormatOptions(format);
-}
-
-void FileSaveOptionsBox::toggleFormatOptions(const QString& format)
-{
-    if (format == QString("JPEG"))
+    if (format.contains("JPEG"))
         setCurrentIndex(DImg::JPEG);
-    else if (format == QString("PNG"))
+    else if (format.contains("PNG"))
         setCurrentIndex(DImg::PNG);
-    else if (format == QString("TIFF"))
+    else if (format.contains("TIFF"))
         setCurrentIndex(DImg::TIFF);
-    else if (format == QString("JP2") || format == QString("J2K"))
+    else if (format.contains("JP2"))
         setCurrentIndex(DImg::JP2K);
-    else if (format == QString("PGF"))
+    else if (format.contains("PGF"))
         setCurrentIndex(DImg::PGF);
     else
         setCurrentIndex(DImg::NONE);
