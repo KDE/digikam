@@ -122,4 +122,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 101 ==> 195565 : Loading next image while in curves tool does not confirm and loads nothing.
 102 ==> 189046 : digiKam crashes finding duplicates in fingerprints. 
 103 ==> 185726 : SIGSERV 11 by choosing an image for fullscreen. 
-104 ==> 
+104 ==> 193616 : Location not shown digiKam right sidebar after geolocating in external program.
+105 ==> 
