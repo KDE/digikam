@@ -486,13 +486,14 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData *querySig,
 
         // We don't use DatabaseBackend's convenience calls, as the result set is large
         // and we try to avoid copying in a temporary QList<QVariant>
+        int albumRootId = 0;
         while (query.next())
         {
             imageid = query.value(0).toLongLong();
 
             if (filterByAlbumRoots)
             {
-                int albumRootId = query.value(1).toInt();
+                albumRootId = query.value(1).toInt();
                 if (!d->albumRootsToSearch.contains(albumRootId))
                     continue;
             }
