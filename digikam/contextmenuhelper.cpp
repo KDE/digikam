@@ -599,40 +599,23 @@ QAction* ContextMenuHelper::exec(const QPoint& pos, QAction* at)
     QAction* choice = d->parent->exec(pos, at);
     if (choice)
     {
-        if (choice == d->gotoAlbumAction)
+        if (!d->selectedIds.isEmpty())
         {
-            if (!d->selectedIds.isEmpty())
-            {
-                ImageInfo selectedItem(d->selectedIds.first());
-                emit signalGotoAlbum(selectedItem);
-            }
+            ImageInfo selectedItem(d->selectedIds.first());
+
+            if (choice == d->gotoAlbumAction)           emit signalGotoAlbum(selectedItem);
+            else if (choice == d->gotoDateAction)       emit signalGotoDate(selectedItem);
+            else if (choice == d->setThumbnailAction)   emit signalSetThumbnail(selectedItem);
         }
-        else if (choice == d->gotoDateAction)
+
+        // check if a BQM action has been triggered
+        for (QMap<int, QAction*>::iterator it = d->queueActions.begin();
+             it != d->queueActions.end(); ++it)
         {
-            if (!d->selectedIds.isEmpty())
+            if (choice == it.value())
             {
-                ImageInfo selectedItem(d->selectedIds.first());
-                emit signalGotoDate(selectedItem);
-            }
-        }
-        else if (choice == d->setThumbnailAction)
-        {
-            if (!d->selectedIds.isEmpty())
-            {
-                ImageInfo selectedItem(d->selectedIds.first());
-                emit signalSetThumbnail(selectedItem);
-            }
-        }
-        else
-        {
-            for (QMap<int, QAction*>::iterator it = d->queueActions.begin();
-                 it != d->queueActions.end(); ++it)
-            {
-                if (choice == it.value())
-                {
-                    emit signalAddToExistingQueue(it.key());
-                    break;
-                }
+                emit signalAddToExistingQueue(it.key());
+                break;
             }
         }
     }
