@@ -554,6 +554,8 @@ void AdjustCurvesTool::readSettings()
 
     d->curvesWidget->reset();
 
+    QPoint disable(-1, -1);
+
     for (int i = 0 ; i < 5 ; ++i)
     {
         d->curvesWidget->curves()->curvesChannelReset(i);
@@ -563,7 +565,6 @@ void AdjustCurvesTool::readSettings()
 
         for (int j = 0 ; j < 17 ; ++j)
         {
-            QPoint disable(-1, -1);
             QPoint p = group.readEntry(QString("CurveAdjustmentChannel%1Point%2").arg(i).arg(j), disable);
 
             if (d->originalImage->sixteenBit() && p.x() != -1)
