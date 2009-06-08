@@ -246,6 +246,11 @@ int ImageInfo::albumId() const
     return m_data ? m_data->albumId : -1;
 }
 
+int ImageInfo::albumRootId() const
+{
+    return m_data ? m_data->albumRootId : -1;
+}
+
 QString ImageInfo::name() const
 {
     if (!m_data)

@@ -158,6 +158,11 @@ public:
     int       albumId() const;
 
     /**
+     * The album root id
+     */
+    int albumRootId() const;
+
+    /**
      * @return the caption for this item
      */
     QString   comment() const;
