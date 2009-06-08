@@ -60,7 +60,7 @@ public:
     enum FORMAT
     {
         // NOTE: Order is important here:
-        // See filesaveoptionbox.cpp which use these values to fill a combobox.
+        // See filesaveoptionbox.cpp which use these values to fill a stack of widgets.
         NONE = 0,
         JPEG,
         PNG,
@@ -247,7 +247,6 @@ public:
      */
     FORMAT      fileFormat() const;
 
-
     /** Access a single pixel of the image.
         These functions add some safety checks and then use the methods from DColor.
         In optimized code working directly on the data,
@@ -256,8 +255,8 @@ public:
     DColor      getPixelColor(uint x, uint y) const;
     void        setPixelColor(uint x, uint y, const DColor& color);
     void        prepareSubPixelAccess();
-    DColor		getSubPixelColor(float x, float y) const;
-    DColor		getSubPixelColorFast(float x, float y) const;
+    DColor      getSubPixelColor(float x, float y) const;
+    DColor      getSubPixelColorFast(float x, float y) const;
 
     /** Return true if the original image file format cannot be saved.
         This is depending of DImgLoader::save() implementation. For example
@@ -400,7 +399,7 @@ public:
     /** This methods return a 16-byte MD5 hex digest which is meant to uniquely identify
         the file. The hash is calculated on parts of the file and the file metadata.
         It cannot be used to find similar images. It is not calculated from the image data.
-    
+
         If you already have a DImg object of the file, use the member method.
         The object does not need to have the full image data loaded, but it shall at least
         have been loaded with loadImageInfo with loadMetadata = true, or have the metadata
@@ -409,7 +408,7 @@ public:
         be returned! In this case, use the static method.
         If the image has been loaded with loadUniqueHash = true, the hash can be retrieved
         with the member method.
-    
+
         You do not need a DImg object of the file to retrieve the unique hash;
         Use the static method and pass just the file path.
      */
