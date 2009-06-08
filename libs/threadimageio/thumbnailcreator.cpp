@@ -131,6 +131,11 @@ void ThumbnailCreator::setLoadingProperties(DImgLoaderObserver *observer, const 
     d->rawSettings = settings;
 }
 
+void ThumbnailCreator::setThumbnailProvider(ThumbnailInfoProvider *provider)
+{
+    d->infoProvider = provider;
+}
+
 int ThumbnailCreator::thumbnailSize() const
 {
     return d->thumbnailSize;

@@ -151,6 +151,11 @@ public:
     void setRemoveAlphaChannel(bool removeAlpha);
 
     /**
+     * Set a ThumbnailInfoProvider to provide custom ThumbnailInfos
+     */
+    void setThumbnailProvider(ThumbnailInfoProvider *provider);
+
+    /**
      * Return the thumbnail size, the maximum size of the QImage
      * returned by load.
      */
@@ -175,6 +180,9 @@ public:
      */
     void deleteThumbnailsFromDisk(const QString& filePath);
 
+    /** Creates a default ThumbnailInfo for the given path using QFileInfo only */
+    static ThumbnailInfo fileThumbnailInfo(const QString &path);
+
 private:
 
     ThumbnailImage createThumbnail(const ThumbnailInfo &info);
@@ -189,7 +197,6 @@ private:
     ThumbnailImage loadFromDatabase(const ThumbnailInfo &info);
     void deleteFromDatabase(const ThumbnailInfo &info);
 
-    ThumbnailInfo fileThumbnailInfo(const QString &path);
     void storeFreedesktop(const ThumbnailInfo &info, const ThumbnailImage &image);
     ThumbnailImage loadFreedesktop(const ThumbnailInfo &info);
     void deleteFromDiskFreedesktop(const QString filePath);
