@@ -653,21 +653,29 @@ void AdjustLevelsTool::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("adjustlevels Tool");
 
-    for (int i = 0 ; i < 5 ; ++i)
     {
         bool sb        = d->originalImage->sixteenBit();
         int max        = sb ? 65535 : 255;
-        double gamma   = group.readEntry(QString("GammaChannel%1").arg(i), 1.0);
-        int lowInput   = group.readEntry(QString("LowInputChannel%1").arg(i), 0);
-        int lowOutput  = group.readEntry(QString("LowOutputChannel%1").arg(i), 0);
-        int highInput  = group.readEntry(QString("HighInputChannel%1").arg(i), max);
-        int highOutput = group.readEntry(QString("HighOutputChannel%1").arg(i), max);
+        double gamma   = 0.0;
+        int lowInput   = 0;
+        int lowOutput  = 0;
+        int highInput  = 0;
+        int highOutput = 0;
 
-        d->levels->setLevelGammaValue(i, gamma);
-        d->levels->setLevelLowInputValue(i, sb ? lowInput*255 : lowInput);
-        d->levels->setLevelHighInputValue(i, sb ? highInput*255 : highInput);
-        d->levels->setLevelLowOutputValue(i, sb ? lowOutput*255 : lowOutput);
-        d->levels->setLevelHighOutputValue(i, sb ? highOutput*255 : highOutput);
+        for (int i = 0 ; i < 5 ; ++i)
+        {
+            gamma      = group.readEntry(QString("GammaChannel%1").arg(i), 1.0);
+            lowInput   = group.readEntry(QString("LowInputChannel%1").arg(i), 0);
+            lowOutput  = group.readEntry(QString("LowOutputChannel%1").arg(i), 0);
+            highInput  = group.readEntry(QString("HighInputChannel%1").arg(i), max);
+            highOutput = group.readEntry(QString("HighOutputChannel%1").arg(i), max);
+
+            d->levels->setLevelGammaValue(i, gamma);
+            d->levels->setLevelLowInputValue(i, sb ? lowInput*255 : lowInput);
+            d->levels->setLevelHighInputValue(i, sb ? highInput*255 : highInput);
+            d->levels->setLevelLowOutputValue(i, sb ? lowOutput*255 : lowOutput);
+            d->levels->setLevelHighOutputValue(i, sb ? highOutput*255 : highOutput);
+        }
     }
 
     d->levelsHistogramWidget->reset();
@@ -694,20 +702,28 @@ void AdjustLevelsTool::writeSettings()
     group.writeEntry("Histogram Channel", d->gboxSettings->histogramBox()->channel());
     group.writeEntry("Histogram Scale", d->gboxSettings->histogramBox()->scale());
 
-    for (int i = 0 ; i < 5 ; ++i)
     {
         bool sb        = d->originalImage->sixteenBit();
-        double gamma   = d->levels->getLevelGammaValue(i);
-        int lowInput   = d->levels->getLevelLowInputValue(i);
-        int lowOutput  = d->levels->getLevelLowOutputValue(i);
-        int highInput  = d->levels->getLevelHighInputValue(i);
-        int highOutput = d->levels->getLevelHighOutputValue(i);
+        double gamma   = 0.0;
+        int lowInput   = 0;
+        int lowOutput  = 0;
+        int highInput  = 0;
+        int highOutput = 0;
 
-        group.writeEntry(QString("GammaChannel%1").arg(i), gamma);
-        group.writeEntry(QString("LowInputChannel%1").arg(i), sb ? lowInput/255 : lowInput);
-        group.writeEntry(QString("LowOutputChannel%1").arg(i), sb ? lowOutput/255 : lowOutput);
-        group.writeEntry(QString("HighInputChannel%1").arg(i), sb ? highInput/255 : highInput);
-        group.writeEntry(QString("HighOutputChannel%1").arg(i), sb ? highOutput/255 : highOutput);
+        for (int i = 0 ; i < 5 ; ++i)
+        {
+            gamma      = d->levels->getLevelGammaValue(i);
+            lowInput   = d->levels->getLevelLowInputValue(i);
+            lowOutput  = d->levels->getLevelLowOutputValue(i);
+            highInput  = d->levels->getLevelHighInputValue(i);
+            highOutput = d->levels->getLevelHighOutputValue(i);
+
+            group.writeEntry(QString("GammaChannel%1").arg(i), gamma);
+            group.writeEntry(QString("LowInputChannel%1").arg(i), sb ? lowInput/255 : lowInput);
+            group.writeEntry(QString("LowOutputChannel%1").arg(i), sb ? lowOutput/255 : lowOutput);
+            group.writeEntry(QString("HighInputChannel%1").arg(i), sb ? highInput/255 : highInput);
+            group.writeEntry(QString("HighOutputChannel%1").arg(i), sb ? highOutput/255 : highOutput);
+        }
     }
 
     d->previewWidget->writeSettings();
