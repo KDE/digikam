@@ -72,7 +72,7 @@ public:
 
 private:
 
-    Q_DECLARE_PRIVATE(DatabaseBackend);
+    Q_DECLARE_PRIVATE(DatabaseBackend)
 };
 
 } // namespace Digikam
