@@ -152,13 +152,13 @@ void FileSaveOptionsBox::slotImageFileFormatChanged(const QString& ext)
     kDebug(50003) << "Format selected: " << ext << endl;
     QString format = ext.toUpper();
 
-    if (format.contains("JPEG"))
+    if (format.contains("JPEG") || format.contains("JPG") || format.contains("JPE"))
         setCurrentIndex(DImg::JPEG);
     else if (format.contains("PNG"))
         setCurrentIndex(DImg::PNG);
-    else if (format.contains("TIFF"))
+    else if (format.contains("TIFF") || format.contains("TIF"))
         setCurrentIndex(DImg::TIFF);
-    else if (format.contains("JP2"))
+    else if (format.contains("JP2") || format.contains("J2K"))
         setCurrentIndex(DImg::JP2K);
     else if (format.contains("PGF"))
         setCurrentIndex(DImg::PGF);
