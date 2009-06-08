@@ -59,6 +59,7 @@ public:
 
         thumbnailStorage    = ThumbnailCreator::FreeDesktopStandard;
         infoProvider        = 0;
+        dbIdForReplacement  = -1;
 
         exifRotate          = true;
         removeAlphaChannel  = true;
@@ -73,6 +74,7 @@ public:
 
     ThumbnailCreator::StorageMethod thumbnailStorage;
     ThumbnailInfoProvider          *infoProvider;
+    int                             dbIdForReplacement;
 
     int                 thumbnailSize;
     int                 cachedSize;

@@ -58,10 +58,13 @@
 
 // Local includes
 
+#include "databasebackend.h"
 #include "dimg.h"
 #include "dmetadata.h"
 #include "jpegutils.h"
 #include "pgfutils.h"
+#include "thumbnaildatabaseaccess.h"
+#include "thumbnaildb.h"
 
 namespace Digikam
 {
@@ -197,6 +200,7 @@ QImage ThumbnailCreator::load(const QString& path)
         // image is stored, or created, unrotated, and is now rotated for display
         if (d->exifRotate)
             image.qimage = exifRotate(image.qimage, image.exifOrientation);
+        d->dbIdForReplacement = -1; // just to prevent bugs
     }
 
     if (image.isNull())
@@ -454,20 +458,81 @@ QImage ThumbnailCreator::exifRotate(const QImage& thumb, int orientation)
 // --------------- PGF Database thumbnail storage -----------------------
 
 
-void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& /*info*/, const ThumbnailImage& /*image*/)
+void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const ThumbnailImage& image)
 {
-    //TODO
+    DatabaseThumbnailInfo dbInfo;
+
+    // We rely on loadFromDatabase() being called before, so we do not need to look up
+    // by filepath of uniqueHash to find out if a thumb need to be replaced.
+    dbInfo.id = d->dbIdForReplacement;
+    d->dbIdForReplacement = -1;
+    dbInfo.type = DatabaseThumbnail::PgfBlob;
+    dbInfo.modificationDate = info.modificationDate;
+    dbInfo.orientationHint = image.exifOrientation;
+
+    if (!writePGFImageData(image.qimage, dbInfo.data, 3))
+        return;
+
+    ThumbnailDatabaseAccess access;
+
+    access.backend()->beginTransaction();
+    // Insert thumbnail data
+    if (dbInfo.id == -1)
+        dbInfo.id = access.db()->insertThumbnail(dbInfo);
+    else
+        access.db()->replaceThumbnail(dbInfo);
+
+    // Insert lookup data used to locate thumbnail data
+    if (!info.uniqueHash.isNull())
+        access.db()->insertUniqueHash(info.uniqueHash, info.fileSize, dbInfo.id);
+    if (!info.filePath.isNull())
+        access.db()->insertFilePath(info.filePath, dbInfo.id);
+    access.backend()->commitTransaction();
 }
 
-ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& /*info*/)
+ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info)
 {
-    //TODO
-    return ThumbnailImage();
+    ThumbnailDatabaseAccess access;
+    DatabaseThumbnailInfo dbInfo;
+
+    if (!info.uniqueHash.isNull())
+    {
+        dbInfo = access.db()->findByHash(info.uniqueHash, info.fileSize);
+    }
+    if (dbInfo.data.isNull() && !info.filePath.isNull())
+    {
+        dbInfo = access.db()->findByFilePath(info.filePath);
+    }
+
+    // store for use in storeInDatabase()
+    d->dbIdForReplacement = dbInfo.id;
+
+    ThumbnailImage image;
+    if (dbInfo.data.isNull())
+        return ThumbnailImage();
+    // check modification date
+    if (dbInfo.modificationDate < info.modificationDate)
+        return ThumbnailImage();
+
+    // Read QImage from PGF blob
+    if (!readPGFImageData(dbInfo.data, image.qimage))
+        return ThumbnailImage();
+
+    image.exifOrientation = dbInfo.orientationHint;
+
+    return image;
 }
 
-void ThumbnailCreator::deleteFromDatabase(const ThumbnailInfo& /*info*/)
+void ThumbnailCreator::deleteFromDatabase(const ThumbnailInfo& info)
 {
-    //TODO
+    ThumbnailDatabaseAccess access;
+
+    access.backend()->beginTransaction();
+    if (!info.uniqueHash.isNull())
+        access.db()->removeByUniqueHash(info.uniqueHash, info.fileSize);
+    if (!info.filePath.isNull())
+        access.db()->removeByFilePath(info.filePath);
+    access.backend()->commitTransaction();
 }
 
 // --------------- Freedesktop.org standard implementation -----------------------
