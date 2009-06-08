@@ -1269,11 +1269,12 @@ void ImageSelectionWidget::mousePressEvent ( QMouseEvent * e )
                                 ImageSelectionWidgetPriv::ResizingTopRight,
                                 ImageSelectionWidgetPriv::ResizingBottomLeft,
                                 ImageSelectionWidgetPriv::ResizingBottomRight };
-            float dist = -1;
+            float dist  = -1.0f;
+            float dist2 =  0.0f;
             for (int i = 0 ; i < 4 ; ++i)
             {
                 QPoint point = points[i];
-                float dist2 = distance(pmVirtual, point);
+                dist2 = distance(pmVirtual, point);
                 if (dist2 < dist || d->currentResizing == ImageSelectionWidgetPriv::ResizingNone)
                 {
                     dist = dist2;

@@ -300,8 +300,12 @@ void Border::bevel(Digikam::DImg& src, Digikam::DImg& dest, const Digikam::DColo
 
     // paint right border
     for (int x = upperRightCorner.x(); x < width; ++x)
+    {
         for (int y = upperRightCorner.y(); y < height; ++y)
+        {
             dest.setPixelColor(x, y, btmColor);
+        }
+    }
 
     // paint lower left corner
     QPoint lowerLeftCorner((0 + ((width - src.width()) / 2) + 2),
@@ -319,8 +323,12 @@ void Border::bevel(Digikam::DImg& src, Digikam::DImg& dest, const Digikam::DColo
 
     // paint bottom border
     for (int x = lowerLeftCorner.x(); x < width; ++x)
+    {
         for (int y = lowerLeftCorner.y(); y < height; ++y)
+        {
             dest.setPixelColor(x, y, btmColor);
+        }
+    }
 
     if (d->orgWidth > d->orgHeight)
         dest.bitBltImage(&src, (dest.width() - src.width()) / 2, borderWidth);
@@ -359,8 +367,12 @@ void Border::pattern(Digikam::DImg& src, Digikam::DImg& dest, int borderWidth,
     border.convertToDepthOfImage(&tmp2);
 
     for (int x = 0 ; x < width ; x+=border.width())
+    {
         for (int y = 0 ; y < height ; y+=border.height())
+        {
             tmp2.bitBltImage(&border, x, y);
+        }
+    }
 
     solid(tmp2, dest, secondColor, secondWidth);
 
@@ -458,8 +470,12 @@ void Border::pattern2(Digikam::DImg& src, Digikam::DImg& dest, int borderWidth,
     border.convertToDepthOfImage(&borderImg);
 
     for (int x = 0 ; x < w ; x+=border.width())
+    {
         for (int y = 0 ; y < h ; y+=border.height())
+        {
             borderImg.bitBltImage(&border, x, y);
+        }
+    }
 
     // First line around the pattern tile.
     Digikam::DImg tmp = borderImg.smoothScale(src.width() + borderWidth*2,

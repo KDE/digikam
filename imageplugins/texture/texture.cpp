@@ -85,8 +85,12 @@ void Texture::filterImage(void)
     texture.convertToDepthOfImage(&textureImg);
 
     for (int x = 0 ; x < w ; x+=texture.width())
+    {
         for (int y = 0 ; y < h ; y+=texture.height())
+        {
             textureImg.bitBltImage(&texture, x, y);
+        }
+    }
 
     // Apply texture.
 
