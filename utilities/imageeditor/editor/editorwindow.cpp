@@ -1575,9 +1575,11 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
 
             QStringList imgExtList = KImageIO::types(KImageIO::Writing);
 
+            imgExtList << "PNG";
             imgExtList << "TIF";
             imgExtList << "TIFF";
             imgExtList << "JPG";
+            imgExtList << "JPEG";
             imgExtList << "JPE";
             imgExtList << "J2K";
             imgExtList << "JP2";
