@@ -321,11 +321,22 @@ QList<qlonglong> HaarIface::bestMatchesForImage(qlonglong imageid, int numberOfR
 QList<qlonglong> HaarIface::bestMatchesForImageWithThreshold(qlonglong imageid, double requiredPercentage,
                                                              SketchType type)
 {
-    Haar::SignatureData sig;
-    if (!retrieveSignatureFromDB(imageid, &sig))
-        return QList<qlonglong>();
-
-    return bestMatchesWithThreshold(&sig, requiredPercentage, type);
+    if ( !d->useCachedSigs || (d->sigMap->isEmpty() && d->useCachedSigs) )
+    {
+        Haar::SignatureData sig;
+        if (!retrieveSignatureFromDB(imageid, &sig))
+        {
+            return QList<qlonglong>();
+        }
+        return bestMatchesWithThreshold(&sig, requiredPercentage, type);
+    }
+    else
+    {
+        // reference for easier access
+        QMap<qlonglong, Haar::SignatureData>& sigMap = *d->sigMap;
+        Haar::SignatureData& sig = sigMap[imageid];
+        return bestMatchesWithThreshold(&sig, requiredPercentage, type);
+    }
 }
 
 QList<qlonglong> HaarIface::bestMatchesForFile(const QString& filename, int numberOfResults, SketchType type)
