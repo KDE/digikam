@@ -57,11 +57,6 @@ extern "C"
 #include <kdebug.h>
 #include <ktemporaryfile.h>
 
-// Libkexiv2 includes
-
-#include <libkexiv2/version.h>
-#include <libkexiv2/kexiv2.h>
-
 // Windows includes
 
 #ifdef WIN32
@@ -71,6 +66,7 @@ extern "C"
 // Local includes
 
 #include "PGFimage.h"
+#include "dmetadata.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 #include "pgfloader.h"
@@ -211,13 +207,12 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         kDebug(50003) << "Is 16 bits   = " << m_sixteenBit     << endl;
 #endif
 
-#if KEXIV2_VERSION >= 0x010000
         UINT32 size;
         const UINT8* udata = pgf.GetUserData(size);
         if (udata)
         {
             QByteArray data((const char*)udata, size);
-            KExiv2Iface::KExiv2 meta;
+            DMetadata meta;
             if (meta.load(data))
             {
                 kDebug(50003) << "Load PGF metadata (" << data.size() << ")" << endl;
@@ -246,7 +241,6 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 }
             }
         }
-#endif
 
         int width   = pgf.Width();
         int height  = pgf.Height();
@@ -421,7 +415,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
             thumb.save(thumbTmp.fileName(), "JPEG");
             kDebug(50003) << "Created PGF metadata tmp file" << endl;
 
-            KExiv2Iface::KExiv2 meta(thumbTmp.fileName());
+            DMetadata meta(thumbTmp.fileName());
             QMap<int, QByteArray>& metaData = imageMetaData();
             meta.setExif(metaData[DImg::EXIF]);
             meta.setIptc(metaData[DImg::IPTC]);
