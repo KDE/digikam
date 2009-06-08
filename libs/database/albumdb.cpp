@@ -1818,7 +1818,7 @@ void AlbumDB::addTagsToItems(QList<qlonglong> imageIDs, QList<int> tagIDs)
     QVariantList images;
     QVariantList tags;
 
-    foreach (qlonglong imageid, imageIDs)
+    foreach (const qlonglong& imageid, imageIDs)
     {
         foreach (int tagid, tagIDs)
         {
@@ -1864,7 +1864,7 @@ void AlbumDB::removeTagsFromItems(QList<qlonglong> imageIDs, QList<int> tagIDs)
     QVariantList images;
     QVariantList tags;
 
-    foreach (qlonglong imageid, imageIDs)
+    foreach (const qlonglong& imageid, imageIDs)
     {
         foreach (int tagid, tagIDs)
         {
@@ -2833,7 +2833,7 @@ void AlbumDB::removeItems(QList<qlonglong> itemIDs, QList<int> albumIDs)
 
     QVariantList imageIds;
     QVariantList status;
-    foreach (qlonglong id, itemIDs)
+    foreach (const qlonglong& id, itemIDs)
     {
         status << (int)DatabaseItem::Removed;
         imageIds << id;

@@ -668,7 +668,7 @@ void AlbumLister::slotImageChange(const ImageChangeset& changeset)
     {
         // For searches any touched field can require a refresh.
         // We cannot easily find out which fields are searched for, so we refresh for any change.
-        foreach(qlonglong id, changeset.ids())
+        foreach(const qlonglong& id, changeset.ids())
         {
             // if one matching image id is found, trigger a refresh
             if (d->itemListSet.contains(id))
@@ -695,7 +695,7 @@ void AlbumLister::slotImageChange(const ImageChangeset& changeset)
         return;
 
     // is one of our images affected?
-    foreach(qlonglong id, changeset.ids())
+    foreach (const qlonglong& id, changeset.ids())
     {
         // if one matching image id is found, trigger a refilter
         if (d->itemListSet.contains(id))
@@ -724,7 +724,7 @@ void AlbumLister::slotImageTagChange(const ImageTagChangeset& changeset)
         return;
 
     // is one of our images affected?
-    foreach(qlonglong id, changeset.ids())
+    foreach (const qlonglong& id, changeset.ids())
     {
         // if one matching image id is found, trigger a refresh
         if (d->itemListSet.contains(id))
@@ -764,7 +764,7 @@ void AlbumLister::slotCollectionImageChange(const CollectionImageChangeset& chan
         case CollectionImageChangeset::Removed:
         case CollectionImageChangeset::RemovedAll:
             // is one of our images affected?
-            foreach(qlonglong id, changeset.ids())
+            foreach (const qlonglong& id, changeset.ids())
             {
                 // if one matching image id is found, trigger a refresh
                 if (d->itemListSet.contains(id))

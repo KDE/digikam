@@ -101,7 +101,7 @@ void ImageInfoCache::slotImageChanged(const ImageChangeset& changeset)
     // we cannot know if we have databaseaccess lock here as well
     DatabaseAccess access;
 
-    foreach (qlonglong imageId, changeset.ids())
+    foreach (const qlonglong& imageId, changeset.ids())
     {
         QHash<qlonglong, ImageInfoData *>::iterator it = m_infos.find(imageId);
         if (it != m_infos.end())
@@ -132,7 +132,7 @@ void ImageInfoCache::slotImageTagChanged(const ImageTagChangeset& changeset)
 {
     DatabaseAccess access;
 
-    foreach (qlonglong imageId, changeset.ids())
+    foreach (const qlonglong& imageId, changeset.ids())
     {
         QHash<qlonglong, ImageInfoData *>::iterator it = m_infos.find(imageId);
         if (it != m_infos.end())

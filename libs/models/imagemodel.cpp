@@ -626,7 +626,7 @@ void ImageModel::slotImageChange(const ImageChangeset& changeset)
     if (d->watchFlags & changeset.changes())
     {
         QItemSelection items;
-        foreach(qlonglong id, changeset.ids())
+        foreach (const qlonglong& id, changeset.ids())
         {
             QModelIndex index = indexForImageId(id);
             if (index.isValid())
@@ -646,7 +646,7 @@ void ImageModel::slotImageTagChange(const ImageTagChangeset& changeset)
         return;
 
     QItemSelection items;
-    foreach(qlonglong id, changeset.ids())
+    foreach (const qlonglong& id, changeset.ids())
     {
         QModelIndex index = indexForImageId(id);
         if (index.isValid())

@@ -678,7 +678,7 @@ void LightTableBar::slotCollectionImageChange(const CollectionImageChangeset& ch
         case CollectionImageChangeset::RemovedAll:
         {
             ImageInfo info;
-            foreach(qlonglong id, changeset.ids())
+            foreach (const qlonglong& id, changeset.ids())
             {
                 ImagePreviewBarItem* item = findItemById(id);
                 if (item)

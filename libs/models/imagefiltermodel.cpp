@@ -738,7 +738,7 @@ void ImageFilterModel::slotImageTagChange(const ImageTagChangeset& changeset)
         return;
 
     // is one of our images affected?
-    foreach(qlonglong id, changeset.ids())
+    foreach (const qlonglong& id, changeset.ids())
     {
         // if one matching image id is found, trigger a refresh
         if (d->imageModel->hasImage(id))
@@ -770,7 +770,7 @@ void ImageFilterModel::slotImageChange(const ImageChangeset& changeset)
 
     // is one of our images affected?
     bool imageAffected = false;
-    foreach(qlonglong id, changeset.ids())
+    foreach (const qlonglong& id, changeset.ids())
     {
         // if one matching image id is found, trigger a refresh
         if (d->imageModel->hasImage(id))

@@ -539,7 +539,7 @@ void ImageLister::listFromIdList(ImageListerReceiver *receiver, QList<qlonglong>
         /*
         // Unfortunately, we need to convert to QVariant
         QList<QVariant> variantIdList;
-        foreach(qlonglong id, imageIds)
+        foreach (const qlonglong& id, imageIds)
             variantIdList << id;
 
         DatabaseAccess access;
@@ -570,7 +570,7 @@ void ImageLister::listFromIdList(ImageListerReceiver *receiver, QList<qlonglong>
                              " WHERE Images.status=1 AND Images.id = ?;"
                                                                 ));
 
-        foreach(qlonglong id, imageIds)
+        foreach (const qlonglong& id, imageIds)
         {
             query.bindValue(0, id);
             executionSuccess = access.backend()->exec(query);

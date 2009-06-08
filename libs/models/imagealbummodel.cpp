@@ -301,7 +301,7 @@ void ImageAlbumModel::slotImageChange(const ImageChangeset& changeset)
     {
         // For searches any touched field can require a refresh.
         // We cannot easily find out which fields are searched for, so we refresh for any change.
-        foreach(qlonglong id, changeset.ids())
+        foreach (const qlonglong& id, changeset.ids())
         {
             // if one matching image id is found, trigger a refresh
             if (hasImage(id))
@@ -385,7 +385,7 @@ void ImageAlbumModel::slotCollectionImageChange(const CollectionImageChangeset& 
         case CollectionImageChangeset::Removed:
         case CollectionImageChangeset::RemovedAll:
             // is one of our images affected?
-            foreach(qlonglong id, changeset.ids())
+            foreach (const qlonglong& id, changeset.ids())
             {
                 // if one matching image id is found, trigger a refresh
                 if (hasImage(id))

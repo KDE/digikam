@@ -78,7 +78,7 @@ void ImageAttributesWatch::slotImageChange(const ImageChangeset& changeset)
         (set & DatabaseFields::ModificationDate) ||
         (set & DatabaseFields::Rating))
     {
-        foreach(qlonglong imageId, changeset.ids())
+        foreach (const qlonglong& imageId, changeset.ids())
         {
             if (set & DatabaseFields::ImageCommentsAll)
                 emit signalImageCaptionChanged(imageId);
@@ -93,7 +93,7 @@ void ImageAttributesWatch::slotImageChange(const ImageChangeset& changeset)
 
 void ImageAttributesWatch::slotImageTagChange(const ImageTagChangeset& changeset)
 {
-    foreach(qlonglong imageId, changeset.ids())
+    foreach (const qlonglong& imageId, changeset.ids())
         emit signalImageTagsChanged(imageId);
 }
 

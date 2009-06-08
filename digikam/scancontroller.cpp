@@ -726,7 +726,7 @@ void ScanControllerLoadingCacheFileWatch::slotImageChanged(const ImageChangeset&
 {
     DatabaseAccess access;
 
-    foreach (qlonglong imageId, changeset.ids())
+    foreach (const qlonglong& imageId, changeset.ids())
     {
         DatabaseFields::Set changes = changeset.changes();
         if (changes & DatabaseFields::ModificationDate)
