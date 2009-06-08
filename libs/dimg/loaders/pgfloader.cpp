@@ -50,10 +50,17 @@ extern "C"
 #include <QVariant>
 #include <QByteArray>
 #include <QTextStream>
+#include <QDataStream>
 
 // KDE includes
 
 #include <kdebug.h>
+#include <ktemporaryfile.h>
+
+// Libkexiv2 includes
+
+#include <libkexiv2/version.h>
+#include <libkexiv2/kexiv2.h>
 
 // Windows includes
 
@@ -192,7 +199,6 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 break;
         }
 
-
 #ifdef ENABLE_DEBUG_MESSAGES
         const PGFHeader* header = pgf.GetHeader();
         kDebug(50003) << "PGF width    = " << header->width    << endl;
@@ -203,6 +209,43 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         kDebug(50003) << "PGF mode     = " << header->mode     << endl;
         kDebug(50003) << "Has Alpha    = " << m_hasAlpha       << endl;
         kDebug(50003) << "Is 16 bits   = " << m_sixteenBit     << endl;
+#endif
+
+#if KEXIV2_VERSION >= 0x010000
+        UINT32 size;
+        const UINT8* udata = pgf.GetUserData(size);
+        if (udata)
+        {
+            QByteArray data((const char*)udata, size);
+            KExiv2Iface::KExiv2 meta;
+            if (meta.load(data))
+            {
+                kDebug(50003) << "Load PGF metadata (" << data.size() << ")" << endl;
+                QMap<int, QByteArray>& imageMetadata = imageMetaData();
+                imageMetadata.clear();
+
+                if (!meta.getComments().isNull())
+                {
+                    kDebug(50003) << "PGF as Comments" << endl;
+                    imageMetadata.insert(DImg::COM, meta.getComments());
+                }
+                if (!meta.getExif().isNull())
+                {
+                    kDebug(50003) << "PGF as Exif" << endl;
+                    imageMetadata.insert(DImg::EXIF, meta.getExif());
+                }
+                if (!meta.getIptc().isNull())
+                {
+                    kDebug(50003) << "PGF as Iptc" << endl;
+                    imageMetadata.insert(DImg::IPTC, meta.getIptc());
+                }
+                if (!meta.getXmp().isNull())
+                {
+                    kDebug(50003) << "PGF as Xmp" << endl;
+                    imageMetadata.insert(DImg::XMP, meta.getXmp());
+                }
+            }
+        }
 #endif
 
         int width   = pgf.Width();
@@ -334,7 +377,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
                 // NOTE : there is no PGF color mode in 16 bits with alpha.
                 header.channels = 3;
                 header.bpp      = 48;
-                header.mode     = ImageModeRGB48;  
+                header.mode     = ImageModeRGB48;
             }
             else
             {
@@ -355,12 +398,49 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
             {
                 header.channels = 3;
                 header.bpp      = 24;
-                header.mode = ImageModeRGBColor;
+                header.mode     = ImageModeRGBColor;
             }
         }
 
         header.background.rgbtBlue = header.background.rgbtGreen = header.background.rgbtRed = 0;
-        pgf.SetHeader(header);
+
+        // Host Exif/IPTC/XMP metadata to PGF header. We use a small thumb JPEG image to embed all data
+        // and pass it to PGF header as user data byte-array.
+        QImage thumb = m_image->smoothScale(256, 256, Qt::KeepAspectRatio).copyQImage();
+        KTemporaryFile thumbTmp;
+        thumbTmp.setPrefix(filePath);
+        thumbTmp.setSuffix("-thumb.jpg");
+        thumbTmp.setAutoRemove(true);
+        if ( !thumbTmp.open() )
+        {
+            kDebug(50003) << "Cannot open tmp file to save PGF metadata" << endl;
+            pgf.SetHeader(header);
+        }
+        else
+        {
+            thumb.save(thumbTmp.fileName(), "JPEG");
+            kDebug(50003) << "Created PGF metadata tmp file" << endl;
+
+            KExiv2Iface::KExiv2 meta(thumbTmp.fileName());
+            QMap<int, QByteArray>& metaData = imageMetaData();
+            meta.setExif(metaData[DImg::EXIF]);
+            meta.setIptc(metaData[DImg::IPTC]);
+            meta.setXmp(metaData[DImg::XMP]);
+            meta.setComments(metaData[DImg::COM]);
+            meta.removeIptcTag("Iptc.Application2.Preview");
+            meta.removeIptcTag("Iptc.Application2.PreviewFormat");
+            meta.removeIptcTag("Iptc.Application2.PreviewVersion");
+            meta.applyChanges();
+
+            QByteArray data;
+            data.resize(thumbTmp.size());
+            QDataStream stream( &thumbTmp );
+            stream.readRawData(data.data(), data.size());
+            thumbTmp.close();
+
+            kDebug(50003) << "Save PGF metadata (" << data.size() << ")"  << endl;
+            pgf.SetHeader(header, 0, (UINT8*)data.constData(), data.size());
+        }
 
         pgf.ImportBitmap(4 * imageWidth() * (imageSixteenBit() ? 2 : 1),
                          (UINT8*)imageData(),
