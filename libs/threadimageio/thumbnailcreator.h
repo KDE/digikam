@@ -80,7 +80,7 @@ public:
 
     ThumbnailInfoProvider() {};
     virtual ~ThumbnailInfoProvider() {};
-    virtual ThumbnailInfo thumbnailInfo(const QString& path);
+    virtual ThumbnailInfo thumbnailInfo(const QString& path)=0;
 };
 
 class DIGIKAM_EXPORT ThumbnailCreator
