@@ -766,6 +766,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasetransaction.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseurl.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasechangesets.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasethumbnailinfoprovider.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/downloadhistory.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagecomments.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imageinfo.cpp
