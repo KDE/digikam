@@ -34,12 +34,12 @@ class QMutexLocker;
 namespace Digikam
 {
 
-class DatabaseBackend;
+class DatabaseCoreBackend;
 class InitializationObserver;
 class ThumbnailDB;
 class ThumbnailDatabaseAccessStaticPriv;
 
-class DIGIKAM_DATABASE_EXPORT ThumbnailDatabaseAccess
+class DIGIKAM_EXPORT ThumbnailDatabaseAccess
 {
 public:
 
@@ -52,7 +52,7 @@ public:
 
     ThumbnailDB *db() const;
 
-    DatabaseBackend *backend() const;
+    DatabaseCoreBackend *backend() const;
     QString lastError();
     static DatabaseParameters parameters();
 

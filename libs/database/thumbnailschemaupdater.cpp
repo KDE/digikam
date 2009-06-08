@@ -41,7 +41,7 @@
 // Local includes
 
 #include "collectionscannerobserver.h"
-#include "databasebackend.h"
+#include "databasecorebackend.h"
 #include "databasetransaction.h"
 #include "thumbnaildatabaseaccess.h"
 #include "thumbnaildb.h"

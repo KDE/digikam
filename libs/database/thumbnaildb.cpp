@@ -37,7 +37,7 @@
 
 // Local includes
 
-#include "databasebackend.h"
+#include "databasecorebackend.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
 
@@ -54,10 +54,10 @@ public:
         db = 0;
     }
 
-    DatabaseBackend *db;
+    DatabaseCoreBackend *db;
 };
 
-ThumbnailDB::ThumbnailDB(DatabaseBackend *backend)
+ThumbnailDB::ThumbnailDB(DatabaseCoreBackend *backend)
            : d(new ThumbnailDBPriv)
 {
     d->db = backend;
@@ -103,7 +103,7 @@ DatabaseThumbnailInfo ThumbnailDB::findByHash(const QString &uniqueHash, int fil
     QList<QVariant> values;
     d->db->execSql( QString("SELECT id, type, modificationDate, orientationHint, data "
                             "FROM UniqueHashes "
-                            "   JOIN Thumbnails ON thumbId = id "
+                            "   INNER JOIN Thumbnails ON thumbId = id "
                             "WHERE uniqueHash=? AND fileSize=?;"),
                     uniqueHash, fileSize,
                     &values );
@@ -118,7 +118,7 @@ DatabaseThumbnailInfo ThumbnailDB::findByFilePath(const QString &path)
     QList<QVariant> values;
     d->db->execSql( QString("SELECT id, type, modificationDate, orientationHint, data "
                             "FROM FilePaths "
-                            "   JOIN Thumbnails ON thumbId = id "
+                            "   INNER JOIN Thumbnails ON thumbId = id "
                             "WHERE path=?;"),
                     path,
                     &values );
@@ -140,10 +140,26 @@ void ThumbnailDB::insertFilePath(const QString &path, int thumbId)
                    path, thumbId);
 }
 
+void ThumbnailDB::removeByUniqueHash(const QString &uniqueHash, int fileSize)
+{
+    // UniqueHashes + FilePaths entries are removed by trigger
+    d->db->execSql("DELETE FROM Thumbnails WHERE id IN "
+                   " (SELECT thumbId FROM UniqueHashes WHERE uniqueHash=? AND fileSize=?);",
+                   uniqueHash, fileSize);
+}
+
+void ThumbnailDB::removeByFilePath(const QString &path)
+{
+    // UniqueHashes + FilePaths entries are removed by trigger
+    d->db->execSql("DELETE FROM Thumbnails WHERE id IN "
+                   " (SELECT thumbId FROM FilePaths WHERE path=?);",
+                   path);
+}
+
 int ThumbnailDB::insertThumbnail(const DatabaseThumbnailInfo &info)
 {
     QVariant id;
-    if (!d->db->execSql("INSERT INTO THUMBNAILS (type, modificationDate, orientationHint, data) VALUES(?, ?, ?, ?);",
+    if (!d->db->execSql("INSERT INTO Thumbnails (type, modificationDate, orientationHint, data) VALUES (?, ?, ?, ?);",
                         info.type, info.modificationDate, info.orientationHint, info.data,
                         0, &id) )
     {

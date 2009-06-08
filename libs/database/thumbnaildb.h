@@ -45,7 +45,7 @@
 namespace Digikam
 {
 
-class DatabaseBackend;
+class DatabaseCoreBackend;
 class ThumbnailDBPriv;
 
 namespace DatabaseThumbnail {
@@ -73,7 +73,7 @@ public:
     QByteArray              data;
 };
 
-class DIGIKAM_DATABASE_EXPORT ThumbnailDB
+class DIGIKAM_EXPORT ThumbnailDB
 {
 
 public:
@@ -83,8 +83,15 @@ public:
 
     DatabaseThumbnailInfo findByHash(const QString &uniqueHash, int fileSize);
     DatabaseThumbnailInfo findByFilePath(const QString &path);
+
     void insertUniqueHash(const QString &uniqueHash, int fileSize, int thumbId);
     void insertFilePath(const QString &path, int thumbId);
+
+    /** Removes thumbnail data associated to the given uniqueHash/fileSize */
+    void removeByUniqueHash(const QString &uniqueHash, int fileSize);
+    /** Removes thumbnail data associated to the given file path */
+    void removeByFilePath(const QString &path);
+
     int insertThumbnail(const DatabaseThumbnailInfo &info);
     void replaceThumbnail(const DatabaseThumbnailInfo &info);
 
@@ -92,7 +99,7 @@ private:
 
     friend class Digikam::ThumbnailDatabaseAccess;
 
-    ThumbnailDB(DatabaseBackend *backend);
+    ThumbnailDB(DatabaseCoreBackend *backend);
     ~ThumbnailDB();
 
     ThumbnailDBPriv* const d;

@@ -35,7 +35,7 @@
 
 // Local includes
 
-#include "databasebackend.h"
+#include "databasecorebackend.h"
 #include "thumbnaildb.h"
 #include "thumbnailschemaupdater.h"
 
@@ -53,7 +53,7 @@ public:
     {}
     ~ThumbnailDatabaseAccessStaticPriv() {};
 
-    DatabaseBackend    *backend;
+    DatabaseCoreBackend*backend;
     ThumbnailDB        *db;
     DatabaseParameters  parameters;
     QMutex              mutex;
@@ -118,7 +118,7 @@ ThumbnailDB *ThumbnailDatabaseAccess::db() const
     return d->db;
 }
 
-DatabaseBackend *ThumbnailDatabaseAccess::backend() const
+DatabaseCoreBackend *ThumbnailDatabaseAccess::backend() const
 {
     return d->backend;
 }
@@ -151,7 +151,7 @@ void ThumbnailDatabaseAccess::setParameters(const DatabaseParameters& parameters
     {
         delete d->db;
         delete d->backend;
-        d->backend = new DatabaseBackend();
+        d->backend = new DatabaseCoreBackend();
         d->db = new ThumbnailDB(d->backend);
     }
 }
