@@ -83,6 +83,7 @@ SET(digikamcore_LIB_SRCS
                         ${libdimgloaders_SRCS}
                         ${libdimgfilters_SRCS}
                         ${libdmetadata_SRCS}
+                        ${libdatabasecore_SRCS}
                         ${libhistogram_SRCS}
                         ${libwhitebalance_SRCS}
                         ${libcurves_SRCS}
@@ -131,6 +132,7 @@ TARGET_LINK_LIBRARIES(digikamcore
                       ${KDE4_SOLID_LIBS}
                       ${KDE4_KDE3SUPPORT_LIBRARY}
                       ${QT_QT3SUPPORT_LIBRARY}
+                      ${QT_QTSQL_LIBRARY}
 
                       ${JPEG_LIBRARIES}
                       ${TIFF_LIBRARIES}

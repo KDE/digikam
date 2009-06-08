@@ -745,6 +745,14 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/fingerprintsgenerator.cpp
        )
 
+    SET(libdatabasecore_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasecorebackend.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseparameters.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/thumbnaildatabaseaccess.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/thumbnaildb.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/thumbnailschemaupdater.cpp
+       )
+
     SET(libdatabase_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/albumdb.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/albumdb_sqlite2.cpp
@@ -755,7 +763,6 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseaccess.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasewatch.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasebackend.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseparameters.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasetransaction.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseurl.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasechangesets.cpp
@@ -773,9 +780,6 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/namefilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/searchxml.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/schemaupdater.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/thumbnaildatabaseaccess.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/thumbnaildb.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/thumbnailschemaupdater.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/upgradedb_sqlite2tosqlite3.cpp
        )
 
