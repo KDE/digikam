@@ -52,6 +52,9 @@ void ManualRenameInputTest::testNumberToken_data()
     QTest::newRow("#") << QString("#") << filename << cameraName << curdate << 1
                        << QString("1");
 
+    QTest::newRow("# (index:20)") << QString("#") << filename << cameraName << curdate << 20
+                                  << QString("20");
+
     QTest::newRow("##") << QString("##") << filename << cameraName << curdate << 2
                         << QString("02");
 
@@ -173,6 +176,10 @@ void ManualRenameInputTest::testUppercaseToken_data()
     QTest::newRow("my_image.jpg") << QString("&") << QString("my_image.jpg")
                                   << cameraName << curdate << 1
                                   << QString("MY_IMAGE");
+
+//    QTest::newRow("all char") << QString("&") << QString("1234567890ß'qwertzuiop+asdfghjkl#<yxcvbnm,.-")
+//                              << cameraName << curdate << 1
+//                              << QString("1234567890?'QWERTZUIOP+ASDFGHJKL#<YXCVBNM,.-");
 }
 
 void ManualRenameInputTest::testUppercaseToken()
@@ -260,6 +267,47 @@ void ManualRenameInputTest::testCameraToken_data()
 }
 
 void ManualRenameInputTest::testCameraToken()
+{
+    QFETCH(QString,     parseString);
+    QFETCH(QString,     filename);
+    QFETCH(QString,     cameraName);
+    QFETCH(QDateTime,   cameraDate);
+    QFETCH(int,         index);
+    QFETCH(QString,     result);
+
+    QString parsed = ManualRenameInput::parser(parseString, filename, cameraName, cameraDate, index);
+    QCOMPARE(parsed, result);
+}
+
+void ManualRenameInputTest::testCompleteParse_data()
+{
+    QTest::addColumn<QString>("parseString");
+    QTest::addColumn<QString>("filename");
+    QTest::addColumn<QString>("cameraName");
+    QTest::addColumn<QDateTime>("cameraDate");
+    QTest::addColumn<int>("index");
+    QTest::addColumn<QString>("result");
+
+    QString default_filename("myfile001.jpg");
+    QString default_camname("Nikon D50");
+    QDateTime default_curdate = QDateTime::currentDateTime();
+
+    QTest::newRow("new-###") << QString("new-###") << default_filename << default_camname << default_curdate << 20
+                             << QString("new-020");
+
+    QTest::newRow("new-###_% (&-token in filename)") << QString("new-###_%")
+                                                     << QString("my_#_file.jpg") << default_camname
+                                                     << default_curdate << 20
+                                                     << QString("new-020_my_#_file");
+
+    QTest::newRow("#_new-###") << QString("#_new-###") << default_filename << default_camname << default_curdate << 20
+                               << QString("20_new-020");
+
+    QTest::newRow("%_##_&") << QString("%_##_&") << default_filename << default_camname << default_curdate << 1000
+                            << QString("myfile001_1000_MYFILE001");
+}
+
+void ManualRenameInputTest::testCompleteParse()
 {
     QFETCH(QString,     parseString);
     QFETCH(QString,     filename);
