@@ -65,6 +65,17 @@ double FreeRotation::calculateAngle(int x1, int y1, int x2, int y2)
 
 double FreeRotation::calculateAngle(const QPoint& p1, const QPoint& p2)
 {
+    // check for invalid points. This should have been handled by the calling method,
+    // but we want to be really sure here
+
+    if ( p1.x() < 0 ||
+         p2.y() < 0 ||
+         p1.x() < 0 ||
+         p2.y() < 0 )
+    {
+        return 0.0;
+    }
+
     // check if points are equal
     if (p1 == p2)
         return 0.0;
