@@ -3,7 +3,7 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2004-09-19
+ * Date        : 2009-05-22
  * Description : an input widget that allows manual renaming of files
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
