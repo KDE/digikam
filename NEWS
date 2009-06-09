@@ -1,9 +1,14 @@
 *********************************************************************************************************
 digiKam 1.0.0-beta2 - Release date: 2009-xx-xx
 
+NEW FEATURES:
+
+BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
 001 ==> 178189 : do not create preview automatically for large pictures.
 002 ==> 172807 : Warning: JPEG format error, rc = 5.
-003 ==> 
+003 ==> 188936 : Not finding all pictures on camera.
+004 ==> 
 
 
 *********************************************************************************************************
