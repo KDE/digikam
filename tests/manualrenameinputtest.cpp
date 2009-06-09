@@ -3,7 +3,7 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : Jun 9, 2009
+ * Date        : 2009-06-09
  * Description : a test for the ManualRenameInput widget
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
