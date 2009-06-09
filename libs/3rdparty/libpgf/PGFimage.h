@@ -186,7 +186,7 @@ public:
 	/// @param flags A combination of additional version flags
 	/// @param userData A user-defined memory block
 	/// @param userDataLength The size of user-defined memory block in bytes
-	void SetHeader(const PGFHeader& header, BYTE flags = 0, UINT8* userData = 0, UINT16 userDataLength = 0) THROW_; // throws IOException
+	void SetHeader(const PGFHeader& header, BYTE flags = 0, UINT8* userData = 0, UINT32 userDataLength = 0) THROW_; // throws IOException
 
 	//////////////////////////////////////////////////////////////////////
 	/// Set maximum intensity value for image modes with more than eight bits per channel.

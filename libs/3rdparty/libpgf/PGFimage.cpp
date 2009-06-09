@@ -586,7 +586,7 @@ void CPGFImage::SetBackground(const RGBTRIPLE* bg) {
 /// @param flags A combination of additional version flags
 /// @param userData A user-defined memory block
 /// @param userDataLength The size of user-defined memory block in bytes
-void CPGFImage::SetHeader(const PGFHeader& header, BYTE flags /*=0*/, UINT8* userData /*= 0*/, UINT16 userDataLength /*= 0*/) THROW_ {
+void CPGFImage::SetHeader(const PGFHeader& header, BYTE flags /*=0*/, UINT8* userData /*= 0*/, UINT32 userDataLength /*= 0*/) THROW_ {
 	ASSERT(!m_decoder);	// current image must be closed
 	ASSERT(header.quality <= MaxQuality);
 	int i;
