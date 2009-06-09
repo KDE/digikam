@@ -886,7 +886,7 @@ void EditorWindow::applyStandardSettings()
     m_IOFileSettings->PGFCompression      = group.readEntry("PGFCompression", 3);
 
     // PGF LossLess setting.
-    m_IOFileSettings->JPEG2000LossLess    = group.readEntry("PGFLossLess", true);
+    m_IOFileSettings->PGFLossLess         = group.readEntry("PGFLossLess", true);
 
     // -- RAW images decoding settings ------------------------------------------------------
 
