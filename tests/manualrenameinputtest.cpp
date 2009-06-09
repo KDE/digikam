@@ -262,6 +262,12 @@ void ManualRenameInputTest::testCameraToken_data()
     QString camname("Nikon D50");
     QDateTime curdate = QDateTime::currentDateTime();
 
+    QTest::newRow("empty") << QString("[cam]") << filename << QString() << curdate << 1
+                           << QString();
+
+    QTest::newRow("   ") << QString("[cam]") << filename << QString("   ") << curdate << 1
+                         << QString();
+
     QTest::newRow("[cam]") << QString("[cam]") << filename << camname << curdate << 1
                            << camname;
 

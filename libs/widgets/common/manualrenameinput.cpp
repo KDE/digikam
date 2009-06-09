@@ -141,9 +141,9 @@ QString ManualRenameInput::parser(const QString& parse,
                                   const QDateTime &dateTime, int index)
 {
     QFileInfo fi(fileName);
-    QRegExp invalidParseString("^\\s*$");
+    QRegExp invalidString("^\\s*$");
 
-    if (parse.isEmpty() || invalidParseString.exactMatch(parse))
+    if (parse.isEmpty() || invalidString.exactMatch(parse))
         return fi.baseName();
 
     QString parsedString = parse;
@@ -226,7 +226,8 @@ QString ManualRenameInput::parser(const QString& parse,
             pos  = regExp.indexIn(parsedString, pos);
             if (pos > -1)
             {
-                QString tmp      = cameraName;
+                QString tmp      = (cameraName.isEmpty() || invalidString.exactMatch(cameraName))
+                                       ? QString() : cameraName;
                 QString optToken = regExp.cap(1);
 
                 if (!optToken.isEmpty())
