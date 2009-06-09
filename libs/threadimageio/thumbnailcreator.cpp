@@ -471,7 +471,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
     // by filepath of uniqueHash to find out if a thumb need to be replaced.
     dbInfo.id = d->dbIdForReplacement;
     d->dbIdForReplacement = -1;
-    dbInfo.type = DatabaseThumbnail::PgfBlob;
+    dbInfo.type = DatabaseThumbnail::PGF;
     dbInfo.modificationDate = info.modificationDate;
     dbInfo.orientationHint = image.exifOrientation;
 

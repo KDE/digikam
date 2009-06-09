@@ -52,8 +52,8 @@ enum Type
 {
     UndefinedType = 0,
     NoThumbnail,
-    PgfBlob,
-    FilePath
+    PGF
+    //FreeDesktopHash
 };
 }
 
