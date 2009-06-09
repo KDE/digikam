@@ -191,7 +191,6 @@ QString ManualRenameInput::parser(const QString& parse,
     // parse camera token
     {
         QRegExp regExp("\\[cam([$%&\\*]*)\\]");
-        regExp.setMinimal(true);
 
         int pos = 0;
         while (pos > -1)
@@ -202,15 +201,13 @@ QString ManualRenameInput::parser(const QString& parse,
                 QString tmp      = stringIsValid(cameraName) ? cameraName : QString();
                 QString optToken = regExp.cap(1);
 
-                if (!optToken.isEmpty())
+                if (!optToken.isEmpty() && optToken.length() == 1)
                 {
-                    if (regExp.cap(1) == QString('$'))
-                        tmp = cameraName;
-                    else if (regExp.cap(1) == QString('&'))
-                        tmp = cameraName.toUpper();
-                    else if (regExp.cap(1) == QString('%'))
-                        tmp = cameraName.toLower();
-                    else if (regExp.cap(1) == QString('*'))
+                    if (optToken == QString('&'))
+                        tmp = tmp.toUpper();
+                    else if (optToken == QString('%'))
+                        tmp = tmp.toLower();
+                    else if (optToken == QString('*'))
                         tmp = firstLetterUppercase(cameraName);
                 }
                 parsedString.replace(pos, regExp.matchedLength(), tmp);

@@ -274,8 +274,20 @@ void ManualRenameInputTest::testCameraToken_data()
     QTest::newRow("[cam$]") << QString("[cam$]") << filename << camname << curdate << 1
                             << camname;
 
+    QTest::newRow("[cam$*]") << QString("[cam$*]") << filename << camname << curdate << 1
+                             << camname;
+
+    QTest::newRow("[cam$$$$]") << QString("[cam$$$$]") << filename << camname << curdate << 1
+                               << camname;
+
     QTest::newRow("[cam%]") << QString("[cam%]") << filename << camname << curdate << 1
                             << camname.toLower();
+
+    QTest::newRow("[cam%*]") << QString("[cam%*]") << filename << camname << curdate << 1
+                             << camname;
+
+    QTest::newRow("[cam%%]") << QString("[cam%%]") << filename << camname << curdate << 1
+                            << camname;
 
     QTest::newRow("[cam&]") << QString("[cam&]") << filename << camname << curdate << 1
                             << camname.toUpper();
@@ -329,6 +341,14 @@ void ManualRenameInputTest::testCompleteParse_data()
 
     QTest::newRow("%_##_&") << QString("%_##_&") << default_filename << default_camname << default_curdate << 1000
                             << QString("myfile001_1000_MYFILE001");
+
+    QTest::newRow("[cam*]*") << QString("[cam*]*") << default_filename << QString("My super camera")
+                             << default_curdate << 1
+                             << QString("My Super CameraMyfile001");
+
+    QTest::newRow("[cam*]_*") << QString("[cam*]_*") << default_filename << QString("My super camera")
+                              << default_curdate << 1
+                              << QString("My Super Camera_Myfile001");
 }
 
 void ManualRenameInputTest::testCompleteParse()
