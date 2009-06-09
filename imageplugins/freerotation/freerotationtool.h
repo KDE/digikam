@@ -47,9 +47,6 @@ public:
     FreeRotationTool(QObject *parent);
     ~FreeRotationTool();
 
-    static double calculateAngle(int x1, int y1, int x2, int y2);
-    static double calculateAngle(const QPoint& p1, const QPoint& p2);
-
 private Q_SLOTS:
 
     void slotResetSettings();

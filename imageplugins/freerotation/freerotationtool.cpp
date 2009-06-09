@@ -589,44 +589,7 @@ double FreeRotationTool::calculateAutoAngle()
     if (!pointIsValid(d->autoAdjustPoint1) && !pointIsValid(d->autoAdjustPoint2))
         return 0.0;
 
-    return calculateAngle(d->autoAdjustPoint1, d->autoAdjustPoint2);
-}
-
-double FreeRotationTool::calculateAngle(int x1, int y1, int x2, int y2)
-{
-    QPoint p1(x1, y1);
-    QPoint p2(x2, y2);
-
-    return calculateAngle(p1, p2);
-}
-
-double FreeRotationTool::calculateAngle(const QPoint& p1, const QPoint& p2)
-{
-    // check if points are equal
-    if (p1 == p2)
-        return 0.0;
-
-    // if y() is equal, no angle needs to be calculated
-    if (p1.y() == p2.y())
-        return 0.0;
-
-    // if x() is equal, angle equals 90°
-    if (p1.x() == p2.x())
-        return 90.0;
-
-    // do we rotate to the left (counter clock wise)?
-    bool ccw = ((p1.x() < p2.x()) && (p2.y() > p1.y())) ||
-               ((p1.x() > p2.x()) && (p2.y() < p1.y()));
-
-    // calculate the angle
-    double angle = 0.0;
-    double ly = fabs((double)p2.y() - p1.y());
-    double lx = fabs((double)p2.x() - p1.x());
-
-    angle = atan2(ly, lx) * 180.0 / M_PI;
-    angle = ccw ? -angle : angle;
-
-    return angle;
+    return FreeRotation::calculateAngle(d->autoAdjustPoint1, d->autoAdjustPoint2);
 }
 
 void FreeRotationTool::setPointInvalid(QPoint& p)

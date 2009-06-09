@@ -30,7 +30,7 @@
 
 // Local includes
 
-#include "freerotationtool.h"
+#include "freerotation.h"
 
 using namespace DigikamFreeRotationImagesPlugin;
 using namespace Digikam;
@@ -57,6 +57,6 @@ void FreeRotationToolTest::testCalculateAngle()
     QFETCH(QPoint, p2);
     QFETCH(double, result);
 
-    double angle = FreeRotationTool::calculateAngle(p1, p2);
+    double angle = FreeRotation::calculateAngle(p1, p2);
     QCOMPARE(angle, result);
 }
