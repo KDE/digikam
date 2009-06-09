@@ -228,6 +228,7 @@ void ThumbnailCreator::deleteThumbnailsFromDisk(const QString& filePath)
     {
         case FreeDesktopStandard:
             deleteFromDiskFreedesktop(filePath);
+            break;
         case PGFDatabase:
         {
             ThumbnailInfo info;
