@@ -36,6 +36,10 @@ private Q_SLOTS:
 
     void testCalculateAngle();
     void testCalculateAngle_data();
+
+private:
+
+    double myRound(double val, int accuracy);
 };
 
 #endif /* FREEROTATIONTEST_H_ */

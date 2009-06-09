@@ -24,6 +24,10 @@
 #include "freerotationtest.h"
 #include "freerotationtest.moc"
 
+// C++ includes
+
+#include <cmath>
+
 // KDE includes
 
 #include "qtest_kde.h"
@@ -43,13 +47,15 @@ void FreeRotationTest::testCalculateAngle_data()
     QTest::addColumn<QPoint>("p2");
     QTest::addColumn<double>("result");
 
-    QTest::newRow("empty")       << QPoint()      << QPoint()       << 0.0;
-    QTest::newRow("invalid")     << QPoint(-1,-3) << QPoint(2,2)    << 0.0;
-    QTest::newRow("p1=p2")       << QPoint(10,10) << QPoint(10,10)  << 0.0;
-    QTest::newRow("p1.x=p2.x")   << QPoint(10,10) << QPoint(200,10) << 0.0;
-    QTest::newRow("p1.y=p2.y")   << QPoint(10,10) << QPoint(10,200) << 90.0;
-    QTest::newRow("-45 degrees") << QPoint(10,10) << QPoint(20,20)  << -45.0;
-    QTest::newRow("45 degrees")  << QPoint(10,20) << QPoint(20,10)  << 45.0;
+    QTest::newRow("empty")          << QPoint()      << QPoint()        << 0.0;
+    QTest::newRow("invalid")        << QPoint(-1,-3) << QPoint(2,2)     << 0.0;
+    QTest::newRow("p1=p2")          << QPoint(10,10) << QPoint(10,10)   << 0.0;
+    QTest::newRow("p1.x=p2.x")      << QPoint(10,10) << QPoint(200,10)  << 0.0;
+    QTest::newRow("p1.y=p2.y")      << QPoint(10,10) << QPoint(10,200)  << 90.0;
+    QTest::newRow("-45 degrees")    << QPoint(10,10) << QPoint(20,20)   << -45.0;
+    QTest::newRow("45 degrees")     << QPoint(10,20) << QPoint(20,10)   << 45.0;
+    QTest::newRow("28.82 degrees")  << QPoint(0,241) << QPoint(438,0)   << 28.82;
+    QTest::newRow("-28.82 degrees") << QPoint(0,0)   << QPoint(438,241) << -28.82;
 }
 
 void FreeRotationTest::testCalculateAngle()
@@ -59,5 +65,18 @@ void FreeRotationTest::testCalculateAngle()
     QFETCH(double, result);
 
     double angle = FreeRotation::calculateAngle(p1, p2);
-    QCOMPARE(angle, result);
+    QCOMPARE(myRound(angle, 2), result);
+}
+
+double FreeRotationTest::myRound(double val, int accuracy)
+{
+    double tmp = pow(10.0, accuracy);
+    double x   = val;
+
+    x *= tmp;
+    x += 0.5;
+    x = floor(x);
+    x /= tmp;
+
+    return x;
 }
