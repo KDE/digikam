@@ -1017,6 +1017,7 @@ ENDIF(MSVC)
     ADD_SUBDIRECTORY(kioslave)
     ADD_SUBDIRECTORY(showfoto)
     ADD_SUBDIRECTORY(imageplugins)
+    ADD_SUBDIRECTORY(tests)
 
     IF(ENABLE_THEMEDESIGNER)
         ADD_SUBDIRECTORY(themedesigner)
