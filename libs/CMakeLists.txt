@@ -1,4 +1,4 @@
-include_directories( dimg
+INCLUDE_DIRECTORIES( dimg
                      dimg/filters
                      dimg/filters/clapack
                      dimg/loaders
@@ -22,13 +22,13 @@ include_directories( dimg
                      ${PNG_INCLUDE_DIR}
                      ${JASPER_INCLUDE_DIR}
                    )
-add_subdirectory( curves )
-add_subdirectory( levels )
-add_subdirectory( histogram )
-add_subdirectory( dmetadata )
-add_subdirectory( dimg )
-add_subdirectory( greycstoration )
-add_subdirectory( dialogs )
-add_subdirectory( widgets )
-add_subdirectory( database )
-add_subdirectory( threadimageio )
+ADD_SUBDIRECTORY( curves )
+ADD_SUBDIRECTORY( levels )
+ADD_SUBDIRECTORY( histogram )
+ADD_SUBDIRECTORY( dmetadata )
+ADD_SUBDIRECTORY( dimg )
+ADD_SUBDIRECTORY( greycstoration )
+ADD_SUBDIRECTORY( dialogs )
+ADD_SUBDIRECTORY( widgets )
+ADD_SUBDIRECTORY( database )
+ADD_SUBDIRECTORY( threadimageio )
