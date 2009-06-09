@@ -29,7 +29,7 @@
 
 #include "manualrenameinputtest.h"
 
-QTEST_KDEMAIN_CORE(ManualRenameInputTest)
+QTEST_KDEMAIN(ManualRenameInputTest, GUI)
 
 void ManualRenameInputTest::testNumberToken()
 {
