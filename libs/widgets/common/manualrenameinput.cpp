@@ -202,7 +202,7 @@ QString ManualRenameInput::parser(const QString& parse,
                 QString tmp      = stringIsValid(cameraName) ? cameraName : QString();
                 QString optToken = regExp.cap(1);
 
-                if (!optToken.isEmpty() && optToken.length() == 1)
+                if (optToken.length() == 1)
                 {
                     if (optToken == QString('&'))
                         tmp = tmp.toUpper();
