@@ -538,9 +538,11 @@ __inline UINT32 ByteSwap(UINT32 dwX) {
 #endif 
 }
 
+#if defined WIN32
 __inline UINT64 ByteSwap(UINT64 ui64) { 
 	return _byteswap_uint64(ui64);
 }
+#endif
 
 #define __VAL(x) ByteSwap(x)
 
