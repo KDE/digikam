@@ -57,6 +57,11 @@ extern "C"
 #include <kdebug.h>
 #include <ktemporaryfile.h>
 
+// Libkexiv2 includes
+
+#include <libkexiv2/kexiv2.h>
+
+
 // Windows includes
 
 #ifdef WIN32
@@ -66,7 +71,6 @@ extern "C"
 // Local includes
 
 #include "PGFimage.h"
-#include "dmetadata.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 #include "pgfloader.h"
@@ -212,10 +216,11 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         if (udata)
         {
             QByteArray data((const char*)udata, size);
-            DMetadata meta;
+            kDebug(50003) << "Find PGF metadata (" << data.size() << ")" << endl;
+            KExiv2Iface::KExiv2 meta;
             if (meta.load(data))
             {
-                kDebug(50003) << "Load PGF metadata (" << data.size() << ")" << endl;
+                kDebug(50003) << "PGF metadata loaded" << endl;
                 QMap<int, QByteArray>& imageMetadata = imageMetaData();
                 imageMetadata.clear();
 
@@ -398,25 +403,28 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
         header.background.rgbtBlue = header.background.rgbtGreen = header.background.rgbtRed = 0;
 
-        // Host Exif/IPTC/XMP metadata to PGF header. We use a small thumb JPEG image to embed all data
+        // Host Exif/IPTC/XMP metadata to PGF header. We use a preview JPEG image to embed all data
         // and pass it to PGF header as user data byte-array.
-        QImage thumb = m_image->smoothScale(256, 256, Qt::KeepAspectRatio).copyQImage();
-        KTemporaryFile thumbTmp;
-        thumbTmp.setPrefix(filePath);
-        thumbTmp.setSuffix("-thumb.jpg");
-        thumbTmp.setAutoRemove(true);
-        if ( !thumbTmp.open() )
+        QImage preview;
+        KExiv2Iface::KExiv2 meta;
+        QMap<int, QByteArray>& metaData = imageMetaData();
+        meta.setIptc(metaData[DImg::IPTC]);
+        meta.getImagePreview(preview);
+        KTemporaryFile tmp;
+        tmp.setPrefix(filePath);
+        tmp.setSuffix("-preview-jpg.tmp");
+        tmp.setAutoRemove(true);
+        if ( !tmp.open() )
         {
             kDebug(50003) << "Cannot open tmp file to save PGF metadata" << endl;
             pgf.SetHeader(header);
         }
         else
         {
-            thumb.save(thumbTmp.fileName(), "JPEG");
+            preview.save(tmp.fileName(), "JPEG");
             kDebug(50003) << "Created PGF metadata tmp file" << endl;
 
-            DMetadata meta(thumbTmp.fileName());
-            QMap<int, QByteArray>& metaData = imageMetaData();
+            meta.load(tmp.fileName());
             meta.setExif(metaData[DImg::EXIF]);
             meta.setIptc(metaData[DImg::IPTC]);
             meta.setXmp(metaData[DImg::XMP]);
@@ -427,10 +435,10 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
             meta.applyChanges();
 
             QByteArray data;
-            data.resize(thumbTmp.size());
-            QDataStream stream( &thumbTmp );
+            data.resize(tmp.size());
+            QDataStream stream( &tmp );
             stream.readRawData(data.data(), data.size());
-            thumbTmp.close();
+            tmp.close();
 
             kDebug(50003) << "Save PGF metadata (" << data.size() << ")"  << endl;
             pgf.SetHeader(header, 0, (UINT8*)data.constData(), data.size());
