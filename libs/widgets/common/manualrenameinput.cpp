@@ -149,7 +149,7 @@ QString ManualRenameInput::parser(const QString& parse,
 
     // parse sequence number token ----------------------------
     {
-        QRegExp regExp("(#+)(\\{(\\d+)\\s*,\\s*(\\d+)\\})?");
+        QRegExp regExp("(#+)(\\{\\s*(\\d+)\\s*,\\s*(\\d+)\\s*\\})?");
         int pos     = 0;
         int slength = 0;
         int start   = 0;
