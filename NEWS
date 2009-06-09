@@ -8,7 +8,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 001 ==> 178189 : do not create preview automatically for large pictures.
 002 ==> 172807 : Warning: JPEG format error, rc = 5.
 003 ==> 188936 : Not finding all pictures on camera.
-004 ==> 
+004 ==> 195812 : crash when rotating image in album overlay (rightest rotate icon).
+005 ==> 
 
 
 *********************************************************************************************************
