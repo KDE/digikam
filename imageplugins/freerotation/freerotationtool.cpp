@@ -585,15 +585,23 @@ QPixmap FreeRotationTool::generateBtnPixmap(const QString& label, const QColor& 
 
 double FreeRotationTool::calculateAutoAngle()
 {
+    // check if all points are valid
+    if (!pointIsValid(d->autoAdjustPoint1) && !pointIsValid(d->autoAdjustPoint2))
+        return 0.0;
+
     return calculateAngle(d->autoAdjustPoint1, d->autoAdjustPoint2);
+}
+
+double FreeRotationTool::calculateAngle(int x1, int y1, int x2, int y2)
+{
+    QPoint p1(x1, y1);
+    QPoint p2(x2, y2);
+
+    return calculateAngle(p1, p2);
 }
 
 double FreeRotationTool::calculateAngle(const QPoint& p1, const QPoint& p2)
 {
-    // check if all points are valid
-    if (!pointIsValid(p1) && !pointIsValid(p2))
-        return 0.0;
-
     // check if points are equal
     if (p1 == p2)
         return 0.0;
@@ -603,7 +611,7 @@ double FreeRotationTool::calculateAngle(const QPoint& p1, const QPoint& p2)
         return 0.0;
 
     // if x() is equal, angle equals 90°
-    if (p1.y() == p2.y())
+    if (p1.x() == p2.x())
         return 90.0;
 
     // do we rotate to the left (counter clock wise)?
