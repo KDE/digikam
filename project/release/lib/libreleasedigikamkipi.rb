@@ -48,7 +48,7 @@ def release
     file.close()
 
     # remove unnecessary stuff from tarball
-    toberemoved = ["project"]
+    toberemoved = ["project", "tests"]
     for object in toberemoved
         FileUtils.rm_rf(object)
     end
