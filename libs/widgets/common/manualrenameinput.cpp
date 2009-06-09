@@ -191,6 +191,7 @@ QString ManualRenameInput::parser(const QString& parse,
     // parse camera token
     {
         QRegExp regExp("\\[cam([$%&\\*]*)\\]");
+        regExp.setCaseSensitivity(Qt::CaseInsensitive);
 
         int pos = 0;
         while (pos > -1)
