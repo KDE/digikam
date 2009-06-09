@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-06-09
- * Description : a test for the freerotationtool
+ * Description : a test for the freerotation tool
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#include "freerotationtooltest.h"
-#include "freerotationtooltest.moc"
+#include "freerotationtest.h"
+#include "freerotationtest.moc"
 
 // KDE includes
 
@@ -35,9 +35,9 @@
 using namespace DigikamFreeRotationImagesPlugin;
 using namespace Digikam;
 
-QTEST_KDEMAIN(FreeRotationToolTest, GUI)
+QTEST_KDEMAIN(FreeRotationTest, GUI)
 
-void FreeRotationToolTest::testCalculateAngle_data()
+void FreeRotationTest::testCalculateAngle_data()
 {
     QTest::addColumn<QPoint>("p1");
     QTest::addColumn<QPoint>("p2");
@@ -51,7 +51,7 @@ void FreeRotationToolTest::testCalculateAngle_data()
     QTest::newRow("45 degrees") << QPoint(10,20) << QPoint(20,10)  << 45.0;
 }
 
-void FreeRotationToolTest::testCalculateAngle()
+void FreeRotationTest::testCalculateAngle()
 {
     QFETCH(QPoint, p1);
     QFETCH(QPoint, p2);

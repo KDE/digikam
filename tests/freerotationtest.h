@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-06-09
- * Description : a test for the freerotationtool
+ * Description : a test for the freerotation tool
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,14 +21,14 @@
  *
  * ============================================================ */
 
-#ifndef FREEROTATIONTOOLTEST_H_
-#define FREEROTATIONTOOLTEST_H_
+#ifndef FREEROTATIONTEST_H_
+#define FREEROTATIONTEST_H_
 
 // Qt includes
 
 #include <QtCore/QObject>
 
-class FreeRotationToolTest : public QObject
+class FreeRotationTest : public QObject
 {
     Q_OBJECT
 
@@ -38,4 +38,4 @@ private Q_SLOTS:
     void testCalculateAngle_data();
 };
 
-#endif /* FREEROTATIONTOOLTEST_H_ */
+#endif /* FREEROTATIONTEST_H_ */

@@ -20,15 +20,15 @@ TARGET_LINK_LIBRARIES(manualrenameinputtest
                       digikamcore
                       )
 
-SET(freerotationtooltest_SRCS
+SET(freerotationtest_SRCS
     ../imageplugins/freerotation/freerotationtool.cpp
     ../imageplugins/freerotation/freerotation.cpp
     ../imageplugins/freerotation/imageplugin_freerotation.cpp
     ../utilities/imageeditor/editor/editortool.cpp
-    freerotationtooltest.cpp
+    freerotationtest.cpp
 )
-kde4_add_unit_test(freerotationtooltest ${freerotationtooltest_SRCS})
-TARGET_LINK_LIBRARIES(freerotationtooltest
+kde4_add_unit_test(freerotationtest ${freerotationtest_SRCS})
+TARGET_LINK_LIBRARIES(freerotationtest
                       ${KDE4_KDECORE_LIBS}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
