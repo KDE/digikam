@@ -624,6 +624,15 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
             d->image.setAttribute("quality", iofileSettings->JPEG2000Compression);
     }
 
+    // PGF file format.
+    if ( mimeType.toUpper() == QString("PGF"))
+    {
+        if (iofileSettings->PGFLossLess)
+            d->image.setAttribute("quality", 0);    // LossLess compression
+        else
+            d->image.setAttribute("quality", iofileSettings->PGFCompression);
+    }
+
     d->savingFilename = fileName;
 
     d->image.updateMetadata(mimeType, getImageFileName(), setExifOrientationTag);

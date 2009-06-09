@@ -882,6 +882,12 @@ void EditorWindow::applyStandardSettings()
     // JPEG2000 LossLess setting.
     m_IOFileSettings->JPEG2000LossLess    = group.readEntry("JPEG2000LossLess", true);
 
+    // PGF quality slider settings : 1 - 9
+    m_IOFileSettings->PGFCompression      = group.readEntry("PGFCompression", 3);
+
+    // PGF LossLess setting.
+    m_IOFileSettings->JPEG2000LossLess    = group.readEntry("PGFLossLess", true);
+
     // -- RAW images decoding settings ------------------------------------------------------
 
     // If digiKam Color Management is enable, no need to correct color of decoded RAW image,
