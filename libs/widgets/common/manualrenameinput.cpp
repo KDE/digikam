@@ -197,7 +197,7 @@ QString ManualRenameInput::parser(const QString& parse,
             pos  = regExp.indexIn(parsedString, pos);
             if (pos > -1)
             {
-                QString tmp = fileName.toLower();
+                QString tmp = fi.baseName().toLower();
                 if( tmp[0].isLetter() )
                     tmp[0] = tmp[0].toUpper();
 

@@ -36,6 +36,8 @@ private Q_SLOTS:
 
     void testNumberToken();
     void testNumberToken_data();
+    void testEachLetterUppercaseToken();
+    void testEachLetterUppercaseToken_data();
 };
 
 #endif /* MANUALRENAMEINPUTTEST_H_ */

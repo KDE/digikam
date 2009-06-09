@@ -95,3 +95,45 @@ void ManualRenameInputTest::testNumberToken()
     QString parsed = ManualRenameInput::parser(parseString, filename, cameraName, cameraDate, index);
     QCOMPARE(parsed, result);
 }
+
+void ManualRenameInputTest::testEachLetterUppercaseToken_data()
+{
+    QTest::addColumn<QString>("parseString");
+    QTest::addColumn<QString>("filename");
+    QTest::addColumn<QString>("cameraName");
+    QTest::addColumn<QDateTime>("cameraDate");
+    QTest::addColumn<int>("index");
+    QTest::addColumn<QString>("result");
+
+    QString cameraName("Nikon D50");
+    QDateTime curdate = QDateTime::currentDateTime();
+
+    QTest::newRow("myfilename001.jpg") << QString("*") << QString("myfilename001.jpg")
+                                       << cameraName << curdate << 4
+                                       << QString("Myfilename001");
+
+    QTest::newRow("myfilename001.jpg(token: **)") << QString("**") << QString("myfilename001.jpg")
+                                                  << cameraName << curdate << 4
+                                                  << QString("Myfilename001Myfilename001");
+
+    QTest::newRow("my image.jpg") << QString("*") << QString("my image.jpg")
+                                  << cameraName << curdate << 4
+                                  << QString("My Image");
+
+    QTest::newRow("my_image.jpg") << QString("*") << QString("my_image.jpg")
+                                  << cameraName << curdate << 4
+                                  << QString("My_Image");
+}
+
+void ManualRenameInputTest::testEachLetterUppercaseToken()
+{
+    QFETCH(QString,     parseString);
+    QFETCH(QString,     filename);
+    QFETCH(QString,     cameraName);
+    QFETCH(QDateTime,   cameraDate);
+    QFETCH(int,         index);
+    QFETCH(QString,     result);
+
+    QString parsed = ManualRenameInput::parser(parseString, filename, cameraName, cameraDate, index);
+    QCOMPARE(parsed, result);
+}
