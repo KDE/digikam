@@ -35,6 +35,7 @@ class ManualRenameInputTest : public QObject
 private Q_SLOTS:
 
     void testNumberToken();
+    void testNumberToken_data();
 };
 
 #endif /* MANUALRENAMEINPUTTEST_H_ */

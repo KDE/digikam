@@ -21,18 +21,73 @@
  *
  * ============================================================ */
 
+#include "manualrenameinputtest.h"
+#include "manualrenameinputtest.moc"
+
 // KDE includes
 
 #include <qtest_kde.h>
 
 // Local includes
 
-#include "manualrenameinputtest.h"
+#include "manualrenameinput.h"
+
+using namespace Digikam;
 
 QTEST_KDEMAIN(ManualRenameInputTest, GUI)
 
+void ManualRenameInputTest::testNumberToken_data()
+{
+    QTest::addColumn<QString>("parseString");
+    QTest::addColumn<QString>("filename");
+    QTest::addColumn<QString>("cameraName");
+    QTest::addColumn<QDateTime>("cameraDate");
+    QTest::addColumn<int>("index");
+    QTest::addColumn<QString>("result");
+
+    QTest::newRow("#") << QString("#") << QString("myfile001.jpg")
+                       << QString("Nikon D50") << QDateTime::currentDateTime() << 1
+                       << QString("1");
+
+    QTest::newRow("##") << QString("##") << QString("myfile001.jpg")
+                        << QString("Nikon D50") << QDateTime::currentDateTime() << 2
+                        << QString("02");
+
+    QTest::newRow("###") << QString("###") << QString("myfile001.jpg")
+                         << QString("Nikon D50") << QDateTime::currentDateTime() << 4
+                         << QString("004");
+
+    QTest::newRow("### (40)") << QString("###") << QString("myfile001.jpg")
+                              << QString("Nikon D50") << QDateTime::currentDateTime() << 40
+                              << QString("040");
+
+    QTest::newRow("###_bla_##") << QString("###_bla_##") << QString("myfile001.jpg")
+                                << QString("Nikon D50") << QDateTime::currentDateTime() << 10
+                                << QString("010_bla_10");
+
+    QTest::newRow("####{2,3}") << QString("####{2,3}") << QString("myfile001.jpg")
+                               << QString("Nikon D50") << QDateTime::currentDateTime() << 1
+                               << QString("0002");
+
+    QTest::newRow("####{2,3}(10)") << QString("####{2,3}") << QString("myfile001.jpg")
+                                   << QString("Nikon D50") << QDateTime::currentDateTime() << 10
+                                   << QString("0029");
+
+    QTest::newRow("####{2,3}_bla_## ###") << QString("####{2,3}_bla_## ###") << QString("myfile001.jpg")
+                                          << QString("Nikon D50") << QDateTime::currentDateTime() << 1
+                                          << QString("0002_bla_01 001");
+
+}
+
 void ManualRenameInputTest::testNumberToken()
 {
-    // dummy check
-    QVERIFY(1);
+    QFETCH(QString,     parseString);
+    QFETCH(QString,     filename);
+    QFETCH(QString,     cameraName);
+    QFETCH(QDateTime,   cameraDate);
+    QFETCH(int,         index);
+    QFETCH(QString,     result);
+
+    QString parsed = ManualRenameInput::parser(parseString, filename, cameraName, cameraDate, index);
+    QCOMPARE(parsed, result);
 }
