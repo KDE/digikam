@@ -1579,19 +1579,20 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
         {
             // Else, check if format from file name extension is include on file mime type list.
 
-            QStringList imgExtList = KImageIO::types(KImageIO::Writing);
+            QStringList types = KImageIO::types(KImageIO::Writing);
+            kDebug(50003) << "KDE Offered types: " << types << endl;
 
-            imgExtList << "PNG";
-            imgExtList << "TIF";
-            imgExtList << "TIFF";
-            imgExtList << "JPG";
-            imgExtList << "JPEG";
-            imgExtList << "JPE";
-            imgExtList << "J2K";
-            imgExtList << "JP2";
-            imgExtList << "PGF";
+            types << "TIF";
+            types << "TIFF";
+            types << "JPG";
+            types << "JPEG";
+            types << "JPE";
+            types << "J2K";
+            types << "JP2";
+            types << "PGF";
+            QString imgExtList = types.join(" ");
 
-            if ( !imgExtList.contains( m_savingContext->format.toUpper() ) )
+            if ( !imgExtList.toUpper().contains( m_savingContext->format.toUpper() ) )
             {
                 KMessageBox::error(this, i18n("Target image file format \"%1\" unsupported.", m_savingContext->format));
                 kWarning(50003) << "target image file format " << m_savingContext->format << " unsupported!" << endl;
