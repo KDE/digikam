@@ -161,6 +161,10 @@ void ManualRenameInputTest::testUppercaseToken_data()
                                        << cameraName << curdate << 1
                                        << QString("MYFILENAME001");
 
+    QTest::newRow("my/filename001.jpg") << QString("&") << QString("my/filename001.jpg")
+                                       << cameraName << curdate << 1
+                                       << QString("FILENAME001");
+
     QTest::newRow("myfilename001.jpg(token: &&)") << QString("&&") << QString("myfilename001.jpg")
                                                   << cameraName << curdate << 1
                                                   << QString("MYFILENAME001MYFILENAME001");
@@ -177,9 +181,9 @@ void ManualRenameInputTest::testUppercaseToken_data()
                                   << cameraName << curdate << 1
                                   << QString("MY_IMAGE");
 
-//    QTest::newRow("all char") << QString("&") << QString("1234567890ß'qwertzuiop+asdfghjkl#<yxcvbnm,.-")
-//                              << cameraName << curdate << 1
-//                              << QString("1234567890?'QWERTZUIOP+ASDFGHJKL#<YXCVBNM,.-");
+    QTest::newRow("all chars") << QString("&") << QString("1234567890'qwertzuiop+asdfghjkl#<yxcvbnm,.-.png")
+                               << cameraName << curdate << 1
+                               << QString("1234567890'QWERTZUIOP+ASDFGHJKL#<YXCVBNM,");
 }
 
 void ManualRenameInputTest::testUppercaseToken()
@@ -207,25 +211,29 @@ void ManualRenameInputTest::testLowercaseToken_data()
     QString cameraName("Nikon D50");
     QDateTime curdate = QDateTime::currentDateTime();
 
-    QTest::newRow("myfilename001.jpg") << QString("%") << QString("myfilename001.jpg")
+    QTest::newRow("myfilename001.jpg") << QString("%") << QString("MyFileName001.jpg")
                                        << cameraName << curdate << 1
                                        << QString("myfilename001");
 
-    QTest::newRow("myfilename001.jpg(token: %%)") << QString("%%") << QString("myfilename001.jpg")
+    QTest::newRow("myfilename001.jpg(token: %%)") << QString("%%") << QString("mYfilenAme001.jpg")
                                                   << cameraName << curdate << 1
                                                   << QString("myfilename001myfilename001");
 
-    QTest::newRow("myfilename001.jpg(token: % %)") << QString("% %") << QString("myfilename001.jpg")
+    QTest::newRow("myfilename001.jpg(token: % %)") << QString("% %") << QString("myFILEname001.jpg")
                                                    << cameraName << curdate << 1
                                                    << QString("myfilename001 myfilename001");
 
-    QTest::newRow("my image.jpg") << QString("%") << QString("my image.jpg")
+    QTest::newRow("my image.jpg") << QString("%") << QString("MY image.jpg")
                                   << cameraName << curdate << 1
                                   << QString("my image");
 
-    QTest::newRow("my_image.jpg") << QString("%") << QString("my_image.jpg")
+    QTest::newRow("my_image.jpg") << QString("%") << QString("mY_Image.jpg")
                                   << cameraName << curdate << 1
                                   << QString("my_image");
+
+    QTest::newRow("all chars") << QString("%") << QString("1234567890'QWERTZUIOP+ASDFGHJKL#<yxcvbnm,.-.png")
+                               << cameraName << curdate << 1
+                               << QString("1234567890'qwertzuiop+asdfghjkl#<yxcvbnm,");
 }
 
 void ManualRenameInputTest::testLowercaseToken()
