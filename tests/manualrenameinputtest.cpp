@@ -70,9 +70,14 @@ void ManualRenameInputTest::testNumberToken_data()
     QTest::newRow("####{2,3}(10)") << QString("####{2,3}") << filename << cameraName << curdate << 10
                                    << QString("0029");
 
+    QTest::newRow("####{ 2, 3}(spaces)") << QString("####{ 2, 3}") << filename << cameraName << curdate << 10
+                                         << QString("0029");
+
     QTest::newRow("####{2,3}_bla_## ###") << QString("####{2,3}_bla_## ###") << filename << cameraName << curdate << 1
                                           << QString("0002_bla_01 001");
 
+    QTest::newRow("####{2, 3}_bla_## ###") << QString("####{2, 3}_bla_## ###") << filename << cameraName << curdate << 1
+                                           << QString("0002_bla_01 001");
 }
 
 void ManualRenameInputTest::testNumberToken()
