@@ -3,12 +3,12 @@ Native DIMG Loaders status (Gilles Caulier - 2009-03-26)
 
 Format  Read  Write  ICC   MetaData  Thumb  8bits    16bits  depency
 
-JPG     Done  Done   Done  Done      TODO    yes      N.A     libjpeg
+JPG     Done  Done   Done  Done      DONE    yes      N.A     libjpeg
 PNG     Done  Done   Done  Done      N.A     yes      yes     libpng
-TIF/EP  Done  Done   Done  Done      TODO    yes      yes     libtiff
+TIF/EP  Done  Done   Done  Done      DONE    yes      yes     libtiff
 RAW     Done  N.A    N.A   Done      Done    yes      yes     libkdcraw
 PPM     Done  TODO   N.A   N.A       N.A     yes      yes     none
-PGF     Done  DONE   TODO  TODO      TODO    yes      yes     libpgf (internally)
+PGF     Done  DONE   TODO  DONE      N.A     yes      yes     libpgf (internally)
 JPEG2K  Done  Done   Done  Done      N.A     yes      yes     libjasper
 
 Others file formats are supported only in 8 bits/color/pixel using QImage/kimgio. 
