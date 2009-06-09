@@ -280,6 +280,9 @@ void ManualRenameInputTest::testCameraToken_data()
     QTest::newRow("[cam&]") << QString("[cam&]") << filename << camname << curdate << 1
                             << camname.toUpper();
 
+    QTest::newRow("[cam*]") << QString("[cam*]") << filename << QString("My super camera") << curdate << 1
+                            << QString("My Super Camera");
+
     QTest::newRow("[ cam ]") << QString("[ cam ]") << filename << camname << curdate << 1
                              << QString("[ cam ]");
 

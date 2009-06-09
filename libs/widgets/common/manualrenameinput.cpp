@@ -187,37 +187,10 @@ QString ManualRenameInput::parser(const QString& parse,
             }
         }
     }
-    // parse * token (first letter of each word upper case) ---
-    {
-        QRegExp regExp("\\*{1}");
-        regExp.setMinimal(true);
-
-        int pos = 0;
-        while (pos > -1)
-        {
-            pos  = regExp.indexIn(parsedString, pos);
-            if (pos > -1)
-            {
-                QString tmp = baseFileName.toLower();
-                if( tmp[0].isLetter() )
-                    tmp[0] = tmp[0].toUpper();
-
-                for( int i = 0; i < tmp.length(); ++i )
-                {
-                    if( tmp[i+1].isLetter() && !tmp[i].isLetter() &&
-                            tmp[i] != '\'' && tmp[i] != '?' && tmp[i] != '`' )
-                    {
-                        tmp[i+1] = tmp[i+1].toUpper();
-                    }
-                }
-                parsedString.replace(pos, regExp.matchedLength(), tmp);
-            }
-        }
-    }
 
     // parse camera token
     {
-        QRegExp regExp("\\[cam([$%&]*)\\]");
+        QRegExp regExp("\\[cam([$%&\\*]*)\\]");
         regExp.setMinimal(true);
 
         int pos = 0;
@@ -237,7 +210,26 @@ QString ManualRenameInput::parser(const QString& parse,
                         tmp = cameraName.toUpper();
                     else if (regExp.cap(1) == QString('%'))
                         tmp = cameraName.toLower();
+                    else if (regExp.cap(1) == QString('*'))
+                        tmp = firstLetterUppercase(cameraName);
                 }
+                parsedString.replace(pos, regExp.matchedLength(), tmp);
+            }
+        }
+    }
+
+    // parse * token (first letter of each word upper case) ---
+    {
+        QRegExp regExp("\\*{1}");
+        regExp.setMinimal(true);
+
+        int pos = 0;
+        while (pos > -1)
+        {
+            pos  = regExp.indexIn(parsedString, pos);
+            if (pos > -1)
+            {
+                QString tmp = firstLetterUppercase(baseFileName.toLower());
                 parsedString.replace(pos, regExp.matchedLength(), tmp);
             }
         }
@@ -259,6 +251,27 @@ bool ManualRenameInput::stringIsValid(const QString& str)
     if (str.isEmpty() || invalidString.exactMatch(str))
         return false;
     return true;
+}
+
+QString ManualRenameInput::firstLetterUppercase(const QString& str)
+{
+    if (str.isEmpty())
+        return str;
+
+    QString tmp = str.toLower();
+
+    if( tmp[0].isLetter() )
+        tmp[0] = tmp[0].toUpper();
+
+    for( int i = 0; i < tmp.length(); ++i )
+    {
+        if( tmp[i+1].isLetter() && !tmp[i].isLetter() &&
+                tmp[i] != '\'' && tmp[i] != '?' && tmp[i] != '`' )
+        {
+            tmp[i+1] = tmp[i+1].toUpper();
+        }
+    }
+    return tmp;
 }
 
 QString ManualRenameInput::parse(const QString& fileName, const QString& cameraName,

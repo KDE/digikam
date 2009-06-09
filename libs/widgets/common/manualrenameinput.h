@@ -82,7 +82,10 @@ private Q_SLOTS:
 private:
 
     QString createToolTip();
+
+    // static parse methods
     static bool stringIsValid(const QString& str);
+    static QString firstLetterUppercase(const QString& str);
 
 private:
 
