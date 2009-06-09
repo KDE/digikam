@@ -92,8 +92,8 @@ enum Orientation { LL=0, HL=1, LH=2, HH=3 };
 struct PGFPreHeader {
 	char magic[3];				// PGF identification = "PGF"
 	UINT8 version;				// PGF version
-	UINT32 hSize;				// total size of PGFHeader, [ColorTable], and [UserData] in bytes
-	// total: 8 Bytes
+	UINT16 hSize;				// total size of PGFHeader, [ColorTable], and [UserData] in bytes
+	// total: 6 Bytes
 };
 
 struct PGFHeader {
@@ -111,8 +111,8 @@ struct PGFHeader {
 struct PGFPostHeader {
 	RGBQUAD clut[ColorTableLen];// color table for indexed color images
 	UINT8 *userData;			// user data of size userDataLen
-	UINT32 userDataLen;			// user data size in bytes
-	// total: at least 260 Bytes
+	UINT16 userDataLen;			// user data size in bytes
+	// total: at least 258 Bytes
 };
 
 union ROIBlockHeader {
