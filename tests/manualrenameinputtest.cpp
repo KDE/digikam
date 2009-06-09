@@ -327,3 +327,19 @@ void ManualRenameInputTest::testCompleteParse()
     QString parsed = ManualRenameInput::parser(parseString, filename, cameraName, cameraDate, index);
     QCOMPARE(parsed, result);
 }
+
+void ManualRenameInputTest::testEmptyParseString()
+{
+    QString filename("myfilename001.jpg");
+    QDateTime curdate = QDateTime::currentDateTime();
+
+    // test for empty parser string
+    QString parsed = ManualRenameInput::parser(QString(), filename, QString(), curdate, 1);
+    QCOMPARE(parsed, QString("myfilename001"));
+
+    parsed = ManualRenameInput::parser(QString(""), filename, QString(), curdate, 1);
+    QCOMPARE(parsed, QString("myfilename001"));
+
+    parsed = ManualRenameInput::parser(QString("   "), filename, QString(), curdate, 1);
+    QCOMPARE(parsed, QString("myfilename001"));
+}
