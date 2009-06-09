@@ -342,4 +342,8 @@ void ManualRenameInputTest::testEmptyParseString()
 
     parsed = ManualRenameInput::parser(QString("   "), filename, QString(), curdate, 1);
     QCOMPARE(parsed, QString("myfilename001"));
+
+    // the following is not invalid
+    parsed = ManualRenameInput::parser(QString("  %_##"), filename, QString(), curdate, 1);
+    QCOMPARE(parsed, QString("  myfilename001_01"));
 }
