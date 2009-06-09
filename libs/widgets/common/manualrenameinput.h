@@ -82,6 +82,7 @@ private Q_SLOTS:
 private:
 
     QString createToolTip();
+    static bool stringIsValid(const QString& str);
 
 private:
 
