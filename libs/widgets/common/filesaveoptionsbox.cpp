@@ -158,7 +158,8 @@ void FileSaveOptionsBox::slotImageFileFormatChanged(const QString& ext)
         setCurrentIndex(DImg::PNG);
     else if (format.contains("TIFF") || format.contains("TIF"))
         setCurrentIndex(DImg::TIFF);
-    else if (format.contains("JP2") || format.contains("J2K"))
+    else if (format.contains("JP2") || format.contains("JPX") || format.contains("JPC") ||
+             format.contains("PGX") || format.contains("J2K"))
         setCurrentIndex(DImg::JP2K);
     else if (format.contains("PGF"))
         setCurrentIndex(DImg::PGF);
