@@ -141,9 +141,9 @@ QString ManualRenameInput::parser(const QString& parse,
                                   const QDateTime &dateTime, int index)
 {
     QFileInfo fi(fileName);
-    QRegExp emptyString("^\\s*$");
+    QRegExp invalidParseString("^\\s*$");
 
-    if (parse.isEmpty() || emptyString.exactMatch(parse))
+    if (parse.isEmpty() || invalidParseString.exactMatch(parse))
         return fi.baseName();
 
     QString parsedString = parse;
