@@ -214,9 +214,37 @@ QString ManualRenameInput::parser(const QString& parse,
             }
         }
     }
+
+    // parse camera token
+    {
+        QRegExp regExp("\\[cam([$%&]*)\\]");
+        regExp.setMinimal(true);
+
+        int pos = 0;
+        while (pos > -1)
+        {
+            pos  = regExp.indexIn(parsedString, pos);
+            if (pos > -1)
+            {
+                QString tmp      = cameraName;
+                QString optToken = regExp.cap(1);
+
+                if (!optToken.isEmpty())
+                {
+                    if (regExp.cap(1) == QString('$'))
+                        tmp = cameraName;
+                    else if (regExp.cap(1) == QString('&'))
+                        tmp = cameraName.toUpper();
+                    else if (regExp.cap(1) == QString('%'))
+                        tmp = cameraName.toLower();
+                }
+                parsedString.replace(pos, regExp.matchedLength(), tmp);
+            }
+        }
+    }
+
     // parse simple / remaining tokens ------------------------
     {
-        parsedString.replace("[cam]", cameraName);
         parsedString.replace('$', fi.baseName());
         parsedString.replace('&', fi.baseName().toUpper());
         parsedString.replace('%', fi.baseName().toLower());

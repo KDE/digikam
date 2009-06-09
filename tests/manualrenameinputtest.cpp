@@ -259,19 +259,26 @@ void ManualRenameInputTest::testCameraToken_data()
     QTest::addColumn<QString>("result");
 
     QString filename("myfile001.jpg");
+    QString camname("Nikon D50");
     QDateTime curdate = QDateTime::currentDateTime();
 
-    QTest::newRow("[cam]") << QString("[cam]") << filename << QString("Nikon D50") << curdate << 1
-                           << QString("Nikon D50");
+    QTest::newRow("[cam]") << QString("[cam]") << filename << camname << curdate << 1
+                           << camname;
 
-    QTest::newRow("[ cam ]") << QString("[ cam ]") << filename << QString("Nikon D50") << curdate << 1
+    QTest::newRow("[cam$]") << QString("[cam$]") << filename << camname << curdate << 1
+                            << camname;
+
+    QTest::newRow("[cam%]") << QString("[cam%]") << filename << camname << curdate << 1
+                            << camname.toLower();
+
+    QTest::newRow("[cam&]") << QString("[cam&]") << filename << camname << curdate << 1
+                            << camname.toUpper();
+
+    QTest::newRow("[ cam ]") << QString("[ cam ]") << filename << camname << curdate << 1
                              << QString("[ cam ]");
 
-    QTest::newRow("[camcam]") << QString("[camcam]") << filename << QString("Nikon D50") << curdate << 1
+    QTest::newRow("[camcam]") << QString("[camcam]") << filename << camname << curdate << 1
                               << QString("[camcam]");
-
-    QTest::newRow("[cam%]") << QString("[cam%]") << filename << QString("Nikon D50") << curdate << 1
-                            << QString("[cammyfile001]");
 }
 
 void ManualRenameInputTest::testCameraToken()
