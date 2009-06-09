@@ -141,9 +141,10 @@ QString ManualRenameInput::parser(const QString& parse,
                                   const QDateTime &dateTime, int index)
 {
     QFileInfo fi(fileName);
+    QString baseFileName = fi.baseName();
 
     if (!stringIsValid(parse))
-        return fi.baseName();
+        return baseFileName;
 
     QString parsedString = parse;
 
@@ -197,7 +198,7 @@ QString ManualRenameInput::parser(const QString& parse,
             pos  = regExp.indexIn(parsedString, pos);
             if (pos > -1)
             {
-                QString tmp = fi.baseName().toLower();
+                QString tmp = baseFileName.toLower();
                 if( tmp[0].isLetter() )
                     tmp[0] = tmp[0].toUpper();
 
@@ -244,9 +245,9 @@ QString ManualRenameInput::parser(const QString& parse,
 
     // parse simple / remaining tokens ------------------------
     {
-        parsedString.replace('$', fi.baseName());
-        parsedString.replace('&', fi.baseName().toUpper());
-        parsedString.replace('%', fi.baseName().toLower());
+        parsedString.replace('$', baseFileName);
+        parsedString.replace('&', baseFileName.toUpper());
+        parsedString.replace('%', baseFileName.toLower());
     }
 
     return parsedString;
