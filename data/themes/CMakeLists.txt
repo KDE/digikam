@@ -1,4 +1,4 @@
-install( FILES Dreary 
+INSTALL( FILES Dreary 
                Marine 
 	       Clean 
 	       OrangeCrush 

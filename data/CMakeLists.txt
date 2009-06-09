@@ -1,5 +1,5 @@
 
-add_subdirectory( themes )
-add_subdirectory( icons )
-add_subdirectory( pics )
-add_subdirectory( about )
+ADD_SUBDIRECTORY( themes )
+ADD_SUBDIRECTORY( icons )
+ADD_SUBDIRECTORY( pics )
+ADD_SUBDIRECTORY( about )
