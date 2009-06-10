@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-
 #include "superimposetool.h"
 #include "superimposetool.moc"
 
@@ -39,6 +38,7 @@
 #include <QPixmap>
 #include <QPushButton>
 #include <QToolButton>
+#include <QProgressBar>
 
 // KDE includes
 
@@ -55,7 +55,6 @@
 #include <klocale.h>
 #include <kmenu.h>
 #include <kstandarddirs.h>
-#include <qprogressbar.h>
 
 // Local includes
 
