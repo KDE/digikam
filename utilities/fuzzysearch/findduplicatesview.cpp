@@ -132,10 +132,13 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
     d->progressBar->progressBarMode(StatusProgressBar::TextMode);
     d->progressBar->setEnabled(false);
 
+    // ---------------------------------------------------------------
+
     QLabel *excludeLabel = new QLabel(i18n("Exclude from search:"));
     d->albumSelectCB     = new AlbumSelectComboBox;
-    d->albumSelectCB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    d->albumSelectCB->setNoSelectionText(i18nc("No albums selected", "None"));
     d->albumSelectCB->setDefaultAlbumModels();
+    d->albumSelectCB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->model = d->albumSelectCB->model();
 
     grid->addWidget(d->listView,           0, 0, 1,-1);
