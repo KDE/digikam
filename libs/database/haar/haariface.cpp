@@ -182,11 +182,12 @@ public:
         if (!cache || imageIds.isEmpty())
             return;
 
-        // Remove all ids from the fully created sigMap, that are not listed in the imageIds list.
+        // Remove all ids from the fully created signatureCache that are not needed for the duplicates search.
         // This is usually faster then starting a query for every single id in imageIds.
         //
-        // It might look like a waste of resources, but I tested this and getting all signatures and removing the
-        // not wanted ones is really more efficient then X queries (where X = imageIds.count())
+        // It might look like a waste of resources, but I tested this quite intense.
+        // Getting all signatures and removing the not wanted ones is really more efficient
+        // then doing X queries (where X = imageIds.count())
 
         for (QMap<qlonglong, Haar::SignatureData>::iterator it = signatureCache->begin();
              it != signatureCache->end(); )
