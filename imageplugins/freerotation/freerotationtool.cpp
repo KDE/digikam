@@ -242,7 +242,7 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     QLabel *autoDescr             = new QLabel;
     autoDescr->setText(i18n("<p>Correct the rotation of your images automatically by assigning two points in the "
                             "preview widget and clicking <i>Adjust</i>.<br/>"
-                            "Note that you can adjust either horizontal or vertical lines.</p>"));
+                            "You can either adjust horizontal or vertical lines.</p>"));
     autoDescr->setAlignment(Qt::AlignJustify);
     autoDescr->setWordWrap(true);
     containerLayout2->addWidget(autoDescr,              0, 0, 1,-1);
