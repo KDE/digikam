@@ -412,7 +412,7 @@ bool ThemeEngine::loadTheme()
 
     QFile themeFile(t->filePath);
 
-    if (!themeFile.open(IO_ReadOnly))
+    if (!themeFile.open(QIODevice::ReadOnly))
         return false;
 
     QDomDocument xmlDoc;
@@ -713,7 +713,7 @@ bool ThemeEngine::saveTheme()
 
     QFile themeFile(fi.filePath());
 
-    if (!themeFile.open(IO_WriteOnly))
+    if (!themeFile.open(QIODevice::WriteOnly))
         return false;
 
     KUser        user;
