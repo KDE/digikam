@@ -133,8 +133,8 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
     d->progressBar->setEnabled(false);
 
     QLabel *excludeLabel = new QLabel(i18n("Exclude from search:"));
-    d->albumSelectCB = new AlbumSelectComboBox;
-    d->albumSelectCB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    d->albumSelectCB     = new AlbumSelectComboBox;
+    d->albumSelectCB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->albumSelectCB->setDefaultAlbumModels();
     d->model = d->albumSelectCB->model();
 
@@ -180,8 +180,8 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
     connect(d->progressBar, SIGNAL(signalCancelButtonPressed()),
             this, SLOT(slotCancelButtonPressed()));
 
-    connect(d->model, SIGNAL(checkStateChanged(Album*, int)),
-            this, SLOT(slotExcludeSelectionChanged(Album*, int)));
+    connect(d->model, SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+            this, SLOT(slotExcludeSelectionChanged(Album*, Qt::CheckState)));
 }
 
 FindDuplicatesView::~FindDuplicatesView()
@@ -217,6 +217,7 @@ void FindDuplicatesView::populateTreeView()
 
     d->listView->sortByColumn(1, Qt::DescendingOrder);
     d->listView->resizeColumnToContents(0);
+    d->albumSelectCB->view()->expandToDepth(1);
 }
 
 void FindDuplicatesView::slotAlbumAdded(Album* a)
@@ -373,8 +374,21 @@ void FindDuplicatesView::slotFindDuplicates()
 
     AlbumList albums = AlbumManager::instance()->allPAlbums();
     QStringList idsStringList;
+    QStringList excludedIdsStringList;
+
+    foreach(const Album* album, d->excludedAlbumsList)
+    {
+        excludedIdsStringList << QString::number(album->id());
+    }
+
     foreach(Album *a, albums)
-        idsStringList << QString::number(a->id());
+    {
+        QString number = QString::number(a->id());
+        if (!excludedIdsStringList.contains(number))
+            idsStringList << number;
+    }
+
+    // --------------------------------------------------------
 
     KIO::Job *job = ImageLister::startListJob(DatabaseUrl::searchUrl(-1));
 
@@ -443,10 +457,19 @@ void FindDuplicatesView::slotDuplicatesAlbumActived(QTreeWidgetItem* item, int)
         AlbumManager::instance()->setCurrentAlbum(sitem->album());
 }
 
-void FindDuplicatesView::slotExcludeSelectionChanged(Album* album, int checkState)
+void FindDuplicatesView::slotExcludeSelectionChanged(Album* album, Qt::CheckState checkState)
 {
-    Q_UNUSED(album);
-    Q_UNUSED(checkState);
+    QModelIndex index = d->model->indexForAlbum(album);
+    if (index.isValid() && d->model->hasChildren(index))
+    {
+        AlbumIterator it(album);
+        while (it.current())
+        {
+            d->model->setCheckState(it.current(), checkState);
+            ++it;
+        }
+    }
+
     d->excludedAlbumsList = d->model->checkedAlbums();
 }
 
