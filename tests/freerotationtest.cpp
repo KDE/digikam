@@ -56,6 +56,10 @@ void FreeRotationTest::testCalculateAngle_data()
     QTest::newRow("45 degrees")     << QPoint(10,20) << QPoint(20,10)   << 45.0;
     QTest::newRow("28.82 degrees")  << QPoint(0,241) << QPoint(438,0)   << 28.82;
     QTest::newRow("-28.82 degrees") << QPoint(0,0)   << QPoint(438,241) << -28.82;
+
+    // point layout shouldn't matter
+    QTest::newRow("layout1") << QPoint(10,20) << QPoint(20,10)   << 45.0;
+    QTest::newRow("layout2") << QPoint(20,10) << QPoint(10,20)   << 45.0;
 }
 
 void FreeRotationTest::testCalculateAngle()
