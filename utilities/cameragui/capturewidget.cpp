@@ -26,10 +26,10 @@
 
 // Qt includes
 
-#include <qpainter.h>
-#include <qimage.h>
-#include <qpixmap.h>
-#include <qrect.h>
+#include <QPainter>
+#include <QImage>
+#include <QPixmap>
+#include <QRect>
 
 // KDE includes
 
