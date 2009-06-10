@@ -237,7 +237,7 @@ void FindDuplicatesView::populateTreeView()
 void FindDuplicatesView::slotUpdateAlbumSelectBox()
 {
     d->albumSelectCB->view()->expandToDepth(1);
-    d->albumSelectCB->setNoSelectionText(i18n("No album selected"));
+    d->albumSelectCB->setNoSelectionText(i18n("No albums selected"));
 }
 
 void FindDuplicatesView::slotAlbumAdded(Album* a)
