@@ -171,7 +171,7 @@ Canvas::Canvas(QWidget *parent)
     setCornerWidget(d->cornerButton);
 
     QPalette palette;
-    palette.setColor(viewport()->backgroundRole(), Qt::NoBackground);
+    palette.setColor(viewport()->backgroundRole(), Qt::WA_NoBackground);
     viewport()->setPalette(palette);
     viewport()->setMouseTracking(false);
     setFrameStyle( QFrame::NoFrame );
