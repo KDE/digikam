@@ -1,6 +1,5 @@
 INCLUDE_DIRECTORIES( dimg
                      dimg/filters
-                     dimg/filters/clapack
                      dimg/loaders
                      whitebalance
                      dmetadata 
@@ -17,6 +16,8 @@ INCLUDE_DIRECTORIES( dimg
                      widgets/iccprofiles 
                      imageproperties
                      dialogs
+                     3rdparty/cimg
+                     3rdparty/clapack
                      ${JPEG_INCLUDE_DIR}
                      ${TIFF_INCLUDE_DIR}
                      ${PNG_INCLUDE_DIR}
@@ -31,4 +32,3 @@ ADD_SUBDIRECTORY( greycstoration )
 ADD_SUBDIRECTORY( dialogs )
 ADD_SUBDIRECTORY( widgets )
 ADD_SUBDIRECTORY( database )
-ADD_SUBDIRECTORY( threadimageio )
