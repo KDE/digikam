@@ -73,12 +73,15 @@ public:
         updateFingerPrtBtn      = 0;
         progressBar             = 0;
         thumbLoadThread         = 0;
-        albumSelectCB           = 0;
+        excludeAlbumsLabel      = 0;
+        excludeAlbumsCB         = 0;
         model                   = 0;
         cancelFindDuplicates    = false;
     }
 
     bool                cancelFindDuplicates;
+
+    QLabel              *excludeAlbumsLabel;
 
     QPushButton         *scanDuplicatesBtn;
     QPushButton         *updateFingerPrtBtn;
@@ -89,7 +92,7 @@ public:
 
     ThumbnailLoadThread *thumbLoadThread;
 
-    AlbumSelectComboBox *albumSelectCB;
+    AlbumSelectComboBox *excludeAlbumsCB;
 
     AbstractCheckableAlbumModel
                         *model;
@@ -134,25 +137,25 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    d->albumSelectCB     = new AlbumSelectComboBox;
-    d->albumSelectCB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    d->albumSelectCB->setDefaultAlbumModels();
-    d->albumSelectCB->setNoSelectionText(i18nc("No albums selected", "None"));
+    d->excludeAlbumsCB = new AlbumSelectComboBox;
+    d->excludeAlbumsCB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    d->excludeAlbumsCB->setDefaultAlbumModels();
+    d->excludeAlbumsCB->setNoSelectionText(i18nc("No albums selected", "None"));
 
     QString excludeAlbumsStr = i18n("Exclude albums or collections, to speed up the accurate search method.");
-    d->albumSelectCB->setWhatsThis(excludeAlbumsStr);
-    d->albumSelectCB->setToolTip(excludeAlbumsStr);
+    d->excludeAlbumsCB->setWhatsThis(excludeAlbumsStr);
+    d->excludeAlbumsCB->setToolTip(excludeAlbumsStr);
 
-    QLabel *excludeLabel = new QLabel(i18n("Exclude from search:"));
-    excludeLabel->setBuddy(d->albumSelectCB);
+    d->excludeAlbumsLabel = new QLabel(i18n("Exclude from search:"));
+    d->excludeAlbumsLabel->setBuddy(d->excludeAlbumsCB);
 
-    d->model = d->albumSelectCB->model();
+    d->model = d->excludeAlbumsCB->model();
 
     // ---------------------------------------------------------------
 
     grid->addWidget(d->listView,           0, 0, 1,-1);
-    grid->addWidget(excludeLabel,          1, 0, 1, 1);
-    grid->addWidget(d->albumSelectCB,      1, 1, 1, 1);
+    grid->addWidget(d->excludeAlbumsLabel, 1, 0, 1, 1);
+    grid->addWidget(d->excludeAlbumsCB,    1, 1, 1, 1);
     grid->addWidget(d->updateFingerPrtBtn, 2, 0, 1,-1);
     grid->addWidget(d->scanDuplicatesBtn,  3, 0, 1,-1);
     grid->addWidget(d->progressBar,        4, 0, 1,-1);
@@ -229,7 +232,7 @@ void FindDuplicatesView::populateTreeView()
 
     d->listView->sortByColumn(1, Qt::DescendingOrder);
     d->listView->resizeColumnToContents(0);
-    d->albumSelectCB->view()->expandToDepth(1);
+    d->excludeAlbumsCB->view()->expandToDepth(1);
 }
 
 void FindDuplicatesView::slotAlbumAdded(Album* a)
@@ -306,7 +309,8 @@ void FindDuplicatesView::enableControlWidgets(bool val)
 {
     d->scanDuplicatesBtn->setEnabled(val);
     d->updateFingerPrtBtn->setEnabled(val);
-    d->albumSelectCB->setEnabled(val);
+    d->excludeAlbumsLabel->setEnabled(val);
+    d->excludeAlbumsCB->setEnabled(val);
 
     d->progressBar->progressBarMode(val ? StatusProgressBar::TextMode
                                         : StatusProgressBar::CancelProgressBarMode);
