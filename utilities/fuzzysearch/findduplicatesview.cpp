@@ -73,15 +73,15 @@ public:
         updateFingerPrtBtn      = 0;
         progressBar             = 0;
         thumbLoadThread         = 0;
-        excludeAlbumsLabel      = 0;
-        excludeAlbumsCB         = 0;
+        includeAlbumsLabel      = 0;
+        albumSelectCB           = 0;
         model                   = 0;
         cancelFindDuplicates    = false;
     }
 
     bool                cancelFindDuplicates;
 
-    QLabel              *excludeAlbumsLabel;
+    QLabel              *includeAlbumsLabel;
 
     QPushButton         *scanDuplicatesBtn;
     QPushButton         *updateFingerPrtBtn;
@@ -92,7 +92,7 @@ public:
 
     ThumbnailLoadThread *thumbLoadThread;
 
-    AlbumSelectComboBox *excludeAlbumsCB;
+    AlbumSelectComboBox *albumSelectCB;
 
     AbstractCheckableAlbumModel
                         *model;
@@ -135,24 +135,24 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    d->excludeAlbumsCB = new AlbumSelectComboBox;
-    d->excludeAlbumsCB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    d->excludeAlbumsCB->setDefaultAlbumModels();
+    d->albumSelectCB = new AlbumSelectComboBox;
+    d->albumSelectCB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    d->albumSelectCB->setDefaultAlbumModels();
 
     QString excludeAlbumsStr = i18n("Exclude albums or collections, to speed up the accurate search method.");
-    d->excludeAlbumsCB->setWhatsThis(excludeAlbumsStr);
-    d->excludeAlbumsCB->setToolTip(excludeAlbumsStr);
+    d->albumSelectCB->setWhatsThis(excludeAlbumsStr);
+    d->albumSelectCB->setToolTip(excludeAlbumsStr);
 
-    d->excludeAlbumsLabel = new QLabel(i18n("Exclude from search:"));
-    d->excludeAlbumsLabel->setBuddy(d->excludeAlbumsCB);
+    d->includeAlbumsLabel = new QLabel(i18n("Search in:"));
+    d->includeAlbumsLabel->setBuddy(d->albumSelectCB);
 
-    d->model = d->excludeAlbumsCB->model();
+    d->model = d->albumSelectCB->model();
 
     // ---------------------------------------------------------------
 
     grid->addWidget(d->listView,           0, 0, 1,-1);
-    grid->addWidget(d->excludeAlbumsLabel, 1, 0, 1, 1);
-    grid->addWidget(d->excludeAlbumsCB,    1, 1, 1, 1);
+    grid->addWidget(d->includeAlbumsLabel, 1, 0, 1, 1);
+    grid->addWidget(d->albumSelectCB,      1, 1, 1, 1);
     grid->addWidget(d->updateFingerPrtBtn, 2, 0, 1,-1);
     grid->addWidget(d->scanDuplicatesBtn,  3, 0, 1,-1);
     grid->addWidget(d->progressBar,        4, 0, 1,-1);
@@ -236,8 +236,8 @@ void FindDuplicatesView::populateTreeView()
 
 void FindDuplicatesView::slotUpdateAlbumSelectBox()
 {
-    d->excludeAlbumsCB->view()->expandToDepth(1);
-    d->excludeAlbumsCB->setNoSelectionText(i18nc("No albums selected", "None"));
+    d->albumSelectCB->view()->expandToDepth(1);
+    d->albumSelectCB->setNoSelectionText(i18n("No album selected"));
 }
 
 void FindDuplicatesView::slotAlbumAdded(Album* a)
@@ -314,8 +314,8 @@ void FindDuplicatesView::enableControlWidgets(bool val)
 {
     d->scanDuplicatesBtn->setEnabled(val);
     d->updateFingerPrtBtn->setEnabled(val);
-    d->excludeAlbumsLabel->setEnabled(val);
-    d->excludeAlbumsCB->setEnabled(val);
+    d->includeAlbumsLabel->setEnabled(val);
+    d->albumSelectCB->setEnabled(val);
 
     d->progressBar->progressBarMode(val ? StatusProgressBar::TextMode
                                         : StatusProgressBar::CancelProgressBarMode);
@@ -386,20 +386,10 @@ void FindDuplicatesView::slotFindDuplicates()
     slotClear();
     enableControlWidgets(false);
 
-    AlbumList albums = AlbumManager::instance()->allPAlbums();
     QStringList idsStringList;
-    QStringList excludedIdsStringList;
-
     foreach(const Album* album, d->model->checkedAlbums())
     {
-        excludedIdsStringList << QString::number(album->id());
-    }
-
-    foreach(Album *a, albums)
-    {
-        QString number = QString::number(a->id());
-        if (!excludedIdsStringList.contains(number))
-            idsStringList << number;
+        idsStringList << QString::number(album->id());
     }
 
     // --------------------------------------------------------
