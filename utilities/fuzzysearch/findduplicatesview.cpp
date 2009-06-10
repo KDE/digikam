@@ -96,8 +96,6 @@ public:
 
     AbstractCheckableAlbumModel
                         *model;
-
-    QList<Album*>        excludedAlbumsList;
 };
 
 FindDuplicatesView::FindDuplicatesView(QWidget *parent)
@@ -385,7 +383,7 @@ void FindDuplicatesView::slotFindDuplicates()
     QStringList idsStringList;
     QStringList excludedIdsStringList;
 
-    foreach(const Album* album, d->excludedAlbumsList)
+    foreach(const Album* album, d->model->checkedAlbums())
     {
         excludedIdsStringList << QString::number(album->id());
     }
@@ -478,8 +476,6 @@ void FindDuplicatesView::slotExcludeSelectionChanged(Album* album, Qt::CheckStat
             ++it;
         }
     }
-
-    d->excludedAlbumsList = d->model->checkedAlbums();
 }
 
 }  // namespace Digikam
