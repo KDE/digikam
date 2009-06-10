@@ -25,8 +25,6 @@
 #include "gpconfigdlg.moc"
 
 // Qt includes
-
-#include <Q3Frame>
 #include <Q3Grid>
 #include <Q3GroupBox>
 #include <Q3ButtonGroup>
