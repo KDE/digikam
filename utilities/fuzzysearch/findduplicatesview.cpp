@@ -117,16 +117,15 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
     d->listView->setHeaderLabels(QStringList() << i18n("Ref. images") << i18n("Items"));
     d->listView->header()->setResizeMode(0, QHeaderView::Stretch);
     d->listView->header()->setResizeMode(1, QHeaderView::ResizeToContents);
-    d->listView->setWhatsThis(i18n("This shows all duplicate items found in whole collection."));
+    d->listView->setWhatsThis(i18n("This shows all found duplicate items."));
 
     d->updateFingerPrtBtn = new QPushButton(i18n("Update fingerprints"), this);
     d->updateFingerPrtBtn->setIcon(KIcon("run-build"));
-    d->updateFingerPrtBtn->setWhatsThis(i18n("Use this button to scan the whole collection and find all "
-                                              "duplicate items."));
+    d->updateFingerPrtBtn->setWhatsThis(i18n("Use this button to update all image fingerprints."));
 
     d->scanDuplicatesBtn = new QPushButton(i18n("Find duplicates"), this);
     d->scanDuplicatesBtn->setIcon(KIcon("system-search"));
-    d->scanDuplicatesBtn->setWhatsThis(i18n("Use this button to scan whole collection to find all "
+    d->scanDuplicatesBtn->setWhatsThis(i18n("Use this button to scan the selected albums for "
                                             "duplicate items."));
 
     d->progressBar = new StatusProgressBar(this);
@@ -139,9 +138,9 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
     d->albumSelectCB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->albumSelectCB->setDefaultAlbumModels();
 
-    QString excludeAlbumsStr = i18n("Exclude albums or collections, to speed up the accurate search method.");
-    d->albumSelectCB->setWhatsThis(excludeAlbumsStr);
-    d->albumSelectCB->setToolTip(excludeAlbumsStr);
+    QString albumSelectStr = i18n("Select all albums that should be included into the search.");
+    d->albumSelectCB->setWhatsThis(albumSelectStr);
+    d->albumSelectCB->setToolTip(albumSelectStr);
 
     d->includeAlbumsLabel = new QLabel(i18n("Search in:"));
     d->includeAlbumsLabel->setBuddy(d->albumSelectCB);
@@ -362,15 +361,13 @@ void FindDuplicatesView::slotFindDuplicates()
     QString msg = QString("<p>%1<p><table>"
                           "<tr><td><b>%2</b></td><td>-</td><td>%3</td></tr>"
                           "<tr><td><b>%4</b></td><td>-</td><td>%5</td></tr>"
-                          "</table></p><p>%6</p>")
+                          "</table></p>")
                           .arg(i18n("Find Duplicates can take some time, especially on huge collections.<br/> "
                                     "Which of the following methods do you prefer?"))
                           .arg(fastMode)
                           .arg(fastModeInfoStr)
                           .arg(accurateMode)
-                          .arg(accurateInfoStr)
-                          .arg(i18n("<i>Note:</i> Excluding albums or collections "
-                                    "from the search will increase speed."));
+                          .arg(accurateInfoStr);
 
     // --------------------------------------------------------
 
