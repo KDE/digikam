@@ -1,11 +1,11 @@
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}../utilities/imageeditor/editor
-                    ${CMAKE_CURRENT_SOURCE_DIR}../utilities/imageeditor/canvas
-                    ${CMAKE_CURRENT_SOURCE_DIR}../libs/widgets/common
-                    ${CMAKE_CURRENT_SOURCE_DIR}../libs/widgets/imageplugins
-                    ${CMAKE_CURRENT_SOURCE_DIR}../libs/dimg
-                    ${CMAKE_CURRENT_SOURCE_DIR}../libs/dimg/filters
-                    ${CMAKE_CURRENT_SOURCE_DIR}../libs/dmetadata
-                    ${CMAKE_CURRENT_SOURCE_DIR}../imageplugins/freerotation
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/editor
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/canvas
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/common
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/imageplugins
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dmetadata
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../imageplugins/freerotation
 )
 SET( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
