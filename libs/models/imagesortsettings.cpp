@@ -111,17 +111,17 @@ Qt::SortOrder ImageSortSettings::defaultSortOrderForSortRole(SortRole role)
     {
         case SortByFileName:
         case SortByFilePath:
-            return Qt::Ascending;
+            return Qt::AscendingOrder;
         case SortByFileSize:
-            return Qt::Descending;
+            return Qt::DescendingOrder;
         case SortByModificationDate:
         case SortByCreationDate:
-            return Qt::Ascending;
+            return Qt::AscendingOrder;
         case SortByRating:
         case SortByImageSize:
-            return Qt::Descending;
+            return Qt::DescendingOrder;
         default:
-            return Qt::Ascending;
+            return Qt::AscendingOrder;
     }
 }
 
