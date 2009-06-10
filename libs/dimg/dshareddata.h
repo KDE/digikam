@@ -26,8 +26,8 @@
 
 // Qt includes
 
-#include <QGlobal>
-#include <QAtomic>
+#include <qglobal.h>
+#include <qatomic.h>
 
 #if QT_VERSION < 0x040400
 typedef QAtomic QAtomicInt;
