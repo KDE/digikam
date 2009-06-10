@@ -134,12 +134,21 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    QLabel *excludeLabel = new QLabel(i18n("Exclude from search:"));
     d->albumSelectCB     = new AlbumSelectComboBox;
     d->albumSelectCB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->albumSelectCB->setDefaultAlbumModels();
     d->albumSelectCB->setNoSelectionText(i18nc("No albums selected", "None"));
+
+    QString excludeAlbumsStr = i18n("Exclude albums or collections, to speed up the accurate search method.");
+    d->albumSelectCB->setWhatsThis(excludeAlbumsStr);
+    d->albumSelectCB->setToolTip(excludeAlbumsStr);
+
+    QLabel *excludeLabel = new QLabel(i18n("Exclude from search:"));
+    excludeLabel->setBuddy(d->albumSelectCB);
+
     d->model = d->albumSelectCB->model();
+
+    // ---------------------------------------------------------------
 
     grid->addWidget(d->listView,           0, 0, 1,-1);
     grid->addWidget(excludeLabel,          1, 0, 1, 1);
@@ -336,10 +345,10 @@ void FindDuplicatesView::slotFindDuplicates()
     // prepare the find duplicates dialog ---------------------
 
     QString fastMode        = i18nc("Fast 'find duplicates' search method",     "Fast");
-    QString fastModeInfoStr = i18n("find images that are absolutely identical (quick)");
+    QString fastModeInfoStr = i18n("Find images that are absolutely identical (quick)");
 
     QString accurateMode    = i18nc("Accurate 'find duplicates' search method", "Accurate");
-    QString accurateInfoStr = i18n("find images that are identical or very similar to each other <br/>"
+    QString accurateInfoStr = i18n("Find images that are identical or very similar to each other <br/>"
                                    "(slow and memory consuming");
     if (validSizeInfo)
     {
@@ -353,13 +362,15 @@ void FindDuplicatesView::slotFindDuplicates()
     QString msg = QString("<p>%1<p><table>"
                           "<tr><td><b>%2</b></td><td>-</td><td>%3</td></tr>"
                           "<tr><td><b>%4</b></td><td>-</td><td>%5</td></tr>"
-                          "</table></p>")
+                          "</table></p><p>%6</p>")
                           .arg(i18n("Find Duplicates can take some time, especially on huge collections.<br/> "
                                     "Which of the following methods do you prefer?"))
                           .arg(fastMode)
                           .arg(fastModeInfoStr)
                           .arg(accurateMode)
-                          .arg(accurateInfoStr);
+                          .arg(accurateInfoStr)
+                          .arg(i18n("<i>Note:</i> Excluding albums or collections "
+                                    "from the search will increase speed."));
 
     // --------------------------------------------------------
 
