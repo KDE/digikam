@@ -92,7 +92,7 @@ void CaptureWidget::updatePixmap()
     {
         p.setPen(QPen(palette().text().color()));
         p.drawText(0, 0, d->pixmap.width(), d->pixmap.height(),
-                   Qt::AlignCenter|Qt::WordBreak,
+                   Qt::AlignCenter|Qt::TextWordWrap,
                    i18n("Cannot display camera preview"));
     }
 
