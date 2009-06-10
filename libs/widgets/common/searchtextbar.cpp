@@ -142,10 +142,10 @@ void SearchTextBar::slotSearchResult(bool match)
     }
 
     QPalette pal = palette();
-    pal.setColor(QPalette::Active, QColorGroup::Base,
+    pal.setColor(QPalette::Active, QPalette::Base,
                  match ? QColor(200, 255, 200) :
                  QColor(255, 200, 200));
-    pal.setColor(QPalette::Active, QColorGroup::Text, Qt::black);
+    pal.setColor(QPalette::Active, QPalette::Text, Qt::black);
     setPalette(pal);
 
     // If search result match the text query, we put the text
