@@ -854,7 +854,7 @@ void ImageDescEditTab::setMetadataWidgetStatus(int status, QWidget *widget)
     {
         // For text widgets: Set text color to color of disabled text
         QPalette palette = widget->palette();
-        palette.setColor(QColorGroup::Text, palette.color(QPalette::Disabled, QColorGroup::Text));
+        palette.setColor(QPalette::Text, palette.color(QPalette::Disabled, QPalette::Text));
         widget->setPalette(palette);
     }
     else
