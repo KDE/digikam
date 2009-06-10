@@ -740,7 +740,6 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesFast(HaarProgressOb
 {
     QMap<qlonglong, QList<qlonglong> > resultsMap;
     QList<QByteArray> matrixList;
-    int _total        = 0;
     int total         = 0;
     int progress      = 0;
     int progressStep  = 20;
@@ -765,14 +764,13 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesFast(HaarProgressOb
     while (mainQuery.next())
     {
         matrixList << mainQuery.value(1).toByteArray();
-        _total += mainQuery.value(0).toInt();
+        total += mainQuery.value(0).toInt();
     }
 
     // --------------------------------------------------------
 
     if (observer)
     {
-        total        = _total;
         progressStep = qMax(progressStep, total / 100);
         observer->totalNumberToScan(total);
     }
