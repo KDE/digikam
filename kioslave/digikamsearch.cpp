@@ -105,8 +105,9 @@ void kio_digikamsearch::special(const QByteArray& data)
     }
     else
     {
-        QString idsString = metaData("albumids");
+        QString idsString       = metaData("albumids");
         QString thresholdString = metaData("threshold");
+        bool fastSearch         = (metaData("duplicates") == "fast");
 
         // get albums to scan
         QStringList idsStringList = idsString.split(',');
@@ -119,7 +120,7 @@ void kio_digikamsearch::special(const QByteArray& data)
                 albumIds << albumId;
         }
 
-        if (albumIds.isEmpty())
+        if (albumIds.isEmpty() && !fastSearch)
         {
             kDebug(50004) << "No album ids passed for duplicates search";
             error(KIO::ERR_INTERNAL, i18n("No album ids passed"));
@@ -156,11 +157,7 @@ void kio_digikamsearch::special(const QByteArray& data)
 
         // rebuild the duplicate albums
         Digikam::HaarIface iface;
-
-        if (metaData("duplicates") == "fast")
-            iface.rebuildDuplicatesAlbums(albumIds, threshold, &observer, true);
-        else // accurate
-            iface.rebuildDuplicatesAlbums(albumIds, threshold, &observer, false);
+        iface.rebuildDuplicatesAlbums(albumIds, threshold, &observer, fastSearch);
     }
 
     finished();
