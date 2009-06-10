@@ -366,12 +366,12 @@ void LightTableWindow::setupActions()
 
     d->backwardAction = KStandardAction::back(this, SLOT(slotBackward()), this);
     actionCollection()->addAction("lighttable_backward", d->backwardAction);
-    d->backwardAction->setShortcut( KShortcut(Qt::Key_Prior, Qt::Key_Backspace) );
+    d->backwardAction->setShortcut( KShortcut(Qt::Key_PageUp, Qt::Key_Backspace) );
 
     d->forwardAction = KStandardAction::forward(this, SLOT(slotForward()), this);
     actionCollection()->addAction("lighttable_forward", d->forwardAction);
     d->forwardAction->setEnabled(false);
-    d->forwardAction->setShortcut( KShortcut(Qt::Key_Next, Qt::Key_Space) );
+    d->forwardAction->setShortcut( KShortcut(Qt::Key_PageDown, Qt::Key_Space) );
 
     d->firstAction = new KAction(KIcon("go-first"), i18n("&First"), this);
     d->firstAction->setShortcut(KStandardShortcut::begin());
@@ -1020,7 +1020,7 @@ void LightTableWindow::slotRemoveItem(const ImageInfo& info)
     ImageInfo new_linfo;
     ImageInfo new_rinfo;
 
-    Q_LLONG infoId = info.id();
+    qint64 infoId = info.id();
 
     // First determine the next images to the current left and right image:
     ImageInfo next_linfo;
