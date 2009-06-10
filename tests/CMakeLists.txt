@@ -23,10 +23,7 @@ TARGET_LINK_LIBRARIES(manualrenameinputtest
 #------------------------------------------------------------------------
 
 SET(freerotationtest_SRCS
-    ../imageplugins/freerotation/freerotationtool.cpp
-    ../imageplugins/freerotation/freerotation.cpp
-    ../imageplugins/freerotation/imageplugin_freerotation.cpp
-    ../utilities/imageeditor/editor/editortool.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../imageplugins/freerotation/freerotation.cpp
     freerotationtest.cpp
 )
 KDE4_ADD_UNIT_TEST(freerotationtest ${freerotationtest_SRCS})
