@@ -28,7 +28,7 @@
 
 // Qt includes
 
-#include <qwidget.h>
+#include <QWidget>
 #include <QRect>
 #include <QColor>
 
