@@ -33,7 +33,7 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QThread>
-
+#include <QSqlRecord>
 // KDE includes
 
 #include <kdebug.h>
@@ -249,7 +249,10 @@ bool DatabaseCoreBackend::execSql(const QString& sql, QStringList* values)
 QList<QVariant> DatabaseCoreBackend::readToList(QSqlQuery& query)
 {
     QList<QVariant> list;
-    int count = query.record().count();
+    
+    QSqlRecord record = query.record();
+    int count = record.count();
+    
     while (query.next())
     {
         for (int i=0; i<count; ++i)
