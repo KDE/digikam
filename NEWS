@@ -11,7 +11,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 002 ==> 172807 : Warning: JPEG format error, rc = 5.
 003 ==> 188936 : Not finding all pictures on camera.
 004 ==> 195812 : crash when rotating image in album overlay (rightest rotate icon).
-005 ==> 
+005 ==> 94562  : Renaming an album recreates all thumbnails. 
 
 
 *********************************************************************************************************
