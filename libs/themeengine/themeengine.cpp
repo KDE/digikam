@@ -37,7 +37,7 @@
 #include <QDomDocument>
 #include <QTextStream>
 #include <QDate>
-
+#include <QTextCodec>
 // KDE includes
 
 #include <kdebug.h>
