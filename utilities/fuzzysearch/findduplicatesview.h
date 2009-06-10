@@ -80,6 +80,7 @@ private Q_SLOTS:
     void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
 
     void slotExcludeSelectionChanged(Album*, Qt::CheckState);
+    void slotUpdateAlbumSelectBox();
 
 private:
 

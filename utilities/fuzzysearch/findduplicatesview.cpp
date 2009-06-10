@@ -138,7 +138,6 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
     d->excludeAlbumsCB = new AlbumSelectComboBox;
     d->excludeAlbumsCB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->excludeAlbumsCB->setDefaultAlbumModels();
-    d->excludeAlbumsCB->setNoSelectionText(i18nc("No albums selected", "None"));
 
     QString excludeAlbumsStr = i18n("Exclude albums or collections, to speed up the accurate search method.");
     d->excludeAlbumsCB->setWhatsThis(excludeAlbumsStr);
@@ -177,6 +176,9 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
 
     connect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()),
             this, SLOT(populateTreeView()));
+
+    connect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()),
+            this, SLOT(slotUpdateAlbumSelectBox()));
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
             this, SLOT(slotAlbumAdded(Album*)));
@@ -230,7 +232,12 @@ void FindDuplicatesView::populateTreeView()
 
     d->listView->sortByColumn(1, Qt::DescendingOrder);
     d->listView->resizeColumnToContents(0);
+}
+
+void FindDuplicatesView::slotUpdateAlbumSelectBox()
+{
     d->excludeAlbumsCB->view()->expandToDepth(1);
+    d->excludeAlbumsCB->setNoSelectionText(i18nc("No albums selected", "None"));
 }
 
 void FindDuplicatesView::slotAlbumAdded(Album* a)
