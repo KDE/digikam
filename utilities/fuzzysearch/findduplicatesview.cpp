@@ -136,9 +136,9 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
 
     QLabel *excludeLabel = new QLabel(i18n("Exclude from search:"));
     d->albumSelectCB     = new AlbumSelectComboBox;
-    d->albumSelectCB->setNoSelectionText(i18nc("No albums selected", "None"));
-    d->albumSelectCB->setDefaultAlbumModels();
     d->albumSelectCB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    d->albumSelectCB->setDefaultAlbumModels();
+    d->albumSelectCB->setNoSelectionText(i18nc("No albums selected", "None"));
     d->model = d->albumSelectCB->model();
 
     grid->addWidget(d->listView,           0, 0, 1,-1);
