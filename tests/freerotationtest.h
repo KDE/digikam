@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FREEROTATIONTEST_H_
-#define FREEROTATIONTEST_H_
+#ifndef FREEROTATIONTEST_H
+#define FREEROTATIONTEST_H
 
 // Qt includes
 

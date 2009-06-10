@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef MANUALRENAMEINPUTTEST_H_
-#define MANUALRENAMEINPUTTEST_H_
+#ifndef MANUALRENAMEINPUTTEST_H
+#define MANUALRENAMEINPUTTEST_H
 
 // Qt includes
 
