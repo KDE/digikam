@@ -304,23 +304,14 @@ void FindDuplicatesView::slotThumbnailLoaded(const LoadingDescription& desc, con
 
 void FindDuplicatesView::enableControlWidgets(bool val)
 {
+    d->scanDuplicatesBtn->setEnabled(val);
+    d->updateFingerPrtBtn->setEnabled(val);
+    d->albumSelectCB->setEnabled(val);
 
-    if (val)
-    {
-        d->scanDuplicatesBtn->setEnabled(true);
-        d->updateFingerPrtBtn->setEnabled(true);
-        d->progressBar->progressBarMode(StatusProgressBar::TextMode);
-        d->progressBar->setProgressValue(0);
-        d->progressBar->setEnabled(false);
-    }
-    else
-    {
-        d->scanDuplicatesBtn->setEnabled(false);
-        d->updateFingerPrtBtn->setEnabled(false);
-        d->progressBar->progressBarMode(StatusProgressBar::CancelProgressBarMode);
-        d->progressBar->setProgressValue(0);
-        d->progressBar->setEnabled(true);
-    }
+    d->progressBar->progressBarMode(val ? StatusProgressBar::TextMode
+                                        : StatusProgressBar::CancelProgressBarMode);
+    d->progressBar->setProgressValue(0);
+    d->progressBar->setEnabled(!val);
 }
 
 void FindDuplicatesView::slotFindDuplicates()
