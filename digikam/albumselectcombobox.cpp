@@ -73,7 +73,7 @@ void AlbumSelectComboBox::setModels(AbstractCheckableAlbumModel *model, QSortFil
     m_filterModel = filterModel;
 
     m_model->setCheckable(true);
-    connect(m_model, SIGNAL(checkStateChanged(Album*, int)),
+    connect(m_model, SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
             this, SLOT(updateText()));
 
     m_filterModel->setDynamicSortFilter(true);

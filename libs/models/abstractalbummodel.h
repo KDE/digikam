@@ -104,7 +104,7 @@ public:
 
     /** Returns the album object associated with the given model index */
     Album *albumForIndex(const QModelIndex& index) const;
-    /** Return the QModelIndex for the given album, or an invalid index if 
+    /** Return the QModelIndex for the given album, or an invalid index if
         the album is not contained in this model. */
     QModelIndex indexForAlbum(Album *album) const;
 
@@ -300,7 +300,7 @@ Q_SIGNALS:
 
     /** Emitted when the check state of an album changes.
      *  checkState contains the new Qt::CheckState of album */
-    void checkStateChanged(Album *album, int checkState);
+    void checkStateChanged(Album *album, Qt::CheckState checkState);
 
 protected:
 

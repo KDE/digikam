@@ -909,7 +909,7 @@ void SearchFieldRangeDate::valueChanged()
 // -------------------------------------------------------------------------
 
 SearchFieldRangeInt::SearchFieldRangeInt(QObject *parent)
-                   : SearchField(parent), 
+                   : SearchField(parent),
                      m_min(0), m_max(100), m_reciprocal(false),
                      m_firstBox(0), m_secondBox(0)
 {
@@ -1220,7 +1220,7 @@ QList<QRect> SearchFieldRangeInt::valueWidgetRects() const
 // -------------------------------------------------------------------------
 
 SearchFieldRangeDouble::SearchFieldRangeDouble(QObject *parent)
-                      : SearchField(parent), 
+                      : SearchField(parent),
                         m_min(0), m_max(100), m_factor(1),
                         m_firstBox(0), m_secondBox(0)
 {
@@ -1816,8 +1816,8 @@ void SearchFieldAlbum::setupValueWidgets(QGridLayout *layout, int row, int colum
 
     m_model = m_comboBox->model();
 
-    connect(m_model, SIGNAL(checkStateChanged(Album*, int)),
-            this, SLOT(checkStateChanged(Album*, int)));
+    connect(m_model, SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+            this, SLOT(checkStateChanged(Album*, Qt::CheckState)));
 
     updateState();
 
