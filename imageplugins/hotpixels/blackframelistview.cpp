@@ -109,7 +109,7 @@ void BlackFrameListViewItem::slotParsed(QList<HotPixel> hotPixels)
 QPixmap BlackFrameListViewItem::thumb(const QSize& size)
 {
     //First scale it down to the size
-    QPixmap thumb = QPixmap::fromImage(m_image.scaled(size, Qt::ScaleMin, Qt::SmoothTransformation));
+    QPixmap thumb = QPixmap::fromImage(m_image.scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     //And draw the hot pixel positions on the thumb
     QPainter p(&thumb);

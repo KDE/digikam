@@ -481,7 +481,7 @@ void ResizeTool::prepareEffect()
     ImageIface* iface = d->previewWidget->imageIface();
     int w             = iface->previewWidth();
     int h             = iface->previewHeight();
-    DImg imTemp       = iface->getOriginalImg()->smoothScale(w, h, Qt::ScaleMin);
+    DImg imTemp       = iface->getOriginalImg()->smoothScale(w, h, Qt::KeepAspectRatio);
     int new_w         = (int)(w*d->wpInput->value()/100.0);
     int new_h         = (int)(h*d->hpInput->value()/100.0);
 
@@ -547,7 +547,7 @@ void ResizeTool::putPreviewData()
     ImageIface* iface = d->previewWidget->imageIface();
     int w             = iface->previewWidth();
     int h             = iface->previewHeight();
-    DImg imTemp       = filter()->getTargetImage().smoothScale(w, h, Qt::ScaleMin);
+    DImg imTemp       = filter()->getTargetImage().smoothScale(w, h, Qt::KeepAspectRatio);
     DImg imDest(w, h, filter()->getTargetImage().sixteenBit(),
                 filter()->getTargetImage().hasAlpha());
 

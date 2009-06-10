@@ -313,7 +313,7 @@ void AntiVignettingTool::prepareEffect()
     int orgWidth               = iface->originalWidth();
     int orgHeight              = iface->originalHeight();
     QSize ps(orgWidth, orgHeight);
-    ps.scale(QSize(120, 120), Qt::ScaleMin);
+    ps.scale(QSize(120, 120), Qt::KeepAspectRatio);
 
     // Calc mask preview.
     DImg preview(ps.width(), ps.height(), false);
