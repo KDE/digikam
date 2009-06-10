@@ -484,15 +484,15 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData *querySig,
     {
         if (filterByAlbumRoots)
             query = access.backend()->prepareQuery(QString("SELECT M.imageid, Albums.albumRoot, M.matrix "
-                                                           " FROM ImageHaarMatrix AS M, Albums, Images "
-                                                           " WHERE Images.id=M.imageid "
-                                                           " AND Albums.id=Images.album "
-                                                           " AND Images.status=1; "));
+                                                           " FROM ImageHaarMatrix AS M "
+                                                           "    INNER JOIN Images ON Images.id=M.imageid "
+                                                           "    INNER JOIN Albums ON Albums.id=Images.album"
+                                                           " WHERE Images.status=1;"));
         else
             query = access.backend()->prepareQuery(QString("SELECT M.imageid, 0, M.matrix "
-                                                           " FROM ImageHaarMatrix AS M, Images "
-                                                           " WHERE Images.id=M.imageid "
-                                                           " AND Images.status=1; "));
+                                                           " FROM ImageHaarMatrix AS M "
+                                                           "    INNER JOIN Images ON Images.id=M.imageid "
+                                                           " WHERE Images.status=1; "));
         if (!access.backend()->exec(query))
             return scores;
 
@@ -751,11 +751,11 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesFast(HaarProgressOb
      * Step 1: get all fingerprints that are absolutely identical
      */
     QSqlQuery mainQuery = access.backend()->prepareQuery(QString(
-                                                         "SELECT COUNT(*)AS x, ImageHaarMatrix.matrix "
-                                                         "FROM ImageHaarMatrix, Images "
-                                                         "WHERE Images.id=ImageHaarMatrix.imageid "
-                                                         "AND Images.status=1 "
-                                                         "GROUP BY ImageHaarMatrix.matrix HAVING x>1 ")
+                                                         "SELECT COUNT(*) AS count, M.matrix "
+                                                         "FROM ImageHaarMatrix AS M "
+                                                         "  INNER JOIN Images ON Images.id=M.imageid "
+                                                         "WHERE Images.status=1 "
+                                                         "GROUP BY M.matrix HAVING count>1 ")
     );
 
     if (!access.backend()->exec(mainQuery))
@@ -787,9 +787,9 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesFast(HaarProgressOb
     {
         QSqlQuery imageQuery = access.backend()->prepareQuery(QString(
                 "SELECT Images.id "
-                "FROM Images, ImageHaarMatrix "
-                "WHERE Images.id=ImageHaarMatrix.imageid "
-                "AND Images.status=1 "
+                "FROM Images "
+                "   INNER JOIN ImageHaarMatrix AS M ON Images.id=M.imageid "
+                "WHERE Images.status=1 "
                 "AND ImageHaarMatrix.matrix=?; ")
         );
         imageQuery.bindValue(0, matrix);
