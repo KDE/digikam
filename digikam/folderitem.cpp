@@ -72,7 +72,7 @@ bool FolderItem::isHighlighted() const
     return m_highlighted;
 }
 
-void FolderItem::paintCell(QPainter* p, const QColorGroup& cg, int column, int width, int)
+void FolderItem::paintCell(QPainter* p, const QPalette& cg, int column, int width, int)
 {
     FolderView *fv = dynamic_cast<FolderView*>(listView());
     if (!fv)
@@ -197,7 +197,7 @@ void FolderCheckListItem::takeItem(Q3ListViewItem *item)
     Q3CheckListItem::takeItem(item);
 }
 
-void FolderCheckListItem::paintCell(QPainter* p, const QColorGroup& cg, int column, int width, int)
+void FolderCheckListItem::paintCell(QPainter* p, const QPalette& cg, int column, int width, int)
 {
     FolderView *fv = dynamic_cast<FolderView*>(listView());
     if (!fv)

@@ -57,7 +57,7 @@ public:
 
 protected:
 
-    void paintCell(QPainter* p, const QColorGroup & cg, int column, int width, int align);
+    void paintCell(QPainter* p, const QPalette & cg, int column, int width, int align);
     void setup();
 
 private:
@@ -85,7 +85,7 @@ public:
 
 protected:
 
-    void paintCell(QPainter* p, const QColorGroup & cg, int column, int width, int align);
+    void paintCell(QPainter* p, const QPalette & cg, int column, int width, int align);
     void setup();
     QStyleOptionQ3ListView getStyleOption(const FolderView *fv);
 
