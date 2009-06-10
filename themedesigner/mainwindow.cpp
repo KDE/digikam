@@ -288,7 +288,7 @@ void MainWindow::slotSave()
         return;
 
     QFile file(path);
-    if (!file.open(IO_WriteOnly))
+    if (!file.open(QIODevice::WriteOnly))
     {
         KMessageBox::error(this, i18n("Failed to open file for writing"));
         return;
