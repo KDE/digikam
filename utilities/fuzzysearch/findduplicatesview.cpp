@@ -56,6 +56,7 @@
 #include "statusprogressbar.h"
 
 #include "albumselectcombobox.h"
+#include "abstractalbummodel.h"
 
 namespace Digikam
 {
@@ -72,6 +73,8 @@ public:
         updateFingerPrtBtn      = 0;
         progressBar             = 0;
         thumbLoadThread         = 0;
+        albumSelectCB           = 0;
+        model                   = 0;
         cancelFindDuplicates    = false;
     }
 
@@ -87,6 +90,11 @@ public:
     ThumbnailLoadThread *thumbLoadThread;
 
     AlbumSelectComboBox *albumSelectCB;
+
+    AbstractCheckableAlbumModel
+                        *model;
+
+    QList<Album*>        excludedAlbumsList;
 };
 
 FindDuplicatesView::FindDuplicatesView(QWidget *parent)
@@ -128,6 +136,7 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
     d->albumSelectCB = new AlbumSelectComboBox;
     d->albumSelectCB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     d->albumSelectCB->setDefaultAlbumModels();
+    d->model = d->albumSelectCB->model();
 
     grid->addWidget(d->listView,           0, 0, 1,-1);
     grid->addWidget(excludeLabel,          1, 0, 1, 1);
@@ -170,6 +179,9 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
 
     connect(d->progressBar, SIGNAL(signalCancelButtonPressed()),
             this, SLOT(slotCancelButtonPressed()));
+
+    connect(d->model, SIGNAL(checkStateChanged(Album*, int)),
+            this, SLOT(slotExcludeSelectionChanged(Album*, int)));
 }
 
 FindDuplicatesView::~FindDuplicatesView()
@@ -429,6 +441,13 @@ void FindDuplicatesView::slotDuplicatesAlbumActived(QTreeWidgetItem* item, int)
     FindDuplicatesAlbumItem* sitem = dynamic_cast<FindDuplicatesAlbumItem*>(item);
     if (sitem)
         AlbumManager::instance()->setCurrentAlbum(sitem->album());
+}
+
+void FindDuplicatesView::slotExcludeSelectionChanged(Album* album, int checkState)
+{
+    Q_UNUSED(album);
+    Q_UNUSED(checkState);
+    d->excludedAlbumsList = d->model->checkedAlbums();
 }
 
 }  // namespace Digikam

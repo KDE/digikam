@@ -79,6 +79,8 @@ private Q_SLOTS:
     void slotCancelButtonPressed();
     void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
 
+    void slotExcludeSelectionChanged(Album*, int);
+
 private:
 
     void cancelFindDuplicates(KJob* job);
