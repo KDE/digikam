@@ -346,17 +346,17 @@ void FindDuplicatesView::slotFindDuplicates()
     QString fastMode        = i18nc("Fast 'find duplicates' search method",     "Fast");
     QString fastModeInfoStr = i18n("Find images that are absolutely identical (quick)");
 
-    QString accurateMode    = i18nc("Accurate 'find duplicates' search method", "Accurate");
-    QString accurateInfoStr = i18n("Find images that are identical or very similar to each other <br/>"
+    QString normalMode      = i18nc("Normal 'find duplicates' search method", "Normal");
+    QString normalModeStr   = i18n("Find images that are identical or very similar to each other <br/>"
                                    "(slow and memory consuming");
     if (validSizeInfo)
     {
-        accurateInfoStr.append(QString(", <br/>"));
-        accurateInfoStr.append(i18nc("%1 - kioslave memory usage (e.g. 10 MiB)",
+        normalModeStr.append(QString(", <br/>"));
+        normalModeStr.append(i18nc("%1 - kioslave memory usage (e.g. 10 MiB)",
                                      "approx. <b>%1</b> in case of your database",
                                      KIO::convertSize(matrixSize)));
     }
-    accurateInfoStr.append(QString(")"));
+    normalModeStr.append(QString(")"));
 
     QString msg = QString("<p>%1<p><table>"
                           "<tr><td><b>%2</b></td><td>-</td><td>%3</td></tr>"
@@ -366,14 +366,14 @@ void FindDuplicatesView::slotFindDuplicates()
                                     "Which of the following methods do you prefer?"))
                           .arg(fastMode)
                           .arg(fastModeInfoStr)
-                          .arg(accurateMode)
-                          .arg(accurateInfoStr);
+                          .arg(normalMode)
+                          .arg(normalModeStr);
 
     // --------------------------------------------------------
 
     int result = KMessageBox::questionYesNoCancel(this, msg, i18n("Warning"),
                                                   KGuiItem(fastMode),
-                                                  KGuiItem(accurateMode));
+                                                  KGuiItem(normalMode));
 
     if (result == KMessageBox::Cancel)
         return;
@@ -396,7 +396,7 @@ void FindDuplicatesView::slotFindDuplicates()
     if (result == KMessageBox::Yes)
         job->addMetaData("duplicates", "fast");
     else
-        job->addMetaData("duplicates", "accurate");
+        job->addMetaData("duplicates", "normal");
 
     job->addMetaData("albumids", idsStringList.join(","));
     job->addMetaData("threshold", QString::number(0.87));

@@ -60,7 +60,7 @@ kio_digikamsearch::~kio_digikamsearch()
 void kio_digikamsearch::special(const QByteArray& data)
 {
     QStringList duplicatesModes;
-    duplicatesModes << "fast" << "accurate";
+    duplicatesModes << "fast" << "normal";
     bool duplicates = duplicatesModes.contains(metaData("duplicates"));
 
     KUrl    kurl;
