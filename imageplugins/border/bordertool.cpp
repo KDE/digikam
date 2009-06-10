@@ -587,7 +587,7 @@ void BorderTool::putPreviewData(void)
     int w = iface->previewWidth();
     int h = iface->previewHeight();
 
-    DImg imTemp = filter()->getTargetImage().smoothScale(w, h, Qt::ScaleMin);
+    DImg imTemp = filter()->getTargetImage().smoothScale(w, h, Qt::KeepAspectRatio);
     DImg imDest( w, h, filter()->getTargetImage().sixteenBit(),
                        filter()->getTargetImage().hasAlpha() );
 
