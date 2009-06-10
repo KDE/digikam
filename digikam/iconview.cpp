@@ -1724,7 +1724,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
             break;
         }
 
-        case Qt::Key_Next:
+        case Qt::Key_PageDown:
         {
             IconItem *item = 0;
 
@@ -1764,7 +1764,7 @@ void IconView::keyPressEvent(QKeyEvent* e)
             break;
         }
 
-        case Qt::Key_Prior:
+        case Qt::Key_PageUp:
         {
             IconItem *item = 0;
 
