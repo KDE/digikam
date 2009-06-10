@@ -138,10 +138,10 @@ public:
 
     HaarIfacePriv()
     {
-        data          = 0;
-        bin           = 0;
-        sigMap        = 0;
-        useCachedSigs = false;
+        data              = 0;
+        bin               = 0;
+        signatureCache    = 0;
+        useSignatureCache = false;
 
         signatureQuery = QString("SELECT M.imageid, 0, M.matrix "
                                  " FROM ImageHaarMatrix AS M "
@@ -159,7 +159,7 @@ public:
     {
         delete data;
         delete bin;
-        delete sigMap;
+        delete signatureCache;
     }
 
     void createLoadingBuffer()
@@ -174,12 +174,12 @@ public:
             bin = new Haar::WeightBin;
     }
 
-    void enableCachedSignatures(bool useCachedSigs, const QList<qlonglong>& imageIds)
+    void setSignatureCacheEnabled(bool cache, const QList<qlonglong>& imageIds)
     {
-        enableCachedSignatures(useCachedSigs);
+        setSignatureCacheEnabled(cache);
 
         // stop here if we disable cached signatures
-        if (!useCachedSigs || imageIds.isEmpty())
+        if (!cache || imageIds.isEmpty())
             return;
 
         // Remove all ids from the fully created sigMap, that are not listed in the imageIds list.
@@ -188,28 +188,28 @@ public:
         // It might look like a waste of resources, but I tested this and getting all signatures and removing the
         // not wanted ones is really more efficient then X queries (where X = imageIds.count())
 
-        for (QMap<qlonglong, Haar::SignatureData>::iterator it = sigMap->begin();
-             it != sigMap->end(); )
+        for (QMap<qlonglong, Haar::SignatureData>::iterator it = signatureCache->begin();
+             it != signatureCache->end(); )
         {
             if (!imageIds.contains(it.key()))
-                it = sigMap->erase(it);
+                it = signatureCache->erase(it);
             else
                 ++it;
         }
     }
 
-    void enableCachedSignatures(bool useCachedSigs)
+    void setSignatureCacheEnabled(bool cache)
     {
-        if (sigMap)
-            delete sigMap;
+        if (signatureCache)
+            delete signatureCache;
 
-        if (useCachedSigs)
-            sigMap = new QMap<qlonglong, Haar::SignatureData>();
+        if (cache)
+            signatureCache = new QMap<qlonglong, Haar::SignatureData>();
 
-        this->useCachedSigs = useCachedSigs;
+        useSignatureCache = cache;
 
         // stop here if we disable cached signatures
-        if (!useCachedSigs)
+        if (!cache)
             return;
 
         // Variables for data read from DB
@@ -220,7 +220,7 @@ public:
         Haar::SignatureData targetSig;
 
         // reference for easier access
-        QMap<qlonglong, Haar::SignatureData> &sigMap = *this->sigMap;
+        QMap<qlonglong, Haar::SignatureData> &signatureCache = *this->signatureCache;
 
         query = access.backend()->prepareQuery(signatureQuery);
         if (!access.backend()->exec(query))
@@ -230,14 +230,14 @@ public:
         {
             imageid = query.value(0).toLongLong();
             blob.read(query.value(2).toByteArray(), &targetSig);
-            sigMap[imageid] = targetSig;
+            signatureCache[imageid] = targetSig;
         }
     }
 
-    bool                                  useCachedSigs;
+    bool                                  useSignatureCache;
     Haar::ImageData                      *data;
     Haar::WeightBin                      *bin;
-    QMap<qlonglong, Haar::SignatureData> *sigMap;
+    QMap<qlonglong, Haar::SignatureData> *signatureCache;
     QString                               signatureQuery;
     QString                               signatureByAlbumRootsQuery;
     QSet<int>                             albumRootsToSearch;
@@ -382,7 +382,7 @@ QList<qlonglong> HaarIface::bestMatchesForImage(qlonglong imageid, int numberOfR
 QList<qlonglong> HaarIface::bestMatchesForImageWithThreshold(qlonglong imageid, double requiredPercentage,
                                                              SketchType type)
 {
-    if ( !d->useCachedSigs || (d->sigMap->isEmpty() && d->useCachedSigs) )
+    if ( !d->useSignatureCache || (d->signatureCache->isEmpty() && d->useSignatureCache) )
     {
         Haar::SignatureData sig;
         if (!retrieveSignatureFromDB(imageid, &sig))
@@ -394,8 +394,8 @@ QList<qlonglong> HaarIface::bestMatchesForImageWithThreshold(qlonglong imageid, 
     else
     {
         // reference for easier access
-        QMap<qlonglong, Haar::SignatureData>& sigMap = *d->sigMap;
-        Haar::SignatureData& sig = sigMap[imageid];
+        QMap<qlonglong, Haar::SignatureData>& signatureCache = *d->signatureCache;
+        Haar::SignatureData& sig = signatureCache[imageid];
         return bestMatchesWithThreshold(&sig, requiredPercentage, type);
     }
 }
@@ -536,12 +536,12 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData *querySig,
     Haar::SignatureData targetSig;
 
     // reference for easier access
-    QMap<qlonglong, Haar::SignatureData> &sigMap = *d->sigMap;
+    QMap<qlonglong, Haar::SignatureData> &signatureCache = *d->signatureCache;
 
     bool filterByAlbumRoots = !d->albumRootsToSearch.isEmpty();
 
     // if no cache is used or the cache signature map is empty, query the database
-    if ( !d->useCachedSigs || (sigMap.isEmpty() && d->useCachedSigs) )
+    if ( !d->useSignatureCache || (signatureCache.isEmpty() && d->useSignatureCache) )
     {
         if (filterByAlbumRoots)
             query = access.backend()->prepareQuery(d->signatureByAlbumRootsQuery);
@@ -566,9 +566,9 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData *querySig,
 
             blob.read(query.value(2).toByteArray(), &targetSig);
 
-            if (d->useCachedSigs)
+            if (d->useSignatureCache)
             {
-                sigMap[imageid] = targetSig;
+                signatureCache[imageid] = targetSig;
             }
             else
             {
@@ -583,11 +583,11 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData *querySig,
     // read cached signature map if possible
     else
     {
-        foreach (const qlonglong& imageid, sigMap.keys())
+        foreach (const qlonglong& imageid, signatureCache.keys())
         {
             double& score              = scores[imageid];
             Haar::SignatureData &qSig  = *querySig;
-            Haar::SignatureData &tSig  = sigMap[imageid];
+            Haar::SignatureData &tSig  = signatureCache[imageid];
 
             score = calculateScore(qSig, tSig, weights, queryMaps);
         }
@@ -744,7 +744,7 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlongl
     }
 
     // create signature cache map for fast lookup
-    d->enableCachedSignatures(true, images2Scan);
+    d->setSignatureCacheEnabled(true, images2Scan);
 
     for (it = images2Scan.constBegin(); it != images2Scan.constEnd(); ++it)
     {
@@ -771,7 +771,7 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlongl
         // if an imageid is not a results candidate, remove it from the cached signature map as well,
         // to greatly improve speed
         if (!resultsCandidates.contains(*it))
-            d->sigMap->remove(*it);
+            d->signatureCache->remove(*it);
 
         ++progress;
 
@@ -785,7 +785,8 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlongl
     if (observer)
         observer->processedNumber(total);
 
-    d->enableCachedSignatures(false);
+    // disable cache
+    d->setSignatureCacheEnabled(false);
 
     return resultsMap;
 }
