@@ -26,7 +26,7 @@
 
 // Qt includes
 
-#include <qapplication.h>
+#include <QApplication>
 
 // KDE includes
 
