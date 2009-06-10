@@ -55,6 +55,8 @@
 #include "imagelister.h"
 #include "statusprogressbar.h"
 
+#include "albumselectcombobox.h"
+
 namespace Digikam
 {
 
@@ -83,6 +85,8 @@ public:
     StatusProgressBar   *progressBar;
 
     ThumbnailLoadThread *thumbLoadThread;
+
+    AlbumSelectComboBox *albumSelectCB;
 };
 
 FindDuplicatesView::FindDuplicatesView(QWidget *parent)
@@ -120,10 +124,17 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
     d->progressBar->progressBarMode(StatusProgressBar::TextMode);
     d->progressBar->setEnabled(false);
 
-    grid->addWidget(d->listView,           0, 0, 1, 3);
-    grid->addWidget(d->updateFingerPrtBtn, 1, 0, 1, 3);
-    grid->addWidget(d->scanDuplicatesBtn,  2, 0, 1, 3);
-    grid->addWidget(d->progressBar,        3, 0, 1, 3);
+    QLabel *excludeLabel = new QLabel(i18n("Exclude from search:"));
+    d->albumSelectCB = new AlbumSelectComboBox;
+    d->albumSelectCB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    d->albumSelectCB->setDefaultAlbumModels();
+
+    grid->addWidget(d->listView,           0, 0, 1,-1);
+    grid->addWidget(excludeLabel,          1, 0, 1, 1);
+    grid->addWidget(d->albumSelectCB,      1, 1, 1, 1);
+    grid->addWidget(d->updateFingerPrtBtn, 2, 0, 1,-1);
+    grid->addWidget(d->scanDuplicatesBtn,  3, 0, 1,-1);
+    grid->addWidget(d->progressBar,        4, 0, 1,-1);
     grid->setRowStretch(0, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
