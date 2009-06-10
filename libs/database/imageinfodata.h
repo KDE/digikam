@@ -29,7 +29,7 @@
 #include <QDateTime>
 #include <QSize>
 #include <QList>
-#include <qatomic.h>
+#include <QAtomic>
 
 // Local includes
 
