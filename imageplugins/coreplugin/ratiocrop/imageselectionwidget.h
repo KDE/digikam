@@ -29,8 +29,8 @@
 // Qt includes
 
 #include <qwidget.h>
-#include <qrect.h>
-#include <qcolor.h>
+#include <QRect>
+#include <QColor>
 
 namespace Digikam
 {
