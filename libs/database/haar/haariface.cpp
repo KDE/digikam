@@ -142,6 +142,17 @@ public:
         bin           = 0;
         sigMap        = 0;
         useCachedSigs = false;
+
+        signatureQuery = QString("SELECT M.imageid, 0, M.matrix "
+                                 " FROM ImageHaarMatrix AS M "
+                                 "    INNER JOIN Images ON Images.id=M.imageid "
+                                 " WHERE Images.status=1; ");
+
+        signatureByAlbumRootsQuery = QString("SELECT M.imageid, Albums.albumRoot, M.matrix "
+                                             " FROM ImageHaarMatrix AS M "
+                                             "    INNER JOIN Images ON Images.id=M.imageid "
+                                             "    INNER JOIN Albums ON Albums.id=Images.album"
+                                             " WHERE Images.status=1;");
     }
 
     ~HaarIfacePriv()
@@ -163,23 +174,73 @@ public:
             bin = new Haar::WeightBin;
     }
 
-    void enableCachedSignatures(bool cached)
+    void enableCachedSignatures(bool useCachedSigs, const QList<qlonglong>& imageIds)
+    {
+        enableCachedSignatures(useCachedSigs);
+
+        // stop here if we disable cached signatures
+        if (!useCachedSigs || imageIds.isEmpty())
+            return;
+
+        // Remove all ids from the fully created sigMap, that are not listed in the imageIds list.
+        // This is usually faster then starting a query for every single id in imageIds.
+        //
+        // It might look like a waste of resources, but I tested this and getting all signatures and removing the
+        // not wanted ones is really more efficient then X queries (where X = imageIds.count())
+
+        for (QMap<qlonglong, Haar::SignatureData>::iterator it = sigMap->begin();
+             it != sigMap->end(); )
+        {
+            if (!imageIds.contains(it.key()))
+                it = sigMap->erase(it);
+            else
+                ++it;
+        }
+    }
+
+    void enableCachedSignatures(bool useCachedSigs)
     {
         if (sigMap)
             delete sigMap;
 
-        if (cached)
+        if (useCachedSigs)
             sigMap = new QMap<qlonglong, Haar::SignatureData>();
 
-        useCachedSigs = cached;
+        this->useCachedSigs = useCachedSigs;
+
+        // stop here if we disable cached signatures
+        if (!useCachedSigs)
+            return;
+
+        // Variables for data read from DB
+        DatabaseAccess      access;
+        QSqlQuery           query;
+        DatabaseBlob        blob;
+        qlonglong           imageid;
+        Haar::SignatureData targetSig;
+
+        // reference for easier access
+        QMap<qlonglong, Haar::SignatureData> &sigMap = *this->sigMap;
+
+        query = access.backend()->prepareQuery(signatureQuery);
+        if (!access.backend()->exec(query))
+            return;
+
+        while (query.next())
+        {
+            imageid = query.value(0).toLongLong();
+            blob.read(query.value(2).toByteArray(), &targetSig);
+            sigMap[imageid] = targetSig;
+        }
     }
 
     bool                                  useCachedSigs;
     Haar::ImageData                      *data;
     Haar::WeightBin                      *bin;
     QMap<qlonglong, Haar::SignatureData> *sigMap;
-
-    QSet<int> albumRootsToSearch;
+    QString                               signatureQuery;
+    QString                               signatureByAlbumRootsQuery;
+    QSet<int>                             albumRootsToSearch;
 };
 
 HaarIface::HaarIface()
@@ -483,16 +544,9 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData *querySig,
     if ( !d->useCachedSigs || (sigMap.isEmpty() && d->useCachedSigs) )
     {
         if (filterByAlbumRoots)
-            query = access.backend()->prepareQuery(QString("SELECT M.imageid, Albums.albumRoot, M.matrix "
-                                                           " FROM ImageHaarMatrix AS M "
-                                                           "    INNER JOIN Images ON Images.id=M.imageid "
-                                                           "    INNER JOIN Albums ON Albums.id=Images.album"
-                                                           " WHERE Images.status=1;"));
+            query = access.backend()->prepareQuery(d->signatureByAlbumRootsQuery);
         else
-            query = access.backend()->prepareQuery(QString("SELECT M.imageid, 0, M.matrix "
-                                                           " FROM ImageHaarMatrix AS M "
-                                                           "    INNER JOIN Images ON Images.id=M.imageid "
-                                                           " WHERE Images.status=1; "));
+            query = access.backend()->prepareQuery(d->signatureQuery);
         if (!access.backend()->exec(query))
             return scores;
 
@@ -690,7 +744,7 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlongl
     }
 
     // create signature cache map for fast lookup
-    d->enableCachedSignatures(true);
+    d->enableCachedSignatures(true, images2Scan);
 
     for (it = images2Scan.constBegin(); it != images2Scan.constEnd(); ++it)
     {
