@@ -790,7 +790,7 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesFast(HaarProgressOb
                 "FROM Images "
                 "   INNER JOIN ImageHaarMatrix AS M ON Images.id=M.imageid "
                 "WHERE Images.status=1 "
-                "AND ImageHaarMatrix.matrix=?; ")
+                "AND M.matrix=?; ")
         );
         imageQuery.bindValue(0, matrix);
         access.backend()->exec(imageQuery);
