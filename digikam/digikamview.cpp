@@ -288,7 +288,7 @@ void DigikamView::applySettings()
 {
     AlbumSettings *settings = AlbumSettings::instance();
     d->albumWidgetStack->applySettings();
-    
+
     d->folderView->setEnableToolTips(settings->getShowAlbumToolTips());
     refreshView();
 }
@@ -448,6 +448,9 @@ void DigikamView::setupConnections()
 
     connect(d->folderView, SIGNAL(signalTextFolderFilterMatch(bool)),
             d->folderSearchBar, SLOT(slotSearchResult(bool)));
+
+    connect(d->folderView, SIGNAL(signalFindDuplicates(Album*)),
+            this, SLOT(slotNewDuplicatesSearch(Album*)));
 
     connect(d->tagFolderView, SIGNAL(signalTextTagFilterMatch(bool)),
             d->tagSearchBar, SLOT(slotSearchResult(bool)));
@@ -720,11 +723,11 @@ void DigikamView::slotNewAdvancedSearch()
     d->searchTabHeader->newAdvancedSearch();
 }
 
-void DigikamView::slotNewDuplicatesSearch()
+void DigikamView::slotNewDuplicatesSearch(Album* album)
 {
     if (d->leftSideBar->getActiveTab() != d->fuzzySearchView)
         d->leftSideBar->setActiveTab(d->fuzzySearchView);
-    d->fuzzySearchView->newDuplicatesSearch();
+    d->fuzzySearchView->newDuplicatesSearch(album);
 }
 
 void DigikamView::slotAlbumAdded(Album *album)

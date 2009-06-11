@@ -557,6 +557,7 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
 
     QAction *renameAction    = new QAction(SmallIcon("edit-rename"), i18n("Rename..."), this);
     QAction *resetIconAction = new QAction(SmallIcon("view-refresh"), i18n("Reset Album Icon"), this);
+    QAction *findDuplAction  = new QAction(SmallIcon("tools-wizard"), i18n("Find Duplicates..."), this);
 
     if (album->isAlbumRoot())
         renameAction->setEnabled(false);
@@ -572,6 +573,7 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
     cmhelper.addAction(resetIconAction);
     popmenu.addSeparator();
     // --------------------------------------------------------
+    cmhelper.addAction(findDuplAction);
     cmhelper.addImportMenu();
     cmhelper.addExportMenu();
     cmhelper.addBatchMenu();
@@ -596,6 +598,10 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
         else if (choice == renameAction)
         {
             albumRename(item);
+        }
+        else if (choice == findDuplAction)
+        {
+            emit signalFindDuplicates(album);
         }
     }
 }

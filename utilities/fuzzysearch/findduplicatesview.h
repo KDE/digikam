@@ -62,6 +62,10 @@ Q_SIGNALS:
 
     void signalUpdateFingerPrints();
 
+public Q_SLOTS:
+
+    void slotSetSelectedAlbum(Album*);
+
 private Q_SLOTS:
 
     void populateTreeView();

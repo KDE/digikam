@@ -493,4 +493,14 @@ void FindDuplicatesView::slotAlbumSelectionChanged(Album* album, Qt::CheckState 
     }
 }
 
+void FindDuplicatesView::slotSetSelectedAlbum(Album* album)
+{
+    if (!album)
+        return;
+
+    d->model->resetCheckedAlbums();
+    d->model->setChecked(album, true);
+    slotAlbumSelectionChanged(album, Qt::Checked);
+}
+
 }  // namespace Digikam

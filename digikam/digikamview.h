@@ -133,7 +133,7 @@ public Q_SLOTS:
     // Search action slots
     void slotNewKeywordSearch();
     void slotNewAdvancedSearch();
-    void slotNewDuplicatesSearch();
+    void slotNewDuplicatesSearch(Album* album=0);
 
     // Image action slots
     void slotImageLightTable();

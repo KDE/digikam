@@ -36,6 +36,7 @@ class QPixmap;
 namespace Digikam
 {
 
+class Album;
 class SAlbum;
 class ImageInfo;
 class SearchTextBar;
@@ -58,9 +59,9 @@ public:
     void setActive(bool val);
     void setImageInfo(const ImageInfo& info);
 
-    void newDuplicatesSearch();
+    void newDuplicatesSearch(Album*);
 
-Q_SIGNALS:
+    Q_SIGNALS:
 
     void signalUpdateFingerPrints();
 

@@ -491,8 +491,9 @@ FuzzySearchView::~FuzzySearchView()
 
 // Common methods ----------------------------------------------------------------------
 
-void FuzzySearchView::newDuplicatesSearch()
+void FuzzySearchView::newDuplicatesSearch(Album* album)
 {
+    d->findDuplicatesPanel->slotSetSelectedAlbum(album);
     d->tabWidget->setCurrentIndex(FuzzySearchViewPriv::DUPLICATES);
 }
 
