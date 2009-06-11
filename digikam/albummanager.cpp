@@ -84,6 +84,7 @@ extern "C"
 #include "imagelister.h"
 #include "scancontroller.h"
 #include "setup.h"
+#include "thumbnailloadthread.h"
 #include "upgradedb_sqlite2tosqlite3.h"
 
 namespace Digikam
@@ -164,6 +165,7 @@ public:
     QString                     dbPath;
 
     QList<QDateTime>            dbPathModificationDateList;
+    QList<QString>              dirWatchBlackList;
 
     KIO::TransferJob           *albumListJob;
     KIO::TransferJob           *dateListJob;
@@ -655,12 +657,14 @@ bool AlbumManager::setDatabase(const QString& dbPath, bool priority, const QStri
         DatabaseAccess().db()->setSetting("Locale",currLocale);
     }
 
-    // set an initial modification list to filter out KDirWatch signals caused by database operations
+    // measures to filter out KDirWatch signals caused by database operations
+    d->dirWatchBlackList.clear();
     DatabaseParameters params = DatabaseAccess::parameters();
     if (params.isSQLite())
     {
         QFileInfo dbFile(params.SQLiteDatabaseFile());
         d->dbPathModificationDateList = d->buildDirectoryModList(dbFile);
+        d->dirWatchBlackList << dbFile.fileName() << dbFile.fileName() + "-journal";
     }
 
     // check that we have one album root
@@ -2495,6 +2499,10 @@ void AlbumManager::slotNotifyFileChange(const QString& path)
 void AlbumManager::slotDirWatchDirty(const QString& path)
 {
     // Filter out dirty signals triggered by changes on the database file
+    foreach (const QString &bannedFile, d->dirWatchBlackList)
+        if (path.endsWith(bannedFile))
+            return;
+
     DatabaseParameters params = DatabaseAccess::parameters();
     if (params.isSQLite())
     {
