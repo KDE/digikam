@@ -79,6 +79,7 @@ extern "C"
 #include "databaseaccess.h"
 #include "databaseurl.h"
 #include "databaseparameters.h"
+#include "databasethumbnailinfoprovider.h"
 #include "databasewatch.h"
 #include "dio.h"
 #include "imagelister.h"
@@ -680,6 +681,11 @@ bool AlbumManager::setDatabase(const QString& dbPath, bool priority, const QStri
         }
     }
 
+    // Initialize thumbnail database
+/*    QFileInfo thumbFile(d->dbPath, "thumbnails-digikam.db");
+    ThumbnailLoadThread::initializeThumbnailDatabase(thumbFile.filePath(), new DatabaseThumbnailInfoProvider());
+    d->dirWatchBlackList << "thumbnails-digikam.db" << "thumbnails-digikam.db-journal";
+*/
     return true;
 }
 
