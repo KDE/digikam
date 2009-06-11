@@ -86,7 +86,6 @@ public:
         gp_upload,
         gp_delete,
         gp_lock,
-        gp_thumbnail,
         gp_thumbnails,
         gp_exif,
         gp_open,
@@ -425,26 +424,6 @@ void CameraController::executeCommand(CameraCommand *cmd)
             }
 
             sendLogMsg(i18n("The files in %1 have been listed.", folder));
-
-            break;
-        }
-        case(CameraCommand::gp_thumbnail):
-        {
-            QString folder = cmd->map["folder"].toString();
-            QString file   = cmd->map["file"].toString();
-
-            sendLogMsg(i18n("Getting thumbnails for %1...", file), DHistoryView::StartingEntry, folder, file);
-            QImage thumbnail;
-
-            if (d->camera->getThumbnail(folder, file, thumbnail))
-            {
-                thumbnail = thumbnail.scaled(ThumbnailSize::Huge, ThumbnailSize::Huge, Qt::KeepAspectRatio);
-                emit signalThumbnail(folder, file, thumbnail);
-            }
-            else
-            {
-                emit signalThumbnailFailed(folder, file);
-            }
 
             break;
         }
@@ -958,14 +937,10 @@ void CameraController::listFiles(const QString& folder)
 
 void CameraController::getThumbnail(const QString& folder, const QString& file)
 {
-    d->canceled        = false;
-    CameraCommand *cmd = new CameraCommand;
-    cmd->action        = CameraCommand::gp_thumbnail;
-    cmd->map.insert("folder", QVariant(folder));
-    cmd->map.insert("file",   QVariant(file));
-    addCommand(cmd);
+    QList<QVariant> list;
+    list.append(QStringList() << folder << file);
+    getThumbnails(list);
 }
-
 
 void CameraController::getThumbnails(const QList<QVariant>& list)
 {
