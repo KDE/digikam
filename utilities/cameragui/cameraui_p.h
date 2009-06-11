@@ -116,6 +116,7 @@ public:
         showLogAction             = 0;
         kdeJob                    = 0;
         historyView               = 0;
+        lastPhotoFirstAction      = 0;
     }
 
     bool                          deleteAfter;
@@ -173,6 +174,7 @@ public:
     KAction                      *selectNewItemsAction;
     KAction                      *selectNoneAction;
     KAction                      *uploadAction;
+    KToggleAction                *lastPhotoFirstAction;
     KToggleAction                *showMenuBarAction;
     KToggleAction                *showLogAction;
 

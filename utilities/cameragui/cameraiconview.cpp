@@ -348,12 +348,12 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
 
     // NOTE: see B.K.O #182352: ordering of item count must be adapted sort of icon view,
     // since items are ordered from the most rescent to the older one.
-
+    bool revOrder=!d->cameraUI->chronologicOrder();
     if (hasSelection)
     {
         // Camera items selection.
 
-        for (IconItem* item = lastItem(); item; item = item->prevItem())
+        for (IconItem* item = (revOrder?lastItem():firstItem()); item; (revOrder?item = item->prevItem():item=item->nextItem()))
         {
             QString downloadName;
             CameraIconItem* viewItem = static_cast<CameraIconItem*>(item);

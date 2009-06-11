@@ -72,14 +72,18 @@ public:
 
     QByteArray cameraMD5ID();
 
+    void capture();
     void listFolders();
     void listFiles(const QString& folder);
     void getFreeSpace();
-    void getThumbnail(const QString& folder, const QString& file);
     void getExif(const QString& folder, const QString& file);
     void getCameraInformation();
     void getPreview();
-    void capture();
+    void getThumbnail(const QString& folder, const QString& file);
+    /** Get thumbnials for a list of camera item. 'list' is a list of QStringList composed of
+        2 values : item path and item filename.
+     */
+    void getThumbnails(const QList<QVariant>& list);
 
     void downloadPrep();
     void download(const DownloadSettingsContainer& downloadSettings);

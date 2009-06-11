@@ -416,6 +416,12 @@ void CameraUI::setupActions()
     connect(d->deleteAllAction, SIGNAL(triggered()), this, SLOT(slotDeleteAll()));
     actionCollection()->addAction("cameraui_imagedeleteall", d->deleteAllAction);
 
+    // -- Last Photo First menu actions --------------------------------------------
+   
+    d->lastPhotoFirstAction = new KToggleAction(i18n("Show last photo first"), this);
+    connect(d->lastPhotoFirstAction, SIGNAL(triggered()), this, SLOT(slotlastPhotoFirst()));
+    actionCollection()->addAction("cameraui_lastphotofirst", d->lastPhotoFirstAction);
+
     // -- Standard 'View' menu actions ---------------------------------------------
 
     d->increaseThumbsAction = KStandardAction::zoomIn(this, SLOT(slotIncreaseThumbSize()), this);
@@ -720,6 +726,7 @@ void CameraUI::readSettings()
     d->folderDateFormat->setCurrentIndex(group.readEntry("FolderDateFormat", (int)CameraUIPriv::IsoDateFormat));
     d->view->setThumbnailSize(group.readEntry("ThumbnailSize",               (int)ThumbnailSize::Large));
     d->showLogAction->setChecked(group.readEntry("ShowLog",                  false));
+    d->lastPhotoFirstAction->setChecked(group.readEntry("LastPhotoFirst",    true));
 
     d->advBox->readSettings(group);
     d->splitter->restoreState(group);
@@ -748,6 +755,7 @@ void CameraUI::saveSettings()
     group.writeEntry("ThumbnailSize",       d->view->thumbnailSize());
     group.writeEntry("FolderDateFormat",    d->folderDateFormat->currentIndex());
     group.writeEntry("ShowLog",             d->showLogAction->isChecked());
+    group.writeEntry("LastPhotoFirst",      d->lastPhotoFirstAction->isChecked());
 
     d->advBox->writeSettings(group);
     d->splitter->saveState(group);
@@ -1109,16 +1117,28 @@ void CameraUI::slotFileList(const GPItemInfoList& fileList)
         }
     }
 
+    refreshIconView(map);
+}
+
+void CameraUI::refreshIconView(QMultiMap<QDateTime, GPItemInfo>& map)
+{
     if (map.empty())
         return;
 
-    QMultiMap<QDateTime, GPItemInfo>::iterator it = map.end();
+    int curr = d->statusProgressBar->progressTotalSteps();
+    d->statusProgressBar->setProgressTotalSteps(curr + map.count());
 
+    QMultiMap<QDateTime, GPItemInfo>::iterator it;
+    bool lastPhotoFirst = d->lastPhotoFirstAction->isChecked();
+    GPItemInfo item;
+    QList<QVariant> itemsList;
+
+    it = lastPhotoFirst ? map.end() : map.begin();
     do
     {
-        --it;
-        GPItemInfo item = *it;
+        if (lastPhotoFirst) --it;
 
+        item = *it;
         // We query database to check if item have been already downloaded from camera.
         switch(DownloadHistory::status(d->controller->cameraMD5ID(), item.name, item.size, item.mtime))
         {
@@ -1133,12 +1153,37 @@ void CameraUI::slotFileList(const GPItemInfoList& fileList)
                 break;
         }
         d->view->addItem(item);
-        d->controller->getThumbnail(item.folder, item.name);
-    }
-    while(it != map.begin());
+        itemsList.append(QStringList() << item.folder << item.name);
 
-    d->statusProgressBar->setProgressTotalSteps(d->statusProgressBar->progressTotalSteps() +
-                                                fileList.count());
+        if (!lastPhotoFirst) it++;
+    }
+    while((lastPhotoFirst ? it != map.begin() : it != map.end()));
+
+    d->controller->getThumbnails(itemsList);
+}
+
+void CameraUI::slotlastPhotoFirst()
+{
+    saveSettings();
+
+    QMultiMap<QDateTime, GPItemInfo> map;
+    CameraIconItem *item = dynamic_cast<CameraIconItem*>(d->view->firstItem());
+    QFileInfo info;
+    while(item)
+    {
+        info.setFile(item->itemInfo()->name);
+        map.insertMulti(item->itemInfo()->mtime, *item->itemInfo());
+        item = dynamic_cast<CameraIconItem*>(item->nextItem());
+    }
+
+    item = dynamic_cast<CameraIconItem*>(d->view->firstItem());
+    while(item)
+    {
+        d->view->removeItem(item->itemInfo()->folder,item->itemInfo()->name);
+        item = dynamic_cast<CameraIconItem*>(item->nextItem());
+    }
+
+    refreshIconView(map);
 }
 
 void CameraUI::slotThumbnail(const QString& folder, const QString& file,
@@ -1493,9 +1538,9 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
     // Since we show camera items in reverse order, downloading need to be done also in reverse order.
 
     QSet<QString> usedDownloadPaths;
-
-    for (IconItem* item = d->view->lastItem(); item;
-         item = item->prevItem())
+    bool lastPhotoFirst = d->lastPhotoFirstAction->isChecked();
+    for (IconItem* item = (lastPhotoFirst?d->view->lastItem():d->view->firstItem()); item;
+         (lastPhotoFirst?item = item->prevItem():item->nextItem()))
     {
         if (onlySelected && !(item->isSelected()))
             continue;
@@ -2267,4 +2312,10 @@ void CameraUI::slotHistoryEntryClicked(const QVariant& metadata)
     d->view->ensureItemVisible(folder, file);
 }
 
+bool CameraUI::chronologicOrder() const
+{
+    return !d->lastPhotoFirstAction->isChecked();
+}
+
 }  // namespace Digikam
+

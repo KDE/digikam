@@ -87,6 +87,7 @@ public:
         gp_delete,
         gp_lock,
         gp_thumbnail,
+        gp_thumbnails,
         gp_exif,
         gp_open,
         gp_freeSpace,
@@ -433,14 +434,11 @@ void CameraController::executeCommand(CameraCommand *cmd)
             QString file   = cmd->map["file"].toString();
 
             sendLogMsg(i18n("Getting thumbnails for %1...", file), DHistoryView::StartingEntry, folder, file);
-
             QImage thumbnail;
 
             if (d->camera->getThumbnail(folder, file, thumbnail))
             {
-                thumbnail = thumbnail.scaled(ThumbnailSize::Huge, ThumbnailSize::Huge,
-                                             Qt::KeepAspectRatio);
-
+                thumbnail = thumbnail.scaled(ThumbnailSize::Huge, ThumbnailSize::Huge, Qt::KeepAspectRatio);
                 emit signalThumbnail(folder, file, thumbnail);
             }
             else
@@ -448,6 +446,30 @@ void CameraController::executeCommand(CameraCommand *cmd)
                 emit signalThumbnailFailed(folder, file);
             }
 
+            break;
+        }
+        case(CameraCommand::gp_thumbnails):
+        {
+            QList<QVariant> list = cmd->map["list"].toList();
+
+            foreach (QVariant item, list)
+            {
+                QString folder = item.toStringList()[0];
+                QString file   = item.toStringList()[1];
+
+                sendLogMsg(i18n("Getting thumbnails for %1...", file), DHistoryView::StartingEntry, folder, file);
+                QImage thumbnail;
+
+                if (d->camera->getThumbnail(folder, file, thumbnail))
+                {
+                    thumbnail = thumbnail.scaled(ThumbnailSize::Huge, ThumbnailSize::Huge, Qt::KeepAspectRatio);
+                    emit signalThumbnail(folder, file, thumbnail);
+                }
+                else
+                {
+                    emit signalThumbnailFailed(folder, file);
+                }
+            }
             break;
         }
         case(CameraCommand::gp_exif):
@@ -941,6 +963,16 @@ void CameraController::getThumbnail(const QString& folder, const QString& file)
     cmd->action        = CameraCommand::gp_thumbnail;
     cmd->map.insert("folder", QVariant(folder));
     cmd->map.insert("file",   QVariant(file));
+    addCommand(cmd);
+}
+
+
+void CameraController::getThumbnails(const QList<QVariant>& list)
+{
+    d->canceled        = false;
+    CameraCommand *cmd = new CameraCommand;
+    cmd->action        = CameraCommand::gp_thumbnails;
+    cmd->map.insert("list", QVariant(list));
     addCommand(cmd);
 }
 

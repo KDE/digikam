@@ -33,6 +33,7 @@
 #include <QImage>
 #include <QKeyEvent>
 #include <QCloseEvent>
+#include <QMultiMap>
 
 // KDE includes
 
@@ -75,7 +76,7 @@ public:
     bool cameraDelDirSupport();
 
     bool autoRotateJpegFiles() const;
-
+    bool chronologicOrder() const;
     /** Get status of JPEG conversion files to lossless format during download.*/
     bool convertLosslessJpegFiles() const;
     QString losslessFormat();
@@ -116,6 +117,7 @@ private:
     void finishDialog();
     void showToolBars();
     void hideToolBars();
+    void refreshIconView(QMultiMap<QDateTime, GPItemInfo>& map);
     void refreshFreeSpace();
     void refreshCollectionFreeSpace();
     void startKdePreviewJob();
@@ -182,6 +184,8 @@ private Q_SLOTS:
 
     void slotExifFromFile(const QString& folder, const QString& file);
     void slotExifFromData(const QByteArray& exifData);
+
+    void slotlastPhotoFirst();
 
     void slotFirstItem();
     void slotPrevItem();
