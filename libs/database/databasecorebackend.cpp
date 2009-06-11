@@ -54,10 +54,12 @@ DatabaseCoreBackendPrivate::DatabaseCoreBackendPrivate(DatabaseCoreBackend *back
     isInTransaction = false;
 }
 
-void DatabaseCoreBackendPrivate::init()
+void DatabaseCoreBackendPrivate::init(const QString &name)
 {
     QObject::connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()),
                      q, SLOT(slotMainThreadFinished()));
+
+    backendName = name;
 }
 
 // "A connection can only be used from within the thread that created it.
@@ -96,6 +98,11 @@ void DatabaseCoreBackendPrivate::closeDatabaseForThread()
     databasesValid[thread] = 0;
     transactionCount.remove(thread);
     QSqlDatabase::removeDatabase(connectionName(thread));
+}
+
+QString DatabaseCoreBackendPrivate::connectionName(QThread *thread)
+{
+    return backendName + QString::number((quintptr)thread);
 }
 
 bool DatabaseCoreBackendPrivate::open(QSqlDatabase& db)
@@ -149,16 +156,16 @@ bool DatabaseCoreBackendPrivate::isInTransactionInOtherThread() const
 // ---------------------------
 
 
-DatabaseCoreBackend::DatabaseCoreBackend()
+DatabaseCoreBackend::DatabaseCoreBackend(const QString &backendName)
                : d_ptr(new DatabaseCoreBackendPrivate(this))
 {
-    d_ptr->init();
+    d_ptr->init(backendName);
 }
 
-DatabaseCoreBackend::DatabaseCoreBackend(DatabaseCoreBackendPrivate &dd)
+DatabaseCoreBackend::DatabaseCoreBackend(const QString &backendName, DatabaseCoreBackendPrivate &dd)
                : d_ptr(&dd)
 {
-    d_ptr->init();
+    d_ptr->init(backendName);
 }
 
 DatabaseCoreBackend::~DatabaseCoreBackend()

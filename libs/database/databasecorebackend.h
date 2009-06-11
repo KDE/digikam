@@ -49,8 +49,12 @@ Q_OBJECT
 
 public:
 
-    DatabaseCoreBackend();
-    DatabaseCoreBackend(DatabaseCoreBackendPrivate &dd);
+    /** Creates a database backend. The backend name is an arbitrary string that
+     *  shall be unique for this backend object.
+     *  It will be used to create unique connection names per backend and thread.
+     */
+    DatabaseCoreBackend(const QString &backendName);
+    DatabaseCoreBackend(const QString &backendName, DatabaseCoreBackendPrivate &dd);
     ~DatabaseCoreBackend();
 
     /**

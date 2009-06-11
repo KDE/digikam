@@ -43,19 +43,9 @@ public:
 
     DatabaseCoreBackendPrivate(DatabaseCoreBackend *backend);
     virtual ~DatabaseCoreBackendPrivate() {}
-    void init();
+    void init(const QString &connectionName);
 
-    // "A connection can only be used from within the thread that created it.
-    //  Moving connections between threads or creating queries from a different thread is not supported."
-    // => one QSqlDatabase object per thread.
-    // The main class' open/close methods only interact with the "firstDatabase" object.
-    // When another thread requests a DB, a new connection is opened and closed at
-    // finishing of the thread.
-
-    inline QString connectionName(QThread *thread)
-    {
-        return QString("digikamDatabase-" + QString::number((quintptr)thread));
-    }
+    QString connectionName(QThread *thread);
 
     QSqlDatabase databaseForThread();
     void closeDatabaseForThread();
@@ -74,6 +64,8 @@ public:
     QHash<QThread*, int>          transactionCount;
 
     bool                          isInTransaction;
+
+    QString                       backendName;
 
     DatabaseParameters            parameters;
 

@@ -48,7 +48,7 @@ namespace Digikam
 {
 
 DatabaseBackend::DatabaseBackend()
-               : DatabaseCoreBackend(*new DatabaseBackendPrivate(this))
+               : DatabaseCoreBackend("digikamDatabase-", *new DatabaseBackendPrivate(this))
 {
 }
 
