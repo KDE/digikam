@@ -151,7 +151,7 @@ void ThumbnailDatabaseAccess::setParameters(const DatabaseParameters& parameters
     {
         delete d->db;
         delete d->backend;
-        d->backend = new DatabaseCoreBackend();
+        d->backend = new DatabaseCoreBackend("thumbnailDatabase-");
         d->db = new ThumbnailDB(d->backend);
     }
 }

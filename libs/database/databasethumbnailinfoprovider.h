@@ -30,12 +30,13 @@
 
 // Local includes
 
+#include "digikam_export.h"
 #include "thumbnailcreator.h"
 
 namespace Digikam
 {
 
-class DatabaseThumbnailInfoProvider
+class DIGIKAM_DATABASE_EXPORT DatabaseThumbnailInfoProvider : public ThumbnailInfoProvider
 {
 public:
 

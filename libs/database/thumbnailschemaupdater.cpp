@@ -177,7 +177,7 @@ bool ThumbnailSchemaUpdater::createDatabase()
          && createIndicesV1()
          && createTriggersV1())
     {
-        m_currentVersion = 5;
+        m_currentVersion = 1;
         return true;
     }
     else
