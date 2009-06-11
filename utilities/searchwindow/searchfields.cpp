@@ -1817,7 +1817,7 @@ void SearchFieldAlbum::setupValueWidgets(QGridLayout *layout, int row, int colum
     m_model = m_comboBox->model();
 
     connect(m_model, SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
-            this, SLOT(checkStateChanged(Album*, Qt::CheckState)));
+            this, SLOT(updateState()));
 
     updateState();
 
