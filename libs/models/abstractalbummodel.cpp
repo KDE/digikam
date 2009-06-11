@@ -389,6 +389,7 @@ void AbstractAlbumModel::slotAlbumHasBeenDeleted(void *p)
 
 void AbstractAlbumModel::slotAlbumsCleared()
 {
+    d->rootAlbum = 0;
     reset();
     allAlbumsCleared();
 }
