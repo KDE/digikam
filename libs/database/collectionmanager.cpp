@@ -275,9 +275,9 @@ QList<SolidVolumeInfo> CollectionManagerPrivate::actuallyListVolumes()
 {
     QList<SolidVolumeInfo> volumes;
 
-    kDebug(50003) << "listFromType" << endl;
+    //kDebug(50003) << "listFromType" << endl;
     QList<Solid::Device> devices = Solid::Device::listFromType(Solid::DeviceInterface::StorageAccess);
-    kDebug(50003) << "got listFromType" << endl;
+    //kDebug(50003) << "got listFromType" << endl;
 
     foreach(const Solid::Device& accessDevice, devices)
     {
@@ -539,7 +539,7 @@ bool CollectionManagerPrivate::checkIfExists(const QString& filePath, QList<Coll
     foreach (AlbumRootLocation *location, locations)
     {
         QString locationPath = location->albumRootPath();
-        kDebug() << filePath << locationPath;
+        //kDebug() << filePath << locationPath;
         if (!locationPath.isEmpty() && filePath.startsWith(locationPath))
         {
             bool isDeleted = false;
@@ -950,7 +950,7 @@ CollectionLocation CollectionManager::locationForPath(const QString& filePath)
     foreach (AlbumRootLocation *location, d->locations)
     {
         QString rootPath = location->albumRootPath();
-        kDebug(50003) << "Testing location " << location->id() << filePath << rootPath << endl;
+        //kDebug(50003) << "Testing location " << location->id() << filePath << rootPath << endl;
         if (!rootPath.isEmpty() && filePath.startsWith(rootPath))
             return *location;
     }
