@@ -39,6 +39,8 @@
 
 // Local includes
 
+#include "databaseparameters.h"
+#include "thumbnaildatabaseaccess.h"
 #include "thumbnailsize.h"
 #include "thumbnailtask.h"
 #include "thumbnailcreator.h"
@@ -59,6 +61,26 @@ public:
     LoadingDescription loadingDescription;
     QImage             image;
 };
+
+// -------------------------------------------------------------------
+
+class ThumbnailLoadThreadStaticPriv
+{
+public:
+
+    ThumbnailLoadThreadStaticPriv()
+    {
+        storageMethod      = ThumbnailCreator::FreeDesktopStandard;
+        firstThreadCreated = false;
+    }
+
+    ThumbnailCreator::StorageMethod  storageMethod;
+    ThumbnailInfoProvider           *provider;
+
+    bool firstThreadCreated;
+};
+
+K_GLOBAL_STATIC(ThumbnailLoadThreadStaticPriv, static_d)
 
 // -------------------------------------------------------------------
 
@@ -102,8 +124,10 @@ K_GLOBAL_STATIC(ThumbnailLoadThread, defaultThumbBarObject)
 ThumbnailLoadThread::ThumbnailLoadThread()
                    : d(new ThumbnailLoadThreadPriv)
 {
-    d->creator = new ThumbnailCreator(ThumbnailCreator::FreeDesktopStandard);
-    d->creator->initialize();
+    static_d->firstThreadCreated = true;
+    d->creator = new ThumbnailCreator(static_d->storageMethod);
+    if (static_d->provider)
+        d->creator->setThumbnailInfoProvider(static_d->provider);
     d->creator->setOnlyLargeThumbnails(true);
     d->creator->setRemoveAlphaChannel(true);
     setPixmapRequested(true);
@@ -136,6 +160,28 @@ void ThumbnailLoadThread::cleanUp()
     defaultIconViewObject.destroy();
     defaultObject.destroy();
     defaultThumbBarObject.destroy();
+}
+
+void ThumbnailLoadThread::initializeThumbnailDatabase(const QString &thumbnailDBFile, ThumbnailInfoProvider *provider)
+{
+    if (static_d->firstThreadCreated)
+    {
+        kError() << "Call initializeThumbnailDatabase at application start. "
+                    "There are already thumbnail loading threads created, "
+                    "and these will not be switched to use the database. ";
+    }
+    ThumbnailDatabaseAccess::setParameters(DatabaseParameters::parametersForSQLite(thumbnailDBFile));
+    if (ThumbnailDatabaseAccess::checkReadyForUse(0))
+    {
+        kDebug() << "Thumbnail db ready for use";
+        static_d->storageMethod = ThumbnailCreator::ThumbnailDatabase;
+        static_d->provider = provider;
+    }
+    else
+    {
+        kError() << "Failed to initialize thumbnail database at" << thumbnailDBFile
+                 << "\n Error message:" << ThumbnailDatabaseAccess().lastError();
+    }
 }
 
 void ThumbnailLoadThread::setThumbnailSize(int size)

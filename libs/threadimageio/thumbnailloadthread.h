@@ -40,6 +40,7 @@ namespace Digikam
 {
 
 class ThumbnailCreator;
+class ThumbnailInfoProvider;
 class ThumbnailLoadThreadPriv;
 
 class DIGIKAM_EXPORT ThumbnailLoadThread : public ManagedLoadSaveThread
@@ -61,6 +62,14 @@ public:
     static ThumbnailLoadThread *defaultThread();
 
     static void cleanUp();
+
+    /**
+     * Enable loading of thumbnails from a thumbnail database.
+     * This shall be called once at application startup.
+     * This need not be called, then the FreeDesktop standard is used.
+     * You can optionally provide a thumbnail info provider.
+     */
+    static void initializeThumbnailDatabase(const QString &thumbnailDBFile, ThumbnailInfoProvider *provider = 0);
 
     /**
      * Find a thumbnail.
