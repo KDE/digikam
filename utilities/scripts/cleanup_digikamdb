@@ -36,8 +36,7 @@ databasedir=$(cat $rcpath | grep "$databasekey" | sed -e "s/$databasekey=//")
 proc="$(ps aux | grep $username | grep -v $0 | grep -w $processname | grep -v grep)"
 if [ "$proc" != "" ]
 then
-    echo "Please make sure to shutdown $programname first."
-    echo "Cleaning up the database while $programname is running might not be as safe as if the application has been shut down."
+    echo "Please shutdown $programname first."
     exit 1
 fi
 
