@@ -90,6 +90,7 @@ private:
 
     void cancelFindDuplicates(KJob* job);
     void enableControlWidgets(bool);
+    bool checkForValidSettings();
 
 private:
 

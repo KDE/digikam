@@ -254,6 +254,8 @@ void FindDuplicatesView::slotUpdateAlbumSelectBox()
 
     connect(d->model, SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
             this, SLOT(slotAlbumSelectionChanged(Album*, Qt::CheckState)));
+
+    checkForValidSettings();
 }
 
 void FindDuplicatesView::slotAlbumAdded(Album* a)
@@ -328,7 +330,7 @@ void FindDuplicatesView::slotThumbnailLoaded(const LoadingDescription& desc, con
 
 void FindDuplicatesView::enableControlWidgets(bool val)
 {
-    d->scanDuplicatesBtn->setEnabled(val);
+    d->scanDuplicatesBtn->setEnabled(val && checkForValidSettings());
     d->updateFingerPrtBtn->setEnabled(val);
     d->includeAlbumsLabel->setEnabled(val);
     d->albumSelectCB->setEnabled(val);
@@ -430,6 +432,7 @@ void FindDuplicatesView::slotAlbumSelectionChanged(Album* album, Qt::CheckState 
             ++it;
         }
     }
+    checkForValidSettings();
 }
 
 void FindDuplicatesView::slotSetSelectedAlbum(Album* album)
@@ -440,6 +443,19 @@ void FindDuplicatesView::slotSetSelectedAlbum(Album* album)
     d->model->resetCheckedAlbums();
     d->model->setChecked(album, true);
     slotAlbumSelectionChanged(album, Qt::Checked);
+}
+
+bool FindDuplicatesView::checkForValidSettings()
+{
+    bool valid = false;
+
+    if (d->model)
+    {
+        valid = d->model->checkedAlbums().count();
+    }
+    d->scanDuplicatesBtn->setEnabled(valid);
+
+    return valid;
 }
 
 }  // namespace Digikam
