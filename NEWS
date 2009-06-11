@@ -17,7 +17,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 183435 : No more file manager at media:/camera.
 009 ==> 189979 : All displays of the same caption don't show the same text when it contains "éèà".
 010 ==> 195902 : digiKam crashes on first startup if album folder is not empty.
-011 ==> 
+011 ==> 154606 : Changing the date for multiple pictures simultaneously changes all of the times too.
+012 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta1 - Release date: 2009-06-07
