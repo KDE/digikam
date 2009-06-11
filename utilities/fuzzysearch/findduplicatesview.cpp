@@ -235,7 +235,7 @@ void FindDuplicatesView::slotUpdateAlbumSelectBox()
     d->albumSelectCB->setNoSelectionText(i18n("No albums selected"));
 
     connect(d->model, SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
-            this, SLOT(slotExcludeSelectionChanged(Album*, Qt::CheckState)));
+            this, SLOT(slotAlbumSelectionChanged(Album*, Qt::CheckState)));
 }
 
 void FindDuplicatesView::slotAlbumAdded(Album* a)
@@ -457,7 +457,7 @@ void FindDuplicatesView::slotDuplicatesAlbumActived(QTreeWidgetItem* item, int)
         AlbumManager::instance()->setCurrentAlbum(sitem->album());
 }
 
-void FindDuplicatesView::slotExcludeSelectionChanged(Album* album, Qt::CheckState checkState)
+void FindDuplicatesView::slotAlbumSelectionChanged(Album* album, Qt::CheckState checkState)
 {
     QModelIndex index = d->model->indexForAlbum(album);
     if (index.isValid() && d->model->hasChildren(index))
