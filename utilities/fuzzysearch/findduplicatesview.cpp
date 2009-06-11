@@ -35,6 +35,7 @@
 #include <QPainter>
 #include <QPushButton>
 #include <QTreeWidget>
+#include <QSpinBox>
 
 // KDE includes
 
@@ -74,6 +75,8 @@ public:
         progressBar             = 0;
         thumbLoadThread         = 0;
         includeAlbumsLabel      = 0;
+        thresholdLabel          = 0;
+        threshold               = 0;
         albumSelectCB           = 0;
         model                   = 0;
         cancelFindDuplicates    = false;
@@ -82,6 +85,9 @@ public:
     bool                cancelFindDuplicates;
 
     QLabel              *includeAlbumsLabel;
+    QLabel              *thresholdLabel;
+
+    QSpinBox            *threshold;
 
     QPushButton         *scanDuplicatesBtn;
     QPushButton         *updateFingerPrtBtn;
@@ -146,13 +152,25 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
+    d->thresholdLabel = new QLabel(i18n("Threshold:"));
+    d->threshold      = new QSpinBox;
+    d->threshold->setRange(0, 100);
+    d->threshold->setValue(90);
+    d->threshold->setSingleStep(1);
+    d->threshold->setSuffix(QChar('%'));
+
+    // ---------------------------------------------------------------
+
     grid->addWidget(d->listView,           0, 0, 1,-1);
     grid->addWidget(d->includeAlbumsLabel, 1, 0, 1, 1);
-    grid->addWidget(d->albumSelectCB,      1, 1, 1, 1);
-    grid->addWidget(d->updateFingerPrtBtn, 2, 0, 1,-1);
-    grid->addWidget(d->scanDuplicatesBtn,  3, 0, 1,-1);
-    grid->addWidget(d->progressBar,        4, 0, 1,-1);
+    grid->addWidget(d->albumSelectCB,      1, 1, 1,-1);
+    grid->addWidget(d->thresholdLabel,     2, 0, 1, 1);
+    grid->addWidget(d->threshold,          2, 2, 1, 1);
+    grid->addWidget(d->updateFingerPrtBtn, 3, 0, 1,-1);
+    grid->addWidget(d->scanDuplicatesBtn,  4, 0, 1,-1);
+    grid->addWidget(d->progressBar,        5, 0, 1,-1);
     grid->setRowStretch(0, 10);
+    grid->setColumnStretch(1, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
 
@@ -314,6 +332,8 @@ void FindDuplicatesView::enableControlWidgets(bool val)
     d->updateFingerPrtBtn->setEnabled(val);
     d->includeAlbumsLabel->setEnabled(val);
     d->albumSelectCB->setEnabled(val);
+    d->thresholdLabel->setEnabled(val);
+    d->threshold->setEnabled(val);
 
     d->progressBar->progressBarMode(val ? StatusProgressBar::TextMode
                                         : StatusProgressBar::CancelProgressBarMode);
@@ -398,7 +418,9 @@ void FindDuplicatesView::slotFindDuplicates()
         job->addMetaData("duplicates", "normal");
 
     job->addMetaData("albumids", idsStringList.join(","));
-    job->addMetaData("threshold", QString::number(0.87));
+//    job->addMetaData("threshold", QString::number(0.87));
+    double thresh = d->threshold->value() / 100.0;
+    job->addMetaData("threshold", QString::number(thresh));
 
     connect(job, SIGNAL(result(KJob*)),
             this, SLOT(slotDuplicatesSearchResult(KJob*)));
