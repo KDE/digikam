@@ -221,8 +221,9 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     // ---------------------------------------------------------------
 
     KHBox *hbox3          = new KHBox(imagePanel);
-    QLabel *resultsLabel2 = new QLabel(i18n("Threshold (%):"), hbox3);
+    QLabel *resultsLabel2 = new QLabel(i18n("Threshold:"), hbox3);
     d->levelImage         = new QSpinBox(hbox3);
+    d->levelImage->setSuffix(QChar('%'));
     d->levelImage->setRange(1, 100);
     d->levelImage->setSingleStep(1);
     d->levelImage->setValue(90);
