@@ -71,6 +71,7 @@ public:
     ThumbnailLoadThreadStaticPriv()
     {
         storageMethod      = ThumbnailCreator::FreeDesktopStandard;
+        provider           = 0;
         firstThreadCreated = false;
     }
 
