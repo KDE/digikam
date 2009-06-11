@@ -136,7 +136,6 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
 
     d->albumSelectCB = new AlbumSelectComboBox;
     d->albumSelectCB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    d->albumSelectCB->setDefaultAlbumModels();
 
     QString albumSelectStr = i18n("Select all albums that should be included into the search.");
     d->albumSelectCB->setWhatsThis(albumSelectStr);
@@ -144,8 +143,6 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
 
     d->includeAlbumsLabel = new QLabel(i18n("Search in:"));
     d->includeAlbumsLabel->setBuddy(d->albumSelectCB);
-
-    d->model = d->albumSelectCB->model();
 
     // ---------------------------------------------------------------
 
@@ -193,9 +190,6 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
 
     connect(d->progressBar, SIGNAL(signalCancelButtonPressed()),
             this, SLOT(slotCancelButtonPressed()));
-
-    connect(d->model, SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
-            this, SLOT(slotExcludeSelectionChanged(Album*, Qt::CheckState)));
 }
 
 FindDuplicatesView::~FindDuplicatesView()
@@ -235,8 +229,13 @@ void FindDuplicatesView::populateTreeView()
 
 void FindDuplicatesView::slotUpdateAlbumSelectBox()
 {
-    d->albumSelectCB->view()->expandToDepth(1);
+    d->albumSelectCB->setDefaultAlbumModels();
+    d->model = d->albumSelectCB->model();
+    d->albumSelectCB->view()->expandToDepth(0);
     d->albumSelectCB->setNoSelectionText(i18n("No albums selected"));
+
+    connect(d->model, SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+            this, SLOT(slotExcludeSelectionChanged(Album*, Qt::CheckState)));
 }
 
 void FindDuplicatesView::slotAlbumAdded(Album* a)
