@@ -468,7 +468,7 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
         }
         else
         {
-        // tags not yet contained in database will be created
+            // tags not yet contained in database will be created
             info.addTagPaths(d->tagList);
             changed = changed || !d->tagList.isEmpty();
         }
@@ -738,7 +738,6 @@ MetadataHub::TagStatus MetadataHub::tagStatus(TAlbum *album) const
         return TagStatus(MetadataInvalid);
     return mapIt.value();
 }
-
 
 bool MetadataHub::dateTimeChanged() const
 {
