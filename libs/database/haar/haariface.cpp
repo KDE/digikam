@@ -671,10 +671,10 @@ void HaarIface::getBestAndWorstPossibleScore(Haar::SignatureData *sig, SketchTyp
 }
 
 void HaarIface::rebuildDuplicatesAlbums(const QList<int>& albums2Scan, double requiredPercentage,
-                                        HaarProgressObserver *observer, bool fast)
+                                        HaarProgressObserver *observer)
 {
     // Carry out search. This takes long.
-    QMap< qlonglong, QList<qlonglong> > results = findDuplicatesInAlbums(albums2Scan, requiredPercentage, observer, fast);
+    QMap< qlonglong, QList<qlonglong> > results = findDuplicatesInAlbums(albums2Scan, requiredPercentage, observer);
 
     // Build search XML from the results. Store list of ids of similar images.
     QMap<QString, QString> queries;
@@ -709,7 +709,7 @@ void HaarIface::rebuildDuplicatesAlbums(const QList<int>& albums2Scan, double re
 
 
 QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesInAlbums(const QList<int>& albums2Scan,
-                                               double requiredPercentage, HaarProgressObserver *observer, bool fast)
+                                               double requiredPercentage, HaarProgressObserver *observer)
 {
     QList<qlonglong> idList;
 
@@ -719,10 +719,7 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesInAlbums(const QLis
         idList << DatabaseAccess().db()->getItemIDsInAlbum(albumId);
     }
 
-    if (fast)
-        return findDuplicatesFast(observer);
-    else
-        return findDuplicates(idList, requiredPercentage, observer);
+    return findDuplicates(idList, requiredPercentage, observer);
 }
 
 QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlonglong>& images2Scan,
@@ -788,84 +785,6 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlongl
 
     // disable cache
     d->setSignatureCacheEnabled(false);
-
-    return resultsMap;
-}
-
-QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesFast(HaarProgressObserver *observer)
-{
-    QMap<qlonglong, QList<qlonglong> > resultsMap;
-    QList<QByteArray> matrixList;
-    int total         = 0;
-    int progress      = 0;
-    int progressStep  = 20;
-
-    DatabaseAccess access;
-
-    /*
-     * Step 1: get all fingerprints that are absolutely identical
-     */
-    QSqlQuery mainQuery = access.backend()->prepareQuery(QString(
-                                                         "SELECT COUNT(*) AS count, M.matrix "
-                                                         "FROM ImageHaarMatrix AS M "
-                                                         "  INNER JOIN Images ON Images.id=M.imageid "
-                                                         "WHERE Images.status=1 "
-                                                         "GROUP BY M.matrix HAVING count>1 ")
-    );
-
-    if (!access.backend()->exec(mainQuery))
-        return resultsMap;
-
-    // get all duplicate fingerprints and calculate total images
-    while (mainQuery.next())
-    {
-        matrixList << mainQuery.value(1).toByteArray();
-        total += mainQuery.value(0).toInt();
-    }
-
-    // --------------------------------------------------------
-
-    if (observer)
-    {
-        progressStep = qMax(progressStep, total / 100);
-        observer->totalNumberToScan(total);
-    }
-
-    // --------------------------------------------------------
-
-    /*
-     * Step 2: get all image ids for each duplicate fingerprint
-     */
-    QList<qlonglong> ids;
-    foreach(const QByteArray& matrix, matrixList)
-    {
-        QSqlQuery imageQuery = access.backend()->prepareQuery(QString(
-                "SELECT Images.id "
-                "FROM Images "
-                "   INNER JOIN ImageHaarMatrix AS M ON Images.id=M.imageid "
-                "WHERE Images.status=1 "
-                "AND M.matrix=?; ")
-        );
-        imageQuery.bindValue(0, matrix);
-        access.backend()->exec(imageQuery);
-
-        ids.clear();
-
-        while (imageQuery.next())
-        {
-            ids << imageQuery.value(0).toLongLong();
-            ++progress;
-        }
-        resultsMap[ids.first()] = ids;
-
-        if (observer && (progress % progressStep == 0))
-            observer->processedNumber(progress);
-    }
-
-    // make sure that the progress bar is really set to maximum now, just in case
-    // we have calculated a wrong amount of duplicate images
-    if (observer)
-        observer->processedNumber(total);
 
     return resultsMap;
 }

@@ -343,62 +343,6 @@ void FindDuplicatesView::enableControlWidgets(bool val)
 
 void FindDuplicatesView::slotFindDuplicates()
 {
-    // query the database to get the approximate size of the haar matrices
-    DatabaseAccess access;
-    QList<QVariant> matrixSizeList;
-    qulonglong matrixSize = 0;
-    access.backend()->execSql(QString("SELECT SUM(LENGTH(matrix)) "
-                                      "FROM Imagehaarmatrix "
-                                      "    INNER JOIN Images ON Images.id=Imagehaarmatrix.imageid "
-                                      "WHERE Images.status=1;"),
-                                      &matrixSizeList);
-    bool ok = false;
-    if (!matrixSizeList.isEmpty())
-        matrixSize = matrixSizeList.first().toULongLong(&ok);
-    if (ok)
-        matrixSize *= 2;
-
-    bool validSizeInfo = ok && (matrixSize > 0);
-
-    // prepare the find duplicates dialog ---------------------
-
-    QString fastMode        = i18nc("Fast 'find duplicates' search method",     "Fast");
-    QString fastModeInfoStr = i18n("Find images that are absolutely identical (quick)");
-
-    QString normalMode      = i18nc("Normal 'find duplicates' search method", "Normal");
-    QString normalModeStr   = i18n("Find images that are identical or very similar to each other <br/>"
-                                   "(slow and memory consuming");
-    if (validSizeInfo)
-    {
-        normalModeStr.append(QString(", <br/>"));
-        normalModeStr.append(i18nc("%1 - kioslave memory usage (e.g. 10 MiB)",
-                                     "approx. <b>%1</b> in case of your database",
-                                     KIO::convertSize(matrixSize)));
-    }
-    normalModeStr.append(QString(")"));
-
-    QString msg = QString("<p>%1<p><table>"
-                          "<tr><td><b>%2</b></td><td>-</td><td>%3</td></tr>"
-                          "<tr><td><b>%4</b></td><td>-</td><td>%5</td></tr>"
-                          "</table></p>")
-                          .arg(i18n("Find Duplicates can take some time, especially on huge collections.<br/> "
-                                    "Which of the following methods do you prefer?"))
-                          .arg(fastMode)
-                          .arg(fastModeInfoStr)
-                          .arg(normalMode)
-                          .arg(normalModeStr);
-
-    // --------------------------------------------------------
-
-    int result = KMessageBox::questionYesNoCancel(this, msg, i18n("Warning"),
-                                                  KGuiItem(fastMode),
-                                                  KGuiItem(normalMode));
-
-    if (result == KMessageBox::Cancel)
-        return;
-
-    // --------------------------------------------------------
-
     slotClear();
     enableControlWidgets(false);
 
@@ -410,17 +354,12 @@ void FindDuplicatesView::slotFindDuplicates()
 
     // --------------------------------------------------------
 
-    KIO::Job *job = ImageLister::startListJob(DatabaseUrl::searchUrl(-1));
-
-    if (result == KMessageBox::Yes)
-        job->addMetaData("duplicates", "fast");
-    else
-        job->addMetaData("duplicates", "normal");
-
-    job->addMetaData("albumids", idsStringList.join(","));
-//    job->addMetaData("threshold", QString::number(0.87));
     double thresh = d->threshold->value() / 100.0;
-    job->addMetaData("threshold", QString::number(thresh));
+
+    KIO::Job *job = ImageLister::startListJob(DatabaseUrl::searchUrl(-1));
+    job->addMetaData("duplicates", "normal");
+    job->addMetaData("albumids",   idsStringList.join(","));
+    job->addMetaData("threshold",  QString::number(thresh));
 
     connect(job, SIGNAL(result(KJob*)),
             this, SLOT(slotDuplicatesSearchResult(KJob*)));
