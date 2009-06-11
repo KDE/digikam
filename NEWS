@@ -14,7 +14,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 005 ==> 094562 : Renaming an album recreates all thumbnails.
 006 ==> 193124 : Import image should allow both direct and reverse ordering.
 007 ==> 188051 : Sort order of filenames in camera - no way to set or choose.
-008 ==> 
+008 ==> 183435 : No more file manager at media:/camera.
+009 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta1 - Release date: 2009-06-07
