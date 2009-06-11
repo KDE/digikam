@@ -80,6 +80,7 @@ ThumbnailCreator::ThumbnailCreator(StorageMethod method)
                 : d(new ThumbnailCreatorPriv)
 {
     d->thumbnailStorage = method;
+    initialize();
 }
 
 ThumbnailCreator::ThumbnailCreator(int thumbnailSize, StorageMethod method)
@@ -87,6 +88,7 @@ ThumbnailCreator::ThumbnailCreator(int thumbnailSize, StorageMethod method)
 {
     setThumbnailSize(thumbnailSize);
     d->thumbnailStorage = method;
+    initialize();
 }
 
 ThumbnailCreator::~ThumbnailCreator()
@@ -131,7 +133,7 @@ void ThumbnailCreator::setLoadingProperties(DImgLoaderObserver *observer, const 
     d->rawSettings = settings;
 }
 
-void ThumbnailCreator::setThumbnailProvider(ThumbnailInfoProvider *provider)
+void ThumbnailCreator::setThumbnailInfoProvider(ThumbnailInfoProvider *provider)
 {
     d->infoProvider = provider;
 }
@@ -160,6 +162,9 @@ QImage ThumbnailCreator::load(const QString& path)
         return QImage();
     }
 
+    if (d->thumbnailStorage == ThumbnailDatabase)
+        d->dbIdForReplacement = -1; // just to prevent bugs
+
     // get info about path
     ThumbnailInfo info;
     if (d->infoProvider)
@@ -171,7 +176,7 @@ QImage ThumbnailCreator::load(const QString& path)
     ThumbnailImage image;
     switch (d->thumbnailStorage)
     {
-        case PGFDatabase:
+        case ThumbnailDatabase:
             image = loadFromDatabase(info);
             break;
         case FreeDesktopStandard:
@@ -187,7 +192,7 @@ QImage ThumbnailCreator::load(const QString& path)
         {
             switch (d->thumbnailStorage)
             {
-                case PGFDatabase:
+                case ThumbnailDatabase:
                     storeInDatabase(info, image);
                     break;
                 case FreeDesktopStandard:
@@ -198,14 +203,6 @@ QImage ThumbnailCreator::load(const QString& path)
                     break;
             }
         }
-    }
-
-    if (d->thumbnailStorage == PGFDatabase)
-    {
-        // image is stored, or created, unrotated, and is now rotated for display
-        if (d->exifRotate)
-            image.qimage = exifRotate(image.qimage, image.exifOrientation);
-        d->dbIdForReplacement = -1; // just to prevent bugs
     }
 
     if (image.isNull())
@@ -219,6 +216,13 @@ QImage ThumbnailCreator::load(const QString& path)
     image.qimage = image.qimage.scaled(d->thumbnailSize, d->thumbnailSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     handleAlphaChannel(image.qimage);
 
+    if (d->thumbnailStorage == ThumbnailDatabase)
+    {
+        // image is stored, or created, unrotated, and is now rotated for display
+        if (d->exifRotate)
+            image.qimage = exifRotate(image.qimage, image.exifOrientation);
+    }
+
     return image.qimage;
 }
 
@@ -229,7 +233,7 @@ void ThumbnailCreator::deleteThumbnailsFromDisk(const QString& filePath)
         case FreeDesktopStandard:
             deleteFromDiskFreedesktop(filePath);
             break;
-        case PGFDatabase:
+        case ThumbnailDatabase:
         {
             ThumbnailInfo info;
             if (d->infoProvider)

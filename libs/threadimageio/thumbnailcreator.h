@@ -90,7 +90,7 @@ public:
     enum StorageMethod
     {
         FreeDesktopStandard,
-        PGFDatabase
+        ThumbnailDatabase
     };
 
     /**
@@ -103,11 +103,6 @@ public:
      */
     ThumbnailCreator(int thumbnailSize, StorageMethod method);
     ~ThumbnailCreator();
-
-    /**
-     * Should be called at least once after application start
-     */
-    void initialize();
 
     /**
      * Create a thumbnail for the specified file.
@@ -153,7 +148,7 @@ public:
     /**
      * Set a ThumbnailInfoProvider to provide custom ThumbnailInfos
      */
-    void setThumbnailProvider(ThumbnailInfoProvider *provider);
+    void setThumbnailInfoProvider(ThumbnailInfoProvider *provider);
 
     /**
      * Return the thumbnail size, the maximum size of the QImage
@@ -184,6 +179,8 @@ public:
     static ThumbnailInfo fileThumbnailInfo(const QString &path);
 
 private:
+
+    void initialize();
 
     ThumbnailImage createThumbnail(const ThumbnailInfo &info);
     QImage loadWithDImg(const QString& path);
