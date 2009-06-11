@@ -13,24 +13,10 @@ programname="digiKam"
 processname="digikam"
 
 # config file
-rcdir=$(kde4-config --localprefix)share/config
-rcfile="digikamrc"
-rcpath=$rcdir/$rcfile
-
-# check if config file is readable
-if [ ! -e "$rcpath" ]
-then
-    echo "Error reading $programname's configuration file."
-    echo "I searched for $rcpath, but was not able to find it."
-    echo "Make sure you started $programname at least once, to generate the "
-    echo "appropiate files in your home folder."
-    echo "Also make sure that you are currently logged into a KDE session".
-    exit 1
-fi
-
-# database
+configgroup="Album Settings"
 databasekey="Database File Path"
-databasedir=$(cat $rcpath | grep "$databasekey" | sed -e "s/$databasekey=//")
+configfile="digikamrc"
+databasedir=$(kreadconfig --file $configfile --group "$configgroup" --key "$databasekey")
 
 # make sure digiKam is not running
 proc="$(ps aux | grep $username | grep -v $0 | grep -w $processname | grep -v grep)"
