@@ -183,7 +183,7 @@ QString DMetadata::getImageComment() const
         xmpComment = getXmpTagStringLangAlt("Xmp.tiff.ImageDescription", QString(), false);
         if (!xmpComment.isEmpty())
             return xmpComment;
-}
+    }
 
     // In four, we trying to get IPTC comments
 
