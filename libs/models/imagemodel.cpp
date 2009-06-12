@@ -70,7 +70,8 @@ public:
                          *dragDropHandler;
 
     bool                  keepFilePathCache;
-    QHash<QString, int>   filePathHash;
+    QHash<QString, qlonglong>
+                          filePathHash;
 
     QObject              *preprocessor;
     bool                  reAdding;
@@ -193,9 +194,9 @@ QModelIndex ImageModel::indexForImageInfo(const ImageInfo& info) const
 
 QModelIndex ImageModel::indexForImageId(qlonglong id) const
 {
-    QHash<qlonglong, int>::iterator it = d->idHash.find(id);
-    if (it != d->idHash.end())
-        return createIndex(it.value(), 0);
+    int index = d->idHash.value(id, -1);
+    if (index != -1)
+        return createIndex(index, 0);
     return QModelIndex();
 }
 
@@ -225,9 +226,7 @@ QModelIndex ImageModel::indexForPath(const QString& filePath) const
 {
     if (d->keepFilePathCache)
     {
-        int index = d->filePathHash.value(filePath, -1);
-        if (index != -1)
-            return createIndex(index, 0);
+        return indexForImageId(d->filePathHash.value(filePath));
     }
     else
     {
@@ -243,9 +242,13 @@ ImageInfo ImageModel::imageInfo(const QString& filePath) const
 {
     if (d->keepFilePathCache)
     {
-        int index = d->filePathHash.value(filePath, -1);
-        if (index != -1)
-            return d->infos[index];
+        qlonglong id = d->filePathHash.value(filePath);
+        if (id)
+        {
+            int index = d->idHash.value(id, -1);
+            if (index != -1)
+                return d->infos[index];
+        }
     }
     else
     {
@@ -379,9 +382,10 @@ void ImageModel::publiciseInfos(const QList<ImageInfo>& infos)
     for (int i=firstNewIndex; i<=lastNewIndex; ++i)
     {
         ImageInfo &info = d->infos[i];
-        d->idHash[info.id()] = i;
+        qlonglong id = info.id();
+        d->idHash[id] = i;
         if (d->keepFilePathCache)
-            d->filePathHash[info.filePath()] = i;
+            d->filePathHash[info.filePath()] = id;
     }
     endInsertRows();
     emit imageInfosAdded(infos);
@@ -421,35 +425,40 @@ void ImageModel::finishIncrementalRefresh()
     // must still be valid, and this includes our hashes as well, which limits what we can optimize
     QList<ImageInfo>::iterator beginIt, endIt;
     QList<QPair<int,int> > pairs = d->incrementalUpdater->oldIndexes();
-    int begin, end, offset = 0;
+    int begin, end, removedRows, offset = 0;
     typedef QPair<int,int> IntPair; // to make foreach macro happy
     foreach (const IntPair &pair, pairs)
     {
         begin = pair.first - offset;
-        end = pair.second - offset;
+        end = pair.second - offset; // inclusive
+        removedRows = end - begin + 1;
         // when removing from the list, all subsequent indexes are affected
-        offset += end - begin + 1;
+        offset += removedRows;
 
         beginRemoveRows(QModelIndex(), begin, end);
 
         beginIt = d->infos.begin() + begin;
-        endIt   = d->infos.begin() + (end + 1);
+        endIt   = d->infos.begin() + (end + 1); // exclusive
 
-        // remove from idHash
-        for (QList<ImageInfo>::iterator it = beginIt; it != endIt; ++it)
+        // update idHash - which points to indexes of d->infos, and these change now!
+        QHash<qlonglong, int>::iterator it;
+        for (it = d->idHash.begin(); it != d->idHash.end(); )
         {
-            d->idHash.remove(it->id());
-        }
-
-        // remove from filePathHash
-        if (d->keepFilePathCache)
-        {
-            for (int i=begin; i<=end; ++i)
+            if (it.value() >= begin)
             {
-                QList<QString> paths = d->filePathHash.keys(i);
-                foreach (const QString &path, paths)
-                    d->filePathHash.remove(path);
+                if (it.value() > end)
+                {
+                    // after the removed interval: adjust index
+                    it.value() -= removedRows;
+                }
+                else
+                {
+                    // in the removed interval
+                    it = d->idHash.erase(it);
+                    continue;
+                }
             }
+            ++it;
         }
 
         // remove from list
@@ -458,6 +467,19 @@ void ImageModel::finishIncrementalRefresh()
         endRemoveRows();
     }
 
+    // tidy up: remove old indexes from file path hash now
+    if (d->keepFilePathCache)
+    {
+        QHash<QString, qlonglong>::iterator it;
+        for (it = d->filePathHash.begin(); it != d->filePathHash.end(); )
+        {
+            if (d->incrementalUpdater->oldIds.contains(it.value()))
+                it = d->filePathHash.erase(it);
+            else
+                ++it;
+        }
+    }
+    
     // add new indexes
     appendInfos(d->incrementalUpdater->newInfos);
 
