@@ -7,7 +7,7 @@
  * Description : batch sync pictures metadata from all Albums
  *               with digiKam database
  *
- * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,6 +39,7 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kpassivepopup.h>
 
 // Local includes
 
@@ -115,6 +116,8 @@ void BatchAlbumsSyncMetadata::parseAlbum()
         setLabel(i18n("<b>The metadata of all images has been synchronized with the digiKam database.</b>"));
         setTitle(i18n("Duration: %1",t.toString()));
         setButtonText(i18n("&Close"));
+        // Pop-up a message to bring user when all is done.
+        KPassivePopup::message(windowTitle(), i18n("Images' metadata synchronization with database is done."), this);
         advance(1);
         abort();
     }

@@ -41,6 +41,7 @@
 #include <kcodecs.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <kpassivepopup.h>
 
 // Local includes
 
@@ -143,6 +144,8 @@ void BatchThumbsGenerator::complete()
     setLabel(i18n("<b>The thumbnails database has been updated.</b>"));
     setTitle(i18n("Duration: %1", t.toString()));
     setButtonText(i18n("&Close"));
+    // Pop-up a message to bring user when all is done.
+    KPassivePopup::message(windowTitle(), i18n("The thumbnails database has been updated."), this);
     emit signalRebuildAllThumbsDone();
 }
 

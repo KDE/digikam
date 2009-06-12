@@ -41,6 +41,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kstandardguiitem.h>
+#include <kpassivepopup.h>
 
 // Local includes
 
@@ -152,6 +153,8 @@ void FingerPrintsGenerator::complete()
     setTitle(i18n("Duration: %1", t.toString()));
     setButtonGuiItem(KStandardGuiItem::ok());
     setButtonText(i18n("&Close"));
+    // Pop-up a message to bring user when all is done.
+    KPassivePopup::message(windowTitle(), i18n("Update of fingerprint database complete."), this);
     emit signalRebuildAllFingerPrintsDone();
 }
 

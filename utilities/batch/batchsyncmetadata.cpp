@@ -7,7 +7,7 @@
  * Description : batch sync pictures metadata from all Albums
  *               with digiKam database
  *
- * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -60,21 +60,18 @@ public:
         imageInfoIndex = 0;
     }
 
-    bool                   cancel;
+    bool           cancel;
+    bool           everStarted;
+    bool           running;
 
-    bool                   everStarted;
+    int            count;
+    int            imageInfoIndex;
 
-    bool                   running;
+    Album         *album;
 
-    int                    count;
+    ImageInfoJob  *imageInfoJob;
 
-    Album                 *album;
-
-    ImageInfoJob          *imageInfoJob;
-
-    ImageInfoList          imageInfoList;
-
-    int                    imageInfoIndex;
+    ImageInfoList  imageInfoList;
 };
 
 BatchSyncMetadata::BatchSyncMetadata(QObject* parent, Album *album)
@@ -83,8 +80,8 @@ BatchSyncMetadata::BatchSyncMetadata(QObject* parent, Album *album)
     d->album = album;
 
     connect(this, SIGNAL(startParsingList()),
-             this, SLOT(parseList()),
-             Qt::QueuedConnection);
+            this, SLOT(parseList()),
+            Qt::QueuedConnection);
 }
 
 BatchSyncMetadata::BatchSyncMetadata(QObject* parent, const ImageInfoList& list)
