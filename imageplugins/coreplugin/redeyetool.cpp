@@ -136,12 +136,10 @@ RedEyeTool::RedEyeTool(QObject* parent)
                                              EditorToolSettings::Cancel,
                                              EditorToolSettings::Histogram);
 
-    QGridLayout* gridSettings = new QGridLayout(d->gboxSettings->plainPage());
-
     // -------------------------------------------------------------
 
-    d->thresholdLabel = new QLabel(i18n("Sensitivity:"), d->gboxSettings->plainPage());
-    d->redThreshold   = new RIntNumInput(d->gboxSettings->plainPage());
+    d->thresholdLabel = new QLabel(i18n("Sensitivity:"));
+    d->redThreshold   = new RIntNumInput();
     d->redThreshold->setRange(10, 90, 1);
     d->redThreshold->setSliderEnabled(true);
     d->redThreshold->setDefaultValue(20);
@@ -151,9 +149,8 @@ RedEyeTool::RedEyeTool(QObject* parent)
                                        "Use a low value if an eye has been selected exactly. "
                                        "Use a high value if other parts of the face have been selected too.</p>"));
 
-    d->smoothLabel = new QLabel(i18nc("Smoothness when blurring border of changed pixels",
-                                      "Smooth:"), d->gboxSettings->plainPage());
-    d->smoothLevel = new RIntNumInput(d->gboxSettings->plainPage());
+    d->smoothLabel = new QLabel(i18nc("Smoothness when blurring border of changed pixels", "Smooth:"));
+    d->smoothLevel = new RIntNumInput();
     d->smoothLevel->setRange(0, 5, 1);
     d->smoothLevel->setSliderEnabled(true);
     d->smoothLevel->setDefaultValue(1);
@@ -161,21 +158,21 @@ RedEyeTool::RedEyeTool(QObject* parent)
                                       "of the changed pixels. "
                                       "This leads to a more naturally looking pupil."));
 
-    QLabel *label3 = new QLabel(i18n("Coloring Tint:"), d->gboxSettings->plainPage());
+    QLabel *label3 = new QLabel(i18n("Coloring Tint:"));
 
-    d->HSSelector   = new KHueSaturationSelector(d->gboxSettings->plainPage());
+    d->HSSelector   = new KHueSaturationSelector();
     d->HSSelector->setWhatsThis(i18n("Sets a custom color when re-colorizing the eyes."));
     d->HSSelector->setMinimumSize(200, 142);
     d->HSSelector->setChooserMode(ChooserValue);
     d->HSSelector->setColorValue(255);
 
-    d->VSelector    = new KColorValueSelector(d->gboxSettings->plainPage());
+    d->VSelector    = new KColorValueSelector();
     d->VSelector->setChooserMode(ChooserValue);
     d->VSelector->setMinimumSize(26, 142);
     d->VSelector->setIndent(false);
 
-    QLabel *label4 = new QLabel(i18n("Tint Level:"), d->gboxSettings->plainPage());
-    d->tintLevel   = new RIntNumInput(d->gboxSettings->plainPage());
+    QLabel *label4 = new QLabel(i18n("Tint Level:"));
+    d->tintLevel   = new RIntNumInput();
     d->tintLevel->setRange(1, 200, 1);
     d->tintLevel->setSliderEnabled(true);
     d->tintLevel->setDefaultValue(128);
@@ -184,19 +181,23 @@ RedEyeTool::RedEyeTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    gridSettings->addWidget(d->thresholdLabel, 0, 0, 1, 5);
-    gridSettings->addWidget(d->redThreshold,   1, 0, 1, 5);
-    gridSettings->addWidget(d->smoothLabel,    2, 0, 1, 5);
-    gridSettings->addWidget(d->smoothLevel,    3, 0, 1, 5);
-    gridSettings->addWidget(label3,            4, 0, 1, 5);
-    gridSettings->addWidget(d->HSSelector,     5, 0, 1, 4);
-    gridSettings->addWidget(d->VSelector,      5, 4, 1, 1);
-    gridSettings->addWidget(label4,            6, 0, 1, 5);
-    gridSettings->addWidget(d->tintLevel,      7, 0, 1, 5);
-    gridSettings->setRowStretch(8, 10);
-    gridSettings->setColumnStretch(3, 10);
-    gridSettings->setMargin(d->gboxSettings->spacingHint());
-    gridSettings->setSpacing(d->gboxSettings->spacingHint());
+    QGridLayout* mainLayout = new QGridLayout();
+    mainLayout->addWidget(d->thresholdLabel, 0, 0, 1, 5);
+    mainLayout->addWidget(d->redThreshold,   1, 0, 1, 5);
+    mainLayout->addWidget(d->smoothLabel,    2, 0, 1, 5);
+    mainLayout->addWidget(d->smoothLevel,    3, 0, 1, 5);
+    mainLayout->addWidget(label3,            4, 0, 1, 5);
+    mainLayout->addWidget(d->HSSelector,     5, 0, 1, 4);
+    mainLayout->addWidget(d->VSelector,      5, 4, 1, 1);
+    mainLayout->addWidget(label4,            6, 0, 1, 5);
+    mainLayout->addWidget(d->tintLevel,      7, 0, 1, 5);
+    mainLayout->setRowStretch(8, 10);
+    mainLayout->setColumnStretch(3, 10);
+    mainLayout->setMargin(d->gboxSettings->spacingHint());
+    mainLayout->setSpacing(d->gboxSettings->spacingHint());
+    d->gboxSettings->plainPage()->setLayout(mainLayout);
+
+    // -------------------------------------------------------------
 
     setToolSettings(d->gboxSettings);
     init();

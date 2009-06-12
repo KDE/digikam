@@ -188,21 +188,20 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QGridLayout *grid = new QGridLayout(d->gboxSettings->plainPage());
 
     d->temperatureLabel = new QLabel(i18n("<a href='http://en.wikipedia.org/wiki/Color_temperature'>"
-                                          "Color Temperature</a> (K): "), d->gboxSettings->plainPage());
+                                          "Color Temperature</a> (K): "));
     d->temperatureLabel->setOpenExternalLinks(true);
 
-    d->adjTemperatureLabel = new QLabel(i18n("Adjustment:"), d->gboxSettings->plainPage());
-    d->temperatureInput    = new RDoubleNumInput(d->gboxSettings->plainPage());
+    d->adjTemperatureLabel = new QLabel(i18n("Adjustment:"));
+    d->temperatureInput    = new RDoubleNumInput;
     d->temperatureInput->setDecimals(1);
     d->temperatureInput->input()->setRange(1750.0, 12000.0, 10.0);
     d->temperatureInput->setDefaultValue(6500.0);
     d->temperatureInput->setWhatsThis( i18n("Set here the white balance color temperature in Kelvin."));
 
-    d->temperaturePresetLabel = new QLabel(i18n("Preset:"), d->gboxSettings->plainPage());
-    d->temperaturePresetCB    = new RComboBox(d->gboxSettings->plainPage());
+    d->temperaturePresetLabel = new QLabel(i18n("Preset:"));
+    d->temperaturePresetCB    = new RComboBox;
     d->temperaturePresetCB->addItem(i18n("Candle"));
     d->temperaturePresetCB->addItem(i18n("40W Lamp"));
     d->temperaturePresetCB->addItem(i18n("100W Lamp"));
@@ -235,7 +234,7 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
                                               "<p><b>Xenon Lamp</b>: xenon lamp or light arc (6420K).</p>"
                                               "<p><b>Daylight D65</b>: overcast sky light (6500K).</p>"
                                               "<p><b>None</b>: no preset value.</p>"));
-    d->pickTemperature = new QToolButton(d->gboxSettings->plainPage());
+    d->pickTemperature = new QToolButton;
     d->pickTemperature->setIcon(KIcon("color-picker-grey"));
     d->pickTemperature->setCheckable(true);
     d->pickTemperature->setToolTip( i18n( "Temperature tone color picker." ) );
@@ -243,68 +242,68 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
                                           "image used to set the white color balance temperature and "
                                           "green component."));
 
-    KSeparator *line = new KSeparator(Qt::Horizontal, d->gboxSettings->plainPage());
+    KSeparator *line = new KSeparator(Qt::Horizontal);
 
     // -------------------------------------------------------------
 
-    d->blackLabel = new QLabel(i18n("Black point:"), d->gboxSettings->plainPage());
-    d->blackInput = new RDoubleNumInput(d->gboxSettings->plainPage());
+    d->blackLabel = new QLabel(i18n("Black point:"));
+    d->blackInput = new RDoubleNumInput;
     d->blackInput->setDecimals(2);
     d->blackInput->input()->setRange(0.0, 0.05, 0.01, true);
     d->blackInput->setWhatsThis( i18n("Set here the black level value."));
     d->blackInput->setDefaultValue(0.0);
 
-    d->darkLabel = new QLabel(i18n("Shadows:"), d->gboxSettings->plainPage());
-    d->darkInput = new RDoubleNumInput(d->gboxSettings->plainPage());
+    d->darkLabel = new QLabel(i18n("Shadows:"));
+    d->darkInput = new RDoubleNumInput;
     d->darkInput->setDecimals(2);
     d->darkInput->input()->setRange(0.0, 1.0, 0.01, true);
     d->darkInput->setDefaultValue(0.5);
     d->darkInput->setWhatsThis( i18n("Set here the shadow noise suppression level."));
 
-    d->saturationLabel = new QLabel(i18n("Saturation:"), d->gboxSettings->plainPage());
-    d->saturationInput = new RDoubleNumInput(d->gboxSettings->plainPage());
+    d->saturationLabel = new QLabel(i18n("Saturation:"));
+    d->saturationInput = new RDoubleNumInput;
     d->saturationInput->setDecimals(2);
     d->saturationInput->input()->setRange(0.0, 2.0, 0.01, true);
     d->saturationInput->setDefaultValue(1.0);
     d->saturationInput->setWhatsThis( i18n("Set here the saturation value."));
 
-    d->gammaLabel = new QLabel(i18n("Gamma:"), d->gboxSettings->plainPage());
-    d->gammaInput = new RDoubleNumInput(d->gboxSettings->plainPage());
+    d->gammaLabel = new QLabel(i18n("Gamma:"));
+    d->gammaInput = new RDoubleNumInput;
     d->gammaInput->setDecimals(2);
     d->gammaInput->input()->setRange(0.1, 3.0, 0.01, true);
     d->gammaInput->setDefaultValue(1.0);
     d->gammaInput->setWhatsThis( i18n("Set here the gamma correction value."));
 
-    d->greenLabel = new QLabel(i18n("Green:"), d->gboxSettings->plainPage());
-    d->greenInput = new RDoubleNumInput(d->gboxSettings->plainPage());
+    d->greenLabel = new QLabel(i18n("Green:"));
+    d->greenInput = new RDoubleNumInput;
     d->greenInput->setDecimals(2);
     d->greenInput->input()->setRange(0.2, 2.5, 0.01, true);
     d->greenInput->setDefaultValue(1.0);
     d->greenInput->setWhatsThis(i18n("Set here the green component to control the magenta color "
                                      "cast removal level."));
 
-    KSeparator *line2 = new KSeparator(Qt::Horizontal, d->gboxSettings->plainPage());
+    KSeparator *line2 = new KSeparator(Qt::Horizontal);
 
     // -------------------------------------------------------------
 
     d->exposureLabel = new QLabel(i18n("<a href='http://en.wikipedia.org/wiki/Exposure_value'>"
-                                       "Exposure Compensation</a> (E.V): "), d->gboxSettings->plainPage());
+                                       "Exposure Compensation</a> (E.V): "));
     d->exposureLabel->setOpenExternalLinks(true);
 
-    d->mainExposureLabel  = new QLabel(i18nc("main exposure value", "Main:"), d->gboxSettings->plainPage());
-    d->autoAdjustExposure = new QToolButton(d->gboxSettings->plainPage());
+    d->mainExposureLabel  = new QLabel(i18nc("main exposure value", "Main:"));
+    d->autoAdjustExposure = new QToolButton;
     d->autoAdjustExposure->setIcon(KIconLoader::global()->loadIcon("system-run", KIconLoader::Toolbar));
     d->autoAdjustExposure->setToolTip( i18n( "Auto exposure adjustments" ) );
     d->autoAdjustExposure->setWhatsThis(i18n("With this button, you can automatically adjust Exposure "
                                              "and Black Point values."));
-    d->mainExposureInput = new RDoubleNumInput(d->gboxSettings->plainPage());
+    d->mainExposureInput = new RDoubleNumInput;
     d->mainExposureInput->setDecimals(2);
     d->mainExposureInput->input()->setRange(-6.0, 8.0, 0.1, true);
     d->mainExposureInput->setDefaultValue(0.0);
     d->mainExposureInput->setWhatsThis( i18n("Set here the main exposure compensation value in E.V."));
 
-    d->fineExposureLabel = new QLabel(i18nc("fine exposure adjustment", "Fine:"), d->gboxSettings->plainPage());
-    d->fineExposureInput = new RDoubleNumInput(d->gboxSettings->plainPage());
+    d->fineExposureLabel = new QLabel(i18nc("fine exposure adjustment", "Fine:"));
+    d->fineExposureInput = new RDoubleNumInput;
     d->fineExposureInput->setDecimals(2);
     d->fineExposureInput->input()->setRange(-0.5, 0.5, 0.01, true);
     d->fineExposureInput->setDefaultValue(0.0);
@@ -313,33 +312,37 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    grid->setMargin(d->gboxSettings->spacingHint());
-    grid->setSpacing(d->gboxSettings->spacingHint());
-    grid->addWidget(d->temperatureLabel,        0, 0, 1, 6);
-    grid->addWidget(d->adjTemperatureLabel,     1, 0, 1, 1);
-    grid->addWidget(d->pickTemperature,         1, 1, 1, 1);
-    grid->addWidget(d->temperatureInput,        1, 2, 1, 4);
-    grid->addWidget(d->temperaturePresetLabel,  2, 0, 1, 1);
-    grid->addWidget(d->temperaturePresetCB,     2, 2, 1, 4);
-    grid->addWidget(line,                       3, 0, 1, 6);
-    grid->addWidget(d->blackLabel,              4, 0, 1, 1);
-    grid->addWidget(d->blackInput,              4, 1, 1, 5);
-    grid->addWidget(d->darkLabel,               5, 0, 1, 1);
-    grid->addWidget(d->darkInput,               5, 1, 1, 5);
-    grid->addWidget(d->saturationLabel,         6, 0, 1, 1);
-    grid->addWidget(d->saturationInput,         6, 1, 1, 5);
-    grid->addWidget(d->gammaLabel,              7, 0, 1, 1);
-    grid->addWidget(d->gammaInput,              7, 1, 1, 5);
-    grid->addWidget(d->greenLabel,              8, 0, 1, 1);
-    grid->addWidget(d->greenInput,              8, 1, 1, 5);
-    grid->addWidget(line2,                      9, 0, 1, 6);
-    grid->addWidget(d->exposureLabel,          10, 0, 1, 6);
-    grid->addWidget(d->mainExposureLabel,      11, 0, 1, 1);
-    grid->addWidget(d->autoAdjustExposure,     11, 1, 1, 1);
-    grid->addWidget(d->mainExposureInput,      11, 2, 1, 4);
-    grid->addWidget(d->fineExposureLabel,      12, 0, 1, 2);
-    grid->addWidget(d->fineExposureInput,      12, 2, 1, 4);
-    grid->setRowStretch(13, 10);
+    QGridLayout *mainLayout = new QGridLayout;
+    mainLayout->addWidget(d->temperatureLabel,        0, 0, 1, 6);
+    mainLayout->addWidget(d->adjTemperatureLabel,     1, 0, 1, 1);
+    mainLayout->addWidget(d->pickTemperature,         1, 1, 1, 1);
+    mainLayout->addWidget(d->temperatureInput,        1, 2, 1, 4);
+    mainLayout->addWidget(d->temperaturePresetLabel,  2, 0, 1, 1);
+    mainLayout->addWidget(d->temperaturePresetCB,     2, 2, 1, 4);
+    mainLayout->addWidget(line,                       3, 0, 1, 6);
+    mainLayout->addWidget(d->blackLabel,              4, 0, 1, 1);
+    mainLayout->addWidget(d->blackInput,              4, 1, 1, 5);
+    mainLayout->addWidget(d->darkLabel,               5, 0, 1, 1);
+    mainLayout->addWidget(d->darkInput,               5, 1, 1, 5);
+    mainLayout->addWidget(d->saturationLabel,         6, 0, 1, 1);
+    mainLayout->addWidget(d->saturationInput,         6, 1, 1, 5);
+    mainLayout->addWidget(d->gammaLabel,              7, 0, 1, 1);
+    mainLayout->addWidget(d->gammaInput,              7, 1, 1, 5);
+    mainLayout->addWidget(d->greenLabel,              8, 0, 1, 1);
+    mainLayout->addWidget(d->greenInput,              8, 1, 1, 5);
+    mainLayout->addWidget(line2,                      9, 0, 1, 6);
+    mainLayout->addWidget(d->exposureLabel,          10, 0, 1, 6);
+    mainLayout->addWidget(d->mainExposureLabel,      11, 0, 1, 1);
+    mainLayout->addWidget(d->autoAdjustExposure,     11, 1, 1, 1);
+    mainLayout->addWidget(d->mainExposureInput,      11, 2, 1, 4);
+    mainLayout->addWidget(d->fineExposureLabel,      12, 0, 1, 2);
+    mainLayout->addWidget(d->fineExposureInput,      12, 2, 1, 4);
+    mainLayout->setRowStretch(13, 10);
+    mainLayout->setMargin(d->gboxSettings->spacingHint());
+    mainLayout->setSpacing(d->gboxSettings->spacingHint());
+    d->gboxSettings->plainPage()->setLayout(mainLayout);
+
+    // -------------------------------------------------------------
 
     setToolSettings(d->gboxSettings);
     init();

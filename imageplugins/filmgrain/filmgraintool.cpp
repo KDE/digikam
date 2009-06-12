@@ -97,10 +97,13 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
                                              EditorToolSettings::Cancel|
                                              EditorToolSettings::Try,
                                              EditorToolSettings::PanIcon);
-    QGridLayout* grid = new QGridLayout( d->gboxSettings->plainPage() );
 
-    QLabel *label1       = new QLabel(i18n("Sensitivity (ISO):"), d->gboxSettings->plainPage());
-    d->sensibilitySlider = new QSlider(Qt::Horizontal, d->gboxSettings->plainPage());
+    d->previewWidget = new ImagePanelWidget(470, 350, "filmgrain Tool", d->gboxSettings->panIconView());
+
+    // -------------------------------------------------------------
+
+    QLabel *label1       = new QLabel(i18n("Sensitivity (ISO):"));
+    d->sensibilitySlider = new QSlider(Qt::Horizontal);
     d->sensibilitySlider->setMinimum(2);
     d->sensibilitySlider->setMaximum(30);
     d->sensibilitySlider->setPageStep(1);
@@ -109,7 +112,7 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
     d->sensibilitySlider->setTickInterval(1);
     d->sensibilitySlider->setTickPosition(QSlider::TicksBelow);
 
-    d->sensibilityLCDValue = new QLCDNumber(4, d->gboxSettings->plainPage());
+    d->sensibilityLCDValue = new QLCDNumber(4);
     d->sensibilityLCDValue->setSegmentStyle( QLCDNumber::Flat );
     d->sensibilityLCDValue->display( QString::number(2400) );
     QString whatsThis = i18n("Set here the film ISO-sensitivity to use for "
@@ -120,19 +123,18 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    grid->addWidget(label1,                 0, 0, 1, 2);
-    grid->addWidget(d->sensibilitySlider,   1, 0, 1, 1);
-    grid->addWidget(d->sensibilityLCDValue, 1, 1, 1, 1);
-    grid->setRowStretch(2, 10);
-    grid->setMargin(d->gboxSettings->spacingHint());
-    grid->setSpacing(d->gboxSettings->spacingHint());
-
-    setToolSettings(d->gboxSettings);
+    QGridLayout* mainLayout = new QGridLayout;
+    mainLayout->addWidget(label1,                 0, 0, 1, 2);
+    mainLayout->addWidget(d->sensibilitySlider,   1, 0, 1, 1);
+    mainLayout->addWidget(d->sensibilityLCDValue, 1, 1, 1, 1);
+    mainLayout->setRowStretch(2, 10);
+    mainLayout->setMargin(d->gboxSettings->spacingHint());
+    mainLayout->setSpacing(d->gboxSettings->spacingHint());
+    d->gboxSettings->plainPage()->setLayout(mainLayout);
 
     // -------------------------------------------------------------
 
-    d->previewWidget = new ImagePanelWidget(470, 350, "filmgrain Tool", d->gboxSettings->panIconView());
-
+    setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
     init();
 

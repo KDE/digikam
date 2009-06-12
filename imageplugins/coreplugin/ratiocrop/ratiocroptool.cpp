@@ -189,7 +189,6 @@ RatioCropTool::RatioCropTool(QObject* parent)
     QVBoxLayout* vlay      = new QVBoxLayout(d->gboxSettings->plainPage());
     d->expbox              = new RExpanderBox(d->gboxSettings->plainPage());
     QWidget *cropSelection = new QWidget(d->expbox);
-    QGridLayout* grid      = new QGridLayout(cropSelection);
 
     QLabel *label = new QLabel(i18n("Aspect ratio:"), cropSelection);
     d->ratioCB    = new RComboBox(cropSelection);
@@ -297,23 +296,24 @@ RatioCropTool::RatioCropTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    grid->addWidget(label,                0, 0, 1, 1);
-    grid->addWidget(d->ratioCB,           0, 1, 1, 3);
-    grid->addWidget(d->preciseCrop,       0, 4, 1, 1);
-    grid->addWidget(d->customLabel,       1, 0, 1, 1);
-    grid->addWidget(d->customRatioNInput, 1, 1, 1, 1);
-    grid->addWidget(d->customRatioDInput, 2, 1, 1, 1);
-    grid->addWidget(d->orientLabel,       3, 0, 1, 1);
-    grid->addWidget(d->orientCB,          3, 1, 1, 3);
-    grid->addWidget(d->autoOrientation,   3, 4, 1, 1);
-    grid->addWidget(d->xInput,            4, 0, 1, 4);
-    grid->addWidget(d->widthInput,        5, 0, 1, 4);
-    grid->addWidget(d->centerWidth,       5, 4, 1, 1);
-    grid->addWidget(d->yInput,            6, 0, 1, 4);
-    grid->addWidget(d->heightInput,       7, 0, 1, 4);
-    grid->addWidget(d->centerHeight,      7, 4, 1, 1);
-    grid->setMargin(d->gboxSettings->spacingHint());
-    grid->setSpacing(d->gboxSettings->spacingHint());
+    QGridLayout* mainLayout = new QGridLayout(cropSelection);
+    mainLayout->addWidget(label,                0, 0, 1, 1);
+    mainLayout->addWidget(d->ratioCB,           0, 1, 1, 3);
+    mainLayout->addWidget(d->preciseCrop,       0, 4, 1, 1);
+    mainLayout->addWidget(d->customLabel,       1, 0, 1, 1);
+    mainLayout->addWidget(d->customRatioNInput, 1, 1, 1, 1);
+    mainLayout->addWidget(d->customRatioDInput, 2, 1, 1, 1);
+    mainLayout->addWidget(d->orientLabel,       3, 0, 1, 1);
+    mainLayout->addWidget(d->orientCB,          3, 1, 1, 3);
+    mainLayout->addWidget(d->autoOrientation,   3, 4, 1, 1);
+    mainLayout->addWidget(d->xInput,            4, 0, 1, 4);
+    mainLayout->addWidget(d->widthInput,        5, 0, 1, 4);
+    mainLayout->addWidget(d->centerWidth,       5, 4, 1, 1);
+    mainLayout->addWidget(d->yInput,            6, 0, 1, 4);
+    mainLayout->addWidget(d->heightInput,       7, 0, 1, 4);
+    mainLayout->addWidget(d->centerHeight,      7, 4, 1, 1);
+    mainLayout->setMargin(d->gboxSettings->spacingHint());
+    mainLayout->setSpacing(d->gboxSettings->spacingHint());
 
     d->expbox->addItem(cropSelection, SmallIcon("transform-crop-and-resize"),
                       i18n("Crop Settings"), QString("CropSelection"), true);

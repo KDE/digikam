@@ -121,11 +121,9 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
                                              EditorToolSettings::Cancel,
                                              EditorToolSettings::Histogram);
 
-    QGridLayout* gridSettings = new QGridLayout(d->gboxSettings->plainPage());
-
     // -------------------------------------------------------------
 
-    d->correctionTools = new QListWidget(d->gboxSettings->plainPage());
+    d->correctionTools = new QListWidget();
     d->correctionTools->setIconSize(QSize(128, 128));
 
     QPixmap pix = getThumbnailForEffect(AutoLevelsCorrection);
@@ -182,10 +180,16 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
 
     d->correctionTools->setFocus();
 
-    gridSettings->addWidget(d->correctionTools, 0, 0, 1, 5);
-    gridSettings->setRowStretch(0, 10);
-    gridSettings->setMargin(d->gboxSettings->spacingHint());
-    gridSettings->setSpacing(d->gboxSettings->spacingHint());
+    // -------------------------------------------------------------
+
+    QGridLayout* mainLayout = new QGridLayout();
+    mainLayout->addWidget(d->correctionTools, 0, 0, 1, 5);
+    mainLayout->setRowStretch(0, 10);
+    mainLayout->setMargin(d->gboxSettings->spacingHint());
+    mainLayout->setSpacing(d->gboxSettings->spacingHint());
+    d->gboxSettings->plainPage()->setLayout(mainLayout);
+
+    // -------------------------------------------------------------
 
     setToolSettings(d->gboxSettings);
     init();

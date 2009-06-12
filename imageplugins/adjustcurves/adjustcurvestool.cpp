@@ -185,74 +185,72 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
     // we don't need to use the Gradient widget in this tool
     d->gboxSettings->histogramBox()->setGradientVisible(false);
 
-    QGridLayout* grid = new QGridLayout(d->gboxSettings->plainPage());
 
     // -------------------------------------------------------------
 
-    QWidget *curveBox = new QWidget(d->gboxSettings->plainPage());
-    QGridLayout* gl   = new QGridLayout(curveBox);
+    QWidget *curveBox = new QWidget();
 
-    d->vGradient = new ColorGradientWidget(Qt::Vertical, 10, curveBox);
+    d->vGradient = new ColorGradientWidget(Qt::Vertical, 10);
     d->vGradient->setColors(QColor("white"), QColor("black"));
 
     d->curvesWidget = new CurvesWidget(256, 256, d->originalImage->bits(), d->originalImage->width(),
-                                                 d->originalImage->height(), d->originalImage->sixteenBit(),
-                                                 curveBox);
+                                                 d->originalImage->height(), d->originalImage->sixteenBit());
     d->curvesWidget->setWhatsThis(i18n("This is the curve drawing of the selected channel from "
                                        "original image"));
 
-    QLabel *spaceh = new QLabel(curveBox);
+    QLabel *spaceh = new QLabel;
     spaceh->setFixedHeight(1);
 
-    d->hGradient = new ColorGradientWidget(Qt::Horizontal, 10, curveBox);
+    d->hGradient = new ColorGradientWidget(Qt::Horizontal, 10);
     d->hGradient->setColors(QColor("black"), QColor("white"));
 
-    gl->addWidget(d->vGradient,     0, 0, 1, 1);
-    gl->addWidget(d->curvesWidget,  0, 2, 1, 1);
-    gl->addWidget(spaceh,           1, 2, 1, 1);
-    gl->addWidget(d->hGradient,     2, 2, 1, 1);
-    gl->setRowMinimumHeight(1, d->gboxSettings->spacingHint());
-    gl->setMargin(0);
-    gl->setSpacing(0);
+    QGridLayout* curveBoxLayout = new QGridLayout;
+    curveBoxLayout->addWidget(d->vGradient,     0, 0, 1, 1);
+    curveBoxLayout->addWidget(d->curvesWidget,  0, 2, 1, 1);
+    curveBoxLayout->addWidget(spaceh,           1, 2, 1, 1);
+    curveBoxLayout->addWidget(d->hGradient,     2, 2, 1, 1);
+    curveBoxLayout->setRowMinimumHeight(1, d->gboxSettings->spacingHint());
+    curveBoxLayout->setMargin(0);
+    curveBoxLayout->setSpacing(0);
+    curveBox->setLayout(curveBoxLayout);
 
     // -------------------------------------------------------------
 
-    QWidget *typeBox   = new QWidget(d->gboxSettings->plainPage());
-    QHBoxLayout *hlay2 = new QHBoxLayout(typeBox);
-    d->curveType       = new QButtonGroup(typeBox);
+    QWidget *typeBox = new QWidget();
 
-    d->curveFree = new QToolButton(typeBox);
+    d->curveFree = new QToolButton;
     d->curveFree->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/curvefree.png")));
     d->curveFree->setCheckable(true);
     d->curveFree->setToolTip(i18n("Curve free mode"));
     d->curveFree->setWhatsThis( i18n("With this button, you can draw your curve free-hand "
                                      "with the mouse."));
-    d->curveType->addButton(d->curveFree, FreeDrawing);
 
-    d->curveSmooth = new QToolButton(typeBox);
+    d->curveSmooth = new QToolButton;
     d->curveSmooth->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/curvemooth.png")));
     d->curveSmooth->setCheckable(true);
     d->curveSmooth->setToolTip(i18n("Curve smooth mode"));
     d->curveSmooth->setWhatsThis( i18n("With this button, the curve type is constrained to "
                                        "be a smooth line with tension."));
-    d->curveType->addButton(d->curveSmooth, SmoothDrawing);
 
-    hlay2->setMargin(0);
-    hlay2->setSpacing(0);
-    hlay2->addWidget(d->curveFree);
-    hlay2->addWidget(d->curveSmooth);
+    d->curveType = new QButtonGroup(typeBox);
+    d->curveType->addButton(d->curveFree, FreeDrawing);
+    d->curveType->addButton(d->curveSmooth, SmoothDrawing);
 
     d->curveType->setExclusive(true);
     d->curveSmooth->setChecked(true);
 
+    QHBoxLayout *typeBoxLayout = new QHBoxLayout;
+    typeBoxLayout->addWidget(d->curveFree);
+    typeBoxLayout->addWidget(d->curveSmooth);
+    typeBoxLayout->setMargin(0);
+    typeBoxLayout->setSpacing(0);
+    typeBox->setLayout(typeBoxLayout);
+
     // -------------------------------------------------------------
 
-    d->pickerBox              = new QWidget(d->gboxSettings->plainPage());
-    QHBoxLayout *hlay3        = new QHBoxLayout(d->pickerBox);
-    d->pickerColorButtonGroup = new QButtonGroup(d->pickerBox);
+    d->pickerBox = new QWidget();
 
-    d->pickBlack = new QToolButton(d->pickerBox);
-    d->pickerColorButtonGroup->addButton(d->pickBlack, BlackTonal);
+    d->pickBlack = new QToolButton;
     d->pickBlack->setIcon(KIcon("color-picker-black"));
     d->pickBlack->setCheckable(true);
     d->pickBlack->setToolTip(i18n("All channels shadow tone color picker"));
@@ -260,8 +258,7 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
                                      "image used to set <b>Shadow Tone</b> "
                                      "smooth curves point on Red, Green, Blue, and Luminosity channels."));
 
-    d->pickGray = new QToolButton(d->pickerBox);
-    d->pickerColorButtonGroup->addButton(d->pickGray, GrayTonal);
+    d->pickGray = new QToolButton;
     d->pickGray->setIcon(KIcon("color-picker-grey"));
     d->pickGray->setCheckable(true);
     d->pickGray->setToolTip(i18n("All channels middle tone color picker"));
@@ -269,8 +266,7 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
                                     "image used to set <b>Middle Tone</b> "
                                     "smooth curves point on Red, Green, Blue, and Luminosity channels."));
 
-    d->pickWhite = new QToolButton(d->pickerBox);
-    d->pickerColorButtonGroup->addButton(d->pickWhite, WhiteTonal);
+    d->pickWhite = new QToolButton;
     d->pickWhite->setIcon(KIcon("color-picker-white"));
     d->pickWhite->setCheckable(true);
     d->pickWhite->setToolTip( i18n( "All channels highlight tone color picker" ) );
@@ -278,17 +274,24 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
                                      "image used to set <b>Highlight Tone</b> "
                                      "smooth curves point on Red, Green, Blue, and Luminosity channels."));
 
-    hlay3->setMargin(0);
-    hlay3->setSpacing(0);
-    hlay3->addWidget(d->pickBlack);
-    hlay3->addWidget(d->pickGray);
-    hlay3->addWidget(d->pickWhite);
+    d->pickerColorButtonGroup = new QButtonGroup(d->pickerBox);
+    d->pickerColorButtonGroup->addButton(d->pickBlack, BlackTonal);
+    d->pickerColorButtonGroup->addButton(d->pickGray, GrayTonal);
+    d->pickerColorButtonGroup->addButton(d->pickWhite, WhiteTonal);
+
+    QHBoxLayout *pickerBoxLayout = new QHBoxLayout;
+    pickerBoxLayout->addWidget(d->pickBlack);
+    pickerBoxLayout->addWidget(d->pickGray);
+    pickerBoxLayout->addWidget(d->pickWhite);
+    pickerBoxLayout->setMargin(0);
+    pickerBoxLayout->setSpacing(0);
+    d->pickerBox->setLayout(pickerBoxLayout);
 
     d->pickerColorButtonGroup->setExclusive(true);
 
     // -------------------------------------------------------------
 
-    d->resetButton = new QPushButton(i18n("&Reset"), d->gboxSettings->plainPage());
+    d->resetButton = new QPushButton(i18n("&Reset"));
     d->resetButton->setIcon(KIconLoader::global()->loadIcon("document-revert", KIconLoader::Toolbar));
     d->resetButton->setToolTip(i18n("Reset current channel curves' values."));
     d->resetButton->setWhatsThis(i18n("If you press this button, all curves' values "
@@ -303,11 +306,15 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    grid->addWidget(curveBox,   0, 0, 3, 6);
-    grid->addLayout(l3,         3, 1, 1, 4);
-    grid->setRowStretch(4, 10);
-    grid->setMargin(d->gboxSettings->spacingHint());
-    grid->setSpacing(d->gboxSettings->spacingHint());
+    QGridLayout* mainLayout = new QGridLayout();
+    mainLayout->addWidget(curveBox,   0, 0, 3, 6);
+    mainLayout->addLayout(l3,         3, 1, 1, 4);
+    mainLayout->setRowStretch(4, 10);
+    mainLayout->setMargin(d->gboxSettings->spacingHint());
+    mainLayout->setSpacing(d->gboxSettings->spacingHint());
+    d->gboxSettings->plainPage()->setLayout(mainLayout);
+
+    // -------------------------------------------------------------
 
     setToolSettings(d->gboxSettings);
     init();

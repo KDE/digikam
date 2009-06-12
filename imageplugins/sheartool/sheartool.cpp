@@ -127,69 +127,74 @@ ShearTool::ShearTool(QObject* parent)
                                              EditorToolSettings::Cancel,
                                              EditorToolSettings::ColorGuide);
 
-    QGridLayout* gridSettings = new QGridLayout(d->gboxSettings->plainPage());
+    // -------------------------------------------------------------
 
-    QLabel *label1   = new QLabel(i18n("New width:"), d->gboxSettings->plainPage());
-    d->newWidthLabel = new QLabel(temp.setNum(iface.originalWidth()) + i18n(" px"), d->gboxSettings->plainPage());
+    QLabel *label1   = new QLabel(i18n("New width:"));
+    d->newWidthLabel = new QLabel(temp.setNum(iface.originalWidth()) + i18n(" px"));
     d->newWidthLabel->setAlignment(Qt::AlignBottom | Qt::AlignRight);
 
-    QLabel *label2    = new QLabel(i18n("New height:"), d->gboxSettings->plainPage());
-    d->newHeightLabel = new QLabel(temp.setNum(iface.originalHeight()) + i18n(" px"), d->gboxSettings->plainPage());
+    QLabel *label2    = new QLabel(i18n("New height:"));
+    d->newHeightLabel = new QLabel(temp.setNum(iface.originalHeight()) + i18n(" px"));
     d->newHeightLabel->setAlignment(Qt::AlignBottom | Qt::AlignRight);
 
-    KSeparator *line = new KSeparator(Qt::Horizontal, d->gboxSettings->plainPage());
-
-    QLabel *label3     = new QLabel(i18n("Main horizontal angle:"), d->gboxSettings->plainPage());
-    d->mainHAngleInput = new RIntNumInput(d->gboxSettings->plainPage());
+    QLabel *label3     = new QLabel(i18n("Main horizontal angle:"));
+    d->mainHAngleInput = new RIntNumInput;
     d->mainHAngleInput->setRange(-45, 45, 1);
     d->mainHAngleInput->setSliderEnabled(true);
     d->mainHAngleInput->setDefaultValue(0);
     d->mainHAngleInput->setWhatsThis( i18n("The main horizontal shearing angle, in degrees."));
 
-    QLabel *label4     = new QLabel(i18n("Fine horizontal angle:"), d->gboxSettings->plainPage());
-    d->fineHAngleInput = new RDoubleNumInput(d->gboxSettings->plainPage());
+    QLabel *label4     = new QLabel(i18n("Fine horizontal angle:"));
+    d->fineHAngleInput = new RDoubleNumInput;
     d->fineHAngleInput->input()->setRange(-1.0, 1.0, 0.01, true);
     d->fineHAngleInput->setDefaultValue(0);
     d->fineHAngleInput->setWhatsThis( i18n("This value in degrees will be added to main "
                                            "horizontal angle value to set fine adjustments."));
-    QLabel *label5     = new QLabel(i18n("Main vertical angle:"), d->gboxSettings->plainPage());
-    d->mainVAngleInput = new RIntNumInput(d->gboxSettings->plainPage());
+    QLabel *label5     = new QLabel(i18n("Main vertical angle:"));
+    d->mainVAngleInput = new RIntNumInput;
     d->mainVAngleInput->setRange(-45, 45, 1);
     d->mainVAngleInput->setSliderEnabled(true);
     d->mainVAngleInput->setDefaultValue(0);
     d->mainVAngleInput->setWhatsThis( i18n("The main vertical shearing angle, in degrees."));
 
-    QLabel *label6     = new QLabel(i18n("Fine vertical angle:"), d->gboxSettings->plainPage());
-    d->fineVAngleInput = new RDoubleNumInput(d->gboxSettings->plainPage());
+    QLabel *label6     = new QLabel(i18n("Fine vertical angle:"));
+    d->fineVAngleInput = new RDoubleNumInput;
     d->fineVAngleInput->input()->setRange(-1.0, 1.0, 0.01, true);
     d->fineVAngleInput->setDefaultValue(0);
     d->fineVAngleInput->setWhatsThis( i18n("This value in degrees will be added to main vertical "
                                            "angle value to set fine adjustments."));
 
-    d->antialiasInput = new QCheckBox(i18n("Anti-Aliasing"), d->gboxSettings->plainPage());
+    d->antialiasInput = new QCheckBox(i18n("Anti-Aliasing"));
     d->antialiasInput->setWhatsThis( i18n("Enable this option to apply the anti-aliasing filter "
                                           "to the sheared image. "
                                           "To smooth the target image, it will be blurred a little."));
 
+    KSeparator *line = new KSeparator(Qt::Horizontal);
+
     // -------------------------------------------------------------
 
-    gridSettings->setMargin(d->gboxSettings->spacingHint());
-    gridSettings->setSpacing(0);
-    gridSettings->addWidget(label1,              0, 0, 1, 1);
-    gridSettings->addWidget(d->newWidthLabel,    0, 1, 1, 2);
-    gridSettings->addWidget(label2,              1, 0, 1, 1);
-    gridSettings->addWidget(d->newHeightLabel,   1, 1, 1, 2);
-    gridSettings->addWidget(line,                2, 0, 1, 3);
-    gridSettings->addWidget(label3,              3, 0, 1, 3);
-    gridSettings->addWidget(d->mainHAngleInput,  4, 0, 1, 3);
-    gridSettings->addWidget(label4,              5, 0, 1, 3);
-    gridSettings->addWidget(d->fineHAngleInput,  6, 0, 1, 3);
-    gridSettings->addWidget(label5,              7, 0, 1, 1);
-    gridSettings->addWidget(d->mainVAngleInput,  8, 0, 1, 3);
-    gridSettings->addWidget(label6,              9, 0, 1, 3);
-    gridSettings->addWidget(d->fineVAngleInput, 10, 0, 1, 3);
-    gridSettings->addWidget(d->antialiasInput,  11, 0, 1, 3);
-    gridSettings->setRowStretch(12, 10);
+    QGridLayout* mainLayout = new QGridLayout;
+    mainLayout->setSpacing(0);
+    mainLayout->addWidget(label1,              0, 0, 1, 1);
+    mainLayout->addWidget(d->newWidthLabel,    0, 1, 1, 2);
+    mainLayout->addWidget(label2,              1, 0, 1, 1);
+    mainLayout->addWidget(d->newHeightLabel,   1, 1, 1, 2);
+    mainLayout->addWidget(line,                2, 0, 1, 3);
+    mainLayout->addWidget(label3,              3, 0, 1, 3);
+    mainLayout->addWidget(d->mainHAngleInput,  4, 0, 1, 3);
+    mainLayout->addWidget(label4,              5, 0, 1, 3);
+    mainLayout->addWidget(d->fineHAngleInput,  6, 0, 1, 3);
+    mainLayout->addWidget(label5,              7, 0, 1, 1);
+    mainLayout->addWidget(d->mainVAngleInput,  8, 0, 1, 3);
+    mainLayout->addWidget(label6,              9, 0, 1, 3);
+    mainLayout->addWidget(d->fineVAngleInput, 10, 0, 1, 3);
+    mainLayout->addWidget(d->antialiasInput,  11, 0, 1, 3);
+    mainLayout->setRowStretch(12, 10);
+    mainLayout->setMargin(d->gboxSettings->spacingHint());
+    mainLayout->setSpacing(d->gboxSettings->spacingHint());
+    d->gboxSettings->plainPage()->setLayout(mainLayout);
+
+    // -------------------------------------------------------------
 
     setToolSettings(d->gboxSettings);
     init();

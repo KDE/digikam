@@ -112,9 +112,12 @@ BlurFXTool::BlurFXTool(QObject* parent)
                                              EditorToolSettings::Try,
                                              EditorToolSettings::PanIcon);
 
-    QGridLayout* grid  = new QGridLayout(d->gboxSettings->plainPage());
-    d->effectTypeLabel = new QLabel(i18n("Type:"), d->gboxSettings->plainPage());
-    d->effectType      = new RComboBox(d->gboxSettings->plainPage());
+    d->previewWidget = new ImagePanelWidget(470, 350, "blurfx Tool", d->gboxSettings->panIconView());
+
+    // -------------------------------------------------------------
+
+    d->effectTypeLabel = new QLabel(i18n("Type:"));
+    d->effectType      = new RComboBox;
     d->effectType->addItem(i18n("Zoom Blur"));
     d->effectType->addItem(i18n("Radial Blur"));
     d->effectType->addItem(i18n("Far Blur"));
@@ -150,15 +153,15 @@ BlurFXTool::BlurFXTool(QObject* parent)
                                      "<p><b>Mosaic</b>: divides the photograph into rectangular cells and then "
                                      "recreates it by filling those cells with average pixel value.</p>"));
 
-    d->distanceLabel = new QLabel(i18n("Distance:"), d->gboxSettings->plainPage());
-    d->distanceInput = new RIntNumInput(d->gboxSettings->plainPage());
+    d->distanceLabel = new QLabel(i18n("Distance:"));
+    d->distanceInput = new RIntNumInput;
     d->distanceInput->setRange(0, 100, 1);
     d->distanceInput->setSliderEnabled(true);
     d->distanceInput->setDefaultValue(3);
     d->distanceInput->setWhatsThis( i18n("Set here the blur distance in pixels."));
 
-    d->levelLabel = new QLabel(i18nc("level to use for the effect", "Level:"), d->gboxSettings->plainPage());
-    d->levelInput = new RIntNumInput(d->gboxSettings->plainPage());
+    d->levelLabel = new QLabel(i18nc("level to use for the effect", "Level:"));
+    d->levelInput = new RIntNumInput;
     d->levelInput->setRange(0, 360, 1);
     d->levelInput->setSliderEnabled(true);
     d->levelInput->setDefaultValue(128);
@@ -166,22 +169,21 @@ BlurFXTool::BlurFXTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    grid->addWidget(d->effectTypeLabel, 0, 0, 1, 2);
-    grid->addWidget(d->effectType,      1, 0, 1, 2);
-    grid->addWidget(d->distanceLabel,   2, 0, 1, 2);
-    grid->addWidget(d->distanceInput,   3, 0, 1, 2);
-    grid->addWidget(d->levelLabel,      4, 0, 1, 2);
-    grid->addWidget(d->levelInput,      5, 0, 1, 2);
-    grid->setRowStretch(6, 10);
-    grid->setMargin(d->gboxSettings->spacingHint());
-    grid->setSpacing(d->gboxSettings->spacingHint());
-
-    setToolSettings(d->gboxSettings);
+    QGridLayout* mainLayout  = new QGridLayout;
+    mainLayout->addWidget(d->effectTypeLabel, 0, 0, 1, 2);
+    mainLayout->addWidget(d->effectType,      1, 0, 1, 2);
+    mainLayout->addWidget(d->distanceLabel,   2, 0, 1, 2);
+    mainLayout->addWidget(d->distanceInput,   3, 0, 1, 2);
+    mainLayout->addWidget(d->levelLabel,      4, 0, 1, 2);
+    mainLayout->addWidget(d->levelInput,      5, 0, 1, 2);
+    mainLayout->setRowStretch(6, 10);
+    mainLayout->setMargin(d->gboxSettings->spacingHint());
+    mainLayout->setSpacing(d->gboxSettings->spacingHint());
+    d->gboxSettings->plainPage()->setLayout(mainLayout);
 
     // -------------------------------------------------------------
 
-    d->previewWidget = new ImagePanelWidget(470, 350, "blurfx Tool", d->gboxSettings->panIconView());
-
+    setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
     init();
 }

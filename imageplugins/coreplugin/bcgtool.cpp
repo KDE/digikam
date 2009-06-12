@@ -126,26 +126,25 @@ BCGTool::BCGTool(QObject* parent)
                                              EditorToolSettings::Cancel,
                                              EditorToolSettings::Histogram);
 
-    QGridLayout* gridSettings = new QGridLayout(d->gboxSettings->plainPage());
 
     // -------------------------------------------------------------
 
-    QLabel *label2 = new QLabel(i18n("Brightness:"), d->gboxSettings->plainPage());
-    d->bInput      = new RIntNumInput(d->gboxSettings->plainPage());
+    QLabel *label2 = new QLabel(i18n("Brightness:"));
+    d->bInput      = new RIntNumInput();
     d->bInput->setRange(-100, 100, 1);
     d->bInput->setSliderEnabled(true);
     d->bInput->setDefaultValue(0);
     d->bInput->setWhatsThis( i18n("Set here the brightness adjustment of the image."));
 
-    QLabel *label3 = new QLabel(i18n("Contrast:"), d->gboxSettings->plainPage());
-    d->cInput      = new RIntNumInput(d->gboxSettings->plainPage());
+    QLabel *label3 = new QLabel(i18n("Contrast:"));
+    d->cInput      = new RIntNumInput();
     d->cInput->setRange(-100, 100, 1);
     d->cInput->setSliderEnabled(true);
     d->cInput->setDefaultValue(0);
     d->cInput->setWhatsThis( i18n("Set here the contrast adjustment of the image."));
 
-    QLabel *label4 = new QLabel(i18n("Gamma:"), d->gboxSettings->plainPage());
-    d->gInput      = new RDoubleNumInput(d->gboxSettings->plainPage());
+    QLabel *label4 = new QLabel(i18n("Gamma:"));
+    d->gInput      = new RDoubleNumInput();
     d->gInput->setDecimals(2);
     d->gInput->input()->setRange(0.1, 3.0, 0.01, true);
     d->gInput->setDefaultValue(1.0);
@@ -153,15 +152,19 @@ BCGTool::BCGTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    gridSettings->addWidget(label2,    0, 0, 1, 5);
-    gridSettings->addWidget(d->bInput, 1, 0, 1, 5);
-    gridSettings->addWidget(label3,    2, 0, 1, 5);
-    gridSettings->addWidget(d->cInput, 3, 0, 1, 5);
-    gridSettings->addWidget(label4,    4, 0, 1, 5);
-    gridSettings->addWidget(d->gInput, 5, 0, 1, 5);
-    gridSettings->setRowStretch(6, 10);
-    gridSettings->setMargin(d->gboxSettings->spacingHint());
-    gridSettings->setSpacing(d->gboxSettings->spacingHint());
+    QGridLayout* mainLayout = new QGridLayout();
+    mainLayout->addWidget(label2,    0, 0, 1, 5);
+    mainLayout->addWidget(d->bInput, 1, 0, 1, 5);
+    mainLayout->addWidget(label3,    2, 0, 1, 5);
+    mainLayout->addWidget(d->cInput, 3, 0, 1, 5);
+    mainLayout->addWidget(label4,    4, 0, 1, 5);
+    mainLayout->addWidget(d->gInput, 5, 0, 1, 5);
+    mainLayout->setRowStretch(6, 10);
+    mainLayout->setMargin(d->gboxSettings->spacingHint());
+    mainLayout->setSpacing(d->gboxSettings->spacingHint());
+    d->gboxSettings->plainPage()->setLayout(mainLayout);
+
+    // -------------------------------------------------------------
 
     setToolSettings(d->gboxSettings);
     init();

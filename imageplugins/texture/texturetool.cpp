@@ -94,14 +94,17 @@ TextureTool::TextureTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings    = new EditorToolSettings(EditorToolSettings::Default|
-                                                EditorToolSettings::Ok|
-                                                EditorToolSettings::Cancel|
-                                                EditorToolSettings::PanIcon);
-    QGridLayout* grid = new QGridLayout(d->gboxSettings->plainPage());
+    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
+                                             EditorToolSettings::Ok|
+                                             EditorToolSettings::Cancel|
+                                             EditorToolSettings::PanIcon);
 
-    QLabel *label1 = new QLabel(i18n("Type:"), d->gboxSettings->plainPage());
-    d->textureType = new RComboBox(d->gboxSettings->plainPage());
+    d->previewWidget = new ImagePanelWidget(470, 350, "texture Tool", d->gboxSettings->panIconView());
+
+    // -------------------------------------------------------------
+
+    QLabel *label1 = new QLabel(i18n("Type:"));
+    d->textureType = new RComboBox;
     d->textureType->addItem(i18n("Paper"));
     d->textureType->addItem(i18n("Paper 2"));
     d->textureType->addItem(i18n("Fabric"));
@@ -123,31 +126,28 @@ TextureTool::TextureTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label2 = new QLabel(i18n("Relief:"), d->gboxSettings->plainPage());
-
-    d->blendGain    = new RIntNumInput(d->gboxSettings->plainPage());
+    QLabel *label2 = new QLabel(i18n("Relief:"));
+    d->blendGain   = new RIntNumInput;
     d->blendGain->setRange(1, 255, 1);
     d->blendGain->setSliderEnabled(true);
     d->blendGain->setDefaultValue(200);
-    d->blendGain->setWhatsThis(i18n("Set here the relief gain used to merge "
-                                    "texture and image."));
+    d->blendGain->setWhatsThis(i18n("Set here the relief gain used to merge texture and image."));
 
     // -------------------------------------------------------------
 
-    grid->addWidget(label1,         0, 0, 1, 1);
-    grid->addWidget(d->textureType, 0, 1, 1, 1);
-    grid->addWidget(label2,         1, 0, 1, 2);
-    grid->addWidget(d->blendGain,   2, 0, 1, 2);
-    grid->setRowStretch(3, 10);
-    grid->setMargin(d->gboxSettings->spacingHint());
-    grid->setSpacing(d->gboxSettings->spacingHint());
+    QGridLayout* mainLayout = new QGridLayout;
+    mainLayout->addWidget(label1,         0, 0, 1, 1);
+    mainLayout->addWidget(d->textureType, 0, 1, 1, 1);
+    mainLayout->addWidget(label2,         1, 0, 1, 2);
+    mainLayout->addWidget(d->blendGain,   2, 0, 1, 2);
+    mainLayout->setRowStretch(3, 10);
+    mainLayout->setMargin(d->gboxSettings->spacingHint());
+    mainLayout->setSpacing(d->gboxSettings->spacingHint());
+    d->gboxSettings->plainPage()->setLayout(mainLayout);
+
+    // -------------------------------------------------------------
 
     setToolSettings(d->gboxSettings);
-
-    // -------------------------------------------------------------
-
-    d->previewWidget = new ImagePanelWidget(470, 350, "texture Tool", d->gboxSettings->panIconView());
-
     setToolView(d->previewWidget);
     init();
 

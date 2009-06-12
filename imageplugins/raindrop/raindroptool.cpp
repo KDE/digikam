@@ -109,11 +109,11 @@ RainDropTool::RainDropTool(QObject* parent)
                                              EditorToolSettings::Ok|
                                              EditorToolSettings::Cancel);
 
-    QGridLayout* gridSettings = new QGridLayout(d->gboxSettings->plainPage());
 
-    QLabel *label1 = new QLabel(i18n("Drop size:"), d->gboxSettings->plainPage());
+    // -------------------------------------------------------------
 
-    d->dropInput = new RIntNumInput(d->gboxSettings->plainPage());
+    QLabel *label1 = new QLabel(i18n("Drop size:"));
+    d->dropInput   = new RIntNumInput;
     d->dropInput->setRange(0, 200, 1);
     d->dropInput->setSliderEnabled(true);
     d->dropInput->setDefaultValue(80);
@@ -121,9 +121,8 @@ RainDropTool::RainDropTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label2 = new QLabel(i18n("Number:"), d->gboxSettings->plainPage());
-
-    d->amountInput = new RIntNumInput(d->gboxSettings->plainPage());
+    QLabel *label2 = new QLabel(i18n("Number:"));
+    d->amountInput = new RIntNumInput;
     d->amountInput->setRange(1, 500, 1);
     d->amountInput->setSliderEnabled(true);
     d->amountInput->setDefaultValue(150);
@@ -131,24 +130,29 @@ RainDropTool::RainDropTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label3 = new QLabel(i18n("Fish eyes:"), d->gboxSettings->plainPage());
-
-    d->coeffInput = new RIntNumInput(d->gboxSettings->plainPage());
+    QLabel *label3 = new QLabel(i18n("Fish eyes:"));
+    d->coeffInput  = new RIntNumInput;
     d->coeffInput->setRange(1, 100, 1);
     d->coeffInput->setSliderEnabled(true);
     d->coeffInput->setDefaultValue(30);
     d->coeffInput->setWhatsThis( i18n("This value is the fish-eye-effect optical "
                                      "distortion coefficient."));
 
-    gridSettings->addWidget(label1,         0, 0, 1, 3);
-    gridSettings->addWidget(d->dropInput,   1, 0, 1, 3);
-    gridSettings->addWidget(label2,         2, 0, 1, 3);
-    gridSettings->addWidget(d->amountInput, 3, 0, 1, 3);
-    gridSettings->addWidget(label3,         4, 0, 1, 3);
-    gridSettings->addWidget(d->coeffInput,  5, 0, 1, 3);
-    gridSettings->setRowStretch(6, 10);
-    gridSettings->setMargin(d->gboxSettings->spacingHint());
-    gridSettings->setSpacing(0);
+    // -------------------------------------------------------------
+
+    QGridLayout* mainLayout = new QGridLayout;
+    mainLayout->addWidget(label1,         0, 0, 1, 3);
+    mainLayout->addWidget(d->dropInput,   1, 0, 1, 3);
+    mainLayout->addWidget(label2,         2, 0, 1, 3);
+    mainLayout->addWidget(d->amountInput, 3, 0, 1, 3);
+    mainLayout->addWidget(label3,         4, 0, 1, 3);
+    mainLayout->addWidget(d->coeffInput,  5, 0, 1, 3);
+    mainLayout->setRowStretch(6, 10);
+    mainLayout->setMargin(d->gboxSettings->spacingHint());
+    mainLayout->setSpacing(d->gboxSettings->spacingHint());
+    d->gboxSettings->plainPage()->setLayout(mainLayout);
+
+    // -------------------------------------------------------------
 
     setToolSettings(d->gboxSettings);
     init();

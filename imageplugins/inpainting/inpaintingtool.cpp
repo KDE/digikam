@@ -140,22 +140,20 @@ InPaintingTool::InPaintingTool(QObject* parent)
                                              EditorToolSettings::Ok|
                                              EditorToolSettings::Cancel);
 
-    QGridLayout* gridSettings = new QGridLayout(d->gboxSettings->plainPage());
-    d->mainTab                = new KTabWidget( d->gboxSettings->plainPage());
+    // -------------------------------------------------------------
 
+    d->mainTab         = new KTabWidget( d->gboxSettings->plainPage());
     QWidget* firstPage = new QWidget(d->mainTab);
-    QGridLayout* grid  = new QGridLayout(firstPage);
-    d->mainTab->addTab(firstPage, i18n("Preset"));
 
-    KUrlLabel *cimgLogoLabel = new KUrlLabel(firstPage);
+    KUrlLabel *cimgLogoLabel = new KUrlLabel();
     cimgLogoLabel->setText(QString());
     cimgLogoLabel->setUrl("http://cimg.sourceforge.net");
     cimgLogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-cimg.png")));
     cimgLogoLabel->setToolTip(i18n("Visit CImg library website"));
 
-    QLabel *typeLabel  = new QLabel(i18n("Filtering type:"), firstPage);
+    QLabel *typeLabel  = new QLabel(i18n("Filtering type:"));
     typeLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    d->inpaintingTypeCB = new KComboBox(firstPage);
+    d->inpaintingTypeCB = new KComboBox();
     d->inpaintingTypeCB->addItem(i18nc("no inpainting type", "None"));
     d->inpaintingTypeCB->addItem(i18n("Remove Small Artifact"));
     d->inpaintingTypeCB->addItem(i18n("Remove Medium Artifact"));
@@ -166,22 +164,35 @@ InPaintingTool::InPaintingTool(QObject* parent)
                                            "<b>Remove Medium Artifact</b>: in-paint medium image artifacts.<br/>"
                                            "<b>Remove Large Artifact</b>: in-paint large image artifacts, such as unwanted objects.</p>"));
 
-    grid->addWidget(cimgLogoLabel,       0, 1, 1, 1);
-    grid->addWidget(typeLabel,           1, 0, 1, 1);
-    grid->addWidget(d->inpaintingTypeCB, 1, 1, 1, 1);
-    grid->setRowStretch(1, 10);
-    grid->setMargin(d->gboxSettings->spacingHint());
-    grid->setSpacing(d->gboxSettings->spacingHint());
+    // -------------------------------------------------------------
+
+    QGridLayout* firstPageLayout  = new QGridLayout();
+    firstPageLayout->addWidget(cimgLogoLabel,       0, 1, 1, 1);
+    firstPageLayout->addWidget(typeLabel,           1, 0, 1, 1);
+    firstPageLayout->addWidget(d->inpaintingTypeCB, 1, 1, 1, 1);
+    firstPageLayout->setRowStretch(1, 10);
+    firstPageLayout->setMargin(d->gboxSettings->spacingHint());
+    firstPageLayout->setSpacing(d->gboxSettings->spacingHint());
+    firstPage->setLayout(firstPageLayout);
+
+    d->mainTab->addTab(firstPage, i18n("Preset"));
 
     // -------------------------------------------------------------
 
+    QLabel* spacer    = new QLabel();
     d->settingsWidget = new GreycstorationWidget(d->mainTab);
 
-    gridSettings->addWidget(d->mainTab,                               0, 1, 1, 1);
-    gridSettings->addWidget(new QLabel(d->gboxSettings->plainPage()), 1, 1, 1, 1);
-    gridSettings->setMargin(d->gboxSettings->spacingHint());
-    gridSettings->setSpacing(d->gboxSettings->spacingHint());
-    gridSettings->setRowStretch(1, 10);
+    // -------------------------------------------------------------
+
+    QGridLayout* mainLayout = new QGridLayout(d->gboxSettings->plainPage());
+    mainLayout->addWidget(d->mainTab,   0, 1, 1, 1);
+    mainLayout->addWidget(spacer,       1, 1, 1, 1);
+    mainLayout->setRowStretch(1, 10);
+    mainLayout->setMargin(d->gboxSettings->spacingHint());
+    mainLayout->setSpacing(d->gboxSettings->spacingHint());
+    d->gboxSettings->plainPage()->setLayout(mainLayout);
+
+    // -------------------------------------------------------------
 
     setToolSettings(d->gboxSettings);
 

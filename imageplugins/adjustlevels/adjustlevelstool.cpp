@@ -168,7 +168,6 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     d->histoSegments = d->originalImage->sixteenBit() ? 65535 : 255;
     d->levels        = new ImageLevels(d->originalImage->sixteenBit());
 
-
     // -------------------------------------------------------------
 
     d->previewWidget = new ImageWidget("adjustlevels Tool", 0,
@@ -191,7 +190,6 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     // we don't need to use the Gradient widget in this tool
     d->gboxSettings->histogramBox()->setGradientVisible(false);
 
-    QGridLayout* grid = new QGridLayout(d->gboxSettings->plainPage());
 
     d->levelsHistogramWidget = new HistogramWidget(256, 140, d->originalImage->bits(),
                                                              d->originalImage->width(),
@@ -203,45 +201,45 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->inputLevels = new DGradientSlider(d->gboxSettings->plainPage());
+    d->inputLevels = new DGradientSlider();
     d->inputLevels->setWhatsThis( i18n("Select the input intensity of the histogram here."));
     d->inputLevels->setToolTip( i18n( "Input intensity." ) );
     d->inputLevels->installEventFilter(this);
 
-    d->outputLevels = new DGradientSlider(d->gboxSettings->plainPage());
+    d->outputLevels = new DGradientSlider();
     d->outputLevels->setWhatsThis( i18n("Select the output intensity of the histogram here."));
     d->outputLevels->setToolTip( i18n( "Output intensity." ) );
     d->outputLevels->installEventFilter(this);
 
-    d->minInput = new RIntNumInput(d->gboxSettings->plainPage());
+    d->minInput = new RIntNumInput();
     d->minInput->setRange(0, d->histoSegments, 1);
     d->minInput->setSliderEnabled(false);
     d->minInput->setDefaultValue(0);
     d->minInput->setWhatsThis( i18n("Select the minimal input intensity value of the histogram here."));
     d->minInput->setToolTip( i18n( "Minimal input intensity." ) );
 
-    d->gammaInput = new RDoubleNumInput(d->gboxSettings->plainPage());
+    d->gammaInput = new RDoubleNumInput();
     d->gammaInput->setDecimals(2);
     d->gammaInput->setRange(0.1, 3.0, 0.01);
     d->gammaInput->setDefaultValue(1.0);
     d->gammaInput->setToolTip( i18n( "Gamma input value." ) );
     d->gammaInput->setWhatsThis( i18n("Select the gamma input value here."));
 
-    d->maxInput = new RIntNumInput(d->gboxSettings->plainPage());
+    d->maxInput = new RIntNumInput();
     d->maxInput->setRange(0, d->histoSegments, 1);
     d->maxInput->setSliderEnabled(false);
     d->maxInput->setDefaultValue(d->histoSegments);
     d->maxInput->setToolTip( i18n( "Maximal input intensity." ) );
     d->maxInput->setWhatsThis( i18n("Select the maximal input intensity value of the histogram here."));
 
-    d->minOutput = new RIntNumInput(d->gboxSettings->plainPage());
+    d->minOutput = new RIntNumInput();
     d->minOutput->setRange(0, d->histoSegments, 1);
     d->minOutput->setSliderEnabled(false);
     d->minOutput->setDefaultValue(0);
     d->minOutput->setToolTip( i18n( "Minimal output intensity." ) );
     d->minOutput->setWhatsThis( i18n("Select the minimal output intensity value of the histogram here."));
 
-    d->maxOutput = new RIntNumInput(d->gboxSettings->plainPage());
+    d->maxOutput = new RIntNumInput();
     d->maxOutput->setRange(0, d->histoSegments, 1);
     d->maxOutput->setSliderEnabled(false);
     d->maxOutput->setDefaultValue(d->histoSegments);
@@ -250,12 +248,9 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->pickerBox              = new QWidget(d->gboxSettings->plainPage());
-    QHBoxLayout *hlay3        = new QHBoxLayout(d->pickerBox);
-    d->pickerColorButtonGroup = new QButtonGroup(d->pickerBox);
+    d->pickerBox = new QWidget();
 
-    d->pickBlack = new QToolButton(d->pickerBox);
-    d->pickerColorButtonGroup->addButton(d->pickBlack, BlackTonal);
+    d->pickBlack = new QToolButton();
     d->pickBlack->setIcon(KIcon("color-picker-black"));
     d->pickBlack->setCheckable(true);
     d->pickBlack->setToolTip( i18n( "All channels shadow tone color picker" ) );
@@ -263,8 +258,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
                                     "image used to set <b>Shadow Tone</b> "
                                     "input levels on the Red, Green, Blue, and Luminosity channels."));
 
-    d->pickGray  = new QToolButton(d->pickerBox);
-    d->pickerColorButtonGroup->addButton(d->pickGray, GrayTonal);
+    d->pickGray  = new QToolButton();
     d->pickGray->setIcon(KIcon("color-picker-grey"));
     d->pickGray->setCheckable(true);
     d->pickGray->setToolTip( i18n( "All channels middle tone color picker" ) );
@@ -272,8 +266,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
                                    "image used to set <b>Middle Tone</b> "
                                    "input levels on the Red, Green, Blue, and Luminosity channels."));
 
-    d->pickWhite = new QToolButton(d->pickerBox);
-    d->pickerColorButtonGroup->addButton(d->pickWhite, WhiteTonal);
+    d->pickWhite = new QToolButton();
     d->pickWhite->setIcon(KIcon("color-picker-white"));
     d->pickWhite->setCheckable(true);
     d->pickWhite->setToolTip( i18n( "All channels highlight tone color picker" ) );
@@ -281,30 +274,37 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
                                     "image used to set <b>Highlight Tone</b> "
                                     "input levels on the Red, Green, Blue, and Luminosity channels."));
 
-    hlay3->setMargin(0);
-    hlay3->setSpacing(0);
-    hlay3->addWidget(d->pickBlack);
-    hlay3->addWidget(d->pickGray);
-    hlay3->addWidget(d->pickWhite);
+    d->pickerColorButtonGroup = new QButtonGroup(d->pickerBox);
+    d->pickerColorButtonGroup->addButton(d->pickBlack, BlackTonal);
+    d->pickerColorButtonGroup->addButton(d->pickGray, GrayTonal);
+    d->pickerColorButtonGroup->addButton(d->pickWhite, WhiteTonal);
+
+    QHBoxLayout *pickerBoxLayout = new QHBoxLayout;
+    pickerBoxLayout->setMargin(0);
+    pickerBoxLayout->setSpacing(0);
+    pickerBoxLayout->addWidget(d->pickBlack);
+    pickerBoxLayout->addWidget(d->pickGray);
+    pickerBoxLayout->addWidget(d->pickWhite);
+    d->pickerBox->setLayout(pickerBoxLayout);
 
     d->pickerColorButtonGroup->setExclusive(true);
 
     // -------------------------------------------------------------
 
-    d->autoButton = new QToolButton(d->gboxSettings->plainPage());
+    d->autoButton = new QToolButton();
     d->autoButton->setIcon(KIconLoader::global()->loadIcon("system-run", KIconLoader::Toolbar));
     d->autoButton->setToolTip( i18n( "Adjust all levels automatically." ) );
     d->autoButton->setWhatsThis(i18n("If you press this button, all channel levels will be adjusted "
                                      "automatically."));
 
-    d->resetButton = new QPushButton(i18n("&Reset"), d->gboxSettings->plainPage());
+    d->resetButton = new QPushButton(i18n("&Reset"));
     d->resetButton->setIcon(KIconLoader::global()->loadIcon("document-revert", KIconLoader::Toolbar));
     d->resetButton->setToolTip( i18n( "Reset current channel levels' values." ) );
     d->resetButton->setWhatsThis(i18n("If you press this button, all levels' values "
                                       "from the currently selected channel "
                                       "will be reset to the default values."));
 
-    QLabel *space = new QLabel(d->gboxSettings->plainPage());
+    QLabel *space = new QLabel();
     space->setFixedWidth(d->gboxSettings->spacingHint());
 
     QHBoxLayout* l3 = new QHBoxLayout();
@@ -316,20 +316,25 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    grid->setMargin(0);
-    grid->setSpacing(d->gboxSettings->spacingHint());
-    grid->addWidget(d->levelsHistogramWidget, 0, 1, 1, 5);
-    grid->addWidget(d->inputLevels,           1, 0, 1, 7);
-    grid->addWidget(d->minInput,              2, 1, 1, 1);
-    grid->addWidget(d->maxInput,              2, 5, 1, 1);
-    grid->addWidget(d->gammaInput,            3, 0, 1, 7);
-    grid->addWidget(d->outputLevels,          4, 0, 1, 7);
-    grid->addWidget(d->minOutput,             5, 1, 1, 1);
-    grid->addWidget(d->maxOutput,             5, 5, 1, 1);
-    grid->addLayout(l3,                       6, 0, 1, 7);
-    grid->setRowStretch(7, 10);
-    grid->setColumnStretch(2, 10);
-    grid->setColumnStretch(4, 10);
+    QGridLayout* mainLayout = new QGridLayout();
+    mainLayout->setSpacing(d->gboxSettings->spacingHint());
+    mainLayout->addWidget(d->levelsHistogramWidget, 0, 1, 1, 5);
+    mainLayout->addWidget(d->inputLevels,           1, 0, 1, 7);
+    mainLayout->addWidget(d->minInput,              2, 1, 1, 1);
+    mainLayout->addWidget(d->maxInput,              2, 5, 1, 1);
+    mainLayout->addWidget(d->gammaInput,            3, 0, 1, 7);
+    mainLayout->addWidget(d->outputLevels,          4, 0, 1, 7);
+    mainLayout->addWidget(d->minOutput,             5, 1, 1, 1);
+    mainLayout->addWidget(d->maxOutput,             5, 5, 1, 1);
+    mainLayout->addLayout(l3,                       6, 0, 1, 7);
+    mainLayout->setRowStretch(7, 10);
+    mainLayout->setColumnStretch(2, 10);
+    mainLayout->setColumnStretch(4, 10);
+    mainLayout->setMargin(d->gboxSettings->spacingHint());
+    mainLayout->setSpacing(d->gboxSettings->spacingHint());
+    d->gboxSettings->plainPage()->setLayout(mainLayout);
+
+    // -------------------------------------------------------------
 
     setToolSettings(d->gboxSettings);
     init();

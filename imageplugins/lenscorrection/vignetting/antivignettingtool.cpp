@@ -120,9 +120,9 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
                                              EditorToolSettings::Ok|
                                              EditorToolSettings::Cancel);
 
-    QGridLayout* gridSettings = new QGridLayout(d->gboxSettings->plainPage());
+    // -------------------------------------------------------------
 
-    d->maskPreviewLabel = new QLabel(d->gboxSettings->plainPage());
+    d->maskPreviewLabel = new QLabel();
     d->maskPreviewLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     d->maskPreviewLabel->setPixmap(QPixmap(120, 120));
     d->maskPreviewLabel->setWhatsThis(i18n("You can see here a thumbnail preview of the anti-vignetting "
@@ -130,8 +130,8 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label1  = new QLabel(i18n("Density:"), d->gboxSettings->plainPage());
-    d->densityInput = new RDoubleNumInput(d->gboxSettings->plainPage());
+    QLabel *label1  = new QLabel(i18n("Density:"));
+    d->densityInput = new RDoubleNumInput();
     d->densityInput->setDecimals(1);
     d->densityInput->input()->setRange(1.0, 20.0, 0.1, true);
     d->densityInput->setDefaultValue(2.0);
@@ -140,8 +140,8 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label2 = new QLabel(i18n("Power:"), d->gboxSettings->plainPage());
-    d->powerInput  = new RDoubleNumInput(d->gboxSettings->plainPage());
+    QLabel *label2 = new QLabel(i18n("Power:"));
+    d->powerInput  = new RDoubleNumInput();
     d->powerInput->setDecimals(1);
     d->powerInput->input()->setRange(0.1, 2.0, 0.1, true);
     d->powerInput->setDefaultValue(1.0);
@@ -150,8 +150,8 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label3 = new QLabel(i18n("Radius:"), d->gboxSettings->plainPage());
-    d->radiusInput = new RDoubleNumInput(d->gboxSettings->plainPage());
+    QLabel *label3 = new QLabel(i18n("Radius:"));
+    d->radiusInput = new RDoubleNumInput();
     d->radiusInput->setDecimals(1);
     d->radiusInput->input()->setRange(-100.0, 100.0, 0.1, true);
     d->radiusInput->setDefaultValue(1.0);
@@ -159,12 +159,12 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
                                       "multiple of the half-diagonal measure of the image, at which "
                                       "the density of the filter falls to zero."));
 
-    KSeparator *line = new KSeparator (Qt::Horizontal, d->gboxSettings->plainPage());
+    KSeparator *line = new KSeparator (Qt::Horizontal);
 
     // -------------------------------------------------------------
 
-    QLabel *label4     = new QLabel(i18n("Brightness:"), d->gboxSettings->plainPage());
-    d->brightnessInput = new RIntNumInput(d->gboxSettings->plainPage());
+    QLabel *label4     = new QLabel(i18n("Brightness:"));
+    d->brightnessInput = new RIntNumInput();
     d->brightnessInput->setRange(0, 100, 1);
     d->brightnessInput->setSliderEnabled(true);
     d->brightnessInput->setDefaultValue(0);
@@ -172,8 +172,8 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label5   = new QLabel(i18n("Contrast:"), d->gboxSettings->plainPage());
-    d->contrastInput = new RIntNumInput(d->gboxSettings->plainPage());
+    QLabel *label5   = new QLabel(i18n("Contrast:"));
+    d->contrastInput = new RIntNumInput();
     d->contrastInput->setRange(0, 100, 1);
     d->contrastInput->setSliderEnabled(true);
     d->contrastInput->setDefaultValue(0);
@@ -181,8 +181,8 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label6 = new QLabel(i18n("Gamma:"), d->gboxSettings->plainPage());
-    d->gammaInput  = new RDoubleNumInput(d->gboxSettings->plainPage());
+    QLabel *label6 = new QLabel(i18n("Gamma:"));
+    d->gammaInput  = new RDoubleNumInput();
     d->gammaInput->setDecimals(2);
     d->gammaInput->input()->setRange(0.1, 3.0, 0.01, true);
     d->gammaInput->setDefaultValue(1.0);
@@ -190,23 +190,27 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    gridSettings->addWidget(d->maskPreviewLabel, 0, 0, 1, 3);
-    gridSettings->addWidget(label1,              1, 0, 1, 3);
-    gridSettings->addWidget(d->densityInput,     2, 0, 1, 3);
-    gridSettings->addWidget(label2,              3, 0, 1, 3);
-    gridSettings->addWidget(d->powerInput,       4, 0, 1, 3);
-    gridSettings->addWidget(label3,              5, 0, 1, 3);
-    gridSettings->addWidget(d->radiusInput,      6, 0, 1, 3);
-    gridSettings->addWidget(line,                7, 0, 1, 3);
-    gridSettings->addWidget(label4,              8, 0, 1, 3);
-    gridSettings->addWidget(d->brightnessInput,  9, 0, 1, 3);
-    gridSettings->addWidget(label5,             10, 0, 1, 3);
-    gridSettings->addWidget(d->contrastInput,   11, 0, 1, 3);
-    gridSettings->addWidget(label6,             12, 0, 1, 3);
-    gridSettings->addWidget(d->gammaInput,      13, 0, 1, 3);
-    gridSettings->setRowStretch(14, 10);
-    gridSettings->setMargin(d->gboxSettings->spacingHint());
-    gridSettings->setSpacing(d->gboxSettings->spacingHint());
+    QGridLayout* mainLayout = new QGridLayout();
+    mainLayout->addWidget(d->maskPreviewLabel, 0, 0, 1, 3);
+    mainLayout->addWidget(label1,              1, 0, 1, 3);
+    mainLayout->addWidget(d->densityInput,     2, 0, 1, 3);
+    mainLayout->addWidget(label2,              3, 0, 1, 3);
+    mainLayout->addWidget(d->powerInput,       4, 0, 1, 3);
+    mainLayout->addWidget(label3,              5, 0, 1, 3);
+    mainLayout->addWidget(d->radiusInput,      6, 0, 1, 3);
+    mainLayout->addWidget(line,                7, 0, 1, 3);
+    mainLayout->addWidget(label4,              8, 0, 1, 3);
+    mainLayout->addWidget(d->brightnessInput,  9, 0, 1, 3);
+    mainLayout->addWidget(label5,             10, 0, 1, 3);
+    mainLayout->addWidget(d->contrastInput,   11, 0, 1, 3);
+    mainLayout->addWidget(label6,             12, 0, 1, 3);
+    mainLayout->addWidget(d->gammaInput,      13, 0, 1, 3);
+    mainLayout->setRowStretch(14, 10);
+    mainLayout->setMargin(d->gboxSettings->spacingHint());
+    mainLayout->setSpacing(d->gboxSettings->spacingHint());
+    d->gboxSettings->plainPage()->setLayout(mainLayout);
+
+    // -------------------------------------------------------------
 
     setToolSettings(d->gboxSettings);
     init();

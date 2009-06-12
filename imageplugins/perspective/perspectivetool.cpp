@@ -131,61 +131,64 @@ PerspectiveTool::PerspectiveTool(QObject* parent)
                                              EditorToolSettings::Cancel,
                                              EditorToolSettings::ColorGuide);
 
-    QGridLayout *gridLayout = new QGridLayout(d->gboxSettings->plainPage());
+    // -------------------------------------------------------------
 
-    QLabel *label1   = new QLabel(i18n("New width:"), d->gboxSettings->plainPage());
-    d->newWidthLabel = new QLabel(temp.setNum( iface.originalWidth()) + i18n(" px"), d->gboxSettings->plainPage());
+    QLabel *label1   = new QLabel(i18n("New width:"));
+    d->newWidthLabel = new QLabel(temp.setNum( iface.originalWidth()) + i18n(" px"));
     d->newWidthLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
 
-    QLabel *label2    = new QLabel(i18n("New height:"), d->gboxSettings->plainPage());
-    d->newHeightLabel = new QLabel(temp.setNum( iface.originalHeight()) + i18n(" px"), d->gboxSettings->plainPage());
+    QLabel *label2    = new QLabel(i18n("New height:"));
+    d->newHeightLabel = new QLabel(temp.setNum( iface.originalHeight()) + i18n(" px"));
     d->newHeightLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
 
     // -------------------------------------------------------------
 
-    KSeparator *line         = new KSeparator (Qt::Horizontal, d->gboxSettings->plainPage());
-
-    QLabel *angleLabel       = new QLabel(i18n("Angles (in degrees):"), d->gboxSettings->plainPage());
-    QLabel *label3           = new QLabel(i18n("  Top left:"), d->gboxSettings->plainPage());
-    d->topLeftAngleLabel     = new QLabel(d->gboxSettings->plainPage());
-    QLabel *label4           = new QLabel(i18n("  Top right:"), d->gboxSettings->plainPage());
-    d->topRightAngleLabel    = new QLabel(d->gboxSettings->plainPage());
-    QLabel *label5           = new QLabel(i18n("  Bottom left:"), d->gboxSettings->plainPage());
-    d->bottomLeftAngleLabel  = new QLabel(d->gboxSettings->plainPage());
-    QLabel *label6           = new QLabel(i18n("  Bottom right:"), d->gboxSettings->plainPage());
-    d->bottomRightAngleLabel = new QLabel(d->gboxSettings->plainPage());
-
-    // -------------------------------------------------------------
-
-    KSeparator *line2          = new KSeparator (Qt::Horizontal, d->gboxSettings->plainPage());
-    d->drawWhileMovingCheckBox = new QCheckBox(i18n("Draw preview while moving"), d->gboxSettings->plainPage());
-    d->drawGridCheckBox        = new QCheckBox(i18n("Draw grid"), d->gboxSettings->plainPage());
-    d->inverseTransformation   = new QCheckBox(i18n("Inverse transformation"), d->gboxSettings->plainPage());
+    KSeparator *line         = new KSeparator (Qt::Horizontal);
+    QLabel *angleLabel       = new QLabel(i18n("Angles (in degrees):"));
+    QLabel *label3           = new QLabel(i18n("  Top left:"));
+    d->topLeftAngleLabel     = new QLabel;
+    QLabel *label4           = new QLabel(i18n("  Top right:"));
+    d->topRightAngleLabel    = new QLabel;
+    QLabel *label5           = new QLabel(i18n("  Bottom left:"));
+    d->bottomLeftAngleLabel  = new QLabel;
+    QLabel *label6           = new QLabel(i18n("  Bottom right:"));
+    d->bottomRightAngleLabel = new QLabel;
 
     // -------------------------------------------------------------
 
-    gridLayout->setMargin(d->gboxSettings->spacingHint());
-    gridLayout->setSpacing(0);
-    gridLayout->addWidget(label1,                       0, 0, 1, 1);
-    gridLayout->addWidget(d->newWidthLabel,             0, 1, 1, 2);
-    gridLayout->addWidget(label2,                       1, 0, 1, 1);
-    gridLayout->addWidget(d->newHeightLabel,            1, 1, 1, 2);
-    gridLayout->addWidget(line,                         2, 0, 1, 3);
-    gridLayout->addWidget(angleLabel,                   3, 0, 1, 3);
-    gridLayout->addWidget(label3,                       4, 0, 1, 1);
-    gridLayout->addWidget(d->topLeftAngleLabel,         4, 1, 1, 2);
-    gridLayout->addWidget(label4,                       5, 0, 1, 1);
-    gridLayout->addWidget(d->topRightAngleLabel,        5, 1, 1, 2);
-    gridLayout->addWidget(label5,                       6, 0, 1, 1);
-    gridLayout->addWidget(d->bottomLeftAngleLabel,      6, 1, 1, 2);
-    gridLayout->addWidget(label6,                       7, 0, 1, 1);
-    gridLayout->addWidget(d->bottomRightAngleLabel,     7, 1, 1, 2);
-    gridLayout->addWidget(line2,                        8, 0, 1, 3);
-    gridLayout->addWidget(d->drawWhileMovingCheckBox,   9, 0, 1, 3);
-    gridLayout->addWidget(d->drawGridCheckBox,         10, 0, 1, 3);
-    gridLayout->addWidget(d->inverseTransformation,    11, 0, 1, 3);
-    gridLayout->setColumnStretch(1, 10);
-    gridLayout->setRowStretch(12, 10);
+    KSeparator *line2          = new KSeparator (Qt::Horizontal);
+    d->drawWhileMovingCheckBox = new QCheckBox(i18n("Draw preview while moving"));
+    d->drawGridCheckBox        = new QCheckBox(i18n("Draw grid"));
+    d->inverseTransformation   = new QCheckBox(i18n("Inverse transformation"));
+
+    // -------------------------------------------------------------
+
+    QGridLayout *mainLayout = new QGridLayout;
+    mainLayout->addWidget(label1,                       0, 0, 1, 1);
+    mainLayout->addWidget(d->newWidthLabel,             0, 1, 1, 2);
+    mainLayout->addWidget(label2,                       1, 0, 1, 1);
+    mainLayout->addWidget(d->newHeightLabel,            1, 1, 1, 2);
+    mainLayout->addWidget(line,                         2, 0, 1, 3);
+    mainLayout->addWidget(angleLabel,                   3, 0, 1, 3);
+    mainLayout->addWidget(label3,                       4, 0, 1, 1);
+    mainLayout->addWidget(d->topLeftAngleLabel,         4, 1, 1, 2);
+    mainLayout->addWidget(label4,                       5, 0, 1, 1);
+    mainLayout->addWidget(d->topRightAngleLabel,        5, 1, 1, 2);
+    mainLayout->addWidget(label5,                       6, 0, 1, 1);
+    mainLayout->addWidget(d->bottomLeftAngleLabel,      6, 1, 1, 2);
+    mainLayout->addWidget(label6,                       7, 0, 1, 1);
+    mainLayout->addWidget(d->bottomRightAngleLabel,     7, 1, 1, 2);
+    mainLayout->addWidget(line2,                        8, 0, 1, 3);
+    mainLayout->addWidget(d->drawWhileMovingCheckBox,   9, 0, 1, 3);
+    mainLayout->addWidget(d->drawGridCheckBox,         10, 0, 1, 3);
+    mainLayout->addWidget(d->inverseTransformation,    11, 0, 1, 3);
+    mainLayout->setColumnStretch(1, 10);
+    mainLayout->setRowStretch(12, 10);
+    mainLayout->setMargin(d->gboxSettings->spacingHint());
+    mainLayout->setSpacing(d->gboxSettings->spacingHint());
+    d->gboxSettings->plainPage()->setLayout(mainLayout);
+
+    // -------------------------------------------------------------
 
     setToolSettings(d->gboxSettings);
     init();

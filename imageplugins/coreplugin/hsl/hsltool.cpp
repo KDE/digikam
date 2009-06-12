@@ -129,11 +129,10 @@ HSLTool::HSLTool(QObject* parent)
                                              EditorToolSettings::Cancel,
                                              EditorToolSettings::Histogram);
 
-    QGridLayout* gridSettings = new QGridLayout(d->gboxSettings->plainPage());
 
     // -------------------------------------------------------------
 
-    d->HSSelector = new KHueSaturationSelector(d->gboxSettings->plainPage());
+    d->HSSelector = new KHueSaturationSelector();
     d->HSSelector->setWhatsThis(i18n("Select the hue and saturation adjustments of the image."));
     d->HSSelector->setMinimumSize(256, 142);
 
@@ -142,22 +141,22 @@ HSLTool::HSLTool(QObject* parent)
                                    "saturation adjustments."));
     d->HSPreview->setMinimumSize(256, 15);
 
-    QLabel *label2 = new QLabel(i18n("Hue:"), d->gboxSettings->plainPage());
-    d->hInput      = new RDoubleNumInput(d->gboxSettings->plainPage());
+    QLabel *label2 = new QLabel(i18n("Hue:"));
+    d->hInput      = new RDoubleNumInput();
     d->hInput->setDecimals(0);
     d->hInput->input()->setRange(-180.0, 180.0, 1.0, true);
     d->hInput->setDefaultValue(0.0);
     d->hInput->setWhatsThis(i18n("Set here the hue adjustment of the image."));
 
-    QLabel *label3 = new QLabel(i18n("Saturation:"), d->gboxSettings->plainPage());
-    d->sInput      = new RDoubleNumInput(d->gboxSettings->plainPage());
+    QLabel *label3 = new QLabel(i18n("Saturation:"));
+    d->sInput      = new RDoubleNumInput();
     d->sInput->setDecimals(2);
     d->sInput->input()->setRange(-100.0, 100.0, 0.01, true);
     d->sInput->setDefaultValue(0.0);
     d->sInput->setWhatsThis(i18n("Set here the saturation adjustment of the image."));
 
-    QLabel *label4 = new QLabel(i18n("Lightness:"), d->gboxSettings->plainPage());
-    d->lInput      = new RDoubleNumInput(d->gboxSettings->plainPage());
+    QLabel *label4 = new QLabel(i18n("Lightness:"));
+    d->lInput      = new RDoubleNumInput();
     d->lInput->setDecimals(2);
     d->lInput->input()->setRange(-100.0, 100.0, 0.01, true);
     d->lInput->setDefaultValue(0.0);
@@ -165,17 +164,21 @@ HSLTool::HSLTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    gridSettings->addWidget(d->HSSelector, 0, 0, 1, 5);
-    gridSettings->addWidget(d->HSPreview,  1, 0, 1, 5);
-    gridSettings->addWidget(label2,        2, 0, 1, 5);
-    gridSettings->addWidget(d->hInput,     3, 0, 1, 5);
-    gridSettings->addWidget(label3,        4, 0, 1, 5);
-    gridSettings->addWidget(d->sInput,     5, 0, 1, 5);
-    gridSettings->addWidget(label4,        6, 0, 1, 5);
-    gridSettings->addWidget(d->lInput,     7, 0, 1, 5);
-    gridSettings->setRowStretch(8, 10);
-    gridSettings->setMargin(d->gboxSettings->spacingHint());
-    gridSettings->setSpacing(d->gboxSettings->spacingHint());
+    QGridLayout* mainLayout = new QGridLayout();
+    mainLayout->addWidget(d->HSSelector, 0, 0, 1, 5);
+    mainLayout->addWidget(d->HSPreview,  1, 0, 1, 5);
+    mainLayout->addWidget(label2,        2, 0, 1, 5);
+    mainLayout->addWidget(d->hInput,     3, 0, 1, 5);
+    mainLayout->addWidget(label3,        4, 0, 1, 5);
+    mainLayout->addWidget(d->sInput,     5, 0, 1, 5);
+    mainLayout->addWidget(label4,        6, 0, 1, 5);
+    mainLayout->addWidget(d->lInput,     7, 0, 1, 5);
+    mainLayout->setRowStretch(8, 10);
+    mainLayout->setMargin(d->gboxSettings->spacingHint());
+    mainLayout->setSpacing(d->gboxSettings->spacingHint());
+    d->gboxSettings->plainPage()->setLayout(mainLayout);
+
+    // -------------------------------------------------------------
 
     setToolSettings(d->gboxSettings);
     init();

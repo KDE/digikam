@@ -89,27 +89,32 @@ BlurTool::BlurTool(QObject* parent)
                                              EditorToolSettings::Ok|
                                              EditorToolSettings::Cancel,
                                              EditorToolSettings::PanIcon);
-    QGridLayout* grid = new QGridLayout( d->gboxSettings->plainPage() );
 
-    QLabel *label = new QLabel(i18n("Smoothness:"), d->gboxSettings->plainPage());
+    d->previewWidget = new ImagePanelWidget(470, 350, "gaussianblur Tool", d->gboxSettings->panIconView());
 
-    d->radiusInput = new RDoubleNumInput(d->gboxSettings->plainPage());
+    // --------------------------------------------------------
+
+    QLabel *label  = new QLabel(i18n("Smoothness:"));
+    d->radiusInput = new RDoubleNumInput();
     d->radiusInput->setRange(0.0, 100.0, 0.1);
     d->radiusInput->setDefaultValue(0.0);
     d->radiusInput->setWhatsThis(i18n("A smoothness of 0 has no effect, "
                                       "1 and above determine the Gaussian blur matrix radius "
                                       "that determines how much to blur the image."));
 
-    grid->addWidget(label,          0, 0, 1, 2);
-    grid->addWidget(d->radiusInput, 1, 0, 1, 2);
-    grid->setRowStretch(2, 10);
-    grid->setMargin(d->gboxSettings->spacingHint());
-    grid->setSpacing(d->gboxSettings->spacingHint());
+    // --------------------------------------------------------
+
+    QGridLayout* mainLayout = new QGridLayout( );
+    mainLayout->addWidget(label,          0, 0, 1, 2);
+    mainLayout->addWidget(d->radiusInput, 1, 0, 1, 2);
+    mainLayout->setRowStretch(2, 10);
+    mainLayout->setMargin(d->gboxSettings->spacingHint());
+    mainLayout->setSpacing(d->gboxSettings->spacingHint());
+    d->gboxSettings->plainPage()->setLayout(mainLayout);
+
+    // --------------------------------------------------------
 
     setToolSettings(d->gboxSettings);
-
-    d->previewWidget = new ImagePanelWidget(470, 350, "gaussianblur Tool", d->gboxSettings->panIconView());
-
     setToolView(d->previewWidget);
     init();
 

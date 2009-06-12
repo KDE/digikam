@@ -98,10 +98,11 @@ OilPaintTool::OilPaintTool(QObject* parent)
                                              EditorToolSettings::Cancel|
                                              EditorToolSettings::Try,
                                              EditorToolSettings::PanIcon);
-    QGridLayout* grid = new QGridLayout(d->gboxSettings->plainPage());
 
-    QLabel *label1   = new QLabel(i18n("Brush size:"), d->gboxSettings->plainPage());
-    d->brushSizeInput = new RIntNumInput(d->gboxSettings->plainPage());
+    // -------------------------------------------------------------
+
+    QLabel *label1    = new QLabel(i18n("Brush size:"));
+    d->brushSizeInput = new RIntNumInput();
     d->brushSizeInput->setRange(1, 5, 1);
     d->brushSizeInput->setSliderEnabled(true);
     d->brushSizeInput->setDefaultValue(1);
@@ -109,20 +110,24 @@ OilPaintTool::OilPaintTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label2 = new QLabel(i18nc("value of smoothing effect", "Smooth:"), d->gboxSettings->plainPage());
-    d->smoothInput  = new RIntNumInput(d->gboxSettings->plainPage());
+    QLabel *label2  = new QLabel(i18nc("value of smoothing effect", "Smooth:"));
+    d->smoothInput  = new RIntNumInput();
     d->smoothInput->setRange(10, 255, 1);
     d->smoothInput->setSliderEnabled(true);
     d->smoothInput->setDefaultValue(30);
     d->smoothInput->setWhatsThis(i18n("This value controls the smoothing effect of the brush under the canvas."));
 
-    grid->addWidget(label1,            0, 0, 1, 2);
-    grid->addWidget(d->brushSizeInput, 1, 0, 1, 2);
-    grid->addWidget(label2,            2, 0, 1, 2);
-    grid->addWidget(d->smoothInput,    3, 0, 1, 2);
-    grid->setRowStretch(4, 10);
-    grid->setMargin(d->gboxSettings->spacingHint());
-    grid->setSpacing(d->gboxSettings->spacingHint());
+    QGridLayout* mainLayout = new QGridLayout();
+    mainLayout->addWidget(label1,            0, 0, 1, 2);
+    mainLayout->addWidget(d->brushSizeInput, 1, 0, 1, 2);
+    mainLayout->addWidget(label2,            2, 0, 1, 2);
+    mainLayout->addWidget(d->smoothInput,    3, 0, 1, 2);
+    mainLayout->setRowStretch(4, 10);
+    mainLayout->setMargin(d->gboxSettings->spacingHint());
+    mainLayout->setSpacing(d->gboxSettings->spacingHint());
+    d->gboxSettings->plainPage()->setLayout(mainLayout);
+
+    // -------------------------------------------------------------
 
     setToolSettings(d->gboxSettings);
 

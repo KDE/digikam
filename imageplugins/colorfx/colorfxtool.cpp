@@ -139,12 +139,11 @@ ColorFXTool::ColorFXTool(QObject* parent)
                                              EditorToolSettings::Cancel,
                                              EditorToolSettings::Histogram);
 
-    QGridLayout* gridSettings = new QGridLayout(d->gboxSettings->plainPage());
 
     // -------------------------------------------------------------
 
-    d->effectTypeLabel = new QLabel(i18n("Type:"), d->gboxSettings->plainPage());
-    d->effectType      = new RComboBox(d->gboxSettings->plainPage());
+    d->effectTypeLabel = new QLabel(i18n("Type:"));
+    d->effectType      = new RComboBox();
     d->effectType->addItem(i18n("Solarize"));
     d->effectType->addItem(i18n("Vivid"));
     d->effectType->addItem(i18n("Neon"));
@@ -158,30 +157,36 @@ ColorFXTool::ColorFXTool(QObject* parent)
                                      "<p><b>Find Edges</b>: detects the edges in a photograph "
                                      "and their strength.</p>"));
 
-    d->levelLabel = new QLabel(i18nc("level of the effect", "Level:"), d->gboxSettings->plainPage());
-    d->levelInput = new RIntNumInput(d->gboxSettings->plainPage());
+    d->levelLabel = new QLabel(i18nc("level of the effect", "Level:"));
+    d->levelInput = new RIntNumInput();
     d->levelInput->setRange(0, 100, 1);
     d->levelInput->setSliderEnabled(true);
     d->levelInput->setDefaultValue(0);
     d->levelInput->setWhatsThis( i18n("Set here the level of the effect."));
 
-    d->iterationLabel = new QLabel(i18n("Iteration:"), d->gboxSettings->plainPage());
-    d->iterationInput = new RIntNumInput(d->gboxSettings->plainPage());
+    d->iterationLabel = new QLabel(i18n("Iteration:"));
+    d->iterationInput = new RIntNumInput();
     d->iterationInput->setRange(0, 100, 1);
     d->iterationInput->setSliderEnabled(true);
     d->iterationInput->setDefaultValue(0);
     d->iterationInput->setWhatsThis( i18n("This value controls the number of iterations "
                                          "to use with the Neon and Find Edges effects."));
 
-    gridSettings->addWidget(d->effectTypeLabel,  0, 0, 1, 5);
-    gridSettings->addWidget(d->effectType,       1, 0, 1, 5);
-    gridSettings->addWidget(d->levelLabel,       2, 0, 1, 5);
-    gridSettings->addWidget(d->levelInput,       3, 0, 1, 5);
-    gridSettings->addWidget(d->iterationLabel,   4, 0, 1, 5);
-    gridSettings->addWidget(d->iterationInput,   5, 0, 1, 5);
-    gridSettings->setRowStretch(6, 10);
-    gridSettings->setMargin(d->gboxSettings->spacingHint());
-    gridSettings->setSpacing(d->gboxSettings->spacingHint());
+    // -------------------------------------------------------------
+
+    QGridLayout* mainLayout = new QGridLayout();
+    mainLayout->addWidget(d->effectTypeLabel,  0, 0, 1, 5);
+    mainLayout->addWidget(d->effectType,       1, 0, 1, 5);
+    mainLayout->addWidget(d->levelLabel,       2, 0, 1, 5);
+    mainLayout->addWidget(d->levelInput,       3, 0, 1, 5);
+    mainLayout->addWidget(d->iterationLabel,   4, 0, 1, 5);
+    mainLayout->addWidget(d->iterationInput,   5, 0, 1, 5);
+    mainLayout->setRowStretch(6, 10);
+    mainLayout->setMargin(d->gboxSettings->spacingHint());
+    mainLayout->setSpacing(d->gboxSettings->spacingHint());
+    d->gboxSettings->plainPage()->setLayout(mainLayout);
+
+    // -------------------------------------------------------------
 
     setToolSettings(d->gboxSettings);
     init();

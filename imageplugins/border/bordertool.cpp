@@ -133,12 +133,10 @@ BorderTool::BorderTool(QObject* parent)
                                              EditorToolSettings::Ok|
                                              EditorToolSettings::Cancel);
 
+    // -------------------------------------------------------------
 
-    QGridLayout* gridSettings = new QGridLayout(d->gboxSettings->plainPage());
-
-    QLabel *label1 = new QLabel(i18n("Type:"), d->gboxSettings->plainPage());
-
-    d->borderType  = new RComboBox( d->gboxSettings->plainPage() );
+    QLabel *label1 = new QLabel(i18n("Type:"));
+    d->borderType  = new RComboBox( );
     d->borderType->addItem(i18nc("solid border type", "Solid"));
     // NOTE: Niepce is a real name. This is the first guy in the world to have built a camera.
     d->borderType->addItem("Niepce");
@@ -162,26 +160,26 @@ BorderTool::BorderTool(QObject* parent)
     d->borderType->setDefaultIndex(Border::SolidBorder);
     d->borderType->setWhatsThis( i18n("Select the border type to add around the image here."));
 
-    KSeparator *line1 = new KSeparator(Qt::Horizontal, d->gboxSettings->plainPage());
+    KSeparator *line1 = new KSeparator(Qt::Horizontal);
 
     // -------------------------------------------------------------------
 
-    d->preserveAspectRatio = new QCheckBox(d->gboxSettings->plainPage());
+    d->preserveAspectRatio = new QCheckBox();
     d->preserveAspectRatio->setText(i18n("Preserve Aspect Ratio"));
     d->preserveAspectRatio->setWhatsThis(i18n("Enable this option if you want to preserve the aspect "
                                               "ratio of image. If enabled, the border width will be "
                                               "a percentage of the image size, else the border width will be "
                                               "in pixels."));
 
-    d->labelBorderPercent  = new QLabel(i18n("Width (%):"), d->gboxSettings->plainPage());
-    d->borderPercent       = new RIntNumInput(d->gboxSettings->plainPage());
+    d->labelBorderPercent  = new QLabel(i18n("Width (%):"));
+    d->borderPercent       = new RIntNumInput();
     d->borderPercent->setRange(1, 50, 1);
     d->borderPercent->setSliderEnabled(true);
     d->borderPercent->setDefaultValue(10);
     d->borderPercent->setWhatsThis( i18n("Set here the border width as a percentage of the image size."));
 
-    d->labelBorderWidth = new QLabel(i18n("Width (pixels):"), d->gboxSettings->plainPage());
-    d->borderWidth      = new RIntNumInput(d->gboxSettings->plainPage());
+    d->labelBorderWidth = new QLabel(i18n("Width (pixels):"));
+    d->borderWidth      = new RIntNumInput();
     d->borderWidth->setRange(1, 1000, 1);
     d->borderWidth->setSliderEnabled(true);
     d->borderWidth->setDefaultValue(100);
@@ -196,33 +194,37 @@ BorderTool::BorderTool(QObject* parent)
     else
         d->borderWidth->setRange(1, w/2, 1);
 
-    KSeparator *line2 = new KSeparator(Qt::Horizontal, d->gboxSettings->plainPage());
+    KSeparator *line2 = new KSeparator(Qt::Horizontal);
 
     // -------------------------------------------------------------------
 
-    d->labelForeground   = new QLabel(d->gboxSettings->plainPage());
-    d->firstColorButton  = new KColorButton( QColor::QColor( 192, 192, 192 ), d->gboxSettings->plainPage() );
-    d->labelBackground   = new QLabel(d->gboxSettings->plainPage());
-    d->secondColorButton = new KColorButton( QColor::QColor( 128, 128, 128 ), d->gboxSettings->plainPage() );
+    d->labelForeground   = new QLabel();
+    d->firstColorButton  = new KColorButton( QColor::QColor( 192, 192, 192 ) );
+    d->labelBackground   = new QLabel();
+    d->secondColorButton = new KColorButton( QColor::QColor( 128, 128, 128 ) );
 
     // -------------------------------------------------------------------
 
-    gridSettings->addWidget(label1,                  0, 0, 1, 3);
-    gridSettings->addWidget(d->borderType,           1, 0, 1, 3);
-    gridSettings->addWidget(line1,                   2, 0, 1, 3);
-    gridSettings->addWidget(d->preserveAspectRatio,  3, 0, 1, 3);
-    gridSettings->addWidget(d->labelBorderPercent,   4, 0, 1, 3);
-    gridSettings->addWidget(d->borderPercent,        5, 0, 1, 3);
-    gridSettings->addWidget(d->labelBorderWidth,     6, 0, 1, 3);
-    gridSettings->addWidget(d->borderWidth,          7, 0, 1, 3);
-    gridSettings->addWidget(line2,                   8, 0, 1, 3);
-    gridSettings->addWidget(d->labelForeground,      9, 0, 1, 1);
-    gridSettings->addWidget(d->firstColorButton,     9, 1, 1, 2);
-    gridSettings->addWidget(d->labelBackground,     10, 0, 1, 1);
-    gridSettings->addWidget(d->secondColorButton,   10, 1, 1, 2);
-    gridSettings->setRowStretch(11, 10);
-    gridSettings->setMargin(d->gboxSettings->spacingHint());
-    gridSettings->setSpacing(d->gboxSettings->spacingHint());
+    QGridLayout* mainLayout = new QGridLayout();
+    mainLayout->addWidget(label1,                  0, 0, 1, 3);
+    mainLayout->addWidget(d->borderType,           1, 0, 1, 3);
+    mainLayout->addWidget(line1,                   2, 0, 1, 3);
+    mainLayout->addWidget(d->preserveAspectRatio,  3, 0, 1, 3);
+    mainLayout->addWidget(d->labelBorderPercent,   4, 0, 1, 3);
+    mainLayout->addWidget(d->borderPercent,        5, 0, 1, 3);
+    mainLayout->addWidget(d->labelBorderWidth,     6, 0, 1, 3);
+    mainLayout->addWidget(d->borderWidth,          7, 0, 1, 3);
+    mainLayout->addWidget(line2,                   8, 0, 1, 3);
+    mainLayout->addWidget(d->labelForeground,      9, 0, 1, 1);
+    mainLayout->addWidget(d->firstColorButton,     9, 1, 1, 2);
+    mainLayout->addWidget(d->labelBackground,     10, 0, 1, 1);
+    mainLayout->addWidget(d->secondColorButton,   10, 1, 1, 2);
+    mainLayout->setRowStretch(11, 10);
+    mainLayout->setMargin(d->gboxSettings->spacingHint());
+    mainLayout->setSpacing(d->gboxSettings->spacingHint());
+    d->gboxSettings->plainPage()->setLayout(mainLayout);
+
+    // -------------------------------------------------------------
 
     setToolSettings(d->gboxSettings);
     init();

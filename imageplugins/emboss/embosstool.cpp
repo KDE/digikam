@@ -92,11 +92,12 @@ EmbossTool::EmbossTool(QObject* parent)
                                              EditorToolSettings::Cancel|
                                              EditorToolSettings::PanIcon);
 
-    QGridLayout* grid = new QGridLayout( d->gboxSettings->plainPage() );
+    d->previewWidget = new ImagePanelWidget(470, 350, "emboss Tool", d->gboxSettings->panIconView());
 
-    QLabel *label1 = new QLabel(i18n("Depth:"), d->gboxSettings->plainPage());
+    // -------------------------------------------------------------
 
-    d->depthInput   = new RIntNumInput(d->gboxSettings->plainPage());
+    QLabel *label1 = new QLabel(i18n("Depth:"));
+    d->depthInput  = new RIntNumInput;
     d->depthInput->setRange(10, 300, 1);
     d->depthInput->setSliderEnabled(true);
     d->depthInput->setDefaultValue(30);
@@ -104,18 +105,17 @@ EmbossTool::EmbossTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    grid->addWidget(label1,        0, 0, 1, 2);
-    grid->addWidget(d->depthInput, 1, 0, 1, 2);
-    grid->setRowStretch(2, 10);
-    grid->setMargin(d->gboxSettings->spacingHint());
-    grid->setSpacing(d->gboxSettings->spacingHint());
-
-    setToolSettings(d->gboxSettings);
+    QGridLayout* mainLayout = new QGridLayout;
+    mainLayout->addWidget(label1,        0, 0, 1, 2);
+    mainLayout->addWidget(d->depthInput, 1, 0, 1, 2);
+    mainLayout->setRowStretch(2, 10);
+    mainLayout->setMargin(d->gboxSettings->spacingHint());
+    mainLayout->setSpacing(d->gboxSettings->spacingHint());
+    d->gboxSettings->plainPage()->setLayout(mainLayout);
 
     // -------------------------------------------------------------
 
-    d->previewWidget = new ImagePanelWidget(470, 350, "emboss Tool", d->gboxSettings->panIconView());
-
+    setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
     init();
 

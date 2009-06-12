@@ -98,10 +98,13 @@ CharcoalTool::CharcoalTool(QObject* parent)
                                              EditorToolSettings::Cancel|
                                              EditorToolSettings::Try,
                                              EditorToolSettings::PanIcon);
-    QGridLayout* grid = new QGridLayout(d->gboxSettings->plainPage());
 
-    QLabel *label1 = new QLabel(i18n("Pencil size:"), d->gboxSettings->plainPage());
-    d->pencilInput = new RIntNumInput(d->gboxSettings->plainPage());
+    d->previewWidget = new ImagePanelWidget(470, 350, "charcoal Tool", d->gboxSettings->panIconView());
+
+    // -------------------------------------------------------------
+
+    QLabel *label1 = new QLabel(i18n("Pencil size:"));
+    d->pencilInput = new RIntNumInput;
     d->pencilInput->setRange(1, 100, 1);
     d->pencilInput->setSliderEnabled(true);
     d->pencilInput->setDefaultValue(5);
@@ -109,8 +112,8 @@ CharcoalTool::CharcoalTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label2 = new QLabel(i18nc("smoothing value of the pencil", "Smooth:"), d->gboxSettings->plainPage());
-    d->smoothInput = new RIntNumInput(d->gboxSettings->plainPage());
+    QLabel *label2 = new QLabel(i18nc("smoothing value of the pencil", "Smooth:"));
+    d->smoothInput = new RIntNumInput;
     d->smoothInput->setRange(1, 100, 1);
     d->smoothInput->setSliderEnabled(true);
     d->smoothInput->setDefaultValue(10);
@@ -119,20 +122,19 @@ CharcoalTool::CharcoalTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    grid->addWidget(label1,         0, 0, 1, 2);
-    grid->addWidget(d->pencilInput, 1, 0, 1, 2);
-    grid->addWidget(label2,         2, 0, 1, 2);
-    grid->addWidget(d->smoothInput, 3, 0, 1, 2);
-    grid->setRowStretch(4, 10);
-    grid->setMargin(d->gboxSettings->spacingHint());
-    grid->setSpacing(d->gboxSettings->spacingHint());
-
-    setToolSettings(d->gboxSettings);
+    QGridLayout* mainLayout = new QGridLayout;
+    mainLayout->addWidget(label1,         0, 0, 1, 2);
+    mainLayout->addWidget(d->pencilInput, 1, 0, 1, 2);
+    mainLayout->addWidget(label2,         2, 0, 1, 2);
+    mainLayout->addWidget(d->smoothInput, 3, 0, 1, 2);
+    mainLayout->setRowStretch(4, 10);
+    mainLayout->setMargin(d->gboxSettings->spacingHint());
+    mainLayout->setSpacing(d->gboxSettings->spacingHint());
+    d->gboxSettings->plainPage()->setLayout(mainLayout);
 
     // -------------------------------------------------------------
 
-    d->previewWidget = new ImagePanelWidget(470, 350, "charcoal Tool", d->gboxSettings->panIconView());
-
+    setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
     init();
 

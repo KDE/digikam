@@ -142,23 +142,21 @@ InsertTextTool::InsertTextTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QGridLayout *grid = new QGridLayout(d->gboxSettings->plainPage());
-
-    d->textEdit = new KTextEdit(d->gboxSettings->plainPage());
+    d->textEdit = new KTextEdit();
     d->textEdit->setCheckSpellingEnabled(true);
     d->textEdit->setWordWrapMode(QTextOption::NoWrap);
     d->textEdit->setWhatsThis( i18n("Here, enter the text you want to insert in your image."));
 
     // -------------------------------------------------------------
 
-    d->fontChooserWidget = new KFontChooser(d->gboxSettings->plainPage(), KFontChooser::NoDisplayFlags);
+    d->fontChooserWidget = new KFontChooser(0, KFontChooser::NoDisplayFlags);
     d->fontChooserWidget->setSampleBoxVisible(false);
     d->fontChooserWidget->setWhatsThis(i18n("Here you can choose the font to be used."));
 
     // -------------------------------------------------------------
 
     KIconLoader icon;
-    QWidget *alignBox   = new QWidget(d->gboxSettings->plainPage());
+    QWidget *alignBox   = new QWidget();
     QHBoxLayout *hlay   = new QHBoxLayout(alignBox);
     d->alignButtonGroup = new QButtonGroup(alignBox);
     d->alignButtonGroup->setExclusive(true);
@@ -196,8 +194,8 @@ InsertTextTool::InsertTextTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label1 = new QLabel(i18n("Rotation:"), d->gboxSettings->plainPage());
-    d->textRotation = new KComboBox(d->gboxSettings->plainPage());
+    QLabel *label1 = new QLabel(i18n("Rotation:"));
+    d->textRotation = new KComboBox();
     d->textRotation->addItem(i18nc("no rotation", "None"));
     d->textRotation->addItem(i18n("90 Degrees"));
     d->textRotation->addItem(i18n("180 Degrees"));
@@ -206,32 +204,36 @@ InsertTextTool::InsertTextTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label2 = new QLabel(i18nc("font color", "Color:"), d->gboxSettings->plainPage());
-    d->fontColorButton = new KColorButton(Qt::black, d->gboxSettings->plainPage());
+    QLabel *label2 = new QLabel(i18nc("font color", "Color:"));
+    d->fontColorButton = new KColorButton(Qt::black);
     d->fontColorButton->setWhatsThis(i18n("Set here the font color to use."));
 
     // -------------------------------------------------------------
 
-    d->borderText = new QCheckBox(i18n("Add border"), d->gboxSettings->plainPage());
+    d->borderText = new QCheckBox(i18n("Add border"));
     d->borderText->setToolTip(i18n("Add a solid border around text using current text color"));
 
-    d->transparentText = new QCheckBox(i18n("Semi-transparent"), d->gboxSettings->plainPage());
+    d->transparentText = new QCheckBox(i18n("Semi-transparent"));
     d->transparentText->setToolTip(i18n("Use semi-transparent text background under image"));
 
     // -------------------------------------------------------------
 
-    grid->addWidget(d->textEdit,             0, 0, 3, 2);
-    grid->addWidget(d->fontChooserWidget,    3, 0, 1, 2);
-    grid->addWidget(alignBox,                4, 0, 1, 2);
-    grid->addWidget(label1,                  5, 0, 1, 1);
-    grid->addWidget(d->textRotation,         5, 1, 1, 1);
-    grid->addWidget(label2,                  6, 0, 1, 1);
-    grid->addWidget(d->fontColorButton,      6, 1, 1, 1);
-    grid->addWidget(d->borderText,           7, 0, 1, 2);
-    grid->addWidget(d->transparentText,      8, 0, 1, 2);
-    grid->setRowStretch(9, 10);
-    grid->setMargin(d->gboxSettings->spacingHint());
-    grid->setSpacing(d->gboxSettings->spacingHint());
+    QGridLayout *mainLayout = new QGridLayout();
+    mainLayout->addWidget(d->textEdit,             0, 0, 3, 2);
+    mainLayout->addWidget(d->fontChooserWidget,    3, 0, 1, 2);
+    mainLayout->addWidget(alignBox,                4, 0, 1, 2);
+    mainLayout->addWidget(label1,                  5, 0, 1, 1);
+    mainLayout->addWidget(d->textRotation,         5, 1, 1, 1);
+    mainLayout->addWidget(label2,                  6, 0, 1, 1);
+    mainLayout->addWidget(d->fontColorButton,      6, 1, 1, 1);
+    mainLayout->addWidget(d->borderText,           7, 0, 1, 2);
+    mainLayout->addWidget(d->transparentText,      8, 0, 1, 2);
+    mainLayout->setRowStretch(9, 10);
+    mainLayout->setMargin(d->gboxSettings->spacingHint());
+    mainLayout->setSpacing(d->gboxSettings->spacingHint());
+    d->gboxSettings->plainPage()->setLayout(mainLayout);
+
+    // -------------------------------------------------------------
 
     setToolSettings(d->gboxSettings);
     init();
