@@ -47,21 +47,28 @@ namespace Digikam
 class DatabaseCoreBackend;
 class ThumbnailDBPriv;
 
-namespace DatabaseThumbnail {
+namespace DatabaseThumbnail
+{
+
 enum Type
 {
     UndefinedType = 0,
     NoThumbnail,
-    PGF
+    PGF,
+    JPEG,
+    JPEG2000
     //FreeDesktopHash
 };
-}
+
+} // namespace DatabaseThumbnail
 
 class DIGIKAM_DATABASE_EXPORT DatabaseThumbnailInfo
 {
+
 public:
+
     DatabaseThumbnailInfo()
-            : id(-1), type(DatabaseThumbnail::UndefinedType)
+        : id(-1), type(DatabaseThumbnail::UndefinedType)
     {
     }
 

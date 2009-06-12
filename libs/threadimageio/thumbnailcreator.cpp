@@ -31,6 +31,8 @@
 #include <QFileInfo>
 #include <QFile>
 #include <QPainter>
+#include <QBuffer>
+#include <QIODevice>
 
 // KDE includes
 
@@ -480,8 +482,36 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
     dbInfo.modificationDate = info.modificationDate;
     dbInfo.orientationHint  = image.exifOrientation;
 
-    if (!writePGFImageData(image.qimage, dbInfo.data, 3))
-        return;
+    if (dbInfo.type == DatabaseThumbnail::PGF)
+    {
+        if (!writePGFImageData(image.qimage, dbInfo.data, 3))
+        {
+            kWarning(50003) << "Cannot save PGF thumb in DB" << endl;
+            return;
+        }
+    }
+    else if (dbInfo.type == DatabaseThumbnail::JPEG)
+    {
+        QBuffer buffer(&dbInfo.data);
+        buffer.open(QIODevice::WriteOnly);
+        image.qimage.save(&buffer, "JPEG");
+        if (dbInfo.data.isNull())
+        {
+            kWarning(50003) << "Cannot save JPEG thumb in DB" << endl;
+            return;
+        }
+    }
+    else if (dbInfo.type == DatabaseThumbnail::JPEG2000)
+    {
+        QBuffer buffer(&dbInfo.data);
+        buffer.open(QIODevice::WriteOnly);
+        image.qimage.save(&buffer, "JP2");
+        if (dbInfo.data.isNull())
+        {
+            kWarning(50003) << "Cannot save JPEG2000 thumb in DB" << endl;
+            return;
+        }
+    }
 
     ThumbnailDatabaseAccess access;
 
@@ -521,13 +551,31 @@ ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info)
     ThumbnailImage image;
     if (dbInfo.data.isNull())
         return ThumbnailImage();
+
     // check modification date
     if (dbInfo.modificationDate < info.modificationDate)
         return ThumbnailImage();
 
-    // Read QImage from PGF blob
-    if (!readPGFImageData(dbInfo.data, image.qimage))
-        return ThumbnailImage();
+    // Read QImage from data blob
+    if (dbInfo.type == DatabaseThumbnail::PGF)
+    {
+        if (!readPGFImageData(dbInfo.data, image.qimage))
+            return ThumbnailImage();
+    }
+    else if (dbInfo.type == DatabaseThumbnail::JPEG)
+    {
+        QBuffer buffer(&dbInfo.data);
+        buffer.open(QIODevice::ReadOnly);
+        if (image.qimage.load(&buffer, "JPEG"))
+            return ThumbnailImage();
+    }
+    else if (dbInfo.type == DatabaseThumbnail::JPEG2000)
+    {
+        QBuffer buffer(&dbInfo.data);
+        buffer.open(QIODevice::ReadOnly);
+        if (image.qimage.load(&buffer, "JP2"))
+            return ThumbnailImage();
+    }
 
     image.exifOrientation = dbInfo.orientationHint;
 
