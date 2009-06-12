@@ -49,7 +49,7 @@ private Q_SLOTS:
     void slotInverseTransformationChanged(bool b);
     void slotResetSettings();
     void slotUpdateInfo(const QRect& newSize, float topLeftAngle, float topRightAngle,
-                        float bottomLeftAngle, float bottomRightAngle);
+                        float bottomLeftAngle, float bottomRightAngle, bool valid);
     void slotColorGuideChanged();
 
 private:

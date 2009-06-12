@@ -250,7 +250,7 @@ void PerspectiveWidget::slotChangeGuideSize(int size)
     repaint();
 }
 
-void PerspectiveWidget::updatePixmap()
+void PerspectiveWidget::updatePixmap(bool valid)
 {
     m_topLeftCorner.setRect(m_topLeftPoint.x() + m_rect.topLeft().x(),
                             m_topLeftPoint.y() + m_rect.topLeft().y(), 8, 8);
@@ -295,7 +295,7 @@ void PerspectiveWidget::updatePixmap()
 
     // if we are resizing with the mouse, compute and draw only if drawWhileMoving is set
     }
-    else if ((m_currentResizing == ResizingNone || m_drawWhileMoving))
+    else if ((m_currentResizing == ResizingNone || m_drawWhileMoving) && valid)
     {
         // Create preview image
 
@@ -316,7 +316,7 @@ void PerspectiveWidget::updatePixmap()
         m_iface->paint(m_pixmap, m_rect.x(), m_rect.y(),
                        m_rect.width(), m_rect.height());
     }
-    else
+    else if (valid)
     {
         m_transformedCenter = buildPerspective(QPoint(0, 0), QPoint(m_w, m_h),
                                                m_topLeftPoint, m_topRightPoint,
@@ -377,7 +377,7 @@ void PerspectiveWidget::updatePixmap()
     p.end();
 
     emit signalPerspectiveChanged(getTargetSize(), getAngleTopLeft(), getAngleTopRight(),
-                                  getAngleBottomLeft(), getAngleBottomRight());
+                                  getAngleBottomLeft(), getAngleBottomRight(), valid);
 }
 
 QPoint PerspectiveWidget::buildPerspective(QPoint orignTopLeft, QPoint orignBottomRight,
@@ -765,6 +765,8 @@ void PerspectiveWidget::mouseReleaseEvent ( QMouseEvent * e )
 
 void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
 {
+    bool valid = true;
+
     if ( e->buttons() == Qt::LeftButton )
     {
         if ( m_currentResizing != ResizingNone )
@@ -797,7 +799,7 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
                                          m_w-1, 0 );
                 QRegion unusableArea(unusablePoints);
 
-                if ( unusableArea.contains(pm) && !m_inverseTransformation ) return;
+                if ( unusableArea.contains(pm) && !m_inverseTransformation ) valid = false;
 
                 m_topLeftPoint = pm - m_rect.topLeft();
                 setCursor( Qt::SizeFDiagCursor );
@@ -815,7 +817,7 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
                                          m_w-1, m_h-1);
                 QRegion unusableArea(unusablePoints);
 
-                if ( unusableArea.contains(pm) && !m_inverseTransformation ) return;
+                if ( unusableArea.contains(pm) && !m_inverseTransformation ) valid = false;
 
                 m_topRightPoint = pm - m_rect.topLeft();
                 setCursor( Qt::SizeBDiagCursor );
@@ -833,7 +835,7 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
                                          0, 0);
                 QRegion unusableArea(unusablePoints);
 
-                if ( unusableArea.contains(pm) && !m_inverseTransformation ) return;
+                if ( unusableArea.contains(pm) && !m_inverseTransformation ) valid = false;
 
                 m_bottomLeftPoint = pm - m_rect.topLeft();
                 setCursor( Qt::SizeBDiagCursor );
@@ -851,7 +853,7 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
                                          0, m_w-1);
                 QRegion unusableArea(unusablePoints);
 
-                if ( unusableArea.contains(pm) && !m_inverseTransformation ) return;
+                if ( unusableArea.contains(pm) && !m_inverseTransformation ) valid = false;
 
                 m_bottomRightPoint = pm - m_rect.topLeft();
                 setCursor( Qt::SizeFDiagCursor );
@@ -863,7 +865,7 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
                 m_spot.setY(e->y()-m_rect.y());
             }
 
-            updatePixmap();
+            updatePixmap(valid);
             repaint();
         }
     }

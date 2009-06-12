@@ -90,7 +90,7 @@ public Q_SLOTS:
 Q_SIGNALS:
 
     void signalPerspectiveChanged(const QRect& newSize, float topLeftAngle, float topRightAngle,
-                                  float bottomLeftAngle, float bottomRightAngle);
+                                  float bottomLeftAngle, float bottomRightAngle, bool valid);
 
 protected:
 
@@ -102,7 +102,7 @@ protected:
 
 private:  // Widget methods.
 
-    void   updatePixmap();
+    void   updatePixmap(bool valid = true);
 
     void   transformAffine(Digikam::DImg *orgImage, Digikam::DImg *destImage,
                            const Matrix& matrix, Digikam::DColor background);

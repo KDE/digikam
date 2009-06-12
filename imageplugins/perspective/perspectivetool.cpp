@@ -50,6 +50,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmenu.h>
+#include <kpushbutton.h>
 #include <kseparator.h>
 #include <kstandarddirs.h>
 
@@ -195,8 +196,8 @@ PerspectiveTool::PerspectiveTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    connect(d->previewWidget, SIGNAL(signalPerspectiveChanged(const QRect&, float, float, float, float)),
-            this, SLOT(slotUpdateInfo(const QRect&, float, float, float, float)));
+    connect(d->previewWidget, SIGNAL(signalPerspectiveChanged(const QRect&, float, float, float, float, bool)),
+            this, SLOT(slotUpdateInfo(const QRect&, float, float, float, float, bool)));
 
     connect(d->drawWhileMovingCheckBox, SIGNAL(toggled(bool)),
             d->previewWidget, SLOT(slotToggleDrawWhileMoving(bool)));
@@ -257,7 +258,7 @@ void PerspectiveTool::finalRendering()
 }
 
 void PerspectiveTool::slotUpdateInfo(const QRect& newSize, float topLeftAngle, float topRightAngle,
-                                     float bottomLeftAngle, float bottomRightAngle)
+                                     float bottomLeftAngle, float bottomRightAngle, bool valid)
 {
     QString temp;
     d->newWidthLabel->setText(temp.setNum(newSize.width()) + i18n(" px"));
@@ -267,6 +268,8 @@ void PerspectiveTool::slotUpdateInfo(const QRect& newSize, float topLeftAngle, f
     d->topRightAngleLabel->setText(temp.setNum(topRightAngle, 'f', 1));
     d->bottomLeftAngleLabel->setText(temp.setNum(bottomLeftAngle, 'f', 1));
     d->bottomRightAngleLabel->setText(temp.setNum(bottomRightAngle, 'f', 1));
+
+    d->gboxSettings->button(EditorToolSettings::Ok)->setEnabled(valid);
 }
 
 void PerspectiveTool::slotInverseTransformationChanged(bool b)
