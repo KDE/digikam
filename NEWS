@@ -19,7 +19,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 010 ==> 195902 : digiKam crashes on first startup if album folder is not empty.
 011 ==> 154606 : Changing the date for multiple pictures simultaneously changes all of the times too.
 012 ==> 143932 : utf-8 displayed with wrong encoding when restoring photo to digiKam.
-013 ==> 
+013 ==> 179227 : Generation of XMP tags crashes the application.
+014 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta1 - Release date: 2009-06-07
