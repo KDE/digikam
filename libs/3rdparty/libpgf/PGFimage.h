@@ -62,7 +62,7 @@ public:
 	/// It might throw an IOException.
 	/// @param level The image level of the resulting image in the internal image buffer.
 	/// @param cb A pointer to a callback procedure. The procedure is called after reading a single level. If cb returns true, then it stops proceeding.
-    /// @param data Data Pointer to C++ class container to host callback procedure.
+	/// @param data Data Pointer to C++ class container to host callback procedure.
 	void Read(int level = 0, CallbackPtr cb = NULL, void *data = NULL) THROW_;
 
 #ifdef __PGFROISUPPORT__
@@ -74,7 +74,7 @@ public:
 	/// @param rect [inout] Rectangular region of interest (ROI). The rect might be cropped.
 	/// @param level The image level of the resulting image in the internal image buffer.
 	/// @param cb A pointer to a callback procedure. The procedure is called after reading a single level. If cb returns true, then it stops proceeding.
-    /// @param data Data Pointer to C++ class container to host callback procedure.
+	/// @param data Data Pointer to C++ class container to host callback procedure.
 	void Read(PGFRect& rect, int level = 0, CallbackPtr cb = NULL, void *data = NULL) THROW_;
 #endif
 
@@ -84,6 +84,11 @@ public:
 	/// Precondition: The PGF image has been opened with a call of Open(...).
 	/// It might throw an IOException.
 	void ReadPreview() THROW_										{ Read(Levels() - 1); }
+
+	//////////////////////////////////////////////////////////////////////
+	// After you've written a PGF image, you can call this method followed by GetBitmap/GetYUV
+	// to get a quick reconstruction (coded -> decoded image).
+	void Reconstruct() THROW_;
 
 	//////////////////////////////////////////////////////////////////////
 	/// Close PGF image after opening and reading.
@@ -123,8 +128,25 @@ public:
 	/// @param bpp The number of bits per pixel used in image buffer.
 	/// @param channelMap A integer array containing the mapping of PGF channel ordering to expected channel ordering.
 	/// @param cb A pointer to a callback procedure. The procedure is called after each copied buffer row. If cb returns true, then it stops proceeding.
-    /// @param data Data Pointer to C++ class container to host callback procedure.
+	/// @param data Data Pointer to C++ class container to host callback procedure.
 	void GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] = NULL, CallbackPtr cb = NULL, void *data = NULL) const THROW_; // throws IOException
+
+	//////////////////////////////////////////////////////////////////////
+	/// Get YUV image data in interleaved format: (ordering is YUV[A])
+	/// The absolute value of pitch is the number of bytes of an image row of the given image buffer.
+	/// If pitch is negative, then the image buffer must point to the last row of a bottom-up image (first byte on last row).
+	/// if pitch is positive, then the image buffer must point to the first row of a top-down image (first byte).
+	/// The sequence of output channels in the output image buffer does not need to be the same as provided by PGF. In case of different sequences you have to
+	/// provide a channelMap of size of expected channels (depending on image mode). For example, PGF provides a channel sequence BGR in RGB color mode.
+	/// If your provided image buffer expects a channel sequence VUY, then the channelMap looks like { 2, 1, 0 }.
+	/// It might throw an IOException.
+	/// @param pitch The number of bytes of a row of the image buffer.
+	/// @param buff An image buffer.
+	/// @param bpp The number of bits per pixel used in image buffer.
+	/// @param channelMap A integer array containing the mapping of PGF channel ordering to expected channel ordering.
+	/// @param cb A pointer to a callback procedure. The procedure is called after each copied buffer row. If cb returns true, then it stops proceeding.
+	/// @param data Data Pointer to C++ class container to host callback procedure.
+	void GetYUV(int pitch, DataT* buff, BYTE bpp, int channelMap[] = NULL, CallbackPtr cb = NULL, void *data = NULL) const THROW_; // throws IOException
 
 	//////////////////////////////////////////////////////////////////////
 	/// Import an image from a specified image buffer.
@@ -141,8 +163,25 @@ public:
 	/// @param bpp The number of bits per pixel used in image buffer.
 	/// @param channelMap A integer array containing the mapping of input channel ordering to expected channel ordering.
 	/// @param cb A pointer to a callback procedure. The procedure is called after each imported buffer row. If cb returns true, then it stops proceeding.
-    /// @param data Data Pointer to C++ class container to host callback procedure.
+	/// @param data Data Pointer to C++ class container to host callback procedure.
 	void ImportBitmap(int pitch, UINT8 *buff, BYTE bpp, int channelMap[] = NULL, CallbackPtr cb = NULL, void *data = NULL) THROW_;
+
+	//////////////////////////////////////////////////////////////////////
+	/// Import a YUV image from a specified image buffer.
+	/// The absolute value of pitch is the number of bytes of an image row.
+	/// If pitch is negative, then buff points to the last row of a bottom-up image (first byte on last row).
+	/// If pitch is positive, then buff points to the first row of a top-down image (first byte).
+	/// The sequence of input channels in the input image buffer does not need to be the same as expected from PGF. In case of different sequences you have to
+	/// provide a channelMap of size of expected channels (depending on image mode). For example, PGF expects in RGB color mode a channel sequence BGR.
+	/// If your provided image buffer contains a channel sequence VUY, then the channelMap looks like { 2, 1, 0 }.
+	/// It might throw an IOException.
+	/// @param pitch The number of bytes of a row of the image buffer.
+	/// @param buff An image buffer.
+	/// @param bpp The number of bits per pixel used in image buffer.
+	/// @param channelMap A integer array containing the mapping of input channel ordering to expected channel ordering.
+	/// @param cb A pointer to a callback procedure. The procedure is called after each imported buffer row. If cb returns true, then it stops proceeding.
+	/// @param data Data Pointer to C++ class container to host callback procedure.
+	void ImportYUV(int pitch, INT16 *buff, BYTE bpp, int channelMap[] = NULL, CallbackPtr cb = NULL, void *data = NULL) THROW_;
 
 	//////////////////////////////////////////////////////////////////////
 	/// Encode and write a PGF image at current stream position.
@@ -157,7 +196,7 @@ public:
 	/// @param levels The positive number of levels used in layering or 0 meaning a useful number of levels is computed.
 	/// @param cb A pointer to a callback procedure. The procedure is called after reading a single level. If cb returns true, then it stops proceeding.
 	/// @param nWrittenBytes [in-out] The number of bytes written into stream are added to the input value.
-    /// @param data Data Pointer to C++ class container to host callback procedure.
+	/// @param data Data Pointer to C++ class container to host callback procedure.
 	void Write(CPGFStream* stream, int levels = 0, CallbackPtr cb = NULL, UINT32* nWrittenBytes = NULL, void *data = NULL) THROW_;
 
 	//////////////////////////////////////////////////////////////////////
@@ -186,7 +225,7 @@ public:
 	/// @param flags A combination of additional version flags
 	/// @param userData A user-defined memory block
 	/// @param userDataLength The size of user-defined memory block in bytes
-	void SetHeader(const PGFHeader& header, BYTE flags = 0, UINT8* userData = 0, UINT16 userDataLength = 0) THROW_; // throws IOException
+	void SetHeader(const PGFHeader& header, BYTE flags = 0, UINT8* userData = 0, UINT32 userDataLength = 0) THROW_; // throws IOException
 
 	//////////////////////////////////////////////////////////////////////
 	/// Set maximum intensity value for image modes with more than eight bits per channel.

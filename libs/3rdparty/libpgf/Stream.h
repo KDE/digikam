@@ -43,13 +43,13 @@ public:
 	/// Write some bytes out of a buffer into this stream.
 	/// @param count A pointer to a value containing the number of bytes should be written. After this call it contains the number of written bytes.
 	/// @param buffer A memory buffer
-	virtual void Write(long *count, void *buffer)=0; 
+	virtual void Write(int *count, void *buffer)=0; 
 
 	//////////////////////////////////////////////////////////////////////
 	/// Read some bytes from this stream and stores them into a buffer.
 	/// @param count A pointer to a value containing the number of bytes should be read. After this call it contains the number of read bytes.
 	/// @param buffer A memory buffer
-	virtual void Read(long *count, void *buffer)=0; 
+	virtual void Read(int *count, void *buffer)=0; 
 
 	//////////////////////////////////////////////////////////////////////
 	/// Set stream position either absolute or relative.
@@ -79,8 +79,8 @@ public:
 	CPGFFileStream(HANDLE hFile) : m_hFile(hFile) {}
 	virtual ~CPGFFileStream() { m_hFile = 0; }
 
-	virtual void Write(long *count, void *buffer) THROW_; // throws IOException 
-	virtual void Read(long *count, void *buffer) THROW_; // throws IOException 
+	virtual void Write(int *count, void *buffer) THROW_; // throws IOException 
+	virtual void Read(int *count, void *buffer) THROW_; // throws IOException 
 	virtual void SetPos(short posMode, INT64 posOff) THROW_; // throws IOException
 	virtual UINT64 GetPos() const THROW_; // throws IOException
 	virtual bool   IsValid() const	{ return m_hFile != 0; }
@@ -106,8 +106,8 @@ public:
 		}
 	}
 
-	virtual void Write(long *count, void *buffer) THROW_; // throws IOException 
-	virtual void Read(long *count, void *buffer) THROW_; // throws IOException 
+	virtual void Write(int *count, void *buffer) THROW_; // throws IOException 
+	virtual void Read(int *count, void *buffer) THROW_; // throws IOException 
 	virtual void SetPos(short posMode, INT64 posOff) THROW_; // throws IOException
 	virtual UINT64 GetPos() const THROW_; // throws IOException
 	virtual bool   IsValid() const	{ return m_buffer != 0; }
@@ -118,24 +118,36 @@ public:
 
 /////////////////////////////////////////////////////////////////////
 // A PGF stream subclass for internal memory files. Usable only with MFC.
+#ifdef _MFC_VER
 class CPGFMemFileStream : public CPGFStream {
 protected:
-#ifdef _MFC_VER
 	CMemFile *m_memFile;
-#endif
 public:
-#ifdef _MFC_VER
 	CPGFMemFileStream(CMemFile *memFile) : m_memFile(memFile) {}
 	virtual bool	IsValid() const	{ return m_memFile != NULL; }
-#else
-	CPGFMemFileStream() {}
-	virtual bool	IsValid() const	{ return false; }
-#endif
 	virtual ~CPGFMemFileStream() {}
-	virtual void Write(long *count, void *buffer) THROW_; // throws IOException 
-	virtual void Read(long *count, void *buffer) THROW_; // throws IOException 
+	virtual void Write(int *count, void *buffer) THROW_; // throws IOException 
+	virtual void Read(int *count, void *buffer) THROW_; // throws IOException 
 	virtual void SetPos(short posMode, INT64 posOff) THROW_; // throws IOException
 	virtual UINT64 GetPos() const THROW_; // throws IOException
 };
+#endif
+
+/////////////////////////////////////////////////////////////////////
+// A PGF stream subclass for IStream. Usable only with COM.
+#if defined WIN32 || WINCE
+class CPGFIStream : public CPGFStream {
+protected:
+	IStream *m_stream;
+public:
+	CPGFIStream(IStream *stream) : m_stream(stream) {}
+	virtual bool	IsValid() const	{ return m_stream != 0; }
+	virtual ~CPGFIStream() {}
+	virtual void Write(int *count, void *buffer) THROW_; // throws IOException 
+	virtual void Read(int *count, void *buffer) THROW_; // throws IOException 
+	virtual void SetPos(short posMode, INT64 posOff) THROW_; // throws IOException
+	virtual UINT64 GetPos() const THROW_; // throws IOException
+};
+#endif
 
 #endif // PGF_STREAM_H

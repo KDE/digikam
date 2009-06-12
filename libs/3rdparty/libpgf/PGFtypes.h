@@ -38,7 +38,7 @@
 // Version 3:	INT32 instead of INT16, allows 31 bit per pixel and channel
 // Version 5:	ROI, new block-reordering scheme
 //-------------------------------------------------------------------------------
-#define PGFCodecVersion		"5.08.22"			// Major number
+#define PGFCodecVersion		"6.09.24"			// Major number
 												// Minor number: Year (2) Week (2)
 
 //-------------------------------------------------------------------------------
@@ -59,9 +59,10 @@
 #define PGF32				0					// 16 bit values are used -> allows at maximum 15 bits
 #endif
 #define PGFROI				8					// supports Regions Of Interest
-#define Version5			16					// coding scheme of major version 5
+#define Version5			16					// new coding scheme since major version 5
+#define Version6			32					// new HeaderSize: 32 bits instead of 16 bits 
 // version numbers
-#define PGFVersion			(Version2 | Version5 | PGF32)	// current standard version
+#define PGFVersion			(Version2 | Version5 | Version6 | PGF32)	// current standard version
 
 //-------------------------------------------------------------------------------
 //	Coder constants
@@ -84,16 +85,20 @@
 enum Orientation { LL=0, HL=1, LH=2, HH=3 };
 
 // general file structure
-// PGFPreHeader PGFHeader PGFPostHeader LevelLengths Level_n-1 Level_n-2 ... Level_0
+// PGFPreHeaderV6 PGFHeader PGFPostHeader LevelLengths Level_n-1 Level_n-2 ... Level_0
 // PGFPostHeader ::= [ColorTable] [UserData]
 // LevelLengths  ::= UINT32[nLevels]
 
 #pragma pack(1)
-struct PGFPreHeader {
+struct PGFMagicVersion {
 	char magic[3];				// PGF identification = "PGF"
 	UINT8 version;				// PGF version
-	UINT16 hSize;				// total size of PGFHeader, [ColorTable], and [UserData] in bytes
-	// total: 6 Bytes
+	// total: 4 Bytes
+};
+
+struct PGFPreHeader : PGFMagicVersion {
+	UINT32 hSize;				// total size of PGFHeader, [ColorTable], and [UserData] in bytes
+	// total: 8 Bytes
 };
 
 struct PGFHeader {
@@ -111,18 +116,12 @@ struct PGFHeader {
 struct PGFPostHeader {
 	RGBQUAD clut[ColorTableLen];// color table for indexed color images
 	UINT8 *userData;			// user data of size userDataLen
-	UINT16 userDataLen;			// user data size in bytes
-	// total: at least 258 Bytes
+	UINT32 userDataLen;			// user data size in bytes
 };
 
 union ROIBlockHeader {
 	ROIBlockHeader(UINT16 v) { val = v; }
-	ROIBlockHeader(UINT32 size, bool end)
-	{ 
-	    ASSERT(size < (1 << RLblockSizeLen));
-	    bufferSize = size; 
-	    tileEnd = end;
-	}
+	ROIBlockHeader(UINT32 size, bool end)	{ ASSERT(size < (1 << RLblockSizeLen)); bufferSize = size; tileEnd = end; }
 
 	UINT16 val;
 	struct {
@@ -163,6 +162,7 @@ typedef void (*RefreshCB)(void *p);
 //-------------------------------------------------------------------------------
 // Image constants
 //-------------------------------------------------------------------------------
+#define MagicVersionSize	sizeof(PGFMagicVersion)
 #define PreHeaderSize		sizeof(PGFPreHeader)
 #define HeaderSize			sizeof(PGFHeader)
 #define ColorTableSize		ColorTableLen*sizeof(RGBQUAD)

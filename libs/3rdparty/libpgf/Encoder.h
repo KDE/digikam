@@ -92,7 +92,7 @@ public:
 	/// It might throw an IOException.
 	/// @param band A subband
 	/// @param bandPosition A valid position in subband band
-	void WriteValue(CSubband* band, long bandPos) THROW_;
+	void WriteValue(CSubband* band, int bandPos) THROW_;
 
 #ifdef __PGFROISUPPORT__
 	/////////////////////////////////////////////////////////////////////

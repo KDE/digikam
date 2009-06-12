@@ -35,7 +35,7 @@
 //////////////////////////////////////////////////////////////////////
 // CPGFFileStream
 //////////////////////////////////////////////////////////////////////
-void CPGFFileStream::Write(long *count, void *buffPtr) THROW_ {
+void CPGFFileStream::Write(int *count, void *buffPtr) THROW_ {
 	ASSERT(count);
 	ASSERT(buffPtr);
 	ASSERT(IsValid());
@@ -45,7 +45,7 @@ void CPGFFileStream::Write(long *count, void *buffPtr) THROW_ {
 }
 
 //////////////////////////////////////////////////////////////////////
-void CPGFFileStream::Read(long *count, void *buffPtr) THROW_ {
+void CPGFFileStream::Read(int *count, void *buffPtr) THROW_ {
 	ASSERT(count);
 	ASSERT(buffPtr);
 	ASSERT(IsValid());
@@ -84,7 +84,7 @@ CPGFMemoryStream::CPGFMemoryStream(UINT8 *pBuffer, size_t size) THROW_ : m_buffe
 }
 
 //////////////////////////////////////////////////////////////////////
-void CPGFMemoryStream::Write(long *count, void *buffPtr) THROW_ {
+void CPGFMemoryStream::Write(int *count, void *buffPtr) THROW_ {
 	ASSERT(count);
 	ASSERT(buffPtr);
 	ASSERT(IsValid());
@@ -112,7 +112,7 @@ void CPGFMemoryStream::Write(long *count, void *buffPtr) THROW_ {
 }
 
 //////////////////////////////////////////////////////////////////////
-void CPGFMemoryStream::Read(long *count, void *buffPtr) THROW_ {
+void CPGFMemoryStream::Read(int *count, void *buffPtr) THROW_ {
 	ASSERT(count);
 	ASSERT(buffPtr);
 	ASSERT(IsValid());
@@ -122,7 +122,7 @@ void CPGFMemoryStream::Read(long *count, void *buffPtr) THROW_ {
 		m_pos += *count;
 	} else {
 		// end of memory block reached -> read only until end
-		*count = (long)(m_buffer + m_size - m_pos);
+		*count = (int)(m_buffer + m_size - m_pos);
 		memcpy(buffPtr, m_pos, *count);
 		m_pos += *count;
 		ReturnWithError(EndOfMemory);
@@ -156,39 +156,88 @@ UINT64 CPGFMemoryStream::GetPos() const THROW_ {
 
 //////////////////////////////////////////////////////////////////////
 // CPGFMemFileStream
+#ifdef _MFC_VER
 //////////////////////////////////////////////////////////////////////
-void CPGFMemFileStream::Write(long *count, void *buffPtr) THROW_ {
+void CPGFMemFileStream::Write(int *count, void *buffPtr) THROW_ {
 	ASSERT(count);
 	ASSERT(buffPtr);
 	ASSERT(IsValid());
-#ifdef _MFC_VER
 	m_memFile->Write(buffPtr, *count);
-#endif
 }
 
 //////////////////////////////////////////////////////////////////////
-void CPGFMemFileStream::Read(long *count, void *buffPtr) THROW_ {
+void CPGFMemFileStream::Read(int *count, void *buffPtr) THROW_ {
 	ASSERT(count);
 	ASSERT(buffPtr);
 	ASSERT(IsValid());
-#ifdef _MFC_VER
 	m_memFile->Read(buffPtr, *count);
-#endif
 }
 
 //////////////////////////////////////////////////////////////////////
 void CPGFMemFileStream::SetPos(short posMode, INT64 posOff) THROW_ {
 	ASSERT(IsValid());
-#ifdef _MFC_VER
 	m_memFile->Seek(posOff, posMode); 
-#endif
 }
 
 //////////////////////////////////////////////////////////////////////
 UINT64 CPGFMemFileStream::GetPos() const THROW_ {
-#ifdef _MFC_VER
-	return (ULONG)m_memFile->GetPosition();
-#else
-	return 0;
-#endif
+	return (UINT64)m_memFile->GetPosition();
 }
+#endif // _MFC_VER
+
+//////////////////////////////////////////////////////////////////////
+// CPGFIStream
+#if defined WIN32 || WINCE
+//////////////////////////////////////////////////////////////////////
+void CPGFIStream::Write(int *count, void *buffPtr) THROW_ {
+	ASSERT(count);
+	ASSERT(buffPtr);
+	ASSERT(IsValid());
+	
+	HRESULT hr = m_stream->Write(buffPtr, *count, (ULONG *)count);
+	if (FAILED(hr)) {
+		ReturnWithError(hr);
+	}
+}
+
+//////////////////////////////////////////////////////////////////////
+void CPGFIStream::Read(int *count, void *buffPtr) THROW_ {
+	ASSERT(count);
+	ASSERT(buffPtr);
+	ASSERT(IsValid());
+	
+	HRESULT hr = m_stream->Read(buffPtr, *count, (ULONG *)count);
+	if (FAILED(hr)) {
+		ReturnWithError(hr);
+	}
+}
+
+//////////////////////////////////////////////////////////////////////
+void CPGFIStream::SetPos(short posMode, INT64 posOff) THROW_ {
+	ASSERT(IsValid());
+	
+	LARGE_INTEGER li;
+	li.QuadPart = posOff;
+
+	HRESULT hr = m_stream->Seek(li, posMode, NULL); 
+	if (FAILED(hr)) {
+		ReturnWithError(hr);
+	}
+}
+
+//////////////////////////////////////////////////////////////////////
+UINT64 CPGFIStream::GetPos() const THROW_ {
+	ASSERT(IsValid());
+	
+	LARGE_INTEGER n;
+	ULARGE_INTEGER pos;
+	n.QuadPart = 0;
+
+	HRESULT hr = m_stream->Seek(n, FSFromCurrent, &pos); 
+	if (SUCCEEDED(hr)) {
+		return pos.QuadPart;
+	} else {
+		ReturnWithError2(hr, pos.QuadPart);
+	}
+}
+#endif // WIN32 || WINCE

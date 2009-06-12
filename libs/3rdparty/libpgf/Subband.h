@@ -83,6 +83,13 @@ public:
 	void Quantize(int quantParam);
 
 	//////////////////////////////////////////////////////////////////////
+	/// Perform subband dequantization with given quantization parameter.
+	/// A scalar quantization (with dead-zone) is used. A large quantization value
+	/// results in strong quantization and therefore in big quality loss.
+	/// @param quantParam A quantization parameter (larger or equal to 0)
+	void Dequantize(int quantParam, int level);
+
+	//////////////////////////////////////////////////////////////////////
 	/// Store wavelet coefficient in subband at given position.
 	/// @param pos A subband position (>= 0)
 	/// @param v A wavelet coefficient

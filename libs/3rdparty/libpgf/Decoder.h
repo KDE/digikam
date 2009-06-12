@@ -103,7 +103,7 @@ public:
 	/// @param band A subband
 	/// @param bandPosition A valid position in subband band
 	/// @param quantParam The quantization parameter
-	void DequantizeValue(CSubband* band, long bandPos, int quantParam);
+	void DequantizeValue(CSubband* band, UINT32 bandPos, int quantParam);
 
 	//////////////////////////////////////////////////////////////////////
 	/// Copies data from the open stream to a target buffer.
@@ -140,7 +140,8 @@ private:
 	UINT32 ComposeBitplane(UINT32 bufferSize, UINT32 planeMask, UINT32* sigBits, UINT32* refBits, UINT32* signBits);
 	void  DecodeBuffer() THROW_; // throws IOException
 	void  SetBitAtPos(UINT32 pos, UINT32 planeMask)			{ (m_value[pos] >= 0) ? m_value[pos] |= planeMask : m_value[pos] -= planeMask; }
-	void  SetSign(UINT32 pos, bool sign)					{ if (sign && m_value[pos] >= 0) m_value[pos] = -m_value[pos]; }
+	void  SetSign(UINT32 pos, bool sign)					{ m_value[pos] = -m_value[pos]*sign + m_value[pos]*(!sign); }
+	//void  SetSign(UINT32 pos, bool sign)					{ if (sign && m_value[pos] >= 0) m_value[pos] = -m_value[pos]; }
 	void  SkipBuffer() THROW_; //throws IOException
 
 protected:

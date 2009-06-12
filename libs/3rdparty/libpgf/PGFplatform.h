@@ -25,8 +25,6 @@
 #define PGF_PGFPLATFORM_H
 
 #include <cassert>
-#include <cmath>
-#include <cstdlib>
 
 //-------------------------------------------------------------------------------
 // ROI support
@@ -87,7 +85,7 @@
 //-------------------------------------------------------------------------------
 // WINDOWS 32
 //-------------------------------------------------------------------------------
-#if defined WIN32 /*|| WINCE*/
+#if defined WIN32 || WINCE
 #define VC_EXTRALEAN		// Exclude rarely-used stuff from Windows headers
 
 //-------------------------------------------------------------------------------
@@ -139,7 +137,7 @@ typedef signed __int64		LONGLONG;
 //-------------------------------------------------------------------------------
 // other types
 //-------------------------------------------------------------------------------
-typedef long OSError;
+typedef int OSError;
 typedef bool (__cdecl *CallbackPtr)(double percent, bool escapeAllowed, void *data);
 
 //-------------------------------------------------------------------------------
@@ -153,9 +151,7 @@ typedef bool (__cdecl *CallbackPtr)(double percent, bool escapeAllowed, void *da
 	#ifdef _DEBUG
 		#define ASSERT(x)	assert(x)
 	#else
-		#if defined(__GNUC__)
-			#define ASSERT(ignore)((void) 0)
-		#elif _MSC_VER >= 1300
+		#if _MSC_VER >= 1300
 			#define ASSERT		__noop
 		#else
 			#define ASSERT ((void)0)
@@ -212,7 +208,7 @@ typedef bool (__cdecl *CallbackPtr)(double percent, bool escapeAllowed, void *da
 //-------------------------------------------------------------------------------
 // methods
 //-------------------------------------------------------------------------------
-inline OSError FileRead(HANDLE hFile, long *count, void *buffPtr) {
+inline OSError FileRead(HANDLE hFile, int *count, void *buffPtr) {
 	if (ReadFile(hFile, buffPtr, *count, (ULONG *)count, NULL)) {
 		return NoError;
 	} else {
@@ -220,7 +216,7 @@ inline OSError FileRead(HANDLE hFile, long *count, void *buffPtr) {
 	}
 }
 
-inline OSError FileWrite(HANDLE hFile, long *count, void *buffPtr) {
+inline OSError FileWrite(HANDLE hFile, int *count, void *buffPtr) {
 	if (WriteFile(hFile, buffPtr, *count, (ULONG *)count, NULL)) {
 		return NoError;
 	} else {
@@ -294,6 +290,7 @@ inline OSError SetFPos(HANDLE hFile, int posMode, INT64 posOff) {
 #define __POSIX__
 #endif /* __linux__ */
 
+
 //-------------------------------------------------------------------------------
 // POSIX *NIXes
 //-------------------------------------------------------------------------------
@@ -314,7 +311,7 @@ typedef unsigned char		BYTE;
 typedef unsigned short		UINT16;
 typedef unsigned short		WORD;
 typedef unsigned int		UINT32;
-typedef unsigned long		DWORD;
+typedef unsigned int		DWORD;
 typedef unsigned long		ULONG;
 typedef unsigned long long  __Uint64;
 typedef __Uint64			UINT64;
@@ -334,7 +331,7 @@ typedef int64_t				LONGLONG;
 //-------------------------------------------------------------------------------
 // other types
 //-------------------------------------------------------------------------------
-typedef long				OSError;
+typedef int					OSError;
 typedef int					HANDLE;	
 typedef unsigned long		ULONG_PTR;
 typedef void*				PVOID;
@@ -394,13 +391,6 @@ __inline int MulDiv(int nNumber, int nNumerator, int nDenominator) {
 }
 #endif // __POSIX__ or WINCE
 
-//-------------------------------------------------------------------------------
-// Macros
-//-------------------------------------------------------------------------------
-#ifndef __min
-#define __min(x, y)		((x) <= (y) ? (x) : (y))
-#define __max(x, y)		((x) >= (y) ? (x) : (y))
-#endif // __min
 
 #ifdef __POSIX__
 //-------------------------------------------------------------------------------
@@ -432,6 +422,14 @@ __inline int MulDiv(int nNumber, int nNumerator, int nDenominator) {
 #define CONST const
 
 //-------------------------------------------------------------------------------
+// Macros
+//-------------------------------------------------------------------------------
+#ifndef __min
+#define __min(x, y)		((x) <= (y) ? (x) : (y))
+#define __max(x, y)		((x) >= (y) ? (x) : (y))
+#endif // __min
+
+//-------------------------------------------------------------------------------
 // constants
 //-------------------------------------------------------------------------------
 #define FSFromStart			SEEK_SET
@@ -456,8 +454,8 @@ __inline int MulDiv(int nNumber, int nNumerator, int nDenominator) {
 //-------------------------------------------------------------------------------
 // methods
 //-------------------------------------------------------------------------------
-__inline OSError FileRead(HANDLE hFile, long *count, void *buffPtr) {
-	*count = (long)read(hFile, buffPtr, *count);
+__inline OSError FileRead(HANDLE hFile, int *count, void *buffPtr) {
+	*count = (int)read(hFile, buffPtr, *count);
 	if (*count != -1) {
 		return NoError;
 	} else {
@@ -465,8 +463,8 @@ __inline OSError FileRead(HANDLE hFile, long *count, void *buffPtr) {
 	}
 }
 
-__inline OSError FileWrite(HANDLE hFile, long *count, void *buffPtr) {
-	*count = (long)write(hFile, buffPtr, (size_t)*count);
+__inline OSError FileWrite(HANDLE hFile, int *count, void *buffPtr) {
+	*count = (int)write(hFile, buffPtr, (size_t)*count);
 	if (*count != -1) {
 		return NoError;
 	} else {

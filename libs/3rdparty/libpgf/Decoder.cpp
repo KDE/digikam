@@ -41,9 +41,9 @@
 //                    file      (for each buffer: packedLength (16 bit), packed bits)
 //                      |
 //                m_codeBuffer  (for each plane: RLcodeLength (16 bit), RLcoded sigBits + m_sign, refBits)
-/*                /     |     \                                                  */
+//                /     |     \
 //           m_sign  sigBits  refBits   [BufferLen, BufferLen, BufferLen]
-/*               \      |     /                                                  */
+//               \      |     /
 //                   m_value	[BufferSize]
 //                      |
 //                   subband
@@ -74,14 +74,24 @@ CDecoder::CDecoder(CPGFStream* stream, PGFPreHeader& preHeader, PGFHeader& heade
 {
 	ASSERT(m_stream);
 
-	long count;
+	int count;
 
 	// store current stream position
 	m_startPos = m_stream->GetPos();
 
-	// read preheader
-	count = PreHeaderSize;
+	// read magic and version
+	count = MagicVersionSize;
 	m_stream->Read(&count, &preHeader);
+
+	// read header size
+	if (preHeader.version & Version6) {
+		// 32 bit header size since version 6
+		count = 4;
+	} else {
+		count = 2;
+	}
+	m_stream->Read(&count, ((UINT8*)&preHeader) + MagicVersionSize);
+
 	// make sure the values are correct read
 	preHeader.hSize = __VAL(preHeader.hSize);
 
@@ -164,7 +174,7 @@ CDecoder::~CDecoder() {
 UINT32 CDecoder::ReadEncodedData(UINT8* target, UINT32 len) const THROW_ {
 	ASSERT(m_stream);
 
-	long count = len;
+	int count = len;
 	m_stream->Read(&count, target);
 
 	return count;
@@ -378,7 +388,7 @@ void CDecoder::Skip(UINT64 offset) THROW_ {
 /// @param band A subband
 /// @param bandPosition A valid position in subband band
 /// @param quantParam The quantization parameter
-void CDecoder::DequantizeValue(CSubband* band, long bandPos, int quantParam) {
+void CDecoder::DequantizeValue(CSubband* band, UINT32 bandPos, int quantParam) {
 	if (m_bufferIsAvailable) {
 		band->SetData(bandPos, m_value[m_valuePos] << quantParam);
 	} else {
@@ -404,7 +414,7 @@ void CDecoder::DequantizeValue(CSubband* band, long bandPos, int quantParam) {
 void CDecoder::DecodeBuffer() THROW_ {
 	UINT16 wordLen;
 	ROIBlockHeader h(BufferSize);
-	long count;
+	int count;
 
 #ifdef TRACE
 	UINT32 filePos = (UINT32)m_stream->GetPos();
@@ -456,7 +466,7 @@ void CDecoder::DecodeBuffer() THROW_ {
 // throws IOException
 void CDecoder::SkipBuffer() THROW_ {
 	UINT16 wordLen;
-	long count;
+	int count;
 
 	// read wordLen
 	count = sizeof(UINT16);

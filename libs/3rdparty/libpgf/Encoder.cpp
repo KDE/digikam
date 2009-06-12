@@ -41,9 +41,9 @@
 //                   subband
 //                      |
 //                   m_value	[BufferSize]
-/*                /     |     \                                               */
+//                /     |     \
 //           m_sign  sigBits  refBits   [BufferSize, BufferLen, BufferLen]
-/*               \      |     /                                               */
+//               \      |     /
 //                m_codeBuffer  (for each plane: RLcodeLength (16 bit), RLcoded sigBits + m_sign, refBits)
 //                      |
 //                    file      (for each buffer: packedLength (16 bit), packed bits)
@@ -59,14 +59,14 @@
 // Throws IOException
 // preHeader and header must not be references, because on BigEndian platforms they are modified
 CEncoder::CEncoder(CPGFStream* stream, PGFPreHeader preHeader, PGFHeader header, const PGFPostHeader& postHeader, UINT32*& levelLength) THROW_
-: m_stream(stream), m_startPosition(0), m_valuePos(0), m_maxAbsValue(0)
+: m_stream(stream), m_valuePos(0), m_maxAbsValue(0), m_startPosition(0)
 #ifdef __PGFROISUPPORT__
 , m_roi(false)
 #endif
 {
 	ASSERT(m_stream);
 
-	long count;
+	int count;
 
 	// save file position
 	m_startPosition = m_stream->GetPos();
@@ -341,14 +341,14 @@ UINT32 CEncoder::Flush() THROW_ {
 		m_stream->SetPos(FSFromStart, m_levelLengthPos);
 #ifdef __BIGENDIAN__
 		UINT32 levelLength;
-		long count = WordBytes;
+		int count = WordBytes;
 		
 		for (int i=0; i < m_currLevelIndex; i++) {
 			levelLength = __VAL(UINT32(m_levelLength[i]));
 			m_stream->Write(&count, &levelLength);
 		}
 #else
-		long count = m_currLevelIndex*WordBytes;
+		int count = m_currLevelIndex*WordBytes;
 		
 		m_stream->Write(&count, m_levelLength);
 #endif //__BIGENDIAN__
@@ -364,7 +364,7 @@ UINT32 CEncoder::Flush() THROW_ {
 // Stores band value from given position bandPos into buffer m_value at position m_valuePos
 // If buffer is full encode it to file
 // Throws IOException
-void CEncoder::WriteValue(CSubband* band, long bandPos) THROW_ {
+void CEncoder::WriteValue(CSubband* band, int bandPos) THROW_ {
 	if (m_valuePos == BufferSize) {
 		EncodeBuffer(ROIBlockHeader(BufferSize, false));
 	}
@@ -391,7 +391,7 @@ void CEncoder::EncodeBuffer(ROIBlockHeader h) THROW_ {
 	UINT16 wordLen = UINT16(AlignWordPos(codeLen)/WordWidth);
 	ASSERT(wordLen <= BufferSize);
 	
-	long count = sizeof(UINT16);
+	int count = sizeof(UINT16);
 
 #ifdef __BIGENDIAN__
 	// write wordLen
@@ -829,7 +829,7 @@ void CEncoder::DumpBuffer() const {
 // Stores band value from given position bandPos into buffer m_value at position m_valuePos
 // If buffer is full encode it to file
 // Throws IOException
-void CEncoder::WriteTileValue(CSubband* band, long bandPos) THROW_ {
+void CEncoder::WriteTileValue(CSubband* band, int bandPos) THROW_ {
 	// check if buffer is full
 	if (m_valuePos == BufferSize) {
 		// encode buffer
@@ -924,7 +924,7 @@ void CEncoder::EncodeTileBuffer() THROW_ {
 #endif
 
 	// write block header into file
-	long count = sizeof(BlockHeader);
+	int count = sizeof(BlockHeader);
 	m_stream->Write(&count, &h);
 
 	// write coded buffer into file

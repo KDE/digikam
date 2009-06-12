@@ -258,7 +258,7 @@ void CPGFImage::Read(int level /*= 0*/, CallbackPtr cb /*= NULL*/, void *data /*
 	if (ROIisSupported() && m_header.nLevels > 0) {
 		// new encoding scheme supporting ROI
 		PGFRect rect(0, 0, m_header.width, m_header.height);
-		Read(rect, level, cb, data);
+		Read(rect, level, cb);
 		return;
 	}
 #endif
@@ -275,13 +275,14 @@ void CPGFImage::Read(int level /*= 0*/, CallbackPtr cb /*= NULL*/, void *data /*
 		const int levelDiff = m_currentLevel - level;
 		double p, percent = pow(0.25, levelDiff);
 
-		// old encoding scheme without ROI
+		// encoding scheme without ROI
 		while (m_currentLevel > level) {
 			p = percent;
 			for (i=0; i < m_header.channels; i++) {
 				ASSERT(m_wtChannel[i]);
 				// decode file and write stream to m_wtChannel
-				if (m_currentLevel == m_header.nLevels) { // last level also has LL band
+				if (m_currentLevel == m_header.nLevels) { 
+					// last level also has LL band
 					m_wtChannel[i]->GetSubband(m_currentLevel, LL)->PlaceTile(*m_decoder, m_quant);
 				}
 				if (m_preHeader.version & Version5) {
@@ -318,6 +319,46 @@ void CPGFImage::Read(int level /*= 0*/, CallbackPtr cb /*= NULL*/, void *data /*
 	}
 }
 
+//////////////////////////////////////////////////////////////////////
+// After you've written a PGF image, you can call this method followed by GetBitmap/GetYUV
+// to get a quick reconstruction (coded -> decoded image).
+void CPGFImage::Reconstruct() THROW_ {
+	int i;
+
+	if (m_header.nLevels == 0) {
+		// image didn't use wavelet transform
+		for (i=0; i < m_header.channels; i++) {
+			ASSERT(m_wtChannel[i]);
+			m_channel[i] = m_wtChannel[i]->GetSubband(0, LL)->GetBuffer();
+		}
+	} else {
+		int currentLevel = m_header.nLevels;
+
+		// old encoding scheme without ROI
+		while (currentLevel > 0) {
+			for (i=0; i < m_header.channels; i++) {
+				ASSERT(m_wtChannel[i]);
+				// dequantize subbands
+				if (currentLevel == m_header.nLevels) { 
+					// last level also has LL band
+					m_wtChannel[i]->GetSubband(currentLevel, LL)->Dequantize(m_quant, currentLevel);
+				}
+				m_wtChannel[i]->GetSubband(currentLevel, HL)->Dequantize(m_quant, currentLevel);
+				m_wtChannel[i]->GetSubband(currentLevel, LH)->Dequantize(m_quant, currentLevel);
+				m_wtChannel[i]->GetSubband(currentLevel, HH)->Dequantize(m_quant, currentLevel);
+
+				// inverse transform from m_wtChannel to m_channel
+				m_wtChannel[i]->InverseTransform(currentLevel, &m_width[i], &m_height[i], &m_channel[i]);
+				ASSERT(m_channel[i]);
+			}
+			// now we have to refresh the display
+			if (m_cb) m_cb(m_cbArg);
+
+			currentLevel--;
+		}
+	}
+}
+
 #ifdef __PGFROISUPPORT__
 //////////////////////////////////////////////////////////////////////
 /// Compute ROIs for each channel and each level
@@ -332,20 +373,18 @@ void CPGFImage::SetROI(PGFRect rect) {
 	// enable ROI decoding
 	m_decoder->SetROI();
 
-	if (m_header.quality == 0) {
-		// enlarge ROI because of border artefacts
-		const UINT32 dx = FilterWidth/2*(1 << m_currentLevel);
-		const UINT32 dy = FilterHeight/2*(1 << m_currentLevel);
+	// enlarge ROI because of border artefacts
+	const UINT32 dx = FilterWidth/2*(1 << m_currentLevel);
+	const UINT32 dy = FilterHeight/2*(1 << m_currentLevel);
 
-		if (rect.left < dx) rect.left = 0;
-		else rect.left -= dx;
-		if (rect.top < dy) rect.top = 0;
-		else rect.top -= dy;
-		rect.right += dx;
-		if (rect.right > m_header.width) rect.right = m_header.width;
-		rect.bottom += dy;
-		if (rect.bottom > m_header.height) rect.bottom = m_header.height;
-	}
+	if (rect.left < dx) rect.left = 0;
+	else rect.left -= dx;
+	if (rect.top < dy) rect.top = 0;
+	else rect.top -= dy;
+	rect.right += dx;
+	if (rect.right > m_header.width) rect.right = m_header.width;
+	rect.bottom += dy;
+	if (rect.bottom > m_header.height) rect.bottom = m_header.height;
 
 	// prepare wavelet channels for using ROI
 	ASSERT(m_wtChannel[0]);
@@ -586,7 +625,7 @@ void CPGFImage::SetBackground(const RGBTRIPLE* bg) {
 /// @param flags A combination of additional version flags
 /// @param userData A user-defined memory block
 /// @param userDataLength The size of user-defined memory block in bytes
-void CPGFImage::SetHeader(const PGFHeader& header, BYTE flags /*=0*/, UINT8* userData /*= 0*/, UINT16 userDataLength /*= 0*/) THROW_ {
+void CPGFImage::SetHeader(const PGFHeader& header, BYTE flags /*=0*/, UINT8* userData /*= 0*/, UINT32 userDataLength /*= 0*/) THROW_ {
 	ASSERT(!m_decoder);	// current image must be closed
 	ASSERT(header.quality <= MaxQuality);
 	int i;
@@ -1022,7 +1061,7 @@ void CPGFImage::SetColorTable(UINT32 iFirstColor, UINT32 nColors, const RGBQUAD*
 // The sequence of input channels in the input image buffer does not need to be the same as expected from PGF. In case of different sequences you have to
 // provide a channelMap of size of expected channels (depending on image mode). For example, PGF expects in RGB color mode a channel sequence BGR.
 // If your provided image buffer contains a channel sequence ARGB, then the channelMap looks like { 3, 2, 1 }.
-void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], CallbackPtr cb, void *data) THROW_ {
+void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], CallbackPtr cb, void *data /*=NULL*/) THROW_ {
 	ASSERT(buff);
 	int yPos = 0, cnt = 0;
 	double percent = 0;
@@ -1391,7 +1430,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 // @param channelMap A integer array containing the mapping of PGF channel ordering to expected channel ordering.
 // @param cb A pointer to a callback procedure. The procedure is called after each copied buffer row. If cb returns true, then it stops proceeding.
 // @param data Data Pointer to C++ class container to host callback procedure.
-void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*= NULL */, CallbackPtr cb /*= NULL*/, void *data /*= NULL*/) const THROW_ {
+void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*= NULL */, CallbackPtr cb /*= NULL*/, void *data /*=NULL*/) const THROW_ {
 	ASSERT(buff);
 	UINT32 w = m_width[0];
 	UINT32 h = m_height[0];
@@ -1401,11 +1440,12 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 
 #ifdef __PGFROISUPPORT__
 	const PGFRect& roi = (ROIisSupported()) ? m_wtChannel[0]->GetROI(m_currentLevel) : PGFRect(0, 0, w, h); // roi is usually larger than m_roi
+	const PGFRect levelRoi(LevelWidth(m_roi.left, m_currentLevel), LevelHeight(m_roi.top, m_currentLevel), LevelWidth(m_roi.Width(), m_currentLevel), LevelHeight(m_roi.Height(), m_currentLevel));
 	ASSERT(w == roi.Width() && h == roi.Height());
-	ASSERT(roi.left <= m_roi.left && m_roi.right <= roi.right); 
-	ASSERT(roi.top <= m_roi.top && m_roi.bottom <= roi.bottom); 
+	ASSERT(roi.left <= levelRoi.left && levelRoi.right <= roi.right); 
+	ASSERT(roi.top <= levelRoi.top && levelRoi.bottom <= roi.bottom); 
 
-	if (ROIisSupported() && (m_roi.Width() < w || m_roi.Height() < h)) {
+	if (ROIisSupported() && (levelRoi.Width() < w || levelRoi.Height() < h)) {
 		// ROI is used -> create a temporary image buffer for roi
 		// compute pitch
 		targetPitch = pitch;
@@ -1589,7 +1629,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 			UINT16 g;
 			int cnt, channels;
 
-			if (bpp%16 == 0 && bpp > 32) {
+			if (bpp >= 48 && bpp%16 == 0) {
 				UINT16 *buff16 = (UINT16 *)buff;
 				int pitch16 = pitch/2;
 				channels = bpp/16; ASSERT(channels >= m_header.channels);
@@ -2036,9 +2076,9 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 		// copy valid ROI (m_roi) from temporary buffer (roi) to target buffer
 		if (bpp%8 == 0) {
 			BYTE bypp = bpp/8;
-			buff = buffStart + (m_roi.top - roi.top)*pitch + (m_roi.left - roi.left)*bypp;
-			w = m_roi.Width()*bypp;
-			h = m_roi.Height();
+			buff = buffStart + (levelRoi.top - roi.top)*pitch + (levelRoi.left - roi.left)*bypp;
+			w = levelRoi.Width()*bypp;
+			h = levelRoi.Height();
 
 			for (i=0; i < h; i++) {
 				for (j=0; j < w; j++) {
@@ -2055,3 +2095,207 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 	}
 #endif
 }			
+
+//////////////////////////////////////////////////////////////////////
+/// Get YUV image data in interleaved format: (ordering is YUV[A])
+/// The absolute value of pitch is the number of bytes of an image row of the given image buffer.
+/// If pitch is negative, then the image buffer must point to the last row of a bottom-up image (first byte on last row).
+/// if pitch is positive, then the image buffer must point to the first row of a top-down image (first byte).
+/// The sequence of output channels in the output image buffer does not need to be the same as provided by PGF. In case of different sequences you have to
+/// provide a channelMap of size of expected channels (depending on image mode). For example, PGF provides a channel sequence BGR in RGB color mode.
+/// If your provided image buffer expects a channel sequence VUY, then the channelMap looks like { 2, 1, 0 }.
+/// It might throw an IOException.
+/// @param pitch The number of bytes of a row of the image buffer.
+/// @param buff An image buffer.
+/// @param bpp The number of bits per pixel used in image buffer.
+/// @param channelMap A integer array containing the mapping of PGF channel ordering to expected channel ordering.
+/// @param cb A pointer to a callback procedure. The procedure is called after each copied buffer row. If cb returns true, then it stops proceeding.
+void CPGFImage::GetYUV(int pitch, DataT* buff, BYTE bpp, int channelMap[] /*= NULL*/, CallbackPtr cb /*= NULL*/, void *data /*=NULL*/) const THROW_ {
+	ASSERT(buff);
+	const UINT32 w = m_width[0];
+	const UINT32 h = m_height[0];
+	const bool wOdd = (1 == w%2);
+	const int bits = m_header.bpp/m_header.channels;
+	const int dataBits = sizeof(DataT)*8; ASSERT(dataBits == 16 || dataBits == 32);
+	const int pitch2 = pitch/sizeof(DataT);
+	const int yuvOffset = (dataBits == 16) ? YUVoffset8 : YUVoffset16;
+	const double dP = 1.0/h;
+	
+	int defMap[] = { 0, 1, 2, 3, 4, 5, 6, 7 }; ASSERT(sizeof(defMap)/sizeof(defMap[0]) == MaxChannels);
+	if (channelMap == NULL) channelMap = defMap;
+	int sampledPos = 0, yPos = 0;
+	DataT uAvg, vAvg;
+	double percent = 0;
+	UINT32 i, j;
+
+	if (m_header.channels == 3) { 
+		ASSERT(m_header.bpp == m_header.channels*bits);
+		ASSERT(bpp%dataBits == 0);
+
+		DataT* y = m_channel[0]; ASSERT(y);
+		DataT* u = m_channel[1]; ASSERT(u);
+		DataT* v = m_channel[2]; ASSERT(v);
+		int cnt, channels = bpp/dataBits; ASSERT(channels >= m_header.channels);
+
+		for (i=0; i < h; i++) {
+			if (i%2) sampledPos -= (w + 1)/2;
+			cnt = 0;
+			for (j=0; j < w; j++) {
+				if (m_downsample) {
+					// image was downsampled
+					uAvg = u[sampledPos];
+					vAvg = v[sampledPos];
+				} else {
+					uAvg = u[yPos];
+					vAvg = v[yPos];
+				}
+				buff[cnt + channelMap[0]] = y[yPos];
+				buff[cnt + channelMap[1]] = uAvg;
+				buff[cnt + channelMap[2]] = vAvg;
+				yPos++; 
+				cnt += channels;
+				if (j%2) sampledPos++;
+			}
+			buff += pitch2;
+			if (wOdd) sampledPos++;
+
+			if (cb) {
+				percent += dP;
+				if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
+			}
+		}
+	} else if (m_header.channels == 4) {
+		ASSERT(m_header.bpp == m_header.channels*8);
+		ASSERT(bpp%dataBits == 0);
+
+		DataT* y = m_channel[0]; ASSERT(y);
+		DataT* u = m_channel[1]; ASSERT(u);
+		DataT* v = m_channel[2]; ASSERT(v);
+		DataT* a = m_channel[3]; ASSERT(a);
+		UINT8 aAvg;
+		int cnt, channels = bpp/dataBits; ASSERT(channels >= m_header.channels);
+
+		for (i=0; i < h; i++) {
+			if (i%2) sampledPos -= (w + 1)/2;
+			cnt = 0;
+			for (j=0; j < w; j++) {
+				if (m_downsample) {
+					// image was downsampled
+					uAvg = u[sampledPos];
+					vAvg = v[sampledPos];
+					aAvg = Clamp(a[sampledPos] + yuvOffset);
+				} else {
+					uAvg = u[yPos];
+					vAvg = v[yPos];
+					aAvg = Clamp(a[yPos] + yuvOffset);
+				}
+				// Yuv
+				buff[cnt + channelMap[0]] = y[yPos];
+				buff[cnt + channelMap[1]] = uAvg;
+				buff[cnt + channelMap[2]] = vAvg;
+				buff[cnt + channelMap[3]] = aAvg;
+				yPos++; 
+				cnt += channels;
+				if (j%2) sampledPos++;
+			}
+			buff += pitch2;
+			if (wOdd) sampledPos++;
+
+			if (cb) {
+				percent += dP;
+				if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
+			}
+		}
+	}
+}
+
+//////////////////////////////////////////////////////////////////////
+/// Import a YUV image from a specified image buffer.
+/// The absolute value of pitch is the number of bytes of an image row.
+/// If pitch is negative, then buff points to the last row of a bottom-up image (first byte on last row).
+/// If pitch is positive, then buff points to the first row of a top-down image (first byte).
+/// The sequence of input channels in the input image buffer does not need to be the same as expected from PGF. In case of different sequences you have to
+/// provide a channelMap of size of expected channels (depending on image mode). For example, PGF expects in RGB color mode a channel sequence BGR.
+/// If your provided image buffer contains a channel sequence VUY, then the channelMap looks like { 2, 1, 0 }.
+/// It might throw an IOException.
+/// @param pitch The number of bytes of a row of the image buffer.
+/// @param buff An image buffer.
+/// @param bpp The number of bits per pixel used in image buffer.
+/// @param channelMap A integer array containing the mapping of input channel ordering to expected channel ordering.
+/// @param cb A pointer to a callback procedure. The procedure is called after each imported buffer row. If cb returns true, then it stops proceeding.
+void CPGFImage::ImportYUV(int pitch, INT16 *buff, BYTE bpp, int channelMap[] /*= NULL*/, CallbackPtr cb /*= NULL*/, void *data /*=NULL*/) THROW_ {
+	ASSERT(buff);
+	const double dP = 1.0/m_header.height;
+	const int bits = m_header.bpp/m_header.channels;
+	const int dataBits = sizeof(DataT)*8; ASSERT(dataBits == 16 || dataBits == 32);
+	const int pitch2 = pitch/sizeof(DataT);
+	const int yuvOffset = (dataBits == 16) ? YUVoffset8 : YUVoffset16;
+
+	int yPos = 0, cnt = 0;
+	double percent = 0;
+	int defMap[] = { 0, 1, 2, 3, 4, 5, 6, 7 }; ASSERT(sizeof(defMap)/sizeof(defMap[0]) == MaxChannels);
+
+	if (channelMap == NULL) channelMap = defMap;
+
+	if (m_header.channels == 3)	{
+		ASSERT(m_header.bpp == m_header.channels*bits);
+		ASSERT(bpp%dataBits == 0);
+
+		DataT* y = m_channel[0]; ASSERT(y);
+		DataT* u = m_channel[1]; ASSERT(u);
+		DataT* v = m_channel[2]; ASSERT(v);
+		const int channels = bpp/dataBits; ASSERT(channels >= m_header.channels);
+
+		for (UINT32 h=0; h < m_header.height; h++) {
+			if (cb) {
+				if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
+				percent += dP;
+			}
+
+			cnt = 0;
+			for (UINT32 w=0; w < m_header.width; w++) {
+				y[yPos] = buff[cnt + channelMap[0]];
+				u[yPos] = buff[cnt + channelMap[1]];
+				v[yPos] = buff[cnt + channelMap[2]];
+				yPos++;
+				cnt += channels;
+			}
+			buff += pitch2;
+		}	
+	} else if (m_header.channels == 4) {
+		ASSERT(m_header.bpp == m_header.channels*bits);
+		ASSERT(bpp%dataBits == 0);
+
+		DataT* y = m_channel[0]; ASSERT(y);
+		DataT* u = m_channel[1]; ASSERT(u);
+		DataT* v = m_channel[2]; ASSERT(v);
+		DataT* a = m_channel[3]; ASSERT(a);
+		const int channels = bpp/dataBits; ASSERT(channels >= m_header.channels);
+
+		for (UINT32 h=0; h < m_header.height; h++) {
+			if (cb) {
+				if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
+				percent += dP;
+			}
+
+			cnt = 0;
+			for (UINT32 w=0; w < m_header.width; w++) {
+				y[yPos] = buff[cnt + channelMap[0]];
+				u[yPos] = buff[cnt + channelMap[1]];
+				v[yPos] = buff[cnt + channelMap[2]];
+				a[yPos] = buff[cnt + channelMap[3]] - yuvOffset;
+				yPos++;
+				cnt += channels;
+			}
+			buff += pitch2;
+		}	
+	}
+
+	if (m_downsample) {
+		// Subsampling of the chrominance and alpha channels
+		for (int i=1; i < m_header.channels; i++) {
+			Downsample(i);
+		}
+	}
+}
+

@@ -197,8 +197,25 @@ inline void SetBitBlock(UINT32* stream, UINT32 pos, UINT32 len) {
 inline UINT32 SeekBitRange(UINT32* stream, UINT32 pos, UINT32 len) {
 	UINT32 count = 0;
 	UINT32 wordPos = pos >> WordWidthLog;
+	UINT32 testMask = 1 << (pos%WordWidth);
+	UINT32* word = stream + wordPos;
+
+	while (((*word & testMask) == 0) && (count < len)) {
+		count++; 
+		testMask <<= 1;
+		if (!testMask) {
+			word++; testMask = 1;
+
+			// fast steps if all bits in a word are zero
+			while ((count + WordWidth <= len) && (*word == 0)) {
+				word++; 
+				count += WordWidth;
+			}
+		}
+	}
+
+	/* old version
 	UINT32 bitPos  = pos%WordWidth;
-	UINT32 testMask = 1 << bitPos;
 
 	while (((stream[wordPos] & testMask) == 0) && (count < len)) {
 		ASSERT(bitPos < WordWidth);
@@ -216,6 +233,7 @@ inline UINT32 SeekBitRange(UINT32* stream, UINT32 pos, UINT32 len) {
 			}
 		}
 	}
+	*/
 	return count;
 }
 

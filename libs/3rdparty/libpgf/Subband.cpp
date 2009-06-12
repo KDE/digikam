@@ -107,11 +107,12 @@ void CSubband::Quantize(int quantParam) {
 		quantParam -= (m_level + 1);
 		// uniform rounding quantization
 		if (quantParam > 0) {
+			quantParam--;
 			for (UINT32 i=0; i < m_size; i++) {
 				if (m_data[i] < 0) {
-					m_data[i] = -(((-m_data[i] >> (quantParam - 1)) + 1) >> 1);
+					m_data[i] = -(((-m_data[i] >> quantParam) + 1) >> 1);
 				} else {
-					m_data[i] = ((m_data[i] >> (quantParam - 1)) + 1) >> 1;
+					m_data[i] = ((m_data[i] >> quantParam) + 1) >> 1;
 				}
 			}
 		}
@@ -124,17 +125,38 @@ void CSubband::Quantize(int quantParam) {
 		// uniform deadzone quantization
 		if (quantParam > 0) {
 			int threshold = ((1 << quantParam) * 7)/5;	// good value
+			quantParam--;
 			for (UINT32 i=0; i < m_size; i++) {
 				if (m_data[i] < -threshold) {
-					m_data[i] = -(((-m_data[i] >> (quantParam - 1)) + 1) >> 1);
+					m_data[i] = -(((-m_data[i] >> quantParam) + 1) >> 1);
 				} else if (m_data[i] > threshold) {
-					m_data[i] = ((m_data[i] >> (quantParam - 1)) + 1) >> 1;
+					m_data[i] = ((m_data[i] >> quantParam) + 1) >> 1;
 				} else {
 					m_data[i] = 0;
 				}
 			}
 		}
 	}			
+}
+
+//////////////////////////////////////////////////////////////////////
+/// Perform subband dequantization with given quantization parameter.
+/// A scalar quantization (with dead-zone) is used. A large quantization value
+/// results in strong quantization and therefore in big quality loss.
+/// @param quantParam A quantization parameter (larger or equal to 0)
+void CSubband::Dequantize(int quantParam, int level) {
+	if (m_orientation == LL) {
+		quantParam -= m_level + 1;
+	} else if (m_orientation == HH) {
+		quantParam -= m_level - 1;
+	} else {
+		quantParam -= m_level;
+	}
+	if (quantParam > 0) {
+		for (UINT32 i=0; i < m_size; i++) {
+			m_data[i] <<= quantParam;
+		}
+	}
 }
 
 /////////////////////////////////////////////////////////////////////
