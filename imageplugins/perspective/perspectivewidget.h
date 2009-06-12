@@ -102,7 +102,7 @@ protected:
 
 private:  // Widget methods.
 
-    void   updatePixmap(bool valid = true);
+    void   updatePixmap();
 
     void   transformAffine(Digikam::DImg *orgImage, Digikam::DImg *destImage,
                            const Matrix& matrix, Digikam::DColor background);
@@ -128,6 +128,7 @@ private:
     bool                 m_drawWhileMoving;
     bool                 m_drawGrid;
     bool                 m_inverseTransformation;
+    bool                 m_validPerspective;
 
     uint                *m_data;
     int                  m_w;

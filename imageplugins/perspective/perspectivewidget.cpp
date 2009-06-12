@@ -73,6 +73,7 @@ PerspectiveWidget::PerspectiveWidget(int w, int h, QWidget *parent)
     m_drawGrid              = false;
     m_drawWhileMoving       = true;
     m_inverseTransformation = false;
+    m_validPerspective      = true;
     m_currentResizing       = ResizingNone;
     m_guideColor            = Qt::red;
     m_guideSize             = 1;
@@ -250,7 +251,7 @@ void PerspectiveWidget::slotChangeGuideSize(int size)
     repaint();
 }
 
-void PerspectiveWidget::updatePixmap(bool valid)
+void PerspectiveWidget::updatePixmap()
 {
     m_topLeftCorner.setRect(m_topLeftPoint.x() + m_rect.topLeft().x(),
                             m_topLeftPoint.y() + m_rect.topLeft().y(), 8, 8);
@@ -295,7 +296,7 @@ void PerspectiveWidget::updatePixmap(bool valid)
 
     // if we are resizing with the mouse, compute and draw only if drawWhileMoving is set
     }
-    else if ((m_currentResizing == ResizingNone || m_drawWhileMoving) && valid)
+    else if ((m_currentResizing == ResizingNone || m_drawWhileMoving) && m_validPerspective)
     {
         // Create preview image
 
@@ -316,7 +317,7 @@ void PerspectiveWidget::updatePixmap(bool valid)
         m_iface->paint(m_pixmap, m_rect.x(), m_rect.y(),
                        m_rect.width(), m_rect.height());
     }
-    else if (valid)
+    else if (m_validPerspective)
     {
         m_transformedCenter = buildPerspective(QPoint(0, 0), QPoint(m_w, m_h),
                                                m_topLeftPoint, m_topRightPoint,
@@ -377,7 +378,7 @@ void PerspectiveWidget::updatePixmap(bool valid)
     p.end();
 
     emit signalPerspectiveChanged(getTargetSize(), getAngleTopLeft(), getAngleTopRight(),
-                                  getAngleBottomLeft(), getAngleBottomRight(), valid);
+                                  getAngleBottomLeft(), getAngleBottomRight(), m_validPerspective);
 }
 
 QPoint PerspectiveWidget::buildPerspective(QPoint orignTopLeft, QPoint orignBottomRight,
@@ -765,7 +766,7 @@ void PerspectiveWidget::mouseReleaseEvent ( QMouseEvent * e )
 
 void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
 {
-    bool valid = true;
+    m_validPerspective = true;
 
     if ( e->buttons() == Qt::LeftButton )
     {
@@ -799,7 +800,8 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
                                          m_w-1, 0 );
                 QRegion unusableArea(unusablePoints);
 
-                if ( unusableArea.contains(pm) && !m_inverseTransformation ) valid = false;
+                if ( unusableArea.contains(pm) && !m_inverseTransformation )
+                    m_validPerspective = false;
 
                 m_topLeftPoint = pm - m_rect.topLeft();
                 setCursor( Qt::SizeFDiagCursor );
@@ -817,7 +819,8 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
                                          m_w-1, m_h-1);
                 QRegion unusableArea(unusablePoints);
 
-                if ( unusableArea.contains(pm) && !m_inverseTransformation ) valid = false;
+                if ( unusableArea.contains(pm) && !m_inverseTransformation )
+                    m_validPerspective = false;
 
                 m_topRightPoint = pm - m_rect.topLeft();
                 setCursor( Qt::SizeBDiagCursor );
@@ -835,7 +838,8 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
                                          0, 0);
                 QRegion unusableArea(unusablePoints);
 
-                if ( unusableArea.contains(pm) && !m_inverseTransformation ) valid = false;
+                if ( unusableArea.contains(pm) && !m_inverseTransformation )
+                    m_validPerspective = false;
 
                 m_bottomLeftPoint = pm - m_rect.topLeft();
                 setCursor( Qt::SizeBDiagCursor );
@@ -853,7 +857,8 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
                                          0, m_w-1);
                 QRegion unusableArea(unusablePoints);
 
-                if ( unusableArea.contains(pm) && !m_inverseTransformation ) valid = false;
+                if ( unusableArea.contains(pm) && !m_inverseTransformation )
+                    m_validPerspective = false;
 
                 m_bottomRightPoint = pm - m_rect.topLeft();
                 setCursor( Qt::SizeFDiagCursor );
@@ -865,7 +870,7 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
                 m_spot.setY(e->y()-m_rect.y());
             }
 
-            updatePixmap(valid);
+            updatePixmap();
             repaint();
         }
     }
