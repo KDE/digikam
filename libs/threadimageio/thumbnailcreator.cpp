@@ -474,11 +474,11 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
 
     // We rely on loadFromDatabase() being called before, so we do not need to look up
     // by filepath of uniqueHash to find out if a thumb need to be replaced.
-    dbInfo.id = d->dbIdForReplacement;
-    d->dbIdForReplacement = -1;
-    dbInfo.type = DatabaseThumbnail::PGF;
+    dbInfo.id               = d->dbIdForReplacement;
+    d->dbIdForReplacement   = -1;
+    dbInfo.type             = DatabaseThumbnail::PGF;
     dbInfo.modificationDate = info.modificationDate;
-    dbInfo.orientationHint = image.exifOrientation;
+    dbInfo.orientationHint  = image.exifOrientation;
 
     if (!writePGFImageData(image.qimage, dbInfo.data, 3))
         return;
@@ -497,13 +497,14 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
         access.db()->insertUniqueHash(info.uniqueHash, info.fileSize, dbInfo.id);
     if (!info.filePath.isNull())
         access.db()->insertFilePath(info.filePath, dbInfo.id);
+
     access.backend()->commitTransaction();
 }
 
 ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info)
 {
     ThumbnailDatabaseAccess access;
-    DatabaseThumbnailInfo dbInfo;
+    DatabaseThumbnailInfo   dbInfo;
 
     if (!info.uniqueHash.isNull())
     {
