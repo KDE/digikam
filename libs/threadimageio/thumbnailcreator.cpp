@@ -484,7 +484,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
 
     if (dbInfo.type == DatabaseThumbnail::PGF)
     {
-        if (!writePGFImageData(image.qimage, dbInfo.data, 3))
+        if (!writePGFImageData(image.qimage, dbInfo.data, 4))
         {
             kWarning(50003) << "Cannot save PGF thumb in DB" << endl;
             return;
@@ -560,21 +560,32 @@ ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info)
     if (dbInfo.type == DatabaseThumbnail::PGF)
     {
         if (!readPGFImageData(dbInfo.data, image.qimage))
+        {
+            kWarning(50003) << "Cannot load PGF thumb from DB" << endl;
             return ThumbnailImage();
+        }
     }
     else if (dbInfo.type == DatabaseThumbnail::JPEG)
     {
         QBuffer buffer(&dbInfo.data);
         buffer.open(QIODevice::ReadOnly);
-        if (image.qimage.load(&buffer, "JPEG"))
+        image.qimage.load(&buffer, "JPEG");
+        if (dbInfo.data.isNull())
+        {
+            kWarning(50003) << "Cannot load JPEG thumb from DB" << endl;
             return ThumbnailImage();
+        }
     }
     else if (dbInfo.type == DatabaseThumbnail::JPEG2000)
     {
         QBuffer buffer(&dbInfo.data);
         buffer.open(QIODevice::ReadOnly);
-        if (image.qimage.load(&buffer, "JP2"))
+        image.qimage.load(&buffer, "JP2");
+        if (dbInfo.data.isNull())
+        {
+            kWarning(50003) << "Cannot load JPEG2000 thumb from DB" << endl;
             return ThumbnailImage();
+        }
     }
 
     image.exifOrientation = dbInfo.orientationHint;
