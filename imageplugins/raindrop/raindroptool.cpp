@@ -107,6 +107,7 @@ RainDropTool::RainDropTool(QObject* parent)
 
     d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
                                              EditorToolSettings::Ok|
+                                             EditorToolSettings::Try|
                                              EditorToolSettings::Cancel);
 
 
@@ -156,17 +157,6 @@ RainDropTool::RainDropTool(QObject* parent)
 
     setToolSettings(d->gboxSettings);
     init();
-
-    // -------------------------------------------------------------
-
-    connect(d->dropInput, SIGNAL(valueChanged(int)),
-            this, SLOT(slotTimer()));
-
-    connect(d->amountInput, SIGNAL(valueChanged(int)),
-            this, SLOT(slotTimer()));
-
-    connect(d->coeffInput, SIGNAL(valueChanged(int)),
-            this, SLOT(slotTimer()));
 }
 
 RainDropTool::~RainDropTool()
@@ -193,8 +183,6 @@ void RainDropTool::readSettings()
     d->coeffInput->setValue(group.readEntry("CoeffAdjustment", d->coeffInput->defaultValue()));
 
     blockWidgetSignals(false);
-
-    slotEffect();
 }
 
 void RainDropTool::writeSettings()
