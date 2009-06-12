@@ -194,7 +194,7 @@ InsertTextTool::InsertTextTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label1 = new QLabel(i18n("Rotation:"));
+    QLabel *label1  = new QLabel(i18n("Rotation:"));
     d->textRotation = new KComboBox();
     d->textRotation->addItem(i18nc("no rotation", "None"));
     d->textRotation->addItem(i18n("90 Degrees"));
@@ -204,7 +204,7 @@ InsertTextTool::InsertTextTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label2 = new QLabel(i18nc("font color", "Color:"));
+    QLabel *label2     = new QLabel(i18nc("font color", "Color:"));
     d->fontColorButton = new KColorButton(Qt::black);
     d->fontColorButton->setWhatsThis(i18n("Set here the font color to use."));
 
@@ -219,16 +219,17 @@ InsertTextTool::InsertTextTool(QObject* parent)
     // -------------------------------------------------------------
 
     QGridLayout *mainLayout = new QGridLayout();
-    mainLayout->addWidget(d->textEdit,             0, 0, 3, 2);
-    mainLayout->addWidget(d->fontChooserWidget,    3, 0, 1, 2);
-    mainLayout->addWidget(alignBox,                4, 0, 1, 2);
+    mainLayout->addWidget(d->textEdit,             0, 0, 3,-1);
+    mainLayout->addWidget(d->fontChooserWidget,    3, 0, 1,-1);
+    mainLayout->addWidget(alignBox,                4, 0, 1,-1);
     mainLayout->addWidget(label1,                  5, 0, 1, 1);
     mainLayout->addWidget(d->textRotation,         5, 1, 1, 1);
     mainLayout->addWidget(label2,                  6, 0, 1, 1);
     mainLayout->addWidget(d->fontColorButton,      6, 1, 1, 1);
-    mainLayout->addWidget(d->borderText,           7, 0, 1, 2);
-    mainLayout->addWidget(d->transparentText,      8, 0, 1, 2);
+    mainLayout->addWidget(d->borderText,           7, 0, 1,-1);
+    mainLayout->addWidget(d->transparentText,      8, 0, 1,-1);
     mainLayout->setRowStretch(9, 10);
+    mainLayout->setColumnStretch(2, 10);
     mainLayout->setMargin(d->gboxSettings->spacingHint());
     mainLayout->setSpacing(d->gboxSettings->spacingHint());
     d->gboxSettings->plainPage()->setLayout(mainLayout);
