@@ -7,10 +7,10 @@ AlbumGui       : Find Duplicates search can be limited to an album range.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 178189 : do not create preview automatically for large pictures.
+001 ==> 178189 : Do not create preview automatically for large pictures.
 002 ==> 172807 : Warning: JPEG format error, rc = 5.
 003 ==> 188936 : Not finding all pictures on camera.
-004 ==> 195812 : crash when rotating image in album overlay (rightest rotate icon).
+004 ==> 195812 : Crash when rotating image in album overlay (rightest rotate icon).
 005 ==> 094562 : Renaming an album recreates all thumbnails.
 006 ==> 193124 : Import image should allow both direct and reverse ordering.
 007 ==> 188051 : Sort order of filenames in camera - no way to set or choose.
@@ -18,9 +18,10 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 009 ==> 189979 : All displays of the same caption don't show the same text when it contains "éèà".
 010 ==> 195902 : digiKam crashes on first startup if album folder is not empty.
 011 ==> 154606 : Changing the date for multiple pictures simultaneously changes all of the times too.
-012 ==> 143932 : utf-8 displayed with wrong encoding when restoring photo to digiKam.
+012 ==> 143932 : Utf-8 displayed with wrong encoding when restoring photo to digiKam.
 013 ==> 179227 : Generation of XMP tags crashes the application.
-014 ==> 
+014 ==> 188988 : digiKam crash while scanning images.
+015 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta1 - Release date: 2009-06-07
