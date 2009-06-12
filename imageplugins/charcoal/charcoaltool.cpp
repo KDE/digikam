@@ -137,14 +137,6 @@ CharcoalTool::CharcoalTool(QObject* parent)
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
     init();
-
-    // -------------------------------------------------------------
-
-    connect(d->pencilInput, SIGNAL(valueChanged(int)),
-            this, SLOT(slotTimer()));
-
-    connect(d->smoothInput, SIGNAL(valueChanged(int)),
-            this, SLOT(slotTimer()));
 }
 
 CharcoalTool::~CharcoalTool()
