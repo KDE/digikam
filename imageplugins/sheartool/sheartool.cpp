@@ -235,10 +235,10 @@ void ShearTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("sheartool Tool");
-    d->mainHAngleInput->setValue(group.readEntry("Main HAngle", d->mainHAngleInput->defaultValue()));
-    d->mainVAngleInput->setValue(group.readEntry("Main VAngle", d->mainVAngleInput->defaultValue()));
-    d->fineHAngleInput->setValue(group.readEntry("Fine HAngle", d->fineHAngleInput->defaultValue()));
-    d->fineVAngleInput->setValue(group.readEntry("Fine VAngle", d->fineVAngleInput->defaultValue()));
+//    d->mainHAngleInput->setValue(group.readEntry("Main HAngle", d->mainHAngleInput->defaultValue()));
+//    d->mainVAngleInput->setValue(group.readEntry("Main VAngle", d->mainVAngleInput->defaultValue()));
+//    d->fineHAngleInput->setValue(group.readEntry("Fine HAngle", d->fineHAngleInput->defaultValue()));
+//    d->fineVAngleInput->setValue(group.readEntry("Fine VAngle", d->fineVAngleInput->defaultValue()));
     d->antialiasInput->setChecked(group.readEntry("Anti Aliasing", true));
     slotEffect();
 }
@@ -247,10 +247,10 @@ void ShearTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("sheartool Tool");
-    group.writeEntry("Main HAngle", d->mainHAngleInput->value());
-    group.writeEntry("Main VAngle", d->mainVAngleInput->value());
-    group.writeEntry("Fine HAngle", d->fineHAngleInput->value());
-    group.writeEntry("Fine VAngle", d->fineVAngleInput->value());
+//    group.writeEntry("Main HAngle", d->mainHAngleInput->value());
+//    group.writeEntry("Main VAngle", d->mainVAngleInput->value());
+//    group.writeEntry("Fine HAngle", d->fineHAngleInput->value());
+//    group.writeEntry("Fine VAngle", d->fineVAngleInput->value());
     group.writeEntry("Anti Aliasing", d->antialiasInput->isChecked());
     d->previewWidget->writeSettings();
     config->sync();
