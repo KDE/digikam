@@ -135,7 +135,7 @@ public:
 
 /////////////////////////////////////////////////////////////////////
 // A PGF stream subclass for IStream. Usable only with COM.
-#if defined WIN32 || WINCE
+#if defined WIN32 /*|| WINCE*/
 class CPGFIStream : public CPGFStream {
 protected:
 	IStream *m_stream;
