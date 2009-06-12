@@ -170,6 +170,7 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, int histogr
     d->guideColorBt = new KColorButton(QColor(Qt::red), d->guideBox);
     d->guideColorBt->setWhatsThis(i18n("Set here the color used to draw dashed guide lines."));
     d->guideSize    = new RIntNumInput(d->guideBox);
+    d->guideSize->input()->setSuffix(QString("px"));
     d->guideSize->setRange(1, 5, 1);
     d->guideSize->setSliderEnabled(true);
     d->guideSize->setDefaultValue(1);
