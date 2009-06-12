@@ -82,8 +82,6 @@ public:
         drawWhileMovingCheckBox   = 0;
         drawGridCheckBox          = 0;
         inverseTransformation     = 0;
-        guideSize                 = 0;
-        guideColorBt              = 0;
         previewWidget             = 0;
         gboxSettings              = 0;
     }
@@ -98,10 +96,6 @@ public:
     QCheckBox*          drawWhileMovingCheckBox;
     QCheckBox*          drawGridCheckBox;
     QCheckBox*          inverseTransformation;
-
-    QSpinBox*           guideSize;
-
-    KColorButton*       guideColorBt;
 
     PerspectiveWidget*  previewWidget;
     EditorToolSettings* gboxSettings;
@@ -134,7 +128,8 @@ PerspectiveTool::PerspectiveTool(QObject* parent)
 
     d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
                                              EditorToolSettings::Ok|
-                                             EditorToolSettings::Cancel);
+                                             EditorToolSettings::Cancel,
+                                             EditorToolSettings::ColorGuide);
 
     QGridLayout *gridLayout = new QGridLayout(d->gboxSettings->plainPage());
 
@@ -169,19 +164,6 @@ PerspectiveTool::PerspectiveTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label7  = new QLabel(i18n("Guide color:"), d->gboxSettings->plainPage());
-    d->guideColorBt = new KColorButton(QColor(Qt::red), d->gboxSettings->plainPage());
-    d->guideColorBt->setWhatsThis(i18n("Set here the color used to draw dashed guide lines."));
-
-    QLabel *space  = new QLabel(d->gboxSettings->plainPage());
-    space->setFixedHeight(d->gboxSettings->spacingHint());
-
-    QLabel *label8  = new QLabel(i18n("Guide width:"), d->gboxSettings->plainPage());
-    d->guideSize    = new QSpinBox(d->gboxSettings->plainPage());
-    d->guideSize->setRange(1, 5);
-    d->guideSize->setSingleStep(1);
-    d->guideSize->setWhatsThis(i18n("Set here the width in pixels used to draw dashed guide lines."));
-
     gridLayout->setMargin(d->gboxSettings->spacingHint());
     gridLayout->setSpacing(0);
     gridLayout->addWidget(label1,                       0, 0, 1, 1);
@@ -202,13 +184,8 @@ PerspectiveTool::PerspectiveTool(QObject* parent)
     gridLayout->addWidget(d->drawWhileMovingCheckBox,   9, 0, 1, 3);
     gridLayout->addWidget(d->drawGridCheckBox,         10, 0, 1, 3);
     gridLayout->addWidget(d->inverseTransformation,    11, 0, 1, 3);
-    gridLayout->addWidget(label7,                      12, 0, 1, 1);
-    gridLayout->addWidget(d->guideColorBt,             12, 2, 1, 1);
-    gridLayout->addWidget(space,                       13, 0, 1, 3);
-    gridLayout->addWidget(label8,                      14, 0, 1, 1);
-    gridLayout->addWidget(d->guideSize,                14, 2, 1, 1);
     gridLayout->setColumnStretch(1, 10);
-    gridLayout->setRowStretch(15, 10);
+    gridLayout->setRowStretch(12, 10);
 
     setToolSettings(d->gboxSettings);
     init();
@@ -224,19 +201,22 @@ PerspectiveTool::PerspectiveTool(QObject* parent)
     connect(d->drawGridCheckBox, SIGNAL(toggled(bool)),
             d->previewWidget, SLOT(slotToggleDrawGrid(bool)));
 
-    connect(d->guideColorBt, SIGNAL(changed(const QColor &)),
-            d->previewWidget, SLOT(slotChangeGuideColor(const QColor &)));
-
-    connect(d->guideSize, SIGNAL(valueChanged(int)),
-            d->previewWidget, SLOT(slotChangeGuideSize(int)));
-
     connect(d->inverseTransformation, SIGNAL(toggled(bool)),
             this, SLOT(slotInverseTransformationChanged(bool)));
+
+    connect(d->gboxSettings, SIGNAL(signalColorGuideChanged()),
+            this, SLOT(slotColorGuideChanged()));
 }
 
 PerspectiveTool::~PerspectiveTool()
 {
     delete d;
+}
+
+void PerspectiveTool::slotColorGuideChanged()
+{
+    d->previewWidget->slotChangeGuideColor(d->gboxSettings->guideColor());
+    d->previewWidget->slotChangeGuideSize(d->gboxSettings->guideSize());
 }
 
 void PerspectiveTool::readSettings()
@@ -246,13 +226,9 @@ void PerspectiveTool::readSettings()
     KConfigGroup group = config->group("perspective Tool");
     d->drawWhileMovingCheckBox->setChecked(group.readEntry("Draw While Moving", true));
     d->drawGridCheckBox->setChecked(group.readEntry("Draw Grid", false));
-    d->guideColorBt->setColor(group.readEntry("Guide Color", defaultGuideColor));
-    d->guideSize->setValue(group.readEntry("Guide Width", 1));
     d->inverseTransformation->setChecked(group.readEntry("Inverse Transformation", false));
     d->previewWidget->slotToggleDrawWhileMoving(d->drawWhileMovingCheckBox->isChecked());
     d->previewWidget->slotToggleDrawGrid(d->drawGridCheckBox->isChecked());
-    d->previewWidget->slotChangeGuideColor(d->guideColorBt->color());
-    d->previewWidget->slotChangeGuideSize(d->guideSize->value());
 }
 
 void PerspectiveTool::writeSettings()
@@ -261,8 +237,6 @@ void PerspectiveTool::writeSettings()
     KConfigGroup group = config->group("perspective Tool");
     group.writeEntry("Draw While Moving", d->drawWhileMovingCheckBox->isChecked());
     group.writeEntry("Draw Grid", d->drawGridCheckBox->isChecked());
-    group.writeEntry("Guide Color", d->guideColorBt->color());
-    group.writeEntry("Guide Width", d->guideSize->value());
     group.writeEntry("Inverse Transformation", d->inverseTransformation->isChecked());
     config->sync();
 }

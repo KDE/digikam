@@ -50,6 +50,7 @@ private Q_SLOTS:
     void slotResetSettings();
     void slotUpdateInfo(const QRect& newSize, float topLeftAngle, float topRightAngle,
                         float bottomLeftAngle, float bottomRightAngle);
+    void slotColorGuideChanged();
 
 private:
 
