@@ -769,7 +769,7 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
     {
         if ( m_currentResizing != ResizingNone )
         {
-            QPolygon unsablePoints;
+            QPolygon unusablePoints;
             QPoint pm(e->x(), e->y());
 
             if (!m_rect.contains( pm ))
@@ -787,17 +787,17 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
 
             if ( m_currentResizing == ResizingTopLeft )
             {
-                unsablePoints.putPoints(0, 7,
-                                        m_w-1, m_h-1,
-                                        0, m_h-1,
-                                        0, m_bottomLeftPoint.y()-10,
-                                        m_bottomLeftPoint.x(), m_bottomLeftPoint.y()-10,
-                                        m_topRightPoint.x()-10, m_topRightPoint.y(),
-                                        m_topRightPoint.x()-10, 0,
-                                        m_w-1, 0 );
-                QRegion unsableArea(unsablePoints);
+                unusablePoints.putPoints(0, 7,
+                                         m_w-1, m_h-1,
+                                         0, m_h-1,
+                                         0, m_bottomLeftPoint.y()-10,
+                                         m_bottomLeftPoint.x(), m_bottomLeftPoint.y()-10,
+                                         m_topRightPoint.x()-10, m_topRightPoint.y(),
+                                         m_topRightPoint.x()-10, 0,
+                                         m_w-1, 0 );
+                QRegion unusableArea(unusablePoints);
 
-                if ( unsableArea.contains(pm) && !m_inverseTransformation ) return;
+                if ( unusableArea.contains(pm) && !m_inverseTransformation ) return;
 
                 m_topLeftPoint = pm - m_rect.topLeft();
                 setCursor( Qt::SizeFDiagCursor );
@@ -805,17 +805,17 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
 
             else if ( m_currentResizing == ResizingTopRight )
             {
-                unsablePoints.putPoints(0, 7,
-                                        0, m_h-1,
-                                        0, 0,
-                                        m_topLeftPoint.x()+10, 0,
-                                        m_topLeftPoint.x()+10, m_topLeftPoint.y(),
-                                        m_bottomRightPoint.x(), m_bottomRightPoint.y()-10,
-                                        m_w-1, m_bottomRightPoint.y()-10,
-                                        m_w-1, m_h-1);
-                QRegion unsableArea(unsablePoints);
+                unusablePoints.putPoints(0, 7,
+                                         0, m_h-1,
+                                         0, 0,
+                                         m_topLeftPoint.x()+10, 0,
+                                         m_topLeftPoint.x()+10, m_topLeftPoint.y(),
+                                         m_bottomRightPoint.x(), m_bottomRightPoint.y()-10,
+                                         m_w-1, m_bottomRightPoint.y()-10,
+                                         m_w-1, m_h-1);
+                QRegion unusableArea(unusablePoints);
 
-                if ( unsableArea.contains(pm) && !m_inverseTransformation ) return;
+                if ( unusableArea.contains(pm) && !m_inverseTransformation ) return;
 
                 m_topRightPoint = pm - m_rect.topLeft();
                 setCursor( Qt::SizeBDiagCursor );
@@ -823,17 +823,17 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
 
             else if ( m_currentResizing == ResizingBottomLeft  )
             {
-                unsablePoints.putPoints(0, 7,
-                                        m_w-1, 0,
-                                        m_w-1, m_h-1,
-                                        m_bottomRightPoint.x()-10, m_h-1,
-                                        m_bottomRightPoint.x()-10, m_bottomRightPoint.y()+10,
-                                        m_topLeftPoint.x(), m_topLeftPoint.y()+10,
-                                        0, m_topLeftPoint.y(),
-                                        0, 0);
-                QRegion unsableArea(unsablePoints);
+                unusablePoints.putPoints(0, 7,
+                                         m_w-1, 0,
+                                         m_w-1, m_h-1,
+                                         m_bottomRightPoint.x()-10, m_h-1,
+                                         m_bottomRightPoint.x()-10, m_bottomRightPoint.y()+10,
+                                         m_topLeftPoint.x(), m_topLeftPoint.y()+10,
+                                         0, m_topLeftPoint.y(),
+                                         0, 0);
+                QRegion unusableArea(unusablePoints);
 
-                if ( unsableArea.contains(pm) && !m_inverseTransformation ) return;
+                if ( unusableArea.contains(pm) && !m_inverseTransformation ) return;
 
                 m_bottomLeftPoint = pm - m_rect.topLeft();
                 setCursor( Qt::SizeBDiagCursor );
@@ -841,17 +841,17 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
 
             else if ( m_currentResizing == ResizingBottomRight )
             {
-                unsablePoints.putPoints(0, 7,
-                                        0, 0,
-                                        m_w-1, 0,
-                                        m_w-1, m_topRightPoint.y()+10,
-                                        m_topRightPoint.x(), m_topRightPoint.y()+10,
-                                        m_bottomLeftPoint.x()+10, m_bottomLeftPoint.y(),
-                                        m_bottomLeftPoint.x()+10, m_w-1,
-                                        0, m_w-1);
-                QRegion unsableArea(unsablePoints);
+                unusablePoints.putPoints(0, 7,
+                                         0, 0,
+                                         m_w-1, 0,
+                                         m_w-1, m_topRightPoint.y()+10,
+                                         m_topRightPoint.x(), m_topRightPoint.y()+10,
+                                         m_bottomLeftPoint.x()+10, m_bottomLeftPoint.y(),
+                                         m_bottomLeftPoint.x()+10, m_w-1,
+                                         0, m_w-1);
+                QRegion unusableArea(unusablePoints);
 
-                if ( unsableArea.contains(pm) && !m_inverseTransformation ) return;
+                if ( unusableArea.contains(pm) && !m_inverseTransformation ) return;
 
                 m_bottomRightPoint = pm - m_rect.topLeft();
                 setCursor( Qt::SizeFDiagCursor );
