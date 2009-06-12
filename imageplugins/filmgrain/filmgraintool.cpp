@@ -95,7 +95,6 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
     d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
                                              EditorToolSettings::Ok|
                                              EditorToolSettings::Cancel|
-                                             EditorToolSettings::Try,
                                              EditorToolSettings::PanIcon);
 
     d->previewWidget = new ImagePanelWidget(470, 350, "filmgrain Tool", d->gboxSettings->panIconView());
