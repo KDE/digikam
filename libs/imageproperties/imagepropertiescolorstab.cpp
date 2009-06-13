@@ -378,7 +378,7 @@ void ImagePropertiesColorsTab::setData(const KUrl& url, const QRect& selectionAr
     // threaded histogram algorithm.
     d->histogramBox->histogram()->stopHistogramComputation();
 
-    d->currentFilePath = QString();
+    d->currentFilePath.clear();
     d->currentLoadingDescription = LoadingDescription();
     d->iccProfileWidget->loadFromURL(KUrl());
 

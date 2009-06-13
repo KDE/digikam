@@ -75,7 +75,7 @@ public:
         identifier   = info.identifier;
         m_label      = info.label;
 
-        m_path       = QString();
+        m_path.clear();
 
         setStatus((CollectionLocation::Status)info.status);
     }

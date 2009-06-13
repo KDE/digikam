@@ -97,7 +97,7 @@ QMap<int, QString> QueuePool::queuesMap() const
 QString QueuePool::queueTitle(int index) const
 {
     // NOTE: clean up tab title. With KTabWidget, it sound like mistake is added, as '&' and space.
-    return (tabText(index).remove("&").remove(" "));
+    return (tabText(index).remove('&').remove(' '));
 }
 
 void QueuePool::slotAddQueue()

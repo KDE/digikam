@@ -251,7 +251,7 @@ void DImgInterface::resetImage()
 void DImgInterface::resetValues()
 {
     d->valid          = false;
-    d->filename       = QString();
+    d->filename.clear();
     d->width          = 0;
     d->height         = 0;
     d->origWidth      = 0;

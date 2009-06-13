@@ -1743,7 +1743,7 @@ bool AlbumManager::updatePAlbumIcon(PAlbum *album, qlonglong iconID, QString& er
             album->m_icon = albumRootPath + iconRelativePath;
         }
         else
-            album->m_icon = QString();
+            album->m_icon.clear();
     }
 
     emit signalAlbumIconChanged(album);
@@ -1953,7 +1953,7 @@ bool AlbumManager::updateTAlbumIcon(TAlbum* album, const QString& iconKDE,
             }
         }
         else
-            album->m_icon = QString();
+            album->m_icon.clear();
     }
 
     emit signalAlbumIconChanged(album);

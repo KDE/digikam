@@ -216,8 +216,8 @@ void ImagePreviewView::setImagePath(const QString& path)
     setCursor( Qt::WaitCursor );
 
     d->path         = path;
-    d->nextPath     = QString();
-    d->previousPath = QString();
+    d->nextPath.clear();
+    d->previousPath.clear();
 
     if (d->path.isEmpty())
     {
@@ -289,12 +289,12 @@ void ImagePreviewView::slotNextPreload()
     if (!d->nextPath.isNull())
     {
         loadPath    = d->nextPath;
-        d->nextPath = QString();
+        d->nextPath.clear();
     }
     else if (!d->previousPath.isNull())
     {
         loadPath        = d->previousPath;
-        d->previousPath = QString();
+        d->previousPath.clear();
     }
     else
         return;
@@ -575,7 +575,7 @@ bool ImagePreviewView::previewIsNull()
 void ImagePreviewView::resetPreview()
 {
     d->preview   = DImg();
-    d->path      = QString();
+    d->path.clear();
     d->imageInfo = ImageInfo();
 
     updateZoomAndSize(true);

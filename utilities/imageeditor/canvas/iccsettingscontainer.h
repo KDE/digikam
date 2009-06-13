@@ -51,10 +51,10 @@ public:
 
         renderingSetting        = 0;
 
-        workspaceSetting        = QString();
-        monitorSetting          = QString();
-        inputSetting            = QString();
-        proofSetting            = QString();
+        workspaceSetting.clear();
+        monitorSetting.clear();
+        inputSetting.clear();
+        proofSetting.clear();
     };
 
     ~ICCSettingsContainer(){};

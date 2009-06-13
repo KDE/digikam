@@ -449,7 +449,7 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
         }
 
         info.name             = fi.fileName();
-        info.folder           = !folder.endsWith("/") ? folder + QString("/") : folder;
+        info.folder           = !folder.endsWith('/') ? folder + QString("/") : folder;
         info.mime             = mime;
         info.mtime            = dt;
         info.size             = fi.size();

@@ -1298,7 +1298,7 @@ void EditorWindow::slotLoadingFinished(const QString& filename, bool success)
     m_animLogo->stop();
 
     // Note: in showFoto, we using a null filename to clear canvas.
-    if (!success && filename != QString())
+    if (!success && !filename.isEmpty())
     {
         QFileInfo fi(filename);
         QString message = i18n("Failed to load image \"%1\"",fi.fileName());

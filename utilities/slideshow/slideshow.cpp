@@ -418,7 +418,7 @@ void SlideShow::updatePixmap()
 
             if (d->settings.printMakeModel)
             {
-                str = QString();
+                str.clear();
 
                 if (!photoInfo.make.isEmpty())
                     str = photoInfo.make;
@@ -438,7 +438,7 @@ void SlideShow::updatePixmap()
 
             if (d->settings.printExpoSensitivity)
             {
-                str = QString();
+                str.clear();
 
                 if (!photoInfo.exposureTime.isEmpty())
                     str = photoInfo.exposureTime;
@@ -458,7 +458,7 @@ void SlideShow::updatePixmap()
 
             if (d->settings.printApertureFocal)
             {
-                str = QString();
+                str.clear();
 
                 if (!photoInfo.aperture.isEmpty())
                     str = photoInfo.aperture;

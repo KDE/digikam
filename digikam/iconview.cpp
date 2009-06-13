@@ -2074,7 +2074,7 @@ QPixmap IconView::thumbnailBorderPixmap(const QSize& pixSize)
     const int radius         = 3;
     const QColor borderColor = QColor(0, 0, 0, 128);
 
-    QString cacheKey  = QString::number(pixSize.width()) + "-" + QString::number(pixSize.height());
+    QString cacheKey  = QString::number(pixSize.width()) + '-' + QString::number(pixSize.height());
     QPixmap *cachePix = d->thumbnailBorderCache.object(cacheKey);
 
     if (!cachePix)

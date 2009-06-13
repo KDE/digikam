@@ -120,7 +120,7 @@ void SearchWindow::reset()
 {
     d->currentId = -1;
     d->hasTouchedXml = false;
-    d->oldXml = QString();
+    d->oldXml.clear();
     d->searchView->read(QString());
 }
 

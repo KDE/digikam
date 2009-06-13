@@ -1103,7 +1103,7 @@ void CameraUI::slotFileList(const GPItemInfoList& fileList)
     fileExts.append("dps");
 
     // NOTE: see B.K.O #181726: list of accepted file extensions from Album Settings.
-    QStringList list = settings->getAllFileFilter().toLower().split(" ");
+    QStringList list = settings->getAllFileFilter().toLower().split(' ');
 
     QMultiMap<QDateTime, GPItemInfo> map;
     foreach(const GPItemInfo& item, fileList)
@@ -1631,13 +1631,13 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
             if (usedDownloadPaths.contains(suggestedPath))
             {
                 QFileInfo fi(downloadName);
-                QString suffix = "." + fi.suffix();
+                QString suffix = '.' + fi.suffix();
                 QString pathWithoutSuffix(suggestedPath);
                 pathWithoutSuffix.chop(suffix.length());
                 QString currentVariant;
                 int counter = 1;
                 do
-                    currentVariant = pathWithoutSuffix + "-" + QString::number(counter++) + suffix;
+                    currentVariant = pathWithoutSuffix + '-' + QString::number(counter++) + suffix;
                 while (usedDownloadPaths.contains(currentVariant));
 
                 usedDownloadPaths << currentVariant;

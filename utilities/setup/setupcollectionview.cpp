@@ -444,8 +444,8 @@ void SetupCollectionModel::apply()
         else
         {
             item.location = location;
-            item.path = QString();
-            item.label = QString();
+            item.path.clear();
+            item.label.clear();
         }
     }
 
@@ -454,7 +454,7 @@ void SetupCollectionModel::apply()
     {
         Item& item = m_collections[i];
         CollectionManager::instance()->setLabel(item.location, item.label);
-        item.label = QString();
+        item.label.clear();
     }
 
     // Handle any errors
@@ -603,7 +603,7 @@ void SetupCollectionModel::addCollection(int category)
         int row = rowCount(parent);
         QString label = nameEdit->text();
         if (label.isEmpty())
-            label = QString();
+            label.clear();
         beginInsertRows(parent, row, row);
         m_collections << Item(path, label, (Category)category);
         endInsertRows();

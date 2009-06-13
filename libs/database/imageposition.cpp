@@ -55,9 +55,9 @@ public:
 
     void resetData()
     {
-        description     = QString();
-        latitude        = QString();
-        longitude       = QString();
+        description.clear();
+        latitude.clear();
+        longitude.clear();
         latitudeNumber  = 0;
         longitudeNumber = 0;
         altitude        = 0;

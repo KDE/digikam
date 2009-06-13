@@ -254,8 +254,8 @@ PAlbum::PAlbum(const QString& title)
     setTitle(title);
     m_isAlbumRootAlbum = false;
     m_albumRootId      = -1;
-    m_parentPath       = "/";
-    m_path             = QString();
+    m_parentPath       = '/';
+    m_path.clear();
 }
 
 PAlbum::PAlbum(int albumRoot, const QString& label)
@@ -265,8 +265,8 @@ PAlbum::PAlbum(int albumRoot, const QString& label)
     setTitle(label);
     m_albumRootId      = albumRoot;
     m_isAlbumRootAlbum = true;
-    m_parentPath       = "/";
-    m_path             = QString();
+    m_parentPath       = '/';
+    m_path.clear();
 }
 
 PAlbum::PAlbum(int albumRoot, const QString& parentPath, const QString& title, int id)

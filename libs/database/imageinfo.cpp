@@ -433,7 +433,7 @@ QString ImageInfo::filePath() const
     if (album == "/")
         return albumRoot + album + m_data->name;
     else
-        return albumRoot + album + "/" + m_data->name;
+        return albumRoot + album + '/' + m_data->name;
 }
 
 ImageComments ImageInfo::imageComments(DatabaseAccess& access) const
