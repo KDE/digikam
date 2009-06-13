@@ -33,6 +33,7 @@
 #include <QtCore/QDateTime>
 #include <QtCore/QPair>
 #include <QtCore/QMap>
+#include <QtCore/QHash>
 
 // KDE includes
 
@@ -101,7 +102,7 @@ public:
     int insertThumbnail(const DatabaseThumbnailInfo &info);
     void replaceThumbnail(const DatabaseThumbnailInfo &info);
 
-    QStringList getValidFilePaths();
+    QHash<QString, int> getValidFilePaths();
 
 private:
 

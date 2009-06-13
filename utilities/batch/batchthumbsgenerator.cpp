@@ -123,10 +123,10 @@ void BatchThumbsGenerator::slotRebuildThumbs()
 
     if (!d->rebuildAll)
     {
-        QStringList thumbPaths = ThumbnailDatabaseAccess().db()->getValidFilePaths();
+        QHash<QString, int> filePaths = ThumbnailDatabaseAccess().db()->getValidFilePaths();
         for (QStringList::iterator it = d->allPicturesPath.begin(); it != d->allPicturesPath.end();)
         {
-            if (thumbPaths.contains(*it))
+            if (filePaths.contains(*it))
             {
                 it = d->allPicturesPath.erase(it);
             }
