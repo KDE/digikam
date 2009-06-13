@@ -52,6 +52,9 @@
 #include "databaseaccess.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
+#include "thumbnaildatabaseaccess.h"
+#include "thumbnaildb.h"
+#include "config-digikam.h"
 
 namespace Digikam
 {
@@ -105,15 +108,35 @@ BatchThumbsGenerator::~BatchThumbsGenerator()
 void BatchThumbsGenerator::slotRebuildThumbs()
 {
     setTitle(i18n("Processing..."));
-    AlbumList palbumList  = AlbumManager::instance()->allPAlbums();
 
     // Get all digiKam albums collection pictures path.
+
+    AlbumList palbumList  = AlbumManager::instance()->allPAlbums();
 
     for (AlbumList::Iterator it = palbumList.begin();
          !d->cancel && (it != palbumList.end()); ++it )
     {
         d->allPicturesPath += DatabaseAccess().db()->getItemURLsInAlbum((*it)->id());
     }
+
+#ifdef USE_THUMBS_DB
+
+    if (!d->rebuildAll)
+    {
+        for (QStringList::iterator it = d->allPicturesPath.begin(); it != d->allPicturesPath.end();)
+        {
+            if (ThumbnailDatabaseAccess().db()->findByFilePath(*it).id != -1)
+            {
+                it = d->allPicturesPath.erase(it);
+            }
+            else
+            {
+                ++it;
+            }
+        }
+    }
+
+#endif
 
     setMaximum(d->allPicturesPath.count());
 
