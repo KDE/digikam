@@ -143,7 +143,7 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
     d->albumSelectCB = new AlbumSelectComboBox;
     d->albumSelectCB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    QString albumSelectStr = i18n("Select all albums that should be included into the search.");
+    QString albumSelectStr = i18n("Select all albums that should be included in the search.");
     d->albumSelectCB->setWhatsThis(albumSelectStr);
     d->albumSelectCB->setToolTip(albumSelectStr);
 
