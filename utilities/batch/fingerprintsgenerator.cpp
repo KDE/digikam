@@ -128,10 +128,10 @@ void FingerPrintsGenerator::slotRebuildFingerPrints()
 
     setMaximum(d->allPicturesPath.count());
 
-    if(d->allPicturesPath.isEmpty())
+    if (d->allPicturesPath.isEmpty())
     {
-       slotCancel();
-       return;
+        slotCancel();
+        return;
     }
 
     processOne();
