@@ -193,6 +193,9 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
 
+    connect(d->progressBar, SIGNAL(signalCancelButtonPressed()),
+            this, SLOT(slotCancelButtonPressed()));
+
     connect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()),
             this, SLOT(populateTreeView()));
 
@@ -210,9 +213,6 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
             this, SLOT(slotClear()));
-
-    connect(d->progressBar, SIGNAL(signalCancelButtonPressed()),
-            this, SLOT(slotCancelButtonPressed()));
 }
 
 FindDuplicatesView::~FindDuplicatesView()
