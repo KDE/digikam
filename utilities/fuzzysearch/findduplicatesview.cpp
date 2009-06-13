@@ -152,12 +152,14 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    d->thresholdLabel = new QLabel(i18n("Threshold:"));
-    d->threshold      = new QSpinBox;
+    d->threshold = new QSpinBox;
     d->threshold->setRange(0, 100);
     d->threshold->setValue(90);
     d->threshold->setSingleStep(1);
     d->threshold->setSuffix(QChar('%'));
+
+    d->thresholdLabel = new QLabel(i18n("Threshold:"));
+    d->thresholdLabel->setBuddy(d->threshold);
 
     // ---------------------------------------------------------------
 
