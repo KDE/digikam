@@ -41,9 +41,9 @@
 //                    file      (for each buffer: packedLength (16 bit), packed bits)
 //                      |
 //                m_codeBuffer  (for each plane: RLcodeLength (16 bit), RLcoded sigBits + m_sign, refBits)
-//                /     |     \
+//                |     |     |
 //           m_sign  sigBits  refBits   [BufferLen, BufferLen, BufferLen]
-//               \      |     /
+//                |     |     |
 //                   m_value	[BufferSize]
 //                      |
 //                   subband

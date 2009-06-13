@@ -71,9 +71,9 @@ public:
 	const PGFRect& GetROI(int level) const		{ ASSERT(m_ROIs); ASSERT(level >= 0 && level < m_nLevels); return m_ROIs[level]; }
 
 private:
+    int      m_nLevels;         // number of levels of the image
 	PGFRect	*m_ROIs;			// array of region of interests (ROI)
 	PGFRect *m_indices;			// array of tile indices
-	int      m_nLevels;			// number of levels of the image
 
 };
 #endif //__PGFROISUPPORT__
@@ -163,7 +163,7 @@ private:
 
 #ifdef __PGFROISUPPORT__
 	CROIs		m_ROIs;							// ROI information
-#endif __PGFROISUPPORT__
+#endif /*__PGFROISUPPORT__*/
 
 	int			m_nLevels;						// number of transform levels: one more than the number of level in PGFimage
 	CSubband	(*m_subband)[NSubbands];		// quadtree of subbands: LL HL												

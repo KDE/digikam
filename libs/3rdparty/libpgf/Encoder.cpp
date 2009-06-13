@@ -41,9 +41,9 @@
 //                   subband
 //                      |
 //                   m_value	[BufferSize]
-//                /     |     \
+//                |     |     |
 //           m_sign  sigBits  refBits   [BufferSize, BufferLen, BufferLen]
-//               \      |     /
+//                |     |     |
 //                m_codeBuffer  (for each plane: RLcodeLength (16 bit), RLcoded sigBits + m_sign, refBits)
 //                      |
 //                    file      (for each buffer: packedLength (16 bit), packed bits)
@@ -59,7 +59,7 @@
 // Throws IOException
 // preHeader and header must not be references, because on BigEndian platforms they are modified
 CEncoder::CEncoder(CPGFStream* stream, PGFPreHeader preHeader, PGFHeader header, const PGFPostHeader& postHeader, UINT32*& levelLength) THROW_
-: m_stream(stream), m_valuePos(0), m_maxAbsValue(0), m_startPosition(0)
+: m_stream(stream), m_startPosition(0), m_valuePos(0), m_maxAbsValue(0)
 #ifdef __PGFROISUPPORT__
 , m_roi(false)
 #endif
