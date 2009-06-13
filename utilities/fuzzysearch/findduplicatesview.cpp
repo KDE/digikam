@@ -111,8 +111,9 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
 
     setAttribute(Qt::WA_DeleteOnClose);
 
-    QGridLayout *grid = new QGridLayout(this);
-    d->listView       = new QTreeWidget(this);
+    // ---------------------------------------------------------------
+
+    d->listView = new QTreeWidget();
     d->listView->setRootIsDecorated(false);
     d->listView->setSelectionMode(QAbstractItemView::SingleSelection);
     d->listView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -125,22 +126,22 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
     d->listView->header()->setResizeMode(1, QHeaderView::ResizeToContents);
     d->listView->setWhatsThis(i18n("This shows all found duplicate items."));
 
-    d->updateFingerPrtBtn = new QPushButton(i18n("Update fingerprints"), this);
+    d->updateFingerPrtBtn = new QPushButton(i18n("Update fingerprints"));
     d->updateFingerPrtBtn->setIcon(KIcon("run-build"));
     d->updateFingerPrtBtn->setWhatsThis(i18n("Use this button to update all image fingerprints."));
 
-    d->scanDuplicatesBtn = new QPushButton(i18n("Find duplicates"), this);
+    d->scanDuplicatesBtn = new QPushButton(i18n("Find duplicates"));
     d->scanDuplicatesBtn->setIcon(KIcon("system-search"));
     d->scanDuplicatesBtn->setWhatsThis(i18n("Use this button to scan the selected albums for "
                                             "duplicate items."));
 
-    d->progressBar = new StatusProgressBar(this);
+    d->progressBar = new StatusProgressBar();
     d->progressBar->progressBarMode(StatusProgressBar::TextMode);
     d->progressBar->setEnabled(false);
 
     // ---------------------------------------------------------------
 
-    d->albumSelectCB = new AlbumSelectComboBox;
+    d->albumSelectCB = new AlbumSelectComboBox();
     d->albumSelectCB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     QString albumSelectStr = i18n("Select all albums that should be included in the search.");
@@ -152,7 +153,7 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    d->threshold = new QSpinBox;
+    d->threshold = new QSpinBox();
     d->threshold->setRange(0, 100);
     d->threshold->setValue(90);
     d->threshold->setSingleStep(1);
@@ -163,18 +164,20 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    grid->addWidget(d->listView,           0, 0, 1,-1);
-    grid->addWidget(d->includeAlbumsLabel, 1, 0, 1, 1);
-    grid->addWidget(d->albumSelectCB,      1, 1, 1,-1);
-    grid->addWidget(d->thresholdLabel,     2, 0, 1, 1);
-    grid->addWidget(d->threshold,          2, 2, 1, 1);
-    grid->addWidget(d->updateFingerPrtBtn, 3, 0, 1,-1);
-    grid->addWidget(d->scanDuplicatesBtn,  4, 0, 1,-1);
-    grid->addWidget(d->progressBar,        5, 0, 1,-1);
-    grid->setRowStretch(0, 10);
-    grid->setColumnStretch(1, 10);
-    grid->setMargin(KDialog::spacingHint());
-    grid->setSpacing(KDialog::spacingHint());
+    QGridLayout *mainLayout = new QGridLayout();
+    mainLayout->addWidget(d->listView,           0, 0, 1,-1);
+    mainLayout->addWidget(d->includeAlbumsLabel, 1, 0, 1, 1);
+    mainLayout->addWidget(d->albumSelectCB,      1, 1, 1,-1);
+    mainLayout->addWidget(d->thresholdLabel,     2, 0, 1, 1);
+    mainLayout->addWidget(d->threshold,          2, 2, 1, 1);
+    mainLayout->addWidget(d->updateFingerPrtBtn, 3, 0, 1,-1);
+    mainLayout->addWidget(d->scanDuplicatesBtn,  4, 0, 1,-1);
+    mainLayout->addWidget(d->progressBar,        5, 0, 1,-1);
+    mainLayout->setRowStretch(0, 10);
+    mainLayout->setColumnStretch(1, 10);
+    mainLayout->setMargin(KDialog::spacingHint());
+    mainLayout->setSpacing(KDialog::spacingHint());
+    setLayout(mainLayout);
 
     // ---------------------------------------------------------------
 
