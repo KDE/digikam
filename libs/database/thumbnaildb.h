@@ -101,6 +101,8 @@ public:
     int insertThumbnail(const DatabaseThumbnailInfo &info);
     void replaceThumbnail(const DatabaseThumbnailInfo &info);
 
+    QStringList getValidFilePaths();
+
 private:
 
     friend class Digikam::ThumbnailDatabaseAccess;
