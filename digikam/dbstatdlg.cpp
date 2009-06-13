@@ -44,6 +44,7 @@
 #include "daboutdata.h"
 #include "albumdb.h"
 #include "databaseaccess.h"
+#include "config-digikam.h"
 
 namespace Digikam
 {
@@ -65,6 +66,7 @@ DBStatDlg::DBStatDlg(QWidget *parent)
         total += it.value();
         map.insert(it.key(), QString::number(it.value()));
     }
+
     setInfoMap(map);
 
     // To see total count of items at end of list.
@@ -75,6 +77,13 @@ DBStatDlg::DBStatDlg(QWidget *parent)
     ft = ti->font(1);
     ft.setBold(true);
     ti->setFont(1, ft);
+
+#ifdef USE_THUMBS_DB
+
+    QTreeWidgetItem *spacer = new QTreeWidgetItem(listView(), QStringList());
+    QTreeWidgetItem *db     = new QTreeWidgetItem(listView(), QStringList() << i18n("Using ThumbsDB") << QString(i18n("yes")));
+
+#endif /* USE_THUMBS_DB */
 
     kapp->restoreOverrideCursor();
 }
