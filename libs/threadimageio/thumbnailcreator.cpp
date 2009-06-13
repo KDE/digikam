@@ -494,7 +494,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
     {
         QBuffer buffer(&dbInfo.data);
         buffer.open(QIODevice::WriteOnly);
-        image.qimage.save(&buffer, "JPEG");
+        image.qimage.save(&buffer, "JPEG", 85);  // Here we will use JPEG quality = 85 to reduce artifacts.
         if (dbInfo.data.isNull())
         {
             kWarning(50003) << "Cannot save JPEG thumb in DB" << endl;
