@@ -87,6 +87,7 @@ extern "C"
 #include "setup.h"
 #include "thumbnailloadthread.h"
 #include "upgradedb_sqlite2tosqlite3.h"
+#include "config-digikam.h"
 
 namespace Digikam
 {
@@ -681,11 +682,13 @@ bool AlbumManager::setDatabase(const QString& dbPath, bool priority, const QStri
         }
     }
 
+#ifdef USE_THUMBS_DB
     // Initialize thumbnail database
-/*    QFileInfo thumbFile(d->dbPath, "thumbnails-digikam.db");
+    QFileInfo thumbFile(d->dbPath, "thumbnails-digikam.db");
     ThumbnailLoadThread::initializeThumbnailDatabase(thumbFile.filePath(), new DatabaseThumbnailInfoProvider());
     d->dirWatchBlackList << "thumbnails-digikam.db" << "thumbnails-digikam.db-journal";
-*/
+#endif
+
     return true;
 }
 
