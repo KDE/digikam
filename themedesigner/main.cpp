@@ -44,7 +44,7 @@ int main(int argc, char** argv)
 {
     KAboutData aboutData("digikamthemedesigner", "digikam",
                          ki18n("digiKam Theme Designer"),
-                         digiKamVersion().toAscii(),
+                         Digikam::digiKamVersion().toAscii(),
                          Digikam::digiKamSlogan(),
                          KAboutData::License_GPL,
                          Digikam::copyright(),
