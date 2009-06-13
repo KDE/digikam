@@ -412,7 +412,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         meta.getImagePreview(preview);
         KTemporaryFile tmp;
         tmp.setPrefix(filePath);
-        tmp.setSuffix("-preview-jpg.tmp");
+        tmp.setSuffix("-preview-tif.tmp");
         tmp.setAutoRemove(true);
         if ( !tmp.open() )
         {
@@ -421,7 +421,8 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         }
         else
         {
-            preview.save(tmp.fileName(), "JPEG");
+            preview = preview.scaled(16, 16, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            preview.save(tmp.fileName(), "PNG");
             kDebug(50003) << "Created PGF metadata tmp file" << endl;
 
             meta.load(tmp.fileName());
@@ -429,9 +430,6 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
             meta.setIptc(metaData[DImg::IPTC]);
             meta.setXmp(metaData[DImg::XMP]);
             meta.setComments(metaData[DImg::COM]);
-            meta.removeIptcTag("Iptc.Application2.Preview");
-            meta.removeIptcTag("Iptc.Application2.PreviewFormat");
-            meta.removeIptcTag("Iptc.Application2.PreviewVersion");
             meta.applyChanges();
 
             QByteArray data;
