@@ -20,19 +20,24 @@
  *
  * ============================================================ */
 
-// Qt includes.
+// C++ includes
+
+#include <ctime>
+
+// Qt includes
 
 #include <QImage>
+#include <QBuffer>
 #include <QFile>
 #include <QIODevice>
 #include <QByteArray>
 #include <QDataStream>
 
-// KDE includes.
+// KDE includes
 
 #include "kdebug.h"
 
-// Local includes.
+// Local includes
 
 #include "pgfutils.h"
 
@@ -40,17 +45,24 @@ using namespace Digikam;
 
 int main(int /*argc*/, char** /*argv*/)
 {
+    clock_t    start, end;
     QImage     img;
-    QByteArray data;
+    QByteArray pgfData, jpgData;
 
     // QImage => PGF conversion
 
     img.load("test.png");
-    if (!writePGFImageData(img, data, 3))
+
+    start = clock();
+
+    if (!writePGFImageData(img, pgfData, 4))
     {
         kDebug(50003) << "writePGFImageData failed..." << endl;
         return -1;
     }
+    end = clock();
+
+    kDebug(50003) << "PGF Encoding time: " << double(end - start)/CLOCKS_PER_SEC << " s" << endl;
 
     // Write PGF file.
 
@@ -61,17 +73,52 @@ int main(int /*argc*/, char** /*argv*/)
         return -1;
     }
     QDataStream stream(&file);
-    stream.writeRawData(data.data(), data.size());
+    stream.writeRawData(pgfData.data(), pgfData.size());
     file.close();
 
     // PGF => QImage conversion
 
-    if (!readPGFImageData(data, img))
+    start = clock();
+
+    if (!readPGFImageData(pgfData, img))
     {
         kDebug(50003) << "readPGFImageData failed..." << endl;
         return -1;
     }
+    end = clock();
+
     img.save("test2.png", "PNG");
+
+    kDebug(50003) << "PGF Decoding time: " << double(end - start)/CLOCKS_PER_SEC << " s" << endl;
+
+    // JPEG tests for comparisons.
+
+    start = clock();
+
+    QBuffer buffer(&jpgData);
+    buffer.open(QIODevice::WriteOnly);
+    img.save(&buffer, "JPEG", 85);  // Here we will use JPEG quality = 85 to reduce artifacts.
+    if (jpgData.isNull())
+    {
+        kDebug(50003) << "Save JPG image data to byte array failed..." << endl;
+        return -1;
+    }
+    end = clock();
+
+    kDebug(50003) << "JPG Encoding time: " << double(end - start)/CLOCKS_PER_SEC << " s" << endl;
+
+    start = clock();
+
+    buffer.open(QIODevice::ReadOnly);
+    img.load(&buffer, "JPEG");
+    if (jpgData.isNull())
+    {
+        kDebug(50003) << "Load JPG image data from byte array failed..." << endl;
+        return -1;
+    }
+    end = clock();
+
+    kDebug(50003) << "JPG Decoding time: " << double(end - start)/CLOCKS_PER_SEC << " s" << endl;
 
     return 0;
 }
