@@ -21,7 +21,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 012 ==> 143932 : Utf-8 displayed with wrong encoding when restoring photo to digiKam.
 013 ==> 179227 : Generation of XMP tags crashes the application.
 014 ==> 188988 : digiKam crash while scanning images.
-015 ==> 
+015 ==> 192085 : digiKam suddenly crashed when managing pictures.
+016 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta1 - Release date: 2009-06-07
