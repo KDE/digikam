@@ -22,8 +22,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 013 ==> 179227 : Generation of XMP tags crashes the application.
 014 ==> 188988 : digiKam crash while scanning images.
 015 ==> 192085 : digiKam suddenly crashed when managing pictures.
-016 ==> 196465 : Missing reset button for curve in monochrome conversion tool. 
-017 ==> 
+016 ==> 196465 : Missing reset button for curve in monochrome conversion tool.
+017 ==> 196329 : Renaming album causes problems (until re-opening).
+018 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta1 - Release date: 2009-06-07
