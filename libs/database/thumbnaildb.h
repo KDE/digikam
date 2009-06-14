@@ -56,7 +56,7 @@ enum Type
     UndefinedType = 0,
     NoThumbnail,
     PGF,
-    JPEG,
+    JPEG,              // Warning : no alpha chanel support. Cannot be used as well.
     JPEG2000,
     PNG
     //FreeDesktopHash
