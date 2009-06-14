@@ -57,7 +57,8 @@ enum Type
     NoThumbnail,
     PGF,
     JPEG,
-    JPEG2000
+    JPEG2000,
+    PNG
     //FreeDesktopHash
 };
 

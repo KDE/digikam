@@ -512,6 +512,17 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
             return;
         }
     }
+    else if (dbInfo.type == DatabaseThumbnail::PNG)
+    {
+        QBuffer buffer(&dbInfo.data);
+        buffer.open(QIODevice::WriteOnly);
+        image.qimage.save(&buffer, "PNG", 0);
+        if (dbInfo.data.isNull())
+        {
+            kWarning(50003) << "Cannot save JPEG2000 thumb in DB" << endl;
+            return;
+        }
+    }
 
     ThumbnailDatabaseAccess access;
 
@@ -584,6 +595,17 @@ ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info)
         if (dbInfo.data.isNull())
         {
             kWarning(50003) << "Cannot load JPEG2000 thumb from DB" << endl;
+            return ThumbnailImage();
+        }
+    }
+    else if (dbInfo.type == DatabaseThumbnail::PNG)
+    {
+        QBuffer buffer(&dbInfo.data);
+        buffer.open(QIODevice::ReadOnly);
+        image.qimage.load(&buffer, "PNG");
+        if (dbInfo.data.isNull())
+        {
+            kWarning(50003) << "Cannot load PNG thumb from DB" << endl;
             return ThumbnailImage();
         }
     }
