@@ -24,7 +24,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 015 ==> 192085 : digiKam suddenly crashed when managing pictures.
 016 ==> 196465 : Missing reset button for curve in monochrome conversion tool.
 017 ==> 196329 : Renaming album causes problems (until re-opening).
-018 ==> 
+018 ==> 191288 : CRC error in chunk zTXt.
+019 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta1 - Release date: 2009-06-07
