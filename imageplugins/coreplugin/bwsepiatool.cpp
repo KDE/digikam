@@ -27,6 +27,7 @@
 
 // Qt includes
 
+#include <QButtonGroup>
 #include <QColor>
 #include <QFile>
 #include <QFrame>
@@ -409,6 +410,48 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
     ColorGradientWidget *hGradient = new ColorGradientWidget(Qt::Horizontal, 10, curveBox );
     hGradient->setColors(QColor("black"), QColor("white"));
 
+    // -------------------------------------------------------------
+
+    QWidget *typeBox = new QWidget();
+
+    m_curveFree = new QToolButton;
+    m_curveFree->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/curvefree.png")));
+    m_curveFree->setCheckable(true);
+    m_curveFree->setToolTip(i18n("Curve free mode"));
+    m_curveFree->setWhatsThis( i18n("With this button, you can draw your curve free-hand "
+                                    "with the mouse."));
+
+    m_curveSmooth = new QToolButton;
+    m_curveSmooth->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/curvemooth.png")));
+    m_curveSmooth->setCheckable(true);
+    m_curveSmooth->setToolTip(i18n("Curve smooth mode"));
+    m_curveSmooth->setWhatsThis( i18n("With this button, the curve type is constrained to "
+                                       "be a smooth line with tension."));
+
+    m_curveType = new QButtonGroup(typeBox);
+    m_curveType->addButton(m_curveFree, FreeDrawing);
+    m_curveType->addButton(m_curveSmooth, SmoothDrawing);
+
+    m_curveType->setExclusive(true);
+    m_curveSmooth->setChecked(true);
+
+    m_curveReset = new QPushButton(i18n("&Reset"));
+    m_curveReset->setIcon(KIconLoader::global()->loadIcon("document-revert", KIconLoader::Toolbar));
+    m_curveReset->setToolTip(i18n("Reset the curve to its default values."));
+    m_curveReset->setWhatsThis(i18n("If you press this button, all curves' values "
+                                    "will be reset to the default values."));
+
+    QGridLayout *typeBoxLayout = new QGridLayout();
+    typeBoxLayout->addWidget(m_curveFree,   0, 0, 1, 1);
+    typeBoxLayout->addWidget(m_curveSmooth, 0, 1, 1, 1);
+    typeBoxLayout->addWidget(m_curveReset,  0, 3, 1, 1);
+    typeBoxLayout->setColumnStretch(2, 10);
+    typeBoxLayout->setMargin(0);
+    typeBoxLayout->setSpacing(0);
+    typeBox->setLayout(typeBoxLayout);
+
+    // -------------------------------------------------------------
+
     m_cInput = new RIntNumInput(curveBox);
     m_cInput->input()->setLabel(i18n("Contrast:"), Qt::AlignLeft | Qt::AlignVCenter);
     m_cInput->setRange(-100, 100, 1);
@@ -421,9 +464,10 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
     gridTab2->addWidget(m_curvesWidget, 0, 2, 1, 1);
     gridTab2->addWidget(spaceh,         1, 2, 1, 1);
     gridTab2->addWidget(hGradient,      2, 2, 1, 1);
-    gridTab2->addWidget(m_cInput,       4, 0, 1, 3);
+    gridTab2->addWidget(typeBox,        4, 0, 1,-1);
+    gridTab2->addWidget(m_cInput,       5, 0, 1,-1);
     gridTab2->setRowMinimumHeight(3, m_gboxSettings->spacingHint());
-    gridTab2->setRowStretch(5, 10);
+    gridTab2->setRowStretch(6, 10);
     gridTab2->setMargin(m_gboxSettings->spacingHint());
     gridTab2->setSpacing(0);
 
@@ -471,11 +515,46 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
 
     connect(m_previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
+
+    connect(m_curveType, SIGNAL(buttonClicked(int)),
+            this, SLOT(slotCurveTypeChanged(int)));
+
+    connect(m_curveReset, SIGNAL(clicked()),
+            this, SLOT(slotResetCurve()));
 }
 
 BWSepiaTool::~BWSepiaTool()
 {
     delete [] m_destinationPreviewData;
+}
+
+void BWSepiaTool::slotCurveTypeChanged(int type)
+{
+    switch(type)
+    {
+       case SmoothDrawing:
+       {
+          m_curvesWidget->curves()->setCurveType(CurvesWidget::ValueHistogram, ImageCurves::CURVE_SMOOTH);
+          break;
+       }
+
+       case FreeDrawing:
+       {
+          m_curvesWidget->curves()->setCurveType(CurvesWidget::ValueHistogram, ImageCurves::CURVE_FREE);
+          break;
+       }
+    }
+
+    m_curvesWidget->curveTypeChanged();
+}
+
+void BWSepiaTool::slotResetCurve()
+{
+    for (int channel = 0 ; channel < 5 ; ++channel)
+        m_curvesWidget->curves()->curvesChannelReset(channel);
+
+    m_curvesWidget->reset();
+    slotEffect();
 }
 
 void BWSepiaTool::updatePreviews()

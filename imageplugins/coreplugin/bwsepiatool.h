@@ -35,6 +35,9 @@
 #include "editortool.h"
 
 class QListWidget;
+class QToolButton;
+class QButtonGroup;
+class QPushButton;
 
 class KTabWidget;
 
@@ -89,6 +92,8 @@ private Q_SLOTS:
     void slotSpotColorChanged(const Digikam::DColor& color);
     void slotColorSelectedFromTarget(const Digikam::DColor& color);
     void slotFilterSelected();
+    void slotCurveTypeChanged(int type);
+    void slotResetCurve();
 
 private:
 
@@ -133,6 +138,12 @@ private:
         LuminosityTab
     };
 
+    enum CurvesDrawingType
+    {
+        SmoothDrawing=0,
+        FreeDrawing
+    };
+
     // Color filter attenuation in percents.
     double m_redAttn, m_greenAttn, m_blueAttn;
 
@@ -144,6 +155,14 @@ private:
     QListWidget                  *m_bwFilters;
     QListWidget                  *m_bwFilm;
     QListWidget                  *m_bwTone;
+
+    QButtonGroup                 *m_curveType;
+
+    QPushButton                  *m_curveReset;
+
+    QToolButton                  *m_curveFree;
+    QToolButton                  *m_curveSmooth;
+
 
     KTabWidget                   *m_tab;
 
