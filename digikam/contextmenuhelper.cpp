@@ -309,7 +309,7 @@ KAction* ContextMenuHelper::kipiRotateAction()
     {
         KIPI::Plugin* plugin = info->plugin();
 
-        if (plugin && info->shouldLoad() && info->name() == "JPEGLossless")
+        if (plugin && info->shouldLoad() && info->library() == "kipiplugin_jpeglossless")
         {
             QList<KAction*> actionList = plugin->actions();
             foreach (KAction* action, actionList)
