@@ -136,7 +136,7 @@ QHash<QString, int> ThumbnailDB::getValidFilePaths()
                                         "   INNER JOIN Thumbnails ON FilePaths.thumbId=Thumbnails.id "
                                         "WHERE type BETWEEN %1 AND %2;")
                                 .arg(DatabaseThumbnail::PGF)
-                                .arg(DatabaseThumbnail::JPEG2000));
+                                .arg(DatabaseThumbnail::PNG));
 
     if (!d->db->exec(query))
         return QHash<QString, int>();
