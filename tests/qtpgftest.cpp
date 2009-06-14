@@ -44,7 +44,7 @@ int main(int /*argc*/, char** /*argv*/)
 {
     clock_t    start, end;
     QImage     img;
-    QByteArray pgfData, jpgData;
+    QByteArray pgfData, jpgData, pngData;
 
     // QImage => PGF conversion
 
@@ -90,6 +90,8 @@ int main(int /*argc*/, char** /*argv*/)
 
     // JPEG tests for comparisons.
 
+    img.load("test.png");
+
     start = clock();
 
     QBuffer buffer(&jpgData);
@@ -116,6 +118,37 @@ int main(int /*argc*/, char** /*argv*/)
     end = clock();
 
     qDebug() << "JPG Decoding time: " << double(end - start)/CLOCKS_PER_SEC << " s" << endl;
+
+    // PNG tests for comparisons.
+
+    img.load("test.png");
+
+    start = clock();
+
+    QBuffer buffer2(&pngData);
+    buffer2.open(QIODevice::WriteOnly);
+    img.save(&buffer2, "PNG", 100);
+    if (pngData.isNull())
+    {
+        qDebug() << "Save PNG image data to byte array failed..." << endl;
+        return -1;
+    }
+    end = clock();
+
+    qDebug() << "PNG Encoding time: " << double(end - start)/CLOCKS_PER_SEC << " s" << endl;
+
+    start = clock();
+
+    buffer2.open(QIODevice::ReadOnly);
+    img.load(&buffer2, "PNG");
+    if (pngData.isNull())
+    {
+        qDebug() << "Load PNG image data from byte array failed..." << endl;
+        return -1;
+    }
+    end = clock();
+
+    qDebug() << "PNG Decoding time: " << double(end - start)/CLOCKS_PER_SEC << " s" << endl;
 
     return 0;
 }
