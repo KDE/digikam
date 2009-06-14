@@ -1,3 +1,5 @@
+SET( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
+
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/editor
                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/canvas
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/common
@@ -7,7 +9,8 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/editor
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dmetadata
                     ${CMAKE_CURRENT_SOURCE_DIR}/../imageplugins/freerotation
 )
-SET( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
+
+#------------------------------------------------------------------------
 
 SET(manualrenameinputtest_SRCS
     manualrenameinputtest.cpp
