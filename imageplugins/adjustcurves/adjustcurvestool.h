@@ -60,27 +60,11 @@ private Q_SLOTS:
     void slotEffect();
     void slotResetSettings();
     void slotResetCurrentChannel();
-    void slotCurveTypeChanged(int type);
     void slotSpotColorChanged(const Digikam::DColor& color);
     void slotColorSelectedFromTarget(const Digikam::DColor& color);
     void slotPickerColorButtonActived();
     void slotChannelChanged();
     void slotScaleChanged();
-
-private:
-
-    enum ColorPicker
-    {
-        BlackTonal=0,
-        GrayTonal,
-        WhiteTonal
-    };
-
-    enum CurvesDrawingType
-    {
-        SmoothDrawing=0,
-        FreeDrawing
-    };
 
 private:
 
