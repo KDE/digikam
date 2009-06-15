@@ -39,16 +39,9 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <ktextedit.h>
-
-// LibKDcraw includes
-
-#include <libkdcraw/squeezedcombobox.h>
-
-// Local includes
-
+#include <kcombobox.h>
 
 using namespace KExiv2Iface;
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -256,7 +249,7 @@ public:
 
     KTextEdit                      *valueEdit;
 
-    SqueezedComboBox               *languageCB;
+    KComboBox                      *languageCB;
 };
 
 CommentsEdit::CommentsEdit(QWidget* parent)
@@ -266,18 +259,18 @@ CommentsEdit::CommentsEdit(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *title     = new QLabel(i18n("Caption:"), this);
+    QLabel *title     = new QLabel(i18n("Captions:"), this);
 
     d->addValueButton = new QToolButton(this);
     d->delValueButton = new QToolButton(this);
     d->addValueButton->setIcon(SmallIcon("list-add"));
     d->delValueButton->setIcon(SmallIcon("list-remove"));
-    d->addValueButton->setWhatsThis(i18n("Add or update a new value to the list"));
-    d->delValueButton->setWhatsThis(i18n("Remove the current selected value from the list"));
+    d->addValueButton->setToolTip(i18n("Add or update caption"));
+    d->delValueButton->setToolTip(i18n("Remove current caption"));
     d->delValueButton->setEnabled(false);
 
-    d->languageCB = new SqueezedComboBox(this);
-    d->languageCB->setWhatsThis(i18n("Select here language code."));
+    d->languageCB = new KComboBox(this);
+    d->languageCB->setWhatsThis(i18n("Select here the language for your caption."));
 
     d->valueEdit = new KTextEdit(this);
     d->valueEdit->setCheckSpellingEnabled(true);
@@ -324,7 +317,7 @@ void CommentsEdit::reset()
 
 void CommentsEdit::slotAddValue()
 {
-    QString lang = d->languageCB->itemHighlighted();
+    QString lang = d->languageCB->currentText();
     QString text = d->valueEdit->toPlainText();
     if (text.isEmpty()) return;
 
@@ -335,16 +328,17 @@ void CommentsEdit::slotAddValue()
 
 void CommentsEdit::slotDeleteValue()
 {
-    QString lang = d->languageCB->itemHighlighted();
+    QString lang = d->languageCB->currentText();
     d->values.remove(lang);
     loadLangAltListEntries();
 }
 
 void CommentsEdit::slotSelectionChanged(int index)
 {
+    QString lang = d->languageCB->currentText();
+
     if (!d->languageCB->itemIcon(index).isNull())
     {
-        QString lang = d->languageCB->itemHighlighted();
         QString text = d->values[lang];
         d->valueEdit->setText(text);
         d->delValueButton->setEnabled(true);
@@ -354,6 +348,8 @@ void CommentsEdit::slotSelectionChanged(int index)
         d->delValueButton->setEnabled(false);
         d->valueEdit->clear();
     }
+
+    d->languageCB->setToolTip(d->languageCodeMap[lang]);
 }
 
 void CommentsEdit::setValues(const KExiv2::AltLangMap& values)
@@ -379,7 +375,7 @@ void CommentsEdit::loadLangAltListEntries()
     {
         for (QStringList::Iterator it = list.begin(); it != list.end(); ++it)
         {
-              d->languageCB->addSqueezedItem(*it);
+              d->languageCB->addItem(*it);
               d->languageCB->setItemIcon(d->languageCB->count()-1, SmallIcon("dialog-ok"));
         }
         d->languageCB->insertSeparator(d->languageCB->count());
@@ -391,10 +387,10 @@ void CommentsEdit::loadLangAltListEntries()
          it != d->languageCodeMap.end(); ++it)
     {
         if (!list.contains(it.key()))
-            d->languageCB->addSqueezedItem(it.key());
+            d->languageCB->addItem(it.key());
     }
 
-    d->languageCB->setCurrent(QString("x-default"));
+    d->languageCB->setCurrentItem(QString("x-default"));
     slotSelectionChanged(d->languageCB->currentIndex());
 }
 
