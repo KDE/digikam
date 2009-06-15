@@ -51,14 +51,14 @@ public:
 
     enum ColorPicker
     {
-        BlackTonal=0,
+        BlackTonal = 0,
         GrayTonal,
         WhiteTonal
     };
 
     enum CurvesDrawingType
     {
-        SmoothDrawing=0,
+        SmoothDrawing = 0,
         FreeDrawing
     };
 
