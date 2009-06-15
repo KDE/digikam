@@ -367,12 +367,12 @@ void CurvesBox::setChannel(int channel)
     d->curvesWidget->repaint();
 }
 
-int CurvesBox::getCurrentChannel() const
+int CurvesBox::channel() const
 {
-    return d->curvesWidget->m_channelType;
+    return d->currentChannel;
 }
 
-int CurvesBox::getCurrentPicker() const
+int CurvesBox::picker() const
 {
     return d->pickerType->checkedId();
 }

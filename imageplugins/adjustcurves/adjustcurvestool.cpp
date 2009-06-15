@@ -221,7 +221,7 @@ void AdjustCurvesTool::slotSpotColorChanged(const DColor& color)
 {
     DColor sc = color;
 
-    switch (d->curvesBox->getCurrentPicker())
+    switch (d->curvesBox->picker())
     {
         case CurvesBox::BlackTonal:
         {

@@ -85,8 +85,8 @@ public:
     void setChannel(int channel);
     void setCurveGuide(const DColor& color);
 
-    int  getCurrentPicker() const;
-    int  getCurrentChannel() const;
+    int  picker() const;
+    int  channel() const;
 
     void resetPickers();
     void resetChannel(int channel);

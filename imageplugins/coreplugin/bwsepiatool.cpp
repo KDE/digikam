@@ -990,7 +990,7 @@ void BWSepiaTool::slotLoadSettings()
         for (int i = 0 ; i < 5 ; ++i)
             m_curvesBox->curves()->curvesChannelReset(i);
 
-        m_curvesBox->curves()->setCurveType(m_curvesBox->getCurrentChannel(), ImageCurves::CURVE_SMOOTH);
+        m_curvesBox->curves()->setCurveType(m_curvesBox->channel(), ImageCurves::CURVE_SMOOTH);
         m_curvesBox->reset();
 
         for (int j = 0 ; j < 17 ; ++j)
