@@ -1750,7 +1750,7 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
 
     for( it = urlList.begin(); it != urlList.end(); ++it )
     {
-        kDebug(50003) << "Setting Exif Orientation tag to " << orientation << endl;
+        kDebug(50003) << "Setting Exif Orientation tag to " << orientation;
 
         DMetadata metadata((*it).toLocalFile());
         DMetadata::ImageOrientation o = (DMetadata::ImageOrientation)orientation;

@@ -609,7 +609,7 @@ void PerspectiveWidget::transformAffine(Digikam::DImg *orgImage, Digikam::DImg *
                 }
                 else
                 {
-                    kDebug(50006) << "homogeneous coordinate = 0...\n" << endl;
+                    kDebug(50006) << "homogeneous coordinate = 0...\n";
                 }
             }
 

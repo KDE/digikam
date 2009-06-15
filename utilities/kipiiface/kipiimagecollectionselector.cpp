@@ -217,7 +217,7 @@ void KipiImageCollectionSelector::populateTreeView(const AlbumList& aList, QTree
 
             if (!pitem)
             {
-                kWarning(50003) << "Failed to find parent for Album " << album->title() << endl;
+                kWarning(50003) << "Failed to find parent for Album " << album->title();
                 continue;
             }
 
@@ -317,7 +317,7 @@ QList<KIPI::ImageCollection> KipiImageCollectionSelector::selectedImageCollectio
          ++it3;
     }
 
-    kDebug(50003) << list.count() << " collection items selected" << endl;
+    kDebug(50003) << list.count() << " collection items selected";
 
     return list;
 }

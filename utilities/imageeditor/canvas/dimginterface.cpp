@@ -372,7 +372,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription
                                 d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
                                 if (d->parent)
                                     d->parent->unsetCursor();
-                                kDebug(50003) << "dimginterface.cpp: Apply pressed" << endl;
+                                kDebug(50003) << "dimginterface.cpp: Apply pressed";
                                 break;
                         }
                     }
@@ -400,7 +400,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription
                         {
                             // Embedded profile and default workspace profile are different: ask to user!
 
-                            kDebug(50003) << "Embedded profile: " << trans.getEmbeddedProfileDescriptor() << endl;
+                            kDebug(50003) << "Embedded profile: " << trans.getEmbeddedProfileDescriptor();
 
                             // To repaint image in canvas before to ask about to apply ICC profile.
                             emit signalImageLoaded(d->filename, valRet);
@@ -426,7 +426,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription
                                     d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
                                     if (d->parent)
                                         d->parent->unsetCursor();
-                                    kDebug(50003) << "dimginterface.cpp: Apply pressed" << endl;
+                                    kDebug(50003) << "dimginterface.cpp: Apply pressed";
                                     break;
                             }
                         }
@@ -646,7 +646,7 @@ void DImgInterface::slotImageSaved(const QString& filePath, bool success)
         return;
 
     if (!success)
-        kWarning(50003) << "error saving image '" << QFile::encodeName(filePath).data() << endl;
+        kWarning(50003) << "error saving image '" << QFile::encodeName(filePath).data();
 
     emit signalImageSaved(filePath, success);
     emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
@@ -1078,7 +1078,7 @@ DImg* DImgInterface::getImg()
     }
     else
     {
-        kWarning(50003) << "d->image is NULL" << endl;
+        kWarning(50003) << "d->image is NULL";
         return 0;
     }
 }
@@ -1091,7 +1091,7 @@ uchar* DImgInterface::getImage()
     }
     else
     {
-        kWarning(50003) << "d->image is NULL" << endl;
+        kWarning(50003) << "d->image is NULL";
         return 0;
     }
 }
@@ -1116,13 +1116,13 @@ void DImgInterface::putImage(uchar* data, int w, int h, bool sixteenBit)
 {
     if (d->image.isNull())
     {
-       kWarning(50003) << "d->image is NULL" << endl;
+       kWarning(50003) << "d->image is NULL";
        return;
     }
 
     if (!data)
     {
-       kWarning(50003) << "New image is NULL" << endl;
+       kWarning(50003) << "New image is NULL";
        return;
     }
 
@@ -1139,7 +1139,7 @@ void DImgInterface::putImage(uchar* data, int w, int h, bool sixteenBit)
         d->origHeight = h;
     }
 
-    //kDebug(50003) << data << " " << w << " " << h << endl;
+    //kDebug(50003) << data << " " << w << " " << h;
     d->image.putImageData(w, h, sixteenBit, d->image.hasAlpha(), data);
 
     setModified();
@@ -1149,11 +1149,11 @@ void DImgInterface::setEmbeddedICCToOriginalImage( QString profilePath)
 {
     if (d->image.isNull())
     {
-        kWarning(50003) << "d->image is NULL" << endl;
+        kWarning(50003) << "d->image is NULL";
         return;
     }
 
-     kDebug(50003) << "Embedding profile: " << profilePath << endl;
+     kDebug(50003) << "Embedding profile: " << profilePath;
      d->image.getICCProfilFromFile( QFile::encodeName(profilePath));
      setModified();
 }
@@ -1233,7 +1233,7 @@ QString DImgInterface::getImageFormat()
     // It is a bug in the loader if format attribute is not given
     if (mimeType.isEmpty())
     {
-        kWarning(50003) << "DImg object does not contain attribute \"format\"" << endl;
+        kWarning(50003) << "DImg object does not contain attribute \"format\"";
         mimeType = QImageReader::imageFormat(d->filename);
     }
     return mimeType;

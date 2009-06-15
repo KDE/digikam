@@ -79,7 +79,7 @@ ImagePlugin_LensCorrection::ImagePlugin_LensCorrection(QObject *parent, const QV
 
     setXMLFile("digikamimageplugin_lenscorrection_ui.rc");
 
-    kDebug(50006) << "ImagePlugin_LensCorrection plugin loaded" << endl;
+    kDebug(50006) << "ImagePlugin_LensCorrection plugin loaded";
 }
 
 ImagePlugin_LensCorrection::~ImagePlugin_LensCorrection()

@@ -261,7 +261,7 @@ void ImageAlbumModel::slotResult(KJob* job)
 
     if (job->error())
     {
-        kWarning(50003) << "Failed to list url: " << job->errorString() << endl;
+        kWarning(50003) << "Failed to list url: " << job->errorString();
         return;
     }
 }

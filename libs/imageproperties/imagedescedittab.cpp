@@ -496,7 +496,7 @@ void ImageDescEditTab::slotApplyAllChanges()
     // remove before final release
     if (d->ignoreImageAttributesWatch)
     {
-        kWarning(50003) << "ImageDescEditTab::slotApplyAllChanges(): re-entering from event loop!" << endl;
+        kWarning(50003) << "ImageDescEditTab::slotApplyAllChanges(): re-entering from event loop!";
     }
 
     // Create a local copy of the current state of the hub.
@@ -1291,7 +1291,7 @@ void ImageDescEditTab::slotAlbumAdded(Album* a)
 
         if (!parent)
         {
-            kWarning(50003) << "Failed to find parent for Tag " << tag->title() << endl;
+            kWarning(50003) << "Failed to find parent for Tag " << tag->title();
             return;
         }
 

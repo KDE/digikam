@@ -191,7 +191,7 @@ void PreviewLoadingTask::execute()
 
     if (img.isNull())
     {
-        kWarning(50003) << "Cannot extract preview for " << m_loadingDescription.filePath << endl;
+        kWarning(50003) << "Cannot extract preview for " << m_loadingDescription.filePath;
     }
 
     img.convertToEightBit();

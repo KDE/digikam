@@ -100,7 +100,7 @@ CameraFolderDialog::CameraFolderDialog(QWidget *parent, CameraIconView *cameraVi
 
             QString sub = folder.section( '/', -1 );
             m_folderView->addFolder(root, sub, cameraView->countItemsByFolder(*it));
-            kDebug(50003) << "Camera folder: '" << folder << "' (root='" << root << "', sub='" <<sub <<"')" << endl;
+            kDebug(50003) << "Camera folder: '" << folder << "' (root='" << root << "', sub='" <<sub <<"')";
         }
     }
 
@@ -135,7 +135,7 @@ void CameraFolderDialog::slotFolderPathSelectionChanged(CameraFolderItem* item)
     if (item)
     {
         enableButtonOk(true);
-        kDebug(50003) << "Camera folder path: " << selectedFolderPath() << endl;
+        kDebug(50003) << "Camera folder path: " << selectedFolderPath();
     }
     else
     {

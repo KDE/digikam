@@ -530,7 +530,7 @@ void SetupICC::fillCombos(const QString& path, bool report)
     userProfilesDir.setFilter(QDir::Files);
 
     QFileInfoList usersFiles = userProfilesDir.entryInfoList();
-    kDebug(50003) << "Scanning ICC profiles from user repository: " << path << endl;
+    kDebug(50003) << "Scanning ICC profiles from user repository: " << path;
 
     if ( !parseProfilesfromDir(usersFiles) )
     {
@@ -540,7 +540,7 @@ void SetupICC::fillCombos(const QString& path, bool report)
             KMessageBox::sorry(this, message);
         }
 
-        kDebug(50003) << "No ICC profile files found!!!" << endl;
+        kDebug(50003) << "No ICC profile files found!!!";
         d->mainDialog->enableButtonOk(false);
         return;
     }
@@ -552,7 +552,7 @@ void SetupICC::fillCombos(const QString& path, bool report)
     libkdcrawProfilesDir.setFilter(QDir::Files);
 
     QFileInfoList libkdcrawFiles = libkdcrawProfilesDir.entryInfoList();
-    kDebug(50003) << "Scanning ICC profiles included with libkdcraw: " << libkdcrawProfilesPath << endl;
+    kDebug(50003) << "Scanning ICC profiles included with libkdcraw: " << libkdcrawProfilesPath;
     parseProfilesfromDir(libkdcrawFiles);
 
     d->monitorProfilesKC->insertSqueezedList(d->monitorICCPath.keys(), 0);
@@ -603,7 +603,7 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList& files)
 
                 if (tmpProfile == NULL)
                 {
-                    kDebug(50003) << "Error: Parsed profile  is NULL (invalid profile); " << fileName << endl;
+                    kDebug(50003) << "Error: Parsed profile  is NULL (invalid profile); " << fileName;
                     cmsCloseProfile(tmpProfile);
                     ++it;
                     QString message = i18n("<p>The following profile is invalid:</p><p><b>"
@@ -789,7 +789,7 @@ bool SetupICC::iccRepositoryIsValid()
     // To be valid, the ICC profiles repository must exist and be readable.
 
     QDir tmpPath(group.readEntry("DefaultPath", QString()));
-    kDebug(50003) << "ICC profiles repository is: " << tmpPath.dirName() << endl;
+    kDebug(50003) << "ICC profiles repository is: " << tmpPath.dirName();
 
     if ( tmpPath.exists() && tmpPath.isReadable() )
         return true;

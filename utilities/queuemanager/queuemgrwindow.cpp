@@ -1123,7 +1123,7 @@ bool QueueMgrWindow::checkTargetAlbum(int queueId)
 
     QString queueName              = d->queuePool->queueTitle(queueId);
     KUrl    processedItemsAlbumUrl = queue->settings().targetUrl;
-    kDebug(50003) << "Target album for queue " << queueName << " is: " << processedItemsAlbumUrl.path() << endl;
+    kDebug(50003) << "Target album for queue " << queueName << " is: " << processedItemsAlbumUrl.path();
 
     if (processedItemsAlbumUrl.isEmpty())
     {

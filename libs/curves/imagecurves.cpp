@@ -685,7 +685,7 @@ bool ImageCurves::loadCurvesFromGimpCurvesFile(const KUrl& fileUrl)
           fields = fscanf (file, "%d %d ", &index[i][j], &value[i][j]);
           if (fields != 2)
           {
-             kWarning(50003) <<  "Invalid Gimp curves file!" << endl;
+             kWarning(50003) <<  "Invalid Gimp curves file!";
              fclose(file);
              return false;
           }

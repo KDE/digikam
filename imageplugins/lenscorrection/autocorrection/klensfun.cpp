@@ -291,7 +291,7 @@ void KLFDeviceSelector::findFromMetadata()
     if (!temp.isEmpty())
     {
         double focal = temp.mid(0, temp.length() -3).toDouble(); // HACK: strip the " mm" at the end ...
-        kDebug(50006) << "Focal Length: " << focal << endl;
+        kDebug(50006) << "Focal Length: " << focal;
         m_focal->setValue(focal);
         m_focal->setEnabled(false);
     }
@@ -300,7 +300,7 @@ void KLFDeviceSelector::findFromMetadata()
     if (!temp.isEmpty())
     {
         double aperture = temp.mid(1).toDouble();
-        kDebug(50006) << "Aperture: " << aperture << endl;
+        kDebug(50006) << "Aperture: " << aperture;
         m_aperture->setValue(aperture);
         m_aperture->setEnabled(false);
     }
@@ -326,7 +326,7 @@ void KLFDeviceSelector::findFromMetadata()
     if (!temp.isEmpty())
     {
         double distance = temp.toDouble();
-        kDebug(50006) << "Subject Distance: " << distance << endl;
+        kDebug(50006) << "Subject Distance: " << distance;
         m_distance->setValue(distance);
         m_distance->setEnabled(false);
     }
@@ -415,7 +415,7 @@ void KLFDeviceSelector::slotUpdateLensCombo()
     DevicePtr dev = v.value<KLFDeviceSelector::DevicePtr>();
     if (!dev)
     {
-        kDebug(50006) << "slotUpdateLensCombo() => Device is null!" << endl;
+        kDebug(50006) << "slotUpdateLensCombo() => Device is null!";
         return;
     }
 
@@ -514,7 +514,7 @@ void KLensFunFilter::filterImage()
                 ( m_klf->m_filterVig || m_klf->m_filterCCI )   ? 1 : 0 +
                 ( m_klf->m_filterDist || m_klf->m_filterGeom ) ? 1 : 0;
 
-    kDebug(50006) << "LensFun Modifier Flags: " << modflags << "  Steps:" << steps << endl;
+    kDebug(50006) << "LensFun Modifier Flags: " << modflags << "  Steps:" << steps;
 
     if ( steps < 1 )
        return;
@@ -555,7 +555,7 @@ void KLensFunFilter::filterImage()
                 postProgress(progress/steps);
         }
 
-        kDebug(50006) << "Applying TCA correction... (loop: " << loop << ")" << endl;
+        kDebug(50006) << "Applying TCA correction... (loop: " << loop << ")";
     }
     else
     {
@@ -590,7 +590,7 @@ void KLensFunFilter::filterImage()
                 postProgress(progress/steps + offset);
         }
 
-        kDebug(50006) << "Applying Color Correction: Vignetting and CCI. (loop: " << loop << ")" << endl;
+        kDebug(50006) << "Applying Color Correction: Vignetting and CCI. (loop: " << loop << ")";
     }
 
     // Stage 3: Distortion and Geometry
@@ -625,7 +625,7 @@ void KLensFunFilter::filterImage()
 
         /*qDebug (" for %f %f %i %i", tempImage.height(), tempImage.width(),
                                       tempImage.height(), tempImage.width());*/
-        kDebug(50006) << "Applying Distortion and Geometry Correction. (loop: " << loop << ")" << endl;
+        kDebug(50006) << "Applying Distortion and Geometry Correction. (loop: " << loop << ")";
 
         m_destImage = tempImage;
     }

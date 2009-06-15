@@ -115,8 +115,7 @@ extern "C"
         kDebug(50004) << "*** kio_digikamtag started ***";
 
         if (argc != 4) {
-            kDebug(50004) << "Usage: kio_digikamtags  protocol domain-socket1 domain-socket2"
-                      << endl;
+            kDebug(50004) << "Usage: kio_digikamtags  protocol domain-socket1 domain-socket2";
             exit(-1);
         }
 

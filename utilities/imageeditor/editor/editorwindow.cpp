@@ -771,7 +771,7 @@ void EditorWindow::loadImagePlugins()
         }
         else
         {
-            kDebug(50003) << "Invalid plugin to add!" << endl;
+            kDebug(50003) << "Invalid plugin to add!";
         }
     }
 
@@ -1303,7 +1303,7 @@ void EditorWindow::slotLoadingFinished(const QString& filename, bool success)
         QFileInfo fi(filename);
         QString message = i18n("Failed to load image \"%1\"",fi.fileName());
         KMessageBox::error(this, message);
-        kWarning(50003) << "Failed to load image " << fi.fileName() << endl;
+        kWarning(50003) << "Failed to load image " << fi.fileName();
     }
 }
 
@@ -1359,7 +1359,7 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
             return;
         }
 
-        kDebug(50003) << "renaming to " << m_savingContext->destinationURL.path() << endl;
+        kDebug(50003) << "renaming to " << m_savingContext->destinationURL.path();
 
         if (!moveFile())
         {
@@ -1402,7 +1402,7 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
 
         // Only try to write Exif if both src and destination are JPEG files
 
-        kDebug(50003) << "renaming to " << m_savingContext->destinationURL.path() << endl;
+        kDebug(50003) << "renaming to " << m_savingContext->destinationURL.path();
 
         if (!moveFile())
         {
@@ -1498,7 +1498,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
 
     QString pattern             = KImageIO::pattern(KImageIO::Writing);
     QStringList writablePattern = pattern.split(QChar('\n'));
-    kDebug(50003) << "KDE Offered pattern: " << writablePattern << endl;
+    kDebug(50003) << "KDE Offered pattern: " << writablePattern;
     writablePattern.append(QString("*.jp2|") + i18n("JPEG 2000 image"));
     writablePattern.append(QString("*.pgf|") + i18n("Progressive Graphics File"));
 
@@ -1580,7 +1580,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
             // Else, check if format from file name extension is include on file mime type list.
 
             QStringList types = KImageIO::types(KImageIO::Writing);
-            kDebug(50003) << "KDE Offered types: " << types << endl;
+            kDebug(50003) << "KDE Offered types: " << types;
 
             types << "TIF";
             types << "TIFF";
@@ -1595,7 +1595,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
             if ( !imgExtList.toUpper().contains( m_savingContext->format.toUpper() ) )
             {
                 KMessageBox::error(this, i18n("Target image file format \"%1\" unsupported.", m_savingContext->format));
-                kWarning(50003) << "target image file format " << m_savingContext->format << " unsupported!" << endl;
+                kWarning(50003) << "target image file format " << m_savingContext->format << " unsupported!";
                 return false;
             }
         }
@@ -1606,7 +1606,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
         KMessageBox::error(this, i18n("Failed to save file\n\"%1\"\nto\n\"%2\".",
                                       newURL.fileName(),
                                       newURL.path().section('/', -2, -2)));
-        kWarning(50003) << "target URL is not valid !" << endl;
+        kWarning(50003) << "target URL is not valid !";
         return false;
     }
 
@@ -1756,7 +1756,7 @@ bool EditorWindow::moveFile()
     // restore permissions
     if (::chmod(dstFileName, filePermissions) != 0)
     {
-        kWarning(50003) << "Failed to restore file permissions for file " << dstFileName << endl;
+        kWarning(50003) << "Failed to restore file permissions for file " << dstFileName;
     }
 #endif
     return true;

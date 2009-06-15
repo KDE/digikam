@@ -715,7 +715,7 @@ void ChannelMixerTool::slotSaveAsSettings()
               str = "BLUE";
               break;
            default:
-              kWarning(50006) <<  "Unknown Color channel gains" << endl;
+              kWarning(50006) <<  "Unknown Color channel gains";
               break;
         }
 

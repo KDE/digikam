@@ -336,7 +336,7 @@ void EditorToolThreaded::slotFilterFinished(bool success)
         {
             case EditorToolThreaded::PreviewRendering:
             {
-                kDebug(50003) << "Preview " << toolName() << " completed..." << endl;
+                kDebug(50003) << "Preview " << toolName() << " completed...";
                 putPreviewData();
                 slotAbort();
                 break;
@@ -344,7 +344,7 @@ void EditorToolThreaded::slotFilterFinished(bool success)
 
             case EditorToolThreaded::FinalRendering:
             {
-                kDebug(50003) << "Final" << toolName() << " completed..." << endl;
+                kDebug(50003) << "Final" << toolName() << " completed...";
                 putFinalData();
                 EditorToolIface::editorToolIface()->setToolStopProgress();
                 kapp->restoreOverrideCursor();
@@ -362,7 +362,7 @@ void EditorToolThreaded::slotFilterFinished(bool success)
         {
             case EditorToolThreaded::PreviewRendering:
             {
-                kDebug(50003) << "Preview " << toolName() << " failed..." << endl;
+                kDebug(50003) << "Preview " << toolName() << " failed...";
                 slotAbort();
                 break;
             }
@@ -396,7 +396,7 @@ void EditorToolThreaded::slotOk()
     writeSettings();
 
     d->currentRenderingMode = EditorToolThreaded::FinalRendering;
-    kDebug(50003) << "Final " << toolName() << " started..." << endl;
+    kDebug(50003) << "Final " << toolName() << " started...";
     writeSettings();
 
     toolSettings()->enableButton(EditorToolSettings::Ok,      false);
@@ -424,7 +424,7 @@ void EditorToolThreaded::slotEffect()
         return;
 
     d->currentRenderingMode = EditorToolThreaded::PreviewRendering;
-    kDebug(50003) << "Preview " << toolName() << " started..." << endl;
+    kDebug(50003) << "Preview " << toolName() << " started...";
 
     toolSettings()->enableButton(EditorToolSettings::Ok,      false);
     toolSettings()->enableButton(EditorToolSettings::SaveAs,  false);

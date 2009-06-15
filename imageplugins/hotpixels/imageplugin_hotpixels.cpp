@@ -58,7 +58,7 @@ ImagePlugin_HotPixels::ImagePlugin_HotPixels(QObject *parent, const QVariantList
 
     setXMLFile("digikamimageplugin_hotpixels_ui.rc");
 
-    kDebug(50006) << "ImagePlugin_HotPixels plugin loaded" << endl;
+    kDebug(50006) << "ImagePlugin_HotPixels plugin loaded";
 }
 
 ImagePlugin_HotPixels::~ImagePlugin_HotPixels()

@@ -394,7 +394,7 @@ void ClassicLoadingCacheFileWatch::addedThumbnail(const QString& filePath)
 void ClassicLoadingCacheFileWatch::slotFileDirty(const QString& path)
 {
     // Signal comes from main thread
-    kDebug(50003) << "LoadingCache slotFileDirty " << path << endl;
+    kDebug(50003) << "LoadingCache slotFileDirty " << path;
     // This method acquires a lock itself
     notifyFileChanged(path);
     // No need for locking here, we are in main thread
@@ -424,14 +424,14 @@ void ClassicLoadingCacheFileWatch::slotUpdateDirWatch()
 
     for (QStringList::const_iterator it = toBeRemoved.constBegin(); it != toBeRemoved.constEnd(); ++it)
     {
-        //kDebug(50003) << "removing m_watch for " << *it << endl;
+        //kDebug(50003) << "removing m_watch for " << *it;
         m_watch->removeFile(*it);
         m_watchedFiles.removeAll(*it);
     }
 
     for (QStringList::const_iterator it = toBeAdded.constBegin(); it != toBeAdded.constEnd(); ++it)
     {
-        //kDebug(50003) << "adding m_watch for " << *it << endl;
+        //kDebug(50003) << "adding m_watch for " << *it;
         m_watch->addFile(*it);
         m_watchedFiles.append(*it);
     }

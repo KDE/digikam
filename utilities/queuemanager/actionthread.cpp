@@ -175,7 +175,7 @@ void ActionThread::run()
                 BatchToolSettings settings = set.settings;
                 inUrl                      = outUrl;
 
-                kDebug(50003) << "Tool Index: " << index << endl;
+                kDebug(50003) << "Tool Index: " << index;
 
                 ActionData ad2;
                 ad2.fileUrl = t->item.itemUrl;

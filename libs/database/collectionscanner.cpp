@@ -261,7 +261,7 @@ void CollectionScanner::partialScan(const QString& albumRoot, const QString& alb
     if (album.isEmpty())
     {
         // If you want to scan the album root, pass "/"
-        kWarning(50003) << "partialScan(QString, QString) called with empty album" << endl;
+        kWarning(50003) << "partialScan(QString, QString) called with empty album";
         return;
     }
 
@@ -280,7 +280,7 @@ void CollectionScanner::partialScan(const QString& albumRoot, const QString& alb
 
     if (location.isNull())
     {
-        kWarning(50003) << "Did not find a CollectionLocation for album root path " << albumRoot << endl;
+        kWarning(50003) << "Did not find a CollectionLocation for album root path " << albumRoot;
         return;
     }
 
@@ -328,7 +328,7 @@ void CollectionScanner::scanFile(const QString& albumRoot, const QString& album,
     if (album.isEmpty() || fileName.isEmpty())
     {
         // If you want to scan the album root, pass "/"
-        kWarning(50003) << "scanFile(QString, QString, QString) called with empty album or empty filename" << endl;
+        kWarning(50003) << "scanFile(QString, QString, QString) called with empty album or empty filename";
         return;
     }
 
@@ -344,7 +344,7 @@ void CollectionScanner::scanFile(const QString& albumRoot, const QString& album,
 
     if (location.isNull())
     {
-        kWarning(50003) << "Did not find a CollectionLocation for album root path " << albumRoot << endl;
+        kWarning(50003) << "Did not find a CollectionLocation for album root path " << albumRoot;
         return;
     }
 
@@ -587,7 +587,7 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
             }
             else
             {
-                //kDebug(50003) << "Adding item " << fi->fileName() << endl;
+                //kDebug(50003) << "Adding item " << fi->fileName();
 
                 scanNewFile(*fi, albumID);
             }
@@ -812,7 +812,7 @@ void CollectionScanner::removeStaleAlbums()
     QList<AlbumShortInfo>::const_iterator it;
     for (it = m_foldersToBeDeleted.constBegin(); it != m_foldersToBeDeleted.constEnd(); ++it)
     {
-        kDebug(50003) << "Removing album " << (*it).albumRoot + '/' + (*it).url << endl;
+        kDebug(50003) << "Removing album " << (*it).albumRoot + '/' + (*it).url;
         access.db()->deleteAlbum((*it).id);
     }
 }
@@ -878,7 +878,7 @@ void CollectionScanner::scan(const QString& folderPath)
 
     if (albumRoot.isNull())
     {
-        kWarning(50003) << "scanAlbums(QString): folder " << folderPath << " not found in collection." << endl;
+        kWarning(50003) << "scanAlbums(QString): folder " << folderPath << " not found in collection.";
         return;
     }
 
@@ -978,7 +978,7 @@ void CollectionScanner::scanAlbum(const QString& albumRoot, const QString& album
             }
             else
             {
-                kDebug(50003) << "Adding item " << fi->fileName() << endl;
+                kDebug(50003) << "Adding item " << fi->fileName();
                 addItem(albumID, albumRoot, album, fi->fileName());
             }
         }
@@ -1027,7 +1027,7 @@ void CollectionScanner::updateItemsWithoutDate()
 
             if (albumID <= 0)
             {
-                kWarning(50003) << "Album ID == -1: " << albumURL << endl;
+                kWarning(50003) << "Album ID == -1: " << albumURL;
             }
 
             if (fi.exists())
@@ -1171,7 +1171,7 @@ void CollectionScanner::scanAlbum(const QString& albumRoot, const QString& album
 
 void CollectionScanner::scanOneAlbum(const QString& albumRoot, const QString& album)
 {
-    kDebug(50003) << "CollectionScanner::scanOneAlbum " << albumRoot << "/" << album << endl;
+    kDebug(50003) << "CollectionScanner::scanOneAlbum " << albumRoot << "/" << album;
     QDir dir(albumRoot + album);
     if (!dir.exists() || !dir.isReadable())
     {
@@ -1185,7 +1185,7 @@ void CollectionScanner::scanOneAlbum(const QString& albumRoot, const QString& al
 
         // get sub albums, but only direct subalbums (Album/ *, not Album/ * / *)
         currAlbumList = DatabaseAccess().db()->getSubalbumsForPath(albumRoot, album, true);
-        kDebug(50003) << "currAlbumList is " << currAlbumList << endl;
+        kDebug(50003) << "currAlbumList is " << currAlbumList;
 
         const QFileInfoList* infoList = dir.entryInfoList(QDir::Dirs);
         if (!infoList)
@@ -1217,7 +1217,7 @@ void CollectionScanner::scanOneAlbum(const QString& albumRoot, const QString& al
         for (QStringList::iterator it = newAlbumList.begin();
              it != newAlbumList.end(); ++it)
         {
-            kDebug(50003) << "New Album: " << *it << endl;
+            kDebug(50003) << "New Album: " << *it;
 
             QFileInfo fi(albumRoot + *it);
             DatabaseAccess().db()->addAlbum(albumRoot, *it, QString(), fi.lastModified().date(), QString());
@@ -1298,7 +1298,7 @@ void CollectionScanner::removeInvalidAlbums(const QString& albumRoot)
     DatabaseTransaction transaction(&access);
     for (QValueList<AlbumShortInfo>::iterator it = toBeDeleted.begin(); it != toBeDeleted.end(); ++it)
     {
-        kDebug(50003) << "Removing album " << (*it).albumRoot + '/' + (*it).url << endl;
+        kDebug(50003) << "Removing album " << (*it).albumRoot + '/' + (*it).url;
         access.db()->deleteAlbum((*it).id);
     }
 }

@@ -85,7 +85,7 @@ bool ThumbnailSchemaUpdater::startUpdates()
         // Find out schema version of db file
         QString version = m_access->db()->getSetting("DBVersion");
         QString versionRequired = m_access->db()->getSetting("DBVersionRequired");
-        //kDebug(50003) << "Have a database structure version " << version << endl;
+        //kDebug(50003) << "Have a database structure version " << version;
 
         // We absolutely require the DBVersion setting
         if (version.isEmpty())
@@ -141,7 +141,7 @@ bool ThumbnailSchemaUpdater::startUpdates()
     }
     else
     {
-        //kDebug(50003) << "No database file available" << endl;
+        //kDebug(50003) << "No database file available";
         DatabaseParameters parameters = m_access->parameters();
         // No legacy handling: start with a fresh db
         if (!createDatabase())

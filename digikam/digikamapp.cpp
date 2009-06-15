@@ -1767,7 +1767,7 @@ bool DigikamApp::checkSolidCamera(const Solid::Device& cameraDevice)
 
     QStringList drivers = camera->supportedDrivers();
 
-    kDebug(50003) << "fillSolidMenus: Found Camera " << cameraDevice.vendor() + ' ' + cameraDevice.product() << " protocols " << camera->supportedProtocols() << " drivers " << camera->supportedDrivers("ptp") << endl;
+    kDebug(50003) << "fillSolidMenus: Found Camera " << cameraDevice.vendor() + ' ' + cameraDevice.product() << " protocols " << camera->supportedProtocols() << " drivers " << camera->supportedDrivers("ptp");
 
     // We handle gphoto2 cameras in this loop
     if (! (camera->supportedDrivers().contains("gphoto") || camera->supportedProtocols().contains("ptp")) )
@@ -1776,7 +1776,7 @@ bool DigikamApp::checkSolidCamera(const Solid::Device& cameraDevice)
     QVariant driverHandle = camera->driverHandle("gphoto");
     if (!driverHandle.canConvert(QVariant::List))
     {
-        kWarning(50003) << "Solid returns unsupported driver handle for gphoto2" << endl;
+        kWarning(50003) << "Solid returns unsupported driver handle for gphoto2";
         return false;
     }
     QList<QVariant> driverHandleList = driverHandle.toList();
@@ -1785,7 +1785,7 @@ bool DigikamApp::checkSolidCamera(const Solid::Device& cameraDevice)
         || !driverHandleList[2].canConvert(QVariant::Int)
         )
     {
-        kWarning(50003) << "Solid returns unsupported driver handle for gphoto2" << endl;
+        kWarning(50003) << "Solid returns unsupported driver handle for gphoto2";
         return false;
     }
 
@@ -2343,13 +2343,13 @@ void DigikamApp::slotKipiPluginPlug()
                         break;
                     }
                     default:
-                        kDebug(50003) << "No menu found for a plugin!" << endl;
+                        kDebug(50003) << "No menu found for a plugin!";
                         break;
                 }
             }
             else
             {
-                kDebug(50003) << "Plugin '" << actionName << "' disabled." << endl;
+                kDebug(50003) << "Plugin '" << actionName << "' disabled.";
             }
         }
     }

@@ -74,7 +74,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     FILE *file = fopen(QFile::encodeName(filePath), "rb");
     if (!file)
     {
-        kDebug(50003) << "Cannot open image file." << endl;
+        kDebug(50003) << "Cannot open image file.";
         return false;
     }
 
@@ -82,7 +82,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     if (fread(&header, 2, 1, file) != 1)
     {
-        kDebug(50003) << "Cannot read header of file." << endl;
+        kDebug(50003) << "Cannot read header of file.";
         fclose(file);
         return false;
     }
@@ -90,7 +90,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     uchar* c = (uchar*) &header;
     if (*c != 'P')
     {
-        kDebug(50003) << "Not a PPM file." << endl;
+        kDebug(50003) << "Not a PPM file.";
         fclose(file);
         return false;
     }
@@ -98,7 +98,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     c++;
     if (*c != '6')
     {
-        kDebug(50003) << "Not a PPM file." << endl;
+        kDebug(50003) << "Not a PPM file.";
         fclose(file);
         return false;
     }
@@ -107,14 +107,14 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     if (fscanf (file, "P6 %d %d %d%c", &width, &height, &rgbmax, &nl) != 4)
     {
-        kDebug(50003) << "Corrupted PPM file." << endl;
+        kDebug(50003) << "Corrupted PPM file.";
         pclose (file);
         return false;
     }
 
     if (rgbmax <= 255)
     {
-        kDebug(50003) << "Not a 16 bits per color per pixel PPM file." << endl;
+        kDebug(50003) << "Not a 16 bits per color per pixel PPM file.";
         pclose (file);
         return false;
     }
@@ -133,7 +133,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         int checkpoint = 0;
 
     #ifdef ENABLE_DEBUG_MESSAGES
-        kDebug(50003) << "rgbmax=" << rgbmax << "  fac=" << fac << endl;
+        kDebug(50003) << "rgbmax=" << rgbmax << "  fac=" << fac;
     #endif
 
         for (int h = 0; h < height; ++h)

@@ -56,7 +56,7 @@ ImagePlugin_OilPaint::ImagePlugin_OilPaint(QObject *parent, const QVariantList &
 
     setXMLFile( "digikamimageplugin_oilpaint_ui.rc" );
 
-    kDebug(50006) << "ImagePlugin_OilPaint plugin loaded" << endl;
+    kDebug(50006) << "ImagePlugin_OilPaint plugin loaded";
 }
 
 ImagePlugin_OilPaint::~ImagePlugin_OilPaint()

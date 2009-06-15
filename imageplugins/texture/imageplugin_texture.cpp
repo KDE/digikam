@@ -57,7 +57,7 @@ ImagePlugin_Texture::ImagePlugin_Texture(QObject *parent, const QVariantList &)
 
     setXMLFile( "digikamimageplugin_texture_ui.rc" );
 
-    kDebug(50006) << "ImagePlugin_Texture plugin loaded" << endl;
+    kDebug(50006) << "ImagePlugin_Texture plugin loaded";
 }
 
 ImagePlugin_Texture::~ImagePlugin_Texture()

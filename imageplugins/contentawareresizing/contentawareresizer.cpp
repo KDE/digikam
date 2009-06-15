@@ -192,13 +192,13 @@ void ContentAwareResizer::progressCallback(int progress)
     if (progress%5 == 0)
         postProgress( progress );
 
-    //kDebug(50003) << "Content Aware Resizing: " << progress << " %" << endl;
+    //kDebug(50003) << "Content Aware Resizing: " << progress << " %";
 }
 
 void ContentAwareResizer::cancelFilter()
 {
     // Handle cancel operations with lqr library.
-    kDebug(50003) << "Stop LibLqr computation..." << endl;
+    kDebug(50003) << "Stop LibLqr computation...";
     lqr_carver_cancel(d->carver);
     DImgThreadedFilter::cancelFilter();
 }

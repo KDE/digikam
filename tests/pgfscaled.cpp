@@ -53,7 +53,7 @@ int main(int argc, char** argv)
     QFile file(fname);
     if ( !file.open(QIODevice::ReadOnly) )
     {
-        kDebug(50003) << "Cannot open PGF file to read..." << endl;
+        kDebug(50003) << "Cannot open PGF file to read...";
         return -1;
     }
 
@@ -61,7 +61,7 @@ int main(int argc, char** argv)
 
     if (!loadPGFScaled(img, file.fileName(), 1280))
     {
-        kDebug(50003) << "loadPGFScaled failed..." << endl;
+        kDebug(50003) << "loadPGFScaled failed...";
         return -1;
     }
     img.save(file.fileName()+QString("-scaled.png"), "PNG");

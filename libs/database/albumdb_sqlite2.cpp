@@ -76,7 +76,7 @@ void AlbumDB_Sqlite2::setDBPath(const QString& path)
     m_db = sqlite_open(QFile::encodeName(path), 0, &errMsg);
     if (m_db == 0)
     {
-        kWarning(50003) << "Cannot open database: " << errMsg << endl;
+        kWarning(50003) << "Cannot open database: " << errMsg;
         free(errMsg);
         return;
     }
@@ -90,11 +90,11 @@ bool AlbumDB_Sqlite2::execSql(const QString& sql, QStringList* const values,
                       const bool debug)
 {
     if ( debug )
-        kDebug(50003) << "SQL-query: " << sql << endl;
+        kDebug(50003) << "SQL-query: " << sql;
 
     if ( !m_db )
     {
-        kWarning(50003) << "SQLite pointer == NULL" << endl;
+        kWarning(50003) << "SQLite pointer == NULL";
         return false;
     }
 

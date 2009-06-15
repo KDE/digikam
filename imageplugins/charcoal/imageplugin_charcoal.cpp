@@ -57,7 +57,7 @@ ImagePlugin_Charcoal::ImagePlugin_Charcoal(QObject *parent, const QVariantList &
 
     setXMLFile( "digikamimageplugin_charcoal_ui.rc" );
 
-    kDebug(50006) << "ImagePlugin_Charcoal plugin loaded" << endl;
+    kDebug(50006) << "ImagePlugin_Charcoal plugin loaded";
 }
 
 ImagePlugin_Charcoal::~ImagePlugin_Charcoal()

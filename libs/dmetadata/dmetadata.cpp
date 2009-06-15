@@ -203,7 +203,7 @@ bool DMetadata::setImageComment(const QString& comment) const
     /*if (comment.isEmpty())
           return false;*/
 
-    kDebug(50003) << getFilePath() << " ==> Comment: " << comment << endl;
+    kDebug(50003) << getFilePath() << " ==> Comment: " << comment;
 
     // In first we set image comments, outside of Exif, XMP, and IPTC.
 
@@ -359,11 +359,11 @@ bool DMetadata::setImageRating(int rating) const
 
     if (rating < RatingMin || rating > RatingMax)
     {
-        kDebug(50003) << "Rating value to write is out of range!" << endl;
+        kDebug(50003) << "Rating value to write is out of range!";
         return false;
     }
 
-    kDebug(50003) << getFilePath() << " ==> Rating: " << rating << endl;
+    kDebug(50003) << getFilePath() << " ==> Rating: " << rating;
 
     if (!setProgramId())
         return false;
@@ -656,7 +656,7 @@ bool DMetadata::setIptcTag(const QString& text, int maxLength,
 {
     QString truncatedText = text;
     truncatedText.truncate(maxLength);
-    kDebug(50003) << getFilePath() << " ==> " << debugLabel << ": " << truncatedText << endl;
+    kDebug(50003) << getFilePath() << " ==> " << debugLabel << ": " << truncatedText;
     return setIptcTagString(tagKey, truncatedText);    // returns false if failed
 }
 
@@ -1225,7 +1225,7 @@ QMap<int, QString> DMetadata::possibleValuesForEnumField(MetadataInfo::Field fie
             //more: TODO?
             return map;
         default:
-            kWarning(50003) << "Unsupported field " << field << " in DMetadata::possibleValuesForEnumField" << endl;
+            kWarning(50003) << "Unsupported field " << field << " in DMetadata::possibleValuesForEnumField";
             return map;
     }
 
@@ -1347,8 +1347,8 @@ bool DMetadata::getXMLImageProperties(QString& comments, QDateTime& date,
     int row, col;
     if (!xmlDoc.setContent(doc, true, &error, &row, &col))
     {
-        kDebug(50003) << doc << endl;
-        kDebug(50003) << error << " :: row=" << row << " , col=" << col << endl;
+        kDebug(50003) << doc;
+        kDebug(50003) << error << " :: row=" << row << " , col=" << col;
         return false;
     }
 

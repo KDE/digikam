@@ -596,7 +596,7 @@ bool AlbumManager::setDatabase(const QString& dbPath, bool priority, const QStri
 
     if (dbLocale.isNull())
     {
-        kDebug(50003) << "No locale found in database" << endl;
+        kDebug(50003) << "No locale found in database";
 
         // Copy an existing locale from the settings file (used < 0.8)
         // to the database.
@@ -604,7 +604,7 @@ bool AlbumManager::setDatabase(const QString& dbPath, bool priority, const QStri
         KConfigGroup group = config->group("General Settings");
         if (group.hasKey("Locale"))
         {
-            kDebug(50003) << "Locale found in configfile" << endl;
+            kDebug(50003) << "Locale found in configfile";
             dbLocale = group.readEntry("Locale", QString());
 
             // this hack is necessary, as we used to store the entire
@@ -622,7 +622,7 @@ bool AlbumManager::setDatabase(const QString& dbPath, bool priority, const QStri
         }
         else
         {
-            kDebug(50003) << "No locale found in config file"  << endl;
+            kDebug(50003) << "No locale found in config file";
             dbLocale = currLocale;
 
             localeChanged = false;
@@ -711,7 +711,7 @@ void AlbumManager::startScan()
         mName = QString("Stat");
     else if (m == KDirWatch::INotify)
         mName = QString("INotify");
-    kDebug(50003) << "KDirWatch method = " << mName << endl;
+    kDebug(50003) << "KDirWatch method = " << mName;
 
     // connect to KDirNotify
 
@@ -2217,7 +2217,7 @@ void AlbumManager::slotAlbumsJobResult(KJob* job)
 
     if (job->error())
     {
-        kWarning(50003) << k_funcinfo << "Failed to list albums" << endl;
+        kWarning(50003) << k_funcinfo << "Failed to list albums";
         return;
     }
 }
@@ -2241,7 +2241,7 @@ void AlbumManager::slotTagsJobResult(KJob* job)
 
     if (job->error())
     {
-        kWarning(50003) << k_funcinfo << "Failed to list tags" << endl;
+        kWarning(50003) << k_funcinfo << "Failed to list tags";
         return;
     }
 }
@@ -2265,7 +2265,7 @@ void AlbumManager::slotDatesJobResult(KJob* job)
 
     if (job->error())
     {
-        kWarning(50003) << "Failed to list dates" << endl;
+        kWarning(50003) << "Failed to list dates";
         return;
     }
 
@@ -2531,7 +2531,7 @@ void AlbumManager::slotDirWatchDirty(const QString& path)
             // check for equality
             if (modList == d->dbPathModificationDateList)
             {
-                //kDebug(50003) << "Filtering out db-file-triggered dir watch signal" << endl;
+                //kDebug(50003) << "Filtering out db-file-triggered dir watch signal";
                 // we can skip the signal
                 return;
             }
@@ -2541,7 +2541,7 @@ void AlbumManager::slotDirWatchDirty(const QString& path)
         }
     }
 
-    kDebug(50003) << "KDirWatch detected change at" << path << endl;
+    kDebug(50003) << "KDirWatch detected change at" << path;
 
     slotNotifyFileChange(path);
 }

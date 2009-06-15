@@ -1320,7 +1320,7 @@ void CameraUI::slotUpload()
 #endif
     fileformats = patternList.join("\n");
 
-    kDebug(50003) << "fileformats=" << fileformats << endl;
+    kDebug(50003) << "fileformats=" << fileformats;
 
     KUrl::List urls = KFileDialog::getOpenUrls(CollectionManager::instance()->oneAlbumRootPath(),
                                                fileformats, this, i18n("Select Image to Upload"));
@@ -1932,7 +1932,7 @@ void CameraUI::slotExifFromData(const QByteArray& exifData)
     // decode (yet) exif metadata from APP1. We will find Exif header to get data at this place
     // to please with Exiv2...
 
-    kDebug(50003) << "Size of Exif metadata from camera = " << exifData.size() << endl;
+    kDebug(50003) << "Size of Exif metadata from camera = " << exifData.size();
     char exifHeader[] = { 0x45, 0x78, 0x69, 0x66, 0x00, 0x00 };
 
     if (!exifData.isEmpty())
@@ -1940,7 +1940,7 @@ void CameraUI::slotExifFromData(const QByteArray& exifData)
         int i = exifData.indexOf(*exifHeader);
         if (i != -1)
         {
-            kDebug(50003) << "Exif header found at position " << i << endl;
+            kDebug(50003) << "Exif header found at position " << i;
             i = i + sizeof(exifHeader);
             QByteArray data;
             data.resize(exifData.size()-i);

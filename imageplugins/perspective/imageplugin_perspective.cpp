@@ -55,7 +55,7 @@ ImagePlugin_Perspective::ImagePlugin_Perspective(QObject *parent, const QVariant
 
     setXMLFile("digikamimageplugin_perspective_ui.rc");
 
-    kDebug(50006) << "ImagePlugin_Perspective plugin loaded" << endl;
+    kDebug(50006) << "ImagePlugin_Perspective plugin loaded";
 }
 
 ImagePlugin_Perspective::~ImagePlugin_Perspective()

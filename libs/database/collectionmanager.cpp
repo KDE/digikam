@@ -68,7 +68,7 @@ public:
 
     AlbumRootLocation(const AlbumRootInfo &info)
     {
-        kDebug(50003) << "Creating new Location " << info.specificPath << " uuid " << info.identifier << endl;
+        kDebug(50003) << "Creating new Location " << info.specificPath << " uuid " << info.identifier;
         m_id         = info.id;
         m_type       = (Type)info.type;
         specificPath = info.specificPath;
@@ -275,9 +275,9 @@ QList<SolidVolumeInfo> CollectionManagerPrivate::actuallyListVolumes()
 {
     QList<SolidVolumeInfo> volumes;
 
-    //kDebug(50003) << "listFromType" << endl;
+    //kDebug(50003) << "listFromType";
     QList<Solid::Device> devices = Solid::Device::listFromType(Solid::DeviceInterface::StorageAccess);
-    //kDebug(50003) << "got listFromType" << endl;
+    //kDebug(50003) << "got listFromType";
 
     foreach(const Solid::Device& accessDevice, devices)
     {
@@ -617,7 +617,7 @@ void CollectionManager::refresh()
 
 CollectionLocation CollectionManager::addLocation(const KUrl& fileUrl, const QString& label)
 {
-    kDebug(50003) << "addLocation " << fileUrl << endl;
+    kDebug(50003) << "addLocation " << fileUrl;
     QString path = fileUrl.path(KUrl::RemoveTrailingSlash);
 
     if (!locationForPath(path).isNull())
@@ -666,7 +666,7 @@ CollectionLocation CollectionManager::addLocation(const KUrl& fileUrl, const QSt
 
 CollectionLocation CollectionManager::addNetworkLocation(const KUrl& fileUrl, const QString& label)
 {
-    kDebug(50003) << "addLocation " << fileUrl << endl;
+    kDebug(50003) << "addLocation " << fileUrl;
     QString path = fileUrl.path(KUrl::RemoveTrailingSlash);
 
     if (!locationForPath(path).isNull())
@@ -950,7 +950,7 @@ CollectionLocation CollectionManager::locationForPath(const QString& filePath)
     foreach (AlbumRootLocation *location, d->locations)
     {
         QString rootPath = location->albumRootPath();
-        //kDebug(50003) << "Testing location " << location->id() << filePath << rootPath << endl;
+        //kDebug(50003) << "Testing location " << location->id() << filePath << rootPath;
         if (!rootPath.isEmpty() && filePath.startsWith(rootPath))
             return *location;
     }
@@ -1169,7 +1169,7 @@ void CollectionManager::updateLocations()
             // Don't touch location->status, do not interfere with "hidden" setting
             location->available = available;
             location->setAbsolutePath(absolutePath);
-            kDebug(50003) << "location for " << absolutePath << " is available " << available << endl;
+            kDebug(50003) << "location for " << absolutePath << " is available " << available;
             // set the status depending on "hidden" and "available"
             location->setStatusFromFlags();
         }

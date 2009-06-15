@@ -194,7 +194,7 @@ bool CollectionPage::checkSettings()
 bool CollectionPage::checkRootAlbum(QString& rootAlbumFolder)
 {
     rootAlbumFolder = d->rootAlbumPathRequester->url().toLocalFile();
-    kDebug(50003) << "Root album is : " << rootAlbumFolder << endl;
+    kDebug(50003) << "Root album is : " << rootAlbumFolder;
 
     if (rootAlbumFolder.isEmpty())
     {
@@ -268,7 +268,7 @@ bool CollectionPage::checkRootAlbum(QString& rootAlbumFolder)
 bool CollectionPage::checkDatabase(QString& dbFolder)
 {
     dbFolder = d->dbPathRequester->url().toLocalFile();
-    kDebug(50003) << "DB folder is : " << dbFolder << endl;
+    kDebug(50003) << "DB folder is : " << dbFolder;
 
     if (dbFolder.isEmpty())
     {

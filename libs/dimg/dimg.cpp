@@ -347,13 +347,13 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
     {
         case(NONE):
         {
-            kDebug(50003) << filePath << " : Unknown image format !!!" << endl;
+            kDebug(50003) << filePath << " : Unknown image format !!!";
             return false;
             break;
         }
         case(JPEG):
         {
-            kDebug(50003) << filePath << " : JPEG file identified" << endl;
+            kDebug(50003) << filePath << " : JPEG file identified";
             JPEGLoader loader(this);
             loader.setLoadFlags(loadFlags);
             if (loader.load(filePath, observer))
@@ -368,7 +368,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
         }
         case(TIFF):
         {
-            kDebug(50003) << filePath << " : TIFF file identified" << endl;
+            kDebug(50003) << filePath << " : TIFF file identified";
             TIFFLoader loader(this);
             loader.setLoadFlags(loadFlags);
             if (loader.load(filePath, observer))
@@ -383,7 +383,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
         }
         case(PNG):
         {
-            kDebug(50003) << filePath << " : PNG file identified" << endl;
+            kDebug(50003) << filePath << " : PNG file identified";
             PNGLoader loader(this);
             loader.setLoadFlags(loadFlags);
             if (loader.load(filePath, observer))
@@ -398,7 +398,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
         }
         case(PPM):
         {
-            kDebug(50003) << filePath << " : PPM file identified" << endl;
+            kDebug(50003) << filePath << " : PPM file identified";
             PPMLoader loader(this);
             loader.setLoadFlags(loadFlags);
             if (loader.load(filePath, observer))
@@ -413,7 +413,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
         }
         case(RAW):
         {
-            kDebug(50003) << filePath << " : RAW file identified" << endl;
+            kDebug(50003) << filePath << " : RAW file identified";
             RAWLoader loader(this, rawDecodingSettings);
             loader.setLoadFlags(loadFlags);
             if (loader.load(filePath, observer))
@@ -428,7 +428,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
         }
         case(JP2K):
         {
-            kDebug(50003) << filePath << " : JPEG2000 file identified" << endl;
+            kDebug(50003) << filePath << " : JPEG2000 file identified";
             JP2KLoader loader(this);
             loader.setLoadFlags(loadFlags);
             if (loader.load(filePath, observer))
@@ -443,7 +443,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
         }
         case(PGF):
         {
-            kDebug(50003) << filePath << " : PGF file identified" << endl;
+            kDebug(50003) << filePath << " : PGF file identified";
             PGFLoader loader(this);
             loader.setLoadFlags(loadFlags);
             if (loader.load(filePath, observer))
@@ -458,7 +458,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
         }
         default:
         {
-            kDebug(50003) << filePath << " : QIMAGE file identified" << endl;
+            kDebug(50003) << filePath << " : QIMAGE file identified";
             QImageLoader loader(this);
             loader.setLoadFlags(loadFlags);
             if (loader.load(filePath, observer))
@@ -595,7 +595,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
     QFileInfo fileInfo(filePath);
     if (!fileInfo.exists())
     {
-        kDebug(50003) << "File \"" << filePath << "\" does not exist" << endl;
+        kDebug(50003) << "File \"" << filePath << "\" does not exist";
         return NONE;
     }
 
@@ -630,7 +630,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
 
     if (!f)
     {
-        kDebug(50003) << "Failed to open file \"" << filePath << "\"" << endl;
+        kDebug(50003) << "Failed to open file \"" << filePath << "\"";
         return NONE;
     }
 
@@ -639,7 +639,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
 
     if (fread(&header, headerLen, 1, f) != 1)
     {
-        kDebug(50003) << "Failed to read header of file \"" << filePath << "\"" << endl;
+        kDebug(50003) << "Failed to read header of file \"" << filePath << "\"";
         fclose(f);
         return NONE;
     }
@@ -930,7 +930,7 @@ DColor DImg::getPixelColor(uint x, uint y) const
 {
     if (isNull() || x >= width() || y >= height())
     {
-        kDebug(50003) << "DImg::getPixelColor() : wrong pixel position!" << endl;
+        kDebug(50003) << "DImg::getPixelColor() : wrong pixel position!";
         return DColor();
     }
 
@@ -1000,7 +1000,7 @@ DColor DImg::getSubPixelColor(float x, float y) const
 {
     if (isNull() || x >= width() || y >= height())
     {
-        kDebug(50003) << "DImg::getPixelColor() : wrong pixel position!" << endl;
+        kDebug(50003) << "DImg::getPixelColor() : wrong pixel position!";
         return DColor();
     }
 
@@ -1159,13 +1159,13 @@ void DImg::setPixelColor(uint x, uint y, const DColor& color)
 {
     if (isNull() || x > width() || y > height())
     {
-        kDebug(50003) << "DImg::setPixelColor() : wrong pixel position!" << endl;
+        kDebug(50003) << "DImg::setPixelColor() : wrong pixel position!";
         return;
     }
 
     if (color.sixteenBit() != sixteenBit())
     {
-        kDebug(50003) << "DImg::setPixelColor() : wrong color depth!" << endl;
+        kDebug(50003) << "DImg::setPixelColor() : wrong color depth!";
         return;
     }
 
@@ -1212,7 +1212,7 @@ DImg DImg::copy(int x, int y, int w, int h)
 {
     if ( isNull() || w <= 0 || h <= 0)
     {
-        kDebug(50003) << " : return null image!" << endl;
+        kDebug(50003) << " : return null image!";
         return DImg();
     }
 
@@ -1244,7 +1244,7 @@ void DImg::bitBltImage(const DImg* src, int sx, int sy, int w, int h, int dx, in
 
     if (src->sixteenBit() != sixteenBit())
     {
-        kWarning(50003) << "Blitting from 8-bit to 16-bit or vice versa is not supported" << endl;
+        kWarning(50003) << "Blitting from 8-bit to 16-bit or vice versa is not supported";
         return;
     }
 
@@ -1266,7 +1266,7 @@ void DImg::bitBltImage(const uchar* src, int sx, int sy, int w, int h, int dx, i
 
     if (bytesDepth() != sdepth)
     {
-        kWarning(50003) << "Blitting from 8-bit to 16-bit or vice versa is not supported" << endl;
+        kWarning(50003) << "Blitting from 8-bit to 16-bit or vice versa is not supported";
         return;
     }
 
@@ -1380,7 +1380,7 @@ void DImg::bitBlendImage(DColorComposer *composer, const DImg* src,
 
     if (src->sixteenBit() != sixteenBit())
     {
-        kWarning(50003) << "Blending from 8-bit to 16-bit or vice versa is not supported" << endl;
+        kWarning(50003) << "Blending from 8-bit to 16-bit or vice versa is not supported";
         return;
     }
 
@@ -1525,7 +1525,7 @@ QPixmap DImg::convertToPixmap(IccTransform *monitorICCtrans)
 
     if (!monitorICCtrans->hasOutputProfile())
     {
-        kDebug(50003) << " : no monitor ICC profile available!" << endl;
+        kDebug(50003) << " : no monitor ICC profile available!";
         return convertToPixmap();
     }
 
@@ -1975,7 +1975,7 @@ void DImg::convertDepth(int depth)
 
     if (depth != 32 && depth != 64)
     {
-        kDebug(50003) << " : wrong color depth!" << endl;
+        kDebug(50003) << " : wrong color depth!";
         return;
     }
 
@@ -2054,7 +2054,7 @@ QByteArray DImg::getUniqueHash()
 
     if (!m_priv->attributes.contains("originalFilePath"))
     {
-        kWarning(50003) << "DImg::getUniqueHash called without originalFilePath property set!" << endl;
+        kWarning(50003) << "DImg::getUniqueHash called without originalFilePath property set!";
         return QByteArray();
     }
 

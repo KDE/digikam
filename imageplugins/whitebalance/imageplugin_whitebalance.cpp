@@ -59,7 +59,7 @@ ImagePlugin_WhiteBalance::ImagePlugin_WhiteBalance(QObject *parent, const QVaria
 
     setXMLFile("digikamimageplugin_whitebalance_ui.rc");
 
-    kDebug(50006) << "ImagePlugin_WhiteBalance plugin loaded" << endl;
+    kDebug(50006) << "ImagePlugin_WhiteBalance plugin loaded";
 }
 
 ImagePlugin_WhiteBalance::~ImagePlugin_WhiteBalance()

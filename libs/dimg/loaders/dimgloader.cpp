@@ -185,7 +185,7 @@ bool DImgLoader::checkExifWorkingColorSpace()
     QByteArray profile = metaData.getExifTagData("Exif.Image.InterColorProfile");
     if (!profile.isNull())
     {
-        kDebug(50003) << "Found an ICC profile in Exif metadata" << endl;
+        kDebug(50003) << "Found an ICC profile in Exif metadata";
         m_image->setICCProfil(profile);
         return true;
     }
@@ -197,7 +197,7 @@ bool DImgLoader::checkExifWorkingColorSpace()
     {
         case DMetadata::WORKSPACE_SRGB:
         {
-            kDebug(50003) << "Exif color-space tag is sRGB. Using default sRGB ICC profile." << endl;
+            kDebug(50003) << "Exif color-space tag is sRGB. Using default sRGB ICC profile.";
             m_image->getICCProfilFromFile(directory + QString("srgb-d65.icm"));
             return true;
             break;
@@ -205,7 +205,7 @@ bool DImgLoader::checkExifWorkingColorSpace()
 
         case DMetadata::WORKSPACE_ADOBERGB:
         {
-            kDebug(50003) << "Exif color-space tag is AdobeRGB. Using default AdobeRGB ICC profile." << endl;
+            kDebug(50003) << "Exif color-space tag is AdobeRGB. Using default AdobeRGB ICC profile.";
             m_image->getICCProfilFromFile(directory + QString("adobergb.icm"));
             return true;
             break;

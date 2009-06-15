@@ -374,7 +374,7 @@ void MetadataManagerFileWorker::writeOrientationToFiles(const QList<ImageInfo>& 
 
     foreach (const ImageInfo& info, infos)
     {
-        //kDebug(50003) << "Setting Exif Orientation tag to " << orientation << endl;
+        //kDebug(50003) << "Setting Exif Orientation tag to " << orientation;
 
         QString path = info.filePath();
         DMetadata metadata(path);

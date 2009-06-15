@@ -58,7 +58,7 @@ ImagePlugin_FreeRotation::ImagePlugin_FreeRotation(QObject *parent, const QVaria
 
     setXMLFile("digikamimageplugin_freerotation_ui.rc");
 
-    kDebug(50006) << "ImagePlugin_FreeRotation plugin loaded" << endl;
+    kDebug(50006) << "ImagePlugin_FreeRotation plugin loaded";
 }
 
 ImagePlugin_FreeRotation::~ImagePlugin_FreeRotation()

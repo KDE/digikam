@@ -58,7 +58,7 @@ ImagePlugin_Infrared::ImagePlugin_Infrared(QObject *parent, const QVariantList &
 
     setXMLFile( "digikamimageplugin_infrared_ui.rc" );
 
-    kDebug(50006) << "ImagePlugin_Infrared plugin loaded" << endl;
+    kDebug(50006) << "ImagePlugin_Infrared plugin loaded";
 }
 
 ImagePlugin_Infrared::~ImagePlugin_Infrared()

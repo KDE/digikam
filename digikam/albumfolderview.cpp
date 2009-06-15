@@ -625,7 +625,7 @@ void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
     AlbumSettings* settings = AlbumSettings::instance();
     if(!settings)
     {
-        kWarning(50003) << "AlbumFolderView: Could not get Album Settings" << endl;
+        kWarning(50003) << "AlbumFolderView: Could not get Album Settings";
         return;
     }
 

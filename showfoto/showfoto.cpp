@@ -858,7 +858,7 @@ void ShowFoto::openFolder(const KUrl& url)
     patterns.append (" ");
     patterns.append (filter.toUpper());
 
-    kDebug(50005) << "patterns=" << patterns << endl;
+    kDebug(50005) << "patterns=" << patterns;
 
     // Get all image files from directory.
 
@@ -1068,7 +1068,7 @@ bool ShowFoto::save()
 {
     if (!d->currentItem)
     {
-        kWarning(50005) << "This should not happen" << endl;
+        kWarning(50005) << "This should not happen";
         return true;
     }
 
@@ -1085,7 +1085,7 @@ bool ShowFoto::saveAs()
 {
     if (!d->currentItem)
     {
-        kWarning(50005) << "This should not happen" << endl;
+        kWarning(50005) << "This should not happen";
         return false;
     }
 

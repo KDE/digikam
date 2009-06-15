@@ -864,7 +864,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
         srcAlbum = d->albumMan->findTAlbum(albumID);
         if (!srcAlbum)
         {
-            kWarning(50003) << "Could not find source album of drag" << endl;
+            kWarning(50003) << "Could not find source album of drag";
             return;
         }
 

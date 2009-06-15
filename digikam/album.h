@@ -455,7 +455,7 @@ private:
  *  AlbumIterator it(album);
  *  while ( it.current() )
  *  {
- *     kDebug(50003) << "Album: " << it.current()->title() << endl;
+ *     kDebug(50003) << "Album: " << it.current()->title();
  *     ++it;
  *  }
  * \endcode

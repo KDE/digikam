@@ -146,17 +146,17 @@ CameraController::CameraController(QWidget* parent,
     if (path.startsWith("camera:/"))
     {
         KUrl url(path);
-        kDebug(50003) << "path " << path << " " << url <<  " " << url.host() << endl;
+        kDebug(50003) << "path " << path << " " << url <<  " " << url.host();
         QString xport = url.host();
         if (xport.startsWith("usb:"))
         {
-            kDebug(50003) << "xport " << xport << endl;
+            kDebug(50003) << "xport " << xport;
             QRegExp x = QRegExp("(usb:[0-9,]*)");
 
             if (x.indexIn(xport) != -1)
             {
                 QString usbport = x.cap(1);
-                kDebug(50003) << "USB " << xport << " " << usbport << endl;
+                kDebug(50003) << "USB " << xport << " " << usbport;
                 // if ((xport == usbport) || ((count == 1) && (xport == "usb:"))) {
                 //   model = xmodel;
                 d->camera = new GPCamera(title, url.user(), "usb:", "/");
@@ -506,7 +506,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             KUrl tempURL(dest);
             tempURL      = tempURL.upUrl();
             tempURL.addPath(QString(".digikam-camera-tmp1-%1").arg(getpid()).append(file));
-            kDebug(50003) << "Downloading: " << file << " using (" << tempURL << ")" << endl;
+            kDebug(50003) << "Downloading: " << file << " using (" << tempURL << ")";
             QString temp = tempURL.path();
 
             bool result  = d->camera->downloadItem(folder, file, tempURL.path());
@@ -524,14 +524,14 @@ void CameraController::executeCommand(CameraCommand *cmd)
 
                 if (autoRotate)
                 {
-                    kDebug(50003) << "Exif autorotate: " << file << " using (" << tempURL << ")" << endl;
+                    kDebug(50003) << "Exif autorotate: " << file << " using (" << tempURL << ")";
                     sendLogMsg(i18n("EXIF rotating file %1...", file), DHistoryView::StartingEntry, folder, file);
                     exifTransform(tempURL.path(), file);
                 }
 
                 if (fixDateTime || setPhotographerId || setCredits)
                 {
-                    kDebug(50003) << "Set metadata from: " << file << " using (" << tempURL << ")" << endl;
+                    kDebug(50003) << "Set metadata from: " << file << " using (" << tempURL << ")";
                     sendLogMsg(i18n("Setting Metadata tags to file %1...", file), DHistoryView::StartingEntry, folder, file);
                     DMetadata metadata(tempURL.path());
 
@@ -552,7 +552,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
 
                 if (convertJpeg)
                 {
-                    kDebug(50003) << "Convert to LossLess: " << file << " using (" << tempURL << ")" << endl;
+                    kDebug(50003) << "Convert to LossLess: " << file << " using (" << tempURL << ")";
                     sendLogMsg(i18n("Converting %1 to lossless file format...", file), DHistoryView::StartingEntry, folder, file);
 
                     KUrl tempURL2(dest);
@@ -668,7 +668,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
         }
         default:
         {
-            kWarning(50003) << " unknown action specified" << endl;
+            kWarning(50003) << " unknown action specified";
         }
     }
 }

@@ -71,7 +71,7 @@ void AbstractSearchGroupContainer::removeSearchGroup(SearchGroup *group)
 {
     if (group->groupType() == SearchGroup::FirstGroup)
     {
-        kWarning(50003) << "Attempt to delete the primary search group" << endl;
+        kWarning(50003) << "Attempt to delete the primary search group";
         return;
     }
     m_groups.removeAll(group);

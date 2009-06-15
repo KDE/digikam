@@ -611,8 +611,7 @@ extern "C"
         KGlobal::locale();
 
         if (argc != 4) {
-            kDebug(50004) << "Usage: kio_digikamalbums  protocol domain-socket1 domain-socket2"
-                      << endl;
+            kDebug(50004) << "Usage: kio_digikamalbums  protocol domain-socket1 domain-socket2";
             exit(-1);
         }
 

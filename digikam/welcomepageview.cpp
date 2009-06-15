@@ -287,25 +287,25 @@ void WelcomePageView::disablePredefinedActions()
     if (findAction)
         findAction->setShortcut(KShortcut());
     else
-        kDebug(50003) << "failed to remove the shortcut of khtml's find action" << endl;
+        kDebug(50003) << "failed to remove the shortcut of khtml's find action";
 
     KAction* findNextAction = qobject_cast<KAction*>(actionCollection()->action("findNext"));
     if (findNextAction)
         findNextAction->setShortcut(KShortcut());
     else
-        kDebug(50003) << "failed to remove the shortcut of khtml's findNext action" << endl;
+        kDebug(50003) << "failed to remove the shortcut of khtml's findNext action";
 
     KAction* findPreviousAction = qobject_cast<KAction*>(actionCollection()->action("findPrevious"));
     if (findPreviousAction)
         findPreviousAction->setShortcut(KShortcut());
     else
-        kDebug(50003) << "failed to remove the shortcut of khtml's findPrevious action" << endl;
+        kDebug(50003) << "failed to remove the shortcut of khtml's findPrevious action";
 
     KAction* selectAllAction = qobject_cast<KAction*>(actionCollection()->action("selectAll"));
     if (selectAllAction)
         selectAllAction->setShortcut(KShortcut());
     else
-        kDebug(50003) << "failed to remove the shortcut of khtml's selectAll action" << endl;
+        kDebug(50003) << "failed to remove the shortcut of khtml's selectAll action";
 }
 
 }  // namespace Digikam

@@ -462,7 +462,7 @@ SearchField *SearchField::createField(const QString& name, SearchFieldGroup *par
     }
     else
     {
-        kWarning(50003) << "SearchField::createField: cannot create SearchField for" << name << endl;
+        kWarning(50003) << "SearchField::createField: cannot create SearchField for" << name;
     }
     return 0;
 }

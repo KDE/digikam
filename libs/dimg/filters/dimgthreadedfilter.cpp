@@ -126,7 +126,7 @@ void DImgThreadedFilter::startFilter()
     else  // No image data
     {
         emit finished(false);
-        kDebug(50003) << m_name << "::No valid image data !!! ..." << endl;
+        kDebug(50003) << m_name << "::No valid image data !!! ...";
     }
 }
 
@@ -143,7 +143,7 @@ void DImgThreadedFilter::startFilterDirectly()
     else  // No image data
     {
         emit finished(false);
-        kDebug(50003) << m_name << "::No valid image data !!! ..." << endl;
+        kDebug(50003) << m_name << "::No valid image data !!! ...";
     }
 }
 

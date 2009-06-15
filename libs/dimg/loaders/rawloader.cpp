@@ -183,7 +183,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
             // Search 99th percentile white level.
 
             perc = (int)(width * height * 0.01);
-            kDebug(50003) << "White Level: " << perc << endl;
+            kDebug(50003) << "White Level: " << perc;
             for (int c = 1 ; c < 4 ; ++c)
             {
                 total = 0;
@@ -196,7 +196,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
 
             white *= 1.0 / m_rawDecodingSettings.brightness;
 
-            kDebug(50003) << "White Point: " << white << endl;
+            kDebug(50003) << "White Point: " << white;
 
             // Compute the Gamma lut accordingly.
 

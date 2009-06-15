@@ -97,14 +97,14 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
 
     #ifdef NFS_HACK
     newDB = locateLocal("appdata", KIO::encodeFileName(QDir::cleanPath(newDB)));
-    kDebug(50003) << "NFS: " << newDB << endl;
+    kDebug(50003) << "NFS: " << newDB;
     #endif
 
     AlbumDB db3;
     access.db()->setDBPath(newDB);
     if (!access.db()->isValid())
     {
-        kWarning(50003) << "Failed to open new Album Database" << endl;
+        kWarning(50003) << "Failed to open new Album Database";
         return false;
     }
     */
@@ -119,7 +119,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
     /*
     #ifdef NFS_HACK
     dbPath = locateLocal("appdata", KIO::encodeFileName(QDir::cleanPath(dbPath)));
-    kDebug(50003) << "From NFS: " << dbPath << endl;
+    kDebug(50003) << "From NFS: " << dbPath;
     #endif
     */
 
@@ -127,7 +127,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
 
     if (!fi.exists())
     {
-        kDebug(50003) << "No old database present. Not upgrading" << endl;
+        kDebug(50003) << "No old database present. Not upgrading";
         access.db()->setSetting("UpgradedFromSqlite2", "yes");
         return true;
     }
@@ -136,7 +136,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
     db2.setDBPath( dbPath );
     if (!db2.isValid())
     {
-        kDebug(50003) << "Failed to initialize Old Album Database" << endl;
+        kDebug(50003) << "Failed to initialize Old Album Database";
         return false;
     }
 
@@ -312,8 +312,8 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
         AlbumMap::iterator it1 = albumMap.find(url);
         if (it1 == albumMap.end())
         {
-            kDebug(50003) << "Could not find album with url: " << url << endl;
-            kDebug(50003) << "Most likely an external directory. Rejecting." << endl;
+            kDebug(50003) << "Could not find album with url: " << url;
+            kDebug(50003) << "Most likely an external directory. Rejecting.";
             continue;
         }
 
@@ -333,15 +333,15 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
     // -- update setting entry ------------------------------------------
     access.db()->setSetting("UpgradedFromSqlite2", "yes");
 
-    kDebug(50003) << "Successfully upgraded database to sqlite3 " << endl;
+    kDebug(50003) << "Successfully upgraded database to sqlite3 ";
 
     // -- Check for db consistency ----------------------------------------
 
     /*
-    kDebug(50003) << "Checking database consistency" << endl;
+    kDebug(50003) << "Checking database consistency";
 
 
-    kDebug(50003) << "Checking Albums.................." << endl;
+    kDebug(50003) << "Checking Albums..................";
     values.clear();
     db2.execSql("SELECT id, url, date, caption, collection FROM Albums;", &values);
     for (QStringList::iterator it = values.begin(); it != values.end();)
@@ -373,16 +373,16 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
         if (list.size() != 1)
         {
             kError(50003) << "Failed" << endl;
-            kWarning(50003) << "" << endl;
+            kWarning(50003) << "";
             kWarning(50003) << "Consistency check failed for Album: "
                        << album.url << endl;
             return false;
         }
     }
-    kDebug(50003) << " (" << values.count()/5 << " Albums) "  << "OK" << endl;
+    kDebug(50003) << " (" << values.count()/5 << " Albums) "  << "OK";
 
 
-    kDebug(50003) << "Checking Tags...................." << endl;
+    kDebug(50003) << "Checking Tags....................";
     values.clear();
     db2.execSql("SELECT id, pid, name FROM Tags;", &values);
     for (QStringList::iterator it = values.begin(); it != values.end();)
@@ -406,16 +406,16 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
         if (list.size() != 1)
         {
             kError(50003) << "Failed" << endl;
-            kWarning(50003) << "" << endl;
+            kWarning(50003) << "";
             kWarning(50003) << "Consistency check failed for Tag: "
                        << name << endl;
             return false;
         }
     }
-    kDebug(50003) << " (" << values.count()/3 << " Tags) "  << "OK" << endl;
+    kDebug(50003) << " (" << values.count()/3 << " Tags) "  << "OK";
 
 
-    kDebug(50003) << "Checking Images.................." << endl;
+    kDebug(50003) << "Checking Images..................";
     values.clear();
     db2.execSql("SELECT Albums.url, Images.name, Images.caption "
             "FROM Images, Albums WHERE Albums.id=Images.dirid;", &values);
@@ -441,16 +441,16 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
         if (list.size() != 1)
         {
             kError(50003) << "Failed" << endl;
-            kWarning(50003) << "" << endl;
+            kWarning(50003) << "";
             kWarning(50003) << "Consistency check failed for Image: "
                        << url << ", " << name << ", " << caption  << endl;
             return false;
         }
     }
-    kDebug(50003) << " (" << values.count()/3 << " Images) " << "OK" << endl;
+    kDebug(50003) << " (" << values.count()/3 << " Images) " << "OK";
 
 
-    kDebug(50003) << "Checking ImageTags..............." << endl;
+    kDebug(50003) << "Checking ImageTags...............";
     values.clear();
     db2.execSql("SELECT Albums.url, ImageTags.name, ImageTags.tagid "
             "FROM ImageTags, Albums WHERE \n "
@@ -478,15 +478,15 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
         if (list.size() != 1)
         {
             kError(50003) << "Failed" << endl;
-            kWarning(50003) << "" << endl;
+            kWarning(50003) << "";
             kWarning(50003) << "Consistency check failed for ImageTag: "
                        << url << ", " << name << ", " << tagid << endl;
             return false;
         }
     }
-    kDebug(50003) << " (" << values.count()/3 << " ImageTags) " << "OK" << endl;
+    kDebug(50003) << " (" << values.count()/3 << " ImageTags) " << "OK";
 
-    kDebug(50003) << "Checking Album icons ..............." << endl;
+    kDebug(50003) << "Checking Album icons ...............";
     values.clear();
     db2.execSql("SELECT url, icon FROM Albums;", &values);
     for (QStringList::iterator it = values.begin(); it != values.end();)
@@ -510,17 +510,17 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
         if (list.size() != 1)
         {
             kError(50003) << "Failed" << endl;
-            kWarning(50003) << "" << endl;
+            kWarning(50003) << "";
             kWarning(50003) << "Consistency check failed for Album Icon: "
                        << url << ", " << icon << endl;
 
             return false;
         }
     }
-    kDebug(50003) << " (" << values.count()/2 << " Album Icons) " << "OK" << endl;
+    kDebug(50003) << " (" << values.count()/2 << " Album Icons) " << "OK";
 
 
-    kDebug(50003) << "Checking Tag icons ..............." << endl;
+    kDebug(50003) << "Checking Tag icons ...............";
     values.clear();
     db2.execSql("SELECT id, icon FROM Tags;", &values);
     for (QStringList::iterator it = values.begin(); it != values.end();)
@@ -545,7 +545,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
             if (list.size() != 1)
             {
                 kError(50003) << "Failed" << endl;
-                kWarning(50003) << "" << endl;
+                kWarning(50003) << "";
                 kWarning(50003) << "Consistency check failed for Tag Icon: "
                            << id << ", " << icon << endl;
 
@@ -567,8 +567,8 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
                     .arg(access.backend()->escapeString(url)), &list);
             if (list.isEmpty())
             {
-                kWarning(50003) << "Tag icon not in Album Library Path, Rejecting " << endl;
-                kWarning(50003) << "(" << icon << ")" << endl;
+                kWarning(50003) << "Tag icon not in Album Library Path, Rejecting ";
+                kWarning(50003) << "(" << icon << ")";
                 continue;
             }
 
@@ -584,7 +584,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
             if (list.size() != 1)
             {
                 kError(50003) << "Failed." << endl;
-                kWarning(50003) << "" << endl;
+                kWarning(50003) << "";
                 kWarning(50003) << "Consistency check failed for Tag Icon: "
                            << id << ", " << icon << endl;
 
@@ -593,10 +593,10 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
 
         }
     }
-    kDebug(50003) << " (" << values.count()/2 << " Tag Icons) " << "OK" << endl;
+    kDebug(50003) << " (" << values.count()/2 << " Tag Icons) " << "OK";
 
-    kDebug(50003) << "" << endl;
-    kDebug(50003) << "All Tests: A-OK" << endl;
+    kDebug(50003) << "";
+    kDebug(50003) << "All Tests: A-OK";
     */
 
     return true;

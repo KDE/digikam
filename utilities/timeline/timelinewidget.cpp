@@ -423,7 +423,7 @@ DateRangeList TimeLineWidget::selectedDateRange(int& totalCount)
         kDebug(50003) << (*it).first.date().toString(Qt::ISODate) << " :: "
                  << (*it).second.date().toString(Qt::ISODate) << endl;
 
-    kDebug(50003) << "Total Count of Items = " << totalCount << endl;
+    kDebug(50003) << "Total Count of Items = " << totalCount;
 */
 
     // Group contiguous date ranges to optimize query on database.

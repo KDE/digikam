@@ -106,7 +106,7 @@ void KipiImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec)
 {
     if ( !time.isValid() )
     {
-        kWarning(50003) << "Invalid datetime specified" << endl;
+        kWarning(50003) << "Invalid datetime specified";
         return;
     }
 

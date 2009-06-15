@@ -623,7 +623,7 @@ void TagsPopupMenu::slotAddTag(QAction *action)
     TAlbum* parent    = man->findTAlbum(tagID);
     if (!parent)
     {
-        kWarning(50003) << "Failed to find album with id " << tagID << endl;
+        kWarning(50003) << "Failed to find album with id " << tagID;
         return;
     }
 

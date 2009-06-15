@@ -149,7 +149,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
         {
             d->pluginMap[corePlugin->name()] = plugin;
 
-            kDebug(50003) << "ImagePluginLoader: Loaded plugin " << corePlugin->name() << endl;
+            kDebug(50003) << "ImagePluginLoader: Loaded plugin " << corePlugin->name();
 
             ++cpt;
         }
@@ -182,7 +182,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
             {
                 d->pluginMap[name] = plugin;
 
-                kDebug(50003) << "ImagePluginLoader: Loaded plugin " << service->name() << endl;
+                kDebug(50003) << "ImagePluginLoader: Loaded plugin " << service->name();
 
                 ++cpt;
             }

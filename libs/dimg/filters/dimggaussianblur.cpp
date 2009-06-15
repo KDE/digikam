@@ -75,7 +75,7 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
 {
     if (!data || !width || !height)
     {
-       kWarning(50003) << ("DImgGaussianBlur::gaussianBlurImage: no image data available!") << endl;
+       kWarning(50003) << ("DImgGaussianBlur::gaussianBlurImage: no image data available!");
        return;
     }
 
@@ -86,7 +86,7 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
        return;
     }
 
-    kDebug(50003) << "DImgGaussianBlur::Process Computation..." << endl;
+    kDebug(50003) << "DImgGaussianBlur::Process Computation...";
 
     if (!sixteenBit)           // 8 bits image.
     {
@@ -98,7 +98,7 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
         img.blur(radius);
 
         // Copy CImg onto destination.
-        kDebug(50003) << "DImgGaussianBlur::Finalization..." << endl;
+        kDebug(50003) << "DImgGaussianBlur::Finalization...";
 
         uchar *ptr = m_destImage.bits();
         for (int y = 0; y < height; ++y)
@@ -124,7 +124,7 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
         img.blur(radius);
 
         // Copy CImg onto destination.
-        kDebug(50003) << "DImgGaussianBlur::Finalization..." << endl;
+        kDebug(50003) << "DImgGaussianBlur::Finalization...";
 
         unsigned short *ptr = (unsigned short *)m_destImage.bits();
         for (int y = 0; y < height; ++y)

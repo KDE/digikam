@@ -263,7 +263,7 @@ void SearchGroup::read(SearchXmlCachingReader& reader)
             }
             else
             {
-                kWarning(50003) << "Unhandled search field in XML with field name" << name << endl;
+                kWarning(50003) << "Unhandled search field in XML with field name" << name;
                 reader.readToEndOfElement();
             }
         }

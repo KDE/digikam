@@ -133,7 +133,7 @@ bool Rotate::toolOperations()
                     return (exifTransform(inputUrl().path(), inputUrl().fileName(), outputUrl().path(), Rotate270));
                     break;
                 default:
-                    kDebug(50003) << "Unknow rotate action" << endl;
+                    kDebug(50003) << "Unknow rotate action";
                     return false;
                     break;
             }

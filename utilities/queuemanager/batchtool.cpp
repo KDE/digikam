@@ -265,7 +265,7 @@ void BatchTool::setOutputUrlFromInputUrl()
     path.append(QString::number(QDateTime::currentDateTime().toTime_t()));
     path.append("-");
     path.append(fi.fileName());
-    kDebug(50003) << "path: " << path << endl;
+    kDebug(50003) << "path: " << path;
 
     KUrl url;
     url.setPath(path);
@@ -316,15 +316,15 @@ bool BatchTool::apply()
 {
     d->cancel = false;
 
-    kDebug(50003) << "Tool:       " << toolTitle() << endl;
-    kDebug(50003) << "Input url:  " << inputUrl()  << endl;
-    kDebug(50003) << "Output url: " << outputUrl() << endl;
-    kDebug(50003) << "Settings:   " << endl;
+    kDebug(50003) << "Tool:       " << toolTitle();
+    kDebug(50003) << "Input url:  " << inputUrl();
+    kDebug(50003) << "Output url: " << outputUrl();
+    kDebug(50003) << "Settings:   ";
 
     BatchToolSettings prm = settings();
     for (BatchToolSettings::const_iterator it = prm.constBegin() ; it != prm.constEnd() ; ++it)
     {
-        kDebug(50003) << "   " << it.key() << ": " << it.value() << endl;
+        kDebug(50003) << "   " << it.key() << ": " << it.value();
     }
 
     return toolOperations();

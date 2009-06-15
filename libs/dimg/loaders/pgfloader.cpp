@@ -104,7 +104,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     FILE *file = fopen(QFile::encodeName(filePath), "rb");
     if (!file)
     {
-        kDebug(50003) << "Error: Could not open source file." << endl;
+        kDebug(50003) << "Error: Could not open source file.";
         return false;
     }
 
@@ -165,7 +165,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 colorModel = DImg::RGB;
                 break;
             default:
-                kDebug(50003) << "Cannot load PGF image: color mode not supported (" << pgf.Mode() << ")" << endl;
+                kDebug(50003) << "Cannot load PGF image: color mode not supported (" << pgf.Mode() << ")";
                 return false;
                 break;
         }
@@ -176,7 +176,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             case 4:
                 break;
             default:
-                kDebug(50003) << "Cannot load PGF image: color channels number not supported (" << pgf.Channels() << ")" << endl;
+                kDebug(50003) << "Cannot load PGF image: color channels number not supported (" << pgf.Channels() << ")";
                 return false;
                 break;
         }
@@ -194,21 +194,21 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 m_sixteenBit = true;
                 break;
             default:
-                kDebug(50003) << "Cannot load PGF image: color bits depth not supported (" << bitDepth << ")" << endl;
+                kDebug(50003) << "Cannot load PGF image: color bits depth not supported (" << bitDepth << ")";
                 return false;
                 break;
         }
 
 #ifdef ENABLE_DEBUG_MESSAGES
         const PGFHeader* header = pgf.GetHeader();
-        kDebug(50003) << "PGF width    = " << header->width    << endl;
-        kDebug(50003) << "PGF height   = " << header->height   << endl;
-        kDebug(50003) << "PGF bbp      = " << header->bpp      << endl;
-        kDebug(50003) << "PGF channels = " << header->channels << endl;
-        kDebug(50003) << "PGF quality  = " << header->quality  << endl;
-        kDebug(50003) << "PGF mode     = " << header->mode     << endl;
-        kDebug(50003) << "Has Alpha    = " << m_hasAlpha       << endl;
-        kDebug(50003) << "Is 16 bits   = " << m_sixteenBit     << endl;
+        kDebug(50003) << "PGF width    = " << header->width;
+        kDebug(50003) << "PGF height   = " << header->height;
+        kDebug(50003) << "PGF bbp      = " << header->bpp;
+        kDebug(50003) << "PGF channels = " << header->channels;
+        kDebug(50003) << "PGF quality  = " << header->quality;
+        kDebug(50003) << "PGF mode     = " << header->mode;
+        kDebug(50003) << "Has Alpha    = " << m_hasAlpha;
+        kDebug(50003) << "Is 16 bits   = " << m_sixteenBit;
 #endif
 
         UINT32 size;
@@ -216,32 +216,32 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         if (udata)
         {
             QByteArray data((const char*)udata, size);
-            kDebug(50003) << "Find PGF metadata (" << data.size() << ")" << endl;
+            kDebug(50003) << "Find PGF metadata (" << data.size() << ")";
             KExiv2Iface::KExiv2 meta;
             if (meta.load(data))
             {
-                kDebug(50003) << "PGF metadata loaded" << endl;
+                kDebug(50003) << "PGF metadata loaded";
                 QMap<int, QByteArray>& imageMetadata = imageMetaData();
                 imageMetadata.clear();
 
                 if (!meta.getComments().isNull())
                 {
-                    kDebug(50003) << "PGF as Comments" << endl;
+                    kDebug(50003) << "PGF as Comments";
                     imageMetadata.insert(DImg::COM, meta.getComments());
                 }
                 if (!meta.getExif().isNull())
                 {
-                    kDebug(50003) << "PGF as Exif" << endl;
+                    kDebug(50003) << "PGF as Exif";
                     imageMetadata.insert(DImg::EXIF, meta.getExif());
                 }
                 if (!meta.getIptc().isNull())
                 {
-                    kDebug(50003) << "PGF as Iptc" << endl;
+                    kDebug(50003) << "PGF as Iptc";
                     imageMetadata.insert(DImg::IPTC, meta.getIptc());
                 }
                 if (!meta.getXmp().isNull())
                 {
-                    kDebug(50003) << "PGF as Xmp" << endl;
+                    kDebug(50003) << "PGF as Xmp";
                     imageMetadata.insert(DImg::XMP, meta.getXmp());
                 }
             }
@@ -319,7 +319,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     {
         int err = e.error;
         if (err >= AppError) err -= AppError;
-        kDebug(50003) << "Error: Opening and reading PGF image failed (" << err << ")!" << endl;
+        kDebug(50003) << "Error: Opening and reading PGF image failed (" << err << ")!";
 
 #ifdef WIN32
         CloseHandle(fd);
@@ -343,14 +343,14 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 #endif
     if (fd == INVALID_HANDLE_VALUE)
     {
-        kDebug(50003) << "Error: Could not open destination file." << endl;
+        kDebug(50003) << "Error: Could not open destination file.";
         return false;
     }
 #elif defined(__POSIX__)
     int fd = open(QFile::encodeName(filePath), O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
     if (fd == -1)
     {
-        kDebug(50003) << "Error: Could not open destination file." << endl;
+        kDebug(50003) << "Error: Could not open destination file.";
         return false;
     }
 #endif
@@ -360,7 +360,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         QVariant qualityAttr = imageGetAttribute("quality");
         int quality          = qualityAttr.isValid() ? qualityAttr.toInt() : 3;
 
-        kDebug(50003) << "PGF quality: " << quality << endl;
+        kDebug(50003) << "PGF quality: " << quality;
 
         CPGFFileStream stream(fd);
         CPGFImage      pgf;
@@ -416,14 +416,14 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         tmp.setAutoRemove(true);
         if ( !tmp.open() )
         {
-            kDebug(50003) << "Cannot open tmp file to save PGF metadata" << endl;
+            kDebug(50003) << "Cannot open tmp file to save PGF metadata";
             pgf.SetHeader(header);
         }
         else
         {
             preview = preview.scaled(16, 16, Qt::KeepAspectRatio, Qt::SmoothTransformation);
             preview.save(tmp.fileName(), "PNG");
-            kDebug(50003) << "Created PGF metadata tmp file" << endl;
+            kDebug(50003) << "Created PGF metadata tmp file";
 
             meta.load(tmp.fileName());
             meta.setExif(metaData[DImg::EXIF]);
@@ -438,7 +438,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
             stream.readRawData(data.data(), data.size());
             tmp.close();
 
-            kDebug(50003) << "Save PGF metadata (" << data.size() << ")"  << endl;
+            kDebug(50003) << "Save PGF metadata (" << data.size() << ")";
             pgf.SetHeader(header, 0, (UINT8*)data.constData(), data.size());
         }
 
@@ -452,13 +452,13 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         pgf.Write(&stream, 0, CallbackForLibPGF, &nWrittenBytes, this);
 
 #ifdef ENABLE_DEBUG_MESSAGES
-        kDebug(50003) << "PGF width     = " << header.width    << endl;
-        kDebug(50003) << "PGF height    = " << header.height   << endl;
-        kDebug(50003) << "PGF bbp       = " << header.bpp      << endl;
-        kDebug(50003) << "PGF channels  = " << header.channels << endl;
-        kDebug(50003) << "PGF quality   = " << header.quality  << endl;
-        kDebug(50003) << "PGF mode      = " << header.mode     << endl;
-        kDebug(50003) << "Bytes Written = " << nWrittenBytes   << endl;
+        kDebug(50003) << "PGF width     = " << header.width;
+        kDebug(50003) << "PGF height    = " << header.height;
+        kDebug(50003) << "PGF bbp       = " << header.bpp;
+        kDebug(50003) << "PGF channels  = " << header.channels;
+        kDebug(50003) << "PGF quality   = " << header.quality;
+        kDebug(50003) << "PGF mode      = " << header.mode;
+        kDebug(50003) << "Bytes Written = " << nWrittenBytes;
 #endif
 
 #ifdef WIN32
@@ -479,7 +479,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     {
         int err = e.error;
         if (err >= AppError) err -= AppError;
-        kDebug(50003) << "Error: Opening and saving PGF image failed (" << err << ")!" << endl;
+        kDebug(50003) << "Error: Opening and saving PGF image failed (" << err << ")!";
 
 #ifdef WIN32
         CloseHandle(fd);

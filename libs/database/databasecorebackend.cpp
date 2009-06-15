@@ -450,12 +450,12 @@ bool DatabaseCoreBackend::exec(QSqlQuery& query)
                 while (limit > 0 && query.lastError().number() == 5);
             }
             else
-                kWarning(50003) << "Detected locked database file. There is an active transaction." << endl;
+                kWarning(50003) << "Detected locked database file. There is an active transaction.";
         }
-        kDebug(50003) << "Failure executing query: " << endl;
-        kDebug(50003) << query.executedQuery() << endl;
-        kDebug(50003) << query.lastError().text() << query.lastError().number() << endl;
-        kDebug(50003) << "Bound values: " << query.boundValues().values() << endl;
+        kDebug(50003) << "Failure executing query: ";
+        kDebug(50003) << query.executedQuery();
+        kDebug(50003) << query.lastError().text() << query.lastError().number();
+        kDebug(50003) << "Bound values: " << query.boundValues().values();
         return false;
     }
     return true;
@@ -466,10 +466,10 @@ bool DatabaseCoreBackend::execBatch(QSqlQuery& query)
     if (!query.execBatch())
     {
         // Use DatabaseAccess::lastError?
-        kDebug(50003) << "Failure executing batch query: " << endl;
-        kDebug(50003) << query.executedQuery() << endl;
-        kDebug(50003) << query.lastError().text() << query.lastError().number() << endl;
-        kDebug(50003) << "Bound values: " << query.boundValues().values() << endl;
+        kDebug(50003) << "Failure executing batch query: ";
+        kDebug(50003) << query.executedQuery();
+        kDebug(50003) << query.lastError().text() << query.lastError().number();
+        kDebug(50003) << "Bound values: " << query.boundValues().values();
         return false;
     }
     return true;

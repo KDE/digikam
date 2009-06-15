@@ -331,7 +331,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
         srcAlbum    = AlbumManager::instance()->findTAlbum(albumID);
         if (!srcAlbum)
         {
-            kWarning(50003) << "Could not find source album of drag" << endl;
+            kWarning(50003) << "Could not find source album of drag";
             return;
         }
 

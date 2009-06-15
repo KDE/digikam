@@ -138,7 +138,7 @@ int main(int argc, char *argv[])
         dbPath         = firstRun.databasePath();
     }
 
-    kDebug(50003) << "Database Path: " << dbPath << endl;
+    kDebug(50003) << "Database Path: " << dbPath;
 
     // Check if SQLite Qt4 plugin is available.
 
@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
                                        "Database plugins installed are:"),
                                QSqlDatabase::drivers());
 
-        kDebug(50003) << "QT Sql drivers list: " << QSqlDatabase::drivers() << endl;
+        kDebug(50003) << "QT Sql drivers list: " << QSqlDatabase::drivers();
         return 1;
     }
 

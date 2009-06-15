@@ -60,7 +60,7 @@ void Charcoal::filterImage(void)
 {
     if (m_orgImage.isNull())
     {
-       kWarning(50006) << "No image data available!" << endl;
+       kWarning(50006) << "No image data available!";
        return;
     }
 
@@ -77,7 +77,7 @@ void Charcoal::filterImage(void)
 
     if((int)m_orgImage.width() < kernelWidth)
     {
-        kWarning(50006) << "Image is smaller than radius!" << endl;
+        kWarning(50006) << "Image is smaller than radius!";
         return;
     }
 
@@ -85,7 +85,7 @@ void Charcoal::filterImage(void)
 
     if(!kernel)
     {
-        kWarning(50006) << "Unable to allocate memory!" << endl;
+        kWarning(50006) << "Unable to allocate memory!";
         return;
     }
 
@@ -147,7 +147,7 @@ bool Charcoal::convolveImage(const unsigned int order, const double *kernel)
 
     if((kernelWidth % 2) == 0)
     {
-        kWarning(50006) << "Kernel width must be an odd number!" << endl;
+        kWarning(50006) << "Kernel width must be an odd number!";
         return(false);
     }
 
@@ -155,7 +155,7 @@ bool Charcoal::convolveImage(const unsigned int order, const double *kernel)
 
     if(!normal_kernel)
     {
-        kWarning(50006) << "Unable to allocate memory!" << endl;
+        kWarning(50006) << "Unable to allocate memory!";
         return(false);
     }
 

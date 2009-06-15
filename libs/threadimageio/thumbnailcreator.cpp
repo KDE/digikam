@@ -160,7 +160,7 @@ QImage ThumbnailCreator::load(const QString& path)
     if (d->cachedSize <= 0)
     {
         d->error = i18n("No or invalid size specified");
-        kWarning(50003) << "No or invalid size specified" << endl;
+        kWarning(50003) << "No or invalid size specified";
         return QImage();
     }
 
@@ -210,7 +210,7 @@ QImage ThumbnailCreator::load(const QString& path)
     if (image.isNull())
     {
         d->error = i18n("Thumbnail is null");
-        kWarning(50003) << "Thumbnail is null for " << path << endl;
+        kWarning(50003) << "Thumbnail is null for " << path;
         return image.qimage;
     }
 
@@ -335,7 +335,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo &info)
     if (qimage.isNull())
     {
         d->error = i18n("Cannot create thumbnail for %1", path);
-        kWarning(50003) << "Cannot create thumbnail for " << path << endl;
+        kWarning(50003) << "Cannot create thumbnail for " << path;
         return ThumbnailImage();
     }
 
@@ -486,7 +486,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
     {
         if (!writePGFImageData(image.qimage, dbInfo.data, 4))
         {
-            kWarning(50003) << "Cannot save PGF thumb in DB" << endl;
+            kWarning(50003) << "Cannot save PGF thumb in DB";
             return;
         }
     }
@@ -497,7 +497,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
         image.qimage.save(&buffer, "JPEG", 90);  // Here we will use JPEG quality = 90 to reduce artifacts.
         if (dbInfo.data.isNull())
         {
-            kWarning(50003) << "Cannot save JPEG thumb in DB" << endl;
+            kWarning(50003) << "Cannot save JPEG thumb in DB";
             return;
         }
     }
@@ -508,7 +508,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
         image.qimage.save(&buffer, "JP2");
         if (dbInfo.data.isNull())
         {
-            kWarning(50003) << "Cannot save JPEG2000 thumb in DB" << endl;
+            kWarning(50003) << "Cannot save JPEG2000 thumb in DB";
             return;
         }
     }
@@ -572,7 +572,7 @@ ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info)
     {
         if (!readPGFImageData(dbInfo.data, image.qimage))
         {
-            kWarning(50003) << "Cannot load PGF thumb from DB" << endl;
+            kWarning(50003) << "Cannot load PGF thumb from DB";
             return ThumbnailImage();
         }
     }
@@ -583,7 +583,7 @@ ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info)
         image.qimage.load(&buffer, "JPEG");
         if (dbInfo.data.isNull())
         {
-            kWarning(50003) << "Cannot load JPEG thumb from DB" << endl;
+            kWarning(50003) << "Cannot load JPEG thumb from DB";
             return ThumbnailImage();
         }
     }
@@ -594,7 +594,7 @@ ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info)
         image.qimage.load(&buffer, "JP2");
         if (dbInfo.data.isNull())
         {
-            kWarning(50003) << "Cannot load JPEG2000 thumb from DB" << endl;
+            kWarning(50003) << "Cannot load JPEG2000 thumb from DB";
             return ThumbnailImage();
         }
     }
@@ -706,8 +706,8 @@ void ThumbnailCreator::storeFreedesktop(const ThumbnailInfo &info, const Thumbna
 
             if (ret != 0)
             {
-                kDebug(50003) << "Cannot rename thumb file (" << tempFileName << ")" << endl;
-                kDebug(50003) << "to (" << thumbPath << ")..." << endl;
+                kDebug(50003) << "Cannot rename thumb file (" << tempFileName << ")";
+                kDebug(50003) << "to (" << thumbPath << ")...";
             }
         }
     }
