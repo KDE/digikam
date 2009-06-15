@@ -34,11 +34,17 @@
 #include <QSharedData>
 #include <QSet>
 
+// LibKExiv2 includes
+
+#include <libkexiv2/kexiv2.h>
+
 // Local includes
 
 #include "digikam_export.h"
 #include "albuminfo.h"
 #include "databaseaccess.h"
+
+using namespace KExiv2Iface;
 
 namespace Digikam
 {
@@ -176,6 +182,13 @@ public:
      */
     void apply();
     void apply(DatabaseAccess& access);
+
+    /**
+     * Wrapper to convert from/to KExiv2::AltLangMap container.
+     */
+
+    void setAltComments(const KExiv2::AltLangMap& comments);
+    KExiv2::AltLangMap altComments() const;
 
     // If you need more methods, add your methods here!
 

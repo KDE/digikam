@@ -7,6 +7,7 @@
  * Description : Access to comments of an image in the database
  *
  * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +33,8 @@
 // Local includes
 
 #include "albumdb.h"
+
+using namespace KExiv2Iface;
 
 namespace Digikam
 {
@@ -406,6 +409,26 @@ void ImageComments::apply(DatabaseAccess& access)
         access.db()->changeImageComment(info.id, d->id, values);
     }
     d->dirtyIndices.clear();
+}
+
+void ImageComments::setAltComments(const KExiv2::AltLangMap& comments)
+{
+    if (comments.isEmpty()) return;
+
+    for (KExiv2::AltLangMap::const_iterator it = comments.constBegin(); it != comments.constEnd(); ++it)
+        addComment(it.value(), it.key());
+
+    apply();
+}
+
+KExiv2::AltLangMap ImageComments::altComments() const
+{
+    KExiv2::AltLangMap comments;
+
+    for (int i = 0 ; i < numberOfComments() ; ++i)
+        comments.insert(language(i), comment(i));
+
+    return comments;
 }
 
 } // namespace Digikam
