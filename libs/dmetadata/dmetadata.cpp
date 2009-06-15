@@ -49,6 +49,8 @@
 #include "constants.h"
 #include "version.h"
 
+using namespace KExiv2Iface;
+
 namespace Digikam
 {
 
@@ -145,10 +147,35 @@ bool DMetadata::setProgramId(bool on) const
     return true;
 }
 
-QString DMetadata::getImageComment() const
+KExiv2::AltLangMap DMetadata::getImageComments() const
 {
     if (getFilePath().isEmpty())
-        return QString();
+        return KExiv2::AltLangMap();
+
+    KExiv2::AltLangMap map;
+
+    // In first, we check XMP alternative language tags to create map of values.
+
+    if (hasXmp())
+    {
+        map = getXmpTagStringListLangAlt("Xmp.dc.description", false);
+        if (!map.isEmpty())
+            return map;
+
+        QString xmpComment = getXmpTagStringLangAlt("Xmp.exif.UserComment", QString(), false);
+        if (!xmpComment.isEmpty())
+        {
+            map.insert(QString("x-default"), xmpComment);
+            return map;
+        }
+
+        xmpComment = getXmpTagStringLangAlt("Xmp.tiff.ImageDescription", QString(), false);
+        if (!xmpComment.isEmpty())
+        {
+            map.insert(QString("x-default"), xmpComment);
+            return map;
+        }
+    }
 
     // In first we trying to get image comments, outside of XMP, Exif, and IPTC.
     // For JPEG, string is extracted from JFIF Comments section.
@@ -156,7 +183,10 @@ QString DMetadata::getImageComment() const
 
     QString comment = getCommentsDecoded();
     if (!comment.isEmpty())
-        return comment;
+    {
+        map.insert(QString("x-default"), comment);
+        return map;
+    }
 
     // In second, we trying to get Exif comments
 
@@ -164,25 +194,10 @@ QString DMetadata::getImageComment() const
     {
         QString exifComment = getExifComment();
         if (!exifComment.isEmpty())
-            return exifComment;
-    }
-
-    // In third, we trying to get XMP comments. Language Alternative rule is not yet used.
-
-    if (hasXmp())
-    {
-        QString xmpComment = getXmpTagStringLangAlt("Xmp.dc.description", QString(), false);
-        if (!xmpComment.isEmpty())
-            return xmpComment;
-
-        xmpComment = getXmpTagStringLangAlt("Xmp.exif.UserComment", QString(), false);
-        if (!xmpComment.isEmpty())
-            return xmpComment;
-
-
-        xmpComment = getXmpTagStringLangAlt("Xmp.tiff.ImageDescription", QString(), false);
-        if (!xmpComment.isEmpty())
-            return xmpComment;
+        {
+            map.insert(QString("x-default"), exifComment);
+            return map;
+        }
     }
 
     // In four, we trying to get IPTC comments
@@ -191,47 +206,50 @@ QString DMetadata::getImageComment() const
     {
         QString iptcComment = getIptcTagString("Iptc.Application2.Caption", false);
         if (!iptcComment.isEmpty() && !iptcComment.trimmed().isEmpty())
-            return iptcComment;
+        {
+            map.insert(QString("x-default"), iptcComment);
+            return map;
+        }
     }
 
-    return QString();
+    return map;
 }
 
-bool DMetadata::setImageComment(const QString& comment) const
+bool DMetadata::setImageComments(const KExiv2::AltLangMap& comments) const
 {
     //See B.K.O #139313: An empty string is also a valid value
-    /*if (comment.isEmpty())
+    /*if (comments.isEmpty())
           return false;*/
 
-    kDebug(50003) << getFilePath() << " ==> Comment: " << comment;
+    kDebug(50003) << getFilePath() << " ==> Comment: " << comments;
 
     // In first we set image comments, outside of Exif, XMP, and IPTC.
 
-    if (!setComments(comment.toUtf8()))
+    if (!setComments(comments[QString("x-default")].toUtf8()))
         return false;
 
     // In Second we write comments into Exif.
 
-    if (!setExifComment(comment))
+    if (!setExifComment(comments[QString("x-default")]))
         return false;
 
     // In Third we write comments into XMP. Language Alternative rule is not yet used.
 
     if (supportXmp())
     {
-        if (!setXmpTagStringLangAlt("Xmp.dc.description", comment, QString(), false))
+        if (!setXmpTagStringListLangAlt("Xmp.dc.description", comments, false))
             return false;
 
-        if (!setXmpTagStringLangAlt("Xmp.exif.UserComment", comment, QString(), false))
+        if (!setXmpTagStringLangAlt("Xmp.exif.UserComment", comments[QString("x-default")], QString(), false))
             return false;
 
-        if (!setXmpTagStringLangAlt("Xmp.tiff.ImageDescription", comment, QString(), false))
+        if (!setXmpTagStringLangAlt("Xmp.tiff.ImageDescription", comments[QString("x-default")], QString(), false))
             return false;
     }
     // In Four we write comments into IPTC.
     // Note that Caption IPTC tag is limited to 2000 char and ASCII charset.
 
-    QString commentIptc = comment;
+    QString commentIptc = comments[QString("x-default")];
     commentIptc.truncate(2000);
 
     if (!setIptcTagString("Iptc.Application2.Caption", commentIptc))
@@ -743,7 +761,7 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field)
     switch (field)
     {
         case MetadataInfo::Comment:
-            return getImageComment();
+            return getImageComments()[QString("x-default")];
         case MetadataInfo::CommentJfif:
             return getCommentsDecoded();
         case MetadataInfo::CommentExif:

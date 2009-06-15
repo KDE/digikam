@@ -40,6 +40,8 @@
 #include "metadatainfo.h"
 #include "digikam_export.h"
 
+using namespace KExiv2Iface;
+
 namespace Digikam
 {
 
@@ -60,8 +62,8 @@ public:
 
     /** Metadata manipulation methods */
 
-    QString getImageComment() const;
-    bool    setImageComment(const QString& comment) const;
+    KExiv2::AltLangMap getImageComments() const;
+    bool setImageComments(const KExiv2::AltLangMap& comments) const;
 
     int  getImageRating() const;
     bool setImageRating(int rating) const;

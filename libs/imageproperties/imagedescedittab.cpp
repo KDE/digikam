@@ -49,7 +49,6 @@
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
-#include <ktextedit.h>
 #include <kconfig.h>
 #include <klineedit.h>
 #include <kdialog.h>
@@ -59,6 +58,7 @@
 
 // Local includes
 
+#include "commentsedit.h"
 #include "dmetadata.h"
 #include "kdatetimeedit.h"
 #include "albumiconitem.h"
@@ -128,7 +128,7 @@ public:
 
     QWidget                       *lastSelectedWidget;
 
-    KTextEdit                     *commentsEdit;
+    CommentsEdit                  *commentsEdit;
 
     KDateTimeEdit                 *dateTimeEdit;
 
@@ -162,10 +162,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
 
     // Captions/Date/Rating view -----------------------------------
 
-    KVBox *commentsBox = new KVBox(settingsArea);
-    new QLabel(i18n("Caption:"), commentsBox);
-    d->commentsEdit = new KTextEdit(commentsBox);
-    d->commentsEdit->setCheckSpellingEnabled(true);
+    d->commentsEdit = new CommentsEdit(settingsArea);
     d->commentsEdit->setFixedHeight(100);
 
     KHBox *dateBox  = new KHBox(settingsArea);
@@ -234,13 +231,13 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
 
     // --------------------------------------------------
 
-    settingsLayout->addWidget(commentsBox,    0, 0, 1, 2);
-    settingsLayout->addWidget(dateBox,        1, 0, 1, 2);
-    settingsLayout->addWidget(ratingBox,      2, 0, 1, 2);
-    settingsLayout->addWidget(d->newTagEdit,  3, 0, 1, 2);
-    settingsLayout->addWidget(d->tagsView,    4, 0, 1, 2);
-    settingsLayout->addWidget(tagsSearch,     5, 0, 1, 2);
-    settingsLayout->addWidget(buttonsBox,     6, 0, 1, 2);
+    settingsLayout->addWidget(d->commentsEdit, 0, 0, 1, 2);
+    settingsLayout->addWidget(dateBox,         1, 0, 1, 2);
+    settingsLayout->addWidget(ratingBox,       2, 0, 1, 2);
+    settingsLayout->addWidget(d->newTagEdit,   3, 0, 1, 2);
+    settingsLayout->addWidget(d->tagsView,     4, 0, 1, 2);
+    settingsLayout->addWidget(tagsSearch,      5, 0, 1, 2);
+    settingsLayout->addWidget(buttonsBox,      6, 0, 1, 2);
     settingsLayout->setRowStretch(4, 10);
     settingsLayout->setMargin(KDialog::spacingHint());
     settingsLayout->setSpacing(KDialog::spacingHint());
@@ -256,7 +253,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     connect(d->tagsView, SIGNAL(signalItemStateChanged(TAlbumCheckListItem *)),
             this, SLOT(slotItemStateChanged(TAlbumCheckListItem *)));
 
-    connect(d->commentsEdit, SIGNAL(textChanged()),
+    connect(d->commentsEdit, SIGNAL(signalModified()),
             this, SLOT(slotCommentChanged()));
 
     connect(d->dateTimeEdit, SIGNAL(dateTimeChanged(const QDateTime& )),
@@ -294,7 +291,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
 
     // Initialize ---------------------------------------------
 
-    d->commentsEdit->installEventFilter(this);
+    /* FIXME */ d->commentsEdit->installEventFilter(this);
     d->dateTimeEdit->installEventFilter(this);
     d->ratingWidget->installEventFilter(this);
     d->tagsView->installEventFilter(this);
@@ -357,9 +354,9 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     // -- read config ---------------------------------------------------------
 
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(QString("Tag List View"));
-    d->toggleAutoTags = (TagFilterView::ToggleAutoTags)(group.readEntry("Toggle Auto Tags",
-                                                       (int)TagFilterView::NoToggleAuto));
+    KConfigGroup group        = config->group(QString("Tag List View"));
+    d->toggleAutoTags         = (TagFilterView::ToggleAutoTags)(group.readEntry("Toggle Auto Tags",
+                                                               (int)TagFilterView::NoToggleAuto));
 }
 
 ImageDescEditTab::~ImageDescEditTab()
@@ -412,7 +409,7 @@ void ImageDescEditTab::slotChangingItems()
         dialog->setModal(true);
 
         int changedFields = 0;
-        if (d->hub.commentChanged())
+        if (d->hub.commentsChanged())
             ++changedFields;
         if (d->hub.dateTimeChanged())
             ++changedFields;
@@ -424,7 +421,7 @@ void ImageDescEditTab::slotChangingItems()
         QString text;
         if (changedFields == 1)
         {
-            if (d->hub.commentChanged())
+            if (d->hub.commentsChanged())
                 text = i18np("You have edited the image caption. ",
                              "You have edited the captions of %1 images. ",
                              d->currInfos.count());
@@ -449,7 +446,7 @@ void ImageDescEditTab::slotChangingItems()
                          "<p>You have edited the metadata of %1 images: </p><p><ul>",
                          d->currInfos.count());
 
-            if (d->hub.commentChanged())
+            if (d->hub.commentsChanged())
                 text += i18n("<li>caption</li>");
             if (d->hub.dateTimeChanged())
                 text += i18n("<li>date</li>");
@@ -599,7 +596,7 @@ void ImageDescEditTab::setInfos(const ImageInfoList& infos)
     {
         d->hub = MetadataHub();
         d->commentsEdit->blockSignals(true);
-        d->commentsEdit->clear();
+        d->commentsEdit->reset();
         d->commentsEdit->blockSignals(false);
         d->currInfos.clear();
         setEnabled(false);
@@ -766,11 +763,12 @@ void ImageDescEditTab::slotCommentChanged()
     // we cannot trust that the text actually changed
     // (there are bogus signals caused by spell checking, see bug 141663)
     // so we have to check before marking the metadata as modified
-    if (d->hub.comment() == d->commentsEdit->toPlainText())
+
+    if (d->hub.comments() == d->commentsEdit->values())
         return;
 
-    d->hub.setComment(d->commentsEdit->toPlainText());
-    setMetadataWidgetStatus(d->hub.commentStatus(), d->commentsEdit);
+    d->hub.setComments(d->commentsEdit->values());
+    setMetadataWidgetStatus(d->hub.commentsStatus(), d->commentsEdit);
     slotModified();
 }
 
@@ -825,8 +823,8 @@ void ImageDescEditTab::updateTagsView()
 void ImageDescEditTab::updateComments()
 {
     d->commentsEdit->blockSignals(true);
-    d->commentsEdit->setPlainText(d->hub.comment());
-    setMetadataWidgetStatus(d->hub.commentStatus(), d->commentsEdit);
+    d->commentsEdit->setValues(d->hub.comments());
+    setMetadataWidgetStatus(d->hub.commentsStatus(), d->commentsEdit);
     d->commentsEdit->blockSignals(false);
 }
 

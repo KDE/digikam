@@ -55,7 +55,7 @@ public:
     {
         dateTimeStatus  = MetadataHub::MetadataInvalid;
         ratingStatus    = MetadataHub::MetadataInvalid;
-        commentStatus   = MetadataHub::MetadataInvalid;
+        commentsStatus  = MetadataHub::MetadataInvalid;
 
         rating          = -1;
         highestRating   = -1;
@@ -65,13 +65,13 @@ public:
         dbmode          = MetadataHub::ManagedTags;
 
         dateTimeChanged = false;
-        commentChanged  = false;
+        commentsChanged = false;
         ratingChanged   = false;
         tagsChanged     = false;
     }
 
     bool                                   dateTimeChanged;
-    bool                                   commentChanged;
+    bool                                   commentsChanged;
     bool                                   ratingChanged;
     bool                                   tagsChanged;
 
@@ -82,14 +82,14 @@ public:
     QDateTime                              dateTime;
     QDateTime                              lastDateTime;
 
-    QString                                comment;
+    KExiv2::AltLangMap                     comments;
 
     QMap<TAlbum *, MetadataHub::TagStatus> tags;
 
     QStringList                            tagList;
 
     MetadataHub::Status                    dateTimeStatus;
-    MetadataHub::Status                    commentStatus;
+    MetadataHub::Status                    commentsStatus;
     MetadataHub::Status                    ratingStatus;
     MetadataHub::DatabaseMode              dbmode;
 
@@ -160,7 +160,9 @@ void MetadataHub::load(const ImageInfo& info)
 {
     d->count++;
 
-    load(info.dateTime(), info.comment(), info.rating());
+    DatabaseAccess access;
+    ImageComments comments = info.imageComments(access);
+    load(info.dateTime(), comments.altComments(), info.rating());
 
     AlbumManager *man = AlbumManager::instance();
     QList<int> tagIds = info.tagIds();
@@ -192,17 +194,17 @@ void MetadataHub::load(const DMetadata& metadata)
 {
     d->count++;
 
-    QString     comment;
-    QStringList keywords;
-    QDateTime   datetime;
-    int         rating;
+    KExiv2::AltLangMap comments;
+    QStringList        keywords;
+    QDateTime          datetime;
+    int                rating;
 
     // Try to get comments from image :
     // In first, from standard JPEG JFIF comments section, or
     // In second, from Exif comments tag, or
     // In third, from Xmp comments tag, or
     // In four, from Iptc comments tag.
-    comment = metadata.getImageComment();
+    comments = metadata.getImageComments();
 
     // Try to get date and time from image :
     // In first, from Exif date & time tags,
@@ -219,7 +221,7 @@ void MetadataHub::load(const DMetadata& metadata)
     // Try to get image rating from Xmp tag, or Iptc Urgency tag
     rating = metadata.getImageRating();
 
-    load(datetime, comment, rating);
+    load(datetime, comments, rating);
 
     // Try to get image tags from Xmp using digiKam namespace tags.
 
@@ -330,7 +332,7 @@ void MetadataHub::loadTags(const QStringList& loadedTagPaths)
 }
 
 // private common code to load dateTime, comment, rating
-void MetadataHub::load(const QDateTime& dateTime, const QString& comment, int rating)
+void MetadataHub::load(const QDateTime& dateTime, const KExiv2::AltLangMap& comments, int rating)
 {
     if (dateTime.isValid())
     {
@@ -339,7 +341,7 @@ void MetadataHub::load(const QDateTime& dateTime, const QString& comment, int ra
 
     d->loadWithInterval<int>(rating, d->rating, d->highestRating, d->ratingStatus);
 
-    d->loadSingleValue<QString>(comment, d->comment, d->commentStatus);
+    d->loadSingleValue<KExiv2::AltLangMap>(comments, d->comments, d->commentsStatus);
 }
 
 // template method to share code for dateTime and rating
@@ -405,7 +407,7 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
     bool changed = false;
 
     // find out in advance if we have something to write - needed for FullWriteIfChanged mode
-    bool saveComment  = d->commentStatus == MetadataAvailable;
+    bool saveComment  = d->commentsStatus == MetadataAvailable;
     bool saveDateTime = d->dateTimeStatus == MetadataAvailable;
     bool saveRating   = d->ratingStatus == MetadataAvailable;
     bool saveTags     = false;
@@ -423,7 +425,7 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
         writeAllFields = true;
     else if (writeMode == FullWriteIfChanged)
         writeAllFields = (
-                           (saveComment  && d->commentChanged)  ||
+                           (saveComment  && d->commentsChanged)  ||
                            (saveDateTime && d->dateTimeChanged) ||
                            (saveRating   && d->ratingChanged)   ||
                            (saveTags     && d->tagsChanged)
@@ -431,12 +433,12 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
     else // PartialWrite
         writeAllFields = false;
 
-    if (saveComment && (writeAllFields || d->commentChanged))
+    if (saveComment && (writeAllFields || d->commentsChanged))
     {
         DatabaseAccess access;
         ImageComments comments = info.imageComments(access);
-        // we set a comment with default language, author and date null
-        comments.addComment(d->comment);
+        // we set a map of alt-languages comments with default author and date null
+        comments.setAltComments(d->comments);
         changed = true;
     }
     if (saveDateTime && (writeAllFields || d->dateTimeChanged))
@@ -487,9 +489,9 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
 #endif
 
     // find out in advance if we have something to write - needed for FullWriteIfChanged mode
-    bool saveComment  = (settings.saveComments && d->commentStatus == MetadataAvailable);
+    bool saveComment  = (settings.saveComments && d->commentsStatus == MetadataAvailable);
     bool saveDateTime = (settings.saveDateTime && d->dateTimeStatus == MetadataAvailable);
-    bool saveRating   = (settings.saveRating   && d->ratingStatus == MetadataAvailable);
+    bool saveRating   = (settings.saveRating   && d->ratingStatus   == MetadataAvailable);
     bool saveTags     = false;
     if (settings.saveTags)
     {
@@ -510,7 +512,7 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
         writeAllFields = true;
     else if (writeMode == FullWriteIfChanged)
         writeAllFields = (
-                           (saveComment  && d->commentChanged)  ||
+                           (saveComment  && d->commentsChanged) ||
                            (saveDateTime && d->dateTimeChanged) ||
                            (saveRating   && d->ratingChanged)   ||
                            (saveTags     && d->tagsChanged)
@@ -518,10 +520,10 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
     else // PartialWrite
         writeAllFields = false;
 
-    if (saveComment && (writeAllFields || d->commentChanged))
+    if (saveComment && (writeAllFields || d->commentsChanged))
     {
-        // Store comments in image as JFIF comments, Exif comments, and Iptc Comments.
-        dirty |= metadata.setImageComment(d->comment);
+        // Store comments in image as JFIF comments, Exif comments, Iptc Caption, and Xmp.
+        dirty |= metadata.setImageComments(d->comments);
     }
 
     if (saveDateTime && (writeAllFields || d->dateTimeChanged))
@@ -648,9 +650,9 @@ bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataWriteSett
     // This is the same logic as in write(DMetadata) but without actually writing.
     // Adapt if the method above changes
 
-    bool saveComment  = (settings.saveComments && d->commentStatus == MetadataAvailable);
+    bool saveComment  = (settings.saveComments && d->commentsStatus == MetadataAvailable);
     bool saveDateTime = (settings.saveDateTime && d->dateTimeStatus == MetadataAvailable);
-    bool saveRating   = (settings.saveRating   && d->ratingStatus == MetadataAvailable);
+    bool saveRating   = (settings.saveRating   && d->ratingStatus   == MetadataAvailable);
     bool saveTags     = false;
     if (settings.saveTags)
     {
@@ -671,7 +673,7 @@ bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataWriteSett
         writeAllFields = true;
     else if (writeMode == FullWriteIfChanged)
         writeAllFields = (
-                           (saveComment  && d->commentChanged)  ||
+                           (saveComment  && d->commentsChanged) ||
                            (saveDateTime && d->dateTimeChanged) ||
                            (saveRating   && d->ratingChanged)   ||
                            (saveTags     && d->tagsChanged)
@@ -680,11 +682,11 @@ bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataWriteSett
         writeAllFields = false;
 
     return (
-            (saveComment && (writeAllFields || d->commentChanged))   ||
+            (saveComment && (writeAllFields || d->commentsChanged))  ||
             (saveDateTime && (writeAllFields || d->dateTimeChanged)) ||
             (saveRating && (writeAllFields || d->ratingChanged))     ||
             (saveTags && (writeAllFields || d->tagsChanged))         ||
-            (settings.savePhotographerId && writeAllFields)      ||
+            (settings.savePhotographerId && writeAllFields)          ||
             (settings.saveCredits && writeAllFields)
            );
 }
@@ -705,9 +707,9 @@ MetadataHub::Status MetadataHub::dateTimeStatus() const
     return d->dateTimeStatus;
 }
 
-MetadataHub::Status MetadataHub::commentStatus() const
+MetadataHub::Status MetadataHub::commentsStatus() const
 {
-    return d->commentStatus;
+    return d->commentsStatus;
 }
 
 MetadataHub::Status MetadataHub::ratingStatus() const
@@ -744,9 +746,9 @@ bool MetadataHub::dateTimeChanged() const
     return d->dateTimeChanged;
 }
 
-bool MetadataHub::commentChanged() const
+bool MetadataHub::commentsChanged() const
 {
-    return d->commentChanged;
+    return d->commentsChanged;
 }
 
 bool MetadataHub::ratingChanged() const
@@ -764,9 +766,9 @@ QDateTime MetadataHub::dateTime() const
     return d->dateTime;
 }
 
-QString MetadataHub::comment() const
+KExiv2::AltLangMap MetadataHub::comments() const
 {
-    return d->comment;
+    return d->comments;
 }
 
 int MetadataHub::rating() const
@@ -850,11 +852,11 @@ void MetadataHub::setDateTime(const QDateTime& dateTime, Status status)
     d->dateTimeChanged = true;
 }
 
-void MetadataHub::setComment(const QString& comment, Status status)
+void MetadataHub::setComments(const KExiv2::AltLangMap& comments, Status status)
 {
-    d->commentStatus  = status;
-    d->comment        = comment;
-    d->commentChanged = true;
+    d->commentsStatus  = status;
+    d->comments        = comments;
+    d->commentsChanged = true;
 }
 
 void MetadataHub::setRating(int rating, Status status)
@@ -886,7 +888,7 @@ void MetadataHub::setTag(int albumID, bool hasTag, Status status)
 void MetadataHub::resetChanged()
 {
     d->dateTimeChanged = false;
-    d->commentChanged  = false;
+    d->commentsChanged = false;
     d->ratingChanged   = false;
     d->tagsChanged     = false;
 }

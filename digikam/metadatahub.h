@@ -41,6 +41,8 @@
 #include "dmetadata.h"
 #include "dimg.h"
 
+using namespace KExiv2Iface;
+
 namespace Digikam
 {
 
@@ -262,7 +264,7 @@ public:
     // --------------------------------------------------
 
     Status dateTimeStatus() const;
-    Status commentStatus() const;
+    Status commentsStatus() const;
     Status ratingStatus() const;
 
     TagStatus tagStatus(TAlbum *album) const;
@@ -274,7 +276,7 @@ public:
         with the corresponding set... method
     */
     bool dateTimeChanged() const;
-    bool commentChanged() const;
+    bool commentsChanged() const;
     bool ratingChanged() const;
     bool tagsChanged() const;
 
@@ -286,11 +288,11 @@ public:
     */
     QDateTime           dateTime() const;
     /**
-        Returns the dateTime.
-        If status is MetadataDisjoint, the first loaded comment is returned.
-        If status is MetadataInvalid, QString() is returned.
+        Returns a map all alternate language omments .
+        If status is MetadataDisjoint, the first loaded map is returned.
+        If status is MetadataInvalid, KExiv2::AltLangMap() is returned.
     */
-    QString             comment() const;
+    KExiv2::AltLangMap  comments() const;
     /**
         Returns the rating.
         If status is MetadataDisjoint, the lowest rating is returned.
@@ -343,7 +345,7 @@ public:
         Set dateTime to the given value, and the dateTime status to MetadataAvailable
     */
     void setDateTime(const QDateTime& dateTime, Status status = MetadataAvailable);
-    void setComment(const QString& comment, Status status = MetadataAvailable);
+    void setComments(const KExiv2::AltLangMap& comments, Status status = MetadataAvailable);
     void setRating(int rating, Status status = MetadataAvailable);
     void setTag(TAlbum *tag, bool hasTag, Status status = MetadataAvailable);
     void setTag(int albumID, bool hasTag, Status status = MetadataAvailable);
@@ -356,7 +358,7 @@ public:
 
 private:
 
-    void load(const QDateTime& dateTime, const QString& comment, int rating);
+    void load(const QDateTime& dateTime, const KExiv2::AltLangMap& comment, int rating);
     void loadTags(const QList<TAlbum *>& loadedTags);
     void loadTags(const QStringList& loadedTagPaths);
 
