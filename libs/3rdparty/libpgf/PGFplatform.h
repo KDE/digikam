@@ -394,6 +394,14 @@ __inline int MulDiv(int nNumber, int nNumerator, int nDenominator) {
 #endif // __POSIX__ or WINCE
 
 
+//-------------------------------------------------------------------------------
+// Macros
+//-------------------------------------------------------------------------------
+#ifndef __min
+#define __min(x, y)		((x) <= (y) ? (x) : (y))
+#define __max(x, y)		((x) >= (y) ? (x) : (y))
+#endif // __min
+
 #ifdef __POSIX__
 //-------------------------------------------------------------------------------
 // DEBUG macros
@@ -422,14 +430,6 @@ __inline int MulDiv(int nNumber, int nNumerator, int nDenominator) {
 
 #define THROW_ throw(IOException)
 #define CONST const
-
-//-------------------------------------------------------------------------------
-// Macros
-//-------------------------------------------------------------------------------
-#ifndef __min
-#define __min(x, y)		((x) <= (y) ? (x) : (y))
-#define __max(x, y)		((x) >= (y) ? (x) : (y))
-#endif // __min
 
 //-------------------------------------------------------------------------------
 // constants
