@@ -258,7 +258,7 @@ void AdjustCurvesTool::slotSpotColorChanged(const DColor& color)
         }
         default:
         {
-//            d->curvesBox->setCurveGuide(color);
+            d->curvesBox->setCurveGuide(color);
             return;
         }
     }

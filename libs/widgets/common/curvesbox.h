@@ -42,6 +42,7 @@ namespace Digikam
 
 class ImageCurves;
 class CurvesBoxPriv;
+class DColor;
 
 class DIGIKAM_EXPORT CurvesBox : public QWidget
 {
@@ -84,6 +85,7 @@ public:
 
     void setScale(int type);
     void setChannel(int channel);
+    void setCurveGuide(const DColor& color);
 
     int  getCurrentPicker() const;
 

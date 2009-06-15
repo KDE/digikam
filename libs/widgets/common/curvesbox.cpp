@@ -494,4 +494,9 @@ ImageCurves* CurvesBox::curves() const
     return d->curvesWidget->curves();
 }
 
+void CurvesBox::setCurveGuide(const DColor& color)
+{
+    d->curvesWidget->setCurveGuide(color);
+}
+
 } // namespace Digikam
