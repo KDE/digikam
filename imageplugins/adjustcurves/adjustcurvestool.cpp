@@ -388,6 +388,7 @@ void AdjustCurvesTool::writeSettings()
 void AdjustCurvesTool::slotResetSettings()
 {
     d->curvesBox->resetChannels();
+    d->curvesBox->resetPickers();
     d->gboxSettings->histogramBox()->histogram()->reset();
 
     slotEffect();

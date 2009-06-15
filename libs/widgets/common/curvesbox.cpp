@@ -379,9 +379,11 @@ int CurvesBox::picker() const
 
 void CurvesBox::resetPickers()
 {
+    d->pickerType->setExclusive(false);
     d->pickBlack->setChecked(false);
     d->pickGray->setChecked(false);
     d->pickWhite->setChecked(false);
+    d->pickerType->setExclusive(true);
     emit signalPickerChanged(NoPicker);
 }
 
