@@ -1199,7 +1199,7 @@ void ShowFoto::slideShow(bool startWithCurrent, Digikam::SlideShowSettings& sett
     {
         Digikam::SlidePictureInfo pictInfo;
         meta.load((*it).path());
-        pictInfo.comment   = meta.getImageComment();
+        pictInfo.comment   = meta.getImageComments()[QString("x-default")];
         pictInfo.photoInfo = meta.getPhotographInformation();
         settings.pictInfoMap.insert(*it, pictInfo);
 
