@@ -2,6 +2,7 @@ INSTALL(FILES histogramwidget.h
               histogrambox.h
               colorgradientwidget.h 
               curveswidget.h
+              curvesbox.h
               sidebar.h
               dpopupmenu.h
               dlogoaction.h
