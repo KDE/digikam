@@ -547,7 +547,7 @@ void BWSepiaTool::slotScaleChanged()
 
 void BWSepiaTool::slotSpotColorChanged(const DColor& color)
 {
-//    m_curvesBox->setCurveGuide(color);
+    m_curvesBox->setCurveGuide(color);
 }
 
 void BWSepiaTool::slotColorSelectedFromTarget( const DColor& color )
