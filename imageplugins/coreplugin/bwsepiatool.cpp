@@ -993,9 +993,9 @@ void BWSepiaTool::slotLoadSettings()
         m_curvesBox->curves()->setCurveType(m_curvesBox->channel(), ImageCurves::CURVE_SMOOTH);
         m_curvesBox->reset();
 
+        QPoint disable(-1, -1);
         for (int j = 0 ; j < 17 ; ++j)
         {
-            QPoint disable(-1, -1);
             QPoint p;
             p.setX( stream.readLine().toInt() );
             p.setY( stream.readLine().toInt() );
