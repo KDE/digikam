@@ -987,7 +987,30 @@ void BWSepiaTool::slotLoadSettings()
         m_bwTone->setCurrentRow(stream.readLine().toInt());
         m_cInput->setValue(stream.readLine().toInt());
 
-        m_curvesBox->readCurveSettings(stream);
+        for (int i = 0 ; i < 5 ; ++i)
+            m_curvesBox->curves()->curvesChannelReset(i);
+
+        m_curvesBox->curves()->setCurveType(m_curvesBox->getCurrentChannel(), ImageCurves::CURVE_SMOOTH);
+        m_curvesBox->reset();
+
+        for (int j = 0 ; j < 17 ; ++j)
+        {
+            QPoint disable(-1, -1);
+            QPoint p;
+            p.setX( stream.readLine().toInt() );
+            p.setY( stream.readLine().toInt() );
+
+            if (m_originalImage->sixteenBit() && p != disable)
+            {
+                p.setX(p.x()*255);
+                p.setY(p.y()*255);
+            }
+
+            m_curvesBox->curves()->setCurvePoint(ImageHistogram::ValueChannel, j, p);
+        }
+
+        for (int i = 0 ; i < 5 ; ++i)
+            m_curvesBox->curves()->curvesCalculateCurve(i);
 
         blockWidgetSignals(false);
 

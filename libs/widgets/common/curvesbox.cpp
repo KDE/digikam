@@ -367,6 +367,11 @@ void CurvesBox::setChannel(int channel)
     d->curvesWidget->repaint();
 }
 
+int CurvesBox::getCurrentChannel() const
+{
+    return d->curvesWidget->m_channelType;
+}
+
 int CurvesBox::getCurrentPicker() const
 {
     return d->pickerType->checkedId();
@@ -439,30 +444,6 @@ void CurvesBox::readCurveSettings(KConfigGroup& group)
     }
 }
 
-void CurvesBox::readCurveSettings(QTextStream& stream)
-{
-    resetChannels();
-
-    QPoint disable(-1, -1);
-    for (int j = 0 ; j < 17 ; ++j)
-    {
-        QPoint p;
-        p.setX( stream.readLine().toInt() );
-        p.setY( stream.readLine().toInt() );
-
-        if (d->sixteenBit && p != disable)
-        {
-            p.setX(p.x()*255);
-            p.setY(p.y()*255);
-        }
-
-        d->curvesWidget->curves()->setCurvePoint(ImageHistogram::ValueChannel, j, p);
-    }
-
-    for (int i = 0 ; i < 5 ; ++i)
-        d->curvesWidget->curves()->curvesCalculateCurve(i);
-}
-
 void CurvesBox::writeCurveSettings(KConfigGroup& group)
 {
     for (int i = 0 ; i < 5 ; ++i)
@@ -483,11 +464,6 @@ void CurvesBox::writeCurveSettings(KConfigGroup& group)
         }
     }
 }
-
-//void CurvesBox::writeCurveSettings(QTextStream& stream)
-//{
-//    Q_UNUSED(stream)
-//}
 
 ImageCurves* CurvesBox::curves() const
 {

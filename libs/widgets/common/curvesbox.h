@@ -32,8 +32,6 @@
 
 #include "digikam_export.h"
 
-class QTextStream;
-
 class KConfigGroup;
 class KUrl;
 
@@ -88,6 +86,7 @@ public:
     void setCurveGuide(const DColor& color);
 
     int  getCurrentPicker() const;
+    int  getCurrentChannel() const;
 
     void resetPickers();
     void resetChannel(int channel);
@@ -95,10 +94,7 @@ public:
     void reset();
 
     void readCurveSettings(KConfigGroup& group);
-    void readCurveSettings(QTextStream& stream);
     void writeCurveSettings(KConfigGroup& group);
-    // TODO: implement me!
-//    void writeCurveSettings(QTextStream& stream);
 
     ImageCurves* curves() const;
 
