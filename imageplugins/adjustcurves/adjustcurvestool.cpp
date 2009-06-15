@@ -367,6 +367,8 @@ void AdjustCurvesTool::readSettings()
                     (int)EditorToolSettings::LuminosityChannel));
     d->gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
                     (int)CurvesWidget::LogScaleHistogram));
+    d->curvesBox->setScale(d->gboxSettings->histogramBox()->scale());
+    d->curvesBox->setChannel(d->gboxSettings->histogramBox()->channel());
     d->curvesBox->update();
 
     slotEffect();
