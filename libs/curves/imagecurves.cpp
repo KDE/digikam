@@ -99,6 +99,7 @@ ImageCurves::ImageCurves(bool sixteenBit)
            : d(new ImageCurvesPriv)
 {
     d->lut        = new ImageCurvesPriv::_Lut;
+    d->lut->luts  = NULL;
     d->curves     = new ImageCurvesPriv::_Curves;
     d->segmentMax = sixteenBit ? 65535 : 255;
 
@@ -109,14 +110,7 @@ ImageCurves::~ImageCurves()
 {
     if (d->lut)
     {
-       if (d->lut->luts)
-       {
-          for (int i = 0 ; i < d->lut->nchannels ; ++i)
-              delete [] d->lut->luts[i];
-
-          delete [] d->lut->luts;
-       }
-
+       freeLutData();
        delete d->lut;
     }
 
@@ -139,6 +133,7 @@ bool ImageCurves::isSixteenBits()
 void ImageCurves::curvesReset()
 {
     memset(d->curves, 0, sizeof(struct ImageCurvesPriv::_Curves));
+    freeLutData();
     d->lut->luts      = NULL;
     d->lut->nchannels = 0;
     d->dirty          = false;
@@ -410,13 +405,7 @@ void ImageCurves::curvesLutSetup(int nchannels)
     uint   v;
     double val;
 
-    if (d->lut->luts)
-    {
-       for (i = 0 ; i < d->lut->nchannels ; ++i)
-           delete [] d->lut->luts[i];
-
-       delete [] d->lut->luts;
-    }
+    freeLutData();
 
     d->lut->nchannels = nchannels;
     d->lut->luts      = new unsigned short*[d->lut->nchannels];
@@ -762,6 +751,18 @@ bool ImageCurves::saveCurvesToGimpCurvesFile(const KUrl& fileUrl)
     fclose(file);
 
     return true;
+}
+
+void ImageCurves::freeLutData()
+{
+    if (d->lut->luts)
+    {
+        for (int i = 0 ; i < d->lut->nchannels ; ++i)
+        {
+            delete [] d->lut->luts[i];
+        }
+        delete [] d->lut->luts;
+    }
 }
 
 }  // namespace Digikam
