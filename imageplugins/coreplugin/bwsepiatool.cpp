@@ -68,6 +68,7 @@
 
 #include "bcgmodifier.h"
 #include "colorgradientwidget.h"
+#include "curvesbox.h"
 #include "curveswidget.h"
 #include "dimg.h"
 #include "dimgimagefilters.h"
@@ -105,7 +106,7 @@ private:
 
     QHash<int, QPixmap*> m_previewPixmapMap;
     QSize                m_previewSize;
-    BWSepiaTool *m_bwSepia;
+    BWSepiaTool         *m_bwSepia;
 };
 
 PreviewPixmapFactory::PreviewPixmapFactory(BWSepiaTool* bwSepia, const QSize& previewSize)
@@ -390,65 +391,12 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QWidget *curveBox     = new QWidget( m_tab );
-    QGridLayout *gridTab2 = new QGridLayout(curveBox);
-
-    ColorGradientWidget* vGradient = new ColorGradientWidget(Qt::Vertical, 10, curveBox);
-    vGradient->setColors( QColor( "white" ), QColor( "black" ) );
-
-    QLabel *spacev = new QLabel(curveBox);
-    spacev->setFixedWidth(1);
-
-    m_curvesWidget = new CurvesWidget(256, 256, m_originalImage->bits(), m_originalImage->width(),
-                                                m_originalImage->height(), m_originalImage->sixteenBit(),
-                                                curveBox);
-    m_curvesWidget->setWhatsThis( i18n("This is the curve adjustment of the image luminosity"));
-
-    QLabel *spaceh = new QLabel(curveBox);
-    spaceh->setFixedHeight(1);
-
-    ColorGradientWidget *hGradient = new ColorGradientWidget(Qt::Horizontal, 10, curveBox );
-    hGradient->setColors(QColor("black"), QColor("white"));
-
-    // -------------------------------------------------------------
-
-    QWidget *typeBox = new QWidget();
-
-    m_curveFree = new QToolButton;
-    m_curveFree->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/curvefree.png")));
-    m_curveFree->setCheckable(true);
-    m_curveFree->setToolTip(i18n("Curve free mode"));
-    m_curveFree->setWhatsThis( i18n("With this button, you can draw your curve free-hand "
-                                    "with the mouse."));
-
-    m_curveSmooth = new QToolButton;
-    m_curveSmooth->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/curvemooth.png")));
-    m_curveSmooth->setCheckable(true);
-    m_curveSmooth->setToolTip(i18n("Curve smooth mode"));
-    m_curveSmooth->setWhatsThis( i18n("With this button, the curve type is constrained to "
-                                       "be a smooth line with tension."));
-
-    m_curveType = new QButtonGroup(typeBox);
-    m_curveType->addButton(m_curveFree, FreeDrawing);
-    m_curveType->addButton(m_curveSmooth, SmoothDrawing);
-
-    m_curveType->setExclusive(true);
-    m_curveSmooth->setChecked(true);
-
-    m_curveReset = new QPushButton(i18n("&Reset"));
-    m_curveReset->setIcon(KIconLoader::global()->loadIcon("document-revert", KIconLoader::Toolbar));
-    m_curveReset->setToolTip(i18n("Reset the curve to its default values."));
-    m_curveReset->setWhatsThis(i18n("If you press this button, all curves' values "
-                                    "will be reset to the default values."));
-
-    QGridLayout *typeBoxLayout = new QGridLayout();
-    typeBoxLayout->addWidget(m_curveFree,   0, 0, 1, 1);
-    typeBoxLayout->addWidget(m_curveSmooth, 0, 1, 1, 1);
-    typeBoxLayout->addWidget(m_curveReset,  0, 3, 1, 1);
-    typeBoxLayout->setColumnStretch(2, 10);
-    typeBoxLayout->setMargin(0);
-    typeBoxLayout->setSpacing(0);
-    typeBox->setLayout(typeBoxLayout);
+    QWidget* curveBox = new QWidget();
+    m_curvesBox = new CurvesBox(256, 256, m_originalImage->bits(), m_originalImage->width(),
+                                          m_originalImage->height(), m_originalImage->sixteenBit());
+    m_curvesBox->enableCurveTypes(true);
+    m_curvesBox->enableResetButton(true);
+    m_curvesBox->setWhatsThis( i18n("This is the curve adjustment of the image luminosity"));
 
     // -------------------------------------------------------------
 
@@ -459,17 +407,14 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
     m_cInput->setDefaultValue(0);
     m_cInput->setWhatsThis(i18n("Set here the contrast adjustment of the image."));
 
-    gridTab2->addWidget(vGradient,      0, 0, 1, 1);
-    gridTab2->addWidget(spacev,         0, 1, 1, 1);
-    gridTab2->addWidget(m_curvesWidget, 0, 2, 1, 1);
-    gridTab2->addWidget(spaceh,         1, 2, 1, 1);
-    gridTab2->addWidget(hGradient,      2, 2, 1, 1);
-    gridTab2->addWidget(typeBox,        4, 0, 1,-1);
-    gridTab2->addWidget(m_cInput,       5, 0, 1,-1);
-    gridTab2->setRowMinimumHeight(3, m_gboxSettings->spacingHint());
-    gridTab2->setRowStretch(6, 10);
+    QGridLayout* gridTab2 = new QGridLayout();
+    gridTab2->addWidget(m_curvesBox, 0, 0, 1, 1);
+    gridTab2->addWidget(m_cInput,    1, 0, 1, 1);
+//    gridTab2->setRowMinimumHeight(3, m_gboxSettings->spacingHint());
+    gridTab2->setRowStretch(2, 10);
     gridTab2->setMargin(m_gboxSettings->spacingHint());
     gridTab2->setSpacing(0);
+    curveBox->setLayout(gridTab2);
 
     // -------------------------------------------------------------
 
@@ -507,54 +452,22 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
     connect(m_bwTone, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotEffect()));
 
-    connect(m_curvesWidget, SIGNAL(signalCurvesChanged()),
-            this, SLOT(slotTimer()));
-
     connect(m_cInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
 
     connect(m_previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
 
-    connect(m_curveType, SIGNAL(buttonClicked(int)),
-            this, SLOT(slotCurveTypeChanged(int)));
+    connect(m_curvesBox, SIGNAL(signalCurvesChanged()),
+            this, SLOT(slotTimer()));
 
-    connect(m_curveReset, SIGNAL(clicked()),
-            this, SLOT(slotResetCurve()));
+    connect(m_curvesBox, SIGNAL(signalChannelReset(int)),
+            this, SLOT(slotEffect()));
 }
 
 BWSepiaTool::~BWSepiaTool()
 {
     delete [] m_destinationPreviewData;
-}
-
-void BWSepiaTool::slotCurveTypeChanged(int type)
-{
-    switch(type)
-    {
-       case SmoothDrawing:
-       {
-          m_curvesWidget->curves()->setCurveType(CurvesWidget::ValueHistogram, ImageCurves::CURVE_SMOOTH);
-          break;
-       }
-
-       case FreeDrawing:
-       {
-          m_curvesWidget->curves()->setCurveType(CurvesWidget::ValueHistogram, ImageCurves::CURVE_FREE);
-          break;
-       }
-    }
-
-    m_curvesWidget->curveTypeChanged();
-}
-
-void BWSepiaTool::slotResetCurve()
-{
-    for (int channel = 0 ; channel < 5 ; ++channel)
-        m_curvesWidget->curves()->curvesChannelReset(channel);
-
-    m_curvesWidget->reset();
-    slotEffect();
 }
 
 void BWSepiaTool::updatePreviews()
@@ -609,11 +522,11 @@ QPixmap BWSepiaTool::getThumbnailForEffect(int type)
         blackAndWhiteConversion(thumb.bits(), w, h, sb, type);
     }
 
-    if (m_curvesWidget->curves())   // in case we're called before the creator is done
+    if (m_curvesBox->curves())   // in case we're called before the creator is done
     {
         uchar *targetData = new uchar[w*h*(sb ? 8 : 4)];
-        m_curvesWidget->curves()->curvesLutSetup(ImageHistogram::AlphaChannel);
-        m_curvesWidget->curves()->curvesLutProcess(thumb.bits(), targetData, w, h);
+        m_curvesBox->curves()->curvesLutSetup(ImageHistogram::AlphaChannel);
+        m_curvesBox->curves()->curvesLutProcess(thumb.bits(), targetData, w, h);
 
         DImg preview(w, h, sb, a, targetData);
         BCGModifier cmod;
@@ -629,13 +542,12 @@ QPixmap BWSepiaTool::getThumbnailForEffect(int type)
 
 void BWSepiaTool::slotScaleChanged()
 {
-    m_curvesWidget->m_scaleType = m_gboxSettings->histogramBox()->scale();
-    m_curvesWidget->repaint();
+    m_curvesBox->setScale(m_gboxSettings->histogramBox()->scale());
 }
 
 void BWSepiaTool::slotSpotColorChanged(const DColor& color)
 {
-    m_curvesWidget->setCurveGuide(color);
+//    m_curvesBox->setCurveGuide(color);
 }
 
 void BWSepiaTool::slotColorSelectedFromTarget( const DColor& color )
@@ -656,28 +568,7 @@ void BWSepiaTool::readSettings()
     m_cInput->setValue(group.readEntry("ContrastAdjustment", m_cInput->defaultValue()));
     m_strengthInput->setValue(group.readEntry("StrengthAdjustment", m_strengthInput->defaultValue()));
 
-    for (int i = 0 ; i < 5 ; ++i)
-        m_curvesWidget->curves()->curvesChannelReset(i);
-
-    m_curvesWidget->curves()->setCurveType(m_curvesWidget->m_channelType, ImageCurves::CURVE_SMOOTH);
-    m_curvesWidget->reset();
-
-    for (int j = 0 ; j < 17 ; ++j)
-    {
-        QPoint disable(-1, -1);
-        QPoint p = group.readEntry(QString("CurveAdjustmentPoint%1").arg(j), disable);
-
-        if (m_originalImage->sixteenBit() && p.x() != -1)
-        {
-            p.setX(p.x()*255);
-            p.setY(p.y()*255);
-        }
-
-        m_curvesWidget->curves()->setCurvePoint(ImageHistogram::ValueChannel, j, p);
-    }
-
-    for (int i = 0 ; i < 5 ; ++i)
-        m_curvesWidget->curves()->curvesCalculateCurve(i);
+    m_curvesBox->readCurveSettings(group);
 
     // we need to call the set methods here, otherwise the curve will not be updated correctly
     m_gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
@@ -701,18 +592,20 @@ void BWSepiaTool::writeSettings()
     group.writeEntry("ContrastAdjustment", m_cInput->value());
     group.writeEntry("StrengthAdjustment", m_strengthInput->value());
 
-    for (int j = 0 ; j < 17 ; ++j)
-    {
-        QPoint p = m_curvesWidget->curves()->getCurvePoint(ImageHistogram::ValueChannel, j);
+    m_curvesBox->writeCurveSettings(group);
 
-        if (m_originalImage->sixteenBit() && p.x() != -1)
-        {
-            p.setX(p.x()/255);
-            p.setY(p.y()/255);
-        }
-
-        group.writeEntry(QString("CurveAdjustmentPoint%1").arg(j), p);
-    }
+//    for (int j = 0 ; j < 17 ; ++j)
+//    {
+//        QPoint p = m_curvesBox->curves()->getCurvePoint(ImageHistogram::ValueChannel, j);
+//
+//        if (m_originalImage->sixteenBit() && p.x() != -1)
+//        {
+//            p.setX(p.x()/255);
+//            p.setY(p.y()/255);
+//        }
+//
+//        group.writeEntry(QString("CurveAdjustmentPoint%1").arg(j), p);
+//    }
 
     m_previewWidget->writeSettings();
     group.sync();
@@ -730,9 +623,9 @@ void BWSepiaTool::slotResetSettings()
     m_strengthInput->slotReset();
 
     for (int channel = 0 ; channel < 5 ; ++channel)
-       m_curvesWidget->curves()->curvesChannelReset(channel);
+       m_curvesBox->curves()->curvesChannelReset(channel);
 
-    m_curvesWidget->reset();
+    m_curvesBox->reset();
 
     blockWidgetSignals(false);
 
@@ -775,8 +668,8 @@ void BWSepiaTool::slotEffect()
     // Calculate and apply the curve on image.
 
     uchar *targetData = new uchar[w*h*(sb ? 8 : 4)];
-    m_curvesWidget->curves()->curvesLutSetup(ImageHistogram::AlphaChannel);
-    m_curvesWidget->curves()->curvesLutProcess(m_destinationPreviewData, targetData, w, h);
+    m_curvesBox->curves()->curvesLutSetup(ImageHistogram::AlphaChannel);
+    m_curvesBox->curves()->curvesLutProcess(m_destinationPreviewData, targetData, w, h);
 
     // Adjust contrast.
 
@@ -824,8 +717,8 @@ void BWSepiaTool::finalRendering()
         // Calculate and apply the curve on image.
 
         uchar *targetData = new uchar[w*h*(sb ? 8 : 4)];
-        m_curvesWidget->curves()->curvesLutSetup(ImageHistogram::AlphaChannel);
-        m_curvesWidget->curves()->curvesLutProcess(data, targetData, w, h);
+        m_curvesBox->curves()->curvesLutSetup(ImageHistogram::AlphaChannel);
+        m_curvesBox->curves()->curvesLutProcess(data, targetData, w, h);
 
         // Adjust contrast.
 
@@ -1094,30 +987,7 @@ void BWSepiaTool::slotLoadSettings()
         m_bwTone->setCurrentRow(stream.readLine().toInt());
         m_cInput->setValue(stream.readLine().toInt());
 
-        for (int i = 0 ; i < 5 ; ++i)
-            m_curvesWidget->curves()->curvesChannelReset(i);
-
-        m_curvesWidget->curves()->setCurveType(m_curvesWidget->m_channelType, ImageCurves::CURVE_SMOOTH);
-        m_curvesWidget->reset();
-
-        for (int j = 0 ; j < 17 ; ++j)
-        {
-            QPoint disable(-1, -1);
-            QPoint p;
-            p.setX( stream.readLine().toInt() );
-            p.setY( stream.readLine().toInt() );
-
-            if (m_originalImage->sixteenBit() && p != disable)
-            {
-                p.setX(p.x()*255);
-                p.setY(p.y()*255);
-            }
-
-            m_curvesWidget->curves()->setCurvePoint(ImageHistogram::ValueChannel, j, p);
-        }
-
-        for (int i = 0 ; i < 5 ; ++i)
-           m_curvesWidget->curves()->curvesCalculateCurve(i);
+        m_curvesBox->readCurveSettings(stream);
 
         blockWidgetSignals(false);
 
@@ -1157,7 +1027,7 @@ void BWSepiaTool::slotSaveAsSettings()
 
         for (int j = 0 ; j < 17 ; ++j)
         {
-            QPoint p = m_curvesWidget->curves()->getCurvePoint(ImageHistogram::ValueChannel, j);
+            QPoint p = m_curvesBox->curves()->getCurvePoint(ImageHistogram::ValueChannel, j);
             if (m_originalImage->sixteenBit())
             {
                 p.setX(p.x()/255);
