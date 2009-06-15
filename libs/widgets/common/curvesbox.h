@@ -51,6 +51,7 @@ public:
 
     enum ColorPicker
     {
+        NoPicker = -1,
         BlackTonal = 0,
         GrayTonal,
         WhiteTonal
@@ -84,6 +85,9 @@ public:
     void setScale(int type);
     void setChannel(int channel);
 
+    int  getCurrentPicker() const;
+
+    void resetPickers();
     void resetChannel(int channel);
     void resetChannels();
     void reset();

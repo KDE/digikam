@@ -367,6 +367,19 @@ void CurvesBox::setChannel(int channel)
     d->curvesWidget->repaint();
 }
 
+int CurvesBox::getCurrentPicker() const
+{
+    return d->pickerType->checkedId();
+}
+
+void CurvesBox::resetPickers()
+{
+    d->pickBlack->setChecked(false);
+    d->pickGray->setChecked(false);
+    d->pickWhite->setChecked(false);
+    emit signalPickerChanged(NoPicker);
+}
+
 void CurvesBox::resetChannel(int channel)
 {
     d->curvesWidget->curves()->curvesChannelReset(channel);
