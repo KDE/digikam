@@ -221,48 +221,54 @@ void AdjustCurvesTool::slotSpotColorChanged(const DColor& color)
 {
     DColor sc = color;
 
-//    if ( d->pickBlack->isChecked() )
-//    {
-//       // Black tonal curves point.
-//       d->curvesBox->curves()->setCurvePoint(ImageHistogram::ValueChannel, 1,
-//                                  QPoint(qMax(qMax(sc.red(), sc.green()), sc.blue()), 42*d->histoSegments/256));
-//       d->curvesBox->curves()->setCurvePoint(ImageHistogram::RedChannel, 1, QPoint(sc.red(), 42*d->histoSegments/256));
-//       d->curvesBox->curves()->setCurvePoint(ImageHistogram::GreenChannel, 1, QPoint(sc.green(), 42*d->histoSegments/256));
-//       d->curvesBox->curves()->setCurvePoint(ImageHistogram::BlueChannel, 1, QPoint(sc.blue(), 42*d->histoSegments/256));
-//       d->pickBlack->setChecked(false);
-//    }
-//    else if ( d->pickGray->isChecked() )
-//    {
-//       // Gray tonal curves point.
-//       d->curvesBox->curves()->setCurvePoint(ImageHistogram::ValueChannel, 8,
-//                                  QPoint(qMax(qMax(sc.red(), sc.green()), sc.blue()), 128*d->histoSegments/256));
-//       d->curvesBox->curves()->setCurvePoint(ImageHistogram::RedChannel, 8, QPoint(sc.red(), 128*d->histoSegments/256));
-//       d->curvesBox->curves()->setCurvePoint(ImageHistogram::GreenChannel, 8, QPoint(sc.green(), 128*d->histoSegments/256));
-//       d->curvesBox->curves()->setCurvePoint(ImageHistogram::BlueChannel, 8, QPoint(sc.blue(), 128*d->histoSegments/256));
-//       d->pickGray->setChecked(false);
-//    }
-//    else if ( d->pickWhite->isChecked() )
-//    {
-//       // White tonal curves point.
-//       d->curvesBox->curves()->setCurvePoint(ImageHistogram::ValueChannel, 15,
-//                                  QPoint(qMax(qMax(sc.red(), sc.green()), sc.blue()), 213*d->histoSegments/256));
-//       d->curvesBox->curves()->setCurvePoint(ImageHistogram::RedChannel, 15, QPoint(sc.red(), 213*d->histoSegments/256));
-//       d->curvesBox->curves()->setCurvePoint(ImageHistogram::GreenChannel, 15, QPoint(sc.green(), 213*d->histoSegments/256));
-//       d->curvesBox->curves()->setCurvePoint(ImageHistogram::BlueChannel, 15, QPoint(sc.blue(), 213*d->histoSegments/256));
-//       d->pickWhite->setChecked(false);
-//    }
-//    else
-//    {
-//       d->curvesBox->setCurveGuide(color);
-//       return;
-//    }
-//
-//    // Calculate Red, green, blue curves.
-//
-//    for (int i = ImageHistogram::ValueChannel ; i <= ImageHistogram::BlueChannel ; ++i)
-//       d->curvesBox->curves()->curvesCalculateCurve(i);
-//
-//    d->curvesBox->repaint();
+    switch (d->curvesBox->getCurrentPicker())
+    {
+        case CurvesBox::BlackTonal:
+        {
+            // Black tonal curves point.
+            d->curvesBox->curves()->setCurvePoint(ImageHistogram::ValueChannel, 1,
+                    QPoint(qMax(qMax(sc.red(), sc.green()), sc.blue()), 42*d->histoSegments/256));
+            d->curvesBox->curves()->setCurvePoint(ImageHistogram::RedChannel, 1, QPoint(sc.red(), 42*d->histoSegments/256));
+            d->curvesBox->curves()->setCurvePoint(ImageHistogram::GreenChannel, 1, QPoint(sc.green(), 42*d->histoSegments/256));
+            d->curvesBox->curves()->setCurvePoint(ImageHistogram::BlueChannel, 1, QPoint(sc.blue(), 42*d->histoSegments/256));
+            d->curvesBox->resetPickers();
+            break;
+        }
+        case CurvesBox::GrayTonal:
+        {
+            // Gray tonal curves point.
+            d->curvesBox->curves()->setCurvePoint(ImageHistogram::ValueChannel, 8,
+                    QPoint(qMax(qMax(sc.red(), sc.green()), sc.blue()), 128*d->histoSegments/256));
+            d->curvesBox->curves()->setCurvePoint(ImageHistogram::RedChannel, 8, QPoint(sc.red(), 128*d->histoSegments/256));
+            d->curvesBox->curves()->setCurvePoint(ImageHistogram::GreenChannel, 8, QPoint(sc.green(), 128*d->histoSegments/256));
+            d->curvesBox->curves()->setCurvePoint(ImageHistogram::BlueChannel, 8, QPoint(sc.blue(), 128*d->histoSegments/256));
+            d->curvesBox->resetPickers();
+            break;
+        }
+        case CurvesBox::WhiteTonal:
+        {
+            // White tonal curves point.
+            d->curvesBox->curves()->setCurvePoint(ImageHistogram::ValueChannel, 15,
+                    QPoint(qMax(qMax(sc.red(), sc.green()), sc.blue()), 213*d->histoSegments/256));
+            d->curvesBox->curves()->setCurvePoint(ImageHistogram::RedChannel, 15, QPoint(sc.red(), 213*d->histoSegments/256));
+            d->curvesBox->curves()->setCurvePoint(ImageHistogram::GreenChannel, 15, QPoint(sc.green(), 213*d->histoSegments/256));
+            d->curvesBox->curves()->setCurvePoint(ImageHistogram::BlueChannel, 15, QPoint(sc.blue(), 213*d->histoSegments/256));
+            d->curvesBox->resetPickers();
+            break;
+        }
+        default:
+        {
+//            d->curvesBox->setCurveGuide(color);
+            return;
+        }
+    }
+
+    // Calculate Red, green, blue curves.
+
+    for (int i = ImageHistogram::ValueChannel ; i <= ImageHistogram::BlueChannel ; ++i)
+       d->curvesBox->curves()->curvesCalculateCurve(i);
+
+    d->curvesBox->repaint();
 
     // restore previous rendering mode.
     d->previewWidget->setRenderingPreviewMode(d->currentPreviewMode);
