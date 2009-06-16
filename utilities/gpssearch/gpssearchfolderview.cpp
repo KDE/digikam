@@ -299,11 +299,11 @@ void GPSSearchFolderView::slotContextMenu(Q3ListViewItem* item, const QPoint&, i
 void GPSSearchFolderView::selectItem(int id)
 {
     SAlbum *album = AlbumManager::instance()->findSAlbum(id);
-    if(!album)
+    if (!album)
         return;
 
     GPSSearchFolderItem *item = (GPSSearchFolderItem*)album->extraData(this);
-    if(item)
+    if (item)
     {
         setSelected(item, true);
         ensureItemVisible(item);

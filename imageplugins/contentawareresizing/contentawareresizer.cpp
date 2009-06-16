@@ -92,7 +92,7 @@ ContentAwareResizer::ContentAwareResizer(DImg *orgImage, uint width, uint height
     d->carver = lqr_carver_new_ext(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), 4,
                                    m_orgImage.sixteenBit() ? LQR_COLDEPTH_16I : LQR_COLDEPTH_8I);
 
-    if(d->carver)
+    if (d->carver)
     {
         // Non null carver object operations
 
@@ -118,24 +118,24 @@ ContentAwareResizer::ContentAwareResizer(DImg *orgImage, uint width, uint height
         lqr_carver_set_energy_function_builtin(d->carver, func);
 
         // Choose the resize order
-        if(resize_order == 0)
+        if (resize_order == 0)
             lqr_carver_set_resize_order(d->carver, LQR_RES_ORDER_HOR);
         else
             lqr_carver_set_resize_order(d->carver, LQR_RES_ORDER_VERT);
 
         // Set a bias if any mask
-        if(!mask.isNull())
+        if (!mask.isNull())
             buildBias(mask);
 
         // Set skin tone mask if option is activated
-        if(preserve_skin_tones)
+        if (preserve_skin_tones)
             buildSkinToneBias();
     }
 }
 
 ContentAwareResizer::~ContentAwareResizer()
 {
-    if(d->carver)
+    if (d->carver)
         lqr_carver_destroy(d->carver);
 
     delete d;
@@ -143,7 +143,7 @@ ContentAwareResizer::~ContentAwareResizer()
 
 void ContentAwareResizer::filterImage()
 {
-    if(!d->carver) return;
+    if (!d->carver) return;
 
     uint  x   = 0;
     uint  y   = 0;
@@ -260,7 +260,7 @@ void ContentAwareResizer::buildBias(const QImage& mask)
 
 LqrRetVal s_carverProgressInit(const gchar* /*init_message*/)
 {
-    if(!s_stage)
+    if (!s_stage)
         s_resiser->progressCallback(0);
     else
         s_resiser->progressCallback(50);
@@ -274,7 +274,7 @@ LqrRetVal s_carverProgressUpdate(gdouble percentage)
 
     if (!s_stage)
     {
-        if(!s_wResize || !s_hResize)
+        if (!s_wResize || !s_hResize)
             progress = (int)(percentage*100.0);
         else
             progress = (int)(percentage*50.0);
@@ -290,9 +290,9 @@ LqrRetVal s_carverProgressUpdate(gdouble percentage)
 
 LqrRetVal s_carverProgressEnd(const gchar* /*end_message*/)
 {
-    if(!s_stage)
+    if (!s_stage)
     {
-        if(!s_wResize || !s_hResize)
+        if (!s_wResize || !s_hResize)
             s_resiser->progressCallback(100);
         else
             s_resiser->progressCallback(50);

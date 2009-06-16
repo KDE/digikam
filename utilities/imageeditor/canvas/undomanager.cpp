@@ -151,12 +151,12 @@ void UndoManager::undo()
 
 void UndoManager::redo()
 {
-    if(d->redoActions.isEmpty())
+    if (d->redoActions.isEmpty())
         return;
 
     UndoAction *action = d->redoActions.back();
 
-    if(typeid(*action) == typeid(UndoActionIrreversible))
+    if (typeid(*action) == typeid(UndoActionIrreversible))
     {
         int    w, h, bytesDepth;
         uchar *data = d->undoCache->getData(d->undoActions.size() + 2, w, h, bytesDepth, false);
@@ -182,7 +182,7 @@ void UndoManager::clear(bool clearCache)
     clearRedoActions();
     setOrigin();
 
-    if(clearCache)
+    if (clearCache)
         d->undoCache->clear();
 }
 
@@ -201,7 +201,7 @@ void UndoManager::clearUndoActions()
 
 void UndoManager::clearRedoActions()
 {
-    if(!anyMoreRedo())
+    if (!anyMoreRedo())
         return;
 
     UndoAction *action;

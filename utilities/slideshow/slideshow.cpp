@@ -578,7 +578,7 @@ void SlideShow::printComments(QPainter& p, int& offset, const QString& comments)
         for (currIndex = commentsIndex ;
              currIndex < (uint)comments.length() && !breakLine ; ++currIndex )
         {
-            if( comments[currIndex] == QChar('\n') || comments[currIndex].isSpace() )
+            if ( comments[currIndex] == QChar('\n') || comments[currIndex].isSpace() )
                 breakLine = true;
         }
 

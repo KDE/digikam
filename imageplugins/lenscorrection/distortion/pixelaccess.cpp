@@ -116,7 +116,7 @@ void PixelAccess::pixelAccessDoEdge(int i, int j)
     if (lineEnd > m_imageWidth) lineEnd = m_imageWidth;
     lineWidth = lineEnd - lineStart;
 
-    if( lineStart >= lineEnd )
+    if ( lineStart >= lineEnd )
        return;
 
     rowStart = j;

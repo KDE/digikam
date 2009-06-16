@@ -403,7 +403,7 @@ void AdjustCurvesTool::slotLoadSettings()
     loadCurvesFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
                                              QString( "*" ), kapp->activeWindow(),
                                              QString( i18n("Select Gimp Curves File to Load")) );
-    if( loadCurvesFile.isEmpty() )
+    if ( loadCurvesFile.isEmpty() )
        return;
 
     if ( d->curvesBox->curves()->loadCurvesFromGimpCurvesFile( loadCurvesFile ) == false )
@@ -425,7 +425,7 @@ void AdjustCurvesTool::slotSaveAsSettings()
     saveCurvesFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
                                              QString( "*" ), kapp->activeWindow(),
                                              QString( i18n("Gimp Curves File to Save")) );
-    if( saveCurvesFile.isEmpty() )
+    if ( saveCurvesFile.isEmpty() )
        return;
 
     if ( d->curvesBox->curves()->saveCurvesToGimpCurvesFile( saveCurvesFile ) == false )

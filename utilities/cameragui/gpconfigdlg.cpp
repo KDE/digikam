@@ -218,7 +218,7 @@ void GPConfigDlg::appendWidget(QWidget *parent, CameraWidget *widget)
                 gp_widget_get_choice(widget, i, &widget_choice);
 
                 new QRadioButton(widget_choice, buttonGroup);
-                if(!strcmp(widget_value_string, widget_choice))
+                if (!strcmp(widget_value_string, widget_choice))
                     buttonGroup->setButton(i);
             }
             d->wmap.insert(widget, buttonGroup);
@@ -241,7 +241,7 @@ void GPConfigDlg::appendWidget(QWidget *parent, CameraWidget *widget)
                 gp_widget_get_choice(widget, i, &widget_choice);
 
                 comboBox->insertItem(widget_choice);
-                if(!strcmp(widget_value_string, widget_choice))
+                if (!strcmp(widget_value_string, widget_choice))
                     comboBox->setCurrentItem(i);
             }
             d->wmap.insert(widget, comboBox);

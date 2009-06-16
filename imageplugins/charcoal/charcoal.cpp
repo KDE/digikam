@@ -75,7 +75,7 @@ void Charcoal::filterImage(void)
     register long i=0;
     int kernelWidth = getOptimalKernelWidth(m_pencil, m_smooth);
 
-    if((int)m_orgImage.width() < kernelWidth)
+    if ((int)m_orgImage.width() < kernelWidth)
     {
         kWarning(50006) << "Image is smaller than radius!";
         return;
@@ -83,7 +83,7 @@ void Charcoal::filterImage(void)
 
     double *kernel = new double[kernelWidth*kernelWidth];
 
-    if(!kernel)
+    if (!kernel)
     {
         kWarning(50006) << "Unable to allocate memory!";
         return;
@@ -145,7 +145,7 @@ bool Charcoal::convolveImage(const unsigned int order, const double *kernel)
 
     kernelWidth = order;
 
-    if((kernelWidth % 2) == 0)
+    if ((kernelWidth % 2) == 0)
     {
         kWarning(50006) << "Kernel width must be an odd number!";
         return(false);
@@ -153,7 +153,7 @@ bool Charcoal::convolveImage(const unsigned int order, const double *kernel)
 
     double *normal_kernel = new double[kernelWidth*kernelWidth];
 
-    if(!normal_kernel)
+    if (!normal_kernel)
     {
         kWarning(50006) << "Unable to allocate memory!";
         return(false);
@@ -162,7 +162,7 @@ bool Charcoal::convolveImage(const unsigned int order, const double *kernel)
     for(i=0 ; i < (kernelWidth*kernelWidth) ; ++i)
         normalize += kernel[i];
 
-    if(fabs(normalize) <= Epsilon)
+    if (fabs(normalize) <= Epsilon)
         normalize=1.0;
 
     normalize = 1.0/normalize;
@@ -224,7 +224,7 @@ int Charcoal::getOptimalKernelWidth(double radius, double sigma)
     long          kernelWidth;
     register long u;
 
-    if(radius > 0.0)
+    if (radius > 0.0)
         return((int)(2.0*ceil(radius)+1.0));
 
     for(kernelWidth=5; ;)
@@ -237,7 +237,7 @@ int Charcoal::getOptimalKernelWidth(double radius, double sigma)
         u     = kernelWidth/2;
         value = exp(-((double) u*u)/(2.0*sigma*sigma))/(SQ2PI*sigma)/normalize;
 
-        if((long)(65535*value) <= 0)
+        if ((long)(65535*value) <= 0)
             break;
 
         kernelWidth+=2;

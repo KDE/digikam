@@ -316,11 +316,11 @@ void FuzzySearchFolderView::slotContextMenu(Q3ListViewItem* item, const QPoint&,
 void FuzzySearchFolderView::selectItem(int id)
 {
     SAlbum *album = AlbumManager::instance()->findSAlbum(id);
-    if(!album)
+    if (!album)
         return;
 
     FuzzySearchFolderItem *item = (FuzzySearchFolderItem*)album->extraData(this);
-    if(item)
+    if (item)
     {
         setSelected(item, true);
         ensureItemVisible(item);

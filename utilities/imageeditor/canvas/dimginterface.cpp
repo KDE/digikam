@@ -322,7 +322,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription
                 QByteArray fakeProfile;
 
                 // First possibility: image has no embedded profile
-                if(d->image.getICCProfil().isNull())
+                if (d->image.getICCProfil().isNull())
                 {
                     // Ask or apply?
                     if (d->cmSettings->askOrApplySetting)
@@ -471,7 +471,7 @@ void DImgInterface::exifRotate(const QString& filename)
     DMetadata metadata(filename);
     DMetadata::ImageOrientation orientation = metadata.getImageOrientation();
 
-    if(orientation != DMetadata::ORIENTATION_NORMAL)
+    if (orientation != DMetadata::ORIENTATION_NORMAL)
     {
         switch (orientation)
         {

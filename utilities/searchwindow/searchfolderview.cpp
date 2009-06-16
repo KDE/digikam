@@ -366,11 +366,11 @@ void SearchFolderView::slotDoubleClicked(Q3ListViewItem* item, const QPoint&, in
 void SearchFolderView::selectItem(int id)
 {
     SAlbum *album = AlbumManager::instance()->findSAlbum(id);
-    if(!album)
+    if (!album)
         return;
 
     SearchFolderItem *item = (SearchFolderItem*)album->extraData(this);
-    if(item)
+    if (item)
     {
         setSelected(item, true);
         ensureItemVisible(item);

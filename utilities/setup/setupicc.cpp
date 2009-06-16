@@ -735,25 +735,25 @@ void SetupICC::slotToggledWidgets(bool t)
 
 void SetupICC::slotClickedWork()
 {
-    if(!d->workProfilesKC->itemHighlighted().isEmpty())
+    if (!d->workProfilesKC->itemHighlighted().isEmpty())
        profileInfo(*(d->workICCPath.find(d->workProfilesKC->itemHighlighted())));
 }
 
 void SetupICC::slotClickedIn()
 {
-    if(!d->inProfilesKC->itemHighlighted().isEmpty())
+    if (!d->inProfilesKC->itemHighlighted().isEmpty())
        profileInfo(*(d->inICCPath.find(d->inProfilesKC->itemHighlighted())));
 }
 
 void SetupICC::slotClickedMonitor()
 {
-    if(!d->monitorProfilesKC->itemHighlighted().isEmpty())
+    if (!d->monitorProfilesKC->itemHighlighted().isEmpty())
        profileInfo(*(d->monitorICCPath.find(d->monitorProfilesKC->itemHighlighted())));
 }
 
 void SetupICC::slotClickedProof()
 {
-    if(!d->proofProfilesKC->itemHighlighted().isEmpty())
+    if (!d->proofProfilesKC->itemHighlighted().isEmpty())
        profileInfo(*(d->proofICCPath.find(d->proofProfilesKC->itemHighlighted())));
 }
 

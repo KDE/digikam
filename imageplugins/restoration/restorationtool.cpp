@@ -333,7 +333,7 @@ void RestorationTool::slotLoadSettings()
     KUrl loadRestorationFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
                                             QString( "*" ), kapp->activeWindow(),
                                             QString( i18n("Photograph Restoration Settings File to Load")) );
-    if( loadRestorationFile.isEmpty() )
+    if ( loadRestorationFile.isEmpty() )
        return;
 
     QFile file(loadRestorationFile.path());
@@ -366,7 +366,7 @@ void RestorationTool::slotSaveAsSettings()
     KUrl saveRestorationFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
                                             QString( "*" ), kapp->activeWindow(),
                                             QString( i18n("Photograph Restoration Settings File to Save")) );
-    if( saveRestorationFile.isEmpty() )
+    if ( saveRestorationFile.isEmpty() )
        return;
 
     QFile file(saveRestorationFile.path());

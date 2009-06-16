@@ -146,7 +146,7 @@ uchar* UndoCache::getData(int level, int& w, int& h, int& bytesDepth, bool del)
 
     file.close();
 
-    if(del)
+    if (del)
     {
         ::unlink(QFile::encodeName(cacheFile));
         d->cacheFilenames.removeAll(cacheFile);

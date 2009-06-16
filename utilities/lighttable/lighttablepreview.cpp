@@ -650,7 +650,7 @@ void LightTablePreview::contentsDropEvent(QDropEvent *e)
             e->accept();
             return;
         }
-        else if(DTagDrag::canDecode(e->mimeData()))
+        else if (DTagDrag::canDecode(e->mimeData()))
         {
             int tagID;
             if (!DTagDrag::decode(e->mimeData(), tagID))

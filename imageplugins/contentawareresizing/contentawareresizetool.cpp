@@ -528,14 +528,14 @@ void ContentAwareResizeTool::slotValuesChanged()
 
     QString s(sender()->objectName());
 
-    if(s == "wInput")
+    if (s == "wInput")
     {
         double val  = d->wInput->value();
         double pval = val / (double)(d->orgWidth) * 100.0;
 
         d->wpInput->setValue(pval);
 
-        if(d->preserveRatioBox->isChecked())
+        if (d->preserveRatioBox->isChecked())
         {
             int h = (int)(pval * d->orgHeight / 100);
 
@@ -543,14 +543,14 @@ void ContentAwareResizeTool::slotValuesChanged()
             d->hInput->setValue(h);
         }
     }
-    else if(s == "hInput")
+    else if (s == "hInput")
     {
         double val  = d->hInput->value();
         double pval = val / (double)(d->orgHeight) * 100.0;
 
         d->hpInput->setValue(pval);
 
-        if(d->preserveRatioBox->isChecked())
+        if (d->preserveRatioBox->isChecked())
         {
             int w = (int)(pval * d->orgWidth / 100);
 
@@ -558,14 +558,14 @@ void ContentAwareResizeTool::slotValuesChanged()
             d->wInput->setValue(w);
         }
     }
-    else if(s == "wpInput")
+    else if (s == "wpInput")
     {
         double val = d->wpInput->value();
         int w      = (int)(val * d->orgWidth / 100);
 
         d->wInput->setValue(w);
 
-        if(d->preserveRatioBox->isChecked())
+        if (d->preserveRatioBox->isChecked())
         {
             int h = (int)(val * d->orgHeight / 100);
 
@@ -573,14 +573,14 @@ void ContentAwareResizeTool::slotValuesChanged()
             d->hInput->setValue(h);
         }
     }
-    else if(s == "hpInput")
+    else if (s == "hpInput")
     {
         double val = d->hpInput->value();
         int h      = (int)(val * d->orgHeight / 100);
 
         d->hInput->setValue(h);
 
-        if(d->preserveRatioBox->isChecked())
+        if (d->preserveRatioBox->isChecked())
         {
             int w = (int)(val * d->orgWidth / 100);
 
@@ -662,7 +662,7 @@ void ContentAwareResizeTool::prepareEffect()
     int new_w         = (int)(w*d->wpInput->value()/100.0);
     int new_h         = (int)(h*d->hpInput->value()/100.0);
 
-    if(d->mixedRescaleInput->value()<100.0) // mixed rescale
+    if (d->mixedRescaleInput->value()<100.0) // mixed rescale
     {
         double stdRescaleP = (100.0 - d->mixedRescaleInput->value()) / 100.0;
         int diff_w         = (int)(stdRescaleP * (w - new_w));
@@ -672,7 +672,7 @@ void ContentAwareResizeTool::prepareEffect()
     }
 
     QImage mask;
-    if(d->weightMaskBox->isChecked())
+    if (d->weightMaskBox->isChecked())
         mask = d->previewWidget->getMask();
 
     contentAwareResizeCore( &imTemp, new_w, new_h, mask );
@@ -689,7 +689,7 @@ void ContentAwareResizeTool::prepareFinal()
     ImageIface iface(0, 0);
     QImage mask;
 
-    if(d->mixedRescaleInput->value() < 100.0) // mixed rescale
+    if (d->mixedRescaleInput->value() < 100.0) // mixed rescale
     {
         double stdRescaleP = (100.0 - d->mixedRescaleInput->value()) / 100.0;
         int diff_w         = (int)(stdRescaleP * (iface.originalWidth()  - d->wInput->value()));
@@ -698,7 +698,7 @@ void ContentAwareResizeTool::prepareFinal()
                                                                  iface.originalHeight() - diff_h,
                                                                  Qt::IgnoreAspectRatio);
 
-        if(d->weightMaskBox->isChecked())
+        if (d->weightMaskBox->isChecked())
         {
             mask = d->previewWidget->getMask().scaled(iface.originalWidth()  - diff_w,
                                                       iface.originalHeight() - diff_h);
@@ -707,7 +707,7 @@ void ContentAwareResizeTool::prepareFinal()
     }
     else
     {
-        if(d->weightMaskBox->isChecked())
+        if (d->weightMaskBox->isChecked())
             mask = d->previewWidget->getMask().scaled(iface.originalWidth(), iface.originalHeight());
 
         contentAwareResizeCore( iface.getOriginalImg(), d->wInput->value(), d->hInput->value(), mask);

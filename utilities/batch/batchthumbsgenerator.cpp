@@ -139,7 +139,7 @@ void BatchThumbsGenerator::slotRebuildThumbs()
 
     setMaximum(d->allPicturesPath.count());
 
-    if(d->allPicturesPath.isEmpty())
+    if (d->allPicturesPath.isEmpty())
     {
        slotCancel();
        return;

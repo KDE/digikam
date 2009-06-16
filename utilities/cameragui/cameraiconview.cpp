@@ -700,7 +700,7 @@ void CameraIconView::slotRightButtonClicked(const QPoint&)
         return;
 
     const QMimeData *data = kapp->clipboard()->mimeData(QClipboard::Clipboard);
-    if(!data || !KUrl::List::canDecode(data))
+    if (!data || !KUrl::List::canDecode(data))
         return;
 
     KUrl::List srcURLs = KUrl::List::fromMimeData(data);

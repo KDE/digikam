@@ -244,7 +244,7 @@ void AssignedListView::slotMoveCurrentToolUp()
             if (preIndex != -1)
             {
                 AssignedListViewItem* iabove = findTool(preIndex);
-                if(iabove)
+                if (iabove)
                 {
                     AssignedListViewItem* nitem = moveTool(iabove, item->toolSet());
                     setCurrentItem(nitem);
@@ -275,7 +275,7 @@ void AssignedListView::slotMoveCurrentToolDown()
     if (item)
     {
         AssignedListViewItem* ibelow = dynamic_cast<AssignedListViewItem*>(itemBelow(item));
-        if(ibelow)
+        if (ibelow)
         {
             AssignedListViewItem* nitem = moveTool(ibelow, item->toolSet());
             setCurrentItem(nitem);

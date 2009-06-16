@@ -805,7 +805,7 @@ void EditorWindow::readStandardSettings()
     KConfigGroup group        = config->group("ImageViewer Settings");
 
     // Restore Canvas layout
-    if(group.hasKey("Vertical Splitter Sizes") && m_vSplitter)
+    if (group.hasKey("Vertical Splitter Sizes") && m_vSplitter)
     {
         QByteArray state;
         state = group.readEntry("Vertical Splitter State", state);

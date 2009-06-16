@@ -95,7 +95,7 @@ void Shear::filterImage(void)
 
     // if horizontal angle is greater than zero...
     // else, initial distance is equal to maximum distance ( in negative form )
-    if( m_hAngle > 0.0 )
+    if ( m_hAngle > 0.0 )
     {
         // initial distance is zero and scale is negative ( to decrease )
         dx = 0;
@@ -108,7 +108,7 @@ void Shear::filterImage(void)
 
     // if vertical angle is greater than zero...
     // else, initial distance is equal to maximum distance ( in negative form )
-    if( m_vAngle > 0.0 )
+    if ( m_vAngle > 0.0 )
     {
         // initial distance is zero and scale is negative ( to decrease )
         dy = 0;
@@ -142,7 +142,7 @@ void Shear::filterImage(void)
             // if is inside the source image
             if (isInside (nWidth, nHeight, ROUND( nx ), ROUND( ny )))
             {
-                if( m_antiAlias )
+                if ( m_antiAlias )
                 {
                     if (!sixteenBit)
                         filters.pixelAntiAliasing(pBits, nWidth, nHeight, nx, ny,

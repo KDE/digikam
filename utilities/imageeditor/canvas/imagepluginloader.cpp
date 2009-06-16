@@ -170,7 +170,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
         KService::Ptr service = d->pluginServiceMap.value(name);
         ImagePlugin *plugin;
 
-        if( pluginIsLoaded(name) )
+        if ( pluginIsLoaded(name) )
             continue;
         else
         {
@@ -211,7 +211,7 @@ ImagePlugin* ImagePluginLoader::pluginInstance(const QString& libraryName)
 {
     foreach (const KService::Ptr& service, d->pluginServiceMap)
     {
-        if(service->library() == libraryName)
+        if (service->library() == libraryName)
         {
             return ( pluginIsLoaded(service->name()) );
         }
@@ -229,9 +229,9 @@ bool ImagePluginLoader::pluginLibraryIsLoaded(const QString& libraryName)
 {
     foreach (const KService::Ptr& service, d->pluginServiceMap)
     {
-        if(service->library() == libraryName)
+        if (service->library() == libraryName)
         {
-            if( pluginIsLoaded(service->name()) )
+            if ( pluginIsLoaded(service->name()) )
                 return true;
         }
     }

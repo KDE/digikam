@@ -284,7 +284,7 @@ void PerspectiveWidget::updatePixmap()
 
     m_pixmap->fill(palette().color(QPalette::Background));
 
-    if(m_inverseTransformation)
+    if (m_inverseTransformation)
     {
         m_transformedCenter = buildPerspective(QPoint(0, 0), QPoint(m_w, m_h),
                                                m_topLeftPoint, m_topRightPoint,
@@ -363,7 +363,7 @@ void PerspectiveWidget::updatePixmap()
 
     // Drawing vertical and horizontal guide lines.
 
-    if(!m_inverseTransformation)
+    if (!m_inverseTransformation)
     {
       int xspot = m_spot.x() + m_rect.x();
       int yspot = m_spot.y() + m_rect.y();
@@ -478,9 +478,9 @@ QPoint PerspectiveWidget::buildPerspective(QPoint orignTopLeft, QPoint orignBott
     transform.scale    (scalex, scaley);
     transform.multiply (matrix);
 
-    if(orgImage && destImage)
+    if (orgImage && destImage)
     {
-        if(m_inverseTransformation)
+        if (m_inverseTransformation)
         {
             Matrix inverseTransform = transform;
             inverseTransform.invert();

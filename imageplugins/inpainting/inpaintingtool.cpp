@@ -424,7 +424,7 @@ void InPaintingTool::slotLoadSettings()
     KUrl loadInpaintingFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
                                             QString( "*" ), kapp->activeWindow(),
                                             QString( i18n("Photograph In-Painting Settings File to Load")) );
-    if( loadInpaintingFile.isEmpty() )
+    if ( loadInpaintingFile.isEmpty() )
        return;
 
     QFile file(loadInpaintingFile.path());
@@ -455,7 +455,7 @@ void InPaintingTool::slotSaveAsSettings()
     KUrl saveRestorationFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
                                             QString( "*" ), kapp->activeWindow(),
                                             QString( i18n("Photograph In-Painting Settings File to Save")) );
-    if( saveRestorationFile.isEmpty() )
+    if ( saveRestorationFile.isEmpty() )
        return;
 
     QFile file(saveRestorationFile.path());

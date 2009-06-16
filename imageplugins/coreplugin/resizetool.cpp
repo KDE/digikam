@@ -395,14 +395,14 @@ void ResizeTool::slotValuesChanged()
 
     QString s(sender()->objectName());
 
-    if(s == "wInput")
+    if (s == "wInput")
     {
         double val  = d->wInput->value();
         double pval = val / (double)(d->orgWidth) * 100.0;
 
         d->wpInput->setValue(pval);
 
-        if(d->preserveRatioBox->isChecked())
+        if (d->preserveRatioBox->isChecked())
         {
             int h = (int)(pval * d->orgHeight / 100);
 
@@ -410,14 +410,14 @@ void ResizeTool::slotValuesChanged()
             d->hInput->setValue(h);
         }
     }
-    else if(s == "hInput")
+    else if (s == "hInput")
     {
         double val  = d->hInput->value();
         double pval = val / (double)(d->orgHeight) * 100.0;
 
         d->hpInput->setValue(pval);
 
-        if(d->preserveRatioBox->isChecked())
+        if (d->preserveRatioBox->isChecked())
         {
             int w = (int)(pval * d->orgWidth / 100);
 
@@ -425,14 +425,14 @@ void ResizeTool::slotValuesChanged()
             d->wInput->setValue(w);
         }
     }
-    else if(s == "wpInput")
+    else if (s == "wpInput")
     {
         double val = d->wpInput->value();
         int w      = (int)(val * d->orgWidth / 100);
 
         d->wInput->setValue(w);
 
-        if(d->preserveRatioBox->isChecked())
+        if (d->preserveRatioBox->isChecked())
         {
             int h = (int)(val * d->orgHeight / 100);
 
@@ -440,14 +440,14 @@ void ResizeTool::slotValuesChanged()
             d->hInput->setValue(h);
         }
     }
-    else if(s == "hpInput")
+    else if (s == "hpInput")
     {
         double val = d->hpInput->value();
         int h = (int)(val * d->orgHeight / 100);
 
         d->hInput->setValue(h);
 
-        if(d->preserveRatioBox->isChecked())
+        if (d->preserveRatioBox->isChecked())
         {
             int w = (int)(val * d->orgWidth / 100);
 
@@ -606,7 +606,7 @@ void ResizeTool::slotLoadSettings()
     KUrl loadBlowupFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
                                        QString( "*" ), kapp->activeWindow(),
                                        QString( i18n("Photograph Resizing Settings File to Load")) );
-    if( loadBlowupFile.isEmpty() )
+    if ( loadBlowupFile.isEmpty() )
        return;
 
     QFile file(loadBlowupFile.path());
@@ -636,7 +636,7 @@ void ResizeTool::slotSaveAsSettings()
     KUrl saveBlowupFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
                                        QString( "*" ), kapp->activeWindow(),
                                        QString( i18n("Photograph Resizing Settings File to Save")) );
-    if( saveBlowupFile.isEmpty() )
+    if ( saveBlowupFile.isEmpty() )
        return;
 
     QFile file(saveBlowupFile.path());

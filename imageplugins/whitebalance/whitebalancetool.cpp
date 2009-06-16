@@ -776,7 +776,7 @@ void WhiteBalanceTool::slotSaveAsSettings()
     KUrl saveWhiteBalanceFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
                                              QString( "*" ), kapp->activeWindow(),
                                              QString( i18n("White Color Balance Settings File to Save")));
-    if( saveWhiteBalanceFile.isEmpty() )
+    if ( saveWhiteBalanceFile.isEmpty() )
        return;
 
     QFile file(saveWhiteBalanceFile.path());

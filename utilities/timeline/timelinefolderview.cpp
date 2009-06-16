@@ -278,11 +278,11 @@ void TimeLineFolderView::slotContextMenu(Q3ListViewItem* item, const QPoint&, in
 void TimeLineFolderView::selectItem(int id)
 {
     SAlbum *album = AlbumManager::instance()->findSAlbum(id);
-    if(!album)
+    if (!album)
         return;
 
     TimeLineFolderItem *item = (TimeLineFolderItem*)album->extraData(this);
-    if(item)
+    if (item)
     {
         setSelected(item, true);
         ensureItemVisible(item);

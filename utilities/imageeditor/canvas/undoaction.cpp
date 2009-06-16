@@ -111,9 +111,9 @@ void UndoActionRotate::execute()
 UndoActionFlip::UndoActionFlip(DImgInterface* iface, UndoActionFlip::Direction dir)
               : UndoAction(iface), m_dir(dir)
 {
-    if(m_dir == Horizontal)
+    if (m_dir == Horizontal)
         m_title = i18n("Flip Horizontal");
-    else if(m_dir == Vertical)
+    else if (m_dir == Vertical)
         m_title = i18n("Flip Vertical");
 }
 

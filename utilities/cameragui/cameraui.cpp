@@ -909,7 +909,7 @@ void CameraUI::finishDialog()
 
     deleteLater();
 
-    if(!d->lastDestURL.isEmpty())
+    if (!d->lastDestURL.isEmpty())
         emit signalLastDestination(d->lastDestURL);
 
     saveSettings();

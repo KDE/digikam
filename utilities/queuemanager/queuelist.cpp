@@ -432,7 +432,7 @@ void QueueListView::dropEvent(QDropEvent *e)
             e->acceptProposedAction();
         }
     }
-    else if(DTagDrag::canDecode(e->mimeData()))
+    else if (DTagDrag::canDecode(e->mimeData()))
     {
         int tagID;
         if (!DTagDrag::decode(e->mimeData(), tagID))
@@ -498,7 +498,7 @@ void QueueListView::mouseMoveEvent(QMouseEvent* e)
     {
         QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(itemAt(e->pos()));
 
-        if(d->showTips)
+        if (d->showTips)
         {
             if (!isActiveWindow())
             {
@@ -518,7 +518,7 @@ void QueueListView::mouseMoveEvent(QMouseEvent* e)
                 }
             }
 
-            if(item == d->toolTipItem && !acceptToolTip(e->pos()))
+            if (item == d->toolTipItem && !acceptToolTip(e->pos()))
             {
                 hideToolTip();
             }

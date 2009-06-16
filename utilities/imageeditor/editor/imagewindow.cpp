@@ -314,7 +314,7 @@ void ImageWindow::setupUserArea()
 
     QWidget* widget = new QWidget(this);
 
-    if(!group.readEntry("HorizontalThumbbar", false)) // Vertical thumbbar layout
+    if (!group.readEntry("HorizontalThumbbar", false)) // Vertical thumbbar layout
     {
         QHBoxLayout *hlay = new QHBoxLayout(widget);
         m_splitter        = new SidebarSplitter(widget);
@@ -592,7 +592,7 @@ void ImageWindow::setViewToURL(const KUrl& url)
 
 void ImageWindow::slotForward()
 {
-    if(!promptUserSave(d->urlCurrent))
+    if (!promptUserSave(d->urlCurrent))
         return;
 
     int index = d->urlList.indexOf(d->urlCurrent);
@@ -612,7 +612,7 @@ void ImageWindow::slotForward()
 
 void ImageWindow::slotBackward()
 {
-    if(!promptUserSave(d->urlCurrent))
+    if (!promptUserSave(d->urlCurrent))
         return;
 
     int index = d->urlList.indexOf(d->urlCurrent);
@@ -633,7 +633,7 @@ void ImageWindow::slotBackward()
 
 void ImageWindow::slotFirst()
 {
-    if(!promptUserSave(d->urlCurrent))
+    if (!promptUserSave(d->urlCurrent))
         return;
 
     d->urlCurrent = d->urlList.first();
@@ -644,7 +644,7 @@ void ImageWindow::slotFirst()
 
 void ImageWindow::slotLast()
 {
-    if(!promptUserSave(d->urlCurrent))
+    if (!promptUserSave(d->urlCurrent))
         return;
 
     d->urlCurrent = d->urlList.last();
@@ -962,7 +962,7 @@ void ImageWindow::saveAsIsComplete()
             LoadingCacheInterface::putImage(m_savingContext->destinationURL.path(), m_canvas->currentImage());
 
         // notify main app that file changed or a file is added
-        if(m_savingContext->destinationExisted)
+        if (m_savingContext->destinationExisted)
             emit signalFileModified(m_savingContext->destinationURL);
         else
             emit signalFileAdded(m_savingContext->destinationURL);
@@ -1390,7 +1390,7 @@ void ImageWindow::dropEvent(QDropEvent *e)
                        i18n("Album \"%1\"",ATitle), true);
         e->accept();
     }
-    else if(DTagDrag::canDecode(e->mimeData()))
+    else if (DTagDrag::canDecode(e->mimeData()))
     {
         int tagID;
         if (!DTagDrag::decode(e->mimeData(), tagID))
@@ -1429,7 +1429,7 @@ void ImageWindow::dropEvent(QDropEvent *e)
 
 void ImageWindow::slotRevert()
 {
-    if(!promptUserSave(d->urlCurrent))
+    if (!promptUserSave(d->urlCurrent))
         return;
 
     m_canvas->slotRestore();

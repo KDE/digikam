@@ -863,13 +863,13 @@ void FuzzySearchView::slotCheckNameEditSketchConditions()
 
 void FuzzySearchView::dragEnterEvent(QDragEnterEvent *e)
 {
-    if(DItemDrag::canDecode(e->mimeData()))
+    if (DItemDrag::canDecode(e->mimeData()))
         e->acceptProposedAction();
 }
 
 void FuzzySearchView::dropEvent(QDropEvent *e)
 {
-    if(DItemDrag::canDecode(e->mimeData()))
+    if (DItemDrag::canDecode(e->mimeData()))
     {
         KUrl::List urls;
         KUrl::List kioURLs;

@@ -642,7 +642,7 @@ void LightTableBar::contentsDropEvent(QDropEvent *e)
         emit signalDroppedItems(imageInfoList);
         e->accept();
     }
-    else if(DTagDrag::canDecode(e->mimeData()))
+    else if (DTagDrag::canDecode(e->mimeData()))
     {
         int tagID;
         if (!DTagDrag::decode(e->mimeData(), tagID))

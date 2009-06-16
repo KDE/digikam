@@ -963,7 +963,7 @@ void BWSepiaTool::slotLoadSettings()
     KUrl loadFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
                                             QString( "*" ), kapp->activeWindow(),
                                             QString( i18n("Black & White Settings File to Load")) );
-    if( loadFile.isEmpty() )
+    if ( loadFile.isEmpty() )
        return;
 
     QFile file(loadFile.path());
@@ -1035,7 +1035,7 @@ void BWSepiaTool::slotSaveAsSettings()
     KUrl saveFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
                                             QString( "*" ), kapp->activeWindow(),
                                             QString( i18n("Black & White Settings File to Save")) );
-    if( saveFile.isEmpty() )
+    if ( saveFile.isEmpty() )
        return;
 
     QFile file(saveFile.path());

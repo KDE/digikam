@@ -117,7 +117,7 @@ void CameraIconItem::setDownloaded(int status)
     d->itemInfo->downloaded = status;
     d->progressCount        = 0;
 
-    if(d->itemInfo->downloaded == GPItemInfo::DownloadStarted)
+    if (d->itemInfo->downloaded == GPItemInfo::DownloadStarted)
         d->progressTimer->start(500);
     else
         d->progressTimer->stop();

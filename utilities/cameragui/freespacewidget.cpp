@@ -372,7 +372,7 @@ void FreeSpaceWidget::slotTimeout()
     foreach (const QString& path, d->paths)
     {
         KDiskFreeSpaceInfo info = KDiskFreeSpaceInfo::freeSpaceInfo(path);
-        if(info.isValid())
+        if (info.isValid())
         {
             addInformation((unsigned long)(info.size()/1024.0), 
                            (unsigned long)(info.used()/1024.0), 

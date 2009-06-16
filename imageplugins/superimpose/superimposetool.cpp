@@ -267,7 +267,7 @@ void SuperImposeTool::slotRootTemplateDirChanged(void)
     KUrl url = KFileDialog::getExistingDirectory(d->templatesRootUrl.path(), kapp->activeWindow(),
                                                  i18n("Select Template Root Directory to Use"));
 
-    if( url.isValid() )
+    if ( url.isValid() )
     {
         d->dirSelect->setRootPath(url);
         d->templatesRootUrl = url;

@@ -1074,7 +1074,7 @@ void ICCProofTool::slotInICCInfo()
     {
         getICCInfo(d->embeddedICC);
     }
-    else if(useBuiltinProfile())
+    else if (useBuiltinProfile())
     {
         QString message = i18n("<p>You have selected the \"Default built-in sRGB profile\"</p>");
         message.append(i18n("<p>This profile is built on the fly, so there is no relevant information "
@@ -1218,7 +1218,7 @@ void ICCProofTool::slotLoadSettings()
     KUrl loadColorManagementFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
                                                 QString( "*" ), kapp->activeWindow(),
                                                 QString( i18n("Color Management Settings File to Load")) );
-    if( loadColorManagementFile.isEmpty() )
+    if ( loadColorManagementFile.isEmpty() )
        return;
 
     QFile file(loadColorManagementFile.path());
@@ -1295,7 +1295,7 @@ void ICCProofTool::slotSaveAsSettings()
     KUrl saveColorManagementFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
                                                 QString( "*" ), kapp->activeWindow(),
                                                 QString( i18n("Color Management Settings File to Save")) );
-    if( saveColorManagementFile.isEmpty() )
+    if ( saveColorManagementFile.isEmpty() )
        return;
 
     QFile file(saveColorManagementFile.path());

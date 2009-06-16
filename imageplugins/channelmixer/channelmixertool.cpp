@@ -604,7 +604,7 @@ void ChannelMixerTool::slotLoadSettings()
     loadGainsFileUrl = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
                                             QString( "*" ), kapp->activeWindow(),
                                             QString( i18n("Select Gimp Gains Mixer File to Load")) );
-    if( loadGainsFileUrl.isEmpty() )
+    if ( loadGainsFileUrl.isEmpty() )
        return;
 
     fp = fopen(QFile::encodeName(loadGainsFileUrl.path()), "r");
@@ -691,7 +691,7 @@ void ChannelMixerTool::slotSaveAsSettings()
     saveGainsFileUrl = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
                                                QString( "*" ), kapp->activeWindow(),
                                                QString( i18n("Gimp Gains Mixer File to Save")) );
-    if( saveGainsFileUrl.isEmpty() )
+    if ( saveGainsFileUrl.isEmpty() )
        return;
 
     fp = fopen(QFile::encodeName(saveGainsFileUrl.path()), "w");
