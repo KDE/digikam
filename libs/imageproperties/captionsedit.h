@@ -38,16 +38,16 @@ using namespace KExiv2Iface;
 namespace Digikam
 {
 
-class captionsEditPriv;
+class CaptionsEditPriv;
 
-class captionsEdit : public QWidget
+class CaptionsEdit : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    captionsEdit(QWidget* parent);
-    ~captionsEdit();
+    CaptionsEdit(QWidget* parent);
+    ~CaptionsEdit();
 
     void reset();
 
@@ -73,7 +73,7 @@ private:
 
 private:
 
-    captionsEditPriv* const d;
+    CaptionsEditPriv* const d;
 };
 
 }  // namespace Digikam
