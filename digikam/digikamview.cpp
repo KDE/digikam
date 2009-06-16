@@ -449,7 +449,10 @@ void DigikamView::setupConnections()
     connect(d->folderView, SIGNAL(signalTextFolderFilterMatch(bool)),
             d->folderSearchBar, SLOT(slotSearchResult(bool)));
 
-    connect(d->folderView, SIGNAL(signalFindDuplicates(Album*)),
+    connect(d->folderView, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
+            this, SLOT(slotNewDuplicatesSearch(Album*)));
+
+    connect(d->tagFolderView, SIGNAL(signalFindDuplicatesInTag(Album*)),
             this, SLOT(slotNewDuplicatesSearch(Album*)));
 
     connect(d->tagFolderView, SIGNAL(signalTextTagFilterMatch(bool)),

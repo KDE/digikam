@@ -601,7 +601,7 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
         }
         else if (choice == findDuplAction)
         {
-            emit signalFindDuplicates(album);
+            emit signalFindDuplicatesInAlbum(album);
         }
     }
 }

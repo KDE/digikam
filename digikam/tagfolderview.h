@@ -68,6 +68,7 @@ Q_SIGNALS:
     void signalProgressBarMode(int, const QString&);
     void signalProgressValue(int);
     void signalTextTagFilterMatch(bool);
+    void signalFindDuplicatesInTag(Album*);
 
 public Q_SLOTS:
 

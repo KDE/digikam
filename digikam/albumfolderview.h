@@ -106,7 +106,7 @@ Q_SIGNALS:
 
     void signalAlbumModified();
     void signalTextFolderFilterMatch(bool);
-    void signalFindDuplicates(Album*);
+    void signalFindDuplicatesInAlbum(Album*);
 
 public Q_SLOTS:
 

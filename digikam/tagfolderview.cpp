@@ -544,6 +544,8 @@ void TagFolderView::slotContextMenu(Q3ListViewItem *item, const QPoint &, int)
     // temporary actions --------------------------------------
 
     QAction *resetIconAction = new QAction(SmallIcon("view-refresh"), i18n("Reset Tag Icon"), this);
+    QAction *findDuplAction  = new QAction(SmallIcon("tools-wizard"), i18n("Find Duplicates..."), this);
+
     if (!tag || !tag->parent())
         resetIconAction->setEnabled(false);
     // --------------------------------------------------------
@@ -555,6 +557,7 @@ void TagFolderView::slotContextMenu(Q3ListViewItem *item, const QPoint &, int)
     cmhelper.addAction("tag_new");
     cmhelper.addCreateTagFromAddressbookMenu();
     cmhelper.addAction(resetIconAction);
+    cmhelper.addAction(findDuplAction);
     popmenu.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAction("tag_delete");
@@ -574,6 +577,11 @@ void TagFolderView::slotContextMenu(Q3ListViewItem *item, const QPoint &, int)
         {
             QString errMsg;
             d->albumMan->updateTAlbumIcon(tag->album(), QString("tag"), 0, errMsg);
+        }
+        else if (choice == findDuplAction)
+        {
+            TAlbum* album = tag->album();
+            emit signalFindDuplicatesInTag(album);
         }
     }
 }
