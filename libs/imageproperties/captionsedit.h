@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-06-15
- * Description : multi-languages comments editor
+ * Description : multi-languages captions editor
  *
  * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef COMMENTSEDIT_H
-#define COMMENTSEDIT_H
+#ifndef CAPTIONSEDIT_H
+#define CAPTIONSEDIT_H
 
 // Qt includes
 
@@ -38,16 +38,16 @@ using namespace KExiv2Iface;
 namespace Digikam
 {
 
-class CommentsEditPriv;
+class captionsEditPriv;
 
-class CommentsEdit : public QWidget
+class captionsEdit : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    CommentsEdit(QWidget* parent);
-    ~CommentsEdit();
+    captionsEdit(QWidget* parent);
+    ~captionsEdit();
 
     void reset();
 
@@ -73,9 +73,9 @@ private:
 
 private:
 
-    CommentsEditPriv* const d;
+    captionsEditPriv* const d;
 };
 
 }  // namespace Digikam
 
-#endif // COMMENTSEDIT_H
+#endif // CAPTIONSEDIT_H

@@ -58,7 +58,7 @@
 
 // Local includes
 
-#include "commentsedit.h"
+#include "captionsedit.h"
 #include "dmetadata.h"
 #include "kdatetimeedit.h"
 #include "albumiconitem.h"
@@ -96,7 +96,7 @@ public:
         modified                   = false;
         ignoreImageAttributesWatch = false;
         recentTagsBtn              = 0;
-        commentsEdit               = 0;
+        captionsEdit               = 0;
         tagsSearchBar              = 0;
         dateTimeEdit               = 0;
         tagsView                   = 0;
@@ -128,7 +128,7 @@ public:
 
     QWidget                       *lastSelectedWidget;
 
-    CommentsEdit                  *commentsEdit;
+    CaptionsEdit                  *captionsEdit;
 
     KDateTimeEdit                 *dateTimeEdit;
 
@@ -162,8 +162,8 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
 
     // Captions/Date/Rating view -----------------------------------
 
-    d->commentsEdit = new CommentsEdit(settingsArea);
-    d->commentsEdit->setFixedHeight(100);
+    d->captionsEdit = new CaptionsEdit(settingsArea);
+    d->captionsEdit->setFixedHeight(100);
 
     KHBox *dateBox  = new KHBox(settingsArea);
     new QLabel(i18n("Date:"), dateBox);
@@ -183,9 +183,9 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
                                      "'/' can be used here to create a hierarchy of tags. "
                                      "',' can be used here to create more than one hierarchy at the same time."));
 
-    d->tagsView = new TAlbumListView(settingsArea);
+    d->tagsView        = new TAlbumListView(settingsArea);
 
-    KHBox *tagsSearch = new KHBox(settingsArea);
+    KHBox *tagsSearch  = new KHBox(settingsArea);
     tagsSearch->setSpacing(KDialog::spacingHint());
 
     d->tagsSearchBar   = new SearchTextBar(tagsSearch, "ImageDescEditTabTagsSearchBar");
@@ -231,7 +231,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
 
     // --------------------------------------------------
 
-    settingsLayout->addWidget(d->commentsEdit, 0, 0, 1, 2);
+    settingsLayout->addWidget(d->captionsEdit, 0, 0, 1, 2);
     settingsLayout->addWidget(dateBox,         1, 0, 1, 2);
     settingsLayout->addWidget(ratingBox,       2, 0, 1, 2);
     settingsLayout->addWidget(d->newTagEdit,   3, 0, 1, 2);
@@ -253,7 +253,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     connect(d->tagsView, SIGNAL(signalItemStateChanged(TAlbumCheckListItem *)),
             this, SLOT(slotItemStateChanged(TAlbumCheckListItem *)));
 
-    connect(d->commentsEdit, SIGNAL(signalModified()),
+    connect(d->captionsEdit, SIGNAL(signalModified()),
             this, SLOT(slotCommentChanged()));
 
     connect(d->dateTimeEdit, SIGNAL(dateTimeChanged(const QDateTime& )),
@@ -291,7 +291,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
 
     // Initialize ---------------------------------------------
 
-    /* FIXME */ d->commentsEdit->installEventFilter(this);
+    /* FIXME */ d->captionsEdit->installEventFilter(this);
     d->dateTimeEdit->installEventFilter(this);
     d->ratingWidget->installEventFilter(this);
     d->tagsView->installEventFilter(this);
@@ -595,9 +595,9 @@ void ImageDescEditTab::setInfos(const ImageInfoList& infos)
     if (infos.isEmpty())
     {
         d->hub = MetadataHub();
-        d->commentsEdit->blockSignals(true);
-        d->commentsEdit->reset();
-        d->commentsEdit->blockSignals(false);
+        d->captionsEdit->blockSignals(true);
+        d->captionsEdit->reset();
+        d->captionsEdit->blockSignals(false);
         d->currInfos.clear();
         setEnabled(false);
         return;
@@ -764,11 +764,11 @@ void ImageDescEditTab::slotCommentChanged()
     // (there are bogus signals caused by spell checking, see bug 141663)
     // so we have to check before marking the metadata as modified
 
-    if (d->hub.comments() == d->commentsEdit->values())
+    if (d->hub.comments() == d->captionsEdit->values())
         return;
 
-    d->hub.setComments(d->commentsEdit->values());
-    setMetadataWidgetStatus(d->hub.commentsStatus(), d->commentsEdit);
+    d->hub.setComments(d->captionsEdit->values());
+    setMetadataWidgetStatus(d->hub.commentsStatus(), d->captionsEdit);
     slotModified();
 }
 
@@ -822,10 +822,10 @@ void ImageDescEditTab::updateTagsView()
 
 void ImageDescEditTab::updateComments()
 {
-    d->commentsEdit->blockSignals(true);
-    d->commentsEdit->setValues(d->hub.comments());
-    setMetadataWidgetStatus(d->hub.commentsStatus(), d->commentsEdit);
-    d->commentsEdit->blockSignals(false);
+    d->captionsEdit->blockSignals(true);
+    d->captionsEdit->setValues(d->hub.comments());
+    setMetadataWidgetStatus(d->hub.commentsStatus(), d->captionsEdit);
+    d->captionsEdit->blockSignals(false);
 }
 
 void ImageDescEditTab::updateRating()

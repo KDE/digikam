@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-06-15
- * Description : multi-languages comments editor
+ * Description : multi-languages captions editor
  *
  * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#include "commentsedit.h"
-#include "commentsedit.moc"
+#include "captionsedit.h"
+#include "captionsedit.moc"
 
 // Qt includes
 
@@ -46,11 +46,11 @@ using namespace KExiv2Iface;
 namespace Digikam
 {
 
-class CommentsEditPriv
+class CaptionsEditPriv
 {
 public:
 
-    CommentsEditPriv()
+    CaptionsEditPriv()
     {
         addValueButton = 0;
         delValueButton = 0;
@@ -252,8 +252,8 @@ public:
     KComboBox                      *languageCB;
 };
 
-CommentsEdit::CommentsEdit(QWidget* parent)
-            : QWidget(parent), d(new CommentsEditPriv)
+CaptionsEdit::CaptionsEdit(QWidget* parent)
+            : QWidget(parent), d(new CaptionsEditPriv)
 {
     QGridLayout *grid = new QGridLayout(this);
 
@@ -305,17 +305,17 @@ CommentsEdit::CommentsEdit(QWidget* parent)
             this, SIGNAL(signalModified()));
 }
 
-CommentsEdit::~CommentsEdit()
+CaptionsEdit::~CaptionsEdit()
 {
     delete d;
 }
 
-void CommentsEdit::reset()
+void CaptionsEdit::reset()
 {
     setValues(KExiv2::AltLangMap());
 }
 
-void CommentsEdit::slotAddValue()
+void CaptionsEdit::slotAddValue()
 {
     QString lang = d->languageCB->currentText();
     QString text = d->valueEdit->toPlainText();
@@ -326,14 +326,14 @@ void CommentsEdit::slotAddValue()
     loadLangAltListEntries();
 }
 
-void CommentsEdit::slotDeleteValue()
+void CaptionsEdit::slotDeleteValue()
 {
     QString lang = d->languageCB->currentText();
     d->values.remove(lang);
     loadLangAltListEntries();
 }
 
-void CommentsEdit::slotSelectionChanged(int index)
+void CaptionsEdit::slotSelectionChanged(int index)
 {
     QString lang = d->languageCB->currentText();
 
@@ -352,19 +352,19 @@ void CommentsEdit::slotSelectionChanged(int index)
     d->languageCB->setToolTip(d->languageCodeMap[lang]);
 }
 
-void CommentsEdit::setValues(const KExiv2::AltLangMap& values)
+void CaptionsEdit::setValues(const KExiv2::AltLangMap& values)
 {
     blockSignals(true);
     d->values = values;
     loadLangAltListEntries();
 }
 
-KExiv2::AltLangMap& CommentsEdit::values()
+KExiv2::AltLangMap& CaptionsEdit::values()
 {
     return d->values;
 }
 
-void CommentsEdit::loadLangAltListEntries()
+void CaptionsEdit::loadLangAltListEntries()
 {
     d->languageCB->clear();
 
@@ -383,7 +383,7 @@ void CommentsEdit::loadLangAltListEntries()
 
     // ...and now, all the rest...
 
-    for (CommentsEditPriv::LanguageCodeMap::Iterator it = d->languageCodeMap.begin();
+    for (CaptionsEditPriv::LanguageCodeMap::Iterator it = d->languageCodeMap.begin();
          it != d->languageCodeMap.end(); ++it)
     {
         if (!list.contains(it.key()))
@@ -394,12 +394,12 @@ void CommentsEdit::loadLangAltListEntries()
     slotSelectionChanged(d->languageCB->currentIndex());
 }
 
-QString CommentsEdit::defaultAltLang() const
+QString CaptionsEdit::defaultAltLang() const
 {
     return d->values[QString("x-default")];
 }
 
-bool CommentsEdit::asDefaultAltLang() const
+bool CaptionsEdit::asDefaultAltLang() const
 {
     return defaultAltLang().isNull() ? false : true;
 }
