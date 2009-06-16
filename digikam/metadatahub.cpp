@@ -568,11 +568,14 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
             }
         }
 
-        // We set Iptc keywords using tags name. Also remove tags path, for 0.9 compatibility.
-        dirty |= metadata.setIptcKeywords(oldKeywords + oldTagsPathList, newKeywords);
+        // NOTE: See B.K.O #175321 : we remove all old keyword from IPTC and XMP before to
+        // synchronize metadata, else contents is not coherent.
 
-        // We add Xmp keywords using tags name. Remove old keywords before.
-        dirty |= metadata.removeXmpKeywords(oldKeywords);
+        // We set Iptc keywords using tags name.
+        dirty |= metadata.setIptcKeywords(metadata.getIptcKeywords(), newKeywords);
+
+        // We add Xmp keywords using tags name.
+        dirty |= metadata.removeXmpKeywords(metadata.getXmpKeywords());
         dirty |= metadata.setXmpKeywords(newKeywords);
 
         // We set Tags Path list in digiKam Xmp private namespace using tags path.
