@@ -4,7 +4,7 @@ digiKam 1.0.0-beta2 - Release date: 2009-xx-xx
 NEW FEATURES:
 
 General        : Added Multi-languages support to Caption and Tags right side-bar.
-AlbumGui       : Find Duplicates search can be limited to an album range.
+AlbumGui       : Find Duplicates search can be limited to an album and tag range.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
