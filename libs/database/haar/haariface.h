@@ -117,7 +117,7 @@ public:
      *  All images are referenced by id from database.
      *  The threshold is in the range 0..1, with 1 meaning identical signature.
      */
-    QMap< qlonglong, QList<qlonglong> > findDuplicates(const QList<qlonglong>& images2Scan, double requiredPercentage,
+    QMap< qlonglong, QList<qlonglong> > findDuplicates(const QSet<qlonglong>& images2Scan, double requiredPercentage,
                                                        HaarProgressObserver *observer = 0);
 
     /** Calls findDuplicates with all images in the given album ids */

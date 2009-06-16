@@ -174,7 +174,7 @@ public:
             bin = new Haar::WeightBin;
     }
 
-    void setSignatureCacheEnabled(bool cache, const QList<qlonglong>& imageIds)
+    void setSignatureCacheEnabled(bool cache, const QSet<qlonglong>& imageIds)
     {
         setSignatureCacheEnabled(cache);
 
@@ -711,22 +711,22 @@ void HaarIface::rebuildDuplicatesAlbums(const QList<int>& albums2Scan, double re
 QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesInAlbums(const QList<int>& albums2Scan,
                                                double requiredPercentage, HaarProgressObserver *observer)
 {
-    QList<qlonglong> idList;
+    QSet<qlonglong> idList;
 
     // Get all items DB id from all albums and all collections
     foreach(int albumId, albums2Scan)
     {
-        idList << DatabaseAccess().db()->getItemIDsInAlbum(albumId);
+        idList.unite(DatabaseAccess().db()->getItemIDsInAlbum(albumId).toSet());
     }
 
     return findDuplicates(idList, requiredPercentage, observer);
 }
 
-QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QList<qlonglong>& images2Scan,
+QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QSet<qlonglong>& images2Scan,
                                                double requiredPercentage, HaarProgressObserver *observer)
 {
     QMap< qlonglong, QList<qlonglong> >  resultsMap;
-    QList<qlonglong>::const_iterator     it;
+    QSet<qlonglong>::const_iterator      it;
     QList<qlonglong>                     list;
     QSet<qlonglong>                      resultsCandidates;
 
