@@ -252,6 +252,9 @@ void FindDuplicatesView::populateTreeView()
 
 void FindDuplicatesView::slotUpdateAlbumSelectBox()
 {
+    if (d->model)
+        disconnect(d->model, 0, this, 0);
+
     d->albumSelectCB->setDefaultAlbumModels();
     d->model = d->albumSelectCB->model();
     d->albumSelectCB->view()->expandToDepth(0);
