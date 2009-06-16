@@ -670,11 +670,13 @@ void HaarIface::getBestAndWorstPossibleScore(Haar::SignatureData *sig, SketchTyp
     *lowestAndBestScore = score;
 }
 
-void HaarIface::rebuildDuplicatesAlbums(const QList<int>& albums2Scan, double requiredPercentage,
-                                        HaarProgressObserver *observer)
+void HaarIface::rebuildDuplicatesAlbums(const QList<int>& albums2Scan, const QList<int>& tags2Scan,
+                                        double requiredPercentage, HaarProgressObserver *observer)
 {
     // Carry out search. This takes long.
-    QMap< qlonglong, QList<qlonglong> > results = findDuplicatesInAlbums(albums2Scan, requiredPercentage, observer);
+    QMap< qlonglong, QList<qlonglong> > results = findDuplicatesInAlbumsAndTags(albums2Scan,
+                                                                                tags2Scan,
+                                                                                requiredPercentage, observer);
 
     // Build search XML from the results. Store list of ids of similar images.
     QMap<QString, QString> queries;
@@ -717,6 +719,27 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesInAlbums(const QLis
     foreach(int albumId, albums2Scan)
     {
         idList.unite(DatabaseAccess().db()->getItemIDsInAlbum(albumId).toSet());
+    }
+
+    return findDuplicates(idList, requiredPercentage, observer);
+}
+
+QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesInAlbumsAndTags(const QList<int>& albums2Scan,
+                                               const QList<int>& tags2Scan,
+                                               double requiredPercentage, HaarProgressObserver *observer)
+{
+    QSet<qlonglong> idList;
+
+    // Get all items DB id from all albums and all collections
+    foreach(int albumId, albums2Scan)
+    {
+        idList.unite(DatabaseAccess().db()->getItemIDsInAlbum(albumId).toSet());
+    }
+
+    // Get all items DB id from all tags
+    foreach(int albumId, tags2Scan)
+    {
+        idList.unite(DatabaseAccess().db()->getItemIDsInTag(albumId).toSet());
     }
 
     return findDuplicates(idList, requiredPercentage, observer);

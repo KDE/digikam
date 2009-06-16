@@ -84,13 +84,20 @@ private Q_SLOTS:
     void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
 
     void slotAlbumSelectionChanged(Album*, Qt::CheckState);
-    void slotUpdateAlbumSelectBox();
+    void slotTagSelectionChanged(Album*, Qt::CheckState);
+    void slotUpdateAlbumsAndTags();
 
 private:
 
     void cancelFindDuplicates(KJob* job);
     void enableControlWidgets(bool);
     bool checkForValidSettings();
+
+    void updateAlbumsBox();
+    void updateTagsBox();
+
+    bool validAlbumSettings();
+    bool validTagSettings();
 
 private:
 

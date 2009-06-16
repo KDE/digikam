@@ -103,21 +103,36 @@ void kio_digikamsearch::special(const QByteArray& data)
     }
     else
     {
-        QString idsString       = metaData("albumids");
+        QString albumIdsString  = metaData("albumids");
+        QString tagIdsString    = metaData("tagids");
         QString thresholdString = metaData("threshold");
 
         // get albums to scan
-        QStringList idsStringList = idsString.split(',');
+        QStringList albumIdsStringList = albumIdsString.split(',');
+        QStringList tagIdsStringList   = tagIdsString.split(',');
         QList<int> albumIds;
-        foreach(const QString& idString, idsStringList)
+        QList<int> tagIds;
+
         {
-            bool ok;
-            int albumId = idString.toInt(&ok);
-            if (ok)
-                albumIds << albumId;
+            bool ok = true;
+            int id  = 0;
+
+            foreach(const QString& idString, albumIdsStringList)
+            {
+                id = idString.toInt(&ok);
+                if (ok)
+                    albumIds << id;
+            }
+
+            foreach(const QString& idString, tagIdsStringList)
+            {
+                id = idString.toInt(&ok);
+                if (ok)
+                    tagIds << id;
+            }
         }
 
-        if (albumIds.isEmpty())
+        if (albumIds.isEmpty() && tagIds.isEmpty())
         {
             kDebug(50004) << "No album ids passed for duplicates search";
             error(KIO::ERR_INTERNAL, i18n("No album ids passed"));
@@ -154,7 +169,7 @@ void kio_digikamsearch::special(const QByteArray& data)
 
         // rebuild the duplicate albums
         Digikam::HaarIface iface;
-        iface.rebuildDuplicatesAlbums(albumIds, threshold, &observer);
+        iface.rebuildDuplicatesAlbums(albumIds, tagIds, threshold, &observer);
     }
 
     finished();
