@@ -32,8 +32,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 022 ==> 186308 : Moving tags in hierarchy not reflected in XMP metadata "TagsList".
 023 ==> 141912 : Sync Metadata Batch Tool does not reflect changes in tags properly.
 024 ==> 175321 : Synchronize tags to iptc keywords adds instead of copying.
-025 ==> 
-
+025 ==> 195663 : Crash while adding new tag.
+026 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta1 - Release date: 2009-06-07
