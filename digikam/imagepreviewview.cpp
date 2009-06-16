@@ -354,6 +354,7 @@ void ImagePreviewView::slotContextMenu()
     cmhelper.addAction(prevAction, true);
     cmhelper.addAction(nextAction, true);
     cmhelper.addAction(back2AlbumAction);
+    cmhelper.addGotoMenu(idList);
     popmenu.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAction("image_edit");
@@ -364,7 +365,6 @@ void ImagePreviewView::slotContextMenu()
     cmhelper.addAction("image_find_similar");
     cmhelper.addActionLightTable();
     cmhelper.addQueueManagerMenu();
-    cmhelper.addGotoMenu(idList);
     popmenu.addSeparator();
     // --------------------------------------------------------
     cmhelper.addActionItemDelete(this, SLOT(slotDeleteItem()));
