@@ -27,8 +27,13 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 017 ==> 196329 : Renaming album causes problems (until re-opening).
 018 ==> 191288 : CRC error in chunk zTXt.
 019 ==> 189982 : digiKam crashes during start-up.
-020 ==> 098462 : support for comments in different languages.
-021 ==> 
+020 ==> 098462 : Support for comments in different languages.
+021 ==> 159158 : Tags moved in tree are duplicated in the IPTC metadata.
+022 ==> 186308 : Moving tags in hierarchy not reflected in XMP metadata "TagsList".
+023 ==> 141912 : Sync Metadata Batch Tool does not reflect changes in tags properly.
+024 ==> 175321 : Synchronize tags to iptc keywords adds instead of copying.
+025 ==> 
+
 
 *********************************************************************************************************
 digiKam 1.0.0-beta1 - Release date: 2009-06-07
