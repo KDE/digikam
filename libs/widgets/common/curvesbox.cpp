@@ -237,6 +237,15 @@ void CurvesBox::setup()
 
     connect(d->curvesWidget, SIGNAL(signalCurvesChanged()),
             this, SIGNAL(signalCurvesChanged()));
+
+    connect(d->pickerType, SIGNAL(buttonReleased(int)),
+            this, SIGNAL(signalPickerChanged(int)));
+
+    connect(d->resetButton, SIGNAL(clicked()),
+            this, SLOT(slotResetChannel()));
+
+    connect(d->curveType, SIGNAL(buttonClicked(int)),
+            this, SLOT(slotCurveTypeChanged(int)));
 }
 
 CurvesBox::~CurvesBox()
@@ -249,9 +258,6 @@ void CurvesBox::enablePickers(bool enable)
     d->pickBlack->setVisible(enable);
     d->pickGray->setVisible(enable);
     d->pickWhite->setVisible(enable);
-
-    connect(d->pickerType, SIGNAL(buttonReleased(int)),
-            this, SIGNAL(signalPickerChanged(int)));
 }
 
 void CurvesBox::enableHGradient(bool enable)
@@ -273,18 +279,12 @@ void CurvesBox::enableGradients(bool enable)
 void CurvesBox::enableResetButton(bool enable)
 {
     d->resetButton->setVisible(enable);
-
-    connect(d->resetButton, SIGNAL(clicked()),
-            this, SLOT(slotResetChannel()));
 }
 
 void CurvesBox::enableCurveTypes(bool enable)
 {
     d->curveFree->setVisible(enable);
     d->curveSmooth->setVisible(enable);
-
-    connect(d->curveType, SIGNAL(buttonClicked(int)),
-            this, SLOT(slotCurveTypeChanged(int)));
 }
 
 void CurvesBox::enableControlWidgets(bool enable)
