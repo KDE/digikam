@@ -235,11 +235,8 @@ void CurvesBox::setup()
 
     // -------------------------------------------------------------
 
-        connect(d->curvesWidget, SIGNAL(signalCurvesChanged()),
-                this, SIGNAL(signalCurvesChanged()));
-
-        connect(d->resetButton, SIGNAL(clicked()),
-                this, SLOT(slotResetChannel()));
+    connect(d->curvesWidget, SIGNAL(signalCurvesChanged()),
+            this, SIGNAL(signalCurvesChanged()));
 }
 
 CurvesBox::~CurvesBox()
