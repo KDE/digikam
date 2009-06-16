@@ -65,6 +65,7 @@ Q_SIGNALS:
 public Q_SLOTS:
 
     void slotSetSelectedAlbum(Album*);
+    void slotSetSelectedTag(Album*);
 
 private Q_SLOTS:
 
@@ -98,6 +99,8 @@ private:
 
     bool validAlbumSettings();
     bool validTagSettings();
+
+    void resetAlbumsAndTags();
 
 private:
 

@@ -508,9 +508,19 @@ void FindDuplicatesView::slotSetSelectedAlbum(Album* album)
     if (!album)
         return;
 
-    d->albumModel->resetCheckedAlbums();
+    resetAlbumsAndTags();
     d->albumModel->setChecked(album, true);
     slotAlbumSelectionChanged(album, Qt::Checked);
+}
+
+void FindDuplicatesView::slotSetSelectedTag(Album* album)
+{
+    if (!album)
+        return;
+
+    resetAlbumsAndTags();
+    d->tagModel->setChecked(album, true);
+    slotTagSelectionChanged(album, Qt::Checked);
 }
 
 bool FindDuplicatesView::checkForValidSettings()
@@ -544,6 +554,13 @@ bool FindDuplicatesView::validTagSettings()
     }
 
     return valid;
+}
+
+void FindDuplicatesView::resetAlbumsAndTags()
+{
+    d->albumModel->resetCheckedAlbums();
+    d->tagModel->resetCheckedAlbums();
+    checkForValidSettings();
 }
 
 }  // namespace Digikam
