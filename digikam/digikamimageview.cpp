@@ -182,16 +182,16 @@ void DigikamImageView::showContextMenu(QContextMenuEvent* event, const ImageInfo
     cmhelper.addAction(viewAction);
     cmhelper.addAction("image_edit");
     cmhelper.addServicesMenu(selectedUrls());
+    cmhelper.addGotoMenu(selectedImageIDs);
     cmhelper.addKipiActions();
     popmenu.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAction("image_find_similar");
     cmhelper.addActionLightTable();
     cmhelper.addQueueManagerMenu();
-    cmhelper.addGotoMenu(selectedImageIDs);
-    cmhelper.addAction("image_rename");
     popmenu.addSeparator();
     // --------------------------------------------------------
+    cmhelper.addAction("image_rename");
     cmhelper.addActionCopy(this, SLOT(copy()));
     cmhelper.addActionPaste(this, SLOT(paste()));
     cmhelper.addActionItemDelete(this, SLOT(deleteSelected()), selectedImageIDs.count());
