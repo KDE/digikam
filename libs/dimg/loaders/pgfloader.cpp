@@ -422,7 +422,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         else
         {
             preview = preview.scaled(16, 16, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-            preview.save(tmp.fileName(), "PNG");
+            preview.save(tmp.fileName(), "TIFF");
             kDebug(50003) << "Created PGF metadata tmp file";
 
             meta.load(tmp.fileName());
@@ -438,7 +438,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
             stream.readRawData(data.data(), data.size());
             tmp.close();
 
-            kDebug(50003) << "Save PGF metadata (" << data.size() << ")";
+            kDebug(50003) << "Saved PGF metadata (" << data.size() << ")";
             pgf.SetHeader(header, 0, (UINT8*)data.constData(), data.size());
         }
 
