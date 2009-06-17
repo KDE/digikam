@@ -210,7 +210,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         kDebug(50003) << "Has Alpha    = " << m_hasAlpha;
         kDebug(50003) << "Is 16 bits   = " << m_sixteenBit;
 #endif
-
+/*
         UINT32 size;
         const UINT8* udata = pgf.GetUserData(size);
         if (udata)
@@ -246,7 +246,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 }
             }
         }
-
+*/
         int width   = pgf.Width();
         int height  = pgf.Height();
         uchar *data = 0;
@@ -402,7 +402,9 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         }
 
         header.background.rgbtBlue = header.background.rgbtGreen = header.background.rgbtRed = 0;
+        pgf.SetHeader(header);
 
+/*
         // Host Exif/IPTC/XMP metadata to PGF header. We use a preview JPEG image to embed all data
         // and pass it to PGF header as user data byte-array.
         QImage preview;
@@ -441,7 +443,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
             kDebug(50003) << "Saved PGF metadata (" << data.size() << ")";
             pgf.SetHeader(header, 0, (UINT8*)data.constData(), data.size());
         }
-
+*/
         pgf.ImportBitmap(4 * imageWidth() * (imageSixteenBit() ? 2 : 1),
                          (UINT8*)imageData(),
                          imageBitsDepth() * 4,
