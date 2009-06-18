@@ -34,6 +34,7 @@
 #include "convert2png.h"
 #include "convert2tiff.h"
 #include "convert2jp2.h"
+#include "convert2pgf.h"
 #include "autocorrection.h"
 #include "resize.h"
 #include "rotate.h"
@@ -64,6 +65,7 @@ BatchToolsManager::BatchToolsManager(QObject* parent)
     registerTool(new Convert2PNG(this));
     registerTool(new Convert2TIFF(this));
     registerTool(new Convert2JP2(this));
+    registerTool(new Convert2PGF(this));
     registerTool(new AutoCorrection(this));
     registerTool(new Rotate(this));
     registerTool(new Flip(this));
