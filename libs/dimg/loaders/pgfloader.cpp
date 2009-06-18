@@ -210,43 +210,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         kDebug(50003) << "Has Alpha    = " << m_hasAlpha;
         kDebug(50003) << "Is 16 bits   = " << m_sixteenBit;
 #endif
-/*
-        UINT32 size;
-        const UINT8* udata = pgf.GetUserData(size);
-        if (udata)
-        {
-            QByteArray data((const char*)udata, size);
-            kDebug(50003) << "Find PGF metadata (" << data.size() << ")";
-            KExiv2Iface::KExiv2 meta;
-            if (meta.load(data))
-            {
-                kDebug(50003) << "PGF metadata loaded";
-                QMap<int, QByteArray>& imageMetadata = imageMetaData();
-                imageMetadata.clear();
 
-                if (!meta.getComments().isNull())
-                {
-                    kDebug(50003) << "PGF as Comments";
-                    imageMetadata.insert(DImg::COM, meta.getComments());
-                }
-                if (!meta.getExif().isNull())
-                {
-                    kDebug(50003) << "PGF as Exif";
-                    imageMetadata.insert(DImg::EXIF, meta.getExif());
-                }
-                if (!meta.getIptc().isNull())
-                {
-                    kDebug(50003) << "PGF as Iptc";
-                    imageMetadata.insert(DImg::IPTC, meta.getIptc());
-                }
-                if (!meta.getXmp().isNull())
-                {
-                    kDebug(50003) << "PGF as Xmp";
-                    imageMetadata.insert(DImg::XMP, meta.getXmp());
-                }
-            }
-        }
-*/
         int width   = pgf.Width();
         int height  = pgf.Height();
         uchar *data = 0;
@@ -404,46 +368,6 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         header.background.rgbtBlue = header.background.rgbtGreen = header.background.rgbtRed = 0;
         pgf.SetHeader(header);
 
-/*
-        // Host Exif/IPTC/XMP metadata to PGF header. We use a preview JPEG image to embed all data
-        // and pass it to PGF header as user data byte-array.
-        QImage preview;
-        KExiv2Iface::KExiv2 meta;
-        QMap<int, QByteArray>& metaData = imageMetaData();
-        meta.setIptc(metaData[DImg::IPTC]);
-        meta.getImagePreview(preview);
-        KTemporaryFile tmp;
-        tmp.setPrefix(filePath);
-        tmp.setSuffix("-preview-tif.tmp");
-        tmp.setAutoRemove(true);
-        if ( !tmp.open() )
-        {
-            kDebug(50003) << "Cannot open tmp file to save PGF metadata";
-            pgf.SetHeader(header);
-        }
-        else
-        {
-            preview = preview.scaled(16, 16, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-            preview.save(tmp.fileName(), "TIFF");
-            kDebug(50003) << "Created PGF metadata tmp file";
-
-            meta.load(tmp.fileName());
-            meta.setExif(metaData[DImg::EXIF]);
-            meta.setIptc(metaData[DImg::IPTC]);
-            meta.setXmp(metaData[DImg::XMP]);
-            meta.setComments(metaData[DImg::COM]);
-            meta.applyChanges();
-
-            QByteArray data;
-            data.resize(tmp.size());
-            QDataStream stream( &tmp );
-            stream.readRawData(data.data(), data.size());
-            tmp.close();
-
-            kDebug(50003) << "Saved PGF metadata (" << data.size() << ")";
-            pgf.SetHeader(header, 0, (UINT8*)data.constData(), data.size());
-        }
-*/
         pgf.ImportBitmap(4 * imageWidth() * (imageSixteenBit() ? 2 : 1),
                          (UINT8*)imageData(),
                          imageBitsDepth() * 4,
