@@ -33,7 +33,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 023 ==> 141912 : Sync Metadata Batch Tool does not reflect changes in tags properly.
 024 ==> 175321 : Synchronize tags to iptc keywords adds instead of copying.
 025 ==> 195663 : Crash while adding new tag.
-026 ==> 
+026 ==> 195735 : digiKam-svn fails to compile on Mac OS X.
+027 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta1 - Release date: 2009-06-07
