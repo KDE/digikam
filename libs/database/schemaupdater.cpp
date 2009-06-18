@@ -69,7 +69,7 @@ int SchemaUpdater::schemaVersion()
 
 int SchemaUpdater::filterSettingsVersion()
 {
-    return 2;
+    return 3;
 }
 
 SchemaUpdater::SchemaUpdater(DatabaseAccess *access)
@@ -313,11 +313,11 @@ void SchemaUpdater::defaultFilterSettings(QStringList& defaultImageFilter,
     //When changing anything here, just increment filterSettingsVersion() so that the changes take effect
 
     defaultImageFilter << "jpg" << "jpeg" << "jpe"                    // JPEG
-                       << "jp2" << "j2k" << "jpx"  << "jpc" << "pgx"  // JPEG-2000
+                       << "jp2" << "j2k"  << "jpx"  << "jpc" << "pgx" // JPEG-2000
                        << "tif" << "tiff"                             // TIFF
                        << "png"                                       // PNG
-                       << "xpm" << "ppm" << "pnm"
-                       << "gif" << "bmp" << "xcf" << "pcx";
+                       << "xpm" << "ppm"  << "pnm" << "pgf"
+                       << "gif" << "bmp"  << "xcf" << "pcx";
 
 #if KDCRAW_VERSION < 0x000400
     defaultImageFilter << KDcrawIface::DcrawBinary::rawFilesList();
