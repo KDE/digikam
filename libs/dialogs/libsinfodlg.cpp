@@ -115,6 +115,8 @@ LibsInfoDlg::LibsInfoDlg(QWidget *parent)
                                                      i18n("Yes") : i18n("No"));
     list.insert(i18n("Exiv2 can write to Jp2"),      KExiv2Iface::KExiv2::supportMetadataWritting("image/jp2") ?
                                                      i18n("Yes") : i18n("No"));
+    list.insert(i18n("Exiv2 can write to Pgf"),      KExiv2Iface::KExiv2::supportMetadataWritting("image/pgf") ?
+                                                     i18n("Yes") : i18n("No"));
 #endif
 
     list.insert(i18n("LibPNG"),                      QString(PNG_LIBPNG_VER_STRING));
