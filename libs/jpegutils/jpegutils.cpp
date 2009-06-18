@@ -564,6 +564,7 @@ bool jpegConvert(const QString& src, const QString& dest, const QString& documen
         DMetadata meta;
         meta.setExif(image.getExif());
         meta.setIptc(image.getIptc());
+        meta.setXmp(image.getXmp());
 
         // Update IPTC preview.
         QImage preview = image.smoothScale(1280, 1024, Qt::KeepAspectRatio).copyQImage();
@@ -589,6 +590,7 @@ bool jpegConvert(const QString& src, const QString& dest, const QString& documen
         // Store new Exif/IPTC data into image.
         image.setExif(meta.getExif());
         image.setIptc(meta.getIptc());
+        image.setXmp(meta.getXmp());
 
         // And now save the image to a new file format.
 
@@ -597,6 +599,14 @@ bool jpegConvert(const QString& src, const QString& dest, const QString& documen
 
         if ( format.toUpper() == QString("TIFF") || format.toUpper() == QString("TIF") )
             image.setAttribute("compress", true);
+
+        if ( format.toUpper() == QString("JP2") || format.toUpper() == QString("JPX") ||
+             format.toUpper() == QString("JPC") || format.toUpper() == QString("PGX") ||
+             format.toUpper() == QString("J2K") )
+            image.setAttribute("quality", 100);      // LossLess
+
+        if ( format.toUpper() == QString("PGF") )
+            image.setAttribute("quality", 0);      // LossLess
 
         return (image.save(dest, format));
     }

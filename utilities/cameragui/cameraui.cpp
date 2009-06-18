@@ -257,6 +257,9 @@ void CameraUI::setupUserArea()
     d->formatLabel         = new QLabel(i18n("New image format:"), hbox2);
     d->losslessFormat      = new KComboBox(hbox2);
     d->losslessFormat->insertItem(0, "PNG");
+    d->losslessFormat->insertItem(1, "TIF");
+    d->losslessFormat->insertItem(2, "JP2");
+    d->losslessFormat->insertItem(3, "PGF");
 
     onFlyVlay->addWidget(d->setPhotographerId);
     onFlyVlay->addWidget(d->setCredits);
@@ -523,6 +526,9 @@ void CameraUI::setupConnections()
             d->formatLabel, SLOT(setEnabled(bool)));
 
     connect(d->convertJpegCheck, SIGNAL(toggled(bool)),
+            d->view, SLOT(slotDownloadNameChanged()));
+
+    connect(d->losslessFormat, SIGNAL(activated(int)),
             d->view, SLOT(slotDownloadNameChanged()));
 
     connect(d->fixDateTimeCheck, SIGNAL(toggled(bool)),
