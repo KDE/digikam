@@ -1,3 +1,158 @@
+0.9.6-rc 2009-06-18
+-------------------------------------------------------------------------
+
+2009-06-18 09:40  cgilles
+
+	* digikam/metadatahub.cpp, digikam/metadatahub.h: backport commit
+	  #982571 from trunk
+
+2009-05-28 14:06  cgilles
+
+	* NEWS, digikam.lsm, digikam/daboutdata.h, release_digikam.rb: bump
+	  version to 0.9.6-rc
+
+2009-05-28 13:58  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp: backport commit
+	  #974096 from trunk
+
+2009-05-28 07:49  cgilles
+
+	* digikam/albumfolderview.cpp: backport commit #973904 from trunk
+	  CCBUGS: 169213
+
+2009-05-26 17:16  cgilles
+
+	* kioslave/digikamthumbnail.cpp: revert
+	  CCBUGS: 193967
+
+2009-05-25 13:37  cgilles
+
+	* utilities/cameragui/cameraui.cpp, utilities/cameragui/cameraui.h:
+	  backport commit #972580 from KDE4
+
+2009-05-25 13:13  cgilles
+
+	* utilities/cameragui/cameraui.cpp: fix sort of items, as KDE4.
+	  BUG: 191842
+	  CCBUGS: 191774
+
+2009-05-25 10:47  cgilles
+
+	* utilities/cameragui/cameraiconitem.cpp,
+	  utilities/cameragui/cameraiconitem.h: polish
+
+2009-05-25 09:22  cgilles
+
+	* utilities/cameragui/cameraui.cpp: Selection is used to run
+	  download post processing : do not permit to change icon view
+	  selection if camera gui is busy
+
+2009-05-25 07:18  cgilles
+
+	* utilities/cameragui/cameraiconitem.cpp,
+	  utilities/cameragui/cameraiconitem.h: sync with trunk
+
+2009-05-25 06:59  cgilles
+
+	* kioslave/digikamthumbnail.cpp, kioslave/digikamthumbnail.h: sync
+	  with trunk
+
+2009-05-14 12:52  cgilles
+
+	* utilities/cameragui/cameraui.cpp, utilities/cameragui/cameraui.h:
+	  backport commit #967936 from trunk
+
+2009-05-14 07:42  cgilles
+
+	* utilities/setup/cameraselection.cpp,
+	  utilities/setup/cameraselection.h: backport commit #967846 from
+	  trunk
+
+2009-04-21 07:27  cgilles
+
+	* showfoto/pics/menusidepixmap.png,
+	  showfoto/pics/menusidepixmap.xcf: update version
+
+2009-04-21 07:27  cgilles
+
+	* data/pics/menusidepixmap.png, data/pics/menusidepixmap.xcf:
+	  update version
+
+2009-04-17 06:40  cgilles
+
+	* libs/dimg/loaders/dimgloader.cpp, libs/dimg/loaders/dimgloader.h:
+	  digiKam 0.9.6 : backport commit #955139 from trunk
+
+2009-04-16 18:58  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp: sync with trunk
+
+2009-04-14 17:00  cgilles
+
+	* libs/widgets/common/splashscreen.cpp: use black color for text
+
+2009-04-14 06:18  cgilles
+
+	* AUTHORS, data/pics/digikam-splash.png,
+	  data/pics/digikam-splash.xcf, showfoto/pics/showfoto-splash.png,
+	  showfoto/pics/showfoto-splash.xcf: If digiKam and Showfoto 0.9.6
+	  will be released, at least splashscreens are updated
+
+2009-04-13 21:05  cgilles
+
+	* utilities/imageeditor/rawimport/rawimport.cpp: backport commit
+	  #953387
+
+2009-04-11 12:59  cgilles
+
+	* NEWS, project/NEWS.0.9.5: 0.9.5 news
+
+2009-04-06 10:08  cgilles
+
+	* NEWS, configure.in.in, digikam.lsm, digikam/daboutdata.h: 0.9.6
+
+2009-04-06 10:06  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp: backport commit
+	  #949942 from KDE4
+
+2009-03-17 09:52  cgilles
+
+	* NEWS: typo
+
+2009-03-16 12:43  cgilles
+
+	* libs/greycstoration/greycstorationiface.cpp: restore 2 Cimg
+	  threads
+
+2009-03-13 12:22  cgilles
+
+	* release_digikam.rb: update
+
+2009-03-13 12:21  cgilles
+
+	* digikam/daboutdata.h: update
+
+2009-03-13 11:47  cgilles
+
+	* libs/greycstoration/greycstorationiface.cpp: as recommended by
+	  CImg author, use only one separated thread in CImg. Thread
+	  management need to be fixed in CImg.
+	  CCBUGS: 186642
+
+2009-03-13 11:40  cgilles
+
+	* ChangeLog: update
+
+2009-03-13 10:56  cgilles
+
+	* digikam.lsm: update
+
+2009-03-13 10:56  cgilles
+
+	* NEWS: update
+
 0.9.5 2009-03-15
 -------------------------------------------------------------------------
 
