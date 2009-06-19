@@ -551,7 +551,7 @@ bool AlbumManager::setDatabase(const QString& dbPath, bool priority, const QStri
 
     // -- Database initialization -------------------------------------------------
 
-    DatabaseAccess::setParameters(Digikam::DatabaseParameters::parametersForSQLiteDefaultFile(d->dbPath),
+    DatabaseAccess::setParameters(DatabaseParameters::parametersForSQLiteDefaultFile(d->dbPath),
                                   DatabaseAccess::MainApplication);
 
     ScanController::Advice advice = ScanController::instance()->databaseInitialization();
@@ -670,13 +670,13 @@ bool AlbumManager::setDatabase(const QString& dbPath, bool priority, const QStri
     }
 
     // check that we have one album root
-    if (Digikam::CollectionManager::instance()->allLocations().isEmpty())
+    if (CollectionManager::instance()->allLocations().isEmpty())
     {
         if (suggestedAlbumRoot.isEmpty())
             Setup::execSinglePage(Setup::CollectionsPage);
         else
         {
-            Digikam::CollectionManager::instance()->addLocation(suggestedAlbumRoot);
+            CollectionManager::instance()->addLocation(suggestedAlbumRoot);
             // Not needed? See bug #188959
             //ScanController::instance()->completeCollectionScan();
         }
