@@ -235,7 +235,7 @@ bool CollectionPage::checkRootAlbum(QString& rootAlbumFolder)
             return false;
         }
 
-        if (!targetPath.mkdir(rootAlbumFolder))
+        if (!targetPath.mkpath(rootAlbumFolder))
         {
             KMessageBox::sorry(this,
                                i18n("<p>digiKam could not create the folder to use as the root album.\n"
@@ -309,7 +309,7 @@ bool CollectionPage::checkDatabase(QString& dbFolder)
             return false;
         }
 
-        if (!targetPath.mkdir(dbFolder))
+        if (!targetPath.mkpath(dbFolder))
         {
             KMessageBox::sorry(this,
                                i18n("<p>digiKam could not create the folder to host your database file.\n"
