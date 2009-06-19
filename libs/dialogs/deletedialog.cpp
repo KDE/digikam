@@ -255,6 +255,7 @@ DeleteDialog::DeleteDialog(QWidget *parent)
 {
     setButtons(Ok | Cancel);
     setDefaultButton(Cancel);
+    setButtonFocus(Cancel);
     setModal(true);
     m_widget = new DeleteWidget(this);
     setMainWidget(m_widget);
