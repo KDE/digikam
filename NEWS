@@ -35,7 +35,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 025 ==> 195663 : Crash while adding new tag.
 026 ==> 195735 : digiKam-svn fails to compile on Mac OS X.
 027 ==> 196768 : With 4.2.90 digikam always crashes on startup - worked fine with 4.2.3.
-028 ==> 
+028 ==> 190719 : Compiling digikam-0.10.0 on gentoo fails.
+029 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta1 - Release date: 2009-06-07
