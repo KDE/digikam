@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEALBUMFILTERMODELPRIV_H
-#define IMAGEALBUMFILTERMODELPRIV_H
+#ifndef IMAGEFILTERMODELPRIV_H
+#define IMAGEFILTERMODELPRIV_H
 
 // Qt includes
 
@@ -131,4 +131,4 @@ Q_SIGNALS:
 
 } // namespace Digikam
 
-#endif // IMAGEALBUMFILTERMODELPRIV_H
+#endif // IMAGEFILTERMODELPRIV_H

@@ -24,6 +24,7 @@
  * ============================================================ */
 
 #include "dimg.h"
+#include "dimg_p.h"
 
 // C ANSI includes
 
@@ -75,7 +76,6 @@ extern "C"
 #include "icctransform.h"
 #include "exposurecontainer.h"
 #include "dmetadata.h"
-#include "dimg_p.h"
 #include "dimgloaderobserver.h"
 
 typedef uint64_t ullong;

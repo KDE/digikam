@@ -22,6 +22,7 @@
  * ============================================================ */
 
 #include "editorwindow.h"
+#include "editorwindow_p.h"
 #include "editorwindow.moc"
 
 // C++ includes
@@ -117,7 +118,6 @@
 #include "themeengine.h"
 #include "thumbbar.h"
 #include "printhelper.h"
-#include "editorwindow_p.h"
 
 namespace Digikam
 {

@@ -23,7 +23,6 @@
 
 #include "metadatamanager.h"
 #include "metadatamanager.moc"
-#include "metadatamanager.h"
 #include "metadatamanager_p.moc"
 
 // Qt includes

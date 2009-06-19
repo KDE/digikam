@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEALBUMFILTERMODELTHREADS_H
-#define IMAGEALBUMFILTERMODELTHREADS_H
+#ifndef IMAGEFILTERMODELTHREADS_H
+#define IMAGEFILTERMODELTHREADS_H
 
 // Qt includes
 
@@ -96,4 +96,4 @@ public:
 
 } // namespace Digikam
 
-#endif // IMAGEALBUMFILTERMODELTHREADS_H
+#endif // IMAGEFILTERMODELTHREADS_H

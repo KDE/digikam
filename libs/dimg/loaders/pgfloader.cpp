@@ -28,6 +28,8 @@
 // files io. Uncomment this line only for debugging.
 //#define ENABLE_DEBUG_MESSAGES
 
+#include "pgfloader.h"
+
 // C Ansi includes
 
 extern "C"
@@ -73,7 +75,6 @@ extern "C"
 #include "PGFimage.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
-#include "pgfloader.h"
 
 namespace Digikam
 {

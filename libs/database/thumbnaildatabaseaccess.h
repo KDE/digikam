@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef THUMBDATABASEACCESS_H
-#define THUMBDATABASEACCESS_H
+#ifndef THUMBNAILDATABASEACCESS_H
+#define THUMBNAILDATABASEACCESS_H
 
 // Local includes
 
@@ -75,4 +75,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // THUMBDATABASEACCESS_H
+#endif // THUMBNAILDATABASEACCESS_H

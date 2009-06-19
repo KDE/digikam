@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGPROPERTIESTXTLABEL_H
-#define IMAGPROPERTIESTXTLABEL_H
+#ifndef IMAGEPROPERTIESTXTLABEL_H
+#define IMAGEPROPERTIESTXTLABEL_H
 
 // Qt includes
 
@@ -81,4 +81,4 @@ public:
     ~DTextLabelValue(){};
 };
 
-#endif /* IMAGPROPERTIESTXTLABEL_H */
+#endif /* IMAGEPROPERTIESTXTLABEL_H */

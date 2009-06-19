@@ -21,6 +21,10 @@
  *
  * ============================================================ */
 
+#ifndef DATABASEBACKEND_P_H
+#define DATABASEBACKEND_P_H
+
+
 #include "databasecorebackend_p.h"
 
 // Qt includes
@@ -121,3 +125,5 @@ public:
 };
 
 }  // namespace Digikam
+
+#endif // DATABASEBACKEND_P_H

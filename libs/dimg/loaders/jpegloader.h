@@ -25,6 +25,11 @@
 #ifndef JPEGLOADER_H
 #define JPEGLOADER_H
 
+// C++ includes
+
+#include <cstdio>
+#include <cstdlib>
+
 // C ANSI includes
 
 extern "C" 

@@ -29,6 +29,8 @@
 // files io. Uncomment this line only for debugging.
 //#define ENABLE_DEBUG_MESSAGES
 
+#include "jpegloader.h"
+
 // C ANSI includes
 
 extern "C"
@@ -36,10 +38,6 @@ extern "C"
 #include "iccjpeg.h"
 }
 
-// C+ includes
-
-#include <cstdio>
-#include <cstdlib>
 
 // Qt includes
 
@@ -54,7 +52,6 @@ extern "C"
 
 #include "dimg.h"
 #include "dimgloaderobserver.h"
-#include "jpegloader.h"
 
 #ifdef Q_CC_MSVC
 #include "jpegwin.h"

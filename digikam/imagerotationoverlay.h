@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEROTATEOVERLAY_H
-#define IMAGEROTATEOVERLAY_H
+#ifndef IMAGEROTATIONOVERLAY_H
+#define IMAGEROTATIONOVERLAY_H
 
 // Qt includes
 
@@ -119,4 +119,4 @@ private Q_SLOTS:
 
 } // namespace Digikam
 
-#endif /* IMAGEROTATEOVERLAY_H */
+#endif /* IMAGEROTATIONOVERLAY_H */

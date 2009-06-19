@@ -21,6 +21,9 @@
  *
  * ============================================================ */
 
+#ifndef DATABASECOREBACKEND_P_H
+#define DATABASECOREBACKEND_P_H
+
 // Qt includes
 
 #include <QHash>
@@ -77,3 +80,5 @@ public:
 
 
 }  // namespace Digikam
+
+#endif // DATABASECOREBACKEND_P_H
