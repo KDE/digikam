@@ -658,11 +658,11 @@ QString ImageScanner::detectFormat()
             if (mimetype)
             {
                 QString name = mimetype->name();
-                if (name.startsWith("image/"))
+                if (name.startsWith(QLatin1String("image/")))
                 {
                     QString imageTypeName = name.mid(6).toUpper();
                     // cut off the "X-" from some mimetypes
-                    if (imageTypeName.startsWith("X-"))
+                    if (imageTypeName.startsWith(QLatin1String("X-")))
                         imageTypeName = imageTypeName.mid(2);
                     return imageTypeName;
                 }
@@ -714,7 +714,7 @@ QString ImageScanner::formatToString(const QString& format)
     {
         return "JPEG 2000";
     }
-    else if (format.startsWith("RAW-"))
+    else if (format.startsWith(QLatin1String("RAW-")))
     {
         return i18nc("RAW image file (), the parentheses contain the file suffix, like MRW",
                      "RAW image file (%1)",

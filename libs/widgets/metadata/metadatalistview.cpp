@@ -158,7 +158,7 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
         }
 
         // We ignore all unknown tags if necessary.
-        if (!it.key().section('.', 2, 2).startsWith("0x"))
+        if (!it.key().section('.', 2, 2).startsWith(QLatin1String("0x")))
         {
             if (!tagsfilter.isEmpty())
             {
@@ -215,7 +215,7 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
             if ( *itKeysFilter == it.key().section('.', 1, 1) )
             {
                 // We ignore all unknown tags if necessary.
-                if (!it.key().section('.', 2, 2).startsWith("0x"))
+                if (!it.key().section('.', 2, 2).startsWith(QLatin1String("0x")))
                 {
                     if (!tagsFilter.isEmpty())
                     {

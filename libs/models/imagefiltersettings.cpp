@@ -236,13 +236,13 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool *foundText) const
         }
         case MimeFilter::NoRAWFiles:
         {
-            if (info.format().startsWith("RAW"))
+            if (info.format().startsWith(QLatin1String("RAW")))
                 match = false;
             break;
         }
         case MimeFilter::RAWFiles:
         {
-            if (!info.format().startsWith("RAW"))
+            if (!info.format().startsWith(QLatin1String("RAW")))
                 match = false;
             break;
         }

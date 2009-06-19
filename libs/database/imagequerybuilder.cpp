@@ -94,7 +94,7 @@ ImageQueryBuilder::ImageQueryBuilder()
 QString ImageQueryBuilder::buildQuery(const QString& q, QList<QVariant> *boundValues, ImageQueryPostHooks *hooks) const
 {
     // Handle legacy query descriptions
-    if (q.startsWith("digikamsearch:"))
+    if (q.startsWith(QLatin1String("digikamsearch:")))
         return buildQueryFromUrl(KUrl(q), boundValues);
     else
         return buildQueryFromXml(q, boundValues, hooks);

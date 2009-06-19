@@ -335,7 +335,7 @@ void SetupCamera::slotAutoDetectCamera()
     }
 
     // NOTE: See note in digikam/digikam/cameralist.cpp
-    if (port.startsWith("usb:"))
+    if (port.startsWith(QLatin1String("usb:")))
     port = "usb:";
 
     if (!d->listView->findItems(model, Qt::MatchExactly, 1).isEmpty())

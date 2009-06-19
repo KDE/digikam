@@ -246,7 +246,7 @@ CameraType* CameraList::autoDetect(bool& retry)
     // "usb:" and cross your fingers that user doesn't have multiple cameras
     // connected at the same time (whack them if they do).
 
-    if (port.startsWith("usb:"))
+    if (port.startsWith(QLatin1String("usb:")))
         port = "usb:";
 
     CameraType* ctype = new CameraType(model, model, port, "/", 1);
