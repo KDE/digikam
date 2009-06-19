@@ -46,7 +46,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 033 ==> 196462 : IconView (Qt4 Model/view based): Navigation broken after delete.
 034 ==> 192055 : Typo digiKam tip of the day.
 035 ==> 164026 : Wish: use embedded thumbs within jpegs to speedup album display.
-036 ==> 
+036 ==> 197152 : Startup wizard has problems creating directories.
+037 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta1 - Release date: 2009-06-07
