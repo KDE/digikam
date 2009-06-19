@@ -224,7 +224,7 @@ bool CollectionPage::checkRootAlbum(QString& rootAlbumFolder)
     if (!targetPath.exists())
     {
         int rc = KMessageBox::questionYesNo(this,
-                                   i18n("The folder to use as the root album path does not exist: "
+                                   i18n("<p>The folder to use as the root album path does not exist:</p>"
                                         "<p><b>%1</b></p>"
                                         "Would you like digiKam to create it for you?",
                                         rootAlbumFolder),
@@ -238,8 +238,8 @@ bool CollectionPage::checkRootAlbum(QString& rootAlbumFolder)
         if (!targetPath.mkdir(rootAlbumFolder))
         {
             KMessageBox::sorry(this,
-                               i18n("digiKam could not create the folder to use as the root album.\n"
-                                    "Please select a different location."
+                               i18n("<p>digiKam could not create the folder to use as the root album.\n"
+                                    "Please select a different location.</p>"
                                     "<p><b>%1</b></p>", rootAlbumFolder),
                                i18n("Create Root Album Folder Failed"));
             return false;
@@ -298,7 +298,7 @@ bool CollectionPage::checkDatabase(QString& dbFolder)
     if (!targetPath.exists())
     {
         int rc = KMessageBox::questionYesNo(this,
-                                   i18n("The folder to put your database in does not seem to exist: "
+                                   i18n("<p>The folder to put your database in does not seem to exist:</p>"
                                         "<p><b>%1</b></p>"
                                         "Would you like digiKam to create it for you?",
                                         dbFolder),
@@ -312,8 +312,8 @@ bool CollectionPage::checkDatabase(QString& dbFolder)
         if (!targetPath.mkdir(dbFolder))
         {
             KMessageBox::sorry(this,
-                               i18n("digiKam could not create the folder to host your database file.\n"
-                                    "Please select a different location."
+                               i18n("<p>digiKam could not create the folder to host your database file.\n"
+                                    "Please select a different location.</p>"
                                     "<p><b>%1</b></p>", dbFolder),
                                i18n("Create Database Folder Failed"));
             return false;
