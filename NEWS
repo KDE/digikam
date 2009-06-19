@@ -38,7 +38,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 028 ==> 190719 : Compiling digikam-0.10.0 on gentoo fails.
 029 ==> 197129 : Hierarchical setting of keywords.
 030 ==> 195079 : digiKam albums appear empty.
-031 ==> 
+031 ==> 195494 : Deleting and cancelling a picture with the keyboard still delete the picture.
+032 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta1 - Release date: 2009-06-07
