@@ -384,6 +384,42 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     ENDIF(MARBLEWIDGET_FOUND)
 
     # ==================================================================================================
+    # LibLqr-1 library rules
+
+    INCLUDE_DIRECTORIES(${GLIB2_INCLUDE_DIR})
+
+    IF(LQR-1_FOUND)
+
+        INCLUDE_DIRECTORIES(${LQR-1_INCLUDE_DIRS})
+
+        SET(liblqr_LIBS ${LQR-1_LIBRARIES})
+
+    ELSE(LQR-1_FOUND)
+
+        INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty)
+        INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr)
+
+        SET(liblqr_SRCS
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_carver_bias.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_carver.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_carver_list.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_carver_rigmask.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_cursor.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_gradient.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_progress.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_vmap.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_vmap_list.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_energy.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_rwindow.c
+          )
+
+        IF(WIN32)
+            ADD_DEFINITIONS(-DLQR_DISABLE_DECLSPEC)
+        ENDIF(WIN32)
+
+    ENDIF(LQR-1_FOUND)
+
+    # ==================================================================================================
     # Common targets parts
 
     SET(libcurves_SRCS
