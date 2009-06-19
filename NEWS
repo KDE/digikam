@@ -40,7 +40,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 030 ==> 195079 : digiKam albums appear empty.
 031 ==> 195494 : Deleting and cancelling a picture with the keyboard still delete the picture.
 032 ==> 195975 : Images are not visible.
-033 ==> 
+033 ==> 196462 : IconView (Qt4 Model/view based): Navigation broken after delete.
+034 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta1 - Release date: 2009-06-07
