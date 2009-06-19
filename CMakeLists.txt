@@ -2,7 +2,7 @@ PROJECT(digikam)
 
 OPTION(ENABLE_GPHOTO2 "Build digiKam with libgphoto2 support (default=ON)" ON)
 OPTION(ENABLE_THEMEDESIGNER "Build digiKam theme designer (default=OFF)" OFF)
-OPTION(ENABLE_THUMBS_DB "Build digiKam with thumbnails database support (default=OFF)" OFF)
+OPTION(ENABLE_THUMBS_DB "Build digiKam with thumbnails database support (default=OFF)" ON)
 
 # ==================================================================================================
 # Information to update before to release this package.
