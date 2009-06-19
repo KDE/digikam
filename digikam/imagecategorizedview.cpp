@@ -565,7 +565,7 @@ void ImageCategorizedView::layoutWasChanged()
 
 void ImageCategorizedView::userInteraction()
 {
-    // as soon as the user did anything affecting selection, we don't interfer anymore
+    // as soon as the user did anything affecting selection, we don't interfere anymore
     d->ensureInitialSelectedItem = false;
 }
 
@@ -675,7 +675,7 @@ QModelIndex ImageCategorizedView::moveCursor(CursorAction cursorAction, Qt::Keyb
         return KCategorizedView::moveCursor(cursorAction, modifiers);
 
     // We want a simple wrapping navigation.
-    // Default behavior we dont want: right/left does never change row; Next/Previous is equivalent to Down/Up
+    // Default behavior we do not want: right/left does never change row; Next/Previous is equivalent to Down/Up
     switch (cursorAction)
     {
         case MoveNext:

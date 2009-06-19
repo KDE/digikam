@@ -420,7 +420,7 @@ void RawSettingsBox::readSettings()
     d->decodingSettingsBox->setCustomWhiteBalanceGreen(group.readEntry("Custom White Balance Green", 1.0));
     d->decodingSettingsBox->setFourColor(group.readEntry("Four Color RGB", false));
     d->decodingSettingsBox->setUnclipColor(group.readEntry("Unclip Color", 0));
-    d->decodingSettingsBox->setDontStretchPixels(group.readEntry("Dont Stretch Pixels", false));
+    d->decodingSettingsBox->setDontStretchPixels(group.readEntry("Dont Stretch Pixels", false)); // krazy:exclude=spelling
     d->decodingSettingsBox->setNoiseReduction(group.readEntry("Use Noise Reduction", false));
     d->decodingSettingsBox->setMedianFilterPasses(group.readEntry("Median Filter Passes", 0));
     d->decodingSettingsBox->setNRThreshold(group.readEntry("NR Threshold", 100));
@@ -495,7 +495,7 @@ void RawSettingsBox::writeSettings()
     group.writeEntry("Custom White Balance Green", d->decodingSettingsBox->customWhiteBalanceGreen());
     group.writeEntry("Four Color RGB",             d->decodingSettingsBox->useFourColor());
     group.writeEntry("Unclip Color",               d->decodingSettingsBox->unclipColor());
-    group.writeEntry("Dont Stretch Pixels",        d->decodingSettingsBox->useDontStretchPixels());
+    group.writeEntry("Dont Stretch Pixels",        d->decodingSettingsBox->useDontStretchPixels()); // krazy:exclude=spelling
     group.writeEntry("Use Noise Reduction",        d->decodingSettingsBox->useNoiseReduction());
     group.writeEntry("MedianFilterPasses",         d->decodingSettingsBox->medianFilterPasses());
     group.writeEntry("NR Threshold",               d->decodingSettingsBox->NRThreshold());

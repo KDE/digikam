@@ -782,7 +782,7 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
     {
         emit signalDownloaded(folder, file, GPItemInfo::DownloadedYes);
         emit signalDownloadComplete(folder, file, info.path(), info.fileName());
-        sendLogMsg(i18n("Download sucessfully %1...", file), DHistoryView::StartingEntry, folder, file);
+        sendLogMsg(i18n("Download successfully %1...", file), DHistoryView::StartingEntry, folder, file);
     }
 }
 

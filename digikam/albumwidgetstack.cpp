@@ -375,7 +375,7 @@ void AlbumWidgetStack::slotFileChanged(const QString &path)
 void AlbumWidgetStack::slotItemsAddedOrRemoved()
 {
     // do this before the check in the next line, to store this state in any case,
-    // even if we dont trigger updateThumbbar immediately
+    // even if we do not trigger updateThumbbar immediately
     d->needUpdateBar = true;
 
     if (previewMode() != PreviewImageMode)
