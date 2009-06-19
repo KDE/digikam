@@ -3,6 +3,9 @@ digiKam 1.0.0-beta2 - Release date: 2009-xx-xx
 
 NEW FEATURES:
 
+General        : digiKam use a new database to cache thumbnails instead ~./thumbnails.
+                 File format used to store image is PGF (http://www.libpgf.org).
+                 PGF is a wavelets based image compression format and give space optimizations.
 General        : Added Multi-languages support to Caption and Tags right side-bar.
 AlbumGui       : Find Duplicates search can be limited to an album and tag range.
 
@@ -42,7 +45,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 032 ==> 195975 : Images are not visible.
 033 ==> 196462 : IconView (Qt4 Model/view based): Navigation broken after delete.
 034 ==> 192055 : Typo digiKam tip of the day.
-035 ==> 
+035 ==> 164026 : Wish: use embedded thumbs within jpegs to speedup album display.
+036 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta1 - Release date: 2009-06-07
