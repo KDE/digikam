@@ -99,7 +99,7 @@ void ManualRenameInputTest::testNumberToken()
     QCOMPARE(parsed, result);
 }
 
-void ManualRenameInputTest::testEachLetterUppercaseToken_data()
+void ManualRenameInputTest::testFirstLetterOfEachWordUppercaseToken_data()
 {
     QTest::addColumn<QString>("parseString");
     QTest::addColumn<QString>("filename");
@@ -132,7 +132,7 @@ void ManualRenameInputTest::testEachLetterUppercaseToken_data()
                                   << QString("My_Image");
 }
 
-void ManualRenameInputTest::testEachLetterUppercaseToken()
+void ManualRenameInputTest::testFirstLetterOfEachWordUppercaseToken()
 {
     QFETCH(QString,     parseString);
     QFETCH(QString,     filename);

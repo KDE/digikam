@@ -34,12 +34,11 @@ class ManualRenameInputTest : public QObject
 
 private Q_SLOTS:
 
-    // parser tests
     void testNumberToken();
     void testNumberToken_data();
 
-    void testEachLetterUppercaseToken();
-    void testEachLetterUppercaseToken_data();
+    void testFirstLetterOfEachWordUppercaseToken();
+    void testFirstLetterOfEachWordUppercaseToken_data();
 
     void testUppercaseToken();
     void testUppercaseToken_data();
