@@ -734,6 +734,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameraselection.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameralist.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameratype.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/photographer.cpp 
        )
 
     SET(libkipiiface_SRCS
