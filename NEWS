@@ -52,7 +52,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 039 ==> 173899 : Timeline does not show any photos.
 040 ==> 196994 : digiKam 1.0.0-0.1.beta1.f11 from kde-redhat crash on startup.
 041 ==> 180076 : Moving a big folder to another subfolder folder does ... nothing.
-042 ==> 
+042 ==> 191557 : Previous and next image is showing weird results.
+043 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta1 - Release date: 2009-06-07
