@@ -48,7 +48,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 035 ==> 164026 : Wish: use embedded thumbs within jpegs to speedup album display.
 036 ==> 197152 : Startup wizard has problems creating directories.
 037 ==> 196726 : digiKam crashes while creating thumbnails.
-038 ==> 
+038 ==> 182852 : Timeline: click area small an unintuitive.
+039 ==> 173899 : Timeline does not show any photos.
+040 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta1 - Release date: 2009-06-07
