@@ -61,7 +61,7 @@ public:
 
     SetupCategoryPriv()
     {
-        categoryEdit        = 0;
+        categoryEdit      = 0;
         albumCategoryBox  = 0;
         addCategoryButton = 0;
         delCategoryButton = 0;
