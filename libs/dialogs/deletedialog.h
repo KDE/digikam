@@ -142,8 +142,12 @@ public:
 
 protected Q_SLOTS:
 
-    virtual void accept();
+    void slotUser1Clicked();
     void slotShouldDelete(bool);
+
+private:
+
+    void keyPressEvent(QKeyEvent*);
 
 private:
 

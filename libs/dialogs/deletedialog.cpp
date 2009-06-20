@@ -34,6 +34,7 @@
 #include <QLabel>
 #include <QTimer>
 #include <QCheckBox>
+#include <QKeyEvent>
 
 // KDE includes
 
@@ -43,6 +44,7 @@
 #include <kstandarddirs.h>
 #include <klocale.h>
 #include <kstdguiitem.h>
+#include <kpushbutton.h>
 
 // Local includes
 
@@ -253,9 +255,8 @@ DeleteDialog::DeleteDialog(QWidget *parent)
               m_saveDoNotShowAgain(false),
               m_trashGuiItem(i18n("&Move to Trash"), "user-trash-full")
 {
-    setButtons(Ok | Cancel);
-    setDefaultButton(Cancel);
-    setButtonFocus(Cancel);
+    setButtons(User1 | Cancel);
+    setButtonFocus(User1);
     setModal(true);
     m_widget = new DeleteWidget(this);
     setMainWidget(m_widget);
@@ -268,6 +269,9 @@ DeleteDialog::DeleteDialog(QWidget *parent)
 
     connect(m_widget->m_shouldDelete, SIGNAL(toggled(bool)),
             this, SLOT(slotShouldDelete(bool)));
+
+    connect(this, SIGNAL(user1Clicked()),
+            this, SLOT(slotUser1Clicked()));
 }
 
 bool DeleteDialog::confirmDeleteList(const KUrl::List& condemnedFiles,
@@ -291,7 +295,7 @@ void DeleteDialog::setURLs(const KUrl::List& files)
     m_widget->setFiles(files);
 }
 
-void DeleteDialog::accept()
+void DeleteDialog::slotUser1Clicked()
 {
     // Save user's preference
     AlbumSettings *settings = AlbumSettings::instance();
@@ -321,7 +325,7 @@ void DeleteDialog::slotShouldDelete(bool shouldDelete)
     // This is called once from constructor, and then when the user changed the checkbox state.
     // In that case, save the user's preference.
     m_saveShouldDeleteUserPreference = true;
-    setButtonGuiItem(Ok, shouldDelete ? KStandardGuiItem::del() : m_trashGuiItem);
+    setButtonGuiItem(User1, shouldDelete ? KStandardGuiItem::del() : m_trashGuiItem);
 }
 
 void DeleteDialog::presetDeleteMode(DeleteDialogMode::DeleteMode mode)
@@ -375,6 +379,29 @@ void DeleteDialog::setListMode(DeleteDialogMode::ListMode mode)
             setCaption(i18n("About to delete selected albums"));
             break;
     }
+}
+
+void DeleteDialog::keyPressEvent(QKeyEvent *e)
+{
+    if ( e->modifiers() == 0 )
+    {
+        if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return)
+        {
+            if (button(User1)->hasFocus())
+            {
+                e->accept();
+                button(User1)->animateClick();
+                return;
+            }
+            else if (button(Cancel)->hasFocus())
+            {
+                e->accept();
+                button(Cancel)->animateClick();
+                return;
+            }
+        }
+    }
+    KDialog::keyPressEvent(e);
 }
 
 } // namespace Digikam
