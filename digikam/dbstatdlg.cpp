@@ -82,7 +82,7 @@ DBStatDlg::DBStatDlg(QWidget *parent)
     QTreeWidgetItem *spacer = new QTreeWidgetItem(listView(), QStringList());
 
     // get album statistics
-    int albums                 = DatabaseAccess().db()->getAlbumShortInfos().length();
+    int albums                 = DatabaseAccess().db()->scanAlbums().length();
     QTreeWidgetItem *albumItem = new QTreeWidgetItem(listView(), QStringList() << i18n("Albums")
                                                                                << QString::number(albums));
 
