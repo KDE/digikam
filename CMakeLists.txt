@@ -732,6 +732,8 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupdcraw.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupcamera.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameraselection.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameralist.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameratype.cpp 
        )
 
     SET(libkipiiface_SRCS
@@ -1001,8 +1003,6 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumthumbnailloader.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumtreeview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumwidgetstack.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/cameralist.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/cameratype.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/contextmenuhelper.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/datefolderview.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dbstatdlg.cpp 
