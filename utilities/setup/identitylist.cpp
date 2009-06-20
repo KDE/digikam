@@ -90,9 +90,14 @@ IndentityList::IndentityList(QWidget* parent)
     setHeaderLabels(labels);
     header()->setResizeMode(0, QHeaderView::ResizeToContents);
     header()->setResizeMode(1, QHeaderView::Stretch);
+}
 
-    // Populate photographers --------------------------------------
+IndentityList::~IndentityList()
+{
+}
 
+void IndentityList::readSettings()
+{
     PhotographerList* plist = PhotographerList::defaultList();
 
     if (plist)
@@ -104,10 +109,6 @@ IndentityList::IndentityList(QWidget* parent)
             new IndentityListItem(this, photographer);
         }
     }
-}
-
-IndentityList::~IndentityList()
-{
 }
 
 void IndentityList::applySettings()

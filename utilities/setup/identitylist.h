@@ -61,9 +61,10 @@ public:
     IndentityList(QWidget* parent=0);
     ~IndentityList();
 
+    void readSettings();
     void applySettings();
 };
 
 }  // namespace Digikam
 
-#endif // INDENTITYLIST_H 
+#endif // INDENTITYLIST_H
