@@ -50,8 +50,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 037 ==> 196726 : digiKam crashes while creating thumbnails.
 038 ==> 182852 : Timeline: click area small an unintuitive.
 039 ==> 173899 : Timeline does not show any photos.
-040 ==> 196994 : digikam 1.0.0-0.1.beta1.f11 from kde-redhat crash on startup.
-041 ==> 
+040 ==> 196994 : digiKam 1.0.0-0.1.beta1.f11 from kde-redhat crash on startup.
+041 ==> 180076 : Moving a big folder to another subfolder folder does ... nothing.
+042 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta1 - Release date: 2009-06-07
