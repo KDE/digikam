@@ -259,6 +259,9 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
     QPoint vp = contentsToViewport(e->pos());
     TAlbumCheckListItem *itemDrop = dynamic_cast<TAlbumCheckListItem*>(itemAt(vp));
 
+    if (!itemDrop)
+        return;
+
     if(DTagDrag::canDecode(e->mimeData()))
     {
         int tagID;
@@ -271,7 +274,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
         if(!talbum)
             return;
 
-        if (itemDrop && talbum == itemDrop->album())
+        if (talbum == itemDrop->album())
             return;
 
         KMenu popMenu(this);
