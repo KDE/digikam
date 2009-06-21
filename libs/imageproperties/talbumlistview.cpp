@@ -271,7 +271,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
         if(!talbum)
             return;
 
-        if (talbum == itemDrop->album())
+        if (itemDrop && talbum == itemDrop->album())
             return;
 
         KMenu popMenu(this);
