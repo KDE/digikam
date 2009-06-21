@@ -495,24 +495,15 @@ void AlbumDB::deleteTag(int tagID)
 
 void AlbumDB::setTagIcon(int tagID, const QString& iconKDE, qlonglong iconID)
 {
-    if (!iconKDE.isEmpty())
-    {
-        if (iconKDE.toLower() == QString("tag"))
-        {
-            d->db->execSql( QString("UPDATE Tags SET iconkde=NULL, icon=0 WHERE id=?;"),
-                            tagID );
-        }
-        else
-        {
-            d->db->execSql( QString("UPDATE Tags SET iconkde=?, icon=0 WHERE id=?;"),
-                            iconKDE, tagID );
-        }
-    }
-    else
-    {
-        d->db->execSql( QString("UPDATE Tags SET icon=? WHERE id=?;"),
-                        iconID, tagID );
-    }
+    int     _iconID  = iconKDE.isEmpty() ? iconID : 0;
+    QString _iconKDE = iconKDE;
+
+    if (iconKDE.isEmpty() || iconKDE.toLower() == QString("tag"))
+        _iconKDE.clear();
+
+    d->db->execSql( QString("UPDATE Tags SET iconkde=?, icon=? WHERE id=?;"),
+                    _iconKDE, _iconID, tagID );
+
     d->db->recordChangeset(TagChangeset(tagID, TagChangeset::IconChanged));
 }
 
