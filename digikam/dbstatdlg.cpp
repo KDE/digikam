@@ -82,12 +82,12 @@ DBStatDlg::DBStatDlg(QWidget *parent)
     QTreeWidgetItem *spacer = new QTreeWidgetItem(listView(), QStringList());
 
     // get album statistics
-    int albums                 = DatabaseAccess().db()->scanAlbums().length();
+    int albums                 = DatabaseAccess().db()->scanAlbums().count();
     QTreeWidgetItem *albumItem = new QTreeWidgetItem(listView(), QStringList() << i18n("Albums")
                                                                                << QString::number(albums));
 
     // get tags statistics
-    int tags                  = DatabaseAccess().db()->scanTags().length();
+    int tags                  = DatabaseAccess().db()->scanTags().count();
     QTreeWidgetItem *tagsItem = new QTreeWidgetItem(listView(), QStringList() << i18n("Tags")
                                                                               << QString::number(tags));
     Q_UNUSED(spacer)
