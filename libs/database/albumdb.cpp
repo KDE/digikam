@@ -497,8 +497,16 @@ void AlbumDB::setTagIcon(int tagID, const QString& iconKDE, qlonglong iconID)
 {
     if (!iconKDE.isEmpty())
     {
-        d->db->execSql( QString("UPDATE Tags SET iconkde=?, icon=0 WHERE id=?;"),
-                        iconKDE, tagID );
+        if (iconKDE.toLower() == QString("tag"))
+        {
+            d->db->execSql( QString("UPDATE Tags SET iconkde=NULL, icon=0 WHERE id=?;"),
+                            tagID );
+        }
+        else
+        {
+            d->db->execSql( QString("UPDATE Tags SET iconkde=?, icon=0 WHERE id=?;"),
+                            iconKDE, tagID );
+        }
     }
     else
     {
