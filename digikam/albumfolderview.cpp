@@ -970,6 +970,9 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
 
         if (AlbumSettings::instance()->getAlbumSortOrder() == AlbumSettings::ByFolder)
         {
+            if (!itemDrop)
+                return;
+
             // TODO: Copy?
             KMenu popMenu(this);
             popMenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
@@ -983,12 +986,18 @@ void AlbumFolderView::contentsDropEvent(QDropEvent *e)
             {
                 PAlbum *album = itemDrag->album();
                 PAlbum *destAlbum;
+
+                /*
                 if(!itemDrop)
                 {
+                    // FIXME: old code? Doesn't seem to work with multiple collections anymore.
+                    // returning for now. Any better solution?
+
                     // move dragItem to the root
-                    destAlbum = d->albumMan->findPAlbum(0);
+                    // destAlbum = d->albumMan->findPAlbum(0);
                 }
                 else
+                */
                 {
                     // move dragItem below dropItem
                     destAlbum = itemDrop->album();
