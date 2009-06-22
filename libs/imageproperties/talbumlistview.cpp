@@ -223,8 +223,12 @@ bool TAlbumListView::acceptDrop(const QDropEvent *e) const
 
     if(DTagDrag::canDecode(e->mimeData()) || DTagListDrag::canDecode(e->mimeData()))
     {
+        // Allow dragging on empty space when the itemDrag isn't already at root level
+        if (!itemDrop && itemDrag->album()->parent()->isRoot())
+            return false;
+
         // Allow dragging at the root, to move the tag to the root
-        if(!itemDrop)
+        if (!itemDrop)
             return true;
 
         // Dragging an item on itself makes no sense
@@ -271,6 +275,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
         if(!talbum)
             return;
 
+        // do not allow dropping
         if (itemDrop && talbum == itemDrop->album())
             return;
 

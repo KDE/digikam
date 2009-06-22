@@ -499,6 +499,10 @@ bool TagFilterView::acceptDrop(const QDropEvent *e) const
 
     if(DTagDrag::canDecode(e->mimeData()) || DTagListDrag::canDecode(e->mimeData()))
     {
+        // Allow dragging on empty space when the itemDrag isn't already at root level
+        if (!itemDrop && itemDrag->album()->parent()->isRoot())
+            return false;
+
         // Allow dragging at the root, to move the tag to the root
         if(!itemDrop)
             return true;
@@ -547,7 +551,7 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
     QPoint vp = contentsToViewport(e->pos());
     TagFilterViewItem *itemDrop = dynamic_cast<TagFilterViewItem*>(itemAt(vp));
 
-    if (!itemDrop || itemDrop->untagged())
+    if (itemDrop && itemDrop->untagged())
         return;
 
     if(DTagDrag::canDecode(e->mimeData()))
@@ -562,7 +566,7 @@ void TagFilterView::contentsDropEvent(QDropEvent *e)
         if(!talbum)
             return;
 
-        if (talbum == itemDrop->album())
+        if (itemDrop && talbum == itemDrop->album())
             return;
 
         KMenu popMenu(this);
