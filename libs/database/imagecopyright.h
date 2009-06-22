@@ -6,7 +6,7 @@
  * Date        : 2008-05-12
  * Description : Access to copyright info of an image in the database
  *
- * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -161,8 +161,8 @@ public:
     QString byLineTitle()     { return creatorJobTitle(); }
 
     void setCreatorJobTitle(const QString& title);
-     void setAuthorsPosition(const QString& position) { setCreatorJobTitle(position); }
-     void setByLineTitle(const QString& title)        { setCreatorJobTitle(title); }
+    void setAuthorsPosition(const QString& position) { setCreatorJobTitle(position); }
+    void setByLineTitle(const QString& title)        { setCreatorJobTitle(title); }
 
     /** Returns the instructions.
      *  This is Photoshop Instructions.

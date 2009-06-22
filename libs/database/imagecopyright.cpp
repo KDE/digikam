@@ -6,7 +6,7 @@
  * Date        : 2008-05-12
  * Description : Access to copyright info of an image in the database
  *
- * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -127,7 +127,6 @@ void ImageCopyright::setInstructions(const QString& instructions)
     setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreInstructions), instructions);
 }
 
-
 QString ImageCopyright::readSimpleProperty(const QString& property)
 {
     QList<CopyrightInfo> infos = DatabaseAccess().db()->getImageCopyright(m_id, property);
@@ -192,17 +191,19 @@ int ImageCopyright::languageMatch(const QList<CopyrightInfo> infos, const QStrin
     }
 
     int fullCodeMatch, langCodeMatch, defaultCodeMatch, firstMatch;
-    fullCodeMatch = -1;
-    langCodeMatch = -1;
+    fullCodeMatch    = -1;
+    langCodeMatch    = -1;
     defaultCodeMatch = -1;
-    firstMatch = -1;
+    firstMatch       = -1;
 
     if (infos.isEmpty())
     {
         return -1;
     }
     else
+    {
         firstMatch = 0; // index of first entry - at least we have one
+    }
 
     // First we search for a full match
     // Second for a match of the language code
@@ -221,9 +222,13 @@ int ImageCopyright::languageMatch(const QList<CopyrightInfo> infos, const QStrin
             break;
         }
         else if (info.extraValue.startsWith(langCode) && langCodeMatch == -1)
+        {
             langCodeMatch = i;
+        }
         else if (info.extraValue == defaultCode)
+        {
             defaultCodeMatch = i;
+        }
     }
 
     int chosen = fullCodeMatch;
