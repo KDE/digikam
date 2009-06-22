@@ -478,35 +478,6 @@ void KCategorizedView::Private::drawDraggedItems(QPainter *painter)
     }
 }
 
-void KCategorizedView::Private::layoutChanged(bool forceItemReload)
-{
-    if (proxyModel && categoryDrawer && proxyModel->isCategorizedModel() &&
-        ((forceItemReload ||
-          (modelSortRole != proxyModel->sortRole()) ||
-          (modelSortColumn != proxyModel->sortColumn()) ||
-          (modelSortOrder != proxyModel->sortOrder()) ||
-          (modelLastRowCount != proxyModel->rowCount()) ||
-          (modelCategorized != proxyModel->isCategorizedModel()))))
-    {
-        // Force the view to update all elements
-        listView->rowsInsertedArtifficial(QModelIndex(), 0, proxyModel->rowCount() - 1);
-
-        if (!forceItemReload)
-        {
-            modelSortRole = proxyModel->sortRole();
-            modelSortColumn = proxyModel->sortColumn();
-            modelSortOrder = proxyModel->sortOrder();
-            modelLastRowCount = proxyModel->rowCount();
-            modelCategorized = proxyModel->isCategorizedModel();
-        }
-    }
-
-    if (proxyModel && categoryDrawer && proxyModel->isCategorizedModel())
-    {
-        updateScrollbars();
-    }
-}
-
 void KCategorizedView::Private::drawDraggedItems()
 {
     QRect rectToUpdate;
@@ -549,7 +520,7 @@ void KCategorizedView::setGridSize(const QSize &size)
 {
     QListView::setGridSize(size);
 
-    d->layoutChanged(true);
+    slotLayoutChanged();
 }
 
 void KCategorizedView::setModel(QAbstractItemModel *model)
@@ -583,12 +554,6 @@ void KCategorizedView::setModel(QAbstractItemModel *model)
 
     if (d->proxyModel)
     {
-        d->modelSortRole = d->proxyModel->sortRole();
-        d->modelSortColumn = d->proxyModel->sortColumn();
-        d->modelSortOrder = d->proxyModel->sortOrder();
-        d->modelLastRowCount = d->proxyModel->rowCount();
-        d->modelCategorized = d->proxyModel->isCategorizedModel();
-
         QObject::connect(d->proxyModel,
                          SIGNAL(layoutChanged()),
                          this, SLOT(slotLayoutChanged()));
@@ -599,12 +564,8 @@ void KCategorizedView::setModel(QAbstractItemModel *model)
 
         if (d->proxyModel->rowCount())
         {
-            d->layoutChanged(true);
+            slotLayoutChanged();
         }
-    }
-    else
-    {
-        d->modelCategorized = false;
     }
 }
 
@@ -737,7 +698,7 @@ void KCategorizedView::setCategoryDrawer(KCategoryDrawer *categoryDrawer)
         {
             if (d->proxyModel->rowCount())
             {
-                d->layoutChanged(true);
+                slotLayoutChanged();
             }
         }
     }
@@ -1757,7 +1718,11 @@ void KCategorizedView::updateGeometries()
 
 void KCategorizedView::slotLayoutChanged()
 {
-    d->layoutChanged();
+    if (d->proxyModel && d->categoryDrawer && d->proxyModel->isCategorizedModel())
+    {
+        d->updateScrollbars();
+        rowsInsertedArtifficial(QModelIndex(), 0, d->proxyModel->rowCount() - 1);
+    }
 }
 
 void KCategorizedView::currentChanged(const QModelIndex &current,
@@ -1801,37 +1766,5 @@ void KCategorizedView::currentChanged(const QModelIndex &current,
     QListView::currentChanged(current, previous);
 }
 
-void KCategorizedView::dataChanged(const QModelIndex &topLeft,
-                                   const QModelIndex &bottomRight)
-{
-    if (!d->proxyModel || !d->categoryDrawer || !d->proxyModel->isCategorizedModel())
-    {
-        QListView::dataChanged(topLeft, bottomRight);
-        return;
-    }
-
-    if (topLeft == bottomRight)
-    {
-        d->cacheIndex(topLeft);
-    }
-    else
-    {
-        const int columnStart = topLeft.column();
-        const int columnEnd = bottomRight.column();
-        const int rowStart = topLeft.row();
-        const int rowEnd = bottomRight.row();
-
-        for (int row = rowStart; row <= rowEnd; ++row)
-        {
-            for (int column = columnStart; column <= columnEnd; ++column)
-            {
-                d->cacheIndex(d->proxyModel->index(row, column));
-            }
-        }
-    }
-
-    QListView::dataChanged(topLeft, bottomRight);
-    slotLayoutChanged();
-}
 
 #include "kcategorizedview.moc"

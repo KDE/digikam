@@ -112,8 +112,6 @@ public:
       */
     void drawDraggedItems();
 
-    void layoutChanged(bool forceItemReload = false);
-
     /**
       * This method will, starting from the index at begin in the given (sorted) modelIndex List,
       * find the last index having the same category as the index to begin with.
@@ -154,11 +152,6 @@ public:
     QStringList categories;
     QModelIndexList intersectedIndexes;
     QRect lastDraggedItemsRect;
-    int modelSortRole;
-    int modelSortColumn;
-    int modelLastRowCount;
-    bool modelCategorized;
-    Qt::SortOrder modelSortOrder;
     QItemSelection lastSelection;
 
     // Attributes for speed reasons
