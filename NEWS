@@ -55,7 +55,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 042 ==> 191557 : Previous and next image is showing weird results.
 043 ==> 197360 : In the "edit captions" sidebar moving a tag to white space crashes digiKam.
 044 ==> 195799 : digiKam takes 100% CPU when exiting and finally crashes.
-045 ==> 
+045 ==> 152219 : Impossible to clear comments in metadata.
+046 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta1 - Release date: 2009-06-07
