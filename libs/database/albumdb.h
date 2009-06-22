@@ -981,8 +981,9 @@ public:
     /**
      * Remove all tags for the item
      * @param imageID the ID of the item
+     * @param currentTagIds the current tags ids assigned to the item
      */
-    void removeItemAllTags(qlonglong imageID);
+    void removeItemAllTags(qlonglong imageID, QList<int> currentTagIds);
 
     /**
      * Remove each tag from a list of tags

@@ -243,8 +243,7 @@ void KipiImageInfo::delAttributes(const QStringList& res)
         // Remove all tags of a picture from database.
         if (res.contains("tags"))
         {
-            DatabaseAccess access;
-            access.db()->removeItemAllTags(m_info.id());
+            m_info.removeAllTags();
         }
 
         // Remove digiKam Rating of picture from database.

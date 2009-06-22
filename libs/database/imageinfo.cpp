@@ -526,24 +526,36 @@ void ImageInfo::setDateTime(const QDateTime& dateTime)
 
 void ImageInfo::setTag(int tagID)
 {
+    if (!m_data)
+        return;
+
     DatabaseAccess access;
     access.db()->addItemTag(m_data->id, tagID);
 }
 
 void ImageInfo::removeTag(int tagID)
 {
+    if (!m_data)
+        return;
+
     DatabaseAccess access;
     access.db()->removeItemTag(m_data->id, tagID);
 }
 
 void ImageInfo::removeAllTags()
 {
+    if (!m_data)
+        return;
+
     DatabaseAccess access;
-    access.db()->removeItemAllTags(m_data->id);
+    access.db()->removeItemAllTags(m_data->id, tagIds());
 }
 
 void ImageInfo::addTagPaths(const QStringList& tagPaths)
 {
+    if (!m_data)
+        return;
+
     DatabaseAccess access;
     QList<int> list = access.db()->getTagsFromTagPaths(tagPaths, false);
     for (int i=0; i<list.count(); ++i)
@@ -552,6 +564,9 @@ void ImageInfo::addTagPaths(const QStringList& tagPaths)
 
 ImageInfo ImageInfo::copyItem(int dstAlbumID, const QString& dstFileName)
 {
+    if (!m_data)
+        return ImageInfo();
+
     DatabaseAccess access;
     //kDebug(50003) << "ImageInfo::copyItem " << m_data->albumId << " " << m_data->name << " to " << dstAlbumID << " " << dstFileName;
 

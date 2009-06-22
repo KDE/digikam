@@ -1847,13 +1847,13 @@ void AlbumDB::removeItemTag(qlonglong imageID, int tagID)
     d->db->recordChangeset(ImageTagChangeset(imageID, tagID, ImageTagChangeset::Removed));
 }
 
-void AlbumDB::removeItemAllTags(qlonglong imageID)
+void AlbumDB::removeItemAllTags(qlonglong imageID, QList<int> currentTagIds)
 {
     d->db->execSql( QString("DELETE FROM ImageTags "
                             "WHERE imageID=?;"),
                     imageID );
 
-    d->db->recordChangeset(ImageTagChangeset(imageID, QList<int>(), ImageTagChangeset::RemovedAll));
+    d->db->recordChangeset(ImageTagChangeset(imageID, currentTagIds, ImageTagChangeset::RemovedAll));
 }
 
 void AlbumDB::removeTagsFromItems(QList<qlonglong> imageIDs, QList<int> tagIDs)

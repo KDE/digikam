@@ -75,9 +75,6 @@ public:
      * It is described by a list of affected image ids, a list of affected tags,
      * and an operation.
      * There is no guarantee that information in the database has actually been changed.
-     * Special case:
-     * If all tags have been removed from an item, operation is RemovedAll,
-     * and the tags list is empty. containsTag() will always return true in this case.
      */
 
     enum Operation
