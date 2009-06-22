@@ -146,6 +146,8 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
+    d->includeAlbumsLabel = new QLabel(i18n("Search in:"));
+
     d->albumSelectCB = new AlbumSelectComboBox();
     d->albumSelectCB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
@@ -153,20 +155,12 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
     d->albumSelectCB->setWhatsThis(albumSelectStr);
     d->albumSelectCB->setToolTip(albumSelectStr);
 
-    d->includeAlbumsLabel = new QLabel(i18n("Search in:"));
-    d->includeAlbumsLabel->setBuddy(d->albumSelectCB);
-
-    // ---------------------------------------------------------------
-
     d->tagSelectCB = new AlbumSelectComboBox();
     d->tagSelectCB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     QString tagSelectStr = i18n("Select all tags that should be included in the search.");
     d->tagSelectCB->setWhatsThis(tagSelectStr);
     d->tagSelectCB->setToolTip(tagSelectStr);
-
-    d->includeAlbumsLabel = new QLabel(i18n("Search in:"));
-    d->includeAlbumsLabel->setBuddy(d->albumSelectCB);
 
     // ---------------------------------------------------------------
 
