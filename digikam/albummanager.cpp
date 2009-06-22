@@ -46,6 +46,7 @@ extern "C"
 
 #include <QApplication>
 #include <QDBusConnection>
+#include <QDBusInterface>
 #include <QHash>
 #include <QList>
 #include <QFile>
@@ -209,7 +210,7 @@ public:
         foreach (const QFileInfo& info, fileInfoList)
         {
             // ignore digikam4.db and journal and other temporary files
-            if (!info.fileName().startsWith(dbFile.fileName()))
+            if (!dirWatchBlackList.contains(info.fileName()))
             {
                 modList << info.lastModified();
             }
@@ -473,7 +474,10 @@ void AlbumManager::changeDatabase(const QString& dbPath)
     }
 
     if (setDatabase(dbPath, false))
+    {
         startScan();
+        ScanController::instance()->completeCollectionScan();
+    }
 }
 
 bool AlbumManager::setDatabase(const QString& dbPath, bool priority, const QString& suggestedAlbumRoot)
