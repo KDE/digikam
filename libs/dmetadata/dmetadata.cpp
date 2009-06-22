@@ -177,7 +177,7 @@ KExiv2::AltLangMap DMetadata::getImageComments() const
         }
     }
 
-    // In first we trying to get image comments, outside of XMP, Exif, and IPTC.
+    // Now, we trying to get image comments, outside of XMP, Exif, and IPTC.
     // For JPEG, string is extracted from JFIF Comments section.
     // For PNG, string is extracted from iTXt chunk.
 
@@ -188,7 +188,7 @@ KExiv2::AltLangMap DMetadata::getImageComments() const
         return map;
     }
 
-    // In second, we trying to get Exif comments
+    // We trying to get Exif comments
 
     if (hasExif())
     {
@@ -200,7 +200,7 @@ KExiv2::AltLangMap DMetadata::getImageComments() const
         }
     }
 
-    // In four, we trying to get IPTC comments
+    // We trying to get IPTC comments
 
     if (hasIptc())
     {
@@ -223,37 +223,49 @@ bool DMetadata::setImageComments(const KExiv2::AltLangMap& comments) const
 
     kDebug(50003) << getFilePath() << " ==> Comment: " << comments;
 
+    QString defaultComment = comments[QString("x-default")];
+
     // In first we set image comments, outside of Exif, XMP, and IPTC.
 
-    if (!setComments(comments[QString("x-default")].toUtf8()))
+    if (!setComments(defaultComment.toUtf8()))
         return false;
 
     // In Second we write comments into Exif.
 
-    if (!setExifComment(comments[QString("x-default")]))
+    if (!setExifComment(defaultComment))
         return false;
 
     // In Third we write comments into XMP. Language Alternative rule is not yet used.
 
     if (supportXmp())
     {
+        // NOTE : setXmpTagStringListLangAlt remove xmp tag before to add new values
         if (!setXmpTagStringListLangAlt("Xmp.dc.description", comments, false))
             return false;
 
-        if (!setXmpTagStringLangAlt("Xmp.exif.UserComment", comments[QString("x-default")], QString(), false))
-            return false;
+        removeXmpTag("Xmp.exif.UserComment");
 
-        if (!setXmpTagStringLangAlt("Xmp.tiff.ImageDescription", comments[QString("x-default")], QString(), false))
-            return false;
+        if (!defaultComment.isNull())
+            if (!setXmpTagStringLangAlt("Xmp.exif.UserComment", defaultComment, QString(), false))
+                return false;
+
+        removeXmpTag("Xmp.tiff.ImageDescription");
+        if (!defaultComment.isNull())
+            if (!setXmpTagStringLangAlt("Xmp.tiff.ImageDescription", defaultComment, QString(), false))
+                return false;
     }
     // In Four we write comments into IPTC.
     // Note that Caption IPTC tag is limited to 2000 char and ASCII charset.
 
-    QString commentIptc = comments[QString("x-default")];
-    commentIptc.truncate(2000);
+    removeIptcTag("Iptc.Application2.Caption");
 
-    if (!setIptcTagString("Iptc.Application2.Caption", commentIptc))
-        return false;
+    if (!defaultComment.isNull())
+    {
+        defaultComment.truncate(2000);
+
+        if (!setIptcTagString("Iptc.Application2.Caption", defaultComment))
+            return false;
+    }
 
     return true;
 }
