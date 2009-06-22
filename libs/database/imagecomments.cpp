@@ -45,7 +45,7 @@ public:
 
     ImageCommentsPriv()
     {
-        id = -1;
+        id     = -1;
         unique = ImageComments::UniquePerLanguage;
     }
 
@@ -56,7 +56,7 @@ public:
     ImageComments::UniqueBehavior unique;
 
     void languageMatch(const QString& fullCode, const QString& langCode,
-                        int& fullCodeMatch, int& langCodeMatch, int& defaultCodeMatch, int& firstMatch) const
+                       int& fullCodeMatch, int& langCodeMatch, int& defaultCodeMatch, int& firstMatch) const
     {
         // if you change the algorithm, please take a look at ImageCopyright as well
         fullCodeMatch    = -1;
@@ -413,7 +413,15 @@ void ImageComments::apply(DatabaseAccess& access)
 
 void ImageComments::setAltComments(const KExiv2::AltLangMap& comments)
 {
-    if (comments.isEmpty()) return;
+    for (int i = 0 ; i < numberOfComments() ; ++i)
+    {
+        CommentInfo& info = d->infos[i];
+        kDebug(50003) << "Remove Comment from DB: " << info.comment;
+        DatabaseAccess access;
+        access.db()->removeImageComment(info.id, d->id);
+    }
+
+    d->infos.clear();
 
     for (KExiv2::AltLangMap::const_iterator it = comments.constBegin(); it != comments.constEnd(); ++it)
         addComment(it.value(), it.key());
