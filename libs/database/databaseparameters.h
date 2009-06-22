@@ -73,6 +73,11 @@ public:
     bool operator==(const DatabaseParameters& other);
     bool operator!=(const DatabaseParameters& other);
 
+    /** Performs basic checks that the parameters are not empty and have the information
+     *  required for the databaseType.
+     */
+    bool isValid() const;
+
     bool isSQLite() const;
     QString SQLiteDatabaseFile() const;
 

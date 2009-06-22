@@ -83,6 +83,13 @@ bool DatabaseParameters::operator!=(const DatabaseParameters& other)
     return !operator==(other);
 }
 
+bool DatabaseParameters::isValid() const
+{
+    if (isSQLite())
+        return !databaseName.isEmpty();
+    return false;
+}
+
 bool DatabaseParameters::isSQLite() const
 {
     return databaseType == "QSQLITE";

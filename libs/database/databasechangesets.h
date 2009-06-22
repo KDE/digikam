@@ -332,7 +332,9 @@ DECLARE_METATYPE_FOR_DBUS(Digikam::SearchChangeset)
 DECLARE_METATYPE_FOR_DBUS(Digikam::AlbumRootChangeset)
 DECLARE_METATYPE_FOR_DBUS(Digikam::DatabaseFields::Set)
 
+#ifndef DATABASECHANGESETS_H_NO_QLIST_METATYPE_DECLARATION // also defined in library headers
 Q_DECLARE_METATYPE(QList<int>)
 Q_DECLARE_METATYPE(QList<qlonglong>)
+#endif
 
 #endif //DATABASECHANGESETS_H
