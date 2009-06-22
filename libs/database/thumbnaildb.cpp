@@ -150,6 +150,28 @@ QHash<QString, int> ThumbnailDB::getValidFilePaths()
     return filePaths;
 }
 
+QHash<QString, int> ThumbnailDB::getInvalidFilePaths()
+{
+    QSqlQuery query;
+    query = d->db->prepareQuery(QString("SELECT path, id "
+                                        "FROM FilePaths "
+                                        "   INNER JOIN Thumbnails ON FilePaths.thumbId=Thumbnails.id "
+                                        "WHERE type BETWEEN %1 AND %2;")
+                                .arg(DatabaseThumbnail::UndefinedType)
+                                .arg(DatabaseThumbnail::NoThumbnail));
+
+    if (!d->db->exec(query))
+        return QHash<QString, int>();
+
+    QHash <QString, int> filePaths;
+
+    while (query.next())
+    {
+        filePaths[query.value(0).toString()] = query.value(1).toInt();
+    }
+    return filePaths;
+}
+
 void ThumbnailDB::insertUniqueHash(const QString &uniqueHash, int fileSize, int thumbId)
 {
     d->db->execSql("REPLACE INTO UniqueHashes (uniqueHash, fileSize, thumbId) VALUES (?,?,?)",

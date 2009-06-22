@@ -121,6 +121,24 @@ void BatchThumbsGenerator::slotRebuildThumbs()
 
 #ifdef USE_THUMBS_DB
 
+    /* Not working at the moment, it seems that the NoThumbnail type is not (yet) used, so no results
+     * are returned from getInvalidFilePaths()
+
+    if (!d->rebuildAll)
+    {
+        QHash<QString, int> filePaths = ThumbnailDatabaseAccess().db()->getInvalidFilePaths();
+
+        QStringList::iterator it = d->allPicturesPath.begin();
+        while (it != d->allPicturesPath.end())
+        {
+            if (!filePaths.contains(*it))
+                it = d->allPicturesPath.erase(it);
+            else
+                ++it;
+        }
+    }
+    */
+
     if (!d->rebuildAll)
     {
         QHash<QString, int> filePaths = ThumbnailDatabaseAccess().db()->getValidFilePaths();
