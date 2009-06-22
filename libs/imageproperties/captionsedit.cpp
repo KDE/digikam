@@ -425,8 +425,15 @@ void CaptionsEdit::slotTextChanged()
         return;
     }
 
-    QString lang = d->languageCB->currentText();
-    d->addValueButton->setEnabled(text != d->values[lang]);
+    bool dirty = (text != d->values[d->languageCB->currentText()]);
+    d->addValueButton->setEnabled(dirty);
+
+    if (dirty) emit signalModified();
+}
+
+void CaptionsEdit::apply()
+{
+    d->addValueButton->animateClick();
 }
 
 }  // namespace Digikam

@@ -486,7 +486,9 @@ void ImageDescEditTab::slotApplyAllChanges()
     if (d->currInfos.isEmpty())
         return;
 
-    bool progressInfo = (d->currInfos.count() > 1);
+    d->captionsEdit->apply();
+
+    bool progressInfo                   = (d->currInfos.count() > 1);
     MetadataWriteSettings writeSettings = MetadataHub::defaultWriteSettings();
 
     // debugging - use this to indicate reentry from event loop (kapp->processEvents)
@@ -514,7 +516,7 @@ void ImageDescEditTab::slotApplyAllChanges()
     // update database information
     {
         emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
-                                i18n("Applying changes to images. Please wait..."));
+                                   i18n("Applying changes to images. Please wait..."));
         int i=0;
 
         DatabaseTransaction transaction;

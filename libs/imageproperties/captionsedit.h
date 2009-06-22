@@ -57,6 +57,10 @@ public:
     QString defaultAltLang() const;
     bool    asDefaultAltLang() const;
 
+    /** Force current text to be registered in captions map
+     */
+    void apply();
+
 signals:
 
     void signalModified();
