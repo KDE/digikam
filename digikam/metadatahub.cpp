@@ -200,9 +200,9 @@ void MetadataHub::load(const DMetadata& metadata)
     int                rating;
 
     // Try to get comments from image :
-    // In first, from standard JPEG JFIF comments section, or
-    // In second, from Exif comments tag, or
-    // In third, from Xmp comments tag, or
+    // In first, from Xmp comments tag,
+    // In second, from standard JPEG JFIF comments section,
+    // In third, from Exif comments tag,
     // In four, from Iptc comments tag.
     comments = metadata.getImageComments();
 
