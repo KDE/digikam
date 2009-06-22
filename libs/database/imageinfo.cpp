@@ -139,6 +139,7 @@ ImageInfo::ImageInfo(const KUrl& url)
     QString album = CollectionManager::instance()->album(url.directory());
     QString name  = url.fileName();
 
+    /*
     // if needed, the two SQL calls can be consolidated into one by adding a method to AlbumDB
     int albumId = access.db()->getAlbumForPath(location.id(), album, false);
     if (albumId == -1)
@@ -153,12 +154,18 @@ ImageInfo::ImageInfo(const KUrl& url)
         m_data = 0;
         return;
     }
+    */
+    ItemShortInfo info = access.db()->getItemShortInfo(location.id(), album, name);
+    if (!info.id)
+    {
+        m_data = 0;
+        return;
+    }
 
-    m_data = access.imageInfoCache()->infoForId(imageId);
-    m_data->albumId     = albumId;
-    m_data->albumRootId = location.id();
-    m_data->name        = name;
-    //m_data->url         = DatabaseUrl::fromAlbumAndName(name, album, location->albumRootPath());
+    m_data = access.imageInfoCache()->infoForId(info.id);
+    m_data->albumId     = info.albumID;
+    m_data->albumRootId = info.albumRootID;
+    m_data->name        = info.itemName;
 }
 
 ImageInfo::~ImageInfo()
