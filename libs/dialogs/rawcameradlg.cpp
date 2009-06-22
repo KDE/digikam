@@ -60,12 +60,8 @@ public:
 
     RawCameraDlgPriv()
     {
-        listView  = 0;
         searchBar = 0;
     }
-
-    QTreeWidget   *listView;
-
     SearchTextBar *searchBar;
 };
 
@@ -140,7 +136,7 @@ void RawCameraDlg::slotSearchTextChanged(const SearchTextSettings& settings)
     bool query     = false;
     QString search = settings.text.toLower();
 
-    QTreeWidgetItemIterator it(d->listView);
+    QTreeWidgetItemIterator it(listView());
     while (*it)
     {
         QTreeWidgetItem *item  = *it;
