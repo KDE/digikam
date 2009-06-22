@@ -44,18 +44,22 @@ public:
     Photographer& operator=(const Photographer& photographer);
 
     void setAuthor(const QString& author);
-    void setAuthorName(const QString& authorName);
+    void setAuthorPosition(const QString& authorPosition);
     void setCredit(const QString& credit);
-    void setSource(const QString& source);
     void setCopyright(const QString& copyright);
+    void setRightUsageTerms(const QString& rightUsageTerms);
+    void setSource(const QString& source);
+    void setInstructions(const QString& instructions);
     void setValid(bool valid);
 
-    QString author()     const;
-    QString authorName() const;
-    QString credit()     const;
-    QString source()     const;
-    QString copyright()  const;
-    bool    valid()      const;
+    QString author()          const;
+    QString authorPosition()  const;
+    QString credit()          const;
+    QString copyright()       const;
+    QString rightUsageTerms() const;
+    QString source()          const;
+    QString instructions()    const;
+    bool    valid()           const;
 
 private:
 

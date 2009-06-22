@@ -38,10 +38,12 @@ public:
     bool    valid;
 
     QString author;
-    QString authorName;
+    QString authorPosition;
     QString credit;
-    QString source;
     QString copyright;
+    QString rightUsageTerms;
+    QString source;
+    QString instructions;
 };
 
 Photographer::Photographer()
@@ -58,10 +60,12 @@ Photographer::Photographer(const Photographer& photographer)
             : d(new PhotographerPrivate)
 {
     setAuthor(photographer.d->author);
-    setAuthorName(photographer.d->authorName);
+    setAuthorPosition(photographer.d->authorPosition);
     setCredit(photographer.d->credit);
-    setSource(photographer.d->source);
     setCopyright(photographer.d->copyright);
+    setRightUsageTerms(photographer.d->rightUsageTerms);
+    setSource(photographer.d->source);
+    setInstructions(photographer.d->instructions);
     setValid(photographer.d->valid);
 }
 
@@ -70,10 +74,12 @@ Photographer& Photographer::operator=(const Photographer& photographer)
     if (this != &photographer)
     {
         setAuthor(photographer.d->author);
-        setAuthorName(photographer.d->authorName);
+        setAuthorPosition(photographer.d->authorPosition);
         setCredit(photographer.d->credit);
-        setSource(photographer.d->source);
         setCopyright(photographer.d->copyright);
+        setRightUsageTerms(photographer.d->rightUsageTerms);
+        setSource(photographer.d->source);
+        setInstructions(photographer.d->instructions);
         setValid(photographer.d->valid);
     }
     return *this;
@@ -84,9 +90,9 @@ void Photographer::setAuthor(const QString& author)
     d->author = author;
 }
 
-void Photographer::setAuthorName(const QString& authorName)
+void Photographer::setAuthorPosition(const QString& authorPosition)
 {
-    d->authorName = authorName;
+    d->authorPosition = authorPosition;
 }
 
 void Photographer::setCredit(const QString& credit)
@@ -94,14 +100,24 @@ void Photographer::setCredit(const QString& credit)
     d->credit = credit;
 }
 
+void Photographer::setCopyright(const QString& copyright)
+{
+    d->copyright = copyright;
+}
+
+void Photographer::setRightUsageTerms(const QString& rightUsageTerms)
+{
+    d->rightUsageTerms = rightUsageTerms;
+}
+
 void Photographer::setSource(const QString& source)
 {
     d->source = source;
 }
 
-void Photographer::setCopyright(const QString& copyright)
+void Photographer::setInstructions(const QString& instructions)
 {
-    d->copyright = copyright;
+    d->instructions = instructions;
 }
 
 void Photographer::setValid(bool valid)
@@ -114,9 +130,9 @@ QString Photographer::author() const
     return d->author;
 }
 
-QString Photographer::authorName() const
+QString Photographer::authorPosition() const
 {
-    return d->authorName;
+    return d->authorPosition;
 }
 
 QString Photographer::credit() const
@@ -124,14 +140,24 @@ QString Photographer::credit() const
     return d->credit;
 }
 
+QString Photographer::copyright() const
+{
+    return d->copyright;
+}
+
+QString Photographer::rightUsageTerms() const
+{
+    return d->rightUsageTerms;
+}
+
 QString Photographer::source() const
 {
     return d->source;
 }
 
-QString Photographer::copyright() const
+QString Photographer::instructions() const
 {
-    return d->copyright;
+    return d->instructions;
 }
 
 bool Photographer::valid() const

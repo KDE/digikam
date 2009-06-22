@@ -63,7 +63,7 @@ void IndentityListItem::setPhotographer(Photographer *photographer)
     if (m_photographer)
     {
         setText(0, m_photographer->author());
-        setText(1, m_photographer->authorName());
+        setText(1, m_photographer->authorPosition());
     }
 }
 
@@ -86,7 +86,7 @@ IndentityList::IndentityList(QWidget* parent)
 
     QStringList labels;
     labels.append( i18n("Author") );
-    labels.append( i18n("Author Name") );
+    labels.append( i18n("Author Position") );
     setHeaderLabels(labels);
     header()->setResizeMode(0, QHeaderView::ResizeToContents);
     header()->setResizeMode(1, QHeaderView::Stretch);

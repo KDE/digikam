@@ -109,10 +109,12 @@ bool PhotographerList::load()
 
         Photographer *photographer = new Photographer();
         photographer->setAuthor(e.attribute("author"));
-        photographer->setAuthorName(e.attribute("authorname"));
+        photographer->setAuthorPosition(e.attribute("authorposition"));
         photographer->setCredit(e.attribute("credit"));
-        photographer->setSource(e.attribute("source"));
         photographer->setCopyright(e.attribute("copyright"));
+        photographer->setRightUsageTerms(e.attribute("rightusageterms"));
+        photographer->setSource(e.attribute("source"));
+        photographer->setInstructions(e.attribute("instructions"));
         insertPrivate(photographer);
     }
 
@@ -133,11 +135,13 @@ bool PhotographerList::save()
     foreach (Photographer *photographer, d->pList)
     {
        QDomElement elem = doc.createElement("item");
-       elem.setAttribute("author",     photographer->author());
-       elem.setAttribute("authorname", photographer->authorName());
-       elem.setAttribute("credit",     photographer->credit());
-       elem.setAttribute("source",     photographer->source());
-       elem.setAttribute("copyright",  photographer->copyright());
+       elem.setAttribute("author",          photographer->author());
+       elem.setAttribute("authorposition",  photographer->authorPosition());
+       elem.setAttribute("credit",          photographer->credit());
+       elem.setAttribute("copyright",       photographer->copyright());
+       elem.setAttribute("rightusageterms", photographer->rightUsageTerms());
+       elem.setAttribute("source",          photographer->source());
+       elem.setAttribute("instructions",    photographer->instructions());
        docElem.appendChild(elem);
     }
 
