@@ -106,7 +106,7 @@ RawCameraDlg::RawCameraDlg(QWidget *parent)
 
     // --------------------------------------------------------
 
-    kapp->setOverrideCursor(Qt::WaitCursor);
+//    kapp->setOverrideCursor(Qt::WaitCursor);
     setCaption(i18n("List of supported RAW cameras"));
 
     d->searchBar = new SearchTextBar(this, "RawCameraDlgSearchBar");
