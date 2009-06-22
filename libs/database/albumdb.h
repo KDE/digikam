@@ -626,6 +626,11 @@ public:
     ItemShortInfo getItemShortInfo(qlonglong imageID);
 
     /**
+     * Get item and album if from albumRootId, album path and file name.
+     */
+    ItemShortInfo getItemShortInfo(int albumRootId, const QString& relativePath, const QString& name);
+
+    /**
      * Get scan info from the image ID
      */
     ItemScanInfo getItemScanInfo(qlonglong imageID);

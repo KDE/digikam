@@ -922,6 +922,31 @@ ItemShortInfo AlbumDB::getItemShortInfo(qlonglong imageID)
     return info;
 }
 
+ItemShortInfo AlbumDB::getItemShortInfo(int albumRootId, const QString& relativePath, const QString& name)
+{
+    QList<QVariant> values;
+
+    d->db->execSql( QString("SELECT Images.id, Albums.id "
+                            " FROM Images INNER JOIN Albums "
+                            "  ON Images.album=Albums.id "
+                            " WHERE name=? AND albumRoot=? AND relativePath=?;"),
+                    name, albumRootId, relativePath,
+                    &values );
+
+    ItemShortInfo info;
+
+    if (!values.isEmpty())
+    {
+        info.id          = values[0].toLongLong();
+        info.itemName    = name;
+        info.albumRootID = albumRootId;
+        info.album       = relativePath;
+        info.albumID     = values[1].toInt();
+    }
+
+    return info;
+}
+
 bool AlbumDB::hasTags(const QList<qlonglong>& imageIDList)
 {
     QList<int> ids;
