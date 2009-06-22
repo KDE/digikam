@@ -52,6 +52,7 @@
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "cameralist.h"
+#include "photographerlist.h"
 #include "imagepluginloader.h"
 #include "splashscreen.h"
 #include "kipiinterface.h"
@@ -154,6 +155,7 @@ public:
         imagePluginsLoader                   = 0;
         kipiInterface                        = 0;
         cameraList                           = 0;
+        photographerList                     = 0;
         statusProgressBar                    = 0;
         statusNavigateBar                    = 0;
         statusZoomBar                        = 0;
@@ -300,6 +302,7 @@ public:
     KipiInterface                      *kipiInterface;
     DigikamView                        *view;
     CameraList                         *cameraList;
+    PhotographerList                   *photographerList;
     StatusZoomBar                      *statusZoomBar;
     StatusProgressBar                  *statusProgressBar;
     StatusNavigateBar                  *statusNavigateBar;

@@ -197,6 +197,8 @@ DigikamApp::DigikamApp()
     connect(d->cameraList, SIGNAL(signalCameraRemoved(KAction*)),
             this, SLOT(slotCameraRemoved(KAction*)));
 
+    d->photographerList = new PhotographerList(this, KStandardDirs::locateLocal("appdata", "credits.xml"));
+
     setupView();
     setupStatusBar();
     setupAccelerators();
@@ -1466,6 +1468,10 @@ void DigikamApp::loadCameras()
     // -- fill manually added cameras ----------------------------------
 
     d->cameraList->load();
+
+    // -- fill photographer credits list -------------------------------
+
+    d->photographerList->load();
 
     // -- scan Solid devices -------------------------------------------
 

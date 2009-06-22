@@ -33,6 +33,7 @@
 // KDE includes
 
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -99,11 +100,9 @@ IndentityList::~IndentityList()
 void IndentityList::readSettings()
 {
     PhotographerList* plist = PhotographerList::defaultList();
-
     if (plist)
     {
         QList<Photographer*>* list = plist->photographerList();
-
         foreach (Photographer *photographer, *list)
         {
             new IndentityListItem(this, photographer);
@@ -132,7 +131,6 @@ void IndentityList::applySettings()
             }
             ++it;
         }
-
         plist->save();
     }
 }

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-07-04
- * Description : default IPTC identity setup tab.
+ * Description : identities setup page.
  *
  * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -47,6 +47,13 @@ public:
 private:
 
     void readSettings();
+
+private Q_SLOTS:
+
+    void slotSelectionChanged();
+    void slotAddIdentity();
+    void slotDelIdentity();
+    void slotRepIdentity();
 
 private:
 

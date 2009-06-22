@@ -36,6 +36,7 @@
 // KDE includes
 
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -88,17 +89,17 @@ bool PhotographerList::load()
 {
     d->modified = false;
 
-    QFile cfile(d->file);
+    QFile pfile(d->file);
 
-    if (!cfile.open(QIODevice::ReadOnly))
+    if (!pfile.open(QIODevice::ReadOnly))
         return false;
 
     QDomDocument doc("photographerlist");
-    if (!doc.setContent(&cfile))
+    if (!doc.setContent(&pfile))
         return false;
 
     QDomElement docElem = doc.documentElement();
-    if (docElem.tagName()!="photographerlist")
+    if (docElem.tagName() != "photographerlist")
         return false;
 
     for (QDomNode n = docElem.firstChild(); !n.isNull(); n = n.nextSibling())
@@ -145,15 +146,16 @@ bool PhotographerList::save()
        docElem.appendChild(elem);
     }
 
-    QFile cfile(d->file);
-    if (!cfile.open(QIODevice::WriteOnly))
+    QFile pfile(d->file);
+
+    if (!pfile.open(QIODevice::WriteOnly))
         return false;
 
-    QTextStream stream(&cfile);
+    QTextStream stream(&pfile);
     stream.setCodec(QTextCodec::codecForName("UTF-8"));
     stream.setAutoDetectUnicode(true);
     stream << doc.toString();
-    cfile.close();
+    pfile.close();
 
     return true;
 }
