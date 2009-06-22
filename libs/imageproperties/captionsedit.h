@@ -66,10 +66,11 @@ private slots:
     void slotSelectionChanged(int);
     void slotAddValue();
     void slotDeleteValue();
+    void slotTextChanged();
 
 private:
 
-    void loadLangAltListEntries();
+    void loadLangAltListEntries(const QString& currentLang=QString());
 
 private:
 

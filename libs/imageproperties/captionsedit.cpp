@@ -265,8 +265,8 @@ CaptionsEdit::CaptionsEdit(QWidget* parent)
     d->delValueButton = new QToolButton(this);
     d->addValueButton->setIcon(SmallIcon("list-add"));
     d->delValueButton->setIcon(SmallIcon("list-remove"));
-    d->addValueButton->setToolTip(i18n("Add or update caption"));
     d->delValueButton->setToolTip(i18n("Remove current caption"));
+    d->addValueButton->setEnabled(false);
     d->delValueButton->setEnabled(false);
 
     d->languageCB = new KComboBox(this);
@@ -303,6 +303,9 @@ CaptionsEdit::CaptionsEdit(QWidget* parent)
 
     connect(d->delValueButton, SIGNAL(clicked()),
             this, SIGNAL(signalModified()));
+
+    connect(d->valueEdit, SIGNAL(textChanged()),
+            this, SLOT(slotTextChanged()));
 }
 
 CaptionsEdit::~CaptionsEdit()
@@ -322,8 +325,10 @@ void CaptionsEdit::slotAddValue()
     if (text.isEmpty()) return;
 
     d->values.insert(lang, text);
+    d->valueEdit->blockSignals(true);
     d->valueEdit->clear();
-    loadLangAltListEntries();
+    d->valueEdit->blockSignals(false);
+    loadLangAltListEntries(lang);
 }
 
 void CaptionsEdit::slotDeleteValue()
@@ -336,19 +341,26 @@ void CaptionsEdit::slotDeleteValue()
 void CaptionsEdit::slotSelectionChanged(int index)
 {
     QString lang = d->languageCB->currentText();
+    d->valueEdit->blockSignals(true);
 
     if (!d->languageCB->itemIcon(index).isNull())
     {
         QString text = d->values[lang];
         d->valueEdit->setText(text);
+        d->addValueButton->setEnabled(false);
         d->delValueButton->setEnabled(true);
+        d->addValueButton->setIcon(SmallIcon("view-refresh"));
+        d->addValueButton->setToolTip(i18n("Update current caption"));
     }
     else
     {
-        d->delValueButton->setEnabled(false);
         d->valueEdit->clear();
+        d->addValueButton->setEnabled(false);
+        d->delValueButton->setEnabled(false);
+        d->addValueButton->setIcon(SmallIcon("list-add"));
+        d->addValueButton->setToolTip(i18n("Add new caption"));
     }
-
+    d->valueEdit->blockSignals(false);
     d->languageCB->setToolTip(d->languageCodeMap[lang]);
 }
 
@@ -364,7 +376,7 @@ KExiv2::AltLangMap& CaptionsEdit::values()
     return d->values;
 }
 
-void CaptionsEdit::loadLangAltListEntries()
+void CaptionsEdit::loadLangAltListEntries(const QString& currentLang)
 {
     d->languageCB->clear();
 
@@ -390,7 +402,7 @@ void CaptionsEdit::loadLangAltListEntries()
             d->languageCB->addItem(it.key());
     }
 
-    d->languageCB->setCurrentItem(QString("x-default"));
+    d->languageCB->setCurrentItem(currentLang.isEmpty() ? QString("x-default") : currentLang);
     slotSelectionChanged(d->languageCB->currentIndex());
 }
 
@@ -402,6 +414,19 @@ QString CaptionsEdit::defaultAltLang() const
 bool CaptionsEdit::asDefaultAltLang() const
 {
     return defaultAltLang().isNull() ? false : true;
+}
+
+void CaptionsEdit::slotTextChanged()
+{
+    QString text = d->valueEdit->toPlainText();
+    if (text.isEmpty())
+    {
+        d->addValueButton->setEnabled(false);
+        return;
+    }
+
+    QString lang = d->languageCB->currentText();
+    d->addValueButton->setEnabled(text != d->values[lang]);
 }
 
 }  // namespace Digikam
