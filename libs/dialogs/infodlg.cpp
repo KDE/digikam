@@ -149,10 +149,11 @@ InfoDlg::InfoDlg(QWidget *parent)
     // --------------------------------------------------------
 
     grid->addWidget(logo,        0, 0, 1, 1);
-    grid->addWidget(header,      0, 1, 1, 2);
-    grid->addWidget(d->listView, 1, 0, 1, 2);
+    grid->addWidget(header,      0, 1, 1, 1);
+    // row 1 can be expanded by custom widgets in the subclassed dialog
+    grid->addWidget(d->listView, 2, 0, 1,-1);
     grid->setColumnStretch(1, 10);
-    grid->setRowStretch(1, 10);
+    grid->setRowStretch(2, 10);
     grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
 

@@ -24,12 +24,9 @@
 #ifndef RAWCAMERADLG_H
 #define RAWCAMERADLG_H
 
-// KDE includes
-
-#include <kdialog.h>
-
 // Local includes
 
+#include "infodlg.h"
 #include "searchtextbar.h"
 #include "digikam_export.h"
 
@@ -38,7 +35,7 @@ namespace Digikam
 
 class RawCameraDlgPriv;
 
-class DIGIKAM_EXPORT RawCameraDlg : public KDialog
+class DIGIKAM_EXPORT RawCameraDlg : public InfoDlg
 {
     Q_OBJECT
 

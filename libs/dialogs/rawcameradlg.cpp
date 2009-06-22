@@ -70,18 +70,8 @@ public:
 };
 
 RawCameraDlg::RawCameraDlg(QWidget *parent)
-            : KDialog(parent), d(new RawCameraDlgPriv)
+            : InfoDlg(parent), d(new RawCameraDlgPriv)
 {
-    setButtons(Help|Ok);
-    setDefaultButton(Ok);
-    setButtonFocus(Ok);
-    setModal(false);
-    setHelp("digitalstillcamera.anchor", "digikam");
-    setCaption(i18n("List of supported RAW cameras"));
-
-    QWidget *page     = new QWidget(this);
-    setMainWidget(page);
-    QGridLayout* grid = new QGridLayout(page);
 
 #if KDCRAW_VERSION < 0x000400
     QStringList list      = KDcrawIface::DcrawBinary::instance()->supportedCamera();
@@ -95,68 +85,49 @@ RawCameraDlg::RawCameraDlg(QWidget *parent)
 
     // --------------------------------------------------------
 
-    QLabel *logo = new QLabel(page);
-    if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
-        logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
-                                .scaled(96, 96, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    else
-        logo->setPixmap(QPixmap(KStandardDirs::locate("data", "showfoto/data/logo-showfoto.png"))
-                                .scaled(96, 96, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-
-    // --------------------------------------------------------
-
-    QLabel *header = new QLabel(page);
+    QLabel *header = new QLabel(this);
 #if KDCRAW_VERSION < 0x000400
-    header->setText(i18np("<p>Using KDcraw library version %2</p>"
-                          "<p>Using Dcraw program version %3</p>"
-                          "<p>1 model in the list</p>",
-                          "<p>Using KDcraw library version %2</p>"
-                          "<p>Using Dcraw program version %3</p>"
-                          "<p>%1 models in the list</p>",
+    header->setText(i18np("<p>Using KDcraw library version %2<br/>"
+                          "Using Dcraw program version %3<br/>"
+                          "1 model in the list</p>",
+                          "<p>Using KDcraw library version %2<br/>"
+                          "Using Dcraw program version %3<br/>"
+                          "%1 models in the list</p>",
                           list.count(), KDcrawVer, dcrawVer));
 #else
-    header->setText(i18np("<p>Using KDcraw library version %2</p>"
-                          "<p>Using LibRaw version %3</p>"
-                          "<p>1 model in the list</p>",
-                          "<p>Using KDcraw library version %2</p>"
-                          "<p>Using LibRaw version %3</p>"
-                          "<p>%1 models in the list</p>",
+    header->setText(i18np("<p>Using KDcraw library version %2<br/>"
+                          "Using LibRaw version %3<br/>"
+                          "1 model in the list</p>",
+                          "<p>Using KDcraw library version %2<br/>"
+                          "Using LibRaw version %3<br/>"
+                          "%1 models in the list</p>",
                           list.count(), KDcrawVer, librawVer));
 #endif
 
     // --------------------------------------------------------
 
-    d->searchBar = new SearchTextBar(page, "RawCameraDlgSearchBar");
-    d->listView  = new QTreeWidget(page);
+    kapp->setOverrideCursor(Qt::WaitCursor);
+    setCaption(i18n("List of supported RAW cameras"));
 
-    d->listView->setRootIsDecorated(false);
-    d->listView->setSelectionMode(QAbstractItemView::SingleSelection);
-    d->listView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    d->listView->setAllColumnsShowFocus(true);
-    d->listView->setColumnCount(1);
-    d->listView->setHeaderLabels(QStringList() << "Camera Model"); // Header is hidden. No i18n here.
-    d->listView->header()->hide();
+    d->searchBar = new SearchTextBar(this, "RawCameraDlgSearchBar");
+
+    listView()->setColumnCount(1);
+    listView()->setHeaderLabels(QStringList() << "Camera Model"); // Header is hidden. No i18n here.
+    listView()->header()->hide();
 
     for (QStringList::Iterator it = list.begin() ; it != list.end() ; ++it)
-        new QTreeWidgetItem(d->listView, QStringList() << *it);
+        new QTreeWidgetItem(listView(), QStringList() << *it);
 
     // --------------------------------------------------------
 
-    grid->addWidget(logo,         0, 0, 1, 1);
-    grid->addWidget(header,       0, 1, 1, 2);
-    grid->addWidget(d->listView,  1, 0, 1, 2);
-    grid->addWidget(d->searchBar, 2, 0, 1, 2);
-    grid->setColumnStretch(1, 10);
-    grid->setRowStretch(1, 10);
-    grid->setMargin(0);
-    grid->setSpacing(KDialog::spacingHint());
+    QGridLayout *grid = dynamic_cast<QGridLayout*>(mainWidget()->layout());
+    grid->addWidget(header,       1, 0, 1,-1);
+    grid->addWidget(d->searchBar, 3, 0, 1,-1);
 
     // --------------------------------------------------------
 
     connect(d->searchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
             this, SLOT(slotSearchTextChanged(const SearchTextSettings&)));
-
-    resize(500, 500);
 }
 
 RawCameraDlg::~RawCameraDlg()
