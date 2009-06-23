@@ -846,6 +846,14 @@ public:
                                    const QString& value, const QString& extraValue = QString(),
                                    CopyrightPropertyUnique uniqueness = PropertyUnique);
 
+    /** Removes copyright properties for the given image id. All values after the first null value,
+     *  in order of parameters, are treated as wild cards (you can give value as wildcard; value and
+     *  extraValue; or property, extraValue and value).
+     *  Note that extraValue is ordered before value in this method!
+     */
+    void removeImageCopyrightProperties(qlonglong imageID, const QString& property = QString(),
+                                        const QString& extraValue = QString(),
+                                        const QString& value = QString() /* NOTE parameter order */);
     /**
      * Returns if there are valid entries in the ImageHaarMatrix table.
      * Returns false if the table is empty.

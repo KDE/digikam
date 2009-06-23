@@ -1464,6 +1464,42 @@ void AlbumDB::setImageCopyrightProperty(qlonglong imageID, const QString& proper
                     imageID, property, value, extraValue);
 }
 
+void AlbumDB::removeImageCopyrightProperties(qlonglong imageID, const QString& property,
+                                           const QString& extraValue, const QString& value)
+{
+    int removeBy = 0;
+    if (!property.isNull())
+        removeBy++;
+    else if (!extraValue.isNull())
+        removeBy++;
+    else if (!value.isNull())
+        removeBy++;
+
+    switch (removeBy)
+    {
+        case 0:
+            d->db->execSql( QString("DELETE FROM ImageCopyright "
+                                    "WHERE imageid=?;"),
+                            imageID );
+            break;
+        case 1:
+            d->db->execSql( QString("DELETE FROM ImageCopyright "
+                                    "WHERE imageid=? AND property=?;"),
+                            imageID, property );
+            break;
+        case 2:
+            d->db->execSql( QString("DELETE FROM ImageCopyright "
+                                    "WHERE imageid=? AND property=? AND extraValue=?;"),
+                            imageID, property, extraValue );
+            break;
+        case 3:
+            d->db->execSql( QString("DELETE FROM ImageCopyright "
+                                    "WHERE imageid=? AND property=? AND extraValue=? AND value=?;"),
+                            imageID, property, extraValue, value );
+            break;
+    }
+}
+
 bool AlbumDB::hasHaarFingerprints()
 {
     QList<QVariant> values;
