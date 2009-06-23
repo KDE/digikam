@@ -13,6 +13,7 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/jpegutils
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/greycstoration
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/threadimageio
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/template
 
                      # widgets and dialogs
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/common
@@ -95,6 +96,7 @@ SET(digikamcore_LIB_SRCS
                         ${libthreadimageio_SRCS}
                         ${libthemeengine_SRCS}
                         ${libpgf_SRCS}
+                        ${libtemplate_SRCS}
                         ${pgfutils_SRCS}
 
                         # widgets and dialogs

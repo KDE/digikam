@@ -699,6 +699,12 @@ ENDIF(MSVC)
     # ==================================================================================================
     # digiKam target parts
 
+    SET(libtemplate_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/template.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/templatemanager.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/templatelist.cpp 
+       )
+       
     SET(libdialogs_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/infodlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/iccprofileinfodlg.cpp
@@ -734,9 +740,6 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameraselection.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameralist.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameratype.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/template.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/templatemanager.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/templatelist.cpp 
        )
 
     SET(libkipiiface_SRCS
