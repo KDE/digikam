@@ -53,7 +53,20 @@ public:
     QList<CommentInfo>            infos;
     QSet<int>                     dirtyIndices;
     QSet<int>                     newIndices;
+    QSet<int>                     idsToRemove;
     ImageComments::UniqueBehavior unique;
+
+    void init(DatabaseAccess &access, qlonglong imageId)
+    {
+        id = imageId;
+        infos = access.db()->getImageComments(id);
+        for (int i=0; i<infos.size(); i++)
+        {
+            CommentInfo &info = infos[i];
+            if (info.language.isNull())
+                info.language = "x-default";
+        }
+    }
 
     void languageMatch(const QString& fullCode, const QString& langCode,
                        int& fullCodeMatch, int& langCodeMatch, int& defaultCodeMatch, int& firstMatch) const
@@ -101,6 +114,26 @@ public:
             }
         }
     }
+
+    void adjustStoredIndexes(QSet<int> &set, int removedIndex)
+    {
+        QSet<int> newSet;
+        foreach (int index, set)
+        {
+            if (index > removedIndex)
+                newSet << index - 1;
+            else if (index < removedIndex)
+                newSet << index;
+            // drop index == removedIndex
+        }
+        set = newSet;
+    }
+
+    void adjustStoredIndexes(int removedIndex)
+    {
+        adjustStoredIndexes(dirtyIndices, removedIndex);
+        adjustStoredIndexes(newIndices, removedIndex);
+    }
 };
 
 ImageComments::ImageComments()
@@ -108,18 +141,16 @@ ImageComments::ImageComments()
 }
 
 ImageComments::ImageComments(qlonglong imageid)
+            : d(new ImageCommentsPriv)
 {
-    d = new ImageCommentsPriv;
-    d->id    = imageid;
     DatabaseAccess access;
-    d->infos = access.db()->getImageComments(imageid);
+    d->init(access, imageid);
 }
 
 ImageComments::ImageComments(DatabaseAccess& access, qlonglong imageid)
+            : d(new ImageCommentsPriv)
 {
-    d = new ImageCommentsPriv;
-    d->id    = imageid;
-    d->infos = access.db()->getImageComments(imageid);
+    d->init(access, imageid);
 }
 
 ImageComments::ImageComments(const ImageComments& other)
@@ -304,7 +335,7 @@ void ImageComments::addComment(const QString& comment, const QString& lang, cons
         }
     }
 
-    return addCommentDirect(comment, language, author, type, date);
+    return addCommentDirectly(comment, language, author, type, date);
 }
 
 void ImageComments::addHeadline(const QString& comment, const QString& lang,
@@ -319,8 +350,26 @@ void ImageComments::addTitle(const QString& comment, const QString& lang,
     return addComment(comment, lang, author, date, DatabaseComment::Title);
 }
 
-void ImageComments::addCommentDirect(const QString& comment, const QString& language, const QString& author,
-                                     DatabaseComment::Type type, const QDateTime& date)
+void ImageComments::replaceComments(const KExiv2::AltLangMap& map, const QString& author,
+                                    const QDateTime& date, DatabaseComment::Type type)
+{
+    d->dirtyIndices.clear();
+
+    for (KExiv2::AltLangMap::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
+        addComment(it.value(), it.key(), author, date, type);
+
+    // remove all that have not been touched above
+    for (int i=0; i<d->infos.size() /* changing! */; )
+    {
+        if (!d->dirtyIndices.contains(i))
+            remove(i);
+        else
+            ++i;
+    }
+}
+
+void ImageComments::addCommentDirectly(const QString& comment, const QString& language, const QString& author,
+                                       DatabaseComment::Type type, const QDateTime& date)
 {
     CommentInfo info;
     info.comment  = comment;
@@ -331,6 +380,47 @@ void ImageComments::addCommentDirect(const QString& comment, const QString& lang
 
     d->newIndices << d->infos.size();
     d->infos      << info;
+}
+
+void ImageComments::remove(int index)
+{
+    if (!d)
+        return;
+
+    d->idsToRemove << d->infos[index].id;
+    d->infos.removeAt(index);
+    d->adjustStoredIndexes(index);
+}
+
+void ImageComments::removeAll(DatabaseComment::Type type)
+{
+    if (!d)
+        return;
+
+    for (int i=0; i<d->infos.size() /* changing! */; )
+    {
+        if (d->infos[i].type == type)
+            remove(i);
+        else
+            ++i;
+    }
+}
+
+void ImageComments::removeAllComments()
+{
+    removeAll(DatabaseComment::Comment);
+}
+
+void ImageComments::removeAll()
+{
+    if (!d)
+        return;
+
+    foreach (const CommentInfo &info, d->infos)
+        d->idsToRemove << info.id;
+    d->infos.clear();
+    d->dirtyIndices.clear();
+    d->newIndices.clear();
 }
 
 void ImageComments::changeComment(int index, const QString& comment)
@@ -392,10 +482,15 @@ void ImageComments::apply(DatabaseAccess& access)
     if (!d)
         return;
 
+    foreach(int commentId, d->idsToRemove)
+    {
+        access.db()->removeImageComment(commentId, d->id);
+    }
+    d->idsToRemove.clear();
+
     foreach(int index, d->newIndices)
     {
         CommentInfo& info = d->infos[index];
-        DatabaseAccess access;
         info.id = access.db()->setImageComment(d->id, info.comment, info.type, info.language, info.author, info.date);
     }
     d->dirtyIndices.subtract(d->newIndices);
@@ -411,32 +506,19 @@ void ImageComments::apply(DatabaseAccess& access)
     d->dirtyIndices.clear();
 }
 
-void ImageComments::setAltComments(const KExiv2::AltLangMap& comments)
+KExiv2::AltLangMap ImageComments::toAltLangMap(DatabaseComment::Type type) const
 {
-    for (int i = 0 ; i < numberOfComments() ; ++i)
+    KExiv2::AltLangMap map;
+
+    foreach (const CommentInfo &info, d->infos)
     {
-        CommentInfo& info = d->infos[i];
-        kDebug(50003) << "Remove Comment from DB: " << info.comment;
-        DatabaseAccess access;
-        access.db()->removeImageComment(info.id, d->id);
+        if (info.type == type)
+        {
+            map[info.language] = info.comment;
+        }
     }
 
-    d->infos.clear();
-
-    for (KExiv2::AltLangMap::const_iterator it = comments.constBegin(); it != comments.constEnd(); ++it)
-        addComment(it.value(), it.key());
-
-    apply();
-}
-
-KExiv2::AltLangMap ImageComments::altComments() const
-{
-    KExiv2::AltLangMap comments;
-
-    for (int i = 0 ; i < numberOfComments() ; ++i)
-        comments.insert(language(i), comment(i));
-
-    return comments;
+    return map;
 }
 
 } // namespace Digikam

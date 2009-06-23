@@ -112,6 +112,7 @@ public:
     /**
      * Changes the behavior to unique comments per language, see the enum above for possible
      * values.
+     * Default value is UniquePerLanguage.
      * Note: This is _not_ a property of the database, but only of this single ImageComments object,
      */
     void setUniqueBehavior(UniqueBehavior behavior);
@@ -167,6 +168,35 @@ public:
                   const QDateTime& date = QDateTime());
 
     /**
+     * Replaces all existing comments with the given set of comments and associated language.
+     * Optionally date and author can be specified.
+     */
+    void replaceComments(const KExiv2::AltLangMap& commentsAndLanguage,
+                         const QString& author = QString(),
+                         const QDateTime& date = QDateTime(),
+                         DatabaseComment::Type type = DatabaseComment::Comment);
+
+    /**
+     * Remove the entry referred to by index.
+     */
+    void remove(int index);
+
+    /**
+     * Remove all entries of the given type
+     */
+    void removeAll(DatabaseComment::Type type);
+
+    /**
+     * Convenience method: remove all entries of type Comment
+     */
+    void removeAllComments();
+
+    /**
+     * Remove all entries of all types: Comments, Headlines, Titles
+     */
+    void removeAll();
+
+    /**
      * Access individual properties.
      * Please ensure that the specified index is a valid index
      */
@@ -179,26 +209,27 @@ public:
 
     /**
      * Apply all changes.
+     * Also called in destructor, so you typically do not need to call this.
      */
     void apply();
     void apply(DatabaseAccess& access);
 
     /**
-     * Wrapper to convert from/to KExiv2::AltLangMap container.
+     * Returns all entries of the given type in a KExiv2 AltLangMap.
+     * Please keep in mind that author and date info is not contained
+     * and the order in the map has no relation to the index parameters taken by some methods here.
      */
-
-    void setAltComments(const KExiv2::AltLangMap& comments);
-    KExiv2::AltLangMap altComments() const;
+    KExiv2::AltLangMap toAltLangMap(DatabaseComment::Type = DatabaseComment::Comment) const;
 
     // If you need more methods, add your methods here!
 
 protected:
 
-    void addCommentDirect(const QString& comment,
-                          const QString& language,
-                          const QString& author,
-                          DatabaseComment::Type type,
-                          const QDateTime& date);
+    void addCommentDirectly(const QString& comment,
+                            const QString& language,
+                            const QString& author,
+                            DatabaseComment::Type type,
+                            const QDateTime& date);
 
 protected:
 
