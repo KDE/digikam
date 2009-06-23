@@ -703,8 +703,9 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/template.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/templatemanager.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/templatelist.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/templateselector.cpp 
        )
-       
+
     SET(libdialogs_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/infodlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/iccprofileinfodlg.cpp
