@@ -63,7 +63,6 @@ public:
         templateCombo = 0;
     }
 
-    QLabel           *space;
     QLabel           *label;
 
     QToolButton      *setupButton;
@@ -75,14 +74,13 @@ TemplateSelector::TemplateSelector(QWidget* parent=0)
                 : KHBox(parent), d(new TemplateSelectorPriv)
 {
     d->label         = new QLabel(i18n("Template: "), this);
-    d->space         = new QLabel(this);
     d->templateCombo = new SqueezedComboBox(this);
     d->setupButton   = new QToolButton(this);
     d->setupButton->setIcon(SmallIcon("document-edit"));
 
     setSpacing(KDialog::spacingHint());
     setMargin(0);
-    setStretchFactor(d->space, 10);
+    setStretchFactor(d->templateCombo, 10);
 
     connect(d->templateCombo, SIGNAL(activated(int)),
             this, SLOT(slotChangeTemplate(int)));
