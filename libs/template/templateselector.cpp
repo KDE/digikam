@@ -76,6 +76,7 @@ TemplateSelector::TemplateSelector(QWidget* parent=0)
     d->templateCombo = new SqueezedComboBox(this);
     d->setupButton   = new QToolButton(this);
     d->setupButton->setIcon(SmallIcon("document-edit"));
+    d->setupButton->setWhatsThis(i18n("Open metadata template editor"));
 
     setSpacing(KDialog::spacingHint());
     setMargin(0);
