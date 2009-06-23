@@ -67,6 +67,11 @@ void ImageCopyright::setCreator(const QString& creator, ReplaceMode mode)
                                                      creator, QString(), uniqueness);
 }
 
+void ImageCopyright::removeCreators()
+{
+    removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreator));
+}
+
 QString ImageCopyright::provider()
 {
     return readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreProvider));
@@ -75,6 +80,11 @@ QString ImageCopyright::provider()
 void ImageCopyright::setProvider(const QString& provider)
 {
     setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreProvider), provider);
+}
+
+void ImageCopyright::removeProvider()
+{
+    removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreProvider));
 }
 
 QString ImageCopyright::copyrightNotice(const QString& languageCode)
@@ -87,6 +97,11 @@ void ImageCopyright::setCopyrightNotice(const QString& notice, const QString& la
     setLanguageProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCopyrightNotice), notice, languageCode, mode);
 }
 
+void ImageCopyright::removeCopyrightNotices()
+{
+    removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCopyrightNotice));
+}
+
 QString ImageCopyright::rightsUsageTerms(const QString& languageCode)
 {
     return readLanguageProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreRightsUsageTerms), languageCode);
@@ -95,6 +110,11 @@ QString ImageCopyright::rightsUsageTerms(const QString& languageCode)
 void ImageCopyright::setRightsUsageTerms(const QString& term, const QString& languageCode, ReplaceMode mode)
 {
     setLanguageProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreRightsUsageTerms), term, languageCode, mode);
+}
+
+void ImageCopyright::removeRightsUsageTerms()
+{
+    removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreRightsUsageTerms));
 }
 
 QString ImageCopyright::source()
@@ -107,6 +127,11 @@ void ImageCopyright::setSource(const QString& source)
     setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreSource), source);
 }
 
+void ImageCopyright::removeSource()
+{
+    removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreSource));
+}
+
 QString ImageCopyright::creatorJobTitle()
 {
     return readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreatorJobTitle));
@@ -117,6 +142,11 @@ void ImageCopyright::setCreatorJobTitle(const QString& title)
     setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreatorJobTitle), title);
 }
 
+void ImageCopyright::removeCreatorJobTitle()
+{
+    removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreatorJobTitle));
+}
+
 QString ImageCopyright::instructions()
 {
     return readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreInstructions));
@@ -125,6 +155,11 @@ QString ImageCopyright::instructions()
 void ImageCopyright::setInstructions(const QString& instructions)
 {
     setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreInstructions), instructions);
+}
+
+void ImageCopyright::removeInstructions()
+{
+    removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreInstructions));
 }
 
 QString ImageCopyright::readSimpleProperty(const QString& property)
@@ -167,6 +202,16 @@ void ImageCopyright::setLanguageProperty(const QString& property, const QString&
         language = "x-default";
 
     DatabaseAccess().db()->setImageCopyrightProperty(m_id, property, value, language, uniqueness);
+}
+
+void ImageCopyright::removeProperties(const QString &property)
+{
+    DatabaseAccess().db()->removeImageCopyrightProperties(m_id, property);
+}
+
+void ImageCopyright::removeLanguageProperty(const QString &property, const QString &languageCode)
+{
+    DatabaseAccess().db()->removeImageCopyrightProperties(m_id, property, languageCode);
 }
 
 int ImageCopyright::languageMatch(const QList<CopyrightInfo> infos, const QString& languageCode) const

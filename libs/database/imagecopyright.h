@@ -83,6 +83,8 @@ public:
     void setAuthor(const QString& author, ReplaceMode mode = ReplaceAllEntries) { setCreator(author, mode); }
     void setByLine(const QString& byline, ReplaceMode mode = ReplaceAllEntries) { setCreator(byline, mode); }
 
+    void removeCreators();
+
     /** Returns the credit/provider.
      *  This is Photoshop Credit.
      *  This is IPTC Credit.
@@ -94,6 +96,8 @@ public:
 
     void setProvider(const QString& provider);
     void setCredit(const QString& credit) { setProvider(credit); }
+
+    void removeProvider();
 
     /** Returns the copyright notice.
      *  This is Photoshop Copyright Notice.
@@ -124,6 +128,8 @@ public:
                    ReplaceMode mode = ReplaceLanguageEntry)
         { setCopyrightNotice(notice, languageCode, mode); }
 
+    void removeCopyrightNotices();
+
     /** Returns the right usage terms.
      *  This has no equivalent in Photoshop, IPTC, or DC.
      *  This is xmpRights:UsageTerms in XMP.
@@ -134,6 +140,8 @@ public:
 
     void setRightsUsageTerms(const QString& term, const QString& languageCode = QString(),
                              ReplaceMode mode = ReplaceLanguageEntry);
+
+    void removeRightsUsageTerms();
 
     /** Returns the source.
      *  This is Photoshop Source.
@@ -147,6 +155,8 @@ public:
      */
     QString source();
     void setSource(const QString& source);
+
+    void removeSource();
 
     /** Returns the creator's job title.
      *  This is Photoshop AuthorsPosition.
@@ -164,6 +174,8 @@ public:
     void setAuthorsPosition(const QString& position) { setCreatorJobTitle(position); }
     void setByLineTitle(const QString& title)        { setCreatorJobTitle(title); }
 
+    void removeCreatorJobTitle();
+
     /** Returns the instructions.
      *  This is Photoshop Instructions.
      *  This is IPTC Special Instruction.
@@ -177,6 +189,7 @@ public:
      */
     QString instructions();
     void setInstructions(const QString& instructions);
+    void removeInstructions();
 
 protected:
 
@@ -184,6 +197,8 @@ protected:
     void setSimpleProperty(const QString& property, const QString& value);
     QString readLanguageProperty(const QString& property, const QString& languageCode);
     void setLanguageProperty(const QString& property, const QString& value, const QString& languageCode, ReplaceMode mode);
+    void removeProperties(const QString &property);
+    void removeLanguageProperty(const QString &property, const QString &languageCode);
     int languageMatch(const QList<CopyrightInfo> infos, const QString& languageCode) const;
 
     qlonglong m_id;
