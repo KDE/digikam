@@ -94,12 +94,12 @@ bool PhotographerList::load()
     if (!pfile.open(QIODevice::ReadOnly))
         return false;
 
-    QDomDocument doc("photographerlist");
+    QDomDocument doc("templatelist");
     if (!doc.setContent(&pfile))
         return false;
 
     QDomElement docElem = doc.documentElement();
-    if (docElem.tagName() != "photographerlist")
+    if (docElem.tagName() != "templatelist")
         return false;
 
     for (QDomNode n = docElem.firstChild(); !n.isNull(); n = n.nextSibling())
@@ -128,8 +128,8 @@ bool PhotographerList::save()
     if (!d->modified)
         return true;
 
-    QDomDocument doc("photographerlist");
-    doc.setContent(QString("<!DOCTYPE XMLPhotographerList><photographerlist version=\"1.0\" client=\"digikam\"/>"));
+    QDomDocument doc("templatelist");
+    doc.setContent(QString("<!DOCTYPE XMLTemplateList><templatelist version=\"1.0\" client=\"digikam\"/>"));
 
     QDomElement docElem=doc.documentElement();
 

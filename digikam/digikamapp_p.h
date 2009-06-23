@@ -155,7 +155,7 @@ public:
         imagePluginsLoader                   = 0;
         kipiInterface                        = 0;
         cameraList                           = 0;
-        photographerList                     = 0;
+        templateManager                      = 0;
         statusProgressBar                    = 0;
         statusNavigateBar                    = 0;
         statusZoomBar                        = 0;
@@ -302,7 +302,7 @@ public:
     KipiInterface                      *kipiInterface;
     DigikamView                        *view;
     CameraList                         *cameraList;
-    PhotographerList                   *photographerList;
+    PhotographerList                   *templateManager;
     StatusZoomBar                      *statusZoomBar;
     StatusProgressBar                  *statusProgressBar;
     StatusNavigateBar                  *statusNavigateBar;
