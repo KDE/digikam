@@ -1,0 +1,76 @@
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2009-06-23
+ * Description : a widget to select metadata template.
+ *
+ * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
+
+#ifndef TEMPLATESELECTOR_H
+#define TEMPLATESELECTOR_H
+
+// KDE includes
+
+#include <khbox.h>
+
+// Local includes
+
+#include "digikam_export.h"
+
+namespace Digikam
+{
+
+class Template;
+class TemplateSelectorPriv;
+
+class DIGIKAM_EXPORT TemplateSelector : public KHBox
+{
+    Q_OBJECT
+
+public:
+
+    TemplateSelector(QWidget* parent);
+    virtual ~TemplateSelector();
+
+    Template* getTemplate() const;
+    void      setTemplate(Template* t);
+
+    int  getTemplateIndex() const;
+    void setTemplateIndex(int i);
+
+Q_SIGNALS:
+
+    void signalTemplateChanged();
+
+private Q_SLOTS:
+
+    void slotOpenSetup();
+    void slotChangeTemplate(int);
+
+private:
+
+    void populateTemplates();
+
+private:
+
+    TemplateSelectorPriv* const d;
+};
+
+}  // namespace Digikam
+
+#endif // DFONTSELECT_H
