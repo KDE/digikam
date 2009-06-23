@@ -623,10 +623,7 @@ bool DMetadata::setMetadataTemplate(Template* t) const
         if (!setXmpTagStringLangAlt("Xmp.tiff.Copyright", copyright, QString(), false))
             return false;
 
-        if (!setXmpTagStringLangAlt("Xmp.rights.UsageTerms", rightUsage, QString(), false))
-            return false;
-
-        if (!setXmpTagStringLangAlt("Xmp.rights.UsageTerms", rightUsage, QString(), false))
+        if (!setXmpTagStringLangAlt("Xmp.xmpRights.UsageTerms", rightUsage, QString(), false))
             return false;
 
         if (!setXmpTagString("Xmp.photoshop.Instructions", instructions, false))
@@ -640,7 +637,7 @@ bool DMetadata::setMetadataTemplate(Template* t) const
     if (!setIptcTag(credit,         32, "Credit",       "Iptc.Application2.Credit"))              return false;
     if (!setIptcTag(source,         32, "Source",       "Iptc.Application2.Source"))              return false;
     if (!setIptcTag(copyright,     128, "Copyright",    "Iptc.Application2.Copyright"))           return false;
-    if (!setIptcTag(instructions,  256, "Copyright",    "Iptc.Application2.SpecialInstructions")) return false;
+    if (!setIptcTag(instructions,  256, "Instructions",    "Iptc.Application2.SpecialInstructions")) return false;
 
     return true;
 }
