@@ -37,7 +37,7 @@
 
 // Local includes
 
-#include "photographerlist.h"
+#include "templatemanager.h"
 #include "photographer.h"
 
 namespace Digikam
@@ -99,10 +99,10 @@ IndentityList::~IndentityList()
 
 void IndentityList::readSettings()
 {
-    PhotographerList* plist = PhotographerList::defaultList();
-    if (plist)
+    TemplateManager* tm = TemplateManager::defaultManager();
+    if (tm)
     {
-        QList<Photographer*>* list = plist->photographerList();
+        QList<Photographer*>* list = tm->templateList();
         foreach (Photographer *photographer, *list)
         {
             new IndentityListItem(this, photographer);
@@ -112,10 +112,10 @@ void IndentityList::readSettings()
 
 void IndentityList::applySettings()
 {
-    PhotographerList* plist = PhotographerList::defaultList();
-    if (plist)
+    TemplateManager* tm = TemplateManager::defaultManager();
+    if (tm)
     {
-        plist->clear();
+        tm->clear();
 
         QTreeWidgetItemIterator it(this);
         while (*it)
@@ -126,12 +126,12 @@ void IndentityList::applySettings()
                 Photographer* photographer = item->photographer();
                 if (photographer)
                 {
-                    plist->insert(new Photographer(*photographer));
+                    tm->insert(new Photographer(*photographer));
                 }
             }
             ++it;
         }
-        plist->save();
+        tm->save();
     }
 }
 
