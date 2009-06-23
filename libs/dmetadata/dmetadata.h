@@ -44,6 +44,7 @@ using namespace KExiv2Iface;
 
 namespace Digikam
 {
+class Template;
 
 class DIGIKAM_EXPORT DMetadata : public KExiv2Iface::KExiv2
 {
@@ -73,6 +74,8 @@ public:
 
     bool setImagePhotographerId(const QString& author, const QString& authorTitle) const;
     bool setImageCredits(const QString& credit, const QString& source, const QString& copyright) const;
+
+    bool setMetadataTemplate(Template* t) const;
 
     /** Return a string with Lens mounted on the front of camera.
         There no standard Exif tag for Lens information.

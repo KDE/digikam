@@ -46,6 +46,7 @@
 
 // Local includes
 
+#include "template.h"
 #include "constants.h"
 #include "version.h"
 
@@ -565,6 +566,69 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath) const
         if (!setXmpTagStringSeq("Xmp.digiKam.TagsList", tagsPath))
             return false;
     }
+    return true;
+}
+
+
+bool DMetadata::setMetadataTemplate(Template* t) const
+{
+    if (!setProgramId())
+        return false;
+
+    QString author         = t->author();
+    QString authorPosition = t->authorPosition();
+    QString credit         = t->credit();
+    QString source         = t->source();
+    QString copyright      = t->copyright();
+
+    // Set XMP tags. XMP<->IPTC Schema from Photoshop 7.0
+
+    if (supportXmp())
+    {
+        // Create a list of authors including old one witch already exists.
+        QStringList oldAuthors = getXmpTagStringSeq("Xmp.dc.creator", false);
+        QStringList newAuthors(author);
+
+        for (QStringList::Iterator it = oldAuthors.begin(); it != oldAuthors.end(); ++it)
+        {
+            if (!newAuthors.contains(*it))
+                newAuthors.append(*it);
+        }
+
+        if (!setXmpTagStringSeq("Xmp.dc.creator", newAuthors, false))
+            return false;
+
+        if (!setXmpTagStringSeq("Xmp.tiff.Artist", newAuthors, false))
+            return false;
+
+        if (!setXmpTagString("Xmp.photoshop.AuthorsPosition", authorPosition, false))
+            return false;
+
+        if (!setXmpTagString("Xmp.photoshop.Credit", credit, false))
+            return false;
+
+        if (!setXmpTagString("Xmp.photoshop.Source", source, false))
+            return false;
+
+        if (!setXmpTagString("Xmp.dc.source", source, false))
+            return false;
+
+        // NOTE : language Alternative rule is not yet used here.
+        if (!setXmpTagStringLangAlt("Xmp.dc.rights", copyright, QString(), false))
+            return false;
+
+        if (!setXmpTagStringLangAlt("Xmp.tiff.Copyright", copyright, QString(), false))
+            return false;
+    }
+
+    // Set IPTC tags.
+
+    if (!setIptcTag(author,         32, "Author",       "Iptc.Application2.Byline"))      return false;
+    if (!setIptcTag(authorPosition, 32, "Author Title", "Iptc.Application2.BylineTitle")) return false;
+    if (!setIptcTag(credit,         32, "Credit",       "Iptc.Application2.Credit"))      return false;
+    if (!setIptcTag(source,         32, "Source",       "Iptc.Application2.Source"))      return false;
+    if (!setIptcTag(copyright,     128, "Copyright",    "Iptc.Application2.Copyright"))   return false;
+
     return true;
 }
 

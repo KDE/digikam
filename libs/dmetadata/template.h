@@ -28,12 +28,16 @@
 
 #include <QString>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
 class TemplatePrivate;
 
-class Template
+class DIGIKAM_EXPORT Template
 {
 public:
 
