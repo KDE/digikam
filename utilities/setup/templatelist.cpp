@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#include "identitylist.h"
-#include "identitylist.moc"
+#include "templatelist.h"
+#include "templatelist.moc"
 
 // Qt includes
 
@@ -38,52 +38,52 @@
 // Local includes
 
 #include "templatemanager.h"
-#include "photographer.h"
+#include "template.h"
 
 namespace Digikam
 {
 
-IndentityListItem::IndentityListItem(QTreeWidget *parent, Photographer *photographer)
-                 : QTreeWidgetItem(parent), m_photographer(0)
+TemplateListItem::TemplateListItem(QTreeWidget *parent, Template *t)
+                : QTreeWidgetItem(parent), m_template(0)
 {
-    setPhotographer(photographer);
+    setTemplate(t);
 }
 
-IndentityListItem::~IndentityListItem()
+TemplateListItem::~TemplateListItem()
 {
-    delete m_photographer;
+    delete m_template;
 }
 
-void IndentityListItem::setPhotographer(Photographer *photographer)
+void TemplateListItem::setTemplate(Template *t)
 {
-    if (m_photographer)
-        delete m_photographer;
+    if (m_template)
+        delete m_template;
 
-    m_photographer = new Photographer(*photographer);
+    m_template = new Template(*t);
 
-    if (m_photographer)
+    if (m_template)
     {
-        setText(0, m_photographer->author());
-        setText(1, m_photographer->authorPosition());
+        setText(0, m_template->author());
+        setText(1, m_template->authorPosition());
     }
 }
 
-Photographer* IndentityListItem::photographer() const
+Template* TemplateListItem::getTemplate() const
 {
-    return m_photographer;
+    return m_template;
 }
 
 // -------------------------------------------------------------------
 
-IndentityList::IndentityList(QWidget* parent)
-             : QTreeWidget(parent)
+TemplateList::TemplateList(QWidget* parent)
+            : QTreeWidget(parent)
 {
     setColumnCount(2);
     setRootIsDecorated(false);
     setSelectionMode(QAbstractItemView::SingleSelection);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setAllColumnsShowFocus(true);
-    setWhatsThis(i18n("Here you can see the photographers list managed by digiKam."));
+    setWhatsThis(i18n("Here you can see the metadata template list managed by digiKam."));
 
     QStringList labels;
     labels.append( i18n("Author") );
@@ -93,24 +93,24 @@ IndentityList::IndentityList(QWidget* parent)
     header()->setResizeMode(1, QHeaderView::Stretch);
 }
 
-IndentityList::~IndentityList()
+TemplateList::~TemplateList()
 {
 }
 
-void IndentityList::readSettings()
+void TemplateList::readSettings()
 {
     TemplateManager* tm = TemplateManager::defaultManager();
     if (tm)
     {
-        QList<Photographer*>* list = tm->templateList();
-        foreach (Photographer *photographer, *list)
+        QList<Template*>* list = tm->templateList();
+        foreach (Template *t, *list)
         {
-            new IndentityListItem(this, photographer);
+            new TemplateListItem(this, t);
         }
     }
 }
 
-void IndentityList::applySettings()
+void TemplateList::applySettings()
 {
     TemplateManager* tm = TemplateManager::defaultManager();
     if (tm)
@@ -120,13 +120,13 @@ void IndentityList::applySettings()
         QTreeWidgetItemIterator it(this);
         while (*it)
         {
-            IndentityListItem *item = dynamic_cast<IndentityListItem*>(*it);
+            TemplateListItem *item = dynamic_cast<TemplateListItem*>(*it);
             if (item)
             {
-                Photographer* photographer = item->photographer();
-                if (photographer)
+                Template* t = item->getTemplate();
+                if (t)
                 {
-                    tm->insert(new Photographer(*photographer));
+                    tm->insert(new Template(*t));
                 }
             }
             ++it;

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-06-20
- * Description : Photographer information container.
+ * Description : Template information container.
  *
  * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef PHOTOGRAPHER_H
-#define PHOTOGRAPHER_H
+#ifndef TEMPLATE_H
+#define TEMPLATE_H
 
 // Qt includes
 
@@ -31,17 +31,17 @@
 namespace Digikam
 {
 
-class PhotographerPrivate;
+class TemplatePrivate;
 
-class Photographer
+class Template
 {
 public:
 
-    Photographer();
-    ~Photographer();
+    Template();
+    ~Template();
 
-    Photographer(const Photographer& photographer);
-    Photographer& operator=(const Photographer& photographer);
+    Template(const Template& t);
+    Template& operator=(const Template& t);
 
     void setAuthor(const QString& author);
     void setAuthorPosition(const QString& authorPosition);
@@ -63,9 +63,9 @@ public:
 
 private:
 
-    PhotographerPrivate* const d;
+    TemplatePrivate* const d;
 };
 
 }  // namespace Digikam
 
-#endif /* PHOTOGRAPHER_H */
+#endif /* TEMPLATE_H */

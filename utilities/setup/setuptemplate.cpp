@@ -40,8 +40,8 @@
 
 // Local includes
 
-#include "photographer.h"
-#include "identitylist.h"
+#include "template.h"
+#include "templatelist.h"
 
 namespace Digikam
 {
@@ -65,19 +65,19 @@ public:
         repButton          = 0;
     }
 
-    QPushButton   *addButton;
-    QPushButton   *delButton;
-    QPushButton   *repButton;
+    QPushButton  *addButton;
+    QPushButton  *delButton;
+    QPushButton  *repButton;
 
-    KLineEdit     *authorEdit;
-    KLineEdit     *authorPositionEdit;
-    KLineEdit     *creditEdit;
-    KLineEdit     *copyrightEdit;
-    KLineEdit     *rightUsageEdit;
-    KLineEdit     *sourceEdit;
-    KLineEdit     *instructionsEdit;
+    KLineEdit    *authorEdit;
+    KLineEdit    *authorPositionEdit;
+    KLineEdit    *creditEdit;
+    KLineEdit    *copyrightEdit;
+    KLineEdit    *rightUsageEdit;
+    KLineEdit    *sourceEdit;
+    KLineEdit    *instructionsEdit;
 
-    IndentityList *listView;
+    TemplateList *listView;
 };
 
 SetupTemplate::SetupTemplate(QWidget* parent)
@@ -90,7 +90,7 @@ SetupTemplate::SetupTemplate(QWidget* parent)
     viewport()->setAutoFillBackground(false);
 
     QGridLayout* grid = new QGridLayout(panel);
-    d->listView       = new IndentityList(panel);
+    d->listView       = new TemplateList(panel);
 
     // --------------------------------------------------------
 
@@ -289,7 +289,7 @@ void SetupTemplate::readSettings()
 
 void SetupTemplate::slotSelectionChanged()
 {
-    IndentityListItem *item = dynamic_cast<IndentityListItem*>(d->listView->currentItem());
+    TemplateListItem *item = dynamic_cast<TemplateListItem*>(d->listView->currentItem());
     if (!item)
     {
         d->delButton->setEnabled(false);
@@ -297,14 +297,14 @@ void SetupTemplate::slotSelectionChanged()
         return;
     }
 
-    Photographer *photographer = item->photographer();
-    d->authorEdit->setText(photographer->author());
-    d->authorPositionEdit->setText(photographer->authorPosition());
-    d->creditEdit->setText(photographer->credit());
-    d->copyrightEdit->setText(photographer->copyright());
-    d->rightUsageEdit->setText(photographer->rightUsageTerms());
-    d->sourceEdit->setText(photographer->source());
-    d->instructionsEdit->setText(photographer->instructions());
+    Template *t = item->getTemplate();
+    d->authorEdit->setText(t->author());
+    d->authorPositionEdit->setText(t->authorPosition());
+    d->creditEdit->setText(t->credit());
+    d->copyrightEdit->setText(t->copyright());
+    d->rightUsageEdit->setText(t->rightUsageTerms());
+    d->sourceEdit->setText(t->source());
+    d->instructionsEdit->setText(t->instructions());
 
     d->delButton->setEnabled(true);
     d->repButton->setEnabled(true);
@@ -312,37 +312,37 @@ void SetupTemplate::slotSelectionChanged()
 
 void SetupTemplate::slotAddTemplate()
 {
-    Photographer photographer;
-    photographer.setAuthor(d->authorEdit->text());
-    photographer.setAuthorPosition(d->authorPositionEdit->text());
-    photographer.setCredit(d->creditEdit->text());
-    photographer.setCopyright(d->copyrightEdit->text());
-    photographer.setRightUsageTerms(d->rightUsageEdit->text());
-    photographer.setSource(d->sourceEdit->text());
-    photographer.setInstructions(d->instructionsEdit->text());
-    new IndentityListItem(d->listView, &photographer);
+    Template t;
+    t.setAuthor(d->authorEdit->text());
+    t.setAuthorPosition(d->authorPositionEdit->text());
+    t.setCredit(d->creditEdit->text());
+    t.setCopyright(d->copyrightEdit->text());
+    t.setRightUsageTerms(d->rightUsageEdit->text());
+    t.setSource(d->sourceEdit->text());
+    t.setInstructions(d->instructionsEdit->text());
+    new TemplateListItem(d->listView, &t);
 }
 
 void SetupTemplate::slotDelTemplate()
 {
-    IndentityListItem *item = dynamic_cast<IndentityListItem*>(d->listView->currentItem());
+    TemplateListItem *item = dynamic_cast<TemplateListItem*>(d->listView->currentItem());
     if (item) delete item;
 }
 
 void SetupTemplate::slotRepTemplate()
 {
-    IndentityListItem *item = dynamic_cast<IndentityListItem*>(d->listView->currentItem());
+    TemplateListItem *item = dynamic_cast<TemplateListItem*>(d->listView->currentItem());
     if (!item) return;
 
-    Photographer photographer;
-    photographer.setAuthor(d->authorEdit->text());
-    photographer.setAuthorPosition(d->authorPositionEdit->text());
-    photographer.setCredit(d->creditEdit->text());
-    photographer.setCopyright(d->copyrightEdit->text());
-    photographer.setRightUsageTerms(d->rightUsageEdit->text());
-    photographer.setSource(d->sourceEdit->text());
-    photographer.setInstructions(d->instructionsEdit->text());
-    item->setPhotographer(&photographer);
+    Template t;
+    t.setAuthor(d->authorEdit->text());
+    t.setAuthorPosition(d->authorPositionEdit->text());
+    t.setCredit(d->creditEdit->text());
+    t.setCopyright(d->copyrightEdit->text());
+    t.setRightUsageTerms(d->rightUsageEdit->text());
+    t.setSource(d->sourceEdit->text());
+    t.setInstructions(d->instructionsEdit->text());
+    item->setTemplate(&t);
 }
 
 }  // namespace Digikam

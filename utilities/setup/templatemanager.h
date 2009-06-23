@@ -37,7 +37,7 @@ class KAction;
 namespace Digikam
 {
 
-class Photographer;
+class Template;
 class TemplateManagerPrivate;
 
 class TemplateManager : public QObject
@@ -53,24 +53,24 @@ public:
     bool save();
     void clear();
 
-    void insert(Photographer* photographer);
-    void remove(Photographer* photographer);
+    void insert(Template* t);
+    void remove(Template* t);
 
-    Photographer* find(const QString& author) const;
+    Template* find(const QString& author) const;
 
-    QList<Photographer*>* templateList();
+    QList<Template*>* templateList();
 
     static TemplateManager* defaultManager();
 
 Q_SIGNALS:
 
-    void signalPhotographerAdded(Photographer*);
-    void signalPhotographerRemoved(Photographer*);
+    void signalTemplateAdded(Template*);
+    void signalTemplateRemoved(Template*);
 
 private:
 
-    void insertPrivate(Photographer* photographer);
-    void removePrivate(Photographer* photographer);
+    void insertPrivate(Template* t);
+    void removePrivate(Template* t);
 
 private:
 

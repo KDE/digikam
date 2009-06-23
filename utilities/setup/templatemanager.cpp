@@ -40,7 +40,7 @@
 
 // Local includes
 
-#include "photographer.h"
+#include "template.h"
 
 namespace Digikam
 {
@@ -63,7 +63,7 @@ public:
 
     bool                 modified;
 
-    QList<Photographer*> pList;
+    QList<Template*> pList;
     QString              file;
 };
 
@@ -108,15 +108,15 @@ bool TemplateManager::load()
         if (e.isNull()) continue;
         if (e.tagName() != "item") continue;
 
-        Photographer *photographer = new Photographer();
-        photographer->setAuthor(e.attribute("author"));
-        photographer->setAuthorPosition(e.attribute("authorposition"));
-        photographer->setCredit(e.attribute("credit"));
-        photographer->setCopyright(e.attribute("copyright"));
-        photographer->setRightUsageTerms(e.attribute("rightusageterms"));
-        photographer->setSource(e.attribute("source"));
-        photographer->setInstructions(e.attribute("instructions"));
-        insertPrivate(photographer);
+        Template *t = new Template();
+        t->setAuthor(e.attribute("author"));
+        t->setAuthorPosition(e.attribute("authorposition"));
+        t->setCredit(e.attribute("credit"));
+        t->setCopyright(e.attribute("copyright"));
+        t->setRightUsageTerms(e.attribute("rightusageterms"));
+        t->setSource(e.attribute("source"));
+        t->setInstructions(e.attribute("instructions"));
+        insertPrivate(t);
     }
 
     return true;
@@ -133,16 +133,16 @@ bool TemplateManager::save()
 
     QDomElement docElem = doc.documentElement();
 
-    foreach (Photographer *photographer, d->pList)
+    foreach (Template *t, d->pList)
     {
        QDomElement elem = doc.createElement("item");
-       elem.setAttribute("author",          photographer->author());
-       elem.setAttribute("authorposition",  photographer->authorPosition());
-       elem.setAttribute("credit",          photographer->credit());
-       elem.setAttribute("copyright",       photographer->copyright());
-       elem.setAttribute("rightusageterms", photographer->rightUsageTerms());
-       elem.setAttribute("source",          photographer->source());
-       elem.setAttribute("instructions",    photographer->instructions());
+       elem.setAttribute("author",          t->author());
+       elem.setAttribute("authorposition",  t->authorPosition());
+       elem.setAttribute("credit",          t->credit());
+       elem.setAttribute("copyright",       t->copyright());
+       elem.setAttribute("rightusageterms", t->rightUsageTerms());
+       elem.setAttribute("source",          t->source());
+       elem.setAttribute("instructions",    t->instructions());
        docElem.appendChild(elem);
     }
 
@@ -160,36 +160,36 @@ bool TemplateManager::save()
     return true;
 }
 
-void TemplateManager::insert(Photographer* photographer)
+void TemplateManager::insert(Template* t)
 {
-    if (!photographer) return;
+    if (!t) return;
 
     d->modified = true;
-    insertPrivate(photographer);
+    insertPrivate(t);
 }
 
-void TemplateManager::remove(Photographer* photographer)
+void TemplateManager::remove(Template* t)
 {
-    if (!photographer) return;
+    if (!t) return;
 
     d->modified = true;
-    removePrivate(photographer);
+    removePrivate(t);
 }
 
-void TemplateManager::insertPrivate(Photographer* photographer)
+void TemplateManager::insertPrivate(Template* t)
 {
-    if (!photographer) return;
-    d->pList.append(photographer);
-    emit signalPhotographerAdded(photographer);
+    if (!t) return;
+    d->pList.append(t);
+    emit signalTemplateAdded(t);
 }
 
-void TemplateManager::removePrivate(Photographer* photographer)
+void TemplateManager::removePrivate(Template* t)
 {
-    if (!photographer) return;
+    if (!t) return;
 
-    emit signalPhotographerRemoved(photographer);
+    emit signalTemplateRemoved(t);
 
-    int i = d->pList.indexOf(photographer);
+    int i = d->pList.indexOf(t);
     if (i != -1)
         delete d->pList.takeAt(i);
 }
@@ -200,17 +200,17 @@ void TemplateManager::clear()
         removePrivate(d->pList.first());
 }
 
-QList<Photographer*>* TemplateManager::templateList()
+QList<Template*>* TemplateManager::templateList()
 {
     return &d->pList;
 }
 
-Photographer* TemplateManager::find(const QString& author) const
+Template* TemplateManager::find(const QString& author) const
 {
-    foreach (Photographer *photographer, d->pList)
+    foreach (Template *t, d->pList)
     {
-        if (photographer->author() == author)
-            return photographer;
+        if (t->author() == author)
+            return t;
     }
     return 0;
 }

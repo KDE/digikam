@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-06-20
- * Description : identity list view.
+ * Description : template list view.
  *
  * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef INDENTITYLIST_H
-#define INDENTITYLIST_H
+#ifndef TEMPLATELIST_H
+#define TEMPLATELIST_H
 
 // Qt includes
 
@@ -31,35 +31,35 @@
 namespace Digikam
 {
 
-class Photographer;
+class Template;
 
-class IndentityListItem : public QTreeWidgetItem
+class TemplateListItem : public QTreeWidgetItem
 {
 
 public:
 
-    IndentityListItem(QTreeWidget *parent, Photographer *photographer);
-    ~IndentityListItem();
+    TemplateListItem(QTreeWidget *parent, Template *t);
+    ~TemplateListItem();
 
-    void setPhotographer(Photographer *photographer);
+    void setTemplate(Template *t);
 
-    Photographer* photographer() const;
+    Template* getTemplate() const;
 
 private:
 
-    Photographer* m_photographer;
+    Template* m_template;
 };
 
 // -------------------------------------------------------------------
 
-class IndentityList : public QTreeWidget
+class TemplateList : public QTreeWidget
 {
     Q_OBJECT
 
 public:
 
-    IndentityList(QWidget* parent=0);
-    ~IndentityList();
+    TemplateList(QWidget* parent=0);
+    ~TemplateList();
 
     void readSettings();
     void applySettings();
@@ -67,4 +67,4 @@ public:
 
 }  // namespace Digikam
 
-#endif // INDENTITYLIST_H
+#endif // TEMPLATELIST_H
