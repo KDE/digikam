@@ -582,6 +582,8 @@ bool DMetadata::setMetadataTemplate(Template* t) const
     QString credit         = t->credit();
     QString source         = t->source();
     QString copyright      = t->copyright();
+    QString rightUsage     = t->rightUsageTerms();
+    QString instructions   = t->instructions();
 
     // Set XMP tags. XMP<->IPTC Schema from Photoshop 7.0
 
@@ -615,21 +617,30 @@ bool DMetadata::setMetadataTemplate(Template* t) const
         if (!setXmpTagString("Xmp.dc.source", source, false))
             return false;
 
-        // NOTE : language Alternative rule is not yet used here.
         if (!setXmpTagStringLangAlt("Xmp.dc.rights", copyright, QString(), false))
             return false;
 
         if (!setXmpTagStringLangAlt("Xmp.tiff.Copyright", copyright, QString(), false))
             return false;
+
+        if (!setXmpTagStringLangAlt("Xmp.rights.UsageTerms", rightUsage, QString(), false))
+            return false;
+
+        if (!setXmpTagStringLangAlt("Xmp.rights.UsageTerms", rightUsage, QString(), false))
+            return false;
+
+        if (!setXmpTagString("Xmp.photoshop.Instructions", instructions, false))
+            return false;
     }
 
     // Set IPTC tags.
 
-    if (!setIptcTag(author,         32, "Author",       "Iptc.Application2.Byline"))      return false;
-    if (!setIptcTag(authorPosition, 32, "Author Title", "Iptc.Application2.BylineTitle")) return false;
-    if (!setIptcTag(credit,         32, "Credit",       "Iptc.Application2.Credit"))      return false;
-    if (!setIptcTag(source,         32, "Source",       "Iptc.Application2.Source"))      return false;
-    if (!setIptcTag(copyright,     128, "Copyright",    "Iptc.Application2.Copyright"))   return false;
+    if (!setIptcTag(author,         32, "Author",       "Iptc.Application2.Byline"))              return false;
+    if (!setIptcTag(authorPosition, 32, "Author Title", "Iptc.Application2.BylineTitle"))         return false;
+    if (!setIptcTag(credit,         32, "Credit",       "Iptc.Application2.Credit"))              return false;
+    if (!setIptcTag(source,         32, "Source",       "Iptc.Application2.Source"))              return false;
+    if (!setIptcTag(copyright,     128, "Copyright",    "Iptc.Application2.Copyright"))           return false;
+    if (!setIptcTag(instructions,  256, "Copyright",    "Iptc.Application2.SpecialInstructions")) return false;
 
     return true;
 }
