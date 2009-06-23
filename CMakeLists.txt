@@ -504,6 +504,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/photoinfocontainer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/dmetadata.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/geodetictools.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/template.cpp 
        )
 
     # CImg.h version 1.2.8 do not compile fine with gcc 4.3.
@@ -700,7 +701,6 @@ ENDIF(MSVC)
     # digiKam target parts
 
     SET(libtemplate_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/template.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/templatemanager.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/templatelist.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/templateselector.cpp 
