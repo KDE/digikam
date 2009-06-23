@@ -169,6 +169,10 @@ public:
     // icon view settings
     int                                 imageSortOrder;
     AlbumSettings::ItemRightClickAction itemRightClickAction;
+
+    // nepomuk settings
+    bool                                syncToDigikam;
+    bool                                syncToNepomuk;
 };
 
 class AlbumSettingsCreator { public: AlbumSettings object; };
@@ -278,6 +282,9 @@ void AlbumSettings::init()
     d->recursiveTags                = true;
 
     d->showFolderTreeViewItemsCount = false;
+
+    d->syncToDigikam                = false;
+    d->syncToNepomuk                = false;
 }
 
 void AlbumSettings::readSettings()
@@ -398,8 +405,16 @@ void AlbumSettings::readSettings()
     d->sidebarApplyDirectly  = group.readEntry("Apply Sidebar Changes Directly", false);
     d->scanAtStart           = group.readEntry("Scan At Start", true);
 
+    // ---------------------------------------------------------------------
+
+    group = config->group("Nepomuk Settings");
+
+    d->syncToDigikam         = group.readEntry("Sync Nepomuk to Digikam", false);
+    d->syncToNepomuk         = group.readEntry("Sync Digikam to Nepomuk", false);
+
     emit setupChanged();
     emit recurseSettingsChanged();
+    emit nepomukSettingsChanged();
 }
 
 void AlbumSettings::saveSettings()
@@ -502,6 +517,13 @@ void AlbumSettings::saveSettings()
     group.writeEntry("Show Trash Delete Dialog", d->showTrashDeleteDialog);
     group.writeEntry("Apply Sidebar Changes Directly", d->sidebarApplyDirectly);
     group.writeEntry("Scan At Start", d->scanAtStart);
+
+    // ---------------------------------------------------------------------
+
+    group = config->group("Nepomuk Settings");
+
+    group.writeEntry("Sync Nepomuk to Digikam", d->syncToDigikam);
+    group.writeEntry("Sync Digikam to Nepomuk", d->syncToNepomuk);
 
     config->sync();
 }
@@ -1320,5 +1342,28 @@ bool AlbumSettings::getShowThumbbar() const
 {
     return d->showThumbbar;
 }
+
+void AlbumSettings::setSyncNepomukToDigikam(bool val)
+{
+    d->syncToDigikam = val;
+    emit nepomukSettingsChanged();
+}
+
+bool AlbumSettings::getSyncNepomukToDigikam() const
+{
+    return d->syncToDigikam;
+}
+
+void AlbumSettings::setSyncDigikamToNepomuk(bool val)
+{
+    d->syncToNepomuk = val;
+    emit nepomukSettingsChanged();
+}
+
+bool AlbumSettings::getSyncDigikamToNepomuk() const
+{
+    return d->syncToNepomuk;
+}
+
 
 }  // namespace Digikam

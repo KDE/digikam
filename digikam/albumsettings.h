@@ -70,6 +70,7 @@ Q_SIGNALS:
     void setupChanged();
 
     void recurseSettingsChanged();
+    void nepomukSettingsChanged();
 
 public:
 
@@ -303,6 +304,12 @@ public:
 
     void setShowThumbbar(bool val);
     bool getShowThumbbar() const;
+
+    void setSyncNepomukToDigikam(bool val);
+    bool getSyncNepomukToDigikam() const;
+
+    void setSyncDigikamToNepomuk(bool val);
+    bool getSyncDigikamToNepomuk() const;
 
 private:
 
