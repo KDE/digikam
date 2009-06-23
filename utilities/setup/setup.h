@@ -49,7 +49,7 @@ public:
         CategoryPage,
         ToolTipPage,
         MetadataPage,
-        IdentifyPage,
+        TemplatePage,
         MimePage,
         LightTablePage,
         EditorPage,

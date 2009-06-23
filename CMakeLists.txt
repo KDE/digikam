@@ -720,7 +720,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupalbumview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setup.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setuptooltip.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupidentity.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setuptemplate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupmime.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupslideshow.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupmetadata.cpp
