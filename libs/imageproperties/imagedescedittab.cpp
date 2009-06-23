@@ -762,13 +762,6 @@ void ImageDescEditTab::slotItemStateChanged(TAlbumCheckListItem *item)
 
 void ImageDescEditTab::slotCommentChanged()
 {
-    // we cannot trust that the text actually changed
-    // (there are bogus signals caused by spell checking, see bug 141663)
-    // so we have to check before marking the metadata as modified
-
-    if (d->hub.comments() == d->captionsEdit->values())
-        return;
-
     d->hub.setComments(d->captionsEdit->values());
     setMetadataWidgetStatus(d->hub.commentsStatus(), d->captionsEdit);
     slotModified();

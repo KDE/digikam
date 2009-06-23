@@ -40,6 +40,7 @@
 #include <klocale.h>
 #include <ktextedit.h>
 #include <kcombobox.h>
+#include <kdebug.h>
 
 using namespace KExiv2Iface;
 
@@ -295,14 +296,11 @@ CaptionsEdit::CaptionsEdit(QWidget* parent)
     connect(d->addValueButton, SIGNAL(clicked()),
             this, SLOT(slotAddValue()));
 
-    connect(d->delValueButton, SIGNAL(clicked()),
-            this, SLOT(slotDeleteValue()));
-
     connect(d->addValueButton, SIGNAL(clicked()),
             this, SIGNAL(signalModified()));
 
     connect(d->delValueButton, SIGNAL(clicked()),
-            this, SIGNAL(signalModified()));
+            this, SLOT(slotDeleteValue()));
 
     connect(d->valueEdit, SIGNAL(textChanged()),
             this, SLOT(slotTextChanged()));
@@ -336,6 +334,7 @@ void CaptionsEdit::slotDeleteValue()
     QString lang = d->languageCB->currentText();
     d->values.remove(lang);
     loadLangAltListEntries();
+    emit signalModified();
 }
 
 void CaptionsEdit::slotSelectionChanged(int index)
@@ -369,6 +368,7 @@ void CaptionsEdit::setValues(const KExiv2::AltLangMap& values)
     blockSignals(true);
     d->values = values;
     loadLangAltListEntries();
+    blockSignals(false);
 }
 
 KExiv2::AltLangMap& CaptionsEdit::values()
@@ -425,15 +425,20 @@ void CaptionsEdit::slotTextChanged()
         return;
     }
 
+    // we cannot trust that the text actually changed
+    // (there are bogus signals caused by spell checking, see bug #141663)
+    // so we have to check before marking the metadata as modified.
+
     bool dirty = (text != d->values[d->languageCB->currentText()]);
     d->addValueButton->setEnabled(dirty);
 
-    if (dirty) emit signalModified();
+    if (dirty)
+        emit signalModified();
 }
 
 void CaptionsEdit::apply()
 {
-    d->addValueButton->animateClick();
+    slotAddValue();
 }
 
 }  // namespace Digikam
