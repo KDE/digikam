@@ -160,9 +160,13 @@ void MetadataHub::load(const ImageInfo& info)
 {
     d->count++;
 
-    DatabaseAccess access;
-    ImageComments comments = info.imageComments(access);
-    load(info.dateTime(), comments.altComments(), info.rating());
+    KExiv2::AltLangMap commentMap;
+    {
+        DatabaseAccess access;
+        ImageComments comments = info.imageComments(access);
+        commentMap = comments.toAltLangMap();
+    }
+    load(info.dateTime(), commentMap, info.rating());
 
     AlbumManager *man = AlbumManager::instance();
     QList<int> tagIds = info.tagIds();
@@ -438,7 +442,7 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
         DatabaseAccess access;
         ImageComments comments = info.imageComments(access);
         // we set a map of alt-languages comments with default author and date null
-        comments.setAltComments(d->comments);
+        comments.replaceComments(d->comments);
         changed = true;
     }
     if (saveDateTime && (writeAllFields || d->dateTimeChanged))
