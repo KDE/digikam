@@ -6,7 +6,7 @@
  * Date        : 2006-21-07
  * Description : Camera item download settings container.
  *
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,6 +29,10 @@
 #include <QString>
 #include <QDateTime>
 
+// local includes
+
+#include "template.h"
+
 namespace Digikam
 {
 
@@ -41,9 +45,8 @@ public:
     {
         autoRotate        = true;
         fixDateTime       = false;
-        setPhotographerId = false;
-        setCredits        = false;
         convertJpeg       = false;
+        metadataTemplate  = 0;
     };
 
     ~DownloadSettingsContainer(){};
@@ -52,8 +55,6 @@ public:
 
     bool      autoRotate;
     bool      fixDateTime;
-    bool      setPhotographerId;
-    bool      setCredits;
     bool      convertJpeg;
 
     QDateTime newDateTime;
@@ -66,12 +67,8 @@ public:
     // New format to convert Jpeg files.
     QString   losslessFormat;
 
-    // IPTC settings
-    QString   author;
-    QString   authorTitle;
-    QString   credit;
-    QString   source;
-    QString   copyright;
+    // Metadata template settings
+    Template *metadataTemplate;
 };
 
 }  // namespace Digikam

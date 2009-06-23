@@ -74,8 +74,7 @@ public:
         renameCustomizer          = 0;
         anim                      = 0;
         dateTimeEdit              = 0;
-        setPhotographerId         = 0;
-        setCredits                = 0;
+        templateSelector          = 0;
         losslessFormat            = 0;
         convertJpegCheck          = 0;
         formatLabel               = 0;
@@ -136,8 +135,6 @@ public:
     QCheckBox                    *autoAlbumDateCheck;
     QCheckBox                    *autoAlbumExtCheck;
     QCheckBox                    *fixDateTimeCheck;
-    QCheckBox                    *setPhotographerId;
-    QCheckBox                    *setCredits;
     QCheckBox                    *convertJpegCheck;
 
     QLabel                       *formatLabel;
@@ -202,6 +199,8 @@ public:
     RenameCustomizer             *renameCustomizer;
 
     DLogoAction                  *anim;
+
+    TemplateSelector             *templateSelector;
 
     ImagePropertiesSideBarCamGui *rightSideBar;
 

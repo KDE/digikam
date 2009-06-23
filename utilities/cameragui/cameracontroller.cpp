@@ -482,21 +482,15 @@ void CameraController::executeCommand(CameraCommand *cmd)
         }
         case(CameraCommand::gp_download):
         {
-            QString   folder            = cmd->map["folder"].toString();
-            QString   file              = cmd->map["file"].toString();
-            QString   dest              = cmd->map["dest"].toString();
-            bool      autoRotate        = cmd->map["autoRotate"].toBool();
-            bool      fixDateTime       = cmd->map["fixDateTime"].toBool();
-            QDateTime newDateTime       = cmd->map["newDateTime"].toDateTime();
-            bool      setPhotographerId = cmd->map["setPhotographerId"].toBool();
-            QString   author            = cmd->map["author"].toString();
-            QString   authorTitle       = cmd->map["authorTitle"].toString();
-            bool      setCredits        = cmd->map["setCredits"].toBool();
-            QString   credit            = cmd->map["credit"].toString();
-            QString   source            = cmd->map["source"].toString();
-            QString   copyright         = cmd->map["copyright"].toString();
-            bool      convertJpeg       = cmd->map["convertJpeg"].toBool();
-            QString   losslessFormat    = cmd->map["losslessFormat"].toString();
+            QString   folder         = cmd->map["folder"].toString();
+            QString   file           = cmd->map["file"].toString();
+            QString   dest           = cmd->map["dest"].toString();
+            bool      autoRotate     = cmd->map["autoRotate"].toBool();
+            bool      fixDateTime    = cmd->map["fixDateTime"].toBool();
+            QDateTime newDateTime    = cmd->map["newDateTime"].toDateTime();
+            Template* t              = (Template*)(cmd->map["template"].value<void*>());
+            bool      convertJpeg    = cmd->map["convertJpeg"].toBool();
+            QString   losslessFormat = cmd->map["losslessFormat"].toString();
             sendLogMsg(i18n("Downloading file %1...", file), DHistoryView::StartingEntry, folder, file);
 
             // download to a temp file
@@ -529,20 +523,17 @@ void CameraController::executeCommand(CameraCommand *cmd)
                     exifTransform(tempURL.path(), file);
                 }
 
-                if (fixDateTime || setPhotographerId || setCredits)
+                if (t || fixDateTime)
                 {
                     kDebug(50003) << "Set metadata from: " << file << " using (" << tempURL << ")";
-                    sendLogMsg(i18n("Setting Metadata tags to file %1...", file), DHistoryView::StartingEntry, folder, file);
+                    sendLogMsg(i18n("Apply Metadata template to file %1...", file), DHistoryView::StartingEntry, folder, file);
                     DMetadata metadata(tempURL.path());
 
                     if (fixDateTime)
                         metadata.setImageDateTime(newDateTime, true);
 
-                    if (setPhotographerId)
-                        metadata.setImagePhotographerId(author, authorTitle);
-
-                    if (setCredits)
-                        metadata.setImageCredits(credit, source, copyright);
+                    if (t)
+                        metadata.setMetadataTemplate(t);
 
                     metadata.applyChanges();
                 }
@@ -1024,13 +1015,7 @@ void CameraController::download(const DownloadSettingsContainer& downloadSetting
     cmd->map.insert("autoRotate",        QVariant(downloadSettings.autoRotate));
     cmd->map.insert("fixDateTime",       QVariant(downloadSettings.fixDateTime));
     cmd->map.insert("newDateTime",       QVariant(downloadSettings.newDateTime));
-    cmd->map.insert("setPhotographerId", QVariant(downloadSettings.setPhotographerId));
-    cmd->map.insert("author",            QVariant(downloadSettings.author));
-    cmd->map.insert("authorTitle",       QVariant(downloadSettings.authorTitle));
-    cmd->map.insert("setCredits",        QVariant(downloadSettings.setCredits));
-    cmd->map.insert("credit",            QVariant(downloadSettings.credit));
-    cmd->map.insert("source",            QVariant(downloadSettings.source));
-    cmd->map.insert("copyright",         QVariant(downloadSettings.copyright));
+    cmd->map.insert("template",          qVariantFromValue((void*)downloadSettings.metadataTemplate));
     cmd->map.insert("convertJpeg",       QVariant(downloadSettings.convertJpeg));
     cmd->map.insert("losslessFormat",    QVariant(downloadSettings.losslessFormat));
     addCommand(cmd);

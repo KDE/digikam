@@ -103,6 +103,7 @@
 #include "kdatetimeedit.h"
 #include "sidebar.h"
 #include "themeengine.h"
+#include "templateselector.h"
 #include "setup.h"
 #include "downloadsettingscontainer.h"
 #include "downloadhistory.h"
@@ -247,8 +248,7 @@ void CameraUI::setupUserArea()
 
     QWidget* onFlyBox      = new QWidget(d->advBox);
     QVBoxLayout* onFlyVlay = new QVBoxLayout(onFlyBox);
-    d->setPhotographerId   = new QCheckBox(i18n("Set default photographer identity"), onFlyBox);
-    d->setCredits          = new QCheckBox(i18n("Set default credit and copyright"), onFlyBox);
+    d->templateSelector    = new TemplateSelector(onFlyBox);
     d->fixDateTimeCheck    = new QCheckBox(i18n("Fix internal date && time"), onFlyBox);
     d->dateTimeEdit        = new KDateTimeEdit(onFlyBox, "datepicker");
     d->autoRotateCheck     = new QCheckBox(i18n("Auto-rotate/flip image"), onFlyBox);
@@ -261,8 +261,7 @@ void CameraUI::setupUserArea()
     d->losslessFormat->insertItem(2, "JP2");
     d->losslessFormat->insertItem(3, "PGF");
 
-    onFlyVlay->addWidget(d->setPhotographerId);
-    onFlyVlay->addWidget(d->setCredits);
+    onFlyVlay->addWidget(d->templateSelector);
     onFlyVlay->addWidget(d->fixDateTimeCheck);
     onFlyVlay->addWidget(d->dateTimeEdit);
     onFlyVlay->addWidget(d->autoRotateCheck);
@@ -276,10 +275,8 @@ void CameraUI::setupUserArea()
                      "as they are downloaded."));
     d->autoRotateCheck->setWhatsThis( i18n("Enable this option if you want images automatically "
                      "rotated or flipped using EXIF information provided by the camera."));
-    d->setPhotographerId->setWhatsThis( i18n("Enable this option to store the default "
-                     "photographer identity in the XMP and IPTC tags using digiKam's metadata settings."));
-    d->setCredits->setWhatsThis( i18n("Enable this option to store the default credit "
-                     "and copyright information in the XMP and IPTC tags using digiKam's metadata settings."));
+    d->templateSelector->setWhatsThis( i18n("Select here which metadata template you want to apply "
+                     "on images."));
     d->fixDateTimeCheck->setWhatsThis( i18n("Enable this option to set date and time metadata "
                      "tags to the right values if your camera does not set "
                      "these tags correctly when pictures are taken. The values will "
@@ -420,7 +417,7 @@ void CameraUI::setupActions()
     actionCollection()->addAction("cameraui_imagedeleteall", d->deleteAllAction);
 
     // -- Last Photo First menu actions --------------------------------------------
-   
+
     d->lastPhotoFirstAction = new KToggleAction(i18n("Show last photo first"), this);
     connect(d->lastPhotoFirstAction, SIGNAL(triggered()), this, SLOT(slotlastPhotoFirst()));
     actionCollection()->addAction("cameraui_lastphotofirst", d->lastPhotoFirstAction);
@@ -725,8 +722,7 @@ void CameraUI::readSettings()
     d->autoAlbumDateCheck->setChecked(group.readEntry("AutoAlbumDate",       false));
     d->autoAlbumExtCheck->setChecked(group.readEntry("AutoAlbumExt",         false));
     d->fixDateTimeCheck->setChecked(group.readEntry("FixDateTime",           false));
-    d->setPhotographerId->setChecked(group.readEntry("SetPhotographerId",    false));
-    d->setCredits->setChecked(group.readEntry("SetCredits",                  false));
+    d->templateSelector->setTemplateIndex(group.readEntry("Template",        0));
     d->convertJpegCheck->setChecked(group.readEntry("ConvertJpeg",           false));
     d->losslessFormat->setCurrentIndex(group.readEntry("LossLessFormat",     0));   // PNG by default
     d->folderDateFormat->setCurrentIndex(group.readEntry("FolderDateFormat", (int)CameraUIPriv::IsoDateFormat));
@@ -754,8 +750,7 @@ void CameraUI::saveSettings()
     group.writeEntry("AutoAlbumDate",       d->autoAlbumDateCheck->isChecked());
     group.writeEntry("AutoAlbumExt",        d->autoAlbumExtCheck->isChecked());
     group.writeEntry("FixDateTime",         d->fixDateTimeCheck->isChecked());
-    group.writeEntry("SetPhotographerId",   d->setPhotographerId->isChecked());
-    group.writeEntry("SetCredits",          d->setCredits->isChecked());
+    group.writeEntry("Template",            d->templateSelector->getTemplateIndex());
     group.writeEntry("ConvertJpeg",         convertLosslessJpegFiles());
     group.writeEntry("LossLessFormat",      d->losslessFormat->currentIndex());
     group.writeEntry("ThumbnailSize",       d->view->thumbnailSize());
@@ -1522,23 +1517,12 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
     QDateTime dateTime;
     int       total = 0;
 
-    downloadSettings.autoRotate        = d->autoRotateCheck->isChecked();
-    downloadSettings.fixDateTime       = d->fixDateTimeCheck->isChecked();
-    downloadSettings.newDateTime       = d->dateTimeEdit->dateTime();
-    downloadSettings.setPhotographerId = d->setPhotographerId->isChecked();
-    downloadSettings.setCredits        = d->setCredits->isChecked();
-    downloadSettings.convertJpeg       = convertLosslessJpegFiles();
-    downloadSettings.losslessFormat    = losslessFormat();
-
-    AlbumSettings* settings = AlbumSettings::instance();
-    if (settings)
-    {
-        downloadSettings.author      = settings->getAuthor();
-        downloadSettings.authorTitle = settings->getAuthorTitle();
-        downloadSettings.credit      = settings->getCredit();
-        downloadSettings.source      = settings->getSource();
-        downloadSettings.copyright   = settings->getCopyright();
-    }
+    downloadSettings.autoRotate       = d->autoRotateCheck->isChecked();
+    downloadSettings.fixDateTime      = d->fixDateTimeCheck->isChecked();
+    downloadSettings.newDateTime      = d->dateTimeEdit->dateTime();
+    downloadSettings.metadataTemplate = d->templateSelector->getTemplate();
+    downloadSettings.convertJpeg      = convertLosslessJpegFiles();
+    downloadSettings.losslessFormat   = losslessFormat();
 
     // -- Download camera items -------------------------------
     // Since we show camera items in reverse order, downloading need to be done also in reverse order.
