@@ -572,6 +572,8 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath) const
 
 bool DMetadata::setMetadataTemplate(Template* t) const
 {
+    if (!t) return false;
+
     if (!setProgramId())
         return false;
 
