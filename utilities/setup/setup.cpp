@@ -43,7 +43,7 @@
 #include "setupalbumview.h"
 #include "setuptooltip.h"
 #include "setupmetadata.h"
-#include "setupidentity.h"
+#include "setuptemplate.h"
 #include "setupcategory.h"
 #include "setupmime.h"
 #include "setuplighttable.h"
@@ -69,7 +69,7 @@ public:
         page_albumView   = 0;
         page_tooltip     = 0;
         page_metadata    = 0;
-        page_identity    = 0;
+        page_template    = 0;
         page_category    = 0;
         page_mime        = 0;
         page_lighttable  = 0;
@@ -86,7 +86,7 @@ public:
         albumViewPage    = 0;
         tooltipPage      = 0;
         metadataPage     = 0;
-        identityPage     = 0;
+        templatePage     = 0;
         categoryPage     = 0;
         mimePage         = 0;
         lighttablePage   = 0;
@@ -104,7 +104,7 @@ public:
     KPageWidgetItem  *page_albumView;
     KPageWidgetItem  *page_tooltip;
     KPageWidgetItem  *page_metadata;
-    KPageWidgetItem  *page_identity;
+    KPageWidgetItem  *page_template;
     KPageWidgetItem  *page_category;
     KPageWidgetItem  *page_mime;
     KPageWidgetItem  *page_lighttable;
@@ -121,7 +121,7 @@ public:
     SetupAlbumView   *albumViewPage;
     SetupToolTip     *tooltipPage;
     SetupMetadata    *metadataPage;
-    SetupIdentity    *identityPage;
+    SetupTemplate    *templatePage;
     SetupCategory    *categoryPage;
     SetupMime        *mimePage;
     SetupLightTable  *lighttablePage;
@@ -177,11 +177,11 @@ Setup::Setup(QWidget* parent)
                                 "<i>Setup relations between images and metadata</i></qt>"));
     d->page_metadata->setIcon(KIcon("exifinfo"));
 
-    d->identityPage  = new SetupIdentity();
-    d->page_identity = addPage(d->identityPage, i18n("Identity"));
-    d->page_identity->setHeader(i18n("<qt>Default identity information<br/>"
-                                "<i>Manage your credits information</i></qt>"));
-    d->page_identity->setIcon(KIcon("user-identity"));
+    d->templatePage  = new SetupTemplate();
+    d->page_template = addPage(d->templatePage, i18n("Template"));
+    d->page_template->setHeader(i18n("<qt>Metadata template information<br/>"
+                                "<i>Manage your metadata template information</i></qt>"));
+    d->page_template->setIcon(KIcon("user-identity"));
 
     d->mimePage  = new SetupMime();
     d->page_mime = addPage(d->mimePage, i18n("MIME Types"));
@@ -287,13 +287,13 @@ QSize Setup::sizeHint() const
     {
         // only take tabs into account here that should better be displayed without scrolling
         if (page == CollectionsPage ||
-            page == AlbumViewPage ||
-            page == IdentifyPage ||
-            page == MimePage ||
-            page == LightTablePage ||
-            page == EditorPage ||
-            page == IOFilesPage ||
-            page == DcrawPage ||
+            page == AlbumViewPage   ||
+            page == TemplatePage    ||
+            page == MimePage        ||
+            page == LightTablePage  ||
+            page == EditorPage      ||
+            page == IOFilesPage     ||
+            page == DcrawPage       ||
             page == MiscellaneousPage)
         {
             KPageWidgetItem *item = d->pageItem((Page)page);
@@ -344,7 +344,7 @@ void Setup::slotOkClicked()
     d->albumViewPage->applySettings();
     d->tooltipPage->applySettings();
     d->metadataPage->applySettings();
-    d->identityPage->applySettings();
+    d->templatePage->applySettings();
     d->categoryPage->applySettings();
     d->mimePage->applySettings();
     d->cameraPage->applySettings();
@@ -408,8 +408,8 @@ KPageWidgetItem *SetupPrivate::pageItem(Setup::Page page)
             return page_tooltip;
         case Setup::MetadataPage:
             return page_metadata;
-        case Setup::IdentifyPage:
-            return page_identity;
+        case Setup::TemplatePage:
+            return page_template;
         case Setup::CategoryPage:
             return page_category;
         case Setup::MimePage:
@@ -444,7 +444,7 @@ Setup::Page Setup::activePageIndex()
     if (cur == d->page_albumView)   return AlbumViewPage;
     if (cur == d->page_tooltip)     return ToolTipPage;
     if (cur == d->page_metadata)    return MetadataPage;
-    if (cur == d->page_identity)    return IdentifyPage;
+    if (cur == d->page_template)    return TemplatePage;
     if (cur == d->page_category)    return CategoryPage;
     if (cur == d->page_mime)        return MimePage;
     if (cur == d->page_lighttable)  return LightTablePage;

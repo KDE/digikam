@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-06-20
- * Description : Photographers list container.
+ * Description : metadata template manager.
  *
  * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef PHOTOGRAPHERLIST_H
-#define PHOTOGRAPHERLIST_H
+#ifndef TEMPLATEMANAGER_H
+#define TEMPLATEMANAGER_H
 
 // Qt includes
 
@@ -38,16 +38,16 @@ namespace Digikam
 {
 
 class Photographer;
-class PhotographerListPrivate;
+class TemplateManagerPrivate;
 
-class PhotographerList : public QObject
+class TemplateManager : public QObject
 {
     Q_OBJECT
 
 public:
 
-    PhotographerList(QObject *parent, const QString& file);
-    ~PhotographerList();
+    TemplateManager(QObject *parent, const QString& file);
+    ~TemplateManager();
 
     bool load();
     bool save();
@@ -58,9 +58,9 @@ public:
 
     Photographer* find(const QString& author) const;
 
-    QList<Photographer*>* photographerList();
+    QList<Photographer*>* templateList();
 
-    static PhotographerList* defaultList();
+    static TemplateManager* defaultManager();
 
 Q_SIGNALS:
 
@@ -74,10 +74,10 @@ private:
 
 private:
 
-    static PhotographerList *m_defaultList;
-    PhotographerListPrivate* const d;
+    static TemplateManager* m_defaultManager;
+    TemplateManagerPrivate* const d;
 };
 
 }  // namespace Digikam
 
-#endif /* PHOTOGRAPHERLIST_H */
+#endif /* TEMPLATEMANAGER_H */

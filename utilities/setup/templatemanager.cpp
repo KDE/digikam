@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-06-20
- * Description : Photographers list container.
+ * Description : metadata template manager.
  *
  * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#include "photographerlist.h"
-#include "photographerlist.moc"
+#include "templatemanager.h"
+#include "templatemanager.moc"
 
 // Qt includes
 
@@ -45,18 +45,18 @@
 namespace Digikam
 {
 
-PhotographerList* PhotographerList::m_defaultList = 0;
+TemplateManager* TemplateManager::m_defaultManager = 0;
 
-PhotographerList* PhotographerList::defaultList()
+TemplateManager* TemplateManager::defaultManager()
 {
-    return m_defaultList;
+    return m_defaultManager;
 }
 
-class PhotographerListPrivate
+class TemplateManagerPrivate
 {
 public:
 
-    PhotographerListPrivate()
+    TemplateManagerPrivate()
     {
         modified = false;
     }
@@ -67,35 +67,35 @@ public:
     QString              file;
 };
 
-PhotographerList::PhotographerList(QObject *parent, const QString& file)
-                : QObject(parent), d(new PhotographerListPrivate)
+TemplateManager::TemplateManager(QObject *parent, const QString& file)
+                : QObject(parent), d(new TemplateManagerPrivate)
 {
     d->file = file;
-    if (!m_defaultList)
-        m_defaultList = this;
+    if (!m_defaultManager)
+        m_defaultManager = this;
 }
 
-PhotographerList::~PhotographerList()
+TemplateManager::~TemplateManager()
 {
     save();
     clear();
     delete d;
 
-    if (m_defaultList == this)
-        m_defaultList = 0;
+    if (m_defaultManager == this)
+        m_defaultManager = 0;
 }
 
-bool PhotographerList::load()
+bool TemplateManager::load()
 {
     d->modified = false;
 
-    QFile pfile(d->file);
+    QFile file(d->file);
 
-    if (!pfile.open(QIODevice::ReadOnly))
+    if (!file.open(QIODevice::ReadOnly))
         return false;
 
     QDomDocument doc("templatelist");
-    if (!doc.setContent(&pfile))
+    if (!doc.setContent(&file))
         return false;
 
     QDomElement docElem = doc.documentElement();
@@ -122,7 +122,7 @@ bool PhotographerList::load()
     return true;
 }
 
-bool PhotographerList::save()
+bool TemplateManager::save()
 {
     // If not modified don't save the file
     if (!d->modified)
@@ -131,7 +131,7 @@ bool PhotographerList::save()
     QDomDocument doc("templatelist");
     doc.setContent(QString("<!DOCTYPE XMLTemplateList><templatelist version=\"1.0\" client=\"digikam\"/>"));
 
-    QDomElement docElem=doc.documentElement();
+    QDomElement docElem = doc.documentElement();
 
     foreach (Photographer *photographer, d->pList)
     {
@@ -146,21 +146,21 @@ bool PhotographerList::save()
        docElem.appendChild(elem);
     }
 
-    QFile pfile(d->file);
+    QFile file(d->file);
 
-    if (!pfile.open(QIODevice::WriteOnly))
+    if (!file.open(QIODevice::WriteOnly))
         return false;
 
-    QTextStream stream(&pfile);
+    QTextStream stream(&file);
     stream.setCodec(QTextCodec::codecForName("UTF-8"));
     stream.setAutoDetectUnicode(true);
     stream << doc.toString();
-    pfile.close();
+    file.close();
 
     return true;
 }
 
-void PhotographerList::insert(Photographer* photographer)
+void TemplateManager::insert(Photographer* photographer)
 {
     if (!photographer) return;
 
@@ -168,7 +168,7 @@ void PhotographerList::insert(Photographer* photographer)
     insertPrivate(photographer);
 }
 
-void PhotographerList::remove(Photographer* photographer)
+void TemplateManager::remove(Photographer* photographer)
 {
     if (!photographer) return;
 
@@ -176,14 +176,14 @@ void PhotographerList::remove(Photographer* photographer)
     removePrivate(photographer);
 }
 
-void PhotographerList::insertPrivate(Photographer* photographer)
+void TemplateManager::insertPrivate(Photographer* photographer)
 {
     if (!photographer) return;
     d->pList.append(photographer);
     emit signalPhotographerAdded(photographer);
 }
 
-void PhotographerList::removePrivate(Photographer* photographer)
+void TemplateManager::removePrivate(Photographer* photographer)
 {
     if (!photographer) return;
 
@@ -194,18 +194,18 @@ void PhotographerList::removePrivate(Photographer* photographer)
         delete d->pList.takeAt(i);
 }
 
-void PhotographerList::clear()
+void TemplateManager::clear()
 {
     while (!d->pList.isEmpty())
         removePrivate(d->pList.first());
 }
 
-QList<Photographer*>* PhotographerList::photographerList()
+QList<Photographer*>* TemplateManager::templateList()
 {
     return &d->pList;
 }
 
-Photographer* PhotographerList::find(const QString& author) const
+Photographer* TemplateManager::find(const QString& author) const
 {
     foreach (Photographer *photographer, d->pList)
     {

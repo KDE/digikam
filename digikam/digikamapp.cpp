@@ -197,7 +197,7 @@ DigikamApp::DigikamApp()
     connect(d->cameraList, SIGNAL(signalCameraRemoved(KAction*)),
             this, SLOT(slotCameraRemoved(KAction*)));
 
-    d->templateManager = new PhotographerList(this, KStandardDirs::locateLocal("appdata", "template.xml"));
+    d->templateManager = new TemplateManager(this, KStandardDirs::locateLocal("appdata", "template.xml"));
 
     setupView();
     setupStatusBar();

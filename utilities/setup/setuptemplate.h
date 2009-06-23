@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-07-04
- * Description : identities setup page.
+ * Description : metadata template setup page.
  *
  * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUP_IDENTITY_H
-#define SETUP_IDENTITY_H
+#ifndef SETUP_TEMPLATE_H
+#define SETUP_TEMPLATE_H
 
 // Qt includes
 
@@ -31,16 +31,16 @@
 namespace Digikam
 {
 
-class SetupIdentityPriv;
+class SetupTemplatePriv;
 
-class SetupIdentity : public QScrollArea
+class SetupTemplate : public QScrollArea
 {
     Q_OBJECT
 
 public:
 
-    SetupIdentity(QWidget* parent = 0);
-    ~SetupIdentity();
+    SetupTemplate(QWidget* parent = 0);
+    ~SetupTemplate();
 
     void applySettings();
 
@@ -51,15 +51,15 @@ private:
 private Q_SLOTS:
 
     void slotSelectionChanged();
-    void slotAddIdentity();
-    void slotDelIdentity();
-    void slotRepIdentity();
+    void slotAddTemplate();
+    void slotDelTemplate();
+    void slotRepTemplate();
 
 private:
 
-    SetupIdentityPriv* const d;
+    SetupTemplatePriv* const d;
 };
 
 }  // namespace Digikam
 
-#endif // SETUP_IDENTITY_H 
+#endif // SETUP_TEMPLATE_H

@@ -735,7 +735,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameralist.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameratype.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/photographer.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/photographerlist.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/templatemanager.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/identitylist.cpp 
        )
 

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-07-04
- * Description : identities setup page.
+ * Description : metadata template setup page.
  *
  * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#include "setupidentity.h"
-#include "setupidentity.moc"
+#include "setuptemplate.h"
+#include "setuptemplate.moc"
 
 // Qt includes
 
@@ -46,11 +46,11 @@
 namespace Digikam
 {
 
-class SetupIdentityPriv
+class SetupTemplatePriv
 {
 public:
 
-    SetupIdentityPriv()
+    SetupTemplatePriv()
     {
         authorEdit         = 0;
         authorPositionEdit = 0;
@@ -80,8 +80,8 @@ public:
     IndentityList *listView;
 };
 
-SetupIdentity::SetupIdentity(QWidget* parent)
-             : QScrollArea(parent), d(new SetupIdentityPriv)
+SetupTemplate::SetupTemplate(QWidget* parent)
+             : QScrollArea(parent), d(new SetupTemplatePriv)
 {
     QWidget *panel = new QWidget(viewport());
     panel->setAutoFillBackground(false);
@@ -248,30 +248,30 @@ SetupIdentity::SetupIdentity(QWidget* parent)
             this, SLOT(slotSelectionChanged()));
 
     connect(d->addButton, SIGNAL(clicked()),
-            this, SLOT(slotAddIdentity()));
+            this, SLOT(slotAddTemplate()));
 
     connect(d->delButton, SIGNAL(clicked()),
-            this, SLOT(slotDelIdentity()));
+            this, SLOT(slotDelTemplate()));
 
     connect(d->repButton, SIGNAL(clicked()),
-            this, SLOT(slotRepIdentity()));
+            this, SLOT(slotRepTemplate()));
 
     // --------------------------------------------------------
 
     readSettings();
 }
 
-SetupIdentity::~SetupIdentity()
+SetupTemplate::~SetupTemplate()
 {
     delete d;
 }
 
-void SetupIdentity::applySettings()
+void SetupTemplate::applySettings()
 {
     d->listView->applySettings();
 }
 
-void SetupIdentity::readSettings()
+void SetupTemplate::readSettings()
 {
     d->listView->readSettings();
 
@@ -287,7 +287,7 @@ void SetupIdentity::readSettings()
 */
 }
 
-void SetupIdentity::slotSelectionChanged()
+void SetupTemplate::slotSelectionChanged()
 {
     IndentityListItem *item = dynamic_cast<IndentityListItem*>(d->listView->currentItem());
     if (!item)
@@ -310,7 +310,7 @@ void SetupIdentity::slotSelectionChanged()
     d->repButton->setEnabled(true);
 }
 
-void SetupIdentity::slotAddIdentity()
+void SetupTemplate::slotAddTemplate()
 {
     Photographer photographer;
     photographer.setAuthor(d->authorEdit->text());
@@ -323,13 +323,13 @@ void SetupIdentity::slotAddIdentity()
     new IndentityListItem(d->listView, &photographer);
 }
 
-void SetupIdentity::slotDelIdentity()
+void SetupTemplate::slotDelTemplate()
 {
     IndentityListItem *item = dynamic_cast<IndentityListItem*>(d->listView->currentItem());
     if (item) delete item;
 }
 
-void SetupIdentity::slotRepIdentity()
+void SetupTemplate::slotRepTemplate()
 {
     IndentityListItem *item = dynamic_cast<IndentityListItem*>(d->listView->currentItem());
     if (!item) return;
