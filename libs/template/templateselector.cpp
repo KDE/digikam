@@ -57,7 +57,6 @@ public:
 
     TemplateSelectorPriv()
     {
-        space         = 0;
         label         = 0;
         setupButton   = 0;
         templateCombo = 0;
