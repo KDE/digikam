@@ -537,6 +537,16 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
     if (!tagsPath.isEmpty())
         return true;
 
+    // Try to get Tags Path list from XMP in first.
+    tagsPath = getXmpTagStringBag("Xmp.lr.hierarchicalSubject", false);
+    if (!tagsPath.isEmpty())
+    {
+        // See B.K.O #197285: LightRoom use '|' as separator.
+        tagsPath = tagsPath.replaceInStrings("|", "/");
+        kDebug(50003) << "Tags Path imported from LR: " << tagsPath;
+        return true;
+    }
+
     // Try to get Tags Path list from XMP keywords.
     tagsPath = getXmpKeywords();
     if (!tagsPath.isEmpty())
@@ -1412,137 +1422,6 @@ double DMetadata::apexShutterSpeedToExposureTime(double shutterSpeed)
         return 0.000125; // 1/8000
 
     return exp( - log(2) * shutterSpeed);
-}
-
-/**
-The following methods set and get an XML dataset into a private IPTC.Application2 tags
-to backup digiKam image properties. The XML text data are compressed using zlib and stored
-like a byte array. The XML text data format are like below:
-
-<?xml version="1.0" encoding="UTF-8"?>
-<digikamproperties>
- <comments value="A cool photo from Adrien..." />
- <date value="2006-11-23T13:36:26" />
- <rating value="4" />
- <tagslist>
-  <tag path="Gilles/Adrien/testphoto" />
-  <tag path="monuments/Trocadero/Tour Eiffel" />
-  <tag path="City/Paris" />
- </tagslist>
-</digikamproperties>
-
-*/
-
-bool DMetadata::getXMLImageProperties(QString& comments, QDateTime& date,
-                                      int& rating, QStringList& tagsPath) const
-{
-    rating = 0;
-
-    QByteArray data = getIptcTagData("Iptc.Application2.0x00ff");
-    if (data.isEmpty())
-        return false;
-    QByteArray decompressedData = qUncompress(data);
-    QString doc;
-    QDataStream ds(&decompressedData, QIODevice::ReadOnly);
-    ds >> doc;
-
-    QDomDocument xmlDoc;
-    QString error;
-    int row, col;
-    if (!xmlDoc.setContent(doc, true, &error, &row, &col))
-    {
-        kDebug(50003) << doc;
-        kDebug(50003) << error << " :: row=" << row << " , col=" << col;
-        return false;
-    }
-
-    QDomElement rootElem = xmlDoc.documentElement();
-    if (rootElem.tagName() != QString::fromLatin1("digikamproperties"))
-        return false;
-
-    for (QDomNode node = rootElem.firstChild();
-         !node.isNull(); node = node.nextSibling())
-    {
-        QDomElement e = node.toElement();
-        QString name  = e.tagName();
-        QString val   = e.attribute(QString::fromLatin1("value"));
-
-        if (name == QString::fromLatin1("comments"))
-        {
-            comments = val;
-        }
-        else if (name == QString::fromLatin1("date"))
-        {
-            if (val.isEmpty()) continue;
-            date = QDateTime::fromString(val, Qt::ISODate);
-        }
-        else if (name == QString::fromLatin1("rating"))
-        {
-            if (val.isEmpty()) continue;
-            bool ok=false;
-            rating = val.toInt(&ok);
-            if (!ok) rating = 0;
-        }
-        else if (name == QString::fromLatin1("tagslist"))
-        {
-            for (QDomNode node2 = e.firstChild();
-                !node2.isNull(); node2 = node2.nextSibling())
-            {
-                QDomElement e2 = node2.toElement();
-                QString name2  = e2.tagName();
-                QString val2   = e2.attribute(QString::fromLatin1("path"));
-
-                if (name2 == QString::fromLatin1("tag"))
-                {
-                    if (val2.isEmpty()) continue;
-                    tagsPath.append(val2);
-                }
-            }
-        }
-    }
-
-    return true;
-}
-
-bool DMetadata::setXMLImageProperties(const QString& comments, const QDateTime& date,
-                                      int rating, const QStringList& tagsPath) const
-{
-    QDomDocument xmlDoc;
-
-    xmlDoc.appendChild(xmlDoc.createProcessingInstruction( QString::fromLatin1("xml"),
-                       QString::fromLatin1("version=\"1.0\" encoding=\"UTF-8\"") ) );
-
-    QDomElement propertiesElem = xmlDoc.createElement(QString::fromLatin1("digikamproperties"));
-    xmlDoc.appendChild( propertiesElem );
-
-    QDomElement c = xmlDoc.createElement(QString::fromLatin1("comments"));
-    c.setAttribute(QString::fromLatin1("value"), comments);
-    propertiesElem.appendChild(c);
-
-    QDomElement d = xmlDoc.createElement(QString::fromLatin1("date"));
-    d.setAttribute(QString::fromLatin1("value"), date.toString(Qt::ISODate));
-    propertiesElem.appendChild(d);
-
-    QDomElement r = xmlDoc.createElement(QString::fromLatin1("rating"));
-    r.setAttribute(QString::fromLatin1("value"), rating);
-    propertiesElem.appendChild(r);
-
-    QDomElement tagsElem = xmlDoc.createElement(QString::fromLatin1("tagslist"));
-    propertiesElem.appendChild(tagsElem);
-
-    QStringList path = tagsPath;
-    for ( QStringList::Iterator it = path.begin(); it != path.end(); ++it )
-    {
-        QDomElement e = xmlDoc.createElement(QString::fromLatin1("tag"));
-        e.setAttribute(QString::fromLatin1("path"), *it);
-        tagsElem.appendChild(e);
-    }
-
-    QByteArray  data, compressedData;
-    QDataStream ds(&data, QIODevice::WriteOnly);
-    ds << xmlDoc.toString();
-    compressedData = qCompress(data);
-    return (setIptcTagData("Iptc.Application2.0x00ff", compressedData));
 }
 
 // ---------- Scheduled to be moved to libkexiv2 --------------

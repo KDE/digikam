@@ -104,17 +104,12 @@ public:
      */
     static QMap<int, QString> possibleValuesForEnumField(MetadataInfo::Field field);
 
-    /** Methods dedicated to record/read a private IPTC tag used to store digiKam image properties.
-        Code tested but not used because XMP is more simple to use for that. */
-    bool getXMLImageProperties(QString& comments, QDateTime& date,
-                               int& rating, QStringList& tagsPath) const;
-    bool setXMLImageProperties(const QString& comments, const QDateTime& date, 
-                               int rating, const QStringList& tagsPath) const;
-
     static double apexApertureToFNumber(double aperture);
     static double apexShutterSpeedToExposureTime(double shutterSpeed);
 
-// Scheduled to be moved to libkexiv2
+    //------------------------------------------------------------------------------------------------
+    // Scheduled to be moved to libkexiv2
+
     /** Set an Xmp tag content using a list of strings defined by the 'entriesToAdd' parameter.
         The existing entries are preserved. The method will compare
         all new with all already existing entries to prevent duplicates in the image.
@@ -178,7 +173,9 @@ public:
         Return true if subjects are no longer contained in metadata.
      */
     bool removeXmpSubCategories(const QStringList& categoriesToRemove, bool setProgramName=true);
-// End: Scheduled to be moved to libkexiv2
+
+    // End: Scheduled to be moved to libkexiv2
+    //------------------------------------------------------------------------------------------------
 
 private:
 
