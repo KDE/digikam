@@ -96,7 +96,6 @@ SET(digikamcore_LIB_SRCS
                         ${libthreadimageio_SRCS}
                         ${libthemeengine_SRCS}
                         ${libpgf_SRCS}
-                        ${libtemplate_SRCS}
                         ${pgfutils_SRCS}
 
                         # widgets and dialogs
@@ -216,6 +215,7 @@ SET(digikam_SRCS ${libdimgimagewindow_SRCS}
                  ${libalbummodels_SRCS}
                  ${libdigikamgui_SRCS}
                  ${libfirstrun_SRCS}
+                 ${libtemplate_SRCS}
 
                  main.cpp
     )
