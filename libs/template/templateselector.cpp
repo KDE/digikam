@@ -146,7 +146,7 @@ void TemplateSelector::setTemplateIndex(int i)
 
 void TemplateSelector::slotOpenSetup()
 {
-    if (Setup::execSinglePage(this, Setup::ICCPage))
+    if (Setup::execSinglePage(this, Setup::TemplatePage))
     {
         populateTemplates();
         emit signalTemplateChanged();
