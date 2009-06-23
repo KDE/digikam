@@ -56,7 +56,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 043 ==> 197360 : In the "edit captions" sidebar moving a tag to white space crashes digiKam.
 044 ==> 195799 : digiKam takes 100% CPU when exiting and finally crashes.
 045 ==> 152219 : Impossible to clear comments in metadata.
-046 ==> 
+046 ==> 197198 : Libpng not detected during configure.
+047 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta1 - Release date: 2009-06-07
