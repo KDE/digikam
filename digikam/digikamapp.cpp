@@ -184,6 +184,9 @@ DigikamApp::DigikamApp()
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
 
+    connect(AlbumSettings::instance(), SIGNAL(nepomukSettingsChanged()),
+             this, SLOT(slotNepomukSettingsChanged()));
+
     d->cameraSolidMenu          = new KActionMenu(this);
     d->usbMediaMenu             = new KActionMenu(this);
     d->cardReaderMenu           = new KActionMenu(this);
@@ -402,7 +405,7 @@ const QList<QAction*>& DigikamApp::menuExportActions()
 
 void DigikamApp::autoDetect()
 {
-    // Called from main if command line option is set
+    // Called from main if command line option is set, or via DBus
 
     if(d->splashScreen)
         d->splashScreen->message(i18n("Auto Detect Camera"));
@@ -412,7 +415,7 @@ void DigikamApp::autoDetect()
 
 void DigikamApp::downloadFrom(const QString& cameraGuiPath)
 {
-    // Called from main if command line option is set
+    // Called from main if command line option is set, or via DBus
 
     if (!cameraGuiPath.isEmpty())
     {
@@ -425,7 +428,7 @@ void DigikamApp::downloadFrom(const QString& cameraGuiPath)
 
 void DigikamApp::downloadFromUdi(const QString& udi)
 {
-    // Called from main if command line option is set
+    // Called from main if command line option is set, or via DBus
 
     if (!udi.isEmpty())
     {
@@ -434,6 +437,14 @@ void DigikamApp::downloadFromUdi(const QString& udi)
 
         emit queuedOpenSolidDevice(udi);
     }
+}
+
+QString DigikamApp::currentDatabaseParameters()
+{
+    DatabaseParameters parameters = DatabaseAccess::parameters();
+    KUrl url;
+    parameters.insertInUrl(url);
+    return url.url();
 }
 
 bool DigikamApp::queryClose()
@@ -2614,6 +2625,17 @@ void DigikamApp::slotShowMenuBar()
 void DigikamApp::moveEvent(QMoveEvent*)
 {
     emit signalWindowHasMoved();
+}
+
+void DigikamApp::slotNepomukSettingsChanged()
+{
+    QDBusInterface interface("org.kde.digikam.nepomuk.digikamnepomukservice",
+                              "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
+    if (interface.isValid())
+    {
+        interface.call(QDBus::NoBlock, "enableSyncToDigikam", AlbumSettings::instance()->getSyncNepomukToDigikam());
+        interface.call(QDBus::NoBlock, "enableSyncToNepomuk", AlbumSettings::instance()->getSyncDigikamToNepomuk());
+    }
 }
 
 }  // namespace Digikam

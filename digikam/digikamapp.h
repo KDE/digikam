@@ -84,6 +84,7 @@ public:
     void autoDetect();
     void downloadFrom(const QString& cameraGuiPath);
     void downloadFromUdi(const QString& udi);
+    QString currentDatabaseParameters();
     void enableZoomPlusAction(bool val);
     void enableZoomMinusAction(bool val);
     void enableAlbumBackwardHistory(bool enable);
@@ -198,6 +199,8 @@ private Q_SLOTS:
     void slotImportAddImages();
     void slotImportAddFolders();
     void slotDIOResult(KJob*);
+
+    void slotNepomukSettingsChanged();
 
 private:
 
