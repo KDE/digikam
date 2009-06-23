@@ -58,7 +58,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 045 ==> 152219 : Impossible to clear comments in metadata.
 046 ==> 197198 : Libpng not detected during configure.
 047 ==> 152199 : Deleting tags can leave orphaned IPTC keywords inside files.
-048 ==> 
+048 ==> 197285 : Understand keyword hierarchies with different delimitors.
+049 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta1 - Release date: 2009-06-07
