@@ -86,6 +86,7 @@ ENDIF(NOT WIN32)
 
 MACRO_OPTIONAL_FIND_PACKAGE(KdepimLibs)
 MACRO_BOOL_TO_01(KDEPIMLIBS_FOUND HAVE_KDEPIMLIBS)
+FIND_PACKAGE(Nepomuk REQUIRED)
 
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH} )
 
@@ -104,6 +105,7 @@ MACRO_OPTIONAL_FIND_PACKAGE(Lqr-1)
 MACRO_BOOL_TO_01(LQR-1_FOUND USE_EXT_LIBLQR-1)
 
 MACRO_BOOL_TO_01(ENABLE_THUMBS_DB USE_THUMBS_DB)
+MESSAGE("Thumbs DB:" ${USE_THUMBS_DB} ${CMAKE_CURRENT_BINARY_DIR})
 
 # Set config file depending of optional depencies
 
@@ -375,6 +377,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                         ${KDE4_INCLUDES}
                         ${QT_INCLUDES}
                         ${GPHOTO2_INCLUDE_DIRS}
+                        ${SOPRANO_INCLUDE_DIR}
+                        ${NEPOMUK_INCLUDE_DIR}
                         ${CMAKE_CURRENT_SOURCE_DIR}/digikam
                         ${CMAKE_CURRENT_BINARY_DIR}/digikam
                        )
@@ -749,6 +753,10 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiimagecollectionselector.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiuploadwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiinterface.cpp
+       )
+
+    SET(libnepomukservices_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/nepomuk/digikamnepomukservice.cpp
        )
 
     SET(libfirstrun_SRCS
