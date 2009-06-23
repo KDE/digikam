@@ -58,11 +58,13 @@ namespace Digikam
 DMetadata::DMetadata()
          : KExiv2Iface::KExiv2()
 {
+    registerXmpNameSpace(QString("http://ns.adobe.com/lightroom/1.0/"), QString("lr"));
 }
 
 DMetadata::DMetadata(const QString& filePath)
          : KExiv2Iface::KExiv2()
 {
+    registerXmpNameSpace(QString("http://ns.adobe.com/lightroom/1.0/"), QString("lr"));
     load(filePath);
 }
 
@@ -575,10 +577,14 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath) const
     {
         if (!setXmpTagStringSeq("Xmp.digiKam.TagsList", tagsPath))
             return false;
+
+        QStringList LRtagsPath = tagsPath;
+        LRtagsPath             = LRtagsPath.replaceInStrings("/", "|");
+        if (!setXmpTagStringBag("Xmp.lr.hierarchicalSubject", LRtagsPath))
+            return false;
     }
     return true;
 }
-
 
 bool DMetadata::setMetadataTemplate(Template* t) const
 {
