@@ -693,6 +693,13 @@ bool AlbumManager::setDatabase(const QString& dbPath, bool priority, const QStri
     d->dirWatchBlackList << "thumbnails-digikam.db" << "thumbnails-digikam.db-journal";
 #endif
 
+    QDBusInterface interface("org.kde.digikam.nepomuk.digikamnepomukservice",
+                              "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
+    if (interface.isValid())
+    {
+        interface.call(QDBus::NoBlock, "databaseChanged");
+    }
+
     return true;
 }
 
