@@ -287,4 +287,17 @@ int ImageCopyright::languageMatch(const QList<CopyrightInfo> infos, const QStrin
     return chosen;
 }
 
+Template ImageCopyright::toMetadataTemplate()
+{
+    Template t;
+    t.setAuthor(author()[0]);
+    t.setAuthorPosition(authorsPosition());
+    t.setCredit(credit());
+    t.setCopyright(rights("x-default"));
+    t.setRightUsageTerms(rightsUsageTerms("x-default"));
+    t.setSource(source());
+    t.setInstructions(instructions());
+    return t;
+}
+
 } // namespace Digikam

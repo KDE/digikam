@@ -32,6 +32,7 @@
 
 // Local includes
 
+#include "template.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -191,15 +192,22 @@ public:
     void setInstructions(const QString& instructions);
     void removeInstructions();
 
+    /**
+     * Returns all entries of the given type in a Template container.
+     */
+    Template toMetadataTemplate();
+
 protected:
 
     QString readSimpleProperty(const QString& property);
-    void setSimpleProperty(const QString& property, const QString& value);
+    void    setSimpleProperty(const QString& property, const QString& value);
     QString readLanguageProperty(const QString& property, const QString& languageCode);
-    void setLanguageProperty(const QString& property, const QString& value, const QString& languageCode, ReplaceMode mode);
-    void removeProperties(const QString &property);
-    void removeLanguageProperty(const QString &property, const QString &languageCode);
-    int languageMatch(const QList<CopyrightInfo> infos, const QString& languageCode) const;
+    void    setLanguageProperty(const QString& property, const QString& value, const QString& languageCode, ReplaceMode mode);
+    void    removeProperties(const QString &property);
+    void    removeLanguageProperty(const QString &property, const QString &languageCode);
+    int     languageMatch(const QList<CopyrightInfo> infos, const QString& languageCode) const;
+
+protected:
 
     qlonglong m_id;
 };
