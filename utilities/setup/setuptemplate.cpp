@@ -34,9 +34,11 @@
 
 // KDE includes
 
+#include <kseparator.h>
 #include <klocale.h>
 #include <kdialog.h>
 #include <klineedit.h>
+#include <kmessagebox.h>
 
 // Local includes
 
@@ -69,6 +71,7 @@ public:
     QPushButton  *delButton;
     QPushButton  *repButton;
 
+    KLineEdit    *titleEdit;
     KLineEdit    *authorEdit;
     KLineEdit    *authorPositionEdit;
     KLineEdit    *creditEdit;
@@ -91,6 +94,15 @@ SetupTemplate::SetupTemplate(QWidget* parent)
 
     QGridLayout* grid = new QGridLayout(panel);
     d->listView       = new TemplateList(panel);
+
+    // --------------------------------------------------------
+
+    QLabel *label0 = new QLabel(i18n("Template Tile:"), panel);
+    d->titleEdit  = new KLineEdit(panel);
+    d->titleEdit->setClearButtonShown(true);
+    d->titleEdit->setMaxLength(32);
+    label0->setBuddy(d->titleEdit);
+    d->titleEdit->setWhatsThis(i18n("<p>Enter here the metadata template title.</p>"));
 
     // --------------------------------------------------------
 
@@ -184,7 +196,7 @@ SetupTemplate::SetupTemplate(QWidget* parent)
     d->instructionsEdit = new KLineEdit(panel);
     d->instructionsEdit->setClearButtonShown(true);
     d->instructionsEdit->setMaxLength(256);
-    label5->setBuddy(d->instructionsEdit);
+    label7->setBuddy(d->instructionsEdit);
 //TODO    d->instructionsEdit->setWhatsThis(i18n("<p></p>"));
 
     // --------------------------------------------------------
@@ -226,21 +238,24 @@ SetupTemplate::SetupTemplate(QWidget* parent)
     grid->addWidget(d->addButton,          0,  2, 1, 1);
     grid->addWidget(d->delButton,          1,  2, 1, 1);
     grid->addWidget(d->repButton,          2,  2, 1, 1);
-    grid->addWidget(label1,                4,  0, 1, 1);
-    grid->addWidget(d->authorEdit,         4,  1, 1, 2);
-    grid->addWidget(label2,                5,  0, 1, 1);
-    grid->addWidget(d->authorPositionEdit, 5,  1, 1, 2);
-    grid->addWidget(label3,                6,  0, 1, 1);
-    grid->addWidget(d->creditEdit,         6,  1, 1, 2);
-    grid->addWidget(label4,                7,  0, 1, 1);
-    grid->addWidget(d->copyrightEdit,      7,  1, 1, 2);
-    grid->addWidget(label5,                8,  0, 1, 1);
-    grid->addWidget(d->rightUsageEdit,     8,  1, 1, 2);
-    grid->addWidget(label6,                9,  0, 1, 1);
-    grid->addWidget(d->sourceEdit,         9,  1, 1, 2);
-    grid->addWidget(label7,                10, 0, 1, 1);
-    grid->addWidget(d->instructionsEdit,   10, 1, 1, 2);
-    grid->addWidget(note,                  11, 0, 1, 3);
+    grid->addWidget(label0,                4,  0, 1, 1);
+    grid->addWidget(d->titleEdit,          4,  1, 1, 1);
+    grid->addWidget(new KSeparator(panel), 5,  0, 1, 3);
+    grid->addWidget(label1,                6,  0, 1, 1);
+    grid->addWidget(d->authorEdit,         6,  1, 1, 2);
+    grid->addWidget(label2,                7,  0, 1, 1);
+    grid->addWidget(d->authorPositionEdit, 7,  1, 1, 2);
+    grid->addWidget(label3,                8,  0, 1, 1);
+    grid->addWidget(d->creditEdit,         8,  1, 1, 2);
+    grid->addWidget(label4,                9,  0, 1, 1);
+    grid->addWidget(d->copyrightEdit,      9,  1, 1, 2);
+    grid->addWidget(label5,                10, 0, 1, 1);
+    grid->addWidget(d->rightUsageEdit,     10, 1, 1, 2);
+    grid->addWidget(label6,                11, 0, 1, 1);
+    grid->addWidget(d->sourceEdit,         11, 1, 1, 2);
+    grid->addWidget(label7,                12, 0, 1, 1);
+    grid->addWidget(d->instructionsEdit,   12, 1, 1, 2);
+    grid->addWidget(note,                  13, 0, 1, 3);
 
     // --------------------------------------------------------
 
@@ -298,6 +313,7 @@ void SetupTemplate::slotSelectionChanged()
     }
 
     Template *t = item->getTemplate();
+    d->titleEdit->setText(t->templateTitle());
     d->authorEdit->setText(t->author());
     d->authorPositionEdit->setText(t->authorPosition());
     d->creditEdit->setText(t->credit());
@@ -312,7 +328,22 @@ void SetupTemplate::slotSelectionChanged()
 
 void SetupTemplate::slotAddTemplate()
 {
+    QString title = d->titleEdit->text();
+
+    if (title.isEmpty())
+    {
+        KMessageBox::error(this, i18n("Cannot register new metadata template without title."));
+        return;
+    }
+
+    if (d->listView->contains(title))
+    {
+        KMessageBox::error(this, i18n("A metadata template named '%1' already exist.", title));
+        return;
+    }
+
     Template t;
+    t.setTemplateTitle(d->titleEdit->text());
     t.setAuthor(d->authorEdit->text());
     t.setAuthorPosition(d->authorPositionEdit->text());
     t.setCredit(d->creditEdit->text());
@@ -331,10 +362,19 @@ void SetupTemplate::slotDelTemplate()
 
 void SetupTemplate::slotRepTemplate()
 {
+    QString title = d->titleEdit->text();
+
+    if (title.isEmpty())
+    {
+        KMessageBox::error(this, i18n("Cannot register new metadata template without title."));
+        return;
+    }
+
     TemplateListItem *item = dynamic_cast<TemplateListItem*>(d->listView->currentItem());
     if (!item) return;
 
     Template t;
+    t.setTemplateTitle(title);
     t.setAuthor(d->authorEdit->text());
     t.setAuthorPosition(d->authorPositionEdit->text());
     t.setCredit(d->creditEdit->text());
