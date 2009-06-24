@@ -294,6 +294,7 @@ ImageInfo ImageCategorizedView::nextInOrder(const ImageInfo &startingPoint, int 
 void ImageCategorizedView::toFirstIndex()
 {
     QModelIndex index = moveCursor(MoveHome, Qt::NoModifier);
+    clearSelection();
     setCurrentIndex(index);
     scrollToTop();
 }
@@ -301,6 +302,7 @@ void ImageCategorizedView::toFirstIndex()
 void ImageCategorizedView::toLastIndex()
 {
     QModelIndex index = moveCursor(MoveEnd, Qt::NoModifier);
+    clearSelection();
     setCurrentIndex(index);
     scrollToBottom();
 }
@@ -325,6 +327,7 @@ void ImageCategorizedView::toIndex(const QModelIndex& index)
 {
     if (!index.isValid())
         return;
+    clearSelection();
     setCurrentIndex(index);
     scrollTo(index);
 }
@@ -384,6 +387,7 @@ void ImageCategorizedView::setCurrentUrl(const KUrl& url)
         kWarning() << "no QModelIndex found for" << url;
         return;
     }
+    clearSelection();
     setCurrentIndex(index);
 }
 
