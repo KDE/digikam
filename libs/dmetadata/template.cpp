@@ -32,6 +32,10 @@ public:
 
     TemplatePrivate(){}
 
+    // template title used internaly
+    QString templateTitle;
+
+    // Metadata strings recorded to DB and XMP
     QString author;
     QString authorPosition;
     QString credit;
@@ -54,6 +58,7 @@ Template::~Template()
 Template::Template(const Template& t)
         : d(new TemplatePrivate)
 {
+    setTemplateTitle(t.d->templateTitle);
     setAuthor(t.d->author);
     setAuthorPosition(t.d->authorPosition);
     setCredit(t.d->credit);
@@ -67,6 +72,7 @@ Template& Template::operator=(const Template& t)
 {
     if (this != &t)
     {
+        setTemplateTitle(t.d->templateTitle);
         setAuthor(t.d->author);
         setAuthorPosition(t.d->authorPosition);
         setCredit(t.d->credit);
@@ -79,7 +85,7 @@ Template& Template::operator=(const Template& t)
 }
 
 bool Template::operator==(const Template& t) const
-{                                                  
+{
     return d->author          == t.d->author
         && d->authorPosition  == t.d->authorPosition
         && d->credit          == t.d->credit
@@ -87,8 +93,18 @@ bool Template::operator==(const Template& t) const
         && d->rightUsageTerms == t.d->rightUsageTerms
         && d->source          == t.d->source
         && d->instructions    == t.d->instructions
-      ;                                                        
-}                                                             
+      ;
+}
+
+void Template::setTemplateTitle(const QString& title)
+{
+    d->templateTitle = title;
+}
+
+QString Template::templateTitle() const
+{
+    return d->templateTitle;
+}
 
 void Template::setAuthor(const QString& author)
 {

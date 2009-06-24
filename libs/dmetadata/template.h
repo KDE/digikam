@@ -47,8 +47,12 @@ public:
     Template(const Template& t);
     Template& operator=(const Template& t);
 
-    /** Compare for equality */
+    /** Compare for metadata equality, not including "templateTitle"
+     */
     bool operator==(const Template& t) const;
+
+    void setTemplateTitle(const QString& title);
+    QString templateTitle() const;
 
     void setAuthor(const QString& author);
     void setAuthorPosition(const QString& authorPosition);
