@@ -87,14 +87,14 @@ Template& Template::operator=(const Template& t)
 
 bool Template::operator==(const Template& t) const
 {                                                  
-    return valid           == t.valid
-        && author          == t.author
-        && authorPosition  == t.authorPosition
-        && credit          == t.credit
-        && copyright       == t.copyright
-        && rightUsageTerms == t.rightUsageTerms
-        && source          == t.source
-        && instructions    == t.instructions
+    return d->valid           == t.d->valid
+        && d->author          == t.d->author
+        && d->authorPosition  == t.d->authorPosition
+        && d->credit          == t.d->credit
+        && d->copyright       == t.d->copyright
+        && d->rightUsageTerms == t.d->rightUsageTerms
+        && d->source          == t.d->source
+        && d->instructions    == t.d->instructions
       ;                                                        
 }                                                             
 
