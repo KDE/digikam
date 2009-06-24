@@ -1480,10 +1480,6 @@ void DigikamApp::loadCameras()
 
     d->cameraList->load();
 
-    // -- fill photographer credits list -------------------------------
-
-    d->templateManager->load();
-
     // -- scan Solid devices -------------------------------------------
 
     fillSolidMenus();
