@@ -84,7 +84,7 @@ TemplateSelector::TemplateSelector(QWidget* parent=0)
     setStretchFactor(d->templateCombo, 10);
 
     connect(d->templateCombo, SIGNAL(activated(int)),
-            this, SIGNAL(signalTemplateChanged()));
+            this, SIGNAL(signalTemplateSelected()));
 
     connect(d->setupButton, SIGNAL(clicked()),
             this, SLOT(slotOpenSetup()));
