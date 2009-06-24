@@ -137,15 +137,20 @@ void TemplateList::applySettings()
 
 bool TemplateList::contains(const QString& title)
 {
-    TemplateManager* tm = TemplateManager::defaultManager();
-    if (tm)
+    QTreeWidgetItemIterator it(this);
+    while (*it)
     {
-        QList<Template*>* list = tm->templateList();
-        foreach (Template *t, *list)
+        TemplateListItem *item = dynamic_cast<TemplateListItem*>(*it);
+        if (item)
         {
-            if (t->templateTitle() == title)
-                return true;
+            Template* t = item->getTemplate();
+            if (t)
+            {
+                if (t->templateTitle == title)
+                    return true;
+            }
         }
+        ++it;
     }
     return false;
 }
