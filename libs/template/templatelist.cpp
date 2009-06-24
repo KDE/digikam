@@ -146,7 +146,7 @@ bool TemplateList::contains(const QString& title)
             Template* t = item->getTemplate();
             if (t)
             {
-                if (t->templateTitle == title)
+                if (t->templateTitle() == title)
                     return true;
             }
         }
