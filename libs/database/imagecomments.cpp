@@ -137,18 +137,19 @@ public:
 };
 
 ImageComments::ImageComments()
+             : d(new ImageCommentsPriv)
 {
 }
 
 ImageComments::ImageComments(qlonglong imageid)
-            : d(new ImageCommentsPriv)
+             : d(new ImageCommentsPriv)
 {
     DatabaseAccess access;
     d->init(access, imageid);
 }
 
 ImageComments::ImageComments(DatabaseAccess& access, qlonglong imageid)
-            : d(new ImageCommentsPriv)
+             : d(new ImageCommentsPriv)
 {
     d->init(access, imageid);
 }
