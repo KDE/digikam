@@ -43,6 +43,11 @@ ImageCopyright::ImageCopyright(qlonglong imageid)
 {
 }
 
+ImageCopyright::ImageCopyright()
+              : m_id(0)
+{
+}
+
 QStringList ImageCopyright::creator()
 {
     QList<CopyrightInfo> infos = DatabaseAccess().db()->getImageCopyright(m_id, 

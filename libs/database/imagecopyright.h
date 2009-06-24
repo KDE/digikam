@@ -47,6 +47,9 @@ public:
 
     ImageCopyright(qlonglong imageid);
 
+    /** Create a null ImageCopyright object */
+    ImageCopyright();
+
     enum ReplaceMode
     {
         /// Remove entries for all languages and add one new entry
