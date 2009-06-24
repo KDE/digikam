@@ -598,7 +598,7 @@ void NepomukService::slotStatementAdded(const Soprano::Statement& statement)
 
 void NepomukService::slotStatementRemoved(const Soprano::Statement& statement)
 {
-    Q_UNUSED(statement);    
+    Q_UNUSED(statement);
 }
 
 void NepomukService::cleanIgnoreList()
@@ -771,6 +771,8 @@ void NepomukService::syncCommentToDigikam(const KUrl::List &fileUrls, const QStr
 
 void NepomukService::syncTagsToDigikam(const KUrl::List &fileUrls, const QList<QUrl> &tags)
 {
+    Q_UNUSED(tags);
+
     if (fileUrls.isEmpty())
         return;
 
