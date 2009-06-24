@@ -605,20 +605,10 @@ bool DMetadata::setMetadataTemplate(Template* t) const
 
     if (supportXmp())
     {
-        // Create a list of authors including old one witch already exists.
-        QStringList oldAuthors = getXmpTagStringSeq("Xmp.dc.creator", false);
-        QStringList newAuthors(author);
-
-        for (QStringList::Iterator it = oldAuthors.begin(); it != oldAuthors.end(); ++it)
-        {
-            if (!newAuthors.contains(*it))
-                newAuthors.append(*it);
-        }
-
-        if (!setXmpTagStringSeq("Xmp.dc.creator", newAuthors, false))
+        if (!setXmpTagStringSeq("Xmp.dc.creator", QStringList() << author, false))
             return false;
 
-        if (!setXmpTagStringSeq("Xmp.tiff.Artist", newAuthors, false))
+        if (!setXmpTagStringSeq("Xmp.tiff.Artist", QStringList() << author, false))
             return false;
 
         if (!setXmpTagString("Xmp.photoshop.AuthorsPosition", authorPosition, false))
@@ -656,6 +646,19 @@ bool DMetadata::setMetadataTemplate(Template* t) const
     if (!setIptcTag(instructions,  256, "Instructions", "Iptc.Application2.SpecialInstructions")) return false;
 
     return true;
+}
+
+Template DMetadata::getMetadataTemplate() const
+{
+    Template t;
+    t.setAuthor(getXmpTagStringSeq("Xmp.dc.creator")[0]);
+    t.setAuthorPosition(getXmpTagString("Xmp.photoshop.AuthorsPosition"));
+    t.setCredit(getXmpTagString("Xmp.photoshop.Credit"));
+    t.setSource(getXmpTagString("Xmp.dc.source"));
+    t.setCopyright(getXmpTagStringLangAlt("Xmp.dc.rights", "x-default", false));
+    t.setRightUsageTerms(getXmpTagStringLangAlt("Xmp.xmpRights.UsageTerms", "x-default", false));
+    t.setInstructions(getXmpTagString("Xmp.photoshop.Instructions"));
+    return t;
 }
 
 bool DMetadata::setImagePhotographerId(const QString& author, const QString& authorTitle) const

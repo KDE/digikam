@@ -76,6 +76,7 @@ public:
     KDE_DEPRECATED bool setImageCredits(const QString& credit, const QString& source, const QString& copyright) const;
 
     bool setMetadataTemplate(Template* t) const;
+    Template getMetadataTemplate() const;
 
     /** Return a string with Lens mounted on the front of camera.
         There no standard Exif tag for Lens information.
