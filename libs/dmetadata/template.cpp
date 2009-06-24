@@ -85,6 +85,19 @@ Template& Template::operator=(const Template& t)
     return *this;
 }
 
+bool Template::operator==(const Template& t) const
+{                                                  
+    return valid           == t.valid
+        && author          == t.author
+        && authorPosition  == t.authorPosition
+        && credit          == t.credit
+        && copyright       == t.copyright
+        && rightUsageTerms == t.rightUsageTerms
+        && source          == t.source
+        && instructions    == t.instructions
+      ;                                                        
+}                                                             
+
 void Template::setAuthor(const QString& author)
 {
     d->author = author;
