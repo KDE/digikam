@@ -55,12 +55,12 @@ public:
 
 Q_SIGNALS:
 
-    void signalTemplateChanged();
+    void signalTemplateSelected();
 
 private Q_SLOTS:
 
     void slotOpenSetup();
-    void slotChangeTemplate(int);
+    void slotTemplateListChanged();
 
 private:
 

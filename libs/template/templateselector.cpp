@@ -84,10 +84,20 @@ TemplateSelector::TemplateSelector(QWidget* parent=0)
     setStretchFactor(d->templateCombo, 10);
 
     connect(d->templateCombo, SIGNAL(activated(int)),
-            this, SLOT(slotChangeTemplate(int)));
+            this, SIGNAL(signalTemplateChanged()));
 
     connect(d->setupButton, SIGNAL(clicked()),
             this, SLOT(slotOpenSetup()));
+
+    TemplateManager* tm = TemplateManager::defaultManager();
+    if (tm)
+    {
+        connect(tm, SIGNAL(signalTemplateAdded(Template*)),
+                this, SLOT(slotTemplateListChanged()));
+
+        connect(tm, SIGNAL(signalTemplateRemoved(Template*)),
+                this, SLOT(slotTemplateListChanged()));
+    }
 
     populateTemplates();
 }
@@ -145,16 +155,12 @@ void TemplateSelector::setTemplateIndex(int i)
 
 void TemplateSelector::slotOpenSetup()
 {
-    if (Setup::execSinglePage(this, Setup::TemplatePage))
-    {
-        populateTemplates();
-        emit signalTemplateChanged();
-    }
+    Setup::execSinglePage(this, Setup::TemplatePage);
 }
 
-void TemplateSelector::slotChangeTemplate(int)
+void TemplateSelector::slotTemplateListChanged()
 {
-    emit signalTemplateChanged();
+    populateTemplates();
 }
 
 }  // namespace Digikam
