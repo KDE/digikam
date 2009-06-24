@@ -34,7 +34,6 @@
 
 // KDE includes
 
-#include <kseparator.h>
 #include <klocale.h>
 #include <kdialog.h>
 #include <klineedit.h>
@@ -106,8 +105,16 @@ SetupTemplate::SetupTemplate(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label1 = new QLabel(i18n("Author:"), panel);
-    d->authorEdit  = new KLineEdit(panel);
+    QScrollArea *templateSv = new QScrollArea(panel);
+    QWidget *tview          = new QWidget(templateSv->viewport());
+    tview->setAutoFillBackground(false);
+    templateSv->setWidget(tview);
+    templateSv->setWidgetResizable(true);
+    templateSv->viewport()->setAutoFillBackground(false);
+    QGridLayout* tgrid = new QGridLayout(tview);
+
+    QLabel *label1 = new QLabel(i18n("Author:"), tview);
+    d->authorEdit  = new KLineEdit(tview);
     d->authorEdit->setClearButtonShown(true);
     d->authorEdit->setMaxLength(32);
     label1->setBuddy(d->authorEdit);
@@ -119,8 +126,8 @@ SetupTemplate::SetupTemplate(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label2        = new QLabel(i18n("Author Position:"), panel);
-    d->authorPositionEdit = new KLineEdit(panel);
+    QLabel *label2        = new QLabel(i18n("Author Position:"), tview);
+    d->authorPositionEdit = new KLineEdit(tview);
     d->authorPositionEdit->setClearButtonShown(true);
     d->authorPositionEdit->setMaxLength(32);
     label2->setBuddy(d->authorPositionEdit);
@@ -131,8 +138,8 @@ SetupTemplate::SetupTemplate(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label3 = new QLabel(i18n("Credit:"), panel);
-    d->creditEdit  = new KLineEdit(panel);
+    QLabel *label3 = new QLabel(i18n("Credit:"), tview);
+    d->creditEdit  = new KLineEdit(tview);
     d->creditEdit->setClearButtonShown(true);
     d->creditEdit->setMaxLength(32);
     label3->setBuddy(d->creditEdit);
@@ -145,8 +152,8 @@ SetupTemplate::SetupTemplate(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label4   = new QLabel(i18n("Copyright:"), panel);
-    d->copyrightEdit = new KLineEdit(panel);
+    QLabel *label4   = new QLabel(i18n("Copyright:"), tview);
+    d->copyrightEdit = new KLineEdit(tview);
     d->copyrightEdit->setClearButtonShown(true);
     d->copyrightEdit->setMaxLength(128);
     label4->setBuddy(d->copyrightEdit);
@@ -168,16 +175,16 @@ SetupTemplate::SetupTemplate(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label5    = new QLabel(i18n("Right Usage Terms:"), panel);
-    d->rightUsageEdit = new KLineEdit(panel);
+    QLabel *label5    = new QLabel(i18n("Right Usage Terms:"), tview);
+    d->rightUsageEdit = new KLineEdit(tview);
     d->rightUsageEdit->setClearButtonShown(true);
     label5->setBuddy(d->rightUsageEdit);
 //TODO    d->rightUsageEdit->setWhatsThis(i18n("<p></p>"));
 
     // --------------------------------------------------------
 
-    QLabel *label6 = new QLabel(i18n("Source:"), panel);
-    d->sourceEdit  = new KLineEdit(panel);
+    QLabel *label6 = new QLabel(i18n("Source:"), tview);
+    d->sourceEdit  = new KLineEdit(tview);
     d->sourceEdit->setClearButtonShown(true);
     d->sourceEdit->setMaxLength(32);
     label6->setBuddy(d->sourceEdit);
@@ -192,12 +199,32 @@ SetupTemplate::SetupTemplate(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label7      = new QLabel(i18n("Instructions:"), panel);
-    d->instructionsEdit = new KLineEdit(panel);
+    QLabel *label7      = new QLabel(i18n("Instructions:"), tview);
+    d->instructionsEdit = new KLineEdit(tview);
     d->instructionsEdit->setClearButtonShown(true);
     d->instructionsEdit->setMaxLength(256);
     label7->setBuddy(d->instructionsEdit);
 //TODO    d->instructionsEdit->setWhatsThis(i18n("<p></p>"));
+
+
+    tgrid->setMargin(KDialog::spacingHint());
+    tgrid->setSpacing(KDialog::spacingHint());
+    tgrid->setAlignment(Qt::AlignTop);
+    tgrid->setColumnStretch(1, 10);
+    tgrid->addWidget(label1,                0, 0, 1, 1);
+    tgrid->addWidget(d->authorEdit,         0, 1, 1, 2);
+    tgrid->addWidget(label2,                1, 0, 1, 1);
+    tgrid->addWidget(d->authorPositionEdit, 1, 1, 1, 2);
+    tgrid->addWidget(label3,                2, 0, 1, 1);
+    tgrid->addWidget(d->creditEdit,         2, 1, 1, 2);
+    tgrid->addWidget(label4,                3, 0, 1, 1);
+    tgrid->addWidget(d->copyrightEdit,      3, 1, 1, 2);
+    tgrid->addWidget(label5,                4, 0, 1, 1);
+    tgrid->addWidget(d->rightUsageEdit,     4, 1, 1, 2);
+    tgrid->addWidget(label6,                5, 0, 1, 1);
+    tgrid->addWidget(d->sourceEdit,         5, 1, 1, 2);
+    tgrid->addWidget(label7,                6, 0, 1, 1);
+    tgrid->addWidget(d->instructionsEdit,   6, 1, 1, 2);
 
     // --------------------------------------------------------
 
@@ -229,33 +256,19 @@ SetupTemplate::SetupTemplate(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    grid->setMargin(0);
+    grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
     grid->setAlignment(Qt::AlignTop);
     grid->setColumnStretch(1, 10);
     grid->setRowStretch(4, 10);
-    grid->addWidget(d->listView,           0,  0, 4, 2);
-    grid->addWidget(d->addButton,          0,  2, 1, 1);
-    grid->addWidget(d->delButton,          1,  2, 1, 1);
-    grid->addWidget(d->repButton,          2,  2, 1, 1);
-    grid->addWidget(label0,                4,  0, 1, 1);
-    grid->addWidget(d->titleEdit,          4,  1, 1, 1);
-    grid->addWidget(new KSeparator(panel), 5,  0, 1, 3);
-    grid->addWidget(label1,                6,  0, 1, 1);
-    grid->addWidget(d->authorEdit,         6,  1, 1, 2);
-    grid->addWidget(label2,                7,  0, 1, 1);
-    grid->addWidget(d->authorPositionEdit, 7,  1, 1, 2);
-    grid->addWidget(label3,                8,  0, 1, 1);
-    grid->addWidget(d->creditEdit,         8,  1, 1, 2);
-    grid->addWidget(label4,                9,  0, 1, 1);
-    grid->addWidget(d->copyrightEdit,      9,  1, 1, 2);
-    grid->addWidget(label5,                10, 0, 1, 1);
-    grid->addWidget(d->rightUsageEdit,     10, 1, 1, 2);
-    grid->addWidget(label6,                11, 0, 1, 1);
-    grid->addWidget(d->sourceEdit,         11, 1, 1, 2);
-    grid->addWidget(label7,                12, 0, 1, 1);
-    grid->addWidget(d->instructionsEdit,   12, 1, 1, 2);
-    grid->addWidget(note,                  13, 0, 1, 3);
+    grid->addWidget(d->listView,           0, 0, 4, 2);
+    grid->addWidget(d->addButton,          0, 2, 1, 1);
+    grid->addWidget(d->delButton,          1, 2, 1, 1);
+    grid->addWidget(d->repButton,          2, 2, 1, 1);
+    grid->addWidget(label0,                4, 0, 1, 1);
+    grid->addWidget(d->titleEdit,          4, 1, 1, 1);
+    grid->addWidget(templateSv,            5, 0, 1, 3);
+    grid->addWidget(note,                  6, 0, 1, 3);
 
     // --------------------------------------------------------
 
