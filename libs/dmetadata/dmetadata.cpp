@@ -651,7 +651,8 @@ bool DMetadata::setMetadataTemplate(Template* t) const
 Template DMetadata::getMetadataTemplate() const
 {
     Template t;
-    t.setAuthor(getXmpTagStringSeq("Xmp.dc.creator")[0]);
+    QStringList authors = getXmpTagStringSeq("Xmp.dc.creator");
+    t.setAuthor(authors.isEmpty() ? QString() : authors[0]);
     t.setAuthorPosition(getXmpTagString("Xmp.photoshop.AuthorsPosition"));
     t.setCredit(getXmpTagString("Xmp.photoshop.Credit"));
     t.setSource(getXmpTagString("Xmp.dc.source"));
