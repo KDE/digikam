@@ -47,6 +47,9 @@ public:
     Template(const Template& t);
     Template& operator=(const Template& t);
 
+    /** Compare for equality */
+    bool operator==(const Template& t) const;
+
     void setAuthor(const QString& author);
     void setAuthorPosition(const QString& authorPosition);
     void setCredit(const QString& credit);
