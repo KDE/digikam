@@ -61,10 +61,10 @@ public:
         modified = false;
     }
 
-    bool                 modified;
+    bool             modified;
 
     QList<Template*> pList;
-    QString              file;
+    QString          file;
 };
 
 TemplateManager::TemplateManager(QObject *parent, const QString& file)
@@ -207,13 +207,11 @@ QList<Template*>* TemplateManager::templateList()
     return &d->pList;
 }
 
-Template* TemplateManager::find(const QString& author) const
+Template* TemplateManager::fromIndex(int index) const
 {
-    foreach (Template *t, d->pList)
-    {
-        if (t->author() == author)
-            return t;
-    }
+    if (index >= 0 && index < d->pList.size())
+        return d->pList[index];
+
     return 0;
 }
 

@@ -122,7 +122,7 @@ Template* TemplateSelector::getTemplate() const
     if (tm)
     {
         if (d->templateCombo->currentIndex() > 0)
-            return tm->find(d->templateCombo->itemHighlighted());
+            return tm->fromIndex(d->templateCombo->currentIndex()-1);
     }
     return 0;
 }

@@ -56,7 +56,7 @@ public:
     void insert(Template* t);
     void remove(Template* t);
 
-    Template* find(const QString& author) const;
+    Template* fromIndex(int index) const;
 
     QList<Template*>* templateList();
 
