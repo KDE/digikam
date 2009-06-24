@@ -209,11 +209,21 @@ QList<Template*>* TemplateManager::templateList()
     return &d->pList;
 }
 
-Template* TemplateManager::find(const QString& title) const
+Template* TemplateManager::findByTitle(const QString& title) const
 {
     foreach (Template *t, d->pList)
     {
         if (t->templateTitle() == title)
+            return t;
+    }
+    return 0;
+}
+
+Template* TemplateManager::findByContents(const Template& tref) const
+{
+    foreach (Template *t, d->pList)
+    {
+        if (t == &tref)
             return t;
     }
     return 0;
