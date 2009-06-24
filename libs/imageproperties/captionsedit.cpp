@@ -280,7 +280,7 @@ CaptionsEdit::CaptionsEdit(QWidget* parent)
 
     grid->setAlignment( Qt::AlignTop );
     grid->addWidget(title,             0, 0, 1, 1);
-    grid->addWidget(d->languageCB,     0, 2, 1, 1);
+    grid->addWidget(d->languageCB,     0, 1, 1, 2);
     grid->addWidget(d->addValueButton, 0, 3, 1, 1);
     grid->addWidget(d->delValueButton, 0, 4, 1, 1);
     grid->addWidget(d->valueEdit,      1, 0, 1, 5);
