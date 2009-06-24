@@ -30,12 +30,7 @@ class TemplatePrivate
 {
 public:
 
-    TemplatePrivate()
-    {
-        valid = false;
-    }
-
-    bool    valid;
+    TemplatePrivate(){}
 
     QString author;
     QString authorPosition;
@@ -66,7 +61,6 @@ Template::Template(const Template& t)
     setRightUsageTerms(t.d->rightUsageTerms);
     setSource(t.d->source);
     setInstructions(t.d->instructions);
-    setValid(t.d->valid);
 }
 
 Template& Template::operator=(const Template& t)
@@ -80,15 +74,13 @@ Template& Template::operator=(const Template& t)
         setRightUsageTerms(t.d->rightUsageTerms);
         setSource(t.d->source);
         setInstructions(t.d->instructions);
-        setValid(t.d->valid);
     }
     return *this;
 }
 
 bool Template::operator==(const Template& t) const
 {                                                  
-    return d->valid           == t.d->valid
-        && d->author          == t.d->author
+    return d->author          == t.d->author
         && d->authorPosition  == t.d->authorPosition
         && d->credit          == t.d->credit
         && d->copyright       == t.d->copyright
@@ -133,11 +125,6 @@ void Template::setInstructions(const QString& instructions)
     d->instructions = instructions;
 }
 
-void Template::setValid(bool valid)
-{
-    d->valid = valid;
-}
-
 QString Template::author() const
 {
     return d->author;
@@ -171,11 +158,6 @@ QString Template::source() const
 QString Template::instructions() const
 {
     return d->instructions;
-}
-
-bool Template::valid() const
-{
-    return d->valid;
 }
 
 }  // namespace Digikam

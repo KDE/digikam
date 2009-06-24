@@ -57,7 +57,6 @@ public:
     void setRightUsageTerms(const QString& rightUsageTerms);
     void setSource(const QString& source);
     void setInstructions(const QString& instructions);
-    void setValid(bool valid);
 
     QString author()          const;
     QString authorPosition()  const;
@@ -66,7 +65,6 @@ public:
     QString rightUsageTerms() const;
     QString source()          const;
     QString instructions()    const;
-    bool    valid()           const;
 
 private:
 
