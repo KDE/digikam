@@ -111,6 +111,7 @@ bool TemplateManager::load()
         if (e.tagName() != "item") continue;
 
         Template *t = new Template();
+        t->setTemplateTitle(e.attribute("templateTitle"));
         t->setAuthor(e.attribute("author"));
         t->setAuthorPosition(e.attribute("authorposition"));
         t->setCredit(e.attribute("credit"));
@@ -138,6 +139,7 @@ bool TemplateManager::save()
     foreach (Template *t, d->pList)
     {
        QDomElement elem = doc.createElement("item");
+       elem.setAttribute("templatetitle",   t->templateTitle());
        elem.setAttribute("author",          t->author());
        elem.setAttribute("authorposition",  t->authorPosition());
        elem.setAttribute("credit",          t->credit());
@@ -205,6 +207,16 @@ void TemplateManager::clear()
 QList<Template*>* TemplateManager::templateList()
 {
     return &d->pList;
+}
+
+Template* TemplateManager::find(const QString& title) const
+{
+    foreach (Template *t, d->pList)
+    {
+        if (t->templateTitle() == title)
+            return t;
+    }
+    return 0;
 }
 
 Template* TemplateManager::fromIndex(int index) const

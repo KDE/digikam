@@ -61,6 +61,8 @@ public:
     TemplateList(QWidget* parent=0);
     ~TemplateList();
 
+    bool contains(const QString& title);
+
     void readSettings();
     void applySettings();
 };

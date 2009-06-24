@@ -63,8 +63,8 @@ void TemplateListItem::setTemplate(Template *t)
 
     if (m_template)
     {
-        setText(0, m_template->author());
-        setText(1, m_template->authorPosition());
+        setText(0, m_template->templateTitle());
+        setText(1, m_template->author());
     }
 }
 
@@ -86,8 +86,8 @@ TemplateList::TemplateList(QWidget* parent)
     setWhatsThis(i18n("Here you can see the metadata template list managed by digiKam."));
 
     QStringList labels;
+    labels.append( i18n("Title") );
     labels.append( i18n("Author") );
-    labels.append( i18n("Author Position") );
     setHeaderLabels(labels);
     header()->setResizeMode(0, QHeaderView::ResizeToContents);
     header()->setResizeMode(1, QHeaderView::Stretch);
@@ -133,6 +133,21 @@ void TemplateList::applySettings()
         }
         tm->save();
     }
+}
+
+bool TemplateList::contains(const QString& title)
+{
+    TemplateManager* tm = TemplateManager::defaultManager();
+    if (tm)
+    {
+        QList<Template*>* list = tm->templateList();
+        foreach (Template *t, *list)
+        {
+            if (t->templateTitle() == title)
+                return true;
+        }
+    }
+    return false;
 }
 
 }  // namespace Digikam

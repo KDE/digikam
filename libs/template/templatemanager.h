@@ -57,6 +57,7 @@ public:
     void remove(Template* t);
 
     Template* fromIndex(int index) const;
+    Template* find(const QString& title) const;
 
     QList<Template*>* templateList();
 

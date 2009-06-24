@@ -110,7 +110,7 @@ void TemplateSelector::populateTemplates()
 
         foreach (Template *t, *list)
         {
-            d->templateCombo->insertSqueezedItem(t->author(), i);
+            d->templateCombo->insertSqueezedItem(t->templateTitle(), i);
             ++i;
         }
     }
@@ -130,7 +130,7 @@ Template* TemplateSelector::getTemplate() const
 void TemplateSelector::setTemplate(Template *t)
 {
     if (t)
-        d->templateCombo->setCurrent(t->author());
+        d->templateCombo->setCurrent(t->templateTitle());
 }
 
 int TemplateSelector::getTemplateIndex() const
