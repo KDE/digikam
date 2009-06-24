@@ -44,6 +44,7 @@
 #include "imagelisterrecord.h"
 #include "imageinfolist.h"
 #include "imagecomments.h"
+#include "imagecopyright.h"
 #include "imageposition.h"
 #include "photoinfocontainer.h"
 #include "databaseinfocontainers.h"
@@ -198,6 +199,13 @@ public:
      * For simple, cached read access see comment().
      */
     ImageComments imageComments(DatabaseAccess& access) const;
+
+    /**
+     * Retrieve the ImageCopyright object for this item.
+     * This object allows full read and write access to all copyright
+     * values.
+     */
+    ImageCopyright imageCopyright() const;
 
     /**
      * Retrieve the ImagePosition object for this item.

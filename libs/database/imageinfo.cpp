@@ -451,6 +451,14 @@ ImageComments ImageInfo::imageComments(DatabaseAccess& access) const
     return ImageComments(access, m_data->id);
 }
 
+ImageCopyright ImageInfo::imageCopyright() const
+{
+    if (!m_data)
+        return ImageCopyright();
+
+    return ImageCopyright(m_data->id);
+}
+
 ImagePosition ImageInfo::imagePosition() const
 {
     if (!m_data)
