@@ -511,16 +511,16 @@ void ImageComments::apply(DatabaseAccess& access)
 
 KExiv2::AltLangMap ImageComments::toAltLangMap(DatabaseComment::Type type) const
 {
-    if (!d)
-        return;
-
     KExiv2::AltLangMap map;
 
-    foreach (const CommentInfo &info, d->infos)
+    if (d)
     {
-        if (info.type == type)
+        foreach (const CommentInfo &info, d->infos)
         {
-            map[info.language] = info.comment;
+            if (info.type == type)
+            {
+                map[info.language] = info.comment;
+            }
         }
     }
 
