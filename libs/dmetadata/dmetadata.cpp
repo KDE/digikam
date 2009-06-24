@@ -653,7 +653,7 @@ bool DMetadata::setMetadataTemplate(Template* t) const
     if (!setIptcTag(credit,         32, "Credit",       "Iptc.Application2.Credit"))              return false;
     if (!setIptcTag(source,         32, "Source",       "Iptc.Application2.Source"))              return false;
     if (!setIptcTag(copyright,     128, "Copyright",    "Iptc.Application2.Copyright"))           return false;
-    if (!setIptcTag(instructions,  256, "Instructions",    "Iptc.Application2.SpecialInstructions")) return false;
+    if (!setIptcTag(instructions,  256, "Instructions", "Iptc.Application2.SpecialInstructions")) return false;
 
     return true;
 }
