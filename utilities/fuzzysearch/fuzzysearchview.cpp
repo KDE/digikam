@@ -495,16 +495,10 @@ void FuzzySearchView::newDuplicatesSearch(Album* album)
 {
     if (album)
     {
-        switch (album->type())
-        {
-            case Album::PHYSICAL:
-                d->findDuplicatesPanel->slotSetSelectedAlbum(album);
-                break;
-
-            case Album::TAG:
-                d->findDuplicatesPanel->slotSetSelectedTag(album);
-                break;
-        }
+        if (album->type() == Album::PHYSICAL)
+            d->findDuplicatesPanel->slotSetSelectedAlbum(album);
+        else if (album->type() == Album::PHYSICAL)
+            d->findDuplicatesPanel->slotSetSelectedTag(album);
     }
     d->tabWidget->setCurrentIndex(FuzzySearchViewPriv::DUPLICATES);
 }
