@@ -111,7 +111,7 @@ bool TemplateManager::load()
         if (e.tagName() != "item") continue;
 
         Template *t = new Template();
-        t->setTemplateTitle(e.attribute("templateTitle"));
+        t->setTemplateTitle(e.attribute("templatetitle"));
         t->setAuthor(e.attribute("author"));
         t->setAuthorPosition(e.attribute("authorposition"));
         t->setCredit(e.attribute("credit"));
