@@ -179,8 +179,8 @@ Setup::Setup(QWidget* parent)
 
     d->templatePage  = new SetupTemplate();
     d->page_template = addPage(d->templatePage, i18n("Template"));
-    d->page_template->setHeader(i18n("<qt>Metadata template information<br/>"
-                                "<i>Manage your metadata template information</i></qt>"));
+    d->page_template->setHeader(i18n("<qt>Metadata template<br/>"
+                                "<i>Manage your collection of metadata template</i></qt>"));
     d->page_template->setIcon(KIcon("user-identity"));
 
     d->mimePage  = new SetupMime();
