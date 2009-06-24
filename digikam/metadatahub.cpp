@@ -164,7 +164,7 @@ void MetadataHub::load(const ImageInfo& info)
     {
         DatabaseAccess access;
         ImageComments comments = info.imageComments(access);
-        commentMap = comments.toAltLangMap();
+        commentMap             = comments.toAltLangMap();
     }
     load(info.dateTime(), commentMap, info.rating());
 
@@ -355,7 +355,7 @@ template <class T> void MetadataHubPriv::loadWithInterval(const T& data, T& stor
     {
         case MetadataHub::MetadataInvalid:
             storage = data;
-            status = MetadataHub::MetadataAvailable;
+            status  = MetadataHub::MetadataAvailable;
             break;
         case MetadataHub::MetadataAvailable:
             // we have two values. If they are equal, status is unchanged
@@ -370,7 +370,7 @@ template <class T> void MetadataHubPriv::loadWithInterval(const T& data, T& stor
             else
             {
                 highestStorage = storage;
-                storage = data;
+                storage        = data;
             }
             break;
         case MetadataHub::MetadataDisjoint:
@@ -413,7 +413,7 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
     // find out in advance if we have something to write - needed for FullWriteIfChanged mode
     bool saveComment  = d->commentsStatus == MetadataAvailable;
     bool saveDateTime = d->dateTimeStatus == MetadataAvailable;
-    bool saveRating   = d->ratingStatus == MetadataAvailable;
+    bool saveRating   = d->ratingStatus   == MetadataAvailable;
     bool saveTags     = false;
     for (QMap<TAlbum *, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
     {
@@ -429,7 +429,7 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
         writeAllFields = true;
     else if (writeMode == FullWriteIfChanged)
         writeAllFields = (
-                           (saveComment  && d->commentsChanged)  ||
+                           (saveComment  && d->commentsChanged) ||
                            (saveDateTime && d->dateTimeChanged) ||
                            (saveRating   && d->ratingChanged)   ||
                            (saveTags     && d->tagsChanged)
@@ -794,7 +794,7 @@ void MetadataHub::dateTimeInterval(QDateTime& lowest, QDateTime& highest) const
             lowest = highest = d->dateTime;
             break;
         case MetadataDisjoint:
-            lowest = d->dateTime;
+            lowest  = d->dateTime;
             highest = d->lastDateTime;
             break;
     }
@@ -811,7 +811,7 @@ void MetadataHub::ratingInterval(int& lowest, int& highest) const
             lowest = highest = d->rating;
             break;
         case MetadataDisjoint:
-            lowest = d->rating;
+            lowest  = d->rating;
             highest = d->highestRating;
             break;
     }
