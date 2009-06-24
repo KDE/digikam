@@ -137,7 +137,6 @@ public:
 };
 
 ImageComments::ImageComments()
-             : d(new ImageCommentsPriv)
 {
 }
 
@@ -354,6 +353,9 @@ void ImageComments::addTitle(const QString& comment, const QString& lang,
 void ImageComments::replaceComments(const KExiv2::AltLangMap& map, const QString& author,
                                     const QDateTime& date, DatabaseComment::Type type)
 {
+    if (!d)
+        return;
+
     d->dirtyIndices.clear();
 
     for (KExiv2::AltLangMap::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
@@ -509,6 +511,9 @@ void ImageComments::apply(DatabaseAccess& access)
 
 KExiv2::AltLangMap ImageComments::toAltLangMap(DatabaseComment::Type type) const
 {
+    if (!d)
+        return;
+
     KExiv2::AltLangMap map;
 
     foreach (const CommentInfo &info, d->infos)
