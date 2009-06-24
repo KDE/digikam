@@ -73,6 +73,8 @@ TemplateManager::TemplateManager(QObject *parent, const QString& file)
     d->file = file;
     if (!m_defaultManager)
         m_defaultManager = this;
+
+    load();
 }
 
 TemplateManager::~TemplateManager()
