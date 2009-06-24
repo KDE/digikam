@@ -3,6 +3,7 @@ digiKam 1.0.0-beta2 - Release date: 2009-xx-xx
 
 NEW FEATURES:
 
+General        : Added support of LightRoom keywords path for interoperability purpose.
 General        : digiKam use a new database to cache thumbnails instead ~./thumbnails.
                  File format used to store image is PGF (http://www.libpgf.org).
                  PGF is a wavelets based image compression format and give space optimizations.
