@@ -295,7 +295,7 @@ int ImageCopyright::languageMatch(const QList<CopyrightInfo> infos, const QStrin
 Template ImageCopyright::toMetadataTemplate()
 {
     Template t;
-    t.setAuthor(author()[0]);
+    t.setAuthor(author().isEmpty() ? QString() : author()[0]);
     t.setAuthorPosition(authorsPosition());
     t.setCredit(credit());
     t.setCopyright(rights("x-default"));
