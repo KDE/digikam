@@ -199,32 +199,36 @@ INSTALL(TARGETS digikamdatabase ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 # digiKam nepomuk services #########################################################
 
-set(digikamnepomukservices_SRCS ${libnepomukservices_SRCS} )
+IF (${KDE_VERSION} VERSION_GREATER "4.2.70")
 
-kde4_add_plugin(digikamnepomukservice ${digikamnepomukservices_SRCS})
+    set(digikamnepomukservices_SRCS ${libnepomukservices_SRCS} )
 
-target_link_libraries(digikamnepomukservice
-                      ${KDE4_KIO_LIBS}
-                      ${KDE4_SOLID_LIBS}
-                      ${KIPI_LIBRARIES}
-                      ${KEXIV2_LIBRARIES}
-                      ${KDCRAW_LIBRARIES}
-                      ${QT_QTSQL_LIBRARY}
-                      ${SOPRANO_CLIENT_LIBRARIES}
-                      ${SOPRANO_LIBRARIES}
-                      ${KDE4_KDEUI_LIBS}
-                      ${KDE4_KIO_LIBS}
-                      ${NEPOMUK_LIBRARIES}
-                      digikamcore
-                      digikamdatabase
-                     )
+    kde4_add_plugin(digikamnepomukservice ${digikamnepomukservices_SRCS})
 
-install(
-  FILES ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/nepomuk/digikamnepomukservice.desktop
-  DESTINATION ${SERVICES_INSTALL_DIR})
-install(
-  TARGETS digikamnepomukservice
-  DESTINATION ${PLUGIN_INSTALL_DIR})
+    target_link_libraries(digikamnepomukservice
+                        ${KDE4_KIO_LIBS}
+                        ${KDE4_SOLID_LIBS}
+                        ${KIPI_LIBRARIES}
+                        ${KEXIV2_LIBRARIES}
+                        ${KDCRAW_LIBRARIES}
+                        ${QT_QTSQL_LIBRARY}
+                        ${SOPRANO_CLIENT_LIBRARIES}
+                        ${SOPRANO_LIBRARIES}
+                        ${KDE4_KDEUI_LIBS}
+                        ${KDE4_KIO_LIBS}
+                        ${NEPOMUK_LIBRARIES}
+                        digikamcore
+                        digikamdatabase
+                        )
+
+    install(
+    FILES ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/nepomuk/digikamnepomukservice.desktop
+    DESTINATION ${SERVICES_INSTALL_DIR})
+    install(
+    TARGETS digikamnepomukservice
+    DESTINATION ${PLUGIN_INSTALL_DIR})
+
+ENDIF (${KDE_VERSION} VERSION_GREATER "4.2.70")
 
 # digiKam binary progam #########################################################
 
