@@ -99,7 +99,6 @@ SetupTemplate::SetupTemplate(QWidget* parent)
     QLabel *label0 = new QLabel(i18n("Template Tile:"), panel);
     d->titleEdit  = new KLineEdit(panel);
     d->titleEdit->setClearButtonShown(true);
-    d->titleEdit->setMaxLength(32);
     label0->setBuddy(d->titleEdit);
     d->titleEdit->setWhatsThis(i18n("<p>Enter here the metadata template title.</p>"));
 
@@ -116,46 +115,44 @@ SetupTemplate::SetupTemplate(QWidget* parent)
     QLabel *label1 = new QLabel(i18n("Author:"), tview);
     d->authorEdit  = new KLineEdit(tview);
     d->authorEdit->setClearButtonShown(true);
-    d->authorEdit->setMaxLength(32);
     label1->setBuddy(d->authorEdit);
     d->authorEdit->setWhatsThis(i18n("<p>This field should contain your name, or the name of the person who created the photograph. "
                                      "If it is not appropriate to add the name of the photographer (for example, if the identify of "
                                      "the photographer needs to be protected) the name of a company or organization can also be used. "
                                      "Once saved, this field should not be changed by anyone. This field does not support the use of "
-                                     "commas or semi-colons as separators. \nThis field is limited to 32 ASCII characters.</p>"));
+                                     "commas or semi-colons as separators.</p>"
+                                     "<p>With IPTC, this field is limited to 32 ASCII characters.</p>"));
 
     // --------------------------------------------------------
 
     QLabel *label2        = new QLabel(i18n("Author Position:"), tview);
     d->authorPositionEdit = new KLineEdit(tview);
     d->authorPositionEdit->setClearButtonShown(true);
-    d->authorPositionEdit->setMaxLength(32);
     label2->setBuddy(d->authorPositionEdit);
     d->authorPositionEdit->setWhatsThis(i18n("<p>This field should contain the job title of the photographer. Examples might include "
                                              "titles such as: Staff Photographer, Freelance Photographer, or Independent Commercial "
                                              "Photographer. Since this is a qualifier for the Author field, the Author field must also "
-                                             "be filled out. \nThis field is limited to 32 ASCII characters.</p>"));
+                                             "be filled out.</p>"
+                                             "<p>With IPTC, this field is limited to 32 ASCII characters.</p>"));
 
     // --------------------------------------------------------
 
     QLabel *label3 = new QLabel(i18n("Credit:"), tview);
     d->creditEdit  = new KLineEdit(tview);
     d->creditEdit->setClearButtonShown(true);
-    d->creditEdit->setMaxLength(32);
     label3->setBuddy(d->creditEdit);
     d->creditEdit->setWhatsThis(i18n("<p>(synonymous to Provider): Use the Provider field to identify who is providing the photograph. "
                                      "This does not necessarily have to be the author. If a photographer is working for a news agency "
                                      "such as Reuters or the Associated Press, these organizations could be listed here as they are "
                                      "\"providing\" the image for use by others. If the image is a stock photograph, then the group "
-                                     "(agency) involved in supplying the image should be listed here. "
-                                     "\nThis field is limited to 32 ASCII characters.</p>"));
+                                     "(agency) involved in supplying the image should be listed here.</p>"
+                                     "<p>With IPTC, this field is limited to 32 ASCII characters.</p>"));
 
     // --------------------------------------------------------
 
     QLabel *label4   = new QLabel(i18n("Copyright:"), tview);
     d->copyrightEdit = new KLineEdit(tview);
     d->copyrightEdit->setClearButtonShown(true);
-    d->copyrightEdit->setMaxLength(128);
     label4->setBuddy(d->copyrightEdit);
     d->copyrightEdit->setWhatsThis(i18n("<p>The Copyright Notice should contain any necessary copyright notice for claiming the intellectual "
                                         "property, and should identify the current owner(s) of the copyright for the photograph. Usually, "
@@ -170,8 +167,8 @@ SetupTemplate::SetupTemplate(QWidget* parent)
                                         "you would use: Copyright {Year} {Copyright owner}, all rights reserved. \nIn Japan, for maximum "
                                         "protection, the following three items should appear in the copyright field of the IPTC Core: "
                                         "(a) the word, Copyright; (b) year of the first publication; and (c) name of the author. "
-                                        "You may also wish to include the phrase \"all rights reserved.\"\n"
-                                        "This field is limited to 128 ASCII characters.</p>"));
+                                        "You may also wish to include the phrase \"all rights reserved\".</p>"
+                                        "<p>With IPTC, this field is limited to 128 ASCII characters.</p>"));
 
     // --------------------------------------------------------
 
@@ -186,7 +183,6 @@ SetupTemplate::SetupTemplate(QWidget* parent)
     QLabel *label6 = new QLabel(i18n("Source:"), tview);
     d->sourceEdit  = new KLineEdit(tview);
     d->sourceEdit->setClearButtonShown(true);
-    d->sourceEdit->setMaxLength(32);
     label6->setBuddy(d->sourceEdit);
     d->sourceEdit->setWhatsThis(i18n("<p>The Source field should be used to identify the original owner or copyright holder of the "
                                      "photograph. The value of this field should never be changed after the information is entered "
@@ -195,14 +191,14 @@ SetupTemplate::SetupTemplate(QWidget* parent)
                                      "member of an agency. To aid in later searches, it is suggested to separate any slashes "
                                      "\"/\" with a blank space. Use the form \"photographer / agency\" rather than "
                                      "\"photographer/agency.\" Source may also be different from Creator and from the names "
-                                     "listed in the Copyright Notice.\nThis field is limited to 32 ASCII characters.</p>"));
+                                     "listed in the Copyright Notice.</p>"
+                                     "<p>With IPTC, this field is limited to 32 ASCII characters.</p>"));
 
     // --------------------------------------------------------
 
     QLabel *label7      = new QLabel(i18n("Instructions:"), tview);
     d->instructionsEdit = new KLineEdit(tview);
     d->instructionsEdit->setClearButtonShown(true);
-    d->instructionsEdit->setMaxLength(256);
     label7->setBuddy(d->instructionsEdit);
 //TODO    d->instructionsEdit->setWhatsThis(i18n("<p></p>"));
 
