@@ -92,6 +92,7 @@ DigikamImageView::DigikamImageView(QWidget *parent)
     setDropIndicatorShown(false);
 
     setToolTipEnabled(AlbumSettings::instance()->getShowToolTips());
+    imageFilterModel()->setSortRole((ImageSortSettings::SortRole)AlbumSettings::instance()->getImageSortOrder());
 
     ImageRotateLeftOverlay *rotateLeftOverlay   = new ImageRotateLeftOverlay(this);
     addOverlay(rotateLeftOverlay);
