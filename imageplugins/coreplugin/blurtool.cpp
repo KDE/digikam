@@ -96,7 +96,7 @@ BlurTool::BlurTool(QObject* parent)
 
     QLabel *label  = new QLabel(i18n("Smoothness:"));
     d->radiusInput = new RDoubleNumInput();
-    d->radiusInput->setRange(0.0, 100.0, 0.1);
+    d->radiusInput->setRange(0.0, 120.0, 0.1);
     d->radiusInput->setDefaultValue(0.0);
     d->radiusInput->setWhatsThis(i18n("A smoothness of 0 has no effect, "
                                       "1 and above determine the Gaussian blur matrix radius "

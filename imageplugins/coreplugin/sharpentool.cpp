@@ -96,8 +96,8 @@ public:
 
     RIntNumInput*        matrixSize;
     RIntNumInput*        radiusInput;
-    RIntNumInput*        radiusInput2;
 
+    RDoubleNumInput*     radiusInput2;
     RDoubleNumInput*     radius;
     RDoubleNumInput*     gauss;
     RDoubleNumInput*     correlation;
@@ -175,10 +175,10 @@ SharpenTool::SharpenTool(QObject* parent)
     QGridLayout* grid2           = new QGridLayout(unsharpMaskSettings);
 
     QLabel *label2 = new QLabel(i18n("Radius:"), unsharpMaskSettings);
-    d->radiusInput2 = new RIntNumInput(unsharpMaskSettings);
-    d->radiusInput2->setRange(1, 120, 1);
-    d->radiusInput2->setSliderEnabled(true);
-    d->radiusInput2->setDefaultValue(1);
+    d->radiusInput2 = new RDoubleNumInput(unsharpMaskSettings);
+    d->radiusInput2->setRange(0.0, 120.0, 0.1, true);
+//    d->radiusInput2->setSliderEnabled(true);
+    d->radiusInput2->setDefaultValue(1.0);
     d->radiusInput2->setWhatsThis( i18n("Radius value is the Gaussian blur matrix radius value "
                                         "used to determines how much to blur the image.") );
 
