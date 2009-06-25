@@ -39,6 +39,8 @@
 // Local includes
 
 #include "imageinfo.h"
+#include "template.h"
+#include "templatemanager.h"
 #include "album.h"
 #include "albummanager.h"
 #include "albumsettings.h"
@@ -53,49 +55,58 @@ public:
 
     MetadataHubPriv()
     {
-        dateTimeStatus  = MetadataHub::MetadataInvalid;
-        ratingStatus    = MetadataHub::MetadataInvalid;
-        commentsStatus  = MetadataHub::MetadataInvalid;
+        dateTimeStatus   = MetadataHub::MetadataInvalid;
+        ratingStatus     = MetadataHub::MetadataInvalid;
+        commentsStatus   = MetadataHub::MetadataInvalid;
+        templateStatus   = MetadataHub::MetadataInvalid;
 
-        rating          = -1;
-        highestRating   = -1;
+        rating           = -1;
+        highestRating    = -1;
 
-        count           = 0;
+        count            = 0;
+        metadataTemplate = 0;
 
-        dbmode          = MetadataHub::ManagedTags;
+        dbmode           = MetadataHub::ManagedTags;
 
-        dateTimeChanged = false;
-        commentsChanged = false;
-        ratingChanged   = false;
-        tagsChanged     = false;
+        dateTimeChanged  = false;
+        commentsChanged  = false;
+        ratingChanged    = false;
+        templateChanged  = false;
+        tagsChanged      = false;
     }
 
-    bool                                   dateTimeChanged;
-    bool                                   commentsChanged;
-    bool                                   ratingChanged;
-    bool                                   tagsChanged;
+    bool                                  dateTimeChanged;
+    bool                                  commentsChanged;
+    bool                                  ratingChanged;
+    bool                                  templateChanged;
+    bool                                  tagsChanged;
 
-    int                                    rating;
-    int                                    highestRating;
-    int                                    count;
+    int                                   rating;
+    int                                   highestRating;
+    int                                   count;
 
-    QDateTime                              dateTime;
-    QDateTime                              lastDateTime;
+    QDateTime                             dateTime;
+    QDateTime                             lastDateTime;
 
-    KExiv2::AltLangMap                     comments;
+    KExiv2::AltLangMap                    comments;
 
-    QMap<TAlbum *, MetadataHub::TagStatus> tags;
+    Template*                             metadataTemplate;
 
-    QStringList                            tagList;
+    QMap<TAlbum*, MetadataHub::TagStatus> tags;
 
-    MetadataHub::Status                    dateTimeStatus;
-    MetadataHub::Status                    commentsStatus;
-    MetadataHub::Status                    ratingStatus;
-    MetadataHub::DatabaseMode              dbmode;
+    QStringList                           tagList;
+
+    MetadataHub::Status                   dateTimeStatus;
+    MetadataHub::Status                   commentsStatus;
+    MetadataHub::Status                   ratingStatus;
+    MetadataHub::Status                   templateStatus;
+    MetadataHub::DatabaseMode             dbmode;
 
     template <class T> void loadWithInterval(const T &data, T &storage, T &highestStorage, MetadataHub::Status& status);
     template <class T> void loadSingleValue(const T &data, T &storage, MetadataHub::Status& status);
 };
+
+// ------------------------------------------------------------------------------------------------
 
 MetadataWriteSettings::MetadataWriteSettings()
 {
@@ -103,8 +114,6 @@ MetadataWriteSettings::MetadataWriteSettings()
     saveDateTime        = false;
     saveRating          = false;
     saveTags            = false;
-    savePhotographerId  = false;
-    saveCredits         = false;
     writeRawFiles       = false;
     updateFileTimeStamp = false;
 }
@@ -115,17 +124,11 @@ MetadataWriteSettings::MetadataWriteSettings(AlbumSettings *albumSettings)
     saveDateTime        = albumSettings->getSaveDateTime();
     saveRating          = albumSettings->getSaveRating();
     saveTags            = albumSettings->getSaveTags();
-    savePhotographerId  = albumSettings->getSavePhotographerId();
-    saveCredits         = albumSettings->getSaveCredits();
     writeRawFiles       = albumSettings->getWriteRawFiles();
     updateFileTimeStamp = albumSettings->getUpdateFileTimeStamp();
-
-    Author              = albumSettings->getAuthor();
-    AuthorTitle         = albumSettings->getAuthorTitle();
-    Credit              = albumSettings->getCredit();
-    Source              = albumSettings->getSource();
-    Copyright           = albumSettings->getCopyright();
 }
+
+// ------------------------------------------------------------------------------------------
 
 MetadataHub::MetadataHub(DatabaseMode dbmode)
            : d(new MetadataHubPriv)
@@ -166,11 +169,16 @@ void MetadataHub::load(const ImageInfo& info)
         ImageComments comments = info.imageComments(access);
         commentMap             = comments.toAltLangMap();
     }
-    load(info.dateTime(), commentMap, info.rating());
+    Template *t=0;
+    {
+        ImageCopyright cr = info.imageCopyright();
+        t                 = TemplateManager::defaultManager()->findByContents(cr.toMetadataTemplate());
+    }
+    load(info.dateTime(), commentMap, info.rating(), t);
 
     AlbumManager *man = AlbumManager::instance();
     QList<int> tagIds = info.tagIds();
-    QList<TAlbum *> loadedTags;
+    QList<TAlbum*> loadedTags;
 
     if (d->dbmode == ManagedTags)
     {
@@ -202,6 +210,7 @@ void MetadataHub::load(const DMetadata& metadata)
     QStringList        keywords;
     QDateTime          datetime;
     int                rating;
+    Template*          t=0;
 
     // Try to get comments from image :
     // In first, from Xmp comments tag,
@@ -225,7 +234,9 @@ void MetadataHub::load(const DMetadata& metadata)
     // Try to get image rating from Xmp tag, or Iptc Urgency tag
     rating = metadata.getImageRating();
 
-    load(datetime, comments, rating);
+    t = TemplateManager::defaultManager()->findByContents(metadata.getMetadataTemplate());
+
+    load(datetime, comments, rating, t);
 
     // Try to get image tags from Xmp using digiKam namespace tags.
 
@@ -336,7 +347,7 @@ void MetadataHub::loadTags(const QStringList& loadedTagPaths)
 }
 
 // private common code to load dateTime, comment, rating
-void MetadataHub::load(const QDateTime& dateTime, const KExiv2::AltLangMap& comments, int rating)
+void MetadataHub::load(const QDateTime& dateTime, const KExiv2::AltLangMap& comments, int rating, Template* t)
 {
     if (dateTime.isValid())
     {
@@ -346,6 +357,8 @@ void MetadataHub::load(const QDateTime& dateTime, const KExiv2::AltLangMap& comm
     d->loadWithInterval<int>(rating, d->rating, d->highestRating, d->ratingStatus);
 
     d->loadSingleValue<KExiv2::AltLangMap>(comments, d->comments, d->commentsStatus);
+
+    d->loadSingleValue<Template*>(t, d->metadataTemplate, d->templateStatus);
 }
 
 // template method to share code for dateTime and rating
@@ -383,14 +396,14 @@ template <class T> void MetadataHubPriv::loadWithInterval(const T& data, T& stor
     }
 }
 
-// template method used by comment
+// template method used by comment and template
 template <class T> void MetadataHubPriv::loadSingleValue(const T& data, T& storage, MetadataHub::Status& status)
 {
     switch (status)
     {
         case MetadataHub::MetadataInvalid:
             storage = data;
-            status = MetadataHub::MetadataAvailable;
+            status  = MetadataHub::MetadataAvailable;
             break;
         case MetadataHub::MetadataAvailable:
             // we have two values. If they are equal, status is unchanged
@@ -411,9 +424,10 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
     bool changed = false;
 
     // find out in advance if we have something to write - needed for FullWriteIfChanged mode
-    bool saveComment  = d->commentsStatus == MetadataAvailable;
-    bool saveDateTime = d->dateTimeStatus == MetadataAvailable;
-    bool saveRating   = d->ratingStatus   == MetadataAvailable;
+    bool saveComment  = (d->commentsStatus == MetadataAvailable);
+    bool saveDateTime = (d->dateTimeStatus == MetadataAvailable);
+    bool saveRating   = (d->ratingStatus   == MetadataAvailable);
+    bool saveTemplate = (d->templateStatus == MetadataAvailable);
     bool saveTags     = false;
     for (QMap<TAlbum *, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
     {
@@ -432,6 +446,7 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
                            (saveComment  && d->commentsChanged) ||
                            (saveDateTime && d->dateTimeChanged) ||
                            (saveRating   && d->ratingChanged)   ||
+                           (saveTemplate && d->templateChanged) ||
                            (saveTags     && d->tagsChanged)
                          );
     else // PartialWrite
@@ -453,6 +468,35 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
     if (saveRating && (writeAllFields || d->ratingChanged))
     {
         info.setRating(d->rating);
+        changed = true;
+    }
+    if (saveTemplate && writeAllFields)
+    {
+        ImageCopyright cr = info.imageCopyright();
+        if (d->metadataTemplate == TemplateManager::defaultManager()->removeTemplate())
+        {
+            cr.removeCreators();
+            cr.removeProvider();
+            cr.removeCopyrightNotices();
+            cr.removeRightsUsageTerms();
+            cr.removeSource();
+            cr.removeCreatorJobTitle();
+            cr.removeInstructions();
+        }
+        if (d->metadataTemplate == TemplateManager::defaultManager()->unknowTemplate())
+        {
+            // Nothing to do.
+        }
+        else
+        {
+            cr.setAuthor(d->metadataTemplate->author());
+            cr.setCredit(d->metadataTemplate->credit());
+            cr.setRights(d->metadataTemplate->copyright(), "x-default", ImageCopyright::ReplaceAllEntries);
+            cr.setRightsUsageTerms(d->metadataTemplate->rightUsageTerms(), "x-default", ImageCopyright::ReplaceAllEntries);
+            cr.setSource(d->metadataTemplate->source());
+            cr.setAuthorsPosition(d->metadataTemplate->authorPosition());
+            cr.setInstructions(d->metadataTemplate->instructions());
+        }
         changed = true;
     }
 
@@ -496,7 +540,9 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
     bool saveComment  = (settings.saveComments && d->commentsStatus == MetadataAvailable);
     bool saveDateTime = (settings.saveDateTime && d->dateTimeStatus == MetadataAvailable);
     bool saveRating   = (settings.saveRating   && d->ratingStatus   == MetadataAvailable);
+    bool saveTemplate = (d->templateStatus == MetadataAvailable);
     bool saveTags     = false;
+
     if (settings.saveTags)
     {
         saveTags = false;
@@ -519,6 +565,7 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
                            (saveComment  && d->commentsChanged) ||
                            (saveDateTime && d->dateTimeChanged) ||
                            (saveRating   && d->ratingChanged)   ||
+                           (saveTemplate && d->templateChanged) ||
                            (saveTags     && d->tagsChanged)
                          );
     else // PartialWrite
@@ -540,6 +587,23 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
     {
         // Store Image rating as Iptc tag.
         dirty |= metadata.setImageRating(d->rating);
+    }
+
+    if (saveTemplate && (writeAllFields || d->templateChanged))
+    {
+        if (d->metadataTemplate == TemplateManager::defaultManager()->removeTemplate())
+        {
+            dirty |= metadata.removeMetadataTemplate();
+        }
+        else if (d->metadataTemplate == TemplateManager::defaultManager()->unknowTemplate())
+        {
+            // Nothing to do.
+        }
+        else
+        {
+            // Store metadata template as XMP tag.
+            dirty |= metadata.setMetadataTemplate(d->metadataTemplate);
+        }
     }
 
     if (saveTags && (writeAllFields || d->tagsChanged))
@@ -584,21 +648,6 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
 
         // We set Tags Path list in digiKam Xmp private namespace using tags path.
         dirty |= metadata.setImageTagsPath(newTagsPathList);
-    }
-
-    if (settings.savePhotographerId && writeAllFields)
-    {
-        // Store Photograph identity into the Iptc tags.
-        dirty |= metadata.setImagePhotographerId(settings.Author,
-                                                 settings.AuthorTitle);
-    }
-
-    if (settings.saveCredits && writeAllFields)
-    {
-        // Store Photograph identity into the Iptc tags.
-        dirty |= metadata.setImageCredits(settings.Credit,
-                                          settings.Source,
-                                          settings.Copyright);
     }
 
     return dirty;
@@ -660,7 +709,9 @@ bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataWriteSett
     bool saveComment  = (settings.saveComments && d->commentsStatus == MetadataAvailable);
     bool saveDateTime = (settings.saveDateTime && d->dateTimeStatus == MetadataAvailable);
     bool saveRating   = (settings.saveRating   && d->ratingStatus   == MetadataAvailable);
+    bool saveTemplate = (d->templateStatus == MetadataAvailable);
     bool saveTags     = false;
+
     if (settings.saveTags)
     {
         saveTags = false;
@@ -683,18 +734,18 @@ bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataWriteSett
                            (saveComment  && d->commentsChanged) ||
                            (saveDateTime && d->dateTimeChanged) ||
                            (saveRating   && d->ratingChanged)   ||
+                           (saveTemplate && d->templateChanged) ||
                            (saveTags     && d->tagsChanged)
                          );
     else // PartialWrite
         writeAllFields = false;
 
     return (
-            (saveComment && (writeAllFields || d->commentsChanged))  ||
+            (saveComment &&  (writeAllFields || d->commentsChanged)) ||
             (saveDateTime && (writeAllFields || d->dateTimeChanged)) ||
-            (saveRating && (writeAllFields || d->ratingChanged))     ||
-            (saveTags && (writeAllFields || d->tagsChanged))         ||
-            (settings.savePhotographerId && writeAllFields)          ||
-            (settings.saveCredits && writeAllFields)
+            (saveRating &&   (writeAllFields || d->ratingChanged))   ||
+            (saveTags &&     (writeAllFields || d->tagsChanged))     ||
+            (saveTemplate && (writeAllFields || d->templateChanged))
            );
 }
 
@@ -722,6 +773,11 @@ MetadataHub::Status MetadataHub::commentsStatus() const
 MetadataHub::Status MetadataHub::ratingStatus() const
 {
     return d->ratingStatus;
+}
+
+MetadataHub::Status MetadataHub::templateStatus() const
+{
+    return d->templateStatus;
 }
 
 MetadataHub::TagStatus MetadataHub::tagStatus(int albumId) const
@@ -763,6 +819,11 @@ bool MetadataHub::ratingChanged() const
     return d->ratingChanged;
 }
 
+bool MetadataHub::templateChanged() const
+{
+    return d->templateChanged;
+}
+
 bool MetadataHub::tagsChanged() const
 {
     return d->tagsChanged;
@@ -781,6 +842,11 @@ KExiv2::AltLangMap MetadataHub::comments() const
 int MetadataHub::rating() const
 {
     return d->rating;
+}
+
+Template* MetadataHub::metadataTemplate() const
+{
+    return d->metadataTemplate;
 }
 
 void MetadataHub::dateTimeInterval(QDateTime& lowest, QDateTime& highest) const
@@ -873,6 +939,13 @@ void MetadataHub::setRating(int rating, Status status)
     d->ratingChanged  = true;
 }
 
+void MetadataHub::setMetadataTemplate(Template* t, Status status)
+{
+    d->templateStatus   = status;
+    d->metadataTemplate = t;
+    d->templateChanged  = true;
+}
+
 void MetadataHub::setTag(TAlbum *tag, bool hasTag, Status status)
 {
     // DatabaseMode == ManagedTags is assumed
@@ -897,6 +970,7 @@ void MetadataHub::resetChanged()
     d->dateTimeChanged = false;
     d->commentsChanged = false;
     d->ratingChanged   = false;
+    d->templateChanged = false;
     d->tagsChanged     = false;
 }
 

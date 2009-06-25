@@ -73,6 +73,7 @@
 #include "scancontroller.h"
 #include "talbumlistview.h"
 #include "tagfilterview.h"
+#include "templateselector.h"
 #include "imageinfo.h"
 #include "imageattributeswatch.h"
 #include "metadatahub.h"
@@ -109,6 +110,7 @@ public:
         newTagEdit                 = 0;
         toggleAutoTags             = TagFilterView::NoToggleAuto;
         lastSelectedWidget         = 0;
+        templateSelector           = 0;
     }
 
     bool                           modified;
@@ -138,6 +140,8 @@ public:
     ImageInfoList                  currInfos;
 
     TAlbumListView                *tagsView;
+
+    TemplateSelector              *templateSelector;
 
     RatingWidget                  *ratingWidget;
 
@@ -174,6 +178,8 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     new QLabel(i18n("Rating:"), ratingBox);
     d->ratingWidget  = new RatingWidget(ratingBox);
     ratingBox->layout()->setAlignment(d->ratingWidget, Qt::AlignVCenter|Qt::AlignRight);
+
+    d->templateSelector = new TemplateSelector(settingsArea);
 
     // Tags view ---------------------------------------------------
 
@@ -231,14 +237,15 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
 
     // --------------------------------------------------
 
-    settingsLayout->addWidget(d->captionsEdit, 0, 0, 1, 2);
-    settingsLayout->addWidget(dateBox,         1, 0, 1, 2);
-    settingsLayout->addWidget(ratingBox,       2, 0, 1, 2);
-    settingsLayout->addWidget(d->newTagEdit,   3, 0, 1, 2);
-    settingsLayout->addWidget(d->tagsView,     4, 0, 1, 2);
-    settingsLayout->addWidget(tagsSearch,      5, 0, 1, 2);
-    settingsLayout->addWidget(buttonsBox,      6, 0, 1, 2);
-    settingsLayout->setRowStretch(4, 10);
+    settingsLayout->addWidget(d->captionsEdit,     0, 0, 1, 2);
+    settingsLayout->addWidget(dateBox,             1, 0, 1, 2);
+    settingsLayout->addWidget(ratingBox,           2, 0, 1, 2);
+    settingsLayout->addWidget(d->templateSelector, 3, 0, 1, 2);
+    settingsLayout->addWidget(d->newTagEdit,       4, 0, 1, 2);
+    settingsLayout->addWidget(d->tagsView,         5, 0, 1, 2);
+    settingsLayout->addWidget(tagsSearch,          6, 0, 1, 2);
+    settingsLayout->addWidget(buttonsBox,          7, 0, 1, 2);
+    settingsLayout->setRowStretch(5, 10);
     settingsLayout->setMargin(KDialog::spacingHint());
     settingsLayout->setSpacing(KDialog::spacingHint());
 
@@ -261,6 +268,9 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
 
     connect(d->ratingWidget, SIGNAL(signalRatingChanged(int)),
             this, SLOT(slotRatingChanged(int)));
+
+    connect(d->templateSelector, SIGNAL(signalTemplateSelected()),
+            this, SLOT(slotTemplateSelected()));
 
     connect(d->tagsView, SIGNAL(rightButtonClicked(Q3ListViewItem*, const QPoint &, int)),
             this, SLOT(slotRightButtonClicked(Q3ListViewItem*, const QPoint&, int)));
@@ -620,6 +630,7 @@ void ImageDescEditTab::setInfos(const ImageInfoList& infos)
     updateComments();
     updateRating();
     updateDate();
+    updateTemplate();
     updateTagsView();
     focusLastSelectedWidget();
 }
@@ -774,6 +785,13 @@ void ImageDescEditTab::slotDateTimeChanged(const QDateTime& dateTime)
     slotModified();
 }
 
+void ImageDescEditTab::slotTemplateSelected()
+{
+    d->hub.setMetadataTemplate(d->templateSelector->getTemplate());
+    setMetadataWidgetStatus(d->hub.templateStatus(), d->templateSelector);
+    slotModified();
+}
+
 void ImageDescEditTab::slotRatingChanged(int rating)
 {
     d->hub.setRating(rating);
@@ -839,6 +857,14 @@ void ImageDescEditTab::updateDate()
     d->dateTimeEdit->setDateTime(d->hub.dateTime());
     setMetadataWidgetStatus(d->hub.dateTimeStatus(), d->dateTimeEdit);
     d->dateTimeEdit->blockSignals(false);
+}
+
+void ImageDescEditTab::updateTemplate()
+{
+    d->templateSelector->blockSignals(true);
+    d->templateSelector->setTemplate(d->hub.metadataTemplate());
+    setMetadataWidgetStatus(d->hub.templateStatus(), d->templateSelector);
+    d->templateSelector->blockSignals(false);
 }
 
 void ImageDescEditTab::setMetadataWidgetStatus(int status, QWidget *widget)

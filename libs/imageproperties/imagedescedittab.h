@@ -83,6 +83,7 @@ private:
     void updateComments();
     void updateRating();
     void updateDate();
+    void updateTemplate();
     void updateRecentTags();
 
     void tagNew(TAlbum* parAlbum, const QString& _title=QString(), const QString& _icon=QString()) const;
@@ -108,6 +109,7 @@ private Q_SLOTS:
     void slotCommentChanged();
     void slotDateTimeChanged(const QDateTime& dateTime);
     void slotRatingChanged(int rating);
+    void slotTemplateSelected();
     void slotModified();
     void slotRightButtonClicked(Q3ListViewItem*, const QPoint &, int);
     void slotTagsSearchChanged(const SearchTextSettings&);

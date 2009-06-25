@@ -48,6 +48,7 @@ namespace Digikam
 
 class AlbumSettings;
 class ImageInfo;
+class Template;
 class TAlbum;
 class MetadataHubPriv;
 
@@ -71,21 +72,15 @@ public:
     */
     MetadataWriteSettings(AlbumSettings *albumsettings);
 
-    bool     saveComments;
-    bool     saveDateTime;
-    bool     saveRating;
-    bool     saveTags;
-    bool     savePhotographerId;
-    bool     saveCredits;
-    bool     writeRawFiles;
-    bool     updateFileTimeStamp;
-
-    QString  Author;
-    QString  AuthorTitle;
-    QString  Credit;
-    QString  Source;
-    QString  Copyright;
+    bool      saveComments;
+    bool      saveDateTime;
+    bool      saveRating;
+    bool      saveTags;
+    bool      writeRawFiles;
+    bool      updateFileTimeStamp;
 };
+
+// ----------------------------------------------------------------------------------------
 
 class MetadataHub
 {
@@ -265,7 +260,8 @@ public:
 
     Status dateTimeStatus() const;
     Status commentsStatus() const;
-    Status ratingStatus() const;
+    Status ratingStatus()   const;
+    Status templateStatus() const;
 
     TagStatus tagStatus(TAlbum *album) const;
     TagStatus tagStatus(int albumId) const;
@@ -277,8 +273,9 @@ public:
     */
     bool dateTimeChanged() const;
     bool commentsChanged() const;
-    bool ratingChanged() const;
-    bool tagsChanged() const;
+    bool ratingChanged()   const;
+    bool templateChanged() const;
+    bool tagsChanged()     const;
 
     /**
         Returns the dateTime.
@@ -300,7 +297,12 @@ public:
         If status is MetadataInvalid, -1 is returned.
     */
     int                 rating() const;
-
+    /**
+        Returns the metadata template.
+        If status is MetadataDisjoint, FIXME
+        If status is MetadataInvalid, 0 is returned.
+    */
+    Template* metadataTemplate() const;
     /**
         Returns the earliest and latest date.
         If status is MetadataAvailable, the values are the same.
@@ -347,6 +349,7 @@ public:
     void setDateTime(const QDateTime& dateTime, Status status = MetadataAvailable);
     void setComments(const KExiv2::AltLangMap& comments, Status status = MetadataAvailable);
     void setRating(int rating, Status status = MetadataAvailable);
+    void setMetadataTemplate(Template* t, Status status = MetadataAvailable);
     void setTag(TAlbum *tag, bool hasTag, Status status = MetadataAvailable);
     void setTag(int albumID, bool hasTag, Status status = MetadataAvailable);
 
@@ -358,7 +361,7 @@ public:
 
 private:
 
-    void load(const QDateTime& dateTime, const KExiv2::AltLangMap& comment, int rating);
+    void load(const QDateTime& dateTime, const KExiv2::AltLangMap& comment, int rating, Template* t);
     void loadTags(const QList<TAlbum *>& loadedTags);
     void loadTags(const QStringList& loadedTagPaths);
 
