@@ -82,8 +82,8 @@ TemplateSelector::TemplateSelector(QWidget* parent=0)
     d->templateCombo->setWhatsThis(i18n("<p>Select here the action to do with metadata template.</p>"
                                         "<p><b>To remove</b>: delete template already assigned.</p>"
                                         "<p><b>Don't change</b>: Do not touch template information.</p>"
-                                        "<p>All other value are title of template managed by digiKam. "
-                                        "Select one will assign template as well.</p>"));
+                                        "<p>All other values are template titles managed by digiKam. "
+                                        "Select one will assign information as well.</p>"));
 
     setSpacing(KDialog::spacingHint());
     setMargin(0);
