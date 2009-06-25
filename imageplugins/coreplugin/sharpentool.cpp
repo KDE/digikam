@@ -174,15 +174,14 @@ SharpenTool::SharpenTool(QObject* parent)
     QWidget *unsharpMaskSettings = new QWidget(d->stack);
     QGridLayout* grid2           = new QGridLayout(unsharpMaskSettings);
 
-    QLabel *label2 = new QLabel(i18n("Radius:"), unsharpMaskSettings);
+    QLabel *label2  = new QLabel(i18n("Radius:"), unsharpMaskSettings);
     d->radiusInput2 = new RDoubleNumInput(unsharpMaskSettings);
     d->radiusInput2->setRange(0.0, 120.0, 0.1, true);
-//    d->radiusInput2->setSliderEnabled(true);
     d->radiusInput2->setDefaultValue(1.0);
     d->radiusInput2->setWhatsThis( i18n("Radius value is the Gaussian blur matrix radius value "
                                         "used to determines how much to blur the image.") );
 
-    QLabel *label3 = new QLabel(i18n("Amount:"), unsharpMaskSettings);
+    QLabel *label3  = new QLabel(i18n("Amount:"), unsharpMaskSettings);
     d->amountInput  = new RDoubleNumInput(unsharpMaskSettings);
     d->amountInput->setDecimals(1);
     d->amountInput->input()->setRange(0.0, 5.0, 0.1, true);
@@ -190,7 +189,7 @@ SharpenTool::SharpenTool(QObject* parent)
     d->amountInput->setWhatsThis( i18n("The value of the difference between the "
                                        "original and the blur image that is added back into the original.") );
 
-    QLabel *label4   = new QLabel(i18n("Threshold:"), unsharpMaskSettings);
+    QLabel *label4    = new QLabel(i18n("Threshold:"), unsharpMaskSettings);
     d->thresholdInput = new RDoubleNumInput(unsharpMaskSettings);
     d->thresholdInput->setDecimals(2);
     d->thresholdInput->input()->setRange(0.0, 1.0, 0.01, true);
