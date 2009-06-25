@@ -56,6 +56,7 @@ void ImageLoaderTest::testLoadPNG()
     QCOMPARE((uint)src.height(),    dimg.height());
     QCOMPARE(src.hasAlphaChannel(), dimg.hasAlpha());
 
+    // compare image data
     dst = dimg.convertToPixmap().toImage().convertToFormat(src.format());
     QCOMPARE(src, dst);
 }
@@ -76,6 +77,7 @@ void ImageLoaderTest::testLoadJPG()
     QCOMPARE((uint)src.height(),    dimg.height());
     QCOMPARE(src.hasAlphaChannel(), dimg.hasAlpha());
 
+    // compare image data
     dst = dimg.convertToPixmap().toImage().convertToFormat(src.format());
     QCOMPARE(src, dst);
 }
