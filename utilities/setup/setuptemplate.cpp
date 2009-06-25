@@ -313,15 +313,15 @@ void SetupTemplate::slotSelectionChanged()
         return;
     }
 
-    Template *t = item->getTemplate();
-    d->titleEdit->setText(t->templateTitle());
-    d->authorsEdit->setText(t->authors().join(";"));
-    d->authorsPositionEdit->setText(t->authorsPosition());
-    d->creditEdit->setText(t->credit());
-    d->copyrightEdit->setText(t->copyright());
-    d->rightUsageEdit->setText(t->rightUsageTerms());
-    d->sourceEdit->setText(t->source());
-    d->instructionsEdit->setText(t->instructions());
+    Template t = item->getTemplate();
+    d->titleEdit->setText(t.templateTitle());
+    d->authorsEdit->setText(t.authors().join(";"));
+    d->authorsPositionEdit->setText(t.authorsPosition());
+    d->creditEdit->setText(t.credit());
+    d->copyrightEdit->setText(t.copyright());
+    d->rightUsageEdit->setText(t.rightUsageTerms());
+    d->sourceEdit->setText(t.source());
+    d->instructionsEdit->setText(t.instructions());
 
     d->delButton->setEnabled(true);
     d->repButton->setEnabled(true);
@@ -352,7 +352,7 @@ void SetupTemplate::slotAddTemplate()
     t.setRightUsageTerms(d->rightUsageEdit->text());
     t.setSource(d->sourceEdit->text());
     t.setInstructions(d->instructionsEdit->text());
-    new TemplateListItem(d->listView, &t);
+    new TemplateListItem(d->listView, t);
 }
 
 void SetupTemplate::slotDelTemplate()
@@ -383,7 +383,7 @@ void SetupTemplate::slotRepTemplate()
     t.setRightUsageTerms(d->rightUsageEdit->text());
     t.setSource(d->sourceEdit->text());
     t.setInstructions(d->instructionsEdit->text());
-    item->setTemplate(&t);
+    item->setTemplate(t);
 }
 
 }  // namespace Digikam

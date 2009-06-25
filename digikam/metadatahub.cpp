@@ -64,7 +64,6 @@ public:
         highestRating    = -1;
 
         count            = 0;
-        metadataTemplate = 0;
 
         dbmode           = MetadataHub::ManagedTags;
 
@@ -90,7 +89,7 @@ public:
 
     KExiv2::AltLangMap                    comments;
 
-    Template*                             metadataTemplate;
+    Template                              metadataTemplate;
 
     QMap<TAlbum*, MetadataHub::TagStatus> tags;
 
@@ -171,7 +170,7 @@ void MetadataHub::load(const ImageInfo& info)
         ImageComments comments = info.imageComments(access);
         commentMap             = comments.toAltLangMap();
     }
-    Template *t=0;
+    Template t;
     {
         ImageCopyright cr = info.imageCopyright();
         t                 = TemplateManager::defaultManager()->findByContents(cr.toMetadataTemplate());
@@ -212,7 +211,7 @@ void MetadataHub::load(const DMetadata& metadata)
     QStringList        keywords;
     QDateTime          datetime;
     int                rating;
-    Template*          t=0;
+    Template           t;
 
     // Try to get comments from image :
     // In first, from Xmp comments tag,
@@ -349,7 +348,7 @@ void MetadataHub::loadTags(const QStringList& loadedTagPaths)
 }
 
 // private common code to load dateTime, comment, rating
-void MetadataHub::load(const QDateTime& dateTime, const KExiv2::AltLangMap& comments, int rating, Template* t)
+void MetadataHub::load(const QDateTime& dateTime, const KExiv2::AltLangMap& comments, int rating, const Template& t)
 {
     if (dateTime.isValid())
     {
@@ -360,7 +359,7 @@ void MetadataHub::load(const QDateTime& dateTime, const KExiv2::AltLangMap& comm
 
     d->loadSingleValue<KExiv2::AltLangMap>(comments, d->comments, d->commentsStatus);
 
-    d->loadSingleValue<Template*>(t, d->metadataTemplate, d->templateStatus);
+    d->loadSingleValue<Template>(t, d->metadataTemplate, d->templateStatus);
 }
 
 // template method to share code for dateTime and rating
@@ -492,15 +491,15 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
         else
         {
             cr.removeCreators();
-            foreach(QString author, d->metadataTemplate->authors())
+            foreach(QString author, d->metadataTemplate.authors())
                 cr.setAuthor(author, ImageCopyright::AddEntryToExisting);
 
-            cr.setCredit(d->metadataTemplate->credit());
-            cr.setRights(d->metadataTemplate->copyright(), "x-default", ImageCopyright::ReplaceAllEntries);
-            cr.setRightsUsageTerms(d->metadataTemplate->rightUsageTerms(), "x-default", ImageCopyright::ReplaceAllEntries);
-            cr.setSource(d->metadataTemplate->source());
-            cr.setAuthorsPosition(d->metadataTemplate->authorsPosition());
-            cr.setInstructions(d->metadataTemplate->instructions());
+            cr.setCredit(d->metadataTemplate.credit());
+            cr.setRights(d->metadataTemplate.copyright(), "x-default", ImageCopyright::ReplaceAllEntries);
+            cr.setRightsUsageTerms(d->metadataTemplate.rightUsageTerms(), "x-default", ImageCopyright::ReplaceAllEntries);
+            cr.setSource(d->metadataTemplate.source());
+            cr.setAuthorsPosition(d->metadataTemplate.authorsPosition());
+            cr.setInstructions(d->metadataTemplate.instructions());
         }
         changed = true;
     }
@@ -849,7 +848,7 @@ int MetadataHub::rating() const
     return d->rating;
 }
 
-Template* MetadataHub::metadataTemplate() const
+Template MetadataHub::metadataTemplate() const
 {
     return d->metadataTemplate;
 }
@@ -944,7 +943,7 @@ void MetadataHub::setRating(int rating, Status status)
     d->ratingChanged  = true;
 }
 
-void MetadataHub::setMetadataTemplate(Template* t, Status status)
+void MetadataHub::setMetadataTemplate(const Template &t, Status status)
 {
     d->templateStatus   = status;
     d->metadataTemplate = t;

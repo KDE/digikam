@@ -46,7 +46,6 @@ public:
         autoRotate        = true;
         fixDateTime       = false;
         convertJpeg       = false;
-        metadataTemplate  = 0;
     };
 
     ~DownloadSettingsContainer(){};
@@ -68,7 +67,7 @@ public:
     QString   losslessFormat;
 
     // Metadata template settings
-    Template *metadataTemplate;
+    Template  metadataTemplate;
 };
 
 }  // namespace Digikam

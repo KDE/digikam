@@ -586,20 +586,20 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath) const
     return true;
 }
 
-bool DMetadata::setMetadataTemplate(Template* t) const
+bool DMetadata::setMetadataTemplate(const Template& t) const
 {
-    if (!t) return false;
+    if (t.isNull()) return false;
 
     if (!setProgramId())
         return false;
 
-    QStringList authors     = t->authors();
-    QString authorsPosition = t->authorsPosition();
-    QString credit          = t->credit();
-    QString source          = t->source();
-    QString copyright       = t->copyright();
-    QString rightUsage      = t->rightUsageTerms();
-    QString instructions    = t->instructions();
+    QStringList authors     = t.authors();
+    QString authorsPosition = t.authorsPosition();
+    QString credit          = t.credit();
+    QString source          = t.source();
+    QString copyright       = t.copyright();
+    QString rightUsage      = t.rightUsageTerms();
+    QString instructions    = t.instructions();
  
     // Set XMP tags. XMP<->IPTC Schema from Photoshop 7.0
 

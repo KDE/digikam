@@ -47,8 +47,8 @@ public:
     TemplateSelector(QWidget* parent);
     virtual ~TemplateSelector();
 
-    Template* getTemplate() const;
-    void      setTemplate(Template* t);
+    Template  getTemplate() const;
+    void      setTemplate(const Template& t);
 
     int  getTemplateIndex() const;
     void setTemplateIndex(int i);

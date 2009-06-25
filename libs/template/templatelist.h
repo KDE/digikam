@@ -28,26 +28,28 @@
 
 #include <QTreeWidget>
 
+// Local includes
+
+#include <template.h>
+
 namespace Digikam
 {
-
-class Template;
 
 class TemplateListItem : public QTreeWidgetItem
 {
 
 public:
 
-    TemplateListItem(QTreeWidget *parent, Template *t);
+    TemplateListItem(QTreeWidget *parent, const Template &t);
     ~TemplateListItem();
 
-    void setTemplate(Template *t);
+    void setTemplate(const Template &t);
 
-    Template* getTemplate() const;
+    Template getTemplate() const;
 
 private:
 
-    Template* m_template;
+    Template m_template;
 };
 
 // -------------------------------------------------------------------

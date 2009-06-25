@@ -303,7 +303,7 @@ public:
         If status is MetadataDisjoint, FIXME
         If status is MetadataInvalid, 0 is returned.
     */
-    Template* metadataTemplate() const;
+    Template metadataTemplate() const;
     /**
         Returns the earliest and latest date.
         If status is MetadataAvailable, the values are the same.
@@ -350,7 +350,7 @@ public:
     void setDateTime(const QDateTime& dateTime, Status status = MetadataAvailable);
     void setComments(const KExiv2::AltLangMap& comments, Status status = MetadataAvailable);
     void setRating(int rating, Status status = MetadataAvailable);
-    void setMetadataTemplate(Template* t, Status status = MetadataAvailable);
+    void setMetadataTemplate(const Template& t, Status status = MetadataAvailable);
     void setTag(TAlbum *tag, bool hasTag, Status status = MetadataAvailable);
     void setTag(int albumID, bool hasTag, Status status = MetadataAvailable);
 
@@ -362,7 +362,7 @@ public:
 
 private:
 
-    void load(const QDateTime& dateTime, const KExiv2::AltLangMap& comment, int rating, Template* t);
+    void load(const QDateTime& dateTime, const KExiv2::AltLangMap& comment, int rating, const Template& t);
     void loadTags(const QList<TAlbum *>& loadedTags);
     void loadTags(const QStringList& loadedTagPaths);
 

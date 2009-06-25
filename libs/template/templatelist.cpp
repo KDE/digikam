@@ -43,32 +43,28 @@
 namespace Digikam
 {
 
-TemplateListItem::TemplateListItem(QTreeWidget *parent, Template *t)
-                : QTreeWidgetItem(parent), m_template(0)
+TemplateListItem::TemplateListItem(QTreeWidget *parent, const Template &t)
+                : QTreeWidgetItem(parent)
 {
     setTemplate(t);
 }
 
 TemplateListItem::~TemplateListItem()
 {
-    delete m_template;
 }
 
-void TemplateListItem::setTemplate(Template *t)
+void TemplateListItem::setTemplate(const Template &t)
 {
-    if (m_template)
-        delete m_template;
+    m_template = t;
 
-    m_template = new Template(*t);
-
-    if (m_template)
+    if (!m_template.isNull())
     {
-        setText(0, m_template->templateTitle());
-        setText(1, m_template->authors().join(";"));
+        setText(0, m_template.templateTitle());
+        setText(1, m_template.authors().join(";"));
     }
 }
 
-Template* TemplateListItem::getTemplate() const
+Template TemplateListItem::getTemplate() const
 {
     return m_template;
 }
@@ -102,8 +98,8 @@ void TemplateList::readSettings()
     TemplateManager* tm = TemplateManager::defaultManager();
     if (tm)
     {
-        QList<Template*>* list = tm->templateList();
-        foreach (Template *t, *list)
+        QList<Template> list = tm->templateList();
+        foreach (const Template &t, list)
         {
             new TemplateListItem(this, t);
         }
@@ -123,10 +119,10 @@ void TemplateList::applySettings()
             TemplateListItem *item = dynamic_cast<TemplateListItem*>(*it);
             if (item)
             {
-                Template* t = item->getTemplate();
-                if (t)
+                Template t = item->getTemplate();
+                if (!t.isNull())
                 {
-                    tm->insert(new Template(*t));
+                    tm->insert(t);
                 }
             }
             ++it;
@@ -143,10 +139,10 @@ bool TemplateList::contains(const QString& title)
         TemplateListItem *item = dynamic_cast<TemplateListItem*>(*it);
         if (item)
         {
-            Template* t = item->getTemplate();
-            if (t)
+            Template t = item->getTemplate();
+            if (!t.isNull())
             {
-                if (t->templateTitle() == title)
+                if (t.templateTitle() == title)
                     return true;
             }
         }

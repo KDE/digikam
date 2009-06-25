@@ -98,10 +98,10 @@ TemplateSelector::TemplateSelector(QWidget* parent=0)
     TemplateManager* tm = TemplateManager::defaultManager();
     if (tm)
     {
-        connect(tm, SIGNAL(signalTemplateAdded(Template*)),
+        connect(tm, SIGNAL(signalTemplateAdded(const Template &)),
                 this, SLOT(slotTemplateListChanged()));
 
-        connect(tm, SIGNAL(signalTemplateRemoved(Template*)),
+        connect(tm, SIGNAL(signalTemplateRemoved(const Template &)),
                 this, SLOT(slotTemplateListChanged()));
     }
 
@@ -124,17 +124,17 @@ void TemplateSelector::populateTemplates()
     if (tm)
     {
         int i                  = 3;
-        QList<Template*>* list = tm->templateList();
+        QList<Template> list  = tm->templateList();
 
-        foreach (Template *t, *list)
+        foreach (const Template &t, list)
         {
-            d->templateCombo->insertSqueezedItem(t->templateTitle(), i);
+            d->templateCombo->insertSqueezedItem(t.templateTitle(), i);
             ++i;
         }
     }
 }
 
-Template* TemplateSelector::getTemplate() const
+Template TemplateSelector::getTemplate() const
 {
     TemplateManager* tm = TemplateManager::defaultManager();
     if (tm)
@@ -152,20 +152,20 @@ Template* TemplateSelector::getTemplate() const
                 break;
         }
     }
-    return 0;
+    return Template();
 }
 
-void TemplateSelector::setTemplate(Template *t)
+void TemplateSelector::setTemplate(const Template &t)
 {
     TemplateManager* tm = TemplateManager::defaultManager();
     if (tm)
     {
-        if (t)
+        if (!t.isNull())
         {
-            QString title = t->templateTitle();
-            if (title == tm->removeTemplate()->templateTitle())
+            QString title = t.templateTitle();
+            if (title == tm->removeTemplate().templateTitle())
                 return d->templateCombo->setCurrentIndex(0);
-            else if (title == tm->unknowTemplate()->templateTitle())
+            else if (title == tm->unknowTemplate().templateTitle())
                 return d->templateCombo->setCurrentIndex(1);
             else
                 return d->templateCombo->setCurrent(title);
