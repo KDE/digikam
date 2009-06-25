@@ -491,12 +491,15 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
         }
         else
         {
-            cr.setAuthor(d->metadataTemplate->author());
+            cr.removeCreators();
+            foreach(QString author, d->metadataTemplate->authors())
+                cr.setAuthor(author, ImageCopyright::AddEntryToExisting);
+
             cr.setCredit(d->metadataTemplate->credit());
             cr.setRights(d->metadataTemplate->copyright(), "x-default", ImageCopyright::ReplaceAllEntries);
             cr.setRightsUsageTerms(d->metadataTemplate->rightUsageTerms(), "x-default", ImageCopyright::ReplaceAllEntries);
             cr.setSource(d->metadataTemplate->source());
-            cr.setAuthorsPosition(d->metadataTemplate->authorPosition());
+            cr.setAuthorsPosition(d->metadataTemplate->authorsPosition());
             cr.setInstructions(d->metadataTemplate->instructions());
         }
         changed = true;

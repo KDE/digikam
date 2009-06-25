@@ -140,8 +140,8 @@ bool TemplateManager::load()
 
         Template *t = new Template();
         t->setTemplateTitle(e.attribute("templatetitle"));
-        t->setAuthor(e.attribute("author"));
-        t->setAuthorPosition(e.attribute("authorposition"));
+        t->setAuthors(e.attribute("authors").split(";", QString::SkipEmptyParts));
+        t->setAuthorsPosition(e.attribute("authorsposition"));
         t->setCredit(e.attribute("credit"));
         t->setCopyright(e.attribute("copyright"));
         t->setRightUsageTerms(e.attribute("rightusageterms"));
@@ -168,8 +168,8 @@ bool TemplateManager::save()
     {
         QDomElement elem = doc.createElement("item");
         elem.setAttribute("templatetitle",   t->templateTitle());
-        elem.setAttribute("author",          t->author());
-        elem.setAttribute("authorposition",  t->authorPosition());
+        elem.setAttribute("authors",         t->authors().join(";"));
+        elem.setAttribute("authorsposition", t->authorsPosition());
         elem.setAttribute("credit",          t->credit());
         elem.setAttribute("copyright",       t->copyright());
         elem.setAttribute("rightusageterms", t->rightUsageTerms());
@@ -252,7 +252,9 @@ Template* TemplateManager::findByContents(const Template& tref) const
     foreach (Template *t, d->pList)
     {
         if (*t == tref)
+        {
             return t;
+        }
     }
     return d->unknowTemplate;
 }

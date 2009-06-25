@@ -53,17 +53,17 @@ public:
 
     SetupTemplatePriv()
     {
-        authorEdit         = 0;
-        authorPositionEdit = 0;
-        creditEdit         = 0;
-        sourceEdit         = 0;
-        copyrightEdit      = 0;
-        rightUsageEdit     = 0;
-        instructionsEdit   = 0;
-        listView           = 0;
-        addButton          = 0;
-        delButton          = 0;
-        repButton          = 0;
+        authorsEdit         = 0;
+        authorsPositionEdit = 0;
+        creditEdit          = 0;
+        sourceEdit          = 0;
+        copyrightEdit       = 0;
+        rightUsageEdit      = 0;
+        instructionsEdit    = 0;
+        listView            = 0;
+        addButton           = 0;
+        delButton           = 0;
+        repButton           = 0;
     }
 
     QPushButton  *addButton;
@@ -71,8 +71,8 @@ public:
     QPushButton  *repButton;
 
     KLineEdit    *titleEdit;
-    KLineEdit    *authorEdit;
-    KLineEdit    *authorPositionEdit;
+    KLineEdit    *authorsEdit;
+    KLineEdit    *authorsPositionEdit;
     KLineEdit    *creditEdit;
     KLineEdit    *copyrightEdit;
     KLineEdit    *rightUsageEdit;
@@ -97,7 +97,7 @@ SetupTemplate::SetupTemplate(QWidget* parent)
     // --------------------------------------------------------
 
     QLabel *label0 = new QLabel(i18n("Template Tile:"), panel);
-    d->titleEdit  = new KLineEdit(panel);
+    d->titleEdit   = new KLineEdit(panel);
     d->titleEdit->setClearButtonShown(true);
     label0->setBuddy(d->titleEdit);
     d->titleEdit->setWhatsThis(i18n("<p>Enter here the metadata template title.</p>"));
@@ -112,24 +112,24 @@ SetupTemplate::SetupTemplate(QWidget* parent)
     templateSv->viewport()->setAutoFillBackground(false);
     QGridLayout* tgrid = new QGridLayout(tview);
 
-    QLabel *label1 = new QLabel(i18n("Author:"), tview);
-    d->authorEdit  = new KLineEdit(tview);
-    d->authorEdit->setClearButtonShown(true);
-    label1->setBuddy(d->authorEdit);
-    d->authorEdit->setWhatsThis(i18n("<p>This field should contain your name, or the name of the person who created the photograph. "
-                                     "If it is not appropriate to add the name of the photographer (for example, if the identify of "
-                                     "the photographer needs to be protected) the name of a company or organization can also be used. "
-                                     "Once saved, this field should not be changed by anyone. This field does not support the use of "
-                                     "commas or semi-colons as separators.</p>"
-                                     "<p>With IPTC, this field is limited to 32 ASCII characters.</p>"));
+    QLabel *label1 = new QLabel(i18n("Authors:"), tview);
+    d->authorsEdit = new KLineEdit(tview);
+    d->authorsEdit->setClearButtonShown(true);
+    label1->setBuddy(d->authorsEdit);
+    d->authorsEdit->setWhatsThis(i18n("<p>This field should contain names of the persons who created the photograph. "
+                                      "If it is not appropriate to add the name of the photographer (for example, if the identify of "
+                                      "the photographer needs to be protected) the name of a company or organization can also be used. "
+                                      "Once saved, this field should not be changed by anyone. "
+                                      "To enter more than one name, use semi-colons as separators.</p>"
+                                      "<p>With IPTC, this field is limited to 32 ASCII characters.</p>"));
 
     // --------------------------------------------------------
 
-    QLabel *label2        = new QLabel(i18n("Author Position:"), tview);
-    d->authorPositionEdit = new KLineEdit(tview);
-    d->authorPositionEdit->setClearButtonShown(true);
-    label2->setBuddy(d->authorPositionEdit);
-    d->authorPositionEdit->setWhatsThis(i18n("<p>This field should contain the job title of the photographer. Examples might include "
+    QLabel *label2         = new QLabel(i18n("Authors Position:"), tview);
+    d->authorsPositionEdit = new KLineEdit(tview);
+    d->authorsPositionEdit->setClearButtonShown(true);
+    label2->setBuddy(d->authorsPositionEdit);
+    d->authorsPositionEdit->setWhatsThis(i18n("<p>This field should contain the job title of the photographer. Examples might include "
                                              "titles such as: Staff Photographer, Freelance Photographer, or Independent Commercial "
                                              "Photographer. Since this is a qualifier for the Author field, the Author field must also "
                                              "be filled out.</p>"
@@ -207,20 +207,20 @@ SetupTemplate::SetupTemplate(QWidget* parent)
     tgrid->setSpacing(KDialog::spacingHint());
     tgrid->setAlignment(Qt::AlignTop);
     tgrid->setColumnStretch(1, 10);
-    tgrid->addWidget(label1,                0, 0, 1, 1);
-    tgrid->addWidget(d->authorEdit,         0, 1, 1, 2);
-    tgrid->addWidget(label2,                1, 0, 1, 1);
-    tgrid->addWidget(d->authorPositionEdit, 1, 1, 1, 2);
-    tgrid->addWidget(label3,                2, 0, 1, 1);
-    tgrid->addWidget(d->creditEdit,         2, 1, 1, 2);
-    tgrid->addWidget(label4,                3, 0, 1, 1);
-    tgrid->addWidget(d->copyrightEdit,      3, 1, 1, 2);
-    tgrid->addWidget(label5,                4, 0, 1, 1);
-    tgrid->addWidget(d->rightUsageEdit,     4, 1, 1, 2);
-    tgrid->addWidget(label6,                5, 0, 1, 1);
-    tgrid->addWidget(d->sourceEdit,         5, 1, 1, 2);
-    tgrid->addWidget(label7,                6, 0, 1, 1);
-    tgrid->addWidget(d->instructionsEdit,   6, 1, 1, 2);
+    tgrid->addWidget(label1,                 0, 0, 1, 1);
+    tgrid->addWidget(d->authorsEdit,         0, 1, 1, 2);
+    tgrid->addWidget(label2,                 1, 0, 1, 1);
+    tgrid->addWidget(d->authorsPositionEdit, 1, 1, 1, 2);
+    tgrid->addWidget(label3,                 2, 0, 1, 1);
+    tgrid->addWidget(d->creditEdit,          2, 1, 1, 2);
+    tgrid->addWidget(label4,                 3, 0, 1, 1);
+    tgrid->addWidget(d->copyrightEdit,       3, 1, 1, 2);
+    tgrid->addWidget(label5,                 4, 0, 1, 1);
+    tgrid->addWidget(d->rightUsageEdit,      4, 1, 1, 2);
+    tgrid->addWidget(label6,                 5, 0, 1, 1);
+    tgrid->addWidget(d->sourceEdit,          5, 1, 1, 2);
+    tgrid->addWidget(label7,                 6, 0, 1, 1);
+    tgrid->addWidget(d->instructionsEdit,    6, 1, 1, 2);
 
     // --------------------------------------------------------
 
@@ -298,17 +298,6 @@ void SetupTemplate::applySettings()
 void SetupTemplate::readSettings()
 {
     d->listView->readSettings();
-
-/*
-    AlbumSettings* settings = AlbumSettings::instance();
-    if (!settings) return;
-
-    d->authorEdit->setText(settings->getAuthor());
-    d->authorTitleEdit->setText(settings->getAuthorTitle());
-    d->creditEdit->setText(settings->getCredit());
-    d->sourceEdit->setText(settings->getSource());
-    d->copyrightEdit->setText(settings->getCopyright());
-*/
 }
 
 void SetupTemplate::slotSelectionChanged()
@@ -323,8 +312,8 @@ void SetupTemplate::slotSelectionChanged()
 
     Template *t = item->getTemplate();
     d->titleEdit->setText(t->templateTitle());
-    d->authorEdit->setText(t->author());
-    d->authorPositionEdit->setText(t->authorPosition());
+    d->authorsEdit->setText(t->authors().join(";"));
+    d->authorsPositionEdit->setText(t->authorsPosition());
     d->creditEdit->setText(t->credit());
     d->copyrightEdit->setText(t->copyright());
     d->rightUsageEdit->setText(t->rightUsageTerms());
@@ -353,8 +342,8 @@ void SetupTemplate::slotAddTemplate()
 
     Template t;
     t.setTemplateTitle(d->titleEdit->text());
-    t.setAuthor(d->authorEdit->text());
-    t.setAuthorPosition(d->authorPositionEdit->text());
+    t.setAuthors(d->authorsEdit->text().split(";", QString::SkipEmptyParts));
+    t.setAuthorsPosition(d->authorsPositionEdit->text());
     t.setCredit(d->creditEdit->text());
     t.setCopyright(d->copyrightEdit->text());
     t.setRightUsageTerms(d->rightUsageEdit->text());
@@ -384,8 +373,8 @@ void SetupTemplate::slotRepTemplate()
 
     Template t;
     t.setTemplateTitle(title);
-    t.setAuthor(d->authorEdit->text());
-    t.setAuthorPosition(d->authorPositionEdit->text());
+    t.setAuthors(d->authorsEdit->text().split(";", QString::SkipEmptyParts));
+    t.setAuthorsPosition(d->authorsPositionEdit->text());
     t.setCredit(d->creditEdit->text());
     t.setCopyright(d->copyrightEdit->text());
     t.setRightUsageTerms(d->rightUsageEdit->text());

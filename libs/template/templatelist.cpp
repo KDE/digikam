@@ -64,7 +64,7 @@ void TemplateListItem::setTemplate(Template *t)
     if (m_template)
     {
         setText(0, m_template->templateTitle());
-        setText(1, m_template->author());
+        setText(1, m_template->authors().join(";"));
     }
 }
 
@@ -86,8 +86,8 @@ TemplateList::TemplateList(QWidget* parent)
     setWhatsThis(i18n("Here you can see the metadata template list managed by digiKam."));
 
     QStringList labels;
-    labels.append( i18n("Title") );
-    labels.append( i18n("Author") );
+    labels.append(i18n("Title"));
+    labels.append(i18n("Authors"));
     setHeaderLabels(labels);
     header()->setResizeMode(0, QHeaderView::ResizeToContents);
     header()->setResizeMode(1, QHeaderView::Stretch);

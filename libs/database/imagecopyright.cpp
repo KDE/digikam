@@ -7,6 +7,7 @@
  * Description : Access to copyright info of an image in the database
  *
  * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -295,8 +296,8 @@ int ImageCopyright::languageMatch(const QList<CopyrightInfo> infos, const QStrin
 Template ImageCopyright::toMetadataTemplate()
 {
     Template t;
-    t.setAuthor(author().isEmpty() ? QString() : author()[0]);
-    t.setAuthorPosition(authorsPosition());
+    t.setAuthors(author());
+    t.setAuthorsPosition(authorsPosition());
     t.setCredit(credit());
     t.setCopyright(rights("x-default"));
     t.setRightUsageTerms(rightsUsageTerms("x-default"));

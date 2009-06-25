@@ -593,25 +593,25 @@ bool DMetadata::setMetadataTemplate(Template* t) const
     if (!setProgramId())
         return false;
 
-    QString author         = t->author();
-    QString authorPosition = t->authorPosition();
-    QString credit         = t->credit();
-    QString source         = t->source();
-    QString copyright      = t->copyright();
-    QString rightUsage     = t->rightUsageTerms();
-    QString instructions   = t->instructions();
-
+    QStringList authors     = t->authors();
+    QString authorsPosition = t->authorsPosition();
+    QString credit          = t->credit();
+    QString source          = t->source();
+    QString copyright       = t->copyright();
+    QString rightUsage      = t->rightUsageTerms();
+    QString instructions    = t->instructions();
+ 
     // Set XMP tags. XMP<->IPTC Schema from Photoshop 7.0
 
     if (supportXmp())
     {
-        if (!setXmpTagStringSeq("Xmp.dc.creator", QStringList() << author, false))
+        if (!setXmpTagStringSeq("Xmp.dc.creator", authors, false))
             return false;
 
-        if (!setXmpTagStringSeq("Xmp.tiff.Artist", QStringList() << author, false))
+        if (!setXmpTagStringSeq("Xmp.tiff.Artist", authors, false))
             return false;
 
-        if (!setXmpTagString("Xmp.photoshop.AuthorsPosition", authorPosition, false))
+        if (!setXmpTagString("Xmp.photoshop.AuthorsPosition", authorsPosition, false))
             return false;
 
         if (!setXmpTagString("Xmp.photoshop.Credit", credit, false))
@@ -638,12 +638,15 @@ bool DMetadata::setMetadataTemplate(Template* t) const
 
     // Set IPTC tags.
 
-    if (!setIptcTag(author,         32, "Author",       "Iptc.Application2.Byline"))              return false;
-    if (!setIptcTag(authorPosition, 32, "Author Title", "Iptc.Application2.BylineTitle"))         return false;
-    if (!setIptcTag(credit,         32, "Credit",       "Iptc.Application2.Credit"))              return false;
-    if (!setIptcTag(source,         32, "Source",       "Iptc.Application2.Source"))              return false;
-    if (!setIptcTag(copyright,     128, "Copyright",    "Iptc.Application2.Copyright"))           return false;
-    if (!setIptcTag(instructions,  256, "Instructions", "Iptc.Application2.SpecialInstructions")) return false;
+    if (!setIptcTagsStringList("Iptc.Application2.Byline", 32,
+                               getIptcTagsStringList("Iptc.Application2.Byline"), 
+                               authors, false)) return false;
+
+    if (!setIptcTag(authorsPosition, 32, "Authors Title", "Iptc.Application2.BylineTitle"))         return false;
+    if (!setIptcTag(credit,          32, "Credit",        "Iptc.Application2.Credit"))              return false;
+    if (!setIptcTag(source,          32, "Source",        "Iptc.Application2.Source"))              return false;
+    if (!setIptcTag(copyright,      128, "Copyright",     "Iptc.Application2.Copyright"))           return false;
+    if (!setIptcTag(instructions,   256, "Instructions",  "Iptc.Application2.SpecialInstructions")) return false;
 
     return true;
 }
@@ -674,9 +677,8 @@ bool DMetadata::removeMetadataTemplate() const
 Template DMetadata::getMetadataTemplate() const
 {
     Template t;
-    QStringList authors = getXmpTagStringSeq("Xmp.dc.creator");
-    t.setAuthor(authors.isEmpty() ? QString() : authors[0]);
-    t.setAuthorPosition(getXmpTagString("Xmp.photoshop.AuthorsPosition"));
+    t.setAuthors(getXmpTagStringSeq("Xmp.dc.creator"));
+    t.setAuthorsPosition(getXmpTagString("Xmp.photoshop.AuthorsPosition"));
     t.setCredit(getXmpTagString("Xmp.photoshop.Credit"));
     t.setSource(getXmpTagString("Xmp.dc.source"));
     t.setCopyright(getXmpTagStringLangAlt("Xmp.dc.rights", "x-default", false));

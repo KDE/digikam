@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QString>
+#include <QStringList>
 
 // Local includes
 
@@ -54,21 +55,21 @@ public:
     void setTemplateTitle(const QString& title);
     QString templateTitle() const;
 
-    void setAuthor(const QString& author);
-    void setAuthorPosition(const QString& authorPosition);
+    void setAuthors(const QStringList& authors);
+    void setAuthorsPosition(const QString& authorPosition);
     void setCredit(const QString& credit);
     void setCopyright(const QString& copyright);
     void setRightUsageTerms(const QString& rightUsageTerms);
     void setSource(const QString& source);
     void setInstructions(const QString& instructions);
 
-    QString author()          const;
-    QString authorPosition()  const;
-    QString credit()          const;
-    QString copyright()       const;
-    QString rightUsageTerms() const;
-    QString source()          const;
-    QString instructions()    const;
+    QStringList authors()         const;
+    QString     authorsPosition() const;
+    QString     credit()          const;
+    QString     copyright()       const;
+    QString     rightUsageTerms() const;
+    QString     source()          const;
+    QString     instructions()    const;
 
 private:
 

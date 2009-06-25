@@ -33,16 +33,16 @@ public:
     TemplatePrivate(){}
 
     // template title used internaly
-    QString templateTitle;
+    QString     templateTitle;
 
     // Metadata strings recorded to DB and XMP
-    QString author;
-    QString authorPosition;
-    QString credit;
-    QString copyright;
-    QString rightUsageTerms;
-    QString source;
-    QString instructions;
+    QStringList authors;
+    QString     authorsPosition;
+    QString     credit;
+    QString     copyright;
+    QString     rightUsageTerms;
+    QString     source;
+    QString     instructions;
 };
 
 Template::Template()
@@ -59,8 +59,8 @@ Template::Template(const Template& t)
         : d(new TemplatePrivate)
 {
     setTemplateTitle(t.d->templateTitle);
-    setAuthor(t.d->author);
-    setAuthorPosition(t.d->authorPosition);
+    setAuthors(t.d->authors);
+    setAuthorsPosition(t.d->authorsPosition);
     setCredit(t.d->credit);
     setCopyright(t.d->copyright);
     setRightUsageTerms(t.d->rightUsageTerms);
@@ -73,8 +73,8 @@ Template& Template::operator=(const Template& t)
     if (this != &t)
     {
         setTemplateTitle(t.d->templateTitle);
-        setAuthor(t.d->author);
-        setAuthorPosition(t.d->authorPosition);
+        setAuthors(t.d->authors);
+        setAuthorsPosition(t.d->authorsPosition);
         setCredit(t.d->credit);
         setCopyright(t.d->copyright);
         setRightUsageTerms(t.d->rightUsageTerms);
@@ -86,13 +86,13 @@ Template& Template::operator=(const Template& t)
 
 bool Template::operator==(const Template& t) const
 {
-    return d->author          == t.d->author
-        && d->authorPosition  == t.d->authorPosition
-        && d->credit          == t.d->credit
-        && d->copyright       == t.d->copyright
-        && d->rightUsageTerms == t.d->rightUsageTerms
-        && d->source          == t.d->source
-        && d->instructions    == t.d->instructions
+    return d->authors          == t.d->authors
+        && d->authorsPosition  == t.d->authorsPosition
+        && d->credit           == t.d->credit
+        && d->copyright        == t.d->copyright
+        && d->rightUsageTerms  == t.d->rightUsageTerms
+        && d->source           == t.d->source
+        && d->instructions     == t.d->instructions
       ;
 }
 
@@ -106,14 +106,15 @@ QString Template::templateTitle() const
     return d->templateTitle;
 }
 
-void Template::setAuthor(const QString& author)
+void Template::setAuthors(const QStringList& authors)
 {
-    d->author = author;
+    d->authors = authors;
+    d->authors.sort();
 }
 
-void Template::setAuthorPosition(const QString& authorPosition)
+void Template::setAuthorsPosition(const QString& authorsPosition)
 {
-    d->authorPosition = authorPosition;
+    d->authorsPosition = authorsPosition;
 }
 
 void Template::setCredit(const QString& credit)
@@ -141,14 +142,14 @@ void Template::setInstructions(const QString& instructions)
     d->instructions = instructions;
 }
 
-QString Template::author() const
+QStringList Template::authors() const
 {
-    return d->author;
+    return d->authors;
 }
 
-QString Template::authorPosition() const
+QString Template::authorsPosition() const
 {
-    return d->authorPosition;
+    return d->authorsPosition;
 }
 
 QString Template::credit() const
