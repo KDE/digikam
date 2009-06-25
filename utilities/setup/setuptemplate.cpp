@@ -176,7 +176,8 @@ SetupTemplate::SetupTemplate(QWidget* parent)
     d->rightUsageEdit = new KLineEdit(tview);
     d->rightUsageEdit->setClearButtonShown(true);
     label5->setBuddy(d->rightUsageEdit);
-//TODO    d->rightUsageEdit->setWhatsThis(i18n("<p></p>"));
+    d->rightUsageEdit->setWhatsThis(i18n("<p>The Right Usage Terms field should be used to list instructions on how "
+                                         "a resource can be legally used. This field do not exist in IPTC.</p>"));
 
     // --------------------------------------------------------
 
@@ -200,7 +201,9 @@ SetupTemplate::SetupTemplate(QWidget* parent)
     d->instructionsEdit = new KLineEdit(tview);
     d->instructionsEdit->setClearButtonShown(true);
     label7->setBuddy(d->instructionsEdit);
-//TODO    d->instructionsEdit->setWhatsThis(i18n("<p></p>"));
+    d->instructionsEdit->setWhatsThis(i18n("<p>The Instructions field should be used to list editorial "
+                                           "instructions concerning the use of photograph.</p>"
+                                           "<p>With IPTC, this field is limited to 256 ASCII characters.</p>"));
 
 
     tgrid->setMargin(KDialog::spacingHint());
