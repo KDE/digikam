@@ -60,6 +60,7 @@ extern "C"
 
 // Local includes
 
+#include "templatemanager.h"
 #include "thumbnailsize.h"
 #include "imagewindow.h"
 #include "gpcamera.h"
@@ -532,9 +533,23 @@ void CameraController::executeCommand(CameraCommand *cmd)
                     if (fixDateTime)
                         metadata.setImageDateTime(newDateTime, true);
 
-                    if (t)
-                        metadata.setMetadataTemplate(t);
-
+                    TemplateManager* tm = TemplateManager::defaultManager();
+                    if (tm && t)
+                    {
+                        QString title = t->templateTitle();
+                        if (title == tm->removeTemplate()->templateTitle())
+                        {
+                            metadata.removeMetadataTemplate();
+                        }
+                        else if (title == tm->unknowTemplate()->templateTitle())
+                        {
+                            // Nothing to do.
+                        }
+                        else
+                        {
+                            metadata.setMetadataTemplate(t);
+                        }
+                    }
                     metadata.applyChanges();
                 }
 
