@@ -418,18 +418,32 @@ void ManualRenameInputTest::testEmptyParseString()
     QString filename("myfilename001.jpg");
     QDateTime curdate = QDateTime::currentDateTime();
 
+    // for tests with the bound parse method
+    ManualRenameInput mrename;
+
     // test for empty parser string
     QString parsed = ManualRenameInput::parser(QString(), filename, QString(), curdate, 1);
+    QCOMPARE(parsed, QString("myfilename001"));
+    parsed = mrename.parse(filename, QString(), curdate, 1);
     QCOMPARE(parsed, QString("myfilename001"));
 
     parsed = ManualRenameInput::parser(QString(""), filename, QString(), curdate, 1);
     QCOMPARE(parsed, QString("myfilename001"));
+    mrename.setText("");
+    parsed = mrename.parse(filename, QString(), curdate, 1);
+    QCOMPARE(parsed, QString("myfilename001"));
 
     parsed = ManualRenameInput::parser(QString("   "), filename, QString(), curdate, 1);
+    QCOMPARE(parsed, QString("myfilename001"));
+    mrename.setText("   ");
+    parsed = mrename.parse(filename, QString(), curdate, 1);
     QCOMPARE(parsed, QString("myfilename001"));
 
     // the following is not invalid
     parsed = ManualRenameInput::parser(QString("  %_##"), filename, QString(), curdate, 1);
+    QCOMPARE(parsed, QString("  myfilename001_01"));
+    mrename.setText("  %_##");
+    parsed = mrename.parse(filename, QString(), curdate, 1);
     QCOMPARE(parsed, QString("  myfilename001_01"));
 }
 
