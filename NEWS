@@ -61,7 +61,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 047 ==> 152199 : Deleting tags can leave orphaned IPTC keywords inside files.
 048 ==> 197285 : Understand keyword hierarchies with different delimitors.
 049 ==> 197640 : Add the "New folder" Option while dragging items to folders.
-050 ==> 
+050 ==> 197744 : Lists of languages miss en-US.
+051 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta1 - Release date: 2009-06-07
