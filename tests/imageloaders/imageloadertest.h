@@ -36,6 +36,7 @@ private Q_SLOTS:
 
     void testLoadPNG();
     void testLoadJPG();
+    void testLoadTIFF();
 };
 
 #endif /* IMAGELOADERTEST_H_ */

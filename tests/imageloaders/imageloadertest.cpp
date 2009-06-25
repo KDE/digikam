@@ -81,3 +81,24 @@ void ImageLoaderTest::testLoadJPG()
     dst = dimg.convertToPixmap().toImage().convertToFormat(src.format());
     QCOMPARE(src, dst);
 }
+
+void ImageLoaderTest::testLoadTIFF()
+{
+    QString filename(KDESRCDIR"/test.tif");
+    QImage src(filename);
+    QImage dst;
+    bool success = true;
+
+    DImg dimg;
+    success = dimg.load(filename);
+    QVERIFY(success);
+
+    // compare basic values
+    QCOMPARE((uint)src.width(),     dimg.width());
+    QCOMPARE((uint)src.height(),    dimg.height());
+    QCOMPARE(src.hasAlphaChannel(), dimg.hasAlpha());
+
+    // compare image data
+    dst = dimg.convertToPixmap().toImage().convertToFormat(src.format());
+    QCOMPARE(src, dst);
+}
