@@ -72,9 +72,6 @@ public:
     bool getImageTagsPath(QStringList& tagsPath) const;
     bool setImageTagsPath(const QStringList& tagsPath) const;
 
-    KDE_DEPRECATED bool setImagePhotographerId(const QString& author, const QString& authorTitle) const;
-    KDE_DEPRECATED bool setImageCredits(const QString& credit, const QString& source, const QString& copyright) const;
-
     bool     setMetadataTemplate(Template* t) const;
     Template getMetadataTemplate() const;
     bool     removeMetadataTemplate() const;
