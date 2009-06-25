@@ -46,135 +46,109 @@ public:
 };
 
 Template::Template()
-        : d(new TemplatePrivate)
 {
 }
 
 Template::~Template()
 {
-    delete d;
 }
 
-Template::Template(const Template& t)
-        : d(new TemplatePrivate)
+bool Template::isNull() const
 {
-    setTemplateTitle(t.d->templateTitle);
-    setAuthors(t.d->authors);
-    setAuthorsPosition(t.d->authorsPosition);
-    setCredit(t.d->credit);
-    setCopyright(t.d->copyright);
-    setRightUsageTerms(t.d->rightUsageTerms);
-    setSource(t.d->source);
-    setInstructions(t.d->instructions);
-}
-
-Template& Template::operator=(const Template& t)
-{
-    if (this != &t)
-    {
-        setTemplateTitle(t.d->templateTitle);
-        setAuthors(t.d->authors);
-        setAuthorsPosition(t.d->authorsPosition);
-        setCredit(t.d->credit);
-        setCopyright(t.d->copyright);
-        setRightUsageTerms(t.d->rightUsageTerms);
-        setSource(t.d->source);
-        setInstructions(t.d->instructions);
-    }
-    return *this;
+    return m_templateTitle.isNull();
 }
 
 bool Template::operator==(const Template& t) const
 {
-    return d->authors          == t.d->authors
-        && d->authorsPosition  == t.d->authorsPosition
-        && d->credit           == t.d->credit
-        && d->copyright        == t.d->copyright
-        && d->rightUsageTerms  == t.d->rightUsageTerms
-        && d->source           == t.d->source
-        && d->instructions     == t.d->instructions
+    return m_authors          == t.m_authors
+        && m_authorsPosition  == t.m_authorsPosition
+        && m_credit           == t.m_credit
+        && m_copyright        == t.m_copyright
+        && m_rightUsageTerms  == t.m_rightUsageTerms
+        && m_source           == t.m_source
+        && m_instructions     == t.m_instructions
       ;
 }
 
 void Template::setTemplateTitle(const QString& title)
 {
-    d->templateTitle = title;
+    m_templateTitle = title;
 }
 
 QString Template::templateTitle() const
 {
-    return d->templateTitle;
+    return m_templateTitle;
 }
 
 void Template::setAuthors(const QStringList& authors)
 {
-    d->authors = authors;
-    d->authors.sort();
+    m_authors = authors;
+    m_authors.sort();
 }
 
 void Template::setAuthorsPosition(const QString& authorsPosition)
 {
-    d->authorsPosition = authorsPosition;
+    m_authorsPosition = authorsPosition;
 }
 
 void Template::setCredit(const QString& credit)
 {
-    d->credit = credit;
+    m_credit = credit;
 }
 
 void Template::setCopyright(const QString& copyright)
 {
-    d->copyright = copyright;
+    m_copyright = copyright;
 }
 
 void Template::setRightUsageTerms(const QString& rightUsageTerms)
 {
-    d->rightUsageTerms = rightUsageTerms;
+    m_rightUsageTerms = rightUsageTerms;
 }
 
 void Template::setSource(const QString& source)
 {
-    d->source = source;
+    m_source = source;
 }
 
 void Template::setInstructions(const QString& instructions)
 {
-    d->instructions = instructions;
+    m_instructions = instructions;
 }
 
 QStringList Template::authors() const
 {
-    return d->authors;
+    return m_authors;
 }
 
 QString Template::authorsPosition() const
 {
-    return d->authorsPosition;
+    return m_authorsPosition;
 }
 
 QString Template::credit() const
 {
-    return d->credit;
+    return m_credit;
 }
 
 QString Template::copyright() const
 {
-    return d->copyright;
+    return m_copyright;
 }
 
 QString Template::rightUsageTerms() const
 {
-    return d->rightUsageTerms;
+    return m_rightUsageTerms;
 }
 
 QString Template::source() const
 {
-    return d->source;
+    return m_source;
 }
 
 QString Template::instructions() const
 {
-    return d->instructions;
+    return m_instructions;
 }
 
 }  // namespace Digikam

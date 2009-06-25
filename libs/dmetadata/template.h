@@ -26,6 +26,7 @@
 
 // Qt includes
 
+#include <QMetaType>
 #include <QString>
 #include <QStringList>
 
@@ -45,8 +46,7 @@ public:
     Template();
     ~Template();
 
-    Template(const Template& t);
-    Template& operator=(const Template& t);
+    bool isNull() const;
 
     /** Compare for metadata equality, not including "templateTitle"
      */
@@ -71,11 +71,23 @@ public:
     QString     source()          const;
     QString     instructions()    const;
 
-private:
+protected:
 
-    TemplatePrivate* const d;
+    // template title used internaly
+    QString     m_templateTitle;
+
+    // Metadata strings recorded to DB and XMP
+    QStringList m_authors;
+    QString     m_authorsPosition;
+    QString     m_credit;
+    QString     m_copyright;
+    QString     m_rightUsageTerms;
+    QString     m_source;
+    QString     m_instructions;
 };
 
 }  // namespace Digikam
+
+Q_DECLARE_METATYPE(Digikam::Template)
 
 #endif /* TEMPLATE_H */
