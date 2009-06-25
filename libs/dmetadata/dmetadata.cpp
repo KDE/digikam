@@ -588,83 +588,85 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath) const
 
 bool DMetadata::setMetadataTemplate(Template* t) const
 {
+    if (!t) return false;
+
     if (!setProgramId())
         return false;
 
-    if (t)
+    QString author         = t->author();
+    QString authorPosition = t->authorPosition();
+    QString credit         = t->credit();
+    QString source         = t->source();
+    QString copyright      = t->copyright();
+    QString rightUsage     = t->rightUsageTerms();
+    QString instructions   = t->instructions();
+
+    // Set XMP tags. XMP<->IPTC Schema from Photoshop 7.0
+
+    if (supportXmp())
     {
-        QString author         = t->author();
-        QString authorPosition = t->authorPosition();
-        QString credit         = t->credit();
-        QString source         = t->source();
-        QString copyright      = t->copyright();
-        QString rightUsage     = t->rightUsageTerms();
-        QString instructions   = t->instructions();
+        if (!setXmpTagStringSeq("Xmp.dc.creator", QStringList() << author, false))
+            return false;
 
-        // Set XMP tags. XMP<->IPTC Schema from Photoshop 7.0
+        if (!setXmpTagStringSeq("Xmp.tiff.Artist", QStringList() << author, false))
+            return false;
 
-        if (supportXmp())
-        {
-            if (!setXmpTagStringSeq("Xmp.dc.creator", QStringList() << author, false))
-                return false;
+        if (!setXmpTagString("Xmp.photoshop.AuthorsPosition", authorPosition, false))
+            return false;
 
-            if (!setXmpTagStringSeq("Xmp.tiff.Artist", QStringList() << author, false))
-                return false;
+        if (!setXmpTagString("Xmp.photoshop.Credit", credit, false))
+            return false;
 
-            if (!setXmpTagString("Xmp.photoshop.AuthorsPosition", authorPosition, false))
-                return false;
+        if (!setXmpTagString("Xmp.photoshop.Source", source, false))
+            return false;
 
-            if (!setXmpTagString("Xmp.photoshop.Credit", credit, false))
-                return false;
+        if (!setXmpTagString("Xmp.dc.source", source, false))
+            return false;
 
-            if (!setXmpTagString("Xmp.photoshop.Source", source, false))
-                return false;
+        if (!setXmpTagStringLangAlt("Xmp.dc.rights", copyright, QString(), false))
+            return false;
 
-            if (!setXmpTagString("Xmp.dc.source", source, false))
-                return false;
+        if (!setXmpTagStringLangAlt("Xmp.tiff.Copyright", copyright, QString(), false))
+            return false;
 
-            if (!setXmpTagStringLangAlt("Xmp.dc.rights", copyright, QString(), false))
-                return false;
+        if (!setXmpTagStringLangAlt("Xmp.xmpRights.UsageTerms", rightUsage, QString(), false))
+            return false;
 
-            if (!setXmpTagStringLangAlt("Xmp.tiff.Copyright", copyright, QString(), false))
-                return false;
-
-            if (!setXmpTagStringLangAlt("Xmp.xmpRights.UsageTerms", rightUsage, QString(), false))
-                return false;
-
-            if (!setXmpTagString("Xmp.photoshop.Instructions", instructions, false))
-                return false;
-        }
-
-        // Set IPTC tags.
-
-        if (!setIptcTag(author,         32, "Author",       "Iptc.Application2.Byline"))              return false;
-        if (!setIptcTag(authorPosition, 32, "Author Title", "Iptc.Application2.BylineTitle"))         return false;
-        if (!setIptcTag(credit,         32, "Credit",       "Iptc.Application2.Credit"))              return false;
-        if (!setIptcTag(source,         32, "Source",       "Iptc.Application2.Source"))              return false;
-        if (!setIptcTag(copyright,     128, "Copyright",    "Iptc.Application2.Copyright"))           return false;
-        if (!setIptcTag(instructions,  256, "Instructions", "Iptc.Application2.SpecialInstructions")) return false;
+        if (!setXmpTagString("Xmp.photoshop.Instructions", instructions, false))
+            return false;
     }
-    else
-    {
-        removeXmpTag("Xmp.dc.creator");
-        removeXmpTag("Xmp.tiff.Artist");
-        removeXmpTag("Xmp.photoshop.AuthorsPosition");
-        removeXmpTag("Xmp.photoshop.Credit");
-        removeXmpTag("Xmp.photoshop.Source");
-        removeXmpTag("Xmp.dc.source");
-        removeXmpTag("Xmp.dc.rights");
-        removeXmpTag("Xmp.tiff.Copyright");
-        removeXmpTag("Xmp.xmpRights.UsageTerms");
-        removeXmpTag("Xmp.photoshop.Instructions");
 
-        removeIptcTag("Iptc.Application2.Byline");
-        removeIptcTag("Iptc.Application2.BylineTitle");
-        removeIptcTag("Iptc.Application2.Credit");
-        removeIptcTag("Iptc.Application2.Source");
-        removeIptcTag("Iptc.Application2.Copyright");
-        removeIptcTag("Iptc.Application2.SpecialInstructions");
-    }
+    // Set IPTC tags.
+
+    if (!setIptcTag(author,         32, "Author",       "Iptc.Application2.Byline"))              return false;
+    if (!setIptcTag(authorPosition, 32, "Author Title", "Iptc.Application2.BylineTitle"))         return false;
+    if (!setIptcTag(credit,         32, "Credit",       "Iptc.Application2.Credit"))              return false;
+    if (!setIptcTag(source,         32, "Source",       "Iptc.Application2.Source"))              return false;
+    if (!setIptcTag(copyright,     128, "Copyright",    "Iptc.Application2.Copyright"))           return false;
+    if (!setIptcTag(instructions,  256, "Instructions", "Iptc.Application2.SpecialInstructions")) return false;
+
+    return true;
+}
+
+bool DMetadata::removeMetadataTemplate() const
+{
+    removeXmpTag("Xmp.dc.creator");
+    removeXmpTag("Xmp.tiff.Artist");
+    removeXmpTag("Xmp.photoshop.AuthorsPosition");
+    removeXmpTag("Xmp.photoshop.Credit");
+    removeXmpTag("Xmp.photoshop.Source");
+    removeXmpTag("Xmp.dc.source");
+    removeXmpTag("Xmp.dc.rights");
+    removeXmpTag("Xmp.tiff.Copyright");
+    removeXmpTag("Xmp.xmpRights.UsageTerms");
+    removeXmpTag("Xmp.photoshop.Instructions");
+
+    removeIptcTag("Iptc.Application2.Byline");
+    removeIptcTag("Iptc.Application2.BylineTitle");
+    removeIptcTag("Iptc.Application2.Credit");
+    removeIptcTag("Iptc.Application2.Source");
+    removeIptcTag("Iptc.Application2.Copyright");
+    removeIptcTag("Iptc.Application2.SpecialInstructions");
 
     return true;
 }
