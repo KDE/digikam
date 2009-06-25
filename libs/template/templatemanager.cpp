@@ -30,6 +30,7 @@
 #include <QFile>
 #include <QDomDocument>
 #include <QDomElement>
+#include <QMutex>
 #include <QTextStream>
 #include <QTextCodec>
 
@@ -58,33 +59,32 @@ public:
 
     TemplateManagerPrivate()
         : unknowTitle(QString("_UNKNOW_TEMPLATE_")),
-          removeTitle(QString("_REMOVE_TEMPLATE_"))
+          removeTitle(QString("_REMOVE_TEMPLATE_")),
+          mutex(QMutex::Recursive)
     {
         modified       = false;
-        removeTemplate = 0;
-        unknowTemplate = 0;
     }
 
     bool             modified;
 
-    QList<Template*> pList;
+    QList<Template>  pList;
     QString          file;
 
-    Template*        unknowTemplate;  // Used to identify unregistered template informations found in metadata.
-    Template*        removeTemplate;  // Used to identify template information to remove ferom metadata.
+    Template         unknowTemplate;  // Used to identify unregistered template informations found in metadata.
+    Template         removeTemplate;  // Used to identify template information to remove ferom metadata.
 
     const QString    unknowTitle;
     const QString    removeTitle;
+
+    QMutex           mutex;
 };
 
 TemplateManager::TemplateManager(QObject *parent, const QString& file)
                 : QObject(parent), d(new TemplateManagerPrivate)
 {
-    d->unknowTemplate = new Template();
-    d->unknowTemplate->setTemplateTitle(d->unknowTitle);
+    d->unknowTemplate.setTemplateTitle(d->unknowTitle);
 
-    d->removeTemplate = new Template();
-    d->removeTemplate->setTemplateTitle(d->removeTitle);
+    d->removeTemplate.setTemplateTitle(d->removeTitle);
 
     d->file = file;
     if (!m_defaultManager)
@@ -97,20 +97,18 @@ TemplateManager::~TemplateManager()
 {
     save();
     clear();
-    delete d->unknowTemplate;
-    delete d->removeTemplate;
     delete d;
 
     if (m_defaultManager == this)
         m_defaultManager = 0;
 }
 
-Template* TemplateManager::unknowTemplate() const
+Template TemplateManager::unknowTemplate() const
 {
     return d->unknowTemplate;
 }
 
-Template* TemplateManager::removeTemplate() const
+Template TemplateManager::removeTemplate() const
 {
     return d->removeTemplate;
 }
@@ -138,15 +136,15 @@ bool TemplateManager::load()
         if (e.isNull()) continue;
         if (e.tagName() != "item") continue;
 
-        Template *t = new Template();
-        t->setTemplateTitle(e.attribute("templatetitle"));
-        t->setAuthors(e.attribute("authors").split(";", QString::SkipEmptyParts));
-        t->setAuthorsPosition(e.attribute("authorsposition"));
-        t->setCredit(e.attribute("credit"));
-        t->setCopyright(e.attribute("copyright"));
-        t->setRightUsageTerms(e.attribute("rightusageterms"));
-        t->setSource(e.attribute("source"));
-        t->setInstructions(e.attribute("instructions"));
+        Template t;
+        t.setTemplateTitle(e.attribute("templatetitle"));
+        t.setAuthors(e.attribute("authors").split(";", QString::SkipEmptyParts));
+        t.setAuthorsPosition(e.attribute("authorsposition"));
+        t.setCredit(e.attribute("credit"));
+        t.setCopyright(e.attribute("copyright"));
+        t.setRightUsageTerms(e.attribute("rightusageterms"));
+        t.setSource(e.attribute("source"));
+        t.setInstructions(e.attribute("instructions"));
         insertPrivate(t);
     }
 
@@ -164,18 +162,22 @@ bool TemplateManager::save()
 
     QDomElement docElem = doc.documentElement();
 
-    foreach (Template *t, d->pList)
     {
-        QDomElement elem = doc.createElement("item");
-        elem.setAttribute("templatetitle",   t->templateTitle());
-        elem.setAttribute("authors",         t->authors().join(";"));
-        elem.setAttribute("authorsposition", t->authorsPosition());
-        elem.setAttribute("credit",          t->credit());
-        elem.setAttribute("copyright",       t->copyright());
-        elem.setAttribute("rightusageterms", t->rightUsageTerms());
-        elem.setAttribute("source",          t->source());
-        elem.setAttribute("instructions",    t->instructions());
-        docElem.appendChild(elem);
+        QMutexLocker lock(&d->mutex);
+
+        foreach (const Template& t, d->pList)
+        {
+            QDomElement elem = doc.createElement("item");
+            elem.setAttribute("templatetitle",   t.templateTitle());
+            elem.setAttribute("authors",         t.authors().join(";"));
+            elem.setAttribute("authorsposition", t.authorsPosition());
+            elem.setAttribute("credit",          t.credit());
+            elem.setAttribute("copyright",       t.copyright());
+            elem.setAttribute("rightusageterms", t.rightUsageTerms());
+            elem.setAttribute("source",          t.source());
+            elem.setAttribute("instructions",    t.instructions());
+            docElem.appendChild(elem);
+        }
     }
 
     QFile file(d->file);
@@ -192,66 +194,92 @@ bool TemplateManager::save()
     return true;
 }
 
-void TemplateManager::insert(Template* t)
+void TemplateManager::insert(const Template& t)
 {
-    if (!t) return;
+    if (t.isNull()) return;
 
     d->modified = true;
     insertPrivate(t);
 }
 
-void TemplateManager::remove(Template* t)
+void TemplateManager::remove(const Template& t)
 {
-    if (!t) return;
+    if (t.isNull()) return;
 
     d->modified = true;
     removePrivate(t);
 }
 
-void TemplateManager::insertPrivate(Template* t)
+void TemplateManager::insertPrivate(const Template& t)
 {
-    if (!t) return;
-    d->pList.append(t);
+    if (t.isNull()) return;
+
+    {
+        QMutexLocker lock(&d->mutex);
+        d->pList.append(t);
+    }
+
     emit signalTemplateAdded(t);
 }
 
-void TemplateManager::removePrivate(Template* t)
+void TemplateManager::removePrivate(const Template& t)
 {
-    if (!t) return;
+    if (t.isNull()) return;
+
+    {
+        QMutexLocker lock(&d->mutex);
+        for (QList<Template>::iterator it = d->pList.begin(); it != d->pList.end(); ++it)
+        {
+            if (it->templateTitle() == t.templateTitle())
+            {
+                it = d->pList.erase(it);
+                break;
+            }
+        }
+    }
 
     emit signalTemplateRemoved(t);
-
-    int i = d->pList.indexOf(t);
-    if (i != -1)
-        delete d->pList.takeAt(i);
 }
 
 void TemplateManager::clear()
 {
-    while (!d->pList.isEmpty())
-        removePrivate(d->pList.first());
-}
+    QList<Template> oldTemplates = d->pList;
 
-QList<Template*>* TemplateManager::templateList()
-{
-    return &d->pList;
-}
-
-Template* TemplateManager::findByTitle(const QString& title) const
-{
-    foreach (Template *t, d->pList)
     {
-        if (t->templateTitle() == title)
+        QMutexLocker lock(&d->mutex);
+        d->pList.clear();
+    }
+
+    foreach (const Template &t, d->pList)
+    {
+        emit signalTemplateRemoved(t);
+    }
+}
+
+QList<Template> TemplateManager::templateList()
+{
+    return d->pList;
+}
+
+Template TemplateManager::findByTitle(const QString& title) const
+{
+    QMutexLocker lock(&d->mutex);
+
+    foreach (const Template &t, d->pList)
+    {
+        if (t.templateTitle() == title)
             return t;
     }
     return d->unknowTemplate;
 }
 
-Template* TemplateManager::findByContents(const Template& tref) const
+Template TemplateManager::findByContents(const Template& templ) const
 {
-    foreach (Template *t, d->pList)
+    QMutexLocker lock(&d->mutex);
+
+    foreach (const Template &t, d->pList)
     {
-        if (*t == tref)
+        if (t == templ)
         {
             return t;
         }
@@ -259,12 +287,14 @@ Template* TemplateManager::findByContents(const Template& tref) const
     return d->unknowTemplate;
 }
 
-Template* TemplateManager::fromIndex(int index) const
+Template TemplateManager::fromIndex(int index) const
 {
+    QMutexLocker lock(&d->mutex);
+
     if (index >= 0 && index < d->pList.size())
         return d->pList[index];
 
-    return 0;
+    return Template();
 }
 
 }  // namespace Digikam

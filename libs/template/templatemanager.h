@@ -53,29 +53,29 @@ public:
     bool save();
     void clear();
 
-    void insert(Template* t);
-    void remove(Template* t);
+    void insert(const Template& t);
+    void remove(const Template& t);
 
-    Template* unknowTemplate() const;
-    Template* removeTemplate() const;
+    Template unknowTemplate() const;
+    Template removeTemplate() const;
 
-    Template* fromIndex(int index) const;
-    Template* findByTitle(const QString& title) const;
-    Template* findByContents(const Template& tref) const;
+    Template fromIndex(int index) const;
+    Template findByTitle(const QString& title) const;
+    Template findByContents(const Template& tref) const;
 
-    QList<Template*>* templateList();
+    QList<Template> templateList();
 
     static TemplateManager* defaultManager();
 
 Q_SIGNALS:
 
-    void signalTemplateAdded(Template*);
-    void signalTemplateRemoved(Template*);
+    void signalTemplateAdded(const Template&);
+    void signalTemplateRemoved(const Template&);
 
 private:
 
-    void insertPrivate(Template* t);
-    void removePrivate(Template* t);
+    void insertPrivate(const Template& t);
+    void removePrivate(const Template& t);
 
 private:
 
