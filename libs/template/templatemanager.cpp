@@ -57,19 +57,35 @@ class TemplateManagerPrivate
 public:
 
     TemplateManagerPrivate()
+        : unknowTitle(QString("_UNKNOW_TEMPLATE_")),
+          removeTitle(QString("_REMOVE_TEMPLATE_"))
     {
-        modified = false;
+        modified       = false;
+        removeTemplate = 0;
+        unknowTemplate = 0;
     }
 
     bool             modified;
 
     QList<Template*> pList;
     QString          file;
+
+    Template*        unknowTemplate;  // Used to identify unregistered template informations found in metadata.
+    Template*        removeTemplate;  // Used to identify template information to remove ferom metadata.
+
+    const QString    unknowTitle;
+    const QString    removeTitle;
 };
 
 TemplateManager::TemplateManager(QObject *parent, const QString& file)
                 : QObject(parent), d(new TemplateManagerPrivate)
 {
+    d->unknowTemplate = new Template();
+    d->unknowTemplate->setTemplateTitle(d->unknowTitle);
+
+    d->removeTemplate = new Template();
+    d->removeTemplate->setTemplateTitle(d->removeTitle);
+
     d->file = file;
     if (!m_defaultManager)
         m_defaultManager = this;
@@ -81,10 +97,22 @@ TemplateManager::~TemplateManager()
 {
     save();
     clear();
+    delete d->unknowTemplate;
+    delete d->removeTemplate;
     delete d;
 
     if (m_defaultManager == this)
         m_defaultManager = 0;
+}
+
+Template* TemplateManager::unknowTemplate() const
+{
+    return d->unknowTemplate;
+}
+
+Template* TemplateManager::removeTemplate() const
+{
+    return d->removeTemplate;
 }
 
 bool TemplateManager::load()
@@ -138,16 +166,16 @@ bool TemplateManager::save()
 
     foreach (Template *t, d->pList)
     {
-       QDomElement elem = doc.createElement("item");
-       elem.setAttribute("templatetitle",   t->templateTitle());
-       elem.setAttribute("author",          t->author());
-       elem.setAttribute("authorposition",  t->authorPosition());
-       elem.setAttribute("credit",          t->credit());
-       elem.setAttribute("copyright",       t->copyright());
-       elem.setAttribute("rightusageterms", t->rightUsageTerms());
-       elem.setAttribute("source",          t->source());
-       elem.setAttribute("instructions",    t->instructions());
-       docElem.appendChild(elem);
+        QDomElement elem = doc.createElement("item");
+        elem.setAttribute("templatetitle",   t->templateTitle());
+        elem.setAttribute("author",          t->author());
+        elem.setAttribute("authorposition",  t->authorPosition());
+        elem.setAttribute("credit",          t->credit());
+        elem.setAttribute("copyright",       t->copyright());
+        elem.setAttribute("rightusageterms", t->rightUsageTerms());
+        elem.setAttribute("source",          t->source());
+        elem.setAttribute("instructions",    t->instructions());
+        docElem.appendChild(elem);
     }
 
     QFile file(d->file);
@@ -216,7 +244,7 @@ Template* TemplateManager::findByTitle(const QString& title) const
         if (t->templateTitle() == title)
             return t;
     }
-    return 0;
+    return d->unknowTemplate;
 }
 
 Template* TemplateManager::findByContents(const Template& tref) const
@@ -226,7 +254,7 @@ Template* TemplateManager::findByContents(const Template& tref) const
         if (*t == tref)
             return t;
     }
-    return 0;
+    return d->unknowTemplate;
 }
 
 Template* TemplateManager::fromIndex(int index) const

@@ -56,6 +56,9 @@ public:
     void insert(Template* t);
     void remove(Template* t);
 
+    Template* unknowTemplate() const;
+    Template* removeTemplate() const;
+
     Template* fromIndex(int index) const;
     Template* findByTitle(const QString& title) const;
     Template* findByContents(const Template& tref) const;

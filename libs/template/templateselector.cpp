@@ -26,6 +26,7 @@
 
 // Qt includes
 
+#include <QAbstractItemView>
 #include <QLabel>
 #include <QToolButton>
 
@@ -35,6 +36,7 @@
 #include <klocale.h>
 #include <kdialog.h>
 #include <kiconloader.h>
+#include <kdebug.h>
 
 // LibKDcraw includes
 
@@ -111,11 +113,13 @@ void TemplateSelector::populateTemplates()
 {
     d->templateCombo->clear();
     d->templateCombo->insertSqueezedItem(i18n("None"), 0);
+    d->templateCombo->insertSqueezedItem(i18n("Unregistered"), 1);
+    d->templateCombo->insertSeparator(2);
 
     TemplateManager* tm = TemplateManager::defaultManager();
     if (tm)
     {
-        int i                  = 1;
+        int i                  = 3;
         QList<Template*>* list = tm->templateList();
 
         foreach (Template *t, *list)
@@ -131,18 +135,40 @@ Template* TemplateSelector::getTemplate() const
     TemplateManager* tm = TemplateManager::defaultManager();
     if (tm)
     {
-        if (d->templateCombo->currentIndex() > 0)
-            return tm->fromIndex(d->templateCombo->currentIndex()-1);
+        switch(d->templateCombo->currentIndex())
+        {
+            case 0:
+                return tm->removeTemplate();
+                break;
+            case 1:
+                return tm->unknowTemplate();
+                break;
+            default:
+                return tm->fromIndex(d->templateCombo->currentIndex()-3);
+                break;
+        }
     }
     return 0;
 }
 
 void TemplateSelector::setTemplate(Template *t)
 {
-    if (t)
-        d->templateCombo->setCurrent(t->templateTitle());
-    else
-        d->templateCombo->setCurrentIndex(0);
+    TemplateManager* tm = TemplateManager::defaultManager();
+    if (tm)
+    {
+        if (t)
+        {
+            QString title = t->templateTitle();
+            if (title == tm->removeTemplate()->templateTitle())
+                return d->templateCombo->setCurrentIndex(0);
+            else if (title == tm->unknowTemplate()->templateTitle())
+                return d->templateCombo->setCurrentIndex(1);
+            else
+                return d->templateCombo->setCurrent(title);
+        }
+    }
+
+    return d->templateCombo->setCurrentIndex(1);
 }
 
 int TemplateSelector::getTemplateIndex() const
