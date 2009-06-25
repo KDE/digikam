@@ -649,7 +649,7 @@ bool DMetadata::setMetadataTemplate(Template* t) const
     {
         removeXmpTag("Xmp.dc.creator");
         removeXmpTag("Xmp.tiff.Artist");
-        removeXmpTag("mp.photoshop.AuthorsPosition");
+        removeXmpTag("Xmp.photoshop.AuthorsPosition");
         removeXmpTag("Xmp.photoshop.Credit");
         removeXmpTag("Xmp.photoshop.Source");
         removeXmpTag("Xmp.dc.source");
