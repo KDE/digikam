@@ -97,6 +97,12 @@ void ManualRenameInputTest::testNumberToken()
 
     QString parsed = ManualRenameInput::parser(parseString, filename, cameraName, cameraDate, index);
     QCOMPARE(parsed, result);
+
+    // test again with bound parse method
+    ManualRenameInput mrename;
+    mrename.setText(parseString);
+    parsed = mrename.parse(filename, cameraName, cameraDate, index);
+    QCOMPARE(parsed, result);
 }
 
 void ManualRenameInputTest::testFirstLetterOfEachWordUppercaseToken_data()
@@ -142,6 +148,12 @@ void ManualRenameInputTest::testFirstLetterOfEachWordUppercaseToken()
     QFETCH(QString,     result);
 
     QString parsed = ManualRenameInput::parser(parseString, filename, cameraName, cameraDate, index);
+    QCOMPARE(parsed, result);
+
+    // test again with bound parse method
+    ManualRenameInput mrename;
+    mrename.setText(parseString);
+    parsed = mrename.parse(filename, cameraName, cameraDate, index);
     QCOMPARE(parsed, result);
 }
 
@@ -197,6 +209,12 @@ void ManualRenameInputTest::testUppercaseToken()
 
     QString parsed = ManualRenameInput::parser(parseString, filename, cameraName, cameraDate, index);
     QCOMPARE(parsed, result);
+
+    // test again with bound parse method
+    ManualRenameInput mrename;
+    mrename.setText(parseString);
+    parsed = mrename.parse(filename, cameraName, cameraDate, index);
+    QCOMPARE(parsed, result);
 }
 
 void ManualRenameInputTest::testLowercaseToken_data()
@@ -246,6 +264,12 @@ void ManualRenameInputTest::testLowercaseToken()
     QFETCH(QString,     result);
 
     QString parsed = ManualRenameInput::parser(parseString, filename, cameraName, cameraDate, index);
+    QCOMPARE(parsed, result);
+
+    // test again with bound parse method
+    ManualRenameInput mrename;
+    mrename.setText(parseString);
+    parsed = mrename.parse(filename, cameraName, cameraDate, index);
     QCOMPARE(parsed, result);
 }
 
@@ -322,6 +346,12 @@ void ManualRenameInputTest::testCameraToken()
 
     QString parsed = ManualRenameInput::parser(parseString, filename, cameraName, cameraDate, index);
     QCOMPARE(parsed, result);
+
+    // test again with bound parse method
+    ManualRenameInput mrename;
+    mrename.setText(parseString);
+    parsed = mrename.parse(filename, cameraName, cameraDate, index);
+    QCOMPARE(parsed, result);
 }
 
 void ManualRenameInputTest::testCompleteParse_data()
@@ -375,6 +405,12 @@ void ManualRenameInputTest::testCompleteParse()
 
     QString parsed = ManualRenameInput::parser(parseString, filename, cameraName, cameraDate, index);
     QCOMPARE(parsed, result);
+
+    // test again with bound parse method
+    ManualRenameInput mrename;
+    mrename.setText(parseString);
+    parsed = mrename.parse(filename, cameraName, cameraDate, index);
+    QCOMPARE(parsed, result);
 }
 
 void ManualRenameInputTest::testEmptyParseString()
@@ -395,4 +431,13 @@ void ManualRenameInputTest::testEmptyParseString()
     // the following is not invalid
     parsed = ManualRenameInput::parser(QString("  %_##"), filename, QString(), curdate, 1);
     QCOMPARE(parsed, QString("  myfilename001_01"));
+}
+
+void ManualRenameInputTest::testSetters()
+{
+    ManualRenameInput mrename;
+
+    mrename.setText("this is a test");
+    QVERIFY(!mrename.text().isEmpty());
+    QCOMPARE(mrename.text(), QString("this is a test"));
 }

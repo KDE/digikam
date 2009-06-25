@@ -53,6 +53,8 @@ private Q_SLOTS:
     void testCompleteParse_data();
 
     void testEmptyParseString();
+
+    void testSetters();
 };
 
 #endif /* MANUALRENAMEINPUTTEST_H_ */
