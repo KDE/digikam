@@ -223,7 +223,7 @@ Template* TemplateManager::findByContents(const Template& tref) const
 {
     foreach (Template *t, d->pList)
     {
-        if (t == &tref)
+        if (*t == tref)
             return t;
     }
     return 0;
