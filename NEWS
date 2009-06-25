@@ -63,7 +63,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 049 ==> 197640 : Add the "New folder" Option while dragging items to folders.
 050 ==> 197744 : Lists of languages miss en-US.
 051 ==> 197622 : digiKam crashes on exit.
-052 ==> 
+052 ==> 197808 : Bad images sort order when starting digiKam.
+053 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta1 - Release date: 2009-06-07
