@@ -114,19 +114,26 @@ int ImageAlbumFilterModel::compareInfosCategories(const ImageInfo& left, const I
             PAlbum *rightAlbum = AlbumManager::instance()->findPAlbum(rightAlbumId);
             if (!leftAlbum || !rightAlbum)
                 return -1;
+            if (leftAlbum == rightAlbum)
+                return 0;
             if (d->sorter.sortRole == ImageSortSettings::SortByCreationDate ||
                 d->sorter.sortRole == ImageSortSettings::SortByModificationDate)
             {
+                // Here we want to sort the _categories_ by _album_ date if images are sorted by date
+                // We must still make sure that categorization is unique!
                 QDate leftDate = leftAlbum->date();
                 QDate rightDate = rightAlbum->date();
-                int result;
-                if (leftDate == rightDate)
-                    result = 0;
-                else if (leftDate < rightDate)
-                    result = -1;
-                else
-                    result = 1;
-                return ImageSortSettings::compareByOrder(result, d->sorter.currentSortOrder);
+                if (leftDate != rightDate)
+                {
+                    int result;
+                    if (leftDate == rightDate)
+                        result = 0;
+                    else if (leftDate < rightDate)
+                        result = -1;
+                    else
+                        result = 1;
+                    return ImageSortSettings::compareByOrder(result, d->sorter.currentSortOrder);
+                }
             }
 
             return ImageSortSettings::naturalCompare(leftAlbum->albumPath(), rightAlbum->albumPath(),
