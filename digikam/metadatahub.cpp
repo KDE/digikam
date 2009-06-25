@@ -113,6 +113,7 @@ MetadataWriteSettings::MetadataWriteSettings()
     saveComments        = false;
     saveDateTime        = false;
     saveRating          = false;
+    saveTemplate        = false;
     saveTags            = false;
     writeRawFiles       = false;
     updateFileTimeStamp = false;
@@ -123,6 +124,7 @@ MetadataWriteSettings::MetadataWriteSettings(AlbumSettings *albumSettings)
     saveComments        = albumSettings->getSaveComments();
     saveDateTime        = albumSettings->getSaveDateTime();
     saveRating          = albumSettings->getSaveRating();
+    saveTemplate        = albumSettings->getSaveTemplate();
     saveTags            = albumSettings->getSaveTags();
     writeRawFiles       = albumSettings->getWriteRawFiles();
     updateFileTimeStamp = albumSettings->getUpdateFileTimeStamp();
@@ -540,7 +542,7 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
     bool saveComment  = (settings.saveComments && d->commentsStatus == MetadataAvailable);
     bool saveDateTime = (settings.saveDateTime && d->dateTimeStatus == MetadataAvailable);
     bool saveRating   = (settings.saveRating   && d->ratingStatus   == MetadataAvailable);
-    bool saveTemplate = (d->templateStatus == MetadataAvailable);
+    bool saveTemplate = (settings.saveTemplate && d->templateStatus == MetadataAvailable);
     bool saveTags     = false;
 
     if (settings.saveTags)
@@ -709,7 +711,7 @@ bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataWriteSett
     bool saveComment  = (settings.saveComments && d->commentsStatus == MetadataAvailable);
     bool saveDateTime = (settings.saveDateTime && d->dateTimeStatus == MetadataAvailable);
     bool saveRating   = (settings.saveRating   && d->ratingStatus   == MetadataAvailable);
-    bool saveTemplate = (d->templateStatus == MetadataAvailable);
+    bool saveTemplate = (settings.saveTemplate && d->templateStatus == MetadataAvailable);
     bool saveTags     = false;
 
     if (settings.saveTags)

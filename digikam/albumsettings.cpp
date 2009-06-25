@@ -118,8 +118,7 @@ public:
     bool                                exifSetOrientation;
 
     bool                                saveTags;
-    bool                                savePhotographerId;
-    bool                                saveCredits;
+    bool                                saveTemplate;
 
     bool                                saveComments;
     bool                                saveDateTime;
@@ -133,12 +132,6 @@ public:
     bool                                showThumbbar;
 
     bool                                showFolderTreeViewItemsCount;
-
-    QString                             author;
-    QString                             authorTitle;
-    QString                             credit;
-    QString                             source;
-    QString                             copyright;
 
     // tree-view settings
     int                                 treeThumbnailSize;
@@ -265,8 +258,7 @@ void AlbumSettings::init()
     d->exifSetOrientation           = true;
 
     d->saveTags                     = false;
-    d->savePhotographerId           = false;
-    d->saveCredits                  = false;
+    d->saveTemplate                 = false;
 
     d->saveComments                 = false;
     d->saveDateTime                 = false;
@@ -379,18 +371,11 @@ void AlbumSettings::readSettings()
     group = config->group("Metadata Settings");
 
     d->saveTags               = group.readEntry("Save Tags", false);
-    d->savePhotographerId     = group.readEntry("Save Photographer ID", false);
-    d->saveCredits            = group.readEntry("Save Credits", false);
+    d->saveTemplate           = group.readEntry("Save Template", false);
 
     d->saveComments           = group.readEntry("Save EXIF Comments", false);
     d->saveDateTime           = group.readEntry("Save Date Time", false);
     d->saveRating             = group.readEntry("Save Rating", false);
-
-    d->author                 = group.readEntry("Author", QString());
-    d->authorTitle            = group.readEntry("Author Title", QString());
-    d->credit                 = group.readEntry("Credit", QString());
-    d->source                 = group.readEntry("Source", QString());
-    d->copyright              = group.readEntry("Copyright", QString());
 
     d->writeRawFiles          = group.readEntry("Write RAW Files", false);
     d->updateFileTimeStamp    = group.readEntry("Update File Timestamp", false);
@@ -492,18 +477,11 @@ void AlbumSettings::saveSettings()
     group = config->group("Metadata Settings");
 
     group.writeEntry("Save Tags", d->saveTags);
-    group.writeEntry("Save Photographer ID", d->savePhotographerId);
-    group.writeEntry("Save Credits", d->saveCredits);
+    group.writeEntry("Save Template", d->saveTemplate);
 
     group.writeEntry("Save EXIF Comments", d->saveComments);
     group.writeEntry("Save Date Time", d->saveDateTime);
     group.writeEntry("Save Rating", d->saveRating);
-
-    group.writeEntry("Author", d->author);
-    group.writeEntry("Author Title", d->authorTitle);
-    group.writeEntry("Credit", d->credit);
-    group.writeEntry("Source", d->source);
-    group.writeEntry("Copyright", d->copyright);
 
     group.writeEntry("Write RAW Files", d->writeRawFiles);
     group.writeEntry("Update File Timestamp", d->updateFileTimeStamp);
@@ -855,24 +833,14 @@ bool AlbumSettings::getSaveTags() const
     return d->saveTags;
 }
 
-void AlbumSettings::setSavePhotographerId(bool val)
+void AlbumSettings::setSaveTemplate(bool val)
 {
-    d->savePhotographerId = val;
+    d->saveTemplate = val;
 }
 
-bool AlbumSettings::getSavePhotographerId() const
+bool AlbumSettings::getSaveTemplate() const
 {
-    return d->savePhotographerId;
-}
-
-void AlbumSettings::setSaveCredits(bool val)
-{
-    d->saveCredits = val;
-}
-
-bool AlbumSettings::getSaveCredits() const
-{
-    return d->saveCredits;
+    return d->saveTemplate;
 }
 
 void AlbumSettings::setWriteRawFiles(bool val)
@@ -893,56 +861,6 @@ void AlbumSettings::setUpdateFileTimeStamp(bool val)
 bool AlbumSettings::getUpdateFileTimeStamp() const
 {
     return d->updateFileTimeStamp;
-}
-
-void AlbumSettings::setAuthor(const QString& author)
-{
-    d->author = author;
-}
-
-QString AlbumSettings::getAuthor() const
-{
-    return d->author;
-}
-
-void AlbumSettings::setAuthorTitle(const QString& authorTitle)
-{
-    d->authorTitle = authorTitle;
-}
-
-QString AlbumSettings::getAuthorTitle() const
-{
-    return d->authorTitle;
-}
-
-void AlbumSettings::setCredit(const QString& credit)
-{
-    d->credit = credit;
-}
-
-QString AlbumSettings::getCredit() const
-{
-    return d->credit;
-}
-
-void AlbumSettings::setSource(const QString& source)
-{
-    d->source = source;
-}
-
-QString AlbumSettings::getSource() const
-{
-    return d->source;
-}
-
-void AlbumSettings::setCopyright(const QString& copyright)
-{
-    d->copyright = copyright;
-}
-
-QString AlbumSettings::getCopyright() const
-{
-    return d->copyright;
 }
 
 void AlbumSettings::setSaveComments(bool val)

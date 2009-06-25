@@ -70,8 +70,7 @@ public:
         saveRatingBox           = 0;
         saveTagsBox             = 0;
         saveDateTimeBox         = 0;
-        savePhotographerIdBox   = 0;
-        saveCreditsBox          = 0;
+        saveTemplateBox         = 0;
         writeRawFilesBox        = 0;
         updateFileTimeStampBox  = 0;
     }
@@ -85,8 +84,7 @@ public:
     QCheckBox *saveRatingBox;
     QCheckBox *saveTagsBox;
     QCheckBox *saveDateTimeBox;
-    QCheckBox *savePhotographerIdBox;
-    QCheckBox *saveCreditsBox;
+    QCheckBox *saveTemplateBox;
     QCheckBox *writeRawFilesBox;
     QCheckBox *updateFileTimeStampBox;
 };
@@ -128,17 +126,11 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     d->saveTagsBox->setWhatsThis( i18n("Turn on this option to store the image tags "
                                        "in the XMP and IPTC tags."));
 
-    d->savePhotographerIdBox = new QCheckBox(commonGroup);
-    d->savePhotographerIdBox->setText(i18n("&Save default photographer identity as tags"));
-    d->savePhotographerIdBox->setWhatsThis( i18n("Turn on this option to store the default "
-                                                 "photographer identity in the XMP and the IPTC tags. "
-                                                 "You can set this value in the Identity setup page."));
-
-    d->saveCreditsBox = new QCheckBox(commonGroup);
-    d->saveCreditsBox->setText(i18n("&Save default credit and copyright identity as tags"));
-    d->saveCreditsBox->setWhatsThis( i18n("Turn on this option to store the default "
-                                          "credit and copyright identity in the XMP and the IPTC tags. "
-                                          "You can set this value in the Identity setup page."));
+    d->saveTemplateBox = new QCheckBox(commonGroup);
+    d->saveTemplateBox->setText(i18n("&Save metadata template as tags"));
+    d->saveTemplateBox->setWhatsThis( i18n("Turn on this option to store the metadata "
+                                           "template in the XMP and the IPTC tags. "
+                                           "You can set template values to Template setup page."));
 
     d->saveCommentsBox = new QCheckBox(commonGroup);
     d->saveCommentsBox->setText(i18n("&Save image captions as embedded text"));
@@ -174,8 +166,7 @@ SetupMetadata::SetupMetadata(QWidget* parent )
 #endif
 
     gLayout2->addWidget(d->saveTagsBox);
-    gLayout2->addWidget(d->savePhotographerIdBox);
-    gLayout2->addWidget(d->saveCreditsBox);
+    gLayout2->addWidget(d->saveTemplateBox);
     gLayout2->addWidget(d->saveCommentsBox);
     gLayout2->addWidget(d->saveDateTimeBox);
     gLayout2->addWidget(d->saveRatingBox);
@@ -266,8 +257,7 @@ void SetupMetadata::applySettings()
     settings->setSaveDateTime(d->saveDateTimeBox->isChecked());
     settings->setSaveRating(d->saveRatingBox->isChecked());
     settings->setSaveTags(d->saveTagsBox->isChecked());
-    settings->setSavePhotographerId(d->savePhotographerIdBox->isChecked());
-    settings->setSaveCredits(d->saveCreditsBox->isChecked());
+    settings->setSaveTemplate(d->saveTemplateBox->isChecked());
     settings->setWriteRawFiles(d->writeRawFilesBox->isChecked());
     settings->setUpdateFileTimeStamp(d->updateFileTimeStampBox->isChecked());
     settings->saveSettings();
@@ -285,8 +275,7 @@ void SetupMetadata::readSettings()
     d->saveDateTimeBox->setChecked(settings->getSaveDateTime());
     d->saveRatingBox->setChecked(settings->getSaveRating());
     d->saveTagsBox->setChecked(settings->getSaveTags());
-    d->savePhotographerIdBox->setChecked(settings->getSavePhotographerId());
-    d->saveCreditsBox->setChecked(settings->getSaveCredits());
+    d->saveTemplateBox->setChecked(settings->getSaveTemplate());
     d->writeRawFilesBox->setChecked(settings->getWriteRawFiles());
     d->updateFileTimeStampBox->setChecked(settings->getUpdateFileTimeStamp());
 }

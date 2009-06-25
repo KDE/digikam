@@ -167,32 +167,14 @@ public:
     void setSaveTags(bool val);
     bool getSaveTags() const;
 
-    void setSavePhotographerId(bool val);
-    bool getSavePhotographerId() const;
-
-    void setSaveCredits(bool val);
-    bool getSaveCredits() const;
+    void setSaveTemplate(bool val);
+    bool getSaveTemplate() const;
 
     void setWriteRawFiles(bool val);
     bool getWriteRawFiles() const;
 
     void setUpdateFileTimeStamp(bool val);
     bool getUpdateFileTimeStamp() const;
-
-    void setAuthor(const QString& author);
-    QString getAuthor() const;
-
-    void setAuthorTitle(const QString& authorTitle);
-    QString getAuthorTitle() const;
-
-    void setCredit(const QString& credit);
-    QString getCredit() const;
-
-    void setSource(const QString& source);
-    QString getSource() const;
-
-    void setCopyright(const QString& copyright);
-    QString getCopyright() const;
 
     void setSaveComments(bool val);
     bool getSaveComments() const;

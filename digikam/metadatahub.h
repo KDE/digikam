@@ -72,12 +72,13 @@ public:
     */
     MetadataWriteSettings(AlbumSettings *albumsettings);
 
-    bool      saveComments;
-    bool      saveDateTime;
-    bool      saveRating;
-    bool      saveTags;
-    bool      writeRawFiles;
-    bool      updateFileTimeStamp;
+    bool saveComments;
+    bool saveDateTime;
+    bool saveRating;
+    bool saveTemplate;
+    bool saveTags;
+    bool writeRawFiles;
+    bool updateFileTimeStamp;
 };
 
 // ----------------------------------------------------------------------------------------
