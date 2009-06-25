@@ -96,7 +96,7 @@ SetupTemplate::SetupTemplate(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label0 = new QLabel(i18n("Template Tile:"), panel);
+    QLabel *label0 = new QLabel(i18n("Template Title:"), panel);
     d->titleEdit   = new KLineEdit(panel);
     d->titleEdit->setClearButtonShown(true);
     label0->setBuddy(d->titleEdit);
