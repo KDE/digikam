@@ -364,7 +364,7 @@ void ImageComments::replaceComments(const KExiv2::AltLangMap& map, const QString
     // remove all that have not been touched above
     for (int i=0; i<d->infos.size() /* changing! */; )
     {
-        if (!d->dirtyIndices.contains(i))
+        if (!d->dirtyIndices.contains(i) && !d->newIndices.contains(i))
             remove(i);
         else
             ++i;
