@@ -48,13 +48,34 @@ void ImageLoaderTest::testLoadPNG()
     bool success = true;
 
     DImg dimg;
-    PNGLoader loader(&dimg);
-    success = loader.load(filename, 0);
+    success = dimg.load(filename);
     QVERIFY(success);
 
     // compare basic values
     QCOMPARE((uint)src.width(),     dimg.width());
     QCOMPARE((uint)src.height(),    dimg.height());
     QCOMPARE(src.hasAlphaChannel(), dimg.hasAlpha());
-    QCOMPARE(src.depth(),           dimg.bitsDepth());
+
+    dst = dimg.convertToPixmap().toImage().convertToFormat(src.format());
+    QCOMPARE(src, dst);
+}
+
+void ImageLoaderTest::testLoadJPG()
+{
+    QString filename(KDESRCDIR"/test.jpg");
+    QImage src(filename);
+    QImage dst;
+    bool success = true;
+
+    DImg dimg;
+    success = dimg.load(filename);
+    QVERIFY(success);
+
+    // compare basic values
+    QCOMPARE((uint)src.width(),     dimg.width());
+    QCOMPARE((uint)src.height(),    dimg.height());
+    QCOMPARE(src.hasAlphaChannel(), dimg.hasAlpha());
+
+    dst = dimg.convertToPixmap().toImage().convertToFormat(src.format());
+    QCOMPARE(src, dst);
 }

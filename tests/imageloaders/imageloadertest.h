@@ -35,6 +35,7 @@ class ImageLoaderTest : public QObject
 private Q_SLOTS:
 
     void testLoadPNG();
+    void testLoadJPG();
 };
 
 #endif /* IMAGELOADERTEST_H_ */
