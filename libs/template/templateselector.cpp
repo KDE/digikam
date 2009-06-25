@@ -141,6 +141,8 @@ void TemplateSelector::setTemplate(Template *t)
 {
     if (t)
         d->templateCombo->setCurrent(t->templateTitle());
+    else
+        d->templateCombo->setCurrentIndex(0);
 }
 
 int TemplateSelector::getTemplateIndex() const
