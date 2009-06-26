@@ -46,7 +46,7 @@ class CaptionsEdit : public QWidget
 
 public:
 
-    CaptionsEdit(QWidget* parent);
+    CaptionsEdit(QWidget* parent, const QString& title);
     ~CaptionsEdit();
 
     void reset();

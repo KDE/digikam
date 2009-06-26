@@ -253,17 +253,17 @@ public:
     KComboBox                      *languageCB;
 };
 
-CaptionsEdit::CaptionsEdit(QWidget* parent)
+CaptionsEdit::CaptionsEdit(QWidget* parent, const QString& title)
             : QWidget(parent), d(new CaptionsEditPriv)
 {
     QGridLayout *grid = new QGridLayout(this);
 
     // --------------------------------------------------------
 
-    QLabel *title     = new QLabel(i18n("Captions:"), this);
+    QLabel *titleLabel = new QLabel(title, this);
 
-    d->addValueButton = new QToolButton(this);
-    d->delValueButton = new QToolButton(this);
+    d->addValueButton  = new QToolButton(this);
+    d->delValueButton  = new QToolButton(this);
     d->addValueButton->setIcon(SmallIcon("list-add"));
     d->delValueButton->setIcon(SmallIcon("list-remove"));
     d->delValueButton->setToolTip(i18n("Remove current caption"));
@@ -273,13 +273,13 @@ CaptionsEdit::CaptionsEdit(QWidget* parent)
     d->languageCB = new KComboBox(this);
     d->languageCB->setWhatsThis(i18n("Select here the language for your caption."));
 
-    d->valueEdit = new KTextEdit(this);
+    d->valueEdit  = new KTextEdit(this);
     d->valueEdit->setCheckSpellingEnabled(true);
 
     // --------------------------------------------------------
 
     grid->setAlignment( Qt::AlignTop );
-    grid->addWidget(title,             0, 0, 1, 1);
+    grid->addWidget(titleLabel,        0, 0, 1, 1);
     grid->addWidget(d->languageCB,     0, 1, 1, 2);
     grid->addWidget(d->addValueButton, 0, 3, 1, 1);
     grid->addWidget(d->delValueButton, 0, 4, 1, 1);
