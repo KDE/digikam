@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-06-15
- * Description : multi-languages captions editor
+ * Description : multi-languages string editor
  *
  * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#include "captionsedit.h"
-#include "captionsedit.moc"
+#include "altlangstredit.h"
+#include "altlangstredit.moc"
 
 // Qt includes
 
@@ -47,11 +47,11 @@ using namespace KExiv2Iface;
 namespace Digikam
 {
 
-class CaptionsEditPriv
+class AltLangStrEditPriv
 {
 public:
 
-    CaptionsEditPriv()
+    AltLangStrEditPriv()
     {
         addValueButton = 0;
         delValueButton = 0;
@@ -253,8 +253,8 @@ public:
     KComboBox                      *languageCB;
 };
 
-CaptionsEdit::CaptionsEdit(QWidget* parent, const QString& title)
-            : QWidget(parent), d(new CaptionsEditPriv)
+AltLangStrEdit::AltLangStrEdit(QWidget* parent, const QString& title)
+              : QWidget(parent), d(new AltLangStrEditPriv)
 {
     QGridLayout *grid = new QGridLayout(this);
 
@@ -306,17 +306,17 @@ CaptionsEdit::CaptionsEdit(QWidget* parent, const QString& title)
             this, SLOT(slotTextChanged()));
 }
 
-CaptionsEdit::~CaptionsEdit()
+AltLangStrEdit::~AltLangStrEdit()
 {
     delete d;
 }
 
-void CaptionsEdit::reset()
+void AltLangStrEdit::reset()
 {
     setValues(KExiv2::AltLangMap());
 }
 
-void CaptionsEdit::slotAddValue()
+void AltLangStrEdit::slotAddValue()
 {
     QString lang = d->languageCB->currentText();
     QString text = d->valueEdit->toPlainText();
@@ -329,7 +329,7 @@ void CaptionsEdit::slotAddValue()
     loadLangAltListEntries(lang);
 }
 
-void CaptionsEdit::slotDeleteValue()
+void AltLangStrEdit::slotDeleteValue()
 {
     QString lang = d->languageCB->currentText();
     d->values.remove(lang);
@@ -337,7 +337,7 @@ void CaptionsEdit::slotDeleteValue()
     emit signalModified();
 }
 
-void CaptionsEdit::slotSelectionChanged(int index)
+void AltLangStrEdit::slotSelectionChanged(int index)
 {
     QString lang = d->languageCB->currentText();
     d->valueEdit->blockSignals(true);
@@ -363,7 +363,7 @@ void CaptionsEdit::slotSelectionChanged(int index)
     d->languageCB->setToolTip(d->languageCodeMap[lang]);
 }
 
-void CaptionsEdit::setValues(const KExiv2::AltLangMap& values)
+void AltLangStrEdit::setValues(const KExiv2::AltLangMap& values)
 {
     blockSignals(true);
     d->values = values;
@@ -371,12 +371,12 @@ void CaptionsEdit::setValues(const KExiv2::AltLangMap& values)
     blockSignals(false);
 }
 
-KExiv2::AltLangMap& CaptionsEdit::values()
+KExiv2::AltLangMap& AltLangStrEdit::values()
 {
     return d->values;
 }
 
-void CaptionsEdit::loadLangAltListEntries(const QString& currentLang)
+void AltLangStrEdit::loadLangAltListEntries(const QString& currentLang)
 {
     d->languageCB->clear();
 
@@ -395,7 +395,7 @@ void CaptionsEdit::loadLangAltListEntries(const QString& currentLang)
 
     // ...and now, all the rest...
 
-    for (CaptionsEditPriv::LanguageCodeMap::Iterator it = d->languageCodeMap.begin();
+    for (AltLangStrEditPriv::LanguageCodeMap::Iterator it = d->languageCodeMap.begin();
          it != d->languageCodeMap.end(); ++it)
     {
         if (!list.contains(it.key()))
@@ -406,17 +406,17 @@ void CaptionsEdit::loadLangAltListEntries(const QString& currentLang)
     slotSelectionChanged(d->languageCB->currentIndex());
 }
 
-QString CaptionsEdit::defaultAltLang() const
+QString AltLangStrEdit::defaultAltLang() const
 {
     return d->values[QString("x-default")];
 }
 
-bool CaptionsEdit::asDefaultAltLang() const
+bool AltLangStrEdit::asDefaultAltLang() const
 {
     return defaultAltLang().isNull() ? false : true;
 }
 
-void CaptionsEdit::slotTextChanged()
+void AltLangStrEdit::slotTextChanged()
 {
     QString text = d->valueEdit->toPlainText();
     if (text.isEmpty())
@@ -436,7 +436,7 @@ void CaptionsEdit::slotTextChanged()
         emit signalModified();
 }
 
-void CaptionsEdit::apply()
+void AltLangStrEdit::apply()
 {
     slotAddValue();
 }

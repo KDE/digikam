@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-06-15
- * Description : multi-languages captions editor
+ * Description : multi-languages string editor
  *
  * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef CAPTIONSEDIT_H
-#define CAPTIONSEDIT_H
+#ifndef ALTLANGSTREDIT_H
+#define ALTLANGSTREDIT_H
 
 // Qt includes
 
@@ -38,16 +38,16 @@ using namespace KExiv2Iface;
 namespace Digikam
 {
 
-class CaptionsEditPriv;
+class AltLangStrEditPriv;
 
-class CaptionsEdit : public QWidget
+class AltLangStrEdit : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    CaptionsEdit(QWidget* parent, const QString& title);
-    ~CaptionsEdit();
+    AltLangStrEdit(QWidget* parent, const QString& title);
+    ~AltLangStrEdit();
 
     void reset();
 
@@ -78,9 +78,9 @@ private:
 
 private:
 
-    CaptionsEditPriv* const d;
+    AltLangStrEditPriv* const d;
 };
 
 }  // namespace Digikam
 
-#endif // CAPTIONSEDIT_H
+#endif // ALTLANGSTREDIT_H
