@@ -66,7 +66,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 052 ==> 197808 : Bad images sort order when starting digiKam.
 053 ==> 197641 : Can't delete exif x-default caption once set.
 054 ==> 196437 : digiKam crashes at startup.
-056 ==> 
+056 ==> 197868 : digiKam crashes on startup (digikam-0.10.0-2/x86_64/Archlinux).
+057 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta1 - Release date: 2009-06-07
