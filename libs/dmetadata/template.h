@@ -77,14 +77,32 @@ protected:
      */
     QString     m_templateTitle;
 
-    /** Metadata strings recorded to DB and XMP
+    /** List of author names.
      */
     QStringList m_authors;
+
+    /** Description of authors position.
+     */
     QString     m_authorsPosition;
+
+    /** Credit description.
+     */
     QString     m_credit;
+
+    /** Language alternative copyright notices.
+     */
     QString     m_copyright;
+
+    /** Language alternative right term usages.
+     */
     QString     m_rightUsageTerms;
+
+    /** Descriptions of contents source.
+     */
     QString     m_source;
+
+    /** Special instructions to process with contents.
+     */
     QString     m_instructions;
 };
 
