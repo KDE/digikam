@@ -137,6 +137,7 @@ public:
 };
 
 ImageComments::ImageComments()
+             : d(0)
 {
 }
 
