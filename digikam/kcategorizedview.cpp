@@ -1,5 +1,7 @@
 /**
   * This file is part of the KDE project
+  * Copyright (C) 2009 Marcel Wiesweg <marcel.wiesweg@gmx.de>
+  * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
   * Copyright (C) 2007 Rafael Fernández López <ereslibre@kde.org>
   *
   * This library is free software; you can redistribute it and/or
@@ -393,6 +395,18 @@ QRect KCategorizedView::Private::categoryVisualRect(const QString &category)
     return retRect;
 }
 
+QSize KCategorizedView::Private::contentsSize()
+{
+    // find the last index in the last category
+    QModelIndex lastIndex = categoriesIndexes.isEmpty() ? QModelIndex() :
+                            proxyModel->index(categoriesIndexes[categories.last()].last(), 0);
+
+    int lastItemBottom = cachedRectIndex(lastIndex).top() +
+                         listView->spacing() + (listView->gridSize().isEmpty() ? biggestItemSize.height() : listView->gridSize().height()) - listView->viewport()->height();
+
+    return QSize(listView->viewport()->width(), lastItemBottom);
+}
+
 void KCategorizedView::Private::drawNewCategory(const QModelIndex &index,
                                                 int sortRole,
                                                 const QStyleOption &option,
@@ -435,13 +449,6 @@ void KCategorizedView::Private::drawNewCategory(const QModelIndex &index,
 
 void KCategorizedView::Private::updateScrollbars()
 {
-    // find the last index in the last category
-    QModelIndex lastIndex = categoriesIndexes.isEmpty() ? QModelIndex() :
-                            proxyModel->index(categoriesIndexes[categories.last()].last(), 0);
-
-    int lastItemBottom = cachedRectIndex(lastIndex).top() +
-                         listView->spacing() + (listView->gridSize().isEmpty() ? biggestItemSize.height() : listView->gridSize().height()) - listView->viewport()->height();
-
     listView->horizontalScrollBar()->setRange(0, 0);
 
     if (listView->verticalScrollMode() == QAbstractItemView::ScrollPerItem)
@@ -456,7 +463,7 @@ void KCategorizedView::Private::updateScrollbars()
 
     listView->verticalScrollBar()->setSingleStep(listView->viewport()->height() / 10);
     listView->verticalScrollBar()->setPageStep(listView->viewport()->height());
-    listView->verticalScrollBar()->setRange(0, lastItemBottom);
+    listView->verticalScrollBar()->setRange(0, contentsSize().height());
 }
 
 void KCategorizedView::Private::drawDraggedItems(QPainter *painter)
@@ -927,146 +934,188 @@ void KCategorizedView::resizeEvent(QResizeEvent *event)
     d->updateScrollbars();
 }
 
+QItemSelection KCategorizedView::Private::selectionForRect(const QRect &rect)
+{
+    QItemSelection selection;
+    QModelIndex tl, br;
+    QModelIndexList intersectedIndexes = intersectionSet(rect);
+    QList<QModelIndex>::iterator it = intersectedIndexes.begin();
+    for (; it != intersectedIndexes.end(); ++it) {
+        if (!tl.isValid() && !br.isValid()) {
+            tl = br = *it;
+        } else if ((*it).row() == (tl.row() - 1)) {
+            tl = *it; // expand current range
+        } else if ((*it).row() == (br.row() + 1)) {
+            br = (*it); // expand current range
+        } else {
+            selection.select(tl, br); // select current range
+            tl = br = *it; // start new range
+        }
+    }
+
+    if (tl.isValid() && br.isValid())
+        selection.select(tl, br);
+    else if (tl.isValid())
+        selection.select(tl, tl);
+    else if (br.isValid())
+        selection.select(br, br);
+
+    return selection;
+}
+
 void KCategorizedView::setSelection(const QRect &rect,
-                                    QItemSelectionModel::SelectionFlags flags)
+                                    QItemSelectionModel::SelectionFlags command)
 {
     if (!d->proxyModel || !d->categoryDrawer || !d->proxyModel->isCategorizedModel())
     {
-        QListView::setSelection(rect, flags);
+        QListView::setSelection(rect, command);
         return;
     }
 
-    if (!flags)
-        return;
+    QItemSelection selection;
+    QRect contentsRect = rect.translated(horizontalOffset(), verticalOffset());
+    QModelIndexList intersectedIndexes = d->intersectionSet(rect);
 
-    if (flags & QItemSelectionModel::Clear)
+    if (rect.width() == 1 && rect.height() == 1)
     {
-        selectionModel()->clearSelection();
-        d->lastSelection.clear();
+        QModelIndex tl;
+        if (!intersectedIndexes.isEmpty())
+            tl = intersectedIndexes.last(); // special case for mouse press; only select the top item
+        if (tl.isValid() && (tl.flags() & Qt::ItemIsEnabled))
+            selection.select(tl, tl);
     }
-
-    QModelIndexList dirtyIndexes = d->intersectionSet(rect);
-
-    // no items affected, just leave
-    if (!dirtyIndexes.count())
+    else
     {
-        selectionModel()->select(d->lastSelection, QItemSelectionModel::SelectCurrent);
-
-        return;
-    }
-
-    QModelIndex topLeft;
-    QModelIndex bottomRight;
-
-    if (d->mouseButtonPressed || d->rightMouseButtonPressed) // selection with click + drag
-    {
-        QItemSelection selection;
-
-        QModelIndex prev = dirtyIndexes[0];
-        QModelIndex first = prev;
-        foreach (const QModelIndex &index, dirtyIndexes)
-        {
-            // we have a different interval. non-contiguous items
-            if ((index.row() - prev.row()) > 1) {
-                selection << QItemSelectionRange(first, prev);
-
-                first = index;
-            }
-
-            prev = index;
-        }
-
-        selection << QItemSelectionRange(first, prev);
-
-        if (flags & QItemSelectionModel::Current)
-        {
-            if (rect.topLeft() == rect.bottomRight())
-            {
-                selectionModel()->setCurrentIndex(indexAt(rect.topLeft()), QItemSelectionModel::NoUpdate);
-            }
-
-            selection.merge(d->lastSelection, flags);
+        if (state() == DragSelectingState)
+        { // visual selection mode (rubberband selection)
+            selection = d->selectionForRect(rect);
         }
         else
-        {
-            selection.merge(selectionModel()->selection(), flags);
+        { // logical selection mode (key and mouse click selection)
+            QModelIndex tl, br;
+            // get the first item
+            const QRect topLeft(rect.left(), rect.top(), 1, 1);
+            intersectedIndexes = d->intersectionSet(topLeft);
+            if (!intersectedIndexes.isEmpty())
+                tl = intersectedIndexes.last();
+            // get the last item
+            const QRect bottomRight(rect.right(), rect.bottom(), 1, 1);
+            intersectedIndexes = d->intersectionSet(bottomRight);
+            if (!intersectedIndexes.isEmpty())
+                br = intersectedIndexes.last();
 
-            selectionModel()->select(selection, QItemSelectionModel::SelectCurrent);
-
-            return;
-        }
-
-        selectionModel()->select(selection, flags);
-    }
-    else // selection with click + keyboard keys
-    {
-        QModelIndex topLeftIndex = indexAt(QPoint(rect.topLeft().x(),
-                                                  rect.topLeft().y()));
-        QModelIndex bottomRightIndex = indexAt(QPoint(rect.bottomRight().x(),
-                                                      rect.bottomRight().y()));
-
-        // keyboard selection comes "upside down". Let's normalize it
-        if (topLeftIndex.row() > bottomRightIndex.row())
-        {
-            QModelIndex auxIndex = topLeftIndex;
-            topLeftIndex = bottomRightIndex;
-            bottomRightIndex = auxIndex;
-        }
-
-        int viewportWidth = viewport()->width() - spacing();
-        int itemWidth;
-
-        if (gridSize().isEmpty())
-        {
-            itemWidth = d->biggestItemSize.width();
-        }
-        else
-        {
-            itemWidth = gridSize().width();
-        }
-
-        int itemWidthPlusSeparation = spacing() + itemWidth;
-        if (!itemWidthPlusSeparation)
-            itemWidthPlusSeparation++;
-        int elementsPerRow = viewportWidth / itemWidthPlusSeparation;
-        if (!elementsPerRow)
-            elementsPerRow++;
-
-        QModelIndexList theoricDirty(dirtyIndexes);
-        dirtyIndexes.clear();
-        int first = model()->rowCount();
-        int last = -1;
-
-        foreach (const QModelIndex &index, theoricDirty)
-        {
-            if ((index.row() < first) &&
-                ((((topLeftIndex.row() / elementsPerRow) == (index.row() / elementsPerRow)) &&
-                  ((topLeftIndex.row() % elementsPerRow) <= (index.row() % elementsPerRow))) ||
-                 (topLeftIndex.row() / elementsPerRow) != (index.row() / elementsPerRow)))
+            // get the ranges
+            if (tl.isValid() && br.isValid()
+                && (tl.flags() & Qt::ItemIsEnabled)
+                && (br.flags() & Qt::ItemIsEnabled))
             {
-                first = index.row();
-                topLeft = index;
-            }
+                // first, middle, last in content coordinates
+                QRect first = d->cachedRectIndex(tl);
+                QRect last = d->cachedRectIndex(br);
+                QRect middle;
+                QSize fullSize = d->contentsSize();
+                if (flow() == LeftToRight)
+                {
+                    QRect &top = first;
+                    QRect &bottom = last;
+                    // if bottom is above top, swap them
+                    if (top.center().y() > bottom.center().y())
+                    {
+                        QRect tmp = top;
+                        top = bottom;
+                        bottom = tmp;
+                    }
+                    // if the rect are on differnet lines, expand
+                    if (top.top() != bottom.top())
+                    {
+                        // top rectangle
+                        if (isRightToLeft())
+                            top.setLeft(0);
+                        else
+                            top.setRight(fullSize.width());
+                        // bottom rectangle
+                        if (isRightToLeft())
+                            bottom.setRight(fullSize.width());
+                        else
+                            bottom.setLeft(0);
+                    }
+                    else if (top.left() > bottom.right())
+                    {
+                        if (isRightToLeft())
+                            bottom.setLeft(top.right());
+                        else
+                            bottom.setRight(top.left());
+                    }
+                    else
+                    {
+                        if (isRightToLeft())
+                            top.setLeft(bottom.right());
+                        else
+                            top.setRight(bottom.left());
+                    }
+                    // middle rectangle
+                    if (top.bottom() < bottom.top())
+                    {
+                        middle.setTop(top.bottom() + 1);
+                        middle.setLeft(qMin(top.left(), bottom.left()));
+                        middle.setBottom(bottom.top() - 1);
+                        middle.setRight(qMax(top.right(), bottom.right()));
+                    }
+                } else
+                {    // TopToBottom
+                    QRect &left = first;
+                    QRect &right = last;
+                    if (left.center().x() > right.center().x())
+                        qSwap(left, right);
 
-            if ((index.row() > last) &&
-                ((((bottomRightIndex.row() / elementsPerRow) == (index.row() / elementsPerRow)) &&
-                  ((bottomRightIndex.row() % elementsPerRow) >= (index.row() % elementsPerRow))) ||
-                 (bottomRightIndex.row() / elementsPerRow) != (index.row() / elementsPerRow)))
-            {
-                last = index.row();
-                bottomRight = index;
+                    int ch = fullSize.height();
+                    if (left.left() != right.left())
+                    {
+                        // left rectangle
+                        if (isRightToLeft())
+                            left.setTop(0);
+                        else
+                            left.setBottom(ch);
+
+                        // top rectangle
+                        if (isRightToLeft())
+                            right.setBottom(ch);
+                        else
+                            right.setTop(0);
+                        // only set middle if the
+                        middle.setTop(0);
+                        middle.setBottom(ch);
+                        middle.setLeft(left.right() + 1);
+                        middle.setRight(right.left() - 1);
+                    }
+                    else if (left.bottom() < right.top())
+                    {
+                        left.setBottom(right.top() - 1);
+                    }
+                    else
+                    {
+                        right.setBottom(left.top() - 1);
+                    }
+                }
+
+                // get viewport coordinates
+                first  = first.translated( - horizontalOffset(), - verticalOffset());
+                middle = middle.translated( - horizontalOffset(), - verticalOffset());
+                last   = last.translated( - horizontalOffset(), - verticalOffset());
+
+                // do the selections
+                QItemSelection topSelection = d->selectionForRect(first);
+                QItemSelection middleSelection = d->selectionForRect(middle);
+                QItemSelection bottomSelection = d->selectionForRect(last);
+                // merge
+                selection.merge(topSelection, QItemSelectionModel::Select);
+                selection.merge(middleSelection, QItemSelectionModel::Select);
+                selection.merge(bottomSelection, QItemSelectionModel::Select);
             }
         }
-
-        for (int i = first; i <= last; i++)
-        {
-            dirtyIndexes << model()->index(i, theoricDirty[0].column(), theoricDirty[0].parent());
-        }
-
-        QItemSelection selection(topLeft, bottomRight);
-
-        selectionModel()->select(selection, flags);
     }
+
+    selectionModel()->select(selection, command);
 }
 
 void KCategorizedView::mouseMoveEvent(QMouseEvent *event)

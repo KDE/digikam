@@ -86,6 +86,11 @@ public:
     QRect categoryVisualRect(const QString &category);
 
     /**
+      * Returns the contents size of this view (topmost category to bottommost index + spacing)
+      */
+    QSize contentsSize();
+
+    /**
       * This method will draw a new category represented by index
       * @param index  on the rect specified by @p option.rect, with
       * painter @p painter
@@ -117,6 +122,11 @@ public:
       * find the last index having the same category as the index to begin with.
       */
     int categoryUpperBound(const QVector<QModelIndex> &modelIndexList, int begin, int averageSize = 0);
+
+    /**
+      * Returns a QItemSelection for all items intersection rect.
+      */
+    QItemSelection selectionForRect(const QRect &rect);
 
     // Attributes
 
