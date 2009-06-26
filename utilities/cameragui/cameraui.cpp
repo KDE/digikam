@@ -1529,8 +1529,8 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
 
     QSet<QString> usedDownloadPaths;
     bool lastPhotoFirst = d->lastPhotoFirstAction->isChecked();
-    for (IconItem* item = (lastPhotoFirst?d->view->lastItem():d->view->firstItem()); item;
-         (lastPhotoFirst?item = item->prevItem():item->nextItem()))
+    for (IconItem* item = (lastPhotoFirst ? d->view->lastItem() : d->view->firstItem()); item;
+         item = (lastPhotoFirst ? item->prevItem() : item->nextItem()))
     {
         if (onlySelected && !(item->isSelected()))
             continue;
