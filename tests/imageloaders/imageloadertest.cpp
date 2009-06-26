@@ -55,7 +55,7 @@ void ImageLoaderTest::testSimpleLoaderCheck()
 
     QImage src(filename);
     QImage dst;
-    bool success = true;
+    bool success = false;
 
     DImg dimg;
     success = dimg.load(filename);
