@@ -67,7 +67,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 053 ==> 197641 : Can't delete exif x-default caption once set.
 054 ==> 196437 : digiKam crashes at startup.
 056 ==> 197868 : digiKam crashes on startup (digikam-0.10.0-2/x86_64/Archlinux).
-057 ==> 
+057 ==> 196686 : Iconview (Qt4 Model/View based) : Select multiple images with Ctrl + Mouse not working anymore in 1.0.0-beta1
+058 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta1 - Release date: 2009-06-07
