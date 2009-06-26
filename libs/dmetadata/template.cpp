@@ -30,25 +30,6 @@
 namespace Digikam
 {
 
-class TemplatePrivate
-{
-public:
-
-    TemplatePrivate(){}
-
-    // template title used internaly
-    QString     templateTitle;
-
-    // Metadata strings recorded to DB and XMP
-    QStringList authors;
-    QString     authorsPosition;
-    QString     credit;
-    QString     copyright;
-    QString     rightUsageTerms;
-    QString     source;
-    QString     instructions;
-};
-
 Template::Template()
 {
 }
