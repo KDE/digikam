@@ -152,12 +152,12 @@ ImagePreviewBar::~ImagePreviewBar()
 
 void ImagePreviewBar::clear(bool updateView)
 {
-    if (d->ratingItem)
+    ThumbBarItem *item = d->ratingItem;
+    if (item)
     {
         unsetCursor();
-        d->ratingWidget->hide();
-        ThumbBarItem *item = d->ratingItem;
         d->ratingItem = 0;
+        d->ratingWidget->hide();
         item->repaint();
     }
 
@@ -196,12 +196,12 @@ void ImagePreviewBar::removeItem(ThumbBarItem* item)
 
 void ImagePreviewBar::rearrangeItems()
 {
-    if (d->ratingItem)
+    ThumbBarItem *item = d->ratingItem;
+    if (item)
     {
         unsetCursor();
+        d->ratingItem = 0;
         d->ratingWidget->hide();
-        ThumbBarItem *item = d->ratingItem;
-        d->ratingItem      = 0;
         item->repaint();
     }
 
@@ -212,13 +212,13 @@ void ImagePreviewBar::ensureItemVisible(ThumbBarItem* item)
 {
     if (!item) return;
 
-    if (d->ratingItem)
+    ThumbBarItem *ritem = d->ratingItem;
+    if (ritem)
     {
         unsetCursor();
+        d->ratingItem = 0;
         d->ratingWidget->hide();
-        ThumbBarItem *item = d->ratingItem;
-        d->ratingItem      = 0;
-        item->repaint();
+        ritem->repaint();
     }
 
     ThumbBarView::ensureItemVisible(item);
@@ -226,12 +226,12 @@ void ImagePreviewBar::ensureItemVisible(ThumbBarItem* item)
 
 void ImagePreviewBar::leaveEvent(QEvent* e)
 {
-    if (d->ratingItem)
+    ThumbBarItem *item = d->ratingItem;
+    if (item)
     {
         unsetCursor();
+        d->ratingItem = 0;
         d->ratingWidget->hide();
-        ThumbBarItem *item = d->ratingItem;
-        d->ratingItem      = 0;
         item->repaint();
     }
 
@@ -240,12 +240,12 @@ void ImagePreviewBar::leaveEvent(QEvent* e)
 
 void ImagePreviewBar::focusOutEvent(QFocusEvent* e)
 {
-    if (d->ratingItem)
+    ThumbBarItem *item = d->ratingItem;
+    if (item)
     {
         unsetCursor();
+        d->ratingItem = 0;
         d->ratingWidget->hide();
-        ThumbBarItem *item = d->ratingItem;
-        d->ratingItem      = 0;
         item->repaint();
     }
 
@@ -254,12 +254,12 @@ void ImagePreviewBar::focusOutEvent(QFocusEvent* e)
 
 void ImagePreviewBar::contentsWheelEvent(QWheelEvent* e)
 {
-    if (d->ratingItem)
+    ThumbBarItem *item = d->ratingItem;
+    if (item)
     {
         unsetCursor();
-        d->ratingWidget->hide();
-        ThumbBarItem *item = d->ratingItem;
         d->ratingItem = 0;
+        d->ratingWidget->hide();
         item->repaint();
     }
 
