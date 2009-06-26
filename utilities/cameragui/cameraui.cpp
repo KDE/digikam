@@ -1517,12 +1517,12 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
     QDateTime dateTime;
     int       total = 0;
 
-    downloadSettings.autoRotate       = d->autoRotateCheck->isChecked();
-    downloadSettings.fixDateTime      = d->fixDateTimeCheck->isChecked();
-    downloadSettings.newDateTime      = d->dateTimeEdit->dateTime();
-    downloadSettings.metadataTemplate = d->templateSelector->getTemplate();
-    downloadSettings.convertJpeg      = convertLosslessJpegFiles();
-    downloadSettings.losslessFormat   = losslessFormat();
+    downloadSettings.autoRotate     = d->autoRotateCheck->isChecked();
+    downloadSettings.fixDateTime    = d->fixDateTimeCheck->isChecked();
+    downloadSettings.newDateTime    = d->dateTimeEdit->dateTime();
+    downloadSettings.templateTitle  = d->templateSelector->getTemplate().templateTitle();
+    downloadSettings.convertJpeg    = convertLosslessJpegFiles();
+    downloadSettings.losslessFormat = losslessFormat();
 
     // -- Download camera items -------------------------------
     // Since we show camera items in reverse order, downloading need to be done also in reverse order.

@@ -66,8 +66,8 @@ public:
     // New format to convert Jpeg files.
     QString   losslessFormat;
 
-    // Metadata template settings
-    Template  metadataTemplate;
+    // Metadata template title.
+    QString   templateTitle;
 };
 
 }  // namespace Digikam

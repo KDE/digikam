@@ -489,7 +489,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             bool      autoRotate     = cmd->map["autoRotate"].toBool();
             bool      fixDateTime    = cmd->map["fixDateTime"].toBool();
             QDateTime newDateTime    = cmd->map["newDateTime"].toDateTime();
-            Template  t              = cmd->map["template"].value<Template>();
+            QString   templateTitle  = cmd->map["template"].toString();
             bool      convertJpeg    = cmd->map["convertJpeg"].toBool();
             QString   losslessFormat = cmd->map["losslessFormat"].toString();
             sendLogMsg(i18n("Downloading file %1...", file), DHistoryView::StartingEntry, folder, file);
@@ -524,30 +524,33 @@ void CameraController::executeCommand(CameraCommand *cmd)
                     exifTransform(tempURL.path(), file);
                 }
 
-                if (!t.isNull() || fixDateTime)
+                if (!templateTitle.isNull() || fixDateTime)
                 {
                     kDebug(50003) << "Set metadata from: " << file << " using (" << tempURL << ")";
-                    sendLogMsg(i18n("Apply Metadata template to file %1...", file), DHistoryView::StartingEntry, folder, file);
                     DMetadata metadata(tempURL.path());
 
                     if (fixDateTime)
+                    {
+                        sendLogMsg(i18n("Fix Internal date to file %1...", file), DHistoryView::StartingEntry, folder, file);
                         metadata.setImageDateTime(newDateTime, true);
+                    }
 
                     TemplateManager* tm = TemplateManager::defaultManager();
-                    if (tm && !t.isNull())
+                    if (tm && !templateTitle.isEmpty())
                     {
-                        QString title = t.templateTitle();
-                        if (title == tm->removeTemplate().templateTitle())
+                        kDebug(50003) << "Metadata template title : " << templateTitle;
+                        if (templateTitle == tm->removeTemplate().templateTitle())
                         {
                             metadata.removeMetadataTemplate();
                         }
-                        else if (title == tm->unknowTemplate().templateTitle())
+                        else if (templateTitle == tm->unknowTemplate().templateTitle())
                         {
                             // Nothing to do.
                         }
                         else
                         {
-                            metadata.setMetadataTemplate(t);
+                            sendLogMsg(i18n("Apply Metadata template to file %1...", file), DHistoryView::StartingEntry, folder, file);
+                            metadata.setMetadataTemplate(tm->findByTitle(templateTitle));
                         }
                     }
                     metadata.applyChanges();
@@ -1030,7 +1033,7 @@ void CameraController::download(const DownloadSettingsContainer& downloadSetting
     cmd->map.insert("autoRotate",        QVariant(downloadSettings.autoRotate));
     cmd->map.insert("fixDateTime",       QVariant(downloadSettings.fixDateTime));
     cmd->map.insert("newDateTime",       QVariant(downloadSettings.newDateTime));
-    cmd->map.insert("template",          qVariantFromValue(downloadSettings.metadataTemplate));
+    cmd->map.insert("template",          QVariant(downloadSettings.templateTitle));
     cmd->map.insert("convertJpeg",       QVariant(downloadSettings.convertJpeg));
     cmd->map.insert("losslessFormat",    QVariant(downloadSettings.losslessFormat));
     addCommand(cmd);
