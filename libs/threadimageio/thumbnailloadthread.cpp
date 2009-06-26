@@ -550,7 +550,10 @@ void ThumbnailLoadThread::deleteThumbnail(const QString& filePath)
             cache->removeThumbnail(cacheKey);
     }
 
-    ThumbnailCreator(ThumbnailCreator::FreeDesktopStandard).deleteThumbnailsFromDisk(filePath);
+    ThumbnailCreator creator(static_d->storageMethod);
+    if (static_d->provider)
+        creator.setThumbnailInfoProvider(static_d->provider);
+    creator.deleteThumbnailsFromDisk(filePath);
 }
 
 }   // namespace Digikam
