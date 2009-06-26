@@ -98,6 +98,11 @@ QString ImageCopyright::copyrightNotice(const QString& languageCode)
     return readLanguageProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCopyrightNotice), languageCode);
 }
 
+KExiv2Iface::KExiv2::AltLangMap ImageCopyright::allCopyrightNotices()
+{
+    return readLanguageProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCopyrightNotice));
+}
+
 void ImageCopyright::setCopyrightNotice(const QString& notice, const QString& languageCode, ReplaceMode mode)
 {
     setLanguageProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCopyrightNotice), notice, languageCode, mode);
@@ -111,6 +116,11 @@ void ImageCopyright::removeCopyrightNotices()
 QString ImageCopyright::rightsUsageTerms(const QString& languageCode)
 {
     return readLanguageProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreRightsUsageTerms), languageCode);
+}
+
+KExiv2Iface::KExiv2::AltLangMap ImageCopyright::allRightsUsageTerms()
+{
+    return readLanguageProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreRightsUsageTerms));
 }
 
 void ImageCopyright::setRightsUsageTerms(const QString& term, const QString& languageCode, ReplaceMode mode)
@@ -190,6 +200,15 @@ QString ImageCopyright::readLanguageProperty(const QString& property, const QStr
         return QString();
     else
         return infos[index].value;
+}
+
+KExiv2Iface::KExiv2::AltLangMap ImageCopyright::readLanguageProperties(const QString& property)
+{
+    KExiv2Iface::KExiv2::AltLangMap map;
+    QList<CopyrightInfo> infos = DatabaseAccess().db()->getImageCopyright(m_id, property);
+    foreach (const CopyrightInfo &info, infos)
+        map[info.extraValue] = info.value;
+    return map;
 }
 
 void ImageCopyright::setLanguageProperty(const QString& property, const QString& value, 
