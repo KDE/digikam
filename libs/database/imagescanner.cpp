@@ -409,7 +409,7 @@ void ImageScanner::scanImageCopyright()
            << MetadataInfo::IptcCoreRightsUsageTerms
            << MetadataInfo::IptcCoreSource
            << MetadataInfo::IptcCoreCreatorJobTitle
-           << MetadataInfo::IptcCoreSource;
+           << MetadataInfo::IptcCoreInstructions;
 
     QVariantList metadataInfos = m_metadata.getMetadataFields(fields);
 
@@ -445,7 +445,7 @@ void ImageScanner::scanImageCopyright()
     }
     if (!metadataInfos[3].isNull())
     {
-        QMap<QString, QVariant> map = metadataInfos[0].toMap();
+        QMap<QString, QVariant> map = metadataInfos[3].toMap();
         ImageCopyright::ReplaceMode mode = ImageCopyright::ReplaceAllEntries;
         for (QMap<QString, QVariant>::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
         {
