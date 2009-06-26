@@ -474,6 +474,13 @@ void ImageCategorizedView::slotActivated(const QModelIndex& index)
 {
     if (d->currentMouseEvent)
     {
+        // ignore activation if Ctrl or Shift is pressed (for selection)
+        Qt::KeyboardModifiers modifiers = d->currentMouseEvent->modifiers();
+        const bool shiftKeyPressed = modifiers & Qt::ShiftModifier;
+        const bool controlKeyPressed = modifiers & Qt::ControlModifier;
+        if (shiftKeyPressed || controlKeyPressed)
+            return;
+
         // if the activation is caused by mouse click (not keyboard)
         // we need to check the hot area
         if (!d->delegate->acceptsActivation(d->currentMouseEvent->pos(), visualRect(index), index))
