@@ -48,7 +48,7 @@ public:
 
     bool isNull() const;
 
-    /** Compare for metadata equality, not including "templateTitle"
+    /** Compare for metadata equality, not including "templateTitle" value.
      */
     bool operator==(const Template& t) const;
 
@@ -73,10 +73,12 @@ public:
 
 protected:
 
-    // template title used internaly
+    /** Template title used internaly. This value always exist and cannot be empty.
+     */
     QString     m_templateTitle;
 
-    // Metadata strings recorded to DB and XMP
+    /** Metadata strings recorded to DB and XMP
+     */
     QStringList m_authors;
     QString     m_authorsPosition;
     QString     m_credit;
