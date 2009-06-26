@@ -123,10 +123,10 @@ void TemplateSelector::populateTemplates()
     TemplateManager* tm = TemplateManager::defaultManager();
     if (tm)
     {
-        int i                  = 3;
+        int i                 = 3;
         QList<Template> list  = tm->templateList();
 
-        foreach (const Template &t, list)
+        foreach (const Template& t, list)
         {
             d->templateCombo->insertSqueezedItem(t.templateTitle(), i);
             ++i;
@@ -155,7 +155,7 @@ Template TemplateSelector::getTemplate() const
     return Template();
 }
 
-void TemplateSelector::setTemplate(const Template &t)
+void TemplateSelector::setTemplate(const Template& t)
 {
     TemplateManager* tm = TemplateManager::defaultManager();
     if (tm)

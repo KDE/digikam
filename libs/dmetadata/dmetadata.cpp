@@ -600,7 +600,8 @@ bool DMetadata::setMetadataTemplate(const Template& t) const
     QString copyright       = t.copyright();
     QString rightUsage      = t.rightUsageTerms();
     QString instructions    = t.instructions();
- 
+    kDebug(50003) << "Appling Metadata Template: " << t.templateTitle() << " :: " << authors;
+
     // Set XMP tags. XMP<->IPTC Schema from Photoshop 7.0
 
     if (supportXmp())

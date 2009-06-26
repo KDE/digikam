@@ -251,7 +251,7 @@ void TemplateManager::clear()
         d->pList.clear();
     }
 
-    foreach (const Template &t, d->pList)
+    foreach (const Template& t, d->pList)
     {
         emit signalTemplateRemoved(t);
     }
@@ -266,7 +266,7 @@ Template TemplateManager::findByTitle(const QString& title) const
 {
     QMutexLocker lock(&d->mutex);
 
-    foreach (const Template &t, d->pList)
+    foreach (const Template& t, d->pList)
     {
         if (t.templateTitle() == title)
             return t;
@@ -278,7 +278,7 @@ Template TemplateManager::findByContents(const Template& templ) const
 {
     QMutexLocker lock(&d->mutex);
 
-    foreach (const Template &t, d->pList)
+    foreach (const Template& t, d->pList)
     {
         if (t == templ)
         {

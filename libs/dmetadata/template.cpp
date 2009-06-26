@@ -23,6 +23,10 @@
 
 #include "template.h"
 
+// KDE includes
+
+#include <kdebug.h>
+
 namespace Digikam
 {
 
@@ -60,14 +64,23 @@ bool Template::isNull() const
 
 bool Template::operator==(const Template& t) const
 {
-    return m_authors          == t.m_authors
-        && m_authorsPosition  == t.m_authorsPosition
-        && m_credit           == t.m_credit
-        && m_copyright        == t.m_copyright
-        && m_rightUsageTerms  == t.m_rightUsageTerms
-        && m_source           == t.m_source
-        && m_instructions     == t.m_instructions
-      ;
+    bool b1 = m_authors         == t.m_authors;
+    bool b2 = m_authorsPosition == t.m_authorsPosition;
+    bool b3 = m_credit          == t.m_credit;
+    bool b4 = m_copyright       == t.m_copyright;
+    bool b5 = m_rightUsageTerms == t.m_rightUsageTerms;
+    bool b6 = m_source          == t.m_source;
+    bool b7 = m_instructions    == t.m_instructions;
+
+    kDebug(50003) << t.authors()         << m_authors         << b1;
+    kDebug(50003) << t.authorsPosition() << m_authorsPosition << b2;
+    kDebug(50003) << t.credit()          << m_credit          << b3;
+    kDebug(50003) << t.copyright()       << m_copyright       << b4;
+    kDebug(50003) << t.rightUsageTerms() << m_rightUsageTerms << b5;
+    kDebug(50003) << t.source()          << m_source          << b6;
+    kDebug(50003) << t.instructions()    << m_instructions    << b7;
+
+    return b1 && b2 && b3 && b4 && b5 && b6 && b7;
 }
 
 void Template::setTemplateTitle(const QString& title)
