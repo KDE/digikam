@@ -40,9 +40,19 @@ using namespace Digikam;
 
 QTEST_KDEMAIN(ImageLoaderTest, GUI)
 
-void ImageLoaderTest::testLoadPNG()
+void ImageLoaderTest::testSimpleLoaderCheck_data()
 {
-    QString filename(KDESRCDIR"/test.png");
+    QTest::addColumn<QString>("filename");
+
+    QTest::newRow("JPG")  << QString(KDESRCDIR"/test.jpg");
+    QTest::newRow("PNG")  << QString(KDESRCDIR"/test.png");
+    QTest::newRow("TIFF") << QString(KDESRCDIR"/test.tif");
+}
+
+void ImageLoaderTest::testSimpleLoaderCheck()
+{
+    QFETCH(QString, filename);
+
     QImage src(filename);
     QImage dst;
     bool success = true;
@@ -59,46 +69,16 @@ void ImageLoaderTest::testLoadPNG()
     // compare image data
     dst = dimg.convertToPixmap().toImage().convertToFormat(src.format());
     QCOMPARE(src, dst);
+}
+
+void ImageLoaderTest::testLoadPNG()
+{
 }
 
 void ImageLoaderTest::testLoadJPG()
 {
-    QString filename(KDESRCDIR"/test.jpg");
-    QImage src(filename);
-    QImage dst;
-    bool success = true;
-
-    DImg dimg;
-    success = dimg.load(filename);
-    QVERIFY(success);
-
-    // compare basic values
-    QCOMPARE((uint)src.width(),     dimg.width());
-    QCOMPARE((uint)src.height(),    dimg.height());
-    QCOMPARE(src.hasAlphaChannel(), dimg.hasAlpha());
-
-    // compare image data
-    dst = dimg.convertToPixmap().toImage().convertToFormat(src.format());
-    QCOMPARE(src, dst);
 }
 
 void ImageLoaderTest::testLoadTIFF()
 {
-    QString filename(KDESRCDIR"/test.tif");
-    QImage src(filename);
-    QImage dst;
-    bool success = true;
-
-    DImg dimg;
-    success = dimg.load(filename);
-    QVERIFY(success);
-
-    // compare basic values
-    QCOMPARE((uint)src.width(),     dimg.width());
-    QCOMPARE((uint)src.height(),    dimg.height());
-    QCOMPARE(src.hasAlphaChannel(), dimg.hasAlpha());
-
-    // compare image data
-    dst = dimg.convertToPixmap().toImage().convertToFormat(src.format());
-    QCOMPARE(src, dst);
 }
