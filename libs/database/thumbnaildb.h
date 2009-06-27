@@ -104,7 +104,6 @@ public:
     void replaceThumbnail(const DatabaseThumbnailInfo &info);
 
     QHash<QString, int> getValidFilePaths();
-    QHash<QString, int> getInvalidFilePaths();
 
 private:
 
