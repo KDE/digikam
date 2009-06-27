@@ -107,12 +107,7 @@ SetupTemplate::SetupTemplate(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QScrollArea *templateSv = new QScrollArea(panel);
-    QWidget *tview          = new QWidget(templateSv->viewport());
-    tview->setAutoFillBackground(false);
-    templateSv->setWidget(tview);
-    templateSv->setWidgetResizable(true);
-    templateSv->viewport()->setAutoFillBackground(false);
+    QWidget *tview     = new QWidget(panel);
     QGridLayout* tgrid = new QGridLayout(tview);
 
     QLabel *label1 = new QLabel(i18n("Authors:"), tview);
@@ -133,10 +128,10 @@ SetupTemplate::SetupTemplate(QWidget* parent)
     d->authorsPositionEdit->setClearButtonShown(true);
     label2->setBuddy(d->authorsPositionEdit);
     d->authorsPositionEdit->setWhatsThis(i18n("<p>This field should contain the job title of the photographer. Examples might include "
-                                             "titles such as: Staff Photographer, Freelance Photographer, or Independent Commercial "
-                                             "Photographer. Since this is a qualifier for the Author field, the Author field must also "
-                                             "be filled out.</p>"
-                                             "<p>With IPTC, this field is limited to 32 ASCII characters.</p>"));
+                                              "titles such as: Staff Photographer, Freelance Photographer, or Independent Commercial "
+                                              "Photographer. Since this is a qualifier for the Author field, the Author field must also "
+                                              "be filled out.</p>"
+                                              "<p>With IPTC, this field is limited to 32 ASCII characters.</p>"));
 
     // --------------------------------------------------------
 
@@ -170,7 +165,7 @@ SetupTemplate::SetupTemplate(QWidget* parent)
                                         "protection, the following three items should appear in the copyright field of the IPTC Core: "
                                         "(a) the word, Copyright; (b) year of the first publication; and (c) name of the author. "
                                         "You may also wish to include the phrase \"all rights reserved\".</p>"
-                                        "<p>With XMP, you can include more than one copyright string using different languages.</p>"));
+                                        "<p>With XMP, you can include more than one copyright string using different languages.</p>"
                                         "<p>With IPTC, this field is limited to 128 ASCII characters.</p>"));
 
     // --------------------------------------------------------
@@ -181,7 +176,7 @@ SetupTemplate::SetupTemplate(QWidget* parent)
     d->rightUsageEdit->setWhatsThis(i18n("<p>The Right Usage Terms field should be used to list instructions on how "
                                          "a resource can be legally used."
                                          "<p>With XMP, you can include more than one right usage terms string using "
-                                         "different languages.</p>"));
+                                         "different languages.</p>"
                                          "<p>This field do not exist with IPTC.</p>"));
 
     // --------------------------------------------------------
@@ -270,7 +265,7 @@ SetupTemplate::SetupTemplate(QWidget* parent)
     grid->addWidget(d->repButton, 2, 2, 1, 1);
     grid->addWidget(label0,       4, 0, 1, 1);
     grid->addWidget(d->titleEdit, 4, 1, 1, 1);
-    grid->addWidget(templateSv,   5, 0, 1, 3);
+    grid->addWidget(tview,        5, 0, 1, 3);
     grid->addWidget(note,         6, 0, 1, 3);
 
     // --------------------------------------------------------
