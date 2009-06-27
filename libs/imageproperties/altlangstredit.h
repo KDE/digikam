@@ -46,8 +46,10 @@ class AltLangStrEdit : public QWidget
 
 public:
 
-    AltLangStrEdit(QWidget* parent, const QString& title);
+    AltLangStrEdit(QWidget* parent);
     ~AltLangStrEdit();
+
+    void setTitle(const QString& title);
 
     void reset();
 

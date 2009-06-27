@@ -53,6 +53,7 @@ public:
 
     AltLangStrEditPriv()
     {
+        titleLabel     = 0;
         addValueButton = 0;
         delValueButton = 0;
         languageCB     = 0;
@@ -243,7 +244,7 @@ public:
 
     LanguageCodeMap                 languageCodeMap;
 
-    KExiv2::AltLangMap              values;
+    QLabel                         *titleLabel;
 
     QToolButton                    *addValueButton;
     QToolButton                    *delValueButton;
@@ -251,19 +252,17 @@ public:
     KTextEdit                      *valueEdit;
 
     KComboBox                      *languageCB;
+
+    KExiv2::AltLangMap              values;
 };
 
-AltLangStrEdit::AltLangStrEdit(QWidget* parent, const QString& title)
+AltLangStrEdit::AltLangStrEdit(QWidget* parent)
               : QWidget(parent), d(new AltLangStrEditPriv)
 {
     QGridLayout *grid = new QGridLayout(this);
-
-    // --------------------------------------------------------
-
-    QLabel *titleLabel = new QLabel(title, this);
-
-    d->addValueButton  = new QToolButton(this);
-    d->delValueButton  = new QToolButton(this);
+    d->titleLabel     = new QLabel(this);
+    d->addValueButton = new QToolButton(this);
+    d->delValueButton = new QToolButton(this);
     d->addValueButton->setIcon(SmallIcon("list-add"));
     d->delValueButton->setIcon(SmallIcon("list-remove"));
     d->delValueButton->setToolTip(i18n("Remove current caption"));
@@ -279,7 +278,7 @@ AltLangStrEdit::AltLangStrEdit(QWidget* parent, const QString& title)
     // --------------------------------------------------------
 
     grid->setAlignment( Qt::AlignTop );
-    grid->addWidget(titleLabel,        0, 0, 1, 1);
+    grid->addWidget(d->titleLabel,        0, 0, 1, 1);
     grid->addWidget(d->languageCB,     0, 1, 1, 2);
     grid->addWidget(d->addValueButton, 0, 3, 1, 1);
     grid->addWidget(d->delValueButton, 0, 4, 1, 1);
@@ -309,6 +308,11 @@ AltLangStrEdit::AltLangStrEdit(QWidget* parent, const QString& title)
 AltLangStrEdit::~AltLangStrEdit()
 {
     delete d;
+}
+
+void AltLangStrEdit::setTitle(const QString& title)
+{
+    d->titleLabel->setText(title);
 }
 
 void AltLangStrEdit::reset()

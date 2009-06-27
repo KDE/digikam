@@ -166,7 +166,8 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
 
     // Captions/Date/Rating view -----------------------------------
 
-    d->captionsEdit = new AltLangStrEdit(settingsArea, i18n("Captions: "));
+    d->captionsEdit = new AltLangStrEdit(settingsArea);
+    d->captionsEdit->setTitle(i18n("Captions: "));
     d->captionsEdit->setFixedHeight(100);
 
     KHBox *dateBox  = new KHBox(settingsArea);
