@@ -72,7 +72,7 @@ BatchToolsManager::BatchToolsManager(QObject* parent)
     registerTool(new Resize(this));
     registerTool(new Restoration(this));
     registerTool(new WaterMark(this));
-//    registerTool(new Metadata(this));
+    registerTool(new Metadata(this));
     registerTool(new Sharpen(this));
 }
 

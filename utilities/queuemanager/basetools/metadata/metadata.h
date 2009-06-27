@@ -30,6 +30,7 @@
 
 namespace Digikam
 {
+class TemplateSelector;
 
 class Metadata : public BatchTool
 {
@@ -53,6 +54,7 @@ private Q_SLOTS:
 
 private:
 
+    TemplateSelector* m_selector;
 };
 
 }  // namespace Digikam

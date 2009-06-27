@@ -35,11 +35,14 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kiconloader.h>
-#include <kcombobox.h>
 
 // Local includes
 
 #include "dimg.h"
+#include "templateselector.h"
+#include "templatemanager.h"
+#include "template.h"
+#include "dmetadata.h"
 
 namespace Digikam
 {
@@ -47,13 +50,20 @@ namespace Digikam
 Metadata::Metadata(QObject* parent)
         : BatchTool("Metadata", BaseTool, parent)
 {
-    setToolTitle(i18n("Edit Metadata"));
-    setToolDescription(i18n("A tool to edit metadata"));
+    setToolTitle(i18n("Apply Metadata Template"));
+    setToolDescription(i18n("A tool to apply template metadata"));
     setToolIcon(KIcon(SmallIcon("application-xml")));
 
-    KVBox *vbox   = new KVBox;
+    KVBox *vbox = new KVBox;
+    m_selector  = new TemplateSelector(vbox);
+
+    QLabel *space = new QLabel(vbox);
+    vbox->setStretchFactor(space, 10);
 
     setSettingsWidget(vbox);
+
+    connect(m_selector, SIGNAL(signalTemplateSelected()),
+            this, SLOT(slotSettingsChanged()));
 }
 
 Metadata::~Metadata()
@@ -63,19 +73,22 @@ Metadata::~Metadata()
 BatchToolSettings Metadata::defaultSettings()
 {
     BatchToolSettings settings;
-//    settings.insert("AutoCorrectionFilter", AutoLevelsCorrection);
+    settings.insert("TemplateTitle", TemplateManager::defaultManager()->unknowTemplate().templateTitle());
     return settings;
 }
 
 void Metadata::assignSettings2Widget()
 {
-//    m_comboBox->setCurrentIndex(settings()["AutoCorrectionFilter"].toInt());
+    QString title = settings()["TemplateTitle"].toString();
+    Template t    = TemplateManager::defaultManager()->findByTitle(title);
+    m_selector->setTemplate(t);
 }
 
 void Metadata::slotSettingsChanged()
 {
     BatchToolSettings settings;
-//    settings.insert("AutoCorrectionFilter", (int)m_comboBox->currentIndex());
+    QString title = m_selector->getTemplate().templateTitle();
+    settings.insert("TemplateTitle", title);
     setSettings(settings);
 }
 
@@ -83,8 +96,31 @@ bool Metadata::toolOperations()
 {
     if (!loadToDImg()) return false;
 
-//    int type = settings()["AutoCorrectionFilter"].toInt();
+    QString title = settings()["TemplateTitle"].toString();
+    Template t    = TemplateManager::defaultManager()->findByTitle(title);
 
+    DMetadata meta;
+    meta.setExif(image().getExif());
+    meta.setIptc(image().getIptc());
+    meta.setXmp(image().getXmp());
+
+    if (t == TemplateManager::defaultManager()->removeTemplate())
+    {
+        meta.removeMetadataTemplate();
+    }
+    else if (t == TemplateManager::defaultManager()->unknowTemplate())
+    {
+        // Nothing to do.
+    }
+    else
+    {
+        meta.removeMetadataTemplate();
+        meta.setMetadataTemplate(t);
+    }
+
+    image().setExif(meta.getExif());
+    image().setIptc(meta.getIptc());
+    image().setXmp(meta.getXmp());
 
     return (savefromDImg());
 }
