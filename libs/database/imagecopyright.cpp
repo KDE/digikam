@@ -318,8 +318,8 @@ Template ImageCopyright::toMetadataTemplate()
     t.setAuthors(author());
     t.setAuthorsPosition(authorsPosition());
     t.setCredit(credit());
-    t.setCopyright(rights("x-default"));
-    t.setRightUsageTerms(rightsUsageTerms("x-default"));
+    t.setCopyright(allCopyrightNotices());
+    t.setRightUsageTerms(allRightsUsageTerms());
     t.setSource(source());
     t.setInstructions(instructions());
     return t;

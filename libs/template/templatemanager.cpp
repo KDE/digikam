@@ -135,17 +135,88 @@ bool TemplateManager::load()
     {
         QDomElement e = n.toElement();
         if (e.isNull()) continue;
-        if (e.tagName() != "item") continue;
+        if (e.tagName() != "template") continue;
 
         Template t;
-        t.setTemplateTitle(e.attribute("templatetitle"));
-        t.setAuthors(e.attribute("authors").split(";", QString::SkipEmptyParts));
-        t.setAuthorsPosition(e.attribute("authorsposition"));
-        t.setCredit(e.attribute("credit"));
-        t.setCopyright(e.attribute("copyright"));
-        t.setRightUsageTerms(e.attribute("rightusageterms"));
-        t.setSource(e.attribute("source"));
-        t.setInstructions(e.attribute("instructions"));
+
+        for (QDomNode n2 = e.firstChild(); !n2.isNull(); n2 = n2.nextSibling())
+        {
+            QDomElement e2 = n2.toElement();
+            if (e2.isNull()) continue;
+            QString name2  = e2.tagName();
+            QString val2   = e2.attribute(QString::fromLatin1("value"));
+
+            if (name2 == QString::fromLatin1("templatetitle"))
+            {
+                t.setTemplateTitle(val2);
+            }
+            else if (name2 == QString::fromLatin1("authorsposition"))
+            {
+                t.setAuthorsPosition(val2);
+            }
+            else if (name2 == QString::fromLatin1("credit"))
+            {
+                t.setCredit(val2);
+            }
+            else if (name2 == QString::fromLatin1("source"))
+            {
+                t.setSource(val2);
+            }
+            else if (name2 == QString::fromLatin1("instructions"))
+            {
+                t.setInstructions(val2);
+            }
+            else if (name2 == QString::fromLatin1("authors"))
+            {
+                QStringList list;
+                for (QDomNode n3 = e2.firstChild(); !n3.isNull(); n3 = n3.nextSibling())
+                {
+                    QDomElement e3 = n3.toElement();
+                    QString key    = e3.tagName();
+                    QString val    = e3.attribute(QString::fromLatin1("value"));
+
+                    if (key == QString::fromLatin1("name"))
+                    {
+                        if (val.isEmpty()) continue;
+                        list.append(val);
+                    }
+                }
+                t.setAuthors(list);
+            }
+            else if (name2 == QString::fromLatin1("copyright"))
+            {
+                KExiv2::AltLangMap copyrights;
+                for (QDomNode n3 = e2.firstChild(); !n3.isNull(); n3 = n3.nextSibling())
+                {
+                    QDomElement e3 = n3.toElement();
+                    QString key    = e3.tagName();
+                    QString val    = e3.attribute(QString::fromLatin1("value"));
+                    copyrights.insert(key, val);
+                }
+                t.setCopyright(copyrights);
+            }
+            else if (name2 == QString::fromLatin1("rightusageterms"))
+            {
+                KExiv2::AltLangMap usages;
+                for (QDomNode n3 = e2.firstChild(); !n3.isNull(); n3 = n3.nextSibling())
+                {
+                    QDomElement e3 = n3.toElement();
+                    QString key    = e3.tagName();
+                    QString val    = e3.attribute(QString::fromLatin1("value"));
+                    usages.insert(key, val);
+                }
+                t.setRightUsageTerms(usages);
+            }
+        }
+
+        kDebug(50003) << t.authors();
+        kDebug(50003) << t.authorsPosition();
+        kDebug(50003) << t.credit();
+        kDebug(50003) << t.copyright();
+        kDebug(50003) << t.rightUsageTerms();
+        kDebug(50003) << t.source();
+        kDebug(50003) << t.instructions();
+
         insertPrivate(t);
     }
 
@@ -159,8 +230,7 @@ bool TemplateManager::save()
         return true;
 
     QDomDocument doc("templatelist");
-    doc.setContent(QString("<!DOCTYPE XMLTemplateList><templatelist version=\"1.0\" client=\"digikam\"/>"));
-
+    doc.setContent(QString("<!DOCTYPE XMLTemplateList><templatelist version=\"2.0\" client=\"digikam\" encoding=\"UTF-8\"/>"));
     QDomElement docElem = doc.documentElement();
 
     {
@@ -168,15 +238,59 @@ bool TemplateManager::save()
 
         foreach (const Template& t, d->pList)
         {
-            QDomElement elem = doc.createElement("item");
-            elem.setAttribute("templatetitle",   t.templateTitle());
-            elem.setAttribute("authors",         t.authors().join(";"));
-            elem.setAttribute("authorsposition", t.authorsPosition());
-            elem.setAttribute("credit",          t.credit());
-            elem.setAttribute("copyright",       t.copyright());
-            elem.setAttribute("rightusageterms", t.rightUsageTerms());
-            elem.setAttribute("source",          t.source());
-            elem.setAttribute("instructions",    t.instructions());
+            QDomElement elem = doc.createElement("template");
+
+            QDomElement templatetitle = doc.createElement(QString::fromLatin1("templatetitle"));
+            templatetitle.setAttribute(QString::fromLatin1("value"), t.templateTitle());
+            elem.appendChild(templatetitle);
+
+            QDomElement authorsposition = doc.createElement(QString::fromLatin1("authorsposition"));
+            authorsposition.setAttribute(QString::fromLatin1("value"), t.authorsPosition());
+            elem.appendChild(authorsposition);
+
+            QDomElement credit = doc.createElement(QString::fromLatin1("credit"));
+            credit.setAttribute(QString::fromLatin1("value"), t.credit());
+            elem.appendChild(credit);
+
+            QDomElement source = doc.createElement(QString::fromLatin1("source"));
+            source.setAttribute(QString::fromLatin1("value"), t.source());
+            elem.appendChild(source);
+
+            QDomElement instructions = doc.createElement(QString::fromLatin1("instructions"));
+            instructions.setAttribute(QString::fromLatin1("value"), t.instructions());
+            elem.appendChild(instructions);
+
+            QDomElement authors = doc.createElement(QString::fromLatin1("authors"));
+            elem.appendChild(authors);
+            foreach (QString name, t.authors())
+            {
+                QDomElement e = doc.createElement(QString::fromLatin1("name"));
+                e.setAttribute(QString::fromLatin1("value"), name);
+                authors.appendChild(e);
+            }
+
+            QDomElement copyright     = doc.createElement(QString::fromLatin1("copyright"));
+            elem.appendChild(copyright);
+            KExiv2::AltLangMap rights = t.copyright();
+            KExiv2::AltLangMap::const_iterator it;
+            for (it = rights.constBegin() ; it != rights.constEnd() ; ++it)
+            {
+                QDomElement e = doc.createElement(it.key());
+                e.setAttribute(QString::fromLatin1("value"), it.value());
+                copyright.appendChild(e);
+            }
+
+            QDomElement rightusageterms = doc.createElement(QString::fromLatin1("rightusageterms"));
+            elem.appendChild(rightusageterms);
+            KExiv2::AltLangMap usages   = t.rightUsageTerms();
+            KExiv2::AltLangMap::const_iterator it2;
+            for (it2 = usages.constBegin() ; it2 != usages.constEnd() ; ++it2)
+            {
+                QDomElement e = doc.createElement(it2.key());
+                e.setAttribute(QString::fromLatin1("value"), it2.value());
+                rightusageterms.appendChild(e);
+            }
+
             docElem.appendChild(elem);
         }
     }

@@ -41,6 +41,7 @@
 
 // Local includes
 
+#include "altlangstredit.h"
 #include "template.h"
 #include "templatelist.h"
 
@@ -66,20 +67,21 @@ public:
         repButton           = 0;
     }
 
-    QPushButton  *addButton;
-    QPushButton  *delButton;
-    QPushButton  *repButton;
+    QPushButton    *addButton;
+    QPushButton    *delButton;
+    QPushButton    *repButton;
 
-    KLineEdit    *titleEdit;
-    KLineEdit    *authorsEdit;
-    KLineEdit    *authorsPositionEdit;
-    KLineEdit    *creditEdit;
-    KLineEdit    *copyrightEdit;
-    KLineEdit    *rightUsageEdit;
-    KLineEdit    *sourceEdit;
-    KLineEdit    *instructionsEdit;
+    KLineEdit      *titleEdit;
+    KLineEdit      *authorsEdit;
+    KLineEdit      *authorsPositionEdit;
+    KLineEdit      *creditEdit;
+    KLineEdit      *sourceEdit;
+    KLineEdit      *instructionsEdit;
 
-    TemplateList *listView;
+    AltLangStrEdit *copyrightEdit;
+    AltLangStrEdit *rightUsageEdit;
+
+    TemplateList   *listView;
 };
 
 SetupTemplate::SetupTemplate(QWidget* parent)
@@ -150,10 +152,8 @@ SetupTemplate::SetupTemplate(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label4   = new QLabel(i18n("Copyright:"), tview);
-    d->copyrightEdit = new KLineEdit(tview);
-    d->copyrightEdit->setClearButtonShown(true);
-    label4->setBuddy(d->copyrightEdit);
+    d->copyrightEdit = new AltLangStrEdit(tview);
+    d->copyrightEdit->setTitle(i18n("Copyright:"));
     d->copyrightEdit->setWhatsThis(i18n("<p>The Copyright Notice should contain any necessary copyright notice for claiming the intellectual "
                                         "property, and should identify the current owner(s) of the copyright for the photograph. Usually, "
                                         "this would be the photographer, but if the image was done by an employee or as work-for-hire, "
@@ -172,10 +172,8 @@ SetupTemplate::SetupTemplate(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label5    = new QLabel(i18n("Right Usage Terms:"), tview);
-    d->rightUsageEdit = new KLineEdit(tview);
-    d->rightUsageEdit->setClearButtonShown(true);
-    label5->setBuddy(d->rightUsageEdit);
+    d->rightUsageEdit = new AltLangStrEdit(tview);
+    d->rightUsageEdit->setTitle(i18n("Right Usage Terms:"));
     d->rightUsageEdit->setWhatsThis(i18n("<p>The Right Usage Terms field should be used to list instructions on how "
                                          "a resource can be legally used. This field do not exist in IPTC.</p>"));
 
@@ -205,6 +203,7 @@ SetupTemplate::SetupTemplate(QWidget* parent)
                                            "instructions concerning the use of photograph.</p>"
                                            "<p>With IPTC, this field is limited to 256 ASCII characters.</p>"));
 
+    // --------------------------------------------------------
 
     tgrid->setMargin(KDialog::spacingHint());
     tgrid->setSpacing(KDialog::spacingHint());
@@ -216,10 +215,8 @@ SetupTemplate::SetupTemplate(QWidget* parent)
     tgrid->addWidget(d->authorsPositionEdit, 1, 1, 1, 2);
     tgrid->addWidget(label3,                 2, 0, 1, 1);
     tgrid->addWidget(d->creditEdit,          2, 1, 1, 2);
-    tgrid->addWidget(label4,                 3, 0, 1, 1);
-    tgrid->addWidget(d->copyrightEdit,       3, 1, 1, 2);
-    tgrid->addWidget(label5,                 4, 0, 1, 1);
-    tgrid->addWidget(d->rightUsageEdit,      4, 1, 1, 2);
+    tgrid->addWidget(d->copyrightEdit,       3, 0, 1, 2);
+    tgrid->addWidget(d->rightUsageEdit,      4, 0, 1, 2);
     tgrid->addWidget(label6,                 5, 0, 1, 1);
     tgrid->addWidget(d->sourceEdit,          5, 1, 1, 2);
     tgrid->addWidget(label7,                 6, 0, 1, 1);
@@ -260,14 +257,14 @@ SetupTemplate::SetupTemplate(QWidget* parent)
     grid->setAlignment(Qt::AlignTop);
     grid->setColumnStretch(1, 10);
     grid->setRowStretch(4, 10);
-    grid->addWidget(d->listView,           0, 0, 4, 2);
-    grid->addWidget(d->addButton,          0, 2, 1, 1);
-    grid->addWidget(d->delButton,          1, 2, 1, 1);
-    grid->addWidget(d->repButton,          2, 2, 1, 1);
-    grid->addWidget(label0,                4, 0, 1, 1);
-    grid->addWidget(d->titleEdit,          4, 1, 1, 1);
-    grid->addWidget(templateSv,            5, 0, 1, 3);
-    grid->addWidget(note,                  6, 0, 1, 3);
+    grid->addWidget(d->listView,  0, 0, 4, 2);
+    grid->addWidget(d->addButton, 0, 2, 1, 1);
+    grid->addWidget(d->delButton, 1, 2, 1, 1);
+    grid->addWidget(d->repButton, 2, 2, 1, 1);
+    grid->addWidget(label0,       4, 0, 1, 1);
+    grid->addWidget(d->titleEdit, 4, 1, 1, 1);
+    grid->addWidget(templateSv,   5, 0, 1, 3);
+    grid->addWidget(note,         6, 0, 1, 3);
 
     // --------------------------------------------------------
 
@@ -318,8 +315,8 @@ void SetupTemplate::slotSelectionChanged()
     d->authorsEdit->setText(t.authors().join(";"));
     d->authorsPositionEdit->setText(t.authorsPosition());
     d->creditEdit->setText(t.credit());
-    d->copyrightEdit->setText(t.copyright());
-    d->rightUsageEdit->setText(t.rightUsageTerms());
+    d->copyrightEdit->setValues(t.copyright());
+    d->rightUsageEdit->setValues(t.rightUsageTerms());
     d->sourceEdit->setText(t.source());
     d->instructionsEdit->setText(t.instructions());
 
@@ -348,8 +345,8 @@ void SetupTemplate::slotAddTemplate()
     t.setAuthors(d->authorsEdit->text().split(";", QString::SkipEmptyParts));
     t.setAuthorsPosition(d->authorsPositionEdit->text());
     t.setCredit(d->creditEdit->text());
-    t.setCopyright(d->copyrightEdit->text());
-    t.setRightUsageTerms(d->rightUsageEdit->text());
+    t.setCopyright(d->copyrightEdit->values());
+    t.setRightUsageTerms(d->rightUsageEdit->values());
     t.setSource(d->sourceEdit->text());
     t.setInstructions(d->instructionsEdit->text());
     new TemplateListItem(d->listView, t);
@@ -379,8 +376,8 @@ void SetupTemplate::slotRepTemplate()
     t.setAuthors(d->authorsEdit->text().split(";", QString::SkipEmptyParts));
     t.setAuthorsPosition(d->authorsPositionEdit->text());
     t.setCredit(d->creditEdit->text());
-    t.setCopyright(d->copyrightEdit->text());
-    t.setRightUsageTerms(d->rightUsageEdit->text());
+    t.setCopyright( d->copyrightEdit->values());
+    t.setRightUsageTerms(d->rightUsageEdit->values());
     t.setSource(d->sourceEdit->text());
     t.setInstructions(d->instructionsEdit->text());
     item->setTemplate(t);

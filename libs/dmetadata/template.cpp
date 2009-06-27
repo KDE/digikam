@@ -45,6 +45,9 @@ bool Template::isNull() const
 
 bool Template::operator==(const Template& t) const
 {
+    if (isEmpty() ||
+        t.isEmpty()) return false;
+
     bool b1 = m_authors         == t.m_authors;
     bool b2 = m_authorsPosition == t.m_authorsPosition;
     bool b3 = m_credit          == t.m_credit;
@@ -62,6 +65,18 @@ bool Template::operator==(const Template& t) const
     kDebug(50003) << t.instructions()    << m_instructions    << b7;
 
     return b1 && b2 && b3 && b4 && b5 && b6 && b7;
+}
+
+bool Template::isEmpty() const
+{
+    return (m_authors.isEmpty()         &&
+            m_authorsPosition.isEmpty() &&
+            m_credit.isEmpty()          &&
+            m_copyright.isEmpty()       &&
+            m_rightUsageTerms.isEmpty() &&
+            m_source.isEmpty()          &&
+            m_instructions.isEmpty()
+           );
 }
 
 void Template::setTemplateTitle(const QString& title)
@@ -90,12 +105,12 @@ void Template::setCredit(const QString& credit)
     m_credit = credit;
 }
 
-void Template::setCopyright(const QString& copyright)
+void Template::setCopyright(const KExiv2::AltLangMap& copyright)
 {
     m_copyright = copyright;
 }
 
-void Template::setRightUsageTerms(const QString& rightUsageTerms)
+void Template::setRightUsageTerms(const KExiv2::AltLangMap& rightUsageTerms)
 {
     m_rightUsageTerms = rightUsageTerms;
 }
@@ -125,12 +140,12 @@ QString Template::credit() const
     return m_credit;
 }
 
-QString Template::copyright() const
+KExiv2::AltLangMap Template::copyright() const
 {
     return m_copyright;
 }
 
-QString Template::rightUsageTerms() const
+KExiv2::AltLangMap Template::rightUsageTerms() const
 {
     return m_rightUsageTerms;
 }

@@ -175,6 +175,8 @@ void MetadataHub::load(const ImageInfo& info)
         ImageCopyright cr = info.imageCopyright();
         t                 = TemplateManager::defaultManager()->findByContents(cr.toMetadataTemplate());
     }
+    kDebug(50003) << "Found Metadata Template: " << t.templateTitle();
+
     load(info.dateTime(), commentMap, info.rating(), t);
 
     AlbumManager *man = AlbumManager::instance();
@@ -236,6 +238,7 @@ void MetadataHub::load(const DMetadata& metadata)
     rating = metadata.getImageRating();
 
     t = TemplateManager::defaultManager()->findByContents(metadata.getMetadataTemplate());
+    kDebug(50003) << "Found Metadata Template: " << t.templateTitle();
 
     load(datetime, comments, rating, t);
 
@@ -495,8 +498,19 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
                 cr.setAuthor(author, ImageCopyright::AddEntryToExisting);
 
             cr.setCredit(d->metadataTemplate.credit());
-            cr.setRights(d->metadataTemplate.copyright(), "x-default", ImageCopyright::ReplaceAllEntries);
-            cr.setRightsUsageTerms(d->metadataTemplate.rightUsageTerms(), "x-default", ImageCopyright::ReplaceAllEntries);
+
+            cr.removeCopyrightNotices();
+            KExiv2::AltLangMap copyrights = d->metadataTemplate.copyright();
+            KExiv2::AltLangMap::const_iterator it;
+            for (it = copyrights.constBegin() ; it != copyrights.constEnd() ; ++it)
+                cr.setRights(it.value(), it.key(), ImageCopyright::AddEntryToExisting);
+
+            cr.removeRightsUsageTerms();
+            KExiv2::AltLangMap usages = d->metadataTemplate.rightUsageTerms();
+            KExiv2::AltLangMap::const_iterator it2;
+            for (it2 = usages.constBegin() ; it2 != usages.constEnd() ; ++it2)
+                cr.setRightsUsageTerms(it2.value(), it2.key(), ImageCopyright::AddEntryToExisting);
+
             cr.setSource(d->metadataTemplate.source());
             cr.setAuthorsPosition(d->metadataTemplate.authorsPosition());
             cr.setInstructions(d->metadataTemplate.instructions());

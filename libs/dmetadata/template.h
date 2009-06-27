@@ -30,9 +30,15 @@
 #include <QString>
 #include <QStringList>
 
+// LibKExiv2 includes
+
+#include <libkexiv2/kexiv2.h>
+
 // Local includes
 
 #include "digikam_export.h"
+
+using namespace KExiv2Iface;
 
 namespace Digikam
 {
@@ -46,7 +52,13 @@ public:
     Template();
     ~Template();
 
+    /** Return true is Template title is null
+     */
     bool isNull() const;
+
+    /** Return true is Template contents is empty
+     */
+    bool isEmpty() const;
 
     /** Compare for metadata equality, not including "templateTitle" value.
      */
@@ -58,52 +70,52 @@ public:
     void setAuthors(const QStringList& authors);
     void setAuthorsPosition(const QString& authorPosition);
     void setCredit(const QString& credit);
-    void setCopyright(const QString& copyright);
-    void setRightUsageTerms(const QString& rightUsageTerms);
+    void setCopyright(const KExiv2::AltLangMap& copyright);
+    void setRightUsageTerms(const KExiv2::AltLangMap& rightUsageTerms);
     void setSource(const QString& source);
     void setInstructions(const QString& instructions);
 
-    QStringList authors()         const;
-    QString     authorsPosition() const;
-    QString     credit()          const;
-    QString     copyright()       const;
-    QString     rightUsageTerms() const;
-    QString     source()          const;
-    QString     instructions()    const;
+    QStringList        authors()         const;
+    QString            authorsPosition() const;
+    QString            credit()          const;
+    KExiv2::AltLangMap copyright()       const;
+    KExiv2::AltLangMap rightUsageTerms() const;
+    QString            source()          const;
+    QString            instructions()    const;
 
 protected:
 
     /** Template title used internaly. This value always exist and cannot be empty.
      */
-    QString     m_templateTitle;
+    QString            m_templateTitle;
 
     /** List of author names.
      */
-    QStringList m_authors;
+    QStringList        m_authors;
 
     /** Description of authors position.
      */
-    QString     m_authorsPosition;
+    QString            m_authorsPosition;
 
     /** Credit description.
      */
-    QString     m_credit;
+    QString            m_credit;
 
     /** Language alternative copyright notices.
      */
-    QString     m_copyright;
+    KExiv2::AltLangMap m_copyright;
 
     /** Language alternative right term usages.
      */
-    QString     m_rightUsageTerms;
+    KExiv2::AltLangMap m_rightUsageTerms;
 
     /** Descriptions of contents source.
      */
-    QString     m_source;
+    QString            m_source;
 
     /** Special instructions to process with contents.
      */
-    QString     m_instructions;
+    QString            m_instructions;
 };
 
 }  // namespace Digikam
