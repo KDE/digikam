@@ -278,7 +278,7 @@ AltLangStrEdit::AltLangStrEdit(QWidget* parent)
     // --------------------------------------------------------
 
     grid->setAlignment( Qt::AlignTop );
-    grid->addWidget(d->titleLabel,        0, 0, 1, 1);
+    grid->addWidget(d->titleLabel,     0, 0, 1, 1);
     grid->addWidget(d->languageCB,     0, 1, 1, 2);
     grid->addWidget(d->addValueButton, 0, 3, 1, 1);
     grid->addWidget(d->delValueButton, 0, 4, 1, 1);
@@ -286,6 +286,8 @@ AltLangStrEdit::AltLangStrEdit(QWidget* parent)
     grid->setColumnStretch(1, 10);
     grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
+
+    loadLangAltListEntries();
 
     // --------------------------------------------------------
 
