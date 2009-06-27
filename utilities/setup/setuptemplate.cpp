@@ -123,7 +123,7 @@ SetupTemplate::SetupTemplate(QWidget* parent)
                                       "If it is not appropriate to add the name of the photographer (for example, if the identify of "
                                       "the photographer needs to be protected) the name of a company or organization can also be used. "
                                       "Once saved, this field should not be changed by anyone. "
-                                      "To enter more than one name, use semi-colons as separators.</p>"
+                                      "<p>To enter more than one name, use <b>semi-colons as separators</b>.</p>"
                                       "<p>With IPTC, this field is limited to 32 ASCII characters.</p>"));
 
     // --------------------------------------------------------
@@ -170,6 +170,7 @@ SetupTemplate::SetupTemplate(QWidget* parent)
                                         "protection, the following three items should appear in the copyright field of the IPTC Core: "
                                         "(a) the word, Copyright; (b) year of the first publication; and (c) name of the author. "
                                         "You may also wish to include the phrase \"all rights reserved\".</p>"
+                                        "<p>With XMP, you can include more than one copyright string using different languages.</p>"));
                                         "<p>With IPTC, this field is limited to 128 ASCII characters.</p>"));
 
     // --------------------------------------------------------
@@ -178,7 +179,10 @@ SetupTemplate::SetupTemplate(QWidget* parent)
     d->rightUsageEdit->setTitle(i18n("Right Usage Terms:"));
     d->rightUsageEdit->setFixedHeight(75);
     d->rightUsageEdit->setWhatsThis(i18n("<p>The Right Usage Terms field should be used to list instructions on how "
-                                         "a resource can be legally used. This field do not exist in IPTC.</p>"));
+                                         "a resource can be legally used."
+                                         "<p>With XMP, you can include more than one right usage terms string using "
+                                         "different languages.</p>"));
+                                         "<p>This field do not exist with IPTC.</p>"));
 
     // --------------------------------------------------------
 
