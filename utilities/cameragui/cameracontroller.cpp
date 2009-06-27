@@ -550,6 +550,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
                         else
                         {
                             sendLogMsg(i18n("Apply Metadata template to file %1...", file), DHistoryView::StartingEntry, folder, file);
+                            metadata.removeMetadataTemplate();
                             metadata.setMetadataTemplate(tm->findByTitle(templateTitle));
                         }
                     }
