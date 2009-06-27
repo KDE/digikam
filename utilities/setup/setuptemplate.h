@@ -28,6 +28,10 @@
 
 #include <QScrollArea>
 
+// Local includes.
+
+#include "template.h"
+
 namespace Digikam
 {
 
@@ -42,6 +46,7 @@ public:
     SetupTemplate(QWidget* parent = 0);
     ~SetupTemplate();
 
+    void populateTemplate(const Template& t);
     void applySettings();
 
 private:

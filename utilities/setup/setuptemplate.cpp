@@ -42,7 +42,6 @@
 // Local includes
 
 #include "altlangstredit.h"
-#include "template.h"
 #include "templatelist.h"
 
 namespace Digikam
@@ -311,8 +310,13 @@ void SetupTemplate::slotSelectionChanged()
         d->repButton->setEnabled(false);
         return;
     }
+    d->delButton->setEnabled(true);
+    d->repButton->setEnabled(true);
+    populateTemplate(item->getTemplate());
+}
 
-    Template t = item->getTemplate();
+void SetupTemplate::populateTemplate(const Template& t)
+{
     d->titleEdit->setText(t.templateTitle());
     d->authorsEdit->setText(t.authors().join(";"));
     d->authorsPositionEdit->setText(t.authorsPosition());
@@ -321,9 +325,6 @@ void SetupTemplate::slotSelectionChanged()
     d->rightUsageEdit->setValues(t.rightUsageTerms());
     d->sourceEdit->setText(t.source());
     d->instructionsEdit->setText(t.instructions());
-
-    d->delButton->setEnabled(true);
-    d->repButton->setEnabled(true);
 }
 
 void SetupTemplate::slotAddTemplate()

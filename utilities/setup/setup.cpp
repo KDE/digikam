@@ -43,7 +43,6 @@
 #include "setupalbumview.h"
 #include "setuptooltip.h"
 #include "setupmetadata.h"
-#include "setuptemplate.h"
 #include "setupcategory.h"
 #include "setupmime.h"
 #include "setuplighttable.h"
@@ -134,7 +133,7 @@ public:
     SetupMisc        *miscPage;
     SetupPlugins     *pluginsPage;
 
-    KPageWidgetItem *pageItem(Setup::Page page);
+    KPageWidgetItem  *pageItem(Setup::Page page);
 };
 
 Setup::Setup(QWidget* parent)
@@ -274,6 +273,12 @@ Setup::~Setup()
     delete d;
 }
 
+void Setup::setTemplate(const Template& t)
+{
+    if (d->templatePage)
+        d->templatePage->populateTemplate(t);
+}
+
 QSize Setup::sizeHint() const
 {
     // The minimum size is very small. But the default initial size is such
@@ -335,6 +340,15 @@ bool Setup::execSinglePage(QWidget *parent, Page page)
     Setup setup(parent);
     setup.showPage(page);
     setup.setFaceType(Plain);
+    return setup.KPageDialog::exec() == QDialog::Accepted;
+}
+
+bool Setup::execTemplateEditor(QWidget *parent, const Template& t)
+{
+    Setup setup(parent);
+    setup.showPage(TemplatePage);
+    setup.setFaceType(Plain);
+    setup.setTemplate(t);
     return setup.KPageDialog::exec() == QDialog::Accepted;
 }
 

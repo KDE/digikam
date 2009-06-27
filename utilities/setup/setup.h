@@ -29,6 +29,11 @@
 
 #include <kpagedialog.h>
 
+// Local includes
+
+#include "setuptemplate.h"
+#include "template.h"
+
 namespace Digikam
 {
 
@@ -71,6 +76,9 @@ public:
     /** Show a setup dialog. Only the specified page will be available. */
     static bool execSinglePage(Page page);
     static bool execSinglePage(QWidget *parent, Page page);
+
+    static bool execTemplateEditor(QWidget *parent, const Template& t);
+    void setTemplate(const Template& t);
 
     QSize sizeHint() const;
 
