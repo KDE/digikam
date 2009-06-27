@@ -134,8 +134,8 @@ void ManualRenameInput::slotHideToolTipTracker()
 }
 
 QString ManualRenameInput::parser(const QString& parse,
-                                  const QString &fileName, const QString &cameraName,
-                                  const QDateTime &dateTime, int index)
+                                  const QString& fileName, const QString& cameraName,
+                                  const QDateTime& dateTime, int index)
 {
     QFileInfo fi(fileName);
     QString baseFileName = fi.baseName();
@@ -270,7 +270,7 @@ QString ManualRenameInput::firstLetterUppercase(const QString& str)
 }
 
 QString ManualRenameInput::parse(const QString& fileName, const QString& cameraName,
-                                 const QDateTime &dateTime, int index) const
+                                 const QDateTime& dateTime, int index) const
 {
     QString parseString = d->parseStringLineEdit->text();
     return (parser(parseString, fileName, cameraName, dateTime, index));
