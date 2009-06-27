@@ -95,6 +95,7 @@ SetupTemplate::SetupTemplate(QWidget* parent)
 
     QGridLayout* grid = new QGridLayout(panel);
     d->listView       = new TemplateList(panel);
+    d->listView->setFixedHeight(100);
 
     // --------------------------------------------------------
 
@@ -154,6 +155,7 @@ SetupTemplate::SetupTemplate(QWidget* parent)
 
     d->copyrightEdit = new AltLangStrEdit(tview);
     d->copyrightEdit->setTitle(i18n("Copyright:"));
+    d->copyrightEdit->setFixedHeight(75);
     d->copyrightEdit->setWhatsThis(i18n("<p>The Copyright Notice should contain any necessary copyright notice for claiming the intellectual "
                                         "property, and should identify the current owner(s) of the copyright for the photograph. Usually, "
                                         "this would be the photographer, but if the image was done by an employee or as work-for-hire, "
@@ -174,6 +176,7 @@ SetupTemplate::SetupTemplate(QWidget* parent)
 
     d->rightUsageEdit = new AltLangStrEdit(tview);
     d->rightUsageEdit->setTitle(i18n("Right Usage Terms:"));
+    d->rightUsageEdit->setFixedHeight(75);
     d->rightUsageEdit->setWhatsThis(i18n("<p>The Right Usage Terms field should be used to list instructions on how "
                                          "a resource can be legally used. This field do not exist in IPTC.</p>"));
 
