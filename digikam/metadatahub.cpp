@@ -620,6 +620,7 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
         else
         {
             // Store metadata template as XMP tag.
+            dirty |= metadata.removeMetadataTemplate();
             dirty |= metadata.setMetadataTemplate(d->metadataTemplate);
         }
     }
