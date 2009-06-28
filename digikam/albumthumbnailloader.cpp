@@ -108,6 +108,14 @@ AlbumThumbnailLoader::~AlbumThumbnailLoader()
     delete d;
 }
 
+void AlbumThumbnailLoader::cleanUp()
+{
+    delete d->iconTagThumbThread;
+    d->iconTagThumbThread = 0;
+    delete d->iconAlbumThumbThread;
+    d->iconAlbumThumbThread = 0;
+}
+
 QPixmap AlbumThumbnailLoader::getStandardTagIcon(RelativeSize relativeSize)
 {
     return loadIcon("tag", computeIconSize(relativeSize));

@@ -52,6 +52,8 @@ public:
 
     static AlbumThumbnailLoader *instance();
 
+    void cleanUp();
+
     /**
      * Change the size of the thumbnails.
      * If the size differs from the current size,

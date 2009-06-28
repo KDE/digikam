@@ -286,6 +286,7 @@ DigikamApp::~DigikamApp()
     AlbumLister::cleanUp();
     ImageAttributesWatch::cleanUp();
     ThumbnailLoadThread::cleanUp();
+    AlbumThumbnailLoader::instance()->cleanUp();
     LoadingCacheInterface::cleanUp();
 #if KDCRAW_VERSION < 0x000400
     KDcrawIface::DcrawBinary::cleanUp();
