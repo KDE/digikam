@@ -739,24 +739,27 @@ void ImageSelectionWidget::updatePixmap()
     {
         for (int x=d->rect.left() ; x <= d->rect.right() ; ++x)
         {
-            if (! d->localRegionSelection.contains(x, y, true) )
-            {
-                b = ptr[0];
-                g = ptr[1];
-                r = ptr[2];
+            b = ptr[0];
+            g = ptr[1];
+            r = ptr[2];
 
-                r += (uchar)((RCOL - r) * OPACITY);
-                g += (uchar)((GCOL - g) * OPACITY);
-                b += (uchar)((BCOL - b) * OPACITY);
+            r += (uchar)((RCOL - r) * OPACITY);
+            g += (uchar)((GCOL - g) * OPACITY);
+            b += (uchar)((BCOL - b) * OPACITY);
 
-                ptr[0] = b;
-                ptr[1] = g;
-                ptr[2] = r;
-            }
+            ptr[0] = b;
+            ptr[1] = g;
+            ptr[2] = r;
 
             ptr+=4;
         }
     }
+
+    int sx = d->localRegionSelection.left() - d->rect.left();
+    int sy = d->localRegionSelection.top()  - d->rect.top();
+    int dw = d->localRegionSelection.width();
+    int dh = d->localRegionSelection.height();
+    image.bitBltImage(&d->preview, sx, sy, dw, dh, sx, sy);
 
     QPixmap pix = d->iface->convertToPixmap(image);
     QPainter p(d->pixmap);
