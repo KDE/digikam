@@ -334,6 +334,26 @@ QList<QRect> SearchGroup::startupAnimationArea() const
 
 // -------------------------------------------------------------------------
 
+class RadioButtonHBox : public QHBoxLayout
+{
+public:
+    RadioButtonHBox(QWidget* left, QWidget *right, Qt::LayoutDirection dir)
+                : QHBoxLayout()
+    {
+        if (dir == Qt::RightToLeft)
+        {
+            addWidget(right, Qt::AlignRight);
+            addWidget(left);
+        }
+        else
+        {
+            addWidget(left);
+            addWidget(right, Qt::AlignLeft);
+        }
+        setSpacing(0);
+    }
+};
+
 SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache *cache, SearchGroup::Type type, QWidget *parent)
                 : QWidget(parent), 
                   m_extended(false), m_groupOp(SearchXml::And), m_fieldOp(SearchXml::And),
@@ -346,17 +366,22 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache *cache, SearchGrou
     QLabel *mainLabel = new QLabel(i18n("Find Pictures"));
     mainLabel->setObjectName("SearchGroupLabel_MainLabel");
 
-    m_allBox = new QRadioButton(i18n("Meet All of the following conditions"));
-    m_allBox->setObjectName("SearchGroupLabel_CheckBox");
+    // Use radio button with a separate label to fix styling problem, see bug 195809
+    m_allBox = new QRadioButton;
+    QLabel *allBoxLabel = new QLabel(i18n("Meet All of the following conditions"));
+    allBoxLabel->setObjectName("SearchGroupLabel_CheckBox");
 
-    m_anyBox = new QRadioButton(i18n("Meet Any of the following conditions"));
-    m_anyBox->setObjectName("SearchGroupLabel_CheckBox");
+    m_anyBox = new QRadioButton;
+    QLabel *anyBoxLabel = new QLabel(i18n("Meet Any of the following conditions"));
+    anyBoxLabel->setObjectName("SearchGroupLabel_CheckBox");
 
-    m_noneBox = new QRadioButton(i18n("None of these conditions are met"));
-    m_noneBox->setObjectName("SearchGroupLabel_CheckBox");
+    m_noneBox = new QRadioButton;
+    QLabel *noneBoxLabel = new QLabel(i18n("None of these conditions are met"));
+    noneBoxLabel->setObjectName("SearchGroupLabel_CheckBox");
 
-    m_oneNotBox = new QRadioButton(i18n("At least one of these conditions is not met"));
-    m_oneNotBox->setObjectName("SearchGroupLabel_CheckBox");
+    m_oneNotBox = new QRadioButton;
+    QLabel *oneNotBoxLabel = new QLabel(i18n("At least one of these conditions is not met"));
+    oneNotBoxLabel->setObjectName("SearchGroupLabel_CheckBox");
 
     connect(m_allBox, SIGNAL(toggled(bool)),
             this, SLOT(boxesToggled()));
@@ -393,10 +418,10 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache *cache, SearchGrou
 
         QWidget *optionsBox        = new QWidget;
         QGridLayout *optionsLayout = new QGridLayout;
-        optionsLayout->addWidget(m_allBox,    0, 0);
-        optionsLayout->addWidget(m_anyBox,    1, 0);
-        optionsLayout->addWidget(m_noneBox,   0, 1);
-        optionsLayout->addWidget(m_oneNotBox, 1, 1);
+        optionsLayout->addLayout(new RadioButtonHBox(m_allBox, allBoxLabel, layoutDirection()),       0, 0);
+        optionsLayout->addLayout(new RadioButtonHBox(m_anyBox, anyBoxLabel, layoutDirection()),       1, 0);
+        optionsLayout->addLayout(new RadioButtonHBox(m_noneBox, noneBoxLabel, layoutDirection()),     0, 1);
+        optionsLayout->addLayout(new RadioButtonHBox(m_oneNotBox, oneNotBoxLabel, layoutDirection()), 1, 1);
         optionsLayout->setMargin(0);
         optionsBox->setLayout(optionsLayout);
 
@@ -426,10 +451,10 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache *cache, SearchGrou
                 this, SIGNAL(removeClicked()));
 
         m_layout->addWidget(m_groupOpLabel, 0, 0, 1, 1);
-        m_layout->addWidget(m_allBox,       1, 0, 1, 1);
-        m_layout->addWidget(m_anyBox,       2, 0, 1, 1);
-        m_layout->addWidget(m_noneBox,      3, 0, 1, 1);
-        m_layout->addWidget(m_oneNotBox,    4, 0, 1, 1);
+        m_layout->addLayout(new RadioButtonHBox(m_allBox, allBoxLabel, layoutDirection()),       1, 0, 1, 1);
+        m_layout->addLayout(new RadioButtonHBox(m_anyBox, anyBoxLabel, layoutDirection()),       2, 0, 1, 1);
+        m_layout->addLayout(new RadioButtonHBox(m_noneBox, noneBoxLabel, layoutDirection()),     3, 0, 1, 1);
+        m_layout->addLayout(new RadioButtonHBox(m_oneNotBox, oneNotBoxLabel, layoutDirection()), 4, 0, 1, 1);
         m_layout->addWidget(m_removeLabel,  0, 2, 1, 1);
         m_layout->setColumnStretch(1, 10);
     }
