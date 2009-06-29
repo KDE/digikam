@@ -177,9 +177,9 @@ Setup::Setup(QWidget* parent)
     d->page_metadata->setIcon(KIcon("exifinfo"));
 
     d->templatePage  = new SetupTemplate();
-    d->page_template = addPage(d->templatePage, i18n("Template"));
-    d->page_template->setHeader(i18n("<qt>Metadata template<br/>"
-                                "<i>Manage your collection of metadata template</i></qt>"));
+    d->page_template = addPage(d->templatePage, i18n("Templates"));
+    d->page_template->setHeader(i18n("<qt>Metadata templates<br/>"
+                                "<i>Manage your collection of metadata templates</i></qt>"));
     d->page_template->setIcon(KIcon("user-identity"));
 
     d->mimePage  = new SetupMime();
