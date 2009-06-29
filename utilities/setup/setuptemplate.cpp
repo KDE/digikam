@@ -113,7 +113,7 @@ SetupTemplate::SetupTemplate(QWidget* parent)
     tview->setLineWidth(1);
     tview->setFrameShape(QFrame::StyledPanel);
 
-    QLabel *label1 = new QLabel(i18n("Authors:"), tview);
+    QLabel *label1 = new QLabel(i18n("Author Names:"), tview);
     d->authorsEdit = new KLineEdit(tview);
     d->authorsEdit->setClearButtonShown(true);
     label1->setBuddy(d->authorsEdit);
