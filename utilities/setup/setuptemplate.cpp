@@ -31,6 +31,7 @@
 #include <QValidator>
 #include <QGridLayout>
 #include <QPushButton>
+#include <QFrame>
 
 // KDE includes
 
@@ -106,8 +107,11 @@ SetupTemplate::SetupTemplate(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QWidget *tview     = new QWidget(panel);
+    QFrame *tview      = new QFrame(panel);
     QGridLayout* tgrid = new QGridLayout(tview);
+    tview->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
+    tview->setLineWidth(1);
+    tview->setFrameShape(QFrame::StyledPanel);
 
     QLabel *label1 = new QLabel(i18n("Authors:"), tview);
     d->authorsEdit = new KLineEdit(tview);
