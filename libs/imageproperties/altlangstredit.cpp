@@ -270,6 +270,7 @@ AltLangStrEdit::AltLangStrEdit(QWidget* parent)
     d->delValueButton->setEnabled(false);
 
     d->languageCB = new KComboBox(this);
+    d->languageCB->setSizeAdjustPolicy(KComboBox::AdjustToContents);
     d->languageCB->setWhatsThis(i18n("Select here the language for your caption."));
 
     d->valueEdit  = new KTextEdit(this);
@@ -410,6 +411,8 @@ void AltLangStrEdit::loadLangAltListEntries(const QString& currentLang)
 
     d->languageCB->setCurrentItem(currentLang.isEmpty() ? QString("x-default") : currentLang);
     slotSelectionChanged(d->languageCB->currentIndex());
+
+    d->languageCB->updateGeometry();
 }
 
 QString AltLangStrEdit::defaultAltLang() const
