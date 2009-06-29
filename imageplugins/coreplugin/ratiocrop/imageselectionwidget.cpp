@@ -728,43 +728,44 @@ void ImageSelectionWidget::updatePixmap()
     if (d->preview.isNull())
         return;
 
-    // Drawing region outside selection grayed.
-
     Digikam::DImg image = d->preview.copy();
 
-    uchar* ptr = image.bits();
-    uchar  r, g, b;
-
-    int xlow  = d->rect.left();
-    int xhigh = d->rect.right();
-    int ylow  = d->rect.top();
-    int yhigh = d->rect.bottom();
-
-    for (int y = ylow ; y <= yhigh ; ++y)
+    // Drawing region outside selection grayed.
     {
-        for (int x = xlow ; x <= xhigh ; ++x)
+        uchar* ptr = image.bits();
+        uchar  r, g, b;
+
+        int xlow  = d->rect.left();
+        int xhigh = d->rect.right();
+        int ylow  = d->rect.top();
+        int yhigh = d->rect.bottom();
+
+        for (int y = ylow ; y <= yhigh ; ++y)
         {
-            b = ptr[0];
-            g = ptr[1];
-            r = ptr[2];
+            for (int x = xlow ; x <= xhigh ; ++x)
+            {
+                b = ptr[0];
+                g = ptr[1];
+                r = ptr[2];
 
-            r += (uchar)((RCOL - r) * OPACITY);
-            g += (uchar)((GCOL - g) * OPACITY);
-            b += (uchar)((BCOL - b) * OPACITY);
+                r += (uchar)((RCOL - r) * OPACITY);
+                g += (uchar)((GCOL - g) * OPACITY);
+                b += (uchar)((BCOL - b) * OPACITY);
 
-            ptr[0] = b;
-            ptr[1] = g;
-            ptr[2] = r;
+                ptr[0] = b;
+                ptr[1] = g;
+                ptr[2] = r;
 
-            ptr+=4;
+                ptr+=4;
+            }
         }
-    }
 
-    int sx = d->localRegionSelection.left() - d->rect.left();
-    int sy = d->localRegionSelection.top()  - d->rect.top();
-    int dw = d->localRegionSelection.width();
-    int dh = d->localRegionSelection.height();
-    image.bitBltImage(&d->preview, sx, sy, dw, dh, sx, sy);
+        int sx = d->localRegionSelection.left() - d->rect.left();
+        int sy = d->localRegionSelection.top()  - d->rect.top();
+        int dw = d->localRegionSelection.width();
+        int dh = d->localRegionSelection.height();
+        image.bitBltImage(&d->preview, sx, sy, dw, dh, sx, sy);
+    }
 
     QPixmap pix = d->iface->convertToPixmap(image);
     QPainter p(d->pixmap);
