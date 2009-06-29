@@ -764,12 +764,11 @@ void ImageSelectionWidget::updatePixmap()
     if (d->preview.isNull())
         return;
 
-    Digikam::DImg image = d->preview.copy();
     int sx              = d->localRegionSelection.left() - d->rect.left();
     int sy              = d->localRegionSelection.top()  - d->rect.top();
     int dw              = d->localRegionSelection.width();
     int dh              = d->localRegionSelection.height();
-    image.crop(sx, sy, dw, dh);
+    Digikam::DImg image = d->preview.copy(sx, sy, dw, dh);
 
     QPixmap pix = d->iface->convertToPixmap(image);
     QPainter p(d->pixmap);
