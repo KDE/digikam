@@ -55,6 +55,7 @@
 #include <kglobal.h>
 #include <kselectaction.h>
 #include <kvbox.h>
+#include <ktabwidget.h>
 
 // Local includes
 
@@ -74,6 +75,7 @@
 #include "talbumlistview.h"
 #include "tagfilterview.h"
 #include "templateselector.h"
+#include "templateviewer.h"
 #include "imageinfo.h"
 #include "imageattributeswatch.h"
 #include "metadatahub.h"
@@ -91,6 +93,12 @@ class ImageDescEditTabPriv
 {
 
 public:
+
+    enum DescEditTab
+    {
+        DESCRIPTIONS=0,
+        RIGHTS
+    };
 
     ImageDescEditTabPriv()
     {
@@ -111,6 +119,8 @@ public:
         toggleAutoTags             = TagFilterView::NoToggleAuto;
         lastSelectedWidget         = 0;
         templateSelector           = 0;
+        templateViewer             = 0;
+        tabWidget                  = 0;
     }
 
     bool                           modified;
@@ -134,6 +144,8 @@ public:
 
     KDateTimeEdit                 *dateTimeEdit;
 
+    KTabWidget                    *tabWidget;
+
     SearchTextBar                 *tagsSearchBar;
     SearchTextBar                 *newTagEdit;
 
@@ -142,6 +154,7 @@ public:
     TAlbumListView                *tagsView;
 
     TemplateSelector              *templateSelector;
+    TemplateViewer                *templateViewer;
 
     RatingWidget                  *ratingWidget;
 
@@ -151,48 +164,49 @@ public:
 };
 
 ImageDescEditTab::ImageDescEditTab(QWidget *parent)
-                : QScrollArea(parent), d(new ImageDescEditTabPriv)
+                : KVBox(parent), d(new ImageDescEditTabPriv)
 {
-    setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
-    setLineWidth( style()->pixelMetric(QStyle::PM_DefaultFrameWidth) );
-    setWidgetResizable(true);
-
-    QWidget *settingsArea       = new QWidget(viewport());
-    QGridLayout *settingsLayout = new QGridLayout(settingsArea);
-    setWidget(settingsArea);
-
-    viewport()->setAutoFillBackground(false);
-    settingsArea->setAutoFillBackground(false);
+    setMargin(0);
+    setSpacing(KDialog::spacingHint());
+    d->tabWidget = new KTabWidget(this);
 
     // Captions/Date/Rating view -----------------------------------
 
-    d->captionsEdit = new AltLangStrEdit(settingsArea);
+    QScrollArea *sv = new QScrollArea(d->tabWidget);
+    sv->setFrameStyle(QFrame::NoFrame);
+    sv->setWidgetResizable(true);
+
+    QWidget *captionTagsArea = new QWidget(sv->viewport());
+    QGridLayout *grid1       = new QGridLayout(captionTagsArea);
+    sv->setWidget(captionTagsArea);
+    sv->viewport()->setAutoFillBackground(false);
+    captionTagsArea->setAutoFillBackground(false);
+
+    d->captionsEdit = new AltLangStrEdit(captionTagsArea);
     d->captionsEdit->setTitle(i18n("Captions: "));
     d->captionsEdit->setFixedHeight(100);
 
-    KHBox *dateBox  = new KHBox(settingsArea);
+    KHBox *dateBox  = new KHBox(captionTagsArea);
     new QLabel(i18n("Date:"), dateBox);
     d->dateTimeEdit = new KDateTimeEdit(dateBox, "datepicker");
     d->dateTimeEdit->setMaximumHeight( fontMetrics().height()+4 );
 
-    KHBox *ratingBox = new KHBox(settingsArea);
+    KHBox *ratingBox = new KHBox(captionTagsArea);
     new QLabel(i18n("Rating:"), ratingBox);
     d->ratingWidget  = new RatingWidget(ratingBox);
     ratingBox->layout()->setAlignment(d->ratingWidget, Qt::AlignVCenter|Qt::AlignRight);
 
-    d->templateSelector = new TemplateSelector(settingsArea);
-
     // Tags view ---------------------------------------------------
 
-    d->newTagEdit    = new SearchTextBar(settingsArea, "ImageDescEditTabNewTagEdit", i18n("Enter new tag here..."));
+    d->newTagEdit = new SearchTextBar(captionTagsArea, "ImageDescEditTabNewTagEdit", i18n("Enter new tag here..."));
     d->newTagEdit->setCaseSensitive(false);
     d->newTagEdit->setWhatsThis(i18n("Enter here the text used to create new tags. "
                                      "'/' can be used here to create a hierarchy of tags. "
                                      "',' can be used here to create more than one hierarchy at the same time."));
 
-    d->tagsView        = new TAlbumListView(settingsArea);
+    d->tagsView        = new TAlbumListView(captionTagsArea);
 
-    KHBox *tagsSearch  = new KHBox(settingsArea);
+    KHBox *tagsSearch  = new KHBox(captionTagsArea);
     tagsSearch->setSpacing(KDialog::spacingHint());
 
     d->tagsSearchBar   = new SearchTextBar(tagsSearch, "ImageDescEditTabTagsSearchBar");
@@ -215,7 +229,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
 
     // Buttons -----------------------------------------
 
-    KHBox *buttonsBox = new KHBox(settingsArea);
+    KHBox *buttonsBox = new KHBox(this);
     buttonsBox->setSpacing(KDialog::spacingHint());
 
     d->revertBtn = new QToolButton(buttonsBox);
@@ -232,23 +246,47 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     buttonsBox->setStretchFactor(d->applyBtn, 10);
 
     d->moreButton = new QPushButton(i18n("More"), buttonsBox);
-    d->moreMenu   = new KMenu(settingsArea);
+    d->moreMenu   = new KMenu(captionTagsArea);
     d->moreButton->setMaximumHeight( fontMetrics().height()+4 );
     d->moreButton->setMenu(d->moreMenu);
 
     // --------------------------------------------------
 
-    settingsLayout->addWidget(d->captionsEdit,     0, 0, 1, 2);
-    settingsLayout->addWidget(dateBox,             1, 0, 1, 2);
-    settingsLayout->addWidget(ratingBox,           2, 0, 1, 2);
-    settingsLayout->addWidget(d->templateSelector, 3, 0, 1, 2);
-    settingsLayout->addWidget(d->newTagEdit,       4, 0, 1, 2);
-    settingsLayout->addWidget(d->tagsView,         5, 0, 1, 2);
-    settingsLayout->addWidget(tagsSearch,          6, 0, 1, 2);
-    settingsLayout->addWidget(buttonsBox,          7, 0, 1, 2);
-    settingsLayout->setRowStretch(5, 10);
-    settingsLayout->setMargin(KDialog::spacingHint());
-    settingsLayout->setSpacing(KDialog::spacingHint());
+    grid1->addWidget(d->captionsEdit,     0, 0, 1, 2);
+    grid1->addWidget(dateBox,             1, 0, 1, 2);
+    grid1->addWidget(ratingBox,           2, 0, 1, 2);
+    grid1->addWidget(d->templateSelector, 3, 0, 1, 2);
+    grid1->addWidget(d->newTagEdit,       4, 0, 1, 2);
+    grid1->addWidget(d->tagsView,         5, 0, 1, 2);
+    grid1->addWidget(tagsSearch,          6, 0, 1, 2);
+    grid1->setRowStretch(5, 10);
+    grid1->setMargin(KDialog::spacingHint());
+    grid1->setSpacing(KDialog::spacingHint());
+
+    d->tabWidget->insertTab(ImageDescEditTabPriv::DESCRIPTIONS, sv, i18n("Description"));
+
+    // Rights Managament view --------------------------------------
+
+    QScrollArea *sv2 = new QScrollArea(d->tabWidget);
+    sv2->setFrameStyle(QFrame::NoFrame);
+    sv2->setWidgetResizable(true);
+
+    QWidget *rightArea = new QWidget(sv->viewport());
+    QGridLayout *grid2 = new QGridLayout(rightArea);
+    sv2->setWidget(rightArea);
+    sv2->viewport()->setAutoFillBackground(false);
+    rightArea->setAutoFillBackground(false);
+
+    d->templateSelector = new TemplateSelector(rightArea);
+    d->templateViewer   = new TemplateViewer(rightArea);
+
+    grid2->addWidget(d->templateSelector, 0, 0, 1, 2);
+    grid2->addWidget(d->templateViewer,   1, 0, 1, 2);
+    grid2->setRowStretch(1, 10);
+    grid2->setMargin(KDialog::spacingHint());
+    grid2->setSpacing(KDialog::spacingHint());
+
+    d->tabWidget->insertTab(ImageDescEditTabPriv::RIGHTS, sv2, i18n("Rights"));
 
     // --------------------------------------------------
 
@@ -302,7 +340,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
 
     // Initialize ---------------------------------------------
 
-    /* FIXME */ d->captionsEdit->installEventFilter(this);
+    d->captionsEdit->installEventFilter(this);
     d->dateTimeEdit->installEventFilter(this);
     d->ratingWidget->installEventFilter(this);
     d->tagsView->installEventFilter(this);
@@ -790,6 +828,7 @@ void ImageDescEditTab::slotDateTimeChanged(const QDateTime& dateTime)
 void ImageDescEditTab::slotTemplateSelected()
 {
     d->hub.setMetadataTemplate(d->templateSelector->getTemplate());
+    d->templateViewer->setTemplate(d->templateSelector->getTemplate());
     setMetadataWidgetStatus(d->hub.templateStatus(), d->templateSelector);
     slotModified();
 }
@@ -865,6 +904,7 @@ void ImageDescEditTab::updateTemplate()
 {
     d->templateSelector->blockSignals(true);
     d->templateSelector->setTemplate(d->hub.metadataTemplate());
+    d->templateViewer->setTemplate(d->hub.metadataTemplate());
     setMetadataWidgetStatus(d->hub.templateStatus(), d->templateSelector);
     d->templateSelector->blockSignals(false);
 }

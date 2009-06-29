@@ -32,6 +32,10 @@
 #include <QPixmap>
 #include <QEvent>
 
+// KDE includes
+
+#include <kvbox.h>
+
 // Local includes
 
 #include "digikam_export.h"
@@ -47,7 +51,7 @@ class TAlbumCheckListItem;
 class ImageInfo;
 class ImageDescEditTabPriv;
 
-class ImageDescEditTab : public QScrollArea
+class ImageDescEditTab : public KVBox
 {
     Q_OBJECT
 
