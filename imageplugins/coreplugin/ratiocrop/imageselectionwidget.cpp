@@ -140,6 +140,7 @@ public:
     QColor               guideColor;
 
     Digikam::DImg        preview;
+    Digikam::DImg        previewGrayOverlay;
 
     Digikam::ImageIface *iface;
 };
@@ -177,6 +178,7 @@ ImageSelectionWidget::ImageSelectionWidget(int w, int h, QWidget *parent,
     d->image = QRect(0, 0, d->iface->originalWidth(), d->iface->originalHeight());
     d->rect  = QRect(w/2-d->preview.width()/2, h/2-d->preview.height()/2,
                      d->preview.width(), d->preview.height());
+
     updatePixmap();
     setGoldenGuideTypes(true, false, false, false, false, false);
 }
@@ -213,6 +215,39 @@ void ImageSelectionWidget::resizeEvent(QResizeEvent *e)
 
     d->rect   = QRect(w/2-d->preview.width()/2, h/2-d->preview.height()/2,
                       d->preview.width(), d->preview.height());
+
+    // Drawing a gray overlay
+    {
+        d->previewGrayOverlay = d->preview.copy();
+        uchar* ptr            = d->previewGrayOverlay.bits();
+        uchar  r, g, b;
+
+        int xlow  = d->rect.left();
+        int xhigh = d->rect.right();
+        int ylow  = d->rect.top();
+        int yhigh = d->rect.bottom();
+
+        for (int y = ylow ; y <= yhigh ; ++y)
+        {
+            for (int x = xlow ; x <= xhigh ; ++x)
+            {
+                b = ptr[0];
+                g = ptr[1];
+                r = ptr[2];
+
+                r += (uchar)((RCOL - r) * OPACITY);
+                g += (uchar)((GCOL - g) * OPACITY);
+                b += (uchar)((BCOL - b) * OPACITY);
+
+                ptr[0] = b;
+                ptr[1] = g;
+                ptr[2] = r;
+
+                ptr+=4;
+            }
+        }
+    }
+
     updatePixmap();
 }
 
@@ -729,47 +764,16 @@ void ImageSelectionWidget::updatePixmap()
         return;
 
     Digikam::DImg image = d->preview.copy();
-
-    // Drawing region outside selection grayed.
-    {
-        uchar* ptr = image.bits();
-        uchar  r, g, b;
-
-        int xlow  = d->rect.left();
-        int xhigh = d->rect.right();
-        int ylow  = d->rect.top();
-        int yhigh = d->rect.bottom();
-
-        for (int y = ylow ; y <= yhigh ; ++y)
-        {
-            for (int x = xlow ; x <= xhigh ; ++x)
-            {
-                b = ptr[0];
-                g = ptr[1];
-                r = ptr[2];
-
-                r += (uchar)((RCOL - r) * OPACITY);
-                g += (uchar)((GCOL - g) * OPACITY);
-                b += (uchar)((BCOL - b) * OPACITY);
-
-                ptr[0] = b;
-                ptr[1] = g;
-                ptr[2] = r;
-
-                ptr+=4;
-            }
-        }
-
-        int sx = d->localRegionSelection.left() - d->rect.left();
-        int sy = d->localRegionSelection.top()  - d->rect.top();
-        int dw = d->localRegionSelection.width();
-        int dh = d->localRegionSelection.height();
-        image.bitBltImage(&d->preview, sx, sy, dw, dh, sx, sy);
-    }
+    int sx              = d->localRegionSelection.left() - d->rect.left();
+    int sy              = d->localRegionSelection.top()  - d->rect.top();
+    int dw              = d->localRegionSelection.width();
+    int dh              = d->localRegionSelection.height();
+    image.crop(sx, sy, dw, dh);
 
     QPixmap pix = d->iface->convertToPixmap(image);
     QPainter p(d->pixmap);
-    p.drawPixmap(d->rect.x(), d->rect.y(), pix);
+    p.drawPixmap(d->rect.x(), d->rect.y(), d->iface->convertToPixmap(d->previewGrayOverlay));
+    p.drawPixmap(d->localRegionSelection.left(), d->localRegionSelection.top(), pix);
 
     // Stop here if no selection to draw
     if ( d->regionSelection.isEmpty() )
