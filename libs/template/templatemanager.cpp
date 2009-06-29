@@ -71,7 +71,7 @@ public:
     QList<Template>  pList;
     QString          file;
                                       // See TemplateSelector actions:
-    Template         unknowTemplate;  // Used to identify unregistered template informations found in metadata.
+    Template         unknowTemplate;  // Used to identify unregistered template information found in metadata.
     Template         removeTemplate;  // Used to identify template information to remove from metadata.
 
     const QString    unknowTitle;
