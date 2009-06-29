@@ -282,9 +282,8 @@ AltLangStrEdit::AltLangStrEdit(QWidget* parent)
     grid->addWidget(d->languageCB,     0, 2, 1, 1);
     grid->addWidget(d->addValueButton, 0, 3, 1, 1);
     grid->addWidget(d->delValueButton, 0, 4, 1, 1);
-    grid->addWidget(d->valueEdit,      1, 0, 1, 5);
-    grid->setColumnStretch(1, 5);
-    grid->setColumnStretch(2, 10);
+    grid->addWidget(d->valueEdit,      1, 0, 1,-1);
+    grid->setColumnStretch(1, 10);
     grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
 
