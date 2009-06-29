@@ -735,9 +735,14 @@ void ImageSelectionWidget::updatePixmap()
     uchar* ptr = image.bits();
     uchar  r, g, b;
 
-    for (int y=d->rect.top() ; y <= d->rect.bottom() ; ++y)
+    int xlow  = d->rect.left();
+    int xhigh = d->rect.right();
+    int ylow  = d->rect.top();
+    int yhigh = d->rect.bottom();
+
+    for (int y = ylow ; y <= yhigh ; ++y)
     {
-        for (int x=d->rect.left() ; x <= d->rect.right() ; ++x)
+        for (int x = xlow ; x <= xhigh ; ++x)
         {
             b = ptr[0];
             g = ptr[1];
