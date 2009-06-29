@@ -178,6 +178,7 @@ IconView::IconView(QWidget* parent, const char* name)
     d->rubber         = new DRubberBand(this);
     d->ratingWidget   = new RatingWidget(viewport());
     d->ratingWidget->setTracking(false);
+    d->ratingWidget->hide();
 
     connect(d->rearrangeTimer, SIGNAL(timeout()),
             this, SLOT(slotRearrange()));
