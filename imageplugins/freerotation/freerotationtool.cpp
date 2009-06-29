@@ -255,12 +255,12 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QWidget* additionalSettingsContainer = new QWidget;
+    QWidget* settingsContainer    = new QWidget;
     QGridLayout* containerLayout3 = new QGridLayout;
     containerLayout3->addWidget(d->antialiasInput, 0, 0, 1,-1);
     containerLayout3->addWidget(label5,            1, 0, 1, 1);
     containerLayout3->addWidget(d->autoCropCB,     1, 1, 1, 1);
-    additionalSettingsContainer->setLayout(containerLayout3);
+    settingsContainer->setLayout(containerLayout3);
 
     // -------------------------------------------------------------
 
@@ -271,7 +271,7 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
                             QString("AutoAdjustContainer"), true);
     d->expanderBox->addItem(manualAdjustContainer, SmallIcon("freerotation"), i18n("Manual Adjustment"),
                             QString("ManualAdjustContainer"), true);
-    d->expanderBox->addItem(additionalSettingsContainer, SmallIcon("freerotation"), i18n("Additional Settings"),
+    d->expanderBox->addItem(settingsContainer, SmallIcon("freerotation"), i18n("Settings"),
                             QString("SettingsContainer"), true);
     d->expanderBox->addStretch();
 
