@@ -184,6 +184,7 @@ void TextureTool::readSettings()
     d->blendGain->setValue(group.readEntry("BlendGain", d->blendGain->defaultValue()));
     d->textureType->blockSignals(false);
     d->blendGain->blockSignals(false);
+    slotEffect();
 }
 
 void TextureTool::writeSettings()
