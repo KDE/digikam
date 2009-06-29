@@ -136,7 +136,7 @@ public:
     QRect                localBottomRightCorner;
 
     QPixmap             *pixmap;
-    QPixmap              previewGrayOverlay;
+    QPixmap              grayOverLay;
 
     QColor               guideColor;
 
@@ -216,7 +216,7 @@ void ImageSelectionWidget::resizeEvent(QResizeEvent *e)
     d->rect   = QRect(w/2-d->preview.width()/2, h/2-d->preview.height()/2,
                       d->preview.width(), d->preview.height());
 
-    // Drawing a gray overlay
+    // Drawing the gray overlay
     {
         Digikam::DImg image = d->preview.copy();
         uchar* ptr          = image.bits();
@@ -246,7 +246,7 @@ void ImageSelectionWidget::resizeEvent(QResizeEvent *e)
                 ptr+=4;
             }
         }
-        d->previewGrayOverlay = image.convertToPixmap();
+        d->grayOverLay = image.convertToPixmap();
     }
 
     updatePixmap();
@@ -773,8 +773,12 @@ void ImageSelectionWidget::updatePixmap()
 
     QPixmap pix = d->iface->convertToPixmap(image);
     QPainter p(d->pixmap);
-    p.drawPixmap(d->rect.x(), d->rect.y(), d->previewGrayOverlay);
-    p.drawPixmap(d->localRegionSelection.left(), d->localRegionSelection.top(), pix);
+
+    p.drawPixmap(d->rect.x(), d->rect.y(),
+                 d->grayOverLay);
+
+    p.drawPixmap(d->localRegionSelection.left(), d->localRegionSelection.top(),
+                 pix);
 
     // Stop here if no selection to draw
     if ( d->regionSelection.isEmpty() )
