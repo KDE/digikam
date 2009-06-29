@@ -384,15 +384,16 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         png_read_update_info(png_ptr, info_ptr);
 
         if (m_sixteenBit)
-            data = new uchar[width*height*8];  // 16 bits/color/pixel
+            data = new_failureTolerant(width*height*8);  // 16 bits/color/pixel
         else
-            data = new uchar[width*height*4];  // 8 bits/color/pixel
+            data = new_failureTolerant(width*height*4);  // 8 bits/color/pixel
         cleanupData->setData(data);
 
         uchar **lines = 0;
         lines = (uchar **)malloc(height * sizeof(uchar *));
         cleanupData->setLines(lines);
-        if (!lines)
+
+        if (!data || !lines)
         {
             kDebug(50003) << "Cannot allocate memory to load PNG image data.";
             png_read_end(png_ptr, info_ptr);

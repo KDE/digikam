@@ -294,6 +294,18 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
         return false;
     }
+    catch(std::bad_alloc& e)
+    {
+        kError(50003) << "Failed to allocate memory for loading" << filePath << e.what();
+
+#ifdef WIN32
+        CloseHandle(fd);
+#else
+        close(fd);
+#endif
+
+        return false;
+    }
 }
 
 bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)

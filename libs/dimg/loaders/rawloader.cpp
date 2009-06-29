@@ -126,7 +126,12 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
 
     if (m_rawDecodingSettings.sixteenBitsImage)       // 16 bits image
     {
-        uchar *image = new uchar[width*height*8];
+        uchar *image = new_failureTolerant(width*height*8);
+        if (!image)
+        {
+            kDebug(50003) << "Failed to allocate memory for loading raw file";
+            return false;
+        }
 
         unsigned short *dst = (unsigned short *)image;
         uchar          *src = (uchar*)data.data();
@@ -226,7 +231,13 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
     }
     else        // 8 bits image
     {
-        uchar *image = new uchar[width*height*4];
+        uchar *image = new_failureTolerant(width*height*4);
+        if (!image)
+        {
+            kDebug(50003) << "Failed to allocate memory for loading raw file";
+            return false;
+        }
+
         uchar *dst   = image;
         uchar *src   = (uchar*)data.data();
         checkpoint   = 0;

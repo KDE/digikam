@@ -291,7 +291,12 @@ void DImg::copyImageData(const DImgPrivate *src)
 int DImg::allocateData()
 {
     int size = m_priv->width * m_priv->height * (m_priv->sixteenBit ? 8 : 4);
-    m_priv->data = new uchar[size];
+    try {
+        m_priv->data = new uchar[size];
+    } catch (std::bad_alloc &ex) {
+        m_priv->null = true;
+        return 0;
+    }
     m_priv->null = false;
     return size;
 }

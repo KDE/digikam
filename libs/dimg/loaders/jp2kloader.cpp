@@ -265,9 +265,9 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     if (m_loadFlags & LoadImageData)
     {
         if (m_sixteenBit)          // 16 bits image.
-            data = new uchar[imageWidth()*imageHeight()*8];
+            data = new_failureTolerant(imageWidth()*imageHeight()*8);
         else
-            data = new uchar[imageWidth()*imageHeight()*4];
+            data = new_failureTolerant(imageWidth()*imageHeight()*4);
 
         if (!data)
         {

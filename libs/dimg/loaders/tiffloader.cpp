@@ -273,15 +273,13 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
         if (bits_per_sample == 16)          // 16 bits image.
         {
-            uchar *strip;
-            try
+            data  = new_failureTolerant(w*h*8);
+            uchar *strip = new_failureTolerant(strip_size);
+            if (!data || !strip)
             {
-                data  = new uchar[w*h*8];
-                strip = new uchar[strip_size];
-            }
-            catch (std::bad_alloc &ex)
-            {
-                kDebug(50003) << "Failed to allocate memory for TIFF image (" << QSize(w,h) << ") : " << ex.what();
+                kDebug(50003) << "Failed to allocate memory for TIFF image" << filePath;
+                delete[] data;
+                delete[] strip;
                 TIFFClose(tif);
                 return false;
             }
@@ -407,15 +405,13 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         }
         else       // Non 16 bits images ==> get it on BGRA 8 bits.
         {
-            uchar* strip;
-            try
+            data  = new_failureTolerant(w*h*4);
+            uchar *strip = new_failureTolerant(w*rows_per_strip*4);
+            if (!data || !strip)
             {
-                data  = new uchar[w*h*4];
-                strip = new uchar[w*rows_per_strip*4];
-            }
-            catch (std::bad_alloc &ex)
-            {
-                kDebug(50003) << "Failed to allocate memory for TIFF image (" << QSize(w,h) << ") : " << ex.what();
+                kDebug(50003) << "Failed to allocate memory for TIFF image" << filePath;
+                delete[] data;
+                delete[] strip;
                 TIFFClose(tif);
                 return false;
             }

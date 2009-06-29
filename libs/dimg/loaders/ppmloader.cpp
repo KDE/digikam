@@ -126,7 +126,14 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     if (m_loadFlags & LoadImageData)
     {
-        data = new unsigned short[width*height*4];
+        data = new_short_failureTolerant(width*height*4);
+        if (!data)
+        {
+            kDebug(50003) << "Failed to allocate memory for loading" << filePath;
+            fclose(file);
+            return false;
+        }
+
         unsigned short *dst  = data;
         uchar src[6];
         float fac = 65535.0 / rgbmax;

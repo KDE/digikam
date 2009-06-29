@@ -139,6 +139,26 @@ void DImgLoader::imageSetEmbbededText(const QString& key, const QString& text)
     m_image->setEmbeddedText(key, text);
 }
 
+unsigned char* DImgLoader::new_failureTolerant(size_t size)
+{
+    try {
+        return new uchar[size];
+    } catch (std::bad_alloc &ex) {
+        kError(50003) << "Failed to allocate chunk of memory of size" << size << ex.what();
+        return 0;
+    }
+}
+
+unsigned short* DImgLoader::new_short_failureTolerant(size_t size)
+{
+    try {
+        return new unsigned short[size];
+    } catch (std::bad_alloc &ex) {
+        kError(50003) << "Failed to allocate chunk of memory of size" << size << ex.what();
+        return 0;
+    }
+}
+
 bool DImgLoader::readMetadata(const QString& filePath, DImg::FORMAT /*ff*/)
 {
     if (! (m_loadFlags & LoadMetadata || m_loadFlags & LoadUniqueHash) )

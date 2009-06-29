@@ -96,7 +96,12 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     uint w      = target.width();
     uint h      = target.height();
-    uchar* data = new uchar[w*h*4];
+    uchar* data = new_failureTolerant(w*h*4);
+    if (!data)
+    {
+        kDebug(50003) << "Failed to allocate memory for loading" << filePath;
+        return false;
+    }
     uint*  sptr = (uint*)target.bits();
     uchar* dptr = data;
 

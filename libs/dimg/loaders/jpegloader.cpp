@@ -315,7 +315,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             return false;
         }
 
-        data = new uchar[w * 16 * cinfo.output_components];
+        data = new_failureTolerant(w * 16 * cinfo.output_components);
         cleanupData->setData(data);
 
         if (!data)
@@ -326,7 +326,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             return false;
         }
 
-        dest = new uchar[w * h * 4];
+        dest = new_failureTolerant(w * h * 4);
         cleanupData->setDest(dest);
 
         if (!dest)

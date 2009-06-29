@@ -99,6 +99,9 @@ protected:
 
     bool                    checkExifWorkingColorSpace();
 
+    unsigned char*          new_failureTolerant(size_t unsecureSize);
+    unsigned short*         new_short_failureTolerant(size_t unsecureSize);
+
 protected:
 
     DImg                   *m_image;
