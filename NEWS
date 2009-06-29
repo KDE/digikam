@@ -66,14 +66,14 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 052 ==> 197808 : Bad images sort order when starting digiKam.
 053 ==> 197641 : Can't delete exif x-default caption once set.
 054 ==> 196437 : digiKam crashes at startup.
-056 ==> 197868 : digiKam crashes on startup (digikam-0.10.0-2/x86_64/Archlinux).
-057 ==> 196686 : Iconview (Qt4 Model/View based) : Select multiple images with Ctrl + Mouse not working anymore in 1.0.0-beta1.
-058 ==> 197961 : Cameragui freezes digikam when starting to download images from camera.
-059 ==> 197445 : digiKam freezes while attempting to import images from canon powershot a540.
-060 ==> 198067 : digiKam does not show any pictures.
-061 ==> 186638 : Canon 450D import issues.
-062 ==> 195809 : Radio buttons in "Search Group" "Options" in "Advanced search" dialog do not show selection status.
-063 ==> 
+055 ==> 197868 : digiKam crashes on startup (digikam-0.10.0-2/x86_64/Archlinux).
+056 ==> 196686 : Iconview (Qt4 Model/View based) : Select multiple images with Ctrl + Mouse not working anymore in 1.0.0-beta1.
+057 ==> 197961 : Cameragui freezes digikam when starting to download images from camera.
+058 ==> 197445 : digiKam freezes while attempting to import images from canon powershot a540.
+059 ==> 198067 : digiKam does not show any pictures.
+060 ==> 186638 : Canon 450D import issues.
+061 ==> 195809 : Radio buttons in "Search Group" "Options" in "Advanced search" dialog do not show selection status.
+062 ==> 
 
 
 *********************************************************************************************************
