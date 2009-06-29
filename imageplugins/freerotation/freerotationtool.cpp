@@ -334,20 +334,20 @@ void FreeRotationTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("freerotation Tool");
+
+    blockWidgetSignals(true);
+
     d->autoCropCB->setCurrentIndex(group.readEntry("Auto Crop Type", d->autoCropCB->defaultIndex()));
     d->antialiasInput->setChecked(group.readEntry("Anti Aliasing", true));
     d->expanderBox->readSettings(group);
 
-    d->angleInput->blockSignals(true);
-    d->fineAngleInput->blockSignals(true);
     d->angleInput->slotReset();
     d->fineAngleInput->slotReset();
-    d->angleInput->blockSignals(false);
-    d->fineAngleInput->blockSignals(false);
 
     resetPoints();
     slotColorGuideChanged();
-    slotEffect();
+
+    blockWidgetSignals(false);
 }
 
 void FreeRotationTool::writeSettings()
@@ -604,6 +604,14 @@ bool FreeRotationTool::pointIsValid(const QPoint& p)
     if (p.x() == -1 || p.y() == -1)
         valid = false;
     return valid;
+}
+
+void FreeRotationTool::blockWidgetSignals(bool b)
+{
+    d->angleInput->blockSignals(b);
+    d->fineAngleInput->blockSignals(b);
+    d->autoCropCB->blockSignals(b);
+    d->antialiasInput->blockSignals(b);
 }
 
 }  // namespace DigikamFreeRotationImagesPlugin
