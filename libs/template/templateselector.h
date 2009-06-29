@@ -73,4 +73,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // DFONTSELECT_H
+#endif // TEMPLATESELECTOR_H
