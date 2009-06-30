@@ -347,6 +347,9 @@ void SetupTemplate::slotAddTemplate()
         return;
     }
 
+    d->copyrightEdit->apply();
+    d->rightUsageEdit->apply();
+
     Template t;
     t.setTemplateTitle(d->titleEdit->text());
     t.setAuthors(d->authorsEdit->text().split(";", QString::SkipEmptyParts));
@@ -377,6 +380,9 @@ void SetupTemplate::slotRepTemplate()
 
     TemplateListItem *item = dynamic_cast<TemplateListItem*>(d->listView->currentItem());
     if (!item) return;
+
+    d->copyrightEdit->apply();
+    d->rightUsageEdit->apply();
 
     Template t;
     t.setTemplateTitle(title);
