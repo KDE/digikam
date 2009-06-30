@@ -31,9 +31,11 @@
 #include <QPalette>
 #include <QColor>
 #include <QString>
+#include <QFontMetrics>
 
 // KDE includes
 
+#include <ktextbrowser.h>
 #include <kglobalsettings.h>
 #include <ksqueezedtextlabel.h>
 
@@ -74,6 +76,27 @@ public:
     };
 
     ~DTextLabelValue(){};
+};
+
+// -------------------------------------------------------------------
+
+class DTextBrowser : public KTextBrowser
+{
+public:
+
+    DTextBrowser(const QString& text, QWidget* parent=0)
+        : KTextBrowser(parent)
+    {
+        setOpenExternalLinks(false);
+        setOpenLinks(false);
+        QFont fnt = KGlobalSettings::smallestReadableFont();
+        setFont(fnt);
+        QFontMetrics mt(fnt);
+        setFixedHeight(mt.height()*3);
+        setText(text);
+    };
+
+    ~DTextBrowser(){};
 };
 
 #endif /* IMAGEPROPERTIESTXTLABEL_H */
