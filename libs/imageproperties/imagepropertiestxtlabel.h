@@ -101,7 +101,7 @@ public:
         document()->setDefaultFont(fnt);
         int left, top, right, bottom;
         getContentsMargins(&left, &top, &right, &bottom);
-        setFixedHeight(top + bottom + fontMetrics().lineSpacing()*l);
+        setFixedHeight(top + bottom + frameWidth() + fontMetrics().lineSpacing()*l);
     };
 
 };
