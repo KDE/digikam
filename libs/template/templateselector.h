@@ -44,6 +44,14 @@ class DIGIKAM_EXPORT TemplateSelector : public KHBox
 
 public:
 
+    enum SelectorItems
+    {
+        REMOVETEMPLATE=0,
+        DONTCHANGE=1
+    };
+
+public:
+
     TemplateSelector(QWidget* parent);
     virtual ~TemplateSelector();
 

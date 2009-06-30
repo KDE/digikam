@@ -116,14 +116,14 @@ TemplateSelector::~TemplateSelector()
 void TemplateSelector::populateTemplates()
 {
     d->templateCombo->clear();
-    d->templateCombo->insertSqueezedItem(i18n("To remove"), 0);
-    d->templateCombo->insertSqueezedItem(i18n("Don't change"), 1);
-    d->templateCombo->insertSeparator(2);
+    d->templateCombo->insertSqueezedItem(i18n("To remove"),    REMOVETEMPLATE);
+    d->templateCombo->insertSqueezedItem(i18n("Don't change"), DONTCHANGE);
+    d->templateCombo->insertSeparator(DONTCHANGE+1);
 
     TemplateManager* tm = TemplateManager::defaultManager();
     if (tm)
     {
-        int i                 = 3;
+        int i                 = DONTCHANGE+2;
         QList<Template> list  = tm->templateList();
 
         foreach (const Template& t, list)
@@ -141,10 +141,10 @@ Template TemplateSelector::getTemplate() const
     {
         switch(d->templateCombo->currentIndex())
         {
-            case 0:
+            case REMOVETEMPLATE:
                 return tm->removeTemplate();
                 break;
-            case 1:
+            case DONTCHANGE:
                 return tm->unknowTemplate();
                 break;
             default:
