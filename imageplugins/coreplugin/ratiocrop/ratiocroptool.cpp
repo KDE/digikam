@@ -388,13 +388,11 @@ RatioCropTool::RatioCropTool(QObject* parent)
     vlay->addStretch();
     vlay->setMargin(0);
     vlay->setSpacing(0);
+
+    // -------------------------------------------------------------
+
     setToolSettings(d->gboxSettings);
-
     init();
-
-    // Sets current region selection
-    slotSelectionChanged(d->imageSelectionWidget->getRegionSelection());
-    readSettings();
 
     // -------------------------------------------------------------
 
@@ -547,6 +545,11 @@ void RatioCropTool::readSettings()
                                     (int)ImageSelectionWidget::Portrait));
         d->orientCB->setDefaultIndex(ImageSelectionWidget::Portrait);
     }
+
+    slotXChanged(d->xInput->value());
+    slotYChanged(d->yInput->value());
+    slotWidthChanged(d->widthInput->value());
+    slotHeightChanged(d->heightInput->value());
 
     applyRatioChanges(d->ratioCB->currentIndex());
     d->autoOrientation->setChecked(group.readEntry("Auto Orientation", false));
