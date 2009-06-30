@@ -63,28 +63,27 @@ public:
           removeTitle(QString("_REMOVE_TEMPLATE_")),
           mutex(QMutex::Recursive)
     {
-        modified       = false;
+        modified = false;
     }
 
-    bool             modified;
+    bool            modified;
 
-    QList<Template>  pList;
-    QString          file;
+    QList<Template> pList;
+    QString         file;
                                       // See TemplateSelector actions:
-    Template         unknowTemplate;  // Used to identify unregistered template information found in metadata.
-    Template         removeTemplate;  // Used to identify template information to remove from metadata.
+    Template        unknowTemplate;  // Used to identify unregistered template information found in metadata.
+    Template        removeTemplate;  // Used to identify template information to remove from metadata.
 
-    const QString    unknowTitle;
-    const QString    removeTitle;
+    const QString   unknowTitle;
+    const QString   removeTitle;
 
-    QMutex           mutex;
+    QMutex          mutex;
 };
 
 TemplateManager::TemplateManager(QObject *parent, const QString& file)
                 : QObject(parent), d(new TemplateManagerPrivate)
 {
     d->unknowTemplate.setTemplateTitle(d->unknowTitle);
-
     d->removeTemplate.setTemplateTitle(d->removeTitle);
 
     d->file = file;
