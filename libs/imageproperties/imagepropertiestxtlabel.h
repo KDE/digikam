@@ -51,12 +51,6 @@ public:
         setFont(fnt);
         setAlignment(Qt::AlignRight | Qt::AlignTop);
         setWordWrap(false);
-/*
-        QPalette palette  = this->palette();
-        QColor foreground = palette.color(QPalette::Foreground);
-        foreground.setAlpha(0);
-        palette.setColor(QPalette::Foreground, foreground);
-        setPalette(palette);*/
     };
 
     ~DTextLabelName(){};
@@ -76,6 +70,7 @@ public:
         setFont(KGlobalSettings::smallestReadableFont());
         setAlignment(Qt::AlignLeft | Qt::AlignTop);
         setWordWrap(false);
+        setTextElideMode(Qt::ElideRight);
     };
 
     ~DTextLabelValue(){};
