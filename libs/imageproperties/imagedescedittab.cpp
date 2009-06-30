@@ -406,6 +406,9 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     KConfigGroup group        = config->group(QString("Tag List View"));
     d->toggleAutoTags         = (TagFilterView::ToggleAutoTags)(group.readEntry("Toggle Auto Tags",
                                                                (int)TagFilterView::NoToggleAuto));
+    group                     = config->group("Image Properties SideBar");
+    d->tabWidget->setCurrentIndex(group.readEntry("ImageDescEditTab Tab",
+                                  (int)ImageDescEditTabPriv::DESCRIPTIONS));
 }
 
 ImageDescEditTab::~ImageDescEditTab()
@@ -427,6 +430,9 @@ ImageDescEditTab::~ImageDescEditTab()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("Tag List View"));
     group.writeEntry("Toggle Auto Tags", (int)(d->toggleAutoTags));
+    group.sync();
+    group                     = config->group("Image Properties SideBar");
+    group.writeEntry("ImageDescEditTab Tab", d->tabWidget->currentIndex());
     group.sync();
 
     delete d;
