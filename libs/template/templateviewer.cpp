@@ -66,20 +66,20 @@ public:
         labelInstructions = 0;
     }
 
-    DTextLabelName  *names;
-    DTextLabelName  *position;
-    DTextLabelName  *credit;
-    DTextLabelName  *copyright;
-    DTextLabelName  *usages;
-    DTextLabelName  *source;
+    DTextLabelName *names;
+    DTextLabelName *position;
+    DTextLabelName *credit;
+    DTextLabelName *copyright;
+    DTextLabelName *usages;
+    DTextLabelName *source;
 
-    DTextLabelValue *labelNames;
-    DTextLabelValue *labelPosition;
-    DTextLabelValue *labelCredit;
-    DTextLabelValue *labelCopyright;
-    DTextLabelValue *labelUsages;
-    DTextLabelValue *labelSource;
-    DTextLabelValue *labelInstructions;
+    DTextBrowser   *labelPosition;
+    DTextBrowser   *labelCredit;
+    DTextBrowser   *labelCopyright;
+    DTextBrowser   *labelUsages;
+    DTextBrowser   *labelSource;
+    DTextBrowser   *labelNames;
+    DTextBrowser   *labelInstructions;
 };
 
 TemplateViewer::TemplateViewer(QWidget* parent=0)
@@ -87,50 +87,37 @@ TemplateViewer::TemplateViewer(QWidget* parent=0)
 {
     setFrameStyle(QFrame::NoFrame);
 
-    QWidget *w1        = new QWidget(this);
-    QGridLayout *glay1 = new QGridLayout(w1);
+    KVBox *w1 = new KVBox(this);
 
-    d->names           = new DTextLabelName(i18n("Names: "),    w1);
-    d->position        = new DTextLabelName(i18n("Position: "), w1);
-    d->labelNames      = new DTextLabelValue(0, w1);
-    d->labelPosition   = new DTextLabelValue(0, w1);
+    d->names         = new DTextLabelName(i18n("Names:"), w1);
+    d->labelNames    = new DTextBrowser(QString(), w1);
+    d->position      = new DTextLabelName(i18n("Position:"), w1);
+    d->labelPosition = new DTextBrowser(QString(), w1);
 
-    glay1->addWidget(d->names,         0, 0, 1, 1);
-    glay1->addWidget(d->labelNames,    0, 1, 1, 1);
-    glay1->addWidget(d->position,      1, 0, 1, 1);
-    glay1->addWidget(d->labelPosition, 1, 1, 1, 1);
-    glay1->setMargin(KDialog::spacingHint());
-    glay1->setSpacing(0);
-    glay1->setColumnStretch(1, 10);
+    d->names->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    d->position->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
     addItem(w1, SmallIcon("user-identity"),
             i18n("Authors"), QString("Authors"), true);
 
     // ------------------------------------------------------------------
 
-    QWidget *w2        = new QWidget(this);
-    QGridLayout *glay2 = new QGridLayout(w2);
+    KVBox *w2  = new KVBox(this);
 
-    d->credit         = new DTextLabelName(i18n("Credit: "),    w2);
-    d->copyright      = new DTextLabelName(i18n("Copyright: "), w2);
-    d->usages         = new DTextLabelName(i18n("Usages: "),    w2);
-    d->source         = new DTextLabelName(i18n("Source: "),    w2);
-    d->labelCredit    = new DTextLabelValue(0, w2);
-    d->labelCopyright = new DTextLabelValue(0, w2);
-    d->labelUsages    = new DTextLabelValue(0, w2);
-    d->labelSource    = new DTextLabelValue(0, w2);
+    d->credit         = new DTextLabelName(i18n("Credit:"), w2);
+    d->labelCredit    = new DTextBrowser(QString(), w2);
+    d->copyright      = new DTextLabelName(i18n("Copyright:"), w2);
+    d->labelCopyright = new DTextBrowser(QString(), w2);
+    d->usages         = new DTextLabelName(i18n("Usages:"), w2);
+    d->labelUsages    = new DTextBrowser(QString(), w2);
+    d->source         = new DTextLabelName(i18n("Source:"), w2);
+    d->labelSource    = new DTextBrowser(QString(), w2);
 
-    glay2->addWidget(d->credit,         0, 0, 1, 1);
-    glay2->addWidget(d->labelCredit,    0, 1, 1, 1);
-    glay2->addWidget(d->copyright,      1, 0, 1, 1);
-    glay2->addWidget(d->labelCopyright, 1, 1, 1, 1);
-    glay2->addWidget(d->usages,         2, 0, 1, 1);
-    glay2->addWidget(d->labelUsages,    2, 1, 1, 1);
-    glay2->addWidget(d->source,         3, 0, 1, 1);
-    glay2->addWidget(d->labelSource,    3, 1, 1, 1);
-    glay2->setMargin(KDialog::spacingHint());
-    glay2->setSpacing(0);
-    glay2->setColumnStretch(1, 10);
+    d->credit->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    d->copyright->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    d->credit->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    d->usages->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    d->source->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
     addItem(w2, SmallIcon("flag-red"),
             i18n("Intellectual Property"), QString("CopyRight"), true);
@@ -138,7 +125,7 @@ TemplateViewer::TemplateViewer(QWidget* parent=0)
     // ------------------------------------------------------------------
 
     KVBox *w3            = new KVBox(this);
-    d->labelInstructions = new DTextLabelValue(0, w3);
+    d->labelInstructions = new DTextBrowser(QString(), w3);
 
     addItem(w3, SmallIcon("view-pim-journal"),
             i18n("Instructions"), QString("Instructions"), true);
@@ -153,7 +140,7 @@ TemplateViewer::~TemplateViewer()
 
 void TemplateViewer::setTemplate(const Template& t)
 {
-    d->labelNames->setText(t.authors().join(";"));
+    d->labelNames->setText(t.authors().join("\n"));
     d->labelPosition->setText(t.authorsPosition());
     d->labelCredit->setText(t.credit());
     d->labelCopyright->setText(t.copyright()["x-default"]);

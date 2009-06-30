@@ -89,14 +89,21 @@ public:
     {
         setOpenExternalLinks(false);
         setOpenLinks(false);
-        QFont fnt = KGlobalSettings::smallestReadableFont();
-        setFont(fnt);
-        QFontMetrics mt(fnt);
-        setFixedHeight(mt.height()*3);
         setText(text);
+        setLinesNumber(3);
     };
 
     ~DTextBrowser(){};
+
+    void setLinesNumber(int l)
+    {
+        QFont fnt = KGlobalSettings::smallestReadableFont();
+        document()->setDefaultFont(fnt);
+        int left, top, right, bottom;
+        getContentsMargins(&left, &top, &right, &bottom);
+        setFixedHeight(top + bottom + fontMetrics().lineSpacing()*l);
+    };
+
 };
 
 #endif /* IMAGEPROPERTIESTXTLABEL_H */
