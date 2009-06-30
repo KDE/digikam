@@ -89,10 +89,15 @@ public:
 
 public:
 
+    /*
     ImageSelectionWidget(int width, int height, QWidget *parent=0,
                          int widthRatioValue=1, int heightRatioValue=1,
                          int aspectRatio=RATIO01X01, int orient=Landscape,
                          int guideLinesType=GuideNone);
+    */
+
+    ImageSelectionWidget(int width, int height, QWidget *parent = 0);
+    ImageSelectionWidget(int width, int height, bool initDrawing, QWidget *parent = 0);
     ~ImageSelectionWidget();
 
     void  setCenterSelection(int centerType=CenterImage);
@@ -101,6 +106,7 @@ public:
     void  setSelectionWidth(int w);
     void  setSelectionHeight(int h);
     void  setSelectionOrientation(int orient);
+    void  setIsDrawingSelection(bool draw);
     void  setPreciseCrop(bool precise);
     void  setAutoOrientation(bool orientation);
     void  setSelectionAspectRatioType(int aspectRatioType);
@@ -164,6 +170,11 @@ private:
     float  distance(QPoint a, QPoint b);
     void   placeSelection(QPoint pm, bool symmetric, QPoint center);
     void   setCursorResizing();
+
+    void setup(int width, int height,
+               int widthRatioValue=1, int heightRatioValue=1,
+               int aspectRatio=RATIO01X01, int orient=Landscape,
+               int guideLinesType=GuideNone);
 
 private:
 

@@ -112,6 +112,8 @@ public:
     bool                 autoOrientation;
     bool                 preciseCrop;
 
+    bool                 isDrawingSelection;
+
     int                  guideLinesType;
     int                  guideSize;
 
@@ -145,12 +147,33 @@ public:
     Digikam::ImageIface *iface;
 };
 
-ImageSelectionWidget::ImageSelectionWidget(int w, int h, QWidget *parent,
-                                           int widthRatioValue, int heightRatioValue,
-                                           int aspectRatioType, int orient, int guideLinesType)
+ImageSelectionWidget::ImageSelectionWidget(int w, int h, QWidget *parent)
                     : QWidget(parent), d(new ImageSelectionWidgetPriv)
 {
-    d->currentAspectRatioType  = aspectRatioType;
+    d->isDrawingSelection = true;
+    setup(w, h);
+}
+
+ImageSelectionWidget::ImageSelectionWidget(int w, int h, bool initDrawing, QWidget *parent)
+                    : QWidget(parent), d(new ImageSelectionWidgetPriv)
+{
+    d->isDrawingSelection = initDrawing;
+    setup(w, h);
+}
+
+ImageSelectionWidget::~ImageSelectionWidget()
+{
+    delete d->iface;
+    delete d->pixmap;
+    delete d;
+}
+
+void ImageSelectionWidget::setup(int w, int h,
+                                 int widthRatioValue, int heightRatioValue,
+                                 int aspectRatio, int orient,
+                                 int guideLinesType)
+{
+    d->currentAspectRatioType  = aspectRatio;
     d->currentWidthRatioValue  = widthRatioValue;
     d->currentHeightRatioValue = heightRatioValue;
     d->currentOrientation      = orient;
@@ -181,13 +204,6 @@ ImageSelectionWidget::ImageSelectionWidget(int w, int h, QWidget *parent,
 
     updatePixmap();
     setGoldenGuideTypes(true, false, false, false, false, false);
-}
-
-ImageSelectionWidget::~ImageSelectionWidget()
-{
-    delete d->iface;
-    delete d->pixmap;
-    delete d;
 }
 
 Digikam::ImageIface* ImageSelectionWidget::imageIface()
@@ -776,12 +792,12 @@ void ImageSelectionWidget::updatePixmap()
     p.drawPixmap(d->rect.x(), d->rect.y(),
                  d->grayOverLay);
 
+    // Stop here if no selection to draw
+    if ( d->regionSelection.isEmpty() || !d->isDrawingSelection )
+        return;
+
     p.drawPixmap(d->localRegionSelection.left(), d->localRegionSelection.top(),
                  pix);
-
-    // Stop here if no selection to draw
-    if ( d->regionSelection.isEmpty() )
-        return;
 
     // Drawing selection borders.
 
@@ -1443,6 +1459,11 @@ void ImageSelectionWidget::mouseMoveEvent ( QMouseEvent * e )
         else
             setCursor( Qt::ArrowCursor );
     }
+}
+
+void ImageSelectionWidget::setIsDrawingSelection(bool draw)
+{
+    d->isDrawingSelection = draw;
 }
 
 }  // namespace DigikamImagesPluginCore

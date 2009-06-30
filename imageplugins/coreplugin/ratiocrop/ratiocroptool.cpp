@@ -155,7 +155,8 @@ RatioCropTool::RatioCropTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->imageSelectionWidget = new ImageSelectionWidget(480, 320);
+    // Important: Deactivate drawing of the selection now, we will enable it later.
+    d->imageSelectionWidget = new ImageSelectionWidget(480, 320, false);
     d->imageSelectionWidget->setWhatsThis(i18n("<p>Here you can see the aspect ratio selection preview "
                                                "used for cropping. You can use the mouse to move and "
                                                "resize the crop area.</p>"
@@ -489,7 +490,9 @@ void RatioCropTool::readSettings()
 
     // --------------------------------------------------------
 
-    blockWidgetSignals(true);
+    // Note: the selection widget has been setup to NOT draw the selection at the moment.
+    // This is necessary to avoid jumping of the selection when reading the settings.
+    // The drawing must be activated later on in this method to have a working selection.
 
     d->expbox->readSettings(group);
 
@@ -546,17 +549,21 @@ void RatioCropTool::readSettings()
         d->orientCB->setDefaultIndex(ImageSelectionWidget::Portrait);
     }
 
+
+    d->autoOrientation->setChecked(group.readEntry("Auto Orientation", false));
+    slotAutoOrientChanged( d->autoOrientation->isChecked() );
+    applyRatioChanges(d->ratioCB->currentIndex());
+
     slotXChanged(d->xInput->value());
     slotYChanged(d->yInput->value());
     slotWidthChanged(d->widthInput->value());
+
+    // For the last setting to be applied, activate drawing in the selectionWidget,
+    // so that we can see the results.
+    d->imageSelectionWidget->setIsDrawingSelection(true);
     slotHeightChanged(d->heightInput->value());
 
-    applyRatioChanges(d->ratioCB->currentIndex());
-    d->autoOrientation->setChecked(group.readEntry("Auto Orientation", false));
-    slotAutoOrientChanged( d->autoOrientation->isChecked() );
     slotGuideTypeChanged(d->guideLinesCB->currentIndex());
-
-    blockWidgetSignals(false);
 }
 
 void RatioCropTool::writeSettings()
