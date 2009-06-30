@@ -330,7 +330,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     mainLayout->setRowStretch(7, 10);
     mainLayout->setColumnStretch(2, 10);
     mainLayout->setColumnStretch(4, 10);
-    mainLayout->setMargin(d->gboxSettings->spacingHint());
+    mainLayout->setMargin(0);
     mainLayout->setSpacing(d->gboxSettings->spacingHint());
     d->gboxSettings->plainPage()->setLayout(mainLayout);
 

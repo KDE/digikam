@@ -171,7 +171,7 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
     QGridLayout* mainLayout = new QGridLayout();
     mainLayout->addWidget(d->curvesBox, 0, 0, 1, 1);
     mainLayout->setRowStretch(1, 10);
-    mainLayout->setMargin(d->gboxSettings->spacingHint());
+    mainLayout->setMargin(0);
     mainLayout->setSpacing(d->gboxSettings->spacingHint());
     d->gboxSettings->plainPage()->setLayout(mainLayout);
 

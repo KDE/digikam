@@ -224,7 +224,7 @@ void CurvesBox::setup()
     mainLayout->addWidget(curveBox,   0, 0, 1, 1);
     mainLayout->addLayout(l3,         1, 0, 1, 1);
     mainLayout->setRowStretch(2, 10);
-    mainLayout->setMargin(KDialog::spacingHint());
+    mainLayout->setMargin(0);
     mainLayout->setSpacing(KDialog::spacingHint());
     setLayout(mainLayout);
 

@@ -179,7 +179,7 @@ ImagePanelWidget::ImagePanelWidget(uint w, uint h, const QString& settingsSectio
     grid->addWidget(d->sepaBBox,    2, 2, 1, 3);
     grid->setRowStretch(1, 10);
     grid->setColumnStretch(1, 10);
-    grid->setMargin(0);
+    grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
 
     // -------------------------------------------------------------

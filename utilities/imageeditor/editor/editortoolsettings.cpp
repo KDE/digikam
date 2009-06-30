@@ -256,7 +256,7 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, int histogr
     gridSettings->addWidget(d->btnBox2,       5, 0, 1, 2);
     gridSettings->addWidget(d->btnBox1,       6, 0, 1, 2);
     gridSettings->setSpacing(spacingHint());
-    gridSettings->setMargin(0);
+    gridSettings->setMargin(spacingHint());
 
     // ---------------------------------------------------------------
 
