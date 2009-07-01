@@ -40,6 +40,7 @@
 
 #include "dimg.h"
 #include "templateselector.h"
+#include "templateviewer.h"
 #include "templatemanager.h"
 #include "template.h"
 #include "dmetadata.h"
@@ -54,15 +55,16 @@ Metadata::Metadata(QObject* parent)
     setToolDescription(i18n("A tool to apply template metadata"));
     setToolIcon(KIcon(SmallIcon("application-xml")));
 
-    KVBox *vbox = new KVBox;
-    m_selector  = new TemplateSelector(vbox);
+    KVBox *vbox        = new KVBox;
+    m_templateSelector = new TemplateSelector(vbox);
+    m_templateViewer   = new TemplateViewer(vbox);
 
     QLabel *space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
 
     setSettingsWidget(vbox);
 
-    connect(m_selector, SIGNAL(signalTemplateSelected()),
+    connect(m_templateSelector, SIGNAL(signalTemplateSelected()),
             this, SLOT(slotSettingsChanged()));
 }
 
@@ -81,14 +83,14 @@ void Metadata::assignSettings2Widget()
 {
     QString title = settings()["TemplateTitle"].toString();
     Template t    = TemplateManager::defaultManager()->findByTitle(title);
-    m_selector->setTemplate(t);
+    m_templateSelector->setTemplate(t);
 }
 
 void Metadata::slotSettingsChanged()
 {
+    m_templateViewer->setTemplate(m_templateSelector->getTemplate());
     BatchToolSettings settings;
-    QString title = m_selector->getTemplate().templateTitle();
-    settings.insert("TemplateTitle", title);
+    settings.insert("TemplateTitle", m_templateSelector->getTemplate().templateTitle());
     setSettings(settings);
 }
 
