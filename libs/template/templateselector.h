@@ -28,17 +28,13 @@
 
 #include <khbox.h>
 
-// Local includes
-
-#include "digikam_export.h"
-
 namespace Digikam
 {
 
 class Template;
 class TemplateSelectorPriv;
 
-class DIGIKAM_EXPORT TemplateSelector : public KHBox
+class TemplateSelector : public KHBox
 {
     Q_OBJECT
 

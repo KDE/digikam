@@ -31,7 +31,6 @@
 // Local includes
 
 #include "rexpanderbox.h"
-#include "digikam_export.h"
 
 namespace Digikam
 {
@@ -39,7 +38,7 @@ namespace Digikam
 class Template;
 class TemplateViewerPriv;
 
-class DIGIKAM_EXPORT TemplateViewer : public RExpanderBox
+class TemplateViewer : public RExpanderBox
 {
 
 public:

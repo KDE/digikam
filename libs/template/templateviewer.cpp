@@ -22,7 +22,6 @@
  * ============================================================ */
 
 #include "templateviewer.h"
-#include "templateviewer.moc"
 
 // Qt includes
 
