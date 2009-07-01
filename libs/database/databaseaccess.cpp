@@ -101,7 +101,7 @@ DatabaseAccess::DatabaseAccess()
     d->lockCount++;
     if (!d->backend->isOpen() && !d->initializing)
     {
-        // avoid endless loops
+        // avoid endless loops (e.g. recursing from CollectionManager)
         d->initializing = true;
 
         d->backend->open(d->parameters);
@@ -202,7 +202,7 @@ void DatabaseAccess::setParameters(const DatabaseParameters& parameters, Applica
     delete d->infoCache;
     d->infoCache = new ImageInfoCache();
     d->databaseWatch->setDatabaseIdentifier(QString());
-    CollectionManager::instance()->clear();
+    CollectionManager::instance()->clear_locked();
 }
 
 bool DatabaseAccess::checkReadyForUse(InitializationObserver *observer)

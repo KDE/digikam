@@ -596,24 +596,14 @@ CollectionManager::~CollectionManager()
     delete d;
 }
 
-void CollectionManager::clear()
-{
-    DatabaseAccess access;
-
-    // clear list
-    foreach (AlbumRootLocation *location, d->locations)
-    {
-        CollectionLocation::Status oldStatus = location->status();
-        location->setStatus(CollectionLocation::LocationDeleted);
-        emit locationStatusChanged(*location, oldStatus);
-        delete location;
-    }
-    d->locations.clear();
-}
-
 void CollectionManager::refresh()
 {
-    clear();
+    {
+        // if called from the DatabaseAccess constructor itself, it will
+        // hold a flag to prevent endless recursion
+        DatabaseAccess access;
+        clear_locked();
+    }
     updateLocations();
 }
 
@@ -863,6 +853,72 @@ void CollectionManager::removeLocation(const CollectionLocation& location)
     updateLocations();
 }
 
+QList<CollectionLocation> CollectionManager::checkHardWiredLocations()
+{
+    QList<CollectionLocation> disappearedLocations;
+    QList<SolidVolumeInfo> volumes = d->listVolumes();
+
+    DatabaseAccess access;
+
+    foreach (AlbumRootLocation *location, d->locations)
+    {
+        // Hardwired and unavailable?
+        if (location->type() == CollectionLocation::TypeVolumeHardWired
+            && location->status() == CollectionLocation::LocationUnavailable)
+        {
+            disappearedLocations << *location;
+        }
+    }
+
+    return disappearedLocations;
+}
+
+
+QList< QPair<QString, QString> > CollectionManager::migrationCandidates(const CollectionLocation &location)
+{
+    QList< QPair<QString, QString> > pairs;
+
+    QList<SolidVolumeInfo> volumes = d->listVolumes();
+
+    DatabaseAccess access;
+
+    AlbumRootLocation *albumLoc = d->locations.value(location.id());
+    if (!albumLoc)
+        return pairs;
+
+    // Find possible new volumes where the specific path is found.
+    foreach (const SolidVolumeInfo &info, volumes)
+    {
+        if (info.isMounted && !info.path.isEmpty())
+        {
+            QDir dir(info.path + albumLoc->specificPath);
+            if (dir.exists())
+            {
+                pairs << QPair<QString, QString>(d->volumeIdentifier(info), dir.absolutePath());
+            }
+        }
+    }
+
+    return pairs;
+}
+
+void CollectionManager::migrateToVolume(const CollectionLocation& location, const QString& identifier)
+{
+    DatabaseAccess access;
+
+    AlbumRootLocation *albumLoc = d->locations.value(location.id());
+    if (!albumLoc)
+        return;
+
+    // update db
+    ChangingDB db(d);
+    access.db()->migrateAlbumRoot(albumLoc->id(), identifier);
+
+    albumLoc->identifier = identifier;
+
+    updateLocations();
+}
+
 void CollectionManager::setLabel(const CollectionLocation& location, const QString& label)
 {
     DatabaseAccess access;
@@ -877,6 +933,24 @@ void CollectionManager::setLabel(const CollectionLocation& location, const QStri
 
     // update local structure
     albumLoc->setLabel(label);
+
+    emit locationPropertiesChanged(*albumLoc);
+}
+
+void CollectionManager::changeType(const CollectionLocation& location, int type)
+{
+    DatabaseAccess access;
+
+    AlbumRootLocation *albumLoc = d->locations.value(location.id());
+    if (!albumLoc)
+        return;
+
+    // update db
+    ChangingDB db(d);
+    access.db()->changeAlbumRootType(albumLoc->id(), (AlbumRoot::Type)type);
+
+    // update local structure
+    albumLoc->setType((CollectionLocation::Type)type);
 
     emit locationPropertiesChanged(*albumLoc);
 }
@@ -1187,6 +1261,20 @@ void CollectionManager::updateLocations()
             ++i;
         }
     }
+}
+
+void CollectionManager::clear_locked()
+{
+    // Internal method: Called with mutex locked
+    // Cave: Difficult recursions with DatabaseAccess constructor and setParameters
+    foreach (AlbumRootLocation *location, d->locations)
+    {
+        CollectionLocation::Status oldStatus = location->status();
+        location->setStatus(CollectionLocation::LocationDeleted);
+        emit locationStatusChanged(*location, oldStatus);
+        delete location;
+    }
+    d->locations.clear();
 }
 
 void CollectionManager::slotAlbumRootChange(const AlbumRootChangeset& changeset)

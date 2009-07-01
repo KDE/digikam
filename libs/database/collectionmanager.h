@@ -57,7 +57,6 @@ public:
     /**
      * Clears all locations and re-reads the lists of collection locations
      */
-    void clear();
     void refresh();
 
     /** CollectionLocation objects returned are simple data containers.
@@ -110,6 +109,37 @@ public:
      * Sets the label of the given location
      */
     void setLabel(const CollectionLocation& location, const QString& label);
+
+    /**
+     * Changes the CollectionLocation::Type of the given location
+     */
+    void changeType(const CollectionLocation& location, int type);
+
+    /**
+     * Checks the locations of type HardWired. If one of these is not available currently,
+     * it is added to the list of disappared locations.
+     * This case may happen if a file system is changed, a backup restored or other actions
+     * taken that change the UUID, although the data may still be available and mounted.
+     * If there are hard-wired volumes available which are candidates for a newly appeared
+     * volume (in fact those that do not contain any collections currently), they are
+     * added to the map, identifier -> i18n'ed user presentable description.
+     * The identifier can be used for changeVolume.
+     */
+    QList<CollectionLocation> checkHardWiredLocations();
+
+    /**
+     * Get a list of (identifier, user presentable string) of candidates to where the
+     * given disappeared location (retrieved from checkHardWiredLocations()) may have been moved.
+     */
+    QList< QPair<QString, QString> > migrationCandidates(const CollectionLocation &disappearedLocation);
+
+    /**
+     * Migrates the existing collection to a new volume, identified by an internal identifier
+     * as returned by checkHardWiredLocations().
+     * Use this _only_ to react to changes like those detailed for checkHardWiredLocations;
+     * the actual data pointed to shall be unchanged.
+     */
+    void migrateToVolume(const CollectionLocation& location, const QString& identifier);
 
     /**
      * Returns a list of all CollectionLocations stored in the database
@@ -229,6 +259,9 @@ private:
     void updateLocations();
 
     friend class DatabaseWatch;
+    friend class DatabaseAccess;
+
+    void clear_locked();
 
     CollectionManagerPrivate* const d;
     friend class CollectionManagerPrivate;
