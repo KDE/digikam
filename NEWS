@@ -76,7 +76,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 062 ==> 177686 : Menu text is invisible.
 063 ==> 198509 : Tagging by drag and drop not possible anymore.
 064 ==> 198531 : Compilation error in libpgf [PATCH].
-065 ==> 
+065 ==> 198530 : Compilation error in imagecategorizedview.cpp.
+066 ==> 
 
 
 *********************************************************************************************************
