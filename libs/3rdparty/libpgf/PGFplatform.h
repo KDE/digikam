@@ -299,6 +299,17 @@ inline OSError SetFPos(HANDLE hFile, int posMode, INT64 posOff) {
 //-------------------------------------------------------------------------------
 // POSIX *NIXes
 //-------------------------------------------------------------------------------
+#ifdef __NetBSD__
+#ifndef __POSIX__
+#define __POSIX__
+#endif
+#ifndef off64_t
+#define off64_t off_t
+#endif
+#ifndef lseek64
+#define lseek64 lseek
+#endif
+#endif
 
 #ifdef __POSIX__
 #include <stdlib.h>		// div(), abs(), div_t
