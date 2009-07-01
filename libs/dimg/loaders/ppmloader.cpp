@@ -95,7 +95,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         return false;
     }
 
-    c++;
+    ++c;
     if (*c != '6')
     {
         kDebug(50003) << "Not a PPM file.";

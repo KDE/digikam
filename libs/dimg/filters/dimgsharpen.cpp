@@ -117,7 +117,7 @@ void DImgSharpen::sharpenImage(double radius, double sigma)
             alpha      = exp(-((double) u*u+v*v)/(2.0*sigma*sigma));
             kernel[i]  = alpha/(2.0*M_PI*sigma*sigma);
             normalize += kernel[i];
-            i++;
+            ++i;
         }
     }
 
@@ -188,7 +188,7 @@ bool DImgSharpen::convolveImage(const unsigned int order, const double *kernel)
                     green += (*k)*(color.green() * 257.0);
                     blue  += (*k)*(color.blue()  * 257.0);
                     alpha += (*k)*(color.alpha() * 257.0);
-                    k++;
+                    ++k;
                 }
             }
 
