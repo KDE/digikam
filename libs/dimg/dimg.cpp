@@ -933,15 +933,17 @@ QString DImg::embeddedText(const QString& key) const
 
 DColor DImg::getPixelColor(uint x, uint y) const
 {
-    if (isNull() || x >= width() || y >= height())
+
+    if (m_priv->null || x >= m_priv->width || y >= m_priv->height)
     {
         kDebug(50003) << "DImg::getPixelColor() : wrong pixel position!";
         return DColor();
     }
 
-    uchar *data = bits() + x*bytesDepth() + (width()*y*bytesDepth());
+    int depth   = bytesDepth();
+    uchar *data = bits() + x*depth + (m_priv->width*y*depth);
 
-    return( DColor(data, sixteenBit()) );
+    return( DColor(data, m_priv->sixteenBit) );
 }
 
 void DImg::prepareSubPixelAccess()
