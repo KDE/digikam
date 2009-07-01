@@ -73,7 +73,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 059 ==> 198067 : digiKam does not show any pictures.
 060 ==> 186638 : Canon 450D import issues.
 061 ==> 195809 : Radio buttons in "Search Group" "Options" in "Advanced search" dialog do not show selection status.
-062 ==> 
+062 ==> 177686 : Menu text is invisible.
+063 ==> 
 
 
 *********************************************************************************************************
