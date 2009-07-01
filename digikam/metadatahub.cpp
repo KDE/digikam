@@ -170,14 +170,12 @@ void MetadataHub::load(const ImageInfo& info)
         ImageComments comments = info.imageComments(access);
         commentMap             = comments.toAltLangMap();
     }
-    Template t;
-    {
-        ImageCopyright cr = info.imageCopyright();
-        t                 = TemplateManager::defaultManager()->findByContents(cr.toMetadataTemplate());
-    }
+
+    Template tref = info.imageCopyright().toMetadataTemplate();
+    Template t    = TemplateManager::defaultManager()->findByContents(tref);
     kDebug(50003) << "Found Metadata Template: " << t.templateTitle();
 
-    load(info.dateTime(), commentMap, info.rating(), t);
+    load(info.dateTime(), commentMap, info.rating(), t.isNull() ? tref : t);
 
     AlbumManager *man = AlbumManager::instance();
     QList<int> tagIds = info.tagIds();
