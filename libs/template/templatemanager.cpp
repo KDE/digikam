@@ -186,14 +186,6 @@ bool TemplateManager::load()
             }
         }
 
-        kDebug(50003) << t.authors();
-        kDebug(50003) << t.authorsPosition();
-        kDebug(50003) << t.credit();
-        kDebug(50003) << t.copyright();
-        kDebug(50003) << t.rightUsageTerms();
-        kDebug(50003) << t.source();
-        kDebug(50003) << t.instructions();
-
         insertPrivate(t);
     }
 
