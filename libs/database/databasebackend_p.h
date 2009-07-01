@@ -127,3 +127,4 @@ public:
 }  // namespace Digikam
 
 #endif // DATABASEBACKEND_P_H
+

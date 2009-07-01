@@ -82,3 +82,4 @@ public:
 }  // namespace Digikam
 
 #endif // DATABASECOREBACKEND_P_H
+
