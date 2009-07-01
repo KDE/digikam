@@ -108,6 +108,9 @@ DigikamImageView::DigikamImageView(QWidget *parent)
     connect(d->utilities, SIGNAL(editorCurrentUrlChanged(const KUrl&)),
             this, SLOT(setCurrentUrl(const KUrl&)));
 
+    connect(imageModel()->dragDropHandler(), SIGNAL(assignTags(const QList<ImageInfo>&, const QList<int>&)),
+            MetadataManager::instance(), SLOT(assignTags(const QList<ImageInfo>&, const QList<int>&)));
+
     connect(imageModel()->dragDropHandler(), SIGNAL(dioResult(KJob*)),
             d->utilities, SLOT(slotDIOResult(KJob*)));
 

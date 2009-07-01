@@ -157,7 +157,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView *abstractview, const QDro
                 infos << info;
             }
 
-            emit changeTagOnImageInfos(infos, QList<int>() << talbum->id(), true, true);
+            emit assignTags(infos, QList<int>() << talbum->id());
             return true;
         }
         return false;
@@ -222,15 +222,15 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView *abstractview, const QDro
         {
             if (choice == assignToSelectedAction)    // Selected Items
             {
-                emit changeTagOnImageInfos(selectedInfos, QList<int>() << tagID, true, true);
+                emit assignTags(selectedInfos, QList<int>() << tagID);
             }
             else if (choice == assignToAllAction)    // All Items
             {
-                emit changeTagOnImageInfos(model()->imageInfos(), QList<int>() << tagID, true, true);
+                emit assignTags(model()->imageInfos(), QList<int>() << tagID);
             }
             else if (choice == assignToThisAction)  // Dropped Item only.
             {
-                emit changeTagOnImageInfos(QList<ImageInfo>() << model()->imageInfo(droppedOn), QList<int>() << tagID, true, false);
+                emit assignTags(QList<ImageInfo>() << model()->imageInfo(droppedOn), QList<int>() << tagID);
             }
         }
         return true;
@@ -264,15 +264,15 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView *abstractview, const QDro
         {
             if (choice == assignToSelectedAction)    // Selected Items
             {
-                emit changeTagOnImageInfos(selectedInfos, tagIDs, true, true);
+                emit assignTags(selectedInfos, tagIDs);
             }
             else if (choice == assignToAllAction)    // All Items
             {
-                emit changeTagOnImageInfos(model()->imageInfos(), tagIDs, true, true);
+                emit assignTags(model()->imageInfos(), tagIDs);
             }
             else if (choice == assignToThisAction)    // Dropped item only.
             {
-                emit changeTagOnImageInfos(QList<ImageInfo>() << model()->imageInfo(droppedOn), tagIDs, true, false);
+                emit assignTags(QList<ImageInfo>() << model()->imageInfo(droppedOn), tagIDs);
             }
         }
         return true;

@@ -53,7 +53,7 @@ public:
 
 Q_SIGNALS:
 
-    void changeTagOnImageInfos(const ImageInfoList& list, const QList<int>& tagIDs, bool addOrRemove, bool progress);
+    void assignTags(const QList<ImageInfo>& list, const QList<int>& tagIDs);
     void dioResult(KJob *);
 };
 
