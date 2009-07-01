@@ -28,11 +28,10 @@
 
 // KDE includes
 
-#include <kcategorizedview.h>
-
 // Local includes
 
 #include "imageinfo.h"
+#include "kcategorizedview.h"
 #include "thumbnailsize.h"
 
 namespace Digikam
