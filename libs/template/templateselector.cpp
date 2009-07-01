@@ -69,6 +69,8 @@ public:
     QToolButton      *setupButton;
 
     SqueezedComboBox *templateCombo;
+
+    Template          metadataTemplate;
 };
 
 TemplateSelector::TemplateSelector(QWidget* parent=0)
@@ -163,7 +165,9 @@ Template TemplateSelector::getTemplate() const
 
 void TemplateSelector::setTemplate(const Template& t)
 {
-    QString title = t.templateTitle();
+    d->metadataTemplate = t;
+
+    QString title = d->metadataTemplate.templateTitle();
     if (title == Template::removeTemplateTitle())
         return d->templateCombo->setCurrentIndex(REMOVETEMPLATE);
     else if (title.isEmpty())
@@ -184,7 +188,10 @@ void TemplateSelector::setTemplateIndex(int i)
 
 void TemplateSelector::slotOpenSetup()
 {
-    Setup::execSinglePage(this, Setup::TemplatePage);
+    if (d->metadataTemplate.isNull())
+        Setup::execTemplateEditor(this, d->metadataTemplate);
+    else
+        Setup::execSinglePage(this, Setup::TemplatePage);
 }
 
 void TemplateSelector::slotTemplateListChanged()
