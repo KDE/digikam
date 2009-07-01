@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-03-04
- * Description : metadata edit batch tool.
+ * Description : assign metadata template batch tool.
  *
  * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#include "metadata.h"
-#include "metadata.moc"
+#include "assigntemplate.h"
+#include "assigntemplate.moc"
 
 // Qt includes
 
@@ -48,8 +48,8 @@
 namespace Digikam
 {
 
-Metadata::Metadata(QObject* parent)
-        : BatchTool("Metadata", BaseTool, parent)
+AssignTemplate::AssignTemplate(QObject* parent)
+        : BatchTool("AssignTemplate", BaseTool, parent)
 {
     setToolTitle(i18n("Apply Metadata Template"));
     setToolDescription(i18n("A tool to apply template metadata"));
@@ -68,25 +68,25 @@ Metadata::Metadata(QObject* parent)
             this, SLOT(slotSettingsChanged()));
 }
 
-Metadata::~Metadata()
+AssignTemplate::~AssignTemplate()
 {
 }
 
-BatchToolSettings Metadata::defaultSettings()
+BatchToolSettings AssignTemplate::defaultSettings()
 {
     BatchToolSettings settings;
     settings.insert("TemplateTitle", QString());
     return settings;
 }
 
-void Metadata::assignSettings2Widget()
+void AssignTemplate::assignSettings2Widget()
 {
     QString title = settings()["TemplateTitle"].toString();
     Template t    = TemplateManager::defaultManager()->findByTitle(title);
     m_templateSelector->setTemplate(t);
 }
 
-void Metadata::slotSettingsChanged()
+void AssignTemplate::slotSettingsChanged()
 {
     m_templateViewer->setTemplate(m_templateSelector->getTemplate());
     BatchToolSettings settings;
@@ -94,7 +94,7 @@ void Metadata::slotSettingsChanged()
     setSettings(settings);
 }
 
-bool Metadata::toolOperations()
+bool AssignTemplate::toolOperations()
 {
     if (!loadToDImg()) return false;
 

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-03-04
- * Description : metadata edit batch tool.
+ * Description : assign metadata template batch tool.
  *
  * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef METADATA_H
-#define METADATA_H
+#ifndef ASSIGNTEMPLATE_H
+#define ASSIGNTEMPLATE_H
 
 // Local includes
 
@@ -33,14 +33,14 @@ namespace Digikam
 class TemplateSelector;
 class TemplateViewer;
 
-class Metadata : public BatchTool
+class AssignTemplate : public BatchTool
 {
     Q_OBJECT
 
 public:
 
-    Metadata(QObject* parent=0);
-    ~Metadata();
+    AssignTemplate(QObject* parent=0);
+    ~AssignTemplate();
 
     BatchToolSettings defaultSettings();
 
@@ -61,4 +61,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* METADATA_H */
+#endif /* ASSIGNTEMPLATE_H */
