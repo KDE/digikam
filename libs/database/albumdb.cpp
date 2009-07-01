@@ -130,6 +130,13 @@ void AlbumDB::deleteAlbumRoot(int rootId)
     d->db->recordChangeset(AlbumRootChangeset(rootId, AlbumRootChangeset::Deleted));
 }
 
+void AlbumDB::migrateAlbumRoot(int rootId, const QString& identifier)
+{
+    d->db->execSql( QString("UPDATE AlbumRoots SET identifier=? WHERE id=?;"),
+                    identifier, rootId);
+    d->db->recordChangeset(AlbumRootChangeset(rootId, AlbumRootChangeset::PropertiesChanged));
+}
+
 void AlbumDB::setAlbumRootLabel(int rootId, const QString& newLabel)
 {
     d->db->execSql( QString("UPDATE AlbumRoots SET label=? WHERE id=?;"),

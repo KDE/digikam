@@ -145,6 +145,13 @@ public:
     void deleteAlbumRoot(int rootId);
 
     /**
+     * Migrates a given album root to a new disk location. This only changes the values
+     * in the AlbumRoots table. It is expected that this merely reflects underlying partition changes,
+     * still pointing to the same data.
+     */
+    void migrateAlbumRoot(int rootId, const QString& identifier);
+
+    /**
      * Changes the label of the specified album root
      * @param rootId the id of the album root
      */
