@@ -57,6 +57,7 @@ public:
     /**
      * Clears all locations and re-reads the lists of collection locations
      */
+    void clear();
     void refresh();
 
     /** CollectionLocation objects returned are simple data containers.

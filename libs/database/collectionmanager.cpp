@@ -596,22 +596,24 @@ CollectionManager::~CollectionManager()
     delete d;
 }
 
+void CollectionManager::clear()
+{
+    DatabaseAccess access;
+
+    // clear list
+    foreach (AlbumRootLocation *location, d->locations)
+    {
+        CollectionLocation::Status oldStatus = location->status();
+        location->setStatus(CollectionLocation::LocationDeleted);
+        emit locationStatusChanged(*location, oldStatus);
+        delete location;
+    }
+    d->locations.clear();
+}
+
 void CollectionManager::refresh()
 {
-    {
-        DatabaseAccess access;
-
-        // clear list
-        foreach (AlbumRootLocation *location, d->locations)
-        {
-            CollectionLocation::Status oldStatus = location->status();
-            location->setStatus(CollectionLocation::LocationDeleted);
-            emit locationStatusChanged(*location, oldStatus);
-            delete location;
-        }
-        d->locations.clear();
-    }
-
+    clear();
     updateLocations();
 }
 

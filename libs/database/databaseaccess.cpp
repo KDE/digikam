@@ -202,6 +202,7 @@ void DatabaseAccess::setParameters(const DatabaseParameters& parameters, Applica
     delete d->infoCache;
     d->infoCache = new ImageInfoCache();
     d->databaseWatch->setDatabaseIdentifier(QString());
+    CollectionManager::instance()->clear();
 }
 
 bool DatabaseAccess::checkReadyForUse(InitializationObserver *observer)
