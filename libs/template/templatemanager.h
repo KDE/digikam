@@ -29,11 +29,7 @@
 
 #include <QList>
 #include <QObject>
-
-class QString;
-class QDateTime;
-
-class KAction;
+#include <QString>
 
 namespace Digikam
 {
@@ -56,9 +52,6 @@ public:
 
     void insert(const Template& t);
     void remove(const Template& t);
-
-    Template unknowTemplate() const;
-    Template removeTemplate() const;
 
     Template fromIndex(int index) const;
     Template findByTitle(const QString& title) const;

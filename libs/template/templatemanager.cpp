@@ -27,7 +27,6 @@
 
 // Qt includes
 
-#include <QString>
 #include <QFile>
 #include <QDomDocument>
 #include <QDomElement>
@@ -59,9 +58,7 @@ class TemplateManagerPrivate
 public:
 
     TemplateManagerPrivate()
-        : unknowTitle(QString("_UNKNOW_TEMPLATE_")),
-          removeTitle(QString("_REMOVE_TEMPLATE_")),
-          mutex(QMutex::Recursive)
+        :mutex(QMutex::Recursive)
     {
         modified = false;
     }
@@ -70,12 +67,6 @@ public:
 
     QList<Template> pList;
     QString         file;
-                                      // See TemplateSelector actions:
-    Template        unknowTemplate;  // Used to identify unregistered template information found in metadata.
-    Template        removeTemplate;  // Used to identify template information to remove from metadata.
-
-    const QString   unknowTitle;
-    const QString   removeTitle;
 
     QMutex          mutex;
 };
@@ -83,9 +74,6 @@ public:
 TemplateManager::TemplateManager(QObject *parent, const QString& file)
                 : QObject(parent), d(new TemplateManagerPrivate)
 {
-    d->unknowTemplate.setTemplateTitle(d->unknowTitle);
-    d->removeTemplate.setTemplateTitle(d->removeTitle);
-
     d->file = file;
     if (!m_defaultManager)
         m_defaultManager = this;
@@ -101,16 +89,6 @@ TemplateManager::~TemplateManager()
 
     if (m_defaultManager == this)
         m_defaultManager = 0;
-}
-
-Template TemplateManager::unknowTemplate() const
-{
-    return d->unknowTemplate;
-}
-
-Template TemplateManager::removeTemplate() const
-{
-    return d->removeTemplate;
 }
 
 bool TemplateManager::load()
@@ -384,21 +362,21 @@ Template TemplateManager::findByTitle(const QString& title) const
         if (t.templateTitle() == title)
             return t;
     }
-    return d->unknowTemplate;
+    return Template();
 }
 
-Template TemplateManager::findByContents(const Template& templ) const
+Template TemplateManager::findByContents(const Template& tref) const
 {
     QMutexLocker lock(&d->mutex);
 
     foreach (const Template& t, d->pList)
     {
-        if (t == templ)
+        if (t == tref)
         {
             return t;
         }
     }
-    return d->unknowTemplate;
+    return Template();
 }
 
 Template TemplateManager::fromIndex(int index) const

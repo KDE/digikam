@@ -539,11 +539,11 @@ void CameraController::executeCommand(CameraCommand *cmd)
                     if (tm && !templateTitle.isEmpty())
                     {
                         kDebug(50003) << "Metadata template title : " << templateTitle;
-                        if (templateTitle == tm->removeTemplate().templateTitle())
+                        if (templateTitle == Template::removeTemplateTitle())
                         {
                             metadata.removeMetadataTemplate();
                         }
-                        else if (templateTitle == tm->unknowTemplate().templateTitle())
+                        else if (templateTitle.isEmpty())
                         {
                             // Nothing to do.
                         }

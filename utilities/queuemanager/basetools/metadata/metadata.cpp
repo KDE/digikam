@@ -73,7 +73,7 @@ Metadata::~Metadata()
 BatchToolSettings Metadata::defaultSettings()
 {
     BatchToolSettings settings;
-    settings.insert("TemplateTitle", TemplateManager::defaultManager()->unknowTemplate().templateTitle());
+    settings.insert("TemplateTitle", QString());
     return settings;
 }
 
@@ -97,23 +97,23 @@ bool Metadata::toolOperations()
     if (!loadToDImg()) return false;
 
     QString title = settings()["TemplateTitle"].toString();
-    Template t    = TemplateManager::defaultManager()->findByTitle(title);
 
     DMetadata meta;
     meta.setExif(image().getExif());
     meta.setIptc(image().getIptc());
     meta.setXmp(image().getXmp());
 
-    if (t == TemplateManager::defaultManager()->removeTemplate())
+    if (title == Template::removeTemplateTitle())
     {
         meta.removeMetadataTemplate();
     }
-    else if (t == TemplateManager::defaultManager()->unknowTemplate())
+    else if (title.isEmpty())
     {
         // Nothing to do.
     }
     else
     {
+        Template t = TemplateManager::defaultManager()->findByTitle(title);
         meta.removeMetadataTemplate();
         meta.setMetadataTemplate(t);
     }

@@ -213,7 +213,6 @@ void MetadataHub::load(const DMetadata& metadata)
     QStringList        keywords;
     QDateTime          datetime;
     int                rating;
-    Template           t;
 
     // Try to get comments from image :
     // In first, from Xmp comments tag,
@@ -237,10 +236,12 @@ void MetadataHub::load(const DMetadata& metadata)
     // Try to get image rating from Xmp tag, or Iptc Urgency tag
     rating = metadata.getImageRating();
 
-    t = TemplateManager::defaultManager()->findByContents(metadata.getMetadataTemplate());
+    Template tref = metadata.getMetadataTemplate();
+    Template t    = TemplateManager::defaultManager()->findByContents(tref);
+
     kDebug(50003) << "Found Metadata Template: " << t.templateTitle();
 
-    load(datetime, comments, rating, t);
+    load(datetime, comments, rating, t.isNull() ? tref : t);
 
     // Try to get image tags from Xmp using digiKam namespace tags.
 
@@ -477,7 +478,8 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
     if (saveTemplate && writeAllFields)
     {
         ImageCopyright cr = info.imageCopyright();
-        if (d->metadataTemplate == TemplateManager::defaultManager()->removeTemplate())
+        QString title = d->metadataTemplate.templateTitle();
+        if (title == Template::removeTemplateTitle())
         {
             cr.removeCreators();
             cr.removeProvider();
@@ -487,7 +489,7 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
             cr.removeCreatorJobTitle();
             cr.removeInstructions();
         }
-        if (d->metadataTemplate == TemplateManager::defaultManager()->unknowTemplate())
+        if (title.isEmpty())
         {
             // Nothing to do.
         }
@@ -609,11 +611,12 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
 
     if (saveTemplate && (writeAllFields || d->templateChanged))
     {
-        if (d->metadataTemplate == TemplateManager::defaultManager()->removeTemplate())
+        QString title = d->metadataTemplate.templateTitle();
+        if (title == Template::removeTemplateTitle())
         {
             dirty |= metadata.removeMetadataTemplate();
         }
-        else if (d->metadataTemplate == TemplateManager::defaultManager()->unknowTemplate())
+        else if (title.isEmpty())
         {
             // Nothing to do.
         }

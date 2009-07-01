@@ -136,20 +136,26 @@ void TemplateSelector::populateTemplates()
 
 Template TemplateSelector::getTemplate() const
 {
-    TemplateManager* tm = TemplateManager::defaultManager();
-    if (tm)
+    switch(d->templateCombo->currentIndex())
     {
-        switch(d->templateCombo->currentIndex())
+        case REMOVETEMPLATE:
         {
-            case REMOVETEMPLATE:
-                return tm->removeTemplate();
-                break;
-            case DONTCHANGE:
-                return tm->unknowTemplate();
-                break;
-            default:
+            Template t;
+            t.setTemplateTitle(Template::removeTemplateTitle());
+            return t;
+            break;
+        }
+        case DONTCHANGE:
+        {
+            return Template();
+            break;
+        }
+        default:
+        {
+            TemplateManager* tm = TemplateManager::defaultManager();
+            if (tm)
                 return tm->fromIndex(d->templateCombo->currentIndex()-3);
-                break;
+            break;
         }
     }
     return Template();
@@ -157,22 +163,13 @@ Template TemplateSelector::getTemplate() const
 
 void TemplateSelector::setTemplate(const Template& t)
 {
-    TemplateManager* tm = TemplateManager::defaultManager();
-    if (tm)
-    {
-        if (!t.isNull())
-        {
-            QString title = t.templateTitle();
-            if (title == tm->removeTemplate().templateTitle())
-                return d->templateCombo->setCurrentIndex(0);
-            else if (title == tm->unknowTemplate().templateTitle())
-                return d->templateCombo->setCurrentIndex(1);
-            else
-                return d->templateCombo->setCurrent(title);
-        }
-    }
+    QString title = t.templateTitle();
+    if (title == Template::removeTemplateTitle())
+        return d->templateCombo->setCurrentIndex(REMOVETEMPLATE);
+    else if (title.isEmpty())
+        return d->templateCombo->setCurrentIndex(DONTCHANGE);
 
-    return d->templateCombo->setCurrentIndex(1);
+    d->templateCombo->setCurrent(title);
 }
 
 int TemplateSelector::getTemplateIndex() const

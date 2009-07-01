@@ -87,8 +87,7 @@ TemplateViewer::TemplateViewer(QWidget* parent=0)
 {
     setFrameStyle(QFrame::NoFrame);
 
-    KVBox *w1 = new KVBox(this);
-
+    KVBox *w1        = new KVBox(this);
     d->names         = new DTextLabelName(i18n("Names:"), w1);
     d->labelNames    = new DTextBrowser(QString(), w1);
     d->position      = new DTextLabelName(i18n("Position:"), w1);
@@ -102,8 +101,7 @@ TemplateViewer::TemplateViewer(QWidget* parent=0)
 
     // ------------------------------------------------------------------
 
-    KVBox *w2  = new KVBox(this);
-
+    KVBox *w2         = new KVBox(this);
     d->credit         = new DTextLabelName(i18n("Credit:"), w2);
     d->labelCredit    = new DTextBrowser(QString(), w2);
     d->copyright      = new DTextLabelName(i18n("Copyright:"), w2);

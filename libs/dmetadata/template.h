@@ -67,6 +67,8 @@ public:
     void setTemplateTitle(const QString& title);
     QString templateTitle() const;
 
+    void print() const;
+
     void setAuthors(const QStringList& authors);
     void setAuthorsPosition(const QString& authorPosition);
     void setCredit(const QString& credit);
@@ -82,6 +84,8 @@ public:
     KExiv2::AltLangMap rightUsageTerms() const;
     QString            source()          const;
     QString            instructions()    const;
+
+    static QString     removeTemplateTitle() { return QString("_REMOVE_TEMPLATE_"); };
 
 protected:
 
