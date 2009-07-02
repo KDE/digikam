@@ -891,7 +891,7 @@ uint DImg::numPixels() const
 
 int DImg::bytesDepth() const
 {
-    if (sixteenBit())
+    if (m_priv->sixteenBit)
        return 8;
 
     return 4;
@@ -899,7 +899,7 @@ int DImg::bytesDepth() const
 
 int DImg::bitsDepth() const
 {
-    if (sixteenBit())
+    if (m_priv->sixteenBit)
        return 16;
 
     return 8;
