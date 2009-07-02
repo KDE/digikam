@@ -2304,7 +2304,7 @@ void DigikamApp::slotKipiPluginPlug()
         QList<QAction*> allPluginActions = plugin->actionCollection()->actions();
 
 #if KDE_IS_VERSION(4,1,68)
-        if (!allPluginActions.isEmpty() && allPluginActions.count() > 3)
+        if (allPluginActions.count() > 3)
         {
             KActionCategory *category = new KActionCategory(plugin->objectName(), d->kipipluginsActionCollection);
             foreach (QAction *action, allPluginActions)
