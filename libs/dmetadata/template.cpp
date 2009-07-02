@@ -157,15 +157,25 @@ QString Template::instructions() const
     return m_instructions;
 }
 
-void Template::print() const
+QDebug operator<<(QDebug dbg, const Template& t)
 {
-    kDebug(50003) << m_authors;
-    kDebug(50003) << m_authorsPosition;
-    kDebug(50003) << m_credit;
-    kDebug(50003) << m_copyright;
-    kDebug(50003) << m_rightUsageTerms;
-    kDebug(50003) << m_source;
-    kDebug(50003) << m_instructions;
+    dbg.nospace() << "Template::title: "
+                  << t.templateTitle() << ", ";
+    dbg.nospace() << "Template::authors: "
+                  << t.authors() << ", ";
+    dbg.nospace() << "Template::authorsPosition: "
+                  << t.authorsPosition() << ", ";
+    dbg.nospace() << "Template::credit: "
+                  << t.credit() << ", ";
+    dbg.nospace() << "Template::copyright: "
+                  << t.copyright() << ", ";
+    dbg.nospace() << "Template::rightUsageTerms: "
+                  << t.rightUsageTerms() << ", ";
+    dbg.nospace() << "Template::source: "
+                  << t.source() << ", ";
+    dbg.nospace() << "Template::instructions: "
+                  << t.instructions() << ", ";
+    return dbg.space();
 }
 
 }  // namespace Digikam

@@ -29,6 +29,7 @@
 #include <QMetaType>
 #include <QString>
 #include <QStringList>
+#include <QDebug>
 
 // LibKExiv2 includes
 
@@ -66,8 +67,6 @@ public:
 
     void setTemplateTitle(const QString& title);
     QString templateTitle() const;
-
-    void print() const;
 
     void setAuthors(const QStringList& authors);
     void setAuthorsPosition(const QString& authorPosition);
@@ -121,6 +120,9 @@ protected:
      */
     QString            m_instructions;
 };
+
+//! kDebug() stream operator. Writes property @a t to the debug output in a nicely formatted way.
+DIGIKAM_EXPORT QDebug operator<<(QDebug dbg, const Template& t);
 
 }  // namespace Digikam
 
