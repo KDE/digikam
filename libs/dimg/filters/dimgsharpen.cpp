@@ -94,7 +94,8 @@ void DImgSharpen::sharpenImage(double radius, double sigma)
     double        alpha, normalize=0.0;
     register long i=0, u, v;
 
-    int kernelWidth = getOptimalKernelWidth(radius, sigma);
+    int kernelWidth     = getOptimalKernelWidth(radius, sigma);
+    int halfKernelWidth = kernelWidth / 2;
 
     if((int)m_orgImage.width() < kernelWidth)
     {
@@ -110,9 +111,9 @@ void DImgSharpen::sharpenImage(double radius, double sigma)
         return;
     }
 
-    for(v=(-kernelWidth/2) ; v <= (kernelWidth/2) ; ++v)
+    for(v = -halfKernelWidth; v <= halfKernelWidth; ++v)
     {
-        for(u=(-kernelWidth/2) ; u <= (kernelWidth/2) ; ++u)
+        for(u = -halfKernelWidth; u <= halfKernelWidth; ++u)
         {
             alpha      = exp(-((double) u*u+v*v)/(2.0*sigma*sigma));
             kernel[i]  = alpha/(2.0*M_PI*sigma*sigma);
@@ -136,7 +137,8 @@ bool DImgSharpen::convolveImage(const unsigned int order, const double *kernel)
     double *k=0;
     DColor  color;
 
-    kernelWidth = order;
+    kernelWidth          = order;
+    long halfKernelWidth = kernelWidth / 2;
 
     if((kernelWidth % 2) == 0)
     {
@@ -173,12 +175,12 @@ bool DImgSharpen::convolveImage(const unsigned int order, const double *kernel)
         {
             k   = normal_kernel;
             red = green = blue = alpha = 0;
-            sy  = y-(kernelWidth/2);
+            sy  = y-halfKernelWidth;
 
             for(mcy=0 ; !m_cancel && (mcy < kernelWidth) ; ++mcy, ++sy)
             {
                 my = sy < 0 ? 0 : sy > (int)m_destImage.height()-1 ? m_destImage.height()-1 : sy;
-                sx = x+(-kernelWidth/2);
+                sx = x+(-halfKernelWidth);
 
                 for(mcx=0 ; !m_cancel && (mcx < kernelWidth) ; ++mcx, ++sx)
                 {
