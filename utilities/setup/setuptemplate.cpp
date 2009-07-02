@@ -329,6 +329,7 @@ void SetupTemplate::populateTemplate(const Template& t)
     d->rightUsageEdit->setValues(t.rightUsageTerms());
     d->sourceEdit->setText(t.source());
     d->instructionsEdit->setText(t.instructions());
+    d->titleEdit->setFocus();
 }
 
 void SetupTemplate::slotAddTemplate()
