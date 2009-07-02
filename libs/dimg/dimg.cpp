@@ -941,7 +941,7 @@ DColor DImg::getPixelColor(uint x, uint y) const
     }
 
     int depth   = bytesDepth();
-    uchar *data = bits() + x*depth + (m_priv->width*y*depth);
+    uchar *data = m_priv->data + x*depth + (m_priv->width*y*depth);
 
     return( DColor(data, m_priv->sixteenBit) );
 }
@@ -1164,19 +1164,20 @@ DColor DImg::getSubPixelColorFast(float x, float y) const
 
 void DImg::setPixelColor(uint x, uint y, const DColor& color)
 {
-    if (isNull() || x > width() || y > height())
+    if (m_priv->null || x > m_priv->width || y > m_priv->height)
     {
         kDebug(50003) << "DImg::setPixelColor() : wrong pixel position!";
         return;
     }
 
-    if (color.sixteenBit() != sixteenBit())
+    if (color.sixteenBit() != m_priv->sixteenBit)
     {
         kDebug(50003) << "DImg::setPixelColor() : wrong color depth!";
         return;
     }
 
-    uchar *data = bits() + x*bytesDepth() + (width()*y*bytesDepth());
+    int depth   = bytesDepth();
+    uchar *data = m_priv->data + x*depth + (m_priv->width*y*depth);
     color.setPixel(data);
 }
 
