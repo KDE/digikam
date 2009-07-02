@@ -52,7 +52,7 @@ bool Template::operator==(const Template& t) const
     bool b5 = m_rightUsageTerms == t.m_rightUsageTerms;
     bool b6 = m_source          == t.m_source;
     bool b7 = m_instructions    == t.m_instructions;
-/*
+
     kDebug(50003) << t.authors()         << m_authors         << b1;
     kDebug(50003) << t.authorsPosition() << m_authorsPosition << b2;
     kDebug(50003) << t.credit()          << m_credit          << b3;
@@ -60,7 +60,7 @@ bool Template::operator==(const Template& t) const
     kDebug(50003) << t.rightUsageTerms() << m_rightUsageTerms << b5;
     kDebug(50003) << t.source()          << m_source          << b6;
     kDebug(50003) << t.instructions()    << m_instructions    << b7;
-*/
+
     return b1 && b2 && b3 && b4 && b5 && b6 && b7;
 }
 
