@@ -169,7 +169,8 @@ bool DImgSharpen::convolveImage(const unsigned int order, const double *kernel)
 
     for(y=0 ; !m_cancel && (y < m_destImage.height()) ; ++y)
     {
-        sy = y-(kernelWidth/2);
+        // FIXME: this calculation seems to be useless, since we already do it in the following loop
+//        sy = y-halfKernelWidth;
 
         for(x=0 ; !m_cancel && (x < m_destImage.width()) ; ++x)
         {
