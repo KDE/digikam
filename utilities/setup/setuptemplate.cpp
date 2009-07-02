@@ -102,8 +102,10 @@ SetupTemplate::SetupTemplate(QWidget* parent)
     QLabel *label0 = new QLabel(i18n("Template Title:"), panel);
     d->titleEdit   = new KLineEdit(panel);
     d->titleEdit->setClearButtonShown(true);
+    d->titleEdit->setClickMessage(i18n("Enter here the metadata template title."));
+    d->titleEdit->setWhatsThis(i18n("<p>Enter here the metadata template title. This title will be "
+                                    "used to identify a template in your collection.</p>"));
     label0->setBuddy(d->titleEdit);
-    d->titleEdit->setWhatsThis(i18n("<p>Enter here the metadata template title.</p>"));
 
     // --------------------------------------------------------
 
@@ -116,6 +118,7 @@ SetupTemplate::SetupTemplate(QWidget* parent)
     QLabel *label1 = new QLabel(i18n("Author Names:"), tview);
     d->authorsEdit = new KLineEdit(tview);
     d->authorsEdit->setClearButtonShown(true);
+    d->authorsEdit->setClickMessage(i18n("Use semi-colons to separate names"));
     label1->setBuddy(d->authorsEdit);
     d->authorsEdit->setWhatsThis(i18n("<p>This field should contain names of the persons who created the photograph. "
                                       "If it is not appropriate to add the name of the photographer (for example, if the identify of "
@@ -129,8 +132,9 @@ SetupTemplate::SetupTemplate(QWidget* parent)
     QLabel *label2         = new QLabel(i18n("Authors Position:"), tview);
     d->authorsPositionEdit = new KLineEdit(tview);
     d->authorsPositionEdit->setClearButtonShown(true);
+    d->authorsPositionEdit->setClickMessage(i18n("Enter here the job title of authors"));
     label2->setBuddy(d->authorsPositionEdit);
-    d->authorsPositionEdit->setWhatsThis(i18n("<p>This field should contain the job title of the photographer. Examples might include "
+    d->authorsPositionEdit->setWhatsThis(i18n("<p>This field should contain the job title of authors. Examples might include "
                                               "titles such as: Staff Photographer, Freelance Photographer, or Independent Commercial "
                                               "Photographer. Since this is a qualifier for the Author field, the Author field must also "
                                               "be filled out.</p>"
@@ -141,6 +145,7 @@ SetupTemplate::SetupTemplate(QWidget* parent)
     QLabel *label3 = new QLabel(i18n("Credit:"), tview);
     d->creditEdit  = new KLineEdit(tview);
     d->creditEdit->setClearButtonShown(true);
+    d->creditEdit->setClickMessage(i18n("Enter here the photograph credit"));
     label3->setBuddy(d->creditEdit);
     d->creditEdit->setWhatsThis(i18n("<p>(synonymous to Provider): Use the Provider field to identify who is providing the photograph. "
                                      "This does not necessarily have to be the author. If a photographer is working for a news agency "
@@ -187,6 +192,7 @@ SetupTemplate::SetupTemplate(QWidget* parent)
     QLabel *label6 = new QLabel(i18n("Source:"), tview);
     d->sourceEdit  = new KLineEdit(tview);
     d->sourceEdit->setClearButtonShown(true);
+    d->sourceEdit->setClickMessage(i18n("Enter here original owner of the photograph"));
     label6->setBuddy(d->sourceEdit);
     d->sourceEdit->setWhatsThis(i18n("<p>The Source field should be used to identify the original owner or copyright holder of the "
                                      "photograph. The value of this field should never be changed after the information is entered "
@@ -203,6 +209,7 @@ SetupTemplate::SetupTemplate(QWidget* parent)
     QLabel *label7      = new QLabel(i18n("Instructions:"), tview);
     d->instructionsEdit = new KLineEdit(tview);
     d->instructionsEdit->setClearButtonShown(true);
+    d->instructionsEdit->setClickMessage(i18n("Enter here the editorial notice"));
     label7->setBuddy(d->instructionsEdit);
     d->instructionsEdit->setWhatsThis(i18n("<p>The Instructions field should be used to list editorial "
                                            "instructions concerning the use of photograph.</p>"
