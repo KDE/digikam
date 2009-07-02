@@ -213,6 +213,9 @@ public:
     /// Check if a location for specified path exists, assuming the given list of locations was deleted
     bool checkIfExists(const QString& path, QList<CollectionLocation> assumeDeleted);
 
+    /// Make a user presentable description, regardless of current location status
+    QString technicalDescription(const AlbumRootLocation *location);
+
     CollectionManager *s;
 };
 
@@ -502,6 +505,43 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForLocation(const AlbumRootL
     }
 
     return SolidVolumeInfo();
+}
+
+QString CollectionManagerPrivate::technicalDescription(const AlbumRootLocation *albumLoc)
+{
+    KUrl url(albumLoc->identifier);
+    QString queryItem;
+
+    if (url.protocol() == "volumeid")
+    {
+        if (!(queryItem = url.queryItem("uuid")).isNull())
+        {
+            return i18nc("\"relative path\" on harddisk partition with \"UUID\"",
+                         "Folder \"%1\" on the volume with the id \"%2\"",
+                         albumLoc->specificPath, queryItem);
+        }
+        else if (!(queryItem = url.queryItem("label")).isNull())
+        {
+            return i18nc("\"relative path\" on harddisk partition with \"label\"",
+                         "Folder \"%1\" on the volume labeled \"%2\"",
+                         albumLoc->specificPath, queryItem);
+        }
+        else if (!(queryItem = url.queryItem("mountpath")).isNull())
+        {
+            return QString("\"%1\"").arg(queryItem);
+        }
+    }
+    else if (url.protocol() == "networkshareid")
+    {
+        return QString();
+
+        if (!(queryItem =  url.queryItem("mountpath")).isNull())
+        {
+            return QString("\"%1\"").arg(queryItem);
+        }
+    }
+
+    return QString();
 }
 
 SolidVolumeInfo CollectionManagerPrivate::findVolumeForUrl(const KUrl& url, const QList<SolidVolumeInfo> volumes)
@@ -874,9 +914,12 @@ QList<CollectionLocation> CollectionManager::checkHardWiredLocations()
 }
 
 
-QList< QPair<QString, QString> > CollectionManager::migrationCandidates(const CollectionLocation &location)
+void CollectionManager::migrationCandidates(const CollectionLocation &location, QString *description,
+                                             QStringList *candidateIdentifiers, QStringList *candidateDescriptions)
 {
-    QList< QPair<QString, QString> > pairs;
+    description->clear();
+    candidateIdentifiers->clear();
+    candidateDescriptions->clear();
 
     QList<SolidVolumeInfo> volumes = d->listVolumes();
 
@@ -884,7 +927,9 @@ QList< QPair<QString, QString> > CollectionManager::migrationCandidates(const Co
 
     AlbumRootLocation *albumLoc = d->locations.value(location.id());
     if (!albumLoc)
-        return pairs;
+        return;
+
+    *description = d->technicalDescription(albumLoc);
 
     // Find possible new volumes where the specific path is found.
     foreach (const SolidVolumeInfo &info, volumes)
@@ -894,12 +939,11 @@ QList< QPair<QString, QString> > CollectionManager::migrationCandidates(const Co
             QDir dir(info.path + albumLoc->specificPath);
             if (dir.exists())
             {
-                pairs << QPair<QString, QString>(d->volumeIdentifier(info), dir.absolutePath());
+                *candidateIdentifiers << d->volumeIdentifier(info);
+                *candidateDescriptions << dir.absolutePath();
             }
         }
     }
-
-    return pairs;
 }
 
 void CollectionManager::migrateToVolume(const CollectionLocation& location, const QString& identifier)

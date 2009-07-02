@@ -128,10 +128,15 @@ public:
     QList<CollectionLocation> checkHardWiredLocations();
 
     /**
-     * Get a list of (identifier, user presentable string) of candidates to where the
-     * given disappeared location (retrieved from checkHardWiredLocations()) may have been moved.
+     * For a given disappeared location (retrieved from checkHardWiredLocations())
+     * retrieve a user-presentable technical description (excluding the CollectionLocation's label)
+     * and a list of identifiers and corresponding user presentable strings of candidates
+     * to where the given location may have been moved.
      */
-    QList< QPair<QString, QString> > migrationCandidates(const CollectionLocation &disappearedLocation);
+    void migrationCandidates(const CollectionLocation &disappearedLocation,
+                             QString *technicalDescription,
+                             QStringList *candidateIdentifiers,
+                             QStringList *candidateDescriptions);
 
     /**
      * Migrates the existing collection to a new volume, identified by an internal identifier
