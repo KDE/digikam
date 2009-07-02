@@ -45,14 +45,18 @@ extern "C"
 // Qt includes
 
 #include <QApplication>
+#include <QByteArray>
+#include <QComboBox>
 #include <QDBusConnection>
 #include <QDBusInterface>
+#include <QDir>
+#include <QFile>
+#include <QGroupBox>
 #include <QHash>
 #include <QList>
-#include <QFile>
-#include <QDir>
-#include <QByteArray>
+#include <QLabel>
 #include <QMultiHash>
+#include <QRadioButton>
 #include <QTextCodec>
 #include <QTimer>
 
@@ -662,6 +666,107 @@ bool AlbumManager::setDatabase(const QString& dbPath, bool priority, const QStri
 
         DatabaseAccess().db()->setSetting("Locale",currLocale);
     }
+
+    // -- UUID Checking ---------------------------------------------------------
+
+    QList<CollectionLocation> disappearedLocations = CollectionManager::instance()->checkHardWiredLocations();
+    foreach (const CollectionLocation &loc, disappearedLocations)
+    {
+        QString locDescription;
+        QStringList candidateIds, candidateDescriptions;
+        CollectionManager::instance()->migrationCandidates(loc, &locDescription, &candidateIds, &candidateDescriptions);
+        kDebug(50003) << "Migration candidates for" << locDescription << ":" << candidateIds << candidateDescriptions;
+
+        KDialog *dialog = new KDialog;
+
+        QWidget *widget = new QWidget;
+        QGridLayout *mainLayout = new QGridLayout;
+        mainLayout->setColumnStretch(1, 1);
+
+        QLabel *deviceIconLabel = new QLabel;
+        deviceIconLabel->setPixmap(KIconLoader::global()->loadIcon("drive-harddisk", KIconLoader::NoGroup, KIconLoader::SizeHuge));
+        mainLayout->addWidget(deviceIconLabel, 0, 0);
+
+        QLabel *mainLabel = new QLabel(
+                i18n("<p>The collection </p><p><b>%1</b><br/>(%2)</p><p> is currently not found on your system.<br/> "
+                     "Please choose the most appropriate option to handle this situation:</p>",
+                      loc.label(), locDescription));
+        mainLabel->setWordWrap(true);
+        mainLayout->addWidget(mainLabel, 0, 1);
+
+        QGroupBox *groupBox = new QGroupBox;
+        mainLayout->addWidget(groupBox, 1, 0, 1, 2);
+
+        QGridLayout *layout = new QGridLayout;
+        layout->setColumnStretch(1, 1);
+
+        QRadioButton *migrateButton = 0;
+        QComboBox *migrateChoices = 0;
+        if (!candidateIds.isEmpty())
+        {
+            migrateButton = new QRadioButton;
+            QLabel *migrateLabel = new QLabel(
+                    i18n("<p>The collection is still available, but the identifier changed.<br/>"
+                        "This can be caused by restoring a backup, changing the partition layout "
+                        "or the file system settings.<br/>"
+                        "The collection is now located at this place:</p>"));
+            migrateLabel->setWordWrap(true);
+
+            migrateChoices = new QComboBox;
+            for (int i=0; i<candidateIds.size(); ++i)
+                migrateChoices->addItem(candidateDescriptions[i], candidateIds[i]);
+
+            layout->addWidget(migrateButton, 0, 0, Qt::AlignTop);
+            layout->addWidget(migrateLabel, 0, 1);
+            layout->addWidget(migrateChoices, 1, 1);
+        }
+
+        QRadioButton *isRemovableButton = new QRadioButton;
+        QLabel *isRemovableLabel = new QLabel(
+                i18n("The collection is located on a storage device which is not always attached. "
+                     "Mark the collection as a removable collection."));
+        isRemovableLabel->setWordWrap(true);
+        layout->addWidget(isRemovableButton, 2, 0, Qt::AlignTop);
+        layout->addWidget(isRemovableLabel, 2, 1);
+
+        QRadioButton *solveManuallyButton = new QRadioButton;
+        QLabel *solveManuallyLabel = new QLabel(
+                i18n("Take no action now. I would like to solve the problem "
+                     "later using the setup dialog"));
+        solveManuallyLabel->setWordWrap(true);
+        layout->addWidget(solveManuallyButton, 3, 0, Qt::AlignTop);
+        layout->addWidget(solveManuallyLabel, 3, 1);
+
+        groupBox->setLayout(layout);
+
+        widget->setLayout(mainLayout);
+        dialog->setCaption(i18n("Collection not found"));
+        dialog->setMainWidget(widget);
+        dialog->setButtons(KDialog::Ok);
+
+        // Default option: If there is only one candidate, default to migration.
+        // Otherwise default to do nothing now.
+        if (migrateButton && candidateIds.size() == 1)
+            migrateButton->setChecked(true);
+        else
+            solveManuallyButton->setChecked(true);
+
+        if (dialog->exec())
+        {
+            if (migrateButton && migrateButton->isChecked())
+            {
+                CollectionManager::instance()->migrateToVolume(loc, migrateChoices->itemData(migrateChoices->currentIndex()).toString());
+            }
+            else if (isRemovableButton->isChecked())
+            {
+                CollectionManager::instance()->changeType(loc, CollectionLocation::TypeVolumeRemovable);
+            }
+        }
+
+        delete dialog;
+    }
+
+    // -- ---------------------------------------------------------
 
     // measures to filter out KDirWatch signals caused by database operations
     d->dirWatchBlackList.clear();

@@ -79,7 +79,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 064 ==> 198531 : Compilation error in libpgf [PATCH].
 065 ==> 198530 : Compilation error in imagecategorizedview.cpp.
 066 ==> 139361 : Templates for meta data.
-067 ==> 
+067 ==> 175923 : digikam uses wrong album root path/wrong disk uuid.
+068 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta1 - Release date: 2009-06-07
