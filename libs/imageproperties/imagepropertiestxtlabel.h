@@ -91,6 +91,7 @@ public:
         setOpenLinks(false);
         setText(text);
         setLinesNumber(3);
+        setFocusPolicy(Qt::NoFocus);
     };
 
     ~DTextBrowser(){};
