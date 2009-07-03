@@ -1455,7 +1455,7 @@ QImage DImg::copyQImage()
 
     if (img.isNull())
     {
-        kError() << "Failed to allocate memory to copy DImg of size" << size() << "to QImage";
+        kError(50003) << "Failed to allocate memory to copy DImg of size" << size() << "to QImage";
         return QImage();
     }
 
