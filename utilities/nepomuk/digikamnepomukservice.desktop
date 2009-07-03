@@ -8,6 +8,7 @@ X-KDE-Nepomuk-start-on-demand=false
 #X-KDE-Nepomuk-dependencies=nepomukfoobar
 Name=Digikam Nepomuk Service
 Name[et]=Digikami Nepomuki teenus
+Name[fi]=DigiKamin Nepomuk-palvelu
 Name[gl]=Servizo Digikam de Nepomuk
 Name[it]=Servizio Nepomuk di Digikam
 Name[pt]=Serviço do Nepomuk para o Digikam
