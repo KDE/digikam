@@ -7,7 +7,7 @@
  * Description : implementation of item folder
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -72,7 +72,7 @@ bool FolderItem::isHighlighted() const
     return m_highlighted;
 }
 
-void FolderItem::paintCell(QPainter* p, const QPalette& cg, int column, int width, int)
+void FolderItem::paintCell(QPainter* p, const QColorGroup& cg, int column, int width, int)
 {
     FolderView *fv = dynamic_cast<FolderView*>(listView());
     if (!fv)
@@ -197,7 +197,7 @@ void FolderCheckListItem::takeItem(Q3ListViewItem *item)
     Q3CheckListItem::takeItem(item);
 }
 
-void FolderCheckListItem::paintCell(QPainter* p, const QPalette& cg, int column, int width, int)
+void FolderCheckListItem::paintCell(QPainter* p, const QColorGroup& cg, int column, int width, int)
 {
     FolderView *fv = dynamic_cast<FolderView*>(listView());
     if (!fv)
