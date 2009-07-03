@@ -95,6 +95,7 @@ public:
         showToolTip        = false;
         ensureOneSelectedItem     = false;
         ensureInitialSelectedItem = false;
+        hintAtSelectionRow = -1;
     }
 
     ImageAlbumModel         *model;
@@ -110,6 +111,8 @@ public:
     QMouseEvent             *currentMouseEvent;
     bool                     ensureOneSelectedItem;
     bool                     ensureInitialSelectedItem;
+    QPersistentModelIndex    hintAtSelectionIndex;
+    int                      hintAtSelectionRow;
 };
 
 // -------------------------------------------------------------------------------
@@ -565,19 +568,33 @@ void ImageCategorizedView::rowsAboutToBeRemoved(const QModelIndex &parent, int s
 void ImageCategorizedView::layoutAboutToBeChanged()
 {
     d->ensureOneSelectedItem = selectionModel()->hasSelection();
+    // store some hints so that if all selected items were removed dont need to default to 0,0.
+    if (d->ensureOneSelectedItem)
+    {
+        QItemSelection currentSelection = selectionModel()->selection();
+        QModelIndex current = currentIndex();
+        QModelIndex indexToAnchor;
+        if (currentSelection.contains(current))
+            indexToAnchor = current;
+        else
+            indexToAnchor = currentSelection.first().topLeft();
+        d->hintAtSelectionRow = indexToAnchor.row();
+        d->hintAtSelectionIndex = model()->index(d->hintAtSelectionRow == model()->rowCount()
+                                            ? d->hintAtSelectionRow : d->hintAtSelectionRow + 1, 0);
+    }
 }
 
 void ImageCategorizedView::layoutWasChanged()
 {
     // connected queued to layoutChanged()
     ensureSelectionAfterChanges();
-    d->ensureOneSelectedItem = false;
 }
 
 void ImageCategorizedView::userInteraction()
 {
     // as soon as the user did anything affecting selection, we don't interfere anymore
     d->ensureInitialSelectedItem = false;
+    d->hintAtSelectionIndex = QModelIndex();
 }
 
 void ImageCategorizedView::ensureSelectionAfterChanges()
@@ -589,6 +606,7 @@ void ImageCategorizedView::ensureSelectionAfterChanges()
         // Caveat: Item at (0,0) may have changed.
         bool hadInitial = d->ensureInitialSelectedItem;
         d->ensureInitialSelectedItem = false;
+        d->ensureOneSelectedItem     = false;
 
         QModelIndex index = model()->index(0,0);
         if (index.isValid())
@@ -608,9 +626,21 @@ void ImageCategorizedView::ensureSelectionAfterChanges()
         d->ensureOneSelectedItem = false;
         if (model()->rowCount() && selectionModel()->selection().isEmpty())
         {
-            QModelIndex index = currentIndex();
+            QModelIndex index;
+
+            if (d->hintAtSelectionIndex.isValid())
+                index = d->hintAtSelectionIndex;
+            else if (d->hintAtSelectionRow != -1)
+                index = model()->index(qMin(model()->rowCount(), d->hintAtSelectionRow), 0);
+            else
+                index = currentIndex();
+
             if (!index.isValid())
                 index = model()->index(0,0);
+
+            d->hintAtSelectionRow = -1;
+            d->hintAtSelectionIndex = QModelIndex();
+
             if (index.isValid())
             {
                 selectionModel()->select(index, QItemSelectionModel::SelectCurrent);
