@@ -576,11 +576,14 @@ void ImageCategorizedView::layoutAboutToBeChanged()
         QModelIndex indexToAnchor;
         if (currentSelection.contains(current))
             indexToAnchor = current;
-        else
+        else if (!currentSelection.isEmpty())
             indexToAnchor = currentSelection.first().topLeft();
-        d->hintAtSelectionRow = indexToAnchor.row();
-        d->hintAtSelectionIndex = model()->index(d->hintAtSelectionRow == model()->rowCount()
+        if (indexToAnchor.isValid())
+        {
+            d->hintAtSelectionRow = indexToAnchor.row();
+            d->hintAtSelectionIndex = model()->index(d->hintAtSelectionRow == model()->rowCount()
                                             ? d->hintAtSelectionRow : d->hintAtSelectionRow + 1, 0);
+        }
     }
 }
 

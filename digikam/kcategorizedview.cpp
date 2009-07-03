@@ -1769,7 +1769,7 @@ void KCategorizedView::slotLayoutChanged()
 {
     if (d->proxyModel && d->categoryDrawer && d->proxyModel->isCategorizedModel())
     {
-        d->updateScrollbars();
+        // all cached values are invalidated, recompute immediately
         rowsInsertedArtifficial(QModelIndex(), 0, d->proxyModel->rowCount() - 1);
     }
 }
