@@ -1453,6 +1453,12 @@ QImage DImg::copyQImage()
 
     QImage img(width(), height(), QImage::Format_ARGB32);
 
+    if (img.isNull())
+    {
+        kError() << "Failed to allocate memory to copy DImg of size" << size() << "to QImage";
+        return QImage();
+    }
+
     uchar* sptr = bits();
     uint*  dptr = (uint*)img.bits();
 
