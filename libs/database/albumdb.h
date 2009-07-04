@@ -833,6 +833,7 @@ public:
      * Sets the property with the given name for the given image to the specified value
      */
     void setImageProperty(qlonglong imageID, const QString& property, const QString& value);
+    void removeImageProperty(qlonglong imageID, const QString& property);
 
     /**
      * Returns the copyright properties of the specified image.

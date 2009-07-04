@@ -1412,6 +1412,12 @@ void AlbumDB::setImageProperty(qlonglong imageID, const QString& property, const
                     imageID, property, value);
 }
 
+void AlbumDB::removeImageProperty(qlonglong imageID, const QString& property)
+{
+    d->db->execSql( QString ("DELETE FROM ImageProperties WHERE imageid=? AND property=?;"),
+                    imageID, property);
+}
+
 QList<CopyrightInfo> AlbumDB::getImageCopyright(qlonglong imageID, const QString& property)
 {
     QList<CopyrightInfo> list;
