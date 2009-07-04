@@ -409,7 +409,8 @@ void ImageScanner::scanImageCopyright()
            << MetadataInfo::IptcCoreRightsUsageTerms
            << MetadataInfo::IptcCoreSource
            << MetadataInfo::IptcCoreCreatorJobTitle
-           << MetadataInfo::IptcCoreInstructions;
+           << MetadataInfo::IptcCoreInstructions
+           << MetadataInfo::IptcCoreContactInfo;
 
     QVariantList metadataInfos = m_metadata.getMetadataFields(fields);
 
@@ -464,6 +465,10 @@ void ImageScanner::scanImageCopyright()
     if (!metadataInfos[6].isNull())
     {
         copyright.setInstructions(metadataInfos[6].toString());
+    }
+    if (!metadataInfos[7].isNull())
+    {
+        copyright.setContactInfo(metadataInfos[7].value<IptcCoreContactInfo>());
     }
 }
 
@@ -836,6 +841,22 @@ QString ImageScanner::iptcCorePropertyName(MetadataInfo::Field field)
             return "scene";
         case MetadataInfo::IptcCoreSubjectCode:
             return "subjectCode";
+        case MetadataInfo::IptcCoreContactInfoCity:
+            return "creatorContactInfo.city";
+        case MetadataInfo::IptcCoreContactInfoCountry:
+            return "creatorContactInfo.country";
+        case MetadataInfo::IptcCoreContactInfoAddress:
+            return "creatorContactInfo.address";
+        case MetadataInfo::IptcCoreContactInfoPostalCode:
+            return "creatorContactInfo.postalCode";
+        case MetadataInfo::IptcCoreContactInfoStateProvince:
+            return "creatorContactInfo.stateProvince";
+        case MetadataInfo::IptcCoreContactInfoEmail:
+            return "creatorContactInfo.email";
+        case MetadataInfo::IptcCoreContactInfoPhone:
+            return "creatorContactInfo.phone";
+        case MetadataInfo::IptcCoreContactInfoWebUrl:
+            return "creatorContactInfo.webUrl";
         default:
             return QString();
     }

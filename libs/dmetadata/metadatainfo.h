@@ -93,7 +93,17 @@ enum Field
     IptcCoreIntellectualGenre,        /// String
     IptcCoreJobID,                    /// String
     IptcCoreScene,                    /// List of type String
-    IptcCoreSubjectCode               /// List of type String
+    IptcCoreSubjectCode,              /// List of type String
+
+    IptcCoreContactInfo,              /// object of IptcCoreContactInfo, including:
+    IptcCoreContactInfoCity,          /// String
+    IptcCoreContactInfoCountry,       /// String
+    IptcCoreContactInfoAddress,       /// String
+    IptcCoreContactInfoPostalCode,    /// String
+    IptcCoreContactInfoStateProvince, /// String
+    IptcCoreContactInfoEmail,         /// String
+    IptcCoreContactInfoPhone,         /// String
+    IptcCoreContactInfoWebUrl         /// String
 
     // Description, DescriptionWriter, Headline, Title: see above
     // DateCreated: see above, CreationDate

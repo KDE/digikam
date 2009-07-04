@@ -178,6 +178,44 @@ void ImageCopyright::removeInstructions()
     removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreInstructions));
 }
 
+IptcCoreContactInfo ImageCopyright::contactInfo()
+{
+    IptcCoreContactInfo info;
+    info.city = readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoCity));
+    info.country = readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoCountry));
+    info.address = readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoAddress));
+    info.postalCode = readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoPostalCode));
+    info.stateProvince = readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoStateProvince));
+    info.email = readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoEmail));
+    info.phone = readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoPhone));
+    info.webUrl = readSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoWebUrl));
+    return info;
+}
+
+void ImageCopyright::setContactInfo(const IptcCoreContactInfo &info)
+{
+    setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoCity), info.city);
+    setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoCountry), info.country);
+    setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoAddress), info.address);
+    setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoPostalCode), info.postalCode);
+    setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoStateProvince), info.stateProvince);
+    setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoEmail), info.email);
+    setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoPhone), info.phone);
+    setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoWebUrl), info.webUrl);
+}
+
+void ImageCopyright::removeContactInfo()
+{
+    removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoCity));
+    removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoCountry));
+    removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoAddress));
+    removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoPostalCode));
+    removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoStateProvince));
+    removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoEmail));
+    removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoPhone));
+    removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoWebUrl));
+}
+
 QString ImageCopyright::readSimpleProperty(const QString& property)
 {
     QList<CopyrightInfo> infos = DatabaseAccess().db()->getImageCopyright(m_id, property);

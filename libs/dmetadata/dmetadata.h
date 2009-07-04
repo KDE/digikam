@@ -44,6 +44,7 @@ using namespace KExiv2Iface;
 
 namespace Digikam
 {
+class IptcCoreContactInfo;
 class Template;
 
 class DIGIKAM_EXPORT DMetadata : public KExiv2Iface::KExiv2
@@ -75,6 +76,9 @@ public:
     bool     setMetadataTemplate(const Template& t) const;
     Template getMetadataTemplate() const;
     bool     removeMetadataTemplate() const;
+
+    IptcCoreContactInfo getContactInfo() const;
+    bool setContactInfo(const IptcCoreContactInfo &info) const;
 
     /** Return a string with Lens mounted on the front of camera.
         There no standard Exif tag for Lens information.

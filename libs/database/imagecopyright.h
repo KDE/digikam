@@ -203,6 +203,10 @@ public:
     void setInstructions(const QString& instructions);
     void removeInstructions();
 
+    IptcCoreContactInfo contactInfo();
+    void setContactInfo(const IptcCoreContactInfo &info);
+    void removeContactInfo();
+
     /**
      * Returns all entries of the given type in a Template container.
      */
