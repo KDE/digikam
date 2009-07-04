@@ -37,6 +37,7 @@
 
 // Local includes
 
+#include "metadatainfo.h"
 #include "template.h"
 #include "digikam_export.h"
 

@@ -44,22 +44,6 @@ using namespace KExiv2Iface;
 namespace Digikam
 {
 
-class IptcCoreContactInfo
-{
-public:
-
-    bool isNull() const;
-
-    QString city;
-    QString country;
-    QString address;
-    QString postalCode;
-    QString stateProvince;
-    QString email;
-    QString phone;
-    QString webUrl;
-};
-
 class TemplatePrivate;
 
 class DIGIKAM_EXPORT Template
@@ -143,6 +127,5 @@ DIGIKAM_EXPORT QDebug operator<<(QDebug dbg, const Template& t);
 }  // namespace Digikam
 
 Q_DECLARE_METATYPE(Digikam::Template)
-Q_DECLARE_METATYPE(Digikam::IptcCoreContactInfo)
 
 #endif /* TEMPLATE_H */

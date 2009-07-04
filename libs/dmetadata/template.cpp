@@ -30,18 +30,6 @@
 namespace Digikam
 {
 
-bool IptcCoreContactInfo::isNull() const
-{
-    return  city.isNull() &&
-            country.isNull() &&
-            address.isNull() &&
-            postalCode.isNull() &&
-            stateProvince.isNull() &&
-            email.isNull() &&
-            phone.isNull() &&
-            webUrl.isNull();
-}
-
 Template::Template()
 {
 }

@@ -24,8 +24,45 @@
 #ifndef METADATAINFO_H
 #define METADATAINFO_H
 
+// Qt includes
+
+#include <QMetaType>
+
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
+
+class DIGIKAM_DATABASE_EXPORT IptcCoreLocationInfo
+{
+public:
+
+    bool isNull() const;
+
+    QString country;
+    QString countryCode;
+    QString provinceState;
+    QString city;
+    QString location;
+};
+
+class DIGIKAM_DATABASE_EXPORT IptcCoreContactInfo
+{
+public:
+
+    bool isNull() const;
+
+    QString city;
+    QString country;
+    QString address;
+    QString postalCode;
+    QString provinceState;
+    QString email;
+    QString phone;
+    QString webUrl;
+};
 
 namespace MetadataInfo
 {
@@ -85,11 +122,13 @@ enum Field
     IptcCoreCreatorJobTitle,          /// String
     IptcCoreInstructions,             /// String
 
+    IptcCoreLocationInfo,             /// object of IptcCoreLocation, including:
     IptcCoreCountryCode,              /// String
     IptcCoreCountry,                  /// String
     IptcCoreCity,                     /// String
     IptcCoreLocation,                 /// String
     IptcCoreProvinceState,            /// String
+
     IptcCoreIntellectualGenre,        /// String
     IptcCoreJobID,                    /// String
     IptcCoreScene,                    /// List of type String
@@ -100,7 +139,7 @@ enum Field
     IptcCoreContactInfoCountry,       /// String
     IptcCoreContactInfoAddress,       /// String
     IptcCoreContactInfoPostalCode,    /// String
-    IptcCoreContactInfoStateProvince, /// String
+    IptcCoreContactInfoProvinceState, /// String
     IptcCoreContactInfoEmail,         /// String
     IptcCoreContactInfoPhone,         /// String
     IptcCoreContactInfoWebUrl         /// String
@@ -118,5 +157,8 @@ enum Field
 typedef QList<MetadataInfo::Field> MetadataFields;
 
 } // namespace Digikam
+
+Q_DECLARE_METATYPE(Digikam::IptcCoreContactInfo)
+Q_DECLARE_METATYPE(Digikam::IptcCoreLocationInfo)
 
 #endif // METADATAINFO_H
