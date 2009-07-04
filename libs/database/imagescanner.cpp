@@ -43,6 +43,7 @@
 #include "collectionmanager.h"
 #include "imagecomments.h"
 #include "imagecopyright.h"
+#include "imageextendedproperties.h"
 
 namespace Digikam
 {
@@ -475,11 +476,7 @@ void ImageScanner::scanImageCopyright()
 void ImageScanner::scanIPTCCore()
 {
     MetadataFields fields;
-    fields << MetadataInfo::IptcCoreCountryCode
-           << MetadataInfo::IptcCoreCountry
-           << MetadataInfo::IptcCoreCity
-           << MetadataInfo::IptcCoreLocation
-           << MetadataInfo::IptcCoreProvinceState
+    fields << MetadataInfo::IptcCoreLocationInfo
            << MetadataInfo::IptcCoreIntellectualGenre
            << MetadataInfo::IptcCoreJobID
            << MetadataInfo::IptcCoreScene
@@ -490,26 +487,29 @@ void ImageScanner::scanIPTCCore()
     if (!hasValidField(metadataInfos))
         return;
 
-    DatabaseAccess access;
-    for (int i=0; i<metadataInfos.size(); ++i)
+    ImageExtendedProperties props(m_scanInfo.id);
+
+    if (!metadataInfos[0].isNull())
     {
-        const QVariant &var = metadataInfos[i];
-
-        if (var.isNull())
-            continue;
-
-        // Data is of type String or StringList (Scene and SubjectCode)
-        if (var.type() == QVariant::String)
-        {
-            access.db()->setImageProperty(m_scanInfo.id, iptcCorePropertyName(fields[i]), var.toString());
-        }
-        else if (var.type() == QVariant::StringList)
-        {
-            QStringList list = var.toStringList();
-            QString property = iptcCorePropertyName(fields[i]);
-            foreach(const QString& str, list)
-                access.db()->setImageProperty(m_scanInfo.id, property, str);
-        }
+        IptcCoreLocationInfo loc = metadataInfos[0].value<IptcCoreLocationInfo>();
+        if (!loc.isNull())
+            props.setLocation(loc);
+    }
+    if (!metadataInfos[1].isNull())
+    {
+        props.setIntellectualGenre(metadataInfos[1].toString());
+    }
+    if (!metadataInfos[2].isNull())
+    {
+        props.setJobId(metadataInfos[2].toString());
+    }
+    if (!metadataInfos[3].isNull())
+    {
+        props.setScene(metadataInfos[3].toStringList());
+    }
+    if (!metadataInfos[4].isNull())
+    {
+        props.setSubjectCode(metadataInfos[4].toStringList());
     }
 }
 
@@ -849,8 +849,8 @@ QString ImageScanner::iptcCorePropertyName(MetadataInfo::Field field)
             return "creatorContactInfo.address";
         case MetadataInfo::IptcCoreContactInfoPostalCode:
             return "creatorContactInfo.postalCode";
-        case MetadataInfo::IptcCoreContactInfoStateProvince:
-            return "creatorContactInfo.stateProvince";
+        case MetadataInfo::IptcCoreContactInfoProvinceState:
+            return "creatorContactInfo.provinceState";
         case MetadataInfo::IptcCoreContactInfoEmail:
             return "creatorContactInfo.email";
         case MetadataInfo::IptcCoreContactInfoPhone:

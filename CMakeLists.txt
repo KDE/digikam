@@ -828,6 +828,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasethumbnailinfoprovider.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/downloadhistory.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagecomments.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imageextendedproperties.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imageinfo.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imageinfolist.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imageinfocache.cpp

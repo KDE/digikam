@@ -55,6 +55,27 @@ using namespace KExiv2Iface;
 namespace Digikam
 {
 
+bool IptcCoreContactInfo::isNull() const
+{
+    return city.isNull() &&
+           country.isNull() &&
+           address.isNull() &&
+           postalCode.isNull() &&
+           provinceState.isNull() &&
+           email.isNull() &&
+           phone.isNull() &&
+           webUrl.isNull();
+}
+
+bool IptcCoreLocationInfo::isNull() const
+{
+    return country.isNull() &&
+           countryCode.isNull() &&
+           provinceState.isNull() &&
+           city.isNull() &&
+           location.isNull();
+}
+
 DMetadata::DMetadata()
          : KExiv2Iface::KExiv2()
 {
@@ -688,25 +709,37 @@ Template DMetadata::getMetadataTemplate() const
     return t;
 }
 
-IptcCoreContactInfo DMetadata::getContactInfo() const
+IptcCoreContactInfo DMetadata::getCreatorContactInfo() const
 {
+    MetadataFields fields;
+    fields << MetadataInfo::IptcCoreContactInfoCity
+           << MetadataInfo::IptcCoreContactInfoCountry
+           << MetadataInfo::IptcCoreContactInfoAddress
+           << MetadataInfo::IptcCoreContactInfoPostalCode
+           << MetadataInfo::IptcCoreContactInfoProvinceState
+           << MetadataInfo::IptcCoreContactInfoEmail
+           << MetadataInfo::IptcCoreContactInfoPhone
+           << MetadataInfo::IptcCoreContactInfoWebUrl;
+
+    QVariantList metadataInfos = getMetadataFields(fields);
+
     IptcCoreContactInfo info;
-    info.city = getXmpTagString("Xmp.iptc.CiAdrCity", false);
-    info.country = getXmpTagString("Xmp.iptc.CiAdrCtry", false);
-    info.address = getXmpTagString("Xmp.iptc.CiAdrExtadr", false);
-    info.postalCode = getXmpTagString("Xmp.iptc.CiAdrPcode", false);
-    info.stateProvince = getXmpTagString("Xmp.iptc.CiAdrRegion", false);
-    info.email = getXmpTagString("Xmp.iptc.CiEmailWork", false);
-    info.phone = getXmpTagString("Xmp.iptc.CiTelWork", false);
-    info.webUrl = getXmpTagString("Xmp.iptc.CiUrlWork", false);
+    if (metadataInfos.size() == 8)
+    {
+        info.city          = metadataInfos[0].toString();
+        info.country       = metadataInfos[1].toString();
+        info.address       = metadataInfos[2].toString();
+        info.postalCode    = metadataInfos[3].toString();
+        info.provinceState = metadataInfos[4].toString();
+        info.email         = metadataInfos[5].toString();
+        info.phone         = metadataInfos[6].toString();
+        info.webUrl        = metadataInfos[7].toString();
+    }
     return info;
 }
 
-bool DMetadata::setContactInfo(const IptcCoreContactInfo &info) const
+bool DMetadata::setCreatorContactInfo(const IptcCoreContactInfo &info)
 {
-    if (info.isNull())
-        return false;
-
     if (!supportXmp())
         return false;
 
@@ -722,7 +755,7 @@ bool DMetadata::setContactInfo(const IptcCoreContactInfo &info) const
     if (!setXmpTagString("Xmp.iptc.CiAdrPcode", info.postalCode, false))
         return false;
 
-    if (!setXmpTagString("Xmp.iptc.CiAdrRegion", info.stateProvince, false))
+    if (!setXmpTagString("Xmp.iptc.CiAdrRegion", info.provinceState, false))
         return false;
 
     if (!setXmpTagString("Xmp.iptc.CiEmailWork", info.email, false))
@@ -733,6 +766,58 @@ bool DMetadata::setContactInfo(const IptcCoreContactInfo &info) const
 
     if (!setXmpTagString("Xmp.iptc.CiUrlWork", info.webUrl, false))
         return false;
+
+    return true;
+}
+
+IptcCoreLocationInfo DMetadata::getIptcCoreLocation() const
+{
+    MetadataFields fields;
+    fields << MetadataInfo::IptcCoreCountry
+           << MetadataInfo::IptcCoreCountryCode
+           << MetadataInfo::IptcCoreCity
+           << MetadataInfo::IptcCoreLocation
+           << MetadataInfo::IptcCoreProvinceState;
+
+    QVariantList metadataInfos = getMetadataFields(fields);
+
+    IptcCoreLocationInfo location;
+    if (fields.size() == 5)
+    {
+        location.country       = metadataInfos[0].toString();
+        location.countryCode   = metadataInfos[1].toString();
+        location.city          = metadataInfos[2].toString();
+        location.location      = metadataInfos[3].toString();
+        location.provinceState = metadataInfos[4].toString();
+    }
+    return location;
+}
+
+bool DMetadata::setIptcCoreLocation(const IptcCoreLocationInfo &location)
+{
+    if (supportXmp())
+    {
+        if (!setXmpTagString("Xmp.photoshop.Country", location.country, false))
+            return false;
+
+        if (!setXmpTagString("Xmp.iptc.CountryCode", location.countryCode, false))
+            return false;
+
+        if (!setXmpTagString("Xmp.photoshop.City", location.city, false))
+            return false;
+
+        if (!setXmpTagString("Xmp.iptc.Location", location.location, false))
+            return false;
+
+        if (!setXmpTagString("Xmp.photoshop.State", location.provinceState, false))
+            return false;
+    }
+
+    if (!setIptcTag(location.country,       64,  "Country",        "Iptc.Application2.CountryName"))    return false;
+    if (!setIptcTag(location.countryCode,    3,  "Country Code",   "Iptc.Application2.CountryCode"))    return false;
+    if (!setIptcTag(location.city,          32,  "City",           "Iptc.Application2.City"))           return false;
+    if (!setIptcTag(location.location,      32,  "SubLocation",    "Iptc.Application2.SubLocation"))    return false;
+    if (!setIptcTag(location.provinceState, 32,  "Province/State", "Iptc.Application2.ProvinceState"))  return false;
 
     return true;
 }
@@ -866,7 +951,7 @@ inline QVariant DMetadata::fromXmpLangAlt(const char *xmpTagName) const
     return var;
 }
 
-QVariant DMetadata::getMetadataField(MetadataInfo::Field field)
+QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
 {
     switch (field)
     {
@@ -1057,6 +1142,13 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field)
         case MetadataInfo::IptcCoreInstructions:
             return fromIptcOrXmp("Iptc.Application2.SpecialInstructions", "Xmp.photoshop.Instructions");
 
+        case MetadataInfo::IptcCoreLocationInfo:
+        {
+            IptcCoreLocationInfo location = getIptcCoreLocation();
+            if (location.isNull())
+                return QVariant();
+            return QVariant::fromValue(location);
+        }
         case MetadataInfo::IptcCoreCountryCode:
             return fromIptcOrXmp("Iptc.Application2.CountryCode", "Xmp.iptc.CountryCode");
         case MetadataInfo::IptcCoreCountry:
@@ -1067,9 +1159,9 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field)
             return fromIptcOrXmp("Iptc.Application2.SubLocation", "Xmp.iptc.Location");
         case MetadataInfo::IptcCoreProvinceState:
             return fromIptcOrXmp("Iptc.Application2.ProvinceState", "Xmp.photoshop.State");
+
         case MetadataInfo::IptcCoreIntellectualGenre:
-            // TODO: find out correct IPTC tag
-            return fromIptcOrXmp(/*"Iptc.Application2.ObjectAttribute"?*/ 0, "Xmp.iptc.IntellectualGenre");
+            return fromIptcOrXmp("Iptc.Application2.ObjectAttribute", "Xmp.iptc.IntellectualGenre");
         case MetadataInfo::IptcCoreJobID:
             return fromIptcOrXmp("Iptc.Application2.TransmissionReference", "Xmp.photoshop.TransmissionReference");
         case MetadataInfo::IptcCoreScene:
@@ -1082,9 +1174,10 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field)
 
             return fromIptcEmulateList("Iptc.Application2.Subject");
         }
+
         case MetadataInfo::IptcCoreContactInfo:
         {
-            IptcCoreContactInfo info = getContactInfo();
+            IptcCoreContactInfo info = getCreatorContactInfo();
             if (info.isNull())
                 return QVariant();
             return QVariant::fromValue(info);
@@ -1097,7 +1190,7 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field)
             return getXmpTagVariant("Xmp.iptc.CiAdrExtadr");
         case MetadataInfo::IptcCoreContactInfoPostalCode:
             return getXmpTagVariant("Xmp.iptc.CiAdrPcode");
-        case MetadataInfo::IptcCoreContactInfoStateProvince:
+        case MetadataInfo::IptcCoreContactInfoProvinceState:
             return getXmpTagVariant("Xmp.iptc.CiAdrRegion");
         case MetadataInfo::IptcCoreContactInfoEmail:
             return getXmpTagVariant("Xmp.iptc.CiEmailWork");
@@ -1111,7 +1204,7 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field)
     }
 }
 
-QVariantList DMetadata::getMetadataFields(const MetadataFields& fields)
+QVariantList DMetadata::getMetadataFields(const MetadataFields& fields) const
 {
     QVariantList list;
     foreach (MetadataInfo::Field field, fields)

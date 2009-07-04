@@ -44,7 +44,6 @@ using namespace KExiv2Iface;
 
 namespace Digikam
 {
-class IptcCoreContactInfo;
 class Template;
 
 class DIGIKAM_EXPORT DMetadata : public KExiv2Iface::KExiv2
@@ -77,8 +76,11 @@ public:
     Template getMetadataTemplate() const;
     bool     removeMetadataTemplate() const;
 
-    IptcCoreContactInfo getContactInfo() const;
-    bool setContactInfo(const IptcCoreContactInfo &info) const;
+    IptcCoreContactInfo getCreatorContactInfo() const;
+    bool setCreatorContactInfo(const IptcCoreContactInfo &info);
+
+    IptcCoreLocationInfo getIptcCoreLocation() const;
+    bool setIptcCoreLocation(const IptcCoreLocationInfo &location);
 
     /** Return a string with Lens mounted on the front of camera.
         There no standard Exif tag for Lens information.
@@ -93,8 +95,8 @@ public:
     /** Returns the requested metadata field as a QVariant. See metadatainfo.h for a specification
         of the format of the QVariant.
      */
-    QVariant     getMetadataField(MetadataInfo::Field field);
-    QVariantList getMetadataFields(const MetadataFields& fields);
+    QVariant     getMetadataField(MetadataInfo::Field field) const;
+    QVariantList getMetadataFields(const MetadataFields& fields) const;
 
     /** Convert a QVariant value of the specified field to a user-presentable, i18n'ed string.
         The QVariant must be of the type as specified in metadatainfo.h and as obtained by getMetadataField.
