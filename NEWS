@@ -82,7 +82,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 067 ==> 175923 : digiKam uses wrong album root path/wrong disk uuid.
 068 ==> 185065 : Image editor loads new image without being asked to.
 069 ==> 188017 : Video colours inverted after digiKam started.
-070 ==> 
+070 ==> 194950 : digiKam endlessly spewing text to stderr.
+071 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta1 - Release date: 2009-06-07
