@@ -115,7 +115,10 @@ QString ImageExtendedProperties::readProperty(const QString& property)
 
 void ImageExtendedProperties::setProperty(const QString& property, const QString& value)
 {
-    DatabaseAccess().db()->setImageProperty(m_id, property, value);
+    if (value.isNull()) // there is a NOT NULL restriction on the table.
+        removeProperty(property);
+    else
+        DatabaseAccess().db()->setImageProperty(m_id, property, value);
 }
 
 QStringList ImageExtendedProperties::readFakeListProperty(const QString& property)
@@ -126,7 +129,10 @@ QStringList ImageExtendedProperties::readFakeListProperty(const QString& propert
 
 void ImageExtendedProperties::setFakeListProperty(const QString& property, const QStringList& value)
 {
-    DatabaseAccess().db()->setImageProperty(m_id, property, value.join(","));
+    if (value.isEmpty())
+        removeProperty(property);
+    else
+        DatabaseAccess().db()->setImageProperty(m_id, property, value.join(","));
 }
 
 void ImageExtendedProperties::removeProperty(const QString &property)
