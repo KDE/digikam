@@ -38,6 +38,7 @@
 #include <klocale.h>
 #include <kdialog.h>
 #include <klineedit.h>
+#include <ktabwidget.h>
 #include <kmessagebox.h>
 
 // Local includes
@@ -50,6 +51,13 @@ namespace Digikam
 
 class SetupTemplatePriv
 {
+public:
+
+    enum TemplateTab
+    {
+        RIGHTS=0
+    };
+
 public:
 
     SetupTemplatePriv()
@@ -109,14 +117,12 @@ SetupTemplate::SetupTemplate(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QFrame *tview      = new QFrame(panel);
-    QGridLayout* tgrid = new QGridLayout(tview);
-    tview->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
-    tview->setLineWidth(1);
-    tview->setFrameShape(QFrame::StyledPanel);
+    KTabWidget *tview  = new KTabWidget(panel);
+    QWidget *page1     = new QWidget(tview);
+    QGridLayout* grid1 = new QGridLayout(page1);
 
-    QLabel *label1 = new QLabel(i18n("Author Names:"), tview);
-    d->authorsEdit = new KLineEdit(tview);
+    QLabel *label1 = new QLabel(i18n("Author Names:"), page1);
+    d->authorsEdit = new KLineEdit(page1);
     d->authorsEdit->setClearButtonShown(true);
     d->authorsEdit->setClickMessage(i18n("Enter here all creator name. Use semi-colons as separator."));
     label1->setBuddy(d->authorsEdit);
@@ -129,8 +135,8 @@ SetupTemplate::SetupTemplate(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label2         = new QLabel(i18n("Authors Position:"), tview);
-    d->authorsPositionEdit = new KLineEdit(tview);
+    QLabel *label2         = new QLabel(i18n("Authors Position:"), page1);
+    d->authorsPositionEdit = new KLineEdit(page1);
     d->authorsPositionEdit->setClearButtonShown(true);
     d->authorsPositionEdit->setClickMessage(i18n("Enter here the job title of authors."));
     label2->setBuddy(d->authorsPositionEdit);
@@ -142,8 +148,8 @@ SetupTemplate::SetupTemplate(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label3 = new QLabel(i18n("Credit:"), tview);
-    d->creditEdit  = new KLineEdit(tview);
+    QLabel *label3 = new QLabel(i18n("Credit:"), page1);
+    d->creditEdit  = new KLineEdit(page1);
     d->creditEdit->setClearButtonShown(true);
     d->creditEdit->setClickMessage(i18n("Enter here the photograph credit."));
     label3->setBuddy(d->creditEdit);
@@ -156,7 +162,7 @@ SetupTemplate::SetupTemplate(QWidget* parent)
 
     // --------------------------------------------------------
 
-    d->copyrightEdit = new AltLangStrEdit(tview);
+    d->copyrightEdit = new AltLangStrEdit(page1);
     d->copyrightEdit->setTitle(i18n("Copyright:"));
     d->copyrightEdit->setFixedHeight(75);
     d->copyrightEdit->setWhatsThis(i18n("<p>The Copyright Notice should contain any necessary copyright notice for claiming the intellectual "
@@ -178,7 +184,7 @@ SetupTemplate::SetupTemplate(QWidget* parent)
 
     // --------------------------------------------------------
 
-    d->rightUsageEdit = new AltLangStrEdit(tview);
+    d->rightUsageEdit = new AltLangStrEdit(page1);
     d->rightUsageEdit->setTitle(i18n("Right Usage Terms:"));
     d->rightUsageEdit->setFixedHeight(75);
     d->rightUsageEdit->setWhatsThis(i18n("<p>The Right Usage Terms field should be used to list instructions on how "
@@ -189,8 +195,8 @@ SetupTemplate::SetupTemplate(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label6 = new QLabel(i18n("Source:"), tview);
-    d->sourceEdit  = new KLineEdit(tview);
+    QLabel *label6 = new QLabel(i18n("Source:"), page1);
+    d->sourceEdit  = new KLineEdit(page1);
     d->sourceEdit->setClearButtonShown(true);
     d->sourceEdit->setClickMessage(i18n("Enter here original owner of the photograph."));
     label6->setBuddy(d->sourceEdit);
@@ -206,8 +212,8 @@ SetupTemplate::SetupTemplate(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label7      = new QLabel(i18n("Instructions:"), tview);
-    d->instructionsEdit = new KLineEdit(tview);
+    QLabel *label7      = new QLabel(i18n("Instructions:"), page1);
+    d->instructionsEdit = new KLineEdit(page1);
     d->instructionsEdit->setClearButtonShown(true);
     d->instructionsEdit->setClickMessage(i18n("Enter here the editorial notice."));
     label7->setBuddy(d->instructionsEdit);
@@ -217,22 +223,25 @@ SetupTemplate::SetupTemplate(QWidget* parent)
 
     // --------------------------------------------------------
 
-    tgrid->setMargin(KDialog::spacingHint());
-    tgrid->setSpacing(KDialog::spacingHint());
-    tgrid->setAlignment(Qt::AlignTop);
-    tgrid->setColumnStretch(1, 10);
-    tgrid->addWidget(label1,                 0, 0, 1, 1);
-    tgrid->addWidget(d->authorsEdit,         0, 1, 1, 2);
-    tgrid->addWidget(label2,                 1, 0, 1, 1);
-    tgrid->addWidget(d->authorsPositionEdit, 1, 1, 1, 2);
-    tgrid->addWidget(label3,                 2, 0, 1, 1);
-    tgrid->addWidget(d->creditEdit,          2, 1, 1, 2);
-    tgrid->addWidget(d->copyrightEdit,       3, 0, 1, 2);
-    tgrid->addWidget(d->rightUsageEdit,      4, 0, 1, 2);
-    tgrid->addWidget(label6,                 5, 0, 1, 1);
-    tgrid->addWidget(d->sourceEdit,          5, 1, 1, 2);
-    tgrid->addWidget(label7,                 6, 0, 1, 1);
-    tgrid->addWidget(d->instructionsEdit,    6, 1, 1, 2);
+    grid1->setMargin(KDialog::spacingHint());
+    grid1->setSpacing(KDialog::spacingHint());
+    grid1->setAlignment(Qt::AlignTop);
+    grid1->setColumnStretch(1, 10);
+    grid1->addWidget(label1,                 0, 0, 1, 1);
+    grid1->addWidget(d->authorsEdit,         0, 1, 1, 2);
+    grid1->addWidget(label2,                 1, 0, 1, 1);
+    grid1->addWidget(d->authorsPositionEdit, 1, 1, 1, 2);
+    grid1->addWidget(label3,                 2, 0, 1, 1);
+    grid1->addWidget(d->creditEdit,          2, 1, 1, 2);
+    grid1->addWidget(d->copyrightEdit,       3, 0, 1, 2);
+    grid1->addWidget(d->rightUsageEdit,      4, 0, 1, 2);
+    grid1->addWidget(label6,                 5, 0, 1, 1);
+    grid1->addWidget(d->sourceEdit,          5, 1, 1, 2);
+    grid1->addWidget(label7,                 6, 0, 1, 1);
+    grid1->addWidget(d->instructionsEdit,    6, 1, 1, 2);
+
+    tview->insertTab(SetupTemplatePriv::RIGHTS, page1, i18n("Rights"));
+    tview->setTabBarHidden(true);
 
     // --------------------------------------------------------
 
