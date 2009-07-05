@@ -1,5 +1,5 @@
 *********************************************************************************************************
-digiKam 1.0.0-beta2 - Release date: 2009-xx-xx
+digiKam 1.0.0-beta2 - Release date: 2009-07-05
 
 NEW FEATURES:
 
@@ -85,7 +85,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 070 ==> 194950 : digiKam endlessly spewing text to stderr.
 071 ==> 189080 : Comments not saved with digikam 0.10.0 on KDE 4.2.2.
 072 ==> 198868 : Pictures are not displayed in the main view i just can see them in the batch menu.
-073 ==> 
 
 
 *********************************************************************************************************
