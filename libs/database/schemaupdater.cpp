@@ -1082,6 +1082,14 @@ bool SchemaUpdater::updateV4toV5()
     }
 
     // Port ImagesV3.comment to ImageComments
+
+    // An author of NULL will inhibt the UNIQUE restriction to take effect (but #189080). Work around.
+    m_access->backend()->execSql(QString(
+                    "DELETE FROM ImageComments WHERE "
+                    "type=? AND language=? AND author IS NULL "
+                    "AND imageid IN ( SELECT id FROM ImagesV3 ); "),
+                    (int)DatabaseComment::Comment, QString("x-default"));
+
     if (!m_access->backend()->execSql(QString(
                     "REPLACE INTO ImageComments "
                     " (imageid, type, language, comment) "

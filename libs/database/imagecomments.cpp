@@ -297,7 +297,7 @@ void ImageComments::setUniqueBehavior(UniqueBehavior behavior)
     d->unique = behavior;
 }
 
-void ImageComments::addComment(const QString& comment, const QString& lang, const QString& author,
+void ImageComments::addComment(const QString& comment, const QString& lang, const QString& author_,
                                const QDateTime& date, DatabaseComment::Type type)
 {
     if (!d)
@@ -305,8 +305,11 @@ void ImageComments::addComment(const QString& comment, const QString& lang, cons
 
     bool multipleCommentsPerLanguage = (d->unique == UniquePerLanguageAndAuthor);
     QString language = lang;
-    if (language.isNull())
+    if (language.isEmpty())
         language = "x-default";
+    QString author = author_;
+    if (author.isEmpty())
+        author = QString();
 
     for (int i=0; i<d->infos.size(); ++i)
     {
@@ -326,8 +329,10 @@ void ImageComments::addComment(const QString& comment, const QString& lang, cons
             }
         }
 
-        // simulate unique restrictions of db
-        if (info.type == type && info.language == language && info.author == author)
+        // simulate unique restrictions of db.
+        // There is a problem that a NULL value is never unique, see #189080
+        if (info.type == type && info.language == language &&
+            (info.author == author || (info.author.isEmpty() && author.isEmpty())) )
         {
             info.comment = comment;
             info.date    = date;
