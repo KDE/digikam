@@ -83,8 +83,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 068 ==> 185065 : Image editor loads new image without being asked to.
 069 ==> 188017 : Video colours inverted after digiKam started.
 070 ==> 194950 : digiKam endlessly spewing text to stderr.
-071 ==> 189080 : comments not saved with digikam 0.10.0 on KDE 4.2.2.
-072 ==> 
+071 ==> 189080 : Comments not saved with digikam 0.10.0 on KDE 4.2.2.
+072 ==> 198868 : Pictures are not displayed in the main view i just can see them in the batch menu.
+073 ==> 
 
 
 *********************************************************************************************************
