@@ -1,6 +1,8 @@
 # Copy this script on root folder where are source code
 
-export CC=gcc4.4
+export CC=/usr/bin/gcc4.4
+export CXX=/usr/bin/g++4.4
+
 
 #!/bin/sh
 # set devel env from Mandriva 2009.0
