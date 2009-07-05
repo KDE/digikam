@@ -1,3 +1,4120 @@
+1.0.0-beta2 2009-07-05
+--------------------------------------------------------------------------------
+
+2009-07-05 17:59  cgilles
+
+    * NEWS: update
+
+2009-07-05 16:10  mwiesweg
+
+    * NEWS, libs/database/imagecomments.cpp,
+      libs/database/schemaupdater.cpp: Take into account that a NULL
+      value will prevent a UNIQUE restriction taking effect.
+      1) In ImageComments, treat an empty author like a null author
+      2) When upgrading - there will still be users upgrading from 0.9,
+      work around it
+      by deleting all affected entries before upgrading the image
+      comments from the old db
+
+      Users already affected by this bug need to solve it manually as
+      outlined in the bug report.
+
+      BUG: 189080
+
+2009-07-05 16:10  mwiesweg
+
+    * libs/database/imageextendedproperties.cpp: Passing a null QString
+      for value means removing it - there is a NOT NULL restriction on
+      the db table
+
+2009-07-05 08:29  cgilles
+
+    * project/bootstrap.mandriva.2009: add rules to use gcc4.4
+
+2009-07-05 08:15  cgilles
+
+    * project/bootstrap.mandriva.2009: update
+
+2009-07-05 07:44  cgilles
+
+    * utilities/setup/setuptemplate.cpp: use tab widget here. later we
+      will tabs to host more template properties
+
+2009-07-05 07:08  cgilles
+
+    * utilities/setup/setuptemplate.cpp: fix i18n
+
+2009-07-04 19:53  mwiesweg
+
+    * CMakeLists.txt, libs/database/imageextendedproperties.cpp,
+      libs/database/imageextendedproperties.h,
+      libs/database/imagescanner.cpp, libs/dmetadata/dmetadata.cpp,
+      libs/dmetadata/dmetadata.h: Add a class ImageExtendedProperties
+      that handles the remaining IPTC Core properties
+      that dont fit well into other places.
+      Implement IptcCoreLocation reading/writing in DMetadata.
+
+2009-07-04 19:53  mwiesweg
+
+    * project/DBSCHEMA.ODS: minor corrections
+
+2009-07-04 19:53  mwiesweg
+
+    * libs/database/imagecopyright.cpp, libs/database/imagecopyright.h,
+      libs/dmetadata/metadatainfo.h, libs/dmetadata/template.cpp,
+      libs/dmetadata/template.h: Move IptcCore info classes from
+      template.h to metadatainfo.h
+      Use "ProvinceState" not "stateProvince"
+
+2009-07-04 19:53  mwiesweg
+
+    * libs/database/albumdb.cpp, libs/database/albumdb.h: Add method to
+      delete an entry in ImageProperties
+
+2009-07-04 18:27  cgilles
+
+    * NEWS: update
+
+2009-07-04 16:13  mwiesweg
+
+    * libs/database/imagecopyright.cpp, libs/database/imagecopyright.h,
+      libs/database/imagescanner.cpp, libs/dmetadata/dmetadata.cpp,
+      libs/dmetadata/dmetadata.h, libs/dmetadata/metadatainfo.h,
+      libs/dmetadata/template.cpp, libs/dmetadata/template.h,
+      project/DBSCHEMA.ODS: Add support for Iptc Core XMP field
+      "CreatorContactInfo", which is a structure
+      of eight fields, to DMetadata and Database classes
+
+2009-07-03 17:49  mwiesweg
+
+    * digikam/imagecategorizedview.cpp, digikam/kcategorizedview.cpp:
+      Part B of the problem: Do not call updateScrollBars after
+      layoutChanged(); everything is invalid!
+
+      Fix possible crash from Part A's solution.
+
+2009-07-03 17:23  mwiesweg
+
+    * digikam/imagecategorizedview.cpp: Part A of the problem: Try to
+      preserve selection across layoutChanged().
+      Simply store one persistent index and one row number to indicate
+      where about
+      the selection was before the layout change. That's not perfect
+      but simple
+      and works for most cases.
+
+      CCBUG: 193422
+
+2009-07-03 16:44  mwiesweg
+
+    * libs/dimg/dimg.cpp: Forgot kdebug area code
+
+2009-07-03 16:39  mwiesweg
+
+    * libs/dimg/dimg.cpp: Check that the newly created QImage is not
+      null, which may happen if memory allocation fails.
+
+      CCBUG: 197254
+
+2009-07-03 14:09  scripty
+
+    * utilities/nepomuk/digikamnepomukservice.desktop: SVN_SILENT made
+      messages (.desktop file)
+
+2009-07-03 05:55  cgilles
+
+    * digikam/folderitem.cpp, digikam/folderitem.h: fix Qt3 porting
+      class warnings
+
+2009-07-02 23:12  aclemens
+
+    * NEWS: update
+
+2009-07-02 21:17  cgilles
+
+    * NEWS: update
+
+2009-07-02 20:34  cgilles
+
+    * imageplugins/superimpose/CMakeLists.txt: link
+
+2009-07-02 15:54  mwiesweg
+
+    * NEWS, digikam/albummanager.cpp: Implement automatic migration for
+      a case when a "hard-wired" collection is no longer found.
+      This may happen if the user restores a backup, changes the file
+      system etc.
+      In this case, we scan the available volumes for migration
+      candidates, where the old
+      relative path exists. These candidates are presented for choice.
+      In the most common case (one data partition, UUID changed) there
+      will be exactly one
+      candidate here.
+      The second option is to mark a collection as removable, if
+      autodetection failed or
+      the user likes to use his screwdriver a lot.
+      Third option is to do nothing ("I would like to solve the problem
+      later using the setup dialog").
+      In this case, however, the message will just popup at every
+      startup.
+
+      BUG: 175923
+
+2009-07-02 15:54  mwiesweg
+
+    * libs/database/collectionmanager.cpp,
+      libs/database/collectionmanager.h: Add a method to retrieve a
+      user-presentable yet technical description of a given identifier
+      (relative path, UUID or volume label).
+      Change API of migrationCanditates to be more friendly, dump
+      QPair.
+
+2009-07-02 14:00  aclemens
+
+    * digikam/digikamapp.cpp: no need to double check here
+
+2009-07-02 11:33  cgilles
+
+    * NEWS: update
+
+2009-07-02 11:28  cgilles
+
+    * libs/dmetadata/template.cpp, libs/dmetadata/template.h: implement
+      kDebug stream operator to print Template contents
+
+2009-07-02 11:27  cgilles
+
+    * libs/dmetadata/template.cpp: it's realy more simple to use
+      kDebug() to hack Template contents...
+
+2009-07-02 07:40  aclemens
+
+    * libs/dimg/dimg.cpp: Some more performance improvement: do not use
+      getters here.
+      The sharpen filter has become a little bit faster now (release
+      build).
+
+2009-07-02 07:15  aclemens
+
+    * libs/dimg/dimg.cpp: A little speed improvement: we call
+      setPixelColor() a lot of times in
+      some filters, especially when running over the whole image data.
+      To save us from a lot of method calls, query the appropriate
+      values
+      directly instead of using the getter methods.
+      This saves a lot of calls and some computation time, according to
+      callgrind, for example in the simple sharpen filter.
+
+      I tested this with release build and thought that the getters
+      will be
+      used inline, but somehow they were not. So using the members
+      directly
+      instead of calling the getters seems to be necessary.
+
+2009-07-02 07:15  aclemens
+
+    * libs/dimg/filters/dimgsharpen.cpp: This line seems to be useless,
+      can you confirm?
+      sy is used in the loops below, but gets recalculated anyway.
+      To save some computation time, I assume we can remove it?
+
+2009-07-02 07:15  aclemens
+
+    * libs/dimg/filters/dimgsharpen.cpp: Do not calculate the half
+      kernelWidth in the forloop, it is enough to
+      do it once.
+
+2009-07-02 06:05  cgilles
+
+    * utilities/setup/setuptemplate.cpp: add clic messages
+
+2009-07-02 05:54  cgilles
+
+    * utilities/setup/setuptemplate.cpp: set focus to title in first
+
+2009-07-02 05:54  cgilles
+
+    * libs/imageproperties/imagepropertiestxtlabel.h: do not set focus
+      here
+
+2009-07-01 20:14  cgilles
+
+    * NEWS: update
+
+2009-07-01 20:09  cgilles
+
+    * libs/template/templateselector.cpp: pass unregistered template
+      data to template editor
+
+2009-07-01 19:50  cgilles
+
+    * libs/template/templatemanager.cpp: remove debug
+
+2009-07-01 19:50  cgilles
+
+    * digikam/metadatahub.cpp: Pass unregistered template data to
+      Caption and tags to be able to see template contents as well.
+      Still TODO : make a easy way to registered unknow template data
+      in digiKam collection.
+      CCBUGS: 139361
+
+2009-07-01 17:15  aclemens
+
+    * libs/dimg/dimg.cpp: A little speed improvement: we call
+      getPixelColor() a lot of times in
+      some filters, especially when running over the whole image data.
+      To save us from a lot of method calls, query the appropriate
+      values
+      directly instead of using the getter methods.
+      This saves a lot of calls and some computation time, according to
+      callgrind, for example in the simple sharpen filter.
+
+2009-07-01 16:02  cgilles
+
+    * NEWS: update
+
+2009-07-01 15:35  scripty
+
+    * utilities/nepomuk/digikamnepomukservice.desktop: SVN_SILENT made
+      messages (.desktop file)
+
+2009-07-01 15:23  mwiesweg
+
+    * digikam/imagecategorizedview.h: Include with "" not <>
+
+      CCBUG: 198530
+
+2009-07-01 15:23  mwiesweg
+
+    * libs/database/collectionmanager.cpp,
+      libs/database/collectionmanager.h,
+      libs/database/databaseaccess.cpp: Combined commit:
+
+      1) Fix the problem of breaking kioslaves by clearing the
+      collection manager.
+      clear() would instantiate DatabaseAccess() for the first time and
+      thus
+      cause the call to refresh() that was supposed to happen only
+      after clear().
+      Calls are now disentangled
+      2) Preliminary code for solving the problem of changed UUIDs of
+      hard-wired
+      collections (175923)
+
+2009-07-01 15:23  mwiesweg
+
+    * libs/database/albumdb.cpp, libs/database/albumdb.h: Add a method
+      to change the identifier of an existing album root
+
+2009-07-01 15:17  aclemens
+
+    * libs/dimg/filters/dimgsharpen.cpp,
+      libs/dimg/loaders/ppmloader.cpp: prefix
+
+2009-07-01 13:06  cgilles
+
+    * NEWS: update
+
+2009-07-01 13:04  cgilles
+
+    * libs/3rdparty/libpgf/PGFplatform.h: compile under NetBSD
+      BUG: 198531
+
+2009-07-01 11:31  cgilles
+
+    * libs/template/templateselector.h,
+      libs/template/templateviewer.cpp, libs/template/templateviewer.h:
+      compile under win32
+
+2009-07-01 11:13  mwiesweg
+
+    * NEWS, digikam/digikamimageview.cpp, digikam/imagedragdrop.cpp,
+      digikam/imagedragdrop.h: Add missing connection from Drag-drop
+      handler to MetadataManager
+
+      BUG: 198509
+
+2009-07-01 11:12  mwiesweg
+
+    * libs/database/collectionmanager.cpp,
+      libs/database/collectionmanager.h,
+      libs/database/databaseaccess.cpp: Reset collections as soon as
+      parameters have changed
+
+2009-07-01 09:39  cgilles
+
+    * NEWS: update
+
+2009-07-01 09:13  aclemens
+
+    * libs/database/databasebackend_p.h,
+      libs/database/databasecorebackend_p.h: Files that do not end with
+      a newline character can cause problems.
+
+2009-07-01 08:13  cgilles
+
+    * CMakeLists.txt: compile
+
+2009-07-01 08:13  cgilles
+
+    * utilities/queuemanager/basetools/metadata/assigntemplate.cpp,
+      utilities/queuemanager/basetools/metadata/assigntemplate.h,
+      utilities/queuemanager/basetools/metadata/metadata.cpp,
+      utilities/queuemanager/basetools/metadata/metadata.h,
+      utilities/queuemanager/batchtoolsmanager.cpp: rename
+
+2009-07-01 07:59  cgilles
+
+    * utilities/queuemanager/basetools/metadata/metadata.cpp,
+      utilities/queuemanager/basetools/metadata/metadata.h: add
+      template viewer to Assign Template Batch Tool
+
+2009-07-01 04:05  cgilles
+
+    * digikam/metadatahub.cpp, libs/dmetadata/template.cpp,
+      libs/dmetadata/template.h, libs/template/templatemanager.cpp,
+      libs/template/templatemanager.h,
+      libs/template/templateselector.cpp,
+      libs/template/templateviewer.cpp,
+      utilities/cameragui/cameracontroller.cpp,
+      utilities/queuemanager/basetools/metadata/metadata.cpp: Add
+      Template::print()
+      Simplify Template identification about action to perform in
+      metadatahub, camercontroller, and Metadata Batch tool.
+      Template applying action is identified usng template title :
+      - Empty : nothing to do.
+      - "_REMOVE_TEMPLATE_" : template info are removed from image.
+      - Template name : info are recorded to image.
+
+      Marcel, problem to see template assigned to image after applying
+      template with BQM still there.
+      Template from a new image generated with BQM is not detected.
+      Template from a new image is detected with Scan for New Images
+
+2009-06-30 17:03  aclemens
+
+    * imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp,
+      imageplugins/coreplugin/ratiocrop/imageselectionwidget.h,
+      imageplugins/coreplugin/ratiocrop/ratiocroptool.cpp: To avoid
+      flickering while reading the settings of the RatioCropTool, we
+      need to change the constructor of the ImageSelectionWidget a
+      little bit.
+      We need a flag that turns off selection drawing, and it needs to
+      be set
+      during construction, a simple setter call is not enough.
+
+      CCBUG:197386
+
+2009-06-30 17:03  aclemens
+
+    * imageplugins/coreplugin/ratiocrop/ratiocroptool.cpp: Read
+      settings correctly, but now the selection widget is flickering
+      again. I need to add some mechanism to avoid this.
+
+      CCBUG: 197386
+
+2009-06-30 14:35  scripty
+
+    * utilities/nepomuk/digikamnepomukservice.desktop: SVN_SILENT made
+      messages (.desktop file)
+
+2009-06-30 13:48  aclemens
+
+    * imageplugins/adjustcurves/adjustcurvestool.cpp,
+      imageplugins/adjustlevels/adjustlevelstool.cpp,
+      imageplugins/coreplugin/autocorrectiontool.cpp,
+      libs/widgets/common/curvesbox.cpp,
+      libs/widgets/imageplugins/imagepanelwidget.cpp,
+      utilities/imageeditor/editor/editortoolsettings.cpp: fix some
+      layout issues.
+
+2009-06-30 12:33  cgilles
+
+    * libs/template/templateselector.cpp,
+      libs/template/templateselector.h: add enum
+
+2009-06-30 11:33  cgilles
+
+    * utilities/setup/setuptemplate.cpp: apply alternative language
+      string contents when Add or Replace buttons are pressed
+
+2009-06-30 11:20  cgilles
+
+    * libs/imageproperties/imagepropertiestxtlabel.h: polish
+
+2009-06-30 11:04  cgilles
+
+    * libs/template/templatemanager.cpp: polish
+
+2009-06-30 08:57  cgilles
+
+    * libs/imageproperties/imagedescedittab.cpp: remember tab
+
+2009-06-30 08:41  cgilles
+
+    * libs/imageproperties/imagepropertiestxtlabel.h,
+      libs/template/templateviewer.cpp: use DTextBrowser
+
+2009-06-30 07:15  cgilles
+
+    * libs/imageproperties/imagepropertiestxtlabel.h: new class
+      DTextBrowser
+
+2009-06-30 06:59  cgilles
+
+    * libs/imageproperties/imagepropertiestxtlabel.h: polish
+
+2009-06-29 21:28  aclemens
+
+    * NEWS: fix bug numbering
+
+2009-06-29 19:41  mwiesweg
+
+    * NEWS, utilities/searchwindow/searchgroup.cpp: Use a radio button
+      and a separate QLabel, which only is styled, to workaround
+      styling
+      problems (white color of text is reused for indicator in radio
+      button circle)
+
+      BUG: 195809
+
+2009-06-29 18:11  mwiesweg
+
+    * libs/dimg/dimg.cpp, libs/dimg/loaders/dimgloader.cpp,
+      libs/dimg/loaders/dimgloader.h, libs/dimg/loaders/jp2kloader.cpp,
+      libs/dimg/loaders/jpegloader.cpp,
+      libs/dimg/loaders/pgfloader.cpp, libs/dimg/loaders/pngloader.cpp,
+      libs/dimg/loaders/ppmloader.cpp,
+      libs/dimg/loaders/qimageloader.cpp,
+      libs/dimg/loaders/rawloader.cpp,
+      libs/dimg/loaders/tiffloader.cpp: There are a few strategic
+      places where a chunk memory is allocated the size of which was
+      read
+      from an image file. By trying to load a very big image or an
+      image with a corrupt header
+      the allocation may fail, leading to std::bad_alloc thrown and
+      abort() called.
+      Wrap these allocations in try { } catch (std::bad_alloc) in the
+      hope of converting
+      such crashes into mere failures.
+
+      CCBUG: 188334, 190593, 197254
+
+2009-06-29 17:02  cgilles
+
+    * utilities/setup/setup.cpp: typo
+
+2009-06-29 15:53  aclemens
+
+    * imageplugins/freerotation/freerotationtool.cpp: Don't use another
+      description here, use either "Correction" or
+      "Adjustment", not a mix of both
+
+2009-06-29 15:47  aclemens
+
+    * libs/imageproperties/altlangstredit.cpp: Adjust size to fit items
+      and icons in the combobox widget
+
+2009-06-29 15:24  aclemens
+
+    * imageplugins/freerotation/freerotationtool.cpp: Actually
+      "Settings" is enough here. They are not additional, but the
+      only ones ;-)
+
+2009-06-29 14:50  aclemens
+
+    * imageplugins/texture/texturetool.cpp: apply effect when tool is
+      started
+
+2009-06-29 14:12  scripty
+
+    * utilities/nepomuk/digikamnepomukservice.desktop: SVN_SILENT made
+      messages (.desktop file)
+
+2009-06-29 13:11  aclemens
+
+    * libs/imageproperties/altlangstredit.cpp: Gilles,
+
+      I would suggest to use this layout. It looks better in setup
+      template,
+      don't you think? The other version is too stretched, and the
+      copyright
+      one is wider than the useTerms widget.
+
+      Just revert it if you don't like it ;-)
+
+      Andi
+
+2009-06-29 12:54  aclemens
+
+    * libs/template/templatemanager.cpp: fix little typo
+
+2009-06-29 12:46  cgilles
+
+    * CMakeLists.txt, libs/imageproperties/imagedescedittab.cpp,
+      libs/imageproperties/imagedescedittab.h: use template viewer in
+      new tab from Caption & Tags sidebar
+
+2009-06-29 12:46  cgilles
+
+    * utilities/setup/setuptemplate.cpp: typo
+
+2009-06-29 12:45  cgilles
+
+    * libs/template/templateviewer.cpp, libs/template/templateviewer.h:
+      add template viewer code
+
+2009-06-29 11:21  aclemens
+
+    * imageplugins/freerotation/freerotationtool.cpp,
+      imageplugins/freerotation/freerotationtool.h: Block signals when
+      settings are read to avoid rotating on plugin startup
+      (which will always be zero degrees anyway).
+
+2009-06-29 10:50  aclemens
+
+    * imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp: Use
+      copy instead of creating an tmp image and crop it. Seems to be a
+      little bit faster (according to callgrind).
+
+2009-06-29 10:50  aclemens
+
+    * imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp:
+      polish
+
+2009-06-29 10:44  aclemens
+
+    * imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp:
+      Performance again: Save some method calls to convertToPixmap. We
+      don't
+      need this every time for the previewGrayOverlay, only in the
+      resizeEvent.
+      Also use a pixmap instead of an DImg for previewGrayOverlay
+
+2009-06-29 10:11  aclemens
+
+    * imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp: More
+      performance: Don't draw the gray overlay every time a mouse event
+      occurs.
+      Creating the overlay in the resizeEvent is enough.
+      This greatly improves the imageselectionwidget on my machine.
+
+2009-06-29 07:36  cgilles
+
+    * libs/template/templateselector.h: polish
+
+2009-06-29 07:14  aclemens
+
+    * imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp:
+      polish
+
+2009-06-29 07:09  aclemens
+
+    * imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp: Do
+      not call methods in the forloop that will return the same value
+      anyway. It's enough to call them once and use the resulting
+      values in
+      the forloop.
+      updatePixmap becomes a little bit faster this way, I can not
+      notice this
+      by just "looking" at it, but callgrind tells me so :-)
+
+2009-06-29 06:14  cgilles
+
+    * utilities/setup/setuptemplate.cpp: use frame around template
+      settings
+
+2009-06-29 05:49  cgilles
+
+    * digikam/iconview.cpp: idem rating widget in constructor
+
+2009-06-29 04:22  cgilles
+
+    * NEWS: update
+
+2009-06-28 20:50  aclemens
+
+    * imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp:
+      Little performance improvement: Don't call if (QRect.contains())
+      for
+      every single point to draw the transparent gray overlay for
+      the aspect ratio widget. Especially when images are bigger, this
+      is very
+      slow. It still isn't fluent, but at least a little bit faster.
+
+2009-06-28 14:40  mwiesweg
+
+    * digikam/albumthumbnailloader.cpp, digikam/albumthumbnailloader.h,
+      digikam/digikamapp.cpp: Clean up album thumbnail loader thread at
+      shutdown
+
+2009-06-27 23:13  aclemens
+
+    * utilities/fuzzysearch/fuzzysearchview.cpp: wrong logic
+
+2009-06-27 20:14  cgilles
+
+    * utilities/setup/setup.cpp, utilities/setup/setup.h,
+      utilities/setup/setuptemplate.cpp,
+      utilities/setup/setuptemplate.h: to be able to run setup Template
+      with a not registered Template to record in Collection.
+
+2009-06-27 19:38  aclemens
+
+    * libs/database/thumbnaildb.cpp, libs/database/thumbnaildb.h,
+      utilities/batch/batchthumbsgenerator.cpp: Removing this code
+      again, it will not make things faster.
+
+      I did a lot of I/O performance testing now and at least with our
+      sqlite3
+      solution, we really have reached the limit, it is just not
+      performing
+      well on bigger collections.
+
+      My thumbsDB is 970MB big, and when the disk cache has not been
+      already
+      filled, querying the database is painfully slow.
+      This is not digiKam's fault, it can be easily reproduced in the
+      sqlite3
+      command line tool.
+
+      as root:
+      sync
+      echo 1 > /proc/sys/vm/drop_caches
+
+      Now your disk cache is cleared, as if the system just started up.
+      Run a simple query on a bigger thumbsDB like:
+
+      select count(*) from thumbnails where type = 0;
+
+      Even though this query delivers no results, it takes up to 20
+      seconds to
+      completely parse the table.
+
+      When used in digiKam, the application is not responding at all
+      during
+      this operation, you get the impression that digiKam just hung up.
+
+      I have a large RAM here (4GB), but I don't know what happens if
+      you run
+      digiKam 1.0.0 on an average system with 512MB or 1GB RAM.
+
+      For me the only solution is to go with embedded MySQL or even a
+      real
+      MySQL server solution.
+      Because now we don't have just one, but two rather big databases.
+
+      CCMAIL:digikam-devel@kde.org
+
+2009-06-27 19:38  aclemens
+
+    * libs/widgets/common/manualrenameinput.cpp: polish
+
+2009-06-27 15:27  cgilles
+
+    * NEWS: update
+
+2009-06-27 13:51  cgilles
+
+    * utilities/cameragui/cameracontroller.cpp: idem here : remove
+      template before to assign new one
+
+2009-06-27 13:48  cgilles
+
+    * utilities/queuemanager/basetools/metadata/metadata.cpp,
+      utilities/queuemanager/basetools/metadata/metadata.h,
+      utilities/queuemanager/batchtoolsmanager.cpp: new Metadata
+      Template Batch tool for Batch Queue Manager
+
+2009-06-27 13:48  cgilles
+
+    * digikam/metadatahub.cpp: bugfix : clean template before to assign
+      new one
+
+2009-06-27 12:27  cgilles
+
+    * NEWS: update
+
+2009-06-27 10:31  cgilles
+
+    * utilities/setup/setuptemplate.cpp: polish
+
+2009-06-27 10:22  cgilles
+
+    * utilities/setup/setuptemplate.cpp: improve whats this
+
+2009-06-27 10:17  cgilles
+
+    * libs/imageproperties/altlangstredit.cpp: optimize layout
+
+2009-06-27 10:10  cgilles
+
+    * utilities/setup/setuptemplate.cpp: optiomize
+
+2009-06-27 09:50  cgilles
+
+    * digikam/metadatahub.cpp, libs/database/imagecopyright.cpp,
+      libs/dmetadata/dmetadata.cpp, libs/dmetadata/template.cpp,
+      libs/dmetadata/template.h, libs/template/templatelist.cpp,
+      libs/template/templatemanager.cpp,
+      utilities/setup/setuptemplate.cpp: Matadata Template : support of
+      multi-language alternative contents.
+      CCBUGS: 139361
+
+2009-06-27 07:17  cgilles
+
+    * libs/imageproperties/altlangstredit.cpp: polish
+
+2009-06-27 07:04  cgilles
+
+    * libs/imageproperties/altlangstredit.cpp,
+      libs/imageproperties/altlangstredit.h,
+      libs/imageproperties/imagedescedittab.cpp: fix api
+
+2009-06-26 19:23  cgilles
+
+    * NEWS: update
+
+2009-06-26 18:17  mwiesweg
+
+    * utilities/cameragui/cameraui.cpp: Infinite loop: Fix subtlety in
+      incrementing loop when lastPhotoFirst is false
+
+      CCBUG: 197445
+
+2009-06-26 18:16  mwiesweg
+
+    * digikam/imagepreviewbar.cpp: Apply fix from 184473 at all
+      occurrences
+
+      CCBUG: 193879
+
+2009-06-26 17:51  mwiesweg
+
+    * libs/database/imagecopyright.cpp, libs/database/imagecopyright.h:
+      Implement method to retrieve all entries of a property with
+      language code.
+
+      CCBUG: 139361
+
+2009-06-26 17:50  mwiesweg
+
+    * libs/threadimageio/thumbnailloadthread.cpp: Remove hardcoded
+      FreeDesktopStandard value - remove thumbnails properly
+      from thumbnails db after JPEG lossless rotation or adjusting EXIF
+      orientation flag
+
+2009-06-26 16:32  cgilles
+
+    * CMakeLists.txt: compile
+
+2009-06-26 16:31  cgilles
+
+    * libs/imageproperties/altlangstredit.cpp,
+      libs/imageproperties/altlangstredit.h,
+      libs/imageproperties/captionsedit.cpp,
+      libs/imageproperties/captionsedit.h,
+      libs/imageproperties/imagedescedittab.cpp: captionsedit =>
+      altlangstredit
+
+2009-06-26 16:26  cgilles
+
+    * libs/imageproperties/captionsedit.cpp,
+      libs/imageproperties/captionsedit.h,
+      libs/imageproperties/imagedescedittab.cpp: add title parameter
+
+2009-06-26 14:37  mwiesweg
+
+    * NEWS: udpate
+
+2009-06-26 14:35  mwiesweg
+
+    * digikam/imagecategorizedview.cpp: Ignore activation by click on
+      thumbnail if the Ctrl or Shift modifiers are pressed.
+
+      BUG: 196686
+
+2009-06-26 14:35  mwiesweg
+
+    * digikam/kcategorizedview.cpp, digikam/kcategorizedview_p.h: Got
+      enough of this: Port Qt's QListView code for setSelection and
+      replace
+      home-brewn implementation.
+      In my tests it worked nicely.
+      This fixes the problems of "Weird behavior with Shift + Click"
+      (any bug report?)
+      and the problem "Ctrl + rubberband selection deselects previous
+      selection".
+
+      CCBUG: 196686
+
+2009-06-26 13:30  mwiesweg
+
+    * libs/database/imagescanner.cpp: Read rights usage terms and
+      instruction correctly from metadata to database
+
+2009-06-26 10:47  cgilles
+
+    * libs/dmetadata/template.cpp: TemplatePrivate not used anymore
+
+2009-06-26 10:44  cgilles
+
+    * libs/dmetadata/template.h: api doc
+
+2009-06-26 10:34  cgilles
+
+    * libs/database/imagecomments.cpp: i recommend to always init
+      pointer to 0, to be sure...
+
+2009-06-26 08:29  aclemens
+
+    * tests/imageloaders/imageloadertest.cpp: Hmm very trusty :) Better
+      set it to false, although load should always
+      deliver some return value
+
+2009-06-26 08:27  aclemens
+
+    * tests/imageloaders/tests.xcf: Hmm this file is way too big,
+      strange... maybe because of the alpha
+      channels. I will remove it for now and try to compress it.
+
+2009-06-26 08:21  aclemens
+
+    * tests/imageloaders/tests.xcf: Add xcf for creating more test
+      images.
+      The created images contain a lot of noise, to see smoothing
+      effects when
+      loading and saving images.
+
+2009-06-26 08:17  aclemens
+
+    * tests/imageloaders/imageloadertest.cpp,
+      tests/imageloaders/imageloadertest.h: Simplify normal test, use
+      data driven testing here.
+      The other functions may be used for specialized file-format
+      testing.
+
+2009-06-26 08:06  cgilles
+
+    * libs/dmetadata/dmetadata.cpp, libs/dmetadata/template.cpp,
+      libs/template/templatemanager.cpp,
+      libs/template/templateselector.cpp: polish + add debug staements
+
+2009-06-26 08:05  cgilles
+
+    * utilities/cameragui/cameracontroller.cpp,
+      utilities/cameragui/cameraui.cpp,
+      utilities/cameragui/downloadsettingscontainer.h: using template
+      title instead Template container. more simple to understand.
+
+2009-06-26 06:16  cgilles
+
+    * libs/dmetadata/template.h: polish
+
+2009-06-26 04:29  cgilles
+
+    * libs/template/templatemanager.cpp,
+      libs/template/templatemanager.h: credits
+
+2009-06-26 04:11  cgilles
+
+    * libs/template/templatemanager.cpp: add comments
+
+2009-06-26 04:05  cgilles
+
+    * NEWS: update
+
+2009-06-26 04:04  cgilles
+
+    * NEWS: update
+
+2009-06-25 22:16  mwiesweg
+
+    * digikam/metadatahub.cpp, digikam/metadatahub.h,
+      libs/dmetadata/dmetadata.cpp, libs/dmetadata/dmetadata.h,
+      libs/template/templatelist.cpp, libs/template/templatelist.h,
+      libs/template/templateselector.cpp,
+      libs/template/templateselector.h,
+      utilities/cameragui/cameracontroller.cpp,
+      utilities/cameragui/downloadsettingscontainer.h,
+      utilities/setup/setuptemplate.cpp: Pass Template by value
+      everywhere
+
+2009-06-25 22:15  mwiesweg
+
+    * libs/template/templatemanager.cpp,
+      libs/template/templatemanager.h: Pass Template objects by value.
+      Template are identified by template title instead of pointer
+      (e.g. in remove())
+      Use a mutex - now all methods are thread-safe
+
+2009-06-25 22:14  mwiesweg
+
+    * libs/dmetadata/template.cpp, libs/dmetadata/template.h: Change
+      Template into a class that can be easily passed by value and
+      shared across threads
+
+2009-06-25 21:37  cgilles
+
+    * NEWS: update
+
+2009-06-25 21:36  cgilles
+
+    * libs/imageproperties/imagedescedittab.cpp: unforget to read last
+      captions list from editor when apply button is pressed
+      BUGS: 197641
+
+2009-06-25 20:41  cgilles
+
+    * NEWS: update
+
+2009-06-25 20:40  cgilles
+
+    * NEWS: update
+
+2009-06-25 20:37  aacid
+
+    * utilities/setup/setuptemplate.cpp: fix typo reported by Yuri
+      Chornoivan
+
+2009-06-25 20:24  mwiesweg
+
+    * libs/models/imagealbumfiltermodel.cpp: Fix broken categorization
+      in sort by date mode
+
+2009-06-25 18:35  scripty
+
+    * utilities/nepomuk/digikamnepomukservice.desktop: SVN_SILENT made
+      messages (.desktop file)
+
+2009-06-25 18:21  aclemens
+
+    * tests/imageloaders/imageloadertest.cpp,
+      tests/imageloaders/imageloadertest.h: add TIFF loader test
+
+2009-06-25 18:21  aclemens
+
+    * tests/imageloaders/test.tif: add tiff (uncompressed) test image
+
+2009-06-25 18:16  mwiesweg
+
+    * digikam/digikamimageview.cpp: Set image sort order at creation
+
+      BUG: 197622
+
+2009-06-25 17:50  mwiesweg
+
+    * libs/database/imagecomments.cpp: Dont drop newly inserted
+      comments...
+      CCBUG: 197641
+
+2009-06-25 16:46  aclemens
+
+    * tests/imageloaders/imageloadertest.cpp: polish
+
+2009-06-25 16:46  aclemens
+
+    * tests/imageloaders/imageloadertest.cpp,
+      tests/imageloaders/imageloadertest.h: Add another test case for
+      JPG. It fails due to different image data.
+      Is this the fault of JPG compression?
+
+2009-06-25 16:15  aclemens
+
+    * libs/widgets/common/manualrenameinput.cpp: This connection is not
+      valid anymore
+
+2009-06-25 16:09  aclemens
+
+    * tests/imageloaders/test.jpg, tests/imageloaders/test.png: forgot
+      to upload the test images
+
+2009-06-25 16:03  aclemens
+
+    * tests/CMakeLists.txt, tests/imageloaders,
+      tests/imageloaders/CMakeLists.txt,
+      tests/imageloaders/imageloadertest.cpp,
+      tests/imageloaders/imageloadertest.h: Add new tests for
+      ImageLoader classes.
+      They don't do much yet, but it seems we already found a bug in
+      PNGLoader.
+      We need definitely more test cases for digiKam ;-) also to reduce
+      regression errors.
+
+2009-06-25 14:16  cgilles
+
+    * utilities/setup/setuptemplate.cpp: add missing whats this
+
+2009-06-25 14:06  cgilles
+
+    * digikam/metadatahub.cpp, libs/database/imagecopyright.cpp,
+      libs/database/imagecopyright.h, libs/dmetadata/dmetadata.cpp,
+      libs/dmetadata/template.cpp, libs/dmetadata/template.h,
+      libs/template/templatelist.cpp,
+      libs/template/templatemanager.cpp,
+      utilities/setup/setuptemplate.cpp: Template management : to be
+      able to host more than one author at the same time.
+
+2009-06-25 14:02  aclemens
+
+    * imageplugins/coreplugin/sharpentool.cpp: polish
+
+2009-06-25 13:59  aclemens
+
+    * imageplugins/coreplugin/blurtool.cpp,
+      imageplugins/coreplugin/sharpentool.cpp: Fix sharpen method
+      "unsharp mask".
+      We use the "radius" input as diameter. Actually this setting has
+      been
+      wrong for a long time, and ha become visible by using
+      CImg::blur() now.
+
+2009-06-25 11:46  cgilles
+
+    * libs/template/templateselector.cpp: fix typo
+
+2009-06-25 11:45  cgilles
+
+    * digikam/albumsettings.cpp, digikam/albumsettings.h,
+      digikam/metadatahub.cpp, digikam/metadatahub.h,
+      utilities/setup/setupmetadata.cpp: add new settings to record
+      template to image metadata.
+      remove obsolete methods from AlbumSettings.
+      CCBUGS: 139361
+
+2009-06-25 11:10  cgilles
+
+    * libs/dmetadata/dmetadata.cpp, libs/dmetadata/dmetadata.h: remove
+      depreciate
+
+2009-06-25 11:07  cgilles
+
+    * utilities/setup/setuptemplate.cpp: remove IPTC limitation there
+
+2009-06-25 10:52  cgilles
+
+    * utilities/cameragui/cameracontroller.cpp: use removeTemplate
+      method here
+
+2009-06-25 10:51  cgilles
+
+    * libs/template/templateselector.cpp: add more whats this details
+
+2009-06-25 10:23  cgilles
+
+    * digikam/metadatahub.cpp, digikam/metadatahub.h,
+      libs/imageproperties/imagedescedittab.cpp,
+      libs/imageproperties/imagedescedittab.h: added template
+      management to Caption and tags right side bar.
+      CCBUGS: 139361
+
+2009-06-25 10:20  cgilles
+
+    * libs/template/templatemanager.cpp,
+      libs/template/templatemanager.h,
+      libs/template/templateselector.cpp: added internal template to
+      remove identify template to remove or unregistered template
+
+2009-06-25 10:19  cgilles
+
+    * libs/dmetadata/dmetadata.cpp, libs/dmetadata/dmetadata.h: add new
+      method to remove template
+
+2009-06-25 09:55  aclemens
+
+    * tests/manualrenameinputtest.cpp: some more tests
+
+2009-06-25 09:50  aclemens
+
+    * tests/manualrenameinputtest.cpp, tests/manualrenameinputtest.h:
+      add more tests
+
+2009-06-25 07:18  cgilles
+
+    * libs/template/templatemanager.cpp: wrong logic here
+
+2009-06-25 07:08  cgilles
+
+    * libs/template/templateselector.cpp: if template is null set None
+      option
+
+2009-06-25 07:02  cgilles
+
+    * libs/dmetadata/dmetadata.cpp: wrong tag name
+
+2009-06-25 06:13  cgilles
+
+    * libs/dmetadata/dmetadata.cpp: if Template is null remove all
+      relevant Tags
+
+2009-06-25 03:36  cgilles
+
+    * NEWS: update
+
+2009-06-24 16:44  cgilles
+
+    * libs/template/templateselector.cpp: wrong signal name
+
+2009-06-24 15:12  mwiesweg
+
+    * digikam/imagecategorizedview.cpp: Clear selection before calling
+      setCurrentIndex() at those places where the intention
+      is clearly to set exactly one selected + current index.
+      If Ctrl or Shift are pressed, maybe for any unrelated purpose, it
+      would be taken
+      into account because the selectionCommand() is shared for all
+      purposes including
+      mouse selection, keyboard selection and programmatical selection.
+
+2009-06-24 14:25  cgilles
+
+    * libs/dmetadata/dmetadata.cpp: fix possible crash
+
+2009-06-24 14:24  cgilles
+
+    * libs/database/imagecopyright.cpp: fix possible crash
+
+2009-06-24 14:17  cgilles
+
+    * libs/database/imagecomments.cpp: compile
+
+2009-06-24 14:11  mwiesweg
+
+    * libs/database/imagecomments.cpp: Check for d everywhere - should
+      fix crashes. (done in all methods
+      but forgot it in the newly added ones)
+
+2009-06-24 13:10  cgilles
+
+    * libs/database/imageinfo.cpp, libs/database/imageinfo.h: new
+      method to get ImageCopyright container
+
+2009-06-24 13:09  cgilles
+
+    * libs/database/imagecopyright.cpp, libs/database/imagecopyright.h:
+      new null constructor
+
+2009-06-24 13:06  cgilles
+
+    * libs/database/imagecomments.cpp: nice. A null ImageComments class
+      do not create internal private container. I must crash if
+      ImageComments methods are called...
+
+2009-06-24 12:47  cgilles
+
+    * libs/database/imagecopyright.cpp, libs/database/imagecopyright.h:
+      new method to export ImageCopyright to Template class
+
+2009-06-24 11:59  cgilles
+
+    * libs/template/templateselector.cpp,
+      libs/template/templateselector.h: make connection between
+      template selector and template manager. rename signals and slots
+
+2009-06-24 11:28  cgilles
+
+    * libs/template/templatemanager.cpp,
+      libs/template/templatemanager.h: new findBytContents method
+
+2009-06-24 11:20  cgilles
+
+    * libs/template/templatemanager.cpp: polish
+
+2009-06-24 11:16  cgilles
+
+    * utilities/setup/setuptemplate.cpp: polish
+
+2009-06-24 10:33  cgilles
+
+    * libs/template/templatelist.cpp: compile
+
+2009-06-24 10:31  cgilles
+
+    * libs/template/templatelist.cpp: wrong logic here
+
+2009-06-24 10:25  cgilles
+
+    * utilities/setup/setuptemplate.cpp: use template title everywhere
+
+2009-06-24 10:25  cgilles
+
+    * libs/dmetadata/template.cpp, libs/dmetadata/template.h: use
+      template title everywhere
+
+2009-06-24 10:25  cgilles
+
+    * libs/template/templatelist.cpp, libs/template/templatelist.h,
+      libs/template/templatemanager.cpp,
+      libs/template/templatemanager.h,
+      libs/template/templateselector.cpp: use template title everywhere
+
+2009-06-24 09:00  mwiesweg
+
+    * digikam/CMakeLists.txt: Compile nepomuk service only with KDE4.3
+      (beta currently)
+
+2009-06-24 08:58  cgilles
+
+    * libs/dmetadata/dmetadata.cpp, libs/dmetadata/dmetadata.h: new
+      getMetadataTemplate() method
+
+2009-06-24 08:51  aclemens
+
+    * utilities/fuzzysearch/fuzzysearchview.cpp: Use if statement to
+      avoid compiler warnings
+
+2009-06-24 08:41  cgilles
+
+    * libs/dmetadata/template.cpp, libs/dmetadata/template.h: no need
+      valid flag
+
+2009-06-24 08:28  cgilles
+
+    * libs/dmetadata/template.cpp: compile
+
+2009-06-24 08:27  cgilles
+
+    * libs/dmetadata/template.h: compile
+
+2009-06-24 08:26  cgilles
+
+    * libs/dmetadata/template.cpp: equality operator
+
+2009-06-24 08:17  cgilles
+
+    * libs/template/templatemanager.cpp,
+      libs/template/templatemanager.h,
+      libs/template/templateselector.cpp: remove find(author) method.
+
+2009-06-24 08:04  cgilles
+
+    * digikam/metadatahub.cpp: polish
+
+2009-06-24 07:43  cgilles
+
+    * libs/imageproperties/captionsedit.cpp: polish
+
+2009-06-24 07:24  cgilles
+
+    * libs/template/templatemanager.cpp,
+      libs/template/templateselector.cpp: load template in constructor
+
+2009-06-24 07:24  cgilles
+
+    * digikam/digikamapp.cpp: load template in constructor
+
+2009-06-24 06:17  cgilles
+
+    * libs/template/templateselector.cpp: polish
+
+2009-06-24 06:16  cgilles
+
+    * utilities/setup/setup.cpp: polish
+
+2009-06-24 06:02  cgilles
+
+    * libs/dmetadata/dmetadata.cpp, libs/dmetadata/dmetadata.h: polish
+
+2009-06-24 04:32  cgilles
+
+    * README: update
+
+2009-06-24 04:31  cgilles
+
+    * NEWS: update
+
+2009-06-24 04:29  cgilles
+
+    * utilities/nepomuk/digikamnepomukservice.cpp: fix warning
+
+2009-06-23 21:18  mwiesweg
+
+    * digikam/metadatahub.cpp: Adjust to ImageComments changes
+
+2009-06-23 21:18  mwiesweg
+
+    * CMakeLists.txt, digikam/CMakeLists.txt: Add compilation of
+      Nepomuk sync service.
+
+      Please test if this is fine with KDE4.2! If not, we must make it
+      optional
+      for KDE >= 4.3. I guess that should be possible with CMake.
+
+2009-06-23 21:17  mwiesweg
+
+    * utilities/nepomuk, utilities/nepomuk/digikamnepomukservice.cpp,
+      utilities/nepomuk/digikamnepomukservice.desktop,
+      utilities/nepomuk/digikamnepomukservice.h: Nepomuk coding sprint
+      results:
+      Initial revision of a Digikam <-> Nepomuk synchronisation bridge.
+      For now this is implemented as a Nepomuk service running
+      independently
+      from the main digikam instance.
+      Syncs rating, comment and tags; tags is one-way currently,
+      syncing tags
+      from Nepomuk to digikam is awaiting implementation.
+      Changes in digikam are immediately pushed to Nepomuk by listening
+      to
+      digikam's DBus signals. After first start, a full sync of all
+      entries
+      is triggered. The initial sync is recorded in the database.
+      Changes in Nepomuk are registered by listening to global change
+      signals.
+      After a timed delay a Sparql query retrieves all relevant changes
+      that occurred since the last check. The time is recorded in the
+      database.
+      The database file path is read from the digikam configuration
+      file.
+      If an instance is running, it is queried directly. If the
+      database file
+      changes, the service is informed by digikam. (This does not scale
+      well to several
+      instances running different DBs, but digikam does not support
+      this scenario anyway)
+      Both syncing directions are independently configurable. Default
+      is false for now;
+      we should consider defaulting to true.
+
+      Note: I am running KDE4.3beta2 at the moment. If there is code
+      not compiling with
+      KDE4.2, we must add a conditional switch to CMake.
+
+      CCMAIL: digikam-devel@kde.org trueg@kde.org
+
+2009-06-23 21:17  mwiesweg
+
+    * digikam/digikamapp.cpp, digikam/digikamapp.h,
+      digikam/org.kde.digikam.xml: - add DBus call to retrieve current
+      db settings
+      - inform Nepomuk service if relevant setup options changed
+
+2009-06-23 21:17  mwiesweg
+
+    * digikam/albummanager.cpp: Inform nepomuk service on database
+      change
+
+2009-06-23 21:16  mwiesweg
+
+    * digikam/albumsettings.cpp, digikam/albumsettings.h: Add settings
+      to sync to/fro nepomuk.
+      Settings have no UI yet.
+
+2009-06-23 21:16  mwiesweg
+
+    * libs/database/imagecomments.cpp, libs/database/imagecomments.h:
+      Add various remove and replace methods, adjust API, some internal
+      changes
+
+2009-06-23 21:16  mwiesweg
+
+    * libs/database/imagecopyright.cpp, libs/database/imagecopyright.h:
+      Add remove...() method for all properties
+
+2009-06-23 21:15  mwiesweg
+
+    * libs/database/albumdb.cpp, libs/database/albumdb.h: Add method to
+      remove copyright entries
+
+2009-06-23 20:08  cgilles
+
+    * libs/imageproperties/captionsedit.cpp,
+      libs/imageproperties/imagedescedittab.cpp: fix broken
+      signal/slots order
+      CCBUGS: 197641
+
+2009-06-23 19:25  cgilles
+
+    * NEWS: update
+
+2009-06-23 19:24  cgilles
+
+    * NEWS: update
+
+2009-06-23 14:33  cgilles
+
+    * libs/dmetadata/dmetadata.cpp: Export digiKam tags hierarchies to
+      LightRoom XMP namespace
+      CCBUGS: 197285
+
+2009-06-23 13:49  cgilles
+
+    * libs/dmetadata/dmetadata.cpp, libs/dmetadata/dmetadata.h: import
+      tags hierarchies from LightRoom
+      CCBUGS: 197285
+
+2009-06-23 13:08  cgilles
+
+    * NEWS: update
+
+2009-06-23 13:01  cgilles
+
+    * libs/template/templateselector.cpp: add whats this
+
+2009-06-23 12:58  cgilles
+
+    * libs/dmetadata/CMakeLists.txt: export tmplate header
+
+2009-06-23 12:56  cgilles
+
+    * libs/dmetadata/dmetadata.cpp: fix wrong namespace
+
+2009-06-23 12:40  cgilles
+
+    * utilities/cameragui/cameracontroller.cpp,
+      utilities/cameragui/cameraui.cpp,
+      utilities/cameragui/cameraui_p.h,
+      utilities/cameragui/downloadsettingscontainer.h: Camera GUI : add
+      option to apply metadata template to items to download from
+      camera.
+      CCBUGS: 139361
+
+2009-06-23 12:38  cgilles
+
+    * libs/dmetadata/dmetadata.cpp: set all template tags
+
+2009-06-23 12:35  aclemens
+
+    * project/porting2ModelView.ods: update
+
+2009-06-23 12:32  aclemens
+
+    * project/porting2ModelView.ods: update
+
+2009-06-23 12:24  cgilles
+
+    * libs/dmetadata/dmetadata.cpp: check if template is null
+
+2009-06-23 12:18  cgilles
+
+    * CMakeLists.txt: compile
+
+2009-06-23 12:18  cgilles
+
+    * libs/dmetadata/dmetadata.cpp, libs/dmetadata/dmetadata.h,
+      libs/dmetadata/template.cpp, libs/dmetadata/template.h,
+      libs/template/template.cpp, libs/template/template.h: move
+      template class in dmetadata.
+      export symbol and share in libdigikamcore
+
+2009-06-23 11:12  cgilles
+
+    * libs/template/templateselector.cpp: compile
+
+2009-06-23 11:11  cgilles
+
+    * libs/template/templateselector.cpp: fix layout
+
+2009-06-23 11:08  cgilles
+
+    * libs/template/templateselector.cpp: use right setup page
+
+2009-06-23 11:02  cgilles
+
+    * CMakeLists.txt: compile
+
+2009-06-23 11:01  cgilles
+
+    * libs/template/templateselector.cpp,
+      libs/template/templateselector.h: add template selector widget
+
+2009-06-23 09:11  cgilles
+
+    * digikam/CMakeLists.txt: link
+
+2009-06-23 07:50  cgilles
+
+    * CMakeLists.txt, digikam/CMakeLists.txt,
+      libs/template/template.cpp, libs/template/template.h,
+      libs/template/templatelist.cpp, libs/template/templatelist.h,
+      libs/template/templatemanager.cpp,
+      libs/template/templatemanager.h, utilities/setup/template.cpp,
+      utilities/setup/template.h, utilities/setup/templatelist.cpp,
+      utilities/setup/templatelist.h,
+      utilities/setup/templatemanager.cpp,
+      utilities/setup/templatemanager.h: use template dir
+
+2009-06-23 07:38  cgilles
+
+    * libs/template: add template dir
+
+2009-06-23 07:14  cgilles
+
+    * CMakeLists.txt, utilities/setup/identitylist.cpp,
+      utilities/setup/identitylist.h, utilities/setup/photographer.cpp,
+      utilities/setup/photographer.h,
+      utilities/setup/setuptemplate.cpp, utilities/setup/template.cpp,
+      utilities/setup/template.h, utilities/setup/templatelist.cpp,
+      utilities/setup/templatelist.h,
+      utilities/setup/templatemanager.cpp,
+      utilities/setup/templatemanager.h: photographer => template
+
+2009-06-23 06:12  cgilles
+
+    * utilities/setup/identitylist.cpp: compile
+
+2009-06-23 06:12  cgilles
+
+    * CMakeLists.txt, digikam/digikamapp.cpp, digikam/digikamapp_p.h,
+      utilities/setup/photographerlist.cpp,
+      utilities/setup/photographerlist.h, utilities/setup/setup.cpp,
+      utilities/setup/setuptemplate.cpp,
+      utilities/setup/setuptemplate.h,
+      utilities/setup/templatemanager.cpp,
+      utilities/setup/templatemanager.h: PhotographerList =>
+      TemplateManager
+
+2009-06-23 05:55  cgilles
+
+    * CMakeLists.txt, utilities/setup/setup.h,
+      utilities/setup/setupidentity.cpp,
+      utilities/setup/setupidentity.h,
+      utilities/setup/setuptemplate.cpp,
+      utilities/setup/setuptemplate.h: setuidentity => setuptemplate
+
+2009-06-23 04:19  cgilles
+
+    * digikam/digikamapp.cpp, digikam/digikamapp_p.h,
+      utilities/setup/photographerlist.cpp: credits.xml => template.xml
+
+2009-06-23 03:38  cgilles
+
+    * NEWS: update--Cette ligne, et les suivantes ci-dessous, seront
+      ignorées--
+
+      M NEWS
+
+2009-06-22 21:40  aclemens
+
+    * utilities/fuzzysearch/findduplicatesview.cpp: Copy and paste
+      error: this will introduce a memory leak
+
+2009-06-22 19:10  cgilles
+
+    * digikam/digikamapp.cpp, digikam/digikamapp_p.h,
+      utilities/setup/identitylist.cpp,
+      utilities/setup/photographerlist.cpp, utilities/setup/setup.cpp,
+      utilities/setup/setupidentity.cpp,
+      utilities/setup/setupidentity.h: set-up credits.xml info file to
+      store photographer identies.
+      re-write setup identity page as photographers info manager
+      TODO : use these info to store data in DB and metadata
+
+2009-06-22 18:10  aclemens
+
+    * libs/dialogs/rawcameradlg.cpp: polish / fix crash when searching
+      camera list
+
+2009-06-22 18:07  aclemens
+
+    * libs/dialogs/rawcameradlg.cpp: Do we need a waitcursor here?
+
+2009-06-22 18:07  aclemens
+
+    * libs/dialogs/infodlg.cpp, libs/dialogs/rawcameradlg.cpp,
+      libs/dialogs/rawcameradlg.h: Use InfoDlg as base class for
+      RawCameraDlg to have a more common look in
+      these dialogs.
+
+      InfoDlg can be factorized a little bit to make adding new widgets
+      easier.
+
+2009-06-22 14:36  aclemens
+
+    * libs/database/thumbnaildb.cpp, libs/database/thumbnaildb.h,
+      utilities/batch/batchthumbsgenerator.cpp: Add a new method to get
+      invalid filePaths. This should speed up the
+      batch thumbnailer a lot if used on a big collection.
+      Unfortunately it seems that we are not (yet) using the
+      NoThumbnail flag
+      (or we don't add files without thumbs at all to the filePaths
+      table).
+
+      When adding new files, they don't appear in the thumbsDB when the
+      album
+      has not been opened or the batch thumbnailer has not yet run.
+
+      Maybe we should add files immediately to the thumbsDB when they
+      are
+      added to the collection and set the NoThumbnail flag.
+
+2009-06-22 13:32  cgilles
+
+    * utilities/setup/identitylist.cpp,
+      utilities/setup/photographer.cpp, utilities/setup/photographer.h,
+      utilities/setup/photographerlist.cpp: Update photographer info
+      container following ImageCopyright class to prepare registration
+      in DB.
+      Next stage is to make Photographers indentity manager for digiKAm
+      setup, and later add to ALbumGUI
+      and CameraGui right sidebar a new settings to adjust photo author
+      informations.
+
+      Marcel : as ImageComment, same problem in ImageCopyright class :
+      how to remove copyright informations from DB ?
+      We can Add/Append new item, but not delete...
+      CCMAIL: marcel.wiesweg@gmx.de
+
+2009-06-22 12:39  cgilles
+
+    * libs/database/imagecopyright.cpp, libs/database/imagecopyright.h:
+      polish
+
+2009-06-22 11:59  cgilles
+
+    * libs/imageproperties/captionsedit.cpp,
+      libs/imageproperties/captionsedit.h,
+      libs/imageproperties/imagedescedittab.cpp: displatch dirty state
+      from caption widget to sidebar.
+      User can now press apply button to register current caption
+      edited.
+
+2009-06-22 11:07  mwiesweg
+
+    * digikam/kcategorizedview.cpp, digikam/kcategorizedview.h,
+      digikam/kcategorizedview_p.h: Remove "optimization" in
+      slotLayoutChanged that only causes relayout if certain tested
+      filter parameters have changed. But neither testing these
+      parameters nor testing
+      for rowCount can rule out the necessity of a relayout (our filter
+      models e.g. dont
+      care about these parameters. Row count may be the same but
+      completely different
+      indexes may be present).
+
+      Remove dataChanged reimplementation. This may cause side effects!
+      But I see no need for this. And even less for caching visual rect
+      before
+      a possible relayout. For me, if a proxy model wants to
+      re-categorize,
+      it should emit layoutChanged().
+
+2009-06-22 11:07  mwiesweg
+
+    * libs/database/databasechangesets.h,
+      libs/database/databaseparameters.cpp,
+      libs/database/databaseparameters.h: Add isValid() method to
+      DatabaseParameters.
+      Add definitions around Q_METATYPE declarations for QList<int> in
+      case other headers
+      have already defined them (dont know if there is a cleaner
+      solution)
+
+2009-06-22 11:07  mwiesweg
+
+    * libs/database/imageinfo.cpp: Use only one DB call in file path
+      constructor
+
+2009-06-22 11:07  mwiesweg
+
+    * libs/database/albumdb.cpp, libs/database/albumdb.h: Retrieve
+      image + album ids in one call from given album root, album path
+      and file name
+
+2009-06-22 11:07  mwiesweg
+
+    * digikam/albummanager.cpp: - keep thumb db files out of mod date
+      list
+      - make sure there is a complete scan after changing the database
+      while running
+
+2009-06-22 11:07  mwiesweg
+
+    * libs/database/albumdb.cpp, libs/database/albumdb.h,
+      libs/database/databasechangesets.h, libs/database/imageinfo.cpp,
+      utilities/kipiiface/kipiimageinfo.cpp: Pass current tag ids to
+      removeAllTags (which is hardly used at all)
+      to get better state in the change message.
+      Fix possible crashes in ImageInfo (check for m_data)
+
+2009-06-22 10:41  cgilles
+
+    * libs/imageproperties/captionsedit.cpp,
+      libs/imageproperties/captionsedit.h: improve buttons behavors.
+
+2009-06-22 09:56  cgilles
+
+    * NEWS: update
+
+2009-06-22 09:55  cgilles
+
+    * digikam/metadatahub.cpp: polish
+
+2009-06-22 09:54  cgilles
+
+    * libs/database/imagecomments.cpp: clear comments from DB before to
+      update it.
+      Marcel, this commit must be re-arranged i'm sure. In fact there
+      is no method to remove and clear DB item comments.
+      CCMAIL: marcel.wiesweg@gmx.de
+
+2009-06-22 09:51  cgilles
+
+    * libs/dmetadata/dmetadata.cpp: fix null comments registration to
+      metadata
+      BUGS: 152219
+
+2009-06-22 09:18  aclemens
+
+    * digikam/tagfilterview.cpp, digikam/tagfolderview.cpp,
+      libs/imageproperties/talbumlistview.cpp: Only allow dragging to
+      empty space when the parent tag is not the root
+      tag.
+
+2009-06-22 09:18  aclemens
+
+    * libs/imageproperties/talbumlistview.cpp: Revert this commit,
+      since it is actually possible to move a tag into the
+      empty space and add it to the root tag folder.
+
+      I committed this yesterday because the other two tag views don't
+      allow
+      dropping items in the empty space, but instead of disallowing it
+      here,
+      too, we should allow it in the other two views.
+
+      This reverts commit 2867f4ebf033febf0d60c898f157341006cc9687.
+
+2009-06-21 23:14  aclemens
+
+    * digikam/albumfolderview.cpp: Dropping an album into an empty
+      space in the albumfolderview added this
+      album to the albumroot. But since we have multiple collections,
+      this
+      isn't working anymore.
+
+      Disabling it for now because we get an error, but I would suggest
+      to
+      remove this forever, because we can not guess the
+      correct collection, in where the album should be moved.
+
+2009-06-21 23:14  aclemens
+
+    * libs/imageproperties/talbumlistview.cpp: If no itemDrop is
+      present (if the user drags a tag into an empty space),
+      return from contentsDropEvent completely. It doesn't make sense
+      to allow
+      moving the tag to this location, it will do nothing.
+
+2009-06-21 14:30  aclemens
+
+    * libs/database/albumdb.cpp: Simplify update statement
+
+2009-06-21 14:06  aclemens
+
+    * libs/database/albumdb.cpp: Don't display the tag symbol inside of
+      a tag thumbnail. This looks
+      strange.
+      Maybe we should even thing about getting rid of the tag border as
+      soon
+      as a tag thumbnail has been set, like we do in album folder view?
+
+      For those of you who have "a tag inside a tag":
+      Right-click on the tag thumbnail and choose "Reset Icon".
+
+      CCMAIL:digikam-devel@kde.org
+
+2009-06-21 13:50  welwarsky
+
+    * digikam/dbstatdlg.cpp: QList::length() is Qt 4.5 only.
+      QList::count() is equivalent and works for earlier versions
+
+2009-06-21 13:21  cgilles
+
+    * NEWS: update
+
+2009-06-21 11:07  aclemens
+
+    * NEWS: update
+
+2009-06-21 11:07  aclemens
+
+    * libs/imageproperties/talbumlistview.cpp: Fix crash in
+      TAlbumListView when dragging an item into the empty space
+      below the tag list.
+      BUG:197360
+
+2009-06-20 21:17  cgilles
+
+    * utilities/setup/identitylist.cpp, utilities/setup/identitylist.h:
+      polish
+
+2009-06-20 21:15  cgilles
+
+    * utilities/setup/setupcategory.cpp: polish
+
+2009-06-20 20:56  cgilles
+
+    * CMakeLists.txt, utilities/setup/identitylist.cpp,
+      utilities/setup/identitylist.h: new widget to display list of
+      photographer identities. Not yet used...
+
+2009-06-20 19:30  cgilles
+
+    * NEWS: update
+
+2009-06-20 19:29  cgilles
+
+    * NEWS: update
+
+2009-06-20 17:19  aclemens
+
+    * digikam/dbstatdlg.cpp: polish
+
+2009-06-20 17:17  aclemens
+
+    * digikam/dbstatdlg.cpp: Use scanAlbums() here, like in the tag
+      statistics section.
+      This query is a little bit slower, but maybe more accurate?
+
+2009-06-20 17:02  aclemens
+
+    * digikam/dbstatdlg.cpp: Add albums and tags count to the dbstats
+      dialog
+
+2009-06-20 16:27  cgilles
+
+    * CMakeLists.txt, utilities/setup/photographerlist.cpp,
+      utilities/setup/photographerlist.h: new photographer list
+      manager. not yet used...
+
+2009-06-20 16:22  aclemens
+
+    * digikam/dbstatdlg.cpp: fix warning
+
+2009-06-20 16:02  cgilles
+
+    * CMakeLists.txt, utilities/setup/photographer.cpp,
+      utilities/setup/photographer.h: new photographer info container.
+      Not yet used...
+
+2009-06-20 14:37  mwiesweg
+
+    * libs/dimg/loaders/tiffloader.cpp: Catch std::bad_alloc around the
+      main image data allocation - with very big images
+      or corrupt headers, width or height information may be fatally
+      large.
+
+      CCBUG: 197254
+
+2009-06-20 14:34  cgilles
+
+    * CMakeLists.txt, digikam/cameralist.cpp, digikam/cameralist.h,
+      digikam/cameratype.cpp, digikam/cameratype.h,
+      utilities/setup/cameralist.cpp, utilities/setup/cameralist.h,
+      utilities/setup/cameratype.cpp, utilities/setup/cameratype.h:
+      these object are relevant of setup. move at the right place
+
+2009-06-20 13:34  cgilles
+
+    * libs/dialogs/deletedialog.cpp, libs/dialogs/deletedialog.h: wrap
+      around focused button from Delete dialog. Sound like Qt and KDE
+      api do not follow focus button set by keyboard.
+      CCBUGS: 195494
+
+2009-06-20 12:47  cgilles
+
+    * NEWS: update
+
+2009-06-20 12:19  cgilles
+
+    * NEWS: update
+
+2009-06-20 12:10  cgilles
+
+    * utilities/timeline/timelinewidget.cpp,
+      utilities/timeline/timelinewidget.h: TimeLine widget : draw
+      flicker rectangle around time selection date below X axis. Now,
+      with flicker effect, this bring users
+      to see where they can take date selection.
+      Note : Only bottom of vertical band is used to perform selection.
+      the rest of band, upper X axis can be move to naviguate
+      on time line without to take selection. Why ? To see and check
+      date an number of items from histogram displayed on the top.
+      Kphotoalbum use also this behavour with timeline.
+      BUGS: 182852
+      BUGS: 173899
+
+2009-06-20 11:15  aclemens
+
+    * tests/manualrenameinputtest.cpp, tests/manualrenameinputtest.h:
+      polish
+
+2009-06-20 06:35  cgilles
+
+    * NEWS: update
+
+2009-06-19 13:24  cgilles
+
+    * NEWS: update
+
+2009-06-19 13:23  cgilles
+
+    * utilities/firstrun/collectionpage.cpp: QDir::mkdir =>
+      QDir::mkpath
+      BUGS: 197152
+
+2009-06-19 13:17  cgilles
+
+    * utilities/firstrun/collectionpage.cpp: fix i18n
+
+2009-06-19 13:04  cgilles
+
+    * digikam/albummanager.cpp: no need extra namespace here. gcc 4.4
+      no not like it
+
+2009-06-19 12:51  cgilles
+
+    * digikam/albummanager.cpp: polish i18n
+
+2009-06-19 12:39  cgilles
+
+    * CMakeLists.txt: enable thumbs database by default now.
+
+2009-06-19 12:38  cgilles
+
+    * NEWS: update
+
+2009-06-19 12:20  cgilles
+
+    * NEWS: update
+
+2009-06-19 10:30  cgilles
+
+    * NEWS: update
+
+2009-06-19 10:23  cgilles
+
+    * NEWS: update
+
+2009-06-19 10:20  cgilles
+
+    * NEWS: update
+
+2009-06-19 10:20  cgilles
+
+    * libs/dialogs/deletedialog.cpp: set focus to Cancel button
+      BUGS: 195494
+
+2009-06-19 10:11  cgilles
+
+    * NEWS: update
+
+2009-06-19 09:33  cgilles
+
+    * NEWS: update
+
+2009-06-19 09:16  cgilles
+
+    * NEWS: update
+
+2009-06-19 07:01  cgilles
+
+    * CMakeLists.txt, imageplugins/contentawareresizing/CMakeLists.txt,
+      imageplugins/contentawareresizing/lqr, libs/3rdparty/lqr: move
+      lqr library to 3rdparty subdir
+
+2009-06-19 03:25  mboquien
+
+    * digikam/albumlister.cpp, digikam/cameralist.cpp,
+      digikam/digikamapp.cpp, digikam/main.cpp,
+      libs/database/imagequerybuilder.cpp,
+      libs/database/imagescanner.cpp,
+      libs/models/imagefiltersettings.cpp,
+      libs/widgets/metadata/metadatalistview.cpp,
+      utilities/cameragui/cameracontroller.cpp,
+      utilities/setup/cameraselection.cpp,
+      utilities/setup/setupcamera.cpp: Let's quote EBN: “Some QString
+      methods (like startsWith() and endsWith()) are more efficient if
+      they are passed a QLatin1String, avoiding an implicit conversion
+      from const char *.”
+
+2009-06-19 03:06  mboquien
+
+    * digikam/albumwidgetstack.cpp, digikam/imagecategorizedview.cpp,
+      digikam/scancontroller.cpp,
+      utilities/cameragui/cameracontroller.cpp,
+      utilities/imageeditor/rawimport/rawsettingsbox.cpp: Correct some
+      spelling mistakes detected by krazy and exclude a couple of
+      warnings because they are bogus in the context of reading keys in
+      a config file.
+
+2009-06-19 02:54  mboquien
+
+    * digikam/imagerotationoverlay.h, digikam/metadatamanager.cpp,
+      libs/database/databasebackend_p.h,
+      libs/database/databasecorebackend.cpp,
+      libs/database/databasecorebackend_p.h,
+      libs/database/thumbnaildatabaseaccess.h, libs/dimg/dimg.cpp,
+      libs/dimg/loaders/jpegloader.cpp, libs/dimg/loaders/jpegloader.h,
+      libs/dimg/loaders/pgfloader.cpp,
+      libs/dimg/loaders/tiffloader.cpp,
+      libs/imageproperties/imagepropertiestxtlabel.h,
+      libs/models/imagefiltermodelpriv.h,
+      libs/models/imagefiltermodelthreads.h,
+      utilities/firstrun/startscanpage.h,
+      utilities/imageeditor/editor/editorwindow.cpp,
+      utilities/queuemanager/queuepool.h: Correct some EBN warning
+      regarding includes.
+
+2009-06-18 18:54  sengels
+
+    * libs/database/thumbnaildb.h: fix linker error on msvc 2k5/2k8
+
+2009-06-18 13:32  cgilles
+
+    * libs/3rdparty/libpgf/PGFplatform.h: IStream used in
+      libpgf::Stream.h need ole2.h header with MSVC 9
+
+2009-06-18 10:31  cgilles
+
+    * libs/jpegutils/jpegutils.cpp, utilities/cameragui/cameraui.cpp:
+      CameraGUI : added TIFF, JPEG2000, and PGF file format to convert
+      JPEG to lossless image format
+
+2009-06-18 10:17  cgilles
+
+    * NEWS: update
+
+2009-06-18 08:58  cgilles
+
+    * libs/database/schemaupdater.cpp: add PGF in DB schema updater
+
+2009-06-18 08:44  cgilles
+
+    * libs/dimg/loaders/pgfloader.cpp: polish
+
+2009-06-18 07:40  cgilles
+
+    * CMakeLists.txt,
+      utilities/queuemanager/basetools/convert/convert2pgf.cpp,
+      utilities/queuemanager/basetools/convert/convert2pgf.h,
+      utilities/queuemanager/batchtoolsmanager.cpp: add new PGF convert
+      to Batch Queue Manager
+
+2009-06-18 07:10  cgilles
+
+    * libs/dialogs/libsinfodlg.cpp: add PGF format
+
+2009-06-18 04:06  cgilles
+
+    * NEWS: update
+
+2009-06-17 12:21  cgilles
+
+    * libs/dimg/loaders/pgfloader.cpp: i just completed first version
+      of PGF metadata encoder/decoder for Exiv2 library. i can comment
+      this code (will be definitively removed later)
+
+2009-06-16 18:35  aclemens
+
+    * imageplugins/adjustcurves/adjustcurvestool.cpp,
+      imageplugins/adjustlevels/adjustlevelstool.cpp,
+      imageplugins/channelmixer/channelmixertool.cpp,
+      imageplugins/charcoal/charcoal.cpp,
+      imageplugins/contentawareresizing/contentawareresizer.cpp,
+      imageplugins/contentawareresizing/contentawareresizetool.cpp,
+      imageplugins/coreplugin/bwsepiatool.cpp,
+      imageplugins/coreplugin/iccprooftool.cpp,
+      imageplugins/coreplugin/resizetool.cpp,
+      imageplugins/inpainting/inpaintingtool.cpp,
+      imageplugins/lenscorrection/distortion/pixelaccess.cpp,
+      imageplugins/perspective/perspectivewidget.cpp,
+      imageplugins/restoration/restorationtool.cpp,
+      imageplugins/sheartool/shear.cpp,
+      imageplugins/superimpose/superimposetool.cpp,
+      imageplugins/whitebalance/whitebalancetool.cpp,
+      utilities/batch/batchthumbsgenerator.cpp,
+      utilities/cameragui/cameraiconitem.cpp,
+      utilities/cameragui/cameraiconview.cpp,
+      utilities/cameragui/cameraui.cpp,
+      utilities/cameragui/freespacewidget.cpp,
+      utilities/cameragui/gpconfigdlg.cpp,
+      utilities/fuzzysearch/fuzzysearchfolderview.cpp,
+      utilities/fuzzysearch/fuzzysearchview.cpp,
+      utilities/gpssearch/gpssearchfolderview.cpp,
+      utilities/imageeditor/canvas/dimginterface.cpp,
+      utilities/imageeditor/canvas/imagepluginloader.cpp,
+      utilities/imageeditor/canvas/undoaction.cpp,
+      utilities/imageeditor/canvas/undocache.cpp,
+      utilities/imageeditor/canvas/undomanager.cpp,
+      utilities/imageeditor/editor/editorwindow.cpp,
+      utilities/imageeditor/editor/imagewindow.cpp,
+      utilities/lighttable/lighttablebar.cpp,
+      utilities/lighttable/lighttablepreview.cpp,
+      utilities/queuemanager/assignedlist.cpp,
+      utilities/queuemanager/queuelist.cpp,
+      utilities/searchwindow/searchfolderview.cpp,
+      utilities/setup/setupicc.cpp, utilities/slideshow/slideshow.cpp,
+      utilities/timeline/timelinefolderview.cpp: polish
+
+2009-06-16 18:04  aclemens
+
+    * utilities/fuzzysearch/fuzzysearchview.cpp: polish
+
+2009-06-16 18:01  aclemens
+
+    * utilities/fuzzysearch/fuzzysearchview.cpp: fix possible crash
+
+2009-06-16 16:16  aclemens
+
+    * NEWS: update
+
+2009-06-16 16:13  aclemens
+
+    * digikam/albumfolderview.cpp, digikam/albumfolderview.h,
+      digikam/digikamview.cpp, digikam/tagfolderview.cpp,
+      digikam/tagfolderview.h,
+      utilities/fuzzysearch/fuzzysearchview.cpp: Add context menu to
+      tag folder view
+
+2009-06-16 16:13  aclemens
+
+    * utilities/fuzzysearch/findduplicatesview.cpp,
+      utilities/fuzzysearch/findduplicatesview.h: prepare
+      FindDuplicatesView for context menu action used in TagFolderView
+
+2009-06-16 15:31  aclemens
+
+    * kioslave/digikamsearch.cpp, libs/database/haar/haariface.cpp,
+      libs/database/haar/haariface.h,
+      utilities/fuzzysearch/findduplicatesview.cpp,
+      utilities/fuzzysearch/findduplicatesview.h: Find Duplicates can
+      now be used on albums and tags
+      - adding the tag selection box
+      - setup the connections
+      - adding appropiate methods for haariface
+
+2009-06-16 15:30  aclemens
+
+    * libs/database/haar/haariface.cpp, libs/database/haar/haariface.h:
+      In preparation to find duplicates in tag albums as well: use a
+      QSet to
+      avoid duplicate image ids.
+      When searching in albums AND tags, chances are that image ids are
+      located in both places. Avoid duplicates in this case.
+
+2009-06-16 12:33  aclemens
+
+    * utilities/fuzzysearch/findduplicatesview.cpp: Disconnect model
+      when calling this slot to avoid multiple connections.
+      The slot slotUpdateAlbumSelectBox is only called when digiKam is
+      started
+      or the database path was changed in the setup. To avoid any
+      duplicate
+      connections, try to disconnect first when the model has been
+      already
+      assigned.
+
+2009-06-16 11:45  cgilles
+
+    * NEWS: update
+
+2009-06-16 11:17  aclemens
+
+    * digikam/imagepreviewview.cpp: Same here, move GoTo to the view
+      actions...
+
+2009-06-16 11:15  aclemens
+
+    * digikam/digikamimageview.cpp: re-arrange context menu a little
+      bit, I guess GoTo is quite important,
+      but gets lost at its old position.
+      It is some kind of view action, so moving it into the view / edit
+      group
+      is better.
+
+2009-06-16 09:28  aclemens
+
+    * libs/widgets/common/curvesbox.cpp: Don't call connect() in the
+      enable methods. Somehow the connections get
+      added twice (didn't know this is even possible) and therefore the
+      curvesReset
+      button sent two signals on each click.
+
+2009-06-16 09:27  aclemens
+
+    * libs/widgets/common/curvesbox.cpp: polish
+
+2009-06-16 08:47  cgilles
+
+    * NEWS: update
+
+2009-06-16 08:44  cgilles
+
+    * digikam/metadatahub.cpp: This is a long standing bug about Tag
+      synchronization to XMP and IPTC keywords.
+      To wrap around this problem, we remove all previous keywords
+      before to apply new sets.
+      Marcel, i think MetadataHub is right : new and old tags lists are
+      fine. Problem must be in libkexiv2.
+      Anyway this patch fix the problem for the moment.
+      BUGS: 175321
+      BUGS: 159158
+      BUGS: 141912
+      BUGS: 186308
+      CCMAIL: marcel.wiesweg@gmx.de
+
+2009-06-16 06:24  cgilles
+
+    * libs/imageproperties/captionsedit.h: compile
+
+2009-06-16 06:19  cgilles
+
+    * CMakeLists.txt, libs/imageproperties/captionsedit.cpp,
+      libs/imageproperties/captionsedit.h,
+      libs/imageproperties/commentsedit.cpp,
+      libs/imageproperties/commentsedit.h,
+      libs/imageproperties/imagedescedittab.cpp: commentsedit =>
+      captionsedit
+
+2009-06-16 06:14  cgilles
+
+    * libs/dimg/loaders/pgfloader.cpp: use TIFF is better here
+
+2009-06-15 19:21  cgilles
+
+    * libs/3rdparty/libpgf/PGFplatform.h: compile under MSVC 9
+
+2009-06-15 17:17  cgilles
+
+    * libs/3rdparty/libpgf/PGFplatform.h: compile under win32 with
+      MinGW
+
+2009-06-15 17:03  cgilles
+
+    * libs/3rdparty/libpgf/PGFplatform.h: compile under win32 with
+      MinGW
+
+2009-06-15 13:39  cgilles
+
+    * showfoto/showfoto.cpp: compile
+
+2009-06-15 13:35  cgilles
+
+    * libs/imageproperties/commentsedit.cpp: more tooltips here : show
+      full description of language to be more suitable
+
+2009-06-15 13:21  aclemens
+
+    * libs/curves/imagecurves.cpp, libs/curves/imagecurves.h: fix
+      memory leak in ImageCurves
+
+2009-06-15 13:06  cgilles
+
+    * NEWS: update
+
+2009-06-15 13:04  cgilles
+
+    * digikam/metadatahub.cpp, digikam/metadatahub.h,
+      libs/dmetadata/dmetadata.cpp, libs/dmetadata/dmetadata.h,
+      libs/imageproperties/imagedescedittab.cpp,
+      utilities/imageeditor/editor/imagewindow.cpp: Added multiple
+      language support to Caption and Tags right side bar. Comments are
+      store to database folowing RFC 3066.
+      comments are stored to image metadata into XMP schema.
+      BUGS: 98462
+
+2009-06-15 12:56  cgilles
+
+    * libs/database/imagecomments.cpp, libs/database/imagecomments.h:
+      new methods to convert from/to KExiv2::AltLangMap. will be used
+      with MetadataHub to read/save multiple language comments from/to
+      DB
+      CCBUGS: 98462
+
+2009-06-15 12:12  aclemens
+
+    * imageplugins/coreplugin/bwsepiatool.cpp: This point can be moved
+      out, too
+
+2009-06-15 12:07  aclemens
+
+    * imageplugins/coreplugin/bwsepiatool.cpp: move QPoint creation out
+      of the forloop
+
+2009-06-15 11:39  aclemens
+
+    * imageplugins/adjustcurves/adjustcurvestool.cpp: Set channel and
+      scale when settings have been read
+
+2009-06-15 11:30  aclemens
+
+    * imageplugins/adjustcurves/adjustcurvestool.cpp,
+      libs/widgets/common/curvesbox.cpp: Fix resetPickers(). Since a
+      QButtonGroup with the 'exclusive' property
+      can not have no button selected, we need to turn off this
+      property
+      first.
+      Then we can disable all buttons and set the property again.
+
+      This fixes an old bug we had a long time now in the
+      AdjustCurvesTool.
+
+2009-06-15 11:21  aclemens
+
+    * imageplugins/coreplugin/bwsepiatool.cpp: forgot the enable method
+      call in here
+
+2009-06-15 11:21  aclemens
+
+    * imageplugins/adjustcurves/adjustcurvestool.cpp,
+      imageplugins/coreplugin/bwsepiatool.cpp,
+      libs/widgets/common/curvesbox.cpp,
+      libs/widgets/common/curvesbox.h: polish API
+
+2009-06-15 11:12  aclemens
+
+    * imageplugins/coreplugin/bwsepiatool.cpp,
+      libs/widgets/common/curvesbox.cpp,
+      libs/widgets/common/curvesbox.h: Do not extract this method, it
+      is a rather special case for the BWSepiaTool
+
+2009-06-15 10:55  cgilles
+
+    * CMakeLists.txt: compile
+
+2009-06-15 10:54  cgilles
+
+    * libs/imageproperties/commentsedit.cpp,
+      libs/imageproperties/commentsedit.h: add multi-language comments
+      editor. Not yet used as well. Just a question of time...
+      CCBUGS: 98462
+
+2009-06-15 10:47  aclemens
+
+    * imageplugins/adjustcurves/adjustcurvestool.cpp,
+      libs/widgets/common/curvesbox.cpp,
+      libs/widgets/common/curvesbox.h: New wrapper method:
+      setCurveGuide()
+
+2009-06-15 10:47  aclemens
+
+    * imageplugins/adjustcurves/adjustcurvestool.cpp: use new picker
+      access methods in AdjustCurvesTool
+
+2009-06-15 10:47  aclemens
+
+    * libs/widgets/common/curvesbox.cpp,
+      libs/widgets/common/curvesbox.h: new methods: getCurrentPicker()
+      and resetPickers()
+
+2009-06-15 10:47  aclemens
+
+    * libs/widgets/common/curvesbox.h: polish
+
+2009-06-15 10:47  aclemens
+
+    * imageplugins/adjustcurves/adjustcurvestool.cpp,
+      imageplugins/adjustcurves/adjustcurvestool.h: Add CurvesBox to
+      the AdjustCurvesTool
+
+2009-06-15 10:47  aclemens
+
+    * imageplugins/coreplugin/bwsepiatool.cpp,
+      imageplugins/coreplugin/bwsepiatool.h: Add CurvesBox widget to
+      the BWSepia tool.
+
+2009-06-15 10:47  aclemens
+
+    * CMakeLists.txt, libs/widgets/common/CMakeLists.txt,
+      libs/widgets/common/curvesbox.cpp,
+      libs/widgets/common/curvesbox.h: New widget: CurvesBox
+      This class will allow to add control elements as well as the
+      gradient widgets to
+      a curve.
+      All elements can be enabled separately, if needed. The default is
+      to
+      turn them off.
+
+2009-06-15 10:47  aclemens
+
+    * digikam/album.h, digikam/albumfolderview.cpp,
+      digikam/albumiconview.cpp, digikam/albumlister.cpp,
+      digikam/albummanager.cpp, digikam/albumselectwidget.cpp,
+      digikam/digikamapp.cpp, digikam/main.cpp,
+      digikam/metadatahub.cpp, digikam/metadatamanager.cpp,
+      digikam/tageditdlg.cpp, digikam/tagfolderview.cpp,
+      digikam/tagspopupmenu.cpp, digikam/welcomepageview.cpp,
+      imageplugins/adjustcurves/imageplugin_adjustcurves.cpp,
+      imageplugins/adjustlevels/imageplugin_adjustlevels.cpp,
+      imageplugins/blurfx/imageplugin_blurfx.cpp,
+      imageplugins/border/border.cpp,
+      imageplugins/border/imageplugin_border.cpp,
+      imageplugins/channelmixer/channelmixertool.cpp,
+      imageplugins/channelmixer/imageplugin_channelmixer.cpp,
+      imageplugins/charcoal/charcoal.cpp,
+      imageplugins/charcoal/imageplugin_charcoal.cpp,
+      imageplugins/colorfx/imageplugin_colorfx.cpp,
+      imageplugins/contentawareresizing/contentawareresizer.cpp,
+      imageplugins/contentawareresizing/imageplugin_contentawareresizing.cpp,
+      imageplugins/coreplugin/iccprooftool.cpp,
+      imageplugins/coreplugin/imageplugin_core.cpp,
+      imageplugins/distortionfx/imageplugin_distortionfx.cpp,
+      imageplugins/emboss/imageplugin_emboss.cpp,
+      imageplugins/filmgrain/imageplugin_filmgrain.cpp,
+      imageplugins/freerotation/imageplugin_freerotation.cpp,
+      imageplugins/hotpixels/imageplugin_hotpixels.cpp,
+      imageplugins/infrared/imageplugin_infrared.cpp,
+      imageplugins/inpainting/imageplugin_inpainting.cpp,
+      imageplugins/inserttext/imageplugin_inserttext.cpp,
+      imageplugins/lenscorrection/autocorrection/klensfun.cpp,
+      imageplugins/lenscorrection/imageplugin_lenscorrection.cpp,
+      imageplugins/noisereduction/imageplugin_noisereduction.cpp,
+      imageplugins/oilpaint/imageplugin_oilpaint.cpp,
+      imageplugins/perspective/imageplugin_perspective.cpp,
+      imageplugins/perspective/perspectivewidget.cpp,
+      imageplugins/raindrop/imageplugin_raindrop.cpp,
+      imageplugins/restoration/imageplugin_restoration.cpp,
+      imageplugins/sheartool/imageplugin_sheartool.cpp,
+      imageplugins/superimpose/dirselectwidget.cpp,
+      imageplugins/superimpose/imageplugin_superimpose.cpp,
+      imageplugins/texture/imageplugin_texture.cpp,
+      imageplugins/texture/texture.cpp,
+      imageplugins/whitebalance/imageplugin_whitebalance.cpp,
+      kioslave/digikamalbums.cpp, kioslave/digikamdates.cpp,
+      kioslave/digikamsearch.cpp, kioslave/digikamtags.cpp,
+      libs/curves/imagecurves.cpp, libs/database/albumdb.cpp,
+      libs/database/albumdb_sqlite2.cpp,
+      libs/database/collectionmanager.cpp,
+      libs/database/collectionscanner.cpp,
+      libs/database/databasecorebackend.cpp,
+      libs/database/imageinfo.cpp, libs/database/imagequerybuilder.cpp,
+      libs/database/schemaupdater.cpp,
+      libs/database/thumbnailschemaupdater.cpp,
+      libs/database/upgradedb_sqlite2tosqlite3.cpp,
+      libs/dialogs/deletedialog.cpp, libs/dialogs/imagedialog.cpp,
+      libs/dimg/dimg.cpp, libs/dimg/filters/dimggaussianblur.cpp,
+      libs/dimg/filters/dimgimagefilters.cpp,
+      libs/dimg/filters/dimgrefocus.cpp,
+      libs/dimg/filters/dimgsharpen.cpp,
+      libs/dimg/filters/dimgthreadedfilter.cpp,
+      libs/dimg/filters/dimgunsharpmask.cpp,
+      libs/dimg/filters/icctransform.cpp, libs/dimg/filters/matrix.cpp,
+      libs/dimg/loaders/dimgloader.cpp,
+      libs/dimg/loaders/jp2kloader.cpp,
+      libs/dimg/loaders/jpegloader.cpp,
+      libs/dimg/loaders/pgfloader.cpp, libs/dimg/loaders/pngloader.cpp,
+      libs/dimg/loaders/ppmloader.cpp,
+      libs/dimg/loaders/qimageloader.cpp,
+      libs/dimg/loaders/rawloader.cpp,
+      libs/dimg/loaders/tiffloader.cpp, libs/dmetadata/dmetadata.cpp,
+      libs/greycstoration/greycstorationiface.cpp,
+      libs/histogram/imagehistogram.cpp,
+      libs/imageproperties/imagedescedittab.cpp,
+      libs/imageproperties/imagepropertiesgpstab.cpp,
+      libs/imageproperties/talbumlistview.cpp,
+      libs/jpegutils/jpegutils.cpp, libs/levels/imagelevels.cpp,
+      libs/models/imagealbummodel.cpp, libs/themeengine/theme.cpp,
+      libs/themeengine/themeengine.cpp,
+      libs/threadimageio/loadingcache.cpp,
+      libs/threadimageio/loadsavetask.cpp,
+      libs/threadimageio/managedloadsavethread.cpp,
+      libs/threadimageio/pgfutils.cpp,
+      libs/threadimageio/previewtask.cpp,
+      libs/threadimageio/thumbnailcreator.cpp,
+      libs/whitebalance/whitebalance.cpp,
+      libs/widgets/common/filesaveoptionsbox.cpp,
+      libs/widgets/iccprofiles/iccpreviewwidget.cpp,
+      libs/widgets/iccprofiles/iccprofilewidget.cpp,
+      libs/widgets/imageplugins/imageregionwidget.cpp,
+      showfoto/showfoto.cpp, tests/pgfscaled.cpp,
+      utilities/batch/batchalbumssyncmetadata.cpp,
+      utilities/batch/imageinfojob.cpp,
+      utilities/cameragui/cameracontroller.cpp,
+      utilities/cameragui/camerafolderdialog.cpp,
+      utilities/cameragui/cameraui.cpp,
+      utilities/cameragui/gpcamera.cpp,
+      utilities/cameragui/umscamera.cpp,
+      utilities/firstrun/collectionpage.cpp,
+      utilities/gpssearch/gpssearchview.cpp,
+      utilities/gpssearch/gpssearchwidget.cpp,
+      utilities/imageeditor/canvas/dimginterface.cpp,
+      utilities/imageeditor/canvas/imagepluginloader.cpp,
+      utilities/imageeditor/canvas/undoaction.cpp,
+      utilities/imageeditor/editor/editortool.cpp,
+      utilities/imageeditor/editor/editorwindow.cpp,
+      utilities/imageeditor/editor/imageiface.cpp,
+      utilities/imageeditor/rawimport/rawpostprocessing.cpp,
+      utilities/kipiiface/kipiimagecollection.cpp,
+      utilities/kipiiface/kipiimagecollectionselector.cpp,
+      utilities/kipiiface/kipiimageinfo.cpp,
+      utilities/kipiiface/kipiinterface.cpp,
+      utilities/queuemanager/actionthread.cpp,
+      utilities/queuemanager/basetools/transform/flip.cpp,
+      utilities/queuemanager/basetools/transform/rotate.cpp,
+      utilities/queuemanager/batchtool.cpp,
+      utilities/queuemanager/queuemgrwindow.cpp,
+      utilities/searchwindow/searchfields.cpp,
+      utilities/searchwindow/searchgroup.cpp,
+      utilities/searchwindow/searchview.cpp,
+      utilities/setup/setupicc.cpp,
+      utilities/timeline/timelinewidget.cpp: remove endl from kDebug
+      and kWarning, it is not needed anymore
+
+2009-06-15 07:09  cgilles
+
+    * NEWS: update
+
+2009-06-14 22:13  mboquien
+
+    * .krazy: Exclude a few other 3rd party libs as it makes no sense
+      to run krazy over them. It will clean up a bit the EBN reports so
+      the real issues will stand out more clearly.
+
+2009-06-14 19:11  aclemens
+
+    * libs/database/thumbnaildb.cpp: fix query
+
+2009-06-14 19:02  cgilles
+
+    * libs/database/thumbnaildb.h: add comment
+
+2009-06-14 18:53  mwiesweg
+
+    * libs/database/thumbnaildb.h,
+      libs/threadimageio/thumbnailcreator.cpp: Add PNG format for
+      testing to supported thumbnail db formats
+
+2009-06-14 18:51  mwiesweg
+
+    * digikam/contextmenuhelper.cpp: info->name() is translated. I hope
+      info->library() is good to identify plugin.
+
+2009-06-14 17:03  aclemens
+
+    * libs/database/thumbnaildb.cpp: Optimize query
+
+      The keywords IN, NOT IN, !, <>, OR, NOT EXISTS will not use the
+      index of
+      the table and therefore perform bad.
+      The new query will also reduce the SQL statements from 46 to 24
+      instructions, which is good ;-)
+
+      Unfortunately the query is still very slow, because the index is
+      set on
+      path for FilePaths and uniqueHash for Thumbnails.
+      This is why a lot of thumb queries with the new thumbsDB seem to
+      be
+      slower. When joining the FilePaths table with the Thumbnails
+      table, we
+      are not using both indexes, but only one, therefore we don't
+      benefit
+      from the index tables.
+
+      My thumbsDB is 600MB and is really slow to query. We either need
+      to
+      think of new index tables or try to improve speed with other
+      solutions.
+      When thumbsDB grows even more, digiKam becomes unusable on my
+      system.
+
+      Andi
+
+      CCMAIL:digikam-devel@kde.org
+
+2009-06-14 16:08  cgilles
+
+    * NEWS: update
+
+2009-06-14 15:54  cgilles
+
+    * NEWS: update
+
+2009-06-14 12:51  cgilles
+
+    * tests/qtpgftest.cpp: add png for time comparison
+
+2009-06-14 12:02  aclemens
+
+    * NEWS: update
+
+2009-06-14 12:02  aclemens
+
+    * imageplugins/coreplugin/bwsepiatool.cpp,
+      imageplugins/coreplugin/bwsepiatool.h: Add reset button to the
+      curves widget in BWSepia tool.
+      This could be factorized, right now it is just a copy & paste.
+      Maybe we should think of this when planning new editor interface.
+
+      BUG:196465
+
+2009-06-14 10:34  cgilles
+
+    * libs/threadimageio/thumbnailcreator.cpp: with 85 JPEG
+      compression, i can see artifacts. try 90
+
+2009-06-14 09:11  aclemens
+
+    * tests/CMakeLists.txt: polish
+
+2009-06-14 09:02  aclemens
+
+    * libs/database/thumbnaildb.cpp: This list is not needed anymore
+
+2009-06-14 08:09  cgilles
+
+    * NEWS: update
+
+2009-06-14 07:13  cgilles
+
+    * tests/qtpgftest.cpp: kdebug => qdebug
+
+2009-06-14 06:29  cgilles
+
+    * tests/qtpgftest.cpp: add time mesurement and comparison with JPEG
+      encoding decoding
+
+2009-06-13 23:23  aclemens
+
+    * utilities/batch/batchthumbsgenerator.cpp,
+      utilities/batch/fingerprintsgenerator.cpp: polish
+
+2009-06-13 18:32  aclemens
+
+    * libs/database/thumbnaildb.cpp, libs/database/thumbnaildb.h,
+      utilities/batch/batchthumbsgenerator.cpp: Using a QStringList as
+      a return value for getValidFilePaths() seems to
+      be very slow on a collection with over 50.000 images.
+      According to the Qt docs and some guys from the #qt IRC channel,
+      q QHash
+      should be much faster.
+      I tested it and I can not see a difference, but I will change it
+      for
+      now. Maybe we will find a better solution in the future.
+
+2009-06-13 17:10  aclemens
+
+    * themedesigner/main.cpp: fix compile
+
+2009-06-13 17:02  cgilles
+
+    * libs/dimg/loaders/pgfloader.cpp: save metadata as PNG
+
+2009-06-13 15:53  mboquien
+
+    * .krazy: Skip 3rd party libs as it makes little sense to check
+      them.
+
+2009-06-13 15:38  cgilles
+
+    * CMakeLists.txt: make option visible from CMake command line to
+      switch on/off thumbs database support
+
+2009-06-13 15:29  cgilles
+
+    * libs/threadimageio/thumbnailcreator.cpp: with JPEG, we will use
+      quality = 85 to reduce artificats
+
+2009-06-13 14:40  aclemens
+
+    * digikam/dbstatdlg.cpp: Add some debug info to the dbstatdlg for
+      now.
+      It happened to me twice now that I didn't know if I'm using the
+      thumbs
+      db or not.
+      This will be removed when switching to the thumbs db per default.
+
+2009-06-13 13:48  mboquien
+
+    * digikam/album.cpp, digikam/albummanager.cpp,
+      digikam/iconview.cpp, digikam/imagedelegate.cpp,
+      digikam/imagepreviewview.cpp, digikam/scancontroller.cpp,
+      libs/database/collectionmanager.cpp, libs/database/imageinfo.cpp,
+      libs/database/imageposition.cpp,
+      libs/imageproperties/imagepropertiescolorstab.cpp,
+      utilities/cameragui/cameraui.cpp,
+      utilities/cameragui/umscamera.cpp,
+      utilities/imageeditor/canvas/dimginterface.cpp,
+      utilities/imageeditor/canvas/iccsettingscontainer.h,
+      utilities/imageeditor/editor/editorwindow.cpp,
+      utilities/lighttable/lighttablepreview.cpp,
+      utilities/queuemanager/queuepool.cpp,
+      utilities/searchwindow/searchwindow.cpp,
+      utilities/setup/setupcollectionview.cpp,
+      utilities/slideshow/slideshow.cpp: Save some CPU cycles: correct
+      EBN warnings #6, #17 and #18.
+
+2009-06-13 13:22  aclemens
+
+    * libs/database/thumbnaildb.cpp, libs/database/thumbnaildb.h,
+      utilities/batch/batchthumbsgenerator.cpp: Use a query to retrieve
+      valid thumbnail paths.
+
+2009-06-13 12:37  aclemens
+
+    * utilities/batch/batchthumbsgenerator.cpp: Don't scan thumbs that
+      are already created.
+      This works quite fine, but it is not an optimal solution. We
+      should add
+      a method that returns all valid thumb paths from the db and use
+      it here
+      instead of checking every thumb path with its own query.
+
+      Marcel,
+      what do you think?
+
+      Andi
+
+      CCMAIL:digikam-devel@kde.org
+
+2009-06-13 11:33  aclemens
+
+    * CMakeLists.txt, config-digikam.h.cmake, digikam/albummanager.cpp:
+      Add cmake option DIGIKAM_THUMBS_DB
+      This is just a temporary solution, we will not need it in the
+      future.
+      But for now it becomes quickly annoying to set and revert the
+      database
+      code when you want to test the thumbs db and the freedesktop
+      solution.
+
+      To enable the thumbs db, add
+
+      -DDIGIKAM_THUMBS_DB=yes
+
+      to your cmake configuration.
+
+      Andi
+
+      CCMAIL:digikam-devel@kde.org
+
+2009-06-13 10:37  aclemens
+
+    * utilities/fuzzysearch/findduplicatesview.cpp: polish
+
+2009-06-13 10:36  aclemens
+
+    * utilities/fuzzysearch/findduplicatesview.cpp: polish
+
+2009-06-13 10:32  aclemens
+
+    * utilities/fuzzysearch/findduplicatesview.cpp: Set a buddy for the
+      thresholdLabel
+
+2009-06-13 10:32  aclemens
+
+    * utilities/fuzzysearch/findduplicatesview.cpp: fix i18n
+
+2009-06-13 08:19  cgilles
+
+    * libs/3rdparty/libpgf/Decoder.cpp,
+      libs/3rdparty/libpgf/Encoder.cpp,
+      libs/3rdparty/libpgf/Stream.cpp,
+      libs/3rdparty/libpgf/Subband.cpp,
+      libs/3rdparty/libpgf/WaveletTransform.h: fix 90% of libpgf GCC
+      warnings. Still unused variable only checked with C++ assertions.
+
+2009-06-12 22:59  aclemens
+
+    * imageplugins/perspective/perspectivewidget.cpp,
+      imageplugins/perspective/perspectivewidget.h: Fix perspective
+      validation when pixmap is not drawn while dragging the grid
+
+2009-06-12 22:50  aclemens
+
+    * imageplugins/perspective/perspectivetool.cpp,
+      imageplugins/perspective/perspectivetool.h,
+      imageplugins/perspective/perspectivewidget.cpp,
+      imageplugins/perspective/perspectivewidget.h: Change the behavior
+      of the perspective widget.
+      If the perspective was invalid, the old behavior was to disable
+      dragging
+      the handles further. This feels really weird and some users might
+      think
+      the tool is broken.
+      The new method is to allow dragging, but disabling the Ok button
+      if the
+      perspective is invalid.
+      This is also the preferred behavior in Gimp, but Gimp will render
+      the
+      perspective anyway when pressing Ok (which is weird, because it
+      disallowed these settings first). We will not allow to render in
+      this
+      case.
+
+2009-06-12 22:50  aclemens
+
+    * imageplugins/perspective/perspectivewidget.cpp: I guess these
+      variables should be called unusablePoints and unusableArea.
+
+2009-06-12 22:50  aclemens
+
+    * imageplugins/inserttext/inserttexttool.cpp: fix layout
+
+2009-06-12 22:50  aclemens
+
+    * imageplugins/raindrop/raindroptool.cpp: This filter can be rather
+      slow. Add a Try button and remove the slot
+      connections.
+
+2009-06-12 22:50  aclemens
+
+    * imageplugins/filmgrain/filmgraintool.cpp: effect is started when
+      settings are made, no need for a Try button here.
+
+2009-06-12 22:49  aclemens
+
+    * imageplugins/emboss/embosstool.cpp,
+      imageplugins/texture/texturetool.cpp: When clip focus changed,
+      update the filter
+
+2009-06-12 22:49  aclemens
+
+    * imageplugins/charcoal/charcoaltool.cpp: This filter takes some
+      time, this is why we use a Try button here. Don't
+      connect the slotEffect() for this filter.
+
+2009-06-12 22:49  aclemens
+
+    * imageplugins/sheartool/sheartool.cpp: Like in FreeRotation, don't
+      save the angle values. You will mostly never
+      want the same settings applied to other images.
+      We might think of a better solution in the future to save
+      settings.
+
+2009-06-12 22:49  aclemens
+
+    * imageplugins/adjustcurves/adjustcurvestool.cpp,
+      imageplugins/adjustlevels/adjustlevelstool.cpp,
+      imageplugins/blurfx/blurfxtool.cpp,
+      imageplugins/border/bordertool.cpp,
+      imageplugins/charcoal/charcoaltool.cpp,
+      imageplugins/colorfx/colorfxtool.cpp,
+      imageplugins/coreplugin/autocorrectiontool.cpp,
+      imageplugins/coreplugin/bcgtool.cpp,
+      imageplugins/coreplugin/blurtool.cpp,
+      imageplugins/coreplugin/hsl/hsltool.cpp,
+      imageplugins/coreplugin/ratiocrop/ratiocroptool.cpp,
+      imageplugins/coreplugin/redeyetool.cpp,
+      imageplugins/distortionfx/distortionfxtool.cpp,
+      imageplugins/emboss/embosstool.cpp,
+      imageplugins/filmgrain/filmgraintool.cpp,
+      imageplugins/infrared/infraredtool.cpp,
+      imageplugins/inpainting/inpaintingtool.cpp,
+      imageplugins/inserttext/inserttexttool.cpp,
+      imageplugins/lenscorrection/vignetting/antivignettingtool.cpp,
+      imageplugins/oilpaint/oilpainttool.cpp,
+      imageplugins/perspective/perspectivetool.cpp,
+      imageplugins/raindrop/raindroptool.cpp,
+      imageplugins/sheartool/sheartool.cpp,
+      imageplugins/texture/texturetool.cpp,
+      imageplugins/whitebalance/whitebalancetool.cpp: Widgets get
+      re-parented when added to a layout. We should not set a
+      parent in the constructor (if possible), it is quite "useless"
+      and
+      distracting. This was the old Qt3 style where a parent was
+      absolutely
+      necessary.
+
+      Move the layout construction to the place where it is needed,
+      this also
+      increases readability.
+
+      Polish the layout code...
+
+2009-06-12 21:19  cgilles
+
+    * libs/3rdparty/libpgf/PGFplatform.h,
+      libs/3rdparty/libpgf/Stream.h: this is the real fixes for WINCE
+      warnings with GCC 4.3 under linux
+
+2009-06-12 21:16  cgilles
+
+    * libs/3rdparty/libpgf/PGFplatform.h: fix warning
+
+2009-06-12 21:14  cgilles
+
+    * libs/3rdparty/libpgf/Stream.h: fix warning
+
+2009-06-12 21:06  cgilles
+
+    * libs/3rdparty/libpgf/BitStream.h,
+      libs/3rdparty/libpgf/Decoder.cpp, libs/3rdparty/libpgf/Decoder.h,
+      libs/3rdparty/libpgf/Encoder.cpp, libs/3rdparty/libpgf/Encoder.h,
+      libs/3rdparty/libpgf/PGFimage.cpp,
+      libs/3rdparty/libpgf/PGFimage.h,
+      libs/3rdparty/libpgf/PGFplatform.h,
+      libs/3rdparty/libpgf/PGFtypes.h, libs/3rdparty/libpgf/Stream.cpp,
+      libs/3rdparty/libpgf/Stream.h, libs/3rdparty/libpgf/Subband.cpp,
+      libs/3rdparty/libpgf/Subband.h,
+      libs/3rdparty/libpgf/WaveletTransform.h: Update libpgf to
+      official 6.09.24 including all my previous fixes !!!
+      Thanks to libpgf team...
+
+2009-06-12 18:53  mwiesweg
+
+    * libs/models/imagemodel.cpp: Incremental updating had a bug -
+      strange noone noticed till now.
+      There were two hash pointing to indexes of the d->infos list, but
+      the indexes were not updated.
+      Change filePathHash to point to imageids, one inconsistency less
+      to worry about.
+      Update idHash properly.
+
+2009-06-12 15:32  cgilles
+
+    * NEWS: update
+
+2009-06-12 14:00  cgilles
+
+    * libs/threadimageio/pgfutils.h: add API doc
+
+2009-06-12 13:00  cgilles
+
+    * libs/threadimageio/thumbnailcreator.cpp: adjust PGF quality from
+      3 to 4. better compression ratio with very good image quality for
+      thumbs.
+
+2009-06-12 11:26  aclemens
+
+    * imageplugins/perspective/perspectivetool.cpp,
+      imageplugins/perspective/perspectivetool.h: Use ColorGuide from
+      the editor tool like all the other imageplugins
+
+2009-06-12 11:26  aclemens
+
+    * utilities/imageeditor/editor/editortoolsettings.cpp: Add unit to
+      guide input widget
+
+2009-06-12 10:58  cgilles
+
+    * libs/database/thumbnaildb.h,
+      libs/threadimageio/thumbnailcreator.cpp: add support of JPEG and
+      JPEG2000 image format for storing thumbs in database. Only for
+      testing at this moment.
+
+2009-06-12 10:55  aclemens
+
+    * project/unitsForInputWidgets.ods: update
+
+2009-06-12 09:19  cgilles
+
+    * libs/threadimageio/thumbnailcreator.cpp: polish
+
+2009-06-12 08:59  cgilles
+
+    * utilities/batch/batchalbumssyncmetadata.cpp,
+      utilities/batch/batchalbumssyncmetadata.h,
+      utilities/batch/batchsyncmetadata.cpp,
+      utilities/batch/batchsyncmetadata.h,
+      utilities/batch/batchthumbsgenerator.cpp,
+      utilities/batch/fingerprintsgenerator.cpp: shwo a passive popup
+      when batch tools are complete (thumbnails, sync metadata,
+      fingerprints)
+
+2009-06-12 08:41  aclemens
+
+    * project/unitsForInputWidgets.ods: unitsForInputWidgets: need to
+      add more rows first, not done yet
+
+2009-06-12 08:41  aclemens
+
+    * CONTEXTMENU-PORT, porting2ModelView.ods,
+      project/CONTEXTMENU-PORT, project/porting2ModelView.ods: Move to
+      project folder
+
+2009-06-12 08:03  aclemens
+
+    * imageplugins/sheartool/sheartool.cpp: It doesn't make sense to
+      have a range of -5.0 to 5.0 degrees for the
+      fine angles.
+
+2009-06-12 04:08  cgilles
+
+    * NEWS: update
+
+2009-06-11 20:10  mwiesweg
+
+    * libs/threadimageio/thumbnailloadthread.cpp: Uninitialized
+      variable - caused crash
+
+2009-06-11 19:29  aclemens
+
+    * utilities/fuzzysearch/findduplicatesview.cpp,
+      utilities/fuzzysearch/findduplicatesview.h: Now that the fast
+      duplicates search is gone, it is invalid to have no
+      albums selected.
+      Check for the correct settings and disable the scan button if
+      needed.
+
+2009-06-11 19:29  aclemens
+
+    * kioslave/digikamsearch.cpp, libs/database/haar/haariface.cpp,
+      libs/database/haar/haariface.h,
+      utilities/fuzzysearch/findduplicatesview.cpp: Remove fast search
+      and the find duplicates dialog again.
+      This is not needed anymore since find duplicates is able to
+      search in
+      album ranges.
+
+2009-06-11 19:18  aclemens
+
+    * utilities/scripts/cleanup_digikamdb: Oh it is so much easier than
+      I thought :-) Always learning new stuff.
+      Use kreadconfig app to parse digikam config file
+
+2009-06-11 18:57  aclemens
+
+    * utilities/scripts/cleanup_digikamdb: blabla :D shorten message
+      here
+
+2009-06-11 18:23  cgilles
+
+    * NEWS: update
+
+2009-06-11 17:36  mwiesweg
+
+    * digikam/albummanager.cpp: Adding the lines that switch on using a
+      thumbnail database - not enabled per default:
+
+      NOTE:
+      You need to remove the comment signs around albummanager.cpp,
+      lines 685-687, to test the thumbnail database.
+
+      For simplicity, it is always created in the directory of the main
+      database and named "thumbnails-digikam.db".
+      It is using the PGF format to store thumbnails. I am aware there
+      are suggestions to use JPEG or Djvu.
+
+      Only real world testing can show if this database is a good thing
+      or not.
+
+      CCMAIL: digikam-devel@kde.org
+
+2009-06-11 17:36  mwiesweg
+
+    * libs/threadimageio/thumbnailloadthread.cpp,
+      libs/threadimageio/thumbnailloadthread.h: Add a global static
+      method initializeThumbnailDatabase to switch on using a thumbnail
+      database.
+      This needs to be called at application startup, before thumbnail
+      threads are created
+      - we cannot switch a running thread currently.
+
+2009-06-11 17:36  mwiesweg
+
+    * libs/threadimageio/thumbnailcreator.cpp,
+      libs/threadimageio/thumbnailcreator.h: Some API changes and
+      adjustments
+
+2009-06-11 17:36  mwiesweg
+
+    * libs/database/databasethumbnailinfoprovider.h,
+      libs/database/thumbnaildatabaseaccess.cpp,
+      libs/database/thumbnailschemaupdater.cpp: Some bugfixes
+
+2009-06-11 17:36  mwiesweg
+
+    * libs/database/databasebackend.cpp,
+      libs/database/databasecorebackend.cpp,
+      libs/database/databasecorebackend.h,
+      libs/database/databasecorebackend_p.h: We need unique connection;
+      each DatabaseBackend (we may have two) needs its own backend
+      name.
+      Combined with the thread PID can a unique name per thread and
+      object be created.
+
+2009-06-11 17:36  mwiesweg
+
+    * libs/database/collectionmanager.cpp: Disable debug statements
+
+2009-06-11 17:36  mwiesweg
+
+    * digikam/albummanager.cpp: Use a blacklist to check for database
+      and journal files reported by KDirWatch since recently
+
+2009-06-11 17:35  mwiesweg
+
+    * utilities/searchwindow/searchfields.cpp: Fix signal connection
+
+2009-06-11 17:34  cgilles
+
+    * NEWS: update
+
+2009-06-11 17:18  cgilles
+
+    * NEWS: update
+
+2009-06-11 17:01  cgilles
+
+    * NEWS: update
+
+2009-06-11 16:53  cgilles
+
+    * libs/dmetadata/dmetadata.cpp: polish
+
+2009-06-11 15:46  aclemens
+
+    * digikam/albumfolderview.cpp, digikam/albumfolderview.h,
+      digikam/digikamview.cpp, digikam/digikamview.h,
+      utilities/fuzzysearch/findduplicatesview.cpp,
+      utilities/fuzzysearch/findduplicatesview.h,
+      utilities/fuzzysearch/fuzzysearchview.cpp,
+      utilities/fuzzysearch/fuzzysearchview.h: Add "find duplicates"
+      context menu action to the folderview.
+      This way you can easily set the find duplicates search from
+      within the
+      folder view.
+      The currently highlighted album and all its children will be
+      selected.
+      This works for collection roots, too.
+
+2009-06-11 14:36  aclemens
+
+    * utilities/fuzzysearch/fuzzysearchview.cpp: Use suffix here to fit
+      find duplicates view
+
+2009-06-11 14:36  aclemens
+
+    * utilities/fuzzysearch/findduplicatesview.cpp: Add a threshold
+      spinbox to the find duplicates search.
+      The default threshold value is not enough sometimes, 87% might be
+      too
+      high in some cases and duplicate (or very similar) images are not
+      found.
+      With the spinbox, you can query with different thresholds.
+
+      Now that we can limit the search to specific folders, users might
+      run
+      the find duplicates search more often then before, because it is
+      way
+      faster now.
+      To test different values, it is important to have customization
+      here.
+
+      The value will not be saved in the config (for now), because I
+      don't
+      think it is necessary. But if we want to save it, it is easy to
+      change
+      :-)
+
+      Andi
+
+2009-06-11 12:56  aclemens
+
+    * utilities/fuzzysearch/findduplicatesview.cpp,
+      utilities/fuzzysearch/findduplicatesview.h: polish API
+
+2009-06-11 12:37  cgilles
+
+    * NEWS: update
+
+2009-06-11 12:32  cgilles
+
+    * digikam/metadatahub.cpp: polish
+
+2009-06-11 11:48  cgilles
+
+    * utilities/cameragui/cameracontroller.cpp: factorize
+
+2009-06-11 11:32  cgilles
+
+    * NEWS: update
+
+2009-06-11 11:22  cgilles
+
+    * utilities/cameragui/cameracontroller.cpp,
+      utilities/cameragui/cameracontroller.h,
+      utilities/cameragui/cameraiconview.cpp,
+      utilities/cameragui/cameraui.cpp, utilities/cameragui/cameraui.h,
+      utilities/cameragui/cameraui.rc,
+      utilities/cameragui/cameraui_p.h: apply patch from Simone
+      Lazzaris to change sort of camera icon view item : in
+      chronological order or not.
+      Factorize code.
+      Bug fix : there is a race condition between camera gui and camera
+      controler when thumbnails are processed:
+      camera controller switch randomly between busy state or not when
+      camera gui fill the list of item thumbs to get one by one.
+      A new method fill all thumbs to get in a first time : camera
+      controler will be still busy during this task.
+      BUGS: 193124
+      BUGS: 188051
+
+2009-06-11 10:10  mwiesweg
+
+    * libs/models/abstractalbummodel.cpp: Fix crash: after
+      signalAlbumsCleared, root album is deleted as well and pointer is
+      stale.
+
+2009-06-11 09:23  aclemens
+
+    * utilities/fuzzysearch/findduplicatesview.cpp: Move
+      setDefaultAlbumModels(), model creation and connection to a
+      dedicated slot, this should fix a crash when album database path
+      is
+      changed while digikam is running.
+
+2009-06-10 23:20  aclemens
+
+    * NEWS: update
+
+2009-06-10 21:24  aclemens
+
+    * kioslave/digikamsearch.cpp,
+      utilities/fuzzysearch/findduplicatesview.cpp: Rename find
+      duplicates mode: "Accurate" => "Normal"
+
+2009-06-10 21:11  aclemens
+
+    * kioslave/digikamsearch.cpp: Fix fast duplicates search.
+      We are now able to select an album range for the find duplicates
+      search,
+      this also means we can have no album selected. Normally the find
+      duplicates search will fail if no album ids are present,
+      but the fast scan doesn't need any album information.
+      It always scans the whole database and finds duplicates with a
+      SQL query.
+      If fast scan is activated and the albumid list is empty, don't
+      quit the
+      search.
+
+2009-06-10 21:11  aclemens
+
+    * utilities/fuzzysearch/findduplicatesview.cpp: Now that we include
+      albums, change the description a little bit.
+      Fix wrong whatsThis messages.
+
+2009-06-10 20:23  aclemens
+
+    * NEWS: update
+
+2009-06-10 20:19  aclemens
+
+    * libs/database/haar/haariface.cpp: polish
+
+2009-06-10 20:16  aclemens
+
+    * libs/database/haar/haariface.cpp: polish API
+
+2009-06-10 19:34  aclemens
+
+    * utilities/fuzzysearch/findduplicatesview.cpp: fix i18n
+
+2009-06-10 19:32  aclemens
+
+    * utilities/fuzzysearch/findduplicatesview.cpp: Change logic: do
+      not exclude, but INCLUDE albums to the find duplicates
+      search.
+
+2009-06-10 19:24  nlecureuil
+
+    * imageplugins/contentawareresizing/contentawareresizetool.cpp,
+      imageplugins/coreplugin/resizetool.cpp,
+      imageplugins/freerotation/freerotationtool.cpp,
+      imageplugins/hotpixels/blackframelistview.cpp,
+      imageplugins/lenscorrection/vignetting/antivignettingtool.cpp,
+      imageplugins/sheartool/sheartool.cpp: Qt3Support--
+
+2009-06-10 19:10  aclemens
+
+    * utilities/fuzzysearch/findduplicatesview.cpp,
+      utilities/fuzzysearch/findduplicatesview.h: It seems to take some
+      time until the model for the AlbumSelectComboBox
+      is loaded, therefore we don't see the noSelectionText.
+      Adding a slot that is called after all albums are loaded fixes
+      the
+      problem.
+
+2009-06-10 18:18  aclemens
+
+    * libs/database/haar/haariface.cpp: Move signatureQueries into
+      private class.
+      enableCachedSignatures() will now create the signatureMap
+      already, and
+      This can greatly increase speed, especially if you have more then
+      one
+      collection, you can exclude them from the search.
+      reduce it again if we exclude albums from the find duplicates
+      search.
+
+2009-06-10 17:44  nlecureuil
+
+    * imageplugins/border/bordertool.cpp,
+      imageplugins/coreplugin/autocorrectiontool.cpp: Qt3support--
+
+2009-06-10 16:12  aclemens
+
+    * libs/database/haar/haariface.cpp: I guess this is some old
+      leftover code, no need to have two 'total'
+      variables here.
+
+2009-06-10 16:12  aclemens
+
+    * libs/database/haar/haariface.cpp: Oops, this doesn't work. Seems
+      like defining a new name in a SQL query
+      makes the original name invalid.
+
+2009-06-10 16:04  aclemens
+
+    * libs/database/haar/haariface.cpp: polish queries
+
+2009-06-10 14:53  aclemens
+
+    * utilities/fuzzysearch/findduplicatesview.cpp: No need to save and
+      update the checked albums in a separate QList. This information
+      is only needed once and can be retrieved with
+      model->checkedAlbums()
+
+2009-06-10 14:53  aclemens
+
+    * utilities/fuzzysearch/findduplicatesview.cpp: Make excludeLabel
+      globally avaible, to use it in enableControlWidgets()
+      as well.
+      polish
+
+2009-06-10 14:53  aclemens
+
+    * utilities/fuzzysearch/findduplicatesview.cpp: Disable
+      albumSelectCB when search has been started
+      Simplify enableControlWidgets() method
+
+2009-06-10 14:24  aclemens
+
+    * utilities/fuzzysearch/findduplicatesview.cpp: Add more
+      descriptions
+
+2009-06-10 14:24  aclemens
+
+    * utilities/fuzzysearch/findduplicatesview.cpp: polish
+
+2009-06-10 14:23  aclemens
+
+    * utilities/fuzzysearch/findduplicatesview.cpp: Set noSelectionText
+      (but still not visible)?
+      Marcel,
+      do I need to update something first?
+
+2009-06-10 14:07  nlecureuil
+
+    * utilities/cameragui/gpconfigdlg.cpp: Remove unused header
+
+2009-06-10 13:49  aclemens
+
+    * utilities/fuzzysearch/findduplicatesview.cpp,
+      utilities/fuzzysearch/findduplicatesview.h: Integrate the
+      albumselect widget into the findduplicates search window.
+      It is fully functional, but the HaarIface needs to be changed as
+      well
+      now, to really have a speed improvement when excluding albums
+      from the
+      search.
+      The albumselect widget will automatically select its children, so
+      that
+      you can easily exclude a whole collection from the search.
+
+      This is all quite basic at the moment, maybe we can allow more
+      setup
+      controls later.
+
+2009-06-10 13:49  aclemens
+
+    * utilities/fuzzysearch/findduplicatesview.cpp,
+      utilities/fuzzysearch/findduplicatesview.h: Add model and its
+      connections
+
+2009-06-10 13:49  aclemens
+
+    * utilities/fuzzysearch/findduplicatesview.cpp: First basic
+      integration of the AlbumSelectComboBox in the Find
+      Duplicates view. This widget will be used to exclude albums from
+      the
+      duplicates search.
+      It doesn't do anything right now, there need to be changes made
+      to the
+      HaarIFace to make it work.
+
+2009-06-10 13:42  nlecureuil
+
+    * libs/database/databasecorebackend.cpp: Qt3support --
+
+2009-06-10 13:42  nlecureuil
+
+    * digikam/folderitem.cpp, digikam/folderitem.h: compile
+
+2009-06-10 13:22  nlecureuil
+
+    * libs/imageproperties/imagedescedittab.cpp: QColorGroup does not
+      exist anymore
+
+2009-06-10 13:20  aclemens
+
+    * digikam/albumselectcombobox.cpp,
+      libs/models/abstractalbummodel.h,
+      utilities/searchwindow/searchfields.cpp: setCheckState doesn't
+      seem to work when using an int here, so I change
+      the appropriate signals and slots to Qt::CheckState.
+
+2009-06-10 13:19  nlecureuil
+
+    * libs/models/imagesortsettings.cpp: Qt3Support--
+
+2009-06-10 13:18  cgilles
+
+    * imageplugins/superimpose/superimposetool.cpp: Qt4 header
+
+2009-06-10 13:15  cgilles
+
+    * libs/database/imageinfodata.h, libs/dimg/dshareddata.h: revert.
+      these file do not exist in Qt 4.5.0
+
+2009-06-10 13:15  nlecureuil
+
+    * utilities/imageeditor/canvas/canvas.cpp: qt3support--
+
+2009-06-10 13:09  cgilles
+
+    * libs/database/imageinfodata.h, libs/dimg/dshareddata.h: Qt4
+      header
+
+2009-06-10 13:04  cgilles
+
+    * imageplugins/coreplugin/ratiocrop/imageselectionwidget.h: polish
+
+2009-06-10 13:01  nlecureuil
+
+    * imageplugins/coreplugin/ratiocrop/imageselectionwidget.h: Use Qt4
+      headers
+
+2009-06-10 13:00  nlecureuil
+
+    * utilities/imageeditor/editor/editortooliface.h: Use Qt4 headers
+
+2009-06-10 12:59  nlecureuil
+
+    * libs/threadimageio/loadsavetask.cpp: Use Qt4 headers
+
+2009-06-10 12:59  nlecureuil
+
+    * utilities/cameragui/capturewidget.cpp: Use Qt4 headers
+
+2009-06-10 12:53  nlecureuil
+
+    * utilities/cameragui/capturewidget.cpp: Qt3Support--
+
+2009-06-10 12:53  nlecureuil
+
+    * utilities/lighttable/lighttablewindow.cpp: Qt3Support--
+
+2009-06-10 12:48  nlecureuil
+
+    * digikam/digikamapp.cpp: Qt3Support--
+
+2009-06-10 12:48  nlecureuil
+
+    * digikam/iconview.cpp: Qt3Support--
+
+2009-06-10 12:47  cgilles
+
+    * tests/CMakeLists.txt: compile
+
+2009-06-10 12:42  nlecureuil
+
+    * themedesigner/mainwindow.cpp: qt3support--
+
+2009-06-10 12:20  nlecureuil
+
+    * libs/widgets/common/searchtextbar.cpp: QColorGroup does not exist
+      anymore
+
+2009-06-10 12:16  nlecureuil
+
+    * libs/themeengine/themeengine.cpp: Add missing include
+
+2009-06-10 12:04  aclemens
+
+    * tests/CMakeLists.txt: polish
+
+2009-06-10 11:38  nlecureuil
+
+    * libs/themeengine/themeengine.cpp: Qt3support--
+
+2009-06-10 11:04  aclemens
+
+    * tests/CMakeLists.txt: compile
+
+2009-06-10 10:02  cgilles
+
+    * digikam/CMakeLists.txt: compile
+
+2009-06-10 10:01  cgilles
+
+    * libs/3rdparty/cimg/CImg.h, libs/3rdparty/cimg/LICENSE.txt,
+      libs/3rdparty/cimg/greycstoration.h, libs/CMakeLists.txt,
+      libs/greycstoration/CImg.h, libs/greycstoration/LICENSE.txt,
+      libs/greycstoration/greycstoration.h,
+      libs/whitebalance/CMakeLists.txt: compile
+
+2009-06-10 09:56  cgilles
+
+    * libs/3rdparty/cimg: cimg to 3rdparty
+
+2009-06-10 09:54  cgilles
+
+    * libs/threadimageio/test: rm
+
+2009-06-10 09:53  cgilles
+
+    * libs/threadimageio/test/CMakeLists.txt,
+      libs/threadimageio/test/pgfscaled.cpp,
+      libs/threadimageio/test/qtpgftest.cpp,
+      libs/threadimageio/test/test.png, tests/CMakeLists.txt,
+      tests/pgfscaled.cpp, tests/qtpgftest.cpp, tests/test.png: move
+      pgf test program to tests dir
+
+2009-06-10 09:28  aclemens
+
+    * imageplugins/freerotation/freerotationtool.cpp: The fine angle
+      settings don't make sense, why use a range of -5.0 to 5.0
+      degrees?
+      New range: -1.0 to 1.0
+
+2009-06-10 08:04  aclemens
+
+    * imageplugins/freerotation/freerotationtool.cpp: shorten the
+      description a little bit
+
+2009-06-10 07:58  aclemens
+
+    * tests/freerotationtest.h, tests/manualrenameinputtest.h: make
+      kraz2 happy again: fix include guards
+
+2009-06-10 07:55  aclemens
+
+    * tests/freerotationtest.cpp: polish
+
+2009-06-10 07:53  aclemens
+
+    * tests/freerotationtest.cpp: Test for point layout. Switched
+      points should not deliver different
+      angles.
+
+2009-06-09 21:06  aclemens
+
+    * libs/widgets/common/manualrenameinput.cpp: An string with the
+      length==1 is never empty, and the regexp guarantees
+      that no invalid string can be present, so one check is actually
+      enough
+      here.
+
+2009-06-09 20:58  cgilles
+
+    * NEWS: update
+
+2009-06-09 20:51  mwiesweg
+
+    * libs/threadimageio/thumbnailcreator.cpp: Unfinished code came
+      into use accidentally - missing "break" in switch
+
+      BUG: 195812
+
+2009-06-09 20:51  mwiesweg
+
+    * libs/database/thumbnaildb.h,
+      libs/threadimageio/thumbnailcreator.cpp: Rename enum values
+
+2009-06-09 20:27  aclemens
+
+    * tests/freerotationtest.cpp, tests/freerotationtest.h: Add some
+      more tests and a helper function, to round the angle value
+
+2009-06-09 20:03  aclemens
+
+    * imageplugins/freerotation/freerotation.cpp,
+      tests/freerotationtest.cpp: check for invalid points in
+      calculateAngle(). Normally this should have
+      been handled by the calling instance, but better check twice.
+
+2009-06-09 19:57  aclemens
+
+    * tests/CMakeLists.txt, tests/freerotationtest.cpp,
+      tests/freerotationtest.h, tests/freerotationtooltest.cpp,
+      tests/freerotationtooltest.h: rename the freerotation tests
+
+2009-06-09 19:48  aclemens
+
+    * imageplugins/freerotation/freerotation.cpp,
+      imageplugins/freerotation/freerotation.h,
+      imageplugins/freerotation/freerotationtool.cpp,
+      imageplugins/freerotation/freerotationtool.h,
+      tests/freerotationtooltest.cpp: move calculateAngle() method to
+      FreeRotation class
+
+2009-06-09 19:41  aclemens
+
+    * imageplugins/freerotation/freerotationtool.cpp,
+      imageplugins/freerotation/freerotationtool.h,
+      tests/CMakeLists.txt, tests/freerotationtooltest.cpp,
+      tests/freerotationtooltest.h: Add test cases for freerotationtool
+      Make calculateAngle a static method, for easier testing
+      Fix logic error in calculateAngle() method
+
+2009-06-09 17:40  cgilles
+
+    * NEWS: update
+
+2009-06-09 17:19  aclemens
+
+    * libs/widgets/common/manualrenameinput.cpp,
+      tests/manualrenameinputtest.cpp: camera token should not be case
+      sensitive
+
+2009-06-09 17:02  aclemens
+
+    * libs/widgets/common/manualrenameinput.cpp,
+      tests/manualrenameinputtest.cpp: Check for invalid cam token
+      options, if not valid, return the normal
+      camera name
+
+2009-06-09 16:33  aclemens
+
+    * libs/widgets/common/manualrenameinput.cpp,
+      libs/widgets/common/manualrenameinput.h,
+      tests/manualrenameinputtest.cpp: Factorize firstLetterUppercase()
+      method
+      Add new test cases
+
+2009-06-09 16:29  cgilles
+
+    * project/release/lib/libreleasedigikamkipi.rb: remove tests dir
+      from tarball
+
+2009-06-09 15:43  aclemens
+
+    * libs/widgets/common/manualrenameinput.cpp: Don't call
+      QFileInfo::baseFileName() all the time, save the result to a
+      QString
+
+2009-06-09 15:33  aclemens
+
+    * libs/widgets/common/manualrenameinput.cpp,
+      libs/widgets/common/manualrenameinput.h: Factorize string check
+      method. This has to be static,
+      since the parse method is static, too.
+
+2009-06-09 15:33  aclemens
+
+    * libs/widgets/common/manualrenameinput.cpp,
+      tests/manualrenameinputtest.cpp: check for empty / invalid camera
+      name
+
+2009-06-09 15:33  aclemens
+
+    * libs/widgets/common/manualrenameinput.cpp,
+      tests/manualrenameinputtest.cpp: New parser option: $, % and &
+      can be used for the camera name now, too.
+      In the future these tokens will also applied to metadata
+      information.
+      Add new test cases.
+
+2009-06-09 14:50  scripty
+
+    * digikam/digikam.desktop,
+      imageplugins/contentawareresizing/digikamimageplugin_contentawareresizing.desktop,
+      showfoto/showfoto.desktop: SVN_SILENT made messages (.desktop
+      file)
+
+2009-06-09 14:03  cgilles
+
+    * libs/threadimageio/test/test.png: why this file size is 25M
+
+2009-06-09 13:55  aclemens
+
+    * data/CMakeLists.txt, data/icons/CMakeLists.txt,
+      data/themes/CMakeLists.txt, utilities/hotplug/CMakeLists.txt:
+      uppercase notation
+
+2009-06-09 13:47  aclemens
+
+    * libs/CMakeLists.txt, tests/CMakeLists.txt: uppercase notation
+
+2009-06-09 13:34  aclemens
+
+    * libs/widgets/common/manualrenameinput.cpp: polish
+
+2009-06-09 13:33  aclemens
+
+    * libs/widgets/common/manualrenameinput.cpp,
+      tests/manualrenameinputtest.cpp: Fix invalid parse string check
+      Add new test case
+
+2009-06-09 13:33  aclemens
+
+    * tests/manualrenameinputtest.cpp, tests/manualrenameinputtest.h:
+      add test for empty / invalid parse string
+
+2009-06-09 13:31  cgilles
+
+    * utilities/imageeditor/editor/editorwindow.cpp: use uppercase
+      version of KDE type to check if file format is really writtable
+
+2009-06-09 13:12  aclemens
+
+    * tests/manualrenameinputtest.cpp, tests/manualrenameinputtest.h:
+      polish
+
+2009-06-09 13:07  aclemens
+
+    * tests/manualrenameinputtest.cpp: polish
+
+2009-06-09 13:07  aclemens
+
+    * tests/manualrenameinputtest.cpp, tests/manualrenameinputtest.h:
+      some more tests
+
+2009-06-09 12:53  cgilles
+
+    * NEWS: update
+
+2009-06-09 12:31  aclemens
+
+    * tests/manualrenameinputtest.cpp, tests/manualrenameinputtest.h:
+      add some more tests
+
+2009-06-09 12:10  aclemens
+
+    * libs/widgets/common/manualrenameinput.cpp,
+      tests/manualrenameinputtest.cpp, tests/manualrenameinputtest.h:
+      Add new test: testEachLetterUppercaseToken()
+      Fix parser (again: good to have tests here ;-))
+
+2009-06-09 11:40  aclemens
+
+    * libs/widgets/common/manualrenameinput.cpp,
+      tests/manualrenameinputtest.cpp: fix number parsing
+
+2009-06-09 11:34  aclemens
+
+    * tests/manualrenameinputtest.cpp: Added some more test data and
+      found a bug in ManualRenameInput widget.
+      Good to have tests ;-)
+
+      Will need to fix the widget to make the tests pass...
+
+2009-06-09 11:27  cgilles
+
+    * libs/3rdparty/libpgf/PGFimage.cpp,
+      libs/3rdparty/libpgf/PGFimage.h, libs/3rdparty/libpgf/PGFtypes.h:
+      revert temporally this commit. It make libpgf uncompatible with
+      file generated with PGF command line tool.
+      I'm still waiting PGF team feedback
+
+2009-06-09 11:26  aclemens
+
+    * tests/manualrenameinputtest.cpp: polish
+
+2009-06-09 11:26  aclemens
+
+    * tests/CMakeLists.txt, tests/manualrenameinputtest.cpp,
+      tests/manualrenameinputtest.h: Add first functional test:
+      testNumberToken()
+
+2009-06-09 10:32  cgilles
+
+    * libs/3rdparty/libpgf/PGFplatform.h: "-byteswap_uint64" is a pure
+      M$ function. wrap this call for M$ only
+
+      CCBUGS: 195735
+
+2009-06-09 10:05  cgilles
+
+    * CMakeLists.txt: beta2
+
+2009-06-09 10:04  cgilles
+
+    * NEWS: update
+
+2009-06-09 09:49  aclemens
+
+    * tests/manualrenameinputtest.cpp: fix macro, it was the wrong one
+      (I guess?)
+
+2009-06-09 09:46  aclemens
+
+    * CMakeLists.txt, tests, tests/CMakeLists.txt,
+      tests/manualrenameinputtest.cpp, tests/manualrenameinputtest.h:
+      Add initial tests for ManualRenameInput widget. Right now they do
+      nothing, tests need to be written.
+
+2009-06-09 08:42  aclemens
+
+    * libs/widgets/common/manualrenameinput.cpp,
+      libs/widgets/common/manualrenameinput.h: fix copyright header
+
+2009-06-09 08:38  cgilles
+
+    * utilities/setup/setupiofiles.cpp: add PGF settings panel
+
+2009-06-09 08:30  cgilles
+
+    * libs/dimg/loaders/README: update
+
+2009-06-09 08:29  cgilles
+
+    * libs/dimg/loaders/pgfloader.cpp: use preview JPEG image
+      previuously scaled in IPTC.preview to host PGF metadata.
+
+2009-06-09 08:21  cgilles
+
+    * libs/3rdparty/libpgf/PGFtypes.h: missing to change structure
+      member which discribe user data lenght : UINT16 => UINT32
+
+2009-06-09 08:05  cgilles
+
+    * libs/3rdparty/libpgf/PGFimage.cpp,
+      libs/3rdparty/libpgf/PGFimage.h: libpgf bug : SetHeader accept
+      only unsigned short user data size where GetUserData can read
+      unsigned int ! This is not homogenous and limit user data to
+      65536 bytes.
+      There is no reasons for that...
+
+2009-06-09 07:12  cgilles
+
+    * utilities/imageeditor/editor/editorwindow.cpp: wrong settings
+
+2009-06-09 06:56  cgilles
+
+    * utilities/imageeditor/canvas/iofilesettingscontainer.h: compile
+
+2009-06-09 06:52  cgilles
+
+    * libs/widgets/common/filesaveoptionsbox.cpp: missing J2K ext
+
+2009-06-09 06:51  cgilles
+
+    * utilities/imageeditor/canvas/dimginterface.cpp,
+      utilities/imageeditor/editor/editorwindow.cpp: missing PGF rules
+      there
+
+2009-06-08 21:00  aclemens
+
+    * libs/database/databasebackend.h: fix warning
+
+2009-06-08 19:35  mwiesweg
+
+    * CMakeLists.txt, libs/database/databasethumbnailinfoprovider.cpp,
+      libs/database/databasethumbnailinfoprovider.h,
+      libs/database/thumbnaildb.h: Add the class that glues information
+      for the main digikam database and provides
+      it for lookup in the thumbnail database.
+      Initial revision, needs testing.
+
+2009-06-08 19:35  mwiesweg
+
+    * libs/database/imageinfo.cpp, libs/database/imageinfo.h: Allow to
+      retrieve the album root id of the ImageInfo
+
+2009-06-08 19:35  mwiesweg
+
+    * libs/threadimageio/thumbnailcreator.cpp,
+      libs/threadimageio/thumbnailcreator.h: Add code to set the
+      ThumbnailInfoProvider
+
+2009-06-08 18:37  mwiesweg
+
+    * libs/threadimageio/thumbnailcreator.cpp,
+      libs/threadimageio/thumbnailcreator_p.h: Add logic for storing
+      and loading thumbnails from database.
+      Initial revision, needs testing.
+
+2009-06-08 18:36  mwiesweg
+
+    * libs/database/thumbnaildatabaseaccess.cpp,
+      libs/database/thumbnaildatabaseaccess.h,
+      libs/database/thumbnaildb.cpp, libs/database/thumbnaildb.h,
+      libs/database/thumbnailschemaupdater.cpp: Use DatabaseCoreBackend
+      everywhere here.
+      Use INNER JOIN instead of JOIN as recommended by Andi.
+      Add methods to remove thumbnail data.
+
+2009-06-08 18:36  mwiesweg
+
+    * CMakeLists.txt, digikam/CMakeLists.txt,
+      libs/database/databasebackend.cpp,
+      libs/database/databasebackend.h,
+      libs/database/databasebackend_p.h,
+      libs/database/databasecorebackend.cpp,
+      libs/database/databasecorebackend.h,
+      libs/database/databasecorebackend_p.h,
+      libs/database/databaseparameters.h: To use a database for
+      thumnail loading, core database code need to be available in
+      libdigikamcore.
+      Split DatabaseBackend to a generic DatabaseCoreBackend (wrapper
+      code to Qt SQL) and leave
+      schema-specific code in DatabaseBackend. DatabaseCoreBackend and
+      DatabaseParameters move to libdigikamcore,
+      as do the thumbnail-db classes.
+
+2009-06-08 17:18  cgilles
+
+    * libs/threadimageio/thumbnailcreator.h: now link is fine under
+      MSVC9
+
+2009-06-08 15:46  cgilles
+
+    * utilities/imageeditor/editor/editorwindow.cpp: and where is PNG
+      here
+
+2009-06-08 15:46  cgilles
+
+    * libs/widgets/common/filesaveoptionsbox.cpp: missing file format
+      there
+
+2009-06-08 14:35  aclemens
+
+    * libs/database/haar/haariface.cpp: Use cached signatures in
+      bestMatchesForImage() as well if possible,
+      maybe this will improve the speed of Find Duplicates a little
+      bit.
+
+2009-06-08 13:36  cgilles
+
+    * libs/dimg/loaders/pgfloader.cpp: polish
+
+2009-06-08 13:31  cgilles
+
+    * libs/dimg/loaders/pgfloader.cpp: load and save Exif/iptc/xmp
+      metadata to PGF file.
+      We use PGF header where a byte array can be encapsuled.
+      In this byte array, we store a JPEG thumb with all metadata.
+      This is not optimal because a tmp file is used. Exiv2 cannot
+      write image data to a memory buffer.
+      When PGF will be supported in Exiv2, it will be more simple...
+
+2009-06-08 12:49  aclemens
+
+    * digikam/albumlister.cpp, digikam/imageattributeswatch.cpp,
+      digikam/scancontroller.cpp, libs/database/albumdb.cpp,
+      libs/database/imageinfocache.cpp, libs/database/imagelister.cpp,
+      libs/models/imagealbummodel.cpp,
+      libs/models/imagefiltermodel.cpp, libs/models/imagemodel.cpp,
+      utilities/lighttable/lighttablebar.cpp,
+      utilities/queuemanager/queuelist.cpp: const ref in foreach loops
+
+2009-06-08 12:35  aclemens
+
+    * libs/database/haar/haariface.cpp: polish
+
+2009-06-08 10:51  aclemens
+
+    * imageplugins/adjustcurves/adjustcurvestool.cpp: call update() on
+      curvesWidget manually after settings are read,
+      otherwise the curve is not displayed correctly. It will be only
+      updated,
+      when you hover over with the mouse, so calling update() seems to
+      be
+      necessary.
+
+2009-06-08 10:51  aclemens
+
+    * imageplugins/blurfx/blurfx.cpp, imageplugins/border/border.cpp,
+      imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp,
+      imageplugins/texture/texture.cpp: polish
+
+2009-06-08 10:51  aclemens
+
+    * imageplugins/adjustlevels/adjustlevelstool.cpp: Some small
+      optimizations: even though we only use standard types here,
+      it is always good to move variable creation or calculations out
+      of
+      loops. In some situations, this can really improve speed (ok in
+      this
+      commit it will not matter that much).
+
+      I will go through the digiKam code and fix such issues now and
+      then...
+
+2009-06-08 10:51  aclemens
+
+    * imageplugins/adjustcurves/adjustcurvestool.cpp: No need to create
+      the QPoint over and over again. This will only waste
+      computation time.
+
+2009-06-08 10:00  cgilles
+
+    * libs/dimg/dimg.h: polish
+
+2009-06-08 04:30  cgilles
+
+    * ChangeLog: prepare 1.0.0-beta1
+
+2009-06-07 21:32  aclemens
+
+    * libs/threadimageio/thumbnailloadthread.cpp: const ref in foreach
+      loop
+
+2009-06-07 21:16  aclemens
+
+    * digikam/albummanager.cpp, digikam/digikamimageview.cpp,
+      libs/threadimageio/thumbnailloadthread.cpp: Use const refs in
+      foreach loops if possible, to avoid copying of data
+
+      I marked one line with a FIXME, not sure if we can use a const
+      ref here,
+      too.
+      What do you think?
+
+      CCMAIL:digikam-devel@kde.org
+
+2009-06-07 21:15  aclemens
+
+    * libs/database/haar/haariface.cpp: small optimizations: if
+      possible, don't generate variables inside of
+      loops to save instruction calls
+
+2009-06-07 21:02  cgilles
+
+    * NEWS: update
+
+2009-06-07 20:58  cgilles
+
+    * libs/dimg/CMakeLists.txt, libs/dimg/loaders/CMakeLists.txt,
+      libs/dimg/loaders/pgf.desktop: no need this desktop file now
+
+2009-06-07 19:49  cgilles
+
+    * libs/dimg/dimg.h: polish
+
+2009-06-07 19:48  cgilles
+
+    * NEWS: update
+
+2009-06-07 19:44  cgilles
+
+    * libs/dimg/dimg.h: ad comments
+
+2009-06-07 19:41  cgilles
+
+    * libs/dimg/dimg.h, libs/widgets/common/filesaveoptionsbox.cpp,
+      libs/widgets/common/filesaveoptionsbox.h,
+      utilities/imageeditor/editor/editorwindow.cpp: Register PGF as
+      new writable file format.
+
+2009-06-07 18:52  cgilles
+
+    * libs/dialogs/imagedialog.cpp: add PGF as file to load in showfoto
+
+2009-06-07 17:35  aclemens
+
+    * libs/dialogs/infodlg.cpp, libs/dialogs/rawcameradlg.cpp: Set the
+      'OK' button to be the focused one, otherwise 'Help' will be
+      highlighted,
+      which is not what we want to be the default action.
+
+2009-06-07 17:12  cgilles
+
+    * libs/threadimageio/thumbnailcreator.h: need default destructor
+      here
+
+2009-06-07 17:07  cgilles
+
+    * libs/threadimageio/thumbnailcreator.h: sound like MSCV9 need
+      default contructor to link
+
+2009-06-07 17:06  cgilles
+
+    * NEWS: update
+
 1.0.0-beta1 2009-06-07
 --------------------------------------------------------------------------------
 
