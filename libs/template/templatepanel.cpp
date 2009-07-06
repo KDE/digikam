@@ -33,6 +33,7 @@
 
 #include <klocale.h>
 #include <kdialog.h>
+#include <kicon.h>
 #include <klineedit.h>
 
 // Local includes
@@ -238,7 +239,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     grid1->addWidget(label7,                 6, 0, 1, 1);
     grid1->addWidget(d->instructionsEdit,    6, 1, 1, 2);
 
-    insertTab(TemplatePanelPriv::RIGHTS, page1, i18n("Rights"));
+    insertTab(TemplatePanelPriv::RIGHTS, page1, KIcon("flag-red"), i18n("Rights"));
 
     // -- Location Template informations panel -------------------------------------------------------------
 
@@ -311,7 +312,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     grid2->addWidget(label12,                      4, 0, 1, 1);
     grid2->addWidget(d->locationEdit,              4, 1, 1, 2);
 
-    insertTab(TemplatePanelPriv::LOCATION, page2, i18n("Location"));
+    insertTab(TemplatePanelPriv::LOCATION, page2, KIcon("applications-internet"), i18n("Location"));
 
     // -- Contact Template informations panel -------------------------------------------------------------
 
@@ -420,7 +421,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     grid3->addWidget(label20,                     7, 0, 1, 1);
     grid3->addWidget(d->contactWebUrlEdit,        7, 1, 1, 2);
 
-    insertTab(TemplatePanelPriv::CONTACT, page3, i18n("Contact"));
+    insertTab(TemplatePanelPriv::CONTACT, page3, KIcon("view-pim-contacts"), i18n("Contact"));
 }
 
 TemplatePanel::~TemplatePanel()
