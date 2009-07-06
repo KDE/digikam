@@ -74,6 +74,22 @@ public:
         labelLocationProvinceState = 0;
         labelLocationCity          = 0;
         labelLocationLocation      = 0;
+        contactCity                = 0;
+        contactCountry             = 0;
+        contactAddress             = 0;
+        contactPostalCode          = 0;
+        contactProvinceState       = 0;
+        contactEmail               = 0;
+        contactPhone               = 0;
+        contactWebUrl              = 0;
+        labelContactCity           = 0;
+        labelContactCountry        = 0;
+        labelContactAddress        = 0;
+        labelContactPostalCode     = 0;
+        labelContactProvinceState  = 0;
+        labelContactEmail          = 0;
+        labelContactPhone          = 0;
+        labelContactWebUrl         = 0;
     }
 
     // IPTC Rights info.
@@ -110,6 +126,23 @@ public:
 
     // IPTC Contact info.
 
+    DTextLabelName *contactCity;
+    DTextLabelName *contactCountry;
+    DTextLabelName *contactAddress;
+    DTextLabelName *contactPostalCode;
+    DTextLabelName *contactProvinceState;
+    DTextLabelName *contactEmail;
+    DTextLabelName *contactPhone;
+    DTextLabelName *contactWebUrl;
+
+    DTextBrowser   *labelContactCity;
+    DTextBrowser   *labelContactCountry;
+    DTextBrowser   *labelContactAddress;
+    DTextBrowser   *labelContactPostalCode;
+    DTextBrowser   *labelContactProvinceState;
+    DTextBrowser   *labelContactEmail;
+    DTextBrowser   *labelContactPhone;
+    DTextBrowser   *labelContactWebUrl;
 };
 
 TemplateViewer::TemplateViewer(QWidget* parent=0)
@@ -170,7 +203,32 @@ TemplateViewer::TemplateViewer(QWidget* parent=0)
 
     // ------------------------------------------------------------------
 
-    KVBox *w3            = new KVBox(this);
+    KVBox *w3                    = new KVBox(this);
+    d->contactCity               = new DTextLabelName(i18n("City:"), w3);
+    d->labelContactCity          = new DTextBrowser(QString(), w3);
+    d->contactCountry            = new DTextLabelName(i18n("Country:"), w3);
+    d->labelContactCountry       = new DTextBrowser(QString(), w3);
+    d->contactAddress            = new DTextLabelName(i18n("Address:"), w3);
+    d->labelContactAddress       = new DTextBrowser(QString(), w3);
+    d->contactPostalCode         = new DTextLabelName(i18n("Postal Code:"), w3);
+    d->labelContactPostalCode    = new DTextBrowser(QString(), w3);
+    d->contactProvinceState      = new DTextLabelName(i18n("Province State:"), w3);
+    d->labelContactProvinceState = new DTextBrowser(QString(), w3);
+    d->contactEmail              = new DTextLabelName(i18n("Email:"), w3);
+    d->labelContactEmail         = new DTextBrowser(QString(), w3);
+    d->contactPhone              = new DTextLabelName(i18n("Phone:"), w3);
+    d->labelContactPhone         = new DTextBrowser(QString(), w3);
+    d->contactWebUrl             = new DTextLabelName(i18n("Url:"), w3);
+    d->labelContactWebUrl        = new DTextBrowser(QString(), w3);
+
+    d->contactCity->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    d->contactCountry->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    d->contactAddress->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    d->contactPostalCode->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    d->contactProvinceState->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    d->contactEmail->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    d->contactPhone->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    d->contactWebUrl->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
     addItem(w3, SmallIcon("view-pim-contacts"),
             i18n("Contact"), QString("Contact"), true);
@@ -198,6 +256,15 @@ void TemplateViewer::setTemplate(const Template& t)
     d->labelLocationProvinceState->setText(t.locationInfo().provinceState);
     d->labelLocationCity->setText(t.locationInfo().city);
     d->labelLocationLocation->setText(t.locationInfo().location);
+
+    d->labelContactCity->setText(t.contactInfo().city);
+    d->labelContactCountry->setText(t.contactInfo().country);
+    d->labelContactAddress->setText(t.contactInfo().address);
+    d->labelContactPostalCode->setText(t.contactInfo().postalCode);
+    d->labelContactProvinceState->setText(t.contactInfo().provinceState);
+    d->labelContactEmail->setText(t.contactInfo().email);
+    d->labelContactPhone->setText(t.contactInfo().phone);
+    d->labelContactWebUrl->setText(t.contactInfo().webUrl);
 }
 
 }  // namespace Digikam
