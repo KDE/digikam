@@ -39,6 +39,8 @@ class DIGIKAM_DATABASE_EXPORT IptcCoreLocationInfo
 {
 public:
 
+    bool operator==(const IptcCoreLocationInfo& t) const;
+    bool isEmpty() const;
     bool isNull() const;
 
     QString country;
@@ -52,6 +54,8 @@ class DIGIKAM_DATABASE_EXPORT IptcCoreContactInfo
 {
 public:
 
+    bool operator==(const IptcCoreContactInfo& t) const;
+    bool isEmpty() const;
     bool isNull() const;
 
     QString city;
