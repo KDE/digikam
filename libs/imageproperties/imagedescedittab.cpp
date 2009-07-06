@@ -97,7 +97,7 @@ public:
     enum DescEditTab
     {
         DESCRIPTIONS=0,
-        RIGHTS
+        INFOS
     };
 
     ImageDescEditTabPriv()
@@ -286,7 +286,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     grid2->setMargin(KDialog::spacingHint());
     grid2->setSpacing(KDialog::spacingHint());
 
-    d->tabWidget->insertTab(ImageDescEditTabPriv::RIGHTS, sv2, i18n("Rights"));
+    d->tabWidget->insertTab(ImageDescEditTabPriv::INFOS, sv2, i18n("Informations"));
 
     // --------------------------------------------------
 
