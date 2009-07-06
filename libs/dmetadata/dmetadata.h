@@ -77,10 +77,10 @@ public:
     bool     removeMetadataTemplate() const;
 
     IptcCoreContactInfo getCreatorContactInfo() const;
-    bool setCreatorContactInfo(const IptcCoreContactInfo &info);
+    bool setCreatorContactInfo(const IptcCoreContactInfo &info) const;
 
     IptcCoreLocationInfo getIptcCoreLocation() const;
-    bool setIptcCoreLocation(const IptcCoreLocationInfo &location);
+    bool setIptcCoreLocation(const IptcCoreLocationInfo &location) const;
 
     /** Return a string with Lens mounted on the front of camera.
         There no standard Exif tag for Lens information.

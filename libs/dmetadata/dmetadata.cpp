@@ -600,6 +600,7 @@ bool DMetadata::setMetadataTemplate(const Template& t) const
     KExiv2::AltLangMap copyright  = t.copyright();
     KExiv2::AltLangMap rightUsage = t.rightUsageTerms();
     QString instructions          = t.instructions();
+
     kDebug(50003) << "Applying Metadata Template: " << t.templateTitle() << " :: " << authors;
 
     // Set XMP tags. XMP<->IPTC Schema from Photoshop 7.0
@@ -649,11 +650,16 @@ bool DMetadata::setMetadataTemplate(const Template& t) const
     if (!setIptcTag(copyright["x-default"], 128, "Copyright",     "Iptc.Application2.Copyright"))           return false;
     if (!setIptcTag(instructions,           256, "Instructions",  "Iptc.Application2.SpecialInstructions")) return false;
 
+    if (!setIptcCoreLocation(t.locationInfo())) return false;
+    if (!setCreatorContactInfo(t.contactInfo())) return false;
+
     return true;
 }
 
 bool DMetadata::removeMetadataTemplate() const
 {
+    // Remove Rights info.
+
     removeXmpTag("Xmp.dc.creator");
     removeXmpTag("Xmp.tiff.Artist");
     removeXmpTag("Xmp.photoshop.AuthorsPosition");
@@ -672,6 +678,31 @@ bool DMetadata::removeMetadataTemplate() const
     removeIptcTag("Iptc.Application2.Copyright");
     removeIptcTag("Iptc.Application2.SpecialInstructions");
 
+    // Remove Location info.
+
+    removeXmpTag("Xmp.photoshop.Country");
+    removeXmpTag("Xmp.iptc.CountryCode");
+    removeXmpTag("Xmp.photoshop.City");
+    removeXmpTag("Xmp.iptc.Location");
+    removeXmpTag("Xmp.photoshop.State");
+
+    removeIptcTag("Iptc.Application2.CountryName");
+    removeIptcTag("Iptc.Application2.CountryCode");
+    removeIptcTag("Iptc.Application2.City");
+    removeIptcTag("Iptc.Application2.SubLocation");
+    removeIptcTag("Iptc.Application2.ProvinceState");
+
+    // Remove Contact info.
+
+    removeXmpTag("Xmp.iptc.CiAdrCity");
+    removeXmpTag("Xmp.iptc.CiAdrCtry");
+    removeXmpTag("Xmp.iptc.CiAdrExtadr");
+    removeXmpTag("Xmp.iptc.CiAdrPcode");
+    removeXmpTag("Xmp.iptc.CiAdrRegion");
+    removeXmpTag("Xmp.iptc.CiEmailWork");
+    removeXmpTag("Xmp.iptc.CiTelWork");
+    removeXmpTag("Xmp.iptc.CiUrlWork");
+
     return true;
 }
 
@@ -685,6 +716,10 @@ Template DMetadata::getMetadataTemplate() const
     t.setCopyright(getXmpTagStringListLangAlt("Xmp.dc.rights", false));
     t.setRightUsageTerms(getXmpTagStringListLangAlt("Xmp.xmpRights.UsageTerms", false));
     t.setInstructions(getXmpTagString("Xmp.photoshop.Instructions"));
+
+    t.setContactInfo(getCreatorContactInfo());
+    t.setLocationInfo(getIptcCoreLocation());
+
     return t;
 }
 
@@ -717,7 +752,7 @@ IptcCoreContactInfo DMetadata::getCreatorContactInfo() const
     return info;
 }
 
-bool DMetadata::setCreatorContactInfo(const IptcCoreContactInfo &info)
+bool DMetadata::setCreatorContactInfo(const IptcCoreContactInfo& info) const
 {
     if (!supportXmp())
         return false;
@@ -772,7 +807,7 @@ IptcCoreLocationInfo DMetadata::getIptcCoreLocation() const
     return location;
 }
 
-bool DMetadata::setIptcCoreLocation(const IptcCoreLocationInfo &location)
+bool DMetadata::setIptcCoreLocation(const IptcCoreLocationInfo& location) const
 {
     if (supportXmp())
     {

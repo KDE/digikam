@@ -120,7 +120,7 @@ enum Field
     IptcCoreCopyrightNotice,          /// Map language -> String
     IptcCoreCreator,                  /// List of type String
     IptcCoreProvider,                 /// String
-    IptcCoreRightsUsageTerms,          /// Map language -> String
+    IptcCoreRightsUsageTerms,         /// Map language -> String
     IptcCoreSource,                   /// String
 
     IptcCoreCreatorJobTitle,          /// String
