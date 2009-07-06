@@ -265,13 +265,13 @@ TemplatePanel::TemplatePanel(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label10            = new QLabel(i18n("Province State:"), page2);
-    d->locationCountryCodeEdit = new KLineEdit(page2);
-    d->locationCountryCodeEdit->setClearButtonShown(true);
-    d->locationCountryCodeEdit->setClickMessage(i18n("Enter here province state of contents."));
-    label10->setBuddy(d->locationCountryCodeEdit);
-    d->locationCountryCodeEdit->setWhatsThis(i18n("<p>This field should contain province state "
-                                                  "where have been taken the photograph.</p>"));
+    QLabel *label10              = new QLabel(i18n("Province State:"), page2);
+    d->locationProvinceStateEdit = new KLineEdit(page2);
+    d->locationProvinceStateEdit->setClearButtonShown(true);
+    d->locationProvinceStateEdit->setClickMessage(i18n("Enter here province state of contents."));
+    label10->setBuddy(d->locationProvinceStateEdit);
+    d->locationProvinceStateEdit->setWhatsThis(i18n("<p>This field should contain province state "
+                                                    "where have been taken the photograph.</p>"));
 
     // --------------------------------------------------------
 
@@ -312,6 +312,115 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     grid2->addWidget(d->locationEdit,              4, 1, 1, 2);
 
     insertTab(TemplatePanelPriv::LOCATION, page2, i18n("Location"));
+
+    // -- Contact Template informations panel -------------------------------------------------------------
+
+    QWidget *page3     = new QWidget(this);
+    QGridLayout* grid3 = new QGridLayout(page3);
+
+    QLabel *label13    = new QLabel(i18n("City:"), page3);
+    d->contactCityEdit = new KLineEdit(page3);
+    d->contactCityEdit->setClearButtonShown(true);
+    d->contactCityEdit->setClickMessage(i18n("Enter here city name of lead author."));
+    label13->setBuddy(d->contactCityEdit);
+    d->contactCityEdit->setWhatsThis(i18n("<p>This field should contain city name "
+                                          "where lead author live.</p>"));
+
+    // --------------------------------------------------------
+
+    QLabel *label14       = new QLabel(i18n("Country:"), page3);
+    d->contactCountryEdit = new KLineEdit(page3);
+    d->contactCountryEdit->setClearButtonShown(true);
+    d->contactCountryEdit->setClickMessage(i18n("Enter here country name of lead author."));
+    label14->setBuddy(d->contactCountryEdit);
+    d->contactCountryEdit->setWhatsThis(i18n("<p>This field should contain country name "
+                                             "where lead author live.</p>"));
+
+    // --------------------------------------------------------
+
+    QLabel *label15       = new QLabel(i18n("Adress:"), page3);
+    d->contactAddressEdit = new KLineEdit(page3);
+    d->contactAddressEdit->setClearButtonShown(true);
+    d->contactAddressEdit->setClickMessage(i18n("Enter here adress of lead author."));
+    label15->setBuddy(d->contactAddressEdit);
+    d->contactAddressEdit->setWhatsThis(i18n("<p>This field should contain adress "
+                                             "where lead author live.</p>"));
+
+    // --------------------------------------------------------
+
+    QLabel *label16          = new QLabel(i18n("Postal Code:"), page3);
+    d->contactPostalCodeEdit = new KLineEdit(page3);
+    d->contactPostalCodeEdit->setClearButtonShown(true);
+    d->contactPostalCodeEdit->setClickMessage(i18n("Enter here postal code of lead author."));
+    label16->setBuddy(d->contactPostalCodeEdit);
+    d->contactPostalCodeEdit->setWhatsThis(i18n("<p>This field should contain postal code "
+                                                "where lead author live.</p>"));
+
+    // --------------------------------------------------------
+
+    QLabel *label17             = new QLabel(i18n("Province:"), page3);
+    d->contactProvinceStateEdit = new KLineEdit(page3);
+    d->contactProvinceStateEdit->setClearButtonShown(true);
+    d->contactProvinceStateEdit->setClickMessage(i18n("Enter here province of lead author."));
+    label17->setBuddy(d->contactProvinceStateEdit);
+    d->contactProvinceStateEdit->setWhatsThis(i18n("<p>This field should contain province "
+                                                   "where lead author live.</p>"));
+
+    // --------------------------------------------------------
+
+    QLabel *label18     = new QLabel(i18n("Email:"), page3);
+    d->contactEmailEdit = new KLineEdit(page3);
+    d->contactEmailEdit->setClearButtonShown(true);
+    d->contactEmailEdit->setClickMessage(i18n("Enter here email of lead author."));
+    label18->setBuddy(d->contactEmailEdit);
+    d->contactEmailEdit->setWhatsThis(i18n("<p>This field should contain email "
+                                           "of lead author.</p>"));
+
+    // --------------------------------------------------------
+
+    QLabel *label19     = new QLabel(i18n("Phone:"), page3);
+    d->contactPhoneEdit = new KLineEdit(page3);
+    d->contactPhoneEdit->setClearButtonShown(true);
+    d->contactPhoneEdit->setClickMessage(i18n("Enter here phone number of lead author."));
+    label19->setBuddy(d->contactPhoneEdit);
+    d->contactPhoneEdit->setWhatsThis(i18n("<p>This field should contain phone number "
+                                           "of lead author.</p>"));
+
+    // --------------------------------------------------------
+
+    QLabel *label20      = new QLabel(i18n("Url:"), page3);
+    d->contactWebUrlEdit = new KLineEdit(page3);
+    d->contactWebUrlEdit->setClearButtonShown(true);
+    d->contactWebUrlEdit->setClickMessage(i18n("Enter here Web site Url of lead author."));
+    label20->setBuddy(d->contactWebUrlEdit);
+    d->contactWebUrlEdit->setWhatsThis(i18n("<p>This field should contain web site Url "
+                                            "of lead author.</p>"));
+
+    // --------------------------------------------------------
+
+    grid3->setMargin(KDialog::spacingHint());
+    grid3->setSpacing(KDialog::spacingHint());
+    grid3->setAlignment(Qt::AlignTop);
+    grid3->setColumnStretch(1, 10);
+    grid3->setRowStretch(8, 10);
+    grid3->addWidget(label13,                     0, 0, 1, 1);
+    grid3->addWidget(d->contactCityEdit,          0, 1, 1, 2);
+    grid3->addWidget(label14,                     1, 0, 1, 1);
+    grid3->addWidget(d->contactCountryEdit,       1, 1, 1, 2);
+    grid3->addWidget(label15,                     2, 0, 1, 1);
+    grid3->addWidget(d->contactAddressEdit,       2, 1, 1, 2);
+    grid3->addWidget(label16,                     3, 0, 1, 1);
+    grid3->addWidget(d->contactPostalCodeEdit,    3, 1, 1, 2);
+    grid3->addWidget(label17,                     4, 0, 1, 1);
+    grid3->addWidget(d->contactProvinceStateEdit, 4, 1, 1, 2);
+    grid3->addWidget(label18,                     5, 0, 1, 1);
+    grid3->addWidget(d->contactEmailEdit,         5, 1, 1, 2);
+    grid3->addWidget(label19,                     6, 0, 1, 1);
+    grid3->addWidget(d->contactPhoneEdit,         6, 1, 1, 2);
+    grid3->addWidget(label20,                     7, 0, 1, 1);
+    grid3->addWidget(d->contactWebUrlEdit,        7, 1, 1, 2);
+
+    insertTab(TemplatePanelPriv::CONTACT, page3, i18n("Contact"));
 }
 
 TemplatePanel::~TemplatePanel()
