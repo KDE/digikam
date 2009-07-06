@@ -339,12 +339,12 @@ TemplatePanel::TemplatePanel(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label15       = new QLabel(i18n("Adress:"), page3);
+    QLabel *label15       = new QLabel(i18n("Address:"), page3);
     d->contactAddressEdit = new KLineEdit(page3);
     d->contactAddressEdit->setClearButtonShown(true);
-    d->contactAddressEdit->setClickMessage(i18n("Enter here adress of lead author."));
+    d->contactAddressEdit->setClickMessage(i18n("Enter here address of lead author."));
     label15->setBuddy(d->contactAddressEdit);
-    d->contactAddressEdit->setWhatsThis(i18n("<p>This field should contain adress "
+    d->contactAddressEdit->setWhatsThis(i18n("<p>This field should contain address "
                                              "where lead author live.</p>"));
 
     // --------------------------------------------------------
