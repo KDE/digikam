@@ -286,12 +286,12 @@ TemplatePanel::TemplatePanel(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label12 = new QLabel(i18n("Location:"), page2);
+    QLabel *label12 = new QLabel(i18n("Sublocation:"), page2);
     d->locationEdit = new KLineEdit(page2);
     d->locationEdit->setClearButtonShown(true);
-    d->locationEdit->setClickMessage(i18n("Enter here location place of contents."));
+    d->locationEdit->setClickMessage(i18n("Enter here sublocation place of contents."));
     label12->setBuddy(d->locationEdit);
-    d->locationEdit->setWhatsThis(i18n("<p>This field should contain location place "
+    d->locationEdit->setWhatsThis(i18n("<p>This field should contain sublocation from the city "
                                        "where have been taken the photograph.</p>"));
 
     // --------------------------------------------------------
