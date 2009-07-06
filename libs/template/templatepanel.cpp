@@ -437,6 +437,21 @@ void TemplatePanel::setTemplate(const Template& t)
     d->rightUsageEdit->setValues(t.rightUsageTerms());
     d->sourceEdit->setText(t.source());
     d->instructionsEdit->setText(t.instructions());
+
+    d->locationCountryEdit->setText(t.locationInfo().country);
+    d->locationCountryCodeEdit->setText(t.locationInfo().countryCode);
+    d->locationProvinceStateEdit->setText(t.locationInfo().provinceState);
+    d->locationCityEdit->setText(t.locationInfo().city);
+    d->locationEdit->setText(t.locationInfo().location);
+
+    d->contactCityEdit->setText(t.contactInfo().city);
+    d->contactCountryEdit->setText(t.contactInfo().country);
+    d->contactAddressEdit->setText(t.contactInfo().address);
+    d->contactPostalCodeEdit->setText(t.contactInfo().postalCode);
+    d->contactProvinceStateEdit->setText(t.contactInfo().provinceState);
+    d->contactEmailEdit->setText(t.contactInfo().email);
+    d->contactPhoneEdit->setText(t.contactInfo().phone);
+    d->contactWebUrlEdit->setText(t.contactInfo().webUrl);
 }
 
 Template TemplatePanel::getTemplate() const
@@ -449,6 +464,26 @@ Template TemplatePanel::getTemplate() const
     t.setRightUsageTerms(d->rightUsageEdit->values());
     t.setSource(d->sourceEdit->text());
     t.setInstructions(d->instructionsEdit->text());
+
+    IptcCoreLocationInfo inf1;
+    inf1.country       = d->locationCountryEdit->text();
+    inf1.countryCode   = d->locationCountryCodeEdit->text();
+    inf1.provinceState = d->locationProvinceStateEdit->text();
+    inf1.city          = d->locationCityEdit->text();
+    inf1.location      = d->locationEdit->text();
+    t.setLocationInfo(inf1);
+
+    IptcCoreContactInfo inf2;
+    inf2.city          = d->contactCityEdit->text();
+    inf2.country       = d->contactCountryEdit->text();
+    inf2.address       = d->contactAddressEdit->text();
+    inf2.postalCode    = d->contactPostalCodeEdit->text();
+    inf2.provinceState = d->contactProvinceStateEdit->text();
+    inf2.email         = d->contactEmailEdit->text();
+    inf2.phone         = d->contactPhoneEdit->text();
+    inf2.webUrl        = d->contactWebUrlEdit->text();
+    t.setContactInfo(inf2);
+
     return t;
 }
 
