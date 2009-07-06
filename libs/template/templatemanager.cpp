@@ -294,7 +294,7 @@ bool TemplateManager::save()
                 authors.appendChild(e);
             }
 
-            QDomElement copyright     = doc.createElement(QString::fromLatin1("copyright"));
+            QDomElement copyright = doc.createElement(QString::fromLatin1("copyright"));
             elem.appendChild(copyright);
             KExiv2::AltLangMap rights = t.copyright();
             KExiv2::AltLangMap::const_iterator it;
@@ -315,8 +315,59 @@ bool TemplateManager::save()
                 e.setAttribute(QString::fromLatin1("value"), it2.value());
                 rightusageterms.appendChild(e);
             }
-
             docElem.appendChild(elem);
+
+            QDomElement locationcountry = doc.createElement(QString::fromLatin1("locationcountry"));
+            locationcountry.setAttribute(QString::fromLatin1("value"), t.locationInfo().country);
+            elem.appendChild(locationcountry);
+
+            QDomElement locationcountrycode = doc.createElement(QString::fromLatin1("locationcountrycode"));
+            locationcountrycode.setAttribute(QString::fromLatin1("value"), t.locationInfo().countryCode);
+            elem.appendChild(locationcountrycode);
+
+            QDomElement locationprovincestate = doc.createElement(QString::fromLatin1("locationprovincestate"));
+            locationprovincestate.setAttribute(QString::fromLatin1("value"), t.locationInfo().provinceState);
+            elem.appendChild(locationprovincestate);
+
+            QDomElement locationcity = doc.createElement(QString::fromLatin1("locationcity"));
+            locationcity.setAttribute(QString::fromLatin1("value"), t.locationInfo().city);
+            elem.appendChild(locationcity);
+
+            QDomElement locationlocation = doc.createElement(QString::fromLatin1("locationlocation"));
+            locationlocation.setAttribute(QString::fromLatin1("value"), t.locationInfo().location);
+            elem.appendChild(locationlocation);
+
+            QDomElement contactcity = doc.createElement(QString::fromLatin1("contactcity"));
+            contactcity.setAttribute(QString::fromLatin1("value"), t.contactInfo().city);
+            elem.appendChild(contactcity);
+
+            QDomElement contactcountry = doc.createElement(QString::fromLatin1("contactcountry"));
+            contactcountry.setAttribute(QString::fromLatin1("value"), t.contactInfo().country);
+            elem.appendChild(contactcountry);
+
+            QDomElement contactaddress = doc.createElement(QString::fromLatin1("contactaddress"));
+            contactaddress.setAttribute(QString::fromLatin1("value"), t.contactInfo().address);
+            elem.appendChild(contactaddress);
+
+            QDomElement contactpostalcode = doc.createElement(QString::fromLatin1("contactpostalcode"));
+            contactpostalcode.setAttribute(QString::fromLatin1("value"), t.contactInfo().postalCode);
+            elem.appendChild(contactpostalcode);
+
+            QDomElement contactprovinceSstate = doc.createElement(QString::fromLatin1("contactprovinceSstate"));
+            contactprovinceSstate.setAttribute(QString::fromLatin1("value"), t.contactInfo().provinceState);
+            elem.appendChild(contactprovinceSstate);
+
+            QDomElement contactemail = doc.createElement(QString::fromLatin1("contactemail"));
+            contactemail.setAttribute(QString::fromLatin1("value"), t.contactInfo().email);
+            elem.appendChild(contactemail);
+
+            QDomElement contactphone = doc.createElement(QString::fromLatin1("contactphone"));
+            contactphone.setAttribute(QString::fromLatin1("value"), t.contactInfo().phone);
+            elem.appendChild(contactphone);
+
+            QDomElement contactweburl = doc.createElement(QString::fromLatin1("contactweburl"));
+            contactweburl.setAttribute(QString::fromLatin1("value"), t.contactInfo().webUrl);
+            elem.appendChild(contactweburl);
         }
     }
 
