@@ -52,6 +52,8 @@ bool Template::operator==(const Template& t) const
     bool b5 = m_rightUsageTerms == t.m_rightUsageTerms;
     bool b6 = m_source          == t.m_source;
     bool b7 = m_instructions    == t.m_instructions;
+    bool b8 = m_locationInfo    == t.m_locationInfo;
+    bool b9 = m_contactInfo     == t.m_contactInfo;
 
     kDebug(50003) << t.authors()         << m_authors         << b1;
     kDebug(50003) << t.authorsPosition() << m_authorsPosition << b2;
@@ -61,7 +63,7 @@ bool Template::operator==(const Template& t) const
     kDebug(50003) << t.source()          << m_source          << b6;
     kDebug(50003) << t.instructions()    << m_instructions    << b7;
 
-    return b1 && b2 && b3 && b4 && b5 && b6 && b7;
+    return b1 && b2 && b3 && b4 && b5 && b6 && b7 && b8 && b9;
 }
 
 bool Template::isEmpty() const
@@ -72,7 +74,9 @@ bool Template::isEmpty() const
             m_copyright.isEmpty()       &&
             m_rightUsageTerms.isEmpty() &&
             m_source.isEmpty()          &&
-            m_instructions.isEmpty()
+            m_instructions.isEmpty()    &&
+            m_locationInfo.isEmpty()    &&
+            m_contactInfo.isEmpty()
            );
 }
 
@@ -122,6 +126,16 @@ void Template::setInstructions(const QString& instructions)
     m_instructions = instructions;
 }
 
+void Template::setLocationInfo(const IptcCoreLocationInfo& inf)
+{
+    m_locationInfo = inf;
+}
+
+void Template::setContactInfo(const IptcCoreContactInfo& inf)
+{
+    m_contactInfo = inf;
+}
+
 QStringList Template::authors() const
 {
     return m_authors;
@@ -155,6 +169,16 @@ QString Template::source() const
 QString Template::instructions() const
 {
     return m_instructions;
+}
+
+IptcCoreLocationInfo Template::locationInfo() const
+{
+    return m_locationInfo;
+}
+
+IptcCoreContactInfo  Template::contactInfo() const
+{
+    return m_contactInfo;
 }
 
 QDebug operator<<(QDebug dbg, const Template& t)

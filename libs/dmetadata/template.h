@@ -37,6 +37,7 @@
 
 // Local includes
 
+#include "metadatainfo.h"
 #include "digikam_export.h"
 
 using namespace KExiv2Iface;
@@ -75,14 +76,18 @@ public:
     void setRightUsageTerms(const KExiv2::AltLangMap& rightUsageTerms);
     void setSource(const QString& source);
     void setInstructions(const QString& instructions);
+    void setLocationInfo(const IptcCoreLocationInfo& inf);
+    void setContactInfo(const IptcCoreContactInfo& inf);
 
-    QStringList        authors()         const;
-    QString            authorsPosition() const;
-    QString            credit()          const;
-    KExiv2::AltLangMap copyright()       const;
-    KExiv2::AltLangMap rightUsageTerms() const;
-    QString            source()          const;
-    QString            instructions()    const;
+    QStringList          authors()         const;
+    QString              authorsPosition() const;
+    QString              credit()          const;
+    KExiv2::AltLangMap   copyright()       const;
+    KExiv2::AltLangMap   rightUsageTerms() const;
+    QString              source()          const;
+    QString              instructions()    const;
+    IptcCoreLocationInfo locationInfo()    const;
+    IptcCoreContactInfo  contactInfo()     const;
 
     static QString     removeTemplateTitle() { return QString("_REMOVE_TEMPLATE_"); };
 
@@ -90,35 +95,43 @@ protected:
 
     /** Template title used internaly. This value always exist and cannot be empty.
      */
-    QString            m_templateTitle;
+    QString              m_templateTitle;
 
     /** List of author names.
      */
-    QStringList        m_authors;
+    QStringList          m_authors;
 
     /** Description of authors position.
      */
-    QString            m_authorsPosition;
+    QString              m_authorsPosition;
 
     /** Credit description.
      */
-    QString            m_credit;
+    QString              m_credit;
 
     /** Language alternative copyright notices.
      */
-    KExiv2::AltLangMap m_copyright;
+    KExiv2::AltLangMap   m_copyright;
 
     /** Language alternative right term usages.
      */
-    KExiv2::AltLangMap m_rightUsageTerms;
+    KExiv2::AltLangMap   m_rightUsageTerms;
 
     /** Descriptions of contents source.
      */
-    QString            m_source;
+    QString              m_source;
 
     /** Special instructions to process with contents.
      */
-    QString            m_instructions;
+    QString              m_instructions;
+
+    /** IPTC Location Informations.
+     */
+    IptcCoreLocationInfo m_locationInfo;
+
+    /** IPTC Contact Informations.
+     */
+    IptcCoreContactInfo  m_contactInfo;
 };
 
 //! kDebug() stream operator. Writes property @a t to the debug output in a nicely formatted way.
