@@ -114,7 +114,9 @@ bool TemplateManager::load()
         if (e.isNull()) continue;
         if (e.tagName() != "template") continue;
 
-        Template t;
+        Template             t;
+        IptcCoreLocationInfo locationInf;
+        IptcCoreContactInfo  contactInf;
 
         for (QDomNode n2 = e.firstChild(); !n2.isNull(); n2 = n2.nextSibling())
         {
@@ -184,8 +186,62 @@ bool TemplateManager::load()
                 }
                 t.setRightUsageTerms(usages);
             }
+            else if (name2 == QString::fromLatin1("locationcountry"))
+            {
+                locationInf.country = val2;
+            }
+            else if (name2 == QString::fromLatin1("locationcountrycode"))
+            {
+                locationInf.countryCode = val2;
+            }
+            else if (name2 == QString::fromLatin1("clocationprovincestate"))
+            {
+                locationInf.provinceState = val2;
+            }
+            else if (name2 == QString::fromLatin1("locationcity"))
+            {
+                locationInf.city = val2;
+            }
+            else if (name2 == QString::fromLatin1("locationlocation"))
+            {
+                locationInf.location = val2;
+            }
+            else if (name2 == QString::fromLatin1("contactcity"))
+            {
+                contactInf.city = val2;
+            }
+            else if (name2 == QString::fromLatin1("contactcountry"))
+            {
+                contactInf.country = val2;
+            }
+            else if (name2 == QString::fromLatin1("contactaddress"))
+            {
+                contactInf.address = val2;
+            }
+            else if (name2 == QString::fromLatin1("contactpostalcode"))
+            {
+                contactInf.postalCode = val2;
+            }
+            else if (name2 == QString::fromLatin1("contactprovincestate"))
+            {
+                contactInf.provinceState = val2;
+            }
+            else if (name2 == QString::fromLatin1("contactemail"))
+            {
+                contactInf.email = val2;
+            }
+            else if (name2 == QString::fromLatin1("contactphone"))
+            {
+                contactInf.phone = val2;
+            }
+            else if (name2 == QString::fromLatin1("contactweburl"))
+            {
+                contactInf.webUrl = val2;
+            }
         }
 
+        t.setLocationInfo(locationInf);
+        t.setContactInfo(contactInf);
         insertPrivate(t);
     }
 
