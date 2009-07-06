@@ -55,27 +55,6 @@ using namespace KExiv2Iface;
 namespace Digikam
 {
 
-bool IptcCoreContactInfo::isNull() const
-{
-    return city.isNull() &&
-           country.isNull() &&
-           address.isNull() &&
-           postalCode.isNull() &&
-           provinceState.isNull() &&
-           email.isNull() &&
-           phone.isNull() &&
-           webUrl.isNull();
-}
-
-bool IptcCoreLocationInfo::isNull() const
-{
-    return country.isNull() &&
-           countryCode.isNull() &&
-           provinceState.isNull() &&
-           city.isNull() &&
-           location.isNull();
-}
-
 DMetadata::DMetadata()
          : KExiv2Iface::KExiv2()
 {
