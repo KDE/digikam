@@ -43,6 +43,7 @@
 #include <QStyle>
 #include <QApplication>
 #include <QCursor>
+#include <QFileInfo>
 #include <QImage>
 #include <QRegion>
 #include <QTimer>
@@ -74,6 +75,7 @@
 #include "iofilesettingscontainer.h"
 #include "loadingcacheinterface.h"
 #include "drubberband.h"
+#include "themeengine.h"
 
 namespace Digikam
 {
@@ -147,6 +149,8 @@ public:
     DImgInterface           *im;
 
     ImagePanIconWidget      *panIconWidget;
+
+    QString                  errorMessage;
 };
 
 Canvas::Canvas(QWidget *parent)
@@ -237,6 +241,7 @@ void Canvas::reset()
             emit signalSelected(false);
     }
 
+    d->errorMessage.clear();
     d->tileCache.clear();
 }
 
@@ -254,6 +259,15 @@ void Canvas::slotImageLoaded(const QString& filePath, bool success)
 
     if (d->autoZoom)
         updateAutoZoom();
+
+    // Note: in showFoto, we using a null filename to clear canvas.
+    if (!success && !filePath.isEmpty())
+    {
+        QFileInfo info(filePath);
+        d->errorMessage = i18n("Failed to load image\n\"%1\"", info.fileName());
+    }
+    else
+        d->errorMessage.clear();
 
     updateContentsSize(true);
 
@@ -603,6 +617,16 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
                                    ir.width(), ir.height());
             }
         }
+    }
+    else if (!d->im->imageValid() && !d->errorMessage.isEmpty())
+    {
+        QRect fullRect(0, 0, visibleWidth(), visibleHeight());
+        QRect textRect = painter.boundingRect(fullRect, Qt::AlignCenter|Qt::TextWordWrap, d->errorMessage);
+        painter.fillRect(textRect, ThemeEngine::instance()->baseColor());
+        painter.setPen(QPen(ThemeEngine::instance()->textRegColor()));
+        painter.drawText(textRect, Qt::AlignCenter|Qt::TextWordWrap, d->errorMessage);
+
+        clipRegion -= textRect;
     }
 
     painter.setClipRegion(clipRegion);

@@ -1296,15 +1296,6 @@ void EditorWindow::slotLoadingFinished(const QString& filename, bool success)
     toggleActions(success);
     unsetCursor();
     m_animLogo->stop();
-
-    // Note: in showFoto, we using a null filename to clear canvas.
-    if (!success && !filename.isEmpty())
-    {
-        QFileInfo fi(filename);
-        QString message = i18n("Failed to load image \"%1\"",fi.fileName());
-        KMessageBox::error(this, message);
-        kWarning(50003) << "Failed to load image " << fi.fileName();
-    }
 }
 
 void EditorWindow::slotNameLabelCancelButtonPressed()
