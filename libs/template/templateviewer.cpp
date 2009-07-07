@@ -68,12 +68,10 @@ public:
         labelSource                = 0;
         labelInstructions          = 0;
         locationCountry            = 0;
-        locationCountryCode        = 0;
         locationProvinceState      = 0;
         locationCity               = 0;
         locationSublocation        = 0;
         labelLocationCountry       = 0;
-        labelLocationCountryCode   = 0;
         labelLocationProvinceState = 0;
         labelLocationCity          = 0;
         labelLocationSublocation   = 0;
@@ -116,13 +114,11 @@ public:
     // IPTC Location info.
 
     DTextLabelName *locationCountry;
-    DTextLabelName *locationCountryCode;
     DTextLabelName *locationProvinceState;
     DTextLabelName *locationCity;
     DTextLabelName *locationSublocation;
 
     DTextBrowser   *labelLocationCountry;
-    DTextBrowser   *labelLocationCountryCode;
     DTextBrowser   *labelLocationProvinceState;
     DTextBrowser   *labelLocationCity;
     DTextBrowser   *labelLocationSublocation;
@@ -192,14 +188,11 @@ TemplateViewer::TemplateViewer(QWidget* parent=0)
     d->labelLocationProvinceState = new DTextBrowser(QString(), w2);
     d->locationCountry            = new DTextLabelName(i18n("Country:"), w2);
     d->labelLocationCountry       = new DTextBrowser(QString(), w2);
-    d->locationCountryCode        = new DTextLabelName(i18n("Country Code:"), w2);
-    d->labelLocationCountryCode   = new DTextBrowser(QString(), w2);
 
-    d->locationCountry->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    d->locationCountryCode->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    d->locationProvinceState->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     d->locationCity->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     d->locationSublocation->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    d->locationProvinceState->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    d->locationCountry->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
     addItem(w2, SmallIcon("applications-internet"),
             i18n("Location"), QString("Location"), true);
@@ -263,8 +256,7 @@ void TemplateViewer::setTemplate(const Template& t)
     d->labelLocationCity->setText(t.locationInfo().city);
     d->labelLocationSublocation->setText(t.locationInfo().location);
     d->labelLocationProvinceState->setText(t.locationInfo().provinceState);
-    d->labelLocationCountry->setText(t.locationInfo().country);
-    d->labelLocationCountryCode->setText(t.locationInfo().countryCode);
+    d->labelLocationCountry->setText(CountrySelector::countryForCode(t.locationInfo().countryCode));
 
     d->labelContactAddress->setText(t.contactInfo().address);
     d->labelContactPostalCode->setText(t.contactInfo().postalCode);
