@@ -40,6 +40,7 @@
 
 // Local includes
 
+#include "countryselector.h"
 #include "imagepropertiestxtlabel.h"
 #include "template.h"
 #include "templatemanager.h"
