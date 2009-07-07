@@ -287,14 +287,14 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     grid2->setAlignment(Qt::AlignTop);
     grid2->setColumnStretch(1, 10);
     grid2->setRowStretch(4, 10);
-    grid2->addWidget(label9,                       0, 0, 1, 1);
-    grid2->addWidget(d->locationCountryCodeEdit,   0, 1, 1, 2);
-    grid2->addWidget(label10,                      1, 0, 1, 1);
-    grid2->addWidget(d->locationProvinceStateEdit, 1, 1, 1, 2);
-    grid2->addWidget(label11,                      2, 0, 1, 1);
-    grid2->addWidget(d->locationCityEdit,          2, 1, 1, 2);
-    grid2->addWidget(label12,                      3, 0, 1, 1);
-    grid2->addWidget(d->locationSublocationEdit,   3, 1, 1, 2);
+    grid2->addWidget(label11,                      0, 0, 1, 1);
+    grid2->addWidget(d->locationCityEdit,          0, 1, 1, 2);
+    grid2->addWidget(label12,                      1, 0, 1, 1);
+    grid2->addWidget(d->locationSublocationEdit,   1, 1, 1, 2);
+    grid2->addWidget(label10,                      2, 0, 1, 1);
+    grid2->addWidget(d->locationProvinceStateEdit, 2, 1, 1, 2);
+    grid2->addWidget(label9,                       3, 0, 1, 1);
+    grid2->addWidget(d->locationCountryCodeEdit,   3, 1, 1, 2);
 
     insertTab(TemplatePanelPriv::LOCATION, page2, KIcon("applications-internet"), i18n("Location"));
 
@@ -388,20 +388,20 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     grid3->setAlignment(Qt::AlignTop);
     grid3->setColumnStretch(1, 10);
     grid3->setRowStretch(8, 10);
-    grid3->addWidget(label13,                     0, 0, 1, 1);
-    grid3->addWidget(d->contactCityEdit,          0, 1, 1, 2);
-    grid3->addWidget(label14,                     1, 0, 1, 1);
-    grid3->addWidget(d->contactCountryEdit,       1, 1, 1, 2);
-    grid3->addWidget(label15,                     2, 0, 1, 1);
-    grid3->addWidget(d->contactAddressEdit,       2, 1, 1, 2);
-    grid3->addWidget(label16,                     3, 0, 1, 1);
-    grid3->addWidget(d->contactPostalCodeEdit,    3, 1, 1, 2);
-    grid3->addWidget(label17,                     4, 0, 1, 1);
-    grid3->addWidget(d->contactProvinceStateEdit, 4, 1, 1, 2);
-    grid3->addWidget(label18,                     5, 0, 1, 1);
-    grid3->addWidget(d->contactEmailEdit,         5, 1, 1, 2);
-    grid3->addWidget(label19,                     6, 0, 1, 1);
-    grid3->addWidget(d->contactPhoneEdit,         6, 1, 1, 2);
+    grid3->addWidget(label15,                     0, 0, 1, 1);
+    grid3->addWidget(d->contactAddressEdit,       0, 1, 1, 2);
+    grid3->addWidget(label16,                     1, 0, 1, 1);
+    grid3->addWidget(d->contactPostalCodeEdit,    1, 1, 1, 2);
+    grid3->addWidget(label13,                     2, 0, 1, 1);
+    grid3->addWidget(d->contactCityEdit,          2, 1, 1, 2);
+    grid3->addWidget(label17,                     3, 0, 1, 1);
+    grid3->addWidget(d->contactProvinceStateEdit, 3, 1, 1, 2);
+    grid3->addWidget(label14,                     4, 0, 1, 1);
+    grid3->addWidget(d->contactCountryEdit,       4, 1, 1, 2);
+    grid3->addWidget(label19,                     5, 0, 1, 1);
+    grid3->addWidget(d->contactPhoneEdit,         5, 1, 1, 2);
+    grid3->addWidget(label18,                     6, 0, 1, 1);
+    grid3->addWidget(d->contactEmailEdit,         6, 1, 1, 2);
     grid3->addWidget(label20,                     7, 0, 1, 1);
     grid3->addWidget(d->contactWebUrlEdit,        7, 1, 1, 2);
 
