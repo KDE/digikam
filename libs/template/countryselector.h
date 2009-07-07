@@ -26,8 +26,8 @@
 
 // Qt includes
 
-#include <QString>
-#include <QWidget>
+#include <QtCore/QString>
+#include <QtGui/QWidget>
 
 // LibKDcraw includes
 
@@ -42,6 +42,7 @@ class CountrySelectorPriv;
 
 class CountrySelector : public SqueezedComboBox
 {
+    Q_OBJECT
 
 public:
 

@@ -22,6 +22,7 @@
  * ============================================================ */
 
 #include "countryselector.h"
+#include "countryselector.moc"
 
 // Qt includes
 

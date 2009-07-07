@@ -450,10 +450,7 @@ Template TemplatePanel::getTemplate() const
     t.setInstructions(d->instructionsEdit->text());
 
     IptcCoreLocationInfo inf1;
-    QString              code, country;
-    d->locationCountryCodeEdit->country(code, country);
-    inf1.country       = country;
-    inf1.countryCode   = code;
+    d->locationCountryCodeEdit->country(inf1.countryCode, inf1.country);
     inf1.provinceState = d->locationProvinceStateEdit->text();
     inf1.city          = d->locationCityEdit->text();
     inf1.location      = d->locationSublocationEdit->text();
