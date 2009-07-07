@@ -1,0 +1,2 @@
+altstringlangedit and countryselector must be moved in a common place to be shared with kipi-plugins/metadataedit
+Good candidate is libkexiv2

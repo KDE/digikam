@@ -712,6 +712,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/templateviewer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/templatepanel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/countryselector.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/altlangstredit.cpp
        )
 
     SET(libdialogs_SRCS
@@ -782,7 +783,6 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/cameraitempropertiestab.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagedescedittab.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/talbumlistview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/altlangstredit.cpp
        )
 
     SET(libdimgeditor_SRCS
