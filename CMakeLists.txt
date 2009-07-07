@@ -706,11 +706,12 @@ ENDIF(MSVC)
     # digiKam target parts
 
     SET(libtemplate_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/templatemanager.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/templatelist.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/templateselector.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/templateviewer.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/templatepanel.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/templatemanager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/templatelist.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/templateselector.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/templateviewer.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/templatepanel.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/countryselector.cpp
        )
 
     SET(libdialogs_SRCS
