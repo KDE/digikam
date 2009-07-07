@@ -351,7 +351,7 @@ bool CountrySelector::country(QString& countryCode, QString& countryName) const
 {
     // Unknow is selected ?
     if (currentIndex() == count()-1)
-        return false
+        return false;
 
     countryName = itemHighlighted().mid(6);
     countryCode = itemHighlighted().left(3);
