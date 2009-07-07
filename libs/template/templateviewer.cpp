@@ -22,6 +22,7 @@
  * ============================================================ */
 
 #include "templateviewer.h"
+#include "templateviewer.moc"
 
 // Qt includes
 
@@ -34,6 +35,8 @@
 #include <kdialog.h>
 #include <kdebug.h>
 #include <kvbox.h>
+#include <kurllabel.h>
+#include <ktoolinvocation.h>
 
 // Local includes
 
@@ -87,8 +90,8 @@ public:
         labelContactAddress        = 0;
         labelContactPostalCode     = 0;
         labelContactProvinceState  = 0;
-        labelContactEmail          = 0;
         labelContactPhone          = 0;
+        labelContactEmail          = 0;
         labelContactWebUrl         = 0;
     }
 
@@ -131,8 +134,8 @@ public:
     DTextLabelName *contactAddress;
     DTextLabelName *contactPostalCode;
     DTextLabelName *contactProvinceState;
-    DTextLabelName *contactEmail;
     DTextLabelName *contactPhone;
+    DTextLabelName *contactEmail;
     DTextLabelName *contactWebUrl;
 
     DTextBrowser   *labelContactCity;
@@ -140,9 +143,9 @@ public:
     DTextBrowser   *labelContactAddress;
     DTextBrowser   *labelContactPostalCode;
     DTextBrowser   *labelContactProvinceState;
-    DTextBrowser   *labelContactEmail;
     DTextBrowser   *labelContactPhone;
-    DTextBrowser   *labelContactWebUrl;
+    KUrlLabel      *labelContactEmail;
+    KUrlLabel      *labelContactWebUrl;
 };
 
 TemplateViewer::TemplateViewer(QWidget* parent=0)
@@ -214,26 +217,32 @@ TemplateViewer::TemplateViewer(QWidget* parent=0)
     d->labelContactPostalCode    = new DTextBrowser(QString(), w3);
     d->contactProvinceState      = new DTextLabelName(i18n("Province State:"), w3);
     d->labelContactProvinceState = new DTextBrowser(QString(), w3);
-    d->contactEmail              = new DTextLabelName(i18n("Email:"), w3);
-    d->labelContactEmail         = new DTextBrowser(QString(), w3);
     d->contactPhone              = new DTextLabelName(i18n("Phone:"), w3);
     d->labelContactPhone         = new DTextBrowser(QString(), w3);
+    d->contactEmail              = new DTextLabelName(i18n("Email:"), w3);
+    d->labelContactEmail         = new KUrlLabel(w3);
     d->contactWebUrl             = new DTextLabelName(i18n("Url:"), w3);
-    d->labelContactWebUrl        = new DTextBrowser(QString(), w3);
+    d->labelContactWebUrl        = new KUrlLabel(w3);
 
     d->contactCity->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     d->contactCountry->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     d->contactAddress->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     d->contactPostalCode->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     d->contactProvinceState->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    d->contactEmail->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     d->contactPhone->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    d->contactEmail->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     d->contactWebUrl->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
     addItem(w3, SmallIcon("view-pim-contacts"),
             i18n("Contact"), QString("Contact"), true);
 
     addStretch();
+
+    connect(d->labelContactWebUrl, SIGNAL(leftClickedUrl(const QString&)),
+            this, SLOT(slotProcessUrl(const QString&)));
+
+    connect(d->labelContactEmail, SIGNAL(leftClickedUrl(const QString&)),
+            this, SLOT(slotProcessEmail(const QString&)));
 }
 
 TemplateViewer::~TemplateViewer()
@@ -262,9 +271,22 @@ void TemplateViewer::setTemplate(const Template& t)
     d->labelContactAddress->setText(t.contactInfo().address);
     d->labelContactPostalCode->setText(t.contactInfo().postalCode);
     d->labelContactProvinceState->setText(t.contactInfo().provinceState);
-    d->labelContactEmail->setText(t.contactInfo().email);
     d->labelContactPhone->setText(t.contactInfo().phone);
-    d->labelContactWebUrl->setText(t.contactInfo().webUrl);
+    d->labelContactEmail->setUrl(t.contactInfo().email);
+    d->labelContactEmail->setText(t.contactInfo().email);
+    KUrl url(t.contactInfo().webUrl);
+    d->labelContactWebUrl->setText(url.host());
+    d->labelContactWebUrl->setUrl(url.url());
+}
+
+void TemplateViewer::slotProcessUrl(const QString& url)
+{
+    KToolInvocation::self()->invokeBrowser(url);
+}
+
+void TemplateViewer::slotProcessEmail(const QString& email)
+{
+    KToolInvocation::self()->invokeMailer(email);
 }
 
 }  // namespace Digikam

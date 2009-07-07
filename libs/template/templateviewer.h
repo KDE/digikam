@@ -40,6 +40,7 @@ class TemplateViewerPriv;
 
 class TemplateViewer : public RExpanderBox
 {
+    Q_OBJECT
 
 public:
 
@@ -47,6 +48,11 @@ public:
     virtual ~TemplateViewer();
 
     void setTemplate(const Template& t);
+
+private Q_SLOTS:
+
+    void slotProcessUrl(const QString&);
+    void slotProcessEmail(const QString&);
 
 private:
 
