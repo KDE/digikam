@@ -118,8 +118,8 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     QWidget *page1     = new QWidget(this);
     QGridLayout* grid1 = new QGridLayout(page1);
 
-    QLabel *label1 = new QLabel(i18n("Author Names:"), page1);
-    d->authorsEdit = new KLineEdit(page1);
+    QLabel *label1     = new QLabel(i18n("Author Names:"), page1);
+    d->authorsEdit     = new KLineEdit(page1);
     d->authorsEdit->setClearButtonShown(true);
     d->authorsEdit->setClickMessage(i18n("Enter here all creator name. Use semi-colons as separator."));
     label1->setBuddy(d->authorsEdit);
@@ -241,13 +241,13 @@ TemplatePanel::TemplatePanel(QWidget* parent)
 
     // -- Location Template informations panel -------------------------------------------------------------
 
-    QWidget *page2     = new QWidget(this);
-    QGridLayout* grid2 = new QGridLayout(page2);
+    QWidget *page2             = new QWidget(this);
+    QGridLayout* grid2         = new QGridLayout(page2);
 
     QLabel *label9             = new QLabel(i18n("Country:"), page2);
     d->locationCountryCodeEdit = new CountrySelector(page2);
     label9->setBuddy(d->locationCountryCodeEdit);
-    d->locationCountryCodeEdit->setWhatsThis(i18n("<p>Select here the country code "
+    d->locationCountryCodeEdit->setWhatsThis(i18n("<p>Select here the country "
                                                   "where have been taken the photograph.</p>"));
 
     // --------------------------------------------------------
@@ -262,7 +262,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label11 = new QLabel(i18n("City:"), page2);
+    QLabel *label11     = new QLabel(i18n("City:"), page2);
     d->locationCityEdit = new KLineEdit(page2);
     d->locationCityEdit->setClearButtonShown(true);
     d->locationCityEdit->setClickMessage(i18n("Enter here city of contents."));
