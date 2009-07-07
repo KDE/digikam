@@ -7,7 +7,7 @@
  * Description : simple image properties side bar (without support
  *               of digiKam database).
  *
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -88,10 +88,21 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget *parent,
 
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
             this, SLOT(slotChangedTab(QWidget*)));
+
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group("Image Properties SideBar");
+    m_propertiesTab->readSettings(group);
 }
 
 ImagePropertiesSideBar::~ImagePropertiesSideBar()
 {
+}
+
+void ImagePropertiesSideBar::closeEvent(QCloseEvent*)
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group("Image Properties SideBar");
+    m_propertiesTab->writeSettings(group);
 }
 
 void ImagePropertiesSideBar::itemChanged(const KUrl& url, const QRect& rect, DImg *img)

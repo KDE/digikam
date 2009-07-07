@@ -111,13 +111,13 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, SidebarSplit
 
     DatabaseWatch *dbwatch = DatabaseAccess::databaseWatch();
 
-    connect(dbwatch, SIGNAL(imageChange(const ImageChangeset &)),
-            this, SLOT(slotImageChangeDatabase(const ImageChangeset &)));
+    connect(dbwatch, SIGNAL(imageChange(const ImageChangeset&)),
+            this, SLOT(slotImageChangeDatabase(const ImageChangeset&)));
 
     ImageAttributesWatch *watch = ImageAttributesWatch::instance();
 
-    connect(watch, SIGNAL(signalFileMetadataChanged(const KUrl &)),
-            this, SLOT(slotFileMetadataChanged(const KUrl &)));
+    connect(watch, SIGNAL(signalFileMetadataChanged(const KUrl&)),
+            this, SLOT(slotFileMetadataChanged(const KUrl&)));
 }
 
 ImagePropertiesSideBarDB::~ImagePropertiesSideBarDB()

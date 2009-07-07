@@ -409,6 +409,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     group                     = config->group("Image Properties SideBar");
     d->tabWidget->setCurrentIndex(group.readEntry("ImageDescEditTab Tab",
                                   (int)ImageDescEditTabPriv::DESCRIPTIONS));
+    d->templateViewer->readSettings(group);
 }
 
 ImageDescEditTab::~ImageDescEditTab()
@@ -433,6 +434,7 @@ ImageDescEditTab::~ImageDescEditTab()
     group.sync();
     group                     = config->group("Image Properties SideBar");
     group.writeEntry("ImageDescEditTab Tab", d->tabWidget->currentIndex());
+    d->templateViewer->writeSettings(group);
     group.sync();
 
     delete d;
