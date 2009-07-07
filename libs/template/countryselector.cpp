@@ -359,4 +359,10 @@ bool CountrySelector::country(QString& countryCode, QString& countryName)
     return true;
 }
 
+QString CountrySelector::countryForCode(const QString& countryCode)
+{
+    CountrySelectorPriv priv;
+    return (priv.countryCodeMap[countryCode]);
+}
+
 }  // namespace Digikam
