@@ -29,20 +29,17 @@
 #include <QtCore/QString>
 #include <QtGui/QWidget>
 
-// LibKDcraw includes
+// KDE includes
 
-#include <libkdcraw/squeezedcombobox.h>
-
-using namespace KDcrawIface;
+#include <kcombobox.h>
 
 namespace Digikam
 {
 
 class CountrySelectorPriv;
 
-class CountrySelector : public SqueezedComboBox
+class CountrySelector : public KComboBox
 {
-    Q_OBJECT
 
 public:
 

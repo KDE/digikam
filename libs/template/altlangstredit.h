@@ -26,8 +26,8 @@
 
 // Qt includes
 
-#include <QWidget>
-#include <QString>
+#include <QtGui/QWidget>
+#include <QtCore/QString>
 
 // LibKExiv2 includes
 

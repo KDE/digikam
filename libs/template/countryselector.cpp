@@ -22,7 +22,6 @@
  * ============================================================ */
 
 #include "countryselector.h"
-#include "countryselector.moc"
 
 // Qt includes
 
@@ -33,8 +32,6 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -314,18 +311,18 @@ public:
 };
 
 CountrySelector::CountrySelector(QWidget* parent)
-               : SqueezedComboBox(parent), d(new CountrySelectorPriv)
+               : KComboBox(parent), d(new CountrySelectorPriv)
 {
     for (CountrySelectorPriv::CountryCodeMap::Iterator it = d->countryCodeMap.begin();
          it != d->countryCodeMap.end(); ++it)
     {
-        addSqueezedItem(QString("%1 - %2").arg(it.key()).arg(it.value()));
+        addItem(QString("%1 - %2").arg(it.key()).arg(it.value()));
     }
 
     model()->sort(0);
 
     insertSeparator(count());
-    addSqueezedItem(i18n("Unknown"));
+    addItem(i18n("Unknown"));
 }
 
 CountrySelector::~CountrySelector()
@@ -341,7 +338,7 @@ void CountrySelector::setCountry(const QString& countryCode)
         int i;
         for (i = 0 ; i < count() ; i++)
         {
-            if (item(i).left(3) == countryCode)
+            if (itemText(i).left(3) == countryCode)
                 break;
         }
         setCurrentIndex(i);
@@ -354,8 +351,8 @@ bool CountrySelector::country(QString& countryCode, QString& countryName)
     if (currentIndex() == count()-1)
         return false;
 
-    countryName = itemHighlighted().mid(6);
-    countryCode = itemHighlighted().left(3);
+    countryName = currentText().mid(6);
+    countryCode = currentText().left(3);
     return true;
 }
 
