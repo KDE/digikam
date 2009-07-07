@@ -347,7 +347,7 @@ void CountrySelector::setCountry(const QString& countryCode)
     }
 }
 
-bool CountrySelector::country(QString& countryCode, QString& countryName) const
+bool CountrySelector::country(QString& countryCode, QString& countryName)
 {
     // Unknow is selected ?
     if (currentIndex() == count()-1)

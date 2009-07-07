@@ -49,7 +49,7 @@ public:
     ~CountrySelector();
 
     void setCountry(const QString& countryCode);
-    bool country(QString& countryCode, QString& countryName) const;
+    bool country(QString& countryCode, QString& countryName);
 
 private:
 
