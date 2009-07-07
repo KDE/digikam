@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <kglobal.h>
+#include <kdebug.h>
 #include <klocale.h>
 
 using namespace KDcrawIface;
@@ -318,11 +318,13 @@ CountrySelector::CountrySelector(QWidget* parent)
     for (CountrySelectorPriv::CountryCodeMap::Iterator it = d->countryCodeMap.begin();
          it != d->countryCodeMap.end(); ++it)
     {
-        addSqueezedItem(it.value(), it.key());
+        addSqueezedItem(QString("%1 - %2").arg(it.key()).arg(it.value()));
     }
 
     model()->sort(0);
-    setWhatsThis(i18n("Select here your country."));
+
+    insertSeparator(count());
+    addSqueezedItem(i18n("Unknown"));
 }
 
 CountrySelector::~CountrySelector()
@@ -335,31 +337,25 @@ void CountrySelector::setCountry(const QString& countryCode)
     setCurrentIndex(0);
     if (!countryCode.isNull())
     {
-        int id = -1;
-        for (int i = 0 ; i < count() ; i++)
+        int i;
+        for (i = 0 ; i < count() ; i++)
         {
-            QVariant var = itemData(i);
-            if (var != QVariant::Invalid)
-            {
-                if (var.toString() == countryCode)
-                    id = i;
-             }
+            if (item(i).left(3) == countryCode)
+                break;
         }
-
-        if (id != -1)
-        {
-            setCurrentIndex(id);
-        }
+        setCurrentIndex(i);
     }
 }
 
-void CountrySelector::country(QString& countryCode, QString& countryName)
+bool CountrySelector::country(QString& countryCode, QString& countryName) const
 {
-    QVariant var = itemData(currentIndex());
-    if (var != QVariant::Invalid)
-        countryCode = var.toString();
+    // Unknow is selected ?
+    if (currentIndex() == count()-1)
+        return false
 
-    countryName = itemHighlighted();
+    countryName = itemHighlighted().mid(6);
+    countryCode = itemHighlighted().left(3);
+    return true;
 }
 
 }  // namespace Digikam

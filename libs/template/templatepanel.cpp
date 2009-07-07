@@ -39,6 +39,7 @@
 // Local includes
 
 #include "altlangstredit.h"
+#include "countryselector.h"
 #include "templatelist.h"
 
 namespace Digikam
@@ -67,11 +68,10 @@ public:
         rightUsageEdit            = 0;
         instructionsEdit          = 0;
 
-        locationCountryEdit       = 0;
         locationCountryCodeEdit   = 0;
         locationProvinceStateEdit = 0;
         locationCityEdit          = 0;
-        locationEdit              = 0;
+        locationSublocationEdit   = 0;
 
         contactCityEdit           = 0;
         contactCountryEdit        = 0;
@@ -84,37 +84,35 @@ public:
     }
 
     // Rights template informations panel.
-    KLineEdit      *authorsEdit;
-    KLineEdit      *authorsPositionEdit;
-    KLineEdit      *creditEdit;
-    KLineEdit      *sourceEdit;
-    KLineEdit      *instructionsEdit;
+    KLineEdit       *authorsEdit;
+    KLineEdit       *authorsPositionEdit;
+    KLineEdit       *creditEdit;
+    KLineEdit       *sourceEdit;
+    KLineEdit       *instructionsEdit;
 
-    AltLangStrEdit *copyrightEdit;
-    AltLangStrEdit *rightUsageEdit;
+    AltLangStrEdit  *copyrightEdit;
+    AltLangStrEdit  *rightUsageEdit;
 
     // Location template informations panel.
-    KLineEdit      *locationCountryEdit;
-    KLineEdit      *locationCountryCodeEdit;
-    KLineEdit      *locationProvinceStateEdit;
-    KLineEdit      *locationCityEdit;
-    KLineEdit      *locationEdit;
+    CountrySelector *locationCountryCodeEdit;
+    KLineEdit       *locationProvinceStateEdit;
+    KLineEdit       *locationCityEdit;
+    KLineEdit       *locationSublocationEdit;
 
     // Contact template informations panel.
-    KLineEdit      *contactCityEdit;
-    KLineEdit      *contactCountryEdit;
-    KLineEdit      *contactAddressEdit;
-    KLineEdit      *contactPostalCodeEdit;
-    KLineEdit      *contactProvinceStateEdit;
-    KLineEdit      *contactEmailEdit;
-    KLineEdit      *contactPhoneEdit;
-    KLineEdit      *contactWebUrlEdit;
+    KLineEdit       *contactCityEdit;
+    KLineEdit       *contactCountryEdit;
+    KLineEdit       *contactAddressEdit;
+    KLineEdit       *contactPostalCodeEdit;
+    KLineEdit       *contactProvinceStateEdit;
+    KLineEdit       *contactEmailEdit;
+    KLineEdit       *contactPhoneEdit;
+    KLineEdit       *contactWebUrlEdit;
 };
 
 TemplatePanel::TemplatePanel(QWidget* parent)
              : KTabWidget(parent), d(new TemplatePanelPriv)
 {
-
     // -- Rights Template informations panel -------------------------------------------------------------
 
     QWidget *page1     = new QWidget(this);
@@ -246,22 +244,10 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     QWidget *page2     = new QWidget(this);
     QGridLayout* grid2 = new QGridLayout(page2);
 
-    QLabel *label8         = new QLabel(i18n("Country Name:"), page2);
-    d->locationCountryEdit = new KLineEdit(page2);
-    d->locationCountryEdit->setClearButtonShown(true);
-    d->locationCountryEdit->setClickMessage(i18n("Enter here country name of contents."));
-    label8->setBuddy(d->locationCountryEdit);
-    d->locationCountryEdit->setWhatsThis(i18n("<p>This field should contain country name "
-                                              "where have been taken the photograph.</p>"));
-
-    // --------------------------------------------------------
-
-    QLabel *label9             = new QLabel(i18n("Country Code:"), page2);
-    d->locationCountryCodeEdit = new KLineEdit(page2);
-    d->locationCountryCodeEdit->setClearButtonShown(true);
-    d->locationCountryCodeEdit->setClickMessage(i18n("Enter here country code of contents."));
+    QLabel *label9             = new QLabel(i18n("Country:"), page2);
+    d->locationCountryCodeEdit = new CountrySelector(page2);
     label9->setBuddy(d->locationCountryCodeEdit);
-    d->locationCountryCodeEdit->setWhatsThis(i18n("<p>This field should contain country code "
+    d->locationCountryCodeEdit->setWhatsThis(i18n("<p>Select here the country code "
                                                   "where have been taken the photograph.</p>"));
 
     // --------------------------------------------------------
@@ -286,13 +272,13 @@ TemplatePanel::TemplatePanel(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label12 = new QLabel(i18n("Sublocation:"), page2);
-    d->locationEdit = new KLineEdit(page2);
-    d->locationEdit->setClearButtonShown(true);
-    d->locationEdit->setClickMessage(i18n("Enter here sublocation place of contents."));
-    label12->setBuddy(d->locationEdit);
-    d->locationEdit->setWhatsThis(i18n("<p>This field should contain sublocation from the city "
-                                       "where have been taken the photograph.</p>"));
+    QLabel *label12            = new QLabel(i18n("Sublocation:"), page2);
+    d->locationSublocationEdit = new KLineEdit(page2);
+    d->locationSublocationEdit->setClearButtonShown(true);
+    d->locationSublocationEdit->setClickMessage(i18n("Enter here sublocation place of contents."));
+    label12->setBuddy(d->locationSublocationEdit);
+    d->locationSublocationEdit->setWhatsThis(i18n("<p>This field should contain sublocation from the city "
+                                                  "where have been taken the photograph.</p>"));
 
     // --------------------------------------------------------
 
@@ -300,17 +286,15 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     grid2->setSpacing(KDialog::spacingHint());
     grid2->setAlignment(Qt::AlignTop);
     grid2->setColumnStretch(1, 10);
-    grid2->setRowStretch(5, 10);
-    grid2->addWidget(label8,                       0, 0, 1, 1);
-    grid2->addWidget(d->locationCountryEdit,       0, 1, 1, 2);
-    grid2->addWidget(label9,                       1, 0, 1, 1);
-    grid2->addWidget(d->locationCountryCodeEdit,   1, 1, 1, 2);
-    grid2->addWidget(label10,                      2, 0, 1, 1);
-    grid2->addWidget(d->locationProvinceStateEdit, 2, 1, 1, 2);
-    grid2->addWidget(label11,                      3, 0, 1, 1);
-    grid2->addWidget(d->locationCityEdit,          3, 1, 1, 2);
-    grid2->addWidget(label12,                      4, 0, 1, 1);
-    grid2->addWidget(d->locationEdit,              4, 1, 1, 2);
+    grid2->setRowStretch(4, 10);
+    grid2->addWidget(label9,                       0, 0, 1, 1);
+    grid2->addWidget(d->locationCountryCodeEdit,   0, 1, 1, 2);
+    grid2->addWidget(label10,                      1, 0, 1, 1);
+    grid2->addWidget(d->locationProvinceStateEdit, 1, 1, 1, 2);
+    grid2->addWidget(label11,                      2, 0, 1, 1);
+    grid2->addWidget(d->locationCityEdit,          2, 1, 1, 2);
+    grid2->addWidget(label12,                      3, 0, 1, 1);
+    grid2->addWidget(d->locationSublocationEdit,   3, 1, 1, 2);
 
     insertTab(TemplatePanelPriv::LOCATION, page2, KIcon("applications-internet"), i18n("Location"));
 
@@ -439,11 +423,10 @@ void TemplatePanel::setTemplate(const Template& t)
     d->sourceEdit->setText(t.source());
     d->instructionsEdit->setText(t.instructions());
 
-    d->locationCountryEdit->setText(t.locationInfo().country);
-    d->locationCountryCodeEdit->setText(t.locationInfo().countryCode);
+    d->locationCountryCodeEdit->setCountry(t.locationInfo().countryCode);
     d->locationProvinceStateEdit->setText(t.locationInfo().provinceState);
     d->locationCityEdit->setText(t.locationInfo().city);
-    d->locationEdit->setText(t.locationInfo().location);
+    d->locationSublocationEdit->setText(t.locationInfo().location);
 
     d->contactCityEdit->setText(t.contactInfo().city);
     d->contactCountryEdit->setText(t.contactInfo().country);
@@ -467,11 +450,13 @@ Template TemplatePanel::getTemplate() const
     t.setInstructions(d->instructionsEdit->text());
 
     IptcCoreLocationInfo inf1;
-    inf1.country       = d->locationCountryEdit->text();
-    inf1.countryCode   = d->locationCountryCodeEdit->text();
+    QString              code, country;
+    d->locationCountryCodeEdit->country(code, country);
+    inf1.country       = country;
+    inf1.countryCode   = code;
     inf1.provinceState = d->locationProvinceStateEdit->text();
     inf1.city          = d->locationCityEdit->text();
-    inf1.location      = d->locationEdit->text();
+    inf1.location      = d->locationSublocationEdit->text();
     t.setLocationInfo(inf1);
 
     IptcCoreContactInfo inf2;
