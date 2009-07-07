@@ -332,17 +332,20 @@ CountrySelector::~CountrySelector()
 
 void CountrySelector::setCountry(const QString& countryCode)
 {
-    setCurrentIndex(0);
-    if (!countryCode.isNull())
+    // NOTE: if countryCode is empty or do not matches code map, unknow is selected from the list.
+
+    int id = count()-1;
+    for (int i = 0 ; i < d->countryCodeMap.count() ; i++)
     {
-        int i;
-        for (i = 0 ; i < count() ; i++)
+        if (itemText(i).left(3) == countryCode)
         {
-            if (itemText(i).left(3) == countryCode)
-                break;
+            id = i;
+            break;
         }
-        setCurrentIndex(i);
     }
+    setCurrentIndex(id);
+
+    kDebug() << count() << " :: " << id;
 }
 
 bool CountrySelector::country(QString& countryCode, QString& countryName)
