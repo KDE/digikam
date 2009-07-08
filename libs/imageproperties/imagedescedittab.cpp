@@ -286,7 +286,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     grid2->setMargin(KDialog::spacingHint());
     grid2->setSpacing(KDialog::spacingHint());
 
-    d->tabWidget->insertTab(ImageDescEditTabPriv::INFOS, sv2, i18n("Informations"));
+    d->tabWidget->insertTab(ImageDescEditTabPriv::INFOS, sv2, i18n("Information"));
 
     // --------------------------------------------------
 
