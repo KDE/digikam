@@ -131,7 +131,7 @@ void TemplateList::applySettings()
     }
 }
 
-bool TemplateList::contains(const QString& title)
+TemplateListItem* TemplateList::find(const QString& title)
 {
     QTreeWidgetItemIterator it(this);
     while (*it)
@@ -143,12 +143,12 @@ bool TemplateList::contains(const QString& title)
             if (!t.isNull())
             {
                 if (t.templateTitle() == title)
-                    return true;
+                    return item;
             }
         }
         ++it;
     }
-    return false;
+    return 0;
 }
 
 }  // namespace Digikam

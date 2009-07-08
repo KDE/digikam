@@ -189,6 +189,18 @@ void SetupTemplate::readSettings()
     d->tview->setCurrentIndex((TemplatePanel::TemplateTab)group.readEntry("Template Tab", (int)TemplatePanel::RIGHTS));
 }
 
+void SetupTemplate::setTemplate(const Template& t)
+{
+    if (!t.isNull())
+    {
+        TemplateListItem *item = d->listView->find(t.templateTitle());
+        d->listView->setCurrentItem(item);
+        return;
+    }
+
+    populateTemplate(t);
+}
+
 void SetupTemplate::slotSelectionChanged()
 {
     TemplateListItem *item = dynamic_cast<TemplateListItem*>(d->listView->currentItem());
@@ -220,7 +232,7 @@ void SetupTemplate::slotAddTemplate()
         return;
     }
 
-    if (d->listView->contains(title))
+    if (d->listView->find(title))
     {
         KMessageBox::error(this, i18n("A metadata template named '%1' already exist.", title));
         return;

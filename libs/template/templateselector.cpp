@@ -188,10 +188,7 @@ void TemplateSelector::setTemplateIndex(int i)
 
 void TemplateSelector::slotOpenSetup()
 {
-    if (d->metadataTemplate.isNull())
-        Setup::execTemplateEditor(this, d->metadataTemplate);
-    else
-        Setup::execSinglePage(this, Setup::TemplatePage);
+    Setup::execTemplateEditor(this, d->metadataTemplate);
 }
 
 void TemplateSelector::slotTemplateListChanged()

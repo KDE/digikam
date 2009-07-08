@@ -63,7 +63,7 @@ public:
     TemplateList(QWidget* parent=0);
     ~TemplateList();
 
-    bool contains(const QString& title);
+    TemplateListItem* find(const QString& title);
 
     void readSettings();
     void applySettings();

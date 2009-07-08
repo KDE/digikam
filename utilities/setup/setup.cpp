@@ -276,7 +276,7 @@ Setup::~Setup()
 void Setup::setTemplate(const Template& t)
 {
     if (d->templatePage)
-        d->templatePage->populateTemplate(t);
+        d->templatePage->setTemplate(t);
 }
 
 QSize Setup::sizeHint() const

@@ -46,12 +46,13 @@ public:
     SetupTemplate(QWidget* parent = 0);
     ~SetupTemplate();
 
-    void populateTemplate(const Template& t);
     void applySettings();
+    void setTemplate(const Template& t);
 
 private:
 
     void readSettings();
+    void populateTemplate(const Template& t);
 
 private Q_SLOTS:
 
