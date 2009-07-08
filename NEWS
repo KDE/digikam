@@ -9,8 +9,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 001 ==> 199168 : Tags in db but not in iptc.
 002 ==> 184445 : Deleting multiple files in folder view gives me multiple errors.
 003 ==> 151749 : External URLs from pictures for related information.
-004 ==> 192701 : Application: digiKam (digikam), signal SIGSEGV --Crash under Gnome (Ubuntu 9.04).
-005 ==> 
+004 ==> 192701 : Application: digiKam (digiKam), signal SIGSEGV --Crash under Gnome (Ubuntu 9.04).
+005 ==> 199394 : Request: "regenerate folder thumbnails" menu item. 
+006 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta2 - Release date: 2009-07-05
