@@ -406,19 +406,24 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     KConfigGroup group        = config->group(QString("Tag List View"));
     d->toggleAutoTags         = (TagFilterView::ToggleAutoTags)(group.readEntry("Toggle Auto Tags",
                                                                (int)TagFilterView::NoToggleAuto));
-    group                     = config->group("Image Properties SideBar");
-    d->tabWidget->setCurrentIndex(group.readEntry("ImageDescEditTab Tab",
+    KConfigGroup group2       = config->group("Image Properties SideBar");
+    d->tabWidget->setCurrentIndex(group2.readEntry("ImageDescEditTab Tab",
                                   (int)ImageDescEditTabPriv::DESCRIPTIONS));
-    d->templateViewer->readSettings(group);
+    d->templateViewer->readSettings(group2);
 }
 
 ImageDescEditTab::~ImageDescEditTab()
+{
+    delete d;
+}
+
+void ImageDescEditTab::closeEvent(QCloseEvent* e)
 {
     // FIXME: this slot seems to be called several times, which can also be seen when changing the metadata of
     // an image and then switching to another one, because you'll get the dialog created by slotChangingItems()
     // twice, and this seems to be exactly the problem when called here.
     // We should disable the slot here at the moment, otherwise digikam crashes.
-//    slotChangingItems();
+    //slotChangingItems();
 
     /*
     AlbumList tList = AlbumManager::instance().allTAlbums();
@@ -432,12 +437,14 @@ ImageDescEditTab::~ImageDescEditTab()
     KConfigGroup group        = config->group(QString("Tag List View"));
     group.writeEntry("Toggle Auto Tags", (int)(d->toggleAutoTags));
     group.sync();
-    group                     = config->group("Image Properties SideBar");
-    group.writeEntry("ImageDescEditTab Tab", d->tabWidget->currentIndex());
-    d->templateViewer->writeSettings(group);
-    group.sync();
+    KConfigGroup group2       = config->group("Image Properties SideBar");
+    group2.writeEntry("ImageDescEditTab Tab", d->tabWidget->currentIndex());
+    d->templateViewer->writeSettings(group2);
+    group2.sync();
 
-    delete d;
+    kDebug() << "-------------> Close Event called !!!";
+
+    KVBox::closeEvent(e);
 }
 
 bool ImageDescEditTab::singleSelection() const
@@ -765,9 +772,8 @@ bool ImageDescEditTab::eventFilter(QObject *o, QEvent *e)
                 return true;
             }
         }
-        return false;
     }
-    return false;
+    return KVBox::eventFilter(o, e);
 }
 
 void ImageDescEditTab::populateTags()

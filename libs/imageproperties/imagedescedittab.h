@@ -77,6 +77,7 @@ Q_SIGNALS:
 protected:
 
     bool eventFilter(QObject *o, QEvent *e);
+    void closeEvent(QCloseEvent*);
 
 private:
 
