@@ -47,14 +47,6 @@ namespace Digikam
 
 class TemplatePanelPriv
 {
-public:
-
-    enum TemplateTab
-    {
-        RIGHTS=0,
-        LOCATION,
-        CONTACT
-    };
 
 public:
 
@@ -237,7 +229,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     grid1->addWidget(label7,                 6, 0, 1, 1);
     grid1->addWidget(d->instructionsEdit,    6, 1, 1, 2);
 
-    insertTab(TemplatePanelPriv::RIGHTS, page1, KIcon("flag-red"), i18n("Rights"));
+    insertTab(RIGHTS, page1, KIcon("flag-red"), i18n("Rights"));
 
     // -- Location Template informations panel -------------------------------------------------------------
 
@@ -296,7 +288,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     grid2->addWidget(label9,                       3, 0, 1, 1);
     grid2->addWidget(d->locationCountryCodeEdit,   3, 1, 1, 2);
 
-    insertTab(TemplatePanelPriv::LOCATION, page2, KIcon("applications-internet"), i18n("Location"));
+    insertTab(LOCATION, page2, KIcon("applications-internet"), i18n("Location"));
 
     // -- Contact Template informations panel -------------------------------------------------------------
 
@@ -405,7 +397,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     grid3->addWidget(label20,                     7, 0, 1, 1);
     grid3->addWidget(d->contactWebUrlEdit,        7, 1, 1, 2);
 
-    insertTab(TemplatePanelPriv::CONTACT, page3, KIcon("view-pim-contacts"), i18n("Contact"));
+    insertTab(CONTACT, page3, KIcon("view-pim-contacts"), i18n("Contact"));
 }
 
 TemplatePanel::~TemplatePanel()

@@ -39,6 +39,14 @@ class TemplatePanelPriv;
 
 class TemplatePanel : public KTabWidget
 {
+public:
+
+    enum TemplateTab
+    {
+        RIGHTS=0,
+        LOCATION,
+        CONTACT
+    };
 
 public:
 
@@ -48,7 +56,7 @@ public:
     void     setTemplate(const Template& t);
     Template getTemplate() const;
 
-    void apply();
+    void     apply();
 
 private:
 
