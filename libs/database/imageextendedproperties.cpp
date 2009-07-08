@@ -108,6 +108,11 @@ void ImageExtendedProperties::setLocation(const IptcCoreLocationInfo &location)
     setProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreProvinceState), location.provinceState);
 }
 
+void ImageExtendedProperties::removeLocation()
+{
+    setLocation(IptcCoreLocationInfo());
+}
+
 QString ImageExtendedProperties::readProperty(const QString& property)
 {
     return DatabaseAccess().db()->getImageProperty(m_id, property);
@@ -139,6 +144,5 @@ void ImageExtendedProperties::removeProperty(const QString &property)
 {
     DatabaseAccess().db()->removeImageProperty(m_id, property);
 }
-
 
 } // namespace Digikam

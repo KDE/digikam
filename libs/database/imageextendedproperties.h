@@ -32,6 +32,7 @@
 
 // Local includes
 
+#include "template.h"
 #include "metadatainfo.h"
 #include "digikam_export.h"
 
@@ -102,15 +103,15 @@ public:
      */
     IptcCoreLocationInfo location();
     void setLocation(const IptcCoreLocationInfo &location);
-
+    void removeLocation();
 
 protected:
 
-    QString readProperty(const QString& property);
-    void    setProperty(const QString& property, const QString& value);
+    QString     readProperty(const QString& property);
+    void        setProperty(const QString& property, const QString& value);
     QStringList readFakeListProperty(const QString& property);
-    void    setFakeListProperty(const QString& property, const QStringList& value);
-    void    removeProperty(const QString &property);
+    void        setFakeListProperty(const QString& property, const QStringList& value);
+    void        removeProperty(const QString &property);
 
 protected:
 

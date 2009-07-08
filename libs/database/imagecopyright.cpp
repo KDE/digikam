@@ -350,9 +350,8 @@ int ImageCopyright::languageMatch(const QList<CopyrightInfo> infos, const QStrin
     return chosen;
 }
 
-Template ImageCopyright::toMetadataTemplate()
+void ImageCopyright::fillMetadataTemplate(Template& t)
 {
-    Template t;
     t.setAuthors(author());
     t.setAuthorsPosition(authorsPosition());
     t.setCredit(credit());
@@ -360,7 +359,7 @@ Template ImageCopyright::toMetadataTemplate()
     t.setRightUsageTerms(allRightsUsageTerms());
     t.setSource(source());
     t.setInstructions(instructions());
-    return t;
+    t.setContactInfo(contactInfo());
 }
 
 } // namespace Digikam

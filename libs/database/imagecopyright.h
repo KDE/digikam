@@ -209,9 +209,9 @@ public:
     void removeContactInfo();
 
     /**
-     * Returns all entries of the given type in a Template container.
+     * Fill all entries of the given type in a Template container.
      */
-    Template toMetadataTemplate();
+    void fillMetadataTemplate(Template& t);
 
 protected:
 

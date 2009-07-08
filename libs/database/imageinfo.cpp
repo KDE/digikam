@@ -521,6 +521,79 @@ PhotoInfoContainer ImageInfo::photoInfoContainer() const
     return photoInfo;
 }
 
+Template ImageInfo::metadataTemplate() const
+{
+    if (!m_data)
+        return Template();
+
+    Template t;
+    ImageCopyright cr = imageCopyright();
+
+    t.setAuthors(cr.author());
+    t.setAuthorsPosition(cr.authorsPosition());
+    t.setCredit(cr.credit());
+    t.setCopyright(cr.allCopyrightNotices());
+    t.setRightUsageTerms(cr.allRightsUsageTerms());
+    t.setSource(cr.source());
+    t.setInstructions(cr.instructions());
+    t.setContactInfo(cr.contactInfo());
+
+    ImageExtendedProperties ep = imageExtendedProperties();
+    t.setLocationInfo(ep.location());
+    return t;
+}
+
+void ImageInfo::setMetadataTemplate(const Template& t)
+{
+    if (!m_data)
+        return;
+
+    removeMetadataTemplate();
+
+    ImageCopyright cr = imageCopyright();
+    foreach(QString author, t.authors())
+        cr.setAuthor(author, ImageCopyright::AddEntryToExisting);
+
+    cr.setCredit(t.credit());
+
+    KExiv2::AltLangMap copyrights = t.copyright();
+    KExiv2::AltLangMap::const_iterator it;
+    for (it = copyrights.constBegin() ; it != copyrights.constEnd() ; ++it)
+        cr.setRights(it.value(), it.key(), ImageCopyright::AddEntryToExisting);
+
+    KExiv2::AltLangMap usages = t.rightUsageTerms();
+    KExiv2::AltLangMap::const_iterator it2;
+    for (it2 = usages.constBegin() ; it2 != usages.constEnd() ; ++it2)
+        cr.setRightsUsageTerms(it2.value(), it2.key(), ImageCopyright::AddEntryToExisting);
+
+    cr.setSource(t.source());
+    cr.setAuthorsPosition(t.authorsPosition());
+    cr.setInstructions(t.instructions());
+    cr.setContactInfo(t.contactInfo());
+
+    ImageExtendedProperties ep = imageExtendedProperties();
+    ep.setLocation(t.locationInfo());
+}
+
+void ImageInfo::removeMetadataTemplate()
+{
+    if (!m_data)
+        return;
+
+    ImageCopyright cr = imageCopyright();
+    cr.removeCreators();
+    cr.removeProvider();
+    cr.removeCopyrightNotices();
+    cr.removeRightsUsageTerms();
+    cr.removeSource();
+    cr.removeCreatorJobTitle();
+    cr.removeInstructions();
+    cr.removeContactInfo();
+
+    ImageExtendedProperties ep = imageExtendedProperties();
+    ep.removeLocation();
+}
+
 void ImageInfo::setRating(int value)
 {
     if (!m_data)

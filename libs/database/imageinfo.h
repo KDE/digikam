@@ -48,6 +48,7 @@
 #include "imagecopyright.h"
 #include "imageextendedproperties.h"
 #include "imageposition.h"
+#include "template.h"
 #include "photoinfocontainer.h"
 #include "databaseinfocontainers.h"
 
@@ -229,6 +230,23 @@ public:
     ImageCommonContainer   imageCommonContainer() const;
     ImageMetadataContainer imageMetadataContainer() const;
     PhotoInfoContainer     photoInfoContainer() const;
+
+
+    /**
+     * Retrieve metadata template informations about the image.
+     */
+    Template metadataTemplate() const;
+
+    /**
+     * Set metadata template information (write it to database)
+     * @param t the new template data.
+     */
+    void setMetadataTemplate(const Template& t);
+
+    /**
+     * Remove all template info about the image from database.
+     */
+    void removeMetadataTemplate();
 
     /**
      * Set the date and time (write it to database)
