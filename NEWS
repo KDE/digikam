@@ -6,7 +6,7 @@ NEW FEATURES:
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 199168 : Tags in db but not in iptc.
+001 ==> 199168 : Tags in db but not in IPTC.
 002 ==> 184445 : Deleting multiple files in folder view gives me multiple errors.
 003 ==> 151749 : External URLs from pictures for related information.
 004 ==> 192701 : Application: digiKam (digiKam), signal SIGSEGV --Crash under Gnome (Ubuntu 9.04).
@@ -39,7 +39,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 009 ==> 189979 : All displays of the same caption don't show the same text when it contains "éèà".
 010 ==> 195902 : digiKam crashes on first startup if album folder is not empty.
 011 ==> 154606 : Changing the date for multiple pictures simultaneously changes all of the times too.
-012 ==> 143932 : Utf-8 displayed with wrong encoding when restoring photo to digiKam.
+012 ==> 143932 : UTF-8 displayed with wrong encoding when restoring photo to digiKam.
 013 ==> 179227 : Generation of XMP tags crashes the application.
 014 ==> 188988 : digiKam crash while scanning images.
 015 ==> 192085 : digiKam suddenly crashed when managing pictures.
@@ -51,14 +51,14 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 021 ==> 159158 : Tags moved in tree are duplicated in the IPTC metadata.
 022 ==> 186308 : Moving tags in hierarchy not reflected in XMP metadata "TagsList".
 023 ==> 141912 : Sync Metadata Batch Tool does not reflect changes in tags properly.
-024 ==> 175321 : Synchronize tags to iptc keywords adds instead of copying.
+024 ==> 175321 : Synchronize tags to IPTC keywords adds instead of copying.
 025 ==> 195663 : Crash while adding new tag.
 026 ==> 195735 : digiKam-svn fails to compile on Mac OS X.
-027 ==> 196768 : With 4.2.90 digikam always crashes on startup - worked fine with 4.2.3.
-028 ==> 190719 : Compiling digikam-0.10.0 on gentoo fails.
+027 ==> 196768 : With 4.2.90 digiKam always crashes on startup - worked fine with 4.2.3.
+028 ==> 190719 : Compiling digikam-0.10.0 on Gentoo fails.
 029 ==> 197129 : Hierarchical setting of keywords.
 030 ==> 195079 : digiKam albums appear empty.
-031 ==> 195494 : Deleting and cancelling a picture with the keyboard still delete the picture.
+031 ==> 195494 : Deleting and canceling a picture with the keyboard still delete the picture.
 032 ==> 195975 : Images are not visible.
 033 ==> 196462 : IconView (Qt4 Model/view based): Navigation broken after delete.
 034 ==> 192055 : Typo digiKam tip of the day.
@@ -75,17 +75,17 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 045 ==> 152219 : Impossible to clear comments in metadata.
 046 ==> 197198 : Libpng not detected during configure.
 047 ==> 152199 : Deleting tags can leave orphaned IPTC keywords inside files.
-048 ==> 197285 : Understand keyword hierarchies with different delimitors.
+048 ==> 197285 : Understand keyword hierarchies with different delimiters.
 049 ==> 197640 : Add the "New folder" Option while dragging items to folders.
 050 ==> 197744 : Lists of languages miss en-US.
 051 ==> 197622 : digiKam crashes on exit.
 052 ==> 197808 : Bad images sort order when starting digiKam.
-053 ==> 197641 : Can't delete exif x-default caption once set.
+053 ==> 197641 : Can't delete Exif x-default caption once set.
 054 ==> 196437 : digiKam crashes at startup.
 055 ==> 197868 : digiKam crashes on startup (digikam-0.10.0-2/x86_64/Archlinux).
-056 ==> 196686 : Iconview (Qt4 Model/View based) : Select multiple images with Ctrl + Mouse not working anymore in 1.0.0-beta1.
-057 ==> 197961 : Cameragui freezes digikam when starting to download images from camera.
-058 ==> 197445 : digiKam freezes while attempting to import images from canon powershot a540.
+056 ==> 196686 : IconView (Qt4 Model/View based) : Select multiple images with CTRL + Mouse not working anymore in 1.0.0-beta1.
+057 ==> 197961 : CameraUI freezes digiKam when starting to download images from camera.
+058 ==> 197445 : digiKam freezes while attempting to import images from canon Powershot a540.
 059 ==> 198067 : digiKam does not show any pictures.
 060 ==> 186638 : Canon 450D import issues.
 061 ==> 195809 : Radio buttons in "Search Group" "Options" in "Advanced search" dialog do not show selection status.
@@ -96,9 +96,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 066 ==> 139361 : Templates for meta data.
 067 ==> 175923 : digiKam uses wrong album root path/wrong disk uuid.
 068 ==> 185065 : Image editor loads new image without being asked to.
-069 ==> 188017 : Video colours inverted after digiKam started.
+069 ==> 188017 : Video colors inverted after digiKam started.
 070 ==> 194950 : digiKam endlessly spewing text to stderr.
-071 ==> 189080 : Comments not saved with digikam 0.10.0 on KDE 4.2.2.
+071 ==> 189080 : Comments not saved with digiKam 0.10.0 on KDE 4.2.2.
 072 ==> 198868 : Pictures are not displayed in the main view i just can see them in the batch menu.
 
 
@@ -133,7 +133,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 187937 : Writing tags to files doesn't update modification timestamp.
 009 ==> 184687 : Crash after deleting an empty album.
 010 ==> 186766 : Crash after finish resize and rename of images in folder.
-011 ==> 184953 : Zooming and paning in slideshow / without toolbars.
+011 ==> 184953 : Zooming and panning in slideshow / without toolbars.
 012 ==> 187508 : Spontaneous crash whilst doing nothing in particular.
 013 ==> 188235 : Assigning a color profile to TIFF images does not work anymore with 0.10.0.
 014 ==> 187748 : Install application icons to right path for non-KDE desktops.
@@ -155,17 +155,17 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 030 ==> 185177 : Searches are not updated when changes are made to the resulting image set.
 031 ==> 189542 : Crash on opening download dialog.
 032 ==> 114225 : Free rotation using an horizontal line.
-033 ==> 189843 : Crash on ubuntu jaunty beta.
+033 ==> 189843 : Crash on Ubuntu jaunty beta.
 034 ==> 167836 : Image preview is too large.
 035 ==> 189250 : Editing a canon camera jpeg adds broken sRGB profile.
 036 ==> 187733 : Cannot turn off sidebar after Infrared filter usage?
-037 ==> 188755 : Strange behaviour on selection.
+037 ==> 188755 : Strange behavior on selection.
 038 ==> 185884 : Empty view after clicking the left thumbnail image in Image Editor filter view.
 039 ==> 188062 : Synchronize Images with Database does not save Copyright, Credit, Source, By-line, By-line Title in IPTC.
 040 ==> 186823 : Several bugs in lens defect auto-correction plugin.
-041 ==> 190612 : digiKam and Showfoto crash.
+041 ==> 190612 : digiKam and showFoto crash.
 042 ==> 191092 : No images shown in digiKam albums.
-043 ==> 191203 : digiKam crashed on first load, after being installed on ubuntu 9.04.
+043 ==> 191203 : digiKam crashed on first load, after being installed on Ubuntu 9.04.
 044 ==> 151321 : Remaining space incorrectly calculated when using symlinks (import from camera).
 045 ==> 189742 : Thumbnails not saved between sessions.
 046 ==> 180507 : Crash when dragging picture to another app with kwin_composite enabled.
@@ -176,11 +176,11 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 051 ==> 182332 : Can't stop generating of thumbnails when import from a card reader.
 052 ==> 152382 : Unable to view photo.
 053 ==> 161744 : Filenames are lower case when imported via sd card reader, upper case when imported via usb cable directly from camera.
-054 ==> 187560 : Iptc data for author are missing while downloading images.
+054 ==> 187560 : IPTC data for author are missing while downloading images.
 055 ==> 192294 : digiKam crash when i try to import photos from my card reader.
 056 ==> 192413 : Missing items from right-click search menu.
 057 ==> 131551 : Camera port info deleted when editing camera title.
-058 ==> 181726 : digiKam collect video, music when I connect usb key.
+058 ==> 181726 : digiKam collect video, music when I connect USB key.
 059 ==> 154626 : Autodetect starting number for "appending numbers" when downloading images.
 060 ==> 188316 : Missing NEF files when importing from USB disk.
 061 ==> 193163 : digiKam ignores settings on the rating stars.
