@@ -7,7 +7,8 @@
  * Description : Handling accesss to one image and associated data
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -457,6 +458,14 @@ ImageCopyright ImageInfo::imageCopyright() const
         return ImageCopyright();
 
     return ImageCopyright(m_data->id);
+}
+
+ImageExtendedProperties ImageInfo::imageExtendedProperties() const
+{
+    if (!m_data)
+        return ImageExtendedProperties();
+
+    return ImageExtendedProperties(m_data->id);
 }
 
 ImagePosition ImageInfo::imagePosition() const

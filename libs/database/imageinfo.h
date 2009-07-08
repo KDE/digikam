@@ -7,7 +7,8 @@
  * Description : Handling accesses to one image and associated data
  *
  * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,6 +46,7 @@
 #include "imageinfolist.h"
 #include "imagecomments.h"
 #include "imagecopyright.h"
+#include "imageextendedproperties.h"
 #include "imageposition.h"
 #include "photoinfocontainer.h"
 #include "databaseinfocontainers.h"
@@ -206,6 +208,13 @@ public:
      * values.
      */
     ImageCopyright imageCopyright() const;
+
+    /**
+     * Retrieve the ImageExtendedProperties object for this item.
+     * This object allows full read and write access to all extended properties
+     * values.
+     */
+    ImageExtendedProperties imageExtendedProperties() const;
 
     /**
      * Retrieve the ImagePosition object for this item.
