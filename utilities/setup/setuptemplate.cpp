@@ -33,6 +33,7 @@
 
 // KDE includes
 
+#include <kconfig.h>
 #include <klocale.h>
 #include <kdialog.h>
 #include <klineedit.h>
@@ -172,11 +173,20 @@ SetupTemplate::~SetupTemplate()
 void SetupTemplate::applySettings()
 {
     d->listView->applySettings();
+
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(QString("Setup Dialog"));
+    group.writeEntry("Template Tab", (int)(d->tview->currentIndex()));
+    config->sync();
 }
 
 void SetupTemplate::readSettings()
 {
     d->listView->readSettings();
+
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(QString("Setup Dialog"));
+    d->tview->setCurrentIndex((TemplatePanel::TemplateTab)group.readEntry("Template Tab", (int)TemplatePanel::RIGHTS));
 }
 
 void SetupTemplate::slotSelectionChanged()
