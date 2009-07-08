@@ -62,6 +62,8 @@ bool Template::operator==(const Template& t) const
     kDebug(50003) << t.rightUsageTerms() << m_rightUsageTerms << b5;
     kDebug(50003) << t.source()          << m_source          << b6;
     kDebug(50003) << t.instructions()    << m_instructions    << b7;
+    kDebug(50003) << t.locationInfo()    << m_locationInfo    << b8;
+    kDebug(50003) << t.contactInfo()     << m_contactInfo     << b9;
 
     return b1 && b2 && b3 && b4 && b5 && b6 && b7 && b8 && b9;
 }
@@ -199,6 +201,10 @@ QDebug operator<<(QDebug dbg, const Template& t)
                   << t.source() << ", ";
     dbg.nospace() << "Template::instructions: "
                   << t.instructions();
+    dbg.nospace() << "Template::locationinfo: "
+                  << t.locationInfo();
+    dbg.nospace() << "Template::contactinfo: "
+                  << t.contactInfo();
     return dbg.space();
 }
 
