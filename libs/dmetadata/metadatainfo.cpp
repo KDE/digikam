@@ -7,6 +7,7 @@
  * Description : Metadata info containers
  *
  * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -66,6 +67,27 @@ bool IptcCoreContactInfo::operator==(const IptcCoreContactInfo& t) const
     return b1 && b2 && b3 && b4 && b5 && b6 && b7 && b8;
 }
 
+QDebug operator<<(QDebug dbg, const IptcCoreContactInfo& inf)
+{
+    dbg.nospace() << "IptcCoreContactInfo::city: "
+                  << inf.city << ", ";
+    dbg.nospace() << "IptcCoreContactInfo::country: "
+                  << inf.country << ", ";
+    dbg.nospace() << "IptcCoreContactInfo::address: "
+                  << inf.address << ", ";
+    dbg.nospace() << "IptcCoreContactInfo::postalCode: "
+                  << inf.postalCode << ", ";
+    dbg.nospace() << "IptcCoreContactInfo::provinceState: "
+                  << inf.provinceState << ", ";
+    dbg.nospace() << "IptcCoreContactInfo::email: "
+                  << inf.email << ", ";
+    dbg.nospace() << "IptcCoreContactInfo::phone: "
+                  << inf.phone << ", ";
+    dbg.nospace() << "IptcCoreContactInfo::webUrl: "
+                  << inf.webUrl;
+    return dbg.space();
+}
+
 bool IptcCoreLocationInfo::isEmpty() const
 {
     return country.isEmpty()       &&
@@ -93,6 +115,21 @@ bool IptcCoreLocationInfo::operator==(const IptcCoreLocationInfo& t) const
     bool b5 = location      == t.location;
 
     return b1 && b2 && b3 && b4 && b5;
+}
+
+QDebug operator<<(QDebug dbg, const IptcCoreLocationInfo& inf)
+{
+    dbg.nospace() << "IptcCoreLocationInfo::country: "
+                  << inf.country << ", ";
+    dbg.nospace() << "IptcCoreLocationInfo::countryCode: "
+                  << inf.countryCode << ", ";
+    dbg.nospace() << "IptcCoreLocationInfo::provinceState: "
+                  << inf.provinceState << ", ";
+    dbg.nospace() << "IptcCoreLocationInfo::city: "
+                  << inf.city << ", ";
+    dbg.nospace() << "IptcCoreLocationInfo::location: "
+                  << inf.location;
+    return dbg.space();
 }
 
 } // namespace Digikam

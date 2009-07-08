@@ -200,9 +200,9 @@ QDebug operator<<(QDebug dbg, const Template& t)
     dbg.nospace() << "Template::source: "
                   << t.source() << ", ";
     dbg.nospace() << "Template::instructions: "
-                  << t.instructions();
+                  << t.instructions() << ", ";
     dbg.nospace() << "Template::locationinfo: "
-                  << t.locationInfo();
+                  << t.locationInfo() << ", ";
     dbg.nospace() << "Template::contactinfo: "
                   << t.contactInfo();
     return dbg.space();
