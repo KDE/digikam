@@ -267,6 +267,7 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     KSeparator *line  = new KSeparator(Qt::Horizontal);
 
     d->expanderBox = new RExpanderBox;
+    d->expanderBox->setObjectName("FreeRotationTool Expander");
     d->expanderBox->addItem(autoAdjustContainer, SmallIcon("freerotation"), i18n("Automatic Adjustment"),
                             QString("AutoAdjustContainer"), true);
     d->expanderBox->addItem(manualAdjustContainer, SmallIcon("freerotation"), i18n("Manual Adjustment"),
@@ -339,7 +340,7 @@ void FreeRotationTool::readSettings()
 
     d->autoCropCB->setCurrentIndex(group.readEntry("Auto Crop Type", d->autoCropCB->defaultIndex()));
     d->antialiasInput->setChecked(group.readEntry("Anti Aliasing", true));
-    d->expanderBox->readSettings(group);
+    d->expanderBox->readSettings();
 
     d->angleInput->slotReset();
     d->fineAngleInput->slotReset();
@@ -356,7 +357,6 @@ void FreeRotationTool::writeSettings()
     KConfigGroup group        = config->group("freerotation Tool");
     group.writeEntry("Auto Crop Type", d->autoCropCB->currentIndex());
     group.writeEntry("Anti Aliasing", d->antialiasInput->isChecked());
-    d->expanderBox->writeSettings(group);
     d->previewWidget->writeSettings();
     group.sync();
 }

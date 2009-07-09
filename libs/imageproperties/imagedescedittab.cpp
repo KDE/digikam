@@ -409,15 +409,11 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     KConfigGroup group2       = config->group("Image Properties SideBar");
     d->tabWidget->setCurrentIndex(group2.readEntry("ImageDescEditTab Tab",
                                   (int)ImageDescEditTabPriv::DESCRIPTIONS));
-    d->templateViewer->readSettings(group2);
+    d->templateViewer->setObjectName("ImageDescEditTab Expander");
+    d->templateViewer->readSettings();
 }
 
 ImageDescEditTab::~ImageDescEditTab()
-{
-    delete d;
-}
-
-void ImageDescEditTab::closeEvent(QCloseEvent* e)
 {
     // FIXME: this slot seems to be called several times, which can also be seen when changing the metadata of
     // an image and then switching to another one, because you'll get the dialog created by slotChangingItems()
@@ -439,12 +435,9 @@ void ImageDescEditTab::closeEvent(QCloseEvent* e)
     group.sync();
     KConfigGroup group2       = config->group("Image Properties SideBar");
     group2.writeEntry("ImageDescEditTab Tab", d->tabWidget->currentIndex());
-    d->templateViewer->writeSettings(group2);
     group2.sync();
 
-    kDebug() << "-------------> Close Event called !!!";
-
-    KVBox::closeEvent(e);
+    delete d;
 }
 
 bool ImageDescEditTab::singleSelection() const

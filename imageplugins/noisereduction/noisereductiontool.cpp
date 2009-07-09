@@ -292,6 +292,7 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
     grid2->setSpacing(d->gboxSettings->spacingHint());
 
     d->expanderBox = new RExpanderBox;
+    d->expanderBox->setObjectName("NoiseReductionTool Expander");
     d->expanderBox->addItem(firstPage, SmallIcon("noisereduction"), i18n("Details"),
                             QString("DetailsContainer"), true);
     d->expanderBox->addItem(secondPage, SmallIcon("noisereduction"), i18n("Advanced settings"),
@@ -338,7 +339,7 @@ void NoiseReductionTool::readSettings()
     d->sharpnessInput->setValue(group.readEntry("SharpnessAdjustment", d->sharpnessInput->defaultValue()));
     d->textureInput->setValue(group.readEntry("TextureAdjustment", d->textureInput->defaultValue()));
     d->thresholdInput->setValue(group.readEntry("ThresholdAdjustment", d->thresholdInput->defaultValue()));
-    d->expanderBox->readSettings(group);
+    d->expanderBox->readSettings();
 
     d->expanderBox->setEnabled(true);
 }
@@ -357,7 +358,6 @@ void NoiseReductionTool::writeSettings()
     group.writeEntry("GammaAdjustment", d->gammaInput->value());
     group.writeEntry("DampingAdjustment", d->dampingInput->value());
     group.writeEntry("PhaseAdjustment", d->phaseInput->value());
-    d->expanderBox->writeSettings(group);
     d->previewWidget->writeSettings();
     group.sync();
 }

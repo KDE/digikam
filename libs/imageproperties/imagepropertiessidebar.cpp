@@ -89,20 +89,12 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget *parent,
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
             this, SLOT(slotChangedTab(QWidget*)));
 
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("Image Properties SideBar");
-    m_propertiesTab->readSettings(group);
+    m_propertiesTab->setObjectName("Image Properties SideBar Expander");
+    m_propertiesTab->readSettings();
 }
 
 ImagePropertiesSideBar::~ImagePropertiesSideBar()
 {
-}
-
-void ImagePropertiesSideBar::closeEvent(QCloseEvent*)
-{
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("Image Properties SideBar");
-    m_propertiesTab->writeSettings(group);
 }
 
 void ImagePropertiesSideBar::itemChanged(const KUrl& url, const QRect& rect, DImg *img)

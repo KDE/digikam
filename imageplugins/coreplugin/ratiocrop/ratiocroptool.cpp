@@ -189,6 +189,7 @@ RatioCropTool::RatioCropTool(QObject* parent)
 
     QVBoxLayout* vlay      = new QVBoxLayout(d->gboxSettings->plainPage());
     d->expbox              = new RExpanderBox(d->gboxSettings->plainPage());
+    d->expbox->setObjectName("RatioCropTool Expander");
     QWidget *cropSelection = new QWidget(d->expbox);
 
     QLabel *label = new QLabel(i18n("Aspect ratio:"), cropSelection);
@@ -494,7 +495,7 @@ void RatioCropTool::readSettings()
     // This is necessary to avoid jumping of the selection when reading the settings.
     // The drawing must be activated later on in this method to have a working selection.
 
-    d->expbox->readSettings(group);
+    d->expbox->readSettings();
 
     // No guide lines per default.
     d->guideLinesCB->setCurrentIndex(group.readEntry("Guide Lines Type",
@@ -570,8 +571,6 @@ void RatioCropTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("aspectratiocrop Tool");
-
-    d->expbox->writeSettings(group);
 
     if (d->originalIsLandscape)
     {

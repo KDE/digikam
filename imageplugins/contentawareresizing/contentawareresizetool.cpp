@@ -413,6 +413,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     // -------------------------------------------------------------
 
     d->expanderBox = new RExpanderBox;
+    d->expanderBox->setObjectName("ContentAwareResizeTool Expander");
     d->expanderBox->addItem(sizeSettingsContainer, SmallIcon("transform-scale"), i18n("Target size"),
                            QString("SizeSettingsContainer"), true);
     d->expanderBox->addItem(mixedRescaleContainer, SmallIcon("transform-scale"), i18n("Content-aware rescale percentage"),
@@ -481,7 +482,7 @@ void ContentAwareResizeTool::readSettings()
     d->mixedRescaleInput->setValue(group.readEntry("MixedRescaleValue", d->mixedRescaleInput->defaultValue()));
     d->maskPenSize->setValue(group.readEntry("BrushSize",               d->maskPenSize->defaultValue()));
     d->preserveSkinTones->setChecked(group.readEntry("PreserveTones",   false));
-    d->expanderBox->readSettings(group);
+    d->expanderBox->readSettings();
 
     enableContentAwareSettings(d->mixedRescaleInput->value() > 0.0);
 
@@ -502,7 +503,6 @@ void ContentAwareResizeTool::writeSettings()
     group.writeEntry("MixedRescaleValue", d->mixedRescaleInput->value());
     group.writeEntry("BrushSize",         d->maskPenSize->value());
     group.writeEntry("PreserveTones",     d->preserveSkinTones->isChecked());
-    d->expanderBox->writeSettings(group);
 
     d->previewWidget->writeSettings();
     group.sync();

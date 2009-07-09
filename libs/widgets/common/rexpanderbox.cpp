@@ -43,6 +43,7 @@
 #include <kglobalsettings.h>
 #include <kdialog.h>
 #include <klocale.h>
+#include <kconfig.h>
 
 namespace Digikam
 {
@@ -144,6 +145,11 @@ void RArrowClickLabel::setArrowType(Qt::ArrowType type)
 {
     m_arrowType = type;
     update();
+}
+
+Qt::ArrowType RArrowClickLabel::arrowType() const
+{
+    return m_arrowType;
 }
 
 void RArrowClickLabel::mouseReleaseEvent(QMouseEvent* event)
@@ -381,10 +387,7 @@ void RLabelExpander::setExpanded(bool b)
 
 bool RLabelExpander::isExpanded() const
 {
-    if (d->containerWidget)
-        return (d->containerWidget->isVisible());
-
-    return false;
+    return (d->arrow->arrowType() == Qt::DownArrow);
 }
 
 void RLabelExpander::slotToggleContainer()
@@ -475,6 +478,8 @@ RExpanderBox::RExpanderBox(QWidget *parent)
 
 RExpanderBox::~RExpanderBox()
 {
+    writeSettings();
+    d->wList.clear();
     delete d;
 }
 
@@ -620,8 +625,11 @@ bool RExpanderBox::isItemExpanded(int index) const
     return (exp->isExpanded());
 }
 
-void RExpanderBox::readSettings(KConfigGroup& group)
+void RExpanderBox::readSettings()
 {
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(QString("%1").arg(objectName()));
+
     for (int i = 0 ; i < count(); ++i)
     {
         RLabelExpander *exp = d->wList[i];
@@ -633,8 +641,11 @@ void RExpanderBox::readSettings(KConfigGroup& group)
     }
 }
 
-void RExpanderBox::writeSettings(KConfigGroup& group)
+void RExpanderBox::writeSettings()
 {
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(QString("%1").arg(objectName()));
+
     for (int i = 0 ; i < count(); ++i)
     {
         RLabelExpander *exp = d->wList[i];
@@ -644,6 +655,7 @@ void RExpanderBox::writeSettings(KConfigGroup& group)
                              exp->isExpanded());
         }
     }
+    config->sync();
 }
 
 } // namespace Digikam

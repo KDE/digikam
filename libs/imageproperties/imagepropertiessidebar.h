@@ -71,7 +71,6 @@ protected Q_SLOTS:
 protected:
 
     virtual void setImagePropertiesInformation(const KUrl& url);
-    virtual void closeEvent(QCloseEvent*);
 
 protected:
 

@@ -199,6 +199,7 @@ void CameraUI::setupUserArea()
     // -------------------------------------------------------------------------
 
     d->advBox           = new RExpanderBox(d->rightSideBar);
+    d->advBox->setObjectName("Camera Settings Expander");
 
     d->renameCustomizer = new RenameCustomizer(d->advBox, d->cameraTitle);
     d->renameCustomizer->setWhatsThis( i18n("Set how digiKam will rename files as they are downloaded."));
@@ -730,7 +731,7 @@ void CameraUI::readSettings()
     d->showLogAction->setChecked(group.readEntry("ShowLog",                  false));
     d->lastPhotoFirstAction->setChecked(group.readEntry("LastPhotoFirst",    true));
 
-    d->advBox->readSettings(group);
+    d->advBox->readSettings();
     d->splitter->restoreState(group);
 
     d->dateTimeEdit->setEnabled(d->fixDateTimeCheck->isChecked());
@@ -758,7 +759,6 @@ void CameraUI::saveSettings()
     group.writeEntry("ShowLog",             d->showLogAction->isChecked());
     group.writeEntry("LastPhotoFirst",      d->lastPhotoFirstAction->isChecked());
 
-    d->advBox->writeSettings(group);
     d->splitter->saveState(group);
     config->sync();
 }

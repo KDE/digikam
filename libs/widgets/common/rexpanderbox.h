@@ -103,6 +103,8 @@ public:
     ~RArrowClickLabel(){};
 
     void setArrowType(Qt::ArrowType arrowType);
+    Qt::ArrowType arrowType() const;
+
     virtual QSize sizeHint () const;
 
 Q_SIGNALS:
@@ -231,8 +233,8 @@ public:
     RLabelExpander* widget(int index) const;
     int indexOf(RLabelExpander *widget) const;
 
-    void readSettings(KConfigGroup& group);
-    void writeSettings(KConfigGroup& group);
+    void readSettings();
+    void writeSettings();
 
 Q_SIGNALS:
 

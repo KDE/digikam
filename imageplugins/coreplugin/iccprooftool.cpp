@@ -224,6 +224,7 @@ ICCProofTool::ICCProofTool(QObject* parent)
     // -------------------------------------------------------------
 
     d->toolBoxWidgets        = new RExpanderBox(d->gboxSettings->plainPage());
+    d->toolBoxWidgets->setObjectName("IccProofTool Expander");
     QWidget *generalOptions  = new QWidget(d->toolBoxWidgets);
     QWidget *inProfiles      = new QWidget(d->toolBoxWidgets);
     QWidget *spaceProfiles   = new QWidget(d->toolBoxWidgets);
@@ -635,7 +636,7 @@ void ICCProofTool::readSettings()
     // Plugin settings.
     group = config->group("colormanagement Tool");
 
-    d->toolBoxWidgets->readSettings(group);
+    d->toolBoxWidgets->readSettings();
     d->inProfilesPath->setUrl(group.readPathEntry("InputProfilePath", defaultICCPath));
     d->proofProfilePath->setUrl(group.readPathEntry("ProofProfilePath", defaultICCPath));
     d->spaceProfilePath->setUrl(group.readPathEntry("SpaceProfilePath", defaultICCPath));
@@ -683,7 +684,6 @@ void ICCProofTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("colormanagement Tool");
-    d->toolBoxWidgets->writeSettings(group);
     group.writeEntry("Histogram Channel", d->gboxSettings->histogramBox()->channel());
     group.writeEntry("Histogram Scale", d->gboxSettings->histogramBox()->scale());
     group.writeEntry("InputProfilePath", d->inProfilesPath->url());
