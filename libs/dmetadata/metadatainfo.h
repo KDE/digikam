@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_DATABASE_EXPORT IptcCoreLocationInfo
+class IptcCoreLocationInfo
 {
 public:
 
@@ -53,9 +53,9 @@ public:
 };
 
 //! kDebug() stream operator. Writes property @a inf to the debug output in a nicely formatted way.
-DIGIKAM_DATABASE_EXPORT QDebug operator<<(QDebug dbg, const IptcCoreLocationInfo& inf);
+DIGIKAM_EXPORT QDebug operator<<(QDebug dbg, const IptcCoreLocationInfo& inf);
 
-class DIGIKAM_DATABASE_EXPORT IptcCoreContactInfo
+class DIGIKAM_EXPORT IptcCoreContactInfo
 {
 public:
 
@@ -74,7 +74,7 @@ public:
 };
 
 //! kDebug() stream operator. Writes property @a inf to the debug output in a nicely formatted way.
-DIGIKAM_DATABASE_EXPORT QDebug operator<<(QDebug dbg, const IptcCoreContactInfo& inf);
+DIGIKAM_EXPORT QDebug operator<<(QDebug dbg, const IptcCoreContactInfo& inf);
 
 namespace MetadataInfo
 {
