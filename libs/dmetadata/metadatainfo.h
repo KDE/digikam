@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-class IptcCoreLocationInfo
+class DIGIKAM_EXPORT IptcCoreLocationInfo
 {
 public:
 
