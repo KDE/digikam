@@ -36,7 +36,6 @@
 // KDE includes
 
 #include <ksqueezedtextlabel.h>
-#include <kconfiggroup.h>
 
 // Local includes
 
