@@ -88,6 +88,11 @@ void ImageExtendedProperties::setSubjectCode(const QStringList &subjectCode)
     setFakeListProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreSubjectCode), subjectCode);
 }
 
+void ImageExtendedProperties::removeSubjectCode()
+{
+    setSubjectCode(QStringList());
+}
+
 IptcCoreLocationInfo ImageExtendedProperties::location()
 {
     IptcCoreLocationInfo location;

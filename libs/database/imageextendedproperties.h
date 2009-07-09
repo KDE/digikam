@@ -95,6 +95,7 @@ public:
      */
     QStringList subjectCode();
     void setSubjectCode(const QStringList &subjectCode);
+    void removeSubjectCode();
 
     /**
      * Return the IPTC Core Location.
