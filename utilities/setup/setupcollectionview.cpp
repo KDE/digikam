@@ -607,6 +607,9 @@ void SetupCollectionModel::addCollection(int category)
         beginInsertRows(parent, row, row);
         m_collections << Item(path, label, (Category)category);
         endInsertRows();
+
+        // only workaround for bug 182753
+        emit layoutChanged();
     }
 }
 
@@ -634,6 +637,9 @@ void SetupCollectionModel::deleteCollection(int internalId)
         beginRemoveRows(parentIndex, index.row(), index.row());
         item.deleted = true;
         endRemoveRows();
+
+        // only workaround for bug 182753
+        emit layoutChanged();
     }
 }
 
