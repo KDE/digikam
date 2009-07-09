@@ -1285,7 +1285,7 @@ void EditorWindow::slotLoadingStarted(const QString& /*filename*/)
     m_nameLabel->progressBarMode(StatusProgressBar::ProgressBarMode, i18n("Loading: "));
 }
 
-void EditorWindow::slotLoadingFinished(const QString& filename, bool success)
+void EditorWindow::slotLoadingFinished(const QString& /*filename*/, bool success)
 {
     m_nameLabel->progressBarMode(StatusProgressBar::TextMode);
     slotUpdateItemInfo();
