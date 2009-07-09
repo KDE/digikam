@@ -525,8 +525,8 @@ void PerspectiveWidget::transformAffine(Digikam::DImg *orgImage, Digikam::DImg *
     double      uinc, vinc, winc;      // increments in source coordinates
                                        // pr horizontal target coordinate
 
-    double      u[5],v[5];             // source coordinates,
-                                       //   2
+    double      u[5] = {0.0};          // source coordinates,
+    double      v[5] = {0.0};          //   2
                                        //  / \    0 is sample in the center of pixel
                                        // 1 0 3   1..4 is offset 1 pixel in each
                                        //  \ /    direction (in target space)
