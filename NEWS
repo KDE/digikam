@@ -13,8 +13,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 192701 : Application: digiKam (digiKam), signal SIGSEGV --Crash under Gnome (Ubuntu 9.04).
 005 ==> 199394 : Request: "regenerate folder thumbnails" menu item.
 006 ==> 199420 : Duplication of Albums when naming them using upper case letters.
-007 ==> 192535 : Digikam collections on removable media are treated as local collections.
-008 ==> 
+007 ==> 192535 : digiKam collections on removable media are treated as local collections.
+008 ==> 199497 : Open camera rejected with: "Fehler beim Auflisten der Dateien in /store_00010001/DCIM/100CANON.".
+009 ==> 
 
 
 *********************************************************************************************************
