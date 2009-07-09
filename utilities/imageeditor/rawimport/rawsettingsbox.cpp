@@ -150,6 +150,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
     QGridLayout* rawGrid   = new QGridLayout(d->rawdecodingBox);
     d->decodingSettingsBox = new DcrawSettingsWidget(d->rawdecodingBox,
                                  DcrawSettingsWidget::SIXTEENBITS | DcrawSettingsWidget::COLORSPACE);
+    d->decodingSettingsBox->setObjectName("RawSettingsBox Expander");
 
     KFileDialog *inputDlg  = d->decodingSettingsBox->inputProfileUrlEdit()->fileDialog();
     inputDlg->setPreviewWidget(new ICCPreviewWidget(inputDlg));
@@ -179,6 +180,8 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
     // ---------------------------------------------------------------
 
     d->postProcessSettingsBox = new RExpanderBox(d->tabView);
+    d->postProcessSettingsBox->setObjectName("PostProcessingSettingsBox Expander");
+
     d->infoBox                = new ImageDialogPreview(d->postProcessSettingsBox);
     d->infoBox->showPreview(url);
 
@@ -471,9 +474,9 @@ void RawSettingsBox::readSettings()
 #if KDCRAW_VERSION <= 0x000500
     d->decodingSettingsBox->setCurrentIndex(group.readEntry("Decoding Settings Tab", (int)DcrawSettingsWidget::DEMOSAICING));
 #else
-    d->decodingSettingsBox->readSettings(group);
+    d->decodingSettingsBox->readSettings();
 #endif
-    d->postProcessSettingsBox->readSettings(group);
+    d->postProcessSettingsBox->readSettings();
 
 //    slotChannelChanged();
 //    slotScaleChanged(histogramScale());
@@ -531,10 +534,7 @@ void RawSettingsBox::writeSettings()
     group.writeEntry("Settings Page", d->tabView->currentIndex());
 #if KDCRAW_VERSION <= 0x000500
     group.writeEntry("Decoding Settings Tab", d->decodingSettingsBox->currentIndex());
-#else
-    d->decodingSettingsBox->writeSettings(group);
 #endif
-    d->postProcessSettingsBox->writeSettings(group);
     group.sync();
 }
 
