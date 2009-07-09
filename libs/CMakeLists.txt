@@ -32,3 +32,5 @@ ADD_SUBDIRECTORY( greycstoration )
 ADD_SUBDIRECTORY( dialogs )
 ADD_SUBDIRECTORY( widgets )
 ADD_SUBDIRECTORY( database )
+ADD_SUBDIRECTORY( template )
+
