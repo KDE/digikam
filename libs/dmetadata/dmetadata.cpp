@@ -652,6 +652,7 @@ bool DMetadata::setMetadataTemplate(const Template& t) const
 
     if (!setIptcCoreLocation(t.locationInfo())) return false;
     if (!setCreatorContactInfo(t.contactInfo())) return false;
+    if (!setXmpSubjects(t.IptcSubjects())) return false;
 
     return true;
 }
@@ -703,6 +704,10 @@ bool DMetadata::removeMetadataTemplate() const
     removeXmpTag("Xmp.iptc.CiTelWork");
     removeXmpTag("Xmp.iptc.CiUrlWork");
 
+    // Remove IPTC Subjects.
+
+    removeXmpTag("Xmp.iptc.SubjectCode");
+
     return true;
 }
 
@@ -719,6 +724,7 @@ Template DMetadata::getMetadataTemplate() const
 
     t.setContactInfo(getCreatorContactInfo());
     t.setLocationInfo(getIptcCoreLocation());
+    t.setIptcSubjects(getXmpSubjects());
 
     return t;
 }

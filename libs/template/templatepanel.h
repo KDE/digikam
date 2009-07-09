@@ -45,7 +45,8 @@ public:
     {
         RIGHTS=0,
         LOCATION,
-        CONTACT
+        CONTACT,
+        SUBJECTS
     };
 
 public:

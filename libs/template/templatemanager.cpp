@@ -238,6 +238,23 @@ bool TemplateManager::load()
             {
                 contactInf.webUrl = val2;
             }
+            else if (name2 == QString::fromLatin1("subjects"))
+            {
+                QStringList list;
+                for (QDomNode n3 = e2.firstChild(); !n3.isNull(); n3 = n3.nextSibling())
+                {
+                    QDomElement e3 = n3.toElement();
+                    QString key    = e3.tagName();
+                    QString val    = e3.attribute(QString::fromLatin1("value"));
+
+                    if (key == QString::fromLatin1("subject"))
+                    {
+                        if (val.isEmpty()) continue;
+                        list.append(val);
+                    }
+                }
+                t.setIptcSubjects(list);
+            }
         }
 
         t.setLocationInfo(locationInf);
@@ -368,6 +385,15 @@ bool TemplateManager::save()
             QDomElement contactweburl = doc.createElement(QString::fromLatin1("contactweburl"));
             contactweburl.setAttribute(QString::fromLatin1("value"), t.contactInfo().webUrl);
             elem.appendChild(contactweburl);
+
+            QDomElement subjects = doc.createElement(QString::fromLatin1("subjects"));
+            elem.appendChild(subjects);
+            foreach (QString subject, t.IptcSubjects())
+            {
+                QDomElement e = doc.createElement(QString::fromLatin1("subject"));
+                e.setAttribute(QString::fromLatin1("value"), subject);
+                subjects.appendChild(e);
+            }
         }
     }
 

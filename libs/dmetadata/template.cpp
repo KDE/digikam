@@ -45,16 +45,17 @@ bool Template::isNull() const
 
 bool Template::operator==(const Template& t) const
 {
-    bool b1 = m_authors         == t.m_authors;
-    bool b2 = m_authorsPosition == t.m_authorsPosition;
-    bool b3 = m_credit          == t.m_credit;
-    bool b4 = m_copyright       == t.m_copyright;
-    bool b5 = m_rightUsageTerms == t.m_rightUsageTerms;
-    bool b6 = m_source          == t.m_source;
-    bool b7 = m_instructions    == t.m_instructions;
-    bool b8 = m_locationInfo    == t.m_locationInfo;
-    bool b9 = m_contactInfo     == t.m_contactInfo;
-
+    bool b1  = m_authors         == t.m_authors;
+    bool b2  = m_authorsPosition == t.m_authorsPosition;
+    bool b3  = m_credit          == t.m_credit;
+    bool b4  = m_copyright       == t.m_copyright;
+    bool b5  = m_rightUsageTerms == t.m_rightUsageTerms;
+    bool b6  = m_source          == t.m_source;
+    bool b7  = m_instructions    == t.m_instructions;
+    bool b8  = m_locationInfo    == t.m_locationInfo;
+    bool b9  = m_contactInfo     == t.m_contactInfo;
+    bool b10 = m_subjects        == t.m_subjects;
+/*
     kDebug(50003) << t.authors()         << m_authors         << b1;
     kDebug(50003) << t.authorsPosition() << m_authorsPosition << b2;
     kDebug(50003) << t.credit()          << m_credit          << b3;
@@ -64,8 +65,9 @@ bool Template::operator==(const Template& t) const
     kDebug(50003) << t.instructions()    << m_instructions    << b7;
     kDebug(50003) << t.locationInfo()    << m_locationInfo    << b8;
     kDebug(50003) << t.contactInfo()     << m_contactInfo     << b9;
-
-    return b1 && b2 && b3 && b4 && b5 && b6 && b7 && b8 && b9;
+    kDebug(50003) << t.IptcSubjects()    << m_subjects        << b10;
+*/
+    return b1 && b2 && b3 && b4 && b5 && b6 && b7 && b8 && b9 && b10;
 }
 
 bool Template::isEmpty() const
@@ -78,7 +80,8 @@ bool Template::isEmpty() const
             m_source.isEmpty()          &&
             m_instructions.isEmpty()    &&
             m_locationInfo.isEmpty()    &&
-            m_contactInfo.isEmpty()
+            m_contactInfo.isEmpty()     &&
+            m_subjects.isEmpty()
            );
 }
 
@@ -138,6 +141,12 @@ void Template::setContactInfo(const IptcCoreContactInfo& inf)
     m_contactInfo = inf;
 }
 
+void Template::setIptcSubjects(const QStringList& subjects)
+{
+    m_subjects = subjects;
+    m_subjects.sort();
+}
+
 QStringList Template::authors() const
 {
     return m_authors;
@@ -178,9 +187,14 @@ IptcCoreLocationInfo Template::locationInfo() const
     return m_locationInfo;
 }
 
-IptcCoreContactInfo  Template::contactInfo() const
+IptcCoreContactInfo Template::contactInfo() const
 {
     return m_contactInfo;
+}
+
+QStringList Template::IptcSubjects() const
+{
+    return m_subjects;
 }
 
 QDebug operator<<(QDebug dbg, const Template& t)
@@ -205,6 +219,8 @@ QDebug operator<<(QDebug dbg, const Template& t)
                   << t.locationInfo() << ", ";
     dbg.nospace() << "Template::contactinfo: "
                   << t.contactInfo();
+    dbg.nospace() << "Template::IptcSubjects: "
+                  << t.IptcSubjects();
     return dbg.space();
 }
 

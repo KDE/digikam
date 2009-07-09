@@ -41,6 +41,7 @@
 #include "altlangstredit.h"
 #include "countryselector.h"
 #include "templatelist.h"
+#include "subjectedit.h"
 
 namespace Digikam
 {
@@ -73,6 +74,8 @@ public:
         contactEmailEdit          = 0;
         contactPhoneEdit          = 0;
         contactWebUrlEdit         = 0;
+
+        subjects                  = 0;
     }
 
     // Rights template informations panel.
@@ -100,6 +103,9 @@ public:
     KLineEdit       *contactEmailEdit;
     KLineEdit       *contactPhoneEdit;
     KLineEdit       *contactWebUrlEdit;
+
+    // Subjects template informations panel.
+    SubjectEdit     *subjects;
 };
 
 TemplatePanel::TemplatePanel(QWidget* parent)
@@ -398,6 +404,20 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     grid3->addWidget(d->contactWebUrlEdit,        7, 1, 1, 2);
 
     insertTab(CONTACT, page3, KIcon("view-pim-contacts"), i18n("Contact"));
+
+    // -- Subjects Template informations panel -------------------------------------------------------------
+
+    QWidget *page4     = new QWidget(this);
+    QGridLayout* grid4 = new QGridLayout(page4);
+    d->subjects        = new SubjectEdit(page4);
+
+    grid4->setMargin(KDialog::spacingHint());
+    grid4->setSpacing(KDialog::spacingHint());
+    grid4->setAlignment(Qt::AlignTop);
+    grid4->addWidget(d->subjects, 0, 0, 1, 1);
+    grid4->setRowStretch(1, 10);
+
+    insertTab(SUBJECTS, page4, KIcon("feed-subscribe"), i18n("Subjects"));
 }
 
 TemplatePanel::~TemplatePanel()
@@ -428,6 +448,8 @@ void TemplatePanel::setTemplate(const Template& t)
     d->contactEmailEdit->setText(t.contactInfo().email);
     d->contactPhoneEdit->setText(t.contactInfo().phone);
     d->contactWebUrlEdit->setText(t.contactInfo().webUrl);
+
+    d->subjects->setSubjectList(t.IptcSubjects());
 }
 
 Template TemplatePanel::getTemplate() const
@@ -458,6 +480,8 @@ Template TemplatePanel::getTemplate() const
     inf2.phone         = d->contactPhoneEdit->text();
     inf2.webUrl        = d->contactWebUrlEdit->text();
     t.setContactInfo(inf2);
+
+    t.setIptcSubjects(d->subjects->subjectsList());
 
     return t;
 }

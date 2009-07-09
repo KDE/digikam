@@ -540,6 +540,7 @@ Template ImageInfo::metadataTemplate() const
 
     ImageExtendedProperties ep = imageExtendedProperties();
     t.setLocationInfo(ep.location());
+    t.setIptcSubjects(ep.subjectCode());
     return t;
 }
 
@@ -573,6 +574,7 @@ void ImageInfo::setMetadataTemplate(const Template& t)
 
     ImageExtendedProperties ep = imageExtendedProperties();
     ep.setLocation(t.locationInfo());
+    ep.setSubjectCode(t.IptcSubjects());
 }
 
 void ImageInfo::removeMetadataTemplate()
@@ -592,6 +594,7 @@ void ImageInfo::removeMetadataTemplate()
 
     ImageExtendedProperties ep = imageExtendedProperties();
     ep.removeLocation();
+    ep.removeSubjectCode();
 }
 
 void ImageInfo::setRating(int value)

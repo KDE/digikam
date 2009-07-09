@@ -92,6 +92,7 @@ public:
         labelContactPhone          = 0;
         labelContactEmail          = 0;
         labelContactWebUrl         = 0;
+        labelSubjects              = 0;
     }
 
     // IPTC Rights info.
@@ -143,6 +144,9 @@ public:
     DTextBrowser   *labelContactPhone;
     KUrlLabel      *labelContactEmail;
     KUrlLabel      *labelContactWebUrl;
+
+    // IPTC Subjects info.
+    DTextBrowser   *labelSubjects;
 };
 
 TemplateViewer::TemplateViewer(QWidget* parent=0)
@@ -230,6 +234,14 @@ TemplateViewer::TemplateViewer(QWidget* parent=0)
     addItem(w3, SmallIcon("view-pim-contacts"),
             i18n("Contact"), QString("Contact"), true);
 
+    // ------------------------------------------------------------------
+
+    KVBox *w4        = new KVBox(this);
+    d->labelSubjects = new DTextBrowser(QString(), w4);
+
+    addItem(w4, SmallIcon("feed-subscribe"),
+            i18n("Subjects"), QString("Subjects"), true);
+
     addStretch();
 
     connect(d->labelContactWebUrl, SIGNAL(leftClickedUrl(const QString&)),
@@ -270,6 +282,8 @@ void TemplateViewer::setTemplate(const Template& t)
     KUrl url(t.contactInfo().webUrl);
     d->labelContactWebUrl->setText(url.host());
     d->labelContactWebUrl->setUrl(url.url());
+
+    d->labelSubjects->setText(t.IptcSubjects().join("\n"));
 }
 
 void TemplateViewer::slotProcessUrl(const QString& url)

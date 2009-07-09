@@ -78,6 +78,7 @@ public:
     void setInstructions(const QString& instructions);
     void setLocationInfo(const IptcCoreLocationInfo& inf);
     void setContactInfo(const IptcCoreContactInfo& inf);
+    void setIptcSubjects(const QStringList& subjects);
 
     QStringList          authors()         const;
     QString              authorsPosition() const;
@@ -88,8 +89,9 @@ public:
     QString              instructions()    const;
     IptcCoreLocationInfo locationInfo()    const;
     IptcCoreContactInfo  contactInfo()     const;
+    QStringList          IptcSubjects()    const;
 
-    static QString     removeTemplateTitle() { return QString("_REMOVE_TEMPLATE_"); };
+    static QString removeTemplateTitle() { return QString("_REMOVE_TEMPLATE_"); };
 
 protected:
 
@@ -125,13 +127,17 @@ protected:
      */
     QString              m_instructions;
 
-    /** IPTC Location Informations.
+    /** IPTC Location Information.
      */
     IptcCoreLocationInfo m_locationInfo;
 
-    /** IPTC Contact Informations.
+    /** IPTC Contact Information.
      */
     IptcCoreContactInfo  m_contactInfo;
+
+    /** IPTC Subjects Information.
+     */
+    QStringList          m_subjects;
 };
 
 //! kDebug() stream operator. Writes property @a t to the debug output in a nicely formatted way.
