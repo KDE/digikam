@@ -3,6 +3,7 @@ digiKam 1.0.0-beta3 - Release date: 2009-xx-xx
 
 NEW FEATURES:
 
+General        : Metadata Template: add support of Contact and Location information.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
