@@ -547,7 +547,8 @@ QString CollectionManagerPrivate::technicalDescription(const AlbumRootLocation *
 SolidVolumeInfo CollectionManagerPrivate::findVolumeForUrl(const KUrl& url, const QList<SolidVolumeInfo> volumes)
 {
     SolidVolumeInfo volume;
-    QString path = url.path(KUrl::RemoveTrailingSlash);
+    // v.path is specified to have a trailing slash. path needs one as well.
+    QString path = url.path(KUrl::AddTrailingSlash);
     int volumeMatch = 0;
 
     //FIXME: Network shares! Here we get only the volume of the mount path...

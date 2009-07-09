@@ -13,7 +13,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 192701 : Application: digiKam (digiKam), signal SIGSEGV --Crash under Gnome (Ubuntu 9.04).
 005 ==> 199394 : Request: "regenerate folder thumbnails" menu item.
 006 ==> 199420 : Duplication of Albums when naming them using upper case letters.
-007 ==> 
+007 ==> 192535 : Digikam collections on removable media are treated as local collections.
+008 ==> 
+
 
 *********************************************************************************************************
 digiKam 1.0.0-beta2 - Release date: 2009-07-05
