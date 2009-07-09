@@ -32,11 +32,16 @@ namespace Digikam
 
 class SubjectEdit : public IptcSubject
 {
+    Q_OBJECT
 
 public:
 
     SubjectEdit(QWidget* parent);
     ~SubjectEdit();
+
+private Q_SLOTS:
+
+    void slotRefChanged();
 };
 
 }  // namespace Digikam

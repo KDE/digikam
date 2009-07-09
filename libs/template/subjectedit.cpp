@@ -21,6 +21,7 @@
  * ============================================================ */
 
 #include "subjectedit.h"
+#include "subjectedit.moc"
 
 // Qt includes
 
@@ -88,6 +89,12 @@ SubjectEdit::SubjectEdit(QWidget* parent)
 
 SubjectEdit::~SubjectEdit()
 {
+}
+
+void SubjectEdit::slotRefChanged()
+{
+    IptcSubject::slotRefChanged();
+    m_iprEdit->setText(QString("XMP"));
 }
 
 }  // namespace Digikam
