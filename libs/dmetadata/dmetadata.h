@@ -124,7 +124,7 @@ public:
                               bool setProgramName) const;
 
     /** Remove those Xmp tag entries that are listed in entriesToRemove from the entries in metadata.
-        Return true if subjects are no longer contained in metadata.
+        Return true if tag entries are no longer contained in metadata.
         All other entries are preserved.
      */
     bool removeFromXmpTagStringBag(const char *xmpTagName, const QStringList& entriesToRemove,
