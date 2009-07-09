@@ -1,2 +1,9 @@
-altstringlangedit and countryselector must be moved in a common place to be shared with kipi-plugins/metadataedit
-Good candidate is libkexiv2
+Files listed below must be moved to libkexiv2 1.0.0 for KDE 4.4 to be shared with kipi-plugins/metadataedit.
+
+altstringlangedit.cpp
+altstringlangedit.h
+countryselector.cpp
+countryselector.h
+subjectsedit.cpp
+subjectsedit.h
+topicset.iptc-subjectcode.xml
