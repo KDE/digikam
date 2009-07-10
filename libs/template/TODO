@@ -4,6 +4,6 @@ altstringlangedit.cpp
 altstringlangedit.h
 countryselector.cpp
 countryselector.h
-iptcsubject.cpp
-iptcsubject.h
+subjectwidget.cpp
+subjectwidget.h
 topicset.iptc-subjectcode.xml
