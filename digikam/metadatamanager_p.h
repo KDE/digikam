@@ -104,7 +104,7 @@ public:
 
 public Q_SLOTS:
 
-    void slotDeleteThumbnail(const QString &path);
+    void slotImageDataChanged(const QString &path, bool removeThumbnails, bool notifyCache);
 
 Q_SIGNALS:
 
@@ -191,7 +191,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 
-    void deleteThumbnail(const QString &path);
+    void imageDataChanged(const QString &path, bool removeThumbnails, bool notifyCache);
     void orientationChangeFailed(const QStringList& failedFileNames);
 };
 

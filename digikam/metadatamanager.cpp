@@ -146,8 +146,8 @@ MetadataManagerPriv::MetadataManagerPriv(MetadataManager *q)
     connect(dbWorker, SIGNAL(writeOrientationToFiles(const QList<ImageInfo> &, int)),
             fileWorker, SLOT(writeOrientationToFiles(const QList<ImageInfo> &, int)));
 
-    connect(fileWorker, SIGNAL(deleteThumbnail(const QString &)),
-            this, SLOT(slotDeleteThumbnail(const QString &)));
+    connect(fileWorker, SIGNAL(imageDataChanged(const QString &, bool, bool)),
+            this, SLOT(slotImageDataChanged(const QString &, bool, bool)));
 }
 
 MetadataManagerPriv::~MetadataManagerPriv()
@@ -262,10 +262,14 @@ void MetadataManagerPriv::updateProgress()
     emit progressValueChanged(percent);
 }
 
-void MetadataManagerPriv::slotDeleteThumbnail(const QString &path)
+void MetadataManagerPriv::slotImageDataChanged(const QString &path, bool removeThumbnails, bool notifyCache)
 {
     // must be done from the UI thread, touches pixmaps
-    ThumbnailLoadThread::deleteThumbnail(path);
+    if (removeThumbnails)
+        ThumbnailLoadThread::deleteThumbnail(path);
+
+    if (notifyCache)
+        LoadingCacheInterface::fileChanged(path);
 }
 
 // -------------------------------------------------------------------------------
@@ -387,8 +391,7 @@ void MetadataManagerFileWorker::writeOrientationToFiles(const QList<ImageInfo>& 
         }
         else
         {
-            emit deleteThumbnail(path);
-            LoadingCacheInterface::fileChanged(path);
+            emit imageDataChanged(path, true, true);
             KUrl url = KUrl::fromPath(path);
             ImageAttributesWatch::instance()->fileMetadataChanged(url);
         }
