@@ -16,7 +16,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 007 ==> 192535 : digiKam collections on removable media are treated as local collections.
 008 ==> 199497 : Open camera rejected with: "Fehler beim Auflisten der Dateien in /store_00010001/DCIM/100CANON.".
 009 ==> 199602 : Exif rotation not interpreted the same way in different tools.
-010 ==> 
+010 ==> 191522 : Crash on use default action "Download Photos with digiKam".
+011 ==> 
 
 
 *********************************************************************************************************
