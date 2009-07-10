@@ -190,23 +190,24 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     QLabel* explanation = new QLabel(box);
     explanation->setOpenExternalLinks(true);
     explanation->setWordWrap(true);
-    QString txt("<qt>");
+    QString txt("<qt><b>");
 
-    txt.append(i18n("<b><a href='http://en.wikipedia.org/wiki/Exif'>EXIF</a></b> - "
+    txt.append(i18n("<p><a href='http://en.wikipedia.org/wiki/Exif'>EXIF</a> - "
                     "a standard used by most digital cameras today to store technical "
-                    "information (like aperture and shutter speed) about an image."));
+                    "information (like aperture and shutter speed) about an image.</p>"));
 
-    txt.append(i18n("<br><b><a href='http://en.wikipedia.org/wiki/IPTC'>IPTC</a></b> - "
+    txt.append(i18n("<p><a href='http://en.wikipedia.org/wiki/IPTC'>IPTC</a> - "
                     "an older standard used in digital photography to store "
-                    "photographer information in images."));
+                    "photographer information in images.</p>"));
 
     if (KExiv2Iface::KExiv2::supportXmp())
-        txt.append(i18n("<br><b><a href='http://en.wikipedia.org/wiki/Extensible_Metadata_Platform'>XMP</a></b> - "
-                        "a new standard used in digital photography, designed to replace IPTC."));
+        txt.append(i18n("<p><a href='http://en.wikipedia.org/wiki/Extensible_Metadata_Platform'>XMP</a> - "
+                        "a new standard used in digital photography, designed to replace IPTC.</p>"));
 
-    txt.append("<br></qt>");
+    txt.append("</b></qt>");
 
     explanation->setText(txt);
+    explanation->setFont(KGlobalSettings::smallestReadableFont());
 
     grid->addWidget(exiv2LogoLabel, 0, 0, 1, 1);
     grid->addWidget(explanation,    0, 1, 1, 2);

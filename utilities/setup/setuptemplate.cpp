@@ -38,6 +38,7 @@
 #include <kdialog.h>
 #include <klineedit.h>
 #include <kmessagebox.h>
+#include <kglobalsettings.h>
 
 // Local includes
 
@@ -112,6 +113,7 @@ SetupTemplate::SetupTemplate(QWidget* parent)
     note->setOpenExternalLinks(true);
     note->setWordWrap(true);
     note->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
+    note->setFont(KGlobalSettings::smallestReadableFont());
 
     // -------------------------------------------------------------
 

@@ -96,19 +96,20 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
     QGroupBox *albumPathBox = new QGroupBox(i18n("Root Album Folders"), panel);
 
 #ifndef _WIN32
-    QLabel *albumPathLabel  = new QLabel(i18n("Below are the locations of your root albums used to store "
+    QLabel *albumPathLabel  = new QLabel(i18n("<b><p>Below are the locations of your root albums used to store "
                                               "your images. Write access is necessary to be able "
-                                              "to edit images in these albums.\n"
-                                              "Note: Removable media (such as USB drives or DVDs) and remote file systems "
-                                              "(such as NFS, or Samba mounted with cifs/smbfs) are supported."),
+                                              "to edit images in these albums.</p>"
+                                              "<p>Note: Removable media (such as USB drives or DVDs) and remote file systems "
+                                              "(such as NFS, or Samba mounted with cifs/smbfs) are supported.</p></b><p></p>"),
                                          albumPathBox);
 #else
-    QLabel *albumPathLabel  = new QLabel(i18n("Below are the locations of your root albums used to store "
+    QLabel *albumPathLabel  = new QLabel(i18n("<b><p>Below are the locations of your root albums used to store "
                                               "your images. Write access is necessary to be able "
-                                              "to edit images in these albums.\n"),
+                                              "to edit images in these albums.</p></b><p></p>"),
                                          albumPathBox);
 #endif
     albumPathLabel->setWordWrap(true);
+    albumPathLabel->setFont(KGlobalSettings::smallestReadableFont());
 
     d->collectionView  = new SetupCollectionTreeView(albumPathBox);
     d->collectionModel = new SetupCollectionModel(panel);
@@ -125,13 +126,13 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
 
     QGroupBox *dbPathBox      = new QGroupBox(i18n("Database File Path"), panel);
     QVBoxLayout *vlay         = new QVBoxLayout(dbPathBox);
-    QLabel *databasePathLabel = new QLabel(i18n("The location "
-                                                "where the database file will be stored on your system. "
-                                                "There is one common database file for all root albums.\n"
-                                                "Write access is required to be able to edit image properties.\n"
-                                                "Note: a remote file system, such as NFS, cannot be used here."),
+    QLabel *databasePathLabel = new QLabel(i18n("<b><p>The location where the database file will be stored on your system. "
+                                                "There is one common database file for all root albums.</p>"
+                                                "<p>Write access is required to be able to edit image properties.</p>"
+                                                "<p>Note: a remote file system, such as NFS, cannot be used here.</p></b><p></p>"),
                                            dbPathBox);
     databasePathLabel->setWordWrap(true);
+    databasePathLabel->setFont(KGlobalSettings::smallestReadableFont());
 
     d->databasePathEdit = new KUrlRequester(dbPathBox);
     d->databasePathEdit->setMode(KFile::Directory | KFile::LocalOnly);
