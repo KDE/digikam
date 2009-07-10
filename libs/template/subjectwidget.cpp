@@ -194,8 +194,12 @@ SubjectWidget::SubjectWidget(QWidget* parent)
 
     // --------------------------------------------------------
 
+    int left, top, right, bottom;
     d->subjectsBox = new KListWidget;
     d->subjectsBox->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    d->subjectsBox->getContentsMargins(&left, &top, &right, &bottom);
+    d->subjectsBox->setFixedHeight(top + bottom + d->subjectsBox->frameWidth() +
+                                   d->subjectsBox->fontMetrics().lineSpacing()*8);
 
     d->addSubjectButton = new QPushButton(i18n("&Add"));
     d->delSubjectButton = new QPushButton(i18n("&Delete"));
