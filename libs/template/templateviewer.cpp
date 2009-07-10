@@ -61,7 +61,7 @@ public:
         usages                     = 0;
         source                     = 0;
         instructions               = 0;
-        labelNames                 = 0;
+        namesList                  = 0;
         labelPosition              = 0;
         labelCredit                = 0;
         labelCopyright             = 0;
@@ -92,7 +92,7 @@ public:
         labelContactPhone          = 0;
         labelContactEmail          = 0;
         labelContactWebUrl         = 0;
-        labelSubjects              = 0;
+        subjectsList               = 0;
     }
 
     // IPTC Rights info.
@@ -105,12 +105,12 @@ public:
     DTextLabelName *source;
     DTextLabelName *instructions;
 
+    DTextList      *namesList;
     DTextBrowser   *labelPosition;
     DTextBrowser   *labelCredit;
     DTextBrowser   *labelCopyright;
     DTextBrowser   *labelUsages;
     DTextBrowser   *labelSource;
-    DTextBrowser   *labelNames;
     DTextBrowser   *labelInstructions;
 
     // IPTC Location info.
@@ -146,7 +146,7 @@ public:
     KUrlLabel      *labelContactWebUrl;
 
     // IPTC Subjects info.
-    DTextBrowser   *labelSubjects;
+    DTextList      *subjectsList;
 };
 
 TemplateViewer::TemplateViewer(QWidget* parent=0)
@@ -156,7 +156,7 @@ TemplateViewer::TemplateViewer(QWidget* parent=0)
 
     KVBox *w1            = new KVBox(this);
     d->names             = new DTextLabelName(i18n("Names:"), w1);
-    d->labelNames        = new DTextBrowser(QString(), w1);
+    d->namesList         = new DTextList(QStringList(), w1);
     d->position          = new DTextLabelName(i18n("Position:"), w1);
     d->labelPosition     = new DTextBrowser(QString(), w1);
     d->credit            = new DTextLabelName(i18n("Credit:"), w1);
@@ -236,8 +236,8 @@ TemplateViewer::TemplateViewer(QWidget* parent=0)
 
     // ------------------------------------------------------------------
 
-    KVBox *w4        = new KVBox(this);
-    d->labelSubjects = new DTextBrowser(QString(), w4);
+    KVBox *w4       = new KVBox(this);
+    d->subjectsList = new DTextList(QStringList(), w4);
 
     addItem(w4, SmallIcon("feed-subscribe"),
             i18n("Subjects"), QString("Subjects"), true);
@@ -258,7 +258,8 @@ TemplateViewer::~TemplateViewer()
 
 void TemplateViewer::setTemplate(const Template& t)
 {
-    d->labelNames->setText(t.authors().join("\n"));
+    d->namesList->clear();
+    d->namesList->addItems(t.authors());
     d->labelPosition->setText(t.authorsPosition());
     d->labelCredit->setText(t.credit());
     d->labelCopyright->setText(t.copyright()["x-default"]);
@@ -283,7 +284,8 @@ void TemplateViewer::setTemplate(const Template& t)
     d->labelContactWebUrl->setText(url.host());
     d->labelContactWebUrl->setUrl(url.url());
 
-    d->labelSubjects->setText(t.IptcSubjects().join("\n"));
+    d->subjectsList->clear();
+    d->subjectsList->addItems(t.IptcSubjects());
 }
 
 void TemplateViewer::slotProcessUrl(const QString& url)

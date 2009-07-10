@@ -35,6 +35,7 @@
 
 // KDE includes
 
+#include <klistwidget.h>
 #include <ktextbrowser.h>
 #include <kglobalsettings.h>
 #include <ksqueezedtextlabel.h>
@@ -100,6 +101,34 @@ public:
     {
         QFont fnt = KGlobalSettings::smallestReadableFont();
         document()->setDefaultFont(fnt);
+        int left, top, right, bottom;
+        getContentsMargins(&left, &top, &right, &bottom);
+        setFixedHeight(top + bottom + frameWidth() + fontMetrics().lineSpacing()*l);
+    };
+
+};
+
+// -------------------------------------------------------------------
+
+class DTextList : public KListWidget
+{
+public:
+
+    DTextList(const QStringList& list, QWidget* parent=0)
+        : KListWidget(parent)
+    {
+        addItems(list);
+        setLinesNumber(6);
+        setFocusPolicy(Qt::NoFocus);
+        sortItems();
+    };
+
+    ~DTextList(){};
+
+    void setLinesNumber(int l)
+    {
+        QFont fnt = KGlobalSettings::smallestReadableFont();
+        setFont(fnt);
         int left, top, right, bottom;
         getContentsMargins(&left, &top, &right, &bottom);
         setFixedHeight(top + bottom + frameWidth() + fontMetrics().lineSpacing()*l);
