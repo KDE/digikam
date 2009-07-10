@@ -208,11 +208,6 @@ public:
     void setContactInfo(const IptcCoreContactInfo &info);
     void removeContactInfo();
 
-    /**
-     * Fill all entries of the given type in a Template container.
-     */
-    void fillMetadataTemplate(Template& t);
-
 protected:
 
     QString readSimpleProperty(const QString& property);

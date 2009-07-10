@@ -192,7 +192,7 @@ IptcCoreContactInfo ImageCopyright::contactInfo()
     return info;
 }
 
-void ImageCopyright::setContactInfo(const IptcCoreContactInfo &info)
+void ImageCopyright::setContactInfo(const IptcCoreContactInfo& info)
 {
     setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoCity), info.city);
     setSimpleProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoCountry), info.country);
@@ -267,12 +267,12 @@ void ImageCopyright::setLanguageProperty(const QString& property, const QString&
     DatabaseAccess().db()->setImageCopyrightProperty(m_id, property, value, language, uniqueness);
 }
 
-void ImageCopyright::removeProperties(const QString &property)
+void ImageCopyright::removeProperties(const QString& property)
 {
     DatabaseAccess().db()->removeImageCopyrightProperties(m_id, property);
 }
 
-void ImageCopyright::removeLanguageProperty(const QString &property, const QString &languageCode)
+void ImageCopyright::removeLanguageProperty(const QString& property, const QString& languageCode)
 {
     DatabaseAccess().db()->removeImageCopyrightProperties(m_id, property, languageCode);
 }
@@ -348,18 +348,6 @@ int ImageCopyright::languageMatch(const QList<CopyrightInfo> infos, const QStrin
         chosen = firstMatch;
 
     return chosen;
-}
-
-void ImageCopyright::fillMetadataTemplate(Template& t)
-{
-    t.setAuthors(author());
-    t.setAuthorsPosition(authorsPosition());
-    t.setCredit(credit());
-    t.setCopyright(allCopyrightNotices());
-    t.setRightUsageTerms(allRightsUsageTerms());
-    t.setSource(source());
-    t.setInstructions(instructions());
-    t.setContactInfo(contactInfo());
 }
 
 } // namespace Digikam
