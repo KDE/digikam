@@ -175,6 +175,9 @@ void ImageAlbumModel::refresh()
     if (!d->currentAlbum)
         return;
 
+    if (d->currentAlbum->isRoot())
+        return;
+
     startListJob(d->currentAlbum->databaseUrl());
 }
 
