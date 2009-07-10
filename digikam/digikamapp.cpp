@@ -1392,6 +1392,8 @@ void DigikamApp::slotSelectionChanged(int selectionCount)
     d->imageRenameAction->setEnabled(selectionCount == 1);
     d->imageLightTableAction->setEnabled(selectionCount > 0);
     d->imageAddLightTableAction->setEnabled(selectionCount > 0);
+    d->imageAddCurrentQueueAction->setEnabled(selectionCount > 0);
+    d->imageAddNewQueueAction->setEnabled(selectionCount > 0);
     d->imageDeleteAction->setEnabled(selectionCount > 0);
     d->imageExifOrientationActionMenu->setEnabled(selectionCount > 0);
     d->slideShowSelectionAction->setEnabled(selectionCount > 0);
