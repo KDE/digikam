@@ -7,6 +7,7 @@
  * Description : Access to extended properties of an image in the database
  *
  * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -63,6 +64,7 @@ public:
      */
     QString intellectualGenre();
     void setIntellectualGenre(const QString &intellectualGenre);
+    void removeIntellectualGenre();
 
     /**
      * Returns the Job ID.
@@ -73,7 +75,8 @@ public:
      *   have no significance for archiving."
      */
     QString jobId();
-    void setJobId(const QString &jobId);
+    void setJobId(const QString& jobId);
+    void removeJobId();
 
     /**
      * Returns the Scene.
@@ -81,8 +84,8 @@ public:
      *   IPTC "Scene-NewsCodes". Each Scene is represented as a string of 6 digits in an unordered list."
      */
     QStringList scene();
-    void setScene(const QStringList &scene);
-
+    void setScene(const QStringList& scene);
+    void removeScene();
 
     /**
      * Returns the Subject Code.
@@ -94,7 +97,7 @@ public:
      *   Subject-NewsCodes at www.newscodes.org."
      */
     QStringList subjectCode();
-    void setSubjectCode(const QStringList &subjectCode);
+    void setSubjectCode(const QStringList& subjectCode);
     void removeSubjectCode();
 
     /**
@@ -103,7 +106,7 @@ public:
      * This includes IPTC Country Name, Country Code, City, SubLocation and ProvinceState.
      */
     IptcCoreLocationInfo location();
-    void setLocation(const IptcCoreLocationInfo &location);
+    void setLocation(const IptcCoreLocationInfo& location);
     void removeLocation();
 
 protected:
@@ -112,7 +115,7 @@ protected:
     void        setProperty(const QString& property, const QString& value);
     QStringList readFakeListProperty(const QString& property);
     void        setFakeListProperty(const QString& property, const QStringList& value);
-    void        removeProperty(const QString &property);
+    void        removeProperty(const QString& property);
 
 protected:
 
