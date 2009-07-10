@@ -19,7 +19,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 010 ==> 191522 : Crash on use default action "Download Photos with digiKam".
 011 ==> 196463 : Crash on device action Download Photos with Digikam.
 012 ==> 199617 : When clicking on "My Tags", the view switches automatically after 2 seconds. 
-013 ==> 
+013 ==> 199076 : Sudden crash of digiKam during work. 
+014 ==> 
 
 
 *********************************************************************************************************
