@@ -18,7 +18,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 009 ==> 199602 : Exif rotation not interpreted the same way in different tools.
 010 ==> 191522 : Crash on use default action "Download Photos with digiKam".
 011 ==> 196463 : Crash on device action Download Photos with Digikam.
-012 ==> 
+012 ==> 199617 : When clicking on "My Tags", the view switches automatically after 2 seconds. 
+013 ==> 
 
 
 *********************************************************************************************************
