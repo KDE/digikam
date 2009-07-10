@@ -652,7 +652,24 @@ bool DMetadata::setMetadataTemplate(const Template& t) const
 
     if (!setIptcCoreLocation(t.locationInfo())) return false;
     if (!setCreatorContactInfo(t.contactInfo())) return false;
-    if (!setXmpSubjects(t.IptcSubjects())) return false;
+
+    if (supportXmp())
+    {
+        if (!setXmpSubjects(t.IptcSubjects())) return false;
+    }
+
+    // Synchronize Iptc subjects tags with Xmp subjects tags.
+    QStringList list = t.IptcSubjects();
+    QStringList newList;
+    foreach(QString str, list)
+    {
+        if (str.startsWith("XMP"))
+        {
+            str.replace(0, 3, "IPTC");
+        }
+        newList.append(str);
+    }
+    if (!setIptcSubjects(getIptcSubjects(), newList)) return false;
 
     return true;
 }
@@ -707,6 +724,7 @@ bool DMetadata::removeMetadataTemplate() const
     // Remove IPTC Subjects.
 
     removeXmpTag("Xmp.iptc.SubjectCode");
+    removeIptcTag("Iptc.Application2.Subject");
 
     return true;
 }
