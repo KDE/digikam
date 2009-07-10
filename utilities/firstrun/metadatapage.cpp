@@ -119,6 +119,7 @@ void MetadataPage::saveSettings()
     group.writeEntry("Save EXIF Comments", d->storeInFiles->isChecked());
     group.writeEntry("Save Date Time",     d->storeInFiles->isChecked());
     group.writeEntry("Save Rating",        d->storeInFiles->isChecked());
+    group.writeEntry("Save Template",      d->storeInFiles->isChecked());
     config->sync();
 }
 
