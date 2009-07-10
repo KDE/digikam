@@ -17,7 +17,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 199497 : Open camera rejected with: "Fehler beim Auflisten der Dateien in /store_00010001/DCIM/100CANON.".
 009 ==> 199602 : Exif rotation not interpreted the same way in different tools.
 010 ==> 191522 : Crash on use default action "Download Photos with digiKam".
-011 ==> 
+011 ==> 196463 : Crash on device action Download Photos with Digikam.
+012 ==> 
 
 
 *********************************************************************************************************
