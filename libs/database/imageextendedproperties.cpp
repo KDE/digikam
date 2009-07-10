@@ -150,7 +150,7 @@ void ImageExtendedProperties::setProperty(const QString& property, const QString
 QStringList ImageExtendedProperties::readFakeListProperty(const QString& property)
 {
     QString value = DatabaseAccess().db()->getImageProperty(m_id, property);
-    return value.split(',', QString::SkipEmptyParts);
+    return value.split(";", QString::SkipEmptyParts);
 }
 
 void ImageExtendedProperties::setFakeListProperty(const QString& property, const QStringList& value)
@@ -158,7 +158,7 @@ void ImageExtendedProperties::setFakeListProperty(const QString& property, const
     if (value.isEmpty())
         removeProperty(property);
     else
-        DatabaseAccess().db()->setImageProperty(m_id, property, value.join(","));
+        DatabaseAccess().db()->setImageProperty(m_id, property, value.join(";"));
 }
 
 void ImageExtendedProperties::removeProperty(const QString& property)
