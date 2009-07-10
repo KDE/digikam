@@ -25,12 +25,12 @@
 
 // Local includes.
 
-#include "iptcsubject.h"
+#include "subjectwidget.h"
 
 namespace Digikam
 {
 
-class SubjectEdit : public IptcSubject
+class SubjectEdit : public SubjectWidget
 {
     Q_OBJECT
 

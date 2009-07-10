@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#include "iptcsubject.h"
-#include "iptcsubject.moc"
+#include "subjectwidget.h"
+#include "subjectwidget.moc"
 
 // Qt includes
 
@@ -52,7 +52,7 @@
 namespace Digikam
 {
 
-class IptcSubjectPriv
+class SubjectWidgetPriv
 {
 public:
 
@@ -62,7 +62,7 @@ public:
         CUSTOM
     };
 
-    IptcSubjectPriv()
+    SubjectWidgetPriv()
     {
         addSubjectButton = 0;
         delSubjectButton = 0;
@@ -110,8 +110,8 @@ public:
 
 // --------------------------------------------------------------------------------
 
-IptcSubject::IptcSubject(QWidget* parent)
-           : QWidget(parent), d(new IptcSubjectPriv)
+SubjectWidget::SubjectWidget(QWidget* parent)
+             : QWidget(parent), d(new SubjectWidgetPriv)
 {
     // Load subject codes provided by IPTC/NAA as xml file.
     // See http://iptc.cms.apa.at/std/topicset/topicset.iptc-subjectcode.xml for details.
@@ -144,12 +144,12 @@ IptcSubject::IptcSubject(QWidget* parent)
 
     QLabel *customLabel = new QLabel(i18n("Use custom definition"));
 
-    d->btnGroup->addButton(d->stdBtn,    IptcSubjectPriv::STANDARD);
-    d->btnGroup->addButton(d->customBtn, IptcSubjectPriv::CUSTOM);
+    d->btnGroup->addButton(d->stdBtn,    SubjectWidgetPriv::STANDARD);
+    d->btnGroup->addButton(d->customBtn, SubjectWidgetPriv::CUSTOM);
     d->btnGroup->setExclusive(true);
     d->stdBtn->setChecked(true);
 
-    for (IptcSubjectPriv::SubjectCodesMap::Iterator it = d->subMap.begin();
+    for (SubjectWidgetPriv::SubjectCodesMap::Iterator it = d->subMap.begin();
          it != d->subMap.end(); ++it)
         d->refCB->addItem(it.key());
 
@@ -289,14 +289,14 @@ IptcSubject::IptcSubject(QWidget* parent)
     slotEditOptionChanged(d->btnGroup->id(d->btnGroup->checkedButton()));
 }
 
-IptcSubject::~IptcSubject()
+SubjectWidget::~SubjectWidget()
 {
     delete d;
 }
 
-void IptcSubject::slotEditOptionChanged(int b)
+void SubjectWidget::slotEditOptionChanged(int b)
 {
-    if (b == IptcSubjectPriv::CUSTOM)
+    if (b == SubjectWidgetPriv::CUSTOM)
     {
         d->refCB->setEnabled(false);
         d->iprLabel->setEnabled(true);
@@ -327,12 +327,12 @@ void IptcSubject::slotEditOptionChanged(int b)
     }
 }
 
-void IptcSubject::slotRefChanged()
+void SubjectWidget::slotRefChanged()
 {
     QString key = d->refCB->currentText();
     QString name, matter, detail;
 
-    for (IptcSubjectPriv::SubjectCodesMap::Iterator it = d->subMap.begin();
+    for (SubjectWidgetPriv::SubjectCodesMap::Iterator it = d->subMap.begin();
          it != d->subMap.end(); ++it)
     {
         if (key == it.key())
@@ -349,7 +349,7 @@ void IptcSubject::slotRefChanged()
     m_detailEdit->setText(detail);
 }
 
-QString IptcSubject::buildSubject() const
+QString SubjectWidget::buildSubject() const
 {
     QString subject = m_iprEdit->text();
     subject.append(":");
@@ -363,7 +363,7 @@ QString IptcSubject::buildSubject() const
     return subject;
 }
 
-void IptcSubject::slotDelSubject()
+void SubjectWidget::slotDelSubject()
 {
     QListWidgetItem *item = d->subjectsBox->currentItem();
     if (!item) return;
@@ -371,7 +371,7 @@ void IptcSubject::slotDelSubject()
     delete item;
 }
 
-void IptcSubject::slotRepSubject()
+void SubjectWidget::slotRepSubject()
 {
     QString newSubject = buildSubject();
     if (newSubject.isEmpty()) return;
@@ -387,7 +387,7 @@ void IptcSubject::slotRepSubject()
     }
 }
 
-void IptcSubject::slotSubjectSelectionChanged()
+void SubjectWidget::slotSubjectSelectionChanged()
 {
     if (!d->subjectsBox->selectedItems().isEmpty())
     {
@@ -407,7 +407,7 @@ void IptcSubject::slotSubjectSelectionChanged()
     }
 }
 
-void IptcSubject::slotAddSubject()
+void SubjectWidget::slotAddSubject()
 {
     QString newSubject = buildSubject();
     if (newSubject.isEmpty()) return;
@@ -434,7 +434,7 @@ void IptcSubject::slotAddSubject()
     }
 }
 
-bool IptcSubject::loadSubjectCodesFromXML(const KUrl& url)
+bool SubjectWidget::loadSubjectCodesFromXML(const KUrl& url)
 {
     QFile xmlfile(url.path());
 
@@ -502,7 +502,7 @@ bool IptcSubject::loadSubjectCodesFromXML(const KUrl& url)
 
     // Set the Subject Name everywhere on the map.
 
-    for (IptcSubjectPriv::SubjectCodesMap::Iterator it = d->subMap.begin();
+    for (SubjectWidgetPriv::SubjectCodesMap::Iterator it = d->subMap.begin();
          it != d->subMap.end(); ++it)
     {
         QString name, keyPrefix;
@@ -511,7 +511,7 @@ bool IptcSubject::loadSubjectCodesFromXML(const KUrl& url)
             keyPrefix = it.key().left(3);
             name      = it.value().name;
 
-            for (IptcSubjectPriv::SubjectCodesMap::Iterator it2 = d->subMap.begin();
+            for (SubjectWidgetPriv::SubjectCodesMap::Iterator it2 = d->subMap.begin();
                 it2 != d->subMap.end(); ++it2)
             {
                 if (it2.key().startsWith(keyPrefix) &&
@@ -525,7 +525,7 @@ bool IptcSubject::loadSubjectCodesFromXML(const KUrl& url)
 
     // Set the Subject Matter Name everywhere on the map.
 
-    for (IptcSubjectPriv::SubjectCodesMap::Iterator it = d->subMap.begin();
+    for (SubjectWidgetPriv::SubjectCodesMap::Iterator it = d->subMap.begin();
          it != d->subMap.end(); ++it)
     {
         QString matter, keyPrefix;
@@ -534,7 +534,7 @@ bool IptcSubject::loadSubjectCodesFromXML(const KUrl& url)
             keyPrefix = it.key().left(5);
             matter    = it.value().matter;
 
-            for (IptcSubjectPriv::SubjectCodesMap::Iterator it2 = d->subMap.begin();
+            for (SubjectWidgetPriv::SubjectCodesMap::Iterator it2 = d->subMap.begin();
                 it2 != d->subMap.end(); ++it2)
             {
                 if (it2.key().startsWith(keyPrefix) &&
@@ -549,7 +549,7 @@ bool IptcSubject::loadSubjectCodesFromXML(const KUrl& url)
     return true;
 }
 
-void IptcSubject::setSubjectList(const QStringList& list)
+void SubjectWidget::setSubjectList(const QStringList& list)
 {
     d->subjectsList = list;
 
@@ -561,17 +561,17 @@ void IptcSubject::setSubjectList(const QStringList& list)
     blockSignals(false);
 }
 
-QStringList IptcSubject::subjectsList() const
+QStringList SubjectWidget::subjectsList() const
 {
-    QStringList newIptcSubject;
+    QStringList newSubjects;
 
     for (int i = 0 ; i < d->subjectsBox->count(); i++)
     {
         QListWidgetItem *item = d->subjectsBox->item(i);
-        newIptcSubject.append(item->text());
+        newSubjects.append(item->text());
     }
 
-    return newIptcSubject;
+    return newSubjects;
 }
 
 }  // namespace Digikam

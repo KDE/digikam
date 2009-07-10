@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IPTCSUBJECT_H
-#define IPTCSUBJECT_H
+#ifndef SUBJECTWIDGET_H
+#define SUBJECTWIDGET_H
 
 // Qt includes
 
@@ -44,7 +44,7 @@ class KLineEdit;
 namespace Digikam
 {
 
-class IptcSubjectPriv;
+class SubjectWidgetPriv;
 
 class SubjectData
 {
@@ -64,14 +64,14 @@ public:
 
 // --------------------------------------------------------------------------------
 
-class IptcSubject : public QWidget
+class SubjectWidget : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    IptcSubject(QWidget* parent);
-    ~IptcSubject();
+    SubjectWidget(QWidget* parent);
+    ~SubjectWidget();
 
     void setSubjectList(const QStringList& list);
     QStringList subjectsList() const;
@@ -106,9 +106,9 @@ protected:
 
 private:
 
-    IptcSubjectPriv* const d;
+    SubjectWidgetPriv* const d;
 };
 
 }  // namespace Digikam
 
-#endif // IPTCSUBJECT_H
+#endif // SUBJECTWIDGET_H

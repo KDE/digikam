@@ -40,7 +40,7 @@ namespace Digikam
 {
 
 SubjectEdit::SubjectEdit(QWidget* parent)
-           : IptcSubject(parent)
+           : SubjectWidget(parent)
 {
     // Subject string do not accept these characters:
     // - '*' (\x2A)
@@ -93,7 +93,7 @@ SubjectEdit::~SubjectEdit()
 
 void SubjectEdit::slotRefChanged()
 {
-    IptcSubject::slotRefChanged();
+    SubjectWidget::slotRefChanged();
     m_iprEdit->setText(QString("XMP"));
 }
 
