@@ -303,11 +303,6 @@ void SubjectWidget::slotEditOptionChanged(int b)
     if (b == SubjectWidgetPriv::CUSTOM)
     {
         d->refCB->setEnabled(false);
-        d->iprLabel->setEnabled(true);
-        d->refLabel->setEnabled(true);
-        d->nameLabel->setEnabled(true);
-        d->matterLabel->setEnabled(true);
-        d->detailLabel->setEnabled(true);
         m_iprEdit->setEnabled(true);
         m_refEdit->setEnabled(true);
         m_nameEdit->setEnabled(true);
@@ -317,11 +312,6 @@ void SubjectWidget::slotEditOptionChanged(int b)
     else
     {
         d->refCB->setEnabled(true);
-        d->iprLabel->setEnabled(false);
-        d->refLabel->setEnabled(false);
-        d->nameLabel->setEnabled(false);
-        d->matterLabel->setEnabled(false);
-        d->detailLabel->setEnabled(false);
         m_iprEdit->setEnabled(false);
         m_refEdit->setEnabled(false);
         m_nameEdit->setEnabled(false);
