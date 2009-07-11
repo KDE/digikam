@@ -265,13 +265,13 @@ AltLangStrEdit::AltLangStrEdit(QWidget* parent)
     d->delValueButton = new QToolButton(this);
     d->addValueButton->setIcon(SmallIcon("list-add"));
     d->delValueButton->setIcon(SmallIcon("list-remove"));
-    d->delValueButton->setToolTip(i18n("Remove current caption"));
+    d->delValueButton->setToolTip(i18n("Remove current item"));
     d->addValueButton->setEnabled(false);
     d->delValueButton->setEnabled(false);
 
     d->languageCB = new KComboBox(this);
     d->languageCB->setSizeAdjustPolicy(KComboBox::AdjustToContents);
-    d->languageCB->setWhatsThis(i18n("Select here the language for your caption."));
+    d->languageCB->setWhatsThis(i18n("Select item language here."));
 
     d->valueEdit  = new KTextEdit(this);
     d->valueEdit->setCheckSpellingEnabled(true);
@@ -356,7 +356,7 @@ void AltLangStrEdit::slotSelectionChanged(int index)
         d->addValueButton->setEnabled(false);
         d->delValueButton->setEnabled(true);
         d->addValueButton->setIcon(SmallIcon("view-refresh"));
-        d->addValueButton->setToolTip(i18n("Update current caption"));
+        d->addValueButton->setToolTip(i18n("Update current item"));
     }
     else
     {
@@ -364,7 +364,7 @@ void AltLangStrEdit::slotSelectionChanged(int index)
         d->addValueButton->setEnabled(false);
         d->delValueButton->setEnabled(false);
         d->addValueButton->setIcon(SmallIcon("list-add"));
-        d->addValueButton->setToolTip(i18n("Add new caption"));
+        d->addValueButton->setToolTip(i18n("Add new item"));
     }
     d->valueEdit->blockSignals(false);
     d->languageCB->setToolTip(d->languageCodeMap[lang]);
