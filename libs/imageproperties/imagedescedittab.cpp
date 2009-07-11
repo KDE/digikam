@@ -255,11 +255,10 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     grid1->addWidget(d->captionsEdit,     0, 0, 1, 2);
     grid1->addWidget(dateBox,             1, 0, 1, 2);
     grid1->addWidget(ratingBox,           2, 0, 1, 2);
-    grid1->addWidget(d->templateSelector, 3, 0, 1, 2);
-    grid1->addWidget(d->newTagEdit,       4, 0, 1, 2);
-    grid1->addWidget(d->tagsView,         5, 0, 1, 2);
-    grid1->addWidget(tagsSearch,          6, 0, 1, 2);
-    grid1->setRowStretch(5, 10);
+    grid1->addWidget(d->newTagEdit,       3, 0, 1, 2);
+    grid1->addWidget(d->tagsView,         4, 0, 1, 2);
+    grid1->addWidget(tagsSearch,          5, 0, 1, 2);
+    grid1->setRowStretch(4, 10);
     grid1->setMargin(KDialog::spacingHint());
     grid1->setSpacing(KDialog::spacingHint());
 
