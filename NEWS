@@ -21,7 +21,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 012 ==> 199617 : When clicking on "My Tags", the view switches automatically after 2 seconds.
 013 ==> 199076 : Sudden crash of digiKam during work.
 014 ==> 195121 : digiKam crashes on view image (exiv2).
-015 ==> 
+015 ==> 142566 : Update metadata doesn't work correctly for creation date.
+016 ==> 
 
 
 *********************************************************************************************************
