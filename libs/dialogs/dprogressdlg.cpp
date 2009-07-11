@@ -166,11 +166,7 @@ void DProgressDlg::addedAction(const QPixmap& itemPix, const QString& text)
 
     if (pix.isNull())
     {
-        QString imagePath = KGlobal::dirs()->findResource("digikam_imagebroken",
-                                                          "image-broken.png");
-        QImage img(imagePath);
-        img = img.scaled(32, 32, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        pix = QPixmap::fromImage(img);
+        pix = DesktopIcon("image-missing", KIconLoader::SizeMedium);    // 32x32 px
     }
     else
     {
