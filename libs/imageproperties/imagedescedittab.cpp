@@ -264,20 +264,20 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
 
     d->tabWidget->insertTab(ImageDescEditTabPriv::DESCRIPTIONS, sv, i18n("Description"));
 
-    // Rights Managament view --------------------------------------
+    // Informations Managament view --------------------------------------
 
     QScrollArea *sv2 = new QScrollArea(d->tabWidget);
     sv2->setFrameStyle(QFrame::NoFrame);
     sv2->setWidgetResizable(true);
 
-    QWidget *rightArea = new QWidget(sv->viewport());
-    QGridLayout *grid2 = new QGridLayout(rightArea);
-    sv2->setWidget(rightArea);
+    QWidget *infoArea = new QWidget(sv->viewport());
+    QGridLayout *grid2 = new QGridLayout(infoArea);
+    sv2->setWidget(infoArea);
     sv2->viewport()->setAutoFillBackground(false);
-    rightArea->setAutoFillBackground(false);
+    infoArea->setAutoFillBackground(false);
 
-    d->templateSelector = new TemplateSelector(rightArea);
-    d->templateViewer   = new TemplateViewer(rightArea);
+    d->templateSelector = new TemplateSelector(infoArea);
+    d->templateViewer   = new TemplateViewer(infoArea);
 
     grid2->addWidget(d->templateSelector, 0, 0, 1, 2);
     grid2->addWidget(d->templateViewer,   1, 0, 1, 2);
