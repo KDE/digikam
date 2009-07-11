@@ -172,6 +172,9 @@ void ImagePropertiesSideBar::slotChangedTab(QWidget* tab)
 
 void ImagePropertiesSideBar::setImagePropertiesInformation(const KUrl& url)
 {
+    if (!url.isValid())
+        return;
+
     QString str;
     QString unavailable(i18n("<i>unavailable</i>"));
 
