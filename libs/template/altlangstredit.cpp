@@ -422,7 +422,7 @@ QString AltLangStrEdit::defaultAltLang() const
 
 bool AltLangStrEdit::asDefaultAltLang() const
 {
-    return defaultAltLang().isNull() ? false : true;
+    return !defaultAltLang().isNull();
 }
 
 void AltLangStrEdit::slotTextChanged()
