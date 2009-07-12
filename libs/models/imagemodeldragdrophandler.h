@@ -67,6 +67,13 @@ public:
     /** Create a mime data object for starting a drag from the given Albums */
     virtual QMimeData *createMimeData(const QList<ImageInfo> &);
 
+    /** Returns if the given mime data can be handled. acceptsMimeData shall return true
+     *  if a drop of the given mime data will be accepted on any index or place at all.
+     *  If this returns false, the more specific method accepts() will not be called for this drag.
+     *  The default implementation uses mimeTypes() to check for supported mime types.
+     *  There is usually no need to reimplement this. */
+    virtual bool acceptsMimeData(const QMimeData *data);
+
 protected:
 
     ImageModel *m_model;

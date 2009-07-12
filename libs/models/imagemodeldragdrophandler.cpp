@@ -25,6 +25,8 @@
 
 // Qt includes
 
+#include <QMimeData>
+
 // Local includes
 
 #include "imagemodel.h"
@@ -63,6 +65,16 @@ QMimeData *ImageModelDragDropHandler::createMimeData(const QList<ImageInfo> &)
     return 0;
 }
 
+bool ImageModelDragDropHandler::acceptsMimeData(const QMimeData *mime)
+{
+    QStringList modelTypes = mimeTypes();
+    for (int i = 0; i < modelTypes.count(); ++i)
+    {
+        if (mime->hasFormat(modelTypes.at(i))) //&& (e->dropAction() & model->supportedDropActions()))
+            return true;
+    }
+    return false;
+}
 
 }
 
