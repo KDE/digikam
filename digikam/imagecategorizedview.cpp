@@ -1003,6 +1003,15 @@ void ImageCategorizedView::startDrag(Qt::DropActions supportedActions)
     }
 }
 
+void ImageCategorizedView::dragEnterEvent(QDragEnterEvent *e)
+{
+    ImageModelDragDropHandler *handler = d->model->dragDropHandler();
+    if (handler && handler->acceptsMimeData(e->mimeData()))
+        e->accept();
+    else
+        e->ignore();
+}
+
 void ImageCategorizedView::dragMoveEvent(QDragMoveEvent *e)
 {
     KCategorizedView::dragMoveEvent(e);

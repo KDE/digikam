@@ -171,6 +171,7 @@ protected:
     // reimplemented from parent class
     void contextMenuEvent(QContextMenuEvent* event);
     void currentChanged(const QModelIndex& index, const QModelIndex& previous);
+    void dragEnterEvent(QDragEnterEvent *event);
     void dragMoveEvent(QDragMoveEvent *e);
     void dropEvent(QDropEvent *e);
     void keyPressEvent(QKeyEvent *event);
