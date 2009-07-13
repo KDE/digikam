@@ -932,12 +932,33 @@ bool GPCamera::downloadItem(const QString& folder, const QString& itemName,
     int         errorCode;
     CameraFile *cfile;
 
-    gp_file_new(&cfile);
-
     if (d->status)
     {
         delete d->status;
         d->status = 0;
+    }
+
+    QFile file(saveFile);
+    if (!file.open(QIODevice::ReadWrite))
+    {
+        kDebug(50003) << "Failed to open file" << file.fileName() << file.errorString();
+        return false;
+    }
+    // dup fd, passing fd control to gphoto2 later
+    int handle = dup(file.handle());
+    if (handle == -1)
+    {
+        kDebug(50003) << "Failed to dup file descriptor";
+        return false;
+    }
+
+    errorCode = gp_file_new_from_fd(&cfile, handle);
+
+    if (errorCode != GP_OK)
+    {
+        kDebug(50003) << "Failed to get camera item!";
+        printGphotoErrorDescription(errorCode);
+        return false;
     }
 
     d->status = new GPStatus;
@@ -956,17 +977,10 @@ bool GPCamera::downloadItem(const QString& folder, const QString& itemName,
         return false;
     }
 
+    file.close();
+
     delete d->status;
     d->status = 0;
-
-    errorCode = gp_file_save(cfile, QFile::encodeName(saveFile));
-    if (errorCode != GP_OK)
-    {
-        kDebug(50003) << "Failed to save camera item!";
-        printGphotoErrorDescription(errorCode);
-        gp_file_unref(cfile);
-        return false;
-    }
 
     gp_file_unref(cfile);
     return true;
