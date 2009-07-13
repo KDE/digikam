@@ -24,8 +24,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 015 ==> 142566 : Update metadata doesn't work correctly for creation date.
 016 ==> 199251 : digiKam crashes when setting exif orientation tag.
 017 ==> 199482 : Caption can't be canged.
-018 ==> 174586 : Loading video from camera consumes ll memory
-019 ==> 
+018 ==> 174586 : Loading video from camera consumes ll memory.
+019 ==> 199667 : Make writing of metadata to picture enabled by default.
+020 ==> 
 
 
 
