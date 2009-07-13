@@ -720,7 +720,7 @@ void ImageGuideWidget::mouseMoveEvent(QMouseEvent *e)
             d->spot.setX(e->x()-d->rect.x());
             d->spot.setY(e->y()-d->rect.y());
         }
-        else if ((e->buttons() & Qt::LeftButton) && d->drawingMask)
+        else if (d->enableDrawMask)
         {
             int size = d->penWidth;
             if (size>64)
@@ -731,9 +731,12 @@ void ImageGuideWidget::mouseMoveEvent(QMouseEvent *e)
             p.drawEllipse( 0, 0, size-1, size-1);
             setCursor(QCursor(pix));
             
-            QPoint currentPos = QPoint(e->x()-d->rect.x(), e->y()-d->rect.y());
-            drawLineTo(currentPos);
-            updatePreview();
+            if ((e->buttons() & Qt::LeftButton) && d->drawingMask)
+            {
+                QPoint currentPos = QPoint(e->x()-d->rect.x(), e->y()-d->rect.y());
+                drawLineTo(currentPos);
+                updatePreview();
+            }
         }
     }
     else
