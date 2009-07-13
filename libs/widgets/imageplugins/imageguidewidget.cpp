@@ -64,6 +64,7 @@ public:
     {
         pixmap                    = 0;
         maskPixmap                = 0;
+        previewPixmap             = 0;
         iface                     = 0;
         flicker                   = 0;
         timerID                   = 0;
@@ -110,6 +111,7 @@ public:
 
     QPixmap    *pixmap;
     QPixmap    *maskPixmap;
+    QPixmap    *previewPixmap;
 
     QPoint      lastPoint;
 
@@ -144,10 +146,12 @@ ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent,
     d->preview.setICCProfil( d->iface->getOriginalImg()->getICCProfil() );
     delete [] data;
 
-    d->pixmap     = new QPixmap(w, h);
-    d->rect       = QRect(w/2-d->width/2, h/2-d->height/2, d->width, d->height);
-    d->maskPixmap = new QPixmap(d->rect.width(), d->rect.height());
+    d->pixmap        = new QPixmap(w, h);
+    d->rect          = QRect(w/2-d->width/2, h/2-d->height/2, d->width, d->height);
+    d->maskPixmap    = new QPixmap(d->rect.width(), d->rect.height());
+    d->previewPixmap = new QPixmap(d->rect.width(), d->rect.height());
     d->maskPixmap->fill(QColor(0,0,0,0));
+    d->previewPixmap->fill(QColor(0,0,0,0));
 
     d->paintColor.setRgb(255, 255, 255, 255);
 
@@ -273,7 +277,7 @@ void ImageGuideWidget::updatePixmap()
     if (d->renderingPreviewMode == PreviewOriginalImage ||
         (d->renderingPreviewMode == PreviewToggleOnMouseOver && d->onMouseMovePreviewToggled == false ))
     {
-        p.drawPixmap(d->rect, d->iface->convertToPixmap(d->preview));
+        p.drawPixmap(d->rect, *d->previewPixmap);
 
         text     = i18n("Original");
         fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
@@ -313,7 +317,7 @@ void ImageGuideWidget::updatePixmap()
         if (d->renderingPreviewMode == PreviewBothImagesVert)
         {
             // Drawing the original image.
-            p.drawPixmap(d->rect, d->iface->convertToPixmap(d->preview));
+            p.drawPixmap(d->rect, *d->previewPixmap);
 
             // Drawing the target image under the original.
             d->iface->paint(d->pixmap,
@@ -338,7 +342,7 @@ void ImageGuideWidget::updatePixmap()
                             &p);
 
             // Drawing the original image under the target.
-            p.drawPixmap(d->rect.x(), d->rect.y(), d->iface->convertToPixmap(d->preview),
+            p.drawPixmap(d->rect.x(), d->rect.y(), *d->previewPixmap,
                          0, 0, d->rect.width()/2, d->rect.height());
         }
 
@@ -381,7 +385,7 @@ void ImageGuideWidget::updatePixmap()
         if (d->renderingPreviewMode == PreviewBothImagesHorz)
         {
             // Drawing the original image.
-            p.drawPixmap(d->rect, d->iface->convertToPixmap(d->preview));
+            p.drawPixmap(d->rect, *d->previewPixmap);
 
             // Drawing the target image under the original.
             d->iface->paint(d->pixmap,
@@ -406,7 +410,7 @@ void ImageGuideWidget::updatePixmap()
                             &p);
 
             // Drawing the original image under the target.
-            p.drawPixmap(d->rect.x(), d->rect.y(), d->iface->convertToPixmap(d->preview),
+            p.drawPixmap(d->rect.x(), d->rect.y(), *d->previewPixmap,
                          0, 0, d->rect.width(), d->rect.height()/2);
         }
 
@@ -575,6 +579,7 @@ void ImageGuideWidget::resizeEvent(QResizeEvent *e)
 {
     blockSignals(true);
     delete d->pixmap;
+    delete d->previewPixmap;
 
     int w     = e->size().width();
     int h     = e->size().height();
@@ -590,9 +595,11 @@ void ImageGuideWidget::resizeEvent(QResizeEvent *e)
     d->preview.setICCProfil( d->iface->getOriginalImg()->getICCProfil() );
     delete [] data;
 
-    d->pixmap       = new QPixmap(w, h);
-    d->rect         = QRect(w/2-d->width/2, h/2-d->height/2, d->width, d->height);
-    *d->maskPixmap  = d->maskPixmap->scaled(d->width,d->height,Qt::IgnoreAspectRatio);
+    d->pixmap         = new QPixmap(w, h);
+    d->previewPixmap  = new QPixmap(w, h);
+    d->rect           = QRect(w/2-d->width/2, h/2-d->height/2, d->width, d->height);
+    *d->maskPixmap    = d->maskPixmap->scaled(d->width,d->height,Qt::IgnoreAspectRatio);
+    *d->previewPixmap = d->iface->convertToPixmap(d->preview);
 
     d->spot.setX((int)((float)d->spot.x() * ( (float)d->width  / (float)old_w)));
     d->spot.setY((int)((float)d->spot.y() * ( (float)d->height / (float)old_h)));
