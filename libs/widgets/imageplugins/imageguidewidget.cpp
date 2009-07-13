@@ -174,6 +174,9 @@ ImageGuideWidget::~ImageGuideWidget()
     if(d->maskPixmap)
         delete d->maskPixmap;
 
+    if(d->previewPixmap)
+        delete d->previewPixmap;
+
     delete d;
 }
 
