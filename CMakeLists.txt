@@ -510,7 +510,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/dmetadata.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/geodetictools.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/template.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/captionvalues.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/captionvalues.cpp
        )
 
     # CImg.h version 1.2.8 do not compile fine with gcc 4.3.
