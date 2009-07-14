@@ -796,7 +796,9 @@ void ImageGuideWidget::drawLineTo(int width, bool erase, const QColor& color, co
         painter.setCompositionMode(QPainter::CompositionMode_Clear);
     }
     else
+    {
         painter.setPen(QPen(color, width, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    }
     painter.drawLine(start, end);
 
     int rad = (width / 2) + 2;
