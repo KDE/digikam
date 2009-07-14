@@ -26,8 +26,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 017 ==> 199482 : Caption can't be canged.
 018 ==> 174586 : Loading video from camera consumes ll memory.
 019 ==> 199667 : Make writing of metadata to picture enabled by default.
-020 ==> 
-
+020 ==> 199981 : XMP synchronization of digiKam namespace occurs for second tag.
+021 ==> 
 
 
 *********************************************************************************************************
