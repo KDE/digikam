@@ -185,7 +185,7 @@ void PerspectiveWidget::reset()
 
     m_antiAlias = true;
     updatePixmap();
-    repaint();
+    update();
 }
 
 void PerspectiveWidget::applyPerspectiveAdjustment()
@@ -215,14 +215,14 @@ void PerspectiveWidget::slotInverseTransformationChanged(bool isEnabled)
 {
     m_inverseTransformation = isEnabled;
     updatePixmap();
-    repaint();
+    update();
 }
 
 void PerspectiveWidget::slotToggleAntiAliasing(bool a)
 {
     m_antiAlias = a;
     updatePixmap();
-    repaint();
+    update();
 }
 
 void PerspectiveWidget::slotToggleDrawWhileMoving(bool draw)
@@ -234,21 +234,21 @@ void PerspectiveWidget::slotToggleDrawGrid(bool grid)
 {
     m_drawGrid = grid;
     updatePixmap();
-    repaint();
+    update();
 }
 
 void PerspectiveWidget::slotChangeGuideColor(const QColor& color)
 {
     m_guideColor = color;
     updatePixmap();
-    repaint();
+    update();
 }
 
 void PerspectiveWidget::slotChangeGuideSize(int size)
 {
     m_guideSize = size;
     updatePixmap();
-    repaint();
+    update();
 }
 
 void PerspectiveWidget::updatePixmap()
@@ -752,7 +752,7 @@ void PerspectiveWidget::mouseReleaseEvent ( QMouseEvent * e )
         if (!m_drawWhileMoving)
         {
             updatePixmap();
-            repaint();
+            update();
         }
     }
     else
@@ -760,7 +760,7 @@ void PerspectiveWidget::mouseReleaseEvent ( QMouseEvent * e )
         m_spot.setX(e->x()-m_rect.x());
         m_spot.setY(e->y()-m_rect.y());
         updatePixmap();
-        repaint();
+        update();
     }
 }
 
@@ -871,7 +871,7 @@ void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
             }
 
             updatePixmap();
-            repaint();
+            update();
         }
     }
     else
