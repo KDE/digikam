@@ -139,6 +139,7 @@ private:
     void   drawLineTo(const QPoint& endPoint);
     void   drawLineTo(int width, bool erase, const QColor& color, const QPoint& start, const QPoint& end);
     QPoint translatePointPosition(QPoint& point);
+    void   updateMaskCursor();
 
 private:
 

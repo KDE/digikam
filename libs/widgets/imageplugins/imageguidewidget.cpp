@@ -113,6 +113,8 @@ public:
     QPixmap    *maskPixmap;
     QPixmap    *previewPixmap;
 
+    QCursor     maskCursor;
+
     QPoint      lastPoint;
 
     ImageIface *iface;
@@ -152,6 +154,7 @@ ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent,
     d->previewPixmap = new QPixmap(d->rect.width(), d->rect.height());
     d->maskPixmap->fill(QColor(0,0,0,0));
     d->previewPixmap->fill(QColor(0,0,0,0));
+
 
     d->paintColor.setRgb(255, 255, 255, 255);
 
@@ -732,15 +735,7 @@ void ImageGuideWidget::mouseMoveEvent(QMouseEvent *e)
         }
         else if (d->enableDrawMask)
         {
-            int size = d->penWidth;
-            if (size>64)
-              size=64; // it is not possible to have larger cursors
-            QPixmap pix(size,size);
-            pix.fill(Qt::transparent);
-            QPainter p(&pix);
-            p.drawEllipse( 0, 0, size-1, size-1);
-            setCursor(QCursor(pix));
-            
+            setCursor(d->maskCursor);
             if ((e->buttons() & Qt::LeftButton) && d->drawingMask)
             {
                 QPoint currentPos = QPoint(e->x()-d->rect.x(), e->y()-d->rect.y());
@@ -820,6 +815,7 @@ void ImageGuideWidget::setPaintColor(const QColor& color)
 void ImageGuideWidget::setMaskEnabled(bool enabled)
 {
     d->enableDrawMask = enabled;
+    updateMaskCursor();
     updatePreview();
 }
 
@@ -846,6 +842,22 @@ QPoint ImageGuideWidget::translatePointPosition(QPoint& point)
 void ImageGuideWidget::setMaskPenSize(int size)
 {
     d->penWidth = size;
+    updateMaskCursor();
 }
 
+void ImageGuideWidget::updateMaskCursor()
+{
+    int size = d->penWidth;
+    if (size > 64)
+        size = 64;
+
+    QPixmap pix(size, size);
+    pix.fill(Qt::transparent);
+
+    QPainter p(&pix);
+    p.drawEllipse( 0, 0, size-1, size-1);
+
+    d->maskCursor = QCursor(pix);
+
+}
 }  // namespace Digikam
