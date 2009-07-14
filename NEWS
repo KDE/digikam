@@ -4,6 +4,8 @@ digiKam 1.0.0-beta3 - Release date: 2009-xx-xx
 NEW FEATURES:
 
 General        : Metadata Template: add support of Contact, Location, and Subjects IPTC information.
+General        : Add support of Author properties to multi-language Captions. User can set 
+                 an author name for each caption value.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
