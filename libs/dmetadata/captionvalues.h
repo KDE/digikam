@@ -63,7 +63,7 @@ DIGIKAM_EXPORT QDebug operator<<(QDebug dbg, const CaptionValues& val);
 
 /** A map used to store a list of Alternative Language values + author and date properties
     The map key is the language code following RFC3066 notation
-    (like "fr-FR" for French), and the map value the text.
+    (like "fr-FR" for French), and the CaptionsMap value all caption properties.
  */
 class DIGIKAM_EXPORT CaptionsMap : public QMap<QString, CaptionValues>
 {
