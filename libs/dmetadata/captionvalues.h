@@ -72,8 +72,18 @@ public:
     CaptionsMap();
     ~CaptionsMap();
 
+    void setData(const KExiv2::AltLangMap& comments,
+                 const KExiv2::AltLangMap& authors,
+                 const KExiv2::AltLangMap& dates);
+
     void fromAltLangMap(const KExiv2::AltLangMap& map);
     KExiv2::AltLangMap toAltLangMap() const;
+
+    void setAuthorsList(const KExiv2::AltLangMap& map);
+    KExiv2::AltLangMap authorsList() const;
+
+    void setDatesList(const KExiv2::AltLangMap& map);
+    KExiv2::AltLangMap datesList() const;
 };
 
 }  // namespace Digikam

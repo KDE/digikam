@@ -156,35 +156,42 @@ CaptionsMap DMetadata::getImageComments() const
         return CaptionsMap();
 
     CaptionsMap        captionsMap;
+    KExiv2::AltLangMap authorsMap;
+    KExiv2::AltLangMap datesMap;
+    KExiv2::AltLangMap commentsMap;
 
-   // TODO: in first try to get captions map data from digiKam XMP namespace
+    // In first try to get captions properties from digiKam XMP namespace
 
-    KExiv2::AltLangMap map;
+    if (supportXmp())
+    {
+        authorsMap = getXmpTagStringListLangAlt("Xmp.digiKam.CaptionsAuthorNames",    false);
+        datesMap   = getXmpTagStringListLangAlt("Xmp.digiKam.CaptionsDateTimeStamps", false);
+    }
 
     // In first, we check XMP alternative language tags to create map of values.
 
     if (hasXmp())
     {
-        map = getXmpTagStringListLangAlt("Xmp.dc.description", false);
-        if (!map.isEmpty())
+        commentsMap = getXmpTagStringListLangAlt("Xmp.dc.description", false);
+        if (!commentsMap.isEmpty())
         {
-            captionsMap.fromAltLangMap(map);
+            captionsMap.setData(commentsMap, authorsMap, datesMap);
             return captionsMap;
         }
 
         QString xmpComment = getXmpTagStringLangAlt("Xmp.exif.UserComment", QString(), false);
         if (!xmpComment.isEmpty())
         {
-            map.insert(QString("x-default"), xmpComment);
-            captionsMap.fromAltLangMap(map);
+            commentsMap.insert(QString("x-default"), xmpComment);
+            captionsMap.setData(commentsMap, authorsMap, datesMap);
             return captionsMap;
         }
 
         xmpComment = getXmpTagStringLangAlt("Xmp.tiff.ImageDescription", QString(), false);
         if (!xmpComment.isEmpty())
         {
-            map.insert(QString("x-default"), xmpComment);
-            captionsMap.fromAltLangMap(map);
+            commentsMap.insert(QString("x-default"), xmpComment);
+            captionsMap.setData(commentsMap, authorsMap, datesMap);
             return captionsMap;
         }
     }
@@ -196,8 +203,8 @@ CaptionsMap DMetadata::getImageComments() const
     QString comment = getCommentsDecoded();
     if (!comment.isEmpty())
     {
-        map.insert(QString("x-default"), comment);
-        captionsMap.fromAltLangMap(map);
+        commentsMap.insert(QString("x-default"), comment);
+        captionsMap.setData(commentsMap, authorsMap, datesMap);
         return captionsMap;
     }
 
@@ -208,8 +215,8 @@ CaptionsMap DMetadata::getImageComments() const
         QString exifComment = getExifComment();
         if (!exifComment.isEmpty())
         {
-            map.insert(QString("x-default"), exifComment);
-            captionsMap.fromAltLangMap(map);
+            commentsMap.insert(QString("x-default"), exifComment);
+            captionsMap.setData(commentsMap, authorsMap, datesMap);
             return captionsMap;
         }
     }
@@ -221,8 +228,8 @@ CaptionsMap DMetadata::getImageComments() const
         QString iptcComment = getIptcTagString("Iptc.Application2.Caption", false);
         if (!iptcComment.isEmpty() && !iptcComment.trimmed().isEmpty())
         {
-            map.insert(QString("x-default"), iptcComment);
-            captionsMap.fromAltLangMap(map);
+            commentsMap.insert(QString("x-default"), iptcComment);
+            captionsMap.setData(commentsMap, authorsMap, datesMap);
             return captionsMap;
         }
     }
@@ -238,7 +245,16 @@ bool DMetadata::setImageComments(const CaptionsMap& comments) const
 
     kDebug(50003) << getFilePath() << " ==> Comment: " << comments;
 
-   // TODO: in first set captions map data to digiKam XMP namespace
+    // In first, set captions properties to digiKam XMP namespace
+
+    if (supportXmp())
+    {
+        if (!setXmpTagStringListLangAlt("Xmp.digiKam.CaptionsAuthorNames", comments.authorsList(), false))
+            return false;
+
+        if (!setXmpTagStringListLangAlt("Xmp.digiKam.CaptionsDateTimeStamps", comments.datesList(), false))
+            return false;
+    }
 
     QString defaultComment = comments[QString("x-default")].caption;
 
