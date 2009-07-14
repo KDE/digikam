@@ -34,8 +34,6 @@
 
 #include "albumdb.h"
 
-using namespace KExiv2Iface;
-
 namespace Digikam
 {
 
@@ -356,16 +354,18 @@ void ImageComments::addTitle(const QString& comment, const QString& lang,
     return addComment(comment, lang, author, date, DatabaseComment::Title);
 }
 
-void ImageComments::replaceComments(const KExiv2::AltLangMap& map, const QString& author,
-                                    const QDateTime& date, DatabaseComment::Type type)
+void ImageComments::replaceComments(const CaptionsMap& map, DatabaseComment::Type type)
 {
     if (!d)
         return;
 
     d->dirtyIndices.clear();
 
-    for (KExiv2::AltLangMap::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
-        addComment(it.value(), it.key(), author, date, type);
+    for (CaptionsMap::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
+    {
+        CaptionValues val = it.value();
+        addComment(val.caption, it.key(), val.author, val.date, type);
+    }
 
     // remove all that have not been touched above
     for (int i=0; i<d->infos.size() /* changing! */; )
@@ -515,9 +515,9 @@ void ImageComments::apply(DatabaseAccess& access)
     d->dirtyIndices.clear();
 }
 
-KExiv2::AltLangMap ImageComments::toAltLangMap(DatabaseComment::Type type) const
+CaptionsMap ImageComments::toCaptionsMap(DatabaseComment::Type type) const
 {
-    KExiv2::AltLangMap map;
+    CaptionsMap map;
 
     if (d)
     {
@@ -525,7 +525,11 @@ KExiv2::AltLangMap ImageComments::toAltLangMap(DatabaseComment::Type type) const
         {
             if (info.type == type)
             {
-                map[info.language] = info.comment;
+                CaptionValues val;
+                val.caption        = info.comment;
+                val.author         = info.author;
+                val.date           = info.date;
+                map[info.language] = val;
             }
         }
     }

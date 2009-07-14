@@ -34,14 +34,11 @@
 #include <QSharedData>
 #include <QSet>
 
-// LibKExiv2 includes
-
-#include <libkexiv2/kexiv2.h>
-
 // Local includes
 
 #include "digikam_export.h"
 #include "albuminfo.h"
+#include "captionvalues.h"
 #include "databaseaccess.h"
 
 using namespace KExiv2Iface;
@@ -169,11 +166,9 @@ public:
 
     /**
      * Replaces all existing comments with the given set of comments and associated language.
-     * Optionally date and author can be specified.
+     * Optionally date and author can be specified in CaptionsMap container.
      */
-    void replaceComments(const KExiv2::AltLangMap& commentsAndLanguage,
-                         const QString& author = QString(),
-                         const QDateTime& date = QDateTime(),
+    void replaceComments(const CaptionsMap& comments,
                          DatabaseComment::Type type = DatabaseComment::Comment);
 
     /**
@@ -215,11 +210,9 @@ public:
     void apply(DatabaseAccess& access);
 
     /**
-     * Returns all entries of the given type in a KExiv2 AltLangMap.
-     * Please keep in mind that author and date info is not contained
-     * and the order in the map has no relation to the index parameters taken by some methods here.
+     * Returns all entries of the given type in a CaptionsMap container.
      */
-    KExiv2::AltLangMap toAltLangMap(DatabaseComment::Type = DatabaseComment::Comment) const;
+    CaptionsMap toCaptionsMap(DatabaseComment::Type = DatabaseComment::Comment) const;
 
     // If you need more methods, add your methods here!
 

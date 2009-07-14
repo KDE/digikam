@@ -26,7 +26,6 @@
 
 // Qt includes
 
-#include <QCheckBox>
 #include <QLabel>
 #include <QMap>
 #include <QToolButton>
@@ -313,6 +312,16 @@ AltLangStrEdit::~AltLangStrEdit()
     delete d;
 }
 
+QString AltLangStrEdit::currentLanguageCode() const
+{
+    return d->languageCB->currentText();
+}
+
+QString AltLangStrEdit::languageCode(int index) const
+{
+    return d->languageCB->itemText(index);
+}
+
 void AltLangStrEdit::setTitle(const QString& title)
 {
     d->titleLabel->setText(title);
@@ -330,10 +339,12 @@ void AltLangStrEdit::slotAddValue()
     if (text.isEmpty()) return;
 
     d->values.insert(lang, text);
-    d->valueEdit->blockSignals(true);
+    blockSignals(true);
     d->valueEdit->clear();
-    d->valueEdit->blockSignals(false);
     loadLangAltListEntries(lang);
+    blockSignals(false);
+
+    emit signalAddValue(lang, text);
 }
 
 void AltLangStrEdit::slotDeleteValue()
@@ -341,6 +352,7 @@ void AltLangStrEdit::slotDeleteValue()
     QString lang = d->languageCB->currentText();
     d->values.remove(lang);
     loadLangAltListEntries();
+    emit signalDeleteValue(lang);
     emit signalModified();
 }
 
@@ -368,6 +380,8 @@ void AltLangStrEdit::slotSelectionChanged(int index)
     }
     d->valueEdit->blockSignals(false);
     d->languageCB->setToolTip(d->languageCodeMap[lang]);
+
+    emit signalSelectionChanged(lang);
 }
 
 void AltLangStrEdit::setValues(const KExiv2::AltLangMap& values)
@@ -439,10 +453,20 @@ void AltLangStrEdit::slotTextChanged()
     // so we have to check before marking the metadata as modified.
 
     bool dirty = (text != d->values[d->languageCB->currentText()]);
-    d->addValueButton->setEnabled(dirty);
+    setDirty(dirty);
 
     if (dirty)
         emit signalModified();
+}
+
+void AltLangStrEdit::setDirty(bool dirty)
+{
+    d->addValueButton->setEnabled(dirty);
+}
+
+bool AltLangStrEdit::isDirty() const
+{
+    return d->addValueButton->isEnabled();
 }
 
 void AltLangStrEdit::apply()

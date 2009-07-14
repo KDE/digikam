@@ -51,30 +51,41 @@ public:
 
     void setTitle(const QString& title);
 
-    void reset();
-
     void setValues(const KExiv2::AltLangMap& values);
     KExiv2::AltLangMap& values();
 
+    QString currentLanguageCode() const;
+    QString languageCode(int index) const;
+
     QString defaultAltLang() const;
     bool    asDefaultAltLang() const;
+
+    /** Reset all entries
+     */
+    void reset();
 
     /** Force current text to be registered in captions map
      */
     void apply();
 
-signals:
+    void setDirty(bool dirty);
+    bool isDirty() const;
+
+Q_SIGNALS:
 
     void signalModified();
+    void signalSelectionChanged(const QString&);
+    void signalAddValue(const QString&, const QString&);
+    void signalDeleteValue(const QString&);
 
-private slots:
+protected Q_SLOTS:
 
+    void slotTextChanged();
     void slotSelectionChanged(int);
     void slotAddValue();
     void slotDeleteValue();
-    void slotTextChanged();
 
-private:
+protected:
 
     void loadLangAltListEntries(const QString& currentLang=QString());
 

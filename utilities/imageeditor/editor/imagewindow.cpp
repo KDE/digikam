@@ -1283,7 +1283,7 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
         {
             SlidePictureInfo pictInfo;
             meta.load((*it).path());
-            pictInfo.comment   = meta.getImageComments()[QString("x-default")];
+            pictInfo.comment   = meta.getImageComments()[QString("x-default")].caption;
             pictInfo.photoInfo = meta.getPhotographInformation();
             settings.pictInfoMap.insert(*it, pictInfo);
 

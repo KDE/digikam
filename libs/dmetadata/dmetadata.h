@@ -36,6 +36,7 @@
 // Local includes
 
 #include "dimg.h"
+#include "captionvalues.h"
 #include "photoinfocontainer.h"
 #include "metadatainfo.h"
 #include "digikam_export.h"
@@ -63,8 +64,8 @@ public:
 
     /** Metadata manipulation methods */
 
-    KExiv2::AltLangMap getImageComments() const;
-    bool setImageComments(const KExiv2::AltLangMap& comments) const;
+    CaptionsMap getImageComments() const;
+    bool setImageComments(const CaptionsMap& comments) const;
 
     int  getImageRating() const;
     bool setImageRating(int rating) const;

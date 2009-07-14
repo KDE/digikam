@@ -87,7 +87,7 @@ public:
     QDateTime                             dateTime;
     QDateTime                             lastDateTime;
 
-    KExiv2::AltLangMap                    comments;
+    CaptionsMap                           comments;
 
     Template                              metadataTemplate;
 
@@ -164,11 +164,11 @@ void MetadataHub::load(const ImageInfo& info)
 {
     d->count++;
 
-    KExiv2::AltLangMap commentMap;
+    CaptionsMap commentMap;
     {
         DatabaseAccess access;
         ImageComments comments = info.imageComments(access);
-        commentMap             = comments.toAltLangMap();
+        commentMap             = comments.toCaptionsMap();
     }
 
     Template tref = info.metadataTemplate();
@@ -207,10 +207,10 @@ void MetadataHub::load(const DMetadata& metadata)
 {
     d->count++;
 
-    KExiv2::AltLangMap comments;
-    QStringList        keywords;
-    QDateTime          datetime;
-    int                rating;
+    CaptionsMap comments;
+    QStringList keywords;
+    QDateTime   datetime;
+    int         rating;
 
     // Try to get comments from image :
     // In first, from Xmp comments tag,
@@ -350,7 +350,7 @@ void MetadataHub::loadTags(const QStringList& loadedTagPaths)
 }
 
 // private common code to load dateTime, comment, rating
-void MetadataHub::load(const QDateTime& dateTime, const KExiv2::AltLangMap& comments, int rating, const Template& t)
+void MetadataHub::load(const QDateTime& dateTime, const CaptionsMap& comments, int rating, const Template& t)
 {
     if (dateTime.isValid())
     {
@@ -359,7 +359,7 @@ void MetadataHub::load(const QDateTime& dateTime, const KExiv2::AltLangMap& comm
 
     d->loadWithInterval<int>(rating, d->rating, d->highestRating, d->ratingStatus);
 
-    d->loadSingleValue<KExiv2::AltLangMap>(comments, d->comments, d->commentsStatus);
+    d->loadSingleValue<CaptionsMap>(comments, d->comments, d->commentsStatus);
 
     d->loadSingleValue<Template>(t, d->metadataTemplate, d->templateStatus);
 }
@@ -459,7 +459,6 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
     {
         DatabaseAccess access;
         ImageComments comments = info.imageComments(access);
-        // we set a map of alt-languages comments with default author and date null
         comments.replaceComments(d->comments);
         changed = true;
     }
@@ -827,7 +826,7 @@ QDateTime MetadataHub::dateTime() const
     return d->dateTime;
 }
 
-KExiv2::AltLangMap MetadataHub::comments() const
+CaptionsMap MetadataHub::comments() const
 {
     return d->comments;
 }
@@ -918,7 +917,7 @@ void MetadataHub::setDateTime(const QDateTime& dateTime, Status status)
     d->dateTimeChanged = true;
 }
 
-void MetadataHub::setComments(const KExiv2::AltLangMap& comments, Status status)
+void MetadataHub::setComments(const CaptionsMap& comments, Status status)
 {
     d->commentsStatus  = status;
     d->comments        = comments;

@@ -59,7 +59,7 @@
 
 // Local includes
 
-#include "altlangstredit.h"
+#include "captionedit.h"
 #include "dmetadata.h"
 #include "kdatetimeedit.h"
 #include "albumiconitem.h"
@@ -140,7 +140,7 @@ public:
 
     QWidget                       *lastSelectedWidget;
 
-    AltLangStrEdit                *captionsEdit;
+    CaptionEdit                   *captionsEdit;
 
     KDateTimeEdit                 *dateTimeEdit;
 
@@ -182,9 +182,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     sv->viewport()->setAutoFillBackground(false);
     captionTagsArea->setAutoFillBackground(false);
 
-    d->captionsEdit = new AltLangStrEdit(captionTagsArea);
-    d->captionsEdit->setTitle(i18n("Captions: "));
-    d->captionsEdit->setFixedHeight(100);
+    d->captionsEdit = new CaptionEdit(captionTagsArea);
 
     KHBox *dateBox  = new KHBox(captionTagsArea);
     new QLabel(i18n("Date:"), dateBox);
@@ -252,12 +250,12 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
 
     // --------------------------------------------------
 
-    grid1->addWidget(d->captionsEdit,     0, 0, 1, 2);
-    grid1->addWidget(dateBox,             1, 0, 1, 2);
-    grid1->addWidget(ratingBox,           2, 0, 1, 2);
-    grid1->addWidget(d->newTagEdit,       3, 0, 1, 2);
-    grid1->addWidget(d->tagsView,         4, 0, 1, 2);
-    grid1->addWidget(tagsSearch,          5, 0, 1, 2);
+    grid1->addWidget(d->captionsEdit, 0, 0, 1, 2);
+    grid1->addWidget(dateBox,         1, 0, 1, 2);
+    grid1->addWidget(ratingBox,       2, 0, 1, 2);
+    grid1->addWidget(d->newTagEdit,   3, 0, 1, 2);
+    grid1->addWidget(d->tagsView,     4, 0, 1, 2);
+    grid1->addWidget(tagsSearch,      5, 0, 1, 2);
     grid1->setRowStretch(4, 10);
     grid1->setMargin(KDialog::spacingHint());
     grid1->setSpacing(KDialog::spacingHint());

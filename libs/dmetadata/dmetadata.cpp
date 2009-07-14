@@ -150,10 +150,14 @@ bool DMetadata::setProgramId(bool on) const
     return true;
 }
 
-KExiv2::AltLangMap DMetadata::getImageComments() const
+CaptionsMap DMetadata::getImageComments() const
 {
     if (getFilePath().isEmpty())
-        return KExiv2::AltLangMap();
+        return CaptionsMap();
+
+    CaptionsMap        captionsMap;
+
+   // TODO: in first try to get captions map data from digiKam XMP namespace
 
     KExiv2::AltLangMap map;
 
@@ -163,20 +167,25 @@ KExiv2::AltLangMap DMetadata::getImageComments() const
     {
         map = getXmpTagStringListLangAlt("Xmp.dc.description", false);
         if (!map.isEmpty())
-            return map;
+        {
+            captionsMap.fromAltLangMap(map);
+            return captionsMap;
+        }
 
         QString xmpComment = getXmpTagStringLangAlt("Xmp.exif.UserComment", QString(), false);
         if (!xmpComment.isEmpty())
         {
             map.insert(QString("x-default"), xmpComment);
-            return map;
+            captionsMap.fromAltLangMap(map);
+            return captionsMap;
         }
 
         xmpComment = getXmpTagStringLangAlt("Xmp.tiff.ImageDescription", QString(), false);
         if (!xmpComment.isEmpty())
         {
             map.insert(QString("x-default"), xmpComment);
-            return map;
+            captionsMap.fromAltLangMap(map);
+            return captionsMap;
         }
     }
 
@@ -188,7 +197,8 @@ KExiv2::AltLangMap DMetadata::getImageComments() const
     if (!comment.isEmpty())
     {
         map.insert(QString("x-default"), comment);
-        return map;
+        captionsMap.fromAltLangMap(map);
+        return captionsMap;
     }
 
     // We trying to get Exif comments
@@ -199,7 +209,8 @@ KExiv2::AltLangMap DMetadata::getImageComments() const
         if (!exifComment.isEmpty())
         {
             map.insert(QString("x-default"), exifComment);
-            return map;
+            captionsMap.fromAltLangMap(map);
+            return captionsMap;
         }
     }
 
@@ -211,14 +222,15 @@ KExiv2::AltLangMap DMetadata::getImageComments() const
         if (!iptcComment.isEmpty() && !iptcComment.trimmed().isEmpty())
         {
             map.insert(QString("x-default"), iptcComment);
-            return map;
+            captionsMap.fromAltLangMap(map);
+            return captionsMap;
         }
     }
 
-    return map;
+    return captionsMap;
 }
 
-bool DMetadata::setImageComments(const KExiv2::AltLangMap& comments) const
+bool DMetadata::setImageComments(const CaptionsMap& comments) const
 {
     //See B.K.O #139313: An empty string is also a valid value
     /*if (comments.isEmpty())
@@ -226,7 +238,9 @@ bool DMetadata::setImageComments(const KExiv2::AltLangMap& comments) const
 
     kDebug(50003) << getFilePath() << " ==> Comment: " << comments;
 
-    QString defaultComment = comments[QString("x-default")];
+   // TODO: in first set captions map data to digiKam XMP namespace
+
+    QString defaultComment = comments[QString("x-default")].caption;
 
     // In first we set image comments, outside of Exif, XMP, and IPTC.
 
@@ -243,7 +257,7 @@ bool DMetadata::setImageComments(const KExiv2::AltLangMap& comments) const
     if (supportXmp())
     {
         // NOTE : setXmpTagStringListLangAlt remove xmp tag before to add new values
-        if (!setXmpTagStringListLangAlt("Xmp.dc.description", comments, false))
+        if (!setXmpTagStringListLangAlt("Xmp.dc.description", comments.toAltLangMap(), false))
             return false;
 
         removeXmpTag("Xmp.exif.UserComment");
@@ -994,7 +1008,7 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
     switch (field)
     {
         case MetadataInfo::Comment:
-            return getImageComments()[QString("x-default")];
+            return getImageComments()[QString("x-default")].caption;
         case MetadataInfo::CommentJfif:
             return getCommentsDecoded();
         case MetadataInfo::CommentExif:

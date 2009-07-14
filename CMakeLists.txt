@@ -509,7 +509,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/photoinfocontainer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/dmetadata.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/geodetictools.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/template.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/template.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/captionvalues.cpp
        )
 
     # CImg.h version 1.2.8 do not compile fine with gcc 4.3.
@@ -785,6 +786,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/cameraitempropertiestab.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagedescedittab.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/talbumlistview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/captionedit.cpp
        )
 
     SET(libdimgeditor_SRCS
