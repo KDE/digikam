@@ -564,7 +564,7 @@ void ImageGuideWidget::paintEvent(QPaintEvent*)
 void ImageGuideWidget::updatePreview()
 {
     updatePixmap();
-    repaint();
+    update();
 }
 
 void ImageGuideWidget::timerEvent(QTimerEvent *e)
@@ -766,7 +766,7 @@ void ImageGuideWidget::leaveEvent(QEvent*)
     {
         d->onMouseMovePreviewToggled = true;
         updatePixmap();
-        repaint();
+        update();
     }
 }
 
