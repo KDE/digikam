@@ -82,13 +82,21 @@ public:
      * all information from the file into the database, possibly overwriting
      * information there.
      */
-    void fullScan();
+    void rescan();
 
     /**
      * Call this when you want ImageScanner to add a new file to the database
      * and read all information into the database.
      */
     void newFile(int albumId);
+
+    /**
+     * Call this when you want ImageScanner to add a new file to the database
+     * and read all information into the database. This variant will not use
+     * the unique hash to establish identify with an existing entry, but
+     * read all information newly from the file.
+     */
+    void newFileFullScan(int albumId);
 
     /**
      * Similar to newFile.

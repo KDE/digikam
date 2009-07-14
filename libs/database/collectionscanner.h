@@ -43,10 +43,11 @@ class QFileInfo;
 namespace Digikam
 {
 
+class AlbumCopyMoveHint;
 class CollectionLocation;
 class CollectionScannerObserver;
 class CollectionScannerPriv;
-class AlbumCopyMoveHint;
+class ImageInfo;
 class ItemCopyMoveHint;
 
 class DIGIKAM_DATABASE_EXPORT CollectionScanner : public QObject
@@ -78,16 +79,39 @@ public:
      */
     void partialScan(const QString& albumRoot, const QString& album);
 
+    enum FileScanMode
+    {
+        /** The file will be scanned like it is done for any usual scan.
+         *  If it was not modified, no further action is taken.
+         *  If the file is not known yet, it will be fully scanned, or,
+         *  if an identical file is found, this data will be copied. */
+        NormalScan,
+        /** The file will scanned like a modified file. Only a selected portion
+         *  of the metadata will be updated into the database.
+         *  If the file is not known yet, it will be fully scanned, or,
+         *  if an identical file is found, this data will be copied.  */
+        ModifiedScan,
+        /** The file will be scanned like a completely new file.
+         *  The complete metadata is re-read into the database.
+         *  No search for identical files will be done. */
+        Rescan
+    };
+
     /**
-     * The specified file will be added to the database if it is not included,
-     * or rescanned as if it was modified if it is found in the database.
+     * The given file will be scanned according to the given mode.
      */
-    void scanFile(const QString& filePath);
+    void scanFile(const QString& filePath, FileScanMode mode = ModifiedScan);
 
     /**
      * Same procedure as above, but albumRoot and album is provided.
+     * If you already have this info it need not be retrieved.
      */
-    void scanFile(const QString& albumRoot, const QString& album, const QString& fileName);
+    void scanFile(const QString& albumRoot, const QString& album, const QString& fileName, FileScanMode mode = ModifiedScan);
+
+    /**
+     * The given file represented by the ImageInfo will be scanned according to mode
+     */
+    void scanFile(const ImageInfo& info, FileScanMode mode = ModifiedScan);
 
     /**
      * Call this to enable the progress info signals.
@@ -127,8 +151,11 @@ protected:
     void scanAlbumRoot(const CollectionLocation& location);
     void scanAlbum(const CollectionLocation& location, const QString& album);
     int checkAlbum(const CollectionLocation& location, const QString& album);
+    void scanFileNormal(const QFileInfo& info, const ItemScanInfo& scanInfo);
     void scanNewFile(const QFileInfo& info, int albumId);
+    void scanNewFileFullScan(const QFileInfo& info, int albumId);
     void scanModifiedFile(const QFileInfo& info, const ItemScanInfo& scanInfo);
+    void rescanFile(const QFileInfo& info, const ItemScanInfo& scanInfo);
 
 Q_SIGNALS:
 

@@ -55,6 +55,7 @@
 #include "databaseaccess.h"
 #include "databasebackend.h"
 #include "databasetransaction.h"
+#include "imageinfo.h"
 #include "imagescanner.h"
 #include "collectionscannerhints.h"
 #include "collectionscannerobserver.h"
@@ -156,6 +157,9 @@ void CollectionScanner::recordHints(const QList<ItemCopyMoveHint>& hints)
 
 void CollectionScanner::loadNameFilters()
 {
+    if (!d->nameFilters.isEmpty())
+        return;
+
     QStringList imageFilter, audioFilter, videoFilter;
     DatabaseAccess().db()->getFilterSettings(&imageFilter, &videoFilter, &audioFilter);
 
@@ -312,7 +316,7 @@ void CollectionScanner::partialScan(const QString& albumRoot, const QString& alb
     updateRemovedItemsTime();
 }
 
-void CollectionScanner::scanFile(const QString& filePath)
+void CollectionScanner::scanFile(const QString& filePath, FileScanMode mode)
 {
     QFileInfo info(filePath);
     QString dirPath = info.path(); // strip off filename
@@ -320,14 +324,13 @@ void CollectionScanner::scanFile(const QString& filePath)
     if (albumRoot.isNull())
         return;
     QString album = CollectionManager::instance()->album(dirPath);
-    scanFile(albumRoot, album, info.fileName());
+    scanFile(albumRoot, album, info.fileName(), mode);
 }
 
-void CollectionScanner::scanFile(const QString& albumRoot, const QString& album, const QString& fileName)
+void CollectionScanner::scanFile(const QString& albumRoot, const QString& album, const QString& fileName, FileScanMode mode)
 {
     if (album.isEmpty() || fileName.isEmpty())
     {
-        // If you want to scan the album root, pass "/"
         kWarning(50003) << "scanFile(QString, QString, QString) called with empty album or empty filename";
         return;
     }
@@ -349,9 +352,9 @@ void CollectionScanner::scanFile(const QString& albumRoot, const QString& album,
     }
 
     QDir dir(location.albumRootPath() + album);
-    QFileInfo info(dir, fileName);
+    QFileInfo fi(dir, fileName);
 
-    if (!info.exists())
+    if (!fi.exists())
     {
         kWarning(50003) << "File given to scan does not exist" << albumRoot << album << fileName;
         return;
@@ -361,15 +364,67 @@ void CollectionScanner::scanFile(const QString& albumRoot, const QString& album,
     qlonglong imageId = DatabaseAccess().db()->getImageId(albumId, fileName);
 
     loadNameFilters();
+
     if (imageId == -1)
     {
-        scanNewFile(info, albumId);
+        switch (mode)
+        {
+            case NormalScan:
+            case ModifiedScan:
+                scanNewFile(fi, albumId);
+                break;
+            case Rescan:
+                scanNewFileFullScan(fi, albumId);
+                break;
+        }
     }
     else
     {
-        // If one file is explicitly scanned, assume it is modified
         ItemScanInfo scanInfo = DatabaseAccess().db()->getItemScanInfo(imageId);
-        scanModifiedFile(info, scanInfo);
+        switch (mode)
+        {
+            case NormalScan:
+                scanFileNormal(fi, scanInfo);
+                break;
+            case ModifiedScan:
+                scanModifiedFile(fi, scanInfo);
+                break;
+            case Rescan:
+                rescanFile(fi, scanInfo);
+                break;
+        }
+    }
+}
+
+void CollectionScanner::scanFile(const ImageInfo& info, FileScanMode mode)
+{
+    if (info.isNull())
+        return;
+
+    if (DatabaseAccess().backend()->isInTransaction())
+    {
+        // Install ScanController::instance()->suspendCollectionScan around your DatabaseTransaction
+        kError(50003) << "Detected an active database transaction when starting a collection file scan. "
+                         "Please report this error." << endl;
+        return;
+    }
+
+    loadNameFilters();
+
+    QFileInfo fi(info.filePath());
+    ItemScanInfo scanInfo = DatabaseAccess().db()->getItemScanInfo(info.id());
+
+    switch (mode)
+    {
+        case NormalScan:
+            scanFileNormal(fi, scanInfo);
+            break;
+        case ModifiedScan:
+            scanModifiedFile(fi, scanInfo);
+            break;
+        case Rescan:
+            rescanFile(fi, scanInfo);
+            break;
     }
 }
 
@@ -556,29 +611,7 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
                 // mark item as "seen"
                 itemIdSet.remove(scanInfos[index].id);
 
-                // if the date is null, this signals a full rescan
-                if (scanInfos[index].modificationDate.isNull())
-                {
-                    ImageScanner scanner((*fi), scanInfos[index]);
-                    scanner.setCategory(category(*fi));
-                    scanner.fullScan();
-                }
-                else
-                {
-                    // compare modification date
-                    QDateTime fiModifyDate = fi->lastModified();
-                    if (fiModifyDate != scanInfos[index].modificationDate)
-                    {
-                        // allow a "modify window" of one second.
-                        // FAT filesystems store the modify date in 2-second resolution.
-                        int diff = fiModifyDate.secsTo(scanInfos[index].modificationDate);
-                        if (abs(diff) > 1)
-                        {
-                            // file has been modified
-                            scanModifiedFile(*fi, scanInfos[index]);
-                        }
-                    }
-                }
+                scanFileNormal(*fi, scanInfos[index]);
             }
             // ignore temp files we created ourselves
             else if (fi->completeSuffix() == "digikamtempfile.tmp")
@@ -618,6 +651,31 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
         emit finishedScanningAlbum(location.albumRootPath(), album, list.count());
 }
 
+void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& scanInfo)
+{
+    // if the date is null, this signals a full rescan
+    if (scanInfo.modificationDate.isNull())
+    {
+        rescanFile(fi, scanInfo);
+    }
+    else
+    {
+        // compare modification date
+        QDateTime fiModifyDate = fi.lastModified();
+        if (fiModifyDate != scanInfo.modificationDate)
+        {
+            // allow a "modify window" of one second.
+            // FAT filesystems store the modify date in 2-second resolution.
+            int diff = fiModifyDate.secsTo(scanInfo.modificationDate);
+            if (abs(diff) > 1)
+            {
+                // file has been modified
+                scanModifiedFile(fi, scanInfo);
+            }
+        }
+    }
+}
+
 void CollectionScanner::scanNewFile(const QFileInfo& info, int albumId)
 {
     ImageScanner scanner(info);
@@ -643,11 +701,25 @@ void CollectionScanner::scanNewFile(const QFileInfo& info, int albumId)
     }
 }
 
+void CollectionScanner::scanNewFileFullScan(const QFileInfo& info, int albumId)
+{
+    ImageScanner scanner(info);
+    scanner.setCategory(category(info));
+    scanner.newFileFullScan(albumId);
+}
+
 void CollectionScanner::scanModifiedFile(const QFileInfo& info, const ItemScanInfo& scanInfo)
 {
     ImageScanner scanner(info, scanInfo);
     scanner.setCategory(category(info));
     scanner.fileModified();
+}
+
+void CollectionScanner::rescanFile(const QFileInfo& info, const ItemScanInfo& scanInfo)
+{
+    ImageScanner scanner(info, scanInfo);
+    scanner.setCategory(category(info));
+    scanner.rescan();
 }
 
 int CollectionScanner::countItemsInFolder(const QString& directory)

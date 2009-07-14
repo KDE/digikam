@@ -92,7 +92,14 @@ void ImageScanner::newFile(int albumId)
         scanFile();
 }
 
-void ImageScanner::fullScan()
+void ImageScanner::newFileFullScan(int albumId)
+{
+    loadFromDisk();
+    addImage(albumId);
+    scanFile();
+}
+
+void ImageScanner::rescan()
 {
     loadFromDisk();
     updateImage();
