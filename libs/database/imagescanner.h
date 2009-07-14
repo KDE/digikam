@@ -152,6 +152,7 @@ protected:
     QString detectFormat();
     QString detectVideoFormat();
     QString detectAudioFormat();
+    QDateTime creationDateFromFilesystem();
 
 protected:
 
