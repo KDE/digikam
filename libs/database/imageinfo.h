@@ -233,7 +233,7 @@ public:
 
 
     /**
-     * Retrieve metadata template informations about the image.
+     * Retrieve metadata template information about the image.
      */
     Template metadataTemplate() const;
 

@@ -78,7 +78,7 @@ public:
         subjects                  = 0;
     }
 
-    // Rights template informations panel.
+    // Rights template information panel.
     KLineEdit       *authorsEdit;
     KLineEdit       *authorsPositionEdit;
     KLineEdit       *creditEdit;
@@ -88,13 +88,13 @@ public:
     AltLangStrEdit  *copyrightEdit;
     AltLangStrEdit  *rightUsageEdit;
 
-    // Location template informations panel.
+    // Location template information panel.
     CountrySelector *locationCountryCodeEdit;
     KLineEdit       *locationProvinceStateEdit;
     KLineEdit       *locationCityEdit;
     KLineEdit       *locationSublocationEdit;
 
-    // Contact template informations panel.
+    // Contact template information panel.
     KLineEdit       *contactCityEdit;
     KLineEdit       *contactCountryEdit;
     KLineEdit       *contactAddressEdit;
@@ -104,14 +104,14 @@ public:
     KLineEdit       *contactPhoneEdit;
     KLineEdit       *contactWebUrlEdit;
 
-    // Subjects template informations panel.
+    // Subjects template information panel.
     SubjectEdit     *subjects;
 };
 
 TemplatePanel::TemplatePanel(QWidget* parent)
              : KTabWidget(parent), d(new TemplatePanelPriv)
 {
-    // -- Rights Template informations panel -------------------------------------------------------------
+    // -- Rights Template information panel -------------------------------------------------------------
 
     QWidget *page1     = new QWidget(this);
     QGridLayout* grid1 = new QGridLayout(page1);
@@ -237,7 +237,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
 
     insertTab(RIGHTS, page1, KIcon("flag-red"), i18n("Rights"));
 
-    // -- Location Template informations panel -------------------------------------------------------------
+    // -- Location Template information panel -------------------------------------------------------------
 
     QWidget *page2             = new QWidget(this);
     QGridLayout* grid2         = new QGridLayout(page2);
@@ -296,7 +296,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
 
     insertTab(LOCATION, page2, KIcon("applications-internet"), i18n("Location"));
 
-    // -- Contact Template informations panel -------------------------------------------------------------
+    // -- Contact Template information panel -------------------------------------------------------------
 
     QWidget *page3     = new QWidget(this);
     QGridLayout* grid3 = new QGridLayout(page3);
@@ -405,7 +405,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
 
     insertTab(CONTACT, page3, KIcon("view-pim-contacts"), i18n("Contact"));
 
-    // -- Subjects Template informations panel -------------------------------------------------------------
+    // -- Subjects Template information panel -------------------------------------------------------------
 
     QWidget *page4     = new QWidget(this);
     QGridLayout* grid4 = new QGridLayout(page4);
