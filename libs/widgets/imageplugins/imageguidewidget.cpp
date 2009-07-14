@@ -860,6 +860,6 @@ void ImageGuideWidget::updateMaskCursor()
     p.drawEllipse( 0, 0, size-1, size-1);
 
     d->maskCursor = QCursor(pix);
-
 }
+
 }  // namespace Digikam
