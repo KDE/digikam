@@ -1655,7 +1655,7 @@ void DigikamApp::openSolidCamera(const QString& udi, const QString& cameraLabel)
         if (CameraList::findConnectedCamera(vendorId, productId, model, port))
         {
             kDebug(50003) << "Found camera from ids " << vendorId << " " << productId
-                          << " camera is: " << model << " at " << port << endl;
+                          << " camera is: " << model << " at " << port;
 
             // the CameraUI will delete itself when it has finished
             CameraUI* cgui      = new CameraUI(this, cameraLabel, model, port, "/", 1);
@@ -1668,7 +1668,7 @@ void DigikamApp::openSolidCamera(const QString& udi, const QString& cameraLabel)
         }
         else
         {
-            kError(50003) << "Failed to detect camera with GPhoto2 from Solid information" << endl;
+            kError(50003) << "Failed to detect camera with GPhoto2 from Solid information";
         }
     }
 }

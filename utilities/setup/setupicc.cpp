@@ -638,7 +638,7 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList& files)
                             d->inICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
 
                         kDebug(50003) << "ICC file: " << fileName << " ==> Input device class ("
-                                 << cmsGetDeviceClass(tmpProfile) << ")" << endl;
+                                 << cmsGetDeviceClass(tmpProfile) << ")";
                         findIccFiles = true;
                         break;
                     }
@@ -656,7 +656,7 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList& files)
                         }
 
                         kDebug(50003) << "ICC file: " << fileName << " ==> Monitor device class ("
-                                 << cmsGetDeviceClass(tmpProfile) << ")" << endl;
+                                 << cmsGetDeviceClass(tmpProfile) << ")";
                         findIccFiles = true;
                         break;
                     }
@@ -668,7 +668,7 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList& files)
                             d->proofICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
 
                         kDebug(50003) << "ICC file: " << fileName << " ==> Output device class ("
-                                 << cmsGetDeviceClass(tmpProfile) << ")" << endl;
+                                 << cmsGetDeviceClass(tmpProfile) << ")";
                         findIccFiles = true;
                         break;
                     }
@@ -686,7 +686,7 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList& files)
                         }
 
                         kDebug(50003) << "ICC file: " << fileName << " ==> WorkingSpace device class ("
-                                 << cmsGetDeviceClass(tmpProfile) << ")" << endl;
+                                 << cmsGetDeviceClass(tmpProfile) << ")";
                         findIccFiles = true;
                         break;
                     }
@@ -695,13 +695,13 @@ bool SetupICC::parseProfilesfromDir(const QFileInfoList& files)
                     case icSigNamedColorClass:
                     {
                         kDebug(50003) << "ICC file: " << fileName << " ==> Device class unused ("
-                                 << cmsGetDeviceClass(tmpProfile) << ")" << endl;
+                                 << cmsGetDeviceClass(tmpProfile) << ")";
                         break;
                     }
                     default:
                     {
                         kDebug(50003) << "ICC file: " << fileName << " ==> UNKNOWN device class ("
-                                 << cmsGetDeviceClass(tmpProfile) << ")" << endl;
+                                 << cmsGetDeviceClass(tmpProfile) << ")";
                         break;
                     }
                 }

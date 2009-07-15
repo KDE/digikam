@@ -159,7 +159,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
                             << corePlugin->name()
                             << " (" << corePlugin->library() << ")"
                             << " with error: "
-                            << error << endl;
+                            << error;
         }
     }
 
@@ -192,7 +192,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
                                 << service->name()
                                 << " (" << service->library() << ")"
                                 << " with error: "
-                                << error << endl;
+                                << error;
             }
         }
     }

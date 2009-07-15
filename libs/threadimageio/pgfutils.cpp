@@ -206,7 +206,7 @@ bool loadPGFScaled(QImage& img, const QString& path, int maximumSize)
         kDebug(50003) << "PGF mode     = " << header->mode;
         kDebug(50003) << "PGF levels   = " << header->nLevels;
         kDebug(50003) << "Level (w x h)= " << i << "(" << pgf.Width(i)
-                      << " x " << pgf.Height(i) << ")" << endl;
+                      << " x " << pgf.Height(i) << ")";
         kDebug(50003) << "QImage depth = " << img.depth();
 */
 

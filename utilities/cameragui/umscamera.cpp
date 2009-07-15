@@ -286,7 +286,7 @@ bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, con
     if ( !sFile.open(QIODevice::ReadOnly) )
     {
         kWarning(50003) << "Failed to open source file for reading: "
-                        << src << endl;
+                        << src;
         return false;
     }
 
@@ -294,7 +294,7 @@ bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, con
     {
         sFile.close();
         kWarning(50003) << "Failed to open dest file for writing: "
-                        << dest << endl;
+                        << dest;
         return false;
     }
 
@@ -384,7 +384,7 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
     if ( !sFile.open(QIODevice::ReadOnly) )
     {
         kWarning(50003) << "Failed to open source file for reading: "
-                        << src << endl;
+                        << src;
         return false;
     }
 
@@ -392,7 +392,7 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
     {
         sFile.close();
         kWarning(50003) << "Failed to open dest file for writing: "
-                        << dest << endl;
+                        << dest;
         return false;
     }
 

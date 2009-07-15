@@ -91,7 +91,7 @@ bool ThumbnailSchemaUpdater::startUpdates()
         if (version.isEmpty())
         {
             // Something is damaged. Give up.
-            kError(50003) << "DBVersion not available! Giving up schema upgrading." << endl;
+            kError(50003) << "DBVersion not available! Giving up schema upgrading.";
             QString errorMsg = i18n(
                     "The database is not valid: "
                     "the \"DBVersion\" setting does not exist. "

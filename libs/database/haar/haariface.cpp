@@ -92,7 +92,7 @@ public:
         stream >> version;
         if (version != Version)
         {
-            kError(50003) << "Unsupported binary version of Haar Blob in database" << endl;
+            kError(50003) << "Unsupported binary version of Haar Blob in database";
             return;
         }
 

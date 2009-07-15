@@ -356,7 +356,7 @@ void TagFolderView::slotAlbumAdded(Album *album)
         if (!parent)
         {
             kWarning(50003) << " Failed to find parent for Tag "
-                            << tag->title() << endl;
+                            << tag->title();
             return;
         }
 

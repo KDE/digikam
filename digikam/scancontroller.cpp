@@ -671,7 +671,7 @@ void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum *album, const QString&
     if (location.isNull())
     {
         kWarning(50003) << "hintAtMoveOrCopyOfAlbum: Destination path" << dstPath 
-                        << "does not point to an available location." << endl;;
+                        << "does not point to an available location.";
         return;
     }
     QString relativeDstPath = CollectionManager::instance()->album(location, dstPath);

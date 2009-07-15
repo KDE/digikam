@@ -1411,7 +1411,7 @@ void GPCamera::printGphotoErrorDescription(int errorCode)
 {
 #ifdef ENABLE_GPHOTO2
     kDebug(50003) << "Libgphoto2 error: " << gp_result_as_string(errorCode)
-                  << " (" << errorCode << ")" << endl;
+                  << " (" << errorCode << ")";
 #else
     Q_UNUSED(errorCode);
 #endif /* ENABLE_GPHOTO2 */
@@ -1644,7 +1644,7 @@ bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& mode
                 {
                     kWarning(50003) << "More than one camera detected on port " << port
                                     << ". Due to restrictions in the GPhoto2 API, "
-                                    << "only the first camera is used." << endl;
+                                    << "only the first camera is used.";
                 }
 
                 if (gp_list_get_name(camList, 0, &model_str) == GP_OK

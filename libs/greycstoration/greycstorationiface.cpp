@@ -166,7 +166,7 @@ void GreycstorationIface::setup()
         m_destImage = DImg(d->newSize.width(), d->newSize.height(),
                            m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
         kDebug(50003) << "GreycstorationIface::Resize: new size: ("
-                      << d->newSize.width() << ", " << d->newSize.height() << ")" << endl;
+                      << d->newSize.width() << ", " << d->newSize.height() << ")";
     }
     else
     {

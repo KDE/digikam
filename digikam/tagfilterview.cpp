@@ -719,7 +719,7 @@ void TagFilterView::slotTagAdded(Album* album)
         if (!parent)
         {
             kWarning(50003) << " Failed to find parent for Tag "
-                            << tag->tagPath() << endl;
+                            << tag->tagPath();
             return;
         }
 

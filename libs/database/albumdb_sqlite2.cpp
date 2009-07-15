@@ -110,7 +110,7 @@ bool AlbumDB_Sqlite2::execSql(const QString& sql, QStringList* const values,
     {
         kWarning(50003) << "sqlite_compile error: "
                         << errorStr
-                        << " on query: " << sql << endl;
+                        << " on query: " << sql;
         sqlite_freemem( errorStr );
         return false;
     }
@@ -140,7 +140,7 @@ bool AlbumDB_Sqlite2::execSql(const QString& sql, QStringList* const values,
     {
         kWarning(50003) << "sqlite_step error: "
                         << errorStr
-                        << " on query: " << sql << endl;
+                        << " on query: " << sql;
         return false;
     }
 

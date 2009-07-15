@@ -104,7 +104,7 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
     CameraFolderItem *parentItem = findFolder(folder);
 
     kDebug(50003) << "CameraFolderView: Adding Subfolder " << subFolder
-             << " of folder " << folder << endl;
+             << " of folder " << folder;
 
     if (parentItem)
     {
@@ -117,7 +117,7 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
         CameraFolderItem* item = new CameraFolderItem(parentItem, subFolder, path, pixmap);
 
         kDebug(50003) << "CameraFolderView: Added ViewItem with path "
-                 << item->folderPath() << endl;
+                 << item->folderPath();
 
         item->setCount(nbItems);
         item->setExpanded(true);
@@ -126,7 +126,7 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
     else
     {
         kWarning(50003) << "CameraFolderView: Could not find parent for subFolder "
-                        << subFolder << " of folder " << folder << endl;
+                        << subFolder << " of folder " << folder;
         return 0;
     }
 }

@@ -346,14 +346,13 @@ bool ThumbnailLoadThread::checkSize(int size)
 {
     if (size <= 0)
     {
-        kError(50003) << "ThumbnailLoadThread::load: No thumbnail size specified. Refusing to load thumbnail."
-                      << endl;
+        kError(50003) << "ThumbnailLoadThread::load: No thumbnail size specified. Refusing to load thumbnail.";
         return false;
     }
     else if (size > ThumbnailSize::Huge)
     {
         kError(50003) << "ThumbnailLoadThread::load: Thumbnail size " << size
-                      << " is larger than " << ThumbnailSize::Huge << ". Refusing to load." << endl;
+                      << " is larger than " << ThumbnailSize::Huge << ". Refusing to load.";
         return false;
     }
     return true;

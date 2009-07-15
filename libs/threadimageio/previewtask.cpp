@@ -260,7 +260,7 @@ bool PreviewLoadingTask::loadImagePreview(QImage& image, const QString& path)
     if (metadata.getImagePreview(image))
     {
         kDebug(50003) << "Use Exif/IPTC preview extraction. Size of image: "
-                      << image.width() << "x" << image.height() << endl;
+                      << image.width() << "x" << image.height();
         return true;
     }
 

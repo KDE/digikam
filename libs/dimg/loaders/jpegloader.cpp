@@ -70,7 +70,7 @@ void JPEGLoader::dimg_jpeg_error_exit(j_common_ptr cinfo)
     (*cinfo->err->format_message)(cinfo, buffer);
 
 //#ifdef ENABLE_DEBUG_MESSAGES
-    kError(50003) << buffer << endl;
+    kError(50003) << buffer;
 //#endif
 
     longjmp(myerr->setjmp_buffer, 1);
@@ -310,7 +310,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                     << cinfo.out_color_space
                     << ") or Number of JPEG color components ("
                     << cinfo.output_components
-                    << ") unsupported!" << endl;
+                    << ") unsupported!";
             delete cleanupData;
             return false;
         }

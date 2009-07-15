@@ -273,7 +273,7 @@ void CollectionScanner::partialScan(const QString& albumRoot, const QString& alb
     {
         // Install ScanController::instance()->suspendCollectionScan around your DatabaseTransaction
         kError(50003) << "Detected an active database transaction when starting a collection scan. "
-                         "Please report this error." << endl;
+                         "Please report this error.";
         return;
     }
 
@@ -339,7 +339,7 @@ void CollectionScanner::scanFile(const QString& albumRoot, const QString& album,
     {
         // Install ScanController::instance()->suspendCollectionScan around your DatabaseTransaction
         kError(50003) << "Detected an active database transaction when starting a collection file scan. "
-                         "Please report this error." << endl;
+                         "Please report this error.";
         return;
     }
 
@@ -405,7 +405,7 @@ void CollectionScanner::scanFile(const ImageInfo& info, FileScanMode mode)
     {
         // Install ScanController::instance()->suspendCollectionScan around your DatabaseTransaction
         kError(50003) << "Detected an active database transaction when starting a collection file scan. "
-                         "Please report this error." << endl;
+                         "Please report this error.";
         return;
     }
 
@@ -570,7 +570,7 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
     if ( !dir.exists() || !dir.isReadable() )
     {
         kWarning(50003) << "Folder does not exist or is not readable: "
-                        << dir.path() << endl;
+                        << dir.path();
         return;
     }
 
@@ -913,7 +913,7 @@ void CollectionScanner::removeStaleFiles()
     for (it = m_filesToBeDeleted.constBegin(); it != m_filesToBeDeleted.constEnd(); ++it)
     {
         kDebug(50003) << "Removing: " << (*it).first << " in "
-                << (*it).second << endl;
+                << (*it).second;
         access.db()->deleteItem( (*it).second, (*it).first );
     }
 }
@@ -1007,7 +1007,7 @@ void CollectionScanner::scanAlbum(const QString& albumRoot, const QString& album
     if ( !dir.exists() || !dir.isReadable() )
     {
         kWarning(50003) << "Folder does not exist or is not readable: "
-                        << dir.path() << endl;
+                        << dir.path();
         return;
     }
 

@@ -1040,7 +1040,7 @@ void AlbumManager::scanPAlbums()
 
             if (!album)
             {
-                kError(50003) << "Did not find album root album in hash" << endl;
+                kError(50003) << "Did not find album root album in hash";
                 continue;
             }
 
@@ -1063,7 +1063,7 @@ void AlbumManager::scanPAlbums()
             if (!parent)
             {
                 kError(50003) <<  "Could not find parent with url: "
-                              << parentPath << " for: " << info.relativePath << endl;
+                              << parentPath << " for: " << info.relativePath;
                 continue;
             }
 
@@ -1258,7 +1258,7 @@ void AlbumManager::scanTAlbums()
                 kWarning(50003) << "Failed to find parent tag for tag "
                                 << album->m_title
                                 << " with pid "
-                                << album->m_pid << endl;
+                                << album->m_pid;
             }
         }
 
@@ -1295,7 +1295,7 @@ void AlbumManager::scanTAlbums()
             kWarning(50003) << "Failed to find parent tag for tag "
                             << info.name
                             << " with pid "
-                            << info.pid << endl;
+                            << info.pid;
             continue;
         }
 

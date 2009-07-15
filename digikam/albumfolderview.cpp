@@ -377,7 +377,7 @@ void AlbumFolderView::slotAlbumAdded(Album *album)
     if (failed)
     {
         kWarning(50003) << " Failed to find Album parent "
-                        << palbum->albumPath() << endl;
+                        << palbum->albumPath();
         return;
     }
 

@@ -285,8 +285,7 @@ void WhiteBalance::setLUTv()
              << " G:"    << d->mg
              << " B:"    << d->mb
              << " BP:"   << d->BP
-             << " WP:"   << d->WP
-             << endl;
+             << " WP:"   << d->WP;
 
     d->curve[0] = 0;
 

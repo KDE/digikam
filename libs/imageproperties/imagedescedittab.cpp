@@ -1445,7 +1445,7 @@ void ImageDescEditTab::slotAlbumRenamed(Album* a)
     if (!viewItem)
     {
         kWarning(50003) << "Failed to find view item for Tag "
-                        << album->title() << endl;
+                        << album->title();
         return;
     }
 

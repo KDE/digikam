@@ -480,7 +480,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForLocation(const AlbumRootL
             if (dirHash.isNull())
             {
                 kDebug(50003) << "No directory hash specified for the non-unique Label"
-                         << queryItem << "Resorting to returning the first match." << endl;
+                         << queryItem << "Resorting to returning the first match.";
                 return candidateVolumes.first();
             }
 
@@ -568,7 +568,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForUrl(const KUrl& url, cons
 
     if (!volumeMatch)
     {
-        kError(50003) << "Failed to detect a storage volume for path " << path << " with Solid" << endl;
+        kError(50003) << "Failed to detect a storage volume for path " << path << " with Solid";
     }
 
     return volume;

@@ -412,7 +412,7 @@ void AlbumIconView::slotImageListerNewItems(const ImageInfoList& itemList)
         if (!album)
         {
             kWarning(50003) << "No album for item: " << it->name()
-                            << ", albumID: " << it->albumId() << endl;
+                            << ", albumID: " << it->albumId();
             continue;
         }
 

@@ -242,7 +242,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                     level  = i;
                     kDebug(50003) << "Loading PGF scaled version at level " << i
                                   << " (" << w << " x " << h << ") for size "
-                                  << scaledLoadingSize << endl;
+                                  << scaledLoadingSize;
                 }
             }
 

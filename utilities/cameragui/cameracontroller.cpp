@@ -1013,7 +1013,7 @@ void CameraController::upload(const QFileInfo& srcFileInfo, const QString& destF
     cmd->map.insert("destFolder",  QVariant(destFolder));
     addCommand(cmd);
     kDebug(50003) << "Uploading '" << srcFileInfo.filePath() << "' into camera : '" << destFolder <<
-                 "' (" << destFile << ")" << endl;
+                 "' (" << destFile << ")";
 }
 
 void CameraController::downloadPrep()

@@ -156,7 +156,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         || rows_per_strip == 0 || rows_per_strip == (unsigned int)-1)
     {
         kWarning(50003)  << "TIFF loader: Cannot handle non-stripped images. Loading file "
-                         << filePath << endl;
+                         << filePath;
         TIFFClose(tif);
         return false;
     }
@@ -170,7 +170,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                         << " bits_per_sample " << bits_per_sample
                         << " samples_per_pixel " << samples_per_pixel
                         << " rows_per_strip " << rows_per_strip
-                        << " Loading file " << filePath << endl;
+                        << " Loading file " << filePath;
         TIFFClose(tif);
         return false;
     }
@@ -186,7 +186,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         m_loadFlags & LoadImageData)
     {
         kWarning(50003) << "Can not handle image without RGB color-space: "
-                        << photometric << endl;
+                        << photometric;
         TIFFClose(tif);
         return false;
     }
@@ -430,7 +430,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             if (!TIFFRGBAImageOK(tif, emsg) || !TIFFRGBAImageBegin(&img, tif, 0, emsg))
             {
                 kDebug(50003) << "Failed to set up RGBA reading of image, filename "
-                        << TIFFFileName(tif) <<  " error message from Libtiff: " << emsg << endl;
+                        << TIFFFileName(tif) <<  " error message from Libtiff: " << emsg;
                 delete [] data;
                 delete [] strip;
                 TIFFClose(tif);

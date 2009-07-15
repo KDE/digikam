@@ -371,7 +371,7 @@ QImage ThumbnailCreator::loadImagePreview(const QString& path)
     if (metadata.getImagePreview(image))
     {
         kDebug(50003) << "Use Exif/IPTC preview extraction. Size of image: "
-                      << image.width() << "x" << image.height() << endl;
+                      << image.width() << "x" << image.height();
     }
 
     return image;
@@ -519,7 +519,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
         image.qimage.save(&buffer, "PNG", 0);
         if (dbInfo.data.isNull())
         {
-            kWarning(50003) << "Cannot save JPEG2000 thumb in DB" << endl;
+            kWarning(50003) << "Cannot save JPEG2000 thumb in DB";
             return;
         }
     }
@@ -605,7 +605,7 @@ ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info)
         image.qimage.load(&buffer, "PNG");
         if (dbInfo.data.isNull())
         {
-            kWarning(50003) << "Cannot load PNG thumb from DB" << endl;
+            kWarning(50003) << "Cannot load PNG thumb from DB";
             return ThumbnailImage();
         }
     }

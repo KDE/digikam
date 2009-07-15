@@ -120,7 +120,7 @@ bool SchemaUpdater::startUpdates()
         if (version.isEmpty())
         {
             // Something is damaged. Give up.
-            kError(50003) << "DBVersion not available! Giving up schema upgrading." << endl;
+            kError(50003) << "DBVersion not available! Giving up schema upgrading.";
             QString errorMsg = i18n(
                     "The database is not valid: "
                     "the \"DBVersion\" setting does not exist. "
@@ -882,7 +882,7 @@ bool SchemaUpdater::updateV4toV5()
 
     if (albumLibraryPath.isEmpty())
     {
-        kError(50003) << "Album library path from config file is empty. Aborting update." << endl;
+        kError(50003) << "Album library path from config file is empty. Aborting update.";
         QString errorMsg = i18n("No album library path has been found in the configuration file. "
                                 "Giving up the schema updating process. "
                                 "Please try with an empty database, or repair your configuration.");
@@ -900,7 +900,7 @@ bool SchemaUpdater::updateV4toV5()
             CollectionManager::instance()->addLocation(KUrl::fromPath(albumLibraryPath));
     if (location.isNull())
     {
-        kError(50003) << "Failure to create a collection location. Aborting update." << endl;
+        kError(50003) << "Failure to create a collection location. Aborting update.";
         QString errorMsg = i18n("There was an error associating your albumLibraryPath (\"%1\") "
                                 "with a storage volume of your system. "
                                 "This problem may indicate that there is a problem with your installation. "

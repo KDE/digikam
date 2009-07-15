@@ -530,7 +530,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
 #ifdef ENABLE_DEBUG_MESSAGES
                 kDebug(50003) << "Reading PNG Embedded text: key=" << text_ptr[i].key
-                              << " text=" << text_ptr[i].text << endl;
+                              << " text=" << text_ptr[i].text;
 #endif
             }
         }

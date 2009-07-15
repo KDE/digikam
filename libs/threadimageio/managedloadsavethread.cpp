@@ -140,7 +140,7 @@ void ManagedLoadSaveThread::load(LoadingDescription description, LoadingMode loa
                     loadingTask->setStatus(LoadingTask::LoadingTaskStatusStopping);
             }
             //kDebug(50003) << "LoadingPolicyFirstRemovePrevious, Existing task " << existingTask <<
-             //", m_currentTask " << m_currentTask << ", loadingTask " << loadingTask << endl;
+             //", m_currentTask " << m_currentTask << ", loadingTask " << loadingTask;
             // remove all loading tasks
             for (int i=0; i < m_todo.size(); ++i)
             {

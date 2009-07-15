@@ -378,7 +378,7 @@ void AlbumSelectWidget::slotAlbumAdded(Album* album)
     if (!parentItem)
     {
         kWarning(50003) << "Failed to find parent for Album "
-                        << album->title() << endl;
+                        << album->title();
         return;
     }
 
