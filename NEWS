@@ -29,8 +29,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 018 ==> 174586 : Loading video from camera consumes ll memory.
 019 ==> 199667 : Make writing of metadata to picture enabled by default.
 020 ==> 199981 : XMP synchronization of digiKam namespace occurs for second tag.
-021 ==> 
-
+021 ==> 199967 : Creation date newer than last modified date.
+022 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta2 - Release date: 2009-07-05
