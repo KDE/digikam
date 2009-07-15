@@ -541,10 +541,10 @@ void EditorWindow::setupStandardActions()
 
     // -- Keyboard-only actions added to <MainWindow> ------------------------------
 
-    KAction *exitFullscreenAction = new KAction(i18n("Exit Full Screen"), this);
-    actionCollection()->addAction("editorwindow_exitfullscreen", exitFullscreenAction);
-    exitFullscreenAction->setShortcut( QKeySequence(Qt::Key_Escape) );
-    connect(exitFullscreenAction, SIGNAL(triggered()), this, SLOT(slotEscapePressed()));
+//    KAction *exitFullscreenAction = new KAction(i18n("Exit Full Screen"), this);
+//    actionCollection()->addAction("editorwindow_exitfullscreen", exitFullscreenAction);
+//    exitFullscreenAction->setShortcut( QKeySequence(Qt::Key_Escape) );
+//    connect(exitFullscreenAction, SIGNAL(triggered()), this, SLOT(slotEscapePressed()));
 
     KAction *altBackwardAction = new KAction(i18n("Previous Image"), this);
     actionCollection()->addAction("editorwindow_backward_shift_space", altBackwardAction);
