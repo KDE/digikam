@@ -6,6 +6,7 @@ NEW FEATURES:
 General        : Metadata Template: add support of Contact, Location, and Subjects IPTC information.
 General        : Add support of Author properties to multi-language Captions. User can set 
                  an author name for each caption value.
+ImageEditor    : Close tools by pressing ESC.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
