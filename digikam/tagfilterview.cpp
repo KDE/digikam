@@ -277,9 +277,10 @@ public:
 
 
 TagFilterView::TagFilterView(QWidget* parent)
-             : FolderView(parent, "TagFilterView"),
-               d(new TagFilterViewPrivate)
+             : FolderView(parent, "TagFilterView"), d(new TagFilterViewPrivate)
 {
+    setObjectName("Tag Filter View");
+
     d->timer = new QTimer(this);
 
     addColumn(i18n("Tag Filters"));
@@ -343,19 +344,20 @@ TagFilterView::TagFilterView(QWidget* parent)
     // ------------------------------------------------------------------------
 
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("Tag Filters View");
-    d->matchingCond = (ImageFilterSettings::MatchingCondition)(group.readEntry("Matching Condition",
-                                                       (int)ImageFilterSettings::OrCondition));
+    KConfigGroup group = config->group(objectName());
+    d->matchingCond = (ImageFilterSettings::MatchingCondition)
+                      (group.readEntry("Matching Condition", (int)ImageFilterSettings::OrCondition));
 
-    d->toggleAutoTags = (ToggleAutoTags)(group.readEntry("Toggle Auto Tags", (int)NoToggleAuto));
+    d->toggleAutoTags    = (ToggleAutoTags)
+                           (group.readEntry("Toggle Auto Tags", (int)NoToggleAuto));
 }
 
 TagFilterView::~TagFilterView()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("Tag Filters View");
-    group.writeEntry("Matching Condition", (int)(d->matchingCond));
-    group.writeEntry("Toggle Auto Tags", (int)(d->toggleAutoTags));
+    KConfigGroup group        = config->group(objectName());
+    group.writeEntry("Matching Condition",  (int)(d->matchingCond));
+    group.writeEntry("Toggle Auto Tags",    (int)(d->toggleAutoTags));
     config->sync();
 
     saveViewState();
