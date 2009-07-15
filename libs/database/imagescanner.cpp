@@ -352,57 +352,34 @@ void ImageScanner::scanImagePosition()
 void ImageScanner::scanImageComments()
 {
     MetadataFields fields;
-    fields << MetadataInfo::Comment
-           << MetadataInfo::Description
-           << MetadataInfo::Headline
-           << MetadataInfo::Title
-           << MetadataInfo::DescriptionWriter;
+    fields << MetadataInfo::Headline
+           << MetadataInfo::Title;
 
     QVariantList metadataInfos = m_metadata.getMetadataFields(fields);
 
-    // note that this cannot be replaced with hasValidField, as the last is skipped
-    bool noComment = (metadataInfos[0].isNull() && metadataInfos[1].isNull()
-                      && metadataInfos[2].isNull() && metadataInfos[3].isNull());
-    if (noComment)
+    // handles all possible fields, multi-language, author, date
+    CaptionsMap captions = m_metadata.getImageComments();
+
+    if (captions.isEmpty() && !hasValidField(metadataInfos))
         return;
 
     DatabaseAccess access;
     ImageComments comments(access, m_scanInfo.id);
 
     // Description
-    if (!metadataInfos[1].isNull())
+    if (!captions.isEmpty())
     {
-        QString author = metadataInfos[4].toString(); // possibly null
-
-        const QMap<QString, QVariant> &map = metadataInfos[1].toMap();
-
-        for (QMap<QString, QVariant>::const_iterator it = map.constBegin();
-             it != map.constEnd(); ++it)
-        {
-            comments.addComment(it.value().toString(), it.key(), author);
-            /*
-             * Add here any handling of always adding one x-default comment, if needed
-             * TODO: Store always one x-default value? Or is it ok to have only real language values? Then we will need
-             * a global default language based on which x-default is chosen, when writing to image metadata
-             * (not by this class!)
-             */
-        }
-    }
-
-    // old-style comment. Maybe overwrite x-default from above.
-    if (!metadataInfos[0].isNull())
-    {
-        comments.addComment(metadataInfos[0].toString());
+        comments.replaceComments(captions);
     }
 
     // Headline
-    if (!metadataInfos[2].isNull())
+    if (!metadataInfos[0].isNull())
     {
         comments.addHeadline(metadataInfos[2].toString());
     }
 
     // Title
-    if (!metadataInfos[3].isNull())
+    if (!metadataInfos[1].isNull())
     {
         comments.addTitle(metadataInfos[2].toString());
     }
