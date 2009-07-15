@@ -762,15 +762,9 @@ bool DMetadata::removeMetadataTemplate() const
 Template DMetadata::getMetadataTemplate() const
 {
     Template t;
-    t.setAuthors(getXmpTagStringSeq("Xmp.dc.creator"));
-    t.setAuthorsPosition(getXmpTagString("Xmp.photoshop.AuthorsPosition"));
-    t.setCredit(getXmpTagString("Xmp.photoshop.Credit"));
-    t.setSource(getXmpTagString("Xmp.dc.source"));
-    t.setCopyright(getXmpTagStringListLangAlt("Xmp.dc.rights", false));
-    t.setRightUsageTerms(getXmpTagStringListLangAlt("Xmp.xmpRights.UsageTerms", false));
-    t.setInstructions(getXmpTagString("Xmp.photoshop.Instructions"));
 
-    t.setContactInfo(getCreatorContactInfo());
+    getCopyrightInformation(t);
+
     t.setLocationInfo(getIptcCoreLocation());
     t.setIptcSubjects(getXmpSubjects());
 
