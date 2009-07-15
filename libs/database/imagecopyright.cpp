@@ -35,6 +35,7 @@
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "imagescanner.h"
+#include "template.h"
 
 namespace Digikam
 {
@@ -214,6 +215,53 @@ void ImageCopyright::removeContactInfo()
     removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoEmail));
     removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoPhone));
     removeProperties(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreContactInfoWebUrl));
+}
+
+void ImageCopyright::fillTemplate(Template &t)
+{
+    t.setAuthors(author());
+    t.setAuthorsPosition(authorsPosition());
+    t.setCredit(credit());
+    t.setCopyright(allCopyrightNotices());
+    t.setRightUsageTerms(allRightsUsageTerms());
+    t.setSource(source());
+    t.setInstructions(instructions());
+    t.setContactInfo(contactInfo());
+}
+
+void ImageCopyright::setFromTemplate(const Template &t)
+{
+    foreach(QString author, t.authors())
+        setAuthor(author, ImageCopyright::AddEntryToExisting);
+
+    setCredit(t.credit());
+
+    KExiv2::AltLangMap copyrights = t.copyright();
+    KExiv2::AltLangMap::const_iterator it;
+    for (it = copyrights.constBegin() ; it != copyrights.constEnd() ; ++it)
+        setRights(it.value(), it.key(), ImageCopyright::AddEntryToExisting);
+
+    KExiv2::AltLangMap usages = t.rightUsageTerms();
+    KExiv2::AltLangMap::const_iterator it2;
+    for (it2 = usages.constBegin() ; it2 != usages.constEnd() ; ++it2)
+        setRightsUsageTerms(it2.value(), it2.key(), ImageCopyright::AddEntryToExisting);
+
+    setSource(t.source());
+    setAuthorsPosition(t.authorsPosition());
+    setInstructions(t.instructions());
+    setContactInfo(t.contactInfo());
+}
+
+void ImageCopyright::removeAll()
+{
+    removeCreators();
+    removeProvider();
+    removeCopyrightNotices();
+    removeRightsUsageTerms();
+    removeSource();
+    removeCreatorJobTitle();
+    removeInstructions();
+    removeContactInfo();
 }
 
 QString ImageCopyright::readSimpleProperty(const QString& property)

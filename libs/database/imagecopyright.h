@@ -38,13 +38,13 @@
 // Local includes
 
 #include "metadatainfo.h"
-#include "template.h"
 #include "digikam_export.h"
 
 namespace Digikam
 {
 
 class CopyrightInfo;
+class Template;
 
 class DIGIKAM_DATABASE_EXPORT ImageCopyright
 {
@@ -204,9 +204,26 @@ public:
     void setInstructions(const QString& instructions);
     void removeInstructions();
 
+    /** Returns the creator's contact info.
+     *  This is Iptc4xmpCore:CreatorContactInfo in XMP.
+     *  "  The creator's contact information provides all necessary information to get in contact with
+     *     the creator of this news object and comprises a set of sub-properties for proper addressing."
+     */
     IptcCoreContactInfo contactInfo();
     void setContactInfo(const IptcCoreContactInfo &info);
     void removeContactInfo();
+
+    /** Fills the information fields in template concerning copyright info
+     *  (note there are other fields in the a Template. There will not be touched)
+     */
+    void fillTemplate(Template &t);
+
+    /** Sets all database copyright fields from the template.
+     *  This does not clear any fields before. */
+    void setFromTemplate(const Template &t);
+
+    /** Calls all remove...() methods in this class */
+    void removeAll();
 
 protected:
 
