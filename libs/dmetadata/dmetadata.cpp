@@ -777,6 +777,47 @@ Template DMetadata::getMetadataTemplate() const
     return t;
 }
 
+static bool hasValidField(const QVariantList &list)
+{
+    for (QVariantList::const_iterator it = list.constBegin();
+         it != list.constEnd(); ++it)
+    {
+        if (!(*it).isNull())
+            return true;
+    }
+    return false;
+}
+
+bool DMetadata::getCopyrightInformation(Template &t) const
+{
+    MetadataFields fields;
+    fields << MetadataInfo::IptcCoreCopyrightNotice
+           << MetadataInfo::IptcCoreCreator
+           << MetadataInfo::IptcCoreProvider
+           << MetadataInfo::IptcCoreRightsUsageTerms
+           << MetadataInfo::IptcCoreSource
+           << MetadataInfo::IptcCoreCreatorJobTitle
+           << MetadataInfo::IptcCoreInstructions;
+
+    QVariantList metadataInfos = getMetadataFields(fields);
+    IptcCoreContactInfo contactInfo = getCreatorContactInfo();
+
+    if (!hasValidField(metadataInfos) && contactInfo.isNull())
+        return false;
+
+    t.setCopyright(toAltLangMap(metadataInfos[0]));
+    t.setAuthors(metadataInfos[1].toStringList());
+    t.setCredit(metadataInfos[2].toString());
+    t.setRightUsageTerms(toAltLangMap(metadataInfos[3]));
+    t.setSource(metadataInfos[4].toString());
+    t.setAuthorsPosition(metadataInfos[5].toString());
+    t.setInstructions(metadataInfos[6].toString());
+
+    t.setContactInfo(contactInfo);
+
+    return true;
+}
+
 IptcCoreContactInfo DMetadata::getCreatorContactInfo() const
 {
     MetadataFields fields;
@@ -1620,6 +1661,32 @@ double DMetadata::apexShutterSpeedToExposureTime(double shutterSpeed)
         return 0.000125; // 1/8000
 
     return exp( - log(2) * shutterSpeed);
+}
+
+KExiv2::AltLangMap DMetadata::toAltLangMap(const QVariant &var)
+{
+    KExiv2::AltLangMap map;
+
+    if (var.isNull())
+        return map;
+
+    switch (var.type())
+    {
+        case QVariant::String:
+            map.insert("x-default", var.toString());
+            break;
+        case QVariant::Map:
+        {
+            QMap<QString, QVariant> varMap = var.toMap();
+            for (QMap<QString, QVariant>::const_iterator it = varMap.constBegin(); it != varMap.constEnd(); ++it)
+                map.insert(it.key(), it.value().toString());
+            break;
+        }
+        default:
+            break;
+    }
+
+    return map;
 }
 
 // ---------- Scheduled to be moved to libkexiv2 --------------

@@ -387,74 +387,13 @@ void ImageScanner::scanImageComments()
 
 void ImageScanner::scanImageCopyright()
 {
-    MetadataFields fields;
-    fields << MetadataInfo::IptcCoreCopyrightNotice
-           << MetadataInfo::IptcCoreCreator
-           << MetadataInfo::IptcCoreProvider
-           << MetadataInfo::IptcCoreRightsUsageTerms
-           << MetadataInfo::IptcCoreSource
-           << MetadataInfo::IptcCoreCreatorJobTitle
-           << MetadataInfo::IptcCoreInstructions
-           << MetadataInfo::IptcCoreContactInfo;
-
-    QVariantList metadataInfos = m_metadata.getMetadataFields(fields);
-
-    if (!hasValidField(metadataInfos))
+    Template t;
+    if (!m_metadata.getCopyrightInformation(t))
         return;
 
     ImageCopyright copyright(m_scanInfo.id);
-
-    if (!metadataInfos[0].isNull())
-    {
-        QMap<QString, QVariant> map = metadataInfos[0].toMap();
-        // replace all entries for the first time, after that, add entries
-        ImageCopyright::ReplaceMode mode = ImageCopyright::ReplaceAllEntries;
-        for (QMap<QString, QVariant>::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
-        {
-            copyright.setCopyrightNotice(it.value().toString(), it.key(), mode);
-            mode = ImageCopyright::ReplaceLanguageEntry;
-        }
-    }
-    if (!metadataInfos[1].isNull())
-    {
-        QList<QVariant> list = metadataInfos[1].toList();
-        ImageCopyright::ReplaceMode mode = ImageCopyright::ReplaceAllEntries;
-        foreach(const QVariant& var, list)
-        {
-            copyright.setCreator(var.toString(), mode);
-            mode = ImageCopyright::AddEntryToExisting;
-        }
-    }
-    if (!metadataInfos[2].isNull())
-    {
-        copyright.setProvider(metadataInfos[2].toString());
-    }
-    if (!metadataInfos[3].isNull())
-    {
-        QMap<QString, QVariant> map = metadataInfos[3].toMap();
-        ImageCopyright::ReplaceMode mode = ImageCopyright::ReplaceAllEntries;
-        for (QMap<QString, QVariant>::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
-        {
-            copyright.setRightsUsageTerms(it.value().toString(), it.key(), mode);
-            mode = ImageCopyright::ReplaceLanguageEntry;
-        }
-    }
-    if (!metadataInfos[4].isNull())
-    {
-        copyright.setSource(metadataInfos[4].toString());
-    }
-    if (!metadataInfos[5].isNull())
-    {
-        copyright.setCreatorJobTitle(metadataInfos[5].toString());
-    }
-    if (!metadataInfos[6].isNull())
-    {
-        copyright.setInstructions(metadataInfos[6].toString());
-    }
-    if (!metadataInfos[7].isNull())
-    {
-        copyright.setContactInfo(metadataInfos[7].value<IptcCoreContactInfo>());
-    }
+    copyright.removeAll();
+    copyright.setFromTemplate(t);
 }
 
 void ImageScanner::scanIPTCCore()

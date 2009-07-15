@@ -77,6 +77,10 @@ public:
     Template getMetadataTemplate() const;
     bool     removeMetadataTemplate() const;
 
+    /// Fills only the copyright values in the template. Use getMetadataTemplate() usually.
+    /// Returns true if valid fields were read.
+    bool getCopyrightInformation(Template &t) const;
+
     IptcCoreContactInfo getCreatorContactInfo() const;
     bool setCreatorContactInfo(const IptcCoreContactInfo &info) const;
 
@@ -112,6 +116,8 @@ public:
 
     static double apexApertureToFNumber(double aperture);
     static double apexShutterSpeedToExposureTime(double shutterSpeed);
+
+    static KExiv2::AltLangMap toAltLangMap(const QVariant &var);
 
     //------------------------------------------------------------------------------------------------
     // Scheduled to be moved to libkexiv2
