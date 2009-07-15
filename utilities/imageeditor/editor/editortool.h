@@ -58,6 +58,10 @@ public:
     QWidget*            toolView() const;
     EditorToolSettings* toolSettings() const;
 
+public Q_SLOTS:
+
+    virtual void slotCloseTool();
+
 Q_SIGNALS:
 
     void okClicked();

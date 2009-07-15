@@ -225,6 +225,11 @@ void EditorTool::slotCancel()
     emit cancelClicked();
 }
 
+void EditorTool::slotCloseTool()
+{
+    slotCancel();
+}
+
 // ----------------------------------------------------------------
 
 class EditorToolThreadedPriv

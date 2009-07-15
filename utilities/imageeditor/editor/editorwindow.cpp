@@ -546,6 +546,11 @@ void EditorWindow::setupStandardActions()
 //    exitFullscreenAction->setShortcut( QKeySequence(Qt::Key_Escape) );
 //    connect(exitFullscreenAction, SIGNAL(triggered()), this, SLOT(slotEscapePressed()));
 
+    KAction *closeToolAction = new KAction(i18n("Close Tool"), this);
+    actionCollection()->addAction("editorwindow_closetool", closeToolAction);
+    closeToolAction->setShortcut( QKeySequence(Qt::Key_Escape) );
+    connect(closeToolAction, SIGNAL(triggered()), this, SLOT(slotCloseTool()));
+
     KAction *altBackwardAction = new KAction(i18n("Previous Image"), this);
     actionCollection()->addAction("editorwindow_backward_shift_space", altBackwardAction);
     altBackwardAction->setShortcut( KShortcut(Qt::SHIFT+Qt::Key_Space) );
@@ -1962,6 +1967,12 @@ void EditorWindow::slotShowMenuBar()
 {
     const bool visible = menuBar()->isVisible();
     menuBar()->setVisible(!visible);
+}
+
+void EditorWindow::slotCloseTool()
+{
+    if (d->toolIface)
+        d->toolIface->slotToolAborted();
 }
 
 }  // namespace Digikam

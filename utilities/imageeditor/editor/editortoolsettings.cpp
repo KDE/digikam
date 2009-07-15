@@ -201,7 +201,6 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, int histogr
 
     d->cancelBtn = new KPushButton(d->btnBox1);
     d->cancelBtn->setGuiItem(KStandardGuiItem::cancel());
-    d->cancelBtn->setShortcut(Qt::Key_Escape);
     if (!(buttonMask & Cancel))
         d->cancelBtn->hide();
 

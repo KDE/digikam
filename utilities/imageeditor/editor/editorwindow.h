@@ -249,6 +249,7 @@ private Q_SLOTS:
     void slotToggleShowBar();
     void slotPrepareToLoad();
     void slotShowMenuBar();
+    void slotCloseTool();
 
 private:
 
