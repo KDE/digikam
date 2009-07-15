@@ -160,6 +160,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     d->copyrightEdit = new AltLangStrEdit(page1);
     d->copyrightEdit->setTitle(i18n("Copyright:"));
     d->copyrightEdit->setFixedHeight(75);
+    d->copyrightEdit->setClickMessage(i18n("Enter here the copyright notice to identify the current owner(s) of the copyright"));
     d->copyrightEdit->setWhatsThis(i18n("<p>The Copyright Notice should contain any necessary copyright notice for claiming the intellectual "
                                         "property, and should identify the current owner(s) of the copyright for the photograph. Usually, "
                                         "this would be the photographer, but if the image was done by an employee or as work-for-hire, "
@@ -182,6 +183,8 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     d->rightUsageEdit = new AltLangStrEdit(page1);
     d->rightUsageEdit->setTitle(i18n("Right Usage Terms:"));
     d->rightUsageEdit->setFixedHeight(75);
+    d->rightUsageEdit->setClickMessage(i18n("Enter here the list of instructions on how "
+                                            "a resource can be legally used"));
     d->rightUsageEdit->setWhatsThis(i18n("<p>The Right Usage Terms field should be used to list instructions on how "
                                          "a resource can be legally used."
                                          "<p>With XMP, you can include more than one right usage terms string using "
