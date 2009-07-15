@@ -41,6 +41,10 @@
 #include <kcombobox.h>
 #include <kdebug.h>
 
+// Local includes
+
+#include "msgtextedit.h"
+
 using namespace KExiv2Iface;
 
 namespace Digikam
@@ -248,7 +252,7 @@ public:
     QToolButton                    *addValueButton;
     QToolButton                    *delValueButton;
 
-    KTextEdit                      *valueEdit;
+    MsgTextEdit                    *valueEdit;
 
     KComboBox                      *languageCB;
 
@@ -272,7 +276,7 @@ AltLangStrEdit::AltLangStrEdit(QWidget* parent)
     d->languageCB->setSizeAdjustPolicy(KComboBox::AdjustToContents);
     d->languageCB->setWhatsThis(i18n("Select item language here."));
 
-    d->valueEdit  = new KTextEdit(this);
+    d->valueEdit  = new MsgTextEdit(this);
     d->valueEdit->setCheckSpellingEnabled(true);
 
     // --------------------------------------------------------
@@ -325,6 +329,11 @@ QString AltLangStrEdit::languageCode(int index) const
 void AltLangStrEdit::setTitle(const QString& title)
 {
     d->titleLabel->setText(title);
+}
+
+void AltLangStrEdit::setClickMessage(const QString& msg)
+{
+    d->valueEdit->setClickMessage(msg);
 }
 
 void AltLangStrEdit::reset()

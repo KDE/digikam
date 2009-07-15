@@ -713,6 +713,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/templateviewer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/templatepanel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/countryselector.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/msgtextedit.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/altlangstredit.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/subjectwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/subjectedit.cpp

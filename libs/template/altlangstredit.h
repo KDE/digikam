@@ -50,6 +50,7 @@ public:
     ~AltLangStrEdit();
 
     void setTitle(const QString& title);
+    void setClickMessage(const QString& msg);
 
     void setValues(const KExiv2::AltLangMap& values);
     KExiv2::AltLangMap& values();
