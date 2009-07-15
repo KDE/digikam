@@ -1972,7 +1972,7 @@ void EditorWindow::slotShowMenuBar()
 void EditorWindow::slotCloseTool()
 {
     if (d->toolIface)
-        d->toolIface->slotToolAborted();
+        d->toolIface->slotCloseTool();
 }
 
 }  // namespace Digikam

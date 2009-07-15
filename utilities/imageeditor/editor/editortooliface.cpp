@@ -135,9 +135,14 @@ void EditorToolIface::setToolStopProgress()
 
 void EditorToolIface::slotToolAborted()
 {
+    EditorToolThreaded *tool = dynamic_cast<EditorToolThreaded*>(d->tool);
+    if (tool) tool->slotAbort();
+}
+
+void EditorToolIface::slotCloseTool()
+{
     EditorTool *tool = dynamic_cast<EditorTool*>(d->tool);
-    if (tool)
-        tool->slotCloseTool();
+    if (tool) tool->slotCloseTool();
 }
 
 }  // namespace Digikam

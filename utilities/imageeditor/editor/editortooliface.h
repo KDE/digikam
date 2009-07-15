@@ -61,6 +61,7 @@ public:
 
 public Q_SLOTS:
 
+    void slotCloseTool();
     void slotToolAborted();
 
 private:
