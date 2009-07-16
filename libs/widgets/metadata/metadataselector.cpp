@@ -84,6 +84,8 @@ MetadataSelector::~MetadataSelector()
 {
 }
 
+#if KEXIV2_VERSION >= 0x010000
+
 void MetadataSelector::setTagsMap(const DMetadata::TagsMap& map)
 {
     clear();
@@ -117,6 +119,8 @@ void MetadataSelector::setTagsMap(const DMetadata::TagsMap& map)
         }
     }
 }
+
+#endif
 
 void MetadataSelector::setcheckedTagsList(const QStringList& list)
 {

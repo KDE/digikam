@@ -30,6 +30,10 @@
 #include <QTreeWidget>
 #include <QStringList>
 
+// Libkexiv2 includes
+
+#include <libkexiv2/version.h>
+
 // Local includes
 
 #include "digikam_export.h"
@@ -65,7 +69,9 @@ public:
     MetadataSelector(QWidget* parent);
     virtual ~MetadataSelector();
 
+#if KEXIV2_VERSION >= 0x010000
     void setTagsMap(const DMetadata::TagsMap& map);
+#endif
 
     void setcheckedTagsList(const QStringList& list);
     QStringList checkedTagsList();
