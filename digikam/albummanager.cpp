@@ -479,7 +479,9 @@ void AlbumManager::changeDatabase(const QString& dbPath)
 
     if (setDatabase(dbPath, false))
     {
+        QApplication::setOverrideCursor(Qt::WaitCursor);
         startScan();
+        QApplication::restoreOverrideCursor();
         ScanController::instance()->completeCollectionScan();
     }
 }
@@ -504,6 +506,10 @@ bool AlbumManager::setDatabase(const QString& dbPath, bool priority, const QStri
 
     if (d->dbPath == dbPath)
         return true;
+
+    // shutdown possibly running collection scans. Must call resumeCollectionScan further down.
+    ScanController::instance()->cancelAllAndSuspendCollectionScan();
+    QApplication::setOverrideCursor(Qt::WaitCursor);
 
     d->dbPath  = dbPath;
     d->changed = true;
@@ -562,7 +568,12 @@ bool AlbumManager::setDatabase(const QString& dbPath, bool priority, const QStri
     DatabaseAccess::setParameters(DatabaseParameters::parametersForSQLiteDefaultFile(d->dbPath),
                                   DatabaseAccess::MainApplication);
 
+    // still suspended from above
+    ScanController::instance()->resumeCollectionScan();
+
     ScanController::Advice advice = ScanController::instance()->databaseInitialization();
+
+    QApplication::restoreOverrideCursor();
 
     switch (advice)
     {
@@ -792,10 +803,14 @@ bool AlbumManager::setDatabase(const QString& dbPath, bool priority, const QStri
     }
 
 #ifdef USE_THUMBS_DB
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+
     // Initialize thumbnail database
     QFileInfo thumbFile(d->dbPath, "thumbnails-digikam.db");
     ThumbnailLoadThread::initializeThumbnailDatabase(thumbFile.filePath(), new DatabaseThumbnailInfoProvider());
     d->dirWatchBlackList << "thumbnails-digikam.db" << "thumbnails-digikam.db-journal";
+
+    QApplication::restoreOverrideCursor();
 #endif
 
     QDBusInterface interface("org.kde.digikam.nepomuk.digikamnepomukservice",
