@@ -41,15 +41,12 @@ namespace Digikam
 
 MetadataSelectorItem::MetadataSelectorItem(MdKeyListViewItem *parent, const QString& key,
                                            const QString& title, const QString& desc)
-                    : QTreeWidgetItem(parent)
+                    : QTreeWidgetItem(parent, QStringList() << title << desc)
 {
     setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
     setCheckState(0, Qt::Unchecked);
     setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
     m_key = key;
-
-    setText(0, title);
-    setText(1, desc);
 }
 
 MetadataSelectorItem::~MetadataSelectorItem()
@@ -91,13 +88,13 @@ void MetadataSelector::setTagsMap(const DMetadata::TagsMap& map)
     clear();
 
     uint               subItems = 0;
-    QString            ifDItemName;
+    QString            ifDItemName, currentIfDName;
     MdKeyListViewItem *parentifDItem = 0;
 
     for (DMetadata::TagsMap::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
     {
         // We checking if we have changed of ifDName
-        QString currentIfDName = it.key().section('.', 1, 1);
+        currentIfDName = it.key().section('.', 1, 1);
 
         if ( currentIfDName != ifDItemName )
         {
