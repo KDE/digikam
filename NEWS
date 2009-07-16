@@ -32,7 +32,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 020 ==> 199981 : XMP synchronization of digiKam namespace occurs for second tag.
 021 ==> 199967 : Creation date newer than last modified date.
 022 ==> 200190 : tag filters: unlike older versions AND-condition doesn't match anymore.
-023 ==> 
+023 ==> 193616 : Location not shown digiKam right sidebar after geolocating in external program.
+024 ==> 
+
 
 
 *********************************************************************************************************

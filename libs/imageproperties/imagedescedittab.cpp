@@ -68,6 +68,7 @@
 #include "albumsettings.h"
 #include "albumlister.h"
 #include "albumthumbnailloader.h"
+#include "collectionscanner.h"
 #include "databasetransaction.h"
 #include "tageditdlg.h"
 #include "ratingwidget.h"
@@ -692,18 +693,19 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
     AlbumLister::instance()->blockSignals(true);
     ScanController::instance()->suspendCollectionScan();
 
-    //TODO: We should consider loading _all_ metadata fields here, not only comment/date/rating.
-    // This requires a new ScanController/CollectionScanner/ImageScanner method.
-    // This method must care about stuff like merging existing tags with metadata etc.
-
+    CollectionScanner scanner;
     foreach(const ImageInfo& info, d->currInfos)
     {
+        scanner.scanFile(info, CollectionScanner::Rescan);
+
+        /*
         // A batch operation: a hub for each single file, not the common hub
         MetadataHub fileHub(MetadataHub::NewTagsImport);
         // read in from DMetadata
         fileHub.load(info.filePath());
         // write out to database
         fileHub.write(info);
+        */
 
         emit signalProgressValue((int)((i++/(float)d->currInfos.count())*100.0));
         kapp->processEvents();
