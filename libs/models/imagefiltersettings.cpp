@@ -74,11 +74,11 @@ bool ImageFilterSettings::isFiltering() const
             || untaggedFilter || ratingFilter >= 0 || mimeTypeFilter != MimeFilter::AllFiles;
 }
 
-void ImageFilterSettings::setTagFilter(const QList<int>& tags, MatchingCondition matchingCond,
+void ImageFilterSettings::setTagFilter(const QList<int>& tags, MatchingCondition matchingCondition,
                                        bool showUnTagged)
 {
     tagFilter      = tags;
-    matchingCond   = matchingCond;
+    matchingCond   = matchingCondition;
     untaggedFilter = showUnTagged;
 }
 
