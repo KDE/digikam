@@ -32,7 +32,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 020 ==> 199981 : XMP synchronization of digiKam namespace occurs for second tag.
 021 ==> 199967 : Creation date newer than last modified date.
 022 ==> 200159 : digiKam almost always crash on my system.
-023 ==> 
+023 ==> 200427 : digiKam , iptc, tags, hierarchy disappears.
+024 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta2 - Release date: 2009-07-05
