@@ -110,6 +110,12 @@ public:
      *  It can be resumed later. */
     void cancelCompleteScan();
 
+    /** Cancels all running or scheduled operations and suspends scanning.
+     *  This method returns when all scanning has stopped.
+     *  This includes a call to suspendCollectionScan().
+     *  Restart with resumeCollectionScan. */
+    void cancelAllAndSuspendCollectionScan();
+
     /** Temporarily suspend collection scanning.
      *  All scheduled scanning tasks are queued
      *  and will be done when resumeCollectionScan()

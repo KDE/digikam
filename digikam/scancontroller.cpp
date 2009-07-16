@@ -99,6 +99,7 @@ public:
         running             = false;
         needsInitialization = false;
         needsCompleteScan   = false;
+        fileWatchInstalled  = false;
         advice              = ScanController::Success;
     }
 
@@ -116,6 +117,9 @@ public:
 
     bool                      continueInitialization;
     bool                      continueScan;
+    bool                      continuePartialScan;
+
+    bool                      fileWatchInstalled;
 
     QEventLoop               *eventLoop;
 
@@ -250,13 +254,6 @@ ScanController::ScanController()
     // start thread
     d->running = true;
     start();
-
-    // setup file watch service for LoadingCache
-    {
-        LoadingCache *cache = LoadingCache::cache();
-        LoadingCache::CacheLock lock(cache);
-        cache->setFileWatch(new ScanControllerLoadingCacheFileWatch);
-    }
 }
 
 ScanController::~ScanController()
@@ -336,6 +333,15 @@ ScanController::Advice ScanController::databaseInitialization()
     // loop is quit by signal
     d->eventLoop->exec();
 
+    // setup file watch service for LoadingCache - now that we are sure we have a DatabaseWatch
+    if (!d->fileWatchInstalled)
+    {
+        d->fileWatchInstalled = true; // once per application lifetime only
+        LoadingCache *cache = LoadingCache::cache();
+        LoadingCache::CacheLock lock(cache);
+        cache->setFileWatch(new ScanControllerLoadingCacheFileWatch);
+    }
+
     delete d->progressDialog;
     d->progressDialog = 0;
 
@@ -411,6 +417,28 @@ void ScanController::cancelCompleteScan()
     d->continueScan = false;
 }
 
+void ScanController::cancelAllAndSuspendCollectionScan()
+{
+    QMutexLocker lock(&d->mutex);
+
+    d->needsInitialization = false;
+    d->continueInitialization = false;
+
+    d->needsCompleteScan = false;
+    d->continueScan = false;
+
+    d->scanTasks.clear();
+    d->continuePartialScan = false;
+
+    d->relaxedTimer->stop();
+
+    // like suspendCollectionScan
+    d->scanSuspended++;
+
+    while (!d->idle)
+        d->condVar.wait(&d->mutex, 20);
+}
+
 void ScanController::suspendCollectionScan()
 {
     QMutexLocker lock(&d->mutex);
@@ -484,6 +512,8 @@ void ScanController::run()
             scanner.recordHints(d->albumHints);
             scanner.recordHints(d->itemHints);
             //connectCollectionScanner(&scanner);
+            SimpleCollectionScannerObserver observer(&d->continuePartialScan);
+            scanner.setObserver(&observer);
             scanner.partialScan(task);
         }
     }
