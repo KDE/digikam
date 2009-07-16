@@ -169,7 +169,7 @@ BlurFXTool::BlurFXTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QGridLayout* mainLayout  = new QGridLayout;
+    QGridLayout* mainLayout = new QGridLayout;
     mainLayout->addWidget(d->effectTypeLabel, 0, 0, 1, 2);
     mainLayout->addWidget(d->effectType,      1, 0, 1, 2);
     mainLayout->addWidget(d->distanceLabel,   2, 0, 1, 2);
