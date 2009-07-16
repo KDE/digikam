@@ -368,7 +368,7 @@ void AltLangStrEdit::slotDeleteValue()
 void AltLangStrEdit::slotSelectionChanged(int index)
 {
     QString lang = d->languageCB->currentText();
-    d->valueEdit->setSpellCheckingLanguage(lang); 
+    d->valueEdit->setSpellCheckingLanguage(lang.replace("-", "_")); 
     d->valueEdit->blockSignals(true);
 
     if (!d->languageCB->itemIcon(index).isNull())
