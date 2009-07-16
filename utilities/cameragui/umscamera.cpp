@@ -224,7 +224,7 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
 
     // JPEG files: try to get thumbnail from Exif data.
 
-    DMetadata metadata(QFile::encodeName(folder + QString("/") + itemName));
+    DMetadata metadata(folder + QString("/") + itemName);
     thumbnail = metadata.getExifThumbnail(true);
     if (!thumbnail.isNull())
         return true;
@@ -256,14 +256,14 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
 
     // Finally, we trying to get thumbnail using DImg API (slow).
 
-    DImg dimgThumb(QFile::encodeName(folder + QString("/") + itemName));
+    DImg dimgThumb(folder + QString("/") + itemName);
 
     if (!dimgThumb.isNull())
     {
         thumbnail = dimgThumb.copyQImage();
         return true;
     }
-  return false;
+    return false;
 }
 
 bool UMSCamera::getExif(const QString&, const QString&, char **, int&)
