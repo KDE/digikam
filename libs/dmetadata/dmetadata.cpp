@@ -766,7 +766,7 @@ Template DMetadata::getMetadataTemplate() const
     getCopyrightInformation(t);
 
     t.setLocationInfo(getIptcCoreLocation());
-    t.setIptcSubjects(getXmpSubjects());
+    t.setIptcSubjects(getIptcCoreSubjects()); // get from XMP or Iptc
 
     return t;
 }
@@ -925,6 +925,15 @@ bool DMetadata::setIptcCoreLocation(const IptcCoreLocationInfo& location) const
     return true;
 }
 
+QStringList DMetadata::getIptcCoreSubjects() const
+{
+    QStringList list = getXmpSubjects();
+    if (!list.isEmpty())
+        return list;
+
+    return getIptcSubjects();
+}
+
 QString DMetadata::getLensDescription() const
 {
     QString lens;
@@ -1018,11 +1027,7 @@ inline QVariant DMetadata::fromIptcOrXmp(const char *iptcTagName, const char *xm
 
 inline QVariant DMetadata::fromIptcEmulateList(const char *iptcTagName) const
 {
-    QStringList iptcValues = getIptcTagsStringList(iptcTagName);
-
-    if (iptcValues.isEmpty())
-        return QVariant(QVariant::StringList);
-    return iptcValues;
+    return toStringListVariant(getIptcTagsStringList(iptcTagName));
 }
 
 inline QVariant DMetadata::fromXmpList(const char *xmpTagName) const
@@ -1052,6 +1057,14 @@ inline QVariant DMetadata::fromXmpLangAlt(const char *xmpTagName) const
     if (var.isNull())
         return QVariant(QVariant::Map);
     return var;
+}
+
+inline QVariant DMetadata::toStringListVariant(const QStringList &list) const
+{
+    if (list.isEmpty())
+        return QVariant(QVariant::StringList);
+
+    return list;
 }
 
 QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
@@ -1095,9 +1108,8 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
         case MetadataInfo::Keywords:
         {
             QStringList list;
-            if (getImageTagsPath(list))
-                return list;
-            return QVariant(QVariant::StringList);
+            getImageTagsPath(list);
+            return toStringListVariant(list);
         }
 
         case MetadataInfo::Rating:
@@ -1270,13 +1282,7 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
         case MetadataInfo::IptcCoreScene:
             return fromXmpList("Xmp.iptc.Scene");
         case MetadataInfo::IptcCoreSubjectCode:
-        {
-            QVariant var = fromXmpList("Xmp.iptc.SubjectCode");
-            if (!var.isNull())
-                return var;
-
-            return fromIptcEmulateList("Iptc.Application2.Subject");
-        }
+            return toStringListVariant(getIptcCoreSubjects());
 
         case MetadataInfo::IptcCoreContactInfo:
         {

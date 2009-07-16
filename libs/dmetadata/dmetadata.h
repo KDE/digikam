@@ -87,6 +87,8 @@ public:
     IptcCoreLocationInfo getIptcCoreLocation() const;
     bool setIptcCoreLocation(const IptcCoreLocationInfo &location) const;
 
+    QStringList getIptcCoreSubjects() const;
+
     /** Return a string with Lens mounted on the front of camera.
         There no standard Exif tag for Lens information.
         Camera makernotes and Xmp tags are parsed. 
@@ -199,6 +201,7 @@ private:
     QVariant fromIptcEmulateList(const char *iptcTagName) const;
     QVariant fromXmpLangAlt(const char *xmpTagName) const;
     QVariant fromIptcEmulateLangAlt(const char *iptcTagName) const;
+    QVariant toStringListVariant(const QStringList &list) const;
 };
 
 }  // namespace Digikam
