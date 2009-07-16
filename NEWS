@@ -34,7 +34,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 022 ==> 200190 : tag filters: unlike older versions AND-condition doesn't match anymore.
 023 ==> 193616 : Location not shown digiKam right sidebar after geolocating in external program.
 024 ==> 189156 : digikam crashes on importing directories with some (cyrillic?) file names.
-025 ==> 
+025 ==> 191963 : calender sort by wrong dates on images without properties.
+026 ==> 
+
 
 
 
