@@ -28,6 +28,10 @@
 #include <QTreeWidget>
 #include <QHeaderView>
 
+// KDE includes
+
+#include <klocale.h>
+
 // Local includes
 
 #include "mdkeylistviewitem.h"
@@ -42,9 +46,10 @@ MetadataSelectorItem::MetadataSelectorItem(MdKeyListViewItem *parent, const QStr
     setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
     setCheckState(0, Qt::Unchecked);
     setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
+    m_key = key;
+
     setText(0, title);
     setText(1, desc);
-    m_key = key;
 }
 
 MetadataSelectorItem::~MetadataSelectorItem()
@@ -66,13 +71,13 @@ MetadataSelector::MetadataSelector(QWidget* parent)
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setAllColumnsShowFocus(true);
     setColumnCount(2);
-    header()->setResizeMode(QHeaderView::Stretch);
-    header()->hide();
 
     QStringList labels;
-    labels.append( "Name" );              // no i18n here: hidden header
-    labels.append( "Description" );       // no i18n here: hidden header
+    labels.append( i18n("Name") );
+    labels.append( i18n("Description") );
     setHeaderLabels(labels);
+    header()->setResizeMode(0, QHeaderView::ResizeToContents);
+    header()->setResizeMode(1, QHeaderView::Stretch);
 }
 
 MetadataSelector::~MetadataSelector()
