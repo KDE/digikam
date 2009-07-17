@@ -34,6 +34,7 @@
 
 // Local includes
 
+#include "ditemtooltip.h"
 #include "mdkeylistviewitem.h"
 
 namespace Digikam
@@ -41,12 +42,27 @@ namespace Digikam
 
 MetadataSelectorItem::MetadataSelectorItem(MdKeyListViewItem *parent, const QString& key,
                                            const QString& title, const QString& desc)
-                    : QTreeWidgetItem(parent, QStringList() << title << desc)
+                    : QTreeWidgetItem(parent)
 {
     setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
     setCheckState(0, Qt::Unchecked);
     setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
+
     m_key = key;
+
+    setText(0, title);
+
+    QString descVal = desc.simplified();
+    if (descVal.length() > 512)
+    {
+        descVal.truncate(512);
+        descVal.append("...");
+    }
+
+    setText(1, descVal);
+
+    DToolTipStyleSheet cnt;
+    setToolTip(1, "<qt><p>" + cnt.breakString(descVal) + "</p></qt>");
 }
 
 MetadataSelectorItem::~MetadataSelectorItem()
