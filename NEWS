@@ -35,10 +35,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 023 ==> 193616 : Location not shown digiKam right sidebar after geolocating in external program.
 024 ==> 189156 : digikam crashes on importing directories with some (cyrillic?) file names.
 025 ==> 191963 : calender sort by wrong dates on images without properties.
-026 ==> 
-
-
-
+026 ==> 189072 : Right click popup menu.
+027 ==> 
 
 
 *********************************************************************************************************
