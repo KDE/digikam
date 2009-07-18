@@ -41,7 +41,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 028 ==> 126086 : Besides the basic and full exif info I would like a page with selectable fields.
 029 ==> 200637 : Too small fonts in collections setup page.
 030 ==> 135476 : Support for multiple comment authors.
-031 ==> 
+031 ==> 200246 : digiKam does not recognize GPS EXIF information.
+032 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta2 - Release date: 2009-07-05
