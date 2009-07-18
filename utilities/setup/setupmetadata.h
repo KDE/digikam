@@ -53,7 +53,7 @@ private:
 
 private Q_SLOTS:
 
-    void processExiv2Url(const QString&);
+    void slotProcessExiv2Url(const QString&);
     void slotExifAutoRotateToggled(bool);
 
 private:
