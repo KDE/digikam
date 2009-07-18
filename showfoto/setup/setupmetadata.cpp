@@ -143,7 +143,6 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     grid->addWidget(exiv2LogoLabel, 0, 0, 1, 1);
     grid->addWidget(explanation,    0, 1, 1, 2);
     grid->setColumnStretch(1, 10);
-    grid->setRowStretch(1, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(0);
 
