@@ -201,7 +201,7 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     QLabel* explanation = new QLabel(box);
     explanation->setOpenExternalLinks(true);
     explanation->setWordWrap(true);
-    QString txt("<qt><b>");
+    QString txt;
 
     txt.append(i18n("<p><a href='http://en.wikipedia.org/wiki/Exif'>EXIF</a> - "
                     "a standard used by most digital cameras today to store technical "
@@ -214,8 +214,6 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     if (KExiv2Iface::KExiv2::supportXmp())
         txt.append(i18n("<p><a href='http://en.wikipedia.org/wiki/Extensible_Metadata_Platform'>XMP</a> - "
                         "a new standard used in digital photography, designed to replace IPTC.</p>"));
-
-    txt.append("</b></qt>");
 
     explanation->setText(txt);
     explanation->setFont(KGlobalSettings::smallestReadableFont());
