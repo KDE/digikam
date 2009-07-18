@@ -170,6 +170,7 @@ void CollectionPage::saveSettings()
     group.writeEntry("Version", digikam_version);
 
     group = config->group("Album Settings");
+    group.writeEntry("Album Path", d->rootAlbum);
     group.writeEntry("Database File Path", d->dbPath);
 
     config->sync();
