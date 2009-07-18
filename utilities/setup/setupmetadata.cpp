@@ -79,6 +79,7 @@ public:
         writeRawFilesBox        = 0;
         updateFileTimeStampBox  = 0;
         tagsCfgPanel            = 0;
+	tab                     = 0;
     }
 
     bool              exifAutoRotateAsChanged;
