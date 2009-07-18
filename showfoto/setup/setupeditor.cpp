@@ -61,8 +61,6 @@ public:
         horizontalThumbBar    = 0;
         showSplash            = 0;
         useTrash              = 0;
-        exifRotateBox         = 0;
-        exifSetOrientationBox = 0;
         overExposureColor     = 0;
         underExposureColor    = 0;
         themebackgroundColor  = 0;
@@ -84,8 +82,6 @@ public:
     QCheckBox    *horizontalThumbBar;
     QCheckBox    *showSplash;
     QCheckBox    *useTrash;
-    QCheckBox    *exifRotateBox;
-    QCheckBox    *exifSetOrientationBox;
     QCheckBox    *themebackgroundColor;
     QCheckBox    *useRawImportTool;
 
@@ -184,21 +180,6 @@ SetupEditor::SetupEditor(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QGroupBox *ExifGroupOptions = new QGroupBox(i18n("EXIF Actions"), panel);
-    QVBoxLayout *gLayout3       = new QVBoxLayout();
-
-    d->exifRotateBox = new QCheckBox(ExifGroupOptions);
-    d->exifRotateBox->setText(i18n("Show images/thumbs &rotated according to orientation tag"));
-
-    d->exifSetOrientationBox = new QCheckBox(ExifGroupOptions);
-    d->exifSetOrientationBox->setText(i18n("Set orientation tag to normal after rotate/flip"));
-
-    gLayout3->addWidget(d->exifRotateBox);
-    gLayout3->addWidget(d->exifSetOrientationBox);
-    ExifGroupOptions->setLayout(gLayout3);
-
-    // --------------------------------------------------------
-
     QGroupBox *sortOptionsGroup = new QGroupBox(i18n("Sort order for images"), panel);
     QVBoxLayout *gLayout4       = new QVBoxLayout();
 
@@ -223,7 +204,6 @@ SetupEditor::SetupEditor(QWidget* parent)
 
     layout->addWidget(interfaceOptionsGroup);
     layout->addWidget(exposureOptionsGroup);
-    layout->addWidget(ExifGroupOptions);
     layout->addWidget(sortOptionsGroup);
     layout->addStretch();
     layout->setSpacing(KDialog::spacingHint());
@@ -261,8 +241,6 @@ void SetupEditor::readSettings()
     d->useTrash->setChecked(group.readEntry("DeleteItem2Trash", false));
     d->showSplash->setChecked(group.readEntry("ShowSplash", true));
     d->sidebarType->setCurrentIndex(group.readEntry("Sidebar Title Style", 0));
-    d->exifRotateBox->setChecked(group.readEntry("EXIF Rotate", true));
-    d->exifSetOrientationBox->setChecked(group.readEntry("EXIF Set Orientation", true));
     d->underExposureColor->setColor(group.readEntry("UnderExposureColor", White));
     d->overExposureColor->setColor(group.readEntry("OverExposureColor", Black));
     d->sortOrderComboBox->setCurrentIndex(group.readEntry("SortOrder", 0));
@@ -282,8 +260,6 @@ void SetupEditor::applySettings()
     group.writeEntry("DeleteItem2Trash",        d->useTrash->isChecked());
     group.writeEntry("ShowSplash",              d->showSplash->isChecked());
     group.writeEntry("Sidebar Title Style",     d->sidebarType->currentIndex());
-    group.writeEntry("EXIF Rotate",             d->exifRotateBox->isChecked());
-    group.writeEntry("EXIF Set Orientation",    d->exifSetOrientationBox->isChecked());
     group.writeEntry("UnderExposureColor",      d->underExposureColor->color());
     group.writeEntry("OverExposureColor",       d->overExposureColor->color());
     group.writeEntry("SortOrder",               d->sortOrderComboBox->currentIndex());

@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2005-04-02
- * Description : showFoto setup dialog.
+ * Date        : 2009-07-18
+ * Description : setup Metadata tab.
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,54 +21,42 @@
  *
  * ============================================================ */
 
-#ifndef SETUP_H
-#define SETUP_H
+#ifndef SETUPMETADATA_H
+#define SETUPMETADATA_H
 
-// KDE includes
+// Qt includes
 
-#include <kpagedialog.h>
-
+#include <QScrollArea>
 
 namespace ShowFoto
 {
 
-class SetupPrivate;
+class SetupMetadataPriv;
 
-class Setup : public KPageDialog
+class SetupMetadata : public QScrollArea
 {
     Q_OBJECT
 
 public:
 
-    enum Page
-    {
-        LastPageUsed = -1,
-        EditorPage = 0,
-        MetadataPage,
-        ToolTipPage,
-        DcrawPage,
-        IOFilesPage,
-        SlideshowPage,
-        ICCPage
-    };
+    SetupMetadata(QWidget* parent = 0);
+    ~SetupMetadata();
 
-    Setup(QWidget* parent=0, const char* name=0, Page page=LastPageUsed);
-    ~Setup();
+    void applySettings();
+
+private:
+
+    void readSettings();
 
 private Q_SLOTS:
 
-    void slotOkClicked();
+    void slotProcessExiv2Url(const QString& url);
 
 private:
 
-    Setup::Page activePageIndex();
-    void showPage(Setup::Page page);
-
-private:
-
-    SetupPrivate* const d;
+    SetupMetadataPriv* const d;
 };
 
-}   // namespace ShowFoto
+}  // namespace ShowFoto
 
-#endif  /* SETUP_H  */
+#endif // SETUPMETADATA_H 

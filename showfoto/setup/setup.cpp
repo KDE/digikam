@@ -41,6 +41,7 @@
 #include "setupiofiles.h"
 #include "setupslideshow.h"
 #include "setuptooltip.h"
+#include "setupmetadata.h"
 
 namespace ShowFoto
 {
@@ -52,12 +53,14 @@ public:
     SetupPrivate()
     {
         editorPage     = 0;
+        metadataPage   = 0;
         toolTipPage    = 0;
         dcrawPage      = 0;
         iofilesPage    = 0;
         slideshowPage  = 0;
         iccPage        = 0;
         page_editor    = 0;
+        page_metadata  = 0;
         page_tooltip   = 0;
         page_dcraw     = 0;
         page_iofiles   = 0;
@@ -66,6 +69,7 @@ public:
     }
 
     KPageWidgetItem*         page_editor;
+    KPageWidgetItem*         page_metadata;
     KPageWidgetItem*         page_tooltip;
     KPageWidgetItem*         page_dcraw;
     KPageWidgetItem*         page_iofiles;
@@ -73,6 +77,7 @@ public:
     KPageWidgetItem*         page_icc;
 
     SetupEditor*             editorPage;
+    SetupMetadata*           metadataPage;
     SetupToolTip*            toolTipPage;
 
     Digikam::SetupDcraw*     dcrawPage;
@@ -97,6 +102,12 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->page_editor->setHeader(i18n("<qt>General Settings<br/>"
                               "<i>Customize general behavior</i></qt>"));
     d->page_editor->setIcon(KIcon("showfoto"));
+
+    d->metadataPage  = new SetupMetadata();
+    d->page_metadata = addPage(d->metadataPage, i18n("Metadata"));
+    d->page_metadata->setHeader(i18n("<qt>Embedded Image Information Management<br/>"
+                                "<i>Setup relations between images and metadata</i></qt>"));
+    d->page_metadata->setIcon(KIcon("exifinfo"));
 
     d->toolTipPage = new SetupToolTip();
     d->page_tooltip = addPage(d->toolTipPage, i18n("Tool Tip"));
@@ -159,6 +170,7 @@ Setup::~Setup()
 void Setup::slotOkClicked()
 {
     d->editorPage->applySettings();
+    d->metadataPage->applySettings();
     d->toolTipPage->applySettings();
     d->dcrawPage->applySettings();
     d->iofilesPage->applySettings();
@@ -186,6 +198,9 @@ void Setup::showPage(Setup::Page page)
         case ICCPage:
             setCurrentPage(d->page_icc);
             break;
+        case MetadataPage:
+            setCurrentPage(d->page_metadata);
+            break;
         default:
             setCurrentPage(d->page_editor);
             break;
@@ -200,6 +215,7 @@ Setup::Page Setup::activePageIndex()
     if (cur == d->page_iofiles)   return IOFilesPage;
     if (cur == d->page_slideshow) return SlideshowPage;
     if (cur == d->page_icc)       return ICCPage;
+    if (cur == d->page_metadata)  return MetadataPage;
 
     return EditorPage;
 }

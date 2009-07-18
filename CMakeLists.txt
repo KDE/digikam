@@ -702,6 +702,7 @@ ENDIF(MSVC)
     SET(libshowfotosetup_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setuptooltip.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setupeditor.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setupmetadata.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setup.cpp
        )
 
