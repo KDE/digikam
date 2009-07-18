@@ -289,7 +289,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
 
     setCurrentIndex(group.readEntry("ImagePropertiesColors Tab",
                     (int)ImagePropertiesColorsTabPriv::HISTOGRAM));
-    d->iccProfileWidget->setMode(group.readEntry("ICC Level", (int)ICCProfileWidget::SIMPLE));
+    d->iccProfileWidget->setMode(group.readEntry("ICC Level", (int)ICCProfileWidget::CUSTOM));
     d->iccProfileWidget->setCurrentItemByKey(group.readEntry("Current ICC Item", QString()));
 
     d->histogramBox->setChannel(group.readEntry("Histogram Channel",

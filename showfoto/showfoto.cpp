@@ -563,6 +563,7 @@ void ShowFoto::applySettings()
 
     d->rightSideBar->setStyle(group.readEntry("Sidebar Title Style", 0) == 0 ?
                               KMultiTabBar::VSNET : KMultiTabBar::KDEV3ICON);
+    d->rightSideBar->applySettings();
 
     // Current image deleted go to trash ?
     d->deleteItem2Trash = group.readEntry("DeleteItem2Trash", true);

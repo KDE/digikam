@@ -97,6 +97,11 @@ ImagePropertiesSideBar::~ImagePropertiesSideBar()
 {
 }
 
+void ImagePropertiesSideBar::applySettings()
+{
+    m_metadataTab->applySettings();
+}
+
 void ImagePropertiesSideBar::itemChanged(const KUrl& url, const QRect& rect, DImg *img)
 {
     if (!url.isValid())

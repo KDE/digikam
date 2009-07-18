@@ -648,6 +648,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/metadatalistviewitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/metadatawidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/metadataselector.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/metadatapanel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/iptcwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/exifwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/makernotewidget.cpp

@@ -6,7 +6,7 @@
  * Date        : 2004-11-17
  * Description : a tab to display metadata information of images
  *
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,6 +41,10 @@
 #include <kdialog.h>
 #include <kfileitem.h>
 #include <kglobal.h>
+
+// Libkexiv2 includes
+
+#include <libkexiv2/version.h>
 
 // Local includes
 
@@ -107,26 +111,47 @@ ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* parent)
     else
         d->xmpWidget->hide();
 
-    // -- read config ---------------------------------------------------------
-
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("Image Properties SideBar");
-    setCurrentIndex(group.readEntry("ImagePropertiesMetaData Tab",
-                    (int)ImagePropertiesMetadataTabPriv::EXIF));
-    d->exifWidget->setMode(group.readEntry("EXIF Level", (int)ExifWidget::SIMPLE));
-    d->makernoteWidget->setMode(group.readEntry("MAKERNOTE Level", (int)MakerNoteWidget::SIMPLE));
-    d->iptcWidget->setMode(group.readEntry("IPTC Level", (int)IptcWidget::SIMPLE));
-    d->xmpWidget->setMode(group.readEntry("XMP Level", (int)XmpWidget::SIMPLE));
-    d->exifWidget->setCurrentItemByKey(group.readEntry("Current EXIF Item", QString()));
-    d->makernoteWidget->setCurrentItemByKey(group.readEntry("Current MAKERNOTE Item", QString()));
-    d->iptcWidget->setCurrentItemByKey(group.readEntry("Current IPTC Item", QString()));
-    d->xmpWidget->setCurrentItemByKey(group.readEntry("Current XMP Item", QString()));
+    readSettings();
 }
 
 ImagePropertiesMetaDataTab::~ImagePropertiesMetaDataTab()
 {
+    writeSettings();
+    delete d;
+}
+
+void ImagePropertiesMetaDataTab::applySettings()
+{
+    readSettings();
+}
+
+void ImagePropertiesMetaDataTab::readSettings()
+{
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("Image Properties SideBar");
+    KConfigGroup group        = config->group("Image Properties SideBar");
+    setCurrentIndex(group.readEntry("ImagePropertiesMetaData Tab",
+                    (int)ImagePropertiesMetadataTabPriv::EXIF));
+    d->exifWidget->setMode(group.readEntry("EXIF Level", (int)ExifWidget::CUSTOM));
+    d->makernoteWidget->setMode(group.readEntry("MAKERNOTE Level", (int)MakerNoteWidget::CUSTOM));
+    d->iptcWidget->setMode(group.readEntry("IPTC Level", (int)IptcWidget::CUSTOM));
+    d->xmpWidget->setMode(group.readEntry("XMP Level", (int)XmpWidget::CUSTOM));
+    d->exifWidget->setCurrentItemByKey(group.readEntry("Current EXIF Item", QString()));
+    d->makernoteWidget->setCurrentItemByKey(group.readEntry("Current MAKERNOTE Item", QString()));
+    d->iptcWidget->setCurrentItemByKey(group.readEntry("Current IPTC Item", QString()));
+    d->xmpWidget->setCurrentItemByKey(group.readEntry("Current XMP Item", QString()));
+
+#if KEXIV2_VERSION >= 0x010000
+    d->exifWidget->setTagsFilter(group.readEntry("EXIF Tags Filter", QStringList()));
+    d->makernoteWidget->setTagsFilter(group.readEntry("MAKERNOTE Tags Filter", QStringList()));
+    d->iptcWidget->setTagsFilter(group.readEntry("IPTC Tags Filter", QStringList()));
+    d->xmpWidget->setTagsFilter(group.readEntry("XMP Tags Filter", QStringList()));
+#endif
+}
+
+void ImagePropertiesMetaDataTab::writeSettings()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group("Image Properties SideBar");
     group.writeEntry("ImagePropertiesMetaData Tab", currentIndex());
     group.writeEntry("EXIF Level", d->exifWidget->getMode());
     group.writeEntry("MAKERNOTE Level", d->makernoteWidget->getMode());
@@ -137,8 +162,6 @@ ImagePropertiesMetaDataTab::~ImagePropertiesMetaDataTab()
     group.writeEntry("Current IPTC Item", d->iptcWidget->getCurrentItemKey());
     group.writeEntry("Current XMP Item", d->xmpWidget->getCurrentItemKey());
     config->sync();
-
-    delete d;
 }
 
 void ImagePropertiesMetaDataTab::setCurrentURL(const KUrl& url)

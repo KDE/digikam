@@ -1619,6 +1619,7 @@ void LightTableWindow::slotSidebarTabTitleStyleChanged()
 {
     d->leftSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
     d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
+    d->rightSideBar->applySettings();
 }
 
 void LightTableWindow::moveEvent(QMoveEvent *e)

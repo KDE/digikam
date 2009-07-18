@@ -7,7 +7,7 @@
  * Description : a widget to display non standard Exif metadata
  *               used by camera makers
  *
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,61 +42,6 @@
 namespace Digikam
 {
 
-// This list mix different tags name used by camera makers.
-static const char* MakerNoteHumanList[] =
-{
-     "AFFocusPos",
-     "AFMode",
-     "AFPoint",
-     "AutofocusMode",
-     "ColorMode",
-     "ColorTemperature",
-     "Contrast",
-     "DigitalZoom",
-     "ExposureMode",
-     "ExposureProgram",
-     "ExposureCompensation",
-     "ExposureManualBias",
-     "Flash",
-     "FlashBias",
-     "FlashMode",
-     "FlashType",
-     "FlashDevice",
-     "FNumber",
-     "Focus"
-     "FocusDistance",
-     "FocusMode",
-     "FocusSetting",
-     "FocusType",
-     "Hue",
-     "HueAdjustment",
-     "ImageStabilizer",
-     "ImageStabilization",
-     "InternalFlash",
-     "ISOSelection",
-     "ISOSpeed",
-     "Lens",
-     "LensType",
-     "LensRange",
-     "Macro",
-     "MacroFocus",
-     "MeteringMode",
-     "NoiseReduction",
-     "OwnerName",
-     "Quality",
-     "Tone",
-     "ToneComp",
-     "Saturation",
-     "Sharpness",
-     "ShootingMode",
-     "ShutterSpeedValue",
-     "SpotMode",
-     "SubjectDistance",
-     "WhiteBalance",
-     "WhiteBalanceBias",
-     "-1"
-};
-
 static const char* ExifEntryListToIgnore[] =
 {
      "GPSInfo",
@@ -114,9 +59,6 @@ MakerNoteWidget::MakerNoteWidget(QWidget* parent, const char* name)
 {
     for (int i=0 ; QString(ExifEntryListToIgnore[i]) != QString("-1") ; ++i)
         m_keysFilter << ExifEntryListToIgnore[i];
-
-    for (int i=0 ; QString(MakerNoteHumanList[i]) != QString("-1") ; ++i)
-        m_tagsfilter << MakerNoteHumanList[i];
 }
 
 MakerNoteWidget::~MakerNoteWidget()
@@ -166,13 +108,13 @@ bool MakerNoteWidget::decodeMetadata()
 
 void MakerNoteWidget::buildView()
 {
-    if (getMode() == SIMPLE)
+    if (getMode() == CUSTOM)
     {
-        setIfdList(getMetadataMap(), m_tagsfilter);
+        setIfdList(getMetadataMap(), getTagsFilter());
     }
     else
     {
-        setIfdList(getMetadataMap());
+        setIfdList(getMetadataMap(), QStringList() << QString("FULL"));
     }
 
     MetadataWidget::buildView();

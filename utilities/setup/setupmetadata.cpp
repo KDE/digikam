@@ -33,6 +33,7 @@
 #include <QFrame>
 #include <QLabel>
 #include <QVBoxLayout>
+#include <QGridLayout>
 
 // KDE includes
 
@@ -44,6 +45,9 @@
 #include <kstandarddirs.h>
 #include <kvbox.h>
 #include <ktoolinvocation.h>
+#include <ktabwidget.h>
+#include <kapplication.h>
+#include <kconfig.h>
 
 // Libkexiv2 includes
 
@@ -52,6 +56,7 @@
 
 // Local includes
 
+#include "metadatapanel.h"
 #include "albumsettings.h"
 
 namespace Digikam
@@ -63,41 +68,46 @@ public:
 
     SetupMetadataPriv()
     {
-        ExifAutoRotateAsChanged = false;
+        exifAutoRotateAsChanged = false;
         saveCommentsBox         = 0;
-        ExifRotateBox           = 0;
-        ExifSetOrientationBox   = 0;
+        exifRotateBox           = 0;
+        exifSetOrientationBox   = 0;
         saveRatingBox           = 0;
         saveTagsBox             = 0;
         saveDateTimeBox         = 0;
         saveTemplateBox         = 0;
         writeRawFilesBox        = 0;
         updateFileTimeStampBox  = 0;
+        tagsCfgPanel            = 0;
     }
 
-    bool       ExifAutoRotateAsChanged;
-    bool       ExifAutoRotateOrg;
+    bool              exifAutoRotateAsChanged;
+    bool              exifAutoRotateOrg;
 
-    QCheckBox *saveCommentsBox;
-    QCheckBox *ExifRotateBox;
-    QCheckBox *ExifSetOrientationBox;
-    QCheckBox *saveRatingBox;
-    QCheckBox *saveTagsBox;
-    QCheckBox *saveDateTimeBox;
-    QCheckBox *saveTemplateBox;
-    QCheckBox *writeRawFilesBox;
-    QCheckBox *updateFileTimeStampBox;
+    QCheckBox        *saveCommentsBox;
+    QCheckBox        *exifRotateBox;
+    QCheckBox        *exifSetOrientationBox;
+    QCheckBox        *saveRatingBox;
+    QCheckBox        *saveTagsBox;
+    QCheckBox        *saveDateTimeBox;
+    QCheckBox        *saveTemplateBox;
+    QCheckBox        *writeRawFilesBox;
+    QCheckBox        *updateFileTimeStampBox;
+
+    KTabWidget       *tab;
+
+    MetadataPanel    *tagsCfgPanel;
 };
 
 SetupMetadata::SetupMetadata(QWidget* parent )
              : QScrollArea(parent), d(new SetupMetadataPriv)
 {
-    QWidget *panel = new QWidget(viewport());
-    panel->setAutoFillBackground(false);
-    setWidget(panel);
+    d->tab = new KTabWidget(viewport());
+    setWidget(d->tab);
     setWidgetResizable(true);
     viewport()->setAutoFillBackground(false);
 
+    QWidget *panel          = new QWidget(d->tab);
     QVBoxLayout *mainLayout = new QVBoxLayout(panel);
 
     // --------------------------------------------------------
@@ -105,14 +115,14 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     QGroupBox *ExifGroup  = new QGroupBox(i18n("EXIF Actions"), panel);
     QVBoxLayout *gLayout1 = new QVBoxLayout(ExifGroup);
 
-    d->ExifRotateBox = new QCheckBox(ExifGroup);
-    d->ExifRotateBox->setText(i18n("Show images/thumbnails &rotated according to orientation tag."));
+    d->exifRotateBox      = new QCheckBox(ExifGroup);
+    d->exifRotateBox->setText(i18n("Show images/thumbnails &rotated according to orientation tag."));
 
-    d->ExifSetOrientationBox = new QCheckBox(ExifGroup);
-    d->ExifSetOrientationBox->setText(i18n("Set orientation tag to normal after rotate/flip."));
+    d->exifSetOrientationBox = new QCheckBox(ExifGroup);
+    d->exifSetOrientationBox->setText(i18n("Set orientation tag to normal after rotate/flip."));
 
-    gLayout1->addWidget(d->ExifRotateBox);
-    gLayout1->addWidget(d->ExifSetOrientationBox);
+    gLayout1->addWidget(d->exifRotateBox);
+    gLayout1->addWidget(d->exifSetOrientationBox);
     gLayout1->setMargin(KDialog::spacingHint());
     gLayout1->setSpacing(0);
 
@@ -226,6 +236,12 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     mainLayout->addWidget(box);
     mainLayout->addStretch();
 
+    d->tab->insertTab(0, panel, i18n("Behavior"));
+
+    // --------------------------------------------------------
+
+    d->tagsCfgPanel = new MetadataPanel(d->tab);
+
     // --------------------------------------------------------
 
     readSettings();
@@ -233,7 +249,7 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     connect(exiv2LogoLabel, SIGNAL(leftClickedUrl(const QString&)),
             this, SLOT(processExiv2Url(const QString&)));
 
-    connect(d->ExifRotateBox, SIGNAL(toggled(bool)),
+    connect(d->exifRotateBox, SIGNAL(toggled(bool)),
             this, SLOT(slotExifAutoRotateToggled(bool)));
 }
 
@@ -252,8 +268,8 @@ void SetupMetadata::applySettings()
     AlbumSettings* settings = AlbumSettings::instance();
     if (!settings) return;
 
-    settings->setExifRotate(d->ExifRotateBox->isChecked());
-    settings->setExifSetOrientation(d->ExifSetOrientationBox->isChecked());
+    settings->setExifRotate(d->exifRotateBox->isChecked());
+    settings->setExifSetOrientation(d->exifSetOrientationBox->isChecked());
     settings->setSaveComments(d->saveCommentsBox->isChecked());
     settings->setSaveDateTime(d->saveDateTimeBox->isChecked());
     settings->setSaveRating(d->saveRatingBox->isChecked());
@@ -262,6 +278,8 @@ void SetupMetadata::applySettings()
     settings->setWriteRawFiles(d->writeRawFilesBox->isChecked());
     settings->setUpdateFileTimeStamp(d->updateFileTimeStampBox->isChecked());
     settings->saveSettings();
+
+    d->tagsCfgPanel->applySettings();
 }
 
 void SetupMetadata::readSettings()
@@ -269,9 +287,9 @@ void SetupMetadata::readSettings()
     AlbumSettings* settings = AlbumSettings::instance();
     if (!settings) return;
 
-    d->ExifAutoRotateOrg = settings->getExifRotate();
-    d->ExifRotateBox->setChecked(d->ExifAutoRotateOrg);
-    d->ExifSetOrientationBox->setChecked(settings->getExifSetOrientation());
+    d->exifAutoRotateOrg = settings->getExifRotate();
+    d->exifRotateBox->setChecked(d->exifAutoRotateOrg);
+    d->exifSetOrientationBox->setChecked(settings->getExifSetOrientation());
     d->saveCommentsBox->setChecked(settings->getSaveComments());
     d->saveDateTimeBox->setChecked(settings->getSaveDateTime());
     d->saveRatingBox->setChecked(settings->getSaveRating());
@@ -283,15 +301,15 @@ void SetupMetadata::readSettings()
 
 bool SetupMetadata::exifAutoRotateAsChanged()
 {
-    return d->ExifAutoRotateAsChanged;
+    return d->exifAutoRotateAsChanged;
 }
 
 void SetupMetadata::slotExifAutoRotateToggled(bool b)
 {
-    if ( b != d->ExifAutoRotateOrg)
-        d->ExifAutoRotateAsChanged = true;
+    if ( b != d->exifAutoRotateOrg)
+        d->exifAutoRotateAsChanged = true;
     else
-        d->ExifAutoRotateAsChanged = false;
+        d->exifAutoRotateAsChanged = false;
 }
 
 }  // namespace Digikam

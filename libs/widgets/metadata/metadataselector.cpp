@@ -22,15 +22,19 @@
  * ============================================================ */
 
 #include "metadataselector.h"
+#include "metadataselector.moc"
 
 // Qt includes
 
 #include <QTreeWidget>
 #include <QHeaderView>
+#include <QGridLayout>
 
 // KDE includes
 
 #include <klocale.h>
+#include <kdialog.h>
+#include <kpushbutton.h>
 
 // Local includes
 
@@ -142,9 +146,8 @@ void MetadataSelector::setcheckedTagsList(const QStringList& list)
     {
         MetadataSelectorItem *item = dynamic_cast<MetadataSelectorItem*>(*it);
         if (item && list.contains(item->key()))
-        {
             item->setCheckState(0, Qt::Checked);
-        }
+
         ++it;
     }
 }
@@ -157,12 +160,171 @@ QStringList MetadataSelector::checkedTagsList()
     {
         MetadataSelectorItem *item = dynamic_cast<MetadataSelectorItem*>(*it);
         if (item)
-        {
             list.append(item->key());
-        }
+
         ++it;
     }
     return list;
+}
+
+void MetadataSelector::clearSelection()
+{
+    QTreeWidgetItemIterator it(this, QTreeWidgetItemIterator::Checked);
+    while (*it)
+    {
+        MetadataSelectorItem *item = dynamic_cast<MetadataSelectorItem*>(*it);
+        if (item)
+            item->setCheckState(0, Qt::Unchecked);
+
+        ++it;
+    }
+}
+
+void MetadataSelector::selectAll()
+{
+    QTreeWidgetItemIterator it(this);
+    while (*it)
+    {
+        MetadataSelectorItem *item = dynamic_cast<MetadataSelectorItem*>(*it);
+        if (item)
+            item->setCheckState(0, Qt::Checked);
+
+        ++it;
+    }
+}
+
+// ------------------------------------------------------------------------------------
+
+class MetadataSelectorViewPriv
+{
+public:
+
+    MetadataSelectorViewPriv()
+    {
+        selectAllBtn        = 0;
+        clearSelectionBtn   = 0;
+        defaultSelectionBtn = 0;
+        selector            = 0;
+        searchBar           = 0;
+    }
+
+    QStringList       defaultFilter;
+
+    KPushButton      *selectAllBtn;
+    KPushButton      *clearSelectionBtn;
+    KPushButton      *defaultSelectionBtn;
+
+    MetadataSelector *selector;
+
+    SearchTextBar    *searchBar;
+};
+
+MetadataSelectorView::MetadataSelectorView(QWidget* parent)
+                    : QWidget(parent), d(new MetadataSelectorViewPriv)
+{
+    QGridLayout *grid      = new QGridLayout(this);
+    d->selector            = new MetadataSelector(this);
+    d->searchBar           = new SearchTextBar(this, "MetadataSelectorView");
+    d->selectAllBtn        = new KPushButton(i18n("Select All"),this);
+    d->clearSelectionBtn   = new KPushButton(i18n("Clear"),this);
+    d->defaultSelectionBtn = new KPushButton(i18n("Default"),this);
+
+    grid->addWidget(d->selector,            0, 0, 1, 5);
+    grid->addWidget(d->searchBar,           1, 0, 1, 1);
+    grid->addWidget(d->selectAllBtn,        1, 2, 1, 1);
+    grid->addWidget(d->clearSelectionBtn,   1, 3, 1, 1);
+    grid->addWidget(d->defaultSelectionBtn, 1, 4, 1, 1);
+    grid->setColumnStretch(1, 10);
+    grid->setRowStretch(0, 10);
+    grid->setMargin(KDialog::spacingHint());
+    grid->setSpacing(KDialog::spacingHint());
+
+    connect(d->searchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
+            this, SLOT(slotSearchTextChanged(const SearchTextSettings&)));
+
+    connect(d->selectAllBtn, SIGNAL(clicked()),
+            this, SLOT(slotSelectAll()));
+
+    connect(d->defaultSelectionBtn, SIGNAL(clicked()),
+            this, SLOT(slotDeflautSelection()));
+
+    connect(d->clearSelectionBtn, SIGNAL(clicked()),
+            this, SLOT(slotClearSelection()));
+}
+
+MetadataSelectorView::~MetadataSelectorView()
+{
+    delete d;
+}
+
+MetadataSelector* MetadataSelectorView::selector() const
+{
+    return d->selector;
+}
+
+void MetadataSelectorView::setDefaultFilter(const char** list)
+{
+    for (int i=0 ; QString(list[i]) != QString("-1") ; ++i)
+        d->defaultFilter << QString(list[i]);
+}
+
+QStringList MetadataSelectorView::checkedTagsList() const
+{
+    d->searchBar->clear();
+    return d->selector->checkedTagsList();
+}
+
+void MetadataSelectorView::slotSearchTextChanged(const SearchTextSettings& settings)
+{
+    QString search       = settings.text;
+    bool atleastOneMatch = false;
+
+    QTreeWidgetItemIterator it(d->selector);
+    while (*it)
+    {
+        MetadataSelectorItem *item = dynamic_cast<MetadataSelectorItem*>(*it);
+        if (item)
+        {
+            bool match = item->text(0).contains(search, settings.caseSensitive);
+            if (match)
+            {
+                atleastOneMatch = true;
+                item->setHidden(false);
+            }
+            else
+            {
+                item->setHidden(true);
+            }
+        }
+        ++it;
+    }
+    d->searchBar->slotSearchResult(atleastOneMatch);
+}
+
+void MetadataSelectorView::slotDeflautSelection()
+{
+    slotClearSelection();
+    QTreeWidgetItemIterator it(d->selector);
+    while (*it)
+    {
+        MetadataSelectorItem *item = dynamic_cast<MetadataSelectorItem*>(*it);
+        if (item)
+        {
+            if (d->defaultFilter.contains(item->text(0)))
+                item->setCheckState(0, Qt::Checked);
+        }
+        ++it;
+    }
+}
+
+void MetadataSelectorView::slotSelectAll()
+{
+    d->selector->selectAll();
+}
+
+void MetadataSelectorView::slotClearSelection()
+{
+    d->selector->clearSelection();
 }
 
 }  // namespace Digikam

@@ -52,7 +52,7 @@ public:
 
     enum Mode
     {
-        SIMPLE=0,
+        CUSTOM=0,
         FULL
     };
 
@@ -63,6 +63,9 @@ public:
 
     int     getMode();
     void    setMode(int mode);
+
+    QStringList getTagsFilter() const;
+    void        setTagsFilter(const QStringList& list);
 
     QString getCurrentItemKey() const;
     void    setCurrentItemByKey(const QString& itemKey);

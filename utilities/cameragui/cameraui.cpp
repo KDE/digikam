@@ -2278,6 +2278,7 @@ void CameraUI::slotShowMenuBar()
 void CameraUI::slotSidebarTabTitleStyleChanged()
 {
     d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
+    d->rightSideBar->applySettings();
 }
 
 void CameraUI::slotLogMsg(const QString& msg, DHistoryView::EntryType type,

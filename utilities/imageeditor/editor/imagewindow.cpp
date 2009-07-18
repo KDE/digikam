@@ -1467,6 +1467,7 @@ void ImageWindow::slotDBStat()
 void ImageWindow::slotSidebarTabTitleStyleChanged()
 {
     d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
+    d->rightSideBar->applySettings();
 }
 
 }  // namespace Digikam

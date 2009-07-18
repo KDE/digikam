@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2006-02-20
- * Description : A widget to display IPTC metadata
+ * Date        : 2009-07-17
+ * Description : Metadata tags selector config panel.
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,47 +21,48 @@
  *
  * ============================================================ */
 
-#ifndef IPTCWIDGET_H
-#define IPTCWIDGET_H
+#ifndef METADATAPANEL_H
+#define METADATAPANEL_H
+
+// Qt includes
+
+#include <QObject>
 
 // Local includes
 
-#include "metadatawidget.h"
 #include "digikam_export.h"
+
+class KTabWidget;
 
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT IptcWidget : public MetadataWidget
+class MetadataPanelPriv;
+
+class DIGIKAM_EXPORT MetadataPanel : public QObject
 {
     Q_OBJECT
 
 public:
 
-    IptcWidget(QWidget* parent, const char* name=0);
-    ~IptcWidget();
+    MetadataPanel(KTabWidget* tab);
+    ~MetadataPanel();
 
-    bool loadFromURL(const KUrl& url);
-
-    QString getTagDescription(const QString& key);
-    QString getTagTitle(const QString& key);
-
-    QString getMetadataTitle();
-
-protected Q_SLOTS:
-
-    virtual void slotSaveMetadataToFile();
+    void applySettings();
 
 private:
 
-    bool decodeMetadata();
-    void buildView();
+    void readSettings();
+
+private Q_SLOTS:
+
+    void slotTabChanged(int);
 
 private:
 
-    QStringList m_keysFilter;
+    MetadataPanelPriv* const d;
 };
 
 }  // namespace Digikam
 
-#endif /* IPTCWIDGET_H */
+#endif // METADATAPANEL_H 

@@ -6,7 +6,7 @@
  * Date        : 2006-02-20
  * Description : A widget to display IPTC metadata
  *
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,23 +41,6 @@
 namespace Digikam
 {
 
-static const char* IptcHumanList[] =
-{
-     "Caption",
-     "City",
-     "Contact",
-     "Copyright",
-     "Credit",
-     "DateCreated",
-     "Headline",
-     "Keywords",
-     "ProvinceState",
-     "Source",
-     "Urgency",
-     "Writer",
-     "-1"
-};
-
 static const char* StandardIptcEntryList[] =
 {
      "Envelope",
@@ -70,9 +53,6 @@ IptcWidget::IptcWidget(QWidget* parent, const char* name)
 {
     for (int i=0 ; QString(StandardIptcEntryList[i]) != QString("-1") ; ++i)
         m_keysFilter << StandardIptcEntryList[i];
-
-    for (int i=0 ; QString(IptcHumanList[i]) != QString("-1") ; ++i)
-        m_tagsfilter << IptcHumanList[i];
 }
 
 IptcWidget::~IptcWidget()
@@ -122,13 +102,13 @@ bool IptcWidget::decodeMetadata()
 
 void IptcWidget::buildView()
 {
-    if (getMode() == SIMPLE)
+    if (getMode() == CUSTOM)
     {
-        setIfdList(getMetadataMap(), m_tagsfilter);
+        setIfdList(getMetadataMap(), getTagsFilter());
     }
     else
     {
-        setIfdList(getMetadataMap());
+        setIfdList(getMetadataMap(), QStringList() << QString("FULL"));
     }
 
     MetadataWidget::buildView();

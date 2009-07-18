@@ -6,7 +6,7 @@
  * Date        : 2004-11-17
  * Description : a tab to display metadata information of images
  *
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,9 +52,16 @@ public:
     ImagePropertiesMetaDataTab(QWidget* parent);
     ~ImagePropertiesMetaDataTab();
 
+    void applySettings();
+
     void setCurrentURL(const KUrl& url=KUrl());
     void setCurrentData(const DMetadata& metadata=DMetadata(), 
                         const QString& filename=QString());
+
+private:
+
+    void readSettings();
+    void writeSettings();
 
 private:
 

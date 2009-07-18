@@ -1736,6 +1736,7 @@ void DigikamView::slotSidebarTabTitleStyleChanged()
 {
     d->leftSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
     d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
+    d->rightSideBar->applySettings();
 }
 
 void DigikamView::slotProgressMessageChanged(const QString& descriptionOfAction)

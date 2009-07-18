@@ -58,12 +58,12 @@ namespace Digikam
 
 static const char* ICCHumanList[] =
 {
-     "ColorSpace",
-     "Copyright",
-     "DeviceClass",
-     "Name",
-     "Description",
-     "RenderingIntent",
+     "Icc.Header.ColorSpace",
+     "Icc.Header.Copyright",
+     "Icc.Header.DeviceClass",
+     "Icc.Header.Name",
+     "Icc.Header.Description",
+     "Icc.Header.RenderingIntent",
      "-1"
 };
 
@@ -107,7 +107,6 @@ public:
 
     QByteArray       profileData;
 
-    QStringList      tagsfilter;
     QStringList      keysFilter;
 
     CIETongueWidget *cieTongue;
@@ -152,8 +151,10 @@ ICCProfileWidget::ICCProfileWidget(QWidget* parent, int w, int h)
     for (int i=0 ; QString(ICCEntryList[i]) != QString("-1") ; ++i)
         d->keysFilter << ICCEntryList[i];
 
+    QStringList tagsFilter;
     for (int i=0 ; QString(ICCHumanList[i]) != QString("-1") ; ++i)
-        d->tagsfilter << ICCHumanList[i];
+        tagsFilter << ICCHumanList[i];
+    setTagsFilter(tagsFilter);
 
     // Add CIE tongue graph to the widget area
 
@@ -440,13 +441,13 @@ bool ICCProfileWidget::decodeMetadata()
 
 void ICCProfileWidget::buildView()
 {
-    if (getMode() == SIMPLE)
+    if (getMode() == CUSTOM)
     {
-        setIfdList(getMetadataMap(), d->keysFilter, d->tagsfilter);
+        setIfdList(getMetadataMap(), d->keysFilter, getTagsFilter());
     }
     else
     {
-        setIfdList(getMetadataMap(), d->keysFilter, QStringList());
+        setIfdList(getMetadataMap(), d->keysFilter, QStringList() << QString("FULL"));
     }
 
     MetadataWidget::buildView();

@@ -91,6 +91,8 @@ public:
 
     QString                 fileName;
 
+    QStringList             tagsFilter;
+
     MetadataListView       *view;
 
     SearchTextBar          *searchBar;
@@ -117,9 +119,9 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     QToolButton *simpleLevel = new QToolButton(d->levelGBox);
     simpleLevel->setIcon(iconLoader->loadIcon("user-identity", (KIconLoader::Group)KIconLoader::Toolbar));
     simpleLevel->setCheckable(true);
-    simpleLevel->setWhatsThis(i18n("Switch the tags view to a simple human-readable list"));
-    simpleLevel->setToolTip(i18n("Simple list"));
-    d->levelButtons->addButton(simpleLevel, SIMPLE);
+    simpleLevel->setWhatsThis(i18n("Switch the tags view to a custom human-readable list"));
+    simpleLevel->setToolTip(i18n("Custom list"));
+    d->levelButtons->addButton(simpleLevel, CUSTOM);
 
     QToolButton *fullLevel = new QToolButton(d->levelGBox);
     fullLevel->setIcon(iconLoader->loadIcon("view-media-playlist", (KIconLoader::Group)KIconLoader::Toolbar));
@@ -202,6 +204,17 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
 MetadataWidget::~MetadataWidget()
 {
     delete d;
+}
+
+QStringList MetadataWidget::getTagsFilter() const
+{
+    return d->tagsFilter;
+}
+
+void MetadataWidget::setTagsFilter(const QStringList& list)
+{
+    d->tagsFilter = list;
+    buildView();
 }
 
 MetadataListView* MetadataWidget::view()

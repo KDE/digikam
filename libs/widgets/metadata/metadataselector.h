@@ -37,6 +37,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "searchtextbar.h"
 #include "dmetadata.h"
 
 namespace Digikam
@@ -75,6 +76,38 @@ public:
 
     void setcheckedTagsList(const QStringList& list);
     QStringList checkedTagsList();
+
+    void clearSelection();
+    void selectAll();
+};
+
+// ------------------------------------------------------------------------------------
+
+class MetadataSelectorViewPriv;
+
+class DIGIKAM_EXPORT MetadataSelectorView : public QWidget
+{
+    Q_OBJECT
+
+public:
+
+    MetadataSelectorView(QWidget* parent);
+    virtual ~MetadataSelectorView();
+
+    void setDefaultFilter(const char** list);
+    MetadataSelector* selector() const;
+    QStringList checkedTagsList() const;
+
+private Q_SLOTS:
+
+    void slotSearchTextChanged(const SearchTextSettings&);
+    void slotDeflautSelection();
+    void slotSelectAll();
+    void slotClearSelection();
+
+private:
+
+    MetadataSelectorViewPriv* const d;
 };
 
 }  // namespace Digikam

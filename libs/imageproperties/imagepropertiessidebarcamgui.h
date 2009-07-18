@@ -58,6 +58,8 @@ public:
 
     ~ImagePropertiesSideBarCamGui();
 
+    void applySettings();
+
     void itemChanged(GPItemInfo* itemInfo, const KUrl& url, const QByteArray& exifData=QByteArray(),
                      CameraIconView* view=0, CameraIconItem* item=0);
 

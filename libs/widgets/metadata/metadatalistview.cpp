@@ -160,11 +160,11 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
         // We ignore all unknown tags if necessary.
         if (!it.key().section('.', 2, 2).startsWith(QLatin1String("0x")))
         {
-            if (!tagsfilter.isEmpty())
+            if (!tagsfilter.isEmpty() && tagsfilter[0] != QString("FULL"))
             {
                 // We using the filter to make a more user friendly output (Simple Mode)
 
-                if (tagsfilter.contains(it.key().section('.', 2, 2), Qt::CaseInsensitive))
+                if (tagsfilter.contains(it.key()))
                 {
                     QString tagTitle = m_parent->getTagTitle(it.key());
                     new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.value());
@@ -217,11 +217,11 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
                 // We ignore all unknown tags if necessary.
                 if (!it.key().section('.', 2, 2).startsWith(QLatin1String("0x")))
                 {
-                    if (!tagsFilter.isEmpty())
+                    if (!tagsFilter.isEmpty() && tagsFilter[0] != QString("FULL"))
                     {
                         // We using the filter to make a more user friendly output (Simple Mode)
 
-                        if (tagsFilter.contains(it.key().section('.', 2, 2)))
+                        if (tagsFilter.contains(it.key()))
                         {
                             QString tagTitle = m_parent->getTagTitle(it.key());
                             new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.value());
