@@ -127,8 +127,8 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
     QGroupBox *dbPathBox      = new QGroupBox(i18n("Database File Path"), panel);
     QVBoxLayout *vlay         = new QVBoxLayout(dbPathBox);
     QLabel *databasePathLabel = new QLabel(i18n("<p>The location where the database file will be stored on your system. "
-                                                "There is one common database file for all root albums.</p>"
-                                                "<p>Write access is required to be able to edit image properties.</p>"
+                                                "There is one common database file for all root albums.<br/>"
+                                                "Write access is required to be able to edit image properties.</p>"
                                                 "<p>Note: a remote file system, such as NFS, cannot be used here.</p><p></p>"),
                                            dbPathBox);
     databasePathLabel->setWordWrap(true);
