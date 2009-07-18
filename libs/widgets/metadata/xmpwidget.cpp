@@ -46,10 +46,14 @@ static const char* StandardXmpEntryList[] =
      "aux",             // Schema for Additional Exif Properties.
      "crs",             // Camera Raw schema.
      "dc",              // Dublin Core schema.
+     "digiKam",         // Our Xmp schema used to store private information (see DMetadata class for details).
      "exif",            // Schema for Exif-specific Properties.
      "iptc",            // IPTC Core schema.
+     "iptcExt",         // IPTC Extension schema.
+     "MicrosoftPhoto",  // Microsoft schema.
      "pdf",             // Adobe PDF schema.
      "photoshop",       // Adobe Photoshop schema.
+     "plus",            // PLUS License Data Format Schema.
      "tiff",            // Schema for TIFF Properties
      "xmp",             // Basic schema.
      "xmpBJ",           // Basic Job Ticket schema.
@@ -57,8 +61,7 @@ static const char* StandardXmpEntryList[] =
      "xmpMM",           // Media Management schema.
      "xmpRights",       // Rights Management schema.
      "xmpTPg",          // Paged-Text schema.
-     "MicrosoftPhoto",  // Microsoft schema.
-     "digiKam",         // Our Xmp schema used to store private information (see DMetadata class for details).
+
      "-1"
 };
 

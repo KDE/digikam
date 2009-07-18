@@ -7,7 +7,7 @@
  * Description : a generic list view item widget to
  *               display metadata key like a title
  *
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -60,21 +60,24 @@ MdKeyListViewItem::MdKeyListViewItem(QTreeWidget *parent, const QString& key)
     else if (key == "Application2")   m_decryptedKey = i18n("IIM Application 2");
 
     // Standard XMP key descriptions.
+    else if (key == "aux")            m_decryptedKey = i18n("Additional Exif Properties");
+    else if (key == "crs")            m_decryptedKey = i18n("Camera Raw");
     else if (key == "dc")             m_decryptedKey = i18n("Dublin Core");
-    else if (key == "xmp")            m_decryptedKey = i18n("Basic Schema");
-    else if (key == "xmpRights")      m_decryptedKey = i18n("Rights Management");
-    else if (key == "xmpMM")          m_decryptedKey = i18n("Media Management ");
-    else if (key == "xmpBJ")          m_decryptedKey = i18n("Basic Job Ticket");
-    else if (key == "xmpTPg")         m_decryptedKey = i18n("Paged-Text");
-    else if (key == "xmpDM")          m_decryptedKey = i18n("Dynamic Media");
+    else if (key == "digiKam")        m_decryptedKey = i18n("digiKam schema");
+    else if (key == "exif")           m_decryptedKey = i18n("Exif-specific Properties");
+    else if (key == "iptc")           m_decryptedKey = i18n("IPTC Core");
+    else if (key == "iptcExt")        m_decryptedKey = i18n("IPTC Extension schema");
     else if (key == "MicrosoftPhoto") m_decryptedKey = i18n("Microsoft Photo");
     else if (key == "pdf")            m_decryptedKey = i18n("Adobe PDF");
     else if (key == "photoshop")      m_decryptedKey = i18n("Adobe Photoshop");
-    else if (key == "crs")            m_decryptedKey = i18n("Camera Raw");
+    else if (key == "plus")           m_decryptedKey = i18n("PLUS License Data Format Schema");
     else if (key == "tiff")           m_decryptedKey = i18n("TIFF Properties");
-    else if (key == "exif")           m_decryptedKey = i18n("Exif-specific Properties");
-    else if (key == "aux")            m_decryptedKey = i18n("Additional Exif Properties");
-    else if (key == "iptc")           m_decryptedKey = i18n("IPTC Core");
+    else if (key == "xmp")            m_decryptedKey = i18n("Basic Schema");
+    else if (key == "xmpBJ")          m_decryptedKey = i18n("Basic Job Ticket");
+    else if (key == "xmpDM")          m_decryptedKey = i18n("Dynamic Media");
+    else if (key == "xmpMM")          m_decryptedKey = i18n("Media Management ");
+    else if (key == "xmpRights")      m_decryptedKey = i18n("Rights Management");
+    else if (key == "xmpTPg")         m_decryptedKey = i18n("Paged-Text");
 
     // Reset all item flags: item is not selectable.
     setFlags(Qt::ItemIsEnabled);
