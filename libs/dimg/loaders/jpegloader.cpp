@@ -268,8 +268,9 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             }
             if(scale>8) scale=8;
 
-            cinfo.scale_num=1;
-            cinfo.scale_denom=scale;
+            //cinfo.scale_num = 1;
+            //cinfo.scale_denom = scale;
+            cinfo.scale_denom *= scale;
         }
 
         // initialize decompression

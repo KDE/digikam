@@ -167,8 +167,9 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
     }
     if(scale>8) scale=8;
 
-    cinfo.scale_num=1;
-    cinfo.scale_denom=scale;
+    //cinfo.scale_num = 1;
+    //cinfo.scale_denom = scale;
+    cinfo.scale_denom *= scale;
 
     switch (cinfo.jpeg_color_space)
     {
