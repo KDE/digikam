@@ -118,6 +118,10 @@ private Q_SLOTS:
 
 private:
 
+    void cleanUpMdKeyItem();
+
+private:
+
     MetadataSelectorViewPriv* const d;
 };
 

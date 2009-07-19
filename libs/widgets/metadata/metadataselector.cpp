@@ -301,6 +301,15 @@ void MetadataSelectorView::slotSearchTextChanged(const SearchTextSettings& setti
     QString search       = settings.text;
     bool atleastOneMatch = false;
 
+    QTreeWidgetItemIterator it2(d->selector);
+    while (*it2)
+    {
+        MdKeyListViewItem *item = dynamic_cast<MdKeyListViewItem*>(*it2);
+        if (item)
+            item->setHidden(false);
+        ++it2;
+    }
+
     QTreeWidgetItemIterator it(d->selector);
     while (*it)
     {
@@ -321,6 +330,9 @@ void MetadataSelectorView::slotSearchTextChanged(const SearchTextSettings& setti
         }
         ++it;
     }
+
+    cleanUpMdKeyItem();
+
     d->searchBar->slotSearchResult(atleastOneMatch);
 }
 
@@ -335,6 +347,29 @@ void MetadataSelectorView::slotDeflautSelection()
         {
             if (d->defaultFilter.contains(item->text(0)))
                 item->setCheckState(0, Qt::Checked);
+        }
+        ++it;
+    }
+}
+
+void MetadataSelectorView::cleanUpMdKeyItem()
+{
+    QTreeWidgetItemIterator it(d->selector);
+    while (*it)
+    {
+        MdKeyListViewItem *item = dynamic_cast<MdKeyListViewItem*>(*it);
+        if (item)
+        {
+            int childs   = item->childCount();
+            int visibles = 0;
+            for (int i = 0 ; i < childs; ++i)
+            {
+                QTreeWidgetItem* citem = (*it)->child(i);
+                if (!citem->isHidden())
+                    ++visibles;
+            }
+            if (!childs || !visibles)
+                item->setHidden(true);
         }
         ++it;
     }
