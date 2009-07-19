@@ -46,6 +46,7 @@ namespace Digikam
 MdKeyListViewItem::MdKeyListViewItem(QTreeWidget *parent, const QString& key)
                  : QObject(parent), QTreeWidgetItem(parent)
 {
+    m_key          = key;
     m_decryptedKey = key;
 
     // Standard Exif key descriptions.
@@ -106,7 +107,12 @@ MdKeyListViewItem::~MdKeyListViewItem()
 {
 }
 
-QString MdKeyListViewItem::getMdKey()
+QString MdKeyListViewItem::getKey() const
+{
+    return m_key;
+}
+
+QString MdKeyListViewItem::getDecryptedKey() const
 {
     return m_decryptedKey;
 }

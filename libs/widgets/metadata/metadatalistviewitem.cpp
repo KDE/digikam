@@ -7,7 +7,7 @@
  * Description : a generic list view item widget to
  *               display metadata
  *
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,16 +39,12 @@ namespace Digikam
 
 MetadataListViewItem::MetadataListViewItem(QTreeWidgetItem *parent, const QString& key,
                                            const QString& title, const QString& value)
-                    : QTreeWidgetItem(parent)
+                    : QTreeWidgetItem(parent), m_key(key)
 {
-    m_key = key;
-
-    setDisabled(false);
-
     setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
     setText(0, title);
     setToolTip(0, title);
-
+    setDisabled(false);
     QString tagVal = value.simplified();
     if (tagVal.length() > 512)
     {
@@ -60,6 +56,20 @@ MetadataListViewItem::MetadataListViewItem(QTreeWidgetItem *parent, const QStrin
 
     DToolTipStyleSheet cnt;
     setToolTip(1, "<qt><p>" + cnt.breakString(tagVal) + "</p></qt>");
+}
+
+MetadataListViewItem::MetadataListViewItem(QTreeWidgetItem *parent, const QString& key,
+                                           const QString& title)
+                    : QTreeWidgetItem(parent), m_key(key)
+{
+    setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
+    setText(0, title);
+    setToolTip(0, title);
+    setDisabled(true);
+    setText(1, i18n("Unavailable"));
+    QFont fnt = font(1);
+    fnt.setItalic(true);
+    setFont(1, fnt);
 }
 
 MetadataListViewItem::~MetadataListViewItem()

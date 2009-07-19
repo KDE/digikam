@@ -316,7 +316,7 @@ void MetadataWidget::slotCopy2Clipboard()
         if (lvItem)
         {
             textmetadata.append("\n\n>>> ");
-            textmetadata.append(lvItem->getMdKey());
+            textmetadata.append(lvItem->getDecryptedKey());
             textmetadata.append(" <<<\n\n");
 
             int j                  = 0;
@@ -359,7 +359,7 @@ void MetadataWidget::slotPrintMetadata()
         if (lvItem)
         {
             textmetadata.append("<br/><br/><b>");
-            textmetadata.append(lvItem->getMdKey());
+            textmetadata.append(lvItem->getDecryptedKey());
             textmetadata.append("</b><br/><br/>");
 
             int j                  = 0;

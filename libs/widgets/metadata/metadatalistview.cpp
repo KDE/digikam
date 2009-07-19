@@ -132,13 +132,14 @@ void MetadataListView::slotSelectionChanged(QTreeWidgetItem *item, int)
                              tagTitle, tagValue, tagDesc));
 }
 
-void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStringList& tagsfilter)
+void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStringList& tagsFilter)
 {
     clear();
 
-    uint               subItems = 0;
-    QString            ifDItemName;
+    uint               subItems      = 0;
     MdKeyListViewItem *parentifDItem = 0;
+    QStringList        filters       = tagsFilter;
+    QString            ifDItemName;
 
     for (DMetadata::MetaDataMap::const_iterator it = ifds.constBegin(); it != ifds.constEnd(); ++it)
     {
@@ -160,15 +161,16 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
         // We ignore all unknown tags if necessary.
         if (!it.key().section('.', 2, 2).startsWith(QLatin1String("0x")))
         {
-            if (!tagsfilter.isEmpty() && tagsfilter[0] != QString("FULL"))
+            if (!filters.isEmpty() && filters[0] != QString("FULL"))
             {
-                // We using the filter to make a more user friendly output (Simple Mode)
+                // We using the filter to make a more user friendly output
 
-                if (tagsfilter.contains(it.key()))
+                if (filters.contains(it.key()))
                 {
                     QString tagTitle = m_parent->getTagTitle(it.key());
                     new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.value());
                     ++subItems;
+                    filters.removeAll(it.key());
                 }
             }
             else
@@ -186,6 +188,19 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
     if ( subItems == 0 && parentifDItem)
         delete parentifDItem;
 
+    if (!filters.isEmpty() && filters[0] != QString("FULL"))
+    {
+        foreach(QString key, filters)
+        {
+            MdKeyListViewItem *pitem = findMdKeyItem(key);
+            if (!pitem)
+                pitem = new MdKeyListViewItem(this, key.section('.', 1, 1));
+
+            QString tagTitle = m_parent->getTagTitle(key);
+            new MetadataListViewItem(pitem, key, tagTitle);
+        }
+    }
+
     setCurrentItemByKey(m_selectedItemKey);
     update();
 }
@@ -195,7 +210,8 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
 {
     clear();
 
-    uint               subItems = 0;
+    QStringList        filters       = tagsFilter;
+    uint               subItems      = 0;
     MdKeyListViewItem *parentifDItem = 0;
     if (ifds.count() == 0) return;
 
@@ -217,15 +233,16 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
                 // We ignore all unknown tags if necessary.
                 if (!it.key().section('.', 2, 2).startsWith(QLatin1String("0x")))
                 {
-                    if (!tagsFilter.isEmpty() && tagsFilter[0] != QString("FULL"))
+                    if (!filters.isEmpty() && filters[0] != QString("FULL"))
                     {
                         // We using the filter to make a more user friendly output (Simple Mode)
 
-                        if (tagsFilter.contains(it.key()))
+                        if (filters.contains(it.key()))
                         {
                             QString tagTitle = m_parent->getTagTitle(it.key());
                             new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.value());
                             ++subItems;
+                            filters.removeAll(it.key());
                         }
                     }
                     else
@@ -243,6 +260,19 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
         // We checking if the last IfD have any items. If no, we remove it.
         if ( subItems == 0 && parentifDItem)
             delete parentifDItem;
+    }
+
+    if (!filters.isEmpty() && filters[0] != QString("FULL"))
+    {
+        foreach(QString key, filters)
+        {
+            MdKeyListViewItem *pitem = findMdKeyItem(key);
+            if (!pitem)
+                pitem = new MdKeyListViewItem(this, key.section('.', 1, 1));
+
+            QString tagTitle = m_parent->getTagTitle(key);
+            new MetadataListViewItem(pitem, key, tagTitle);
+        }
     }
 
     setCurrentItemByKey(m_selectedItemKey);
@@ -275,6 +305,24 @@ void MetadataListView::slotSearchTextChanged(const SearchTextSettings& settings)
     }
 
     emit signalTextFilterMatch(query);
+}
+
+MdKeyListViewItem* MetadataListView::findMdKeyItem(const QString& key)
+{
+    QTreeWidgetItemIterator it(this);
+    while (*it)
+    {
+        MdKeyListViewItem *item = dynamic_cast<MdKeyListViewItem*>(*it);
+        if (item)
+        {
+            if (key.section('.', 1, 1) == item->getKey())
+            {
+                return item;
+            }
+        }
+        ++it;
+    }
+    return 0;
 }
 
 }  // namespace Digikam
