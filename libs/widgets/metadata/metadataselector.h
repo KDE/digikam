@@ -54,10 +54,12 @@ public:
     virtual ~MetadataSelectorItem();
 
     QString key() const;
+    QString mdKeyTitle() const;
 
 private:
 
-    QString m_key;
+    QString            m_key;
+    MdKeyListViewItem *m_parent;
 };
 
 // ------------------------------------------------------------------------------------

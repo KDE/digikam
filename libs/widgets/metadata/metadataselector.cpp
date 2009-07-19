@@ -46,13 +46,11 @@ namespace Digikam
 
 MetadataSelectorItem::MetadataSelectorItem(MdKeyListViewItem *parent, const QString& key,
                                            const QString& title, const QString& desc)
-                    : QTreeWidgetItem(parent)
+                    : QTreeWidgetItem(parent), m_key(key), m_parent(parent)
 {
     setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
     setCheckState(0, Qt::Unchecked);
     setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
-
-    m_key = key;
 
     setText(0, title);
 
@@ -76,6 +74,11 @@ MetadataSelectorItem::~MetadataSelectorItem()
 QString MetadataSelectorItem::key() const
 {
     return m_key;
+}
+
+QString MetadataSelectorItem::mdKeyTitle() const
+{
+    return (m_parent ? m_parent->text(0) : QString());
 }
 
 // ------------------------------------------------------------------------------------
@@ -304,7 +307,8 @@ void MetadataSelectorView::slotSearchTextChanged(const SearchTextSettings& setti
         MetadataSelectorItem *item = dynamic_cast<MetadataSelectorItem*>(*it);
         if (item)
         {
-            bool match = item->text(0).contains(search, settings.caseSensitive);
+            bool match = item->text(0).contains(search, settings.caseSensitive) ||
+                         item->mdKeyTitle().contains(search, settings.caseSensitive);
             if (match)
             {
                 atleastOneMatch = true;
