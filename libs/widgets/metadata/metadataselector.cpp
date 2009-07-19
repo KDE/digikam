@@ -268,6 +268,16 @@ void MetadataSelectorView::setDefaultFilter(const char** list)
         d->defaultFilter << QString(list[i]);
 }
 
+QStringList MetadataSelectorView::defaultFilter() const
+{
+    return d->defaultFilter;
+}
+
+int MetadataSelectorView::itemsCount() const
+{
+    return d->selector->model()->rowCount();
+}
+
 QStringList MetadataSelectorView::checkedTagsList() const
 {
     d->searchBar->clear();

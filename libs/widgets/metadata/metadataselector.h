@@ -94,7 +94,11 @@ public:
     MetadataSelectorView(QWidget* parent);
     virtual ~MetadataSelectorView();
 
+    int itemsCount() const;
+
     void setDefaultFilter(const char** list);
+    QStringList defaultFilter() const;
+
     MetadataSelector* selector() const;
     QStringList checkedTagsList() const;
 

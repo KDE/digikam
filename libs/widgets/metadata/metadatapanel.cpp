@@ -263,40 +263,40 @@ void MetadataPanel::slotTabChanged(int index)
 #if KEXIV2_VERSION >= 0x010000
         case 1:
         {
-            if (!d->exifViewerConfig->selector()->model()->rowCount())
+            if (!d->exifViewerConfig->itemsCount())
             {
                 d->exifViewerConfig->selector()->setTagsMap(meta.getStdExifTagsList());
-                d->exifViewerConfig->selector()->setcheckedTagsList(group.readEntry("EXIF Tags Filter", QStringList()));
+                d->exifViewerConfig->selector()->setcheckedTagsList(group.readEntry("EXIF Tags Filter", d->exifViewerConfig->defaultFilter()));
             }
             break;
         }
 
         case 2:
         {
-            if (!d->mknoteViewerConfig->selector()->model()->rowCount())
+            if (!d->mknoteViewerConfig->itemsCount())
             {
                 d->mknoteViewerConfig->selector()->setTagsMap(meta.getMakernoteTagsList());
-                d->mknoteViewerConfig->selector()->setcheckedTagsList(group.readEntry("MAKERNOTE Tags Filter", QStringList()));
+                d->mknoteViewerConfig->selector()->setcheckedTagsList(group.readEntry("MAKERNOTE Tags Filter", d->mknoteViewerConfig->defaultFilter()));
             }
             break;
         }
 
         case 3:
         {
-            if (!d->iptcViewerConfig->selector()->model()->rowCount())
+            if (!d->iptcViewerConfig->itemsCount())
             {
                 d->iptcViewerConfig->selector()->setTagsMap(meta.getIptcTagsList());
-                d->iptcViewerConfig->selector()->setcheckedTagsList(group.readEntry("IPTC Tags Filter", QStringList()));
+                d->iptcViewerConfig->selector()->setcheckedTagsList(group.readEntry("IPTC Tags Filter", d->iptcViewerConfig->defaultFilter()));
             }
             break;
         }
 
         case 4:
         {
-            if (!d->xmpViewerConfig->selector()->model()->rowCount())
+            if (!d->xmpViewerConfig->itemsCount())
             {
                 d->xmpViewerConfig->selector()->setTagsMap(meta.getXmpTagsList());
-                d->xmpViewerConfig->selector()->setcheckedTagsList(group.readEntry("XMP Tags Filter", QStringList()));
+                d->xmpViewerConfig->selector()->setcheckedTagsList(group.readEntry("XMP Tags Filter", d->xmpViewerConfig->defaultFilter()));
             }
             break;
         }
