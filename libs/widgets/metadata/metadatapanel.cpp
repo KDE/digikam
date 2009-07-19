@@ -32,8 +32,6 @@
 // KDE includes
 
 #include <klocale.h>
-#include <kdialog.h>
-#include <kvbox.h>
 #include <ktabwidget.h>
 #include <kapplication.h>
 #include <kconfig.h>
@@ -176,11 +174,11 @@ public:
 
     MetadataPanelPriv()
     {
-        tab                     = 0;
-        exifViewerConfig        = 0;
-        mknoteViewerConfig      = 0;
-        iptcViewerConfig        = 0;
-        xmpViewerConfig         = 0;
+        tab                = 0;
+        exifViewerConfig   = 0;
+        mknoteViewerConfig = 0;
+        iptcViewerConfig   = 0;
+        xmpViewerConfig    = 0;
     }
 
     KTabWidget           *tab;
@@ -235,16 +233,16 @@ void MetadataPanel::applySettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Image Properties SideBar");
 
-    if (d->exifViewerConfig->selector()->model()->rowCount())
+    if (d->exifViewerConfig->itemsCount())
         group.writeEntry("EXIF Tags Filter", d->exifViewerConfig->checkedTagsList());
 
-    if (d->mknoteViewerConfig->selector()->model()->rowCount())
+    if (d->mknoteViewerConfig->itemsCount())
         group.writeEntry("MAKERNOTE Tags Filter", d->mknoteViewerConfig->checkedTagsList());
 
-    if (d->iptcViewerConfig->selector()->model()->rowCount())
+    if (d->iptcViewerConfig->itemsCount())
         group.writeEntry("IPTC Tags Filter", d->iptcViewerConfig->checkedTagsList());
 
-    if (d->xmpViewerConfig->selector()->model()->rowCount())
+    if (d->xmpViewerConfig->itemsCount())
         group.writeEntry("XMP Tags Filter", d->xmpViewerConfig->checkedTagsList());
 
     config->sync();
@@ -265,8 +263,8 @@ void MetadataPanel::slotTabChanged(int index)
         {
             if (!d->exifViewerConfig->itemsCount())
             {
-                d->exifViewerConfig->selector()->setTagsMap(meta.getStdExifTagsList());
-                d->exifViewerConfig->selector()->setcheckedTagsList(group.readEntry("EXIF Tags Filter", d->exifViewerConfig->defaultFilter()));
+                d->exifViewerConfig->setTagsMap(meta.getStdExifTagsList());
+                d->exifViewerConfig->setcheckedTagsList(group.readEntry("EXIF Tags Filter", d->exifViewerConfig->defaultFilter()));
             }
             break;
         }
@@ -275,8 +273,8 @@ void MetadataPanel::slotTabChanged(int index)
         {
             if (!d->mknoteViewerConfig->itemsCount())
             {
-                d->mknoteViewerConfig->selector()->setTagsMap(meta.getMakernoteTagsList());
-                d->mknoteViewerConfig->selector()->setcheckedTagsList(group.readEntry("MAKERNOTE Tags Filter", d->mknoteViewerConfig->defaultFilter()));
+                d->mknoteViewerConfig->setTagsMap(meta.getMakernoteTagsList());
+                d->mknoteViewerConfig->setcheckedTagsList(group.readEntry("MAKERNOTE Tags Filter", d->mknoteViewerConfig->defaultFilter()));
             }
             break;
         }
@@ -285,8 +283,8 @@ void MetadataPanel::slotTabChanged(int index)
         {
             if (!d->iptcViewerConfig->itemsCount())
             {
-                d->iptcViewerConfig->selector()->setTagsMap(meta.getIptcTagsList());
-                d->iptcViewerConfig->selector()->setcheckedTagsList(group.readEntry("IPTC Tags Filter", d->iptcViewerConfig->defaultFilter()));
+                d->iptcViewerConfig->setTagsMap(meta.getIptcTagsList());
+                d->iptcViewerConfig->setcheckedTagsList(group.readEntry("IPTC Tags Filter", d->iptcViewerConfig->defaultFilter()));
             }
             break;
         }
@@ -295,8 +293,8 @@ void MetadataPanel::slotTabChanged(int index)
         {
             if (!d->xmpViewerConfig->itemsCount())
             {
-                d->xmpViewerConfig->selector()->setTagsMap(meta.getXmpTagsList());
-                d->xmpViewerConfig->selector()->setcheckedTagsList(group.readEntry("XMP Tags Filter", d->xmpViewerConfig->defaultFilter()));
+                d->xmpViewerConfig->setTagsMap(meta.getXmpTagsList());
+                d->xmpViewerConfig->setcheckedTagsList(group.readEntry("XMP Tags Filter", d->xmpViewerConfig->defaultFilter()));
             }
             break;
         }

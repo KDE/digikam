@@ -257,9 +257,18 @@ MetadataSelectorView::~MetadataSelectorView()
     delete d;
 }
 
-MetadataSelector* MetadataSelectorView::selector() const
+#if KEXIV2_VERSION >= 0x010000
+
+void MetadataSelectorView::setTagsMap(const DMetadata::TagsMap& map)
 {
-    return d->selector;
+    d->selector->setTagsMap(map);
+}
+
+#endif
+
+void MetadataSelectorView::setcheckedTagsList(const QStringList& list)
+{
+    d->selector->setcheckedTagsList(list);
 }
 
 void MetadataSelectorView::setDefaultFilter(const char** list)

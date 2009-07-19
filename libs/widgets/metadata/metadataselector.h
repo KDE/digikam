@@ -96,10 +96,15 @@ public:
 
     int itemsCount() const;
 
+#if KEXIV2_VERSION >= 0x010000
+    void setTagsMap(const DMetadata::TagsMap& map);
+#endif
+
+    void setcheckedTagsList(const QStringList& list);
+
     void setDefaultFilter(const char** list);
     QStringList defaultFilter() const;
 
-    MetadataSelector* selector() const;
     QStringList checkedTagsList() const;
 
 private Q_SLOTS:
