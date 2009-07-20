@@ -53,7 +53,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 040 ==> 190795 : USB PTP Class does not work anymore with the KDE4 version.
 041 ==> 188905 : Edit view goes 100% instead of fit window.
 042 ==> 187810 : In import window images are sorted in reverse order but folders are not.
-043 ==> 
+043 ==> 199619 : Deleting image and switching to next fastly seems to confuse album list.
+044 ==> 
 
 
 *********************************************************************************************************
