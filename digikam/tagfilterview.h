@@ -62,6 +62,12 @@ public:
         ChildrenAndParents
     };
 
+    enum RestoreTagFilters
+    {
+        OffRestoreTagFilters = 0,
+        OnRestoreTagFilters
+    };
+
 public:
 
     TagFilterView(QWidget* parent);
@@ -128,6 +134,9 @@ private:
 
     void loadViewState();
     void saveViewState();
+
+    void saveTagFilters();
+    void loadTagFilters();
 
 private:
 

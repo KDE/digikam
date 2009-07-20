@@ -260,19 +260,21 @@ public:
 
     TagFilterViewPrivate()
     {
-        ABCMenu        = 0;
-        timer          = 0;
-        toggleAutoTags = TagFilterView::NoToggleAuto;
-        matchingCond   = ImageFilterSettings::OrCondition;
+        ABCMenu           = 0;
+        timer             = 0;
+        toggleAutoTags    = TagFilterView::NoToggleAuto;
+        matchingCond      = ImageFilterSettings::OrCondition;
+        restoreTagFilters = TagFilterView::OffRestoreTagFilters;
     }
 
-    QTimer                         *timer;
+    QTimer                                *timer;
 
-    KMenu                          *ABCMenu;
+    KMenu                                 *ABCMenu;
 
-    TagFilterView::ToggleAutoTags   toggleAutoTags;
+    TagFilterView::RestoreTagFilters       restoreTagFilters;
+    TagFilterView::ToggleAutoTags          toggleAutoTags;
 
-    ImageFilterSettings::MatchingCondition  matchingCond;
+    ImageFilterSettings::MatchingCondition matchingCond;
 };
 
 
@@ -350,6 +352,9 @@ TagFilterView::TagFilterView(QWidget* parent)
 
     d->toggleAutoTags    = (ToggleAutoTags)
                            (group.readEntry("Toggle Auto Tags", (int)NoToggleAuto));
+
+    d->restoreTagFilters = (RestoreTagFilters)
+                           (group.readEntry("Restore Tag Filters", (int)OffRestoreTagFilters));
 }
 
 TagFilterView::~TagFilterView()
@@ -358,6 +363,8 @@ TagFilterView::~TagFilterView()
     KConfigGroup group        = config->group(objectName());
     group.writeEntry("Matching Condition",  (int)(d->matchingCond));
     group.writeEntry("Toggle Auto Tags",    (int)(d->toggleAutoTags));
+    group.writeEntry("Restore Tag Filters", (int)(d->restoreTagFilters));
+    saveTagFilters();
     config->sync();
 
     saveViewState();
@@ -978,6 +985,16 @@ void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)
         andBetweenAction->setChecked(true);
     popmenu.addAction(matchingCondAction);
 
+    KSelectAction *restoreTagFiltersAction = new KSelectAction(i18n("Restore Tag Filters"), &popmenu);
+    QAction *onRestoreTagFiltersAction = restoreTagFiltersAction->addAction(i18n("On"));
+    QAction *offRestoreTagFiltersAction = restoreTagFiltersAction->addAction(i18n("Off"));
+
+    if (d->restoreTagFilters == OnRestoreTagFilters)
+        onRestoreTagFiltersAction->setChecked(true);
+    else
+        offRestoreTagFiltersAction->setChecked(true);
+    popmenu.addAction(restoreTagFiltersAction);
+
     if (item)
     {
         popmenu.addSeparator();
@@ -1117,6 +1134,16 @@ void TagFilterView::slotContextMenu(Q3ListViewItem* it, const QPoint&, int)
         else if (choice == andBetweenAction)        // And Between Tags.
         {
             d->matchingCond = ImageFilterSettings::AndCondition;
+            triggerChange();
+        }
+        else if (choice == onRestoreTagFiltersAction)        // Restore TagFilters ON.
+        {
+            d->restoreTagFilters = TagFilterView::OnRestoreTagFilters;
+            triggerChange();
+        }
+        else if (choice == offRestoreTagFiltersAction)        // Restore TagFilters OFF.
+        {
+            d->restoreTagFilters = TagFilterView::OffRestoreTagFilters;
             triggerChange();
         }
         else                                        // ABC menu
@@ -1436,6 +1463,7 @@ void TagFilterView::loadViewState()
         setSelected(foundItem, true);
         ensureItemVisible(foundItem);
     }
+    loadTagFilters();
 }
 
 void TagFilterView::saveViewState()
@@ -1458,6 +1486,52 @@ void TagFilterView::saveViewState()
             openFolders.push_back(item->id());
     }
     group.writeEntry("OpenFolders", openFolders);
+}
+
+void TagFilterView::saveTagFilters()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(objectName());
+
+    QList<int> selectedItems;
+
+    if (d->restoreTagFilters == TagFilterView::OnRestoreTagFilters)
+    {
+        Q3ListViewItemIterator it(this);
+        while (it.current())
+        {
+            TagFilterViewItem* item = dynamic_cast<TagFilterViewItem*> (*it);
+            if (item && item->isOn())
+                selectedItems.push_back(item->id());
+            ++it;
+        }
+    }
+    group.writeEntry("StoredTagFilters", selectedItems);
+}
+
+void TagFilterView::loadTagFilters()
+{
+    if (d->restoreTagFilters == TagFilterView::OffRestoreTagFilters)
+    {
+        return;
+    }
+
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(objectName());
+
+    QList<int> selectedItems;
+
+    if (group.hasKey("StoredTagFilters"))
+        selectedItems = group.readEntry("StoredTagFilters", QList<int> ());
+
+    Q3ListViewItemIterator it(this);
+    while (it.current())
+    {
+        TagFilterViewItem* item = dynamic_cast<TagFilterViewItem*> (*it);
+        if (item && selectedItems.contains(item->id()))
+            item->setOn(true);
+        ++it;
+    }
 }
 
 }  // namespace Digikam
