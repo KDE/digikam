@@ -5,7 +5,7 @@ NEW FEATURES:
 
 General        : Exif, Makernotes, Iptc, and Xmp metadata tags filtering can be customized in setup config dialog.
 General        : Metadata Template: add support of Contact, Location, and Subjects IPTC information.
-General        : Add support of Author properties to multi-language Captions. User can set 
+General        : Add support of Author properties to multi-language Captions. User can set
                  an author name for each caption value.
 ImageEditor    : Close tools by pressing ESC.
 
@@ -48,7 +48,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 035 ==> 200162 : EXIF tags not updated if digiKam tag is renamed.
 036 ==> 200854 : Option to clear light table on close.
 037 ==> 200805 : List of supported file types can not be edited, just extended.
-038 ==> 
+038 ==> 200187 : Save and restore selected filter tags.
+039 ==>
 
 *********************************************************************************************************
 digiKam 1.0.0-beta2 - Release date: 2009-07-05
@@ -229,7 +230,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 067 ==> 150072 : Download with digiKam doesn't work with the first start of digiKam.
 068 ==> 193738 : Have the image editor status bar show the current color depth.
 069 ==> 191678 : Exif rotation for Pentax Pef not working.
-070 ==> 146455 : Image rotation and auto-rotate don't work. 
+070 ==> 146455 : Image rotation and auto-rotate don't work.
 071 ==> 152877 : Thumbnails: URI does not follow Thumbnail Managing Standard.
 072 ==> 140615 : Pre-Creating of image thumbnails in whole digiKam/all subfolders.
 073 ==> 193967 : VERY fast loading of thumbnails [PATCH].
@@ -237,7 +238,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 075 ==> 171950 : Lost pictures after 'download/delete all' when target dir had same file names.
 076 ==> 191774 : digiKam download sorting slow, and wrong with multiple folders.
 077 ==> 191842 : digiKam download forgets to download some pictures (multiple big folders).
-078 ==> 187902 : Status bar gives wrong picture filename and position in list after "Save As". 
+078 ==> 187902 : Status bar gives wrong picture filename and position in list after "Save As".
 079 ==> 193894 : Pop up "Copy Finished!" dialogue when done downloading from camera.
 080 ==> 193870 : digiKam freezes after second exif rotation on same file.
 081 ==> 194342 : What is the right rename pattern to get names like 2009.02.18_09h56m30s?
@@ -246,7 +247,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 084 ==> 191634 : Statistics of the database, and all pictures?
 085 ==> 193228 : Experimental option "write metadata to RAW files" corrupts Nikon NEFs.
 086 ==> 194116 : digiKam crashed for no obvious reason.
-087 ==> 179766 : Auto crop does not fully remove black corners created by free rotation. 
+087 ==> 179766 : Auto crop does not fully remove black corners created by free rotation.
 088 ==> 134308 : Add arrow buttons on thumbnail to perform lossless rotation.
 089 ==> 194804 : Tag, rate, rotate and delete via slideshow.
 090 ==> 192425 : Star rating setting under thumbnails is a nuisance.
@@ -258,9 +259,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 096 ==> 161865 : Image not placed in New Tag category.
 097 ==> 136897 : THM files are not uploaded.
 098 ==> 195494 : Deleting and cancelling a picture with the keyboard still delete the picture.
-099 ==> 120994 : Print preview generates HUGE postscript files. 
-100 ==> 191633 : Rename a folder, press F5 and see thumbnails go away. 
+099 ==> 120994 : Print preview generates HUGE postscript files.
+100 ==> 191633 : Rename a folder, press F5 and see thumbnails go away.
 101 ==> 195565 : Loading next image while in curves tool does not confirm and loads nothing.
-102 ==> 189046 : digiKam crashes finding duplicates in fingerprints. 
-103 ==> 185726 : SIGSERV 11 by choosing an image for fullscreen. 
+102 ==> 189046 : digiKam crashes finding duplicates in fingerprints.
+103 ==> 185726 : SIGSERV 11 by choosing an image for fullscreen.
 104 ==> 193616 : Location not shown digiKam right sidebar after geolocating in external program.
