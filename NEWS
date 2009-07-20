@@ -52,7 +52,10 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 039 ==> 196999 : Calendar is ignoring selection of date/week but respecting month.
 040 ==> 190795 : USB PTP Class does not work anymore with the KDE4 version.
 041 ==> 188905 : Edit view goes 100% instead of fit window.
-042 ==> 
+042 ==> 187810 : In import window images are sorted in reverse order but folders are not.
+043 ==> 
+
+>>>>>>> Take already loaded items into account when sorting by date.:NEWS
 
 
 *********************************************************************************************************
