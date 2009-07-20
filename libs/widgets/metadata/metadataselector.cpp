@@ -274,10 +274,9 @@ void MetadataSelectorView::setcheckedTagsList(const QStringList& list)
     d->selector->setcheckedTagsList(list);
 }
 
-void MetadataSelectorView::setDefaultFilter(const char** list)
+void MetadataSelectorView::setDefaultFilter(const QStringList& list)
 {
-    for (int i=0 ; QString(list[i]) != QString("-1") ; ++i)
-        d->defaultFilter << QString(list[i]);
+    d->defaultFilter = list;
 }
 
 QStringList MetadataSelectorView::defaultFilter() const

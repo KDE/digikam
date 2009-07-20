@@ -50,6 +50,11 @@ public:
 
     void applySettings();
 
+    static QStringList defaultExifFilter();
+    static QStringList defaultMknoteFilter();
+    static QStringList defaultIptcFilter();
+    static QStringList defaultXmpFilter();
+
 private:
 
     void readSettings();

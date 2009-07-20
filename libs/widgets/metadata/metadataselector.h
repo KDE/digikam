@@ -104,7 +104,7 @@ public:
 
     void setcheckedTagsList(const QStringList& list);
 
-    void setDefaultFilter(const char** list);
+    void setDefaultFilter(const QStringList& list);
     QStringList defaultFilter() const;
 
     QStringList checkedTagsList() const;

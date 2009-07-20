@@ -180,9 +180,25 @@ public:
         mknoteViewerConfig = 0;
         iptcViewerConfig   = 0;
         xmpViewerConfig    = 0;
-    }
+
+        setDefaultFilter(ExifHumanList,      defaultExifFilter);
+        setDefaultFilter(MakerNoteHumanList, defaultMknoteFilter);
+        setDefaultFilter(IptcHumanList,      defaultIptcFilter);
+        setDefaultFilter(XmpHumanList,       defaultXmpFilter);
+    };
+
+    void setDefaultFilter(const char** list, QStringList& filter)
+    {
+        for (int i=0 ; QString(list[i]) != QString("-1") ; ++i)
+            filter << QString(list[i]);
+    };
 
     KTabWidget           *tab;
+
+    QStringList           defaultExifFilter;
+    QStringList           defaultMknoteFilter;
+    QStringList           defaultIptcFilter;
+    QStringList           defaultXmpFilter;
 
     MetadataSelectorView *exifViewerConfig;
     MetadataSelectorView *mknoteViewerConfig;
@@ -198,19 +214,19 @@ MetadataPanel::MetadataPanel(KTabWidget* tab)
     // --------------------------------------------------------
 
     d->exifViewerConfig   = new MetadataSelectorView(d->tab);
-    d->exifViewerConfig->setDefaultFilter(ExifHumanList);
+    d->exifViewerConfig->setDefaultFilter(d->defaultExifFilter);
     d->tab->insertTab(1, d->exifViewerConfig, i18n("EXIF viewer"));
 
     d->mknoteViewerConfig = new MetadataSelectorView(d->tab);
-    d->mknoteViewerConfig->setDefaultFilter(MakerNoteHumanList);
+    d->mknoteViewerConfig->setDefaultFilter(d->defaultMknoteFilter);
     d->tab->insertTab(2, d->mknoteViewerConfig, i18n("Makernotes viewer"));
 
     d->iptcViewerConfig   = new MetadataSelectorView(d->tab);
-    d->iptcViewerConfig->setDefaultFilter(IptcHumanList);
+    d->iptcViewerConfig->setDefaultFilter(d->defaultIptcFilter);
     d->tab->insertTab(3, d->iptcViewerConfig, i18n("IPTC viewer"));
 
     d->xmpViewerConfig    = new MetadataSelectorView(d->tab);
-    d->xmpViewerConfig->setDefaultFilter(XmpHumanList);
+    d->xmpViewerConfig->setDefaultFilter(d->defaultXmpFilter);
     d->tab->insertTab(4, d->xmpViewerConfig, i18n("XMP viewer"));
 
 #if KEXIV2_VERSION < 0x010000
@@ -226,6 +242,30 @@ MetadataPanel::MetadataPanel(KTabWidget* tab)
 MetadataPanel::~MetadataPanel()
 {
     delete d;
+}
+
+QStringList MetadataPanel::defaultExifFilter()
+{
+    MetadataPanelPriv d;
+    return d.defaultExifFilter;
+}
+
+QStringList MetadataPanel::defaultMknoteFilter()
+{
+    MetadataPanelPriv d;
+    return d.defaultMknoteFilter;
+}
+
+QStringList MetadataPanel::defaultIptcFilter()
+{
+    MetadataPanelPriv d;
+    return d.defaultIptcFilter;
+}
+
+QStringList MetadataPanel::defaultXmpFilter()
+{
+    MetadataPanelPriv d;
+    return d.defaultXmpFilter;
 }
 
 void MetadataPanel::applySettings()

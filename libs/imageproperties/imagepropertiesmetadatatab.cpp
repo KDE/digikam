@@ -48,6 +48,7 @@
 
 // Local includes
 
+#include "metadatapanel.h"
 #include "exifwidget.h"
 #include "makernotewidget.h"
 #include "iptcwidget.h"
@@ -131,20 +132,25 @@ void ImagePropertiesMetaDataTab::readSettings()
     KConfigGroup group        = config->group("Image Properties SideBar");
     setCurrentIndex(group.readEntry("ImagePropertiesMetaData Tab",
                     (int)ImagePropertiesMetadataTabPriv::EXIF));
-    d->exifWidget->setMode(group.readEntry("EXIF Level", (int)ExifWidget::CUSTOM));
-    d->makernoteWidget->setMode(group.readEntry("MAKERNOTE Level", (int)MakerNoteWidget::CUSTOM));
-    d->iptcWidget->setMode(group.readEntry("IPTC Level", (int)IptcWidget::CUSTOM));
-    d->xmpWidget->setMode(group.readEntry("XMP Level", (int)XmpWidget::CUSTOM));
-    d->exifWidget->setCurrentItemByKey(group.readEntry("Current EXIF Item", QString()));
+    d->exifWidget->setMode(group.readEntry("EXIF Level",                              (int)ExifWidget::CUSTOM));
+    d->makernoteWidget->setMode(group.readEntry("MAKERNOTE Level",                    (int)MakerNoteWidget::CUSTOM));
+    d->iptcWidget->setMode(group.readEntry("IPTC Level",                              (int)IptcWidget::CUSTOM));
+    d->xmpWidget->setMode(group.readEntry("XMP Level",                                (int)XmpWidget::CUSTOM));
+    d->exifWidget->setCurrentItemByKey(group.readEntry("Current EXIF Item",           QString()));
     d->makernoteWidget->setCurrentItemByKey(group.readEntry("Current MAKERNOTE Item", QString()));
-    d->iptcWidget->setCurrentItemByKey(group.readEntry("Current IPTC Item", QString()));
-    d->xmpWidget->setCurrentItemByKey(group.readEntry("Current XMP Item", QString()));
+    d->iptcWidget->setCurrentItemByKey(group.readEntry("Current IPTC Item",           QString()));
+    d->xmpWidget->setCurrentItemByKey(group.readEntry("Current XMP Item",             QString()));
 
 #if KEXIV2_VERSION >= 0x010000
-    d->exifWidget->setTagsFilter(group.readEntry("EXIF Tags Filter", QStringList()));
-    d->makernoteWidget->setTagsFilter(group.readEntry("MAKERNOTE Tags Filter", QStringList()));
-    d->iptcWidget->setTagsFilter(group.readEntry("IPTC Tags Filter", QStringList()));
-    d->xmpWidget->setTagsFilter(group.readEntry("XMP Tags Filter", QStringList()));
+    d->exifWidget->setTagsFilter(group.readEntry("EXIF Tags Filter",           MetadataPanel::defaultExifFilter()));
+    d->makernoteWidget->setTagsFilter(group.readEntry("MAKERNOTE Tags Filter", MetadataPanel::defaultMknoteFilter()));
+    d->iptcWidget->setTagsFilter(group.readEntry("IPTC Tags Filter",           MetadataPanel::defaultIptcFilter()));
+    d->xmpWidget->setTagsFilter(group.readEntry("XMP Tags Filter",             MetadataPanel::defaultXmpFilter()));
+#else
+    d->exifWidget->setTagsFilter(MetadataPanel::defaultExifFilter()));
+    d->makernoteWidget->setTagsFilter(MetadataPanel::defaultMknoteFilter()));
+    d->iptcWidget->setTagsFilter(MetadataPanel::defaultIptcFilter()));
+    d->xmpWidget->setTagsFilter(MetadataPanel::defaultXmpFilter()));
 #endif
 }
 
@@ -153,14 +159,14 @@ void ImagePropertiesMetaDataTab::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Image Properties SideBar");
     group.writeEntry("ImagePropertiesMetaData Tab", currentIndex());
-    group.writeEntry("EXIF Level", d->exifWidget->getMode());
-    group.writeEntry("MAKERNOTE Level", d->makernoteWidget->getMode());
-    group.writeEntry("IPTC Level", d->iptcWidget->getMode());
-    group.writeEntry("XMP Level", d->xmpWidget->getMode());
-    group.writeEntry("Current EXIF Item", d->exifWidget->getCurrentItemKey());
-    group.writeEntry("Current MAKERNOTE Item", d->makernoteWidget->getCurrentItemKey());
-    group.writeEntry("Current IPTC Item", d->iptcWidget->getCurrentItemKey());
-    group.writeEntry("Current XMP Item", d->xmpWidget->getCurrentItemKey());
+    group.writeEntry("EXIF Level",                  d->exifWidget->getMode());
+    group.writeEntry("MAKERNOTE Level",             d->makernoteWidget->getMode());
+    group.writeEntry("IPTC Level",                  d->iptcWidget->getMode());
+    group.writeEntry("XMP Level",                   d->xmpWidget->getMode());
+    group.writeEntry("Current EXIF Item",           d->exifWidget->getCurrentItemKey());
+    group.writeEntry("Current MAKERNOTE Item",      d->makernoteWidget->getCurrentItemKey());
+    group.writeEntry("Current IPTC Item",           d->iptcWidget->getCurrentItemKey());
+    group.writeEntry("Current XMP Item",            d->xmpWidget->getCurrentItemKey());
     config->sync();
 }
 

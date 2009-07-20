@@ -55,6 +55,10 @@
 #include <kiconloader.h>
 #include <klocale.h>
 
+// Libkexiv2 includes
+
+#include <libkexiv2/version.h>
+
 // Local includes
 
 #include "metadatalistview.h"
@@ -119,8 +123,14 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     QToolButton *simpleLevel = new QToolButton(d->levelGBox);
     simpleLevel->setIcon(iconLoader->loadIcon("user-identity", (KIconLoader::Group)KIconLoader::Toolbar));
     simpleLevel->setCheckable(true);
-    simpleLevel->setWhatsThis(i18n("Switch the tags view to a custom human-readable list"));
+#if KEXIV2_VERSION >= 0x010000
+    simpleLevel->setWhatsThis(i18n("Switch the tags view to a custom human-readable list. "
+                                   "To customize tags filter list, go to Metadata configuration panel."));
     simpleLevel->setToolTip(i18n("Custom list"));
+#else
+    simpleLevel->setWhatsThis(i18n("Switch the tags view to a human-readable list"));
+    simpleLevel->setToolTip(i18n("Human-readable list"));
+#endif
     d->levelButtons->addButton(simpleLevel, CUSTOM);
 
     QToolButton *fullLevel = new QToolButton(d->levelGBox);
