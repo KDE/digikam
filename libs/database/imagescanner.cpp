@@ -252,7 +252,7 @@ void ImageScanner::scanImageInformation()
     // creation date: fall back to file system property
     if (metadataInfos[1].isNull() || !metadataInfos[1].toDateTime().isValid())
     {
-        metadataInfos[1] = creationDateFromFilesystem();
+        metadataInfos[1] = creationDateFromFilesystem(m_fileInfo);
     }
 
     QVariantList infos;
@@ -470,13 +470,13 @@ void ImageScanner::scanVideoFile()
         // creation date: fall back to file system property
         if (metadataInfos[1].isNull() || !metadataInfos[1].toDateTime().isValid())
         {
-            metadataInfos[1] = creationDateFromFilesystem();
+            metadataInfos[1] = creationDateFromFilesystem(m_fileInfo);
         }
     }
     else
     {
         metadataInfos << -1
-                      << creationDateFromFilesystem();
+                      << creationDateFromFilesystem(m_fileInfo);
     }
 
     QSize size;
@@ -514,7 +514,7 @@ void ImageScanner::scanAudioFile()
 
     QVariantList infos;
     infos << -1
-          << creationDateFromFilesystem()
+          << creationDateFromFilesystem(m_fileInfo)
           << detectAudioFormat();
 
     DatabaseAccess().db()->addImageInformation(m_scanInfo.id, infos,
@@ -620,11 +620,11 @@ QString ImageScanner::detectAudioFormat()
     return suffix;
 }
 
-QDateTime ImageScanner::creationDateFromFilesystem()
+QDateTime ImageScanner::creationDateFromFilesystem(const QFileInfo &info)
 {
     // creation date is not what it seems on Unix
-    QDateTime ctime = m_fileInfo.created();
-    QDateTime mtime = m_fileInfo.lastModified();
+    QDateTime ctime = info.created();
+    QDateTime mtime = info.lastModified();
     if (ctime.isNull())
         return mtime;
     if (mtime.isNull())

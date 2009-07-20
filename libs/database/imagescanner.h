@@ -108,6 +108,12 @@ public:
     void copiedFrom(int albumId, qlonglong srcId);
 
     /**
+     * Returns a suitable creation date from file system information.
+     * Use this as a fallback if metadata is not available.
+     */
+    static QDateTime creationDateFromFilesystem(const QFileInfo &info);
+
+    /**
      * Returns containers with user-presentable information.
      * These methods provide the reverse service: Not writing into the db, but reading from the db.
      */
@@ -152,7 +158,6 @@ protected:
     QString detectFormat();
     QString detectVideoFormat();
     QString detectAudioFormat();
-    QDateTime creationDateFromFilesystem();
 
 protected:
 
