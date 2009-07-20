@@ -52,12 +52,14 @@ public:
         autoSyncPreview      = 0;
         autoLoadOnRightPanel = 0;
         loadFullImageSize    = 0;
+        clearOnClose         = 0;
     }
 
     QCheckBox *hideToolBar;
     QCheckBox *autoSyncPreview;
     QCheckBox *autoLoadOnRightPanel;
     QCheckBox *loadFullImageSize;
+    QCheckBox *clearOnClose;
 };
 
 SetupLightTable::SetupLightTable(QWidget* parent)
@@ -91,12 +93,19 @@ SetupLightTable::SetupLightTable(QWidget* parent)
                      "into the preview panel instead of one at a reduced size. As this option will make it take longer "
                      "to load images, only use it if you have a fast computer."));
 
-    d->hideToolBar = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
+    d->hideToolBar  = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
+
+    d->clearOnClose = new QCheckBox(i18n("Clear the light table on close"));
+    d->clearOnClose->setWhatsThis(i18n("Set this option to remove all images"
+    		                       "from the light table when you close it,"
+    		                       "or unset it to preserve the images"
+    		                       "currently on the light table."));
 
     gLayout->addWidget(d->autoSyncPreview);
     gLayout->addWidget(d->autoLoadOnRightPanel);
     gLayout->addWidget(d->loadFullImageSize);
     gLayout->addWidget(d->hideToolBar);
+    gLayout->addWidget(d->clearOnClose);
     gLayout->setMargin(KDialog::spacingHint());
     gLayout->setSpacing(0);
 
@@ -127,6 +136,7 @@ void SetupLightTable::readSettings()
     d->autoSyncPreview->setChecked(group.readEntry("Auto Sync Preview",          true));
     d->autoLoadOnRightPanel->setChecked(group.readEntry("Auto Load Right Panel", true));
     d->loadFullImageSize->setChecked(group.readEntry("Load Full Image size",     false));
+    d->clearOnClose->setChecked(group.readEntry("Clear On Close",                false));
 }
 
 void SetupLightTable::applySettings()
@@ -137,6 +147,7 @@ void SetupLightTable::applySettings()
     group.writeEntry("Auto Sync Preview",       d->autoSyncPreview->isChecked());
     group.writeEntry("Auto Load Right Panel",   d->autoLoadOnRightPanel->isChecked());
     group.writeEntry("Load Full Image size",    d->loadFullImageSize->isChecked());
+    group.writeEntry("Clear On Close",          d->clearOnClose->isChecked());
     config->sync();
 }
 

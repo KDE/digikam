@@ -96,6 +96,7 @@ public:
         themeMenuAction        = 0;
         contributeAction       = 0;
         showMenuBarAction      = 0;
+        clearOnCloseAction     = 0;
     }
 
     bool                      autoLoadOnRightPanel;
@@ -144,6 +145,7 @@ public:
     KToggleAction            *syncPreviewAction;
     KToggleAction            *navigateByPairAction;
     KToggleAction            *showMenuBarAction;
+    KToggleAction            *clearOnCloseAction;
 
     LightTableBar            *barView;
 

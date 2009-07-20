@@ -167,6 +167,7 @@ void LightTableWindow::writeSettings()
     group.writeEntry("Vertical Splitter State", d->vSplitter->saveState().toBase64());
     d->hSplitter->saveState(group, "Horizontal Splitter State");
     group.writeEntry("Navigate By Pair", d->navigateByPairAction->isChecked());
+    group.writeEntry("Clear On Close", d->clearOnCloseAction->isChecked());
     config->sync();
 }
 
@@ -177,6 +178,7 @@ void LightTableWindow::applySettings()
     d->autoLoadOnRightPanel   = group.readEntry("Auto Load Right Panel",   true);
     d->autoSyncPreview        = group.readEntry("Auto Sync Preview",       true);
     d->fullScreenHideToolBar  = group.readEntry("FullScreen Hide ToolBar", false);
+    d->clearOnCloseAction->setChecked(group.readEntry("Clear On Close", false));
     d->previewView->setLoadFullImageSize(group.readEntry("Load Full Image size", false));
     d->barView->applySettings();
     refreshView();
@@ -192,6 +194,7 @@ void LightTableWindow::closeEvent(QCloseEvent* e)
 {
     if (!e) return;
 
+    if (d->clearOnCloseAction->isChecked()) slotClearItemsList();
     writeSettings();
 
     e->accept();
@@ -441,6 +444,13 @@ void LightTableWindow::setupActions()
     d->navigateByPairAction->setWhatsThis(i18n("Navigate by pairs with all items"));
     connect(d->navigateByPairAction, SIGNAL(triggered()), this, SLOT(slotToggleNavigateByPair()));
     actionCollection()->addAction("lighttable_navigatebypair", d->navigateByPairAction);
+
+    d->clearOnCloseAction = new KToggleAction(KIcon("edit-clear"), i18n("Clear On Close"), this);
+    d->clearOnCloseAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_C);
+    d->clearOnCloseAction->setEnabled(true);
+    d->clearOnCloseAction->setToolTip(i18n("Clear light table when it is closed"));
+    d->clearOnCloseAction->setWhatsThis(i18n("Remove all images from the light table when it is closed"));
+    actionCollection()->addAction("lighttable_clearonclose", d->clearOnCloseAction);
 
     d->zoomPlusAction = KStandardAction::zoomIn(d->previewView, SLOT(slotIncreaseZoom()), this);
     d->zoomPlusAction->setEnabled(false);
