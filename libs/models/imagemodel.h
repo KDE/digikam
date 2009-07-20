@@ -58,6 +58,8 @@ public:
         /// Returns a thumbnail pixmap. May be implemented by subclasses.
         /// Returns either a valid pixmap or a null QVariant.
         ThumbnailRole         = Qt::UserRole + 2,
+        /// Returns a QDateTime with the creation date
+        CreationDateRole      = Qt::UserRole + 3,
         // For use by subclasses
         SubclassRoles         = Qt::UserRole + 100,
         // For use by filter models

@@ -548,6 +548,8 @@ QVariant ImageModel::data(const QModelIndex& index, int role) const
             return QVariant::fromValue(const_cast<ImageModel*>(this));
         case ImageModelInternalId:
             return index.row();
+        case CreationDateRole:
+            return d->infos[index.row()].dateTime();
     }
     return QVariant();
 }
