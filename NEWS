@@ -44,7 +44,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 031 ==> 200246 : digiKam does not recognize GPS EXIF information.
 032 ==> 188999 : XMP tags not imported properly.
 033 ==> 199148 : Iptc ascii vs unicode pb.
-034 ==> 
+034 ==> 169685 : Tags lost on copy via context menu.
+035 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta2 - Release date: 2009-07-05
