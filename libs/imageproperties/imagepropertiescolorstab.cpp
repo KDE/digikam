@@ -241,13 +241,13 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     d->labelAlphaChannel    = new DTextLabelValue(0, gbox);
 
     grid->addWidget(label5,                  0, 0, 1, 1);
-    grid->addWidget(d->labelMeanValue,       0, 1, 1, 1);
+    grid->addWidget(d->labelPixelsValue,     0, 1, 1, 1);
     grid->addWidget(label7,                  1, 0, 1, 1);
-    grid->addWidget(d->labelPixelsValue,     1, 1, 1, 1);
+    grid->addWidget(d->labelCountValue,      1, 1, 1, 1);
     grid->addWidget(label4,                  2, 0, 1, 1);
-    grid->addWidget(d->labelStdDevValue,     2, 1, 1, 1);
+    grid->addWidget(d->labelMeanValue,       2, 1, 1, 1);
     grid->addWidget(label6,                  3, 0, 1, 1);
-    grid->addWidget(d->labelCountValue,      3, 1, 1, 1);
+    grid->addWidget(d->labelStdDevValue,     3, 1, 1, 1);
     grid->addWidget(label8,                  4, 0, 1, 1);
     grid->addWidget(d->labelMedianValue,     4, 1, 1, 1);
     grid->addWidget(label9,                  5, 0, 1, 1);
