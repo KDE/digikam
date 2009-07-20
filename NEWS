@@ -54,7 +54,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 041 ==> 188905 : Edit view goes 100% instead of fit window.
 042 ==> 187810 : In import window images are sorted in reverse order but folders are not.
 043 ==> 199619 : Deleting image and switching to next fastly seems to confuse album list.
-044 ==> 
+044 ==> 121804 : Image overwritten with blank file when importing into same folder
+045 ==>
 
 *********************************************************************************************************
 digiKam 1.0.0-beta2 - Release date: 2009-07-05
