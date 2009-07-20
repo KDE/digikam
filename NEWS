@@ -49,7 +49,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 036 ==> 200854 : Option to clear light table on close.
 037 ==> 200805 : List of supported file types can not be edited, just extended.
 038 ==> 200187 : Save and restore selected filter tags.
-039 ==>
+039 ==> 196999 : Calendar is ignoring selection of date/week but respecting month.
+040 ==> 
+
 
 *********************************************************************************************************
 digiKam 1.0.0-beta2 - Release date: 2009-07-05

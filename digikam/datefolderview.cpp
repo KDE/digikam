@@ -214,6 +214,11 @@ DateFolderView::~DateFolderView()
     delete d;
 }
 
+void DateFolderView::setImageModel(ImageFilterModel *model)
+{
+    d->monthview->setImageModel(model);
+}
+
 void DateFolderView::setActive(bool val)
 {
     if (d->active == val)

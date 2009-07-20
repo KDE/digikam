@@ -39,6 +39,7 @@ class QMouseEvent;
 
 namespace Digikam
 {
+class ImageFilterModel;
 class MonthWidgetPriv;
 
 class MonthWidget : public QWidget
@@ -49,6 +50,8 @@ public:
 
     MonthWidget(QWidget* parent);
     ~MonthWidget();
+
+    void setImageModel(ImageFilterModel *model);
 
     void setYearMonth(int year, int month);
     QSize sizeHint() const;
@@ -67,10 +70,14 @@ private:
 
 private Q_SLOTS:
 
-    void slotAddItems(const ImageInfoList& items);
-    void slotDeleteItem(const ImageInfo& item);
+    void triggerUpdateDays();
+    void updateDays();
+    void slotModelDestroyed();
 
 private:
+
+    void resetDayCounts();
+    void connectModel();
 
     MonthWidgetPriv* const d;
 };

@@ -35,6 +35,7 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QPalette>
+#include <QTimer>
 
 // KDE includes
 
@@ -45,8 +46,8 @@
 
 // Local includes
 
-#include "imageinfo.h"
-#include "albumlister.h"
+#include "imagefiltermodel.h"
+#include "imagemodel.h"
 
 namespace Digikam
 {
@@ -67,9 +68,14 @@ public:
     MonthWidgetPriv()
     {
         active = true;
+        model  = 0;
+        timer  = 0;
     }
 
     bool         active;
+
+    ImageFilterModel *model;
+    QTimer           *timer;
 
     int          year;
     int          month;
@@ -91,6 +97,13 @@ MonthWidget::MonthWidget(QWidget* parent)
     setYearMonth(date.year(), date.month());
 
     setActive(false);
+
+    d->timer = new QTimer(this);
+    d->timer->setSingleShot(true);
+    d->timer->setInterval(150);
+
+    connect(d->timer, SIGNAL(timeout()),
+            this, SLOT(updateDays()));
 }
 
 MonthWidget::~MonthWidget()
@@ -332,7 +345,8 @@ void MonthWidget::mousePressEvent(QMouseEvent *e)
             filterDays.append(QDateTime(QDate(d->year, d->month, d->days[i].day), QTime()));
     }
 
-    AlbumLister::instance()->setDayFilter(filterDays);
+    if (d->model)
+        d->model->setDayFilter(filterDays);
 
     update();
 }
@@ -346,30 +360,86 @@ void MonthWidget::setActive(bool val)
 
     if (d->active)
     {
-        connect(AlbumLister::instance(), SIGNAL(signalNewItems(const ImageInfoList&)),
-                this, SLOT(slotAddItems(const ImageInfoList&)));
-
-        connect(AlbumLister::instance(), SIGNAL(signalDeleteItem(const ImageInfo&)),
-                this, SLOT(slotDeleteItem(const ImageInfo&)));
+        connectModel();
+        triggerUpdateDays();
     }
     else
     {
         QDate date = QDate::currentDate();
         setYearMonth(date.year(), date.month());
-        AlbumLister::instance()->setDayFilter(QList<QDateTime>());
 
-        disconnect(AlbumLister::instance());
+        if (d->model)
+        {
+            d->model->setDayFilter(QList<QDateTime>());
+            disconnect(d->model, 0, this, 0);
+        }
     }
 }
 
-void MonthWidget::slotAddItems(const ImageInfoList& items)
+void MonthWidget::setImageModel(ImageFilterModel *model)
+{
+    if (d->model)
+        disconnect(d->model, 0, this, 0);
+
+    d->model = model;
+    connectModel();
+
+    triggerUpdateDays();
+}
+
+void MonthWidget::connectModel()
+{
+    if (d->model)
+    {
+        connect(d->model, SIGNAL(destroyed()),
+                this, SLOT(slotModelDestroyed()));
+        connect(d->model, SIGNAL(rowsInserted(QModelIndex,int,int)),
+                this, SLOT(triggerUpdateDays()));
+        connect(d->model, SIGNAL(rowsRemoved(QModelIndex,int,int)),
+                this, SLOT(triggerUpdateDays()));
+        connect(d->model, SIGNAL(modelReset()),
+                this, SLOT(triggerUpdateDays()));
+        connect(d->model, SIGNAL(triggerUpdateDays()),
+                this, SLOT(triggerUpdateDays()));
+        //connect(d->model, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+          //      this, SLOT(triggerUpdateDays()));
+    }
+}
+
+void MonthWidget::triggerUpdateDays()
+{
+    if (!d->timer->isActive())
+        d->timer->start();
+}
+
+void MonthWidget::resetDayCounts()
+{
+    for (int i=0; i<42; ++i)
+    {
+        d->days[i].active    = false;
+        d->days[i].numImages = 0;
+    }
+}
+
+void MonthWidget::updateDays()
 {
     if (!d->active)
         return;
 
-    for (ImageInfoList::const_iterator it = items.constBegin(); it != items.constEnd(); ++it)
+    resetDayCounts();
+
+    if (!d->model)
+        return;
+
+    const int size = d->model->rowCount();
+    for (int i=0; i<size; i++)
     {
-        QDateTime dt = it->dateTime();
+        QModelIndex index = d->model->index(i, 0);
+        if (!index.isValid())
+            continue;
+        QDateTime dt = d->model->data(index, ImageModel::CreationDateRole).toDateTime();
+        if (dt.isNull())
+            continue;
 
         for (int i=0; i<42; ++i)
         {
@@ -385,28 +455,10 @@ void MonthWidget::slotAddItems(const ImageInfoList& items)
     update();
 }
 
-void MonthWidget::slotDeleteItem(const ImageInfo& item)
+void MonthWidget::slotModelDestroyed()
 {
-    if (!d->active || item.isNull())
-        return;
-
-    QDateTime dt = item.dateTime();
-
-    for (int i=0; i<42; ++i)
-    {
-        if (d->days[i].day == dt.date().day())
-        {
-            d->days[i].numImages--;
-            if (d->days[i].numImages <= 0)
-            {
-                d->days[i].active = false;
-                d->days[i].numImages = 0;
-            }
-
-            break;
-        }
-    }
-
+    d->model = 0;
+    resetDayCounts();
     update();
 }
 

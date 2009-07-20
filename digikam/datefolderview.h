@@ -37,9 +37,10 @@
 namespace Digikam
 {
 
+class Album;
 class DateFolderViewPriv;
 class DAlbum;
-class Album;
+class ImageFilterModel;
 
 class DateFolderView : public KVBox
 {
@@ -49,6 +50,8 @@ public:
 
     DateFolderView(QWidget* parent);
     ~DateFolderView();
+
+    void setImageModel(ImageFilterModel *model);
 
     void setActive(bool val);
 

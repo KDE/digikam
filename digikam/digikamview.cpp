@@ -235,6 +235,7 @@ DigikamView::DigikamView(QWidget *parent)
     d->searchBox->setMargin(0);
 
     d->dateFolderView   = new DateFolderView(this);
+    d->dateFolderView->setImageModel(d->iconView->imageFilterModel());
     d->timeLineView     = new TimeLineView(this);
     d->fuzzySearchView  = new FuzzySearchView(this);
 #ifdef HAVE_MARBLEWIDGET
