@@ -263,7 +263,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
 
     d->tabWidget->insertTab(ImageDescEditTabPriv::DESCRIPTIONS, sv, i18n("Description"));
 
-    // Informations Managament view --------------------------------------
+    // Information Managament View --------------------------------------
 
     QScrollArea *sv2 = new QScrollArea(d->tabWidget);
     sv2->setFrameStyle(QFrame::NoFrame);
