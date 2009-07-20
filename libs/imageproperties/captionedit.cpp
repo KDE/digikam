@@ -62,11 +62,11 @@ CaptionEdit::CaptionEdit(QWidget* parent)
     d->altLangStrEdit = new AltLangStrEdit(this);
     d->altLangStrEdit->setTitle(i18n("Captions: "));
     d->altLangStrEdit->setFixedHeight(100);
-    d->altLangStrEdit->setClickMessage(i18n("Enter here caption text"));
+    d->altLangStrEdit->setClickMessage(i18n("Enter caption text here."));
 
     d->authorEdit = new KLineEdit(this);
     d->authorEdit->setClearButtonShown(true);
-    d->authorEdit->setClickMessage(i18n("Enter here caption author name."));
+    d->authorEdit->setClickMessage(i18n("Enter caption author name here."));
 
     setMargin(0);
     setSpacing(0);

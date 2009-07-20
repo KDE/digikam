@@ -53,13 +53,13 @@ SubjectEdit::SubjectEdit(QWidget* parent)
 
     m_iprEdit->setText(QString("XMP"));
     m_iprEdit->setValidator(subjectValidator);
-    m_iprEdit->setWhatsThis(i18n("Enter here the Informative Provider Reference. "
+    m_iprEdit->setWhatsThis(i18n("Enter the Informative Provider Reference here. "
                                  "I.P.R is a name registered with the XMP/NAA, identifying the "
                                  "provider that provides an indicator of the content. "
                                  "The default value for the I.P.R is \"XMP\" if a standard Reference "
                                  "Code is used."));
 
-    m_refEdit->setWhatsThis(i18n("Enter here the Subject Reference Number. "
+    m_refEdit->setWhatsThis(i18n("Enter the Subject Reference Number here. "
                                  "Provides a numeric code to indicate the Subject Name plus "
                                  "optional Subject Matter and Subject Detail Names in the "
                                  "language of the service. Subject Reference is a number "
@@ -72,15 +72,15 @@ SubjectEdit::SubjectEdit(QWidget* parent)
                                  "This field is limited to 8 digit code."));
 
     m_nameEdit->setValidator(subjectValidator);
-    m_nameEdit->setWhatsThis(i18n("Enter here the Subject Name. English language is used "
+    m_nameEdit->setWhatsThis(i18n("Enter the Subject Name here. English language is used "
                                   "if you selected a standard XMP/NAA reference code."));
 
     m_matterEdit->setValidator(subjectValidator);
-    m_matterEdit->setWhatsThis(i18n("Enter here the Subject Matter Name. English language is used "
+    m_matterEdit->setWhatsThis(i18n("Enter the Subject Matter Name here. English language is used "
                                     "if you selected a standard XMP/NAA reference code."));
 
     m_detailEdit->setValidator(subjectValidator);
-    m_detailEdit->setWhatsThis(i18n("Enter here the Subject Detail Name. English language is used "
+    m_detailEdit->setWhatsThis(i18n("Enter the Subject Detail Name here. English language is used "
                                     "if you selected a standard XMP/NAA reference code."));
 
     // reset the note label, not used in XMP view

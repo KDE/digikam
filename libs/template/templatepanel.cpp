@@ -119,7 +119,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     QLabel *label1     = new QLabel(i18n("Author Names:"), page1);
     d->authorsEdit     = new KLineEdit(page1);
     d->authorsEdit->setClearButtonShown(true);
-    d->authorsEdit->setClickMessage(i18n("Enter here all creator name. Use semi-colons as separator."));
+    d->authorsEdit->setClickMessage(i18n("Enter all creator name. Use semi-colons as separator here."));
     label1->setBuddy(d->authorsEdit);
     d->authorsEdit->setWhatsThis(i18n("<p>This field should contain names of the persons who created the photograph. "
                                       "If it is not appropriate to add the name of the photographer (for example, if the identify of "
@@ -133,7 +133,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     QLabel *label2         = new QLabel(i18n("Authors Position:"), page1);
     d->authorsPositionEdit = new KLineEdit(page1);
     d->authorsPositionEdit->setClearButtonShown(true);
-    d->authorsPositionEdit->setClickMessage(i18n("Enter here the job title of authors."));
+    d->authorsPositionEdit->setClickMessage(i18n("Enter the job title of authors here."));
     label2->setBuddy(d->authorsPositionEdit);
     d->authorsPositionEdit->setWhatsThis(i18n("<p>This field should contain the job title of authors. Examples might include "
                                               "titles such as: Staff Photographer, Freelance Photographer, or Independent Commercial "
@@ -146,7 +146,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     QLabel *label3 = new QLabel(i18n("Credit:"), page1);
     d->creditEdit  = new KLineEdit(page1);
     d->creditEdit->setClearButtonShown(true);
-    d->creditEdit->setClickMessage(i18n("Enter here the photograph credit."));
+    d->creditEdit->setClickMessage(i18n("Enter the photograph credit here."));
     label3->setBuddy(d->creditEdit);
     d->creditEdit->setWhatsThis(i18n("<p>(synonymous to Provider): Use the Provider field to identify who is providing the photograph. "
                                      "This does not necessarily have to be the author. If a photographer is working for a news agency "
@@ -160,7 +160,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     d->copyrightEdit = new AltLangStrEdit(page1);
     d->copyrightEdit->setTitle(i18n("Copyright:"));
     d->copyrightEdit->setFixedHeight(75);
-    d->copyrightEdit->setClickMessage(i18n("Enter here the copyright notice to identify the current owner(s) of the copyright"));
+    d->copyrightEdit->setClickMessage(i18n("Enter the copyright notice to identify the current owner(s) of the copyright here."));
     d->copyrightEdit->setWhatsThis(i18n("<p>The Copyright Notice should contain any necessary copyright notice for claiming the intellectual "
                                         "property, and should identify the current owner(s) of the copyright for the photograph. Usually, "
                                         "this would be the photographer, but if the image was done by an employee or as work-for-hire, "
@@ -183,8 +183,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     d->rightUsageEdit = new AltLangStrEdit(page1);
     d->rightUsageEdit->setTitle(i18n("Right Usage Terms:"));
     d->rightUsageEdit->setFixedHeight(75);
-    d->rightUsageEdit->setClickMessage(i18n("Enter here the list of instructions on how "
-                                            "a resource can be legally used"));
+    d->rightUsageEdit->setClickMessage(i18n("Enter the list of instructions on how a resource can be legally used here."));
     d->rightUsageEdit->setWhatsThis(i18n("<p>The Right Usage Terms field should be used to list instructions on how "
                                          "a resource can be legally used."
                                          "<p>With XMP, you can include more than one right usage terms string using "
@@ -196,7 +195,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     QLabel *label6 = new QLabel(i18n("Source:"), page1);
     d->sourceEdit  = new KLineEdit(page1);
     d->sourceEdit->setClearButtonShown(true);
-    d->sourceEdit->setClickMessage(i18n("Enter here original owner of the photograph."));
+    d->sourceEdit->setClickMessage(i18n("Enter original owner of the photograph here."));
     label6->setBuddy(d->sourceEdit);
     d->sourceEdit->setWhatsThis(i18n("<p>The Source field should be used to identify the original owner or copyright holder of the "
                                      "photograph. The value of this field should never be changed after the information is entered "
@@ -213,7 +212,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     QLabel *label7      = new QLabel(i18n("Instructions:"), page1);
     d->instructionsEdit = new KLineEdit(page1);
     d->instructionsEdit->setClearButtonShown(true);
-    d->instructionsEdit->setClickMessage(i18n("Enter here the editorial notice."));
+    d->instructionsEdit->setClickMessage(i18n("Enter the editorial notice here."));
     label7->setBuddy(d->instructionsEdit);
     d->instructionsEdit->setWhatsThis(i18n("<p>The Instructions field should be used to list editorial "
                                            "instructions concerning the use of photograph.</p>"
@@ -256,7 +255,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     QLabel *label10              = new QLabel(i18n("Province State:"), page2);
     d->locationProvinceStateEdit = new KLineEdit(page2);
     d->locationProvinceStateEdit->setClearButtonShown(true);
-    d->locationProvinceStateEdit->setClickMessage(i18n("Enter here province state of contents."));
+    d->locationProvinceStateEdit->setClickMessage(i18n("Enter province state of contents here."));
     label10->setBuddy(d->locationProvinceStateEdit);
     d->locationProvinceStateEdit->setWhatsThis(i18n("<p>This field should contain province state "
                                                     "where have been taken the photograph.</p>"));
@@ -266,7 +265,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     QLabel *label11     = new QLabel(i18n("City:"), page2);
     d->locationCityEdit = new KLineEdit(page2);
     d->locationCityEdit->setClearButtonShown(true);
-    d->locationCityEdit->setClickMessage(i18n("Enter here city of contents."));
+    d->locationCityEdit->setClickMessage(i18n("Enter city of contents here."));
     label11->setBuddy(d->locationCityEdit);
     d->locationCityEdit->setWhatsThis(i18n("<p>This field should contain city name "
                                            "where have been taken the photograph.</p>"));
@@ -276,7 +275,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     QLabel *label12            = new QLabel(i18n("Sublocation:"), page2);
     d->locationSublocationEdit = new KLineEdit(page2);
     d->locationSublocationEdit->setClearButtonShown(true);
-    d->locationSublocationEdit->setClickMessage(i18n("Enter here sublocation place of contents."));
+    d->locationSublocationEdit->setClickMessage(i18n("Enter sublocation place of contents here."));
     label12->setBuddy(d->locationSublocationEdit);
     d->locationSublocationEdit->setWhatsThis(i18n("<p>This field should contain sublocation from the city "
                                                   "where have been taken the photograph.</p>"));
@@ -307,7 +306,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     QLabel *label13    = new QLabel(i18n("City:"), page3);
     d->contactCityEdit = new KLineEdit(page3);
     d->contactCityEdit->setClearButtonShown(true);
-    d->contactCityEdit->setClickMessage(i18n("Enter here city name of lead author."));
+    d->contactCityEdit->setClickMessage(i18n("Enter city name of lead author here."));
     label13->setBuddy(d->contactCityEdit);
     d->contactCityEdit->setWhatsThis(i18n("<p>This field should contain city name "
                                           "where lead author live.</p>"));
@@ -317,7 +316,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     QLabel *label14       = new QLabel(i18n("Country:"), page3);
     d->contactCountryEdit = new KLineEdit(page3);
     d->contactCountryEdit->setClearButtonShown(true);
-    d->contactCountryEdit->setClickMessage(i18n("Enter here country name of lead author."));
+    d->contactCountryEdit->setClickMessage(i18n("Enter country name of lead author here."));
     label14->setBuddy(d->contactCountryEdit);
     d->contactCountryEdit->setWhatsThis(i18n("<p>This field should contain country name "
                                              "where lead author live.</p>"));
@@ -327,7 +326,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     QLabel *label15       = new QLabel(i18n("Address:"), page3);
     d->contactAddressEdit = new KLineEdit(page3);
     d->contactAddressEdit->setClearButtonShown(true);
-    d->contactAddressEdit->setClickMessage(i18n("Enter here address of lead author."));
+    d->contactAddressEdit->setClickMessage(i18n("Enter address of lead author here."));
     label15->setBuddy(d->contactAddressEdit);
     d->contactAddressEdit->setWhatsThis(i18n("<p>This field should contain address "
                                              "where lead author live.</p>"));
@@ -337,7 +336,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     QLabel *label16          = new QLabel(i18n("Postal Code:"), page3);
     d->contactPostalCodeEdit = new KLineEdit(page3);
     d->contactPostalCodeEdit->setClearButtonShown(true);
-    d->contactPostalCodeEdit->setClickMessage(i18n("Enter here postal code of lead author."));
+    d->contactPostalCodeEdit->setClickMessage(i18n("Enter postal code of lead author here."));
     label16->setBuddy(d->contactPostalCodeEdit);
     d->contactPostalCodeEdit->setWhatsThis(i18n("<p>This field should contain postal code "
                                                 "where lead author live.</p>"));
@@ -347,7 +346,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     QLabel *label17             = new QLabel(i18n("Province:"), page3);
     d->contactProvinceStateEdit = new KLineEdit(page3);
     d->contactProvinceStateEdit->setClearButtonShown(true);
-    d->contactProvinceStateEdit->setClickMessage(i18n("Enter here province of lead author."));
+    d->contactProvinceStateEdit->setClickMessage(i18n("Enter province of lead author here."));
     label17->setBuddy(d->contactProvinceStateEdit);
     d->contactProvinceStateEdit->setWhatsThis(i18n("<p>This field should contain province "
                                                    "where lead author live.</p>"));
@@ -357,7 +356,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     QLabel *label18     = new QLabel(i18n("Email:"), page3);
     d->contactEmailEdit = new KLineEdit(page3);
     d->contactEmailEdit->setClearButtonShown(true);
-    d->contactEmailEdit->setClickMessage(i18n("Enter here email of lead author."));
+    d->contactEmailEdit->setClickMessage(i18n("Enter email of lead author here."));
     label18->setBuddy(d->contactEmailEdit);
     d->contactEmailEdit->setWhatsThis(i18n("<p>This field should contain email "
                                            "of lead author.</p>"));
@@ -367,7 +366,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     QLabel *label19     = new QLabel(i18n("Phone:"), page3);
     d->contactPhoneEdit = new KLineEdit(page3);
     d->contactPhoneEdit->setClearButtonShown(true);
-    d->contactPhoneEdit->setClickMessage(i18n("Enter here phone number of lead author."));
+    d->contactPhoneEdit->setClickMessage(i18n("Enter phone number of lead author here."));
     label19->setBuddy(d->contactPhoneEdit);
     d->contactPhoneEdit->setWhatsThis(i18n("<p>This field should contain phone number "
                                            "of lead author.</p>"));
@@ -377,7 +376,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     QLabel *label20      = new QLabel(i18n("Url:"), page3);
     d->contactWebUrlEdit = new KLineEdit(page3);
     d->contactWebUrlEdit->setClearButtonShown(true);
-    d->contactWebUrlEdit->setClickMessage(i18n("Enter here Web site Url of lead author."));
+    d->contactWebUrlEdit->setClickMessage(i18n("Enter Web site Url of lead author here."));
     label20->setBuddy(d->contactWebUrlEdit);
     d->contactWebUrlEdit->setWhatsThis(i18n("<p>This field should contain web site Url "
                                             "of lead author.</p>"));

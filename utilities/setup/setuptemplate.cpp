@@ -92,8 +92,8 @@ SetupTemplate::SetupTemplate(QWidget* parent)
     QLabel *label0 = new QLabel(i18n("Template Title:"), panel);
     d->titleEdit   = new KLineEdit(panel);
     d->titleEdit->setClearButtonShown(true);
-    d->titleEdit->setClickMessage(i18n("Enter here the metadata template title."));
-    d->titleEdit->setWhatsThis(i18n("<p>Enter here the metadata template title. This title will be "
+    d->titleEdit->setClickMessage(i18n("Enter the metadata template title here."));
+    d->titleEdit->setWhatsThis(i18n("<p>Enter the metadata template title here. This title will be "
                                     "used to identify a template in your collection.</p>"));
     label0->setBuddy(d->titleEdit);
 

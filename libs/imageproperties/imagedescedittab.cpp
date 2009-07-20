@@ -199,9 +199,9 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
 
     d->newTagEdit = new SearchTextBar(captionTagsArea, "ImageDescEditTabNewTagEdit", i18n("Enter new tag here..."));
     d->newTagEdit->setCaseSensitive(false);
-    d->newTagEdit->setWhatsThis(i18n("Enter here the text used to create new tags. "
-                                     "'/' can be used here to create a hierarchy of tags. "
-                                     "',' can be used here to create more than one hierarchy at the same time."));
+    d->newTagEdit->setWhatsThis(i18n("Enter the text used to create new tags here. "
+                                     "'/' can be used to create a hierarchy of tags. "
+                                     "',' can be used to create more than one hierarchy at the same time."));
 
     d->tagsView        = new TAlbumListView(captionTagsArea);
 

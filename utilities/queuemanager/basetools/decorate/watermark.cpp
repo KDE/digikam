@@ -108,7 +108,7 @@ WaterMark::WaterMark(QObject* parent)
     QLabel *label = new QLabel(vbox);
     d->textEdit   = new KLineEdit(vbox);
     d->textEdit->setClearButtonShown(true);
-    d->textEdit->setClickMessage(i18n("Enter here your watermark string."));
+    d->textEdit->setClickMessage(i18n("Enter your watermark string here."));
     label->setText(i18n("Text:"));
 
     QLabel *label2       = new QLabel(vbox);
@@ -134,7 +134,7 @@ WaterMark::WaterMark(QObject* parent)
     d->stringLength->setRange(10, 90);
     d->stringLength->setValue(25);
     d->stringLength->setSliderEnabled(true);
-    d->stringLength->setWhatsThis(i18n("Enter here the string length as a percent of the image width."));
+    d->stringLength->setWhatsThis(i18n("Enter the string length as a percent of the image width here."));
     label5->setText(i18n("length (%):"));
 
     QLabel *space = new QLabel(vbox);
