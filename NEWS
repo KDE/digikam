@@ -55,8 +55,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 042 ==> 187810 : In import window images are sorted in reverse order but folders are not.
 043 ==> 
 
->>>>>>> Take already loaded items into account when sorting by date.:NEWS
-
 
 *********************************************************************************************************
 digiKam 1.0.0-beta2 - Release date: 2009-07-05
