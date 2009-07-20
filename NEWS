@@ -47,7 +47,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 034 ==> 169685 : Tags lost on copy via context menu.
 035 ==> 200162 : EXIF tags not updated if digiKam tag is renamed.
 036 ==> 200854 : Option to clear light table on close.
-037 ==> 
+037 ==> 200805 : List of supported file types can not be edited, just extended.
+038 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta2 - Release date: 2009-07-05
