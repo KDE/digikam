@@ -284,6 +284,16 @@ void MetadataListView::slotSearchTextChanged(const SearchTextSettings& settings)
     bool query     = false;
     QString search = settings.text;
 
+    // Restore all MdKey items.
+    QTreeWidgetItemIterator it2(this);
+    while (*it2)
+    {
+        MdKeyListViewItem *item = dynamic_cast<MdKeyListViewItem*>(*it2);
+        if (item)
+            item->setHidden(false);
+        ++it2;
+    }
+
     QTreeWidgetItemIterator it(this);
     while (*it)
     {
@@ -304,7 +314,33 @@ void MetadataListView::slotSearchTextChanged(const SearchTextSettings& settings)
         ++it;
     }
 
+    // If we found MdKey items alone, we hide it...
+    cleanUpMdKeyItem();
+
     emit signalTextFilterMatch(query);
+}
+
+void MetadataListView::cleanUpMdKeyItem()
+{
+    QTreeWidgetItemIterator it(this);
+    while (*it)
+    {
+        MdKeyListViewItem *item = dynamic_cast<MdKeyListViewItem*>(*it);
+        if (item)
+        {
+            int childs   = item->childCount();
+            int visibles = 0;
+            for (int i = 0 ; i < childs; ++i)
+            {
+                QTreeWidgetItem* citem = (*it)->child(i);
+                if (!citem->isHidden())
+                    ++visibles;
+            }
+            if (!childs || !visibles)
+                item->setHidden(true);
+        }
+        ++it;
+    }
 }
 
 MdKeyListViewItem* MetadataListView::findMdKeyItem(const QString& key)

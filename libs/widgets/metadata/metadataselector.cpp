@@ -300,6 +300,7 @@ void MetadataSelectorView::slotSearchTextChanged(const SearchTextSettings& setti
     QString search       = settings.text;
     bool atleastOneMatch = false;
 
+    // Restore all MdKey items.
     QTreeWidgetItemIterator it2(d->selector);
     while (*it2)
     {
@@ -330,25 +331,10 @@ void MetadataSelectorView::slotSearchTextChanged(const SearchTextSettings& setti
         ++it;
     }
 
+    // If we found MdKey items alone, we hide it...
     cleanUpMdKeyItem();
 
     d->searchBar->slotSearchResult(atleastOneMatch);
-}
-
-void MetadataSelectorView::slotDeflautSelection()
-{
-    slotClearSelection();
-    QTreeWidgetItemIterator it(d->selector);
-    while (*it)
-    {
-        MetadataSelectorItem *item = dynamic_cast<MetadataSelectorItem*>(*it);
-        if (item)
-        {
-            if (d->defaultFilter.contains(item->text(0)))
-                item->setCheckState(0, Qt::Checked);
-        }
-        ++it;
-    }
 }
 
 void MetadataSelectorView::cleanUpMdKeyItem()
@@ -369,6 +355,22 @@ void MetadataSelectorView::cleanUpMdKeyItem()
             }
             if (!childs || !visibles)
                 item->setHidden(true);
+        }
+        ++it;
+    }
+}
+
+void MetadataSelectorView::slotDeflautSelection()
+{
+    slotClearSelection();
+    QTreeWidgetItemIterator it(d->selector);
+    while (*it)
+    {
+        MetadataSelectorItem *item = dynamic_cast<MetadataSelectorItem*>(*it);
+        if (item)
+        {
+            if (d->defaultFilter.contains(item->text(0)))
+                item->setCheckState(0, Qt::Checked);
         }
         ++it;
     }
