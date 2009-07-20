@@ -147,10 +147,10 @@ void ImagePropertiesMetaDataTab::readSettings()
     d->iptcWidget->setTagsFilter(group.readEntry("IPTC Tags Filter",           MetadataPanel::defaultIptcFilter()));
     d->xmpWidget->setTagsFilter(group.readEntry("XMP Tags Filter",             MetadataPanel::defaultXmpFilter()));
 #else
-    d->exifWidget->setTagsFilter(MetadataPanel::defaultExifFilter()));
-    d->makernoteWidget->setTagsFilter(MetadataPanel::defaultMknoteFilter()));
-    d->iptcWidget->setTagsFilter(MetadataPanel::defaultIptcFilter()));
-    d->xmpWidget->setTagsFilter(MetadataPanel::defaultXmpFilter()));
+    d->exifWidget->setTagsFilter(MetadataPanel::defaultExifFilter());
+    d->makernoteWidget->setTagsFilter(MetadataPanel::defaultMknoteFilter());
+    d->iptcWidget->setTagsFilter(MetadataPanel::defaultIptcFilter());
+    d->xmpWidget->setTagsFilter(MetadataPanel::defaultXmpFilter());
 #endif
 }
 
