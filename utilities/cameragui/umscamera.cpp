@@ -62,6 +62,7 @@ extern "C"
 
 #include "dimg.h"
 #include "dmetadata.h"
+#include "imagescanner.h"
 
 namespace Digikam
 {
@@ -193,11 +194,8 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
                 pInfo = meta.getPhotographInformation();
             }
 
-            if (dt.isNull())
-            {
-                // If date is not found in metadata, use file time stamp
-                dt = fi->created();
-            }
+            if (dt.isNull()) // fall back to file system info
+                ImageScanner::creationDateFromFilesystem(*fi);
 
             info.name             = fi->fileName();
             info.folder           = !folder.endsWith('/') ? folder + QString('/') : folder;
@@ -442,11 +440,8 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
         dims  = meta.getImageDimensions();
         pInfo = meta.getPhotographInformation();
 
-        if (dt.isNull())
-        {
-            // If date is not found in metadata, use file time stamp
-            dt = fi.created();
-        }
+        if (dt.isNull()) // fall back to file system info
+            ImageScanner::creationDateFromFilesystem(fi);
 
         info.name             = fi.fileName();
         info.folder           = !folder.endsWith('/') ? folder + QString("/") : folder;
