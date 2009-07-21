@@ -88,7 +88,7 @@ protected Q_SLOTS:
 
 protected:
 
-    void loadLangAltListEntries(const QString& currentLang=QString());
+    void loadLangAltListEntries(const QString& currentLang=QString("x-default"));
 
 private:
 

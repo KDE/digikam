@@ -367,8 +367,9 @@ void AltLangStrEdit::slotDeleteValue()
 
 void AltLangStrEdit::slotSelectionChanged(int index)
 {
-    QString lang = d->languageCB->currentText();
-    d->valueEdit->setSpellCheckingLanguage(lang.replace("-", "_")); 
+    QString lang        = d->languageCB->currentText();
+    QString langISO3066 = lang;
+    d->valueEdit->setSpellCheckingLanguage(langISO3066.replace("-", "_"));
     d->valueEdit->blockSignals(true);
 
     if (!d->languageCB->itemIcon(index).isNull())
@@ -433,7 +434,7 @@ void AltLangStrEdit::loadLangAltListEntries(const QString& currentLang)
             d->languageCB->addItem(it.key());
     }
 
-    d->languageCB->setCurrentItem(currentLang.isEmpty() ? QString("x-default") : currentLang);
+    d->languageCB->setCurrentItem(currentLang);
     slotSelectionChanged(d->languageCB->currentIndex());
 
     d->languageCB->updateGeometry();
