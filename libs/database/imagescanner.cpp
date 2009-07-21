@@ -373,15 +373,15 @@ void ImageScanner::scanImageComments()
     }
 
     // Headline
-    if (!metadataInfos[0].isNull() && metadataInfos.size() >= 3)
+    if (!metadataInfos[0].isNull())
     {
-        comments.addHeadline(metadataInfos[2].toString());
+        comments.addHeadline(metadataInfos[0].toString());
     }
 
     // Title
-    if (!metadataInfos[1].isNull() && metadataInfos.size() >= 3)
+    if (!metadataInfos[1].isNull())
     {
-        comments.addTitle(metadataInfos[2].toString());
+        comments.addTitle(metadataInfos[1].toString());
     }
 }
 
