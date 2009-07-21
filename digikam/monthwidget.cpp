@@ -399,8 +399,8 @@ void MonthWidget::connectModel()
                 this, SLOT(triggerUpdateDays()));
         connect(d->model, SIGNAL(modelReset()),
                 this, SLOT(triggerUpdateDays()));
-        connect(d->model, SIGNAL(triggerUpdateDays()),
-                this, SLOT(triggerUpdateDays()));
+//        connect(d->model, SIGNAL(triggerUpdateDays()),
+//                this, SLOT(triggerUpdateDays()));
         //connect(d->model, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
           //      this, SLOT(triggerUpdateDays()));
     }
