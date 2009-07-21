@@ -373,13 +373,13 @@ void ImageScanner::scanImageComments()
     }
 
     // Headline
-    if (!metadataInfos[0].isNull())
+    if (!metadataInfos[0].isNull() && metadataInfos.size() >= 3)
     {
         comments.addHeadline(metadataInfos[2].toString());
     }
 
     // Title
-    if (!metadataInfos[1].isNull())
+    if (!metadataInfos[1].isNull() && metadataInfos.size() >= 3)
     {
         comments.addTitle(metadataInfos[2].toString());
     }
