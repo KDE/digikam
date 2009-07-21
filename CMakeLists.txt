@@ -390,7 +390,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     # ==================================================================================================
     # LibLqr-1 library rules
 
-    INCLUDE_DIRECTORIES(${GLIB2_INCLUDE_DIR})
+    IF(NOT WIN32)
+        INCLUDE_DIRECTORIES(${GLIB2_INCLUDE_DIR})
+    ENDIF(NOT WIN32)
 
     IF(LQR-1_FOUND)
 
