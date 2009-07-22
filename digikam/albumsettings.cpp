@@ -161,6 +161,7 @@ public:
 
     // icon view settings
     int                                 imageSortOrder;
+    int                                 imageGroupMode;
     AlbumSettings::ItemRightClickAction itemRightClickAction;
 
     // nepomuk settings
@@ -204,6 +205,7 @@ void AlbumSettings::init()
 
     d->albumSortOrder               = AlbumSettings::ByFolder;
     d->imageSortOrder               = ImageSortSettings::SortByFileName;
+    d->imageGroupMode               = ImageSortSettings::CategoryByAlbum;
     d->itemRightClickAction         = AlbumSettings::ShowPreview;
 
     d->thumbnailSize                = ThumbnailSize::Medium;
@@ -299,7 +301,8 @@ void AlbumSettings::readSettings()
     d->albumSortOrder = AlbumSettings::AlbumSortOrder(group.readEntry("Album Sort Order",
                                                       (int)AlbumSettings::ByFolder));
 
-    d->imageSortOrder               = group.readEntry("Image Sort Order", (int)ImageSortSettings::SortByFileName);;
+    d->imageSortOrder               = group.readEntry("Image Sort Order", (int)ImageSortSettings::SortByFileName);
+    d->imageGroupMode               = group.readEntry("Image Group Mode", (int)ImageSortSettings::CategoryByAlbum);
 
     d->itemRightClickAction         = AlbumSettings::ItemRightClickAction(group.readEntry(
                                                                          "Item Right Click Action",
@@ -414,6 +417,7 @@ void AlbumSettings::saveSettings()
     group.writeEntry("Album Collections", d->albumCategoryNames);
     group.writeEntry("Album Sort Order", (int)d->albumSortOrder);
     group.writeEntry("Image Sort Order", (int)d->imageSortOrder);
+    group.writeEntry("Image Group Mode", (int)d->imageGroupMode);
     group.writeEntry("Item Right Click Action", (int)d->itemRightClickAction);
     group.writeEntry("Default Icon Size", QString::number(d->thumbnailSize));
     group.writeEntry("Default Tree Icon Size", QString::number(d->treeThumbnailSize));
@@ -584,6 +588,16 @@ void AlbumSettings::setImageSortOrder(int order)
 int AlbumSettings::getImageSortOrder() const
 {
     return d->imageSortOrder;
+}
+
+void AlbumSettings::setImageGroupMode(int mode)
+{
+    d->imageGroupMode = mode;
+}
+
+int AlbumSettings::getImageGroupMode() const
+{
+    return d->imageGroupMode;
 }
 
 void AlbumSettings::setItemRightClickAction(const ItemRightClickAction action)

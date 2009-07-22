@@ -104,6 +104,9 @@ public:
     void setImageSortOrder(int order);
     int getImageSortOrder() const;
 
+    void setImageGroupMode(int mode);
+    int getImageGroupMode() const;
+
     void setItemRightClickAction(const ItemRightClickAction action);
     ItemRightClickAction getItemRightClickAction() const;
 
