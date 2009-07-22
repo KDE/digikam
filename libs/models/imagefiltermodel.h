@@ -60,7 +60,7 @@ public:
         //CategoryCountRole      = ImageModel::FilterModelRoles + 3,
         /// Returns the id of the PAlbum of the index which is used for category
         CategoryAlbumIdRole    = ImageModel::FilterModelRoles + 3,
-        /// Returns the format of the PAlbum of the index which is used for category
+        /// Returns the format of the index which is used for category
         CategoryFormatRole     = ImageModel::FilterModelRoles + 4,
         ImageFilterModelPointerRole  = ImageModel::FilterModelRoles + 50
     };

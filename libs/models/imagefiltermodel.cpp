@@ -191,7 +191,7 @@ QVariant ImageFilterModel::data(const QModelIndex& index, int role) const
         case CategoryAlbumIdRole:
             return d->imageModel->imageInfoRef(mapToSource(index)).albumId();
         case CategoryFormatRole:
-            return d->imageModel->imageInfoRef(mapToSource(index)).albumId();
+            return d->imageModel->imageInfoRef(mapToSource(index)).format();
         case ImageFilterModelPointerRole:
             return QVariant::fromValue(const_cast<ImageFilterModel*>(this));
     }
