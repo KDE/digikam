@@ -59,7 +59,7 @@ protected:
     void focusInEvent(QFocusEvent*);
     void focusOutEvent(QFocusEvent*);
 
-private :
+private:
 
     MsgTextEditPriv* d;
 };
