@@ -40,6 +40,7 @@
 
 // KDE includes
 
+#include <kstandarddirs.h>
 #include <kcodecs.h>
 #include <kdebug.h>
 
@@ -190,7 +191,8 @@ void DatabaseParameters::removeFromUrl(KUrl& url)
 }
 
 void DatabaseParameters::readConfig(){    
-        QFile file("dbconfig.xml");
+	    QString filepath = KStandardDirs::locate("data", "digikam/database/dbconfig.xml");
+        QFile file(filepath);
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
             kDebug(50003) << "Couldn't open file: " << file.fileName().toAscii();
 	        return;
