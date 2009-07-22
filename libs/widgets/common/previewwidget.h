@@ -6,7 +6,7 @@
  * Date        : 2006-06-13
  * Description : a widget to display an image preview
  *
- * Copyright (C) 2006-2008 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,7 +47,7 @@ class PreviewWidgetPriv;
 
 class DIGIKAM_EXPORT PreviewWidget : public Q3ScrollView
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
@@ -107,12 +107,6 @@ protected:
     void   updateContentsSize();
     QRect  previewRect();
 
-    virtual void resizeEvent(QResizeEvent *);
-    virtual void viewportPaintEvent(QPaintEvent *);
-    virtual void contentsMousePressEvent(QMouseEvent *);
-    virtual void contentsMouseMoveEvent(QMouseEvent *);
-    virtual void contentsMouseReleaseEvent(QMouseEvent *);
-    virtual void contentsWheelEvent(QWheelEvent *);
     virtual void setContentsSize();
     virtual void viewportPaintExtraData(){};
     virtual int  previewWidth()=0;
@@ -121,6 +115,14 @@ protected:
     virtual void resetPreview()=0;
     virtual void paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)=0;
     virtual void zoomFactorChanged(double zoom);
+
+    // Re-implemented from parent class.
+    virtual void resizeEvent(QResizeEvent*);
+    virtual void viewportPaintEvent(QPaintEvent*);
+    virtual void contentsMousePressEvent(QMouseEvent*);
+    virtual void contentsMouseMoveEvent(QMouseEvent*);
+    virtual void contentsMouseReleaseEvent(QMouseEvent*);
+    virtual void contentsWheelEvent(QWheelEvent*);
 
 private:
 
