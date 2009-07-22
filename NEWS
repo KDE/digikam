@@ -58,7 +58,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 045 ==> 200783 : digiKam crashes while loading JPEG images.
 046 ==> 200979 : Trust 715 LCD camera  no driver.
 047 ==> 179902 : Picture numbering fails if pics taken at more than 1 image per second.
-048 ==> 
+048 ==> 184541 : Resize error when sharpening in image editor.
+049 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta2 - Release date: 2009-07-05
