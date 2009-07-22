@@ -2035,6 +2035,9 @@ void DImg::convertDepth(int depth)
 
 void DImg::fill(const DColor& color)
 {
+    if (isNull())
+        return;
+
     if (sixteenBit())
     {
         unsigned short *imgData16 = (unsigned short *)m_priv->data;
