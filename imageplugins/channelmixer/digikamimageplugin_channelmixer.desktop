@@ -12,6 +12,7 @@ Name[sk]=ObrazovýModul_MiešanieKanálov
 Name[sv]=Insticksprogram för kanalblandning
 Name[tr]=GörüntüEklentisi_KanalKarıştırıcı
 Name[x-test]=xxImagePlugin_ChannelMixerxx
+Name[zh_TW]=影像外掛程式_色頻混合器
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8

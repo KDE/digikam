@@ -43,4 +43,5 @@ Name[tr]=Fotoğrafları DigiKam ile İndir
 Name[uk]=Завантажити фотографії програмою digiKam
 Name[x-test]=xxDownload Photos with digiKamxx
 Name[zh_CN]=用 digiKam 下载照片
+Name[zh_TW]=使用 digiKam 下載照片
 

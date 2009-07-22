@@ -34,6 +34,7 @@ Name[tr]=DigiKam Belirle ve İndir
 Name[uk]=digiKam - виявлення і звантаження
 Name[x-test]=xxdigiKam Detect and Downloadxx
 Name[zh_CN]=digiKam 探测和下载
+Name[zh_TW]=digiKam 偵測與下載
 
 [Desktop Entry]
 Encoding=UTF-8

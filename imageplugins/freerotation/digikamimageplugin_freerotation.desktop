@@ -12,6 +12,7 @@ Name[sk]=ObrazovýModul_VoľnéOtáčanie
 Name[sv]=Insticksprogram för bildrotation
 Name[tr]=GörüntüEklentisi_SerbestDöndürme
 Name[x-test]=xxImagePlugin_FreeRotationxx
+Name[zh_TW]=影像外掛程式_自由旋轉
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
