@@ -84,9 +84,9 @@ void MsgTextEdit::paintEvent(QPaintEvent* e)
     {
         QPainter p(viewport());
         QPen tmp = p.pen();
-        p.setPen(palette().color(QPalette::Disabled, QColorGroup::Text));
+        p.setPen(palette().color(QPalette::Disabled, QPalette::Text));
         QRect cr = contentsRect();
-        p.drawText(cr, Qt::AlignAuto | Qt::AlignTop, d->message);
+        p.drawText(cr, Qt::AlignTop, d->message);
         p.setPen(tmp);
     }
 }
