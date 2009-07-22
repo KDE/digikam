@@ -390,7 +390,8 @@ bool SchemaUpdater::createDatabase()
 
 bool SchemaUpdater::createTablesV5()
 {
-    if (!m_access->backend()->execSql(
+    if (!m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateDB"))))
+    /*
                     QString("CREATE TABLE AlbumRoots\n"
                             " (id INTEGER PRIMARY KEY,\n"
                             "  label TEXT,\n"
@@ -399,201 +400,203 @@ bool SchemaUpdater::createTablesV5()
                             "  identifier TEXT,\n"
                             "  specificPath TEXT,\n"
                             "  UNIQUE(identifier, specificPath));") ))
+                            */
     {
         return false;
     }
 
-    if (!m_access->backend()->execSql(
-                    QString("CREATE TABLE Albums\n"
-                            " (id INTEGER PRIMARY KEY,\n"
-                            "  albumRoot INTEGER NOT NULL,\n"
-                            "  relativePath TEXT NOT NULL,\n"
-                            "  date DATE,\n"
-                            "  caption TEXT,\n"
-                            "  collection TEXT,\n"
-                            "  icon INTEGER,\n"
-                            "  UNIQUE(albumRoot, relativePath));") ))
-    {
-        return false;
-    }
-
-    if (!m_access->backend()->execSql(
-                    QString("CREATE TABLE Images\n"
-                            " (id INTEGER PRIMARY KEY,\n"
-                            "  album INTEGER,\n" // no constraints, for temporary orphans
-                            "  name TEXT NOT NULL,\n"
-                            "  status INTEGER NOT NULL,\n"
-                            "  category INTEGER NOT NULL,\n"
-                            "  modificationDate DATETIME,\n"
-                            "  fileSize INTEGER,\n"
-                            "  uniqueHash TEXT,\n"
-                            "  UNIQUE (album, name));") ))
-    {
-        return false;
-    }
-
-    if (!m_access->backend()->execSql(
-                    QString("CREATE TABLE ImageHaarMatrix\n"
-                            " (imageid INTEGER PRIMARY KEY,\n"
-                            "  modificationDate DATETIME,\n"
-                            "  uniqueHash TEXT,\n"
-                            "  matrix BLOB);") ))
-    {
-        return false;
-    }
-
-    if (!m_access->backend()->execSql(
-                    QString("CREATE TABLE ImageInformation\n"
-                            " (imageid INTEGER PRIMARY KEY,\n"
-                            "  rating INTEGER,\n"
-                            "  creationDate DATETIME,\n"
-                            "  digitizationDate DATETIME,\n"
-                            "  orientation INTEGER,\n"
-                            "  width INTEGER,\n"
-                            "  height INTEGER,\n"
-                            "  format TEXT,\n"
-                            "  colorDepth INTEGER,\n"
-                            "  colorModel INTEGER);") ))
-    {
-        return false;
-    }
-
-    if (!m_access->backend()->execSql(
-                    QString("CREATE TABLE ImageMetadata\n"
-                            " (imageid INTEGER PRIMARY KEY,\n"
-                            "  make TEXT,\n"
-                            "  model TEXT,\n"
-                            "  lens TEXT,\n"
-                            "  aperture REAL,\n"
-                            "  focalLength REAL,\n"
-                            "  focalLength35 REAL,\n"
-                            "  exposureTime REAL,\n"
-                            "  exposureProgram INTEGER,\n"
-                            "  exposureMode INTEGER,\n"
-                            "  sensitivity INTEGER,\n"
-                            "  flash INTEGER,\n"
-                            "  whiteBalance INTEGER,\n"
-                            "  whiteBalanceColorTemperature INTEGER,\n"
-                            "  meteringMode INTEGER,\n"
-                            "  subjectDistance REAL,\n"
-                            "  subjectDistanceCategory INTEGER);") ))
-    {
-        return false;
-    }
-
-    if (!m_access->backend()->execSql(
-                    QString("CREATE TABLE ImagePositions\n"
-                            " (imageid INTEGER PRIMARY KEY,\n"
-                            "  latitude TEXT,\n"
-                            "  latitudeNumber REAL,\n"
-                            "  longitude TEXT,\n"
-                            "  longitudeNumber REAL,\n"
-                            "  altitude REAL,\n"
-                            "  orientation REAL,\n"
-                            "  tilt REAL,\n"
-                            "  roll REAL,\n"
-                            "  accuracy REAL,\n"
-                            "  description TEXT);") ))
-    {
-        return false;
-    }
-
-    if (!m_access->backend()->execSql(
-                    QString("CREATE TABLE ImageComments\n"
-                            " (id INTEGER PRIMARY KEY,\n"
-                            "  imageid INTEGER,\n"
-                            "  type INTEGER,\n"
-                            "  language TEXT,\n"
-                            "  author TEXT,\n"
-                            "  date DATETIME,\n"
-                            "  comment TEXT,\n"
-                            "  UNIQUE(imageid, type, language, author));") ))
-    {
-        return false;
-    }
-
-    if (!m_access->backend()->execSql(
-                    QString("CREATE TABLE ImageCopyright\n"
-                            " (id INTEGER PRIMARY KEY,\n"
-                            "  imageid INTEGER,\n"
-                            "  property TEXT,\n"
-                            "  value TEXT,\n"
-                            "  extraValue TEXT,\n"
-                            "  UNIQUE(imageid, property, value, extraValue));") ))
-    {
-        return false;
-    }
-
-    if (!m_access->backend()->execSql(
-                    QString("CREATE TABLE IF NOT EXISTS Tags\n"
-                            " (id INTEGER PRIMARY KEY,\n"
-                            "  pid INTEGER,\n"
-                            "  name TEXT NOT NULL,\n"
-                            "  icon INTEGER,\n"
-                            "  iconkde TEXT,\n"
-                            "  UNIQUE (name, pid));") ))
-    {
-        return false;
-    }
-
-    if (!m_access->backend()->execSql(
-                    QString("CREATE TABLE IF NOT EXISTS TagsTree\n"
-                            " (id INTEGER NOT NULL,\n"
-                            "  pid INTEGER NOT NULL,\n"
-                            "  UNIQUE (id, pid));") ))
-    {
-        return false;
-    }
-
-    if (!m_access->backend()->execSql(
-                    QString("CREATE TABLE IF NOT EXISTS ImageTags\n"
-                            " (imageid INTEGER NOT NULL,\n"
-                            "  tagid INTEGER NOT NULL,\n"
-                            "  UNIQUE (imageid, tagid));") ))
-    {
-        return false;
-    }
-
-    if (!m_access->backend()->execSql(
-                    QString("CREATE TABLE IF NOT EXISTS ImageProperties\n"
-                            " (imageid  INTEGER NOT NULL,\n"
-                            "  property TEXT    NOT NULL,\n"
-                            "  value    TEXT    NOT NULL,\n"
-                            "  UNIQUE (imageid, property));") ))
-    {
-        return false;
-    }
-
-    if ( !m_access->backend()->execSql(
-                   QString( "CREATE TABLE IF NOT EXISTS Searches  \n"
-                            " (id INTEGER PRIMARY KEY, \n"
-                            "  type INTEGER, \n"
-                            "  name TEXT NOT NULL, \n"
-                            "  query TEXT NOT NULL);" ) ))
-    {
-        return false;
-    }
-
-    if (!m_access->backend()->execSql(
-                    QString("CREATE TABLE DownloadHistory\n"
-                            " (id  INTEGER PRIMARY KEY,\n"
-                            "  identifier TEXT,\n"
-                            "  filename TEXT,\n"
-                            "  filesize INTEGER,\n"
-                            "  filedate DATETIME,\n"
-                            "  UNIQUE(identifier, filename, filesize, filedate));"
-                           ) ))
-    {
-        return false;
-    }
-
-    if (!m_access->backend()->execSql(
-                    QString("CREATE TABLE IF NOT EXISTS Settings         \n"
-                            "(keyword TEXT NOT NULL UNIQUE,\n"
-                            " value TEXT);") ))
-    {
-        return false;
-    }
+//     if (!m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateDB2"))))
+//                     /*QString("CREATE TABLE Albums\n"
+//                             " (id INTEGER PRIMARY KEY,\n"
+//                             "  albumRoot INTEGER NOT NULL,\n"
+//                             "  relativePath TEXT NOT NULL,\n"
+//                             "  date DATE,\n"
+//                             "  caption TEXT,\n"
+//                             "  collection TEXT,\n"
+//                             "  icon INTEGER,\n"
+//                             "  UNIQUE(albumRoot, relativePath));") ))
+//                             */
+//     {
+//         return false;
+//     }
+// 
+//     if (!m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateDB3"))))
+//                     /*QString("CREATE TABLE Images\n"
+//                             " (id INTEGER PRIMARY KEY,\n"
+//                             "  album INTEGER,\n" // no constraints, for temporary orphans
+//                             "  name TEXT NOT NULL,\n"
+//                             "  status INTEGER NOT NULL,\n"
+//                             "  category INTEGER NOT NULL,\n"
+//                             "  modificationDate DATETIME,\n"
+//                             "  fileSize INTEGER,\n"
+//                             "  uniqueHash TEXT,\n"
+//                             "  UNIQUE (album, name));") ))*/
+//     {
+//         return false;
+//     }
+// 
+//     if (!m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateDB4"))))
+//                    /* QString("CREATE TABLE ImageHaarMatrix\n"
+//                             " (imageid INTEGER PRIMARY KEY,\n"
+//                             "  modificationDate DATETIME,\n"
+//                             "  uniqueHash TEXT,\n"
+//                             "  matrix BLOB);") ))*/
+//     {
+//         return false;
+//     }
+// 
+//     if (!m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateDB5"))))
+//                   /*  QString("CREATE TABLE ImageInformation\n"
+//                             " (imageid INTEGER PRIMARY KEY,\n"
+//                             "  rating INTEGER,\n"
+//                             "  creationDate DATETIME,\n"
+//                             "  digitizationDate DATETIME,\n"
+//                             "  orientation INTEGER,\n"
+//                             "  width INTEGER,\n"
+//                             "  height INTEGER,\n"
+//                             "  format TEXT,\n"
+//                             "  colorDepth INTEGER,\n"
+//                             "  colorModel INTEGER);") ))*/
+//     {
+//         return false;
+//     }
+// 
+//     if (!m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateDB6"))))
+//                   /*  QString("CREATE TABLE ImageMetadata\n"
+//                             " (imageid INTEGER PRIMARY KEY,\n"
+//                             "  make TEXT,\n"
+//                             "  model TEXT,\n"
+//                             "  lens TEXT,\n"
+//                             "  aperture REAL,\n"
+//                             "  focalLength REAL,\n"
+//                             "  focalLength35 REAL,\n"
+//                             "  exposureTime REAL,\n"
+//                             "  exposureProgram INTEGER,\n"
+//                             "  exposureMode INTEGER,\n"
+//                             "  sensitivity INTEGER,\n"
+//                             "  flash INTEGER,\n"
+//                             "  whiteBalance INTEGER,\n"
+//                             "  whiteBalanceColorTemperature INTEGER,\n"
+//                             "  meteringMode INTEGER,\n"
+//                             "  subjectDistance REAL,\n"
+//                             "  subjectDistanceCategory INTEGER);") ))*/
+//     {
+//         return false;
+//     }
+// 
+//     if (!m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateDB7"))))
+//                   /*  QString("CREATE TABLE ImagePositions\n"
+//                             " (imageid INTEGER PRIMARY KEY,\n"
+//                             "  latitude TEXT,\n"
+//                             "  latitudeNumber REAL,\n"
+//                             "  longitude TEXT,\n"
+//                             "  longitudeNumber REAL,\n"
+//                             "  altitude REAL,\n"
+//                             "  orientation REAL,\n"
+//                             "  tilt REAL,\n"
+//                             "  roll REAL,\n"
+//                             "  accuracy REAL,\n"
+//                             "  description TEXT);") ))*/
+//     {
+//         return false;
+//     }
+// 
+//     if (!m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateDB8"))))
+//                   /*  QString("CREATE TABLE ImageComments\n"
+//                             " (id INTEGER PRIMARY KEY,\n"
+//                             "  imageid INTEGER,\n"
+//                             "  type INTEGER,\n"
+//                             "  language TEXT,\n"
+//                             "  author TEXT,\n"
+//                             "  date DATETIME,\n"
+//                             "  comment TEXT,\n"
+//                             "  UNIQUE(imageid, type, language, author));") ))*/
+//     {
+//         return false;
+//     }
+// 
+//     if (!m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateDB9"))))
+//                   /*  QString("CREATE TABLE ImageCopyright\n"
+//                             " (id INTEGER PRIMARY KEY,\n"
+//                             "  imageid INTEGER,\n"
+//                             "  property TEXT,\n"
+//                             "  value TEXT,\n"
+//                             "  extraValue TEXT,\n"
+//                             "  UNIQUE(imageid, property, value, extraValue));") ))*/
+//     {
+//         return false;
+//     }
+// 
+//     if (!m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateDB10"))))
+//                    /* QString("CREATE TABLE IF NOT EXISTS Tags\n"
+//                             " (id INTEGER PRIMARY KEY,\n"
+//                             "  pid INTEGER,\n"
+//                             "  name TEXT NOT NULL,\n"
+//                             "  icon INTEGER,\n"
+//                             "  iconkde TEXT,\n"
+//                             "  UNIQUE (name, pid));") ))*/
+//     {
+//         return false;
+//     }
+// 
+//     if (!m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateDB11"))))
+//                   /*  QString("CREATE TABLE IF NOT EXISTS TagsTree\n"
+//                             " (id INTEGER NOT NULL,\n"
+//                             "  pid INTEGER NOT NULL,\n"
+//                             "  UNIQUE (id, pid));") ))*/
+//     {
+//         return false;
+//     }
+// 
+//     if (!m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateDB12"))))
+//                  /*   QString("CREATE TABLE IF NOT EXISTS ImageTags\n"
+//                             " (imageid INTEGER NOT NULL,\n"
+//                             "  tagid INTEGER NOT NULL,\n"
+//                             "  UNIQUE (imageid, tagid));") ))*/
+//     {
+//         return false;
+//     }
+// 
+//     if (!m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateDB13"))))
+//                 /*    QString("CREATE TABLE IF NOT EXISTS ImageProperties\n"
+//                             " (imageid  INTEGER NOT NULL,\n"
+//                             "  property TEXT    NOT NULL,\n"
+//                             "  value    TEXT    NOT NULL,\n"
+//                             "  UNIQUE (imageid, property));") ))*/
+//     {
+//         return false;
+//     }
+// 
+//     if ( !m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateDB14"))))
+//                  /*  QString( "CREATE TABLE IF NOT EXISTS Searches  \n"
+//                             " (id INTEGER PRIMARY KEY, \n"
+//                             "  type INTEGER, \n"
+//                             "  name TEXT NOT NULL, \n"
+//                             "  query TEXT NOT NULL);" ) ))*/
+//     {
+//         return false;
+//     }
+// 
+//     if (!m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateDB15"))))
+//                   /*  QString("CREATE TABLE DownloadHistory\n"
+//                             " (id  INTEGER PRIMARY KEY,\n"
+//                             "  identifier TEXT,\n"
+//                             "  filename TEXT,\n"
+//                             "  filesize INTEGER,\n"
+//                             "  filedate DATETIME,\n"
+//                             "  UNIQUE(identifier, filename, filesize, filedate));"
+//                            ) ))*/
+//     {
+//         return false;
+//     }
+// 
+//     if (!m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateDB16"))))
+//                   /*  QString("CREATE TABLE IF NOT EXISTS Settings         \n"
+//                             "(keyword TEXT NOT NULL UNIQUE,\n"
+//                             " value TEXT);") ))*/
+//     {
+//         return false;
+//     }
 
     return true;
 }
@@ -602,9 +605,9 @@ bool SchemaUpdater::createIndicesV5()
 {
     // TODO: see which more indices are needed
     // create indices
-    m_access->backend()->execSql("CREATE INDEX dir_index  ON Images    (album);");
-    m_access->backend()->execSql("CREATE INDEX hash_index ON Images    (uniqueHash);");
-    m_access->backend()->execSql("CREATE INDEX tag_index  ON ImageTags (tagid);");
+    m_access->backend()->execDBAction(m_access->backend()->getDBAction("CreateIdx1"));
+    m_access->backend()->execDBAction(m_access->backend()->getDBAction("CreateIdx2"));
+    m_access->backend()->execDBAction(m_access->backend()->getDBAction("CreateIdx3"));
 
     return true;
 }
@@ -614,22 +617,28 @@ bool SchemaUpdater::createTriggersV5()
     // Triggers for deletion
 
     // if AlbumRoot has been deleted
-    m_access->backend()->execSql("CREATE TRIGGER delete_albumroot DELETE ON AlbumRoots\n"
+    m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateTriggerV5_1")));
+
+
+            /*
+            "CREATE TRIGGER delete_albumroot DELETE ON AlbumRoots\n"
             "BEGIN\n"
             " DELETE FROM Albums\n"
             "   WHERE Albums.albumRoot = OLD.id;\n"
-            "END;");
-
+            "END;"); */
+/*
     // if Album has been deleted
+  m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateTriggerV5_2")));
     m_access->backend()->execSql("CREATE TRIGGER delete_album DELETE ON Albums\n"
             "BEGIN\n"
             " DELETE FROM Images\n"
             "   WHERE Images.album = OLD.id;\n"
             "END;");
-
+*/
     // if Image has been deleted
     // NOTE: For update to v6, merge in beta010Update1
-    m_access->backend()->execSql(
+    m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateTriggerV5_3")));
+/*    m_access->backend()->execSql(
             "CREATE TRIGGER delete_image DELETE ON Images\n"
             "BEGIN\n"
             "  DELETE FROM ImageTags\n"
@@ -653,19 +662,21 @@ bool SchemaUpdater::createTriggersV5()
             "  UPDATE Tags SET icon=null \n "
             "    WHERE icon=OLD.id;\n"
             "END;");
-
+*/
     // trigger: delete from ImageTags if Tag has been deleted
-    m_access->backend()->execSql(
+    m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateTriggerV5_4")));
+/*    m_access->backend()->execSql(
             "CREATE TRIGGER delete_tag DELETE ON Tags\n"
             "BEGIN\n"
             "  DELETE FROM ImageTags WHERE tagid=OLD.id;\n"
             "END;");
-
+*/
 
     // Triggers maintaining the TagTree (which is used when listing images by tags)
 
     // trigger: insert into TagsTree if Tag has been added
-    m_access->backend()->execSql(
+    m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateTriggerV5_5")));
+/*    m_access->backend()->execSql(
             "CREATE TRIGGER insert_tagstree AFTER INSERT ON Tags\n"
             "BEGIN\n"
             "  INSERT INTO TagsTree\n"
@@ -673,9 +684,10 @@ bool SchemaUpdater::createTriggersV5()
             "    UNION\n"
             "    SELECT NEW.id, pid FROM TagsTree WHERE id=NEW.pid;\n"
             "END;");
-
+*/
     // trigger: delete from TagsTree if Tag has been deleted
-    m_access->backend()->execSql(
+    m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateTriggerV5_6")));
+/*    m_access->backend()->execSql(
             "CREATE TRIGGER delete_tagstree DELETE ON Tags\n"
             "BEGIN\n"
             " DELETE FROM Tags\n"
@@ -685,9 +697,10 @@ bool SchemaUpdater::createTriggersV5()
             " DELETE FROM TagsTree\n"
             "    WHERE id=OLD.id;\n"
             "END;");
-
+*/
     // trigger: delete from TagsTree if Tag has been deleted
-    m_access->backend()->execSql(
+    m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateTriggerV5_7")));
+/*    m_access->backend()->execSql(
             "CREATE TRIGGER move_tagstree UPDATE OF pid ON Tags\n"
             "BEGIN\n"
             "  DELETE FROM TagsTree\n"
@@ -708,7 +721,7 @@ bool SchemaUpdater::createTriggersV5()
             "        WHERE\n"
             "        A.pid = NEW.id AND B.id = NEW.pid;\n"
             "END;");
-
+*/
     return true;
 }
 

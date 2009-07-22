@@ -410,7 +410,7 @@ void AlbumSettings::saveSettings()
 
     KConfigGroup group = config->group("Album Settings");
 
-    group.writeEntry("Database File Path", d->databaseFilePath);
+//    group.writeEntry("Database File Path", d->databaseFilePath);
     group.writeEntry("Album Collections", d->albumCategoryNames);
     group.writeEntry("Album Sort Order", (int)d->albumSortOrder);
     group.writeEntry("Image Sort Order", (int)d->imageSortOrder);

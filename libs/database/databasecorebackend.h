@@ -30,6 +30,7 @@
 #include <QString>
 #include <QStringList>
 #include <QSqlQuery>
+#include <QMap>
 
 // Local includes
 
@@ -56,6 +57,9 @@ public:
     DatabaseCoreBackend(const QString &backendName);
     DatabaseCoreBackend(const QString &backendName, DatabaseCoreBackendPrivate &dd);
     ~DatabaseCoreBackend();
+
+    databaseAction getDBAction(const QString &actionName);
+    bool execDBAction(const databaseAction &action, const QMap<QString, QVariant>* bindingMap = 0, QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
 
     /**
      * Checks if the parameters can be used for this database backend.
@@ -133,6 +137,12 @@ public:
     bool execSql(const QString& sql, const QList<QVariant>& boundValues, QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
 
     /**
+     * Method which accept a hashmap with key, values which are used for named binding
+     */
+    bool execSql(const QString& sql, const QMap<QString, QVariant>& bindingMap, QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
+
+
+    /**
      * Executes the statement and returns the query object.
      * Methods are provided for up to four bound values (positional binding), or for a list of bound values.
      */
@@ -148,10 +158,23 @@ public:
     QSqlQuery execQuery(const QString& sql, const QList<QVariant>& boundValues);
 
     /**
+     * Method which accept a hashmap with key, values which are used for named binding
+     */
+    QSqlQuery execQuery(const QString& sql, const QMap<QString, QVariant>& bindingMap);
+
+
+    /**
      * Calls exec/execBatch on the query, and handles debug output if something went wrong
      */
     bool exec(QSqlQuery& query);
     bool execBatch(QSqlQuery& query);
+
+    /**
+     * Calls exec/execBatch on the query, and handles debug output if something went wrong
+     * The differences to the upper methods are, that the query is not prepared, which can be faulty on
+     * trigger statements (e.g. on QMYSQL).
+     */
+    bool exec(const QString& query);
 
     /**
      * Creates a query object prepared with the statement, waiting for bound values

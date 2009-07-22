@@ -45,7 +45,7 @@ class DIGIKAM_EXPORT DatabaseCoreBackendPrivate
 public:
 
     DatabaseCoreBackendPrivate(DatabaseCoreBackend *backend);
-    virtual ~DatabaseCoreBackendPrivate() {}
+    virtual ~DatabaseCoreBackendPrivate() {}    
     void init(const QString &connectionName);
 
     QString connectionName(QThread *thread);

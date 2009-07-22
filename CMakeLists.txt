@@ -820,11 +820,12 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/thumbnaildatabaseaccess.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/thumbnaildb.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/thumbnailschemaupdater.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseconfigelement.cpp        
        )
 
     SET(libdatabase_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/albumdb.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/albumdb_sqlite2.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/albumdb_sqlite2.cpp        
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collectionscanner.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collectionmanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collectionlocation.cpp

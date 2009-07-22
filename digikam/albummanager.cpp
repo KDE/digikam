@@ -565,8 +565,13 @@ bool AlbumManager::setDatabase(const QString& dbPath, bool priority, const QStri
 
     // -- Database initialization -------------------------------------------------
 
-    DatabaseAccess::setParameters(DatabaseParameters::parametersForSQLiteDefaultFile(d->dbPath),
-                                  DatabaseAccess::MainApplication);
+    /*
+        DatabaseAccess::setParameters(DatabaseParameters::parametersForSQLiteDefaultFile(dbPath),
+                                      DatabaseAccess::MainApplication);
+    */
+        DatabaseAccess::setParameters(DatabaseParameters::parametersFromConfig(),
+                                      DatabaseAccess::MainApplication);
+
 
     // still suspended from above
     ScanController::instance()->resumeCollectionScan();

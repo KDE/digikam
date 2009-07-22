@@ -186,6 +186,12 @@ bool ThumbnailSchemaUpdater::createDatabase()
 
 bool ThumbnailSchemaUpdater::createTablesV1()
 {
+    m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateThumbnailsDB_1")));
+    m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateThumbnailsDB_2")));
+    m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateThumbnailsDB_3")));
+    m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateThumbnailsDB_4")));
+
+    /*
     if (!m_access->backend()->execSql(
                     QString("CREATE TABLE Thumbnails "
                             "(id INTEGER PRIMARY KEY, "
@@ -223,24 +229,31 @@ bool ThumbnailSchemaUpdater::createTablesV1()
     {
         return false;
     }
+    */
 
     return true;
 }
 
 bool ThumbnailSchemaUpdater::createIndicesV1()
 {
+    m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateIndex_1")));
+    m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateIndex_2")));
+    /*
     m_access->backend()->execSql("CREATE INDEX id_uniqueHashes ON UniqueHashes (thumbId);");
-    m_access->backend()->execSql("CREATE INDEX id_filePaths ON FilePaths (thumbId);");
+    m_access->backend()->execSql("CREATE INDEX id_filePaths ON FilePaths (thumbId);"); */
     return true;
 }
 
 bool ThumbnailSchemaUpdater::createTriggersV1()
 {
+    m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateTrigger_1")));
+    /*
     m_access->backend()->execSql("CREATE TRIGGER delete_thumbnails DELETE ON Thumbnails "
                                  "BEGIN "
                                  " DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = OLD.id; "
                                  " DELETE FROM FilePaths WHERE FilePaths.thumbId = OLD.id; "
                                  "END;");
+                                 */
     return true;
 }
 

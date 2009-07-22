@@ -179,7 +179,7 @@ void SetupCollections::applySettings()
     QDir newDir(newPath);
     if (oldDir != newDir)
     {
-        settings->setDatabaseFilePath(newPath);
+        // settings->setDatabaseFilePath(newPath);
         settings->saveSettings();
     }
     else

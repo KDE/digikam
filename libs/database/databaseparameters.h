@@ -27,6 +27,10 @@
 // Qt includes
 
 #include <QString>
+#include <QtGlobal>
+#include <QXmlStreamReader>
+#include <QMap>
+#include <QDomElement>
 
 // KDE includes
 
@@ -35,6 +39,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "databaseconfigelement.h"
 
 namespace Digikam
 {
@@ -86,6 +91,8 @@ public:
      */
     QByteArray hash() const;
 
+    static DatabaseParameters parametersFromConfig();
+
     /**
      * Convenience method to create a DatabaseParameters object for an
      * SQLITE 3 database specified by the local file path.
@@ -94,6 +101,15 @@ public:
     static DatabaseParameters parametersForSQLiteDefaultFile(const QString& directory);
 
     static void removeFromUrl(KUrl& url);
+
+	void readConfig();
+        QString m_DefaultDatabase;
+        QMap<QString, databaseconfigelement> m_DatabaseConfigs;
+protected:
+        databaseconfigelement readDatabase(QDomElement& databaseElement);
+        void readDBActions(QDomElement& sqlStatementElements, databaseconfigelement& configElement);
+        void readStatements(QDomElement& sqlStatementElements, databaseconfigelement& configElement);
+
 };
 
 }  // namespace Digikam
