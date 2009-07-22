@@ -847,7 +847,7 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
     d->imageSortAction = new KSelectAction(i18n("&Sort Images"), this);
-    d->imageSortAction->setWhatsThis(i18n("Sort Albums' contents."));
+    d->imageSortAction->setWhatsThis(i18n("The value by which the images in one album are sorted in the thumbnail view"));
     QSignalMapper *imageSortMapper = new QSignalMapper(this);
     connect(imageSortMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImages(int)));
     actionCollection()->addAction("image_sort", d->imageSortAction);
@@ -870,6 +870,27 @@ void DigikamApp::setupActions()
     imageSortMapper->setMapping(sortByDateAction, (int)ImageSortSettings::SortByCreationDate);
     imageSortMapper->setMapping(sortByFileSizeAction, (int)ImageSortSettings::SortByFileSize);
     imageSortMapper->setMapping(sortByRatingAction, (int)ImageSortSettings::SortByRating);
+
+    // -----------------------------------------------------------
+
+    d->imageGroupAction = new KSelectAction(i18n("&Group Images"), this);
+    d->imageGroupAction->setWhatsThis(i18n("The categories in which the images in the thumbnail view are displayed"));
+    QSignalMapper *imageGroupMapper = new QSignalMapper(this);
+    connect(imageGroupMapper, SIGNAL(mapped(int)), d->view, SLOT(slotGroupImages(int)));
+    actionCollection()->addAction("image_group", d->imageGroupAction);
+
+    // map to ImageSortSettings enum
+    QAction *noCategoriesAction  = d->imageGroupAction->addAction(i18n("Flat List"));
+    QAction *groupByAlbumAction  = d->imageGroupAction->addAction(i18n("By Album"));
+    QAction *groupByFormatAction = d->imageGroupAction->addAction(i18n("By Format"));
+
+    connect(noCategoriesAction, SIGNAL(triggered()), imageGroupMapper, SLOT(map()));
+    connect(groupByAlbumAction, SIGNAL(triggered()), imageGroupMapper, SLOT(map()));
+    connect(groupByFormatAction, SIGNAL(triggered()), imageGroupMapper, SLOT(map()));
+
+    imageGroupMapper->setMapping(noCategoriesAction,  (int)ImageSortSettings::OneCategory);
+    imageGroupMapper->setMapping(groupByAlbumAction,  (int)ImageSortSettings::CategoryByAlbum);
+    imageGroupMapper->setMapping(groupByFormatAction, (int)ImageSortSettings::CategoryByFormat);
 
     // -----------------------------------------------------------------
 
@@ -1223,6 +1244,7 @@ void DigikamApp::setupActions()
 
     d->albumSortAction->setCurrentItem((int)AlbumSettings::instance()->getAlbumSortOrder());
     d->imageSortAction->setCurrentItem((int)AlbumSettings::instance()->getImageSortOrder());
+    d->imageGroupAction->setCurrentItem((int)AlbumSettings::instance()->getImageGroupMode()-1); // no action for enum 0
     d->recurseAlbumsAction->setChecked(AlbumSettings::instance()->getRecurseAlbums());
     d->recurseTagsAction->setChecked(AlbumSettings::instance()->getRecurseTags());
     d->showBarAction->setChecked(AlbumSettings::instance()->getShowThumbbar());
@@ -2553,6 +2575,7 @@ void DigikamApp::slotTogglePreview(bool t)
     // View menu
     d->albumSortAction->setEnabled(!t);
     d->imageSortAction->setEnabled(!t);
+    d->imageGroupAction->setEnabled(!t);
     d->zoomTo100percents->setEnabled(t);
     d->zoomFitToWindowAction->setEnabled(t);
     d->showBarAction->setEnabled(t);

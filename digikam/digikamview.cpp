@@ -1570,6 +1570,15 @@ void DigikamView::slotSortImages(int sortRole)
     d->iconView->imageFilterModel()->setSortRole((ImageSortSettings::SortRole) sortRole);
 }
 
+void DigikamView::slotGroupImages(int categoryMode)
+{
+    AlbumSettings* settings = AlbumSettings::instance();
+    if (!settings)
+        return;
+    settings->setImageGroupMode(categoryMode);
+    d->iconView->imageFilterModel()->setCategorizationMode((ImageSortSettings::CategorizationMode) categoryMode);
+}
+
 void DigikamView::slotLeftSidebarChangedTab(QWidget* w)
 {
     // setActive means that selection changes are propagated, nothing more.

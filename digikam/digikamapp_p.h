@@ -125,6 +125,7 @@ public:
         imageRenameAction                    = 0;
         imageDeleteAction                    = 0;
         imageSortAction                      = 0;
+        imageGroupAction                     = 0;
         imageExifOrientationActionMenu       = 0;
         selectAllAction                      = 0;
         selectNoneAction                     = 0;
@@ -253,6 +254,7 @@ public:
     KAction                            *zoomFitToWindowAction;
     KAction                            *zoomTo100percents;
     KSelectAction                      *imageSortAction;
+    KSelectAction                      *imageGroupAction;
     KSelectAction                      *albumSortAction;
     KToggleAction                      *recurseAlbumsAction;
     KToggleAction                      *recurseTagsAction;

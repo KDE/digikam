@@ -154,6 +154,7 @@ public Q_SLOTS:
     void slotSelectNone();
     void slotSelectInvert();
     void slotSortImages(int order);
+    void slotGroupImages(int mode);
 
     // Image Rating slots
     void slotAssignRating(int rating);
