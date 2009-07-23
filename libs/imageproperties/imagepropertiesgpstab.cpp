@@ -120,8 +120,8 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
 
     d->zoomOutBtn = new QToolButton(box2);
     d->zoomInBtn  = new QToolButton(box2);
-    d->zoomOutBtn->setIcon(KIcon("zoom-out"));
-    d->zoomInBtn->setIcon(KIcon("zoom-in"));
+    d->zoomOutBtn->setIcon(SmallIcon("zoom-out"));
+    d->zoomInBtn->setIcon(SmallIcon("zoom-in"));
 
     d->detailsCombo  = new KComboBox(box2);
     d->detailsButton = new QPushButton(i18n("More Info..."), box2);
