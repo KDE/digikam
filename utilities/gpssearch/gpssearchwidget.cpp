@@ -90,6 +90,18 @@ void GPSSearchWidget::slotNewSelectionFromMap(const QList<double>& sel)
     emit signalNewSelectionFromMap();
 }
 
+void GPSSearchWidget::slotZoomIn()
+{
+    zoomIn();
+    repaint();
+}
+
+void GPSSearchWidget::slotZoomOut()
+{
+    zoomOut();
+    repaint();
+}
+
 #endif // HAVE_MARBLEWIDGET
 
 }  // namespace Digikam
