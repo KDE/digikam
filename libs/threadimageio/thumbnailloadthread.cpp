@@ -171,7 +171,7 @@ void ThumbnailLoadThread::initializeThumbnailDatabase(const QString &thumbnailDB
                     "There are already thumbnail loading threads created, "
                     "and these will not be switched to use the database. ";
     }
-    ThumbnailDatabaseAccess::setParameters(DatabaseParameters::parametersForSQLite(thumbnailDBFile));
+    ThumbnailDatabaseAccess::setParameters(DatabaseParameters::parametersFromConfig());
     if (ThumbnailDatabaseAccess::checkReadyForUse(0))
     {
         kDebug() << "Thumbnail db ready for use";
