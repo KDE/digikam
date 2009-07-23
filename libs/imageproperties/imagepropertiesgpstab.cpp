@@ -38,6 +38,7 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 #include <QLabel>
 #include <QMap>
 #include <QPushButton>
+#include <QToolButton>
 
 // KDE includes
 
@@ -70,6 +71,8 @@ public:
         latitude      = 0;
         longitude     = 0;
         date          = 0;
+        zoomInBtn     = 0;
+        zoomOutBtn    = 0;
     }
 
     QLabel             *altLabel;
@@ -78,6 +81,9 @@ public:
     QLabel             *dateLabel;
 
     QPushButton        *detailsButton;
+
+    QToolButton        *zoomInBtn;
+    QToolButton        *zoomOutBtn;
 
     QComboBox          *detailsCombo;
 
@@ -112,20 +118,26 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     QWidget* box2           = new QWidget(this);
     QHBoxLayout* box2Layout = new QHBoxLayout(box2);
 
+    d->zoomOutBtn = new QToolButton(box2);
+    d->zoomInBtn  = new QToolButton(box2);
+    d->zoomOutBtn->setIcon(KIcon("zoom-out"));
+    d->zoomInBtn->setIcon(KIcon("zoom-in"));
+
     d->detailsCombo  = new KComboBox(box2);
     d->detailsButton = new QPushButton(i18n("More Info..."), box2);
     d->detailsButton->setMaximumHeight( fontMetrics().height()+4 );
     d->detailsCombo->setMaximumHeight( fontMetrics().height()+4 );
-    d->detailsCombo->insertItem(MapQuest,   QString("MapQuest"));
-    d->detailsCombo->insertItem(GoogleMaps, QString("Google Maps"));
-    d->detailsCombo->insertItem(MsnMaps,    QString("MSN Maps"));
-    d->detailsCombo->insertItem(MultiMap,   QString("MultiMap"));
+    d->detailsCombo->insertItem(MapQuest,      QString("MapQuest"));
+    d->detailsCombo->insertItem(GoogleMaps,    QString("Google Maps"));
+    d->detailsCombo->insertItem(MsnMaps,       QString("MSN Maps"));
+    d->detailsCombo->insertItem(MultiMap,      QString("MultiMap"));
     d->detailsCombo->insertItem(OpenStreetMap, QString("OpenStreetMap"));
 
+    box2Layout->addWidget(d->zoomOutBtn);
+    box2Layout->addWidget(d->zoomInBtn);
+    box2Layout->addStretch(10);
     box2Layout->addWidget(d->detailsCombo);
-    box2Layout->addStretch(1);
     box2Layout->addWidget(d->detailsButton);
-    box2Layout->addStretch(100);
     box2Layout->setSpacing(0);
     box2Layout->setMargin(0);
 
@@ -150,6 +162,12 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
 
     connect(d->detailsButton, SIGNAL(clicked()),
             this, SLOT(slotGPSDetails()));
+
+    connect(d->zoomInBtn, SIGNAL(released()),
+            d->map, SLOT(slotZoomIn()));
+
+    connect(d->zoomOutBtn, SIGNAL(released()),
+            d->map, SLOT(slotZoomOut()));
 }
 
 ImagePropertiesGPSTab::~ImagePropertiesGPSTab()

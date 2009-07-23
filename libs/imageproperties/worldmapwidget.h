@@ -70,7 +70,7 @@ class WorldMapWidgetPriv;
 
 class WorldMapWidget : public QFrame
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
@@ -81,6 +81,11 @@ public:
 
     double getLatitude();
     double getLongitude();
+
+public Q_SLOTS:
+
+    void   slotZoomIn();
+    void   slotZoomOut();
 
 private:
 

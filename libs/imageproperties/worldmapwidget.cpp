@@ -118,8 +118,8 @@ void WorldMapWidget::setGPSPositions(const GPSInfoList& list)
     QDomElement kmlRoot = kmlDocument.createElementNS( "http://earth.google.com/kml/2.1","kml");
     kmlDocument.appendChild(kmlRoot);
 
-    QDomElement kmlAlbum     = addKmlElement(kmlDocument, kmlRoot, "Document");
-    QDomElement kmlName      = addKmlTextElement(kmlDocument, kmlAlbum, "name", "Geolocation");
+    QDomElement kmlAlbum = addKmlElement(kmlDocument, kmlRoot, "Document");
+    QDomElement kmlName  = addKmlTextElement(kmlDocument, kmlAlbum, "name", "Geolocation");
 
     double lng = 0;
     double lat = 0;
@@ -203,6 +203,22 @@ QDomElement WorldMapWidget::addKmlTextElement(QDomDocument& kmlDocument, QDomEle
     QDomText kmlTextElement = kmlDocument.createTextNode(text);
     kmlElement.appendChild(kmlTextElement);
     return kmlElement;
+}
+
+void WorldMapWidget::slotZoomIn()
+{
+#ifdef HAVE_MARBLEWIDGET
+    d->marbleWidget->zoomIn();
+    d->marbleWidget->repaint();
+#endif // HAVE_MARBLEWIDGET
+}
+
+void WorldMapWidget::slotZoomOut()
+{
+#ifdef HAVE_MARBLEWIDGET
+    d->marbleWidget->zoomOut();
+    d->marbleWidget->repaint();
+#endif // HAVE_MARBLEWIDGET
 }
 
 }  // namespace Digikam
