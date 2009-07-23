@@ -186,11 +186,7 @@ bool ThumbnailSchemaUpdater::createDatabase()
 
 bool ThumbnailSchemaUpdater::createTablesV1()
 {
-    m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateThumbnailsDB_1")));
-    m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateThumbnailsDB_2")));
-    m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateThumbnailsDB_3")));
-    m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateThumbnailsDB_4")));
-
+    m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateThumbnailsDB")));
     /*
     if (!m_access->backend()->execSql(
                     QString("CREATE TABLE Thumbnails "

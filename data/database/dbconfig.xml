@@ -591,36 +591,41 @@
 			<statement mode="plain">UNLOCK TABLES;</statement></dbaction>
 			
 			<!-- Thumbnails Schema DB -->
-			<dbaction name="CreateThumbnailsDB_1" mode="transaction"><statement mode="query">CREATE TABLE Thumbnails 
-                            (id INTEGER PRIMARY KEY, 
-                             type INTEGER, "
+			<dbaction name="CreateThumbnailsDB" mode="transaction">
+				<statement mode="query">CREATE TABLE Thumbnails 
+                            (id INTEGER PRIMARY KEY AUTO_INCREMENT, 
+                             type INTEGER,
                              modificationDate DATETIME, 
                              orientationHint INTEGER, 
-                             data BLOB)</statement></dbaction>
-			     <dbaction name="CreateThumbnailsDB_2" mode="transaction"><statement mode="query">CREATE TABLE UniqueHashes 
-                            (uniqueHash TEXT, 
+                             data BLOB)
+                </statement>
+			    <statement mode="query">CREATE TABLE UniqueHashes 
+                            (uniqueHash VARCHAR(255), 
                              fileSize INTEGER, 
                              thumbId INTEGER, 
-                             UNIQUE(uniqueHash, fileSize))</statement></dbaction>
-			     <dbaction name="CreateThumbnailsDB_3" mode="transaction"><statement mode="query">CREATE TABLE FilePaths 
-                            (path TEXT, 
+                             UNIQUE(uniqueHash, fileSize))
+                 </statement>
+			     <statement mode="query">CREATE TABLE FilePaths 
+                            (path VARCHAR(255), 
                              thumbId INTEGER, 
-                             UNIQUE(path))</statement></dbaction>
-			     <dbaction name="CreateThumbnailsDB_4" mode="transaction"><statement mode="query">CREATE TABLE Settings         
-                            (keyword TEXT NOT NULL UNIQUE,
-                             value TEXT)</statement></dbaction>
-			     
-			     <!-- Thumbnails Indexes DB -->
-			     <dbaction name="CreateIndex_1" mode="transaction"><statement mode="query">CREATE INDEX id_uniqueHashes ON UniqueHashes (thumbId);</statement></dbaction>
-			     <dbaction name="CreateIndex_2" mode="transaction"><statement mode="query">CREATE INDEX id_filePaths ON FilePaths (thumbId);</statement></dbaction>
-			     
-			     <!-- Thumbnails Trigger DB -->
-			     <dbaction name="CreateTrigger_1" mode="transaction"><statement mode="query">CREATE TRIGGER delete_thumbnails BEFORE DELETE ON Thumbnails 
-                                 FOR EACH ROW BEGIN 
-                                  DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = OLD.id; 
-                                  DELETE FROM FilePaths WHERE FilePaths.thumbId = OLD.id; 
-                                 END;</statement></dbaction>
-				 				 
+                             UNIQUE(path))
+                 </statement>
+			     <statement mode="query">CREATE TABLE Settings         
+                            (keyword VARCHAR(255) NOT NULL UNIQUE,
+                             value VARCHAR(255))
+                 </statement>
+			</dbaction>
+		     <!-- Thumbnails Indexes DB -->
+		     <dbaction name="CreateIndex_1" mode="transaction"><statement mode="query">CREATE INDEX id_uniqueHashes ON UniqueHashes (thumbId);</statement></dbaction>
+		     <dbaction name="CreateIndex_2" mode="transaction"><statement mode="query">CREATE INDEX id_filePaths ON FilePaths (thumbId);</statement></dbaction>
+		     
+		     <!-- Thumbnails Trigger DB -->
+		     <dbaction name="CreateTrigger_1" mode="transaction"><statement mode="query">CREATE TRIGGER delete_thumbnails BEFORE DELETE ON Thumbnails 
+                             FOR EACH ROW BEGIN 
+                              DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = OLD.id; 
+                              DELETE FROM FilePaths WHERE FilePaths.thumbId = OLD.id; 
+                             END;</statement></dbaction>
+			 				 
 		</dbactions>
 	</database>
 </databaseconfig>
