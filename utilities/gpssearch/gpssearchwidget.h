@@ -68,6 +68,11 @@ Q_SIGNALS:
     void signalNewSelectionFromMap();
     void signalSetNewMapSelection(const QList<double>&);
 
+public Q_SLOTS:
+
+    void slotZoomIn();
+    void slotZoomOut();
+
 private Q_SLOTS:
 
     void slotNewSelectionFromMap(const QList<double>&);

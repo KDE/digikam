@@ -72,17 +72,21 @@ public:
         nameEdit            = 0;
         searchGPSBar        = 0;
         gpsSearchFolderView = 0;
+        zoomInBtn           = 0;
+        zoomOutBtn          = 0;
     }
 
-    QToolButton            *saveBtn;
+    QToolButton         *saveBtn;
+    QToolButton         *zoomInBtn;
+    QToolButton         *zoomOutBtn;
 
-    KLineEdit              *nameEdit;
+    KLineEdit           *nameEdit;
 
-    SearchTextBar          *searchGPSBar;
+    SearchTextBar       *searchGPSBar;
 
-    GPSSearchFolderView    *gpsSearchFolderView;
+    GPSSearchFolderView *gpsSearchFolderView;
 
-    GPSSearchWidget        *gpsSearchWidget;
+    GPSSearchWidget     *gpsSearchWidget;
 };
 
 GPSSearchView::GPSSearchView(QWidget *parent)
@@ -111,6 +115,11 @@ GPSSearchView::GPSSearchView(QWidget *parent)
     KHBox *hbox = new KHBox(this);
     hbox->setMargin(0);
     hbox->setSpacing(KDialog::spacingHint());
+
+    d->zoomOutBtn = new QToolButton(hbox);
+    d->zoomInBtn  = new QToolButton(hbox);
+    d->zoomOutBtn->setIcon(SmallIcon("zoom-out"));
+    d->zoomInBtn->setIcon(SmallIcon("zoom-in"));
 
     d->nameEdit = new KLineEdit(hbox);
     d->nameEdit->setClearButtonShown(true);
@@ -168,6 +177,12 @@ GPSSearchView::GPSSearchView(QWidget *parent)
 
     connect(d->gpsSearchWidget, SIGNAL(signalNewSelectionFromMap()),
             this, SLOT(slotSelectionChanged()));
+
+    connect(d->zoomInBtn, SIGNAL(released()),
+            d->gpsSearchWidget, SLOT(slotZoomIn()));
+
+    connect(d->zoomOutBtn, SIGNAL(released()),
+            d->gpsSearchWidget, SLOT(slotZoomOut()));
 
     // ---------------------------------------------------------------
 
