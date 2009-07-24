@@ -859,11 +859,23 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     }
     else if (name == "width")
     {
+        sql += " ( (ImageInformation.orientation <= ? AND ";
+        *boundValues << KExiv2Iface::KExiv2::ORIENTATION_VFLIP;
         fieldQuery.addIntField("ImageInformation.width");
+        sql += ") OR (ImageInformation.orientation >= ? AND ";
+        *boundValues << KExiv2Iface::KExiv2::ORIENTATION_ROT_90_HFLIP;
+        fieldQuery.addIntField("ImageInformation.height");
+        sql += " ) ) ";
     }
     else if (name == "height")
     {
+        sql += " ( (ImageInformation.orientation <= ? AND ";
+        *boundValues << KExiv2Iface::KExiv2::ORIENTATION_VFLIP;
         fieldQuery.addIntField("ImageInformation.height");
+        sql += ") OR (ImageInformation.orientation >= ? AND ";
+        *boundValues << KExiv2Iface::KExiv2::ORIENTATION_ROT_90_HFLIP;
+        fieldQuery.addIntField("ImageInformation.width");
+        sql += " ) ) ";
     }
     else if (name == "pixels")
     {
