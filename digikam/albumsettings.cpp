@@ -61,111 +61,79 @@ class AlbumSettingsPrivate
 {
 
 public:
-
-    // start up setting
-    bool                                showSplash;
-    // file ops settings
-    bool                                useTrash;
-    bool                                showTrashDeleteDialog;
-    // metadata setting
-    bool                                sidebarApplyDirectly;
-    // database setting
-    bool                                scanAtStart;
-
-    // icon view settings
-    bool                                iconShowName;
-    bool                                iconShowSize;
-    bool                                iconShowDate;
-    bool                                iconShowModDate;
-    bool                                iconShowComments;
-    bool                                iconShowResolution;
-    bool                                iconShowTags;
-    bool                                iconShowRating;
-
-    QFont                               iconviewFont;
-
-    // Icon-view tooltip settings
-    bool                                showToolTips;
-    bool                                tooltipShowFileName;
-    bool                                tooltipShowFileDate;
-    bool                                tooltipShowFileSize;
-    bool                                tooltipShowImageType;
-    bool                                tooltipShowImageDim;
-    bool                                tooltipShowPhotoMake;
-    bool                                tooltipShowPhotoDate;
-    bool                                tooltipShowPhotoFocal;
-    bool                                tooltipShowPhotoExpo;
-    bool                                tooltipShowPhotoMode;
-    bool                                tooltipShowPhotoFlash;
-    bool                                tooltipShowPhotoWb;
-    bool                                tooltipShowAlbumName;
-    bool                                tooltipShowComments;
-    bool                                tooltipShowTags;
-    bool                                tooltipShowRating;
-
-    QFont                               toolTipsFont;
-
-    // Folder-view tooltip settings
-    bool                                showAlbumToolTips;
-    bool                                tooltipShowAlbumTitle;
-    bool                                tooltipShowAlbumDate;
-    bool                                tooltipShowAlbumCollection;
-    bool                                tooltipShowAlbumCategory;
-    bool                                tooltipShowAlbumCaption;
-
-    // metadata settings
-    bool                                exifRotate;
-    bool                                exifSetOrientation;
-
-    bool                                saveTags;
-    bool                                saveTemplate;
-
-    bool                                saveComments;
-    bool                                saveDateTime;
-    bool                                saveRating;
-
-    bool                                writeRawFiles;
-    bool                                updateFileTimeStamp;
-
-    // preview settings
-    bool                                previewLoadFullImageSize;
-    bool                                showThumbbar;
-
-    bool                                showFolderTreeViewItemsCount;
-
-    // tree-view settings
-    int                                 treeThumbnailSize;
-    QFont                               treeviewFont;
-
-    // icon view settings
-    int                                 thumbnailSize;
-    int                                 ratingFilterCond;
-    bool                                recursiveAlbums;
-    bool                                recursiveTags;
-
-    // theme settings
-    QString                             currentTheme;
-
-    // database settings
-    QString                             databaseFilePath;
-
-    // album settings
-    QStringList                         albumCategoryNames;
-
-    KSharedConfigPtr                    config;
-
-    KMultiTabBar::KMultiTabBarStyle     sidebarTitleStyle;
-
-    // album view settings
-    AlbumSettings::AlbumSortOrder       albumSortOrder;
-
-    // icon view settings
-    int                                 imageSortOrder;
+    bool showSplash;
+    bool useTrash;
+    bool showTrashDeleteDialog;
+    bool sidebarApplyDirectly;
+    bool scanAtStart;
+    bool iconShowName;
+    bool iconShowSize;
+    bool iconShowDate;
+    bool iconShowModDate;
+    bool iconShowComments;
+    bool iconShowResolution;
+    bool iconShowTags;
+    bool iconShowRating;
+    QFont iconviewFont;
+    bool showToolTips;
+    bool tooltipShowFileName;
+    bool tooltipShowFileDate;
+    bool tooltipShowFileSize;
+    bool tooltipShowImageType;
+    bool tooltipShowImageDim;
+    bool tooltipShowPhotoMake;
+    bool tooltipShowPhotoDate;
+    bool tooltipShowPhotoFocal;
+    bool tooltipShowPhotoExpo;
+    bool tooltipShowPhotoMode;
+    bool tooltipShowPhotoFlash;
+    bool tooltipShowPhotoWb;
+    bool tooltipShowAlbumName;
+    bool tooltipShowComments;
+    bool tooltipShowTags;
+    bool tooltipShowRating;
+    QFont toolTipsFont;
+    bool showAlbumToolTips;
+    bool tooltipShowAlbumTitle;
+    bool tooltipShowAlbumDate;
+    bool tooltipShowAlbumCollection;
+    bool tooltipShowAlbumCategory;
+    bool tooltipShowAlbumCaption;
+    bool exifRotate;
+    bool exifSetOrientation;
+    bool saveTags;
+    bool saveTemplate;
+    bool saveComments;
+    bool saveDateTime;
+    bool saveRating;
+    bool writeRawFiles;
+    bool updateFileTimeStamp;
+    bool previewLoadFullImageSize;
+    bool showThumbbar;
+    bool showFolderTreeViewItemsCount;
+    int treeThumbnailSize;
+    QFont treeviewFont;
+    int thumbnailSize;
+    int ratingFilterCond;
+    bool recursiveAlbums;
+    bool recursiveTags;
+    QString currentTheme;
+    QString databaseType;
+    //QString databaseFilePath;
+    QString databaseHostName;
+    QString databaseName;
+    QString databaseUserName;
+    QString databasePassword;
+    int databasePort;
+    QString databaseConnectoptions;
+    QStringList albumCategoryNames;
+    KSharedConfigPtr config;
+    KMultiTabBar::KMultiTabBarStyle sidebarTitleStyle;
+    AlbumSettings::AlbumSortOrder albumSortOrder;
+    int imageSortOrder;
     AlbumSettings::ItemRightClickAction itemRightClickAction;
-
-    // nepomuk settings
-    bool                                syncToDigikam;
-    bool                                syncToNepomuk;
+    bool syncToDigikam;
+    bool syncToNepomuk;
 };
 
 class AlbumSettingsCreator { public: AlbumSettings object; };
@@ -287,7 +255,7 @@ void AlbumSettings::readSettings()
 
     KConfigGroup group  = config->group("Album Settings");
 
-    d->databaseFilePath = group.readEntry("Database File Path", QString());
+    //d->databaseFilePath = group.readEntry("Database File Path", QString());
 
     QStringList collectionList = group.readEntry("Album Collections",QStringList());
     if (!collectionList.isEmpty())
@@ -397,6 +365,15 @@ void AlbumSettings::readSettings()
     d->syncToDigikam         = group.readEntry("Sync Nepomuk to Digikam", false);
     d->syncToNepomuk         = group.readEntry("Sync Digikam to Nepomuk", false);
 
+    group = config->group("Database Settings");
+    d->databaseType             = group.readEntry("Database Type");
+    d->databaseName             = group.readEntry("Database Name");
+    d->databaseHostName         = group.readEntry("Database Hostname");
+    d->databasePort             = group.readEntry("Database Port").toInt();
+    d->databaseUserName         = group.readEntry("Database Username");
+    d->databasePassword         = group.readEntry("Database Password");
+    d->databaseConnectoptions   = group.readEntry("Database Connectoptions");
+
     emit setupChanged();
     emit recurseSettingsChanged();
     emit nepomukSettingsChanged();
@@ -410,7 +387,7 @@ void AlbumSettings::saveSettings()
 
     KConfigGroup group = config->group("Album Settings");
 
-//    group.writeEntry("Database File Path", d->databaseFilePath);
+    //group.writeEntry("Database File Path", d->databaseFilePath);
     group.writeEntry("Album Collections", d->albumCategoryNames);
     group.writeEntry("Album Sort Order", (int)d->albumSortOrder);
     group.writeEntry("Image Sort Order", (int)d->imageSortOrder);
@@ -503,6 +480,16 @@ void AlbumSettings::saveSettings()
     group.writeEntry("Sync Nepomuk to Digikam", d->syncToDigikam);
     group.writeEntry("Sync Digikam to Nepomuk", d->syncToNepomuk);
 
+    // ---------------------------------------------------------------------
+    group = config->group("Database Settings");
+    group.writeEntry("Database Type", d->databaseType);
+    group.writeEntry("Database Name", d->databaseName);
+    group.writeEntry("Database Hostname", d->databaseHostName);
+    group.writeEntry("Database Port", d->databasePort);
+    group.writeEntry("Database Username", d->databaseUserName);
+    group.writeEntry("Database Password", d->databasePassword);
+    group.writeEntry("Database Connectoptions", d->databaseConnectoptions);
+
     config->sync();
 }
 
@@ -513,12 +500,12 @@ void AlbumSettings::emitSetupChanged()
 
 QString AlbumSettings::getDatabaseFilePath() const
 {
-    return d->databaseFilePath;
+    return d->databaseName;
 }
 
 void AlbumSettings::setDatabaseFilePath(const QString& path)
 {
-    d->databaseFilePath = path;
+    d->databaseName = path;
 }
 
 void AlbumSettings::setShowSplashScreen(bool val)
@@ -1281,6 +1268,76 @@ void AlbumSettings::setSyncDigikamToNepomuk(bool val)
 bool AlbumSettings::getSyncDigikamToNepomuk() const
 {
     return d->syncToNepomuk;
+}
+
+QString AlbumSettings::getDatabaseType() const
+{
+    return d->databaseType;
+}
+void AlbumSettings::setDatabaseType(const QString &databaseType)
+{
+    d->databaseType = databaseType;
+}
+
+
+QString AlbumSettings::getDatabaseConnectoptions() const
+{
+    return d->databaseConnectoptions;
+}
+
+QString AlbumSettings::getDatabaseName() const
+{
+    return d->databaseName;
+}
+
+QString AlbumSettings::getDatabaseHostName() const
+{
+    return d->databaseHostName;
+}
+
+QString AlbumSettings::getDatabasePassword() const
+{
+    return d->databasePassword;
+}
+
+int AlbumSettings::getDatabasePort() const
+{
+    return d->databasePort;
+}
+
+QString AlbumSettings::getDatabaseUserName() const
+{
+    return d->databaseUserName;
+}
+
+void AlbumSettings::setDatabaseConnectoptions(const QString &connectoptions)
+{
+    d->databaseConnectoptions = connectoptions;
+}
+
+void AlbumSettings::setDatabaseName(const QString &databaseName)
+{
+    d->databaseName = databaseName;
+}
+
+void AlbumSettings::setDatabaseHostName(const QString &hostName)
+{
+    d->databaseHostName = hostName;
+}
+
+void AlbumSettings::setDatabasePassword(const QString &password)
+{
+    d->databasePassword = password;
+}
+
+void AlbumSettings::setDatabasePort(int port)
+{
+    d->databasePort = port;
+}
+
+void AlbumSettings::setDatabaseUserName(const QString &userName)
+{
+    d->databaseUserName = userName;
 }
 
 

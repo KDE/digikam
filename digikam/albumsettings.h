@@ -293,6 +293,27 @@ public:
     void setSyncDigikamToNepomuk(bool val);
     bool getSyncDigikamToNepomuk() const;
 
+    QString getDatabaseType() const;
+    void setDatabaseType(const QString &databaseType);
+
+    QString getDatabaseConnectoptions() const;
+    void setDatabaseConnectoptions(const QString &connectoptions);
+
+    QString getDatabaseName() const;
+    void setDatabaseName(const QString &databaseName);
+
+    QString getDatabaseHostName() const;
+    void setDatabaseHostName(const QString &hostName);
+
+    QString getDatabasePassword() const;
+    void setDatabasePassword(const QString &password);
+
+    int getDatabasePort() const;
+    void setDatabasePort(int port);
+
+    QString getDatabaseUserName() const;
+    void setDatabaseUserName(const QString &userName);
+
 private:
 
     friend class AlbumSettingsCreator;

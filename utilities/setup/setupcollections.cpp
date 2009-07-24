@@ -34,6 +34,11 @@
 #include <QGridLayout>
 #include <QVBoxLayout>
 #include <QPushButton>
+#include <QComboBox>
+#include <QLineEdit>
+#include <QIntValidator>
+#include <QSpinBox>
+#include <QFormLayout>
 
 // KDE includes
 
@@ -75,6 +80,18 @@ public:
 
     KUrlRequester           *databasePathEdit;
     QString                  originalDbPath;
+    QLabel                  *databasePathLabel;
+    QComboBox               *databaseType;
+    QLineEdit               *databaseName;
+    QLineEdit               *hostName;
+    QSpinBox                *hostPort;
+    QLineEdit               *connectionOptions;
+
+    QLineEdit               *userName;
+
+    QLineEdit               *password;
+
+    QGroupBox               *expertSettings;
 
     KPageDialog             *mainDialog;
 };
@@ -126,19 +143,57 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
 
     QGroupBox *dbPathBox      = new QGroupBox(i18n("Database File Path"), panel);
     QVBoxLayout *vlay         = new QVBoxLayout(dbPathBox);
-    QLabel *databasePathLabel = new QLabel(i18n("<p>The location where the database file will be stored on your system. "
+    d->databasePathLabel = new QLabel(i18n("<p>The location where the database file will be stored on your system. "
                                                 "There is one common database file for all root albums.<br/>"
                                                 "Write access is required to be able to edit image properties.</p>"
                                                 "<p>Note: a remote file system, such as NFS, cannot be used here.</p><p></p>"),
                                            dbPathBox);
-    databasePathLabel->setWordWrap(true);
-    databasePathLabel->setFont(KGlobalSettings::smallestReadableFont());
+    d->databasePathLabel->setWordWrap(true);
+    d->databasePathLabel->setFont(KGlobalSettings::smallestReadableFont());
 
     d->databasePathEdit = new KUrlRequester(dbPathBox);
     d->databasePathEdit->setMode(KFile::Directory | KFile::LocalOnly);
 
-    vlay->addWidget(databasePathLabel);
+    QLabel *databaseTypeLabel        = new QLabel(i18n("Type"));
+    d->databaseType                  = new QComboBox();
+    QLabel *databaseNameLabel        = new QLabel(i18n("Name"));
+    d->databaseName                  = new QLineEdit();
+    QLabel *hostNameLabel            = new QLabel(i18n("Host Name"));
+    d->hostName                      = new QLineEdit();
+    QLabel *hostPortLabel            = new QLabel(i18n("Port"));
+    d->hostPort                      = new QSpinBox();
+    d->hostPort->setMaximum(65536);
+
+    QLabel *connectionOptionsLabel   = new QLabel(i18n("Database Connection Options"));
+    d->connectionOptions             = new QLineEdit();
+
+    QLabel *userNameLabel            = new QLabel(i18n("User"));
+    d->userName                      = new QLineEdit();
+
+    QLabel *passwordLabel            = new QLabel(i18n("Password"));
+    d->password                      = new QLineEdit();
+    d->password->setEchoMode(QLineEdit::Password);
+
+    d->expertSettings = new QGroupBox();
+    d->expertSettings->setFlat(true);
+    QFormLayout *expertSettinglayout = new QFormLayout();
+    d->expertSettings->setLayout(expertSettinglayout);
+
+    vlay->addWidget(databaseTypeLabel);
+    vlay->addWidget(d->databaseType);
+
+    vlay->addWidget(d->databasePathLabel);
     vlay->addWidget(d->databasePathEdit);
+
+    expertSettinglayout->addRow(hostNameLabel, d->hostName);
+    expertSettinglayout->addRow(hostPortLabel, d->hostPort);
+    expertSettinglayout->addRow(databaseNameLabel, d->databaseName);
+    expertSettinglayout->addRow(userNameLabel, d->userName);
+    expertSettinglayout->addRow(passwordLabel, d->password);
+    expertSettinglayout->addRow(connectionOptionsLabel, d->connectionOptions);
+
+    vlay->addWidget(d->expertSettings);
+
     vlay->setSpacing(0);
     vlay->setMargin(KDialog::spacingHint());
 
@@ -149,6 +204,12 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
     layout->addWidget(albumPathBox);
     layout->addWidget(dbPathBox);
     layout->addStretch();
+
+    // --------- fill with default values ---------------------
+    d->databaseType->addItem("QSQLITE");
+    d->databaseType->addItem("QMYSQL");
+
+    setDatabaseInputFields("QSQLITE");
 
     // --------------------------------------------------------
 
@@ -162,6 +223,9 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
 
     connect(d->databasePathEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotDatabasePathEdited(const QString&)));
+
+    connect(d->databaseType, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(setDatabaseInputFields(const QString&)));
+
 }
 
 SetupCollections::~SetupCollections()
@@ -174,16 +238,37 @@ void SetupCollections::applySettings()
     AlbumSettings* settings = AlbumSettings::instance();
     if (!settings) return;
 
-    QString newPath = d->databasePathEdit->url().path();
-    QDir oldDir(d->originalDbPath);
-    QDir newDir(newPath);
-    if (oldDir != newDir)
-    {
-        // settings->setDatabaseFilePath(newPath);
+    if (d->databaseType->currentText()=="QSQLITE"){
+        QString newPath = d->databasePathEdit->url().path();
+        QDir oldDir(d->originalDbPath);
+        QDir newDir(newPath);
+        if (oldDir != newDir)
+        {
+            settings->setDatabaseType(d->databaseType->currentText());
+            settings->setDatabaseName(newPath);
+
+            // clear other fields
+            settings->setDatabaseConnectoptions("");
+            settings->setDatabaseHostName("");
+            settings->setDatabasePort(-1);
+            settings->setDatabaseUserName("");
+            settings->setDatabasePassword("");
+
+            settings->saveSettings();
+        }
+        else
+        {
+            d->collectionModel->apply();
+        }
+    }else{
+        settings->setDatabaseType(d->databaseType->currentText());
+        settings->setDatabaseName(d->databaseName->text());
+        settings->setDatabaseConnectoptions(d->connectionOptions->text());
+        settings->setDatabaseHostName(d->hostName->text());
+        settings->setDatabasePort(d->hostPort->text().toInt());
+        settings->setDatabaseUserName(d->userName->text());
+        settings->setDatabasePassword(d->password->text());
         settings->saveSettings();
-    }
-    else
-    {
         d->collectionModel->apply();
     }
 }
@@ -195,7 +280,41 @@ void SetupCollections::readSettings()
 
     d->originalDbPath = settings->getDatabaseFilePath();
     d->databasePathEdit->setUrl(settings->getDatabaseFilePath());
+
+    d->databaseName->setText(settings->getDatabaseName());
+    d->hostName->setText(settings->getDatabaseHostName());
+    d->hostPort->setValue(settings->getDatabasePort());
+    d->connectionOptions->setText(settings->getDatabaseConnectoptions());
+
+    d->userName->setText(settings->getDatabaseUserName());
+
+    d->password->setText(settings->getDatabasePassword());
+
+    /* Now set the type according the database type from the settings.
+     * If no item is found, ignore the setting.
+     */
+    for (int i=0; i<d->databaseType->count(); i++){
+        kDebug(50003) << "Comparing comboboxentry on index ["<< i <<"] [" << d->databaseType->itemText(i) << "] with ["<< settings->getDatabaseType() << "]";
+        if (d->databaseType->itemText(i)==settings->getDatabaseType()){
+            d->databaseType->setCurrentIndex(i);
+            setDatabaseInputFields(d->databaseType->itemText(i));
+        }
+    }
     d->collectionModel->loadCollections();
+}
+
+void SetupCollections::setDatabaseInputFields(const QString& currentIndexStr){
+    if (currentIndexStr=="QSQLITE"){
+        d->databasePathLabel->setVisible(true);
+        d->databasePathEdit->setVisible(true);
+
+        d->expertSettings->setVisible(false);
+    }else{
+        d->databasePathLabel->setVisible(false);
+        d->databasePathEdit->setVisible(false);
+
+        d->expertSettings->setVisible(true);
+    }
 }
 
 void SetupCollections::slotChangeDatabasePath(const KUrl& result)

@@ -91,7 +91,10 @@ public:
      */
     QByteArray hash() const;
 
-    static DatabaseParameters parametersFromConfig();
+    static DatabaseParameters parametersFromConfig(const QString &databaseType, const QString &databaseName,
+            const QString &databaseHostName, int databasePort,
+            const QString &databaseUserName, const QString &databaseUserPassword,
+            const QString &databaseConnectOptions);
 
     /**
      * Convenience method to create a DatabaseParameters object for an

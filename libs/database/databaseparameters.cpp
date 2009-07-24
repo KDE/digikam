@@ -128,13 +128,17 @@ QByteArray DatabaseParameters::hash() const
     return md5.hexDigest();
 }
 
-DatabaseParameters DatabaseParameters::parametersFromConfig()
+DatabaseParameters DatabaseParameters::parametersFromConfig(const QString &databaseType, const QString &databaseName,
+                                                            const QString &databaseHostName, int databasePort,
+                                                            const QString &databaseUserName, const QString &databaseUserPassword,
+                                                            const QString &databaseConnectOptions)
 {
 	DatabaseParameters parameters;
 
     // only the database name is needed
 	parameters.readConfig();
 
+	/*
 	// now set default database entries according the default values
 	parameters.databaseType 	= parameters.m_DatabaseConfigs[parameters.m_DefaultDatabase].m_DatabaseID;
 	parameters.databaseName 	= parameters.m_DatabaseConfigs[parameters.m_DefaultDatabase].m_DatabaseName;
@@ -143,6 +147,15 @@ DatabaseParameters DatabaseParameters::parametersFromConfig()
 	parameters.password     	= parameters.m_DatabaseConfigs[parameters.m_DefaultDatabase].m_Password;
 	parameters.port         	= parameters.m_DatabaseConfigs[parameters.m_DefaultDatabase].m_Port.toInt();
 	parameters.connectOptions 	= parameters.m_DatabaseConfigs[parameters.m_DefaultDatabase].m_ConnectOptions;
+	*/
+
+	parameters.databaseType     = databaseType;
+    parameters.databaseName     = databaseName;
+    parameters.hostName         = databaseHostName;
+    parameters.userName         = databaseUserName;
+    parameters.password         = databaseUserPassword;
+    parameters.port             = databasePort;
+    parameters.connectOptions   = databaseConnectOptions;
 
     return parameters;
 }

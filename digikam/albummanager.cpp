@@ -569,8 +569,18 @@ bool AlbumManager::setDatabase(const QString& dbPath, bool priority, const QStri
         DatabaseAccess::setParameters(DatabaseParameters::parametersForSQLiteDefaultFile(dbPath),
                                       DatabaseAccess::MainApplication);
     */
-        DatabaseAccess::setParameters(DatabaseParameters::parametersFromConfig(),
+
+
+
+    DatabaseAccess::setParameters(DatabaseParameters::parametersFromConfig(AlbumSettings::instance()->getDatabaseType(),
+                                                                           AlbumSettings::instance()->getDatabaseName(),
+                                                                           AlbumSettings::instance()->getDatabaseHostName(),
+                                                                           AlbumSettings::instance()->getDatabasePort(),
+                                                                           AlbumSettings::instance()->getDatabaseUserName(),
+                                                                           AlbumSettings::instance()->getDatabasePassword(),
+                                                                           AlbumSettings::instance()->getDatabaseConnectoptions()),
                                       DatabaseAccess::MainApplication);
+
 
 
     // still suspended from above
@@ -812,7 +822,14 @@ bool AlbumManager::setDatabase(const QString& dbPath, bool priority, const QStri
 
     // Initialize thumbnail database
     QFileInfo thumbFile(d->dbPath, "thumbnails-digikam.db");
-    ThumbnailLoadThread::initializeThumbnailDatabase(thumbFile.filePath(), new DatabaseThumbnailInfoProvider());
+    ThumbnailLoadThread::initializeThumbnailDatabase(AlbumSettings::instance()->getDatabaseType(),
+            AlbumSettings::instance()->getDatabaseName(),
+            AlbumSettings::instance()->getDatabaseHostName(),
+            AlbumSettings::instance()->getDatabasePort(),
+            AlbumSettings::instance()->getDatabaseUserName(),
+            AlbumSettings::instance()->getDatabasePassword(),
+            AlbumSettings::instance()->getDatabaseConnectoptions(),
+            new DatabaseThumbnailInfoProvider());
     d->dirWatchBlackList << "thumbnails-digikam.db" << "thumbnails-digikam.db-journal";
 
     QApplication::restoreOverrideCursor();

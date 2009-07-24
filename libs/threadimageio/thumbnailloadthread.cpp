@@ -163,7 +163,10 @@ void ThumbnailLoadThread::cleanUp()
     defaultThumbBarObject.destroy();
 }
 
-void ThumbnailLoadThread::initializeThumbnailDatabase(const QString &thumbnailDBFile, ThumbnailInfoProvider *provider)
+void ThumbnailLoadThread::initializeThumbnailDatabase(const QString &databaseType, const QString &databaseName,
+        const QString &databaseHostName, int databasePort,
+        const QString &databaseUserName, const QString &databaseUserPassword,
+        const QString &databaseConnectOptions, ThumbnailInfoProvider *provider)
 {
     if (static_d->firstThreadCreated)
     {
@@ -171,7 +174,10 @@ void ThumbnailLoadThread::initializeThumbnailDatabase(const QString &thumbnailDB
                     "There are already thumbnail loading threads created, "
                     "and these will not be switched to use the database. ";
     }
-    ThumbnailDatabaseAccess::setParameters(DatabaseParameters::parametersFromConfig());
+    ThumbnailDatabaseAccess::setParameters(DatabaseParameters::parametersFromConfig(databaseType, databaseName,
+                                                                                    databaseHostName, databasePort,
+                                                                                    databaseUserName, databaseUserPassword,
+                                                                                    databaseConnectOptions));
     if (ThumbnailDatabaseAccess::checkReadyForUse(0))
     {
         kDebug() << "Thumbnail db ready for use";
@@ -180,7 +186,7 @@ void ThumbnailLoadThread::initializeThumbnailDatabase(const QString &thumbnailDB
     }
     else
     {
-        kError() << "Failed to initialize thumbnail database at" << thumbnailDBFile
+        kError() << "Failed to initialize thumbnail database at" << databaseName
                  << "\n Error message:" << ThumbnailDatabaseAccess().lastError();
     }
 }

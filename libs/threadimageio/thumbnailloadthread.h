@@ -69,7 +69,10 @@ public:
      * This need not be called, then the FreeDesktop standard is used.
      * You can optionally provide a thumbnail info provider.
      */
-    static void initializeThumbnailDatabase(const QString &thumbnailDBFile, ThumbnailInfoProvider *provider = 0);
+    static void initializeThumbnailDatabase(const QString &databaseType, const QString &databaseName,
+            const QString &databaseHostName, int databasePort,
+            const QString &databaseUserName, const QString &databaseUserPassword,
+            const QString &databaseConnectOptions, ThumbnailInfoProvider *provider = 0);
 
     /**
      * Find a thumbnail.

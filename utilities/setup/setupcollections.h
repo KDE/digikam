@@ -58,6 +58,7 @@ private Q_SLOTS:
 
     void slotChangeDatabasePath(const KUrl&);
     void slotDatabasePathEdited(const QString&);
+    void setDatabaseInputFields(const QString&);
 
 private:
 
