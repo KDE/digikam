@@ -362,9 +362,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                    )
 
     # QT3 support rules
-    ADD_DEFINITIONS(-DQT3_SUPPORT
-                    -DQT3_SUPPORT_WARNINGS
-                   )
+    ADD_DEFINITIONS(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
     # Enable C++ Exceptions support, require by Greycstoration algorithm (CImg.h)
     IF(NOT MSVC)
