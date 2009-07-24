@@ -7,7 +7,7 @@
  * Description : A TIFF IO file for DImg framework
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Specifications & references:
  * - TIFF 6.0  : http://partners.adobe.com/public/developer/en/tiff/TIFF6.pdf
@@ -582,16 +582,18 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     else
         TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
 
-    // Image has an alpha channel ?
+    uint16 sampleinfo[1];
     if (imageHasAlpha())
     {
-        uint16 sampleinfo[1] = { EXTRASAMPLE_UNASSALPHA };
+        sampleinfo[0] = EXTRASAMPLE_ASSOCALPHA;
         TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 4);
-        TIFFSetField(tif, TIFFTAG_EXTRASAMPLES,    EXTRASAMPLE_ASSOCALPHA, sampleinfo);
+        TIFFSetField(tif, TIFFTAG_EXTRASAMPLES,    1, sampleinfo);
     }
     else
     {
+        sampleinfo[0] = EXTRASAMPLE_UNASSALPHA;
         TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 3);
+        TIFFSetField(tif, TIFFTAG_EXTRASAMPLES,    1, sampleinfo);
     }
 
     TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, (uint16)imageBitsDepth());
