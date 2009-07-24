@@ -570,10 +570,16 @@ bool AlbumManager::setDatabase(const QString& dbPath, bool priority, const QStri
                                       DatabaseAccess::MainApplication);
     */
 
+    QString databaseName = AlbumSettings::instance()->getDatabaseName();
+    QString filePath;
+    if (AlbumSettings::instance()->getDatabaseType()=="QSQLITE"){
+        databaseName = databaseName + '/' + "digikam4.db";
+        databaseName = QDir::cleanPath(databaseName);
 
+    }
 
     DatabaseAccess::setParameters(DatabaseParameters::parametersFromConfig(AlbumSettings::instance()->getDatabaseType(),
-                                                                           AlbumSettings::instance()->getDatabaseName(),
+                                                                           databaseName,
                                                                            AlbumSettings::instance()->getDatabaseHostName(),
                                                                            AlbumSettings::instance()->getDatabasePort(),
                                                                            AlbumSettings::instance()->getDatabaseUserName(),

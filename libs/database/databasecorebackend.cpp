@@ -183,7 +183,7 @@ DatabaseCoreBackend::~DatabaseCoreBackend()
 databaseAction DatabaseCoreBackend::getDBAction(const QString &actionName)
 {
     Q_D(DatabaseCoreBackend);
-    return d->parameters.m_DatabaseConfigs[d->parameters.m_DefaultDatabase].m_SQLStatements[actionName];
+    return d->parameters.m_DatabaseConfigs[d->parameters.databaseType].m_SQLStatements[actionName];
 }
 bool DatabaseCoreBackend::execDBAction(const databaseAction &action, const QMap<QString, QVariant>* bindingMap, QList<QVariant>* values, QVariant *lastInsertId){
     bool returnResult=true;
