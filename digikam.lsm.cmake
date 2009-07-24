@@ -1,7 +1,7 @@
 Begin4
 Title:          digiKam
 Version:        ${DIGIKAM_VERSION_STRING}
-Entered-date:   2009-07-24
+Entered-date:   2009-08-xx
 Description:    Manage your photographs like a professional with the power of open source
 Keywords:       Digital Still Camera, KDE, Graphics, Image Viewer, Image Editor, Light Table, Time Line, Digital Camera Interface, Gphoto, Digital Photo Management, Search, Rating, Tags, Comments, Exif, Iptc, Makenotes, Xmp, Geolocation, Batch process, Raw workflow 
 Author:         Gilles Caulier <caulier dot gilles at gmail dot com>, 
