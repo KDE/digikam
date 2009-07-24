@@ -75,7 +75,7 @@ protected:
 
     void buildGroup(QString& sql, SearchXmlCachingReader& reader,
                     QList<QVariant> *boundValues, ImageQueryPostHooks *hooks) const;
-    void buildField(QString& sql, SearchXmlCachingReader& reader, const QString& name,
+    bool buildField(QString& sql, SearchXmlCachingReader& reader, const QString& name,
                     QList<QVariant> *boundValues, ImageQueryPostHooks *hooks) const;
 
     QString possibleDate(const QString& str, bool& exact) const;
@@ -84,6 +84,7 @@ public:
 
     static void addSqlOperator(QString& sql, SearchXml::Operator op, bool isFirst);
     static void addSqlRelation(QString& sql, SearchXml::Relation rel);
+    static void addNoEffectContent(QString& sql, SearchXml::Operator op);
 
 protected:
 

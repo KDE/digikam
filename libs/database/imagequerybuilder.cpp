@@ -43,6 +43,10 @@
 #include <kcomponentdata.h>
 #include <kmimetype.h>
 
+// KExiv2 includes
+
+#include <libkexiv2/kexiv2.h>
+
 // Local includes
 
 #include "databaseaccess.h"
@@ -123,6 +127,7 @@ QString ImageQueryBuilder::buildQueryFromXml(const QString& xml, QList<QVariant>
         }
     }
 
+kDebug() << sql;
     return sql;
 }
 
@@ -156,29 +161,18 @@ void ImageQueryBuilder::buildGroup(QString& sql, SearchXmlCachingReader& reader,
         if (reader.isFieldElement())
         {
             hasContent = true;
-            addSqlOperator(sql, reader.fieldOperator(), firstField);
+            SearchXml::Operator fieldOperator = reader.fieldOperator();
+            addSqlOperator(sql, fieldOperator, firstField);
             if (firstField)
                 firstField = false;
 
-            buildField(sql, reader, reader.fieldName(), boundValues, hooks);
+            if (!buildField(sql, reader, reader.fieldName(), boundValues, hooks))
+                addNoEffectContent(sql, fieldOperator);
         }
     }
 
     if (!hasContent)
-    {
-        // add a condition statement with no effect
-        switch (mainGroupOp)
-        {
-            case SearchXml::And:
-            case SearchXml::Or:
-                sql += " 1 ";
-                break;
-            case SearchXml::AndNot:
-            case SearchXml::OrNot:
-                sql += " 0 ";
-                break;
-        }
-    }
+        addNoEffectContent(sql, mainGroupOp);
 
     sql += ") ";
 }
@@ -658,7 +652,7 @@ public:
 };
 
 
-void ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader, const QString& name,
+bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader, const QString& name,
                                    QList<QVariant> *boundValues, ImageQueryPostHooks *hooks) const
 {
     SearchXml::Relation relation = reader.fieldRelation();
@@ -677,7 +671,7 @@ void ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
             if (ids.isEmpty())
             {
                 kDebug() << "Relation 'InTree', name 'albumid': No values given";
-                return;
+                return false;
             }
 
             sql += "(Images.album IN "
@@ -740,7 +734,7 @@ void ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
             if (ids.isEmpty())
             {
                 kDebug() << "Relation 'InTree', name 'tagid': No values given";
-                return;
+                return false;
             }
 
             if (relation == SearchXml::InTree)
@@ -835,6 +829,33 @@ void ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     else if (name == "orientation")
     {
         fieldQuery.addChoiceIntField("ImageInformation.orientation");
+    }
+    else if (name == "pageorientation")
+    {
+        if (relation == SearchXml::Equal)
+        {
+            int pageOrientation = reader.valueToInt();
+            // "1" is landscape, "2" is portrait, "3" is landscape regardless of Exif, "4" is portrait regardless of Exif
+            if (pageOrientation == 1)
+            {
+                sql += " ( (ImageInformation.orientation <= ? AND ImageInformation.width >= ImageInformation.height) "
+                       "  OR (ImageInformation.orientation >= ? AND ImageInformation.width <= ImageInformation.height) ) ";
+                *boundValues << KExiv2Iface::KExiv2::ORIENTATION_VFLIP << KExiv2Iface::KExiv2::ORIENTATION_ROT_90_HFLIP;
+            }
+            else if (pageOrientation == 2)
+            {
+                sql += " ( (ImageInformation.orientation <= ? AND ImageInformation.width < ImageInformation.height) "
+                       "  OR (ImageInformation.orientation >= ? AND ImageInformation.width > ImageInformation.height) ) ";
+                *boundValues << KExiv2Iface::KExiv2::ORIENTATION_VFLIP << KExiv2Iface::KExiv2::ORIENTATION_ROT_90_HFLIP;
+            }
+            else if (pageOrientation == 3 || pageOrientation == 4)
+            {
+                // ignoring Exif orientation
+                sql += " ( ImageInformation.width ";
+                ImageQueryBuilder::addSqlRelation(sql, pageOrientation == 3 ? SearchXml::GreaterThanOrEqual : SearchXml::LessThanOrEqual);
+                sql += " ImageInformation.height) ";
+            }
+        }
     }
     else if (name == "width")
     {
@@ -1025,6 +1046,12 @@ void ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     {
         kWarning(50003) << "Search field \"similarity\" is not supported by ImageQueryBuilder";
     }
+    else
+    {
+        kDebug(50003) << "Search field" << name << "not known by this version of ImageQueryBuilder";
+        return false;
+    }
+    return true;
 }
 
 void ImageQueryBuilder::addSqlOperator(QString& sql, SearchXml::Operator op, bool isFirst)
@@ -1088,6 +1115,21 @@ void ImageQueryBuilder::addSqlRelation(QString& sql, SearchXml::Relation rel)
     }
 }
 
+void ImageQueryBuilder::addNoEffectContent(QString& sql, SearchXml::Operator op)
+{
+    // add a condition statement with no effect
+    switch (op)
+    {
+        case SearchXml::And:
+        case SearchXml::Or:
+            sql += " 1 ";
+            break;
+        case SearchXml::AndNot:
+        case SearchXml::OrNot:
+            sql += " 0 ";
+            break;
+    }
+}
 
 // ----------- Legacy query description handling -------------- //
 
