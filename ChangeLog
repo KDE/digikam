@@ -1,3 +1,1541 @@
+1.0.0-beta2 2009-07-24
+--------------------------------------------------------------------------------
+
+2009-07-23 13:52  cgilles
+
+    * NEWS: update
+
+2009-07-23 13:50  cgilles
+
+    * utilities/gpssearch/gpssearchview.cpp,
+      utilities/gpssearch/gpssearchwidget.cpp,
+      utilities/gpssearch/gpssearchwidget.h: added 2 new buttons to
+      zoom in/out marble map
+      BUGS: 192563
+
+2009-07-23 13:47  cgilles
+
+    * libs/imageproperties/imagepropertiesgpstab.cpp: polish
+
+2009-07-23 13:40  cgilles
+
+    * libs/imageproperties/imagepropertiesgpstab.cpp,
+      libs/imageproperties/worldmapwidget.cpp,
+      libs/imageproperties/worldmapwidget.h: add 2 buttons to zoom in
+      zoom out marble map
+      CCBUGS: 192563
+
+2009-07-23 09:23  cgilles
+
+    * NEWS: update
+
+2009-07-23 09:20  cgilles
+
+    * NEWS: update
+
+2009-07-22 21:18  mwiesweg
+
+    * NEWS: update - killing bug with 379 votes :-)
+
+2009-07-22 21:13  mwiesweg
+
+    * digikam/digikamapp.cpp, digikam/digikamapp_p.h,
+      digikam/digikamimageview.cpp, digikam/digikamui.rc,
+      digikam/digikamview.cpp, digikam/digikamview.h: Add select action
+      to choose the categorization/group mode for images.
+      Available choices are Flat List, By Album, By Format.
+
+      BUG: 134389
+
+2009-07-22 21:13  mwiesweg
+
+    * digikam/albumsettings.cpp, digikam/albumsettings.h: Store group
+      mode in config
+
+      CCBUG: 134389
+
+2009-07-22 21:13  mwiesweg
+
+    * digikam/imagecategorydrawer.cpp, digikam/imagecategorydrawer.h:
+      Create category header texts for categorization by format or flat
+      list.
+      For flat list, get the "parent" album that is displayed from
+      ImageAlbumModel
+      and create an album type specific text.
+
+      CCBUG: 134389
+
+2009-07-22 21:13  mwiesweg
+
+    * libs/dimg/dimg.cpp: Add check for isNull() to prevent crash if
+      called with null image
+
+      CCBUG: 188334
+
+2009-07-22 21:13  mwiesweg
+
+    * libs/models/imagefiltermodel.cpp, libs/models/imagefiltermodel.h:
+      Return format for format role
+
+2009-07-22 16:56  scripty
+
+    * digikam/digikam.desktop,
+      imageplugins/channelmixer/digikamimageplugin_channelmixer.desktop,
+      imageplugins/charcoal/digikamimageplugin_charcoal.desktop,
+      imageplugins/colorfx/digikamimageplugin_colorfx.desktop,
+      imageplugins/contentawareresizing/digikamimageplugin_contentawareresizing.desktop,
+      imageplugins/freerotation/digikamimageplugin_freerotation.desktop,
+      showfoto/showfoto.desktop,
+      utilities/hotplug/digikam-download.desktop.cmake,
+      utilities/hotplug/digikam-gphoto2-camera.desktop.cmake,
+      utilities/hotplug/digikam-mount-and-download.desktop.cmake,
+      utilities/hotplug/digikam-opencamera.desktop.cmake,
+      utilities/imageeditor/editor/digikamimageplugin.desktop,
+      utilities/nepomuk/digikamnepomukservice.desktop: SVN_SILENT made
+      messages (.desktop file)
+
+2009-07-22 13:27  cgilles
+
+    * NEWS: update
+
+2009-07-22 13:22  cgilles
+
+    * NEWS: update
+
+2009-07-22 11:44  cgilles
+
+    * libs/template/msgtextedit.cpp, libs/template/msgtextedit.h:
+      polish
+
+2009-07-22 07:39  cgilles
+
+    * libs/widgets/common/previewwidget.cpp,
+      libs/widgets/common/previewwidget.h: polish
+
+2009-07-21 18:26  cgilles
+
+    * utilities/setup/setuplighttable.cpp: typo
+
+2009-07-21 15:44  aclemens
+
+    * digikam/monthwidget.cpp: QT_FATAL_WARNINGS is nice to find
+      invalid connections.
+      This signal does not exist...
+
+2009-07-21 15:42  cgilles
+
+    * libs/template/altlangstredit.cpp, libs/template/altlangstredit.h:
+      fix broken lang name settings here.
+
+2009-07-21 14:18  mwiesweg
+
+    * libs/database/imagescanner.cpp: Simply forgot to change the
+      numbers. Count is always 2.
+
+2009-07-21 13:28  cgilles
+
+    * libs/database/imagescanner.cpp: fix crash reported by Markus
+      Spring on mailing list
+
+2009-07-21 12:10  cgilles
+
+    * CMakeLists.txt: Under Windows, Glib2 can be installed to compile
+      Content Aware Resizing tool. We need this line...
+
+2009-07-21 10:34  cgilles
+
+    * NEWS: update
+
+2009-07-21 04:41  cgilles
+
+    * NEWS: update
+
+2009-07-21 00:12  sengels
+
+    * CMakeLists.txt: it should work even if GLIB2 isn't found on
+      windows
+
+2009-07-20 22:18  nlecureuil
+
+    * NEWS: Update
+
+2009-07-20 20:02  cgilles
+
+    * NEWS: update
+
+2009-07-20 20:01  cgilles
+
+    * NEWS: update
+
+2009-07-20 18:36  aclemens
+
+    * libs/imageproperties/captionedit.cpp,
+      libs/imageproperties/imagedescedittab.cpp,
+      libs/template/subjectedit.cpp, libs/template/templatepanel.cpp,
+      utilities/queuemanager/basetools/decorate/watermark.cpp,
+      utilities/setup/setuptemplate.cpp: "Enter here...." is wrong I
+      guess. "Enter... here" seems to be better.
+      This is a single commit, so if someone doesn't agree, we can
+      revert it
+      quite fast ;-)
+
+2009-07-20 17:57  mwiesweg
+
+    * NEWS: Remove git's leftovers
+
+2009-07-20 17:56  mwiesweg
+
+    * NEWS, utilities/cameragui/cameraui.cpp: Take already loaded items
+      into account when sorting by date.
+
+      BUG: 187810
+
+2009-07-20 17:32  cgilles
+
+    * NEWS: update
+
+2009-07-20 17:31  cgilles
+
+    * NEWS: update
+
+2009-07-20 17:11  mwiesweg
+
+    * utilities/cameragui/umscamera.cpp: Use the oldest of ctime and
+      mtime as fallback if exif is not available.
+
+      CCBUG: 190717
+
+2009-07-20 17:10  mwiesweg
+
+    * libs/database/imagescanner.cpp, libs/database/imagescanner.h:
+      Make method public as static utility
+
+2009-07-20 15:22  mwiesweg
+
+    * NEWS, digikam/datefolderview.cpp, digikam/datefolderview.h,
+      digikam/digikamview.cpp, digikam/monthwidget.cpp,
+      digikam/monthwidget.h: Reimplement MonthWidget loading to work
+      with the current image model.
+
+      BUG: 196999
+
+2009-07-20 15:22  mwiesweg
+
+    * libs/models/imagemodel.cpp, libs/models/imagemodel.h: Add a data
+      role to retrieve creation date
+
+2009-07-20 15:22  mwiesweg
+
+    * libs/imageproperties/imagepropertiescolorstab.cpp: Seems not many
+      people use these values ;-)
+      Restore correct association of label and value text for
+      count, mean and stddev.
+
+2009-07-20 13:38  aclemens
+
+    * libs/imageproperties/imagedescedittab.cpp: polish
+
+2009-07-20 13:36  aclemens
+
+    * NEWS: update
+
+2009-07-20 13:36  aclemens
+
+    * digikam/tagfilterview.cpp, digikam/tagfilterview.h: Apply patch
+      from wto.wit01 to save and restore selected filter tags
+      BUG:200187
+
+2009-07-20 13:30  cgilles
+
+    * NEWS: update
+
+2009-07-20 12:02  cgilles
+
+    * NEWS: update
+
+2009-07-20 12:02  cgilles
+
+    * utilities/lighttable/lighttablewindow.cpp,
+      utilities/lighttable/lighttablewindow_p.h,
+      utilities/setup/setuplighttable.cpp: apply patch from Pieter
+      Edelman to clear Light Table contents on close event.
+      BUGS: 200854
+
+2009-07-20 11:43  cgilles
+
+    * NEWS: update
+
+2009-07-20 11:24  cgilles
+
+    * NEWS: update
+
+2009-07-20 10:46  cgilles
+
+    * NEWS: update
+
+2009-07-20 10:01  cgilles
+
+    * NEWS: update
+
+2009-07-20 09:49  cgilles
+
+    * libs/widgets/metadata/metadatalistview.cpp,
+      libs/widgets/metadata/metadatalistview.h,
+      libs/widgets/metadata/metadataselector.cpp: clean up mdkey item
+      when search is performed in metadata viewer
+
+2009-07-20 08:33  aclemens
+
+    * libs/imageproperties/imagepropertiesmetadatatab.cpp: compile
+
+2009-07-20 08:22  cgilles
+
+    * libs/imageproperties/imagepropertiesmetadatatab.cpp,
+      libs/widgets/metadata/metadatapanel.cpp,
+      libs/widgets/metadata/metadatapanel.h,
+      libs/widgets/metadata/metadataselector.cpp,
+      libs/widgets/metadata/metadataselector.h,
+      libs/widgets/metadata/metadatawidget.cpp: if libkexiv2 < 1.0.0,
+      switch and config interface without Metadata tags editor support.
+      Polish API
+
+2009-07-19 19:08  cgilles
+
+    * libs/widgets/metadata/metadataselector.cpp,
+      libs/widgets/metadata/metadataselector.h: cleanup mdkey item when
+      user search tags in metadata editor, if there is no match in the
+      query
+
+2009-07-19 17:46  cgilles
+
+    * libs/widgets/metadata/mdkeylistviewitem.cpp,
+      libs/widgets/metadata/mdkeylistviewitem.h,
+      libs/widgets/metadata/metadatalistview.cpp,
+      libs/widgets/metadata/metadatalistview.h,
+      libs/widgets/metadata/metadatalistviewitem.cpp,
+      libs/widgets/metadata/metadatalistviewitem.h,
+      libs/widgets/metadata/metadatawidget.cpp: Metadata Filter : if
+      metadata tags from filter are not available in image, show tags
+      as "unavaialble" as well instead is hide it.
+      This will improve usability to compare image metadata.
+
+2009-07-19 11:44  cgilles
+
+    * libs/widgets/metadata/metadataselector.cpp,
+      libs/widgets/metadata/metadataselector.h: check mdkey titile to
+      filter tags selection view
+
+2009-07-19 11:01  cgilles
+
+    * libs/widgets/metadata/metadatapanel.cpp: compile
+
+2009-07-19 10:59  cgilles
+
+    * libs/widgets/metadata/metadatapanel.cpp,
+      libs/widgets/metadata/metadataselector.cpp,
+      libs/widgets/metadata/metadataselector.h: polish api
+
+2009-07-19 10:40  cgilles
+
+    * libs/widgets/metadata/metadatapanel.cpp,
+      libs/widgets/metadata/metadataselector.cpp,
+      libs/widgets/metadata/metadataselector.h: load default filter at
+      fisrt instance of Metadata filter editor
+
+2009-07-18 16:08  osterfeld
+
+    * utilities/firstrun/collectionpage.cpp: Actually save the selected
+      album path in the config.
+      CCMAIL:caulier.gilles@gmail.com
+
+2009-07-18 14:23  cgilles
+
+    * NEWS: update
+
+2009-07-18 14:21  cgilles
+
+    * libs/widgets/metadata/mdkeylistviewitem.cpp,
+      libs/widgets/metadata/mdkeylistviewitem.h,
+      libs/widgets/metadata/xmpwidget.cpp: support new XMP namespace
+
+2009-07-18 14:20  cgilles
+
+    * NEWS: update
+
+2009-07-18 12:54  mwiesweg
+
+    * libs/dimg/loaders/jpegloader.cpp, libs/jpegutils/jpegutils.cpp:
+      Following hint from other KDE commit to make this work with
+      libjpeg7.
+      Untested with libjpeg 7. only with libjpeg 6.2, where numerator
+      and denominator
+      are always 1 so the effect is the same.
+
+2009-07-18 12:30  aclemens
+
+    * utilities/setup/setupcollections.cpp: fix text layout
+
+2009-07-18 12:24  aclemens
+
+    * showfoto/setup/setupmetadata.cpp: fix layout
+
+2009-07-18 12:24  aclemens
+
+    * NEWS: update
+
+2009-07-18 12:24  aclemens
+
+    * showfoto/setup/setupmetadata.cpp,
+      utilities/setup/setupcollections.cpp,
+      utilities/setup/setupmetadata.cpp: Remove bold tags from
+      descriptive text in setup pages
+
+2009-07-18 09:01  cgilles
+
+    * NEWS: update
+
+2009-07-18 08:59  cgilles
+
+    * CMakeLists.txt, showfoto/setup/setup.cpp, showfoto/setup/setup.h,
+      showfoto/setup/setupeditor.cpp, showfoto/setup/setupmetadata.cpp,
+      showfoto/setup/setupmetadata.h: Added Metadata Tags filter
+      support to Showfoto
+      BUGS: 126086
+
+2009-07-18 08:39  cgilles
+
+    * utilities/setup/setupmetadata.cpp,
+      utilities/setup/setupmetadata.h: polish
+
+2009-07-18 08:19  cgilles
+
+    * utilities/setup/setupmetadata.cpp: polish
+
+2009-07-18 05:54  cgilles
+
+    * CMakeLists.txt, digikam/digikamview.cpp,
+      libs/imageproperties/imagepropertiescolorstab.cpp,
+      libs/imageproperties/imagepropertiesmetadatatab.cpp,
+      libs/imageproperties/imagepropertiesmetadatatab.h,
+      libs/imageproperties/imagepropertiessidebar.cpp,
+      libs/imageproperties/imagepropertiessidebar.h,
+      libs/imageproperties/imagepropertiessidebarcamgui.cpp,
+      libs/imageproperties/imagepropertiessidebarcamgui.h,
+      libs/widgets/iccprofiles/iccprofilewidget.cpp,
+      libs/widgets/metadata/exifwidget.cpp,
+      libs/widgets/metadata/exifwidget.h,
+      libs/widgets/metadata/iptcwidget.cpp,
+      libs/widgets/metadata/iptcwidget.h,
+      libs/widgets/metadata/makernotewidget.cpp,
+      libs/widgets/metadata/makernotewidget.h,
+      libs/widgets/metadata/metadatalistview.cpp,
+      libs/widgets/metadata/metadatapanel.cpp,
+      libs/widgets/metadata/metadatapanel.h,
+      libs/widgets/metadata/metadataselector.cpp,
+      libs/widgets/metadata/metadataselector.h,
+      libs/widgets/metadata/metadatawidget.cpp,
+      libs/widgets/metadata/metadatawidget.h,
+      libs/widgets/metadata/xmpwidget.cpp,
+      libs/widgets/metadata/xmpwidget.h, showfoto/showfoto.cpp,
+      utilities/cameragui/cameraui.cpp,
+      utilities/imageeditor/editor/imagewindow.cpp,
+      utilities/lighttable/lighttablewindow.cpp,
+      utilities/setup/setupmetadata.cpp: Implement metadata tags filter
+      settings and rules for metadata viewer from right side bar.
+      In setup metadata dialog page, a new panel is available to set
+      which metadata tags must be
+      displayed in EXIF, Makernotes, Iptc and XMP viewer. This panel
+      list all tags supported by Exiv2.
+      User can search on whole tags collection supported with a search
+      bar to found easily metadata title to select.
+      Buttons can clear selection, select all, or use Human Readable
+      default list of tags.
+      NOTE: you need libkexiv2 from trunk (KDE4.4) to be able to use
+      this feature.
+      TODO : showfoto need the same config panel.
+      CCBUGS: 126086
+
+2009-07-17 20:18  cgilles
+
+    * NEWS: update
+
+2009-07-17 08:05  cgilles
+
+    * libs/widgets/metadata/metadataselector.cpp: added tooltip
+
+2009-07-17 06:25  cgilles
+
+    * NEWS: update
+
+2009-07-16 21:36  cgilles
+
+    * libs/widgets/metadata/metadataselector.cpp: optimize
+
+2009-07-16 21:04  mwiesweg
+
+    * NEWS: update
+
+2009-07-16 20:47  mwiesweg
+
+    * NEWS, utilities/cameragui/umscamera.cpp: Remove QFile::encodeName
+      when passing QString
+
+      BUG: 189156
+
+2009-07-16 19:00  mwiesweg
+
+    * NEWS, libs/imageproperties/imagedescedittab.cpp: Use
+      CollectionScanner/ImageScanner to read metadata from file to
+      database.
+      This means that this method now uses 100% the same code as if the
+      image
+      was completely unknown so far and newly added to the collection.
+
+      So this method can now be used if
+      - any metadata was changed by external tools
+      - a missing piece or bug in our scanning code filled wrong or
+      incomplete info in the db
+
+      BUG: 135476
+
+2009-07-16 19:00  mwiesweg
+
+    * digikam/albummanager.cpp: Suspend all running scanning tasks
+      before changing the database.
+      Throw in a few wait cursors for the code of opening a new
+      database. May take 1-2secs.
+
+2009-07-16 19:00  mwiesweg
+
+    * digikam/scancontroller.cpp, digikam/scancontroller.h: Add a
+      method to abort all current activity and suspend scanning.
+      When the database is changed, all scanning tasks should better be
+      aborted.
+
+2009-07-16 18:53  cgilles
+
+    * libs/widgets/metadata/metadataselector.cpp,
+      libs/widgets/metadata/metadataselector.h: fix broken compilation
+      with old KExiv2
+      CCBUGS: 126086
+
+2009-07-16 17:20  mwiesweg
+
+    * NEWS, libs/models/imagefiltersettings.cpp: Fix subtle typo
+
+      BUG: 200190
+
+2009-07-16 17:19  mwiesweg
+
+    * libs/dmetadata/dmetadata.cpp, libs/dmetadata/dmetadata.h: Get
+      IPTC Core subject codes from XMP or Iptc.
+      Add a method getIptcCoreSubjects which returns subject from XMP
+      or IPTC.
+      Some internal restructuring.
+
+2009-07-16 14:43  cgilles
+
+    * libs/widgets/metadata/metadataselector.cpp: polish
+
+2009-07-16 14:13  cgilles
+
+    * CMakeLists.txt: compile
+
+2009-07-16 14:13  cgilles
+
+    * libs/widgets/metadata/metadataselector.cpp,
+      libs/widgets/metadata/metadataselector.h: new widget to config
+      metadata tags to display on EXIF, IPTC, and XMP view
+      It will be used in setupMetadata panel.
+      CCBUGS: 126086
+
+2009-07-16 11:13  cgilles
+
+    * NEWS: update
+
+2009-07-16 09:23  aclemens
+
+    * imageplugins/blurfx/blurfxtool.cpp: polish
+
+2009-07-16 03:20  cgilles
+
+    * libs/template/altlangstredit.cpp: polish
+
+2009-07-16 03:15  cgilles
+
+    * libs/template/altlangstredit.cpp: set checkspelling language
+      accordingly with settings
+
+2009-07-15 23:20  cgilles
+
+    * NEWS: update
+
+2009-07-15 21:11  mwiesweg
+
+    * libs/dmetadata/dmetadata.cpp: Use common method to retrieve
+      copyright information
+      (this now includes the IPTC legacy fields as well)
+
+      I think the different scanning code paths are consolidated now,
+      but I need
+      to review tomorrow.
+      Hope no regressions introduced.
+
+2009-07-15 20:51  mwiesweg
+
+    * libs/database/imagescanner.cpp, libs/dmetadata/dmetadata.cpp,
+      libs/dmetadata/dmetadata.h: DMetadata:
+      - add a method to fill the copyright-related fields of a given
+      Template
+      - add a convenience method to convert an AltLangMap passed as
+      QVariant.
+      ImageScanner:
+      - code from scanImageCopyright has now been moved to DMetadata
+      and ImageCopyright
+
+2009-07-15 19:24  mwiesweg
+
+    * libs/database/imagecopyright.cpp, libs/database/imagecopyright.h,
+      libs/database/imageinfo.cpp: Put code to read and write from
+      template into ImageCopyright. May be reused.
+
+2009-07-15 18:57  mwiesweg
+
+    * libs/database/imagescanner.cpp: In ImageScanner, rely on
+      DMetadata::getImageComments
+      to handle all interpretation of comment values. No custom code
+      here.
+
+      CCBUG: 135476
+
+2009-07-15 13:58  aclemens
+
+    * utilities/imageeditor/editor/editortooliface.cpp,
+      utilities/imageeditor/editor/editortooliface.h,
+      utilities/imageeditor/editor/editorwindow.cpp: Oops, committed
+      the wrong branch. The commit before was some
+      experimental code.
+      This patch will fix the closing of the tool when a filter is
+      aborted.
+
+2009-07-15 13:47  aclemens
+
+    * utilities/imageeditor/editor/editortool.cpp,
+      utilities/imageeditor/editor/editortool.h,
+      utilities/imageeditor/editor/editortooliface.cpp,
+      utilities/imageeditor/editor/editortoolsettings.cpp,
+      utilities/imageeditor/editor/editorwindow.cpp,
+      utilities/imageeditor/editor/editorwindow.h: Use global action
+      for closing the tools in the image editor.
+      Sometimes the assigned shortcut is not working, which is weird.
+      It doesn't seem to work so well to assign a shortcut manually to
+      a
+      button.
+      With this global action all the tools will close fine.
+      Also with this method the shortcut becomes configurable.
+
+2009-07-15 13:20  cgilles
+
+    * libs/template/templatepanel.cpp: use clickMessage()
+
+2009-07-15 13:10  cgilles
+
+    * CMakeLists.txt, libs/imageproperties/captionedit.cpp,
+      libs/template/TODO, libs/template/altlangstredit.cpp,
+      libs/template/altlangstredit.h, libs/template/msgtextedit.cpp,
+      libs/template/msgtextedit.h: Add new widet to edit text (based on
+      KTextEdit) which display a click message as with KLineEdit.
+      This improve usability and make interface more easily to
+      understand.
+      This widget will be moved in libkexiv2 later, with others widgets
+      hosted by Template code.
+
+2009-07-15 12:28  aclemens
+
+    * utilities/cameragui/cameraui.cpp,
+      utilities/lighttable/lighttablewindow.cpp,
+      utilities/queuemanager/queuemgrwindow.cpp: Fullscreen is a toggle
+      action and should be used as such.
+      Either press the button in the toolbar, or CTRL+SHIFT+F to exit
+      fullscreen.
+      This mechanism is used throughout KDE and should be used in
+      digiKam as
+      well of course.
+      I would strongly recommend NOT to use ESC to quit the fullscreen
+      mode.
+
+      I disable these actions for now, but again I would rather remove
+      it
+      completely. What do you think?
+
+      Andi
+
+      CCMAIL:digikam-devel@kde.org
+
+2009-07-15 12:23  aclemens
+
+    * NEWS: update
+
+2009-07-15 12:23  aclemens
+
+    * utilities/imageeditor/editor/editortoolsettings.cpp,
+      utilities/imageeditor/editor/editorwindow.cpp: Close tools by
+      pressing ESC.
+      We used ESC in the editor window to get out of fullscreen, but
+      this is
+      inconsistent within digiKam itself as well as throughout the
+      whole KDE
+      desktop.
+      Fullscreen is a toggle action and should be used as such.
+      By re-assigning ESC to the cancel button in the
+      EditorToolSettings, we
+      can now easily abort a filter, which greatly improves usability
+      and is
+      also a often asked feature.
+
+2009-07-15 11:57  aclemens
+
+    * digikam/album.cpp, digikam/albumfolderview.cpp,
+      digikam/albumiconview.cpp, digikam/albummanager.cpp,
+      digikam/albumselectwidget.cpp, digikam/digikamapp.cpp,
+      digikam/scancontroller.cpp, digikam/tagfilterview.cpp,
+      digikam/tagfolderview.cpp,
+      imageplugins/lenscorrection/autocorrection/klensfun.cpp,
+      libs/database/albumdb_sqlite2.cpp,
+      libs/database/collectionmanager.cpp,
+      libs/database/collectionscanner.cpp,
+      libs/database/databaseaccess.cpp,
+      libs/database/haar/haariface.cpp, libs/database/imagescanner.cpp,
+      libs/database/schemaupdater.cpp,
+      libs/database/thumbnaildatabaseaccess.cpp,
+      libs/database/thumbnailschemaupdater.cpp,
+      libs/database/upgradedb_sqlite2tosqlite3.cpp,
+      libs/dimg/loaders/jpegloader.cpp,
+      libs/dimg/loaders/pgfloader.cpp, libs/dimg/loaders/pngloader.cpp,
+      libs/dimg/loaders/tiffloader.cpp,
+      libs/greycstoration/greycstorationiface.cpp,
+      libs/imageproperties/imagedescedittab.cpp,
+      libs/threadimageio/managedloadsavethread.cpp,
+      libs/threadimageio/pgfutils.cpp,
+      libs/threadimageio/previewtask.cpp,
+      libs/threadimageio/thumbnailcreator.cpp,
+      libs/threadimageio/thumbnailloadthread.cpp,
+      libs/whitebalance/whitebalance.cpp,
+      libs/widgets/common/thumbbar.cpp,
+      utilities/cameragui/cameracontroller.cpp,
+      utilities/cameragui/camerafolderview.cpp,
+      utilities/cameragui/gpcamera.cpp,
+      utilities/cameragui/umscamera.cpp,
+      utilities/imageeditor/canvas/dimginterface.cpp,
+      utilities/imageeditor/canvas/imagepluginloader.cpp,
+      utilities/setup/setupicc.cpp,
+      utilities/timeline/timelinewidget.cpp: remove endl from kDebug,
+      kWarning and kError... I seem to have missed a
+      few lines with my last commit :-)
+
+2009-07-15 10:49  aclemens
+
+    * digikam/tagfilterview.cpp: some polishing, use objectName() as
+      config group to avoid
+      spelling errors
+
+2009-07-15 07:06  cgilles
+
+    * NEWS: update
+
+2009-07-14 19:09  cgilles
+
+    * libs/dmetadata/captionvalues.cpp, libs/dmetadata/captionvalues.h,
+      libs/dmetadata/dmetadata.cpp: Save/restore Captions properties
+      to/from digiKam XMP namespace.
+      Authors and Dates roperties are saved in alternative language
+      bags. Captions Map is build using all these properties,
+      plus the comments get from standard XMP tags.
+
+      Marcel,
+      When i import a new image with these XMP metadata into
+      collection, authors and dates map are not imported in database...
+      CCBUGS: 135476
+      CCMAIL: marcel.wiesweg@gmx.de
+
+2009-07-14 17:33  aclemens
+
+    * imageplugins/perspective/perspectivewidget.cpp: call update()
+      instead of repaint() whenever possible
+
+2009-07-14 15:28  aclemens
+
+    * libs/database/imageinfo.h, libs/template/templatepanel.cpp: there
+      is no plural form of information
+
+2009-07-14 15:28  aclemens
+
+    * libs/widgets/imageplugins/imageguidewidget.cpp: and some
+      polishing...
+
+2009-07-14 15:24  aclemens
+
+    * libs/widgets/imageplugins/imageguidewidget.cpp: polish
+
+2009-07-14 15:24  aclemens
+
+    * libs/widgets/imageplugins/imageguidewidget.cpp: polish
+
+2009-07-14 14:58  aclemens
+
+    * libs/widgets/imageplugins/imageguidewidget.cpp: More performance
+      fixes: Do not call repaint() directly, ever... in most
+      of the cases we don't need this.
+      This greatly improves performance on my machine.
+
+2009-07-14 14:42  scripty
+
+    * utilities/nepomuk/digikamnepomukservice.desktop: SVN_SILENT made
+      messages (.desktop file)
+
+2009-07-14 11:16  aclemens
+
+    * libs/widgets/imageplugins/imageguidewidget.cpp,
+      libs/widgets/imageplugins/imageguidewidget.h: Do not create /
+      draw the cursor on every mouse move.
+      The drawing of the mask is a little bit faster now, but still it
+      flickers with cursor-sizes above 64px.
+
+2009-07-14 10:27  mwiesweg
+
+    * libs/database/imagescanner.cpp, libs/database/imagescanner.h: Use
+      the oldest of ctime, mtime when falling back to the file system
+      to determine the creation date
+
+      CCBUG: 199967
+
+2009-07-14 10:27  mwiesweg
+
+    * libs/database/collectionscanner.cpp,
+      libs/database/collectionscanner.h,
+      libs/database/imagescanner.cpp, libs/database/imagescanner.h:
+      Prepare to use CollectionScanner/Imagescanner to rescan files
+      ("Read metadata to database")
+      - so that a manual rescan uses 100% the same code as an initial
+      scan when the
+      file is imported
+      Add a flag to CollectionScanner::scanFile to signal if a normal
+      scan, a scan as if modified
+      or a full rescan shall be done.
+      Some internal restructuring.
+
+      CCBUG: 193616
+
+2009-07-14 08:46  cgilles
+
+    * libs/dmetadata/captionvalues.h: fix comments
+
+2009-07-14 08:37  cgilles
+
+    * showfoto/showfoto.cpp: compile
+
+2009-07-14 08:12  cgilles
+
+    * CMakeLists.txt, libs/dmetadata/captionvalues.cpp,
+      libs/dmetadata/captionvalues.h,
+      libs/imageproperties/captionvalues.cpp,
+      libs/imageproperties/captionvalues.h: move this code in DMetadata
+
+2009-07-14 08:11  cgilles
+
+    * NEWS: update
+
+2009-07-14 08:07  cgilles
+
+    * CMakeLists.txt, digikam/metadatahub.cpp, digikam/metadatahub.h,
+      libs/database/imagecomments.cpp, libs/database/imagecomments.h,
+      libs/dmetadata/dmetadata.cpp, libs/dmetadata/dmetadata.h,
+      libs/imageproperties/captionedit.cpp,
+      libs/imageproperties/captionedit.h,
+      libs/imageproperties/captionvalues.cpp,
+      libs/imageproperties/captionvalues.h,
+      libs/imageproperties/imagedescedittab.cpp,
+      libs/template/altlangstredit.cpp, libs/template/altlangstredit.h,
+      utilities/imageeditor/editor/imagewindow.cpp: add support of
+      Captions author properties.
+      For each language alternative caption values, user can fill
+      caption author name
+      A caption date properties is also set accordingly, using current
+      date when caption is enter.
+      These new Captions properties are recordrd to datase only, for
+      the moment.
+      TODO: record all captions properties to digiKam XMP namespace
+      CCBUGS: 135476
+
+2009-07-14 06:34  cgilles
+
+    * NEWS: update
+
+2009-07-13 22:53  aclemens
+
+    * libs/widgets/imageplugins/imageguidewidget.cpp: add missing
+      destructor calls
+
+2009-07-13 22:52  aclemens
+
+    * libs/widgets/imageplugins/imageguidewidget.cpp: speed up drawing
+      of the mask a little bit, do not convert the DImg to a
+      Pixmap all the time.
+
+2009-07-13 21:46  aclemens
+
+    * libs/widgets/imageplugins/imageguidewidget.cpp: I would suggest
+      to display the draw cursor all the time, so it is
+      easier to set the correct size in the panel.
+      Right now we show the cursor only when pressing the mouse.
+
+      One question: Why do we allow to set a size of 100 in the panel
+      for the
+      brush size, but disallow the maximum size in the mouseMoveEvent?
+      In there we only allow a max size of 64, which looks weird,
+      because the
+      mask "blob" we draw is bigger as the cursor.
+
+      Is this some old, "wrong" code?
+
+      Andi
+
+      CCMAIL:digikam-devel@kde.org
+
+2009-07-13 18:04  cgilles
+
+    * NEWS: update
+
+2009-07-13 15:28  mwiesweg
+
+    * NEWS, utilities/cameragui/gpcamera.cpp: Use the file descriptor
+      based method to download a file with gphoto2.
+      This should solve problems with very large files because they can
+      directly be written to disk.
+
+      BUG: 174586
+
+2009-07-13 14:32  scripty
+
+    * utilities/nepomuk/digikamnepomukservice.desktop: SVN_SILENT made
+      messages (.desktop file)
+
+2009-07-12 14:59  mwiesweg
+
+    * digikam/imagecategorizedview.cpp, digikam/imagecategorizedview.h:
+      Reimplement dragEnterEvent as well to work around Qt weirdness
+      that broke dropping from outside digikam on the icon view.
+      (why does QAbstractItemView setState(DraggingState) in
+      dragEnterEvent,
+      when it is possible to get a mouseMoveEvent between that last
+      dragMoveEvent
+      and the dropEvent?? The mouseMoveEvent would start a new invalid
+      drag.)
+
+2009-07-12 14:59  mwiesweg
+
+    * libs/models/imagemodeldragdrophandler.cpp,
+      libs/models/imagemodeldragdrophandler.h: Add a method that can be
+      used for a basic check in dragEnterEvent
+
+2009-07-12 09:46  cgilles
+
+    * libs/template/altlangstredit.cpp: polish
+
+2009-07-12 05:03  cgilles
+
+    * NEWS: update
+
+2009-07-11 14:47  cgilles
+
+    * libs/template/altlangstredit.cpp: fix i18n
+
+2009-07-11 11:50  aclemens
+
+    * libs/imageproperties/imagepropertiessidebar.cpp: fix warnings:
+      when url is not valid, the light table gives warnings
+      about missing file information.
+      This can be fixed by checking if url.isValid().
+
+      I can't figure out why the lighttable gets an "empty" image
+      assigned
+      whenever you add items to the LT, but in general a test in here
+      should
+      be done anyway.
+
+2009-07-11 10:48  aclemens
+
+    * libs/dialogs/dprogressdlg.cpp: this resource can not be found
+      anymore (where is it?) so we need to use
+      something different, otherwise we get a lot of warnings in the
+      console
+      when using the fingerprintsgenerator dialog.
+
+2009-07-11 09:40  cgilles
+
+    * libs/imageproperties/imagedescedittab.cpp: rightview => infoview
+
+2009-07-11 09:33  cgilles
+
+    * NEWS: update
+
+2009-07-11 09:30  aclemens
+
+    * libs/imageproperties/imagedescedittab.cpp: Fix layout and
+      warnings.
+      The widget d->templateSelector can not be assigned twice to a
+      layout,
+      also it has not been created yet when added to grid1.
+      Since it is only used in grid2, I remove it for now.
+      If we really need two widgets, we must also define two pointers.
+
+2009-07-11 09:27  cgilles
+
+    * NEWS: update
+
+2009-07-10 16:11  aclemens
+
+    * NEWS: update
+
+2009-07-10 16:02  mwiesweg
+
+    * digikam/metadatamanager.cpp, digikam/metadatamanager_p.h: A call
+      to LoadingCacheInterface::fileChanged will access QPixmap caches
+      and is therefore UI-thread-only.
+      Call from main thread only.
+
+      CCBUG: 199251
+
+2009-07-10 15:37  aclemens
+
+    * digikam/digikamapp.cpp: Enable / disable queue actions on image
+      selection changes
+
+2009-07-10 15:07  aclemens
+
+    * NEWS: update
+
+2009-07-10 15:07  aclemens
+
+    * libs/models/imagealbummodel.cpp: Do not start a list job if the
+      album is a root album.
+      This prevents the tag view to display all tags recursively, if
+      "tag
+      subalbums" option is set.
+
+      BUG:199617
+
+2009-07-10 12:45  cgilles
+
+    * NEWS: update
+
+2009-07-10 12:43  cgilles
+
+    * NEWS: update
+
+2009-07-10 11:42  cgilles
+
+    * libs/dmetadata/dmetadata.cpp: sync IPTC subjects tags with XMP
+      subject tags
+
+2009-07-10 11:18  cgilles
+
+    * libs/database/imageextendedproperties.cpp: strore stringlist in
+      database using ';' separator, not ",", else IPTC subjects storage
+      is broken.
+      In fact, iptc subjects data taken from xml file use already ","
+      in subjects name/title.
+      CCMAIL: marcel.wiesweg@gmx.de
+
+2009-07-10 11:04  cgilles
+
+    * libs/template/subjectwidget.cpp: no need to disable this label
+      here
+
+2009-07-10 10:50  cgilles
+
+    * utilities/firstrun/metadatapage.cpp: missing to register template
+      here
+
+2009-07-10 10:49  cgilles
+
+    * utilities/setup/setupcollections.cpp,
+      utilities/setup/setupmetadata.cpp,
+      utilities/setup/setuptemplate.cpp: fix layout
+
+2009-07-10 10:08  cgilles
+
+    * libs/template/subjectwidget.cpp: limit size
+
+2009-07-10 08:04  cgilles
+
+    * libs/template/TODO: update
+
+2009-07-10 07:48  cgilles
+
+    * CMakeLists.txt: compile
+
+2009-07-10 07:48  cgilles
+
+    * libs/template/iptcsubject.cpp, libs/template/iptcsubject.h,
+      libs/template/subjectedit.cpp, libs/template/subjectedit.h,
+      libs/template/subjectwidget.cpp, libs/template/subjectwidget.h:
+      rename
+
+2009-07-10 07:14  cgilles
+
+    * libs/imageproperties/imagepropertiestxtlabel.h,
+      libs/template/templateviewer.cpp: new widget to list template
+      contents
+
+2009-07-10 05:48  cgilles
+
+    * libs/database/imageextendedproperties.cpp,
+      libs/database/imageextendedproperties.h: add remove() data from
+      database methods
+
+2009-07-10 05:48  cgilles
+
+    * libs/database/imagecopyright.cpp, libs/database/imagecopyright.h:
+      remove obsolete method
+
+2009-07-09 22:03  cgilles
+
+    * libs/database/imageinfo.cpp, libs/dmetadata/dmetadata.cpp,
+      libs/dmetadata/template.cpp, libs/dmetadata/template.h,
+      libs/template/iptcsubject.cpp, libs/template/iptcsubject.h,
+      libs/template/templatemanager.cpp,
+      libs/template/templatepanel.cpp, libs/template/templatepanel.h,
+      libs/template/templateviewer.cpp: Metadata Template : Added IPTC
+      subjects Codes support.
+      CCBUGS: 190055
+
+2009-07-09 21:47  aclemens
+
+    * NEWS: update
+
+2009-07-09 21:17  cgilles
+
+    * libs/database/imageextendedproperties.cpp,
+      libs/database/imageextendedproperties.h: add new method to remove
+      subjects from DB
+
+2009-07-09 18:19  cgilles
+
+    * libs/template/subjectedit.cpp, libs/template/subjectedit.h:
+      polish
+
+2009-07-09 17:32  cgilles
+
+    * libs/dmetadata/dmetadata.h: polish
+
+2009-07-09 16:25  cgilles
+
+    * libs/template/TODO: polish
+
+2009-07-09 16:24  cgilles
+
+    * libs/template/subjectsedit.cpp, libs/template/subjectsedit.h: rm
+
+2009-07-09 16:24  cgilles
+
+    * libs/template/iptcsubject.cpp, libs/template/iptcsubject.h,
+      libs/template/subjectedit.cpp, libs/template/subjectedit.h:
+      polish
+
+2009-07-09 16:23  cgilles
+
+    * CMakeLists.txt: compile
+
+2009-07-09 16:17  aclemens
+
+    * imageplugins/perspective/perspectivewidget.cpp: fix gcc warning
+
+2009-07-09 15:58  cgilles
+
+    * libs/template/subjectsedit.h: polish
+
+2009-07-09 15:39  cgilles
+
+    * libs/CMakeLists.txt: missing to commit
+
+2009-07-09 15:36  cgilles
+
+    * libs/template/CMakeLists.txt, libs/template/TODO,
+      libs/template/subjectsedit.cpp, libs/template/subjectsedit.h,
+      libs/template/topicset.iptc-subjectcode.xml: new widget to set-up
+      IPTC Subjects with template. Code is based on MetadataEdit tool.
+      Later, with KDE 4.4, we will shared this code in libkexiv2 to
+      factorize.
+
+2009-07-09 11:47  cgilles
+
+    * libs/dmetadata/metadatainfo.h: missing export
+
+2009-07-09 11:41  cgilles
+
+    * utilities/imageeditor/editor/editorwindow.cpp: fix warning
+
+2009-07-09 10:58  cgilles
+
+    * NEWS: update
+
+2009-07-09 10:45  cgilles
+
+    * libs/dmetadata/metadatainfo.h: compile under win32
+
+2009-07-09 09:22  cgilles
+
+    * utilities/imageeditor/rawimport/rawsettingsbox.cpp: compile with
+      new libkdcraw
+
+2009-07-09 09:02  cgilles
+
+    * libs/widgets/common/rexpanderbox.h: polish
+
+2009-07-09 08:47  mwiesweg
+
+    * utilities/setup/setupcollectionview.cpp: Workaround problem by
+      emitting a "dry" layoutChanged() signal after an entry has been
+      added. This forces a relayout of all widgets.
+      There are no adverse effects on this (this view does not handle
+      large numbers of entries)
+      but this is stricly a workaround for the underlying bug in
+      kdelibs which is not fixed.
+
+      CCBUG: 182753
+
+2009-07-09 08:47  mwiesweg
+
+    * NEWS, libs/database/collectionmanager.cpp: Sorry just a
+      trailing-slash mismatch.
+
+      BUG: 192535
+
+2009-07-09 08:46  cgilles
+
+    * imageplugins/contentawareresizing/contentawareresizetool.cpp,
+      imageplugins/coreplugin/iccprooftool.cpp,
+      imageplugins/coreplugin/ratiocrop/ratiocroptool.cpp,
+      imageplugins/freerotation/freerotationtool.cpp,
+      imageplugins/noisereduction/noisereductiontool.cpp,
+      libs/imageproperties/imagedescedittab.cpp,
+      libs/imageproperties/imagedescedittab.h,
+      libs/imageproperties/imagepropertiessidebar.cpp,
+      libs/imageproperties/imagepropertiessidebar.h,
+      libs/widgets/common/rexpanderbox.cpp,
+      libs/widgets/common/rexpanderbox.h,
+      utilities/cameragui/cameraui.cpp: Fix RExpanderBox read/write
+      state to RC file.
+      Do not check if expander item are visible as state to save. Use
+      arrow properties instead, because if writesettings()
+      is called from destructor, expander item visibility is not valid.
+      Use RExpanderBox destructor to call writeSettings, intead
+      destructor from parent widget (this can make a crash in some
+      situations).
+      RExpanderBox need objectName to read/write settings from rc file.
+      Don't forget to set this properties before to use an instance.
+
+2009-07-09 04:14  cgilles
+
+    * NEWS: update
+
+2009-07-09 04:13  cgilles
+
+    * NEWS: update
+
+2009-07-08 14:08  cgilles
+
+    * libs/imageproperties/imagedescedittab.cpp,
+      libs/imageproperties/imagedescedittab.h: In event filter, return
+      parent class event filter result, not always false.
+      Move code from destructor to closeEvent() to prevent dumy
+      expander box state settings saved to config file...
+      but it doesn't work yet...
+
+      Marcel, Andi, why closeEvent() is never called here ?
+
+      CCMAIL: digikam-devel@kde.org
+
+2009-07-08 12:19  aclemens
+
+    * project/porting2ModelView.ods: it seems that updates while
+      filtering seem to work now.
+
+2009-07-08 10:42  cgilles
+
+    * libs/template/templatelist.cpp, libs/template/templatelist.h,
+      libs/template/templateselector.cpp, utilities/setup/setup.cpp,
+      utilities/setup/setuptemplate.cpp,
+      utilities/setup/setuptemplate.h: if a template is selected from
+      selector, startup setup template give focus to this item.
+
+2009-07-08 10:10  cgilles
+
+    * utilities/setup/setuptemplate.cpp: remember template tab between
+      setup sessions
+
+2009-07-08 10:10  cgilles
+
+    * libs/template/templatepanel.cpp, libs/template/templatepanel.h:
+      export template tab values
+
+2009-07-08 09:27  cgilles
+
+    * libs/imageproperties/imagedescedittab.cpp: typo
+
+2009-07-08 09:26  cgilles
+
+    * digikam/metadatahub.cpp, libs/database/imagecopyright.cpp,
+      libs/database/imagecopyright.h,
+      libs/database/imageextendedproperties.cpp,
+      libs/database/imageextendedproperties.h,
+      libs/database/imageinfo.cpp, libs/database/imageinfo.h: fix
+      Template registering to DB.
+      In fact Contact info is never recorded duing missing code in
+      MetadataHub (:=))). My misstake
+      ImageInfo now is used to set/get/remove template data from
+      database. It's more simple and clear.
+      ImageCopyright and ImageExtentedProperties don't know Template
+      container anymore.
+      Template container comparison work perfectly now.
+      CCMAIL: marcel.wiesweg@gmx.de
+
+2009-07-08 07:59  aclemens
+
+    * NEWS: polish
+
+2009-07-08 07:59  aclemens
+
+    * NEWS: update
+
+2009-07-08 06:47  cgilles
+
+    * libs/database/imageinfo.cpp, libs/database/imageinfo.h: new
+      methof to get extended properties
+
+2009-07-08 06:09  cgilles
+
+    * libs/dmetadata/metadatainfo.cpp, libs/dmetadata/metadatainfo.h,
+      libs/dmetadata/template.cpp: missing to commit these files
+
+2009-07-08 05:57  cgilles
+
+    * libs/dmetadata/template.cpp: more debug info
+
+2009-07-07 19:02  cgilles
+
+    * libs/imageproperties/imagedescedittab.cpp,
+      libs/imageproperties/imagepropertiessidebar.cpp,
+      libs/imageproperties/imagepropertiessidebar.h,
+      libs/imageproperties/imagepropertiessidebardb.cpp: remember
+      expander box settings between sessions
+
+2009-07-07 18:39  cgilles
+
+    * NEWS: update
+
+2009-07-07 18:16  cgilles
+
+    * libs/template/templateviewer.cpp: compile
+
+2009-07-07 18:15  cgilles
+
+    * libs/template/templateviewer.cpp: no need country name + country
+      code: country name is enough
+
+2009-07-07 18:02  cgilles
+
+    * libs/template/templatepanel.cpp: polish
+
+2009-07-07 17:56  cgilles
+
+    * libs/template/countryselector.cpp,
+      libs/template/countryselector.h: new static method to get country
+      name from country code
+
+2009-07-07 14:36  cgilles
+
+    * libs/template/templatepanel.cpp,
+      libs/template/templateviewer.cpp: fix layout
+
+2009-07-07 14:27  cgilles
+
+    * NEWS: update
+
+2009-07-07 14:26  cgilles
+
+    * libs/template/templateviewer.cpp, libs/template/templateviewer.h:
+      Added support of photograph active links (email and web url).
+      BUGS: 151749
+
+2009-07-07 08:55  cgilles
+
+    * libs/template/countryselector.cpp: polish
+
+2009-07-07 08:14  cgilles
+
+    * libs/template/altlangstredit.h,
+      libs/template/countryselector.cpp,
+      libs/template/countryselector.h: use KCombobox
+
+2009-07-07 08:08  cgilles
+
+    * CMakeLists.txt, libs/imageproperties/altlangstredit.cpp,
+      libs/imageproperties/altlangstredit.h, libs/template/TODO,
+      libs/template/altlangstredit.cpp, libs/template/altlangstredit.h:
+      move altlangstredit to template
+      add TODO plan for the future about to move altlangstredit and
+      countryselector widget to libkexiv2
+
+2009-07-07 07:58  cgilles
+
+    * libs/template/countryselector.cpp,
+      libs/template/countryselector.h, libs/template/templatepanel.cpp:
+      polish
+
+2009-07-07 07:51  cgilles
+
+    * libs/template/countryselector.cpp,
+      libs/template/countryselector.h: polish
+
+2009-07-07 07:48  cgilles
+
+    * libs/template/countryselector.cpp: compile
+
+2009-07-07 07:46  cgilles
+
+    * libs/template/countryselector.cpp,
+      libs/template/countryselector.h, libs/template/templatepanel.cpp:
+      polish
+
+2009-07-07 06:35  cgilles
+
+    * CMakeLists.txt, libs/template/countryselector.cpp,
+      libs/template/countryselector.h: new country selector combobox
+
+2009-07-06 21:30  mwiesweg
+
+    * NEWS, utilities/imageeditor/canvas/canvas.cpp,
+      utilities/imageeditor/editor/editorwindow.cpp: On failure to load
+      a file, do not show a message box but draw the error message on
+      the canvas,
+      consistent with the preview.
+      This fixes all problems that arise when multiple error occur
+      rapidly (like trying to
+      load a group of non existent files in a row)
+
+      BUG: 184445
+
+2009-07-06 21:28  cgilles
+
+    * libs/template/templatepanel.cpp: polish
+
+2009-07-06 20:03  cgilles
+
+    * libs/template/templatepanel.cpp: typo
+
+2009-07-06 19:40  cgilles
+
+    * libs/template/templateviewer.cpp: added IPTC contact info
+
+2009-07-06 18:50  cgilles
+
+    * libs/template/templateviewer.cpp: add IPTC Location info
+
+2009-07-06 18:28  cgilles
+
+    * libs/imageproperties/imagedescedittab.cpp: polish
+
+2009-07-06 18:26  cgilles
+
+    * libs/template/templatepanel.cpp: set icons
+
+2009-07-06 18:14  cgilles
+
+    * libs/dmetadata/dmetadata.cpp, libs/dmetadata/dmetadata.h,
+      libs/dmetadata/metadatainfo.h: set/get/remove IPTC
+      contact/location info thrue Template container
+
+2009-07-06 17:43  cgilles
+
+    * libs/template/templatemanager.cpp: save IPTC contact/location
+      info to XML settings file
+
+2009-07-06 17:32  cgilles
+
+    * CMakeLists.txt: compile
+
+2009-07-06 17:32  cgilles
+
+    * libs/template/templatemanager.cpp: read iptc location/contact
+      info from xml settings file
+
+2009-07-06 17:32  cgilles
+
+    * utilities/setup/setuptemplate.cpp: use Template panel
+
+2009-07-06 17:31  cgilles
+
+    * libs/dmetadata/template.cpp, libs/dmetadata/template.h: drive
+      iptc location and contact info
+
+2009-07-06 17:18  cgilles
+
+    * libs/template/templatepanel.cpp: set/get template implemented
+
+2009-07-06 17:04  cgilles
+
+    * libs/template/templatepanel.cpp: add contact page
+
+2009-07-06 16:17  cgilles
+
+    * libs/template/templatepanel.cpp, libs/template/templatepanel.h:
+      add template settings panel
+
+2009-07-06 16:15  cgilles
+
+    * NEWS: update
+
+2009-07-06 13:06  cgilles
+
+    * libs/dmetadata/metadatainfo.cpp, libs/dmetadata/metadatainfo.h:
+      add isEmpty and comparison operator
+
+2009-07-06 10:24  cgilles
+
+    * CMakeLists.txt: compile
+
+2009-07-06 10:24  cgilles
+
+    * libs/dmetadata/dmetadata.cpp, libs/dmetadata/metadatainfo.cpp,
+      libs/dmetadata/metadatainfo.h, libs/dmetadata/template.cpp:
+      polish
+
+2009-07-05 22:05  cgilles
+
+    * digikam.lsm.cmake: update
+
+2009-07-05 22:05  cgilles
+
+    * NEWS: beta3
+
+2009-07-05 22:04  cgilles
+
+    * CMakeLists.txt: beta3
+
+2009-07-05 21:19  cgilles
+
+    * ChangeLog: preparing 1.0.0-beta2
+
+2009-07-05 20:46  cgilles
+
+    * digikam.lsm.cmake: prepare 1.0.0-beta2
+
+2009-07-05 20:45  cgilles
+
+    * NEWS: prepare 1.0.0-beta2
+
 1.0.0-beta2 2009-07-05
 --------------------------------------------------------------------------------
 
