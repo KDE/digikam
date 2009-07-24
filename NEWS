@@ -1,5 +1,5 @@
 *********************************************************************************************************
-digiKam 1.0.0-beta3 - Release date: 2009-xx-xx
+digiKam 1.0.0-beta3 - Release date: 2009-07-24
 
 NEW FEATURES:
 
@@ -63,7 +63,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 050 ==> 195109 : Integrate lighttable in digiKam.
 051 ==> 199373 : LightTable Crash with Image Drag and Drop.
 052 ==> 192563 : Zooming into the earth map buggy.
-053 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta2 - Release date: 2009-07-05
