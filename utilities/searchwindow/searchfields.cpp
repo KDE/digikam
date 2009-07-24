@@ -185,7 +185,7 @@ SearchField *SearchField::createField(const QString& name, SearchFieldGroup *par
     {//choice
         SearchFieldChoice *field = new SearchFieldChoice(parent);
         field->setFieldName(name);
-        field->setText(i18n("Orientation"), i18n("Find pictures with orientation"));
+        field->setText(i18n("Exif Orientation"), i18n("Find pictures with orientation flag"));
         QMap<int, QString> map = DMetadata::possibleValuesForEnumField(MetadataInfo::Orientation);
         field->setChoice(map);
         return field;
@@ -196,9 +196,37 @@ SearchField *SearchField::createField(const QString& name, SearchFieldGroup *par
     }
     else if (name == "width")
     {
+        SearchFieldRangeInt *field = new SearchFieldRangeInt(parent);
+        field->setFieldName(name);
+        field->setText(i18n("Width"), i18n("Find pictures with a width between"));
+        field->setBetweenText("-");
+        field->setNumberPrefixAndSuffix(QString(), i18nc("Pixels", "px"));
+        field->setBoundary(1, 100000, 250);
+        field->setSuggestedValues(QList<int>()
+                << 50 << 100 << 200 << 300 << 400 << 500 << 600 <<700 << 800 << 900
+                << 1000 << 1250 << 1500 << 1750 << 2000 << 3000 << 4000
+                << 5000 << 6000 << 7000 << 8000 << 9000 << 10000
+                                  );
+        field->setSuggestedInitialValue(1000);
+        field->setSingleSteps(50, 1000);
+        return field;
     }
     else if (name == "height")
     {
+        SearchFieldRangeInt *field = new SearchFieldRangeInt(parent);
+        field->setFieldName(name);
+        field->setText(i18n("Height"), i18n("Find pictures with a height between"));
+        field->setBetweenText("-");
+        field->setNumberPrefixAndSuffix(QString(), i18nc("Pixels", "px"));
+        field->setBoundary(1, 100000, 250);
+        field->setSuggestedValues(QList<int>()
+                << 50 << 100 << 200 << 300 << 400 << 500 << 600 <<700 << 800 << 900
+                << 1000 << 1250 << 1500 << 1750 << 2000 << 3000 << 4000
+                << 5000 << 6000 << 7000 << 8000 << 9000 << 10000
+                                  );
+        field->setSuggestedInitialValue(1000);
+        field->setSingleSteps(50, 1000);
+        return field;
     }
     else if (name == "pageorientation")
     {
