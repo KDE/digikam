@@ -66,7 +66,7 @@ bool ThumbnailSchemaUpdater::update()
 {
     bool success = startUpdates();
     // even on failure, try to set current version - it may have incremented
-    m_access->db()->setSetting("DBVersion",QString::number(m_currentVersion));
+    m_access->db()->setSetting("DBThumbnailsVersion",QString::number(m_currentVersion));
     return success;
 }
 
@@ -83,18 +83,18 @@ bool ThumbnailSchemaUpdater::startUpdates()
     if (tables.contains("Thumbnails"))
     {
         // Find out schema version of db file
-        QString version = m_access->db()->getSetting("DBVersion");
-        QString versionRequired = m_access->db()->getSetting("DBVersionRequired");
-        //kDebug(50003) << "Have a database structure version " << version;
+        QString version = m_access->db()->getSetting("DBThumbnailsVersion");
+        QString versionRequired = m_access->db()->getSetting("DBThumbnailsVersionRequired");
+        kDebug(50003) << "Have a database structure version " << version;
 
-        // We absolutely require the DBVersion setting
+        // We absolutely require the DBThumbnailsVersion setting
         if (version.isEmpty())
         {
             // Something is damaged. Give up.
-            kError(50003) << "DBVersion not available! Giving up schema upgrading.";
+            kError(50003) << "DBThumbnailsVersion not available! Giving up schema upgrading.";
             QString errorMsg = i18n(
                     "The database is not valid: "
-                    "the \"DBVersion\" setting does not exist. "
+                    "the \"DBThumbnailsVersion\" setting does not exist. "
                     "The current database schema version cannot be verified. "
                     "Try to start with an empty database. "
                                    );
