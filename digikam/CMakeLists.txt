@@ -133,8 +133,8 @@ TARGET_LINK_LIBRARIES(digikamcore
                       ${KDE4_KUTILS_LIBS}
                       ${KDE4_SOLID_LIBS}
                       ${KDE4_KDE3SUPPORT_LIBRARY}
-                      ${QT_QT3SUPPORT_LIBRARY}
                       ${QT_QTSQL_LIBRARY}
+                      ${QT_QT3SUPPORT_LIBRARY}
 
                       ${JPEG_LIBRARIES}
                       ${TIFF_LIBRARIES}
