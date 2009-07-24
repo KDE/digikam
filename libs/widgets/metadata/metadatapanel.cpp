@@ -294,6 +294,7 @@ void MetadataPanel::slotTabChanged(int index)
 {
     DMetadata meta;
     kapp->setOverrideCursor(Qt::WaitCursor);
+    kapp->processEvents();
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Image Properties SideBar");
 
