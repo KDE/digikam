@@ -96,6 +96,7 @@ void SearchGroup::setup(Type type)
     group->addField(SearchField::createField("albumname", group));
     group->addField(SearchField::createField("tagid", group));
     group->addField(SearchField::createField("tagname", group));
+    group->addField(SearchField::createField("notag", group));
     group->addField(SearchField::createField("filename", group));
 
     m_fieldLabels << label;
@@ -113,7 +114,7 @@ void SearchGroup::setup(Type type)
     group->addField(SearchField::createField("creationdate", group));
     group->addField(SearchField::createField("rating", group));
     group->addField(SearchField::createField("dimension", group));
-    group->addField(SearchField::createField("orientation", group));
+    group->addField(SearchField::createField("pageorientation", group));
     group->addField(SearchField::createField("format", group));
     group->addField(SearchField::createField("colordepth", group));
     group->addField(SearchField::createField("colormodel", group));
@@ -159,6 +160,7 @@ void SearchGroup::setup(Type type)
     group->addField(SearchField::createField("exposureprogram", group));
     group->addField(SearchField::createField("exposuremode", group));
     group->addField(SearchField::createField("sensitivity", group));
+    group->addField(SearchField::createField("orientation", group));
     group->addField(SearchField::createField("flashmode", group));
     group->addField(SearchField::createField("whitebalance", group));
     group->addField(SearchField::createField("whitebalancecolortemperature", group));

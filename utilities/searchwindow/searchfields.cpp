@@ -120,6 +120,16 @@ SearchField *SearchField::createField(const QString& name, SearchFieldGroup *par
         field->setText(i18n("Tags"), i18n("A tag of the picture contains"));
         return field;
     }
+    else if (name == "notag")
+    {
+        //TODO: Merge a "Not tagged" field into TagModel together with AND/OR control for checked tags
+        // and logical connections (AND and Not Tagged checked => all other tags disabled)
+        SearchFieldCheckBox *field = new SearchFieldCheckBox(parent);
+        field->setFieldName(name);
+        field->setText(i18n("Tags"), i18n("Image has no tags"));
+        field->setLabel(i18n("Not Tagged"));
+        return field;
+    }
     else if (name == "filename")
     {
         SearchFieldText *field = new SearchFieldText(parent);
@@ -183,6 +193,20 @@ SearchField *SearchField::createField(const QString& name, SearchFieldGroup *par
     else if (name == "dimension")
     {
         // "width", "height", "pixels"
+    }
+    else if (name == "width")
+    {
+    }
+    else if (name == "height")
+    {
+    }
+    else if (name == "pageorientation")
+    {
+        SearchFieldPageOrientation *field = new SearchFieldPageOrientation(parent);
+        field->setFieldName(name);
+        field->setText(i18n("Orientation"), i18nc("Find pictures with any orientation / landscape / portrait orientation...",
+                                                  "Find pictures with"));
+        return field;
     }
     else if (name == "format")
     {//choice
@@ -2050,26 +2074,136 @@ QList<QRect> SearchFieldRating::valueWidgetRects() const
 
 // -------------------------------------------------------------------------
 
-SearchFieldColorDepth::SearchFieldColorDepth(QObject *parent)
+SearchFieldComboBox::SearchFieldComboBox(QObject *parent)
                      : SearchField(parent),
                        m_comboBox(0)
 {
 }
 
-void SearchFieldColorDepth::setupValueWidgets(QGridLayout *layout, int row, int column)
+void SearchFieldComboBox::setupValueWidgets(QGridLayout *layout, int row, int column)
 {
     m_comboBox = new KComboBox;
     m_comboBox->setEditable(false);
-    layout->addWidget(m_comboBox, row, column);
+    layout->addWidget(m_comboBox, row, column, 1, 3);
 
+    connect(m_comboBox, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(indexChanged(int)));
+}
+
+void SearchFieldComboBox::write(SearchXmlWriter& writer)
+{
+    int index = m_comboBox->currentIndex();
+    if (index != -1)
+    {
+        QVariant bits = m_comboBox->itemData(index);
+        if (!bits.isNull())
+        {
+            writer.writeField(m_name, SearchXml::Equal);
+            writer.writeValue(bits.toInt());
+            writer.finishField();
+        }
+    }
+}
+
+void SearchFieldComboBox::setValueWidgetsVisible(bool visible)
+{
+    m_comboBox->setVisible(visible);
+}
+
+void SearchFieldComboBox::reset()
+{
+    m_comboBox->setCurrentIndex(0);
+}
+
+QList<QRect> SearchFieldComboBox::valueWidgetRects() const
+{
+    QList<QRect> rects;
+    rects << m_comboBox->geometry();
+    return rects;
+}
+
+void SearchFieldComboBox::indexChanged(int index)
+{
+    setValidValueState(index != 0);
+}
+
+// -------------------------------------------------------------------------
+
+SearchFieldCheckBox::SearchFieldCheckBox(QObject *parent)
+                     : SearchField(parent),
+                       m_checkBox(0)
+{
+}
+
+void SearchFieldCheckBox::setupValueWidgets(QGridLayout *layout, int row, int column)
+{
+    m_checkBox = new QCheckBox(m_label);
+    layout->addWidget(m_checkBox, row, column, 1, 3);
+
+    connect(m_checkBox, SIGNAL(toggled(bool)),
+            this, SLOT(slotToggled(bool)));
+}
+
+void SearchFieldCheckBox::setLabel(const QString &label)
+{
+    m_label = label;
+    if (m_checkBox)
+        m_checkBox->setText(label);
+}
+
+void SearchFieldCheckBox::write(SearchXmlWriter& writer)
+{
+    if (m_checkBox->isChecked())
+    {
+        writer.writeField(m_name, SearchXml::Equal);
+        writer.finishField();
+    }
+}
+
+void SearchFieldCheckBox::read(SearchXmlCachingReader& reader)
+{
+    SearchXml::Relation relation = reader.fieldRelation();
+    if (relation == SearchXml::Equal)
+        m_checkBox->setChecked(true);
+}
+
+void SearchFieldCheckBox::setValueWidgetsVisible(bool visible)
+{
+    m_checkBox->setVisible(visible);
+}
+
+void SearchFieldCheckBox::reset()
+{
+    m_checkBox->setChecked(false);
+}
+
+QList<QRect> SearchFieldCheckBox::valueWidgetRects() const
+{
+    QList<QRect> rects;
+    rects << m_checkBox->geometry();
+    return rects;
+}
+
+void SearchFieldCheckBox::slotToggled(bool checked)
+{
+    setValidValueState(checked);
+}
+
+// -------------------------------------------------------------------------
+
+SearchFieldColorDepth::SearchFieldColorDepth(QObject *parent)
+                     : SearchFieldComboBox(parent)
+{
+}
+
+void SearchFieldColorDepth::setupValueWidgets(QGridLayout *layout, int row, int column)
+{
+    SearchFieldComboBox::setupValueWidgets(layout, row, column);
     m_comboBox->addItem(i18n("any color depth"));
     m_comboBox->addItem(i18n("8 bits per channel"), 8);
     m_comboBox->addItem(i18n("16 bits per channel"), 16);
 
     m_comboBox->setCurrentIndex(0);
-
-    connect(m_comboBox, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(indexChanged(int)));
 }
 
 void SearchFieldColorDepth::read(SearchXmlCachingReader& reader)
@@ -2085,41 +2219,34 @@ void SearchFieldColorDepth::read(SearchXmlCachingReader& reader)
     }
 }
 
-void SearchFieldColorDepth::write(SearchXmlWriter& writer)
+// -------------------------------------------------------------------------
+
+SearchFieldPageOrientation::SearchFieldPageOrientation(QObject *parent)
+                     : SearchFieldComboBox(parent)
 {
-    int index = m_comboBox->currentIndex();
-    if (index != -1)
-    {
-        QVariant bits = m_comboBox->itemData(index);
-        if (!bits.isNull())
-        {
-            writer.writeField(m_name, SearchXml::Equal);
-            writer.writeValue(bits.toInt());
-            writer.finishField();
-        }
-    }
 }
 
-void SearchFieldColorDepth::setValueWidgetsVisible(bool visible)
+void SearchFieldPageOrientation::setupValueWidgets(QGridLayout *layout, int row, int column)
 {
-    m_comboBox->setVisible(visible);
-}
+    SearchFieldComboBox::setupValueWidgets(layout, row, column);
+    m_comboBox->addItem(i18n("Any Orientation"));
+    m_comboBox->addItem(i18n("Landscape Orientation"), 1);
+    m_comboBox->addItem(i18n("Portrait orientation"), 2);
 
-void SearchFieldColorDepth::reset()
-{
     m_comboBox->setCurrentIndex(0);
 }
 
-QList<QRect> SearchFieldColorDepth::valueWidgetRects() const
+void SearchFieldPageOrientation::read(SearchXmlCachingReader& reader)
 {
-    QList<QRect> rects;
-    rects << m_comboBox->geometry();
-    return rects;
-}
-
-void SearchFieldColorDepth::indexChanged(int index)
-{
-    setValidValueState(index != 0);
+    SearchXml::Relation relation = reader.fieldRelation();
+    if (relation == SearchXml::Equal)
+    {
+        int value = reader.valueToInt();
+        if (value == 1)
+            m_comboBox->setCurrentIndex(1);
+        else if (value == 2)
+            m_comboBox->setCurrentIndex(2);
+    }
 }
 
 } // namespace Digikam

@@ -361,16 +361,15 @@ protected:
     QLabel         *m_betweenLabel;
 };
 
-class SearchFieldColorDepth : public SearchField
+class SearchFieldComboBox : public SearchField
 {
     Q_OBJECT
 
 public:
 
-    SearchFieldColorDepth(QObject *parent);
+    SearchFieldComboBox(QObject *parent);
 
     virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
-    virtual void read(SearchXmlCachingReader& reader);
     virtual void write(SearchXmlWriter& writer);
     virtual void reset();
     virtual void setValueWidgetsVisible(bool visible);
@@ -383,6 +382,57 @@ protected Q_SLOTS:
 protected:
 
     QComboBox      *m_comboBox;
+};
+
+class SearchFieldCheckBox : public SearchField
+{
+    Q_OBJECT
+
+public:
+
+    SearchFieldCheckBox(QObject *parent);
+
+    void setLabel(const QString &label);
+
+    virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
+    virtual void read(SearchXmlCachingReader& reader);
+    virtual void write(SearchXmlWriter& writer);
+    virtual void reset();
+    virtual void setValueWidgetsVisible(bool visible);
+    virtual QList<QRect> valueWidgetRects() const;
+
+protected Q_SLOTS:
+
+    void slotToggled(bool checked);
+
+protected:
+
+    QCheckBox      *m_checkBox;
+    QString         m_label;
+};
+
+class SearchFieldColorDepth : public SearchFieldComboBox
+{
+    Q_OBJECT
+
+public:
+
+    SearchFieldColorDepth(QObject *parent);
+
+    virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
+    virtual void read(SearchXmlCachingReader& reader);
+};
+
+class SearchFieldPageOrientation: public SearchFieldComboBox
+{
+    Q_OBJECT
+
+public:
+
+    SearchFieldPageOrientation(QObject *parent);
+
+    virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
+    virtual void read(SearchXmlCachingReader& reader);
 };
 
 } // namespace Digikam
