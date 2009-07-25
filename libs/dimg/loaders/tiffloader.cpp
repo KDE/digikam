@@ -142,6 +142,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     uint16    bits_per_sample;
     uint16    samples_per_pixel;
     uint16    photometric;
+    uint16    planar_config;
     uint32    rows_per_strip;
     tsize_t   strip_size;
     tstrip_t  num_of_strips;
@@ -151,6 +152,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     TIFFGetFieldDefaulted(tif, TIFFTAG_BITSPERSAMPLE, &bits_per_sample);
     TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL, &samples_per_pixel);
+    TIFFGetFieldDefaulted(tif, TIFFTAG_PLANARCONFIG, &planar_config);
 
     if (TIFFGetFieldDefaulted(tif, TIFFTAG_ROWSPERSTRIP, &rows_per_strip) == 0
         || rows_per_strip == 0 || rows_per_strip == (unsigned int)-1)
