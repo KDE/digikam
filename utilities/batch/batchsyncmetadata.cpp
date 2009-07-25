@@ -38,6 +38,7 @@
 // Local includes
 
 #include "album.h"
+#include "collectionscanner.h"
 #include "imageinfojob.h"
 #include "metadatahub.h"
 #include "statusprogressbar.h"
@@ -58,6 +59,7 @@ public:
         album          = 0;
         count          = 0;
         imageInfoIndex = 0;
+        direction      = BatchSyncMetadata::WriteFromDatabaseToFile;
     }
 
     bool           cancel;
@@ -72,22 +74,29 @@ public:
     ImageInfoJob  *imageInfoJob;
 
     ImageInfoList  imageInfoList;
+
+    CollectionScanner scanner;
+
+    BatchSyncMetadata::SyncDirection
+                   direction;
 };
 
-BatchSyncMetadata::BatchSyncMetadata(QObject* parent, Album *album)
+BatchSyncMetadata::BatchSyncMetadata(Album *album, SyncDirection direction, QObject* parent)
                  : QObject(parent), d(new BatchSyncMetadataPriv)
 {
     d->album = album;
+    d->direction = direction;
 
     connect(this, SIGNAL(startParsingList()),
             this, SLOT(parseList()),
             Qt::QueuedConnection);
 }
 
-BatchSyncMetadata::BatchSyncMetadata(QObject* parent, const ImageInfoList& list)
+BatchSyncMetadata::BatchSyncMetadata(const ImageInfoList& list, SyncDirection direction, QObject* parent)
                  : QObject(parent), d(new BatchSyncMetadataPriv)
 {
     d->imageInfoList = list;
+    d->direction = direction;
 }
 
 BatchSyncMetadata::~BatchSyncMetadata()
@@ -152,11 +161,19 @@ void BatchSyncMetadata::parseList()
 void BatchSyncMetadata::parsePicture()
 {
     ImageInfo info = d->imageInfoList[d->imageInfoIndex];
-    MetadataHub fileHub;
-    // read in from database
-    fileHub.load(info);
-    // write out to file DMetadata
-    fileHub.write(info.filePath());
+
+    if (d->direction == WriteFromDatabaseToFile)
+    {
+        MetadataHub fileHub;
+        // read in from database
+        fileHub.load(info);
+        // write out to file DMetadata
+        fileHub.write(info.filePath());
+    }
+    else
+    {
+        d->scanner.scanFile(info, CollectionScanner::Rescan);
+    }
 
     emit signalProgressValue((int)((d->count++/(float)d->imageInfoList.count())*100.0));
 

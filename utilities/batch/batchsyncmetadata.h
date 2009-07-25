@@ -46,11 +46,17 @@ class BatchSyncMetadata : public QObject
 
 public:
 
+    enum SyncDirection
+    {
+        WriteFromDatabaseToFile,
+        ReadFromFileToDatabase
+    };
+
     /** Constructor which sync all metadata pictures from an Album */ 
-    BatchSyncMetadata(QObject* parent, Album *album);
+    BatchSyncMetadata(Album *album, SyncDirection direction = WriteFromDatabaseToFile, QObject* parent = 0);
 
     /** Constructor which sync all metadata from an images list */ 
-    BatchSyncMetadata(QObject* parent, const ImageInfoList& list);
+    BatchSyncMetadata(const ImageInfoList& list, SyncDirection = WriteFromDatabaseToFile, QObject* parent = 0);
 
     ~BatchSyncMetadata();
 
