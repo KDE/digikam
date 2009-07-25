@@ -690,13 +690,23 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
-    d->syncAlbumMetadataAction = new KAction(KIcon("view-refresh"), i18n("Synchronize Images with Database"), this);
-    d->syncAlbumMetadataAction->setWhatsThis(i18n("Updates all image metadata of the current "
+    d->writeAlbumMetadataAction = new KAction(KIcon("document-edit"), i18n("Write Metadata to Images"), this);
+    d->writeAlbumMetadataAction->setWhatsThis(i18n("Updates metadata of images in the current "
                                                   "album with the contents of digiKam database "
                                                   "(image metadata will be overwritten with data from "
                                                   "the database)."));
-    connect(d->syncAlbumMetadataAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumSyncPicturesMetadata()));
-    actionCollection()->addAction("album_syncmetadata", d->syncAlbumMetadataAction);
+    connect(d->writeAlbumMetadataAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumWriteMetadata()));
+    actionCollection()->addAction("album_write_metadata", d->writeAlbumMetadataAction);
+
+    // -----------------------------------------------------------------
+
+    d->readAlbumMetadataAction = new KAction(KIcon("edit-redo"), i18n("Reread Metadata From Images"), this);
+    d->readAlbumMetadataAction->setWhatsThis(i18n("Updates the digiKam database from the metadata "
+                                                  "of the files in the current album "
+                                                  "(information in the database will be overwritten with data from "
+                                                  "the files' metadata)."));
+    connect(d->readAlbumMetadataAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumReadMetadata()));
+    actionCollection()->addAction("album_read_metadata", d->readAlbumMetadataAction);
 
     // -----------------------------------------------------------------
 
@@ -766,6 +776,26 @@ void DigikamApp::setupActions()
     d->imageAddNewQueueAction->setWhatsThis(i18n("Add selected items to a new queue from batch manager."));
     connect(d->imageAddNewQueueAction, SIGNAL(triggered()), d->view, SLOT(slotImageAddToNewQueue()));
     actionCollection()->addAction("image_add_to_new_queue", d->imageAddNewQueueAction);
+
+    // -----------------------------------------------------------------
+
+    d->imageWriteMetadataAction = new KAction(KIcon("document-edit"), i18n("Write Metadata to Selected Images"), this);
+    d->imageWriteMetadataAction->setWhatsThis(i18n("Updates metadata of images in the current "
+                                                  "album with the contents of digiKam database "
+                                                  "(image metadata will be overwritten with data from "
+                                                  "the database)."));
+    connect(d->imageWriteMetadataAction, SIGNAL(triggered()), d->view, SLOT(slotImageWriteMetadata()));
+    actionCollection()->addAction("image_write_metadata", d->imageWriteMetadataAction);
+
+    // -----------------------------------------------------------------
+
+    d->imageReadMetadataAction = new KAction(KIcon("edit-redo"), i18n("Reread Metadata From Selected Images"), this);
+    d->imageReadMetadataAction->setWhatsThis(i18n("Updates the digiKam database from the metadata "
+                                                  "of the files in the current album "
+                                                  "(information in the database will be overwritten with data from "
+                                                  "the files' metadata)."));
+    connect(d->imageReadMetadataAction, SIGNAL(triggered()), d->view, SLOT(slotImageReadMetadata()));
+    actionCollection()->addAction("image_read_metadata", d->imageReadMetadataAction);
 
     // -----------------------------------------------------------
 
@@ -1320,6 +1350,8 @@ void DigikamApp::slotAlbumSelected(bool val)
         d->openInKonquiAction->setEnabled(false);
         d->newAction->setEnabled(false);
         d->addFoldersAction->setEnabled(false);
+        d->writeAlbumMetadataAction->setEnabled(true);
+        d->readAlbumMetadataAction->setEnabled(true);
     }
     else if(!album && !val)
     {
@@ -1330,6 +1362,8 @@ void DigikamApp::slotAlbumSelected(bool val)
         d->openInKonquiAction->setEnabled(false);
         d->newAction->setEnabled(false);
         d->addFoldersAction->setEnabled(false);
+        d->writeAlbumMetadataAction->setEnabled(false);
+        d->readAlbumMetadataAction->setEnabled(false);
     }
     else if (album && album->type() == Album::PHYSICAL)
     {
@@ -1346,6 +1380,8 @@ void DigikamApp::slotAlbumSelected(bool val)
         d->openInKonquiAction->setEnabled(true);
         d->newAction->setEnabled(isNormalAlbum || isAlbumRoot);
         d->addFoldersAction->setEnabled(isNormalAlbum || isAlbumRoot);
+        d->writeAlbumMetadataAction->setEnabled(isNormalAlbum || isAlbumRoot);
+        d->readAlbumMetadataAction->setEnabled(isNormalAlbum || isAlbumRoot);
     }
 }
 
@@ -1416,10 +1452,20 @@ void DigikamApp::slotSelectionChanged(int selectionCount)
     d->imageAddLightTableAction->setEnabled(selectionCount > 0);
     d->imageAddCurrentQueueAction->setEnabled(selectionCount > 0);
     d->imageAddNewQueueAction->setEnabled(selectionCount > 0);
+    d->imageWriteMetadataAction->setEnabled(selectionCount > 0);
+    d->imageReadMetadataAction->setEnabled(selectionCount > 0);
     d->imageDeleteAction->setEnabled(selectionCount > 0);
     d->imageExifOrientationActionMenu->setEnabled(selectionCount > 0);
     d->slideShowSelectionAction->setEnabled(selectionCount > 0);
     d->newAlbumFromSelectionAction->setEnabled(selectionCount > 1);
+
+    if (selectionCount > 0)
+    {
+        d->imageWriteMetadataAction->setText(i18np("Write Metadata to Image",
+                                                   "Write Metadata to Selected Images", selectionCount));
+        d->imageReadMetadataAction->setText(i18np("Reread Metadata From Image",
+                                                  "Reread Metadata From Selected Images", selectionCount));
+    }
 }
 
 void DigikamApp::slotProgressBarMode(int mode, const QString& text)

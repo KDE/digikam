@@ -103,7 +103,10 @@ public:
         addFoldersAction                     = 0;
         openInKonquiAction                   = 0;
         refreshAlbumAction                   = 0;
-        syncAlbumMetadataAction              = 0;
+        writeAlbumMetadataAction             = 0;
+        readAlbumMetadataAction              = 0;
+        imageWriteMetadataAction             = 0;
+        imageReadMetadataAction              = 0;
         newTagAction                         = 0;
         deleteTagAction                      = 0;
         editTagAction                        = 0;
@@ -215,7 +218,8 @@ public:
     KAction                            *addFoldersAction;
     KAction                            *openInKonquiAction;
     KAction                            *refreshAlbumAction;
-    KAction                            *syncAlbumMetadataAction;
+    KAction                            *writeAlbumMetadataAction;
+    KAction                            *readAlbumMetadataAction;
 
     // Tag Actions
     KAction                            *newTagAction;
@@ -229,6 +233,8 @@ public:
     KAction                            *imageAddCurrentQueueAction;
     KAction                            *imageAddNewQueueAction;
     KAction                            *imageViewAction;
+    KAction                            *imageWriteMetadataAction;
+    KAction                            *imageReadMetadataAction;
     KAction                            *imageFindSimilarAction;
     KAction                            *imageSetExifOrientation1Action;
     KAction                            *imageSetExifOrientation2Action;

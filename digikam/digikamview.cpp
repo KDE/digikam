@@ -1334,32 +1334,59 @@ void DigikamView::slotAlbumPropsEdit()
     d->folderView->albumEdit();
 }
 
-void DigikamView::slotAlbumSyncPicturesMetadata()
+void DigikamView::connectBatchSyncMetadata(BatchSyncMetadata *syncMetadata)
 {
-    Album *album = d->albumManager->currentAlbum();
-    if (!album)
-        return;
-
-    BatchSyncMetadata *syncMetadata = new BatchSyncMetadata(this, album);
-
     connect(syncMetadata, SIGNAL(signalProgressBarMode(int, const QString&)),
             d->parent, SLOT(slotProgressBarMode(int, const QString&)));
 
     connect(syncMetadata, SIGNAL(signalProgressValue(int)),
             d->parent, SLOT(slotProgressValue(int)));
 
-    connect(syncMetadata, SIGNAL(signalComplete()),
-            this, SLOT(slotAlbumSyncPicturesMetadataDone()));
+    //connect(syncMetadata, SIGNAL(signalComplete()),
+      //      this, SLOT(slotAlbumSyncPicturesMetadataDone()));
 
     connect(d->parent, SIGNAL(signalCancelButtonPressed()),
             syncMetadata, SLOT(slotAbort()));
+}
 
+void DigikamView::slotAlbumWriteMetadata()
+{
+    Album *album = d->albumManager->currentAlbum();
+    if (!album)
+        return;
+
+    BatchSyncMetadata *syncMetadata = new BatchSyncMetadata(album, BatchSyncMetadata::WriteFromDatabaseToFile, this);
+    connectBatchSyncMetadata(syncMetadata);
     syncMetadata->parseAlbum();
 }
 
-void DigikamView::slotAlbumSyncPicturesMetadataDone()
+void DigikamView::slotAlbumReadMetadata()
 {
-    applySettings();
+    Album *album = d->albumManager->currentAlbum();
+    if (!album)
+        return;
+
+    BatchSyncMetadata *syncMetadata = new BatchSyncMetadata(album, BatchSyncMetadata::ReadFromFileToDatabase, this);
+    connectBatchSyncMetadata(syncMetadata);
+    syncMetadata->parseAlbum();
+}
+
+void DigikamView::slotImageWriteMetadata()
+{
+    ImageInfoList selected = d->iconView->selectedImageInfos();
+
+    BatchSyncMetadata *syncMetadata = new BatchSyncMetadata(selected, BatchSyncMetadata::WriteFromDatabaseToFile, this);
+    connectBatchSyncMetadata(syncMetadata);
+    syncMetadata->parseList();
+}
+
+void DigikamView::slotImageReadMetadata()
+{
+    ImageInfoList selected = d->iconView->selectedImageInfos();
+
+    BatchSyncMetadata *syncMetadata = new BatchSyncMetadata(selected, BatchSyncMetadata::ReadFromFileToDatabase, this);
+    connectBatchSyncMetadata(syncMetadata);
+    syncMetadata->parseList();
 }
 
 // ----------------------------------------------------------------

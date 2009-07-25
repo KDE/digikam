@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="58" name="digikam" >
+<gui version="59" name="digikam" >
 
  <MenuBar>
 
@@ -13,7 +13,8 @@
    <Separator/>
      <Action name="album_propsEdit" />
      <Action name="album_refresh" />
-     <Action name="album_syncmetadata" />
+     <Action name="album_write_metadata" />
+     <Action name="album_read_metadata" />
      <Action name="album_openinkonqui" />
    <Separator/>
      <Action name="album_remove" />
@@ -40,6 +41,9 @@
    <Separator />
      <Action name="image_add_to_current_queue" />
      <Action name="image_add_to_new_queue" />
+   <Separator />
+     <Action name="image_write_metadata" />
+     <Action name="image_read_metadata" />
    <Separator />
      <Action name="image_find_similar" />
      <Action name="image_set_exif_orientation"/>

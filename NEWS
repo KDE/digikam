@@ -7,7 +7,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 192534 : Rename a folder, then rename a photo and you get an error.
 002 ==> 193522 : first run (with existing v3 database) fails, "No album library path...".
-003 ==> 
+003 ==> 147885 : update metadata doesn't work correctly for creation date
+004 ==> 
+
 
 
 *********************************************************************************************************
