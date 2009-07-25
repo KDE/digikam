@@ -380,6 +380,51 @@ static bool copyToNewLocation(const QFileInfo& oldFile, const QFileInfo& newFile
     return true;
 }
 
+void AlbumManager::checkDatabaseDirsAfterFirstRun(const QString& dbPath, const QString& albumPath)
+{
+    // for bug #193522
+    QDir newDir(dbPath);
+    QDir albumDir(albumPath);
+    DatabaseParameters newParams = DatabaseParameters::parametersForSQLiteDefaultFile(newDir.path());
+    QFileInfo digikam4DB(newParams.SQLiteDatabaseFile());
+
+    if (!digikam4DB.exists())
+    {
+        QFileInfo digikam3DB(newDir, "digikam3.db");
+        QFileInfo digikamVeryOldDB(newDir, "digikam.db");
+
+        if (digikam3DB.exists() || digikamVeryOldDB.exists())
+        {
+            KGuiItem startFresh(i18n("Create New Database"), "document-new");
+            KGuiItem upgrade(i18n("Upgrade Database"), "view-refresh");
+            int result = KMessageBox::warningYesNo(0,
+                                i18n("<p>You have chosen the folder \"%1\" as the place to store the database. "
+                                     "A database file from an older version of digiKam is found in this folder.</p> "
+                                     "<p>Would you like to upgrade the old database file - confirming "
+                                     "that this database file was indeed created for the pictures located in the folder \"%2\" - "
+                                     "or ignore the old file and start with a new database?</p> ",
+                                    newDir.path(), albumDir.path()),
+                                i18n("Database Folder"),
+                                upgrade, startFresh);
+
+            if (result == KMessageBox::Yes)
+            {
+                // SchemaUpdater expects Album Path to point to the album root of the 0.9 db file.
+                // Restore this situation.
+                KSharedConfigPtr config = KGlobal::config();
+                KConfigGroup group = config->group("Album Settings");
+                group.writeEntry("Album Path", albumDir.path());
+                group.sync();
+            }
+            else if (result == KMessageBox::No)
+            {
+                moveToBackup(digikam3DB);
+                moveToBackup(digikamVeryOldDB);
+            }
+        }
+    }
+}
+
 void AlbumManager::changeDatabase(const QString& dbPath)
 {
     if (d->dbPath == dbPath)

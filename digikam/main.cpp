@@ -136,6 +136,8 @@ int main(int argc, char *argv[])
 
         firstAlbumPath = firstRun.firstAlbumPath();
         dbPath         = firstRun.databasePath();
+
+        AlbumManager::checkDatabaseDirsAfterFirstRun(dbPath, firstAlbumPath);
     }
 
     kDebug(50003) << "Database Path: " << dbPath;

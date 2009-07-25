@@ -6,7 +6,9 @@ NEW FEATURES:
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 192534 : Rename a folder, then rename a photo and you get an error.
-002 ==> 
+002 ==> 193522 : first run (with existing v3 database) fails, "No album library path...".
+003 ==> 
+
 
 *********************************************************************************************************
 digiKam 1.0.0-beta3 - Release date: 2009-07-24

@@ -109,6 +109,9 @@ public:
     */
     bool setDatabase(const QString& dbPath, bool priority, const QString& suggestedAlbumRoot = QString());
 
+    /** Some checks for settings done in first run wizard */
+    static void checkDatabaseDirsAfterFirstRun(const QString& dbPath, const QString& albumPath);
+
     /**
     * Sets new database when chosen by the user in setup.
     * Handles user notification about problems.
