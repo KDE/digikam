@@ -1082,7 +1082,7 @@ QString CollectionManager::albumRootPath(int id)
 {
     DatabaseAccess access;
     CollectionLocation *location = d->locations.value(id);
-    if (location)
+    if (location && location->status() == CollectionLocation::LocationAvailable)
     {
         return location->albumRootPath();
     }

@@ -435,8 +435,12 @@ QString ImageInfo::filePath() const
 
     DatabaseAccess access;
 
-    QString album = access.imageInfoCache()->albumName(access, m_data->albumId);
     QString albumRoot = CollectionManager::instance()->albumRootPath(m_data->albumRootId);
+
+    if (albumRoot.isNull())
+        return QString();
+
+    QString album = access.imageInfoCache()->albumName(access, m_data->albumId);
 
     if (album == "/")
         return albumRoot + album + m_data->name;
