@@ -2191,6 +2191,7 @@ void SearchFieldCheckBox::write(SearchXmlWriter& writer)
 void SearchFieldCheckBox::read(SearchXmlCachingReader& reader)
 {
     SearchXml::Relation relation = reader.fieldRelation();
+    reader.readToEndOfElement();
     if (relation == SearchXml::Equal)
         m_checkBox->setChecked(true);
 }

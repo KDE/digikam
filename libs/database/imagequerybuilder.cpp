@@ -794,6 +794,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     }
     else if (name == "notag")
     {
+        reader.readToEndOfElement();
         sql += " (Images.id NOT IN "
                "   (SELECT imageid FROM ImageTags)) ";
     }
