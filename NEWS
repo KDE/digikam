@@ -6,10 +6,10 @@ NEW FEATURES:
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 192534 : Rename a folder, then rename a photo and you get an error.
-002 ==> 193522 : first run (with existing v3 database) fails, "No album library path...".
-003 ==> 147885 : update metadata doesn't work correctly for creation date
+002 ==> 193522 : First run (with existing v3 database) fails, "No album library path...".
+003 ==> 147885 : Update metadata doesn't work correctly for creation date.
 004 ==> 196462 : IconView (Qt4 Model/view based): Navigation broken after delete.
-005 ==> 195871 image tool tip does not show all tags if too long.
+005 ==> 195871 : Image tool tip does not show all tags if too long.
 006 ==> 
 
 
