@@ -1233,10 +1233,10 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    KAction *syncMetadataAction = new KAction(KIcon("run-build-file"),
-                                              i18n("Synchronize All Images with Database"), this);
-    connect(syncMetadataAction, SIGNAL(triggered()), this, SLOT(slotSyncAllPicturesMetadata()));
-    actionCollection()->addAction("sync_metadata", syncMetadataAction);
+    KAction *writeMetadataAction = new KAction(KIcon("run-build-file"),
+                                              i18n("Write Metadata to All Images"), this);
+    connect(writeMetadataAction, SIGNAL(triggered()), this, SLOT(slotWriteMetadataToAllImages()));
+    actionCollection()->addAction("sync_metadata", writeMetadataAction);
 
     // -----------------------------------------------------------
 
@@ -2496,9 +2496,10 @@ void DigikamApp::slotDatabaseRescan()
         QueueMgrWindow::queueManagerWindow()->refreshView();
 }
 
-void DigikamApp::slotSyncAllPicturesMetadata()
+void DigikamApp::slotWriteMetadataToAllImages()
 {
-    QString msg = i18n("Updating the metadata database can take some time. \nDo you want to continue?");
+    QString msg = i18n("This action will update the metadata of all available files from information stored in the database. "
+                       "This can take some time. \nDo you want to continue?");
     int result = KMessageBox::warningContinueCancel(this, msg);
     if (result != KMessageBox::Continue)
         return;
