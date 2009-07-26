@@ -80,6 +80,7 @@ public:
 
     KUrlRequester           *databasePathEdit;
     QString                  originalDbPath;
+    QString                  originalDbType;
     QLabel                  *databasePathLabel;
     QComboBox               *databaseType;
     QLineEdit               *databaseName;
@@ -242,7 +243,9 @@ void SetupCollections::applySettings()
         QString newPath = d->databasePathEdit->url().path();
         QDir oldDir(d->originalDbPath);
         QDir newDir(newPath);
-        if (oldDir != newDir)
+
+
+        if (oldDir != newDir || d->databaseType->currentText()!=d->originalDbType)
         {
             settings->setDatabaseType(d->databaseType->currentText());
             settings->setDatabaseName(newPath);
@@ -279,6 +282,7 @@ void SetupCollections::readSettings()
     if (!settings) return;
 
     d->originalDbPath = settings->getDatabaseFilePath();
+    d->originalDbType = settings->getDatabaseType();
     d->databasePathEdit->setUrl(settings->getDatabaseFilePath());
 
     d->databaseName->setText(settings->getDatabaseName());

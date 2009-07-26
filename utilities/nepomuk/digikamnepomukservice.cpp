@@ -868,13 +868,29 @@ DatabaseParameters NepomukService::databaseParameters()
 
     // no running instance, read settings file
     KSharedConfig::Ptr config  = digikamConfig();
-    KConfigGroup group = config->group("Album Settings");
+    KConfigGroup group = config->group("Database Settings");
     if (group.exists())
     {
-        QString dbPath = group.readEntry("Database File Path", QString());
-        kDebug(50003) << "Using database path from config file:" << dbPath;
-        if (!dbPath.isEmpty())
-            return DatabaseParameters::parametersForSQLiteDefaultFile(dbPath);
+        QString databaseType             = group.readEntry("Database Type");
+        QString databaseName             = group.readEntry("Database Name");
+        QString databaseHostName         = group.readEntry("Database Hostname");
+        int     databasePort             = group.readEntry("Database Port").toInt();
+        QString databaseUserName         = group.readEntry("Database Username");
+        QString databasePassword         = group.readEntry("Database Password");
+        QString databaseConnectoptions   = group.readEntry("Database Connectoptions");
+
+        /*
+         * Check if a old digikam instance was running before and have left an database entry.
+         * This have a higher priority as the other settings.
+         */
+        QString oldDatabaseFilePath = group.readEntry("Database File Path", QString());
+        if (oldDatabaseFilePath.isEmpty()==false)
+        {
+            databaseType="QSQLITE";
+            databaseName=oldDatabaseFilePath;
+        }
+
+        return DatabaseParameters::parametersFromConfig(databaseType, databaseName, databaseHostName, databasePort, databaseName, databasePassword, databaseConnectoptions);
     }
     return DatabaseParameters();
 }

@@ -374,6 +374,17 @@ void AlbumSettings::readSettings()
     d->databasePassword         = group.readEntry("Database Password");
     d->databaseConnectoptions   = group.readEntry("Database Connectoptions");
 
+    /*
+     * Check if a old digikam instance was running before and have left an database entry.
+     * This have a higher priority as the other settings.
+     */
+    QString oldDatabaseFilePath = group.readEntry("Database File Path", QString());
+    if (oldDatabaseFilePath.isEmpty()==false)
+    {
+        d->databaseType="QSQLITE";
+        d->databaseName=oldDatabaseFilePath;
+    }
+
     emit setupChanged();
     emit recurseSettingsChanged();
     emit nepomukSettingsChanged();

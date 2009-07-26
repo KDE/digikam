@@ -171,7 +171,10 @@ void CollectionPage::saveSettings()
 
     group = config->group("Album Settings");
     group.writeEntry("Album Path", d->rootAlbum);
-    group.writeEntry("Database File Path", d->dbPath);
+
+    group = config->group("Database Settings");
+    group.writeEntry("Database Type", "QSQLITE");
+    group.writeEntry("Database Name", d->dbPath);
 
     config->sync();
 }
