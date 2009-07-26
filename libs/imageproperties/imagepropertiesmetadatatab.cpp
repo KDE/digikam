@@ -42,10 +42,6 @@
 #include <kfileitem.h>
 #include <kglobal.h>
 
-// Libkexiv2 includes
-
-#include <libkexiv2/version.h>
-
 // Local includes
 
 #include "metadatapanel.h"
@@ -140,18 +136,10 @@ void ImagePropertiesMetaDataTab::readSettings()
     d->makernoteWidget->setCurrentItemByKey(group.readEntry("Current MAKERNOTE Item", QString()));
     d->iptcWidget->setCurrentItemByKey(group.readEntry("Current IPTC Item",           QString()));
     d->xmpWidget->setCurrentItemByKey(group.readEntry("Current XMP Item",             QString()));
-
-#if KEXIV2_VERSION >= 0x010000
-    d->exifWidget->setTagsFilter(group.readEntry("EXIF Tags Filter",           MetadataPanel::defaultExifFilter()));
-    d->makernoteWidget->setTagsFilter(group.readEntry("MAKERNOTE Tags Filter", MetadataPanel::defaultMknoteFilter()));
-    d->iptcWidget->setTagsFilter(group.readEntry("IPTC Tags Filter",           MetadataPanel::defaultIptcFilter()));
-    d->xmpWidget->setTagsFilter(group.readEntry("XMP Tags Filter",             MetadataPanel::defaultXmpFilter()));
-#else
-    d->exifWidget->setTagsFilter(MetadataPanel::defaultExifFilter());
-    d->makernoteWidget->setTagsFilter(MetadataPanel::defaultMknoteFilter());
-    d->iptcWidget->setTagsFilter(MetadataPanel::defaultIptcFilter());
-    d->xmpWidget->setTagsFilter(MetadataPanel::defaultXmpFilter());
-#endif
+    d->exifWidget->setTagsFilter(group.readEntry("EXIF Tags Filter",                  MetadataPanel::defaultExifFilter()));
+    d->makernoteWidget->setTagsFilter(group.readEntry("MAKERNOTE Tags Filter",        MetadataPanel::defaultMknoteFilter()));
+    d->iptcWidget->setTagsFilter(group.readEntry("IPTC Tags Filter",                  MetadataPanel::defaultIptcFilter()));
+    d->xmpWidget->setTagsFilter(group.readEntry("XMP Tags Filter",                    MetadataPanel::defaultXmpFilter()));
 }
 
 void ImagePropertiesMetaDataTab::writeSettings()
