@@ -39,6 +39,8 @@
 #include <QIntValidator>
 #include <QSpinBox>
 #include <QFormLayout>
+#include <QSqlDatabase>
+#include <QSqlError>
 
 // KDE includes
 
@@ -175,6 +177,8 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
     d->password                      = new QLineEdit();
     d->password->setEchoMode(QLineEdit::Password);
 
+    QPushButton *checkDatabaseConnectionButton = new QPushButton(i18n("Check DB Connection"));
+
     d->expertSettings = new QGroupBox();
     d->expertSettings->setFlat(true);
     QFormLayout *expertSettinglayout = new QFormLayout();
@@ -192,6 +196,8 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
     expertSettinglayout->addRow(userNameLabel, d->userName);
     expertSettinglayout->addRow(passwordLabel, d->password);
     expertSettinglayout->addRow(connectionOptionsLabel, d->connectionOptions);
+
+    expertSettinglayout->addWidget(checkDatabaseConnectionButton);
 
     vlay->addWidget(d->expertSettings);
 
@@ -226,6 +232,8 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
             this, SLOT(slotDatabasePathEdited(const QString&)));
 
     connect(d->databaseType, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(setDatabaseInputFields(const QString&)));
+
+    connect(checkDatabaseConnectionButton, SIGNAL(clicked()), this, SLOT(checkDatabaseConnection()));
 
 }
 
@@ -319,6 +327,25 @@ void SetupCollections::setDatabaseInputFields(const QString& currentIndexStr){
 
         d->expertSettings->setVisible(true);
     }
+}
+
+void SetupCollections::checkDatabaseConnection(){
+    QString databaseID("ConnectionTest");
+    QSqlDatabase testDatabase = QSqlDatabase::addDatabase(d->databaseType->currentText(), databaseID);
+    testDatabase.setHostName(d->hostName->text());
+    testDatabase.setPort(d->hostPort->text().toInt());
+    testDatabase.setUserName(d->userName->text());
+    testDatabase.setPassword(d->password->text());
+    testDatabase.setConnectOptions(d->connectionOptions->text());
+
+    bool result = testDatabase.open();
+    if (result == true){
+        KMessageBox::information(0, i18n("Database connection test successful."), i18n("Database connection test"));
+    }else{
+        KMessageBox::error(0, i18n("Database connection test was not successful. <p>Error was: %1</p>", testDatabase.lastError().text()), i18n("Database connection test") );
+    }
+    testDatabase.close();
+    QSqlDatabase::removeDatabase(databaseID);
 }
 
 void SetupCollections::slotChangeDatabasePath(const KUrl& result)
