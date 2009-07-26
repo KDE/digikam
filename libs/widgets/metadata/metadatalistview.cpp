@@ -165,7 +165,15 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
             {
                 // We using the filter to make a more user friendly output
 
-                if (filters.contains(it.key()))
+                // Filter is not a list of complete tag keys
+                if (!filters[0].contains(".") && filters.contains(it.key().section('.', 2, 2)))
+                {
+                    QString tagTitle = m_parent->getTagTitle(it.key());
+                    new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.value());
+                    ++subItems;
+                    filters.removeAll(it.key());
+                }
+                else if (filters.contains(it.key()))
                 {
                     QString tagTitle = m_parent->getTagTitle(it.key());
                     new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.value());
@@ -188,7 +196,8 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
     if ( subItems == 0 && parentifDItem)
         delete parentifDItem;
 
-    if (!filters.isEmpty() && filters[0] != QString("FULL"))
+    // Add not found tags from filter as grey items.
+    if (!filters.isEmpty() && filters[0] != QString("FULL") && filters[0].contains("."))
     {
         foreach(QString key, filters)
         {
@@ -237,7 +246,15 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
                     {
                         // We using the filter to make a more user friendly output (Simple Mode)
 
-                        if (filters.contains(it.key()))
+                        // Filter is not a list of complete tag keys
+                        if (!filters[0].contains(".") && filters.contains(it.key().section('.', 2, 2)))
+                        {
+                            QString tagTitle = m_parent->getTagTitle(it.key());
+                            new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.value());
+                            ++subItems;
+                            filters.removeAll(it.key());
+                        }
+                        else if (filters.contains(it.key()))
                         {
                             QString tagTitle = m_parent->getTagTitle(it.key());
                             new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.value());
@@ -262,7 +279,8 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
             delete parentifDItem;
     }
 
-    if (!filters.isEmpty() && filters[0] != QString("FULL"))
+    // Add not found tags from filter as grey items.
+    if (!filters.isEmpty() && filters[0] != QString("FULL") && filters[0].contains("."))
     {
         foreach(QString key, filters)
         {
