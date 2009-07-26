@@ -9,7 +9,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 002 ==> 193522 : first run (with existing v3 database) fails, "No album library path...".
 003 ==> 147885 : update metadata doesn't work correctly for creation date
 004 ==> 196462 : IconView (Qt4 Model/view based): Navigation broken after delete.
-005 ==> 
+005 ==> 195871 image tool tip does not show all tags if too long.
+006 ==> 
+
 
 *********************************************************************************************************
 digiKam 1.0.0-beta3 - Release date: 2009-07-24
