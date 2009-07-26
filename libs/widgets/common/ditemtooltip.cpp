@@ -43,6 +43,89 @@
 namespace Digikam
 {
 
+DToolTipStyleSheet::DToolTipStyleSheet(const QFont& font)
+    : maxStringLength(30)
+{
+    unavailable = i18n("unavailable");
+
+    tipHeader   = QString("<qt><table cellspacing=\"0\" cellpadding=\"0\" width=\"250\" border=\"0\">");
+    tipFooter   = QString("</table></qt>");
+
+    headBeg     = QString("<tr bgcolor=\"%1\"><td colspan=\"2\">"
+                            "<nobr><font size=\"-1\" color=\"%2\" face=\"%3\"><center><b>")
+                            .arg(ThemeEngine::instance()->baseColor().name())
+                            .arg(ThemeEngine::instance()->textRegColor().name())
+                            .arg(font.family());
+    headEnd     = QString("</b></center></font></nobr></td></tr>");
+
+    cellBeg     = QString("<tr><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\">")
+                            .arg(ThemeEngine::instance()->textRegColor().name())
+                            .arg(font.family());
+    cellMid     = QString("</font></nobr></td><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\">")
+                            .arg(ThemeEngine::instance()->textRegColor().name())
+                            .arg(font.family());
+    cellEnd     = QString("</font></nobr></td></tr>");
+
+    cellSpecBeg = QString("<tr><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\">")
+                            .arg(ThemeEngine::instance()->textRegColor().name())
+                            .arg(font.family());
+    cellSpecMid = QString("</font></nobr></td><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\"><i>")
+                            .arg(ThemeEngine::instance()->textSpecialRegColor().name())
+                            .arg(font.family());
+    cellSpecEnd = QString("</i></font></nobr></td></tr>");
+};
+
+QString DToolTipStyleSheet::breakString(const QString& input)
+{
+    QString str = input.simplified();
+    str         = Qt::escape(str);
+
+    if (str.length() <= maxStringLength)
+        return str;
+
+    QString br;
+
+    int i     = 0;
+    int count = 0;
+
+    while (i < str.length())
+    {
+        if (count >= maxStringLength && str[i].isSpace())
+        {
+            count = 0;
+            br.append("<br/>");
+        }
+        else
+        {
+            br.append(str[i]);
+        }
+
+        ++i;
+        ++count;
+    }
+    return br;
+};
+
+QString DToolTipStyleSheet::elidedText(const QString& str, Qt::TextElideMode elideMode)
+{
+    if (str.length() <= maxStringLength)
+        return str;
+
+    switch (elideMode)
+    {
+        case Qt::ElideLeft:
+            return "..." + str.right(maxStringLength-3);
+        case Qt::ElideRight:
+            return str.left(maxStringLength-3) + "...";
+        case Qt::ElideMiddle:
+            return str.left(maxStringLength / 2 - 2) + "..." + str.right(maxStringLength / 2 - 1);
+        case Qt::ElideNone:
+            return str.left(maxStringLength);
+        default:
+            return str;
+    }
+}
+
 class DItemToolTipPriv
 {
 public:
