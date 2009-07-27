@@ -273,8 +273,8 @@ void WorldMapWidget::readConfig(KConfigGroup& group)
     setMapTheme((MapTheme)group.readEntry("MapTheme", (int)DefaultMap));
     setZoomLevel(group.readEntry("Zoom Level", 5));
     // Default GPS location : Paris
-    setCenterPosition(group.readEntry("Longitude", 2.3455810546875),
-                      group.readEntry("Latitude",  48.850258199721495));
+    setCenterPosition(group.readEntry("Latitude",  48.850258199721495),
+                      group.readEntry("Longitude", 2.3455810546875));
 }
 
 void WorldMapWidget::writeConfig(KConfigGroup& group)
