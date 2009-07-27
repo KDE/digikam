@@ -11,7 +11,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 196462 : IconView (Qt4 Model/view based): Navigation broken after delete.
 005 ==> 195871 : Image tool tip does not show all tags if too long.
 006 ==> 201560 : Crash at start up when scanning images.
-007 ==> 
+007 ==> 197508 : Geo-localisation integration missing, but marble is installed.
+008 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta3 - Release date: 2009-07-24
