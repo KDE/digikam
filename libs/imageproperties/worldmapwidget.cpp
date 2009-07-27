@@ -81,9 +81,10 @@ WorldMapWidget::WorldMapWidget(int w, int h, QWidget *parent)
 
 #ifdef HAVE_MARBLEWIDGET
     d->marbleWidget = new MarbleWidget(this);
-#ifdef MARBLE_VERSION
+    setMapTheme(OpenStreetMap);
+#if MARBLE_VERSION < 800
     d->marbleWidget->setDownloadUrl("http://download.kde.org/apps/marble/");
-#endif // MARBLE_VERSION
+#endif
 #else
     d->marbleWidget = new QLabel(this);
     d->marbleWidget->setText(i18n("Geolocation using Marble not available"));
