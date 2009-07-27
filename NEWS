@@ -13,7 +13,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 006 ==> 201560 : Crash at start up when scanning images.
 007 ==> 197508 : Geo-localisation integration missing, but marble is installed.
 008 ==> 201640 : Opportunity to compile digiKam without Nepomuk service.
-009 ==> 
+009 ==> 201692 : No thumbnails in album view.
+010 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta3 - Release date: 2009-07-24
