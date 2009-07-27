@@ -80,6 +80,11 @@ private Q_SLOTS:
 
 private:
 
+    void readConfig();
+    void writeConfig();
+
+private:
+
     ImagePropertiesGPSTabPriv* const d;
 };
 

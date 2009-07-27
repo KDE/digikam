@@ -53,14 +53,20 @@ class WorldMapWidgetPriv
 
 public:
 
-    WorldMapWidgetPriv(){};
+    WorldMapWidgetPriv()
+    {
+        mapTheme     = WorldMapWidget::DefaultMap;
+        marbleWidget = 0;
+    };
 
-    GPSInfoList   list;
+    GPSInfoList              list;
+
+    WorldMapWidget::MapTheme mapTheme;
 
 #ifdef HAVE_MARBLEWIDGET
-    MarbleWidget *marbleWidget;
+    MarbleWidget*            marbleWidget;
 #else
-    QLabel       *marbleWidget;
+    QLabel*                  marbleWidget;
 #endif // HAVE_MARBLEWIDGET
 };
 
@@ -76,10 +82,7 @@ WorldMapWidget::WorldMapWidget(int w, int h, QWidget *parent)
 #ifdef HAVE_MARBLEWIDGET
     d->marbleWidget = new MarbleWidget(this);
 #ifdef MARBLE_VERSION
-    d->marbleWidget->setMapThemeId("earth/srtm/srtm.dgml");
-/*    d->marbleWidget->setMapThemeId("earth/openstreetmap/openstreetmap.dgml");
-    d->marbleWidget->setDownloadUrl("http://download.kde.org/apps/marble/");*/
-
+    d->marbleWidget->setDownloadUrl("http://download.kde.org/apps/marble/");
 #endif // MARBLE_VERSION
 #else
     d->marbleWidget = new QLabel(this);
@@ -267,6 +270,7 @@ void WorldMapWidget::setZoomLevel(int l)
 
 void WorldMapWidget::readConfig(KConfigGroup& group)
 {
+    setMapTheme((MapTheme)group.readEntry("MapTheme", (int)DefaultMap));
     setZoomLevel(group.readEntry("Zoom Level", 5));
     // Default GPS location : Paris
     setCenterPosition(group.readEntry("Longitude", 2.3455810546875),
@@ -275,11 +279,38 @@ void WorldMapWidget::readConfig(KConfigGroup& group)
 
 void WorldMapWidget::writeConfig(KConfigGroup& group)
 {
+    group.writeEntry("Map Theme",  (int)getMapTheme());
     group.writeEntry("Zoom Level", getZoomLevel());
     double lat, lng;
     getCenterPosition(lat, lng);
     group.writeEntry("Latitude",  lat);
     group.writeEntry("Longitude", lng);
+}
+
+void WorldMapWidget::setMapTheme(MapTheme theme)
+{
+    d->mapTheme = theme;
+
+#ifdef HAVE_MARBLEWIDGET
+
+#ifdef MARBLE_VERSION
+    switch(theme)
+    {
+        case OpenStreetMap:
+            d->marbleWidget->setMapThemeId("earth/openstreetmap/openstreetmap.dgml");
+            break;
+        default: // DefaultMap
+            d->marbleWidget->setMapThemeId("earth/srtm/srtm.dgml");
+            break;
+    }
+#endif // MARBLE_VERSION
+
+#endif // HAVE_MARBLEWIDGET
+}
+
+WorldMapWidget::MapTheme WorldMapWidget::getMapTheme()
+{
+    return d->mapTheme;
 }
 
 }  // namespace Digikam

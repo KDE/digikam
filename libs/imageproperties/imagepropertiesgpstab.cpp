@@ -6,7 +6,7 @@
  * Date        : 2006-02-22
  * Description : a tab widget to display GPS info
  *
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -158,6 +158,8 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     layout->setSpacing(0);
     layout->setMargin(0);
 
+    readConfig();
+
     // --------------------------------------------------------
 
     connect(d->detailsButton, SIGNAL(clicked()),
@@ -172,6 +174,7 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
 
 ImagePropertiesGPSTab::~ImagePropertiesGPSTab()
 {
+    writeConfig();
     delete d;
 }
 
@@ -321,6 +324,21 @@ void ImagePropertiesGPSTab::setGPSInfoList(const GPSInfoList& list)
     }
 
     d->map->setGPSPositions(list);
+}
+
+void ImagePropertiesGPSTab::readConfig()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(QString("Image Properties SideBar"));
+    d->map->readConfig(group);
+}
+
+void ImagePropertiesGPSTab::writeConfig()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(QString("Image Properties SideBar"));
+    d->map->writeConfig(group);
+    group.sync();
 }
 
 }  // namespace Digikam

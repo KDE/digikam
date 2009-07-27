@@ -75,6 +75,14 @@ class DIGIKAM_EXPORT WorldMapWidget : public QFrame
 
 public:
 
+    enum MapTheme
+    {
+        DefaultMap = 0,
+        OpenStreetMap
+    };
+
+public:
+
     WorldMapWidget(int w, int h, QWidget *parent);
     virtual ~WorldMapWidget();
 
@@ -89,6 +97,8 @@ public:
     int    getZoomLevel();
     void   setZoomLevel(int l);
 
+    void     setMapTheme(MapTheme theme);
+    MapTheme getMapTheme();
 
     void readConfig(KConfigGroup& group);
     void writeConfig(KConfigGroup& group);
