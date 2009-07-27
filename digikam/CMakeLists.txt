@@ -198,7 +198,7 @@ INSTALL(TARGETS digikamdatabase ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 # digiKam nepomuk services #########################################################
 
-IF (${KDE_VERSION} VERSION_GREATER "4.2.70")
+IF (NEPOMUK_FOUND)
 
     set(digikamnepomukservices_SRCS ${libnepomukservices_SRCS} )
 
@@ -227,7 +227,7 @@ IF (${KDE_VERSION} VERSION_GREATER "4.2.70")
     TARGETS digikamnepomukservice
     DESTINATION ${PLUGIN_INSTALL_DIR})
 
-ENDIF (${KDE_VERSION} VERSION_GREATER "4.2.70")
+ENDIF (NEPOMUK_FOUND)
 
 # digiKam binary progam #########################################################
 

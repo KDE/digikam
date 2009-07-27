@@ -2,7 +2,7 @@ PROJECT(digikam)
 
 OPTION(ENABLE_GPHOTO2 "Build digiKam with libgphoto2 support (default=ON)" ON)
 OPTION(ENABLE_THEMEDESIGNER "Build digiKam theme designer (default=OFF)" OFF)
-OPTION(ENABLE_THUMBS_DB "Build digiKam with thumbnails database support (default=OFF)" ON)
+OPTION(ENABLE_THUMBS_DB "Build digiKam with thumbnails database support (default=ON)" ON)
 
 # ==================================================================================================
 # Information to update before to release this package.
@@ -89,7 +89,6 @@ ENDIF(NOT WIN32)
 
 MACRO_OPTIONAL_FIND_PACKAGE(KdepimLibs)
 MACRO_BOOL_TO_01(KDEPIMLIBS_FOUND HAVE_KDEPIMLIBS)
-FIND_PACKAGE(Nepomuk REQUIRED)
 
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH} )
 
@@ -109,6 +108,14 @@ MACRO_BOOL_TO_01(LQR-1_FOUND USE_EXT_LIBLQR-1)
 
 MACRO_BOOL_TO_01(ENABLE_THUMBS_DB USE_THUMBS_DB)
 MESSAGE("Thumbs DB:" ${USE_THUMBS_DB} ${CMAKE_CURRENT_BINARY_DIR})
+
+IF (${KDE_VERSION} VERSION_GREATER "4.2.70")
+    MACRO_OPTIONAL_FIND_PACKAGE(Nepomuk)
+    MACRO_BOOL_TO_01(NEPOMUK_FOUND HAVE_NEPOMUK)
+ELSE (${KDE_VERSION} VERSION_GREATER "4.2.70")
+    SET(NEPOMUK_FOUND FALSE)
+    SET(HAVE_NEPOMUK 0)
+ENDIF (${KDE_VERSION} VERSION_GREATER "4.2.70")
 
 # Set config file depending of optional depencies
 
@@ -257,6 +264,19 @@ ELSE(MARBLEWIDGET_FOUND)
     MESSAGE(STATUS " digiKam will be compiled without geolocation using Marble widget support.")
     MESSAGE(STATUS "")
 ENDIF(MARBLEWIDGET_FOUND)
+
+IF(NEPOMUK_FOUND)
+    MESSAGE(STATUS " Nepomuk libraries found............. YES (optional)")
+ELSE(NEPOMUK_FOUND)
+    IF (${KDE_VERSION} VERSION_GREATER "4.2.70")
+        MESSAGE(STATUS " Nepomuk libraries found............. NO  (optional)")
+    ELSE (${KDE_VERSION} VERSION_GREATER "4.2.70")
+        MESSAGE(STATUS " Nepomuk libraries found............. NO  (at least KDE 4.3 required)")
+    ENDIF (${KDE_VERSION} VERSION_GREATER "4.2.70")
+    MESSAGE(STATUS "")
+    MESSAGE(STATUS " digiKam will be compiled without support for the Nepomuk semantic desktop services.")
+    MESSAGE(STATUS "")
+ENDIF(NEPOMUK_FOUND)
 
 IF(LENSFUN_FOUND)
     MESSAGE(STATUS " liblensfun library found............ YES (optional)")
