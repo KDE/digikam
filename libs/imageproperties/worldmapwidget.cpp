@@ -77,6 +77,9 @@ WorldMapWidget::WorldMapWidget(int w, int h, QWidget *parent)
     d->marbleWidget = new MarbleWidget(this);
 #ifdef MARBLE_VERSION
     d->marbleWidget->setMapThemeId("earth/srtm/srtm.dgml");
+/*    d->marbleWidget->setMapThemeId("earth/openstreetmap/openstreetmap.dgml");
+    d->marbleWidget->setDownloadUrl("http://download.kde.org/apps/marble/");*/
+
 #endif // MARBLE_VERSION
 #else
     d->marbleWidget = new QLabel(this);
@@ -93,6 +96,11 @@ WorldMapWidget::WorldMapWidget(int w, int h, QWidget *parent)
 WorldMapWidget::~WorldMapWidget()
 {
     delete d;
+}
+
+QWidget* WorldMapWidget::marbleWidget() const
+{
+    return d->marbleWidget;
 }
 
 double WorldMapWidget::getLatitude()
@@ -218,6 +226,42 @@ void WorldMapWidget::slotZoomOut()
 #ifdef HAVE_MARBLEWIDGET
     d->marbleWidget->zoomOut();
     d->marbleWidget->repaint();
+#endif // HAVE_MARBLEWIDGET
+}
+
+void WorldMapWidget::getCenterPosition(double& lat, double& lng)
+{
+#ifdef HAVE_MARBLEWIDGET
+    lat = d->marbleWidget->centerLatitude();
+    lng = d->marbleWidget->centerLongitude();
+#else // HAVE_MARBLEWIDGET
+    // GPS location : Paris
+    lat = 48.850258199721495;
+    lng = 2.3455810546875;
+#endif // HAVE_MARBLEWIDGET
+}
+
+void WorldMapWidget::setCenterPosition(double lat, double lng)
+{
+#ifdef HAVE_MARBLEWIDGET
+    d->marbleWidget->setCenterLatitude(lat);
+    d->marbleWidget->setCenterLongitude(lng);
+#endif // HAVE_MARBLEWIDGET
+}
+
+int WorldMapWidget::getZoomLevel()
+{
+#ifdef HAVE_MARBLEWIDGET
+    return d->marbleWidget->zoom();
+#else // HAVE_MARBLEWIDGET
+    return 5;
+#endif // HAVE_MARBLEWIDGET
+}
+
+void WorldMapWidget::setZoomLevel(int l)
+{
+#ifdef HAVE_MARBLEWIDGET
+    d->marbleWidget->zoomView(l);
 #endif // HAVE_MARBLEWIDGET
 }
 

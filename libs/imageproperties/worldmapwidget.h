@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-class GPSInfo
+class DIGIKAM_EXPORT GPSInfo
 {
 public:
 
@@ -68,7 +68,7 @@ typedef QList<GPSInfo> GPSInfoList;
 
 class WorldMapWidgetPriv;
 
-class WorldMapWidget : public QFrame
+class DIGIKAM_EXPORT WorldMapWidget : public QFrame
 {
     Q_OBJECT
 
@@ -82,10 +82,20 @@ public:
     double getLatitude();
     double getLongitude();
 
+    void   getCenterPosition(double& lat, double& lng);
+    void   setCenterPosition(double lat, double lng);
+
+    int    getZoomLevel();
+    void   setZoomLevel(int l);
+
 public Q_SLOTS:
 
     void   slotZoomIn();
     void   slotZoomOut();
+
+protected:
+
+    QWidget* marbleWidget() const;
 
 private:
 

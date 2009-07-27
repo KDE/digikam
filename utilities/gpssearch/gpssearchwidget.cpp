@@ -6,7 +6,7 @@
  * Date        : 2008-05-30
  * Description : a widget to search image over a map.
  *
- * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,16 +22,19 @@
  * ============================================================ */
 
 #include "gpssearchwidget.h"
+#include "gpssearchwidget.moc"
 
 // KDE includes
 
+#include <klocale.h>
 #include <kdebug.h>
 
+// Local includes.
+
+#include "config-digikam.h"
 
 namespace Digikam
 {
-
-#ifdef HAVE_MARBLEWIDGET
 
 class GPSSearchWidgetPriv
 {
@@ -43,19 +46,17 @@ public:
 };
 
 GPSSearchWidget::GPSSearchWidget(QWidget *parent)
-               : MarbleWidget(parent), d(new GPSSearchWidgetPriv)
+               : WorldMapWidget(256, 256, parent), d(new GPSSearchWidgetPriv)
 {
-#ifdef MARBLE_VERSION
-    setMapThemeId("earth/srtm/srtm.dgml");
-#endif // MARBLE_VERSION
-
     // NOTE: see B.K.O #153070
     // Marble will include selection area over map canvas with KDE 4.2
     // using CTRL + right mouse button.
     // A new signal named regionSelected() will be emitted when user select an aera.
 
-    connect(this, SIGNAL(regionSelected(const QList<double>&)),
+#ifdef HAVE_MARBLEWIDGET
+    connect(marbleWidget(), SIGNAL(regionSelected(const QList<double>&)),
             this, SLOT(slotNewSelectionFromMap(const QList<double>&)));
+#endif // HAVE_MARBLEWIDGET
 
     // TODO: connect marble with new selection to perform on the map when user select virtual album.
 }
@@ -89,19 +90,5 @@ void GPSSearchWidget::slotNewSelectionFromMap(const QList<double>& sel)
     d->selection = sel;
     emit signalNewSelectionFromMap();
 }
-
-void GPSSearchWidget::slotZoomIn()
-{
-    zoomIn();
-    repaint();
-}
-
-void GPSSearchWidget::slotZoomOut()
-{
-    zoomOut();
-    repaint();
-}
-
-#endif // HAVE_MARBLEWIDGET
 
 }  // namespace Digikam

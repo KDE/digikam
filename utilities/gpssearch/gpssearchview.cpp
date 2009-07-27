@@ -200,19 +200,21 @@ void GPSSearchView::readConfig()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("GPSSearch SideBar"));
 
-    d->gpsSearchWidget->zoomView(group.readEntry("Zoom Level", 5));
+    d->gpsSearchWidget->setZoomLevel(group.readEntry("Zoom Level", 5));
     // Default GPS location : Paris
-    d->gpsSearchWidget->setCenterLongitude(group.readEntry("Longitude", 2.3455810546875));
-    d->gpsSearchWidget->setCenterLatitude(group.readEntry("Latitude", 48.850258199721495));
+    d->gpsSearchWidget->setCenterPosition(group.readEntry("Longitude", 2.3455810546875),
+                                          group.readEntry("Latitude",  48.850258199721495));
 }
 
 void GPSSearchView::writeConfig()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("GPSSearch SideBar"));
-    group.writeEntry("Zoom Level", d->gpsSearchWidget->zoom());
-    group.writeEntry("Longitude",  d->gpsSearchWidget->centerLongitude());
-    group.writeEntry("Latitude",   d->gpsSearchWidget->centerLatitude());
+    group.writeEntry("Zoom Level", d->gpsSearchWidget->getZoomLevel());
+    double lat, lng;
+    d->gpsSearchWidget->getCenterPosition(lat, lng);
+    group.writeEntry("Latitude",  lat);
+    group.writeEntry("Longitude", lng);
     group.sync();
 }
 
