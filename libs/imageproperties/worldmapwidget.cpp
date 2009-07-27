@@ -265,4 +265,21 @@ void WorldMapWidget::setZoomLevel(int l)
 #endif // HAVE_MARBLEWIDGET
 }
 
+void WorldMapWidget::readConfig(KConfigGroup& group)
+{
+    setZoomLevel(group.readEntry("Zoom Level", 5));
+    // Default GPS location : Paris
+    setCenterPosition(group.readEntry("Longitude", 2.3455810546875),
+                      group.readEntry("Latitude",  48.850258199721495));
+}
+
+void WorldMapWidget::writeConfig(KConfigGroup& group)
+{
+    group.writeEntry("Zoom Level", getZoomLevel());
+    double lat, lng;
+    getCenterPosition(lat, lng);
+    group.writeEntry("Latitude",  lat);
+    group.writeEntry("Longitude", lng);
+}
+
 }  // namespace Digikam

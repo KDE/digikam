@@ -34,6 +34,7 @@
 // KDE includes
 
 #include <kurl.h>
+#include <kconfiggroup.h>
 
 // Local includes
 
@@ -87,6 +88,10 @@ public:
 
     int    getZoomLevel();
     void   setZoomLevel(int l);
+
+
+    void readConfig(KConfigGroup& group);
+    void writeConfig(KConfigGroup& group);
 
 public Q_SLOTS:
 
