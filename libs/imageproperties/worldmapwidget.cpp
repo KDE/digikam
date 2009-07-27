@@ -81,7 +81,6 @@ WorldMapWidget::WorldMapWidget(int w, int h, QWidget *parent)
 
 #ifdef HAVE_MARBLEWIDGET
     d->marbleWidget = new MarbleWidget(this);
-    setMapTheme(OpenStreetMap);
 #if MARBLE_VERSION < 0x000800
     d->marbleWidget->setDownloadUrl("http://download.kde.org/apps/marble/");
 #endif
@@ -271,7 +270,7 @@ void WorldMapWidget::setZoomLevel(int l)
 
 void WorldMapWidget::readConfig(KConfigGroup& group)
 {
-    setMapTheme((MapTheme)group.readEntry("MapTheme", (int)DefaultMap));
+    setMapTheme((MapTheme)group.readEntry("Map Theme", (int)DefaultMap));
     setZoomLevel(group.readEntry("Zoom Level", 5));
     // Default GPS location : Paris
     setCenterPosition(group.readEntry("Latitude",  48.850258199721495),

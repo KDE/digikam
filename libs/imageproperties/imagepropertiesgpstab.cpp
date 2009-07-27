@@ -43,6 +43,7 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 // KDE includes
 
 #include <kdebug.h>
+#include <kmenu.h>
 #include <kcombobox.h>
 #include <kdialog.h>
 #include <khbox.h>
@@ -60,19 +61,23 @@ public:
 
     ImagePropertiesGPSTabPriv()
     {
-        detailsButton = 0;
-        detailsCombo  = 0;
-        map           = 0;
-        altLabel      = 0;
-        latLabel      = 0;
-        lonLabel      = 0;
-        dateLabel     = 0;
-        altitude      = 0;
-        latitude      = 0;
-        longitude     = 0;
-        date          = 0;
-        zoomInBtn     = 0;
-        zoomOutBtn    = 0;
+        detailsButton       = 0;
+        detailsCombo        = 0;
+        map                 = 0;
+        altLabel            = 0;
+        latLabel            = 0;
+        lonLabel            = 0;
+        dateLabel           = 0;
+        altitude            = 0;
+        latitude            = 0;
+        longitude           = 0;
+        date                = 0;
+        zoomInBtn           = 0;
+        zoomOutBtn          = 0;
+        mapThemeBtn         = 0;
+        defaultMapAction    = 0;
+        openStreetMapAction = 0;
+        mapThemeMenu        = 0;
     }
 
     QLabel             *altLabel;
@@ -84,8 +89,14 @@ public:
 
     QToolButton        *zoomInBtn;
     QToolButton        *zoomOutBtn;
+    QToolButton        *mapThemeBtn;
+
+    QAction            *defaultMapAction;
+    QAction            *openStreetMapAction;
 
     QComboBox          *detailsCombo;
+
+    KMenu              *mapThemeMenu;
 
     KSqueezedTextLabel *altitude;
     KSqueezedTextLabel *latitude;
@@ -118,6 +129,17 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     QWidget* box2           = new QWidget(this);
     QHBoxLayout* box2Layout = new QHBoxLayout(box2);
 
+    d->mapThemeBtn  = new QToolButton(box2);
+    d->mapThemeMenu = new KMenu(d->mapThemeBtn);
+    d->mapThemeBtn->setToolTip( i18n("Map Theme"));
+    d->mapThemeBtn->setIcon(SmallIcon("applications-internet"));
+    d->mapThemeBtn->setMenu(d->mapThemeMenu);
+    d->mapThemeBtn->setPopupMode(QToolButton::DelayedPopup);
+    d->defaultMapAction    = d->mapThemeMenu->addAction(i18n("Default"));
+    d->defaultMapAction->setCheckable(true);
+    d->openStreetMapAction = d->mapThemeMenu->addAction(i18n("OpenStreetMap"));
+    d->openStreetMapAction->setCheckable(true);
+
     d->zoomOutBtn = new QToolButton(box2);
     d->zoomInBtn  = new QToolButton(box2);
     d->zoomOutBtn->setIcon(SmallIcon("zoom-out"));
@@ -133,6 +155,7 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     d->detailsCombo->insertItem(MultiMap,      QString("MultiMap"));
     d->detailsCombo->insertItem(OpenStreetMap, QString("OpenStreetMap"));
 
+    box2Layout->addWidget(d->mapThemeBtn);
     box2Layout->addWidget(d->zoomOutBtn);
     box2Layout->addWidget(d->zoomInBtn);
     box2Layout->addStretch(10);
@@ -170,6 +193,9 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
 
     connect(d->zoomOutBtn, SIGNAL(released()),
             d->map, SLOT(slotZoomOut()));
+
+    connect(d->mapThemeMenu, SIGNAL(triggered(QAction*)),
+            this, SLOT(slotMapThemeChanged(QAction*)));
 }
 
 ImagePropertiesGPSTab::~ImagePropertiesGPSTab()
@@ -331,6 +357,7 @@ void ImagePropertiesGPSTab::readConfig()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("Image Properties SideBar"));
     d->map->readConfig(group);
+    updateMenu();
 }
 
 void ImagePropertiesGPSTab::writeConfig()
@@ -338,7 +365,39 @@ void ImagePropertiesGPSTab::writeConfig()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("Image Properties SideBar"));
     d->map->writeConfig(group);
-    group.sync();
+    config->sync();
+}
+
+void ImagePropertiesGPSTab::slotMapThemeChanged(QAction *action)
+{
+    if (action == d->defaultMapAction)
+    {
+        d->map->setMapTheme(WorldMapWidget::DefaultMap);
+    }
+    else if (action == d->openStreetMapAction)
+    {
+        d->map->setMapTheme(WorldMapWidget::OpenStreetMap);
+    }
+    updateMenu();
+}
+
+void ImagePropertiesGPSTab::updateMenu()
+{
+    switch(d->map->getMapTheme())
+    {
+        case WorldMapWidget::OpenStreetMap:
+        {
+            d->defaultMapAction->setChecked(false);
+            d->openStreetMapAction->setChecked(true);
+            break;
+        }
+        default:
+        {
+            d->defaultMapAction->setChecked(true);
+            d->openStreetMapAction->setChecked(false);
+            break;
+        }
+    }
 }
 
 }  // namespace Digikam
