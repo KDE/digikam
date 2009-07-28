@@ -30,6 +30,7 @@
 #include <QDateTime>
 #include <QDomDocument>
 #include <QList>
+#include <QToolButton>
 
 // KDE includes
 
@@ -103,10 +104,14 @@ public:
     void readConfig(KConfigGroup& group);
     void writeConfig(KConfigGroup& group);
 
+Q_SIGNALS:
+
+    void signalSettingsChanged();
+
 public Q_SLOTS:
 
-    void   slotZoomIn();
-    void   slotZoomOut();
+    void slotZoomIn();
+    void slotZoomOut();
 
 protected:
 
@@ -120,6 +125,29 @@ private:
 private:
 
     WorldMapWidgetPriv* const d;
+};
+
+// ------------------------------------------------------------------------------
+
+class WorldMapThemeBtnPriv;
+
+class DIGIKAM_EXPORT WorldMapThemeBtn : public QToolButton
+{
+    Q_OBJECT
+
+public:
+
+    WorldMapThemeBtn(WorldMapWidget *map, QWidget *parent);
+    virtual ~WorldMapThemeBtn();
+
+private Q_SLOTS:
+
+    void slotUpdateMenu();
+    void slotMapThemeChanged(QAction*);
+
+private:
+
+    WorldMapThemeBtnPriv* const d;
 };
 
 }  // namespace Digikam

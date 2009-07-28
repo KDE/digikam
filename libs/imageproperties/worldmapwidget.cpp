@@ -38,6 +38,8 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <ktemporaryfile.h>
+#include <kmenu.h>
+#include <kiconloader.h>
 
 #include "config-digikam.h"
 #ifdef HAVE_MARBLEWIDGET
@@ -275,6 +277,8 @@ void WorldMapWidget::readConfig(KConfigGroup& group)
     // Default GPS location : Paris
     setCenterPosition(group.readEntry("Latitude",  48.850258199721495),
                       group.readEntry("Longitude", 2.3455810546875));
+
+    emit signalSettingsChanged();
 }
 
 void WorldMapWidget::writeConfig(KConfigGroup& group)
@@ -308,9 +312,90 @@ void WorldMapWidget::setMapTheme(MapTheme theme)
 #endif // HAVE_MARBLEWIDGET
 }
 
+// ------------------------------------------------------------------------
+
 WorldMapWidget::MapTheme WorldMapWidget::getMapTheme()
 {
     return d->mapTheme;
+}
+
+class WorldMapThemeBtnPriv
+{
+
+public:
+
+    WorldMapThemeBtnPriv()
+    {
+        defaultMapAction    = 0;
+        openStreetMapAction = 0;
+        mapThemeMenu        = 0;
+        map                 = 0;
+    };
+
+    QAction*        defaultMapAction;
+    QAction*        openStreetMapAction;
+
+    KMenu*          mapThemeMenu;
+
+    WorldMapWidget* map;
+};
+
+WorldMapThemeBtn::WorldMapThemeBtn(WorldMapWidget *map, QWidget *parent)
+                : QToolButton(parent), d(new WorldMapThemeBtnPriv)
+{
+    d->map          = map;
+    d->mapThemeMenu = new KMenu(this);
+    setToolTip(i18n("Map Theme"));
+    setIcon(SmallIcon("applications-internet"));
+    setMenu(d->mapThemeMenu);
+    setPopupMode(QToolButton::DelayedPopup);
+    d->defaultMapAction    = d->mapThemeMenu->addAction(i18n("Default"));
+    d->defaultMapAction->setCheckable(true);
+    d->openStreetMapAction = d->mapThemeMenu->addAction(i18n("OpenStreetMap"));
+    d->openStreetMapAction->setCheckable(true);
+
+    connect(d->mapThemeMenu, SIGNAL(triggered(QAction*)),
+            this, SLOT(slotMapThemeChanged(QAction*)));
+
+    connect(d->map, SIGNAL(signalSettingsChanged()),
+            this, SLOT(slotUpdateMenu()));
+}
+
+WorldMapThemeBtn::~WorldMapThemeBtn()
+{
+    delete d;
+}
+
+void WorldMapThemeBtn::slotMapThemeChanged(QAction *action)
+{
+    if (action == d->defaultMapAction)
+    {
+        d->map->setMapTheme(WorldMapWidget::DefaultMap);
+    }
+    else if (action == d->openStreetMapAction)
+    {
+        d->map->setMapTheme(WorldMapWidget::OpenStreetMap);
+    }
+    slotUpdateMenu();
+}
+
+void WorldMapThemeBtn::slotUpdateMenu()
+{
+    switch(d->map->getMapTheme())
+    {
+        case WorldMapWidget::OpenStreetMap:
+        {
+            d->defaultMapAction->setChecked(false);
+            d->openStreetMapAction->setChecked(true);
+            break;
+        }
+        default:
+        {
+            d->defaultMapAction->setChecked(true);
+            d->openStreetMapAction->setChecked(false);
+            break;
+        }
+    }
 }
 
 }  // namespace Digikam

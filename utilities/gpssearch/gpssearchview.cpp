@@ -74,6 +74,7 @@ public:
         gpsSearchFolderView = 0;
         zoomInBtn           = 0;
         zoomOutBtn          = 0;
+        mapThemeBtn         = 0;
     }
 
     QToolButton         *saveBtn;
@@ -87,6 +88,7 @@ public:
     GPSSearchFolderView *gpsSearchFolderView;
 
     GPSSearchWidget     *gpsSearchWidget;
+    WorldMapThemeBtn    *mapThemeBtn;
 };
 
 GPSSearchView::GPSSearchView(QWidget *parent)
@@ -116,8 +118,9 @@ GPSSearchView::GPSSearchView(QWidget *parent)
     hbox->setMargin(0);
     hbox->setSpacing(KDialog::spacingHint());
 
-    d->zoomOutBtn = new QToolButton(hbox);
-    d->zoomInBtn  = new QToolButton(hbox);
+    d->mapThemeBtn = new WorldMapThemeBtn(d->gpsSearchWidget, hbox);
+    d->zoomOutBtn  = new QToolButton(hbox);
+    d->zoomInBtn   = new QToolButton(hbox);
     d->zoomOutBtn->setIcon(SmallIcon("zoom-out"));
     d->zoomInBtn->setIcon(SmallIcon("zoom-in"));
 
@@ -207,7 +210,7 @@ void GPSSearchView::writeConfig()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("GPSSearch SideBar"));
     d->gpsSearchWidget->writeConfig(group);
-    group.sync();
+    config->sync();
 }
 
 GPSSearchFolderView* GPSSearchView::folderView() const

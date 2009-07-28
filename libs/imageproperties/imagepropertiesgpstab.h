@@ -77,13 +77,11 @@ public:
 private Q_SLOTS:
 
     void slotGPSDetails();
-    void slotMapThemeChanged(QAction*);
 
 private:
 
     void readConfig();
     void writeConfig();
-    void updateMenu();
 
 private:
 
