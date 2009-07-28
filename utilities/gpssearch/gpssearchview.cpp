@@ -52,6 +52,7 @@
 #include "album.h"
 #include "albummanager.h"
 #include "imageinfo.h"
+#include "imageinfojob.h"
 #include "searchxml.h"
 #include "searchtextbar.h"
 #include "gpssearchwidget.h"
@@ -83,6 +84,8 @@ public:
 
     KLineEdit           *nameEdit;
 
+    ImageInfoJob         imageInfoJob;
+
     SearchTextBar       *searchGPSBar;
 
     GPSSearchFolderView *gpsSearchFolderView;
@@ -104,6 +107,8 @@ GPSSearchView::GPSSearchView(QWidget *parent)
     QFrame *mapPanel   = new QFrame(this);
     QVBoxLayout *vlay2 = new QVBoxLayout(mapPanel);
     d->gpsSearchWidget = new GPSSearchWidget(mapPanel);
+    d->gpsSearchWidget->setWhatsThis(i18n("To perform a search over map, use CTRL+left mouse button "
+                                          "to draw a rectangle where you want to find items."));
 
     mapPanel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     mapPanel->setLineWidth(style()->pixelMetric(QStyle::PM_DefaultFrameWidth));
@@ -186,6 +191,9 @@ GPSSearchView::GPSSearchView(QWidget *parent)
 
     connect(d->zoomOutBtn, SIGNAL(released()),
             d->gpsSearchWidget, SLOT(slotZoomOut()));
+
+    connect(&d->imageInfoJob, SIGNAL(signalItemsInfo(const ImageInfoList&)),
+            this, SLOT(slotItemsInfo(const ImageInfoList&)));
 
     // ---------------------------------------------------------------
 
@@ -295,6 +303,28 @@ void GPSSearchView::slotAlbumSelected(SAlbum* salbum)
         d->gpsSearchWidget->setSelectionCoordinates(list);
         slotCheckNameEditGPSConditions();
     }
+
+    d->imageInfoJob.allItemsFromAlbum(salbum);
+}
+
+void GPSSearchView::slotItemsInfo(const ImageInfoList& items)
+{
+    GPSInfoList list;
+    foreach(ImageInfo inf, items)
+    {
+        ImagePosition pos = inf.imagePosition();
+        if (!pos.isEmpty())
+        {
+            GPSInfo gps;
+            gps.latitude  = pos.latitudeNumber();
+            gps.longitude = pos.longitudeNumber();
+            gps.altitude  = pos.altitude();
+            gps.dateTime  = inf.dateTime();
+            gps.url       = inf.fileUrl();
+            list << gps;
+        }
+    }
+    d->gpsSearchWidget->setGPSPositions(list);
 }
 
 bool GPSSearchView::checkName(QString& name)

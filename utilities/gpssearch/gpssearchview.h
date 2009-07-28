@@ -37,6 +37,7 @@ namespace Digikam
 
 class SAlbum;
 class ImageInfo;
+class ImageInfoList;
 class SearchTextBar;
 class GPSSearchFolderView;
 class GPSSearchViewPriv;
@@ -74,6 +75,8 @@ private Q_SLOTS:
     void slotCheckNameEditGPSConditions();
 
     void slotSelectionChanged();
+
+    void slotItemsInfo(const ImageInfoList&);
 
 private:
 
