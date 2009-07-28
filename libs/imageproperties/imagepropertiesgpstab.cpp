@@ -60,20 +60,20 @@ public:
 
     ImagePropertiesGPSTabPriv()
     {
-        detailsButton       = 0;
-        detailsCombo        = 0;
-        map                 = 0;
-        altLabel            = 0;
-        latLabel            = 0;
-        lonLabel            = 0;
-        dateLabel           = 0;
-        altitude            = 0;
-        latitude            = 0;
-        longitude           = 0;
-        date                = 0;
-        zoomInBtn           = 0;
-        zoomOutBtn          = 0;
-        mapThemeBtn         = 0;
+        detailsBtn   = 0;
+        detailsCombo = 0;
+        map          = 0;
+        altLabel     = 0;
+        latLabel     = 0;
+        lonLabel     = 0;
+        dateLabel    = 0;
+        altitude     = 0;
+        latitude     = 0;
+        longitude    = 0;
+        date         = 0;
+        zoomInBtn    = 0;
+        zoomOutBtn   = 0;
+        mapThemeBtn  = 0;
     }
 
     QLabel             *altLabel;
@@ -81,8 +81,7 @@ public:
     QLabel             *lonLabel;
     QLabel             *dateLabel;
 
-    QPushButton        *detailsButton;
-
+    QToolButton        *detailsBtn;
     QToolButton        *zoomInBtn;
     QToolButton        *zoomOutBtn;
 
@@ -126,9 +125,10 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     d->zoomOutBtn->setIcon(SmallIcon("zoom-out"));
     d->zoomInBtn->setIcon(SmallIcon("zoom-in"));
 
-    d->detailsCombo  = new KComboBox(box2);
-    d->detailsButton = new QPushButton(i18n("More Info..."), box2);
-    d->detailsButton->setMaximumHeight( fontMetrics().height()+4 );
+    d->detailsCombo = new KComboBox(box2);
+    d->detailsBtn   = new QToolButton(box2);
+    d->detailsBtn->setIcon(SmallIcon("internet-web-browser"));
+    d->detailsBtn->setToolTip(i18n("See more info on the internet"));
     d->detailsCombo->setMaximumHeight( fontMetrics().height()+4 );
     d->detailsCombo->insertItem(MapQuest,      QString("MapQuest"));
     d->detailsCombo->insertItem(GoogleMaps,    QString("Google Maps"));
@@ -141,7 +141,7 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     box2Layout->addWidget(d->zoomInBtn);
     box2Layout->addStretch(10);
     box2Layout->addWidget(d->detailsCombo);
-    box2Layout->addWidget(d->detailsButton);
+    box2Layout->addWidget(d->detailsBtn);
     box2Layout->setSpacing(0);
     box2Layout->setMargin(0);
 
@@ -166,7 +166,7 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
 
     // --------------------------------------------------------
 
-    connect(d->detailsButton, SIGNAL(clicked()),
+    connect(d->detailsBtn, SIGNAL(clicked()),
             this, SLOT(slotGPSDetails()));
 
     connect(d->zoomInBtn, SIGNAL(released()),
