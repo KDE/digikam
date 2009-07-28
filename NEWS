@@ -3,6 +3,8 @@ digiKam 1.0.0-beta4 - Release date: 2009-08-xx
 
 NEW FEATURES:
 
+General        : Add OpenStreetMap support in Geolocation panels.
+
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 192534 : Rename a folder, then rename a photo and you get an error.
@@ -17,7 +19,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 010 ==> 185098 : digiKam craches sometimes on raw files selection.
 011 ==> 201624 : Showfoto => color-management => input-profile => search => crash.
 012 ==> 151712 : Adjust Exif orientation tag - wrong permission interpretation.
-013 ==> 
+013 ==> 171983 : Enable display of Openstreetmap maps in the Map Widget.
+014 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta3 - Release date: 2009-07-24
