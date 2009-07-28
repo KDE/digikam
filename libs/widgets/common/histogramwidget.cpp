@@ -245,6 +245,14 @@ void HistogramWidget::setRenderingType(HistogramRenderingType type)
     }
 }
 
+ImageHistogram *HistogramWidget::currentHistogram()
+{
+    if (d->renderingType == ImageSelectionHistogram && m_selectionHistogram)
+        return m_selectionHistogram;
+    else
+        return m_imageHistogram;
+}
+
 void HistogramWidget::reset()
 {
     d->guideVisible = false;
