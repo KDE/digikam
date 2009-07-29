@@ -50,6 +50,7 @@ public:
     {
         LastPageUsed = -1,
         CollectionsPage = 0,
+        DatabasePage,
         AlbumViewPage,
         CategoryPage,
         ToolTipPage,

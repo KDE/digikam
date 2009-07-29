@@ -54,6 +54,7 @@
 #include "setupplugins.h"
 #include "setupcamera.h"
 #include "setupmisc.h"
+#include "setupdatabase.h"
 
 namespace Digikam
 {
@@ -64,6 +65,7 @@ public:
 
     SetupPrivate()
     {
+        page_database = 0;
         page_collections = 0;
         page_albumView   = 0;
         page_tooltip     = 0;
@@ -81,6 +83,7 @@ public:
         page_camera      = 0;
         page_misc        = 0;
 
+        databasePage     = 0;
         collectionsPage  = 0;
         albumViewPage    = 0;
         tooltipPage      = 0;
@@ -99,6 +102,7 @@ public:
         pluginsPage      = 0;
     }
 
+    KPageWidgetItem  *page_database;
     KPageWidgetItem  *page_collections;
     KPageWidgetItem  *page_albumView;
     KPageWidgetItem  *page_tooltip;
@@ -116,6 +120,7 @@ public:
     KPageWidgetItem  *page_camera;
     KPageWidgetItem  *page_misc;
 
+    SetupDatabase    *databasePage;
     SetupCollections *collectionsPage;
     SetupAlbumView   *albumViewPage;
     SetupToolTip     *tooltipPage;
@@ -145,6 +150,12 @@ Setup::Setup(QWidget* parent)
     setHelp("setupdialog.anchor", "digikam");
     setFaceType(List);
     setModal(true);
+
+    d->databasePage     = new SetupDatabase(this);
+    d->page_database    = addPage(d->databasePage, i18n("Database"));
+    d->page_database->setHeader(i18n("<qt>Database Settings<br/>"
+                                   "<i>Customize database settings</i></qt>"));
+    d->page_database->setIcon(KIcon("folder-image"));
 
     d->collectionsPage  = new SetupCollections(this);
     d->page_collections = addPage(d->collectionsPage, i18n("Collections"));
@@ -354,6 +365,7 @@ bool Setup::execTemplateEditor(QWidget *parent, const Template& t)
 
 void Setup::slotOkClicked()
 {
+    d->databasePage->applySettings();
     d->collectionsPage->applySettings();
     d->albumViewPage->applySettings();
     d->tooltipPage->applySettings();
@@ -414,6 +426,8 @@ KPageWidgetItem *SetupPrivate::pageItem(Setup::Page page)
 {
     switch(page)
     {
+        case Setup::DatabasePage:
+            return page_database;
         case Setup::CollectionsPage:
             return page_collections;
         case Setup::AlbumViewPage:
@@ -455,6 +469,7 @@ Setup::Page Setup::activePageIndex()
 {
     KPageWidgetItem *cur = currentPage();
 
+    if (cur == d->page_collections) return CollectionsPage;
     if (cur == d->page_albumView)   return AlbumViewPage;
     if (cur == d->page_tooltip)     return ToolTipPage;
     if (cur == d->page_metadata)    return MetadataPage;
@@ -471,7 +486,7 @@ Setup::Page Setup::activePageIndex()
     if (cur == d->page_camera)      return CameraPage;
     if (cur == d->page_misc)        return MiscellaneousPage;
 
-    return CollectionsPage;
+    return DatabasePage;
 }
 
 }  // namespace Digikam
