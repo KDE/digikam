@@ -645,17 +645,20 @@ bool AlbumManager::setDatabase(const QString& dbType, const QString& dbName, con
 
             if (result == KMessageBox::Cancel)
             {
-                abort=true;
+                advice = ScanController::AbortImmediately;
             }else if (result == KMessageBox::No)
             {
-                Setup::execSinglePage(0, Setup::CollectionsPage);
+                if ( Setup::execSinglePage(0, Setup::DatabasePage) == false)
+                {
+                    abort=true;
+                }
             }
+            QApplication::setOverrideCursor(Qt::WaitCursor);
         }else
         {
             // In this case the user can't do anything and we must abort
             abort=true;
         }
-        QApplication::setOverrideCursor(Qt::WaitCursor);
     }while(abort==false && advice==ScanController::ContinueWithoutDatabase);
 
     kDebug(50003) << "Database initialization done.";

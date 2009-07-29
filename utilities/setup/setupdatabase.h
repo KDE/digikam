@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUPCOLLECTIONS_H
-#define SETUPCOLLECTIONS_H
+#ifndef SETUPDATABASE_H
+#define SETUPDATABASE_H
 
 // Qt includes
 
@@ -36,30 +36,36 @@ class KUrl;
 namespace Digikam
 {
 
-class SetupCollectionsPriv;
+class SetupDatabasePriv;
 
-class SetupCollections : public QScrollArea
+class SetupDatabase : public QScrollArea
 {
     Q_OBJECT
 
 public:
 
-    SetupCollections(KPageDialog* dialog, QWidget* parent=0);
-    ~SetupCollections();
+    SetupDatabase(KPageDialog* dialog, QWidget* parent=0);
+    ~SetupDatabase();
 
     void applySettings();
 
 private:
 
     void readSettings();
+    void checkDBPath();
 
 private Q_SLOTS:
 
+    void slotChangeDatabasePath(const KUrl&);
+    void slotDatabasePathEdited(const QString&);
+    void setDatabaseInputFields(const QString&);
+    void checkDatabaseConnection();
+
 private:
 
-    SetupCollectionsPriv* const d;
+    SetupDatabasePriv* const d;
 };
 
 }  // namespace Digikam
 
-#endif // SETUPCOLLECTIONS_H
+#endif // SETUPDATABASE_H
