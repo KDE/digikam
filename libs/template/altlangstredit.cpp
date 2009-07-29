@@ -417,9 +417,9 @@ void AltLangStrEdit::loadLangAltListEntries(const QString& currentLang)
     QStringList list = d->values.keys();
     if (!list.isEmpty())
     {
-        for (QStringList::Iterator it = list.begin(); it != list.end(); ++it)
+        foreach (QString item, list)
         {
-              d->languageCB->addItem(*it);
+              d->languageCB->addItem(item);
               d->languageCB->setItemIcon(d->languageCB->count()-1, SmallIcon("dialog-ok"));
         }
         d->languageCB->insertSeparator(d->languageCB->count());
