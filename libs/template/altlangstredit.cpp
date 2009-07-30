@@ -369,8 +369,12 @@ void AltLangStrEdit::slotSelectionChanged(int index)
 {
     QString lang        = d->languageCB->currentText();
     QString langISO3066 = lang;
-    d->valueEdit->setSpellCheckingLanguage(langISO3066.replace("-", "_"));
+
+    // There are bogus signals caused by spell checking, see bug #141663.
+    // so we must block signals here.
+
     d->valueEdit->blockSignals(true);
+    d->valueEdit->setSpellCheckingLanguage(langISO3066.replace("-", "_"));
 
     if (!d->languageCB->itemIcon(index).isNull())
     {
@@ -389,6 +393,7 @@ void AltLangStrEdit::slotSelectionChanged(int index)
         d->addValueButton->setIcon(SmallIcon("list-add"));
         d->addValueButton->setToolTip(i18n("Add new item"));
     }
+
     d->valueEdit->blockSignals(false);
     d->languageCB->setToolTip(d->languageCodeMap[lang]);
 
