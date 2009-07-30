@@ -72,7 +72,7 @@ CaptionEdit::CaptionEdit(QWidget* parent)
     setSpacing(0);
 
     connect(d->altLangStrEdit, SIGNAL(signalModified()),
-            this, SLOT(slotModified()));
+            this, SIGNAL(signalModified()));
 
     connect(d->altLangStrEdit, SIGNAL(signalSelectionChanged(const QString&)),
             this, SLOT(slotSelectionChanged(const QString&)));
@@ -85,7 +85,6 @@ CaptionEdit::CaptionEdit(QWidget* parent)
 
     connect(d->authorEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotAuthorChanged(const QString&)));
-
 }
 
 CaptionEdit::~CaptionEdit()
@@ -98,11 +97,6 @@ void CaptionEdit::reset()
     d->altLangStrEdit->reset();
     d->authorEdit->clear();
     d->captionsValues.clear();
-}
-
-void CaptionEdit::slotModified()
-{
-    emit signalModified();
 }
 
 void CaptionEdit::slotAddValue(const QString& lang, const QString& text)

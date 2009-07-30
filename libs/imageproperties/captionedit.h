@@ -64,7 +64,6 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-    void slotModified();
     void slotSelectionChanged(const QString&);
     void slotAddValue(const QString&, const QString&);
     void slotDeleteValue(const QString&);
