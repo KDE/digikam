@@ -150,6 +150,10 @@ void FreeRotation::filterImage(void)
     bool sixteenBit = m_orgImage.sixteenBit();
 
     m_destImage = Digikam::DImg(nNewWidth, nNewHeight, sixteenBit, m_orgImage.hasAlpha());
+
+    if (m_destImage.isNull())
+        return;
+
     m_destImage.fill( Digikam::DColor(m_backgroundColor.rgb(), sixteenBit) );
 
     uchar *pResBits            = m_destImage.bits();
