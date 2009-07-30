@@ -237,6 +237,8 @@ DigikamApp::DigikamApp()
     // Load Themes
     populateThemes();
 
+    checkNepomukService();
+
     setAutoSaveSettings("General Settings", true);
 }
 
@@ -2696,15 +2698,40 @@ void DigikamApp::moveEvent(QMoveEvent*)
     emit signalWindowHasMoved();
 }
 
+void DigikamApp::checkNepomukService()
+{
+#ifdef HAVE_NEPOMUK
+    QDBusInterface serviceInterface("org.kde.nepomuk.services.digikamnepomukservice",
+                                    "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
+
+    // already running? (normal)
+    if (serviceInterface.isValid())
+        return;
+
+    // start service
+    QDBusInterface nepomukInterface("org.kde.NepomukServer",
+                                    "/servicemanager", "org.kde.nepomuk.ServiceManager");
+    if (!nepomukInterface.isValid())
+    {
+        kDebug(50003) << "Nepomuk server is not reachable. Cannot start Digikam Nepomuk Service";
+        return;
+    }
+
+    nepomukInterface.call(QDBus::NoBlock, "startService", "digikamnepomukservice");
+#endif // HAVE_NEPOMUK
+}
+
 void DigikamApp::slotNepomukSettingsChanged()
 {
-    QDBusInterface interface("org.kde.digikam.nepomuk.digikamnepomukservice",
+#ifdef HAVE_NEPOMUK
+    QDBusInterface interface("org.kde.nepomuk.services.digikamnepomukservice",
                               "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
     if (interface.isValid())
     {
         interface.call(QDBus::NoBlock, "enableSyncToDigikam", AlbumSettings::instance()->getSyncNepomukToDigikam());
         interface.call(QDBus::NoBlock, "enableSyncToNepomuk", AlbumSettings::instance()->getSyncDigikamToNepomuk());
     }
+#endif // HAVE_NEPOMUK
 }
 
 }  // namespace Digikam
