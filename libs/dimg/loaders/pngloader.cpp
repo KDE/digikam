@@ -640,7 +640,8 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)      // Intel
         png_set_bgr(png_ptr);
     else                                                    // PPC
-        png_set_swap_alpha(png_ptr);
+        png_set_bgr(png_ptr);
+        //png_set_swap_alpha(png_ptr);
 
     if (imageHasAlpha())
     {
