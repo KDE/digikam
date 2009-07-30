@@ -47,6 +47,7 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "thumbnailsize.h"
 #include "mimefilter.h"
 #include "databaseaccess.h"
@@ -395,10 +396,14 @@ void AlbumSettings::readSettings()
 
     // ---------------------------------------------------------------------
 
+#ifdef HAVE_NEPOMUK
+
     group = config->group("Nepomuk Settings");
 
     d->syncToDigikam         = group.readEntry("Sync Nepomuk to Digikam", false);
     d->syncToNepomuk         = group.readEntry("Sync Digikam to Nepomuk", false);
+
+#endif // HAVE_NEPOMUK
 
     emit setupChanged();
     emit recurseSettingsChanged();
@@ -502,10 +507,14 @@ void AlbumSettings::saveSettings()
 
     // ---------------------------------------------------------------------
 
+#ifdef HAVE_NEPOMUK
+
     group = config->group("Nepomuk Settings");
 
     group.writeEntry("Sync Nepomuk to Digikam", d->syncToDigikam);
     group.writeEntry("Sync Digikam to Nepomuk", d->syncToNepomuk);
+
+#endif // HAVE_NEPOMUK
 
     config->sync();
 }
