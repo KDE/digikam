@@ -56,6 +56,7 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "metadatapanel.h"
 #include "albumsettings.h"
 
@@ -78,8 +79,10 @@ public:
         saveTemplateBox         = 0;
         writeRawFilesBox        = 0;
         updateFileTimeStampBox  = 0;
+        saveToNepomukBox        = 0;
+        readFromNepomukBox      = 0;
         tagsCfgPanel            = 0;
-	tab                     = 0;
+        tab                     = 0;
     }
 
     bool              exifAutoRotateAsChanged;
@@ -94,6 +97,9 @@ public:
     QCheckBox        *saveTemplateBox;
     QCheckBox        *writeRawFilesBox;
     QCheckBox        *updateFileTimeStampBox;
+
+    QCheckBox        *saveToNepomukBox;
+    QCheckBox        *readFromNepomukBox;
 
     KTabWidget       *tab;
 
@@ -239,6 +245,77 @@ SetupMetadata::SetupMetadata(QWidget* parent )
 
     // --------------------------------------------------------
 
+#ifdef HAVE_NEPOMUK
+
+    QWidget *nepoPanel      = new QWidget(d->tab);
+    QVBoxLayout *nepoLayout = new QVBoxLayout(nepoPanel);
+
+    QGroupBox *nepoGroup = new QGroupBox(i18n("Nepomuk Semantic Desktop"), nepoPanel);
+    QVBoxLayout *gLayout3  = new QVBoxLayout(nepoGroup);
+
+    d->saveToNepomukBox = new QCheckBox;
+    d->saveToNepomukBox->setText(i18n("Store metadata from digiKam in Nepomuk"));
+    d->saveToNepomukBox->setWhatsThis( i18n("Turn on this option to push rating, comments and tags "
+                                            "from digiKam into the Nepomuk storage"));
+
+    d->readFromNepomukBox = new QCheckBox;
+    d->readFromNepomukBox->setText(i18n("Read metadata from Nepomuk"));
+    d->readFromNepomukBox->setWhatsThis( i18n("Turn on this option if you want to apply changes to "
+                                              "rating, comments and tags made in Nepomuk to digiKam's metadata storage."
+                                              "Please note that image metadata will not be edited automatically."));
+
+    gLayout3->addWidget(d->saveToNepomukBox);
+    gLayout3->addWidget(d->readFromNepomukBox);
+
+    nepoLayout->addWidget(nepoGroup);
+
+    d->tab->addTab(nepoPanel, i18n("Nepomuk"));
+
+    // --------------------------------------------------------
+
+    QFrame      *nepoBox  = new QFrame(nepoPanel);
+    QGridLayout *nepoGrid = new QGridLayout(nepoBox);
+    nepoBox->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
+
+    QLabel *nepoLogoLabel = new QLabel;
+    nepoLogoLabel->setPixmap(KIconLoader::global()->loadIcon("nepomuk", KIconLoader::NoGroup, KIconLoader::SizeLarge));
+
+    QLabel* nepoExplanation = new QLabel(nepoBox);
+    nepoExplanation->setOpenExternalLinks(true);
+    nepoExplanation->setWordWrap(true);
+    QString nepotxt;
+
+    nepotxt.append(i18n("<p><a href='http://nepomuk.kde.org'>Nepomuk</a> "
+                    "provides the basis to handle all kinds of metadata on the KDE desktop in a generic fashion. "
+                    "It allows you to tag, rate and comment your files in KDE applications like Dolphin.</p> "
+                    "<p>Please set here if you want to synchronize the metadata stored by digiKam desktop-wide with the "
+                    "Nepomuk Semantic Desktop.</p> "
+                    "<p>If you have enabled writing of metadata to files, please note that changes done through Nepomuk "
+                    "are not automatically applied to the image's metadata when read into digiKam's database.</p> "));
+
+    nepoExplanation->setText(nepotxt);
+    nepoExplanation->setFont(KGlobalSettings::smallestReadableFont());
+
+    nepoGrid->addWidget(nepoLogoLabel, 0, 0, 1, 1);
+    nepoGrid->addWidget(nepoExplanation,    0, 1, 1, 2);
+    nepoGrid->setColumnStretch(1, 10);
+    nepoGrid->setRowStretch(1, 10);
+    nepoGrid->setMargin(KDialog::spacingHint());
+    nepoGrid->setSpacing(0);
+
+    // --------------------------------------------------------
+
+    nepoLayout->setMargin(0);
+    nepoLayout->setSpacing(KDialog::spacingHint());
+    nepoLayout->addWidget(nepoGroup);
+    nepoLayout->addSpacing(KDialog::spacingHint());
+    nepoLayout->addWidget(nepoBox);
+    nepoLayout->addStretch();
+
+#endif // HAVE_NEPOMUK
+
+    // --------------------------------------------------------
+
     d->tagsCfgPanel = new MetadataPanel(d->tab);
 
     // --------------------------------------------------------
@@ -276,6 +353,10 @@ void SetupMetadata::applySettings()
     settings->setSaveTemplate(d->saveTemplateBox->isChecked());
     settings->setWriteRawFiles(d->writeRawFilesBox->isChecked());
     settings->setUpdateFileTimeStamp(d->updateFileTimeStampBox->isChecked());
+#ifdef HAVE_NEPOMUK
+    settings->setSyncDigikamToNepomuk(d->saveToNepomukBox->isChecked());
+    settings->setSyncNepomukToDigikam(d->readFromNepomukBox->isChecked());
+#endif
     settings->saveSettings();
 
     d->tagsCfgPanel->applySettings();
@@ -296,6 +377,10 @@ void SetupMetadata::readSettings()
     d->saveTemplateBox->setChecked(settings->getSaveTemplate());
     d->writeRawFilesBox->setChecked(settings->getWriteRawFiles());
     d->updateFileTimeStampBox->setChecked(settings->getUpdateFileTimeStamp());
+#ifdef HAVE_NEPOMUK
+    d->saveToNepomukBox->setChecked(settings->getSyncDigikamToNepomuk());
+    d->readFromNepomukBox->setChecked(settings->getSyncNepomukToDigikam());
+#endif
 }
 
 bool SetupMetadata::exifAutoRotateAsChanged()
