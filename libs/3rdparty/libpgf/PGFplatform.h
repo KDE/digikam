@@ -28,6 +28,9 @@
 #include <cmath>
 #include <cstdlib>
 
+// For endianess detection
+#include <QtGlobal>
+
 //-------------------------------------------------------------------------------
 // ROI support
 //-------------------------------------------------------------------------------
@@ -283,8 +286,10 @@ inline OSError SetFPos(HANDLE hFile, int posMode, INT64 posOff) {
 // Apple OSX
 //-------------------------------------------------------------------------------
 #ifdef __APPLE__
-#define __POSIX__ 
+#define __POSIX__
+#if Q_BYTE_ORDER == Q_BIG_ENDIAN
 #define __BIGENDIAN__
+#endif // Q_BYTE_ORDER == Q_BIG_ENDIAN
 #endif // __APPLE__
 
 
