@@ -98,19 +98,24 @@ protected:
     };
 
     void readConfig();
-    void syncToNepomuk(const QList<qlonglong> &imageid, SyncToNepomukSettings syncSettings);
-    void syncToNepomuk(const QList<ImageInfo> &infos, SyncToNepomukSettings syncSettings);
-    void syncTagsToNepomuk(const QList<qlonglong> &imageIds, const QList<int> &tagIds, bool addOrRemove);
-    void syncRatingToDigikam(const KUrl::List &filePaths, const QList<int> &ratings);
-    void syncCommentToDigikam(const KUrl::List &filePaths, const QStringList &ratings);
-    void syncTagsToDigikam(const KUrl::List &filePaths, const QList<QUrl> &tags);
-    void pushTagsToNepomuk(const QList<ImageInfo> &imageInfos);
+    void syncToNepomuk(const QList<qlonglong>& imageid, SyncToNepomukSettings syncSettings);
+    void syncToNepomuk(const QList<ImageInfo>& infos, SyncToNepomukSettings syncSettings);
+    void syncTagsToNepomuk(const QList<qlonglong>& imageIds, const QList<int>& tagIds, bool addOrRemove);
+    void syncRatingToDigikam(const KUrl::List& filePaths, const QList<int>& ratings);
+    void syncCommentToDigikam(const KUrl::List& filePaths, const QStringList& ratings);
+    void syncTagsToDigikam(const KUrl::List& filePaths, const QList<QUrl>& tags);
+    void removeTagInDigikam(const KUrl& fileUrl, const QUrl& tag);
+    void pushTagsToNepomuk(const QList<ImageInfo>& imageInfos);
 
+    QList<int> candidateDigikamTagsForTagName(const QString& tagname);
+    int bestDigikamTagForTagName(const ImageInfo& info, const QString& tagName);
+    QString tagnameForNepomukTag(const QUrl& tagUri);
     QDateTime lastSyncToDigikam();
     void markAsSyncedToDigikam();
     bool hasSyncToNepomuk();
     void markAsSyncedToNepomuk();
     void checkTagList();
+    void checkTagMap();
     DatabaseParameters databaseParameters();
     KSharedConfig::Ptr digikamConfig();
 

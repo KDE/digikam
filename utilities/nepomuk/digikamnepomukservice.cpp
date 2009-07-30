@@ -104,10 +104,11 @@ public:
     bool        changingNepomuk;
 
     TagInfo::List tagList;
+    QMap<int, TagInfo> tagMap;
 
     QMultiHash<QUrl, WatchedNepomukProperty> ignoreUris;
 
-    bool checkIgnoreUris(const QUrl &url, WatchedNepomukProperty property)
+    bool checkIgnoreUris(const QUrl& url, WatchedNepomukProperty property)
     {
         QHash<QUrl, WatchedNepomukProperty>::iterator it;
         it = ignoreUris.find(url, property);
@@ -119,7 +120,7 @@ public:
         return false;
     }
 
-    void addIgnoreUri(const QUrl &url, WatchedNepomukProperty property)
+    void addIgnoreUri(const QUrl& url, WatchedNepomukProperty property)
     {
         //if (!ignoreUris.contains(url, property))
         ignoreUris.insert(url, property);
@@ -308,6 +309,7 @@ void NepomukService::connectToDatabase()
 
     d->isConnected = false;
     d->tagList.clear();
+    d->tagMap.clear();
 
     DatabaseParameters params = databaseParameters();
     if (params.isValid())
@@ -369,6 +371,7 @@ void NepomukService::slotImageTagChange(const ImageTagChangeset& changeset)
 void NepomukService::slotTagChange(const TagChangeset&)
 {
     d->tagList.clear();
+    d->tagMap.clear();
 }
 
 void NepomukService::fullSyncDigikamToNepomuk()
@@ -441,7 +444,7 @@ static int digikamToNepomukRating(int digikamRating)
     return 2*digikamRating;
 }
 
-void NepomukService::syncToNepomuk(const QList<qlonglong> &imageIds, SyncToNepomukSettings syncSettings)
+void NepomukService::syncToNepomuk(const QList<qlonglong>& imageIds, SyncToNepomukSettings syncSettings)
 {
     QList<ImageInfo> infos;
     foreach (qlonglong imageid, imageIds)
@@ -453,7 +456,7 @@ void NepomukService::syncToNepomuk(const QList<qlonglong> &imageIds, SyncToNepom
     syncToNepomuk(infos, syncSettings);
 }
 
-void NepomukService::syncToNepomuk(const QList<ImageInfo> &infos, SyncToNepomukSettings syncSettings)
+void NepomukService::syncToNepomuk(const QList<ImageInfo>& infos, SyncToNepomukSettings syncSettings)
 {
     foreach (const ImageInfo &info, infos)
     {
@@ -461,7 +464,7 @@ void NepomukService::syncToNepomuk(const QList<ImageInfo> &infos, SyncToNepomukS
 
         Nepomuk::Resource res(info.fileUrl(), Soprano::Vocabulary::Xesam::File() );
 
-        if (syncSettings & SyncRating)
+        if (syncSettings&  SyncRating)
         {
             int rating = info.rating();
             if (rating != -1 || syncSettings & SyncHasNoRating)
@@ -488,11 +491,15 @@ void NepomukService::syncToNepomuk(const QList<ImageInfo> &infos, SyncToNepomukS
 // For now d->tagList is enough. If we need hierarchy information,
 // we need to move the core of AlbumManager to libdigikamdatabase
 
-static Nepomuk::Tag nepomukForDigikamTag(const TagInfo &info)
+static Nepomuk::Tag nepomukForDigikamTag(const TagInfo& info)
 {
     if (info.id)
     {
         Nepomuk::Tag tag(info.name);
+        // from dolphin's panels/information/newtagdialog.cpp
+        tag.setLabel(info.name);
+        tag.addIdentifier(info.name);
+
         if (info.icon.isNull())
         {
             // Don't think we can use actual large files for tag icon
@@ -511,7 +518,7 @@ static Nepomuk::Tag nepomukForDigikamTag(const TagInfo &info)
     return Nepomuk::Tag();
 }
 
-void NepomukService::syncTagsToNepomuk(const QList<qlonglong> &imageIds, const QList<int> &tagIds, bool addOrRemove)
+void NepomukService::syncTagsToNepomuk(const QList<qlonglong>& imageIds, const QList<int>& tagIds, bool addOrRemove)
 {
     checkTagList();
     foreach (int tagId, tagIds)
@@ -539,7 +546,7 @@ void NepomukService::syncTagsToNepomuk(const QList<qlonglong> &imageIds, const Q
     }
 }
 
-void NepomukService::pushTagsToNepomuk(const QList<ImageInfo> &imageInfos)
+void NepomukService::pushTagsToNepomuk(const QList<ImageInfo>& imageInfos)
 {
     checkTagList();
     foreach (const ImageInfo &info, imageInfos)
@@ -571,27 +578,27 @@ void NepomukService::slotStatementAdded(const Soprano::Statement& statement)
     if (d->changingNepomuk) // no effect currently
         return;
 
-    Soprano::Node subject = statement.subject();
-    Soprano::Node predicate = statement.predicate();
+    const Soprano::Node &subject = statement.subject();
+    const Soprano::Node &predicate = statement.predicate();
     if (predicate == Soprano::Vocabulary::NAO::numericRating())
     {
         if (d->checkIgnoreUris(subject.uri(), NaoRating))
             return;
-        //kDebug(50003) << "Changed rating" << statement.subject().toN3() << statement.object().toN3() << d->changingNepomuk;
+        //kDebug(50003) << "Changed rating" << subject.toN3() << statement.object().toN3() << d->changingNepomuk;
         d->triggerSyncToDigikam();
     }
     else if (predicate == Soprano::Vocabulary::NAO::description())
     {
         if (d->checkIgnoreUris(subject.uri(), NaoDescription))
             return;
-        //kDebug(50003) << "Changed comment" << statement.subject().toN3() << statement.object().toN3() << d->changingNepomuk;
+        //kDebug(50003) << "Changed comment" << subject.toN3() << statement.object().toN3() << d->changingNepomuk;
         d->triggerSyncToDigikam();
     }
-    else if (predicate == Soprano::Vocabulary::NAO::Tag())
+    else if (predicate == Soprano::Vocabulary::NAO::hasTag())
     {
         if (d->checkIgnoreUris(subject.uri(), NaoTags))
             return;
-        //kDebug(50003) << "Changed tag" << statement.subject().toN3() << statement.object().toN3() << d->changingNepomuk;
+        //kDebug(50003) << "Added tag" << subject.toN3() << statement.object().toN3() << d->changingNepomuk;
         d->triggerSyncToDigikam();
     }
 }
@@ -599,6 +606,21 @@ void NepomukService::slotStatementAdded(const Soprano::Statement& statement)
 void NepomukService::slotStatementRemoved(const Soprano::Statement& statement)
 {
     Q_UNUSED(statement);
+
+    if (d->changingNepomuk) // no effect currently
+        return;
+
+    const Soprano::Node &subject = statement.subject();
+    const Soprano::Node &predicate = statement.predicate();
+
+    if (predicate == Soprano::Vocabulary::NAO::hasTag())
+    {
+        if (d->checkIgnoreUris(subject.uri(), NaoTags))
+            return;
+        kDebug(50003) << "Removed tag" << subject.toN3() << statement.object().toN3() << d->changingNepomuk;
+        Nepomuk::Resource res(subject.uri());
+        removeTagInDigikam(res.property(Soprano::Vocabulary::Xesam::url()).toString(), statement.object().uri());
+    }
 }
 
 void NepomukService::cleanIgnoreList()
@@ -606,7 +628,7 @@ void NepomukService::cleanIgnoreList()
     d->ignoreUris.clear();
 }
 
-static QString nepomukChangeQuery(const QString &predicate, const QDateTime &dateTime)
+static QString nepomukChangeQuery(const QString& predicate, const QDateTime& dateTime)
 {
     return  QString("PREFIX nao: <%1> "
                     "PREFIX xls: <%2> "
@@ -701,7 +723,7 @@ void NepomukService::syncNepomukToDigikam()
 }
 
 
-void NepomukService::syncRatingToDigikam(const KUrl::List &fileUrls, const QList<int> &ratings)
+void NepomukService::syncRatingToDigikam(const KUrl::List& fileUrls, const QList<int>& ratings)
 {
     if (fileUrls.isEmpty())
         return;
@@ -734,7 +756,7 @@ void NepomukService::syncRatingToDigikam(const KUrl::List &fileUrls, const QList
     }
 }
 
-void NepomukService::syncCommentToDigikam(const KUrl::List &fileUrls, const QStringList &comments)
+void NepomukService::syncCommentToDigikam(const KUrl::List& fileUrls, const QStringList& comments)
 {
     if (fileUrls.isEmpty())
         return;
@@ -769,27 +791,26 @@ void NepomukService::syncCommentToDigikam(const KUrl::List &fileUrls, const QStr
     }
 }
 
-void NepomukService::syncTagsToDigikam(const KUrl::List &fileUrls, const QList<QUrl> &tags)
+void NepomukService::syncTagsToDigikam(const KUrl::List& fileUrls, const QList<QUrl>& tags)
 {
-    Q_UNUSED(tags);
-
     if (fileUrls.isEmpty())
         return;
 
-    //TODO. Caveat: add + remove!
-    /*
     QList<ImageInfo> infos;
-    QList<QString> commentsForInfos;
-    const int size = filePaths.size();
+    QList<int> tagIdsForInfos;
+    const int size = fileUrls.size();
     for (int i=0; i<size; i++)
     {
         // If the path is not in digikam collections, info will be null.
         // It does the same check first that we would be doing here
-        ImageInfo info(filePaths[i]);
+        ImageInfo info(fileUrls[i]);
         if (!info.isNull())
         {
             infos << info;
-            commentsForInfos << comments[i];
+            QString tagName = tagnameForNepomukTag(tags[i]);
+            int tagId = bestDigikamTagForTagName(info, tagName);
+            if (tagId)
+                tagIdsForInfos << tagId;
         }
     }
     if (!infos.isEmpty())
@@ -799,10 +820,113 @@ void NepomukService::syncTagsToDigikam(const KUrl::List &fileUrls, const QList<Q
         const int infosSize = infos.size();
         for (int i=0; i<infosSize; i++)
         {
-            infos[i].setComment(commentsForInfos[i]);
+            infos[i].setTag(tagIdsForInfos[i]);
         }
     }
-    */
+}
+
+void NepomukService::removeTagInDigikam(const KUrl& fileUrl, const QUrl& tag)
+{
+    kDebug() << fileUrl << tag;
+    if (fileUrl.isEmpty())
+        return;
+
+    ImageInfo info(fileUrl);
+    if (info.isNull())
+        return;
+
+    QList<int> tags = info.tagIds();
+    if (tags.isEmpty())
+        return;
+
+    QString tagName = tagnameForNepomukTag(tag);
+    QList<int> candidates = candidateDigikamTagsForTagName(tagName);
+    kDebug() << tagName << candidates << tags;
+    if (candidates.isEmpty())
+        return;
+
+    foreach (int candidate, candidates)
+    {
+        if (tags.contains(candidate))
+            info.removeTag(candidate);
+    }
+}
+
+QList<int> NepomukService::candidateDigikamTagsForTagName(const QString& tagname)
+{
+    QList<int> candidates;
+
+    if (tagname.isEmpty())
+        return candidates;
+
+    checkTagList();
+
+    foreach (const TagInfo &info, d->tagList)
+    {
+        if (info.name == tagname)
+            candidates << info.id;
+    }
+    return candidates;
+}
+
+int NepomukService::bestDigikamTagForTagName(const ImageInfo& info, const QString& tagname)
+{
+    if (tagname.isEmpty())
+        return 0;
+
+    checkTagMap();
+
+    QList<int> candidates = candidateDigikamTagsForTagName(tagname);
+
+    if (candidates.isEmpty())
+    {
+        // add top-level tag
+        return DatabaseAccess().db()->addTag(0, tagname, QString(), 0);
+    }
+    else if (candidates.size() == 1)
+    {
+        return candidates.first();
+    }
+    else
+    {
+        int currentCandidate = 0;
+        int currentMinimumScore = 0;
+        QList<int> assignedTags = info.tagIds();
+        foreach (int tagId, candidates)
+        {
+            // already assigned one of the candidates?
+            if (assignedTags.contains(tagId))
+                return 0;
+
+            int id = tagId;
+            int score = 0;
+            do {
+                const TagInfo &info = d->tagMap.value(id);
+                id = info.pid;
+                score++;
+            } while (id);
+
+            if (!currentMinimumScore || score < currentMinimumScore)
+                currentCandidate = tagId;
+        }
+        return currentCandidate;
+    }
+}
+
+QString NepomukService::tagnameForNepomukTag(const QUrl& tagUri)
+{
+    if (!tagUri.isEmpty())
+    {
+        Nepomuk::Tag tag(tagUri);
+
+        if (tag.isValid())
+        {
+            return tag.genericLabel();
+        }
+        else
+            kWarning(50003) << "invalid tag" << tagUri;
+    }
+    return QString();
 }
 
 // ------------------- Utilities ------------------------
@@ -835,6 +959,16 @@ void NepomukService::checkTagList()
     if (d->tagList.isEmpty())
     {
         d->tagList = DatabaseAccess().db()->scanTags();
+    }
+}
+
+void NepomukService::checkTagMap()
+{
+    if (d->tagMap.isEmpty())
+    {
+        checkTagList();
+        foreach (const TagInfo &info, d->tagList)
+            d->tagMap[info.id] = info;
     }
 }
 
