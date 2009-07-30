@@ -298,7 +298,8 @@ void MetadataPanel::slotTabChanged(int)
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Image Properties SideBar");
 
-    QWidget *tab = d->tab->currentWidget();
+    QWidget *tab = 0;
+    tab          = d->tab->currentWidget();
 #if KEXIV2_VERSION >= 0x010000
     if (tab == d->exifViewerConfig)
     {
