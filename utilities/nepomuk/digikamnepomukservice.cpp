@@ -306,6 +306,9 @@ void NepomukService::enableSyncToNepomuk(bool syncToNepomuk)
 void NepomukService::setDatabase(const QString &paramsUrl)
 {
     // Called via DBus
+    if (!d->syncToDigikam && !d->syncToNepomuk)
+        return;
+
     KUrl url(paramsUrl);
     kDebug(50003) << "Got database params pushed from running instance:" << url;
     connectToDatabase(DatabaseParameters(url));
