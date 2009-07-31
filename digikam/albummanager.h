@@ -563,6 +563,8 @@ private:
     void changeGuardedPointer(Album *oldAlbum, Album *a, Album **pointer);
     void invalidateGuardedPointers(Album *album);
 
+    bool checkNepomukService();
+
 private:
 
     AlbumManagerPriv* const d;

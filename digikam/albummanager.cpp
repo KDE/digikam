@@ -49,6 +49,7 @@ extern "C"
 #include <QComboBox>
 #include <QDBusConnection>
 #include <QDBusInterface>
+#include <QDBusReply>
 #include <QDir>
 #include <QFile>
 #include <QGroupBox>
@@ -847,6 +848,8 @@ bool AlbumManager::setDatabase(const QString& dbPath, bool priority, const QStri
         }
     }
 
+    // -- ---------------------------------------------------------
+
 #ifdef USE_THUMBS_DB
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
@@ -858,14 +861,71 @@ bool AlbumManager::setDatabase(const QString& dbPath, bool priority, const QStri
     QApplication::restoreOverrideCursor();
 #endif
 
-    QDBusInterface interface("org.kde.digikam.nepomuk.digikamnepomukservice",
-                              "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
-    if (interface.isValid())
+    // -- ---------------------------------------------------------
+
+#ifdef HAVE_NEPOMUK
+    if (checkNepomukService())
     {
-        interface.call(QDBus::NoBlock, "databaseChanged");
+        QDBusInterface serviceInterface("org.kde.nepomuk.services.digikamnepomukservice",
+                                        "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
+        kDebug() << "nepomuk service available" << serviceInterface.isValid();
+        if (serviceInterface.isValid())
+        {
+            DatabaseParameters parameters = DatabaseAccess::parameters();
+            KUrl url;
+            parameters.insertInUrl(url);
+            serviceInterface.call(QDBus::NoBlock, "setDatabase", url.url());
+        }
     }
+#endif // HAVE_NEPOMUK
 
     return true;
+}
+
+bool AlbumManager::checkNepomukService()
+{
+#ifdef HAVE_NEPOMUK
+    QDBusInterface serviceInterface("org.kde.nepomuk.services.digikamnepomukservice",
+                                    "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
+
+    // already running? (normal)
+    if (serviceInterface.isValid())
+        return true;
+
+    // start service
+    QDBusInterface nepomukInterface("org.kde.NepomukServer",
+                                    "/servicemanager", "org.kde.nepomuk.ServiceManager");
+    if (!nepomukInterface.isValid())
+    {
+        kDebug(50003) << "Nepomuk server is not reachable. Cannot start Digikam Nepomuk Service";
+        return false;
+    }
+
+    QDBusReply<QStringList> availableServicesReply = nepomukInterface.call("availableServices");
+    if (!availableServicesReply.isValid() || !availableServicesReply.value().contains("digikamnepomukservice"))
+    {
+        kDebug(50003) << "digikamnepomukservice is not available in NepomukServer";
+        return false;
+    }
+
+    QEventLoop loop;
+
+    if (!connect(&nepomukInterface, SIGNAL(serviceInitialized(const QString &)),
+                 &loop, SLOT(quit())))
+    {
+        kDebug(50003) << "Could not connect to Nepomuk server signal";
+        return false;
+    }
+
+    QTimer::singleShot(1000, &loop, SLOT(quit()));
+
+    kDebug(50003) << "Trying to start up digikamnepomukservice";
+    nepomukInterface.call(QDBus::NoBlock, "startService", "digikamnepomukservice");
+
+    // wait (at most 1sec) for service to start up
+    loop.exec();
+    return true;
+#endif // HAVE_NEPOMUK
 }
 
 void AlbumManager::startScan()
