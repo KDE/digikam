@@ -67,7 +67,7 @@ DatabaseParameters::DatabaseParameters(const KUrl& url)
     password       = url.queryItem("password");
 }
 
-bool DatabaseParameters::operator==(const DatabaseParameters& other)
+bool DatabaseParameters::operator==(const DatabaseParameters& other) const
 {
     return databaseType   == other.databaseType &&
            databaseName   == other.databaseName &&
@@ -78,7 +78,7 @@ bool DatabaseParameters::operator==(const DatabaseParameters& other)
            password       == other.password;
 }
 
-bool DatabaseParameters::operator!=(const DatabaseParameters& other)
+bool DatabaseParameters::operator!=(const DatabaseParameters& other) const
 {
     return !operator==(other);
 }

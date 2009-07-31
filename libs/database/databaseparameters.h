@@ -70,8 +70,8 @@ public:
     QString password;
 
     void insertInUrl(KUrl& url) const;
-    bool operator==(const DatabaseParameters& other);
-    bool operator!=(const DatabaseParameters& other);
+    bool operator==(const DatabaseParameters& other) const;
+    bool operator!=(const DatabaseParameters& other) const;
 
     /** Performs basic checks that the parameters are not empty and have the information
      *  required for the databaseType.
