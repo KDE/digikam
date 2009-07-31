@@ -41,6 +41,7 @@ namespace Soprano { class Statement; }
 namespace Digikam
 {
 
+class CollectionImageChangeset;
 class DatabaseParameters;
 class ImageInfo;
 class ImageChangeset;
@@ -64,7 +65,7 @@ public Q_SLOTS:
      *  The parameter is the url() of a KUrl which contains the database parameters
      *  serialized by DatabaseParameters.
      */
-    Q_SCRIPTABLE void databaseChanged();
+    Q_SCRIPTABLE void setDatabase(const QString &parameters);
     Q_SCRIPTABLE void enableSyncToDigikam(bool syncToDigikam);
     Q_SCRIPTABLE void enableSyncToNepomuk(bool syncToNepomuk);
 
@@ -73,6 +74,7 @@ protected Q_SLOTS:
     void slotImageChange(const ImageChangeset& changeset);
     void slotImageTagChange(const ImageTagChangeset& changeset);
     void slotTagChange(const TagChangeset& changeset);
+    //void slotCollectionImageChange(const CollectionImageChangeset& changeset);
 
     void slotStatementAdded(const Soprano::Statement& statement);
     void slotStatementRemoved(const Soprano::Statement& statement);
@@ -87,7 +89,7 @@ protected Q_SLOTS:
 
 protected:
 
-    void connectToDatabase();
+    void connectToDatabase(const DatabaseParameters &params);
 
     enum SyncToNepomukSettings
     {
@@ -104,6 +106,7 @@ protected:
     void syncRatingToDigikam(const KUrl::List& filePaths, const QList<int>& ratings);
     void syncCommentToDigikam(const KUrl::List& filePaths, const QStringList& ratings);
     void syncTagsToDigikam(const KUrl::List& filePaths, const QList<QUrl>& tags);
+    void syncAddedImagesToDigikam(const QList<qlonglong> &ids);
     void removeTagInDigikam(const KUrl& fileUrl, const QUrl& tag);
     void pushTagsToNepomuk(const QList<ImageInfo>& imageInfos);
 
