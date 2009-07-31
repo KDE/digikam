@@ -23,7 +23,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 014 ==> 155097 : Performance problems with recursive view and filtering.
 015 ==> 200392 : Slideshow displays "Headline" field as "image caption" and has no way to display "Caption" field.
 016 ==> 201302 : Crash due to memory access problem on Mac OS X.
-017 ==> 
+017 ==> 133094 : Exif-changes by external prog has no affect inside digiKam.
+018 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta3 - Release date: 2009-07-24
