@@ -119,43 +119,47 @@ void BatchSyncMetadata::parseAlbum()
 
 void BatchSyncMetadata::slotComplete()
 {
+    if (!d->running)
+        emit startParsingList();
 }
 
 void BatchSyncMetadata::slotAlbumParsed(const ImageInfoList& list)
 {
     d->imageInfoList << list;
 
-    if (!d->everStarted)
-    {
-        emit signalProgressBarMode(StatusProgressBar::CancelProgressBarMode,
-                                i18n("Synchronizing images' Metadata with database. Please wait..."));
-
-        d->imageInfoIndex = 0;
-        d->everStarted = true;
-    }
-    if (!d->running)
+    if (!d->running && !d->cancel)
         emit startParsingList();
 }
 
 void BatchSyncMetadata::parseList()
 {
+    if (!d->everStarted)
+    {
+        QString message;
+        if (d->direction == WriteFromDatabaseToFile)
+            message = i18n("Synchronizing image metadata with database. Please wait...");
+        else
+            message = i18n("Updating database from image metadata. Please wait...");
+        emit signalProgressBarMode(StatusProgressBar::CancelProgressBarMode, message);
+
+        d->everStarted = true;
+    }
+
     d->running = true;
     while (d->imageInfoIndex != d->imageInfoList.size() && !d->cancel)
     {
         parsePicture();
         kapp->processEvents();
     }
-
-    if (d->imageInfoJob && !d->imageInfoJob->isRunning())
-    {
-        complete();
-    }
-    else if (d->cancel)
-    {
-        slotAbort();
-        complete();
-    }
     d->running = false;
+
+    if (d->cancel ||
+        (d->imageInfoJob && !d->imageInfoJob->isRunning()) ||
+        !d->imageInfoJob
+       )
+    {
+        complete();
+    }
 }
 
 void BatchSyncMetadata::parsePicture()
