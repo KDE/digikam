@@ -84,7 +84,7 @@ void ImageInfoJob::allItemsFromAlbum(Album *album)
     ImageLister lister;
     d->job = lister.startListJob(album->databaseUrl());
 
-    connect(d->job, SIGNAL(result(KJob*)),
+    connect(d->job, SIGNAL(finished(KJob*)),
             this, SLOT(slotResult(KJob*)));
 
     connect(d->job, SIGNAL(data(KIO::Job*, const QByteArray&)),
