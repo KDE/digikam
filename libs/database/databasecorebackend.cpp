@@ -328,7 +328,8 @@ bool DatabaseCoreBackend::execDBAction(const databaseAction &action, const QMap<
     QSqlDatabase db = d->databaseForThread();
 
     kDebug(50003) << "Executing DBAction ["<<  action.m_Name  <<"]";
-    if (action.m_Mode == QString("transaction"))
+    bool wrapInTransaction = (action.m_Mode == QString("transaction"));
+    if (wrapInTransaction)
     {
         db.transaction();
     }
@@ -344,16 +345,18 @@ bool DatabaseCoreBackend::execDBAction(const databaseAction &action, const QMap<
         {
             result = exec(actionElement.m_Statement);
         }
-        if (result == false)
+        if (result)
         {
-            kDebug(50003) << "Error while executing DBAction ["<<  action.m_Name  <<"] Statement ["<<actionElement.m_Statement<<"]";
-            returnResult = result;
-            break;
-            db.rollback();
+            if (wrapInTransaction)
+                db.commit();
         }
         else
         {
-            db.commit();
+            kDebug(50003) << "Error while executing DBAction ["<<  action.m_Name  <<"] Statement ["<<actionElement.m_Statement<<"]";
+            returnResult = result;
+            if (wrapInTransaction)
+                db.rollback();
+            break;
         }
     }
     return returnResult;
