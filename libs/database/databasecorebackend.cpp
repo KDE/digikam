@@ -318,34 +318,45 @@ databaseAction DatabaseCoreBackend::getDBAction(const QString &actionName)
     Q_D(DatabaseCoreBackend);
     return d->parameters.m_DatabaseConfigs[d->parameters.databaseType].m_SQLStatements[actionName];
 }
-bool DatabaseCoreBackend::execDBAction(const databaseAction &action, const QMap<QString, QVariant>* bindingMap, QList<QVariant>* values, QVariant *lastInsertId){
-    bool returnResult=true;
-    
+
+bool DatabaseCoreBackend::execDBAction(const databaseAction &action, const QMap<QString, QVariant>* bindingMap,
+                                       QList<QVariant>* values, QVariant *lastInsertId)
+{
     Q_D(DatabaseCoreBackend);
+
+    bool returnResult = true;
     QSqlDatabase db = d->databaseForThread();
 
     kDebug(50003) << "Executing DBAction ["<<  action.m_Name  <<"]";
-    if (action.m_Mode == QString("transaction")){
-      db.transaction();
+    if (action.m_Mode == QString("transaction"))
+    {
+        db.transaction();
     }
-    foreach (databaseActionElement actionElement, action.m_DBActionElements){       
-       bool result;
-       if (actionElement.m_Mode==QString("query")){
-	 result = execSql(actionElement.m_Statement, *bindingMap, values, lastInsertId);
-       }
-       else{
-	 result = exec(actionElement.m_Statement);    
-       }
-       if (result == false){
-	kDebug(50003) << "Error while executing DBAction ["<<  action.m_Name  <<"] Statement ["<<actionElement.m_Statement<<"]";
-	returnResult = result;
-	break;
-	db.rollback();
-       }else{
-	db.commit();
-       }
+
+    foreach (databaseActionElement actionElement, action.m_DBActionElements)
+    {
+        bool result;
+        if (actionElement.m_Mode==QString("query"))
+        {
+            result = execSql(actionElement.m_Statement, *bindingMap, values, lastInsertId);
+        }
+        else
+        {
+            result = exec(actionElement.m_Statement);
+        }
+        if (result == false)
+        {
+            kDebug(50003) << "Error while executing DBAction ["<<  action.m_Name  <<"] Statement ["<<actionElement.m_Statement<<"]";
+            returnResult = result;
+            break;
+            db.rollback();
+        }
+        else
+        {
+            db.commit();
+        }
     }
-  return returnResult;
+    return returnResult;
 }
 
 void DatabaseCoreBackend::setDatabaseErrorHandler(DatabaseErrorHandler *handler)
@@ -609,28 +620,37 @@ QSqlQuery DatabaseCoreBackend::execQuery(const QString& sql)
     return query;
 }
 
-QSqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, QVariant>& bindingMap){    
-	QString preparedString = sql;
-	QList<QVariant> namedPlaceholderValues;
-    if (&bindingMap != NULL){
-      kDebug(50003)<<"Prepare statement ["<< preparedString <<"]";
-      QRegExp identifierRegExp(":[A-Za-z0-9]+");
-      int pos=0;
+QSqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, QVariant>& bindingMap)
+{
+    QString preparedString = sql;
+    QList<QVariant> namedPlaceholderValues;
 
-      while ((pos=identifierRegExp.indexIn(preparedString, pos))!=-1){
-    	  QString namedPlaceholder = identifierRegExp.cap(0);
-    	  namedPlaceholderValues.append(bindingMap[namedPlaceholder]);
-    	  kDebug(50003)<<"Bind key ["<< namedPlaceholder <<"] to value ["<< bindingMap[namedPlaceholder] <<"]";
-    	  preparedString = preparedString.replace(pos, identifierRegExp.matchedLength(), "?");
-	  pos=0; // reset pos
-      }
+    if (&bindingMap != NULL)
+    {
+        kDebug(50003)<<"Prepare statement ["<< preparedString <<"]";
+        QRegExp identifierRegExp(":[A-Za-z0-9]+");
+        int pos=0;
+
+        while ((pos=identifierRegExp.indexIn(preparedString, pos))!=-1)
+        {
+            QString namedPlaceholder = identifierRegExp.cap(0);
+            namedPlaceholderValues.append(bindingMap[namedPlaceholder]);
+            kDebug(50003)<<"Bind key ["<< namedPlaceholder <<"] to value ["<< bindingMap[namedPlaceholder] <<"]";
+            preparedString = preparedString.replace(pos, identifierRegExp.matchedLength(), "?");
+            pos=0; // reset pos
+        }
     }
     kDebug(50003)<<"Prepared statement ["<< preparedString <<"] values ["<< namedPlaceholderValues <<"]";
+
     QSqlQuery query = prepareQuery(preparedString);
-    for(int i=0; i<namedPlaceholderValues.size(); i++){
-    	query.bindValue(i, namedPlaceholderValues[i]);
+
+    for(int i=0; i<namedPlaceholderValues.size(); i++)
+    {
+        query.bindValue(i, namedPlaceholderValues[i]);
     }
+
     exec(query);
+
     return query;
 }
 
