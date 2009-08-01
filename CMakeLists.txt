@@ -1110,7 +1110,7 @@ ENDIF(MSVC)
     ADD_SUBDIRECTORY(imageplugins)
     
 # This line must be commented at release time.
-#    ADD_SUBDIRECTORY(tests)
+    ADD_SUBDIRECTORY(tests)
 
     IF(ENABLE_THEMEDESIGNER)
         ADD_SUBDIRECTORY(themedesigner)

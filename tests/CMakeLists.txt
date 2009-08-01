@@ -25,6 +25,19 @@ TARGET_LINK_LIBRARIES(manualrenameinputtest
 
 #------------------------------------------------------------------------
 
+SET(cameranamehelper_SRCS
+    cameranamehelpertest.cpp
+)
+KDE4_ADD_UNIT_TEST(cameranamehelpertest ${cameranamehelper_SRCS})
+TARGET_LINK_LIBRARIES(cameranamehelpertest
+                      ${KDE4_KDECORE_LIBS}
+                      ${QT_QTGUI_LIBRARY}
+                      ${QT_QTTEST_LIBRARY}
+                      digikamcore
+                      )
+
+#------------------------------------------------------------------------
+
 SET(freerotationtest_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/../imageplugins/freerotation/freerotation.cpp
     freerotationtest.cpp
