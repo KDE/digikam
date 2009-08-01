@@ -29,6 +29,7 @@
 #include <QHash>
 #include <QSqlDatabase>
 #include <QThread>
+#include <QWaitCondition>
 
 // KDE includes
 
@@ -40,13 +41,13 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DatabaseCoreBackendPrivate
+class DIGIKAM_EXPORT DatabaseCoreBackendPrivate : public DatabaseErrorAnswer
 {
 public:
 
     DatabaseCoreBackendPrivate(DatabaseCoreBackend *backend);
-    virtual ~DatabaseCoreBackendPrivate() {}    
-    void init(const QString &connectionName);
+    virtual ~DatabaseCoreBackendPrivate() {}
+    void init(const QString &connectionName, DatabaseLocking *locking);
 
     QString connectionName(QThread *thread);
 
@@ -56,6 +57,18 @@ public:
     bool incrementTransactionCount();
     bool decrementTransactionCount();
     bool isInTransactionInOtherThread() const;
+
+    bool isInMainThread() const;
+    bool isInUIThread() const;
+
+    bool checkOperationStatus();
+    bool handleConnectionError();
+    // called by DatabaseErrorHandler, implementing DatabaseErrorAnswer
+    virtual void connectionErrorContinueQueries();
+    virtual void connectionErrorAbortQueries();
+    void queryOperationWait();
+    void setQueryOperationFlag(DatabaseCoreBackend::QueryOperationStatus status);
+    void queryOperationWakeAll(DatabaseCoreBackend::QueryOperationStatus status);
 
     virtual void transactionFinished() {}
 
@@ -73,6 +86,16 @@ public:
     DatabaseParameters            parameters;
 
     DatabaseCoreBackend::Status   status;
+
+    DatabaseLocking              *lock;
+
+    DatabaseCoreBackend::QueryOperationStatus operationStatus;
+
+    QMutex              errorLockMutex;
+    QWaitCondition      errorLockCondVar;
+    DatabaseCoreBackend::QueryOperationStatus errorLockOperationStatus;
+
+    DatabaseErrorHandler         *errorHandler;
 
     DatabaseCoreBackend* const    q;
 

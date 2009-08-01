@@ -26,11 +26,12 @@
 
 // Qt includes
 
+#include <QMap>
+#include <QMutex>
 #include <QObject>
 #include <QString>
 #include <QStringList>
 #include <QSqlQuery>
-#include <QMap>
 
 // Local includes
 
@@ -43,6 +44,40 @@ namespace Digikam
 class ThumbnailSchemaUpdater;
 class DatabaseCoreBackendPrivate;
 
+class DIGIKAM_EXPORT DatabaseErrorAnswer
+{
+public:
+    virtual ~DatabaseErrorAnswer() {};
+    virtual void connectionErrorContinueQueries() = 0;
+    virtual void connectionErrorAbortQueries() = 0;
+};
+
+class DIGIKAM_EXPORT DatabaseErrorHandler : public QObject
+{
+    Q_OBJECT
+
+public Q_SLOTS:
+
+    /** In the situation of a connection error,
+     *  all threads will be waiting with their queries
+     *  and this method is called.
+     *  This method can display an error dialog and try to repair
+     *  the connection.
+     *  It must then call either connectionErrorContinueQueries()
+     *  or connectionErrorAbortQueries().
+     */
+    virtual void connectionError(DatabaseErrorAnswer *answer) = 0;
+
+};
+
+class DIGIKAM_EXPORT DatabaseLocking
+{
+public:
+    DatabaseLocking();
+    QMutex mutex;
+    int    lockCount;
+};
+
 class DIGIKAM_EXPORT DatabaseCoreBackend : public QObject
 {
 
@@ -54,8 +89,8 @@ public:
      *  shall be unique for this backend object.
      *  It will be used to create unique connection names per backend and thread.
      */
-    DatabaseCoreBackend(const QString &backendName);
-    DatabaseCoreBackend(const QString &backendName, DatabaseCoreBackendPrivate &dd);
+    DatabaseCoreBackend(const QString &backendName, DatabaseLocking *locking);
+    DatabaseCoreBackend(const QString &backendName, DatabaseLocking *locking, DatabaseCoreBackendPrivate &dd);
     ~DatabaseCoreBackend();
 
     databaseAction getDBAction(const QString &actionName);
@@ -114,6 +149,13 @@ public:
 
     bool isOpen() const { return status() > Unavailable; }
     bool isReady() const { return status() == OpenSchemaChecked; }
+
+    enum QueryOperationStatus
+    {
+        ExecuteNormal,
+        Wait,
+        AbortQueries
+    };
 
     /**
      * Executes the SQL statement, and write the returned data into the values list.

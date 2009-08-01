@@ -48,19 +48,17 @@ public:
 
     ThumbnailDatabaseAccessStaticPriv()
         : backend(0), db(0),
-          mutex(QMutex::Recursive), // create a recursive mutex
-          initializing(false), lockCount(0)
+          initializing(false)
     {}
     ~ThumbnailDatabaseAccessStaticPriv() {};
 
     DatabaseCoreBackend*backend;
     ThumbnailDB        *db;
     DatabaseParameters  parameters;
-    QMutex              mutex;
+    DatabaseLocking     lock;
     QString             lastError;
 
     bool                initializing;
-    int                 lockCount;
 };
 
 class ThumbnailDatabaseAccessMutexLocker : public QMutexLocker
@@ -68,14 +66,14 @@ class ThumbnailDatabaseAccessMutexLocker : public QMutexLocker
 public:
 
     ThumbnailDatabaseAccessMutexLocker(ThumbnailDatabaseAccessStaticPriv *d)
-        : QMutexLocker(&d->mutex), d(d)
+        : QMutexLocker(&d->lock.mutex), d(d)
     {
-        d->lockCount++;
+        d->lock.lockCount++;
     }
 
     ~ThumbnailDatabaseAccessMutexLocker()
     {
-        d->lockCount--;
+        d->lock.lockCount--;
     }
 
     ThumbnailDatabaseAccessStaticPriv* const d;
@@ -86,8 +84,8 @@ ThumbnailDatabaseAccessStaticPriv *ThumbnailDatabaseAccess::d = 0;
 ThumbnailDatabaseAccess::ThumbnailDatabaseAccess()
 {
     Q_ASSERT(d/*You will want to call setParameters before constructing ThumbnailDatabaseAccess*/);
-    d->mutex.lock();
-    d->lockCount++;
+    d->lock.mutex.lock();
+    d->lock.lockCount++;
     if (!d->backend->isOpen() && !d->initializing)
     {
         // avoid endless loops
@@ -101,16 +99,16 @@ ThumbnailDatabaseAccess::ThumbnailDatabaseAccess()
 
 ThumbnailDatabaseAccess::~ThumbnailDatabaseAccess()
 {
-    d->lockCount--;
-    d->mutex.unlock();
+    d->lock.lockCount--;
+    d->lock.mutex.unlock();
 }
 
 ThumbnailDatabaseAccess::ThumbnailDatabaseAccess(bool)
 {
     // private constructor, when mutex is locked and
     // backend should not be checked
-    d->mutex.lock();
-    d->lockCount++;
+    d->lock.mutex.lock();
+    d->lock.lockCount++;
 }
 
 ThumbnailDB *ThumbnailDatabaseAccess::db() const
@@ -151,7 +149,7 @@ void ThumbnailDatabaseAccess::setParameters(const DatabaseParameters& parameters
     {
         delete d->db;
         delete d->backend;
-        d->backend = new DatabaseCoreBackend("thumbnailDatabase-");
+        d->backend = new DatabaseCoreBackend("thumbnailDatabase-", &d->lock);
         d->db = new ThumbnailDB(d->backend);
     }
 }

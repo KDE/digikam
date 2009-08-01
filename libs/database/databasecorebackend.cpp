@@ -48,21 +48,30 @@
 namespace Digikam
 {
 
+DatabaseLocking::DatabaseLocking()
+            : mutex(QMutex::Recursive), lockCount(0)// create a recursive mutex
+{
+}
+
 DatabaseCoreBackendPrivate::DatabaseCoreBackendPrivate(DatabaseCoreBackend *backend)
             : q(backend)
 {
 
     status          = DatabaseCoreBackend::Unavailable;
     isInTransaction = false;
+    operationStatus = DatabaseCoreBackend::ExecuteNormal;
 }
 
 
-void DatabaseCoreBackendPrivate::init(const QString &name)
+void DatabaseCoreBackendPrivate::init(const QString &name, DatabaseLocking *l)
 {
     QObject::connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()),
                      q, SLOT(slotMainThreadFinished()));
 
     backendName = name;
+    lock        = l;
+
+    qRegisterMetaType<DatabaseErrorAnswer*>("DatabaseErrorAnswer*");
 }
 
 // "A connection can only be used from within the thread that created it.
@@ -159,19 +168,139 @@ bool DatabaseCoreBackendPrivate::isInTransactionInOtherThread() const
     return false;
 }
 
+bool DatabaseCoreBackendPrivate::isInMainThread() const
+{
+    return QThread::currentThread() == QCoreApplication::instance()->thread();
+}
+
+bool DatabaseCoreBackendPrivate::isInUIThread() const
+{
+    QApplication *app = qobject_cast<QApplication *>(QCoreApplication::instance());
+    if (!app)
+        return false;
+    return QThread::currentThread() == app->thread();
+}
+
+
+    /** This suspends the current thread if the query status as
+     *  set by setFlag() is Wait and until the thread is woken with wakeAll().
+     *  The DatabaseAccess mutex will be unlocked while waiting.
+     */
+void DatabaseCoreBackendPrivate::queryOperationWait()
+{
+    // Why two mutexes? The main mutex is recursive and won't work with a condvar.
+
+    // acquire lock
+    lock->mutex.lock();
+    // store lock count
+    int count = lock->lockCount;
+    // set lock count to 0
+    lock->lockCount = 0;
+    // unlock
+    for (int i=0; i<count; ++i)
+        lock->mutex.unlock();
+
+    // lock condvar mutex (lock only if main mutex is locked)
+    errorLockMutex.lock();
+    // drop lock acquired in first line. Main mutex is now free.
+    // We maintain lock order (first main mutex, second error lock mutex)
+    // but we drop main mutex lock for waiting on the cond var.
+    lock->mutex.unlock();
+
+    // we need a copy of the flag under lock of the errorLockMutex to be able to check it here
+    while (errorLockOperationStatus == DatabaseCoreBackend::Wait)
+        errorLockCondVar.wait(&errorLockMutex);  
+
+    // unlock condvar mutex. Both mutexes are now free.
+    errorLockMutex.unlock();
+
+    // lock main mutex as often as it was locked before
+    for (int i=0; i<count; ++i)
+        lock->mutex.lock();
+    // update lock count
+    lock->lockCount = count;
+}
+
+    /** Set the wait flag to queryStatus. Typically, call this with Wait. */
+void DatabaseCoreBackendPrivate::setQueryOperationFlag(DatabaseCoreBackend::QueryOperationStatus status)
+{
+    // Enforce lock order (first main mutex, second error lock mutex)
+    QMutexLocker l1(&lock->mutex);
+    QMutexLocker l2(&errorLockMutex);
+    // this change must be done under errorLockMutex lock
+    errorLockOperationStatus = status;
+    operationStatus = status;
+}
+
+    /** Set the wait flag to queryStatus and wake all waiting threads.
+     *  Typically, call wakeAll with status ExecuteNormal or AbortQueries. */
+void DatabaseCoreBackendPrivate::queryOperationWakeAll(DatabaseCoreBackend::QueryOperationStatus status)
+{
+    QMutexLocker l1(&lock->mutex);
+    QMutexLocker l2(&errorLockMutex);
+    operationStatus = status;
+    errorLockOperationStatus = status;
+    errorLockCondVar.wakeAll();
+}
+
+
+bool DatabaseCoreBackendPrivate::checkOperationStatus()
+{
+    while (operationStatus == DatabaseCoreBackend::Wait)
+        queryOperationWait();
+
+    if (operationStatus == DatabaseCoreBackend::ExecuteNormal)
+        return true;
+    else if (operationStatus == DatabaseCoreBackend::AbortQueries)
+        return false;
+
+    return false;
+}
+
+bool DatabaseCoreBackendPrivate::handleConnectionError()
+{
+    if (errorHandler)
+    {
+        setQueryOperationFlag(DatabaseCoreBackend::Wait);
+        if (isInUIThread())
+        {
+            errorHandler->connectionError(this);
+        }
+        else
+        {
+            QMetaObject::invokeMethod(errorHandler, SLOT(connectionError(DatabaseErrorAnswer *)),
+                                      Qt::QueuedConnection, Q_ARG(DatabaseErrorAnswer*, this));
+            queryOperationWait();
+        }
+        return true;
+    }
+    return false;
+}
+
+void DatabaseCoreBackendPrivate::connectionErrorContinueQueries()
+{
+    // Attention: called from out of context, maybe without any lock
+    queryOperationWakeAll(DatabaseCoreBackend::ExecuteNormal);
+}
+
+void DatabaseCoreBackendPrivate::connectionErrorAbortQueries()
+{
+    // Attention: called from out of context, maybe without any lock
+    queryOperationWakeAll(DatabaseCoreBackend::AbortQueries);
+}
 
 // ---------------------------
 
-DatabaseCoreBackend::DatabaseCoreBackend(const QString &backendName)
+DatabaseCoreBackend::DatabaseCoreBackend(const QString &backendName, DatabaseLocking *locking)
                : d_ptr(new DatabaseCoreBackendPrivate(this))
 {
-    d_ptr->init(backendName);
+    d_ptr->init(backendName, locking);
 }
 
-DatabaseCoreBackend::DatabaseCoreBackend(const QString &backendName, DatabaseCoreBackendPrivate &dd)
+DatabaseCoreBackend::DatabaseCoreBackend(const QString &backendName, DatabaseLocking *locking, DatabaseCoreBackendPrivate &dd)
                : d_ptr(&dd)
 {
-    d_ptr->init(backendName);
+    d_ptr->init(backendName, locking);
 }
 
 DatabaseCoreBackend::~DatabaseCoreBackend()
@@ -550,9 +679,29 @@ bool DatabaseCoreBackend::exec(const QString& sql)
 bool DatabaseCoreBackend::exec(QSqlQuery& query)
 {
     Q_D(DatabaseCoreBackend);
+
+    if (!d->checkOperationStatus())
+        return false;
+
     if (!query.exec())
     {
-        if (d->parameters.isSQLite() && query.lastError().number() == 5)
+        if (false /*detect a connection error here*/)
+        {
+            if (!d->handleConnectionError())
+                return false;
+            switch (d->operationStatus)
+            {
+                case ExecuteNormal:
+                    if (query.exec())
+                        return true;
+                    break;
+                case AbortQueries:
+                    return false;
+                case Wait:
+                    return exec(query);
+            }
+        }
+        else if (d->parameters.isSQLite() && query.lastError().number() == 5)
         {
             QApplication *app = qobject_cast<QApplication *>(QCoreApplication::instance());
             if (!app)

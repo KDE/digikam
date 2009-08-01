@@ -46,7 +46,7 @@ Q_OBJECT
 
 public:
 
-    DatabaseBackend();
+    DatabaseBackend(DatabaseLocking *locking);
     ~DatabaseBackend();
 
     /** Sets the global database watch */

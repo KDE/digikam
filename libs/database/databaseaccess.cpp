@@ -53,8 +53,7 @@ public:
 
     DatabaseAccessStaticPriv()
         : backend(0), db(0), infoCache(0), databaseWatch(0),
-          mutex(QMutex::Recursive), // create a recursive mutex
-          initializing(false), lockCount(0)
+          initializing(false)
     {
         // create a unique identifier for this application (as an application accessing a database
         applicationIdentifier = QUuid::createUuid();
@@ -66,12 +65,11 @@ public:
     ImageInfoCache     *infoCache;
     DatabaseWatch      *databaseWatch;
     DatabaseParameters  parameters;
-    QMutex              mutex;
+    DatabaseLocking     lock;
     QString             lastError;
     QUuid               applicationIdentifier;
 
     bool                initializing;
-    int                 lockCount;
 };
 
 class DatabaseAccessMutexLocker : public QMutexLocker
@@ -79,14 +77,14 @@ class DatabaseAccessMutexLocker : public QMutexLocker
 public:
 
     DatabaseAccessMutexLocker(DatabaseAccessStaticPriv *d)
-        : QMutexLocker(&d->mutex), d(d)
+        : QMutexLocker(&d->lock.mutex), d(d)
     {
-        d->lockCount++;
+        d->lock.lockCount++;
     }
 
     ~DatabaseAccessMutexLocker()
     {
-        d->lockCount--;
+        d->lock.lockCount--;
     }
 
     DatabaseAccessStaticPriv* const d;
@@ -97,8 +95,8 @@ DatabaseAccessStaticPriv *DatabaseAccess::d = 0;
 DatabaseAccess::DatabaseAccess()
 {
     Q_ASSERT(d/*You will want to call setParameters before constructing DatabaseAccess*/);
-    d->mutex.lock();
-    d->lockCount++;
+    d->lock.mutex.lock();
+    d->lock.lockCount++;
     if (!d->backend->isOpen() && !d->initializing)
     {
         // avoid endless loops (e.g. recursing from CollectionManager)
@@ -114,16 +112,16 @@ DatabaseAccess::DatabaseAccess()
 
 DatabaseAccess::~DatabaseAccess()
 {
-    d->lockCount--;
-    d->mutex.unlock();
+    d->lock.lockCount--;
+    d->lock.mutex.unlock();
 }
 
 DatabaseAccess::DatabaseAccess(bool)
 {
     // private constructor, when mutex is locked and
     // backend should not be checked
-    d->mutex.lock();
-    d->lockCount++;
+    d->lock.mutex.lock();
+    d->lock.lockCount++;
 }
 
 AlbumDB *DatabaseAccess::db() const
@@ -194,7 +192,7 @@ void DatabaseAccess::setParameters(const DatabaseParameters& parameters, Applica
     {
         delete d->db;
         delete d->backend;
-        d->backend = new DatabaseBackend();
+        d->backend = new DatabaseBackend(&d->lock);
         d->backend->setDatabaseWatch(d->databaseWatch);
         d->db = new AlbumDB(d->backend);
     }
@@ -283,31 +281,33 @@ void DatabaseAccess::cleanUpDatabase()
     d = 0;
 }
 
+// --------
+
 DatabaseAccessUnlock::DatabaseAccessUnlock()
 {
     // acquire lock
-    DatabaseAccess::d->mutex.lock();
+    DatabaseAccess::d->lock.mutex.lock();
     // store lock count
-    count = DatabaseAccess::d->lockCount;
+    count = DatabaseAccess::d->lock.lockCount;
     // set lock count to 0
-    DatabaseAccess::d->lockCount = 0;
+    DatabaseAccess::d->lock.lockCount = 0;
     // unlock
     for (int i=0; i<count; ++i)
-        DatabaseAccess::d->mutex.unlock();
+        DatabaseAccess::d->lock.mutex.unlock();
     // drop lock acquired in first line. Mutex is now free.
-    DatabaseAccess::d->mutex.unlock();
+    DatabaseAccess::d->lock.mutex.unlock();
 }
 
 DatabaseAccessUnlock::DatabaseAccessUnlock(DatabaseAccess *)
 {
     // With the passed pointer, we have assured that the mutex is acquired
     // Store lock count
-    count = DatabaseAccess::d->lockCount;
+    count = DatabaseAccess::d->lock.lockCount;
     // set lock count to 0
-    DatabaseAccess::d->lockCount = 0;
+    DatabaseAccess::d->lock.lockCount = 0;
     // unlock
     for (int i=0; i<count; ++i)
-        DatabaseAccess::d->mutex.unlock();
+        DatabaseAccess::d->lock.mutex.unlock();
     // Mutex is now free
 }
 
@@ -315,9 +315,9 @@ DatabaseAccessUnlock::~DatabaseAccessUnlock()
 {
     // lock as often as it was locked before
     for (int i=0; i<count; ++i)
-        DatabaseAccess::d->mutex.lock();
+        DatabaseAccess::d->lock.mutex.lock();
     // update lock count
-    DatabaseAccess::d->lockCount = count;
+    DatabaseAccess::d->lock.lockCount = count;
 }
 
 }  // namespace Digikam
