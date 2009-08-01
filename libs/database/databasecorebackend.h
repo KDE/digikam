@@ -190,9 +190,17 @@ public:
     bool execSql(const QString& sql, const QList<QVariant>& boundValues, QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
 
     /**
-     * Method which accept a hashmap with key, values which are used for named binding
+     * Method which accepts a map for named binding
      */
-    bool execSql(const QString& sql, const QMap<QString, QVariant>& bindingMap, QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
+    bool execSql(const QString& sql, const QMap<QString, QVariant>& bindingMap,
+                 QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
+    /**
+     * Calls exec on the query, and handles debug output if something went wrong.
+     * The query is not prepared, which can be fail in certain situations
+     * (e.g. trigger statements on QMYSQL).
+     */
+    bool execDirectSql(const QString& query);
+
 
 
     /**
@@ -223,16 +231,20 @@ public:
     bool execBatch(QSqlQuery& query);
 
     /**
-     * Calls exec/execBatch on the query, and handles debug output if something went wrong
-     * The differences to the upper methods are, that the query is not prepared, which can be faulty on
-     * trigger statements (e.g. on QMYSQL).
-     */
-    bool exec(const QString& query);
-
-    /**
      * Creates a query object prepared with the statement, waiting for bound values
      */
     QSqlQuery prepareQuery(const QString& sql);
+    /**
+     * Creates an empty query object waiting for the statement
+     */
+    QSqlQuery getQuery();
+
+    /**
+     * Called with a failed query. Handles certain known errors and debug output.
+     * If it returns true, reexecute the query; if it returns false, return it as failed.
+     * Pass the number of retries already done for this query to help with some decisions.
+     */
+    bool queryErrorHandling(const QSqlQuery& query, int retries);
 
     QList<QVariant> readToList(QSqlQuery& query);
 

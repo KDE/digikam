@@ -53,6 +53,25 @@ DatabaseLocking::DatabaseLocking()
 {
 }
 
+// For whatever reason, these methods are "static protected"
+class sotoSleep : public QThread
+{
+public:
+
+    static void sleep(unsigned long secs)
+    {
+        QThread::sleep(secs);
+    }
+    static void msleep(unsigned long msecs)
+    {
+        QThread::msleep(msecs);
+    }
+    static void usleep(unsigned long usecs)
+    {
+        QThread::usleep(usecs);
+    }
+};
+
 DatabaseCoreBackendPrivate::DatabaseCoreBackendPrivate(DatabaseCoreBackend *backend)
             : q(backend)
 {
@@ -182,6 +201,34 @@ bool DatabaseCoreBackendPrivate::isInUIThread() const
     return QThread::currentThread() == app->thread();
 }
 
+bool DatabaseCoreBackendPrivate::isSQLiteLockError(const QSqlQuery &query)
+{
+    return parameters.isSQLite() && query.lastError().number() == 5;
+}
+
+bool DatabaseCoreBackendPrivate::checkRetrySQLiteLockError(int retries)
+{
+    if (!isInUIThread())
+    {
+        if (retries == 1)
+            kDebug(50003) << "Detected locked database file. Waiting at most 10s trying again.";
+
+        sotoSleep::sleep(1);
+        return true;
+    }
+
+    kWarning(50003) << "Detected locked database file. There is an active transaction.";
+    return false;
+}
+
+void DatabaseCoreBackendPrivate::debugOutputFailedQuery(const QSqlQuery &query)
+{
+    kDebug(50003) << "Failure executing query: ";
+    kDebug(50003) << query.executedQuery();
+    kDebug(50003) << query.lastError().text() << query.lastError().number() << query.lastError().databaseText() << query.lastError().driverText();
+    kDebug(50003) << "Bound values: " << query.boundValues().values();
+}
+
 
     /** This suspends the current thread if the query status as
      *  set by setFlag() is Wait and until the thread is woken with wakeAll().
@@ -256,7 +303,8 @@ bool DatabaseCoreBackendPrivate::checkOperationStatus()
     return false;
 }
 
-bool DatabaseCoreBackendPrivate::handleConnectionError()
+/// Returns true if the query shall be retried
+bool DatabaseCoreBackendPrivate::checkConnectionError()
 {
     if (errorHandler)
     {
@@ -272,7 +320,15 @@ bool DatabaseCoreBackendPrivate::handleConnectionError()
                                       Qt::QueuedConnection, Q_ARG(DatabaseErrorAnswer*, this));
             queryOperationWait();
         }
-        return true;
+
+        switch (operationStatus)
+        {
+            case DatabaseCoreBackend::ExecuteNormal:
+            case DatabaseCoreBackend::Wait:
+                return true;
+            case DatabaseCoreBackend::AbortQueries:
+                return false;
+        }
     }
     return false;
 }
@@ -348,7 +404,7 @@ bool DatabaseCoreBackend::execDBAction(const databaseAction &action, const QMap<
         }
         else
         {
-            result = exec(actionElement.m_Statement);
+            result = execDirectSql(actionElement.m_Statement);
         }
         if (result)
         {
@@ -662,63 +718,50 @@ QSqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString,
     }
 
     exec(query);
-
     return query;
 }
 
-// For whatever reason, these methods are "static protected"
-class sotoSleep : public QThread
-{
-public:
-
-    static void sleep(unsigned long secs)
-    {
-        QThread::sleep(secs);
-    }
-    static void msleep(unsigned long msecs)
-    {
-        QThread::msleep(msecs);
-    }
-    static void usleep(unsigned long usecs)
-    {
-        QThread::usleep(usecs);
-    }
-};
-
-bool DatabaseCoreBackend::exec(const QString& sql)
+bool DatabaseCoreBackend::queryErrorHandling(const QSqlQuery& query, int retries)
 {
     Q_D(DatabaseCoreBackend);
-    QSqlDatabase db = d->databaseForThread();
-    QSqlQuery query(db);
-    query.setForwardOnly(true);
 
-    if (!query.exec(sql))
+    if (false /*TODO: detect a connection error here*/)
     {
-        if (d->parameters.isSQLite() && query.lastError().number() == 5)
-        {
-            QApplication *app = qobject_cast<QApplication *>(QCoreApplication::instance());
-            if (!app)
-            {
-                int limit = 10;
-                kDebug(50003) << "Detected locked database file. Waiting 10s trying again.";
+        if (d->checkConnectionError())
+            return true;
+        else
+            return false;
+    }
+    else if (d->isSQLiteLockError(query))
+    {
+        if (d->checkRetrySQLiteLockError(retries))
+            return true;
+    }
+    d->debugOutputFailedQuery(query);
+    return false;
+}
 
-                do
-                {
-                    sotoSleep::sleep(1);
-                    --limit;
-                    if (query.exec())
-                        return true;
-                }
-                while (limit > 0 && query.lastError().number() == 5);
-            }
-            else
-                kWarning(50003) << "Detected locked database file. There is an active transaction.";
-        }
-        kDebug(50003) << "Failure executing query: ";
-        kDebug(50003) << query.executedQuery();
-        kDebug(50003) << query.lastError().text() << query.lastError().number() << query.lastError().databaseText() << query.lastError().driverText();
-        kDebug(50003) << "Bound values: " << query.boundValues().values();
+bool DatabaseCoreBackend::execDirectSql(const QString& sql)
+{
+    Q_D(DatabaseCoreBackend);
+
+    if (!d->checkOperationStatus())
         return false;
+
+    QSqlQuery query = getQuery();
+
+    int retries = 0;
+    forever
+    {
+        if (query.exec(sql))
+            break;
+        else
+        {
+            if (queryErrorHandling(query, retries++))
+                continue;
+            else
+                return false;
+        }
     }
     return true;
 }
@@ -730,63 +773,41 @@ bool DatabaseCoreBackend::exec(QSqlQuery& query)
     if (!d->checkOperationStatus())
         return false;
 
-    if (!query.exec())
+    int retries = 0;
+    forever
     {
-        if (false /*detect a connection error here*/)
+        if (query.exec())
+            break;
+        else
         {
-            if (!d->handleConnectionError())
-                return false;
-            switch (d->operationStatus)
-            {
-                case ExecuteNormal:
-                    if (query.exec())
-                        return true;
-                    break;
-                case AbortQueries:
-                    return false;
-                case Wait:
-                    return exec(query);
-            }
-        }
-        else if (d->parameters.isSQLite() && query.lastError().number() == 5)
-        {
-            QApplication *app = qobject_cast<QApplication *>(QCoreApplication::instance());
-            if (!app)
-            {
-                int limit = 10;
-                kDebug(50003) << "Detected locked database file. Waiting 10s trying again.";
-
-                do
-                {
-                    sotoSleep::sleep(1);
-                    --limit;
-                    if (query.exec())
-                        return true;
-                }
-                while (limit > 0 && query.lastError().number() == 5);
-            }
+            if (queryErrorHandling(query, retries++))
+                continue;
             else
-                kWarning(50003) << "Detected locked database file. There is an active transaction.";
+                return false;
         }
-        kDebug(50003) << "Failure executing query: ";
-        kDebug(50003) << query.executedQuery();
-        kDebug(50003) << query.lastError().text() << query.lastError().number() << query.lastError().databaseText() << query.lastError().driverText();
-        kDebug(50003) << "Bound values: " << query.boundValues().values();
-        return false;
     }
     return true;
 }
 
 bool DatabaseCoreBackend::execBatch(QSqlQuery& query)
 {
-    if (!query.execBatch())
-    {
-        // Use DatabaseAccess::lastError?
-        kDebug(50003) << "Failure executing batch query: ";
-        kDebug(50003) << query.executedQuery();
-        kDebug(50003) << query.lastError().text() << query.lastError().number();
-        kDebug(50003) << "Bound values: " << query.boundValues().values();
+    Q_D(DatabaseCoreBackend);
+
+    if (!d->checkOperationStatus())
         return false;
+
+    int retries = 0;
+    forever
+    {
+        if (query.execBatch())
+            break;
+        else
+        {
+            if (queryErrorHandling(query, retries++))
+                continue;
+            else
+                return false;
+        }
     }
     return true;
 }
@@ -799,6 +820,15 @@ QSqlQuery DatabaseCoreBackend::prepareQuery(const QString& sql)
     QSqlQuery query(db);
     query.setForwardOnly(true);
     query.prepare(sql);
+    return query;
+}
+
+QSqlQuery DatabaseCoreBackend::getQuery()
+{
+    Q_D(DatabaseCoreBackend);
+    QSqlDatabase db = d->databaseForThread();
+    QSqlQuery query(db);
+    query.setForwardOnly(true);
     return query;
 }
 

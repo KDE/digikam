@@ -61,8 +61,12 @@ public:
     bool isInMainThread() const;
     bool isInUIThread() const;
 
+    bool isSQLiteLockError(const QSqlQuery &query);
+    bool checkRetrySQLiteLockError(int retries);
+    void debugOutputFailedQuery(const QSqlQuery &query);
+
     bool checkOperationStatus();
-    bool handleConnectionError();
+    bool checkConnectionError();
     // called by DatabaseErrorHandler, implementing DatabaseErrorAnswer
     virtual void connectionErrorContinueQueries();
     virtual void connectionErrorAbortQueries();
