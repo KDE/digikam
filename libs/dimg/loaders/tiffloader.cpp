@@ -593,9 +593,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     }
     else
     {
-        sampleinfo[0] = EXTRASAMPLE_UNASSALPHA;
         TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 3);
-        TIFFSetField(tif, TIFFTAG_EXTRASAMPLES,    1, sampleinfo);
     }
 
     TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, (uint16)imageBitsDepth());
