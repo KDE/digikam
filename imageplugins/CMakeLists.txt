@@ -51,3 +51,5 @@ ADD_SUBDIRECTORY( whitebalance )
 IF(GLIB2_FOUND)
     ADD_SUBDIRECTORY( contentawareresizing )
 ENDIF(GLIB2_FOUND)
+
+ADD_SUBDIRECTORY( localcontrast )

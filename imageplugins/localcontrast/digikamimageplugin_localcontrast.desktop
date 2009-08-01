@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=ImagePlugin_LocalContrast
+Type=Service
+ServiceTypes=Digikam/ImagePlugin
+Encoding=UTF-8
+Comment=Local contrast plugin for Digikam
+
+X-KDE-Library=digikamimageplugin_localcontrast
+author=Pontabry Julien, julien dot pontabry at gmail dot com
