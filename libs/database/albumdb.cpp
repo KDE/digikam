@@ -473,7 +473,7 @@ int AlbumDB::addTag(int parentTagID, const QString& name, const QString& iconKDE
     parameters.insert(":tagname", name);
 //     if (!d->db->execDBAction(d->db->getDBAction(QString("InsertTag"))), &parameters, NULL, &id)
 
-     if (!d->db->execDBAction(d->db->getDBAction(QString("InsertTag")), &parameters, NULL , &id))
+     if (!d->db->execDBAction(d->db->getDBAction(QString("InsertTag")), 0 , &id))
 //     if (!d->db->execSql( QString("INSERT INTO Tags (pid, name) "
 //                                  "VALUES( ?, ?);"),
 //                          parentTagID,
@@ -509,7 +509,7 @@ void AlbumDB::deleteTag(int tagID)
     QMap<QString, QVariant> bindingMap;
     bindingMap.insert(QString(":tagID"), tagID);
 
-    d->db->execDBAction(d->db->getDBAction("DeleteTag"), &bindingMap );
+    d->db->execDBAction(d->db->getDBAction("DeleteTag"), bindingMap );
     d->db->recordChangeset(TagChangeset(tagID, TagChangeset::Deleted));
 }
 
@@ -2740,11 +2740,11 @@ QStringList AlbumDB::getItemURLsInTag(int tagID, bool recursive)
       
     if (recursive)
     {
-      d->db->execDBAction(d->db->getDBAction(QString("GetItemURLsInTagRecursive")), &bindingMap, &values);
+      d->db->execDBAction(d->db->getDBAction(QString("GetItemURLsInTagRecursive")), bindingMap, &values);
     }
     else
     {
-      d->db->execDBAction(d->db->getDBAction(QString("GetItemURLsInTag")), &bindingMap, &values);
+      d->db->execDBAction(d->db->getDBAction(QString("GetItemURLsInTag")), bindingMap, &values);
     }
 
     QStringList urls;
@@ -2776,9 +2776,9 @@ QList<qlonglong> AlbumDB::getItemIDsInTag(int tagID, bool recursive)
     parameters.insert(":tagID",  tagID);
 
     if (recursive)
-	d->db->execDBAction(d->db->getDBAction(QString("getItemIDsInTagRecursive")), &parameters, &values);
+	d->db->execDBAction(d->db->getDBAction(QString("getItemIDsInTagRecursive")), parameters, &values);
     else
-        d->db->execDBAction(d->db->getDBAction(QString("getItemIDsInTag")), &parameters, &values);
+        d->db->execDBAction(d->db->getDBAction(QString("getItemIDsInTag")), parameters, &values);
 
     for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd(); ++it)
     {

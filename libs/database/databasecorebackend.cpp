@@ -319,7 +319,12 @@ databaseAction DatabaseCoreBackend::getDBAction(const QString &actionName)
     return d->parameters.m_DatabaseConfigs[d->parameters.databaseType].m_SQLStatements[actionName];
 }
 
-bool DatabaseCoreBackend::execDBAction(const databaseAction &action, const QMap<QString, QVariant>* bindingMap,
+bool DatabaseCoreBackend::execDBAction(const databaseAction &action, QList<QVariant>* values, QVariant *lastInsertId)
+{
+    return execDBAction(action, QMap<QString, QVariant>(), values, lastInsertId);
+}
+
+bool DatabaseCoreBackend::execDBAction(const databaseAction &action, const QMap<QString, QVariant>& bindingMap,
                                        QList<QVariant>* values, QVariant *lastInsertId)
 {
     Q_D(DatabaseCoreBackend);
@@ -339,7 +344,7 @@ bool DatabaseCoreBackend::execDBAction(const databaseAction &action, const QMap<
         bool result;
         if (actionElement.m_Mode==QString("query"))
         {
-            result = execSql(actionElement.m_Statement, *bindingMap, values, lastInsertId);
+            result = execSql(actionElement.m_Statement, bindingMap, values, lastInsertId);
         }
         else
         {
@@ -632,7 +637,7 @@ QSqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString,
     QString preparedString = sql;
     QList<QVariant> namedPlaceholderValues;
 
-    if (&bindingMap != NULL)
+    if (!bindingMap.isEmpty())
     {
         kDebug(50003)<<"Prepare statement ["<< preparedString <<"]";
         QRegExp identifierRegExp(":[A-Za-z0-9]+");

@@ -245,11 +245,11 @@ void ImageLister::listTag(ImageListerReceiver *receiver, int tagId)
     
     if (m_recursive)
     {
-      access.backend()->execDBAction(access.backend()->getDBAction(QString("listTagRecursive")), &parameters, &values);
+      access.backend()->execDBAction(access.backend()->getDBAction(QString("listTagRecursive")), parameters, &values);
     }
     else
     {
-      access.backend()->execDBAction(access.backend()->getDBAction(QString("listTag")), &parameters, &values);
+      access.backend()->execDBAction(access.backend()->getDBAction(QString("listTag")), parameters, &values);
     }
 
     QSet<int> albumRoots = albumRootsToList();

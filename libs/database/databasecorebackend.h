@@ -93,9 +93,6 @@ public:
     DatabaseCoreBackend(const QString &backendName, DatabaseLocking *locking, DatabaseCoreBackendPrivate &dd);
     ~DatabaseCoreBackend();
 
-    databaseAction getDBAction(const QString &actionName);
-    bool execDBAction(const databaseAction &action, const QMap<QString, QVariant>* bindingMap = 0, QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
-
     /**
      * Checks if the parameters can be used for this database backend.
      */
@@ -162,6 +159,14 @@ public:
         Wait,
         AbortQueries
     };
+
+    /**
+     * TODO: API docs
+     */
+    databaseAction getDBAction(const QString &actionName);
+    bool execDBAction(const databaseAction &action, QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
+    bool execDBAction(const databaseAction &action, const QMap<QString, QVariant>& bindingMap,
+                      QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
 
     /**
      * Executes the SQL statement, and write the returned data into the values list.
