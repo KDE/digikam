@@ -884,6 +884,8 @@ bool AlbumManager::setDatabase(const QString& dbPath, bool priority, const QStri
 
 bool AlbumManager::checkNepomukService()
 {
+    bool hasNepomuk = false;
+
 #ifdef HAVE_NEPOMUK
     QDBusInterface serviceInterface("org.kde.nepomuk.services.digikamnepomukservice",
                                     "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
@@ -928,8 +930,10 @@ bool AlbumManager::checkNepomukService()
     // wait (at most 1sec) for service to start up
     loop.exec();
     */
-    return true;
+    hasNepomuk = true;
 #endif // HAVE_NEPOMUK
+
+    return hasNepomuk;
 }
 
 void AlbumManager::startScan()
