@@ -34,6 +34,14 @@ class CameraNameHelperTest : public QObject
 
 private Q_SLOTS:
 
+    void testCameraName();
+    void testCameraName_data();
+
+    void testStaticIsAutoDetected();
+
+    void testStaticCreateName();
+    void testStaticCreateName_data();
+
 };
 
 #endif /* CAMERANAMEHELPERTEST_H */

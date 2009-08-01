@@ -27,6 +27,7 @@ TARGET_LINK_LIBRARIES(manualrenameinputtest
 
 SET(cameranamehelper_SRCS
     cameranamehelpertest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/cameranamehelper.cpp
 )
 KDE4_ADD_UNIT_TEST(cameranamehelpertest ${cameranamehelper_SRCS})
 TARGET_LINK_LIBRARIES(cameranamehelpertest

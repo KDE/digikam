@@ -41,31 +41,32 @@ public:
     CameraNameHelper(const QString& cameraName);
     ~CameraNameHelper();
 
-    bool    autoDetected()   const;
-    QString mode()           const;
-    QString cameraName()     const;
-    QString fullCameraName() const;
-    QString vendor()         const;
-    QString product()        const;
-
     void    setAutoDetected(bool v);
     void    setMode(const QString& mode);
     void    setVendor(const QString& vendor);
     void    setProduct(const QString& product);
 
-    static  bool    autoDetected(const QString& name);
-    static  QString mode(const QString& name);
-    static  QString cameraName(const QString& name);
-    static  QString fullCameraName(const QString& name);
-    static  QString vendor(const QString& name);
-    static  QString product(const QString& name);
+    QString cameraName()     const;
+    QString fullCameraName() const;
+
+    // --------------------------------------------------------
+
+    static  bool    isAutoDetected(const QString& name);
+//    static  QString mode(const QString& name);
+//    static  QString cameraName(const QString& name);
+
+    // --------------------------------------------------------
 
     static  QString createName(const QString& vendor, const QString& product,
-                               const QString& mode,   bool autoDetect = false);
+                               const QString& mode = QString(),
+                               bool autoDetected = false);
 
 private:
 
-    bool isValidCameraName(const QString& cameraName) const;
+    static  QString validateStringAndCopy(const QString& string);
+    static  void    validateString(QString& string);
+
+    static  QString autoDetectedString();
 
 private:
 
