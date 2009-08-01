@@ -551,15 +551,19 @@ bool DatabaseCoreBackend::execSql(const QString& sql, const QList<QVariant>& bou
     return true;
 }
 
-bool DatabaseCoreBackend::execSql(const QString& sql, const QMap<QString, QVariant> &bindingMap, QList<QVariant> *values, QVariant *lastInsertId){
+bool DatabaseCoreBackend::execSql(const QString& sql, const QMap<QString, QVariant> &bindingMap,
+                                  QList<QVariant> *values, QVariant *lastInsertId)
+{
     QSqlQuery query = execQuery(sql, bindingMap);
     if (!query.isActive())
         return false;
-    if (lastInsertId){
+    if (lastInsertId)
+    {
         (*lastInsertId) = query.lastInsertId();
-	kDebug(50003) << "Last Insert ID was ["<<*lastInsertId<<"]";
+        kDebug(50003) << "Last Insert ID was ["<<*lastInsertId<<"]";
     }
-    if (values){
+    if (values)
+    {
         (*values) = readToList(query);
     }
     return true;
