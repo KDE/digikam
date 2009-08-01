@@ -908,6 +908,7 @@ bool AlbumManager::checkNepomukService()
         return false;
     }
 
+    /*
     QEventLoop loop;
 
     if (!connect(&nepomukInterface, SIGNAL(serviceInitialized(const QString &)),
@@ -918,12 +919,15 @@ bool AlbumManager::checkNepomukService()
     }
 
     QTimer::singleShot(1000, &loop, SLOT(quit()));
+    */
 
     kDebug(50003) << "Trying to start up digikamnepomukservice";
     nepomukInterface.call(QDBus::NoBlock, "startService", "digikamnepomukservice");
 
+    /*
     // wait (at most 1sec) for service to start up
     loop.exec();
+    */
     return true;
 #endif // HAVE_NEPOMUK
 }
