@@ -94,6 +94,7 @@ public:
     QMutex              errorLockMutex;
     QWaitCondition      errorLockCondVar;
     DatabaseCoreBackend::QueryOperationStatus errorLockOperationStatus;
+    bool                handlingConnectionError;
 
     DatabaseErrorHandler         *errorHandler;
 

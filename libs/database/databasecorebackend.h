@@ -150,6 +150,12 @@ public:
     bool isOpen() const { return status() > Unavailable; }
     bool isReady() const { return status() == OpenSchemaChecked; }
 
+    /**
+     * Add a DatabaseErrorHandler. This object must be created in the main thread.
+     * If a database error occurs, this object can handle problem solving and user interaction.
+     */
+    void setDatabaseErrorHandler(DatabaseErrorHandler *handler);
+
     enum QueryOperationStatus
     {
         ExecuteNormal,

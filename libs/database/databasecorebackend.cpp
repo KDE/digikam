@@ -60,6 +60,7 @@ DatabaseCoreBackendPrivate::DatabaseCoreBackendPrivate(DatabaseCoreBackend *back
     status          = DatabaseCoreBackend::Unavailable;
     isInTransaction = false;
     operationStatus = DatabaseCoreBackend::ExecuteNormal;
+    handlingConnectionError = true;
 }
 
 
@@ -225,8 +226,7 @@ void DatabaseCoreBackendPrivate::queryOperationWait()
 void DatabaseCoreBackendPrivate::setQueryOperationFlag(DatabaseCoreBackend::QueryOperationStatus status)
 {
     // Enforce lock order (first main mutex, second error lock mutex)
-    QMutexLocker l1(&lock->mutex);
-    QMutexLocker l2(&errorLockMutex);
+    QMutexLocker l(&errorLockMutex);
     // this change must be done under errorLockMutex lock
     errorLockOperationStatus = status;
     operationStatus = status;
@@ -236,8 +236,7 @@ void DatabaseCoreBackendPrivate::setQueryOperationFlag(DatabaseCoreBackend::Quer
      *  Typically, call wakeAll with status ExecuteNormal or AbortQueries. */
 void DatabaseCoreBackendPrivate::queryOperationWakeAll(DatabaseCoreBackend::QueryOperationStatus status)
 {
-    QMutexLocker l1(&lock->mutex);
-    QMutexLocker l2(&errorLockMutex);
+    QMutexLocker l(&errorLockMutex);
     operationStatus = status;
     errorLockOperationStatus = status;
     errorLockCondVar.wakeAll();
@@ -261,6 +260,7 @@ bool DatabaseCoreBackendPrivate::handleConnectionError()
 {
     if (errorHandler)
     {
+        handlingConnectionError = true;
         setQueryOperationFlag(DatabaseCoreBackend::Wait);
         if (isInUIThread())
         {
@@ -280,12 +280,16 @@ bool DatabaseCoreBackendPrivate::handleConnectionError()
 void DatabaseCoreBackendPrivate::connectionErrorContinueQueries()
 {
     // Attention: called from out of context, maybe without any lock
+    QMutexLocker l(&lock->mutex);
+    handlingConnectionError = false;
     queryOperationWakeAll(DatabaseCoreBackend::ExecuteNormal);
 }
 
 void DatabaseCoreBackendPrivate::connectionErrorAbortQueries()
 {
     // Attention: called from out of context, maybe without any lock
+    QMutexLocker l(&lock->mutex);
+    handlingConnectionError = false;
     queryOperationWakeAll(DatabaseCoreBackend::AbortQueries);
 }
 
@@ -342,6 +346,17 @@ bool DatabaseCoreBackend::execDBAction(const databaseAction &action, const QMap<
        }
     }
   return returnResult;
+}
+
+void DatabaseCoreBackend::setDatabaseErrorHandler(DatabaseErrorHandler *handler)
+{
+    Q_D(DatabaseCoreBackend);
+    if (handler->thread() != QCoreApplication::instance()->thread())
+    {
+        kError(50003) << "DatabaseErrorHandler must live in the main thread";
+        Q_ASSERT(false);
+    }
+    d->errorHandler = handler;
 }
 
 void DatabaseCoreBackend::slotThreadFinished()
