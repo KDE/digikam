@@ -1518,7 +1518,7 @@ void DigikamApp::loadCameras()
     d->usbMediaMenu->setIcon(KIcon("drive-removable-media-usb"));
     d->cardReaderMenu->setText(i18n("Card Readers"));
     d->cardReaderMenu->setIcon(KIcon("media-flash-smart-media"));
-    d->manuallyAddedCamerasMenu->setText(i18n("Cameras (Add)"));
+    d->manuallyAddedCamerasMenu->setText(i18n("Cameras (Manually Added)"));
     d->manuallyAddedCamerasMenu->setIcon(KIcon("preferences-other"));
 
     actionCollection()->addAction("camera_solid", d->cameraSolidMenu);
