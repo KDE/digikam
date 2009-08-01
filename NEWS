@@ -25,7 +25,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 016 ==> 201302 : Crash due to memory access problem on Mac OS X.
 017 ==> 133094 : Exif-changes by external prog has no affect inside digiKam.
 018 ==> 201746 : Invalid TIFF output in Editor and Batch queue manager.
-019 ==> 
+019 ==> 196692 : Red and blue channels in images are reversed when saving.
+020 ==> 
+
 
 
 *********************************************************************************************************
