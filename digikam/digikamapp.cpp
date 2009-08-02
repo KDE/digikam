@@ -1239,7 +1239,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    KAction *cameraAction = new KAction(i18n("Add Camera..."), this);
+    KAction *cameraAction = new KAction(i18n("Add Camera Manually..."), this);
     connect(cameraAction, SIGNAL(triggered()), this, SLOT(slotSetupCamera()));
     actionCollection()->addAction("camera_add", cameraAction);
 
