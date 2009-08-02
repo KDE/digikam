@@ -60,21 +60,22 @@ CameraNameHelper::~CameraNameHelper()
 QString CameraNameHelper::createName(const QString& vendor, const QString& product,
                                      const QString& mode,   bool autoDetected)
 {
-    if (vendor.isEmpty() || product.isEmpty())
+    if (vendor.isEmpty())
         return QString();
 
     QString tmp;
-    QString vVendor       = validateStringAndCopy(vendor);
-    QString vProduct      = validateStringAndCopy(product);
-    QString vMode         = validateStringAndCopy(mode);
+    QString _vendor  = vendor.trimmed();
+    QString _product = product.trimmed();
+    QString _mode    = mode.trimmed().remove('(').remove(')');
 
-    tmp = QString("%1 %2").arg(vVendor)
-                          .arg(vProduct);
+    tmp = QString("%1 %2").arg(_vendor)
+                          .arg(_product)
+                          .trimmed();
 
     if (!mode.isEmpty())
     {
         tmp.append(" (");
-        tmp.append(vMode);
+        tmp.append(_mode);
         tmp.append(autoDetected ? QString(", %1)").arg(autoDetectedString())
                                 : QString(')'));
     }
@@ -83,40 +84,33 @@ QString CameraNameHelper::createName(const QString& vendor, const QString& produ
         tmp.append(QString(" (%1)").arg(autoDetectedString()));
     }
 
-    return tmp;
+    return tmp.trimmed();
 }
 
-QString CameraNameHelper::validateStringAndCopy(const QString& string)
+QString CameraNameHelper::fullCameraName(const QString& name, bool autoDetected)
 {
-    // remove leading and trailing whitespaces;
-    QString tmp = string.trimmed();
+    QString tmp;
 
-    // remove parantheses
-    QRegExp noParentheses("[()\\[\\]{}]");
-    int pos = 0;
-    while (pos > -1)
+    QString vendorAndProduct = extractCameraNameToken(name, VendorAndProduct);
+    QString mode             = extractCameraNameToken(name, Mode);
+
+    if (vendorAndProduct.isEmpty())
+        return QString();
+
+    // we split vendorAndProduct once, it doesn't really matter if the variables are correctly filled,
+    // it is only important that both are not empty.
+    QStringList words = vendorAndProduct.split(' ');
+    QString     vendor;
+    QString     product;
+
+    if (words.count() > 1)
     {
-        pos = noParentheses.indexIn(tmp, pos);
-        if (pos > -1)
-            tmp.remove(pos, noParentheses.matchedLength());
+        vendor  = words.takeFirst();
+        product = words.join(" ");
+        tmp     = createName(vendor, product, mode, autoDetected);
     }
 
-    return tmp;
-}
-
-void CameraNameHelper::validateString(QString& string)
-{
-    string = validateStringAndCopy(string);
-}
-
-bool CameraNameHelper::isAutoDetected(const QString& name)
-{
-    QString vName   = validateStringAndCopy(name).toLower();
-    QString autoTmp = autoDetectedString().toLower();
-
-    if (vName.endsWith(autoTmp))
-        return true;
-    return false;
+    return (tmp.isEmpty()) ? vendorAndProduct : tmp;
 }
 
 QString CameraNameHelper::autoDetectedString()
@@ -137,36 +131,49 @@ QString CameraNameHelper::cameraName() const
     // and try to extract the mode
     if (d->vendor.isEmpty() || d->product.isEmpty())
     {
-        QRegExp nameRegEx("(.*)\\(.*\\)\\s*$");
-        if (nameRegEx.isValid() && nameRegEx.indexIn(d->originalCameraName) != -1)
-        {
-            tmp               = nameRegEx.cap(1);
-            QStringList words = tmp.split((' '));
-            tmp.clear();
-
-            foreach (const QString& word, words)
-            {
-                tmp.append(word.trimmed());
-                tmp.append(' ');
-            }
-            validateString(tmp);
-        }
-        else if (!d->originalCameraName.isEmpty())
-        {
-            tmp = validateStringAndCopy(d->originalCameraName);
-        }
+        tmp = extractCameraNameToken(d->originalCameraName, VendorAndProduct);
     }
     else
     {
         tmp = createName(d->vendor, d->product);
     }
 
-    return validateStringAndCopy(tmp);
+    return tmp;
 }
 
 QString CameraNameHelper::fullCameraName() const
 {
-    return createName(d->vendor, d->product, d->mode, d->autodetect);
+    QString tmp;
+
+    if (d->vendor.isEmpty() || d->product.isEmpty())
+    {
+
+        QString vendorAndProduct = extractCameraNameToken(d->originalCameraName, VendorAndProduct);
+        QString mode             = extractCameraNameToken(d->originalCameraName, Mode);
+        bool    autoDetected     = d->autodetect;
+
+        if (vendorAndProduct.isEmpty())
+            return QString();
+
+        // we split vendorAndProduct once, it doesn't really matter if the variables are correctly filled,
+        // it is only important that both are not empty.
+        QStringList words = vendorAndProduct.split(' ');
+        QString     vendor;
+        QString     product;
+
+        if (words.count() > 1)
+        {
+            vendor  = words.takeFirst();
+            product = words.join(" ");
+            tmp     = createName(vendor, product, mode, autoDetected);
+        }
+    }
+    else
+    {
+        tmp = createName(d->vendor, d->product, d->mode, d->autodetect);
+    }
+
+    return tmp;
 }
 
 void CameraNameHelper::setMode(const QString& mode)
@@ -182,6 +189,51 @@ void CameraNameHelper::setVendor(const QString& vendor)
 void CameraNameHelper::setProduct(const QString& product)
 {
     d->product = product;
+}
+
+QString CameraNameHelper::extractCameraNameToken(const QString& cameraName, int tokenID)
+{
+    QStringList capturedTexts;
+    QString     tmp;
+
+    capturedTexts = cameraName.split(" (");
+
+    // TODO: Right now we just assume that a camera name has no parantheses in it
+    //       There is a testcase (CameraNameHelperTest::testCameraNameFromGPCamera) that
+    //       checks all camera names delivered by gphoto2. At the moment all seems to be fine.
+    if (!capturedTexts.isEmpty())
+    {
+        QString mode;
+        QString vendorAndProduct;
+
+        if (capturedTexts.count() == 1)     // camera name only
+        {
+            vendorAndProduct = capturedTexts.takeFirst();
+        }
+        else
+        {
+            mode             = capturedTexts.takeLast().trimmed();
+            vendorAndProduct = capturedTexts.join((" ")).trimmed();
+        }
+
+        if (tokenID == VendorAndProduct)
+            tmp = vendorAndProduct;
+        else if (tokenID == Mode)
+            tmp = mode;
+
+    }
+
+    // clean up the string
+    QStringList words = tmp.split((' '));
+    tmp.clear();
+
+    foreach (const QString& word, words)
+    {
+        tmp.append(word.trimmed());
+        tmp.append(' ');
+    }
+
+    return (tmp.isEmpty()) ? cameraName.trimmed() : tmp.trimmed();
 }
 
 } // namespace Digikam

@@ -51,22 +51,30 @@ public:
 
     // --------------------------------------------------------
 
-    static  bool    isAutoDetected(const QString& name);
+//    static  bool    isAutoDetected(const QString& name);
 //    static  QString mode(const QString& name);
 //    static  QString cameraName(const QString& name);
+    static  QString fullCameraName(const QString& name, bool autoDetected = false);
 
-    // --------------------------------------------------------
-
-    static  QString createName(const QString& vendor, const QString& product,
-                               const QString& mode = QString(),
-                               bool autoDetected = false);
+    static  QString createName(const QString& vendor,
+                               const QString& product = QString(),
+                               const QString& mode    = QString(),
+                               bool autoDetected      = false);
 
 private:
 
-    static  QString validateStringAndCopy(const QString& string);
-    static  void    validateString(QString& string);
-
     static  QString autoDetectedString();
+
+    // --------------------------------------------------------
+
+    enum CAMERANAME_TOKENS
+    {
+        VendorAndProduct = 1,
+        Mode,
+        AutoDetected
+    };
+
+    static  QString extractCameraNameToken(const QString& cameraName, int tokenID);
 
 private:
 

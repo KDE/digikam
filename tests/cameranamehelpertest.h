@@ -28,6 +28,10 @@
 
 #include <QtCore/QObject>
 
+// Local includes
+
+#include "config-digikam.h"
+
 class CameraNameHelperTest : public QObject
 {
     Q_OBJECT
@@ -37,7 +41,9 @@ private Q_SLOTS:
     void testCameraName();
     void testCameraName_data();
 
-    void testStaticIsAutoDetected();
+#ifdef ENABLE_GPHOTO2
+    void testCameraNameFromGPCamera();
+#endif
 
     void testStaticCreateName();
     void testStaticCreateName_data();

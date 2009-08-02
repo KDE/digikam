@@ -31,6 +31,7 @@
 // Local includes
 
 #include "cameranamehelper.h"
+#include "gpcamera.h"
 
 using namespace Digikam;
 
@@ -53,7 +54,7 @@ void CameraNameHelperTest::testStaticCreateName_data()
     QTest::newRow("03") << "  Canon   " << "Powershot A80" << "" << true
                         << QString("Canon Powershot A80 (%1)").arg(autoString);
     QTest::newRow("04") << "  Canon   " << "" << "PTP" << true
-                        << "";
+                        << "Canon (PTP, auto-detected)";
     QTest::newRow("05") << "" << "D50" << "PTP Mode" << true
                         << "";
     QTest::newRow("06") << "Nikon" << "D50" << "(PTP Mode)" << true
@@ -71,13 +72,21 @@ void CameraNameHelperTest::testStaticCreateName()
     QCOMPARE(CameraNameHelper::createName(vendor, product, mode, autoDetect), result);
 }
 
-void CameraNameHelperTest::testStaticIsAutoDetected()
+#ifdef ENABLE_GPHOTO2
+void CameraNameHelperTest::testCameraNameFromGPCamera()
 {
-    QVERIFY(CameraNameHelper::isAutoDetected("Nikon D50 (PTP Mode, auto-detected)"));
-    QVERIFY(CameraNameHelper::isAutoDetected("Nikon D50 (auto-detected)"));
-    // test for failure
-    QVERIFY(!CameraNameHelper::isAutoDetected("Nikon D50"));
+    int count = 0;
+    QStringList clist;
+
+    GPCamera::getSupportedCameras(count, clist);
+
+    // test if all camera names stay intact
+    foreach (const QString& camera, clist)
+    {
+        QCOMPARE(CameraNameHelper::fullCameraName(camera), camera);
+    }
 }
+#endif
 
 void CameraNameHelperTest::testCameraName_data()
 {
