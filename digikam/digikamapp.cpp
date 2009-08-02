@@ -2214,10 +2214,10 @@ void DigikamApp::slotConfToolbars()
         createGUI("digikamui.rc");
         applyMainWindowSettings(d->config->group("General Settings"));
         plugActionList( QString::fromLatin1("file_actions_import"), d->kipiFileActionsImport );
-        plugActionList( QString::fromLatin1("image_actions"), d->kipiImageActions );
-        plugActionList( QString::fromLatin1("tool_actions"), d->kipiToolsActions );
-        plugActionList( QString::fromLatin1("batch_actions"), d->kipiBatchActions );
-        plugActionList( QString::fromLatin1("album_actions"), d->kipiAlbumActions );
+        plugActionList( QString::fromLatin1("image_actions"),       d->kipiImageActions );
+        plugActionList( QString::fromLatin1("tool_actions"),        d->kipiToolsActions );
+        plugActionList( QString::fromLatin1("batch_actions"),       d->kipiBatchActions );
+        plugActionList( QString::fromLatin1("album_actions"),       d->kipiAlbumActions );
         plugActionList( QString::fromLatin1("file_actions_export"), d->kipiFileActionsExport );
     }
 
@@ -2730,15 +2730,14 @@ void DigikamApp::updateCameraMenu()
     {
         d->cameraMenu->addAction(action);
     }
-
     d->cameraMenu->addSeparator();
 
     foreach (QAction* action, d->manualCameraActionGroup->actions())
     {
         d->cameraMenu->addAction(action);
     }
-
     d->cameraMenu->addSeparator();
+
     d->cameraMenu->addAction(actionCollection()->action("camera_add"));
 }
 
