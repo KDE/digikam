@@ -1577,17 +1577,14 @@ void DigikamApp::slotCameraAdded(CameraType *ctype)
     cAction->setData(ctype->title());
     actionCollection()->addAction(ctype->title().toUtf8(), cAction);
 
-    // insert before separator
-    d->cameraMenu->insertAction(d->addCameraSeparatorAction, cAction);
     ctype->setAction(cAction);
-
     updateCameraMenu();
 }
 
 void DigikamApp::slotCameraRemoved(KAction *cAction)
 {
     if (cAction)
-        d->cameraMenu->removeAction(cAction);
+        d->manualCameraActionGroup->removeAction(cAction);
 
     updateCameraMenu();
 }
@@ -1916,7 +1913,6 @@ QString DigikamApp::labelForSolidCamera(const Solid::Device& cameraDevice)
 
 void DigikamApp::fillSolidMenus()
 {
-//    d->cameraMenu->menu()->clear();
     d->usbMediaMenu->menu()->clear();
     d->cardReaderMenu->menu()->clear();
 
