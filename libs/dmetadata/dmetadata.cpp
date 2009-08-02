@@ -159,6 +159,7 @@ CaptionsMap DMetadata::getImageComments() const
     KExiv2::AltLangMap authorsMap;
     KExiv2::AltLangMap datesMap;
     KExiv2::AltLangMap commentsMap;
+    QString            commonAuthor;
 
     // In first try to get captions properties from digiKam XMP namespace
 
@@ -168,6 +169,11 @@ CaptionsMap DMetadata::getImageComments() const
         datesMap   = getXmpTagStringListLangAlt("Xmp.digiKam.CaptionsDateTimeStamps", false);
     }
 
+    // Get author name from IPTC DescriptionWriter. Private namespace above gets precedence.
+    QVariant descriptionWriter = getMetadataField(MetadataInfo::DescriptionWriter);
+    if (!descriptionWriter.isNull())
+        commonAuthor = descriptionWriter.toString();
+
     // In first, we check XMP alternative language tags to create map of values.
 
     if (hasXmp())
@@ -175,7 +181,7 @@ CaptionsMap DMetadata::getImageComments() const
         commentsMap = getXmpTagStringListLangAlt("Xmp.dc.description", false);
         if (!commentsMap.isEmpty())
         {
-            captionsMap.setData(commentsMap, authorsMap, datesMap);
+            captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
             return captionsMap;
         }
 
@@ -183,7 +189,7 @@ CaptionsMap DMetadata::getImageComments() const
         if (!xmpComment.isEmpty())
         {
             commentsMap.insert(QString("x-default"), xmpComment);
-            captionsMap.setData(commentsMap, authorsMap, datesMap);
+            captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
             return captionsMap;
         }
 
@@ -191,7 +197,7 @@ CaptionsMap DMetadata::getImageComments() const
         if (!xmpComment.isEmpty())
         {
             commentsMap.insert(QString("x-default"), xmpComment);
-            captionsMap.setData(commentsMap, authorsMap, datesMap);
+            captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
             return captionsMap;
         }
     }
@@ -204,7 +210,7 @@ CaptionsMap DMetadata::getImageComments() const
     if (!comment.isEmpty())
     {
         commentsMap.insert(QString("x-default"), comment);
-        captionsMap.setData(commentsMap, authorsMap, datesMap);
+        captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
         return captionsMap;
     }
 
@@ -216,7 +222,7 @@ CaptionsMap DMetadata::getImageComments() const
         if (!exifComment.isEmpty())
         {
             commentsMap.insert(QString("x-default"), exifComment);
-            captionsMap.setData(commentsMap, authorsMap, datesMap);
+            captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
             return captionsMap;
         }
     }
@@ -229,7 +235,7 @@ CaptionsMap DMetadata::getImageComments() const
         if (!iptcComment.isEmpty() && !iptcComment.trimmed().isEmpty())
         {
             commentsMap.insert(QString("x-default"), iptcComment);
-            captionsMap.setData(commentsMap, authorsMap, datesMap);
+            captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
             return captionsMap;
         }
     }
