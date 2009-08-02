@@ -109,6 +109,7 @@
 #include "batchthumbsgenerator.h"
 #include "cameratype.h"
 #include "cameraui.h"
+#include "cameranamehelper.h"
 #include "collectionscanner.h"
 #include "componentsinfo.h"
 #include "digikamadaptor.h"
@@ -187,10 +188,9 @@ DigikamApp::DigikamApp()
     connect(AlbumSettings::instance(), SIGNAL(nepomukSettingsChanged()),
              this, SLOT(slotNepomukSettingsChanged()));
 
-    d->cameraSolidMenu          = new KActionMenu(this);
+    d->cameraMenu               = new KActionMenu(this);
     d->usbMediaMenu             = new KActionMenu(this);
     d->cardReaderMenu           = new KActionMenu(this);
-    d->manuallyAddedCamerasMenu = new KActionMenu(this);
 
     d->cameraList = new CameraList(this, KStandardDirs::locateLocal("appdata", "cameras.xml"));
 
@@ -1240,6 +1240,12 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
+    KAction *cameraAction = new KAction(i18n("Add Camera..."), this);
+    connect(cameraAction, SIGNAL(triggered()), this, SLOT(slotSetupCamera()));
+    actionCollection()->addAction("camera_add", cameraAction);
+
+    // -----------------------------------------------------------
+
     // Provides a menu entry that allows showing/hiding the toolbar(s)
     setStandardToolBarMenuEnabled(true);
 
@@ -1512,25 +1518,16 @@ void DigikamApp::cameraAutoDetect()
 
 void DigikamApp::loadCameras()
 {
-    d->cameraSolidMenu->setText(i18n("Cameras (Auto-detected)"));
-    d->cameraSolidMenu->setIcon(KIcon("camera-photo"));
+    d->cameraMenu->setText(i18n("Cameras"));
+    d->cameraMenu->setIcon(KIcon("camera-photo"));
     d->usbMediaMenu->setText(i18n("USB Storage Devices"));
     d->usbMediaMenu->setIcon(KIcon("drive-removable-media-usb"));
     d->cardReaderMenu->setText(i18n("Card Readers"));
     d->cardReaderMenu->setIcon(KIcon("media-flash-smart-media"));
-    d->manuallyAddedCamerasMenu->setText(i18n("Cameras (Manually Added)"));
-    d->manuallyAddedCamerasMenu->setIcon(KIcon("preferences-other"));
 
-    actionCollection()->addAction("camera_solid", d->cameraSolidMenu);
-    actionCollection()->addAction("usb_media", d->usbMediaMenu);
+    actionCollection()->addAction("cameras",     d->cameraMenu);
+    actionCollection()->addAction("usb_media",   d->usbMediaMenu);
     actionCollection()->addAction("card_reader", d->cardReaderMenu);
-    actionCollection()->addAction("camera_addedmanually", d->manuallyAddedCamerasMenu);
-
-    KAction *cameraAction = new KAction(i18n("Add Camera..."), this);
-    connect(cameraAction, SIGNAL(triggered()), this, SLOT(slotSetupCamera()));
-    actionCollection()->addAction("camera_add", cameraAction);
-    d->addCameraSeparatorAction = d->manuallyAddedCamerasMenu->addSeparator();
-    d->manuallyAddedCamerasMenu->addAction(cameraAction);
 
     // -----------------------------------------------------------------
 
@@ -1581,14 +1578,18 @@ void DigikamApp::slotCameraAdded(CameraType *ctype)
     actionCollection()->addAction(ctype->title().toUtf8(), cAction);
 
     // insert before separator
-    d->manuallyAddedCamerasMenu->insertAction(d->addCameraSeparatorAction, cAction);
+    d->cameraMenu->insertAction(d->addCameraSeparatorAction, cAction);
     ctype->setAction(cAction);
+
+    updateCameraMenu();
 }
 
 void DigikamApp::slotCameraRemoved(KAction *cAction)
 {
     if (cAction)
-        d->manuallyAddedCamerasMenu->removeAction(cAction);
+        d->cameraMenu->removeAction(cAction);
+
+    updateCameraMenu();
 }
 
 void DigikamApp::slotCameraAutoDetect()
@@ -1915,9 +1916,23 @@ QString DigikamApp::labelForSolidCamera(const Solid::Device& cameraDevice)
 
 void DigikamApp::fillSolidMenus()
 {
-    d->cameraSolidMenu->menu()->clear();
+//    d->cameraMenu->menu()->clear();
     d->usbMediaMenu->menu()->clear();
     d->cardReaderMenu->menu()->clear();
+
+    // delete the actionGroups to avoid duplicate menu entries
+    delete d->solidUsmActionGroup;
+    delete d->solidCameraActionGroup;
+
+    d->solidCameraActionGroup = new QActionGroup(this);
+    connect(d->solidCameraActionGroup, SIGNAL(triggered(QAction*)),
+            this, SLOT(slotOpenSolidCamera(QAction*)));
+
+    d->solidUsmActionGroup = new QActionGroup(this);
+    connect(d->solidUsmActionGroup, SIGNAL(triggered(QAction*)),
+            this, SLOT(slotOpenSolidUsmDevice(QAction*)));
+
+    // --------------------------------------------------------
 
     QList<Solid::Device> cameraDevices = Solid::Device::listFromType(Solid::DeviceInterface::Camera);
 
@@ -1930,7 +1945,12 @@ void DigikamApp::fillSolidMenus()
         if (!checkSolidCamera(cameraDevice))
             continue;
 
-        QString label = labelForSolidCamera(cameraDevice);
+        // --------------------------------------------------------
+
+        QString l     = labelForSolidCamera(cameraDevice);
+        QString label = CameraNameHelper::createFullCameraName(l.trimmed(), true);
+
+        // --------------------------------------------------------
 
         QString iconName = cameraDevice.icon();
         if (iconName.isEmpty())
@@ -1942,7 +1962,7 @@ void DigikamApp::fillSolidMenus()
         // set data to identify device in action slot slotSolidSetupDevice
         action->setData(cameraDevice.udi());
 
-        d->cameraSolidMenu->addAction(action);
+        d->cameraMenu->addAction(action);
     }
 
     QList<Solid::Device> storageDevices = Solid::Device::listFromType(Solid::DeviceInterface::StorageAccess);
@@ -2089,7 +2109,7 @@ void DigikamApp::fillSolidMenus()
         action->setData(accessDevice.udi());
 
         if (isCamera)
-            d->cameraSolidMenu->addAction(action);
+            d->cameraMenu->addAction(action);
         if (isHarddisk)
             d->usbMediaMenu->addAction(action);
         else
@@ -2121,10 +2141,13 @@ void DigikamApp::fillSolidMenus()
     d->usbMediaMenu->menuAction()->setVisible(!d->usbMediaMenu->isEmpty());
     d->cardReaderMenu->menuAction()->setVisible(!d->cardReaderMenu->isEmpty());
     */
+
+
     // disable empty menus
-    d->cameraSolidMenu->setEnabled(!d->cameraSolidMenu->menu()->isEmpty());
     d->usbMediaMenu->setEnabled(!d->usbMediaMenu->menu()->isEmpty());
     d->cardReaderMenu->setEnabled(!d->cardReaderMenu->menu()->isEmpty());
+
+    updateCameraMenu();
 }
 
 void DigikamApp::slotSetup()
@@ -2707,6 +2730,26 @@ void DigikamApp::slotNepomukSettingsChanged()
         interface.call(QDBus::NoBlock, "enableSyncToNepomuk", AlbumSettings::instance()->getSyncDigikamToNepomuk());
     }
 #endif // HAVE_NEPOMUK
+}
+
+void DigikamApp::updateCameraMenu()
+{
+    d->cameraMenu->menu()->clear();
+
+    foreach (QAction* action, d->solidCameraActionGroup->actions())
+    {
+        d->cameraMenu->addAction(action);
+    }
+
+    d->cameraMenu->addSeparator();
+
+    foreach (QAction* action, d->manualCameraActionGroup->actions())
+    {
+        d->cameraMenu->addAction(action);
+    }
+
+    d->cameraMenu->addSeparator();
+    d->cameraMenu->addAction(actionCollection()->action("camera_add"));
 }
 
 }  // namespace Digikam

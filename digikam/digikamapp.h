@@ -132,6 +132,7 @@ private:
     void openSolidUsmDevice(const QString& udi, const QString& label = QString());
     void runFingerPrintsGenerator(bool rebuildAll);
     void runThumbnailsGenerator(bool rebuildAll);
+    void updateCameraMenu();
 
 private Q_SLOTS:
 

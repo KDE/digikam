@@ -83,10 +83,9 @@ public:
         fullScreen                           = false;
         autoShowZoomToolTip                  = false;
         validIccPath                         = true;
-        cameraSolidMenu                      = 0;
+        cameraMenu                           = 0;
         usbMediaMenu                         = 0;
         cardReaderMenu                       = 0;
-        manuallyAddedCamerasMenu             = 0;
         newAction                            = 0;
         newAlbumFromSelectionAction          = 0;
         deleteAction                         = 0;
@@ -193,10 +192,9 @@ public:
     QList<QAction*>                     kipiBatchActions;
     QList<QAction*>                     kipiAlbumActions;
 
-    KActionMenu                        *cameraSolidMenu;
+    KActionMenu                        *cameraMenu;
     KActionMenu                        *usbMediaMenu;
     KActionMenu                        *cardReaderMenu;
-    KActionMenu                        *manuallyAddedCamerasMenu;
 
     KSharedConfig::Ptr                  config;
 

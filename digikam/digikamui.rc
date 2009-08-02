@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="61" name="digikam" >
+<gui version="62" name="digikam" >
 
  <MenuBar>
 
@@ -101,8 +101,7 @@
   </Menu>
 
   <Menu name="Import"><text>I&amp;mport</text>
-      <Action name="camera_solid" />
-      <Action name="camera_addedmanually" />
+      <Action name="cameras" />
       <Action name="usb_media" />
       <Action name="card_reader" />
       <Separator/>
