@@ -149,6 +149,7 @@ class SolidVolumeInfo
 
 public:
 
+    QString udi;  // Solid device UDI of the StorageAccess device
     QString path; // mount path of volume, with trailing slash
     QString uuid; // UUID as from Solid
     QString label; // volume label (think of CDs)
@@ -170,6 +171,7 @@ public:
 
     QMap<int, AlbumRootLocation *> locations;
     bool changingDB;
+    QStringList udisToWatch;
 
     // hack for Solid's threading problems
     QList<SolidVolumeInfo> actuallyListVolumes();
@@ -282,13 +284,24 @@ QList<SolidVolumeInfo> CollectionManagerPrivate::actuallyListVolumes()
     QList<Solid::Device> devices = Solid::Device::listFromType(Solid::DeviceInterface::StorageAccess);
     //kDebug(50003) << "got listFromType";
 
+    udisToWatch.clear();
+
     foreach(const Solid::Device& accessDevice, devices)
     {
         // check for StorageAccess
         if (!accessDevice.is<Solid::StorageAccess>())
             continue;
 
+        // mark as a device of principal interest
+        udisToWatch << accessDevice.udi();
+
         const Solid::StorageAccess *access = accessDevice.as<Solid::StorageAccess>();
+
+        // watch mount status (remove previous connections)
+        QObject::disconnect(access, SIGNAL(accessibilityChanged(bool, const QString&)),
+                            s, SLOT(accessibilityChanged(bool, const QString&)));
+        QObject::connect(access, SIGNAL(accessibilityChanged(bool, const QString&)),
+                         s, SLOT(accessibilityChanged(bool, const QString&)));
 
         if (!access->isAccessible())
             continue;
@@ -324,6 +337,7 @@ QList<SolidVolumeInfo> CollectionManagerPrivate::actuallyListVolumes()
         Solid::StorageVolume *volume = volumeDevice.as<Solid::StorageVolume>();
 
         SolidVolumeInfo info;
+        info.udi = accessDevice.udi();
         info.path = access->filePath();
         info.isMounted = access->isAccessible();
         if (!info.path.isEmpty() && !info.path.endsWith('/'))
@@ -622,12 +636,12 @@ CollectionManager::CollectionManager()
     connect(Solid::DeviceNotifier::instance(),
             SIGNAL(deviceAdded(const QString &)),
             this,
-            SLOT(deviceChange(const QString &)));
+            SLOT(deviceAdded(const QString &)));
 
     connect(Solid::DeviceNotifier::instance(),
             SIGNAL(deviceRemoved(const QString &)),
             this,
-            SLOT(deviceChange(const QString &)));
+            SLOT(deviceRemoved(const QString &)));
 
     // DatabaseWatch slot is connected at construction of DatabaseWatch, which may be later.
 }
@@ -1194,11 +1208,27 @@ QString CollectionManager::oneAlbumRootPath()
     return QString();
 }
 
-void CollectionManager::deviceChange(const QString& udi)
+void CollectionManager::deviceAdded(const QString& udi)
 {
     Solid::Device device(udi);
     if (device.is<Solid::StorageAccess>())
         updateLocations();
+}
+
+void CollectionManager::deviceRemoved(const QString& udi)
+{
+    // we can't access the Solid::Device to check because it is removed
+    DatabaseAccess access;
+    if (!d->udisToWatch.contains(udi))
+        return;
+    updateLocations();
+}
+
+void CollectionManager::accessibilityChanged(bool accessible, const QString& udi)
+{
+    Q_UNUSED(accessible);
+    Q_UNUSED(udi);
+    updateLocations();
 }
 
 void CollectionManager::updateLocations()
