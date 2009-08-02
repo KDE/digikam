@@ -69,7 +69,7 @@ void CameraNameHelperTest::testStaticCreateName()
     QFETCH(bool,    autoDetect);
     QFETCH(QString, result);
 
-    QCOMPARE(CameraNameHelper::createName(vendor, product, mode, autoDetect), result);
+    QCOMPARE(CameraNameHelper::createCameraName(vendor, product, mode, autoDetect), result);
 }
 
 #ifdef ENABLE_GPHOTO2
@@ -83,50 +83,7 @@ void CameraNameHelperTest::testCameraNameFromGPCamera()
     // test if all camera names stay intact
     foreach (const QString& camera, clist)
     {
-        QCOMPARE(CameraNameHelper::createFullCameraName(camera), camera);
+        QCOMPARE(CameraNameHelper::formattedFullCameraName(camera), camera);
     }
 }
 #endif
-
-void CameraNameHelperTest::testCameraName_data()
-{
-    QTest::addColumn<QString>("vendor");
-    QTest::addColumn<QString>("product");
-    QTest::addColumn<QString>("mode");
-    QTest::addColumn<bool>("autoDetect");
-    QTest::addColumn<QString>("result");
-
-    QString autoString("auto-detected");
-
-    // tests from testStaticCreateName_data, please replace this code with the code from
-    // the referenced method if more tests are added
-    QTest::newRow("01") << "Nikon" << "D50" << "PTP Mode" << true
-                        << QString("Nikon D50 (PTP Mode, %1)").arg(autoString);
-    QTest::newRow("02") << "  Canon   " << "Powershot A80" << "" << false
-                        << QString("Canon Powershot A80");
-    QTest::newRow("03") << "  Canon   " << "Powershot A80" << "" << true
-                        << QString("Canon Powershot A80 (%1)").arg(autoString);
-    QTest::newRow("04") << "  Canon   " << "" << "PTP" << true
-                        << "";
-    QTest::newRow("05") << "" << "D50" << "PTP Mode" << true
-                        << "";
-    QTest::newRow("06") << "Nikon" << "D50" << "(PTP Mode)" << true
-                        << QString("Nikon D50 (PTP Mode, %1)").arg(autoString);
-}
-
-void CameraNameHelperTest::testCameraName()
-{
-    QFETCH(QString, vendor);
-    QFETCH(QString, product);
-    QFETCH(QString, mode);
-    QFETCH(bool,    autoDetect);
-    QFETCH(QString, result);
-
-    QString fullCamName = CameraNameHelper::createName(vendor, product, mode, autoDetect);
-    QString camName     = CameraNameHelper::createName(vendor, product);
-
-    // use full name to see if parsing is working
-    CameraNameHelper cnh(fullCamName);
-
-    QCOMPARE(cnh.cameraName(), camName);
-}

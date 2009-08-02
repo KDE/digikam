@@ -138,8 +138,7 @@ CameraUI::CameraUI(QWidget* parent, const QString& cameraTitle,
         : KXmlGuiWindow(parent), d(new CameraUIPriv)
 
 {
-    CameraNameHelper cnh(cameraTitle);
-    QString title  = cnh.cameraName();
+    QString title  = CameraNameHelper::formattedCameraName(cameraTitle);
     d->cameraTitle = (title.isEmpty()) ? cameraTitle : title;
     setCaption(d->cameraTitle);
 

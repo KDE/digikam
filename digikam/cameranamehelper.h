@@ -38,24 +38,17 @@ class CameraNameHelper
 
 public:
 
-    CameraNameHelper(const QString& cameraName);
-    ~CameraNameHelper();
+    CameraNameHelper()  {};
+    ~CameraNameHelper() {};
 
-    void    setAutoDetected(bool v);
-    void    setMode(const QString& mode);
-    void    setVendor(const QString& vendor);
-    void    setProduct(const QString& product);
 
-    QString cameraName()     const;
-    QString fullCameraName() const;
+    static  QString formattedFullCameraName(const QString& name, bool autoDetected = false);
+    static  QString formattedCameraName(const QString& name, bool autoDetected = false);
 
-    // --------------------------------------------------------
-
-    static  QString createFullCameraName(const QString& name, bool autoDetected = false);
-    static  QString createName(const QString& vendor,
-                               const QString& product = QString(),
-                               const QString& mode    = QString(),
-                               bool autoDetected      = false);
+    static  QString createCameraName(const QString& vendor,
+                                     const QString& product = QString(),
+                                     const QString& mode    = QString(),
+                                     bool  autoDetected     = false);
 
 private:
 
@@ -63,10 +56,7 @@ private:
 
     enum CAMERANAME_TOKENS { VendorAndProduct = 1, Mode };
     static  QString extractCameraNameToken(const QString& cameraName, int tokenID);
-
-private:
-
-    CameraNameHelperPriv* const d;
+    static  QString parseAndFormatCameraName(const QString& cameraName, bool parseMode, bool autoDetected);
 };
 
 }

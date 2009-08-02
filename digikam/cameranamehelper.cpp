@@ -31,33 +31,7 @@
 namespace Digikam
 {
 
-class CameraNameHelperPriv
-{
-public:
-
-    CameraNameHelperPriv()
-    {
-    }
-
-    bool    autodetect;
-    QString originalCameraName;
-    QString mode;
-    QString vendor;
-    QString product;
-};
-
-CameraNameHelper::CameraNameHelper(const QString& cameraName)
-                : d(new CameraNameHelperPriv)
-{
-    d->originalCameraName = cameraName;
-    d->autodetect         = false;
-}
-
-CameraNameHelper::~CameraNameHelper()
-{
-}
-
-QString CameraNameHelper::createName(const QString& vendor, const QString& product,
+QString CameraNameHelper::createCameraName(const QString& vendor, const QString& product,
                                      const QString& mode,   bool autoDetected)
 {
     if (vendor.isEmpty())
@@ -87,12 +61,22 @@ QString CameraNameHelper::createName(const QString& vendor, const QString& produ
     return tmp.trimmed();
 }
 
-QString CameraNameHelper::createFullCameraName(const QString& name, bool autoDetected)
+QString CameraNameHelper::formattedCameraName(const QString& name, bool autoDetected)
+{
+    return parseAndFormatCameraName(name, false, autoDetected);
+}
+
+QString CameraNameHelper::formattedFullCameraName(const QString& name, bool autoDetected)
+{
+    return parseAndFormatCameraName(name, true, autoDetected);
+}
+
+QString CameraNameHelper::parseAndFormatCameraName(const QString& cameraName, bool parseMode, bool autoDetected)
 {
     QString tmp;
 
-    QString vendorAndProduct = extractCameraNameToken(name, VendorAndProduct);
-    QString mode             = extractCameraNameToken(name, Mode);
+    QString vendorAndProduct = extractCameraNameToken(cameraName, VendorAndProduct);
+    QString mode             = parseMode ? extractCameraNameToken(cameraName, Mode) : QString();
 
     if (vendorAndProduct.isEmpty())
         return QString();
@@ -107,88 +91,15 @@ QString CameraNameHelper::createFullCameraName(const QString& name, bool autoDet
     {
         vendor  = words.takeFirst();
         product = words.join(" ");
-        tmp     = createName(vendor, product, mode, autoDetected);
     }
 
-    return (tmp.isEmpty()) ? vendorAndProduct : tmp;
+    tmp = createCameraName(vendor, product, mode, autoDetected);
+    return (tmp.isEmpty()) ? cameraName : tmp;
 }
 
 QString CameraNameHelper::autoDetectedString()
 {
     return i18n("auto-detected");
-}
-
-void CameraNameHelper::setAutoDetected(bool v)
-{
-    d->autodetect = v;
-}
-
-QString CameraNameHelper::cameraName() const
-{
-    QString tmp;
-
-    // We should check if vendor and product have been set manually, if not, use the originalCameraName
-    // and try to extract the mode
-    if (d->vendor.isEmpty() || d->product.isEmpty())
-    {
-        tmp = extractCameraNameToken(d->originalCameraName, VendorAndProduct);
-    }
-    else
-    {
-        tmp = createName(d->vendor, d->product);
-    }
-
-    return tmp;
-}
-
-QString CameraNameHelper::fullCameraName() const
-{
-    QString tmp;
-
-    if (d->vendor.isEmpty() || d->product.isEmpty())
-    {
-
-        QString vendorAndProduct = extractCameraNameToken(d->originalCameraName, VendorAndProduct);
-        QString mode             = extractCameraNameToken(d->originalCameraName, Mode);
-        bool    autoDetected     = d->autodetect;
-
-        if (vendorAndProduct.isEmpty())
-            return QString();
-
-        // we split vendorAndProduct once, it doesn't really matter if the variables are correctly filled,
-        // it is only important that both are not empty.
-        QStringList words = vendorAndProduct.split(' ');
-        QString     vendor;
-        QString     product;
-
-        if (words.count() > 1)
-        {
-            vendor  = words.takeFirst();
-            product = words.join(" ");
-            tmp     = createName(vendor, product, mode, autoDetected);
-        }
-    }
-    else
-    {
-        tmp = createName(d->vendor, d->product, d->mode, d->autodetect);
-    }
-
-    return tmp;
-}
-
-void CameraNameHelper::setMode(const QString& mode)
-{
-    d->mode = mode;
-}
-
-void CameraNameHelper::setVendor(const QString& vendor)
-{
-    d->vendor = vendor;
-}
-
-void CameraNameHelper::setProduct(const QString& product)
-{
-    d->product = product;
 }
 
 QString CameraNameHelper::extractCameraNameToken(const QString& cameraName, int tokenID)
