@@ -84,6 +84,8 @@ public:
 
     typedef QList<AlbumInfo> List;
 
+    bool isNull() { return id == 0; }
+
     int     id;
     int     albumRootId;
     QString relativePath;
@@ -115,6 +117,8 @@ public:
     TagInfo() : id(0), pid(0), iconAlbumRootId(0) {};
 
     typedef QList<TagInfo> List;
+
+    bool isNull() { return id == 0; }
 
     int     id;
     int     pid;
@@ -157,6 +161,8 @@ public:
 
     typedef QList<SearchInfo> List;
 
+    bool isNull() { return id == 0; }
+
     int                  id;
     QString              name;
     DatabaseSearch::Type type;
@@ -176,6 +182,8 @@ class AlbumShortInfo
 public:
 
     AlbumShortInfo() : id(0) {};
+
+    bool isNull() { return id == 0; }
 
     int         id;
     QString     relativePath;
@@ -210,6 +218,8 @@ public:
 
     ItemShortInfo() : id(0), albumID(0) {};
 
+    bool isNull() { return id == 0; }
+
     qlonglong id;
     QString   itemName;
     int       albumID;
@@ -225,6 +235,8 @@ public:
         : id(0), albumID(0), status(DatabaseItem::UndefinedStatus),
           category(DatabaseItem::UndefinedCategory)
     {};
+
+    bool isNull() { return id == 0; }
 
     qlonglong              id;
     int                    albumID;
@@ -262,7 +274,9 @@ class CommentInfo
 {
 public:
 
-    CommentInfo() : imageId(-1), type(DatabaseComment::UndefinedType) {};
+    CommentInfo() : id(-1), imageId(-1), type(DatabaseComment::UndefinedType) {};
+
+    bool isNull() { return id == -1; }
 
     int                   id;
     qlonglong             imageId;
@@ -278,6 +292,8 @@ class CopyrightInfo
 public:
 
     CopyrightInfo() : id(-1) {};
+
+    bool isNull() { return id == -1; }
 
     qlonglong id;
     QString   property;
