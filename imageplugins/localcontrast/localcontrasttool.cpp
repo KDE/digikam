@@ -151,16 +151,16 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     d->functionInput->addItem(i18n("power"));
     d->functionInput->addItem(i18n("linear"));
     d->functionInput->setDefaultIndex(0);
-    d->functionInput->setWhatsThis(i18n("<b>Function</b>: This is the function which combines the original RGB chanels"
-                                        "with the desaturated blured image. This function used on each of the tonemapping"
-                                        "stage. It can linear or power. Basicaly, these function increase the value where"
-                                        "both the original and blurred image's value are low and do the opposite on high"
+    d->functionInput->setWhatsThis(i18n("<b>Function</b>: This is the function which combines the original RGB channels "
+                                        "with the desaturated blurred image. This function used on each of the tonemapping "
+                                        "stage. It can linear or power. Basically, these function increase the value where "
+                                        "both the original and blurred image's value are low and do the opposite on high "
                                         "values."));
 
     // -------------------------------------------------------------
 
     d->stretchContrastCheck = new QCheckBox(i18n("Stretch contrast"), firstPage);
-    d->stretchContrastCheck->setWhatsThis(i18n("<b>Strecth contrast</b>: This stretch the contrast of the original image. "
+    d->stretchContrastCheck->setWhatsThis(i18n("<b>Stretch contrast</b>: This stretch the contrast of the original image. "
                                                "This is applied before the tonemapping process."));
     d->stretchContrastCheck->setChecked(false);
 
@@ -173,7 +173,7 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     d->highSaturationInput->setSliderEnabled(true);
     d->highSaturationInput->setObjectName("highSaturationInput");
     d->highSaturationInput->setWhatsThis(i18n("<b>High and low saturation</b>: Usually the (perceived) saturation is "
-                                             "increased. The user can choose to lower the saturation on original highlight"
+                                             "increased. The user can choose to lower the saturation on original highlight "
                                              "and shadows from the image with these parameters."));
 
     // -------------------------------------------------------------
@@ -185,7 +185,7 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     d->lowSaturationInput->setSliderEnabled(true);
     d->lowSaturationInput->setObjectName("lowSaturationInput");
     d->lowSaturationInput->setWhatsThis(i18n("<b>High and low saturation</b>: Usually the (perceived) saturation is "
-                                             "increased. The user can choose to lower the saturation on original highlight"
+                                             "increased. The user can choose to lower the saturation on original highlight "
                                              "and shadows from the image with these parameters."));
 
     // -------------------------------------------------------------
@@ -517,7 +517,7 @@ void LocalContrastTool::prepareEffect()
     d->expanderBox->setEnabled(false);
 
     ToneMappingParameters *par = createParams();
-    
+
     DImg image = d->previewWidget->getOriginalRegionImage();
     DImg *image2 = new DImg(image.width(), image.height(), image.sixteenBit(), image.hasAlpha(), image.bits());
 
@@ -554,9 +554,9 @@ void LocalContrastTool::putFinalData()
 //                                QString( i18n("Photograph Noise Reduction Settings File to Load")) );
 //     if ( loadRestorationFile.isEmpty() )
 //         return;
-// 
+//
 //     QFile file(loadRestorationFile.path());
-// 
+//
 //     if ( file.open(QIODevice::ReadOnly) )
 //     {
 //         QTextStream stream( &file );
@@ -568,7 +568,7 @@ void LocalContrastTool::putFinalData()
 //             file.close();
 //             return;
 //         }
-// 
+//
 //         blockSignals(true);
 //         d->radiusInput->setValue( stream.readLine().toDouble() );
 //         d->lumToleranceInput->setValue( stream.readLine().toDouble() );
@@ -587,7 +587,7 @@ void LocalContrastTool::putFinalData()
 //     {
 //         KMessageBox::error(kapp->activeWindow(), i18n("Cannot load settings from the Photograph Noise Reduction text file."));
 //     }
-// 
+//
 //     file.close();
 // }
 
@@ -598,9 +598,9 @@ void LocalContrastTool::putFinalData()
 //                                QString( i18n("Photograph Noise Reduction Settings File to Save")) );
 //     if ( saveRestorationFile.isEmpty() )
 //         return;
-// 
+//
 //     QFile file(saveRestorationFile.path());
-// 
+//
 //     if ( file.open(QIODevice::WriteOnly) )
 //     {
 //         QTextStream stream( &file );
@@ -615,13 +615,13 @@ void LocalContrastTool::putFinalData()
 //         stream << d->gammaInput->value() << "\n";
 //         stream << d->dampingInput->value() << "\n";
 //         stream << d->phaseInput->value() << "\n";
-// 
+//
 //     }
 //     else
 //     {
 //         KMessageBox::error(kapp->activeWindow(), i18n("Cannot save settings to the Photograph Noise Reduction text file."));
 //     }
-// 
+//
 //     file.close();
 // }
 

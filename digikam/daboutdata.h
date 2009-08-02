@@ -41,7 +41,7 @@ namespace Digikam
 static inline KLocalizedString digiKamSloganFormated()
 {
     return ki18nc("This is the slogan formated string displayed in splashscreen. "
-                  "Please translate using short words else the slogan can be troncated.",
+                  "Please translate using short words else the slogan can be truncated.",
                   "<qt><font color=\"white\">"
                   "<b>Manage</b> your <b>photographs</b> like <b>a professional</b> "
                   "with the power of <b>open source</b>."
