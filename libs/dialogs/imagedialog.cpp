@@ -247,20 +247,20 @@ ImageDialog::ImageDialog(QWidget* parent, const KUrl& url, bool singleSelect, co
     {
         allPictures.insert(allPictures.indexOf("|"), QString(KDcrawIface::DcrawBinary::instance()->rawFiles()) + QString(" *.JPE *.TIF *.PGF"));
         patternList.removeAll(patternList[0]);
-        patternList.prepend(allPictures);
         // Added RAW file formats supported by dcraw program like a type mime.
         // Note: we cannot use here "image/x-raw" type mime from KDE because it is incomplete
         // or unavailable(see file #121242 in B.K.O).
-        patternList.append(i18n("\n%1|Camera RAW files", QString(KDcrawIface::DcrawBinary::instance()->rawFiles())));
+        patternList.prepend(i18n("\n%1|Camera RAW files", QString(KDcrawIface::DcrawBinary::instance()->rawFiles())));
+        patternList.prepend(allPictures);
     }
 #else
     allPictures.insert(allPictures.indexOf("|"), QString(KDcrawIface::KDcraw::rawFiles()) + QString(" *.JPE *.TIF *.PGF"));
     patternList.removeAll(patternList[0]);
-    patternList.prepend(allPictures);
     // Added RAW file formats supported by dcraw program like a type mime.
     // Note: we cannot use here "image/x-raw" type mime from KDE because it is incomplete
     // or unavailable(see file #121242 in B.K.O).
-    patternList.append(i18n("%1|Camera RAW files", QString(KDcrawIface::KDcraw::rawFiles())));
+    patternList.prepend(i18n("%1|Camera RAW files", QString(KDcrawIface::KDcraw::rawFiles())));
+    patternList.prepend(allPictures);
 #endif
     patternList.append(i18n("*.pgf|Progressive Graphics file"));
 
