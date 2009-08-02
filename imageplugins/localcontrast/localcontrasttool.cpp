@@ -160,8 +160,8 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     // -------------------------------------------------------------
 
     d->stretchContrastCheck = new QCheckBox(i18n("Stretch contrast"), firstPage);
-    d->stretchContrastCheck->setWhatsThis(i18n("<b>Stretch contrast</b>: This stretch the contrast of the original image. "
-                                               "This is applied before the tonemapping process."));
+    d->stretchContrastCheck->setWhatsThis(i18n("<b>Stretch contrast</b>: This stretches the contrast of the original image. "
+                                               "It is applied before the tonemapping process."));
     d->stretchContrastCheck->setChecked(false);
 
     // -------------------------------------------------------------
