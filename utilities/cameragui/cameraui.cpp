@@ -127,6 +127,7 @@
 #include "cameralist.h"
 #include "cameratype.h"
 #include "cameraui_p.h"
+#include "cameranamehelper.h"
 
 namespace Digikam
 {
@@ -137,8 +138,10 @@ CameraUI::CameraUI(QWidget* parent, const QString& cameraTitle,
         : KXmlGuiWindow(parent), d(new CameraUIPriv)
 
 {
-    d->cameraTitle = cameraTitle;
-    setCaption(cameraTitle);
+    CameraNameHelper cnh(cameraTitle);
+    QString title  = cnh.cameraName();
+    d->cameraTitle = (title.isEmpty()) ? cameraTitle : title;
+    setCaption(d->cameraTitle);
 
     // -------------------------------------------------------------------
 
