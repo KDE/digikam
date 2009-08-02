@@ -23,6 +23,10 @@
 
 #include "cameranamehelper.h"
 
+// Qt includes
+
+#include <qaction.h>
+
 // KDE includes
 
 #include <klocale.h>
@@ -146,6 +150,54 @@ QString CameraNameHelper::extractCameraNameToken(const QString& cameraName, int 
     }
 
     return (tmp.isEmpty()) ? cameraName.trimmed() : tmp.trimmed();
+}
+
+bool CameraNameHelper::sameDevices(const QString& deviceA, const QString& deviceB)
+{
+    if (deviceA.isEmpty() || deviceB.isEmpty())
+        return false;
+
+    if (deviceA == deviceB)
+        return true;
+
+    // We need to parse the names a little bit. First check if the vendor and name match
+    QString vendorAndProductA = extractCameraNameToken(deviceA, VendorAndProduct);
+    QString vendorAndProductB = extractCameraNameToken(deviceB, VendorAndProduct);
+    QString cameraNameA       = createCameraName(vendorAndProductA);
+    QString cameraNameB       = createCameraName(vendorAndProductB);
+
+    // try to clean up the string, if not possible, return false
+    if (cameraNameA != cameraNameB)
+    {
+        QString tmpA = prepareStringForDeviceComparison(cameraNameA, VendorAndProduct);
+        QString tmpB = prepareStringForDeviceComparison(cameraNameB, VendorAndProduct);
+
+        if (tmpA != tmpB)
+            return false;
+    }
+
+    // now check if the mode is the same
+    QString modeA             = extractCameraNameToken(deviceA, Mode);
+    QString modeB             = extractCameraNameToken(deviceB, Mode);
+
+    // remove the 'mode' token for comparsion
+    QString strippedModeA     = prepareStringForDeviceComparison(modeA, Mode);
+    QString strippedModeB     = prepareStringForDeviceComparison(modeB, Mode);
+
+    if (strippedModeA == strippedModeB)
+        return true;
+
+    return false;
+}
+
+QString CameraNameHelper::prepareStringForDeviceComparison(const QString& string, int tokenID)
+{
+    QString tmp = string.toLower().remove('(').remove(')').remove(autoDetectedString()).trimmed();
+
+    if (tokenID == Mode)
+        tmp = tmp.remove("mode").remove(',');
+
+    return tmp.trimmed();
 }
 
 } // namespace Digikam

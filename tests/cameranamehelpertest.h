@@ -45,6 +45,9 @@ private Q_SLOTS:
     void testStaticCreateName();
     void testStaticCreateName_data();
 
+    void testForSameDevices();
+    void testForSameDevices_data();
+
 };
 
 #endif /* CAMERANAMEHELPERTEST_H */

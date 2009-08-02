@@ -87,3 +87,22 @@ void CameraNameHelperTest::testCameraNameFromGPCamera()
     }
 }
 #endif
+
+void CameraNameHelperTest::testForSameDevices_data()
+{
+    QTest::addColumn<QString>("deviceA");
+    QTest::addColumn<QString>("deviceB");
+    QTest::addColumn<bool>("result");
+
+    QTest::newRow("01") << "Nikon D50 (ptp, auto-detected)" << "Nikon D50 (PTP Mode)" << true;
+    QTest::newRow("02") << "Nikon D50 (ptp mode)" << " Nikon D50 (PTP)" << true;
+}
+
+void CameraNameHelperTest::testForSameDevices()
+{
+    QFETCH(QString, deviceA);
+    QFETCH(QString, deviceB);
+    QFETCH(bool,    result);
+
+    QCOMPARE(CameraNameHelper::sameDevices(deviceA, deviceB), result);
+}
