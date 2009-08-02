@@ -74,12 +74,16 @@ public:
 
     void setData(const KExiv2::AltLangMap& comments,
                  const KExiv2::AltLangMap& authors,
+                 const QString &commonAuthor,
                  const KExiv2::AltLangMap& dates);
 
     void fromAltLangMap(const KExiv2::AltLangMap& map);
     KExiv2::AltLangMap toAltLangMap() const;
 
-    void setAuthorsList(const KExiv2::AltLangMap& map);
+    /** Sets the author for the comments in the specified languages.
+     *  If commonAuthor is not null, it will be used to set the author of all comments
+     *  for which the author is not specified in the map. */
+    void setAuthorsList(const KExiv2::AltLangMap& map, const QString &commonAuthor = QString());
     KExiv2::AltLangMap authorsList() const;
 
     void setDatesList(const KExiv2::AltLangMap& map);
