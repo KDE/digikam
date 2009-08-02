@@ -1831,16 +1831,7 @@ void DigikamApp::slotSolidSetupDone(Solid::ErrorType errorType, QVariant errorDa
 void DigikamApp::slotSolidDeviceChanged(const QString& udi)
 {
     Q_UNUSED(udi)
-
     fillSolidMenus();
-
-//    Solid::Device device(udi);
-//
-//    if (device.isValid())
-//    {
-//        if (device.is<Solid::StorageAccess>() || device.is<Solid::Camera>())
-//            fillSolidMenus();
-//    }
 }
 
 bool DigikamApp::checkSolidCamera(const Solid::Device& cameraDevice)
