@@ -473,7 +473,7 @@ int AlbumDB::addTag(int parentTagID, const QString& name, const QString& iconKDE
     parameters.insert(":tagname", name);
 //     if (!d->db->execDBAction(d->db->getDBAction(QString("InsertTag"))), &parameters, NULL, &id)
 
-     if (!d->db->execDBAction(d->db->getDBAction(QString("InsertTag")), 0 , &id))
+     if (!d->db->execDBAction(d->db->getDBAction(QString("InsertTag")), parameters, 0 , &id))
 //     if (!d->db->execSql( QString("INSERT INTO Tags (pid, name) "
 //                                  "VALUES( ?, ?);"),
 //                          parentTagID,
