@@ -31,8 +31,6 @@
 namespace Digikam
 {
 
-class CameraNameHelperPriv;
-
 class CameraNameHelper
 {
 
@@ -41,22 +39,20 @@ public:
     CameraNameHelper()  {};
     ~CameraNameHelper() {};
 
+    static QString formattedFullCameraName(const QString& name, bool autoDetected = false);
+    static QString formattedCameraName(const QString& name, bool autoDetected = false);
 
-    static  QString formattedFullCameraName(const QString& name, bool autoDetected = false);
-    static  QString formattedCameraName(const QString& name, bool autoDetected = false);
-
-    static  QString createCameraName(const QString& vendor,
-                                     const QString& product = QString(),
-                                     const QString& mode    = QString(),
-                                     bool  autoDetected     = false);
+    static QString createCameraName(const QString& vendor,
+                                    const QString& product      = QString(),
+                                    const QString& mode         = QString(),
+                                    bool           autoDetected = false);
 
 private:
 
-    static  QString autoDetectedString();
-
-    enum CAMERANAME_TOKENS { VendorAndProduct = 1, Mode };
-    static  QString extractCameraNameToken(const QString& cameraName, int tokenID);
-    static  QString parseAndFormatCameraName(const QString& cameraName, bool parseMode, bool autoDetected);
+    enum   CAMERANAME_TOKENS { VendorAndProduct = 1, Mode };
+    static QString extractCameraNameToken(const QString& cameraName, int tokenID);
+    static QString parseAndFormatCameraName(const QString& cameraName, bool parseMode, bool autoDetected);
+    static QString autoDetectedString();
 };
 
 }
