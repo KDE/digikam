@@ -44,6 +44,7 @@ namespace Digikam
 {
 
 class CopyrightInfo;
+class ImageCopyrightCache;
 class Template;
 
 class DIGIKAM_DATABASE_EXPORT ImageCopyright
@@ -55,6 +56,10 @@ public:
 
     /** Create a null ImageCopyright object */
     ImageCopyright();
+
+    ImageCopyright(const ImageCopyright& other);
+    ~ImageCopyright();
+    ImageCopyright &operator=(const ImageCopyright& other);
 
     enum ReplaceMode
     {
@@ -227,6 +232,8 @@ public:
 
 protected:
 
+    CopyrightInfo copyrightInfo(const QString& property);
+    QList<CopyrightInfo> copyrightInfos(const QString& property);
     QString readSimpleProperty(const QString& property);
     void    setSimpleProperty(const QString& property, const QString& value);
     QString readLanguageProperty(const QString& property, const QString& languageCode);
@@ -238,7 +245,10 @@ protected:
 
 protected:
 
+    friend class ImageCopyrightCache;
+
     qlonglong m_id;
+    ImageCopyrightCache *m_cache;
 };
 
 } // namespace Digikam
