@@ -87,7 +87,7 @@ QString CameraNameHelper::createName(const QString& vendor, const QString& produ
     return tmp.trimmed();
 }
 
-QString CameraNameHelper::fullCameraName(const QString& name, bool autoDetected)
+QString CameraNameHelper::createFullCameraName(const QString& name, bool autoDetected)
 {
     QString tmp;
 
