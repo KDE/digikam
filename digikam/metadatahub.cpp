@@ -173,7 +173,7 @@ void MetadataHub::load(const ImageInfo& info)
 
     Template tref = info.metadataTemplate();
     Template t    = TemplateManager::defaultManager()->findByContents(tref);
-    kDebug(50003) << "Found Metadata Template: " << t.templateTitle();
+    //kDebug(50003) << "Found Metadata Template: " << t.templateTitle();
 
     load(info.dateTime(), commentMap, info.rating(), t.isNull() ? tref : t);
 
