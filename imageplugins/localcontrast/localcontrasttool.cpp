@@ -148,8 +148,8 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
 
     QLabel *label1   = new QLabel(i18n("Function:"), firstPage);
     d->functionInput = new RComboBox(firstPage);
-    d->functionInput->addItem(i18n("power"));
-    d->functionInput->addItem(i18n("linear"));
+    d->functionInput->addItem(i18n("Power"));
+    d->functionInput->addItem(i18n("Linear"));
     d->functionInput->setDefaultIndex(0);
     d->functionInput->setWhatsThis(i18n("<b>Function</b>: This is the function which combines the original RGB channels "
                                         "with the desaturated blurred image. This function used on each of the tonemapping "

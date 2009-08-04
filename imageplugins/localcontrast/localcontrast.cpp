@@ -66,7 +66,7 @@ LocalContrast::LocalContrast(DImg *image, ToneMappingParameters *par, QObject *p
     // Parameters
     d->par = par;
 
-    // Image informations
+    // Image information
     d->width        = image->width();
     d->height       = image->height();
     d->data         = image->bits();
