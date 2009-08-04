@@ -177,11 +177,18 @@ Q_SIGNALS:
 
     /**
      * Emitted when the scanning has finished.
+     * Note that start/finishScanningAlbum may be emitted recursively.
      */
     void finishedScanningAlbumRoot(const QString& albumRoot);
     void finishedScanningAlbum(const QString& albumRoot, const QString& album, int filesScanned);
     void finishedScanningForStaleAlbums();
     void finishedCompleteScan();
+    /**
+     * Emitted between startScanningAlbum and finishedScanningAlbum.
+     * In between these two signals, the sum of filesScanned of all sent signals
+     * equals the one reported by finishedScanningAlbum()
+     */
+    void scannedFiles(int filesScanned);
     /**
      * Emitted when the observer told to cancel the scan
      */

@@ -593,10 +593,18 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
     const QFileInfoList list = dir.entryInfoList(QDir::AllDirs | QDir::Files  | QDir::NoDotAndDotDot);
     QFileInfoList::const_iterator fi;
 
+    int counter = -1;
     for (fi = list.constBegin(); fi != list.constEnd(); ++fi)
     {
         if (!d->checkObserver())
             return; // return directly, do not go to cleanup code after loop!
+
+        counter++;
+        if (d->wantSignals && counter && (counter % 100 == 0))
+        {
+            emit scannedFiles(counter);
+            counter = 0;
+        }
 
         if ( fi->isFile())
         {
@@ -623,6 +631,13 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
                 //kDebug(50003) << "Adding item " << fi->fileName();
 
                 scanNewFile(*fi, albumID);
+
+                // emit signals for scanned files with much higher granularity
+                if (d->wantSignals && counter && (counter % 2 == 0))
+                {
+                    emit scannedFiles(counter);
+                    counter = 0;
+                }
             }
         }
         else if ( fi->isDir() )
@@ -636,6 +651,9 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
             scanAlbum( location, subalbum );
         }
     }
+
+    if (d->wantSignals && counter)
+        emit scannedFiles(counter);
 
     // Mark items in the db which we did not see on disk.
     if (!itemIdSet.isEmpty())

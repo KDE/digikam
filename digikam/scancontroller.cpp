@@ -530,8 +530,8 @@ void ScanController::connectCollectionScanner(CollectionScanner *scanner)
     connect(scanner, SIGNAL(startScanningAlbum(const QString&, const QString&)),
             this, SLOT(slotStartScanningAlbum(const QString&, const QString&)));
 
-    connect(scanner, SIGNAL(finishedScanningAlbum(const QString&, const QString&, int)),
-            this, SLOT(slotFinishedScanningAlbum(const QString&, const QString&, int)));
+    connect(scanner, SIGNAL(scannedFiles(int)),
+            this, SLOT(slotScannedFiles(int)));
 
     connect(scanner, SIGNAL(startScanningAlbumRoot(const QString&)),
             this, SLOT(slotStartScanningAlbumRoot(const QString&)));
@@ -559,7 +559,7 @@ void ScanController::slotStartScanningAlbum(const QString& albumRoot, const QStr
         d->progressDialog->addedAction(d->albumPixmap(), ' ' + album);
 }
 
-void ScanController::slotFinishedScanningAlbum(const QString &, const QString &, int filesScanned)
+void ScanController::slotScannedFiles(int filesScanned)
 {
     if (d->progressDialog)
         d->progressDialog->advance(filesScanned);
