@@ -120,6 +120,13 @@ public:
     void setSignalsEnabled(bool on);
 
     /**
+     * Call this to enable emitting the total files to scan
+     * (for progress info) before a complete collection scan.
+     * Default is off. If on, setSignalEnabled() must be on to take effect.
+     */
+    void setNeedFileCount(bool on);
+
+    /**
      * Record hints for the collection scanner.
      */
     void recordHints(const QList<AlbumCopyMoveHint>& hint);

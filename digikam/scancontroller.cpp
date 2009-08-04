@@ -101,6 +101,7 @@ public:
         needsCompleteScan   = false;
         fileWatchInstalled  = false;
         advice              = ScanController::Success;
+        needTotalFiles      = false;
     }
 
     bool                      running;
@@ -141,6 +142,8 @@ public:
     SplashScreen             *splash;
 
     ScanController::Advice    advice;
+
+    bool                      needTotalFiles;
 
     QPixmap albumPixmap()
     {
@@ -360,6 +363,10 @@ void ScanController::completeCollectionScan(SplashScreen *splash)
 {
     d->splash = splash;
     createProgressDialog();
+    // we only need to count the files in advance
+    //if we show a progress percentage in progress dialog
+    d->needTotalFiles = !d->splash;
+
     {
         QMutexLocker lock(&d->mutex);
         d->needsCompleteScan = true;
@@ -372,6 +379,7 @@ void ScanController::completeCollectionScan(SplashScreen *splash)
     d->progressDialog = 0;
     // We do not delete Splashscreen here.
     d->splash         = 0;
+    d->needTotalFiles = false;
 }
 
 void ScanController::scheduleCollectionScan(const QString& path)
@@ -507,6 +515,7 @@ void ScanController::run()
         {
             CollectionScanner scanner;
             connectCollectionScanner(&scanner);
+            scanner.setNeedFileCount(d->needTotalFiles);
             scanner.recordHints(d->albumHints);
             scanner.recordHints(d->itemHints);
             SimpleCollectionScannerObserver observer(&d->continueScan);

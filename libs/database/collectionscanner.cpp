@@ -90,8 +90,9 @@ public:
 
     CollectionScannerPriv()
     {
-        wantSignals = false;
-        observer    = 0;
+        wantSignals    = false;
+        needTotalFiles = false;
+        observer       = 0;
     }
 
     QSet<QString>     nameFilters;
@@ -100,6 +101,7 @@ public:
     QSet<QString>     audioFilterSet;
     QList<int>        scannedAlbums;
     bool              wantSignals;
+    bool              needTotalFiles;
 
     QDateTime         removedItemsTime;
 
@@ -135,6 +137,11 @@ CollectionScanner::~CollectionScanner()
 void CollectionScanner::setSignalsEnabled(bool on)
 {
     d->wantSignals = on;
+}
+
+void CollectionScanner::setNeedFileCount(bool on)
+{
+    d->needTotalFiles = on;
 }
 
 void CollectionScanner::recordHints(const QList<AlbumCopyMoveHint>& hints)
@@ -189,7 +196,7 @@ void CollectionScanner::completeScan()
     //TODO: Implement a mechanism to watch for album root changes while we keep this list
     QList<CollectionLocation> allLocations = CollectionManager::instance()->allAvailableLocations();
 
-    if (d->wantSignals)
+    if (d->wantSignals && d->needTotalFiles)
     {
         // count for progress info
         int count = 0;
