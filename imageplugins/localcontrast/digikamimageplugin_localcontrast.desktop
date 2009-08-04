@@ -1,12 +1,16 @@
 [Desktop Entry]
 Name=ImagePlugin_LocalContrast
 Name[sv]=Bildinsticksprogram lokal kontrast
+Name[x-test]=xxImagePlugin_LocalContrastxx
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Local contrast plugin for Digikam
+Comment[pt]=Um 'plugin' do contraste local para o Digikam
+Comment[pt_BR]=Um 'plugin' do contraste local para o Digikam
 Comment[sv]=Digikam insticksprogram för lokal kontrast
 Comment[uk]=Додаток виправлення локальної контрастності для digiKam
+Comment[x-test]=xxLocal contrast plugin for Digikamxx
 
 X-KDE-Library=digikamimageplugin_localcontrast
 author=Pontabry Julien, julien dot pontabry at gmail dot com
