@@ -129,6 +129,7 @@ void LocalContrast::filterImage()
 
 void LocalContrast::progressCallback(int progress)
 {
+    Q_UNUSED(progress)
     // TODO
 }
 
