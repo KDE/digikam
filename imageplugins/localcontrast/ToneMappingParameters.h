@@ -30,38 +30,38 @@
 
 
 class ToneMappingParameters{
-	public:
-		ToneMappingParameters();
-		~ToneMappingParameters();
+    public:
+        ToneMappingParameters();
+        ~ToneMappingParameters();
 
-		REALTYPE get_power(int nstage);
-		REALTYPE get_blur(int nstage);
+        REALTYPE get_power(int nstage);
+        REALTYPE get_blur(int nstage);
 
-		REALTYPE get_unsharp_mask_power();
-		REALTYPE get_unsharp_mask_blur();
+        REALTYPE get_unsharp_mask_power();
+        REALTYPE get_unsharp_mask_blur();
 
-		void save_parameters(const char *filename);
-		bool load_parameters(const char *filename);
+        void save_parameters(const char *filename);
+        bool load_parameters(const char *filename);
 
-		bool info_fast_mode;		
+        bool info_fast_mode;
 
-		//parameters
-		int low_saturation;
-		int high_saturation;
-		bool stretch_contrast;
-		int function_id;
-		struct{
-			bool enabled;
-			REALTYPE power;
-			REALTYPE blur;
-		}stage[TONEMAPPING_MAX_STAGES];
+        //parameters
+        int low_saturation;
+        int high_saturation;
+        bool stretch_contrast;
+        int function_id;
+        struct{
+            bool enabled;
+            REALTYPE power;
+            REALTYPE blur;
+        }stage[TONEMAPPING_MAX_STAGES];
 
-		struct{
-			bool enabled;
-			REALTYPE power;
-			REALTYPE blur;
-			int threshold;
-		} unsharp_mask;
+        struct{
+            bool enabled;
+            REALTYPE power;
+            REALTYPE blur;
+            int threshold;
+        } unsharp_mask;
 };
 
 #endif
