@@ -156,6 +156,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
+    void slotStartCompleteScan();
     void slotTotalFilesToScan(int count);
     void slotStartScanningAlbum(const QString& albumRoot, const QString& album);
     void slotScannedFiles(int filesScanned);
@@ -186,6 +187,7 @@ private:
     virtual bool continueQuery();
 
     void createProgressDialog();
+    void setInitializationMessage();
 
 private:
 

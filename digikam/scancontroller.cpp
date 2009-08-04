@@ -170,6 +170,13 @@ public:
         return errorPix;
     }
 
+    QPixmap restartPixmap()
+    {
+        if (errorPix.isNull())
+            errorPix = KIconLoader::global()->loadIcon("view-refresh", KIconLoader::NoGroup, 32);
+        return errorPix;
+    }
+
     void garbageCollectHints(bool setAccessTime)
     {
         // called with locked mutex
@@ -325,6 +332,7 @@ ScanController::Advice ScanController::databaseInitialization()
 {
     d->advice = Success;
     createProgressDialog();
+    setInitializationMessage();
     {
         QMutexLocker lock(&d->mutex);
         d->needsInitialization = true;
@@ -524,6 +532,9 @@ void ScanController::connectCollectionScanner(CollectionScanner *scanner)
 {
     scanner->setSignalsEnabled(true);
 
+    connect(scanner, SIGNAL(startCompleteScan()),
+            this, SLOT(slotStartCompleteScan()));
+
     connect(scanner, SIGNAL(totalFilesToScan(int)),
             this, SLOT(slotTotalFilesToScan(int)));
 
@@ -541,15 +552,23 @@ void ScanController::connectCollectionScanner(CollectionScanner *scanner)
 
     connect(scanner, SIGNAL(startScanningAlbumRoots()),
             this, SLOT(slotStartScanningAlbumRoots()));
-
-    connect(scanner, SIGNAL(startCompleteScan()),
-            this, SLOT(slotTriggerShowProgressDialog()));
 }
 
 void ScanController::slotTotalFilesToScan(int count)
 {
     if (d->progressDialog)
         d->progressDialog->incrementMaximum(count);
+}
+
+void ScanController::slotStartCompleteScan()
+{
+    slotTriggerShowProgressDialog();
+
+    QString message = i18n("Preparing collection scan");
+    if (d->splash)
+        d->splash->message(message);
+    if (d->progressDialog)
+        d->progressDialog->addedAction(d->restartPixmap(), message);
 }
 
 void ScanController::slotStartScanningAlbum(const QString& albumRoot, const QString& album)
@@ -659,6 +678,15 @@ void ScanController::slotErrorFromInitialization(const QString& errorMessage)
         d->progressDialog->addedAction(d->errorPixmap(), message);
 
     KMessageBox::error(d->progressDialog, errorMessage);
+}
+
+void ScanController::setInitializationMessage()
+{
+    QString message = i18n("Initializing database");
+    if (d->splash)
+        d->splash->message(message);
+    if (d->progressDialog)
+        d->progressDialog->addedAction(d->restartPixmap(), message);
 }
 
 static AlbumCopyMoveHint hintForAlbum(const PAlbum *album, int dstAlbumRootId, const QString& relativeDstPath,
