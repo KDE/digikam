@@ -270,7 +270,7 @@ void PreviewWidget::setZoomFactor(double zoom, bool centerView)
     }
 
     // To limit precision of zoom value and reduce error with check of max/min zoom.
-    d->zoom       = floor(zoom * 10000.0) / 10000.0;
+    d->zoom       = round(zoom * 10000.0) / 10000.0;
     d->zoomWidth  = (int)(previewWidth()  * d->zoom);
     d->zoomHeight = (int)(previewHeight() * d->zoom);
 
@@ -379,7 +379,7 @@ double PreviewWidget::calcAutoZoomFactor(AutoZoomMode mode)
 
     double zoom = qMin(dstWidth/srcWidth, dstHeight/srcHeight);
     // limit precision as above
-    zoom = floor(zoom * 10000.0) / 10000.0;
+    zoom = round(zoom * 10000.0) / 10000.0;
     if (mode == ZoomInOrOut)
         // fit to available space, scale up or down
         return zoom;
