@@ -147,7 +147,7 @@ QString ManualRenameInput::parser(const QString& parse,
 
     // parse sequence number token ----------------------------
     {
-        QRegExp regExp("(#+)(\\{\\s*(\\d+)\\s*,\\s*(\\d+)\\s*\\})?");
+        QRegExp regExp("(#+)(\\{\\s*(\\d+)\\s*,?\\s*(\\d+)*\\s*\\})?");
         int pos     = 0;
         int slength = 0;
         int start   = 0;
@@ -286,6 +286,7 @@ QString ManualRenameInput::createToolTip()
               << token(QString("%"),              i18n("filename (lower case)"))
               << token(QString("*"),              i18n("filename (first letter of each word upper case)"))
               << token(QString("#"),              i18n("sequence number"))
+              << token(QString("#{start}"),       i18n("sequence number (custom start)"))
               << token(QString("#{start,step}"),  i18n("sequence number (custom start + step)"))
               << token(QString("[cam]"),          i18n("camera name"))
               << token(QString("[date:format]"),  i18n("date and time of the file ("

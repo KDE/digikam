@@ -84,6 +84,18 @@ void ManualRenameInputTest::testNumberToken_data()
 
     QTest::newRow("####{ 2, 3}_bla_## ###") << QString("####{ 2, 3}_bla_## ###") << filename << cameraName << curdate << 1
                                             << QString("0002_bla_01 001");
+
+    QTest::newRow("###{100}_bla") << QString("###{100}_bla") << filename << cameraName << curdate << 1
+                                  << QString("100_bla");
+
+    QTest::newRow("###{100,}_bla") << QString("###{100,}_bla") << filename << cameraName << curdate << 1
+                                   << QString("100_bla");
+
+    QTest::newRow("###{100,   }_bla") << QString("###{100,   }_bla") << filename << cameraName << curdate << 1
+                                      << QString("100_bla");
+
+    QTest::newRow("###{100   ,   }_bla") << QString("###{100   ,   }_bla") << filename << cameraName << curdate << 1
+                                         << QString("100_bla");
 }
 
 void ManualRenameInputTest::testNumberToken()
