@@ -13,6 +13,7 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/editor
                     ${CMAKE_CURRENT_SOURCE_DIR}/../imageplugins/freerotation
                     ${CMAKE_CURRENT_SOURCE_DIR}/../digikam
                     ${CMAKE_CURRENT_SOURCE_DIR}/..
+                    ${CMAKE_CURRENT_BINARY_DIR}/..
                     ${GPHOTO2_INCLUDE_DIRS}
 )
 
