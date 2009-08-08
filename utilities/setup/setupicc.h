@@ -63,9 +63,8 @@ public:
 private:
 
     void readSettings(bool restore=false);
-    void fillCombos(const QString& path, bool report);
-    void enableWidgets();
-    void disableWidgets();
+    void fillCombos(bool report);
+    void setWidgetsEnabled(bool enabled);
     void profileInfo(const QString&);
     void parseProfiles(const QList<IccProfile>& profiles);
     static QList<IccProfile> scanDirectories(const QStringList& paths);
@@ -73,10 +72,10 @@ private:
 
 private Q_SLOTS:
 
+    void slotToggledEnabled();
+    void slotToggledManagedView();
     void processLcmsUrl(const QString&);
-    void slotToggledWidgets(bool);
-    void slotToggleManagedView(bool);
-    void slotFillCombos(const KUrl& url);
+    void slotUrlChanged();
     void slotClickedIn();
     void slotClickedWork();
     void slotClickedMonitor();

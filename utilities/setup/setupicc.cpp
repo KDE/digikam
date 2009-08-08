@@ -107,6 +107,7 @@ public:
         advancedSettingsGB    = 0;
         monitorIcon           = 0;
         monitorProfiles       = 0;
+        iccPathsRead          = false;
      }
 
     QLabel                 *monitorIcon;
@@ -145,6 +146,8 @@ public:
     SqueezedComboBox       *workProfilesKC;
     SqueezedComboBox       *proofProfilesKC;
     SqueezedComboBox       *monitorProfilesKC;
+
+    bool                    iccPathsRead;
 };
 
 SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
@@ -375,18 +378,14 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
 
     // --------------------------------------------------------
 
-    readSettings();
-
-    // --------------------------------------------------------
+    connect(d->enableColorManagement, SIGNAL(toggled(bool)),
+            this, SLOT(slotToggledEnabled()));
 
     connect(d->managedView, SIGNAL(toggled(bool)),
-            this, SLOT(slotToggleManagedView(bool)));
+            this, SLOT(slotToggledManagedView()));
 
     connect(lcmsLogoLabel, SIGNAL(leftClickedUrl(const QString&)),
             this, SLOT(processLcmsUrl(const QString&)));
-
-    connect(d->enableColorManagement, SIGNAL(toggled(bool)),
-            this, SLOT(slotToggledWidgets(bool)));
 
     connect(d->infoProofProfiles, SIGNAL(clicked()),
             this, SLOT(slotClickedProof()) );
@@ -401,13 +400,14 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
             this, SLOT(slotClickedWork()));
 
     connect(d->defaultPathKU, SIGNAL(urlSelected(const KUrl&)),
-            this, SLOT(slotFillCombos(const KUrl&)));
+            this, SLOT(slotUrlChanged()));
 
     // --------------------------------------------------------
 
     adjustSize();
-    slotToggledWidgets(d->enableColorManagement->isChecked());
-    slotToggleManagedView(d->managedView->isChecked());
+
+    readSettings();
+    slotToggledEnabled();
 }
 
 SetupICC::~SetupICC()
@@ -436,33 +436,34 @@ void SetupICC::applySettings()
         group.writeEntry("BehaviourICC", false);
 
     group.writeEntry("DefaultPath", d->defaultPathKU->url().path());
-    group.writeEntry("WorkSpaceProfile", d->workProfilesKC->currentIndex());
-    group.writeEntry("MonitorProfile", d->monitorProfilesKC->currentIndex());
-    group.writeEntry("InProfile", d->inProfilesKC->currentIndex());
-    group.writeEntry("ProofProfile", d->proofProfilesKC->currentIndex());
     group.writeEntry("BPCAlgorithm", d->bpcAlgorithm->isChecked());
     group.writeEntry("RenderingIntent", d->renderingIntentKC->currentIndex());
     group.writeEntry("ManagedView", d->managedView->isChecked());
 
-    if (d->inICCPath.find(d->inProfilesKC->itemHighlighted()) != d->inICCPath.end())
-        group.writePathEntry("InProfileFile", *(d->inICCPath.find(d->inProfilesKC->itemHighlighted())));
-    else
-        group.writePathEntry("InProfileFile", QString());
+    group.writePathEntry("InProfileFile", d->inICCPath.value(d->inProfilesKC->itemHighlighted()));
+    group.writePathEntry("WorkProfileFile", d->workICCPath.value(d->workProfilesKC->itemHighlighted()));
+    group.writePathEntry("MonitorProfileFile", d->monitorICCPath.value(d->monitorProfilesKC->itemHighlighted()));
+    group.writePathEntry("ProofProfileFile", d->proofICCPath.value(d->proofProfilesKC->itemHighlighted()));
+}
 
-    if (d->workICCPath.find(d->workProfilesKC->itemHighlighted()) != d->workICCPath.end())
-        group.writePathEntry("WorkProfileFile", *(d->workICCPath.find(d->workProfilesKC->itemHighlighted())));
-    else
-        group.writePathEntry("WorkProfileFile", QString());
+static void setCurrentIndexFromUserData(QComboBox *box, const QVariant& userData)
+{
+    if (userData.isNull())
+    {
+        box->setCurrentIndex(-1);
+        return;
+    }
 
-    if (d->monitorICCPath.find(d->monitorProfilesKC->itemHighlighted()) != d->monitorICCPath.end())
-        group.writePathEntry("MonitorProfileFile", *(d->monitorICCPath.find(d->monitorProfilesKC->itemHighlighted())));
-    else
-        group.writePathEntry("MonitorProfileFile", QString());
-
-    if (d->proofICCPath.find(d->monitorProfilesKC->itemHighlighted()) != d->proofICCPath.end())
-        group.writePathEntry("ProofProfileFile", *(d->proofICCPath.find(d->proofProfilesKC->itemHighlighted())));
-    else
-        group.writePathEntry("ProofProfileFile", QString());
+    const int size = box->count();
+    for (int i=0; i<size; i++)
+    {
+        if (box->itemData(i) == userData)
+        {
+            box->setCurrentIndex(i);
+            return;
+        }
+    }
+    box->setCurrentIndex(-1);
 }
 
 void SetupICC::readSettings(bool restore)
@@ -473,7 +474,6 @@ void SetupICC::readSettings(bool restore)
     if (!restore)
         d->enableColorManagement->setChecked(group.readEntry("EnableCM", false));
 
-    d->defaultPathKU->setUrl(group.readEntry("DefaultPath", QString()));
     d->bpcAlgorithm->setChecked(group.readEntry("BPCAlgorithm", false));
     d->renderingIntentKC->setCurrentIndex(group.readEntry("RenderingIntent", 0));
     d->managedView->setChecked(group.readEntry("ManagedView", false));
@@ -483,22 +483,26 @@ void SetupICC::readSettings(bool restore)
     else
         d->defaultAskICC->setChecked(true);
 
-    KUrl url = d->defaultPathKU->url();
-    fillCombos(url.path(), false);
+    d->defaultPathKU->setUrl(group.readEntry("DefaultPath", QString()));
+    fillCombos(false);
 
-    d->workProfilesKC->setCurrentIndex(group.readEntry("WorkSpaceProfile", 0));
-    d->monitorProfilesKC->setCurrentIndex(group.readEntry("MonitorProfile", 0));
-    d->inProfilesKC->setCurrentIndex(group.readEntry("InProfile", 0));
-    d->proofProfilesKC->setCurrentIndex(group.readEntry("ProofProfile", 0));
+    setCurrentIndexFromUserData(d->inProfilesKC, group.readPathEntry("InProfileFile", QString()));
+    setCurrentIndexFromUserData(d->workProfilesKC, group.readPathEntry("WorkProfileFile", IccProfile::sRGB().filePath()));
+    setCurrentIndexFromUserData(d->monitorProfilesKC, group.readPathEntry("MonitorProfileFile", IccProfile::sRGB().filePath()));
+    setCurrentIndexFromUserData(d->proofProfilesKC, group.readPathEntry("ProofProfileFile", QString()));
 }
 
-void SetupICC::slotFillCombos(const KUrl& url)
+void SetupICC::slotUrlChanged()
 {
-    fillCombos(url.path(), true);
+    d->iccPathsRead = false;
+    fillCombos(true);
 }
 
-void SetupICC::fillCombos(const QString& extraPath, bool report)
+void SetupICC::fillCombos(bool report)
 {
+    if (d->iccPathsRead)
+        return;
+
     if (!d->enableColorManagement->isChecked())
         return;
 
@@ -511,15 +515,17 @@ void SetupICC::fillCombos(const QString& extraPath, bool report)
     d->proofICCPath.clear();
     d->monitorICCPath.clear();
 
+    QString extraPath = d->defaultPathKU->url().path();
+
     QList<IccProfile> profiles;
-    // load profiles that come with libkdcraw
-    profiles << IccProfile::defaultProfiles();
     // get system paths, e.g. /usr/share/color/icc
     QStringList paths = IccProfile::defaultSearchPaths();
     // add user-specified path
     paths << extraPath;
     // check search directories
     profiles << scanDirectories(paths);
+    // load profiles that come with libkdcraw
+    profiles << IccProfile::defaultProfiles();
 
     if ( profiles.isEmpty() )
     {
@@ -536,7 +542,16 @@ void SetupICC::fillCombos(const QString& extraPath, bool report)
 
     parseProfiles(profiles);
 
-    d->monitorProfilesKC->insertSqueezedList(d->monitorICCPath.keys(), 0);
+    QMap<QString, QString>::const_iterator it;
+    for (it = d->monitorICCPath.constBegin(); it != d->monitorICCPath.constEnd(); ++it)
+        d->monitorProfilesKC->addSqueezedItem(it.key(), it.value());
+    for (it = d->inICCPath.constBegin(); it != d->inICCPath.constEnd(); ++it)
+        d->inProfilesKC->addSqueezedItem(it.key(), it.value());
+    for (it = d->proofICCPath.constBegin(); it != d->proofICCPath.constEnd(); ++it)
+        d->proofProfilesKC->addSqueezedItem(it.key(), it.value());
+    for (it = d->workICCPath.constBegin(); it != d->workICCPath.constEnd(); ++it)
+        d->workProfilesKC->addSqueezedItem(it.key(), it.value());
+
     if (d->monitorICCPath.keys().isEmpty())
     {
         d->managedView->setEnabled(false);
@@ -547,11 +562,7 @@ void SetupICC::fillCombos(const QString& extraPath, bool report)
         d->managedView->setEnabled(true);
     }
 
-    d->inProfilesKC->insertSqueezedList(d->inICCPath.keys(), 0);
-    d->proofProfilesKC->insertSqueezedList(d->proofICCPath.keys(), 0);
-
-    d->workProfilesKC->insertSqueezedList(d->workICCPath.keys(), 0);
-    if (d->workICCPath.keys().isEmpty())
+    if (d->workICCPath.isEmpty())
     {
         // If there is no workspace ICC profiles available,
         // the CM is broken and cannot be used.
@@ -559,6 +570,7 @@ void SetupICC::fillCombos(const QString& extraPath, bool report)
         return;
     }
 
+    d->iccPathsRead = true;
     d->mainDialog->enableButtonOk(true);
 }
 
@@ -635,6 +647,8 @@ void SetupICC::parseProfiles(const QList<IccProfile>& profiles)
         QString description = profile.description();
         if (description.isEmpty())
             description = fileName;
+        else
+            description = i18nc("<Profile Description> (<File Name>)", "%1 (%2)", description, fileName);
 
         switch (profile.type())
         {
@@ -668,22 +682,38 @@ void SetupICC::parseProfiles(const QList<IccProfile>& profiles)
     }
 }
 
-void SetupICC::slotToggledWidgets(bool t)
+void SetupICC::setWidgetsEnabled(bool enabled)
 {
-    d->behaviourGB->setEnabled(t);
-    d->defaultPathGB->setEnabled(t);
-    d->profilesGB->setEnabled(t);
-    d->advancedSettingsGB->setEnabled(t);
+    d->behaviourGB->setEnabled(enabled);
+    d->defaultPathGB->setEnabled(enabled);
+    d->profilesGB->setEnabled(enabled);
+    d->advancedSettingsGB->setEnabled(enabled);
+}
 
-    if (t)
+void SetupICC::slotToggledEnabled()
+{
+    bool enabled = d->enableColorManagement->isChecked();
+
+    setWidgetsEnabled(enabled);
+
+    if (enabled)
     {
         readSettings(true);
-        slotToggleManagedView(d->managedView->isChecked());
+        slotToggledManagedView();
     }
     else
     {
         d->mainDialog->enableButtonOk(true);
     }
+}
+
+void SetupICC::slotToggledManagedView()
+{
+    bool enabled = d->managedView->isChecked();
+    d->monitorIcon->setEnabled(enabled);
+    d->monitorProfiles->setEnabled(enabled);
+    d->monitorProfilesKC->setEnabled(enabled);
+    d->infoMonitorProfiles->setEnabled(enabled);
 }
 
 void SetupICC::slotClickedWork()
@@ -720,14 +750,6 @@ void SetupICC::profileInfo(const QString& profile)
 
     ICCProfileInfoDlg infoDlg(this, profile);
     infoDlg.exec();
-}
-
-void SetupICC::slotToggleManagedView(bool b)
-{
-    d->monitorIcon->setEnabled(b);
-    d->monitorProfiles->setEnabled(b);
-    d->monitorProfilesKC->setEnabled(b);
-    d->infoMonitorProfiles->setEnabled(b);
 }
 
 bool SetupICC::iccRepositoryIsValid()
