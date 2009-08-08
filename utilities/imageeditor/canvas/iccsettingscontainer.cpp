@@ -42,7 +42,7 @@ ICCSettingsContainer::ICCSettingsContainer()
     enableCM                = false;
 
     onProfileMismatch       = Convert;
-    useBPC                  = false;
+    useBPC                  = true;
     useManagedView          = false;
 
     renderingIntent         = IccTransform::Perceptual;
@@ -63,7 +63,7 @@ void ICCSettingsContainer::readFromConfig(KConfigGroup& group)
     else
         onProfileMismatch = ICCSettingsContainer::Ask;
 
-    useBPC               = group.readEntry("BPCAlgorithm",false);
+    useBPC               = group.readEntry("BPCAlgorithm", true);
     useManagedView       = group.readEntry("ManagedView", false);
     renderingIntent      = group.readEntry("RenderingIntent", (int)IccTransform::Perceptual);
     workspaceProfile     = group.readPathEntry("WorkProfileFile", IccProfile::sRGB().filePath());

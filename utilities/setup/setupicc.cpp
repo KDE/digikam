@@ -103,8 +103,8 @@ public:
         infoMonitorProfiles   = 0;
         infoInProfiles        = 0;
         infoProofProfiles     = 0;
-        behaviourGB           = 0;
-        defaultPathGB         = 0;
+        workspaceGB           = 0;
+        openingGB             = 0;
         profilesGB            = 0;
         advancedSettingsGB    = 0;
         monitorIcon           = 0;
@@ -128,8 +128,8 @@ public:
     QPushButton            *infoInProfiles;
     QPushButton            *infoProofProfiles;
 
-    QGroupBox              *behaviourGB;
-    QGroupBox              *defaultPathGB;
+    QGroupBox              *workspaceGB;
+    QGroupBox              *openingGB;
     QGroupBox              *profilesGB;
     QGroupBox              *advancedSettingsGB;
 
@@ -168,7 +168,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
 
     // --------------------------------------------------------
 
-    QGroupBox *colorPolicy = new QGroupBox(i18n("Color Management Policy"), panel);
+    QWidget *colorPolicy  = new QWidget;
     QGridLayout* grid      = new QGridLayout(colorPolicy);
 
     d->enableColorManagement = new QCheckBox(colorPolicy);
@@ -183,67 +183,78 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     lcmsLogoLabel->setPixmap( QPixmap( KStandardDirs::locate("data", "digikam/data/logo-lcms.png" ) ));
     lcmsLogoLabel->setToolTip(i18n("Visit Little CMS project website"));
 
-    d->behaviourGB                 = new QGroupBox(i18n("On Profile Mismatch"), colorPolicy);
-    QVBoxLayout *vlay3             = new QVBoxLayout(d->behaviourGB);
-    QButtonGroup *behaviourOptions = new QButtonGroup(d->behaviourGB);
-
-    QLabel *behaviorLabel = new QLabel(i18n("When opening an image in the Image Editor:"));
-    behaviorLabel->setWordWrap(true);
-    d->defaultApplyICC = new QRadioButton(d->behaviourGB);
-    d->defaultApplyICC->setText(i18n("Convert to working color space"));
-    d->defaultApplyICC->setWhatsThis( i18n("<p>If this option is enabled, digiKam applies the "
-                     "working color profile to an image, without prompting you about missing "
-                     "embedded profiles or embedded profiles different from the workspace "
-                     "profile.</p>"));
-    behaviourOptions->addButton(d->defaultApplyICC);
-
-    d->defaultAskICC = new QRadioButton(d->behaviourGB);
-    d->defaultAskICC->setText(i18n("Ask when opening"));
-    d->defaultAskICC->setWhatsThis( i18n("<p>If this option is enabled, digiKam asks the user "
-                     "before it applies the Workspace default color profile to an image which has no "
-                     "embedded profile or, if the image has an embedded profile, when it is not the same "
-                     "as the workspace profile.</p>"));
-    behaviourOptions->addButton(d->defaultAskICC);
-
-    d->defaultDoNotApplyICC = new QRadioButton(d->behaviourGB);
-    d->defaultDoNotApplyICC->setText(i18n("Do not color manage (leave as is)"));
-    d->defaultDoNotApplyICC->setWhatsThis( i18n("<p>If this option is enabled, digiKam does not apply the "
-                     "workspace color profile to an image, without prompting you about missing "
-                     "embedded profiles or embedded profiles different from the workspace "
-                     "profile.</p>"));
-    behaviourOptions->addButton(d->defaultDoNotApplyICC);
-
-    vlay3->addWidget(behaviorLabel);
-    vlay3->addWidget(d->defaultApplyICC);
-    vlay3->addWidget(d->defaultAskICC);
-    vlay3->addWidget(d->defaultDoNotApplyICC);
-    vlay3->setMargin(KDialog::spacingHint());
-    vlay3->setSpacing(0);
-
     grid->addWidget(d->enableColorManagement, 0, 0, 1, 1);
     grid->addWidget(lcmsLogoLabel,            0, 2, 1, 1);
-    grid->addWidget(d->behaviourGB,           1, 0, 1, 3);
     grid->setColumnStretch(1, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(0);
 
     // --------------------------------------------------------
 
-    d->defaultPathGB  = new QGroupBox(panel);
-    QVBoxLayout *vlay = new QVBoxLayout(d->defaultPathGB);
+    d->workspaceGB       = new QGroupBox(i18n("Working Color Space"), colorPolicy);
+    QHBoxLayout *hboxWS  = new QHBoxLayout(d->workspaceGB);
 
-    d->defaultPathGB->setTitle(i18n("Additional Color Profiles Directory"));
+    /*QLabel *workIcon     = new QLabel(d->profilesGB);
+    workIcon->setPixmap(SmallIcon("input-tablet"));
+    QLabel *workProfiles = new QLabel(i18n("Working Space:"), d->profilesGB);
+    workProfiles->setBuddy(d->workProfilesKC);*/
+    d->workProfilesKC    = new SqueezedComboBox(d->workspaceGB);
+    d->workProfilesKC->setWhatsThis( i18n("<p>This is the color space all the images will be converted to when opened "
+                                          "(if you choose to convert) and the profile that will be embedded when saving. "
+                                          "Good and safe choices are <b>Adobe RGB (1998)</b> and <b>sRGB IEC61966-2.1</b>"));
 
-    d->defaultPathKU = new KUrlRequester(d->defaultPathGB);
-    d->defaultPathKU->lineEdit()->setReadOnly(true);
-    d->defaultPathKU->setMode(KFile::Directory | KFile::LocalOnly | KFile::ExistingOnly);
-    d->defaultPathKU->setWhatsThis( i18n("<p>DigiKam searches ICC profiles in default system folders "
-                                         "and ships itself a few selected profiles. "
-                                         "Store all your additional color profiles in the directory set here.</p>"));
+    d->infoWorkProfiles = new QPushButton(d->workspaceGB);
+    d->infoWorkProfiles->setIcon(SmallIcon("documentinfo"));
+    d->infoWorkProfiles->setWhatsThis( i18n("<p>You can use this button to get more detailed "
+                     "information about the selected workspace profile.</p>"));
 
-    vlay->addWidget(d->defaultPathKU);
-    vlay->setMargin(KDialog::spacingHint());
-    vlay->setSpacing(0);
+    hboxWS->addWidget(d->workProfilesKC, 10);
+    hboxWS->addWidget(d->infoWorkProfiles);
+
+    // --------------------------------------------------------
+
+    d->openingGB                   = new QGroupBox(i18n("Behavior on Profile Mismatch"), colorPolicy);
+    QVBoxLayout *vlayOGB           = new QVBoxLayout(d->openingGB);
+    QButtonGroup *behaviourOptions = new QButtonGroup(d->openingGB);
+
+    QLabel *behaviorIcon = new QLabel;
+    behaviorIcon->setPixmap(SmallIcon("editimage", KIconLoader::SizeSmallMedium));
+    QLabel *behaviorLabel = new QLabel(i18n("When the profile of an image that is opened in the image editor "
+                                            "does not match the working color space:"));
+    behaviorLabel->setWordWrap(true);
+
+    QHBoxLayout *hboxBL = new QHBoxLayout;
+    hboxBL->addWidget(behaviorIcon);
+    hboxBL->addWidget(behaviorLabel, 10);
+
+    d->defaultAskICC = new QRadioButton(d->openingGB);
+    d->defaultAskICC->setText(i18n("Ask when opening the image"));
+    d->defaultAskICC->setWhatsThis( i18n("<p>If this option is enabled, digiKam asks the user "
+                     "before it applies the Workspace default color profile to an image which has no "
+                     "embedded profile or, if the image has an embedded profile, when it is not the same "
+                     "as the workspace profile.</p>"));
+    behaviourOptions->addButton(d->defaultAskICC);
+
+    d->defaultApplyICC = new QRadioButton(d->openingGB);
+    d->defaultApplyICC->setText(i18n("Convert the image to the working color space"));
+    d->defaultApplyICC->setWhatsThis( i18n("<p>If this option is enabled, digiKam applies the "
+                     "working color profile to an image, without prompting you about missing "
+                     "embedded profiles or embedded profiles different from the workspace "
+                     "profile.</p>"));
+    behaviourOptions->addButton(d->defaultApplyICC);
+
+    d->defaultDoNotApplyICC = new QRadioButton(d->openingGB);
+    d->defaultDoNotApplyICC->setText(i18n("Leave the image as is without conversion"));
+    d->defaultDoNotApplyICC->setWhatsThis( i18n("<p>If this option is enabled, digiKam does not apply the "
+                     "workspace color profile to an image, without prompting you about missing "
+                     "embedded profiles or embedded profiles different from the workspace "
+                     "profile.</p>"));
+    behaviourOptions->addButton(d->defaultDoNotApplyICC);
+
+    vlayOGB->addLayout(hboxBL);
+    vlayOGB->addWidget(d->defaultAskICC);
+    vlayOGB->addWidget(d->defaultApplyICC);
+    vlayOGB->addWidget(d->defaultDoNotApplyICC);
 
     // --------------------------------------------------------
 
@@ -268,34 +279,20 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
                      "profile.</p>"));
 
     d->infoMonitorProfiles = new QPushButton(d->profilesGB);
-    d->infoMonitorProfiles->setIcon(SmallIcon("document-properties"));
+    d->infoMonitorProfiles->setIcon(SmallIcon("documentinfo"));
     d->infoMonitorProfiles->setWhatsThis( i18n("<p>You can use this button to get more detailed "
                      "information about the selected monitor profile.</p>"));
-
-    QLabel *workIcon     = new QLabel(d->profilesGB);
-    workIcon->setPixmap(SmallIcon("input-tablet"));
-    QLabel *workProfiles = new QLabel(i18n("Workspace:"), d->profilesGB);
-    d->workProfilesKC    = new SqueezedComboBox(d->profilesGB);
-    workProfiles->setBuddy(d->workProfilesKC);
-    d->workProfilesKC->setWhatsThis( i18n("<p>All the images will be converted to the color "
-                     "space of this profile, so you must select a profile appropriate for editing.</p>"
-                     "<p>These color profiles are device independent.</p>"));
-
-    d->infoWorkProfiles = new QPushButton(d->profilesGB);
-    d->infoWorkProfiles->setIcon(SmallIcon("document-properties"));
-    d->infoWorkProfiles->setWhatsThis( i18n("<p>You can use this button to get more detailed "
-                     "information about the selected workspace profile.</p>"));
 
     QLabel *inIcon     = new QLabel(d->profilesGB);
     inIcon->setPixmap(SmallIcon("camera-photo"));
     QLabel *inProfiles = new QLabel(i18n("Input:"), d->profilesGB);
     d->inProfilesKC    = new SqueezedComboBox(d->profilesGB);
     inProfiles->setBuddy(d->inProfilesKC);
-    d->inProfilesKC->setWhatsThis( i18n("<p>You must select the profile for your input device "
-                     "(usually, your camera, scanner...)</p>"));
+    d->inProfilesKC->setWhatsThis( i18n("<p>Select a default profile for your input device "
+                     "(usually your camera or your scanner)</p>"));
 
     d->infoInProfiles = new QPushButton(d->profilesGB);
-    d->infoInProfiles->setIcon(SmallIcon("document-properties"));
+    d->infoInProfiles->setIcon(SmallIcon("documentinfo"));
     d->infoInProfiles->setWhatsThis( i18n("<p>You can use this button to get more detailed "
                      "information about the selected input profile.</p>"));
 
@@ -309,27 +306,33 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
                      "be able to preview how an image will be rendered via an output device.</p>"));
 
     d->infoProofProfiles = new QPushButton(d->profilesGB);
-    d->infoProofProfiles->setIcon(SmallIcon("document-properties"));
+    d->infoProofProfiles->setIcon(SmallIcon("documentinfo"));
     d->infoProofProfiles->setWhatsThis( i18n("<p>You can use this button to get more detailed "
                      "information about the selected soft proof profile.</p>"));
+
+    QLabel *defaultPathLabel = new QLabel(i18n("Folder with additional color profiles:"));
+    d->defaultPathKU = new KUrlRequester(d->profilesGB);
+    d->defaultPathKU->lineEdit()->setReadOnly(true);
+    d->defaultPathKU->setMode(KFile::Directory | KFile::LocalOnly | KFile::ExistingOnly);
+    d->defaultPathKU->setWhatsThis( i18n("<p>DigiKam searches ICC profiles in default system folders "
+                                         "and ships itself a few selected profiles. "
+                                         "Store all your additional color profiles in the directory set here.</p>"));
 
     grid2->addWidget(d->managedView,         0, 0, 1, 4);
     grid2->addWidget(d->monitorIcon,         1, 0, 1, 1);
     grid2->addWidget(d->monitorProfiles,     1, 1, 1, 1);
     grid2->addWidget(d->monitorProfilesKC,   1, 2, 1, 1);
     grid2->addWidget(d->infoMonitorProfiles, 1, 3, 1, 1);
-    grid2->addWidget(workIcon,               2, 0, 1, 1);
-    grid2->addWidget(workProfiles,           2, 1, 1, 1);
-    grid2->addWidget(d->workProfilesKC,      2, 2, 1, 1);
-    grid2->addWidget(d->infoWorkProfiles,    2, 3, 1, 1);
-    grid2->addWidget(inIcon,                 3, 0, 1, 1);
-    grid2->addWidget(inProfiles,             3, 1, 1, 1);
-    grid2->addWidget(d->inProfilesKC,        3, 2, 1, 1);
-    grid2->addWidget(d->infoInProfiles,      3, 3, 1, 1);
-    grid2->addWidget(proofIcon,              4, 0, 1, 1);
-    grid2->addWidget(proofProfiles,          4, 1, 1, 1);
-    grid2->addWidget(d->proofProfilesKC,     4, 2, 1, 1);
-    grid2->addWidget(d->infoProofProfiles,   4, 3, 1, 1);
+    grid2->addWidget(inIcon,                 2, 0, 1, 1);
+    grid2->addWidget(inProfiles,             2, 1, 1, 1);
+    grid2->addWidget(d->inProfilesKC,        2, 2, 1, 1);
+    grid2->addWidget(d->infoInProfiles,      2, 3, 1, 1);
+    grid2->addWidget(proofIcon,              3, 0, 1, 1);
+    grid2->addWidget(proofProfiles,          3, 1, 1, 1);
+    grid2->addWidget(d->proofProfilesKC,     3, 2, 1, 1);
+    grid2->addWidget(d->infoProofProfiles,   3, 3, 1, 1);
+    grid2->addWidget(defaultPathLabel,       4, 0, 1, 4);
+    grid2->addWidget(d->defaultPathKU,       5, 0, 1, 4);
     grid2->setMargin(KDialog::spacingHint());
     grid2->setSpacing(0);
     grid2->setColumnStretch(2, 10);
@@ -384,7 +387,8 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     grid3->setSpacing(0);
 
     layout->addWidget(colorPolicy);
-    layout->addWidget(d->defaultPathGB);
+    layout->addWidget(d->workspaceGB);
+    layout->addWidget(d->openingGB);
     layout->addWidget(d->profilesGB);
     layout->addWidget(d->advancedSettingsGB);
     layout->addStretch();
@@ -704,8 +708,8 @@ void SetupICC::parseProfiles(const QList<IccProfile>& profiles)
 
 void SetupICC::setWidgetsEnabled(bool enabled)
 {
-    d->behaviourGB->setEnabled(enabled);
-    d->defaultPathGB->setEnabled(enabled);
+    d->workspaceGB->setEnabled(enabled);
+    d->openingGB->setEnabled(enabled);
     d->profilesGB->setEnabled(enabled);
     d->advancedSettingsGB->setEnabled(enabled);
 }
