@@ -44,6 +44,7 @@ class KPageDialog;
 namespace Digikam
 {
 
+class IccProfile;
 class SetupICCPriv;
 
 class SetupICC : public QScrollArea
@@ -66,7 +67,9 @@ private:
     void enableWidgets();
     void disableWidgets();
     void profileInfo(const QString&);
-    bool parseProfilesfromDir(const QFileInfoList& files);
+    void parseProfiles(const QList<IccProfile>& profiles);
+    static QList<IccProfile> scanDirectories(const QStringList& paths);
+    static void scanDirectory(const QString& path, const QStringList& filter, QList<IccProfile> *profiles);
 
 private Q_SLOTS:
 

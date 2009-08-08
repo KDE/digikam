@@ -214,13 +214,14 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     d->defaultPathGB  = new QGroupBox(panel);
     QVBoxLayout *vlay = new QVBoxLayout(d->defaultPathGB);
 
-    d->defaultPathGB->setTitle(i18n("Color Profiles Directory"));
+    d->defaultPathGB->setTitle(i18n("Additional Color Profiles Directory"));
 
     d->defaultPathKU = new KUrlRequester(d->defaultPathGB);
     d->defaultPathKU->lineEdit()->setReadOnly(true);
     d->defaultPathKU->setMode(KFile::Directory | KFile::LocalOnly | KFile::ExistingOnly);
-    d->defaultPathKU->setWhatsThis( i18n("<p>Default path to the color profiles folder. "
-                     "You must store all your color profiles in this directory.</p>"));
+    d->defaultPathKU->setWhatsThis( i18n("<p>DigiKam searches ICC profiles in default system folders "
+                                         "and ships itself a few selected profiles. "
+                                         "Store all your additional color profiles in the directory set here.</p>"));
 
     vlay->addWidget(d->defaultPathKU);
     vlay->setMargin(KDialog::spacingHint());
@@ -496,7 +497,7 @@ void SetupICC::slotFillCombos(const KUrl& url)
     fillCombos(url.path(), true);
 }
 
-void SetupICC::fillCombos(const QString& path, bool report)
+void SetupICC::fillCombos(const QString& extraPath, bool report)
 {
     if (!d->enableColorManagement->isChecked())
         return;
@@ -509,34 +510,22 @@ void SetupICC::fillCombos(const QString& path, bool report)
     d->workICCPath.clear();
     d->proofICCPath.clear();
     d->monitorICCPath.clear();
-    QDir dir(path);
 
-    if (path.isEmpty() || !dir.exists() || !dir.isReadable())
-    {
-        if (report)
-            KMessageBox::sorry(this, i18n("<p>You must set a correct default "
-                                          "path for your ICC color profiles files.</p>"));
+    QList<IccProfile> profiles;
+    // load profiles that come with libkdcraw
+    profiles << IccProfile::defaultProfiles();
+    // get system paths, e.g. /usr/share/color/icc
+    QStringList paths = IccProfile::defaultSearchPaths();
+    // add user-specified path
+    paths << extraPath;
+    // check search directories
+    profiles << scanDirectories(paths);
 
-        d->mainDialog->enableButtonOk(false);
-        return;
-    }
-    d->mainDialog->enableButtonOk(true);
-
-    // Look the ICC profile path repository set by user.
-    QDir userProfilesDir(path);
-    QStringList filters;
-    filters << "*.icc" << "*.icm";
-    userProfilesDir.setNameFilters(filters);
-    userProfilesDir.setFilter(QDir::Files);
-
-    QFileInfoList usersFiles = userProfilesDir.entryInfoList();
-    kDebug(50003) << "Scanning ICC profiles from user repository: " << path;
-
-    if ( !parseProfilesfromDir(usersFiles) )
+    if ( profiles.isEmpty() )
     {
         if (report)
         {
-            QString message = i18n("No ICC profiles files found in %1.", path);
+            QString message = i18n("No ICC profiles files found.");
             KMessageBox::sorry(this, message);
         }
 
@@ -545,15 +534,7 @@ void SetupICC::fillCombos(const QString& path, bool report)
         return;
     }
 
-    // Look the ICC color-space profile path include with libkdcraw dist.
-    QString libkdcrawProfilesPath = KStandardDirs::installPath("data") + QString("libkdcraw/profiles");
-    QDir libkdcrawProfilesDir(libkdcrawProfilesPath);
-    libkdcrawProfilesDir.setNameFilters(filters);
-    libkdcrawProfilesDir.setFilter(QDir::Files);
-
-    QFileInfoList libkdcrawFiles = libkdcrawProfilesDir.entryInfoList();
-    kDebug(50003) << "Scanning ICC profiles included with libkdcraw: " << libkdcrawProfilesPath;
-    parseProfilesfromDir(libkdcrawFiles);
+    parseProfiles(profiles);
 
     d->monitorProfilesKC->insertSqueezedList(d->monitorICCPath.keys(), 0);
     if (d->monitorICCPath.keys().isEmpty())
@@ -581,138 +562,110 @@ void SetupICC::fillCombos(const QString& path, bool report)
     d->mainDialog->enableButtonOk(true);
 }
 
-bool SetupICC::parseProfilesfromDir(const QFileInfoList& files)
+QList<IccProfile> SetupICC::scanDirectories(const QStringList& dirs)
 {
-    cmsHPROFILE tmpProfile=0;
-    bool findIccFiles=false;
+    QList<IccProfile> profiles;
 
-    if (!files.isEmpty())
+    QStringList filters;
+    filters << "*.icc" << "*.icm";
+    kDebug() << dirs;
+    foreach (const QString &dirPath, dirs)
     {
-        QFileInfoList f = files;
-        QFileInfoList::const_iterator it = f.constBegin();
-        QFileInfo fileInfo;
-
-        while (it != f.constEnd())
-        {
-            fileInfo = *it;
-
-            if (fileInfo.isFile() && fileInfo.isReadable())
-            {
-                QString fileName = fileInfo.filePath();
-                tmpProfile       = cmsOpenProfileFromFile(QFile::encodeName(fileName), "r");
-
-                if (tmpProfile == NULL)
-                {
-                    kDebug(50003) << "Error: Parsed profile  is NULL (invalid profile); " << fileName;
-                    cmsCloseProfile(tmpProfile);
-                    ++it;
-                    QString message = i18n("<p>The following profile is invalid:</p><p><b>"
-                                           "%1"
-                                           "</b></p><p>To avoid this message, remove the profile from the color profiles repository.</p>"
-                                           "<p>Do you want digiKam to do this for you?</p>", message);
-                    if (KMessageBox::warningYesNo(this, message, i18n("Invalid Profile")) == 3)
-                    {
-                        if (QFile::remove(fileName))
-                        {
-                            KMessageBox::information(this,  i18n("Invalid color profile has been removed."));
-                        }
-                        else
-                        {
-                            KMessageBox::information(this, i18n("<p>digiKam has failed to remove the invalid color profile.</p><p>Remove it manually.</p>"));
-                        }
-                    }
-
-                    continue;
-                }
-
-                QString profileDescription = QString((cmsTakeProductDesc(tmpProfile)));
-
-                switch ((int)cmsGetDeviceClass(tmpProfile))
-                {
-                    case icSigInputClass:
-                    case 0x6e6b7066: // 'nkbf', proprietary in Nikon profiles
-                    {
-                        if (QString(cmsTakeProductDesc(tmpProfile)).isEmpty())
-                            d->inICCPath.insert(fileName, fileName);
-                        else
-                            d->inICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
-
-                        kDebug(50003) << "ICC file: " << fileName << " ==> Input device class ("
-                                 << cmsGetDeviceClass(tmpProfile) << ")";
-                        findIccFiles = true;
-                        break;
-                    }
-                    case icSigDisplayClass:
-                    {
-                        if (QString(cmsTakeProductDesc(tmpProfile)).isEmpty())
-                        {
-                            d->monitorICCPath.insert(fileName, fileName);
-                            d->workICCPath.insert(fileName, fileName);
-                        }
-                        else
-                        {
-                            d->monitorICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
-                            d->workICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
-                        }
-
-                        kDebug(50003) << "ICC file: " << fileName << " ==> Monitor device class ("
-                                 << cmsGetDeviceClass(tmpProfile) << ")";
-                        findIccFiles = true;
-                        break;
-                    }
-                    case icSigOutputClass:
-                    {
-                        if (QString(cmsTakeProductDesc(tmpProfile)).isEmpty())
-                            d->proofICCPath.insert(fileName, fileName);
-                        else
-                            d->proofICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
-
-                        kDebug(50003) << "ICC file: " << fileName << " ==> Output device class ("
-                                 << cmsGetDeviceClass(tmpProfile) << ")";
-                        findIccFiles = true;
-                        break;
-                    }
-                    case icSigColorSpaceClass:
-                    {
-                        if (QString(cmsTakeProductDesc(tmpProfile)).isEmpty())
-                        {
-                            d->inICCPath.insert(fileName, fileName);
-                            d->workICCPath.insert(fileName, fileName);
-                        }
-                        else
-                        {
-                            d->inICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
-                            d->workICCPath.insert(QString(cmsTakeProductDesc(tmpProfile)), fileName);
-                        }
-
-                        kDebug(50003) << "ICC file: " << fileName << " ==> WorkingSpace device class ("
-                                 << cmsGetDeviceClass(tmpProfile) << ")";
-                        findIccFiles = true;
-                        break;
-                    }
-                    case icSigLinkClass:
-                    case icSigAbstractClass:
-                    case icSigNamedColorClass:
-                    {
-                        kDebug(50003) << "ICC file: " << fileName << " ==> Device class unused ("
-                                 << cmsGetDeviceClass(tmpProfile) << ")";
-                        break;
-                    }
-                    default:
-                    {
-                        kDebug(50003) << "ICC file: " << fileName << " ==> UNKNOWN device class ("
-                                 << cmsGetDeviceClass(tmpProfile) << ")";
-                        break;
-                    }
-                }
-
-                cmsCloseProfile(tmpProfile);
-            }
-            ++it;
-        }
+        QDir dir(dirPath);
+        if (!dir.exists())
+            continue;
+        scanDirectory(dir.path(), filters, &profiles);
     }
 
-    return findIccFiles;
+    return profiles;
+}
+
+void SetupICC::scanDirectory(const QString& path, const QStringList& filter, QList<IccProfile> *profiles)
+{
+    QDir dir(path);
+    QFileInfoList infos;
+    infos << dir.entryInfoList(filter, QDir::Files | QDir::Readable);
+    infos << dir.entryInfoList(QDir::Dirs | QDir::Readable | QDir::NoDotAndDotDot);
+    foreach (const QFileInfo &info, infos)
+    {
+        if (info.isFile())
+        {
+            //kDebug(50003) << info.filePath() << (info.exists() && info.isReadable());
+            *profiles << IccProfile(info.filePath());
+        }
+        else if (info.isDir())
+        {
+            scanDirectory(info.filePath(), filter, profiles);
+        }
+    }
+}
+
+void SetupICC::parseProfiles(const QList<IccProfile>& profiles)
+{
+    foreach (IccProfile profile, profiles)
+    {
+        QString filePath = profile.filePath();
+
+        if (!profile.open())
+        {
+            kError(50003) << "Cannot open profile" << filePath;
+            /*
+            QString message = i18n("<p>The following profile is invalid:</p><p><b>%1</b></p>"
+            "<p>To avoid this message, remove the profile from the color profiles repository.</p>"
+            "<p>Do you want digiKam to do this for you?</p>", message);
+            if (KMessageBox::warningYesNo(this, message, i18n("Invalid Profile")) == 3)
+            {
+                if (QFile::remove(filePath))
+                {
+                    KMessageBox::information(this,  i18n("Invalid color profile has been removed."));
+                }
+                else
+                {
+                    KMessageBox::information(this, i18n("<p>digiKam has failed to remove the invalid color profile.</p>"
+                    "<p>Remove it manually.</p>"));
+                }
+            }
+            */
+            continue;
+        }
+
+        QFileInfo info(filePath);
+        QString fileName = info.fileName();
+
+        QString description = profile.description();
+        if (description.isEmpty())
+            description = fileName;
+
+        switch (profile.type())
+        {
+            case IccProfile::Input:
+                d->inICCPath.insert(description, filePath);
+                kDebug(50003) << "Input ICC profile" << filePath;
+                break;
+            case IccProfile::Display:
+                d->monitorICCPath.insert(description, filePath);
+                d->workICCPath.insert(description, filePath);
+                kDebug(50003) << "Display ICC profile" << filePath;
+                break;
+            case IccProfile::Output:
+                d->proofICCPath.insert(description, filePath);
+                kDebug(50003) << "Output ICC profile" << filePath;
+                break;
+            case icSigColorSpaceClass:
+                d->inICCPath.insert(description, filePath);
+                d->workICCPath.insert(description, filePath);
+                kDebug(50003) << "ColorSpace ICC profile" << filePath;
+                break;
+            case IccProfile::DeviceLink:
+            case IccProfile::Abstract:
+            case IccProfile::NamedColor:
+                kDebug(50003) << "ICC profile of unused profile type:" << filePath;
+                break;
+            default:
+                kDebug(50003) << "Invalid ICC profile" << filePath;
+                break;
+        }
+    }
 }
 
 void SetupICC::slotToggledWidgets(bool t)
@@ -786,15 +739,18 @@ bool SetupICC::iccRepositoryIsValid()
     if (!group.readEntry("EnableCM", false))
         return true;
 
-    // To be valid, the ICC profiles repository must exist and be readable.
 
-    QDir tmpPath(group.readEntry("DefaultPath", QString()));
-    kDebug(50003) << "ICC profiles repository is: " << tmpPath.dirName();
-
-    if ( tmpPath.exists() && tmpPath.isReadable() )
+    // can at least libkdcraw profiles be opened?
+    if (IccProfile::sRGB().open())
         return true;
 
-    return false;
+    // To be valid, the ICC profiles repository must exist and be readable.
+    QString extraPath = group.readEntry("DefaultPath", QString());
+    QFileInfo info(extraPath);
+    if (info.isDir() && info.exists() && info.isReadable())
+        return true;
+    QStringList paths = IccProfile::defaultSearchPaths();
+    return !paths.isEmpty();
 }
 
 }  // namespace Digikam
