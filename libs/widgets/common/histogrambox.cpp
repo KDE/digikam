@@ -366,6 +366,7 @@ void HistogramBox::setHistogramType(HistogramType type)
     switch (type)
     {
         case RGB:
+            d->channelCB->clear();
             d->channelCB->addItem(channelDescMap[RedChannel].first, QVariant(RedChannel));
             d->channelCB->addItem(channelDescMap[GreenChannel].first, QVariant(GreenChannel));
             d->channelCB->addItem(channelDescMap[BlueChannel].first, QVariant(BlueChannel));
@@ -377,6 +378,7 @@ void HistogramBox::setHistogramType(HistogramType type)
             break;
 
         case RGBA:
+            d->channelCB->clear();
             d->channelCB->addItem(channelDescMap[RedChannel].first, QVariant(RedChannel));
             d->channelCB->addItem(channelDescMap[GreenChannel].first, QVariant(GreenChannel));
             d->channelCB->addItem(channelDescMap[BlueChannel].first, QVariant(BlueChannel));
@@ -390,6 +392,7 @@ void HistogramBox::setHistogramType(HistogramType type)
             break;
 
         case LRGB:
+            d->channelCB->clear();
             d->channelCB->addItem(channelDescMap[LuminosityChannel].first, QVariant(LuminosityChannel));
             d->channelCB->addItem(channelDescMap[RedChannel].first, QVariant(RedChannel));
             d->channelCB->addItem(channelDescMap[GreenChannel].first, QVariant(GreenChannel));
@@ -403,6 +406,7 @@ void HistogramBox::setHistogramType(HistogramType type)
             break;
 
         case LRGBA:
+            d->channelCB->clear();
             d->channelCB->addItem(channelDescMap[LuminosityChannel].first, QVariant(LuminosityChannel));
             d->channelCB->addItem(channelDescMap[RedChannel].first, QVariant(RedChannel));
             d->channelCB->addItem(channelDescMap[GreenChannel].first, QVariant(GreenChannel));
@@ -418,6 +422,7 @@ void HistogramBox::setHistogramType(HistogramType type)
             break;
 
         case LRGBC:
+            d->channelCB->clear();
             d->channelCB->addItem(channelDescMap[LuminosityChannel].first, QVariant(LuminosityChannel));
             d->channelCB->addItem(channelDescMap[RedChannel].first, QVariant(RedChannel));
             d->channelCB->addItem(channelDescMap[GreenChannel].first, QVariant(GreenChannel));
@@ -433,6 +438,7 @@ void HistogramBox::setHistogramType(HistogramType type)
             break;
 
         case LRGBAC:
+            d->channelCB->clear();
             d->channelCB->addItem(channelDescMap[LuminosityChannel].first, QVariant(LuminosityChannel));
             d->channelCB->addItem(channelDescMap[RedChannel].first, QVariant(RedChannel));
             d->channelCB->addItem(channelDescMap[GreenChannel].first, QVariant(GreenChannel));
