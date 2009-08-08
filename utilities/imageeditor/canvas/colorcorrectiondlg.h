@@ -36,6 +36,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "iccprofile.h"
 
 namespace Digikam
 {
@@ -50,7 +51,7 @@ class DIGIKAM_EXPORT ColorCorrectionDlg : public KDialog
 public:
 
     ColorCorrectionDlg(QWidget *parent, DImg *preview,
-                       IccTransform *iccTrans, const QString& file);
+                       IccTransform& iccTrans, const QString& file);
     ~ColorCorrectionDlg();
 
 private Q_SLOTS:
@@ -63,7 +64,8 @@ private:
 
     QWidget      *m_parent;
 
-    IccTransform *m_iccTrans;
+    IccProfile    m_outputProfile;
+    IccProfile    m_embeddedProfile;
 };
 
 }  // namespace Digikam

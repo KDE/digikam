@@ -135,18 +135,13 @@ public:
     {
         if (optionsPage->colorManaged())
         {
-            IccTransform *transform = new IccTransform();
+            IccTransform transform;
+            transform.setEmbeddedProfile(img);
+            transform.setInputProfile(optionsPage->inProfilePath());
+            transform.setOutputProfile(optionsPage->outputProfilePath());
+            transform.readFromConfig();
 
-            if (img.getICCProfil().isNull())
-            {
-                transform->setProfiles( optionsPage->inProfilePath(), optionsPage->outputProfilePath() );
-            }
-            else
-            {
-                transform->setProfiles(optionsPage->outputProfilePath());
-            }
-
-            transform->apply( img );
+            transform.apply( img );
         }
     }
   };

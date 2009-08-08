@@ -55,10 +55,11 @@ namespace Digikam
 {
 
 ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
-                                       IccTransform *iccTrans, const QString& file)
+                                       IccTransform& iccTrans, const QString& file)
                   : KDialog(parent)
 {
-    m_iccTrans = iccTrans;
+    m_outputProfile = iccTrans.outputProfile();
+    m_embeddedProfile = iccTrans.embeddedProfile();
     m_parent   = parent;
 
     setButtons(Help|Ok|Apply|Cancel);
@@ -88,15 +89,15 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     QLabel *message               = new QLabel(page);
     QLabel *currentProfileTitle   = new QLabel(i18n("Current workspace color profile:"), page);
     QLabel *currentProfileDesc    = new QLabel(QString("<b>%1</b>")
-                                               .arg(m_iccTrans->getOutpoutProfileDescriptor()), page);
+                                               .arg(m_outputProfile.description()), page);
     QPushButton *currentProfInfo  = new QPushButton(i18n("Info..."), page);
     QLabel *embeddedProfileTitle  = new QLabel(i18n("Embedded color profile:"), page);
     QLabel *embeddedProfileDesc   = new QLabel(QString("<b>%1</b>")
-                                               .arg(m_iccTrans->getEmbeddedProfileDescriptor()), page);
+                                               .arg(m_embeddedProfile.description()), page);
     QPushButton *embeddedProfInfo = new QPushButton(i18n("Info..."), page);
     KSeparator *line              = new KSeparator(Qt::Horizontal, page);
 
-    if (m_iccTrans->embeddedProfile().isEmpty())
+    if (iccTrans.embeddedProfile().isNull())
     {
         message->setText(i18n("<p>This image has not been assigned a color profile.</p>"
                               "<p>Do you want to convert it to your workspace color profile?</p>"));
@@ -122,7 +123,7 @@ ColorCorrectionDlg::ColorCorrectionDlg(QWidget* parent, DImg *preview,
     embeddedProfileDesc->setWordWrap(true);
 
     previewOriginal->setPixmap(preview->convertToPixmap());
-    previewTarget->setPixmap(preview->convertToPixmap(m_iccTrans));
+    previewTarget->setPixmap(preview->convertToPixmap(iccTrans));
     logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
                             .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
@@ -178,19 +179,19 @@ ColorCorrectionDlg::~ColorCorrectionDlg()
 
 void ColorCorrectionDlg::slotCurrentProfInfo()
 {
-    if (m_iccTrans->outputProfile().isEmpty())
+    if (m_outputProfile.isNull())
         return;
 
-    ICCProfileInfoDlg infoDlg(m_parent, QString(), m_iccTrans->outputProfile());
+    ICCProfileInfoDlg infoDlg(m_parent, QString(), m_outputProfile);
     infoDlg.exec();
 }
 
 void ColorCorrectionDlg::slotEmbeddedProfInfo()
 {
-    if (m_iccTrans->embeddedProfile().isEmpty())
+    if (m_embeddedProfile.isNull())
         return;
 
-    ICCProfileInfoDlg infoDlg(m_parent, QString(), m_iccTrans->embeddedProfile());
+    ICCProfileInfoDlg infoDlg(m_parent, QString(), m_embeddedProfile);
     infoDlg.exec();
 }
 

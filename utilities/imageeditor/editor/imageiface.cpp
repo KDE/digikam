@@ -236,7 +236,7 @@ void ImageIface::putPreviewImage(uchar* data)
     {
         d->targetPreviewImage = DImg(d->previewImage.width(), d->previewImage.height(),
                                      d->previewImage.sixteenBit(), d->previewImage.hasAlpha(), data);
-        d->targetPreviewImage.setICCProfil( d->previewImage.getICCProfil() );
+        d->targetPreviewImage.setIccProfile( d->previewImage.getIccProfile() );
     }
     else
     {
@@ -252,9 +252,9 @@ void ImageIface::putOriginalImage(const QString& caller, uchar* data, int w, int
     DImgInterface::defaultInterface()->putImage(caller, data, w, h);
 }
 
-void ImageIface::setEmbeddedICCToOriginalImage(const QString& profilePath)
+void ImageIface::setEmbeddedICCToOriginalImage(const IccProfile& profile)
 {
-    DImgInterface::defaultInterface()->setEmbeddedICCToOriginalImage( profilePath );
+    DImgInterface::defaultInterface()->setEmbeddedICCToOriginalImage( profile );
 }
 
 void ImageIface::putImageSelection(const QString& caller, uchar* data)
@@ -359,7 +359,7 @@ QPixmap ImageIface::convertToPixmap(DImg& img)
     return DImgInterface::defaultInterface()->convertToPixmap(img);
 }
 
-QByteArray ImageIface::getEmbeddedICCFromOriginalImage()
+IccProfile ImageIface::getEmbeddedICCFromOriginalImage()
 {
     return DImgInterface::defaultInterface()->getEmbeddedICC();
 }
@@ -418,8 +418,9 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h,
         if (iccSettings && iccSettings->enableCMSetting && iccSettings->managedViewSetting)
         {
             IccTransform monitorICCtrans;
-            monitorICCtrans.setProfiles(iccSettings->workspaceSetting, iccSettings->monitorSetting);
-            pixImage = d->targetPreviewImage.convertToPixmap(&monitorICCtrans);
+            monitorICCtrans.setInputProfile(iccSettings->workspaceSetting);
+            monitorICCtrans.setOutputProfile(iccSettings->monitorSetting);
+            pixImage = d->targetPreviewImage.convertToPixmap(monitorICCtrans);
         }
         else
         {
