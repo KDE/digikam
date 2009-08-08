@@ -42,6 +42,7 @@
 #include "drawdecoding.h"
 #include "dcolor.h"
 #include "dcolorcomposer.h"
+#include "iccprofile.h"
 
 class QString;
 
@@ -271,17 +272,14 @@ public:
     QByteArray getExif()      const;
     QByteArray getIptc()      const;
     QByteArray getXmp()       const;
-    QByteArray getICCProfil() const;
+    IccProfile getIccProfile()const;
     void       setComments(const QByteArray& commentsData);
     void       setExif(const QByteArray& exifData);
     void       setIptc(const QByteArray& iptcData);
     void       setXmp(const QByteArray& xmpData);
-    void       setICCProfil(const QByteArray& profile);
+    void       setIccProfile(const IccProfile& profile);
 
     QByteArray metadata(METADATA key) const;
-
-    bool       getICCProfilFromFile(const QString& filePath);
-    bool       setICCProfilToFile(const QString& filePath);
 
     void       setAttribute(const QString& key, const QVariant& value);
     QVariant   attribute(const QString& key) const;
@@ -371,7 +369,7 @@ public:
     void       flip(FLIP direction);
 
     QPixmap    convertToPixmap();
-    QPixmap    convertToPixmap(IccTransform* monitorICCtrans);
+    QPixmap    convertToPixmap(IccTransform& monitorICCtrans);
 
     /** Return a mask image where pure white and pure black pixels are over-colored.
         This way is used to identify over and under exposed pixels.

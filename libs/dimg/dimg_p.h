@@ -36,6 +36,7 @@
 
 #include "digikam_export.h"
 #include "dshareddata.h"
+#include "iccprofile.h"
 
 /** Lanczos kernel is precomputed in a table with this resolution
     The value below seems to be enough for HQ upscaling up to eight times
@@ -100,6 +101,7 @@ public:
     QMap<int, QByteArray>   metaData;
     QMap<QString, QVariant> attributes;
     QMap<QString, QString>  embeddedText;
+    IccProfile              iccProfile;
 };
 
 }  // namespace Digikam

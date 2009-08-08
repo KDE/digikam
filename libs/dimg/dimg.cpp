@@ -271,6 +271,8 @@ void DImg::copyMetaData(const DImgPrivate *src)
     m_priv->isReadOnly   = src->isReadOnly;
     m_priv->attributes   = src->attributes;
     m_priv->embeddedText = src->embeddedText;
+    m_priv->iccProfile   = src->iccProfile;
+    //FIXME: what about sharing and deleting lanczos_func?
 
     // since qbytearrays are explicitly shared, we need to make sure that they are
     // detached from any shared references
@@ -788,34 +790,6 @@ DImg::FORMAT DImg::fileFormat() const
         return NONE;
 }
 
-bool DImg::getICCProfilFromFile(const QString& filePath)
-{
-    QFile file(filePath);
-    if ( !file.open(QIODevice::ReadOnly) )
-        return false;
-
-    QByteArray data;
-    data.resize(file.size());
-    QDataStream stream( &file );
-    stream.readRawData(data.data(), data.size());
-    setICCProfil(data);
-    file.close();
-    return true;
-}
-
-bool DImg::setICCProfilToFile(const QString& filePath)
-{
-    QFile file(filePath);
-    if ( !file.open(QIODevice::WriteOnly) )
-        return false;
-
-    QByteArray data(getICCProfil());
-    QDataStream stream( &file );
-    stream.writeRawData(data.data(), data.size());
-    file.close();
-    return true;
-}
-
 QByteArray DImg::getComments() const
 {
     return metadata(COM);
@@ -831,9 +805,9 @@ QByteArray DImg::getIptc() const
     return metadata(IPTC);
 }
 
-QByteArray DImg::getICCProfil() const
+IccProfile DImg::getIccProfile() const
 {
-    return metadata(ICC);
+    return m_priv->iccProfile;
 }
 
 QByteArray DImg::getXmp() const
@@ -856,9 +830,10 @@ void DImg::setIptc(const QByteArray& iptcData)
     m_priv->metaData.insert(IPTC, iptcData);
 }
 
-void DImg::setICCProfil(const QByteArray& profile)
+void DImg::setIccProfile(const IccProfile& profile)
 {
-    m_priv->metaData.insert(ICC, profile);
+    m_priv->iccProfile = profile;
+    m_priv->metaData.insert(ICC, m_priv->iccProfile.data());
 }
 
 void DImg::setXmp(const QByteArray& xmpData)
@@ -1532,12 +1507,12 @@ QPixmap DImg::convertToPixmap()
     }
 }
 
-QPixmap DImg::convertToPixmap(IccTransform *monitorICCtrans)
+QPixmap DImg::convertToPixmap(IccTransform& monitorICCtrans)
 {
     if (isNull())
         return QPixmap();
 
-    if (!monitorICCtrans->hasOutputProfile())
+    if (monitorICCtrans.outputProfile().isNull())
     {
         kDebug(50003) << " : no monitor ICC profile available!";
         return convertToPixmap();
@@ -1545,20 +1520,12 @@ QPixmap DImg::convertToPixmap(IccTransform *monitorICCtrans)
 
     DImg img = copy();
 
-    // Without embedded profile
-    if (img.getICCProfil().isNull())
-    {
-        QByteArray fakeProfile;
-        monitorICCtrans->apply(img, fakeProfile, monitorICCtrans->getRenderingIntent(),
-                               monitorICCtrans->getUseBPC(), false,
-                               monitorICCtrans->inputProfile().isNull());
-    }
-    // With embedded profile.
-    else
-    {
-        monitorICCtrans->getEmbeddedProfile( img );
-        monitorICCtrans->apply( img );
-    }
+    // read embedded profile, if available. Else use input profile, then sRGB.
+    monitorICCtrans.setEmbeddedProfile(img);
+    // read parameters from config
+    monitorICCtrans.readFromConfig();
+    // do transformation
+    monitorICCtrans.apply(img);
 
     return (img.convertToPixmap());
 }
