@@ -480,7 +480,6 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
         // clean up
         cleanupData->deleteData();
-        jpeg_finish_decompress(&cinfo);
     }
 
     // -------------------------------------------------------------------
@@ -510,6 +509,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     // -------------------------------------------------------------------
 
+    jpeg_finish_decompress(&cinfo);
     jpeg_destroy_decompress(&cinfo);
 
     // -------------------------------------------------------------------
