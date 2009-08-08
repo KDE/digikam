@@ -182,7 +182,6 @@ void IccTransform::setInputProfile(const IccProfile &profile)
 void IccTransform::setEmbeddedProfile(const DImg& image)
 {
     d->embeddedProfile = image.getIccProfile();
-    kDebug() << "Embedded profile" << d->embeddedProfile.description() << d->embeddedProfile.isNull();
 }
 
 void IccTransform::setOutputProfile(const IccProfile &profile)

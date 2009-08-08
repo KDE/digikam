@@ -31,6 +31,7 @@
 
 // Qt includes
 
+#include <QDir>
 #include <QFile>
 
 // KDE includes
@@ -105,27 +106,55 @@ IccProfile::IccProfile(const QString& filePath)
     d->filePath = filePath;
 }
 
+IccProfile::IccProfile(const char *location, const QString& relativePath)
+            : d(0)
+{
+    QString filePath = KStandardDirs::locate(location, relativePath);
+    if (filePath.isNull())
+    {
+        kError(50003) << "The sRGB profile" << relativePath << "cannot be found. Check your installation.";
+        return;
+    }
+    d = new IccProfilePriv;
+    d->filePath = filePath;
+}
+
+
 IccProfile IccProfile::sRGB()
 {
     // The srgb.icm file seems to have a whitepoint of D50, see #133913
-    QString filePath = KStandardDirs::locate("data", "libkdcraw/profiles/srgb-d65.icm");
-    if (filePath.isNull())
-    {
-        kError(50003) << "The sRGB profile libkdcraw/profiles/srgb-d65.icm cannot be found. Check your installation.";
-        return IccProfile();
-    }
-    return IccProfile(filePath);
+    return IccProfile("data", "libkdcraw/profiles/srgb-d65.icm");
 }
 
 IccProfile IccProfile::adobeRGB()
 {
-    QString filePath = KStandardDirs::locate("data", "libkdcraw/profiles/adobergb.icm");
-    if (filePath.isNull())
-    {
-        kError(50003) << "The sRGB profile libkdcraw/profiles/adobergb.icm cannot be found. Check your installation.";
-        return IccProfile();
-    }
-    return IccProfile(filePath);
+    return IccProfile("data", "libkdcraw/profiles/adobergb.icm");
+}
+
+IccProfile IccProfile::wideGamuteRGB()
+{
+    return IccProfile("data", "libkdcraw/profiles/widegamut.icm");
+}
+
+IccProfile IccProfile::proPhotoRGB()
+{
+    return IccProfile("data", "libkdcraw/profiles/prophoto.icm");
+}
+
+IccProfile IccProfile::appleRGB()
+{
+    return IccProfile("data", "libkdcraw/profiles/applergb.icm");
+}
+
+QList<IccProfile> IccProfile::defaultProfiles()
+{
+    QList<IccProfile> profiles;
+    profiles << sRGB()
+             << adobeRGB()
+             << appleRGB()
+             << proPhotoRGB()
+             << wideGamuteRGB();
+    return profiles;
 }
 
 IccProfile::IccProfile(const IccProfile& other)
@@ -236,6 +265,14 @@ bool IccProfile::isOpen() const
     return d->handle;
 }
 
+QString IccProfile::filePath() const
+{
+    if (!d)
+        return QString();
+
+    return d->filePath;
+}
+
 QString IccProfile::description()
 {
     if (!d)
@@ -243,9 +280,39 @@ QString IccProfile::description()
 
     open();
     const char *desc = cmsTakeProductDesc(d->handle);
-    if (desc)
+    if (desc && desc[0] != '\0')
         return QString::fromLatin1(desc);
     return QString();
+}
+
+IccProfile::ProfileType IccProfile::type()
+{
+    if (!d)
+        return InvalidType;
+
+    if (!open())
+        return InvalidType;
+
+    switch ((int)cmsGetDeviceClass(d->handle))
+    {
+        case icSigInputClass:
+        case 0x6e6b7066: // 'nkbf', proprietary in Nikon profiles
+            return Input;
+        case icSigDisplayClass:
+            return Display;
+        case icSigOutputClass:
+            return Output;
+        case icSigColorSpaceClass:
+            return ColorSpace;
+        case icSigLinkClass:
+            return DeviceLink;
+        case icSigAbstractClass:
+            return Abstract;
+        case icSigNamedColorClass:
+            return NamedColor;
+        default:
+            return InvalidType;
+    }
 }
 
 bool IccProfile::writeToFile(const QString& filePath)
@@ -275,6 +342,53 @@ void *IccProfile::handle() const
 
     return d->handle;
 }
+
+QStringList IccProfile::defaultSearchPaths()
+{
+    QStringList paths;
+    QStringList candidates;
+
+    paths << KGlobal::dirs()->findDirs("data", "color/icc");
+
+    #ifdef Q_WS_WIN
+    //TODO
+    #elif defined (Q_WS_MAC)
+    //TODO
+    #else
+
+        // XDG data dirs, including /usr/share/color/icc
+        QStringList dataDirs = QString::fromLocal8Bit(getenv("XDG_DATA_DIRS")).split(":", QString::SkipEmptyParts);
+        if (!dataDirs.contains(QLatin1String("/usr/share")))
+            dataDirs << "/usr/share";
+        if (!dataDirs.contains(QLatin1String("/usr/local/share")))
+            dataDirs << "/usr/local/share";
+        foreach (const QString &dataDir, dataDirs)
+            candidates << dataDir + "/color/icc";
+
+        // XDG_DATA_HOME
+        QString dataHomeDir = QString::fromLocal8Bit(getenv("XDG_DATA_HOME"));
+        candidates << dataHomeDir + "/color/icc";
+        candidates << dataHomeDir + "/icc";
+
+        // home dir directories
+        candidates << QDir::homePath() + "/.local/share/color/icc/";
+        candidates << QDir::homePath() + "/.local/share/icc/";
+        candidates << QDir::homePath() + "/.color/icc/";
+    #endif
+
+    foreach (const QString &candidate, candidates)
+    {
+        QDir dir(candidate);
+        if (dir.exists() && dir.isReadable() && !paths.contains(candidate))
+        {
+            paths << candidate;
+        }
+    }
+    //kDebug(50003) << candidates << '\n' << paths;
+
+    return paths;
+}
+
 
 
 }  // namespace Digikam

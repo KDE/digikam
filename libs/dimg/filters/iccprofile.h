@@ -61,10 +61,14 @@ public:
      */
     IccProfile(const QString& filePath);
 
-    /// Returns the sRGB profile (available with libkdcraw). You still need to call open().
+    /// Returns the profiles available with libkdcraw. You still need to call open() on them.
     static IccProfile sRGB();
-    /// Returns the Adobe RGB profile (available with libkdcraw). You still need to call open().
     static IccProfile adobeRGB();
+    static IccProfile wideGamuteRGB();
+    static IccProfile proPhotoRGB();
+    static IccProfile appleRGB();
+    /// Returns a list with the profiles above
+    static QList<IccProfile> defaultProfiles();
 
     IccProfile(const IccProfile& other);
     ~IccProfile();
@@ -103,12 +107,37 @@ public:
     bool isOpen() const;
 
     /**
+     * Returns the filename that this profile was read from.
+     * returns a null QString() if this profile was loaded from memory.
+     */
+    QString filePath() const;
+
+    /**
      * Reads the profile description. Opens the profile if necessary.
      */
     QString description();
 
+    enum ProfileType
+    {
+        /// Returned for a null profile or an unknown (non-standard) profile type
+        InvalidType,
+        /// For an input device like a scanner or digital camera
+        Input,
+        /// For an output device like a printer
+        Output,
+        /// For a display device like a monitor
+        Display,
+        Abstract,
+        ColorSpace,
+        DeviceLink,
+        NamedColor
+    };
+
+    ProfileType type();
+
     /**
      * Returns the raw profile data.
+     * Reads the data from disk if loaded from disk and not yet loaded.
      */
     QByteArray data();
 
@@ -121,7 +150,16 @@ public:
     void *handle() const;
     operator void*() const { return handle(); }
 
+    /**
+     * Returns the default search paths for ICC profiles.
+     * This does not include any user-specified settings.
+     */
+    static QStringList defaultSearchPaths();
+    static QList<IccProfile> scanDirectories(const QStringList& dirs);
+
 private:
+
+    IccProfile(const char *location, const QString& relativePath);
 
     QSharedDataPointer<IccProfilePriv> d;
 };
