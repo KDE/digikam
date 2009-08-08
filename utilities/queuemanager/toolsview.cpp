@@ -64,7 +64,7 @@ ToolsView::ToolsView(QWidget *parent)
          : KTabWidget(parent), d(new ToolsViewPriv)
 {
     setTabBarHidden(false);
-    setCloseButtonEnabled(false);
+    setTabsClosable(false);
 
     // --------------------------------------------------------
 

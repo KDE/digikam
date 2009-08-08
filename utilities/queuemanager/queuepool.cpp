@@ -48,7 +48,7 @@ QueuePool::QueuePool(QWidget *parent)
          : KTabWidget(parent)
 {
     setTabBarHidden(false);
-    setCloseButtonEnabled(true);
+    setTabsClosable(true);
     slotAddQueue();
 
     connect(this, SIGNAL(currentChanged(int)),

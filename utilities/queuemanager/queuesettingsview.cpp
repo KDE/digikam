@@ -87,7 +87,7 @@ QueueSettingsView::QueueSettingsView(QWidget *parent)
                  : KTabWidget(parent), d(new QueueSettingsViewPriv)
 {
     setTabBarHidden(false);
-    setCloseButtonEnabled(false);
+    setTabsClosable(false);
 
     // --------------------------------------------------------
 
