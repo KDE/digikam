@@ -241,8 +241,6 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     if (m_loadFlags & LoadICCData)
     {
-        QMap<int, QByteArray>& metaData = imageMetaData();
-
         uchar  *profile_data=0;
         uint32  profile_size;
 
@@ -251,7 +249,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             QByteArray profile_rawdata;
             profile_rawdata.resize(profile_size);
             memcpy(profile_rawdata.data(), profile_data, profile_size);
-            metaData.insert(DImg::ICC, profile_rawdata);
+            imageSetIccProfile(profile_rawdata);
         }
         else
         {
@@ -647,7 +645,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     // -------------------------------------------------------------------
     // Write ICC profile.
 
-    QByteArray profile_rawdata = m_image->getICCProfil();
+    QByteArray profile_rawdata = m_image->getIccProfile().data();
 
     if (!profile_rawdata.isEmpty())
     {

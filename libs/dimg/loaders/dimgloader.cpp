@@ -114,6 +114,11 @@ QMap<int, QByteArray>& DImgLoader::imageMetaData()
     return m_image->m_priv->metaData;
 }
 
+void DImgLoader::imageSetIccProfile(const QByteArray& profileData)
+{
+    m_image->setIccProfile(profileData);
+}
+
 QVariant DImgLoader::imageGetAttribute(const QString& key)
 {
     return m_image->attribute(key);
@@ -206,29 +211,26 @@ bool DImgLoader::checkExifWorkingColorSpace()
     if (!profile.isNull())
     {
         kDebug(50003) << "Found an ICC profile in Exif metadata";
-        m_image->setICCProfil(profile);
+        m_image->setIccProfile(profile);
         return true;
     }
 
     // Else check the Exif color-space tag and use a default profiles available with libkdcraw.
-    QString directory = KStandardDirs::installPath("data") + QString("libkdcraw/profiles/");
 
     switch(metaData.getImageColorWorkSpace())
     {
         case DMetadata::WORKSPACE_SRGB:
         {
             kDebug(50003) << "Exif color-space tag is sRGB. Using default sRGB ICC profile.";
-            m_image->getICCProfilFromFile(directory + QString("srgb-d65.icm"));
+            m_image->setIccProfile(IccProfile::sRGB());
             return true;
-            break;
         }
 
         case DMetadata::WORKSPACE_ADOBERGB:
         {
             kDebug(50003) << "Exif color-space tag is AdobeRGB. Using default AdobeRGB ICC profile.";
-            m_image->getICCProfilFromFile(directory + QString("adobergb.icm"));
+            m_image->setIccProfile(IccProfile::adobeRGB());
             return true;
-            break;
         }
 
         default:

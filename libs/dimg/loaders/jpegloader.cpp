@@ -488,8 +488,6 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     if (m_loadFlags & LoadICCData)
     {
-        QMap<int, QByteArray>& metaData = imageMetaData();
-
         JOCTET *profile_data=NULL;
         uint    profile_size;
 
@@ -500,7 +498,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             QByteArray profile_rawdata;
             profile_rawdata.resize(profile_size);
             memcpy(profile_rawdata.data(), profile_data, profile_size);
-            metaData.insert(DImg::ICC, profile_rawdata);
+            imageSetIccProfile(profile_rawdata);
             free (profile_data);
         }
         else
@@ -660,7 +658,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     // -------------------------------------------------------------------
     // Write ICC profile.
 
-    QByteArray profile_rawdata = m_image->getICCProfil();
+    QByteArray profile_rawdata = m_image->getIccProfile().data();
 
     if (!profile_rawdata.isEmpty())
     {

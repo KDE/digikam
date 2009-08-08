@@ -470,8 +470,6 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     if (m_loadFlags & LoadICCData)
     {
-        QMap<int, QByteArray>& metaData = imageMetaData();
-
         png_charp   profile_name, profile_data=NULL;
         png_uint_32 profile_size;
         int         compression_type;
@@ -483,7 +481,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             QByteArray profile_rawdata;
             profile_rawdata.resize(profile_size);
             memcpy(profile_rawdata.data(), profile_data, profile_size);
-            metaData.insert(DImg::ICC, profile_rawdata);
+            imageSetIccProfile(profile_rawdata);
         }
         else
         {
@@ -697,7 +695,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     // -------------------------------------------------------------------
     // Write ICC profile.
 
-    QByteArray profile_rawdata = m_image->getICCProfil();
+    QByteArray profile_rawdata = m_image->getIccProfile().data();
 
     if (!profile_rawdata.isEmpty())
     {
