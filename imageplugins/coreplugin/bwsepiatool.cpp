@@ -197,12 +197,14 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    m_gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                                              EditorToolSettings::Load|
-                                                              EditorToolSettings::SaveAs|
-                                                              EditorToolSettings::Ok|
-                                                              EditorToolSettings::Cancel,
-                                                              EditorToolSettings::Histogram);
+    m_gboxSettings = new EditorToolSettings;
+    m_gboxSettings->setButtons(EditorToolSettings::Default|
+                               EditorToolSettings::Load|
+                               EditorToolSettings::SaveAs|
+                               EditorToolSettings::Ok|
+                               EditorToolSettings::Cancel);
+
+    m_gboxSettings->setTools(EditorToolSettings::Histogram);
 
     QGridLayout* gridSettings = new QGridLayout(m_gboxSettings->plainPage());
 

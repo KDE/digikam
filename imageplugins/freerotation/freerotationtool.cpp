@@ -143,10 +143,8 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     QString temp;
     Digikam::ImageIface iface(0, 0);
 
-    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                             EditorToolSettings::Ok|
-                                             EditorToolSettings::Cancel,
-                                             EditorToolSettings::ColorGuide);
+    d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings->setTools(EditorToolSettings::ColorGuide);
 
 
     QLabel *label1   = new QLabel(i18n("New width:"));

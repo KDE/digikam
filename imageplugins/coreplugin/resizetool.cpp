@@ -186,12 +186,13 @@ ResizeTool::ResizeTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                             EditorToolSettings::Try|
-                                             EditorToolSettings::Ok|
-                                             EditorToolSettings::Load|
-                                             EditorToolSettings::SaveAs|
-                                             EditorToolSettings::Cancel);
+    d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings->setButtons(EditorToolSettings::Default|
+                                EditorToolSettings::Try|
+                                EditorToolSettings::Ok|
+                                EditorToolSettings::Load|
+                                EditorToolSettings::SaveAs|
+                                EditorToolSettings::Cancel);
 
     ImageIface iface(0, 0);
     d->orgWidth  = iface.originalWidth();
@@ -523,7 +524,7 @@ void ResizeTool::prepareFinal()
     if (d->useGreycstorationBox->isChecked())
     {
         setFilter(dynamic_cast<DImgThreadedFilter*>(
-                  new GreycstorationIface(iface.getOriginalImg(), 
+                  new GreycstorationIface(iface.getOriginalImg(),
                                           d->settingsWidget->getSettings(),
                                           GreycstorationIface::Resize,
                                           d->wInput->value(),
@@ -537,7 +538,7 @@ void ResizeTool::prepareFinal()
         // to resize image without good quality.
         setFilter(dynamic_cast<DImgThreadedFilter*>(new ResizeImage(iface.getOriginalImg(),
                                                     d->wInput->value(),
-                                                    d->hInput->value(), 
+                                                    d->hInput->value(),
                                                     this)));
     }
 }
@@ -624,7 +625,7 @@ void ResizeTool::slotLoadSettings()
     }
     else
     {
-        KMessageBox::error(kapp->activeWindow(), 
+        KMessageBox::error(kapp->activeWindow(),
                            i18n("Cannot load settings from the Photograph Resizing text file."));
     }
 

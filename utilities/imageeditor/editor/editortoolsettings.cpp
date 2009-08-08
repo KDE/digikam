@@ -92,9 +92,12 @@ public:
         scaleBG         = 0;
         histogramBox    = 0;
         hGradient       = 0;
+        panWidgetFrame  = 0;
     }
 
     QButtonGroup        *scaleBG;
+
+    QFrame              *panWidgetFrame;
 
     QToolButton         *linHistoButton;
     QToolButton         *logHistoButton;
@@ -127,8 +130,8 @@ public:
     RIntNumInput        *guideSize;
 };
 
-EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask,
-                                       HistogramBox::HistogramType histogramType, QWidget *parent)
+//EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, int histogramType, QWidget *parent)
+EditorToolSettings::EditorToolSettings(QWidget *parent)
                   : QScrollArea(parent), d(new EditorToolSettingsPriv)
 {
     setFrameStyle( QFrame::NoFrame );
@@ -145,14 +148,14 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask,
     d->guideBox     = new KHBox(d->settingsArea);
     d->btnBox1      = new KHBox(d->settingsArea);
     d->btnBox2      = new KHBox(d->settingsArea);
-    d->histogramBox = new HistogramBox(d->settingsArea, histogramType);
+    d->histogramBox = new HistogramBox(d->settingsArea);
 
     // ---------------------------------------------------------------
 
-    QFrame *frame     = new QFrame(d->settingsArea);
-    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* vlay = new QVBoxLayout(frame);
-    d->panIconView    = new ImagePanIconWidget(360, 240, frame);
+    d->panWidgetFrame = new QFrame(d->settingsArea);
+    d->panWidgetFrame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    QVBoxLayout* vlay = new QVBoxLayout(d->panWidgetFrame);
+    d->panIconView    = new ImagePanIconWidget(360, 240, d->panWidgetFrame);
     d->panIconView->setWhatsThis(i18n("<p>Here you can see the original image panel "
                                       "which can help you to select the clip preview.</p>"
                                       "<p>Click and drag the mouse cursor in the "
@@ -160,9 +163,6 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask,
     vlay->addWidget(d->panIconView, 0, Qt::AlignCenter);
     vlay->setSpacing(0);
     vlay->setMargin(5);
-
-    if (!(toolMask & PanIcon))
-        frame->hide();
 
     // ---------------------------------------------------------------
 
@@ -181,36 +181,24 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask,
     d->guideBox->setSpacing(spacingHint());
     d->guideBox->setMargin(0);
 
-    if (!(toolMask & ColorGuide))
-        d->guideBox->hide();
-
     // ---------------------------------------------------------------
 
     d->defaultBtn = new KPushButton(d->btnBox1);
     d->defaultBtn->setGuiItem(KStandardGuiItem::defaults());
     d->defaultBtn->setIcon(KIcon(SmallIcon("document-revert")));
     d->defaultBtn->setToolTip(i18n("Reset all settings to their default values."));
-    if (!(buttonMask & Default))
-        d->defaultBtn->hide();
 
     QLabel *space2 = new QLabel(d->btnBox1);
 
     d->okBtn = new KPushButton(d->btnBox1);
     d->okBtn->setGuiItem(KStandardGuiItem::ok());
-    if (!(buttonMask & Ok))
-        d->okBtn->hide();
 
     d->cancelBtn = new KPushButton(d->btnBox1);
     d->cancelBtn->setGuiItem(KStandardGuiItem::cancel());
-    if (!(buttonMask & Cancel))
-        d->cancelBtn->hide();
 
     d->btnBox1->setStretchFactor(space2, 10);
     d->btnBox1->setSpacing(spacingHint());
     d->btnBox1->setMargin(0);
-
-    if (!(buttonMask & Default) && !(buttonMask & Ok) && !(buttonMask & Cancel))
-        d->btnBox1->hide();
 
     // ---------------------------------------------------------------
 
@@ -218,14 +206,11 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask,
     d->loadBtn->setGuiItem(KStandardGuiItem::open());
     d->loadBtn->setText(i18n("Load..."));
     d->loadBtn->setToolTip(i18n("Load all parameters from settings text file."));
-    if (!(buttonMask & Load))
-        d->loadBtn->hide();
 
     d->saveAsBtn = new KPushButton(d->btnBox2);
     d->saveAsBtn->setGuiItem(KStandardGuiItem::saveAs());
     d->saveAsBtn->setToolTip(i18n("Save all parameters to settings text file."));
-    if (!(buttonMask & SaveAs))
-        d->saveAsBtn->hide();
+
 
     QLabel *space3 = new QLabel(d->btnBox2);
 
@@ -233,29 +218,19 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask,
     d->tryBtn->setGuiItem(KStandardGuiItem::apply());
     d->tryBtn->setText(i18n("Try"));
     d->tryBtn->setToolTip(i18n("Try all settings."));
-    if (!(buttonMask & Try))
-        d->tryBtn->hide();
 
     d->btnBox2->setStretchFactor(space3, 10);
     d->btnBox2->setSpacing(spacingHint());
     d->btnBox2->setMargin(0);
 
-    if (!(buttonMask & Load) && !(buttonMask & SaveAs) && !(buttonMask & Try))
-        d->btnBox2->hide();
-
     // ---------------------------------------------------------------
 
-    if (!(toolMask & Histogram))
-        d->histogramBox->hide();
-
-    // ---------------------------------------------------------------
-
-    gridSettings->addWidget(d->histogramBox,  0, 0, 2, 2);
-    gridSettings->addWidget(frame,            2, 0, 1, 2);
-    gridSettings->addWidget(d->plainPage,     3, 0, 1, 2);
-    gridSettings->addWidget(d->guideBox,      4, 0, 1, 2);
-    gridSettings->addWidget(d->btnBox2,       5, 0, 1, 2);
-    gridSettings->addWidget(d->btnBox1,       6, 0, 1, 2);
+    gridSettings->addWidget(d->histogramBox,   0, 0, 2, 2);
+    gridSettings->addWidget(d->panWidgetFrame, 2, 0, 1, 2);
+    gridSettings->addWidget(d->plainPage,      3, 0, 1, 2);
+    gridSettings->addWidget(d->guideBox,       4, 0, 1, 2);
+    gridSettings->addWidget(d->btnBox2,        5, 0, 1, 2);
+    gridSettings->addWidget(d->btnBox1,        6, 0, 1, 2);
     gridSettings->setSpacing(spacingHint());
     gridSettings->setMargin(spacingHint());
 
@@ -293,6 +268,11 @@ EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask,
 
     connect(d->histogramBox, SIGNAL(signalScaleChanged()),
             this, SIGNAL(signalScaleChanged()));
+
+    // --------------------------------------------------------
+
+    setButtons(Default|Ok|Cancel);
+    setTools(0x0);
 }
 
 EditorToolSettings::~EditorToolSettings()
@@ -384,6 +364,31 @@ int EditorToolSettings::guideSize() const
 void EditorToolSettings::setGuideSize(int size)
 {
     d->guideSize->setValue(size);
+}
+
+void EditorToolSettings::setButtons(Buttons buttonMask)
+{
+    d->okBtn->setVisible(buttonMask & Ok);
+    d->cancelBtn->setVisible(buttonMask & Cancel);
+    d->defaultBtn->setVisible(buttonMask & Default);
+    d->btnBox1->setVisible((buttonMask & Ok) || (buttonMask & Cancel) || (buttonMask & Default));
+
+    d->loadBtn->setVisible(buttonMask & Load);
+    d->saveAsBtn->setVisible(buttonMask & SaveAs);
+    d->tryBtn->setVisible(buttonMask & Try);
+    d->btnBox2->setVisible((buttonMask & Load) || (buttonMask & SaveAs) || (buttonMask & Try));
+}
+
+void EditorToolSettings::setTools(Tools toolMask)
+{
+    d->panWidgetFrame->setVisible(toolMask & PanIcon);
+    d->histogramBox->setVisible(toolMask & Histogram);
+    d->guideBox->setVisible(toolMask & ColorGuide);
+}
+
+void EditorToolSettings::setHistogramType(HistogramBox::HistogramType type)
+{
+    d->histogramBox->setHistogramType(type);
 }
 
 } // namespace Digikam

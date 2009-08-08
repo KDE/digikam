@@ -56,6 +56,7 @@ public:
         SaveAs  = 0x00000010,
         Load    = 0x00000020
     };
+    Q_DECLARE_FLAGS(Buttons, ButtonCode)
 
     enum ToolCode
     {
@@ -64,6 +65,7 @@ public:
         PanIcon    = 0x00000004,
         Histogram  = 0x00000008
     };
+    Q_DECLARE_FLAGS(Tools, ToolCode)
 
     enum ColorChannel
     {
@@ -77,9 +79,12 @@ public:
 
 public:
 
-    EditorToolSettings(int buttonMask, int toolMask=NoTool,
-                       HistogramBox::HistogramType histogramType = HistogramBox::LRGB, QWidget *parent = 0);
+    EditorToolSettings(QWidget *parent = 0);
     ~EditorToolSettings();
+
+    void setButtons(Buttons buttonMask);
+    void setTools(Tools toolMask);
+    void setHistogramType(HistogramBox::HistogramType type);
 
     virtual void setBusy(bool){};
     virtual void writeSettings(){};
@@ -123,5 +128,8 @@ private:
 };
 
 } // namespace Digikam
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::EditorToolSettings::Buttons)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::EditorToolSettings::Tools)
 
 #endif // EDITORTOOLSETTINGS_H

@@ -140,9 +140,12 @@ public:
 };
 
 RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
-              : EditorToolSettings(Default|Ok|Cancel, Histogram, HistogramBox::LRGBC, parent),
-                d(new RawSettingsBoxPriv)
+              : EditorToolSettings(parent), d(new RawSettingsBoxPriv)
 {
+    setButtons(Default|Ok|Cancel);
+    setTools(Histogram);
+    setHistogramType(HistogramBox::LRGBC);
+
     QGridLayout* gridSettings = new QGridLayout(plainPage());
 
     d->tabView             = new KTabWidget(plainPage());

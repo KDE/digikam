@@ -134,13 +134,18 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                             EditorToolSettings::Ok|
-                                             EditorToolSettings::Cancel|
-//                                              EditorToolSettings::Load|
-//                                              EditorToolSettings::SaveAs|
-                                             EditorToolSettings::Try,
-                                             EditorToolSettings::PanIcon);
+    d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings->setButtons(EditorToolSettings::Default|
+                                EditorToolSettings::Ok|
+                                EditorToolSettings::Cancel|
+//                              EditorToolSettings::Load|
+//                              EditorToolSettings::SaveAs|
+                                EditorToolSettings::Try);
+
+
+    d->gboxSettings->setTools(EditorToolSettings::PanIcon);
+
+    // -------------------------------------------------------------
 
     QGridLayout* grid  = new QGridLayout( d->gboxSettings->plainPage() );
     QWidget* firstPage = new QWidget();

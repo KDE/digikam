@@ -116,10 +116,8 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
     ImageIface iface(0, 0);
     d->thumbnailImage = iface.getOriginalImg()->smoothScale(128, 128, Qt::KeepAspectRatio);
 
-    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                             EditorToolSettings::Ok|
-                                             EditorToolSettings::Cancel,
-                                             EditorToolSettings::Histogram);
+    d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings->setTools(EditorToolSettings::Histogram);
 
     // -------------------------------------------------------------
 

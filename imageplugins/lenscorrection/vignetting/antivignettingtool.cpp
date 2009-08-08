@@ -116,9 +116,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                             EditorToolSettings::Ok|
-                                             EditorToolSettings::Cancel);
+    d->gboxSettings = new EditorToolSettings;
 
     // -------------------------------------------------------------
 

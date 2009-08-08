@@ -172,10 +172,11 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings   = new EditorToolSettings(EditorToolSettings::Default|
-                                               EditorToolSettings::Try|
-                                               EditorToolSettings::Ok|
-                                               EditorToolSettings::Cancel);
+    d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings->setButtons(EditorToolSettings::Default|
+                                EditorToolSettings::Ok|
+                                EditorToolSettings::Try|
+                                EditorToolSettings::Cancel);
 
     QGridLayout* grid = new QGridLayout(d->gboxSettings->plainPage());
 

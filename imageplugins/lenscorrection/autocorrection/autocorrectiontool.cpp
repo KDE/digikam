@@ -112,9 +112,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                             EditorToolSettings::Ok|
-                                             EditorToolSettings::Cancel);
+    d->gboxSettings = new EditorToolSettings;
 
     QGridLayout *grid  = new QGridLayout(d->gboxSettings->plainPage());
     d->cameraSelector  = new KLFDeviceSelector(d->gboxSettings->plainPage());
