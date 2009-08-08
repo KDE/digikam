@@ -142,13 +142,13 @@ public:
     uchar* getImageSelection();
     void   putImageSelection(const QString& caller, uchar* data);
 
-    void   setEmbeddedICCToOriginalImage( QString profilePath);
+    void   setEmbeddedICCToOriginalImage(const IccProfile& profile);
 
     /** Convert a DImg image to a pixmap for screen using color 
         managed view if necessary */
     QPixmap               convertToPixmap(DImg& img);
 
-    QByteArray            getEmbeddedICC();
+    IccProfile            getEmbeddedICC();
     QByteArray            getExif();
     QByteArray            getIptc();
     QByteArray            getXmp();

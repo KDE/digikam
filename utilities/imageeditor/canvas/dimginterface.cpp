@@ -274,7 +274,8 @@ void DImgInterface::resetValues()
 void DImgInterface::setICCSettings(ICCSettingsContainer *cmSettings)
 {
     d->cmSettings = cmSettings;
-    d->monitorICCtrans.setProfiles(d->cmSettings->workspaceSetting, d->cmSettings->monitorSetting);
+    d->monitorICCtrans.setInputProfile(d->cmSettings->workspaceSetting);
+    d->monitorICCtrans.setOutputProfile(d->cmSettings->monitorSetting);
 }
 
 void DImgInterface::setExposureSettings(ExposureSettingsContainer *expoSettings)
@@ -316,28 +317,34 @@ void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription
 
         if (d->cmSettings->enableCMSetting)
         {
-            if (QFile::exists(d->cmSettings->workspaceSetting))
+            IccProfile workspaceProfile(d->cmSettings->workspaceSetting);
+            //kDebug() << "Workspace" << workspaceProfile.description();
+
+            if (workspaceProfile.open())
             {
                 IccTransform trans;
-                QByteArray fakeProfile;
 
-                // First possibility: image has no embedded profile
-                if (d->image.getICCProfil().isNull())
+                IccProfile inputProfile(d->cmSettings->inputSetting);
+                // If the innput color profile does not exist, built-in sRGB will be used instead.
+                trans.setInputProfile(inputProfile);
+                trans.setOutputProfile(workspaceProfile);
+                trans.setEmbeddedProfile(d->image);
+                trans.setIntent(d->cmSettings->renderingSetting);
+                trans.setUseBlackPointCompensation(d->cmSettings->BPCSetting);
+                //kDebug() << trans.effectiveInputProfile().description() << trans.outputProfile().description() << trans.willHaveEffect() << d->cmSettings->askOrApplySetting;
+
+                if (trans.willHaveEffect())
                 {
+
+                    // First possibility: image has no embedded profile
                     // Ask or apply?
                     if (d->cmSettings->askOrApplySetting)
                     {
                         if (d->parent)
                             d->parent->setCursor( Qt::WaitCursor );
-                        trans.setProfiles(QFile::encodeName(d->cmSettings->inputSetting),
-                                          QFile::encodeName(d->cmSettings->workspaceSetting));
-
-                        // NOTE: If Input color profile do not exist, using built-in sRGB instead.
-                        trans.apply(d->image, fakeProfile, d->cmSettings->renderingSetting,
-                                    d->cmSettings->BPCSetting, false,
-                                    QFile::exists(d->cmSettings->inputSetting));
-
-                        d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
+                        // Transform from embedded profile, input profile, or sRGB to workspace.
+                        trans.apply(d->image);
+                        d->image.setIccProfile(workspaceProfile);
                         if (d->parent)
                             d->parent->unsetCursor();
                     }
@@ -347,29 +354,23 @@ void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription
                         emit signalImageLoaded(d->filename, valRet);
 
                         DImg preview = d->image.smoothScale(240, 180, Qt::KeepAspectRatio);
-                        trans.setProfiles(QFile::encodeName(d->cmSettings->inputSetting),
-                                          QFile::encodeName(d->cmSettings->workspaceSetting));
-                        ColorCorrectionDlg dlg(d->parent, &preview, &trans, fileName);
+                        ColorCorrectionDlg dlg(d->parent, &preview, trans, fileName);
 
                         switch (dlg.exec())
                         {
                             case QDialog::Accepted:
                                 if (d->parent)
                                     d->parent->setCursor( Qt::WaitCursor );
-
-                                // NOTE: If Input color profile do not exist, using built-in sRGB instead.
-                                trans.apply(d->image, fakeProfile, d->cmSettings->renderingSetting,
-                                            d->cmSettings->BPCSetting, false,
-                                            QFile::exists(d->cmSettings->inputSetting));
-
-                                d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
+                                trans.apply(d->image);
+                                d->image.setIccProfile(workspaceProfile);
                                 if (d->parent)
                                     d->parent->unsetCursor();
                                 break;
                             case -1:
                                 if (d->parent)
                                     d->parent->setCursor( Qt::WaitCursor );
-                                d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
+                                // Only set the profile, leave data untouched
+                                d->image.setIccProfile(workspaceProfile);
                                 if (d->parent)
                                     d->parent->unsetCursor();
                                 kDebug(50003) << "dimginterface.cpp: Apply pressed";
@@ -378,60 +379,6 @@ void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription
                     }
                 }
                 // Second possibility: image has an embedded profile
-                else
-                {
-                    trans.getEmbeddedProfile( d->image );
-
-                    // Ask or apply?
-                    if (d->cmSettings->askOrApplySetting)
-                    {
-                        if (d->parent)
-                            d->parent->setCursor( Qt::WaitCursor );
-                        trans.setProfiles(QFile::encodeName(d->cmSettings->workspaceSetting));
-                        trans.apply(d->image, fakeProfile, d->cmSettings->renderingSetting,
-                                    d->cmSettings->BPCSetting, false, false);
-                        if (d->parent)
-                            d->parent->unsetCursor();
-                    }
-                    else
-                    {
-                        if (trans.getEmbeddedProfileDescriptor()
-                            != trans.getProfileDescription( d->cmSettings->workspaceSetting ))
-                        {
-                            // Embedded profile and default workspace profile are different: ask to user!
-
-                            kDebug(50003) << "Embedded profile: " << trans.getEmbeddedProfileDescriptor();
-
-                            // To repaint image in canvas before to ask about to apply ICC profile.
-                            emit signalImageLoaded(d->filename, valRet);
-
-                            DImg preview = d->image.smoothScale(240, 180, Qt::KeepAspectRatio);
-                            trans.setProfiles(QFile::encodeName(d->cmSettings->workspaceSetting));
-                            ColorCorrectionDlg dlg(d->parent, &preview, &trans, fileName);
-
-                            switch (dlg.exec())
-                            {
-                                case QDialog::Accepted:
-                                    if (d->parent)
-                                        d->parent->setCursor( Qt::WaitCursor );
-                                    trans.apply(d->image, fakeProfile, d->cmSettings->renderingSetting,
-                                                d->cmSettings->BPCSetting, false, false);
-                                    d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
-                                    if (d->parent)
-                                        d->parent->unsetCursor();
-                                    break;
-                                case -1:
-                                    if (d->parent)
-                                        d->parent->setCursor( Qt::WaitCursor );
-                                    d->image.getICCProfilFromFile(QFile::encodeName(d->cmSettings->workspaceSetting));
-                                    if (d->parent)
-                                        d->parent->unsetCursor();
-                                    kDebug(50003) << "dimginterface.cpp: Apply pressed";
-                                    break;
-                            }
-                        }
-                    }
-                }
             }
             else
             {
@@ -796,7 +743,7 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
 
     if (d->cmSettings->enableCMSetting && d->cmSettings->managedViewSetting)
     {
-        QPixmap pix(img.convertToPixmap(&d->monitorICCtrans));
+        QPixmap pix(img.convertToPixmap(d->monitorICCtrans));
         painter.drawPixmap(dx, dy, pix, 0, 0, pix.width(), pix.height());
     }
     else
@@ -859,7 +806,7 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
 
     if (d->cmSettings->enableCMSetting && d->cmSettings->managedViewSetting)
     {
-        QPixmap pix(img.convertToPixmap(&d->monitorICCtrans));
+        QPixmap pix(img.convertToPixmap(d->monitorICCtrans));
         painter.drawPixmap(dx, dy, pix, 0, 0, pix.width(), pix.height());
     }
     else
@@ -1145,7 +1092,7 @@ void DImgInterface::putImage(uchar* data, int w, int h, bool sixteenBit)
     setModified();
 }
 
-void DImgInterface::setEmbeddedICCToOriginalImage( QString profilePath)
+void DImgInterface::setEmbeddedICCToOriginalImage(const IccProfile& profile)
 {
     if (d->image.isNull())
     {
@@ -1153,8 +1100,8 @@ void DImgInterface::setEmbeddedICCToOriginalImage( QString profilePath)
         return;
     }
 
-     kDebug(50003) << "Embedding profile: " << profilePath;
-     d->image.getICCProfilFromFile( QFile::encodeName(profilePath));
+     //kDebug(50003) << "Embedding profile: " << profile;
+     d->image.setIccProfile(profile);
      setModified();
 }
 
@@ -1194,9 +1141,9 @@ void DImgInterface::getRedoHistory(QStringList& titles)
     d->undoMan->getRedoHistory(titles);
 }
 
-QByteArray DImgInterface::getEmbeddedICC()
+IccProfile DImgInterface::getEmbeddedICC()
 {
-    return d->image.getICCProfil();
+    return d->image.getIccProfile();
 }
 
 QByteArray DImgInterface::getExif()
@@ -1247,7 +1194,7 @@ ICCSettingsContainer* DImgInterface::getICCSettings()
 QPixmap DImgInterface::convertToPixmap(DImg& img)
 {
     if (d->cmSettings->enableCMSetting && d->cmSettings->managedViewSetting)
-        return img.convertToPixmap(&d->monitorICCtrans);
+        return img.convertToPixmap(d->monitorICCtrans);
 
     return img.convertToPixmap();
 }
