@@ -39,6 +39,7 @@ namespace Digikam
 {
 
 class IccTransformPriv;
+class TransformDescription;
 
 class DIGIKAM_EXPORT IccTransform
 {
@@ -47,46 +48,75 @@ public:
     IccTransform();
     ~IccTransform();
 
+    IccTransform(const IccTransform& other);
+    IccTransform &operator=(const IccTransform& other);
+
+    /// Apply this transform with the set profiles and options to the image
     bool apply(DImg& image);
-    bool apply(DImg& image, QByteArray& profile, int intent,
-               bool useBPC=false, bool checkGamut=false, bool useBuiltin=false);
 
-    void getTransformType(bool do_proof_profile);
-    void getEmbeddedProfile(const DImg& image);
-    int  getRenderingIntent();
-    bool getUseBPC();
+    /// Closes the transform, not the profiles. Called at desctruction.
+    void close();
 
-    bool hasInputProfile();
-    bool hasOutputProfile();
+    enum RenderingIntent
+    {
+        Perceptual = 0,
+        RelativeColorimetric = 1,
+        Saturation = 2,
+        AbsoluteColorimetric = 3
+    };
 
-    QByteArray embeddedProfile() const;
-    QByteArray inputProfile() const;
-    QByteArray outputProfile() const;
-    QByteArray proofProfile() const;
+    /**
+     * Sets the input profiles of this transform.
+     * You can call both setEmbeddedProfile and setInputProfile.
+     * If the image contains an embedded profile this profile is used
+     * and takes precedence over the set input profile, which is used
+     * without an embedded profile. If none is set, sRGB is used.
+     */
+    void setEmbeddedProfile(const DImg& image);
+    void setInputProfile(const IccProfile &profile);
+    /// Sets the output transform
+    void setOutputProfile(const IccProfile &profile);
+    /// Makes this transform a proofing transform, if profile is not null
+    void setProofProfile(const IccProfile &profile);
 
-    /** Input profile from file methods */
-    void setProfiles(const QString& input_profile, const QString& output_profile);
-    void setProfiles(const QString& input_profile, const QString& output_profile, const QString& proof_profile);
+    /// Set options
+    void setIntent(RenderingIntent intent);
+    void setIntent(int intent) { setIntent((RenderingIntent)intent); }
+    void setUseBlackPointCompensation(bool useBPC);
+    void setCheckGamut(bool checkGamut);
 
-    /** Embedded input profile methods */
-    void setProfiles(const QString& output_profile);
-    void setProfiles(const QString& output_profile, const QString& proof_profile, bool forProof);
+    /// Read intent and BPC from config
+    void readFromConfig();
 
-    /** Profile info methods */
-    QString getProfileDescription(const QString& profile);
+    /// Returns the contained profiles
+    IccProfile embeddedProfile() const;
+    IccProfile inputProfile() const;
+    IccProfile outputProfile() const;
+    IccProfile proofProfile() const;
 
-    QString getEmbeddedProfileDescriptor();
-    QString getInputProfileDescriptor();
-    QString getOutpoutProfileDescriptor();
-    QString getProofProfileDescriptor();
+    /**
+     * Returns if this transformation will have an effect, i.e. if
+     * effective input profile and output profile are different.
+     */
+    bool willHaveEffect();
+
+    /**
+     *  Returns the embedded profile; if none is set, the input profile;
+     *  if none is set, sRGB.
+     */
+    IccProfile effectiveInputProfile() const;
 
 private:
 
-    QByteArray loadICCProfilFile(const QString& filePath);
+    TransformDescription getDescription(const DImg& image);
+    TransformDescription getProofingDescription(const DImg& image);
+    bool open(TransformDescription &description);
+    bool openProofing(TransformDescription &description);
+    void transform(const DImg& img);
 
 private:
 
-    IccTransformPriv* const d;
+    QSharedDataPointer<IccTransformPriv> d;
 
 };
 
