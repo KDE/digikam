@@ -362,7 +362,7 @@ void ImageRegionWidget::updatePreviewImage(DImg *img)
     // Because image plugins are tool witch only work on image data, the DImg container
     // do not contain metadata from original image. About Color Managed View, we need to
     // restore the embedded ICC color profile.
-    image.setICCProfil(d->image.getICCProfil());
+    image.setIccProfile(d->image.getIccProfile());
     d->pixmapRegion = d->iface->convertToPixmap(image);
 }
 

@@ -49,7 +49,8 @@ public:
     ~ICCProfileWidget();
 
     bool    loadFromURL(const KUrl& url);
-    bool    loadFromProfileData(const QString& fileName, const QByteArray& data=QByteArray());
+    bool    loadFromProfileData(const QString& fileName, const QByteArray& data);
+    bool    loadProfile(const QString& fileName, const IccProfile& data);
 
     QString getTagDescription(const QString& key);
     QString getTagTitle(const QString& key);
@@ -59,8 +60,8 @@ public:
     void    setLoadingFailed();
     void    setDataLoading();
 
-    bool  setProfileData(const QByteArray& data=QByteArray());
-    const QByteArray& getProfileData();
+    bool  setProfile(const IccProfile& profile = IccProfile());
+    IccProfile getProfile() const;
 
 protected Q_SLOTS:
 

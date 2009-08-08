@@ -123,7 +123,7 @@ public:
 
     QRect                  selectionArea;
 
-    QByteArray             embedded_profile;
+    IccProfile             embedded_profile;
 
     DImg                   image;
     DImg                   imageSelection;
@@ -668,14 +668,14 @@ void ImagePropertiesColorsTab::updateStatistics()
 
 void ImagePropertiesColorsTab::getICCData()
 {
-    if (d->image.getICCProfil().isNull())
+    if (d->image.getIccProfile().isNull())
     {
         d->iccProfileWidget->setLoadingFailed();
     }
     else
     {
-        d->embedded_profile = d->image.getICCProfil();
-        d->iccProfileWidget->loadFromProfileData(d->currentFilePath, d->embedded_profile);
+        d->embedded_profile = d->image.getIccProfile();
+        d->iccProfileWidget->loadProfile(d->currentFilePath, d->embedded_profile);
     }
 }
 
