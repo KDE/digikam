@@ -46,7 +46,7 @@ Q_OBJECT
 
 public:
 
-    enum HistogramCode
+    enum HistogramType
     {
         RGB = 0,
         RGBA,
@@ -74,13 +74,15 @@ public:
 
 public:
 
-    HistogramBox(QWidget* parent = 0, int histogramType = LRGB, bool selectMode = false);
+    HistogramBox(QWidget* parent = 0, HistogramType type = LRGB, bool selectMode = false);
     ~HistogramBox();
 
-    HistogramWidget* histogram() const;
+    void setHistogramType(HistogramType type);
 
-    void setGradientVisible(bool visible);
     void setGradientColors(const QColor& from, const QColor& to);
+    void setGradientVisible(bool visible);
+
+    HistogramWidget* histogram() const;
 
     int  channel() const;
     void setChannel(int channel);
