@@ -415,11 +415,11 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h,
         QPixmap pixImage;
         ICCSettingsContainer *iccSettings = DImgInterface::defaultInterface()->getICCSettings();
 
-        if (iccSettings && iccSettings->enableCMSetting && iccSettings->managedViewSetting)
+        if (iccSettings && iccSettings->enableCM && iccSettings->useManagedView)
         {
             IccTransform monitorICCtrans;
-            monitorICCtrans.setInputProfile(iccSettings->workspaceSetting);
-            monitorICCtrans.setOutputProfile(iccSettings->monitorSetting);
+            monitorICCtrans.setInputProfile(iccSettings->workspaceProfile);
+            monitorICCtrans.setOutputProfile(iccSettings->monitorProfile);
             pixImage = d->targetPreviewImage.convertToPixmap(monitorICCtrans);
         }
         else

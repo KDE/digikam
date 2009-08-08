@@ -33,6 +33,8 @@
 
 #include "digikam_export.h"
 
+class KConfigGroup;
+
 namespace Digikam
 {
 
@@ -41,40 +43,37 @@ class DIGIKAM_EXPORT ICCSettingsContainer
 
 public:
 
-    ICCSettingsContainer()
-    {
-        enableCMSetting         = false;  // NOTE: by default, ICC color management is disable.
-
-        askOrApplySetting       = false;
-        BPCSetting              = false;
-        managedViewSetting      = false;
-
-        renderingSetting        = 0;
-
-        workspaceSetting.clear();
-        monitorSetting.clear();
-        inputSetting.clear();
-        proofSetting.clear();
-    };
+    ICCSettingsContainer();
 
     ~ICCSettingsContainer(){};
 
 public:
 
-    bool    enableCMSetting;
+    void readFromConfig(KConfigGroup& group);
+    void writeToConfig(KConfigGroup& group);
+    void writeManagedViewToConfig(KConfigGroup& group);
 
-    // FALSE -> apply
-    // TRUE  -> ask
-    bool    askOrApplySetting;
-    bool    BPCSetting;
-    bool    managedViewSetting;
+    enum OnProfileMismatch
+    {
+        Ask,
+        Convert,
+        Leave
+    };
 
-    int     renderingSetting;
+    bool    enableCM;
 
-    QString workspaceSetting;
-    QString monitorSetting;
-    QString inputSetting;
-    QString proofSetting;
+    OnProfileMismatch onProfileMismatch;
+    bool    useBPC;
+    bool    useManagedView;
+
+    int     renderingIntent;
+
+    QString workspaceProfile;
+    QString monitorProfile;
+    QString defaultInputProfile;
+    QString defaultProofProfile;
+
+    QString iccFolder;
 };
 
 }  // namespace Digikam

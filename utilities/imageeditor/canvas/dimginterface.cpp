@@ -274,8 +274,8 @@ void DImgInterface::resetValues()
 void DImgInterface::setICCSettings(ICCSettingsContainer *cmSettings)
 {
     d->cmSettings = cmSettings;
-    d->monitorICCtrans.setInputProfile(d->cmSettings->workspaceSetting);
-    d->monitorICCtrans.setOutputProfile(d->cmSettings->monitorSetting);
+    d->monitorICCtrans.setInputProfile(d->cmSettings->workspaceProfile);
+    d->monitorICCtrans.setOutputProfile(d->cmSettings->monitorProfile);
 }
 
 void DImgInterface::setExposureSettings(ExposureSettingsContainer *expoSettings)
@@ -315,22 +315,22 @@ void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription
              d->image.attribute("format").toString() == QString("TIFF")))
              exifRotate(d->filename);
 
-        if (d->cmSettings->enableCMSetting)
+        if (d->cmSettings->enableCM)
         {
-            IccProfile workspaceProfile(d->cmSettings->workspaceSetting);
+            IccProfile workspaceProfile(d->cmSettings->workspaceProfile);
             //kDebug() << "Workspace" << workspaceProfile.description();
 
             if (workspaceProfile.open())
             {
                 IccTransform trans;
 
-                IccProfile inputProfile(d->cmSettings->inputSetting);
+                IccProfile inputProfile(d->cmSettings->defaultInputProfile);
                 // If the innput color profile does not exist, built-in sRGB will be used instead.
                 trans.setInputProfile(inputProfile);
                 trans.setOutputProfile(workspaceProfile);
                 trans.setEmbeddedProfile(d->image);
-                trans.setIntent(d->cmSettings->renderingSetting);
-                trans.setUseBlackPointCompensation(d->cmSettings->BPCSetting);
+                trans.setIntent(d->cmSettings->renderingIntent);
+                trans.setUseBlackPointCompensation(d->cmSettings->useBPC);
                 //kDebug() << trans.effectiveInputProfile().description() << trans.outputProfile().description() << trans.willHaveEffect() << d->cmSettings->askOrApplySetting;
 
                 if (trans.willHaveEffect())
@@ -338,7 +338,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription
 
                     // First possibility: image has no embedded profile
                     // Ask or apply?
-                    if (d->cmSettings->askOrApplySetting)
+                    if (d->cmSettings->onProfileMismatch == ICCSettingsContainer::Convert)
                     {
                         if (d->parent)
                             d->parent->setCursor( Qt::WaitCursor );
@@ -348,7 +348,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription
                         if (d->parent)
                             d->parent->unsetCursor();
                     }
-                    else
+                    else if (d->cmSettings->onProfileMismatch == ICCSettingsContainer::Ask)
                     {
                         // To repaint image in canvas before to ask about to apply ICC profile.
                         emit signalImageLoaded(d->filename, valRet);
@@ -378,7 +378,6 @@ void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription
                         }
                     }
                 }
-                // Second possibility: image has an embedded profile
             }
             else
             {
@@ -741,7 +740,7 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
     img.convertDepth(32);
     QPainter painter(p);
 
-    if (d->cmSettings->enableCMSetting && d->cmSettings->managedViewSetting)
+    if (d->cmSettings->enableCM && d->cmSettings->useManagedView)
     {
         QPixmap pix(img.convertToPixmap(d->monitorICCtrans));
         painter.drawPixmap(dx, dy, pix, 0, 0, pix.width(), pix.height());
@@ -804,7 +803,7 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
         }
     }
 
-    if (d->cmSettings->enableCMSetting && d->cmSettings->managedViewSetting)
+    if (d->cmSettings->enableCM && d->cmSettings->useManagedView)
     {
         QPixmap pix(img.convertToPixmap(d->monitorICCtrans));
         painter.drawPixmap(dx, dy, pix, 0, 0, pix.width(), pix.height());
@@ -1193,7 +1192,7 @@ ICCSettingsContainer* DImgInterface::getICCSettings()
 
 QPixmap DImgInterface::convertToPixmap(DImg& img)
 {
-    if (d->cmSettings->enableCMSetting && d->cmSettings->managedViewSetting)
+    if (d->cmSettings->enableCM && d->cmSettings->useManagedView)
         return img.convertToPixmap(d->monitorICCtrans);
 
     return img.convertToPixmap();

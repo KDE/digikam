@@ -73,6 +73,7 @@
 // Local includes
 
 #include "iccprofileinfodlg.h"
+#include "iccsettingscontainer.h"
 #include "albumsettings.h"
 
 using namespace KDcrawIface;
@@ -91,6 +92,7 @@ public:
         managedView           = 0;
         defaultApplyICC       = 0;
         defaultAskICC         = 0;
+        defaultDoNotApplyICC  = 0;
         defaultPathKU         = 0;
         inProfilesKC          = 0;
         workProfilesKC        = 0;
@@ -119,6 +121,7 @@ public:
 
     QRadioButton           *defaultApplyICC;
     QRadioButton           *defaultAskICC;
+    QRadioButton           *defaultDoNotApplyICC;
 
     QPushButton            *infoWorkProfiles;
     QPushButton            *infoMonitorProfiles;
@@ -180,28 +183,40 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     lcmsLogoLabel->setPixmap( QPixmap( KStandardDirs::locate("data", "digikam/data/logo-lcms.png" ) ));
     lcmsLogoLabel->setToolTip(i18n("Visit Little CMS project website"));
 
-    d->behaviourGB                 = new QGroupBox(i18n("Behavior"), colorPolicy);
+    d->behaviourGB                 = new QGroupBox(i18n("On Profile Mismatch"), colorPolicy);
     QVBoxLayout *vlay3             = new QVBoxLayout(d->behaviourGB);
     QButtonGroup *behaviourOptions = new QButtonGroup(d->behaviourGB);
 
+    QLabel *behaviorLabel = new QLabel(i18n("When opening an image in the Image Editor:"));
+    behaviorLabel->setWordWrap(true);
     d->defaultApplyICC = new QRadioButton(d->behaviourGB);
-    d->defaultApplyICC->setText(i18n("Apply when opening an image in the Image Editor"));
+    d->defaultApplyICC->setText(i18n("Convert to working color space"));
     d->defaultApplyICC->setWhatsThis( i18n("<p>If this option is enabled, digiKam applies the "
-                     "Workspace default color profile to an image, without prompting you about missing "
+                     "working color profile to an image, without prompting you about missing "
                      "embedded profiles or embedded profiles different from the workspace "
                      "profile.</p>"));
     behaviourOptions->addButton(d->defaultApplyICC);
 
     d->defaultAskICC = new QRadioButton(d->behaviourGB);
-    d->defaultAskICC->setText(i18n("Ask when opening an image in the Image Editor"));
+    d->defaultAskICC->setText(i18n("Ask when opening"));
     d->defaultAskICC->setWhatsThis( i18n("<p>If this option is enabled, digiKam asks the user "
                      "before it applies the Workspace default color profile to an image which has no "
                      "embedded profile or, if the image has an embedded profile, when it is not the same "
                      "as the workspace profile.</p>"));
     behaviourOptions->addButton(d->defaultAskICC);
 
+    d->defaultDoNotApplyICC = new QRadioButton(d->behaviourGB);
+    d->defaultDoNotApplyICC->setText(i18n("Do not color manage (leave as is)"));
+    d->defaultDoNotApplyICC->setWhatsThis( i18n("<p>If this option is enabled, digiKam does not apply the "
+                     "workspace color profile to an image, without prompting you about missing "
+                     "embedded profiles or embedded profiles different from the workspace "
+                     "profile.</p>"));
+    behaviourOptions->addButton(d->defaultDoNotApplyICC);
+
+    vlay3->addWidget(behaviorLabel);
     vlay3->addWidget(d->defaultApplyICC);
     vlay3->addWidget(d->defaultAskICC);
+    vlay3->addWidget(d->defaultDoNotApplyICC);
     vlay3->setMargin(KDialog::spacingHint());
     vlay3->setSpacing(0);
 
@@ -422,28 +437,29 @@ void SetupICC::processLcmsUrl(const QString& url)
 
 void SetupICC::applySettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("Color Management"));
-
-    group.writeEntry("EnableCM", d->enableColorManagement->isChecked());
-
-    if (!d->enableColorManagement->isChecked())
-        return;          // No need to write settings in this case.
+    ICCSettingsContainer settings;
+    settings.enableCM = d->enableColorManagement->isChecked();
 
     if (d->defaultApplyICC->isChecked())
-        group.writeEntry("BehaviourICC", true);
+        settings.onProfileMismatch = ICCSettingsContainer::Convert;
+    else if (d->defaultDoNotApplyICC->isChecked())
+        settings.onProfileMismatch = ICCSettingsContainer::Leave;
     else
-        group.writeEntry("BehaviourICC", false);
+        settings.onProfileMismatch = ICCSettingsContainer::Ask;
 
-    group.writeEntry("DefaultPath", d->defaultPathKU->url().path());
-    group.writeEntry("BPCAlgorithm", d->bpcAlgorithm->isChecked());
-    group.writeEntry("RenderingIntent", d->renderingIntentKC->currentIndex());
-    group.writeEntry("ManagedView", d->managedView->isChecked());
+    settings.iccFolder = d->defaultPathKU->url().path();
+    settings.useBPC =  d->bpcAlgorithm->isChecked();
+    settings.renderingIntent = d->renderingIntentKC->currentIndex();
+    settings.useManagedView = d->managedView->isChecked();
 
-    group.writePathEntry("InProfileFile", d->inICCPath.value(d->inProfilesKC->itemHighlighted()));
-    group.writePathEntry("WorkProfileFile", d->workICCPath.value(d->workProfilesKC->itemHighlighted()));
-    group.writePathEntry("MonitorProfileFile", d->monitorICCPath.value(d->monitorProfilesKC->itemHighlighted()));
-    group.writePathEntry("ProofProfileFile", d->proofICCPath.value(d->proofProfilesKC->itemHighlighted()));
+    settings.defaultInputProfile = d->inICCPath.value(d->inProfilesKC->itemHighlighted());
+    settings.workspaceProfile = d->workICCPath.value(d->workProfilesKC->itemHighlighted());
+    settings.monitorProfile = d->monitorICCPath.value(d->monitorProfilesKC->itemHighlighted());
+    settings.defaultProofProfile = d->proofICCPath.value(d->proofProfilesKC->itemHighlighted());
+
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(QString("Color Management"));
+    settings.writeToConfig(group);
 }
 
 static void setCurrentIndexFromUserData(QComboBox *box, const QVariant& userData)
@@ -470,26 +486,30 @@ void SetupICC::readSettings(bool restore)
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("Color Management"));
+    ICCSettingsContainer settings;
+    settings.readFromConfig(group);
 
     if (!restore)
-        d->enableColorManagement->setChecked(group.readEntry("EnableCM", false));
+        d->enableColorManagement->setChecked(settings.enableCM);
 
-    d->bpcAlgorithm->setChecked(group.readEntry("BPCAlgorithm", false));
-    d->renderingIntentKC->setCurrentIndex(group.readEntry("RenderingIntent", 0));
-    d->managedView->setChecked(group.readEntry("ManagedView", false));
+    d->bpcAlgorithm->setChecked(settings.useBPC);
+    d->renderingIntentKC->setCurrentIndex(settings.renderingIntent);
+    d->managedView->setChecked(settings.useManagedView);
 
-    if (group.readEntry("BehaviourICC", false))
+    if (settings.onProfileMismatch == ICCSettingsContainer::Convert)
         d->defaultApplyICC->setChecked(true);
+    else if (settings.onProfileMismatch == ICCSettingsContainer::Leave)
+        d->defaultDoNotApplyICC->setChecked(true);
     else
         d->defaultAskICC->setChecked(true);
 
-    d->defaultPathKU->setUrl(group.readEntry("DefaultPath", QString()));
+    d->defaultPathKU->setUrl(settings.iccFolder);
     fillCombos(false);
 
-    setCurrentIndexFromUserData(d->inProfilesKC, group.readPathEntry("InProfileFile", QString()));
-    setCurrentIndexFromUserData(d->workProfilesKC, group.readPathEntry("WorkProfileFile", IccProfile::sRGB().filePath()));
-    setCurrentIndexFromUserData(d->monitorProfilesKC, group.readPathEntry("MonitorProfileFile", IccProfile::sRGB().filePath()));
-    setCurrentIndexFromUserData(d->proofProfilesKC, group.readPathEntry("ProofProfileFile", QString()));
+    setCurrentIndexFromUserData(d->workProfilesKC, settings.workspaceProfile);
+    setCurrentIndexFromUserData(d->monitorProfilesKC, settings.monitorProfile);
+    setCurrentIndexFromUserData(d->inProfilesKC, settings.defaultInputProfile);
+    setCurrentIndexFromUserData(d->proofProfilesKC, settings.defaultProofProfile);
 }
 
 void SetupICC::slotUrlChanged()

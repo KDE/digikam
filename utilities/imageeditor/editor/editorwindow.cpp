@@ -841,23 +841,15 @@ void EditorWindow::applyStandardSettings()
 
     KConfigGroup group = config->group("Color Management");
 
-    d->ICCSettings->enableCMSetting       = group.readEntry("EnableCM", false);
-    d->ICCSettings->askOrApplySetting     = group.readEntry("BehaviourICC", false);
-    d->ICCSettings->BPCSetting            = group.readEntry("BPCAlgorithm",false);
-    d->ICCSettings->managedViewSetting    = group.readEntry("ManagedView", false);
-    d->ICCSettings->renderingSetting      = group.readEntry("RenderingIntent", 0);
-    d->ICCSettings->inputSetting          = group.readEntry("InProfileFile", QString());
-    d->ICCSettings->workspaceSetting      = group.readEntry("WorkProfileFile", QString());
-    d->ICCSettings->monitorSetting        = group.readEntry("MonitorProfileFile", QString());
-    d->ICCSettings->proofSetting          = group.readEntry("ProofProfileFile", QString());
+    d->ICCSettings->readFromConfig(group);
 
     d->viewCMViewAction->blockSignals(true);
     d->cmViewIndicator->blockSignals(true);
-    d->viewCMViewAction->setEnabled(d->ICCSettings->enableCMSetting);
-    d->viewCMViewAction->setChecked(d->ICCSettings->managedViewSetting);
-    d->cmViewIndicator->setEnabled(d->ICCSettings->enableCMSetting);
-    d->cmViewIndicator->setChecked(d->ICCSettings->managedViewSetting);
-    setColorManagedViewIndicatorToolTip(d->ICCSettings->enableCMSetting, d->ICCSettings->managedViewSetting);
+    d->viewCMViewAction->setEnabled(d->ICCSettings->enableCM);
+    d->viewCMViewAction->setChecked(d->ICCSettings->useManagedView);
+    d->cmViewIndicator->setEnabled(d->ICCSettings->enableCM);
+    d->cmViewIndicator->setChecked(d->ICCSettings->useManagedView);
+    setColorManagedViewIndicatorToolTip(d->ICCSettings->enableCM, d->ICCSettings->useManagedView);
     m_canvas->setICCSettings(d->ICCSettings);
     d->viewCMViewAction->blockSignals(false);
     d->cmViewIndicator->blockSignals(false);
@@ -898,7 +890,7 @@ void EditorWindow::applyStandardSettings()
     // If digiKam Color Management is enable, no need to correct color of decoded RAW image,
     // else, sRGB color workspace will be used.
 
-    if (d->ICCSettings->enableCMSetting)
+    if (d->ICCSettings->enableCM)
         m_IOFileSettings->rawDecodingSettings.outputColorSpace = DRawDecoding::RAWCOLOR;
     else
         m_IOFileSettings->rawDecodingSettings.outputColorSpace = DRawDecoding::SRGB;
@@ -1763,10 +1755,10 @@ void EditorWindow::slotToggleColorManagedView()
     d->cmViewIndicator->blockSignals(true);
     d->viewCMViewAction->blockSignals(true);
     bool cmv = false;
-    if (d->ICCSettings->enableCMSetting)
+    if (d->ICCSettings->enableCM)
     {
-        cmv = !d->ICCSettings->managedViewSetting;
-        d->ICCSettings->managedViewSetting = cmv;
+        cmv = !d->ICCSettings->useManagedView;
+        d->ICCSettings->useManagedView = cmv;
         m_canvas->setICCSettings(d->ICCSettings);
 
         // Save Color Managed View setting in config file. For performance
@@ -1774,12 +1766,12 @@ void EditorWindow::slotToggleColorManagedView()
         // to disk at end of session.
         KSharedConfig::Ptr config = KGlobal::config();
         KConfigGroup group = config->group("Color Management");
-        group.writeEntry("ManagedView", cmv);
+        d->ICCSettings->writeManagedViewToConfig(group);
     }
 
     d->cmViewIndicator->setChecked(cmv);
     d->viewCMViewAction->setChecked(cmv);
-    setColorManagedViewIndicatorToolTip(d->ICCSettings->enableCMSetting, cmv);
+    setColorManagedViewIndicatorToolTip(d->ICCSettings->enableCM, cmv);
     d->cmViewIndicator->blockSignals(false);
     d->viewCMViewAction->blockSignals(false);
 }
