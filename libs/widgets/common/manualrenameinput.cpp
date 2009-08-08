@@ -278,18 +278,18 @@ QString ManualRenameInput::parse(const QString& fileName, const QString& cameraN
 
 QString ManualRenameInput::createToolTip()
 {
-    typedef QPair<QString, QString> token;
-    QList<token> tokenList;
+    typedef QPair<QString, QString> Token;
+    QList<Token> tokenList;
 
-    tokenList << token(QString("$"),              i18n("filename (original)"))
-              << token(QString("&"),              i18n("filename (upper case)"))
-              << token(QString("%"),              i18n("filename (lower case)"))
-              << token(QString("*"),              i18n("filename (first letter of each word upper case)"))
-              << token(QString("#"),              i18n("sequence number"))
-              << token(QString("#{start}"),       i18n("sequence number (custom start)"))
-              << token(QString("#{start,step}"),  i18n("sequence number (custom start + step)"))
-              << token(QString("[cam]"),          i18n("camera name"))
-              << token(QString("[date:format]"),  i18n("date and time of the file ("
+    tokenList << Token(QString("$"),              i18n("filename (original)"))
+              << Token(QString("&"),              i18n("filename (upper case)"))
+              << Token(QString("%"),              i18n("filename (lower case)"))
+              << Token(QString("*"),              i18n("filename (first letter of each word upper case)"))
+              << Token(QString("#"),              i18n("sequence number"))
+              << Token(QString("#{start}"),       i18n("sequence number (custom start)"))
+              << Token(QString("#{start,step}"),  i18n("sequence number (custom start + step)"))
+              << Token(QString("[cam]"),          i18n("camera name"))
+              << Token(QString("[date:format]"),  i18n("date and time of the file ("
                                                        "<a href='http://doc.trolltech.com/latest/qdatetime.html#toString'>"
                                                            "format settings"
                                                        "</a>)"));
@@ -297,7 +297,7 @@ QString ManualRenameInput::createToolTip()
     QString tooltip;
     tooltip += QString("<p><table>");
 
-    foreach (const token& token, tokenList)
+    foreach (const Token& token, tokenList)
     {
         tooltip += QString("<tr><td><b>%1</b></td><td>:</td><td>%2</td></tr>").arg(token.first)
                                                                               .arg(token.second);
@@ -305,11 +305,6 @@ QString ManualRenameInput::createToolTip()
 
     tooltip += QString("</table></p>");
 
-    tooltip += i18n("<p><table>"
-                        "<tr><td><i>Example:</i></td><td></td></tr>"
-                        "<tr><td></td><td><b>new_$_###</b></td></tr>"
-                        "<tr><td>=></td><td>new_MyImageName_001.jpg</td></tr>"
-                    "</table></p>");
     return tooltip;
 }
 
