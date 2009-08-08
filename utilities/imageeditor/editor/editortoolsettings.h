@@ -60,10 +60,10 @@ public:
 
     enum ToolCode
     {
-        NoTool     = 0x00000001,
-        ColorGuide = 0x00000002,
-        PanIcon    = 0x00000004,
-        Histogram  = 0x00000008
+        NoTool     = 0x00000000,
+        ColorGuide = 0x00000001,
+        PanIcon    = 0x00000002,
+        Histogram  = 0x00000004
     };
     Q_DECLARE_FLAGS(Tools, ToolCode)
 

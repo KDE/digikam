@@ -272,7 +272,7 @@ EditorToolSettings::EditorToolSettings(QWidget *parent)
     // --------------------------------------------------------
 
     setButtons(Default|Ok|Cancel);
-    setTools(0x0);
+    setTools(NoTool);
 }
 
 EditorToolSettings::~EditorToolSettings()
