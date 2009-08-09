@@ -45,6 +45,7 @@ public:
 
     virtual ~LoadingProcessListener() {}
     virtual bool querySendNotifyEvent() = 0;
+    virtual void setResult(const LoadingDescription& loadingDescription, const DImg& img) = 0;
     virtual LoadSaveNotifier *loadSaveNotifier() = 0;
     virtual LoadSaveThread::AccessMode accessMode() = 0;
 };

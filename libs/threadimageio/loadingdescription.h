@@ -61,6 +61,13 @@ public:
         bool operator==(const PreviewParameters& other) const;
     };
 
+    class PostProcessingParameters
+    {
+    public:
+
+        bool operator==(const PostProcessingParameters& other) const;
+    };
+
     /**
      * An invalid LoadingDescription
      */
@@ -97,6 +104,7 @@ public:
     QString           filePath;
     DRawDecoding      rawDecodingSettings;
     PreviewParameters previewParameters;
+    PostProcessingParameters postProcessingParameters;
 
     /**
      * Return the cache key this description shall be stored as

@@ -126,15 +126,15 @@ public:
 
     SharedLoadingTask(LoadSaveThread* thread, LoadingDescription description,
                       LoadSaveThread::AccessMode mode = LoadSaveThread::AccessModeReadWrite,
-                      LoadingTaskStatus loadingTaskStatus = LoadingTaskStatusLoading)
-        : LoadingTask(thread, description, loadingTaskStatus),
-          m_completed(false), m_accessMode(mode), m_usedProcess(0)
-        {}
+                      LoadingTaskStatus loadingTaskStatus = LoadingTaskStatusLoading);
 
     virtual void execute();
     virtual void progressInfo(const DImg *, float progress);
     virtual bool continueQuery(const DImg *);
     virtual void setStatus(LoadingTaskStatus status);
+
+    virtual bool needsPostProcessing() const;
+    virtual void postProcess();
 
     // LoadingProcess
 
@@ -148,6 +148,7 @@ public:
     // LoadingProcessListener
 
     virtual bool querySendNotifyEvent();
+    virtual void setResult(const LoadingDescription& loadingDescription, const DImg& img);
     virtual LoadSaveNotifier *loadSaveNotifier();
     virtual LoadSaveThread::AccessMode accessMode();
 
@@ -157,6 +158,8 @@ protected:
     LoadSaveThread::AccessMode     m_accessMode;
     LoadingProcess*                m_usedProcess;
     QList<LoadingProcessListener*> m_listeners;
+    DImg                           m_img;
+    LoadingDescription             m_resultLoadingDescription;
 };
 
 //---------------------------------------------------------------------------------------------------

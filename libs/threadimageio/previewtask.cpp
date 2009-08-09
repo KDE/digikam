@@ -57,8 +57,6 @@ void PreviewLoadingTask::execute()
     if (m_loadingTaskStatus == LoadingTaskStatusStopping)
         return;
 
-    DImg img;
-
     LoadingCache *cache = LoadingCache::cache();
     {
         LoadingCache::CacheLock lock(cache);
@@ -78,14 +76,16 @@ void PreviewLoadingTask::execute()
         {
             // image is found in image cache, loading is successful
 
-            img = DImg(*cachedImg);
+            m_img = *cachedImg;
+            if (accessMode() == LoadSaveThread::AccessModeReadWrite)
+                m_img = m_img.copy();
 
             // rotate if needed - images are unrotated in the cache,
             // except for RAW images, which are already rotated by dcraw.
             if (m_loadingDescription.previewParameters.exifRotate)
             {
-                img = img.copy();
-                LoadSaveThread::exifRotate(img, m_loadingDescription.filePath);
+                m_img = m_img.copy();
+                LoadSaveThread::exifRotate(m_img, m_loadingDescription.filePath);
             }
         }
         else
@@ -118,7 +118,7 @@ void PreviewLoadingTask::execute()
                 lock.wakeAll();
                 // set to 0, as checked in setStatus
                 m_usedProcess = 0;
-                return;
+                // m_img is now set to the result
             }
             else
             {
@@ -136,11 +136,12 @@ void PreviewLoadingTask::execute()
         }
     }
 
-    if (!img.isNull())
+    if (!m_img.isNull())
     {
         // following the golden rule to avoid deadlocks, do this when CacheLock is not held
+        postProcess();
         m_thread->taskHasFinished();
-        m_thread->imageLoaded(m_loadingDescription, img);
+        m_thread->imageLoaded(m_resultLoadingDescription, m_img);
         return;
     }
 
@@ -172,55 +173,52 @@ void PreviewLoadingTask::execute()
     if (!qimage.isNull())
     {
         // convert from QImage
-        img = DImg(qimage);
+        m_img = DImg(qimage);
         // mark as embedded preview (for Exif rotation)
         if (fromEmbeddedPreview)
-            img.setAttribute("fromRawEmbeddedPreview", true);
+            m_img.setAttribute("fromRawEmbeddedPreview", true);
         // free memory
         qimage = QImage();
     }
 
     // DImg-dependent loading methods
-    if (img.isNull())
+    if (m_img.isNull())
     {
         // Set a hint to try to load a JPEG with the fast scale-before-decoding method
-        img.setAttribute("jpegScaledLoadingSize", size);
-        img.setAttribute("pgfScaledLoadingSize", size);
-        img.load(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
+        m_img.setAttribute("jpegScaledLoadingSize", size);
+        m_img.setAttribute("pgfScaledLoadingSize", size);
+        m_img.load(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
     }
 
-    if (img.isNull())
+    if (m_img.isNull())
     {
         kWarning(50003) << "Cannot extract preview for " << m_loadingDescription.filePath;
     }
 
-    img.convertToEightBit();
+    m_img.convertToEightBit();
 
     // Reduce size of image:
     // - only scale down if size is considerably larger
     // - only scale down, do not scale up
-    QSize scaledSize = img.size();
+    QSize scaledSize = m_img.size();
     if (needToScale(scaledSize, size))
     {
         scaledSize.scale(size, size, Qt::KeepAspectRatio);
-        img = img.smoothScale(scaledSize.width(), scaledSize.height());
+        m_img = m_img.smoothScale(scaledSize.width(), scaledSize.height());
     }
 
     // Scale if hinted, Store previews rotated in the cache (?)
     if (m_loadingDescription.previewParameters.exifRotate)
-        LoadSaveThread::exifRotate(img, m_loadingDescription.filePath);
+        LoadSaveThread::exifRotate(m_img, m_loadingDescription.filePath);
 
     {
         LoadingCache::CacheLock lock(cache);
         // put (valid) image into cache of loaded images
-        if (!img.isNull())
-            cache->putImage(m_loadingDescription.cacheKey(), new DImg(img), m_loadingDescription.filePath);
+        if (!m_img.isNull())
+            cache->putImage(m_loadingDescription.cacheKey(), new DImg(m_img), m_loadingDescription.filePath);
         // remove this from the list of loading processes in cache
         cache->removeLoadingProcess(this);
     }
-
-    // again: following the golden rule to avoid deadlocks, do this when CacheLock is not held
-    m_thread->taskHasFinished();
 
     {
         LoadingCache::CacheLock lock(cache);
@@ -230,7 +228,23 @@ void PreviewLoadingTask::execute()
         // dispatch image to all listeners, including this
         for (int i=0; i<m_listeners.count(); ++i)
         {
-            m_listeners[i]->loadSaveNotifier()->imageLoaded(m_loadingDescription, img);
+            LoadingProcessListener *l = m_listeners[i];
+            if (l->accessMode() == LoadSaveThread::AccessModeReadWrite)
+            {
+                // If a listener requested ReadWrite access, it gets a deep copy.
+                // DImg is explicitly shared.
+                DImg copy = m_img.copy();
+                l->setResult(m_loadingDescription, copy);
+            }
+            else
+            {
+                l->setResult(m_loadingDescription, m_img);
+            }
+        }
+
+        for (int i=0; i<m_listeners.count(); ++i)
+        {
+            m_listeners[i]->loadSaveNotifier()->imageLoaded(m_loadingDescription, m_img);
         }
 
         // remove myself from list of listeners
@@ -243,6 +257,11 @@ void PreviewLoadingTask::execute()
         // set to 0, as checked in setStatus
         m_usedProcess = 0;
     }
+
+    // again: following the golden rule to avoid deadlocks, do this when CacheLock is not held
+    postProcess();
+    m_thread->taskHasFinished();
+    m_thread->imageLoaded(m_loadingDescription, m_img);
 }
 
 bool PreviewLoadingTask::needToScale(const QSize& imageSize, int previewSize)
