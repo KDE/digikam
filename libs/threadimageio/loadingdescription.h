@@ -32,9 +32,19 @@
 namespace Digikam
 {
 
+class IccTransform;
+
 class DIGIKAM_EXPORT LoadingDescription
 {
 public:
+
+    enum ColorManagementSettings
+    {
+        NoColorConversion,
+        ApplyTransform,
+        ConvertToWorkspace,
+        ConvertForDisplay
+    };
 
     class PreviewParameters
     {
@@ -65,6 +75,20 @@ public:
     {
     public:
 
+        PostProcessingParameters()
+        {
+            colorManagement = NoColorConversion;
+        }
+
+        bool needsProcessing() const;
+
+        void setTransform(const IccTransform& transform);
+        bool hasTransform() const;
+        IccTransform transform() const;
+
+        ColorManagementSettings colorManagement;
+        QVariant                iccTransform;
+
         bool operator==(const PostProcessingParameters& other) const;
     };
 
@@ -79,13 +103,15 @@ public:
      * Use this for files that are not raw files.
      * Stores only the filePath.
      */
-    explicit LoadingDescription(const QString& filePath);
+    explicit LoadingDescription(const QString& filePath,
+                                ColorManagementSettings = NoColorConversion);
 
     /**
      * For raw files:
      * Stores filePath and RawDecodingSettings
      */
-    LoadingDescription(const QString& filePath, DRawDecoding settings);
+    LoadingDescription(const QString& filePath, const DRawDecoding& settings,
+                       ColorManagementSettings = NoColorConversion);
 
     /**
      * For preview and thumbnail jobs:
@@ -99,7 +125,8 @@ public:
      *    If size is 0, DImg based loading will be used with default raw decoding settings.
      */
     LoadingDescription(const QString& filePath, int size, bool exifRotate,
-                       PreviewParameters::PreviewType = PreviewParameters::PreviewImage);
+                       PreviewParameters::PreviewType = PreviewParameters::PreviewImage,
+                       ColorManagementSettings = NoColorConversion);
 
     QString           filePath;
     DRawDecoding      rawDecodingSettings;

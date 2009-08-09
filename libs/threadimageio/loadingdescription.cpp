@@ -22,6 +22,7 @@
  * ============================================================ */
 
 #include "loadingdescription.h"
+#include "icctransform.h"
 
 namespace Digikam
 {
@@ -33,25 +34,54 @@ bool LoadingDescription::PreviewParameters::operator==(const PreviewParameters& 
            && exifRotate == other.exifRotate;
 }
 
-LoadingDescription::LoadingDescription(const QString& filePath)
+bool LoadingDescription::PostProcessingParameters::operator==(const PostProcessingParameters& other) const
+{
+    return colorManagement == other.colorManagement;
+}
+
+bool LoadingDescription::PostProcessingParameters::needsProcessing() const
+{
+    return colorManagement != NoColorConversion;
+}
+
+void LoadingDescription::PostProcessingParameters::setTransform(const IccTransform& transform)
+{
+    iccTransform = QVariant::fromValue<IccTransform>(transform);
+}
+
+bool LoadingDescription::PostProcessingParameters::hasTransform() const
+{
+    return !iccTransform.isNull();
+}
+
+IccTransform LoadingDescription::PostProcessingParameters::transform() const
+{
+    return iccTransform.value<IccTransform>();
+}
+
+LoadingDescription::LoadingDescription(const QString& filePath, ColorManagementSettings cm)
                   : filePath(filePath)
 {
     rawDecodingSettings = DRawDecoding();
+    postProcessingParameters.colorManagement = cm;
 }
 
-LoadingDescription::LoadingDescription(const QString& filePath, DRawDecoding settings)
+LoadingDescription::LoadingDescription(const QString& filePath, const DRawDecoding& settings, ColorManagementSettings cm)
                   : filePath(filePath), rawDecodingSettings(settings)
 {
+    postProcessingParameters.colorManagement = cm;
 }
 
 LoadingDescription::LoadingDescription(const QString& filePath, int size, bool exifRotate,
-                                       LoadingDescription::PreviewParameters::PreviewType type)
+                                       LoadingDescription::PreviewParameters::PreviewType type,
+                                       ColorManagementSettings cm)
                   : filePath(filePath)
 {
     rawDecodingSettings          = DRawDecoding();
     previewParameters.type       = type;
     previewParameters.size       = size;
     previewParameters.exifRotate = exifRotate;
+    postProcessingParameters.colorManagement = cm;
 }
 
 QString LoadingDescription::cacheKey() const
