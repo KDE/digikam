@@ -66,6 +66,7 @@
 // Local includes
 
 #include "iccprofileinfodlg.h"
+#include "iccsettings.h"
 #include "iccsettingscontainer.h"
 #include "albumsettings.h"
 
@@ -454,9 +455,7 @@ void SetupICC::applySettings()
     settings.monitorProfile = d->monitorICCPath.value(d->monitorProfilesKC->itemHighlighted());
     settings.defaultProofProfile = d->proofICCPath.value(d->proofProfilesKC->itemHighlighted());
 
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("Color Management"));
-    settings.writeToConfig(group);
+    IccSettings::instance()->setSettings(settings);
 }
 
 static void setCurrentIndexFromUserData(QComboBox *box, const QVariant& userData)
@@ -481,10 +480,7 @@ static void setCurrentIndexFromUserData(QComboBox *box, const QVariant& userData
 
 void SetupICC::readSettings(bool restore)
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("Color Management"));
-    ICCSettingsContainer settings;
-    settings.readFromConfig(group);
+    ICCSettingsContainer settings = IccSettings::instance()->settings();
 
     if (!restore)
         d->enableColorManagement->setChecked(settings.enableCM);

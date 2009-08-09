@@ -50,8 +50,8 @@ public:
 public:
 
     void readFromConfig(KConfigGroup& group);
-    void writeToConfig(KConfigGroup& group);
-    void writeManagedViewToConfig(KConfigGroup& group);
+    void writeToConfig(KConfigGroup& group) const;
+    void writeManagedViewToConfig(KConfigGroup& group) const;
 
     enum OnProfileMismatch
     {

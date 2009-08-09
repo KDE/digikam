@@ -73,7 +73,7 @@ void ICCSettingsContainer::readFromConfig(KConfigGroup& group)
     iccFolder            = group.readEntry("DefaultPath", QString());
 }
 
-void ICCSettingsContainer::writeToConfig(KConfigGroup& group)
+void ICCSettingsContainer::writeToConfig(KConfigGroup& group) const
 {
     group.writeEntry("EnableCM", enableCM);
 
@@ -98,8 +98,11 @@ void ICCSettingsContainer::writeToConfig(KConfigGroup& group)
     group.writeEntry("DefaultPath", iccFolder);
 }
 
-void ICCSettingsContainer::writeManagedViewToConfig(KConfigGroup& group)
+void ICCSettingsContainer::writeManagedViewToConfig(KConfigGroup& group) const
 {
+    // Save Color Managed View setting in config file. For performance
+    // reason, no need to flush file, it cached in memory and will be flushed
+    // to disk at end of session.
     group.writeEntry("ManagedView", useManagedView);
 }
 

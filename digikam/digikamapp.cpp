@@ -116,6 +116,7 @@
 #include "dio.h"
 #include "dlogoaction.h"
 #include "fingerprintsgenerator.h"
+#include "iccsettings.h"
 #include "imageattributeswatch.h"
 #include "imageinfo.h"
 #include "imagesortsettings.h"
@@ -181,6 +182,7 @@ DigikamApp::DigikamApp()
     AlbumManager::instance();
     AlbumLister::instance();
     LoadingCacheInterface::initialize();
+    IccSettings::instance();
 
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));

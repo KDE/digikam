@@ -104,6 +104,7 @@
 #include "exposurecontainer.h"
 #include "filesaveoptionsbox.h"
 #include "iccsettingscontainer.h"
+#include "iccsettings.h"
 #include "imagedialog.h"
 #include "imageplugin.h"
 #include "imagepluginloader.h"
@@ -839,9 +840,7 @@ void EditorWindow::applyStandardSettings()
 
     // -- Settings for Color Management stuff ----------------------------------------------
 
-    KConfigGroup group = config->group("Color Management");
-
-    d->ICCSettings->readFromConfig(group);
+    *d->ICCSettings = IccSettings::instance()->settings();
 
     d->viewCMViewAction->blockSignals(true);
     d->cmViewIndicator->blockSignals(true);
@@ -856,7 +855,7 @@ void EditorWindow::applyStandardSettings()
 
     // -- JPEG, PNG, TIFF JPEG2000 files format settings --------------------------------------
 
-    group = config->group("ImageViewer Settings");
+    KConfigGroup group = config->group("ImageViewer Settings");
 
     // JPEG quality slider settings : 1 - 100 ==> libjpeg settings : 25 - 100.
     m_IOFileSettings->JPEGCompression     = (int)((75.0/100.0)*
@@ -1761,12 +1760,7 @@ void EditorWindow::slotToggleColorManagedView()
         d->ICCSettings->useManagedView = cmv;
         m_canvas->setICCSettings(d->ICCSettings);
 
-        // Save Color Managed View setting in config file. For performance
-        // reason, no need to flush file, it cached in memory and will be flushed
-        // to disk at end of session.
-        KSharedConfig::Ptr config = KGlobal::config();
-        KConfigGroup group = config->group("Color Management");
-        d->ICCSettings->writeManagedViewToConfig(group);
+        IccSettings::instance()->setUseManagedView(cmv);
     }
 
     d->cmViewIndicator->setChecked(cmv);
