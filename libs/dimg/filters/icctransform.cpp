@@ -106,6 +106,7 @@ public:
         if (handle)
         {
             currentDescription = TransformDescription();
+            LcmsLock lock();
             cmsDeleteTransform(handle);
             handle = 0;
         }
@@ -278,75 +279,40 @@ TransformDescription IccTransform::getDescription(const DImg& image)
         description.transformFlags |= cmsFLAGS_WHITEBLACKCOMPENSATION;
     }
 
+    LcmsLock lock();
+    // Do not use TYPE_BGR_ - this implies 3 bytes per pixel, but even if !image.hasAlpha(),
+    // our image data has 4 bytes per pixel with the fourth byte filled with 0xFF.
     if (image.sixteenBit())
     {
-        if (image.hasAlpha())
+        switch (cmsGetColorSpace(description.inputProfile))
         {
-            switch (cmsGetColorSpace(description.inputProfile))
-            {
-                    case icSigGrayData:
-                        description.inputFormat = TYPE_GRAYA_16;
-                        break;
-                    case icSigCmykData:
-                        description.inputFormat = TYPE_CMYK_16;
-                        break;
-                    default:
-                        description.inputFormat = TYPE_BGRA_16;
-            }
-
-            description.outputFormat = TYPE_BGRA_16;
+            case icSigGrayData:
+                description.inputFormat = TYPE_GRAYA_16;
+                break;
+            case icSigCmykData:
+                description.inputFormat = TYPE_CMYK_16;
+                break;
+            default:
+                description.inputFormat = TYPE_BGRA_16;
         }
-        else
-        {
-            switch (cmsGetColorSpace(description.inputProfile))
-            {
-                    case icSigGrayData:
-                        description.inputFormat = TYPE_GRAY_16;
-                        break;
-                    case icSigCmykData:
-                        description.inputFormat = TYPE_CMYK_16;
-                        break;
-                    default:
-                        description.inputFormat = TYPE_BGR_16;
-            }
 
-            description.outputFormat = TYPE_BGR_16;
-        }
+        description.outputFormat = TYPE_BGRA_16;
     }
     else
     {
-        if (image.hasAlpha())
+        switch (cmsGetColorSpace(description.inputProfile))
         {
-            switch (cmsGetColorSpace(description.inputProfile))
-            {
-                    case icSigGrayData:
-                        description.inputFormat = TYPE_GRAYA_8;
-                        break;
-                    case icSigCmykData:
-                        description.inputFormat = TYPE_CMYK_8;
-                        break;
-                    default:
-                        description.inputFormat = TYPE_BGRA_8;
-            }
-
-            description.outputFormat = TYPE_BGRA_8;
+            case icSigGrayData:
+                description.inputFormat = TYPE_GRAYA_8;
+                break;
+            case icSigCmykData:
+                description.inputFormat = TYPE_CMYK_8;
+                break;
+            default:
+                description.inputFormat = TYPE_BGRA_8;
         }
-        else
-        {
-            switch (cmsGetColorSpace(description.inputProfile))
-            {
-                    case icSigGrayData:
-                        description.inputFormat = TYPE_GRAY_8;
-                        break;
-                    case icSigCmykData:
-                        description.inputFormat = TYPE_CMYK_8;
-                        break;
-                    default:
-                        description.inputFormat = TYPE_BGR_8;
-            }
 
-            description.outputFormat = TYPE_BGR_8;
-        }
+        description.outputFormat = TYPE_BGRA_8;
     }
     return description;
 }
@@ -384,6 +350,7 @@ bool IccTransform::open(TransformDescription &description)
 
     d->currentDescription = description;
 
+    LcmsLock lock();
     d->handle = cmsCreateTransform( description.inputProfile,
                                     description.inputFormat,
                                     description.outputProfile,
@@ -416,6 +383,7 @@ bool IccTransform::openProofing(TransformDescription &description)
 
     d->currentDescription = description;
 
+    LcmsLock lock();
     d->handle = cmsCreateProofingTransform( description.inputProfile,
                                     description.inputFormat,
                                     description.outputProfile,
@@ -457,43 +425,59 @@ bool IccTransform::apply(DImg& image)
         }
     }
 
+    TransformDescription description;
     if (d->proofProfile.isNull())
     {
-        TransformDescription description = getDescription(image);
+        description = getDescription(image);
         if (!open(description))
             return false;
     }
     else
     {
-        TransformDescription description = getProofingDescription(image);
+        description = getProofingDescription(image);
         if (!openProofing(description))
             return false;
     }
 
-    transform(image);
+    transform(image, description);
 
     return true;
 }
 
     //kDebug(50003) << "Transform flags are: " << transformFlags;
 
-void IccTransform::transform(const DImg& image)
+void IccTransform::transform(const DImg& image, const TransformDescription& description)
 {
-     // We need to work using temp pixel buffer to apply ICC transformations.
-    QVarLengthArray<uchar> transdata(image.bytesDepth());
-
-    // Always working with uchar* prevent endianess problem.
+    const int bytesDepth = image.bytesDepth();
+    const int pixels = image.width() * image.height();
+    // convert ten scanlines in a batch
+    const int pixelsPerStep = image.width() * 10;
     uchar *data = image.bits();
 
-    // We scan all image pixels one by one.
-    for (uint i=0; i < image.width()*image.height()*image.bytesDepth(); i+=image.bytesDepth())
+    // it is safe to use the same input and output buffer if the format is the same
+    if (description.inputFormat == description.outputFormat)
     {
-        // Apply ICC transformations.
-        cmsDoTransform(d->handle, &data[i], &transdata[0], 1);
-
-        // Copy buffer to source to update original image with ICC corrections.
-        // Alpha channel is restored in all cases.
-        memcpy (&data[i], &transdata[0], (image.bytesDepth() == 8) ? 6 : 3);
+        for (int p=pixels; p > 0; p -= pixelsPerStep)
+        {
+            int pixelsThisStep = qMin(p, pixelsPerStep);
+            int size = pixelsThisStep * bytesDepth;
+            LcmsLock lock();
+            cmsDoTransform(d->handle, data, data, pixelsThisStep);
+            data += size;
+        }
+    }
+    else
+    {
+        QVarLengthArray<uchar> buffer(pixelsPerStep * bytesDepth);
+        for (int p=pixels; p > 0; p -= pixelsPerStep)
+        {
+            int pixelsThisStep = qMin(p, pixelsPerStep);
+            int size = pixelsThisStep * bytesDepth;
+            LcmsLock lock();
+            memcpy(buffer.data(), data, size);
+            cmsDoTransform(d->handle, buffer.data(), data, pixelsThisStep);
+            data += size;
+        }
     }
 }
 

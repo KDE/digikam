@@ -112,7 +112,7 @@ private:
     TransformDescription getProofingDescription(const DImg& image);
     bool open(TransformDescription &description);
     bool openProofing(TransformDescription &description);
-    void transform(const DImg& img);
+    void transform(const DImg& img, const TransformDescription&);
 
 private:
 
