@@ -48,6 +48,7 @@
 
 // Local includes
 
+#include "iccprofile.h"
 #include "lcmsprf.h"
 
 namespace Digikam
@@ -247,6 +248,7 @@ bool CIETongueWidget::setProfileData(const QByteArray& profileData)
 {
     if (!profileData.isEmpty())
     {
+        LcmsLock lock();
         cmsHPROFILE hProfile = cmsOpenProfileFromMem((void*)profileData.data(),
                                                     (DWORD)profileData.size());
 
@@ -281,6 +283,7 @@ bool CIETongueWidget::setProfileFromFile(const KUrl& file)
 {
     if (!file.isEmpty() && file.isValid())
     {
+        LcmsLock lock();
         cmsHPROFILE hProfile = cmsOpenProfileFromFile(QFile::encodeName(file.path()), "r");
 
         if (!hProfile)

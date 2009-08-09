@@ -164,6 +164,15 @@ private:
     QSharedDataPointer<IccProfilePriv> d;
 };
 
+class DIGIKAM_EXPORT LcmsLock
+{
+public:
+
+    /** Obtain an LcmsLock if you access not clearly thread-safe LittleCMS methods */
+    LcmsLock();
+    ~LcmsLock();
+};
+
 
 }  // namespace Digikam
 

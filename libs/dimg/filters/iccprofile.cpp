@@ -33,10 +33,12 @@
 
 #include <QDir>
 #include <QFile>
+#include <QMutex>
 
 // KDE includes
 
 #include <kdebug.h>
+#include <kglobal.h>
 #include <kstandarddirs.h>
 
 // Local includes
@@ -78,6 +80,7 @@ public:
     {
         if (handle)
         {
+            LcmsLock lock();
             cmsCloseProfile(handle);
             handle = 0;
         }
@@ -88,6 +91,18 @@ public:
 
     cmsHPROFILE handle;
 };
+
+K_GLOBAL_STATIC_WITH_ARGS(QMutex, lcmsMutex, (QMutex::Recursive))
+
+LcmsLock::LcmsLock()
+{
+    lcmsMutex->lock();
+}
+
+LcmsLock::~LcmsLock()
+{
+    lcmsMutex->unlock();
+}
 
 IccProfile::IccProfile()
             : d(0)
@@ -234,6 +249,7 @@ bool IccProfile::open()
 
     if (!d->data.isEmpty())
     {
+        LcmsLock lock();
         d->handle = cmsOpenProfileFromMem(d->data.data(), (DWORD)d->data.size());
     }
     else if (!d->filePath.isNull())
@@ -243,6 +259,7 @@ bool IccProfile::open()
 
         if (d->data.isEmpty())
             return false;
+        LcmsLock lock();
         d->handle = cmsOpenProfileFromMem(d->data.data(), (DWORD)d->data.size());
     }
 
@@ -278,7 +295,10 @@ QString IccProfile::description()
     if (!d)
         return QString();
 
-    open();
+    if (!open())
+        return QString();
+
+    LcmsLock lock();
     const char *desc = cmsTakeProductDesc(d->handle);
     if (desc && desc[0] != '\0')
         return QString::fromLatin1(desc);
@@ -293,6 +313,7 @@ IccProfile::ProfileType IccProfile::type()
     if (!open())
         return InvalidType;
 
+    LcmsLock lock();
     switch ((int)cmsGetDeviceClass(d->handle))
     {
         case icSigInputClass:
