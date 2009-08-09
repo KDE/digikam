@@ -27,8 +27,9 @@
 
 // Qt includes
 
-#include <QtCore/QByteArray>
-#include <QtCore/QString>
+#include <QByteArray>
+#include <QMetaType>
+#include <QString>
 
 // Local includes
 
@@ -38,6 +39,7 @@
 namespace Digikam
 {
 
+class DImgLoaderObserver;
 class IccTransformPriv;
 class TransformDescription;
 
@@ -51,8 +53,11 @@ public:
     IccTransform(const IccTransform& other);
     IccTransform &operator=(const IccTransform& other);
 
-    /// Apply this transform with the set profiles and options to the image
-    bool apply(DImg& image);
+    /**
+     * Apply this transform with the set profiles and options to the image.
+     * Optionally pass an observer to get progress information.
+     */
+    bool apply(DImg& image, DImgLoaderObserver *observer = 0);
 
     /// Closes the transform, not the profiles. Called at desctruction.
     void close();
@@ -112,7 +117,7 @@ private:
     TransformDescription getProofingDescription(const DImg& image);
     bool open(TransformDescription &description);
     bool openProofing(TransformDescription &description);
-    void transform(const DImg& img, const TransformDescription&);
+    void transform(const DImg& img, const TransformDescription&, DImgLoaderObserver *observer = 0);
 
 private:
 
@@ -121,5 +126,7 @@ private:
 };
 
 }  // namespace Digikam
+
+Q_DECLARE_METATYPE(Digikam::IccTransform)
 
 #endif   // ICCTRANSFORM_H

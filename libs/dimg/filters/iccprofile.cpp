@@ -60,6 +60,7 @@ public:
     IccProfilePriv(const IccProfilePriv& other)
                 : QSharedData(other)
     {
+        handle      = 0;
         operator=(other);
     }
 
@@ -67,6 +68,7 @@ public:
     {
         data        = other.data;
         filePath    = other.filePath;
+        close();
         handle      = 0;
         return *this;
     }

@@ -45,6 +45,9 @@
 #define cmsTakeCopyright(profile) "Unknown"
 #endif // LCMS_VERSION < 114
 
+// Local includes
+
+#include "dimgloaderobserver.h"
 
 namespace Digikam
 {
@@ -94,6 +97,34 @@ public:
         checkGamut           = false;
 
         handle               = 0;
+    }
+
+    IccTransformPriv(const IccTransformPriv& other)
+                : QSharedData(other)
+    {
+        handle = 0;
+        operator=(other);
+    }
+
+    IccTransformPriv &operator=(const IccTransformPriv& other)
+    {
+        // Attention: This is sensitive. Add any new members here.
+        // We can't use the default operator= because of handle.
+        intent             = other.intent;
+        useBPC             = other.useBPC;
+        checkGamut         = other.checkGamut;
+
+        embeddedProfile    = other.embeddedProfile;
+        inputProfile       = other.inputProfile;
+        outputProfile      = other.outputProfile;
+        proofProfile       = other.proofProfile;
+        builtinProfile     = other.builtinProfile;
+
+        close();
+        handle             = 0;
+        currentDescription = TransformDescription();
+
+        return *this;
     }
 
     ~IccTransformPriv()
@@ -402,7 +433,7 @@ bool IccTransform::openProofing(TransformDescription &description)
     return true;
 }
 
-bool IccTransform::apply(DImg& image)
+bool IccTransform::apply(DImg& image, DImgLoaderObserver *observer)
 {
     if (!d->effectiveInputProfile().open())
     {
@@ -438,21 +469,29 @@ bool IccTransform::apply(DImg& image)
         if (!openProofing(description))
             return false;
     }
+    if (observer)
+        observer->progressInfo(&image, 0.1F);
 
-    transform(image, description);
+    transform(image, description, observer);
 
     return true;
 }
 
     //kDebug(50003) << "Transform flags are: " << transformFlags;
 
-void IccTransform::transform(const DImg& image, const TransformDescription& description)
+void IccTransform::transform(const DImg& image, const TransformDescription& description, DImgLoaderObserver *observer)
 {
     const int bytesDepth = image.bytesDepth();
     const int pixels = image.width() * image.height();
     // convert ten scanlines in a batch
     const int pixelsPerStep = image.width() * 10;
     uchar *data = image.bits();
+
+    // see dimgloader.cpp, granularity().
+    int granularity=1;
+    if (observer)
+        granularity = (int)(( pixels / (20 * 0.9)) / observer->granularity());
+    int checkPoint = pixels;
 
     // it is safe to use the same input and output buffer if the format is the same
     if (description.inputFormat == description.outputFormat)
@@ -464,6 +503,11 @@ void IccTransform::transform(const DImg& image, const TransformDescription& desc
             LcmsLock lock();
             cmsDoTransform(d->handle, data, data, pixelsThisStep);
             data += size;
+            if (observer && p <= checkPoint)
+            {
+                checkPoint -= granularity;
+                observer->progressInfo(&image, 0.1 + 0.9*(1.0 - float(p)/float(pixels)));
+            }
         }
     }
     else
@@ -477,6 +521,11 @@ void IccTransform::transform(const DImg& image, const TransformDescription& desc
             memcpy(buffer.data(), data, size);
             cmsDoTransform(d->handle, buffer.data(), data, pixelsThisStep);
             data += size;
+            if (observer && p <= checkPoint)
+            {
+                checkPoint -= granularity;
+                observer->progressInfo(&image, 0.1 + 0.9*(1.0 - float(p)/float(pixels)));
+            }
         }
     }
 }
