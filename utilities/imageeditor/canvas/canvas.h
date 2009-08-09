@@ -57,6 +57,7 @@ class CanvasPrivate;
 class DImgInterface;
 class ExposureSettingsContainer;
 class ICCSettingsContainer;
+class IccTransform;
 class IOFileSettingsContainer;
 
 class DIGIKAM_EXPORT Canvas : public Q3ScrollView
@@ -76,6 +77,7 @@ public:
     void  resetImage();
     void  switchToLastSaved(const QString& newFilename);
     void  abortSaving();
+    void  applyTransform(const IccTransform& transform);
     void  setModified();
     void  readMetadataFromFile(const QString& file);
     void  clearUndoHistory();

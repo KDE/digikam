@@ -241,6 +241,19 @@ void DImgInterface::slotUseDefaultSettings()
     EditorToolIface::editorToolIface()->unLoadTool();
 }
 
+void DImgInterface::applyTransform(const IccTransform& transform)
+{
+    if (!d->valid)
+        return;
+
+    LoadingDescription description(d->filename, d->iofileSettings->rawDecodingSettings, LoadingDescription::ApplyTransform);
+    description.postProcessingParameters.setTransform(transform);
+    d->thread->load(description, SharedLoadSaveThread::AccessModeReadWrite, SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
+    emit signalLoadingStarted(d->filename);
+
+    EditorToolIface::editorToolIface()->unLoadTool();
+}
+
 void DImgInterface::resetImage()
 {
     EditorToolIface::editorToolIface()->unLoadTool();
@@ -315,80 +328,6 @@ void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription
              d->image.attribute("format").toString() == QString("TIFF")))
              exifRotate(d->filename);
 
-        if (d->cmSettings->enableCM)
-        {
-            IccProfile workspaceProfile(d->cmSettings->workspaceProfile);
-            //kDebug() << "Workspace" << workspaceProfile.description();
-
-            if (workspaceProfile.open())
-            {
-                IccTransform trans;
-
-                IccProfile inputProfile(d->cmSettings->defaultInputProfile);
-                // If the innput color profile does not exist, built-in sRGB will be used instead.
-                trans.setInputProfile(inputProfile);
-                trans.setOutputProfile(workspaceProfile);
-                trans.setEmbeddedProfile(d->image);
-                trans.setIntent(d->cmSettings->renderingIntent);
-                trans.setUseBlackPointCompensation(d->cmSettings->useBPC);
-                //kDebug() << trans.effectiveInputProfile().description() << trans.outputProfile().description() << trans.willHaveEffect() << d->cmSettings->askOrApplySetting;
-
-                if (trans.willHaveEffect())
-                {
-
-                    // First possibility: image has no embedded profile
-                    // Ask or apply?
-                    if (d->cmSettings->onProfileMismatch == ICCSettingsContainer::Convert)
-                    {
-                        if (d->parent)
-                            d->parent->setCursor( Qt::WaitCursor );
-                        // Transform from embedded profile, input profile, or sRGB to workspace.
-                        trans.apply(d->image);
-                        d->image.setIccProfile(workspaceProfile);
-                        if (d->parent)
-                            d->parent->unsetCursor();
-                    }
-                    else if (d->cmSettings->onProfileMismatch == ICCSettingsContainer::Ask)
-                    {
-                        // To repaint image in canvas before to ask about to apply ICC profile.
-                        emit signalImageLoaded(d->filename, valRet);
-
-                        DImg preview = d->image.smoothScale(240, 180, Qt::KeepAspectRatio);
-                        ColorCorrectionDlg dlg(d->parent, &preview, trans, fileName);
-
-                        switch (dlg.exec())
-                        {
-                            case QDialog::Accepted:
-                                if (d->parent)
-                                    d->parent->setCursor( Qt::WaitCursor );
-                                trans.apply(d->image);
-                                d->image.setIccProfile(workspaceProfile);
-                                if (d->parent)
-                                    d->parent->unsetCursor();
-                                break;
-                            case -1:
-                                if (d->parent)
-                                    d->parent->setCursor( Qt::WaitCursor );
-                                // Only set the profile, leave data untouched
-                                d->image.setIccProfile(workspaceProfile);
-                                if (d->parent)
-                                    d->parent->unsetCursor();
-                                kDebug(50003) << "dimginterface.cpp: Apply pressed";
-                                break;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                QString message = i18n("Cannot find the ICC color-space profile file: "
-                                       "the ICC profile path seems to be invalid. "
-                                       "No color transform will be applied. "
-                                       "Please check the color management "
-                                       "configuration in digiKam's setup to verify the ICC path.");
-                KMessageBox::information(d->parent, message);
-            }
-        }
     }
     else
     {

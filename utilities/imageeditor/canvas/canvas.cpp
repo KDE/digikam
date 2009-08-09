@@ -278,6 +278,13 @@ void Canvas::slotImageLoaded(const QString& filePath, bool success)
     emit signalLoadingFinished(filePath, success);
 }
 
+void Canvas::applyTransform(const IccTransform& transform)
+{
+    //reset();
+    d->im->applyTransform(transform);
+    //emit signalPrepareToLoad();
+}
+
 void Canvas::preload(const QString& /*filename*/)
 {
 //    d->im->preload(filename);

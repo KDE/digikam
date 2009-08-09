@@ -155,6 +155,7 @@ protected:
     bool startingSaveAs(const KUrl& url);
     bool checkPermissions(const KUrl& url);
     bool moveFile();
+    void colorManage();
 
     EditorStackView* editorStackView() const;
 

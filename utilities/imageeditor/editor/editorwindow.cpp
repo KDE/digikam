@@ -96,6 +96,7 @@
 // Local includes
 
 #include "canvas.h"
+#include "colorcorrectiondlg.h"
 #include "dimginterface.h"
 #include "dpopupmenu.h"
 #include "dlogoaction.h"
@@ -105,6 +106,7 @@
 #include "filesaveoptionsbox.h"
 #include "iccsettingscontainer.h"
 #include "iccsettings.h"
+#include "icctransform.h"
 #include "imagedialog.h"
 #include "imageplugin.h"
 #include "imagepluginloader.h"
@@ -1292,6 +1294,71 @@ void EditorWindow::slotLoadingFinished(const QString& /*filename*/, bool success
     toggleActions(success);
     unsetCursor();
     m_animLogo->stop();
+
+    if (success)
+        colorManage();
+}
+
+void EditorWindow::colorManage()
+{
+    if (d->ICCSettings->enableCM)
+    {
+        DImg image = m_canvas->currentImage();
+        if (image.isNull())
+            return;
+
+        IccProfile workspaceProfile(d->ICCSettings->workspaceProfile);
+        //kDebug() << "Workspace" << workspaceProfile.description();
+
+        if (workspaceProfile.open())
+        {
+            IccTransform trans;
+
+            IccProfile inputProfile(d->ICCSettings->defaultInputProfile);
+            // If the innput color profile does not exist, built-in sRGB will be used instead.
+            trans.setInputProfile(inputProfile);
+            trans.setOutputProfile(workspaceProfile);
+            trans.setEmbeddedProfile(image);
+            trans.setIntent(d->ICCSettings->renderingIntent);
+            trans.setUseBlackPointCompensation(d->ICCSettings->useBPC);
+            //kDebug() << trans.effectiveInputProfile().description() << trans.outputProfile().description() << trans.willHaveEffect() << d->ICCSettings->askOrApplySetting;
+
+            if (trans.willHaveEffect())
+            {
+                if (d->ICCSettings->onProfileMismatch == ICCSettingsContainer::Convert)
+                {
+                    // Transform from embedded profile, input profile, or sRGB to workspace.
+                    m_canvas->applyTransform(trans);
+                }
+                else if (d->ICCSettings->onProfileMismatch == ICCSettingsContainer::Ask)
+                {
+                    DImg preview = image.smoothScale(240, 180, Qt::KeepAspectRatio);
+                    ColorCorrectionDlg dlg(this, &preview, trans, m_canvas->currentImageFilePath());
+
+                    switch (dlg.exec())
+                    {
+                        case QDialog::Accepted:
+                            m_canvas->applyTransform(trans);
+                            break;
+                        case -1:
+                            // Only set the profile, leave data untouched
+                            image.setIccProfile(workspaceProfile);
+                            break;
+                    }
+                }
+                // Third possibility: Do not convert. Do nothing.
+            }
+        }
+        else
+        {
+            QString message = i18n("Cannot find the ICC color-space profile file: "
+                                    "the ICC profile path seems to be invalid. "
+                                    "No color transform will be applied. "
+                                    "Please check the color management "
+                                    "configuration in digiKam's setup to verify the ICC path.");
+            KMessageBox::information(this, message);
+        }
+    }
 }
 
 void EditorWindow::slotNameLabelCancelButtonPressed()

@@ -61,6 +61,7 @@ public:
     ~DImgInterface();
 
     void   load(const QString& filename, IOFileSettingsContainer *iofileSettings, QWidget *parent=0);
+    void   applyTransform(const IccTransform& transform);
 
     void   setICCSettings(ICCSettingsContainer *cmSettings);
     void   setExposureSettings(ExposureSettingsContainer *expoSettings);
