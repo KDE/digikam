@@ -34,6 +34,7 @@
 
 // Local includes
 
+#include "icctransform.h"
 #include "loadsavethread.h"
 #include "managedloadsavethread.h"
 #include "sharedloadsavethread.h"
@@ -243,11 +244,40 @@ void SharedLoadingTask::setResult(const LoadingDescription& loadingDescription, 
 
 bool SharedLoadingTask::needsPostProcessing() const
 {
-    return false;
+    return m_loadingDescription.postProcessingParameters.needsProcessing();
 }
 
 void SharedLoadingTask::postProcess()
 {
+    // to receive progress info again. Should be safe now, we are alone.
+    addListener(this);
+
+    // ---- Color management ---- //
+
+    switch (m_loadingDescription.postProcessingParameters.colorManagement)
+    {
+        case LoadingDescription::NoColorConversion:
+            break;
+        case LoadingDescription::ApplyTransform:
+        {
+            IccTransform trans = m_loadingDescription.postProcessingParameters.transform();
+            trans.apply(m_img, this);
+            m_img.setIccProfile(trans.outputProfile());
+            break;
+        }
+        case LoadingDescription::ConvertToWorkspace:
+        {
+            //TODO
+            break;
+        }
+        case LoadingDescription::ConvertForDisplay:
+        {
+            //TODO
+            break;
+        }
+    }
+
+    removeListener(this);
 }
 
 void SharedLoadingTask::progressInfo(const DImg *, float progress)
