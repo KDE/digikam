@@ -59,13 +59,6 @@
 #include <kurlrequester.h>
 #include <kvbox.h>
 
-// lcms includes
-
-#include <lcms.h>
-#if LCMS_VERSION < 114
-#define cmsTakeCopyright(profile) "Unknown"
-#endif // LCMS_VERSION < 114
-
 // LibKDcraw includes
 
 #include <libkdcraw/squeezedcombobox.h>
@@ -353,10 +346,10 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     lablel->setText(i18n("Rendering Intents:"));
 
     d->renderingIntentKC = new KComboBox(false, d->advancedSettingsGB);
-    d->renderingIntentKC->insertItem(0, "Perceptual");
-    d->renderingIntentKC->insertItem(1, "Relative Colorimetric");
-    d->renderingIntentKC->insertItem(2, "Saturation");
-    d->renderingIntentKC->insertItem(3, "Absolute Colorimetric");
+    d->renderingIntentKC->addItem("Perceptual", IccTransform::Perceptual);
+    d->renderingIntentKC->addItem("Relative Colorimetric", IccTransform::RelativeColorimetric);
+    d->renderingIntentKC->addItem("Saturation", IccTransform::Saturation);
+    d->renderingIntentKC->addItem("Absolute Colorimetric", IccTransform::AbsoluteColorimetric);
     d->renderingIntentKC->setWhatsThis( i18n("<ul><li><p><b>Perceptual intent</b> causes the full gamut of the image to be "
                      "compressed or expanded to fill the gamut of the destination device, so that gray balance is "
                      "preserved but colorimetric accuracy may not be preserved.</p>"
@@ -453,7 +446,7 @@ void SetupICC::applySettings()
 
     settings.iccFolder = d->defaultPathKU->url().path();
     settings.useBPC =  d->bpcAlgorithm->isChecked();
-    settings.renderingIntent = d->renderingIntentKC->currentIndex();
+    settings.renderingIntent = d->renderingIntentKC->itemData(d->renderingIntentKC->currentIndex()).toInt();
     settings.useManagedView = d->managedView->isChecked();
 
     settings.defaultInputProfile = d->inICCPath.value(d->inProfilesKC->itemHighlighted());
@@ -497,7 +490,7 @@ void SetupICC::readSettings(bool restore)
         d->enableColorManagement->setChecked(settings.enableCM);
 
     d->bpcAlgorithm->setChecked(settings.useBPC);
-    d->renderingIntentKC->setCurrentIndex(settings.renderingIntent);
+    setCurrentIndexFromUserData(d->renderingIntentKC, settings.renderingIntent);
     d->managedView->setChecked(settings.useManagedView);
 
     if (settings.onProfileMismatch == ICCSettingsContainer::Convert)
@@ -689,7 +682,7 @@ void SetupICC::parseProfiles(const QList<IccProfile>& profiles)
                 d->proofICCPath.insert(description, filePath);
                 kDebug(50003) << "Output ICC profile" << filePath;
                 break;
-            case icSigColorSpaceClass:
+            case IccProfile::ColorSpace:
                 d->inICCPath.insert(description, filePath);
                 d->workICCPath.insert(description, filePath);
                 kDebug(50003) << "ColorSpace ICC profile" << filePath;
