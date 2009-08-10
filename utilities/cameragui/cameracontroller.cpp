@@ -432,7 +432,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
         {
             QList<QVariant> list = cmd->map["list"].toList();
 
-            foreach (QVariant item, list)
+            foreach (const QVariant& item, list)
             {
                 QString folder = item.toStringList()[0];
                 QString file   = item.toStringList()[1];

@@ -1586,7 +1586,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
 
     // Determine the default filter from LastSavedImageTypeMime
     QString defaultFilter;
-    foreach(QString filter, writablePattern)
+    foreach(const QString& filter, writablePattern)
     {
         if (filter.contains(QString("*.%1").arg(ext.toLower())))
         {
