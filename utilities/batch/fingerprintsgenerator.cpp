@@ -160,6 +160,9 @@ void FingerPrintsGenerator::complete()
 
 void FingerPrintsGenerator::slotGotImagePreview(const LoadingDescription& desc, const DImg& img)
 {
+    if (d->allPicturesPath.isEmpty())
+        return;
+
     if (d->allPicturesPath.first() != desc.filePath)
         return;
 
