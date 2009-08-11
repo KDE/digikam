@@ -6,6 +6,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Local contrast plugin for Digikam
+Comment[nb]=digKam programtillegg for lokal kontrast
 Comment[pt]=Um 'plugin' do contraste local para o Digikam
 Comment[pt_BR]=Plug-in de contraste local para o digiKam
 Comment[sv]=Digikam insticksprogram för lokal kontrast
