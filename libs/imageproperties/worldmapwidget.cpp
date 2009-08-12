@@ -251,6 +251,9 @@ void WorldMapWidget::setCenterPosition(double lat, double lng)
 #ifdef HAVE_MARBLEWIDGET
     d->marbleWidget->setCenterLatitude(lat);
     d->marbleWidget->setCenterLongitude(lng);
+#else // HAVE_MARBLEWIDGET
+    Q_UNUSED(lat)
+    Q_UNUSED(lng)
 #endif // HAVE_MARBLEWIDGET
 }
 
@@ -267,6 +270,8 @@ void WorldMapWidget::setZoomLevel(int l)
 {
 #ifdef HAVE_MARBLEWIDGET
     d->marbleWidget->zoomView(l);
+#else // HAVE_MARBLEWIDGET
+    Q_UNUSED(l)
 #endif // HAVE_MARBLEWIDGET
 }
 
