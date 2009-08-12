@@ -31,6 +31,7 @@
 
 // KDE includes
 
+#include <kdeversion.h>
 #include <klocale.h>
 #include <kiconloader.h>
 
@@ -64,8 +65,12 @@ ToolsView::ToolsView(QWidget *parent)
          : KTabWidget(parent), d(new ToolsViewPriv)
 {
     setTabBarHidden(false);
-    setTabsClosable(false);
 
+#if KDE_IS_VERSION(4,3,0)
+    setTabsClosable(false);
+#else
+    setCloseButtonEnabled(false);
+#endif
     // --------------------------------------------------------
 
     d->baseTools = new ToolsListView(this);

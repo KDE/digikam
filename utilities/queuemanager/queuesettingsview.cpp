@@ -37,6 +37,7 @@
 
 // KDE includes
 
+#include <kdeversion.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdialog.h>
@@ -87,7 +88,11 @@ QueueSettingsView::QueueSettingsView(QWidget *parent)
                  : KTabWidget(parent), d(new QueueSettingsViewPriv)
 {
     setTabBarHidden(false);
+#if KDE_IS_VERSION(4,3,0)
     setTabsClosable(false);
+#else
+    setCloseButtonEnabled(false);
+#endif
 
     // --------------------------------------------------------
 

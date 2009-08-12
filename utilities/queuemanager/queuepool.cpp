@@ -30,6 +30,7 @@
 
 // KDE includes
 
+#include <kdeversion.h>
 #include <kmessagebox.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -48,7 +49,11 @@ QueuePool::QueuePool(QWidget *parent)
          : KTabWidget(parent)
 {
     setTabBarHidden(false);
-    setTabsClosable(true);
+#if KDE_IS_VERSION(4,3,0)
+    setTabsClosable(false);
+#else
+    setCloseButtonEnabled(false);
+#endif
     slotAddQueue();
 
     connect(this, SIGNAL(currentChanged(int)),
