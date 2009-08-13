@@ -326,8 +326,6 @@ void AlbumWidgetStack::setPreviewMode(int mode)
 
     if (mode == PreviewAlbumMode || mode == WelcomePageMode)
     {
-        if (mode == PreviewAlbumMode && currentIndex() != mode)
-            d->imageIconView->setFocus();
         setPreviewItem();
         setCurrentIndex(mode);
         emit signalToggledToPreviewMode(false);
@@ -340,6 +338,8 @@ void AlbumWidgetStack::setPreviewMode(int mode)
 
         setCurrentIndex(mode);
     }
+
+    d->imageIconView->setFocus();
 }
 
 void AlbumWidgetStack::previewLoaded()
