@@ -151,7 +151,7 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
     QLabel *label3    = new QLabel(i18n("Threshold:"), firstPage);
     d->thresholdInput = new RDoubleNumInput(firstPage);
     d->thresholdInput->setDecimals(2);
-    d->thresholdInput->input()->setRange(0.0, 1.0, 0.01, true);
+    d->thresholdInput->input()->setRange(0.01, 1.0, 0.01, true);
     d->thresholdInput->setDefaultValue(0.08);
     d->thresholdInput->setWhatsThis(i18n("<b>Threshold</b>: use the slider for coarse adjustment, "
                                          "and the spin control for fine adjustment to control edge detection sensitivity. "
