@@ -29,8 +29,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 020 ==> 202332 : View mode: Zooming using Ctrl+Scroll is broken.
 021 ==> 197254 : digikam crash at startup.
 022 ==> 202779 : When pressing 'enter', thumbnails should be enlarged, also when a collection is selected.
-023 ==>
-
+023 ==> 203574 : Showfoto crashes when opening jpeg file.
+024 ==> 
 
 
 
