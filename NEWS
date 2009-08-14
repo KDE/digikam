@@ -31,7 +31,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 022 ==> 202779 : When pressing 'enter', thumbnails should be enlarged, also when a collection is selected.
 023 ==> 203574 : Showfoto crashes when opening jpeg file.
 024 ==> 203498 : No drop-down menu for export.
-025 ==> 
+025 ==> 203589 : Crash in the noise reduction plugin when 'Threshold' equals zero.
+026 ==>
 
 *********************************************************************************************************
 digiKam 1.0.0-beta3 - Release date: 2009-07-24
