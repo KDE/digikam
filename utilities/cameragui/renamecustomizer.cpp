@@ -394,7 +394,7 @@ QString RenameCustomizer::newName(const QString& fileName, const QDateTime& date
                 date = dateTime.toString(Qt::TextDate);
                 break;
             case RenameCustomizerPriv::LocalDateFormat:
-                date = dateTime.toString(Qt::LocalDate);
+                date = dateTime.toString(Qt::SystemLocaleShortDate);
                 break;
             case RenameCustomizerPriv::IsoDateFormat:
                 date = dateTime.toString(Qt::ISODate);
