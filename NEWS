@@ -37,7 +37,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 028 ==> 202954 : digiKam crashes on start while scaning picture directory.
 029 ==> 203031 : Album list doesn't show pictures even after tons of new pictures were imported.
 030 ==> 201810 : Segfault moving files to trash.
-031 ==> 
+031 ==> 193763 : digiKam doesn'd display any photos.
+032 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta3 - Release date: 2009-07-24
