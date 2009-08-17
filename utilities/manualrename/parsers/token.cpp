@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-06-09
- * Description : a test for the ManualRenameInput widget
+ * Date        : 2009-08-08
+ * Description : an abstract token class
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,40 +21,38 @@
  *
  * ============================================================ */
 
-#ifndef MANUALRENAMEINPUTTEST_H
-#define MANUALRENAMEINPUTTEST_H
+#include "token.h"
 
 // Qt includes
 
-#include <QtCore/QObject>
+#include <QAction>
 
-class ManualRenameInputTest : public QObject
+namespace Digikam
 {
-    Q_OBJECT
+namespace ManualRename
+{
 
-private Q_SLOTS:
+Token::Token(const QString& id, const QString& alias, const QString& description)
+     : QObject(0)
+ {
+    m_id          = id;
+    m_alias       = alias;
+    m_description = description;
+    m_action      = new QAction(m_alias, this);
 
-    void testNumberToken();
-    void testNumberToken_data();
+    connect(m_action, SIGNAL(triggered()),
+            this, SLOT(slotTriggered()));
+ }
 
-    void testFirstLetterOfEachWordUppercaseToken();
-    void testFirstLetterOfEachWordUppercaseToken_data();
-
-    void testUppercaseToken();
-    void testUppercaseToken_data();
-
-    void testLowercaseToken();
-    void testLowercaseToken_data();
-
-    void testCameraToken();
-    void testCameraToken_data();
-
-    void testCompleteParse();
-    void testCompleteParse_data();
-
-    void testEmptyParseString();
-
-    void testSetters();
+Token::~Token()
+{
+    delete m_action;
 };
 
-#endif /* MANUALRENAMEINPUTTEST_H_ */
+void Token::slotTriggered()
+{
+    emit signalTokenTriggered(m_id);
+}
+
+} // namespace ManualRename
+} // namespace Digikam

@@ -46,16 +46,18 @@
 
 // Local includes
 
+#include "manualrenameparser.h"
+#include "parser.h"
 #include "albumdb.h"
 #include "databasechangesets.h"
 #include "databasewatch.h"
 #include "ddragobjects.h"
-#include "manualrenameinput.h"
 #include "queuemgrwindow.h"
 #include "queuetooltip.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
 
+using namespace Digikam::ManualRename;
 namespace Digikam
 {
 
@@ -829,7 +831,14 @@ void QueueListView::updateDestFileNames()
                 QString parser = settings().renamingParser;
                 QString camera = info.photoInfoContainer().make + info.photoInfoContainer().model;
                 QDateTime date = info.dateTime();
-                baseName       = ManualRenameInput::parser(parser, baseName, camera, date, index);
+
+                ManualRenameParser p;
+                ParseInformation info;
+                info.filename   = baseName;
+                info.cameraname = camera;
+                info.datetime   = date;
+                info.index      = index;
+                baseName        = p.parse(parser, info);
             }
 
             // Update suffix using assigned batch tool rules.

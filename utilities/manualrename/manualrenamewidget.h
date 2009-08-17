@@ -34,37 +34,44 @@
 #include "digikam_export.h"
 
 class QDateTime;
+class QAction;
 
 class KLineEdit;
 
 namespace Digikam
 {
+namespace ManualRename
+{
 
-class ManualRenameInputPriv;
+class ManualRenameWidgetPriv;
 
-class DIGIKAM_EXPORT ManualRenameInput : public QWidget
+class DIGIKAM_EXPORT ManualRenameWidget : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    ManualRenameInput(QWidget* parent = 0);
-    ~ManualRenameInput();
+    enum TokenInputStyle
+    {
+        None       = 0x0,
+        BigButtons = 0x1,
+        ToolButton = 0x2
+    };
+    Q_DECLARE_FLAGS(TokenInputStyles, TokenInputStyle)
+
+    ManualRenameWidget(QWidget* parent = 0);
+    ~ManualRenameWidget();
 
     QString text() const;
     void    setText(const QString& text);
 
     void setTrackerAlignment(Qt::Alignment alignment);
+    void setTokenInputStyle(TokenInputStyles widgetMask);
 
     KLineEdit* input() const;
 
-
-    QString parse(const QString& fileName, const QString& cameraName,
+    QString parse(const QString& fileName,   const QString& cameraName,
                   const QDateTime& dateTime, int index) const;
-
-    static QString parser(const QString& parseString,
-                          const QString& fileName, const QString& cameraName,
-                          const QDateTime& dateTime, int index);
 
 Q_SIGNALS:
 
@@ -78,20 +85,21 @@ public Q_SLOTS:
 private Q_SLOTS:
 
     void slotToolTipButtonToggled(bool);
+    void addToken2ParserInput(const QString& token);
 
 private:
 
     QString createToolTip();
-
-    // static parse methods
-    static bool stringIsValid(const QString& str);
-    static QString firstLetterUppercase(const QString& str);
+    void    registerParsers(int columns = 2);
 
 private:
 
-    ManualRenameInputPriv* const d;
+    ManualRenameWidgetPriv* const d;
 };
 
+}  // namespace ManualRename
 }  // namespace Digikam
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::ManualRename::ManualRenameWidget::TokenInputStyles)
 
 #endif /* MANUALRENAMEINPUT_H */

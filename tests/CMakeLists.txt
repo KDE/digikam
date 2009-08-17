@@ -3,6 +3,8 @@ SET( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/editor
                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/canvas
                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename/parsers
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/common
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/imageplugins
@@ -20,7 +22,7 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/editor
 #------------------------------------------------------------------------
 
 SET(manualrenameinputtest_SRCS
-    manualrenameinputtest.cpp
+    manualrenametest.cpp
 )
 KDE4_ADD_UNIT_TEST(manualrenameinputtest ${manualrenameinputtest_SRCS})
 TARGET_LINK_LIBRARIES(manualrenameinputtest

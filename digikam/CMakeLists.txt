@@ -59,6 +59,8 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/gpssearch
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/timeline
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/firstrun
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename/parsers
                      ${CMAKE_CURRENT_SOURCE_DIR}/../digikam
 
                      # config-digikam.h
@@ -112,10 +114,12 @@ SET(digikamcore_LIB_SRCS
                         ${libdimgeditorprintiface_SRCS}
                         ${libdimgeditor_SRCS}
                         ${librawimport_SRCS}
+                        ${libmanualrename_SRCS}
    )
 
 KDE4_ADD_UI_FILES(digikamcore_LIB_SRCS
                   ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/printiface/printoptionspage.ui
+                  ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename/parsers/dateparserdialogwidget.ui
                  )
 
 KDE4_ADD_KCFG_FILES(digikamcore_LIB_SRCS

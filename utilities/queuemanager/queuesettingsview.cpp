@@ -50,8 +50,9 @@
 #include "batchtool.h"
 #include "album.h"
 #include "albumselectwidget.h"
-#include "manualrenameinput.h"
+#include "manualrenamewidget.h"
 
+using namespace Digikam::ManualRename;
 namespace Digikam
 {
 
@@ -81,7 +82,7 @@ public:
 
     AlbumSelectWidget *albumSel;
 
-    ManualRenameInput *manualRenameInput;
+    ManualRenameWidget *manualRenameInput;
 };
 
 QueueSettingsView::QueueSettingsView(QWidget *parent)
@@ -148,7 +149,7 @@ QueueSettingsView::QueueSettingsView(QWidget *parent)
                                          "filenames without modifications."));
 
     d->renameManual        = new QRadioButton(i18n("Customize filenames:"), vbox2);
-    d->manualRenameInput   = new ManualRenameInput(vbox2);
+    d->manualRenameInput   = new ManualRenameWidget(vbox2);
     QWidget *space         = new QWidget(vbox2);
 
     d->renamingButtonGroup->setExclusive(true);

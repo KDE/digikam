@@ -61,8 +61,9 @@
 // Local includes
 
 #include "dcursortracker.h"
-#include "manualrenameinput.h"
+#include "manualrenamewidget.h"
 
+using namespace Digikam::ManualRename;
 namespace Digikam
 {
 
@@ -105,40 +106,40 @@ public:
         startIndexLabel       = 0;
 }
 
-    QButtonGroup*      buttonGroup;
+    QButtonGroup*       buttonGroup;
 
-    QCheckBox*         addCameraNameBox;
-    QCheckBox*         addDateTimeBox;
-    QCheckBox*         addOrigNameBox;
-    QCheckBox*         addSeqNumberBox;
+    QCheckBox*          addCameraNameBox;
+    QCheckBox*          addDateTimeBox;
+    QCheckBox*          addOrigNameBox;
+    QCheckBox*          addSeqNumberBox;
 
-    QLabel*            dateTimeLabel;
-    QLabel*            renameDefaultCase;
-    QLabel*            startIndexLabel;
+    QLabel*             dateTimeLabel;
+    QLabel*             renameDefaultCase;
+    QLabel*             startIndexLabel;
 
-    QPushButton*       dateTimeButton;
+    QPushButton*        dateTimeButton;
 
-    QRadioButton*      renameCustom;
-    QRadioButton*      renameDefault;
-    QRadioButton*      renameManual;
+    QRadioButton*       renameCustom;
+    QRadioButton*       renameDefault;
+    QRadioButton*       renameManual;
 
-    QString            cameraTitle;
-    QString            dateTimeFormatString;
+    QString             cameraTitle;
+    QString             dateTimeFormatString;
 
-    QTimer*            changedTimer;
+    QTimer*             changedTimer;
 
-    QWidget*           focusedWidget;
-    QWidget*           renameCustomBox;
-    QWidget*           renameDefaultBox;
+    QWidget*            focusedWidget;
+    QWidget*            renameCustomBox;
+    QWidget*            renameDefaultBox;
 
-    KComboBox*         dateTimeFormat;
-    KComboBox*         renameDefaultCaseType;
+    KComboBox*          dateTimeFormat;
+    KComboBox*          renameDefaultCaseType;
 
-    KIntNumInput*      startIndexInput;
-    KLineEdit*         renameCustomPrefix;
-    KLineEdit*         renameCustomSuffix;
+    KIntNumInput*       startIndexInput;
+    KLineEdit*          renameCustomPrefix;
+    KLineEdit*          renameCustomSuffix;
 
-    ManualRenameInput* manualRenameInput;
+    ManualRenameWidget* manualRenameInput;
 };
 
 RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
@@ -279,8 +280,9 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     // ----------------------------------------------------------------------
 
     d->renameManual      = new QRadioButton(i18nc("Manual Image Renaming", "Manual"), this);
-    d->manualRenameInput = new ManualRenameInput;
+    d->manualRenameInput = new ManualRenameWidget(this);
     d->manualRenameInput->setTrackerAlignment(Qt::AlignRight);
+    d->manualRenameInput->setTokenInputStyle(ManualRenameWidget::BigButtons);
     d->buttonGroup->addButton(d->renameManual, 2);
 
     mainLayout->addWidget(d->renameDefault,     0, 0, 1, 2);
