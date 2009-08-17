@@ -45,6 +45,7 @@ void MetadataParser::parse(QString& parseString, const ParseInformation& info)
 {
     Q_UNUSED(parseString)
     Q_UNUSED(info)
+    // TODO: implement me!
 };
 
 } // namespace ManualRename
