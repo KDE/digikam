@@ -282,7 +282,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     d->renameManual      = new QRadioButton(i18nc("Manual Image Renaming", "Manual"), this);
     d->manualRenameInput = new ManualRenameWidget(this);
     d->manualRenameInput->setTrackerAlignment(Qt::AlignRight);
-    d->manualRenameInput->setTokenInputStyle(ManualRenameWidget::BigButtons);
+    d->manualRenameInput->setParserInputStyle(ManualRenameWidget::BigButtons);
     d->buttonGroup->addButton(d->renameManual, 2);
 
     mainLayout->addWidget(d->renameDefault,     0, 0, 1, 2);

@@ -115,7 +115,7 @@ ManualRenameWidget::ManualRenameWidget(QWidget* parent)
 
     d->parser = new ManualRenameParser;
     registerParsers();
-    setTokenInputStyle(ToolButton);
+    setParserInputStyle(ToolButton);
 
     // --------------------------------------------------------
 
@@ -236,10 +236,10 @@ void ManualRenameWidget::addToken2ParserInput(const QString& token)
     d->parseStringLineEdit->setFocus();
 }
 
-void ManualRenameWidget::setTokenInputStyle(TokenInputStyles widgetMask)
+void ManualRenameWidget::setParserInputStyle(ParserInputStyles inputMask)
 {
-    d->btnContainer->setVisible(widgetMask & BigButtons);
-    d->insertTokenToolButton->setVisible(widgetMask & ToolButton);
+    d->btnContainer->setVisible(inputMask & BigButtons);
+    d->insertTokenToolButton->setVisible(inputMask & ToolButton);
 }
 
 void ManualRenameWidget::registerParsers(int columns)

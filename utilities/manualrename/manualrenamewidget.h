@@ -51,13 +51,13 @@ class DIGIKAM_EXPORT ManualRenameWidget : public QWidget
 
 public:
 
-    enum TokenInputStyle
+    enum ParserInputStyle
     {
         None       = 0x0,
         BigButtons = 0x1,
         ToolButton = 0x2
     };
-    Q_DECLARE_FLAGS(TokenInputStyles, TokenInputStyle)
+    Q_DECLARE_FLAGS(ParserInputStyles, ParserInputStyle)
 
     ManualRenameWidget(QWidget* parent = 0);
     ~ManualRenameWidget();
@@ -66,7 +66,7 @@ public:
     void    setText(const QString& text);
 
     void setTrackerAlignment(Qt::Alignment alignment);
-    void setTokenInputStyle(TokenInputStyles widgetMask);
+    void setParserInputStyle(ParserInputStyles inputMask);
 
     KLineEdit* input() const;
 
@@ -100,6 +100,6 @@ private:
 }  // namespace ManualRename
 }  // namespace Digikam
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::ManualRename::ManualRenameWidget::TokenInputStyles)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::ManualRename::ManualRenameWidget::ParserInputStyles)
 
 #endif /* MANUALRENAMEINPUT_H */
