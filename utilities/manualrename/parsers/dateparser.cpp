@@ -57,7 +57,7 @@ DateFormat::DateFormat()
     m_map.insert(Standard, DateFormatDescriptor(QString(""),       QString("yyyyMMddThhmmss")));
     m_map.insert(ISO,      DateFormatDescriptor(QString("ISO"),    Qt::ISODate));
     m_map.insert(FullText, DateFormatDescriptor(QString("Text"),   Qt::TextDate));
-    m_map.insert(System,   DateFormatDescriptor(QString("System"), Qt::SystemLocaleShortDate));
+    m_map.insert(Locale,   DateFormatDescriptor(QString("Locale"), Qt::SystemLocaleShortDate));
     m_map.insert(Custom,   DateFormatDescriptor(QString(""),       QString("")));
 }
 
@@ -103,7 +103,7 @@ DateParserDialog::DateParserDialog(QWidget* parent)
     ui->dateFormatPicker->insertItem(DateFormat::Standard, i18nc("Standard datetime format", "Standard"));
     ui->dateFormatPicker->insertItem(DateFormat::ISO,      i18nc("ISO datetime format",      "ISO"));
     ui->dateFormatPicker->insertItem(DateFormat::FullText, i18nc("Fulltext datetime format", "Full Text"));
-    ui->dateFormatPicker->insertItem(DateFormat::System,   i18nc("locale datetime format",   "System Settings"));
+    ui->dateFormatPicker->insertItem(DateFormat::Locale,   i18nc("locale datetime format",   "Locale Settings"));
     ui->dateFormatPicker->insertItem(DateFormat::Custom,   i18nc("custom datetime format",   "Custom..."));
 
     ui->dateFormatLink->setOpenExternalLinks(true);
@@ -177,7 +177,7 @@ DateParser::DateParser()
              i18n("date and time (standard format)"));
 
     addToken("[date:key]", i18n("Date && Time (key)"),
-             i18n("date and time (key = ISO|Text|System"));
+             i18n("date and time (key = ISO|Text|Locale"));
 
     addToken("[date:format]", i18n("Date && Time (custom format)"),
              i18n("date and time") + " (" +  dateFormatLink +")");

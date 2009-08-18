@@ -59,7 +59,7 @@ public:
         Standard = 0,
         ISO,
         FullText,
-        System,
+        Locale,
         Custom
     };
 
