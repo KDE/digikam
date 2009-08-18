@@ -25,6 +25,10 @@
 #include "setup.h"
 #include "setup.moc"
 
+// Qt includes
+
+#include <QPointer>
+
 // KDE includes
 
 #include <kmessagebox.h>
@@ -325,9 +329,12 @@ bool Setup::exec(Page page)
 
 bool Setup::exec(QWidget *parent, Page page)
 {
-    Setup setup(parent);
-    setup.showPage(page);
-    return setup.KPageDialog::exec() == QDialog::Accepted;
+    QPointer<Setup> setup = new Setup(parent);
+//    Setup setup(parent);
+    setup->showPage(page);
+    bool success = setup->KPageDialog::exec() == QDialog::Accepted;
+    delete setup;
+    return success;
 }
 
 bool Setup::execSinglePage(Page page)
@@ -337,19 +344,25 @@ bool Setup::execSinglePage(Page page)
 
 bool Setup::execSinglePage(QWidget *parent, Page page)
 {
-    Setup setup(parent);
-    setup.showPage(page);
-    setup.setFaceType(Plain);
-    return setup.KPageDialog::exec() == QDialog::Accepted;
+    QPointer<Setup> setup = new Setup(parent);
+//    Setup setup(parent);
+    setup->showPage(page);
+    setup->setFaceType(Plain);
+    bool success = setup->KPageDialog::exec() == QDialog::Accepted;
+    delete setup;
+    return success;
 }
 
 bool Setup::execTemplateEditor(QWidget *parent, const Template& t)
 {
-    Setup setup(parent);
-    setup.showPage(TemplatePage);
-    setup.setFaceType(Plain);
-    setup.setTemplate(t);
-    return setup.KPageDialog::exec() == QDialog::Accepted;
+    QPointer<Setup> setup = new Setup(parent);
+//    Setup setup(parent);
+    setup->showPage(TemplatePage);
+    setup->setFaceType(Plain);
+    setup->setTemplate(t);
+    bool success = setup->KPageDialog::exec() == QDialog::Accepted;
+    delete setup;
+    return success;
 }
 
 void Setup::slotOkClicked()
