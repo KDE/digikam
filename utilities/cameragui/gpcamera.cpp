@@ -518,7 +518,7 @@ bool GPCamera::capture(GPItemInfo& itemInfo)
     itemInfo.size             = -1;
     itemInfo.width            = -1;
     itemInfo.height           = -1;
-    itemInfo.downloaded       = GPItemInfo::DownloadUnknow;
+    itemInfo.downloaded       = GPItemInfo::DownloadUnknown;
     itemInfo.readPermissions  = -1;
     itemInfo.writePermissions = -1;
 
@@ -753,7 +753,7 @@ bool GPCamera::getItemsInfoList(const QString& folder, GPItemInfoList& items, bo
         itemInfo.size             = -1;
         itemInfo.width            = -1;
         itemInfo.height           = -1;
-        itemInfo.downloaded       = GPItemInfo::DownloadUnknow;
+        itemInfo.downloaded       = GPItemInfo::DownloadUnknown;
         itemInfo.readPermissions  = -1;
         itemInfo.writePermissions = -1;
 
@@ -1221,7 +1221,7 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
     itemInfo.size             = -1;
     itemInfo.width            = -1;
     itemInfo.height           = -1;
-    itemInfo.downloaded       = GPItemInfo::DownloadUnknow;
+    itemInfo.downloaded       = GPItemInfo::DownloadUnknown;
     itemInfo.readPermissions  = -1;
     itemInfo.writePermissions = -1;
 

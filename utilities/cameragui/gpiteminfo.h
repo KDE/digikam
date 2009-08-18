@@ -47,12 +47,12 @@ public:
 
     enum DownloadStatus
     {
-        DownloadUnknow  = -1,
-        DownloadedNo    = 0,
-        DownloadedYes   = 1,
-        DownloadFailed  = 2,
-        DownloadStarted = 3,
-        NewPicture      = 4
+        DownloadUnknown  = -1,
+        DownloadedNo     = 0,
+        DownloadedYes    = 1,
+        DownloadFailed   = 2,
+        DownloadStarted  = 3,
+        NewPicture       = 4
     };
 
 public:

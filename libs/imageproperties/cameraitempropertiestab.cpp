@@ -403,7 +403,7 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
 
     d->labelNewFileName->setText(newFileName.isEmpty() ? i18n("<i>unchanged</i>") : newFileName);
 
-    if (itemInfo->downloaded == GPItemInfo::DownloadUnknow)
+    if (itemInfo->downloaded == GPItemInfo::DownloadUnknown)
         str = unknown;
     else if (itemInfo->downloaded == GPItemInfo::DownloadedYes)
         str = i18n("Yes");

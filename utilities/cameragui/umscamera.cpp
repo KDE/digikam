@@ -204,7 +204,7 @@ bool UMSCamera::getItemsInfoList(const QString& folder, GPItemInfoList& infoList
             info.size             = fi->size();
             info.width            = getImageDimensions ? dims.width()  : -1;
             info.height           = getImageDimensions ? dims.height() : -1;
-            info.downloaded       = GPItemInfo::DownloadUnknow;
+            info.downloaded       = GPItemInfo::DownloadUnknown;
             info.readPermissions  = fi->isReadable();
             info.writePermissions = fi->isWritable();
             info.photoInfo        = pInfo;
@@ -450,7 +450,7 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
         info.size             = fi.size();
         info.width            = getImageDimensions ? dims.width()  : -1;
         info.height           = getImageDimensions ? dims.height() : -1;
-        info.downloaded       = GPItemInfo::DownloadUnknow;
+        info.downloaded       = GPItemInfo::DownloadUnknown;
         info.readPermissions  = fi.isReadable();
         info.writePermissions = fi.isWritable();
         info.photoInfo        = pInfo;

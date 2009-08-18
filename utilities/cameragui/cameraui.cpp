@@ -160,7 +160,6 @@ CameraUI::CameraUI(QWidget* parent, const QString& cameraTitle,
     readSettings();
     setAutoSaveSettings("Camera Settings", true);
 
-
     // -- Init. camera controller ----------------------------------------
 
     setupCameraController(model, port, path);
@@ -1168,7 +1167,7 @@ void CameraUI::refreshIconView(QMultiMap<QDateTime, GPItemInfo>& map)
                 item.downloaded = GPItemInfo::DownloadedYes;
                 break;
             default:      // DownloadHistory::StatusUnknown
-                item.downloaded = GPItemInfo::DownloadUnknow;
+                item.downloaded = GPItemInfo::DownloadUnknown;
                 break;
         }
         d->view->addItem(item);
