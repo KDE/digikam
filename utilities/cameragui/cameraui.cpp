@@ -40,14 +40,15 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QPixmap>
+#include <QPointer>
 #include <QPushButton>
 #include <QRadioButton>
+#include <QScrollArea>
 #include <QSplitter>
 #include <QTimer>
-#include <QWidget>
 #include <QToolButton>
 #include <QVBoxLayout>
-#include <QScrollArea>
+#include <QWidget>
 
 // KDE includes
 
@@ -72,15 +73,15 @@
 #include <kmenu.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
+#include <kpassivepopup.h>
 #include <kshortcutsdialog.h>
 #include <kstandarddirs.h>
 #include <kstatusbar.h>
+#include <ktoggleaction.h>
 #include <ktoolbar.h>
 #include <ktoolinvocation.h>
 #include <kurllabel.h>
 #include <kvbox.h>
-#include <ktoggleaction.h>
-#include <kpassivepopup.h>
 
 // Libkdcraw includes
 
@@ -1376,14 +1377,21 @@ void CameraUI::slotUploadItems(const KUrl::List& urls)
         }
     }
 
-    CameraFolderDialog dlg(this, d->view, d->cameraFolderList,
-                           d->controller->cameraTitle(),
-                           d->controller->cameraPath());
+    QPointer<CameraFolderDialog> dlg = new CameraFolderDialog(this, d->view, d->cameraFolderList,
+                                                              d->controller->cameraTitle(),
+                                                              d->controller->cameraPath());
 
-    if (dlg.exec() != QDialog::Accepted)
+    if (dlg->exec() != QDialog::Accepted)
+    {
+        delete dlg;
+        return;
+    }
+
+    // since we access members here, check if the pointer is still valid
+    if (!dlg)
         return;
 
-    QString cameraFolder = dlg.selectedFolderPath();
+    QString cameraFolder = dlg->selectedFolderPath();
 
     for (KUrl::List::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
     {
@@ -1410,6 +1418,8 @@ void CameraUI::slotUploadItems(const KUrl::List& urls)
 
         d->controller->upload(fi, name + ext, cameraFolder);
     }
+
+    delete dlg;
 }
 
 void CameraUI::slotUploaded(const GPItemInfo& itemInfo)
