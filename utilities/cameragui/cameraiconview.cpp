@@ -349,67 +349,35 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
     // NOTE: see B.K.O #182352: ordering of item count must be adapted sort of icon view,
     // since items are ordered from the most rescent to the older one.
     bool revOrder=!d->cameraUI->chronologicOrder();
-    if (hasSelection)
+    // Camera items selection.
+
+    for (IconItem* item = (revOrder?lastItem():firstItem()); item; (revOrder?item = item->prevItem():item=item->nextItem()))
     {
-        // Camera items selection.
+        QString downloadName;
+        CameraIconItem* viewItem = static_cast<CameraIconItem*>(item);
 
-        for (IconItem* item = (revOrder?lastItem():firstItem()); item; (revOrder?item = item->prevItem():item=item->nextItem()))
+        if ( (hasSelection && item->isSelected()) || !hasSelection)
         {
-            QString downloadName;
-            CameraIconItem* viewItem = static_cast<CameraIconItem*>(item);
-
-            if (item->isSelected())
-            {
-                if (!useDefault)
-                    downloadName = getTemplatedName( viewItem->itemInfo(), startIndex );
-                else
-                    downloadName = getCasedName( d->renamer->changeCase(), viewItem->itemInfo() );
-
-                ++startIndex;
-            }
-
-            if (convertLossLessJpeg && !downloadName.isEmpty())
-            {
-                QFileInfo fi(downloadName);
-                QString ext = fi.suffix().toUpper();
-                if (ext == QString("JPEG") || ext == QString("JPG") || ext == QString("JPE"))
-                {
-                    downloadName.truncate(downloadName.length() - ext.length());
-                    downloadName.append(losslessFormat.toLower());
-                }
-            }
-
-            viewItem->setDownloadName( downloadName );
-        }
-    }
-    else
-    {
-        // No camera item selection.
-
-        for (IconItem* item = (revOrder?lastItem():firstItem()); item; (revOrder?item = item->prevItem():item=item->nextItem()))
-        {
-            QString downloadName;
-            CameraIconItem* viewItem = static_cast<CameraIconItem*>(item);
-
             if (!useDefault)
                 downloadName = getTemplatedName( viewItem->itemInfo(), startIndex );
             else
                 downloadName = getCasedName( d->renamer->changeCase(), viewItem->itemInfo() );
 
-            if (convertLossLessJpeg)
-            {
-                QFileInfo fi(downloadName);
-                QString ext = fi.suffix().toUpper();
-                if (ext == QString("JPEG") || ext == QString("JPG") || ext == QString("JPE"))
-                {
-                    downloadName.truncate(downloadName.length() - ext.length());
-                    downloadName.append(losslessFormat.toLower());
-                }
-            }
-
-            viewItem->setDownloadName( downloadName );
             ++startIndex;
         }
+
+        if (convertLossLessJpeg && !downloadName.isEmpty())
+        {
+            QFileInfo fi(downloadName);
+            QString ext = fi.suffix().toUpper();
+            if (ext == QString("JPEG") || ext == QString("JPG") || ext == QString("JPE"))
+            {
+                downloadName.truncate(downloadName.length() - ext.length());
+                downloadName.append(losslessFormat.toLower());
+            }
+        }
+
+        viewItem->setDownloadName( downloadName );
     }
 
     viewport()->setUpdatesEnabled(true);
