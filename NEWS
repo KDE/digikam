@@ -38,7 +38,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 029 ==> 203031 : Album list doesn't show pictures even after tons of new pictures were imported.
 030 ==> 201810 : Segfault moving files to trash.
 031 ==> 193763 : digiKam doesn'd display any photos.
-032 ==> 
+032 ==> 202532 : Wrong rename sequence when downloading.
+033 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta3 - Release date: 2009-07-24
