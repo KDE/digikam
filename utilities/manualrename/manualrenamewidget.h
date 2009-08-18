@@ -90,7 +90,7 @@ private Q_SLOTS:
 private:
 
     QString createToolTip();
-    void    registerParsers(int columns = 2);
+    void    registerParsers(int layoutColumns = 2);
 
 private:
 
