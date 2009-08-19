@@ -1232,6 +1232,23 @@ bool AlbumSettings::showToolTipsIsValid() const
     return false;
 }
 
+bool AlbumSettings::showAlbumToolTipsIsValid() const
+{
+    if (d->showAlbumToolTips)
+    {
+        if (
+            d->tooltipShowAlbumTitle      ||
+            d->tooltipShowAlbumDate       ||
+            d->tooltipShowAlbumCollection ||
+            d->tooltipShowAlbumCaption    ||
+            d->tooltipShowAlbumCategory
+           )
+           return true;
+    }
+
+    return false;
+}
+
 void AlbumSettings::setPreviewLoadFullImageSize(bool val)
 {
     d->previewLoadFullImageSize = val;

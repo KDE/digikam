@@ -81,7 +81,8 @@ public:
 
     void emitSetupChanged();
 
-    bool showToolTipsIsValid() const;
+    bool showToolTipsIsValid()      const;
+    bool showAlbumToolTipsIsValid() const;
 
     void setDatabaseFilePath(const QString& path);
     QString getDatabaseFilePath() const;

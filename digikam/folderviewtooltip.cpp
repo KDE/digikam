@@ -83,7 +83,7 @@ void FolderViewToolTip::setFolderItem(FolderItem* folderItem)
         d->folderItem = 0;
 
     if (!d->folderItem ||
-        !AlbumSettings::instance()->showToolTipsIsValid())
+        !AlbumSettings::instance()->showAlbumToolTipsIsValid())
     {
         hide();
     }
@@ -110,7 +110,7 @@ QString FolderViewToolTip::tipContents()
     if (d->folderItem)
     {
         // NOTE: For the moment only Physical Album Tooltips are supported.
-        //       Extend to all virtual album types when album metadata will 
+        //       Extend to all virtual album types when album metadata will
         //       be the same everywhere (comments, rating, date, etc.)
         AlbumFolderViewItem *item = dynamic_cast<AlbumFolderViewItem*>(d->folderItem);
         if (item)
