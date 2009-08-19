@@ -54,11 +54,11 @@ DateFormat::DateFormat()
 {
     m_map.clear();
 
-    m_map.insert(Standard, DateFormatDescriptor(QString(""),       QString("yyyyMMddThhmmss")));
-    m_map.insert(ISO,      DateFormatDescriptor(QString("ISO"),    Qt::ISODate));
-    m_map.insert(FullText, DateFormatDescriptor(QString("Text"),   Qt::TextDate));
-    m_map.insert(Locale,   DateFormatDescriptor(QString("Locale"), Qt::SystemLocaleShortDate));
-    m_map.insert(Custom,   DateFormatDescriptor(QString(""),       QString("")));
+    m_map.insert(Standard, DateFormatDescriptor(QString("Standard"), QString("yyyyMMddThhmmss")));
+    m_map.insert(ISO,      DateFormatDescriptor(QString("ISO"),      Qt::ISODate));
+    m_map.insert(FullText, DateFormatDescriptor(QString("Text"),     Qt::TextDate));
+    m_map.insert(Locale,   DateFormatDescriptor(QString("Locale"),   Qt::SystemLocaleShortDate));
+    m_map.insert(Custom,   DateFormatDescriptor(QString("Custom"),   QString("")));
 }
 
 QString DateFormat::identifier(Type type)
@@ -100,12 +100,11 @@ DateParserDialog::DateParserDialog(QWidget* parent)
     setWindowTitle(i18n("Add Date && Time"));
 
     // fill the date format combobox
-    ui->dateFormatPicker->insertItem(DateFormat::Standard, i18nc("Standard datetime format", "Standard"));
-    ui->dateFormatPicker->insertItem(DateFormat::ISO,      i18nc("ISO datetime format",      "ISO"));
-    ui->dateFormatPicker->insertItem(DateFormat::FullText, i18nc("Fulltext datetime format", "Full Text"));
-    ui->dateFormatPicker->insertItem(DateFormat::Locale,   i18nc("locale datetime format",   "Locale Settings"));
-    ui->dateFormatPicker->insertItem(DateFormat::Custom,   i18nc("custom datetime format",   "Custom..."));
-
+    DateFormat df;
+    foreach (const DateFormat::DateFormatDescriptor& desc, df.map())
+    {
+        ui->dateFormatPicker->addItem(desc.first);
+    }
     ui->dateFormatLink->setOpenExternalLinks(true);
     ui->dateFormatLink->setTextInteractionFlags(Qt::LinksAccessibleByMouse|Qt::LinksAccessibleByKeyboard);
     ui->dateFormatLink->setText(dateFormatLink);

@@ -54,6 +54,8 @@ public:
     DateFormat();
     ~DateFormat() {};
 
+    typedef QPair<QString, QVariant> DateFormatDescriptor;
+    typedef QList<DateFormatDescriptor> DateFormatMap;
     enum Type
     {
         Standard = 0,
@@ -68,10 +70,11 @@ public:
     QVariant formatType(Type type);
     QVariant formatType(QString identifier);
 
+    DateFormatMap& map() { return m_map; };
+
 private:
 
-    typedef QPair<QString, QVariant> DateFormatDescriptor;
-    QList<DateFormatDescriptor> m_map;
+    DateFormatMap m_map;
 };
 
 // --------------------------------------------------------
