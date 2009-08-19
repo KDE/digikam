@@ -77,6 +77,7 @@ public:
         fileSettingBox         = 0;
         photoSettingBox        = 0;
         digikamSettingBox      = 0;
+        albumSettingBox        = 0;
 
         showAlbumToolTipsBox   = 0;
         showAlbumTitleBox      = 0;
@@ -117,6 +118,7 @@ public:
     QGroupBox   *fileSettingBox;
     QGroupBox   *photoSettingBox;
     QGroupBox   *digikamSettingBox;
+    QGroupBox   *albumSettingBox;
 
     KTabWidget  *tab;
 
@@ -247,27 +249,36 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     // --------------------------------------------------------
 
     KVBox *vbox2              = new KVBox(panel);
-
     d->showAlbumToolTipsBox   = new QCheckBox(i18n("Show album items' tool-tips"), vbox2);
+    d->albumSettingBox        = new QGroupBox(i18n("Album Information"), vbox2);
+
     d->showAlbumToolTipsBox->setWhatsThis(i18n("Set this option to display album information when "
                                                "the mouse hovers over a folder-view item."));
 
-    d->showAlbumTitleBox      = new QCheckBox(i18n("Show album name"), vbox2);
+    d->showAlbumTitleBox      = new QCheckBox(i18n("Show album name"));
     d->showAlbumTitleBox->setWhatsThis(i18n("Set this option to display the album name."));
 
-    d->showAlbumDateBox       = new QCheckBox(i18n("Show album date"), vbox2);
+    d->showAlbumDateBox       = new QCheckBox(i18n("Show album date"));
     d->showAlbumDateBox->setWhatsThis(i18n("Set this option to display the album date."));
 
-    d->showAlbumCollectionBox = new QCheckBox(i18n("Show album collection"), vbox2);
+    d->showAlbumCollectionBox = new QCheckBox(i18n("Show album collection"));
     d->showAlbumCollectionBox->setWhatsThis(i18n("Set this option to display the album collection."));
 
-    d->showAlbumCategoryBox   = new QCheckBox(i18n("Show album category"), vbox2);
+    d->showAlbumCategoryBox   = new QCheckBox(i18n("Show album category"));
     d->showAlbumCategoryBox->setWhatsThis(i18n("Set this option to display the album category."));
 
-    d->showAlbumCaptionBox    = new QCheckBox(i18n("Show album caption"), vbox2);
+    d->showAlbumCaptionBox    = new QCheckBox(i18n("Show album caption"));
     d->showAlbumCaptionBox->setWhatsThis(i18n("Set this option to display the album caption."));
 
-    QWidget *space2           = new QWidget(vbox2);
+    QVBoxLayout* albumSettingBoxLayout = new QVBoxLayout;
+    albumSettingBoxLayout->addWidget(d->showAlbumTitleBox);
+    albumSettingBoxLayout->addWidget(d->showAlbumDateBox);
+    albumSettingBoxLayout->addWidget(d->showAlbumCollectionBox);
+    albumSettingBoxLayout->addWidget(d->showAlbumCategoryBox);
+    albumSettingBoxLayout->addWidget(d->showAlbumCaptionBox);
+    d->albumSettingBox->setLayout(albumSettingBoxLayout);
+
+    QWidget *space2 = new QWidget(vbox2);
     vbox2->setStretchFactor(space2, 10);
     vbox2->setMargin(KDialog::spacingHint());
     vbox2->setSpacing(KDialog::spacingHint());
@@ -294,22 +305,8 @@ SetupToolTip::SetupToolTip(QWidget* parent)
     connect(d->showToolTipsBox, SIGNAL(toggled(bool)),
             d->digikamSettingBox, SLOT(setEnabled(bool)));
 
-    // --------------------------------------------------------
-
     connect(d->showAlbumToolTipsBox, SIGNAL(toggled(bool)),
-            d->showAlbumTitleBox, SLOT(setEnabled(bool)));
-
-    connect(d->showAlbumToolTipsBox, SIGNAL(toggled(bool)),
-            d->showAlbumDateBox, SLOT(setEnabled(bool)));
-
-    connect(d->showAlbumToolTipsBox, SIGNAL(toggled(bool)),
-            d->showAlbumCollectionBox, SLOT(setEnabled(bool)));
-
-    connect(d->showAlbumToolTipsBox, SIGNAL(toggled(bool)),
-            d->showAlbumCategoryBox, SLOT(setEnabled(bool)));
-
-    connect(d->showAlbumToolTipsBox, SIGNAL(toggled(bool)),
-            d->showAlbumCaptionBox, SLOT(setEnabled(bool)));
+            d->albumSettingBox, SLOT(setEnabled(bool)));
 
     // --------------------------------------------------------
 
@@ -390,6 +387,7 @@ void SetupToolTip::readSettings()
     d->fileSettingBox->setEnabled(d->showToolTipsBox->isChecked());
     d->photoSettingBox->setEnabled(d->showToolTipsBox->isChecked());
     d->digikamSettingBox->setEnabled(d->showToolTipsBox->isChecked());
+    d->albumSettingBox->setEnabled(d->showAlbumToolTipsBox->isChecked());
 
     d->showAlbumToolTipsBox->setChecked(settings->getShowAlbumToolTips());
     d->showAlbumTitleBox->setChecked(settings->getToolTipsShowAlbumTitle());
@@ -397,12 +395,6 @@ void SetupToolTip::readSettings()
     d->showAlbumCollectionBox->setChecked(settings->getToolTipsShowAlbumCollection());
     d->showAlbumCategoryBox->setChecked(settings->getToolTipsShowAlbumCategory());
     d->showAlbumCaptionBox->setChecked(settings->getToolTipsShowAlbumCaption());
-
-    d->showAlbumTitleBox->setEnabled(d->showAlbumToolTipsBox->isChecked());
-    d->showAlbumDateBox->setEnabled(d->showAlbumToolTipsBox->isChecked());
-    d->showAlbumCollectionBox->setEnabled(d->showAlbumToolTipsBox->isChecked());
-    d->showAlbumCategoryBox->setEnabled(d->showAlbumToolTipsBox->isChecked());
-    d->showAlbumCaptionBox->setEnabled(d->showAlbumToolTipsBox->isChecked());
 }
 
 }  // namespace Digikam
