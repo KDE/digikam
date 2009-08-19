@@ -91,7 +91,7 @@ DigikamImageView::DigikamImageView(QWidget *parent)
     setAcceptDrops(true);
     setDropIndicatorShown(false);
 
-    setToolTipEnabled(AlbumSettings::instance()->getShowToolTips());
+    setToolTipEnabled(AlbumSettings::instance()->showToolTipsIsValid());
     imageFilterModel()->setSortRole((ImageSortSettings::SortRole)AlbumSettings::instance()->getImageSortOrder());
     imageFilterModel()->setCategorizationMode((ImageSortSettings::CategorizationMode)AlbumSettings::instance()->getImageGroupMode());
 
@@ -123,6 +123,9 @@ DigikamImageView::DigikamImageView(QWidget *parent)
 
     connect(rotateRightOverlay, SIGNAL(signalRotateRight()),
             this, SLOT(slotRotateRight()));
+
+    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+            this, SLOT(slotSetupChanged()));
 }
 
 DigikamImageView::~DigikamImageView()
@@ -137,7 +140,7 @@ ImageViewUtilities *DigikamImageView::utilities() const
 
 void DigikamImageView::slotSetupChanged()
 {
-    setToolTipEnabled(AlbumSettings::instance()->getShowToolTips());
+    setToolTipEnabled(AlbumSettings::instance()->showToolTipsIsValid());
     ImageCategorizedView::slotSetupChanged();
 }
 
