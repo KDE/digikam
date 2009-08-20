@@ -107,7 +107,6 @@ MACRO_OPTIONAL_FIND_PACKAGE(Lqr-1)
 MACRO_BOOL_TO_01(LQR-1_FOUND USE_EXT_LIBLQR-1)
 
 MACRO_BOOL_TO_01(ENABLE_THUMBS_DB USE_THUMBS_DB)
-MESSAGE("Thumbs DB:" ${USE_THUMBS_DB} ${CMAKE_CURRENT_BINARY_DIR})
 
 IF (${KDE_VERSION} VERSION_GREATER "4.2.70")
     MACRO_OPTIONAL_FIND_PACKAGE(Nepomuk)
@@ -652,6 +651,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles/iccpreviewwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles/iccprofilewidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles/cietonguewidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles/iccprofilescombobox.cpp
        )
 
     SET(libimagepluginswidgets_SRCS
@@ -697,6 +697,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/dimginterface.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/iccsettingscontainer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/iccsettings.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/iccmanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/canvas.cpp
        )
 
