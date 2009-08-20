@@ -28,8 +28,8 @@
 
 // Qt includes
 
-#include <QtCore/QByteArray>
-#include <QtCore/QString>
+#include <QByteArray>
+#include <QMetaType>
 #include <QSharedData>
 
 // Local includes
@@ -64,7 +64,7 @@ public:
     /// Returns the profiles available with libkdcraw. You still need to call open() on them.
     static IccProfile sRGB();
     static IccProfile adobeRGB();
-    static IccProfile wideGamuteRGB();
+    static IccProfile wideGamutRGB();
     static IccProfile proPhotoRGB();
     static IccProfile appleRGB();
     /// Returns a list with the profiles above
@@ -175,5 +175,7 @@ public:
 
 
 }  // namespace Digikam
+
+Q_DECLARE_METATYPE(Digikam::IccProfile)
 
 #endif   // ICCPROFILE_H

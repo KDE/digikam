@@ -148,7 +148,7 @@ IccProfile IccProfile::adobeRGB()
     return IccProfile("data", "libkdcraw/profiles/adobergb.icm");
 }
 
-IccProfile IccProfile::wideGamuteRGB()
+IccProfile IccProfile::wideGamutRGB()
 {
     return IccProfile("data", "libkdcraw/profiles/widegamut.icm");
 }
@@ -170,7 +170,7 @@ QList<IccProfile> IccProfile::defaultProfiles()
              << adobeRGB()
              << appleRGB()
              << proPhotoRGB()
-             << wideGamuteRGB();
+             << wideGamutRGB();
     return profiles;
 }
 
