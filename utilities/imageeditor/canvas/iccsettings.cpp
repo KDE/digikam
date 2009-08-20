@@ -28,6 +28,8 @@
 
 // Qt includes
 
+#include <QDir>
+#include <QFileInfo>
 #include <QMutex>
 #include <QMutexLocker>
 
@@ -35,11 +37,13 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
+#include <kdebug.h>
 #include <kglobal.h>
 #include <ksharedconfig.h>
 
 // Local includes
 
+#include "iccprofile.h"
 
 namespace Digikam
 {
@@ -54,6 +58,11 @@ public:
 
     ICCSettingsContainer    settings;
     QMutex                  mutex;
+
+    QList<IccProfile>       profiles;
+
+    QList<IccProfile> scanDirectories(const QStringList& dirs);
+    void scanDirectory(const QString& path, const QStringList& filter, QList<IccProfile> *profiles);
 };
 
 class IccSettingsCreator { public: IccSettings object; };
@@ -99,6 +108,8 @@ void IccSettings::setSettings(const ICCSettingsContainer& settings)
 {
     {
         QMutexLocker lock(&d->mutex);
+        if (settings.iccFolder != d->settings.iccFolder)
+            d->profiles.clear();
         d->settings = settings;
     }
     KSharedConfig::Ptr config = KGlobal::config();
@@ -118,6 +129,145 @@ void IccSettings::setUseManagedView(bool useManagedView)
     d->settings.writeManagedViewToConfig(group);
     emit settingsChanged();
 }
+
+void IccSettings::setIccPath(const QString& path)
+{
+    {
+        QMutexLocker lock(&d->mutex);
+        if (path == d->settings.iccFolder)
+            return;
+        d->profiles.clear();
+        d->settings.iccFolder = path;
+    }
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group = config->group(QString("Color Management"));
+    d->settings.writeManagedViewToConfig(group);
+    emit settingsChanged();
+}
+
+QList<IccProfile> IccSettingsPriv::scanDirectories(const QStringList& dirs)
+{
+    QList<IccProfile> profiles;
+
+    QStringList filters;
+    filters << "*.icc" << "*.icm";
+    kDebug() << dirs;
+    foreach (const QString &dirPath, dirs)
+    {
+        QDir dir(dirPath);
+        if (!dir.exists())
+            continue;
+        scanDirectory(dir.path(), filters, &profiles);
+    }
+
+    return profiles;
+}
+
+void IccSettingsPriv::scanDirectory(const QString& path, const QStringList& filter, QList<IccProfile> *profiles)
+{
+    QDir dir(path);
+    QFileInfoList infos;
+    infos << dir.entryInfoList(filter, QDir::Files | QDir::Readable);
+    infos << dir.entryInfoList(QDir::Dirs | QDir::Readable | QDir::NoDotAndDotDot);
+    foreach (const QFileInfo &info, infos)
+    {
+        if (info.isFile())
+        {
+            //kDebug(50003) << info.filePath() << (info.exists() && info.isReadable());
+            IccProfile profile(info.filePath());
+            if (profile.open())
+                *profiles << profile;
+        }
+        else if (info.isDir())
+        {
+            scanDirectory(info.filePath(), filter, profiles);
+        }
+    }
+}
+
+QList<IccProfile> IccSettings::allProfiles()
+{
+    QString extraPath;
+    {
+        QMutexLocker lock(&d->mutex);
+        if (!d->profiles.isEmpty())
+            return d->profiles;
+        extraPath = d->settings.iccFolder;
+    }
+
+    QList<IccProfile> profiles;
+    // get system paths, e.g. /usr/share/color/icc
+    QStringList paths = IccProfile::defaultSearchPaths();
+    // add user-specified path
+    paths << extraPath;
+    // check search directories
+    profiles << d->scanDirectories(paths);
+    // load profiles that come with libkdcraw
+    profiles << IccProfile::defaultProfiles();
+
+    QMutexLocker lock(&d->mutex);
+    d->profiles = profiles;
+
+    return d->profiles;
+}
+
+QList<IccProfile> IccSettings::workspaceProfiles()
+{
+    QList<IccProfile> profiles;
+    foreach (IccProfile profile, allProfiles())
+    {
+        switch (profile.type())
+        {
+            case IccProfile::Display:
+            case IccProfile::ColorSpace:
+                profiles << profile;
+            default:
+                break;
+        }
+    }
+    return profiles;
+}
+
+QList<IccProfile> IccSettings::displayProfiles()
+{
+    QList<IccProfile> profiles;
+    foreach (IccProfile profile, allProfiles())
+    {
+        if (profile.type() == IccProfile::Display)
+            profiles << profile;
+    }
+    return profiles;
+}
+
+QList<IccProfile> IccSettings::inputProfiles()
+{
+    QList<IccProfile> profiles;
+    foreach (IccProfile profile, allProfiles())
+    {
+        switch (profile.type())
+        {
+            case IccProfile::Input:
+            case IccProfile::ColorSpace:
+                profiles << profile;
+            default:
+                break;
+        }
+    }
+    return profiles;
+}
+
+QList<IccProfile> IccSettings::outputProfiles()
+{
+    QList<IccProfile> profiles;
+    foreach (IccProfile profile, allProfiles())
+    {
+        if (profile.type() == IccProfile::Output)
+            profiles << profile;
+    }
+    return profiles;
+}
+
+
 
 
 }  // namespace Digikam

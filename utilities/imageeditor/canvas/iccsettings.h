@@ -38,6 +38,7 @@
 namespace Digikam
 {
 
+class IccProfile;
 class IccSettingsPriv;
 
 class DIGIKAM_EXPORT IccSettings : public QObject
@@ -60,6 +61,17 @@ public:
 
     /// Set single parts of the settings
     void setUseManagedView(bool useManagedView);
+    void setIccPath(const QString& path);
+
+    QList<IccProfile> allProfiles();
+    /// Get available profiles suitable as workspace profile
+    QList<IccProfile> workspaceProfiles();
+    /// Get available profiles suitable as monitor/display profile
+    QList<IccProfile> displayProfiles();
+    /// Get available profiles suitable as input profile
+    QList<IccProfile> inputProfiles();
+    /// Get available profiles suitable as proof/output profiles
+    QList<IccProfile> outputProfiles();
 
 Q_SIGNALS:
 
