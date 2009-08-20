@@ -34,6 +34,7 @@
 
 // Local includes
 
+#include "iccmanager.h"
 #include "icctransform.h"
 #include "loadsavethread.h"
 #include "managedloadsavethread.h"
@@ -265,14 +266,28 @@ void SharedLoadingTask::postProcess()
             m_img.setIccProfile(trans.outputProfile());
             break;
         }
-        case LoadingDescription::ConvertToWorkspace:
+        case LoadingDescription::ConvertForEditor:
         {
-            //TODO
+            IccManager manager(m_img, m_loadingDescription.filePath);
+            manager.transformDefault();
+            break;
+        }
+        case LoadingDescription::ConvertToSRGB:
+        {
+            IccManager manager(m_img, m_loadingDescription.filePath);
+            manager.transformToSRGB();
             break;
         }
         case LoadingDescription::ConvertForDisplay:
         {
-            //TODO
+            IccManager manager(m_img, m_loadingDescription.filePath);
+            manager.transformForDisplay();
+            break;
+        }
+        case LoadingDescription::ConvertForOutput:
+        {
+            IccManager manager(m_img, m_loadingDescription.filePath);
+            manager.transformForOutput(m_loadingDescription.postProcessingParameters.profile());
             break;
         }
     }
