@@ -116,6 +116,9 @@ public:
         proofProfilesKC       = 0;
         monitorProfilesKC     = 0;
         iccFolderLabel        = 0;
+        behaviorPanel         = 0;
+        profilesPanel         = 0;
+        advancedPanel         = 0;
      }
 
     QLabel                 *iccFolderLabel;
@@ -154,6 +157,9 @@ public:
 
     KComboBox              *renderingIntentKC;
 
+    QWidget                *behaviorPanel;
+    QWidget                *profilesPanel;
+    QWidget                *advancedPanel;
     KTabWidget             *tab;
     KPageDialog            *mainDialog;
 
@@ -173,8 +179,8 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     setWidgetResizable(true);
     viewport()->setAutoFillBackground(false);
 
-    QWidget *panel          = new QWidget;
-    QVBoxLayout *mainLayout = new QVBoxLayout(panel);
+    d->behaviorPanel        = new QWidget;
+    QVBoxLayout *mainLayout = new QVBoxLayout(d->behaviorPanel);
 
     // --------------------------------------------------------
 
@@ -333,8 +339,8 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
 
     // --------------------------------------------------------
 
-    QWidget *panelDisplay = new QWidget;
-    QVBoxLayout *vboxDisplay = new QVBoxLayout(panelDisplay);
+    d->profilesPanel         = new QWidget;
+    QVBoxLayout *vboxDisplay = new QVBoxLayout(d->profilesPanel);
 
     d->viewGB      = new QGroupBox(i18n("Color Managed View"));
     QGridLayout* gridView = new QGridLayout(d->viewGB);
@@ -449,9 +455,9 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
 
     // --------------------------------------------------------
 
-    QWidget *panelAdvanced = new QWidget(d->tab);
-    QVBoxLayout *vboxAdvanced = new QVBoxLayout(panelAdvanced);
-    d->advancedSettingsGB = new QGroupBox(i18n("Advanced Settings"));
+    d->advancedPanel             = new QWidget;
+    QVBoxLayout *vboxAdvanced    = new QVBoxLayout(d->advancedPanel);
+    d->advancedSettingsGB        = new QGroupBox(i18n("Advanced Settings"));
     QGridLayout* gridAdvanced    = new QGridLayout(d->advancedSettingsGB);
 
     d->bpcAlgorithm = new QCheckBox(d->advancedSettingsGB);
@@ -503,9 +509,9 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
 
     // --------------------------------------------------------
 
-    d->tab->addTab(panel, i18n("Behavior"));
-    d->tab->addTab(panelDisplay, i18n("Profiles"));
-    d->tab->addTab(panelAdvanced, i18n("Advanced"));
+    d->tab->addTab(d->behaviorPanel, i18n("Behavior"));
+    d->tab->addTab(d->profilesPanel, i18n("Profiles"));
+    d->tab->addTab(d->advancedPanel, i18n("Advanced"));
 
     // --------------------------------------------------------
 
@@ -743,8 +749,12 @@ void SetupICC::setWidgetsEnabled(bool enabled)
 {
     d->workspaceGB->setEnabled(enabled);
     d->mismatchGB->setEnabled(enabled);
-    d->inputGB->setEnabled(enabled);
-    d->advancedSettingsGB->setEnabled(enabled);
+    d->missingGB->setEnabled(enabled);
+    d->rawGB->setEnabled(enabled);
+    d->tab->setTabEnabled(1, enabled);
+    d->tab->setTabEnabled(2, enabled);
+    //d->profilesPanel->setEnabled(enabled);
+    //d->advancedPanel->setEnabled(enabled);
 }
 
 void SetupICC::slotToggledEnabled()
