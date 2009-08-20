@@ -46,8 +46,27 @@ IccProfilesComboBox::~IccProfilesComboBox()
 {
 }
 
-void IccProfilesComboBox::addProfilesSqueezed(const QList<IccProfile>& profiles)
+bool iccProfileLessThan(IccProfile a, IccProfile b)
 {
+    return a.description() < b.description();
+}
+
+void IccProfilesComboBox::addProfilesSqueezed(const QList<IccProfile>& givenProfiles)
+{
+    QList<IccProfile> profiles;
+    QSet<QString> filePaths;
+    foreach (IccProfile profile, givenProfiles)
+    {
+        QString filePath = profile.filePath();
+        if (!profile.description().isNull() && (filePath.isNull() || !filePaths.contains(filePath)) )
+        {
+            profiles << profile;
+            filePaths << filePath;
+        }
+    }
+
+    qSort(profiles.begin(), profiles.end(), iccProfileLessThan);
+
     foreach (IccProfile profile, profiles)
     {
         QFileInfo info(profile.filePath());
