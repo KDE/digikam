@@ -95,6 +95,7 @@ public:
         intent               = INTENT_PERCEPTUAL;
         useBPC               = false;
         checkGamut           = false;
+        doNotEmbed           = false;
 
         handle               = 0;
     }
@@ -113,6 +114,7 @@ public:
         intent             = other.intent;
         useBPC             = other.useBPC;
         checkGamut         = other.checkGamut;
+        doNotEmbed         = other.doNotEmbed;
 
         embeddedProfile    = other.embeddedProfile;
         inputProfile       = other.inputProfile;
@@ -146,6 +148,7 @@ public:
     int        intent;
     bool       useBPC;
     bool       checkGamut;
+    bool       doNotEmbed;
 
     IccProfile embeddedProfile;
     IccProfile inputProfile;
@@ -208,21 +211,34 @@ IccTransform::~IccTransform()
 
 void IccTransform::setInputProfile(const IccProfile &profile)
 {
+    if (profile == d->inputProfile)
+        return;
+    close();
     d->inputProfile = profile;
 }
 
 void IccTransform::setEmbeddedProfile(const DImg& image)
 {
-    d->embeddedProfile = image.getIccProfile();
+    IccProfile profile = image.getIccProfile();
+    if (profile == d->embeddedProfile)
+        return;
+    close();
+    d->embeddedProfile = profile;
 }
 
 void IccTransform::setOutputProfile(const IccProfile &profile)
 {
+    if (profile == d->outputProfile)
+        return;
+    close();
     d->outputProfile = profile;
 }
 
 void IccTransform::setProofProfile(const IccProfile &profile)
 {
+    if (profile == d->proofProfile)
+        return;
+    close();
     d->proofProfile = profile;
 }
 
@@ -253,6 +269,9 @@ IccProfile IccTransform::effectiveInputProfile() const
 
 void IccTransform::setIntent(RenderingIntent intent)
 {
+    if (intent == d->intent)
+        return;
+    close();
     switch (intent)
     {
         case Perceptual:
@@ -272,14 +291,26 @@ void IccTransform::setIntent(RenderingIntent intent)
 
 void IccTransform::setUseBlackPointCompensation(bool useBPC)
 {
+    if (d->useBPC == useBPC)
+        return;
+    close();
     d->useBPC = useBPC;
 }
 
 void IccTransform::setCheckGamut(bool checkGamut)
 {
+    if (d->checkGamut == checkGamut)
+        return;
+    close();
     d->checkGamut = checkGamut;
 }
 
+void IccTransform::setDoNotEmbedOutputProfile(bool doNotEmbed)
+{
+    d->doNotEmbed = doNotEmbed;
+}
+
+/*
 void IccTransform::readFromConfig()
 {
     KSharedConfig::Ptr config = KGlobal::config();
@@ -291,9 +322,12 @@ void IccTransform::readFromConfig()
     setIntent(intent);
     setUseBlackPointCompensation(useBPC);
 }
+*/
 
 bool IccTransform::willHaveEffect()
 {
+    if (d->outputProfile.isNull())
+        return false;
     return !d->effectiveInputProfile().isSameProfileAs(d->outputProfile);
 }
 
@@ -435,6 +469,13 @@ bool IccTransform::openProofing(TransformDescription &description)
 
 bool IccTransform::apply(DImg& image, DImgLoaderObserver *observer)
 {
+    if (!willHaveEffect())
+    {
+        if (!d->outputProfile.isNull() && !d->doNotEmbed)
+            image.setIccProfile(d->outputProfile);
+        return true;
+    }
+
     if (!d->effectiveInputProfile().open())
     {
         kError(50003) << "Cannot open embedded profile";
@@ -473,6 +514,12 @@ bool IccTransform::apply(DImg& image, DImgLoaderObserver *observer)
         observer->progressInfo(&image, 0.1F);
 
     transform(image, description, observer);
+
+    if (!d->doNotEmbed)
+        image.setIccProfile(d->outputProfile);
+
+    // if this was a RAW color image, it is no more
+    image.removeAttribute("uncalibratedColor");
 
     return true;
 }

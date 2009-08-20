@@ -83,15 +83,18 @@ public:
     void setOutputProfile(const IccProfile &profile);
     /// Makes this transform a proofing transform, if profile is not null
     void setProofProfile(const IccProfile &profile);
+    /**
+     * Call this with 'true' if you do not want the output profile
+     * to be set as embedded profile after apply() did a transformation.
+     * Default is to set the output profile as embedded profile (false).
+     */
+    void setDoNotEmbedOutputProfile(bool doNotEmbed);
 
     /// Set options
     void setIntent(RenderingIntent intent);
     void setIntent(int intent) { setIntent((RenderingIntent)intent); }
     void setUseBlackPointCompensation(bool useBPC);
     void setCheckGamut(bool checkGamut);
-
-    /// Read intent and BPC from config
-    void readFromConfig();
 
     /// Returns the contained profiles
     IccProfile embeddedProfile() const;
