@@ -7,6 +7,7 @@ X-KDE-Nepomuk-start-on-demand=false
 # Dependencies default to 'nepomukstorage'
 #X-KDE-Nepomuk-dependencies=nepomukfoobar
 Name=Digikam Nepomuk Service
+Name[bg]=Услуга Nepomuk за Digikam
 Name[et]=Digikami Nepomuki teenus
 Name[fi]=DigiKamin Nepomuk-palvelu
 Name[fr]=Service Nepomuk pour digiKam
@@ -23,6 +24,7 @@ Name[uk]=Служба Nepomuk Digikam
 Name[x-test]=xxDigikam Nepomuk Servicexx
 Name[zh_TW]=Digikam Nepomuk 服務
 Comment=A Nepomuk service that syncs with digikam
+Comment[bg]=Услуга Nepomuk, която се синхронизира с Digikam
 Comment[et]=Nepomuki teenus, mis sünkroniseerib andmeid digiKamiga
 Comment[fr]=Un service Nepomuk qui se synchronise avec digiKam
 Comment[gl]=Un servizo de Nepomuk que sincroniza con digikam

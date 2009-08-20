@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=ImagePlugin_LocalContrast
+Name[bg]=Приставка за снимки - Локален контраст
 Name[nl]=Afbeeldingsplugin_LokaalContrast
 Name[sv]=Bildinsticksprogram lokal kontrast
 Name[tr]=GörüntüEklentisi_YerelKarşıtlık
@@ -8,6 +9,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Local contrast plugin for Digikam
+Comment[bg]=Приставка на digiKam с ефекти за локален контраст
 Comment[nb]=digKam programtillegg for lokal kontrast
 Comment[nl]=Digikam-plugin voor lokaal contrast
 Comment[pt]=Um 'plugin' do contraste local para o Digikam
