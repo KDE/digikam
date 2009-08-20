@@ -70,6 +70,11 @@ IccSettings::IccSettings()
     readFromConfig();
 }
 
+IccSettings::~IccSettings()
+{
+    delete d;
+}
+
 ICCSettingsContainer IccSettings::settings()
 {
     QMutexLocker lock(&d->mutex);

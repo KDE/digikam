@@ -71,6 +71,7 @@ private:
 
     friend class IccSettingsCreator;
     IccSettings();
+    ~IccSettings();
 
     IccSettingsPriv* const d;
 };
