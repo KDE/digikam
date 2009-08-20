@@ -27,6 +27,7 @@
 
 // Qt includes
 
+#include <QFlags>
 #include <QString>
 
 // Local includes
@@ -53,29 +54,73 @@ public:
     void writeToConfig(KConfigGroup& group) const;
     void writeManagedViewToConfig(KConfigGroup& group) const;
 
-    enum OnProfileMismatch
+    enum BehaviorEnum
     {
-        Ask,
-        Convert,
-        Leave
+        // Note: Values are stored in config - keep them constant
+
+        InvalidBehavior          = 0,
+
+        /// Interpretation of the image data
+
+        UseEmbeddedProfile       = 1 << 0,
+        UseSRGB                  = 1 << 1,
+        UseWorkspace             = 1 << 2,
+        UseDefaultInputProfile   = 1 << 3,
+        UseSpecifiedProfile      = 1 << 4,
+        AutomaticColors          = 1 << 5,
+        DoNotInterpret           = 1 << 6,
+
+        /// Transformation / target profile
+
+        KeepProfile              = 1 << 10,
+        ConvertToWorkspace       = 1 << 11,
+
+        /// Special flags and values
+
+        LeaveFileUntagged        = 1 << 18,
+
+        AskUser                  = 1 << 20,
+        SafestBestAction         = 1 << 21,
+
+        /// ready combinations for convenience
+
+        PreserveEmbeddedProfile  = UseEmbeddedProfile | KeepProfile,
+        EmbeddedToWorkspace      = UseEmbeddedProfile | ConvertToWorkspace,
+        InputToWorkspace         = UseDefaultInputProfile | ConvertToWorkspace,
+        SpecifiedToWorkspace     = UseSpecifiedProfile | ConvertToWorkspace,
+        NoColorManagement        = DoNotInterpret | LeaveFileUntagged
     };
+    Q_DECLARE_FLAGS(Behavior, BehaviorEnum)
 
     bool    enableCM;
 
-    OnProfileMismatch onProfileMismatch;
-    bool    useBPC;
-    bool    useManagedView;
-
-    int     renderingIntent;
+    QString iccFolder;
 
     QString workspaceProfile;
+
+    Behavior       defaultMismatchBehavior;
+    Behavior       defaultMissingProfileBehavior;
+    Behavior       defaultUncalibratedBehavior;
+
+    Behavior       lastMismatchBehavior;
+    Behavior       lastMissingProfileBehavior;
+    Behavior       lastUncalibratedBehavior;
+    QString        lastSpecifiedAssignProfile;
+    QString        lastSpecifiedInputProfile;
+
+    bool    useManagedView;
     QString monitorProfile;
+
     QString defaultInputProfile;
     QString defaultProofProfile;
 
-    QString iccFolder;
+    bool    useBPC;
+    int     renderingIntent;
+
 };
 
 }  // namespace Digikam
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::ICCSettingsContainer::Behavior)
 
 #endif  // ICCSETTINGSCONTAINER_H

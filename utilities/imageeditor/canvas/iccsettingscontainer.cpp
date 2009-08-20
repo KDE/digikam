@@ -39,37 +39,48 @@ namespace Digikam
 ICCSettingsContainer::ICCSettingsContainer()
 {
     // Note: by default, ICC color management is disabled.
-    enableCM                = false;
+    enableCM                      = false;
 
-    onProfileMismatch       = Convert;
-    useBPC                  = true;
-    useManagedView          = false;
+    defaultMismatchBehavior       = KeepProfile;
+    defaultMissingProfileBehavior = KeepProfile;
+    defaultUncalibratedBehavior   = ConvertToWorkspace;
 
-    renderingIntent         = IccTransform::Perceptual;
+    lastMismatchBehavior          = KeepProfile;
+    lastMissingProfileBehavior    = KeepProfile;
+    lastUncalibratedBehavior      = ConvertToWorkspace;
+
+    useManagedView                = false;
+    useBPC                        = true;
+    renderingIntent               = IccTransform::Perceptual;
 }
 
 void ICCSettingsContainer::readFromConfig(KConfigGroup& group)
 {
     enableCM             = group.readEntry("EnableCM", false);
 
-    QString behavior = group.readEntry("OnProfileMismatch", "ask");
-    if (!group.hasKey("OnProfileMismatch") && group.hasKey("BehaviourICC")) // legacy
-        behavior = group.readEntry("BehaviourICC", false) ? "convert" : "ask";
+    //if (!group.hasKey("OnProfileMismatch") && group.hasKey("BehaviourICC")) // legacy
+      //  behavior = group.readEntry("BehaviourICC", false) ? "convert" : "ask";
 
-    if (behavior == "convert")
-        onProfileMismatch = ICCSettingsContainer::Convert;
-    else if (behavior == "leave")
-        onProfileMismatch = ICCSettingsContainer::Leave;
-    else
-        onProfileMismatch = ICCSettingsContainer::Ask;
+    QString sRGB = IccProfile::sRGB().filePath();
+
+    workspaceProfile     = group.readPathEntry("WorkProfileFile", sRGB);
+    monitorProfile       = group.readPathEntry("MonitorProfileFile", sRGB);
+    defaultInputProfile  = group.readPathEntry("InProfileFile", QString());
+    defaultProofProfile  = group.readPathEntry("ProofProfileFile", QString());
+
+    defaultMismatchBehavior       = (Behavior)group.readEntry("DefaultMismatchBehavior", (int)EmbeddedToWorkspace);
+    defaultMissingProfileBehavior = (Behavior)group.readEntry("DefaultMissingProfileBehavior", (int)(UseSRGB|ConvertToWorkspace));
+    defaultUncalibratedBehavior   = (Behavior)group.readEntry("DefaultUncalibratedBehavior", (int)InputToWorkspace);
+
+    lastMismatchBehavior          = (Behavior)group.readEntry("LastMismatchBehavior", (int)EmbeddedToWorkspace);
+    lastMissingProfileBehavior    = (Behavior)group.readEntry("LastMissingProfileBehavior", (int)(UseSRGB|ConvertToWorkspace));
+    lastUncalibratedBehavior      = (Behavior)group.readEntry("LastUncalibratedBehavior", (int)InputToWorkspace);
+    lastSpecifiedAssignProfile    = group.readEntry("LastSpecifiedAssignProfile", sRGB);
+    lastSpecifiedInputProfile     = group.readEntry("LastSpecifiedInputProfile", defaultInputProfile);
 
     useBPC               = group.readEntry("BPCAlgorithm", true);
     useManagedView       = group.readEntry("ManagedView", false);
     renderingIntent      = group.readEntry("RenderingIntent", (int)IccTransform::Perceptual);
-    workspaceProfile     = group.readPathEntry("WorkProfileFile", IccProfile::sRGB().filePath());
-    monitorProfile       = group.readPathEntry("MonitorProfileFile", IccProfile::sRGB().filePath());
-    defaultInputProfile  = group.readPathEntry("InProfileFile", QString());
-    defaultProofProfile  = group.readPathEntry("ProofProfileFile", QString());
     iccFolder            = group.readEntry("DefaultPath", QString());
 }
 
@@ -80,12 +91,15 @@ void ICCSettingsContainer::writeToConfig(KConfigGroup& group) const
     if (!enableCM)
         return;          // No need to write settings in this case.
 
-    if (onProfileMismatch == ICCSettingsContainer::Convert)
-        group.writeEntry("OnProfileMismatch", "convert");
-    else if (onProfileMismatch == ICCSettingsContainer::Leave)
-        group.writeEntry("OnProfileMismatch", "leave");
-    else
-        group.writeEntry("OnProfileMismatch", "ask");
+    group.writeEntry("DefaultMismatchBehavior", (int)defaultMismatchBehavior);
+    group.writeEntry("DefaultMissingProfileBehavior", (int)defaultMissingProfileBehavior);
+    group.writeEntry("DefaultUncalibratedBehavior", (int)defaultUncalibratedBehavior);
+
+    group.writeEntry("LastMismatchBehavior", (int)lastMismatchBehavior);
+    group.writeEntry("LastMissingProfileBehavior", (int)lastMissingProfileBehavior);
+    group.writeEntry("LastUncalibratedBehavior", (int)lastUncalibratedBehavior);
+    group.writeEntry("LastSpecifiedAssignProfile", lastSpecifiedAssignProfile);
+    group.writeEntry("LastSpecifiedInputProfile", lastSpecifiedInputProfile);
 
     group.writeEntry("BPCAlgorithm", useBPC);
     group.writeEntry("ManagedView", useManagedView);
