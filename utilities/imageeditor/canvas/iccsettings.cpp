@@ -267,6 +267,26 @@ QList<IccProfile> IccSettings::outputProfiles()
     return profiles;
 }
 
+void IccSettings::loadAllProfilesProperties()
+{
+    allProfiles();
+    const int size = d->profiles.size();
+    for (int i=0; i<size; ++i)
+    {
+        IccProfile& profile = d->profiles[i];
+        if (!profile.isOpen())
+        {
+            profile.description();
+            profile.type();
+            profile.close();
+        }
+        else
+        {
+            profile.description();
+            profile.type();
+        }
+    }
+}
 
 
 

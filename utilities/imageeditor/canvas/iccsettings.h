@@ -73,6 +73,14 @@ public:
     /// Get available profiles suitable as proof/output profiles
     QList<IccProfile> outputProfiles();
 
+    /**
+     * IccProfile caches some of its properties (description, type)
+     * when it was read once. Subsequently, to read these values no
+     * opening is needed. This ensures that all profiles have these
+     * values read. May imply scanning and opening all profiles.
+     */
+    void loadAllProfilesProperties();
+
 Q_SIGNALS:
 
     void settingsChanged();

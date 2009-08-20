@@ -182,7 +182,7 @@ DigikamApp::DigikamApp()
     AlbumManager::instance();
     AlbumLister::instance();
     LoadingCacheInterface::initialize();
-    IccSettings::instance();
+    IccSettings::instance()->loadAllProfilesProperties();
 
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
