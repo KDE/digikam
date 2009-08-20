@@ -43,7 +43,7 @@
 // Local includes
 
 #include "printoptionspage.h"
-#include "icctransform.h"
+#include "iccmanager.h"
 
 namespace Digikam
 {
@@ -135,13 +135,8 @@ public:
     {
         if (optionsPage->colorManaged())
         {
-            IccTransform transform;
-            transform.setEmbeddedProfile(img);
-            transform.setInputProfile(optionsPage->inProfilePath());
-            transform.setOutputProfile(optionsPage->outputProfilePath());
-            transform.readFromConfig();
-
-            transform.apply( img );
+            IccManager manager(img);
+            manager.transformForOutput(optionsPage->outputProfile());
         }
     }
   };

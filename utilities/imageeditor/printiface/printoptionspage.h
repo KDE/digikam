@@ -32,6 +32,7 @@
 namespace Digikam
 {
 
+class IccProfile;
 class PrintOptionsPagePrivate;
 
 class PrintOptionsPage : public QWidget
@@ -66,8 +67,7 @@ public:
     double scaleHeight() const;
     bool colorManaged();
     bool autoRotation();
-    QString inProfilePath();
-    QString outputProfilePath();
+    IccProfile outputProfile();
 
     void loadConfig();
     void saveConfig();

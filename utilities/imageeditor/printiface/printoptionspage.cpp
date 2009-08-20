@@ -42,6 +42,9 @@
 // Local includes
 
 #include "digikamconfig.h"
+#include "iccsettings.h"
+#include "iccsettingscontainer.h"
+#include "iccmanager.h"
 #include "signalblocker.h"
 #include "ui_printoptionspage.h"
 #include "editorwindow.h"
@@ -74,8 +77,7 @@ public:
     QButtonGroup          mScaleGroup;
     QButtonGroup          mPositionGroup;
     KConfigDialogManager *mConfigDialogManager;
-    QString               inProfilePath;
-    QString               outputProfilePath;
+    IccProfile            outputProfile;
     QCheckBox            *colorManaged;
     QPushButton          *cmPreferences;
     bool                  cmEnabled;
@@ -204,14 +206,9 @@ bool PrintOptionsPage::autoRotation()
     return d->kcfg_PrintAutoRotate->isChecked();
 }
 
-QString PrintOptionsPage::inProfilePath()
+IccProfile PrintOptionsPage::outputProfile()
 {
-    return d->inProfilePath;
-}
-
-QString PrintOptionsPage::outputProfilePath()
-{
-    return d->outputProfilePath;
+    return d->outputProfile;
 }
 
 Qt::Alignment PrintOptionsPage::alignment() const
@@ -302,10 +299,9 @@ void PrintOptionsPage::loadConfig()
     }
 
     d->colorManaged->setChecked (DigikamConfig::printColorManaged());
-    KConfigGroup group   = KGlobal::config()->group("Color Management");
-    d->inProfilePath     = group.readPathEntry("WorkSpaceProfile", QString());
-    d->outputProfilePath = group.readPathEntry("ProofProfileFile", QString());
-    d->cmEnabled         = group.readEntry<bool>("EnableCM", false);
+    ICCSettingsContainer settings = IccSettings::instance()->settings();
+    d->outputProfile = settings.defaultProofProfile;
+    d->cmEnabled     = settings.enableCM;
 }
 
 void PrintOptionsPage::saveConfig()

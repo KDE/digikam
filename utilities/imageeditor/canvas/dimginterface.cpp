@@ -221,7 +221,8 @@ void DImgInterface::slotUseRawImportSettings()
     RawImport *rawImport = dynamic_cast<RawImport*>(EditorToolIface::editorToolIface()->currentTool());
 
     d->thread->load(LoadingDescription(d->filename,
-                    rawImport->rawDecodingSettings()),
+                    rawImport->rawDecodingSettings(),
+                    LoadingDescription::ConvertForEditor),
                     SharedLoadSaveThread::AccessModeReadWrite,
                     SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
 
@@ -233,7 +234,8 @@ void DImgInterface::slotUseRawImportSettings()
 void DImgInterface::slotUseDefaultSettings()
 {
     d->thread->load(LoadingDescription(d->filename,
-                    d->iofileSettings->rawDecodingSettings),
+                    d->iofileSettings->rawDecodingSettings,
+                    LoadingDescription::ConvertForEditor),
                     SharedLoadSaveThread::AccessModeReadWrite,
                     SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
     emit signalLoadingStarted(d->filename);
