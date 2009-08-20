@@ -55,6 +55,7 @@ public:
     IccProfilePriv()
     {
         handle      = 0;
+        type        = IccProfile::InvalidType;
     }
 
     IccProfilePriv(const IccProfilePriv& other)
@@ -68,6 +69,8 @@ public:
     {
         data        = other.data;
         filePath    = other.filePath;
+        description = other.description;
+        type        = other.type;
         close();
         handle      = 0;
         return *this;
@@ -90,6 +93,9 @@ public:
 
     QByteArray  data;
     QString     filePath;
+    QString     description;
+    IccProfile::ProfileType
+                type;
 
     cmsHPROFILE handle;
 };
@@ -297,20 +303,26 @@ QString IccProfile::description()
     if (!d)
         return QString();
 
+    if (!d->description.isNull())
+        return d->description;
+
     if (!open())
         return QString();
 
     LcmsLock lock();
     const char *desc = cmsTakeProductDesc(d->handle);
     if (desc && desc[0] != '\0')
-        return QString::fromLatin1(desc);
-    return QString();
+        d->description = QString::fromLatin1(desc);
+    return d->description;
 }
 
 IccProfile::ProfileType IccProfile::type()
 {
     if (!d)
         return InvalidType;
+
+    if (d->type != InvalidType)
+        return d->type;
 
     if (!open())
         return InvalidType;
@@ -320,22 +332,30 @@ IccProfile::ProfileType IccProfile::type()
     {
         case icSigInputClass:
         case 0x6e6b7066: // 'nkbf', proprietary in Nikon profiles
-            return Input;
+            d->type = Input;
+            break;
         case icSigDisplayClass:
-            return Display;
+            d->type = Display;
+            break;
         case icSigOutputClass:
-            return Output;
+            d->type = Output;
+            break;
         case icSigColorSpaceClass:
-            return ColorSpace;
+            d->type = ColorSpace;
+            break;
         case icSigLinkClass:
-            return DeviceLink;
+            d->type = DeviceLink;
+            break;
         case icSigAbstractClass:
-            return Abstract;
+            d->type = Abstract;
+            break;
         case icSigNamedColorClass:
-            return NamedColor;
+            d->type = NamedColor;
+            break;
         default:
-            return InvalidType;
+            break;
     }
+    return d->type;
 }
 
 bool IccProfile::writeToFile(const QString& filePath)
