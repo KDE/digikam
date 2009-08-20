@@ -65,21 +65,19 @@ private:
     void readSettings(bool restore=false);
     void fillCombos(bool report);
     void setWidgetsEnabled(bool enabled);
-    void profileInfo(const QString&);
-    void parseProfiles(const QList<IccProfile>& profiles);
-    static QList<IccProfile> scanDirectories(const QStringList& paths);
-    static void scanDirectory(const QString& path, const QStringList& filter, QList<IccProfile> *profiles);
+    void profileInfo(const IccProfile&);
 
 private Q_SLOTS:
 
     void slotToggledEnabled();
-    void slotToggledManagedView();
     void processLcmsUrl(const QString&);
     void slotUrlChanged();
     void slotClickedIn();
     void slotClickedWork();
     void slotClickedMonitor();
     void slotClickedProof();
+    void slotShowDefaultSearchPaths();
+    void slotMissingToggled(bool);
 
 private:
 
