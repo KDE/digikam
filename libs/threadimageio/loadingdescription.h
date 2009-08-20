@@ -41,9 +41,11 @@ public:
     enum ColorManagementSettings
     {
         NoColorConversion,
-        ApplyTransform,
-        ConvertToWorkspace,
-        ConvertForDisplay
+        ApplyTransform, /// IccData is an IccTransform
+        ConvertForEditor,
+        ConvertToSRGB,
+        ConvertForDisplay,
+        ConvertForOutput /// IccData is an IccProfile
     };
 
     class PreviewParameters
@@ -85,9 +87,12 @@ public:
         void setTransform(const IccTransform& transform);
         bool hasTransform() const;
         IccTransform transform() const;
+        void setProfile(const IccProfile& profile);
+        bool hasProfile() const;
+        IccProfile profile() const;
 
         ColorManagementSettings colorManagement;
-        QVariant                iccTransform;
+        QVariant                iccData;
 
         bool operator==(const PostProcessingParameters& other) const;
     };

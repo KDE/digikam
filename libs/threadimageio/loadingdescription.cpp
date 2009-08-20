@@ -46,17 +46,33 @@ bool LoadingDescription::PostProcessingParameters::needsProcessing() const
 
 void LoadingDescription::PostProcessingParameters::setTransform(const IccTransform& transform)
 {
-    iccTransform = QVariant::fromValue<IccTransform>(transform);
+    iccData = QVariant::fromValue<IccTransform>(transform);
 }
 
 bool LoadingDescription::PostProcessingParameters::hasTransform() const
 {
-    return !iccTransform.isNull();
+    return !iccData.isNull() && iccData.canConvert<IccTransform>();
+;
 }
 
 IccTransform LoadingDescription::PostProcessingParameters::transform() const
 {
-    return iccTransform.value<IccTransform>();
+    return iccData.value<IccTransform>();
+}
+
+void LoadingDescription::PostProcessingParameters::setProfile(const IccProfile& profile)
+{
+    iccData = QVariant::fromValue<IccProfile>(profile);
+}
+
+bool LoadingDescription::PostProcessingParameters::hasProfile() const
+{
+    return !iccData.isNull() && iccData.canConvert<IccProfile>();
+}
+
+IccProfile LoadingDescription::PostProcessingParameters::profile() const
+{
+    return iccData.value<IccProfile>();
 }
 
 LoadingDescription::LoadingDescription(const QString& filePath, ColorManagementSettings cm)
