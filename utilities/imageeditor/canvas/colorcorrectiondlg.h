@@ -37,12 +37,15 @@
 
 #include "digikam_export.h"
 #include "iccprofile.h"
+#include "iccsettingscontainer.h"
 
 namespace Digikam
 {
 
-class IccTransform;
 class DImg;
+class ColorCorrectionDlgPriv;
+class IccProfile;
+class IccTransform;
 
 class DIGIKAM_EXPORT ColorCorrectionDlg : public KDialog
 {
@@ -50,22 +53,53 @@ class DIGIKAM_EXPORT ColorCorrectionDlg : public KDialog
 
 public:
 
-    ColorCorrectionDlg(QWidget *parent, DImg *preview,
-                       IccTransform& iccTrans, const QString& file);
+    enum Mode
+    {
+        ProfileMismatch,
+        MissingProfile,
+        UncalibratedColor
+    };
+
+    ColorCorrectionDlg(Mode mode, const DImg& preview,
+                       const QString& file, QWidget *parent = 0);
     ~ColorCorrectionDlg();
+
+    ICCSettingsContainer::Behavior behavior() const;
+    IccProfile specifiedProfile() const;
+
+protected:
+
+    virtual void accept();
 
 private Q_SLOTS:
 
-    void slotCurrentProfInfo();
-    void slotEmbeddedProfInfo();
-    void slotApplyClicked();
+    void slotWorkspaceProfInfo();
+    void slotImageProfInfo();
+
+    void imageProfileToggled(bool);
+    void imageProfileChanged();
+    void missingProfileToggled(bool);
+    void missingProfileChanged();
+    void usedProfileToggled(bool);
+    void usedProfileChanged();
+    void inputProfileChanged();
 
 private:
 
-    QWidget      *m_parent;
+    ICCSettingsContainer::Behavior currentBehavior() const;
 
-    IccProfile    m_outputProfile;
-    IccProfile    m_embeddedProfile;
+    QLayout *createHeading();
+    QLayout *createProfilesInfo();
+    QLayout *createPreviews();
+    QWidget *createAssumeOptions();
+    QWidget *createOptions();
+
+    void updateInfo();
+
+    void readSettings();
+    void setSettings();
+
+    ColorCorrectionDlgPriv* const d;
 };
 
 }  // namespace Digikam

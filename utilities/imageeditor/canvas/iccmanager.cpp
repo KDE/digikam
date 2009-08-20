@@ -184,12 +184,9 @@ void IccManager::transform(ICCSettingsContainer::Behavior behavior, IccProfile s
     getTransform(trans, behavior, specifiedProfile);
     if (trans.willHaveEffect())
     {
-        kDebug() << "Transforming from " << trans.effectiveInputProfile().description() << "to" << trans.outputProfile().description();
         trans.apply(d->image, d->observer);
         setIccProfile(trans.outputProfile());
     }
-    else
-        kDebug() << "No Transformation: " << trans.effectiveInputProfile().description() << "and" << trans.outputProfile().description();
 }
 
 bool IccManager::needsPostLoadingManagement(const DImg& img)
@@ -201,7 +198,6 @@ bool IccManager::needsPostLoadingManagement(const DImg& img)
 
 IccTransform IccManager::postLoadingManage(QWidget *parent)
 {
-    kDebug() << "managing";
     if (d->image.hasAttribute("missingProfileAskUser"))
     {
         d->image.removeAttribute("missingProfileAskUser");
@@ -283,7 +279,6 @@ void IccManager::getTransform(IccTransform& trans, ICCSettingsContainer::Behavio
         return;
     }
 
-    kDebug() << inputProfile.description() << d->embeddedProfile.description();
     // Assigning the _input_ profile, if necessary. If output profile is not null, it needs to be assigned later.
     if (inputProfile != d->embeddedProfile && !(behavior & ICCSettingsContainer::LeaveFileUntagged))
         setIccProfile(inputProfile);
@@ -297,7 +292,6 @@ void IccManager::getTransform(IccTransform& trans, ICCSettingsContainer::Behavio
 
 void IccManager::setIccProfile(const IccProfile& profile)
 {
-    kDebug() << IccProfile(profile).description();
     d->image.setIccProfile(profile);
     d->embeddedProfile = profile;
     if (!d->embeddedProfile.isNull())
@@ -324,7 +318,6 @@ void IccManager::transformForDisplay()
     }
     else
     {
-        kDebug() << "Embedded" << d->embeddedProfile.description();
         IccProfile displayProfile = d->settings.monitorProfile;
         if (!displayProfile.open())
             displayProfile = IccProfile::sRGB();
