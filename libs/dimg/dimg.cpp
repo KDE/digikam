@@ -893,6 +893,16 @@ QVariant DImg::attribute(const QString& key) const
     return QVariant();
 }
 
+bool DImg::hasAttribute(const QString& key) const
+{
+    return m_priv->attributes.contains(key);
+}
+
+void DImg::removeAttribute(const QString& key)
+{
+    m_priv->attributes.remove(key);
+}
+
 void DImg::setEmbeddedText(const QString& key, const QString& text)
 {
     m_priv->embeddedText.insert(key, text);
@@ -1520,10 +1530,9 @@ QPixmap DImg::convertToPixmap(IccTransform& monitorICCtrans)
 
     DImg img = copy();
 
+//TODO
     // read embedded profile, if available. Else use input profile, then sRGB.
     monitorICCtrans.setEmbeddedProfile(img);
-    // read parameters from config
-    monitorICCtrans.readFromConfig();
     // do transformation
     monitorICCtrans.apply(img);
 

@@ -283,6 +283,8 @@ public:
 
     void       setAttribute(const QString& key, const QVariant& value);
     QVariant   attribute(const QString& key) const;
+    bool       hasAttribute(const QString& key) const;
+    void       removeAttribute(const QString& key);
 
     void       setEmbeddedText(const QString& key, const QString& text);
     QString    embeddedText(const QString& key) const;

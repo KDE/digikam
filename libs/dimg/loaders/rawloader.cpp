@@ -279,31 +279,31 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
     //----------------------------------------------------------
     // Assign the right color-space profile.
 
-    QString filePath = KStandardDirs::installPath("data") + QString("libkdcraw/profiles/");
     switch(m_rawDecodingSettings.outputColorSpace)
     {
         case DRawDecoding::SRGB:
         {
-            filePath.append("srgb.icm");
+            imageSetIccProfile(IccProfile::sRGB());
             break;
         }
         case DRawDecoding::ADOBERGB:
         {
-            filePath.append("adobergb.icm");
+            imageSetIccProfile(IccProfile::adobeRGB());
             break;
         }
         case DRawDecoding::WIDEGAMMUT:
         {
-            filePath.append("widegamut.icm");
+            imageSetIccProfile(IccProfile::wideGamutRGB());
             break;
         }
         case DRawDecoding::PROPHOTO:
         {
-            filePath.append("prophoto.icm");
+            imageSetIccProfile(IccProfile::proPhotoRGB());
             break;
         }
         default:
             // No icc color-space profile to assign in RAW color mode.
+            imageSetAttribute("uncalibratedColor", true);
             break;
     }
 

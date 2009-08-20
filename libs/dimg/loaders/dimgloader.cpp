@@ -114,9 +114,9 @@ QMap<int, QByteArray>& DImgLoader::imageMetaData()
     return m_image->m_priv->metaData;
 }
 
-void DImgLoader::imageSetIccProfile(const QByteArray& profileData)
+void DImgLoader::imageSetIccProfile(const IccProfile& profile)
 {
-    m_image->setIccProfile(profileData);
+    m_image->setIccProfile(profile);
 }
 
 QVariant DImgLoader::imageGetAttribute(const QString& key)
