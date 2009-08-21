@@ -41,6 +41,7 @@ extern "C"
 #include <QFileInfo>
 #include <QMatrix>
 #include <QStringList>
+#include <QTextDocument>
 
 // KDE includes
 
@@ -489,16 +490,18 @@ bool UMSCamera::cameraSummary(QString& summary)
     summary =  QString(i18n("<b>Mounted Camera</b> driver for USB/IEEE1394 mass storage cameras and "
                             "Flash disk card readers.<br/><br/>"));
 
+    // we do not expect titel/model/etc. to contain newlines,
+    // so we just escape HTML characters
     summary += i18n("Title: <b>%1</b><br/>"
                     "Model: <b>%2</b><br/>"
                     "Port: <b>%3</b><br/>"
                     "Path: <b>%4</b><br/>"
                     "UUID: <b>%5</b><br/><br/>",
-                    title(),
-                    model(),
-                    port(),
-                    path(),
-                    uuid());
+                    Qt::escape(title()),
+                    Qt::escape(model()),
+                    Qt::escape(port()),
+                    Qt::escape(path()),
+                    Qt::escape(uuid()));
 
     summary += i18n("Thumbnails: <b>%1</b><br/>"
                     "Capture image: <b>%2</b><br/>"

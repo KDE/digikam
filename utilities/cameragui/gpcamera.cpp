@@ -38,6 +38,7 @@
 #include <QPixmap>
 #include <QFile>
 #include <QDateTime>
+#include <QTextDocument>
 
 // KDE includes
 
@@ -1300,14 +1301,16 @@ bool GPCamera::cameraSummary(QString& summary)
         return false;
     }
 
+    // we do not expect titel/model/etc. to contain newlines,
+    // so we just escape HTML characters
     summary =  i18n("Title: <b>%1</b><br/>"
                     "Model: <b>%2</b><br/>"
                     "Port: <b>%3</b><br/>"
                     "Path: <b>%4</b><br/><br/>",
-                    title(),
-                    model(),
-                    port(),
-                    path());
+                    Qt::escape(title()),
+                    Qt::escape(model()),
+                    Qt::escape(port()),
+                    Qt::escape(path()));
 
     summary += i18n("Thumbnails: <b>%1</b><br/>"
                     "Capture image: <b>%2</b><br/>"
@@ -1322,7 +1325,9 @@ bool GPCamera::cameraSummary(QString& summary)
                     mkDirSupport()        ? i18n("yes") : i18n("no"),
                     delDirSupport()       ? i18n("yes") : i18n("no"));
 
-    summary.append(QString(sum.text));
+    // here we need to make sure whitespace and newlines
+    // are converted to HTML properly
+    summary.append(Qt::convertFromPlainText(QString(sum.text), Qt::WhiteSpacePre));
 
     delete d->status;
     d->status = 0;
@@ -1357,7 +1362,9 @@ bool GPCamera::cameraManual(QString& manual)
         return false;
     }
 
-    manual = QString(man.text);
+    // I guess manual is plain text and not HTML?
+    // Can't test it. (Michael G. Hansen)
+    manual = Qt::convertFromPlainText(QString(man.text), Qt::WhiteSpacePre);
 
     delete d->status;
     d->status = 0;
@@ -1392,9 +1399,11 @@ bool GPCamera::cameraAbout(QString& about)
         return false;
     }
 
-    about = QString(abt.text);
-    about.append(i18n("\n\nTo report problems about this driver, please contact "
-                      "the gphoto2 team at:\n\nhttp://gphoto.org/bugs"));
+    // here we need to make sure whitespace and newlines
+    // are converted to HTML properly
+    about = Qt::convertFromPlainText(QString(abt.text), Qt::WhiteSpacePre);
+    about.append("<br><br>To report problems about this driver, please contact "
+                      "the gphoto2 team at:<br><br>http://gphoto.org/bugs");
 
     delete d->status;
     d->status = 0;
