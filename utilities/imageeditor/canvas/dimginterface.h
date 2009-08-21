@@ -66,6 +66,7 @@ public:
     void   setICCSettings(ICCSettingsContainer *cmSettings);
     void   setExposureSettings(ExposureSettingsContainer *expoSettings);
     void   setExifOrient(bool exifOrient);
+    void   setDisplayingWidget(QWidget *widget);
 
     void   undo();
     void   redo();

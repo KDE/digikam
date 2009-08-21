@@ -62,6 +62,7 @@
 #include "colorcorrectiondlg.h"
 #include "undomanager.h"
 #include "undoaction.h"
+#include "iccmanager.h"
 #include "iccsettingscontainer.h"
 #include "icctransform.h"
 #include "exposurecontainer.h"
@@ -96,6 +97,7 @@ public:
         selW             = 0;
         selH             = 0;
         zoom             = 1.0;
+        displayingWidget = 0;
         exifOrient       = false;
         valid            = false;
         rotatedOrFlipped = false;
@@ -120,6 +122,8 @@ public:
     float                      contrast;
 
     double                     zoom;
+
+    QWidget                   *displayingWidget;
 
     QString                    filename;
     QString                    savingFilename;
@@ -178,6 +182,11 @@ DImgInterface::~DImgInterface()
     delete d;
     if (m_defaultInterface == this)
         m_defaultInterface = 0;
+}
+
+void DImgInterface::setDisplayingWidget(QWidget *widget)
+{
+    d->displayingWidget = widget;
 }
 
 void DImgInterface::load(const QString& filename, IOFileSettingsContainer *iofileSettings)
@@ -273,8 +282,6 @@ void DImgInterface::resetValues()
 void DImgInterface::setICCSettings(ICCSettingsContainer *cmSettings)
 {
     d->cmSettings = cmSettings;
-    d->monitorICCtrans.setInputProfile(d->cmSettings->workspaceProfile);
-    d->monitorICCtrans.setOutputProfile(d->cmSettings->monitorProfile);
 }
 
 void DImgInterface::setExposureSettings(ExposureSettingsContainer *expoSettings)
@@ -314,6 +321,8 @@ void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription
              d->image.attribute("format").toString() == QString("TIFF")))
              exifRotate(d->filename);
 
+        IccManager manager(d->image);
+        d->monitorICCtrans = manager.displayTransform(d->displayingWidget);
     }
     else
     {

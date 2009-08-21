@@ -552,7 +552,7 @@ void ColorCorrectionDlg::updateInfo()
     }
 
     manager.transform(currentBehavior(), specifiedProfile());
-    manager.transformForDisplay();
+    manager.transformForDisplay(this);
     d->previewTarget->setPixmap(colorPreview.convertToPixmap());
 
     unsetCursor();

@@ -39,6 +39,7 @@
 // Local includes
 
 #include "exposurecontainer.h"
+#include "iccmanager.h"
 #include "iccsettingscontainer.h"
 #include "icctransform.h"
 #include "dimginterface.h"
@@ -417,9 +418,8 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h,
 
         if (iccSettings && iccSettings->enableCM && iccSettings->useManagedView)
         {
-            IccTransform monitorICCtrans;
-            monitorICCtrans.setInputProfile(iccSettings->workspaceProfile);
-            monitorICCtrans.setOutputProfile(iccSettings->monitorProfile);
+            IccManager manager(d->targetPreviewImage);
+            IccTransform monitorICCtrans = manager.displayTransform();
             pixImage = d->targetPreviewImage.convertToPixmap(monitorICCtrans);
         }
         else

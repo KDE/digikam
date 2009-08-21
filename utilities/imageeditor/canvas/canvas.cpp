@@ -182,6 +182,8 @@ Canvas::Canvas(QWidget *parent)
 
     d->rubber = new DRubberBand(this);
 
+    d->im->setDisplayingWidget(this);
+
     // ------------------------------------------------------------
 
     connect(this, SIGNAL(signalZoomChanged(double)),
