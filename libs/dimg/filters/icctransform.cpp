@@ -190,7 +190,6 @@ public:
 IccTransform::IccTransform()
             : d(new IccTransformPriv)
 {
-    cmsErrorAction(LCMS_ERROR_SHOW);
 }
 
 IccTransform::IccTransform(const IccTransform& other)
@@ -207,6 +206,12 @@ IccTransform &IccTransform::operator=(const IccTransform& other)
 IccTransform::~IccTransform()
 {
     // close() is done in ~IccTransformPriv
+}
+
+void IccTransform::init()
+{
+    LcmsLock lock();
+    cmsErrorAction(LCMS_ERROR_SHOW);
 }
 
 void IccTransform::setInputProfile(const IccProfile &profile)

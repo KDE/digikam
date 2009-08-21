@@ -114,6 +114,9 @@ public:
      */
     IccProfile effectiveInputProfile() const;
 
+    /// Initialize LittleCMS library
+    static void init();
+
 private:
 
     TransformDescription getDescription(const DImg& image);

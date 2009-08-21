@@ -44,6 +44,7 @@
 // Local includes
 
 #include "iccprofile.h"
+#include "icctransform.h"
 
 namespace Digikam
 {
@@ -76,6 +77,7 @@ IccSettings *IccSettings::instance()
 IccSettings::IccSettings()
             : d(new IccSettingsPriv)
 {
+    IccTransform::init();
     readFromConfig();
 }
 
