@@ -163,7 +163,8 @@ bool LoadingDescription::operator==(const LoadingDescription& other) const
 {
     return filePath == other.filePath &&
             rawDecodingSettings == other.rawDecodingSettings &&
-            previewParameters == other.previewParameters;
+            previewParameters == other.previewParameters &&
+            postProcessingParameters == other.postProcessingParameters;
 }
 
 bool LoadingDescription::equalsIgnoreReducedVersion(const LoadingDescription& other) const
