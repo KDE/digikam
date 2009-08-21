@@ -189,6 +189,10 @@ void IccManager::transform(ICCSettingsContainer::Behavior behavior, IccProfile s
     }
 }
 
+
+// --- "Ask user" dialog ---
+
+
 bool IccManager::needsPostLoadingManagement(const DImg& img)
 {
     return (img.hasAttribute("missingProfileAskUser") ||
@@ -238,6 +242,10 @@ IccTransform IccManager::postLoadingManage(QWidget *parent)
     return IccTransform();
 }
 
+
+// --- Behavior implementation ---
+
+
 IccProfile IccManager::imageProfile(ICCSettingsContainer::Behavior behavior, IccProfile specifiedProfile)
 {
     if (behavior & ICCSettingsContainer::UseEmbeddedProfile)
@@ -258,6 +266,7 @@ IccProfile IccManager::imageProfile(ICCSettingsContainer::Behavior behavior, Icc
     else if (behavior & ICCSettingsContainer::DoNotInterpret)
         return IccProfile();
 
+    kError(50003) << "No input profile: invalid Behavior flags" << (int)behavior;
     return IccProfile();
 }
 
@@ -274,10 +283,7 @@ void IccManager::getTransform(IccTransform& trans, ICCSettingsContainer::Behavio
         outputProfile = d->workspaceProfile;
 
     if (inputProfile.isNull())
-    {
-        kError(50003) << "No input profile: invalid Behavior flags" << (int)behavior;
         return;
-    }
 
     // Assigning the _input_ profile, if necessary. If output profile is not null, it needs to be assigned later.
     if (inputProfile != d->embeddedProfile && !(behavior & ICCSettingsContainer::LeaveFileUntagged))
@@ -298,7 +304,21 @@ void IccManager::setIccProfile(const IccProfile& profile)
         d->profileMismatch = !d->embeddedProfile.isSameProfileAs(d->workspaceProfile);
 }
 
+
+// --- Display ---
+
+
 void IccManager::transformForDisplay()
+{
+    transformForDisplay(displayProfile());
+}
+
+void IccManager::transformForDisplay(QWidget *widget)
+{
+    transformForDisplay(displayProfile(widget));
+}
+
+void IccManager::transformForDisplay(const IccProfile& displayProfile)
 {
     if (d->image.isNull())
         return;
@@ -312,28 +332,73 @@ void IccManager::transformForDisplay()
         kError(50003) << "Do not use transformForDisplay for uncalibrated data "
                          "but let the RAW loader do the conversion to sRGB";
     }
+
+    IccTransform trans = displayTransform(displayProfile);
+    if (trans.willHaveEffect())
+    {
+        trans.apply(d->image, d->observer);
+        setIccProfile(trans.outputProfile());
+    }
+}
+
+IccProfile IccManager::displayProfile(QWidget *displayingWidget)
+{
+    IccProfile profile = IccSettings::instance()->monitorProfile(displayingWidget);
+    if (profile.open())
+        return profile;
+
+    return IccProfile::sRGB();
+}
+
+IccTransform IccManager::displayTransform(QWidget *displayingWidget)
+{
+    return displayTransform(displayProfile(displayingWidget));
+}
+
+IccTransform IccManager::displayTransform(const IccProfile& displayProfile)
+{
+    if (d->image.isNull())
+        return IccTransform();
+
+    if (!d->settings.enableCM)
+        return IccTransform();
+
+    IccTransform trans;
+    trans.setIntent(d->settings.renderingIntent);
+    trans.setUseBlackPointCompensation(d->settings.useBPC);
+
+    if (isUncalibratedColor())
+    {
+        // set appropriate outputColorSpace in RawLoadingSettings
+        kError(50003) << "Do not use transformForDisplay for uncalibrated data "
+                         "but let the RAW loader do the conversion to sRGB";
+    }
     else if (isMissingProfile())
     {
-        // all is fine, assume sRGB
+        IccProfile assumedImageProfile = imageProfile(d->settings.defaultMissingProfileBehavior, IccProfile());
+        IccProfile outputProfile(displayProfile);
+        if (!assumedImageProfile.isSameProfileAs(outputProfile))
+        {
+            trans.setInputProfile(d->embeddedProfile);
+            trans.setOutputProfile(outputProfile);
+        }
     }
     else
     {
-        IccProfile displayProfile = d->settings.monitorProfile;
-        if (!displayProfile.open())
-            displayProfile = IccProfile::sRGB();
-
-        if (!d->embeddedProfile.isSameProfileAs(displayProfile))
+        IccProfile outputProfile(displayProfile);
+        if (!d->embeddedProfile.isSameProfileAs(outputProfile))
         {
-            IccTransform trans;
             trans.setInputProfile(d->embeddedProfile);
-            trans.setOutputProfile(displayProfile);
-            trans.setIntent(d->settings.renderingIntent);
-            trans.setUseBlackPointCompensation(d->settings.useBPC);
-            trans.apply(d->image, d->observer);
-            setIccProfile(trans.outputProfile());
+            trans.setOutputProfile(outputProfile);
         }
     }
+
+    return trans;
 }
+
+
+// --- sRGB and Output ---
+
 
 void IccManager::transformToSRGB()
 {

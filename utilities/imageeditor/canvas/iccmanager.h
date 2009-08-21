@@ -75,11 +75,6 @@ public:
     void transform(ICCSettingsContainer::Behavior behavior,
                    IccProfile specifiedProfile = IccProfile());
     /**
-     * Transforms the image for display on screen. The result is not suitable
-     * for editing or storage.
-     */
-    void transformForDisplay();
-    /**
      * Transforms the image to sRGB
      */
     void transformToSRGB();
@@ -87,6 +82,21 @@ public:
      * Transforms the image for output to the specified output profile
      */
     void transformForOutput(const IccProfile& outputProfile);
+    /**
+     * Transforms the image for display on screen. The result is not suitable
+     * for editing or storage.
+     * You can specify the widget in which the image will be displayed, or specify
+     * the display profile yourself.
+     * You can retrieve the profile with displayProfile() and pass it to transformForDisplay()
+     * later (in a thread), or you can get a transform from displayTransform and apply it yourself.
+     */
+    void transformForDisplay();
+    void transformForDisplay(QWidget *widget);
+    void transformForDisplay(const IccProfile& displayProfile);
+
+    IccProfile displayProfile(QWidget *displayingWidget = 0);
+    IccTransform displayTransform(QWidget *displayingWidget = 0);
+    IccTransform displayTransform(const IccProfile& displayProfile);
 
     /**
      * Returns true if the given image is marked as needing user interaction
