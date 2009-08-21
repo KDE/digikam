@@ -46,7 +46,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 037 ==> 182272 : color profile and white balance.
 038 ==> 204656 : Import: "Device Information": linebreaks not HTMLified in KTextEdits [patch].
 039 ==> 189073 : Does not save embedded color profile.
-040 ==> 
+040 ==> 195144 : Editor shows wrong colors when loading image without color profile and color management is on.
+041 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta3 - Release date: 2009-07-24
