@@ -55,6 +55,14 @@ public:
     ICCSettingsContainer settings();
 
     /**
+     * Returns the monitor profile (for color managed view).
+     * If there are multiple screens, a system-wide settings specifies the monitor profile,
+     * and the widget parameter is passed, the returned profile is for the widget's screen.
+     * If no settings is specified, the default sRGB profile is returned.
+     */
+    IccProfile monitorProfile(QWidget *widget = 0);
+
+    /**
      * Sets the current ICC settings and writes them to config.
      */
     void setSettings(const ICCSettingsContainer& settings);

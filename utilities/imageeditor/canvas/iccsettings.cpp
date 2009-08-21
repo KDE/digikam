@@ -93,6 +93,17 @@ ICCSettingsContainer IccSettings::settings()
     return s;
 }
 
+IccProfile IccSettings::monitorProfile(QWidget *widget)
+{
+    //TODO: X.org Icc profile specification
+    Q_UNUSED(widget)
+    QMutexLocker lock(&d->mutex);
+    if (!d->settings.monitorProfile.isNull())
+        return d->settings.monitorProfile;
+    else
+        return IccProfile::sRGB();
+}
+
 void IccSettings::readFromConfig()
 {
     ICCSettingsContainer s;
