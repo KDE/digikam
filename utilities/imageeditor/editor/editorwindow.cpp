@@ -893,7 +893,17 @@ void EditorWindow::applyStandardSettings()
     // else, sRGB color workspace will be used.
 
     if (d->ICCSettings->enableCM)
-        m_IOFileSettings->rawDecodingSettings.outputColorSpace = DRawDecoding::RAWCOLOR;
+    {
+        if (d->ICCSettings->defaultUncalibratedBehavior & ICCSettingsContainer::AutomaticColors)
+        {
+            m_IOFileSettings->rawDecodingSettings.outputColorSpace = DRawDecoding::CUSTOMOUTPUTCS;
+            m_IOFileSettings->rawDecodingSettings.outputProfile    = d->ICCSettings->workspaceProfile;
+        }
+        else
+        {
+            m_IOFileSettings->rawDecodingSettings.outputColorSpace = DRawDecoding::RAWCOLOR;
+        }
+    }
     else
         m_IOFileSettings->rawDecodingSettings.outputColorSpace = DRawDecoding::SRGB;
 
