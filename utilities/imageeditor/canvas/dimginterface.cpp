@@ -83,11 +83,9 @@ public:
 
     DImgInterfacePrivate()
     {
-        parent           = 0;
         undoMan          = 0;
         cmSettings       = 0;
         expoSettings     = 0;
-        iofileSettings   = 0;
         thread           = 0;
         width            = 0;
         height           = 0;
@@ -123,9 +121,6 @@ public:
 
     double                     zoom;
 
-    // Used by ICC color profile dialog.
-    QWidget                   *parent;
-
     QString                    filename;
     QString                    savingFilename;
 
@@ -139,9 +134,8 @@ public:
 
     ExposureSettingsContainer *expoSettings;
 
-    IOFileSettingsContainer   *iofileSettings;
-
     SharedLoadSaveThread      *thread;
+    LoadingDescription         currentDescription;
 
     IccTransform               monitorICCtrans;
 };
@@ -186,21 +180,13 @@ DImgInterface::~DImgInterface()
         m_defaultInterface = 0;
 }
 
-void DImgInterface::load(const QString& filename, IOFileSettingsContainer *iofileSettings,
-                         QWidget *parent)
+void DImgInterface::load(const QString& filename, IOFileSettingsContainer *iofileSettings)
 {
-    // store here in case filename == d->fileName, and is then reset by resetValues
-    QString newFileName = filename;
+    LoadingDescription description;
 
-    resetValues();
-
-    d->filename       = newFileName;
-    d->iofileSettings = iofileSettings;
-    d->parent         = parent;
-
-    if (d->iofileSettings->useRAWImport && DImg::fileFormat(d->filename) == DImg::RAW)
+    if (iofileSettings->useRAWImport && DImg::fileFormat(filename) == DImg::RAW)
     {
-        RawImport *rawImport = new RawImport(KUrl(d->filename), this);
+        RawImport *rawImport = new RawImport(KUrl(filename), this);
         EditorToolIface::editorToolIface()->loadTool(rawImport);
 
         connect(rawImport, SIGNAL(okClicked()),
@@ -209,36 +195,21 @@ void DImgInterface::load(const QString& filename, IOFileSettingsContainer *iofil
         connect(rawImport, SIGNAL(cancelClicked()),
                 this, SLOT(slotUseDefaultSettings()));
 
+        description = LoadingDescription(filename, rawImport->rawDecodingSettings(), LoadingDescription::ConvertForEditor);
     }
     else
     {
-        slotUseDefaultSettings();
+        description = LoadingDescription(filename, iofileSettings->rawDecodingSettings, LoadingDescription::ConvertForEditor);
     }
-}
 
-void DImgInterface::slotUseRawImportSettings()
-{
-    RawImport *rawImport = dynamic_cast<RawImport*>(EditorToolIface::editorToolIface()->currentTool());
+    if (description != d->currentDescription)
+    {
+        resetValues();
+        d->currentDescription = description;
+        d->filename           = d->currentDescription.filePath;
 
-    d->thread->load(LoadingDescription(d->filename,
-                    rawImport->rawDecodingSettings(),
-                    LoadingDescription::ConvertForEditor),
-                    SharedLoadSaveThread::AccessModeReadWrite,
-                    SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
-
-    emit signalLoadingStarted(d->filename);
-
-    EditorToolIface::editorToolIface()->unLoadTool();
-}
-
-void DImgInterface::slotUseDefaultSettings()
-{
-    d->thread->load(LoadingDescription(d->filename,
-                    d->iofileSettings->rawDecodingSettings,
-                    LoadingDescription::ConvertForEditor),
-                    SharedLoadSaveThread::AccessModeReadWrite,
-                    SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
-    emit signalLoadingStarted(d->filename);
+        loadCurrent();
+    }
 
     EditorToolIface::editorToolIface()->unLoadTool();
 }
@@ -248,11 +219,25 @@ void DImgInterface::applyTransform(const IccTransform& transform)
     if (!d->valid)
         return;
 
-    LoadingDescription description(d->filename, d->iofileSettings->rawDecodingSettings, LoadingDescription::ApplyTransform);
-    description.postProcessingParameters.setTransform(transform);
-    d->thread->load(description, SharedLoadSaveThread::AccessModeReadWrite, SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
-    emit signalLoadingStarted(d->filename);
+    d->currentDescription.postProcessingParameters.colorManagement = LoadingDescription::ApplyTransform;
+    d->currentDescription.postProcessingParameters.setTransform(transform);
+    loadCurrent();
 
+    EditorToolIface::editorToolIface()->unLoadTool();
+}
+
+void DImgInterface::loadCurrent()
+{
+    d->thread->load(d->currentDescription,
+                    SharedLoadSaveThread::AccessModeReadWrite,
+                    SharedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
+    emit signalLoadingStarted(d->filename);
+}
+
+void DImgInterface::restore()
+{
+    resetValues();
+    loadCurrent();
     EditorToolIface::editorToolIface()->unLoadTool();
 }
 
@@ -267,6 +252,7 @@ void DImgInterface::resetValues()
 {
     d->valid          = false;
     d->filename.clear();
+    d->currentDescription = LoadingDescription();
     d->width          = 0;
     d->height         = 0;
     d->origWidth      = 0;
@@ -279,8 +265,6 @@ void DImgInterface::resetValues()
     d->contrast       = 1.0f;
     d->brightness     = 0.0f;
     d->changedBCG     = false;
-    d->iofileSettings = 0;
-    d->parent         = 0;
 
     d->cmod.reset();
     d->undoMan->clear();
@@ -428,12 +412,6 @@ void DImgInterface::redo()
 
     d->undoMan->redo();
     emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
-}
-
-void DImgInterface::restore()
-{
-    d->undoMan->clear();
-    load(d->filename, d->iofileSettings);
 }
 
 /*

@@ -60,7 +60,7 @@ public:
     DImgInterface();
     ~DImgInterface();
 
-    void   load(const QString& filename, IOFileSettingsContainer *iofileSettings, QWidget *parent=0);
+    void   load(const QString& filename, IOFileSettingsContainer *iofileSettings);
     void   applyTransform(const IccTransform& transform);
 
     void   setICCSettings(ICCSettingsContainer *cmSettings);
@@ -181,13 +181,9 @@ Q_SIGNALS:
     void   signalSavingProgress(const QString& filePath, float progress);
     void   signalImageSaved(const QString& filePath, bool success);
 
-private Q_SLOTS:
-
-    void slotUseRawImportSettings();
-    void slotUseDefaultSettings();
-
 private:
 
+    void   loadCurrent();
     void   exifRotate(const QString& filename);
     void   resetValues();
 

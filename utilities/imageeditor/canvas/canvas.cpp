@@ -249,7 +249,7 @@ void Canvas::load(const QString& filename, IOFileSettingsContainer *IOFileSettin
 {
     reset();
 
-    d->im->load( filename, IOFileSettings, d->parent );
+    d->im->load(filename, IOFileSettings);
     emit signalPrepareToLoad();
 }
 
