@@ -44,7 +44,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 035 ==> 162944 : cms/editor: converting colorspace doesn't work.
 036 ==> 165650 : digikam appears to add a color profile for printing?
 037 ==> 182272 : color profile and white balance.
-038 ==> 
+038 ==> 204656 : Import: "Device Information": linebreaks not HTMLified in KTextEdits [patch].
+039 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta3 - Release date: 2009-07-24
