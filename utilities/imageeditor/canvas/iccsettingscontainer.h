@@ -86,6 +86,8 @@ public:
 
         PreserveEmbeddedProfile  = UseEmbeddedProfile | KeepProfile,
         EmbeddedToWorkspace      = UseEmbeddedProfile | ConvertToWorkspace,
+        SRGBToWorkspace          = UseSRGB | ConvertToWorkspace,
+        AutoToWorkspace          = AutomaticColors | ConvertToWorkspace,
         InputToWorkspace         = UseDefaultInputProfile | ConvertToWorkspace,
         SpecifiedToWorkspace     = UseSpecifiedProfile | ConvertToWorkspace,
         NoColorManagement        = DoNotInterpret | LeaveFileUntagged

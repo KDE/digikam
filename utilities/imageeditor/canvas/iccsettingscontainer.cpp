@@ -41,13 +41,13 @@ ICCSettingsContainer::ICCSettingsContainer()
     // Note: by default, ICC color management is disabled.
     enableCM                      = false;
 
-    defaultMismatchBehavior       = KeepProfile;
-    defaultMissingProfileBehavior = KeepProfile;
-    defaultUncalibratedBehavior   = ConvertToWorkspace;
+    defaultMismatchBehavior       = EmbeddedToWorkspace;
+    defaultMissingProfileBehavior = SRGBToWorkspace;
+    defaultUncalibratedBehavior   = AutoToWorkspace;
 
-    lastMismatchBehavior          = KeepProfile;
-    lastMissingProfileBehavior    = KeepProfile;
-    lastUncalibratedBehavior      = ConvertToWorkspace;
+    lastMismatchBehavior          = EmbeddedToWorkspace;
+    lastMissingProfileBehavior    = SRGBToWorkspace;
+    lastUncalibratedBehavior      = AutoToWorkspace;
 
     useManagedView                = false;
     useBPC                        = true;
@@ -69,12 +69,12 @@ void ICCSettingsContainer::readFromConfig(KConfigGroup& group)
     defaultProofProfile  = group.readPathEntry("ProofProfileFile", QString());
 
     defaultMismatchBehavior       = (Behavior)group.readEntry("DefaultMismatchBehavior", (int)EmbeddedToWorkspace);
-    defaultMissingProfileBehavior = (Behavior)group.readEntry("DefaultMissingProfileBehavior", (int)(UseSRGB|ConvertToWorkspace));
-    defaultUncalibratedBehavior   = (Behavior)group.readEntry("DefaultUncalibratedBehavior", (int)InputToWorkspace);
+    defaultMissingProfileBehavior = (Behavior)group.readEntry("DefaultMissingProfileBehavior", (int)SRGBToWorkspace);
+    defaultUncalibratedBehavior   = (Behavior)group.readEntry("DefaultUncalibratedBehavior", (int)AutoToWorkspace);
 
     lastMismatchBehavior          = (Behavior)group.readEntry("LastMismatchBehavior", (int)EmbeddedToWorkspace);
-    lastMissingProfileBehavior    = (Behavior)group.readEntry("LastMissingProfileBehavior", (int)(UseSRGB|ConvertToWorkspace));
-    lastUncalibratedBehavior      = (Behavior)group.readEntry("LastUncalibratedBehavior", (int)InputToWorkspace);
+    lastMissingProfileBehavior    = (Behavior)group.readEntry("LastMissingProfileBehavior", (int)SRGBToWorkspace);
+    lastUncalibratedBehavior      = (Behavior)group.readEntry("LastUncalibratedBehavior", (int)AutoToWorkspace);
     lastSpecifiedAssignProfile    = group.readEntry("LastSpecifiedAssignProfile", sRGB);
     lastSpecifiedInputProfile     = group.readEntry("LastSpecifiedInputProfile", defaultInputProfile);
 

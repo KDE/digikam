@@ -318,16 +318,18 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     d->defaultAskRaw = new QRadioButton(i18n("Ask for the input profile"));
     //TODO d->defaultAskRaw->setWhatsThis( i18n("<p></p>"));
 
+    d->defaultGuessRaw = new QRadioButton(i18n("Automatic color correction"));
+    //TODO d->defaultGuessRaw->setWhatsThis( i18n("<p></p>"));
+
     d->defaultInputRaw = new QRadioButton(i18n("Convert it from the default input profile"));
     //TODO d->defaultSRGBMissing->setWhatsThis( i18n("<p></p>"));
 
-    d->defaultGuessRaw = new QRadioButton(i18n("Try automatic color correction"));
-    //TODO d->defaultGuessRaw->setWhatsThis( i18n("<p></p>"));
+    d->defaultGuessRaw->setChecked(true);
 
     vlayRaw->addLayout(hboxRF);
     vlayRaw->addWidget(d->defaultAskRaw);
-    vlayRaw->addWidget(d->defaultInputRaw);
     vlayRaw->addWidget(d->defaultGuessRaw);
+    vlayRaw->addWidget(d->defaultInputRaw);
 
 
     mainLayout->addWidget(colorPolicy);
