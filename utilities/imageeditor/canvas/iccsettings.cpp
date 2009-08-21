@@ -178,7 +178,7 @@ void IccSettingsPriv::scanDirectory(const QString& path, const QStringList& filt
             if (profile.open())
                 *profiles << profile;
         }
-        else if (info.isDir())
+        else if (info.isDir() && !info.isSymLink())
         {
             scanDirectory(info.filePath(), filter, profiles);
         }
@@ -199,7 +199,8 @@ QList<IccProfile> IccSettings::allProfiles()
     // get system paths, e.g. /usr/share/color/icc
     QStringList paths = IccProfile::defaultSearchPaths();
     // add user-specified path
-    paths << extraPath;
+    if (!extraPath.isEmpty())
+        paths << extraPath;
     // check search directories
     profiles << d->scanDirectories(paths);
     // load profiles that come with libkdcraw
