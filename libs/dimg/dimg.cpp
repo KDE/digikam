@@ -1523,17 +1523,9 @@ QPixmap DImg::convertToPixmap(IccTransform& monitorICCtrans)
         return QPixmap();
 
     if (monitorICCtrans.outputProfile().isNull())
-    {
-        kDebug(50003) << " : no monitor ICC profile available!";
         return convertToPixmap();
-    }
 
     DImg img = copy();
-
-//TODO
-    // read embedded profile, if available. Else use input profile, then sRGB.
-    monitorICCtrans.setEmbeddedProfile(img);
-    // do transformation
     monitorICCtrans.apply(img);
 
     return (img.convertToPixmap());
