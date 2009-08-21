@@ -525,6 +525,7 @@ void ImageWindow::loadImageInfos(const ImageInfoList& imageInfoList, const Image
     d->urlList = KUrl::List();
     d->thumbBar->clear();
 
+    d->thumbBar->blockSignals(true);
     for (ImageInfoList::iterator it = d->imageInfoList.begin(); it != d->imageInfoList.end(); ++it)
     {
         d->urlList.append(it->fileUrl());
@@ -532,6 +533,7 @@ void ImageWindow::loadImageInfos(const ImageInfoList& imageInfoList, const Image
         if (imageInfoCurrent == *it)
             d->thumbBar->setSelectedItem(item);
     }
+    d->thumbBar->blockSignals(false);
 
     d->urlCurrent = d->imageInfoCurrent.fileUrl();
 
