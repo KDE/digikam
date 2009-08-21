@@ -429,6 +429,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
                 m_priv->isReadOnly = loader.isReadOnly();
+                loader.postProcess(observer);
                 return true;
             }
             break;

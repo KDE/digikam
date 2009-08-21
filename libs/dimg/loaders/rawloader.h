@@ -36,6 +36,7 @@
 #include "dimgloader.h"
 #include "drawdecoding.h"
 #include "digikam_export.h"
+#include "iccprofile.h"
 
 namespace Digikam
 {
@@ -50,6 +51,7 @@ public:
     RAWLoader(DImg* image, DRawDecoding rawDecodingSettings=DRawDecoding());
 
     bool load(const QString& filePath, DImgLoaderObserver *observer=0);
+    void postProcess(DImgLoaderObserver *observer);
 
     // NOTE: RAW files are always Read only.
     bool save(const QString& /*filePath*/, DImgLoaderObserver * /*observer=0*/) { return false; };
@@ -67,7 +69,6 @@ private:
 
     bool checkToCancelWaitingData();
     void setWaitingDataProgress(double value);
-    void postProcessing(DImgLoaderObserver *observer);
 
 #if KDCRAW_VERSION < 0x000400
     bool checkToCancelReceivingData();
@@ -78,6 +79,7 @@ private:
 
     DImgLoaderObserver *m_observer;
     DRawDecoding        m_customRawSettings;
+    IccProfile          m_customOutputProfile;
 };
 
 }  // namespace Digikam
