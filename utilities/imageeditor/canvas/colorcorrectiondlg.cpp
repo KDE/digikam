@@ -656,23 +656,23 @@ void ColorCorrectionDlg::readSettings()
     }
     else if (d->mode == MissingProfile)
     {
-        if (settings.lastMismatchBehavior == ICCSettingsContainer::NoColorManagement)
+        if (settings.lastMissingProfileBehavior == ICCSettingsContainer::NoColorManagement)
         {
             d->imageSRGB->setChecked(true); //?
             d->thirdCheckBox->setChecked(true);
         }
         else
         {
-            if (settings.lastMismatchBehavior & ICCSettingsContainer::KeepProfile)
+            if (settings.lastMissingProfileBehavior & ICCSettingsContainer::KeepProfile)
                 d->keepProfile->setChecked(true);
-            else if (settings.lastMismatchBehavior & ICCSettingsContainer::ConvertToWorkspace)
+            else if (settings.lastMissingProfileBehavior & ICCSettingsContainer::ConvertToWorkspace)
                 d->convertToWorkingSpace->setChecked(true);
 
-            if (settings.lastMismatchBehavior & ICCSettingsContainer::UseSRGB)
+            if (settings.lastMissingProfileBehavior & ICCSettingsContainer::UseSRGB)
                 d->imageSRGB->setChecked(true);
-            if (settings.lastMismatchBehavior & ICCSettingsContainer::UseWorkspace)
+            if (settings.lastMissingProfileBehavior & ICCSettingsContainer::UseWorkspace)
                 d->imageWorkingSpace->setChecked(true);
-            if (settings.lastMismatchBehavior & ICCSettingsContainer::UseSpecifiedProfile
+            if (settings.lastMissingProfileBehavior & ICCSettingsContainer::UseSpecifiedProfile
                 && d->imageProfileBox->count() > 0)
                 d->imageOtherSpace->setChecked(true);
         }
