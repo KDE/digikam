@@ -228,8 +228,8 @@ protected Q_SLOTS:
 
 private Q_SLOTS:
 
-    void slotToggleUnderExposureIndicator();
-    void slotToggleOverExposureIndicator();
+    void slotSetUnderExposureIndicator(bool);
+    void slotSetOverExposureIndicator(bool);
     void slotToggleColorManagedView();
     void slotRotatedOrFlipped();
     void slotSavingFinished(const QString& filename, bool success);

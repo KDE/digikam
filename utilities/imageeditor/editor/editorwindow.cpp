@@ -448,13 +448,13 @@ void EditorWindow::setupStandardActions()
     d->viewUnderExpoAction = new KToggleAction(KIcon("underexposure"),
                                                i18n("Under-Exposure Indicator"), this);
     d->viewUnderExpoAction->setShortcut(Qt::Key_F10);
-    connect(d->viewUnderExpoAction, SIGNAL(triggered()), this, SLOT(slotToggleUnderExposureIndicator()));
+    connect(d->viewUnderExpoAction, SIGNAL(triggered(bool)), this, SLOT(slotSetUnderExposureIndicator(bool)));
     actionCollection()->addAction("editorwindow_underexposure", d->viewUnderExpoAction);
 
     d->viewOverExpoAction = new KToggleAction(KIcon("overexposure"),
                                               i18n("Over-Exposure Indicator"), this);
     d->viewOverExpoAction->setShortcut(Qt::Key_F11);
-    connect(d->viewOverExpoAction, SIGNAL(triggered()), this, SLOT(slotToggleOverExposureIndicator()));
+    connect(d->viewOverExpoAction, SIGNAL(triggered(bool)), this, SLOT(slotSetOverExposureIndicator(bool)));
     actionCollection()->addAction("editorwindow_overexposure", d->viewOverExpoAction);
 
     d->viewCMViewAction = new KToggleAction(KIcon("video-display"), i18n("Color-Managed View"), this);
@@ -602,11 +602,11 @@ void EditorWindow::setupStatusBar()
     d->cmViewIndicator->setMaximumSize(iconSize);
     statusBar()->addPermanentWidget(d->cmViewIndicator);
 
-    connect(d->underExposureIndicator, SIGNAL(toggled(bool)),
-            this, SLOT(slotToggleUnderExposureIndicator()));
+    connect(d->underExposureIndicator, SIGNAL(clicked(bool)),
+            this, SLOT(slotSetUnderExposureIndicator(bool)));
 
-    connect(d->overExposureIndicator, SIGNAL(toggled(bool)),
-            this, SLOT(slotToggleOverExposureIndicator()));
+    connect(d->overExposureIndicator, SIGNAL(clicked(bool)),
+            this, SLOT(slotSetOverExposureIndicator(bool)));
 
     connect(d->cmViewIndicator, SIGNAL(toggled(bool)),
             this, SLOT(slotToggleColorManagedView()));
@@ -943,18 +943,10 @@ void EditorWindow::applyStandardSettings()
 
     QColor black(Qt::black);
     QColor white(Qt::white);
-    d->exposureSettings->underExposureIndicator = group.readEntry("UnderExposureIndicator", false);
-    d->exposureSettings->overExposureIndicator  = group.readEntry("OverExposureIndicator", false);
+    slotSetUnderExposureIndicator(group.readEntry("UnderExposureIndicator", false));
+    slotSetOverExposureIndicator( group.readEntry("OverExposureIndicator", false));
     d->exposureSettings->underExposureColor     = group.readEntry("UnderExposureColor", white);
     d->exposureSettings->overExposureColor      = group.readEntry("OverExposureColor", black);
-
-    d->viewUnderExpoAction->setChecked(d->exposureSettings->underExposureIndicator);
-    d->viewOverExpoAction->setChecked(d->exposureSettings->overExposureIndicator);
-    d->underExposureIndicator->setChecked(d->exposureSettings->underExposureIndicator);
-    d->overExposureIndicator->setChecked(d->exposureSettings->overExposureIndicator);
-    setUnderExposureToolTip(d->exposureSettings->underExposureIndicator);
-    setOverExposureToolTip(d->exposureSettings->overExposureIndicator);
-    m_canvas->setExposureSettings(d->exposureSettings);
 }
 
 void EditorWindow::saveStandardSettings()
@@ -1833,45 +1825,37 @@ void EditorWindow::setColorManagedViewIndicatorToolTip(bool available, bool cmv)
     d->cmViewIndicator->setToolTip(tooltip);
 }
 
-void EditorWindow::slotToggleUnderExposureIndicator()
+void EditorWindow::slotSetUnderExposureIndicator(bool on)
 {
-    d->underExposureIndicator->blockSignals(true);
-    d->viewUnderExpoAction->blockSignals(true);
-    bool uei = !d->exposureSettings->underExposureIndicator;
-    d->underExposureIndicator->setChecked(uei);
-    d->viewUnderExpoAction->setChecked(uei);
-    d->exposureSettings->underExposureIndicator = uei;
+    d->exposureSettings->underExposureIndicator = on;
     m_canvas->setExposureSettings(d->exposureSettings);
-    setUnderExposureToolTip(uei);
-    d->underExposureIndicator->blockSignals(false);
-    d->viewUnderExpoAction->blockSignals(false);
+
+    d->underExposureIndicator->setChecked(on);
+    d->viewUnderExpoAction->setChecked(on);
+    setUnderExposureToolTip(on);
 }
 
-void EditorWindow::setUnderExposureToolTip(bool uei)
+void EditorWindow::setUnderExposureToolTip(bool on)
 {
     d->underExposureIndicator->setToolTip(
-                  uei ? i18n("Under-Exposure indicator is enabled")
+                   on ? i18n("Under-Exposure indicator is enabled")
                       : i18n("Under-Exposure indicator is disabled"));
 }
 
-void EditorWindow::slotToggleOverExposureIndicator()
+void EditorWindow::slotSetOverExposureIndicator(bool on)
 {
-    d->overExposureIndicator->blockSignals(true);
-    d->viewOverExpoAction->blockSignals(true);
-    bool oei = !d->exposureSettings->overExposureIndicator;
-    d->overExposureIndicator->setChecked(oei);
-    d->viewOverExpoAction->setChecked(oei);
-    d->exposureSettings->overExposureIndicator = oei;
+    d->exposureSettings->overExposureIndicator = on;
     m_canvas->setExposureSettings(d->exposureSettings);
-    setOverExposureToolTip(oei);
-    d->overExposureIndicator->blockSignals(false);
-    d->viewOverExpoAction->blockSignals(false);
+
+    d->overExposureIndicator->setChecked(on);
+    d->viewOverExpoAction->setChecked(on);
+    setOverExposureToolTip(on);
 }
 
-void EditorWindow::setOverExposureToolTip(bool oei)
+void EditorWindow::setOverExposureToolTip(bool on)
 {
     d->overExposureIndicator->setToolTip(
-                  oei ? i18n("Over-Exposure indicator is enabled")
+                   on ? i18n("Over-Exposure indicator is enabled")
                       : i18n("Over-Exposure indicator is disabled"));
 }
 
