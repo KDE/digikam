@@ -136,6 +136,7 @@ ColorCorrectionDlg::ColorCorrectionDlg(Mode mode, const DImg& preview,
 
     setButtons(Help|Ok|Cancel);
     setDefaultButton(Ok);
+    setButtonFocus(Ok);
     setModal(true);
     setHelp("iccprofile.anchor", "digikam");
     setButtonText(Cancel,    i18n("Don't know"));
@@ -644,13 +645,20 @@ void ColorCorrectionDlg::readSettings()
         {
             d->thirdOption->setChecked(true);
             d->thirdCheckBox->setChecked(settings.lastMismatchBehavior & ICCSettingsContainer::ConvertToWorkspace);
+            d->thirdOption->setFocus();
         }
         else
         {
             if (settings.lastMismatchBehavior & ICCSettingsContainer::KeepProfile)
+            {
                 d->keepProfile->setChecked(true);
+                d->keepProfile->setFocus();
+            }
             else if (settings.lastMismatchBehavior & ICCSettingsContainer::ConvertToWorkspace)
+            {
                 d->convertToWorkingSpace->setChecked(true);
+                d->convertToWorkingSpace->setFocus();
+            }
         }
         d->otherProfileBox->setCurrentProfile(settings.lastSpecifiedAssignProfile);
     }
@@ -660,13 +668,20 @@ void ColorCorrectionDlg::readSettings()
         {
             d->imageSRGB->setChecked(true); //?
             d->thirdCheckBox->setChecked(true);
+            d->thirdCheckBox->setFocus();
         }
         else
         {
             if (settings.lastMissingProfileBehavior & ICCSettingsContainer::KeepProfile)
+            {
                 d->keepProfile->setChecked(true);
+                d->keepProfile->setFocus();
+            }
             else if (settings.lastMissingProfileBehavior & ICCSettingsContainer::ConvertToWorkspace)
+            {
                 d->convertToWorkingSpace->setChecked(true);
+                d->convertToWorkingSpace->setFocus();
+            }
 
             if (settings.lastMissingProfileBehavior & ICCSettingsContainer::UseSRGB)
                 d->imageSRGB->setChecked(true);
@@ -681,6 +696,7 @@ void ColorCorrectionDlg::readSettings()
     else if (d->mode == UncalibratedColor)
     {
         d->imageProfileBox->setCurrentProfile(settings.lastSpecifiedInputProfile);
+        d->imageProfileBox->setFocus();
     }
 }
 
