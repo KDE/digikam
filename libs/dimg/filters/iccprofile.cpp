@@ -37,6 +37,7 @@
 
 // KDE includes
 
+#include <kcodecs.h>
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -100,16 +101,29 @@ public:
     cmsHPROFILE handle;
 };
 
-K_GLOBAL_STATIC_WITH_ARGS(QMutex, lcmsMutex, (QMutex::Recursive))
+class IccProfileStatic
+{
+public:
+
+    IccProfileStatic()
+        : lcmsMutex(QMutex::Recursive)
+    {
+    }
+
+    QMutex      lcmsMutex;
+    QString     adobeRGBPath;
+};
+
+K_GLOBAL_STATIC(IccProfileStatic, static_d)
 
 LcmsLock::LcmsLock()
 {
-    lcmsMutex->lock();
+    static_d->lcmsMutex.lock();
 }
 
 LcmsLock::~LcmsLock()
 {
-    lcmsMutex->unlock();
+    static_d->lcmsMutex.unlock();
 }
 
 IccProfile::IccProfile()
@@ -135,7 +149,7 @@ IccProfile::IccProfile(const char *location, const QString& relativePath)
     QString filePath = KStandardDirs::locate(location, relativePath);
     if (filePath.isNull())
     {
-        kError(50003) << "The sRGB profile" << relativePath << "cannot be found. Check your installation.";
+        kError(50003) << "The bundled profile" << relativePath << "cannot be found. Check your installation.";
         return;
     }
     d = new IccProfilePriv;
@@ -151,7 +165,12 @@ IccProfile IccProfile::sRGB()
 
 IccProfile IccProfile::adobeRGB()
 {
-    return IccProfile("data", "libkdcraw/profiles/adobergb.icm");
+    QString path = static_d->adobeRGBPath;
+    if (path.isEmpty())
+        path = KStandardDirs::locate("data", "libkdcraw/profiles/compatibleWithAdobeRGB1998.icc");
+    if (path.isEmpty()) // this one has a wrong whitepoint. Remove when sufficiently recent libkdcraw is a digikam dependency.
+        path = KStandardDirs::locate("data", "libkdcraw/profiles/adobergb.icm");
+    return IccProfile(path);
 }
 
 IccProfile IccProfile::wideGamutRGB()
@@ -164,17 +183,18 @@ IccProfile IccProfile::proPhotoRGB()
     return IccProfile("data", "libkdcraw/profiles/prophoto.icm");
 }
 
+/*
 IccProfile IccProfile::appleRGB()
 {
     return IccProfile("data", "libkdcraw/profiles/applergb.icm");
 }
+*/
 
 QList<IccProfile> IccProfile::defaultProfiles()
 {
     QList<IccProfile> profiles;
     profiles << sRGB()
              << adobeRGB()
-             << appleRGB()
              << proPhotoRGB()
              << wideGamutRGB();
     return profiles;
@@ -432,6 +452,20 @@ QStringList IccProfile::defaultSearchPaths()
     return paths;
 }
 
+void IccProfile::considerOriginalAdobeRGB(const QString& filePath)
+{
+    QFile file(filePath);
+    if (file.open(QIODevice::ReadOnly))
+    {
+        KMD5 md5;
+        md5.update(file);
+        if (md5.hexDigest() == "dea88382d899d5f6e573b432473ae138")
+        {
+            kDebug(50003) << "The original Adobe RGB (1998) profile has been found at" << filePath;
+            static_d->adobeRGBPath = filePath;
+        }
+    }
+}
 
 
 }  // namespace Digikam

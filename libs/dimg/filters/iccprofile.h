@@ -66,7 +66,6 @@ public:
     static IccProfile adobeRGB();
     static IccProfile wideGamutRGB();
     static IccProfile proPhotoRGB();
-    static IccProfile appleRGB();
     /// Returns a list with the profiles above
     static QList<IccProfile> defaultProfiles();
 
@@ -156,6 +155,8 @@ public:
      */
     static QStringList defaultSearchPaths();
     static QList<IccProfile> scanDirectories(const QStringList& dirs);
+
+    static void considerOriginalAdobeRGB(const QString& filePath);
 
 private:
 

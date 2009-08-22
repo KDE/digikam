@@ -189,7 +189,11 @@ void IccSettingsPriv::scanDirectory(const QString& path, const QStringList& filt
             //kDebug(50003) << info.filePath() << (info.exists() && info.isReadable());
             IccProfile profile(info.filePath());
             if (profile.open())
+            {
                 *profiles << profile;
+                if (info.fileName() == "AdobeRGB1998.icc")
+                    IccProfile::considerOriginalAdobeRGB(info.filePath());
+            }
         }
         else if (info.isDir() && !info.isSymLink())
         {
