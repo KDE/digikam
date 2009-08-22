@@ -22,6 +22,13 @@
  * ============================================================ */
 
 #include "loadingdescription.h"
+
+// KDE includes
+
+#include <kdebug.h>
+
+// Local includes
+
 #include "icctransform.h"
 
 namespace Digikam
@@ -174,18 +181,18 @@ bool LoadingDescription::equalsIgnoreReducedVersion(const LoadingDescription& ot
 
 bool LoadingDescription::equalsOrBetterThan(const LoadingDescription& other) const
 {
-    // This method is similar to operator==. But it returns true as well if other
-    // Loads a "better" version than this.
+    // This method is similar to operator==. But it returns true as well if this
+    // loads a "better" version than <other>.
     // Preview parameters must have the same size, or other has no size restriction.
-    // All raw decoding settings must be equal, only the half size parameter is allowed to vary.
+    // Comparing raw decoding settings is complicated. We allow to be loaded with optimizeTimeLoading().
 
-    DRawDecoding fullSize = other.rawDecodingSettings;
-    fullSize.halfSizeColorImage = false;
+    DRawDecoding fast = rawDecodingSettings;
+    fast.optimizeTimeLoading();
 
     return filePath == other.filePath &&
             (
              rawDecodingSettings == other.rawDecodingSettings ||
-             rawDecodingSettings == fullSize
+             fast == other.rawDecodingSettings
             ) &&
             (
              (previewParameters.size == other.previewParameters.size) ||
