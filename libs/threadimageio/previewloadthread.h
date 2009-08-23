@@ -49,6 +49,13 @@ public:
      * In the LoadingDescription container, provide "0" as maximum size.
      */
     void loadHighQuality(LoadingDescription description);
+
+    /// Optionally, set the displaying widget for color management
+    void setDisplayingWidget(QWidget *widget);
+
+protected:
+
+    QWidget *m_displayingWidget;
 };
 
 }   // namespace Digikam

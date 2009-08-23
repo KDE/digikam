@@ -281,7 +281,7 @@ void SharedLoadingTask::postProcess()
         case LoadingDescription::ConvertForDisplay:
         {
             IccManager manager(m_img, m_loadingDescription.filePath);
-            manager.transformForDisplay();
+            manager.transformForDisplay(m_loadingDescription.postProcessingParameters.profile());
             break;
         }
         case LoadingDescription::ConvertForOutput:

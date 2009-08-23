@@ -27,18 +27,22 @@
 
 // Local includes
 
+#include "iccmanager.h"
 #include "previewtask.h"
 
 namespace Digikam
 {
 
 PreviewLoadThread::PreviewLoadThread()
+            : m_displayingWidget(0)
 {
 }
 
 void PreviewLoadThread::load(LoadingDescription description)
 {
     description.rawDecodingSettings.sixteenBitsImage = false;
+    if (description.postProcessingParameters.colorManagement == LoadingDescription::ConvertForDisplay)
+        description.postProcessingParameters.setProfile(IccManager::displayProfile(m_displayingWidget));
     ManagedLoadSaveThread::loadPreview(description);
 }
 
@@ -46,7 +50,14 @@ void PreviewLoadThread::loadHighQuality(LoadingDescription description)
 {
     description.rawDecodingSettings.optimizeTimeLoading();
     description.rawDecodingSettings.sixteenBitsImage = false;
+    if (description.postProcessingParameters.colorManagement == LoadingDescription::ConvertForDisplay)
+        description.postProcessingParameters.setProfile(IccManager::displayProfile(m_displayingWidget));
     ManagedLoadSaveThread::load(description, LoadingModeShared, LoadingPolicyFirstRemovePrevious);
+}
+
+void PreviewLoadThread::setDisplayingWidget(QWidget *widget)
+{
+    m_displayingWidget = widget;
 }
 
 }   // namespace Digikam
