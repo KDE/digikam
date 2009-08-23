@@ -44,8 +44,8 @@ public:
         ApplyTransform, /// IccData is an IccTransform
         ConvertForEditor,
         ConvertToSRGB,
-        ConvertForDisplay,
-        ConvertForOutput /// IccData is an IccProfile
+        ConvertForDisplay, /// IccData can be the output profile
+        ConvertForOutput /// IccData is the output profile
     };
 
     class PreviewParameters
@@ -130,8 +130,8 @@ public:
      *    If size is 0, DImg based loading will be used with default raw decoding settings.
      */
     LoadingDescription(const QString& filePath, int size, bool exifRotate,
-                       PreviewParameters::PreviewType = PreviewParameters::PreviewImage,
-                       ColorManagementSettings = NoColorConversion);
+                       ColorManagementSettings = ConvertForDisplay,
+                       PreviewParameters::PreviewType = PreviewParameters::PreviewImage);
 
     QString           filePath;
     DRawDecoding      rawDecodingSettings;

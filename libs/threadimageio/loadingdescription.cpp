@@ -96,8 +96,8 @@ LoadingDescription::LoadingDescription(const QString& filePath, const DRawDecodi
 }
 
 LoadingDescription::LoadingDescription(const QString& filePath, int size, bool exifRotate,
-                                       LoadingDescription::PreviewParameters::PreviewType type,
-                                       ColorManagementSettings cm)
+                                       ColorManagementSettings cm,
+                                       LoadingDescription::PreviewParameters::PreviewType type)
                   : filePath(filePath)
 {
     rawDecodingSettings          = DRawDecoding();
