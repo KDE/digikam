@@ -140,6 +140,7 @@ public:
 
     SharedLoadSaveThread      *thread;
     LoadingDescription         currentDescription;
+    LoadingDescription         nextRawDescription;
 
     IccTransform               monitorICCtrans;
 };
@@ -191,26 +192,42 @@ void DImgInterface::setDisplayingWidget(QWidget *widget)
 
 void DImgInterface::load(const QString& filename, IOFileSettingsContainer *iofileSettings)
 {
-    LoadingDescription description;
+    LoadingDescription description(filename, iofileSettings->rawDecodingSettings, LoadingDescription::ConvertForEditor);
 
     if (iofileSettings->useRAWImport && DImg::fileFormat(filename) == DImg::RAW)
     {
+        d->nextRawDescription = description;
+
         RawImport *rawImport = new RawImport(KUrl(filename), this);
         EditorToolIface::editorToolIface()->loadTool(rawImport);
 
         connect(rawImport, SIGNAL(okClicked()),
-                this, SLOT(slotUseRawImportSettings()));
+                this, SLOT(slotLoadRawFromTool()));
 
         connect(rawImport, SIGNAL(cancelClicked()),
-                this, SLOT(slotUseDefaultSettings()));
+                this, SLOT(slotLoadRaw()));
 
-        description = LoadingDescription(filename, rawImport->rawDecodingSettings(), LoadingDescription::ConvertForEditor);
-    }
-    else
-    {
-        description = LoadingDescription(filename, iofileSettings->rawDecodingSettings, LoadingDescription::ConvertForEditor);
+        return;
     }
 
+    load(description);
+}
+
+void DImgInterface::slotLoadRawFromTool()
+{
+    RawImport *rawImport = dynamic_cast<RawImport*>(EditorToolIface::editorToolIface()->currentTool());
+    if (rawImport)
+        d->nextRawDescription.rawDecodingSettings = rawImport->rawDecodingSettings();
+    load(d->nextRawDescription);
+}
+
+void DImgInterface::slotLoadRaw()
+{
+    load(d->nextRawDescription);
+}
+
+void DImgInterface::load(const LoadingDescription& description)
+{
     if (description != d->currentDescription)
     {
         resetValues();

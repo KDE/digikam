@@ -182,8 +182,14 @@ Q_SIGNALS:
     void   signalSavingProgress(const QString& filePath, float progress);
     void   signalImageSaved(const QString& filePath, bool success);
 
+private Q_SLOTS:
+
+    void slotLoadRawFromTool();
+    void slotLoadRaw();
+
 private:
 
+    void   load(const LoadingDescription& description);
     void   loadCurrent();
     void   exifRotate(const QString& filename);
     void   resetValues();
