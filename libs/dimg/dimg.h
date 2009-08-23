@@ -199,6 +199,10 @@ public:
 
     bool        load(const QString& filePath, DImgLoaderObserver *observer = 0,
                      DRawDecoding rawDecodingSettings=DRawDecoding());
+    bool        load(const QString& filePath,
+                     bool loadMetadata, bool loadICCData, bool loadUniqueHash,
+                     DImgLoaderObserver *observer = 0,
+                     DRawDecoding rawDecodingSettings=DRawDecoding());
 
     bool        save(const QString& filePath, FORMAT frm, DImgLoaderObserver *observer = 0);
     bool        save(const QString& filePath, const QString& format, DImgLoaderObserver *observer = 0);
