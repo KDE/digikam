@@ -36,6 +36,8 @@
 #include "dimg.h"
 #include "digikam_export.h"
 
+class QImage;
+
 namespace Digikam
 {
 
@@ -58,6 +60,8 @@ public:
      * Optionally pass an observer to get progress information.
      */
     bool apply(DImg& image, DImgLoaderObserver *observer = 0);
+    /// Apply this transform to the QImage. This has only basic functionality.
+    bool apply(QImage& qimage);
 
     /// Closes the transform, not the profiles. Called at desctruction.
     void close();
@@ -119,11 +123,14 @@ public:
 
 private:
 
+    bool checkProfiles();
     TransformDescription getDescription(const DImg& image);
     TransformDescription getProofingDescription(const DImg& image);
+    TransformDescription getDescription(const QImage& image);
     bool open(TransformDescription &description);
     bool openProofing(TransformDescription &description);
-    void transform(const DImg& img, const TransformDescription&, DImgLoaderObserver *observer = 0);
+    void transform(DImg& img, const TransformDescription&, DImgLoaderObserver *observer = 0);
+    void transform(QImage& img, const TransformDescription&);
 
 private:
 

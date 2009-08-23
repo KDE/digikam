@@ -28,7 +28,8 @@
 
 #include <QDataStream>
 #include <QFile>
-#include <QtCore/QVarLengthArray>
+#include <QImage>
+#include <QVarLengthArray>
 
 // KDE includes
 
@@ -387,6 +388,25 @@ TransformDescription IccTransform::getDescription(const DImg& image)
     return description;
 }
 
+TransformDescription IccTransform::getDescription(const QImage& )
+{
+    TransformDescription description;
+
+    description.inputProfile = d->effectiveInputProfile();
+    description.outputProfile = d->outputProfile;
+    description.intent = d->intent;
+
+    if (d->useBPC)
+    {
+        description.transformFlags |= cmsFLAGS_WHITEBLACKCOMPENSATION;
+    }
+
+    description.inputFormat = TYPE_BGRA_8;
+    description.outputFormat = TYPE_BGRA_8;
+
+    return description;
+}
+
 TransformDescription IccTransform::getProofingDescription(const DImg& image)
 {
     TransformDescription description = getDescription(image);
@@ -472,15 +492,8 @@ bool IccTransform::openProofing(TransformDescription &description)
     return true;
 }
 
-bool IccTransform::apply(DImg& image, DImgLoaderObserver *observer)
+bool IccTransform::checkProfiles()
 {
-    if (!willHaveEffect())
-    {
-        if (!d->outputProfile.isNull() && !d->doNotEmbed)
-            image.setIccProfile(d->outputProfile);
-        return true;
-    }
-
     if (!d->effectiveInputProfile().open())
     {
         kError(50003) << "Cannot open embedded profile";
@@ -501,6 +514,21 @@ bool IccTransform::apply(DImg& image, DImgLoaderObserver *observer)
             return false;
         }
     }
+
+    return true;
+}
+
+bool IccTransform::apply(DImg& image, DImgLoaderObserver *observer)
+{
+    if (!willHaveEffect())
+    {
+        if (!d->outputProfile.isNull() && !d->doNotEmbed)
+            image.setIccProfile(d->outputProfile);
+        return true;
+    }
+
+    if (!checkProfiles())
+        return false;
 
     TransformDescription description;
     if (d->proofProfile.isNull())
@@ -529,9 +557,33 @@ bool IccTransform::apply(DImg& image, DImgLoaderObserver *observer)
     return true;
 }
 
-    //kDebug(50003) << "Transform flags are: " << transformFlags;
+bool IccTransform::apply(QImage& qimage)
+{
+    if (qimage.format() != QImage::Format_RGB32 &&
+        qimage.format() != QImage::Format_ARGB32 &&
+        qimage.format() != QImage::Format_ARGB32_Premultiplied)
+    {
+        kError(50003) << "Unsupported QImage format" << qimage.format();
+        return false;
+    }
 
-void IccTransform::transform(const DImg& image, const TransformDescription& description, DImgLoaderObserver *observer)
+    if (!willHaveEffect())
+        return true;
+
+    if (!checkProfiles())
+        return false;
+
+    TransformDescription description;
+    description = getDescription(qimage);
+    if (!open(description))
+        return false;
+
+    transform(qimage, description);
+
+    return true;
+}
+
+void IccTransform::transform(DImg& image, const TransformDescription& description, DImgLoaderObserver *observer)
 {
     const int bytesDepth = image.bytesDepth();
     const int pixels = image.width() * image.height();
@@ -579,6 +631,24 @@ void IccTransform::transform(const DImg& image, const TransformDescription& desc
                 observer->progressInfo(&image, 0.1 + 0.9*(1.0 - float(p)/float(pixels)));
             }
         }
+    }
+}
+
+void IccTransform::transform(QImage& image, const TransformDescription&)
+{
+    const int bytesDepth = 4;
+    const int pixels = image.width() * image.height();
+    // convert ten scanlines in a batch
+    const int pixelsPerStep = image.width() * 10;
+    uchar *data = image.bits();
+
+    for (int p=pixels; p > 0; p -= pixelsPerStep)
+    {
+        int pixelsThisStep = qMin(p, pixelsPerStep);
+        int size = pixelsThisStep * bytesDepth;
+        LcmsLock lock();
+        cmsDoTransform(d->handle, data, data, pixelsThisStep);
+        data += size;
     }
 }
 
