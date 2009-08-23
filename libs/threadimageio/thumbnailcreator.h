@@ -44,6 +44,7 @@
 namespace Digikam
 {
 
+class IccProfile;
 class DImgLoaderObserver;
 class ThumbnailImage;
 class ThumbnailCreatorPriv;
@@ -183,7 +184,7 @@ private:
     void initialize();
 
     ThumbnailImage createThumbnail(const ThumbnailInfo &info);
-    QImage loadWithDImg(const QString& path);
+    QImage loadWithDImg(const QString& path, IccProfile *profile);
     QImage loadImagePreview(const QString& path);
     QImage handleAlphaChannel(const QImage& thumb);
     int exifOrientation(const QString& filePath, bool fromEmbeddedPreview);

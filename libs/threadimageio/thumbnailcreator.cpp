@@ -63,6 +63,9 @@
 #include "databasebackend.h"
 #include "dimg.h"
 #include "dmetadata.h"
+#include "iccmanager.h"
+#include "iccprofile.h"
+#include "iccsettings.h"
 #include "jpegutils.h"
 #include "pgfutils.h"
 #include "thumbnaildatabaseaccess.h"
@@ -269,6 +272,9 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo &info)
 
     // -- Get the image preview --------------------------------
 
+    IccProfile profile;
+    bool colorManage = IccSettings::instance()->isEnabled();
+
     // Try to extract Exif/IPTC preview first.
     qimage = loadImagePreview(path);
 
@@ -280,15 +286,18 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo &info)
     {
         if (ext == QString("JPEG") || ext == QString("JPG") || ext == QString("JPE"))
         {
+            if (colorManage)
+                qimage = loadWithDImg(path, &profile);
+            else
             // use jpegutils
-            loadJPEGScaled(qimage, path, d->cachedSize);
+                loadJPEGScaled(qimage, path, d->cachedSize);
             failedAtJPEGScaled = qimage.isNull();
         }
         else if (ext == QString("PNG")  ||
             ext == QString("TIFF") ||
             ext == QString("TIF"))
         {
-            qimage       = loadWithDImg(path);
+            qimage       = loadWithDImg(path, &profile);
             failedAtDImg = qimage.isNull();
         }
         else if (ext == QString("PGF"))
@@ -312,17 +321,17 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo &info)
         KDcrawIface::KDcraw::loadHalfPreview(qimage, path);
     }
 
+    // DImg-dependent loading methods: TIFF, PNG, everything supported by QImage
+    if (qimage.isNull() && !failedAtDImg)
+    {
+        qimage = loadWithDImg(path, &profile);
+    }
+
     // Try JPEG anyway
     if (qimage.isNull() && !failedAtJPEGScaled)
     {
         // use jpegutils
         loadJPEGScaled(qimage, path, d->cachedSize);
-    }
-
-    // DImg-dependent loading methods: TIFF, PNG, everything supported by QImage
-    if (qimage.isNull() && !failedAtDImg)
-    {
-        qimage = loadWithDImg(path);
     }
 
     // Try PGF anyway
@@ -347,6 +356,10 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo &info)
         qimage        = qimage.scaled(cheatSize, cheatSize, Qt::KeepAspectRatio, Qt::FastTransformation);
         qimage        = qimage.scaled(d->cachedSize, d->cachedSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
+    if (colorManage && !profile.isNull())
+    {
+        IccManager::transformToSRGB(qimage, profile);
+    }
 
     ThumbnailImage image;
     image.qimage = qimage;
@@ -354,13 +367,12 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo &info)
     return image;
 }
 
-QImage ThumbnailCreator::loadWithDImg(const QString& path)
+QImage ThumbnailCreator::loadWithDImg(const QString& path, IccProfile *profile)
 {
     DImg img;
-    if (d->observer)
-        img.load(path, d->observer, d->rawSettings);
-    else
-        img.load(path);
+    img.setAttribute("scaledLoadingSize", d->cachedSize);
+    img.load(path, false, profile ? true : false, false, d->observer, d->rawSettings);
+    *profile = img.getIccProfile();
     return img.copyQImage();
 }
 

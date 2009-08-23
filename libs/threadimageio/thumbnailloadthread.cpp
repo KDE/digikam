@@ -238,7 +238,9 @@ bool ThumbnailLoadThread::find(const QString& filePath, QPixmap& retPixmap)
 bool ThumbnailLoadThread::find(const QString& filePath, QPixmap& retPixmap, int size)
 {
     const QPixmap *pix;
-    LoadingDescription description(filePath, size, d->exifRotate, LoadingDescription::PreviewParameters::Thumbnail);
+    LoadingDescription description(filePath, size, d->exifRotate,
+                                   LoadingDescription::ConvertToSRGB,
+                                   LoadingDescription::PreviewParameters::Thumbnail);
 
     {
         LoadingCache *cache = LoadingCache::cache();
@@ -264,7 +266,9 @@ void ThumbnailLoadThread::find(const QString& filePath)
 void ThumbnailLoadThread::find(const QString& filePath, int size)
 {
     const QPixmap *pix;
-    LoadingDescription description(filePath, size, d->exifRotate, LoadingDescription::PreviewParameters::Thumbnail);
+    LoadingDescription description(filePath, size, d->exifRotate,
+                                   LoadingDescription::ConvertToSRGB,
+                                   LoadingDescription::PreviewParameters::Thumbnail);
 
     {
         LoadingCache *cache = LoadingCache::cache();
@@ -297,7 +301,9 @@ void ThumbnailLoadThread::findGroup(const QStringList& filePaths, int size)
         LoadingCache::CacheLock lock(cache);
         foreach(const QString& filePath, filePaths)
         {
-            LoadingDescription description(filePath, size, d->exifRotate, LoadingDescription::PreviewParameters::Thumbnail);
+            LoadingDescription description(filePath, size, d->exifRotate,
+                                           LoadingDescription::ConvertToSRGB,
+                                           LoadingDescription::PreviewParameters::Thumbnail);
             if (!cache->retrieveThumbnailPixmap(description.cacheKey()))
                 descriptions << description;
         }
@@ -312,7 +318,9 @@ void ThumbnailLoadThread::preload(const QString& filePath)
 
 void ThumbnailLoadThread::preload(const QString& filePath, int size)
 {
-    LoadingDescription description(filePath, size, d->exifRotate, LoadingDescription::PreviewParameters::Thumbnail);
+    LoadingDescription description(filePath, size, d->exifRotate,
+                                   LoadingDescription::ConvertToSRGB,
+                                   LoadingDescription::PreviewParameters::Thumbnail);
 
     {
         LoadingCache *cache = LoadingCache::cache();
