@@ -162,7 +162,6 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
                            ThumbBarToolTipSettings settings)
             : Q3ScrollView(parent), d(new ThumbBarViewPriv)
 {
-    d->orientation     = orientation;
     d->toolTipSettings = settings;
     d->timer           = new QTimer(this);
     d->toolTipTimer    = new QTimer(this);
@@ -192,19 +191,7 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
 
     setFrameStyle(QFrame::NoFrame);
     setAcceptDrops(true);
-
-    if (d->orientation == Qt::Vertical)
-    {
-        setMinimumWidth(ThumbnailSize::Small + 2*d->margin + 2*d->radius + verticalScrollBar()->sizeHint().width());
-        setMaximumWidth(d->maxTileSize + 2*d->margin + 2*d->radius + verticalScrollBar()->sizeHint().width());
-        setHScrollBarMode(Q3ScrollView::AlwaysOff);
-    }
-    else
-    {
-        setMinimumHeight(ThumbnailSize::Small + 2*d->margin + 2*d->radius + verticalScrollBar()->sizeHint().width());
-        setMaximumHeight(d->maxTileSize + 2*d->margin + 2*d->radius + horizontalScrollBar()->sizeHint().height());
-        setVScrollBarMode(Q3ScrollView::AlwaysOff);
-    }
+    setOrientation(orientation);
 }
 
 ThumbBarView::~ThumbBarView()
@@ -223,6 +210,34 @@ ThumbBarView::~ThumbBarView()
     delete d->toolTipTimer;
     delete d->toolTip;
     delete d;
+}
+
+void ThumbBarView::setOrientation(int orientation)
+{
+	if (orientation != d->orientation)
+	{
+		d->orientation = orientation;
+
+        // Reset the minimum and maximum sizes.
+		setMinimumSize(QSize(0, 0));
+		setMaximumSize(QSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX));
+
+        // Adjust minimum and maximum width to thumbnail sizes.
+		if (d->orientation == Qt::Vertical)
+		{
+			setMinimumWidth(ThumbnailSize::Small + 2*d->margin + 2*d->radius + verticalScrollBar()->sizeHint().width());
+			setMaximumWidth(d->maxTileSize + 2*d->margin + 2*d->radius + verticalScrollBar()->sizeHint().width());
+			setVScrollBarMode(Q3ScrollView::Auto);
+			setHScrollBarMode(Q3ScrollView::AlwaysOff);
+		}
+		else
+		{
+			setMinimumHeight(ThumbnailSize::Small + 2*d->margin + 2*d->radius + verticalScrollBar()->sizeHint().width());
+			setMaximumHeight(d->maxTileSize + 2*d->margin + 2*d->radius + horizontalScrollBar()->sizeHint().height());
+			setHScrollBarMode(Q3ScrollView::Auto);
+			setVScrollBarMode(Q3ScrollView::AlwaysOff);
+		}
+	}
 }
 
 void ThumbBarView::setToolTip(ThumbBarToolTip *toolTip)

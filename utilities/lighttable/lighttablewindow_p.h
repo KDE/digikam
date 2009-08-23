@@ -39,6 +39,7 @@
 #include "statuszoombar.h"
 #include "lighttableview.h"
 #include "lighttablebar.h"
+#include "thumbbardock.h"
 
 namespace Digikam
 {
@@ -67,7 +68,7 @@ public:
         previewView            = 0;
         barView                = 0;
         hSplitter              = 0;
-        vSplitter              = 0;
+        barViewDock            = 0;
         syncPreviewAction      = 0;
         clearListAction        = 0;
         setItemLeftAction      = 0;
@@ -82,6 +83,7 @@ public:
         zoomTo100percents      = 0;
         zoomPlusAction         = 0;
         zoomMinusAction        = 0;
+        showThumbBarAction     = 0;
         statusProgressBar      = 0;
         leftZoomBar            = 0;
         rightZoomBar           = 0;
@@ -107,7 +109,7 @@ public:
     bool                      cancelSlideShow;
 
     SidebarSplitter          *hSplitter;
-    QSplitter                *vSplitter;
+    ThumbBarDock             *barViewDock;
 
     KAction                  *setItemLeftAction;
     KAction                  *setItemRightAction;
@@ -121,6 +123,7 @@ public:
     KAction                  *zoomTo100percents;
     KAction                  *zoomFitToWindowAction;
     KAction                  *fullScreenAction;
+    KToggleAction            *showThumbBarAction;
 
     // Rating actions.
     KAction                  *star0;

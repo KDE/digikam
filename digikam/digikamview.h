@@ -28,6 +28,7 @@
 // Qt includes
 
 #include <QStringList>
+#include <QMainWindow>
 #include <QMap>
 
 // KDE includes

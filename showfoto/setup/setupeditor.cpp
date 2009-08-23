@@ -58,7 +58,6 @@ public:
         backgroundColor       = 0;
         hideToolBar           = 0;
         hideThumbBar          = 0;
-        horizontalThumbBar    = 0;
         showSplash            = 0;
         useTrash              = 0;
         overExposureColor     = 0;
@@ -79,7 +78,6 @@ public:
     QCheckBox    *sortReverse;
     QCheckBox    *hideToolBar;
     QCheckBox    *hideThumbBar;
-    QCheckBox    *horizontalThumbBar;
     QCheckBox    *showSplash;
     QCheckBox    *useTrash;
     QCheckBox    *themebackgroundColor;
@@ -124,10 +122,6 @@ SetupEditor::SetupEditor(QWidget* parent)
 
     d->hideToolBar        = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
     d->hideThumbBar       = new QCheckBox(i18n("Hide &thumbbar in fullscreen mode"), interfaceOptionsGroup);
-    d->horizontalThumbBar = new QCheckBox(i18n("Use &horizontal thumbbar (will need to restart showFoto)"), interfaceOptionsGroup);
-    d->horizontalThumbBar->setWhatsThis( i18n("If this option is enabled, the thumbnail bar will be displayed "
-                                              "horizontally behind the image area. You need to restart showFoto "
-                                              "for this option to take effect."));
     d->useTrash   = new QCheckBox(i18n("&Deleted items should go to the trash"), interfaceOptionsGroup);
     d->showSplash = new QCheckBox(i18n("&Show splash screen at startup"), interfaceOptionsGroup);
 
@@ -147,7 +141,6 @@ SetupEditor::SetupEditor(QWidget* parent)
     gLayout1->addWidget(d->colorBox);
     gLayout1->addWidget(d->hideToolBar);
     gLayout1->addWidget(d->hideThumbBar);
-    gLayout1->addWidget(d->horizontalThumbBar);
     gLayout1->addWidget(d->useTrash);
     gLayout1->addWidget(d->showSplash);
     gLayout1->addWidget(d->useRawImportTool);
@@ -237,7 +230,6 @@ void SetupEditor::readSettings()
     d->backgroundColor->setColor(group.readEntry("BackgroundColor", Black));
     d->hideToolBar->setChecked(group.readEntry("FullScreen Hide ToolBar", false));
     d->hideThumbBar->setChecked(group.readEntry("FullScreenHideThumbBar", true));
-    d->horizontalThumbBar->setChecked(group.readEntry("HorizontalThumbbar", false));
     d->useTrash->setChecked(group.readEntry("DeleteItem2Trash", false));
     d->showSplash->setChecked(group.readEntry("ShowSplash", true));
     d->sidebarType->setCurrentIndex(group.readEntry("Sidebar Title Style", 0));
@@ -256,7 +248,6 @@ void SetupEditor::applySettings()
     group.writeEntry("BackgroundColor",         d->backgroundColor->color());
     group.writeEntry("FullScreen Hide ToolBar", d->hideToolBar->isChecked());
     group.writeEntry("FullScreenHideThumbBar",  d->hideThumbBar->isChecked());
-    group.writeEntry("HorizontalThumbbar",      d->horizontalThumbBar->isChecked());
     group.writeEntry("DeleteItem2Trash",        d->useTrash->isChecked());
     group.writeEntry("ShowSplash",              d->showSplash->isChecked());
     group.writeEntry("Sidebar Title Style",     d->sidebarType->currentIndex());

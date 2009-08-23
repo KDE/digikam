@@ -38,6 +38,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "thumbbardock.h"
 
 class QSplitter;
 class QLabel;
@@ -167,7 +168,7 @@ protected:
 
     void toggleGUI2FullScreen();
 
-    virtual ThumbBarView *thumbBar() const=0;
+    virtual ThumbBarDock *thumbBar() const=0;
     virtual Sidebar *rightSideBar() const=0;
 
     virtual void slideShow(bool startWithCurrent, SlideShowSettings& settings)=0;
@@ -247,7 +248,6 @@ private Q_SLOTS:
     void slotIncreaseZoom();
     void slotDecreaseZoom();
     void slotRawCameraList();
-    void slotToggleShowBar();
     void slotPrepareToLoad();
     void slotShowMenuBar();
     void slotCloseTool();

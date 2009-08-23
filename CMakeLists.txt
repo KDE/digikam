@@ -643,6 +643,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/statusprogressbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/statuszoombar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/thumbbar.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/thumbbardock.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/thumbbartooltip.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/visibilitycontroller.cpp
        )

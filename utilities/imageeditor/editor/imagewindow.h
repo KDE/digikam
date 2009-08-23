@@ -86,6 +86,7 @@ private:
 
     void loadCurrentList(const QString& caption, bool allowSaving);
     void closeEvent(QCloseEvent* e);
+    void showEvent(QShowEvent*);
 
     void dragMoveEvent(QDragMoveEvent *e);
     void dropEvent(QDropEvent *e);
@@ -105,7 +106,7 @@ private:
 
     void slideShow(bool startWithCurrent, SlideShowSettings& settings);
 
-    ThumbBarView *thumbBar() const;
+    ThumbBarDock *thumbBar() const;
     Sidebar *rightSideBar() const;
 
     ImageWindow();

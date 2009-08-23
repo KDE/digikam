@@ -66,6 +66,8 @@ public:
                  ThumbBarToolTipSettings settings=ThumbBarToolTipSettings());
     virtual ~ThumbBarView();
 
+    void setOrientation(int orientation);
+    int  getOrientation();
     void setToolTip(ThumbBarToolTip *toolTip);
 
     int countItems();
@@ -112,7 +114,6 @@ Q_SIGNALS:
 
 protected:
 
-    int  getOrientation();
     int  getTileSize();
     int  getMargin();
     int  getRadius();

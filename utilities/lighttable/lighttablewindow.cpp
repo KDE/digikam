@@ -26,8 +26,8 @@
 
 // Qt includes
 
-#include <QHBoxLayout>
 #include <QFrame>
+#include <QHBoxLayout>
 #include <QVBoxLayout>
 
 // KDE includes
@@ -78,6 +78,7 @@
 #include "slideshow.h"
 #include "setup.h"
 #include "syncjob.h"
+#include "thumbbardock.h"
 #include "thumbnailsize.h"
 #include "lighttablepreview.h"
 #include "lighttablewindow_p.h"
@@ -147,15 +148,9 @@ void LightTableWindow::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("LightTable Settings");
-    if (group.hasKey("Vertical Splitter State"))
-    {
-        QByteArray state;
-        state = group.readEntry("Vertical Splitter State", state);
-        d->vSplitter->restoreState(QByteArray::fromBase64(state));
-    }
 
     d->hSplitter->restoreState(group, "Horizontal Splitter State");
-
+    d->barViewDock->setShouldBeVisible(group.readEntry("Show Thumbnails", true));
     d->navigateByPairAction->setChecked(group.readEntry("Navigate By Pair", false));
     slotToggleNavigateByPair();
 }
@@ -164,8 +159,8 @@ void LightTableWindow::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("LightTable Settings");
-    group.writeEntry("Vertical Splitter State", d->vSplitter->saveState().toBase64());
     d->hSplitter->saveState(group, "Horizontal Splitter State");
+    group.writeEntry("Show Thumbnails", d->barViewDock->shouldBeVisible());
     group.writeEntry("Navigate By Pair", d->navigateByPairAction->isChecked());
     group.writeEntry("Clear On Close", d->clearOnCloseAction->isChecked());
     config->sync();
@@ -195,9 +190,28 @@ void LightTableWindow::closeEvent(QCloseEvent* e)
     if (!e) return;
 
     if (d->clearOnCloseAction->isChecked()) slotClearItemsList();
+
+    // There is one nasty habit with the thumbnail bar if it is floating: it
+    // doesn't close when the parent window does, so it needs to be manually
+    // closed. If the light table is opened again, its original state needs to
+    // be restored.
+    // This only needs to be done when closing a visible window and not when
+    // destroying a closed window, since the latter case will always report that
+    // the thumbnail bar isn't visible.
+    if (isVisible())
+    {
+        d->barViewDock->makeInvisible();
+    }
+
     writeSettings();
 
     e->accept();
+}
+
+void LightTableWindow::showEvent(QShowEvent*)
+{
+	// Restore the visibility of the thumbbar and start autosaving again.
+	d->barViewDock->restoreVisibility();
 }
 
 void LightTableWindow::setupUserArea()
@@ -205,20 +219,19 @@ void LightTableWindow::setupUserArea()
     QWidget* mainW    = new QWidget(this);
     d->hSplitter      = new SidebarSplitter(Qt::Horizontal, mainW);
     QHBoxLayout *hlay = new QHBoxLayout(mainW);
-    d->leftSideBar    = new ImagePropertiesSideBarDB(mainW, d->hSplitter, KMultiTabBar::Left, true);
 
-    QWidget* centralW = new QWidget(d->hSplitter);
-    QVBoxLayout *vlay = new QVBoxLayout(centralW);
-    d->vSplitter      = new QSplitter(Qt::Vertical, centralW);
-    d->barView        = new LightTableBar(d->vSplitter, Qt::Horizontal,
-                                          AlbumSettings::instance()->getExifRotate());
-    d->previewView    = new LightTableView(d->vSplitter);
+    // The left sidebar
+    d->leftSideBar = new ImagePropertiesSideBarDB(mainW, d->hSplitter, KMultiTabBar::Left, true);
 
-    d->rightSideBar   = new ImagePropertiesSideBarDB(mainW, d->hSplitter, KMultiTabBar::Right, true);
+    // The central preview is wrapped in a KMainWindow so that the thumbnail
+    // bar can float around it.
+    KMainWindow* viewContainer = new KMainWindow(mainW, Qt::Widget);
+    d->hSplitter->addWidget(viewContainer);
+    d->previewView = new LightTableView(viewContainer);
+    viewContainer->setCentralWidget(d->previewView);
 
-    vlay->addWidget(d->vSplitter);
-    vlay->setSpacing(0);
-    vlay->setMargin(0);
+    // The right sidebar.
+    d->rightSideBar = new ImagePropertiesSideBarDB(mainW, d->hSplitter, KMultiTabBar::Right, true);
 
     hlay->addWidget(d->leftSideBar);
     hlay->addWidget(d->hSplitter);
@@ -233,11 +246,18 @@ void LightTableWindow::setupUserArea()
     d->hSplitter->setOpaqueResize(false);
     d->hSplitter->setStretchFactor(1, 10);      // set previewview+thumbbar container default size to max.
 
-    d->vSplitter->setFrameStyle( QFrame::NoFrame );
-    d->vSplitter->setFrameShadow( QFrame::Plain );
-    d->vSplitter->setFrameShape( QFrame::NoFrame );
-    d->vSplitter->setOpaqueResize(false);
-    d->vSplitter->setStretchFactor(1, 10);      // set previewview default size to max.
+    // The thumb bar is placed in a detachable/dockable widget.
+    d->barViewDock = new ThumbBarDock(viewContainer, Qt::Tool);
+    d->barViewDock->setObjectName("lighttable_thumbbar");
+    d->barView     = new LightTableBar(d->barViewDock, Qt::Horizontal,
+                                       AlbumSettings::instance()->getExifRotate());
+    d->barViewDock->setWidget(d->barView);
+    viewContainer->addDockWidget(Qt::TopDockWidgetArea, d->barViewDock);
+
+    // Restore the previous state. This doesn't emit the proper signals to the
+    // dock widget, so it has to be manually reinitialized.
+    viewContainer->setAutoSaveSettings("LightTable Thumbbar", true);
+    d->barViewDock->reInitialize();
 
     setCentralWidget(mainW);
 }
@@ -471,6 +491,9 @@ void LightTableWindow::setupActions()
     d->zoomFitToWindowAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_E); // NOTE: Gimp 2 use CTRL+SHIFT+E.
     connect(d->zoomFitToWindowAction, SIGNAL(triggered()), this, SLOT(slotFitToWindow()));
     actionCollection()->addAction("lighttable_zoomfit2window", d->zoomFitToWindowAction);
+
+    d->showThumbBarAction = d->barViewDock->getToggleAction(this);
+    actionCollection()->addAction("lighttable_showthumbbar", d->showThumbBarAction);
 
     d->fullScreenAction = actionCollection()->addAction(KStandardAction::FullScreen,
                           "lighttable_fullscreen", this, SLOT(slotToggleFullScreen()));

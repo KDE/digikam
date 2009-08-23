@@ -27,17 +27,18 @@
 
 // Qt includes
 
-#include <QString>
-#include <QFileInfo>
-#include <QDir>
-#include <QImage>
-#include <QEvent>
-#include <QFrame>
 #include <QApplication>
-#include <QSplitter>
-#include <QTimer>
+#include <QDir>
+#include <QDockWidget>
+#include <QEvent>
+#include <QFileInfo>
+#include <QFrame>
+#include <QImage>
 #include <QLabel>
 #include <QListView>
+#include <QSplitter>
+#include <QString>
+#include <QTimer>
 #include <QTreeView>
 
 // KDE includes
@@ -121,6 +122,7 @@ public:
         tagSearchBar          = 0;
         searchSearchBar       = 0;
         tagFilterSearchBar    = 0;
+        dockArea              = 0;
         splitter              = 0;
         parent                = 0;
         iconView              = 0;
@@ -151,6 +153,8 @@ public:
 
     int                       initialAlbumID;
     int                       thumbSize;
+
+    QMainWindow              *dockArea;
 
     SidebarSplitter          *splitter;
 
@@ -204,10 +208,16 @@ DigikamView::DigikamView(QWidget *parent)
     d->leftSideBar->setObjectName("Digikam Left Sidebar");
     d->splitter->setParent(this);
 
-    d->albumWidgetStack = new AlbumWidgetStack(d->splitter);
-    d->splitter->setStretchFactor(1, 10);      // set AlbumWidgetStack default size to max.
-    d->iconView         = d->albumWidgetStack->imageIconView();
-    d->rightSideBar     = new ImagePropertiesSideBarDB(this, d->splitter, KMultiTabBar::Right, true);
+    // The dock area where the thumbnail bar is allowed to go.
+    d->dockArea = new QMainWindow(this, Qt::Widget);
+    d->splitter->addWidget(d->dockArea);
+    d->albumWidgetStack = new AlbumWidgetStack(d->dockArea);
+    d->dockArea->setCentralWidget(d->albumWidgetStack);
+    d->albumWidgetStack->setDockArea(d->dockArea);
+
+    d->iconView = d->albumWidgetStack->imageIconView();
+
+    d->rightSideBar = new ImagePropertiesSideBarDB(this, d->splitter, KMultiTabBar::Right, true);
     d->rightSideBar->setObjectName("Digikam Right Sidebar");
 
     // To the left.
@@ -591,7 +601,14 @@ void DigikamView::loadViewState()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("MainWindow");
 
+    // Restore the splitter
     d->splitter->restoreState(group);
+
+    // Restore the thumbnail bar dock.
+    QByteArray thumbbarState;
+    thumbbarState = group.readEntry("ThumbbarState", thumbbarState);
+    d->dockArea->restoreState(QByteArray::fromBase64(thumbbarState));
+
     d->initialAlbumID = group.readEntry("InitialAlbumID", 0);
 }
 
@@ -599,7 +616,16 @@ void DigikamView::saveViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("MainWindow");
+
+    // Save the splitter states.
     d->splitter->saveState(group);
+
+    // Save the position and size of the thumbnail bar. The thumbnail bar dock
+    // needs to be closed explicitly, because when it is floating and visible
+    // (when the user is in image preview mode) when the layout is saved, it
+    // also reappears when restoring the view, while it should always be hidden.
+    d->albumWidgetStack->thumbBarDock()->close();
+    group.writeEntry("ThumbbarState", d->dockArea->saveState().toBase64());
 
     Album *album = AlbumManager::instance()->currentAlbum();
     if(album)
@@ -1756,7 +1782,8 @@ void DigikamView::slotCancelSlideShow()
 
 void DigikamView::toggleShowBar(bool b)
 {
-    d->albumWidgetStack->toggleShowBar(b);
+    if (b) d->albumWidgetStack->thumbBarDock()->show();
+    else   d->albumWidgetStack->thumbBarDock()->hide();
 }
 
 void DigikamView::setRecurseAlbums(bool recursive)

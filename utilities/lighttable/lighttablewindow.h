@@ -80,6 +80,7 @@ protected:
 private:
 
     void closeEvent(QCloseEvent* e);
+    void showEvent(QShowEvent*);
     void setupActions();
     void setupConnections();
     void setupUserArea();

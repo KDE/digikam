@@ -462,9 +462,7 @@ void EditorWindow::setupStandardActions()
     connect(d->viewCMViewAction, SIGNAL(triggered()), this, SLOT(slotToggleColorManagedView()));
     actionCollection()->addAction("editorwindow_cmview", d->viewCMViewAction);
 
-    m_showBarAction = new KToggleAction(KIcon("view-choose"), i18n("Show Thumbnails"), this);
-    m_showBarAction->setShortcut(Qt::CTRL+Qt::Key_T);
-    connect(m_showBarAction, SIGNAL(triggered()), this, SLOT(slotToggleShowBar()));
+    m_showBarAction = thumbBar()->getToggleAction(this);
     actionCollection()->addAction("editorwindow_showthumbs", m_showBarAction);
 
     // -- Standard 'Transform' menu actions ---------------------------------------------
@@ -832,9 +830,6 @@ void EditorWindow::readStandardSettings()
     bool autoZoom = group.readEntry("AutoZoom", true);
     if (autoZoom)
         d->zoomFitToWindowAction->activate(QAction::Trigger);
-
-    m_showBarAction->setChecked(group.readEntry("Show Thumbnails", true));
-    slotToggleShowBar();
 }
 
 void EditorWindow::applyStandardSettings()
@@ -959,7 +954,7 @@ void EditorWindow::saveStandardSettings()
     if (m_vSplitter)
         group.writeEntry("Vertical Splitter State", m_vSplitter->saveState().toBase64());
 
-    group.writeEntry("Show Thumbnails", m_showBarAction->isChecked());
+    group.writeEntry("Show Thumbnails", thumbBar()->shouldBeVisible());
     group.writeEntry("FullScreen", m_fullScreenAction->isChecked());
     group.writeEntry("UnderExposureIndicator", d->exposureSettings->underExposureIndicator);
     group.writeEntry("OverExposureIndicator", d->exposureSettings->overExposureIndicator);
@@ -1925,22 +1920,14 @@ void EditorWindow::slotChangeTheme(const QString& theme)
     ThemeEngine::instance()->slotChangeTheme(theme);
 }
 
-void EditorWindow::slotToggleShowBar()
-{
-    if (m_showBarAction->isChecked())
-        thumbBar()->show();
-    else
-        thumbBar()->hide();
-}
-
 void EditorWindow::toggleGUI2FullScreen()
 {
     if (m_fullScreen)
     {
         rightSideBar()->restore(QList<QWidget*>() << thumbBar(), d->fullscreenSizeBackup);
 
-        if (m_showBarAction->isChecked() && m_fullScreenHideThumbBar)
-            thumbBar()->show();
+        if (m_fullScreenHideThumbBar)
+            thumbBar()->restoreVisibility();
     }
     else
     {
@@ -1948,8 +1935,8 @@ void EditorWindow::toggleGUI2FullScreen()
         // in horizontal mode thumbbar wont be member of the splitter, it is just ignored then
         rightSideBar()->backup(QList<QWidget*>() << thumbBar(), &d->fullscreenSizeBackup);
 
-        if (m_showBarAction->isChecked() && m_fullScreenHideThumbBar)
-                thumbBar()->hide();
+        if (m_fullScreenHideThumbBar)
+                thumbBar()->makeInvisible();
     }
 }
 

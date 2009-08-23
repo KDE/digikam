@@ -135,6 +135,7 @@ public:
         openFilesInFolderAction = 0;
         fileOpenAction          = 0;
         thumbBar                = 0;
+        thumbBarDock            = 0;
         rightSideBar            = 0;
         splash                  = 0;
         itemsNb                 = 0;
@@ -160,6 +161,7 @@ public:
 
     Digikam::ThumbnailLoadThread    *thumbLoadThread;
     Digikam::ThumbBarView           *thumbBar;
+    Digikam::ThumbBarDock           *thumbBarDock;
     Digikam::ThumbBarItem           *currentItem;
     Digikam::ImagePropertiesSideBar *rightSideBar;
     Digikam::SplashScreen           *splash;
@@ -435,59 +437,24 @@ void ShowFoto::setupUserArea()
     KConfigGroup group        = config->group("ImageViewer Settings");
 
     QWidget* widget = new QWidget(this);
+    QHBoxLayout *hlay = new QHBoxLayout(widget);
+    m_splitter        = new Digikam::SidebarSplitter(widget);
 
-    if(!group.readEntry("HorizontalThumbbar", false)) // Vertical thumbbar layout
-    {
-        QHBoxLayout *hlay = new QHBoxLayout(widget);
-        m_splitter        = new Digikam::SidebarSplitter(widget);
-        d->thumbBar       = new Digikam::ThumbBarView(m_splitter, Qt::Vertical);
-        m_stackView       = new Digikam::EditorStackView(m_splitter);
-        m_canvas          = new Digikam::Canvas(m_stackView);
+    KMainWindow* viewContainer = new KMainWindow(widget, Qt::Widget);
+    m_splitter->addWidget(viewContainer);
+    m_stackView = new Digikam::EditorStackView(viewContainer);
+    m_canvas    = new Digikam::Canvas(m_stackView);
+    viewContainer->setCentralWidget(m_stackView);
 
-        m_splitter->setStretchFactor(1, 10);      // set Canvas default size to max.
+    m_splitter->setStretchFactor(1, 10);      // set Canvas default size to max.
 
-        d->rightSideBar   = new Digikam::ImagePropertiesSideBar(widget, m_splitter, KMultiTabBar::Right);
-        d->rightSideBar->setObjectName("ShowFoto Sidebar Right");
+    d->rightSideBar   = new Digikam::ImagePropertiesSideBar(widget, m_splitter, KMultiTabBar::Right);
+    d->rightSideBar->setObjectName("ShowFoto Sidebar Right");
 
-        hlay->addWidget(m_splitter);
-        hlay->addWidget(d->rightSideBar);
-        hlay->setSpacing(0);
-        hlay->setMargin(0);
-    }
-    else                                                     // Horizontal thumbbar layout
-    {
-        m_splitter        = new Digikam::SidebarSplitter(Qt::Horizontal, widget);
-        QWidget* widget2  = new QWidget(m_splitter);
-        QVBoxLayout *vlay = new QVBoxLayout(widget2);
-        m_vSplitter       = new QSplitter(Qt::Vertical, widget2);
-        m_stackView       = new Digikam::EditorStackView(m_vSplitter);
-        m_canvas          = new Digikam::Canvas(m_stackView);
-        d->thumbBar       = new Digikam::ThumbBarView(m_vSplitter, Qt::Horizontal);
-
-        m_vSplitter->setFrameStyle( QFrame::NoFrame );
-        m_vSplitter->setFrameShadow( QFrame::Plain );
-        m_vSplitter->setFrameShape( QFrame::NoFrame );
-        m_vSplitter->setOpaqueResize(false);
-
-        vlay->addWidget(m_vSplitter);
-        vlay->setSpacing(0);
-        vlay->setMargin(0);
-
-        QHBoxLayout *hlay = new QHBoxLayout(widget);
-        d->rightSideBar   = new Digikam::ImagePropertiesSideBar(widget, m_splitter, KMultiTabBar::Right);
-        d->rightSideBar->setObjectName("ShowFoto Sidebar Right");
-
-        hlay->addWidget(m_splitter);
-        hlay->addWidget(d->rightSideBar);
-        hlay->setSpacing(0);
-        hlay->setMargin(0);
-        hlay->setStretchFactor(m_splitter, 10);
-
-        m_splitter->setStretchFactor(0, 10);      // set Canvas+thumbbar container default size to max.
-        m_vSplitter->setStretchFactor(0, 10);     // set Canvas default size to max.
-    }
-
-    d->thumbBar->setToolTip(new Digikam::ThumbBarToolTip(d->thumbBar));
+    hlay->addWidget(m_splitter);
+    hlay->addWidget(d->rightSideBar);
+    hlay->setSpacing(0);
+    hlay->setMargin(0);
 
     m_canvas->makeDefaultEditingCanvas();
     m_stackView->setCanvas(m_canvas);
@@ -497,6 +464,38 @@ void ShowFoto::setupUserArea()
     m_splitter->setFrameShadow( QFrame::Plain );
     m_splitter->setFrameShape( QFrame::NoFrame );
     m_splitter->setOpaqueResize(false);
+
+    // Code to check for the now depreciated HorizontalThumbar directive. It
+    // is found, it is honored and deleted. The state will from than on be saved
+    // by viewContainers built-in mechanism.
+    Qt::DockWidgetArea dockArea    = Qt::LeftDockWidgetArea;
+    Qt::Orientation    orientation = Qt::Vertical;
+    if (group.hasKey("HorizontalThumbbar"))
+    {
+        if (group.readEntry("HorizontalThumbbar", true))
+        {
+            // Horizontal thumbbar layout
+            dockArea    = Qt::TopDockWidgetArea;
+            orientation = Qt::Horizontal;
+        }
+        group.deleteEntry("HorizontalThumbbar");
+    }
+
+    // The thumb bar is placed in a detachable/dockable widget.
+    d->thumbBarDock = new Digikam::ThumbBarDock(viewContainer, Qt::Tool);
+    d->thumbBarDock->setObjectName("editor_thumbbar");
+    d->thumbBarDock->setAllowedAreas(Qt::LeftDockWidgetArea |
+                                     Qt::TopDockWidgetArea  |
+                                     Qt::BottomDockWidgetArea);
+    d->thumbBar = new Digikam::ThumbBarView(d->thumbBarDock, orientation);
+    d->thumbBarDock->setWidget(d->thumbBar);
+    viewContainer->addDockWidget(dockArea, d->thumbBarDock);
+    d->thumbBarDock->setFloating(false);
+
+    d->thumbBar->setToolTip(new Digikam::ThumbBarToolTip(d->thumbBar));
+    viewContainer->setAutoSaveSettings("ImageViewer Thumbbar", true);
+    d->thumbBarDock->reInitialize();
+
     setCentralWidget(widget);
 }
 
@@ -647,9 +646,9 @@ void ShowFoto::slotOpenUrl(const KUrl& url)
     // TODO : add preload here like in ImageWindow::slotLoadCurrent() ???
 }
 
-Digikam::ThumbBarView *ShowFoto::thumbBar() const
+Digikam::ThumbBarDock *ShowFoto::thumbBar() const
 {
-    return d->thumbBar;
+    return d->thumbBarDock;
 }
 
 Digikam::Sidebar *ShowFoto::rightSideBar() const

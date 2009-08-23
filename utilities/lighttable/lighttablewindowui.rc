@@ -32,6 +32,8 @@
         <Action name="lighttable_zoomminus" /> 
         <Action name="lighttable_zoomto100percents" />
         <Action name="lighttable_zoomfit2window" />
+        <Separator/>
+        <Action name="lighttable_showthumbbar" />
     </Menu>
 
     <Menu name="help" ><text>&amp;Help</text>

@@ -27,8 +27,9 @@
 
 // Qt includes
 
-#include <QStackedWidget>
 #include <QByteArray>
+#include <QMainWindow>
+#include <QStackedWidget>
 #include <QString>
 
 // KDE includes
@@ -39,6 +40,7 @@
 
 #include "digikam_export.h"
 #include "imageinfo.h"
+#include "thumbbardock.h"
 
 namespace Digikam
 {
@@ -66,6 +68,10 @@ public:
     AlbumWidgetStack(QWidget *parent=0);
     ~AlbumWidgetStack();
 
+    /* Attach the thumbnail dock widget to the specified QMainWindow. */
+    void setDockArea(QMainWindow*);
+
+    ThumbBarDock     *thumbBarDock();
     DigikamImageView *imageIconView();
     ImagePreviewView *imagePreviewView();
 
@@ -88,8 +94,6 @@ public:
     double zoomFactor();
     double zoomMin();
     double zoomMax();
-
-    void toggleShowBar(bool b);
 
     void applySettings();
 
@@ -127,7 +131,6 @@ private Q_SLOTS:
 private:
 
     void readSettings();
-    void saveSettings();
 
 private:
 

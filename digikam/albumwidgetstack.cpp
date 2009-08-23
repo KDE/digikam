@@ -45,6 +45,7 @@
 
 #include "albumsettings.h"
 #include "digikamimageview.h"
+#include "digikamview.h"
 #include "imagealbummodel.h"
 #include "imagealbumfiltermodel.h"
 #include "imagepreviewview.h"
@@ -52,6 +53,7 @@
 #include "loadingcacheinterface.h"
 #include "welcomepageview.h"
 #include "mediaplayerview.h"
+#include "thumbbardock.h"
 
 namespace Digikam
 {
@@ -63,6 +65,7 @@ public:
 
     AlbumWidgetStackPriv()
     {
+        dockArea           = 0;
         imageIconView      = 0;
         imagePreviewView   = 0;
         welcomePageView    = 0;
@@ -71,12 +74,14 @@ public:
         thumbBar           = 0;
         thumbbarTimer      = 0;
         needUpdateBar      = false;
-        everShowedSplitter = false;
     }
+
+    QMainWindow      *dockArea;
 
     QSplitter        *splitter;
 
     ImagePreviewBar  *thumbBar;
+    ThumbBarDock     *thumbBarDock;
 
     DigikamImageView *imageIconView;
 
@@ -89,41 +94,28 @@ public:
     QTimer           *thumbbarTimer;
 
     bool              needUpdateBar;
-
-    bool              everShowedSplitter;
 };
 
 AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
                 : QStackedWidget(parent), d(new AlbumWidgetStackPriv)
 {
     d->imageIconView    = new DigikamImageView(this);
-    d->splitter         = new QSplitter(Qt::Vertical, this);
-    d->imagePreviewView = new ImagePreviewView(d->splitter, this);
-    d->thumbBar         = new ImagePreviewBar(d->splitter, Qt::Horizontal,
+    d->imagePreviewView = new ImagePreviewView(this, this);
+    d->thumbBarDock     = new ThumbBarDock();
+    d->thumbBar         = new ImagePreviewBar(d->thumbBarDock, Qt::Horizontal,
                                               AlbumSettings::instance()->getExifRotate());
+    d->thumbBarDock->setWidget(d->thumbBar);
+    d->thumbBarDock->setObjectName("mainwindow_thumbbar");
 
     // To prevent flicker effect with content when user change icon view filter
     // if scrollbar appears or disapears.
     d->thumbBar->setHScrollBarMode(Q3ScrollView::AlwaysOn);
 
-    d->splitter->setFrameStyle( QFrame::NoFrame );
-    d->splitter->setFrameShadow( QFrame::Plain );
-    d->splitter->setFrameShape( QFrame::NoFrame );
-    d->splitter->setOpaqueResize(false);
-    d->splitter->setStretchFactor(0, 10);
-    d->splitter->setStretchFactor(1, 2);
-
-    // could fix bug 173746, see workaround in readSettings()
-    int imagePreviewIndex = d->splitter->indexOf(d->imagePreviewView);
-    int thumbbarIndex     = d->splitter->indexOf(d->thumbBar);
-    d->splitter->setCollapsible(imagePreviewIndex, false);
-    d->splitter->setCollapsible(thumbbarIndex,     false);
-
     d->welcomePageView  = new WelcomePageView(this);
     d->mediaPlayerView  = new MediaPlayerView(this);
 
     insertWidget(PreviewAlbumMode, d->imageIconView);
-    insertWidget(PreviewImageMode, d->splitter);
+    insertWidget(PreviewImageMode, d->imagePreviewView);
     insertWidget(WelcomePageMode,  d->welcomePageView->view());
     insertWidget(MediaPlayerMode,  d->mediaPlayerView);
 
@@ -203,46 +195,28 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
 
 AlbumWidgetStack::~AlbumWidgetStack()
 {
-    saveSettings();
     delete d;
 }
 
 void AlbumWidgetStack::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("PreviewView");
-    if (group.hasKey("SplitterState"))
-    {
-        QByteArray state;
-        state = group.readEntry("SplitterState", state);
-
-        // workaround for bug 173746: this invalid config string can be found
-        // in beta tester's config. Refuse to load.
-        if (!state.startsWith("AAAA/wAAAAAAAAACAAAAAAAAAAA"))
-            d->splitter->restoreState(QByteArray::fromBase64(state));
-
-        // could fix bug 173746...
-        AlbumSettings *settings = AlbumSettings::instance();
-        bool showThumbbar = settings->getShowThumbbar();
-        toggleShowBar(showThumbbar);
-
-    }
+	AlbumSettings *settings = AlbumSettings::instance();
+	bool showThumbbar = settings->getShowThumbbar();
+	d->thumbBarDock->setShouldBeVisible(showThumbbar);
 }
 
-void AlbumWidgetStack::saveSettings()
+void AlbumWidgetStack::setDockArea(QMainWindow *dockArea)
 {
-    // could fix bug 173746, see workaround in readSettings()
-    // show thumbbar to get a valid splitter state
-    toggleShowBar(true);
-    d->splitter->refresh();
+    // Attach the thumbbar dock to the given dock area and place it initially
+    // on top.
+    d->dockArea = dockArea;
+    d->thumbBarDock->setParent(d->dockArea);
+    d->dockArea->addDockWidget(Qt::TopDockWidgetArea, d->thumbBarDock);
+}
 
-    if (d->everShowedSplitter)
-    {
-        KSharedConfig::Ptr config = KGlobal::config();
-        KConfigGroup group        = config->group("PreviewView");
-        group.writeEntry("SplitterState", d->splitter->saveState().toBase64());
-        config->sync();
-    }
+ThumbBarDock *AlbumWidgetStack::thumbBarDock()
+{
+    return d->thumbBarDock;
 }
 
 void AlbumWidgetStack::slotEscapePreview()
@@ -324,22 +298,27 @@ void AlbumWidgetStack::setPreviewMode(int mode)
         mode != WelcomePageMode  && mode != MediaPlayerMode)
         return;
 
+    if (mode == PreviewImageMode)
+    {
+        d->thumbBarDock->restoreVisibility();
+    }
+    else
+    {
+        d->thumbBarDock->makeInvisible();
+    }
+
     if (mode == PreviewAlbumMode || mode == WelcomePageMode)
     {
+        if (mode == PreviewAlbumMode && currentIndex() != mode)
+            d->imageIconView->setFocus();
         setPreviewItem();
         setCurrentIndex(mode);
         emit signalToggledToPreviewMode(false);
     }
     else
     {
-        // store if we ever showed the splitter at least once
-        if (!d->everShowedSplitter && mode == PreviewImageMode)
-            d->everShowedSplitter = true;
-
         setCurrentIndex(mode);
     }
-
-    d->imageIconView->setFocus();
 }
 
 void AlbumWidgetStack::previewLoaded()
@@ -397,6 +376,7 @@ void AlbumWidgetStack::updateThumbbar()
         return;
     d->needUpdateBar = false;
 
+    d->thumbBarDock->reInitialize();
     d->thumbBar->clear();
 
     ImageInfoList list = d->imageIconView->imageInfos();
@@ -467,14 +447,6 @@ double AlbumWidgetStack::zoomMin()
 double AlbumWidgetStack::zoomMax()
 {
     return d->imagePreviewView->zoomMax();
-}
-
-void AlbumWidgetStack::toggleShowBar(bool b)
-{
-    if (b)
-        d->thumbBar->show();
-    else
-        d->thumbBar->hide();
 }
 
 void AlbumWidgetStack::applySettings()
