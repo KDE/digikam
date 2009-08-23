@@ -61,6 +61,8 @@ public:
      * If no settings is specified, the default sRGB profile is returned.
      */
     IccProfile monitorProfile(QWidget *widget = 0);
+    /// Returns if color management is enabled
+    bool isEnabled();
 
     /**
      * Sets the current ICC settings and writes them to config.

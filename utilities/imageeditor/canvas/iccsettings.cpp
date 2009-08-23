@@ -104,6 +104,11 @@ IccProfile IccSettings::monitorProfile(QWidget *widget)
         return IccProfile::sRGB();
 }
 
+bool IccSettings::isEnabled()
+{
+    return d->settings.enableCM;
+}
+
 void IccSettings::readFromConfig()
 {
     ICCSettingsContainer s;
