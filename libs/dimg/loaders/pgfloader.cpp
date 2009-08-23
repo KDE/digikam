@@ -222,7 +222,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             // Find out if we do the fast-track loading with reduced size. PGF specific.
             int scaledLoadingSize = 0;
             int level             = 0;
-            QVariant attribute = imageGetAttribute("pgfScaledLoadingSize");
+            QVariant attribute = imageGetAttribute("scaledLoadingSize");
             if (attribute.isValid() && pgf.Levels() > 0)
             {
                 scaledLoadingSize = attribute.toInt();

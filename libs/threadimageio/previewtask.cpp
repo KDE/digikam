@@ -184,9 +184,8 @@ void PreviewLoadingTask::execute()
     // DImg-dependent loading methods
     if (m_img.isNull())
     {
-        // Set a hint to try to load a JPEG with the fast scale-before-decoding method
-        m_img.setAttribute("jpegScaledLoadingSize", size);
-        m_img.setAttribute("pgfScaledLoadingSize", size);
+        // Set a hint to try to load a JPEG or PGF with the fast scale-before-decoding method
+        m_img.setAttribute("scaledLoadingSize", size);
         m_img.load(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
     }
 

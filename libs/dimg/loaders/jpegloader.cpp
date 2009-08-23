@@ -183,7 +183,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     // -------------------------------------------------------------------
     // Find out if we do the fast-track loading with reduced size. Jpeg specific.
     int scaledLoadingSize = 0;
-    QVariant attribute = imageGetAttribute("jpegScaledLoadingSize");
+    QVariant attribute = imageGetAttribute("scaledLoadingSize");
     if (attribute.isValid())
         scaledLoadingSize = attribute.toInt();
 
