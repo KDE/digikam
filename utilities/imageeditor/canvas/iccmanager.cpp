@@ -421,13 +421,13 @@ void IccManager::transformToSRGB()
     }
     else
     {
-        IccProfile displayProfile = IccProfile::sRGB();
+        IccProfile outputProfile = IccProfile::sRGB();
 
-        if (!d->embeddedProfile.isSameProfileAs(displayProfile))
+        if (!d->embeddedProfile.isSameProfileAs(outputProfile))
         {
             IccTransform trans;
             trans.setInputProfile(d->embeddedProfile);
-            trans.setOutputProfile(IccProfile::sRGB());
+            trans.setOutputProfile(outputProfile);
             trans.setIntent(d->settings.renderingIntent);
             trans.setUseBlackPointCompensation(d->settings.useBPC);
             trans.apply(d->image, d->observer);
@@ -435,6 +435,28 @@ void IccManager::transformToSRGB()
         }
     }
 }
+
+void IccManager::transformToSRGB(QImage &qimage, const IccProfile& input)
+{
+    if (qimage.isNull())
+        return;
+
+    if (input.isNull())
+        return;
+
+    IccProfile inputProfile(input);
+    IccProfile outputProfile = IccProfile::sRGB();
+
+    if (!inputProfile.isSameProfileAs(outputProfile))
+    {
+        IccTransform trans;
+        trans.setInputProfile(inputProfile);
+        trans.setOutputProfile(outputProfile);
+        trans.setIntent(IccTransform::Perceptual);
+        trans.apply(qimage);
+    }
+}
+
 
 void IccManager::transformForOutput(const IccProfile& prof)
 {

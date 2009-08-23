@@ -116,6 +116,8 @@ public:
     IccProfile imageProfile(ICCSettingsContainer::Behavior behavior,
                             IccProfile specifiedProfile = IccProfile());
 
+    static void transformToSRGB(QImage &qimage, const IccProfile& inputProfile);
+
 protected:
 
     void getTransform(IccTransform& trans, ICCSettingsContainer::Behavior behavior, IccProfile specifiedProfile);
