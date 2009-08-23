@@ -54,7 +54,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 044 ==> 204871 : digiKam crash when rating a picture on the lighttable.
 045 ==> 203594 : Option to display a vertical thumb bar.
 046 ==> 195050 : Color management doesn't work in thumbnails and view mode.
-047 ==> 
+047 ==> 179802 : After raw import image not shown in editor.
+048 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta3 - Release date: 2009-07-24
