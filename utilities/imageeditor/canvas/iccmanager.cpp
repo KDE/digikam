@@ -318,13 +318,17 @@ void IccManager::transformForDisplay(QWidget *widget)
     transformForDisplay(displayProfile(widget));
 }
 
-void IccManager::transformForDisplay(const IccProfile& displayProfile)
+void IccManager::transformForDisplay(const IccProfile& profile)
 {
     if (d->image.isNull())
         return;
 
     if (!d->settings.enableCM)
         return;
+
+    IccProfile outputProfile = profile;
+    if (outputProfile.isNull())
+        outputProfile = displayProfile();
 
     if (isUncalibratedColor())
     {
@@ -333,7 +337,7 @@ void IccManager::transformForDisplay(const IccProfile& displayProfile)
                          "but let the RAW loader do the conversion to sRGB";
     }
 
-    IccTransform trans = displayTransform(displayProfile);
+    IccTransform trans = displayTransform(outputProfile);
     if (trans.willHaveEffect())
     {
         trans.apply(d->image, d->observer);

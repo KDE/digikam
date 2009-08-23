@@ -94,7 +94,7 @@ public:
     void transformForDisplay(QWidget *widget);
     void transformForDisplay(const IccProfile& displayProfile);
 
-    IccProfile displayProfile(QWidget *displayingWidget = 0);
+    static IccProfile displayProfile(QWidget *displayingWidget = 0);
     IccTransform displayTransform(QWidget *displayingWidget = 0);
     IccTransform displayTransform(const IccProfile& displayProfile);
 
