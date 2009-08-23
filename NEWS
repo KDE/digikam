@@ -4,6 +4,7 @@ digiKam 1.0.0-beta4 - Release date: 2009-08-xx
 NEW FEATURES:
 
 General        : Add OpenStreetMap support in Geolocation panels.
+General        : Showfoto, Editor, Preview, LightTable: Thumbbar is now dockable everywhere.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -51,7 +52,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 042 ==> 163160 : Remember color management status between sessions.
 043 ==> 204797 : Click lock icon crash digiKam.
 044 ==> 204871 : digiKam crash when rating a picture on the lighttable.
-045 ==> 
+045 ==> 203594 : Option to display a vertical thumb bar.
+046 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta3 - Release date: 2009-07-24
