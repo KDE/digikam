@@ -142,7 +142,8 @@ void FingerPrintsGenerator::processOne()
     if (d->cancel) return;
     QString path = d->allPicturesPath.first();
     d->previewLoadThread->load(LoadingDescription(path, HaarIface::preferredSize(),
-                               AlbumSettings::instance()->getExifRotate()));
+                               AlbumSettings::instance()->getExifRotate(),
+                               LoadingDescription::ConvertToSRGB));
 }
 
 void FingerPrintsGenerator::complete()

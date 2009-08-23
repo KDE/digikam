@@ -247,12 +247,14 @@ void LightTablePreview::setImagePath(const QString& path)
     if (!d->previewThread)
     {
         d->previewThread = new PreviewLoadThread();
+        d->previewThread->setDisplayingWidget(this);
         connect(d->previewThread, SIGNAL(signalImageLoaded(const LoadingDescription &, const DImg &)),
                 this, SLOT(slotGotImagePreview(const LoadingDescription &, const DImg&)));
     }
     if (!d->previewPreloadThread)
     {
         d->previewPreloadThread = new PreviewLoadThread();
+        d->previewPreloadThread->setDisplayingWidget(this);
         connect(d->previewPreloadThread, SIGNAL(signalImageLoaded(const LoadingDescription &, const DImg &)),
                 this, SLOT(slotNextPreload()));
     }

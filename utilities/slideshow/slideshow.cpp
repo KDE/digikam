@@ -182,6 +182,8 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
     d->timer                = new QTimer(this);
     d->mouseMoveTimer       = new QTimer(this);
 
+    d->previewThread->setDisplayingWidget(this);
+    d->previewPreloadThread->setDisplayingWidget(this);
     connect(d->previewThread, SIGNAL(signalImageLoaded(const LoadingDescription &, const DImg &)),
             this, SLOT(slotGotImagePreview(const LoadingDescription &, const DImg&)));
 
