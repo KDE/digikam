@@ -35,7 +35,7 @@ DragHandle::DragHandle(QDockWidget *parent) : QWidget()
 {
     m_parent = parent;
 
-    setToolTip(i18n("Drag to repostition"));
+    setToolTip(i18n("Drag to reposition"));
     setCursor(Qt::PointingHandCursor);
 
     // When the dock location changes, check if the orientation has changed.

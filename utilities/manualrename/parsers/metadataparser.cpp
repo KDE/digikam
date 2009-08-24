@@ -35,7 +35,7 @@ namespace ManualRename
 {
 
 MetadataParser::MetadataParser()
-              : Parser(i18n("Metdata"), SmallIcon("metadataedit"))
+              : Parser(i18n("Metadata"), SmallIcon("metadataedit"))
 {
     addToken("[meta:'key']", i18n("Metadata"),
             i18n("add metadata (key = EXIF|IPTC|XMP:keyword)"));
