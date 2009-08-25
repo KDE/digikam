@@ -1782,8 +1782,7 @@ void DigikamView::slotCancelSlideShow()
 
 void DigikamView::toggleShowBar(bool b)
 {
-    if (b) d->albumWidgetStack->thumbBarDock()->show();
-    else   d->albumWidgetStack->thumbBarDock()->hide();
+	d->albumWidgetStack->thumbBarDock()->showThumbBar(b);
 }
 
 void DigikamView::setRecurseAlbums(bool recursive)

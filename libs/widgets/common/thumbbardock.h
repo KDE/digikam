@@ -107,11 +107,15 @@ public:
     KToggleAction *getToggleAction(QObject *parent, QString caption = i18n("Show Thumbnails"));
 
     /* The first two functions can be used to hide a (floating) thumbbar and
-     * show it again, if it was visible. The third and fourth specify if the
-     *  thumbbar should be visible when the window is shown, altough it is
-     *  currently hidden. The first time the window is shown after calling these
-     *  last two functions, the "should be" state is reset to whatever the
-     *  current state is.
+     * show it again, if it was visible. They can be thought of as the state
+     * respecting counterparts of hide and show.
+     * The third and fourth function specify if the thumbbar should be visible
+     * when restoreVisibility is called. The first time the window is shown
+     * after calling these last two functions, the "should be" state is reset to
+     * whatever the current state is.
+     * NOTE: The setVisible() (or show() and hide()) functions are still
+     * available as low-level functions, but they don't keep track of the state.
+     * To do that, the showThumbBar() function is available.
      */
     void makeInvisible();
     void restoreVisibility();
@@ -120,8 +124,8 @@ public:
 
 public Q_SLOTS:
 
+	void showThumbBar(bool);
     void slotDockLocationChanged(Qt::DockWidgetArea area);
-    void slotShowThumbBar(bool);
 
 private:
 

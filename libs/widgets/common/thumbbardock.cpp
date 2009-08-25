@@ -156,7 +156,7 @@ KToggleAction *ThumbBarDock::getToggleAction(QObject *parent, QString caption)
     // Connect the triggered signal, which is only emitted after a user action
     // and not programmatically, to the show/hide method.
     connect(action, SIGNAL(triggered(bool)),
-            this, SLOT(slotShowThumbBar(bool)));
+            this, SLOT(showThumbBar(bool)));
 
     // Connect the show/hide signal to the state of the toggle action.
     connect(this, SIGNAL(visibilityChanged(bool)),
@@ -214,7 +214,7 @@ void ThumbBarDock::slotDockLocationChanged(Qt::DockWidgetArea area)
     }
 }
 
-void ThumbBarDock::slotShowThumbBar(bool status)
+void ThumbBarDock::showThumbBar(bool status)
 {
     if (status) m_visible = WAS_SHOWN;
     else        m_visible = WAS_HIDDEN;
