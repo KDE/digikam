@@ -45,7 +45,7 @@ void CameraNameParser::parse(QString& parseString, const ParseInformation& info)
     if (!stringIsValid(parseString))
         return;
 
-    QString cameraName = info.cameraname;
+    QString cameraName = info.cameraName;
 
     QRegExp regExp("\\[cam\\]");
     regExp.setCaseSensitivity(Qt::CaseInsensitive);

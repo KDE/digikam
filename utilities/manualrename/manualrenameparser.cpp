@@ -74,7 +74,7 @@ QString ManualRenameParser::parse(const QString& parseString, const ParseInforma
 {
     if (!Parser::stringIsValid(parseString))
     {
-        QFileInfo fi(info.filename);
+        QFileInfo fi(info.fileName);
         QString baseName = fi.baseName();
         return baseName;
     }

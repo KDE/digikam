@@ -59,7 +59,7 @@ void FilenameParser::parse(QString& parseString, const ParseInformation& info)
     if (!stringIsValid(parseString))
         return;
 
-    QFileInfo fi(info.filename);
+    QFileInfo fi(info.fileName);
     QString baseFileName = fi.baseName();
 
     QRegExp regExp("\\*{1}");

@@ -113,8 +113,8 @@ void ManualRenameWidgetTest::testNumberToken()
     ManualRenameParser parser;
 
     ParseInformation info;
-    info.filename   = filename;
-    info.cameraname = cameraName;
+    info.fileName   = filename;
+    info.cameraName = cameraName;
     info.datetime   = cameraDate;
     info.index      = index;
 
@@ -167,8 +167,8 @@ void ManualRenameWidgetTest::testFirstLetterOfEachWordUppercaseToken()
     ManualRenameParser parser;
 
     ParseInformation info;
-    info.filename   = filename;
-    info.cameraname = cameraName;
+    info.fileName   = filename;
+    info.cameraName = cameraName;
     info.datetime   = cameraDate;
     info.index      = index;
 
@@ -221,8 +221,8 @@ void ManualRenameWidgetTest::testUppercaseToken()
     ManualRenameParser parser;
 
     ParseInformation info;
-    info.filename   = filename;
-    info.cameraname = cameraName;
+    info.fileName   = filename;
+    info.cameraName = cameraName;
     info.datetime   = cameraDate;
     info.index      = index;
 
@@ -271,8 +271,8 @@ void ManualRenameWidgetTest::testLowercaseToken()
     ManualRenameParser parser;
 
     ParseInformation info;
-    info.filename   = filename;
-    info.cameraname = cameraName;
+    info.fileName   = filename;
+    info.cameraName = cameraName;
     info.datetime   = cameraDate;
     info.index      = index;
 
@@ -327,8 +327,8 @@ void ManualRenameWidgetTest::testCameraToken()
     ManualRenameParser parser;
 
     ParseInformation info;
-    info.filename   = filename;
-    info.cameraname = cameraName;
+    info.fileName   = filename;
+    info.cameraName = cameraName;
     info.datetime   = cameraDate;
     info.index      = index;
 
@@ -344,8 +344,8 @@ void ManualRenameWidgetTest::testEmptyParseString()
     ManualRenameParser parser;
 
     ParseInformation info;
-    info.filename   = filename;
-    info.cameraname = QString();
+    info.fileName   = filename;
+    info.cameraName = QString();
     info.index      = 1;
     info.datetime   = curdate;
 

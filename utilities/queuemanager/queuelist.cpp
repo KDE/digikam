@@ -834,8 +834,8 @@ void QueueListView::updateDestFileNames()
 
                 ManualRenameParser p;
                 ParseInformation info;
-                info.filename   = baseName;
-                info.cameraname = camera;
+                info.fileName   = baseName;
+                info.cameraName = camera;
                 info.datetime   = date;
                 info.index      = index;
                 baseName        = p.parse(parser, info);
