@@ -116,7 +116,10 @@ public:
     IccProfile imageProfile(ICCSettingsContainer::Behavior behavior,
                             IccProfile specifiedProfile = IccProfile());
 
+    /** Transforms the given QImage from the given inputProfile to sRGB. */
     static void transformToSRGB(QImage &qimage, const IccProfile& inputProfile);
+    /** Transforms the given QImage from sRGB to given display profile. */
+    static void transformForDisplay(QImage &qimage, const IccProfile& displayProfile = displayProfile());
 
 protected:
 

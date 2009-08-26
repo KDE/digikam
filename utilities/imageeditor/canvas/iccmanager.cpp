@@ -461,6 +461,26 @@ void IccManager::transformToSRGB(QImage &qimage, const IccProfile& input)
     }
 }
 
+void IccManager::transformForDisplay(QImage &qimage, const IccProfile& displayProfile)
+{
+    if (qimage.isNull())
+        return;
+
+    if (displayProfile.isNull())
+        return;
+
+    IccProfile inputProfile = IccProfile::sRGB();
+    IccProfile outputProfile(displayProfile);
+
+    if (!inputProfile.isSameProfileAs(outputProfile))
+    {
+        IccTransform trans;
+        trans.setInputProfile(inputProfile);
+        trans.setOutputProfile(outputProfile);
+        trans.setIntent(IccTransform::Perceptual);
+        trans.apply(qimage);
+    }
+}
 
 void IccManager::transformForOutput(const IccProfile& prof)
 {
