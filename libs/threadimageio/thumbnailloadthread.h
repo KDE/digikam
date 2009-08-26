@@ -72,6 +72,12 @@ public:
     static void initializeThumbnailDatabase(const QString &thumbnailDBFile, ThumbnailInfoProvider *provider = 0);
 
     /**
+     * For color management, this sets the widget the thumbnails will be color managed for.
+     * (currently it is only possible to set one global widget)
+     */
+    static void setDisplayingWidget(QWidget *widget);
+
+    /**
      * Find a thumbnail.
      * If the pixmap is found in the cache, returns true and sets pixmap
      * to the found QPixmap.

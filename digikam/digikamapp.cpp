@@ -183,6 +183,7 @@ DigikamApp::DigikamApp()
     AlbumLister::instance();
     LoadingCacheInterface::initialize();
     IccSettings::instance()->loadAllProfilesProperties();
+    ThumbnailLoadThread::setDisplayingWidget(this);
 
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));

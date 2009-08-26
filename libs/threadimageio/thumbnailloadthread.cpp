@@ -40,6 +40,9 @@
 // Local includes
 
 #include "databaseparameters.h"
+#include "iccmanager.h"
+#include "iccprofile.h"
+#include "iccsettings.h"
 #include "thumbnaildatabaseaccess.h"
 #include "thumbnailsize.h"
 #include "thumbnailtask.h"
@@ -72,11 +75,13 @@ public:
     {
         storageMethod      = ThumbnailCreator::FreeDesktopStandard;
         provider           = 0;
+        displayingWidget   = 0;
         firstThreadCreated = false;
     }
 
     ThumbnailCreator::StorageMethod  storageMethod;
     ThumbnailInfoProvider           *provider;
+    QWidget                         *displayingWidget;
 
     bool firstThreadCreated;
 };
@@ -116,6 +121,8 @@ public:
     QList<LoadingDescription>       kdeTodo;
     QHash<KUrl, LoadingDescription> kdeJobHash;
     KIO::PreviewJob                *kdeJob;
+
+    LoadingDescription createLoadingDescription(const QString filePath, int size);
 };
 
 K_GLOBAL_STATIC(ThumbnailLoadThread, defaultIconViewObject)
@@ -185,6 +192,11 @@ void ThumbnailLoadThread::initializeThumbnailDatabase(const QString &thumbnailDB
     }
 }
 
+void ThumbnailLoadThread::setDisplayingWidget(QWidget *widget)
+{
+    static_d->displayingWidget = widget;
+}
+
 void ThumbnailLoadThread::setThumbnailSize(int size)
 {
     d->size = size;
@@ -235,12 +247,25 @@ bool ThumbnailLoadThread::find(const QString& filePath, QPixmap& retPixmap)
     return find(filePath, retPixmap, d->size);
 }
 
+LoadingDescription ThumbnailLoadThreadPriv::createLoadingDescription(const QString filePath, int size)
+{
+    LoadingDescription description(filePath, size, exifRotate,
+                                   LoadingDescription::NoColorConversion,
+                                   LoadingDescription::PreviewParameters::Thumbnail);
+
+    if (IccSettings::instance()->isEnabled())
+    {
+        description.postProcessingParameters.colorManagement = LoadingDescription::ConvertForDisplay;
+        description.postProcessingParameters.setProfile(IccManager::displayProfile(static_d->displayingWidget));
+    }
+
+    return description;
+}
+
 bool ThumbnailLoadThread::find(const QString& filePath, QPixmap& retPixmap, int size)
 {
     const QPixmap *pix;
-    LoadingDescription description(filePath, size, d->exifRotate,
-                                   LoadingDescription::ConvertToSRGB,
-                                   LoadingDescription::PreviewParameters::Thumbnail);
+    LoadingDescription description = d->createLoadingDescription(filePath, size);
 
     {
         LoadingCache *cache = LoadingCache::cache();
@@ -266,9 +291,7 @@ void ThumbnailLoadThread::find(const QString& filePath)
 void ThumbnailLoadThread::find(const QString& filePath, int size)
 {
     const QPixmap *pix;
-    LoadingDescription description(filePath, size, d->exifRotate,
-                                   LoadingDescription::ConvertToSRGB,
-                                   LoadingDescription::PreviewParameters::Thumbnail);
+    LoadingDescription description = d->createLoadingDescription(filePath, size);
 
     {
         LoadingCache *cache = LoadingCache::cache();
@@ -301,9 +324,7 @@ void ThumbnailLoadThread::findGroup(const QStringList& filePaths, int size)
         LoadingCache::CacheLock lock(cache);
         foreach(const QString& filePath, filePaths)
         {
-            LoadingDescription description(filePath, size, d->exifRotate,
-                                           LoadingDescription::ConvertToSRGB,
-                                           LoadingDescription::PreviewParameters::Thumbnail);
+            LoadingDescription description = d->createLoadingDescription(filePath, size);
             if (!cache->retrieveThumbnailPixmap(description.cacheKey()))
                 descriptions << description;
         }
@@ -318,9 +339,7 @@ void ThumbnailLoadThread::preload(const QString& filePath)
 
 void ThumbnailLoadThread::preload(const QString& filePath, int size)
 {
-    LoadingDescription description(filePath, size, d->exifRotate,
-                                   LoadingDescription::ConvertToSRGB,
-                                   LoadingDescription::PreviewParameters::Thumbnail);
+    LoadingDescription description = d->createLoadingDescription(filePath, size);
 
     {
         LoadingCache *cache = LoadingCache::cache();
