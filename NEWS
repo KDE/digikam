@@ -55,7 +55,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 045 ==> 203594 : Option to display a vertical thumb bar.
 046 ==> 195050 : Color management doesn't work in thumbnails and view mode.
 047 ==> 179802 : After raw import image not shown in editor.
-048 ==> 
+048 ==> 172196 : Color managed view is inaccurate.
+049 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta3 - Release date: 2009-07-24
