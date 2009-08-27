@@ -67,11 +67,6 @@ void ThumbnailLoadingTask::execute()
     if (m_loadingTaskStatus == LoadingTaskStatusStopping)
         return;
 
-    // initialize creator
-    m_creator->setThumbnailSize(m_loadingDescription.previewParameters.size);
-    m_creator->setExifRotate(m_loadingDescription.previewParameters.exifRotate);
-    m_creator->setLoadingProperties(this, m_loadingDescription.rawDecodingSettings);
-
     LoadingCache *cache = LoadingCache::cache();
     {
         LoadingCache::CacheLock lock(cache);
@@ -132,6 +127,9 @@ void ThumbnailLoadingTask::execute()
     }
 
     // Load or create thumbnail
+    m_creator->setThumbnailSize(m_loadingDescription.previewParameters.size);
+    m_creator->setExifRotate(m_loadingDescription.previewParameters.exifRotate);
+    m_creator->setLoadingProperties(this, m_loadingDescription.rawDecodingSettings);
     m_qimage = m_creator->load(m_loadingDescription.filePath);
 
     {
