@@ -115,7 +115,7 @@ public:
 
     ThumbnailCreator*               creator;
 
-    QList<ThumbnailResult>          collectedResults;
+    QHash<QString, ThumbnailResult> collectedResults;
     QMutex                          resultsMutex;
 
     QList<LoadingDescription>       kdeTodo;
@@ -266,17 +266,25 @@ bool ThumbnailLoadThread::find(const QString& filePath, QPixmap& retPixmap, int 
 {
     const QPixmap *pix;
     LoadingDescription description = d->createLoadingDescription(filePath, size);
+    QString cacheKey = description.cacheKey();
 
     {
         LoadingCache *cache = LoadingCache::cache();
         LoadingCache::CacheLock lock(cache);
-        pix = cache->retrieveThumbnailPixmap(description.cacheKey());
+        pix = cache->retrieveThumbnailPixmap(cacheKey);
     }
 
     if (pix)
     {
         retPixmap = QPixmap(*pix);
         return true;
+    }
+
+    {
+        // If there is a result waiting for conversion to pixmap, return false - pixmap will come shortly
+        QMutexLocker lock(&d->resultsMutex);
+        if (d->collectedResults.contains(cacheKey))
+            return false;
     }
 
     load(description);
@@ -292,17 +300,25 @@ void ThumbnailLoadThread::find(const QString& filePath, int size)
 {
     const QPixmap *pix;
     LoadingDescription description = d->createLoadingDescription(filePath, size);
+    QString cacheKey = description.cacheKey();
 
     {
         LoadingCache *cache = LoadingCache::cache();
         LoadingCache::CacheLock lock(cache);
-        pix = cache->retrieveThumbnailPixmap(description.cacheKey());
+        pix = cache->retrieveThumbnailPixmap(cacheKey);
     }
 
     if (pix)
     {
         emit signalThumbnailLoaded(description, QPixmap(*pix));
         return;
+    }
+
+    {
+        // If there is a result waiting for conversion to pixmap, return false - pixmap will come shortly
+        QMutexLocker lock(&d->resultsMutex);
+        if (d->collectedResults.contains(cacheKey))
+            return;
     }
 
     load(description);
@@ -321,12 +337,24 @@ void ThumbnailLoadThread::findGroup(const QStringList& filePaths, int size)
     QList<LoadingDescription> descriptions;
     {
         LoadingCache *cache = LoadingCache::cache();
-        LoadingCache::CacheLock lock(cache);
         foreach(const QString& filePath, filePaths)
         {
             LoadingDescription description = d->createLoadingDescription(filePath, size);
-            if (!cache->retrieveThumbnailPixmap(description.cacheKey()))
-                descriptions << description;
+            QString cacheKey = description.cacheKey();
+
+            {
+                LoadingCache::CacheLock lock(cache);
+                if (cache->retrieveThumbnailPixmap(cacheKey))
+                    continue;
+            }
+
+            {
+                QMutexLocker lock(&d->resultsMutex);
+                if (d->collectedResults.contains(cacheKey))
+                    continue;
+            }
+
+            descriptions << description;
         }
     }
     ManagedLoadSaveThread::prependThumbnailGroup(descriptions);
@@ -340,11 +368,18 @@ void ThumbnailLoadThread::preload(const QString& filePath)
 void ThumbnailLoadThread::preload(const QString& filePath, int size)
 {
     LoadingDescription description = d->createLoadingDescription(filePath, size);
+    QString cacheKey = description.cacheKey();
 
     {
         LoadingCache *cache = LoadingCache::cache();
         LoadingCache::CacheLock lock(cache);
-        if (cache->retrieveThumbnailPixmap(description.cacheKey()))
+        if (cache->retrieveThumbnailPixmap(cacheKey))
+            return;
+    }
+
+    {
+        QMutexLocker lock(&d->resultsMutex);
+        if (d->collectedResults.contains(cacheKey))
             return;
     }
 
@@ -396,7 +431,7 @@ void ThumbnailLoadThread::thumbnailLoaded(const LoadingDescription& loadingDescr
     // This means there can be several results per pixmap,
     // to speed up cases where inter-thread communication is the limiting factor
     QMutexLocker lock(&d->resultsMutex);
-    d->collectedResults << ThumbnailResult(loadingDescription, img);
+    d->collectedResults.insert(loadingDescription.cacheKey(), ThumbnailResult(loadingDescription, img));
     // only sent signal when flag indicates there is no signal on the way currently
     if (!d->notifiedForResults)
     {
@@ -411,7 +446,7 @@ void ThumbnailLoadThread::slotThumbnailsAvailable()
     QList<ThumbnailResult> results;
     {
         QMutexLocker lock(&d->resultsMutex);
-        results = d->collectedResults;
+        results = d->collectedResults.values();
         d->collectedResults.clear();
         // reset flag so that for next result, the signal is sent again
         d->notifiedForResults = false;

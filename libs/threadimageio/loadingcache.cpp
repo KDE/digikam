@@ -89,7 +89,7 @@ LoadingCache::LoadingCache()
             : d(new LoadingCachePriv(this))
 {
     setCacheSize(60);
-    setThumbnailCacheSize(0, 100);
+    setThumbnailCacheSize(5, 100);
 
     // good place to call it here as LoadingCache is a singleton
     qRegisterMetaType<LoadingDescription>("LoadingDescription");
