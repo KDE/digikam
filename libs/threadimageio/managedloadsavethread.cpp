@@ -306,8 +306,10 @@ void ManagedLoadSaveThread::prependThumbnailGroup(QList<LoadingDescription> desc
         LoadingTask *existingTask = findExistingTask(descriptions[i]);
 
         // remove task, if not the current task
-        if (existingTask && existingTask != m_currentTask)
+        if (existingTask)
         {
+            if (existingTask == m_currentTask)
+                continue;
             m_todo.removeAll(existingTask);
             delete existingTask;
         }
