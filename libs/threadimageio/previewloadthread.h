@@ -41,12 +41,25 @@ public:
 
     /**
      * Load a preview that is optimized for fast loading.
+     * Raw decoding and color management settings will be adjusted.
+     */
+    void load(const QString& filePath, int size, bool exifRotate);
+    /**
+     * Load a preview. Loading description will not be touched.
      */
     void load(LoadingDescription description);
+
     /**
      * Load a preview with higher resolution, trading more quality
      * for less speed.
+     * Raw decoding and color management settings will be adjusted.
+     */
+    void loadHighQuality(const QString& filePath, bool exifRotate);
+
+    /**
+     * Load a preview with higher resolution.
      * In the LoadingDescription container, provide "0" as maximum size.
+     * The given loading description will not be touched.
      */
     void loadHighQuality(LoadingDescription description);
 
@@ -55,6 +68,7 @@ public:
 
 protected:
 
+    LoadingDescription createLoadingDescription(const QString& filePath, int size, bool exifRotate);
     QWidget *m_displayingWidget;
 };
 

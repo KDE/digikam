@@ -130,7 +130,7 @@ public:
      *    If size is 0, DImg based loading will be used with default raw decoding settings.
      */
     LoadingDescription(const QString& filePath, int size, bool exifRotate,
-                       ColorManagementSettings = ConvertForDisplay,
+                       ColorManagementSettings = NoColorConversion,
                        PreviewParameters::PreviewType = PreviewParameters::PreviewImage);
 
     QString           filePath;

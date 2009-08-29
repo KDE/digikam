@@ -260,11 +260,9 @@ void LightTablePreview::setImagePath(const QString& path)
     }
 
     if (d->loadFullImageSize)
-        d->previewThread->loadHighQuality(LoadingDescription(path, 0,
-                          AlbumSettings::instance()->getExifRotate()));
+        d->previewThread->loadHighQuality(path, AlbumSettings::instance()->getExifRotate());
     else
-        d->previewThread->load(LoadingDescription(path, d->previewSize,
-                          AlbumSettings::instance()->getExifRotate()));
+        d->previewThread->load(path, d->previewSize, AlbumSettings::instance()->getExifRotate());
 }
 
 void LightTablePreview::slotGotImagePreview(const LoadingDescription& description, const DImg& preview)
@@ -317,8 +315,10 @@ void LightTablePreview::slotNextPreload()
     else
         return;
 
-    d->previewPreloadThread->load(LoadingDescription(loadPath, d->previewSize,
-                                  AlbumSettings::instance()->getExifRotate()));
+    if (d->loadFullImageSize)
+        d->previewThread->loadHighQuality(loadPath, AlbumSettings::instance()->getExifRotate());
+    else
+        d->previewThread->load(loadPath, d->previewSize, AlbumSettings::instance()->getExifRotate());
 }
 
 void LightTablePreview::setImageInfo(const ImageInfo& info, const ImageInfo& previous, const ImageInfo& next)

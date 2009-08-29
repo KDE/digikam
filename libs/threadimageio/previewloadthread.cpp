@@ -38,20 +38,42 @@ PreviewLoadThread::PreviewLoadThread()
 {
 }
 
+LoadingDescription PreviewLoadThread::createLoadingDescription(const QString& filePath, int size, bool exifRotate)
+{
+    LoadingDescription description(filePath, size, exifRotate);
+    description.rawDecodingSettings.optimizeTimeLoading();
+    description.rawDecodingSettings.sixteenBitsImage   = false;
+    description.rawDecodingSettings.halfSizeColorImage = false;
+
+    ICCSettingsContainer settings = IccSettings::instance()->settings();
+    if (settings.enableCM && settings.useManagedPreviews)
+    {
+        description.postProcessingParameters.colorManagement = LoadingDescription::ConvertForDisplay;
+        description.postProcessingParameters.setProfile(IccManager::displayProfile(m_displayingWidget));
+    }
+
+    return description;
+}
+
+void PreviewLoadThread::load(const QString& filePath, int size, bool exifRotate)
+{
+    load(createLoadingDescription(filePath, size, exifRotate));
+}
+
+void PreviewLoadThread::loadHighQuality(const QString& filePath, bool exifRotate)
+{
+    loadHighQuality(createLoadingDescription(filePath, 0, exifRotate));
+}
+
 void PreviewLoadThread::load(LoadingDescription description)
 {
-    description.rawDecodingSettings.sixteenBitsImage = false;
-    if (description.postProcessingParameters.colorManagement == LoadingDescription::ConvertForDisplay)
-        description.postProcessingParameters.setProfile(IccManager::displayProfile(m_displayingWidget));
+    // creates a PreviewLoadingTask, which uses different mechanisms than a normal loading task
     ManagedLoadSaveThread::loadPreview(description);
 }
 
 void PreviewLoadThread::loadHighQuality(LoadingDescription description)
 {
-    description.rawDecodingSettings.optimizeTimeLoading();
-    description.rawDecodingSettings.sixteenBitsImage = false;
-    if (description.postProcessingParameters.colorManagement == LoadingDescription::ConvertForDisplay)
-        description.postProcessingParameters.setProfile(IccManager::displayProfile(m_displayingWidget));
+    // creates a normal loading task
     ManagedLoadSaveThread::load(description, LoadingModeShared, LoadingPolicyFirstRemovePrevious);
 }
 
