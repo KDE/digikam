@@ -50,6 +50,7 @@ ICCSettingsContainer::ICCSettingsContainer()
     lastUncalibratedBehavior      = AutoToWorkspace;
 
     useManagedView                = false;
+    useManagedPreviews            = false;
     useBPC                        = true;
     renderingIntent               = IccTransform::Perceptual;
 }
@@ -80,6 +81,7 @@ void ICCSettingsContainer::readFromConfig(KConfigGroup& group)
 
     useBPC               = group.readEntry("BPCAlgorithm", true);
     useManagedView       = group.readEntry("ManagedView", false);
+    useManagedPreviews   = group.readEntry("ManagedPreviews", false);
     renderingIntent      = group.readEntry("RenderingIntent", (int)IccTransform::Perceptual);
     iccFolder            = group.readEntry("DefaultPath", QString());
 }
@@ -103,6 +105,7 @@ void ICCSettingsContainer::writeToConfig(KConfigGroup& group) const
 
     group.writeEntry("BPCAlgorithm", useBPC);
     group.writeEntry("ManagedView", useManagedView);
+    group.writeEntry("ManagedPreviews", useManagedPreviews);
     group.writeEntry("RenderingIntent", renderingIntent);
 
     group.writePathEntry("WorkProfileFile", workspaceProfile);

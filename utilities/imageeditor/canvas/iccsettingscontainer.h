@@ -111,6 +111,7 @@ public:
     QString        lastSpecifiedInputProfile;
 
     bool    useManagedView;
+    bool    useManagedPreviews;
     QString monitorProfile;
 
     QString defaultInputProfile;

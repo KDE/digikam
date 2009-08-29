@@ -89,6 +89,7 @@ public:
         defaultSRGBConvert    = 0;
         bpcAlgorithm          = 0;
         managedView           = 0;
+        managedPreviews       = 0;
         defaultAskMismatch    = 0;
         defaultConvertMismatch= 0;
         defaultAskMissing     = 0;
@@ -128,6 +129,7 @@ public:
     QCheckBox              *defaultSRGBConvert;
     QCheckBox              *bpcAlgorithm;
     QCheckBox              *managedView;
+    QCheckBox              *managedPreviews;
 
     QRadioButton           *defaultAskMismatch;
     QRadioButton           *defaultConvertMismatch;
@@ -369,11 +371,16 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
                      "You can at any time toggle this option from the Editor window. "
                      "<i>Warning</i>: This can slow down rendering of the image, depending on the speed of your computer.</p>"));
 
-    gridView->addWidget(monitorIcon, 0, 0);
-    gridView->addWidget(monitorProfiles, 0, 1, 1, 2);
-    gridView->addWidget(d->monitorProfilesKC, 1, 0, 1, 2);
+    d->managedPreviews = new QCheckBox;
+    d->managedPreviews->setText(i18n("Use color managed view for previews and thumbnails"));
+    //TODO d->managedPreview->setWhatsThis( i18n("") );
+
+    gridView->addWidget(monitorIcon,            0, 0);
+    gridView->addWidget(monitorProfiles,        0, 1, 1, 2);
+    gridView->addWidget(d->monitorProfilesKC,   1, 0, 1, 2);
     gridView->addWidget(d->infoMonitorProfiles, 1, 2);
-    gridView->addWidget(d->managedView, 2, 0, 1, 3);
+    gridView->addWidget(d->managedView,         2, 0, 1, 3);
+    gridView->addWidget(d->managedPreviews,     3, 0, 1, 3);
     gridView->setColumnStretch(1, 10);
 
     // --------------------------------------------------------
@@ -615,6 +622,7 @@ void SetupICC::applySettings()
     settings.useBPC =  d->bpcAlgorithm->isChecked();
     settings.renderingIntent = d->renderingIntentKC->itemData(d->renderingIntentKC->currentIndex()).toInt();
     settings.useManagedView = d->managedView->isChecked();
+    settings.useManagedPreviews = d->managedPreviews->isChecked();
 
     settings.defaultInputProfile = d->inProfilesKC->currentProfile().filePath();
     settings.workspaceProfile = d->workProfilesKC->currentProfile().filePath();
@@ -654,6 +662,7 @@ void SetupICC::readSettings(bool restore)
     d->bpcAlgorithm->setChecked(settings.useBPC);
     setCurrentIndexFromUserData(d->renderingIntentKC, settings.renderingIntent);
     d->managedView->setChecked(settings.useManagedView);
+    d->managedPreviews->setChecked(settings.useManagedPreviews);
 
     if (settings.defaultMismatchBehavior & ICCSettingsContainer::AskUser)
         d->defaultAskMismatch->setChecked(true);
@@ -730,11 +739,12 @@ void SetupICC::fillCombos(bool report)
     if (d->monitorProfilesKC->count() == 0)
     {
         d->managedView->setEnabled(false);
-        d->managedView->setChecked(false);
+        d->managedPreviews->setEnabled(false);
     }
     else
     {
         d->managedView->setEnabled(true);
+        d->managedPreviews->setEnabled(true);
     }
 
     if (d->workProfilesKC->count() == 0)
