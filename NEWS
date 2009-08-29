@@ -5,6 +5,7 @@ NEW FEATURES:
 
 General        : Add OpenStreetMap support in Geolocation panels.
 General        : Showfoto, Editor, Preview, LightTable: Thumbbar is now dockable everywhere.
+General        : Complete re-write of Color Management code. Add support of thumbs and preview CM.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
