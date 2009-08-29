@@ -139,6 +139,9 @@ void PreviewLoadingTask::execute()
     if (!m_img.isNull())
     {
         // following the golden rule to avoid deadlocks, do this when CacheLock is not held
+
+        // The image from the cache may or may not be post processed.
+        // postProcess() will detect if work is needed.
         postProcess();
         m_thread->taskHasFinished();
         m_thread->imageLoaded(m_resultLoadingDescription, m_img);
@@ -210,6 +213,9 @@ void PreviewLoadingTask::execute()
     if (m_loadingDescription.previewParameters.exifRotate)
         LoadSaveThread::exifRotate(m_img, m_loadingDescription.filePath);
 
+    // For previews, we put the image post processed in the cache
+    postProcess();
+
     {
         LoadingCache::CacheLock lock(cache);
         // put (valid) image into cache of loaded images
@@ -258,7 +264,6 @@ void PreviewLoadingTask::execute()
     }
 
     // again: following the golden rule to avoid deadlocks, do this when CacheLock is not held
-    postProcess();
     m_thread->taskHasFinished();
     m_thread->imageLoaded(m_loadingDescription, m_img);
 }
