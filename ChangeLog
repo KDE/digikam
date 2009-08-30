@@ -1,4 +1,2241 @@
-1.0.0-beta2 2009-07-24
+1.0.0-beta4 2009-08-30
+--------------------------------------------------------------------------------
+
+2009-08-29 19:14  scripty
+
+    * kioslave/digikamtags.protocol: SVN_SILENT made messages (.desktop
+      file)
+
+2009-08-29 19:04  cgilles
+
+    * NEWS: update
+
+2009-08-29 18:57  cgilles
+
+    * NEWS: update
+
+2009-08-29 15:01  mwiesweg
+
+    * digikam/imagepreviewview.cpp,
+      libs/threadimageio/loadingdescription.h,
+      libs/threadimageio/previewloadthread.cpp,
+      libs/threadimageio/previewloadthread.h,
+      utilities/batch/fingerprintsgenerator.cpp,
+      utilities/lighttable/lighttablepreview.cpp: Adjust and simplify
+      API for preview load thread. Adjust color management
+      settings according to global IccSettings in a common place.
+
+2009-08-29 15:01  mwiesweg
+
+    * utilities/imageeditor/canvas/iccsettingscontainer.cpp,
+      utilities/imageeditor/canvas/iccsettingscontainer.h,
+      utilities/setup/setupicc.cpp: Add a settings to enable color
+      managed view for thumbnails and previews
+
+      CCBUG: 195050
+
+2009-08-29 15:00  mwiesweg
+
+    * libs/threadimageio/previewtask.cpp: Put previews in color managed
+      form into the cache so that preloading is fast.
+
+      CCBUG: 195050
+
+2009-08-28 20:20  cgilles
+
+    * NEWS: update
+
+2009-08-27 18:39  mwiesweg
+
+    * libs/threadimageio/loadingcache.cpp,
+      libs/threadimageio/thumbnailloadthread.cpp: Eliminate a source of
+      doube loading of thumbnails: When the QImage is loaded and
+      waiting to
+      be processed to a QPixmap and the same thumbnail is requested
+      again, scan the list of
+      images currently waiting for conversion, and, if found, do not
+      start a new task.
+      To prevent such problems in the future, provide a small cache for
+      thumbnail QImages.
+
+      CCBUG: 203932
+
+2009-08-27 18:38  mwiesweg
+
+    * libs/threadimageio/thumbnailtask.cpp: Move code down, not always
+      needed.
+
+2009-08-27 18:38  mwiesweg
+
+    * libs/threadimageio/managedloadsavethread.cpp: When prepending a
+      thumbnail group, do not add duplicate task if the current task is
+      requested again, but skip.
+
+2009-08-26 20:18  mwiesweg
+
+    * digikam/digikamapp.cpp,
+      libs/threadimageio/thumbnailloadthread.cpp,
+      libs/threadimageio/thumbnailloadthread.h,
+      libs/threadimageio/thumbnailtask.cpp,
+      libs/threadimageio/thumbnailtask.h: Enable color managed display
+      of thumbnails if color management in enabled.
+      Dedicated setup option comes if profiling shows it has a
+      significant impact,
+      but I found some issues to sort out in the thumbnail loading
+      before.
+      Allow to set displaying widget for thumbnail color management.
+      Extend ThumbnailTask for post processing like the other tasks
+      (could get some refactoring for code reuse in the future)
+
+      CCBUG: 195050
+
+2009-08-26 20:18  mwiesweg
+
+    * utilities/imageeditor/canvas/iccmanager.cpp,
+      utilities/imageeditor/canvas/iccmanager.h: Add a static QImage
+      method to transform for display
+
+2009-08-26 18:42  cgilles
+
+    * NEWS: update
+
+2009-08-25 11:50  aclemens
+
+    * tests/manualrenametest.cpp,
+      utilities/manualrename/manualrenameparser.cpp,
+      utilities/manualrename/manualrenamewidget.cpp,
+      utilities/manualrename/parsers/cameranameparser.cpp,
+      utilities/manualrename/parsers/filenameparser.cpp,
+      utilities/manualrename/parsers/parser.h,
+      utilities/queuemanager/queuelist.cpp: polish
+
+2009-08-25 10:43  scripty
+
+    * imageplugins/localcontrast/digikamimageplugin_localcontrast.desktop:
+      SVN_SILENT made messages (.desktop file)
+
+2009-08-25 06:51  cgilles
+
+    * digikam/digikamview.cpp, libs/widgets/common/thumbbardock.cpp,
+      libs/widgets/common/thumbbardock.h: apply patch to fix thumbbar
+      visibility when cycling through photos.
+      CCBUGS: 203594
+
+2009-08-24 14:44  aclemens
+
+    * libs/widgets/common/thumbbardock.cpp,
+      utilities/manualrename/parsers/dateparser.cpp,
+      utilities/manualrename/parsers/metadataparser.cpp: fix typos
+
+2009-08-23 18:55  mwiesweg
+
+    * NEWS: update
+
+2009-08-23 18:43  mwiesweg
+
+    * NEWS, digikam/imagepreviewview.cpp,
+      utilities/batch/fingerprintsgenerator.cpp,
+      utilities/lighttable/lighttablepreview.cpp,
+      utilities/slideshow/slideshow.cpp: Set displaying widgets to
+      retrieve monitor profile, if set, to preview views.
+
+      BUG: 195050
+
+2009-08-23 18:42  mwiesweg
+
+    * libs/threadimageio/thumbnailcreator.cpp,
+      libs/threadimageio/thumbnailcreator.h,
+      libs/threadimageio/thumbnailloadthread.cpp: Enable color
+      management for thumbnails.
+      The transformation is done on the final scaled QImage when
+      creating a thumbnail
+      if an embedded ICC profile was read before. Applying to a very
+      small image is is very fast.
+      We then store and display the thumbnails as sRGB.
+      There is so much quality loss already in a thumbnail that the
+      little imperfection of ignoring the monitor
+      profile should be ok.
+
+      CCBUG: 195050
+
+2009-08-23 18:42  mwiesweg
+
+    * libs/threadimageio/loadsavetask.cpp,
+      libs/threadimageio/previewloadthread.cpp,
+      libs/threadimageio/previewloadthread.h: Enabling color management
+      for previews.
+      The transform is applied once in the thread, so there is no speed
+      problem
+      like for color managed view in the editor.
+      Add support to set a displaying widget for a PreviewLoadThread.
+
+      CCBUG: 195050
+
+2009-08-23 18:42  mwiesweg
+
+    * utilities/imageeditor/canvas/iccmanager.cpp,
+      utilities/imageeditor/canvas/iccmanager.h: Make displayProfile()
+      static
+
+2009-08-23 18:41  mwiesweg
+
+    * libs/threadimageio/loadingdescription.cpp,
+      libs/threadimageio/loadingdescription.h: small change in order of
+      arguments and default value
+
+2009-08-23 18:41  mwiesweg
+
+    * libs/dimg/loaders/jpegloader.cpp,
+      libs/dimg/loaders/pgfloader.cpp,
+      libs/threadimageio/previewtask.cpp: Just use a universal
+      scaledLoadingSize attribute instead of distinct
+      jpegScaledLoadingSize
+      and pgfScaledLoadingSize
+
+2009-08-23 18:41  mwiesweg
+
+    * utilities/imageeditor/canvas/iccmanager.cpp,
+      utilities/imageeditor/canvas/iccmanager.h: Add a short and simple
+      static method to transform a QImage to sRGB
+
+2009-08-23 18:40  mwiesweg
+
+    * libs/dimg/filters/icctransform.cpp,
+      libs/dimg/filters/icctransform.h: Add methods to transform a
+      QImage - with simplified/restricted functionality of course
+
+2009-08-23 18:40  mwiesweg
+
+    * utilities/imageeditor/canvas/iccsettings.cpp,
+      utilities/imageeditor/canvas/iccsettings.h: Add a method to just
+      access if color management is enabled or not (sometimes there is
+      no need to get full settings)
+
+2009-08-23 18:38  mwiesweg
+
+    * libs/dimg/dimg.cpp, libs/dimg/dimg.h: Add a method to load image
+      data, but skip metadata or ICC profile (for thumbnails e.g.)
+
+2009-08-23 17:22  cgilles
+
+    * libs/widgets/common/thumbbardock.cpp,
+      libs/widgets/common/thumbbardock.h: missing files to compile
+
+2009-08-23 17:21  cgilles
+
+    * NEWS: update
+
+2009-08-23 17:19  cgilles
+
+    * CMakeLists.txt, digikam/albumwidgetstack.cpp,
+      digikam/albumwidgetstack.h, digikam/digikamview.cpp,
+      digikam/digikamview.h, libs/widgets/common/thumbbar.cpp,
+      libs/widgets/common/thumbbar.h, showfoto/setup/setupeditor.cpp,
+      showfoto/showfoto.cpp, showfoto/showfoto.h,
+      utilities/imageeditor/editor/editorwindow.cpp,
+      utilities/imageeditor/editor/editorwindow.h,
+      utilities/imageeditor/editor/imagewindow.cpp,
+      utilities/imageeditor/editor/imagewindow.h,
+      utilities/lighttable/lighttablewindow.cpp,
+      utilities/lighttable/lighttablewindow.h,
+      utilities/lighttable/lighttablewindow_p.h,
+      utilities/lighttable/lighttablewindowui.rc: apply patch from
+      Pieter Edelman to make thumbbar dockable everywhere.
+      BUG: 203594
+
+2009-08-23 17:16  cgilles
+
+    * NEWS: update
+
+2009-08-23 13:39  mwiesweg
+
+    * utilities/imageeditor/canvas/dimginterface.cpp,
+      utilities/imageeditor/canvas/dimginterface.h: Fix loading of the
+      RAW import tool again
+
+2009-08-23 05:34  cgilles
+
+    * NEWS: update
+
+2009-08-22 15:46  mwiesweg
+
+    * NEWS: update
+
+2009-08-22 15:44  mwiesweg
+
+    * utilities/imageeditor/editor/editorwindow.cpp,
+      utilities/imageeditor/editor/editorwindow.h: Simplify and fix
+      setting and restoring under/overexposure settings.
+
+      BUG: 163160
+
+2009-08-22 15:09  mwiesweg
+
+    * utilities/imageeditor/canvas/colorcorrectiondlg.cpp: First, call
+      setButtonFocus in addition to setDefaultButton, else
+      setDefaultButton is pretty useless
+      when no widget is explicitly selected. But we do that:
+      To improve keyboard navigation set focus to selected option in
+      lower option group.
+
+2009-08-22 14:54  mwiesweg
+
+    * libs/threadimageio/loadingdescription.cpp: Fix comparing loading
+      descriptions to find out if another version of a RAW version is
+      equal
+      or superior.
+      Fixes the problem the a RAW file's histogram was never loaded in
+      main window side bar
+      when selected from editor.
+
+2009-08-22 14:54  mwiesweg
+
+    * libs/dimg/filters/iccprofile.cpp, libs/dimg/filters/iccprofile.h,
+      utilities/imageeditor/canvas/iccsettings.cpp: - try to use a
+      correct profile for Adobe RGB (1998). If the original file is
+      found
+      (identified by md5), use it. Else use the compatible profile
+      recently added to
+      libkdcraw. Else use the broken profile - remove this as soon as
+      we can rely
+      on a recent libkdcraw being available
+      - remove applergb.icm with wrong whitepoint from default profiles
+
+2009-08-22 09:22  cgilles
+
+    * utilities/setup/setupicc.cpp, utilities/setup/setupicc.h:
+      credits, typo, polish
+
+2009-08-21 21:25  mwiesweg
+
+    * utilities/imageeditor/editor/editorwindow.cpp: For automatic
+      color conversion, request the workspace profile directly from the
+      raw loader,
+      so that no extra conversion is required.
+
+2009-08-21 21:25  mwiesweg
+
+    * libs/dimg/dimg.cpp, libs/dimg/loaders/rawloader.cpp,
+      libs/dimg/loaders/rawloader.h: Passing a custom output profile to
+      libkdcraw is broken somewhere.
+      For automatic color conversion, we want to get the RAW file to
+      the working color space directly. To emulate custom profile we
+      output to
+      ProPhotoRGB and then convert to the desired output space
+      (ProPhoto has
+      a very wide gamut)
+
+2009-08-21 21:25  mwiesweg
+
+    * libs/dimg/dimg.cpp: Dont output error message, just convert
+      without conversion
+
+2009-08-21 21:25  mwiesweg
+
+    * utilities/imageeditor/canvas/iccsettingscontainer.cpp,
+      utilities/imageeditor/canvas/iccsettingscontainer.h,
+      utilities/setup/setupicc.cpp: Fine-tune default settings
+
+2009-08-21 21:25  mwiesweg
+
+    * utilities/imageeditor/canvas/colorcorrectiondlg.cpp: Fix saving
+      of last dialog settings
+
+2009-08-21 17:40  cgilles
+
+    * NEWS: update
+
+2009-08-21 17:36  cgilles
+
+    * NEWS: update
+
+2009-08-21 16:56  mwiesweg
+
+    * utilities/imageeditor/canvas/canvas.cpp,
+      utilities/imageeditor/canvas/colorcorrectiondlg.cpp,
+      utilities/imageeditor/canvas/dimginterface.cpp,
+      utilities/imageeditor/canvas/dimginterface.h,
+      utilities/imageeditor/editor/imageiface.cpp: Use IccManager to
+      create color managed view transforms
+
+2009-08-21 16:56  mwiesweg
+
+    * utilities/imageeditor/canvas/iccmanager.cpp,
+      utilities/imageeditor/canvas/iccmanager.h: Add a couple of
+      methods for display (color managed view) transformation.
+
+2009-08-21 16:56  mwiesweg
+
+    * utilities/imageeditor/canvas/iccsettings.cpp,
+      utilities/imageeditor/canvas/iccsettings.h: Add a method to
+      retrieve the monitor profile.
+      Optionally accepts a widget to handle multiple screens
+
+2009-08-21 15:36  mwiesweg
+
+    * utilities/imageeditor/editor/imagewindow.cpp: Part A of the fix
+      to avoid showing the ColorCorrectionDialog multiple times:
+      Do not trigger extra slotLoadCurrent() calls by
+      QTimer::singleShot
+      while the thumb bar is filled.
+
+2009-08-21 15:36  mwiesweg
+
+    * utilities/imageeditor/canvas/canvas.cpp,
+      utilities/imageeditor/canvas/dimginterface.cpp,
+      utilities/imageeditor/canvas/dimginterface.h: Part A of the fix
+      to avoid showing the ColorCorrectionDialog multiple times:
+      Rearrange the loading code in DImgInterface so that we can check
+      if we already
+      have loaded the identical loading description, if load is called
+      multiple times
+      from upper layers (which could result in multiple dialogs shown,
+      if loading is very fast)
+
+2009-08-21 15:36  mwiesweg
+
+    * libs/threadimageio/loadingdescription.cpp: Fix operator==
+
+2009-08-21 15:36  mwiesweg
+
+    * libs/dimg/filters/icctransform.cpp,
+      libs/dimg/filters/icctransform.h,
+      utilities/imageeditor/canvas/iccsettings.cpp: Ensure to call
+      cmsErrorAction at startup
+
+2009-08-21 13:11  cgilles
+
+    * NEWS: update
+
+2009-08-21 13:09  cgilles
+
+    * utilities/cameragui/gpcamera.cpp,
+      utilities/cameragui/umscamera.cpp: apply patch from Michael G.
+      Hansen to fix line break with <br>
+      BUG: 204656
+
+2009-08-21 11:51  marten
+
+    * utilities/imageeditor/canvas/iccsettings.cpp: If the "[Color
+      Management] DefaultPath" is not set in the digikam settings,
+      IccSettings::loadAllProfilesProperties() will do a recursive scan
+      of the
+      current directory (most likely, the user's home directory) on
+      digkam startup.
+      This will take a long time even in the best case, but if a
+      symbolic link to a
+      directory is encountered it will be followed even if is a
+      circular reference -
+      so going into an infinite loop.
+
+      Check extraPath in IccSettings::allProfiles(), and don't use it
+      if it is blank.
+      Also do not recursively scan a directory which is a symlink.
+
+2009-08-20 21:25  mwiesweg
+
+    * NEWS: update
+
+2009-08-20 18:27  mwiesweg
+
+    * utilities/setup/setupicc.cpp: Properly disable widgets (disable
+      tabs)
+
+2009-08-20 18:27  mwiesweg
+
+    * libs/widgets/iccprofiles/iccprofilescombobox.cpp,
+      libs/widgets/iccprofiles/iccprofilescombobox.h: Check and sort
+      the profiles added to the combo box.
+      Add Api docs.
+
+2009-08-20 18:27  mwiesweg
+
+    * digikam/digikamapp.cpp,
+      utilities/imageeditor/canvas/iccsettings.cpp,
+      utilities/imageeditor/canvas/iccsettings.h: Scan profiles and
+      load and cache all profiles properties at startup.
+      The idea was that this would speed up opening the ICC setup.
+      But to no success - profiling showed that loading profiles is not
+      the problems
+      (it is mostly font metrics for the squeezed combo boxes)
+
+2009-08-20 18:27  mwiesweg
+
+    * libs/dimg/filters/iccprofile.cpp: Cache description and type, so
+      that no reopening is needed when reading these.
+
+2009-08-20 18:27  mwiesweg
+
+    * utilities/setup/setupicc.cpp, utilities/setup/setupicc.h: The
+      setup page also needed redesign. It offers to select the behavior
+      distinctly
+      for profile mismatch, missing profile and raw colors, and uses
+      more room to present the options.
+      A goal to offer default settings so that the user just needs to
+      enable color management
+      and everything "just works" (viewing and editing images with
+      embedded color space,
+      display to sRGB or monitor profile)
+
+2009-08-20 18:27  mwiesweg
+
+    * CMakeLists.txt: compile
+
+2009-08-20 18:27  mwiesweg
+
+    * utilities/imageeditor/canvas/dimginterface.cpp,
+      utilities/imageeditor/printiface/printhelper.cpp,
+      utilities/imageeditor/printiface/printoptionspage.cpp,
+      utilities/imageeditor/printiface/printoptionspage.h: Adapt to
+      added color management features
+
+2009-08-20 18:27  mwiesweg
+
+    * utilities/imageeditor/editor/editorwindow.cpp: Showing the dialog
+      has no moved to IccManager.
+
+2009-08-20 18:27  mwiesweg
+
+    * libs/threadimageio/loadsavetask.cpp: Implement color management
+      options for postprocessing in thread.
+
+2009-08-20 18:26  mwiesweg
+
+    * utilities/imageeditor/canvas/colorcorrectiondlg.cpp,
+      utilities/imageeditor/canvas/colorcorrectiondlg.h,
+      utilities/imageeditor/canvas/iccmanager.cpp: Reimplement large
+      parts of the dialog to adapt to the three situations:
+      Profile Mismatch, Missing Profile, Raw Color.
+      Using radio buttons allows to offer more than one option at a
+      time,
+      to offer more precise description of the action connected to an
+      option,
+      and to select "other" profiles from a combo box.
+      The previews are updated when changing options. They always apply
+      the selected option and
+      then display to the current monitor profile or sRGB.
+      I have worked hard on the layout, but improvement is possible.
+
+2009-08-20 18:26  mwiesweg
+
+    * libs/threadimageio/loadingdescription.cpp,
+      libs/threadimageio/loadingdescription.h: Allow to store a profile
+      in the LoadingDescription. Extend color management enum.
+
+2009-08-20 18:26  mwiesweg
+
+    * utilities/imageeditor/canvas/iccsettings.cpp,
+      utilities/imageeditor/canvas/iccsettings.h: Move the code to scan
+      ICC profile directories to IccSettings, and keep a list of all
+      available profiles there.
+
+2009-08-20 18:26  mwiesweg
+
+    * utilities/imageeditor/canvas/iccsettingscontainer.cpp,
+      utilities/imageeditor/canvas/iccsettingscontainer.h: Allow
+      specific settings of behavior for profile mismatch, missing
+      profile
+      and uncalibrated raw colors.
+      ICCSettingsContainer::Behavior is a mask specifying which profile
+      is used to
+      interpret the image (embedded profile, sRGB, other specified
+      profile) and which
+      profile it is to be converted to (workspace, or keep profile).
+      Special flag for Ask the User.
+
+2009-08-20 18:26  mwiesweg
+
+    * libs/dimg/dimg.cpp, libs/dimg/dimg.h,
+      libs/dimg/loaders/dimgloader.cpp, libs/dimg/loaders/dimgloader.h,
+      libs/dimg/loaders/rawloader.cpp: Add methods to test for an
+      attribute and to remove it to DImg.
+      In the RAW loader, properly assign the output profile to the
+      DImg.
+
+2009-08-20 18:26  mwiesweg
+
+    * libs/dimg/filters/icctransform.cpp,
+      libs/dimg/filters/icctransform.h: Ensure that the current
+      transform is closed when parameters change.
+      Various fixes. Remove readFromConfig().
+
+2009-08-20 18:26  mwiesweg
+
+    * libs/dimg/filters/iccprofile.cpp, libs/dimg/filters/iccprofile.h:
+      API fix and metatype declaration
+
+2009-08-20 18:26  mwiesweg
+
+    * libs/widgets/iccprofiles/iccprofilescombobox.cpp,
+      libs/widgets/iccprofiles/iccprofilescombobox.h: A simple combo
+      box subclass as a utility for showing Icc profiles in a combo
+      box.
+
+2009-08-20 18:26  mwiesweg
+
+    * utilities/imageeditor/canvas/iccmanager.cpp,
+      utilities/imageeditor/canvas/iccmanager.h: The class IccManager
+      is the class that knows how to construct an ICC Transformation
+      and how to apply it. There are methods for the various use cases
+      of color management.
+      There are methods to transform an image directly, and a way to
+      postpone color management
+      and ask the user in a dialog about the settings.
+
+2009-08-20 10:11  scripty
+
+    * imageplugins/localcontrast/digikamimageplugin_localcontrast.desktop,
+      utilities/nepomuk/digikamnepomukservice.desktop: SVN_SILENT made
+      messages (.desktop file)
+
+2009-08-20 08:45  aclemens
+
+    * utilities/imageeditor/canvas/iccsettings.cpp,
+      utilities/imageeditor/canvas/iccsettings.h: fix memory leak
+
+2009-08-19 14:17  aclemens
+
+    * digikam/digikamimageview.cpp: fix connections: be aware when
+      tooltip settings have changed
+
+2009-08-19 13:39  aclemens
+
+    * digikam/albumsettings.cpp, digikam/albumsettings.h,
+      digikam/folderviewtooltip.cpp: Do not affect albumfolder tooltips
+      when iconview tooltips have been
+      disabled.
+
+2009-08-19 12:27  aclemens
+
+    * utilities/setup/setuptooltip.cpp: Use a groupbox to distinguish
+      the global "album tooltip togglebutton"
+      from the rest of the settings.
+
+      There is still a problem with the tooltip setup:
+      When you disable tooltips for iconview, they are turned off for
+      albumfolderview, but not for iconview. Also you need to restart
+      digiKam
+      to have tooltips disabled in iconview and thumbbar as well.
+      Anyway the albumfolder view should not be effected at all, so
+      this is a
+      bug.
+
+      I will fix this later that day.
+
+2009-08-19 11:56  aclemens
+
+    * utilities/manualrename/parsers/dateparser.cpp,
+      utilities/manualrename/parsers/dateparser.h: no need to hardcode
+      the combobox here, values can be inserted by using
+      DateFormat::map()
+
+2009-08-19 09:33  aclemens
+
+    * tests/CMakeLists.txt, tests/imageloaders/CMakeLists.txt,
+      tests/imageloaders/imageloadertest.cpp,
+      tests/imageloaders/imageloadertest.h,
+      tests/imageloaders/test.jpg, tests/imageloaders/test.png,
+      tests/imageloaders/test.tif: I remove those tests again, they are
+      not that useful... we might create
+      a better test-set for DImg in the future
+
+2009-08-18 15:34  aclemens
+
+    * utilities/cameragui/cameraiconview.cpp: no need to duplicate code
+      here (99% is the same). We can avoid this by
+      simply using the following boolean expression:
+
+      if ( (hasSelection && item->isSelected()) || !hasSelection)
+
+      This should be enough and we therefore can skip the copied else
+      {} path.
+
+2009-08-18 14:14  aclemens
+
+    * utilities/manualrename/parsers/dateparser.cpp,
+      utilities/manualrename/parsers/dateparser.h: rename token
+      (System=>Locale)
+
+2009-08-18 14:07  aclemens
+
+    * utilities/manualrename/manualrenamewidget.cpp,
+      utilities/manualrename/manualrenamewidget.h: fix logic error in
+      registerParsers()
+
+2009-08-18 13:24  aclemens
+
+    * NEWS: update
+
+2009-08-18 13:20  aclemens
+
+    * utilities/cameragui/cameraiconview.cpp: At least fix the
+      numbering sort issue, but I still think it is confusing
+      to see the first item name as the new name when only one item is
+      selected, either in iconview or the detail sidebar. It just looks
+      like
+      an error, although it isn't really one.
+
+      I am aware that users might want to download only one image so I
+      know we
+      can not avoid this.
+
+      I had a patch that only set a selection parameter when more than
+      one
+      item was selected, but then again we can not download a single
+      item with
+      the correct naming scheme.
+
+2009-08-18 13:20  aclemens
+
+    * utilities/cameragui/cameraiconview.cpp: Revert "This commit
+      should fix several issues in the cameraUI:"
+
+      This reverts commit 38165ff4bba21878d254cd01a98f60b42985be60.
+
+2009-08-18 12:05  aclemens
+
+    * utilities/cameragui/cameraiconview.cpp: This commit should fix
+      several issues in the cameraUI:
+      - When chronologicOrder is true, the naming scheme was displayed
+      wrong,
+      e.g. when you clicked into the empty space of the iconview, the
+      new
+      name was displayed in reverse order. If you selected all images,
+      the
+      naming order was correct
+      - When you selected a single image, the new name was always the
+      one from
+      the first item in the iconview, so if you clicked on the 500th
+      item,
+      it still would read the name of the first item in the iconview
+      and the
+      detail sidebar (New Name)
+
+      I'm sure there was a reason for doing it this way, but right now
+      I don't
+      see the purpose (maybe old code)?
+      If you think the patch is wrong (although it fixed 3 issues for
+      me),
+      feel free to revert it again.
+
+2009-08-18 12:05  aclemens
+
+    * libs/imageproperties/cameraitempropertiestab.cpp,
+      utilities/cameragui/cameraiconitem.cpp,
+      utilities/cameragui/cameraui.cpp,
+      utilities/cameragui/gpcamera.cpp,
+      utilities/cameragui/gpiteminfo.h,
+      utilities/cameragui/umscamera.cpp: fix typo
+
+2009-08-18 12:05  aclemens
+
+    * utilities/cameragui/cameraui.cpp: avoid possible crash, use
+      QPointer as described in
+      http://www.kdedevelopers.org/node/3919
+
+2009-08-18 09:06  aclemens
+
+    * utilities/setup/setup.cpp: Possible fix?
+
+      Marco,
+      please try to compile this version and tell us if it worked for
+      you.
+
+      CCBUG:204237
+
+2009-08-17 16:39  aclemens
+
+    * utilities/cameragui/renamecustomizer.cpp,
+      utilities/manualrename/manualrenamewidget.cpp,
+      utilities/manualrename/manualrenamewidget.h: Rename
+      TokenInputStyles => ParserInputStyles
+
+2009-08-17 16:39  aclemens
+
+    * utilities/manualrename/parsers/authorparser.cpp,
+      utilities/manualrename/parsers/metadataparser.cpp,
+      utilities/manualrename/parsers/token.cpp,
+      utilities/manualrename/parsers/token.h: polish
+
+2009-08-17 16:25  aclemens
+
+    * CMakeLists.txt, digikam/CMakeLists.txt,
+      libs/widgets/common/manualrenameinput.cpp,
+      libs/widgets/common/manualrenameinput.h, tests/CMakeLists.txt,
+      tests/manualrenameinputtest.cpp, tests/manualrenameinputtest.h,
+      tests/manualrenametest.cpp, tests/manualrenametest.h,
+      utilities/cameragui/renamecustomizer.cpp, utilities/manualrename,
+      utilities/manualrename/manualrenameparser.cpp,
+      utilities/manualrename/manualrenameparser.h,
+      utilities/manualrename/manualrenamewidget.cpp,
+      utilities/manualrename/manualrenamewidget.h,
+      utilities/manualrename/parsers,
+      utilities/manualrename/parsers/authorparser.cpp,
+      utilities/manualrename/parsers/authorparser.h,
+      utilities/manualrename/parsers/cameranameparser.cpp,
+      utilities/manualrename/parsers/cameranameparser.h,
+      utilities/manualrename/parsers/dateparser.cpp,
+      utilities/manualrename/parsers/dateparser.h,
+      utilities/manualrename/parsers/dateparserdialogwidget.ui,
+      utilities/manualrename/parsers/filenameparser.cpp,
+      utilities/manualrename/parsers/filenameparser.h,
+      utilities/manualrename/parsers/metadataparser.cpp,
+      utilities/manualrename/parsers/metadataparser.h,
+      utilities/manualrename/parsers/parser.cpp,
+      utilities/manualrename/parsers/parser.h,
+      utilities/manualrename/parsers/sequencenumberparser.cpp,
+      utilities/manualrename/parsers/sequencenumberparser.h,
+      utilities/manualrename/parsers/token.cpp,
+      utilities/manualrename/parsers/token.h,
+      utilities/queuemanager/queuelist.cpp,
+      utilities/queuemanager/queuesettingsview.cpp: New utility:
+      ManualRename
+
+      This utility will replace the old ManualRenameInput widget. The
+      goal of
+      this utility is to have a more flexible parser that can be
+      expanded
+      quite easily.
+
+      To create a new parser, inherit from
+      Digikam::ManualRename::Parser and
+      overwrite the parse() method (and, if needed,
+      slotTokenTriggered()).
+
+      A parser can register a button or menu in the client widget,
+      right now
+      the only client widget is ManualRenameWidget, that behaves like
+      the old
+      ManualRenameInput widget. These buttons and menus can be used to
+      access
+      a token, so that the user doesn't have to type in the actual
+      parse
+      string.
+
+      Every parser has one or more token objects. The token information
+      can be
+      used to create the menu actions or the button. In the
+      ManualRenameWidget, this information is also used to create the
+      tooltip
+      helper button.
+      So if you add a new parser, the button, menu and tooltip is
+      automatically created, to minimize coding efforts.
+
+      Some parsers might want to provide additional dialogs, to show /
+      use
+      them overwrite the slotTokenTriggered() method and create the
+      dialog in
+      there.
+
+      The parse information has to be provided to the parse() method
+      with a
+      ParseInformation object.
+      If you create a new parser and need additional information (right
+      now
+      filename, cameraName, dateTime and index is provided), add the
+      extra
+      information to the ParseInformation class and make sure the
+      client fills
+      in the correct values.
+
+      The layout of the ManualRenameWidget can be controlled with flags
+      (TokenInputStyle):
+      - None: No control buttons or toolbutton with menu is shown
+      - BigButtons: the widget uses big buttons below the KLineInput
+      widget.
+      The column number can be set in the registerParsers(int columns)
+      method.
+      (used in CameraUI)
+      - ToolButton: a small toolbutton is shown next to the KLineInput
+      widget.
+      This is normally useful if you don't have much space in the
+      client.
+      (used in BQM)
+
+      The TokenInputStyle can be combined, if needed:
+      setTokenInputStyle(BigButtons|ToolButton)
+
+      In the future we might even remove the "Custom" rename widgets
+      from the
+      camera import dialog, because it actually is less powerful and
+      you are
+      not able to change the order of the added information.
+      What do you think? I guess with the quick-access buttons, the
+      ManualRenameWidget is quite user friendly now, so the custom
+      widget can
+      be removed.
+
+      CCMAIL:digikam-devel@kde.org
+
+2009-08-17 07:42  cgilles
+
+    * digikam/daboutdata.h: add credits
+
+2009-08-17 07:21  cgilles
+
+    * AUTHORS: update
+
+2009-08-16 09:32  scripty
+
+    * imageplugins/localcontrast/digikamimageplugin_localcontrast.desktop,
+      utilities/nepomuk/digikamnepomukservice.desktop: SVN_SILENT made
+      messages (.desktop file)
+
+2009-08-15 09:13  cgilles
+
+    * NEWS: update
+
+2009-08-15 09:11  cgilles
+
+    * NEWS: update
+
+2009-08-15 08:25  cgilles
+
+    * NEWS: update
+
+2009-08-15 08:13  cgilles
+
+    * NEWS: update
+
+2009-08-15 08:11  cgilles
+
+    * NEWS: update
+
+2009-08-15 08:08  cgilles
+
+    * NEWS: update
+
+2009-08-14 10:44  aclemens
+
+    * NEWS: update
+
+2009-08-14 10:43  aclemens
+
+    * imageplugins/noisereduction/noisereductiontool.cpp: set the
+      minimum value for the threshold to 0.01
+
+      BUG:203589
+
+2009-08-14 09:48  cgilles
+
+    * NEWS: update
+
+2009-08-14 09:18  aclemens
+
+    * utilities/cameragui/renamecustomizer.cpp: LocalDate is
+      deprecated, use SystemLocaleShortDate or
+      SystemLocaleLongDate instead
+
+2009-08-14 06:38  cgilles
+
+    * NEWS: update
+
+2009-08-13 15:04  aclemens
+
+    * NEWS: update
+
+2009-08-13 15:03  aclemens
+
+    * digikam/albumwidgetstack.cpp: setFocus whenever the mode of the
+      iconview changes. Right now we only
+      setFocus when we where in preview mode, so if you previewed an
+      image and
+      changed the album, the iconview was focused and keyboard actions
+      where
+      possible.
+      If you just selected an image and changed the album, the focus
+      was lost.
+
+      BUG:202779
+
+2009-08-13 15:03  aclemens
+
+    * utilities/cameragui/renamecustomizer.cpp: polish
+
+2009-08-13 09:35  scripty
+
+    * digikam/digikam.desktop,
+      imageplugins/localcontrast/digikamimageplugin_localcontrast.desktop,
+      showfoto/showfoto.desktop,
+      utilities/nepomuk/digikamnepomukservice.desktop: SVN_SILENT made
+      messages (.desktop file)
+
+2009-08-12 10:36  aclemens
+
+    * libs/imageproperties/worldmapwidget.cpp: fix compile warnings
+      when marble support has been disabled
+
+2009-08-12 08:52  cgilles
+
+    * utilities/queuemanager/queuepool.cpp,
+      utilities/queuemanager/queuesettingsview.cpp,
+      utilities/queuemanager/toolsview.cpp: compile under Windows
+
+2009-08-12 06:42  cgilles
+
+    * README: update
+
+2009-08-11 14:50  aclemens
+
+    * utilities/batch/fingerprintsgenerator.cpp: We need to check if a
+      QList is not empty before calling first(),
+      otherwise it will result in a fatal error and digiKam crashes.
+
+2009-08-11 10:34  scripty
+
+    * imageplugins/localcontrast/digikamimageplugin_localcontrast.desktop:
+      SVN_SILENT made messages (.desktop file)
+
+2009-08-10 21:14  aclemens
+
+    * libs/widgets/metadata/metadatalistview.cpp,
+      utilities/cameragui/cameracontroller.cpp,
+      utilities/imageeditor/editor/editorwindow.cpp,
+      utilities/setup/setupmime.cpp: const ref in foreach loops
+
+2009-08-09 22:29  mwiesweg
+
+    * utilities/imageeditor/canvas/canvas.cpp,
+      utilities/imageeditor/canvas/canvas.h,
+      utilities/imageeditor/canvas/dimginterface.cpp,
+      utilities/imageeditor/canvas/dimginterface.h,
+      utilities/imageeditor/editor/editorwindow.cpp,
+      utilities/imageeditor/editor/editorwindow.h: Move the color
+      management steps, most notably the ColorCorrectionDlg,
+      upwards in the stack from DImgInterface (which usually does not
+      handle UI)
+      to EditorWindow.
+      Use loading thread to apply a color transformation fully
+      multithreaded.
+
+2009-08-09 22:29  mwiesweg
+
+    * libs/threadimageio/loadsavetask.cpp: Implement the ApplyTransform
+      color management in SharedLoadingTask's postProcessing.
+
+2009-08-09 22:28  mwiesweg
+
+    * libs/threadimageio/loadingdescription.cpp,
+      libs/threadimageio/loadingdescription.h: Add color management
+      options to LoadingDescriptions.
+      Allow to pass an IccTransform (storing it in a QVariant to avoid
+      the overhead
+      of a full IccTransform in each LoadingDescription)
+
+2009-08-09 22:28  mwiesweg
+
+    * libs/dimg/filters/iccprofile.cpp,
+      libs/dimg/filters/icctransform.cpp,
+      libs/dimg/filters/icctransform.h: - ensure that an lcms transform
+      handle is not passed on when detaching (crashes)
+      - provide progress information from transform() to an
+      DImgLoaderObserver
+
+2009-08-09 19:12  mwiesweg
+
+    * libs/threadimageio/loadingcache.h,
+      libs/threadimageio/loadingdescription.h,
+      libs/threadimageio/loadsavetask.cpp,
+      libs/threadimageio/loadsavetask.h,
+      libs/threadimageio/previewtask.cpp: Put a method for
+      post-processing into SharedLoadingTask.
+      This can be used for color processing. Postprocessing is not
+      stored in the cache
+      to reduce complexity (which is already very high).
+
+2009-08-09 17:04  mwiesweg
+
+    * CMakeLists.txt, digikam/digikamapp.cpp,
+      utilities/imageeditor/canvas/iccsettingscontainer.cpp,
+      utilities/imageeditor/canvas/iccsettingscontainer.h,
+      utilities/imageeditor/editor/editorwindow.cpp,
+      utilities/setup/setupicc.cpp: Use IccSettings to read and write
+      ICC settings
+
+2009-08-09 17:04  mwiesweg
+
+    * utilities/imageeditor/canvas/iccsettings.cpp,
+      utilities/imageeditor/canvas/iccsettings.h: Introduce a central
+      singleton class to store ICC settings.
+
+2009-08-09 16:06  mwiesweg
+
+    * libs/dimg/filters/icctransform.cpp,
+      libs/dimg/filters/icctransform.h: Don't call cmsDoTransform for
+      every single pixel but transform ten scanlines in a row.
+      Always tell lcms that we have input/output format including
+      alpha, DImg data is always
+      4 bytes per pixel.
+
+2009-08-09 16:06  mwiesweg
+
+    * libs/dimg/filters/iccprofile.cpp, libs/dimg/filters/iccprofile.h,
+      libs/widgets/iccprofiles/cietonguewidget.cpp,
+      libs/widgets/iccprofiles/iccprofilewidget.cpp: LittleCMS boasts
+      to be thread-safe but there are reports that it is not and
+      certain methods
+      (those returning a static buffer) are definitely not.
+      Dont run a risk and use a mutex for Lcms calls.
+
+2009-08-09 16:06  mwiesweg
+
+    * utilities/setup/setupicc.cpp: Use UserData to store rendering
+      intent in combo box. Cleaner than currentIndex.
+
+2009-08-08 22:20  mwiesweg
+
+    * libs/dimg/loaders/jpegloader.cpp: Patch by David Eriksson:
+      Fix very subtle bug in the JPEG loader preventing embedded ICC
+      profiles to be read because
+      the reading structure was destroyed before.
+      Awesome that you have found that bug!
+
+      CCBUG: 182272
+
+2009-08-08 22:09  mwiesweg
+
+    * utilities/imageeditor/canvas/iccsettingscontainer.cpp,
+      utilities/setup/setupicc.cpp: Rearrange the ICC setup to put
+      emphasis on choosing the workspace profile, which is a key
+      decision taken by the user.
+
+2009-08-08 22:09  mwiesweg
+
+    * CMakeLists.txt, utilities/imageeditor/canvas/dimginterface.cpp,
+      utilities/imageeditor/canvas/iccsettingscontainer.cpp,
+      utilities/imageeditor/canvas/iccsettingscontainer.h,
+      utilities/imageeditor/editor/editorwindow.cpp,
+      utilities/imageeditor/editor/imageiface.cpp,
+      utilities/setup/setupicc.cpp: Centralize reading/writing to
+      config in ICCSettingsContainer and use this in SetupICC.
+      Add a third option Dont Convert to Ask or Apply.
+
+2009-08-08 22:09  mwiesweg
+
+    * utilities/setup/setupicc.cpp, utilities/setup/setupicc.h: Store
+      profiles by file path in config, not combo box index (which can
+      change).
+      Display file name along with description. Sometimes there are
+      multiple profiles
+      with the same description.
+
+2009-08-08 16:48  mwiesweg
+
+    * utilities/setup/setupicc.cpp, utilities/setup/setupicc.h:
+      Restructure loading of ICC profiles.
+      Scan available system directories like /usr/share/color/icc where
+      distributions
+      install ICC profiles.
+      Scan directories recursively.
+      This gives a much easier setup, you dont need to specify a
+      directory to have
+      core profiles installed.
+
+2009-08-08 16:47  mwiesweg
+
+    * libs/dimg/filters/iccprofile.cpp, libs/dimg/filters/iccprofile.h,
+      libs/dimg/filters/icctransform.cpp: - make all profiles bundled
+      with libkdcraw available
+      (we can be pretty sure that these are available, sort of builtin)
+      - add a method to return the file path (if loaded from file)
+      - add method to read the profile type (= device class)
+      - add a static method to list available system folders like
+      /usr/share/color/icc
+      where ICC profiles are installed
+
+2009-08-08 13:05  mwiesweg
+
+    * CMakeLists.txt, NEWS: compile + update
+
+2009-08-08 13:05  mwiesweg
+
+    * imageplugins/coreplugin/iccprooftool.cpp,
+      imageplugins/coreplugin/iccprooftool.h: A lot of changes here as
+      well to remove code duplication and increase readability.
+      Adapting to IccProfile/IccTransform API.
+      Needs some testing.
+
+2009-08-08 13:04  mwiesweg
+
+    * libs/dialogs/iccprofileinfodlg.cpp,
+      libs/dialogs/iccprofileinfodlg.h,
+      libs/imageproperties/imagepropertiescolorstab.cpp,
+      libs/widgets/iccprofiles/iccprofilewidget.cpp,
+      libs/widgets/iccprofiles/iccprofilewidget.h,
+      libs/widgets/imageplugins/imageguidewidget.cpp,
+      libs/widgets/imageplugins/imageregionwidget.cpp: Adapt to
+      IccProfile/IccTransform API
+
+2009-08-08 13:04  mwiesweg
+
+    * utilities/imageeditor/canvas/colorcorrectiondlg.cpp,
+      utilities/imageeditor/canvas/colorcorrectiondlg.h,
+      utilities/imageeditor/editor/imageiface.cpp,
+      utilities/imageeditor/editor/imageiface.h,
+      utilities/imageeditor/printiface/printhelper.cpp: Adapt to
+      IccProfile/IccTransform API
+
+2009-08-08 13:04  mwiesweg
+
+    * utilities/imageeditor/canvas/dimginterface.cpp,
+      utilities/imageeditor/canvas/dimginterface.h: Remove code
+      duplication and adapt to new IccTransform API
+
+2009-08-08 13:04  mwiesweg
+
+    * libs/dimg/loaders/dimgloader.cpp, libs/dimg/loaders/dimgloader.h,
+      libs/dimg/loaders/jp2kloader.cpp,
+      libs/dimg/loaders/jpegloader.cpp,
+      libs/dimg/loaders/pngloader.cpp,
+      libs/dimg/loaders/tiffloader.cpp: Adapt to use IccProfile when
+      loading embedded profile
+
+2009-08-08 13:03  mwiesweg
+
+    * libs/dimg/filters/icctransform.cpp,
+      libs/dimg/filters/icctransform.h: Restructuring and API change:
+      - use IccProfile
+      - split API into single methods that tell what they do instead of
+      using several bool parameters
+      or setProfiles() where the meaning of the arguments depends on
+      the number of arguments passed
+      - the main method was almost completely duplicated in two
+      variants, consolidate code
+      - now implicitly shared as well
+
+2009-08-08 13:03  mwiesweg
+
+    * libs/dimg/dimg.cpp, libs/dimg/dimg.h, libs/dimg/dimg_p.h: Use
+      IccProfile instead of QByteArray. Reading and writing from disk
+      code is moved to IccProfile.
+
+2009-08-08 13:03  mwiesweg
+
+    * libs/dimg/filters/iccprofile.cpp, libs/dimg/filters/iccprofile.h:
+      IccProfile is a new class encapsulating an ICC profile, either
+      from memory
+      or from a file on disk.
+      It's a Qt style API, implicitly shared, passed around by value
+      and hides
+      the implementation details. (It's a bit late in the beta process
+      for a major
+      API overhaul but there are enough color management bugs anyway,
+      and it was no
+      fun fixing bugs with a lot of code duplication)
+
+2009-08-08 11:03  aclemens
+
+    * utilities/queuemanager/queuepool.cpp,
+      utilities/queuemanager/queuesettingsview.cpp,
+      utilities/queuemanager/toolsview.cpp: fix warnings:
+      setCloseButtonEnabled() is deprecated
+
+2009-08-08 09:37  aclemens
+
+    * libs/widgets/common/histogrambox.cpp: Now that we are able to
+      change the type of the HistogramBox at runtime,
+      make sure to clear the channel combobox first before adding new
+      items.
+
+2009-08-08 09:37  aclemens
+
+    * utilities/imageeditor/editor/editortoolsettings.cpp,
+      utilities/imageeditor/editor/editortoolsettings.h: NoTool should
+      actually be 0x0, otherwise combinations like this are
+      valid:
+      setTools(NoTool|Histogram|PanIcon)
+
+2009-08-08 09:37  aclemens
+
+    * imageplugins/adjustcurves/adjustcurvestool.cpp,
+      imageplugins/adjustlevels/adjustlevelstool.cpp,
+      imageplugins/blurfx/blurfxtool.cpp,
+      imageplugins/border/bordertool.cpp,
+      imageplugins/channelmixer/channelmixertool.cpp,
+      imageplugins/charcoal/charcoaltool.cpp,
+      imageplugins/colorfx/colorfxtool.cpp,
+      imageplugins/contentawareresizing/contentawareresizetool.cpp,
+      imageplugins/coreplugin/autocorrectiontool.cpp,
+      imageplugins/coreplugin/bcgtool.cpp,
+      imageplugins/coreplugin/blurtool.cpp,
+      imageplugins/coreplugin/bwsepiatool.cpp,
+      imageplugins/coreplugin/hsl/hsltool.cpp,
+      imageplugins/coreplugin/iccprooftool.cpp,
+      imageplugins/coreplugin/ratiocrop/ratiocroptool.cpp,
+      imageplugins/coreplugin/redeyetool.cpp,
+      imageplugins/coreplugin/resizetool.cpp,
+      imageplugins/coreplugin/rgbtool.cpp,
+      imageplugins/coreplugin/sharpentool.cpp,
+      imageplugins/distortionfx/distortionfxtool.cpp,
+      imageplugins/emboss/embosstool.cpp,
+      imageplugins/filmgrain/filmgraintool.cpp,
+      imageplugins/freerotation/freerotationtool.cpp,
+      imageplugins/hotpixels/hotpixelstool.cpp,
+      imageplugins/infrared/infraredtool.cpp,
+      imageplugins/inpainting/inpaintingtool.cpp,
+      imageplugins/inserttext/inserttexttool.cpp,
+      imageplugins/lenscorrection/autocorrection/autocorrectiontool.cpp,
+      imageplugins/lenscorrection/distortion/lensdistortiontool.cpp,
+      imageplugins/lenscorrection/vignetting/antivignettingtool.cpp,
+      imageplugins/localcontrast/localcontrasttool.cpp,
+      imageplugins/noisereduction/noisereductiontool.cpp,
+      imageplugins/oilpaint/oilpainttool.cpp,
+      imageplugins/perspective/perspectivetool.cpp,
+      imageplugins/raindrop/raindroptool.cpp,
+      imageplugins/restoration/restorationtool.cpp,
+      imageplugins/sheartool/sheartool.cpp,
+      imageplugins/superimpose/superimposetool.cpp,
+      imageplugins/texture/texturetool.cpp,
+      imageplugins/whitebalance/whitebalancetool.cpp,
+      utilities/imageeditor/editor/editortoolsettings.cpp,
+      utilities/imageeditor/editor/editortoolsettings.h,
+      utilities/imageeditor/rawimport/rawsettingsbox.cpp: Remove button
+      & toolMask from the EditorToolSettings constructor.
+      It was confusing to set a HistogramType, even if no histogram
+      tool was
+      requested.
+      Also the constructor was not readable, the toolcodes and the
+      buttoncodes
+      where visually mixed together, it was hard to distinguish.
+
+      Another problem was that you couldn't change the settings if ever
+      needed
+      to, since the parameters were only set in the constructor.
+
+      EditorToolSettings has the following default layout now:
+      Buttons: Default, Ok, Cancel
+      Tools: None
+
+      If more buttons or tools are needed, you can use the setter
+      methods:
+
+      setButtons(Ok|Cancel|Default|Try|Load|Save);
+      setTools(None|ColorGuide|PanIcon|Histogram);
+
+      An additional setter method for the histogram has been added, to
+      change
+      the type of the HistogramBox:
+
+      setHistogramType(HistogramBox::HistogramType);
+
+      CCMAIL:digikam-devel@kde.org
+
+2009-08-08 08:22  aclemens
+
+    * libs/widgets/common/histogrambox.cpp,
+      libs/widgets/common/histogrambox.h,
+      utilities/imageeditor/editor/editortoolsettings.cpp,
+      utilities/imageeditor/editor/editortoolsettings.h: Add new method
+      setHistogramType() to be able to change the HistogramBox
+      layout afterwards, not only in the constructor.
+      This is necessary because I will factorize the EditorToolSettings
+      widget
+      later on.
+
+2009-08-08 08:17  aclemens
+
+    * libs/widgets/common/manualrenameinput.cpp: Typedefs should start
+      with an uppercase letter
+      Remove the example in the tooltip, this is not really needed.
+
+      I will prepare some input widgets for the ManualRenameInput, so
+      that
+      tokens can be entered faster.
+      This will be especially useful when metadata can be added, too
+      (not yet
+      implemented).
+
+2009-08-07 15:39  mwoehlke
+
+    * tests/CMakeLists.txt: tests/ also needs config-digikam.h; set
+      INCLUDE_DIRECTORIES appropriately
+
+2009-08-07 10:46  aclemens
+
+    * libs/widgets/common/manualrenameinput.cpp,
+      tests/manualrenameinputtest.cpp: Add the ability to only set a
+      custom start in the ManualRenameInput
+      widget.
+      Added some test cases to verify the functionality.
+
+      CCBUG:202641
+
+2009-08-07 09:30  scripty
+
+    * utilities/nepomuk/digikamnepomukservice.desktop: SVN_SILENT made
+      messages (.desktop file)
+
+2009-08-06 10:01  scripty
+
+    * imageplugins/localcontrast/digikamimageplugin_localcontrast.desktop:
+      SVN_SILENT made messages (.desktop file)
+
+2009-08-04 22:37  aclemens
+
+    * imageplugins/localcontrast/ToneMappingBase.cpp,
+      imageplugins/localcontrast/ToneMappingBase.h,
+      imageplugins/localcontrast/ToneMappingFloat.h,
+      imageplugins/localcontrast/ToneMappingInt.cpp,
+      imageplugins/localcontrast/ToneMappingInt.h,
+      imageplugins/localcontrast/ToneMappingParameters.cpp,
+      imageplugins/localcontrast/ToneMappingParameters.h: TAB->spaces
+
+2009-08-04 22:34  aclemens
+
+    * imageplugins/localcontrast/ToneMappingBase.h,
+      imageplugins/localcontrast/ToneMappingFloat.cpp,
+      imageplugins/localcontrast/ToneMappingInt.h,
+      imageplugins/localcontrast/localcontrast.cpp: avoid compiler
+      warnings, remove TAB characters
+
+2009-08-04 21:14  aclemens
+
+    * imageplugins/localcontrast/imageplugin_localcontrast.cpp,
+      imageplugins/localcontrast/localcontrast.cpp,
+      imageplugins/localcontrast/localcontrasttool.cpp: Minor changes:
+      Use capitalized action names and combobox items
+
+2009-08-04 14:57  mwiesweg
+
+    * digikam/scancontroller.cpp, libs/database/collectionscanner.cpp,
+      libs/database/collectionscanner.h: If we show the splash screen
+      at startup and no progress dialog, we do not
+      need to count the total files to scan before the actual scan.
+      Removes some unnecessary stat'ing in this case.
+
+2009-08-04 14:57  mwiesweg
+
+    * digikam/scancontroller.cpp, digikam/scancontroller.h: Add a
+      "Preparing collection scan" message for the time between starting
+      the scan
+      and the actual scan of the albums.
+
+2009-08-04 14:57  mwiesweg
+
+    * digikam/scancontroller.cpp, digikam/scancontroller.h,
+      libs/database/collectionscanner.cpp,
+      libs/database/collectionscanner.h: Emit progress signal after
+      scanning batches of files (100 unchanged files or 2 new files).
+      When initially scanning large albums the progress can appear
+      stuck for a long time
+      when only at the end of scanning an album progress is reported.
+
+2009-08-04 13:17  mwiesweg
+
+    * NEWS, libs/widgets/common/previewwidget.cpp: There is a problem
+      using floor(x*10000)/10000 to reduce precision.
+      For values like 0.50149999999999996 this operation will subtract
+      1/10000 for every
+      run (5014 -> 5013 -> 5012...). It's not mathematical correct but
+      floating point
+      arithmetics on a computer are not mathematically correct
+      sometimes.
+      If such a value is calculated for fit-to-window as 5014 and
+      truncated to 5013
+      it will be set by setZoomFactor as 5012.
+      Now snapZoom() is fooled when the current zoom is 5012 and the
+      desired one is 0.6,
+      it will snap to 5013 (set as 5012 - and forever again) disabling
+      any zooming.
+
+      Using round(x*10000)/10000 instead of floor solves the problem
+      for me.
+
+      BUG: 202332
+
+2009-08-04 09:00  scripty
+
+    * digikam/digikam.desktop,
+      imageplugins/localcontrast/digikamimageplugin_localcontrast.desktop,
+      showfoto/showfoto.desktop: SVN_SILENT made messages (.desktop
+      file)
+
+2009-08-03 09:04  scripty
+
+    * digikam/digikam.desktop,
+      imageplugins/localcontrast/digikamimageplugin_localcontrast.desktop:
+      SVN_SILENT made messages (.desktop file)
+
+2009-08-02 20:17  aclemens
+
+    * libs/dialogs/imagedialog.cpp: change order of filetype patterns:
+      1. All Images
+      2. All RAW files
+      3. the rest...
+
+      For me the filedialog is broken, can you confirm this (it was
+      broken
+      before this commit, before anyone asks ;-)).
+      If I open showFoto and click on "Open" (not "Open Folder"), I can
+      select
+      any filter, I will not see my files. The only thing that seems to
+      work
+      is "All RAW files", but still when hitting "Ok" the photo is not
+      loaded
+      into showFoto.
+
+      Can someone confirm this?
+
+      CCMAIL:digikam-devel@kde.org
+
+2009-08-02 16:39  mwiesweg
+
+    * libs/database/collectionmanager.cpp,
+      libs/database/collectionmanager.h: Fix two problems with
+      plug&play of collections on removable media:
+      - the UDI passed by the deviceRemoved() signal cannot be used for
+      any checks, the device is removed.
+      Check if the udi is contained in a list of devices of interest
+      - there can be a race condition between the automounter and
+      digikam's device handling,
+      so that devices can not yet be mounted when digikam is notified
+      of it being added.
+      Listen to the accessibilityChanged signal. This also handles
+      manual mounts/umounts.
+
+      Plugging in and out a USB stick added as collection works now
+      smoothly here.
+
+2009-08-02 16:25  aclemens
+
+    * digikam/cameranamehelper.cpp, digikam/cameranamehelper.h,
+      digikam/digikamapp.cpp, tests/cameranamehelpertest.cpp,
+      tests/cameranamehelpertest.h: Do not add duplicate camera
+      actions.
+
+      This is a imple comparison method, based on some string
+      operations.
+      Somehow auto-detection gives different mode names in some cases,
+      so
+      simply comparing both modes is not working.
+      This method should be able to compare (at least with PTP mode
+      ;-))
+      camera names and decide if they are the same. If so, we don't add
+      the
+      auto-detected version and only present the manually added camera.
+
+      In the future we might want to work with setData() for the camera
+      actions. We could add a QMap<QString, QVariant> to it which has
+      values
+      like
+
+      vendor
+      product
+      protocol
+      port
+
+      etc. This way the CameraNameHelper might become obsolete again,
+      or at
+      least the comparison method.
+
+2009-08-02 15:07  aclemens
+
+    * digikam/digikamapp.cpp: polish
+
+2009-08-02 15:07  aclemens
+
+    * digikam/digikamapp.cpp: cleanup unused code
+
+2009-08-02 15:07  aclemens
+
+    * digikam/cameranamehelper.cpp, digikam/cameranamehelper.h: polish
+
+2009-08-02 15:07  aclemens
+
+    * digikam/cameranamehelper.cpp, digikam/cameranamehelper.h,
+      digikam/digikamapp.cpp, tests/cameranamehelpertest.cpp,
+      tests/cameranamehelpertest.h, utilities/cameragui/cameraui.cpp:
+      simplify CameraNameHelper: we don't need a full-blown object
+      here, it is
+      enough to define three static methods here that can handle the
+      formatting of the camera name.
+
+2009-08-02 15:02  mwiesweg
+
+    * libs/dmetadata/dmetadata.cpp: Read IPTC Core DescriptionWriter as
+      the common comments author.
+      Private per-language information from XMP takes precedence.
+
+2009-08-02 15:02  mwiesweg
+
+    * libs/dmetadata/captionvalues.cpp, libs/dmetadata/captionvalues.h:
+      Allow to specify one author common to all comments, if
+      per-language info is not available.
+      The per-language map takes precendence. If commonAuthor is null
+      it is ignored.
+
+2009-08-02 14:31  mwiesweg
+
+    * libs/database/imagecopyright.cpp, libs/database/imagecopyright.h:
+      Add optional, very simple caching to ImageCopyright.
+      The caching only applies when a template is filled. Instead of
+      one SQL statement
+      for each field we can query all entries from the DB in one
+      statement and read fields from there.
+      The caching is not persistent (which would induce a lot of
+      complexity).
+
+      When selecting 10,000 images with the ImageDescEdit tab open,
+      this reduces loading time
+      on my machine from 15.1 secs to 5.5 secs.
+      This is still too slow but this was the lowest-hanging fruit. We
+      should put MetadataHub-loading
+      into a dedicated thread but there are complications as
+      MetadataHub currently needs AlbumManager
+      which is main-thread-only etc.
+
+2009-08-02 14:31  mwiesweg
+
+    * digikam/metadatahub.cpp: Remove debug output at
+      performance-critical point.
+      When loading many images, this output can cost a second or two.
+
+2009-08-02 14:31  mwiesweg
+
+    * libs/database/albuminfo.h: Add isNull() for structures
+
+2009-08-02 12:31  aclemens
+
+    * utilities/cameragui/cameraui.cpp: Truncate camera title in
+      cameraUI window (remove mode and auto-detected
+      string).
+
+2009-08-02 11:54  aclemens
+
+    * digikam/digikamapp.cpp: rename camera_add action
+
+2009-08-02 11:47  aclemens
+
+    * imageplugins/localcontrast/localcontrasttool.cpp: fix spelling
+
+2009-08-02 11:44  aclemens
+
+    * digikam/digikamapp.cpp: Do not check if the device is valid,
+      because if we disconnect a device,
+      none of the import menus is updated and the device is still
+      shown.
+      Since fillSolidMenus() takes care of valid devices anyway, we
+      should
+      simply call it all the time.
+      If you disconnect the camera, it will be removed now from the
+      menu.
+
+2009-08-02 11:43  aclemens
+
+    * digikam/digikamapp.cpp: polish
+
+2009-08-02 11:43  aclemens
+
+    * digikam/digikamapp.cpp: This commit should fix duplicate entries
+      in the camera menu.
+
+2009-08-02 11:25  aclemens
+
+    * digikam/daboutdata.h,
+      imageplugins/localcontrast/localcontrasttool.cpp,
+      utilities/setup/setupmetadata.cpp: fix spelling
+
+2009-08-02 11:13  aclemens
+
+    * digikam/digikamapp.cpp, digikam/digikamapp.h,
+      digikam/digikamapp_p.h, digikam/digikamui.rc: Merge the camera
+      import menus, so that we have only one list with
+      cameras to choose from. All auto-detected cameras will have a
+      suffix and
+      they are separated by a line from the manually added cameras.
+
+      For example:
+
+      Nikon D50 (PTP Mode, auto-generated)
+      ------------------------------------
+      Canon Powershot A80 (PTP Mode)
+      Hama Cardreader 8 in 1
+      ------------------------------------
+      Add Camera...
+
+      I had to restructure the code a little bit, for example we fill
+      the
+      solidUsmActionGroup and solidCameraActionGroup all the time, so
+      that
+      duplicate entries may occur. This has been fixed (I hope), but
+      for
+      manualCameraActionGroup it is still valid. Every time you add a
+      camera,
+      the list is duplicated. I will fix that later.
+
+      Some polishing needs to be done, too.
+      Another thing to add is a way to determine duplicate entries and
+      remove
+      the auto-detected ones (the manually added cameras are the
+      primary
+      target and should always be displayed).
+      With the CameraNameHelper class this tasks should be easy, I will
+      add
+      this later, too.
+
+2009-08-02 10:56  aclemens
+
+    * digikam/cameranamehelper.cpp, digikam/cameranamehelper.h,
+      tests/cameranamehelpertest.cpp: cleanup API
+
+2009-08-02 10:43  aclemens
+
+    * digikam/cameranamehelper.cpp, digikam/cameranamehelper.h,
+      tests/CMakeLists.txt, tests/cameranamehelpertest.cpp,
+      tests/cameranamehelpertest.h: New method
+      extractCameraNameToken(), for splitting up the full
+      cameraname that was set in the constructor
+      Added some more tests: use gphoto camera list as well to check if
+      the
+      cameraname parsing is working)
+
+2009-08-01 20:24  aclemens
+
+    * digikam/cameranamehelper.cpp, digikam/cameranamehelper.h,
+      tests/CMakeLists.txt, tests/cameranamehelpertest.cpp,
+      tests/cameranamehelpertest.h: Add some test cases for method, fix
+      code
+
+2009-08-01 20:24  aclemens
+
+    * CMakeLists.txt, tests/CMakeLists.txt,
+      tests/cameranamehelpertest.cpp, tests/cameranamehelpertest.h: add
+      cameranamehelper test, not functional yet
+
+2009-08-01 20:24  aclemens
+
+    * CMakeLists.txt, digikam/cameranamehelper.cpp,
+      digikam/cameranamehelper.h: add new cameranamehelper class, not
+      functional yet
+
+2009-08-01 19:20  mwiesweg
+
+    * NEWS: update
+
+2009-08-01 18:51  jnarboux
+
+    * imageplugins/CMakeLists.txt, imageplugins/localcontrast,
+      imageplugins/localcontrast/CMakeLists.txt,
+      imageplugins/localcontrast/ToneMappingBase.cpp,
+      imageplugins/localcontrast/ToneMappingBase.h,
+      imageplugins/localcontrast/ToneMappingFloat.cpp,
+      imageplugins/localcontrast/ToneMappingFloat.h,
+      imageplugins/localcontrast/ToneMappingInt.cpp,
+      imageplugins/localcontrast/ToneMappingInt.h,
+      imageplugins/localcontrast/ToneMappingParameters.cpp,
+      imageplugins/localcontrast/ToneMappingParameters.h,
+      imageplugins/localcontrast/digikamimageplugin_localcontrast.desktop,
+      imageplugins/localcontrast/digikamimageplugin_localcontrast_ui.rc,
+      imageplugins/localcontrast/imageplugin_localcontrast.cpp,
+      imageplugins/localcontrast/imageplugin_localcontrast.h,
+      imageplugins/localcontrast/localcontrast.cpp,
+      imageplugins/localcontrast/localcontrast.h,
+      imageplugins/localcontrast/localcontrasttool.cpp,
+      imageplugins/localcontrast/localcontrasttool.h: New local
+      contrast plugin by julien pontabry CCBUGS: 145442 150533
+
+2009-08-01 14:40  aclemens
+
+    * digikam/digikamapp.cpp, digikam/digikamui.rc: I would suggest to
+      re-arrange camera import action menus, rename to "Manually Added"
+      because using only "Add" sounds like this action is only used to
+      add a
+      camera, but may confuse users because you also find already added
+      cameras in
+      there.
+      Also the camera menu entries should be together.
+
+2009-08-01 13:53  aclemens
+
+    * digikam/albummanager.cpp: avoid compiler warning
+
+2009-08-01 13:44  mwiesweg
+
+    * NEWS, libs/dimg/loaders/tiffloader.cpp: If the image does not
+      have alpha, we must not set TIFFTAG_EXTRASAMPLES at all.
+      If setting UNASSOC_ALPHA, libtiff assumes the last value for a
+      pixel is a mask.
+      When settings samples_per_pixel to three, there are 3-1=2 color
+      channels left
+      which libtiff (and noone really) cannot handle.
+
+      BUG: 201746
+
+2009-08-01 13:44  mwiesweg
+
+    * digikam/albummanager.cpp: Comment out this startup waiting, we
+      dont need it
+
+2009-08-01 10:41  scripty
+
+    * utilities/nepomuk/digikamnepomukservice.desktop: SVN_SILENT made
+      messages (.desktop file)
+
+2009-07-31 21:20  mwiesweg
+
+    * utilities/batch/batchsyncmetadata.cpp: Restructure some parts,
+      with regards to recent changes (ensure progress info message is
+      sent for
+      list-only parsing as well) and possible loophole for bug 194777.
+
+      CCBUG: 194777
+
+2009-07-31 21:20  mwiesweg
+
+    * utilities/batch/imageinfojob.cpp: Use signal finished() to get
+      signal as well if killed
+
+2009-07-31 21:20  mwiesweg
+
+    * utilities/nepomuk/digikamnepomukservice.cpp: Add check, only
+      connect if needed
+
+2009-07-31 20:58  cgilles
+
+    * NEWS: update
+
+2009-07-31 17:53  mwiesweg
+
+    * utilities/nepomuk/digikamnepomukservice.cpp,
+      utilities/nepomuk/digikamnepomukservice.h: Accept db params set
+      directly from start app, reorganize methods accordingly.
+      Add (currently unused) draft of a method to get info from Nepomuk
+      when a file is newly added.
+      This can't be done from the service but need to be integrated to
+      ImageScanner after 1.0.
+
+2009-07-31 17:53  mwiesweg
+
+    * digikam/albummanager.cpp, digikam/albummanager.h,
+      digikam/digikamapp.cpp, digikam/digikamapp.h: Move check and
+      startup of nepomuk service to AlbumManager
+
+2009-07-31 17:53  mwiesweg
+
+    * libs/database/databaseparameters.cpp,
+      libs/database/databaseparameters.h: operator== must be const
+
+2009-07-30 15:55  aclemens
+
+    * libs/imageproperties/captionedit.cpp: This commit fixes the
+      caption issue described in the ML for me.
+      Do we really need this connection?
+
+      CCMAIL:digikam-devel@kde.org
+
+2009-07-30 15:14  aclemens
+
+    * libs/widgets/metadata/metadatapanel.cpp: avoid compiler warning
+
+2009-07-30 13:53  mwiesweg
+
+    * imageplugins/freerotation/freerotation.cpp: Test for a null image
+      here.
+      This is only a workaround. Rotation will not crash (or only at
+      the next point), but fail.
+      The problem is still that memory allocation fails.
+
+      CCBUG: 188334
+
+2009-07-30 13:51  mwiesweg
+
+    * utilities/nepomuk/digikamnepomukservice.cpp,
+      utilities/nepomuk/digikamnepomukservice.h: Support syncing of
+      tags nepomuk -> digikam (when a tag is added or removed in
+      nepomuk,
+      add or remove the tag in digikam). As Digikam supports tag
+      hierachies and nepomuk
+      only flat tags, a simple heuristic is used to determine the right
+      tag.
+
+      Various fixes.
+
+2009-07-30 13:51  mwiesweg
+
+    * digikam/digikamapp.cpp, digikam/digikamapp.h: Fix propagation of
+      settings changes.
+      Add a method to start digikam service via DBus if not running.
+
+2009-07-30 13:50  mwiesweg
+
+    * utilities/setup/setupmetadata.cpp: Add settings tab for Nepomuk
+      to the "Metadata" setup
+
+2009-07-30 13:50  mwiesweg
+
+    * digikam/albumsettings.cpp: Write settings only when compiled with
+      Nepomuk
+
+2009-07-30 13:50  mwiesweg
+
+    * libs/widgets/metadata/metadatapanel.cpp: Make Metadata panel just
+      add itself at the current position, not requiring to take the
+      second to fifth tab.
+
+2009-07-30 13:50  mwiesweg
+
+    * libs/dimg/loaders/pngloader.cpp: Use some call for writing as for
+      reading. May explain swapped blue and red channels.
+
+      CCBUG: 196692
+
+2009-07-30 11:17  cgilles
+
+    * NEWS: update
+
+2009-07-30 09:07  cgilles
+
+    * libs/template/altlangstredit.cpp: bug fix : due to bugous signals
+      emitted by spell checking, caption is set as dirty when user
+      change current language.
+
+2009-07-30 08:21  cgilles
+
+    * libs/imageproperties/captionedit.cpp,
+      libs/imageproperties/captionedit.h: code simplification
+
+2009-07-30 04:16  cgilles
+
+    * libs/3rdparty/libpgf/PGFplatform.h: apply patch to prevent crash
+      under Mac osx for intel
+      CCBUGS: 201302
+
+2009-07-29 20:57  cgilles
+
+    * libs/template/altlangstredit.cpp: foreach is better here
+
+2009-07-29 04:15  cgilles
+
+    * NEWS: update
+
+2009-07-28 21:47  mwiesweg
+
+    * libs/imageproperties/imagepropertiescolorstab.cpp,
+      libs/widgets/common/histogramwidget.cpp,
+      libs/widgets/common/histogramwidget.h: Fix behavior when
+      histogram of current selection is displayed:
+      - when setting a new selection, again show selection's histogram,
+      according with the button's state
+      - display statistics for currently rendered histogram
+
+2009-07-28 21:47  mwiesweg
+
+    * NEWS, libs/database/imagecomments.cpp: This clause must only
+      apply to added Comments, or Headline/Title will overwrite a
+      comment.
+
+      BUG: 200392
+
+2009-07-28 13:39  cgilles
+
+    * utilities/gpssearch/gpssearchview.cpp,
+      utilities/gpssearch/gpssearchview.h: Map search tool : display
+      all items which matches a search over the map to visualize search
+      album contents.
+
+2009-07-28 11:41  mlaurent
+
+    * utilities/imageeditor/printiface/printoptionspage.ui: not
+      necessary
+
+2009-07-28 10:14  cgilles
+
+    * libs/imageproperties/imagepropertiesgpstab.cpp: optimize layout
+
+2009-07-28 08:50  cgilles
+
+    * NEWS: update
+
+2009-07-28 08:48  cgilles
+
+    * libs/imageproperties/imagepropertiesgpstab.cpp,
+      libs/imageproperties/imagepropertiesgpstab.h,
+      libs/imageproperties/worldmapwidget.cpp,
+      libs/imageproperties/worldmapwidget.h,
+      utilities/gpssearch/gpssearchview.cpp: Factoring again map theme
+      management for marble widget.
+      add theme button for Map Search tool.
+      BUGS: 171983
+
+2009-07-28 06:48  cgilles
+
+    * NEWS: update
+
+2009-07-28 06:32  cgilles
+
+    * NEWS: update
+
+2009-07-28 04:34  cgilles
+
+    * NEWS: update
+
+2009-07-27 21:28  cgilles
+
+    * libs/imageproperties/imagepropertiesgpstab.cpp,
+      libs/imageproperties/imagepropertiesgpstab.h,
+      libs/imageproperties/worldmapwidget.cpp: added new button to
+      right sidebar to switch between from Default map to openStreet
+      map in marble widget.
+      CCBUGS: 171983
+
+2009-07-27 18:41  cgilles
+
+    * NEWS: update
+
+2009-07-27 18:39  cgilles
+
+    * NEWS: update
+
+2009-07-27 17:59  cgilles
+
+    * libs/imageproperties/worldmapwidget.cpp: use version in hexa
+
+2009-07-27 17:56  cgilles
+
+    * libs/imageproperties/worldmapwidget.cpp: this line is only
+      mandatory with previous versions of Marble
+
+2009-07-27 17:19  cgilles
+
+    * NEWS: update
+
+2009-07-27 15:31  mwiesweg
+
+    * CMakeLists.txt, config-digikam.h.cmake, digikam/CMakeLists.txt:
+      Disable compilation of Nepomuk if libraries are not found
+
+      CCBUG: 201640
+
+2009-07-27 15:16  cgilles
+
+    * libs/imageproperties/worldmapwidget.cpp: inverted values
+
+2009-07-27 15:12  cgilles
+
+    * NEWS: update
+
+2009-07-27 14:01  cgilles
+
+    * libs/imageproperties/imagepropertiescolorstab.cpp,
+      libs/imageproperties/imagepropertiescolorstab.h,
+      libs/imageproperties/imagepropertiesgpstab.cpp,
+      libs/imageproperties/imagepropertiesgpstab.h,
+      libs/imageproperties/worldmapwidget.cpp,
+      libs/imageproperties/worldmapwidget.h: prepare marble map theme
+      support
+
+2009-07-27 13:23  cgilles
+
+    * libs/imageproperties/worldmapwidget.cpp,
+      libs/imageproperties/worldmapwidget.h,
+      utilities/gpssearch/gpssearchview.cpp: factoring again
+
+2009-07-27 13:12  cgilles
+
+    * libs/imageproperties/worldmapwidget.cpp,
+      libs/imageproperties/worldmapwidget.h,
+      utilities/gpssearch/gpssearchview.cpp,
+      utilities/gpssearch/gpssearchwidget.cpp,
+      utilities/gpssearch/gpssearchwidget.h: factoring code
+
+2009-07-26 14:37  cgilles
+
+    * NEWS: polish
+
+2009-07-26 14:03  mwiesweg
+
+    * NEWS, digikam/tooltipfiller.cpp: Make sure to show as much of the
+      tags as possible
+      (there is no other overview about assigned tags. What about right
+      sidebar as well?)
+      Inspired by patch by Jonathan Marten, but asserting
+      maxStringLength is tooltip.
+      If a tagPath is too long, use the tag name; if the tag name is
+      too long, use elided text.
+      BUG: 195871
+
+2009-07-26 14:03  mwiesweg
+
+    * libs/widgets/common/ditemtooltip.cpp,
+      libs/widgets/common/ditemtooltip.h: Add poor man's elideText (we
+      can't use QFontMetrics here...)
+      Move implementation to .cpp file.
+
+2009-07-26 14:03  mwiesweg
+
+    * digikam/digikamapp.cpp, digikam/digikamapp.h: Adjust action
+      description and warning message for write-metadata-of-all batch
+      action.
+
+      CCBUG: 147885
+
+2009-07-26 11:39  cgilles
+
+    * NEWS: update
+
+2009-07-26 10:54  cgilles
+
+    * libs/widgets/metadata/metadatalistview.cpp: fix metadata tags
+      filtering behaviour when filter is empty
+
+2009-07-26 04:53  cgilles
+
+    * libs/imageproperties/imagepropertiesmetadatatab.cpp: no need to
+      check kexiv2 version here.
+
+2009-07-25 20:21  mwiesweg
+
+    * NEWS, digikam/digikamapp.cpp, digikam/digikamapp_p.h,
+      digikam/digikamui.rc, digikam/digikamview.cpp,
+      digikam/digikamview.h: Add distinct actions "Write Metadata to
+      Images" and "Reread Metadata From Images",
+      a pair each for the Album (updates whole album) and Image
+      (updates selected images) menu.
+
+      BUG: 147885
+
+2009-07-25 20:21  mwiesweg
+
+    * utilities/batch/batchsyncmetadata.cpp,
+      utilities/batch/batchsyncmetadata.h: Support both syncing
+      directions in BatchSyncMetadata tool
+
+      CCBUG: 147885
+
+2009-07-25 20:21  mwiesweg
+
+    * libs/database/collectionmanager.cpp, libs/database/imageinfo.cpp:
+      Do not return a file path if location is not available
+
+2009-07-25 17:19  mwiesweg
+
+    * libs/dimg/loaders/tiffloader.cpp: We need to do something about
+      this tag.
+
+2009-07-25 17:19  mwiesweg
+
+    * NEWS, digikam/albummanager.cpp, digikam/albummanager.h,
+      digikam/main.cpp: Add workaround for the corner case described in
+      this bug report
+
+      BUG: 193522
+
+2009-07-25 13:48  anaselli
+
+    * CMakeLists.txt, digikam.lsm.cmake: Release date defined into
+      CMakeLists.txt as DIGIKAM_RELEASE_DATE
+
+2009-07-25 13:07  mwiesweg
+
+    * libs/database/imagequerybuilder.cpp,
+      utilities/searchwindow/searchfields.cpp: Properly read the
+      "notag" field (which contains no value - need to read to the
+      EndElement anyway)
+
+2009-07-25 08:03  cgilles
+
+    * NEWS: update
+
+2009-07-24 20:26  aclemens
+
+    * imageplugins/freerotation/freerotation.cpp,
+      imageplugins/freerotation/freerotation.h: polish
+
+2009-07-24 17:25  mwiesweg
+
+    * utilities/searchwindow/searchfields.cpp,
+      utilities/searchwindow/searchgroup.cpp: Add the search fields for
+      width and height.
+      I had intended a more visual widget here, but I have currently no
+      "inspiration".
+
+2009-07-24 17:25  mwiesweg
+
+    * libs/database/imagequerybuilder.cpp: Searching for width and
+      height has the same caveat as for page orientation - the exif
+      orientation flag must be honoured, so that the width is indeed
+      the width that the user sees.
+      (TODO: adhere settings not to honour exif flag)
+
+2009-07-24 15:10  mwiesweg
+
+    * utilities/searchwindow/searchfields.cpp,
+      utilities/searchwindow/searchfields.h,
+      utilities/searchwindow/searchgroup.cpp: Add two new search fields
+      which have been missing for long:
+      - a "not tagged" checkbox.
+      If we have a model supporting that, we can move the checkbox into
+      the Tags
+      combo box, but for now it is separate
+      - a proper search for image orientation by portrait or landscape
+
+      Includes some restructuring of combo box search fields.
+
+2009-07-24 15:10  mwiesweg
+
+    * libs/database/imagequerybuilder.cpp,
+      libs/database/imagequerybuilder.h: Add backend support for
+      "pageorientation". The "orientation" just searches for the Exif
+      field
+      and is of not much practical use.
+      "pageorientation" searches for either landscape or portrait
+      orientation, and is based.
+      on both the image width and height and the Exif field.
+
+      Also improve behavior when an unknown field is found (ignore) to
+      ensure backward compatibility.
+
+2009-07-24 12:20  cgilles
+
+    * digikam/CMakeLists.txt: sound linke to link with this module is
+      not necessary anymore
+
+2009-07-24 12:08  cgilles
+
+    * digikam/CMakeLists.txt: polish
+
+2009-07-24 12:06  cgilles
+
+    * CMakeLists.txt: update
+
+2009-07-24 12:05  cgilles
+
+    * libs/widgets/metadata/metadatapanel.cpp: polish
+
+2009-07-24 10:30  cgilles
+
+    * digikam.lsm.cmake: update
+
+2009-07-24 10:29  cgilles
+
+    * NEWS: update
+
+2009-07-24 10:28  cgilles
+
+    * CMakeLists.txt: start 1.0.0-beta4
+
+2009-07-24 07:53  cgilles
+
+    * CMakeLists.txt: update
+
+2009-07-24 07:42  cgilles
+
+    * ChangeLog: preparing 1.0.0-beta3
+
+2009-07-24 07:21  cgilles
+
+    * digikam.lsm.cmake: preparing 1.0.0-beta3
+
+2009-07-24 07:20  cgilles
+
+    * NEWS: update
+
+2009-07-24 07:19  cgilles
+
+    * libs/dimg/loaders/tiffloader.cpp, libs/dimg/loaders/tiffloader.h:
+      fix associed alpha chanel registration with tiff image writer
+
+1.0.0-beta3 2009-07-24
 --------------------------------------------------------------------------------
 
 2009-07-23 13:52  cgilles
