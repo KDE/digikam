@@ -1,4 +1,14 @@
 *********************************************************************************************************
+digiKam 1.0.0-beta5 - Release date: 2009-09-xx
+
+NEW FEATURES:
+
+
+BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+001 ==> 
+
+*********************************************************************************************************
 digiKam 1.0.0-beta4 - Release date: 2009-08-30
 
 NEW FEATURES:
@@ -42,7 +52,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 031 ==> 193763 : digiKam doesn'd display any photos.
 032 ==> 202532 : Wrong rename sequence when downloading.
 033 ==> 163161 : Adding ICC profiles confuses digiKam.
-034 ==> 148151 : Problem with icc profle Color Management in Digikam with feisty fawn.
+034 ==> 148151 : Problem with icc profle Color Management in digiKam with feisty fawn.
 035 ==> 162944 : Cms/editor: converting colorspace doesn't work.
 036 ==> 165650 : digiKam appears to add a color profile for printing?
 037 ==> 182272 : Color profile and white balance.
@@ -59,7 +69,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 048 ==> 172196 : Color managed view is inaccurate.
 049 ==> 197537 : Program crashes when starting import from usb camera (canon 450d).
 050 ==> 194950 : digiKam endlessly spewing text to stderr.
-051 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta3 - Release date: 2009-07-24
