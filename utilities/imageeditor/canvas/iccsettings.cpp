@@ -74,10 +74,12 @@ public:
 
     QList<IccProfile>       profiles;
 
+    QHash<int, IccProfile>  screenProfiles;
+
     QList<IccProfile> scanDirectories(const QStringList& dirs);
     void scanDirectory(const QString& path, const QStringList& filter, QList<IccProfile> *profiles);
 
-    IccProfile profileFromX(QWidget *widget);
+    IccProfile profileFromWindowSystem(QWidget *widget);
 };
 
 class IccSettingsCreator { public: IccSettings object; };
@@ -109,8 +111,11 @@ ICCSettingsContainer IccSettings::settings()
 
 IccProfile IccSettings::monitorProfile(QWidget *widget)
 {
-    //TODO: X.org Icc profile specification
-    Q_UNUSED(widget)
+    // system-wide profile set?
+    IccProfile profile = d->profileFromWindowSystem(widget);
+    if (!profile.isNull())
+        return profile;
+
     QMutexLocker lock(&d->mutex);
     if (!d->settings.monitorProfile.isNull())
         return d->settings.monitorProfile;
@@ -126,7 +131,7 @@ IccProfile IccSettings::monitorProfile(QWidget *widget)
  *  Copyright (c) 2007 Thomas Zander <zander@kde.org>
  *  Copyright (c) 2007 Adrian Page <adrian@pagenet.plus.com>IccProfile IccSettingsPriv::profileForScreen(QWidget *widget)
 */
-IccProfile IccSettingsPriv::profileFromX(QWidget *widget)
+IccProfile IccSettingsPriv::profileFromWindowSystem(QWidget *widget)
 {
 #ifdef Q_WS_X11
 
@@ -136,6 +141,12 @@ IccProfile IccSettingsPriv::profileFromX(QWidget *widget)
     QDesktopWidget *desktop = QApplication::desktop();
     int screenNumber = desktop->screenNumber(widget);
 
+    IccProfile profile;
+    {
+        QMutexLocker lock(&mutex);
+        if (screenProfiles.contains(screenNumber))
+            return screenProfiles.value(screenNumber);
+    }
 
     if (desktop->isVirtualDesktop())
     {
@@ -172,8 +183,20 @@ IccProfile IccSettingsPriv::profileFromX(QWidget *widget)
         QByteArray bytes (nitems, '\0');
         bytes = QByteArray::fromRawData((char*)str, (quint32)nitems);
 
-        return (bytes);
+        profile = bytes;
     }
+
+    // insert to cache even if null
+    {
+        QMutexLocker lock(&mutex);
+        screenProfiles.insert(screenNumber, profile);
+    }
+    return profile;
+
+#elif defined Q_WS_WIN
+    //TODO
+#elif defined Q_WS_MAC
+    //TODO
 #endif
 
     return IccProfile();
