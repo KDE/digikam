@@ -26,8 +26,20 @@
 #include "iccsettings.h"
 #include "iccsettings.moc"
 
+// X11 includes
+
+#ifdef Q_WS_X11
+#include <climits>
+#include <X11/Xlib.h>
+#include <X11/Xatom.h>
+#include <fixx11h.h>
+#include <QX11Info>
+#endif
+
 // Qt includes
 
+#include <QApplication>
+#include <QDesktopWidget>
 #include <QDir>
 #include <QFileInfo>
 #include <QMutex>
@@ -64,6 +76,8 @@ public:
 
     QList<IccProfile> scanDirectories(const QStringList& dirs);
     void scanDirectory(const QString& path, const QStringList& filter, QList<IccProfile> *profiles);
+
+    IccProfile profileFromX(QWidget *widget);
 };
 
 class IccSettingsCreator { public: IccSettings object; };
@@ -102,6 +116,68 @@ IccProfile IccSettings::monitorProfile(QWidget *widget)
         return d->settings.monitorProfile;
     else
         return IccProfile::sRGB();
+}
+
+/*
+ * From koffice/libs/pigment/colorprofiles/KoLcmsColorProfileContainer.cpp
+ * Copyright (c) 2000 Matthias Elter <elter@kde.org>
+ *                2001 John Califf
+ *                2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2007 Thomas Zander <zander@kde.org>
+ *  Copyright (c) 2007 Adrian Page <adrian@pagenet.plus.com>IccProfile IccSettingsPriv::profileForScreen(QWidget *widget)
+*/
+IccProfile IccSettingsPriv::profileFromX(QWidget *widget)
+{
+#ifdef Q_WS_X11
+
+    Qt::HANDLE appRootWindow;
+    QString atomName;
+
+    QDesktopWidget *desktop = QApplication::desktop();
+    int screenNumber = desktop->screenNumber(widget);
+
+
+    if (desktop->isVirtualDesktop())
+    {
+        appRootWindow = QX11Info::appRootWindow(QX11Info::appScreen());
+        atomName = QString("_ICC_Profile_%1").arg(screenNumber);
+    }
+    else
+    {
+        appRootWindow = QX11Info::appRootWindow(screenNumber);
+        atomName = "_ICC_Profile";
+    }
+
+    Atom type;
+    int format;
+    unsigned long nitems;
+    unsigned long bytes_after;
+    quint8 * str;
+
+    static Atom icc_atom = XInternAtom( QX11Info::display(), atomName.toLatin1(), True );
+
+    if  ( XGetWindowProperty ( QX11Info::display(),
+                    appRootWindow,
+                    icc_atom,
+                    0,
+                    INT_MAX,
+                    False,
+                    XA_CARDINAL,
+                    &type,
+                    &format,
+                    &nitems,
+                    &bytes_after,
+                    (unsigned char **) &str) == Success
+                ) {
+        QByteArray bytes (nitems, '\0');
+        bytes = QByteArray::fromRawData((char*)str, (quint32)nitems);
+
+        return (bytes);
+    }
+#endif
+
+    return IccProfile();
+
 }
 
 bool IccSettings::isEnabled()
