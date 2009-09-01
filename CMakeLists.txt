@@ -1126,8 +1126,8 @@ ENDIF(MSVC)
     ADD_SUBDIRECTORY(showfoto)
     ADD_SUBDIRECTORY(imageplugins)
 
-# This line must be commented at release time.
-    ADD_SUBDIRECTORY(tests)
+    # This line must be commented at release time.
+    #ADD_SUBDIRECTORY(tests)
 
     IF(ENABLE_THEMEDESIGNER)
         ADD_SUBDIRECTORY(themedesigner)
