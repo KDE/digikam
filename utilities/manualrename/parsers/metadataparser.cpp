@@ -60,7 +60,7 @@ MetadataParser::MetadataParser()
               : Parser(i18n("Metadata"), SmallIcon("metadataedit"))
 {
     addToken("[meta:keycode]", i18n("Metadata"),
-             i18n("add metadata (use quick access button for keycode)"));
+             i18n("add metadata (use the quick access dialog for keycodes)"));
 }
 
 void MetadataParser::slotTokenTriggered(const QString& token)
