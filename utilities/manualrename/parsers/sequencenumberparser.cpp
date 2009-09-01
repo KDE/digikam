@@ -69,6 +69,7 @@ SequenceNumberDialog::SequenceNumberDialog()
     gboxLayout->addWidget(start,      0, 1);
     gboxLayout->addWidget(stepLabel,  1, 0);
     gboxLayout->addWidget(step,       1, 1);
+    gboxLayout->setRowStretch(2, 10);
     gbox->setLayout(gboxLayout);
 
     QWidget* w              = new QWidget;
