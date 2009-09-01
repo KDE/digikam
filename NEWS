@@ -3,10 +3,12 @@ digiKam 1.0.0-beta5 - Release date: 2009-09-xx
 
 NEW FEATURES:
 
+General        : Metadata fields can be used for renaming in BQM and CameraUI.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 
+001 ==> 193482 : XMP/IPTC fields in Batch Rename tool.
+002 ==>
 
 *********************************************************************************************************
 digiKam 1.0.0-beta4 - Release date: 2009-08-30
