@@ -177,16 +177,9 @@ QString ManualRenameWidget::parse(ParseInformation& info) const
 {
     QString parseString = d->parseStringLineEdit->text();
 
-//    ParseInformation info;
-//    info.fileName   = fileName;
-//    info.cameraName = cameraName;
-//    info.datetime   = dateTime;
-//    info.index      = index;
-
-    ManualRenameParser* p = new ManualRenameParser;
+    ManualRenameParser parser;
     QString parsed;
-    parsed = p->parse(parseString, info);
-    delete p;
+    parsed = parser.parse(parseString, info);
 
     return parsed;
 }
