@@ -168,7 +168,7 @@ void DateParserDialog::updateExampleLabel()
 // --------------------------------------------------------
 
 DateParser::DateParser()
-          : Parser(i18n("Date && Time"), SmallIcon("view-pim-calendar"))
+          : Parser(i18n("Date && Time..."), SmallIcon("view-pim-calendar"))
 {
     useTokenMenu(false);
 

@@ -88,7 +88,7 @@ SequenceNumberDialog::~SequenceNumberDialog()
 // --------------------------------------------------------
 
 SequenceNumberParser::SequenceNumberParser() :
-    Parser(i18n("Sequence Number"), SmallIcon("accessories-calculator"))
+    Parser(i18n("Sequence Number..."), SmallIcon("accessories-calculator"))
 {
     useTokenMenu(false);
 

@@ -57,7 +57,7 @@ namespace ManualRename
 {
 
 MetadataParser::MetadataParser()
-              : Parser(i18n("Metadata"), SmallIcon("metadataedit"))
+              : Parser(i18n("Metadata..."), SmallIcon("metadataedit"))
 {
     addToken("[meta:keycode]", i18n("Metadata"),
              i18n("add metadata (use the quick access dialog for keycodes)"));
