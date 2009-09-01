@@ -164,9 +164,9 @@ void MetadataParser::parse(QString& parseString, const ParseInformation& info)
         if (pos > -1)
         {
             QString keyword = regExp.cap(1);
+            QString tmp;
 
 #if KEXIV2_VERSION >= 0x010000
-            QString tmp;
             tmp = parseMetadataToken(keyword, info);
 #endif
             QString result = markResult(tmp);
