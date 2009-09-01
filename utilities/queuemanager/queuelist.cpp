@@ -823,7 +823,7 @@ void QueueListView::updateDestFileNames()
         {
             // Update base name using queue renaming rules.
             ImageInfo info = item->info();
-            QFileInfo fi(info.name());
+            QFileInfo fi(info.filePath());
 
             QString baseName = fi.baseName();
             if (settings().renamingRule == QueueSettings::CUSTOMIZE)
@@ -834,7 +834,7 @@ void QueueListView::updateDestFileNames()
 
                 ManualRenameParser p;
                 ParseInformation info;
-                info.fileName   = baseName;
+                info.filePath   = fi.absoluteFilePath();
                 info.cameraName = camera;
                 info.datetime   = date;
                 info.index      = index;

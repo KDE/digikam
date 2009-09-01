@@ -28,17 +28,18 @@
 
 // Qt includes
 
+#include <QClipboard>
+#include <QCursor>
+#include <QDir>
+#include <QDropEvent>
 #include <QFile>
 #include <QFileInfo>
-#include <QTimer>
-#include <QPixmap>
-#include <QPainter>
-#include <QCursor>
-#include <QFontMetrics>
 #include <QFont>
-#include <QClipboard>
-#include <QDropEvent>
+#include <QFontMetrics>
 #include <QHash>
+#include <QPainter>
+#include <QPixmap>
+#include <QTimer>
 
 // KDE includes
 
@@ -52,16 +53,16 @@
 
 // Local includes
 
-#include "themeengine.h"
-#include "thumbnailsize.h"
-#include "gpiteminfo.h"
-#include "renamecustomizer.h"
-#include "icongroupitem.h"
-#include "dpopupmenu.h"
-#include "ddragobjects.h"
-#include "cameraui.h"
 #include "cameraiconitem.h"
 #include "cameraiconviewtooltip.h"
+#include "cameraui.h"
+#include "ddragobjects.h"
+#include "dpopupmenu.h"
+#include "gpiteminfo.h"
+#include "icongroupitem.h"
+#include "renamecustomizer.h"
+#include "themeengine.h"
+#include "thumbnailsize.h"
 
 namespace Digikam
 {
@@ -402,7 +403,11 @@ QString CameraIconView::getTemplatedName(const GPItemInfo* itemInfo, int positio
     else
         ext = ext.right( ext.length() - pos );
 
-    return d->renamer->newName(itemInfo->name, itemInfo->mtime, position+1, ext);
+
+    QFileInfo fi;
+    fi.setFile(QDir(itemInfo->folder), itemInfo->name);
+
+    return d->renamer->newName(fi.absoluteFilePath(), itemInfo->mtime, position+1, ext);
 }
 
 QString CameraIconView::getCasedName(const RenameCustomizer::Case ccase,

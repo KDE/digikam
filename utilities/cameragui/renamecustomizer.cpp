@@ -61,6 +61,7 @@
 // Local includes
 
 #include "dcursortracker.h"
+#include "parser.h"
 #include "manualrenamewidget.h"
 
 using namespace Digikam::ManualRename;
@@ -434,7 +435,13 @@ QString RenameCustomizer::newName(const QString& fileName, const QDateTime& date
     }
     else if (d->renameManual->isChecked())
     {
-        name =  d->manualRenameInput->parse(fileName, cameraName, dateTime, index);
+        ParseInformation info;
+        info.filePath   = fileName;
+        info.cameraName = cameraName;
+        info.datetime   = dateTime;
+        info.index      = index;
+
+        name = d->manualRenameInput->parse(info);
         name += extension;
     }
 

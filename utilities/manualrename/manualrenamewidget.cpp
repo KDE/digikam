@@ -173,16 +173,15 @@ void ManualRenameWidget::slotHideToolTipTracker()
     slotToolTipButtonToggled(false);
 }
 
-QString ManualRenameWidget::parse(const QString& fileName,   const QString& cameraName,
-                                  const QDateTime& dateTime, int index) const
+QString ManualRenameWidget::parse(ParseInformation& info) const
 {
     QString parseString = d->parseStringLineEdit->text();
 
-    ParseInformation info;
-    info.fileName   = fileName;
-    info.cameraName = cameraName;
-    info.datetime   = dateTime;
-    info.index      = index;
+//    ParseInformation info;
+//    info.fileName   = fileName;
+//    info.cameraName = cameraName;
+//    info.datetime   = dateTime;
+//    info.index      = index;
 
     ManualRenameParser* p = new ManualRenameParser;
     QString parsed;

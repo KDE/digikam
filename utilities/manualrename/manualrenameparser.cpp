@@ -27,6 +27,10 @@
 
 #include <QFileInfo>
 
+// Libkexiv2 includes
+
+#include <libkexiv2/version.h>
+
 // Local includes
 
 #include "parser.h"
@@ -57,8 +61,10 @@ ManualRenameParser::ManualRenameParser()
         << new SequenceNumberParser()
         << new CameraNameParser()
         << new DateParser()
+#if KEXIV2_VERSION >= 0x010000
 //        << new AuthorParser()
-//        << new MetadataParser()
+        << new MetadataParser()
+#endif
     ;
 }
 
@@ -74,7 +80,7 @@ QString ManualRenameParser::parse(const QString& parseString, const ParseInforma
 {
     if (!Parser::stringIsValid(parseString))
     {
-        QFileInfo fi(info.fileName);
+        QFileInfo fi(info.filePath);
         QString baseName = fi.baseName();
         return baseName;
     }

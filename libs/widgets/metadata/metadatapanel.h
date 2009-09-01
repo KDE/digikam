@@ -48,7 +48,9 @@ public:
     MetadataPanel(KTabWidget* tab);
     ~MetadataPanel();
 
-    void applySettings();
+    void        applySettings();
+    void        updateCurrentTagList();
+    QStringList getAllCheckedTags();
 
     static QStringList defaultExifFilter();
     static QStringList defaultMknoteFilter();
@@ -70,4 +72,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // METADATAPANEL_H 
+#endif // METADATAPANEL_H

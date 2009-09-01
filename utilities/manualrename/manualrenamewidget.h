@@ -44,6 +44,7 @@ namespace ManualRename
 {
 
 class ManualRenameWidgetPriv;
+class ParseInformation;
 
 class DIGIKAM_EXPORT ManualRenameWidget : public QWidget
 {
@@ -70,8 +71,7 @@ public:
 
     KLineEdit* input() const;
 
-    QString parse(const QString& fileName,   const QString& cameraName,
-                  const QDateTime& dateTime, int index) const;
+    QString parse(ParseInformation& info) const;
 
 Q_SIGNALS:
 

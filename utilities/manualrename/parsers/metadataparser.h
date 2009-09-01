@@ -47,6 +47,14 @@ public:
     ~MetadataParser() {};
 
     void parse(QString& parseString, const ParseInformation& info);
+
+private Q_SLOTS:
+
+    void slotTokenTriggered(const QString& token);
+
+private:
+
+    QString parseMetadataToken(const QString& token, const ParseInformation& info);
 };
 
 } // namespace ManualRename

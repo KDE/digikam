@@ -337,4 +337,22 @@ void MetadataPanel::slotTabChanged(int)
     kapp->restoreOverrideCursor();
 }
 
+void MetadataPanel::updateCurrentTagList()
+{
+    slotTabChanged(d->tab->currentIndex());
+}
+
+QStringList MetadataPanel::getAllCheckedTags()
+{
+    QStringList checkedTags;
+    checkedTags
+        << d->exifViewerConfig->checkedTagsList()
+        << d->iptcViewerConfig->checkedTagsList()
+        << d->mknoteViewerConfig->checkedTagsList()
+        << d->xmpViewerConfig->checkedTagsList()
+    ;
+
+    return checkedTags;
+}
+
 }  // namespace Digikam

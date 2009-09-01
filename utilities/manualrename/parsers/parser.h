@@ -55,7 +55,7 @@ class ParseInformation
 public:
 
     ParseInformation():
-        fileName(QString()),
+        filePath(QString()),
         cameraName(QString()),
         author(QString()),
         metadata(QString()),
@@ -63,7 +63,7 @@ public:
         index(-1)
         {};
 
-    QString   fileName;
+    QString   filePath;
     QString   cameraName;
     QString   author;
     QString   metadata;
