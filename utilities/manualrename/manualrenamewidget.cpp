@@ -233,7 +233,7 @@ void ManualRenameWidget::setParserInputStyle(ParserInputStyles inputMask)
     d->insertTokenToolButton->setVisible(inputMask & ToolButton);
 }
 
-void ManualRenameWidget::registerParsers(int layoutColumns)
+void ManualRenameWidget::registerParsers(int maxColumns)
 {
    if (!d->parser)
    {
@@ -250,6 +250,7 @@ void ManualRenameWidget::registerParsers(int layoutColumns)
 
        QGridLayout* gridLayout = new QGridLayout;
 
+       int maxParsers = d->parser->parsers().count();
        foreach (Parser* parser, d->parser->parsers())
        {
            btn    = parser->registerButton(this);
@@ -265,12 +266,29 @@ void ManualRenameWidget::registerParsers(int layoutColumns)
 
            ++column;
 
-           if (column % layoutColumns == 0)
+           if (column % maxColumns == 0)
            {
                ++row;
                column = 0;
            }
        }
+
+       // --------------------------------------------------------
+
+       // If the buttons don't fill up all columns, expand the last button to fit the layout
+       if ((row >= (maxParsers / maxColumns)) && (column == 0))
+       {
+           gridLayout->removeWidget(btn);
+           gridLayout->addWidget(btn, (row - 1), (maxColumns - 1), 1, 1);
+       }
+       else if (column != maxColumns)
+       {
+           gridLayout->removeWidget(btn);
+           gridLayout->addWidget(btn, row, (column - 1), 1, -1);
+       }
+
+       // --------------------------------------------------------
+
        d->btnContainer->setLayout(gridLayout);
        d->insertTokenToolButton->setMenu(tokenToolBtnMenu);
    }

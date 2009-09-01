@@ -52,8 +52,6 @@ ManualRenameParser::ManualRenameParser()
      * Register all defined sub-parsers here (found in the directory 'parsers').
      * This list will be used in here for the parse method and also in the ManualRenameWidget,
      * to create the buttons and menu entries as well as the tooltip.
-     *
-     * TODO: Can this be done automatically?
      */
 
     m_parsers
