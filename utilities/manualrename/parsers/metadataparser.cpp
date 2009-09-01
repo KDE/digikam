@@ -112,7 +112,7 @@ void MetadataParser::slotTokenTriggered(const QString& token)
     QStringList tags;
 
     QPointer<KDialog> dlg = new KDialog;
-    dlg->setWindowTitle(i18n("Add Metadata"));
+    dlg->setWindowTitle(i18n("Add Metadata Keywords"));
     dlg->setMainWidget(mainWidget);
 
     if (dlg->exec() == KDialog::Accepted)

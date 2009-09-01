@@ -97,7 +97,7 @@ DateParserDialog::DateParserDialog(QWidget* parent)
                 : KDialog(parent), ui(new Ui::DateParserDialogWidget)
 {
     ui->setupUi(mainWidget());
-    setWindowTitle(i18n("Add Date && Time"));
+    setWindowTitle(i18n("Add Date & Time"));
 
     // fill the date format combobox
     DateFormat df;
