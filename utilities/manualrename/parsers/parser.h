@@ -80,11 +80,36 @@ public:
     Parser(const QString& name, const QIcon& icon);
     virtual ~Parser();
 
+    /**
+     * @return a list of all registered tokens
+     */
     QList<Token*>  tokens() const;
 
+    /**
+     * Register a button in the parent object. By calling this method, a new button for the parser
+     * object will be created and all necessary connections will be setup. A button can only be registered once.
+     * @see registerMenu
+     *
+     * @param parent the parent object the button will be registered for
+     * @return a pointer to the newly created button
+     */
     QPushButton*   registerButton(QWidget* parent);
+
+    /**
+     * Register a menu action in the parent object. By calling this method, a new action for the parser
+     * object will be created and all necessary connections will be setup. An action can only be registered once.
+     * @see registerButton
+     *
+     * @param parent the parent object the action will be registered for
+     * @return a pointer to the newly created action
+     */
     QAction*       registerMenu(QMenu* parent);
 
+    /**
+     * check if the given parse string is valid
+     * @param str the parse string
+     * @return true if valid / can be parsed
+     */
     static bool    stringIsValid(const QString& str);
 
     static void    generateMarkerTemplate(QChar& left, QChar& right, int& width);
@@ -111,10 +136,10 @@ protected:
     bool    addToken(const QString& id, const QString& alias, const QString& description);
 
     /**
-     * A menu will be created, if multiple tokens have been assigned to a parser.
-     * If a parser has many tokens, but only one parse action should be triggered, set this to false and
+     * If multiple tokens have been assigned to a parser, a menu will be created.
+     * If you do not want a menu for every defined token, set this method to 'false' and
      * re-implement the @see slotTokenTriggered method.
-     * @param menu
+     * @param value boolean parameter to set token menu usage
      */
     void    useTokenMenu(bool value);
 
@@ -140,14 +165,14 @@ protected:
      * To avoid this, we mark every result (every token we replace in the @see parse method):
      * new_{{{001}}}_{{{my_file#001}}}
      *
-     * The main parser will extract these markers, save it in a list for later usage and replace the string with:
+     * The main parser will extract these markers, save it in a list for later usage and replace the parse string with:
      * new_index:0_index:1
      * or any string that was defined in @see ManualRenameParser::tokenMarker()
      *
      * When all parsers have been called, the main parser will replace those special markers with the saved results:
      * new_001_my_file#001
      *
-     * This ensures that token characters can exist in replacement strings, without being parsed again, which in some cases,
+     * This ensures that token characters can exist in replacement strings, without being parsed again, which in some cases
      * might even lead to an infinite parse loop.
      *
      * @param result the result token to be marked
@@ -155,6 +180,15 @@ protected:
      */
     QString markResult(const QString& result);
 
+    /**
+     * This helper method converts the string into a "first letter uppercase" version, for example
+     * "my_new_filename001.jpg"
+     * will become
+     * "My_New_Filename001.jpg"
+     *
+     * @param str the string to be converted into an "first letter uppercase" version
+     * @return the converted string
+     */
     QString firstLetterUppercase(const QString& str);
 
 protected Q_SLOTS:
