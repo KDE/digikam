@@ -26,6 +26,7 @@
 
 // Qt includes
 
+#include <QGroupBox>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPointer>
@@ -92,14 +93,25 @@ void MetadataParser::slotTokenTriggered(const QString& token)
 
     // --------------------------------------------------------
 
+    QGroupBox* customGBox     = new QGroupBox(i18n("Settings"));
     QHBoxLayout *customLayout = new QHBoxLayout;
     customLayout->addWidget(customLabel);
     customLayout->addWidget(customSep);
     customLayout->setStretch(0, 10);
+    customGBox->setLayout(customLayout);
+
+    // --------------------------------------------------------
+
+    QGroupBox* keywordsGBox    = new QGroupBox(i18n("Metadata Keywords"));
+    QVBoxLayout* keywordLayout = new QVBoxLayout;
+    keywordLayout->addWidget(tab);
+    keywordsGBox->setLayout(keywordLayout);
+
+    // --------------------------------------------------------
 
     QVBoxLayout* mainLayout = new QVBoxLayout;
-    mainLayout->addLayout(customLayout);
-    mainLayout->addWidget(tab);
+    mainLayout->addWidget(customGBox);
+    mainLayout->addWidget(keywordsGBox);
     mainWidget->setLayout(mainLayout);
 
     // --------------------------------------------------------
