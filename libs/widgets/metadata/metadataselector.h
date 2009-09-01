@@ -93,6 +93,15 @@ class DIGIKAM_EXPORT MetadataSelectorView : public QWidget
 
 public:
 
+    enum ControlElement
+    {
+        SelectAllBtn = 0x01,
+        ClearBtn     = 0x02,
+        DefaultBtn   = 0x04,
+        SearchBar    = 0x08
+    };
+    Q_DECLARE_FLAGS(ControlElements, ControlElement);
+
     MetadataSelectorView(QWidget* parent);
     virtual ~MetadataSelectorView();
 
@@ -108,6 +117,8 @@ public:
     QStringList defaultFilter() const;
 
     QStringList checkedTagsList() const;
+
+    void        setControlElements(ControlElements controllerMask);
 
 private Q_SLOTS:
 
@@ -126,5 +137,7 @@ private:
 };
 
 }  // namespace Digikam
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::MetadataSelectorView::ControlElements);
 
 #endif /* METADATA_SELECTOR_H */

@@ -28,6 +28,7 @@
 
 #include <QFrame>
 #include <QVBoxLayout>
+#include <QList>
 
 // KDE includes
 
@@ -353,6 +354,19 @@ QStringList MetadataPanel::getAllCheckedTags()
     ;
 
     return checkedTags;
+}
+
+QList<MetadataSelectorView*> MetadataPanel::viewers()
+{
+    QList<MetadataSelectorView*> viewers;
+    viewers
+        << d->exifViewerConfig
+        << d->iptcViewerConfig
+        << d->mknoteViewerConfig
+        << d->xmpViewerConfig
+    ;
+
+    return viewers;
 }
 
 }  // namespace Digikam

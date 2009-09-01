@@ -237,10 +237,12 @@ MetadataSelectorView::MetadataSelectorView(QWidget* parent)
     grid->addWidget(d->selectAllBtn,        1, 2, 1, 1);
     grid->addWidget(d->clearSelectionBtn,   1, 3, 1, 1);
     grid->addWidget(d->defaultSelectionBtn, 1, 4, 1, 1);
-    grid->setColumnStretch(1, 10);
+    grid->setColumnStretch(0, 10);
     grid->setRowStretch(0, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
+
+    setControlElements(SearchBar|SelectAllBtn|DefaultBtn|ClearBtn);
 
     connect(d->searchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
             this, SLOT(slotSearchTextChanged(const SearchTextSettings&)));
@@ -384,6 +386,14 @@ void MetadataSelectorView::slotSelectAll()
 void MetadataSelectorView::slotClearSelection()
 {
     d->selector->clearSelection();
+}
+
+void MetadataSelectorView::setControlElements(ControlElements controllerMask)
+{
+    d->searchBar->setVisible(controllerMask & SearchBar);
+    d->selectAllBtn->setVisible(controllerMask & SelectAllBtn);
+    d->clearSelectionBtn->setVisible(controllerMask & ClearBtn);
+    d->defaultSelectionBtn->setVisible(controllerMask & DefaultBtn);
 }
 
 }  // namespace Digikam

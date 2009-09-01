@@ -38,6 +38,7 @@ namespace Digikam
 {
 
 class MetadataPanelPriv;
+class MetadataSelectorView;
 
 class DIGIKAM_EXPORT MetadataPanel : public QObject
 {
@@ -48,9 +49,10 @@ public:
     MetadataPanel(KTabWidget* tab);
     ~MetadataPanel();
 
-    void        applySettings();
-    void        updateCurrentTagList();
-    QStringList getAllCheckedTags();
+    void                         applySettings();
+    void                         updateCurrentTagList();
+    QStringList                  getAllCheckedTags();
+    QList<MetadataSelectorView*> viewers();
 
     static QStringList defaultExifFilter();
     static QStringList defaultMknoteFilter();

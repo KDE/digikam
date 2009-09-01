@@ -77,6 +77,15 @@ void MetadataParser::slotTokenTriggered(const QString& token)
 
     // --------------------------------------------------------
 
+    // disable the "default" and "select all" buttons
+    foreach (MetadataSelectorView* viewer, mPanel->viewers())
+    {
+        viewer->setControlElements(MetadataSelectorView::SearchBar |
+                                   MetadataSelectorView::ClearBtn);
+    }
+
+    // --------------------------------------------------------
+
     // remove "Viewer" string from tabs, remove "Makernotes" tab completely for now
     int makerNotesTabIndex = -1;
     for (int i = 0; i < tab->count(); ++i)
