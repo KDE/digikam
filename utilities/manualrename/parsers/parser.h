@@ -57,16 +57,12 @@ public:
     ParseInformation():
         filePath(QString()),
         cameraName(QString()),
-        author(QString()),
-        metadata(QString()),
         datetime(QDateTime()),
         index(-1)
         {};
 
     QString   filePath;
     QString   cameraName;
-    QString   author;
-    QString   metadata;
     QDateTime datetime;
     int       index;
 };
