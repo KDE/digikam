@@ -48,7 +48,7 @@ namespace ManualRename
 ManualRenameParser::ManualRenameParser()
 {
     /*
-     * Register all sub-parsers here (found in the directory 'parsers').
+     * Register all sub-parsers here (found in the directory 'utilities/manualrename/parsers').
      * This list will be used in here for the parse method and also in the ManualRenameWidget,
      * to create the buttons and menu entries as well as the tooltip.
      */
@@ -70,6 +70,8 @@ ManualRenameParser::~ManualRenameParser()
     {
         delete parser;
     }
+
+    m_parsers.clear();
 }
 
 QString ManualRenameParser::parse(const QString& parseString, const ParseInformation& info)
