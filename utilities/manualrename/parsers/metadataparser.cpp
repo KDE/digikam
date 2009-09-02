@@ -158,9 +158,6 @@ void MetadataParser::slotTokenTriggered(const QString& token)
 
 void MetadataParser::parse(QString& parseString, const ParseInformation& info)
 {
-    Q_UNUSED(parseString)
-    Q_UNUSED(info)
-
     if (!stringIsValid(parseString))
         return;
 
