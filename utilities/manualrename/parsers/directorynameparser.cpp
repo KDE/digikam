@@ -27,11 +27,11 @@
 // Qt includes
 
 #include <QFileInfo>
+#include <QString>
 
 // KDE includes
 
 #include <kiconloader.h>
-#include <kdebug.h>
 #include <klocale.h>
 
 namespace Digikam

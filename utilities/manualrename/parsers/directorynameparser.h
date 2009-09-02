@@ -24,13 +24,11 @@
 #ifndef DIRECTORYNAMEPARSER_H
 #define DIRECTORYNAMEPARSER_H
 
-// Qt includes
-
-#include <QString>
-
 // Local includes
 
 #include "parser.h"
+
+class QString;
 
 namespace Digikam
 {
