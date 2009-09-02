@@ -177,9 +177,8 @@ QString ManualRenameWidget::parse(ParseInformation& info) const
 {
     QString parseString = d->parseStringLineEdit->text();
 
-    ManualRenameParser parser;
     QString parsed;
-    parsed = parser.parse(parseString, info);
+    parsed = d->parser->parse(parseString, info);
 
     return parsed;
 }
