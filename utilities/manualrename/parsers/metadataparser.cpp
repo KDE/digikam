@@ -105,8 +105,8 @@ void MetadataParser::slotTokenTriggered(const QString& token)
     QGroupBox* customGBox     = new QGroupBox(i18n("Settings"));
     QHBoxLayout *customLayout = new QHBoxLayout;
     customLayout->addWidget(customLabel);
+    customLayout->addStretch(10);
     customLayout->addWidget(customSep);
-    customLayout->setStretch(0, 10);
     customGBox->setLayout(customLayout);
 
     // --------------------------------------------------------
