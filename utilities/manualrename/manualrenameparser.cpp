@@ -36,6 +36,7 @@
 #include "parser.h"
 #include "cameranameparser.h"
 #include "dateparser.h"
+#include "directorynameparser.h"
 #include "filenameparser.h"
 #include "metadataparser.h"
 #include "sequencenumberparser.h"
@@ -55,6 +56,7 @@ ManualRenameParser::ManualRenameParser()
 
     m_parsers
         << new FilenameParser()
+        << new DirectoryNameParser()
         << new SequenceNumberParser()
         << new CameraNameParser()
         << new DateParser()

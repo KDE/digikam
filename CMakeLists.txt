@@ -1050,6 +1050,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/dateparser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/sequencenumberparser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/cameranameparser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/directorynameparser.cpp
        )
 
     SET(libdigikamgui_SRCS
