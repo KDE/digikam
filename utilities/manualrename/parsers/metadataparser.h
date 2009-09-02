@@ -57,7 +57,7 @@ public:
     ~MetadataParserDialog();
 
     QStringList checkedTags() const;
-    QString     separator() const;
+    QString     separator()   const;
 
 private:
 
