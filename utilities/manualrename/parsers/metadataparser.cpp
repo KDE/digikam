@@ -192,11 +192,11 @@ QString MetadataParser::parseMetadataToken(const QString& token, const ParseInfo
     if (!meta.isEmpty())
     {
         KExiv2::MetaDataMap dataMap;
-        if (keyword.startsWith("exif."))
+        if (keyword.startsWith(QLatin1String("exif.")))
             dataMap = meta.getExifTagsDataList(QStringList(), true);
-        else if (keyword.startsWith("iptc."))
+        else if (keyword.startsWith(QLatin1String("iptc.")))
             dataMap = meta.getIptcTagsDataList(QStringList(), true);
-        else if (keyword.startsWith("xmp."))
+        else if (keyword.startsWith(QLatin1String("xmp.")))
             dataMap = meta.getXmpTagsDataList(QStringList(), true);
 
         foreach (const QString& key, dataMap.keys())
