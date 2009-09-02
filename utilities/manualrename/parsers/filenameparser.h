@@ -48,7 +48,16 @@ public:
 
     void parse(QString& parseString, const ParseInformation& info);
 
-
+    /**
+     * This helper method converts the string into a "first letter uppercase" version, for example
+     * "my_new_filename001.jpg"
+     * will become
+     * "My_New_Filename001.jpg"
+     *
+     * @param str the string to be converted into an "first letter uppercase" version
+     * @return the converted string
+     */
+    static QString firstLetterUppercase(const QString& str);
 };
 
 } // namespace ManualRename

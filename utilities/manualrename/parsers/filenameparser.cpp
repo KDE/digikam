@@ -83,5 +83,26 @@ void FilenameParser::parse(QString& parseString, const ParseInformation& info)
     parseString.replace(QString('%'), markResult(baseFileName.toLower()));
 }
 
+QString FilenameParser::firstLetterUppercase(const QString& str)
+{
+    if (str.isEmpty())
+        return str;
+
+    QString tmp = str.toLower();
+
+    if( tmp[0].isLetter() )
+        tmp[0] = tmp[0].toUpper();
+
+    for( int i = 0; i < tmp.length(); ++i )
+    {
+        if( tmp[i+1].isLetter() && !tmp[i].isLetter() &&
+                tmp[i] != '\'' && tmp[i] != '?' && tmp[i] != '`' )
+        {
+            tmp[i+1] = tmp[i+1].toUpper();
+        }
+    }
+    return tmp;
+}
+
 } // namespace ManualRename
 } // namespace Digikam
