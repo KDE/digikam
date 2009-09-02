@@ -234,6 +234,8 @@ MetadataPanel::MetadataPanel(KTabWidget* tab)
     d->tab->setTabBarHidden(true);
 #endif
 
+    slotTabChanged(d->tab->currentIndex());
+
     // --------------------------------------------------------
 
     connect(d->tab, SIGNAL(currentChanged(int)),
@@ -336,11 +338,6 @@ void MetadataPanel::slotTabChanged(int)
     }
 #endif
     kapp->restoreOverrideCursor();
-}
-
-void MetadataPanel::updateCurrentTagList()
-{
-    slotTabChanged(d->tab->currentIndex());
 }
 
 QStringList MetadataPanel::getAllCheckedTags()

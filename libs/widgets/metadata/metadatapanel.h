@@ -50,7 +50,7 @@ public:
     ~MetadataPanel();
 
     void                         applySettings();
-    void                         updateCurrentTagList();
+
     QStringList                  getAllCheckedTags();
     QList<MetadataSelectorView*> viewers();
 

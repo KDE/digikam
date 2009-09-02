@@ -125,11 +125,6 @@ void MetadataParser::slotTokenTriggered(const QString& token)
 
     // --------------------------------------------------------
 
-    // update current tag list
-    mPanel->updateCurrentTagList();
-
-    // --------------------------------------------------------
-
     QStringList tags;
 
     QPointer<KDialog> dlg = new KDialog;
