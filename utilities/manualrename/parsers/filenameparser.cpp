@@ -39,7 +39,7 @@ namespace ManualRename
 {
 
 FilenameParser::FilenameParser()
-              : Parser(i18n("File Name"), SmallIcon("list-add-font"))
+              : Parser(i18n("File Name"), SmallIcon("folder-image"))
 {
     addToken("$", i18nc("original filename", "Original"),
             i18n("filename (original)"));
