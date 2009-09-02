@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef MANUALRENAMEINPUT_H
-#define MANUALRENAMEINPUT_H
+#ifndef MANUALRENAMEWIDGET_H
+#define MANUALRENAMEWIDGET_H
 
 // Qt includes
 
@@ -102,4 +102,4 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::ManualRename::ManualRenameWidget::ParserInputStyles)
 
-#endif /* MANUALRENAMEINPUT_H */
+#endif /* MANUALRENAMEWIDGET_H */
