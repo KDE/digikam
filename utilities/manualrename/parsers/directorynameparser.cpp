@@ -79,7 +79,7 @@ void DirectoryNameParser::parse(QString& parseString, const ParseInformation& in
             if (matchedLength == 0)
                 tmp = folders.last();
             else if (matchedLength > (folderCount - 1))
-                tmp = QString();
+                tmp.clear();
             else
                 tmp = folders[folderCount - matchedLength - 1];
 
