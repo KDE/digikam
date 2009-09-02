@@ -77,7 +77,7 @@ void MetadataParser::slotTokenTriggered(const QString& token)
 
     // --------------------------------------------------------
 
-    // disable the "default" and "select all" buttons
+    // we only need the "SearchBar" and "ClearBtn" control elements
     foreach (MetadataSelectorView* viewer, mPanel->viewers())
     {
         viewer->setControlElements(MetadataSelectorView::SearchBar |
