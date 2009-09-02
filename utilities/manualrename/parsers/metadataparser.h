@@ -27,15 +27,45 @@
 // Qt includes
 
 #include <QString>
+#include <QStringList>
+
+// KDE includes
+
+#include <kdialog.h>
 
 // Local includes
 
 #include "parser.h"
 
+class KLineEdit;
+
 namespace Digikam
 {
+
+class MetadataPanel;
+
 namespace ManualRename
 {
+
+class MetadataParserDialog : public KDialog
+{
+    Q_OBJECT
+
+public:
+
+    MetadataParserDialog();
+    ~MetadataParserDialog();
+
+    QStringList checkedTags() const;
+    QString     separator() const;
+
+private:
+
+    MetadataPanel* m_metadataPanel;
+    KLineEdit*     m_separatorLineEdit;
+};
+
+// --------------------------------------------------------
 
 class MetadataParser : public Parser
 {

@@ -35,7 +35,6 @@
 // KDE includes
 
 #include <kdebug.h>
-#include <kdialog.h>
 #include <kiconloader.h>
 #include <klineedit.h>
 #include <klocale.h>
@@ -57,28 +56,22 @@ namespace Digikam
 namespace ManualRename
 {
 
-MetadataParser::MetadataParser()
-              : Parser(i18n("Metadata..."), SmallIcon("metadataedit"))
+MetadataParserDialog::MetadataParserDialog()
+                    : KDialog(0)
 {
-    addToken("[meta:keycode]", i18n("Metadata"),
-             i18n("add metadata (use the quick access dialog for keycodes)"));
-}
+    setCaption(i18n("Add Metadata Keywords"));
 
-void MetadataParser::slotTokenTriggered(const QString& token)
-{
-    Q_UNUSED(token)
-
-    QWidget* mainWidget   = new QWidget;
-    KTabWidget* tab       = new KTabWidget;
-    MetadataPanel* mPanel = new MetadataPanel(tab);
-    QLabel *customLabel   = new QLabel(i18n("Keyword separator:"));
-    KLineEdit* customSep  = new KLineEdit;
-    customSep->setText("_");
+    QWidget* mainWidget = new QWidget;
+    KTabWidget* tab     = new KTabWidget;
+    m_metadataPanel     = new MetadataPanel(tab);
+    QLabel *customLabel = new QLabel(i18n("Keyword separator:"));
+    m_separatorLineEdit = new KLineEdit;
+    m_separatorLineEdit->setText("_");
 
     // --------------------------------------------------------
 
     // we only need the "SearchBar" and "ClearBtn" control elements
-    foreach (MetadataSelectorView* viewer, mPanel->viewers())
+    foreach (MetadataSelectorView* viewer, m_metadataPanel->viewers())
     {
         viewer->setControlElements(MetadataSelectorView::SearchBar |
                                    MetadataSelectorView::ClearBtn);
@@ -106,7 +99,7 @@ void MetadataParser::slotTokenTriggered(const QString& token)
     QHBoxLayout *customLayout = new QHBoxLayout;
     customLayout->addWidget(customLabel);
     customLayout->addStretch(10);
-    customLayout->addWidget(customSep);
+    customLayout->addWidget(m_separatorLineEdit);
     customGBox->setLayout(customLayout);
 
     // --------------------------------------------------------
@@ -125,16 +118,44 @@ void MetadataParser::slotTokenTriggered(const QString& token)
 
     // --------------------------------------------------------
 
+    setMainWidget(mainWidget);
+    resize(450, 450);
+}
+
+MetadataParserDialog::~MetadataParserDialog()
+{
+}
+
+QStringList MetadataParserDialog::checkedTags() const
+{
+    return m_metadataPanel->getAllCheckedTags();
+}
+
+QString MetadataParserDialog::separator() const
+{
+    return m_separatorLineEdit->text();
+}
+
+// --------------------------------------------------------
+
+MetadataParser::MetadataParser()
+              : Parser(i18n("Metadata..."), SmallIcon("metadataedit"))
+{
+    addToken("[meta:keycode]", i18n("Metadata"),
+             i18n("add metadata (use the quick access dialog for keycodes)"));
+}
+
+void MetadataParser::slotTokenTriggered(const QString& token)
+{
+    Q_UNUSED(token)
+
     QStringList tags;
 
-    QPointer<KDialog> dlg = new KDialog;
-    dlg->setWindowTitle(i18n("Add Metadata Keywords"));
-    dlg->setMainWidget(mainWidget);
-    dlg->resize(450, 450);
+    QPointer<MetadataParserDialog> dlg = new MetadataParserDialog;
 
     if (dlg->exec() == KDialog::Accepted)
     {
-        QStringList checkedTags = mPanel->getAllCheckedTags();
+        QStringList checkedTags = dlg->checkedTags();
 
         foreach (const QString& tag, checkedTags)
         {
@@ -145,7 +166,7 @@ void MetadataParser::slotTokenTriggered(const QString& token)
 
     if (!tags.isEmpty())
     {
-        QString tokenStr = tags.join(customSep->text());
+        QString tokenStr = tags.join(dlg->separator());
         emit signalTokenTriggered(tokenStr);
     }
 
