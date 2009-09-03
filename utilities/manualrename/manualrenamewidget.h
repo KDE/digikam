@@ -85,7 +85,10 @@ public Q_SLOTS:
 private Q_SLOTS:
 
     void slotToolTipButtonToggled(bool);
-    void addToken2ParserInput(const QString& token);
+    void addToken2ParserInput(const QString&);
+
+    void slotTextChanged();
+    void slotParseTimer();
 
 private:
 

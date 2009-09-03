@@ -34,6 +34,7 @@
 #include <QList>
 #include <QMenu>
 #include <QPushButton>
+#include <QTimer>
 #include <QToolButton>
 
 // KDE includes
@@ -78,6 +79,8 @@ public:
     QGroupBox*          btnContainer;
 
     ManualRenameParser* parser;
+
+    QTimer*             parseTimer;
 };
 
 ManualRenameWidget::ManualRenameWidget(QWidget* parent)
@@ -131,11 +134,20 @@ ManualRenameWidget::ManualRenameWidget(QWidget* parent)
 
     // --------------------------------------------------------
 
+    d->parseTimer = new QTimer(this);
+    d->parseTimer->setInterval(500);
+    d->parseTimer->setSingleShot(true);
+
+    // --------------------------------------------------------
+
+    connect(d->parseTimer, SIGNAL(timeout()),
+            this, SLOT(slotParseTimer()));
+
     connect(d->tooltipToggleButton, SIGNAL(toggled(bool)),
             this, SLOT(slotToolTipButtonToggled(bool)));
 
     connect(d->parseStringLineEdit, SIGNAL(textChanged(const QString&)),
-            this, SIGNAL(signalTextChanged(const QString&)));
+            this, SLOT(slotTextChanged()));
 }
 
 ManualRenameWidget::~ManualRenameWidget()
@@ -291,6 +303,16 @@ void ManualRenameWidget::registerParsers(int maxColumns)
        d->btnContainer->setLayout(gridLayout);
        d->insertTokenToolButton->setMenu(tokenToolBtnMenu);
    }
+}
+
+void ManualRenameWidget::slotTextChanged()
+{
+    d->parseTimer->start();
+}
+
+void ManualRenameWidget::slotParseTimer()
+{
+    emit signalTextChanged(d->parseStringLineEdit->text());
 }
 
 }  // namespace ManualRename
