@@ -67,13 +67,13 @@ Parser::~Parser()
 
 QPushButton* Parser::createButton(const QString& name, const QIcon& icon)
 {
-    const int minHeight = 28;
+    const int maxHeight = 28;
 
     QPushButton* button = new QPushButton;
     button->setText(name);
     button->setIcon(icon);
-    button->setMinimumHeight(minHeight);
-    button->setMaximumHeight(minHeight);
+    button->setMinimumHeight(maxHeight);
+    button->setMaximumHeight(maxHeight);
 
     return button;
 }
