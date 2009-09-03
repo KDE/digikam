@@ -34,7 +34,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kiconloader.h>
 #include <klineedit.h>
 #include <klocale.h>

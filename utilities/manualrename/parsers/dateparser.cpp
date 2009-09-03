@@ -33,7 +33,6 @@
 
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kdebug.h>
 
 // Local includes
 
