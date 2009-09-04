@@ -95,6 +95,8 @@ IccSettings::IccSettings()
 {
     IccTransform::init();
     readFromConfig();
+
+    qRegisterMetaType<ICCSettingsContainer>("ICCSettingsContainer");
 }
 
 IccSettings::~IccSettings()
@@ -210,56 +212,69 @@ bool IccSettings::isEnabled()
 
 void IccSettings::readFromConfig()
 {
-    ICCSettingsContainer s;
+    ICCSettingsContainer old, s;
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group(QString("Color Management"));
     s.readFromConfig(group);
     {
         QMutexLocker lock(&d->mutex);
+        old = d->settings;
         d->settings = s;
     }
     emit settingsChanged();
+    emit settingsChanged(s, old);
 }
 
 void IccSettings::setSettings(const ICCSettingsContainer& settings)
 {
+    ICCSettingsContainer old;
     {
         QMutexLocker lock(&d->mutex);
         if (settings.iccFolder != d->settings.iccFolder)
             d->profiles.clear();
+        old = d->settings;
         d->settings = settings;
     }
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group(QString("Color Management"));
     settings.writeToConfig(group);
     emit settingsChanged();
+    emit settingsChanged(settings, old);
 }
 
 void IccSettings::setUseManagedView(bool useManagedView)
 {
+    ICCSettingsContainer old, current;
     {
         QMutexLocker lock(&d->mutex);
+        old = d->settings;
         d->settings.useManagedView = useManagedView;
+        current = d->settings;
     }
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group(QString("Color Management"));
     d->settings.writeManagedViewToConfig(group);
     emit settingsChanged();
+    emit settingsChanged(current, old);
 }
 
 void IccSettings::setIccPath(const QString& path)
 {
+    ICCSettingsContainer old, current;
     {
         QMutexLocker lock(&d->mutex);
         if (path == d->settings.iccFolder)
             return;
         d->profiles.clear();
+        old = d->settings;
         d->settings.iccFolder = path;
+        current = d->settings;
     }
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group(QString("Color Management"));
     d->settings.writeManagedViewToConfig(group);
     emit settingsChanged();
+    emit settingsChanged(current, old);
 }
 
 QList<IccProfile> IccSettingsPriv::scanDirectories(const QStringList& dirs)

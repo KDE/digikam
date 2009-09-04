@@ -39,6 +39,8 @@ class KDirWatch;
 namespace Digikam
 {
 
+class ICCSettingsContainer;
+
 class LoadingProcessListener
 {
 public:
@@ -264,6 +266,10 @@ Q_SIGNALS:
      * The signal may be emitted under CacheLock. Strongly consider a queued connection.
      */
     void fileChanged(const QString& filePath, const QString& cacheKey);
+
+private Q_SLOTS:
+
+    void iccSettingsChanged(const ICCSettingsContainer &current, const ICCSettingsContainer &previous);
 
 private:
 

@@ -37,6 +37,10 @@
 #include <kdebug.h>
 #include <kdirwatch.h>
 
+// Local includes
+
+#include "iccsettings.h"
+
 
 namespace Digikam
 {
@@ -94,6 +98,9 @@ LoadingCache::LoadingCache()
     // good place to call it here as LoadingCache is a singleton
     qRegisterMetaType<LoadingDescription>("LoadingDescription");
     qRegisterMetaType<DImg>("DImg");
+
+    connect(IccSettings::instance(), SIGNAL(settingsChanged(const ICCSettingsContainer &, const ICCSettingsContainer &)),
+            this, SLOT(iccSettingsChanged(const ICCSettingsContainer &, const ICCSettingsContainer &)));
 }
 
 LoadingCache::~LoadingCache()
@@ -317,6 +324,18 @@ void LoadingCachePriv::cleanUpThumbnailFilePathHash()
             it = thumbnailFilePathHash.erase(it);
         else
             ++it;
+    }
+}
+
+void LoadingCache::iccSettingsChanged(const ICCSettingsContainer &current, const ICCSettingsContainer &previous)
+{
+    if (current.enableCM != previous.enableCM ||
+        current.useManagedPreviews != previous.useManagedPreviews ||
+        current.monitorProfile != previous.monitorProfile)
+    {
+        LoadingCache::CacheLock lock(this);
+        removeImages();
+        removeThumbnails();
     }
 }
 
