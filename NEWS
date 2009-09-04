@@ -8,7 +8,8 @@ General        : Metadata fields can be used for renaming in BQM and CameraUI.
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 193482 : XMP/IPTC fields in Batch Rename tool.
-002 ==>
+002 ==> 183435 : No more file manager at media:/camera.
+003 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta4 - Release date: 2009-08-30
