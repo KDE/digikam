@@ -191,6 +191,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     // Set JPEG decompressor instance
 
     jpeg_create_decompress(&cinfo);
+    bool startedDecompress = false;
 
 #ifdef Q_CC_MSVC
     QFile inFile(filePath);
@@ -274,7 +275,11 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         }
 
         // initialize decompression
-        jpeg_start_decompress(&cinfo);
+        if (!startedDecompress)
+        {
+            jpeg_start_decompress(&cinfo);
+            startedDecompress = true;
+        }
 
         // some pseudo-progress
         if (observer)
@@ -487,6 +492,12 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     if (m_loadFlags & LoadICCData)
     {
+        if (!startedDecompress)
+        {
+            jpeg_start_decompress(&cinfo);
+            startedDecompress = true;
+        }
+
         JOCTET *profile_data=NULL;
         uint    profile_size;
 
@@ -509,7 +520,9 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     // -------------------------------------------------------------------
 
-    jpeg_finish_decompress(&cinfo);
+    if (startedDecompress)
+        jpeg_finish_decompress(&cinfo);
+
     jpeg_destroy_decompress(&cinfo);
 
     // -------------------------------------------------------------------

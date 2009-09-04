@@ -10,7 +10,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 001 ==> 193482 : XMP/IPTC fields in Batch Rename tool.
 002 ==> 183435 : No more file manager at media:/camera.
 003 ==> 200758 : digiKam, dolphin, dc is not is perepherals list.
-004 ==> 
+004 ==> 206071 : Not reading image properties.
+005 ==>
 
 *********************************************************************************************************
 digiKam 1.0.0-beta4 - Release date: 2009-08-30
