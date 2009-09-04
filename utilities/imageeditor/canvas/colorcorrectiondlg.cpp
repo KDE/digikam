@@ -179,6 +179,8 @@ ColorCorrectionDlg::ColorCorrectionDlg(Mode mode, const DImg& preview,
     page->setLayout(grid);
 
     readSettings();
+    updateImageProfileUI();
+    updateUsedProfileUI();
     updateInfo();
 }
 
@@ -491,9 +493,16 @@ void ColorCorrectionDlg::imageProfileToggled(bool on)
 
 void ColorCorrectionDlg::imageProfileChanged()
 {
-    d->otherProfileBox->setEnabled(d->thirdOption->isChecked());
-    d->thirdCheckBox->setEnabled(d->thirdOption->isChecked());
+    updateImageProfileUI();
     updateInfo();
+}
+
+void ColorCorrectionDlg::updateImageProfileUI()
+{
+    if (d->otherProfileBox)
+        d->otherProfileBox->setEnabled(d->thirdOption->isChecked());
+    if (d->thirdCheckBox)
+        d->thirdCheckBox->setEnabled(d->thirdOption->isChecked());
 }
 
 void ColorCorrectionDlg::missingProfileToggled(bool on)
@@ -517,8 +526,14 @@ void ColorCorrectionDlg::usedProfileToggled(bool on)
 
 void ColorCorrectionDlg::usedProfileChanged()
 {
-    d->imageProfileBox->setEnabled(d->imageOtherSpace->isChecked());
+    updateUsedProfileUI();
     updateInfo();
+}
+
+void ColorCorrectionDlg::updateUsedProfileUI()
+{
+    if (d->imageProfileBox)
+        d->imageProfileBox->setEnabled(d->imageOtherSpace->isChecked());
 }
 
 void ColorCorrectionDlg::inputProfileChanged()

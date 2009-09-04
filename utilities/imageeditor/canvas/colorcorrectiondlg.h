@@ -95,6 +95,8 @@ private:
     QWidget *createOptions();
 
     void updateInfo();
+    void updateUsedProfileUI();
+    void updateImageProfileUI();
 
     void readSettings();
     void setSettings();
