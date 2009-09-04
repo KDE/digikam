@@ -187,12 +187,12 @@ bool Parser::stringIsValid(const QString& str)
     return true;
 }
 
-QString Parser::markResult(const QString& result)
+QString Parser::markResult(int length, const QString& result)
 {
     if (result.isEmpty())
         return QString();
 
-    QString tmp = resultsMarker().arg(result);
+    QString tmp = resultsMarker().arg(length).arg(result);
     return tmp;
 }
 
@@ -211,8 +211,8 @@ QString Parser::resultsMarker()
     QChar left, right;
     generateMarkerTemplate(left, right, width);
 
-    QString marker = QString("%1%3%2").arg(left,  width, left)
-                                      .arg(right, width, right);
+    QString marker = QString("%1%3:%4%2").arg(left,  width, left)
+                                         .arg(right, width, right);
     return marker;
 }
 
@@ -226,7 +226,7 @@ QString Parser::resultsExtractor()
     for (int i = 0; i < width; ++i)
         marker.append("\\").append(left);
 
-    marker.append("(.*)");
+    marker.append("(\\d+):(.*)");
     for (int i = 0; i < width; ++i)
         marker.append("\\").append(right);
 

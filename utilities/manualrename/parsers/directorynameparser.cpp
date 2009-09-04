@@ -83,7 +83,7 @@ void DirectoryNameParser::parse(QString& parseString, const ParseInformation& in
             else
                 tmp = folders[folderCount - matchedLength - 1];
 
-            QString result = markResult(tmp);
+            QString result = markResult(regExp.matchedLength(), tmp);
             parseString.replace(pos, regExp.matchedLength(), result);
             pos += result.count();
         }

@@ -1041,6 +1041,7 @@ ENDIF(MSVC)
        )
 
     SET(libmanualrename_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/manualrenameinput.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/manualrenamewidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/manualrenameparser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/token.cpp

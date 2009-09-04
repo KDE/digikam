@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QList>
+#include <QMap>
 #include <QString>
 
 // Local includes
@@ -48,17 +49,23 @@ class DIGIKAM_EXPORT ManualRenameParser
 
 public:
 
+    typedef QMap<QString, QString> TokenMap;
+
     ManualRenameParser();
     ~ManualRenameParser();
 
-    QString parse(const QString& parseString, const ParseInformation& info);
-    QList<Parser*> parsers() const { return m_parsers; };
+    QString        parse(const QString& parseString, const ParseInformation& info);
+    QList<Parser*> parsers()  const { return m_parsers; };
+    TokenMap       tokenMap() const { return m_tokenMap; };
 
 private:
 
+    QString         m_parseString;
      QList<Parser*> m_parsers;
+     TokenMap       m_tokenMap;
      int            extractTokens(QString& parseString, QStringList& tokens);
-     QString        tokenMarker(int index);
+     void           addTokenMapItem(int index, int length, const QString& value);
+     void           reset();
 };
 
 }  // namespace ManualRename

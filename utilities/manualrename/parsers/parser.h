@@ -174,7 +174,7 @@ protected:
      * @param result the result token to be marked
      * @return
      */
-    QString markResult(const QString& result);
+    QString markResult(int length, const QString& result);
 
 protected Q_SLOTS:
 

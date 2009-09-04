@@ -214,7 +214,7 @@ void DateParser::parse(QString& parseString, const ParseInformation& info)
                     tmp = info.datetime.toString((Qt::DateFormat)v.toInt());
             }
 
-            QString result = markResult(tmp);
+            QString result = markResult(regExp.matchedLength(), tmp);
             parseString.replace(pos, regExp.matchedLength(), result);
         }
     }

@@ -160,7 +160,7 @@ void SequenceNumberParser::parse(QString& parseString, const ParseInformation& i
 
             number = start + ((index - 1) * step);
             QString tmp = QString("%1").arg(number, slength, 10, QChar('0'));
-            QString result = markResult(tmp);
+            QString result = markResult(regExp.matchedLength(), tmp);
             parseString.replace(pos, regExp.matchedLength(), result);
         }
     }

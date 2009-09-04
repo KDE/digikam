@@ -72,15 +72,15 @@ void FilenameParser::parse(QString& parseString, const ParseInformation& info)
         if (pos > -1)
         {
             QString tmp    = firstLetterUppercase(baseFileName.toLower());
-            QString result = markResult(tmp);
+            QString result = markResult(regExp.matchedLength(), tmp);
             parseString.replace(pos, regExp.matchedLength(), result);
             pos += result.count();
         }
     }
 
-    parseString.replace(QString('$'), markResult(baseFileName));
-    parseString.replace(QString('&'), markResult(baseFileName.toUpper()));
-    parseString.replace(QString('%'), markResult(baseFileName.toLower()));
+    parseString.replace(QString('$'), markResult(1, baseFileName));
+    parseString.replace(QString('&'), markResult(1, baseFileName.toUpper()));
+    parseString.replace(QString('%'), markResult(1, baseFileName.toLower()));
 }
 
 QString FilenameParser::firstLetterUppercase(const QString& str)

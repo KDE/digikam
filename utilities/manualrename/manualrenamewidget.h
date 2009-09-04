@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-05-22
- * Description : an input widget for the ManualRenameParser
+ * Description : a control widget for the ManualRenameParser
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -65,11 +65,10 @@ public:
 
     QString text() const;
     void    setText(const QString& text);
+    void    clear();
 
     void setTrackerAlignment(Qt::Alignment alignment);
     void setParserInputStyle(ParserInputStyles inputMask);
-
-    KLineEdit* input() const;
 
     QString parse(ParseInformation& info) const;
 
@@ -85,10 +84,6 @@ public Q_SLOTS:
 private Q_SLOTS:
 
     void slotToolTipButtonToggled(bool);
-    void addToken2ParserInput(const QString&);
-
-    void slotTextChanged();
-    void slotParseTimer();
 
 private:
 

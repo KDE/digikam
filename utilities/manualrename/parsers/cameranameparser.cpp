@@ -57,7 +57,7 @@ void CameraNameParser::parse(QString& parseString, const ParseInformation& info)
         if (pos > -1)
         {
             QString tmp    = stringIsValid(cameraName) ? cameraName : QString();
-            QString result = markResult(tmp);
+            QString result = markResult(regExp.matchedLength(), tmp);
             parseString.replace(pos, regExp.matchedLength(), result);
         }
     }

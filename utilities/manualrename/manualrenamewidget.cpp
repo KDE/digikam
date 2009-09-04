@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-05-22
- * Description : an input widget for the ManualRenameParser
+ * Description : a control widget for the ManualRenameParser
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -41,15 +41,16 @@
 
 #include <kicon.h>
 #include <kiconloader.h>
-#include <klineedit.h>
 #include <klocale.h>
 #include <knuminput.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "dcursortracker.h"
 #include "parser.h"
 #include "manualrenameparser.h"
+#include "manualrenameinput.h"
 
 using namespace Digikam::ManualRename;
 namespace Digikam
@@ -63,7 +64,7 @@ public:
 
     ManualRenameWidgetPriv()
     {
-        parseStringLineEdit   = 0;
+        parserLineEdit        = 0;
         tooltipTracker        = 0;
         tooltipToggleButton   = 0;
         insertTokenToolButton = 0;
@@ -72,15 +73,11 @@ public:
 
     QToolButton*        tooltipToggleButton;
     QToolButton*        insertTokenToolButton;
-
-    KLineEdit*          parseStringLineEdit;
-    DTipTracker*        tooltipTracker;
-
     QGroupBox*          btnContainer;
 
+    DTipTracker*        tooltipTracker;
+    ManualRenameInput*  parserLineEdit;
     ManualRenameParser* parser;
-
-    QTimer*             parseTimer;
 };
 
 ManualRenameWidget::ManualRenameWidget(QWidget* parent)
@@ -90,9 +87,9 @@ ManualRenameWidget::ManualRenameWidget(QWidget* parent)
 
     // --------------------------------------------------------
 
-    d->parseStringLineEdit  = new KLineEdit;
+    d->parserLineEdit = new ManualRenameInput;
 
-    d->tooltipToggleButton  = new QToolButton;
+    d->tooltipToggleButton = new QToolButton;
     d->tooltipToggleButton->setCheckable(true);
     d->tooltipToggleButton->setIcon(SmallIcon("dialog-information"));
 
@@ -107,11 +104,11 @@ ManualRenameWidget::ManualRenameWidget(QWidget* parent)
     // --------------------------------------------------------
 
     QGridLayout* mainLayout = new QGridLayout;
-    mainLayout->addWidget(d->parseStringLineEdit,   1, 1, 1, 1);
-    mainLayout->addWidget(d->tooltipToggleButton,   1, 2, 1, 1);
-    mainLayout->addWidget(d->insertTokenToolButton, 1, 3, 1, 1);
-    mainLayout->addWidget(d->btnContainer,          2, 0, 1,-1);
-    mainLayout->setColumnStretch(1, 10);
+    mainLayout->addWidget(d->parserLineEdit,        0, 0, 1, 1);
+    mainLayout->addWidget(d->tooltipToggleButton,   0, 1, 1, 1);
+    mainLayout->addWidget(d->insertTokenToolButton, 0, 2, 1, 1);
+    mainLayout->addWidget(d->btnContainer,          1, 0, 1,-1);
+    mainLayout->setColumnStretch(0, 10);
     setLayout(mainLayout);
 
     // --------------------------------------------------------
@@ -122,32 +119,18 @@ ManualRenameWidget::ManualRenameWidget(QWidget* parent)
     // --------------------------------------------------------
 
     QString tooltip   = createToolTip();
-    d->tooltipTracker = new DTipTracker(tooltip, d->parseStringLineEdit, Qt::AlignLeft);
+    d->tooltipTracker = new DTipTracker(tooltip, d->parserLineEdit, Qt::AlignLeft);
     d->tooltipTracker->setEnable(false);
     d->tooltipTracker->setKeepOpen(true);
     d->tooltipTracker->setOpenExternalLinks(true);
 
-    d->parseStringLineEdit->setWhatsThis(tooltip);
-    d->parseStringLineEdit->setClearButtonShown(true);
-    d->parseStringLineEdit->setCompletionMode(KGlobalSettings::CompletionAuto);
-    d->parseStringLineEdit->setClickMessage(i18n("Enter custom rename string"));
-
     // --------------------------------------------------------
-
-    d->parseTimer = new QTimer(this);
-    d->parseTimer->setInterval(500);
-    d->parseTimer->setSingleShot(true);
-
-    // --------------------------------------------------------
-
-    connect(d->parseTimer, SIGNAL(timeout()),
-            this, SLOT(slotParseTimer()));
 
     connect(d->tooltipToggleButton, SIGNAL(toggled(bool)),
             this, SLOT(slotToolTipButtonToggled(bool)));
 
-    connect(d->parseStringLineEdit, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotTextChanged()));
+    connect(d->parserLineEdit, SIGNAL(signalTextChanged(const QString&)),
+            this, SIGNAL(signalTextChanged(const QString&)));
 }
 
 ManualRenameWidget::~ManualRenameWidget()
@@ -161,12 +144,12 @@ ManualRenameWidget::~ManualRenameWidget()
 
 QString ManualRenameWidget::text() const
 {
-    return d->parseStringLineEdit->text();
+    return d->parserLineEdit->input()->text();
 }
 
 void ManualRenameWidget::setText(const QString& text)
 {
-    d->parseStringLineEdit->setText(text);
+    d->parserLineEdit->input()->setText(text);
 }
 
 void ManualRenameWidget::setTrackerAlignment(Qt::Alignment alignment)
@@ -174,9 +157,9 @@ void ManualRenameWidget::setTrackerAlignment(Qt::Alignment alignment)
     d->tooltipTracker->setTrackerAlignment(alignment);
 }
 
-KLineEdit* ManualRenameWidget::input() const
+void ManualRenameWidget::clear()
 {
-    return d->parseStringLineEdit;
+    d->parserLineEdit->input()->clear();
 }
 
 void ManualRenameWidget::slotHideToolTipTracker()
@@ -187,7 +170,7 @@ void ManualRenameWidget::slotHideToolTipTracker()
 
 QString ManualRenameWidget::parse(ParseInformation& info) const
 {
-    QString parseString = d->parseStringLineEdit->text();
+    QString parseString = d->parserLineEdit->input()->text();
 
     QString parsed;
     parsed = d->parser->parse(parseString, info);
@@ -211,6 +194,7 @@ QString ManualRenameWidget::createToolTip()
     }
 
     tooltip += QString("</table></p>");
+    tooltip += QString("<p><b>%1</b></p>").arg(d->parserLineEdit->input()->toolTip());
     return tooltip;
 }
 
@@ -223,19 +207,6 @@ void ManualRenameWidget::slotToolTipButtonToggled(bool checked)
 void ManualRenameWidget::slotUpdateTrackerPos()
 {
     d->tooltipTracker->refresh();
-}
-
-void ManualRenameWidget::addToken2ParserInput(const QString& token)
-{
-    if (!token.isEmpty())
-    {
-        int cursorPos = d->parseStringLineEdit->cursorPosition();
-        QString tmp   = d->parseStringLineEdit->text();
-        tmp.insert(cursorPos, token);
-        d->parseStringLineEdit->setText(tmp);
-        d->parseStringLineEdit->setCursorPosition(cursorPos + token.count());
-    }
-    d->parseStringLineEdit->setFocus();
 }
 
 void ManualRenameWidget::setParserInputStyle(ParserInputStyles inputMask)
@@ -273,7 +244,7 @@ void ManualRenameWidget::registerParsers(int maxColumns)
            gridLayout->addWidget(btn, row, column, 1, 1);
 
            connect(parser, SIGNAL(signalTokenTriggered(const QString&)),
-                   this, SLOT(addToken2ParserInput(const QString&)));
+                   d->parserLineEdit, SLOT(slotAddToken(const QString&)));
 
            ++column;
 
@@ -302,17 +273,9 @@ void ManualRenameWidget::registerParsers(int maxColumns)
 
        d->btnContainer->setLayout(gridLayout);
        d->insertTokenToolButton->setMenu(tokenToolBtnMenu);
+
+       d->parserLineEdit->input()->setParser(d->parser);
    }
-}
-
-void ManualRenameWidget::slotTextChanged()
-{
-    d->parseTimer->start();
-}
-
-void ManualRenameWidget::slotParseTimer()
-{
-    emit signalTextChanged(d->parseStringLineEdit->text());
 }
 
 }  // namespace ManualRename

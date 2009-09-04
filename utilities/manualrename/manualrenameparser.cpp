@@ -27,6 +27,10 @@
 
 #include <QFileInfo>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Libkexiv2 includes
 
 #include <libkexiv2/version.h>
@@ -78,12 +82,22 @@ ManualRenameParser::~ManualRenameParser()
 
 QString ManualRenameParser::parse(const QString& parseString, const ParseInformation& info)
 {
+    reset();
+
     if (!Parser::stringIsValid(parseString))
     {
         QFileInfo fi(info.filePath);
         QString baseName = fi.baseName();
         return baseName;
     }
+
+//    bool parseStringChanged = true;
+////    bool parseStringChanged = (m_parseString != parseString);
+//    if (parseStringChanged)
+//    {
+//        reset();
+//        m_parseString = parseString;
+//    }
 
     QString parsed = parseString;
     if (!m_parsers.isEmpty())
@@ -98,11 +112,44 @@ QString ManualRenameParser::parse(const QString& parseString, const ParseInforma
         }
 
         // replace the tokens with the results again
-        for (int i = 0; i < tokens.count(); ++i)
+        QRegExp regExp("index:(\\d+):(\\d+)");
+
+        bool firstRun = true;
+        int index     = 0;
+        int length    = 0;
+        int diff      = 0;
+        int pos       = 0;
+        int relIndex  = 0;
+
+        while (pos > -1)
         {
-            parsed.replace(tokenMarker(i), tokens.at(i));
+            pos = regExp.indexIn(parsed, pos);
+            if (pos > -1)
+            {
+                index         = regExp.cap(1).toInt();
+                length        = regExp.cap(2).toInt();
+                QString token = tokens.at(index);
+                parsed.replace(pos, regExp.matchedLength(), token);
+
+//                if (parseStringChanged)
+//                {
+                    if (firstRun)
+                    {
+                        firstRun = false;
+                        relIndex = pos;
+                    }
+                    else
+                    {
+                        relIndex = qAbs<int>(pos - diff);
+                    }
+
+                    diff += token.count() - length;
+                    addTokenMapItem(relIndex, length, token);
+//                }
+            }
         }
     }
+    kDebug(50003) << m_tokenMap;
     return parsed;
 }
 
@@ -121,22 +168,32 @@ int ManualRenameParser::extractTokens(QString& parseString, QStringList& tokens)
         pos = regExp.indexIn(parseString, pos);
         if (pos > -1)
         {
-            QString tmp = regExp.cap(1);
-            if (!tmp.isEmpty())
+            int length     = regExp.cap(1).toInt();
+            QString result = regExp.cap(2);
+            if (!result.isEmpty())
             {
-                tokens << tmp;
+                tokens << result;
                 ++extracted;
-                int i = tokens.count() - 1;
-                parseString.replace(pos, regExp.matchedLength(), tokenMarker(i));
+                int index = tokens.count() - 1;
+                parseString.replace(pos, regExp.matchedLength(),
+                                    QString("index:%1:%2").arg(QString::number(index))
+                                                          .arg(QString::number(length)));
             }
         }
     }
     return extracted;
 }
 
-QString ManualRenameParser::tokenMarker(int index)
+void ManualRenameParser::addTokenMapItem(int index, int length, const QString& value)
 {
-    return QString("index:%1").arg(QString::number(index));
+    QString key = QString("%1:%2").arg(QString::number(index))
+                                  .arg(QString::number(length));
+    m_tokenMap.insert(key, value);
+}
+
+void ManualRenameParser::reset()
+{
+    m_tokenMap.clear();
 }
 
 }  // namespace ManualRename
