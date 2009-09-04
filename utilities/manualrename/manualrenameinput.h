@@ -78,9 +78,6 @@ private Q_SLOTS:
     void slotMarkTimer();
     void slotCursorPositionChanged();
 
-    void slotMoveTokenLeft();
-    void slotMoveTokenRight();
-
 private:
 
     void highlightTokens();

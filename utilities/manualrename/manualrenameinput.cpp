@@ -105,6 +105,7 @@ void ManualRenameLineEdit::mousePressEvent(QMouseEvent* e)
 
 void ManualRenameLineEdit::highlightTokens()
 {
+    // TODO: implement me!
 //    int pos    = 0;
 //    int length = 0;
 //    bool found = false;
@@ -137,13 +138,14 @@ bool ManualRenameLineEdit::findToken(int curPos, int& pos, int& length)
     while (it.hasNext())
     {
         it.next();
-        QString key = it.key();
-        QStringList k = key.split(":", QString::SkipEmptyParts);
-        if (!k.count() == 2)
+        QString keys        = it.key();
+        QStringList keylist = keys.split(":", QString::SkipEmptyParts);
+
+        if (!keylist.count() == 2)
             continue;
 
-        length  = k.last().toInt();
-        pos     = k.first().toInt();
+        length = keylist.last().toInt();
+        pos    = keylist.first().toInt();
 
         if ((curPos >= pos) && (curPos <= pos + length))
         {
@@ -192,7 +194,6 @@ void ManualRenameLineEdit::slotTextChanged()
 void ManualRenameLineEdit::slotParseTimer()
 {
     m_userTyping = false;
-    highlightTokens();
     emit signalTextChanged(text());
 }
 
@@ -213,50 +214,6 @@ void ManualRenameLineEdit::slotAddToken(const QString& token)
         setCursorPosition(cursorPos + token.count());
     }
     setFocus();
-}
-
-void ManualRenameLineEdit::slotMoveTokenLeft()
-{
-    if (m_selectionStart == -1 || m_selectionLength == 1)
-        return;
-
-    setSelection(m_selectionStart, m_selectionLength);
-
-    int curPos = selectionStart() - 1;
-    int pos;
-    int length;
-
-    bool found = findToken(curPos, pos, length);
-    int newPos = found ? pos - 1 : curPos;
-
-    cut();
-    setCursorPosition(newPos);
-    paste();
-
-    m_selectionStart = newPos;
-    setSelection(m_selectionStart, m_selectionLength);
-}
-
-void ManualRenameLineEdit::slotMoveTokenRight()
-{
-    if (m_selectionStart == -1 || m_selectionLength == 1)
-        return;
-
-    setSelection(m_selectionStart, m_selectionLength);
-
-    int curPos = selectionStart() + m_selectionLength;
-    int pos;
-    int length;
-
-    bool found = findToken(curPos, pos, length);
-    int newPos = found ? pos + length : curPos;
-
-    cut();
-    setCursorPosition(newPos);
-    paste();
-
-    m_selectionStart = newPos;
-    setSelection(m_selectionStart, m_selectionLength);
 }
 
 // --------------------------------------------------------
