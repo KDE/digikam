@@ -43,7 +43,7 @@ LoadingDescription PreviewLoadThread::createLoadingDescription(const QString& fi
     LoadingDescription description(filePath, size, exifRotate);
     description.rawDecodingSettings.optimizeTimeLoading();
     description.rawDecodingSettings.sixteenBitsImage   = false;
-    description.rawDecodingSettings.halfSizeColorImage = false;
+    description.rawDecodingSettings.halfSizeColorImage = true;
 
     ICCSettingsContainer settings = IccSettings::instance()->settings();
     if (settings.enableCM && settings.useManagedPreviews)
@@ -62,19 +62,13 @@ void PreviewLoadThread::load(const QString& filePath, int size, bool exifRotate)
 
 void PreviewLoadThread::loadHighQuality(const QString& filePath, bool exifRotate)
 {
-    loadHighQuality(createLoadingDescription(filePath, 0, exifRotate));
+    load(filePath, 0, exifRotate);
 }
 
 void PreviewLoadThread::load(LoadingDescription description)
 {
     // creates a PreviewLoadingTask, which uses different mechanisms than a normal loading task
     ManagedLoadSaveThread::loadPreview(description);
-}
-
-void PreviewLoadThread::loadHighQuality(LoadingDescription description)
-{
-    // creates a normal loading task
-    ManagedLoadSaveThread::load(description, LoadingModeShared, LoadingPolicyFirstRemovePrevious);
 }
 
 void PreviewLoadThread::setDisplayingWidget(QWidget *widget)

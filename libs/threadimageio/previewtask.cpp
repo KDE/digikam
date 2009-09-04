@@ -156,45 +156,106 @@ void PreviewLoadingTask::execute()
 
     // -- Get the image preview --------------------------------
 
-    // First the QImage-dependent loading methods
-    // Trying to load with dcraw: RAW files.
-    if (KDcrawIface::KDcraw::loadEmbeddedPreview(qimage, m_loadingDescription.filePath))
-        fromEmbeddedPreview = true;
-
-    if (qimage.isNull())
+    if (size)
     {
-        //TODO: Use DImg based loader instead?
-        KDcrawIface::KDcraw::loadHalfPreview(qimage, m_loadingDescription.filePath);
+        // First the QImage-dependent loading methods
+        // Trying to load with dcraw: RAW files.
+        if (KDcrawIface::KDcraw::loadEmbeddedPreview(qimage, m_loadingDescription.filePath))
+        {
+            // Discard if too small
+            if (qMax(qimage.width(), qimage.height()) < size / 2)
+                qimage = QImage();
+            else
+                fromEmbeddedPreview = true;
+        }
+
+        if (qimage.isNull())
+        {
+            //TODO: Use DImg based loader instead?
+            KDcrawIface::KDcraw::loadHalfPreview(qimage, m_loadingDescription.filePath);
+        }
+
+        // Try to extract Exif/IPTC preview.
+        if (qimage.isNull())
+        {
+            loadImagePreview(qimage, m_loadingDescription.filePath);
+        }
+
+        if (!qimage.isNull())
+        {
+            // convert from QImage
+            m_img = DImg(qimage);
+            // mark as embedded preview (for Exif rotation)
+            if (fromEmbeddedPreview)
+                m_img.setAttribute("fromRawEmbeddedPreview", true);
+            // free memory
+            qimage = QImage();
+        }
+
+        // DImg-dependent loading methods
+        if (m_img.isNull())
+        {
+            // Set a hint to try to load a JPEG or PGF with the fast scale-before-decoding method
+            m_img.setAttribute("scaledLoadingSize", size);
+            m_img.load(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
+        }
+
+        if (m_img.isNull())
+        {
+            kWarning(50003) << "Cannot extract preview for " << m_loadingDescription.filePath;
+        }
     }
-
-    // Try to extract Exif/IPTC preview.
-    if (qimage.isNull())
+    else
     {
-        loadImagePreview(qimage, m_loadingDescription.filePath);
-    }
+        //TODO: Use Exiv2's PreviewManager
+        KDcrawIface::DcrawInfoContainer dcrawIdentify;
+        if (KDcrawIface::KDcraw::rawFileIdentify(dcrawIdentify, m_loadingDescription.filePath)
+            && dcrawIdentify.isDecodable)
+        {
+            // Trying to load with dcraw: RAW files.
+            if (KDcrawIface::KDcraw::loadEmbeddedPreview(qimage, m_loadingDescription.filePath))
+            {
+                // discard if smaller than half preview
+                if (qimage.width() < dcrawIdentify.imageSize.width() / 2)
+                    qimage = QImage();
+                else
+                    fromEmbeddedPreview = true;
+            }
 
-    if (!qimage.isNull())
-    {
-        // convert from QImage
-        m_img = DImg(qimage);
-        // mark as embedded preview (for Exif rotation)
-        if (fromEmbeddedPreview)
-            m_img.setAttribute("fromRawEmbeddedPreview", true);
-        // free memory
-        qimage = QImage();
-    }
+            if (qimage.isNull())
+            {
+                KDcrawIface::KDcraw::loadHalfPreview(qimage, m_loadingDescription.filePath);
+            }
+        }
 
-    // DImg-dependent loading methods
-    if (m_img.isNull())
-    {
-        // Set a hint to try to load a JPEG or PGF with the fast scale-before-decoding method
-        m_img.setAttribute("scaledLoadingSize", size);
-        m_img.load(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
-    }
+        if (!qimage.isNull())
+        {
+            // convert from QImage
+            m_img = DImg(qimage);
+            // mark as embedded preview (for Exif rotation)
+            if (fromEmbeddedPreview)
+            {
+                m_img.setAttribute("fromRawEmbeddedPreview", true);
+                /*
+                DMetadata metadata(m_loadingDescription.filePath);
+                if (metaData.getImageColorWorkSpace() == DMetadata::WORKSPACE_ADOBERGB)
+                    m_img.setIccProfile(IccProfile::adobeRGB());
+                */
+            }
+            // free memory
+            qimage = QImage();
+        }
 
-    if (m_img.isNull())
-    {
-        kWarning(50003) << "Cannot extract preview for " << m_loadingDescription.filePath;
+        // DImg-dependent loading methods
+        if (m_img.isNull())
+        {
+            m_img.load(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
+        }
+
+        if (m_img.isNull())
+        {
+            kWarning(50003) << "Cannot extract preview for " << m_loadingDescription.filePath;
+        }
     }
 
     m_img.convertToEightBit();
@@ -270,6 +331,8 @@ void PreviewLoadingTask::execute()
 
 bool PreviewLoadingTask::needToScale(const QSize& imageSize, int previewSize)
 {
+    if (!previewSize)
+        return false;
     int maxSize = imageSize.width() > imageSize.height() ? imageSize.width() : imageSize.height();
     int acceptableUpperSize = lround(1.25 * (double)previewSize);
     return  maxSize >= acceptableUpperSize;

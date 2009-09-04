@@ -44,10 +44,6 @@ public:
      * Raw decoding and color management settings will be adjusted.
      */
     void load(const QString& filePath, int size, bool exifRotate);
-    /**
-     * Load a preview. Loading description will not be touched.
-     */
-    void load(LoadingDescription description);
 
     /**
      * Load a preview with higher resolution, trading more quality
@@ -57,11 +53,9 @@ public:
     void loadHighQuality(const QString& filePath, bool exifRotate);
 
     /**
-     * Load a preview with higher resolution.
-     * In the LoadingDescription container, provide "0" as maximum size.
-     * The given loading description will not be touched.
+     * Load a preview. Loading description will not be touched.
      */
-    void loadHighQuality(LoadingDescription description);
+    void load(LoadingDescription description);
 
     /// Optionally, set the displaying widget for color management
     void setDisplayingWidget(QWidget *widget);
