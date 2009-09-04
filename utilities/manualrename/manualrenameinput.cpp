@@ -318,7 +318,7 @@ void ManualRenameInput::slotAddToken(const QString& token)
 
 void ManualRenameInput::slotMoveTokenLeft()
 {
-    if (d->selectionStart == -1 || d->selectionLength == 1)
+    if (d->selectionStart == -1 || d->selectionLength == -1)
         return;
 
     d->parserInput->setSelection(d->selectionStart, d->selectionLength);
@@ -340,7 +340,7 @@ void ManualRenameInput::slotMoveTokenLeft()
 
 void ManualRenameInput::slotMoveTokenRight()
 {
-    if (d->selectionStart == -1 || d->selectionLength == 1)
+    if (d->selectionStart == -1 || d->selectionLength == -1)
         return;
 
     d->parserInput->setSelection(d->selectionStart, d->selectionLength);
