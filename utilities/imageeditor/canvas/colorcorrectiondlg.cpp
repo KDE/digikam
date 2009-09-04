@@ -337,7 +337,7 @@ QWidget *ColorCorrectionDlg::createOptions()
         d->thirdCheckBox         = new QCheckBox(i18n("and then convert to working space"));
 
         d->keepProfile->setChecked(true);
-        d->otherProfileBox->setCurrentProfile(IccProfile::sRGB());
+        d->otherProfileBox->setCurrentProfile(IccProfile::adobeRGB());
         d->otherProfileBox->setNoProfileIfEmpty(i18n("No Profile Available"));
         if (d->otherProfileBox->count() == 0) // disable if empty
         {
@@ -428,11 +428,12 @@ QWidget *ColorCorrectionDlg::createAssumeOptions()
         d->imageWorkingSpace = new QRadioButton(i18n("Current working color space"));
         d->imageOtherSpace   = new QRadioButton(i18n("This profile:"));
         d->imageProfileBox   = new IccProfilesComboBox;
-        d->imageProfileBox->addProfilesSqueezed(IccSettings::instance()->inputProfiles());
+        d->imageProfileBox->addProfilesSqueezed(IccSettings::instance()->workspaceProfiles()
+                                                << IccSettings::instance()->inputProfiles());
         QPushButton *usedProfInfo = new QPushButton(i18n("Info..."));
 
         d->imageSRGB->setChecked(true);
-        d->imageProfileBox->setCurrentProfile(IccProfile::sRGB());
+        d->imageProfileBox->setCurrentProfile(IccProfile::adobeRGB());
         d->imageProfileBox->setNoProfileIfEmpty(i18n("No Profile Available"));
         if (d->imageProfileBox->count() == 0) // disable if empty
         {
@@ -675,7 +676,8 @@ void ColorCorrectionDlg::readSettings()
                 d->convertToWorkingSpace->setFocus();
             }
         }
-        d->otherProfileBox->setCurrentProfile(settings.lastSpecifiedAssignProfile);
+        if (!settings.lastSpecifiedAssignProfile.isEmpty())
+            d->otherProfileBox->setCurrentProfile(settings.lastSpecifiedAssignProfile);
     }
     else if (d->mode == MissingProfile)
     {
@@ -706,7 +708,8 @@ void ColorCorrectionDlg::readSettings()
                 && d->imageProfileBox->count() > 0)
                 d->imageOtherSpace->setChecked(true);
         }
-        d->imageProfileBox->setCurrentProfile(settings.lastSpecifiedInputProfile);
+        if (!settings.lastSpecifiedInputProfile.isEmpty())
+            d->imageProfileBox->setCurrentProfile(settings.lastSpecifiedInputProfile);
     }
     else if (d->mode == UncalibratedColor)
     {
