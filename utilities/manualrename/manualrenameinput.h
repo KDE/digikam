@@ -37,6 +37,7 @@
 #include "digikam_export.h"
 
 class QMouseEvent;
+class QFocusEvent;
 
 namespace Digikam
 {
@@ -69,6 +70,7 @@ Q_SIGNALS:
 protected:
 
     virtual void mousePressEvent(QMouseEvent* e);
+    virtual void focusOutEvent(QFocusEvent* e);
 
 private Q_SLOTS:
 

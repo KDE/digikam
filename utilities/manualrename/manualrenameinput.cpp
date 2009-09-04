@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QMouseEvent>
+#include <QFocusEvent>
 #include <QToolButton>
 #include <QHBoxLayout>
 #include <QTimer>
@@ -101,6 +102,11 @@ void ManualRenameLineEdit::mousePressEvent(QMouseEvent* e)
             return;
         m_markTimer->start();
     }
+}
+
+void ManualRenameLineEdit::focusOutEvent(QFocusEvent* e)
+{
+    Q_UNUSED(e)
 }
 
 void ManualRenameLineEdit::highlightTokens()
@@ -207,6 +213,8 @@ void ManualRenameLineEdit::slotAddToken(const QString& token)
 {
     if (!token.isEmpty())
     {
+        if (hasSelectedText())
+            del();
         int cursorPos = cursorPosition();
         QString tmp   = text();
         tmp.insert(cursorPos, token);
@@ -308,15 +316,7 @@ ManualRenameLineEdit* ManualRenameInput::input() const
 
 void ManualRenameInput::slotAddToken(const QString& token)
 {
-    if (!token.isEmpty())
-    {
-        int cursorPos = d->parserInput->cursorPosition();
-        QString tmp   = d->parserInput->text();
-        tmp.insert(cursorPos, token);
-        d->parserInput->setText(tmp);
-        d->parserInput->setCursorPosition(cursorPos + token.count());
-    }
-    d->parserInput->setFocus();
+    d->parserInput->slotAddToken(token);
 }
 
 void ManualRenameInput::slotMoveTokenLeft()
