@@ -83,6 +83,7 @@ public:
      *  
      */
     bool operator==(const IccProfile& other) const;
+    bool operator!=(const IccProfile& other) const { return !operator==(other); }
     /**
      * This method compares the actual profile data bit by bit.
      */
