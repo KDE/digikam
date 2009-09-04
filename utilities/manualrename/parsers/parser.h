@@ -111,6 +111,7 @@ public:
     static void    generateMarkerTemplate(QChar& left, QChar& right, int& width);
     static QString resultsMarker();
     static QString resultsExtractor();
+    static QString emptyTokenMarker();
 
 Q_SIGNALS:
 

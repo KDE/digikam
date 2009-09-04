@@ -160,7 +160,7 @@ int ManualRenameParser::extractTokens(QString& parseString, QStringList& tokens)
             int length     = regExp.cap(1).toInt();
             QString result = regExp.cap(2);
 
-            if (result == QString("!!!EMPTY!!!"))
+            if (result == Parser::emptyTokenMarker())
                 tokens << QString();
             else
                 tokens << result;

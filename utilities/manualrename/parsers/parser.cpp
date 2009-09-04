@@ -191,7 +191,7 @@ QString Parser::markResult(int length, const QString& result)
 {
     QString tmp;
     if (result.isEmpty())
-        tmp = QString("!!!EMPTY!!!");
+        tmp = emptyTokenMarker();
     else
         tmp = result;
 
@@ -234,6 +234,11 @@ QString Parser::resultsExtractor()
 
     return marker;
 };
+
+QString Parser::emptyTokenMarker()
+{
+    return QString("!!!EMPTY!!!");
+}
 
 } // namespace ManualRename
 } // namespace Digikam
