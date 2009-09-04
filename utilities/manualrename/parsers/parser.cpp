@@ -189,11 +189,13 @@ bool Parser::stringIsValid(const QString& str)
 
 QString Parser::markResult(int length, const QString& result)
 {
+    QString tmp;
     if (result.isEmpty())
-        return QString();
+        tmp = QString("!!!EMPTY!!!");
+    else
+        tmp = result;
 
-    QString tmp = resultsMarker().arg(length).arg(result);
-    return tmp;
+    return resultsMarker().arg(length).arg(tmp);
 }
 
 void Parser::generateMarkerTemplate(QChar& left, QChar& right, int& width)

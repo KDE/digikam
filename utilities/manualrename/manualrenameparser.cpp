@@ -91,14 +91,6 @@ QString ManualRenameParser::parse(const QString& parseString, const ParseInforma
         return baseName;
     }
 
-//    bool parseStringChanged = true;
-////    bool parseStringChanged = (m_parseString != parseString);
-//    if (parseStringChanged)
-//    {
-//        reset();
-//        m_parseString = parseString;
-//    }
-
     QString parsed = parseString;
     if (!m_parsers.isEmpty())
     {
@@ -131,21 +123,18 @@ QString ManualRenameParser::parse(const QString& parseString, const ParseInforma
                 QString token = tokens.at(index);
                 parsed.replace(pos, regExp.matchedLength(), token);
 
-//                if (parseStringChanged)
-//                {
-                    if (firstRun)
-                    {
-                        firstRun = false;
-                        relIndex = pos;
-                    }
-                    else
-                    {
-                        relIndex = qAbs<int>(pos - diff);
-                    }
+                if (firstRun)
+                {
+                    firstRun = false;
+                    relIndex = pos;
+                }
+                else
+                {
+                    relIndex = qAbs<int>(pos - diff);
+                }
 
-                    diff += token.count() - length;
-                    addTokenMapItem(relIndex, length, token);
-//                }
+                diff += token.count() - length;
+                addTokenMapItem(relIndex, length, token);
             }
         }
     }
@@ -170,15 +159,17 @@ int ManualRenameParser::extractTokens(QString& parseString, QStringList& tokens)
         {
             int length     = regExp.cap(1).toInt();
             QString result = regExp.cap(2);
-            if (!result.isEmpty())
-            {
+
+            if (result == QString("!!!EMPTY!!!"))
+                tokens << QString();
+            else
                 tokens << result;
-                ++extracted;
-                int index = tokens.count() - 1;
-                parseString.replace(pos, regExp.matchedLength(),
-                                    QString("index:%1:%2").arg(QString::number(index))
-                                                          .arg(QString::number(length)));
-            }
+
+            ++extracted;
+            int index = tokens.count() - 1;
+            parseString.replace(pos, regExp.matchedLength(),
+                    QString("index:%1:%2").arg(QString::number(index))
+                    .arg(QString::number(length)));
         }
     }
     return extracted;
