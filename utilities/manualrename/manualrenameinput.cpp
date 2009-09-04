@@ -261,6 +261,9 @@ ManualRenameInput::ManualRenameInput(QWidget* parent)
     d->moveTokenLeft->setEnabled(false);
     d->moveTokenRight->setEnabled(false);
 
+    d->moveTokenLeft->setVisible(false);
+    d->moveTokenRight->setVisible(false);
+
     QString moveTokenTooltip = i18nc("%1: direction", "Move selected token to the %1");
     d->moveTokenLeft->setToolTip(moveTokenTooltip.arg(i18nc("move to the left", "left")));
     d->moveTokenRight->setToolTip(moveTokenTooltip.arg(i18nc("move to the right", "right")));
