@@ -53,23 +53,27 @@ public:
 
     ManualRenameLineEditPriv()
     {
-        userTyping      = false;
+        userIsTyping    = false;
+        userIsMarking   = false;
         tokenMarked     = false;
         selectionStart  = -1;
         selectionLength = -1;
+        oldCursorPos    = -1;
+        markedTokenPos  = -1;
         parseTimer      = 0;
-        markTokenTimer  = 0;
         parser          = 0;
     }
 
-    bool                userTyping;
+    bool                userIsTyping;
+    bool                userIsMarking;
     bool                tokenMarked;
 
     int                 selectionStart;
     int                 selectionLength;
+    int                 oldCursorPos;
+    int                 markedTokenPos;
 
     QTimer*             parseTimer;
-    QTimer*             markTokenTimer;
     ManualRenameParser* parser;
 };
 
@@ -82,6 +86,7 @@ ManualRenameLineEdit::ManualRenameLineEdit(QWidget* parent)
     setToolTip(i18n("<p>CTRL + left mouse button: the token in the line edit widget will be marked.<br/>"
                     "Marked tokens can be moved around with the control buttons.</p>"));
 
+    d->oldCursorPos = cursorPosition();
 
     // --------------------------------------------------------
 
@@ -89,17 +94,10 @@ ManualRenameLineEdit::ManualRenameLineEdit(QWidget* parent)
     d->parseTimer->setInterval(500);
     d->parseTimer->setSingleShot(true);
 
-    d->markTokenTimer = new QTimer(this);
-    d->markTokenTimer->setInterval(100);
-    d->markTokenTimer->setSingleShot(true);
-
     // --------------------------------------------------------
 
     connect(d->parseTimer, SIGNAL(timeout()),
             this, SLOT(slotParseTimer()));
-
-    connect(d->markTokenTimer, SIGNAL(timeout()),
-            this, SLOT(slotMarkTimer()));
 
     connect(this, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotTextChanged()));
@@ -118,14 +116,68 @@ void ManualRenameLineEdit::setParser(ManualRenameParser* parser)
         d->parser = parser;
 }
 
+void ManualRenameLineEdit::mouseMoveEvent(QMouseEvent* e)
+{
+    KLineEdit::mouseMoveEvent(e);
+    if (e->modifiers() == Qt::ControlModifier)
+    {
+        if (d->userIsTyping)
+            return;
+
+        int pos;
+        int length;
+        int curPos = cursorPositionAt(e->pos());
+
+        bool found = findToken(curPos, pos, length);
+        if (found)
+        {
+            d->markedTokenPos = pos;
+            highlightToken(curPos);
+        }
+    }
+    else if (d->tokenMarked)
+    {
+        d->userIsMarking = false;
+    }
+    else
+    {
+        deselect();
+        d->markedTokenPos = -1;
+        d->userIsMarking  = false;
+        d->tokenMarked    = false;
+        setCursorPosition(d->oldCursorPos);
+    }
+}
+
 void ManualRenameLineEdit::mousePressEvent(QMouseEvent* e)
 {
-    KLineEdit::mousePressEvent(e);
-    if (e->modifiers() == Qt::ControlModifier && e->button() == Qt::LeftButton)
+    if (e->modifiers() == Qt::ControlModifier)
     {
-        if (d->userTyping)
-            return;
-        d->markTokenTimer->start();
+        if (e->button() == Qt::LeftButton)
+        {
+            if (d->userIsTyping)
+                return;
+
+            int pos;
+            int length;
+            int curPos = cursorPositionAt(e->pos());
+
+            bool found = findToken(curPos, pos, length);
+            if (found && pos == d->markedTokenPos)
+            {
+                d->tokenMarked = true;
+                emit signalTokenMarked(true);
+            }
+            else
+            {
+                d->tokenMarked = false;
+            }
+        }
+    }
+    else
+    {
+        setCursorPosition(cursorPositionAt(e->pos()));
+        d->oldCursorPos = cursorPosition();
     }
 }
 
@@ -134,26 +186,41 @@ void ManualRenameLineEdit::focusOutEvent(QFocusEvent* e)
     Q_UNUSED(e)
 }
 
-void ManualRenameLineEdit::highlightTokens()
+bool ManualRenameLineEdit::highlightToken(int cursorPos)
 {
-    // TODO: implement me!
-//    int pos    = 0;
-//    int length = 0;
-//    bool found = false;
-//
-//    QString text = d->parseStringLineEdit->text();
-//
-//    for (int i = 0; i < text.count(); ++i)
-//    {
-//        found = findToken(d->parseStringLineEdit->cursorPosition(), pos, length);
-//        if (found)
-//        {
-//            i = pos + length;
-//        }
-//        else
-//        {
-//        }
-//    }
+    if (!d->userIsMarking)
+    {
+        d->oldCursorPos  = cursorPosition();
+        d->userIsMarking = true;
+    }
+
+    int pos    = 0;
+    int length = 0;
+    bool found = findToken(cursorPos, pos, length);
+
+    if (found)
+    {
+        deselect();
+        setSelection(pos, length);
+
+        d->selectionStart  = pos;
+        d->selectionLength = length;
+    }
+    else
+    {
+        deselect();
+        d->selectionStart  = -1;
+        d->selectionLength = -1;
+    }
+
+    return (found && hasSelectedText());
+}
+
+bool ManualRenameLineEdit::findToken(int curPos)
+{
+    int pos;
+    int length;
+    return findToken(curPos, pos, length);
 }
 
 bool ManualRenameLineEdit::findToken(int curPos, int& pos, int& length)
@@ -187,44 +254,15 @@ bool ManualRenameLineEdit::findToken(int curPos, int& pos, int& length)
     return found;
 }
 
-void ManualRenameLineEdit::slotMarkTimer()
-{
-    if (hasSelectedText())
-        return;
-
-    int pos    = 0;
-    int length = 0;
-    bool found = findToken(cursorPosition(), pos, length);
-
-    if (found)
-    {
-        deselect();
-        setSelection(pos, length);
-
-        d->selectionStart  = pos;
-        d->selectionLength = length;
-    }
-    else
-    {
-        deselect();
-        d->selectionStart  = -1;
-        d->selectionLength = -1;
-    }
-
-
-    d->tokenMarked = found && hasSelectedText();
-    emit signalTokenMarked(d->tokenMarked);
-}
-
 void ManualRenameLineEdit::slotTextChanged()
 {
-    d->userTyping = true;
+    d->userIsTyping = true;
     d->parseTimer->start();
 }
 
 void ManualRenameLineEdit::slotParseTimer()
 {
-    d->userTyping = false;
+    d->userIsTyping = false;
     emit signalTextChanged(text());
 }
 
@@ -260,16 +298,8 @@ public:
         moveTokenLeft   =  0;
         moveTokenRight  =  0;
         parserInput     =  0;
-        userTyping      =  false;
         parser          =  0;
-        selectionStart  = -1;
-        selectionLength = -1;
     }
-
-    bool                  userTyping;
-
-    int                   selectionStart;
-    int                   selectionLength;
 
     QToolButton*          moveTokenLeft;
     QToolButton*          moveTokenRight;
@@ -346,46 +376,46 @@ void ManualRenameInput::slotAddToken(const QString& token)
 
 void ManualRenameInput::slotMoveTokenLeft()
 {
-    if (d->selectionStart == -1 || d->selectionLength == -1)
-        return;
-
-    d->parserInput->setSelection(d->selectionStart, d->selectionLength);
-
-    int curPos = d->parserInput->selectionStart() - 1;
-    int pos;
-    int length;
-
-    bool found = d->parserInput->findToken(curPos, pos, length);
-    int newPos = found ? pos - 1 : curPos;
-
-    d->parserInput->cut();
-    d->parserInput->setCursorPosition(newPos);
-    d->parserInput->paste();
-
-    d->selectionStart = newPos;
-    d->parserInput->setSelection(d->selectionStart, d->selectionLength);
+//    if (d->selectionStart == -1 || d->selectionLength == -1)
+//        return;
+//
+//    d->parserInput->setSelection(d->selectionStart, d->selectionLength);
+//
+//    int curPos = d->parserInput->selectionStart() - 1;
+//    int pos;
+//    int length;
+//
+//    bool found = d->parserInput->findToken(curPos, pos, length);
+//    int newPos = found ? pos - 1 : curPos;
+//
+//    d->parserInput->cut();
+//    d->parserInput->setCursorPosition(newPos);
+//    d->parserInput->paste();
+//
+//    d->selectionStart = newPos;
+//    d->parserInput->setSelection(d->selectionStart, d->selectionLength);
 }
 
 void ManualRenameInput::slotMoveTokenRight()
 {
-    if (d->selectionStart == -1 || d->selectionLength == -1)
-        return;
-
-    d->parserInput->setSelection(d->selectionStart, d->selectionLength);
-
-    int curPos = d->parserInput->selectionStart() + d->selectionLength;
-    int pos;
-    int length;
-
-    bool found = d->parserInput->findToken(curPos, pos, length);
-    int newPos = found ? pos + length : curPos;
-
-    d->parserInput->cut();
-    d->parserInput->setCursorPosition(newPos);
-    d->parserInput->paste();
-
-    d->selectionStart = newPos;
-    d->parserInput->setSelection(d->selectionStart, d->selectionLength);
+//    if (d->selectionStart == -1 || d->selectionLength == -1)
+//        return;
+//
+//    d->parserInput->setSelection(d->selectionStart, d->selectionLength);
+//
+//    int curPos = d->parserInput->selectionStart() + d->selectionLength;
+//    int pos;
+//    int length;
+//
+//    bool found = d->parserInput->findToken(curPos, pos, length);
+//    int newPos = found ? pos + length : curPos;
+//
+//    d->parserInput->cut();
+//    d->parserInput->setCursorPosition(newPos);
+//    d->parserInput->paste();
+//
+//    d->selectionStart = newPos;
+//    d->parserInput->setSelection(d->selectionStart, d->selectionLength);
 }
 
 }  // namespace ManualRename

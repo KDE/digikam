@@ -57,6 +57,8 @@ public:
     ~ManualRenameLineEdit();
 
     void setParser(ManualRenameParser* parser);
+
+    bool findToken(int curPos);
     bool findToken(int curPos, int& pos, int& length);
 
 public Q_SLOTS:
@@ -70,6 +72,7 @@ Q_SIGNALS:
 
 protected:
 
+    virtual void mouseMoveEvent(QMouseEvent* e);
     virtual void mousePressEvent(QMouseEvent* e);
     virtual void focusOutEvent(QFocusEvent* e);
 
@@ -77,13 +80,11 @@ private Q_SLOTS:
 
     void slotTextChanged();
     void slotParseTimer();
-
-    void slotMarkTimer();
     void slotCursorPositionChanged();
 
 private:
 
-    void highlightTokens();
+    bool highlightToken(int cursorPos);
 
 private:
 
