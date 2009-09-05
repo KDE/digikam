@@ -85,9 +85,6 @@ private Q_SLOTS:
 
     void slotRadioButtonClicked(int);
     void slotRenameOptionsChanged();
-    void slotDateTimeBoxToggled(bool);
-    void slotDateTimeFormatChanged(int);
-    void slotDateTimeButtonClicked();
 
 private:
 

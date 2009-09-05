@@ -98,7 +98,7 @@ ManualRenameWidget::ManualRenameWidget(QWidget* parent)
 
     // --------------------------------------------------------
 
-    d->btnContainer = new QGroupBox(i18n("Quick access"), this);
+    d->btnContainer = new QGroupBox(i18n("Renaming Options"), this);
 
     // --------------------------------------------------------
 
