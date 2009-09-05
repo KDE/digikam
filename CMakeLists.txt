@@ -821,7 +821,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/thumbnaildatabaseaccess.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/thumbnaildb.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/thumbnailschemaupdater.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseconfigelement.cpp        
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseconfigelement.cpp
        )
 
     SET(libdatabase_SRCS
@@ -853,7 +853,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/namefilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/searchxml.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/schemaupdater.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/upgradedb_sqlite2tosqlite3.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/upgradedb_sqlite2tosqlite3.cpp        
        )
 
     SET(pgfutils_SRCS
@@ -1079,6 +1079,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/treefolderitem.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagspopupmenu.cpp 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/welcomepageview.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/databaseerrorhandler.cpp
        )
 
     ADD_SUBDIRECTORY(data)

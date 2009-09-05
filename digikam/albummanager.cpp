@@ -608,8 +608,8 @@ bool AlbumManager::setDatabase(const QString& dbType, const QString& dbName, con
     ScanController::instance()->resumeCollectionScan();
 
     ScanController::Advice advice = ScanController::AbortImmediately;
-    bool abort=false;
-    do{
+//    bool abort=false;
+//    do{
         QString databaseName = AlbumSettings::instance()->getDatabaseName();
         QString filePath;
         if (AlbumSettings::instance()->getDatabaseType()=="QSQLITE"){
@@ -633,33 +633,34 @@ bool AlbumManager::setDatabase(const QString& dbType, const QString& dbName, con
             DatabaseAccess::setParameters(DatabaseParameters::parametersForSQLiteDefaultFile(dbName),
                                           DatabaseAccess::MainApplication);
         }
-
+        DatabaseGUIErrorHandler *handler = new DatabaseGUIErrorHandler(DatabaseAccess::parameters());
+        DatabaseAccess::initDatabaseErrorHandler(handler);
         advice = ScanController::instance()->databaseInitialization();
-        if (advice==ScanController::ContinueWithoutDatabase){
-            QApplication::restoreOverrideCursor();
-            int result = KMessageBox::warningYesNoCancel(0, i18n("Error while opening the database."
-                                                                 "<p>Error was: %1</p>", DatabaseAccess().lastError()), i18n("Database Connection Error"),
-                    KGuiItem(i18n("Retry")),
-                    KGuiItem(i18n("DB Setup")),
-                    KGuiItem(i18n("Abort")));
-
-            if (result == KMessageBox::Cancel)
-            {
-                advice = ScanController::AbortImmediately;
-            }else if (result == KMessageBox::No)
-            {
-                if ( Setup::execSinglePage(0, Setup::DatabasePage) == false)
-                {
-                    abort=true;
-                }
-            }
-            QApplication::setOverrideCursor(Qt::WaitCursor);
-        }else
-        {
-            // In this case the user can't do anything and we must abort
-            abort=true;
-        }
-    }while(abort==false && advice==ScanController::ContinueWithoutDatabase);
+//        if (advice==ScanController::ContinueWithoutDatabase){
+//            QApplication::restoreOverrideCursor();
+//            int result = KMessageBox::warningYesNoCancel(0, i18n("Error while opening the database."
+//                                                                 "<p>Error was: %1</p>", DatabaseAccess().lastError()), i18n("Database Connection Error"),
+//                    KGuiItem(i18n("Retry")),
+//                    KGuiItem(i18n("DB Setup")),
+//                    KGuiItem(i18n("Abort")));
+//
+//            if (result == KMessageBox::Cancel)
+//            {
+//                advice = ScanController::AbortImmediately;
+//            }else if (result == KMessageBox::No)
+//            {
+//                if ( Setup::execSinglePage(0, Setup::DatabasePage) == false)
+//                {
+//                    abort=true;
+//                }
+//            }
+//            QApplication::setOverrideCursor(Qt::WaitCursor);
+//        }else
+//        {
+//            // In this case the user can't do anything and we must abort
+//            abort=true;
+//        }
+//    }while(abort==false && advice==ScanController::ContinueWithoutDatabase);
 
     kDebug(50003) << "Database initialization done.";
 

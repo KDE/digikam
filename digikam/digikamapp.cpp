@@ -160,6 +160,11 @@ DigikamApp::DigikamApp()
     if(d->splashScreen)
         d->splashScreen->message(i18n("Scan Albums"));
 
+    // set database error handler
+//    DatabaseAccess access;
+//    DatabaseGUIErrorHandler guiErrorHandler;
+//    access.backend()->setDatabaseErrorHandler(&guiErrorHandler);
+
     // collection scan
     if (d->config->group("General Settings").readEntry("Scan At Start", true) ||
         !CollectionScanner::databaseInitialScanDone())
@@ -292,7 +297,6 @@ DigikamApp::~DigikamApp()
     KDcrawIface::DcrawBinary::cleanUp();
 #endif
     m_instance = 0;
-
     delete d;
 }
 

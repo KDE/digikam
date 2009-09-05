@@ -34,6 +34,7 @@
 #include <QSqlError>
 #include <QThread>
 #include <QSqlRecord>
+#include <QSqlDriver>
 #include <QtCore/QRegExp>
 
 // KDE includes
@@ -80,6 +81,7 @@ DatabaseCoreBackendPrivate::DatabaseCoreBackendPrivate(DatabaseCoreBackend *back
     isInTransaction = false;
     operationStatus = DatabaseCoreBackend::ExecuteNormal;
     handlingConnectionError = true;
+    errorHandler = 0;
 }
 
 
@@ -106,7 +108,7 @@ QSqlDatabase DatabaseCoreBackendPrivate::databaseForThread()
     QThread *thread = QThread::currentThread();
     QSqlDatabase db = threadDatabases[thread];
     int isValid = databasesValid[thread];
-    if (!isValid)
+    if (!isValid || !db.isOpen())
     {
         // need to open a db for thread
         open(db);
@@ -306,7 +308,7 @@ bool DatabaseCoreBackendPrivate::checkOperationStatus()
 /// Returns true if the query shall be retried
 bool DatabaseCoreBackendPrivate::checkConnectionError()
 {
-    if (errorHandler)
+    if (errorHandler!=0)
     {
         handlingConnectionError = true;
         setQueryOperationFlag(DatabaseCoreBackend::Wait);
@@ -725,7 +727,7 @@ bool DatabaseCoreBackend::queryErrorHandling(const QSqlQuery& query, int retries
 {
     Q_D(DatabaseCoreBackend);
 
-    if (false /*TODO: detect a connection error here*/)
+    if (query.lastError().type() != QSqlError::ConnectionError)
     {
         if (d->checkConnectionError())
             return true;
@@ -758,7 +760,11 @@ bool DatabaseCoreBackend::execDirectSql(const QString& sql)
         else
         {
             if (queryErrorHandling(query, retries++))
+            {
+                // Create a new database connection and retry
+                query = getQuery();
                 continue;
+            }
             else
                 return false;
         }
@@ -780,8 +786,12 @@ bool DatabaseCoreBackend::exec(QSqlQuery& query)
             break;
         else
         {
+            kDebug(50003) << "Error while executing query. Error was [" <<  query.lastError() << "]";
             if (queryErrorHandling(query, retries++))
+            {
+                // TODO reopen the database
                 continue;
+            }
             else
                 return false;
         }

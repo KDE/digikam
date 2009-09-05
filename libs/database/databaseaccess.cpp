@@ -43,6 +43,7 @@
 #include "collectionmanager.h"
 #include "databasewatch.h"
 #include "databasebackend.h"
+#include "databaseerrorhandler.h"
 
 namespace Digikam
 {
@@ -144,6 +145,15 @@ DatabaseWatch *DatabaseAccess::databaseWatch()
     if (d)
         return d->databaseWatch;
     return 0;
+}
+
+void DatabaseAccess::initDatabaseErrorHandler(DatabaseErrorHandler *errorhandler){
+    if (!d)
+        {
+            d = new DatabaseAccessStaticPriv();
+        }
+    //DatabaseErrorHandler *errorhandler = new DatabaseGUIErrorHandler(d->parameters);
+    d->backend->setDatabaseErrorHandler(errorhandler);
 }
 
 DatabaseParameters DatabaseAccess::parameters()
