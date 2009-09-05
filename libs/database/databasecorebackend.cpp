@@ -826,10 +826,21 @@ bool DatabaseCoreBackend::execBatch(QSqlQuery& query)
 QSqlQuery DatabaseCoreBackend::prepareQuery(const QString& sql)
 {
     Q_D(DatabaseCoreBackend);
-    QSqlDatabase db = d->databaseForThread();
-    QSqlQuery query(db);
-    query.setForwardOnly(true);
+    QSqlQuery query = getQuery();
     query.prepare(sql);
+    return query;
+}
+
+QSqlQuery DatabaseCoreBackend::copyQuery(const QSqlQuery& old)
+{
+    Q_D(DatabaseCoreBackend);
+    QSqlQuery query = getQuery();
+    query.prepare(old.lastQuery());
+    query.setForwardOnly(old.isForwardOnly());
+    // only for positional binding
+    QList<QVariant> boundValues = old.boundValues().values();
+    foreach (const QVariant &value, boundValues)
+        query.addBindValue(value);
     return query;
 }
 

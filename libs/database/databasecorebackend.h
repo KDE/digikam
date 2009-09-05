@@ -238,6 +238,10 @@ public:
      * Creates an empty query object waiting for the statement
      */
     QSqlQuery getQuery();
+    /**
+     * Creates a faithful copy of the passed query, with the current db connection.
+     */
+    QSqlQuery copyQuery(const QSqlQuery& old);
 
     /**
      * Called with a failed query. Handles certain known errors and debug output.
