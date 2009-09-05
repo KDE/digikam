@@ -47,8 +47,34 @@ namespace Digikam
 namespace ManualRename
 {
 
+class ManualRenameLineEditPriv
+{
+public:
+
+    ManualRenameLineEditPriv()
+    {
+        userTyping      = false;
+        tokenMarked     = false;
+        selectionStart  = -1;
+        selectionLength = -1;
+        parseTimer      = 0;
+        markTokenTimer  = 0;
+        parser          = 0;
+    }
+
+    bool                userTyping;
+    bool                tokenMarked;
+
+    int                 selectionStart;
+    int                 selectionLength;
+
+    QTimer*             parseTimer;
+    QTimer*             markTokenTimer;
+    ManualRenameParser* parser;
+};
+
 ManualRenameLineEdit::ManualRenameLineEdit(QWidget* parent)
-                 : KLineEdit(parent)
+                    : KLineEdit(parent), d(new ManualRenameLineEditPriv)
 {
     setClearButtonShown(true);
     setCompletionMode(KGlobalSettings::CompletionAuto);
@@ -56,25 +82,23 @@ ManualRenameLineEdit::ManualRenameLineEdit(QWidget* parent)
     setToolTip(i18n("<p>CTRL + left mouse button: the token in the line edit widget will be marked.<br/>"
                     "Marked tokens can be moved around with the control buttons.</p>"));
 
-    m_userTyping  = false;
-    m_tokenMarked = false;
 
     // --------------------------------------------------------
 
-    m_parseTimer = new QTimer(this);
-    m_parseTimer->setInterval(500);
-    m_parseTimer->setSingleShot(true);
+    d->parseTimer = new QTimer(this);
+    d->parseTimer->setInterval(500);
+    d->parseTimer->setSingleShot(true);
 
-    m_markTimer = new QTimer(this);
-    m_markTimer->setInterval(100);
-    m_markTimer->setSingleShot(true);
+    d->markTokenTimer = new QTimer(this);
+    d->markTokenTimer->setInterval(100);
+    d->markTokenTimer->setSingleShot(true);
 
     // --------------------------------------------------------
 
-    connect(m_parseTimer, SIGNAL(timeout()),
+    connect(d->parseTimer, SIGNAL(timeout()),
             this, SLOT(slotParseTimer()));
 
-    connect(m_markTimer, SIGNAL(timeout()),
+    connect(d->markTokenTimer, SIGNAL(timeout()),
             this, SLOT(slotMarkTimer()));
 
     connect(this, SIGNAL(textChanged(const QString&)),
@@ -91,7 +115,7 @@ ManualRenameLineEdit::~ManualRenameLineEdit()
 void ManualRenameLineEdit::setParser(ManualRenameParser* parser)
 {
     if (parser)
-        m_parser = parser;
+        d->parser = parser;
 }
 
 void ManualRenameLineEdit::mousePressEvent(QMouseEvent* e)
@@ -99,9 +123,9 @@ void ManualRenameLineEdit::mousePressEvent(QMouseEvent* e)
     KLineEdit::mousePressEvent(e);
     if (e->modifiers() == Qt::ControlModifier && e->button() == Qt::LeftButton)
     {
-        if (m_userTyping)
+        if (d->userTyping)
             return;
-        m_markTimer->start();
+        d->markTokenTimer->start();
     }
 }
 
@@ -134,10 +158,10 @@ void ManualRenameLineEdit::highlightTokens()
 
 bool ManualRenameLineEdit::findToken(int curPos, int& pos, int& length)
 {
-    if (!m_parser)
+    if (!d->parser)
         return false;
 
-    ManualRenameParser::TokenMap map = m_parser->tokenMap(text());
+    ManualRenameParser::TokenMap map = d->parser->tokenMap(text());
     QMapIterator<QString, QString> it(map);
 
     bool found = false;
@@ -177,37 +201,37 @@ void ManualRenameLineEdit::slotMarkTimer()
         deselect();
         setSelection(pos, length);
 
-        m_selectionStart  = pos;
-        m_selectionLength = length;
+        d->selectionStart  = pos;
+        d->selectionLength = length;
     }
     else
     {
         deselect();
-        m_selectionStart  = -1;
-        m_selectionLength = -1;
+        d->selectionStart  = -1;
+        d->selectionLength = -1;
     }
 
 
-    m_tokenMarked = found && hasSelectedText();
-    emit signalTokenMarked(m_tokenMarked);
+    d->tokenMarked = found && hasSelectedText();
+    emit signalTokenMarked(d->tokenMarked);
 }
 
 void ManualRenameLineEdit::slotTextChanged()
 {
-    m_userTyping = true;
-    m_parseTimer->start();
+    d->userTyping = true;
+    d->parseTimer->start();
 }
 
 void ManualRenameLineEdit::slotParseTimer()
 {
-    m_userTyping = false;
+    d->userTyping = false;
     emit signalTextChanged(text());
 }
 
 void ManualRenameLineEdit::slotCursorPositionChanged()
 {
-    m_tokenMarked = false;
-    emit signalTokenMarked(m_tokenMarked);
+    d->tokenMarked = false;
+    emit signalTokenMarked(d->tokenMarked);
 }
 
 void ManualRenameLineEdit::slotAddToken(const QString& token)

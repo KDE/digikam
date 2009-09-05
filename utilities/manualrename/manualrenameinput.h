@@ -45,6 +45,7 @@ namespace ManualRename
 {
 
 class ManualRenameParser;
+class ManualRenameLineEditPriv;
 
 class ManualRenameLineEdit : public KLineEdit
 {
@@ -84,14 +85,9 @@ private:
 
     void highlightTokens();
 
-    bool                m_userTyping;
-    bool                m_tokenMarked;
-    int                 m_selectionStart;
-    int                 m_selectionLength;
+private:
 
-    QTimer*             m_parseTimer;
-    QTimer*             m_markTimer;
-    ManualRenameParser* m_parser;
+    ManualRenameLineEditPriv* const d;
 };
 
 // --------------------------------------------------------
