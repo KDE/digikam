@@ -153,12 +153,12 @@ IccProfile IccSettingsPriv::profileFromWindowSystem(QWidget *widget)
     if (desktop->isVirtualDesktop())
     {
         appRootWindow = QX11Info::appRootWindow(QX11Info::appScreen());
-        atomName = QString("_ICC_Profile_%1").arg(screenNumber);
+        atomName = QString("_ICC_PROFILE_%1").arg(screenNumber);
     }
     else
     {
         appRootWindow = QX11Info::appRootWindow(screenNumber);
-        atomName = "_ICC_Profile";
+        atomName = "_ICC_PROFILE";
     }
 
     Atom type;
@@ -169,7 +169,8 @@ IccProfile IccSettingsPriv::profileFromWindowSystem(QWidget *widget)
 
     static Atom icc_atom = XInternAtom( QX11Info::display(), atomName.toLatin1(), True );
 
-    if  ( XGetWindowProperty ( QX11Info::display(),
+    if  ( icc_atom != None &&
+          XGetWindowProperty ( QX11Info::display(),
                     appRootWindow,
                     icc_atom,
                     0,
@@ -182,11 +183,13 @@ IccProfile IccSettingsPriv::profileFromWindowSystem(QWidget *widget)
                     &bytes_after,
                     (unsigned char **) &str) == Success
                 ) {
-        QByteArray bytes (nitems, '\0');
-        bytes = QByteArray::fromRawData((char*)str, (quint32)nitems);
+        QByteArray bytes = QByteArray::fromRawData((char*)str, (quint32)nitems);
 
         profile = bytes;
+        kDebug() << "Found X.org XICC monitor profile" << profile.description();
     }
+    //else
+      //  kDebug(50003) << "No X.org XICC profile installed for screen" << screenNumber;
 
     // insert to cache even if null
     {
