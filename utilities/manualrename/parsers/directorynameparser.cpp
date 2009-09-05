@@ -59,9 +59,6 @@ void DirectoryNameParser::parse(QString& parseString, const ParseInformation& in
     QFileInfo fi(info.filePath);
     QStringList folders = fi.absolutePath().split('/', QString::SkipEmptyParts);
 
-    if (folders.isEmpty())
-        return;
-
     QRegExp regExp("\\[dir(\\.*)\\]");
     regExp.setMinimal(true);
 

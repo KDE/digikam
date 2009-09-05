@@ -137,7 +137,7 @@ bool ManualRenameLineEdit::findToken(int curPos, int& pos, int& length)
     if (!m_parser)
         return false;
 
-    ManualRenameParser::TokenMap map = m_parser->tokenMap();
+    ManualRenameParser::TokenMap map = m_parser->tokenMap(text());
     QMapIterator<QString, QString> it(map);
 
     bool found = false;

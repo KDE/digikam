@@ -58,7 +58,7 @@ public:
         filePath(QString()),
         cameraName(QString()),
         datetime(QDateTime()),
-        index(-1)
+        index(1)
         {};
 
     QString   filePath;

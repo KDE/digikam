@@ -56,16 +56,15 @@ public:
 
     QString        parse(const QString& parseString, const ParseInformation& info);
     QList<Parser*> parsers()  const { return m_parsers; };
-    TokenMap       tokenMap() const { return m_tokenMap; };
+    TokenMap       tokenMap(const QString& parseString);
 
 private:
 
-    QString         m_parseString;
-     QList<Parser*> m_parsers;
-     TokenMap       m_tokenMap;
-     int            extractTokens(QString& parseString, QStringList& tokens);
-     void           addTokenMapItem(int index, int length, const QString& value);
-     void           reset();
+    QString        m_parseString;
+    QList<Parser*> m_parsers;
+    int            extractTokens(QString& parseString, QStringList& tokens);
+    void           replaceMatchingTokens(QString& parseString, QStringList& tokens, TokenMap* map = 0);
+    void           addTokenMapItem(int index, int length, const QString& value, TokenMap* map);
 };
 
 }  // namespace ManualRename

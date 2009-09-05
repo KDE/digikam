@@ -27,10 +27,6 @@
 
 #include <QFileInfo>
 
-// KDE includes
-
-#include <kdebug.h>
-
 // Libkexiv2 includes
 
 #include <libkexiv2/version.h>
@@ -80,10 +76,33 @@ ManualRenameParser::~ManualRenameParser()
     m_parsers.clear();
 }
 
+ManualRenameParser::TokenMap ManualRenameParser::tokenMap(const QString& parseString)
+{
+    TokenMap tokenMap;
+
+    if (!Parser::stringIsValid(parseString))
+        return tokenMap;
+
+    QString parsed = parseString;
+    if (!m_parsers.isEmpty())
+    {
+        QStringList tokens;
+        ParseInformation info;
+
+        // parse and extract matching tokens
+        foreach (Parser* parser, m_parsers)
+        {
+            parser->parse(parsed, info);
+            extractTokens(parsed, tokens);
+        }
+        replaceMatchingTokens(parsed, tokens, &tokenMap);
+    }
+
+    return tokenMap;
+}
+
 QString ManualRenameParser::parse(const QString& parseString, const ParseInformation& info)
 {
-    reset();
-
     if (!Parser::stringIsValid(parseString))
     {
         QFileInfo fi(info.filePath);
@@ -102,44 +121,49 @@ QString ManualRenameParser::parse(const QString& parseString, const ParseInforma
             parser->parse(parsed, info);
             extractTokens(parsed, tokens);
         }
+        replaceMatchingTokens(parsed, tokens);
+    }
+    return parsed;
+}
 
-        // replace the tokens with the results again
-        QRegExp regExp("index:(\\d+):(\\d+)");
+void ManualRenameParser::replaceMatchingTokens(QString& parseString, QStringList& tokens, TokenMap* map)
+{
+    QRegExp regExp("index:(\\d+):(\\d+)");
 
-        bool firstRun = true;
-        int index     = 0;
-        int length    = 0;
-        int diff      = 0;
-        int pos       = 0;
-        int relIndex  = 0;
+    bool firstRun = true;
+    int index     = 0;
+    int length    = 0;
+    int diff      = 0;
+    int pos       = 0;
+    int relIndex  = 0;
 
-        while (pos > -1)
+    while (pos > -1)
+    {
+        pos = regExp.indexIn(parseString, pos);
+        if (pos > -1)
         {
-            pos = regExp.indexIn(parsed, pos);
-            if (pos > -1)
+            index         = regExp.cap(1).toInt();
+            length        = regExp.cap(2).toInt();
+            QString token = tokens.at(index);
+            parseString.replace(pos, regExp.matchedLength(), token);
+
+            if (firstRun)
             {
-                index         = regExp.cap(1).toInt();
-                length        = regExp.cap(2).toInt();
-                QString token = tokens.at(index);
-                parsed.replace(pos, regExp.matchedLength(), token);
+                firstRun = false;
+                relIndex = pos;
+            }
+            else
+            {
+                relIndex = qAbs<int>(pos - diff);
+            }
+            diff += token.count() - length;
 
-                if (firstRun)
-                {
-                    firstRun = false;
-                    relIndex = pos;
-                }
-                else
-                {
-                    relIndex = qAbs<int>(pos - diff);
-                }
-
-                diff += token.count() - length;
-                addTokenMapItem(relIndex, length, token);
+            if (map)
+            {
+                addTokenMapItem(relIndex, length, token, map);
             }
         }
     }
-    kDebug(50003) << m_tokenMap;
-    return parsed;
 }
 
 int ManualRenameParser::extractTokens(QString& parseString, QStringList& tokens)
@@ -175,16 +199,11 @@ int ManualRenameParser::extractTokens(QString& parseString, QStringList& tokens)
     return extracted;
 }
 
-void ManualRenameParser::addTokenMapItem(int index, int length, const QString& value)
+void ManualRenameParser::addTokenMapItem(int index, int length, const QString& value, TokenMap* map)
 {
     QString key = QString("%1:%2").arg(QString::number(index))
                                   .arg(QString::number(length));
-    m_tokenMap.insert(key, value);
-}
-
-void ManualRenameParser::reset()
-{
-    m_tokenMap.clear();
+    map->insert(key, value);
 }
 
 }  // namespace ManualRename

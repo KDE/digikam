@@ -43,7 +43,6 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <knuminput.h>
-#include <kdebug.h>
 
 // Local includes
 

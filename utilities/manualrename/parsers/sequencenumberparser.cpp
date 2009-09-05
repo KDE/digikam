@@ -138,7 +138,7 @@ void SequenceNumberParser::slotTokenTriggered(const QString& token)
 
 void SequenceNumberParser::parse(QString& parseString, const ParseInformation& info)
 {
-    if (info.index == -1 || !stringIsValid(parseString))
+    if (!stringIsValid(parseString))
         return;
 
     QRegExp regExp("(#+)(\\{\\s*(\\d+)\\s*,?\\s*(\\d+)*\\s*\\})?");
