@@ -53,7 +53,8 @@ ManualRenameLineEdit::ManualRenameLineEdit(QWidget* parent)
     setClearButtonShown(true);
     setCompletionMode(KGlobalSettings::CompletionAuto);
     setClickMessage(i18n("Enter custom rename string"));
-    setToolTip(i18n("CTRL+click a token in the line edit widget to mark it."));
+    setToolTip(i18n("<p>CTRL+click on a token in the line edit widget will mark it.<br/>"
+                    "Marked tokens can be moved around with the control buttons.</p>"));
 
     m_userTyping  = false;
     m_tokenMarked = false;

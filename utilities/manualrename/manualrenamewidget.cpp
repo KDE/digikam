@@ -194,7 +194,7 @@ QString ManualRenameWidget::createToolTip()
     }
 
     tooltip += QString("</table></p>");
-    tooltip += QString("<p><b>%1</b></p>").arg(d->parserLineEdit->input()->toolTip());
+    tooltip += QString("<b>%1</b>").arg(d->parserLineEdit->input()->toolTip());
     return tooltip;
 }
 
