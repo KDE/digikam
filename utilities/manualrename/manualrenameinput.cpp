@@ -179,6 +179,7 @@ void ManualRenameLineEdit::mousePressEvent(QMouseEvent* e)
     {
         setCursorPosition(cursorPositionAt(e->pos()));
         d->oldCursorPos = cursorPosition();
+        KLineEdit::mousePressEvent(e);
     }
 }
 
