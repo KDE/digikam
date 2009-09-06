@@ -159,12 +159,7 @@ void ManualRenameLineEdit::mousePressEvent(QMouseEvent* e)
             if (d->userIsTyping)
                 return;
 
-            int pos;
-            int length;
-            int curPos = cursorPositionAt(e->pos());
-
-            bool found = findToken(curPos, pos, length);
-            if (found && pos == d->markedTokenPos)
+            if (selectionStart() == d->markedTokenPos)
             {
                 d->tokenMarked = true;
                 emit signalTokenMarked(true);
