@@ -52,13 +52,13 @@ class DIGIKAM_EXPORT ManualRenameWidget : public QWidget
 
 public:
 
-    enum ParserInputStyle
+    enum InputStyle
     {
         None       = 0x0,
         BigButtons = 0x1,
         ToolButton = 0x2
     };
-    Q_DECLARE_FLAGS(ParserInputStyles, ParserInputStyle)
+    Q_DECLARE_FLAGS(InputStyles, InputStyle)
 
     ManualRenameWidget(QWidget* parent = 0);
     ~ManualRenameWidget();
@@ -68,7 +68,7 @@ public:
     void    clear();
 
     void setTrackerAlignment(Qt::Alignment alignment);
-    void setParserInputStyle(ParserInputStyles inputMask);
+    void setInputStyle(InputStyles inputMask);
 
     QString parse(ParseInformation& info) const;
 
@@ -98,6 +98,6 @@ private:
 }  // namespace ManualRename
 }  // namespace Digikam
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::ManualRename::ManualRenameWidget::ParserInputStyles)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::ManualRename::ManualRenameWidget::InputStyles)
 
 #endif /* MANUALRENAMEWIDGET_H */

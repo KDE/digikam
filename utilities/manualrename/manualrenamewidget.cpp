@@ -113,7 +113,7 @@ ManualRenameWidget::ManualRenameWidget(QWidget* parent)
     // --------------------------------------------------------
 
     registerParsers();
-    setParserInputStyle(BigButtons);
+    setInputStyle(BigButtons);
 
     // --------------------------------------------------------
 
@@ -208,7 +208,7 @@ void ManualRenameWidget::slotUpdateTrackerPos()
     d->tooltipTracker->refresh();
 }
 
-void ManualRenameWidget::setParserInputStyle(ParserInputStyles inputMask)
+void ManualRenameWidget::setInputStyle(InputStyles inputMask)
 {
     d->btnContainer->setVisible(inputMask & BigButtons);
     d->insertTokenToolButton->setVisible(inputMask & ToolButton);
