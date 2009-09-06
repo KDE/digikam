@@ -65,7 +65,7 @@ public:
         renameDefaultBox      = 0;
         renameDefaultCase     = 0;
         renameDefaultCaseType = 0;
-        renameManual          = 0;
+        renameCustom          = 0;
         startIndex            = 1;
 }
 
@@ -76,7 +76,7 @@ public:
     QLabel*             renameDefaultCase;
 
     QRadioButton*       renameDefault;
-    QRadioButton*       renameManual;
+    QRadioButton*       renameCustom;
 
     QString             cameraTitle;
     QString             dateTimeFormatString;
@@ -118,8 +118,8 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
 
     d->renameDefaultCaseType = new KComboBox(d->renameDefaultBox);
     d->renameDefaultCaseType->insertItem(0, i18nc("Leave filename as it is", "Leave as-is"));
-    d->renameDefaultCaseType->insertItem(1, i18nc("Filename to uppercase", "Upper"));
-    d->renameDefaultCaseType->insertItem(2, i18nc("Filename to lowercase", "Lower"));
+    d->renameDefaultCaseType->insertItem(1, i18nc("Filename to uppercase",   "Upper"));
+    d->renameDefaultCaseType->insertItem(2, i18nc("Filename to lowercase",   "Lower"));
     d->renameDefaultCaseType->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
     d->renameDefaultCaseType->setWhatsThis( i18n("Set the method to use to change the case "
                                                  "of the image filenames."));
@@ -132,15 +132,15 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
 
     // ----------------------------------------------------------------------
 
-    d->renameManual      = new QRadioButton(i18nc("Custom Image Renaming", "Customize"), this);
+    d->renameCustom      = new QRadioButton(i18nc("Custom Image Renaming", "Customize"), this);
     d->manualRenameInput = new ManualRenameWidget(this);
     d->manualRenameInput->setTrackerAlignment(Qt::AlignRight);
     d->manualRenameInput->setParserInputStyle(ManualRenameWidget::BigButtons);
-    d->buttonGroup->addButton(d->renameManual, 2);
+    d->buttonGroup->addButton(d->renameCustom, 2);
 
     mainLayout->addWidget(d->renameDefault,     0, 0, 1, 2);
     mainLayout->addWidget(d->renameDefaultBox,  1, 0, 1, 2);
-    mainLayout->addWidget(d->renameManual,      4, 0, 1, 2);
+    mainLayout->addWidget(d->renameCustom,      4, 0, 1, 2);
     mainLayout->addWidget(d->manualRenameInput, 5, 0, 1, 2);
     mainLayout->setRowStretch(6, 10);
     mainLayout->setMargin(KDialog::spacingHint());
@@ -197,7 +197,7 @@ QString RenameCustomizer::newName(const QString& fileName, const QDateTime& date
     QString name;
     QString cameraName = QString("%1").arg(d->cameraTitle.simplified().remove(' '));
 
-    if (d->renameManual->isChecked())
+    if (d->renameCustom->isChecked())
     {
         ParseInformation info;
         info.filePath   = fileName;
@@ -231,7 +231,7 @@ void RenameCustomizer::slotRadioButtonClicked(int)
         return;
 
     d->renameDefaultBox->setEnabled( btn == d->renameDefault );
-    d->manualRenameInput->setEnabled( btn == d->renameManual );
+    d->manualRenameInput->setEnabled( btn == d->renameCustom );
     d->manualRenameInput->slotHideToolTipTracker();
     slotRenameOptionsChanged();
 }
@@ -249,9 +249,9 @@ void RenameCustomizer::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
 
     KConfigGroup group   = config->group("Camera Settings");
-    int def              = group.readEntry("Rename Method",           0);
-    int chcaseT          = group.readEntry("Case Type",               (int)NONE);
-    QString manualRename = group.readEntry("Manual Rename String",    QString());
+    int def              = group.readEntry("Rename Method",        0);
+    int chcaseT          = group.readEntry("Case Type",            (int)NONE);
+    QString manualRename = group.readEntry("Manual Rename String", QString());
 
     switch(def)
     {
@@ -259,7 +259,7 @@ void RenameCustomizer::readSettings()
         {
             d->renameDefault->setChecked(true);
             d->renameDefaultBox->setEnabled(true);
-            d->renameManual->setChecked(false);
+            d->renameCustom->setChecked(false);
             d->manualRenameInput->setEnabled(false);
             break;
         }
@@ -267,7 +267,7 @@ void RenameCustomizer::readSettings()
         {
             d->renameDefault->setChecked(false);
             d->renameDefaultBox->setEnabled(false);
-            d->renameManual->setChecked(false);
+            d->renameCustom->setChecked(false);
             d->manualRenameInput->setEnabled(false);
             break;
         }
@@ -275,7 +275,7 @@ void RenameCustomizer::readSettings()
         {
             d->renameDefault->setChecked(false);
             d->renameDefaultBox->setEnabled(false);
-            d->renameManual->setChecked(true);
+            d->renameCustom->setChecked(true);
             d->manualRenameInput->setEnabled(true);
             break;
         }
@@ -291,9 +291,9 @@ void RenameCustomizer::saveSettings()
     KSharedConfig::Ptr config = KGlobal::config();
 
     KConfigGroup group = config->group("Camera Settings");
-    group.writeEntry("Rename Method",           d->buttonGroup->checkedId());
-    group.writeEntry("Case Type",               d->renameDefaultCaseType->currentIndex());
-    group.writeEntry("Manual Rename String",    d->manualRenameInput->text());
+    group.writeEntry("Rename Method",        d->buttonGroup->checkedId());
+    group.writeEntry("Case Type",            d->renameDefaultCaseType->currentIndex());
+    group.writeEntry("Manual Rename String", d->manualRenameInput->text());
     config->sync();
 }
 
