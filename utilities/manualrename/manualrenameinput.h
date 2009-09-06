@@ -80,7 +80,7 @@ private Q_SLOTS:
 
     void slotTextChanged();
     void slotParseTimer();
-    void slotCursorPositionChanged();
+    void slotCursorPositionChanged(int, int);
 
 private:
 

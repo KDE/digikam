@@ -58,7 +58,7 @@ public:
         tokenMarked     = false;
         selectionStart  = -1;
         selectionLength = -1;
-        oldCursorPos    = -1;
+        curCursorPos    = -1;
         markedTokenPos  = -1;
         parseTimer      = 0;
         parser          = 0;
@@ -70,7 +70,7 @@ public:
 
     int                 selectionStart;
     int                 selectionLength;
-    int                 oldCursorPos;
+    int                 curCursorPos;
     int                 markedTokenPos;
 
     QTimer*             parseTimer;
@@ -87,7 +87,7 @@ ManualRenameLineEdit::ManualRenameLineEdit(QWidget* parent)
                     "To mark a token, press the left mouse button while it is highlighted.<br/>"
                     "Marked tokens can be moved around with the control buttons.</p>"));
 
-    d->oldCursorPos = cursorPosition();
+    d->curCursorPos = cursorPosition();
 
     // --------------------------------------------------------
 
@@ -104,7 +104,7 @@ ManualRenameLineEdit::ManualRenameLineEdit(QWidget* parent)
             this, SLOT(slotTextChanged()));
 
     connect(this, SIGNAL(cursorPositionChanged(int, int)),
-            this, SLOT(slotCursorPositionChanged()));
+            this, SLOT(slotCursorPositionChanged(int, int)));
 }
 
 ManualRenameLineEdit::~ManualRenameLineEdit()
@@ -146,7 +146,7 @@ void ManualRenameLineEdit::mouseMoveEvent(QMouseEvent* e)
         d->markedTokenPos = -1;
         d->userIsMarking  = false;
         d->tokenMarked    = false;
-        setCursorPosition(d->oldCursorPos);
+        setCursorPosition(d->curCursorPos);
     }
 }
 
@@ -178,7 +178,7 @@ void ManualRenameLineEdit::mousePressEvent(QMouseEvent* e)
     else
     {
         setCursorPosition(cursorPositionAt(e->pos()));
-        d->oldCursorPos = cursorPosition();
+        d->curCursorPos = cursorPosition();
         KLineEdit::mousePressEvent(e);
     }
 }
@@ -192,7 +192,7 @@ bool ManualRenameLineEdit::highlightToken(int cursorPos)
 {
     if (!d->userIsMarking)
     {
-        d->oldCursorPos  = cursorPosition();
+        d->curCursorPos  = cursorPosition();
         d->userIsMarking = true;
     }
 
@@ -268,8 +268,13 @@ void ManualRenameLineEdit::slotParseTimer()
     emit signalTextChanged(text());
 }
 
-void ManualRenameLineEdit::slotCursorPositionChanged()
+void ManualRenameLineEdit::slotCursorPositionChanged(int oldPos, int newPos)
 {
+    Q_UNUSED(oldPos)
+
+    if (d->userIsTyping)
+        d->curCursorPos = newPos;
+
     d->tokenMarked = false;
     emit signalTokenMarked(d->tokenMarked);
 }
