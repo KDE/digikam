@@ -208,6 +208,9 @@ int ManualRenameParser::extractTokens(QString& parseString, QStringList& tokens)
 
 void ManualRenameParser::addTokenMapItem(int index, int length, const QString& value, TokenMap* map)
 {
+    if (!map)
+        return;
+
     QString key = QString("%1:%2").arg(QString::number(index))
                                   .arg(QString::number(length));
     map->insert(key, value);
