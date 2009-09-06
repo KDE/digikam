@@ -60,12 +60,15 @@ public:
 
 private:
 
+    int  extractTokens(QString& parseString, QStringList& tokens);
+    void replaceMatchingTokens(QString& parseString, QStringList& tokens, TokenMap* map = 0);
+    void addTokenMapItem(int index, int length, const QString& value, TokenMap* map);
+    void registerParser(Parser* parser);
+
+private:
+
     QString        m_parseString;
     QList<Parser*> m_parsers;
-    int            extractTokens(QString& parseString, QStringList& tokens);
-    void           replaceMatchingTokens(QString& parseString, QStringList& tokens, TokenMap* map = 0);
-    void           addTokenMapItem(int index, int length, const QString& value, TokenMap* map);
-    void           registerParser(Parser* parser);
 };
 
 }  // namespace ManualRename
