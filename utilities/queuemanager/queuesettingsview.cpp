@@ -150,6 +150,7 @@ QueueSettingsView::QueueSettingsView(QWidget *parent)
 
     d->renameManual        = new QRadioButton(i18n("Customize filenames:"), vbox2);
     d->manualRenameInput   = new ManualRenameWidget(vbox2);
+    d->manualRenameInput->setParserInputStyle(ManualRenameWidget::ToolButton);
     QWidget *space         = new QWidget(vbox2);
 
     d->renamingButtonGroup->setExclusive(true);

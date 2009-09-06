@@ -113,7 +113,7 @@ ManualRenameWidget::ManualRenameWidget(QWidget* parent)
     // --------------------------------------------------------
 
     registerParsers();
-    setParserInputStyle(ToolButton);
+    setParserInputStyle(BigButtons);
 
     // --------------------------------------------------------
 
