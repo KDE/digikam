@@ -110,7 +110,9 @@ public:
     DateParser();
     ~DateParser() {};
 
-    void parse(QString& parseString, const ParseInformation& info);
+protected:
+
+    virtual void parseTokenString(QString& parseString, const ParseInformation& info);
 
 private Q_SLOTS:
 

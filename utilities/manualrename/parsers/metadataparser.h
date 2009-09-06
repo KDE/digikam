@@ -76,7 +76,9 @@ public:
     MetadataParser();
     ~MetadataParser() {};
 
-    void parse(QString& parseString, const ParseInformation& info);
+protected:
+
+    virtual void parseTokenString(QString& parseString, const ParseInformation& info);
 
 private Q_SLOTS:
 
@@ -84,7 +86,7 @@ private Q_SLOTS:
 
 private:
 
-    QString parseMetadataToken(const QString& token, const ParseInformation& info);
+    QString parseMetadata(const QString& token, const ParseInformation& info);
 };
 
 } // namespace ManualRename

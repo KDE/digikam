@@ -51,11 +51,8 @@ DirectoryNameParser::DirectoryNameParser()
     useTokenMenu(false);
 }
 
-void DirectoryNameParser::parse(QString& parseString, const ParseInformation& info)
+void DirectoryNameParser::parseTokenString(QString& parseString, const ParseInformation& info)
 {
-    if (!stringIsValid(parseString))
-        return;
-
     QFileInfo fi(info.filePath);
     QStringList folders = fi.absolutePath().split('/', QString::SkipEmptyParts);
 

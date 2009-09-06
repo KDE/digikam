@@ -46,7 +46,9 @@ public:
     CameraNameParser();
     ~CameraNameParser() {};
 
-    void parse(QString& parseString, const ParseInformation& info);
+protected:
+
+    virtual void parseTokenString(QString& parseString, const ParseInformation& info);
 };
 
 } // namespace ManualRename

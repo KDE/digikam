@@ -240,5 +240,14 @@ QString Parser::emptyTokenMarker()
     return QString("!!!EMPTY!!!");
 }
 
+
+void Parser::parse(QString& parseString, const ParseInformation& info)
+{
+    if (!stringIsValid(parseString))
+        return;
+
+    parseTokenString(parseString, info);
+}
+
 } // namespace ManualRename
 } // namespace Digikam

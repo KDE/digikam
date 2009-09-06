@@ -40,11 +40,8 @@ CameraNameParser::CameraNameParser()
     addToken("[cam]", i18n("Camera Name"), i18n("camera name"));
 }
 
-void CameraNameParser::parse(QString& parseString, const ParseInformation& info)
+void CameraNameParser::parseTokenString(QString& parseString, const ParseInformation& info)
 {
-    if (!stringIsValid(parseString))
-        return;
-
     QString cameraName = info.cameraName;
 
     QRegExp regExp("\\[cam\\]");

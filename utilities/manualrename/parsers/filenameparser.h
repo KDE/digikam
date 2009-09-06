@@ -46,8 +46,6 @@ public:
     FilenameParser();
     ~FilenameParser() {};
 
-    void parse(QString& parseString, const ParseInformation& info);
-
     /**
      * This helper method converts the string into a "first letter uppercase" version, for example
      * "my_new_filename001.jpg"
@@ -58,6 +56,10 @@ public:
      * @return the converted string
      */
     static QString firstLetterUppercase(const QString& str);
+
+protected:
+
+    virtual void parseTokenString(QString& parseString, const ParseInformation& info);
 };
 
 } // namespace ManualRename

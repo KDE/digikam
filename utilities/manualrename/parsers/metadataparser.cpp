@@ -172,11 +172,8 @@ void MetadataParser::slotTokenTriggered(const QString& token)
     delete dlg;
 }
 
-void MetadataParser::parse(QString& parseString, const ParseInformation& info)
+void MetadataParser::parseTokenString(QString& parseString, const ParseInformation& info)
 {
-    if (!stringIsValid(parseString))
-        return;
-
     QRegExp regExp("\\[meta:\\s*(.*)\\s*\\s*\\]");
     regExp.setMinimal(true);
     int pos = 0;
@@ -189,7 +186,7 @@ void MetadataParser::parse(QString& parseString, const ParseInformation& info)
             QString tmp;
 
 #if KEXIV2_VERSION >= 0x010000
-            tmp = parseMetadataToken(keyword, info);
+            tmp = parseMetadata(keyword, info);
 #endif
             QString result = markResult(regExp.matchedLength(), tmp);
             parseString.replace(pos, regExp.matchedLength(), result);
@@ -197,7 +194,7 @@ void MetadataParser::parse(QString& parseString, const ParseInformation& info)
     }
 }
 
-QString MetadataParser::parseMetadataToken(const QString& token, const ParseInformation& info)
+QString MetadataParser::parseMetadata(const QString& token, const ParseInformation& info)
 {
     QString tmp;
     QString keyword = token.toLower();

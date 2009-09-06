@@ -119,9 +119,17 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    virtual void parse(QString& parseString, const ParseInformation& info) = 0;
+    void parse(QString& parseString, const ParseInformation& info);
 
 protected:
+
+    /**
+     * The main (abstract) method of a parser class. All parsing functionality has to be done in here.
+     * This method is called by @see parse(QString& parseString, const ParseInformation& info).
+     * @param parseString the token string to be analyzed and parsed
+     * @param info additional file information to parse the token string
+     */
+    virtual void parseTokenString(QString& parseString, const ParseInformation& info) = 0;
 
     /**
      * add a token to the parser, every parser should at least assign one token object
