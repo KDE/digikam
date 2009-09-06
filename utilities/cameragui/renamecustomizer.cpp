@@ -79,7 +79,6 @@ public:
     QRadioButton*       renameCustom;
 
     QString             cameraTitle;
-    QString             dateTimeFormatString;
 
     QTimer*             changedTimer;
 
@@ -167,7 +166,6 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
 
 RenameCustomizer::~RenameCustomizer()
 {
-    delete d->changedTimer;
     saveSettings();
     delete d;
 }
@@ -224,12 +222,13 @@ RenameCustomizer::Case RenameCustomizer::changeCase() const
     return type;
 }
 
-void RenameCustomizer::slotRadioButtonClicked(int)
+void RenameCustomizer::slotRadioButtonClicked(int id)
 {
-    QRadioButton* btn = dynamic_cast<QRadioButton*>(d->buttonGroup->checkedButton());
+    QRadioButton* btn = dynamic_cast<QRadioButton*>(d->buttonGroup->button(id));
     if (!btn)
         return;
 
+    btn->setChecked(true);
     d->renameDefaultBox->setEnabled( btn == d->renameDefault );
     d->manualRenameInput->setEnabled( btn == d->renameCustom );
     d->manualRenameInput->slotHideToolTipTracker();
@@ -253,37 +252,10 @@ void RenameCustomizer::readSettings()
     int chcaseT          = group.readEntry("Case Type",            (int)NONE);
     QString manualRename = group.readEntry("Manual Rename String", QString());
 
-    switch(def)
-    {
-        case 0:
-        {
-            d->renameDefault->setChecked(true);
-            d->renameDefaultBox->setEnabled(true);
-            d->renameCustom->setChecked(false);
-            d->manualRenameInput->setEnabled(false);
-            break;
-        }
-        case 1:
-        {
-            d->renameDefault->setChecked(false);
-            d->renameDefaultBox->setEnabled(false);
-            d->renameCustom->setChecked(false);
-            d->manualRenameInput->setEnabled(false);
-            break;
-        }
-        default:
-        {
-            d->renameDefault->setChecked(false);
-            d->renameDefaultBox->setEnabled(false);
-            d->renameCustom->setChecked(true);
-            d->manualRenameInput->setEnabled(true);
-            break;
-        }
-    }
+    slotRadioButtonClicked(def);
 
     d->renameDefaultCaseType->setCurrentIndex(chcaseT);
     d->manualRenameInput->setText(manualRename);
-    slotRenameOptionsChanged();
 }
 
 void RenameCustomizer::saveSettings()
