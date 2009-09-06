@@ -54,16 +54,15 @@ ManualRenameParser::ManualRenameParser()
      * to create the buttons and menu entries as well as the tooltip.
      */
 
-    m_parsers
-        << new FilenameParser()
-        << new DirectoryNameParser()
-        << new SequenceNumberParser()
-        << new CameraNameParser()
-        << new DateParser()
-#if KEXIV2_VERSION >= 0x010000
-        << new MetadataParser()
+    registerParser(new FilenameParser());
+    registerParser(new DirectoryNameParser());
+    registerParser(new SequenceNumberParser());
+    registerParser(new CameraNameParser());
+    registerParser(new DateParser());
+
+    #if KEXIV2_VERSION >= 0x010000
+    registerParser(new MetadataParser());
 #endif
-    ;
 }
 
 ManualRenameParser::~ManualRenameParser()
@@ -74,6 +73,14 @@ ManualRenameParser::~ManualRenameParser()
     }
 
     m_parsers.clear();
+}
+
+void ManualRenameParser::registerParser(Parser* parser)
+{
+    if (!parser)
+        return;
+
+    m_parsers.append(parser);
 }
 
 ManualRenameParser::TokenMap ManualRenameParser::tokenMap(const QString& parseString)
