@@ -62,7 +62,7 @@ BatchToolsManager::BatchToolsManager(QObject* parent)
                  : QObject(parent), d(new BatchToolsManagerPriv)
 {
     // Register base tools.
-    registerTool(new Rename(this));
+//    registerTool(new Rename(this));
     registerTool(new Convert2JPEG(this));
     registerTool(new Convert2PNG(this));
     registerTool(new Convert2TIFF(this));
