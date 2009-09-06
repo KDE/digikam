@@ -65,6 +65,11 @@ public:
     QString   cameraName;
     QDateTime datetime;
     int       index;
+
+    bool isEmpty()
+    {
+      return (filePath.isEmpty());
+    };
 };
 
 class Parser : public QObject

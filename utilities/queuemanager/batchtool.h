@@ -41,6 +41,7 @@
 // Local includes
 
 #include "dimg.h"
+#include "parser.h"
 
 class QWidget;
 
@@ -103,20 +104,23 @@ public:
     void setLastChainedTool(bool last);
     bool isLastChainedTool() const;
 
-    /** Set output url using input url content + annotation based on time stamp + file 
+    ManualRename::ParseInformation parseInformation() const;
+    void setParseInformation(ManualRename::ParseInformation& info);
+
+    /** Set output url using input url content + annotation based on time stamp + file
         extension defined by outputSuffix().
         if outputSuffix() return null, file extension is the same than original.
      */
     void setOutputUrlFromInputUrl();
 
-    /** Load image data using input Url set by setInputUrl() to instance of internal 
+    /** Load image data using input Url set by setInputUrl() to instance of internal
         DImg container.
      */
     bool loadToDImg();
 
     /** Save image data from instance of internal DImg container using :
         - output Url set by setOutputUrl() or setOutputUrlFromInputUrl()
-        - output file format set by outputSuffix(). If this one is empty, 
+        - output file format set by outputSuffix(). If this one is empty,
           format of original image is used instead.
      */
     bool savefromDImg();
@@ -133,17 +137,23 @@ public:
      */
     bool apply();
 
-    /** Re-implement this method is you want customize cancelization of tool, for ex. to call 
+    /** Re-implement this method is you want customize cancelization of tool, for ex. to call
         a dedicated method to kill sub-threads parented to this tool instance.
         Unforget to call parent BatchTool::cancel() method in you customized implementation.
      */
     virtual void cancel();
 
-    /** Re-implemnt this method if tool change file extension during batch process (ex: "png").
-        Typicaly, this is used with tool which convert to new file format.
+    /** Re-implement this method if tool change file extension during batch process (ex: "png").
+        Typically, this is used with tool which convert to new file format.
         This method return and empty string by default.
      */
     virtual QString outputSuffix() const;
+
+    /** Re-implement this method if tool change file base name during batch process.
+        Typically, this is used with tool which convert to a new file name.
+        This method return and empty string by default.
+     */
+    virtual QString outputBaseName() const;
 
     /** Re-implement this method to initialize Settings Widget value with default settings.
      */
@@ -172,7 +182,7 @@ protected:
      */
     virtual void assignSettings2Widget()=0;
 
-    /** Re-implement this method to customize all batch operations done by this tool. 
+    /** Re-implement this method to customize all batch operations done by this tool.
         This method is called by apply().
      */
     virtual bool toolOperations()=0;
@@ -218,6 +228,23 @@ public:
 
     AssignedBatchTools(){};
 
+    QString targetBaseName()
+    {
+        QString baseName;
+        foreach(BatchToolSet set, toolsMap)
+        {
+            set.tool->setParseInformation(parseInfo);
+            QString s = set.tool->outputBaseName();
+            if (!s.isEmpty())
+                baseName = s;
+        }
+
+        if (baseName.isEmpty())
+            return (QFileInfo(itemUrl.fileName()).baseName());
+
+        return baseName;
+    }
+
     QString targetSuffix()
     {
         QString suffix;
@@ -234,8 +261,9 @@ public:
         return suffix;
     }
 
-    KUrl         itemUrl;
-    BatchToolMap toolsMap;
+    KUrl                           itemUrl;
+    BatchToolMap                   toolsMap;
+    ManualRename::ParseInformation parseInfo;
 };
 
 }  // namespace Digikam
