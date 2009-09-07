@@ -92,18 +92,20 @@ Rename::~Rename()
 BatchToolSettings Rename::defaultSettings()
 {
     BatchToolSettings settings;
-    settings.insert("Text", QString());
+    settings.insert("ParseString", QString());
     return settings;
 }
 
 void Rename::assignSettings2Widget()
 {
+    QString parseString = settings()["ParseString"].toString();
+    d->renamingWidget->setText(parseString);
 }
 
 void Rename::slotSettingsChanged()
 {
     BatchToolSettings settings;
-    settings.insert("text", d->renamingWidget->text());
+    settings.insert("ParseString", d->renamingWidget->text());
     setSettings(settings);
 }
 
