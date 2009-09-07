@@ -54,7 +54,7 @@ public:
     ManualRenameParser();
     ~ManualRenameParser();
 
-    QString        parse(const QString& parseString, const ParseInformation& info);
+    QString        parse(const QString& parseString, ParseInformation& info);
     QList<Parser*> parsers()  const { return m_parsers; };
     TokenMap       tokenMap(const QString& parseString);
 

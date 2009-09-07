@@ -108,7 +108,7 @@ ManualRenameParser::TokenMap ManualRenameParser::tokenMap(const QString& parseSt
     return tokenMap;
 }
 
-QString ManualRenameParser::parse(const QString& parseString, const ParseInformation& info)
+QString ManualRenameParser::parse(const QString& parseString, ParseInformation& info)
 {
     if (!Parser::stringIsValid(parseString))
     {

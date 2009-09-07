@@ -241,9 +241,9 @@ QString Parser::emptyTokenMarker()
 }
 
 
-void Parser::parse(QString& parseString, const ParseInformation& info)
+void Parser::parse(QString& parseString, ParseInformation& info)
 {
-    if (!stringIsValid(parseString))
+    if (!stringIsValid(parseString) || info.isEmpty())
         return;
 
     parseTokenString(parseString, info);

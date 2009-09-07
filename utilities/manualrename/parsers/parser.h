@@ -124,7 +124,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    void parse(QString& parseString, const ParseInformation& info);
+    void parse(QString& parseString, ParseInformation& info);
 
 protected:
 
@@ -197,6 +197,8 @@ protected Q_SLOTS:
 private:
 
     QPushButton*  createButton(const QString& name, const QIcon& icon);
+
+private:
 
     bool          m_buttonRegistered;
     bool          m_MenuRegistered;
