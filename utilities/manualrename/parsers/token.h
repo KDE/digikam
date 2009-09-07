@@ -26,8 +26,9 @@
 
 // Qt includes
 
-#include <QString>
+#include <QList>
 #include <QObject>
+#include <QString>
 
 class  QAction;
 
@@ -65,6 +66,8 @@ private:
     QString  m_description;
     QAction* m_action;
 };
+
+typedef QList<Token*> TokenList;
 
 } // namespace ManualRename
 } // namespace Digikam

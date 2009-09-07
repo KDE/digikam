@@ -33,6 +33,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "parser.h"
 
 class QStringList;
 
@@ -54,9 +55,9 @@ public:
     ManualRenameParser();
     ~ManualRenameParser();
 
-    QString        parse(const QString& parseString, ParseInformation& info);
-    QList<Parser*> parsers()  const { return m_parsers; };
-    TokenMap       tokenMap(const QString& parseString);
+    QString    parse(const QString& parseString, ParseInformation& info);
+    ParserList parsers() const;
+    TokenMap   tokenMap(const QString& parseString);
 
 private:
 
@@ -67,8 +68,8 @@ private:
 
 private:
 
-    QString        m_parseString;
-    QList<Parser*> m_parsers;
+    QString    m_parseString;
+    ParserList m_parsers;
 };
 
 }  // namespace ManualRename

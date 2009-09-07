@@ -33,7 +33,6 @@
 
 // Local includes
 
-#include "parser.h"
 #include "cameranameparser.h"
 #include "dateparser.h"
 #include "directorynameparser.h"
@@ -73,6 +72,11 @@ ManualRenameParser::~ManualRenameParser()
     }
 
     m_parsers.clear();
+}
+
+ParserList ManualRenameParser::parsers() const
+{
+    return m_parsers;
 }
 
 void ManualRenameParser::registerParser(Parser* parser)

@@ -84,7 +84,7 @@ public:
     /**
      * @return a list of all registered tokens
      */
-    QList<Token*>  tokens() const;
+    TokenList tokens() const;
 
     /**
      * Register a button in the parent object. By calling this method, a new button for the parser
@@ -94,7 +94,7 @@ public:
      * @param parent the parent object the button will be registered for
      * @return a pointer to the newly created button
      */
-    QPushButton*   registerButton(QWidget* parent);
+    QPushButton* registerButton(QWidget* parent);
 
     /**
      * Register a menu action in the parent object. By calling this method, a new action for the parser
@@ -104,7 +104,7 @@ public:
      * @param parent the parent object the action will be registered for
      * @return a pointer to the newly created action
      */
-    QAction*       registerMenu(QMenu* parent);
+    QAction* registerMenu(QMenu* parent);
 
     /**
      * check if the given parse string is valid
@@ -200,13 +200,15 @@ private:
 
 private:
 
-    bool          m_buttonRegistered;
-    bool          m_MenuRegistered;
-    bool          m_useTokenMenu;
-    QString       m_name;
-    QIcon         m_icon;
-    QList<Token*> m_tokens;
+    bool      m_buttonRegistered;
+    bool      m_MenuRegistered;
+    bool      m_useTokenMenu;
+    QString   m_name;
+    QIcon     m_icon;
+    TokenList m_tokens;
 };
+
+typedef QList<Parser*> ParserList;
 
 } // namespace ManualRename
 } // namespace Digikam
