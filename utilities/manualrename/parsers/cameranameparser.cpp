@@ -40,7 +40,7 @@ CameraNameParser::CameraNameParser()
     addToken("[cam]", i18n("Camera Name"), i18n("camera name"));
 }
 
-void CameraNameParser::parseTokenString(QString& parseString, const ParseInformation& info)
+void CameraNameParser::parseOperation(QString& parseString, const ParseInformation& info)
 {
     QString cameraName = info.cameraName;
 

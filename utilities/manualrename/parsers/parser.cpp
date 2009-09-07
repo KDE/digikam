@@ -246,7 +246,7 @@ void Parser::parse(QString& parseString, ParseInformation& info)
     if (!stringIsValid(parseString) || info.isEmpty())
         return;
 
-    parseTokenString(parseString, info);
+    parseOperation(parseString, info);
 }
 
 } // namespace ManualRename

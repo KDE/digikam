@@ -54,7 +54,7 @@ FilenameParser::FilenameParser()
              i18n("filename (first letter of each word uppercase)"));
 }
 
-void FilenameParser::parseTokenString(QString& parseString, const ParseInformation& info)
+void FilenameParser::parseOperation(QString& parseString, const ParseInformation& info)
 {
     QFileInfo fi(info.filePath);
     QString baseFileName = fi.baseName();

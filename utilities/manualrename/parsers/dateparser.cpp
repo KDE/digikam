@@ -181,7 +181,7 @@ DateParser::DateParser()
              i18n("date and time") + " (" +  dateFormatLink + ")");
 }
 
-void DateParser::parseTokenString(QString& parseString, const ParseInformation& info)
+void DateParser::parseOperation(QString& parseString, const ParseInformation& info)
 {
     QRegExp regExp("\\[date(:.*)?\\]");
     regExp.setMinimal(true);

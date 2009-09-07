@@ -112,7 +112,7 @@ public:
 
 protected:
 
-    virtual void parseTokenString(QString& parseString, const ParseInformation& info);
+    virtual void parseOperation(QString& parseString, const ParseInformation& info);
 
 private Q_SLOTS:
 
