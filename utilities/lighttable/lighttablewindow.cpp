@@ -150,7 +150,7 @@ void LightTableWindow::readSettings()
     KConfigGroup group        = config->group("LightTable Settings");
 
     d->hSplitter->restoreState(group, "Horizontal Splitter State");
-    d->barViewDock->setShouldBeVisible(group.readEntry("Show Thumbnails", true));
+    d->barViewDock->setShouldBeVisible(group.readEntry("Show Thumbbar", true));
     d->navigateByPairAction->setChecked(group.readEntry("Navigate By Pair", false));
     slotToggleNavigateByPair();
 }
@@ -160,7 +160,7 @@ void LightTableWindow::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("LightTable Settings");
     d->hSplitter->saveState(group, "Horizontal Splitter State");
-    group.writeEntry("Show Thumbnails", d->barViewDock->shouldBeVisible());
+    group.writeEntry("Show Thumbbar", d->barViewDock->shouldBeVisible());
     group.writeEntry("Navigate By Pair", d->navigateByPairAction->isChecked());
     group.writeEntry("Clear On Close", d->clearOnCloseAction->isChecked());
     config->sync();

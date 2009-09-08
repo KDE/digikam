@@ -954,7 +954,7 @@ void EditorWindow::saveStandardSettings()
     if (m_vSplitter)
         group.writeEntry("Vertical Splitter State", m_vSplitter->saveState().toBase64());
 
-    group.writeEntry("Show Thumbnails", thumbBar()->shouldBeVisible());
+    group.writeEntry("Show Thumbbar", thumbBar()->shouldBeVisible());
     group.writeEntry("FullScreen", m_fullScreenAction->isChecked());
     group.writeEntry("UnderExposureIndicator", d->exposureSettings->underExposureIndicator);
     group.writeEntry("OverExposureIndicator", d->exposureSettings->overExposureIndicator);

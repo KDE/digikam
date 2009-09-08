@@ -219,7 +219,7 @@ ImageWindow::ImageWindow()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("ImageViewer Settings");
     applyMainWindowSettings(group);
-    d->thumbBarDock->setShouldBeVisible(group.readEntry("Show Thumbnails", false));
+    d->thumbBarDock->setShouldBeVisible(group.readEntry("Show Thumbbar", false));
     setAutoSaveSettings("ImageViewer Settings", true);
 
     //-------------------------------------------------------------

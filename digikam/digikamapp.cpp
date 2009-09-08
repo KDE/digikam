@@ -1095,7 +1095,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->showBarAction = new KToggleAction(KIcon("view-choose"), i18n("Show Thumbnails"), this);
+    d->showBarAction = new KToggleAction(KIcon("view-choose"), i18n("Show Thumbbar"), this);
     d->showBarAction->setShortcut(Qt::CTRL+Qt::Key_T);
     connect(d->showBarAction, SIGNAL(triggered()), this, SLOT(slotToggleShowBar()));
     actionCollection()->addAction("showthumbs", d->showBarAction);

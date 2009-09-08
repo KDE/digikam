@@ -104,7 +104,7 @@ public:
     void reInitialize();
 
     /* Return a KToggleAction to show and hide the thumbnail bar. */
-    KToggleAction *getToggleAction(QObject *parent, QString caption = i18n("Show Thumbnails"));
+    KToggleAction *getToggleAction(QObject *parent, QString caption = i18n("Show Thumbbar"));
 
     /* The first two functions can be used to hide a (floating) thumbbar and
      * show it again, if it was visible. They can be thought of as the state
