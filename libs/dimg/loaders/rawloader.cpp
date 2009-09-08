@@ -50,6 +50,7 @@
 #include "imagelevels.h"
 #include "bcgmodifier.h"
 #include "whitebalance.h"
+#include "globals.h"
 
 namespace Digikam
 {
@@ -396,9 +397,9 @@ void RAWLoader::postProcess(DImgLoaderObserver *observer)
     {
         DImg tmp(imageWidth(), imageHeight(), m_rawDecodingSettings.sixteenBitsImage);
         ImageCurves curves(m_rawDecodingSettings.sixteenBitsImage);
-        curves.setCurvePoints(ImageHistogram::ValueChannel, m_customRawSettings.curveAdjust);
-        curves.curvesCalculateCurve(ImageHistogram::ValueChannel);
-        curves.curvesLutSetup(ImageHistogram::AlphaChannel);
+        curves.setCurvePoints(LuminosityChannel, m_customRawSettings.curveAdjust);
+        curves.curvesCalculateCurve(LuminosityChannel);
+        curves.curvesLutSetup(AlphaChannel);
         curves.curvesLutProcess(imageData(), tmp.bits(), imageWidth(), imageHeight());
         memcpy(imageData(), tmp.bits(), tmp.numBytes());
     }
@@ -417,7 +418,7 @@ void RAWLoader::postProcess(DImgLoaderObserver *observer)
             levels.setLevelHighOutputValue(i, m_customRawSettings.levelsAdjust[j++]);
         }
 
-        levels.levelsLutSetup(ImageHistogram::AlphaChannel);
+        levels.levelsLutSetup(AlphaChannel);
         levels.levelsLutProcess(imageData(), tmp.bits(), imageWidth(), imageHeight());
         memcpy(imageData(), tmp.bits(), tmp.numBytes());
     }

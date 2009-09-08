@@ -35,6 +35,7 @@
 #include "bcgmodifier.h"
 #include "whitebalance.h"
 #include "dimgimagefilters.h"
+#include "globals.h"
 
 namespace Digikam
 {
@@ -105,9 +106,9 @@ void RawPostProcessing::rawPostProcessing()
     {
         DImg tmp(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit());
         ImageCurves curves(m_orgImage.sixteenBit());
-        curves.setCurvePoints(ImageHistogram::ValueChannel, m_customRawSettings.curveAdjust);
-        curves.curvesCalculateCurve(ImageHistogram::ValueChannel);
-        curves.curvesLutSetup(ImageHistogram::AlphaChannel);
+        curves.setCurvePoints(LuminosityChannel, m_customRawSettings.curveAdjust);
+        curves.curvesCalculateCurve(LuminosityChannel);
+        curves.curvesLutSetup(AlphaChannel);
         curves.curvesLutProcess(m_orgImage.bits(), tmp.bits(), m_orgImage.width(), m_orgImage.height());
         memcpy(m_orgImage.bits(), tmp.bits(), tmp.numBytes());
     }
@@ -126,7 +127,7 @@ void RawPostProcessing::rawPostProcessing()
             levels.setLevelHighOutputValue(i, m_customRawSettings.levelsAdjust[j++]);
         }
 
-        levels.levelsLutSetup(ImageHistogram::AlphaChannel);
+        levels.levelsLutSetup(AlphaChannel);
         levels.levelsLutProcess(m_orgImage.bits(), tmp.bits(), m_orgImage.width(), m_orgImage.height());
         memcpy(m_orgImage.bits(), tmp.bits(), tmp.numBytes());
     }

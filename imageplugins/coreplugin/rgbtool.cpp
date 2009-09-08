@@ -275,9 +275,9 @@ void RGBTool::readSettings()
     KConfigGroup group        = config->group("colorbalance Tool");
 
     d->gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
-                        (int)EditorToolSettings::LuminosityChannel));
+                        (int)LuminosityChannel));
     d->gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
-                        (int)HistogramWidget::LogScaleHistogram));
+                        (int)LogScaleHistogram));
 
     int r = group.readEntry("RedAdjustment", d->rInput->defaultValue());
     int g = group.readEntry("GreenAdjustment", d->gInput->defaultValue());

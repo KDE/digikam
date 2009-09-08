@@ -89,19 +89,9 @@ private Q_SLOTS:
 
 private:
 
-    enum ColorChannel
-    {
-        LuminosityChannel=0,
-        RedChannel,
-        GreenChannel,
-        BlueChannel,
-        AlphaChannel,
-        ColorChannels
-    };
-
     enum AllColorsColorType
     {
-        AllColorsRed=0,
+        AllColorsRed = 0,
         AllColorsGreen,
         AllColorsBlue
     };

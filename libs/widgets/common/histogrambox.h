@@ -31,6 +31,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "globals.h"
 
 class QColor;
 
@@ -46,38 +47,10 @@ Q_OBJECT
 
 public:
 
-    enum HistogramType
-    {
-        RGB = 0,
-        RGBA,
-        LRGB,
-        LRGBA,
-        LRGBC,
-        LRGBAC
-    };
-
-    enum HistogramScale
-    {
-        Linear = 0,
-        Logarithmic
-    };
-
-    enum ColorChannel
-    {
-        LuminosityChannel = 0,
-        RedChannel,
-        GreenChannel,
-        BlueChannel,
-        AlphaChannel,
-        ColorChannels
-    };
-
-public:
-
-    HistogramBox(QWidget* parent = 0, HistogramType type = LRGB, bool selectMode = false);
+    HistogramBox(QWidget* parent = 0, HistogramBoxType type = Digikam::LRGB, bool selectMode = false);
     ~HistogramBox();
 
-    void setHistogramType(HistogramType type);
+    void setHistogramType(HistogramBoxType type);
 
     void setGradientColors(const QColor& from, const QColor& to);
     void setGradientVisible(bool visible);

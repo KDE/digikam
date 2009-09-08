@@ -49,23 +49,6 @@ Q_OBJECT
 
 public:
 
-    enum HistogramType
-    {
-        ValueHistogram = 0,       // Luminosity.
-        RedChannelHistogram,      // Red channel.
-        GreenChannelHistogram,    // Green channel.
-        BlueChannelHistogram,     // Blue channel.
-        AlphaChannelHistogram     // Alpha channel.
-    };
-
-    enum HistogramScale
-    {
-        LinScaleHistogram=0,      // Linear scale.
-        LogScaleHistogram         // Logarithmic scale.
-    };
-
-public:
-
     CurvesWidget(int w, int h, QWidget *parent, bool readOnly=false);
 
     CurvesWidget(int w, int h,                         // Widget size.

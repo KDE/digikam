@@ -43,7 +43,7 @@
 
 // Local includes
 
-#include "constants.h"
+#include "globals.h"
 #include "dcursortracker.h"
 #include "themeengine.h"
 

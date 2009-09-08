@@ -48,6 +48,7 @@
 
 #include "colorgradientwidget.h"
 #include "histogramwidget.h"
+#include "globals.h"
 
 namespace Digikam
 {
@@ -83,7 +84,7 @@ public:
     HistogramWidget*     histogramWidget;
 };
 
-HistogramBox::HistogramBox(QWidget *parent, HistogramType type, bool selectMode)
+HistogramBox::HistogramBox(QWidget *parent, HistogramBoxType type, bool selectMode)
             : QWidget(parent), d(new HistogramBoxPriv)
 {
     d->channelCB         = new KComboBox(this);
@@ -102,13 +103,13 @@ HistogramBox::HistogramBox(QWidget *parent, HistogramType type, bool selectMode)
     d->linHistoButton->setToolTip(i18nc("linear histogram scaling mode", "Linear"));
     d->linHistoButton->setIcon(KIcon("view-object-histogram-linear"));
     d->linHistoButton->setCheckable(true);
-    d->scaleBG->addButton(d->linHistoButton, HistogramWidget::LinScaleHistogram);
+    d->scaleBG->addButton(d->linHistoButton, LinScaleHistogram);
 
     d->logHistoButton = new QToolButton(scaleBox);
     d->logHistoButton->setToolTip(i18nc("logarithmic histogram scaling mode", "Logarithmic"));
     d->logHistoButton->setIcon(KIcon("view-object-histogram-logarithmic"));
     d->logHistoButton->setCheckable(true);
-    d->scaleBG->addButton(d->logHistoButton, HistogramWidget::LogScaleHistogram);
+    d->scaleBG->addButton(d->logHistoButton, LogScaleHistogram);
 
     hlay->setMargin(0);
     hlay->setSpacing(0);
@@ -245,7 +246,7 @@ int HistogramBox::scale() const
 
 void HistogramBox::setScale(int scale)
 {
-    d->scaleBG->button(scale)->setChecked(true);
+    d->scaleBG->button((int)scale)->setChecked(true);
     slotScaleChanged();
     emit signalScaleChanged();
 }
@@ -260,37 +261,37 @@ void HistogramBox::slotChannelChanged()
     switch (channel())
     {
         case LuminosityChannel:
-            d->histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
+            d->histogramWidget->m_channelType = LuminosityChannel;
             setGradientColors(QColor("black"), QColor("white"));
             setColorsEnabled(false);
             break;
 
         case RedChannel:
-            d->histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
+            d->histogramWidget->m_channelType = RedChannel;
             setGradientColors(QColor("black"), QColor("red"));
             setColorsEnabled(false);
             break;
 
         case GreenChannel:
-            d->histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
+            d->histogramWidget->m_channelType = GreenChannel;
             setGradientColors(QColor("black"), QColor("green"));
             setColorsEnabled(false);
             break;
 
         case BlueChannel:
-            d->histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
+            d->histogramWidget->m_channelType = BlueChannel;
             setGradientColors(QColor("black"), QColor("blue"));
             setColorsEnabled(false);
             break;
 
         case AlphaChannel:
-            d->histogramWidget->m_channelType = HistogramWidget::AlphaChannelHistogram;
+            d->histogramWidget->m_channelType = AlphaChannel;
             setGradientColors(QColor("black"), QColor("white"));
             setColorsEnabled(false);
             break;
 
         case ColorChannels:
-            d->histogramWidget->m_channelType = HistogramWidget::ColorChannelsHistogram;
+            d->histogramWidget->m_channelType = ColorChannels;
             setGradientColors(QColor("black"), QColor("white"));
             setColorsEnabled(true);
             break;
@@ -309,23 +310,23 @@ void HistogramBox::slotColorsChanged()
 {
     switch (colorsChannel())
     {
-        case HistogramWidget::GreenColor:
-            d->histogramWidget->m_colorType = HistogramWidget::GreenColor;
+        case ColorChannelsGreen:
+            d->histogramWidget->m_colorType = ColorChannelsGreen;
             break;
 
-        case HistogramWidget::BlueColor:
-            d->histogramWidget->m_colorType = HistogramWidget::BlueColor;
+        case ColorChannelsBlue:
+            d->histogramWidget->m_colorType = ColorChannelsBlue;
             break;
 
         default: // Red.
-            d->histogramWidget->m_colorType = HistogramWidget::RedColor;
+            d->histogramWidget->m_colorType = ColorChannelsRed;
             break;
     }
 
     d->histogramWidget->repaint();
 }
 
-void HistogramBox::setHistogramType(HistogramType type)
+void HistogramBox::setHistogramType(HistogramBoxType type)
 {
     // all possible channels for histogram widget are defined in this map
     QMap<int, QPair<QString, QString> > channelDescMap;

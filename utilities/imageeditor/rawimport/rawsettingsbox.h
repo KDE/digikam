@@ -36,7 +36,6 @@
 namespace Digikam
 {
 
-class HistogramWidget;
 class CurvesWidget;
 class RawSettingsBoxPriv;
 

@@ -220,9 +220,9 @@ void ColorFXTool::readSettings()
     KConfigGroup group = config->group("coloreffect Tool");
 
     d->gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
-                        (int)EditorToolSettings::LuminosityChannel));
+                        (int)LuminosityChannel));
     d->gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
-                        (int)HistogramWidget::LogScaleHistogram));
+                        (int)LogScaleHistogram));
 
     d->effectType->setCurrentIndex(group.readEntry("EffectType", d->effectType->defaultIndex()));
     d->levelInput->setValue(group.readEntry("LevelAdjustment", d->levelInput->defaultValue()));
@@ -511,21 +511,21 @@ void ColorFXTool::vivid(int factor, uchar *data, int w, int h, bool sb)
 
     if (!sb)        // 8 bits image.
     {
-        Curves.setCurvePoint(ImageHistogram::ValueChannel, 0,  QPoint(0,   0));
-        Curves.setCurvePoint(ImageHistogram::ValueChannel, 5,  QPoint(63,  60));
-        Curves.setCurvePoint(ImageHistogram::ValueChannel, 10, QPoint(191, 194));
-        Curves.setCurvePoint(ImageHistogram::ValueChannel, 16, QPoint(255, 255));
+        Curves.setCurvePoint(LuminosityChannel, 0,  QPoint(0,   0));
+        Curves.setCurvePoint(LuminosityChannel, 5,  QPoint(63,  60));
+        Curves.setCurvePoint(LuminosityChannel, 10, QPoint(191, 194));
+        Curves.setCurvePoint(LuminosityChannel, 16, QPoint(255, 255));
     }
     else                    // 16 bits image.
     {
-        Curves.setCurvePoint(ImageHistogram::ValueChannel, 0,  QPoint(0,     0));
-        Curves.setCurvePoint(ImageHistogram::ValueChannel, 5,  QPoint(16128, 15360));
-        Curves.setCurvePoint(ImageHistogram::ValueChannel, 10, QPoint(48896, 49664));
-        Curves.setCurvePoint(ImageHistogram::ValueChannel, 16, QPoint(65535, 65535));
+        Curves.setCurvePoint(LuminosityChannel, 0,  QPoint(0,     0));
+        Curves.setCurvePoint(LuminosityChannel, 5,  QPoint(16128, 15360));
+        Curves.setCurvePoint(LuminosityChannel, 10, QPoint(48896, 49664));
+        Curves.setCurvePoint(LuminosityChannel, 16, QPoint(65535, 65535));
    }
 
-    Curves.curvesCalculateCurve(ImageHistogram::AlphaChannel);   // Calculate cure on all channels.
-    Curves.curvesLutSetup(ImageHistogram::AlphaChannel);         // ... and apply it on all channels
+    Curves.curvesCalculateCurve(AlphaChannel);   // Calculate cure on all channels.
+    Curves.curvesLutSetup(AlphaChannel);         // ... and apply it on all channels
     Curves.curvesLutProcess(data, dest, w, h);
 
     memcpy(data, dest, w*h*(sb ? 8 : 4));

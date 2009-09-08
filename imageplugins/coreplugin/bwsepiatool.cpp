@@ -527,7 +527,7 @@ QPixmap BWSepiaTool::getThumbnailForEffect(int type)
     if (m_curvesBox->curves())   // in case we're called before the creator is done
     {
         uchar *targetData = new uchar[w*h*(sb ? 8 : 4)];
-        m_curvesBox->curves()->curvesLutSetup(ImageHistogram::AlphaChannel);
+        m_curvesBox->curves()->curvesLutSetup(AlphaChannel);
         m_curvesBox->curves()->curvesLutProcess(thumb.bits(), targetData, w, h);
 
         DImg preview(w, h, sb, a, targetData);
@@ -574,9 +574,9 @@ void BWSepiaTool::readSettings()
 
     // we need to call the set methods here, otherwise the curve will not be updated correctly
     m_gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
-                    (int)EditorToolSettings::LuminosityChannel));
+                    (int)LuminosityChannel));
     m_gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
-                    (int)CurvesWidget::LogScaleHistogram));
+                    (int)LogScaleHistogram));
 
     slotFilterSelected();
 }
@@ -598,7 +598,7 @@ void BWSepiaTool::writeSettings()
 
 //    for (int j = 0 ; j < 17 ; ++j)
 //    {
-//        QPoint p = m_curvesBox->curves()->getCurvePoint(ImageHistogram::ValueChannel, j);
+//        QPoint p = m_curvesBox->curves()->getCurvePoint(ValueChannel, j);
 //
 //        if (m_originalImage->sixteenBit() && p.x() != -1)
 //        {
@@ -670,7 +670,7 @@ void BWSepiaTool::slotEffect()
     // Calculate and apply the curve on image.
 
     uchar *targetData = new uchar[w*h*(sb ? 8 : 4)];
-    m_curvesBox->curves()->curvesLutSetup(ImageHistogram::AlphaChannel);
+    m_curvesBox->curves()->curvesLutSetup(AlphaChannel);
     m_curvesBox->curves()->curvesLutProcess(m_destinationPreviewData, targetData, w, h);
 
     // Adjust contrast.
@@ -719,7 +719,7 @@ void BWSepiaTool::finalRendering()
         // Calculate and apply the curve on image.
 
         uchar *targetData = new uchar[w*h*(sb ? 8 : 4)];
-        m_curvesBox->curves()->curvesLutSetup(ImageHistogram::AlphaChannel);
+        m_curvesBox->curves()->curvesLutSetup(AlphaChannel);
         m_curvesBox->curves()->curvesLutProcess(data, targetData, w, h);
 
         // Adjust contrast.
@@ -1008,7 +1008,7 @@ void BWSepiaTool::slotLoadSettings()
                 p.setY(p.y()*255);
             }
 
-            m_curvesBox->curves()->setCurvePoint(ImageHistogram::ValueChannel, j, p);
+            m_curvesBox->curves()->setCurvePoint(LuminosityChannel, j, p);
         }
 
         for (int i = 0 ; i < 5 ; ++i)
@@ -1052,7 +1052,7 @@ void BWSepiaTool::slotSaveAsSettings()
 
         for (int j = 0 ; j < 17 ; ++j)
         {
-            QPoint p = m_curvesBox->curves()->getCurvePoint(ImageHistogram::ValueChannel, j);
+            QPoint p = m_curvesBox->curves()->getCurvePoint(LuminosityChannel, j);
             if (m_originalImage->sixteenBit())
             {
                 p.setX(p.x()/255);

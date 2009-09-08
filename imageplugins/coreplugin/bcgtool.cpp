@@ -207,9 +207,9 @@ void BCGTool::readSettings()
     KConfigGroup group        = config->group("bcgadjust Tool");
 
     d->gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
-                        (int)EditorToolSettings::LuminosityChannel));
+                        (int)LuminosityChannel));
     d->gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
-                        (int)HistogramWidget::LogScaleHistogram));
+                        (int)LogScaleHistogram));
 
     d->bInput->setValue(group.readEntry("BrightnessAdjustment", d->bInput->defaultValue()));
     d->cInput->setValue(group.readEntry("ContrastAdjustment", d->cInput->defaultValue()));

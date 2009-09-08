@@ -295,9 +295,9 @@ void RedEyeTool::readSettings()
     KConfigGroup group        = config->group("redeye Tool");
 
     d->gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
-                        (int)EditorToolSettings::LuminosityChannel));
+                        (int)LuminosityChannel));
     d->gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
-                        (int)HistogramWidget::LogScaleHistogram));
+                        (int)LogScaleHistogram));
 
     d->redThreshold->setValue(group.readEntry("RedThreshold", d->redThreshold->defaultValue()));
     d->smoothLevel->setValue(group.readEntry("SmoothLevel", d->smoothLevel->defaultValue()));

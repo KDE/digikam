@@ -386,7 +386,7 @@ void EditorToolSettings::setTools(Tools toolMask)
     d->guideBox->setVisible(toolMask & ColorGuide);
 }
 
-void EditorToolSettings::setHistogramType(HistogramBox::HistogramType type)
+void EditorToolSettings::setHistogramType(HistogramBoxType type)
 {
     d->histogramBox->setHistogramType(type);
 }

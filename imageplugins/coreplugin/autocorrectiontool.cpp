@@ -223,9 +223,9 @@ void AutoCorrectionTool::readSettings()
     KConfigGroup group        = config->group("autocorrection Tool");
 
     d->gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
-                        (int)EditorToolSettings::LuminosityChannel));
+                        (int)LuminosityChannel));
     d->gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
-                        (int)HistogramWidget::LogScaleHistogram));
+                        (int)LogScaleHistogram));
 
     d->correctionTools->setCurrentRow(group.readEntry("Auto Correction Filter", (int)AutoLevelsCorrection));
 }

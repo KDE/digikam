@@ -669,7 +669,7 @@ void ICCProofTool::readSettings()
             p.setY(p.y()*255);
         }
 
-        d->curvesWidget->curves()->setCurvePoint(ImageHistogram::ValueChannel, j, p);
+        d->curvesWidget->curves()->setCurvePoint(LuminosityChannel, j, p);
     }
 
     for (int i = 0 ; i < 5 ; ++i)
@@ -677,9 +677,9 @@ void ICCProofTool::readSettings()
 
     // we need to call the set methods here, otherwise the curve will not be updated correctly
     d->gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
-                    (int)EditorToolSettings::LuminosityChannel));
+                    (int)LuminosityChannel));
     d->gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
-                    (int)CurvesWidget::LogScaleHistogram));
+                    (int)LogScaleHistogram));
 }
 
 void ICCProofTool::writeSettings()
@@ -703,7 +703,7 @@ void ICCProofTool::writeSettings()
 
     for (int j = 0 ; j < 17 ; ++j)
     {
-        QPoint p = d->curvesWidget->curves()->getCurvePoint(ImageHistogram::ValueChannel, j);
+        QPoint p = d->curvesWidget->curves()->getCurvePoint(LuminosityChannel, j);
 
         if (d->originalImage->sixteenBit() && p.x() != -1)
         {
@@ -870,7 +870,7 @@ void ICCProofTool::slotEffect()
     //-- Calculate and apply the curve on image after transformation -------------
 
     DImg preview2(w, h, sb, a, 0, false);
-    d->curvesWidget->curves()->curvesLutSetup(ImageHistogram::AlphaChannel);
+    d->curvesWidget->curves()->curvesLutSetup(AlphaChannel);
     d->curvesWidget->curves()->curvesLutProcess(preview.bits(), preview2.bits(), w, h);
 
     //-- Adjust contrast ---------------------------------------------------------
@@ -924,7 +924,7 @@ void ICCProofTool::finalRendering()
         //-- Calculate and apply the curve on image after transformation -------------
 
         DImg img2(w, h, sb, a, 0, false);
-        d->curvesWidget->curves()->curvesLutSetup(ImageHistogram::AlphaChannel);
+        d->curvesWidget->curves()->curvesLutSetup(AlphaChannel);
         d->curvesWidget->curves()->curvesLutProcess(img.bits(), img2.bits(), w, h);
 
         //-- Adjust contrast ---------------------------------------------------------
@@ -1146,7 +1146,7 @@ void ICCProofTool::slotLoadSettings()
                 p.setY(p.y()*255);
             }
 
-            d->curvesWidget->curves()->setCurvePoint(ImageHistogram::ValueChannel, j, p);
+            d->curvesWidget->curves()->setCurvePoint(LuminosityChannel, j, p);
         }
 
         blockSignals(false);
@@ -1195,7 +1195,7 @@ void ICCProofTool::slotSaveAsSettings()
 
         for (int j = 0 ; j < 17 ; ++j)
         {
-            QPoint p = d->curvesWidget->curves()->getCurvePoint(ImageHistogram::ValueChannel, j);
+            QPoint p = d->curvesWidget->curves()->getCurvePoint(LuminosityChannel, j);
             if (d->originalImage->sixteenBit())
             {
                 p.setX(p.x()/255);

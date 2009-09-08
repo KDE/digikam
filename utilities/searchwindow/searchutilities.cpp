@@ -55,7 +55,7 @@
 
 // Local includes
 
-#include "constants.h"
+#include "globals.h"
 #include "albummodel.h"
 #include "ratingwidget.h"
 #include "themeengine.h"

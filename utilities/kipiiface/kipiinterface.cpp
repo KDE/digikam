@@ -34,7 +34,7 @@
 
 // Local includes
 
-#include "constants.h"
+#include "globals.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albumsettings.h"

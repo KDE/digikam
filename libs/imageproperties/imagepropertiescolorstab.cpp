@@ -163,13 +163,13 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     fullImageButton->setToolTip( i18n( "Full Image" ) );
     fullImageButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/image-full.png")));
     fullImageButton->setCheckable(true);
-    d->regionBG->addButton(fullImageButton, HistogramWidget::FullImageHistogram);
+    d->regionBG->addButton(fullImageButton, FullImageHistogram);
 
     QPushButton *SelectionImageButton = new QPushButton(d->regionBox);
     SelectionImageButton->setToolTip( i18n( "Selection" ) );
     SelectionImageButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/image-selection.png")));
     SelectionImageButton->setCheckable(true);
-    d->regionBG->addButton(SelectionImageButton, HistogramWidget::ImageSelectionHistogram);
+    d->regionBG->addButton(SelectionImageButton, ImageSelectionHistogram);
 
     hlay2->setMargin(0);
     hlay2->setSpacing(0);
@@ -179,7 +179,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     // -------------------------------------------------------------
 
     KVBox *histoBox    = new KVBox(histogramPage);
-    d->histogramBox    = new HistogramBox(histoBox, HistogramBox::LRGBAC, true);
+    d->histogramBox    = new HistogramBox(histoBox, Digikam::LRGBAC, true);
 
     QLabel *space = new QLabel(histoBox);
     space->setFixedHeight(1);
@@ -293,13 +293,13 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     d->iccProfileWidget->setCurrentItemByKey(group.readEntry("Current ICC Item", QString()));
 
     d->histogramBox->setChannel(group.readEntry("Histogram Channel",
-                                (int)HistogramBox::LuminosityChannel));
+                                (int)Digikam::LuminosityChannel));
     d->histogramBox->setScale(group.readEntry("Histogram Scale",
-                                (int)HistogramBox::Logarithmic));
+                              (int)LogScaleHistogram));
     d->histogramBox->setColorsChannel(group.readEntry("Histogram Color", 0));
 
     d->regionBG->button(group.readEntry("Histogram Rendering",
-                                        (int)HistogramWidget::FullImageHistogram))->setChecked(true);
+                                        (int)FullImageHistogram))->setChecked(true);
 
     // -------------------------------------------------------------
 
@@ -541,7 +541,7 @@ void ImagePropertiesColorsTab::setSelection(const QRect& selectionArea)
     else
     {
         d->regionBox->hide();
-        slotRenderingChanged(HistogramWidget::FullImageHistogram);
+        slotRenderingChanged(FullImageHistogram);
     }
 }
 
@@ -578,7 +578,7 @@ void ImagePropertiesColorsTab::slotScaleChanged()
 
 void ImagePropertiesColorsTab::slotRenderingChanged(int rendering)
 {
-    d->histogramBox->histogram()->setRenderingType((HistogramWidget::HistogramRenderingType)rendering);
+    d->histogramBox->histogram()->setRenderingType((HistogramRenderingType)rendering);
     updateStatistics();
 }
 
@@ -644,7 +644,7 @@ void ImagePropertiesColorsTab::updateStatistics()
     int max = d->maxInterv->value();
     int channel = d->histogramBox->channel();
 
-    if ( channel == HistogramWidget::ColorChannelsHistogram )
+    if ( channel == ColorChannels )
         channel = d->histogramBox->colorsChannel()+1;
 
     double mean = renderedHistogram->getMean(channel, min, max);

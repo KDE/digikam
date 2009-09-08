@@ -150,7 +150,7 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
                                 EditorToolSettings::Cancel);
 
     d->gboxSettings->setTools( EditorToolSettings::Histogram);
-    d->gboxSettings->setHistogramType(HistogramBox::LRGBA);
+    d->gboxSettings->setHistogramType(Digikam::LRGBA);
 
     d->gboxSettings->histogramBox()->histogram()->setWhatsThis(i18n("Here you can see the target preview "
                                                   "image histogram drawing of the selected image "
@@ -228,33 +228,33 @@ void AdjustCurvesTool::slotSpotColorChanged(const DColor& color)
         case CurvesBox::BlackTonal:
         {
             // Black tonal curves point.
-            d->curvesBox->curves()->setCurvePoint(ImageHistogram::ValueChannel, 1,
+            d->curvesBox->curves()->setCurvePoint(LuminosityChannel, 1,
                     QPoint(qMax(qMax(sc.red(), sc.green()), sc.blue()), 42*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(ImageHistogram::RedChannel, 1, QPoint(sc.red(), 42*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(ImageHistogram::GreenChannel, 1, QPoint(sc.green(), 42*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(ImageHistogram::BlueChannel, 1, QPoint(sc.blue(), 42*d->histoSegments/256));
+            d->curvesBox->curves()->setCurvePoint(RedChannel, 1, QPoint(sc.red(), 42*d->histoSegments/256));
+            d->curvesBox->curves()->setCurvePoint(GreenChannel, 1, QPoint(sc.green(), 42*d->histoSegments/256));
+            d->curvesBox->curves()->setCurvePoint(BlueChannel, 1, QPoint(sc.blue(), 42*d->histoSegments/256));
             d->curvesBox->resetPickers();
             break;
         }
         case CurvesBox::GrayTonal:
         {
             // Gray tonal curves point.
-            d->curvesBox->curves()->setCurvePoint(ImageHistogram::ValueChannel, 8,
+            d->curvesBox->curves()->setCurvePoint(LuminosityChannel, 8,
                     QPoint(qMax(qMax(sc.red(), sc.green()), sc.blue()), 128*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(ImageHistogram::RedChannel, 8, QPoint(sc.red(), 128*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(ImageHistogram::GreenChannel, 8, QPoint(sc.green(), 128*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(ImageHistogram::BlueChannel, 8, QPoint(sc.blue(), 128*d->histoSegments/256));
+            d->curvesBox->curves()->setCurvePoint(RedChannel, 8, QPoint(sc.red(), 128*d->histoSegments/256));
+            d->curvesBox->curves()->setCurvePoint(GreenChannel, 8, QPoint(sc.green(), 128*d->histoSegments/256));
+            d->curvesBox->curves()->setCurvePoint(BlueChannel, 8, QPoint(sc.blue(), 128*d->histoSegments/256));
             d->curvesBox->resetPickers();
             break;
         }
         case CurvesBox::WhiteTonal:
         {
             // White tonal curves point.
-            d->curvesBox->curves()->setCurvePoint(ImageHistogram::ValueChannel, 15,
+            d->curvesBox->curves()->setCurvePoint(LuminosityChannel, 15,
                     QPoint(qMax(qMax(sc.red(), sc.green()), sc.blue()), 213*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(ImageHistogram::RedChannel, 15, QPoint(sc.red(), 213*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(ImageHistogram::GreenChannel, 15, QPoint(sc.green(), 213*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(ImageHistogram::BlueChannel, 15, QPoint(sc.blue(), 213*d->histoSegments/256));
+            d->curvesBox->curves()->setCurvePoint(RedChannel, 15, QPoint(sc.red(), 213*d->histoSegments/256));
+            d->curvesBox->curves()->setCurvePoint(GreenChannel, 15, QPoint(sc.green(), 213*d->histoSegments/256));
+            d->curvesBox->curves()->setCurvePoint(BlueChannel, 15, QPoint(sc.blue(), 213*d->histoSegments/256));
             d->curvesBox->resetPickers();
             break;
         }
@@ -267,7 +267,7 @@ void AdjustCurvesTool::slotSpotColorChanged(const DColor& color)
 
     // Calculate Red, green, blue curves.
 
-    for (int i = ImageHistogram::ValueChannel ; i <= ImageHistogram::BlueChannel ; ++i)
+    for (int i = LuminosityChannel ; i <= BlueChannel ; ++i)
        d->curvesBox->curves()->curvesCalculateCurve(i);
 
     d->curvesBox->repaint();
@@ -306,7 +306,7 @@ void AdjustCurvesTool::slotEffect()
     d->destinationPreviewData = new uchar[w*h*(sb ? 8 : 4)];
 
     // Calculate the LUT to apply on the image.
-    d->curvesBox->curves()->curvesLutSetup(ImageHistogram::AlphaChannel);
+    d->curvesBox->curves()->curvesLutSetup(AlphaChannel);
 
     // Apply the LUT to the image.
     d->curvesBox->curves()->curvesLutProcess(orgData, d->destinationPreviewData, w, h);
@@ -333,7 +333,7 @@ void AdjustCurvesTool::finalRendering()
     uchar* desData = new uchar[w*h*(sb ? 8 : 4)];
 
     // Calculate the LUT to apply on the image.
-    d->curvesBox->curves()->curvesLutSetup(ImageHistogram::AlphaChannel);
+    d->curvesBox->curves()->curvesLutSetup(AlphaChannel);
 
     // Apply the LUT to the image.
     d->curvesBox->curves()->curvesLutProcess(orgData, desData, w, h);
@@ -366,9 +366,9 @@ void AdjustCurvesTool::readSettings()
 
     // we need to call the set methods here, otherwise the curve will not be updated correctly
     d->gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
-                    (int)EditorToolSettings::LuminosityChannel));
+                    (int)LuminosityChannel));
     d->gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
-                    (int)CurvesWidget::LogScaleHistogram));
+                    (int)LogScaleHistogram));
     d->curvesBox->setScale(d->gboxSettings->histogramBox()->scale());
     d->curvesBox->setChannel(d->gboxSettings->histogramBox()->channel());
     d->curvesBox->update();

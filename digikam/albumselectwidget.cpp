@@ -43,7 +43,7 @@
 
 // Local includes
 
-#include "constants.h"
+#include "globals.h"
 #include "album.h"
 #include "albummanager.h"
 #include "albumthumbnailloader.h"

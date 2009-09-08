@@ -38,7 +38,7 @@
 // Local includes
 
 #include "albumsettings.h"
-#include "constants.h"
+#include "globals.h"
 #include "databasetransaction.h"
 #include "imageattributeswatch.h"
 #include "loadingcacheinterface.h"

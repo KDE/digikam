@@ -32,6 +32,7 @@
 
 #include "digikam_export.h"
 #include "histogrambox.h"
+#include "globals.h"
 
 class KPushButton;
 
@@ -67,16 +68,6 @@ public:
     };
     Q_DECLARE_FLAGS(Tools, ToolCode)
 
-    enum ColorChannel
-    {
-        LuminosityChannel=0,
-        RedChannel,
-        GreenChannel,
-        BlueChannel,
-        AlphaChannel,
-        ColorChannels
-    };
-
 public:
 
     EditorToolSettings(QWidget *parent = 0);
@@ -84,7 +75,7 @@ public:
 
     void setButtons(Buttons buttonMask);
     void setTools(Tools toolMask);
-    void setHistogramType(HistogramBox::HistogramType type);
+    void setHistogramType(HistogramBoxType type);
 
     virtual void setBusy(bool){};
     virtual void writeSettings(){};

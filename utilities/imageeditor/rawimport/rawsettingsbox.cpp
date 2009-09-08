@@ -62,6 +62,7 @@
 #include "imagedialog.h"
 #include "imagehistogram.h"
 #include "rexpanderbox.h"
+#include "globals.h"
 
 using namespace KDcrawIface;
 
@@ -144,7 +145,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
 {
     setButtons(Default|Ok|Cancel);
     setTools(Histogram);
-    setHistogramType(HistogramBox::LRGBC);
+    setHistogramType(Digikam::LRGBC);
 
     QGridLayout* gridSettings = new QGridLayout(plainPage());
 
@@ -412,9 +413,9 @@ void RawSettingsBox::readSettings()
     KConfigGroup group        = config->group("RAW Import Settings");
 
     histogramBox()->setChannel(group.readEntry("Histogram Channel",
-                            (int)EditorToolSettings::LuminosityChannel));
+                            (int)LuminosityChannel));
     histogramBox()->setScale(group.readEntry("Histogram Scale",
-                            (int)HistogramWidget::LogScaleHistogram));
+                            (int)LogScaleHistogram));
 
 //    d->colorsCB->setCurrentIndex(group.readEntry("Histogram Color", (int)RawSettingsBoxPriv::AllColorsRed));
 
@@ -469,9 +470,9 @@ void RawSettingsBox::readSettings()
             p.setX(p.x()/255);
             p.setY(p.y()/255);
         }
-        d->curveWidget->curves()->setCurvePoint(ImageHistogram::ValueChannel, j, p);
+        d->curveWidget->curves()->setCurvePoint(LuminosityChannel, j, p);
     }
-    d->curveWidget->curves()->curvesCalculateCurve(ImageHistogram::ValueChannel);
+    d->curveWidget->curves()->curvesCalculateCurve(LuminosityChannel);
 
     d->tabView->setCurrentIndex(group.readEntry("Settings Page", 0));
 #if KDCRAW_VERSION <= 0x000500
@@ -524,7 +525,7 @@ void RawSettingsBox::writeSettings()
 
     for (int j = 0 ; j <= 17 ; ++j)
     {
-        QPoint p = d->curveWidget->curves()->getCurvePoint(ImageHistogram::ValueChannel, j);
+        QPoint p = d->curveWidget->curves()->getCurvePoint(LuminosityChannel, j);
         if (!d->curveWidget->curves()->isSixteenBits())
         {
             // Store point as 16 bits depth.
@@ -573,7 +574,7 @@ DRawDecoding RawSettingsBox::settings()
     settings.exposureComp            = d->fineExposureInput->value();
 
     if (d->curveWidget->curves()->isDirty())
-        settings.curveAdjust         = d->curveWidget->curves()->getCurvePoints(ImageHistogram::ValueChannel);
+        settings.curveAdjust         = d->curveWidget->curves()->getCurvePoints(LuminosityChannel);
 
     return settings;
 }

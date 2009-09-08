@@ -182,7 +182,7 @@ ChannelMixerTool::ChannelMixerTool(QObject* parent)
                                 EditorToolSettings::Cancel);
 
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
-    d->gboxSettings->setHistogramType(HistogramBox::RGB);
+    d->gboxSettings->setHistogramType(Digikam::RGB);
 
     QGridLayout* grid = new QGridLayout(d->gboxSettings->plainPage());
 
@@ -292,13 +292,13 @@ void ChannelMixerTool::slotResetCurrentChannel()
 {
     switch (d->gboxSettings->histogramBox()->channel())
     {
-        case EditorToolSettings::GreenChannel:         // Green.
+        case GreenChannel:
             d->greenRedGain     = 0.0;
             d->greenGreenGain   = 1.0;
             d->greenBlueGain    = 0.0;
             break;
 
-        case EditorToolSettings::BlueChannel:          // Blue.
+        case BlueChannel:
             d->blueRedGain      = 0.0;
             d->blueGreenGain    = 0.0;
             d->blueBlueGain     = 1.0;
@@ -334,13 +334,13 @@ void ChannelMixerTool::slotGainsChanged()
 {
     switch(d->gboxSettings->histogramBox()->channel())
     {
-       case EditorToolSettings::GreenChannel:           // Green.
+       case GreenChannel:           // Green.
           d->greenRedGain   = d->redGain->value()   / 100.0;
           d->greenGreenGain = d->greenGain->value() / 100.0;
           d->greenBlueGain  = d->blueGain->value()  / 100.0;
           break;
 
-       case EditorToolSettings::BlueChannel:            // Blue.
+       case BlueChannel:            // Blue.
           d->blueRedGain   = d->redGain->value()   / 100.0;
           d->blueGreenGain = d->greenGain->value() / 100.0;
           d->blueBlueGain  = d->blueGain->value()  / 100.0;
@@ -373,13 +373,13 @@ void ChannelMixerTool::adjustSliders()
 
     switch(d->gboxSettings->histogramBox()->channel())
     {
-       case EditorToolSettings::GreenChannel:           // Green.
+       case GreenChannel:           // Green.
           d->redGain->setValue(d->greenRedGain     * 100.0);
           d->greenGain->setValue(d->greenGreenGain * 100.0);
           d->blueGain->setValue(d->greenBlueGain   * 100.0);
           break;
 
-       case EditorToolSettings::BlueChannel:            // Blue.
+       case BlueChannel:            // Blue.
           d->redGain->setValue(d->blueRedGain     * 100.0);
           d->greenGain->setValue(d->blueGreenGain * 100.0);
           d->blueGain->setValue(d->blueBlueGain   * 100.0);
@@ -409,7 +409,7 @@ void ChannelMixerTool::adjustSliders()
 void ChannelMixerTool::slotMonochromeActived(bool mono)
 {
     d->gboxSettings->histogramBox()->setChannelEnabled(!mono);
-    d->gboxSettings->histogramBox()->setChannel(EditorToolSettings::RedChannel);
+    d->gboxSettings->histogramBox()->setChannel(RedChannel);
 }
 
 void ChannelMixerTool::slotEffect()
@@ -529,9 +529,9 @@ void ChannelMixerTool::readSettings()
 
     // we need to call the set methods here, otherwise the histogram will not be updated correctly
     d->gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
-                        (int)EditorToolSettings::LuminosityChannel));
+                        (int)LuminosityChannel));
     d->gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
-                        (int)HistogramWidget::LogScaleHistogram));
+                        (int)LogScaleHistogram));
 
     d->gboxSettings->histogramBox()->histogram()->reset();
 }
@@ -594,7 +594,7 @@ void ChannelMixerTool::slotResetSettings()
     d->monochrome->blockSignals(false);
     d->preserveLuminosity->blockSignals(false);
     d->gboxSettings->histogramBox()->histogram()->reset();
-    d->gboxSettings->histogramBox()->setChannel(EditorToolSettings::RedChannel);
+    d->gboxSettings->histogramBox()->setChannel(RedChannel);
 }
 
 // Load all gains.
@@ -614,7 +614,7 @@ void ChannelMixerTool::slotLoadSettings()
     if ( fp )
     {
         bool monochrome;
-        int  currentOutputChannel = EditorToolSettings::RedChannel;
+        int  currentOutputChannel = RedChannel;
         char buf1[1024];
         char buf2[1024];
         char buf3[1024];
@@ -628,11 +628,11 @@ void ChannelMixerTool::slotLoadSettings()
         // Get the current output channel in dialog.
 
         if (strcmp (buf1, "RED") == 0)
-            currentOutputChannel = EditorToolSettings::RedChannel;
+            currentOutputChannel = RedChannel;
         else if (strcmp (buf1, "GREEN") == 0)
-            currentOutputChannel = EditorToolSettings::GreenChannel;
+            currentOutputChannel = GreenChannel;
         else if (strcmp (buf1, "BLUE") == 0)
-            currentOutputChannel = EditorToolSettings::BlueChannel;
+            currentOutputChannel = BlueChannel;
 
         fscanf (fp, "%*s %s", buf1); // preview flag, preserved for compatibility
 
@@ -707,13 +707,13 @@ void ChannelMixerTool::slotSaveAsSettings()
 
         switch (d->gboxSettings->histogramBox()->channel())
         {
-           case EditorToolSettings::RedChannel:
+           case RedChannel:
               str = "RED";
               break;
-           case EditorToolSettings::GreenChannel:
+           case GreenChannel:
               str = "GREEN";
               break;
-           case EditorToolSettings::BlueChannel:
+           case BlueChannel:
               str = "BLUE";
               break;
            default:

@@ -56,7 +56,7 @@
 #include "albumdb.h"
 #include "albummanager.h"
 #include "albumsettings.h"
-#include "constants.h"
+#include "globals.h"
 #include "contextmenuhelper.h"
 #include "ddragobjects.h"
 #include "dimg.h"

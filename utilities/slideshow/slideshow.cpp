@@ -58,7 +58,7 @@
 
 // Local includes
 
-#include "constants.h"
+#include "globals.h"
 #include "dimg.h"
 #include "previewloadthread.h"
 #include "toolbar.h"

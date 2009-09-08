@@ -47,7 +47,7 @@
 // Local includes
 
 #include "template.h"
-#include "constants.h"
+#include "globals.h"
 #include "version.h"
 
 using namespace KExiv2Iface;

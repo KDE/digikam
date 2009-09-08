@@ -81,7 +81,7 @@
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "canvas.h"
-#include "constants.h"
+#include "globals.h"
 #include "databaseaccess.h"
 #include "databasewatch.h"
 #include "databasechangesets.h"

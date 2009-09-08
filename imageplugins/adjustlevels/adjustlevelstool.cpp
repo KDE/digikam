@@ -187,7 +187,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
                                 EditorToolSettings::Cancel);
 
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
-    d->gboxSettings->setHistogramType(HistogramBox::LRGBA);
+    d->gboxSettings->setHistogramType(Digikam::LRGBA);
 
     // we don't need to use the Gradient widget in this tool
     d->gboxSettings->histogramBox()->setGradientVisible(false);
@@ -554,7 +554,7 @@ void AdjustLevelsTool::slotEffect()
     d->destinationPreviewData = new uchar[w*h*(sb ? 8 : 4)];
 
     // Calculate the LUT to apply on the image.
-    d->levels->levelsLutSetup(ImageHistogram::AlphaChannel);
+    d->levels->levelsLutSetup(AlphaChannel);
 
     // Apply the lut to the image.
     d->levels->levelsLutProcess(orgData, d->destinationPreviewData, w, h);
@@ -581,7 +581,7 @@ void AdjustLevelsTool::finalRendering()
     uchar* desData = new uchar[w*h*(sb ? 8 : 4)];
 
     // Calculate the LUT to apply on the image.
-    d->levels->levelsLutSetup(ImageHistogram::AlphaChannel);
+    d->levels->levelsLutSetup(AlphaChannel);
 
     // Apply the lut to the image.
     d->levels->levelsLutProcess(orgData, desData, w, h);
@@ -598,40 +598,40 @@ void AdjustLevelsTool::slotChannelChanged()
     int channel = d->gboxSettings->histogramBox()->channel();
     switch (channel)
     {
-        case EditorToolSettings::LuminosityChannel:
-            d->levelsHistogramWidget->m_channelType = HistogramWidget::ValueHistogram;
+        case LuminosityChannel:
+            d->levelsHistogramWidget->m_channelType = LuminosityChannel;
             d->inputLevels->setColors(QColor("black"), QColor("white"));
             d->inputLevels->setColors(QColor("black"), QColor("white"));
             d->outputLevels->setColors(QColor("black"), QColor("white"));
             d->outputLevels->setColors(QColor("black"), QColor("white"));
             break;
 
-        case EditorToolSettings::RedChannel:
-            d->levelsHistogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
+        case RedChannel:
+            d->levelsHistogramWidget->m_channelType = RedChannel;
             d->inputLevels->setColors(QColor("black"), QColor("red"));
             d->inputLevels->setColors(QColor("black"), QColor("red"));
             d->outputLevels->setColors(QColor("black"), QColor("red"));
             d->outputLevels->setColors(QColor("black"), QColor("red"));
             break;
 
-        case EditorToolSettings::GreenChannel:
-            d->levelsHistogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
+        case GreenChannel:
+            d->levelsHistogramWidget->m_channelType = GreenChannel;
             d->inputLevels->setColors(QColor("black"), QColor("green"));
             d->inputLevels->setColors(QColor("black"), QColor("green"));
             d->outputLevels->setColors(QColor("black"), QColor("green"));
             d->outputLevels->setColors(QColor("black"), QColor("green"));
             break;
 
-        case EditorToolSettings::BlueChannel:
-            d->levelsHistogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
+        case BlueChannel:
+            d->levelsHistogramWidget->m_channelType = BlueChannel;
             d->inputLevels->setColors(QColor("black"), QColor("blue"));
             d->inputLevels->setColors(QColor("black"), QColor("blue"));
             d->outputLevels->setColors(QColor("black"), QColor("blue"));
             d->outputLevels->setColors(QColor("black"), QColor("blue"));
             break;
 
-        case EditorToolSettings::AlphaChannel:
-            d->levelsHistogramWidget->m_channelType = HistogramWidget::AlphaChannelHistogram;
+        case AlphaChannel:
+            d->levelsHistogramWidget->m_channelType = AlphaChannel;
             d->inputLevels->setColors(QColor("black"), QColor("white"));
             d->inputLevels->setColors(QColor("black"), QColor("white"));
             d->outputLevels->setColors(QColor("black"), QColor("white"));
@@ -689,9 +689,9 @@ void AdjustLevelsTool::readSettings()
     d->gboxSettings->histogramBox()->histogram()->reset();
 
     d->gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
-                    (int)EditorToolSettings::LuminosityChannel));
+                    (int)LuminosityChannel));
     d->gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
-                    (int)HistogramWidget::LogScaleHistogram));
+                    (int)LogScaleHistogram));
 
     // This is mandatory here to set spinbox values because slot connections
     // can be not set completely at plugin startup.

@@ -47,6 +47,7 @@
 // Local includes
 
 #include "imagehistogram.h"
+#include "globals.h"
 
 namespace Digikam
 {
@@ -167,10 +168,10 @@ void ImageLevels::levelsAuto(ImageHistogram *hist)
 {
     if (!d->levels || !hist) return;
 
-    levelsChannelReset(ImageHistogram::ValueChannel);
+    levelsChannelReset(LuminosityChannel);
 
-    for (int channel = ImageHistogram::RedChannel ;
-         channel <= ImageHistogram::BlueChannel ;
+    for (int channel = RedChannel ;
+         channel <= BlueChannel ;
          ++channel)
     {
        levelsChannelAuto(hist, channel);
@@ -239,16 +240,16 @@ int ImageLevels::levelsInputFromColor(int channel, const DColor& color)
 {
     switch (channel)
     {
-       case ImageHistogram::ValueChannel:
+        case LuminosityChannel:
           return qMax (qMax (color.red(), color.green()), color.blue());
 
-       case ImageHistogram::RedChannel:
+       case RedChannel:
           return color.red();
 
-       case ImageHistogram::GreenChannel:
+       case GreenChannel:
           return color.green();
 
-       case ImageHistogram::BlueChannel:
+       case BlueChannel:
           return color.blue();
     }
 

@@ -48,17 +48,6 @@ class DIGIKAM_EXPORT ImageHistogram : public QThread
 
 public:
 
-enum HistogramChannelType
-{
-    ValueChannel = 0,
-    RedChannel,
-    GreenChannel,
-    BlueChannel,
-    AlphaChannel
-};
-
-public:
-
     ImageHistogram(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits, QObject *parent = 0);
     ImageHistogram(const DImg& image, QObject *parent = 0);
     ~ImageHistogram();

@@ -680,7 +680,7 @@ void WhiteBalanceTool::slotResetSettings()
     d->temperatureInput->slotReset();
 
     d->previewWidget->resetSpotPosition();
-    d->gboxSettings->histogramBox()->setChannel(EditorToolSettings::LuminosityChannel);
+    d->gboxSettings->histogramBox()->setChannel(LuminosityChannel);
     d->gboxSettings->histogramBox()->histogram()->reset();
 
     blockWidgetSignals(false);
@@ -694,9 +694,9 @@ void WhiteBalanceTool::readSettings()
     KConfigGroup group = config->group("whitebalance Tool");
 
     d->gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
-                        (int)EditorToolSettings::LuminosityChannel));
+                        (int)LuminosityChannel));
     d->gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
-                        (int)HistogramWidget::LogScaleHistogram));
+                        (int)LogScaleHistogram));
 
     d->blackInput->setValue(group.readEntry("Black", d->blackInput->defaultValue()));
     d->mainExposureInput->setValue(group.readEntry("MainExposure", d->mainExposureInput->defaultValue()));

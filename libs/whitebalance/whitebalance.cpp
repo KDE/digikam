@@ -44,6 +44,7 @@
 // Local includes
 
 #include "imagehistogram.h"
+#include "globals.h"
 
 namespace Digikam
 {
@@ -187,13 +188,13 @@ void WhiteBalance::autoExposureAdjustement(uchar* data, int width, int height, b
     stop = width * height / 200;
 
     for (i = rgbMax, sum = 0; (i >= 0) && (sum < stop); --i)
-        sum += histogram->getValue(Digikam::ImageHistogram::ValueChannel, i);
+        sum += histogram->getValue(LuminosityChannel, i);
 
     expo = -log((float)(i+1) / rgbMax) / log(2);
     kDebug(50003) << "White level at:" << i;
 
     for (i = 1, sum = 0; (i < (int)rgbMax) && (sum < stop); ++i)
-        sum += histogram->getValue(Digikam::ImageHistogram::ValueChannel, i);
+        sum += histogram->getValue(LuminosityChannel, i);
 
     black = (double)i / rgbMax;
     black /= 2;

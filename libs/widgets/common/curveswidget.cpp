@@ -58,6 +58,7 @@
 
 #include "imagehistogram.h"
 #include "imagecurves.h"
+#include "globals.h"
 
 namespace Digikam
 {
@@ -145,7 +146,7 @@ void CurvesWidget::setup(int w, int h, bool readOnly)
 {
     d->readOnlyMode  = readOnly;
     d->curves        = new ImageCurves(true);
-    m_channelType    = ValueHistogram;
+    m_channelType    = LuminosityChannel;
     m_scaleType      = LogScaleHistogram;
     m_imageHistogram = 0;
 
@@ -240,7 +241,7 @@ void CurvesWidget::curveTypeChanged()
                 int index = CLAMP(i * m_imageHistogram->getHistogramSegments()/8,
                                   0, m_imageHistogram->getHistogramSegments()-1);
 
-                d->curves->setCurvePoint(m_channelType, i * 2, 
+                d->curves->setCurvePoint(m_channelType, i * 2,
                                          QPoint(index, d->curves->getCurveValue(m_channelType, index)));
             }
 
@@ -368,33 +369,33 @@ void CurvesWidget::paintEvent(QPaintEvent*)
 
     switch(m_channelType)
     {
-       case CurvesWidget::GreenChannelHistogram:    // Green channel.
-          max = histogram->getMaximum(ImageHistogram::GreenChannel);
+        case GreenChannel:
+          max = histogram->getMaximum(GreenChannel);
           break;
 
-       case CurvesWidget::BlueChannelHistogram:     // Blue channel.
-          max = histogram->getMaximum(ImageHistogram::BlueChannel);
+       case BlueChannel:
+          max = histogram->getMaximum(BlueChannel);
           break;
 
-       case CurvesWidget::RedChannelHistogram:      // Red channel.
-          max = histogram->getMaximum(ImageHistogram::RedChannel);
+       case RedChannel:
+          max = histogram->getMaximum(RedChannel);
           break;
 
-       case CurvesWidget::AlphaChannelHistogram:    // Alpha channel.
-          max = histogram->getMaximum(ImageHistogram::AlphaChannel);
+       case AlphaChannel:
+          max = histogram->getMaximum(AlphaChannel);
           break;
 
-       case CurvesWidget::ValueHistogram:           // Luminosity.
-          max = histogram->getMaximum(ImageHistogram::ValueChannel);
+       case LuminosityChannel:
+          max = histogram->getMaximum(LuminosityChannel);
           break;
     }
 
     switch (m_scaleType)
     {
-       case CurvesWidget::LinScaleHistogram:
+       case LinScaleHistogram:
           break;
 
-       case CurvesWidget::LogScaleHistogram:
+       case LogScaleHistogram:
           if (max > 0.0)
               max = log (max);
           else
@@ -429,24 +430,24 @@ void CurvesWidget::paintEvent(QPaintEvent*)
 
             switch(m_channelType)
             {
-                case CurvesWidget::RedChannelHistogram:      // Red channel.
-                    v = histogram->getValue(ImageHistogram::RedChannel, i++);
+                case RedChannel:
+                    v = histogram->getValue(RedChannel, i++);
                     break;
 
-                case CurvesWidget::GreenChannelHistogram:    // Green channel.
-                    v = histogram->getValue(ImageHistogram::GreenChannel, i++);
+                case GreenChannel:
+                    v = histogram->getValue(GreenChannel, i++);
                     break;
 
-                case CurvesWidget::BlueChannelHistogram:     // Blue channel.
-                    v = histogram->getValue(ImageHistogram::BlueChannel, i++);
+                case BlueChannel:
+                    v = histogram->getValue(BlueChannel, i++);
                     break;
 
-                case CurvesWidget::AlphaChannelHistogram:    // Alpha channel.
-                    v = histogram->getValue(ImageHistogram::AlphaChannel, i++);
+                case AlphaChannel:
+                    v = histogram->getValue(AlphaChannel, i++);
                     break;
 
-                case CurvesWidget::ValueHistogram:           // Luminosity.
-                    v = histogram->getValue(ImageHistogram::ValueChannel, i++);
+                case LuminosityChannel:
+                    v = histogram->getValue(LuminosityChannel, i++);
                     break;
             }
 
@@ -457,11 +458,11 @@ void CurvesWidget::paintEvent(QPaintEvent*)
 
         switch (m_scaleType)
         {
-            case CurvesWidget::LinScaleHistogram:
+            case LinScaleHistogram:
                 y = (int) ((wHeight * value) / max);
                 break;
 
-            case CurvesWidget::LogScaleHistogram:
+            case LogScaleHistogram:
                 if (value <= 0.0) value = 1.0;
                 y = (int) ((wHeight * log (value)) / max);
                 break;
@@ -544,19 +545,19 @@ void CurvesWidget::paintEvent(QPaintEvent*)
    {
         switch(m_channelType)
         {
-            case CurvesWidget::RedChannelHistogram:
+            case RedChannel:
                 guidePos = d->colorGuide.red();
                 break;
 
-            case CurvesWidget::GreenChannelHistogram:
+            case GreenChannel:
                 guidePos = d->colorGuide.green();
                 break;
 
-            case CurvesWidget::BlueChannelHistogram:
+            case BlueChannel:
                 guidePos = d->colorGuide.blue();
                 break;
 
-            case CurvesWidget::ValueHistogram:
+            case LuminosityChannel:
                 guidePos = qMax(qMax(d->colorGuide.red(), d->colorGuide.green()), d->colorGuide.blue());
                 break;
 
