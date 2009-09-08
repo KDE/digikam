@@ -7,7 +7,7 @@
  * Description : a Brightness/Contrast/Gamma image filter.
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,6 +35,7 @@
 // Local includes
 
 #include "dimg.h"
+#include "globals.h"
 
 namespace Digikam
 {
@@ -45,7 +46,7 @@ public:
 
     BCGModifierPriv()
     {
-        channel  = BCGModifier::CHANNEL_ALL;
+        channel  = ColorChannels;
         modified = false;
     }
 
@@ -56,7 +57,7 @@ public:
     int  map[256];
 };
 
-BCGModifier::BCGModifier() 
+BCGModifier::BCGModifier()
            : d(new BCGModifierPriv)
 {
     reset();
@@ -108,19 +109,19 @@ void BCGModifier::applyBCG(uchar *bits, uint width, uint height, bool sixteenBit
         {
             switch (d->channel)
             {
-                case CHANNEL_BLUE:
+                case BlueChannel:
                     data[0] = CLAMP_0_255(d->map[data[0]]);
                     break;
 
-                case CHANNEL_GREEN:
+                case GreenChannel:
                     data[1] = CLAMP_0_255(d->map[data[1]]);
                     break;
 
-                case CHANNEL_RED:
+                case RedChannel:
                     data[2] = CLAMP_0_255(d->map[data[2]]);
                     break;
 
-                default:      // CHANNEL_ALL
+                default:      // all channels
                     data[0] = CLAMP_0_255(d->map[data[0]]);
                     data[1] = CLAMP_0_255(d->map[data[1]]);
                     data[2] = CLAMP_0_255(d->map[data[2]]);
@@ -138,19 +139,19 @@ void BCGModifier::applyBCG(uchar *bits, uint width, uint height, bool sixteenBit
         {
             switch (d->channel)
             {
-                case CHANNEL_BLUE:
+                case BlueChannel:
                     data[0] = CLAMP_0_65535(d->map16[data[0]]);
                     break;
 
-                case CHANNEL_GREEN:
+                case GreenChannel:
                     data[1] = CLAMP_0_65535(d->map16[data[1]]);
                     break;
 
-                case CHANNEL_RED:
+                case RedChannel:
                     data[2] = CLAMP_0_65535(d->map16[data[2]]);
                     break;
 
-                default:      // CHANNEL_ALL
+                default:      // all channels
                     data[0] = CLAMP_0_65535(d->map16[data[0]]);
                     data[1] = CLAMP_0_65535(d->map16[data[1]]);
                     data[2] = CLAMP_0_65535(d->map16[data[2]]);
