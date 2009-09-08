@@ -46,7 +46,7 @@ public:
 
     BCGModifierPriv()
     {
-        channel  = ColorChannels;
+        channel  = LuminosityChannel;
         modified = false;
     }
 
