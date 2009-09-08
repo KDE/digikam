@@ -64,6 +64,8 @@ using namespace std;
 namespace Digikam
 {
 
+typedef QMap<qlonglong, Haar::SignatureData> SignatureCache;
+
 /** This class encapsulates the Haar signature in a QByteArray
  *  that can be stored as a BLOB in the database.
  *
@@ -189,7 +191,7 @@ public:
         // Getting all signatures and removing the not wanted ones is really more efficient
         // then doing X queries (where X = imageIds.count())
 
-        for (QMap<qlonglong, Haar::SignatureData>::iterator it = signatureCache->begin();
+        for (SignatureCache::iterator it = signatureCache->begin();
              it != signatureCache->end(); )
         {
             if (!imageIds.contains(it.key()))
@@ -205,7 +207,7 @@ public:
             delete signatureCache;
 
         if (cache)
-            signatureCache = new QMap<qlonglong, Haar::SignatureData>();
+            signatureCache = new SignatureCache();
 
         useSignatureCache = cache;
 
@@ -221,7 +223,7 @@ public:
         Haar::SignatureData targetSig;
 
         // reference for easier access
-        QMap<qlonglong, Haar::SignatureData> &signatureCache = *this->signatureCache;
+        SignatureCache &signatureCache = *this->signatureCache;
 
         query = access.backend()->prepareQuery(signatureQuery);
         if (!access.backend()->exec(query))
@@ -235,13 +237,13 @@ public:
         }
     }
 
-    bool                                  useSignatureCache;
-    Haar::ImageData                      *data;
-    Haar::WeightBin                      *bin;
-    QMap<qlonglong, Haar::SignatureData> *signatureCache;
-    QString                               signatureQuery;
-    QString                               signatureByAlbumRootsQuery;
-    QSet<int>                             albumRootsToSearch;
+    bool              useSignatureCache;
+    Haar::ImageData*  data;
+    Haar::WeightBin*  bin;
+    SignatureCache*   signatureCache;
+    QString           signatureQuery;
+    QString           signatureByAlbumRootsQuery;
+    QSet<int>         albumRootsToSearch;
 };
 
 HaarIface::HaarIface()
@@ -395,7 +397,7 @@ QList<qlonglong> HaarIface::bestMatchesForImageWithThreshold(qlonglong imageid, 
     else
     {
         // reference for easier access
-        QMap<qlonglong, Haar::SignatureData>& signatureCache = *d->signatureCache;
+        SignatureCache& signatureCache = *d->signatureCache;
         Haar::SignatureData& sig = signatureCache[imageid];
         return bestMatchesWithThreshold(&sig, requiredPercentage, type);
     }
@@ -537,7 +539,7 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData *querySig,
     Haar::SignatureData targetSig;
 
     // reference for easier access
-    QMap<qlonglong, Haar::SignatureData> &signatureCache = *d->signatureCache;
+    SignatureCache &signatureCache = *d->signatureCache;
 
     bool filterByAlbumRoots = !d->albumRootsToSearch.isEmpty();
 
