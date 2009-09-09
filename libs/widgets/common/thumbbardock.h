@@ -106,21 +106,18 @@ public:
     /* Return a KToggleAction to show and hide the thumbnail bar. */
     KToggleAction *getToggleAction(QObject *parent, QString caption = i18n("Show Thumbbar"));
 
-    /* The first two functions can be used to hide a (floating) thumbbar and
-     * show it again, if it was visible. They can be thought of as the state
-     * respecting counterparts of hide and show.
-     * The third and fourth function specify if the thumbbar should be visible
-     * when restoreVisibility is called. The first time the window is shown
-     * after calling these last two functions, the "should be" state is reset to
-     * whatever the current state is.
-     * NOTE: The setVisible() (or show() and hide()) functions are still
-     * available as low-level functions, but they don't keep track of the state.
-     * To do that, the showThumbBar() function is available.
+    /* The normal show() and hide() functions don't apply that well, because
+     * there are two orthogonal reasons to hide the thumbbar: the user doesn't
+     * want it, and the window with the thumbbar isn't shown.
+     * The restoreVisibility() function will set the visibility status to what
+     * it should be according to the user setting. The setShouldBeVisible()
+     * function can change this setting. showThumbBar() can be used to hide and
+     * show the thumbbar according to the user preference. shouldBeVisible()
+     * tells whether the thumbbar should be shown according to the user.
      */
-    void makeInvisible();
-    void restoreVisibility();
     bool shouldBeVisible();
     void setShouldBeVisible(bool);
+    void restoreVisibility();
 
 public Q_SLOTS:
 

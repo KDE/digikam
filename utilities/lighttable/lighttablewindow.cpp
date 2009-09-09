@@ -200,7 +200,7 @@ void LightTableWindow::closeEvent(QCloseEvent* e)
     // the thumbnail bar isn't visible.
     if (isVisible())
     {
-        d->barViewDock->makeInvisible();
+        d->barViewDock->hide();
     }
 
     writeSettings();

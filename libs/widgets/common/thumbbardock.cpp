@@ -165,18 +165,6 @@ KToggleAction *ThumbBarDock::getToggleAction(QObject *parent, QString caption)
     return action;
 }
 
-void ThumbBarDock::makeInvisible()
-{
-    // Set any SHOULD_BE_ values to their WAS_ values to implement correct
-    // behavior on subsequent calls.
-    if ((m_visible != SHOULD_BE_HIDDEN) && (m_visible != SHOULD_BE_SHOWN))
-    {
-        if (isVisible()) m_visible = WAS_SHOWN;
-        else             m_visible = WAS_HIDDEN;
-    }
-    hide();
-}
-
 void ThumbBarDock::restoreVisibility()
 {
     // Set the visibility to what it should be or to what it was. Reset

@@ -1936,7 +1936,7 @@ void EditorWindow::toggleGUI2FullScreen()
         rightSideBar()->backup(QList<QWidget*>() << thumbBar(), &d->fullscreenSizeBackup);
 
         if (m_fullScreenHideThumbBar)
-                thumbBar()->makeInvisible();
+                thumbBar()->hide();
     }
 }
 

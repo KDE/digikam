@@ -304,7 +304,7 @@ void AlbumWidgetStack::setPreviewMode(int mode)
     }
     else
     {
-        d->thumbBarDock->makeInvisible();
+        d->thumbBarDock->hide();
     }
 
     if (mode == PreviewAlbumMode || mode == WelcomePageMode)

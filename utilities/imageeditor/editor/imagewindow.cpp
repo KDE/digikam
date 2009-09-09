@@ -263,7 +263,7 @@ void ImageWindow::closeEvent(QCloseEvent* e)
     // the thumbnail bar isn't visible.
     if (isVisible())
     {
-        thumbBar()->makeInvisible();
+        thumbBar()->hide();
     }
 
     KSharedConfig::Ptr config = KGlobal::config();
