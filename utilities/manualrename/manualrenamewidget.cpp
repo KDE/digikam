@@ -79,7 +79,7 @@ public:
     ManualRenameParser* parser;
 };
 
-ManualRenameWidget::ManualRenameWidget(QWidget* parent)
+ManualRenameWidget::ManualRenameWidget(QWidget* parent, int maxLayoutColumns)
                  : QWidget(parent), d(new ManualRenameWidgetPriv)
 {
     setAttribute(Qt::WA_DeleteOnClose);
@@ -112,7 +112,7 @@ ManualRenameWidget::ManualRenameWidget(QWidget* parent)
 
     // --------------------------------------------------------
 
-    registerParsers();
+    registerParsers(maxLayoutColumns);
     setInputStyle(BigButtons);
 
     // --------------------------------------------------------
@@ -214,7 +214,7 @@ void ManualRenameWidget::setInputStyle(InputStyles inputMask)
     d->insertTokenToolButton->setVisible(inputMask & ToolButton);
 }
 
-void ManualRenameWidget::registerParsers(int maxColumns)
+void ManualRenameWidget::registerParsers(int maxLayoutColumns)
 {
    if (!d->parser)
    {
@@ -247,7 +247,7 @@ void ManualRenameWidget::registerParsers(int maxColumns)
 
            ++column;
 
-           if (column % maxColumns == 0)
+           if (column % maxLayoutColumns == 0)
            {
                ++row;
                column = 0;
@@ -257,12 +257,12 @@ void ManualRenameWidget::registerParsers(int maxColumns)
        // --------------------------------------------------------
 
        // If the buttons don't fill up all columns, expand the last button to fit the layout
-       if ((row >= (maxParsers / maxColumns)) && (column == 0))
+       if ((row >= (maxParsers / maxLayoutColumns)) && (column == 0))
        {
            gridLayout->removeWidget(btn);
-           gridLayout->addWidget(btn, (row - 1), (maxColumns - 1), 1, 1);
+           gridLayout->addWidget(btn, (row - 1), (maxLayoutColumns - 1), 1, 1);
        }
-       else if (column != maxColumns)
+       else if (column != maxLayoutColumns)
        {
            gridLayout->removeWidget(btn);
            gridLayout->addWidget(btn, row, (column - 1), 1, -1);

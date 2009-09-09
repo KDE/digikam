@@ -60,7 +60,7 @@ public:
     };
     Q_DECLARE_FLAGS(InputStyles, InputStyle)
 
-    ManualRenameWidget(QWidget* parent = 0);
+    ManualRenameWidget(QWidget* parent = 0, int maxLayoutColumns = 2);
     ~ManualRenameWidget();
 
     QString text() const;
@@ -88,7 +88,7 @@ private Q_SLOTS:
 private:
 
     QString createToolTip();
-    void    registerParsers(int maxColumns = 2);
+    void    registerParsers(int maxLayoutColumns);
 
 private:
 
