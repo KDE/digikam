@@ -187,6 +187,8 @@ void MetadataParser::parseOperation(QString& parseString, const ParseInformation
 
 #if KEXIV2_VERSION >= 0x010000
             tmp = parseMetadata(keyword, info);
+#else
+            Q_UNUSED(info)
 #endif
             QString result = markResult(regExp.matchedLength(), tmp);
             parseString.replace(pos, regExp.matchedLength(), result);
