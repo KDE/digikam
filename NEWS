@@ -15,7 +15,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 006 ==> 206487 : Unsharp mask algorithm in batch processing should equal the one in kipi.
 007 ==> 206570 : Crashed when scrolling through thumbnails in edit mode.
 008 ==> 206712 : Raw Import Tool: RGB (linear) provides gamma corrected output and should be named as such.
-009 ==> 
+009 ==> 206857 : Unclear English in sentence.
+010 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta4 - Release date: 2009-08-30
