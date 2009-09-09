@@ -151,16 +151,16 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     QWidget* firstPage = new QWidget();
     QGridLayout* grid1 = new QGridLayout(firstPage);
 
-    QLabel *label1   = new QLabel(i18n("Function:"), firstPage);
-    d->functionInput = new RComboBox(firstPage);
+    QLabel *label1     = new QLabel(i18n("Function:"), firstPage);
+    d->functionInput   = new RComboBox(firstPage);
     d->functionInput->addItem(i18n("Power"));
     d->functionInput->addItem(i18n("Linear"));
     d->functionInput->setDefaultIndex(0);
-    d->functionInput->setWhatsThis(i18n("<b>Function</b>: This is the function which combines the original RGB channels "
-                                        "with the desaturated blurred image. This function used on each of the tonemapping "
-                                        "stage. It can linear or power. Basically, these function increase the value where "
-                                        "both the original and blurred image's value are low and do the opposite on high "
-                                        "values."));
+    d->functionInput->setWhatsThis(i18n("<b>Function</b>: This function combines the original RGB "
+                                        "channels with the desaturated blurred image. This function is used in each of "
+                                        "the tonemapping stages. It can be linear or power. Basically, this function "
+                                        "increases the values where both the original and blurred image's value are low "
+                                        "and do the opposite on high values."));
 
     // -------------------------------------------------------------
 
