@@ -74,6 +74,7 @@ protected:
 
     virtual void mouseMoveEvent(QMouseEvent* e);
     virtual void mousePressEvent(QMouseEvent* e);
+    virtual void focusInEvent(QFocusEvent* e);
     virtual void focusOutEvent(QFocusEvent* e);
 
 private Q_SLOTS:
@@ -85,6 +86,7 @@ private Q_SLOTS:
 private:
 
     bool highlightToken(int cursorPos);
+    bool tokenIsSelected();
 
 private:
 

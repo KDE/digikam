@@ -80,6 +80,7 @@ public:
 ManualRenameLineEdit::ManualRenameLineEdit(QWidget* parent)
                     : KLineEdit(parent), d(new ManualRenameLineEditPriv)
 {
+    setFocusPolicy(Qt::StrongFocus);
     setClearButtonShown(true);
     setCompletionMode(KGlobalSettings::CompletionAuto);
     setClickMessage(i18n("Enter custom rename string"));
@@ -178,9 +179,32 @@ void ManualRenameLineEdit::mousePressEvent(QMouseEvent* e)
     }
 }
 
+void ManualRenameLineEdit::focusInEvent(QFocusEvent* e)
+{
+    KLineEdit::focusInEvent(e);
+    setCursorPosition(d->curCursorPos);
+
+    if (tokenIsSelected())
+    {
+        setSelection(d->selectionStart, d->selectionLength);
+    }
+}
+
 void ManualRenameLineEdit::focusOutEvent(QFocusEvent* e)
 {
-    Q_UNUSED(e)
+    if (hasSelectedText() && tokenIsSelected())
+    {
+        d->selectionStart  = selectionStart();
+        d->selectionLength = selectedText().count();
+    }
+    else
+    {
+        d->selectionStart  = -1;
+        d->selectionLength = -1;
+    }
+    d->curCursorPos = cursorPosition();
+
+    KLineEdit::focusOutEvent(e);
 }
 
 bool ManualRenameLineEdit::highlightToken(int cursorPos)
@@ -211,6 +235,14 @@ bool ManualRenameLineEdit::highlightToken(int cursorPos)
     }
 
     return (found && hasSelectedText());
+}
+
+bool ManualRenameLineEdit::tokenIsSelected()
+{
+    bool selected = false;
+    selected      = (d->selectionStart != -1) && (d->selectionLength != -1) &&
+                    (d->markedTokenPos == d->selectionStart) && d->tokenMarked;
+    return selected;
 }
 
 bool ManualRenameLineEdit::findToken(int curPos)
@@ -278,8 +310,12 @@ void ManualRenameLineEdit::slotAddToken(const QString& token)
 {
     if (!token.isEmpty())
     {
+        if (tokenIsSelected())
+            setSelection(d->selectionStart, d->selectionLength);
+
         if (hasSelectedText())
             del();
+
         int cursorPos = cursorPosition();
         QString tmp   = text();
         tmp.insert(cursorPos, token);
