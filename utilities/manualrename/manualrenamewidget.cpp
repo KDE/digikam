@@ -122,6 +122,7 @@ ManualRenameWidget::ManualRenameWidget(QWidget* parent, int maxLayoutColumns)
     d->tooltipTracker->setEnable(false);
     d->tooltipTracker->setKeepOpen(true);
     d->tooltipTracker->setOpenExternalLinks(true);
+    setTrackerAlignment(Qt::AlignLeft);
 
     // --------------------------------------------------------
 
