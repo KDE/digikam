@@ -85,8 +85,10 @@ ManualRenameLineEdit::ManualRenameLineEdit(QWidget* parent)
     setCompletionMode(KGlobalSettings::CompletionAuto);
     setClickMessage(i18n("Enter custom rename string"));
     setToolTip(i18n("<p>Hold CTRL and move the mouse over the line edit widget to highlight token words.<br/>"
-                    "To mark a token, press the left mouse button while it is highlighted.<br/>"
-                    "Marked tokens can be moved around with the control buttons.</p>"));
+                    "To mark a token, press the left mouse button while it is highlighted."
+//                    "<br/>"
+//                    "Marked tokens can be moved around with the control buttons."
+                    "</p>"));
 
     d->curCursorPos = cursorPosition();
 
