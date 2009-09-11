@@ -194,6 +194,7 @@ protected:
      * Every token that has been parsed in the @see parseOperation() MUST be marked with this method, otherwise the
      * parseString can not be reconstructed correctly.
      *
+     * @param length the original token length
      * @param result the result token to be marked
      * @return
      */
