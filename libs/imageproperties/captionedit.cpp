@@ -106,11 +106,13 @@ void CaptionEdit::slotAddValue(const QString& lang, const QString& text)
     val.author  = d->authorEdit->text();
     val.date    = QDateTime::currentDateTime();
     d->captionsValues.insert(lang, val);
+    emit signalModified();
 }
 
 void CaptionEdit::slotDeleteValue(const QString& lang)
 {
     d->captionsValues.remove(lang);
+    emit signalModified();
 }
 
 void CaptionEdit::slotSelectionChanged(const QString& lang)

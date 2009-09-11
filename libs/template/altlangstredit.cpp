@@ -460,7 +460,7 @@ void AltLangStrEdit::slotTextChanged()
     QString text = d->valueEdit->toPlainText();
     if (text.isEmpty())
     {
-        d->addValueButton->setEnabled(false);
+        slotDeleteValue();
         return;
     }
 
@@ -487,7 +487,8 @@ bool AltLangStrEdit::isDirty() const
 
 void AltLangStrEdit::apply()
 {
-    slotAddValue();
+    if (d->addValueButton->isEnabled())
+        slotAddValue();
 }
 
 }  // namespace Digikam
