@@ -626,8 +626,9 @@ void SetupICC::applySettings()
 
     settings.defaultInputProfile = d->inProfilesKC->currentProfile().filePath();
     settings.workspaceProfile = d->workProfilesKC->currentProfile().filePath();
-    settings.monitorProfile = d->monitorProfilesKC->currentProfile().filePath();
     settings.defaultProofProfile = d->proofProfilesKC->currentProfile().filePath();
+    if (!IccSettings::instance()->monitorProfileFromSystem())
+        settings.monitorProfile = d->monitorProfilesKC->currentProfile().filePath();
 
     IccSettings::instance()->setSettings(settings);
 }
@@ -695,9 +696,16 @@ void SetupICC::readSettings(bool restore)
     fillCombos(false);
 
     d->workProfilesKC->setCurrentProfile(settings.workspaceProfile);
-    d->monitorProfilesKC->setCurrentProfile(settings.monitorProfile);
     d->inProfilesKC->setCurrentProfile(settings.defaultInputProfile);
     d->proofProfilesKC->setCurrentProfile(settings.defaultProofProfile);
+
+    if (IccSettings::instance()->monitorProfileFromSystem())
+    {
+        d->monitorProfilesKC->clear();
+        d->monitorProfilesKC->setNoProfileIfEmpty(i18n("Monitor Profile From System Settings"));
+    }
+    else
+        d->monitorProfilesKC->setCurrentProfile(settings.monitorProfile);
 }
 
 void SetupICC::slotUrlChanged()

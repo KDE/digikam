@@ -54,6 +54,9 @@ public:
     /// Returns the current ICC settings.
     ICCSettingsContainer settings();
 
+    /// Returns if color management is enabled
+    bool isEnabled();
+
     /**
      * Returns the monitor profile (for color managed view).
      * If there are multiple screens, a system-wide settings specifies the monitor profile,
@@ -61,8 +64,13 @@ public:
      * If no settings is specified, the default sRGB profile is returned.
      */
     IccProfile monitorProfile(QWidget *widget = 0);
-    /// Returns if color management is enabled
-    bool isEnabled();
+
+    /**
+     * Returns if the monitor profile (as returned by monitorProfile())
+     * is set system-wide, so that the monitorProfile field of the current settings
+     * need not be set and will not be used by monitorProfile().
+     */
+    bool monitorProfileFromSystem();
 
     /**
      * Sets the current ICC settings and writes them to config.

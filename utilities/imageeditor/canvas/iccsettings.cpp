@@ -125,6 +125,25 @@ IccProfile IccSettings::monitorProfile(QWidget *widget)
         return IccProfile::sRGB();
 }
 
+bool IccSettings::monitorProfileFromSystem()
+{
+    // First, look into cache
+    {
+        QMutexLocker lock(&d->mutex);
+        foreach (const IccProfile &profile, d->screenProfiles)
+            if (!profile.isNull())
+                return true;
+    }
+
+    // Second, check all toplevel widgets
+    QList<QWidget*> topLevels = qApp->topLevelWidgets();
+    foreach (QWidget *widget, topLevels)
+        if (!d->profileFromWindowSystem(widget).isNull())
+            return true;
+
+    return false;
+}
+
 /*
  * From koffice/libs/pigment/colorprofiles/KoLcmsColorProfileContainer.cpp
  * Copyright (c) 2000 Matthias Elter <elter@kde.org>
@@ -186,7 +205,7 @@ IccProfile IccSettingsPriv::profileFromWindowSystem(QWidget *widget)
         QByteArray bytes = QByteArray::fromRawData((char*)str, (quint32)nitems);
 
         profile = bytes;
-        kDebug() << "Found X.org XICC monitor profile" << profile.description();
+        kDebug(50003) << "Found X.org XICC monitor profile" << profile.description();
     }
     //else
       //  kDebug(50003) << "No X.org XICC profile installed for screen" << screenNumber;
