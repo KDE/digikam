@@ -191,6 +191,9 @@ protected:
      * This ensures that token characters can exist in replacement strings, without being parsed again, which in some cases
      * might even lead to an infinite parse loop.
      *
+     * Every token that has been parsed in the @see parseOperation() MUST be marked with this method, otherwise the
+     * parseString can not be reconstructed correctly.
+     *
      * @param result the result token to be marked
      * @return
      */
