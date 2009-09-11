@@ -17,7 +17,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 206712 : Raw Import Tool: RGB (linear) provides gamma corrected output and should be named as such.
 009 ==> 206857 : Unclear English in sentence.
 010 ==> 149485 : Advanced image resize for the digikam editor.
-011 ==> 
+011 ==> 206426 : Default ICC profile locations reads the same directory twice.
+012 ==> 
+
 
 *********************************************************************************************************
 digiKam 1.0.0-beta4 - Release date: 2009-08-30

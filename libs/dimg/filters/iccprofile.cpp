@@ -430,8 +430,11 @@ QStringList IccProfile::defaultSearchPaths()
 
         // XDG_DATA_HOME
         QString dataHomeDir = QString::fromLocal8Bit(getenv("XDG_DATA_HOME"));
-        candidates << dataHomeDir + "/color/icc";
-        candidates << dataHomeDir + "/icc";
+        if (!dataHomeDir.isEmpty())
+        {
+            candidates << dataHomeDir + "/color/icc";
+            candidates << dataHomeDir + "/icc";
+        }
 
         // home dir directories
         candidates << QDir::homePath() + "/.local/share/color/icc/";
@@ -442,9 +445,11 @@ QStringList IccProfile::defaultSearchPaths()
     foreach (const QString &candidate, candidates)
     {
         QDir dir(candidate);
-        if (dir.exists() && dir.isReadable() && !paths.contains(candidate))
+        if (dir.exists() && dir.isReadable())
         {
-            paths << candidate;
+            QString path = dir.canonicalPath();
+            if (!paths.contains(path))
+                paths << path;
         }
     }
     //kDebug(50003) << candidates << '\n' << paths;
@@ -454,6 +459,9 @@ QStringList IccProfile::defaultSearchPaths()
 
 void IccProfile::considerOriginalAdobeRGB(const QString& filePath)
 {
+    if (!static_d->adobeRGBPath.isNull())
+        return;
+
     QFile file(filePath);
     if (file.open(QIODevice::ReadOnly))
     {

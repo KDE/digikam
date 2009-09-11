@@ -357,7 +357,7 @@ QList<IccProfile> IccSettings::allProfiles()
     // get system paths, e.g. /usr/share/color/icc
     QStringList paths = IccProfile::defaultSearchPaths();
     // add user-specified path
-    if (!extraPath.isEmpty())
+    if (!extraPath.isEmpty() && !paths.contains(extraPath))
         paths << extraPath;
     // check search directories
     profiles << d->scanDirectories(paths);
