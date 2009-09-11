@@ -19,7 +19,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 010 ==> 149485 : Advanced image resize for the digikam editor.
 011 ==> 206426 : Default ICC profile locations reads the same directory twice.
 012 ==> 203176 : Deleting 2 files still shows one afterwards.
-013 ==> 
+013 ==> 205059 : The default path for image library is not localizable.
+014 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta4 - Release date: 2009-08-30
