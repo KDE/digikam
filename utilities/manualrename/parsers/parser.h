@@ -61,7 +61,7 @@ public:
     ParseInformation(const ImageInfo& info)
     {
         filePath   = info.filePath();
-        cameraName = info.photoInfoContainer().make + info.photoInfoContainer().model;
+        cameraName = info.photoInfoContainer().make + ' ' + info.photoInfoContainer().model;
         dateTime   = info.dateTime();
         index      = 1;
     }
