@@ -863,7 +863,7 @@ void ShowFoto::openFolder(const KUrl& url)
     // Get all image files from directory.
 
     QDir dir(url.path(), patterns);
-    dir.setFilter ( QDir::Files | QDir::NoSymLinks );
+    dir.setFilter ( QDir::Files );
 
     if (!dir.exists())
        return;
