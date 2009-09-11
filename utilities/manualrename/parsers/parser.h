@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QDateTime>
+#include <QFileInfo>
 #include <QIcon>
 #include <QList>
 #include <QString>
@@ -37,6 +38,7 @@
 
 // Local includes
 
+#include "imageinfo.h"
 #include "token.h"
 
 class QAction;
@@ -54,22 +56,31 @@ class ParseInformation
 {
 public:
 
-    ParseInformation():
-        filePath(QString()),
-        cameraName(QString()),
-        datetime(QDateTime()),
-        index(1)
-        {};
+    ParseInformation(): index(1) {};
+
+    ParseInformation(const ImageInfo& info)
+    {
+        filePath   = info.filePath();
+        cameraName = info.photoInfoContainer().make + info.photoInfoContainer().model;
+        dateTime   = info.dateTime();
+        index      = 1;
+    }
 
     QString   filePath;
     QString   cameraName;
-    QDateTime datetime;
+    QDateTime dateTime;
     int       index;
 
     bool isEmpty()
     {
       return (filePath.isEmpty());
     };
+
+    bool isValid()
+    {
+        QFileInfo fi(filePath);
+        return fi.isReadable();
+    }
 };
 
 class Parser : public QObject

@@ -115,7 +115,7 @@ void ManualRenameWidgetTest::testNumberToken()
     ParseInformation info;
     info.filePath   = filename;
     info.cameraName = cameraName;
-    info.datetime   = cameraDate;
+    info.dateTime   = cameraDate;
     info.index      = index;
 
     QString parsed = parser.parse(parseString, info);
@@ -169,7 +169,7 @@ void ManualRenameWidgetTest::testFirstLetterOfEachWordUppercaseToken()
     ParseInformation info;
     info.filePath   = filename;
     info.cameraName = cameraName;
-    info.datetime   = cameraDate;
+    info.dateTime   = cameraDate;
     info.index      = index;
 
     QString parsed = parser.parse(parseString, info);
@@ -223,7 +223,7 @@ void ManualRenameWidgetTest::testUppercaseToken()
     ParseInformation info;
     info.filePath   = filename;
     info.cameraName = cameraName;
-    info.datetime   = cameraDate;
+    info.dateTime   = cameraDate;
     info.index      = index;
 
     QString parsed = parser.parse(parseString, info);
@@ -273,7 +273,7 @@ void ManualRenameWidgetTest::testLowercaseToken()
     ParseInformation info;
     info.filePath   = filename;
     info.cameraName = cameraName;
-    info.datetime   = cameraDate;
+    info.dateTime   = cameraDate;
     info.index      = index;
 
     QString parsed = parser.parse(parseString, info);
@@ -329,7 +329,7 @@ void ManualRenameWidgetTest::testCameraToken()
     ParseInformation info;
     info.filePath   = filename;
     info.cameraName = cameraName;
-    info.datetime   = cameraDate;
+    info.dateTime   = cameraDate;
     info.index      = index;
 
     QString parsed = parser.parse(parseString, info);
@@ -347,7 +347,7 @@ void ManualRenameWidgetTest::testEmptyParseString()
     info.filePath   = filename;
     info.cameraName = QString();
     info.index      = 1;
-    info.datetime   = curdate;
+    info.dateTime   = curdate;
 
     // test for empty parser string
     QString parsed = parser.parse(QString(), info);

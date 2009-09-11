@@ -201,14 +201,14 @@ void DateParser::parseOperation(QString& parseString, const ParseInformation& in
             QVariant v = df.formatType(token);
             if (v.isNull())
             {
-                tmp = info.datetime.toString(token);
+                tmp = info.dateTime.toString(token);
             }
             else
             {
                 if (v.type() == QVariant::String)
-                    tmp = info.datetime.toString(v.toString());
+                    tmp = info.dateTime.toString(v.toString());
                 else
-                    tmp = info.datetime.toString((Qt::DateFormat)v.toInt());
+                    tmp = info.dateTime.toString((Qt::DateFormat)v.toInt());
             }
 
             QString result = markResult(regExp.matchedLength(), tmp);
