@@ -109,13 +109,12 @@ SET(digikamcore_LIB_SRCS
                         ${libdialogs_SRCS}
                         ${libimageproperties_SRCS}
 
-                        # utitilies
+                        # utilities
                         ${libslideshow_SRCS}
                         ${libdimgcanvas_SRCS}
                         ${libdimgeditorprintiface_SRCS}
                         ${libdimgeditor_SRCS}
                         ${librawimport_SRCS}
-                        ${libmanualrename_SRCS}
    )
 
 KDE4_ADD_UI_FILES(digikamcore_LIB_SRCS
@@ -257,6 +256,7 @@ SET(digikam_SRCS ${libdimgimagewindow_SRCS}
                  ${libdigikamgui_SRCS}
                  ${libfirstrun_SRCS}
                  ${libtemplate_SRCS}
+                 ${libmanualrename_SRCS}
 
                  main.cpp
     )
