@@ -71,11 +71,6 @@ public:
     QDateTime dateTime;
     int       index;
 
-    bool isEmpty()
-    {
-      return (filePath.isEmpty());
-    };
-
     bool isValid()
     {
         QFileInfo fi(filePath);

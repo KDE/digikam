@@ -54,7 +54,6 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager/basetools/transform
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager/basetools/metadata
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager/basetools/decorate
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager/basetools/rename
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/searchwindow
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/fuzzysearch
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/gpssearch

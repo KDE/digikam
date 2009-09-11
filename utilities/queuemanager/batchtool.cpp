@@ -38,7 +38,6 @@
 // Local includes
 
 #include "dimgloaderobserver.h"
-#include "parser.h"
 
 namespace Digikam
 {
@@ -59,30 +58,28 @@ public:
         observer           = 0;
     }
 
-    bool                           exifSetOrientation;
-    bool                           cancel;
-    bool                           last;
+    bool                       exifSetOrientation;
+    bool                       cancel;
+    bool                       last;
 
-    QString                        toolTitle;          // User friendly tool title.
-    QString                        toolDescription;    // User friendly tool description.
+    QString                    toolTitle;          // User friendly tool title.
+    QString                    toolDescription;    // User friendly tool description.
 
-    QWidget                       *settingsWidget;
+    QWidget                   *settingsWidget;
 
-    KIcon                          toolIcon;
+    KIcon                      toolIcon;
 
-    KUrl                           inputUrl;
-    KUrl                           outputUrl;
-    KUrl                           workingUrl;
+    KUrl                       inputUrl;
+    KUrl                       outputUrl;
+    KUrl                       workingUrl;
 
-    DImg                           image;
+    DImg                       image;
 
-    BatchToolSettings              settings;
+    BatchToolSettings          settings;
 
-    BatchToolObserver             *observer;
+    BatchToolObserver         *observer;
 
-    BatchTool::BatchToolGroup      toolGroup;
-
-    ManualRename::ParseInformation parseInfo;
+    BatchTool::BatchToolGroup  toolGroup;
 };
 
 class BatchToolObserver : public DImgLoaderObserver
@@ -204,11 +201,6 @@ QString BatchTool::outputSuffix() const
     return QString();
 }
 
-QString BatchTool::outputBaseName() const
-{
-    return QString();
-}
-
 void BatchTool::setImageData(const DImg& img)
 {
     d->image = img;
@@ -217,16 +209,6 @@ void BatchTool::setImageData(const DImg& img)
 DImg BatchTool::imageData() const
 {
     return d->image;
-}
-
-ManualRename::ParseInformation BatchTool::parseInformation() const
-{
-    return d->parseInfo;
-}
-
-void BatchTool::setParseInformation(ManualRename::ParseInformation& info)
-{
-    d->parseInfo = info;
 }
 
 void BatchTool::setExifSetOrientation(bool set)
