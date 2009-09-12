@@ -44,7 +44,7 @@ namespace Digikam
 namespace ManualRename
 {
 
-class ManualRenameParser;
+class MainParser;
 class ManualRenameLineEditPriv;
 
 class ManualRenameLineEdit : public KLineEdit
@@ -56,7 +56,7 @@ public:
     ManualRenameLineEdit(QWidget* parent = 0);
     ~ManualRenameLineEdit();
 
-    void setParser(ManualRenameParser* parser);
+    void setParser(MainParser* parser);
 
     bool findToken(int curPos);
     bool findToken(int curPos, int& pos, int& length);

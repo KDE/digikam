@@ -64,17 +64,17 @@ public:
         parser          = 0;
     }
 
-    bool                userIsTyping;
-    bool                userIsMarking;
-    bool                tokenMarked;
+    bool        userIsTyping;
+    bool        userIsMarking;
+    bool        tokenMarked;
 
-    int                 selectionStart;
-    int                 selectionLength;
-    int                 curCursorPos;
-    int                 markedTokenPos;
+    int         selectionStart;
+    int         selectionLength;
+    int         curCursorPos;
+    int         markedTokenPos;
 
-    QTimer*             parseTimer;
-    ManualRenameParser* parser;
+    QTimer*     parseTimer;
+    MainParser* parser;
 };
 
 ManualRenameLineEdit::ManualRenameLineEdit(QWidget* parent)
@@ -114,7 +114,7 @@ ManualRenameLineEdit::~ManualRenameLineEdit()
 {
 }
 
-void ManualRenameLineEdit::setParser(ManualRenameParser* parser)
+void ManualRenameLineEdit::setParser(MainParser* parser)
 {
     if (parser)
         d->parser = parser;

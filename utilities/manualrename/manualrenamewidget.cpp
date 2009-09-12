@@ -68,18 +68,25 @@ public:
         tooltipToggleButton   = 0;
         insertTokenToolButton = 0;
         parser                = 0;
+        parserRegistered      = false;
+        maxColumnsLayout      = 2;
+        inputStyles           = ManualRenameWidget::BigButtons;
     }
 
-    QToolButton*        tooltipToggleButton;
-    QToolButton*        insertTokenToolButton;
-    QGroupBox*          btnContainer;
+    bool                            parserRegistered;
+    int                             maxColumnsLayout;
+    ManualRenameWidget::InputStyles inputStyles;
 
-    DTipTracker*        tooltipTracker;
-    ManualRenameInput*  parserLineEdit;
-    ManualRenameParser* parser;
+    QToolButton*                    tooltipToggleButton;
+    QToolButton*                    insertTokenToolButton;
+    QGroupBox*                      btnContainer;
+
+    DTipTracker*                    tooltipTracker;
+    ManualRenameInput*              parserLineEdit;
+    MainParser*                     parser;
 };
 
-ManualRenameWidget::ManualRenameWidget(QWidget* parent, int maxLayoutColumns)
+ManualRenameWidget::ManualRenameWidget(QWidget* parent)
                  : QWidget(parent), d(new ManualRenameWidgetPriv)
 {
     setAttribute(Qt::WA_DeleteOnClose);
@@ -112,17 +119,16 @@ ManualRenameWidget::ManualRenameWidget(QWidget* parent, int maxLayoutColumns)
 
     // --------------------------------------------------------
 
-    registerParsers(maxLayoutColumns);
-    setInputStyle(BigButtons);
-
-    // --------------------------------------------------------
-
-    QString tooltip   = createToolTip();
-    d->tooltipTracker = new DTipTracker(tooltip, d->parserLineEdit, Qt::AlignLeft);
+    d->tooltipTracker = new DTipTracker(QString(), d->parserLineEdit, Qt::AlignLeft);
     d->tooltipTracker->setEnable(false);
     d->tooltipTracker->setKeepOpen(true);
     d->tooltipTracker->setOpenExternalLinks(true);
     setTrackerAlignment(Qt::AlignLeft);
+
+    // --------------------------------------------------------
+
+    setParser(new ManualRenameParser());
+    setInputStyle(d->inputStyles);
 
     // --------------------------------------------------------
 
@@ -170,6 +176,9 @@ void ManualRenameWidget::slotHideToolTipTracker()
 
 QString ManualRenameWidget::parse(ParseInformation& info) const
 {
+    if (!d->parser)
+        return QString();
+
     QString parseString = d->parserLineEdit->input()->text();
 
     QString parsed;
@@ -178,8 +187,11 @@ QString ManualRenameWidget::parse(ParseInformation& info) const
     return parsed;
 }
 
-QString ManualRenameWidget::createToolTip()
+void ManualRenameWidget::createToolTip()
 {
+    if (!d->parser)
+        d->tooltipTracker->setText(QString());
+
     QString tooltip;
     tooltip += QString("<p><table>");
 
@@ -195,7 +207,8 @@ QString ManualRenameWidget::createToolTip()
 
     tooltip += QString("</table></p>");
     tooltip += d->parserLineEdit->input()->toolTip();
-    return tooltip;
+
+    d->tooltipTracker->setText(tooltip);
 }
 
 void ManualRenameWidget::slotToolTipButtonToggled(bool checked)
@@ -211,16 +224,20 @@ void ManualRenameWidget::slotUpdateTrackerPos()
 
 void ManualRenameWidget::setInputStyle(InputStyles inputMask)
 {
-    d->btnContainer->setVisible(inputMask & BigButtons);
-    d->insertTokenToolButton->setVisible(inputMask & ToolButton);
+    bool enable = d->parser;
+
+    d->btnContainer->setVisible(enable && (inputMask & BigButtons));
+    d->insertTokenToolButton->setVisible(enable && (inputMask & ToolButton));
+    d->parserLineEdit->setEnabled(enable);
+    d->tooltipToggleButton->setVisible(enable);
+
+    d->inputStyles = inputMask;
 }
 
 void ManualRenameWidget::registerParsers(int maxLayoutColumns)
 {
-   if (!d->parser)
+   if (d->parser && !d->parserRegistered)
    {
-       d->parser = new ManualRenameParser;
-
        QMenu* tokenToolBtnMenu = new QMenu(this);
        int column              = 0;
        int row                 = 0;
@@ -275,7 +292,24 @@ void ManualRenameWidget::registerParsers(int maxLayoutColumns)
        d->insertTokenToolButton->setMenu(tokenToolBtnMenu);
 
        d->parserLineEdit->input()->setParser(d->parser);
+       d->parserRegistered = true;
    }
+}
+
+void ManualRenameWidget::setParser(MainParser* parser)
+{
+    if (!parser)
+        return;
+
+    if (d->parserRegistered)
+    {
+        delete d->parser;
+        d->parserRegistered = false;
+    }
+
+    d->parser = parser;
+    registerParsers(d->maxColumnsLayout);
+    createToolTip();
 }
 
 }  // namespace ManualRename

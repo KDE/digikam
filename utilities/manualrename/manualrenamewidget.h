@@ -43,6 +43,7 @@ namespace Digikam
 namespace ManualRename
 {
 
+class MainParser;
 class ManualRenameWidgetPriv;
 class ParseInformation;
 
@@ -60,7 +61,7 @@ public:
     };
     Q_DECLARE_FLAGS(InputStyles, InputStyle)
 
-    ManualRenameWidget(QWidget* parent = 0, int maxLayoutColumns = 2);
+    ManualRenameWidget(QWidget* parent = 0);
     ~ManualRenameWidget();
 
     QString text() const;
@@ -69,6 +70,7 @@ public:
 
     void setTrackerAlignment(Qt::Alignment alignment);
     void setInputStyle(InputStyles inputMask);
+    void setParser(MainParser* parser);
 
     QString parse(ParseInformation& info) const;
 
@@ -87,8 +89,8 @@ private Q_SLOTS:
 
 private:
 
-    QString createToolTip();
-    void    registerParsers(int maxLayoutColumns);
+    void createToolTip();
+    void registerParsers(int maxLayoutColumns);
 
 private:
 
