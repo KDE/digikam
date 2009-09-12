@@ -216,7 +216,7 @@ void PreviewLoadingTask::execute()
             if (KDcrawIface::KDcraw::loadEmbeddedPreview(qimage, m_loadingDescription.filePath))
             {
                 // discard if smaller than half preview
-                if (qimage.width() < dcrawIdentify.imageSize.width() / 2)
+                if (qMax(qimage.width(), qimage.height()) < dcrawIdentify.imageSize.width() / 2)
                     qimage = QImage();
                 else
                     fromEmbeddedPreview = true;
