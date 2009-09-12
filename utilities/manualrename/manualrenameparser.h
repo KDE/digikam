@@ -24,52 +24,22 @@
 #ifndef MANUALRENAMEPARSER_H
 #define MANUALRENAMEPARSER_H
 
-// Qt includes
-
-#include <QList>
-#include <QMap>
-#include <QString>
-
 // Local includes
 
-#include "digikam_export.h"
-#include "parser.h"
-
-class QStringList;
+#include "mainparser.h"
 
 namespace Digikam
 {
 namespace ManualRename
 {
 
-class Parser;
-class ParseInformation;
-
-class DIGIKAM_EXPORT ManualRenameParser
+class ManualRenameParser : public MainParser
 {
 
 public:
 
-    typedef QMap<QString, QString> TokenMap;
-
     ManualRenameParser();
     ~ManualRenameParser();
-
-    QString    parse(const QString& parseString, ParseInformation& info);
-    ParserList parsers() const;
-    TokenMap   tokenMap(const QString& parseString);
-
-private:
-
-    int  extractTokens(QString& parseString, QStringList& tokens);
-    void replaceMatchingTokens(QString& parseString, QStringList& tokens, TokenMap* map = 0);
-    void addTokenMapItem(int index, int length, const QString& value, TokenMap* map);
-    void registerParser(Parser* parser);
-
-private:
-
-    QString    m_parseString;
-    ParserList m_parsers;
 };
 
 }  // namespace ManualRename

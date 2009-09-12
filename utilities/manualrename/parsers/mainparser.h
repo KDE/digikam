@@ -21,47 +21,60 @@
  *
  * ============================================================ */
 
-#include "manualrenameparser.h"
+#ifndef MAINPARSER_H
+#define MAINPARSER_H
 
 // Qt includes
 
-#include <QFileInfo>
-
-// Libkexiv2 includes
-
-#include <libkexiv2/version.h>
+#include <QList>
+#include <QMap>
+#include <QString>
 
 // Local includes
 
-#include "cameranameparser.h"
-#include "dateparser.h"
-#include "directorynameparser.h"
-#include "filenameparser.h"
-#include "metadataparser.h"
-#include "sequencenumberparser.h"
+#include "parser.h"
+
+class QStringList;
 
 namespace Digikam
 {
 namespace ManualRename
 {
 
-ManualRenameParser::ManualRenameParser()
-                  : MainParser()
-{
-    registerParser(new FilenameParser());
-    registerParser(new DirectoryNameParser());
-    registerParser(new SequenceNumberParser());
-    registerParser(new CameraNameParser());
-    registerParser(new DateParser());
+class Parser;
+class ParseInformation;
 
-#if KEXIV2_VERSION >= 0x010000
-    registerParser(new MetadataParser());
-#endif
-}
-
-ManualRenameParser::~ManualRenameParser()
+class MainParser
 {
-}
+
+public:
+
+    typedef QMap<QString, QString> TokenMap;
+
+public:
+
+    MainParser();
+    virtual ~MainParser();
+
+    QString    parse(const QString& parseString, ParseInformation& info);
+    ParserList parsers() const;
+    TokenMap   tokenMap(const QString& parseString);
+
+protected:
+
+    int  extractTokens(QString& parseString, QStringList& tokens);
+    void replaceMatchingTokens(QString& parseString, QStringList& tokens, TokenMap* map = 0);
+    void addTokenMapItem(int index, int length, const QString& value, TokenMap* map);
+    void registerParser(Parser* parser);
+
+protected:
+
+    QString    m_parseString;
+    ParserList m_parsers;
+};
 
 }  // namespace ManualRename
 }  // namespace Digikam
+
+
+#endif /* MAINPARSER_H */

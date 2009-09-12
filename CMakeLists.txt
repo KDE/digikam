@@ -1046,6 +1046,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/manualrenameparser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/token.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/parser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/mainparser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/filenameparser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/metadataparser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/dateparser.cpp
