@@ -269,7 +269,7 @@ bool ManualRenameLineEdit::findToken(int curPos, int& pos, int& length)
     {
         it.next();
         QString keys        = it.key();
-        QStringList keylist = keys.split(":", QString::SkipEmptyParts);
+        QStringList keylist = keys.split(':', QString::SkipEmptyParts);
 
         if (!keylist.count() == 2)
             continue;
@@ -368,9 +368,8 @@ ManualRenameInput::ManualRenameInput(QWidget* parent)
     d->moveTokenLeft->setVisible(false);
     d->moveTokenRight->setVisible(false);
 
-    QString moveTokenTooltip = i18nc("%1: direction", "Move selected token to the %1");
-    d->moveTokenLeft->setToolTip(moveTokenTooltip.arg(i18nc("move to the left", "left")));
-    d->moveTokenRight->setToolTip(moveTokenTooltip.arg(i18nc("move to the right", "right")));
+    d->moveTokenLeft->setToolTip(i18n("Move selected token to the left"));
+    d->moveTokenRight->setToolTip(i18n("Move selected token to the right"));
 
     // --------------------------------------------------------
 
