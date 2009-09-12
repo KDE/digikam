@@ -59,7 +59,7 @@ ManualRenameParser::ManualRenameParser()
     registerParser(new CameraNameParser());
     registerParser(new DateParser());
 
-    #if KEXIV2_VERSION >= 0x010000
+#if KEXIV2_VERSION >= 0x010000
     registerParser(new MetadataParser());
 #endif
 }
