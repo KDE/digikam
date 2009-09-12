@@ -112,6 +112,7 @@ ManualRenameLineEdit::ManualRenameLineEdit(QWidget* parent)
 
 ManualRenameLineEdit::~ManualRenameLineEdit()
 {
+    delete d;
 }
 
 void ManualRenameLineEdit::setParser(MainParser* parser)

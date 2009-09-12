@@ -80,8 +80,8 @@ QPushButton* Parser::createButton(const QString& name, const QIcon& icon)
 QPushButton* Parser::registerButton(QWidget* parent)
 {
     QPushButton* button = 0;
-    if (!m_buttonRegistered)
-    {
+//    if (!m_buttonRegistered)
+//    {
         button = createButton(m_name, m_icon);
 
         QList<QAction*> actions;
@@ -108,15 +108,15 @@ QPushButton* Parser::registerButton(QWidget* parent)
         button->setParent(parent);
 
         m_buttonRegistered = button ? true : false;
-    }
+//    }
     return button;
 }
 
 QAction* Parser::registerMenu(QMenu* parent)
 {
     QAction* action = 0;
-    if (!m_MenuRegistered)
-    {
+//    if (!m_MenuRegistered)
+//    {
         QList<QAction*> actions;
 
         if (m_tokens.count() > 1 && m_useTokenMenu)
@@ -143,7 +143,7 @@ QAction* Parser::registerMenu(QMenu* parent)
             action->setIcon(m_icon);
             m_MenuRegistered = true;
         }
-    }
+//    }
 
     return action;
 }

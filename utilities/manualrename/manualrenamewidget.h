@@ -68,11 +68,17 @@ public:
     void    setText(const QString& text);
     void    clear();
 
-    void setTrackerAlignment(Qt::Alignment alignment);
-    void setInputStyle(InputStyles inputMask);
     void setParser(MainParser* parser);
+    /**
+     * set the columns for the parser input buttons. This will only affect the BigButtons input style.
+     * @param col number of columns
+     */
+    void setInputColumns(int col);
+    void setInputStyle(InputStyles inputMask);
 
     QString parse(ParseInformation& info) const;
+
+    void setTrackerAlignment(Qt::Alignment alignment);
 
 Q_SIGNALS:
 
@@ -90,7 +96,8 @@ private Q_SLOTS:
 private:
 
     void createToolTip();
-    void registerParsers(int maxLayoutColumns);
+    void registerParsers();
+    void setupWidgets();
 
 private:
 
