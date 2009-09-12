@@ -1261,7 +1261,7 @@ void CameraUI::startKdePreviewJob()
 void CameraUI::slotGotKDEPreview(const KFileItem& item, const QPixmap& pix)
 {
     QString file   = item.url().fileName();
-    QString folder = item.url().path().remove(QString("/") + file);
+    QString folder = item.url().toLocalFile().remove(QString("/") + file);
     QImage thumb   = pix.toImage();
     if (thumb.isNull())
     {
@@ -1274,7 +1274,7 @@ void CameraUI::slotGotKDEPreview(const KFileItem& item, const QPixmap& pix)
 void CameraUI::slotFailedKDEPreview(const KFileItem& item)
 {
     QString file   = item.url().fileName();
-    QString folder = item.url().path().remove(QString("/") + file);
+    QString folder = item.url().toLocalFile().remove(QString("/") + file);
     QImage thumb   = d->controller->mimeTypeThumbnail(file).toImage();
     d->view->setThumbnail(folder, file, thumb);
 }
@@ -1360,7 +1360,7 @@ void CameraUI::slotUploadItems(const KUrl::List& urls)
         quint64 totalKbSize = 0;
         for (KUrl::List::const_iterator it = urls.constBegin() ; it != urls.constEnd() ; ++it)
         {
-            QFileInfo fi((*it).path());
+            QFileInfo fi((*it).toLocalFile());
             totalKbSize += fi.size()/1024;
         }
 
@@ -1394,7 +1394,7 @@ void CameraUI::slotUploadItems(const KUrl::List& urls)
 
     for (KUrl::List::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
     {
-        QFileInfo fi((*it).path());
+        QFileInfo fi((*it).toLocalFile());
         if (!fi.exists()) continue;
         if (fi.isDir()) continue;
 
@@ -1632,7 +1632,7 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
             downloadUrl.addPath(subAlbum);
         }
 
-        d->foldersToScan << downloadUrl.path();
+        d->foldersToScan << downloadUrl.toLocalFile();
 
         if (downloadName.isEmpty())
         {
@@ -1643,7 +1643,7 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
             // when using custom renaming (e.g. by date, see bug 179902)
             // make sure that we create unique names
             downloadUrl.addPath(downloadName);
-            QString suggestedPath = downloadUrl.path();
+            QString suggestedPath = downloadUrl.toLocalFile();
             if (usedDownloadPaths.contains(suggestedPath))
             {
                 QFileInfo fi(downloadName);
@@ -1663,7 +1663,7 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
                 usedDownloadPaths << suggestedPath;
         }
 
-        downloadSettings.dest = downloadUrl.path();
+        downloadSettings.dest = downloadUrl.toLocalFile();
 
         d->controller->download(downloadSettings);
         ++total;
@@ -2028,7 +2028,7 @@ bool CameraUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,
     u.addPath(sub);
 
     // first stat to see if the album exists
-    QFileInfo info(u.path());
+    QFileInfo info(u.toLocalFile());
     if (info.exists())
     {
         // now check if its really a directory
@@ -2037,7 +2037,7 @@ bool CameraUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,
         else
         {
             errMsg = i18n("A file with the same name (%1) already exists in folder %2.",
-                          sub, parentURL.path());
+                          sub, parentURL.toLocalFile());
             return false;
         }
     }
@@ -2047,7 +2047,7 @@ bool CameraUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,
     PAlbum* parent = AlbumManager::instance()->findPAlbum(parentURL);
     if (!parent)
     {
-        errMsg = i18n("Failed to find Album for path '%1'.", parentURL.path());
+        errMsg = i18n("Failed to find Album for path '%1'.", parentURL.toLocalFile());
         return false;
     }
     return AlbumManager::instance()->createPAlbum(parent, sub, QString(), date, QString(), errMsg);

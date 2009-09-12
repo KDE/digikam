@@ -154,7 +154,7 @@ void RawPreview::setDecodingSettings(const DRawDecoding& settings)
     DRawDecoding demosaisedSettings = settings;
     demosaisedSettings.resetPostProcessingSettings();
 
-    d->loadingDesc = LoadingDescription(d->url.path(), demosaisedSettings);
+    d->loadingDesc = LoadingDescription(d->url.toLocalFile(), demosaisedSettings);
     d->thread->load(d->loadingDesc, ManagedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
     emit signalLoadingStarted();
 }

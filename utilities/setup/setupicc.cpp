@@ -618,7 +618,7 @@ void SetupICC::applySettings()
     else if (d->defaultGuessRaw->isChecked())
         settings.defaultUncalibratedBehavior = ICCSettingsContainer::AutomaticColors | ICCSettingsContainer::ConvertToWorkspace;
 
-    settings.iccFolder = d->defaultPathKU->url().path();
+    settings.iccFolder = d->defaultPathKU->url().toLocalFile();
     settings.useBPC =  d->bpcAlgorithm->isChecked();
     settings.renderingIntent = d->renderingIntentKC->itemData(d->renderingIntentKC->currentIndex()).toInt();
     settings.useManagedView = d->managedView->isChecked();
@@ -710,7 +710,7 @@ void SetupICC::readSettings(bool restore)
 
 void SetupICC::slotUrlChanged()
 {
-    IccSettings::instance()->setIccPath(d->defaultPathKU->url().path());
+    IccSettings::instance()->setIccPath(d->defaultPathKU->url().toLocalFile());
     fillCombos(true);
 }
 

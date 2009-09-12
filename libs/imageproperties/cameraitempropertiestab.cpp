@@ -363,12 +363,12 @@ void CameraItemPropertiesTab::setCurrentItem(const GPItemInfo* itemInfo,
         // delayed loading to list faster from UMSCamera
         if (itemInfo->mime == "image/x-raw")
         {
-            DMetadata metaData(currentURL.path());
+            DMetadata metaData(currentURL.toLocalFile());
             dims = metaData.getImageDimensions();
         }
         else
         {
-            KFileMetaInfo meta(currentURL.path());
+            KFileMetaInfo meta(currentURL.toLocalFile());
 
 /*          TODO: KDE4PORT: KFileMetaInfo API as Changed.
                             Check if new method to search "Dimensions" information is enough.

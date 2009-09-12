@@ -284,7 +284,7 @@ void ImagePropertiesGPSTab::setCurrentURL(const KUrl& url)
         return;
     }
 
-    DMetadata meta(url.path());
+    DMetadata meta(url.toLocalFile());
     setMetadata(meta, url);
 }
 

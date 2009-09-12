@@ -767,7 +767,7 @@ bool ICCProofTool::createTransform(IccTransform &transform)
     }
     else if (useSelectedInProfile())
     {
-        inputProfile = d->inProfilesPath->url().path();
+        inputProfile = d->inProfilesPath->url().toLocalFile();
         if (!inputProfile.open())
         {
             KMessageBox::information(kapp->activeWindow(),
@@ -785,7 +785,7 @@ bool ICCProofTool::createTransform(IccTransform &transform)
     }
     else
     {
-        proofProfile = d->proofProfilePath->url().path();
+        proofProfile = d->proofProfilePath->url().toLocalFile();
         if (proofProfile.open())
         {
             KMessageBox::information(kapp->activeWindow(),
@@ -803,7 +803,7 @@ bool ICCProofTool::createTransform(IccTransform &transform)
     }
     else
     {
-        workspaceProfile = d->spaceProfilePath->url().path();
+        workspaceProfile = d->spaceProfilePath->url().toLocalFile();
         if (!workspaceProfile.open())
         {
             KMessageBox::information(kapp->activeWindow(),
@@ -963,7 +963,7 @@ void ICCProofTool::slotInICCInfo()
     }
     else if (useSelectedInProfile())
     {
-        getICCInfo(d->inProfilesPath->url().path());
+        getICCInfo(d->inProfilesPath->url().toLocalFile());
     }
 }
 
@@ -975,7 +975,7 @@ void ICCProofTool::slotProofICCInfo()
     }
     else
     {
-        getICCInfo(d->proofProfilePath->url().path());
+        getICCInfo(d->proofProfilePath->url().toLocalFile());
     }
 }
 
@@ -987,7 +987,7 @@ void ICCProofTool::slotSpaceICCInfo()
     }
     else
     {
-        getICCInfo(d->spaceProfilePath->url().path());
+        getICCInfo(d->spaceProfilePath->url().toLocalFile());
     }
 }
 
@@ -1097,7 +1097,7 @@ void ICCProofTool::slotLoadSettings()
     if ( loadColorManagementFile.isEmpty() )
        return;
 
-    QFile file(loadColorManagementFile.path());
+    QFile file(loadColorManagementFile.toLocalFile());
 
     if ( file.open(QIODevice::ReadOnly) )
     {
@@ -1174,7 +1174,7 @@ void ICCProofTool::slotSaveAsSettings()
     if ( saveColorManagementFile.isEmpty() )
        return;
 
-    QFile file(saveColorManagementFile.path());
+    QFile file(saveColorManagementFile.toLocalFile());
 
     if ( file.open(QIODevice::WriteOnly) )
     {
@@ -1188,9 +1188,9 @@ void ICCProofTool::slotSaveAsSettings()
         stream << d->inProfileBG->checkedId() << "\n";
         stream << d->spaceProfileBG->checkedId() << "\n";
         stream << d->proofProfileBG->checkedId() << "\n";
-        stream << d->inProfilesPath->url().path() << "\n";
-        stream << d->proofProfilePath->url().path() << "\n";
-        stream << d->spaceProfilePath->url().path() << "\n";
+        stream << d->inProfilesPath->url().toLocalFile() << "\n";
+        stream << d->proofProfilePath->url().toLocalFile() << "\n";
+        stream << d->spaceProfilePath->url().toLocalFile() << "\n";
         stream << d->cInput->value() << "\n";
 
         for (int j = 0 ; j < 17 ; ++j)

@@ -610,7 +610,7 @@ void ResizeTool::slotLoadSettings()
     if ( loadBlowupFile.isEmpty() )
        return;
 
-    QFile file(loadBlowupFile.path());
+    QFile file(loadBlowupFile.toLocalFile());
 
     if ( file.open(QIODevice::ReadOnly) )
     {
@@ -640,7 +640,7 @@ void ResizeTool::slotSaveAsSettings()
     if ( saveBlowupFile.isEmpty() )
        return;
 
-    QFile file(saveBlowupFile.path());
+    QFile file(saveBlowupFile.toLocalFile());
 
     if ( file.open(QIODevice::WriteOnly) )
         d->settingsWidget->saveSettings(file, QString("# Photograph Resizing Configuration File"));

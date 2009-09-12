@@ -509,7 +509,7 @@ QString CameraSelection::currentPortPath()
 
 QString CameraSelection::currentCameraPath()
 {
-    return d->umsMountURL->url().path();
+    return d->umsMountURL->url().toLocalFile();
 }
 
 void CameraSelection::slotOkClicked()

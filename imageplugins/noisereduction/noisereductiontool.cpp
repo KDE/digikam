@@ -439,7 +439,7 @@ void NoiseReductionTool::slotLoadSettings()
     if ( loadRestorationFile.isEmpty() )
         return;
 
-    QFile file(loadRestorationFile.path());
+    QFile file(loadRestorationFile.toLocalFile());
 
     if ( file.open(QIODevice::ReadOnly) )
     {
@@ -483,7 +483,7 @@ void NoiseReductionTool::slotSaveAsSettings()
     if ( saveRestorationFile.isEmpty() )
         return;
 
-    QFile file(saveRestorationFile.path());
+    QFile file(saveRestorationFile.toLocalFile());
 
     if ( file.open(QIODevice::WriteOnly) )
     {

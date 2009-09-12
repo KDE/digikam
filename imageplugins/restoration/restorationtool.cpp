@@ -338,7 +338,7 @@ void RestorationTool::slotLoadSettings()
     if ( loadRestorationFile.isEmpty() )
        return;
 
-    QFile file(loadRestorationFile.path());
+    QFile file(loadRestorationFile.toLocalFile());
 
     if ( file.open(QIODevice::ReadOnly) )
     {
@@ -371,7 +371,7 @@ void RestorationTool::slotSaveAsSettings()
     if ( saveRestorationFile.isEmpty() )
        return;
 
-    QFile file(saveRestorationFile.path());
+    QFile file(saveRestorationFile.toLocalFile());
 
     if ( file.open(QIODevice::WriteOnly) )
         d->settingsWidget->saveSettings(file, QString("# Photograph Restoration Configuration File V2"));

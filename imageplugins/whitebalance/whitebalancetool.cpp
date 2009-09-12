@@ -737,7 +737,7 @@ void WhiteBalanceTool::slotLoadSettings()
     if (loadWhiteBalanceFile.isEmpty())
         return;
 
-    QFile file(loadWhiteBalanceFile.path());
+    QFile file(loadWhiteBalanceFile.toLocalFile());
 
     if (file.open(QIODevice::ReadOnly))
     {
@@ -781,7 +781,7 @@ void WhiteBalanceTool::slotSaveAsSettings()
     if ( saveWhiteBalanceFile.isEmpty() )
        return;
 
-    QFile file(saveWhiteBalanceFile.path());
+    QFile file(saveWhiteBalanceFile.toLocalFile());
 
     if ( file.open(QIODevice::WriteOnly) )
     {

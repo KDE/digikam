@@ -684,17 +684,17 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
                 firstCondition = false;
 
                 DatabaseAccess access;
-                KUrl url(access.db()->getAlbumRelativePath(albumID));
                 int rootId = access.db()->getAlbumRootId(albumID);
+                QString relativePath = access.db()->getAlbumRelativePath(albumID);
 
                 QString childrenWildcard;
-                if (url.path() == "/")
+                if (relativePath == "/")
                     childrenWildcard = "/%";
                 else
-                    childrenWildcard = url.path() + "/%";
+                    childrenWildcard = relativePath + "/%";
 
                 sql += " ( albumRoot=? AND (relativePath=? OR relativePath LIKE ?) ) ";
-                *boundValues << rootId << url.path() << childrenWildcard;
+                *boundValues << rootId << relativePath << childrenWildcard;
             }
             sql += " ))";
         }

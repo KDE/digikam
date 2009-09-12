@@ -69,7 +69,7 @@ ImageScanner::ImageScanner(qlonglong imageid)
 
     QString albumRootPath = CollectionManager::instance()->albumRootPath(shortInfo.albumRootID);
     m_fileInfo = QFileInfo(DatabaseUrl::fromAlbumAndName(shortInfo.itemName,
-                            shortInfo.album, albumRootPath, shortInfo.albumRootID).fileUrl().path());
+                            shortInfo.album, albumRootPath, shortInfo.albumRootID).fileUrl().toLocalFile());
 }
 
 void ImageScanner::setCategory(DatabaseItem::Category category)

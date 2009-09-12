@@ -281,7 +281,7 @@ void SlideShow::loadNextImage()
     if (d->fileIndex < num)
     {
         d->currentImage = d->settings.fileList[d->fileIndex];
-        d->previewThread->load(LoadingDescription(d->currentImage.path(),
+        d->previewThread->load(LoadingDescription(d->currentImage.toLocalFile(),
                                qMax(d->deskWidth, d->deskHeight), d->settings.exifRotate));
     }
     else
@@ -315,7 +315,7 @@ void SlideShow::loadPrevImage()
     if (d->fileIndex >= 0 && d->fileIndex < num)
     {
         d->currentImage = d->settings.fileList[d->fileIndex];
-        d->previewThread->load(LoadingDescription(d->currentImage.path(),
+        d->previewThread->load(LoadingDescription(d->currentImage.toLocalFile(),
                                qMax(d->deskWidth, d->deskHeight), d->settings.exifRotate));
     }
     else
@@ -329,7 +329,7 @@ void SlideShow::loadPrevImage()
 
 void SlideShow::slotGotImagePreview(const LoadingDescription& desc, const DImg& preview)
 {
-    if (desc.filePath != d->currentImage.path() || desc.isThumbnail())
+    if (desc.filePath != d->currentImage.toLocalFile() || desc.isThumbnail())
         return;
 
     d->preview = preview;
@@ -363,7 +363,7 @@ void SlideShow::preloadNextImage()
 
     if (index < num)
     {
-        d->previewPreloadThread->load(LoadingDescription(d->settings.fileList[index].path(),
+        d->previewPreloadThread->load(LoadingDescription(d->settings.fileList[index].toLocalFile(),
                                       qMax(d->deskWidth, d->deskHeight), d->settings.exifRotate));
     }
 }
@@ -374,7 +374,7 @@ void SlideShow::updatePixmap()
     d->pixmap.fill(Qt::black);
     QPainter p(&(d->pixmap));
 
-    if (!d->currentImage.path().isEmpty())
+    if (!d->currentImage.toLocalFile().isEmpty())
     {
         if (!d->preview.isNull())
         {

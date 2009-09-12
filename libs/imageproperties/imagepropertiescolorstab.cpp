@@ -371,7 +371,7 @@ void ImagePropertiesColorsTab::setData(const KUrl& url, const QRect& selectionAr
     // this will completely mess up the timing of progress info in the histogram widget.
     // So filter here, before the stopHistogramComputation!
     // But do not filter if current path is null, as it would not disable the widget on first run.
-    if (!img && !d->currentFilePath.isNull() && url.path() == d->currentFilePath)
+    if (!img && !d->currentFilePath.isNull() && url.toLocalFile() == d->currentFilePath)
         return;
 
     // This is necessary to stop computation because d->image.bits() is currently used by
@@ -456,7 +456,7 @@ void ImagePropertiesColorsTab::loadImageFromUrl(const KUrl& url)
                 this, SLOT(slotMoreCompleteLoadingAvailable(const LoadingDescription &, const LoadingDescription &)));
     }
 
-    LoadingDescription desc = LoadingDescription(url.path());
+    LoadingDescription desc = LoadingDescription(url.toLocalFile());
 
     if (DImg::fileFormat(desc.filePath) == DImg::RAW)
     {

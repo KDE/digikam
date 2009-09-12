@@ -322,7 +322,7 @@ void ImageCategorizedView::toPreviousIndex()
 
 void ImageCategorizedView::toIndex(const KUrl& url)
 {
-    QModelIndex index = d->model->indexForPath(url.path());
+    QModelIndex index = d->model->indexForPath(url.toLocalFile());
     toIndex(d->filterModel->mapFromSource(index));
 }
 
@@ -383,7 +383,7 @@ void ImageCategorizedView::scrollToWhenAvailable(qlonglong imageId)
 
 void ImageCategorizedView::setCurrentUrl(const KUrl& url)
 {
-    QString path = url.path();
+    QString path = url.toLocalFile();
     QModelIndex index = d->filterModel->indexForPath(path);
     if (!index.isValid())
     {

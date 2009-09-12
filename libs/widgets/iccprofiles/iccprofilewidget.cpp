@@ -230,7 +230,7 @@ QString ICCProfileWidget::getMetadataTitle()
 
 bool ICCProfileWidget::loadFromURL(const KUrl& url)
 {
-    setFileName(url.path());
+    setFileName(url.toLocalFile());
 
     if (url.isEmpty())
     {
@@ -240,7 +240,7 @@ bool ICCProfileWidget::loadFromURL(const KUrl& url)
     }
     else
     {
-        IccProfile profile(url.path());
+        IccProfile profile(url.toLocalFile());
         if (!setProfile(profile))
         {
             setProfile();

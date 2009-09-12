@@ -92,7 +92,7 @@ bool XmpWidget::loadFromURL(const KUrl& url)
     }
     else
     {
-        DMetadata metadata(url.path());
+        DMetadata metadata(url.toLocalFile());
 
         if (!metadata.hasXmp())
         {

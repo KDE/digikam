@@ -968,7 +968,7 @@ void BWSepiaTool::slotLoadSettings()
     if ( loadFile.isEmpty() )
        return;
 
-    QFile file(loadFile.path());
+    QFile file(loadFile.toLocalFile());
 
     if ( file.open(QIODevice::ReadOnly) )
     {
@@ -1040,7 +1040,7 @@ void BWSepiaTool::slotSaveAsSettings()
     if ( saveFile.isEmpty() )
        return;
 
-    QFile file(saveFile.path());
+    QFile file(saveFile.toLocalFile());
 
     if ( file.open(QIODevice::WriteOnly) )
     {

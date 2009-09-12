@@ -112,11 +112,11 @@ bool Rotate::toolOperations()
 
     // JPEG image : lossless method.
 
-    if (isJpegImage(inputUrl().path()) && image().isNull())
+    if (isJpegImage(inputUrl().toLocalFile()) && image().isNull())
     {
         if (useExif)
         {
-            if (!exifTransform(inputUrl().path(), inputUrl().fileName(), outputUrl().path(), Auto))
+            if (!exifTransform(inputUrl().toLocalFile(), inputUrl().fileName(), outputUrl().toLocalFile(), Auto))
                 return false;
         }
         else
@@ -124,13 +124,13 @@ bool Rotate::toolOperations()
             switch(angle)
             {
                 case DImg::ROT90:
-                    return (exifTransform(inputUrl().path(), inputUrl().fileName(), outputUrl().path(), Rotate90));
+                    return (exifTransform(inputUrl().toLocalFile(), inputUrl().fileName(), outputUrl().toLocalFile(), Rotate90));
                     break;
                 case DImg::ROT180:
-                    return (exifTransform(inputUrl().path(), inputUrl().fileName(), outputUrl().path(), Rotate180));
+                    return (exifTransform(inputUrl().toLocalFile(), inputUrl().fileName(), outputUrl().toLocalFile(), Rotate180));
                     break;
                 case DImg::ROT270:
-                    return (exifTransform(inputUrl().path(), inputUrl().fileName(), outputUrl().path(), Rotate270));
+                    return (exifTransform(inputUrl().toLocalFile(), inputUrl().fileName(), outputUrl().toLocalFile(), Rotate270));
                     break;
                 default:
                     kDebug(50003) << "Unknow rotate action";
@@ -146,7 +146,7 @@ bool Rotate::toolOperations()
 
     if (useExif)
     {
-        DMetadata meta(inputUrl().path());
+        DMetadata meta(inputUrl().toLocalFile());
         switch(meta.getImageOrientation())
         {
             case DMetadata::ORIENTATION_HFLIP:

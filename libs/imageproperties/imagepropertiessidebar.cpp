@@ -184,8 +184,8 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const KUrl& url)
     QString unavailable(i18n("<i>unavailable</i>"));
 
     KFileItem fi(KFileItem::Unknown, KFileItem::Unknown, url);
-    QFileInfo fileInfo(url.path());
-    DMetadata metaData(url.path());
+    QFileInfo fileInfo(url.toLocalFile());
+    DMetadata metaData(url.toLocalFile());
 
     // -- File system information -----------------------------------------
 

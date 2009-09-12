@@ -188,7 +188,7 @@ bool KipiInterface::addImage( const KUrl& url, QString& errmsg )
 
     if ( url.isValid() == false )
     {
-        errmsg = i18n("Target URL %1 is not valid.",url.path());
+        errmsg = i18n("Target URL %1 is not valid.",url.toLocalFile());
         return false;
     }
 
@@ -241,13 +241,13 @@ void KipiInterface::slotCurrentAlbumChanged( Album *album )
 void KipiInterface::thumbnail(const KUrl& url, int /*size*/)
 {
     // NOTE: size is not used here. Cache use the max pixmap size to store thumbs (256).
-    m_thumbLoadThread->find(url.path());
+    m_thumbLoadThread->find(url.toLocalFile());
 }
 
 void KipiInterface::thumbnails(const KUrl::List& list, int size)
 {
     for (KUrl::List::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
-        thumbnail((*it).path(), size);
+        thumbnail(*it, size);
 }
 
 void KipiInterface::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)

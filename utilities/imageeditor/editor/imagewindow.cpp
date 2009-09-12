@@ -588,10 +588,10 @@ void ImageWindow::slotLoadCurrent()
 
     if (index != -1)
     {
-        m_canvas->load(d->urlCurrent.path(), m_IOFileSettings);
+        m_canvas->load(d->urlCurrent.toLocalFile(), m_IOFileSettings);
 
         if (++index != d->urlList.size())
-            m_canvas->preload(d->urlList[index].path());
+            m_canvas->preload(d->urlList[index].toLocalFile());
     }
 
     d->thumbBar->blockSignals(true);
@@ -908,9 +908,9 @@ void ImageWindow::saveIsComplete()
     // subsequent editing operations.
 
     // put image in cache, the LoadingCacheInterface cares for the details
-    LoadingCacheInterface::putImage(m_savingContext->destinationURL.path(), m_canvas->currentImage());
+    LoadingCacheInterface::putImage(m_savingContext->destinationURL.toLocalFile(), m_canvas->currentImage());
     d->thumbBar->refreshThumbs(KUrl::List() << d->urlCurrent);
-    ScanController::instance()->scanFileDirectly(m_savingContext->destinationURL.path());
+    ScanController::instance()->scanFileDirectly(m_savingContext->destinationURL.toLocalFile());
 
     // notify main app that file changed
     emit signalFileModified(m_savingContext->destinationURL);
@@ -921,7 +921,7 @@ void ImageWindow::saveIsComplete()
     if (index != -1)
     {
         if (++index != d->urlList.size())
-            m_canvas->preload(d->urlList[index].path());
+            m_canvas->preload(d->urlList[index].toLocalFile());
     }
     setViewToURL(d->urlCurrent);
 }
@@ -970,7 +970,7 @@ void ImageWindow::saveAsIsComplete()
         }
 
         d->urlCurrent = m_savingContext->destinationURL;
-        m_canvas->switchToLastSaved(m_savingContext->destinationURL.path());
+        m_canvas->switchToLastSaved(m_savingContext->destinationURL.toLocalFile());
 
         slotUpdateItemInfo();
 
@@ -978,7 +978,7 @@ void ImageWindow::saveAsIsComplete()
         // This may irritate users who want to check for quality loss in lossy formats.
         // In any case, only do that if the format did not change - too many assumptions otherwise (see bug #138949).
         if (m_savingContext->originalFormat == m_savingContext->format)
-            LoadingCacheInterface::putImage(m_savingContext->destinationURL.path(), m_canvas->currentImage());
+            LoadingCacheInterface::putImage(m_savingContext->destinationURL.toLocalFile(), m_canvas->currentImage());
 
         // notify main app that file changed or a file is added
         if (m_savingContext->destinationExisted)
@@ -993,7 +993,7 @@ void ImageWindow::saveAsIsComplete()
         {
             setViewToURL(d->urlCurrent);
             if (++index != d->urlList.count())
-                m_canvas->preload(d->urlList[index].path());
+                m_canvas->preload(d->urlList[index].toLocalFile());
         }
 
         // Add the file to the list of thumbbar images if it's not there already
@@ -1197,7 +1197,7 @@ void ImageWindow::slotFileMetadataChanged(const KUrl& url)
 {
     if (url == d->urlCurrent)
     {
-        m_canvas->readMetadataFromFile(url.path());
+        m_canvas->readMetadataFromFile(url.toLocalFile());
     }
 }
 
@@ -1301,7 +1301,7 @@ void ImageWindow::slideShow(bool startWithCurrent, SlideShowSettings& settings)
              !m_cancelSlideShow && (it != d->urlList.end()) ; ++it)
         {
             SlidePictureInfo pictInfo;
-            meta.load((*it).path());
+            meta.load((*it).toLocalFile());
             pictInfo.comment   = meta.getImageComments()[QString("x-default")].caption;
             pictInfo.photoInfo = meta.getPhotographInformation();
             settings.pictInfoMap.insert(*it, pictInfo);

@@ -276,7 +276,7 @@ QPixmap AlbumThumbnailLoader::getAlbumThumbnailDirectly(PAlbum *album)
 void AlbumThumbnailLoader::addUrl(Album *album, const KUrl& url)
 {
     /*
-    QPixmap* pix = d->cache->find(album->iconKURL().path());
+    QPixmap* pix = d->cache->find(album->iconKURL().toLocalFile());
     if (pix)
     return pix;
     */
@@ -296,7 +296,7 @@ void AlbumThumbnailLoader::addUrl(Album *album, const KUrl& url)
     }
 
     // Check if the URL has already been added
-    PathAlbumMap::iterator it = d->pathAlbumMap.find(url.path());
+    PathAlbumMap::iterator it = d->pathAlbumMap.find(url.toLocalFile());
 
     if (it == d->pathAlbumMap.end())
     {
@@ -317,7 +317,7 @@ void AlbumThumbnailLoader::addUrl(Album *album, const KUrl& url)
             }
 
             // use the asynchronous version - with queued connections, see above
-            d->iconTagThumbThread->find(url.path());
+            d->iconTagThumbThread->find(url.toLocalFile());
         }
         else
         {
@@ -333,11 +333,11 @@ void AlbumThumbnailLoader::addUrl(Album *album, const KUrl& url)
                         Qt::QueuedConnection);
             }
 
-            d->iconAlbumThumbThread->find(url.path());
+            d->iconAlbumThumbThread->find(url.toLocalFile());
         }
 
         // insert new entry to map, add album globalID
-        QList<int> &list = d->pathAlbumMap[url.path()];
+        QList<int> &list = d->pathAlbumMap[url.toLocalFile()];
         list.removeAll(album->globalID());
         list.push_back(album->globalID());
     }

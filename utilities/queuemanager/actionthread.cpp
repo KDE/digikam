@@ -239,7 +239,7 @@ void ActionThread::run()
 
             for (KUrl::List::const_iterator it = tmp2del.constBegin(); it != tmp2del.constEnd() ; ++it)
             {
-                unlink(QFile::encodeName((*it).path()));
+                unlink(QFile::encodeName((*it).toLocalFile()));
             }
         }
 

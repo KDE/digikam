@@ -584,7 +584,7 @@ void QueueListView::slotAddItems(const ImageInfoList& list)
         if (!find)
         {
             item = new QueueListViewItem(this, info);
-            d->thumbLoadThread->find(info.fileUrl().path());
+            d->thumbLoadThread->find(info.fileUrl().toLocalFile());
         }
     }
     emit signalQueueContentsChanged();

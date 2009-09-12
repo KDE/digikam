@@ -65,7 +65,7 @@ ICCPreviewWidget::~ICCPreviewWidget()
 void ICCPreviewWidget::showPreview( const KUrl& url)
 {
     clearPreview();
-    QFileInfo fInfo(url.path());
+    QFileInfo fInfo(url.toLocalFile());
 
     if ( url.isLocalFile() && fInfo.isFile() && fInfo.isReadable() )
     {

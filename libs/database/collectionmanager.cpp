@@ -192,7 +192,7 @@ public:
      *  Find from a given list (usually the result of listVolumes) the volume
      *  on which the file path specified by the url is located.
      */
-    SolidVolumeInfo findVolumeForUrl(const KUrl &url, const QList<SolidVolumeInfo> volumes);
+    SolidVolumeInfo findVolumeForUrl(const KUrl &fileUrl, const QList<SolidVolumeInfo> volumes);
 
     /// Create the volume identifier for the given volume info
     static QString volumeIdentifier(const SolidVolumeInfo &info);
@@ -558,11 +558,11 @@ QString CollectionManagerPrivate::technicalDescription(const AlbumRootLocation *
     return QString();
 }
 
-SolidVolumeInfo CollectionManagerPrivate::findVolumeForUrl(const KUrl& url, const QList<SolidVolumeInfo> volumes)
+SolidVolumeInfo CollectionManagerPrivate::findVolumeForUrl(const KUrl& fileUrl, const QList<SolidVolumeInfo> volumes)
 {
     SolidVolumeInfo volume;
     // v.path is specified to have a trailing slash. path needs one as well.
-    QString path = url.path(KUrl::AddTrailingSlash);
+    QString path = fileUrl.toLocalFile(KUrl::AddTrailingSlash);
     int volumeMatch = 0;
 
     //FIXME: Network shares! Here we get only the volume of the mount path...
@@ -665,7 +665,7 @@ void CollectionManager::refresh()
 CollectionLocation CollectionManager::addLocation(const KUrl& fileUrl, const QString& label)
 {
     kDebug(50003) << "addLocation " << fileUrl;
-    QString path = fileUrl.path(KUrl::RemoveTrailingSlash);
+    QString path = fileUrl.toLocalFile(KUrl::RemoveTrailingSlash);
 
     if (!locationForPath(path).isNull())
         return CollectionLocation();
@@ -714,7 +714,7 @@ CollectionLocation CollectionManager::addLocation(const KUrl& fileUrl, const QSt
 CollectionLocation CollectionManager::addNetworkLocation(const KUrl& fileUrl, const QString& label)
 {
     kDebug(50003) << "addLocation " << fileUrl;
-    QString path = fileUrl.path(KUrl::RemoveTrailingSlash);
+    QString path = fileUrl.toLocalFile(KUrl::RemoveTrailingSlash);
 
     if (!locationForPath(path).isNull())
         return CollectionLocation();
@@ -731,7 +731,7 @@ CollectionLocation CollectionManager::addNetworkLocation(const KUrl& fileUrl, co
 CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KUrl& fileUrl,
         QList<CollectionLocation> assumeDeleted, QString *message, QString *iconName)
 {
-    QString path = fileUrl.path(KUrl::RemoveTrailingSlash);
+    QString path = fileUrl.toLocalFile(KUrl::RemoveTrailingSlash);
 
     QDir dir(path);
     if (!dir.isReadable())
@@ -854,7 +854,7 @@ CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KU
 CollectionManager::LocationCheckResult CollectionManager::checkNetworkLocation(const KUrl& fileUrl,
         QList<CollectionLocation> assumeDeleted, QString *message, QString *iconName)
 {
-    QString path = fileUrl.path(KUrl::RemoveTrailingSlash);
+    QString path = fileUrl.toLocalFile(KUrl::RemoveTrailingSlash);
 
     QDir dir(path);
     if (!dir.isReadable())
@@ -1059,7 +1059,7 @@ CollectionLocation CollectionManager::locationForAlbumRootId(int id)
 
 CollectionLocation CollectionManager::locationForAlbumRoot(const KUrl& fileUrl)
 {
-    return locationForAlbumRootPath(fileUrl.path(KUrl::RemoveTrailingSlash));
+    return locationForAlbumRootPath(fileUrl.toLocalFile(KUrl::RemoveTrailingSlash));
 }
 
 CollectionLocation CollectionManager::locationForAlbumRootPath(const QString& albumRootPath)
@@ -1076,7 +1076,7 @@ CollectionLocation CollectionManager::locationForAlbumRootPath(const QString& al
 
 CollectionLocation CollectionManager::locationForUrl(const KUrl& fileUrl)
 {
-    return locationForPath(fileUrl.path(KUrl::RemoveTrailingSlash));
+    return locationForPath(fileUrl.toLocalFile(KUrl::RemoveTrailingSlash));
 }
 
 CollectionLocation CollectionManager::locationForPath(const QString& filePath)
@@ -1105,12 +1105,12 @@ QString CollectionManager::albumRootPath(int id)
 
 KUrl CollectionManager::albumRoot(const KUrl& fileUrl)
 {
-    return KUrl::fromPath(albumRootPath(fileUrl.path(KUrl::LeaveTrailingSlash)));
+    return KUrl::fromPath(albumRootPath(fileUrl.toLocalFile(KUrl::LeaveTrailingSlash)));
 }
 
 QString CollectionManager::albumRootPath(const KUrl& fileUrl)
 {
-    return albumRootPath(fileUrl.path(KUrl::LeaveTrailingSlash));
+    return albumRootPath(fileUrl.toLocalFile(KUrl::LeaveTrailingSlash));
 }
 
 QString CollectionManager::albumRootPath(const QString& filePath)
@@ -1127,7 +1127,7 @@ QString CollectionManager::albumRootPath(const QString& filePath)
 
 bool CollectionManager::isAlbumRoot(const KUrl& fileUrl)
 {
-    return isAlbumRoot(fileUrl.path(KUrl::RemoveTrailingSlash));
+    return isAlbumRoot(fileUrl.toLocalFile(KUrl::RemoveTrailingSlash));
 }
 
 bool CollectionManager::isAlbumRoot(const QString& filePath)
@@ -1143,7 +1143,7 @@ bool CollectionManager::isAlbumRoot(const QString& filePath)
 
 QString CollectionManager::album(const KUrl& fileUrl)
 {
-    return album(fileUrl.path(KUrl::RemoveTrailingSlash));
+    return album(fileUrl.toLocalFile(KUrl::RemoveTrailingSlash));
 }
 
 QString CollectionManager::album(const QString& filePath)
@@ -1173,7 +1173,7 @@ QString CollectionManager::album(const QString& filePath)
 
 QString CollectionManager::album(const CollectionLocation& location, const KUrl& fileUrl)
 {
-    return album(location, fileUrl.path(KUrl::RemoveTrailingSlash));
+    return album(location, fileUrl.toLocalFile(KUrl::RemoveTrailingSlash));
 }
 
 QString CollectionManager::album(const CollectionLocation& location, const QString& filePath)

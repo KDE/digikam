@@ -215,7 +215,7 @@ void SuperImposeTool::populateTemplates(void)
     if (!d->templatesUrl.isValid() || !d->templatesUrl.isLocalFile())
        return;
 
-    QDir dir(d->templatesUrl.path(), "*.png *.PNG");
+    QDir dir(d->templatesUrl.toLocalFile(), "*.png *.PNG");
 
     if (!dir.exists())
        return;
@@ -241,8 +241,8 @@ void SuperImposeTool::readSettings()
     KUrl albumDBUrl( group.readEntry("Album Path", KGlobalSettings::documentPath()) );
     group = config->group("superimpose Tool");
     group = config->group("Template Superimpose Tool Settings");
-    d->templatesRootUrl.setPath( group.readEntry("Templates Root URL", albumDBUrl.path()) );
-    d->templatesUrl.setPath( group.readEntry("Templates URL", albumDBUrl.path()) );
+    d->templatesRootUrl.setPath( group.readEntry("Templates Root URL", albumDBUrl.toLocalFile()) );
+    d->templatesUrl.setPath( group.readEntry("Templates URL", albumDBUrl.toLocalFile()) );
     d->dirSelect->setRootPath(d->templatesRootUrl, d->templatesUrl);
 }
 
@@ -250,8 +250,8 @@ void SuperImposeTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("superimpose Tool");
-    group.writeEntry( "Templates Root URL", d->dirSelect->rootPath().path() );
-    group.writeEntry( "Templates URL", d->templatesUrl.path() );
+    group.writeEntry( "Templates Root URL", d->dirSelect->rootPath().toLocalFile() );
+    group.writeEntry( "Templates URL", d->templatesUrl.toLocalFile() );
     group.sync();
 }
 
@@ -262,7 +262,7 @@ void SuperImposeTool::slotResetSettings()
 
 void SuperImposeTool::slotRootTemplateDirChanged(void)
 {
-    KUrl url = KFileDialog::getExistingDirectory(d->templatesRootUrl.path(), kapp->activeWindow(),
+    KUrl url = KFileDialog::getExistingDirectory(d->templatesRootUrl.toLocalFile(), kapp->activeWindow(),
                                                  i18n("Select Template Root Directory to Use"));
 
     if ( url.isValid() )

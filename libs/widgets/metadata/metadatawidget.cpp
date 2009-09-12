@@ -278,7 +278,7 @@ bool MetadataWidget::storeMetadataToFile(const KUrl& url, const QByteArray& meta
     if( url.isEmpty() )
         return false;
 
-    QFile file(url.path());
+    QFile file(url.toLocalFile());
     if ( !file.open(QIODevice::WriteOnly) )
         return false;
 

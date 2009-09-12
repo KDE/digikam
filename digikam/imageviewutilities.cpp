@@ -127,9 +127,9 @@ void ImageViewUtilities::slotRenamed(KIO::Job*, const KUrl &, const KUrl&newURL)
     fileURL.addPath(newURL.path());
 
     // refresh thumbnail
-    ThumbnailLoadThread::deleteThumbnail(fileURL.path());
+    ThumbnailLoadThread::deleteThumbnail(fileURL.toLocalFile());
     // clean LoadingCache as well - be pragmatic, do it here.
-    LoadingCacheInterface::fileChanged(fileURL.path());
+    LoadingCacheInterface::fileChanged(fileURL.toLocalFile());
 }
 
 void ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos, bool deletePermanently)

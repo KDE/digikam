@@ -303,7 +303,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
         KUrl url = *it;
         if (url.isLocalFile())
         {
-            QFileInfo fi(url.path());
+            QFileInfo fi(url.toLocalFile());
             if (fi.isDir())
             {
                 // Local Dir
@@ -547,7 +547,7 @@ void ShowFoto::saveSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("ImageViewer Settings");
 
-    group.writeEntry("Last Opened Directory", d->lastOpenedDirectory.path() );
+    group.writeEntry("Last Opened Directory", d->lastOpenedDirectory.toLocalFile() );
     group.writeEntry("Theme", Digikam::ThemeEngine::instance()->getCurrentThemeName());
 
     config->sync();
@@ -862,7 +862,7 @@ void ShowFoto::openFolder(const KUrl& url)
 
     // Get all image files from directory.
 
-    QDir dir(url.path(), patterns);
+    QDir dir(url.toLocalFile(), patterns);
     dir.setFilter ( QDir::Files );
 
     if (!dir.exists())
@@ -1040,14 +1040,14 @@ void ShowFoto::finishSaving(bool success)
 
 void ShowFoto::saveIsComplete()
 {
-    Digikam::LoadingCacheInterface::putImage(m_savingContext->destinationURL.path(), m_canvas->currentImage());
+    Digikam::LoadingCacheInterface::putImage(m_savingContext->destinationURL.toLocalFile(), m_canvas->currentImage());
     d->thumbBar->invalidateThumb(d->currentItem);
 }
 
 void ShowFoto::saveAsIsComplete()
 {
-    m_canvas->switchToLastSaved(m_savingContext->destinationURL.path());
-    Digikam::LoadingCacheInterface::putImage(m_savingContext->destinationURL.path(), m_canvas->currentImage());
+    m_canvas->switchToLastSaved(m_savingContext->destinationURL.toLocalFile());
+    Digikam::LoadingCacheInterface::putImage(m_savingContext->destinationURL.toLocalFile(), m_canvas->currentImage());
 
     // Add the file to the list of thumbbar images if it's not there already
     Digikam::ThumbBarItem* foundItem = d->thumbBar->findItemByUrl(m_savingContext->destinationURL);
@@ -1198,7 +1198,7 @@ void ShowFoto::slideShow(bool startWithCurrent, Digikam::SlideShowSettings& sett
          !m_cancelSlideShow && (it != settings.fileList.constEnd()) ; ++it)
     {
         Digikam::SlidePictureInfo pictInfo;
-        meta.load((*it).path());
+        meta.load((*it).toLocalFile());
         pictInfo.comment   = meta.getImageComments()[QString("x-default")].caption;
         pictInfo.photoInfo = meta.getPhotographInformation();
         settings.pictInfoMap.insert(*it, pictInfo);

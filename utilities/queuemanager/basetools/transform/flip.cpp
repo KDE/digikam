@@ -94,15 +94,15 @@ bool Flip::toolOperations()
 {
     DImg::FLIP flip = (DImg::FLIP)(settings()["Flip"].toInt());
 
-    if (isJpegImage(inputUrl().path()) && image().isNull())
+    if (isJpegImage(inputUrl().toLocalFile()) && image().isNull())
     {
         switch(flip)
         {
             case DImg::HORIZONTAL:
-                return (exifTransform(inputUrl().path(), inputUrl().fileName(), outputUrl().path(), FlipHorizontal));
+                return (exifTransform(inputUrl().toLocalFile(), inputUrl().fileName(), outputUrl().toLocalFile(), FlipHorizontal));
                 break;
             case DImg::VERTICAL:
-                return (exifTransform(inputUrl().path(), inputUrl().fileName(), outputUrl().path(), FlipVertical));
+                return (exifTransform(inputUrl().toLocalFile(), inputUrl().fileName(), outputUrl().toLocalFile(), FlipVertical));
                 break;
             default:
                 kDebug(50003) << "Unknow flip action";

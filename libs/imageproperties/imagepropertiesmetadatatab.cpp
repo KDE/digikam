@@ -171,7 +171,7 @@ void ImagePropertiesMetaDataTab::setCurrentURL(const KUrl& url)
     }
 
     setEnabled(true);
-    DMetadata metadata(url.path());
+    DMetadata metadata(url.toLocalFile());
 
     d->exifWidget->loadFromData(url.fileName(), metadata);
     d->makernoteWidget->loadFromData(url.fileName(), metadata);

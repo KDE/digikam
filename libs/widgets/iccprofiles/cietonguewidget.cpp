@@ -284,7 +284,7 @@ bool CIETongueWidget::setProfileFromFile(const KUrl& file)
     if (!file.isEmpty() && file.isValid())
     {
         LcmsLock lock();
-        cmsHPROFILE hProfile = cmsOpenProfileFromFile(QFile::encodeName(file.path()), "r");
+        cmsHPROFILE hProfile = cmsOpenProfileFromFile(QFile::encodeName(file.toLocalFile()), "r");
 
         if (!hProfile)
         {

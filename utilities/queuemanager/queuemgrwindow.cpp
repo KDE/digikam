@@ -967,7 +967,7 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
     if (settings.conflictRule != QueueSettings::OVERWRITE)
     {
         struct stat statBuf;
-        if (::stat(QFile::encodeName(dest.path()), &statBuf) == 0)
+        if (::stat(QFile::encodeName(dest.toLocalFile()), &statBuf) == 0)
         {
             KIO::RenameDialog dlg(this, i18n("Save Queued Image from '%1' as",
                                   url.fileName()),
@@ -1008,7 +1008,7 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
 
     if (!dest.isEmpty())
     {
-        if (::rename(QFile::encodeName(tmp.path()), QFile::encodeName(dest.path())) != 0)
+        if (::rename(QFile::encodeName(tmp.toLocalFile()), QFile::encodeName(dest.toLocalFile())) != 0)
         {
             if (d->currentProcessItem)
             {
@@ -1123,7 +1123,7 @@ bool QueueMgrWindow::checkTargetAlbum(int queueId)
 
     QString queueName              = d->queuePool->queueTitle(queueId);
     KUrl    processedItemsAlbumUrl = queue->settings().targetUrl;
-    kDebug(50003) << "Target album for queue " << queueName << " is: " << processedItemsAlbumUrl.path();
+    kDebug(50003) << "Target album for queue " << queueName << " is: " << processedItemsAlbumUrl.toLocalFile();
 
     if (processedItemsAlbumUrl.isEmpty())
     {
@@ -1134,7 +1134,7 @@ bool QueueMgrWindow::checkTargetAlbum(int queueId)
         return false;
     }
 
-    QFileInfo dir(processedItemsAlbumUrl.path());
+    QFileInfo dir(processedItemsAlbumUrl.toLocalFile());
 
     if ( !dir.exists() || !dir.isWritable() )
     {

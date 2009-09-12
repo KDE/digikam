@@ -1958,9 +1958,8 @@ QStringList AlbumDB::getItemNamesInAlbum(int albumID, bool recurssive)
 
     if (recurssive)
     {
-        KUrl url(getAlbumRelativePath(albumID));
         int rootId = getAlbumRootId(albumID);
-        QString path = url.path();
+        QString path = getAlbumRelativePath(albumID);
         d->db->execSql( QString("SELECT Images.name FROM Images WHERE Images.album IN "
                                 " (SELECT DISTINCT id FROM Albums "
                                 "  WHERE albumRoot=? AND (relativePath=? OR relativePath LIKE ?));"),

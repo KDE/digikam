@@ -430,7 +430,7 @@ void SubjectWidget::slotAddSubject()
 
 bool SubjectWidget::loadSubjectCodesFromXML(const KUrl& url)
 {
-    QFile xmlfile(url.path());
+    QFile xmlfile(url.toLocalFile());
 
     if (!xmlfile.open(QIODevice::ReadOnly))
         return false;

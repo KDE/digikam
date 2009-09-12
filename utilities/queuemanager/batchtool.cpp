@@ -260,7 +260,7 @@ void BatchTool::setOutputUrlFromInputUrl()
 {
     QFileInfo fi(inputUrl().fileName());
 
-    QString path(workingUrl().path());
+    QString path(workingUrl().toLocalFile());
     path.append("/.");
     path.append(QString::number(QDateTime::currentDateTime().toTime_t()));
     path.append("-");
@@ -285,7 +285,7 @@ bool BatchTool::loadToDImg()
 {
     if (!d->image.isNull()) return true;
 
-    return d->image.load(inputUrl().path(), d->observer);
+    return d->image.load(inputUrl().toLocalFile(), d->observer);
 }
 
 bool BatchTool::savefromDImg()
@@ -298,11 +298,11 @@ bool BatchTool::savefromDImg()
         // In case of output support is not set for ex. with all tool which do not convert to new format.
         DImg::FORMAT format = (DImg::FORMAT)(d->image.attribute("detectedFileFormat").toInt());
         d->image.updateMetadata(DImg::formatToMimeType(format), QString(), getExifSetOrientation());
-        return( d->image.save(outputUrl().path(), format, d->observer) );
+        return( d->image.save(outputUrl().toLocalFile(), format, d->observer) );
     }
 
     d->image.updateMetadata(frm, QString(), getExifSetOrientation());
-    bool b   = d->image.save(outputUrl().path(), frm, d->observer);
+    bool b   = d->image.save(outputUrl().toLocalFile(), frm, d->observer);
     d->image = DImg();
     return b;
 }

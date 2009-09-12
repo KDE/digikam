@@ -49,6 +49,7 @@
 // Local includes
 
 #include "albumsettings.h"
+#include "databaseurl.h"
 
 namespace Digikam
 {
@@ -147,7 +148,7 @@ void DeleteWidget::setFiles(const KUrl::List& files)
         if( (*it).isLocalFile() ) //path is null for non-local
             m_fileList->addItem( (*it).toLocalFile() );
         else if ( (*it).protocol() == "digikamalbums")
-            m_fileList->addItem( (*it).path() );
+            m_fileList->addItem( DatabaseUrl(*it).fileUrl().toLocalFile() );
         else
             m_fileList->addItem( (*it).prettyUrl() );
     }

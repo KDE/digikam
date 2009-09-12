@@ -502,18 +502,18 @@ void CameraController::executeCommand(CameraCommand *cmd)
             tempURL      = tempURL.upUrl();
             tempURL.addPath(QString(".digikam-camera-tmp1-%1").arg(getpid()).append(file));
             kDebug(50003) << "Downloading: " << file << " using (" << tempURL << ")";
-            QString temp = tempURL.path();
+            QString temp = tempURL.toLocalFile();
 
-            bool result  = d->camera->downloadItem(folder, file, tempURL.path());
+            bool result  = d->camera->downloadItem(folder, file, tempURL.toLocalFile());
 
             if (!result)
             {
-                unlink(QFile::encodeName(tempURL.path()));
+                unlink(QFile::encodeName(tempURL.toLocalFile()));
                 emit signalDownloaded(folder, file, GPItemInfo::DownloadFailed);
                 sendLogMsg(i18n("Failed to download %1...", file), DHistoryView::ErrorEntry, folder, file);
                 break;
             }
-            else if (isJpegImage(tempURL.path()))
+            else if (isJpegImage(tempURL.toLocalFile()))
             {
                 // Possible modification operations. Only apply it to JPEG for the moment.
 
@@ -521,13 +521,13 @@ void CameraController::executeCommand(CameraCommand *cmd)
                 {
                     kDebug(50003) << "Exif autorotate: " << file << " using (" << tempURL << ")";
                     sendLogMsg(i18n("EXIF rotating file %1...", file), DHistoryView::StartingEntry, folder, file);
-                    exifTransform(tempURL.path(), file);
+                    exifTransform(tempURL.toLocalFile(), file);
                 }
 
                 if (!templateTitle.isNull() || fixDateTime)
                 {
                     kDebug(50003) << "Set metadata from: " << file << " using (" << tempURL << ")";
-                    DMetadata metadata(tempURL.path());
+                    DMetadata metadata(tempURL.toLocalFile());
 
                     if (fixDateTime)
                     {
@@ -568,19 +568,19 @@ void CameraController::executeCommand(CameraCommand *cmd)
                     KUrl tempURL2(dest);
                     tempURL2 = tempURL2.upUrl();
                     tempURL2.addPath(QString(".digikam-camera-tmp2-%1").arg(getpid()).append(file));
-                    temp     = tempURL2.path();
+                    temp     = tempURL2.toLocalFile();
 
-                    if (!jpegConvert(tempURL.path(), tempURL2.path(), file, losslessFormat))
+                    if (!jpegConvert(tempURL.toLocalFile(), tempURL2.toLocalFile(), file, losslessFormat))
                     {
                         // convert failed. delete the temp file
-                        unlink(QFile::encodeName(tempURL.path()));
-                        unlink(QFile::encodeName(tempURL2.path()));
+                        unlink(QFile::encodeName(tempURL.toLocalFile()));
+                        unlink(QFile::encodeName(tempURL2.toLocalFile()));
                         result = false;
                     }
                     else
                     {
                         // Else remove only the first temp file.
-                        unlink(QFile::encodeName(tempURL.path()));
+                        unlink(QFile::encodeName(tempURL.toLocalFile()));
                     }
                 }
             }
@@ -724,7 +724,7 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
                                   KIO::RenameDialog_Mode(KIO::M_MULTI | KIO::M_OVERWRITE | KIO::M_SKIP));
 
             int result = dlg.exec();
-            dest       = dlg.newDestUrl().path();
+            dest       = dlg.newDestUrl().toLocalFile();
             info       = QFileInfo(dest);
 
             switch (result)

@@ -558,7 +558,7 @@ QPixmap ThumbnailLoadThread::surrogatePixmap(const LoadingDescription& descripti
 
     /*
     No dependency on AlbumSettings here please...
-    QString ext = QFileInfo(url.path()).suffix();
+    QString ext = QFileInfo(url.toLocalFile()).suffix();
 
     AlbumSettings* settings = AlbumSettings::instance();
     if (settings)

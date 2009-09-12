@@ -64,7 +64,6 @@ void kio_digikamdates::special(const QByteArray& data)
     bool folders = (metaData("folders") == "true");
 
     KUrl    kurl;
-    QString url;
     QString filter;
 
     QDataStream ds(data);
@@ -72,8 +71,6 @@ void kio_digikamdates::special(const QByteArray& data)
 
     Digikam::DatabaseUrl dbUrl(kurl);
     Digikam::DatabaseAccess::setParameters(dbUrl);
-
-    url = kurl.path();
 
     if (folders)
     {

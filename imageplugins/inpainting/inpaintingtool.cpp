@@ -428,7 +428,7 @@ void InPaintingTool::slotLoadSettings()
     if ( loadInpaintingFile.isEmpty() )
        return;
 
-    QFile file(loadInpaintingFile.path());
+    QFile file(loadInpaintingFile.toLocalFile());
 
     if ( file.open(QIODevice::ReadOnly) )
     {
@@ -459,7 +459,7 @@ void InPaintingTool::slotSaveAsSettings()
     if ( saveRestorationFile.isEmpty() )
        return;
 
-    QFile file(saveRestorationFile.path());
+    QFile file(saveRestorationFile.toLocalFile());
 
     if ( file.open(QIODevice::WriteOnly) )
         d->settingsWidget->saveSettings(file, QString("# Photograph Inpainting Configuration File V2"));

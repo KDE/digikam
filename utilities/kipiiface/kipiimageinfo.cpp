@@ -286,7 +286,7 @@ int KipiImageInfo::angle()
     if (settings->getExifRotate())
     {
         //TODO: read from DB
-        DMetadata metadata(_url.path());
+        DMetadata metadata(_url.toLocalFile());
         DMetadata::ImageOrientation orientation = metadata.getImageOrientation();
 
         switch (orientation)

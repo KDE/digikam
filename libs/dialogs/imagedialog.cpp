@@ -138,9 +138,9 @@ void ImageDialogPreview::showPreview(const KUrl& url)
     {
         clearPreview();
         d->currentURL = url;
-        d->thumbLoadThread->find(d->currentURL.path());
+        d->thumbLoadThread->find(d->currentURL.toLocalFile());
 
-        d->metaIface.load(d->currentURL.path());
+        d->metaIface.load(d->currentURL.toLocalFile());
         PhotoInfoContainer info = d->metaIface.getPhotographInformation();
         if (!info.isEmpty())
         {

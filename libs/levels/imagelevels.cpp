@@ -622,7 +622,7 @@ bool ImageLevels::loadLevelsFromGimpLevelsFile(const KUrl& fileUrl)
     char    buf[50];
     char   *nptr;
 
-    file = fopen(QFile::encodeName(fileUrl.path()), "r");
+    file = fopen(QFile::encodeName(fileUrl.toLocalFile()), "r");
 
     if (!file)
        return false;
@@ -691,7 +691,7 @@ bool ImageLevels::saveLevelsToGimpLevelsFile(const KUrl& fileUrl)
     FILE *file;
     int   i;
 
-    file = fopen(QFile::encodeName(fileUrl.path()), "w");
+    file = fopen(QFile::encodeName(fileUrl.toLocalFile()), "w");
 
     if (!file)
        return false;

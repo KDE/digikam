@@ -609,7 +609,7 @@ void ChannelMixerTool::slotLoadSettings()
     if ( loadGainsFileUrl.isEmpty() )
        return;
 
-    fp = fopen(QFile::encodeName(loadGainsFileUrl.path()), "r");
+    fp = fopen(QFile::encodeName(loadGainsFileUrl.toLocalFile()), "r");
 
     if ( fp )
     {
@@ -696,7 +696,7 @@ void ChannelMixerTool::slotSaveAsSettings()
     if ( saveGainsFileUrl.isEmpty() )
        return;
 
-    fp = fopen(QFile::encodeName(saveGainsFileUrl.path()), "w");
+    fp = fopen(QFile::encodeName(saveGainsFileUrl.toLocalFile()), "w");
 
     if ( fp )
     {

@@ -1373,13 +1373,13 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
             {
                 KMessageBox::error(this, i18n("Failed to save file\n\"%1\"\nto\n\"%2\".",
                                               m_savingContext->destinationURL.fileName(),
-                                              m_savingContext->destinationURL.path()));
+                                              m_savingContext->destinationURL.toLocalFile()));
             }
             finishSaving(false);
             return;
         }
 
-        kDebug(50003) << "renaming to " << m_savingContext->destinationURL.path();
+        kDebug(50003) << "renaming to " << m_savingContext->destinationURL.toLocalFile();
 
         if (!moveFile())
         {
@@ -1390,7 +1390,7 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
         m_canvas->setUndoHistoryOrigin();
 
         // remove image from cache since it has changed
-        LoadingCacheInterface::fileChanged(m_savingContext->destinationURL.path());
+        LoadingCacheInterface::fileChanged(m_savingContext->destinationURL.toLocalFile());
         // this won't be in the cache, but does not hurt to do it anyway
         LoadingCacheInterface::fileChanged(filename);
 
@@ -1414,7 +1414,7 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
             {
                 KMessageBox::error(this, i18n("Failed to save file\n\"%1\"\nto\n\"%2\".",
                                               m_savingContext->destinationURL.fileName(),
-                                              m_savingContext->destinationURL.path()));
+                                              m_savingContext->destinationURL.toLocalFile()));
             }
             finishSaving(false);
             return;
@@ -1422,7 +1422,7 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
 
         // Only try to write Exif if both src and destination are JPEG files
 
-        kDebug(50003) << "renaming to " << m_savingContext->destinationURL.path();
+        kDebug(50003) << "renaming to " << m_savingContext->destinationURL.toLocalFile();
 
         if (!moveFile())
         {
@@ -1432,7 +1432,7 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
 
         m_canvas->setUndoHistoryOrigin();
 
-        LoadingCacheInterface::fileChanged(m_savingContext->destinationURL.path());
+        LoadingCacheInterface::fileChanged(m_savingContext->destinationURL.toLocalFile());
         LoadingCacheInterface::fileChanged(filename);
 
         finishSaving(true);
@@ -1467,7 +1467,7 @@ void EditorWindow::finishSaving(bool success)
     // On error, continue using current image
     if (!success)
     {
-        m_canvas->switchToLastSaved(m_savingContext->srcURL.path());
+        m_canvas->switchToLastSaved(m_savingContext->srcURL.toLocalFile());
     }
 }
 
@@ -1587,13 +1587,13 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     {
         // Else, check if target image format have been add to target image file name using extension.
 
-        QFileInfo fi(newURL.path());
+        QFileInfo fi(newURL.toLocalFile());
         m_savingContext->format = fi.suffix();
 
         if ( m_savingContext->format.isEmpty() )
         {
             // If format is empty then file format is same as that of the original file.
-            m_savingContext->format = QImageReader::imageFormat(m_savingContext->srcURL.path());
+            m_savingContext->format = QImageReader::imageFormat(m_savingContext->srcURL.toLocalFile());
         }
         else
         {
@@ -1625,7 +1625,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     {
         KMessageBox::error(this, i18n("Failed to save file\n\"%1\"\nto\n\"%2\".",
                                       newURL.fileName(),
-                                      newURL.path().section('/', -2, -2)));
+                                      newURL.toLocalFile().section('/', -2, -2)));
         kWarning(50003) << "target URL is not valid !";
         return false;
     }
@@ -1647,7 +1647,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
 
     // Check for overwrite ----------------------------------------------------------
 
-    QFileInfo fi(newURL.path());
+    QFileInfo fi(newURL.toLocalFile());
     m_savingContext->destinationExisted = fi.exists();
     if ( m_savingContext->destinationExisted )
     {
@@ -1709,7 +1709,7 @@ bool EditorWindow::checkPermissions(const KUrl& url)
     //TODO: Check that the permissions can actually be changed
     //      if write permissions are not available.
 
-    QFileInfo fi(url.path());
+    QFileInfo fi(url.toLocalFile());
 
     if (fi.exists() && !fi.isWritable())
     {

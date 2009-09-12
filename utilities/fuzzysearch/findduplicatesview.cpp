@@ -254,7 +254,7 @@ void FindDuplicatesView::populateTreeView()
         {
             FindDuplicatesAlbumItem *item = new FindDuplicatesAlbumItem(d->listView, salbum);
             salbum->setExtraData(this, item);
-            ThumbnailLoadThread::defaultThread()->find(item->refUrl().path());
+            ThumbnailLoadThread::defaultThread()->find(item->refUrl().toLocalFile());
         }
     }
 
@@ -312,7 +312,7 @@ void FindDuplicatesView::slotAlbumAdded(Album* a)
     {
         FindDuplicatesAlbumItem *item = new FindDuplicatesAlbumItem(d->listView, salbum);
         salbum->setExtraData(this, item);
-        ThumbnailLoadThread::defaultThread()->find(item->refUrl().path());
+        ThumbnailLoadThread::defaultThread()->find(item->refUrl().toLocalFile());
     }
 }
 
@@ -357,7 +357,7 @@ void FindDuplicatesView::slotThumbnailLoaded(const LoadingDescription& desc, con
     while (*it)
     {
         FindDuplicatesAlbumItem* item = dynamic_cast<FindDuplicatesAlbumItem*>(*it);
-        if (item->refUrl().path() == desc.filePath)
+        if (item->refUrl().toLocalFile() == desc.filePath)
         {
             if (pix.isNull())
                 item->setThumb(SmallIcon("image-x-generic", ICONSIZE, KIconLoader::DisabledState));
