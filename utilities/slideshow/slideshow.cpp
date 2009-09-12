@@ -281,8 +281,8 @@ void SlideShow::loadNextImage()
     if (d->fileIndex < num)
     {
         d->currentImage = d->settings.fileList[d->fileIndex];
-        d->previewThread->load(LoadingDescription(d->currentImage.toLocalFile(),
-                               qMax(d->deskWidth, d->deskHeight), d->settings.exifRotate));
+        d->previewThread->load(d->currentImage.toLocalFile(),
+                               qMax(d->deskWidth, d->deskHeight), d->settings.exifRotate);
     }
     else
     {
@@ -315,8 +315,8 @@ void SlideShow::loadPrevImage()
     if (d->fileIndex >= 0 && d->fileIndex < num)
     {
         d->currentImage = d->settings.fileList[d->fileIndex];
-        d->previewThread->load(LoadingDescription(d->currentImage.toLocalFile(),
-                               qMax(d->deskWidth, d->deskHeight), d->settings.exifRotate));
+        d->previewThread->load(d->currentImage.toLocalFile(),
+                               qMax(d->deskWidth, d->deskHeight), d->settings.exifRotate);
     }
     else
     {
@@ -363,8 +363,8 @@ void SlideShow::preloadNextImage()
 
     if (index < num)
     {
-        d->previewPreloadThread->load(LoadingDescription(d->settings.fileList[index].toLocalFile(),
-                                      qMax(d->deskWidth, d->deskHeight), d->settings.exifRotate));
+        d->previewPreloadThread->load(d->settings.fileList[index].toLocalFile(),
+                                      qMax(d->deskWidth, d->deskHeight), d->settings.exifRotate);
     }
 }
 
