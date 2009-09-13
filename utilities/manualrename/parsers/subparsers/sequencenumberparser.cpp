@@ -145,15 +145,16 @@ void SequenceNumberParser::parseOperation(QString& parseString, const ParseInfor
 
     // --------------------------------------------------------
 
-    PARSE_LOOP_START(parseString, regExp)
+    QString tmp;
+    PARSE_LOOP_START(parseString, regExp, tmp)
+    {
+        slength = regExp.cap(1).length();
+        start   = regExp.cap(3).isEmpty() ? 1 : regExp.cap(3).toInt();
+        step    = regExp.cap(4).isEmpty() ? 1 : regExp.cap(4).toInt();
 
-    slength = regExp.cap(1).length();
-    start   = regExp.cap(3).isEmpty() ? 1 : regExp.cap(3).toInt();
-    step    = regExp.cap(4).isEmpty() ? 1 : regExp.cap(4).toInt();
-
-    number = start + ((index - 1) * step);
-    QString tmp = QString("%1").arg(number, slength, 10, QChar('0'));
-
+        number = start + ((index - 1) * step);
+        tmp    = QString("%1").arg(number, slength, 10, QChar('0'));
+    }
     PARSE_LOOP_END(parseString, regExp, tmp)
 }
 

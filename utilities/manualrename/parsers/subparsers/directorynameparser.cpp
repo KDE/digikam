@@ -61,18 +61,18 @@ void DirectoryNameParser::parseOperation(QString& parseString, const ParseInform
 
     // --------------------------------------------------------
 
-    PARSE_LOOP_START(parseString, regExp)
-
     QString tmp;
-    int matchedLength = regExp.cap(1).length();
+    PARSE_LOOP_START(parseString, regExp, tmp)
+    {
+        int matchedLength = regExp.cap(1).length();
 
-    if (matchedLength == 0)
-        tmp = folders.last();
-    else if (matchedLength > (folderCount - 1))
-        tmp.clear();
-    else
-        tmp = folders[folderCount - matchedLength - 1];
-
+        if (matchedLength == 0)
+            tmp = folders.last();
+        else if (matchedLength > (folderCount - 1))
+            tmp.clear();
+        else
+            tmp = folders[folderCount - matchedLength - 1];
+    }
     PARSE_LOOP_END(parseString, regExp, tmp)
 }
 

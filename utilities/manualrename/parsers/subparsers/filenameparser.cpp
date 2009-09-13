@@ -62,10 +62,11 @@ void FilenameParser::parseOperation(QString& parseString, const ParseInformation
 
     // --------------------------------------------------------
 
-    PARSE_LOOP_START(parseString, regExp)
-
-    QString tmp = firstLetterUppercase(baseFileName.toLower());
-
+    QString tmp;
+    PARSE_LOOP_START(parseString, regExp, tmp)
+    {
+        tmp = firstLetterUppercase(baseFileName.toLower());
+    }
     PARSE_LOOP_END(parseString, regExp, tmp)
 
     // --------------------------------------------------------

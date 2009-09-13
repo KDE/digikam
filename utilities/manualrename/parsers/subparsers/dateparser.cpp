@@ -186,28 +186,28 @@ void DateParser::parseOperation(QString& parseString, const ParseInformation& in
 
     // --------------------------------------------------------
 
-    PARSE_LOOP_START(parseString, regExp)
-
     QString tmp;
-    DateFormat df;
-
-    QString token = regExp.cap(1);
-    if (!token.isEmpty())
-        token.remove(0, 1);
-
-    QVariant v = df.formatType(token);
-    if (v.isNull())
+    PARSE_LOOP_START(parseString, regExp, tmp)
     {
-        tmp = info.dateTime.toString(token);
-    }
-    else
-    {
-        if (v.type() == QVariant::String)
-            tmp = info.dateTime.toString(v.toString());
+        DateFormat df;
+
+        QString token = regExp.cap(1);
+        if (!token.isEmpty())
+            token.remove(0, 1);
+
+        QVariant v = df.formatType(token);
+        if (v.isNull())
+        {
+            tmp = info.dateTime.toString(token);
+        }
         else
-            tmp = info.dateTime.toString((Qt::DateFormat)v.toInt());
+        {
+            if (v.type() == QVariant::String)
+                tmp = info.dateTime.toString(v.toString());
+            else
+                tmp = info.dateTime.toString((Qt::DateFormat)v.toInt());
+        }
     }
-
     PARSE_LOOP_END(parseString, regExp, tmp)
 }
 

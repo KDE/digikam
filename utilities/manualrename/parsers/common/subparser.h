@@ -55,20 +55,22 @@ namespace Digikam
  * PARSE_LOOP_START and PARSE_LOOP_END can be used when parsing
  * a token with a regular expression.
  */
-#define PARSE_LOOP_START(PARSESTRING_, REGEXP_)                          \
-        int POS_ = 0;                                                    \
-        while (POS_ > -1)                                                \
-        {                                                                \
-            POS_ = REGEXP_.indexIn(PARSESTRING_, POS_);                  \
-            if (POS_ > -1)                                               \
-            {                                                            \
+#define PARSE_LOOP_START(PARSESTRING_, REGEXP_, PARSED_)                     \
+        {                                                                    \
+            int POS_ = 0;                                                    \
+            while (POS_ > -1)                                                \
+            {                                                                \
+                POS_ = REGEXP_.indexIn(PARSESTRING_, POS_);                  \
+                if (POS_ > -1)                                               \
+                {
 
-#define PARSE_LOOP_END(PARSESTRING_, REGEXP_, PARSED_)                   \
-        QString RESULT_ = markResult(REGEXP_.matchedLength(), PARSED_);  \
-        PARSESTRING_.replace(POS_, REGEXP_.matchedLength(), RESULT_);    \
-        POS_ += RESULT_.count();                                         \
-            }                                                            \
-        }                                                                \
+#define PARSE_LOOP_END(PARSESTRING_, REGEXP_, PARSED_)                       \
+            QString RESULT_ = markResult(REGEXP_.matchedLength(), PARSED_);  \
+            PARSESTRING_.replace(POS_, REGEXP_.matchedLength(), RESULT_);    \
+            POS_ += RESULT_.count();                                         \
+                }                                                            \
+            }                                                                \
+        }
 
 class SubParser : public QObject
 {

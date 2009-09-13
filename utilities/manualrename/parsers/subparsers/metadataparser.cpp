@@ -177,17 +177,16 @@ void MetadataParser::parseOperation(QString& parseString, const ParseInformation
 
     // --------------------------------------------------------
 
-    PARSE_LOOP_START(parseString, regExp)
-
-    QString keyword = regExp.cap(1);
     QString tmp;
-
+    PARSE_LOOP_START(parseString, regExp, tmp)
+    {
+        QString keyword = regExp.cap(1);
 #if KEXIV2_VERSION >= 0x010000
-    tmp = parseMetadata(keyword, info);
+        tmp = parseMetadata(keyword, info);
 #else
-    Q_UNUSED(info)
+        Q_UNUSED(info)
 #endif
-
+    }
     PARSE_LOOP_END(parseString, regExp, tmp)
 }
 

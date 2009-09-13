@@ -47,11 +47,12 @@ void CameraNameParser::parseOperation(QString& parseString, const ParseInformati
 
     // --------------------------------------------------------
 
-    PARSE_LOOP_START(parseString, regExp)
-
-    QString parsed = stringIsValid(cameraName) ? cameraName : QString();
-
-    PARSE_LOOP_END(parseString, regExp, parsed)
+    QString tmp;
+    PARSE_LOOP_START(parseString, regExp, tmp)
+    {
+        tmp = stringIsValid(cameraName) ? cameraName : QString();
+    }
+    PARSE_LOOP_END(parseString, regExp, tmp)
 }
 
 } // namespace Digikam
