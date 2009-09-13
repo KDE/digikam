@@ -205,38 +205,12 @@ bool DImgLoader::checkExifWorkingColorSpace()
 {
     DMetadata metaData;
     metaData.setExif(m_image->getExif());
-
-    // Check if Exif data contains an ICC color profile.
-    QByteArray profile = metaData.getExifTagData("Exif.Image.InterColorProfile");
+    IccProfile profile = metaData.getIccProfile();
     if (!profile.isNull())
     {
-        kDebug(50003) << "Found an ICC profile in Exif metadata";
         m_image->setIccProfile(profile);
         return true;
     }
-
-    // Else check the Exif color-space tag and use a default profiles available with libkdcraw.
-
-    switch(metaData.getImageColorWorkSpace())
-    {
-        case DMetadata::WORKSPACE_SRGB:
-        {
-            kDebug(50003) << "Exif color-space tag is sRGB. Using default sRGB ICC profile.";
-            m_image->setIccProfile(IccProfile::sRGB());
-            return true;
-        }
-
-        case DMetadata::WORKSPACE_ADOBERGB:
-        {
-            kDebug(50003) << "Exif color-space tag is AdobeRGB. Using default AdobeRGB ICC profile.";
-            m_image->setIccProfile(IccProfile::adobeRGB());
-            return true;
-        }
-
-        default:
-            break;
-    }
-
     return false;
 }
 

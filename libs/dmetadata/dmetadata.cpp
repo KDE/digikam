@@ -982,6 +982,38 @@ QString DMetadata::getLensDescription() const
     return lens;
 }
 
+IccProfile DMetadata::getIccProfile() const
+{
+    // Check if Exif data contains an ICC color profile.
+    QByteArray data = getExifTagData("Exif.Image.InterColorProfile");
+    if (!data.isNull())
+    {
+        kDebug(50003) << "Found an ICC profile in Exif metadata";
+        return data;
+    }
+
+    // Else check the Exif color-space tag and use default profiles that we ship
+    switch (getImageColorWorkSpace())
+    {
+        case DMetadata::WORKSPACE_SRGB:
+        {
+            kDebug(50003) << "Exif color-space tag is sRGB. Using default sRGB ICC profile.";
+            return IccProfile::sRGB();
+        }
+
+        case DMetadata::WORKSPACE_ADOBERGB:
+        {
+            kDebug(50003) << "Exif color-space tag is AdobeRGB. Using default AdobeRGB ICC profile.";
+            return IccProfile::adobeRGB();
+        }
+
+        default:
+            break;
+    }
+
+    return IccProfile();
+}
+
 bool DMetadata::setIptcTag(const QString& text, int maxLength,
                            const char* debugLabel, const char* tagKey)  const
 {
