@@ -21,7 +21,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 012 ==> 203176 : Deleting 2 files still shows one afterwards.
 013 ==> 205059 : The default path for image library is not localizable.
 014 ==> 204084 : Showfoto claims that there are no images in directory that contains symlinks to images.
-015 ==>
+015 ==> 197817 : digiKam should utilize _icc_profile X property.
+016 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta4 - Release date: 2009-08-30
