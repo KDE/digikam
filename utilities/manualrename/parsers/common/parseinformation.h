@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-09-12
- * Description : common manualrename parser types
+ * Description : parse information class
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *

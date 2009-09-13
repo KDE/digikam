@@ -46,7 +46,6 @@
 
 // Local includes
 
-#include "parser.h"
 #include "dcursortracker.h"
 #include "defaultparser.h"
 #include "manualrenameinput.h"

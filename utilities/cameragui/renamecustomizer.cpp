@@ -45,7 +45,7 @@
 // Local includes
 
 #include "dcursortracker.h"
-#include "parser.h"
+#include "parseinformation.h"
 #include "manualrenamewidget.h"
 
 namespace Digikam

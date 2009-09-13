@@ -37,7 +37,6 @@ class DefaultParser : public Parser
 public:
 
     DefaultParser();
-    ~DefaultParser();
 };
 
 }  // namespace Digikam

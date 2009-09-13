@@ -23,10 +23,6 @@
 
 #include "defaultparser.h"
 
-// Qt includes
-
-#include <QFileInfo>
-
 // Libkexiv2 includes
 
 #include <libkexiv2/version.h>
@@ -55,10 +51,6 @@ DefaultParser::DefaultParser()
 #if KEXIV2_VERSION >= 0x010000
     registerSubParser(new MetadataParser());
 #endif
-}
-
-DefaultParser::~DefaultParser()
-{
 }
 
 }  // namespace Digikam
