@@ -34,13 +34,11 @@
 
 // Local includes
 
-#include "parser.h"
+#include "subparser.h"
 
 class KIntNumInput;
 
 namespace Digikam
-{
-namespace ManualRename
 {
 
 class SequenceNumberDialog : public KDialog
@@ -59,7 +57,7 @@ public:
 
 // --------------------------------------------------------
 
-class SequenceNumberParser : public Parser
+class SequenceNumberParser : public SubParser
 {
     Q_OBJECT
 
@@ -78,7 +76,6 @@ private Q_SLOTS:
 
 };
 
-} // namespace ManualRename
 } // namespace Digikam
 
 #endif /* SEQUENCENUMBERPARSER_H */

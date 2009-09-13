@@ -39,12 +39,9 @@
 
 // Local includes
 
-#include "mainparser.h"
+#include "parser.h"
 
-using namespace Digikam::ManualRename;
 namespace Digikam
-{
-namespace ManualRename
 {
 
 class ManualRenameLineEditPriv
@@ -64,17 +61,17 @@ public:
         parser          = 0;
     }
 
-    bool        userIsTyping;
-    bool        userIsMarking;
-    bool        tokenMarked;
+    bool    userIsTyping;
+    bool    userIsMarking;
+    bool    tokenMarked;
 
-    int         selectionStart;
-    int         selectionLength;
-    int         curCursorPos;
-    int         markedTokenPos;
+    int     selectionStart;
+    int     selectionLength;
+    int     curCursorPos;
+    int     markedTokenPos;
 
-    QTimer*     parseTimer;
-    MainParser* parser;
+    QTimer* parseTimer;
+    Parser* parser;
 };
 
 ManualRenameLineEdit::ManualRenameLineEdit(QWidget* parent)
@@ -115,7 +112,7 @@ ManualRenameLineEdit::~ManualRenameLineEdit()
     delete d;
 }
 
-void ManualRenameLineEdit::setParser(MainParser* parser)
+void ManualRenameLineEdit::setParser(Parser* parser)
 {
     if (parser)
         d->parser = parser;
@@ -260,14 +257,13 @@ bool ManualRenameLineEdit::findToken(int curPos, int& pos, int& length)
     if (!d->parser)
         return false;
 
-    MainParser::TokenMap map = d->parser->tokenMap(text());
-    QMapIterator<QString, QString> it(map);
+    ParseResultsMap map                = d->parser->parseResultsMap(text());
+    ParseResultsMap::const_iterator it = 0;
 
     bool found = false;
 
-    while (it.hasNext())
+    for (it = map.constBegin(); it != map.constEnd(); ++it)
     {
-        it.next();
         QString keys        = it.key();
         QStringList keylist = keys.split(':', QString::SkipEmptyParts);
 
@@ -346,7 +342,7 @@ public:
     QToolButton*          moveTokenRight;
 
     ManualRenameLineEdit* parserInput;
-    MainParser*           parser;
+    Parser*               parser;
 };
 
 // --------------------------------------------------------
@@ -458,5 +454,4 @@ void ManualRenameInput::slotMoveTokenRight()
 //    d->parserInput->setSelection(d->selectionStart, d->selectionLength);
 }
 
-}  // namespace ManualRename
 }  // namespace Digikam

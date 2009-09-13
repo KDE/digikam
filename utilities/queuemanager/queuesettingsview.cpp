@@ -52,7 +52,6 @@
 #include "albumselectwidget.h"
 #include "manualrenamewidget.h"
 
-using namespace Digikam::ManualRename;
 namespace Digikam
 {
 

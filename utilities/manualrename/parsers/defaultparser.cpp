@@ -42,20 +42,18 @@
 
 namespace Digikam
 {
-namespace ManualRename
-{
 
 DefaultParser::DefaultParser()
-                  : MainParser()
+                  : Parser()
 {
-    registerParser(new FilenameParser());
-    registerParser(new DirectoryNameParser());
-    registerParser(new SequenceNumberParser());
-    registerParser(new CameraNameParser());
-    registerParser(new DateParser());
+    registerSubParser(new FilenameParser());
+    registerSubParser(new DirectoryNameParser());
+    registerSubParser(new SequenceNumberParser());
+    registerSubParser(new CameraNameParser());
+    registerSubParser(new DateParser());
 
 #if KEXIV2_VERSION >= 0x010000
-    registerParser(new MetadataParser());
+    registerSubParser(new MetadataParser());
 #endif
 }
 
@@ -63,5 +61,4 @@ DefaultParser::~DefaultParser()
 {
 }
 
-}  // namespace ManualRename
 }  // namespace Digikam

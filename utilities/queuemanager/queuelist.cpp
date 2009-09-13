@@ -826,8 +826,8 @@ void QueueListView::updateDestFileNames()
             QString baseName = fi.baseName();
             if (settings().renamingRule == QueueSettings::CUSTOMIZE)
             {
-                ManualRename::DefaultParser p;
-                ManualRename::ParseInformation parseInfo(info);
+                DefaultParser p;
+                ParseInformation parseInfo(info);
                 parseInfo.index = index;
 
                 QString parseString = settings().renamingParser;

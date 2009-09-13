@@ -40,8 +40,6 @@
 
 namespace Digikam
 {
-namespace ManualRename
-{
 
 const QString dateFormatLink = QString("<a href='http://doc.trolltech.com/latest/qdatetime.html#toString'>"
                   "format settings"
@@ -167,7 +165,7 @@ void DateParserDialog::updateExampleLabel()
 // --------------------------------------------------------
 
 DateParser::DateParser()
-          : Parser(i18n("Date && Time..."), SmallIcon("view-pim-calendar"))
+          : SubParser(i18n("Date && Time..."), SmallIcon("view-pim-calendar"))
 {
     useTokenMenu(false);
 
@@ -263,5 +261,4 @@ void DateParser::slotTokenTriggered(const QString& token)
     emit signalTokenTriggered(tmp);
 }
 
-} // namespace ManualRename
 } // namespace Digikam

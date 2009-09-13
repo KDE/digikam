@@ -40,12 +40,10 @@ class KLineEdit;
 
 namespace Digikam
 {
-namespace ManualRename
-{
 
-class MainParser;
-class ManualRenameWidgetPriv;
 class ParseInformation;
+class Parser;
+class ManualRenameWidgetPriv;
 
 class DIGIKAM_EXPORT ManualRenameWidget : public QWidget
 {
@@ -68,7 +66,7 @@ public:
     void    setText(const QString& text);
     void    clear();
 
-    void setParser(MainParser* parser);
+    void setParser(Parser* parser);
     /**
      * set the columns for the parser input buttons. This will only affect the BigButtons input style.
      * @param col number of columns
@@ -104,9 +102,8 @@ private:
     ManualRenameWidgetPriv* const d;
 };
 
-}  // namespace ManualRename
 }  // namespace Digikam
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::ManualRename::ManualRenameWidget::InputStyles)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::ManualRenameWidget::InputStyles)
 
 #endif /* MANUALRENAMEWIDGET_H */

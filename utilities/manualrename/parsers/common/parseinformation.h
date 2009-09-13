@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-08-08
- * Description : a token class
+ * Date        : 2009-09-12
+ * Description : common manualrename parser types
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,53 +21,50 @@
  *
  * ============================================================ */
 
-#ifndef TOKEN_H
-#define TOKEN_H
+#ifndef PARSEINFORMATION_H
+#define PARSEINFORMATION_H
 
 // Qt includes
 
-#include <QList>
-#include <QObject>
+#include <QDateTime>
+#include <QFileInfo>
 #include <QString>
 
-class  QAction;
+// Local includes
+
+#include "imageinfo.h"
 
 namespace Digikam
 {
 
-class Token : public QObject
+class ParseInformation
 {
-    Q_OBJECT
+public:
+
+    ParseInformation() { index = 1; };
+    ParseInformation(const ImageInfo& info)
+    {
+        filePath   = info.filePath();
+        cameraName = info.photoInfoContainer().make + ' ' + info.photoInfoContainer().model;
+        dateTime   = info.dateTime();
+        index      = 1;
+    };
+
+    bool isValid()
+    {
+        QFileInfo fi(filePath);
+        return fi.isReadable();
+    };
 
 public:
 
-    Token(const QString& id, const QString& alias, const QString& description);
-    ~Token();
+    QString   filePath;
+    QString   cameraName;
+    QDateTime dateTime;
+    int       index;
 
-    QString  id()          { return m_id; };
-    QString  alias()       { return m_alias; };
-    QString  description() { return m_description; };
-    QAction* action()      { return m_action; };
-
-Q_SIGNALS:
-
-    void signalTokenTriggered(const QString&);
-
-private Q_SLOTS:
-
-    void slotTriggered();
-
-private:
-
-    QString  m_id;
-    QString  m_alias;
-    QString  m_description;
-    QAction* m_action;
 };
-
-typedef QList<Token*> TokenList;
 
 } // namespace Digikam
 
-
-#endif /* TOKEN_H */
+#endif /* PARSEINFORMATION_H */

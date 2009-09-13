@@ -35,7 +35,7 @@
 
 // Local includes
 
-#include "parser.h"
+#include "subparser.h"
 
 namespace Ui
 {
@@ -43,8 +43,6 @@ namespace Ui
 }
 
 namespace Digikam
-{
-namespace ManualRename
 {
 
 class DateFormat
@@ -101,7 +99,7 @@ private:
     void    updateExampleLabel();
 };
 
-class DateParser : public Parser
+class DateParser : public SubParser
 {
     Q_OBJECT
 
@@ -119,7 +117,6 @@ private Q_SLOTS:
     void slotTokenTriggered(const QString& token);
 };
 
-} // namespace ManualRename
 } // namespace Digikam
 
 #endif /* DATEPARSER_H */

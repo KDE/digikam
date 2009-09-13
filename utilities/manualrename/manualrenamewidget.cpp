@@ -46,16 +46,12 @@
 
 // Local includes
 
-#include "dcursortracker.h"
 #include "parser.h"
-#include "mainparser.h"
+#include "dcursortracker.h"
 #include "defaultparser.h"
 #include "manualrenameinput.h"
 
-using namespace Digikam::ManualRename;
 namespace Digikam
-{
-namespace ManualRename
 {
 
 class ManualRenameWidgetPriv
@@ -83,7 +79,7 @@ public:
 
     DTipTracker*                    tooltipTracker;
     ManualRenameInput*              parserLineEdit;
-    MainParser*                     parser;
+    Parser*                         parser;
 };
 
 ManualRenameWidget::ManualRenameWidget(QWidget* parent)
@@ -149,9 +145,9 @@ void ManualRenameWidget::createToolTip()
     QString tooltip;
     tooltip += QString("<p><table>");
 
-    foreach (Parser* parser, d->parser->parsers())
+    foreach (SubParser* subparser, d->parser->subParsers())
     {
-        foreach (Token* token, parser->tokens())
+        foreach (Token* token, subparser->tokens())
         {
             tooltip += QString("<tr><td><b>%1</b></td><td>:</td><td>%2</td></tr>")
                     .arg(token->id())
@@ -178,7 +174,7 @@ void ManualRenameWidget::slotUpdateTrackerPos()
 
 void ManualRenameWidget::setInputStyle(InputStyles inputMask)
 {
-    bool enable = d->parser && d->parser->parsers().count() > 0;
+    bool enable = d->parser && d->parser->subParsers().count() > 0;
 
     d->btnContainer->setVisible(enable && (inputMask & BigButtons));
     d->insertTokenToolButton->setVisible(enable && (inputMask & ToolButton));
@@ -201,18 +197,18 @@ void ManualRenameWidget::registerParsers()
        QAction* action         = 0;
        QGridLayout* gridLayout = new QGridLayout;
 
-       int maxParsers = d->parser->parsers().count();
-       foreach (Parser* parser, d->parser->parsers())
+       int maxParsers = d->parser->subParsers().count();
+       foreach (SubParser* subparser, d->parser->subParsers())
        {
-           btn    = parser->registerButton(this);
-           action = parser->registerMenu(tokenToolBtnMenu);
+           btn    = subparser->registerButton(this);
+           action = subparser->registerMenu(tokenToolBtnMenu);
 
            if (!btn || !action)
                continue;
 
            gridLayout->addWidget(btn, row, column, 1, 1);
 
-           connect(parser, SIGNAL(signalTokenTriggered(const QString&)),
+           connect(subparser, SIGNAL(signalTokenTriggered(const QString&)),
                    d->parserLineEdit, SLOT(slotAddToken(const QString&)));
 
            ++column;
@@ -248,7 +244,7 @@ void ManualRenameWidget::registerParsers()
    }
 }
 
-void ManualRenameWidget::setParser(MainParser* parser)
+void ManualRenameWidget::setParser(Parser* parser)
 {
     if (!parser)
         return;
@@ -319,5 +315,4 @@ void ManualRenameWidget::setupWidgets()
             this, SIGNAL(signalTextChanged(const QString&)));
 }
 
-}  // namespace ManualRename
 }  // namespace Digikam

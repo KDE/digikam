@@ -41,10 +41,8 @@ class QFocusEvent;
 
 namespace Digikam
 {
-namespace ManualRename
-{
 
-class MainParser;
+class Parser;
 class ManualRenameLineEditPriv;
 
 class ManualRenameLineEdit : public KLineEdit
@@ -56,7 +54,7 @@ public:
     ManualRenameLineEdit(QWidget* parent = 0);
     ~ManualRenameLineEdit();
 
-    void setParser(MainParser* parser);
+    void setParser(Parser* parser);
 
     bool findToken(int curPos);
     bool findToken(int curPos, int& pos, int& length);
@@ -126,7 +124,6 @@ private:
     ManualRenameInputPriv* const d;
 };
 
-}  // namespace ManualRename
 }  // namespace Digikam
 
 #endif /* MANUALRENAMEINPUT_H */

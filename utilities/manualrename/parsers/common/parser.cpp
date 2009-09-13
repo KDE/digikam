@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-08-08
- * Description : an abstract parser class
+ * Date        : 2009-08-11
+ * Description : the main parser object for manual rename
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -22,232 +22,177 @@
  * ============================================================ */
 
 #include "parser.h"
-#include "parser.moc"
 
 // Qt includes
 
-#include <QAction>
-#include <QHBoxLayout>
-#include <QMenu>
-#include <QPushButton>
-#include <QWidget>
-
-// KDE includes
-
-#include <kdialog.h>
-#include <kiconloader.h>
-#include <klocale.h>
-#include <knuminput.h>
+#include <QFileInfo>
 
 namespace Digikam
 {
-namespace ManualRename
-{
 
-Parser::Parser(const QString& name, const QIcon& icon)
-      : QObject(0)
+Parser::Parser()
 {
-    m_name              = name;
-    m_icon              = icon;
-    m_buttonRegistered  = false;
-    m_MenuRegistered    = false;
-    m_useTokenMenu      = true;
+    /*
+     * Register all sub-parsers here (found in the directory 'utilities/manualrename/parsers').
+     * This list will be used in here for the parse method and also in the ManualRenameWidget,
+     * to create the buttons and menu entries as well as the tooltip.
+     */
 }
 
 Parser::~Parser()
 {
-    foreach (Token* token, m_tokens)
+    foreach (SubParser* subparser, m_subparsers)
     {
-        delete token;
+        delete subparser;
     }
 
-    m_tokens.clear();
+    m_subparsers.clear();
 }
 
-QPushButton* Parser::createButton(const QString& name, const QIcon& icon)
+SubParserList Parser::subParsers() const
 {
-    const int maxHeight = 28;
-
-    QPushButton* button = new QPushButton;
-    button->setText(name);
-    button->setIcon(icon);
-    button->setMinimumHeight(maxHeight);
-    button->setMaximumHeight(maxHeight);
-
-    return button;
+    return m_subparsers;
 }
 
-QPushButton* Parser::registerButton(QWidget* parent)
+void Parser::registerSubParser(SubParser* parser)
 {
-    QPushButton* button = 0;
-//    if (!m_buttonRegistered)
-//    {
-        button = createButton(m_name, m_icon);
-
-        QList<QAction*> actions;
-
-        if (m_tokens.count() > 1 && m_useTokenMenu)
-        {
-            QMenu* menu = new QMenu(button);
-
-            foreach (Token* token, m_tokens)
-            {
-                actions << token->action();
-            }
-
-            menu->addActions(actions);
-            button->setMenu(menu);
-        }
-        else
-        {
-            Token* token = m_tokens.first();
-            connect(button, SIGNAL(clicked()),
-                    token, SLOT(slotTriggered()));
-
-        }
-        button->setParent(parent);
-
-        m_buttonRegistered = button ? true : false;
-//    }
-    return button;
-}
-
-QAction* Parser::registerMenu(QMenu* parent)
-{
-    QAction* action = 0;
-//    if (!m_MenuRegistered)
-//    {
-        QList<QAction*> actions;
-
-        if (m_tokens.count() > 1 && m_useTokenMenu)
-        {
-            QMenu* menu = new QMenu(parent);
-
-            foreach (Token* token, m_tokens)
-            {
-                actions << token->action();
-            }
-
-            menu->addActions(actions);
-            action = parent->addMenu(menu);
-        }
-        else
-        {
-            action = m_tokens.first()->action();
-            parent->insertAction(0, action);
-        }
-
-        if (action)
-        {
-            action->setText(m_name);
-            action->setIcon(m_icon);
-            m_MenuRegistered = true;
-        }
-//    }
-
-    return action;
-}
-
-bool Parser::addToken(const QString& id, const QString& name, const QString& description)
-{
-    if (id.isEmpty() || name.isEmpty() || description.isEmpty())
-        return false;
-
-    Token* token = new Token(id, name, description);
-    if (!token)
-        return false;
-
-    connect(token, SIGNAL(signalTokenTriggered(const QString&)),
-            this, SLOT(slotTokenTriggered(const QString&)));
-
-    m_tokens << token;
-    return true;
-}
-
-void Parser::useTokenMenu(bool value)
-{
-    m_useTokenMenu = value;
-}
-
-QList<Token*> Parser::tokens() const
-{
-    return m_tokens;
-}
-
-void Parser::slotTokenTriggered(const QString& token)
-{
-    emit signalTokenTriggered(token);
-}
-
-bool Parser::stringIsValid(const QString& str)
-{
-    QRegExp invalidString("^\\s*$");
-    if (str.isEmpty() || invalidString.exactMatch(str))
-        return false;
-    return true;
-}
-
-QString Parser::markResult(int length, const QString& result)
-{
-    QString tmp;
-    if (result.isEmpty())
-        tmp = emptyTokenMarker();
-    else
-        tmp = result;
-
-    return resultsMarker().arg(length).arg(tmp);
-}
-
-void Parser::generateMarkerTemplate(QChar& left, QChar& right, int& width)
-{
-    QString marker("3{}");
-
-    width = QString(marker.at(0)).toInt();
-    left  = marker.at(1);
-    right = marker.at(2);
-}
-
-QString Parser::resultsMarker()
-{
-    int width = 0;
-    QChar left, right;
-    generateMarkerTemplate(left, right, width);
-
-    QString marker = QString("%1%3:%4%2").arg(left,  width, left)
-                                         .arg(right, width, right);
-    return marker;
-}
-
-QString Parser::resultsExtractor()
-{
-    int width = 0;
-    QChar left, right;
-    generateMarkerTemplate(left, right, width);
-
-    QString marker;
-    for (int i = 0; i < width; ++i)
-        marker.append("\\").append(left);
-
-    marker.append("(\\d+):(.*)");
-    for (int i = 0; i < width; ++i)
-        marker.append("\\").append(right);
-
-    return marker;
-};
-
-QString Parser::emptyTokenMarker()
-{
-    return QString("!!!EMPTY!!!");
-}
-
-
-void Parser::parse(QString& parseString, const ParseInformation& info)
-{
-    if (!stringIsValid(parseString))
+    if (!parser)
         return;
 
-    parseOperation(parseString, info);
+    m_subparsers.append(parser);
 }
 
-} // namespace ManualRename
-} // namespace Digikam
+ParseResultsMap Parser::parseResultsMap(const QString& parseString)
+{
+    ParseResultsMap resultsMap;
+
+    if (!SubParser::stringIsValid(parseString))
+        return resultsMap;
+
+    QString parsed = parseString;
+    if (!m_subparsers.isEmpty())
+    {
+        QStringList tokens;
+        ParseInformation info;
+
+        // parse and extract matching tokens
+        foreach (SubParser* subparser, m_subparsers)
+        {
+            subparser->parse(parsed, info);
+            extractTokens(parsed, tokens);
+        }
+        replaceMatchingTokens(parsed, tokens, &resultsMap);
+    }
+
+    return resultsMap;
+}
+
+QString Parser::parse(const QString& parseString, ParseInformation& info)
+{
+    if (!SubParser::stringIsValid(parseString))
+    {
+        QFileInfo fi(info.filePath);
+        QString baseName = fi.baseName();
+        return baseName;
+    }
+
+    QString parsed = parseString;
+    if (!m_subparsers.isEmpty())
+    {
+        QStringList tokens;
+
+        // parse and extract matching tokens
+        foreach (SubParser* parser, m_subparsers)
+        {
+            parser->parse(parsed, info);
+            extractTokens(parsed, tokens);
+        }
+        replaceMatchingTokens(parsed, tokens);
+    }
+    return parsed;
+}
+
+void Parser::replaceMatchingTokens(QString& parseString, QStringList& tokens, ParseResultsMap* map)
+{
+    QRegExp regExp("index:(\\d+):(\\d+)");
+
+    bool firstRun = true;
+    int index     = 0;
+    int length    = 0;
+    int diff      = 0;
+    int pos       = 0;
+    int relIndex  = 0;
+
+    while (pos > -1)
+    {
+        pos = regExp.indexIn(parseString, pos);
+        if (pos > -1)
+        {
+            index         = regExp.cap(1).toInt();
+            length        = regExp.cap(2).toInt();
+            QString token = tokens.at(index);
+            parseString.replace(pos, regExp.matchedLength(), token);
+
+            if (firstRun)
+            {
+                firstRun = false;
+                relIndex = pos;
+            }
+            else
+            {
+                relIndex = qAbs<int>(pos - diff);
+            }
+            diff += token.count() - length;
+
+            if (map)
+            {
+                addTokenMapItem(relIndex, length, token, map);
+            }
+        }
+    }
+}
+
+int Parser::extractTokens(QString& parseString, QStringList& tokens)
+{
+    if (parseString.isEmpty())
+        return 0;
+
+    QRegExp regExp(SubParser::resultsExtractor());
+    regExp.setMinimal(true);
+    int pos       = 0;
+    int extracted = 0;
+
+    while (pos > -1)
+    {
+        pos = regExp.indexIn(parseString, pos);
+        if (pos > -1)
+        {
+            int length     = regExp.cap(1).toInt();
+            QString result = regExp.cap(2);
+
+            if (result == SubParser::emptyTokenMarker())
+                tokens << QString();
+            else
+                tokens << result;
+
+            ++extracted;
+            int index = tokens.count() - 1;
+            parseString.replace(pos, regExp.matchedLength(),
+                    QString("index:%1:%2").arg(QString::number(index))
+                    .arg(QString::number(length)));
+        }
+    }
+    return extracted;
+}
+
+void Parser::addTokenMapItem(int index, int length, const QString& value, ParseResultsMap* map)
+{
+    if (!map)
+        return;
+
+    QString key = QString("%1:%2").arg(QString::number(index))
+                                  .arg(QString::number(length));
+    map->insert(key, value);
+}
+
+}  // namespace Digikam

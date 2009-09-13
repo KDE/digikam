@@ -26,15 +26,12 @@
 
 // Local includes
 
-#include "mainparser.h"
 #include "parser.h"
 
 namespace Digikam
 {
-namespace ManualRename
-{
 
-class DefaultParser : public MainParser
+class DefaultParser : public Parser
 {
 
 public:
@@ -43,7 +40,6 @@ public:
     ~DefaultParser();
 };
 
-}  // namespace ManualRename
 }  // namespace Digikam
 
 

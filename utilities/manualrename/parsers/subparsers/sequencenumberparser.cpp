@@ -38,8 +38,6 @@
 
 namespace Digikam
 {
-namespace ManualRename
-{
 
 SequenceNumberDialog::SequenceNumberDialog()
                     : KDialog(0)
@@ -88,8 +86,8 @@ SequenceNumberDialog::~SequenceNumberDialog()
 
 // --------------------------------------------------------
 
-SequenceNumberParser::SequenceNumberParser() :
-    Parser(i18n("Sequence Number..."), SmallIcon("accessories-calculator"))
+SequenceNumberParser::SequenceNumberParser()
+                    : SubParser(i18n("Sequence Number..."), SmallIcon("accessories-calculator"))
 {
     useTokenMenu(false);
 
@@ -163,5 +161,4 @@ void SequenceNumberParser::parseOperation(QString& parseString, const ParseInfor
     }
 }
 
-} // namespace ManualRename
 } // namespace Digikam

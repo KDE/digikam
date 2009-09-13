@@ -39,6 +39,7 @@
 
 #include <kcombobox.h>
 #include <kconfig.h>
+#include <kdialog.h>
 #include <klocale.h>
 
 // Local includes
@@ -47,7 +48,6 @@
 #include "parser.h"
 #include "manualrenamewidget.h"
 
-using namespace Digikam::ManualRename;
 namespace Digikam
 {
 

@@ -22,14 +22,13 @@
  * ============================================================ */
 
 #include "token.h"
+#include "token.moc"
 
 // Qt includes
 
 #include <QAction>
 
 namespace Digikam
-{
-namespace ManualRename
 {
 
 Token::Token(const QString& id, const QString& alias, const QString& description)
@@ -54,5 +53,4 @@ void Token::slotTriggered()
     emit signalTokenTriggered(m_id);
 }
 
-} // namespace ManualRename
 } // namespace Digikam

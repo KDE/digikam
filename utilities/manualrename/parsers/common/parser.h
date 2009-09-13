@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-08-08
- * Description : an abstract parser class
+ * Date        : 2009-08-11
+ * Description : the main parser object for manual rename
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -26,201 +26,49 @@
 
 // Qt includes
 
-#include <QDateTime>
-#include <QFileInfo>
-#include <QIcon>
 #include <QList>
+#include <QMap>
 #include <QString>
-
-// KDE includes
-
-#include <kdialog.h>
 
 // Local includes
 
-#include "imageinfo.h"
-#include "token.h"
+#include "parseinformation.h"
+#include "subparser.h"
 
-class QAction;
-class QChar;
-class QMenu;
-class QPushButton;
-class QWidget;
+class QStringList;
 
 namespace Digikam
 {
-namespace ManualRename
+
+typedef QMap<QString, QString> ParseResultsMap;
+
+class SubParser;
+class Parser
 {
-
-class ParseInformation
-{
-public:
-
-    ParseInformation(): index(1) {};
-
-    ParseInformation(const ImageInfo& info)
-    {
-        filePath   = info.filePath();
-        cameraName = info.photoInfoContainer().make + ' ' + info.photoInfoContainer().model;
-        dateTime   = info.dateTime();
-        index      = 1;
-    }
-
-    QString   filePath;
-    QString   cameraName;
-    QDateTime dateTime;
-    int       index;
-
-    bool isValid()
-    {
-        QFileInfo fi(filePath);
-        return fi.isReadable();
-    }
-};
-
-class Parser : public QObject
-{
-    Q_OBJECT
 
 public:
 
-    Parser(const QString& name, const QIcon& icon);
+    Parser();
     virtual ~Parser();
 
-    /**
-     * @return a list of all registered tokens
-     */
-    TokenList tokens() const;
-
-    /**
-     * Register a button in the parent object. By calling this method, a new button for the parser
-     * object will be created and all necessary connections will be setup. A button can only be registered once.
-     * @see registerMenu
-     *
-     * @param parent the parent object the button will be registered for
-     * @return a pointer to the newly created button
-     */
-    QPushButton* registerButton(QWidget* parent);
-
-    /**
-     * Register a menu action in the parent object. By calling this method, a new action for the parser
-     * object will be created and all necessary connections will be setup. An action can only be registered once.
-     * @see registerButton
-     *
-     * @param parent the parent object the action will be registered for
-     * @return a pointer to the newly created action
-     */
-    QAction* registerMenu(QMenu* parent);
-
-    /**
-     * check if the given parse string is valid
-     * @param str the parse string
-     * @return true if valid / can be parsed
-     */
-    static bool    stringIsValid(const QString& str);
-
-    static void    generateMarkerTemplate(QChar& left, QChar& right, int& width);
-    static QString resultsMarker();
-    static QString resultsExtractor();
-    static QString emptyTokenMarker();
-
-Q_SIGNALS:
-
-    void signalTokenTriggered(const QString&);
-
-public Q_SLOTS:
-
-    void parse(QString& parseString, const ParseInformation& info);
+    QString         parse(const QString& parseString, ParseInformation& info);
+    SubParserList   subParsers() const;
+    ParseResultsMap parseResultsMap(const QString& parseString);
 
 protected:
 
-    /**
-     * You need to implement this method, all parsing functionality has to be done in here.
-     * This method is called by @see parse(QString& parseString, const ParseInformation& info).
-     * @param parseString the token string to be analyzed and parsed
-     * @param info additional file information to parse the token string
-     */
-    virtual void parseOperation(QString& parseString, const ParseInformation& info) = 0;
+    int  extractTokens(QString& parseString, QStringList& tokens);
+    void replaceMatchingTokens(QString& parseString, QStringList& tokens, ParseResultsMap* map = 0);
+    void addTokenMapItem(int index, int length, const QString& value, ParseResultsMap* map);
+    void registerSubParser(SubParser* parser);
 
-    /**
-     * add a token to the parser, every parser should at least assign one token object
-     * @param id the token id string (used for parsing)
-     * @param name an alias name for the token (used for button and action text)
-     * @param description the description of the token (used for example in the ManualRenameWidget for the tooltip)
-     * @return
-     */
-    bool    addToken(const QString& id, const QString& name, const QString& description);
+protected:
 
-    /**
-     * If multiple tokens have been assigned to a parser, a menu will be created.
-     * If you do not want a menu for every defined token, set this method to 'false' and
-     * re-implement the @see slotTokenTriggered method.
-     * @param value boolean parameter to set token menu usage
-     */
-    void    useTokenMenu(bool value);
-
-    /**
-     * Marks the replaced token results in the parsed string.
-     * Since token replacements can again contain a token character, the replacement needs to be marked so
-     * that the main parser can extract those results and save them in a list for later usage.
-     *
-     * Example:
-     *
-     * filename:
-     * my_file#001.jpg
-     *
-     * renaming string:
-     * new_###_$
-     *
-     * The above example will be parsed as:
-     * new_001_my_file#001
-     *
-     * In a next parser step the '#' token will again be replaced by a number, although not wanted:
-     * new_001_my_file1001
-     *
-     * To avoid this, we mark every result (every token we replace in the @see parse method):
-     * new_{{{001}}}_{{{my_file#001}}}
-     *
-     * The main parser will extract these markers, save it in a list for later usage and replace the parse string with:
-     * new_index:0_index:1
-     * or any string that was defined in @see ManualRenameParser::tokenMarker()
-     *
-     * When all parsers have been called, the main parser will replace those special markers with the saved results:
-     * new_001_my_file#001
-     *
-     * This ensures that token characters can exist in replacement strings, without being parsed again, which in some cases
-     * might even lead to an infinite parse loop.
-     *
-     * Every token that has been parsed in the @see parseOperation() MUST be marked with this method, otherwise the
-     * parseString can not be reconstructed correctly.
-     *
-     * @param length the original token length
-     * @param result the result token to be marked
-     * @return
-     */
-    QString markResult(int length, const QString& result);
-
-protected Q_SLOTS:
-
-    virtual void slotTokenTriggered(const QString&);
-
-private:
-
-    QPushButton*  createButton(const QString& name, const QIcon& icon);
-
-private:
-
-    bool      m_buttonRegistered;
-    bool      m_MenuRegistered;
-    bool      m_useTokenMenu;
-    QString   m_name;
-    QIcon     m_icon;
-    TokenList m_tokens;
+    QString       m_parseString;
+    SubParserList m_subparsers;
 };
 
-typedef QList<Parser*> ParserList;
+}  // namespace Digikam
 
-} // namespace ManualRename
-} // namespace Digikam
 
 #endif /* PARSER_H */

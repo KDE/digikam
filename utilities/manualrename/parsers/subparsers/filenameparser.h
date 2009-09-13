@@ -30,14 +30,12 @@
 
 // Local includes
 
-#include "parser.h"
+#include "subparser.h"
 
 namespace Digikam
 {
-namespace ManualRename
-{
 
-class FilenameParser : public Parser
+class FilenameParser : public SubParser
 {
     Q_OBJECT
 
@@ -62,7 +60,6 @@ protected:
     virtual void parseOperation(QString& parseString, const ParseInformation& info);
 };
 
-} // namespace ManualRename
 } // namespace Digikam
 
 #endif /* FILENAMEPARSER_H */

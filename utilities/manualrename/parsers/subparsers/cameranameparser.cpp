@@ -31,11 +31,9 @@
 
 namespace Digikam
 {
-namespace ManualRename
-{
 
 CameraNameParser::CameraNameParser()
-                : Parser(i18n("Camera Name"), SmallIcon("camera-photo"))
+                : SubParser(i18n("Camera Name"), SmallIcon("camera-photo"))
 {
     addToken("[cam]", i18n("Camera Name"), i18n("camera name"));
 }
@@ -60,5 +58,4 @@ void CameraNameParser::parseOperation(QString& parseString, const ParseInformati
     }
 }
 
-} // namespace ManualRename
 } // namespace Digikam

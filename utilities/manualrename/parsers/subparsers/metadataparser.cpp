@@ -52,8 +52,6 @@
 
 namespace Digikam
 {
-namespace ManualRename
-{
 
 MetadataParserDialog::MetadataParserDialog()
                     : KDialog(0)
@@ -138,7 +136,7 @@ QString MetadataParserDialog::separator() const
 // --------------------------------------------------------
 
 MetadataParser::MetadataParser()
-              : Parser(i18n("Metadata..."), SmallIcon("metadataedit"))
+              : SubParser(i18n("Metadata..."), SmallIcon("metadataedit"))
 {
     addToken("[meta:keycode]", i18n("Metadata"),
              i18n("add metadata (use the quick access dialog for keycodes)"));
@@ -226,5 +224,4 @@ QString MetadataParser::parseMetadata(const QString& token, const ParseInformati
     return tmp;
 }
 
-} // namespace ManualRename
 } // namespace Digikam

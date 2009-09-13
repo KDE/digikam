@@ -36,11 +36,9 @@
 
 namespace Digikam
 {
-namespace ManualRename
-{
 
 DirectoryNameParser::DirectoryNameParser()
-              : Parser(i18n("Directory Name"), SmallIcon("folder"))
+              : SubParser(i18n("Directory Name"), SmallIcon("folder"))
 {
     addToken("[dir]", i18nc("current directory name", "Current"),
             i18n("current directory name"));
@@ -84,5 +82,4 @@ void DirectoryNameParser::parseOperation(QString& parseString, const ParseInform
     }
 }
 
-} // namespace ManualRename
 } // namespace Digikam

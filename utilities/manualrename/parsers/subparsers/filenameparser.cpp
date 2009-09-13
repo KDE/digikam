@@ -35,11 +35,9 @@
 
 namespace Digikam
 {
-namespace ManualRename
-{
 
 FilenameParser::FilenameParser()
-              : Parser(i18n("File Name"), SmallIcon("folder-image"))
+              : SubParser(i18n("File Name"), SmallIcon("folder-image"))
 {
     addToken("$", i18nc("original filename", "Original"),
             i18n("filename (original)"));
@@ -101,5 +99,4 @@ QString FilenameParser::firstLetterUppercase(const QString& str)
     return tmp;
 }
 
-} // namespace ManualRename
 } // namespace Digikam

@@ -35,7 +35,7 @@
 
 // Local includes
 
-#include "parser.h"
+#include "subparser.h"
 
 class KLineEdit;
 
@@ -44,8 +44,6 @@ namespace Digikam
 
 class MetadataPanel;
 
-namespace ManualRename
-{
 
 class MetadataParserDialog : public KDialog
 {
@@ -67,7 +65,7 @@ private:
 
 // --------------------------------------------------------
 
-class MetadataParser : public Parser
+class MetadataParser : public SubParser
 {
     Q_OBJECT
 
@@ -89,7 +87,6 @@ private:
     QString parseMetadata(const QString& token, const ParseInformation& info);
 };
 
-} // namespace ManualRename
 } // namespace Digikam
 
 #endif /* METADATAPARSER_H */
