@@ -49,6 +49,27 @@ class QWidget;
 namespace Digikam
 {
 
+/*
+ * Macro definitions:
+ *
+ * PARSE_LOOP_START and PARSE_LOOP_END can be used when parsing
+ * a token with a regular expression.
+ */
+#define PARSE_LOOP_START(parseString, regExp)                        \
+        int pos = 0;                                                 \
+        while (pos > -1)                                             \
+        {                                                            \
+            pos = regExp.indexIn(parseString, pos);                  \
+            if (pos > -1)                                            \
+            {                                                        \
+
+#define PARSE_LOOP_END(parseString, regExp, parsed)                  \
+        QString result = markResult(regExp.matchedLength(), parsed); \
+        parseString.replace(pos, regExp.matchedLength(), result);    \
+        pos += result.count();                                       \
+            }                                                        \
+        }                                                            \
+
 class SubParser : public QObject
 {
     Q_OBJECT

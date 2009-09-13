@@ -183,36 +183,30 @@ void DateParser::parseOperation(QString& parseString, const ParseInformation& in
 {
     QRegExp regExp("\\[date(:.*)?\\]");
     regExp.setMinimal(true);
-    int pos = 0;
-    while (pos > -1)
+
+    PARSE_LOOP_START(parseString, regExp)
+
+    QString tmp;
+    DateFormat df;
+
+    QString token = regExp.cap(1);
+    if (!token.isEmpty())
+        token.remove(0, 1);
+
+    QVariant v = df.formatType(token);
+    if (v.isNull())
     {
-        pos = regExp.indexIn(parseString, pos);
-        if (pos > -1)
-        {
-            QString tmp;
-            DateFormat df;
-
-            QString token = regExp.cap(1);
-            if (!token.isEmpty())
-                token.remove(0, 1);
-
-            QVariant v = df.formatType(token);
-            if (v.isNull())
-            {
-                tmp = info.dateTime.toString(token);
-            }
-            else
-            {
-                if (v.type() == QVariant::String)
-                    tmp = info.dateTime.toString(v.toString());
-                else
-                    tmp = info.dateTime.toString((Qt::DateFormat)v.toInt());
-            }
-
-            QString result = markResult(regExp.matchedLength(), tmp);
-            parseString.replace(pos, regExp.matchedLength(), result);
-        }
+        tmp = info.dateTime.toString(token);
     }
+    else
+    {
+        if (v.type() == QVariant::String)
+            tmp = info.dateTime.toString(v.toString());
+        else
+            tmp = info.dateTime.toString((Qt::DateFormat)v.toInt());
+    }
+
+    PARSE_LOOP_END(parseString, regExp, tmp)
 }
 
 void DateParser::slotTokenTriggered(const QString& token)

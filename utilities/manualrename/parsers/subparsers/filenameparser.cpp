@@ -60,18 +60,11 @@ void FilenameParser::parseOperation(QString& parseString, const ParseInformation
     QRegExp regExp("\\*{1}");
     regExp.setMinimal(true);
 
-    int pos = 0;
-    while (pos > -1)
-    {
-        pos = regExp.indexIn(parseString, pos);
-        if (pos > -1)
-        {
-            QString tmp    = firstLetterUppercase(baseFileName.toLower());
-            QString result = markResult(regExp.matchedLength(), tmp);
-            parseString.replace(pos, regExp.matchedLength(), result);
-            pos += result.count();
-        }
-    }
+    PARSE_LOOP_START(parseString, regExp)
+
+    QString tmp = firstLetterUppercase(baseFileName.toLower());
+
+    PARSE_LOOP_END(parseString, regExp, tmp)
 
     parseString.replace(QString('$'), markResult(1, baseFileName));
     parseString.replace(QString('&'), markResult(1, baseFileName.toUpper()));

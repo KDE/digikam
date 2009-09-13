@@ -45,17 +45,11 @@ void CameraNameParser::parseOperation(QString& parseString, const ParseInformati
     QRegExp regExp("\\[cam\\]");
     regExp.setCaseSensitivity(Qt::CaseInsensitive);
 
-    int pos = 0;
-    while (pos > -1)
-    {
-        pos  = regExp.indexIn(parseString, pos);
-        if (pos > -1)
-        {
-            QString tmp    = stringIsValid(cameraName) ? cameraName : QString();
-            QString result = markResult(regExp.matchedLength(), tmp);
-            parseString.replace(pos, regExp.matchedLength(), result);
-        }
-    }
+    PARSE_LOOP_START(parseString, regExp)
+
+    QString parsed = stringIsValid(cameraName) ? cameraName : QString();
+
+    PARSE_LOOP_END(parseString, regExp, parsed)
 }
 
 } // namespace Digikam

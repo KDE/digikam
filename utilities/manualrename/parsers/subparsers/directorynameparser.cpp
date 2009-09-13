@@ -58,28 +58,20 @@ void DirectoryNameParser::parseOperation(QString& parseString, const ParseInform
     regExp.setMinimal(true);
 
     int folderCount = folders.count();
-    int pos         = 0;
-    while (pos > -1)
-    {
-        pos = regExp.indexIn(parseString, pos);
-        if (pos > -1)
-        {
-            QString tmp;
 
-            int matchedLength = regExp.cap(1).length();
+    PARSE_LOOP_START(parseString, regExp)
 
-            if (matchedLength == 0)
-                tmp = folders.last();
-            else if (matchedLength > (folderCount - 1))
-                tmp.clear();
-            else
-                tmp = folders[folderCount - matchedLength - 1];
+    QString tmp;
+    int matchedLength = regExp.cap(1).length();
 
-            QString result = markResult(regExp.matchedLength(), tmp);
-            parseString.replace(pos, regExp.matchedLength(), result);
-            pos += result.count();
-        }
-    }
+    if (matchedLength == 0)
+        tmp = folders.last();
+    else if (matchedLength > (folderCount - 1))
+        tmp.clear();
+    else
+        tmp = folders[folderCount - matchedLength - 1];
+
+    PARSE_LOOP_END(parseString, regExp, tmp)
 }
 
 } // namespace Digikam

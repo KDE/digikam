@@ -174,24 +174,19 @@ void MetadataParser::parseOperation(QString& parseString, const ParseInformation
 {
     QRegExp regExp("\\[meta:\\s*(.*)\\s*\\s*\\]");
     regExp.setMinimal(true);
-    int pos = 0;
-    while (pos > -1)
-    {
-        pos = regExp.indexIn(parseString, pos);
-        if (pos > -1)
-        {
-            QString keyword = regExp.cap(1);
-            QString tmp;
+
+    PARSE_LOOP_START(parseString, regExp)
+
+    QString keyword = regExp.cap(1);
+    QString tmp;
 
 #if KEXIV2_VERSION >= 0x010000
-            tmp = parseMetadata(keyword, info);
+    tmp = parseMetadata(keyword, info);
 #else
-            Q_UNUSED(info)
+    Q_UNUSED(info)
 #endif
-            QString result = markResult(regExp.matchedLength(), tmp);
-            parseString.replace(pos, regExp.matchedLength(), result);
-        }
-    }
+
+    PARSE_LOOP_END(parseString, regExp, tmp)
 }
 
 QString MetadataParser::parseMetadata(const QString& token, const ParseInformation& info)

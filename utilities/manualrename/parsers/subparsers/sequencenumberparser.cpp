@@ -137,28 +137,22 @@ void SequenceNumberParser::slotTokenTriggered(const QString& token)
 void SequenceNumberParser::parseOperation(QString& parseString, const ParseInformation& info)
 {
     QRegExp regExp("(#+)(\\{\\s*(\\d+)\\s*,?\\s*(\\d+)*\\s*\\})?");
-    int pos     = 0;
     int slength = 0;
     int start   = 0;
     int step    = 0;
     int number  = 0;
     int index   = info.index;
 
-    while (pos > -1)
-    {
-        pos = regExp.indexIn(parseString, pos);
-        if (pos > -1)
-        {
-            slength = regExp.cap(1).length();
-            start   = regExp.cap(3).isEmpty() ? 1 : regExp.cap(3).toInt();
-            step    = regExp.cap(4).isEmpty() ? 1 : regExp.cap(4).toInt();
+    PARSE_LOOP_START(parseString, regExp)
 
-            number = start + ((index - 1) * step);
-            QString tmp = QString("%1").arg(number, slength, 10, QChar('0'));
-            QString result = markResult(regExp.matchedLength(), tmp);
-            parseString.replace(pos, regExp.matchedLength(), result);
-        }
-    }
+    slength = regExp.cap(1).length();
+    start   = regExp.cap(3).isEmpty() ? 1 : regExp.cap(3).toInt();
+    step    = regExp.cap(4).isEmpty() ? 1 : regExp.cap(4).toInt();
+
+    number = start + ((index - 1) * step);
+    QString tmp = QString("%1").arg(number, slength, 10, QChar('0'));
+
+    PARSE_LOOP_END(parseString, regExp, tmp)
 }
 
 } // namespace Digikam
