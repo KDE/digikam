@@ -241,3 +241,4 @@ UINT64 CPGFIStream::GetPos() const THROW_ {
 	}
 }
 #endif // WIN32 || WINCE
+

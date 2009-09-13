@@ -1004,3 +1004,4 @@ void CEncoder::DecomposeTileBuffer(UINT8 nPlanes, UINT32 bufferSize, UINT32* sig
 	}
 }
 */
+
