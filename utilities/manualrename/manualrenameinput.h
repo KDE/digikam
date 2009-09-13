@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-09-03
- * Description : an input widget for the ManualRenameParser
+ * Description : an input widget for the ManualRename utility
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *

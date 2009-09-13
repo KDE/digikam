@@ -48,7 +48,8 @@
 
 #include "dcursortracker.h"
 #include "parser.h"
-#include "manualrenameparser.h"
+#include "mainparser.h"
+#include "defaultparser.h"
 #include "manualrenameinput.h"
 
 using namespace Digikam::ManualRename;
@@ -89,7 +90,7 @@ ManualRenameWidget::ManualRenameWidget(QWidget* parent)
                  : QWidget(parent), d(new ManualRenameWidgetPriv)
 {
     setupWidgets();
-    setParser(new ManualRenameParser());
+    setParser(new DefaultParser());
 }
 
 ManualRenameWidget::~ManualRenameWidget()

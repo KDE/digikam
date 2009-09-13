@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-08-11
- * Description : the main parser object for manual rename
+ * Description : the default parser for manual rename, includes all subparsers
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "manualrenameparser.h"
+#include "defaultparser.h"
 
 // Qt includes
 
@@ -45,7 +45,7 @@ namespace Digikam
 namespace ManualRename
 {
 
-ManualRenameParser::ManualRenameParser()
+DefaultParser::DefaultParser()
                   : MainParser()
 {
     registerParser(new FilenameParser());
@@ -59,7 +59,7 @@ ManualRenameParser::ManualRenameParser()
 #endif
 }
 
-ManualRenameParser::~ManualRenameParser()
+DefaultParser::~DefaultParser()
 {
 }
 

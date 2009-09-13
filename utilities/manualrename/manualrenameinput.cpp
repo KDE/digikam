@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-09-03
- * Description : an input widget for the ManualRenameParser
+ * Description : an input widget for the ManualRename utility
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -39,7 +39,7 @@
 
 // Local includes
 
-#include "manualrenameparser.h"
+#include "mainparser.h"
 
 using namespace Digikam::ManualRename;
 namespace Digikam
@@ -260,7 +260,7 @@ bool ManualRenameLineEdit::findToken(int curPos, int& pos, int& length)
     if (!d->parser)
         return false;
 
-    ManualRenameParser::TokenMap map = d->parser->tokenMap(text());
+    MainParser::TokenMap map = d->parser->tokenMap(text());
     QMapIterator<QString, QString> it(map);
 
     bool found = false;
@@ -346,7 +346,7 @@ public:
     QToolButton*          moveTokenRight;
 
     ManualRenameLineEdit* parserInput;
-    ManualRenameParser*   parser;
+    MainParser*           parser;
 };
 
 // --------------------------------------------------------

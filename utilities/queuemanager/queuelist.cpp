@@ -46,8 +46,7 @@
 
 // Local includes
 
-#include "manualrenameparser.h"
-#include "parser.h"
+#include "defaultparser.h"
 #include "albumdb.h"
 #include "databasechangesets.h"
 #include "databasewatch.h"
@@ -57,7 +56,6 @@
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
 
-using namespace Digikam::ManualRename;
 namespace Digikam
 {
 
@@ -828,8 +826,8 @@ void QueueListView::updateDestFileNames()
             QString baseName = fi.baseName();
             if (settings().renamingRule == QueueSettings::CUSTOMIZE)
             {
-                ManualRenameParser p;
-                ParseInformation parseInfo(info);
+                ManualRename::DefaultParser p;
+                ManualRename::ParseInformation parseInfo(info);
                 parseInfo.index = index;
 
                 QString parseString = settings().renamingParser;
