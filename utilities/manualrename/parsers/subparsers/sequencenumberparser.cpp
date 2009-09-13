@@ -143,6 +143,8 @@ void SequenceNumberParser::parseOperation(QString& parseString, const ParseInfor
     int number  = 0;
     int index   = info.index;
 
+    // --------------------------------------------------------
+
     PARSE_LOOP_START(parseString, regExp)
 
     slength = regExp.cap(1).length();

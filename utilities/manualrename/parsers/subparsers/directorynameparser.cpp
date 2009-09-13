@@ -59,6 +59,8 @@ void DirectoryNameParser::parseOperation(QString& parseString, const ParseInform
 
     int folderCount = folders.count();
 
+    // --------------------------------------------------------
+
     PARSE_LOOP_START(parseString, regExp)
 
     QString tmp;

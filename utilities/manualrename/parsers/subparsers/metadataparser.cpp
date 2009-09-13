@@ -175,6 +175,8 @@ void MetadataParser::parseOperation(QString& parseString, const ParseInformation
     QRegExp regExp("\\[meta:\\s*(.*)\\s*\\s*\\]");
     regExp.setMinimal(true);
 
+    // --------------------------------------------------------
+
     PARSE_LOOP_START(parseString, regExp)
 
     QString keyword = regExp.cap(1);
