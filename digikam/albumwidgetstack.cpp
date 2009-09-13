@@ -200,9 +200,9 @@ AlbumWidgetStack::~AlbumWidgetStack()
 
 void AlbumWidgetStack::readSettings()
 {
-	AlbumSettings *settings = AlbumSettings::instance();
-	bool showThumbbar = settings->getShowThumbbar();
-	d->thumbBarDock->setShouldBeVisible(showThumbbar);
+    AlbumSettings *settings = AlbumSettings::instance();
+    bool showThumbbar = settings->getShowThumbbar();
+    d->thumbBarDock->setShouldBeVisible(showThumbbar);
 }
 
 void AlbumWidgetStack::setDockArea(QMainWindow *dockArea)
@@ -309,8 +309,6 @@ void AlbumWidgetStack::setPreviewMode(int mode)
 
     if (mode == PreviewAlbumMode || mode == WelcomePageMode)
     {
-        if (mode == PreviewAlbumMode && currentIndex() != mode)
-            d->imageIconView->setFocus();
         setPreviewItem();
         setCurrentIndex(mode);
         emit signalToggledToPreviewMode(false);
@@ -319,6 +317,7 @@ void AlbumWidgetStack::setPreviewMode(int mode)
     {
         setCurrentIndex(mode);
     }
+    d->imageIconView->setFocus();
 }
 
 void AlbumWidgetStack::previewLoaded()
