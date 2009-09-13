@@ -186,6 +186,8 @@ protected:
      * Every token that has been parsed in the @see parseOperation() MUST be marked with this method, otherwise the
      * parseString can not be reconstructed correctly.
      *
+     * If you use the PARSE_LOOP_START and PARSE_LOOP_END macros, the results will be automatically marked.
+     *
      * @param length the original token length
      * @param result the result token to be marked
      * @return
