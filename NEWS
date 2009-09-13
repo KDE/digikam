@@ -23,7 +23,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 014 ==> 204084 : Showfoto claims that there are no images in directory that contains symlinks to images.
 015 ==> 197817 : digiKam should utilize _icc_profile X property.
 016 ==> 205756 : Copy and paste fails silently when pasting file back into the same folder.
-017 ==> 
+017 ==> 207239 : When pressing Enter thumbnails should be enlarged, also after changing from Tags to Collection or similar.
+018 ==>
 
 
 *********************************************************************************************************
