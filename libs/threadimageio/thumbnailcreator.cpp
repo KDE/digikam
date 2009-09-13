@@ -265,6 +265,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo &info)
     }
 
     QImage qimage;
+    DMetadata metadata(path);
     bool fromEmbeddedPreview = false;
     bool failedAtDImg        = false;
     bool failedAtJPEGScaled  = false;
@@ -276,7 +277,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo &info)
     bool colorManage = IccSettings::instance()->isEnabled();
 
     // Try to extract Exif/IPTC preview first.
-    qimage = loadImagePreview(path);
+    qimage = loadImagePreview(metadata);
 
     QFileInfo fileInfo(path);
     // To speed-up thumb extraction, we now try to load the images by the file extension.
@@ -312,7 +313,10 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo &info)
     if (qimage.isNull())
     {
         if (KDcrawIface::KDcraw::loadEmbeddedPreview(qimage, path))
+        {
             fromEmbeddedPreview = true;
+            profile = metadata.getIccProfile();
+        }
     }
 
     if (qimage.isNull())
@@ -363,7 +367,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo &info)
 
     ThumbnailImage image;
     image.qimage = qimage;
-    image.exifOrientation = exifOrientation(path, fromEmbeddedPreview);
+    image.exifOrientation = exifOrientation(path, metadata, fromEmbeddedPreview);
     return image;
 }
 
@@ -376,10 +380,9 @@ QImage ThumbnailCreator::loadWithDImg(const QString& path, IccProfile *profile)
     return img.copyQImage();
 }
 
-QImage ThumbnailCreator::loadImagePreview(const QString& path)
+QImage ThumbnailCreator::loadImagePreview(const DMetadata& metadata)
 {
     QImage image;
-    DMetadata metadata(path);
     if (metadata.getImagePreview(image))
     {
         kDebug(50003) << "Use Exif/IPTC preview extraction. Size of image: "
@@ -418,14 +421,13 @@ QImage ThumbnailCreator::handleAlphaChannel(const QImage& qimage)
     return qimage;
 }
 
-int ThumbnailCreator::exifOrientation(const QString& filePath, bool fromEmbeddedPreview)
+int ThumbnailCreator::exifOrientation(const QString& filePath, const DMetadata& metadata, bool fromEmbeddedPreview)
 {
     // Keep in sync with main version in loadsavethread.cpp
 
     if (DImg::fileFormat(filePath) == DImg::RAW && !fromEmbeddedPreview )
         return DMetadata::ORIENTATION_NORMAL;
 
-    DMetadata metadata(filePath);
     return metadata.getImageOrientation();
 }
 

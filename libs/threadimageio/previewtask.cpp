@@ -187,7 +187,14 @@ void PreviewLoadingTask::execute()
             m_img = DImg(qimage);
             // mark as embedded preview (for Exif rotation)
             if (fromEmbeddedPreview)
+            {
                 m_img.setAttribute("fromRawEmbeddedPreview", true);
+
+                // If we loaded the embedded preview, the Exif of the RAW indicates
+                // the color space of the preview (see bug 195950 for NEF files)
+                DMetadata metadata(m_loadingDescription.filePath);
+                m_img.setIccProfile(metadata.getIccProfile());
+            }
             // free memory
             qimage = QImage();
         }
@@ -240,17 +247,7 @@ void PreviewLoadingTask::execute()
                 // If we loaded the embedded preview, the Exif of the RAW indicates
                 // the color space of the preview (see bug 195950 for NEF files)
                 DMetadata metadata(m_loadingDescription.filePath);
-                switch (metadata.getImageColorWorkSpace())
-                {
-                    case DMetadata::WORKSPACE_UNSPECIFIED:
-                    case DMetadata::WORKSPACE_SRGB:
-                        break;
-                    case DMetadata::WORKSPACE_ADOBERGB:
-                        m_img.setIccProfile(IccProfile::adobeRGB());
-                        break;
-                    case DMetadata::WORKSPACE_UNCALIBRATED:
-                        break;
-                }
+                m_img.setIccProfile(metadata.getIccProfile());
             }
             // free memory
             qimage = QImage();
