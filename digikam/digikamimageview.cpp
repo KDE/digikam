@@ -285,7 +285,11 @@ void DigikamImageView::paste()
     const QMimeData *data = kapp->clipboard()->mimeData(QClipboard::Clipboard);
     if (!data)
         return;
-    QDropEvent event(mapFromGlobal(QCursor::pos()), Qt::CopyAction, data, Qt::NoButton, Qt::ControlModifier);
+    // We need to have a real (context menu action) or fake (Ctrl+V shortcut) mouse position
+    QPoint eventPos = mapFromGlobal(QCursor::pos());
+    if (!rect().contains(eventPos))
+        eventPos = QPoint(0, 0);
+    QDropEvent event(eventPos, Qt::CopyAction, data, Qt::NoButton, Qt::ControlModifier);
     QModelIndex index = indexAt(event.pos());
     if (!imageModel()->dragDropHandler()->accepts(&event, index))
         return;

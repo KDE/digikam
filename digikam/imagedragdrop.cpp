@@ -57,12 +57,15 @@ ImageDragDropHandler::ImageDragDropHandler(ImageAlbumModel *model)
 {
 }
 
-static Qt::DropAction copyOrMove(const QDropEvent *e, QWidget *view)
+static Qt::DropAction copyOrMove(const QDropEvent *e, QWidget *view, bool showMenu = true)
 {
     if (e->keyboardModifiers() & Qt::ControlModifier)
         return Qt::CopyAction;
     else if (e->keyboardModifiers() & Qt::ShiftModifier)
         return Qt::MoveAction;
+
+    if (!showMenu)
+        return e->proposedAction();
 
     KMenu popMenu(view);
     QAction *moveAction = popMenu.addAction( SmallIcon("go-jump"), i18n("&Move Here"));
@@ -117,8 +120,8 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView *abstractview, const QDro
         if (palbum)
         {
             // Check if items dropped come from outside current album.
-            KUrl::List extUrls;
-            QList<qlonglong> extImageIDs;
+            KUrl::List extUrls, intUrls;
+            QList<qlonglong> extImageIDs, intImageIDs;
             for (QList<int>::const_iterator it = imageIDs.constBegin(); it != imageIDs.constEnd(); ++it)
             {
                 ImageInfo info(*it);
@@ -127,25 +130,73 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView *abstractview, const QDro
                     extUrls << info.databaseUrl();
                     extImageIDs << *it;
                 }
+                else
+                {
+                    intUrls << info.databaseUrl();
+                    intImageIDs << *it;
+                }
             }
 
-            if (extUrls.isEmpty())
-                return false;
+            if (intUrls.isEmpty() && !extUrls.isEmpty())
+            {
+                // Only external items: copy or move as requested
 
-            Qt::DropAction action = copyOrMove(e, view);
-            if (action == Qt::MoveAction)
-            {
-                KIO::Job* job = DIO::move(extUrls, extImageIDs, palbum);
-                connect(job, SIGNAL(result(KJob*)),
-                         this, SIGNAL(dioResult(KJob*)));
+                Qt::DropAction action = copyOrMove(e, view);
+
+                if (action == Qt::MoveAction)
+                {
+                    KIO::Job* job = DIO::move(extUrls, extImageIDs, palbum);
+                    connect(job, SIGNAL(result(KJob*)),
+                            this, SIGNAL(dioResult(KJob*)));
+                }
+                else if (action == Qt::CopyAction)
+                {
+                    KIO::Job* job = DIO::copy(extUrls, extImageIDs, palbum);
+                    connect(job, SIGNAL(result(KJob*)),
+                            this, SIGNAL(dioResult(KJob*)));
+                }
+                return true;
             }
-            else if (action == Qt::CopyAction)
+            else if (!intUrls.isEmpty() && extUrls.isEmpty())
             {
-                KIO::Job* job = DIO::copy(extUrls, extImageIDs, palbum);
-                connect(job, SIGNAL(result(KJob*)),
-                         this, SIGNAL(dioResult(KJob*)));
+                // Only items from the current album:
+                // Move is a no-op. Do not show menu to ask for copy or move.
+                // If the user indicates a copy operation (holding Ctrl), copy.
+
+                Qt::DropAction action = copyOrMove(e, view, false);
+
+                if (action == Qt::CopyAction)
+                {
+                    KIO::Job* job = DIO::copy(intUrls, intImageIDs, palbum);
+                    connect(job, SIGNAL(result(KJob*)),
+                            this, SIGNAL(dioResult(KJob*)));
+                    return true;
+                }
+                else
+                    return false;
             }
-            return true;
+            if (!intUrls.isEmpty() && !extUrls.isEmpty())
+            {
+                // Mixed items.
+                // For move operations, ignore items from current album.
+                // If user requests copy, copy.
+
+                Qt::DropAction action = copyOrMove(e, view);
+
+                if (action == Qt::MoveAction)
+                {
+                    KIO::Job* job = DIO::move(extUrls, extImageIDs, palbum);
+                    connect(job, SIGNAL(result(KJob*)),
+                            this, SIGNAL(dioResult(KJob*)));
+                }
+                else if (action == Qt::CopyAction)
+                {
+                    KIO::Job* job = DIO::copy(extUrls+intUrls, extImageIDs+intImageIDs, palbum);
+                    connect(job, SIGNAL(result(KJob*)),
+                            this, SIGNAL(dioResult(KJob*)));
+                }
+                return true;
+            }
         }
         else if (talbum)
         {
