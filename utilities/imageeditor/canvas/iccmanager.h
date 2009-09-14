@@ -125,6 +125,7 @@ protected:
 
     void getTransform(IccTransform& trans, ICCSettingsContainer::Behavior behavior, IccProfile specifiedProfile);
     void setIccProfile(const IccProfile& profile);
+    ICCSettingsContainer::Behavior safestBestBehavior() const;
 
     IccManagerPriv * const d;
 };

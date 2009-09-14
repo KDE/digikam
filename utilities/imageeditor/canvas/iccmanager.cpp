@@ -138,6 +138,27 @@ bool IccManager::isProfileMismatch() const
     return d->profileMismatch;
 }
 
+ICCSettingsContainer::Behavior IccManager::safestBestBehavior() const
+{
+    if (isUncalibratedColor())
+    {
+        return ICCSettingsContainer::InputToWorkspace;
+    }
+    else if (isMissingProfile())
+    {
+        // Assume sRGB (normal, untagged file) and stick with it
+        return ICCSettingsContainer::UseSRGB | ICCSettingsContainer::KeepProfile;
+    }
+    else if (isProfileMismatch())
+    {
+        return ICCSettingsContainer::EmbeddedToWorkspace;
+    }
+    else
+    {
+        return ICCSettingsContainer::PreserveEmbeddedProfile;
+    }
+}
+
 void IccManager::transform(ICCSettingsContainer::Behavior behavior, IccProfile specifiedProfile)
 {
     if (d->image.isNull())
@@ -165,19 +186,7 @@ void IccManager::transform(ICCSettingsContainer::Behavior behavior, IccProfile s
     }
     else if (behavior == ICCSettingsContainer::SafestBestAction)
     {
-        if (isUncalibratedColor())
-        {
-            behavior = ICCSettingsContainer::InputToWorkspace;
-        }
-        else if (isMissingProfile())
-        {
-            // Assume sRGB (normal, untagged file) and stick with it
-            behavior = ICCSettingsContainer::UseSRGB | ICCSettingsContainer::KeepProfile;
-        }
-        else if (isProfileMismatch())
-        {
-            behavior = ICCSettingsContainer::EmbeddedToWorkspace;
-        }
+        behavior = safestBestBehavior();
     }
 
     IccTransform trans;
@@ -379,7 +388,11 @@ IccTransform IccManager::displayTransform(const IccProfile& displayProfile)
     }
     else if (isMissingProfile())
     {
-        IccProfile assumedImageProfile = imageProfile(d->settings.defaultMissingProfileBehavior, IccProfile());
+        ICCSettingsContainer::Behavior missingProfileBehavior = d->settings.defaultMissingProfileBehavior;
+        if (missingProfileBehavior == ICCSettingsContainer::AskUser ||
+            missingProfileBehavior == ICCSettingsContainer::SafestBestAction)
+            missingProfileBehavior = safestBestBehavior();
+        IccProfile assumedImageProfile = imageProfile(missingProfileBehavior, IccProfile());
         IccProfile outputProfile(displayProfile);
         if (!assumedImageProfile.isSameProfileAs(outputProfile))
         {
