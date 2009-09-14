@@ -62,6 +62,7 @@ public:
 
     void   load(const QString& filename, IOFileSettingsContainer *iofileSettings);
     void   applyTransform(const IccTransform& transform);
+    void   updateColorManagement();
 
     void   setICCSettings(ICCSettingsContainer *cmSettings);
     void   setExposureSettings(ExposureSettingsContainer *expoSettings);

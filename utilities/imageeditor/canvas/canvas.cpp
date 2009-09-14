@@ -71,6 +71,7 @@
 #include "imagepaniconwidget.h"
 #include "dimginterface.h"
 #include "iccsettingscontainer.h"
+#include "icctransform.h"
 #include "exposurecontainer.h"
 #include "iofilesettingscontainer.h"
 #include "loadingcacheinterface.h"
@@ -280,11 +281,17 @@ void Canvas::slotImageLoaded(const QString& filePath, bool success)
     emit signalLoadingFinished(filePath, success);
 }
 
-void Canvas::applyTransform(const IccTransform& transform)
+void Canvas::applyTransform(const IccTransform& t)
 {
-    //reset();
-    d->im->applyTransform(transform);
-    //emit signalPrepareToLoad();
+    IccTransform transform(t);
+    if (transform.willHaveEffect())
+        d->im->applyTransform(transform);
+    else
+    {
+        d->im->updateColorManagement();
+        d->tileCache.clear();
+        viewport()->update();
+    }
 }
 
 void Canvas::preload(const QString& /*filename*/)

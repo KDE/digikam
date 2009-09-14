@@ -1321,9 +1321,9 @@ void EditorWindow::colorManage()
 
     // Show dialog and get transform from user choice
     IccTransform trans = manager.postLoadingManage(this);
-    // apply transform in thread
-    if (trans.willHaveEffect())
-        m_canvas->applyTransform(trans);
+    // apply transform in thread.
+    // Do _not_ test for willHaveEffect() here - there are more side effects when calling this method
+    m_canvas->applyTransform(trans);
     slotUpdateItemInfo();
 }
 

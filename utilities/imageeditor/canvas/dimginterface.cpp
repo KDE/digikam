@@ -338,8 +338,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription
              d->image.attribute("format").toString() == QString("TIFF")))
              exifRotate(d->filename);
 
-        IccManager manager(d->image);
-        d->monitorICCtrans = manager.displayTransform(d->displayingWidget);
+        updateColorManagement();
     }
     else
     {
@@ -348,6 +347,12 @@ void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription
 
     emit signalImageLoaded(d->filename, valRet);
     setModified();
+}
+
+void DImgInterface::updateColorManagement()
+{
+    IccManager manager(d->image);
+    d->monitorICCtrans = manager.displayTransform(d->displayingWidget);
 }
 
 void DImgInterface::slotLoadingProgress(const LoadingDescription& loadingDescription, float progress)
