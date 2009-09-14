@@ -56,9 +56,6 @@ public:
 
     void setParser(Parser* parser);
 
-    bool findToken(int curPos);
-    bool findToken(int curPos, int& pos, int& length);
-
 public Q_SLOTS:
 
     void slotAddToken(const QString&);
@@ -83,7 +80,7 @@ private Q_SLOTS:
 
 private:
 
-    bool highlightToken(int cursorPos);
+    bool highlightToken(int pos);
     bool tokenIsSelected();
 
 private:

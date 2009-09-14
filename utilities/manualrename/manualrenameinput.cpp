@@ -126,15 +126,15 @@ void ManualRenameLineEdit::mouseMoveEvent(QMouseEvent* e)
         if (d->userIsTyping)
             return;
 
-        int pos;
+        int start;
         int length;
-        int curPos = cursorPositionAt(e->pos());
+        int pos = cursorPositionAt(e->pos());
 
-        bool found = findToken(curPos, pos, length);
+        bool found = d->parser->tokenAtPosition(text(), pos, start, length);
         if (found)
         {
-            d->markedTokenPos = pos;
-            highlightToken(curPos);
+            d->markedTokenPos = start;
+            highlightToken(pos);
         }
     }
     else if (d->tokenMarked)
@@ -207,7 +207,7 @@ void ManualRenameLineEdit::focusOutEvent(QFocusEvent* e)
     KLineEdit::focusOutEvent(e);
 }
 
-bool ManualRenameLineEdit::highlightToken(int cursorPos)
+bool ManualRenameLineEdit::highlightToken(int pos)
 {
     if (!d->userIsMarking)
     {
@@ -215,16 +215,16 @@ bool ManualRenameLineEdit::highlightToken(int cursorPos)
         d->userIsMarking = true;
     }
 
-    int pos    = 0;
+    int start  = 0;
     int length = 0;
-    bool found = findToken(cursorPos, pos, length);
+    bool found = d->parser->tokenAtPosition(text(), pos, start, length);
 
     if (found)
     {
         deselect();
-        setSelection(pos, length);
+        setSelection(start, length);
 
-        d->selectionStart  = pos;
+        d->selectionStart  = start;
         d->selectionLength = length;
     }
     else
@@ -243,43 +243,6 @@ bool ManualRenameLineEdit::tokenIsSelected()
     selected      = (d->selectionStart != -1) && (d->selectionLength != -1) &&
                     (d->markedTokenPos == d->selectionStart) && d->tokenMarked;
     return selected;
-}
-
-bool ManualRenameLineEdit::findToken(int curPos)
-{
-    int pos;
-    int length;
-    return findToken(curPos, pos, length);
-}
-
-bool ManualRenameLineEdit::findToken(int curPos, int& pos, int& length)
-{
-    if (!d->parser)
-        return false;
-
-    ParseResultsMap map                = d->parser->parseResultsMap(text());
-    ParseResultsMap::const_iterator it = 0;
-
-    bool found = false;
-
-    for (it = map.constBegin(); it != map.constEnd(); ++it)
-    {
-        QString keys        = it.key();
-        QStringList keylist = keys.split(':', QString::SkipEmptyParts);
-
-        if (!keylist.count() == 2)
-            continue;
-
-        length = keylist.last().toInt();
-        pos    = keylist.first().toInt();
-
-        if ((curPos >= pos) && (curPos <= pos + length))
-        {
-            found = true;
-            break;
-        }
-    }
-    return found;
 }
 
 void ManualRenameLineEdit::slotTextChanged()

@@ -40,7 +40,6 @@ class QStringList;
 namespace Digikam
 {
 
-typedef QMap<QString, QString> ParseResultsMap;
 
 class SubParser;
 class Parser
@@ -51,20 +50,27 @@ public:
     Parser();
     virtual ~Parser();
 
-    QString         parse(const QString& parseString, ParseInformation& info);
-    SubParserList   subParsers() const;
-    ParseResultsMap parseResultsMap(const QString& parseString);
+    QString       parse(const QString& parseString, ParseInformation& info);
+    SubParserList subParsers() const;
+
+    bool          tokenAtPosition(const QString& parseString, int pos);
+    bool          tokenAtPosition(const QString& parseString, int pos, int& start, int& length);
 
 protected:
+
+    void registerSubParser(SubParser* parser);
+
+private:
+
+    typedef QMap<QString, QString> ParseResultsMap;
+    ParseResultsMap parseResultsMap(const QString& parseString);
 
     int  extractTokens(QString& parseString, QStringList& tokens);
     void replaceMatchingTokens(QString& parseString, QStringList& tokens, ParseResultsMap* map = 0);
     void addTokenMapItem(int index, int length, const QString& value, ParseResultsMap* map);
-    void registerSubParser(SubParser* parser);
 
-protected:
+private:
 
-    QString       m_parseString;
     SubParserList m_subparsers;
 };
 

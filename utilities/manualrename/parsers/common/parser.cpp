@@ -62,7 +62,7 @@ void Parser::registerSubParser(SubParser* parser)
     m_subparsers.append(parser);
 }
 
-ParseResultsMap Parser::parseResultsMap(const QString& parseString)
+Parser::ParseResultsMap Parser::parseResultsMap(const QString& parseString)
 {
     ParseResultsMap resultsMap;
 
@@ -193,6 +193,40 @@ void Parser::addTokenMapItem(int index, int length, const QString& value, ParseR
     QString key = QString("%1:%2").arg(QString::number(index))
                                   .arg(QString::number(length));
     map->insert(key, value);
+}
+
+bool Parser::tokenAtPosition(const QString& parseString, int pos)
+{
+    int start;
+    int length;
+    return tokenAtPosition(parseString, pos, start, length);
+}
+
+bool Parser::tokenAtPosition(const QString& parseString, int pos, int& start, int& length)
+{
+    ParseResultsMap map                = parseResultsMap(parseString);
+    ParseResultsMap::const_iterator it = 0;
+
+    bool found = false;
+
+    for (it = map.constBegin(); it != map.constEnd(); ++it)
+    {
+        QString keys        = it.key();
+        QStringList keylist = keys.split(':', QString::SkipEmptyParts);
+
+        if (!keylist.count() == 2)
+            continue;
+
+        length = keylist.last().toInt();
+        start  = keylist.first().toInt();
+
+        if ((pos >= start) && (pos <= start + length))
+        {
+            found = true;
+            break;
+        }
+    }
+    return found;
 }
 
 }  // namespace Digikam
