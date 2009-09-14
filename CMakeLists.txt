@@ -411,7 +411,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     # ==================================================================================================
     # LibLqr-1 library rules
 
-    INCLUDE_DIRECTORIES(${GLIB2_INCLUDE_DIR})
+    IF(GLIB2_FOUND)
+        INCLUDE_DIRECTORIES(${GLIB2_INCLUDE_DIR})
+    ENDIF(GLIB2_FOUND)
 
     IF(LQR-1_FOUND)
 
