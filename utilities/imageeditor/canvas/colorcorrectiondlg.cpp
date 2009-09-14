@@ -533,7 +533,7 @@ void ColorCorrectionDlg::usedProfileChanged()
 
 void ColorCorrectionDlg::updateUsedProfileUI()
 {
-    if (d->imageProfileBox)
+    if (d->imageProfileBox && d->imageOtherSpace)
         d->imageProfileBox->setEnabled(d->imageOtherSpace->isChecked());
 }
 
