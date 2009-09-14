@@ -133,19 +133,18 @@ void Parser::replaceMatchingTokens(QString& parseString, QStringList& tokens, Pa
             QString token = tokens.at(index);
             parseString.replace(pos, regExp.matchedLength(), token);
 
-            if (firstRun)
-            {
-                firstRun = false;
-                relIndex = pos;
-            }
-            else
-            {
-                relIndex = qAbs<int>(pos - diff);
-            }
-            diff += token.count() - length;
-
             if (map)
             {
+                if (firstRun)
+                {
+                    firstRun = false;
+                    relIndex = pos;
+                }
+                else
+                {
+                    relIndex = qAbs<int>(pos - diff);
+                }
+                diff += token.count() - length;
                 addTokenMapItem(relIndex, length, token, map);
             }
         }
