@@ -59,14 +59,15 @@ public:
 
     ManualRenameWidgetPriv()
     {
-        parserLineEdit        = 0;
-        tooltipTracker        = 0;
-        tooltipToggleButton   = 0;
-        insertTokenToolButton = 0;
-        btnContainer          = 0;
-        parser                = 0;
-        inputColumns          = 2;
-        inputStyles           = ManualRenameWidget::BigButtons;
+        parserLineEdit          = 0;
+        tooltipTracker          = 0;
+        tooltipToggleButton     = 0;
+        insertTokenToolButton   = 0;
+        btnContainer            = 0;
+        parser                  = 0;
+        inputColumns            = 2;
+        inputStyles             = ManualRenameWidget::BigButtons;
+        tooltipTrackerAlignment = Qt::AlignLeft;
     }
 
     int                             inputColumns;
@@ -75,6 +76,8 @@ public:
     QToolButton*                    tooltipToggleButton;
     QToolButton*                    insertTokenToolButton;
     QGroupBox*                      btnContainer;
+
+    Qt::Alignment                   tooltipTrackerAlignment;
 
     DTipTracker*                    tooltipTracker;
     ManualRenameInput*              parserLineEdit;
@@ -109,6 +112,7 @@ void ManualRenameWidget::setText(const QString& text)
 
 void ManualRenameWidget::setTrackerAlignment(Qt::Alignment alignment)
 {
+    d->tooltipTrackerAlignment = alignment;
     d->tooltipTracker->setTrackerAlignment(alignment);
 }
 
@@ -294,7 +298,7 @@ void ManualRenameWidget::setupWidgets()
     d->tooltipTracker->setEnable(false);
     d->tooltipTracker->setKeepOpen(true);
     d->tooltipTracker->setOpenExternalLinks(true);
-    setTrackerAlignment(Qt::AlignLeft);
+    setTrackerAlignment(d->tooltipTrackerAlignment);
 
     // --------------------------------------------------------
 
