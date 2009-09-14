@@ -1758,8 +1758,9 @@ bool EditorWindow::moveFile()
     int ret;
 #if KDE_IS_VERSION(4,2,85)
     // KDE 4.3.0
-    ret = KDE::rename(QFile::encodeName(m_savingContext->saveTempFileName),
-                       dstFileName);
+    // KDE::rename() takes care of QString -> bytestring encoding
+    ret = KDE::rename(m_savingContext->saveTempFileName,
+                       m_savingContext->destinationURL.toLocalFile());
 #else
     // KDE 4.2.x or 4.1.x
     ret = KDE_rename(QFile::encodeName(m_savingContext->saveTempFileName),
