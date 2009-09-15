@@ -33,4 +33,12 @@ Modifier::Modifier(const QString& id, const QString& alias, const QString& descr
     m_description = description;
  }
 
+QString Modifier::modify(const QString& str)
+{
+    if (str.isEmpty())
+        return QString();
+
+    return modifyOperation(str);
+}
+
 } // namespace Digikam

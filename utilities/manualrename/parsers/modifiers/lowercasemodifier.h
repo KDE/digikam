@@ -36,7 +36,7 @@ class LowerCaseModifier : public Modifier
 public:
 
     LowerCaseModifier();
-    virtual QString modify(const QString& str);
+    virtual QString modifyOperation(const QString& str);
 };
 
 } // namespace Digikam

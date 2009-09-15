@@ -36,7 +36,7 @@ class UpperCaseModifier : public Modifier
 public:
 
     UpperCaseModifier();
-    virtual QString modify(const QString& str);
+    virtual QString modifyOperation(const QString& str);
 };
 
 } // namespace Digikam

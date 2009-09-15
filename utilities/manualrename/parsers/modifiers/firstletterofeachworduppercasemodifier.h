@@ -36,7 +36,7 @@ class FirstLetterEachWordUpperCaseModifier : public Modifier
 public:
 
     FirstLetterEachWordUpperCaseModifier();
-    virtual QString modify(const QString& str);
+    virtual QString modifyOperation(const QString& str);
 };
 
 } // namespace Digikam

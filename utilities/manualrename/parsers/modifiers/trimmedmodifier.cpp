@@ -35,10 +35,8 @@ TrimmedModifier::TrimmedModifier()
 {
 }
 
-QString TrimmedModifier::modify(const QString& str)
+QString TrimmedModifier::modifyOperation(const QString& str)
 {
-    if (str.isEmpty())
-        return QString();
     return str.simplified();
 }
 

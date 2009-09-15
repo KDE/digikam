@@ -35,10 +35,8 @@ UpperCaseModifier::UpperCaseModifier()
 {
 }
 
-QString UpperCaseModifier::modify(const QString& str)
+QString UpperCaseModifier::modifyOperation(const QString& str)
 {
-    if (str.isEmpty())
-        return QString();
     return str.toUpper();
 }
 

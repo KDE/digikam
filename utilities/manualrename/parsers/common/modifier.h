@@ -45,7 +45,11 @@ public:
     QString  alias()       { return m_alias; };
     QString  description() { return m_description; };
 
-    virtual QString modify(const QString& str) = 0;
+    QString  modify(const QString& str);
+
+protected:
+
+    virtual QString modifyOperation(const QString& str) = 0;
 
 private:
 

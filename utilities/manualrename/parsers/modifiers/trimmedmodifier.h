@@ -36,7 +36,7 @@ class TrimmedModifier : public Modifier
 public:
 
     TrimmedModifier();
-    virtual QString modify(const QString& str);
+    virtual QString modifyOperation(const QString& str);
 };
 
 } // namespace Digikam

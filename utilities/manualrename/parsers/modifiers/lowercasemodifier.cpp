@@ -35,10 +35,8 @@ LowerCaseModifier::LowerCaseModifier()
 {
 }
 
-QString LowerCaseModifier::modify(const QString& str)
+QString LowerCaseModifier::modifyOperation(const QString& str)
 {
-    if (str.isEmpty())
-        return QString();
     return str.toLower();
 }
 
