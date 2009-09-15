@@ -39,7 +39,7 @@
 // Local includes
 
 #include "parseinformation.h"
-#include "parseresultsmap.h"
+#include "parseresults.h"
 #include "token.h"
 
 class QAction;
@@ -57,7 +57,7 @@ namespace Digikam
  * PARSE_LOOP_START and PARSE_LOOP_END can be used when parsing
  * a token with a regular expression.
  */
-#define PARSE_LOOP_START(PARSESTRING_, REGEXP_, PARSED_)                     \
+#define PARSE_LOOP_START(PARSESTRING_, REGEXP_)                              \
         {                                                                    \
             int POS_ = 0;                                                    \
             while (POS_ > -1)                                                \
@@ -66,8 +66,8 @@ namespace Digikam
                 if (POS_ > -1)                                               \
                 {
 
-#define PARSE_LOOP_END(PARSESTRING_, REGEXP_, PARSED_)                       \
-            map.addEntry(POS_, REGEXP_.cap(0), PARSED_);                     \
+#define PARSE_LOOP_END(PARSESTRING_, REGEXP_, PARSED_, RESULTS_)             \
+            RESULTS_.addEntry(POS_, REGEXP_.cap(0), PARSED_);                \
             POS_ += REGEXP_.matchedLength();                                 \
                 }                                                            \
             }                                                                \
@@ -120,7 +120,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    void parse(const QString& parseString, const ParseInformation& info, ParseResultsMap& map);
+    void parse(const QString& parseString, const ParseInformation& info, ParseResults& results);
 
 protected:
 
@@ -130,7 +130,7 @@ protected:
      * @param parseString the token string to be analyzed and parsed
      * @param info additional file information to parse the token string
      */
-    virtual void parseOperation(const QString& parseString, const ParseInformation& info, ParseResultsMap& map) = 0;
+    virtual void parseOperation(const QString& parseString, const ParseInformation& info, ParseResults& results) = 0;
 
     /**
      * add a token to the parser, every parser should at least assign one token object

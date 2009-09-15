@@ -43,7 +43,7 @@ FilenameParser::FilenameParser()
              i18n("image filename"));
 }
 
-void FilenameParser::parseOperation(const QString& parseString, const ParseInformation& info, ParseResultsMap& map)
+void FilenameParser::parseOperation(const QString& parseString, const ParseInformation& info, ParseResults& results)
 {
     QFileInfo fi(info.filePath);
     QString baseFileName = fi.baseName();
@@ -54,11 +54,11 @@ void FilenameParser::parseOperation(const QString& parseString, const ParseInfor
     // --------------------------------------------------------
 
     QString tmp;
-    PARSE_LOOP_START(parseString, regExp, tmp)
+    PARSE_LOOP_START(parseString, regExp)
     {
         tmp = baseFileName;
     }
-    PARSE_LOOP_END(parseString, regExp, tmp)
+    PARSE_LOOP_END(parseString, regExp, tmp, results)
 }
 
 } // namespace Digikam

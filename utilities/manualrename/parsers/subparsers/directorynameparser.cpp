@@ -49,7 +49,7 @@ DirectoryNameParser::DirectoryNameParser()
     useTokenMenu(false);
 }
 
-void DirectoryNameParser::parseOperation(const QString& parseString, const ParseInformation& info, ParseResultsMap& map)
+void DirectoryNameParser::parseOperation(const QString& parseString, const ParseInformation& info, ParseResults& results)
 {
     QFileInfo fi(info.filePath);
     QStringList folders = fi.absolutePath().split('/', QString::SkipEmptyParts);
@@ -62,7 +62,7 @@ void DirectoryNameParser::parseOperation(const QString& parseString, const Parse
     // --------------------------------------------------------
 
     QString tmp;
-    PARSE_LOOP_START(parseString, regExp, tmp)
+    PARSE_LOOP_START(parseString, regExp)
     {
         int matchedLength = regExp.cap(1).length();
 
@@ -73,7 +73,7 @@ void DirectoryNameParser::parseOperation(const QString& parseString, const Parse
         else
             tmp = folders[folderCount - matchedLength - 1];
     }
-    PARSE_LOOP_END(parseString, regExp, tmp)
+    PARSE_LOOP_END(parseString, regExp, tmp, results)
 }
 
 } // namespace Digikam

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef PARSERESULTSMAP_H
-#define PARSERESULTSMAP_H
+#ifndef PARSERESULTS_H
+#define PARSERESULTS_H
 
 // Qt includes
 
@@ -34,7 +34,7 @@
 namespace Digikam
 {
 
-class ParseResultsMap
+class ParseResults
 {
 public:
 
@@ -45,8 +45,8 @@ public:
 
 public:
 
-    ParseResultsMap();
-    ~ParseResultsMap();
+    ParseResults()   {};
+    ~ParseResults()  {};
 
     void addEntry(int pos, const QString& token, const QString& result);
     void addModifier(int pos);
@@ -82,4 +82,4 @@ private:
 } // namespace Digikam
 
 
-#endif /* PARSERESULTSMAP_H */
+#endif /* PARSERESULTS_H */

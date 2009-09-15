@@ -38,7 +38,7 @@ CameraNameParser::CameraNameParser()
     addToken("[cam]", i18n("Camera Name"), i18n("camera name"));
 }
 
-void CameraNameParser::parseOperation(const QString& parseString, const ParseInformation& info, ParseResultsMap& map)
+void CameraNameParser::parseOperation(const QString& parseString, const ParseInformation& info, ParseResults& results)
 {
     QString cameraName = info.cameraName;
 
@@ -48,11 +48,11 @@ void CameraNameParser::parseOperation(const QString& parseString, const ParseInf
     // --------------------------------------------------------
 
     QString tmp;
-    PARSE_LOOP_START(parseString, regExp, tmp)
+    PARSE_LOOP_START(parseString, regExp)
     {
         tmp = stringIsValid(cameraName) ? cameraName : QString();
     }
-    PARSE_LOOP_END(parseString, regExp, tmp)
+    PARSE_LOOP_END(parseString, regExp, tmp, results)
 }
 
 } // namespace Digikam

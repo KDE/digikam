@@ -179,12 +179,12 @@ bool SubParser::stringIsValid(const QString& str)
     return true;
 }
 
-void SubParser::parse(const QString& parseString, const ParseInformation& info, ParseResultsMap& map)
+void SubParser::parse(const QString& parseString, const ParseInformation& info, ParseResults& results)
 {
     if (!stringIsValid(parseString))
         return;
 
-    parseOperation(parseString, info, map);
+    parseOperation(parseString, info, results);
 }
 
 } // namespace Digikam

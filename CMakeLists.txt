@@ -1050,7 +1050,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/common/modifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/common/parser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/common/subparser.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/common/parseresultsmap.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/common/parseresults.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/subparsers/filenameparser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/subparsers/metadataparser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/subparsers/dateparser.cpp

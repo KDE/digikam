@@ -101,22 +101,22 @@ void Parser::registerModifier(Modifier* modifier)
     m_modifiers.append(modifier);
 }
 
-ParseResultsMap Parser::parseResultsMap(const QString& parseString)
+ParseResults Parser::parseResults(const QString& parseString)
 {
-    ParseResultsMap resultsMap;
+    ParseResults results;
     ParseInformation info;
 
-    parseOperation(parseString, info, resultsMap, false);
-    return resultsMap;
+    parseOperation(parseString, info, results, false);
+    return results;
 }
 
 QString Parser::parse(const QString& parseString, ParseInformation& info)
 {
-    ParseResultsMap map;
-    return parseOperation(parseString, info, map);
+    ParseResults results;
+    return parseOperation(parseString, info, results);
 }
 
-QString Parser::parseOperation(const QString& parseString, ParseInformation& info, ParseResultsMap& map,
+QString Parser::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results,
                                bool replace)
 {
     if (!SubParser::stringIsValid(parseString))
@@ -133,22 +133,22 @@ QString Parser::parseOperation(const QString& parseString, ParseInformation& inf
         // parse and extract matching tokens
         foreach (SubParser* parser, m_subparsers)
         {
-            parser->parse(parseString, info, map);
+            parser->parse(parseString, info, results);
         }
     }
 
     QString parsed;
     if (replace)
     {
-        applyModifiers(parseString, map);
-        parsed = map.replaceTokens(parseString);
+        applyModifiers(parseString, results);
+        parsed = results.replaceTokens(parseString);
     }
     return parsed;
 }
 
-void Parser::applyModifiers(const QString& parseString, ParseResultsMap& map)
+void Parser::applyModifiers(const QString& parseString, ParseResults& results)
 {
-    if (map.isEmpty())
+    if (results.isEmpty())
         return;
 
     QString tmp = parseString;
@@ -166,10 +166,10 @@ void Parser::applyModifiers(const QString& parseString, ParseResultsMap& map)
 
                 if (tokenAtPosition(parseString, pos, start, length))
                 {
-                    QString token  = map.token(start, length);
-                    QString result = map.result(start, length);
-                    map.addEntry(start, token, modifier->modify(result));
-                    map.addModifier(pos);
+                    QString token  = results.token(start, length);
+                    QString result = results.result(start, length);
+                    results.addEntry(start, token, modifier->modify(result));
+                    results.addModifier(pos);
                 }
                 ++pos;
             }
@@ -188,8 +188,8 @@ bool Parser::tokenAtPosition(const QString& parseString, int pos, int& start, in
 {
     bool found = false;
 
-    ParseResultsMap map      = parseResultsMap(parseString);
-    ParseResultsMap::Key key = map.keyAtApproximatePosition(pos);
+    ParseResults results  = parseResults(parseString);
+    ParseResults::Key key = results.keyAtApproximatePosition(pos);
     start  = key.first;
     length = key.second;
 

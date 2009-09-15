@@ -179,7 +179,7 @@ DateParser::DateParser()
              i18n("date and time") + " (" +  dateFormatLink + ")");
 }
 
-void DateParser::parseOperation(const QString& parseString, const ParseInformation& info, ParseResultsMap& map)
+void DateParser::parseOperation(const QString& parseString, const ParseInformation& info, ParseResults& results)
 {
     QRegExp regExp("\\[date(:.*)?\\]");
     regExp.setMinimal(true);
@@ -187,7 +187,7 @@ void DateParser::parseOperation(const QString& parseString, const ParseInformati
     // --------------------------------------------------------
 
     QString tmp;
-    PARSE_LOOP_START(parseString, regExp, tmp)
+    PARSE_LOOP_START(parseString, regExp)
     {
         DateFormat df;
 
@@ -208,7 +208,7 @@ void DateParser::parseOperation(const QString& parseString, const ParseInformati
                 tmp = info.dateTime.toString((Qt::DateFormat)v.toInt());
         }
     }
-    PARSE_LOOP_END(parseString, regExp, tmp)
+    PARSE_LOOP_END(parseString, regExp, tmp, results)
 }
 
 void DateParser::slotTokenTriggered(const QString& token)

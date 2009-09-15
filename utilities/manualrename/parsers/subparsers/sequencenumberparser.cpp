@@ -134,7 +134,7 @@ void SequenceNumberParser::slotTokenTriggered(const QString& token)
     emit signalTokenTriggered(tmp);
 }
 
-void SequenceNumberParser::parseOperation(const QString& parseString, const ParseInformation& info, ParseResultsMap& map)
+void SequenceNumberParser::parseOperation(const QString& parseString, const ParseInformation& info, ParseResults& results)
 {
     QRegExp regExp("(#+)(\\{\\s*(\\d+)\\s*,?\\s*(\\d+)*\\s*\\})?");
     int slength = 0;
@@ -146,7 +146,7 @@ void SequenceNumberParser::parseOperation(const QString& parseString, const Pars
     // --------------------------------------------------------
 
     QString tmp;
-    PARSE_LOOP_START(parseString, regExp, tmp)
+    PARSE_LOOP_START(parseString, regExp)
     {
         slength = regExp.cap(1).length();
         start   = regExp.cap(3).isEmpty() ? 1 : regExp.cap(3).toInt();
@@ -155,7 +155,7 @@ void SequenceNumberParser::parseOperation(const QString& parseString, const Pars
         number = start + ((index - 1) * step);
         tmp    = QString("%1").arg(number, slength, 10, QChar('0'));
     }
-    PARSE_LOOP_END(parseString, regExp, tmp)
+    PARSE_LOOP_END(parseString, regExp, tmp, results)
 }
 
 } // namespace Digikam

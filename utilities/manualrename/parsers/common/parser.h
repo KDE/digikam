@@ -33,6 +33,7 @@
 // Local includes
 
 #include "parseinformation.h"
+#include "parseresults.h"
 #include "subparser.h"
 #include "modifier.h"
 
@@ -68,10 +69,10 @@ protected:
 
 private:
 
-    ParseResultsMap parseResultsMap(const QString& parseString);
-    void            applyModifiers(const QString& parseString, ParseResultsMap& map);
-    QString         parseOperation(const QString& parseString, ParseInformation& info, ParseResultsMap& map,
-                                   bool replace = true);
+    ParseResults parseResults(const QString& parseString);
+    void         applyModifiers(const QString& parseString, ParseResults& results);
+    QString      parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results,
+                                bool replace = true);
 
 private:
 
