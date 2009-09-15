@@ -28,7 +28,6 @@
 
 #include <QPair>
 #include <QMap>
-#include <QSet>
 #include <QString>
 
 namespace Digikam
