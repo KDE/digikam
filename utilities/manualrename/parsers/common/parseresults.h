@@ -53,9 +53,9 @@ public:
     QString result(int pos, int length);
     QString token(int pos, int length);
 
-
     ResultsKey keyAtPosition(int pos);
     bool       isKeyAtPosition(int pos);
+
     ResultsKey keyAtApproximatePosition(int pos);
     bool       isKeyAtApproximatePosition(int pos);
 
