@@ -41,7 +41,7 @@ public:
     typedef QPair<int, int>         Key;
     typedef QPair<QString, QString> Value;
     typedef QMap<Key, Value>        Map;
-    typedef QSet<int>               Modifiers;
+    typedef QSet<int>               ModifierIDs;
 
 public:
 
@@ -75,8 +75,8 @@ private:
 
 private:
 
-    Map       m_map;
-    Modifiers m_modifiers;
+    Map         m_map;
+    ModifierIDs m_modifiers;
 };
 
 } // namespace Digikam
