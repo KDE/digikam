@@ -39,17 +39,8 @@ namespace Digikam
 FilenameParser::FilenameParser()
               : SubParser(i18n("File Name"), SmallIcon("folder-image"))
 {
-    addToken("$", i18nc("original filename", "Original"),
-            i18n("filename (original)"));
-
-    addToken("&", i18nc("uppercase filename", "Uppercase"),
-             i18n("filename (uppercase)"));
-
-    addToken("%", i18nc("lowercase filename", "Lowercase"),
-             i18n("filename (lowercase)"));
-
-    addToken("*", i18nc("first letter uppercase filename", "First Letter Uppercase"),
-             i18n("filename (first letter of each word uppercase)"));
+    addToken("[file]", i18nc("image filename", "Filename"),
+             i18n("image filename"));
 }
 
 void FilenameParser::parseOperation(QString& parseString, const ParseInformation& info)
@@ -57,24 +48,17 @@ void FilenameParser::parseOperation(QString& parseString, const ParseInformation
     QFileInfo fi(info.filePath);
     QString baseFileName = fi.baseName();
 
-    QRegExp regExp("\\*{1}");
-    regExp.setMinimal(true);
+    QRegExp regExp("\\[file\\]");
+    regExp.setCaseSensitivity(Qt::CaseInsensitive);
 
     // --------------------------------------------------------
 
     QString tmp;
     PARSE_LOOP_START(parseString, regExp, tmp)
     {
-        tmp = firstLetterUppercase(baseFileName.toLower());
+        tmp = baseFileName;
     }
     PARSE_LOOP_END(parseString, regExp, tmp)
-
-    // --------------------------------------------------------
-
-    // parse remaining simple tokens
-    parseString.replace(QString('$'), markResult(1, baseFileName));
-    parseString.replace(QString('&'), markResult(1, baseFileName.toUpper()));
-    parseString.replace(QString('%'), markResult(1, baseFileName.toLower()));
 }
 
 QString FilenameParser::firstLetterUppercase(const QString& str)
