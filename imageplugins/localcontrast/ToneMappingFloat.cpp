@@ -231,7 +231,7 @@ void ToneMappingFloat::inplace_blur(REALTYPE *data,int sizex, int sizey, REALTYP
 
 void ToneMappingFloat::stretch_contrast(REALTYPE *data, int datasize){
     //stretch the contrast
-    unsigned int histogram_size=256;
+    const unsigned int histogram_size=256;
     //first, we compute the histogram
     unsigned int histogram[histogram_size];
     for (unsigned int i=0;i<histogram_size;i++) histogram[i]=0;

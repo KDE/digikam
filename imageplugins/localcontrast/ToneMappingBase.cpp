@@ -95,9 +95,9 @@ REALTYPE ToneMappingBase::func(REALTYPE x1,REALTYPE x2){
 
     switch (par.function_id){
         case 0://power function
-            p=pow(10.0,fabs((x2*2.0-1.0))*current_process_power_value*0.02);
+            p=pow((double)10.0,(double)fabs((x2*2.0-1.0))*current_process_power_value*0.02);
             if (x2>=0.5) result=pow(x1,p);
-            else result=1.0-pow(1.0-x1,p);
+            else result=1.0-pow((double)1.0-x1,(double)p);
             break;
         case 1://linear function
             p=1.0/(1+exp(-(x2*2.0-1.0)*current_process_power_value*0.04));
