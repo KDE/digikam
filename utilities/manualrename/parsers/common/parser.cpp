@@ -169,7 +169,7 @@ void Parser::applyModifiers(const QString& parseString, ParseResults& results)
                     QString token  = results.token(start, length);
                     QString result = results.result(start, length);
                     results.addEntry(start, token, modifier->modify(result));
-                    results.addModifier(pos);
+                    results.addModifier(pos, modifier->id().count());
                 }
                 ++pos;
             }

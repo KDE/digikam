@@ -36,9 +36,9 @@ void ParseResults::addEntry(int pos, const QString& token, const QString& result
     m_results.insert(key, value);
 }
 
-void ParseResults::addModifier(int pos)
+void ParseResults::addModifier(int pos, int length)
 {
-    m_modifiers.insert(pos);
+    m_modifiers.insert(pos, length);
 }
 
 QString ParseResults::result(int pos, int length)
@@ -140,7 +140,7 @@ QString ParseResults::replaceTokens(const QString& markedString)
         }
         else if (isModifier(i))
         {
-            ++i;
+            i += m_modifiers[i];
         }
         else
         {

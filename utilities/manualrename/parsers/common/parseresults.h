@@ -41,7 +41,7 @@ public:
     typedef QPair<int, int>                 ResultsKey;
     typedef QPair<QString, QString>         ResultsValue;
     typedef QMap<ResultsKey, ResultsValue>  ResultsMap;
-    typedef QSet<int>                       ModifierIDs;
+    typedef QMap<int, int>                  ModifierIDs;
 
 public:
 
@@ -49,7 +49,7 @@ public:
     ~ParseResults()  {};
 
     void addEntry(int pos, const QString& token, const QString& result);
-    void addModifier(int pos);
+    void addModifier(int pos, int length);
 
     QString result(int pos, int length);
     QString token(int pos, int length);
