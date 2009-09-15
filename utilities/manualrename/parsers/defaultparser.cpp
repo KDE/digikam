@@ -44,8 +44,8 @@ DefaultParser::DefaultParser()
 {
     registerSubParser(new FilenameParser());
     registerSubParser(new DirectoryNameParser());
-    registerSubParser(new SequenceNumberParser());
     registerSubParser(new CameraNameParser());
+    registerSubParser(new SequenceNumberParser());
     registerSubParser(new DateParser());
 
 #if KEXIV2_VERSION >= 0x010000

@@ -146,7 +146,7 @@ void ManualRenameWidget::createToolTip()
     do                                                              \
     {                                                               \
         tooltip += QString("<p>");                                  \
-        tooltip += QString("<b><i>%1</i></b>").arg(str).toUpper();  \
+        tooltip += QString("<b><i>%1</i></b>").arg(str.toUpper());  \
         tooltip += QString("</p>");                                 \
     } while (0)
 
