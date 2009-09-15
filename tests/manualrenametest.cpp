@@ -31,10 +31,9 @@
 // Local includes
 
 #include "parser.h"
-#include "manualrenameparser.h"
+#include "defaultparser.h"
 #include "manualrenamewidget.h"
 
-using namespace Digikam::ManualRename;
 using namespace Digikam;
 
 QTEST_KDEMAIN(ManualRenameWidgetTest, GUI)
@@ -110,7 +109,7 @@ void ManualRenameWidgetTest::testNumberToken()
     QFETCH(int,       index);
     QFETCH(QString,   result);
 
-    ManualRenameParser parser;
+    DefaultParser parser;
 
     ParseInformation info;
     info.filePath   = filename;
@@ -134,23 +133,23 @@ void ManualRenameWidgetTest::testFirstLetterOfEachWordUppercaseToken_data()
     QString cameraName("Nikon D50");
     QDateTime curdate = QDateTime::currentDateTime();
 
-    QTest::newRow("myfilename001.jpg") << QString("*") << QString("myfilename001.jpg")
+    QTest::newRow("myfilename001.jpg") << QString("[file]*") << QString("myfilename001.jpg")
                                        << cameraName << curdate << 1
                                        << QString("Myfilename001");
 
-    QTest::newRow("myfilename001.jpg(token: **)") << QString("**") << QString("myfilename001.jpg")
+    QTest::newRow("myfilename001.jpg(token: **)") << QString("[file]**") << QString("myfilename001.jpg")
                                                   << cameraName << curdate << 1
-                                                  << QString("Myfilename001Myfilename001");
+                                                  << QString("Myfilename001*");
 
-    QTest::newRow("myfilename001.jpg(token in filename)") << QString("*") << QString("myfilename*001.jpg")
+    QTest::newRow("myfilename001.jpg(token in filename)") << QString("[file]*") << QString("myfilename*001.jpg")
                                                           << cameraName << curdate << 1
                                                           << QString("Myfilename*001");
 
-    QTest::newRow("my image.jpg") << QString("*") << QString("my image.jpg")
+    QTest::newRow("my image.jpg") << QString("[file]*") << QString("my image.jpg")
                                   << cameraName << curdate << 1
                                   << QString("My Image");
 
-    QTest::newRow("my_image.jpg") << QString("*") << QString("my_image.jpg")
+    QTest::newRow("my_image.jpg") << QString("[file]*") << QString("my_image.jpg")
                                   << cameraName << curdate << 1
                                   << QString("My_Image");
 }
@@ -164,7 +163,7 @@ void ManualRenameWidgetTest::testFirstLetterOfEachWordUppercaseToken()
     QFETCH(int,       index);
     QFETCH(QString,   result);
 
-    ManualRenameParser parser;
+    DefaultParser parser;
 
     ParseInformation info;
     info.filePath   = filename;
@@ -188,23 +187,23 @@ void ManualRenameWidgetTest::testUppercaseToken_data()
     QString cameraName("Nikon D50");
     QDateTime curdate = QDateTime::currentDateTime();
 
-    QTest::newRow("myfilename001.jpg")  << QString("&") << QString("myfilename001.jpg")
+    QTest::newRow("myfilename001.jpg")  << QString("[file]&") << QString("myfilename001.jpg")
                                         << cameraName << curdate << 1
                                         << QString("MYFILENAME001");
 
-    QTest::newRow("my/filename001.jpg") << QString("&") << QString("my/filename001.jpg")
+    QTest::newRow("my/filename001.jpg") << QString("[file]&") << QString("my/filename001.jpg")
                                         << cameraName << curdate << 1
                                         << QString("FILENAME001");
 
-    QTest::newRow("myfilename001.jpg(token in filename)") << QString("&") << QString("myfilename0&01.jpg")
+    QTest::newRow("myfilename001.jpg(token in filename)") << QString("[file]&") << QString("myfilename0&01.jpg")
                                                           << cameraName << curdate << 1
                                                           << QString("MYFILENAME0&01");
 
-    QTest::newRow("my image.jpg") << QString("&") << QString("my image.jpg")
+    QTest::newRow("my image.jpg") << QString("[file]&") << QString("my image.jpg")
                                   << cameraName << curdate << 1
                                   << QString("MY IMAGE");
 
-    QTest::newRow("my_image.jpg") << QString("&") << QString("my_image.jpg")
+    QTest::newRow("my_image.jpg") << QString("[file]&") << QString("my_image.jpg")
                                   << cameraName << curdate << 1
                                   << QString("MY_IMAGE");
 }
@@ -218,7 +217,7 @@ void ManualRenameWidgetTest::testUppercaseToken()
     QFETCH(int,       index);
     QFETCH(QString,   result);
 
-    ManualRenameParser parser;
+    DefaultParser parser;
 
     ParseInformation info;
     info.filePath   = filename;
@@ -242,19 +241,19 @@ void ManualRenameWidgetTest::testLowercaseToken_data()
     QString cameraName("Nikon D50");
     QDateTime curdate = QDateTime::currentDateTime();
 
-    QTest::newRow("myfilename001.jpg") << QString("%") << QString("MyFileName001.jpg")
+    QTest::newRow("myfilename001.jpg") << QString("[file]%") << QString("MyFileName001.jpg")
                                        << cameraName << curdate << 1
                                        << QString("myfilename001");
 
-    QTest::newRow("myfilename001.jpg(token in filename)") << QString("%") << QString("mYfilenAme0%01.jpg")
+    QTest::newRow("myfilename001.jpg(token in filename)") << QString("[file]%") << QString("mYfilenAme0%01.jpg")
                                                   << cameraName << curdate << 1
                                                   << QString("myfilename0%01");
 
-    QTest::newRow("my image.jpg") << QString("%") << QString("MY image.jpg")
+    QTest::newRow("my image.jpg") << QString("[file]%") << QString("MY image.jpg")
                                   << cameraName << curdate << 1
                                   << QString("my image");
 
-    QTest::newRow("my_image.jpg") << QString("%") << QString("mY_Image.jpg")
+    QTest::newRow("my_image.jpg") << QString("[file]%") << QString("mY_Image.jpg")
                                   << cameraName << curdate << 1
                                   << QString("my_image");
 }
@@ -268,7 +267,7 @@ void ManualRenameWidgetTest::testLowercaseToken()
     QFETCH(int,       index);
     QFETCH(QString,   result);
 
-    ManualRenameParser parser;
+    DefaultParser parser;
 
     ParseInformation info;
     info.filePath   = filename;
@@ -324,7 +323,7 @@ void ManualRenameWidgetTest::testCameraToken()
     QFETCH(int,       index);
     QFETCH(QString,   result);
 
-    ManualRenameParser parser;
+    DefaultParser parser;
 
     ParseInformation info;
     info.filePath   = filename;
@@ -341,7 +340,7 @@ void ManualRenameWidgetTest::testEmptyParseString()
     QString filename("myfilename001.jpg");
     QDateTime curdate = QDateTime::currentDateTime();
 
-    ManualRenameParser parser;
+    DefaultParser parser;
 
     ParseInformation info;
     info.filePath   = filename;
@@ -360,15 +359,6 @@ void ManualRenameWidgetTest::testEmptyParseString()
     QCOMPARE(parsed, QString("myfilename001"));
 
     // the following is not invalid
-    parsed = parser.parse(QString("  %_##"), info);
+    parsed = parser.parse(QString("  [file]%_##"), info);
     QCOMPARE(parsed, QString("  myfilename001_01"));
-}
-
-void ManualRenameWidgetTest::testSetters()
-{
-    ManualRenameWidget mrename;
-
-    mrename.setText("this is a test");
-    QVERIFY(!mrename.text().isEmpty());
-    QCOMPARE(mrename.text(), QString("this is a test"));
 }

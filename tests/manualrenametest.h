@@ -50,8 +50,6 @@ private Q_SLOTS:
     void testCameraToken_data();
 
     void testEmptyParseString();
-
-    void testSetters();
 };
 
 #endif /* MANUALRENAMEINPUTTEST_H_ */

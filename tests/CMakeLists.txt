@@ -5,9 +5,13 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/editor
                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui
                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename
                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename/parsers
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename/parsers/common
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename/parsers/subparsers
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename/parsers/modifiers
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/common
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/imageplugins
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/metadata
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dmetadata
@@ -22,6 +26,7 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/editor
 #------------------------------------------------------------------------
 
 SET(manualrenameinputtest_SRCS
+    ${libmanualrename_SRCS}
     manualrenametest.cpp
 )
 KDE4_ADD_UNIT_TEST(manualrenameinputtest ${manualrenameinputtest_SRCS})
