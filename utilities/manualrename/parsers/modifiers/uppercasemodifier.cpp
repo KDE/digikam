@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-08-08
- * Description : a camera name parser class
+ * Date        : 2009-09-14
+ * Description : uppercase modifier
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,34 +21,25 @@
  *
  * ============================================================ */
 
-#ifndef CAMERANAMEPARSER_H
-#define CAMERANAMEPARSER_H
+#include "uppercasemodifier.h"
 
-// Qt includes
+// KDE includes
 
-#include <QString>
-
-// Local includes
-
-#include "subparser.h"
+#include <klocale.h>
 
 namespace Digikam
 {
 
-class CameraNameParser : public SubParser
+UpperCaseModifier::UpperCaseModifier()
+                 : Modifier(QString("&"), i18n("Uppercase"), i18n("convert to uppercase"))
 {
-    Q_OBJECT
+}
 
-public:
-
-    CameraNameParser();
-    ~CameraNameParser() {};
-
-protected:
-
-    virtual void parseOperation(const QString& parseString, const ParseInformation& info, ParseResultsMap& map);
-};
+QString UpperCaseModifier::modify(const QString& str)
+{
+    if (str.isEmpty())
+        return QString();
+    return str.toUpper();
+}
 
 } // namespace Digikam
-
-#endif /* CAMERANAMEPARSER_H */

@@ -68,7 +68,7 @@ public:
 
 protected:
 
-    virtual void parseOperation(QString& parseString, const ParseInformation& info);
+    virtual void parseOperation(const QString& parseString, const ParseInformation& info, ParseResultsMap& map);
 
 private Q_SLOTS:
 

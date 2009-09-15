@@ -30,6 +30,7 @@
 #include <QFileInfo>
 #include <QIcon>
 #include <QString>
+#include <QMap>
 
 // KDE includes
 
@@ -38,6 +39,7 @@
 // Local includes
 
 #include "parseinformation.h"
+#include "parseresultsmap.h"
 #include "token.h"
 
 class QAction;
@@ -65,9 +67,8 @@ namespace Digikam
                 {
 
 #define PARSE_LOOP_END(PARSESTRING_, REGEXP_, PARSED_)                       \
-            QString RESULT_ = markResult(REGEXP_.matchedLength(), PARSED_);  \
-            PARSESTRING_.replace(POS_, REGEXP_.matchedLength(), RESULT_);    \
-            POS_ += RESULT_.count();                                         \
+            map.addEntry(POS_, REGEXP_.cap(0), PARSED_);                     \
+            POS_ += REGEXP_.matchedLength();                                 \
                 }                                                            \
             }                                                                \
         }
@@ -111,12 +112,7 @@ public:
      * @param str the parse string
      * @return true if valid / can be parsed
      */
-    static bool    stringIsValid(const QString& str);
-
-    static void    generateMarkerTemplate(QChar& left, QChar& right, int& width);
-    static QString resultsMarker();
-    static QString resultsExtractor();
-    static QString emptyTokenMarker();
+    static bool stringIsValid(const QString& str);
 
 Q_SIGNALS:
 
@@ -124,7 +120,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    void parse(QString& parseString, const ParseInformation& info);
+    void parse(const QString& parseString, const ParseInformation& info, ParseResultsMap& map);
 
 protected:
 
@@ -134,7 +130,7 @@ protected:
      * @param parseString the token string to be analyzed and parsed
      * @param info additional file information to parse the token string
      */
-    virtual void parseOperation(QString& parseString, const ParseInformation& info) = 0;
+    virtual void parseOperation(const QString& parseString, const ParseInformation& info, ParseResultsMap& map) = 0;
 
     /**
      * add a token to the parser, every parser should at least assign one token object
@@ -152,49 +148,6 @@ protected:
      * @param value boolean parameter to set token menu usage
      */
     void    useTokenMenu(bool value);
-
-    /**
-     * Marks the replaced token results in the parsed string.
-     * Since token replacements can again contain a token character, the replacement needs to be marked so
-     * that the main parser can extract those results and save them in a list for later usage.
-     *
-     * Example:
-     *
-     * filename:
-     * my_file#001.jpg
-     *
-     * renaming string:
-     * new_###_$
-     *
-     * The above example will be parsed as:
-     * new_001_my_file#001
-     *
-     * In a next parser step the '#' token will again be replaced by a number, although not wanted:
-     * new_001_my_file1001
-     *
-     * To avoid this, we mark every result (every token we replace in the @see parse method):
-     * new_{{{001}}}_{{{my_file#001}}}
-     *
-     * The main parser will extract these markers, save it in a list for later usage and replace the parse string with:
-     * new_index:0_index:1
-     * or any string that was defined in @see ManualRenameSubParser::tokenMarker()
-     *
-     * When all parsers have been called, the main parser will replace those special markers with the saved results:
-     * new_001_my_file#001
-     *
-     * This ensures that token characters can exist in replacement strings, without being parsed again, which in some cases
-     * might even lead to an infinite parse loop.
-     *
-     * Every token that has been parsed in the @see parseOperation() MUST be marked with this method, otherwise the
-     * parseString can not be reconstructed correctly.
-     *
-     * If you use the PARSE_LOOP_START and PARSE_LOOP_END macros, the results will be automatically marked.
-     *
-     * @param length the original token length
-     * @param result the result token to be marked
-     * @return
-     */
-    QString markResult(int length, const QString& result);
 
 protected Q_SLOTS:
 

@@ -170,7 +170,7 @@ void MetadataParser::slotTokenTriggered(const QString& token)
     delete dlg;
 }
 
-void MetadataParser::parseOperation(QString& parseString, const ParseInformation& info)
+void MetadataParser::parseOperation(const QString& parseString, const ParseInformation& info, ParseResultsMap& map)
 {
     QRegExp regExp("\\[meta:\\s*(.*)\\s*\\s*\\]");
     regExp.setMinimal(true);

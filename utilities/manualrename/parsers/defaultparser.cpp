@@ -40,7 +40,7 @@ namespace Digikam
 {
 
 DefaultParser::DefaultParser()
-                  : Parser()
+             : Parser()
 {
     registerSubParser(new FilenameParser());
     registerSubParser(new DirectoryNameParser());

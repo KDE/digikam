@@ -43,7 +43,7 @@ FilenameParser::FilenameParser()
              i18n("image filename"));
 }
 
-void FilenameParser::parseOperation(QString& parseString, const ParseInformation& info)
+void FilenameParser::parseOperation(const QString& parseString, const ParseInformation& info, ParseResultsMap& map)
 {
     QFileInfo fi(info.filePath);
     QString baseFileName = fi.baseName();
@@ -59,27 +59,6 @@ void FilenameParser::parseOperation(QString& parseString, const ParseInformation
         tmp = baseFileName;
     }
     PARSE_LOOP_END(parseString, regExp, tmp)
-}
-
-QString FilenameParser::firstLetterUppercase(const QString& str)
-{
-    if (str.isEmpty())
-        return str;
-
-    QString tmp = str.toLower();
-
-    if( tmp[0].isLetter() )
-        tmp[0] = tmp[0].toUpper();
-
-    for( int i = 0; i < tmp.length(); ++i )
-    {
-        if( tmp[i+1].isLetter() && !tmp[i].isLetter() &&
-                tmp[i] != '\'' && tmp[i] != '?' && tmp[i] != '`' )
-        {
-            tmp[i+1] = tmp[i+1].toUpper();
-        }
-    }
-    return tmp;
 }
 
 } // namespace Digikam

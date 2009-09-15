@@ -49,7 +49,7 @@ DirectoryNameParser::DirectoryNameParser()
     useTokenMenu(false);
 }
 
-void DirectoryNameParser::parseOperation(QString& parseString, const ParseInformation& info)
+void DirectoryNameParser::parseOperation(const QString& parseString, const ParseInformation& info, ParseResultsMap& map)
 {
     QFileInfo fi(info.filePath);
     QStringList folders = fi.absolutePath().split('/', QString::SkipEmptyParts);

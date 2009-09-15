@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-08-08
- * Description : a camera name parser class
+ * Date        : 2009-09-14
+ * Description : lowercase modifier
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,34 +21,25 @@
  *
  * ============================================================ */
 
-#ifndef CAMERANAMEPARSER_H
-#define CAMERANAMEPARSER_H
+#include "lowercasemodifier.h"
 
-// Qt includes
+// KDE includes
 
-#include <QString>
-
-// Local includes
-
-#include "subparser.h"
+#include <klocale.h>
 
 namespace Digikam
 {
 
-class CameraNameParser : public SubParser
+LowerCaseModifier::LowerCaseModifier()
+                 : Modifier(QString("%"), i18n("Lowercase"), i18n("convert to lowercase"))
 {
-    Q_OBJECT
+}
 
-public:
-
-    CameraNameParser();
-    ~CameraNameParser() {};
-
-protected:
-
-    virtual void parseOperation(const QString& parseString, const ParseInformation& info, ParseResultsMap& map);
-};
+QString LowerCaseModifier::modify(const QString& str)
+{
+    if (str.isEmpty())
+        return QString();
+    return str.toLower();
+}
 
 } // namespace Digikam
-
-#endif /* CAMERANAMEPARSER_H */

@@ -142,26 +142,73 @@ QString ManualRenameWidget::parse(ParseInformation& info) const
 
 void ManualRenameWidget::createToolTip()
 {
+#define TOOLTIP_HEADER(str)                                         \
+    do                                                              \
+    {                                                               \
+        tooltip += QString("<p>");                                  \
+        tooltip += QString("<b><i>%1</i></b>").arg(str).toUpper();  \
+        tooltip += QString("</p>");                                 \
+    } while (0)
+
+
+#define TOOLTIP_ENTRIES(type, data)                                                 \
+    do                                                                              \
+    {                                                                               \
+        foreach (type* t, data)                                                     \
+        {                                                                           \
+            tooltip += QString("<tr><td><b>%1</b></td><td>:</td><td>%2</td></tr>")  \
+                                        .arg(t->id())                               \
+                                        .arg(t->description());                     \
+        }                                                                           \
+    } while (0)
+
+    // --------------------------------------------------------
+
     if (!d->parser)
         d->tooltipTracker->setText(QString());
 
     QString tooltip;
-    tooltip += QString("<p><table>");
 
-    foreach (SubParser* subparser, d->parser->subParsers())
+    // --------------------------------------------------------
+
+    if (!d->parser->subParsers().isEmpty())
     {
-        foreach (Token* token, subparser->tokens())
+        TOOLTIP_HEADER(i18n("Tokens"));
+
+        tooltip += QString("<p><table>");
+        foreach (SubParser* subparser, d->parser->subParsers())
         {
-            tooltip += QString("<tr><td><b>%1</b></td><td>:</td><td>%2</td></tr>")
-                    .arg(token->id())
-                    .arg(token->description());
+            TOOLTIP_ENTRIES(Token, subparser->tokens());
         }
+        tooltip += QString("</table></p>");
     }
 
-    tooltip += QString("</table></p>");
-    tooltip += d->parserLineEdit->input()->toolTip();
+    // --------------------------------------------------------
+
+    tooltip += QString("<i>%1</i>").arg(d->parserLineEdit->input()->toolTip());
+
+    // --------------------------------------------------------
+
+    if (!d->parser->modifiers().isEmpty())
+    {
+        TOOLTIP_HEADER(i18n("Modifiers"));
+
+        tooltip += QString("<p><table>");
+        TOOLTIP_ENTRIES(Modifier, d->parser->modifiers());
+        tooltip += QString("</table></p>");
+
+//        tooltip += i18n("<p><i>Modifiers can be applied to marked tokens by using the "
+//                "modifier control buttons.</i></p>");
+    }
+
+    // --------------------------------------------------------
 
     d->tooltipTracker->setText(tooltip);
+
+    // --------------------------------------------------------
+
+#undef TOOLTIP_HEADER
+#undef TOOLTIP_ENTRIES
 }
 
 void ManualRenameWidget::slotToolTipButtonToggled(bool checked)
@@ -310,6 +357,8 @@ void ManualRenameWidget::setupWidgets()
     mainLayout->addWidget(d->btnContainer,          1, 0, 1,-1);
     mainLayout->setColumnStretch(0, 10);
     setLayout(mainLayout);
+
+    // --------------------------------------------------------
 
     connect(d->tooltipToggleButton, SIGNAL(toggled(bool)),
             this, SLOT(slotToolTipButtonToggled(bool)));

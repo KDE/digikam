@@ -67,10 +67,7 @@ public:
     void    clear();
 
     void setParser(Parser* parser);
-    /**
-     * set the columns for the parser input buttons. This will only affect the BigButtons input style.
-     * @param col number of columns
-     */
+
     void setInputColumns(int col);
     void setInputStyle(InputStyles inputMask);
 

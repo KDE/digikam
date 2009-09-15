@@ -27,16 +27,36 @@
 
 #include <QFileInfo>
 
+// Local includes
+
+#include "lowercasemodifier.h"
+#include "uppercasemodifier.h"
+#include "firstletterofeachworduppercasemodifier.h"
+#include "trimmedmodifier.h"
+
 namespace Digikam
 {
 
 Parser::Parser()
 {
-    /*
+    /**
      * Register all sub-parsers here (found in the directory 'utilities/manualrename/parsers').
      * This list will be used in here for the parse method and also in the ManualRenameWidget,
      * to create the buttons and menu entries as well as the tooltip.
+     * The base parser class will not register sub-parsers, this should be done in the derived classes
+     * like @see DefaultParser, to have individual parser classes.
+     *
      */
+
+    /*
+     * MODIFIERS
+     *
+     * should be used in every parser, so registering them in the base parser is correct.
+     */
+    registerModifier(new LowerCaseModifier());
+    registerModifier(new UpperCaseModifier());
+    registerModifier(new FirstLetterEachWordUpperCaseModifier());
+    registerModifier(new TrimmedModifier());
 }
 
 Parser::~Parser()
@@ -46,12 +66,23 @@ Parser::~Parser()
         delete subparser;
     }
 
+    foreach (Modifier* modifier, m_modifiers)
+    {
+        delete modifier;
+    }
+
     m_subparsers.clear();
+    m_modifiers.clear();
 }
 
 SubParserList Parser::subParsers() const
 {
     return m_subparsers;
+}
+
+ModifierList Parser::modifiers() const
+{
+    return m_modifiers;
 }
 
 void Parser::registerSubParser(SubParser* parser)
@@ -62,32 +93,31 @@ void Parser::registerSubParser(SubParser* parser)
     m_subparsers.append(parser);
 }
 
-Parser::ParseResultsMap Parser::parseResultsMap(const QString& parseString)
+void Parser::registerModifier(Modifier* modifier)
+{
+    if (!modifier)
+        return;
+
+    m_modifiers.append(modifier);
+}
+
+ParseResultsMap Parser::parseResultsMap(const QString& parseString)
 {
     ParseResultsMap resultsMap;
+    ParseInformation info;
 
-    if (!SubParser::stringIsValid(parseString))
-        return resultsMap;
-
-    QString parsed = parseString;
-    if (!m_subparsers.isEmpty())
-    {
-        QStringList tokens;
-        ParseInformation info;
-
-        // parse and extract matching tokens
-        foreach (SubParser* subparser, m_subparsers)
-        {
-            subparser->parse(parsed, info);
-            extractTokens(parsed, tokens);
-        }
-        replaceMatchingTokens(parsed, tokens, &resultsMap);
-    }
-
+    parseOperation(parseString, info, resultsMap, false);
     return resultsMap;
 }
 
 QString Parser::parse(const QString& parseString, ParseInformation& info)
+{
+    ParseResultsMap map;
+    return parseOperation(parseString, info, map);
+}
+
+QString Parser::parseOperation(const QString& parseString, ParseInformation& info, ParseResultsMap& map,
+                               bool replace)
 {
     if (!SubParser::stringIsValid(parseString))
     {
@@ -96,7 +126,6 @@ QString Parser::parse(const QString& parseString, ParseInformation& info)
         return baseName;
     }
 
-    QString parsed = parseString;
     if (!m_subparsers.isEmpty())
     {
         QStringList tokens;
@@ -104,94 +133,48 @@ QString Parser::parse(const QString& parseString, ParseInformation& info)
         // parse and extract matching tokens
         foreach (SubParser* parser, m_subparsers)
         {
-            parser->parse(parsed, info);
-            extractTokens(parsed, tokens);
+            parser->parse(parseString, info, map);
         }
-        replaceMatchingTokens(parsed, tokens);
+    }
+
+    QString parsed;
+    if (replace)
+    {
+        applyModifiers(parseString, map);
+        parsed = map.replaceTokens(parseString);
     }
     return parsed;
 }
 
-void Parser::replaceMatchingTokens(QString& parseString, QStringList& tokens, ParseResultsMap* map)
+void Parser::applyModifiers(const QString& parseString, ParseResultsMap& map)
 {
-    QRegExp regExp("index:(\\d+):(\\d+)");
+    if (map.isEmpty())
+        return;
 
-    bool firstRun = true;
-    int index     = 0;
-    int length    = 0;
-    int diff      = 0;
-    int pos       = 0;
-    int relIndex  = 0;
+    QString tmp = parseString;
 
-    while (pos > -1)
+    foreach (Modifier* modifier, m_modifiers)
     {
-        pos = regExp.indexIn(parseString, pos);
-        if (pos > -1)
+        int pos = 0;
+        while (pos > -1)
         {
-            index         = regExp.cap(1).toInt();
-            length        = regExp.cap(2).toInt();
-            QString token = tokens.at(index);
-            parseString.replace(pos, regExp.matchedLength(), token);
-
-            if (map)
+            pos = parseString.indexOf(modifier->id(), pos);
+            if (pos > -1)
             {
-                if (firstRun)
+                int start  = 0;
+                int length = 0;
+
+                if (tokenAtPosition(parseString, pos, start, length))
                 {
-                    firstRun = false;
-                    relIndex = pos;
+                    QString token  = map.token(start, length);
+                    QString result = map.result(start, length);
+                    map.addEntry(start, token, modifier->modify(result));
+                    map.addModifier(pos);
                 }
-                else
-                {
-                    relIndex = qAbs<int>(pos - diff);
-                }
-                diff += token.count() - length;
-                addTokenMapItem(relIndex, length, token, map);
+                ++pos;
             }
         }
     }
-}
-
-int Parser::extractTokens(QString& parseString, QStringList& tokens)
-{
-    if (parseString.isEmpty())
-        return 0;
-
-    QRegExp regExp(SubParser::resultsExtractor());
-    regExp.setMinimal(true);
-    int pos       = 0;
-    int extracted = 0;
-
-    while (pos > -1)
-    {
-        pos = regExp.indexIn(parseString, pos);
-        if (pos > -1)
-        {
-            int length     = regExp.cap(1).toInt();
-            QString result = regExp.cap(2);
-
-            if (result == SubParser::emptyTokenMarker())
-                tokens << QString();
-            else
-                tokens << result;
-
-            ++extracted;
-            int index = tokens.count() - 1;
-            parseString.replace(pos, regExp.matchedLength(),
-                    QString("index:%1:%2").arg(QString::number(index))
-                    .arg(QString::number(length)));
-        }
-    }
-    return extracted;
-}
-
-void Parser::addTokenMapItem(int index, int length, const QString& value, ParseResultsMap* map)
-{
-    if (!map)
-        return;
-
-    QString key = QString("%1:%2").arg(QString::number(index))
-                                  .arg(QString::number(length));
-    map->insert(key, value);
 }
 
 bool Parser::tokenAtPosition(const QString& parseString, int pos)
@@ -203,27 +186,16 @@ bool Parser::tokenAtPosition(const QString& parseString, int pos)
 
 bool Parser::tokenAtPosition(const QString& parseString, int pos, int& start, int& length)
 {
-    ParseResultsMap map                = parseResultsMap(parseString);
-    ParseResultsMap::const_iterator it = 0;
-
     bool found = false;
 
-    for (it = map.constBegin(); it != map.constEnd(); ++it)
+    ParseResultsMap map      = parseResultsMap(parseString);
+    ParseResultsMap::Key key = map.keyAtApproximatePosition(pos);
+    start  = key.first;
+    length = key.second;
+
+    if ((pos >= start) && (pos <= start + length))
     {
-        QString keys        = it.key();
-        QStringList keylist = keys.split(':', QString::SkipEmptyParts);
-
-        if (!keylist.count() == 2)
-            continue;
-
-        length = keylist.last().toInt();
-        start  = keylist.first().toInt();
-
-        if ((pos >= start) && (pos <= start + length))
-        {
-            found = true;
-            break;
-        }
+        found = true;
     }
     return found;
 }

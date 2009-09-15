@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-08-08
- * Description : a camera name parser class
+ * Date        : 2009-09-14
+ * Description : first letter of each word uppercase modifier
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,38 +21,40 @@
  *
  * ============================================================ */
 
-#include "cameranameparser.h"
-#include "cameranameparser.moc"
+#include "firstletterofeachworduppercasemodifier.h"
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocale.h>
 
 namespace Digikam
 {
 
-CameraNameParser::CameraNameParser()
-                : SubParser(i18n("Camera Name"), SmallIcon("camera-photo"))
+FirstLetterEachWordUpperCaseModifier::FirstLetterEachWordUpperCaseModifier()
+                 : Modifier(QString("*"), i18n("First Letter Of Each Word Uppercase"),
+                            i18n("convert the first letter of each word to uppercase"))
 {
-    addToken("[cam]", i18n("Camera Name"), i18n("camera name"));
 }
 
-void CameraNameParser::parseOperation(const QString& parseString, const ParseInformation& info, ParseResultsMap& map)
+QString FirstLetterEachWordUpperCaseModifier::modify(const QString& str)
 {
-    QString cameraName = info.cameraName;
+    if (str.isEmpty())
+        return QString();
 
-    QRegExp regExp("\\[cam\\]");
-    regExp.setCaseSensitivity(Qt::CaseInsensitive);
+    QString tmp = str.toLower();
 
-    // --------------------------------------------------------
+    if( tmp[0].isLetter() )
+        tmp[0] = tmp[0].toUpper();
 
-    QString tmp;
-    PARSE_LOOP_START(parseString, regExp, tmp)
+    for( int i = 0; i < tmp.length(); ++i )
     {
-        tmp = stringIsValid(cameraName) ? cameraName : QString();
+        if( tmp[i+1].isLetter() && !tmp[i].isLetter() &&
+                tmp[i] != '\'' && tmp[i] != '?' && tmp[i] != '`' )
+        {
+            tmp[i+1] = tmp[i+1].toUpper();
+        }
     }
-    PARSE_LOOP_END(parseString, regExp, tmp)
+    return tmp;
 }
 
 } // namespace Digikam

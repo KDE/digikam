@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-08-08
- * Description : a camera name parser class
+ * Date        : 2009-09-14
+ * Description : a token result modifier class
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,34 +21,16 @@
  *
  * ============================================================ */
 
-#ifndef CAMERANAMEPARSER_H
-#define CAMERANAMEPARSER_H
-
-// Qt includes
-
-#include <QString>
-
-// Local includes
-
-#include "subparser.h"
+#include "modifier.h"
 
 namespace Digikam
 {
 
-class CameraNameParser : public SubParser
-{
-    Q_OBJECT
-
-public:
-
-    CameraNameParser();
-    ~CameraNameParser() {};
-
-protected:
-
-    virtual void parseOperation(const QString& parseString, const ParseInformation& info, ParseResultsMap& map);
-};
+Modifier::Modifier(const QString& id, const QString& alias, const QString& description)
+ {
+    m_id          = id;
+    m_alias       = alias;
+    m_description = description;
+ }
 
 } // namespace Digikam
-
-#endif /* CAMERANAMEPARSER_H */

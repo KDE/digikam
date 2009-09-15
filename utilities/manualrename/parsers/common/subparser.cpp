@@ -78,70 +78,64 @@ QPushButton* SubParser::createButton(const QString& name, const QIcon& icon)
 QPushButton* SubParser::registerButton(QWidget* parent)
 {
     QPushButton* button = 0;
-//    if (!m_buttonRegistered)
-//    {
-        button = createButton(m_name, m_icon);
+    button = createButton(m_name, m_icon);
 
-        QList<QAction*> actions;
+    QList<QAction*> actions;
 
-        if (m_tokens.count() > 1 && m_useTokenMenu)
+    if (m_tokens.count() > 1 && m_useTokenMenu)
+    {
+        QMenu* menu = new QMenu(button);
+
+        foreach (Token* token, m_tokens)
         {
-            QMenu* menu = new QMenu(button);
-
-            foreach (Token* token, m_tokens)
-            {
-                actions << token->action();
-            }
-
-            menu->addActions(actions);
-            button->setMenu(menu);
+            actions << token->action();
         }
-        else
-        {
-            Token* token = m_tokens.first();
-            connect(button, SIGNAL(clicked()),
-                    token, SLOT(slotTriggered()));
 
-        }
-        button->setParent(parent);
+        menu->addActions(actions);
+        button->setMenu(menu);
+    }
+    else
+    {
+        Token* token = m_tokens.first();
+        connect(button, SIGNAL(clicked()),
+                token, SLOT(slotTriggered()));
 
-        m_buttonRegistered = button ? true : false;
-//    }
+    }
+    button->setParent(parent);
+
+    m_buttonRegistered = button ? true : false;
     return button;
 }
 
 QAction* SubParser::registerMenu(QMenu* parent)
 {
     QAction* action = 0;
-//    if (!m_MenuRegistered)
-//    {
-        QList<QAction*> actions;
+    QList<QAction*> actions;
 
-        if (m_tokens.count() > 1 && m_useTokenMenu)
+    if (m_tokens.count() > 1 && m_useTokenMenu)
+    {
+        QMenu* menu = new QMenu(parent);
+
+        foreach (Token* token, m_tokens)
         {
-            QMenu* menu = new QMenu(parent);
-
-            foreach (Token* token, m_tokens)
-            {
-                actions << token->action();
-            }
-
-            menu->addActions(actions);
-            action = parent->addMenu(menu);
-        }
-        else
-        {
-            action = m_tokens.first()->action();
-            parent->insertAction(0, action);
+            actions << token->action();
         }
 
-        if (action)
-        {
-            action->setText(m_name);
-            action->setIcon(m_icon);
-            m_MenuRegistered = true;
-        }
-//    }
+        menu->addActions(actions);
+        action = parent->addMenu(menu);
+    }
+    else
+    {
+        action = m_tokens.first()->action();
+        parent->insertAction(0, action);
+    }
+
+    if (action)
+    {
+        action->setText(m_name);
+        action->setIcon(m_icon);
+        m_MenuRegistered = true;
+    }
 
     return action;
 }
@@ -185,66 +179,12 @@ bool SubParser::stringIsValid(const QString& str)
     return true;
 }
 
-QString SubParser::markResult(int length, const QString& result)
-{
-    QString tmp;
-    if (result.isEmpty())
-        tmp = emptyTokenMarker();
-    else
-        tmp = result;
-
-    return resultsMarker().arg(length).arg(tmp);
-}
-
-void SubParser::generateMarkerTemplate(QChar& left, QChar& right, int& width)
-{
-    QString marker("3{}");
-
-    width = QString(marker.at(0)).toInt();
-    left  = marker.at(1);
-    right = marker.at(2);
-}
-
-QString SubParser::resultsMarker()
-{
-    int width = 0;
-    QChar left, right;
-    generateMarkerTemplate(left, right, width);
-
-    QString marker = QString("%1%3:%4%2").arg(left,  width, left)
-                                         .arg(right, width, right);
-    return marker;
-}
-
-QString SubParser::resultsExtractor()
-{
-    int width = 0;
-    QChar left, right;
-    generateMarkerTemplate(left, right, width);
-
-    QString marker;
-    for (int i = 0; i < width; ++i)
-        marker.append("\\").append(left);
-
-    marker.append("(\\d+):(.*)");
-    for (int i = 0; i < width; ++i)
-        marker.append("\\").append(right);
-
-    return marker;
-};
-
-QString SubParser::emptyTokenMarker()
-{
-    return QString("!!!EMPTY!!!");
-}
-
-
-void SubParser::parse(QString& parseString, const ParseInformation& info)
+void SubParser::parse(const QString& parseString, const ParseInformation& info, ParseResultsMap& map)
 {
     if (!stringIsValid(parseString))
         return;
 
-    parseOperation(parseString, info);
+    parseOperation(parseString, info, map);
 }
 
 } // namespace Digikam

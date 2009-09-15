@@ -34,6 +34,7 @@
 
 #include "parseinformation.h"
 #include "subparser.h"
+#include "modifier.h"
 
 class QStringList;
 
@@ -42,6 +43,8 @@ namespace Digikam
 
 
 class SubParser;
+class Modifier;
+
 class Parser
 {
 
@@ -51,7 +54,9 @@ public:
     virtual ~Parser();
 
     QString       parse(const QString& parseString, ParseInformation& info);
+
     SubParserList subParsers() const;
+    ModifierList  modifiers()  const;
 
     bool          tokenAtPosition(const QString& parseString, int pos);
     bool          tokenAtPosition(const QString& parseString, int pos, int& start, int& length);
@@ -59,19 +64,19 @@ public:
 protected:
 
     void registerSubParser(SubParser* parser);
+    void registerModifier(Modifier* modifier);
 
 private:
 
-    typedef QMap<QString, QString> ParseResultsMap;
     ParseResultsMap parseResultsMap(const QString& parseString);
-
-    int  extractTokens(QString& parseString, QStringList& tokens);
-    void replaceMatchingTokens(QString& parseString, QStringList& tokens, ParseResultsMap* map = 0);
-    void addTokenMapItem(int index, int length, const QString& value, ParseResultsMap* map);
+    void            applyModifiers(const QString& parseString, ParseResultsMap& map);
+    QString         parseOperation(const QString& parseString, ParseInformation& info, ParseResultsMap& map,
+                                   bool replace = true);
 
 private:
 
     SubParserList m_subparsers;
+    ModifierList  m_modifiers;
 };
 
 }  // namespace Digikam

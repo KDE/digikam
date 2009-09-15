@@ -1047,14 +1047,20 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/manualrenamewidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/defaultparser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/common/token.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/common/modifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/common/parser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/common/subparser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/common/parseresultsmap.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/subparsers/filenameparser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/subparsers/metadataparser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/subparsers/dateparser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/subparsers/sequencenumberparser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/subparsers/cameranameparser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/subparsers/directorynameparser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/modifiers/uppercasemodifier.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/modifiers/lowercasemodifier.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/modifiers/firstletterofeachworduppercasemodifier.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/modifiers/trimmedmodifier.cpp
        )
 
     SET(libdigikamgui_SRCS
