@@ -173,7 +173,7 @@ void ManualRenameWidget::createToolTip()
 
     if (!d->parser->subParsers().isEmpty())
     {
-        TOOLTIP_HEADER(i18n("Tokens"));
+        TOOLTIP_HEADER(i18nc("Renaming Options", "Options"));
 
         tooltip += QString("<p><table>");
         foreach (SubParser* subparser, d->parser->subParsers())
