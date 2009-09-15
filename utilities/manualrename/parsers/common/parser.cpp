@@ -188,8 +188,8 @@ bool Parser::tokenAtPosition(const QString& parseString, int pos, int& start, in
 {
     bool found = false;
 
-    ParseResults results  = parseResults(parseString);
-    ParseResults::Key key = results.keyAtApproximatePosition(pos);
+    ParseResults results         = parseResults(parseString);
+    ParseResults::ResultsKey key = results.keyAtApproximatePosition(pos);
     start  = key.first;
     length = key.second;
 

@@ -31,9 +31,9 @@ void ParseResults::addEntry(int pos, const QString& token, const QString& result
     if (token.isEmpty())
         return;
 
-    Key key(pos, token.count());
-    Value value(token, result);
-    m_map.insert(key, value);
+    ResultsKey key(pos, token.count());
+    ResultsValue value(token, result);
+    m_results.insert(key, value);
 }
 
 void ParseResults::addModifier(int pos)
@@ -43,27 +43,27 @@ void ParseResults::addModifier(int pos)
 
 QString ParseResults::result(int pos, int length)
 {
-    if (m_map.isEmpty())
+    if (m_results.isEmpty())
         return QString();
 
-    Key key(pos, length);
-    QString result = m_map.value(key).second;
+    ResultsKey key(pos, length);
+    QString result = m_results.value(key).second;
     return result;
 }
 
 QString ParseResults::token(int pos, int length)
 {
-    if (m_map.isEmpty())
+    if (m_results.isEmpty())
         return QString();
 
-    Key key(pos, length);
-    QString token = m_map.value(key).first;
+    ResultsKey key(pos, length);
+    QString token = m_results.value(key).first;
     return token;
 }
 
-ParseResults::Key ParseResults::keyAtPosition(int pos)
+ParseResults::ResultsKey ParseResults::keyAtPosition(int pos)
 {
-    foreach (const Key& key, m_map.keys())
+    foreach (const ResultsKey& key, m_results.keys())
     {
         if (pos == key.first)
             return key;
@@ -74,15 +74,15 @@ ParseResults::Key ParseResults::keyAtPosition(int pos)
 
 bool ParseResults::isKeyAtPosition(int pos)
 {
-    Key key = keyAtPosition(pos);
+    ResultsKey key = keyAtPosition(pos);
     if (keyIsValid(key))
         return true;
     return false;
 }
 
-ParseResults::Key ParseResults::keyAtApproximatePosition(int pos)
+ParseResults::ResultsKey ParseResults::keyAtApproximatePosition(int pos)
 {
-    foreach (const Key& key, m_map.keys())
+    foreach (const ResultsKey& key, m_results.keys())
     {
         int start  = key.first;
         int length = key.second;
@@ -97,7 +97,7 @@ ParseResults::Key ParseResults::keyAtApproximatePosition(int pos)
 
 bool ParseResults::isKeyAtApproximatePosition(int pos)
 {
-    Key key = keyAtApproximatePosition(pos);
+    ResultsKey key = keyAtApproximatePosition(pos);
     if (keyIsValid(key))
         return true;
     return false;
@@ -105,20 +105,20 @@ bool ParseResults::isKeyAtApproximatePosition(int pos)
 
 void ParseResults::clear()
 {
-    m_map.clear();
+    m_results.clear();
 }
 
 bool ParseResults::isEmpty()
 {
-    return m_map.isEmpty();
+    return m_results.isEmpty();
 }
 
-ParseResults::Key ParseResults::createInvalidKey()
+ParseResults::ResultsKey ParseResults::createInvalidKey()
 {
-    return Key(-1, -1);
+    return ResultsKey(-1, -1);
 }
 
-bool ParseResults::keyIsValid(const Key& key)
+bool ParseResults::keyIsValid(const ResultsKey& key)
 {
     if (key.first == -1 || key.second == -1)
         return false;
@@ -133,8 +133,8 @@ QString ParseResults::replaceTokens(const QString& markedString)
     {
         if (isKeyAtPosition(i))
         {
-            Key key     = keyAtPosition(i);
-            Value value = m_map.value(key);
+            ResultsKey key     = keyAtPosition(i);
+            ResultsValue value = m_results.value(key);
             tmp.append(value.second);
             i += key.second;
         }
@@ -154,14 +154,6 @@ QString ParseResults::replaceTokens(const QString& markedString)
 bool ParseResults::isModifier(int pos)
 {
     return m_modifiers.contains(pos);
-}
-
-QString ParseResults::keyString(const Key& key)
-{
-    QString marker = QString("[map:%1:%2]")
-                        .arg(QString::number(key.first))
-                        .arg(QString::number(key.second));
-    return marker;
 }
 
 } // namespace Digikam

@@ -38,10 +38,10 @@ class ParseResults
 {
 public:
 
-    typedef QPair<int, int>         Key;
-    typedef QPair<QString, QString> Value;
-    typedef QMap<Key, Value>        Map;
-    typedef QSet<int>               ModifierIDs;
+    typedef QPair<int, int>                 ResultsKey;
+    typedef QPair<QString, QString>         ResultsValue;
+    typedef QMap<ResultsKey, ResultsValue>  ResultsMap;
+    typedef QSet<int>                       ModifierIDs;
 
 public:
 
@@ -55,10 +55,10 @@ public:
     QString token(int pos, int length);
 
 
-    Key  keyAtPosition(int pos);
-    bool isKeyAtPosition(int pos);
-    Key  keyAtApproximatePosition(int pos);
-    bool isKeyAtApproximatePosition(int pos);
+    ResultsKey keyAtPosition(int pos);
+    bool       isKeyAtPosition(int pos);
+    ResultsKey keyAtApproximatePosition(int pos);
+    bool       isKeyAtApproximatePosition(int pos);
 
     bool isModifier(int pos);
 
@@ -69,13 +69,12 @@ public:
 
 private:
 
-    Key     createInvalidKey();
-    bool    keyIsValid(const Key& key);
-    QString keyString(const Key& key);
+    ResultsKey createInvalidKey();
+    bool       keyIsValid(const ResultsKey& key);
 
 private:
 
-    Map         m_map;
+    ResultsMap  m_results;
     ModifierIDs m_modifiers;
 };
 
