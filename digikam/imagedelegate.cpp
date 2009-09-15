@@ -718,7 +718,7 @@ QPixmap ImageDelegate::thumbnailBorderPixmap(const QSize& pixSize) const
     return *cachePix;
 }
 
-QString ImageDelegate::dateToString(const QDateTime& datetime) const
+QString ImageDelegate::dateToString(const QDateTime& datetime)
 {
     return KGlobal::locale()->formatDateTime(datetime, KLocale::ShortDate, false);
 }
@@ -787,7 +787,7 @@ QString ImageDelegate::squeezedText(const QFontMetrics &fm, int width, const QSt
 
         if (letters >= 5)
         {
-            
+
             result = squeezedText;
         }
     }

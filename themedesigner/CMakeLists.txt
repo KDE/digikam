@@ -14,6 +14,7 @@ INCLUDE_DIRECTORIES(
                      ../libs/threadimageio
                      ../libs/whitebalance
                      ../libs/models
+                     ../libs/template
 
                      # widgets and dialogs
                      ../libs/widgets/common
@@ -46,6 +47,11 @@ INCLUDE_DIRECTORIES(
                      ../utilities/fuzzysearch
                      ../utilities/gpssearch
                      ../utilities/timeline
+                     ../utilities/manualrename
+                     ../utilities/manualrename/parsers
+                     ../utilities/manualrename/parsers/common
+                     ../utilities/manualrename/parsers/subparsers
+                     ../utilities/manualrename/parsers/modifiers
                      ../utilities/queuemanager
                      ../utilities/queuemanager/basetools/convert
                      ../utilities/queuemanager/basetools/enhance
@@ -78,6 +84,8 @@ SET(digikamthemedesigner_SRCS
     ${libdigikamgui_SRCS}
     ${libqueuemanager_SRCS}
     ${libalbummodels_SRCS}
+    ${libmanualrename_SRCS}
+    ${libtemplate_SRCS}
 
     main.cpp 
     mainwindow.cpp 
