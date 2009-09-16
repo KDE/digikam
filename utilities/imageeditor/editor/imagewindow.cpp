@@ -344,7 +344,7 @@ void ImageWindow::setupUserArea()
     m_canvas    = new Digikam::Canvas(m_stackView);
     viewContainer->setCentralWidget(m_stackView);
 
-    m_splitter->setStretchFactor(1, 10);      // set Canvas default size to max.
+    m_splitter->setStretchFactor(0, 10);      // set Canvas default size to max.
 
     d->rightSideBar = new ImagePropertiesSideBarDB(widget, m_splitter, KMultiTabBar::Right, true);
     d->rightSideBar->setObjectName("ImageEditor Right Sidebar");
