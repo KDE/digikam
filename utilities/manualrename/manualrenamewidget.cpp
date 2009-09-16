@@ -246,6 +246,8 @@ void ManualRenameWidget::registerParsers()
        QPushButton* btn        = 0;
        QAction* action         = 0;
        QGridLayout* gridLayout = new QGridLayout;
+       gridLayout->setSpacing(KDialog::marginHint());
+       gridLayout->setMargin(KDialog::marginHint());
 
        int maxParsers = d->parser->subParsers().count();
        foreach (SubParser* subparser, d->parser->subParsers())
@@ -356,6 +358,8 @@ void ManualRenameWidget::setupWidgets()
     mainLayout->addWidget(d->insertTokenToolButton, 0, 2, 1, 1);
     mainLayout->addWidget(d->btnContainer,          1, 0, 1,-1);
     mainLayout->setColumnStretch(0, 10);
+    mainLayout->setMargin(0);
+    mainLayout->setSpacing(KDialog::marginHint());
     setLayout(mainLayout);
 
     // --------------------------------------------------------
