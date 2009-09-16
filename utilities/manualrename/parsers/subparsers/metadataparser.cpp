@@ -53,22 +53,38 @@
 namespace Digikam
 {
 
+class MetadataParserDialogPriv
+{
+public:
+
+    MetadataParserDialogPriv()
+    {
+        metadataPanel     = 0;
+        separatorLineEdit = 0;
+    }
+
+    MetadataPanel* metadataPanel;
+    KLineEdit*     separatorLineEdit;
+};
+
+// --------------------------------------------------------
+
 MetadataParserDialog::MetadataParserDialog()
-                    : KDialog(0)
+                    : KDialog(0), d(new MetadataParserDialogPriv)
 {
     setCaption(i18n("Add Metadata Keywords"));
 
-    QWidget* mainWidget = new QWidget;
-    KTabWidget* tab     = new KTabWidget;
-    m_metadataPanel     = new MetadataPanel(tab);
-    QLabel *customLabel = new QLabel(i18n("Keyword separator:"));
-    m_separatorLineEdit = new KLineEdit;
-    m_separatorLineEdit->setText("_");
+    QWidget* mainWidget  = new QWidget;
+    KTabWidget* tab      = new KTabWidget;
+    d->metadataPanel     = new MetadataPanel(tab);
+    QLabel *customLabel  = new QLabel(i18n("Keyword separator:"));
+    d->separatorLineEdit = new KLineEdit;
+    d->separatorLineEdit->setText("_");
 
     // --------------------------------------------------------
 
     // we only need the "SearchBar" and "ClearBtn" control elements
-    foreach (MetadataSelectorView* viewer, m_metadataPanel->viewers())
+    foreach (MetadataSelectorView* viewer, d->metadataPanel->viewers())
     {
         viewer->setControlElements(MetadataSelectorView::SearchBar |
                                    MetadataSelectorView::ClearBtn);
@@ -96,7 +112,7 @@ MetadataParserDialog::MetadataParserDialog()
     QHBoxLayout *customLayout = new QHBoxLayout;
     customLayout->addWidget(customLabel);
     customLayout->addStretch(10);
-    customLayout->addWidget(m_separatorLineEdit);
+    customLayout->addWidget(d->separatorLineEdit);
     customGBox->setLayout(customLayout);
 
     // --------------------------------------------------------
@@ -125,12 +141,12 @@ MetadataParserDialog::~MetadataParserDialog()
 
 QStringList MetadataParserDialog::checkedTags() const
 {
-    return m_metadataPanel->getAllCheckedTags();
+    return d->metadataPanel->getAllCheckedTags();
 }
 
 QString MetadataParserDialog::separator() const
 {
-    return m_separatorLineEdit->text();
+    return d->separatorLineEdit->text();
 }
 
 // --------------------------------------------------------

@@ -37,13 +37,10 @@
 
 #include "subparser.h"
 
-class KLineEdit;
-
 namespace Digikam
 {
 
-class MetadataPanel;
-
+class MetadataParserDialogPriv;
 
 class MetadataParserDialog : public KDialog
 {
@@ -59,8 +56,7 @@ public:
 
 private:
 
-    MetadataPanel* m_metadataPanel;
-    KLineEdit*     m_separatorLineEdit;
+    MetadataParserDialogPriv* const d;
 };
 
 // --------------------------------------------------------
