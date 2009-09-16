@@ -26,12 +26,43 @@
 namespace Digikam
 {
 
+class ModifierPriv
+{
+public:
+
+    ModifierPriv()
+    {
+    }
+
+    QString id;
+    QString alias;
+    QString description;
+};
+
+// --------------------------------------------------------
+
 Modifier::Modifier(const QString& id, const QString& alias, const QString& description)
- {
-    m_id          = id;
-    m_alias       = alias;
-    m_description = description;
- }
+        : d(new ModifierPriv)
+{
+    d->id          = id;
+    d->alias       = alias;
+    d->description = description;
+}
+
+QString Modifier::id() const
+{
+    return d->id;
+}
+
+QString Modifier::alias() const
+{
+    return d->alias;
+}
+
+QString Modifier::description() const
+{
+    return d->description;
+}
 
 QString Modifier::modify(const QString& str)
 {

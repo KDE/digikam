@@ -34,6 +34,8 @@ class  QAction;
 namespace Digikam
 {
 
+class ModifierPriv;
+
 class Modifier
 {
 public:
@@ -41,11 +43,11 @@ public:
     Modifier(const QString& id, const QString& alias, const QString& description);
     virtual ~Modifier() {};
 
-    QString  id()          { return m_id; };
-    QString  alias()       { return m_alias; };
-    QString  description() { return m_description; };
+    QString id()          const;
+    QString alias()       const;
+    QString description() const;
 
-    QString  modify(const QString& str);
+    QString modify(const QString& str);
 
 protected:
 
@@ -53,9 +55,7 @@ protected:
 
 private:
 
-    QString  m_id;
-    QString  m_alias;
-    QString  m_description;
+    ModifierPriv* const d;
 };
 
 typedef QList<Modifier*> ModifierList;
