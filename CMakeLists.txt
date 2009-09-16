@@ -1045,12 +1045,12 @@ ENDIF(MSVC)
     SET(libmanualrename_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/manualrenameinput.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/manualrenamewidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/common/token.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/common/modifier.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/common/parser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/common/subparser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/common/parseresults.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/defaultparser.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/common/token.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/common/modifier.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/common/parser.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/common/subparser.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/common/parseresults.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/subparsers/filenameparser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/subparsers/metadataparser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/subparsers/dateparser.cpp

@@ -60,8 +60,8 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/timeline
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/firstrun
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename/common
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename/parsers
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename/parsers/common
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename/parsers/subparsers
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename/parsers/modifiers
                      ${CMAKE_CURRENT_SOURCE_DIR}/../digikam
