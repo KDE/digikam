@@ -39,41 +39,59 @@
 namespace Digikam
 {
 
+class SequenceNumberDialogPriv
+{
+public:
+
+    SequenceNumberDialogPriv()
+    {
+        digits = 0;
+        start  = 0;
+        step   = 0;
+    }
+
+    KIntNumInput* digits;
+    KIntNumInput* start;
+    KIntNumInput* step;
+};
+
+// --------------------------------------------------------
+
 SequenceNumberDialog::SequenceNumberDialog()
-                    : KDialog(0)
+                    : KDialog(0), d(new SequenceNumberDialogPriv)
 {
     setCaption(i18n("Add sequence number"));
 
-    digits = new KIntNumInput;
-    start  = new KIntNumInput;
-    step   = new KIntNumInput;
+    d->digits = new KIntNumInput;
+    d->start  = new KIntNumInput;
+    d->step   = new KIntNumInput;
 
     QLabel* digitsLabel = new QLabel(i18nc("number of digits", "Digits:"));
     QLabel* startLabel  = new QLabel(i18nc("start of sequence number range", "Start:"));
     QLabel* stepLabel   = new QLabel(i18nc("stepping used for sequence number range", "Step:"));
 
-    digits->setRange(1, 999999, 1);
-    digits->setSliderEnabled(false);
+    d->digits->setRange(1, 999999, 1);
+    d->digits->setSliderEnabled(false);
 
-    start->setRange(1, 999999, 1);
-    start->setSliderEnabled(false);
+    d->start->setRange(1, 999999, 1);
+    d->start->setSliderEnabled(false);
 
-    step->setRange(1, 999999, 1);
-    step->setSliderEnabled(false);
+    d->step->setRange(1, 999999, 1);
+    d->step->setSliderEnabled(false);
 
     QGroupBox* gbox         = new QGroupBox(i18n("Custom Range"));
     QGridLayout* gboxLayout = new QGridLayout;
     gboxLayout->addWidget(startLabel, 0, 0);
-    gboxLayout->addWidget(start,      0, 1);
+    gboxLayout->addWidget(d->start,   0, 1);
     gboxLayout->addWidget(stepLabel,  1, 0);
-    gboxLayout->addWidget(step,       1, 1);
+    gboxLayout->addWidget(d->step,    1, 1);
     gboxLayout->setRowStretch(2, 10);
     gbox->setLayout(gboxLayout);
 
     QWidget* w              = new QWidget;
     QGridLayout* mainLayout = new QGridLayout;
     mainLayout->addWidget(digitsLabel, 0, 0, 1, 1);
-    mainLayout->addWidget(digits,      0, 1, 1, 1);
+    mainLayout->addWidget(d->digits,   0, 1, 1, 1);
     mainLayout->addWidget(gbox,        1, 0, 1,-1);
     w->setLayout(mainLayout);
 
@@ -82,6 +100,21 @@ SequenceNumberDialog::SequenceNumberDialog()
 
 SequenceNumberDialog::~SequenceNumberDialog()
 {
+}
+
+int SequenceNumberDialog::digits() const
+{
+    return d->digits->value();
+}
+
+int SequenceNumberDialog::start()  const
+{
+    return d->start->value();
+}
+
+int SequenceNumberDialog::step()   const
+{
+    return d->step->value();
 }
 
 // --------------------------------------------------------
@@ -111,9 +144,9 @@ void SequenceNumberParser::slotTokenTriggered(const QString& token)
     QString tmp;
     if (dlg->exec() == KDialog::Accepted)
     {
-        int _digits = dlg->digits->value();
-        int _start  = dlg->start->value();
-        int _step   = dlg->step->value();
+        int _digits = dlg->digits();
+        int _start  = dlg->start();
+        int _step   = dlg->step();
 
         tmp = QString("%1").arg("#", _digits, QChar('#'));
         if (_start > 1)

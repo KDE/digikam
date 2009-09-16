@@ -36,10 +36,10 @@
 
 #include "subparser.h"
 
-class KIntNumInput;
-
 namespace Digikam
 {
+
+class SequenceNumberDialogPriv;
 
 class SequenceNumberDialog : public KDialog
 {
@@ -50,9 +50,13 @@ public:
     SequenceNumberDialog();
     ~SequenceNumberDialog();
 
-    KIntNumInput* digits;
-    KIntNumInput* start;
-    KIntNumInput* step;
+    int digits() const;
+    int start()  const;
+    int step()   const;
+
+private:
+
+    SequenceNumberDialogPriv* const d;
 };
 
 // --------------------------------------------------------
