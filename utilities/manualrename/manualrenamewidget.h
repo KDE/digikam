@@ -51,6 +51,9 @@ class DIGIKAM_EXPORT ManualRenameWidget : public QWidget
 
 public:
 
+    ManualRenameWidget(QWidget* parent = 0);
+    ~ManualRenameWidget();
+
     enum InputStyle
     {
         None       = 0x0,
@@ -58,9 +61,6 @@ public:
         ToolButton = 0x2
     };
     Q_DECLARE_FLAGS(InputStyles, InputStyle)
-
-    ManualRenameWidget(QWidget* parent = 0);
-    ~ManualRenameWidget();
 
     QString text() const;
     void    setText(const QString& text);
