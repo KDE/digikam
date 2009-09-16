@@ -51,6 +51,8 @@ class QWidget;
 namespace Digikam
 {
 
+class SubParserPriv;
+
 /*
  * Macro definitions:
  *
@@ -159,12 +161,7 @@ private:
 
 private:
 
-    bool      m_buttonRegistered;
-    bool      m_MenuRegistered;
-    bool      m_useTokenMenu;
-    QString   m_name;
-    QIcon     m_icon;
-    TokenList m_tokens;
+    SubParserPriv* const d;
 };
 
 typedef QList<SubParser*> SubParserList;

@@ -42,24 +42,42 @@
 namespace Digikam
 {
 
-SubParser::SubParser(const QString& name, const QIcon& icon)
-      : QObject(0)
+class SubParserPriv
 {
-    m_name              = name;
-    m_icon              = icon;
-    m_buttonRegistered  = false;
-    m_MenuRegistered    = false;
-    m_useTokenMenu      = true;
+public:
+
+    SubParserPriv()
+    {
+        buttonRegistered  = false;
+        menuRegistered    = false;
+        useTokenMenu      = true;
+    }
+
+    bool      buttonRegistered;
+    bool      menuRegistered;
+    bool      useTokenMenu;
+
+    QString   name;
+    QIcon     icon;
+
+    TokenList tokens;
+};
+
+SubParser::SubParser(const QString& name, const QIcon& icon)
+      : QObject(0), d(new SubParserPriv)
+{
+    d->name = name;
+    d->icon = icon;
 }
 
 SubParser::~SubParser()
 {
-    foreach (Token* token, m_tokens)
+    foreach (Token* token, d->tokens)
     {
         delete token;
     }
 
-    m_tokens.clear();
+    d->tokens.clear();
 }
 
 QPushButton* SubParser::createButton(const QString& name, const QIcon& icon)
@@ -78,15 +96,15 @@ QPushButton* SubParser::createButton(const QString& name, const QIcon& icon)
 QPushButton* SubParser::registerButton(QWidget* parent)
 {
     QPushButton* button = 0;
-    button = createButton(m_name, m_icon);
+    button = createButton(d->name, d->icon);
 
     QList<QAction*> actions;
 
-    if (m_tokens.count() > 1 && m_useTokenMenu)
+    if (d->tokens.count() > 1 && d->useTokenMenu)
     {
         QMenu* menu = new QMenu(button);
 
-        foreach (Token* token, m_tokens)
+        foreach (Token* token, d->tokens)
         {
             actions << token->action();
         }
@@ -96,14 +114,14 @@ QPushButton* SubParser::registerButton(QWidget* parent)
     }
     else
     {
-        Token* token = m_tokens.first();
+        Token* token = d->tokens.first();
         connect(button, SIGNAL(clicked()),
                 token, SLOT(slotTriggered()));
 
     }
     button->setParent(parent);
 
-    m_buttonRegistered = button ? true : false;
+    d->buttonRegistered = button ? true : false;
     return button;
 }
 
@@ -112,11 +130,11 @@ QAction* SubParser::registerMenu(QMenu* parent)
     QAction* action = 0;
     QList<QAction*> actions;
 
-    if (m_tokens.count() > 1 && m_useTokenMenu)
+    if (d->tokens.count() > 1 && d->useTokenMenu)
     {
         QMenu* menu = new QMenu(parent);
 
-        foreach (Token* token, m_tokens)
+        foreach (Token* token, d->tokens)
         {
             actions << token->action();
         }
@@ -126,15 +144,15 @@ QAction* SubParser::registerMenu(QMenu* parent)
     }
     else
     {
-        action = m_tokens.first()->action();
+        action = d->tokens.first()->action();
         parent->insertAction(0, action);
     }
 
     if (action)
     {
-        action->setText(m_name);
-        action->setIcon(m_icon);
-        m_MenuRegistered = true;
+        action->setText(d->name);
+        action->setIcon(d->icon);
+        d->menuRegistered = true;
     }
 
     return action;
@@ -152,18 +170,18 @@ bool SubParser::addToken(const QString& id, const QString& name, const QString& 
     connect(token, SIGNAL(signalTokenTriggered(const QString&)),
             this, SLOT(slotTokenTriggered(const QString&)));
 
-    m_tokens << token;
+    d->tokens << token;
     return true;
 }
 
 void SubParser::useTokenMenu(bool value)
 {
-    m_useTokenMenu = value;
+    d->useTokenMenu = value;
 }
 
 QList<Token*> SubParser::tokens() const
 {
-    return m_tokens;
+    return d->tokens;
 }
 
 void SubParser::slotTokenTriggered(const QString& token)
