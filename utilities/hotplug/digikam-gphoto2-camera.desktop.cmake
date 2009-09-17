@@ -7,6 +7,7 @@ Name[ca]=Detecta i descarrega amb el digiKam
 Name[da]=Detektér og download med digiKam
 Name[de]=digiKam - Entdecken und herunterladen
 Name[el]=digiKam ανίχνευση και λήψη
+Name[en_GB]=digiKam Detect and Download
 Name[es]=Detectar y descargar con digiKam
 Name[et]=Fotode tuvastamine ja allalaadimine digiKamiga
 Name[fi]=Tunnista kamera ja lataa kuvat digiKamilla

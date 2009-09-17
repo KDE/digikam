@@ -1,9 +1,17 @@
 [Desktop Entry]
 Name=ImagePlugin_LocalContrast
 Name[bg]=Приставка за снимки - Локален контраст
+Name[da]=ImagePlugin_LocalContrast
+Name[et]=ImagePlugin_LocalContrast
+Name[gl]=ImagePlugin_LocalContrast
+Name[nb]=ImagePlugin_LocalContrast
+Name[nds]=ImagePlugin_LocalContrast
 Name[nl]=Afbeeldingsplugin_LokaalContrast
+Name[pt]=ImagePlugin_LocalContrast
+Name[pt_BR]=ImagePlugin_LocalContrast
 Name[sv]=Bildinsticksprogram lokal kontrast
 Name[tr]=GörüntüEklentisi_YerelKarşıtlık
+Name[uk]=ImagePlugin_LocalContrast
 Name[x-test]=xxImagePlugin_LocalContrastxx
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
