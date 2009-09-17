@@ -42,9 +42,9 @@ class QStringList;
 namespace Digikam
 {
 
-
 class SubParser;
 class Modifier;
+class ParserPriv;
 
 class Parser
 {
@@ -76,8 +76,7 @@ private:
 
 private:
 
-    SubParserList m_subparsers;
-    ModifierList  m_modifiers;
+    ParserPriv* const d;
 };
 
 }  // namespace Digikam

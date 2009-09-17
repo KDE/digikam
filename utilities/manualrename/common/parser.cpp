@@ -37,7 +37,22 @@
 namespace Digikam
 {
 
+class ParserPriv
+{
+public:
+
+    ParserPriv()
+    {
+    }
+
+    SubParserList subparsers;
+    ModifierList  modifiers;
+};
+
+// --------------------------------------------------------
+
 Parser::Parser()
+      : d(new ParserPriv)
 {
     /**
      * Register all sub-parsers here (found in the directory 'utilities/manualrename/parsers').
@@ -61,28 +76,28 @@ Parser::Parser()
 
 Parser::~Parser()
 {
-    foreach (SubParser* subparser, m_subparsers)
+    foreach (SubParser* subparser, d->subparsers)
     {
         delete subparser;
     }
 
-    foreach (Modifier* modifier, m_modifiers)
+    foreach (Modifier* modifier, d->modifiers)
     {
         delete modifier;
     }
 
-    m_subparsers.clear();
-    m_modifiers.clear();
+    d->subparsers.clear();
+    d->modifiers.clear();
 }
 
 SubParserList Parser::subParsers() const
 {
-    return m_subparsers;
+    return d->subparsers;
 }
 
 ModifierList Parser::modifiers() const
 {
-    return m_modifiers;
+    return d->modifiers;
 }
 
 void Parser::registerSubParser(SubParser* parser)
@@ -90,7 +105,7 @@ void Parser::registerSubParser(SubParser* parser)
     if (!parser)
         return;
 
-    m_subparsers.append(parser);
+    d->subparsers.append(parser);
 }
 
 void Parser::registerModifier(Modifier* modifier)
@@ -98,7 +113,7 @@ void Parser::registerModifier(Modifier* modifier)
     if (!modifier)
         return;
 
-    m_modifiers.append(modifier);
+    d->modifiers.append(modifier);
 }
 
 ParseResults Parser::parseResults(const QString& parseString)
@@ -126,12 +141,12 @@ QString Parser::parseOperation(const QString& parseString, ParseInformation& inf
         return baseName;
     }
 
-    if (!m_subparsers.isEmpty())
+    if (!d->subparsers.isEmpty())
     {
         QStringList tokens;
 
         // parse and extract matching tokens
-        foreach (SubParser* parser, m_subparsers)
+        foreach (SubParser* parser, d->subparsers)
         {
             parser->parse(parseString, info, results);
         }
@@ -153,7 +168,7 @@ void Parser::applyModifiers(const QString& parseString, ParseResults& results)
 
     QString tmp = parseString;
 
-    foreach (Modifier* modifier, m_modifiers)
+    foreach (Modifier* modifier, d->modifiers)
     {
         int pos = 0;
         while (pos > -1)
