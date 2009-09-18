@@ -494,8 +494,26 @@ void SetupCollectionModel::addCollection(int category)
         return;
 
     // Get path
+#ifdef _WIN32
+    QString picturesPath;
+    if (m_collections.count()>0) {
+        const Item& item = m_collections[0];
+        picturesPath = item.path;
+    } else {
+#if KDE_IS_VERSION(4,1,61)
+    picturesPath = KGlobalSettings::picturesPath();
+#else
+#if QT_VERSION >= 0x040400
+    picturesPath = QDesktopServices::storageLocation(QDesktopServices::PicturesLocation);
+#endif
+#endif
+    }
+    QString path = KFileDialog::getExistingDirectory(KUrl(picturesPath), m_dialogParentWidget,
+            i18n("Choose the folder containing your collection"));
+#else
     QString path = KFileDialog::getExistingDirectory(KUrl("kfiledialog:///collectionlocation"), m_dialogParentWidget,
             i18n("Choose the folder containing your collection"));
+#endif
 
     if (path.isEmpty())
         return;
