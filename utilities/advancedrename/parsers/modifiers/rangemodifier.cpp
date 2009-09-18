@@ -31,9 +31,9 @@ namespace Digikam
 {
 
 RangeModifier::RangeModifier()
-             : Modifier(QString("[start, stop]"), i18n("Range"), i18n("display only a specific range"))
+             : Modifier(QString("{start, stop}"), i18n("Range"), i18n("display only a specific range"))
 {
-    setRegExp("\\[\\s*(\\d+)\\s*,\\s*(\\d+)\\s*\\]");
+    setRegExp("\\{\\s*(\\d+)\\s*,\\s*(\\d+)\\s*\\}");
 }
 
 QString RangeModifier::modifyOperation(const QString& parseString, const QString& result)

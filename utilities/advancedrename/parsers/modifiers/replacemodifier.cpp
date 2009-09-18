@@ -31,9 +31,9 @@ namespace Digikam
 {
 
 ReplaceModifier::ReplaceModifier()
-               : Modifier(QString("['old', 'new']"), i18n("Replace"), i18n("replace text"))
+               : Modifier(QString("{'old', 'new'}"), i18n("Replace"), i18n("replace text"))
 {
-    setRegExp("\\[\\s*'(.+)'\\s*,\\s*'(.*)'\\s*\\]");
+    setRegExp("\\{\\s*'(.+)'\\s*,\\s*'(.*)'\\s*\\}");
 }
 
 QString ReplaceModifier::modifyOperation(const QString& parseString, const QString& result)
