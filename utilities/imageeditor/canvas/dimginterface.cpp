@@ -101,12 +101,14 @@ public:
         exifOrient       = false;
         valid            = false;
         rotatedOrFlipped = false;
+        doSoftProofing   = false;
     }
 
     bool                       valid;
     bool                       rotatedOrFlipped;
     bool                       exifOrient;
     bool                       changedBCG;
+    bool                       doSoftProofing;
 
     int                        width;
     int                        height;
@@ -352,7 +354,16 @@ void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription
 void DImgInterface::updateColorManagement()
 {
     IccManager manager(d->image);
-    d->monitorICCtrans = manager.displayTransform(d->displayingWidget);
+    if (d->doSoftProofing)
+        d->monitorICCtrans = manager.displaySoftProofingTransform(d->cmSettings->defaultProofProfile, d->displayingWidget);
+    else
+        d->monitorICCtrans = manager.displayTransform(d->displayingWidget);
+}
+
+void DImgInterface::setSoftProofingEnabled(bool enabled)
+{
+    d->doSoftProofing = enabled;
+    updateColorManagement();
 }
 
 void DImgInterface::slotLoadingProgress(const LoadingDescription& loadingDescription, float progress)
@@ -690,7 +701,7 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
     img.convertDepth(32);
     QPainter painter(p);
 
-    if (d->cmSettings->enableCM && d->cmSettings->useManagedView)
+    if (d->cmSettings->enableCM && (d->cmSettings->useManagedView || d->doSoftProofing))
     {
         QPixmap pix(img.convertToPixmap(d->monitorICCtrans));
         painter.drawPixmap(dx, dy, pix, 0, 0, pix.width(), pix.height());
@@ -753,7 +764,7 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
         }
     }
 
-    if (d->cmSettings->enableCM && d->cmSettings->useManagedView)
+    if (d->cmSettings->enableCM && (d->cmSettings->useManagedView || d->doSoftProofing))
     {
         QPixmap pix(img.convertToPixmap(d->monitorICCtrans));
         painter.drawPixmap(dx, dy, pix, 0, 0, pix.width(), pix.height());
@@ -1142,7 +1153,7 @@ ICCSettingsContainer* DImgInterface::getICCSettings()
 
 QPixmap DImgInterface::convertToPixmap(DImg& img)
 {
-    if (d->cmSettings->enableCM && d->cmSettings->useManagedView)
+    if (d->cmSettings->enableCM && (d->cmSettings->useManagedView || d->doSoftProofing))
         return img.convertToPixmap(d->monitorICCtrans);
 
     return img.convertToPixmap();

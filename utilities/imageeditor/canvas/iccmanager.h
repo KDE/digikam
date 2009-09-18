@@ -99,6 +99,12 @@ public:
     IccTransform displayTransform(const IccProfile& displayProfile);
 
     /**
+     * Returns a display transform, with soft-proofing enabled for the given device profile.
+     */
+    IccTransform displaySoftProofingTransform(const IccProfile &deviceProfile, QWidget *displayingWidget = 0);
+    IccTransform displaySoftProofingTransform(const IccProfile &deviceProfile, const IccProfile& displayProfile);
+
+    /**
      * Returns true if the given image is marked as needing user interaction
      * for further color management decision after loading.
      * If this returns true, use postLoadingManage() to do this.

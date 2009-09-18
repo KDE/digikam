@@ -1128,6 +1128,13 @@ void Canvas::setICCSettings(ICCSettingsContainer *cmSettings)
     viewport()->update();
 }
 
+void Canvas::setSoftProofingEnabled(bool enable)
+{
+    d->im->setSoftProofingEnabled(enable);
+    d->tileCache.clear();
+    viewport()->update();
+}
+
 void Canvas::setExposureSettings(ExposureSettingsContainer *expoSettings)
 {
     d->im->setExposureSettings(expoSettings);

@@ -65,6 +65,7 @@ public:
     void   updateColorManagement();
 
     void   setICCSettings(ICCSettingsContainer *cmSettings);
+    void   setSoftProofingEnabled(bool enabled);
     void   setExposureSettings(ExposureSettingsContainer *expoSettings);
     void   setExifOrient(bool exifOrient);
     void   setDisplayingWidget(QWidget *widget);

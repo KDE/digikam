@@ -113,6 +113,7 @@ public:
     void  setBackgroundColor(const QColor& color);
     void  setICCSettings(ICCSettingsContainer *cmSettings);
     void  setExposureSettings(ExposureSettingsContainer *expoSettings);
+    void  setSoftProofingEnabled(bool enable);
 
     void  setExifOrient(bool exifOrient);
 

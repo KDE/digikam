@@ -413,6 +413,19 @@ IccTransform IccManager::displayTransform(const IccProfile& displayProfile)
     return trans;
 }
 
+IccTransform IccManager::displaySoftProofingTransform(const IccProfile &deviceProfile, QWidget *displayingWidget)
+{
+    return displaySoftProofingTransform(deviceProfile, displayProfile(displayingWidget));
+}
+
+IccTransform IccManager::displaySoftProofingTransform(const IccProfile &deviceProfile, const IccProfile& displayProfile)
+{
+    IccTransform transform = displayTransform(displayProfile);
+    transform.setProofProfile(deviceProfile);
+    transform.setCheckGamut(d->settings.doGamutCheck);
+    transform.setCheckGamutMaskColor(d->settings.gamutCheckMaskColor);
+    return transform;
+}
 
 // --- sRGB and Output ---
 
