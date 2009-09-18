@@ -1062,6 +1062,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/modifiers/lowercasemodifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/modifiers/firstletterofeachworduppercasemodifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/modifiers/trimmedmodifier.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/modifiers/rangemodifier.cpp
        )
 
     SET(libdigikamgui_SRCS

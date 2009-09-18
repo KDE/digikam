@@ -46,6 +46,7 @@
 #include "uppercasemodifier.h"
 #include "firstletterofeachworduppercasemodifier.h"
 #include "trimmedmodifier.h"
+#include "rangemodifier.h"
 
 namespace Digikam
 {
@@ -86,6 +87,7 @@ SubParser::SubParser(const QString& name, const QIcon& icon)
     registerModifier(new UpperCaseModifier());
     registerModifier(new FirstLetterEachWordUpperCaseModifier());
     registerModifier(new TrimmedModifier());
+    registerModifier(new RangeModifier());
 }
 
 SubParser::~SubParser()
@@ -327,9 +329,11 @@ ParseResults SubParser::applyModifiers(const QString& parseString, ParseResults&
             {
                 ParseResults::ResultsKey mkey = modifiers.keyAtPosition(pos);
                 Modifier* mod                 = modifierCallbackMap[mkey];
+                QString modToken              = modifiers.token(mkey);
+
                 QString token                 = results.token(key);
                 QString result                = results.result(key);
-                QString modToken              = modifiers.token(key);
+
                 QString modResult             = mod->modify(modToken, result);
 
                 // update result

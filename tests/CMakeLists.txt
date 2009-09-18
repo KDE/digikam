@@ -43,6 +43,7 @@ SET(advancedrenameinputtest_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/modifiers/lowercasemodifier.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/modifiers/firstletterofeachworduppercasemodifier.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/modifiers/trimmedmodifier.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/modifiers/rangemodifier.cpp
 )
 KDE4_ADD_UNIT_TEST(advancedrenameinputtest ${advancedrenameinputtest_SRCS})
 TARGET_LINK_LIBRARIES(advancedrenameinputtest
