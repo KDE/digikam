@@ -281,7 +281,7 @@ ParseResults SubParser::applyModifiers(const QString& parseString, ParseResults&
 {
     ParseResults tmp;
 
-    ParseResults modifiers = results;
+    ParseResults modifiers;
     QMap<ParseResults::ResultsKey, Modifier*> modifierCallbackMap;
 
     if (results.isEmpty())
