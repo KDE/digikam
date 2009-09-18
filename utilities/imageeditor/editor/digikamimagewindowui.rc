@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="29" name="digikamimagewindow" >
+<gui version="30" name="digikamimagewindow" >
 
 <MenuBar>
 
@@ -45,7 +45,10 @@
         <Separator/>
         <Action name="editorwindow_underexposure" />
         <Action name="editorwindow_overexposure" />
+        <Separator/>
         <Action name="editorwindow_cmview" />
+        <Action name="editorwindow_softproofview" />
+        <Action name="editorwindow_softproofoptions" />
     </Menu>
 
     <Menu name="Color" ><text>&amp;Color</text>

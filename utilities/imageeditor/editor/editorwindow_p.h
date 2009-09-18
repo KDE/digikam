@@ -88,6 +88,8 @@ public:
         toolIface                    = 0;
         showMenuBarAction            = 0;
         imagepluginsActionCollection = 0;
+        viewSoftProofAction          = 0;
+        softProofOptionsAction       = 0;
     }
 
     ~EditorWindowPriv()
@@ -125,6 +127,7 @@ public:
     KAction                   *selectNoneAction;
     KAction                   *rawCameraListAction;
     KAction                   *libsInfoAction;
+    KAction                   *softProofOptionsAction;
 
     QSignalMapper             *undoSignalMapper;
     QSignalMapper             *redoSignalMapper;
@@ -133,6 +136,7 @@ public:
 
     KToggleAction             *zoomFitToWindowAction;
     KToggleAction             *viewCMViewAction;
+    KToggleAction             *viewSoftProofAction;
     KToggleAction             *viewUnderExpoAction;
     KToggleAction             *viewOverExpoAction;
     KToggleAction             *showMenuBarAction;

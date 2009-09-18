@@ -231,7 +231,10 @@ private Q_SLOTS:
 
     void slotSetUnderExposureIndicator(bool);
     void slotSetOverExposureIndicator(bool);
+    void slotColorManagementOptionsChanged();
     void slotToggleColorManagedView();
+    void slotSoftProofingOptions();
+    void slotUpdateSoftProofingState();
     void slotRotatedOrFlipped();
     void slotSavingFinished(const QString& filename, bool success);
     void slotDonateMoney();

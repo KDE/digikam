@@ -52,6 +52,7 @@
 #include <kaboutdata.h>
 #include <kaction.h>
 #include <kactioncollection.h>
+#include <kactionmenu.h>
 #include <kapplication.h>
 #include <kcombobox.h>
 #include <kconfig.h>
@@ -118,6 +119,7 @@
 #include "savingcontextcontainer.h"
 #include "sidebar.h"
 #include "slideshowsettings.h"
+#include "softproofdialog.h"
 #include "statusprogressbar.h"
 #include "themeengine.h"
 #include "thumbbar.h"
@@ -280,6 +282,11 @@ void EditorWindow::setupStandardConnections()
 
     connect(m_nameLabel, SIGNAL(signalCancelButtonPressed()),
             d->toolIface, SLOT(slotToolAborted()));
+
+    // -- Icc settings connections --------------------------------------
+
+    connect(IccSettings::instance(), SIGNAL(settingsChanged()),
+            this, SLOT(slotColorManagementOptionsChanged()));
 }
 
 void EditorWindow::setupStandardActions()
@@ -461,6 +468,14 @@ void EditorWindow::setupStandardActions()
     d->viewCMViewAction->setShortcut(Qt::Key_F12);
     connect(d->viewCMViewAction, SIGNAL(triggered()), this, SLOT(slotToggleColorManagedView()));
     actionCollection()->addAction("editorwindow_cmview", d->viewCMViewAction);
+
+    d->softProofOptionsAction = new KAction(KIcon("printer"), i18n("Soft Proofing Options..."), this);
+    connect(d->softProofOptionsAction, SIGNAL(triggered()), this, SLOT(slotSoftProofingOptions()));
+    actionCollection()->addAction("editorwindow_softproofoptions", d->softProofOptionsAction);
+
+    d->viewSoftProofAction = new KToggleAction(KIcon("document-print-preview"), i18n("Soft Proofing View"), this);
+    connect(d->viewSoftProofAction, SIGNAL(triggered()), this, SLOT(slotUpdateSoftProofingState()));
+    actionCollection()->addAction("editorwindow_softproofview", d->viewSoftProofAction);
 
     m_showBarAction = thumbBar()->getToggleAction(this);
     actionCollection()->addAction("editorwindow_showthumbs", m_showBarAction);
@@ -836,20 +851,7 @@ void EditorWindow::applyStandardSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
 
-    // -- Settings for Color Management stuff ----------------------------------------------
-
-    *d->ICCSettings = IccSettings::instance()->settings();
-
-    d->viewCMViewAction->blockSignals(true);
-    d->cmViewIndicator->blockSignals(true);
-    d->viewCMViewAction->setEnabled(d->ICCSettings->enableCM);
-    d->viewCMViewAction->setChecked(d->ICCSettings->useManagedView);
-    d->cmViewIndicator->setEnabled(d->ICCSettings->enableCM);
-    d->cmViewIndicator->setChecked(d->ICCSettings->useManagedView);
-    setColorManagedViewIndicatorToolTip(d->ICCSettings->enableCM, d->ICCSettings->useManagedView);
-    m_canvas->setICCSettings(d->ICCSettings);
-    d->viewCMViewAction->blockSignals(false);
-    d->cmViewIndicator->blockSignals(false);
+    slotColorManagementOptionsChanged();
 
     // -- JPEG, PNG, TIFF JPEG2000 files format settings --------------------------------------
 
@@ -1828,6 +1830,28 @@ bool EditorWindow::moveFile()
     return true;
 }
 
+void EditorWindow::slotColorManagementOptionsChanged()
+{
+    *d->ICCSettings = IccSettings::instance()->settings();
+
+    d->viewCMViewAction->blockSignals(true);
+    d->cmViewIndicator->blockSignals(true);
+
+    d->viewCMViewAction->setEnabled(d->ICCSettings->enableCM);
+    d->viewCMViewAction->setChecked(d->ICCSettings->useManagedView);
+    d->cmViewIndicator->setEnabled(d->ICCSettings->enableCM);
+    d->cmViewIndicator->setChecked(d->ICCSettings->useManagedView);
+    setColorManagedViewIndicatorToolTip(d->ICCSettings->enableCM, d->ICCSettings->useManagedView);
+
+    d->viewSoftProofAction->setEnabled(d->ICCSettings->enableCM &&
+                                       !d->ICCSettings->defaultProofProfile.isEmpty());
+    d->softProofOptionsAction->setEnabled(d->ICCSettings->enableCM);
+
+    m_canvas->setICCSettings(d->ICCSettings);
+    d->viewCMViewAction->blockSignals(false);
+    d->cmViewIndicator->blockSignals(false);
+}
+
 void EditorWindow::slotToggleColorManagedView()
 {
     d->cmViewIndicator->blockSignals(true);
@@ -1864,6 +1888,22 @@ void EditorWindow::setColorManagedViewIndicatorToolTip(bool available, bool cmv)
         tooltip = i18n("Color Management is not configured, so the Color-Managed View is not available.");
     }
     d->cmViewIndicator->setToolTip(tooltip);
+}
+
+void EditorWindow::slotSoftProofingOptions()
+{
+    // Adjusts global settings
+    SoftProofDialog dlg(this);
+    dlg.exec();
+
+    d->viewSoftProofAction->setChecked(dlg.shallEnableSoftProofView());
+    slotUpdateSoftProofingState();
+}
+
+void EditorWindow::slotUpdateSoftProofingState()
+{
+    bool on = d->viewSoftProofAction->isChecked();
+    m_canvas->setSoftProofingEnabled(on);
 }
 
 void EditorWindow::slotSetUnderExposureIndicator(bool on)
