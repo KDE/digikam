@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-09-18
- * Description : a modifier for displaying only a range of a token result
+ * Description : a modifier for replacing text in a token result
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "rangemodifier.h"
+#include "replacemodifier.h"
 
 // KDE includes
 
@@ -30,13 +30,13 @@
 namespace Digikam
 {
 
-RangeModifier::RangeModifier()
-             : Modifier(QString("[start, stop]"), i18n("Range"), i18n("display only a specific range"))
+ReplaceModifier::ReplaceModifier()
+               : Modifier(QString("['old', 'new']"), i18n("Replace"), i18n("replace text"))
 {
-    setRegExp("\\[\\s*(\\d+)\\s*,\\s*(\\d+)\\s*\\]");
+    setRegExp("\\[\\s*'(.+)'\\s*,\\s*'(.*)'\\s*\\]");
 }
 
-QString RangeModifier::modifyOperation(const QString& parseString, const QString& result)
+QString ReplaceModifier::modifyOperation(const QString& parseString, const QString& result)
 {
     QRegExp reg = regExp();
     int pos = 0;
@@ -44,34 +44,12 @@ QString RangeModifier::modifyOperation(const QString& parseString, const QString
     pos     = reg.indexIn(parseString, pos);
     if (pos > -1)
     {
-        bool ok   = false;
+        QString original    = reg.cap(1);
+        QString replacement = reg.cap(2);
 
-        int start = reg.cap(1).toInt(&ok);
-        if (!ok)
-            start = -1;
-
-        int stop = reg.cap(2).toInt(&ok);
-        if (!ok)
-            stop = -1;
-
-        if ((start == -1 || stop == -1))
-            return QString();
-
-        if ((start > result.count()) || (stop > result.count()))
-            return QString();
-
-        start -= 1;
-        stop  -= 1;
-
-        if ((start < 0) || (stop < 0))
-            return QString();
-
-        QString tmp;
-        for (int i = start; i <= stop; ++i)
-        {
-            tmp.append(result.at(i));
-        }
-        return tmp;
+        QString _result = result;
+        _result.replace(original, replacement);
+        return _result;
     }
     return QString();
 }
