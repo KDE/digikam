@@ -35,9 +35,9 @@ LowerCaseModifier::LowerCaseModifier()
 {
 }
 
-QString LowerCaseModifier::modifyOperation(const QString& str)
+QString LowerCaseModifier::modifyOperation(const QString& parseString, const QString& result)
 {
-    return str.toLower();
+    return result.toLower();
 }
 
 } // namespace Digikam

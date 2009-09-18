@@ -35,9 +35,9 @@ TrimmedModifier::TrimmedModifier()
 {
 }
 
-QString TrimmedModifier::modifyOperation(const QString& str)
+QString TrimmedModifier::modifyOperation(const QString& parseString, const QString& result)
 {
-    return str.simplified();
+    return result.simplified();
 }
 
 } // namespace Digikam

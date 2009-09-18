@@ -51,11 +51,11 @@ public:
     QRegExp regExp()      const;
     void    setRegExp(const QString& regExp);
 
-    QString modify(const QString& str);
+    QString modify(const QString& parseString, const QString& result);
 
 protected:
 
-    virtual QString modifyOperation(const QString& str) = 0;
+    virtual QString modifyOperation(const QString& parseString, const QString& result) = 0;
 
 private:
 

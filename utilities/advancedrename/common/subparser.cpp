@@ -301,7 +301,7 @@ ParseResults SubParser::applyModifiers(const QString& parseString, ParseResults&
             if (pos > -1)
             {
                 ParseResults::ResultsKey   k(pos, regExp.matchedLength());
-                ParseResults::ResultsValue v(modifier->id(), QString());
+                ParseResults::ResultsValue v(regExp.cap(0), QString());
 
                 modifiers.addEntry(k, v);
                 modifierCallbackMap.insert(k, modifier);
@@ -329,7 +329,8 @@ ParseResults SubParser::applyModifiers(const QString& parseString, ParseResults&
                 Modifier* mod                 = modifierCallbackMap[mkey];
                 QString token                 = results.token(key);
                 QString result                = results.result(key);
-                QString modResult             = mod->modify(result);
+                QString modToken              = modifiers.token(key);
+                QString modResult             = mod->modify(modToken, result);
 
                 // update result
                 ParseResults::ResultsKey   kResult = key;

@@ -35,9 +35,9 @@ UpperCaseModifier::UpperCaseModifier()
 {
 }
 
-QString UpperCaseModifier::modifyOperation(const QString& str)
+QString UpperCaseModifier::modifyOperation(const QString& parseString, const QString& result)
 {
-    return str.toUpper();
+    return result.toUpper();
 }
 
 } // namespace Digikam

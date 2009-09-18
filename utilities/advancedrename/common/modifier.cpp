@@ -77,12 +77,12 @@ void Modifier::setRegExp(const QString& regExp)
     d->regExp = QRegExp(regExp);
 }
 
-QString Modifier::modify(const QString& str)
+QString Modifier::modify(const QString& parseString, const QString& result)
 {
-    if (str.isEmpty())
+    if (result.isEmpty())
         return QString();
 
-    return modifyOperation(str);
+    return modifyOperation(parseString, result);
 }
 
 } // namespace Digikam

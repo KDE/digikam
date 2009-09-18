@@ -37,9 +37,9 @@ FirstLetterEachWordUpperCaseModifier::FirstLetterEachWordUpperCaseModifier()
     setRegExp("\\*");
 }
 
-QString FirstLetterEachWordUpperCaseModifier::modifyOperation(const QString& str)
+QString FirstLetterEachWordUpperCaseModifier::modifyOperation(const QString& parseString, const QString& result)
 {
-    QString tmp = str.toLower();
+    QString tmp = result.toLower();
 
     if( tmp[0].isLetter() )
         tmp[0] = tmp[0].toUpper();
