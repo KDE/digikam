@@ -292,28 +292,30 @@ ParseResults SubParser::applyModifiers(const QString& parseString, ParseResults&
     // fill modifiers ParseResults with all possible modifier tokens
     foreach (Modifier* modifier, d->modifiers)
     {
+        QRegExp regExp = modifier->regExp();
+        regExp.setMinimal(true);
         int pos = 0;
         while (pos > -1)
         {
-            pos = parseString.indexOf(modifier->id(), pos);
+            pos = regExp.indexIn(parseString, pos);
             if (pos > -1)
             {
-                ParseResults::ResultsKey   k(pos, modifier->id().count());
+                ParseResults::ResultsKey   k(pos, regExp.matchedLength());
                 ParseResults::ResultsValue v(modifier->id(), QString());
 
                 modifiers.addEntry(k, v);
                 modifierCallbackMap.insert(k, modifier);
 
-                pos += modifier->id().count();
+                pos += regExp.matchedLength();
             }
         }
     }
 
+    modifiers.debug();
+
     // Check for valid modifiers (they must appear directly after a token) and apply the modification to the token result.
     // We need to create a second ParseResults object with modified keys, otherwise the final parsing step will not
     // remove the modifier tokens from the result.
-
-//    kDebug(50003) << "--------------------------------------------------------";
 
     foreach (ParseResults::ResultsKey key, results.keys())
     {
@@ -353,7 +355,6 @@ ParseResults SubParser::applyModifiers(const QString& parseString, ParseResults&
             }
         }
     }
-
     return tmp;
 }
 

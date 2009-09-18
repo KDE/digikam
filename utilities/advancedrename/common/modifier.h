@@ -28,6 +28,7 @@
 
 #include <QList>
 #include <QString>
+#include <QRegExp>
 
 class  QAction;
 
@@ -46,6 +47,9 @@ public:
     QString id()          const;
     QString alias()       const;
     QString description() const;
+
+    QRegExp regExp()      const;
+    void    setRegExp(const QString& regExp);
 
     QString modify(const QString& str);
 

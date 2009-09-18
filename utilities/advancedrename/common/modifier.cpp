@@ -37,6 +37,7 @@ public:
     QString id;
     QString alias;
     QString description;
+    QRegExp regExp;
 };
 
 // --------------------------------------------------------
@@ -62,6 +63,18 @@ QString Modifier::alias() const
 QString Modifier::description() const
 {
     return d->description;
+}
+
+QRegExp Modifier::regExp() const
+{
+    if (d->regExp.isEmpty() || !d->regExp.isValid())
+        return QRegExp(d->id);
+    return d->regExp;
+}
+
+void Modifier::setRegExp(const QString& regExp)
+{
+    d->regExp = QRegExp(regExp);
 }
 
 QString Modifier::modify(const QString& str)
