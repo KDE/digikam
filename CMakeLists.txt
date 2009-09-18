@@ -698,6 +698,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/undoaction.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/undomanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/colorcorrectiondlg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/softproofdialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/dimginterface.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/iccsettingscontainer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/iccsettings.cpp
