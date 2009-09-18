@@ -315,17 +315,15 @@ ParseResults SubParser::applyModifiers(const QString& parseString, ParseResults&
         }
     }
 
-    modifiers.debug();
-
     // Check for valid modifiers (they must appear directly after a token) and apply the modification to the token result.
     // We need to create a second ParseResults object with modified keys, otherwise the final parsing step will not
     // remove the modifier tokens from the result.
 
     foreach (ParseResults::ResultsKey key, results.keys())
     {
-        int pos  = results.offset(key);
+        int off  = results.offset(key);
         int diff = 0;
-        for (int i = pos; i < parseString.count();)
+        for (int pos = off; pos < parseString.count();)
         {
             if (modifiers.hasKeyAtPosition(pos))
             {
@@ -344,12 +342,12 @@ ParseResults SubParser::applyModifiers(const QString& parseString, ParseResults&
                 results.addEntry(kResult, vResult);
 
                 // update modifier map
-                ParseResults::ResultsKey   kModifier = key;
+                ParseResults::ResultsKey kModifier = key;
                 kModifier.second += diff;
-                ParseResults::ResultsValue vModifier(mod->id(), modResult);
+                ParseResults::ResultsValue vModifier(modToken, modResult);
 
                 tmp.deleteEntry(kModifier);
-                kModifier.second += mod->id().count();
+                kModifier.second += modToken.count();
                 tmp.addEntry(kModifier, vModifier);
 
                 // set position to the next possible token
