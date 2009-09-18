@@ -39,6 +39,8 @@ FirstLetterEachWordUpperCaseModifier::FirstLetterEachWordUpperCaseModifier()
 
 QString FirstLetterEachWordUpperCaseModifier::modifyOperation(const QString& parseString, const QString& result)
 {
+    Q_UNUSED(parseString)
+
     QString tmp = result.toLower();
 
     if( tmp[0].isLetter() )

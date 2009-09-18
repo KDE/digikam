@@ -37,6 +37,8 @@ UpperCaseModifier::UpperCaseModifier()
 
 QString UpperCaseModifier::modifyOperation(const QString& parseString, const QString& result)
 {
+    Q_UNUSED(parseString)
+
     return result.toUpper();
 }
 

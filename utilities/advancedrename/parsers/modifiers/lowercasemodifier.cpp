@@ -37,6 +37,8 @@ LowerCaseModifier::LowerCaseModifier()
 
 QString LowerCaseModifier::modifyOperation(const QString& parseString, const QString& result)
 {
+    Q_UNUSED(parseString)
+
     return result.toLower();
 }
 
