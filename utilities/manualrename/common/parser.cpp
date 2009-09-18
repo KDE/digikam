@@ -27,13 +27,6 @@
 
 #include <QFileInfo>
 
-// Local includes
-
-#include "lowercasemodifier.h"
-#include "uppercasemodifier.h"
-#include "firstletterofeachworduppercasemodifier.h"
-#include "trimmedmodifier.h"
-
 namespace Digikam
 {
 
@@ -44,9 +37,7 @@ public:
     ParserPriv()
     {
     }
-
     SubParserList subparsers;
-    ModifierList  modifiers;
 };
 
 // --------------------------------------------------------
@@ -54,24 +45,6 @@ public:
 Parser::Parser()
       : d(new ParserPriv)
 {
-    /**
-     * Register all sub-parsers here (found in the directory 'utilities/manualrename/parsers').
-     * This list will be used in here for the parse method and also in the ManualRenameWidget,
-     * to create the buttons and menu entries as well as the tooltip.
-     * The base parser class will not register sub-parsers, this should be done in the derived classes
-     * like @see DefaultParser, to have individual parser classes.
-     *
-     */
-
-    /*
-     * MODIFIERS
-     *
-     * should be used in every parser, so registering them in the base parser is correct.
-     */
-    registerModifier(new LowerCaseModifier());
-    registerModifier(new UpperCaseModifier());
-    registerModifier(new FirstLetterEachWordUpperCaseModifier());
-    registerModifier(new TrimmedModifier());
 }
 
 Parser::~Parser()
@@ -80,14 +53,7 @@ Parser::~Parser()
     {
         delete subparser;
     }
-
-    foreach (Modifier* modifier, d->modifiers)
-    {
-        delete modifier;
-    }
-
     d->subparsers.clear();
-    d->modifiers.clear();
 }
 
 SubParserList Parser::subParsers() const
@@ -97,7 +63,12 @@ SubParserList Parser::subParsers() const
 
 ModifierList Parser::modifiers() const
 {
-    return d->modifiers;
+    ModifierList modifierList;
+    if (!d->subparsers.isEmpty())
+    {
+        modifierList = d->subparsers.first()->modifiers();
+    }
+    return modifierList;
 }
 
 void Parser::registerSubParser(SubParser* parser)
@@ -106,14 +77,6 @@ void Parser::registerSubParser(SubParser* parser)
         return;
 
     d->subparsers.append(parser);
-}
-
-void Parser::registerModifier(Modifier* modifier)
-{
-    if (!modifier)
-        return;
-
-    d->modifiers.append(modifier);
 }
 
 ParseResults Parser::parseResults(const QString& parseString)
@@ -143,53 +106,25 @@ QString Parser::parseOperation(const QString& parseString, ParseInformation& inf
 
     if (!d->subparsers.isEmpty())
     {
-        QStringList tokens;
-
-        // parse and extract matching tokens
         foreach (SubParser* parser, d->subparsers)
         {
-            parser->parse(parseString, info, results);
+            parser->parse(parseString, info);
+
+            ParseResults r;
+            if (replace)
+                r = parser->modifiedResults();
+            else
+                r = parser->parseResults();
+
+            results.append(r);
         }
     }
 
     QString parsed;
     if (replace)
-    {
-        applyModifiers(parseString, results);
         parsed = results.replaceTokens(parseString);
-    }
+
     return parsed;
-}
-
-void Parser::applyModifiers(const QString& parseString, ParseResults& results)
-{
-    if (results.isEmpty())
-        return;
-
-    QString tmp = parseString;
-
-    foreach (Modifier* modifier, d->modifiers)
-    {
-        int pos = 0;
-        while (pos > -1)
-        {
-            pos = parseString.indexOf(modifier->id(), pos);
-            if (pos > -1)
-            {
-                int start  = 0;
-                int length = 0;
-
-                if (tokenAtPosition(parseString, pos, start, length))
-                {
-                    QString token  = results.token(start, length);
-                    QString result = results.result(start, length);
-                    results.addEntry(start, token, modifier->modify(result));
-                    results.addModifier(pos, modifier->id().count());
-                }
-                ++pos;
-            }
-        }
-    }
 }
 
 bool Parser::tokenAtPosition(const QString& parseString, int pos)

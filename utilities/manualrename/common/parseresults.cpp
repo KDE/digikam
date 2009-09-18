@@ -23,42 +23,66 @@
 
 #include "parseresults.h"
 
+// KDE includes
+
+#include <kdebug.h>
+
 namespace Digikam
 {
 
-void ParseResults::addEntry(int pos, const QString& token, const QString& result)
+void ParseResults::addEntry(const ResultsKey& key, const ResultsValue& value)
 {
-    if (token.isEmpty())
-        return;
-
-    ResultsKey key(pos, token.count());
-    ResultsValue value(token, result);
     m_results.insert(key, value);
 }
 
-void ParseResults::addModifier(int pos, int length)
+void ParseResults::deleteEntry(const ResultsKey& key)
 {
-    m_modifiers.insert(pos, length);
+    m_results.remove(key);
 }
 
-QString ParseResults::result(int pos, int length)
+QList<ParseResults::ResultsKey> ParseResults::keys() const
+{
+    return m_results.keys();
+}
+
+QList<ParseResults::ResultsValue> ParseResults::values() const
+{
+    return m_results.values();
+}
+
+QString ParseResults::result(const ResultsKey& key)
 {
     if (m_results.isEmpty())
         return QString();
 
-    ResultsKey key(pos, length);
     QString result = m_results.value(key).second;
     return result;
 }
 
-QString ParseResults::token(int pos, int length)
+QString ParseResults::token(const ResultsKey& key)
 {
     if (m_results.isEmpty())
         return QString();
 
-    ResultsKey key(pos, length);
     QString token = m_results.value(key).first;
     return token;
+}
+
+int ParseResults::offset(const ResultsKey& key)
+{
+    int pos    = key.first;
+    int length = key.second;
+
+    if (hasKeyAtPosition(pos))
+    {
+        return (pos+length);
+    }
+    else if (hasKeyAtApproximatePosition(pos))
+    {
+        ResultsKey key = keyAtApproximatePosition(pos);
+        return ((key.first+key.second)-pos);
+    }
+    return -1;
 }
 
 ParseResults::ResultsKey ParseResults::keyAtPosition(int pos)
@@ -72,7 +96,7 @@ ParseResults::ResultsKey ParseResults::keyAtPosition(int pos)
     return createInvalidKey();
 }
 
-bool ParseResults::isKeyAtPosition(int pos)
+bool ParseResults::hasKeyAtPosition(int pos)
 {
     ResultsKey key = keyAtPosition(pos);
     if (keyIsValid(key))
@@ -95,7 +119,7 @@ ParseResults::ResultsKey ParseResults::keyAtApproximatePosition(int pos)
     return createInvalidKey();
 }
 
-bool ParseResults::isKeyAtApproximatePosition(int pos)
+bool ParseResults::hasKeyAtApproximatePosition(int pos)
 {
     ResultsKey key = keyAtApproximatePosition(pos);
     if (keyIsValid(key))
@@ -106,6 +130,11 @@ bool ParseResults::isKeyAtApproximatePosition(int pos)
 void ParseResults::clear()
 {
     m_results.clear();
+}
+
+void ParseResults::append(ParseResults& results)
+{
+    m_results.unite(results.m_results);
 }
 
 bool ParseResults::isEmpty()
@@ -131,16 +160,12 @@ QString ParseResults::replaceTokens(const QString& markedString)
 
     for (int i = 0; i < markedString.count();)
     {
-        if (isKeyAtPosition(i))
+        if (hasKeyAtPosition(i))
         {
             ResultsKey key     = keyAtPosition(i);
             ResultsValue value = m_results.value(key);
             tmp.append(value.second);
             i += key.second;
-        }
-        else if (isModifier(i))
-        {
-            i += m_modifiers[i];
         }
         else
         {
@@ -151,9 +176,16 @@ QString ParseResults::replaceTokens(const QString& markedString)
     return tmp;
 }
 
-bool ParseResults::isModifier(int pos)
+void ParseResults::debug()
 {
-    return m_modifiers.contains(pos);
+    foreach (const ResultsKey& key, m_results.keys())
+    {
+        QString t = token(key);
+        QString r = result(key);
+
+        kDebug(50003) << "(" << key.first << ":" << key.second << ") => "
+                      << "(" << t         << ":" << r          << ")";
+    }
 }
 
 } // namespace Digikam

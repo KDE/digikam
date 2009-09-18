@@ -139,7 +139,7 @@ void ManualRenameWidgetTest::testFirstLetterOfEachWordUppercaseToken_data()
 
     QTest::newRow("myfilename001.jpg(token: **)") << QString("[file]**") << QString("myfilename001.jpg")
                                                   << cameraName << curdate << 1
-                                                  << QString("Myfilename001*");
+                                                  << QString("Myfilename001");
 
     QTest::newRow("myfilename001.jpg(token in filename)") << QString("[file]*") << QString("myfilename*001.jpg")
                                                           << cameraName << curdate << 1

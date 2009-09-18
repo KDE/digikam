@@ -41,6 +41,7 @@
 #include "parseinformation.h"
 #include "parseresults.h"
 #include "token.h"
+#include "modifier.h"
 
 class QAction;
 class QChar;
@@ -69,7 +70,9 @@ class SubParserPriv;
                 {
 
 #define PARSE_LOOP_END(PARSESTRING_, REGEXP_, PARSED_, RESULTS_)             \
-            RESULTS_.addEntry(POS_, REGEXP_.cap(0), PARSED_);                \
+            ParseResults::ResultsKey   k(POS_, REGEXP_.cap(0).count());      \
+            ParseResults::ResultsValue v(REGEXP_.cap(0), PARSED_);           \
+            RESULTS_.addEntry(k, v);                                         \
             POS_ += REGEXP_.matchedLength();                                 \
                 }                                                            \
             }                                                                \
@@ -87,7 +90,15 @@ public:
     /**
      * @return a list of all registered tokens
      */
-    TokenList tokens() const;
+    TokenList    tokens()    const;
+
+    /**
+     * @return a list of all registered modifiers
+     */
+    ModifierList modifiers() const;
+
+    ParseResults parseResults();
+    ParseResults modifiedResults();
 
     /**
      * Register a button in the parent object. By calling this method, a new button for the parser
@@ -116,13 +127,29 @@ public:
      */
     static bool stringIsValid(const QString& str);
 
+    /**
+     * If multiple tokens have been assigned to a parser, a menu will be created.
+     * If you do not want a menu for every defined token, set this method to 'false' and
+     * re-implement the @see slotTokenTriggered method.
+     * @param value boolean parameter to set token menu usage
+     */
+    void setUseTokenMenu(bool value);
+    bool useTokenMenu() const;
+
+    /**
+     * Use this method to define whether the parser should use modifiers or not
+     * @param value boolean parameter to allow modifiers
+     */
+    void setUseModifiers(bool value);
+    bool useModifiers() const;
+
 Q_SIGNALS:
 
     void signalTokenTriggered(const QString&);
 
 public Q_SLOTS:
 
-    void parse(const QString& parseString, const ParseInformation& info, ParseResults& results);
+    void parse(const QString& parseString, const ParseInformation& info);
 
 protected:
 
@@ -141,15 +168,13 @@ protected:
      * @param description the description of the token (used for example in the ManualRenameWidget for the tooltip)
      * @return
      */
-    bool    addToken(const QString& id, const QString& name, const QString& description);
+    bool addToken(const QString& id, const QString& name, const QString& description);
 
     /**
-     * If multiple tokens have been assigned to a parser, a menu will be created.
-     * If you do not want a menu for every defined token, set this method to 'false' and
-     * re-implement the @see slotTokenTriggered method.
-     * @param value boolean parameter to set token menu usage
+     * register a modifier to the parser class
+     * @param modifier the modifier to add to the parser
      */
-    void    useTokenMenu(bool value);
+    void registerModifier(Modifier* modifier);
 
 protected Q_SLOTS:
 
@@ -158,6 +183,9 @@ protected Q_SLOTS:
 private:
 
     QPushButton* createButton(const QString& name, const QIcon& icon);
+    ParseResults applyModifiers(const QString& parseString, ParseResults& results);
+    bool         tokenAtPosition(ParseResults& results, int pos);
+    bool         tokenAtPosition(ParseResults& results, int pos, int& start, int& length);
 
 private:
 

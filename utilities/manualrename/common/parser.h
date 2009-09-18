@@ -37,8 +37,6 @@
 #include "subparser.h"
 #include "modifier.h"
 
-class QStringList;
-
 namespace Digikam
 {
 
@@ -65,12 +63,10 @@ public:
 protected:
 
     void registerSubParser(SubParser* parser);
-    void registerModifier(Modifier* modifier);
 
 private:
 
     ParseResults parseResults(const QString& parseString);
-    void         applyModifiers(const QString& parseString, ParseResults& results);
     QString      parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results,
                                 bool replace = true);
 

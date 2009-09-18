@@ -122,7 +122,8 @@ int SequenceNumberDialog::step()   const
 SequenceNumberParser::SequenceNumberParser()
                     : SubParser(i18n("Sequence Number..."), SmallIcon("accessories-calculator"))
 {
-    useTokenMenu(false);
+    setUseTokenMenu(false);
+    setUseModifiers(false);
 
     addToken("#", i18n("Sequence Number"),
              i18n("sequence number"));

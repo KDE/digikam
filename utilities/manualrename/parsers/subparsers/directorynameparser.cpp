@@ -40,14 +40,14 @@ namespace Digikam
 DirectoryNameParser::DirectoryNameParser()
               : SubParser(i18n("Directory Name"), SmallIcon("folder"))
 {
+    setUseTokenMenu(false);
+
     addToken("[dir]", i18nc("current directory name", "Current"),
             i18n("current directory name"));
 
     addToken("[dir.]", i18nc("directory name", "Parent Directory Name"),
             i18n("directory name of the parent, additional '.' characters move up <br/>"
                  "in the directory hierarchy"));
-
-    useTokenMenu(false);
 }
 
 void DirectoryNameParser::parseOperation(const QString& parseString, const ParseInformation& info, ParseResults& results)

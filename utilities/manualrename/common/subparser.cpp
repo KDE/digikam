@@ -38,6 +38,14 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <knuminput.h>
+#include <kdebug.h>
+
+// Local includes
+
+#include "lowercasemodifier.h"
+#include "uppercasemodifier.h"
+#include "firstletterofeachworduppercasemodifier.h"
+#include "trimmedmodifier.h"
 
 namespace Digikam
 {
@@ -48,19 +56,24 @@ public:
 
     SubParserPriv()
     {
-        buttonRegistered  = false;
-        menuRegistered    = false;
-        useTokenMenu      = true;
+        buttonRegistered = false;
+        menuRegistered   = false;
+        useTokenMenu     = true;
+        useModifiers     = true;
     }
 
-    bool      buttonRegistered;
-    bool      menuRegistered;
-    bool      useTokenMenu;
+    bool         buttonRegistered;
+    bool         menuRegistered;
+    bool         useTokenMenu;
+    bool         useModifiers;
 
-    QString   name;
-    QIcon     icon;
+    QString      name;
+    QIcon        icon;
 
-    TokenList tokens;
+    TokenList    tokens;
+    ParseResults parseResults;
+    ParseResults modifierResults;
+    ModifierList modifiers;
 };
 
 SubParser::SubParser(const QString& name, const QIcon& icon)
@@ -68,6 +81,11 @@ SubParser::SubParser(const QString& name, const QIcon& icon)
 {
     d->name = name;
     d->icon = icon;
+
+    registerModifier(new LowerCaseModifier());
+    registerModifier(new UpperCaseModifier());
+    registerModifier(new FirstLetterEachWordUpperCaseModifier());
+    registerModifier(new TrimmedModifier());
 }
 
 SubParser::~SubParser()
@@ -77,7 +95,21 @@ SubParser::~SubParser()
         delete token;
     }
 
+    foreach (Modifier* modifier, d->modifiers)
+    {
+        delete modifier;
+    }
+
+    d->modifiers.clear();
     d->tokens.clear();
+}
+
+void SubParser::registerModifier(Modifier* modifier)
+{
+    if (!modifier)
+        return;
+
+    d->modifiers.append(modifier);
 }
 
 QPushButton* SubParser::createButton(const QString& name, const QIcon& icon)
@@ -174,14 +206,34 @@ bool SubParser::addToken(const QString& id, const QString& name, const QString& 
     return true;
 }
 
-void SubParser::useTokenMenu(bool value)
+void SubParser::setUseTokenMenu(bool value)
 {
     d->useTokenMenu = value;
 }
 
-QList<Token*> SubParser::tokens() const
+bool SubParser::useTokenMenu() const
+{
+    return d->useTokenMenu;
+}
+
+void SubParser::setUseModifiers(bool value)
+{
+    d->useModifiers = value;
+}
+
+bool SubParser::useModifiers() const
+{
+    return d->useModifiers;
+}
+
+TokenList SubParser::tokens() const
 {
     return d->tokens;
+}
+
+ModifierList SubParser::modifiers() const
+{
+    return d->modifiers;
 }
 
 void SubParser::slotTokenTriggered(const QString& token)
@@ -197,12 +249,143 @@ bool SubParser::stringIsValid(const QString& str)
     return true;
 }
 
-void SubParser::parse(const QString& parseString, const ParseInformation& info, ParseResults& results)
+void SubParser::parse(const QString& parseString, const ParseInformation& info)
 {
     if (!stringIsValid(parseString))
         return;
 
-    parseOperation(parseString, info, results);
+    d->parseResults.clear();
+    d->modifierResults.clear();
+
+    parseOperation(parseString, info, d->parseResults);
+
+    if (d->useModifiers)
+        d->modifierResults = applyModifiers(parseString, d->parseResults);
+    else
+        d->modifierResults.clear();
+
+    d->parseResults.debug();
+    kDebug(50003) << "--------------------------------------------------------";
+    d->modifierResults.debug();
+}
+
+ParseResults SubParser::parseResults()
+{
+    return d->parseResults;
+}
+
+ParseResults SubParser::modifiedResults()
+{
+    if (d->modifierResults.isEmpty() || !d->useModifiers)
+        return d->parseResults;
+    return d->modifierResults;
+}
+
+ParseResults SubParser::applyModifiers(const QString& parseString, ParseResults& results)
+{
+    ParseResults tmp;
+
+    ParseResults modifiers = results;
+    QMap<ParseResults::ResultsKey, Modifier*> modifierCallbackMap;
+
+    if (results.isEmpty())
+        return tmp;
+
+    tmp = results;
+
+    // fill modifiers ParseResults with all possible modifier tokens
+    foreach (Modifier* modifier, d->modifiers)
+    {
+        int pos = 0;
+        while (pos > -1)
+        {
+            pos = parseString.indexOf(modifier->id(), pos);
+            if (pos > -1)
+            {
+                ParseResults::ResultsKey   k(pos, modifier->id().count());
+                ParseResults::ResultsValue v(modifier->id(), QString());
+
+                modifiers.addEntry(k, v);
+                modifierCallbackMap.insert(k, modifier);
+
+                pos += modifier->id().count();
+            }
+        }
+    }
+
+    // Check for valid modifiers (they must appear directly after a token) and apply the modification to the token result.
+    // We need to create a second ParseResults object with modified keys, otherwise the final parsing step will not
+    // remove the modifier tokens from the result.
+
+//    kDebug(50003) << "--------------------------------------------------------";
+
+    foreach (ParseResults::ResultsKey key, results.keys())
+    {
+        int pos  = results.offset(key);
+        int diff = 0;
+        for (int i = pos; i < parseString.count();)
+        {
+            if (modifiers.hasKeyAtPosition(pos))
+            {
+                ParseResults::ResultsKey mkey = modifiers.keyAtPosition(pos);
+                Modifier* mod                 = modifierCallbackMap[mkey];
+                QString token                 = results.token(key);
+                QString result                = results.result(key);
+                QString modResult             = mod->modify(result);
+
+//                kDebug(50003) << mkey.first << ":" << mkey.second << " MODIFYING: "
+//                              << result
+//                              << " with modifier: " << mod->id()
+//                              << " => " << modResult;
+
+                // update result
+                ParseResults::ResultsKey   kResult = key;
+                ParseResults::ResultsValue vResult(token, modResult);
+                results.addEntry(kResult, vResult);
+
+                // update modifier map
+                ParseResults::ResultsKey   kModifier = key;
+                kModifier.second += diff;
+                ParseResults::ResultsValue vModifier(mod->id(), modResult);
+
+                tmp.deleteEntry(kModifier);
+                kModifier.second += mod->id().count();
+                tmp.addEntry(kModifier, vModifier);
+
+                // set position to the next possible token
+                pos  += mkey.second;
+                diff += mkey.second;
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+
+    return tmp;
+}
+
+bool SubParser::tokenAtPosition(ParseResults& results, int pos)
+{
+    int start;
+    int length;
+    return tokenAtPosition(results, pos, start, length);
+}
+
+bool SubParser::tokenAtPosition(ParseResults& results, int pos, int& start, int& length)
+{
+    bool found = false;
+
+    ParseResults::ResultsKey key = results.keyAtApproximatePosition(pos);
+    start  = key.first;
+    length = key.second;
+
+    if ((pos >= start) && (pos <= start + length))
+    {
+        found = true;
+    }
+    return found;
 }
 
 } // namespace Digikam

@@ -40,41 +40,44 @@ public:
     typedef QPair<int, int>                 ResultsKey;
     typedef QPair<QString, QString>         ResultsValue;
     typedef QMap<ResultsKey, ResultsValue>  ResultsMap;
-    typedef QMap<int, int>                  ModifierIDs;
 
 public:
 
     ParseResults()   {};
     ~ParseResults()  {};
 
-    void addEntry(int pos, const QString& token, const QString& result);
-    void addModifier(int pos, int length);
+    void addEntry(const ResultsKey& key, const ResultsValue& value);
+    void deleteEntry(const ResultsKey& key);
 
-    QString result(int pos, int length);
-    QString token(int pos, int length);
+    QList<ResultsKey>   keys()   const;
+    QList<ResultsValue> values() const;
+
+    QString result(const ResultsKey& key);
+    QString token(const ResultsKey& key);
+    int     offset(const ResultsKey& key);
 
     ResultsKey keyAtPosition(int pos);
-    bool       isKeyAtPosition(int pos);
+    bool       hasKeyAtPosition(int pos);
 
     ResultsKey keyAtApproximatePosition(int pos);
-    bool       isKeyAtApproximatePosition(int pos);
-
-    bool isModifier(int pos);
+    bool       hasKeyAtApproximatePosition(int pos);
 
     bool isEmpty();
     void clear();
+    void append(ParseResults& results);
 
     QString replaceTokens(const QString& markedString);
+
+    void debug();
 
 private:
 
     ResultsKey createInvalidKey();
     bool       keyIsValid(const ResultsKey& key);
 
-private:
+public:
 
     ResultsMap  m_results;
-    ModifierIDs m_modifiers;
 };
 
 } // namespace Digikam

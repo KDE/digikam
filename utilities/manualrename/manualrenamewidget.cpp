@@ -151,15 +151,16 @@ void ManualRenameWidget::createToolTip()
     } while (0)
 
 
-#define TOOLTIP_ENTRIES(type, data)                                                 \
-    do                                                                              \
-    {                                                                               \
-        foreach (type* t, data)                                                     \
-        {                                                                           \
-            tooltip += QString("<tr><td><b>%1</b></td><td>:</td><td>%2</td></tr>")  \
-                                        .arg(t->id())                               \
-                                        .arg(t->description());                     \
-        }                                                                           \
+#define TOOLTIP_ENTRIES(type, data, mod)                                                         \
+    do                                                                                           \
+    {                                                                                            \
+        foreach (type* t, data)                                                                  \
+        {                                                                                        \
+            tooltip += QString("<tr><td><b>%1</b></td><td>:</td><td>%2</td><td>%3</td></tr>")    \
+                                        .arg(t->id())                                            \
+                                        .arg(t->description())                                   \
+                                        .arg(!mod ? QString("(x)") : QString());                 \
+        }                                                                                        \
     } while (0)
 
     // --------------------------------------------------------
@@ -173,12 +174,11 @@ void ManualRenameWidget::createToolTip()
 
     if (!d->parser->subParsers().isEmpty())
     {
-        TOOLTIP_HEADER(i18nc("Renaming Options", "Options"));
-
         tooltip += QString("<p><table>");
         foreach (SubParser* subparser, d->parser->subParsers())
         {
-            TOOLTIP_ENTRIES(Token, subparser->tokens());
+            bool useMod = subparser->useModifiers();
+            TOOLTIP_ENTRIES(Token, subparser->tokens(), useMod);
         }
         tooltip += QString("</table></p>");
     }
@@ -194,8 +194,10 @@ void ManualRenameWidget::createToolTip()
         TOOLTIP_HEADER(i18n("Modifiers"));
 
         tooltip += QString("<p><table>");
-        TOOLTIP_ENTRIES(Modifier, d->parser->modifiers());
+        TOOLTIP_ENTRIES(Modifier, d->parser->modifiers(), true);
         tooltip += QString("</table></p>");
+        tooltip += QString("<p><i>%1</i></p>").arg(i18n("You can not apply modifiers to "
+                                                        "tokens marked with '(x)'."));
 
 //        tooltip += i18n("<p><i>Modifiers can be applied to marked tokens by using the "
 //                "modifier control buttons.</i></p>");
@@ -234,7 +236,7 @@ void ManualRenameWidget::setInputStyle(InputStyles inputMask)
     d->inputStyles = inputMask;
 }
 
-void ManualRenameWidget::registerParsers()
+void ManualRenameWidget::registerParserControls()
 {
    if (d->parser)
    {
@@ -306,7 +308,7 @@ void ManualRenameWidget::setParser(Parser* parser)
     d->parser = parser;
 
     setInputColumns(d->inputColumns);
-    registerParsers();
+    registerParserControls();
     setInputStyle(d->inputStyles);
 }
 
@@ -316,7 +318,7 @@ void ManualRenameWidget::setInputColumns(int col)
         return;
 
     d->inputColumns = col;
-    registerParsers();
+    registerParserControls();
     setInputStyle(d->inputStyles);
 }
 

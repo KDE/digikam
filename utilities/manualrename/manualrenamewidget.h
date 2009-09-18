@@ -91,7 +91,7 @@ private Q_SLOTS:
 private:
 
     void createToolTip();
-    void registerParsers();
+    void registerParserControls();
     void setupWidgets();
 
 private:
