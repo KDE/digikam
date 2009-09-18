@@ -1042,25 +1042,25 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/timeline/timelinewidget.cpp
        )
 
-    SET(libmanualrename_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/manualrenameinput.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/manualrenamewidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/common/token.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/common/modifier.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/common/parser.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/common/subparser.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/common/parseresults.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/defaultparser.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/subparsers/filenameparser.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/subparsers/metadataparser.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/subparsers/dateparser.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/subparsers/sequencenumberparser.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/subparsers/cameranameparser.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/subparsers/directorynameparser.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/modifiers/uppercasemodifier.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/modifiers/lowercasemodifier.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/modifiers/firstletterofeachworduppercasemodifier.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/manualrename/parsers/modifiers/trimmedmodifier.cpp
+    SET(libadvancedrename_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/advancedrenameinput.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/advancedrenamewidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/token.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/modifier.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/parser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/subparser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/parseresults.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/defaultparser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/subparsers/filenameparser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/subparsers/metadataparser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/subparsers/dateparser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/subparsers/sequencenumberparser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/subparsers/cameranameparser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/subparsers/directorynameparser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/modifiers/uppercasemodifier.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/modifiers/lowercasemodifier.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/modifiers/firstletterofeachworduppercasemodifier.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/modifiers/trimmedmodifier.cpp
        )
 
     SET(libdigikamgui_SRCS

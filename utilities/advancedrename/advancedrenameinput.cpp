@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-09-03
- * Description : an input widget for the ManualRename utility
+ * Description : an input widget for the AdvancedRename utility
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#include "manualrenameinput.h"
-#include "manualrenameinput.moc"
+#include "advancedrenameinput.h"
+#include "advancedrenameinput.moc"
 
 // Qt includes
 
@@ -44,11 +44,11 @@
 namespace Digikam
 {
 
-class ManualRenameLineEditPriv
+class AdvancedRenameLineEditPriv
 {
 public:
 
-    ManualRenameLineEditPriv()
+    AdvancedRenameLineEditPriv()
     {
         userIsTyping    = false;
         userIsMarking   = false;
@@ -74,8 +74,8 @@ public:
     Parser* parser;
 };
 
-ManualRenameLineEdit::ManualRenameLineEdit(QWidget* parent)
-                    : KLineEdit(parent), d(new ManualRenameLineEditPriv)
+AdvancedRenameLineEdit::AdvancedRenameLineEdit(QWidget* parent)
+                    : KLineEdit(parent), d(new AdvancedRenameLineEditPriv)
 {
     setFocusPolicy(Qt::StrongFocus);
     setClearButtonShown(true);
@@ -107,18 +107,18 @@ ManualRenameLineEdit::ManualRenameLineEdit(QWidget* parent)
             this, SLOT(slotCursorPositionChanged(int, int)));
 }
 
-ManualRenameLineEdit::~ManualRenameLineEdit()
+AdvancedRenameLineEdit::~AdvancedRenameLineEdit()
 {
     delete d;
 }
 
-void ManualRenameLineEdit::setParser(Parser* parser)
+void AdvancedRenameLineEdit::setParser(Parser* parser)
 {
     if (parser)
         d->parser = parser;
 }
 
-void ManualRenameLineEdit::mouseMoveEvent(QMouseEvent* e)
+void AdvancedRenameLineEdit::mouseMoveEvent(QMouseEvent* e)
 {
     KLineEdit::mouseMoveEvent(e);
     if (e->modifiers() == Qt::ControlModifier)
@@ -151,7 +151,7 @@ void ManualRenameLineEdit::mouseMoveEvent(QMouseEvent* e)
     }
 }
 
-void ManualRenameLineEdit::mousePressEvent(QMouseEvent* e)
+void AdvancedRenameLineEdit::mousePressEvent(QMouseEvent* e)
 {
     if (e->modifiers() == Qt::ControlModifier)
     {
@@ -179,7 +179,7 @@ void ManualRenameLineEdit::mousePressEvent(QMouseEvent* e)
     }
 }
 
-void ManualRenameLineEdit::focusInEvent(QFocusEvent* e)
+void AdvancedRenameLineEdit::focusInEvent(QFocusEvent* e)
 {
     KLineEdit::focusInEvent(e);
     setCursorPosition(d->curCursorPos);
@@ -190,7 +190,7 @@ void ManualRenameLineEdit::focusInEvent(QFocusEvent* e)
     }
 }
 
-void ManualRenameLineEdit::focusOutEvent(QFocusEvent* e)
+void AdvancedRenameLineEdit::focusOutEvent(QFocusEvent* e)
 {
     if (hasSelectedText() && tokenIsSelected())
     {
@@ -207,7 +207,7 @@ void ManualRenameLineEdit::focusOutEvent(QFocusEvent* e)
     KLineEdit::focusOutEvent(e);
 }
 
-bool ManualRenameLineEdit::highlightToken(int pos)
+bool AdvancedRenameLineEdit::highlightToken(int pos)
 {
     if (!d->userIsMarking)
     {
@@ -237,7 +237,7 @@ bool ManualRenameLineEdit::highlightToken(int pos)
     return (found && hasSelectedText());
 }
 
-bool ManualRenameLineEdit::tokenIsSelected()
+bool AdvancedRenameLineEdit::tokenIsSelected()
 {
     bool selected = false;
     selected      = (d->selectionStart != -1) && (d->selectionLength != -1) &&
@@ -245,19 +245,19 @@ bool ManualRenameLineEdit::tokenIsSelected()
     return selected;
 }
 
-void ManualRenameLineEdit::slotTextChanged()
+void AdvancedRenameLineEdit::slotTextChanged()
 {
     d->userIsTyping = true;
     d->parseTimer->start();
 }
 
-void ManualRenameLineEdit::slotParseTimer()
+void AdvancedRenameLineEdit::slotParseTimer()
 {
     d->userIsTyping = false;
     emit signalTextChanged(text());
 }
 
-void ManualRenameLineEdit::slotCursorPositionChanged(int oldPos, int newPos)
+void AdvancedRenameLineEdit::slotCursorPositionChanged(int oldPos, int newPos)
 {
     Q_UNUSED(oldPos)
 
@@ -268,7 +268,7 @@ void ManualRenameLineEdit::slotCursorPositionChanged(int oldPos, int newPos)
     emit signalTokenMarked(d->tokenMarked);
 }
 
-void ManualRenameLineEdit::slotAddToken(const QString& token)
+void AdvancedRenameLineEdit::slotAddToken(const QString& token)
 {
     if (!token.isEmpty())
     {
@@ -289,11 +289,11 @@ void ManualRenameLineEdit::slotAddToken(const QString& token)
 
 // --------------------------------------------------------
 
-class ManualRenameInputPriv
+class AdvancedRenameInputPriv
 {
 public:
 
-    ManualRenameInputPriv()
+    AdvancedRenameInputPriv()
     {
         moveTokenLeft   =  0;
         moveTokenRight  =  0;
@@ -304,16 +304,16 @@ public:
     QToolButton*          moveTokenLeft;
     QToolButton*          moveTokenRight;
 
-    ManualRenameLineEdit* parserInput;
+    AdvancedRenameLineEdit* parserInput;
     Parser*               parser;
 };
 
 // --------------------------------------------------------
 
-ManualRenameInput::ManualRenameInput(QWidget* parent)
-                 : QWidget(parent), d(new ManualRenameInputPriv)
+AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
+                 : QWidget(parent), d(new AdvancedRenameInputPriv)
 {
-    d->parserInput    = new ManualRenameLineEdit;
+    d->parserInput    = new AdvancedRenameLineEdit;
 
     d->moveTokenLeft  = new QToolButton;
     d->moveTokenRight = new QToolButton;
@@ -358,22 +358,22 @@ ManualRenameInput::ManualRenameInput(QWidget* parent)
             this, SIGNAL(signalTextChanged(const QString&)));
 }
 
-ManualRenameInput::~ManualRenameInput()
+AdvancedRenameInput::~AdvancedRenameInput()
 {
     delete d;
 }
 
-ManualRenameLineEdit* ManualRenameInput::input() const
+AdvancedRenameLineEdit* AdvancedRenameInput::input() const
 {
     return d->parserInput;
 }
 
-void ManualRenameInput::slotAddToken(const QString& token)
+void AdvancedRenameInput::slotAddToken(const QString& token)
 {
     d->parserInput->slotAddToken(token);
 }
 
-void ManualRenameInput::slotMoveTokenLeft()
+void AdvancedRenameInput::slotMoveTokenLeft()
 {
 //    if (d->selectionStart == -1 || d->selectionLength == -1)
 //        return;
@@ -395,7 +395,7 @@ void ManualRenameInput::slotMoveTokenLeft()
 //    d->parserInput->setSelection(d->selectionStart, d->selectionLength);
 }
 
-void ManualRenameInput::slotMoveTokenRight()
+void AdvancedRenameInput::slotMoveTokenRight()
 {
 //    if (d->selectionStart == -1 || d->selectionLength == -1)
 //        return;

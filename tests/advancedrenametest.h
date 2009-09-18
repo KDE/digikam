@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-06-09
- * Description : a test for the ManualRenameWidget widget
+ * Description : a test for the AdvancedRenameWidget
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,14 +21,14 @@
  *
  * ============================================================ */
 
-#ifndef MANUALRENAMEINPUTTEST_H
-#define MANUALRENAMEINPUTTEST_H
+#ifndef ADVANCEDRENAMEINPUTTEST_H
+#define ADVANCEDRENAMEINPUTTEST_H
 
 // Qt includes
 
 #include <QtCore/QObject>
 
-class ManualRenameWidgetTest : public QObject
+class AdvancedRenameWidgetTest : public QObject
 {
     Q_OBJECT
 
@@ -52,4 +52,4 @@ private Q_SLOTS:
     void testEmptyParseString();
 };
 
-#endif /* MANUALRENAMEINPUTTEST_H_ */
+#endif /* ADVANCEDRENAMEINPUTTEST_H_ */

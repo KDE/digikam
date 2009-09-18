@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-05-22
- * Description : a control widget for the ManualRenameParser
+ * Description : a control widget for the AdvancedRename utility
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef MANUALRENAMEWIDGET_H
-#define MANUALRENAMEWIDGET_H
+#ifndef ADVANCEDRENAMEWIDGET_H
+#define ADVANCEDRENAMEWIDGET_H
 
 // Qt includes
 
@@ -43,16 +43,16 @@ namespace Digikam
 
 class ParseInformation;
 class Parser;
-class ManualRenameWidgetPriv;
+class AdvancedRenameWidgetPriv;
 
-class DIGIKAM_EXPORT ManualRenameWidget : public QWidget
+class DIGIKAM_EXPORT AdvancedRenameWidget : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    ManualRenameWidget(QWidget* parent = 0);
-    ~ManualRenameWidget();
+    AdvancedRenameWidget(QWidget* parent = 0);
+    ~AdvancedRenameWidget();
 
     enum InputStyle
     {
@@ -96,11 +96,11 @@ private:
 
 private:
 
-    ManualRenameWidgetPriv* const d;
+    AdvancedRenameWidgetPriv* const d;
 };
 
 }  // namespace Digikam
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::ManualRenameWidget::InputStyles)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::AdvancedRenameWidget::InputStyles)
 
-#endif /* MANUALRENAMEWIDGET_H */
+#endif /* ADVANCEDRENAMEWIDGET_H */

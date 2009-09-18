@@ -3,11 +3,11 @@ SET( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/editor
                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/canvas
                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename/common
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename/parsers
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename/parsers/subparsers
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename/parsers/modifiers
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/subparsers
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/modifiers
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/common
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/imageplugins
@@ -25,27 +25,27 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/editor
 
 #------------------------------------------------------------------------
 
-SET(manualrenameinputtest_SRCS
-    manualrenametest.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename/common/token.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename/common/modifier.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename/common/parser.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename/common/subparser.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename/common/parseresults.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename/parsers/defaultparser.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename/parsers/subparsers/filenameparser.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename/parsers/subparsers/metadataparser.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename/parsers/subparsers/dateparser.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename/parsers/subparsers/sequencenumberparser.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename/parsers/subparsers/cameranameparser.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename/parsers/subparsers/directorynameparser.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename/parsers/modifiers/uppercasemodifier.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename/parsers/modifiers/lowercasemodifier.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename/parsers/modifiers/firstletterofeachworduppercasemodifier.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/manualrename/parsers/modifiers/trimmedmodifier.cpp
+SET(advancedrenameinputtest_SRCS
+    advancedrenametest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common/token.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common/modifier.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common/parser.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common/subparser.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common/parseresults.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/defaultparser.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/subparsers/filenameparser.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/subparsers/metadataparser.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/subparsers/dateparser.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/subparsers/sequencenumberparser.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/subparsers/cameranameparser.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/subparsers/directorynameparser.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/modifiers/uppercasemodifier.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/modifiers/lowercasemodifier.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/modifiers/firstletterofeachworduppercasemodifier.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/modifiers/trimmedmodifier.cpp
 )
-KDE4_ADD_UNIT_TEST(manualrenameinputtest ${manualrenameinputtest_SRCS})
-TARGET_LINK_LIBRARIES(manualrenameinputtest
+KDE4_ADD_UNIT_TEST(advancedrenameinputtest ${advancedrenameinputtest_SRCS})
+TARGET_LINK_LIBRARIES(advancedrenameinputtest
                       ${KDE4_KDECORE_LIBS}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}

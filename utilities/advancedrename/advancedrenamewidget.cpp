@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-05-22
- * Description : a control widget for the ManualRenameParser
+ * Description : a control widget for the AdvancedRename utility
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#include "manualrenamewidget.h"
-#include "manualrenamewidget.moc"
+#include "advancedrenamewidget.h"
+#include "advancedrenamewidget.moc"
 
 // Qt includes
 
@@ -48,16 +48,16 @@
 
 #include "dcursortracker.h"
 #include "defaultparser.h"
-#include "manualrenameinput.h"
+#include "advancedrenameinput.h"
 
 namespace Digikam
 {
 
-class ManualRenameWidgetPriv
+class AdvancedRenameWidgetPriv
 {
 public:
 
-    ManualRenameWidgetPriv()
+    AdvancedRenameWidgetPriv()
     {
         parserLineEdit          = 0;
         tooltipTracker          = 0;
@@ -66,32 +66,32 @@ public:
         btnContainer            = 0;
         parser                  = 0;
         inputColumns            = 2;
-        inputStyles             = ManualRenameWidget::BigButtons;
+        inputStyles             = AdvancedRenameWidget::BigButtons;
         tooltipTrackerAlignment = Qt::AlignLeft;
     }
 
-    int                             inputColumns;
-    ManualRenameWidget::InputStyles inputStyles;
+    int                               inputColumns;
+    AdvancedRenameWidget::InputStyles inputStyles;
 
-    QToolButton*                    tooltipToggleButton;
-    QToolButton*                    insertTokenToolButton;
-    QGroupBox*                      btnContainer;
+    QToolButton*                      tooltipToggleButton;
+    QToolButton*                      insertTokenToolButton;
+    QGroupBox*                        btnContainer;
 
-    Qt::Alignment                   tooltipTrackerAlignment;
+    Qt::Alignment                     tooltipTrackerAlignment;
 
-    DTipTracker*                    tooltipTracker;
-    ManualRenameInput*              parserLineEdit;
-    Parser*                         parser;
+    DTipTracker*                      tooltipTracker;
+    AdvancedRenameInput*              parserLineEdit;
+    Parser*                           parser;
 };
 
-ManualRenameWidget::ManualRenameWidget(QWidget* parent)
-                 : QWidget(parent), d(new ManualRenameWidgetPriv)
+AdvancedRenameWidget::AdvancedRenameWidget(QWidget* parent)
+                 : QWidget(parent), d(new AdvancedRenameWidgetPriv)
 {
     setupWidgets();
     setParser(new DefaultParser());
 }
 
-ManualRenameWidget::~ManualRenameWidget()
+AdvancedRenameWidget::~AdvancedRenameWidget()
 {
     // we need to delete it manually, because it has no parent
     delete d->tooltipTracker;
@@ -100,34 +100,34 @@ ManualRenameWidget::~ManualRenameWidget()
     delete d;
 }
 
-QString ManualRenameWidget::text() const
+QString AdvancedRenameWidget::text() const
 {
     return d->parserLineEdit->input()->text();
 }
 
-void ManualRenameWidget::setText(const QString& text)
+void AdvancedRenameWidget::setText(const QString& text)
 {
     d->parserLineEdit->input()->setText(text);
 }
 
-void ManualRenameWidget::setTrackerAlignment(Qt::Alignment alignment)
+void AdvancedRenameWidget::setTrackerAlignment(Qt::Alignment alignment)
 {
     d->tooltipTrackerAlignment = alignment;
     d->tooltipTracker->setTrackerAlignment(alignment);
 }
 
-void ManualRenameWidget::clear()
+void AdvancedRenameWidget::clear()
 {
     d->parserLineEdit->input()->clear();
 }
 
-void ManualRenameWidget::slotHideToolTipTracker()
+void AdvancedRenameWidget::slotHideToolTipTracker()
 {
     d->tooltipToggleButton->setChecked(false);
     slotToolTipButtonToggled(false);
 }
 
-QString ManualRenameWidget::parse(ParseInformation& info) const
+QString AdvancedRenameWidget::parse(ParseInformation& info) const
 {
     if (!d->parser)
         return QString();
@@ -140,7 +140,7 @@ QString ManualRenameWidget::parse(ParseInformation& info) const
     return parsed;
 }
 
-void ManualRenameWidget::createToolTip()
+void AdvancedRenameWidget::createToolTip()
 {
 #define TOOLTIP_HEADER(str)                                         \
     do                                                              \
@@ -213,18 +213,18 @@ void ManualRenameWidget::createToolTip()
 #undef TOOLTIP_ENTRIES
 }
 
-void ManualRenameWidget::slotToolTipButtonToggled(bool checked)
+void AdvancedRenameWidget::slotToolTipButtonToggled(bool checked)
 {
     d->tooltipTracker->setVisible(checked);
     slotUpdateTrackerPos();
 }
 
-void ManualRenameWidget::slotUpdateTrackerPos()
+void AdvancedRenameWidget::slotUpdateTrackerPos()
 {
     d->tooltipTracker->refresh();
 }
 
-void ManualRenameWidget::setInputStyle(InputStyles inputMask)
+void AdvancedRenameWidget::setInputStyle(InputStyles inputMask)
 {
     bool enable = d->parser && d->parser->subParsers().count() > 0;
 
@@ -236,7 +236,7 @@ void ManualRenameWidget::setInputStyle(InputStyles inputMask)
     d->inputStyles = inputMask;
 }
 
-void ManualRenameWidget::registerParserControls()
+void AdvancedRenameWidget::registerParserControls()
 {
    if (d->parser)
    {
@@ -298,7 +298,7 @@ void ManualRenameWidget::registerParserControls()
    }
 }
 
-void ManualRenameWidget::setParser(Parser* parser)
+void AdvancedRenameWidget::setParser(Parser* parser)
 {
     if (!parser)
         return;
@@ -312,7 +312,7 @@ void ManualRenameWidget::setParser(Parser* parser)
     setInputStyle(d->inputStyles);
 }
 
-void ManualRenameWidget::setInputColumns(int col)
+void AdvancedRenameWidget::setInputColumns(int col)
 {
     if (col == d->inputColumns)
         return;
@@ -322,10 +322,10 @@ void ManualRenameWidget::setInputColumns(int col)
     setInputStyle(d->inputStyles);
 }
 
-void ManualRenameWidget::setupWidgets()
+void AdvancedRenameWidget::setupWidgets()
 {
     delete d->parserLineEdit;
-    d->parserLineEdit = new ManualRenameInput;
+    d->parserLineEdit = new AdvancedRenameInput;
 
     delete d->tooltipToggleButton;
     d->tooltipToggleButton = new QToolButton;

@@ -165,7 +165,7 @@ protected:
      * add a token to the parser, every parser should at least assign one token object
      * @param id the token id string (used for parsing)
      * @param name an alias name for the token (used for button and action text)
-     * @param description the description of the token (used for example in the ManualRenameWidget for the tooltip)
+     * @param description the description of the token (used for example in the AdvancedRenameWidget for the tooltip)
      * @return
      */
     bool addToken(const QString& id, const QString& name, const QString& description);

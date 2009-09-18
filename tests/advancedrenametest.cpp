@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-06-09
- * Description : a test for the ManualRenameWidget widget
+ * Description : a test for the AdvancedRenameWidget
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#include "manualrenametest.h"
-#include "manualrenametest.moc"
+#include "advancedrenametest.h"
+#include "advancedrenametest.moc"
 
 // KDE includes
 
@@ -32,13 +32,12 @@
 
 #include "parser.h"
 #include "defaultparser.h"
-#include "manualrenamewidget.h"
 
 using namespace Digikam;
 
-QTEST_KDEMAIN(ManualRenameWidgetTest, GUI)
+QTEST_KDEMAIN(AdvancedRenameWidgetTest, GUI)
 
-void ManualRenameWidgetTest::testNumberToken_data()
+void AdvancedRenameWidgetTest::testNumberToken_data()
 {
     QTest::addColumn<QString>("parseString");
     QTest::addColumn<QString>("filename");
@@ -100,7 +99,7 @@ void ManualRenameWidgetTest::testNumberToken_data()
                                          << QString("100_bla");
 }
 
-void ManualRenameWidgetTest::testNumberToken()
+void AdvancedRenameWidgetTest::testNumberToken()
 {
     QFETCH(QString,   parseString);
     QFETCH(QString,   filename);
@@ -121,7 +120,7 @@ void ManualRenameWidgetTest::testNumberToken()
     QCOMPARE(parsed, result);
 }
 
-void ManualRenameWidgetTest::testFirstLetterOfEachWordUppercaseToken_data()
+void AdvancedRenameWidgetTest::testFirstLetterOfEachWordUppercaseToken_data()
 {
     QTest::addColumn<QString>("parseString");
     QTest::addColumn<QString>("filename");
@@ -154,7 +153,7 @@ void ManualRenameWidgetTest::testFirstLetterOfEachWordUppercaseToken_data()
                                   << QString("My_Image");
 }
 
-void ManualRenameWidgetTest::testFirstLetterOfEachWordUppercaseToken()
+void AdvancedRenameWidgetTest::testFirstLetterOfEachWordUppercaseToken()
 {
     QFETCH(QString,   parseString);
     QFETCH(QString,   filename);
@@ -175,7 +174,7 @@ void ManualRenameWidgetTest::testFirstLetterOfEachWordUppercaseToken()
     QCOMPARE(parsed, result);
 }
 
-void ManualRenameWidgetTest::testUppercaseToken_data()
+void AdvancedRenameWidgetTest::testUppercaseToken_data()
 {
     QTest::addColumn<QString>("parseString");
     QTest::addColumn<QString>("filename");
@@ -208,7 +207,7 @@ void ManualRenameWidgetTest::testUppercaseToken_data()
                                   << QString("MY_IMAGE");
 }
 
-void ManualRenameWidgetTest::testUppercaseToken()
+void AdvancedRenameWidgetTest::testUppercaseToken()
 {
     QFETCH(QString,   parseString);
     QFETCH(QString,   filename);
@@ -229,7 +228,7 @@ void ManualRenameWidgetTest::testUppercaseToken()
     QCOMPARE(parsed, result);
 }
 
-void ManualRenameWidgetTest::testLowercaseToken_data()
+void AdvancedRenameWidgetTest::testLowercaseToken_data()
 {
     QTest::addColumn<QString>("parseString");
     QTest::addColumn<QString>("filename");
@@ -258,7 +257,7 @@ void ManualRenameWidgetTest::testLowercaseToken_data()
                                   << QString("my_image");
 }
 
-void ManualRenameWidgetTest::testLowercaseToken()
+void AdvancedRenameWidgetTest::testLowercaseToken()
 {
     QFETCH(QString,   parseString);
     QFETCH(QString,   filename);
@@ -279,7 +278,7 @@ void ManualRenameWidgetTest::testLowercaseToken()
     QCOMPARE(parsed, result);
 }
 
-void ManualRenameWidgetTest::testCameraToken_data()
+void AdvancedRenameWidgetTest::testCameraToken_data()
 {
     QTest::addColumn<QString>("parseString");
     QTest::addColumn<QString>("filename");
@@ -314,7 +313,7 @@ void ManualRenameWidgetTest::testCameraToken_data()
                               << QString("[camcam]");
 }
 
-void ManualRenameWidgetTest::testCameraToken()
+void AdvancedRenameWidgetTest::testCameraToken()
 {
     QFETCH(QString,   parseString);
     QFETCH(QString,   filename);
@@ -335,7 +334,7 @@ void ManualRenameWidgetTest::testCameraToken()
     QCOMPARE(parsed, result);
 }
 
-void ManualRenameWidgetTest::testEmptyParseString()
+void AdvancedRenameWidgetTest::testEmptyParseString()
 {
     QString filename("myfilename001.jpg");
     QDateTime curdate = QDateTime::currentDateTime();

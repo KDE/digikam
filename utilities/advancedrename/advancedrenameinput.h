@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-09-03
- * Description : an input widget for the ManualRename utility
+ * Description : an input widget for the AdvancedRename utility
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef MANUALRENAMEINPUT_H
-#define MANUALRENAMEINPUT_H
+#ifndef ADVANCEDRENAMEINPUT_H
+#define ADVANCEDRENAMEINPUT_H
 
 // Qt includes
 
@@ -43,16 +43,16 @@ namespace Digikam
 {
 
 class Parser;
-class ManualRenameLineEditPriv;
+class AdvancedRenameLineEditPriv;
 
-class ManualRenameLineEdit : public KLineEdit
+class AdvancedRenameLineEdit : public KLineEdit
 {
     Q_OBJECT
 
 public:
 
-    ManualRenameLineEdit(QWidget* parent = 0);
-    ~ManualRenameLineEdit();
+    AdvancedRenameLineEdit(QWidget* parent = 0);
+    ~AdvancedRenameLineEdit();
 
     void setParser(Parser* parser);
 
@@ -85,23 +85,23 @@ private:
 
 private:
 
-    ManualRenameLineEditPriv* const d;
+    AdvancedRenameLineEditPriv* const d;
 };
 
 // --------------------------------------------------------
 
-class ManualRenameInputPriv;
+class AdvancedRenameInputPriv;
 
-class DIGIKAM_EXPORT ManualRenameInput : public QWidget
+class DIGIKAM_EXPORT AdvancedRenameInput : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    ManualRenameInput(QWidget* parent = 0);
-    ~ManualRenameInput();
+    AdvancedRenameInput(QWidget* parent = 0);
+    ~AdvancedRenameInput();
 
-    ManualRenameLineEdit* input() const;
+    AdvancedRenameLineEdit* input() const;
 
 public Q_SLOTS:
 
@@ -118,9 +118,9 @@ private Q_SLOTS:
 
 private:
 
-    ManualRenameInputPriv* const d;
+    AdvancedRenameInputPriv* const d;
 };
 
 }  // namespace Digikam
 
-#endif /* MANUALRENAMEINPUT_H */
+#endif /* ADVANCEDRENAMEINPUT_H */
