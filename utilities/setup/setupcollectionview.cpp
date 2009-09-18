@@ -493,18 +493,21 @@ void SetupCollectionModel::addCollection(int category)
     if (category < 0 || category >= NumberOfCategories)
         return;
 
-    // Get path
+    // Get path properlly under Windows. See B.K.O #204480 for details.
 #ifdef _WIN32
     QString picturesPath;
-    if (m_collections.count()>0) {
+    if (m_collections.count()>0)
+    {
         const Item& item = m_collections[0];
         picturesPath = item.path;
-    } else {
+    }
+    else
+    {
 #if KDE_IS_VERSION(4,1,61)
-    picturesPath = KGlobalSettings::picturesPath();
+        picturesPath = KGlobalSettings::picturesPath();
 #else
 #if QT_VERSION >= 0x040400
-    picturesPath = QDesktopServices::storageLocation(QDesktopServices::PicturesLocation);
+        picturesPath = QDesktopServices::storageLocation(QDesktopServices::PicturesLocation);
 #endif
 #endif
     }
