@@ -97,8 +97,11 @@ public:
     /// Set options
     void setIntent(RenderingIntent intent);
     void setIntent(int intent) { setIntent((RenderingIntent)intent); }
+    void setProofIntent(RenderingIntent intent);
+    void setProofIntent(int intent) { setProofIntent((RenderingIntent)intent); }
     void setUseBlackPointCompensation(bool useBPC);
     void setCheckGamut(bool checkGamut);
+    void setCheckGamutMaskColor(const QColor &color);
 
     /// Returns the contained profiles
     IccProfile embeddedProfile() const;

@@ -94,9 +94,11 @@ public:
     IccTransformPriv()
     {
         intent               = INTENT_PERCEPTUAL;
+        proofIntent          = INTENT_ABSOLUTE_COLORIMETRIC;
         useBPC               = false;
         checkGamut           = false;
         doNotEmbed           = false;
+        checkGamutColor      = QColor(126, 255, 255);
 
         handle               = 0;
     }
@@ -113,9 +115,11 @@ public:
         // Attention: This is sensitive. Add any new members here.
         // We can't use the default operator= because of handle.
         intent             = other.intent;
+        proofIntent        = other.proofIntent;
         useBPC             = other.useBPC;
         checkGamut         = other.checkGamut;
         doNotEmbed         = other.doNotEmbed;
+        checkGamutColor    = other.checkGamutColor;
 
         embeddedProfile    = other.embeddedProfile;
         inputProfile       = other.inputProfile;
@@ -147,9 +151,11 @@ public:
     }
 
     int        intent;
+    int        proofIntent;
     bool       useBPC;
     bool       checkGamut;
     bool       doNotEmbed;
+    QColor     checkGamutColor;
 
     IccProfile embeddedProfile;
     IccProfile inputProfile;
@@ -273,26 +279,37 @@ IccProfile IccTransform::effectiveInputProfile() const
     return d->effectiveInputProfileConst();
 }
 
+static int renderingIntentToLcmsIntent(IccTransform::RenderingIntent intent)
+{
+    switch (intent)
+    {
+        case IccTransform::Perceptual:
+            return INTENT_PERCEPTUAL;
+        case IccTransform::RelativeColorimetric:
+            return INTENT_RELATIVE_COLORIMETRIC;
+        case IccTransform::Saturation:
+            return INTENT_SATURATION;
+        case IccTransform::AbsoluteColorimetric:
+            return INTENT_ABSOLUTE_COLORIMETRIC;
+        default:
+            return INTENT_PERCEPTUAL;
+    }
+}
+
 void IccTransform::setIntent(RenderingIntent intent)
 {
     if (intent == d->intent)
         return;
+    d->intent = renderingIntentToLcmsIntent(intent);
     close();
-    switch (intent)
-    {
-        case Perceptual:
-            d->intent = INTENT_PERCEPTUAL;
-            break;
-        case RelativeColorimetric:
-            d->intent = INTENT_RELATIVE_COLORIMETRIC;
-            break;
-        case Saturation:
-            d->intent = INTENT_SATURATION;
-            break;
-        case AbsoluteColorimetric:
-            d->intent = INTENT_ABSOLUTE_COLORIMETRIC;
-            break;
-    }
+}
+
+void IccTransform::setProofIntent(RenderingIntent intent)
+{
+    if (intent == d->proofIntent)
+        return;
+    d->proofIntent = renderingIntentToLcmsIntent(intent);
+    close();
 }
 
 void IccTransform::setUseBlackPointCompensation(bool useBPC)
@@ -309,6 +326,11 @@ void IccTransform::setCheckGamut(bool checkGamut)
         return;
     close();
     d->checkGamut = checkGamut;
+}
+
+void IccTransform::setCheckGamutMaskColor(const QColor &color)
+{
+    d->checkGamutColor = color;
 }
 
 void IccTransform::setDoNotEmbedOutputProfile(bool doNotEmbed)
@@ -412,12 +434,12 @@ TransformDescription IccTransform::getProofingDescription(const DImg& image)
     TransformDescription description = getDescription(image);
 
     description.proofProfile = d->proofProfile;
-    description.proofIntent  = d->intent;
+    description.proofIntent  = d->proofIntent;
 
     description.transformFlags |= cmsFLAGS_SOFTPROOFING;
     if (d->checkGamut)
     {
-        cmsSetAlarmCodes(126, 255, 255);
+        cmsSetAlarmCodes(d->checkGamutColor.red(), d->checkGamutColor.green(), d->checkGamutColor.blue());
         description.transformFlags |= cmsFLAGS_GAMUTCHECK;
     }
 

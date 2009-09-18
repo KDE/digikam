@@ -27,6 +27,7 @@
 
 // Qt includes
 
+#include <QColor>
 #include <QFlags>
 #include <QString>
 
@@ -119,6 +120,11 @@ public:
 
     bool    useBPC;
     int     renderingIntent;
+
+    // Settings specific for soft proofing
+    int     proofingRenderingIntent;
+    int     doGamutCheck;
+    QColor  gamutCheckMaskColor;
 
 };
 

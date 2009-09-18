@@ -53,6 +53,9 @@ ICCSettingsContainer::ICCSettingsContainer()
     useManagedPreviews            = false;
     useBPC                        = true;
     renderingIntent               = IccTransform::Perceptual;
+    proofingRenderingIntent       = IccTransform::AbsoluteColorimetric;
+    doGamutCheck                  = false;
+    gamutCheckMaskColor           = QColor(126, 255, 255);
 }
 
 void ICCSettingsContainer::readFromConfig(KConfigGroup& group)
@@ -83,6 +86,11 @@ void ICCSettingsContainer::readFromConfig(KConfigGroup& group)
     useManagedView       = group.readEntry("ManagedView", false);
     useManagedPreviews   = group.readEntry("ManagedPreviews", false);
     renderingIntent      = group.readEntry("RenderingIntent", (int)IccTransform::Perceptual);
+
+    proofingRenderingIntent = group.readEntry("ProofingRenderingIntent", (int)IccTransform::AbsoluteColorimetric);
+    doGamutCheck            = group.readEntry("DoGamutCheck", false);
+    gamutCheckMaskColor     = group.readEntry("GamutCheckMaskColor", QColor(126, 255, 255));
+
     iccFolder            = group.readEntry("DefaultPath", QString());
 }
 
@@ -112,6 +120,11 @@ void ICCSettingsContainer::writeToConfig(KConfigGroup& group) const
     group.writePathEntry("MonitorProfileFile", monitorProfile);
     group.writePathEntry("InProfileFile", defaultInputProfile);
     group.writePathEntry("ProofProfileFile", defaultProofProfile);
+
+    group.writeEntry("ProofingRenderingIntent", proofingRenderingIntent);
+    group.writeEntry("DoGamutCheck", doGamutCheck);
+    group.writeEntry("GamutCheckMaskColor", gamutCheckMaskColor);
+
     group.writeEntry("DefaultPath", iccFolder);
 }
 
