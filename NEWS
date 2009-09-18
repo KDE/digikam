@@ -25,7 +25,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 016 ==> 205756 : Copy and paste fails silently when pasting file back into the same folder.
 017 ==> 207239 : When pressing Enter thumbnails should be enlarged, also after changing from Tags to Collection or similar.
 018 ==> 200830 : 100 % CPU usage without obvious reason.
-019 ==> 
+019 ==> 204480 : Unable to access albums on drives other than C:.
+020 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta4 - Release date: 2009-08-30
