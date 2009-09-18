@@ -263,10 +263,6 @@ void SubParser::parse(const QString& parseString, const ParseInformation& info)
         d->modifierResults = applyModifiers(parseString, d->parseResults);
     else
         d->modifierResults.clear();
-
-    d->parseResults.debug();
-    kDebug(50003) << "--------------------------------------------------------";
-    d->modifierResults.debug();
 }
 
 ParseResults SubParser::parseResults()
@@ -332,11 +328,6 @@ ParseResults SubParser::applyModifiers(const QString& parseString, ParseResults&
                 QString token                 = results.token(key);
                 QString result                = results.result(key);
                 QString modResult             = mod->modify(result);
-
-//                kDebug(50003) << mkey.first << ":" << mkey.second << " MODIFYING: "
-//                              << result
-//                              << " with modifier: " << mod->id()
-//                              << " => " << modResult;
 
                 // update result
                 ParseResults::ResultsKey   kResult = key;
