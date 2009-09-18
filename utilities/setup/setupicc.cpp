@@ -158,7 +158,7 @@ public:
 
     KUrlRequester          *defaultPathKU;
 
-    KComboBox              *renderingIntentKC;
+    IccRenderingIntentComboBox *renderingIntentKC;
 
     QWidget                *behaviorPanel;
     QWidget                *profilesPanel;
@@ -480,33 +480,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     QLabel *lablel = new QLabel(d->advancedSettingsGB);
     lablel->setText(i18n("Rendering Intents:"));
 
-    d->renderingIntentKC = new KComboBox(false, d->advancedSettingsGB);
-    d->renderingIntentKC->addItem("Perceptual", IccTransform::Perceptual);
-    d->renderingIntentKC->addItem("Relative Colorimetric", IccTransform::RelativeColorimetric);
-    d->renderingIntentKC->addItem("Saturation", IccTransform::Saturation);
-    d->renderingIntentKC->addItem("Absolute Colorimetric", IccTransform::AbsoluteColorimetric);
-    d->renderingIntentKC->setWhatsThis( i18n("<ul><li><p><b>Perceptual intent</b> causes the full gamut of the image to be "
-                     "compressed or expanded to fill the gamut of the destination device, so that gray balance is "
-                     "preserved but colorimetric accuracy may not be preserved.</p>"
-                     "<p>In other words, if certain colors in an image fall outside of the range of colors that the output "
-                     "device can render, the image intent will cause all the colors in the image to be adjusted so that "
-                     "the every color in the image falls within the range that can be rendered and so that the relationship "
-                     "between colors is preserved as much as possible.</p>"
-                     "<p>This intent is most suitable for display of photographs and images, and is the default intent.</p></li>"
-                     "<li><p><b>Absolute Colorimetric intent</b> causes any colors that fall outside the range that the output device "
-                     "can render to be adjusted to the closest color that can be rendered, while all other colors are "
-                     "left unchanged.</p>"
-                     "<p>This intent preserves the white point and is most suitable for spot colors (Pantone, TruMatch, "
-                     "logo colors, ....)</p></li>"
-                     "<li><p><b>Relative Colorimetric intent</b> is defined such that any colors that fall outside the range that the "
-                     "output device can render are adjusted to the closest color that can be rendered, while all other colors "
-                     "are left unchanged. Proof intent does not preserve the white point.</p></li>"
-                     "<li><p><b>Saturation intent</b> preserves the saturation of colors in the image at the possible expense of "
-                     "hue and lightness.</p>"
-                     "<p>Implementation of this intent remains somewhat problematic, and the ICC is still working on methods to "
-                     "achieve the desired effects.</p>"
-                     "<p>This intent is most suitable for business graphics such as charts, where it is more important that the "
-                     "colors be vivid and contrast well with each other rather than a specific color.</p></li></ul>"));
+    d->renderingIntentKC = new IccRenderingIntentComboBox(d->advancedSettingsGB);
 
     gridAdvanced->addWidget(d->bpcAlgorithm,      0, 0, 1, 2);
     gridAdvanced->addWidget(lablel,               1, 0, 1, 1);
@@ -620,7 +594,7 @@ void SetupICC::applySettings()
 
     settings.iccFolder = d->defaultPathKU->url().toLocalFile();
     settings.useBPC =  d->bpcAlgorithm->isChecked();
-    settings.renderingIntent = d->renderingIntentKC->itemData(d->renderingIntentKC->currentIndex()).toInt();
+    settings.renderingIntent = d->renderingIntentKC->intent();
     settings.useManagedView = d->managedView->isChecked();
     settings.useManagedPreviews = d->managedPreviews->isChecked();
 
@@ -633,26 +607,6 @@ void SetupICC::applySettings()
     IccSettings::instance()->setSettings(settings);
 }
 
-static void setCurrentIndexFromUserData(QComboBox *box, const QVariant& userData)
-{
-    if (userData.isNull())
-    {
-        box->setCurrentIndex(-1);
-        return;
-    }
-
-    const int size = box->count();
-    for (int i=0; i<size; i++)
-    {
-        if (box->itemData(i) == userData)
-        {
-            box->setCurrentIndex(i);
-            return;
-        }
-    }
-    box->setCurrentIndex(-1);
-}
-
 void SetupICC::readSettings(bool restore)
 {
     ICCSettingsContainer settings = IccSettings::instance()->settings();
@@ -661,7 +615,7 @@ void SetupICC::readSettings(bool restore)
         d->enableColorManagement->setChecked(settings.enableCM);
 
     d->bpcAlgorithm->setChecked(settings.useBPC);
-    setCurrentIndexFromUserData(d->renderingIntentKC, settings.renderingIntent);
+    d->renderingIntentKC->setIntent(settings.renderingIntent);
     d->managedView->setChecked(settings.useManagedView);
     d->managedPreviews->setChecked(settings.useManagedPreviews);
 

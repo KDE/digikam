@@ -34,6 +34,8 @@
 
 // Local includes
 
+#include "icctransform.h"
+
 namespace Digikam
 {
 
@@ -134,6 +136,58 @@ void IccProfilesComboBox::setCurrentProfile(const IccProfile& profile)
     }
     setCurrentIndex(-1);
 }
+
+
+IccRenderingIntentComboBox::IccRenderingIntentComboBox(QWidget *parent)
+            : QComboBox(parent)
+{
+    addItem("Perceptual", IccTransform::Perceptual);
+    addItem("Relative Colorimetric", IccTransform::RelativeColorimetric);
+    addItem("Absolute Colorimetric", IccTransform::AbsoluteColorimetric);
+    addItem("Saturation", IccTransform::Saturation);
+    setWhatsThis( i18n("<ul><li><p><b>Perceptual intent</b> causes the full gamut of the image to be "
+                     "compressed or expanded to fill the gamut of the destination device, so that gray balance is "
+                     "preserved but colorimetric accuracy may not be preserved.</p>"
+                     "<p>In other words, if certain colors in an image fall outside of the range of colors that the output "
+                     "device can render, the image intent will cause all the colors in the image to be adjusted so that "
+                     "the every color in the image falls within the range that can be rendered and so that the relationship "
+                     "between colors is preserved as much as possible.</p>"
+                     "<p>This intent is most suitable for display of photographs and images, and is the default intent.</p></li>"
+                     "<li><p><b>Absolute Colorimetric intent</b> causes any colors that fall outside the range that the output device "
+                     "can render to be adjusted to the closest color that can be rendered, while all other colors are "
+                     "left unchanged.</p>"
+                     "<p>This intent preserves the white point and is most suitable for spot colors (Pantone, TruMatch, "
+                     "logo colors, ....)</p></li>"
+                     "<li><p><b>Relative Colorimetric intent</b> is defined such that any colors that fall outside the range that the "
+                     "output device can render are adjusted to the closest color that can be rendered, while all other colors "
+                     "are left unchanged. Proof intent does not preserve the white point.</p></li>"
+                     "<li><p><b>Saturation intent</b> preserves the saturation of colors in the image at the possible expense of "
+                     "hue and lightness.</p>"
+                     "<p>Implementation of this intent remains somewhat problematic, and the ICC is still working on methods to "
+                     "achieve the desired effects.</p>"
+                     "<p>This intent is most suitable for business graphics such as charts, where it is more important that the "
+                     "colors be vivid and contrast well with each other rather than a specific color.</p></li></ul>"));
+}
+
+void IccRenderingIntentComboBox::setIntent(int intent)
+{
+    const int size = count();
+    for (int i=0; i<size; i++)
+    {
+        if (itemData(i).toInt() == intent)
+        {
+            setCurrentIndex(i);
+            return;
+        }
+    }
+    setCurrentIndex(-1);
+}
+
+int IccRenderingIntentComboBox::intent() const
+{
+    return itemData(currentIndex()).toInt();
+}
+
 
 } // namespace Digikam
 

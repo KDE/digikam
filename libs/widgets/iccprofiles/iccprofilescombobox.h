@@ -77,6 +77,16 @@ public:
 
 };
 
+class DIGIKAM_EXPORT IccRenderingIntentComboBox : public QComboBox
+{
+public:
+
+    IccRenderingIntentComboBox(QWidget *parent = 0);
+
+    void setIntent(int intent);
+    int intent() const;
+};
+
 } // namespace Digikam
 
 #endif /* ICCPROFILESCOMBOBOX_H */
