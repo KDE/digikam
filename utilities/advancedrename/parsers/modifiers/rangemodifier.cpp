@@ -45,12 +45,19 @@ QString RangeModifier::modifyOperation(const QString& parseString, const QString
     pos     = reg.indexIn(parseString, pos);
     if (pos > -1)
     {
+        /*
+         * extract range parameters
+         */
+
         bool ok = false;
 
+        // if the start parameter can not be extracted, set it to 1
         int start = reg.cap(1).simplified().toInt(&ok);
         if (!ok)
             start = 1;
 
+        // If no range is defined at all ({start}), set stop = start.
+        // If the stop parameter is omitted ({start-}), set stop = -1 (end of string)
         ok = false;
         int stop;
         if (!reg.cap(2).isEmpty())
@@ -65,6 +72,12 @@ QString RangeModifier::modifyOperation(const QString& parseString, const QString
 
         if (!ok)
             stop = start;
+
+        // --------------------------------------------------------
+
+        /*
+         * replace the string according to the given range
+         */
 
         if (start > result.count())
             return QString();
