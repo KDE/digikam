@@ -42,11 +42,13 @@
 #include "dimg.h"
 #include "dimgimagefilters.h"
 #include "imageiface.h"
+#include "iccprofilescombobox.h"
+#include "iccsettings.h"
 #include "autocorrectiontool.h"
 #include "bcgtool.h"
 #include "bwsepiatool.h"
 #include "hsltool.h"
-#include "iccprooftool.h"
+#include "profileconversiontool.h"
 #include "resizetool.h"
 #include "blurtool.h"
 #include "ratiocroptool.h"
@@ -78,9 +80,9 @@ public:
         resizeAction          = 0;
         sharpenAction         = 0;
         blurAction            = 0;
-        colorManagementAction = 0;
         convertTo8Bits        = 0;
         convertTo16Bits       = 0;
+        profileMenuAction     = 0;
     }
 
     KAction *redeyeAction;
@@ -94,9 +96,9 @@ public:
     KAction *resizeAction;
     KAction *sharpenAction;
     KAction *blurAction;
-    KAction *colorManagementAction;
     KAction *convertTo8Bits;
     KAction *convertTo16Bits;
+    IccProfilesMenuAction *profileMenuAction;
 };
 
 ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
@@ -166,10 +168,21 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
     connect(d->convertTo16Bits, SIGNAL(triggered(bool) ),
             this, SLOT(slotConvertTo16Bits()));
 
+    /*
     d->colorManagementAction = new KAction(KIcon("colormanagement"), i18n("Color Management..."), this);
     actionCollection()->addAction("implugcore_colormanagement", d->colorManagementAction );
     connect(d->colorManagementAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotColorManagement()));
+    */
+    d->profileMenuAction = new IccProfilesMenuAction(KIcon("colormanagement"), i18n("Color Space Conversion"), this);
+    actionCollection()->addAction("implugcore_colormanagement", d->profileMenuAction );
+    connect(d->profileMenuAction, SIGNAL(triggered(const IccProfile &)),
+            this, SLOT(slotConvertToColorSpace(const IccProfile &)));
+
+    connect(IccSettings::instance(), SIGNAL(settingsChanged()),
+            this, SLOT(slotUpdateColorSpaceMenu()));
+
+    slotUpdateColorSpaceMenu();
 
     //-------------------------------
     // Filters menu actions.
@@ -221,11 +234,11 @@ void ImagePlugin_Core::setEnabledActions(bool b)
     d->redeyeAction->setEnabled(b);
     d->autoCorrectionAction->setEnabled(b);
     d->BWAction->setEnabled(b);
-    d->colorManagementAction->setEnabled(b);
     d->HSLAction->setEnabled(b);
     d->sharpenAction->setEnabled(b);
     d->aspectRatioCropAction->setEnabled(b);
     d->resizeAction->setEnabled(b);
+    d->profileMenuAction->setEnabled(b);
 }
 
 void ImagePlugin_Core::slotInvert()
@@ -331,9 +344,72 @@ void ImagePlugin_Core::slotRedEye()
     loadTool(tool);
 }
 
+/*
 void ImagePlugin_Core::slotColorManagement()
 {
     ICCProofTool *tool = new ICCProofTool(this);
+    loadTool(tool);
+}
+*/
+
+void ImagePlugin_Core::slotConvertToColorSpace(const IccProfile &profile)
+{
+    kDebug() << "";
+    ImageIface iface(0, 0);
+
+    if (iface.getOriginalIccProfile().isNull())
+    {
+       KMessageBox::error(kapp->activeWindow(), i18n("This image is not color managed."));
+       return;
+    }
+
+    kapp->setOverrideCursor(Qt::WaitCursor);
+    ProfileConversionTool::fastConversion(profile);
+    kapp->restoreOverrideCursor();
+}
+
+void ImagePlugin_Core::slotUpdateColorSpaceMenu()
+{
+    d->profileMenuAction->clear();
+
+    ICCSettingsContainer settings = IccSettings::instance()->settings();
+    if (!settings.enableCM)
+    {
+        d->profileMenuAction->setEnabled(false);
+        return;
+    }
+
+    QList<IccProfile> standardProfiles, favoriteProfiles;
+    QSet<QString> standardProfilePaths, favoriteProfilePaths;
+    standardProfiles << IccProfile::sRGB()
+                     << IccProfile::adobeRGB()
+                     << IccProfile::wideGamutRGB()
+                     << IccProfile::proPhotoRGB();
+
+    foreach (IccProfile profile, standardProfiles)
+    {
+        d->profileMenuAction->addProfile(profile, profile.description());
+        standardProfilePaths << profile.filePath();
+    }
+
+    d->profileMenuAction->addSeparator();
+
+    favoriteProfilePaths = QSet<QString>::fromList(ProfileConversionTool::favoriteProfiles());
+    favoriteProfilePaths -= standardProfilePaths;
+    foreach (const QString &path, favoriteProfilePaths)
+        favoriteProfiles << path;
+    d->profileMenuAction->addProfiles(favoriteProfiles);
+
+    d->profileMenuAction->addSeparator();
+
+    KAction *moreAction = new KAction(i18n("Other..."), this);
+    d->profileMenuAction->addAction(moreAction);
+    connect(moreAction, SIGNAL(triggered()), this, SLOT(slotProfileConversionTool()));
+}
+
+void ImagePlugin_Core::slotProfileConversionTool()
+{
+    ProfileConversionTool *tool = new ProfileConversionTool(this);
     loadTool(tool);
 }
 

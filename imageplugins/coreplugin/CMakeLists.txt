@@ -7,7 +7,7 @@ SET(digikamimageplugin_core_PART_SRCS
     ../../imageplugins/coreplugin/autocorrectiontool.cpp 
     ../../imageplugins/coreplugin/bcgtool.cpp
     ../../imageplugins/coreplugin/bwsepiatool.cpp
-    ../../imageplugins/coreplugin/iccprooftool.cpp
+    ../../imageplugins/coreplugin/profileconversiontool.cpp
     ../../imageplugins/coreplugin/blurtool.cpp
     ../../imageplugins/coreplugin/imageplugin_core.cpp
     ../../imageplugins/coreplugin/resizetool.cpp
