@@ -32,7 +32,7 @@ namespace Digikam
 
 RangeModifier::RangeModifier()
              : Modifier(QString("{<i>start</i>-<i>stop</i>}"), i18n("Range"),
-                        i18n("display only a specific range (if stop is omitted, move to end of string)"))
+                        i18n("display only a specific range (if stop is omitted, move to end of the string)"))
 {
     setRegExp("\\{\\s*(\\d+)\\s*(-\\s*((-1|\\d+)\\s*)?)?\\}");
 }
