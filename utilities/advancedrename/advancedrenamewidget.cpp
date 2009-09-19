@@ -195,8 +195,8 @@ void AdvancedRenameWidget::createToolTip()
         TOOLTIP_ENTRIES(Modifier, d->parser->modifiers());
         tooltip += QString("</table></p>");
 
-//        tooltip += i18n("<p><i>Modifiers can be applied to marked tokens by using the "
-//                "modifier control buttons.</i></p>");
+        tooltip += QString("<i><p>%1</p></i>").arg(i18n("Modifiers can be applied to each token, to change the "
+                                                        "parse results individually."));
     }
 
     // --------------------------------------------------------
