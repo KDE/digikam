@@ -111,11 +111,6 @@ Q_SIGNALS:
 
     void signalTextChanged(const QString&);
 
-private Q_SLOTS:
-
-    void slotMoveTokenLeft();
-    void slotMoveTokenRight();
-
 private:
 
     AdvancedRenameInputPriv* const d;

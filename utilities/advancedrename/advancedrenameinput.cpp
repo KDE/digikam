@@ -83,8 +83,6 @@ AdvancedRenameLineEdit::AdvancedRenameLineEdit(QWidget* parent)
     setClickMessage(i18n("Enter renaming string (without extension)"));
     setToolTip(i18n("<p>Hold CTRL and move the mouse over the line edit widget to highlight token words.<br/>"
                     "To mark a token, press the left mouse button while it is highlighted."
-//                    "<br/>"
-//                    "Marked tokens can be moved around with the control buttons."
                     "</p>"));
 
     d->curCursorPos = cursorPosition();
@@ -295,14 +293,9 @@ public:
 
     AdvancedRenameInputPriv()
     {
-        moveTokenLeft   =  0;
-        moveTokenRight  =  0;
         parserInput     =  0;
         parser          =  0;
     }
-
-    QToolButton*          moveTokenLeft;
-    QToolButton*          moveTokenRight;
 
     AdvancedRenameLineEdit* parserInput;
     Parser*               parser;
@@ -313,46 +306,16 @@ public:
 AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
                  : QWidget(parent), d(new AdvancedRenameInputPriv)
 {
-    d->parserInput    = new AdvancedRenameLineEdit;
+    d->parserInput = new AdvancedRenameLineEdit;
 
-    d->moveTokenLeft  = new QToolButton;
-    d->moveTokenRight = new QToolButton;
-
-    d->moveTokenLeft->setIcon(SmallIcon("arrow-left"));
-    d->moveTokenRight->setIcon(SmallIcon("arrow-right"));
-
-    d->moveTokenLeft->setEnabled(false);
-    d->moveTokenRight->setEnabled(false);
-
-    d->moveTokenLeft->setVisible(false);
-    d->moveTokenRight->setVisible(false);
-
-    d->moveTokenLeft->setToolTip(i18n("Move selected token to the left"));
-    d->moveTokenRight->setToolTip(i18n("Move selected token to the right"));
-
-    // --------------------------------------------------------
 
     QHBoxLayout* mainLayout = new QHBoxLayout;
     mainLayout->addWidget(d->parserInput);
-    mainLayout->addWidget(d->moveTokenLeft);
-    mainLayout->addWidget(d->moveTokenRight);
     mainLayout->setSpacing(0);
     mainLayout->setMargin(0);
     setLayout(mainLayout);
 
     // --------------------------------------------------------
-
-    connect(d->parserInput, SIGNAL(signalTokenMarked(bool)),
-            d->moveTokenLeft, SLOT(setEnabled(bool)));
-
-    connect(d->parserInput, SIGNAL(signalTokenMarked(bool)),
-            d->moveTokenRight, SLOT(setEnabled(bool)));
-
-    connect(d->moveTokenLeft, SIGNAL(clicked()),
-            this, SLOT(slotMoveTokenLeft()));
-
-    connect(d->moveTokenRight, SIGNAL(clicked()),
-            this, SLOT(slotMoveTokenRight()));
 
     connect(d->parserInput, SIGNAL(signalTextChanged(const QString&)),
             this, SIGNAL(signalTextChanged(const QString&)));
@@ -371,50 +334,6 @@ AdvancedRenameLineEdit* AdvancedRenameInput::input() const
 void AdvancedRenameInput::slotAddToken(const QString& token)
 {
     d->parserInput->slotAddToken(token);
-}
-
-void AdvancedRenameInput::slotMoveTokenLeft()
-{
-//    if (d->selectionStart == -1 || d->selectionLength == -1)
-//        return;
-//
-//    d->parserInput->setSelection(d->selectionStart, d->selectionLength);
-//
-//    int curPos = d->parserInput->selectionStart() - 1;
-//    int pos;
-//    int length;
-//
-//    bool found = d->parserInput->findToken(curPos, pos, length);
-//    int newPos = found ? pos - 1 : curPos;
-//
-//    d->parserInput->cut();
-//    d->parserInput->setCursorPosition(newPos);
-//    d->parserInput->paste();
-//
-//    d->selectionStart = newPos;
-//    d->parserInput->setSelection(d->selectionStart, d->selectionLength);
-}
-
-void AdvancedRenameInput::slotMoveTokenRight()
-{
-//    if (d->selectionStart == -1 || d->selectionLength == -1)
-//        return;
-//
-//    d->parserInput->setSelection(d->selectionStart, d->selectionLength);
-//
-//    int curPos = d->parserInput->selectionStart() + d->selectionLength;
-//    int pos;
-//    int length;
-//
-//    bool found = d->parserInput->findToken(curPos, pos, length);
-//    int newPos = found ? pos + length : curPos;
-//
-//    d->parserInput->cut();
-//    d->parserInput->setCursorPosition(newPos);
-//    d->parserInput->paste();
-//
-//    d->selectionStart = newPos;
-//    d->parserInput->setSelection(d->selectionStart, d->selectionLength);
 }
 
 }  // namespace Digikam
