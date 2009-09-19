@@ -4,12 +4,12 @@ INCLUDE_DIRECTORIES(
                      ../libs/dimg
                      ../libs/dimg/loaders
                      ../libs/dimg/filters
-                     ../libs/dmetadata 
+                     ../libs/dmetadata
                      ../libs/histogram
                      ../libs/curves
                      ../libs/levels
                      ../libs/lprof/
-                     ../libs/jpegutils 
+                     ../libs/jpegutils
                      ../libs/greycstoration
                      ../libs/threadimageio
                      ../libs/whitebalance
@@ -18,9 +18,9 @@ INCLUDE_DIRECTORIES(
 
                      # widgets and dialogs
                      ../libs/widgets/common
-                     ../libs/widgets/imageplugins 
-                     ../libs/widgets/metadata 
-                     ../libs/widgets/iccprofiles 
+                     ../libs/widgets/imageplugins
+                     ../libs/widgets/metadata
+                     ../libs/widgets/iccprofiles
                      ../libs/imageproperties
                      ../libs/dialogs
 
@@ -47,11 +47,11 @@ INCLUDE_DIRECTORIES(
                      ../utilities/fuzzysearch
                      ../utilities/gpssearch
                      ../utilities/timeline
-                     ../utilities/manualrename
-                     ../utilities/manualrename/parsers
-                     ../utilities/manualrename/parsers/common
-                     ../utilities/manualrename/parsers/subparsers
-                     ../utilities/manualrename/parsers/modifiers
+                     ../utilities/advancedrename
+                     ../utilities/advancedrename/common
+                     ../utilities/advancedrename/parsers
+                     ../utilities/advancedrename/parsers/subparsers
+                     ../utilities/advancedrename/parsers/modifiers
                      ../utilities/queuemanager
                      ../utilities/queuemanager/basetools/convert
                      ../utilities/queuemanager/basetools/enhance
@@ -68,7 +68,7 @@ INCLUDE_DIRECTORIES(
                      ${LCMS_INCLUDE_DIR}
                    )
 
-SET(digikamthemedesigner_SRCS 
+SET(digikamthemedesigner_SRCS
     ${libdimgimagewindow_SRCS}
     ${libdeletedialog_SRCS}
     ${libimagepropertiesdigikam_SRCS}
@@ -84,24 +84,24 @@ SET(digikamthemedesigner_SRCS
     ${libdigikamgui_SRCS}
     ${libqueuemanager_SRCS}
     ${libalbummodels_SRCS}
-    ${libmanualrename_SRCS}
+    ${libadvancedrename_SRCS}
     ${libtemplate_SRCS}
 
-    main.cpp 
-    mainwindow.cpp 
-    themedicongroupitem.cpp 
-    themediconitem.cpp 
-    themediconview.cpp 
+    main.cpp
+    mainwindow.cpp
+    themedicongroupitem.cpp
+    themediconitem.cpp
+    themediconview.cpp
    )
 
-QT4_ADD_DBUS_ADAPTOR(digikamthemedesigner_SRCS 
+QT4_ADD_DBUS_ADAPTOR(digikamthemedesigner_SRCS
                      ../digikam/org.kde.digikam.xml digikamapp.h Digikam::DigikamApp)
 
 KDE4_ADD_EXECUTABLE(digikamthemedesigner ${digikamthemedesigner_SRCS})
 
-TARGET_LINK_LIBRARIES(digikamthemedesigner 
-                      digikamcore 
-                      digikamdatabase 
+TARGET_LINK_LIBRARIES(digikamthemedesigner
+                      digikamcore
+                      digikamdatabase
                       ${KDE4_KPARTS_LIBS}
                       ${KDE4_PHONON_LIBS}
                       ${KDE4_KHTML_LIBS}
