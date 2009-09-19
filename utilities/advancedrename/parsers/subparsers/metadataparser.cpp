@@ -154,7 +154,7 @@ QString MetadataParserDialog::separator() const
 MetadataParser::MetadataParser()
               : SubParser(i18n("Metadata..."), SmallIcon("metadataedit"))
 {
-    addToken("[meta:keycode]", i18n("Metadata"),
+    addToken("[meta:<i>keycode</i>]", i18n("Metadata"),
              i18n("add metadata (use the quick access dialog for keycodes)"));
 }
 

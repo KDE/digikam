@@ -31,7 +31,7 @@ namespace Digikam
 {
 
 RangeModifier::RangeModifier()
-             : Modifier(QString("{start-stop}"), i18n("Range"),
+             : Modifier(QString("{<i>start</i>-<i>stop</i>}"), i18n("Range"),
                         i18n("display only a specific range (if stop is omitted, move to end of string)"))
 {
     setRegExp("\\{\\s*(\\d+)\\s*(-\\s*((-1|\\d+)\\s*)?)?\\}");

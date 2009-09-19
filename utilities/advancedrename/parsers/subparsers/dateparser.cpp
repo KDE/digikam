@@ -172,10 +172,10 @@ DateParser::DateParser()
     addToken("[date]", i18n("Date && Time"),
              i18n("date and time (standard format)"));
 
-    addToken("[date:key]", i18n("Date && Time (key)"),
+    addToken("[date:<i>key</i>]", i18n("Date && Time (key)"),
              i18n("date and time (key = ISO|Text|Locale)"));
 
-    addToken("[date:format]", i18n("Date && Time (custom format)"),
+    addToken("[date:<i>format</i>]", i18n("Date && Time (custom format)"),
              i18n("date and time") + " (" +  dateFormatLink + ")");
 }
 

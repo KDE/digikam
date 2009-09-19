@@ -127,10 +127,10 @@ SequenceNumberParser::SequenceNumberParser()
     addToken("#", i18n("Sequence Number"),
              i18n("sequence number"));
 
-    addToken("#{start}", i18n("Sequence Number (start)"),
+    addToken("#{<i>start</i>}", i18n("Sequence Number (start)"),
              i18n("sequence number (custom start)"));
 
-    addToken("#{start,step}", i18n("Sequence Number (start, step)"),
+    addToken("#{<i>start</i>,<i>step</i>}", i18n("Sequence Number (start, step)"),
              i18n( "sequence number (custom start + step)"));
 
 }
