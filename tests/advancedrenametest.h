@@ -34,21 +34,36 @@ class AdvancedRenameWidgetTest : public QObject
 
 private Q_SLOTS:
 
+    /*
+     * TOKEN TESTS
+     */
+    void testFilenameToken();
+    void testFilenameToken_data();
+
     void testNumberToken();
     void testNumberToken_data();
-
-    void testFirstLetterOfEachWordUppercaseToken();
-    void testFirstLetterOfEachWordUppercaseToken_data();
-
-    void testUppercaseToken();
-    void testUppercaseToken_data();
-
-    void testLowercaseToken();
-    void testLowercaseToken_data();
 
     void testCameraToken();
     void testCameraToken_data();
 
+    /*
+     * MODIFIER TESTS
+     */
+    void testRangeModifier();
+    void testRangeModifier_data();
+
+    void testUppercaseModifier();
+    void testUppercaseModifier_data();
+
+    void testLowercaseModifier();
+    void testLowercaseModifier_data();
+
+    void testFirstLetterOfEachWordUppercaseModifier();
+    void testFirstLetterOfEachWordUppercaseModifier_data();
+
+    /*
+     * OTHER TESTS
+     */
     void testEmptyParseString();
 };
 

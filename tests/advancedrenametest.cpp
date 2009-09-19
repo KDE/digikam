@@ -37,6 +37,32 @@ using namespace Digikam;
 
 QTEST_KDEMAIN(AdvancedRenameWidgetTest, GUI)
 
+void AdvancedRenameWidgetTest::testFilenameToken_data()
+{
+    QTest::addColumn<QString>("parseString");
+    QTest::addColumn<QString>("filename");
+    QTest::addColumn<QString>("result");
+
+    QString filename("myfile001.jpg");
+
+    QTest::newRow("[file]") << QString("[file]") << filename
+                            << QString("myfile001");
+}
+
+void AdvancedRenameWidgetTest::testFilenameToken()
+{
+    QFETCH(QString,   parseString);
+    QFETCH(QString,   filename);
+    QFETCH(QString,   result);
+
+    DefaultParser parser;
+
+    ParseInformation info;
+    info.filePath   = filename;
+
+    QString parsed = parser.parse(parseString, info);
+    QCOMPARE(parsed, result);
+}
 void AdvancedRenameWidgetTest::testNumberToken_data()
 {
     QTest::addColumn<QString>("parseString");
@@ -120,7 +146,7 @@ void AdvancedRenameWidgetTest::testNumberToken()
     QCOMPARE(parsed, result);
 }
 
-void AdvancedRenameWidgetTest::testFirstLetterOfEachWordUppercaseToken_data()
+void AdvancedRenameWidgetTest::testFirstLetterOfEachWordUppercaseModifier_data()
 {
     QTest::addColumn<QString>("parseString");
     QTest::addColumn<QString>("filename");
@@ -153,7 +179,7 @@ void AdvancedRenameWidgetTest::testFirstLetterOfEachWordUppercaseToken_data()
                                   << QString("My_Image");
 }
 
-void AdvancedRenameWidgetTest::testFirstLetterOfEachWordUppercaseToken()
+void AdvancedRenameWidgetTest::testFirstLetterOfEachWordUppercaseModifier()
 {
     QFETCH(QString,   parseString);
     QFETCH(QString,   filename);
@@ -174,7 +200,7 @@ void AdvancedRenameWidgetTest::testFirstLetterOfEachWordUppercaseToken()
     QCOMPARE(parsed, result);
 }
 
-void AdvancedRenameWidgetTest::testUppercaseToken_data()
+void AdvancedRenameWidgetTest::testUppercaseModifier_data()
 {
     QTest::addColumn<QString>("parseString");
     QTest::addColumn<QString>("filename");
@@ -207,7 +233,7 @@ void AdvancedRenameWidgetTest::testUppercaseToken_data()
                                   << QString("MY_IMAGE");
 }
 
-void AdvancedRenameWidgetTest::testUppercaseToken()
+void AdvancedRenameWidgetTest::testUppercaseModifier()
 {
     QFETCH(QString,   parseString);
     QFETCH(QString,   filename);
@@ -228,7 +254,53 @@ void AdvancedRenameWidgetTest::testUppercaseToken()
     QCOMPARE(parsed, result);
 }
 
-void AdvancedRenameWidgetTest::testLowercaseToken_data()
+void AdvancedRenameWidgetTest::testRangeModifier_data()
+{
+    QTest::addColumn<QString>("parseString");
+    QTest::addColumn<QString>("filename");
+    QTest::addColumn<QString>("result");
+
+    QString fileName("DSC1234.jpg");
+    QDateTime curdate = QDateTime::currentDateTime();
+
+    QTest::newRow("[file]{1}")  << QString("[file]{1}") << fileName
+                                << QString("D");
+
+    QTest::newRow("[file]{3 }")  << QString("[file]{3 }") << fileName
+                                 << QString("C");
+
+    QTest::newRow("[file]{ 3 }")  << QString("[file]{ 3 }") << fileName
+                                  << QString("C");
+
+    QTest::newRow("[file]{ 3}")  << QString("[file]{ 3}") << fileName
+                                 << QString("C");
+
+    QTest::newRow("[file]{1-3}")  << QString("[file]{1-3}") << fileName
+                                  << QString("DSC");
+
+    QTest::newRow("[file]{ 1 - 3 }")  << QString("[file]{ 1 - 3 }") << fileName
+                                      << QString("DSC");
+
+    QTest::newRow("[file]{3-}")  << QString("[file]{3-}") << fileName
+                                 << QString("C1234");
+}
+
+void AdvancedRenameWidgetTest::testRangeModifier()
+{
+    QFETCH(QString,   parseString);
+    QFETCH(QString,   filename);
+    QFETCH(QString,   result);
+
+    DefaultParser parser;
+
+    ParseInformation info;
+    info.filePath = filename;
+
+    QString parsed = parser.parse(parseString, info);
+    QCOMPARE(parsed, result);
+}
+
+void AdvancedRenameWidgetTest::testLowercaseModifier_data()
 {
     QTest::addColumn<QString>("parseString");
     QTest::addColumn<QString>("filename");
@@ -257,7 +329,7 @@ void AdvancedRenameWidgetTest::testLowercaseToken_data()
                                   << QString("my_image");
 }
 
-void AdvancedRenameWidgetTest::testLowercaseToken()
+void AdvancedRenameWidgetTest::testLowercaseModifier()
 {
     QFETCH(QString,   parseString);
     QFETCH(QString,   filename);
