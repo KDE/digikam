@@ -46,7 +46,7 @@ DirectoryNameParser::DirectoryNameParser()
             i18n("current directory name"));
 
     addToken("[dir.]", i18nc("directory name", "Parent Directory Name"),
-            i18n("directory name of the parent, additional '.' characters move up <br/>"
+            i18n("directory name of the parent, additional '.' characters move up "
                  "in the directory hierarchy"));
 }
 

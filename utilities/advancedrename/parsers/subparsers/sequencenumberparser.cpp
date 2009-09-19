@@ -123,7 +123,6 @@ SequenceNumberParser::SequenceNumberParser()
                     : SubParser(i18n("Sequence Number..."), SmallIcon("accessories-calculator"))
 {
     setUseTokenMenu(false);
-    setUseModifiers(false);
 
     addToken("#", i18n("Sequence Number"),
              i18n("sequence number"));
@@ -131,8 +130,8 @@ SequenceNumberParser::SequenceNumberParser()
     addToken("#{start}", i18n("Sequence Number (start)"),
              i18n("sequence number (custom start)"));
 
-    addToken("#{start,step}", i18n("Sequence Number (start, step)"), i18n(
-            "sequence number (custom start + step)"));
+    addToken("#{start,step}", i18n("Sequence Number (start, step)"),
+             i18n( "sequence number (custom start + step)"));
 
 }
 

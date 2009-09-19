@@ -151,16 +151,15 @@ void AdvancedRenameWidget::createToolTip()
     } while (0)
 
 
-#define TOOLTIP_ENTRIES(type, data, mod)                                                         \
-    do                                                                                           \
-    {                                                                                            \
-        foreach (type* t, data)                                                                  \
-        {                                                                                        \
-            tooltip += QString("<tr><td><b>%1</b></td><td>:</td><td>%2</td><td>%3</td></tr>")    \
-                                        .arg(t->id())                                            \
-                                        .arg(t->description())                                   \
-                                        .arg(!mod ? QString("(x)") : QString());                 \
-        }                                                                                        \
+#define TOOLTIP_ENTRIES(type, data)                                                  \
+    do                                                                               \
+    {                                                                                \
+        foreach (type* t, data)                                                      \
+        {                                                                            \
+            tooltip += QString("<tr><td><b>%1</b></td><td>:</td><td>%2</td></tr>")   \
+                                        .arg(t->id())                                \
+                                        .arg(t->description());                      \
+        }                                                                            \
     } while (0)
 
     // --------------------------------------------------------
@@ -177,8 +176,7 @@ void AdvancedRenameWidget::createToolTip()
         tooltip += QString("<p><table>");
         foreach (SubParser* subparser, d->parser->subParsers())
         {
-            bool useMod = subparser->useModifiers();
-            TOOLTIP_ENTRIES(Token, subparser->tokens(), useMod);
+            TOOLTIP_ENTRIES(Token, subparser->tokens());
         }
         tooltip += QString("</table></p>");
     }
@@ -194,10 +192,8 @@ void AdvancedRenameWidget::createToolTip()
         TOOLTIP_HEADER(i18n("Modifiers"));
 
         tooltip += QString("<p><table>");
-        TOOLTIP_ENTRIES(Modifier, d->parser->modifiers(), true);
+        TOOLTIP_ENTRIES(Modifier, d->parser->modifiers());
         tooltip += QString("</table></p>");
-        tooltip += QString("<p><i>%1</i></p>").arg(i18n("You can not apply modifiers to "
-                                                        "tokens marked with '(x)'."));
 
 //        tooltip += i18n("<p><i>Modifiers can be applied to marked tokens by using the "
 //                "modifier control buttons.</i></p>");
