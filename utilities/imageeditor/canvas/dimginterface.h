@@ -146,7 +146,7 @@ public:
     uchar* getImageSelection();
     void   putImageSelection(const QString& caller, uchar* data);
 
-    void   setEmbeddedICCToOriginalImage(const IccProfile& profile);
+    void   putIccProfile(const IccProfile& profile);
 
     /** Convert a DImg image to a pixmap for screen using color 
         managed view if necessary */

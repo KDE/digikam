@@ -1052,7 +1052,7 @@ void DImgInterface::putImage(uchar* data, int w, int h, bool sixteenBit)
     setModified();
 }
 
-void DImgInterface::setEmbeddedICCToOriginalImage(const IccProfile& profile)
+void DImgInterface::putIccProfile(const IccProfile& profile)
 {
     if (d->image.isNull())
     {
@@ -1060,9 +1060,10 @@ void DImgInterface::setEmbeddedICCToOriginalImage(const IccProfile& profile)
         return;
     }
 
-     //kDebug(50003) << "Embedding profile: " << profile;
-     d->image.setIccProfile(profile);
-     setModified();
+    //kDebug(50003) << "Embedding profile: " << profile;
+    d->image.setIccProfile(profile);
+    updateColorManagement();
+    setModified();
 }
 
 uchar* DImgInterface::getImageSelection()
@@ -1154,7 +1155,18 @@ ICCSettingsContainer* DImgInterface::getICCSettings()
 QPixmap DImgInterface::convertToPixmap(DImg& img)
 {
     if (d->cmSettings->enableCM && (d->cmSettings->useManagedView || d->doSoftProofing))
-        return img.convertToPixmap(d->monitorICCtrans);
+    {
+        // dont use d->monitorICCtrans here, because img may have a different embedded profile
+        IccManager manager(img);
+        IccTransform transform;
+
+        if (d->doSoftProofing)
+            transform = manager.displaySoftProofingTransform(d->cmSettings->defaultProofProfile, d->displayingWidget);
+        else
+            transform = manager.displayTransform(d->displayingWidget);
+
+        return img.convertToPixmap(transform);
+    }
 
     return img.convertToPixmap();
 }

@@ -177,6 +177,7 @@ uchar* ImageIface::getPreviewImage() const
             uchar *data = DImgInterface::defaultInterface()->getImageSelection();
             DImgInterface::defaultInterface()->getSelectedArea(x, y, w, h);
             im = new DImg(w, h, s, a, data, true);
+            im->setIccProfile(DImgInterface::defaultInterface()->getEmbeddedICC());
             delete [] data;
 
             if (!im)
@@ -233,16 +234,14 @@ void ImageIface::putPreviewImage(uchar* data)
     if (!data)
         return;
 
-    if (d->targetPreviewImage == d->previewImage)
-    {
-        d->targetPreviewImage = DImg(d->previewImage.width(), d->previewImage.height(),
-                                     d->previewImage.sixteenBit(), d->previewImage.hasAlpha(), data);
-        d->targetPreviewImage.setIccProfile( d->previewImage.getIccProfile() );
-    }
-    else
-    {
-        d->targetPreviewImage.putImageData(data);
-    }
+    d->targetPreviewImage.detach();
+    d->targetPreviewImage.putImageData(data);
+}
+
+void ImageIface::putPreviewIccProfile(const IccProfile& profile)
+{
+    d->targetPreviewImage.detach();
+    d->targetPreviewImage.setIccProfile(profile);
 }
 
 void ImageIface::putOriginalImage(const QString& caller, uchar* data, int w, int h)
@@ -253,9 +252,9 @@ void ImageIface::putOriginalImage(const QString& caller, uchar* data, int w, int
     DImgInterface::defaultInterface()->putImage(caller, data, w, h);
 }
 
-void ImageIface::setEmbeddedICCToOriginalImage(const IccProfile& profile)
+void ImageIface::putOriginalIccProfile(const IccProfile& profile)
 {
-    DImgInterface::defaultInterface()->setEmbeddedICCToOriginalImage( profile );
+    DImgInterface::defaultInterface()->putIccProfile( profile );
 }
 
 void ImageIface::putImageSelection(const QString& caller, uchar* data)
@@ -360,7 +359,7 @@ QPixmap ImageIface::convertToPixmap(DImg& img)
     return DImgInterface::defaultInterface()->convertToPixmap(img);
 }
 
-IccProfile ImageIface::getEmbeddedICCFromOriginalImage()
+IccProfile ImageIface::getOriginalIccProfile()
 {
     return DImgInterface::defaultInterface()->getEmbeddedICC();
 }
