@@ -26,11 +26,14 @@
 // Qt includes
 
 #include <QFileInfo>
+#include <QSignalMapper>
 
 // KDE includes
 
+#include <kactionmenu.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <kmenu.h>
 
 // Local includes
 
@@ -53,7 +56,24 @@ bool iccProfileLessThan(IccProfile a, IccProfile b)
     return a.description() < b.description();
 }
 
-void IccProfilesComboBox::addProfilesSqueezed(const QList<IccProfile>& givenProfiles)
+// if needed outside this class, make it a public static method in a namespace
+static QString profileUserString(const IccProfile& p)
+{
+    IccProfile profile(p);
+    QFileInfo info(profile.filePath());
+    QString fileName = info.fileName();
+
+    QString description = profile.description();
+    if (!description.isEmpty() && !fileName.isEmpty())
+        return i18nc("<Profile Description> (<File Name>)", "%1 (%2)", description, fileName);
+    else if (!fileName.isEmpty())
+        return fileName;
+    else
+        return QString();
+}
+
+// if needed outside this class, make it a public static method in a namespace
+static void formatProfiles(const QList<IccProfile>& givenProfiles, QList<IccProfile> *returnedProfiles, QStringList *userText)
 {
     QList<IccProfile> profiles;
     QSet<QString> filePaths;
@@ -71,26 +91,30 @@ void IccProfilesComboBox::addProfilesSqueezed(const QList<IccProfile>& givenProf
 
     foreach (IccProfile profile, profiles)
     {
-        QFileInfo info(profile.filePath());
-        QString fileName = info.fileName();
-
-        QString description = profile.description();
-        if (!description.isEmpty() && !fileName.isEmpty())
-            description = i18nc("<Profile Description> (<File Name>)", "%1 (%2)", description, fileName);
-        else if (!fileName.isEmpty())
-            description = fileName;
-        else
+        QString description = profileUserString(profile);
+        if (description.isNull())
             continue;
 
-        addSqueezedItem(description, QVariant::fromValue(profile));
+        *returnedProfiles << profile;
+        *userText << description;
     }
 }
 
-void IccProfilesComboBox::addProfile(const IccProfile& profile, const QString& d)
+void IccProfilesComboBox::addProfilesSqueezed(const QList<IccProfile>& givenProfiles)
+{
+    QList<IccProfile> profiles;
+    QStringList userDescription;
+    formatProfiles(givenProfiles, &profiles, &userDescription);
+
+    for (int i=0; i<profiles.size(); i++)
+        addSqueezedItem(userDescription[i], QVariant::fromValue(profiles[i]));
+}
+
+void IccProfilesComboBox::addProfileSqueezed(const IccProfile& profile, const QString& d)
 {
     QString description = d;
     if (description.isNull())
-        description = IccProfile(profile).description();
+        description = profileUserString(profile);
     addSqueezedItem(description, QVariant::fromValue(profile));
 }
 
@@ -137,6 +161,77 @@ void IccProfilesComboBox::setCurrentProfile(const IccProfile& profile)
     setCurrentIndex(-1);
 }
 
+// ---------------
+
+IccProfilesMenuAction::IccProfilesMenuAction(const KIcon &icon, const QString &text, QObject *parent)
+            : KActionMenu(icon, text, parent),
+              m_parent(parent)
+{
+    m_mapper = new QSignalMapper(this);
+    connect(m_mapper, SIGNAL(mapped(QObject*)), this, SLOT(slotTriggered(QObject*)));
+}
+
+IccProfilesMenuAction::IccProfilesMenuAction(const QString &text, QObject *parent)
+            : KActionMenu(text, parent),
+              m_parent(parent)
+{
+    m_mapper = new QSignalMapper(this);
+    connect(m_mapper, SIGNAL(mapped(QObject*)), this, SLOT(slotTriggered(QObject*)));
+}
+
+void IccProfilesMenuAction::replaceProfiles(const QList<IccProfile>& profiles)
+{
+    menu()->clear();
+    addProfiles(profiles);
+}
+
+void IccProfilesMenuAction::clear()
+{
+    menu()->clear();
+}
+
+void IccProfilesMenuAction::addProfiles(const QList<IccProfile>& givenProfiles)
+{
+    QList<IccProfile> profiles;
+    QStringList userDescription;
+    formatProfiles(givenProfiles, &profiles, &userDescription);
+
+    for (int i=0; i<profiles.size(); i++)
+    {
+        addProfile(profiles[i], userDescription[i]);
+    }
+
+}
+
+void IccProfilesMenuAction::addProfile(const IccProfile& profile, const QString& d)
+{
+    QString description = d;
+    if (description.isNull())
+        description = profileUserString(profile);
+
+    KAction *action = new KAction(d.left(50), m_parent);
+    action->setData(QVariant::fromValue(profile));
+    addAction(action);
+
+    connect(action, SIGNAL(triggered()), m_mapper, SLOT(map()));
+    m_mapper->setMapping(action, action);
+}
+
+void IccProfilesMenuAction::disableIfEmpty()
+{
+    if (menu()->isEmpty())
+        setEnabled(false);
+}
+
+void IccProfilesMenuAction::slotTriggered(QObject *obj)
+{
+    KAction *action = static_cast<KAction*>(obj);
+    IccProfile profile = action->data().value<IccProfile>();
+    if (!profile.isNull())
+        emit triggered(profile);
+}
+
+// ---------------
 
 IccRenderingIntentComboBox::IccRenderingIntentComboBox(QWidget *parent)
             : QComboBox(parent)

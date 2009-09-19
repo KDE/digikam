@@ -26,6 +26,8 @@
 
 // KDE includes
 
+#include <kactionmenu.h>
+
 // LibKDcraw includes
 
 #include <libkdcraw/squeezedcombobox.h>
@@ -34,6 +36,8 @@
 
 #include "digikam_export.h"
 #include "iccprofile.h"
+
+class QSignalMapper;
 
 namespace Digikam
 {
@@ -57,7 +61,7 @@ public:
      * Add the given profile with the given description, or, if null, a standard description.
      * Does not test for duplicity, does not sort into existing profiles.
      */
-    void addProfile(const IccProfile& profile, const QString& description = QString());
+    void addProfileSqueezed(const IccProfile& profile, const QString& description = QString());
     /**
      * Clears, does the same as addProfilesSqueezed, and restores the current entry if possible.
      */
@@ -85,6 +89,52 @@ public:
 
     void setIntent(int intent);
     int intent() const;
+};
+
+class DIGIKAM_EXPORT IccProfilesMenuAction : public KActionMenu
+{
+    Q_OBJECT
+
+public:
+
+    IccProfilesMenuAction(const KIcon &icon, const QString &text, QObject *parent);
+    IccProfilesMenuAction(const QString &text, QObject *parent);
+
+    /**
+     * Checks the given profiles for validity, creates a suitable description (ICC profile description, file path),
+     * removes duplicates (in newly added list) by file path, sorts them and adds them in sorted order.
+     */
+    void addProfiles(const QList<IccProfile>& profile);
+    /**
+     * Add the given profile with the given description, or, if null, a standard description.
+     * Does not test for duplicity, does not sort into existing profiles.
+     */
+    void addProfile(const IccProfile& profile, const QString& description = QString());
+    /**
+     * Equivalent to calling clear() and addProfiles().
+     */
+    void replaceProfiles(const QList<IccProfile>& profile);
+    /**
+     * Disables if the menu is currently empty.
+     */
+    void disableIfEmpty();
+    /**
+     * Clears the menu.
+     */
+    void clear();
+
+Q_SIGNALS:
+
+    void triggered(const IccProfile& profile);
+
+protected Q_SLOTS:
+
+    void slotTriggered(QObject *);
+
+protected:
+
+    QObject        *m_parent;
+    QSignalMapper  *m_mapper;
 };
 
 } // namespace Digikam
