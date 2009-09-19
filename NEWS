@@ -26,7 +26,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 017 ==> 207239 : When pressing Enter thumbnails should be enlarged, also after changing from Tags to Collection or similar.
 018 ==> 200830 : 100 % CPU usage without obvious reason.
 019 ==> 204480 : Unable to access albums on drives other than C:.
-020 ==> 
+020 ==> 154463 : Autorename while transferring pictures from cam to PC adds lots of '0'.
+021 ==>
 
 *********************************************************************************************************
 digiKam 1.0.0-beta4 - Release date: 2009-08-30
