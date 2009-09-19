@@ -61,6 +61,9 @@ private Q_SLOTS:
     void testFirstLetterOfEachWordUppercaseModifier();
     void testFirstLetterOfEachWordUppercaseModifier_data();
 
+    void testChainedModifiers();
+    void testChainedModifiers_data();
+
     /*
      * OTHER TESTS
      */

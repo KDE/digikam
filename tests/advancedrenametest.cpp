@@ -133,6 +133,35 @@ void AdvancedRenameWidgetTest::testFirstLetterOfEachWordUppercaseModifier()
     QCOMPARE(parsed, result);
 }
 
+void AdvancedRenameWidgetTest::testChainedModifiers_data()
+{
+    QTest::addColumn<QString>("parseString");
+    QTest::addColumn<QString>("filename");
+    QTest::addColumn<QString>("result");
+
+    QString fileName("myfilename001.jpg");
+
+    QTest::newRow("[file]*&")    << QString("[file]*&")    << fileName << QString("MYFILENAME001");
+    QTest::newRow("[file]{3-}*") << QString("[file]{3-}*") << fileName << QString("Filename001");
+    QTest::newRow("[file]{3-}{'name','age'}*") << QString("[file]{3-}{\"name\",\"age\"}*")
+                                               << fileName << QString("Fileage001");
+}
+
+void AdvancedRenameWidgetTest::testChainedModifiers()
+{
+    QFETCH(QString,   parseString);
+    QFETCH(QString,   filename);
+    QFETCH(QString,   result);
+
+    DefaultParser parser;
+
+    ParseInformation info;
+    info.filePath   = filename;
+
+    QString parsed = parser.parse(parseString, info);
+    QCOMPARE(parsed, result);
+}
+
 void AdvancedRenameWidgetTest::testUppercaseModifier_data()
 {
     QTest::addColumn<QString>("parseString");
