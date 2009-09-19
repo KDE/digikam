@@ -36,6 +36,7 @@
 
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -132,6 +133,7 @@ void AdvancedRenameLineEdit::mouseMoveEvent(QMouseEvent* e)
         if (found)
         {
             d->markedTokenPos = start;
+            setSelectionColor(Token);
             highlightToken(pos);
         }
     }
@@ -141,6 +143,7 @@ void AdvancedRenameLineEdit::mouseMoveEvent(QMouseEvent* e)
     }
     else
     {
+        setSelectionColor(None);
         deselect();
         d->markedTokenPos = -1;
         d->userIsMarking  = false;
@@ -283,6 +286,29 @@ void AdvancedRenameLineEdit::slotAddToken(const QString& token)
         setCursorPosition(cursorPos + token.count());
     }
     setFocus();
+}
+
+void AdvancedRenameLineEdit::setSelectionColor(SelectionType type)
+{
+    QString cssTemplate("QLineEdit { selection-background-color: %1; selection-color: %2;}");
+    QString css;
+
+    switch (type)
+    {
+        case Token:
+            css = cssTemplate.arg("red").arg("white");
+            break;
+        case Modifier:
+            css = cssTemplate.arg("green").arg("black");
+            break;
+        case TokenAndModifiers:
+            css = cssTemplate.arg("yellow").arg("black");
+            break;
+        case None:
+            css = cssTemplate.arg("palette(highlight)").arg("palette(highlighted-text)");
+    }
+    kDebug(50003) << css;
+    setStyleSheet(css);
 }
 
 // --------------------------------------------------------

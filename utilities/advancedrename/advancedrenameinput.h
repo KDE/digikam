@@ -80,8 +80,17 @@ private Q_SLOTS:
 
 private:
 
+    enum SelectionType
+    {
+        Token = 0,
+        Modifier,
+        TokenAndModifiers,
+        None
+    };
+
     bool highlightToken(int pos);
     bool tokenIsSelected();
+    void setSelectionColor(SelectionType type);
 
 private:
 
