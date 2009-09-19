@@ -283,15 +283,13 @@ ParseResults SubParser::modifiedResults()
 
 ParseResults SubParser::applyModifiers(const QString& parseString, ParseResults& results)
 {
-    ParseResults tmp;
+    ParseResults tmp = results;
 
     ParseResults modifiers;
     QMap<ParseResults::ResultsKey, Modifier*> modifierCallbackMap;
 
     if (results.isEmpty())
         return tmp;
-
-    tmp = results;
 
     // fill modifiers ParseResults with all possible modifier tokens
     foreach (Modifier* modifier, d->modifiers)
