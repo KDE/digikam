@@ -27,7 +27,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 018 ==> 200830 : 100 % CPU usage without obvious reason.
 019 ==> 204480 : Unable to access albums on drives other than C:.
 020 ==> 154463 : Autorename while transferring pictures from cam to PC adds lots of '0'.
-021 ==>
+021 ==> 207882 : Manual: RAW decoder settings: 16 bit not clearly explained.
+022 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta4 - Release date: 2009-08-30
