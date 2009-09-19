@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-06-09
- * Description : a test for the AdvancedRenameWidget
+ * Description : a test for the AdvancedRename utility
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
