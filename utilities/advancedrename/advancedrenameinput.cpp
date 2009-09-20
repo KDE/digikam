@@ -83,6 +83,7 @@ AdvancedRenameLineEdit::AdvancedRenameLineEdit(QWidget* parent)
     setCompletionMode(KGlobalSettings::CompletionAuto);
     setClickMessage(i18n("Enter renaming string (without extension)"));
     setToolTip(i18n("<p>Hold CTRL and move the mouse over the line edit widget to highlight token words.<br/>"
+                    "Hold SHIFT and move the mouse to hightlight token and modifier words.<br/>"
                     "To mark a token, press the left mouse button while it is highlighted."
                     "</p>"));
 
