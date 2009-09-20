@@ -88,6 +88,15 @@ ParseResults Parser::parseResults(const QString& parseString)
     return results;
 }
 
+ParseResults Parser::modifierResults(const QString& parseString)
+{
+    ParseResults results;
+    ParseInformation info;
+
+    parseOperation(parseString, info, results, true);
+    return results;
+}
+
 QString Parser::parse(const QString& parseString, ParseInformation& info)
 {
     ParseResults results;
@@ -139,6 +148,29 @@ bool Parser::tokenAtPosition(const QString& parseString, int pos, int& start, in
     bool found = false;
 
     ParseResults results         = parseResults(parseString);
+    ParseResults::ResultsKey key = results.keyAtApproximatePosition(pos);
+    start  = key.first;
+    length = key.second;
+
+    if ((pos >= start) && (pos <= start + length))
+    {
+        found = true;
+    }
+    return found;
+}
+
+bool Parser::tokenModifierAtPosition(const QString& parseString, int pos)
+{
+    int start;
+    int length;
+    return tokenAtPosition(parseString, pos, start, length);
+}
+
+bool Parser::tokenModifierAtPosition(const QString& parseString, int pos, int& start, int& length)
+{
+    bool found = false;
+
+    ParseResults results         = modifierResults(parseString);
     ParseResults::ResultsKey key = results.keyAtApproximatePosition(pos);
     start  = key.first;
     length = key.second;

@@ -60,6 +60,9 @@ public:
     bool          tokenAtPosition(const QString& parseString, int pos);
     bool          tokenAtPosition(const QString& parseString, int pos, int& start, int& length);
 
+    bool          tokenModifierAtPosition(const QString& parseString, int pos);
+    bool          tokenModifierAtPosition(const QString& parseString, int pos, int& start, int& length);
+
 protected:
 
     void registerSubParser(SubParser* parser);
@@ -67,6 +70,7 @@ protected:
 private:
 
     ParseResults parseResults(const QString& parseString);
+    ParseResults modifierResults(const QString& parseString);
     QString      parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results,
                                 bool replace = true);
 

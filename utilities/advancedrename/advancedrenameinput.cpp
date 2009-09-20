@@ -120,22 +120,20 @@ void AdvancedRenameLineEdit::setParser(Parser* parser)
 void AdvancedRenameLineEdit::mouseMoveEvent(QMouseEvent* e)
 {
     KLineEdit::mouseMoveEvent(e);
+    int pos = cursorPositionAt(e->pos());
+
     if (e->modifiers() == Qt::ControlModifier)
     {
-        if (d->userIsTyping)
-            return;
-
-        int start;
-        int length;
-        int pos = cursorPositionAt(e->pos());
-
-        bool found = d->parser->tokenAtPosition(text(), pos, start, length);
-        if (found)
-        {
-            d->markedTokenPos = start;
-            setSelectionColor(Token);
-            highlightToken(pos);
-        }
+        searchAndHighlightTokens(Token, pos);
+    }
+//    else if ((e->modifiers() & (Qt::ControlModifier)) &&
+//             (e->modifiers())& (Qt::ShiftModifier))
+//    {
+//        searchAndHighlightTokens(Modifier, pos);
+//    }
+    else if (e->modifiers() & Qt::ShiftModifier)
+    {
+        searchAndHighlightTokens(TokenAndModifiers, pos);
     }
     else if (d->tokenMarked)
     {
@@ -154,7 +152,11 @@ void AdvancedRenameLineEdit::mouseMoveEvent(QMouseEvent* e)
 
 void AdvancedRenameLineEdit::mousePressEvent(QMouseEvent* e)
 {
-    if (e->modifiers() == Qt::ControlModifier)
+    if (
+            (e->modifiers() == Qt::ControlModifier)                                             ||
+//            ((e->modifiers() & (Qt::ControlModifier)) && (e->modifiers())& (Qt::ShiftModifier)) ||
+            (e->modifiers() & Qt::ShiftModifier)
+       )
     {
         if (e->button() == Qt::LeftButton)
         {
@@ -208,7 +210,36 @@ void AdvancedRenameLineEdit::focusOutEvent(QFocusEvent* e)
     KLineEdit::focusOutEvent(e);
 }
 
-bool AdvancedRenameLineEdit::highlightToken(int pos)
+void AdvancedRenameLineEdit::searchAndHighlightTokens(SelectionType type, int pos)
+{
+    if (d->userIsTyping)
+        return;
+
+    int start;
+    int length;
+
+    bool found = false;
+
+    switch (type)
+    {
+        case Token:
+            found = d->parser->tokenAtPosition(text(), pos, start, length);
+            break;
+        case TokenAndModifiers:
+            found = d->parser->tokenModifierAtPosition(text(), pos, start, length);
+            break;
+        default: break;
+    }
+
+    if (found)
+    {
+        d->markedTokenPos = start;
+        setSelectionColor(type);
+        highlightToken(type);
+    }
+}
+
+bool AdvancedRenameLineEdit::highlightToken(SelectionType type)
 {
     if (!d->userIsMarking)
     {
@@ -218,7 +249,18 @@ bool AdvancedRenameLineEdit::highlightToken(int pos)
 
     int start  = 0;
     int length = 0;
-    bool found = d->parser->tokenAtPosition(text(), pos, start, length);
+    bool found = false;
+
+    switch (type)
+    {
+        case Token:
+            found = d->parser->tokenAtPosition(text(), d->markedTokenPos, start, length);
+            break;
+        case TokenAndModifiers:
+            found = d->parser->tokenModifierAtPosition(text(), d->markedTokenPos, start, length);
+            break;
+        default: break;
+    }
 
     if (found)
     {
@@ -299,7 +341,7 @@ void AdvancedRenameLineEdit::setSelectionColor(SelectionType type)
             css = cssTemplate.arg("red").arg("white");
             break;
         case Modifier:
-            css = cssTemplate.arg("green").arg("black");
+            css = cssTemplate.arg("green").arg("white");
             break;
         case TokenAndModifiers:
             css = cssTemplate.arg("yellow").arg("black");
