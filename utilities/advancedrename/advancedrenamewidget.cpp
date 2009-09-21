@@ -62,26 +62,26 @@ public:
         parserLineEdit          = 0;
         tooltipTracker          = 0;
         tooltipToggleButton     = 0;
-        insertTokenToolButton   = 0;
+        tokenToolButton         = 0;
         btnContainer            = 0;
         parser                  = 0;
         inputColumns            = 2;
-        inputStyles             = AdvancedRenameWidget::BigButtons;
+        controlWidgetsMask      = AdvancedRenameWidget::TokenButtons | AdvancedRenameWidget::ToolTipButton;
         tooltipTrackerAlignment = Qt::AlignLeft;
     }
 
-    int                               inputColumns;
-    AdvancedRenameWidget::InputStyles inputStyles;
+    int                                  inputColumns;
+    AdvancedRenameWidget::ControlWidgets controlWidgetsMask;
 
-    QToolButton*                      tooltipToggleButton;
-    QToolButton*                      insertTokenToolButton;
-    QGroupBox*                        btnContainer;
+    QToolButton*                         tooltipToggleButton;
+    QToolButton*                         tokenToolButton;
+    QGroupBox*                           btnContainer;
 
-    Qt::Alignment                     tooltipTrackerAlignment;
+    Qt::Alignment                        tooltipTrackerAlignment;
 
-    DTipTracker*                      tooltipTracker;
-    AdvancedRenameInput*              parserLineEdit;
-    Parser*                           parser;
+    DTipTracker*                         tooltipTracker;
+    AdvancedRenameInput*                 parserLineEdit;
+    Parser*                              parser;
 };
 
 AdvancedRenameWidget::AdvancedRenameWidget(QWidget* parent)
@@ -220,16 +220,16 @@ void AdvancedRenameWidget::slotUpdateTrackerPos()
     d->tooltipTracker->refresh();
 }
 
-void AdvancedRenameWidget::setInputStyle(InputStyles inputMask)
+void AdvancedRenameWidget::setControlWidgets(ControlWidgets mask)
 {
     bool enable = d->parser && d->parser->subParsers().count() > 0;
 
-    d->btnContainer->setVisible(enable && (inputMask & BigButtons));
-    d->insertTokenToolButton->setVisible(enable && (inputMask & ToolButton));
+    d->btnContainer->setVisible(enable && (mask & TokenButtons));
+    d->tokenToolButton->setVisible(enable && (mask & TokenToolButton));
     d->parserLineEdit->setEnabled(enable);
-    d->tooltipToggleButton->setVisible(enable);
+    d->tooltipToggleButton->setVisible(enable && (mask & ToolTipButton));
 
-    d->inputStyles = inputMask;
+    d->controlWidgetsMask = mask;
 }
 
 void AdvancedRenameWidget::registerParserControls()
@@ -238,7 +238,7 @@ void AdvancedRenameWidget::registerParserControls()
    {
        setupWidgets();
 
-       QMenu* tokenToolBtnMenu = new QMenu(d->insertTokenToolButton);
+       QMenu* tokenToolBtnMenu = new QMenu(d->tokenToolButton);
        int column              = 0;
        int row                 = 0;
        QPushButton* btn        = 0;
@@ -287,7 +287,7 @@ void AdvancedRenameWidget::registerParserControls()
        // --------------------------------------------------------
 
        d->btnContainer->setLayout(gridLayout);
-       d->insertTokenToolButton->setMenu(tokenToolBtnMenu);
+       d->tokenToolButton->setMenu(tokenToolBtnMenu);
 
        d->parserLineEdit->input()->setParser(d->parser);
        createToolTip();
@@ -305,7 +305,7 @@ void AdvancedRenameWidget::setParser(Parser* parser)
 
     setInputColumns(d->inputColumns);
     registerParserControls();
-    setInputStyle(d->inputStyles);
+    setControlWidgets(d->controlWidgetsMask);
 }
 
 void AdvancedRenameWidget::setInputColumns(int col)
@@ -315,7 +315,7 @@ void AdvancedRenameWidget::setInputColumns(int col)
 
     d->inputColumns = col;
     registerParserControls();
-    setInputStyle(d->inputStyles);
+    setControlWidgets(d->controlWidgetsMask);
 }
 
 void AdvancedRenameWidget::setupWidgets()
@@ -333,10 +333,10 @@ void AdvancedRenameWidget::setupWidgets()
     delete d->btnContainer;
     d->btnContainer = new QGroupBox(i18n("Renaming Options"), this);
 
-    delete d->insertTokenToolButton;
-    d->insertTokenToolButton = new QToolButton;
-    d->insertTokenToolButton->setPopupMode(QToolButton::InstantPopup);
-    d->insertTokenToolButton->setIcon(SmallIcon("list-add"));
+    delete d->tokenToolButton;
+    d->tokenToolButton = new QToolButton;
+    d->tokenToolButton->setPopupMode(QToolButton::InstantPopup);
+    d->tokenToolButton->setIcon(SmallIcon("list-add"));
 
     // --------------------------------------------------------
 
@@ -353,7 +353,7 @@ void AdvancedRenameWidget::setupWidgets()
     QGridLayout* mainLayout = new QGridLayout;
     mainLayout->addWidget(d->parserLineEdit,        0, 0, 1, 1);
     mainLayout->addWidget(d->tooltipToggleButton,   0, 1, 1, 1);
-    mainLayout->addWidget(d->insertTokenToolButton, 0, 2, 1, 1);
+    mainLayout->addWidget(d->tokenToolButton,       0, 2, 1, 1);
     mainLayout->addWidget(d->btnContainer,          1, 0, 1,-1);
     mainLayout->setColumnStretch(0, 10);
     mainLayout->setMargin(0);

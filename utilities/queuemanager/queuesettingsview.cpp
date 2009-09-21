@@ -62,12 +62,12 @@ public:
 
     QueueSettingsViewPriv()
     {
-        conflictLabel       = 0;
-        conflictButtonGroup = 0;
-        overwriteButton     = 0;
-        promptButton        = 0;
-        albumSel            = 0;
-        advancedRenameInput = 0;
+        conflictLabel        = 0;
+        conflictButtonGroup  = 0;
+        overwriteButton      = 0;
+        promptButton         = 0;
+        albumSel             = 0;
+        advancedRenameWidget = 0;
     }
 
     QLabel*               conflictLabel;
@@ -82,7 +82,7 @@ public:
 
     AlbumSelectWidget*    albumSel;
 
-    AdvancedRenameWidget* advancedRenameInput;
+    AdvancedRenameWidget* advancedRenameWidget;
 };
 
 QueueSettingsView::QueueSettingsView(QWidget *parent)
@@ -148,9 +148,10 @@ QueueSettingsView::QueueSettingsView(QWidget *parent)
     d->renameOriginal->setWhatsThis(i18n("Turn on this option to use original "
                                          "filenames without modifications."));
 
-    d->renameManual        = new QRadioButton(i18n("Customize filenames:"), vbox2);
-    d->advancedRenameInput = new AdvancedRenameWidget(vbox2);
-    d->advancedRenameInput->setInputStyle(AdvancedRenameWidget::ToolButton);
+    d->renameManual         = new QRadioButton(i18n("Customize filenames:"), vbox2);
+    d->advancedRenameWidget = new AdvancedRenameWidget(vbox2);
+    d->advancedRenameWidget->setControlWidgets(AdvancedRenameWidget::TokenToolButton |
+                                               AdvancedRenameWidget::ToolTipButton);
     QWidget *space         = new QWidget(vbox2);
 
     d->renamingButtonGroup->setExclusive(true);
@@ -174,7 +175,7 @@ QueueSettingsView::QueueSettingsView(QWidget *parent)
     connect(d->renamingButtonGroup, SIGNAL(buttonClicked(int)),
             this, SLOT(slotSettingsChanged()));
 
-    connect(d->advancedRenameInput, SIGNAL(signalTextChanged(const QString&)),
+    connect(d->advancedRenameWidget, SIGNAL(signalTextChanged(const QString&)),
             this, SLOT(slotSettingsChanged()));
 
     // --------------------------------------------------------
@@ -199,7 +200,7 @@ void QueueSettingsView::slotResetSettings()
     // TODO: reset d->albumSel
     d->conflictButtonGroup->button(QueueSettings::ASKTOUSER)->setChecked(true);
     d->renamingButtonGroup->button(QueueSettings::USEORIGINAL)->setChecked(true);
-    d->advancedRenameInput->clear();
+    d->advancedRenameWidget->clear();
     blockSignals(false);
     slotSettingsChanged();
 }
@@ -211,17 +212,17 @@ void QueueSettingsView::slotQueueSelected(int, const QueueSettings& settings, co
     d->conflictButtonGroup->button(btn)->setChecked(true);
     btn     = (int)settings.renamingRule;
     d->renamingButtonGroup->button(btn)->setChecked(true);
-    d->advancedRenameInput->setText(settings.renamingParser);
+    d->advancedRenameWidget->setText(settings.renamingParser);
 }
 
 void QueueSettingsView::slotUpdateTrackerPos()
 {
-    d->advancedRenameInput->slotUpdateTrackerPos();
+    d->advancedRenameWidget->slotUpdateTrackerPos();
 }
 
 void QueueSettingsView::slotHideToolTipTracker()
 {
-    d->advancedRenameInput->slotHideToolTipTracker();
+    d->advancedRenameWidget->slotHideToolTipTracker();
 }
 
 void QueueSettingsView::slotSettingsChanged()
@@ -230,8 +231,8 @@ void QueueSettingsView::slotSettingsChanged()
     settings.conflictRule   = (QueueSettings::ConflictRule)d->conflictButtonGroup->checkedId();
     settings.targetUrl      = d->albumSel->currentAlbumUrl();
     settings.renamingRule   = (QueueSettings::RenamingRule)d->renamingButtonGroup->checkedId();
-    settings.renamingParser = d->advancedRenameInput->text();
-    d->advancedRenameInput->setEnabled(settings.renamingRule == QueueSettings::CUSTOMIZE);
+    settings.renamingParser = d->advancedRenameWidget->text();
+    d->advancedRenameWidget->setEnabled(settings.renamingRule == QueueSettings::CUSTOMIZE);
     emit signalSettingsChanged(settings);
 }
 

@@ -54,13 +54,16 @@ public:
     AdvancedRenameWidget(QWidget* parent = 0);
     ~AdvancedRenameWidget();
 
-    enum InputStyle
+    enum ControlWidget
     {
-        None       = 0x0,
-        BigButtons = 0x1,
-        ToolButton = 0x2
+        None               = 0x0,
+        ToolTipButton      = 0x1,
+        TokenButtons       = 0x2,
+        TokenToolButton    = 0x4,
+        ModifierButtons    = 0x8,
+        ModifierToolButton = 0x10
     };
-    Q_DECLARE_FLAGS(InputStyles, InputStyle)
+    Q_DECLARE_FLAGS(ControlWidgets, ControlWidget)
 
     QString text() const;
     void    setText(const QString& text);
@@ -69,7 +72,7 @@ public:
     void setParser(Parser* parser);
 
     void setInputColumns(int col);
-    void setInputStyle(InputStyles inputMask);
+    void setControlWidgets(ControlWidgets mask);
 
     QString parse(ParseInformation& info) const;
 
@@ -101,6 +104,6 @@ private:
 
 }  // namespace Digikam
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::AdvancedRenameWidget::InputStyles)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::AdvancedRenameWidget::ControlWidgets)
 
 #endif /* ADVANCEDRENAMEWIDGET_H */
