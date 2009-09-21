@@ -30,7 +30,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 020 ==> 154463 : Autorename while transferring pictures from cam to PC adds lots of '0'.
 021 ==> 207882 : Manual: RAW decoder settings: 16 bit not clearly explained.
 022 ==> 208004 : Geolocation tool needs higher zoom levels.
-023 ==> 
+023 ==> 207293 : when showing whole collection status bar filters don't work.
+024 ==> 
+
 
 *********************************************************************************************************
 digiKam 1.0.0-beta4 - Release date: 2009-08-30
