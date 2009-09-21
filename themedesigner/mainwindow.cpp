@@ -122,9 +122,16 @@ MainWindow::MainWindow()
     setWindowTitle(i18n("digiKam Theme Designer"));
     setAttribute(Qt::WA_DeleteOnClose);
 
+    // --------------------------------------------------------
+
     setButtons(User1|User2|Close);
     setButtonGuiItem(User2, KStandardGuiItem::open());
     setButtonGuiItem(User1, KStandardGuiItem::save());
+    setButtonToolTip(User2, i18n("Load theme"));
+    setButtonToolTip(User1, i18n("Save theme"));
+    setButtonToolTip(Close, i18n("Close the theme designer"));
+
+    // --------------------------------------------------------
 
     AlbumSettings::instance();
     AlbumSettings::instance()->readSettings();
