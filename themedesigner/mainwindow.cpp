@@ -117,10 +117,14 @@ public:
 };
 
 MainWindow::MainWindow()
-          : QWidget(0), d(new MainWindowPriv)
+          : KDialog(0), d(new MainWindowPriv)
 {
     setWindowTitle(i18n("digiKam Theme Designer"));
     setAttribute(Qt::WA_DeleteOnClose);
+
+    setButtons(User1|User2|Close);
+    setButtonGuiItem(User2, KStandardGuiItem::open());
+    setButtonGuiItem(User1, KStandardGuiItem::save());
 
     AlbumSettings::instance();
     AlbumSettings::instance()->readSettings();
@@ -132,7 +136,6 @@ MainWindow::MainWindow()
 
     // Actual views ------------------------------------------------
 
-    QGridLayout* layout = new QGridLayout(this);
 
     QSplitter* splitter = new QSplitter(this);
     splitter->setOrientation(Qt::Horizontal);
@@ -147,7 +150,7 @@ MainWindow::MainWindow()
     QGroupBox *groupBox = new QGroupBox(this);
     QVBoxLayout* vlay   = new QVBoxLayout(groupBox);
 
-    QLabel* label1  = new QLabel(i18n("Property: "), groupBox);
+    QLabel* label1   = new QLabel(i18n("Property: "), groupBox);
     d->propertyCombo = new KComboBox(groupBox);
 
     d->bevelLabel = new QLabel(i18n("Bevel: "), groupBox);
@@ -229,33 +232,17 @@ MainWindow::MainWindow()
     d->endColorBtn->setColor(Qt::black);
     d->borderColorBtn->setColor(Qt::black);
 
-    // Bottom button bar -------------------------------------------------------
-
-    QHBoxLayout* buttonLayout = new QHBoxLayout();
-
-    QPushButton* loadButton = new QPushButton(this);
-    loadButton->setText(i18nc("load theme", "&Load"));
-
-    QPushButton* saveButton = new QPushButton(this);
-    saveButton->setText(i18nc("save theme", "&Save"));
-
-    QPushButton* closeButton = new QPushButton(this);
-    closeButton->setText(i18n("&Close"));
-
-    buttonLayout->setMargin(5);
-    buttonLayout->setSpacing(5);
-    buttonLayout->addItem(new QSpacerItem(10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum));
-    buttonLayout->addWidget(loadButton);
-    buttonLayout->addWidget(saveButton);
-    buttonLayout->addWidget(closeButton);
-
     // ------------------------------------------------------------------------
 
-    layout->setMargin(5);
-    layout->setSpacing(5);
-    layout->addWidget(splitter,     0, 0, 1, 1);
-    layout->addWidget(groupBox,     0, 1, 1, 1);
-    layout->addLayout(buttonLayout, 1, 0, 1, 2);
+    QWidget*     mainWidget = new QWidget(this);
+    QGridLayout* mainLayout = new QGridLayout(this);
+    mainLayout->setMargin(5);
+    mainLayout->setSpacing(5);
+    mainLayout->addWidget(splitter,     0, 0, 1, 1);
+    mainLayout->addWidget(groupBox,     0, 1, 1, 1);
+    mainWidget->setLayout(mainLayout);
+
+    setMainWidget(mainWidget);
 
     // ------------------------------------------------------------------------
 
@@ -280,13 +267,13 @@ MainWindow::MainWindow()
     connect(d->borderColorBtn, SIGNAL(changed(const QColor&)),
             this, SLOT(slotUpdateTheme()));
 
-    connect(loadButton, SIGNAL(clicked()),
+    connect(this, SIGNAL(user2Clicked()),
             this, SLOT(slotLoad()));
 
-    connect(saveButton, SIGNAL(clicked()),
+    connect(this, SIGNAL(user1Clicked()),
             this, SLOT(slotSave()));
 
-    connect(closeButton, SIGNAL(clicked()),
+    connect(this, SIGNAL(closeClicked()),
             this, SLOT(close()));
 
     // ------------------------------------------------------------------------

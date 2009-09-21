@@ -30,6 +30,10 @@
 #include <QWidget>
 #include <QMap>
 
+// KDE includes
+
+#include <kdialog.h>
+
 class KComboBox;
 class QCheckBox;
 class QLabel;
@@ -45,7 +49,7 @@ class Theme;
 
 class MainWindowPriv;
 
-class MainWindow : public QWidget
+class MainWindow : public KDialog
 {
     Q_OBJECT
 
