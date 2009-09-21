@@ -178,6 +178,8 @@ void ImageAlbumModel::refresh()
     if (d->currentAlbum->isRoot())
         return;
 
+    startRefresh();
+
     startListJob(d->currentAlbum->databaseUrl());
 }
 
@@ -259,7 +261,8 @@ void ImageAlbumModel::slotResult(KJob* job)
         return;
     d->job = 0;
 
-    // can be called in any case even if refresh is not incremental
+    // either of the two
+    finishRefresh();
     finishIncrementalRefresh();
 
     if (job->error())

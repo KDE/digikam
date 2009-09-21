@@ -57,6 +57,7 @@ public:
         itemDrop           = true;
         dragDropHandler    = 0;
         incrementalUpdater = 0;
+        refreshing         = false;
         reAdding           = false;
         incrementalRefreshRequested = false;
     }
@@ -74,6 +75,7 @@ public:
                           filePathHash;
 
     QObject              *preprocessor;
+    bool                  refreshing;
     bool                  reAdding;
     bool                  incrementalRefreshRequested;
 
@@ -277,6 +279,7 @@ void ImageModel::clearImageInfos()
     d->filePathHash.clear();
     delete d->incrementalUpdater;
     d->incrementalUpdater = 0;
+    d->refreshing = false;
     d->reAdding = false;
     d->incrementalRefreshRequested = false;
     reset();
@@ -362,6 +365,33 @@ void ImageModel::reAddImageInfos(const QList<ImageInfo>& infos)
 void ImageModel::reAddingFinished()
 {
     d->reAdding = false;
+    checkStartIncrementalRefresh();
+}
+
+void ImageModel::startRefresh()
+{
+    d->refreshing = true;
+}
+
+void ImageModel::finishRefresh()
+{
+    d->refreshing = false;
+    checkStartIncrementalRefresh();
+}
+
+bool ImageModel::isRefreshing() const
+{
+    return d->refreshing;
+}
+
+void ImageModel::checkStartIncrementalRefresh()
+{
+    // For starting an incremental refresh we want a clear situation:
+    // Any remaining batches from non-incremental refreshing subclasses have been received in appendInfos(),
+    // any batches sent to preprocessor for re-adding have been re-added.
+    if (d->refreshing || d->reAdding)
+        return;
+
     if (d->incrementalRefreshRequested)
     {
         d->incrementalRefreshRequested = false;

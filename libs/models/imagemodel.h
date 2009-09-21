@@ -158,6 +158,13 @@ public:
     void setPreprocessor(QObject *processor);
     void unsetPreprocessor(QObject *processor);
 
+    /**
+     * Returns true if this model is currently refreshing.
+     * For a preprocessor this means that, although the preprocessor may currently have
+     * processed all it got, more batches are to be expected.
+     */
+    bool isRefreshing() const;
+
 Q_SIGNALS:
 
     /** Informs that ImageInfos will be added to the model.
@@ -188,6 +195,14 @@ public Q_SLOTS:
 
 protected:
 
+    /** Subclasses that add ImageInfos in batches shall call startRefresh()
+     *  when they start sending batches and finishRefresh() when they have finished.
+     *  No incremental refreshes will be started while listing.
+     *  A clearImageInfos() always stops listing, calling finishRefresh() is then not necessary.
+     */
+    void startRefresh();
+    void finishRefresh();
+
     /** As soon as the model is ready to start an incremental refresh, the signal
      *  readyForIncrementalRefresh() will be emitted. The signal will be emitted inline
      *  if the model is ready right now. */
@@ -214,6 +229,7 @@ private:
 
     void appendInfos(const QList<ImageInfo>& infos);
     void publiciseInfos(const QList<ImageInfo>& infos);
+    void checkStartIncrementalRefresh();
 
     ImageModelPriv *const d;
 };
