@@ -559,8 +559,12 @@ void ImageCategorizedView::rowsAboutToBeRemoved(const QModelIndex &parent, int s
         selected.merge(removed, QItemSelectionModel::Deselect);
         if (selected.isEmpty())
         {
-            selectionModel()->select(model()->index(start > 0 ? start - 1 : end + 1, 0),
-                                     QItemSelectionModel::SelectCurrent);
+            QModelIndex newCurrent;
+            if (end == model()->rowCount(parent) - 1)
+                newCurrent = model()->index(start - 1, 0); // last remaining, no next one left
+            else
+                newCurrent = model()->index(end + 1, 0); // next remaining
+            selectionModel()->select(newCurrent, QItemSelectionModel::SelectCurrent);
         }
     }
 }

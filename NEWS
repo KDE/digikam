@@ -31,7 +31,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 021 ==> 207882 : Manual: RAW decoder settings: 16 bit not clearly explained.
 022 ==> 208004 : Geolocation tool needs higher zoom levels.
 023 ==> 207293 : when showing whole collection status bar filters don't work.
-024 ==> 
+024 ==> 206670 : after deleting an image the image before the deleted image is displayed/selected instead of the image after the deleted one.
+025 ==> 
+
 
 
 *********************************************************************************************************
