@@ -274,7 +274,7 @@ void WelcomePageView::slotThemeChanged()
                              .arg(slogan)             // %5
                              .arg(infoPage());        // %6
 
-    //qDebug() << content << endl;
+//    kDebug(50003) << content;
 
     write(content);
     end();
