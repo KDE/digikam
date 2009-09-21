@@ -130,6 +130,7 @@ MainWindow::MainWindow()
     setButtonToolTip(User2, i18n("Load theme"));
     setButtonToolTip(User1, i18n("Save theme"));
     setButtonToolTip(Close, i18n("Close the theme designer"));
+    setDefaultButton(Close);
 
     // --------------------------------------------------------
 
@@ -142,7 +143,6 @@ MainWindow::MainWindow()
     d->theme = new Theme(*(ThemeEngine::instance()->getCurrentTheme()));
 
     // Actual views ------------------------------------------------
-
 
     QSplitter* splitter = new QSplitter(this);
     splitter->setOrientation(Qt::Horizontal);
