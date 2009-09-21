@@ -145,7 +145,7 @@ void StatusProgressBar::setProgressText(const QString& text)
     d->progressBar->update();
 }
 
-void StatusProgressBar::progressBarMode(int mode, const QString& text)
+void StatusProgressBar::progressBarMode(StatusProgressBarMode mode, const QString& text)
 {
     if (mode == TextMode)
     {
