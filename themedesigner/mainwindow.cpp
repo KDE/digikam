@@ -28,39 +28,31 @@
 // Qt includes
 
 #include <QCheckBox>
-#include <QDateTime>
 #include <QFileInfo>
-#include <QFrame>
 #include <QGridLayout>
 #include <QGroupBox>
-#include <QHBoxLayout>
 #include <QLabel>
-#include <QPushButton>
 #include <QSplitter>
-#include <QTextStream>
 #include <QVBoxLayout>
 
 // KDE includes
 
-#include <kapplication.h>
 #include <kcolorbutton.h>
-#include <kcolordialog.h>
 #include <kcombobox.h>
 #include <kfiledialog.h>
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kuser.h>
+#include <kstandardguiitem.h>
 
 // Local includes
 
 #include "albumsettings.h"
-#include "folderview.h"
 #include "folderitem.h"
-#include "themediconview.h"
+#include "folderview.h"
 #include "imagepropertiestab.h"
-#include "themeengine.h"
 #include "theme.h"
+#include "themediconview.h"
+#include "themeengine.h"
 
 namespace Digikam
 {
@@ -245,8 +237,8 @@ MainWindow::MainWindow()
     QGridLayout* mainLayout = new QGridLayout(this);
     mainLayout->setMargin(5);
     mainLayout->setSpacing(5);
-    mainLayout->addWidget(splitter,     0, 0, 1, 1);
-    mainLayout->addWidget(groupBox,     0, 1, 1, 1);
+    mainLayout->addWidget(splitter, 0, 0, 1, 1);
+    mainLayout->addWidget(groupBox, 0, 1, 1, 1);
     mainWidget->setLayout(mainLayout);
 
     setMainWidget(mainWidget);

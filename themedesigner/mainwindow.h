@@ -25,27 +25,12 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-// Qt includes
-
-#include <QWidget>
-#include <QMap>
-
 // KDE includes
 
 #include <kdialog.h>
 
-class KComboBox;
-class QCheckBox;
-class QLabel;
-class KColorButton;
-
 namespace Digikam
 {
-
-class ImagePropertiesTab;
-class FolderView;
-class ThemedIconView;
-class Theme;
 
 class MainWindowPriv;
 
