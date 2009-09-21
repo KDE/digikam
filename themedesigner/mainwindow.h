@@ -43,13 +43,15 @@ class FolderView;
 class ThemedIconView;
 class Theme;
 
+class MainWindowPriv;
+
 class MainWindow : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    enum PROPERTY 
+    enum PROPERTY
     {
         BASE = 0,
         REGULARTEXT,
@@ -63,14 +65,14 @@ public:
         LISTVIEWSELECTED
     };
 
-    enum BEVEL 
+    enum BEVEL
     {
         FLAT = 0,
         RAISED,
         SUNKEN
     };
 
-    enum GRADIENT 
+    enum GRADIENT
     {
         SOLID = 0,
         HORIZONTAL,
@@ -92,31 +94,7 @@ private Q_SLOTS:
 
 private:
 
-    QLabel             *m_bevelLabel;
-    QLabel             *m_gradientLabel;
-    QLabel             *m_begColorLabel;
-    QLabel             *m_endColorLabel;
-    QLabel             *m_borderColorLabel;
-
-    KComboBox          *m_propertyCombo;
-    KComboBox          *m_bevelCombo;
-    KComboBox          *m_gradientCombo;
-
-    QCheckBox          *m_addBorderCheck;
-
-    QMap<int,int>       m_bevelMap;
-    QMap<int,int>       m_bevelReverseMap;
-    QMap<int,int>       m_gradientMap;
-    QMap<int,int>       m_gradientReverseMap;
-
-    KColorButton       *m_endColorBtn;
-    KColorButton       *m_begColorBtn;
-    KColorButton       *m_borderColorBtn;
-
-    FolderView         *m_folderView;
-    ThemedIconView     *m_iconView;
-    ImagePropertiesTab *m_propView;
-    Theme              *m_theme;
+    MainWindowPriv* const d;
 };
 
 }  // namespace Digikam
