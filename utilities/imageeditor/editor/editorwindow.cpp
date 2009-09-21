@@ -934,13 +934,13 @@ void EditorWindow::applyStandardSettings()
     if (group.hasKey("SplitterState"))
     {
         // Read splitter state from config file
-    	QByteArray state;
-    	state = QByteArray::fromBase64(group.readEntry("SplitterState", state));
+        QByteArray state;
+        state = QByteArray::fromBase64(group.readEntry("SplitterState", state));
 
-    	// Do a cheap check: a splitter state with 3 windows is always 34 bytes.
-    	if (state.count() == 34)
-    	{
-    	    // Read the state in streamwise fashion.
+        // Do a cheap check: a splitter state with 3 windows is always 34 bytes.
+        if (state.count() == 34)
+        {
+            // Read the state in streamwise fashion.
             QDataStream stream(state);
 
             // The first 8 bytes are resp. the magic number and the version
@@ -957,7 +957,7 @@ void EditorWindow::applyStandardSettings()
                 stream >> sizesList;
                 if (sizesList.count() == 3)
                 {
-                    kDebug(50003) << "Found splitter based config, converting to dockbar" << endl;
+                    kDebug(50003) << "Found splitter based config, converting to dockbar";
                     // Remove the first entry (the thumbbar) and write the rest
                     // back. Then it should be fine.
                     sizesList.removeFirst();
@@ -972,7 +972,7 @@ void EditorWindow::applyStandardSettings()
                     group.writeEntry("SplitterState", newData.toBase64());
                 }
             }
-    	}
+        }
     }
     m_splitter->restoreState(group);
 
