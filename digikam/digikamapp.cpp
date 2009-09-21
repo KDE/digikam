@@ -1455,7 +1455,7 @@ void DigikamApp::slotSelectionChanged(int selectionCount)
     d->imageViewAction->setEnabled(selectionCount == 1);
     d->imagePreviewAction->setEnabled(selectionCount == 1);
     d->imageFindSimilarAction->setEnabled(selectionCount == 1);
-    d->imageRenameAction->setEnabled(selectionCount > 0);
+    d->imageRenameAction->setEnabled(selectionCount == 1);
     d->imageLightTableAction->setEnabled(selectionCount > 0);
     d->imageAddLightTableAction->setEnabled(selectionCount > 0);
     d->imageAddCurrentQueueAction->setEnabled(selectionCount > 0);
@@ -1478,7 +1478,7 @@ void DigikamApp::slotSelectionChanged(int selectionCount)
 
 void DigikamApp::slotProgressBarMode(int mode, const QString& text)
 {
-    d->statusProgressBar->progressBarMode((StatusProgressBar::StatusProgressBarMode)mode, text);
+    d->statusProgressBar->progressBarMode(mode, text);
 
     // Restore the text that we set for selection
     if (mode == StatusProgressBar::TextMode && text.isNull() && !d->statusBarSelectionText.isNull())

@@ -1576,7 +1576,7 @@ void DigikamView::slotImageAddToExistingQueue(int queueid)
 
 void DigikamView::slotImageRename()
 {
-    d->iconView->rename();
+    d->iconView->renameCurrent();
 }
 
 void DigikamView::slotImageDelete()
@@ -1782,7 +1782,7 @@ void DigikamView::slotCancelSlideShow()
 
 void DigikamView::toggleShowBar(bool b)
 {
-    d->albumWidgetStack->thumbBarDock()->showThumbBar(b);
+	d->albumWidgetStack->thumbBarDock()->showThumbBar(b);
 }
 
 void DigikamView::setRecurseAlbums(bool recursive)

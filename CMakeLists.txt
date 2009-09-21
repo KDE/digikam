@@ -1047,13 +1047,11 @@ ENDIF(MSVC)
     SET(libadvancedrename_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/advancedrenameinput.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/advancedrenamewidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/advancedrenamedialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/token.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/modifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/parser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/subparser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/parseresults.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/renamethread.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/defaultparser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/subparsers/filenameparser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/subparsers/metadataparser.cpp

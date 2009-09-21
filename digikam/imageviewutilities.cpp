@@ -107,24 +107,15 @@ void ImageViewUtilities::rename(const ImageInfo& renameInfo)
     QString newName = KInputDialog::getText(i18n("Rename Item (%1)",fi.fileName()),
                                             i18n("Enter new name (without extension):"),
                                             name, &ok, m_widget);
-
-    rename(renameInfo, newName);
-}
-
-void ImageViewUtilities::rename(const ImageInfo& renameInfo, const QString& newName)
-{
-    if (renameInfo.isNull() || newName.isEmpty())
+    if (!ok)
         return;
-
-    QFileInfo fi(renameInfo.name());
-    QString ext = QString(".") + fi.suffix();
 
     KIO::CopyJob* job = DIO::rename(renameInfo, newName + ext);
 
     connect(job, SIGNAL(result(KJob*)),
             this, SLOT(slotDIOResult(KJob*)));
 
-    connect(job, SIGNAL(copyingDone(KIO::Job *, const KUrl &, const KUrl &, time_t, bool, bool)),
+    connect(job, SIGNAL(copyingDone(KIO::Job *, const KUrl &, const KUrl &, bool, bool)),
             this, SLOT(slotRenamed(KIO::Job*, const KUrl &, const KUrl&)));
 }
 
@@ -139,8 +130,6 @@ void ImageViewUtilities::slotRenamed(KIO::Job*, const KUrl &, const KUrl&newURL)
     ThumbnailLoadThread::deleteThumbnail(fileURL.toLocalFile());
     // clean LoadingCache as well - be pragmatic, do it here.
     LoadingCacheInterface::fileChanged(fileURL.toLocalFile());
-
-    emit imageRenamed();
 }
 
 void ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos, bool deletePermanently)
