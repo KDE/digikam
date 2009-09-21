@@ -4,6 +4,7 @@ digiKam 1.0.0-beta5 - Release date: 2009-09-xx
 NEW FEATURES:
 
 General        : Metadata fields can be used for renaming in BQM and CameraUI.
+ImageEditor    : New menu option to switch image color space quickly.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -28,7 +29,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 019 ==> 204480 : Unable to access albums on drives other than C:.
 020 ==> 154463 : Autorename while transferring pictures from cam to PC adds lots of '0'.
 021 ==> 207882 : Manual: RAW decoder settings: 16 bit not clearly explained.
-022 ==> 
+022 ==> 208004 : Geolocation tool needs higher zoom levels.
+023 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta4 - Release date: 2009-08-30
