@@ -143,30 +143,35 @@ QString AdvancedRenameWidget::parse(ParseInformation& info) const
 
 void AdvancedRenameWidget::createToolTip()
 {
-#define TOOLTIP_HEADER(str)                                                              \
-    do                                                                                   \
-    {                                                                                    \
-        tooltip += QString("<tr bgcolor=\"%1\"><td colspan=\"2\">"                       \
-                            "<nobr><font color=\"%2\"><center><b>")                      \
-                            .arg(ThemeEngine::instance()->baseColor().name())            \
-                            .arg(ThemeEngine::instance()->textRegColor().name());        \
-        tooltip += QString(str);                                                         \
-        tooltip += QString("</b></center></font></nobr></td></tr>");                     \
-    } while (0)                                                                          \
+#define TOOLTIP_HEADER(str)                                                                     \
+    do                                                                                          \
+    {                                                                                           \
+        tooltip += QString("<tr bgcolor=\"%1\"><td colspan=\"2\">"                              \
+                           "<nobr><font color=\"%2\"><center><b>")                              \
+                           .arg(ThemeEngine::instance()->baseColor().name())                    \
+                           .arg(ThemeEngine::instance()->textRegColor().name());                \
+        tooltip += QString(str);                                                                \
+        tooltip += QString("</b></center></font></nobr></td></tr>");                            \
+    } while (0)                                                                                 \
 
 
-#define TOOLTIP_ENTRIES(type, data)                                                      \
-    do                                                                                   \
-    {                                                                                    \
-        foreach (type* t, data)                                                          \
-        {                                                                                \
-            foreach (Token* token, t->tokens())                                          \
-            {                                                                            \
-                tooltip += QString("<tr><td><b>%1</b></td><td>: %2</td></tr>")           \
-                                            .arg(token->id())                            \
-                                            .arg(token->description());                  \
-            }                                                                            \
-        }                                                                                \
+#define TOOLTIP_ENTRIES(type, data)                                                             \
+    do                                                                                          \
+    {                                                                                           \
+        foreach (type* t, data)                                                                 \
+        {                                                                                       \
+            foreach (Token* token, t->tokens())                                                 \
+            {                                                                                   \
+                tooltip += QString("<tr>"                                                       \
+                                   "<td bgcolor=\"%1\">"                                        \
+                                       "<font color=\"%2\"><b>&nbsp;%3&nbsp;</b></font></td>"   \
+                                   "<td>&nbsp;%4&nbsp;</td></tr>")                              \
+                                   .arg(ThemeEngine::instance()->baseColor().name())            \
+                                   .arg(ThemeEngine::instance()->textRegColor().name())         \
+                                   .arg(token->id())                                            \
+                                   .arg(token->description());                                  \
+            }                                                                                   \
+        }                                                                                       \
     } while (0)
 
     // --------------------------------------------------------
@@ -181,6 +186,8 @@ void AdvancedRenameWidget::createToolTip()
 
     TOOLTIP_HEADER(i18n("Renaming Options"));
     TOOLTIP_ENTRIES(SubParser, d->parser->subParsers());
+
+    tooltip += QString("<tr></tr>");
 
     TOOLTIP_HEADER(i18n("Modifiers"));
     TOOLTIP_ENTRIES(Modifier, d->parser->modifiers());
