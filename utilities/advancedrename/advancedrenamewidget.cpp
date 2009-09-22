@@ -49,6 +49,7 @@
 #include "dcursortracker.h"
 #include "defaultparser.h"
 #include "advancedrenameinput.h"
+#include "themeengine.h"
 
 namespace Digikam
 {
@@ -142,13 +143,16 @@ QString AdvancedRenameWidget::parse(ParseInformation& info) const
 
 void AdvancedRenameWidget::createToolTip()
 {
-#define TOOLTIP_HEADER(str)                                         \
-    do                                                              \
-    {                                                               \
-        tooltip += QString("<p>");                                  \
-        tooltip += QString("<b><i>%1</i></b>").arg(str.toUpper());  \
-        tooltip += QString("</p>");                                 \
-    } while (0)
+#define TOOLTIP_HEADER(str)                                                          \
+    do                                                                               \
+    {                                                                                \
+        tooltip += QString("<tr bgcolor=\"%1\"><td colspan=\"2\">"                   \
+                            "<nobr><font color=\"%2\"><center><b>")                  \
+                            .arg(ThemeEngine::instance()->baseColor().name())        \
+                            .arg(ThemeEngine::instance()->textRegColor().name());    \
+        tooltip += QString(str);                                                     \
+        tooltip += QString("</b></center></font></nobr></td></tr>");                 \
+    } while (0)                                                                      \
 
 
 #define TOOLTIP_ENTRIES(type, data)                                                  \
@@ -156,7 +160,7 @@ void AdvancedRenameWidget::createToolTip()
     {                                                                                \
         foreach (type* t, data)                                                      \
         {                                                                            \
-            tooltip += QString("<tr><td><b>%1</b></td><td>:</td><td>%2</td></tr>")   \
+            tooltip += QString("<tr><td><b>%1</b></td><td>: %2</td></tr>")           \
                                         .arg(t->id())                                \
                                         .arg(t->description());                      \
         }                                                                            \
@@ -168,38 +172,30 @@ void AdvancedRenameWidget::createToolTip()
         d->tooltipTracker->setText(QString());
 
     QString tooltip;
+    tooltip += QString("<qt><table cellspacing=\"0\" cellpadding=\"0\" border=\"0\">");
 
     // --------------------------------------------------------
 
     if (!d->parser->subParsers().isEmpty())
     {
-        tooltip += QString("<p><table>");
+        TOOLTIP_HEADER(i18n("Renaming Options"));
         foreach (SubParser* subparser, d->parser->subParsers())
         {
             TOOLTIP_ENTRIES(Token, subparser->tokens());
         }
-        tooltip += QString("</table></p>");
     }
-
-    // --------------------------------------------------------
-
-    tooltip += QString("<i>%1</i>").arg(d->parserLineEdit->input()->toolTip());
 
     // --------------------------------------------------------
 
     if (!d->parser->modifiers().isEmpty())
     {
         TOOLTIP_HEADER(i18n("Modifiers"));
-
-        tooltip += QString("<p><table>");
         TOOLTIP_ENTRIES(Modifier, d->parser->modifiers());
-        tooltip += QString("</table></p>");
-
-        tooltip += QString("<i><p>%1</p></i>").arg(i18n("Modifiers can be applied to each token, to change the "
-                                                        "parse results individually."));
     }
-
     // --------------------------------------------------------
+
+    tooltip += QString("</table></qt>");
+    tooltip += QString("<i>%1</i>").arg(d->parserLineEdit->input()->toolTip());
 
     d->tooltipTracker->setText(tooltip);
 
@@ -342,6 +338,7 @@ void AdvancedRenameWidget::setupWidgets()
 
     delete d->tooltipTracker;
     d->tooltipTracker = new DTipTracker(QString(), d->parserLineEdit, Qt::AlignLeft);
+    d->tooltipTracker->setTextFormat(Qt::RichText);
     d->tooltipTracker->setEnable(false);
     d->tooltipTracker->setKeepOpen(true);
     d->tooltipTracker->setOpenExternalLinks(true);
