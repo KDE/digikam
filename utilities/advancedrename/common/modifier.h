@@ -28,38 +28,30 @@
 
 #include <QList>
 #include <QString>
-#include <QRegExp>
+
+// Local includes
+
+#include "parseobject.h"
 
 class  QAction;
 
 namespace Digikam
 {
 
-class ModifierPriv;
-
-class Modifier
+class Modifier : public ParseObject
 {
+    Q_OBJECT
+
 public:
 
-    Modifier(const QString& id, const QString& alias, const QString& description);
+    Modifier(const QString& name, const QIcon& icon = QIcon());
     virtual ~Modifier() {};
 
-    QString id()          const;
-    QString alias()       const;
-    QString description() const;
-
-    QRegExp regExp()      const;
-    void    setRegExp(const QString& regExp);
-
-    QString modify(const QString& parseString, const QString& result);
+    virtual QString modify(const QString& parseString, const QString& result);
 
 protected:
 
     virtual QString modifyOperation(const QString& parseString, const QString& result) = 0;
-
-private:
-
-    ModifierPriv* const d;
 };
 
 typedef QList<Modifier*> ModifierList;

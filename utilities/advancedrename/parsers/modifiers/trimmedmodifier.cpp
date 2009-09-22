@@ -31,8 +31,11 @@ namespace Digikam
 {
 
 TrimmedModifier::TrimmedModifier()
-               : Modifier(QString("!"), i18n("Trimmed"), i18n("remove leading, trailing and extra whitespace"))
+               : Modifier(i18n("Trimmed"))
 {
+    addToken(QString("!"), i18n("Trimmed"), i18n("remove leading, trailing and extra whitespace"));
+
+    setRegExp("\\!");
 }
 
 QString TrimmedModifier::modifyOperation(const QString& parseString, const QString& result)

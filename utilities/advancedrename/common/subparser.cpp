@@ -24,21 +24,11 @@
 #include "subparser.h"
 #include "subparser.moc"
 
-// Qt includes
-
-#include <QAction>
-#include <QHBoxLayout>
-#include <QMenu>
-#include <QPushButton>
-#include <QWidget>
-
 // KDE includes
 
-#include <kdialog.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <knuminput.h>
-#include <kdebug.h>
+//#include <kdebug.h>
 
 // Local includes
 
@@ -58,32 +48,19 @@ public:
 
     SubParserPriv()
     {
-        buttonRegistered = false;
-        menuRegistered   = false;
-        useTokenMenu     = true;
-        useModifiers     = true;
+        useModifiers = true;
     }
 
-    bool         buttonRegistered;
-    bool         menuRegistered;
-    bool         useTokenMenu;
     bool         useModifiers;
 
-    QString      name;
-    QIcon        icon;
-
-    TokenList    tokens;
     ParseResults parseResults;
     ParseResults modifierResults;
     ModifierList modifiers;
 };
 
 SubParser::SubParser(const QString& name, const QIcon& icon)
-      : QObject(0), d(new SubParserPriv)
+         : ParseObject(name, icon), d(new SubParserPriv)
 {
-    d->name = name;
-    d->icon = icon;
-
     registerModifier(new LowerCaseModifier());
     registerModifier(new UpperCaseModifier());
     registerModifier(new FirstLetterEachWordUpperCaseModifier());
@@ -94,18 +71,12 @@ SubParser::SubParser(const QString& name, const QIcon& icon)
 
 SubParser::~SubParser()
 {
-    foreach (Token* token, d->tokens)
-    {
-        delete token;
-    }
-
     foreach (Modifier* modifier, d->modifiers)
     {
         delete modifier;
     }
 
     d->modifiers.clear();
-    d->tokens.clear();
 }
 
 void SubParser::registerModifier(Modifier* modifier)
@@ -113,111 +84,10 @@ void SubParser::registerModifier(Modifier* modifier)
     if (!modifier)
         return;
 
+    if (!modifier->isValid())
+        return;
+
     d->modifiers.append(modifier);
-}
-
-QPushButton* SubParser::createButton(const QString& name, const QIcon& icon)
-{
-    const int maxHeight = 28;
-
-    QPushButton* button = new QPushButton;
-    button->setText(name);
-    button->setIcon(icon);
-    button->setMinimumHeight(maxHeight);
-    button->setMaximumHeight(maxHeight);
-
-    return button;
-}
-
-QPushButton* SubParser::registerButton(QWidget* parent)
-{
-    QPushButton* button = 0;
-    button = createButton(d->name, d->icon);
-
-    QList<QAction*> actions;
-
-    if (d->tokens.count() > 1 && d->useTokenMenu)
-    {
-        QMenu* menu = new QMenu(button);
-
-        foreach (Token* token, d->tokens)
-        {
-            actions << token->action();
-        }
-
-        menu->addActions(actions);
-        button->setMenu(menu);
-    }
-    else
-    {
-        Token* token = d->tokens.first();
-        connect(button, SIGNAL(clicked()),
-                token, SLOT(slotTriggered()));
-
-    }
-    button->setParent(parent);
-
-    d->buttonRegistered = button ? true : false;
-    return button;
-}
-
-QAction* SubParser::registerMenu(QMenu* parent)
-{
-    QAction* action = 0;
-    QList<QAction*> actions;
-
-    if (d->tokens.count() > 1 && d->useTokenMenu)
-    {
-        QMenu* menu = new QMenu(parent);
-
-        foreach (Token* token, d->tokens)
-        {
-            actions << token->action();
-        }
-
-        menu->addActions(actions);
-        action = parent->addMenu(menu);
-    }
-    else
-    {
-        action = d->tokens.first()->action();
-        parent->insertAction(0, action);
-    }
-
-    if (action)
-    {
-        action->setText(d->name);
-        action->setIcon(d->icon);
-        d->menuRegistered = true;
-    }
-
-    return action;
-}
-
-bool SubParser::addToken(const QString& id, const QString& name, const QString& description)
-{
-    if (id.isEmpty() || name.isEmpty() || description.isEmpty())
-        return false;
-
-    Token* token = new Token(id, name, description);
-    if (!token)
-        return false;
-
-    connect(token, SIGNAL(signalTokenTriggered(const QString&)),
-            this, SLOT(slotTokenTriggered(const QString&)));
-
-    d->tokens << token;
-    return true;
-}
-
-void SubParser::setUseTokenMenu(bool value)
-{
-    d->useTokenMenu = value;
-}
-
-bool SubParser::useTokenMenu() const
-{
-    return d->useTokenMenu;
 }
 
 void SubParser::setUseModifiers(bool value)
@@ -230,34 +100,13 @@ bool SubParser::useModifiers() const
     return d->useModifiers;
 }
 
-TokenList SubParser::tokens() const
-{
-    return d->tokens;
-}
-
 ModifierList SubParser::modifiers() const
 {
     return d->modifiers;
 }
 
-void SubParser::slotTokenTriggered(const QString& token)
-{
-    emit signalTokenTriggered(token);
-}
-
-bool SubParser::stringIsValid(const QString& str)
-{
-    QRegExp invalidString("^\\s*$");
-    if (str.isEmpty() || invalidString.exactMatch(str))
-        return false;
-    return true;
-}
-
 void SubParser::parse(const QString& parseString, const ParseInformation& info)
 {
-    if (!stringIsValid(parseString))
-        return;
-
     d->parseResults.clear();
     d->modifierResults.clear();
 
@@ -359,28 +208,6 @@ ParseResults SubParser::applyModifiers(const QString& parseString, ParseResults&
         }
     }
     return tmp;
-}
-
-bool SubParser::tokenAtPosition(ParseResults& results, int pos)
-{
-    int start;
-    int length;
-    return tokenAtPosition(results, pos, start, length);
-}
-
-bool SubParser::tokenAtPosition(ParseResults& results, int pos, int& start, int& length)
-{
-    bool found = false;
-
-    ParseResults::ResultsKey key = results.keyAtApproximatePosition(pos);
-    start  = key.first;
-    length = key.second;
-
-    if ((pos >= start) && (pos <= start + length))
-    {
-        found = true;
-    }
-    return found;
 }
 
 } // namespace Digikam

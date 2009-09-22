@@ -31,8 +31,11 @@ namespace Digikam
 {
 
 LowerCaseModifier::LowerCaseModifier()
-                 : Modifier(QString("%"), i18n("Lowercase"), i18n("convert to lowercase"))
+                 : Modifier(i18n("Lowercase"))
 {
+    addToken(QString("%"), i18n("Lowercase"), i18n("convert to lowercase"));
+
+    setRegExp("\\%");
 }
 
 QString LowerCaseModifier::modifyOperation(const QString& parseString, const QString& result)

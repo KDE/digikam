@@ -156,6 +156,8 @@ MetadataParser::MetadataParser()
 {
     addToken("[meta:<i>keycode</i>]", i18n("Metadata"),
              i18n("add metadata (use the quick access dialog for keycodes)"));
+
+    setRegExp("\\[meta:\\s*(.*)\\s*\\s*\\]");
 }
 
 void MetadataParser::slotTokenTriggered(const QString& token)
@@ -188,22 +190,22 @@ void MetadataParser::slotTokenTriggered(const QString& token)
 
 void MetadataParser::parseOperation(const QString& parseString, const ParseInformation& info, ParseResults& results)
 {
-    QRegExp regExp("\\[meta:\\s*(.*)\\s*\\s*\\]");
-    regExp.setMinimal(true);
+    QRegExp reg = regExp();
+    reg.setMinimal(true);
 
     // --------------------------------------------------------
 
     QString tmp;
-    PARSE_LOOP_START(parseString, regExp)
+    PARSE_LOOP_START(parseString, reg)
     {
-        QString keyword = regExp.cap(1);
+        QString keyword = reg.cap(1);
 #if KEXIV2_VERSION >= 0x010000
         tmp = parseMetadata(keyword, info);
 #else
         Q_UNUSED(info)
 #endif
     }
-    PARSE_LOOP_END(parseString, regExp, tmp, results)
+    PARSE_LOOP_END(parseString, reg, tmp, results)
 }
 
 QString MetadataParser::parseMetadata(const QString& token, const ParseInformation& info)

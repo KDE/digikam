@@ -190,7 +190,10 @@ void AdvancedRenameWidget::createToolTip()
     if (!d->parser->modifiers().isEmpty())
     {
         TOOLTIP_HEADER(i18n("Modifiers"));
-        TOOLTIP_ENTRIES(Modifier, d->parser->modifiers());
+        foreach (Modifier* modifier, d->parser->modifiers())
+        {
+            TOOLTIP_ENTRIES(Token, modifier->tokens());
+        }
     }
     // --------------------------------------------------------
 

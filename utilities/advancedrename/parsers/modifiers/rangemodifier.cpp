@@ -31,9 +31,14 @@ namespace Digikam
 {
 
 RangeModifier::RangeModifier()
-             : Modifier(QString("{<i>start</i>-<i>stop</i>}"), i18n("Range"),
-                        i18n("display only a specific range (if stop is omitted, move to end of the string)"))
+             : Modifier(i18n("Range"))
 {
+    addToken(QString("{<i>index</i>}"), i18n("Index"),
+             i18n("extract the character at the given index"));
+
+    addToken(QString("{<i>from</i> - <i>to</i>}"), i18n("Range"),
+             i18n("extract a specific range ('<i>to'</i> = end of string, if omitted)"));
+
     setRegExp("\\{\\s*(\\d+)\\s*(-\\s*((-1|\\d+)\\s*)?)?\\}");
 }
 

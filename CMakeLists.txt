@@ -1049,6 +1049,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/advancedrenamewidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/token.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/modifier.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/parseobject.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/parser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/subparser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/parseresults.cpp

@@ -29,6 +29,10 @@
 #include <kiconloader.h>
 #include <klocale.h>
 
+// Local includes
+
+#include "parser.h"
+
 namespace Digikam
 {
 
@@ -36,23 +40,23 @@ CameraNameParser::CameraNameParser()
                 : SubParser(i18n("Camera Name"), SmallIcon("camera-photo"))
 {
     addToken("[cam]", i18n("Camera Name"), i18n("camera name"));
+
+    setRegExp("\\[cam\\]");
 }
 
 void CameraNameParser::parseOperation(const QString& parseString, const ParseInformation& info, ParseResults& results)
 {
-    QString cameraName = info.cameraName;
-
-    QRegExp regExp("\\[cam\\]");
-    regExp.setCaseSensitivity(Qt::CaseInsensitive);
+    QRegExp reg = regExp();
+    reg.setCaseSensitivity(Qt::CaseInsensitive);
 
     // --------------------------------------------------------
 
     QString tmp;
-    PARSE_LOOP_START(parseString, regExp)
+    PARSE_LOOP_START(parseString, reg)
     {
-        tmp = stringIsValid(cameraName) ? cameraName : QString();
+        tmp = Parser::stringIsValid(info.cameraName) ? info.cameraName : QString();
     }
-    PARSE_LOOP_END(parseString, regExp, tmp, results)
+    PARSE_LOOP_END(parseString, reg, tmp, results)
 }
 
 } // namespace Digikam

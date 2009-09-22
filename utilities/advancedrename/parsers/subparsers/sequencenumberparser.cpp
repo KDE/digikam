@@ -133,6 +133,7 @@ SequenceNumberParser::SequenceNumberParser()
     addToken("#{<i>start</i>,<i>step</i>}", i18n("Sequence Number (start, step)"),
              i18n( "sequence number (custom start + step)"));
 
+    setRegExp("(#+)(\\{\\s*(\\d+)\\s*,?\\s*(\\d+)*\\s*\\})?");
 }
 
 void SequenceNumberParser::slotTokenTriggered(const QString& token)
@@ -169,7 +170,7 @@ void SequenceNumberParser::slotTokenTriggered(const QString& token)
 
 void SequenceNumberParser::parseOperation(const QString& parseString, const ParseInformation& info, ParseResults& results)
 {
-    QRegExp regExp("(#+)(\\{\\s*(\\d+)\\s*,?\\s*(\\d+)*\\s*\\})?");
+    QRegExp reg = regExp();
     int slength = 0;
     int start   = 0;
     int step    = 0;
@@ -179,16 +180,16 @@ void SequenceNumberParser::parseOperation(const QString& parseString, const Pars
     // --------------------------------------------------------
 
     QString tmp;
-    PARSE_LOOP_START(parseString, regExp)
+    PARSE_LOOP_START(parseString, reg)
     {
-        slength = regExp.cap(1).length();
-        start   = regExp.cap(3).isEmpty() ? 1 : regExp.cap(3).toInt();
-        step    = regExp.cap(4).isEmpty() ? 1 : regExp.cap(4).toInt();
+        slength = reg.cap(1).length();
+        start   = reg.cap(3).isEmpty() ? 1 : reg.cap(3).toInt();
+        step    = reg.cap(4).isEmpty() ? 1 : reg.cap(4).toInt();
 
         number = start + ((index - 1) * step);
         tmp    = QString("%1").arg(number, slength, 10, QChar('0'));
     }
-    PARSE_LOOP_END(parseString, regExp, tmp, results)
+    PARSE_LOOP_END(parseString, reg, tmp, results)
 }
 
 } // namespace Digikam

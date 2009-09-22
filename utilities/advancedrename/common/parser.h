@@ -63,6 +63,13 @@ public:
     bool          tokenModifierAtPosition(const QString& parseString, int pos);
     bool          tokenModifierAtPosition(const QString& parseString, int pos, int& start, int& length);
 
+    /**
+     * check if the given parse string is valid
+     * @param str the parse string
+     * @return true if valid / can be parsed
+     */
+    static bool stringIsValid(const QString& str);
+
 protected:
 
     void registerSubParser(SubParser* parser);

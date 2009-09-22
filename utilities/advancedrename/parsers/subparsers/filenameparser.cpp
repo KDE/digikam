@@ -41,6 +41,8 @@ FilenameParser::FilenameParser()
 {
     addToken("[file]", i18nc("image filename", "Filename"),
              i18n("image filename"));
+
+    setRegExp("\\[file\\]");
 }
 
 void FilenameParser::parseOperation(const QString& parseString, const ParseInformation& info, ParseResults& results)
@@ -48,17 +50,17 @@ void FilenameParser::parseOperation(const QString& parseString, const ParseInfor
     QFileInfo fi(info.filePath);
     QString baseFileName = fi.baseName();
 
-    QRegExp regExp("\\[file\\]");
-    regExp.setCaseSensitivity(Qt::CaseInsensitive);
+    QRegExp reg = regExp();
+    reg.setCaseSensitivity(Qt::CaseInsensitive);
 
     // --------------------------------------------------------
 
     QString tmp;
-    PARSE_LOOP_START(parseString, regExp)
+    PARSE_LOOP_START(parseString, reg)
     {
         tmp = baseFileName;
     }
-    PARSE_LOOP_END(parseString, regExp, tmp, results)
+    PARSE_LOOP_END(parseString, reg, tmp, results)
 }
 
 } // namespace Digikam

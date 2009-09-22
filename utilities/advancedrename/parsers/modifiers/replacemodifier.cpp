@@ -31,8 +31,10 @@ namespace Digikam
 {
 
 ReplaceModifier::ReplaceModifier()
-               : Modifier(QString("{\"<i>old</i>\", \"<i>new</i>\"}"), i18n("Replace"), i18n("replace text"))
+               : Modifier(i18n("Replace"))
 {
+    addToken(QString("{\"<i>old</i>\", \"<i>new</i>\"}"), i18n("Replace"), i18n("replace text"));
+
     setRegExp("\\{\\s*\"(.+)\"\\s*,\\s*\"(.*)\"\\s*\\}");
 }
 

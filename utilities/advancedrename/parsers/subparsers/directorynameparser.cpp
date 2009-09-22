@@ -48,6 +48,8 @@ DirectoryNameParser::DirectoryNameParser()
     addToken("[dir.]", i18nc("directory name", "Parent Directory Name"),
             i18n("directory name of the parent, additional '.' characters move up "
                  "in the directory hierarchy"));
+
+    setRegExp("\\[dir(\\.*)\\]");
 }
 
 void DirectoryNameParser::parseOperation(const QString& parseString, const ParseInformation& info, ParseResults& results)
@@ -55,17 +57,17 @@ void DirectoryNameParser::parseOperation(const QString& parseString, const Parse
     QFileInfo fi(info.filePath);
     QStringList folders = fi.absolutePath().split('/', QString::SkipEmptyParts);
 
-    QRegExp regExp("\\[dir(\\.*)\\]");
-    regExp.setMinimal(true);
+    QRegExp reg = regExp();
+    reg.setMinimal(true);
 
     int folderCount = folders.count();
 
     // --------------------------------------------------------
 
     QString tmp;
-    PARSE_LOOP_START(parseString, regExp)
+    PARSE_LOOP_START(parseString, reg)
     {
-        int matchedLength = regExp.cap(1).length();
+        int matchedLength = reg.cap(1).length();
 
         if (matchedLength == 0)
             tmp = folders.last();
@@ -74,7 +76,7 @@ void DirectoryNameParser::parseOperation(const QString& parseString, const Parse
         else
             tmp = folders[folderCount - matchedLength - 1];
     }
-    PARSE_LOOP_END(parseString, regExp, tmp, results)
+    PARSE_LOOP_END(parseString, reg, tmp, results)
 }
 
 } // namespace Digikam

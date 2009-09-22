@@ -31,8 +31,11 @@ namespace Digikam
 {
 
 UpperCaseModifier::UpperCaseModifier()
-                 : Modifier(QString("&"), i18n("Uppercase"), i18n("convert to uppercase"))
+                 : Modifier(i18n("Uppercase"))
 {
+    addToken(QString("&"), i18n("Uppercase"), i18n("convert to uppercase"));
+
+    setRegExp("\\&");
 }
 
 QString UpperCaseModifier::modifyOperation(const QString& parseString, const QString& result)

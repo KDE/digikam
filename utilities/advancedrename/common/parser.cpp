@@ -56,6 +56,14 @@ Parser::~Parser()
     d->subparsers.clear();
 }
 
+bool Parser::stringIsValid(const QString& str)
+{
+    QRegExp invalidString("^\\s*$");
+    if (str.isEmpty() || invalidString.exactMatch(str))
+        return false;
+    return true;
+}
+
 SubParserList Parser::subParsers() const
 {
     return d->subparsers;
@@ -74,6 +82,9 @@ ModifierList Parser::modifiers() const
 void Parser::registerSubParser(SubParser* parser)
 {
     if (!parser)
+        return;
+
+    if (!parser->isValid())
         return;
 
     d->subparsers.append(parser);
@@ -106,7 +117,7 @@ QString Parser::parse(const QString& parseString, ParseInformation& info)
 QString Parser::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results,
                                bool replace)
 {
-    if (!SubParser::stringIsValid(parseString))
+    if (!stringIsValid(parseString))
     {
         QFileInfo fi(info.filePath);
         QString baseName = fi.baseName();

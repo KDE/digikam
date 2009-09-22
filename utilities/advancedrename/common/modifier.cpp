@@ -22,59 +22,14 @@
  * ============================================================ */
 
 #include "modifier.h"
+#include "modifier.moc"
 
 namespace Digikam
 {
 
-class ModifierPriv
+Modifier::Modifier(const QString& name, const QIcon& icon)
+        : ParseObject(name, icon)
 {
-public:
-
-    ModifierPriv()
-    {
-    }
-
-    QString id;
-    QString alias;
-    QString description;
-    QRegExp regExp;
-};
-
-// --------------------------------------------------------
-
-Modifier::Modifier(const QString& id, const QString& alias, const QString& description)
-        : d(new ModifierPriv)
-{
-    d->id          = id;
-    d->alias       = alias;
-    d->description = description;
-}
-
-QString Modifier::id() const
-{
-    return d->id;
-}
-
-QString Modifier::alias() const
-{
-    return d->alias;
-}
-
-QString Modifier::description() const
-{
-    return d->description;
-}
-
-QRegExp Modifier::regExp() const
-{
-    if (d->regExp.isEmpty() || !d->regExp.isValid())
-        return QRegExp(d->id);
-    return d->regExp;
-}
-
-void Modifier::setRegExp(const QString& regExp)
-{
-    d->regExp = QRegExp(regExp);
 }
 
 QString Modifier::modify(const QString& parseString, const QString& result)
