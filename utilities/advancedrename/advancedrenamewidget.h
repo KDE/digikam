@@ -31,8 +31,6 @@
 
 // Local includes
 
-#include "digikam_export.h"
-
 class QDateTime;
 class QAction;
 
@@ -45,7 +43,7 @@ class ParseInformation;
 class Parser;
 class AdvancedRenameWidgetPriv;
 
-class DIGIKAM_EXPORT AdvancedRenameWidget : public QWidget
+class AdvancedRenameWidget : public QWidget
 {
     Q_OBJECT
 

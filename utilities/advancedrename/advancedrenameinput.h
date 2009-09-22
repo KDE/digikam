@@ -34,8 +34,6 @@
 
 // Local includes
 
-#include "digikam_export.h"
-
 class QMouseEvent;
 class QFocusEvent;
 
@@ -102,7 +100,7 @@ private:
 
 class AdvancedRenameInputPriv;
 
-class DIGIKAM_EXPORT AdvancedRenameInput : public QWidget
+class AdvancedRenameInput : public QWidget
 {
     Q_OBJECT
 
