@@ -143,27 +143,30 @@ QString AdvancedRenameWidget::parse(ParseInformation& info) const
 
 void AdvancedRenameWidget::createToolTip()
 {
-#define TOOLTIP_HEADER(str)                                                          \
-    do                                                                               \
-    {                                                                                \
-        tooltip += QString("<tr bgcolor=\"%1\"><td colspan=\"2\">"                   \
-                            "<nobr><font color=\"%2\"><center><b>")                  \
-                            .arg(ThemeEngine::instance()->baseColor().name())        \
-                            .arg(ThemeEngine::instance()->textRegColor().name());    \
-        tooltip += QString(str);                                                     \
-        tooltip += QString("</b></center></font></nobr></td></tr>");                 \
-    } while (0)                                                                      \
+#define TOOLTIP_HEADER(str)                                                              \
+    do                                                                                   \
+    {                                                                                    \
+        tooltip += QString("<tr bgcolor=\"%1\"><td colspan=\"2\">"                       \
+                            "<nobr><font color=\"%2\"><center><b>")                      \
+                            .arg(ThemeEngine::instance()->baseColor().name())            \
+                            .arg(ThemeEngine::instance()->textRegColor().name());        \
+        tooltip += QString(str);                                                         \
+        tooltip += QString("</b></center></font></nobr></td></tr>");                     \
+    } while (0)                                                                          \
 
 
-#define TOOLTIP_ENTRIES(type, data)                                                  \
-    do                                                                               \
-    {                                                                                \
-        foreach (type* t, data)                                                      \
-        {                                                                            \
-            tooltip += QString("<tr><td><b>%1</b></td><td>: %2</td></tr>")           \
-                                        .arg(t->id())                                \
-                                        .arg(t->description());                      \
-        }                                                                            \
+#define TOOLTIP_ENTRIES(type, data)                                                      \
+    do                                                                                   \
+    {                                                                                    \
+        foreach (type* t, data)                                                          \
+        {                                                                                \
+            foreach (Token* token, t->tokens())                                          \
+            {                                                                            \
+                tooltip += QString("<tr><td><b>%1</b></td><td>: %2</td></tr>")           \
+                                            .arg(token->id())                            \
+                                            .arg(token->description());                  \
+            }                                                                            \
+        }                                                                                \
     } while (0)
 
     // --------------------------------------------------------
@@ -176,25 +179,12 @@ void AdvancedRenameWidget::createToolTip()
 
     // --------------------------------------------------------
 
-    if (!d->parser->subParsers().isEmpty())
-    {
-        TOOLTIP_HEADER(i18n("Renaming Options"));
-        foreach (SubParser* subparser, d->parser->subParsers())
-        {
-            TOOLTIP_ENTRIES(Token, subparser->tokens());
-        }
-    }
+    TOOLTIP_HEADER(i18n("Renaming Options"));
+    TOOLTIP_ENTRIES(SubParser, d->parser->subParsers());
 
-    // --------------------------------------------------------
+    TOOLTIP_HEADER(i18n("Modifiers"));
+    TOOLTIP_ENTRIES(Modifier, d->parser->modifiers());
 
-    if (!d->parser->modifiers().isEmpty())
-    {
-        TOOLTIP_HEADER(i18n("Modifiers"));
-        foreach (Modifier* modifier, d->parser->modifiers())
-        {
-            TOOLTIP_ENTRIES(Token, modifier->tokens());
-        }
-    }
     // --------------------------------------------------------
 
     tooltip += QString("</table></qt>");
