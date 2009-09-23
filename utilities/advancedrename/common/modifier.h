@@ -26,6 +26,7 @@
 
 // Qt includes
 
+#include <QIcon>
 #include <QList>
 #include <QString>
 

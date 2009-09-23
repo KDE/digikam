@@ -29,14 +29,11 @@
 #include <QMouseEvent>
 #include <QFocusEvent>
 #include <QToolButton>
-#include <QHBoxLayout>
 #include <QTimer>
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocale.h>
-#include <kdebug.h>
 
 // Local includes
 

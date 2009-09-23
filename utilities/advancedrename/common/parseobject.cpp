@@ -27,19 +27,16 @@
 // Qt includes
 
 #include <QAction>
-#include <QHBoxLayout>
+#include <QIcon>
 #include <QMenu>
 #include <QPushButton>
-#include <QWidget>
 #include <QRegExp>
+#include <QString>
 
 // KDE includes
 
-#include <kdialog.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <knuminput.h>
-#include <kdebug.h>
 
 namespace Digikam
 {

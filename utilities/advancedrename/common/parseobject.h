@@ -24,18 +24,6 @@
 #ifndef PARSEOBJECT_H
 #define PARSEOBJECT_H
 
-// Qt includes
-
-#include <QDateTime>
-#include <QFileInfo>
-#include <QIcon>
-#include <QString>
-#include <QMap>
-
-// KDE includes
-
-#include <kdialog.h>
-
 // Local includes
 
 #include "parseinformation.h"
@@ -43,10 +31,10 @@
 #include "token.h"
 
 class QAction;
-class QChar;
+class QIcon;
 class QMenu;
 class QPushButton;
-class QWidget;
+class QString;
 
 namespace Digikam
 {
