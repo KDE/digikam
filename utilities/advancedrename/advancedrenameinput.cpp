@@ -331,6 +331,22 @@ void AdvancedRenameInput::slotAddToken(const QString& token)
     setFocus();
 }
 
+void AdvancedRenameInput::slotAddModifier(const QString& token)
+{
+    if (!token.isEmpty())
+    {
+        if (tokenIsSelected())
+        {
+            int cursorPos = cursorPosition();
+            QString tmp   = text();
+            tmp.insert(cursorPos, token);
+            setText(tmp);
+            setCursorPosition(cursorPos + token.count());
+        }
+    }
+    setFocus();
+}
+
 void AdvancedRenameInput::setSelectionColor(SelectionType type)
 {
     QString cssTemplate("QLineEdit { selection-background-color: %1; selection-color: %2;}");

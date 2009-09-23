@@ -88,6 +88,7 @@ public Q_SLOTS:
 private Q_SLOTS:
 
     void slotToolTipButtonToggled(bool);
+    void slotTokenMarked(bool);
 
 private:
 

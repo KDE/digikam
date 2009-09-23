@@ -64,11 +64,14 @@ public:
         tooltipTracker          = 0;
         tooltipToggleButton     = 0;
         tokenToolButton         = 0;
+        modifierToolButton      = 0;
         btnContainer            = 0;
         parser                  = 0;
         inputColumns            = 2;
-        controlWidgetsMask      = AdvancedRenameWidget::TokenButtons | AdvancedRenameWidget::ToolTipButton;
         tooltipTrackerAlignment = Qt::AlignLeft;
+        controlWidgetsMask      = AdvancedRenameWidget::TokenButtons  |
+                                  AdvancedRenameWidget::ToolTipButton |
+                                  AdvancedRenameWidget::ModifierToolButton;
     }
 
     int                                  inputColumns;
@@ -76,6 +79,8 @@ public:
 
     QToolButton*                         tooltipToggleButton;
     QToolButton*                         tokenToolButton;
+    QToolButton*                         modifierToolButton;
+
     QGroupBox*                           btnContainer;
 
     Qt::Alignment                        tooltipTrackerAlignment;
@@ -218,11 +223,13 @@ void AdvancedRenameWidget::slotUpdateTrackerPos()
 
 void AdvancedRenameWidget::setControlWidgets(ControlWidgets mask)
 {
-    bool enable = d->parser && d->parser->subParsers().count() > 0;
+    bool enable       = d->parser && !(d->parser->subParsers().isEmpty());
+    bool enableModBtn = enable && !(d->parser->modifiers().isEmpty());
 
+    d->renameInputWidget->setEnabled(enable);
     d->btnContainer->setVisible(enable && (mask & TokenButtons));
     d->tokenToolButton->setVisible(enable && (mask & TokenToolButton));
-    d->renameInputWidget->setEnabled(enable);
+    d->modifierToolButton->setVisible(enableModBtn && (mask & ModifierToolButton));
     d->tooltipToggleButton->setVisible(enable && (mask & ToolTipButton));
 
     d->controlWidgetsMask = mask;
@@ -234,12 +241,13 @@ void AdvancedRenameWidget::registerParserControls()
    {
        setupWidgets();
 
-       QMenu* tokenToolBtnMenu = new QMenu(d->tokenToolButton);
-       int column              = 0;
-       int row                 = 0;
-       QPushButton* btn        = 0;
-       QAction* action         = 0;
-       QGridLayout* gridLayout = new QGridLayout;
+       QMenu* tokenToolBtnMenu    = new QMenu(d->tokenToolButton);
+       QMenu* modifierToolBtnMenu = new QMenu(d->modifierToolButton);
+       int column                 = 0;
+       int row                    = 0;
+       QPushButton* btn           = 0;
+       QAction* action            = 0;
+       QGridLayout* gridLayout    = new QGridLayout;
        gridLayout->setSpacing(KDialog::marginHint());
        gridLayout->setMargin(KDialog::marginHint());
 
@@ -282,8 +290,24 @@ void AdvancedRenameWidget::registerParserControls()
 
        // --------------------------------------------------------
 
+       // register modifiers
+       foreach (Modifier* modifier, d->parser->modifiers())
+       {
+           action = modifier->registerMenu(modifierToolBtnMenu);
+
+           if (!action)
+               continue;
+
+           connect(modifier, SIGNAL(signalTokenTriggered(const QString&)),
+                   d->renameInputWidget, SLOT(slotAddModifier(const QString&)));
+       }
+
+       // --------------------------------------------------------
+
        d->btnContainer->setLayout(gridLayout);
+
        d->tokenToolButton->setMenu(tokenToolBtnMenu);
+       d->modifierToolButton->setMenu(modifierToolBtnMenu);
 
        d->renameInputWidget->setParser(d->parser);
        createToolTip();
@@ -323,6 +347,7 @@ void AdvancedRenameWidget::setupWidgets()
     d->tooltipToggleButton = new QToolButton;
     d->tooltipToggleButton->setCheckable(true);
     d->tooltipToggleButton->setIcon(SmallIcon("dialog-information"));
+    d->tooltipToggleButton->setToolTip(i18n("Show help"));
 
     // --------------------------------------------------------
 
@@ -333,6 +358,13 @@ void AdvancedRenameWidget::setupWidgets()
     d->tokenToolButton = new QToolButton;
     d->tokenToolButton->setPopupMode(QToolButton::InstantPopup);
     d->tokenToolButton->setIcon(SmallIcon("list-add"));
+    d->tokenToolButton->setToolTip(i18n("Quickly add a renaming option"));
+
+    delete d->modifierToolButton;
+    d->modifierToolButton = new QToolButton;
+    d->modifierToolButton->setPopupMode(QToolButton::InstantPopup);
+    d->modifierToolButton->setIcon(SmallIcon("editimage"));
+    d->modifierToolButton->setToolTip(i18n("Quickly add a modifier to the marked token"));
 
     // --------------------------------------------------------
 
@@ -348,10 +380,11 @@ void AdvancedRenameWidget::setupWidgets()
 
     delete layout();
     QGridLayout* mainLayout = new QGridLayout;
-    mainLayout->addWidget(d->renameInputWidget,     0, 0, 1, 1);
-    mainLayout->addWidget(d->tooltipToggleButton,   0, 1, 1, 1);
-    mainLayout->addWidget(d->tokenToolButton,       0, 2, 1, 1);
-    mainLayout->addWidget(d->btnContainer,          1, 0, 1,-1);
+    mainLayout->addWidget(d->renameInputWidget,   0, 0, 1, 1);
+    mainLayout->addWidget(d->tooltipToggleButton, 0, 1, 1, 1);
+    mainLayout->addWidget(d->tokenToolButton,     0, 2, 1, 1);
+    mainLayout->addWidget(d->modifierToolButton,  0, 3, 1, 1);
+    mainLayout->addWidget(d->btnContainer,        1, 0, 1,-1);
     mainLayout->setColumnStretch(0, 10);
     mainLayout->setMargin(0);
     mainLayout->setSpacing(KDialog::marginHint());
@@ -364,6 +397,16 @@ void AdvancedRenameWidget::setupWidgets()
 
     connect(d->renameInputWidget, SIGNAL(signalTextChanged(const QString&)),
             this, SIGNAL(signalTextChanged(const QString&)));
+
+    connect(d->renameInputWidget, SIGNAL(signalTokenMarked(bool)),
+            this, SLOT(slotTokenMarked(bool)));
+}
+
+void AdvancedRenameWidget::slotTokenMarked(bool marked)
+{
+    bool enable    = marked && d->parser;
+    bool enableMod = enable && !(d->parser->modifiers().isEmpty());
+    d->modifierToolButton->setEnabled(enableMod);
 }
 
 }  // namespace Digikam

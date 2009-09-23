@@ -150,9 +150,10 @@ QueueSettingsView::QueueSettingsView(QWidget *parent)
 
     d->renameManual         = new QRadioButton(i18n("Customize filenames:"), vbox2);
     d->advancedRenameWidget = new AdvancedRenameWidget(vbox2);
-    d->advancedRenameWidget->setControlWidgets(AdvancedRenameWidget::TokenToolButton |
+    d->advancedRenameWidget->setControlWidgets(AdvancedRenameWidget::TokenToolButton     |
+                                               AdvancedRenameWidget::ModifierToolButton  |
                                                AdvancedRenameWidget::ToolTipButton);
-    QWidget *space         = new QWidget(vbox2);
+    QWidget *space = new QWidget(vbox2);
 
     d->renamingButtonGroup->setExclusive(true);
     d->renamingButtonGroup->addButton(d->renameOriginal, QueueSettings::USEORIGINAL);

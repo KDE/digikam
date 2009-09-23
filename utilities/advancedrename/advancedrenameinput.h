@@ -57,6 +57,7 @@ public:
 public Q_SLOTS:
 
     void slotAddToken(const QString&);
+    void slotAddModifier(const QString&);
 
 Q_SIGNALS:
 
