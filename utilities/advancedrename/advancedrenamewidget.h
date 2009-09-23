@@ -29,13 +29,6 @@
 #include <QtGui/QWidget>
 #include <QtCore/QString>
 
-// Local includes
-
-class QDateTime;
-class QAction;
-
-class KLineEdit;
-
 namespace Digikam
 {
 

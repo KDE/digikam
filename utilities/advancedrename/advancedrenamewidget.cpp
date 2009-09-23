@@ -27,14 +27,10 @@
 // Qt includes
 
 #include <QAction>
-#include <QDateTime>
-#include <QFileInfo>
 #include <QGridLayout>
 #include <QGroupBox>
-#include <QList>
 #include <QMenu>
 #include <QPushButton>
-#include <QTimer>
 #include <QToolButton>
 
 // KDE includes
@@ -42,13 +38,12 @@
 #include <kicon.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <knuminput.h>
 
 // Local includes
 
+#include "advancedrenameinput.h"
 #include "dcursortracker.h"
 #include "defaultparser.h"
-#include "advancedrenameinput.h"
 #include "themeengine.h"
 
 namespace Digikam
