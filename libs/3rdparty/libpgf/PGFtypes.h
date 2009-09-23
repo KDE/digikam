@@ -34,11 +34,13 @@
 //-------------------------------------------------------------------------------
 //	Codec versions
 //
-// Version 2:	modified data structure PGFHeader
-// Version 3:	INT32 instead of INT16, allows 31 bit per pixel and channel
-// Version 5:	ROI, new block-reordering scheme
+// Version 2:	modified data structure PGFHeader (backward compatibility assured)
+// Version 3:	DataT: INT32 instead of INT16, allows 31 bit per pixel and channel (backward compatibility assured)
+// Version 5:	ROI, new block-reordering scheme (backward compatibility assured)
+// Version 6:	modified data structure PGFPreHeader: hSize (header size) is now a UINT32 instead of a UINT16 (backward compatibility assured)
+//
 //-------------------------------------------------------------------------------
-#define PGFCodecVersion		"6.09.24"			// Major number
+#define PGFCodecVersion		"6.09.33"			// Major number
 												// Minor number: Year (2) Week (2)
 
 //-------------------------------------------------------------------------------
@@ -109,7 +111,7 @@ struct PGFHeader {
 	UINT8 bpp;					// bits per pixel
 	UINT8 channels;				// number of channels
 	UINT8 mode;					// image mode according to Adobe's image modes
-	RGBTRIPLE background;		// background color used in RGBA color mode
+	RGBTRIPLE background;		// background color used in RGBA color mode or number of bits per channel in 16-bit per channel modes
 	// total: 16 Bytes
 };
 

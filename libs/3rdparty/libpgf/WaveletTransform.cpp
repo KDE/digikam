@@ -240,20 +240,22 @@ void CWaveletTransform::InverseTransform(int srcLevel, UINT32* w, UINT32* h, Dat
 #ifdef __PGFROISUPPORT__
 	const UINT32 srcLeft = (m_ROIs.ROIisSupported()) ? m_ROIs.Left(srcLevel) : 0;
 	const UINT32 srcTop = (m_ROIs.ROIisSupported()) ? m_ROIs.Top(srcLevel) : 0;
-	const UINT32 destWidth = destBand->BufferWidth(); // destination buffer width; is valid only after AllocMemory
+	UINT32 destWidth = destBand->BufferWidth(); // destination buffer width; is valid only after AllocMemory
 	PGFRect destROI = (m_ROIs.ROIisSupported()) ? m_ROIs.GetROI(destLevel) : PGFRect(0, 0, width, height);
 	destROI.right = destROI.left + destWidth;
 	destROI.bottom = __min(destROI.bottom, height);
-	const UINT32 destHeight = destROI.Height(); // destination buffer height
+	UINT32 destHeight = destROI.Height(); // destination buffer height
 
-	// set origin of destination
+	// update destination ROI
 	if (destROI.left & 1) {
 		destROI.left++;
 		origin++;
+		destWidth--;
 	}
 	if (destROI.top & 1) {
 		destROI.top++;
 		origin += destWidth;
+		destHeight--;
 	}
 
 	// init source buffer position

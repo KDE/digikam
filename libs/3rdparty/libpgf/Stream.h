@@ -135,13 +135,13 @@ public:
 
 /////////////////////////////////////////////////////////////////////
 // A PGF stream subclass for IStream. Usable only with COM.
-#if defined (WIN32) || defined (WINCE)
+#if defined(WIN32) || defined(WINCE)
 class CPGFIStream : public CPGFStream {
 protected:
 	IStream *m_stream;
 public:
 	CPGFIStream(IStream *stream) : m_stream(stream) {}
-	virtual bool	IsValid() const	{ return m_stream != 0; }
+	virtual bool IsValid() const	{ return m_stream != 0; }
 	virtual ~CPGFIStream() {}
 	virtual void Write(int *count, void *buffer) THROW_; // throws IOException 
 	virtual void Read(int *count, void *buffer) THROW_; // throws IOException 

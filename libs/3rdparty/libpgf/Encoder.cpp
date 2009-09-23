@@ -59,7 +59,10 @@
 // Throws IOException
 // preHeader and header must not be references, because on BigEndian platforms they are modified
 CEncoder::CEncoder(CPGFStream* stream, PGFPreHeader preHeader, PGFHeader header, const PGFPostHeader& postHeader, UINT32*& levelLength) THROW_
-: m_stream(stream), m_startPosition(0), m_valuePos(0), m_maxAbsValue(0)
+: m_stream(stream)
+, m_startPosition(0)
+, m_valuePos(0)
+, m_maxAbsValue(0)
 #ifdef __PGFROISUPPORT__
 , m_roi(false)
 #endif
@@ -101,6 +104,7 @@ CEncoder::CEncoder(CPGFStream* stream, PGFPreHeader preHeader, PGFHeader header,
 	delete[] levelLength;
 	levelLength = new UINT32[header.nLevels];
 	if (!levelLength) ReturnWithError(InsufficientMemory);
+	for (UINT8 l = 0; l < header.nLevels; l++) levelLength[l] = 0;
 	m_levelLength = levelLength;
 
 	// write dummy levelLength
@@ -339,7 +343,7 @@ UINT32 CEncoder::Flush() THROW_ {
 
 		// set file pos to levelLength
 		m_stream->SetPos(FSFromStart, m_levelLengthPos);
-#ifdef __BIGENDIAN__
+#ifdef __BIG_ENDIAN__ 
 		UINT32 levelLength;
 		int count = WordBytes;
 		
@@ -351,7 +355,7 @@ UINT32 CEncoder::Flush() THROW_ {
 		int count = m_currLevelIndex*WordBytes;
 		
 		m_stream->Write(&count, m_levelLength);
-#endif //__BIGENDIAN__
+#endif //__BIG_ENDIAN__ 
 
 		// restore file position
 		m_stream->SetPos(FSFromStart, curPos);
@@ -393,7 +397,7 @@ void CEncoder::EncodeBuffer(ROIBlockHeader h) THROW_ {
 	
 	int count = sizeof(UINT16);
 
-#ifdef __BIGENDIAN__
+#ifdef __BIG_ENDIAN__ 
 	// write wordLen
 	UINT16 wordLen2 = __VAL(wordLen);
 	m_stream->Write(&count, &wordLen2);
@@ -420,7 +424,7 @@ void CEncoder::EncodeBuffer(ROIBlockHeader h) THROW_ {
 			m_stream->Write(&count, &h.val); ASSERT(count == sizeof(UINT16));
 		}
 	#endif // __PGFROISUPPORT__
-#endif // __BIGENDIAN__
+#endif // __BIG_ENDIAN__ 
 
 	// write data
 	count = wordLen*WordBytes;
@@ -913,7 +917,7 @@ void CEncoder::EncodeTileBuffer() THROW_ {
 	// save codeLen because of BIGENDIAN manipulation
 	codeLen = h.codeLen;
 
-#ifdef __BIGENDIAN__
+#ifdef __BIG_ENDIAN__ 
 	for (int i=0; i < codeLen; i++) {
 		m_codeBuffer[i] = __VAL(m_codeBuffer[i]);
 	}
@@ -1004,4 +1008,3 @@ void CEncoder::DecomposeTileBuffer(UINT8 nPlanes, UINT32 bufferSize, UINT32* sig
 	}
 }
 */
-

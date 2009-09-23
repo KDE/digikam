@@ -148,7 +148,7 @@ CDecoder::CDecoder(CPGFStream* stream, PGFPreHeader& preHeader, PGFHeader& heade
 		count = header.nLevels*WordBytes;
 		m_stream->Read(&count, levelLength);
 
-#ifdef __BIGENDIAN__
+#ifdef __BIG_ENDIAN__ 
 		// make sure the values are correct read
 		for (int i=0; i < header.nLevels; i++) {
 			levelLength[i] = __VAL(levelLength[i]);
@@ -440,7 +440,7 @@ void CDecoder::DecodeBuffer() THROW_ {
 	count = __VAL(wordLen)*WordBytes;
 	m_stream->Read(&count, m_codeBuffer);
 
-#ifdef __BIGENDIAN__
+#ifdef __BIG_ENDIAN__ 
 	// convert data
 	for (int i=0; i < wordLen; i++) {
 		m_codeBuffer[i] = __VAL(m_codeBuffer[i]);

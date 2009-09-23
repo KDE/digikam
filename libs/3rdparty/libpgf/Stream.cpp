@@ -187,7 +187,7 @@ UINT64 CPGFMemFileStream::GetPos() const THROW_ {
 
 //////////////////////////////////////////////////////////////////////
 // CPGFIStream
-#if defined (WIN32) || defined (WINCE)
+#if defined(WIN32) || defined(WINCE)
 //////////////////////////////////////////////////////////////////////
 void CPGFIStream::Write(int *count, void *buffPtr) THROW_ {
 	ASSERT(count);
@@ -241,4 +241,3 @@ UINT64 CPGFIStream::GetPos() const THROW_ {
 	}
 }
 #endif // WIN32 || WINCE
-
