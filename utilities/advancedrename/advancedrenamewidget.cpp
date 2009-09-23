@@ -60,7 +60,7 @@ public:
 
     AdvancedRenameWidgetPriv()
     {
-        parserLineEdit          = 0;
+        renameInputWidget       = 0;
         tooltipTracker          = 0;
         tooltipToggleButton     = 0;
         tokenToolButton         = 0;
@@ -81,7 +81,7 @@ public:
     Qt::Alignment                        tooltipTrackerAlignment;
 
     DTipTracker*                         tooltipTracker;
-    AdvancedRenameInput*                 parserLineEdit;
+    AdvancedRenameInput*                 renameInputWidget;
     Parser*                              parser;
 };
 
@@ -103,12 +103,12 @@ AdvancedRenameWidget::~AdvancedRenameWidget()
 
 QString AdvancedRenameWidget::text() const
 {
-    return d->parserLineEdit->input()->text();
+    return d->renameInputWidget->text();
 }
 
 void AdvancedRenameWidget::setText(const QString& text)
 {
-    d->parserLineEdit->input()->setText(text);
+    d->renameInputWidget->setText(text);
 }
 
 void AdvancedRenameWidget::setTrackerAlignment(Qt::Alignment alignment)
@@ -119,7 +119,7 @@ void AdvancedRenameWidget::setTrackerAlignment(Qt::Alignment alignment)
 
 void AdvancedRenameWidget::clear()
 {
-    d->parserLineEdit->input()->clear();
+    d->renameInputWidget->clear();
 }
 
 void AdvancedRenameWidget::slotHideToolTipTracker()
@@ -133,7 +133,7 @@ QString AdvancedRenameWidget::parse(ParseInformation& info) const
     if (!d->parser)
         return QString();
 
-    QString parseString = d->parserLineEdit->input()->text();
+    QString parseString = d->renameInputWidget->text();
 
     QString parsed;
     parsed = d->parser->parse(parseString, info);
@@ -195,7 +195,7 @@ void AdvancedRenameWidget::createToolTip()
     // --------------------------------------------------------
 
     tooltip += QString("</table></qt>");
-    tooltip += QString("<i>%1</i>").arg(d->parserLineEdit->input()->toolTip());
+    tooltip += QString("<i>%1</i>").arg(d->renameInputWidget->toolTip());
 
     d->tooltipTracker->setText(tooltip);
 
@@ -222,7 +222,7 @@ void AdvancedRenameWidget::setControlWidgets(ControlWidgets mask)
 
     d->btnContainer->setVisible(enable && (mask & TokenButtons));
     d->tokenToolButton->setVisible(enable && (mask & TokenToolButton));
-    d->parserLineEdit->setEnabled(enable);
+    d->renameInputWidget->setEnabled(enable);
     d->tooltipToggleButton->setVisible(enable && (mask & ToolTipButton));
 
     d->controlWidgetsMask = mask;
@@ -255,7 +255,7 @@ void AdvancedRenameWidget::registerParserControls()
            gridLayout->addWidget(btn, row, column, 1, 1);
 
            connect(subparser, SIGNAL(signalTokenTriggered(const QString&)),
-                   d->parserLineEdit, SLOT(slotAddToken(const QString&)));
+                   d->renameInputWidget, SLOT(slotAddToken(const QString&)));
 
            ++column;
 
@@ -285,7 +285,7 @@ void AdvancedRenameWidget::registerParserControls()
        d->btnContainer->setLayout(gridLayout);
        d->tokenToolButton->setMenu(tokenToolBtnMenu);
 
-       d->parserLineEdit->input()->setParser(d->parser);
+       d->renameInputWidget->setParser(d->parser);
        createToolTip();
    }
 }
@@ -316,8 +316,8 @@ void AdvancedRenameWidget::setInputColumns(int col)
 
 void AdvancedRenameWidget::setupWidgets()
 {
-    delete d->parserLineEdit;
-    d->parserLineEdit = new AdvancedRenameInput;
+    delete d->renameInputWidget;
+    d->renameInputWidget = new AdvancedRenameInput;
 
     delete d->tooltipToggleButton;
     d->tooltipToggleButton = new QToolButton;
@@ -337,7 +337,7 @@ void AdvancedRenameWidget::setupWidgets()
     // --------------------------------------------------------
 
     delete d->tooltipTracker;
-    d->tooltipTracker = new DTipTracker(QString(), d->parserLineEdit, Qt::AlignLeft);
+    d->tooltipTracker = new DTipTracker(QString(), d->renameInputWidget, Qt::AlignLeft);
     d->tooltipTracker->setTextFormat(Qt::RichText);
     d->tooltipTracker->setEnable(false);
     d->tooltipTracker->setKeepOpen(true);
@@ -348,7 +348,7 @@ void AdvancedRenameWidget::setupWidgets()
 
     delete layout();
     QGridLayout* mainLayout = new QGridLayout;
-    mainLayout->addWidget(d->parserLineEdit,        0, 0, 1, 1);
+    mainLayout->addWidget(d->renameInputWidget,     0, 0, 1, 1);
     mainLayout->addWidget(d->tooltipToggleButton,   0, 1, 1, 1);
     mainLayout->addWidget(d->tokenToolButton,       0, 2, 1, 1);
     mainLayout->addWidget(d->btnContainer,          1, 0, 1,-1);
@@ -362,7 +362,7 @@ void AdvancedRenameWidget::setupWidgets()
     connect(d->tooltipToggleButton, SIGNAL(toggled(bool)),
             this, SLOT(slotToolTipButtonToggled(bool)));
 
-    connect(d->parserLineEdit, SIGNAL(signalTextChanged(const QString&)),
+    connect(d->renameInputWidget, SIGNAL(signalTextChanged(const QString&)),
             this, SIGNAL(signalTextChanged(const QString&)));
 }
 

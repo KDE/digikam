@@ -41,16 +41,16 @@ namespace Digikam
 {
 
 class Parser;
-class AdvancedRenameLineEditPriv;
+class AdvancedRenameInputPriv;
 
-class AdvancedRenameLineEdit : public KLineEdit
+class AdvancedRenameInput : public KLineEdit
 {
     Q_OBJECT
 
 public:
 
-    AdvancedRenameLineEdit(QWidget* parent = 0);
-    ~AdvancedRenameLineEdit();
+    AdvancedRenameInput(QWidget* parent = 0);
+    ~AdvancedRenameInput();
 
     void setParser(Parser* parser);
 
@@ -90,34 +90,6 @@ private:
     bool highlightToken(SelectionType type);
     bool tokenIsSelected();
     void setSelectionColor(SelectionType type);
-
-private:
-
-    AdvancedRenameLineEditPriv* const d;
-};
-
-// --------------------------------------------------------
-
-class AdvancedRenameInputPriv;
-
-class AdvancedRenameInput : public QWidget
-{
-    Q_OBJECT
-
-public:
-
-    AdvancedRenameInput(QWidget* parent = 0);
-    ~AdvancedRenameInput();
-
-    AdvancedRenameLineEdit* input() const;
-
-public Q_SLOTS:
-
-    void slotAddToken(const QString&);
-
-Q_SIGNALS:
-
-    void signalTextChanged(const QString&);
 
 private:
 
