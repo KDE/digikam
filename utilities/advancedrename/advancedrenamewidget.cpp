@@ -340,6 +340,12 @@ void AdvancedRenameWidget::setInputColumns(int col)
 
 void AdvancedRenameWidget::setupWidgets()
 {
+    /*
+     * This methods needs to delete all main widgets, do not remove the delete lines!
+     * If a new parser is set or the layout has changed, we need to call setupWidgets() again.
+     * So any widget that is created in here needs to be removed first, to avoid memory leaks and
+     * duplicate signal/slot connections.
+     */
     delete d->renameInputWidget;
     d->renameInputWidget = new AdvancedRenameInput;
 
