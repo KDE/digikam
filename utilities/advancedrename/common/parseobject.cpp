@@ -57,6 +57,7 @@ public:
     bool         useTokenMenu;
 
     QString      name;
+    QString      description;
     QIcon        icon;
     QRegExp      regExp;
 
@@ -77,6 +78,16 @@ ParseObject::~ParseObject()
         delete token;
     }
     d->tokens.clear();
+}
+
+void ParseObject::setDescription(const QString& desc)
+{
+    d->description = desc;
+}
+
+QString ParseObject::description() const
+{
+    return d->description;
 }
 
 QRegExp ParseObject::regExp() const

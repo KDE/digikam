@@ -31,11 +31,10 @@ namespace Digikam
 {
 
 FirstLetterEachWordUpperCaseModifier::FirstLetterEachWordUpperCaseModifier()
-                                    : Modifier(i18n("First Letter Of Each Word Uppercase"))
+                                    : Modifier(i18n("First Letter Of Each Word Uppercase"),
+                                               i18n("Convert the first letter of each word to uppercase"))
 {
-    addToken(QString("*"), i18n("First Letter Of Each Word Uppercase"),
-             i18n("convert the first letter of each word to uppercase"));
-
+    addToken(QString("*"), i18n("First Letter Of Each Word Uppercase"), description());
     setRegExp("\\*");
 }
 

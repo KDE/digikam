@@ -31,13 +31,13 @@ namespace Digikam
 {
 
 RangeModifier::RangeModifier()
-             : Modifier(i18n("Range"))
+             : Modifier(i18n("Range"), i18n("Add only a specific range of a string"))
 {
     addToken(QString("{<i>index</i>}"), i18n("Index"),
-             i18n("extract the character at the given index"));
+             i18n("Extract the character at the given index"));
 
     addToken(QString("{<i>from</i> - <i>to</i>}"), i18n("Range"),
-             i18n("extract a specific range ('<i>to'</i> = end of string, if omitted)"));
+             i18n("Extract a specific range ('<i>to'</i> = end of string, if omitted)"));
 
     setRegExp("\\{\\s*(\\d+)\\s*(-\\s*((-1|\\d+)\\s*)?)?\\}");
 }

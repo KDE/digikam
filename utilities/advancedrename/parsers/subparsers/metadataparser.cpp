@@ -157,10 +157,12 @@ QString MetadataParserDialog::separator() const
 // --------------------------------------------------------
 
 MetadataParser::MetadataParser()
-              : SubParser(i18n("Metadata..."), SmallIcon("metadataedit"))
+              : SubParser(i18n("Metadata..."),
+                          i18n("Add metadata fields from Exif, IPTC and XMP"),
+                          SmallIcon("metadataedit"))
 {
     addToken("[meta:<i>keycode</i>]", i18n("Metadata"),
-             i18n("add metadata (use the quick access dialog for keycodes)"));
+             i18n("Add metadata (use the quick access dialog for keycodes)"));
 
     setRegExp("\\[meta:\\s*(.*)\\s*\\s*\\]");
 }

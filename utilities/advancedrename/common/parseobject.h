@@ -77,6 +77,9 @@ public:
     QRegExp regExp() const;
     void    setRegExp(const QString& regExp);
 
+    void    setDescription(const QString& desc);
+    QString description() const;
+
     /**
      * @return a list of all registered tokens
      */

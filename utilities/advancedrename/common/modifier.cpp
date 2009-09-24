@@ -27,9 +27,10 @@
 namespace Digikam
 {
 
-Modifier::Modifier(const QString& name, const QIcon& icon)
+Modifier::Modifier(const QString& name, const QString& description, const QIcon& icon)
         : ParseObject(name, icon)
 {
+    setDescription(description);
 }
 
 QString Modifier::modify(const QString& parseString, const QString& result)

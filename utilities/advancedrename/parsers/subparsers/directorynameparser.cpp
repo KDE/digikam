@@ -38,15 +38,16 @@ namespace Digikam
 {
 
 DirectoryNameParser::DirectoryNameParser()
-              : SubParser(i18n("Directory Name"), SmallIcon("folder"))
+                   : SubParser(i18n("Directory Name"), i18n("Add the directory name"),
+                               SmallIcon("folder"))
 {
     setUseTokenMenu(false);
 
     addToken("[dir]", i18nc("current directory name", "Current"),
-            i18n("current directory name"));
+            i18n("Current directory name"));
 
     addToken("[dir.]", i18nc("directory name", "Parent Directory Name"),
-            i18n("directory name of the parent, additional '.' characters move up "
+            i18n("Directory name of the parent, additional '.' characters move up "
                  "in the directory hierarchy"));
 
     setRegExp("\\[dir(\\.*)\\]");

@@ -262,6 +262,9 @@ void AdvancedRenameWidget::registerParserControls()
                continue;
            }
 
+           // set button tooltip
+           btn->setToolTip(subparser->description());
+
            gridLayout->addWidget(btn, row, column, 1, 1);
 
            connect(subparser, SIGNAL(signalTokenTriggered(const QString&)),

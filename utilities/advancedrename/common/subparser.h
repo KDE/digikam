@@ -41,7 +41,7 @@ class SubParser : public ParseObject
 
 public:
 
-    SubParser(const QString& name, const QIcon& icon = QIcon());
+    SubParser(const QString& name, const QString& description, const QIcon& icon = QIcon());
     virtual ~SubParser();
 
     ModifierList modifiers() const;

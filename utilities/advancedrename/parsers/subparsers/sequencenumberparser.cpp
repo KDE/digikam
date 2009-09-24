@@ -120,18 +120,19 @@ int SequenceNumberDialog::step()   const
 // --------------------------------------------------------
 
 SequenceNumberParser::SequenceNumberParser()
-                    : SubParser(i18n("Sequence Number..."), SmallIcon("accessories-calculator"))
+                    : SubParser(i18n("Sequence Number..."), i18n("Add a sequence number"),
+                                SmallIcon("accessories-calculator"))
 {
     setUseTokenMenu(false);
 
     addToken("#", i18n("Sequence Number"),
-             i18n("sequence number"));
+             i18n("Sequence number"));
 
     addToken("#{<i>start</i>}", i18n("Sequence Number (start)"),
-             i18n("sequence number (custom start)"));
+             i18n("Sequence number (custom start)"));
 
     addToken("#{<i>start</i>,<i>step</i>}", i18n("Sequence Number (start, step)"),
-             i18n( "sequence number (custom start + step)"));
+             i18n( "Sequence number (custom start + step)"));
 
     setRegExp("(#+)(\\{\\s*(\\d+)\\s*,?\\s*(\\d+)*\\s*\\})?");
 }

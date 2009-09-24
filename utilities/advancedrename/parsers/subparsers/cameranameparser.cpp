@@ -37,9 +37,10 @@ namespace Digikam
 {
 
 CameraNameParser::CameraNameParser()
-                : SubParser(i18n("Camera Name"), SmallIcon("camera-photo"))
+                : SubParser(i18n("Camera Name"), i18n("Add the camera name"),
+                            SmallIcon("camera-photo"))
 {
-    addToken("[cam]", i18n("Camera Name"), i18n("camera name"));
+    addToken("[cam]", i18n("Camera Name"), i18n("Camera name"));
 
     setRegExp("\\[cam\\]");
 }

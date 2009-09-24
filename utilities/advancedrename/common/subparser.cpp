@@ -57,9 +57,11 @@ public:
     ModifierList modifiers;
 };
 
-SubParser::SubParser(const QString& name, const QIcon& icon)
+SubParser::SubParser(const QString& name, const QString& description, const QIcon& icon)
          : ParseObject(name, icon), d(new SubParserPriv)
 {
+    setDescription(description);
+
     registerModifier(new LowerCaseModifier());
     registerModifier(new UpperCaseModifier());
     registerModifier(new FirstLetterEachWordUpperCaseModifier());
