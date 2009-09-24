@@ -1,14 +1,15 @@
-INSTALL( FILES Dreary 
-               Marine 
-	       Clean 
-	       OrangeCrush 
-	       Sandy 
-	       Dark 
-	       DarkRoom 
-	       Dessert 
-	       Digikasa 
-	       Gray 
-	       Blue 
-	       DLR  
-               Rose
+INSTALL( FILES
+            Blue
+            Clean
+            DLR
+            Dark
+            DarkRoom
+            Dessert
+            Digikasa
+            Dreary
+            Gray
+            Marine
+            OrangeCrush
+            Rose
+            Sandy
          DESTINATION ${DATA_INSTALL_DIR}/digikam/themes )
