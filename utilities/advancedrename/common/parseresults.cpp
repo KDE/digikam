@@ -79,12 +79,12 @@ int ParseResults::offset(const ResultsKey& key)
 
     if (hasKeyAtPosition(pos))
     {
-        return (pos+length);
+        return (pos + length);
     }
     else if (hasKeyAtApproximatePosition(pos))
     {
         ResultsKey key = keyAtApproximatePosition(pos);
-        return ((key.first+key.second)-pos);
+        return ((key.first + key.second) - pos);
     }
     return -1;
 }
