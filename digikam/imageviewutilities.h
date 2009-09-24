@@ -67,11 +67,13 @@ public Q_SLOTS:
 
     void openInEditor(const ImageInfo& info, const QList<ImageInfo>& allInfosToOpen, Album *currentAlbum);
     void rename(const ImageInfo& renameInfo);
+    void rename(const ImageInfo& renameInfo, const QString& newName);
     void setAsAlbumThumbnail(Album *album, const ImageInfo& imageInfo);
 
 Q_SIGNALS:
 
     void editorCurrentUrlChanged(const KUrl& url);
+    void imageRenamed();
 
 protected Q_SLOTS:
 

@@ -29,6 +29,7 @@
 
 #include <QClipboard>
 #include <QFileInfo>
+#include <QPointer>
 
 // KDE includes
 
@@ -48,20 +49,22 @@
 
 // Local includes
 
+#include "advancedrenamedialog.h"
 #include "albumsettings.h"
 #include "contextmenuhelper.h"
 #include "ddragobjects.h"
 #include "digikamapp.h"
 #include "dio.h"
 #include "dpopupmenu.h"
-#include "imagealbummodel.h"
 #include "imagealbumfiltermodel.h"
+#include "imagealbummodel.h"
 #include "imagedragdrop.h"
 #include "imageratingoverlay.h"
 #include "imagerotationoverlay.h"
 #include "imageviewutilities.h"
 #include "imagewindow.h"
 #include "metadatamanager.h"
+#include "renamethread.h"
 #include "thumbnailloadthread.h"
 
 namespace Digikam
@@ -72,10 +75,12 @@ class DigikamImageViewPriv
 public:
     DigikamImageViewPriv()
     {
-        utilities = 0;
+        utilities    = 0;
+        renameThread = 0;
     }
 
-    ImageViewUtilities *utilities;
+    ImageViewUtilities* utilities;
+    RenameThread*       renameThread;
 };
 
 DigikamImageView::DigikamImageView(QWidget *parent)
@@ -370,9 +375,31 @@ void DigikamImageView::setExifOrientationOfSelected(int orientation)
     MetadataManager::instance()->setExifOrientation(selectedImageInfos(), orientation);
 }
 
-void DigikamImageView::renameCurrent()
+void DigikamImageView::rename()
 {
-    d->utilities->rename(currentInfo());
+    if (!d->renameThread)
+    {
+        d->renameThread = new RenameThread(this);
+
+        connect(d->renameThread, SIGNAL(renameFile(const ImageInfo&, const QString&)),
+                d->utilities, SLOT(rename(const ImageInfo&, const QString&)));
+
+        connect(d->utilities, SIGNAL(imageRenamed()),
+                d->renameThread, SLOT(processNext()));
+    }
+
+    KUrl::List urls = selectedUrls();
+
+    QPointer<AdvancedRenameDialog> dlg = new AdvancedRenameDialog(this);
+    dlg->slotAddImages(urls);
+
+    if (dlg->exec() == KDialog::Accepted)
+    {
+        d->renameThread->addNewNames(dlg->newNames());
+        if (!d->renameThread->isRunning())
+            d->renameThread->start();
+    }
+    delete dlg;
 }
 
 void DigikamImageView::slotRotateLeft()
