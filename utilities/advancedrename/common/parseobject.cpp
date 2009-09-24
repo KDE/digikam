@@ -56,7 +56,6 @@ public:
     bool         menuRegistered;
     bool         useTokenMenu;
 
-    QString      name;
     QString      description;
     QIcon        icon;
     QRegExp      regExp;
@@ -68,7 +67,6 @@ ParseObject::ParseObject(const QString& name, const QIcon& icon)
            : QObject(0), d(new ParseObjectPriv)
 {
     setObjectName(name);
-    d->name = name;
     d->icon = icon;
 }
 
@@ -117,7 +115,7 @@ QPushButton* ParseObject::createButton(const QString& name, const QIcon& icon)
 QPushButton* ParseObject::registerButton(QWidget* parent)
 {
     QPushButton* button = 0;
-    button = createButton(d->name, d->icon);
+    button = createButton(objectName(), d->icon);
 
     QList<QAction*> actions;
 
@@ -171,7 +169,7 @@ QAction* ParseObject::registerMenu(QMenu* parent)
 
     if (action)
     {
-        action->setText(d->name);
+        action->setText(objectName());
         action->setIcon(d->icon);
         d->menuRegistered = true;
     }
