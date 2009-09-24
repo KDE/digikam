@@ -132,7 +132,9 @@ void AdvancedRenameWidget::slotHideToolTipTracker()
 QString AdvancedRenameWidget::parse(ParseInformation& info) const
 {
     if (!d->parser)
+    {
         return QString();
+    }
 
     QString parseString = d->renameInputWidget->text();
 
@@ -178,7 +180,9 @@ void AdvancedRenameWidget::createToolTip()
     // --------------------------------------------------------
 
     if (!d->parser)
+    {
         d->tooltipTracker->setText(QString());
+    }
 
     QString tooltip;
     tooltip += QString("<qt><table cellspacing=\"0\" cellpadding=\"0\" border=\"0\">");
@@ -254,7 +258,9 @@ void AdvancedRenameWidget::registerParserControls()
            action = subparser->registerMenu(tokenToolBtnMenu);
 
            if (!btn || !action)
+           {
                continue;
+           }
 
            gridLayout->addWidget(btn, row, column, 1, 1);
 
@@ -292,7 +298,9 @@ void AdvancedRenameWidget::registerParserControls()
            action = modifier->registerMenu(modifierToolBtnMenu);
 
            if (!action)
+           {
                continue;
+           }
 
            connect(modifier, SIGNAL(signalTokenTriggered(const QString&)),
                    d->renameInputWidget, SLOT(slotAddModifier(const QString&)));
@@ -313,10 +321,14 @@ void AdvancedRenameWidget::registerParserControls()
 void AdvancedRenameWidget::setParser(Parser* parser)
 {
     if (!parser)
+    {
         return;
+    }
 
     if (d->parser)
+    {
         delete d->parser;
+    }
     d->parser = parser;
 
     setInputColumns(d->inputColumns);
@@ -327,7 +339,9 @@ void AdvancedRenameWidget::setParser(Parser* parser)
 void AdvancedRenameWidget::setInputColumns(int col)
 {
     if (col == d->inputColumns)
+    {
         return;
+    }
 
     d->inputColumns = col;
     registerParserControls();

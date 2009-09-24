@@ -170,11 +170,15 @@ QAction* ParseObject::registerMenu(QMenu* parent)
 bool ParseObject::addToken(const QString& id, const QString& name, const QString& description)
 {
     if (id.isEmpty() || name.isEmpty() || description.isEmpty())
+    {
         return false;
+    }
 
     Token* token = new Token(id, name, description);
     if (!token)
+    {
         return false;
+    }
 
     connect(token, SIGNAL(signalTokenTriggered(const QString&)),
             this, SLOT(slotTokenTriggered(const QString&)));

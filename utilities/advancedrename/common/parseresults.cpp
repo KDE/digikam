@@ -53,7 +53,9 @@ QList<ParseResults::ResultsValue> ParseResults::values() const
 QString ParseResults::result(const ResultsKey& key)
 {
     if (m_results.isEmpty())
+    {
         return QString();
+    }
 
     QString result = m_results.value(key).second;
     return result;
@@ -62,7 +64,9 @@ QString ParseResults::result(const ResultsKey& key)
 QString ParseResults::token(const ResultsKey& key)
 {
     if (m_results.isEmpty())
+    {
         return QString();
+    }
 
     QString token = m_results.value(key).first;
     return token;
@@ -90,7 +94,9 @@ ParseResults::ResultsKey ParseResults::keyAtPosition(int pos)
     foreach (const ResultsKey& key, m_results.keys())
     {
         if (pos == key.first)
+        {
             return key;
+        }
     }
 
     return createInvalidKey();
@@ -100,7 +106,9 @@ bool ParseResults::hasKeyAtPosition(int pos)
 {
     ResultsKey key = keyAtPosition(pos);
     if (keyIsValid(key))
+    {
         return true;
+    }
     return false;
 }
 
@@ -123,7 +131,9 @@ bool ParseResults::hasKeyAtApproximatePosition(int pos)
 {
     ResultsKey key = keyAtApproximatePosition(pos);
     if (keyIsValid(key))
+    {
         return true;
+    }
     return false;
 }
 
@@ -150,7 +160,9 @@ ParseResults::ResultsKey ParseResults::createInvalidKey()
 bool ParseResults::keyIsValid(const ResultsKey& key)
 {
     if (key.first == -1 || key.second == -1)
+    {
         return false;
+    }
     return true;
 }
 

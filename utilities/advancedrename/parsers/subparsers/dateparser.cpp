@@ -83,7 +83,9 @@ QVariant DateFormat::formatType(QString identifier)
     }
 
     if (identifier.isEmpty())
+    {
         return m_map.at(Standard).second;
+    }
 
     return v;
 }
@@ -125,7 +127,9 @@ DateParserDialog::~DateParserDialog()
 QString DateParserDialog::formattedDateTime(const QDateTime& date)
 {
     if (ui->dateFormatPicker->currentIndex() == DateFormat::Custom)
+    {
         return date.toString(ui->customFormatInput->text());
+    }
 
     DateFormat df;
     QVariant v;
@@ -137,7 +141,9 @@ QString DateParserDialog::formattedDateTime(const QDateTime& date)
         tmp = date.toString(v.toString());
     }
     else
+    {
         tmp = date.toString((Qt::DateFormat)v.toInt());
+    }
     return tmp;
 }
 
@@ -195,7 +201,9 @@ void DateParser::parseOperation(const QString& parseString, const ParseInformati
 
         QString token = reg.cap(1);
         if (!token.isEmpty())
+        {
             token.remove(0, 1);
+        }
 
         QVariant v = df.formatType(token);
         if (v.isNull())
@@ -205,9 +213,13 @@ void DateParser::parseOperation(const QString& parseString, const ParseInformati
         else
         {
             if (v.type() == QVariant::String)
+            {
                 tmp = info.dateTime.toString(v.toString());
+            }
             else
+            {
                 tmp = info.dateTime.toString((Qt::DateFormat)v.toInt());
+            }
         }
     }
     PARSE_LOOP_END(parseString, reg, tmp, results)
@@ -237,19 +249,27 @@ void DateParser::slotTokenTriggered(const QString& token)
                                               : df.formatType((DateFormat::Type)index);
 
             if (v.type() == QVariant::String)
+            {
                 tmp = date.toString(v.toString());
+            }
             else
+            {
                 tmp = date.toString((Qt::DateFormat)v.toInt());
+            }
         }
         else
         {
             QString identifier = df.identifier((DateFormat::Type)index);
             if (index == DateFormat::Custom)
+            {
                 tmp = tokenStr.arg(dlg->ui->customFormatInput->text());
+            }
             else
             {
                 if (identifier.isEmpty())
+                {
                     tmp.remove(':');
+                }
                 tmp = tokenStr.arg(identifier);
             }
         }

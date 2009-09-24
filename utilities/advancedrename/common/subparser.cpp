@@ -81,10 +81,14 @@ SubParser::~SubParser()
 void SubParser::registerModifier(Modifier* modifier)
 {
     if (!modifier)
+    {
         return;
+    }
 
     if (!modifier->isValid())
+    {
         return;
+    }
 
     d->modifiers.append(modifier);
 }
@@ -112,9 +116,13 @@ void SubParser::parse(const QString& parseString, const ParseInformation& info)
     parseOperation(parseString, info, d->parseResults);
 
     if (d->useModifiers)
+    {
         d->modifierResults = applyModifiers(parseString, d->parseResults);
+    }
     else
+    {
         d->modifierResults.clear();
+    }
 }
 
 ParseResults SubParser::parseResults()
@@ -125,7 +133,9 @@ ParseResults SubParser::parseResults()
 ParseResults SubParser::modifiedResults()
 {
     if (d->modifierResults.isEmpty() || !d->useModifiers)
+    {
         return d->parseResults;
+    }
     return d->modifierResults;
 }
 
@@ -137,7 +147,9 @@ ParseResults SubParser::applyModifiers(const QString& parseString, ParseResults&
     QMap<ParseResults::ResultsKey, Modifier*> modifierCallbackMap;
 
     if (results.isEmpty())
+    {
         return tmp;
+    }
 
     // fill modifiers ParseResults with all possible modifier tokens
     foreach (Modifier* modifier, d->modifiers)

@@ -101,10 +101,15 @@ MetadataParserDialog::MetadataParserDialog()
         tab->setTabText(i, text.simplified());
 
         if (text.toLower().contains("makernotes"))
+        {
             makerNotesTabIndex = i;
+        }
     }
+
     if (makerNotesTabIndex != -1)
+    {
         tab->removeTab(makerNotesTabIndex);
+    }
 
     // --------------------------------------------------------
 
@@ -213,18 +218,26 @@ QString MetadataParser::parseMetadata(const QString& token, const ParseInformati
     QString tmp;
     QString keyword = token.toLower();
     if (keyword.isEmpty())
+    {
         return tmp;
+    }
 
     DMetadata meta(info.filePath);
     if (!meta.isEmpty())
     {
         KExiv2::MetaDataMap dataMap;
         if (keyword.startsWith(QLatin1String("exif.")))
+        {
             dataMap = meta.getExifTagsDataList(QStringList(), true);
+        }
         else if (keyword.startsWith(QLatin1String("iptc.")))
+        {
             dataMap = meta.getIptcTagsDataList(QStringList(), true);
+        }
         else if (keyword.startsWith(QLatin1String("xmp.")))
+        {
             dataMap = meta.getXmpTagsDataList(QStringList(), true);
+        }
 
         foreach (const QString& key, dataMap.keys())
         {

@@ -35,7 +35,9 @@ Modifier::Modifier(const QString& name, const QIcon& icon)
 QString Modifier::modify(const QString& parseString, const QString& result)
 {
     if (result.isEmpty())
+    {
         return QString();
+    }
 
     return modifyOperation(parseString, result);
 }

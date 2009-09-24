@@ -70,11 +70,17 @@ void DirectoryNameParser::parseOperation(const QString& parseString, const Parse
         int matchedLength = reg.cap(1).length();
 
         if (matchedLength == 0)
+        {
             tmp = folders.last();
+        }
         else if (matchedLength > (folderCount - 1))
+        {
             tmp.clear();
+        }
         else
+        {
             tmp = folders[folderCount - matchedLength - 1];
+        }
     }
     PARSE_LOOP_END(parseString, reg, tmp, results)
 }

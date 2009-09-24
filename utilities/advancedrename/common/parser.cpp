@@ -60,7 +60,9 @@ bool Parser::stringIsValid(const QString& str)
 {
     QRegExp invalidString("^\\s*$");
     if (str.isEmpty() || invalidString.exactMatch(str))
+    {
         return false;
+    }
     return true;
 }
 
@@ -82,10 +84,14 @@ ModifierList Parser::modifiers() const
 void Parser::registerSubParser(SubParser* parser)
 {
     if (!parser)
+    {
         return;
+    }
 
     if (!parser->isValid())
+    {
         return;
+    }
 
     d->subparsers.append(parser);
 }
@@ -132,9 +138,13 @@ QString Parser::parseOperation(const QString& parseString, ParseInformation& inf
 
             ParseResults r;
             if (replace)
+            {
                 r = parser->modifiedResults();
+            }
             else
+            {
                 r = parser->parseResults();
+            }
 
             results.append(r);
         }
@@ -142,7 +152,9 @@ QString Parser::parseOperation(const QString& parseString, ParseInformation& inf
 
     QString parsed;
     if (replace)
+    {
         parsed = results.replaceTokens(parseString);
+    }
 
     return parsed;
 }

@@ -59,7 +59,9 @@ QString RangeModifier::modifyOperation(const QString& parseString, const QString
         // if the start parameter can not be extracted, set it to 1
         int start = reg.cap(1).simplified().toInt(&ok);
         if (!ok)
+        {
             start = 1;
+        }
 
         // If no range is defined at all ({start}), set stop = start.
         // If the stop parameter is omitted ({start-}), set stop = -1 (end of string)
@@ -76,7 +78,9 @@ QString RangeModifier::modifyOperation(const QString& parseString, const QString
         }
 
         if (!ok)
+        {
             stop = start;
+        }
 
         // --------------------------------------------------------
 
@@ -85,20 +89,31 @@ QString RangeModifier::modifyOperation(const QString& parseString, const QString
          */
 
         if (start > result.count())
+        {
             return QString();
+        }
 
         if (stop > result.count())
+        {
             stop = -1;
+        }
 
         --start;
         if (stop != -1)
+        {
             --stop;
+        }
 
         if ((start < 0) || (stop < -1))
+        {
             return QString();
+        }
 
         if (stop == -1)
+        {
             stop = result.count() - 1;
+        }
+
         QString tmp;
         for (int i = start; i <= stop; ++i)
         {

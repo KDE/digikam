@@ -45,15 +45,21 @@ QString FirstLetterEachWordUpperCaseModifier::modifyOperation(const QString& par
 
     QString tmp = result.toLower();
 
-    if( tmp[0].isLetter() )
-        tmp[0] = tmp[0].toUpper();
-
-    for( int i = 0; i < tmp.length(); ++i )
+    if (tmp[0].isLetter())
     {
-        if( tmp[i+1].isLetter() && !tmp[i].isLetter() &&
-                tmp[i] != '\'' && tmp[i] != '?' && tmp[i] != '`' )
+        tmp[0] = tmp[0].toUpper();
+    }
+
+    for (int i = 0; i < tmp.length(); ++i)
+    {
+        if ( tmp[i + 1].isLetter()  &&
+            !tmp[i].isLetter()      &&
+             tmp[i] != '\''         &&
+             tmp[i] != '?'          &&
+             tmp[i] != '`'
+        )
         {
-            tmp[i+1] = tmp[i+1].toUpper();
+            tmp[i + 1] = tmp[i + 1].toUpper();
         }
     }
     return tmp;

@@ -112,7 +112,9 @@ AdvancedRenameInput::~AdvancedRenameInput()
 void AdvancedRenameInput::setParser(Parser* parser)
 {
     if (parser)
+    {
         d->parser = parser;
+    }
 }
 
 void AdvancedRenameInput::mouseMoveEvent(QMouseEvent* e)
@@ -159,7 +161,9 @@ void AdvancedRenameInput::mousePressEvent(QMouseEvent* e)
         if (e->button() == Qt::LeftButton)
         {
             if (d->userIsTyping)
+            {
                 return;
+            }
 
             if (selectionStart() == d->markedTokenPos)
             {
@@ -211,7 +215,9 @@ void AdvancedRenameInput::focusOutEvent(QFocusEvent* e)
 void AdvancedRenameInput::searchAndHighlightTokens(SelectionType type, int pos)
 {
     if (d->userIsTyping)
+    {
         return;
+    }
 
     int start;
     int length;
@@ -303,7 +309,9 @@ void AdvancedRenameInput::slotCursorPositionChanged(int oldPos, int newPos)
     Q_UNUSED(oldPos)
 
     if (d->userIsTyping)
+    {
         d->curCursorPos = newPos;
+    }
 
     d->tokenMarked = false;
     emit signalTokenMarked(d->tokenMarked);
@@ -314,10 +322,14 @@ void AdvancedRenameInput::slotAddToken(const QString& token)
     if (!token.isEmpty())
     {
         if (tokenIsSelected())
+        {
             setSelection(d->selectionStart, d->selectionLength);
+        }
 
         if (hasSelectedText())
+        {
             del();
+        }
 
         int cursorPos = cursorPosition();
         QString tmp   = text();
