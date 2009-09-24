@@ -224,7 +224,9 @@ void AdvancedRenameDialog::slotAddImages(const KUrl::List& urls)
     {
         ImageInfo info(*it);
         if (info.isNull())
+        {
             continue;
+        }
         item = new AdvancedRenameListItem(d->listView);
         item->setImageInfo(info);
         ++itemCount;

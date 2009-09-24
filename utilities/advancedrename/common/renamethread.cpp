@@ -96,9 +96,13 @@ void RenameThread::run()
         AdvancedRenameDialog::NewNameInfo info;
         {
             if (!d->todo.isEmpty())
+            {
                 info = d->todo.takeFirst();
+            }
             else
+            {
                 d->condVar.wait(&d->mutex);
+            }
         }
 
         if (!info.first.isNull() && !info.second.isEmpty())
