@@ -25,7 +25,7 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/editor
 
 #------------------------------------------------------------------------
 
-SET(advancedrenameinputtest_SRCS
+SET(advancedrenametest_SRCS
     advancedrenametest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common/token.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common/modifier.cpp
@@ -47,8 +47,8 @@ SET(advancedrenameinputtest_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/modifiers/rangemodifier.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/modifiers/replacemodifier.cpp
 )
-KDE4_ADD_UNIT_TEST(advancedrenameinputtest ${advancedrenameinputtest_SRCS})
-TARGET_LINK_LIBRARIES(advancedrenameinputtest
+KDE4_ADD_UNIT_TEST(advancedrenametest ${advancedrenametest_SRCS})
+TARGET_LINK_LIBRARIES(advancedrenametest
                       ${KDE4_KDECORE_LIBS}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
