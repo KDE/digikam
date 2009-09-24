@@ -416,6 +416,8 @@ void AdvancedRenameWidget::setupWidgets()
 
     connect(d->renameInputWidget, SIGNAL(signalTokenMarked(bool)),
             this, SLOT(slotTokenMarked(bool)));
+
+    slotTokenMarked(false);
 }
 
 void AdvancedRenameWidget::slotTokenMarked(bool marked)
