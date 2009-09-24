@@ -67,6 +67,7 @@ public:
 ParseObject::ParseObject(const QString& name, const QIcon& icon)
            : QObject(0), d(new ParseObjectPriv)
 {
+    setObjectName(name);
     d->name = name;
     d->icon = icon;
 }

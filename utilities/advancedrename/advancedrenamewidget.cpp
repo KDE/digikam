@@ -298,7 +298,13 @@ void AdvancedRenameWidget::registerParserControls()
        // register modifiers
        foreach (Modifier* modifier, d->parser->modifiers())
        {
-           action = modifier->registerMenu(modifierToolBtnMenu);
+           QStringList avoidForNow;
+           avoidForNow << QString("Range") << QString("Replace");
+
+           if (!avoidForNow.contains(modifier->objectName()))
+           {
+               action = modifier->registerMenu(modifierToolBtnMenu);
+           }
 
            if (!action)
            {
