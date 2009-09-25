@@ -209,7 +209,7 @@ void ProfileConversionTool::fastConversion(const IccProfile& profile)
     DImg imDest = filter.getTargetImage();
     iface.putOriginalImage(i18n("Color Profile Conversion"), imDest.bits());
     iface.putOriginalIccProfile(imDest.getIccProfile());
-};
+}
 
 void ProfileConversionTool::renderingFinished()
 {

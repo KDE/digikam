@@ -73,7 +73,7 @@ DToolTipStyleSheet::DToolTipStyleSheet(const QFont& font)
                             .arg(ThemeEngine::instance()->textSpecialRegColor().name())
                             .arg(font.family());
     cellSpecEnd = QString("</i></font></nobr></td></tr>");
-};
+}
 
 QString DToolTipStyleSheet::breakString(const QString& input)
 {
@@ -104,7 +104,7 @@ QString DToolTipStyleSheet::breakString(const QString& input)
         ++count;
     }
     return br;
-};
+}
 
 QString DToolTipStyleSheet::elidedText(const QString& str, Qt::TextElideMode elideMode)
 {

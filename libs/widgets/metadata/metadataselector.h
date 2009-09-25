@@ -100,7 +100,7 @@ public:
         DefaultBtn   = 0x04,
         SearchBar    = 0x08
     };
-    Q_DECLARE_FLAGS(ControlElements, ControlElement);
+    Q_DECLARE_FLAGS(ControlElements, ControlElement)
 
     MetadataSelectorView(QWidget* parent);
     virtual ~MetadataSelectorView();
@@ -118,7 +118,7 @@ public:
 
     QStringList checkedTagsList() const;
 
-    void        setControlElements(ControlElements controllerMask);
+    void setControlElements(ControlElements controllerMask);
 
 private Q_SLOTS:
 
@@ -138,6 +138,6 @@ private:
 
 }  // namespace Digikam
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::MetadataSelectorView::ControlElements);
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::MetadataSelectorView::ControlElements)
 
 #endif /* METADATA_SELECTOR_H */

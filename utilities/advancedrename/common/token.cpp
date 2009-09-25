@@ -46,7 +46,7 @@ Token::Token(const QString& id, const QString& alias, const QString& description
 Token::~Token()
 {
     delete m_action;
-};
+}
 
 void Token::slotTriggered()
 {

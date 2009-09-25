@@ -28,46 +28,46 @@
 ToneMappingBase::ToneMappingBase(){
     current_process_power_value=20.0;
     preview_zoom=1.0;
-};
+}
 
 ToneMappingBase::~ToneMappingBase(){
-};
+}
 
 
 void ToneMappingBase::set_blur(int nstage, REALTYPE value){
     if (value<0) value=0;
     if (value>10000.0) value=10000.0;
     par.stage[nstage].blur=value;
-};
+}
 
 void ToneMappingBase::set_power(int nstage, REALTYPE value){
     if (value<0) value=0;
     if (value>100.0) value=100.0;
     par.stage[nstage].power=value;
-};
+}
 
 
 void ToneMappingBase::set_low_saturation(int value){
     if (value<0) value=0;
     if (value>100) value=100;
     par.low_saturation=value;
-};
+}
 
 void ToneMappingBase::set_high_saturation(int value){
     if (value<0) value=0;
     if (value>100) value=100;
     par.high_saturation=value;
-};
+}
 
 void ToneMappingBase::set_stretch_contrast(bool value){
     par.stretch_contrast=value;
-};
+}
 
 void ToneMappingBase::set_function_id (int value){
     if (value<0) value=0;
     if (value>1) value=1;
     par.function_id=value;
-};
+}
 
 
 REALTYPE ToneMappingBase::func(REALTYPE x1,REALTYPE x2){
@@ -107,17 +107,17 @@ REALTYPE ToneMappingBase::func(REALTYPE x1,REALTYPE x2){
 
 
     return result;
-};
+}
 
 void ToneMappingBase::save_parameters(const char *filename){
     par.save_parameters(filename);
-};
+}
 
 bool ToneMappingBase::load_parameters(const char *filename){
     if (!par.load_parameters(filename)) return false;
     apply_parameters(par);
     return true;
-};
+}
 
 void ToneMappingBase::apply_parameters(ToneMappingParameters inpar){
     par=inpar;
@@ -131,5 +131,5 @@ void ToneMappingBase::apply_parameters(ToneMappingParameters inpar){
         set_blur(i,par.stage[i].blur);
     };
     update_preprocessed_values();
-};
+}
 
