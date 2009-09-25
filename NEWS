@@ -35,7 +35,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 024 ==> 206670 : after deleting an image the image before the deleted image is displayed/selected instead of the image after the deleted one.
 025 ==> 208160 : After edition image has different colors in QT nad GTK+ applications.
 026 ==> 207332 : editor works on the wrong image if a new one was chosen while processing.
-027 ==> 
+027 ==> 206666 : thumbnail borders are drawn inside instead of outside the images thus hiding parts of the image
+028 ==> 195050 : Color management doesn't work in thumbnails and view mode.
+029 ==> 
 
 
 *********************************************************************************************************

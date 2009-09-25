@@ -249,6 +249,10 @@ bool ThumbnailLoadThread::find(const QString& filePath, QPixmap& retPixmap)
 
 LoadingDescription ThumbnailLoadThreadPriv::createLoadingDescription(const QString filePath, int size)
 {
+    // bug #206666: Do not cut off one-pixel line for highlighting border
+    if (highlight && size >= 10)
+        size -= 2;
+
     LoadingDescription description(filePath, size, exifRotate,
                                    LoadingDescription::NoColorConversion,
                                    LoadingDescription::PreviewParameters::Thumbnail);
@@ -461,18 +465,24 @@ void ThumbnailLoadThread::slotThumbnailLoaded(const LoadingDescription& descript
     if (thumb.isNull())
         loadWithKDE(description);
 
-    QPixmap pix = QPixmap::fromImage(thumb);
+    QPixmap pix;
 
-    int w = pix.width();
-    int h = pix.height();
+    int w = thumb.width();
+    int h = thumb.height();
 
     // highlight only when requested and when thumbnail
     // width and height are greater than 10
     if (d->highlight && (w >= 10 && h >= 10))
     {
+        pix = QPixmap(w + 2, h + 2);
         QPainter p(&pix);
         p.setPen(QPen(Qt::black, 1));
-        p.drawRect(0, 0, w - 1, h - 1);
+        p.drawRect(0, 0, w + 1, h + 1);
+        p.drawImage(1, 1, thumb);
+    }
+    else
+    {
+        pix = QPixmap::fromImage(thumb);
     }
 
     // put into cache
