@@ -76,6 +76,7 @@ private Q_SLOTS:
     void slotTextChanged();
     void slotParseTimer();
     void slotCursorPositionChanged(int, int);
+    void slotSelectionChanged();
 
 private:
 

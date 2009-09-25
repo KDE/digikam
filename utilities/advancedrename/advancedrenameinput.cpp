@@ -180,6 +180,7 @@ void AdvancedRenameInput::mousePressEvent(QMouseEvent* e)
     {
         setCursorPosition(cursorPositionAt(e->pos()));
         d->curCursorPos = cursorPosition();
+        slotSelectionChanged();
         KLineEdit::mousePressEvent(e);
     }
 }
@@ -288,7 +289,11 @@ void AdvancedRenameInput::slotCursorPositionChanged(int oldPos, int newPos)
     {
         d->curCursorPos = newPos;
     }
+    slotSelectionChanged();
+}
 
+void AdvancedRenameInput::slotSelectionChanged()
+{
     d->tokenMarked = false;
     emit signalTokenMarked(d->tokenMarked);
 }
