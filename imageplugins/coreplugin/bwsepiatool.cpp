@@ -7,7 +7,7 @@
  * Description : Black and White conversion tool.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -336,6 +336,21 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
                             "This has the most natural tonal correction, and improves contrast. Ideal for "
                             "landscapes.</p>"));
 
+    ++type;
+    item = new ListWidgetBWPreviewItem(m_bwFilters, i18n("Yellow-Green Filter"), m_previewPixmapFactory, type);
+    item->setWhatsThis(i18n("<b>Black & White with Yellow-Green Filter</b>:"
+                            "<p>Simulate black and white film exposure using a yellow-green filter. "
+                            "A yellow-green filter is highly effective for outdoor portraits because "
+                            "red is rendered dark while green appears lighter. Great for correcting skin tones, "
+                            "bring out facial expressions in close-ups and emphasizing the feeling of liveliness. "
+                            "This filter is highly effective for indoor portraits under tungsten lighting.</p>"));
+
+    ++type;
+    item = new ListWidgetBWPreviewItem(m_bwFilters, i18n("Blue Filter"), m_previewPixmapFactory, type);
+    item->setWhatsThis(i18n("<b>Black & White with Blue Filter</b>:"
+                            "<p>Simulate black and white film exposure using a blue filter. "
+                            "This accentuates haze and fog. Used for dye transfer and contrast effects.</p>"));
+
     m_strengthInput = new RIntNumInput(vbox);
     m_strengthInput->input()->setLabel(i18n("Strength:"), Qt::AlignLeft | Qt::AlignVCenter);
     m_strengthInput->setRange(1, 5, 1);
@@ -506,11 +521,11 @@ void BWSepiaTool::slotFilterSelected()
 
 QPixmap BWSepiaTool::getThumbnailForEffect(int type)
 {
-    DImg thumb          = m_thumbnailImage.copy();
-    int w               = thumb.width();
-    int h               = thumb.height();
-    bool sb             = thumb.sixteenBit();
-    bool a              = thumb.hasAlpha();
+    DImg thumb = m_thumbnailImage.copy();
+    int w      = thumb.width();
+    int h      = thumb.height();
+    bool sb    = thumb.sixteenBit();
+    bool a     = thumb.hasAlpha();
 
     if (type < BWGeneric)
     {
@@ -648,12 +663,12 @@ void BWSepiaTool::slotEffect()
 
     delete [] m_destinationPreviewData;
 
-    ImageIface* iface = m_previewWidget->imageIface();
-    m_destinationPreviewData   = iface->getPreviewImage();
-    int w                      = iface->previewWidth();
-    int h                      = iface->previewHeight();
-    bool a                     = iface->previewHasAlpha();
-    bool sb                    = iface->previewSixteenBit();
+    ImageIface* iface        = m_previewWidget->imageIface();
+    m_destinationPreviewData = iface->getPreviewImage();
+    int w                    = iface->previewWidth();
+    int h                    = iface->previewHeight();
+    bool a                   = iface->previewHasAlpha();
+    bool sb                  = iface->previewSixteenBit();
 
     // Apply black and white filter.
 
@@ -696,11 +711,11 @@ void BWSepiaTool::finalRendering()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
     ImageIface* iface = m_previewWidget->imageIface();
-    uchar *data                = iface->getOriginalImage();
-    int w                      = iface->originalWidth();
-    int h                      = iface->originalHeight();
-    bool a                     = iface->originalHasAlpha();
-    bool sb                    = iface->originalSixteenBit();
+    uchar *data       = iface->getOriginalImage();
+    int w             = iface->originalWidth();
+    int h             = iface->originalHeight();
+    bool a            = iface->originalHasAlpha();
+    bool sb           = iface->originalSixteenBit();
 
     if (data)
     {
@@ -775,6 +790,18 @@ void BWSepiaTool::blackAndWhiteConversion(uchar *data, int w, int h, bool sb, in
           m_redAttn   = +0.30 * strength;
           m_greenAttn = -0.31 * strength;
           m_blueAttn  = +0.01 * strength;
+          break;
+
+       case BWYellowGreenFilter:
+          m_redAttn   = +0.25 * strength;
+          m_greenAttn = +0.65 * strength;
+          m_blueAttn  = +0.15 * strength;
+          break;
+
+       case BWBlueFilter:
+          m_redAttn   = +0.15 * strength;
+          m_greenAttn = +0.15 * strength;
+          m_blueAttn  = +0.80 * strength;
           break;
 
        // --------------------------------------------------------------------------------
