@@ -132,9 +132,9 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     // Initialize PGF API.
 
 #ifdef WIN32
-#ifdef Q_CC_MSVC
+#ifdef UNICODE
     HANDLE fd = CreateFile((LPCWSTR)(QFile::encodeName(filePath).constData()), GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
-#else /* MinGW compiler. */
+#else
     HANDLE fd = CreateFile(QFile::encodeName(filePath), GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
 #endif
     if (fd == INVALID_HANDLE_VALUE)
@@ -313,9 +313,9 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     m_observer = observer;
 
 #ifdef WIN32
-#ifdef Q_CC_MSVC
+#ifdef UNICODE
     HANDLE fd = CreateFile((LPCWSTR)(QFile::encodeName(filePath).constData()), GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
-#else /* MinGW compiler. */
+#else
     HANDLE fd = CreateFile(QFile::encodeName(filePath), GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
 #endif
     if (fd == INVALID_HANDLE_VALUE)
