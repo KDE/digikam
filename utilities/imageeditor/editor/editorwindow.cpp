@@ -1317,6 +1317,8 @@ void EditorWindow::slotPrepareToLoad()
 {
     // Disable actions as appropriate during loading
     emit signalNoCurrentItem();
+    unsetCursor();
+    m_animLogo->stop();
     toggleActions(false);
     slotUpdateItemInfo();
 }

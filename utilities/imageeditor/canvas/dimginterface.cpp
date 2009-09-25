@@ -209,7 +209,12 @@ void DImgInterface::load(const QString& filename, IOFileSettingsContainer *iofil
         connect(rawImport, SIGNAL(cancelClicked()),
                 this, SLOT(slotLoadRaw()));
 
+        d->thread->stopLoading();
         return;
+    }
+    else
+    {
+        d->nextRawDescription = LoadingDescription();
     }
 
     load(description);
@@ -221,11 +226,13 @@ void DImgInterface::slotLoadRawFromTool()
     if (rawImport)
         d->nextRawDescription.rawDecodingSettings = rawImport->rawDecodingSettings();
     load(d->nextRawDescription);
+    d->nextRawDescription = LoadingDescription();
 }
 
 void DImgInterface::slotLoadRaw()
 {
     load(d->nextRawDescription);
+    d->nextRawDescription = LoadingDescription();
 }
 
 void DImgInterface::load(const LoadingDescription& description)
@@ -313,6 +320,10 @@ void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription
     const QString &fileName = loadingDescription.filePath;
 
     if (fileName != d->filename)
+        return;
+
+    // RAW tool active? Discard previous loaded image
+    if (!d->nextRawDescription.filePath.isNull())
         return;
 
     bool valRet = false;
