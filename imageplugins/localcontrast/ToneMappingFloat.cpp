@@ -26,10 +26,10 @@
 
 ToneMappingFloat::ToneMappingFloat():ToneMappingBase(){
     par.info_fast_mode=false;
-};
+}
 
 ToneMappingFloat::~ToneMappingFloat(){
-};
+}
 
 void ToneMappingFloat::process_rgb_image(REALTYPE *img,int sizex,int sizey){
     update_preprocessed_values();
@@ -154,9 +154,10 @@ void ToneMappingFloat::process_rgb_image(REALTYPE *img,int sizex,int sizey){
 
     delete[]srcimg;
     delete[]blurimage;
-};
+}
+
 void ToneMappingFloat::update_preprocessed_values(){
-};
+}
 
 void ToneMappingFloat::process_8bit_rgb_image(unsigned char *img,int sizex,int sizey){
     int size=sizex*sizey;
@@ -182,7 +183,7 @@ void ToneMappingFloat::process_8bit_rgb_image(unsigned char *img,int sizex,int s
 
 
     delete[]tmpimage;
-};
+}
 
 void ToneMappingFloat::inplace_blur(REALTYPE *data,int sizex, int sizey, REALTYPE blur){
     blur/=preview_zoom;
@@ -227,7 +228,7 @@ void ToneMappingFloat::inplace_blur(REALTYPE *data,int sizex, int sizey, REALTYP
 
         };
     };
-};
+}
 
 void ToneMappingFloat::stretch_contrast(REALTYPE *data, int datasize){
     //stretch the contrast
@@ -276,6 +277,6 @@ void ToneMappingFloat::stretch_contrast(REALTYPE *data, int datasize){
         if (x>1.0) x=1.0;
          data[i]=x;
     };
-};
+}
 
 

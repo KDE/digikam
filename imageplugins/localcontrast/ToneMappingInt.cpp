@@ -35,20 +35,24 @@ ToneMappingInt::ToneMappingInt():ToneMappingBase(){
     };
     current_func_lookup_table=precomputed[0].func_lookup_table;
 
-};
+}
+
 ToneMappingInt::~ToneMappingInt(){
     for (int nstage=0;nstage<TONEMAPPING_MAX_STAGES;nstage++){
         delete [] precomputed[nstage].func_lookup_table;
     };
-};
+}
+
 void ToneMappingInt::set_power(int nstage,REALTYPE value){
     ToneMappingBase::set_power(nstage,value);
     precomputed[nstage].changed=true;
-};
+}
+
 void ToneMappingInt::set_function_id(int value){
     ToneMappingBase::set_function_id(value);
     for (int nstage=0;nstage<TONEMAPPING_MAX_STAGES;nstage++) precomputed[nstage].changed=true;
-};
+}
+
 void ToneMappingInt::recompute_func_table(int nstage){
     int pos=0;
     unsigned char *func_lookup_table=precomputed[nstage].func_lookup_table;
@@ -61,12 +65,13 @@ void ToneMappingInt::recompute_func_table(int nstage){
         };
     };
     precomputed[nstage].changed=false;
-};
+}
+
 void ToneMappingInt::update_preprocessed_values(){
     for (int nstage=0;nstage<TONEMAPPING_MAX_STAGES;nstage++){
         if (precomputed[nstage].changed&&par.stage[nstage].enabled) recompute_func_table(nstage);
     };
-};
+}
 
 void ToneMappingInt::get_min_max_data(unsigned char *img,int size,int &min,int &max){
     const int ucsize=256; //size of a unsigned char
@@ -99,7 +104,7 @@ void ToneMappingInt::get_min_max_data(unsigned char *img,int size,int &min,int &
         min=0;
         max=255;
     };
-};
+}
 
 void ToneMappingInt::stretch_contrast_8bit_rgb_image(unsigned char *img,int sizex,int sizey,int min,int max,unsigned char *stretch_contrast_table){
     const int ucsize=256; //size of a unsigned char
@@ -122,7 +127,7 @@ void ToneMappingInt::stretch_contrast_8bit_rgb_image(unsigned char *img,int size
         img[i]=stretch_contrast_table[img[i]];
     };
     if (delete_table) delete []stretch_contrast_table;
-};
+}
 
 void ToneMappingInt::process_8bit_rgb_image(unsigned char *img,int sizex,int sizey){
     update_preprocessed_values();
@@ -255,7 +260,7 @@ void ToneMappingInt::process_8bit_rgb_image(unsigned char *img,int sizex,int siz
 
     delete[]blurimage;
     delete[]srcimg;
-};
+}
 
 void ToneMappingInt::inplace_blur_8bit_process(unsigned char *data,int sizex, int sizey, REALTYPE blur){
     blur/=preview_zoom;
@@ -298,5 +303,5 @@ void ToneMappingInt::inplace_blur_8bit_process(unsigned char *data,int sizex, in
 
     };
 
-};
+}
 

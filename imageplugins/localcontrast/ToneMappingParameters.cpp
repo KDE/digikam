@@ -40,28 +40,30 @@ ToneMappingParameters::ToneMappingParameters(){
     unsharp_mask.power=30;
     unsharp_mask.blur=4.0;
     unsharp_mask.threshold=0;
-};
+}
 
 ToneMappingParameters::~ToneMappingParameters(){
-};
+}
+
 REALTYPE ToneMappingParameters::get_power(int nstage){
     REALTYPE power=stage[nstage].power;
     power=pow(power/100.0,1.5)*100.0;
     return power;
-};
+}
+
 REALTYPE ToneMappingParameters::get_blur(int nstage){
     return stage[nstage].blur;
-};
+}
 
 REALTYPE ToneMappingParameters::get_unsharp_mask_power(){
     REALTYPE power=unsharp_mask.power;
     power=pow(power/100.0,3.0)*10.0;
     return power;
-};
+}
 
 REALTYPE ToneMappingParameters::get_unsharp_mask_blur(){
     return unsharp_mask.blur;
-};
+}
 
 void ToneMappingParameters::save_parameters(const char *filename){
     FILE *f=fopen(filename,"w");
@@ -86,7 +88,7 @@ void ToneMappingParameters::save_parameters(const char *filename){
     fprintf(f,"unsharp_mask_threshold %d\n",unsharp_mask.threshold);
 
     fclose(f);
-};
+}
 
 bool ToneMappingParameters::load_parameters(const char *filename){
     FILE *f=fopen(filename,"r");
@@ -147,5 +149,5 @@ bool ToneMappingParameters::load_parameters(const char *filename){
 
 
     return true;
-};
+}
 
