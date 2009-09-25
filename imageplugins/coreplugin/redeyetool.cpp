@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "redeyetool.h"
 #include "redeyetool.moc"
 

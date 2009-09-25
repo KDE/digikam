@@ -274,7 +274,7 @@ ResizeTool::ResizeTool(QObject* parent)
     grid->addWidget(d->restorationTips,        7, 1, 1, 2);
     grid->setRowStretch(8, 10);
     grid->setMargin(d->gboxSettings->spacingHint());
-    grid->setSpacing(0);
+    grid->setSpacing(d->gboxSettings->spacingHint());
 
     // -------------------------------------------------------------
 
