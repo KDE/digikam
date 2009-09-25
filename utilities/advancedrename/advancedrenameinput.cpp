@@ -219,6 +219,12 @@ void AdvancedRenameInput::searchAndHighlightTokens(SelectionType type, int pos)
         return;
     }
 
+    if (!d->userIsMarking)
+    {
+        d->curCursorPos  = cursorPosition();
+        d->userIsMarking = true;
+    }
+
     int start;
     int length;
 
@@ -239,35 +245,7 @@ void AdvancedRenameInput::searchAndHighlightTokens(SelectionType type, int pos)
     {
         d->markedTokenPos = start;
         setSelectionColor(type);
-        highlightToken(type);
-    }
-}
 
-bool AdvancedRenameInput::highlightToken(SelectionType type)
-{
-    if (!d->userIsMarking)
-    {
-        d->curCursorPos  = cursorPosition();
-        d->userIsMarking = true;
-    }
-
-    int start  = 0;
-    int length = 0;
-    bool found = false;
-
-    switch (type)
-    {
-        case Token:
-            found = d->parser->tokenAtPosition(text(), d->markedTokenPos, start, length);
-            break;
-        case TokenAndModifiers:
-            found = d->parser->tokenModifierAtPosition(text(), d->markedTokenPos, start, length);
-            break;
-        default: break;
-    }
-
-    if (found)
-    {
         deselect();
         setSelection(start, length);
 
@@ -280,8 +258,6 @@ bool AdvancedRenameInput::highlightToken(SelectionType type)
         d->selectionStart  = -1;
         d->selectionLength = -1;
     }
-
-    return (found && hasSelectedText());
 }
 
 bool AdvancedRenameInput::tokenIsSelected()
