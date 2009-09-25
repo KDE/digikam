@@ -5,6 +5,7 @@ NEW FEATURES:
 
 General        : Metadata fields can be used for renaming in BQM and CameraUI.
 ImageEditor    : New menu option to switch image color space quickly.
+ImageEditor    : Black and White converter: add standard Blue and Yellow-Green color filters.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
