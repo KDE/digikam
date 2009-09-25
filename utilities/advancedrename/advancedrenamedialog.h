@@ -38,7 +38,6 @@
 // Local includes
 
 #include "imageinfo.h"
-#include "digikam_export.h"
 
 class QEvent;
 class QMoveEvent;
@@ -50,7 +49,7 @@ namespace Digikam
 
 class AdvancedRenameListItemPriv;
 
-class DIGIKAM_EXPORT AdvancedRenameListItem : public QTreeWidgetItem
+class AdvancedRenameListItem : public QTreeWidgetItem
 {
 public:
 
@@ -76,7 +75,7 @@ private:
 
 class AdvancedRenameDialogPriv;
 
-class DIGIKAM_EXPORT AdvancedRenameDialog : public KDialog
+class AdvancedRenameDialog : public KDialog
 {
     Q_OBJECT
 
