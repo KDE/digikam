@@ -123,6 +123,7 @@ protected Q_SLOTS:
     virtual void slotReset();
     virtual void slotViewportEntered();
     virtual void slotRowsRemoved(const QModelIndex& parent, int start, int end);
+    virtual void slotLayoutChanged();
 
 protected:
 

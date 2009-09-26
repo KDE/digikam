@@ -140,6 +140,9 @@ void AbstractWidgetDelegateOverlay::setActive(bool active)
         connect(m_view->model(), SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
                 this, SLOT(slotRowsRemoved(const QModelIndex&, int, int)));
 
+        connect(m_view->model(), SIGNAL(layoutChanged()),
+                this, SLOT(slotLayoutChanged()));
+
         connect(m_view->model(), SIGNAL(modelReset()),
                 this, SLOT(slotReset()));
 
@@ -188,6 +191,11 @@ void AbstractWidgetDelegateOverlay::slotViewportEntered()
 }
 
 void AbstractWidgetDelegateOverlay::slotRowsRemoved(const QModelIndex &, int, int)
+{
+    hide();
+}
+
+void AbstractWidgetDelegateOverlay::slotLayoutChanged()
 {
     hide();
 }
