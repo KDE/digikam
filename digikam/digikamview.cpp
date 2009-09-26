@@ -1086,7 +1086,7 @@ void DigikamView::slotGotoAlbumAndItem(const ImageInfo& imageInfo)
 
     // Set the activate item url to find in the Album View after
     // all items have be reloaded.
-    d->iconView->scrollToWhenAvailable(imageInfo.id());
+    d->iconView->setCurrentWhenAvailable(imageInfo.id());
 
     // And finally toggle album manager to handle album history and
     // reload all items.
@@ -1106,7 +1106,7 @@ void DigikamView::slotGotoDateAndItem(const ImageInfo& imageInfo)
 
     // Set the activate item url to find in the Album View after
     // all items have be reloaded.
-    d->iconView->scrollToWhenAvailable(imageInfo.id());
+    d->iconView->setCurrentWhenAvailable(imageInfo.id());
 
     // Change the year and month of the iconItem (day is unused).
     d->dateFolderView->gotoDate(date);
@@ -1189,7 +1189,10 @@ void DigikamView::slotAlbumRefresh()
     if (album && album->type() == Album::PHYSICAL)
         ScanController::instance()->scheduleCollectionScan(static_cast<PAlbum*>(album)->folderPath());
     // force reload. Should normally not be necessary, but we may have bugs
+    qlonglong currentId = d->iconView->currentInfo().id();
     d->iconView->imageModel()->refresh();
+    if (currentId != -1)
+        d->iconView->setCurrentWhenAvailable(currentId);
 }
 
 void DigikamView::slotImageSelected()

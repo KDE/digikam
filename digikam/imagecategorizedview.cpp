@@ -376,7 +376,7 @@ bool ImageCategorizedView::isToolTipEnabled() const
     return d->showToolTip;
 }
 
-void ImageCategorizedView::scrollToWhenAvailable(qlonglong imageId)
+void ImageCategorizedView::setCurrentWhenAvailable(qlonglong imageId)
 {
     d->scrollToItemId = imageId;
 }
@@ -417,7 +417,9 @@ void ImageCategorizedView::scrollToStoredItem()
     {
         if (d->model->hasImage(d->scrollToItemId))
         {
-            scrollTo(d->filterModel->indexForImageId(d->scrollToItemId));
+            QModelIndex index = d->filterModel->indexForImageId(d->scrollToItemId);
+            setCurrentIndex(index);
+            scrollTo(index, QAbstractItemView::PositionAtCenter);
             d->scrollToItemId = 0;
         }
     }

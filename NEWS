@@ -39,7 +39,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 028 ==> 195050 : Color management doesn't work in thumbnails and view mode.
 029 ==> 200357 : digikam, exif rotation, thumbnail not rotated.
 030 ==> 203485 : consider using KGlobalSettings::picturesPath() instead of KGlobalSettings::documentPath().
-031 ==> 
+031 ==> 204053 : Remember cursor position in album view after refresh / sync.
+032 ==> 
 
 
 *********************************************************************************************************

@@ -112,7 +112,7 @@ public Q_SLOTS:
 
     void setThumbnailSize(int size);
     /** Scroll the view to the given item when it becomes available */
-    void scrollToWhenAvailable(qlonglong imageId);
+    void setCurrentWhenAvailable(qlonglong imageId);
     /** Set as current item the item identified by its file url */
     void setCurrentUrl(const KUrl& url);
 
