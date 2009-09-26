@@ -2646,7 +2646,13 @@ void DigikamApp::slotTogglePreview(bool t)
 
 void DigikamApp::slotImportAddImages()
 {
-    QString path = KFileDialog::getExistingDirectory(KGlobalSettings::documentPath(), this,
+    QString startingPath;
+#if KDE_IS_VERSION(4,1,61)
+    startingPath = KGlobalSettings::picturesPath();
+#else
+    picturesPath = QDesktopServices::storageLocation(QDesktopServices::PicturesLocation);
+#endif
+    QString path = KFileDialog::getExistingDirectory(startingPath, this,
                                 i18n("Select folder to parse"));
 
     if(path.isEmpty())

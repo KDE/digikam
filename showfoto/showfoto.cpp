@@ -533,8 +533,16 @@ void ShowFoto::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("ImageViewer Settings");
 
-    d->lastOpenedDirectory.setPath(group.readEntry("Last Opened Directory",
-                                   KGlobalSettings::documentPath()));
+    QString defaultDir =group.readEntry("Last Opened Directory", QString());
+    if (defaultDir.isNull())
+    {
+        #if KDE_IS_VERSION(4,1,61)
+        defaultDir = KGlobalSettings::picturesPath();
+        #else
+        defaultDir = QDesktopServices::storageLocation(QDesktopServices::PicturesLocation);
+        #endif
+    }
+    d->lastOpenedDirectory.setPath(defaultDir);
 
     Digikam::ThemeEngine::instance()->setCurrentTheme(group.readEntry("Theme", i18nc("default theme name",
                                                                                      "Default")));

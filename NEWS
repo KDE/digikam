@@ -37,7 +37,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 026 ==> 207332 : editor works on the wrong image if a new one was chosen while processing.
 027 ==> 206666 : thumbnail borders are drawn inside instead of outside the images thus hiding parts of the image
 028 ==> 195050 : Color management doesn't work in thumbnails and view mode.
-029 ==> 
+029 ==> 200357 : digikam, exif rotation, thumbnail not rotated.
+030 ==> 203485 : consider using KGlobalSettings::picturesPath() instead of KGlobalSettings::documentPath().
+031 ==> 
 
 
 *********************************************************************************************************
