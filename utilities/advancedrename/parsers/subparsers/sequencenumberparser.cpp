@@ -134,7 +134,7 @@ SequenceNumberParser::SequenceNumberParser()
     addToken("#{<i>start</i>,<i>step</i>}", i18n("Sequence Number (start, step)"),
              i18n( "Sequence number (custom start + step)"));
 
-    setRegExp("(#+)(\\{\\s*(\\d+)\\s*,?\\s*(\\d+)*\\s*\\})?");
+    setRegExp("(#+)(\\{\\s*(\\d+)\\s*,?\\s*(\\d+)?\\s*\\})?");
 }
 
 void SequenceNumberParser::slotTokenTriggered(const QString& token)
