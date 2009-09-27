@@ -101,6 +101,36 @@ void AdvancedRenameWidgetTest::testNumberToken()
     QCOMPARE(parsed, result);
 }
 
+void AdvancedRenameWidgetTest::testTrimmedModifier_data()
+{
+    QTest::addColumn<QString>("parseString");
+    QTest::addColumn<QString>("filename");
+    QTest::addColumn<QString>("result");
+
+    QString fileName("myfilename001");
+
+    QTest::newRow("01") << QString("[file]!") << QString("myfilename001 ")                             << fileName;
+    QTest::newRow("02") << QString("[file]!") << QString(" myfilename001 ")                            << fileName;
+    QTest::newRow("03") << QString("[file]!") << QString("               myfilename001              ") << fileName;
+    QTest::newRow("03") << QString("[file]!") << QString("               myfilename    001          ")
+                        << QString("myfilename 001");
+}
+
+void AdvancedRenameWidgetTest::testTrimmedModifier()
+{
+    QFETCH(QString,   parseString);
+    QFETCH(QString,   filename);
+    QFETCH(QString,   result);
+
+    DefaultParser parser;
+
+    ParseInformation info;
+    info.filePath   = filename;
+
+    QString parsed = parser.parse(parseString, info);
+    QCOMPARE(parsed, result);
+}
+
 void AdvancedRenameWidgetTest::testFirstLetterOfEachWordUppercaseModifier_data()
 {
     QTest::addColumn<QString>("parseString");
