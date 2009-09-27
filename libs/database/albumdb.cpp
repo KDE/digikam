@@ -1899,7 +1899,7 @@ void AlbumDB::addItemTag(int albumID, const QString& name, int tagID)
 
 void AlbumDB::addTagsToItems(QList<qlonglong> imageIDs, QList<int> tagIDs)
 {
-    QSqlQuery query = d->db->prepareQuery("REPLACE INTO ImageTags (imageid, tagid) VALUES(?, ?);");
+    SqlQuery query = d->db->prepareQuery("REPLACE INTO ImageTags (imageid, tagid) VALUES(?, ?);");
 
     QVariantList images;
     QVariantList tags;
@@ -1945,7 +1945,7 @@ void AlbumDB::removeItemAllTags(qlonglong imageID, QList<int> currentTagIds)
 
 void AlbumDB::removeTagsFromItems(QList<qlonglong> imageIDs, QList<int> tagIDs)
 {
-    QSqlQuery query = d->db->prepareQuery("DELETE FROM ImageTags WHERE imageID=? AND tagid=?;");
+    SqlQuery query = d->db->prepareQuery("DELETE FROM ImageTags WHERE imageID=? AND tagid=?;");
 
     QVariantList images;
     QVariantList tags;
@@ -2128,7 +2128,7 @@ QMap<QString,int> AlbumDB::getImageFormatStatistics()
 {
     QMap<QString, int>  map;
 
-    QSqlQuery query;
+    SqlQuery query;
     query = d->db->prepareQuery("SELECT COUNT(*), II.format "
                                 "FROM ImageInformation AS II "
                                 "   INNER JOIN Images ON II.imageid=images.id "
@@ -2907,7 +2907,7 @@ void AlbumDB::removeItemsFromAlbum(int albumID)
 
 void AlbumDB::removeItems(QList<qlonglong> itemIDs, QList<int> albumIDs)
 {
-    QSqlQuery query = d->db->prepareQuery( QString("UPDATE Images SET status=?, album=NULL WHERE id=?;") );
+    SqlQuery query = d->db->prepareQuery( QString("UPDATE Images SET status=?, album=NULL WHERE id=?;") );
 
     QVariantList imageIds;
     QVariantList status;
@@ -2934,7 +2934,7 @@ void AlbumDB::deleteRemovedItems()
 
 void AlbumDB::deleteRemovedItems(QList<int> albumIds)
 {
-    QSqlQuery query = d->db->prepareQuery( QString("DELETE FROM Images WHERE status=? AND album=?;") );
+    SqlQuery query = d->db->prepareQuery( QString("DELETE FROM Images WHERE status=? AND album=?;") );
 
     QVariantList albumBindIds;
     QVariantList status;

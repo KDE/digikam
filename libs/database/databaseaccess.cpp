@@ -235,6 +235,8 @@ bool DatabaseAccess::checkReadyForUse(InitializationObserver *observer)
     }
     if (d->backend->isReady())
         return true;
+
+//TODO: Implement a method to wait until the database is open
     if (!d->backend->isOpen())
     {
         if (!d->backend->open(d->parameters))

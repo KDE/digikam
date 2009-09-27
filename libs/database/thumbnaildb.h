@@ -39,6 +39,7 @@
 
 // Local includes
 
+#include "sqlquery.h"
 #include "thumbnaildatabaseaccess.h"
 #include "digikam_export.h"
 

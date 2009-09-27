@@ -57,6 +57,7 @@
 #include "imagequerybuilder.h"
 #include "dmetadata.h"
 #include "haariface.h"
+#include "sqlquery.h"
 
 namespace Digikam
 {
@@ -547,7 +548,7 @@ void ImageLister::listFromIdList(ImageListerReceiver *receiver, QList<qlonglong>
         executionSuccess = query.execBatch
         */
         DatabaseAccess access;
-        QSqlQuery query = access.backend()->prepareQuery(QString(
+        SqlQuery query = access.backend()->prepareQuery(QString(
                              "SELECT DISTINCT Images.id, Images.name, Images.album, "
                              "       Albums.albumRoot, "
                              "       ImageInformation.rating, Images.category, "

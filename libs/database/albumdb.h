@@ -46,6 +46,7 @@
 #include "databasefields.h"
 #include "databaseaccess.h"
 #include "digikam_export.h"
+#include "sqlquery.h"
 
 namespace Digikam
 {

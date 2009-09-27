@@ -56,6 +56,7 @@
 #include "databasebackend.h"
 #include "searchxml.h"
 #include "haar.h"
+#include "sqlquery.h"
 /*#include "imagecomments_p.h"
 #include "imageposition_p.h"
 */
@@ -215,7 +216,7 @@ public:
 
         // Variables for data read from DB
         DatabaseAccess      access;
-        QSqlQuery           query;
+        SqlQuery           query;
         DatabaseBlob        blob;
         qlonglong           imageid;
         Haar::SignatureData targetSig;
@@ -531,7 +532,7 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData *querySig,
 
     // Variables for data read from DB
     DatabaseAccess      access;
-    QSqlQuery           query;
+    SqlQuery           query;
     DatabaseBlob        blob;
     qlonglong           imageid;
     Haar::SignatureData targetSig;

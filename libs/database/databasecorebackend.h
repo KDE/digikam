@@ -37,6 +37,7 @@
 
 #include "digikam_export.h"
 #include "databaseparameters.h"
+#include "sqlquery.h"
 
 namespace Digikam
 {
@@ -207,50 +208,50 @@ public:
      * Executes the statement and returns the query object.
      * Methods are provided for up to four bound values (positional binding), or for a list of bound values.
      */
-    QSqlQuery execQuery(const QString& sql);
-    QSqlQuery execQuery(const QString& sql, const QVariant& boundValue1);
-    QSqlQuery execQuery(const QString& sql,
+    SqlQuery execQuery(const QString& sql);
+    SqlQuery execQuery(const QString& sql, const QVariant& boundValue1);
+    SqlQuery execQuery(const QString& sql,
                         const QVariant& boundValue1, const QVariant& boundValue2);
-    QSqlQuery execQuery(const QString& sql,
+    SqlQuery execQuery(const QString& sql,
                         const QVariant& boundValue1, const QVariant& boundValue2, const QVariant& boundValue3);
-    QSqlQuery execQuery(const QString& sql,
+    SqlQuery execQuery(const QString& sql,
                         const QVariant& boundValue1, const QVariant& boundValue2,
                         const QVariant& boundValue3, const QVariant& boundValue4);
-    QSqlQuery execQuery(const QString& sql, const QList<QVariant>& boundValues);
+    SqlQuery execQuery(const QString& sql, const QList<QVariant>& boundValues);
 
     /**
      * Method which accept a hashmap with key, values which are used for named binding
      */
-    QSqlQuery execQuery(const QString& sql, const QMap<QString, QVariant>& bindingMap);
+    SqlQuery execQuery(const QString& sql, const QMap<QString, QVariant>& bindingMap);
 
 
     /**
      * Calls exec/execBatch on the query, and handles debug output if something went wrong
      */
-    bool exec(QSqlQuery& query);
-    bool execBatch(QSqlQuery& query);
+    bool exec(SqlQuery& query);
+    bool execBatch(SqlQuery& query);
 
     /**
      * Creates a query object prepared with the statement, waiting for bound values
      */
-    QSqlQuery prepareQuery(const QString& sql);
+    SqlQuery prepareQuery(const QString& sql);
     /**
      * Creates an empty query object waiting for the statement
      */
-    QSqlQuery getQuery();
+    SqlQuery getQuery();
     /**
      * Creates a faithful copy of the passed query, with the current db connection.
      */
-    QSqlQuery copyQuery(const QSqlQuery& old);
+    SqlQuery copyQuery(const SqlQuery& old);
 
     /**
      * Called with a failed query. Handles certain known errors and debug output.
      * If it returns true, reexecute the query; if it returns false, return it as failed.
      * Pass the number of retries already done for this query to help with some decisions.
      */
-    bool queryErrorHandling(const QSqlQuery& query, int retries);
+    bool queryErrorHandling(const SqlQuery& query, int retries);
 
-    QList<QVariant> readToList(QSqlQuery& query);
+    QList<QVariant> readToList(SqlQuery& query);
 
     /**
      * Begin a database transaction

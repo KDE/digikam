@@ -130,7 +130,7 @@ DatabaseThumbnailInfo ThumbnailDB::findByFilePath(const QString &path)
 
 QHash<QString, int> ThumbnailDB::getValidFilePaths()
 {
-    QSqlQuery query;
+    SqlQuery query;
     query = d->db->prepareQuery(QString("SELECT path, id "
                                         "FROM FilePaths "
                                         "   INNER JOIN Thumbnails ON FilePaths.thumbId=Thumbnails.id "
