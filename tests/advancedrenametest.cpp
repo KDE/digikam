@@ -173,8 +173,8 @@ void AdvancedRenameWidgetTest::testChainedModifiers_data()
 
     QTest::newRow("[file]*&")    << QString("[file]*&")    << fileName << QString("MYFILENAME001");
     QTest::newRow("[file]{3-}*") << QString("[file]{3-}*") << fileName << QString("Filename001");
-    QTest::newRow("[file]{3-}{'name','age'}*") << QString("[file]{3-}{\"name\",\"age\"}*")
-                                               << fileName << QString("Fileage001");
+    QTest::newRow("[file]{3-}{\"name\",\"age\"}*") << QString("[file]{3-}{\"name\",\"age\"}*")
+                                                   << fileName << QString("Fileage001");
 }
 
 void AdvancedRenameWidgetTest::testChainedModifiers()
