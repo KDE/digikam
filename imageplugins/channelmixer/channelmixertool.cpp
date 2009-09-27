@@ -534,6 +534,8 @@ void ChannelMixerTool::readSettings()
                         (int)LogScaleHistogram));
 
     d->gboxSettings->histogramBox()->histogram()->reset();
+
+    slotEffect();
 }
 
 void ChannelMixerTool::writeSettings()
