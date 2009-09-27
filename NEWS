@@ -40,7 +40,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 029 ==> 200357 : digikam, exif rotation, thumbnail not rotated.
 030 ==> 203485 : consider using KGlobalSettings::picturesPath() instead of KGlobalSettings::documentPath().
 031 ==> 204053 : Remember cursor position in album view after refresh / sync.
-032 ==> 
+032 ==> 197413 : Changing the name of an album does not update album list.
+033 ==> 
 
 
 *********************************************************************************************************
