@@ -11,14 +11,14 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 193482 : XMP/IPTC fields in Batch Rename tool.
 002 ==> 183435 : No more file manager at media:/camera.
-003 ==> 200758 : digiKam, dolphin, dc is not is perepherals list.
+003 ==> 200758 : digiKam, dolphin, dc is not in peripherals list.
 004 ==> 206071 : Not reading image properties.
 005 ==> 191113 : digiKam doesn't recognize images with colorspace adobergb.
 006 ==> 206487 : Unsharp mask algorithm in batch processing should equal the one in kipi.
 007 ==> 206570 : Crashed when scrolling through thumbnails in edit mode.
 008 ==> 206712 : Raw Import Tool: RGB (linear) provides gamma corrected output and should be named as such.
 009 ==> 206857 : Unclear English in sentence.
-010 ==> 149485 : Advanced image resize for the digikam editor.
+010 ==> 149485 : Advanced image resize for the digiKam editor.
 011 ==> 206426 : Default ICC profile locations reads the same directory twice.
 012 ==> 203176 : Deleting 2 files still shows one afterwards.
 013 ==> 205059 : The default path for image library is not localizable.
@@ -37,12 +37,13 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 026 ==> 207332 : editor works on the wrong image if a new one was chosen while processing.
 027 ==> 206666 : thumbnail borders are drawn inside instead of outside the images thus hiding parts of the image
 028 ==> 195050 : Color management doesn't work in thumbnails and view mode.
-029 ==> 200357 : digikam, exif rotation, thumbnail not rotated.
+029 ==> 200357 : digiKam, exif rotation, thumbnail not rotated.
 030 ==> 203485 : consider using KGlobalSettings::picturesPath() instead of KGlobalSettings::documentPath().
 031 ==> 204053 : Remember cursor position in album view after refresh / sync.
 032 ==> 197413 : Changing the name of an album does not update album list.
 033 ==> 202780 : Channel Mixer: Preview not updated when opening dialog.
-034 ==> 
+034 ==> 191854 : digiKam crashed when scanning newly added folders to local collections.
+035 ==>
 
 
 *********************************************************************************************************
@@ -76,13 +77,13 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 018 ==> 201746 : Invalid TIFF output in Editor and Batch queue manager.
 019 ==> 196692 : Red and blue channels in images are reversed when saving.
 020 ==> 202332 : View mode: Zooming using Ctrl+Scroll is broken.
-021 ==> 197254 : digikam crash at startup.
+021 ==> 197254 : digiKam crash at startup.
 022 ==> 202779 : When pressing 'enter', thumbnails should be enlarged, also when a collection is selected.
 023 ==> 203574 : Showfoto crashes when opening jpeg file.
 024 ==> 203498 : No drop-down menu for export.
 025 ==> 203589 : Crash in the noise reduction plugin when 'Threshold' equals zero.
 026 ==> 198006 : digiKam crash after assistant finished.
-027 ==> 203083 : Crash starting digikam (after kde 4.3 upgrade).
+027 ==> 203083 : Crash starting digiKam (after kde 4.3 upgrade).
 028 ==> 202954 : digiKam crashes on start while scaning picture directory.
 029 ==> 203031 : Album list doesn't show pictures even after tons of new pictures were imported.
 030 ==> 201810 : Segfault moving files to trash.
@@ -143,7 +144,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 021 ==> 199967 : Creation date newer than last modified date.
 022 ==> 200190 : Tag filters: unlike older versions AND-condition doesn't match anymore.
 023 ==> 193616 : Location not shown digiKam right sidebar after geolocating in external program.
-024 ==> 189156 : digikam crashes on importing directories with some (cyrillic?) file names.
+024 ==> 189156 : digiKam crashes on importing directories with some (cyrillic?) file names.
 025 ==> 191963 : Calender sort by wrong dates on images without properties.
 026 ==> 189072 : Right click popup menu.
 027 ==> 200223 : Default language of spellchecker is ignored.
