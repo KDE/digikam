@@ -44,11 +44,9 @@ public:
     RenameThreadPriv()
     {
         running = false;
-        cancel  = false;
     }
 
     bool                               running;
-    bool                               cancel;
 
     QMutex                             mutex;
     QWaitCondition                     condVar;
@@ -80,7 +78,6 @@ void RenameThread::addNewNames(const AdvancedRenameDialog::NewNamesList& newName
 
 void RenameThread::cancel()
 {
-    d->cancel  = true;
     QMutexLocker lock(&d->mutex);
     d->todo.clear();
     d->running = false;
@@ -95,6 +92,7 @@ void RenameThread::run()
     {
         AdvancedRenameDialog::NewNameInfo info;
         {
+            QMutexLocker lock(&d->mutex);
             if (!d->todo.isEmpty())
             {
                 info = d->todo.takeFirst();
