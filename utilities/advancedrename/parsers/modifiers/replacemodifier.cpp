@@ -97,7 +97,7 @@ QString ReplaceDialog::destination() const
 // --------------------------------------------------------
 
 ReplaceModifier::ReplaceModifier()
-               : Modifier(i18nc("Replace text", "Replace"), i18n("Replace text in the string"))
+               : Modifier(i18nc("Replace text", "Replace..."), i18n("Replace text in the string"))
 {
     addTokenDescription(QString("{\"<i>old</i>\", \"<i>new</i>\"}"), i18n("Replace"), description());
 
