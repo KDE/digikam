@@ -32,6 +32,7 @@
 // KDE includes
 
 #include <klocale.h>
+#include <kiconloader.h>
 #include <klineedit.h>
 
 namespace Digikam
@@ -97,7 +98,8 @@ QString ReplaceDialog::destination() const
 // --------------------------------------------------------
 
 ReplaceModifier::ReplaceModifier()
-               : Modifier(i18nc("Replace text", "Replace..."), i18n("Replace text in the string"))
+               : Modifier(i18nc("Replace text", "Replace..."), i18n("Replace text in the string"),
+                          SmallIcon("document-edit"))
 {
     addTokenDescription(QString("{\"<i>old</i>\", \"<i>new</i>\"}"), i18n("Replace"), description());
 
