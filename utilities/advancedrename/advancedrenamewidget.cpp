@@ -299,7 +299,7 @@ void AdvancedRenameWidget::registerParserControls()
        foreach (Modifier* modifier, d->parser->modifiers())
        {
            QStringList avoidForNow;
-           avoidForNow << QString("Range") << QString("Replace");
+           avoidForNow << QString("Range");
 
            if (!avoidForNow.contains(modifier->objectName()))
            {

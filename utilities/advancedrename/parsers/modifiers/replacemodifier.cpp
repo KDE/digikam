@@ -23,19 +23,106 @@
 
 #include "replacemodifier.h"
 
+// Qt includes
+
+#include <QGridLayout>
+#include <QLabel>
+#include <QPointer>
+
 // KDE includes
 
 #include <klocale.h>
+#include <klineedit.h>
 
 namespace Digikam
 {
 
+class ReplaceDialogPriv
+{
+public:
+
+    ReplaceDialogPriv()
+    {
+        source      = 0;
+        destination = 0;
+    }
+
+    KLineEdit* source;
+    KLineEdit* destination;
+};
+
+ReplaceDialog::ReplaceDialog()
+             : KDialog(0), d(new ReplaceDialogPriv)
+{
+    QString replace = i18nc("Replace text", "Replace");
+    setCaption(replace);
+
+    d->source      = new KLineEdit(this);
+    d->destination = new KLineEdit(this);
+
+    QLabel* srcLabel = new QLabel(replace);;
+    QLabel* dstLabel = new QLabel(i18nc("Replace text with", "With:"));
+
+    QWidget*     mainWidget = new QWidget(this);
+    QGridLayout* mainLayout = new QGridLayout(this);
+    mainLayout->addWidget(srcLabel,       0, 0);
+    mainLayout->addWidget(d->source,      0, 1);
+    mainLayout->addWidget(dstLabel,       1, 0);
+    mainLayout->addWidget(d->destination, 1, 1);
+    mainLayout->setSpacing(KDialog::spacingHint());
+    mainLayout->setMargin(KDialog::spacingHint());
+    mainLayout->setRowStretch(2, 10);
+    mainWidget->setLayout(mainLayout);
+
+    setMainWidget(mainWidget);
+
+    d->source->setFocus();
+}
+
+ReplaceDialog::~ReplaceDialog()
+{
+    delete d;
+}
+
+QString ReplaceDialog::source() const
+{
+    return d->source->text();
+}
+
+QString ReplaceDialog::destination() const
+{
+    return d->destination->text();
+}
+
+// --------------------------------------------------------
+
 ReplaceModifier::ReplaceModifier()
-               : Modifier(i18n("Replace"), i18n("Replace text in the string"))
+               : Modifier(i18nc("Replace text", "Replace"), i18n("Replace text in the string"))
 {
     addTokenDescription(QString("{\"<i>old</i>\", \"<i>new</i>\"}"), i18n("Replace"), description());
 
     setRegExp("\\{\\s*\"(.+)\"\\s*,\\s*\"(.*)\"\\s*\\}");
+}
+
+void ReplaceModifier::slotTokenTriggered(const QString& token)
+{
+    Q_UNUSED(token)
+
+    QString tmp;
+
+    QPointer<ReplaceDialog> dlg = new ReplaceDialog;
+    if (dlg->exec() == KDialog::Accepted)
+    {
+        QString oldStr = dlg->source();
+        QString newStr = dlg->destination();
+        if (!oldStr.isEmpty())
+        {
+            tmp = QString("{\"%1\",\"%2\"}").arg(oldStr).arg(newStr);
+        }
+    }
+    delete dlg;
+
+    emit signalTokenTriggered(tmp);
 }
 
 QString ReplaceModifier::modifyOperation(const QString& parseString, const QString& result)

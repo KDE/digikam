@@ -24,6 +24,10 @@
 #ifndef REPLACEMODIFIER_H
 #define REPLACEMODIFIER_H
 
+// KDE includes
+
+#include <kdialog.h>
+
 // Local includes
 
 #include "modifier.h"
@@ -31,12 +35,39 @@
 namespace Digikam
 {
 
+class ReplaceDialogPriv;
+
+class ReplaceDialog : public KDialog
+{
+    Q_OBJECT
+
+public:
+
+    ReplaceDialog();
+    ~ReplaceDialog();
+
+    QString source()      const;
+    QString destination() const;
+
+private:
+
+    ReplaceDialogPriv* const d;
+};
+
+// --------------------------------------------------------
+
 class ReplaceModifier : public Modifier
 {
+    Q_OBJECT
+
 public:
 
     ReplaceModifier();
     virtual QString modifyOperation(const QString& parseString, const QString& result);
+
+private Q_SLOTS:
+
+    void slotTokenTriggered(const QString& token);
 };
 
 } // namespace Digikam
