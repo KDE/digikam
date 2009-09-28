@@ -24,6 +24,10 @@
 #ifndef RANGEMODIFIER_H
 #define RANGEMODIFIER_H
 
+// KDE includes
+
+#include <kdialog.h>
+
 // Local includes
 
 #include "modifier.h"
@@ -31,12 +35,39 @@
 namespace Digikam
 {
 
+class RangeDialogPriv;
+
+class RangeDialog : public KDialog
+{
+    Q_OBJECT
+
+public:
+
+    RangeDialog();
+    ~RangeDialog();
+
+    int start() const;
+    int stop()  const;
+
+private:
+
+    RangeDialogPriv* const d;
+};
+
+// --------------------------------------------------------
+
 class RangeModifier : public Modifier
 {
+    Q_OBJECT
+
 public:
 
     RangeModifier();
     virtual QString modifyOperation(const QString& parseString, const QString& result);
+
+private Q_SLOTS:
+
+    void slotTokenTriggered(const QString& token);
 };
 
 } // namespace Digikam
