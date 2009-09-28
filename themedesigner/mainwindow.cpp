@@ -43,6 +43,10 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandardguiitem.h>
+#include <kglobal.h>
+#include <kdebug.h>
+#include <kstandarddirs.h>
+#include <kurl.h>
 
 // Local includes
 
@@ -305,7 +309,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::slotLoad()
 {
-    QString path = KFileDialog::getOpenFileName(KUrl(), QString(), this, QString());
+    KUrl themesUrl(KGlobal::dirs()->findResourceDir("themes", QString()));
+
+    QString path = KFileDialog::getOpenFileName(themesUrl, QString(), this, QString());
     if (path.isEmpty())
         return;
 
