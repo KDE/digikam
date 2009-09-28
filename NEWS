@@ -43,7 +43,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 032 ==> 197413 : Changing the name of an album does not update album list.
 033 ==> 202780 : Channel Mixer: Preview not updated when opening dialog.
 034 ==> 191854 : digiKam crashed when scanning newly added folders to local collections.
-035 ==>
+035 ==> 204237 : Attempting Add HPE427 Photosmart Camera To Import Pictures.
+036 ==>
 
 
 *********************************************************************************************************
