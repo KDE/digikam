@@ -688,7 +688,7 @@ BYTE CPGFImage::UsedBitsPerChannel() const {
 
 //////////////////////////////////////////////////////////////////////
 /// Returns highest supported version
-const BYTE CPGFImage::Version() const {
+BYTE CPGFImage::Version() const {
 	if (m_preHeader.version & Version6) return 6;
 	if (m_preHeader.version & Version5) return 5;
 	if (m_preHeader.version & Version2) return 2;

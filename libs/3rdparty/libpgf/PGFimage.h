@@ -395,7 +395,7 @@ public:
 
 	//////////////////////////////////////////////////////////////////////
 	/// Returns highest supported version
-	const BYTE Version() const;
+	BYTE Version() const;
 
 	//class methods
 
