@@ -125,13 +125,13 @@ SequenceNumberParser::SequenceNumberParser()
 {
     setUseTokenMenu(false);
 
-    addToken("#", i18n("Sequence Number"),
+    addTokenDescription("#", i18n("Sequence Number"),
              i18n("Sequence number"));
 
-    addToken("#{<i>start</i>}", i18n("Sequence Number (start)"),
+    addTokenDescription("#{<i>start</i>}", i18n("Sequence Number (start)"),
              i18n("Sequence number (custom start)"));
 
-    addToken("#{<i>start</i>,<i>step</i>}", i18n("Sequence Number (start, step)"),
+    addTokenDescription("#{<i>start</i>,<i>step</i>}", i18n("Sequence Number (start, step)"),
              i18n( "Sequence number (custom start + step)"));
 
     setRegExp("(#+)(\\{\\s*(\\d+)\\s*,?\\s*(\\d+)?\\s*\\})?");

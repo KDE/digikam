@@ -39,7 +39,7 @@ namespace Digikam
 FilenameParser::FilenameParser()
               : SubParser(i18n("File Name"), i18n("Add the current file name"), SmallIcon("folder-image"))
 {
-    addToken("[file]", i18nc("image filename", "Filename"),
+    addTokenDescription("[file]", i18nc("image filename", "Filename"),
              i18n("Image filename"));
 
     setRegExp("\\[file\\]");

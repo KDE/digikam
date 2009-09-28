@@ -33,7 +33,7 @@ namespace Digikam
 TrimmedModifier::TrimmedModifier()
                : Modifier(i18n("Trimmed"), i18n("Remove leading, trailing and extra whitespace"))
 {
-    addToken(QString("!"), i18n("Trimmed"), description());
+    addTokenDescription(QString("!"), i18n("Trimmed"), description());
 
     setRegExp("\\!");
 }

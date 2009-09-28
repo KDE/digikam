@@ -129,7 +129,7 @@ protected:
      * @param description the description of the token (used for example in the AdvancedRenameWidget for the tooltip)
      * @return
      */
-    bool addToken(const QString& id, const QString& name, const QString& description);
+    bool addTokenDescription(const QString& id, const QString& name, const QString& description);
 
 protected Q_SLOTS:
 

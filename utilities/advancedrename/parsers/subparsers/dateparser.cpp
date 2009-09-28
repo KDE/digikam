@@ -176,13 +176,13 @@ DateParser::DateParser()
 {
     setUseTokenMenu(false);
 
-    addToken("[date]", i18n("Date && Time"),
+    addTokenDescription("[date]", i18n("Date && Time"),
              i18n("Date and time (standard format)"));
 
-    addToken("[date:<i>key</i>]", i18n("Date && Time (key)"),
+    addTokenDescription("[date:<i>key</i>]", i18n("Date && Time (key)"),
              i18n("Date and time (key = ISO|Text|Locale)"));
 
-    addToken("[date:<i>format</i>]", i18n("Date && Time (custom format)"),
+    addTokenDescription("[date:<i>format</i>]", i18n("Date && Time (custom format)"),
              i18n("Date and time") + " (" +  dateFormatLink + ")");
 
     setRegExp("\\[date(:.*)?\\]");

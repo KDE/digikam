@@ -161,7 +161,7 @@ MetadataParser::MetadataParser()
                           i18n("Add metadata fields from Exif, IPTC and XMP"),
                           SmallIcon("metadataedit"))
 {
-    addToken("[meta:<i>keycode</i>]", i18n("Metadata"),
+    addTokenDescription("[meta:<i>keycode</i>]", i18n("Metadata"),
              i18n("Add metadata (use the quick access dialog for keycodes)"));
 
     setRegExp("\\[meta:\\s*(.*)\\s*\\s*\\]");

@@ -33,7 +33,7 @@ namespace Digikam
 UpperCaseModifier::UpperCaseModifier()
                  : Modifier(i18n("Uppercase"), i18n("Convert to uppercase"))
 {
-    addToken(QString("&"), i18n("Uppercase"), description());
+    addTokenDescription(QString("&"), i18n("Uppercase"), description());
 
     setRegExp("\\&");
 }

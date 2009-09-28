@@ -34,7 +34,7 @@ FirstLetterEachWordUpperCaseModifier::FirstLetterEachWordUpperCaseModifier()
                                     : Modifier(i18n("First Letter Of Each Word Uppercase"),
                                                i18n("Convert the first letter of each word to uppercase"))
 {
-    addToken(QString("*"), i18n("First Letter Of Each Word Uppercase"), description());
+    addTokenDescription(QString("*"), i18n("First Letter Of Each Word Uppercase"), description());
     setRegExp("\\*");
 }
 

@@ -33,7 +33,7 @@ namespace Digikam
 LowerCaseModifier::LowerCaseModifier()
                  : Modifier(i18n("Lowercase"), i18n("Convert to lowercase"))
 {
-    addToken(QString("%"), i18n("Lowercase"), description());
+    addTokenDescription(QString("%"), i18n("Lowercase"), description());
 
     setRegExp("\\%");
 }

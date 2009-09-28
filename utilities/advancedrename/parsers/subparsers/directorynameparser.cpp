@@ -43,10 +43,10 @@ DirectoryNameParser::DirectoryNameParser()
 {
     setUseTokenMenu(false);
 
-    addToken("[dir]", i18nc("current directory name", "Current"),
+    addTokenDescription("[dir]", i18nc("current directory name", "Current"),
             i18n("Current directory name"));
 
-    addToken("[dir.]", i18nc("directory name", "Parent Directory Name"),
+    addTokenDescription("[dir.]", i18nc("directory name", "Parent Directory Name"),
             i18n("Directory name of the parent, additional '.' characters move up "
                  "in the directory hierarchy"));
 
