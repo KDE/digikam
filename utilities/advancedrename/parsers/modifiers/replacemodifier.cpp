@@ -56,13 +56,14 @@ ReplaceDialog::ReplaceDialog()
              : KDialog(0), d(new ReplaceDialogPriv)
 {
     QString replace = i18nc("Replace text", "Replace");
+
     setCaption(replace);
 
-    d->source      = new KLineEdit(this);
-    d->destination = new KLineEdit(this);
+    QLabel* srcLabel = new QLabel(replace + ':');
+    d->source        = new KLineEdit(this);
 
-    QLabel* srcLabel = new QLabel(replace);;
     QLabel* dstLabel = new QLabel(i18nc("Replace text with", "With:"));
+    d->destination   = new KLineEdit(this);
 
     QWidget*     mainWidget = new QWidget(this);
     QGridLayout* mainLayout = new QGridLayout(this);
