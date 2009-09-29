@@ -177,6 +177,9 @@ AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
     setHelp("advancedrename.anchor", "digikam");
     initDialog();
 
+    // avoid focusing the AdvancedRenameWidget, to show the click message
+    d->listView->setFocus();
+
     // --------------------------------------------------------
 
     connect(d->advancedRenameWidget, SIGNAL(signalTextChanged(const QString&)),
