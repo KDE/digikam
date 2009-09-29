@@ -140,7 +140,7 @@ AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
 {
     d->advancedRenameWidget = new AdvancedRenameWidget(this);
     d->advancedRenameWidget->setInputColumns(3);
-    d->advancedRenameWidget->setTrackerAlignment(Qt::AlignCenter);
+    d->advancedRenameWidget->setTooltipAlignment(Qt::AlignCenter);
 
     // --------------------------------------------------------
 

@@ -112,7 +112,7 @@ void AdvancedRenameWidget::setText(const QString& text)
     d->renameInputWidget->setText(text);
 }
 
-void AdvancedRenameWidget::setTrackerAlignment(Qt::Alignment alignment)
+void AdvancedRenameWidget::setTooltipAlignment(Qt::Alignment alignment)
 {
     d->tooltipTrackerAlignment = alignment;
     d->tooltipTracker->setTrackerAlignment(alignment);
@@ -399,7 +399,7 @@ void AdvancedRenameWidget::setupWidgets()
     d->tooltipTracker->setEnable(false);
     d->tooltipTracker->setKeepOpen(true);
     d->tooltipTracker->setOpenExternalLinks(true);
-    setTrackerAlignment(d->tooltipTrackerAlignment);
+    setTooltipAlignment(d->tooltipTrackerAlignment);
 
     // --------------------------------------------------------
 

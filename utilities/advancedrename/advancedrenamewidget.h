@@ -67,7 +67,7 @@ public:
 
     QString parse(ParseInformation& info) const;
 
-    void setTrackerAlignment(Qt::Alignment alignment);
+    void setTooltipAlignment(Qt::Alignment alignment);
 
 Q_SIGNALS:
 
