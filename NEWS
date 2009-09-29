@@ -47,7 +47,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 036 ==> 196480 : Crash on starting digiKam.
 037 ==> 207053 : Replace current renaming in AlbumUI with AdvancedRename utility.
 038 ==> 206094 : Camera Gui: Selection with Shift+Pos1/End does not work.
-039 ==> 
+039 ==> 092098 : Plugin for automaticly adding copyright marks to pictures.
+040 ==> 
 
 
 *********************************************************************************************************
