@@ -75,7 +75,7 @@ public:
 };
 
 SoftProofDialog::SoftProofDialog(QWidget *parent)
-            : KDialog(parent),
+               : KDialog(parent),
               d(new SoftProofDialogPriv)
 {
     setCaption(i18n("Soft Proofing Options"));
@@ -85,27 +85,27 @@ SoftProofDialog::SoftProofDialog(QWidget *parent)
     setButtonFocus(Ok);
     setModal(true);
     //TODO setHelp("softproofing.anchor", "digikam");
-    setButtonText(Ok,    i18n("Soft Proofing On"));
-    setButtonToolTip(Ok, i18n("Enable soft-proofing color managed view"));
+    setButtonText(Ok,        i18n("Soft Proofing On"));
+    setButtonToolTip(Ok,     i18n("Enable soft-proofing color managed view"));
     setButtonText(Cancel,    i18n("Soft Proofing Off"));
     setButtonToolTip(Cancel, i18n("Disable soft-proofing color managed view"));
 
-    QWidget *page     = new QWidget(this);
+    QWidget *page           = new QWidget(this);
     QVBoxLayout* mainLayout = new QVBoxLayout(page);
     setMainWidget(page);
 
     // ---
 
-    QLabel *headerLabel = new QLabel(i18n("<b>Configure the Soft Proofing View</b>"));
+    QLabel *headerLabel   = new QLabel(i18n("<b>Configure the Soft Proofing View</b>"));
     KSeparator *separator = new KSeparator(Qt::Horizontal);
 
     // ---
 
     QGridLayout *profileGrid = new QGridLayout;
 
-    QLabel *proofIcon  = new QLabel;
+    QLabel *proofIcon   = new QLabel;
     proofIcon->setPixmap(SmallIcon("printer", KIconLoader::SizeMedium));
-    QLabel *proofLabel = new QLabel(i18n("Profile of the output device to simulate:"));
+    QLabel *proofLabel  = new QLabel(i18n("Profile of the output device to simulate:"));
     d->deviceProfileBox = new IccProfilesComboBox;
     proofLabel->setBuddy(d->deviceProfileBox);
     d->deviceProfileBox->setWhatsThis( i18n("<p>Select the profile for your output device "
@@ -127,25 +127,25 @@ SoftProofDialog::SoftProofDialog(QWidget *parent)
 
     // ---
 
-    QGroupBox *optionsBox = new QGroupBox;
+    QGroupBox *optionsBox    = new QGroupBox;
     QGridLayout *optionsGrid = new QGridLayout;
 
-    QLabel *intentLabel = new QLabel(i18n("Rendering intent:"));
+    QLabel *intentLabel  = new QLabel(i18n("Rendering intent:"));
     d->proofingIntentBox = new IccRenderingIntentComboBox;
     //TODO d->proofingIntentBox->setWhatsThis(i18n(""));
     intentLabel->setBuddy(d->proofingIntentBox);
 
-    d->gamutCheckBox = new QCheckBox(i18n("Highlight out-of-gamut colors"));
+    d->gamutCheckBox   = new QCheckBox(i18n("Highlight out-of-gamut colors"));
 
-    d->maskColorLabel = new QLabel(i18n("Highlighting color:"));
-    d->maskColorButton  = new KColorButton;
+    d->maskColorLabel  = new QLabel(i18n("Highlighting color:"));
+    d->maskColorButton = new KColorButton;
     d->maskColorLabel->setBuddy(d->maskColorButton);
 
-    optionsGrid->addWidget(intentLabel, 0, 0, 1, 2);
+    optionsGrid->addWidget(intentLabel,          0, 0, 1, 2);
     optionsGrid->addWidget(d->proofingIntentBox, 0, 2, 1, 2);
-    optionsGrid->addWidget(d->gamutCheckBox, 1, 0, 1, 4);
-    optionsGrid->addWidget(d->maskColorLabel, 2, 1, 1, 1);
-    optionsGrid->addWidget(d->maskColorButton, 2, 2, 1, 2, Qt::AlignLeft);
+    optionsGrid->addWidget(d->gamutCheckBox,     1, 0, 1, 4);
+    optionsGrid->addWidget(d->maskColorLabel,    2, 1, 1, 1);
+    optionsGrid->addWidget(d->maskColorButton,   2, 2, 1, 2, Qt::AlignLeft);
     optionsGrid->setColumnMinimumWidth(0, 10);
     optionsGrid->setColumnStretch(2, 1);
     optionsBox->setLayout(optionsGrid);
@@ -201,11 +201,11 @@ void SoftProofDialog::readSettings()
 
 void SoftProofDialog::writeSettings()
 {
-    ICCSettingsContainer settings = IccSettings::instance()->settings();
-    settings.defaultProofProfile = d->deviceProfileBox->currentProfile().filePath();
+    ICCSettingsContainer settings    = IccSettings::instance()->settings();
+    settings.defaultProofProfile     = d->deviceProfileBox->currentProfile().filePath();
     settings.proofingRenderingIntent = d->proofingIntentBox->intent();
-    settings.doGamutCheck = d->gamutCheckBox->isChecked();
-    settings.gamutCheckMaskColor = d->maskColorButton->color();
+    settings.doGamutCheck            = d->gamutCheckBox->isChecked();
+    settings.gamutCheckMaskColor     = d->maskColorButton->color();
     IccSettings::instance()->setSettings(settings);
 }
 
@@ -217,5 +217,4 @@ void SoftProofDialog::accept()
     writeSettings();
 }
 
-}
-
+} // namespace Digikam

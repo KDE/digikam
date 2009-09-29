@@ -68,6 +68,6 @@ private:
     SoftProofDialogPriv* const d;
 };
 
-}
+} // namespace Digikam
 
 #endif // SOFTPROOFDIALOG_H
