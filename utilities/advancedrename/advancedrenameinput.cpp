@@ -54,7 +54,6 @@ public:
         selectionStart  = -1;
         selectionLength = -1;
         curCursorPos    = -1;
-        markedTokenPos  = -1;
         parseTimer      = 0;
         parser          = 0;
     }
@@ -66,7 +65,6 @@ public:
     int     selectionStart;
     int     selectionLength;
     int     curCursorPos;
-    int     markedTokenPos;
 
     QTimer* parseTimer;
     Parser* parser;
@@ -143,7 +141,6 @@ void AdvancedRenameInput::mouseMoveEvent(QMouseEvent* e)
     {
         setSelectionColor(None);
         deselect();
-        d->markedTokenPos = -1;
         d->userIsMarking  = false;
         d->tokenMarked    = false;
         setCursorPosition(d->curCursorPos);
@@ -165,10 +162,10 @@ void AdvancedRenameInput::mousePressEvent(QMouseEvent* e)
                 return;
             }
 
-            if (selectionStart() == d->markedTokenPos)
+            if (selectionStart() == d->selectionStart)
             {
-                d->tokenMarked = true;
-                emit signalTokenMarked(true);
+                d->tokenMarked    = true;
+                emit signalTokenMarked(d->tokenMarked);
             }
             else
             {
@@ -262,7 +259,6 @@ void AdvancedRenameInput::searchAndHighlightTokens(SelectionType type, int pos)
 
     if (found)
     {
-        d->markedTokenPos = start;
         setSelectionColor(type);
 
         deselect();
@@ -281,9 +277,7 @@ void AdvancedRenameInput::searchAndHighlightTokens(SelectionType type, int pos)
 
 bool AdvancedRenameInput::tokenIsSelected()
 {
-    bool selected = false;
-    selected      = (d->selectionStart != -1) && (d->selectionLength != -1) &&
-                    (d->markedTokenPos == d->selectionStart) && d->tokenMarked;
+    bool selected = (d->selectionStart != -1) && (d->selectionLength != -1) && d->tokenMarked;
     return selected;
 }
 
