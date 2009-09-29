@@ -397,7 +397,9 @@ void DigikamImageView::rename()
     {
         d->renameThread->addNewNames(dlg->newNames());
         if (!d->renameThread->isRunning())
+        {
             d->renameThread->start();
+        }
     }
     delete dlg;
 }
