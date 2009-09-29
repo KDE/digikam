@@ -60,7 +60,7 @@ public:
         buttonGroup           = 0;
         changedTimer          = 0;
         focusedWidget         = 0;
-        advancedRenameInput   = 0;
+        advancedRenameWidget  = 0;
         renameDefault         = 0;
         renameDefaultBox      = 0;
         renameDefaultCase     = 0;
@@ -87,7 +87,7 @@ public:
 
     KComboBox*            renameDefaultCaseType;
 
-    AdvancedRenameWidget* advancedRenameInput;
+    AdvancedRenameWidget* advancedRenameWidget;
 };
 
 RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
@@ -131,15 +131,15 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
 
     // ----------------------------------------------------------------------
 
-    d->renameCustom        = new QRadioButton(i18nc("Custom Image Renaming", "Customize"), this);
-    d->advancedRenameInput = new AdvancedRenameWidget(this);
-    d->advancedRenameInput->setTooltipAlignment(Qt::AlignRight);
+    d->renameCustom         = new QRadioButton(i18nc("Custom Image Renaming", "Customize"), this);
+    d->advancedRenameWidget = new AdvancedRenameWidget(this);
+    d->advancedRenameWidget->setTooltipAlignment(Qt::AlignRight);
     d->buttonGroup->addButton(d->renameCustom, 2);
 
-    mainLayout->addWidget(d->renameDefault,       0, 0, 1, 2);
-    mainLayout->addWidget(d->renameDefaultBox,    1, 0, 1, 2);
-    mainLayout->addWidget(d->renameCustom,        4, 0, 1, 2);
-    mainLayout->addWidget(d->advancedRenameInput, 5, 0, 1, 2);
+    mainLayout->addWidget(d->renameDefault,        0, 0, 1, 2);
+    mainLayout->addWidget(d->renameDefaultBox,     1, 0, 1, 2);
+    mainLayout->addWidget(d->renameCustom,         4, 0, 1, 2);
+    mainLayout->addWidget(d->advancedRenameWidget, 5, 0, 1, 2);
     mainLayout->setRowStretch(6, 10);
     mainLayout->setMargin(KDialog::spacingHint());
     mainLayout->setSpacing(KDialog::spacingHint());
@@ -155,7 +155,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     connect(d->changedTimer, SIGNAL(timeout()),
             this, SIGNAL(signalChanged()));
 
-    connect(d->advancedRenameInput, SIGNAL(signalTextChanged(const QString&)),
+    connect(d->advancedRenameWidget, SIGNAL(signalTextChanged(const QString&)),
             this, SLOT(slotRenameOptionsChanged()));
 
     // --------------------------------------------------------
@@ -202,7 +202,7 @@ QString RenameCustomizer::newName(const QString& fileName, const QDateTime& date
         parseInfo.dateTime   = dateTime;
         parseInfo.index      = index;
 
-        name = d->advancedRenameInput->parse(parseInfo);
+        name = d->advancedRenameWidget->parse(parseInfo);
         name += extension;
     }
 
@@ -229,8 +229,8 @@ void RenameCustomizer::slotRadioButtonClicked(int id)
 
     btn->setChecked(true);
     d->renameDefaultBox->setEnabled( btn == d->renameDefault );
-    d->advancedRenameInput->setEnabled( btn == d->renameCustom );
-    d->advancedRenameInput->slotHideToolTipTracker();
+    d->advancedRenameWidget->setEnabled( btn == d->renameCustom );
+    d->advancedRenameWidget->slotHideToolTipTracker();
     slotRenameOptionsChanged();
 }
 
@@ -254,7 +254,7 @@ void RenameCustomizer::readSettings()
     slotRadioButtonClicked(def);
 
     d->renameDefaultCaseType->setCurrentIndex(chcaseT);
-    d->advancedRenameInput->setText(manualRename);
+    d->advancedRenameWidget->setText(manualRename);
 }
 
 void RenameCustomizer::saveSettings()
@@ -264,7 +264,7 @@ void RenameCustomizer::saveSettings()
     KConfigGroup group = config->group("Camera Settings");
     group.writeEntry("Rename Method",        d->buttonGroup->checkedId());
     group.writeEntry("Case Type",            d->renameDefaultCaseType->currentIndex());
-    group.writeEntry("Manual Rename String", d->advancedRenameInput->text());
+    group.writeEntry("Manual Rename String", d->advancedRenameWidget->text());
     config->sync();
 }
 
@@ -275,12 +275,12 @@ void RenameCustomizer::restoreFocus()
 
 void RenameCustomizer::slotUpdateTrackerPos()
 {
-    d->advancedRenameInput->slotUpdateTrackerPos();
+    d->advancedRenameWidget->slotUpdateTrackerPos();
 }
 
 void RenameCustomizer::slotHideToolTipTracker()
 {
-    d->advancedRenameInput->slotHideToolTipTracker();
+    d->advancedRenameWidget->slotHideToolTipTracker();
 }
 
 }  // namespace Digikam
