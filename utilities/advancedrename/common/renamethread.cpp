@@ -72,7 +72,7 @@ RenameThread::~RenameThread()
 void RenameThread::addNewNames(const AdvancedRenameDialog::NewNamesList& newNames)
 {
     QMutexLocker lock(&d->mutex);
-    d->todo.append(newNames);
+    d->todo << newNames;
     d->condVar.wakeAll();
 }
 
