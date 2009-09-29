@@ -37,8 +37,8 @@ private Q_SLOTS:
     /*
      * TOKEN TESTS
      */
-    void testFilenameToken();
-    void testFilenameToken_data();
+    void testFileNameToken();
+    void testFileNameToken_data();
 
     void testNumberToken();
     void testNumberToken_data();

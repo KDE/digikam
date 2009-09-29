@@ -37,7 +37,7 @@ using namespace Digikam;
 
 QTEST_KDEMAIN(AdvancedRenameWidgetTest, GUI)
 
-void AdvancedRenameWidgetTest::testFilenameToken_data()
+void AdvancedRenameWidgetTest::testFileNameToken_data()
 {
     QTest::addColumn<QString>("parseString");
     QTest::addColumn<QString>("filename");
@@ -48,7 +48,7 @@ void AdvancedRenameWidgetTest::testFilenameToken_data()
     QTest::newRow("[file]") << QString("[file]") << filename << QString("myfile001");
 }
 
-void AdvancedRenameWidgetTest::testFilenameToken()
+void AdvancedRenameWidgetTest::testFileNameToken()
 {
     QFETCH(QString,   parseString);
     QFETCH(QString,   filename);
@@ -62,6 +62,7 @@ void AdvancedRenameWidgetTest::testFilenameToken()
     QString parsed = parser.parse(parseString, info);
     QCOMPARE(parsed, result);
 }
+
 void AdvancedRenameWidgetTest::testNumberToken_data()
 {
     QTest::addColumn<QString>("parseString");
