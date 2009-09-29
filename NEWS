@@ -46,7 +46,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 035 ==> 204237 : Attempting Add HPE427 Photosmart Camera To Import Pictures.
 036 ==> 196480 : Crash on starting digiKam.
 037 ==> 207053 : Replace current renaming in AlbumUI with AdvancedRename utility.
-038 ==>
+038 ==> 206094 : Camera Gui: Selection with Shift+Pos1/End does not work.
+039 ==> 
 
 
 *********************************************************************************************************
