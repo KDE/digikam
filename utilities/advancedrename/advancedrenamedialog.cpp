@@ -44,7 +44,6 @@
 
 #include "advancedrenamewidget.h"
 #include "parseinformation.h"
-#include "statusprogressbar.h"
 
 namespace Digikam
 {
@@ -126,13 +125,11 @@ public:
     {
         advancedRenameWidget = 0;
         listView             = 0;
-        statusProgressBar    = 0;
     }
 
     QTreeWidget*                     listView;
     AdvancedRenameWidget*            advancedRenameWidget;
     AdvancedRenameDialog::NewNamesList newNamesList;
-    StatusProgressBar*               statusProgressBar;
 };
 
 AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
@@ -157,17 +154,10 @@ AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
 
     // --------------------------------------------------------
 
-    d->statusProgressBar = new StatusProgressBar(this);
-    d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode);
-    d->statusProgressBar->hide();
-
-    // --------------------------------------------------------
-
     QWidget* mainWidget     = new QWidget(this);
     QGridLayout* mainLayout = new QGridLayout;
     mainLayout->addWidget(d->listView,             0, 0, 1, 1);
     mainLayout->addWidget(d->advancedRenameWidget, 1, 0, 1, 1);
-    mainLayout->addWidget(d->statusProgressBar,    2, 0, 1, 1);
     mainLayout->setRowStretch(0, 10);
     mainWidget->setLayout(mainLayout);
 
