@@ -142,7 +142,7 @@ void AdvancedRenameInput::mouseMoveEvent(QMouseEvent* e)
         setSelectionColor(None);
         deselect();
         d->userIsMarking  = false;
-        d->tokenMarked    = false;
+        slotSelectionChanged();
         setCursorPosition(d->curCursorPos);
     }
 }
@@ -216,14 +216,12 @@ void AdvancedRenameInput::rememberSelection()
         else
         {
             deselect();
-            d->selectionStart  = -1;
-            d->selectionLength = -1;
+            slotSelectionChanged();
         }
     }
     else
     {
-        d->selectionStart  = -1;
-        d->selectionLength = -1;
+        slotSelectionChanged();
     }
     d->curCursorPos = cursorPosition();
 }
@@ -270,8 +268,7 @@ void AdvancedRenameInput::searchAndHighlightTokens(SelectionType type, int pos)
     else
     {
         deselect();
-        d->selectionStart  = -1;
-        d->selectionLength = -1;
+        slotSelectionChanged();
     }
 }
 
@@ -306,7 +303,9 @@ void AdvancedRenameInput::slotCursorPositionChanged(int oldPos, int newPos)
 
 void AdvancedRenameInput::slotSelectionChanged()
 {
-    d->tokenMarked = false;
+    d->tokenMarked     = false;
+    d->selectionStart  = -1;
+    d->selectionLength = -1;
     emit signalTokenMarked(d->tokenMarked);
 }
 
