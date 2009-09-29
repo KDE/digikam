@@ -49,11 +49,16 @@ public:
                                     const QString& mode         = QString(),
                                     bool           autoDetected = false);
 
-    static bool    sameDevices(const QString& deviceA, const QString& deviceB);
+    static bool sameDevices(const QString& deviceA, const QString& deviceB);
 
 private:
 
-    enum   CAMERANAME_TOKENS { VendorAndProduct = 1, Mode };
+    enum CameraName_Tokens
+    {
+        VendorAndProduct = 1,
+        Mode
+    };
+
     static QString extractCameraNameToken(const QString& cameraName, int tokenID);
     static QString parseAndFormatCameraName(const QString& cameraName, bool parseMode, bool autoDetected);
     static QString autoDetectedString();
