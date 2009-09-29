@@ -188,7 +188,6 @@ void AdvancedRenameInput::mousePressEvent(QMouseEvent* e)
 void AdvancedRenameInput::focusInEvent(QFocusEvent* e)
 {
     KLineEdit::focusInEvent(e);
-    setCursorPosition(d->curCursorPos);
 
     if (tokenIsSelected())
     {
