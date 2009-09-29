@@ -61,7 +61,7 @@ TARGET_LINK_LIBRARIES(advancedrenametest
 
 SET(cameranamehelper_SRCS
     cameranamehelpertest.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/cameranamehelper.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui/cameranamehelper.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui/gpcamera.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui/dkcamera.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/albumsettings.cpp

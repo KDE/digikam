@@ -991,24 +991,25 @@ ENDIF(MSVC)
        )
 
     SET(libcameragui_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/dkcamera.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/umscamera.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/gpcamera.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/gpiteminfo.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/renamecustomizer.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerainfodialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameracontroller.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerafolderdialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerafolderitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerafolderview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameraiconitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameraiconview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameraiconviewtooltip.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameracontroller.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerainfodialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameranamehelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameraui.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/freespacewidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/freespacetooltip.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/capturewidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/capturedlg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/capturewidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/dkcamera.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/freespacetooltip.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/freespacewidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/gpcamera.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/gpiteminfo.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/renamecustomizer.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/umscamera.cpp
        )
 
     SET(libsearchwindow_SRCS
@@ -1086,7 +1087,6 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumthumbnailloader.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumtreeview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumwidgetstack.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/cameranamehelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/contextmenuhelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/datefolderview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dbstatdlg.cpp
