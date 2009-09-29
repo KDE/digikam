@@ -104,16 +104,16 @@ void AdvancedRenameWidgetTest::testNumberToken_data()
     QTest::newRow("###")                    << QString("###")                    << 4  << QString("004");
     QTest::newRow("### (index:40)")         << QString("###")                    << 40 << QString("040");
     QTest::newRow("###_bla_##")             << QString("###_bla_##")             << 10 << QString("010_bla_10");
-    QTest::newRow("####{2,3}")              << QString("####{2,3}")              << 1  << QString("0002");
-    QTest::newRow("####{2,3}(10)")          << QString("####{2,3}")              << 10 << QString("0029");
-    QTest::newRow("####{ 2, 3}")            << QString("####{ 2, 3}")            << 10 << QString("0029");
-    QTest::newRow("####{2,3}_bla_## ###")   << QString("####{2,3}_bla_## ###")   << 1  << QString("0002_bla_01 001");
-    QTest::newRow("####{2, 3}_bla_## ###")  << QString("####{2, 3}_bla_## ###")  << 1  << QString("0002_bla_01 001");
-    QTest::newRow("####{ 2, 3}_bla_## ###") << QString("####{ 2, 3}_bla_## ###") << 1  << QString("0002_bla_01 001");
-    QTest::newRow("###{100}_bla")           << QString("###{100}_bla")           << 1  << QString("100_bla");
-    QTest::newRow("###{100,}_bla")          << QString("###{100,}_bla")          << 1  << QString("100_bla");
-    QTest::newRow("###{100,   }_bla")       << QString("###{100,   }_bla")       << 1  << QString("100_bla");
-    QTest::newRow("###{100   ,   }_bla")    << QString("###{100   ,   }_bla")    << 1  << QString("100_bla");
+    QTest::newRow("####[2,3]")              << QString("####[2,3]")              << 1  << QString("0002");
+    QTest::newRow("####[2,3](10)")          << QString("####[2,3]")              << 10 << QString("0029");
+    QTest::newRow("####[ 2, 3]")            << QString("####[ 2, 3]")            << 10 << QString("0029");
+    QTest::newRow("####[2,3]_bla_## ###")   << QString("####[2,3]_bla_## ###")   << 1  << QString("0002_bla_01 001");
+    QTest::newRow("####[2, 3]_bla_## ###")  << QString("####[2, 3]_bla_## ###")  << 1  << QString("0002_bla_01 001");
+    QTest::newRow("####[ 2, 3]_bla_## ###") << QString("####[ 2, 3]_bla_## ###") << 1  << QString("0002_bla_01 001");
+    QTest::newRow("###[100]_bla")           << QString("###[100]_bla")           << 1  << QString("100_bla");
+    QTest::newRow("###[100,]_bla")          << QString("###[100,]_bla")          << 1  << QString("100_bla");
+    QTest::newRow("###[100,   ]_bla")       << QString("###[100,   ]_bla")       << 1  << QString("100_bla");
+    QTest::newRow("###[100   ,   ]_bla")    << QString("###[100   ,   ]_bla")    << 1  << QString("100_bla");
 }
 
 void AdvancedRenameWidgetTest::testNumberToken()

@@ -128,13 +128,13 @@ SequenceNumberParser::SequenceNumberParser()
     addTokenDescription("#", i18n("Sequence Number"),
              i18n("Sequence number"));
 
-    addTokenDescription("#{<i>start</i>}", i18n("Sequence Number (start)"),
+    addTokenDescription("#[<i>start</i>]", i18n("Sequence Number (start)"),
              i18n("Sequence number (custom start)"));
 
-    addTokenDescription("#{<i>start</i>,<i>step</i>}", i18n("Sequence Number (start, step)"),
+    addTokenDescription("#[<i>start</i>,<i>step</i>]", i18n("Sequence Number (start, step)"),
              i18n( "Sequence number (custom start + step)"));
 
-    setRegExp("(#+)(\\{\\s*(\\d+)\\s*,?\\s*(\\d+)?\\s*\\})?");
+    setRegExp("(#+)(\\[\\s*(\\d+)\\s*,?\\s*(\\d+)?\\s*\\])?");
 }
 
 void SequenceNumberParser::slotTokenTriggered(const QString& token)
@@ -153,14 +153,14 @@ void SequenceNumberParser::slotTokenTriggered(const QString& token)
         tmp = QString("%1").arg("#", _digits, QChar('#'));
         if (_start > 1)
         {
-            tmp.append(QString("{%1").arg(QString::number(_start)));
+            tmp.append(QString("[%1").arg(QString::number(_start)));
 
             if (_step > 1)
             {
                 tmp.append(QString(",%1").arg(QString::number(_step)));
             }
 
-            tmp.append(QChar('}'));
+            tmp.append(QChar(']'));
         }
     }
 
