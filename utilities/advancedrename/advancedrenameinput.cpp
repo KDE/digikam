@@ -48,18 +48,18 @@ public:
 
     AdvancedRenameInputPriv()
     {
-        userIsTyping    = false;
-        userIsMarking   = false;
-        tokenMarked     = false;
-        selectionStart  = -1;
-        selectionLength = -1;
-        curCursorPos    = -1;
-        parseTimer      = 0;
-        parser          = 0;
+        userIsTyping       = false;
+        userIsHighlighting = false;
+        tokenMarked        = false;
+        selectionStart     = -1;
+        selectionLength    = -1;
+        curCursorPos       = -1;
+        parseTimer         = 0;
+        parser             = 0;
     }
 
     bool    userIsTyping;
-    bool    userIsMarking;
+    bool    userIsHighlighting;
     bool    tokenMarked;
 
     int     selectionStart;
@@ -135,13 +135,13 @@ void AdvancedRenameInput::mouseMoveEvent(QMouseEvent* e)
     }
     else if (d->tokenMarked)
     {
-        d->userIsMarking = false;
+        d->userIsHighlighting = false;
     }
     else
     {
         setSelectionColor(None);
         deselect();
-        d->userIsMarking  = false;
+        d->userIsHighlighting  = false;
         resetSelection();
         setCursorPosition(d->curCursorPos);
     }
@@ -233,10 +233,10 @@ void AdvancedRenameInput::searchAndHighlightTokens(SelectionType type, int pos)
         return;
     }
 
-    if (!d->userIsMarking)
+    if (!d->userIsHighlighting)
     {
         d->curCursorPos  = cursorPosition();
-        d->userIsMarking = true;
+        d->userIsHighlighting = true;
     }
 
     int start;
