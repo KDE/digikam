@@ -68,6 +68,7 @@ protected:
 
     virtual void mouseMoveEvent(QMouseEvent* e);
     virtual void mousePressEvent(QMouseEvent* e);
+    virtual void leaveEvent(QEvent* e);
     virtual void focusInEvent(QFocusEvent* e);
     virtual void focusOutEvent(QFocusEvent* e);
 
@@ -91,6 +92,7 @@ private:
     void searchAndHighlightTokens(SelectionType type, int pos);
     bool tokenIsSelected();
     void setSelectionColor(SelectionType type);
+    void rememberSelection();
 
 private:
 

@@ -185,6 +185,12 @@ void AdvancedRenameInput::mousePressEvent(QMouseEvent* e)
     }
 }
 
+void AdvancedRenameInput::leaveEvent(QEvent* e)
+{
+    rememberSelection();
+    KLineEdit::leaveEvent(e);
+}
+
 void AdvancedRenameInput::focusInEvent(QFocusEvent* e)
 {
     KLineEdit::focusInEvent(e);
@@ -197,10 +203,25 @@ void AdvancedRenameInput::focusInEvent(QFocusEvent* e)
 
 void AdvancedRenameInput::focusOutEvent(QFocusEvent* e)
 {
-    if (hasSelectedText() && tokenIsSelected())
+    rememberSelection();
+    KLineEdit::focusOutEvent(e);
+}
+
+void AdvancedRenameInput::rememberSelection()
+{
+    if (hasSelectedText())
     {
-        d->selectionStart  = selectionStart();
-        d->selectionLength = selectedText().count();
+        if (tokenIsSelected())
+        {
+            d->selectionStart  = selectionStart();
+            d->selectionLength = selectedText().count();
+        }
+        else
+        {
+            deselect();
+            d->selectionStart  = -1;
+            d->selectionLength = -1;
+        }
     }
     else
     {
@@ -208,8 +229,6 @@ void AdvancedRenameInput::focusOutEvent(QFocusEvent* e)
         d->selectionLength = -1;
     }
     d->curCursorPos = cursorPosition();
-
-    KLineEdit::focusOutEvent(e);
 }
 
 void AdvancedRenameInput::searchAndHighlightTokens(SelectionType type, int pos)
