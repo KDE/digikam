@@ -107,7 +107,7 @@ protected:
 
 private Q_SLOTS:
 
-    void slotParseStringChanged();
+    void slotParseStringChanged(const QString&);
 
 private:
 

@@ -173,13 +173,14 @@ AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
 
     setMainWidget(mainWidget);
     setButtons(Help|Cancel|Ok);
+    enableButton(Ok, false);
     setHelp("advancedrename.anchor", "digikam");
     initDialog();
 
     // --------------------------------------------------------
 
     connect(d->advancedRenameWidget, SIGNAL(signalTextChanged(const QString&)),
-            this, SLOT(slotParseStringChanged()));
+            this, SLOT(slotParseStringChanged(const QString&)));
 
     connect(this, SIGNAL(signalWindowHasMoved()),
             d->advancedRenameWidget, SLOT(slotUpdateTrackerPos()));
@@ -193,9 +194,11 @@ AdvancedRenameDialog::~AdvancedRenameDialog()
     delete d;
 }
 
-void AdvancedRenameDialog::slotParseStringChanged()
+void AdvancedRenameDialog::slotParseStringChanged(const QString& parseString)
 {
     d->newNamesList.clear();
+
+    enableButton(Ok, !parseString.isEmpty());
 
     int index = 1;
     QTreeWidgetItemIterator it(d->listView);
