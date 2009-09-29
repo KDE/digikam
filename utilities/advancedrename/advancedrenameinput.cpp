@@ -217,13 +217,13 @@ void AdvancedRenameInput::rememberSelection()
         {
             deselect();
             resetSelection();
+            setCursorPosition(d->curCursorPos);
         }
     }
     else
     {
         resetSelection();
     }
-    d->curCursorPos = cursorPosition();
 }
 
 void AdvancedRenameInput::searchAndHighlightTokens(SelectionType type, int pos)
