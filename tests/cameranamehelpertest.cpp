@@ -83,7 +83,7 @@ void CameraNameHelperTest::testCameraNameFromGPCamera()
     // test if all camera names stay intact
     foreach (const QString& camera, clist)
     {
-        QCOMPARE(CameraNameHelper::formattedFullCameraName(camera), camera);
+        QCOMPARE(CameraNameHelper::formattedFullCameraName(camera), camera.simplified());
     }
 }
 #endif
