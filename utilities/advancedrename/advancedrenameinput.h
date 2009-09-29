@@ -89,8 +89,8 @@ private:
         None
     };
 
-    void searchAndHighlightTokens(SelectionType type, int pos);
     bool tokenIsSelected();
+    void searchAndHighlightTokens(SelectionType type, int pos);
     void setSelectionColor(SelectionType type);
     void rememberSelection();
 
