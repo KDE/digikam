@@ -77,7 +77,6 @@ private Q_SLOTS:
     void slotTextChanged();
     void slotParseTimer();
     void slotCursorPositionChanged(int, int);
-    void slotSelectionChanged();
 
 private:
 
@@ -91,8 +90,10 @@ private:
 
     bool tokenIsSelected();
     void searchAndHighlightTokens(SelectionType type, int pos);
+
     void setSelectionColor(SelectionType type);
     void rememberSelection();
+    void resetSelection();
 
 private:
 
