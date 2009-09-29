@@ -63,6 +63,35 @@ void AdvancedRenameWidgetTest::testFileNameToken()
     QCOMPARE(parsed, result);
 }
 
+void AdvancedRenameWidgetTest::testDirectoryNameToken_data()
+{
+    QTest::addColumn<QString>("parseString");
+    QTest::addColumn<QString>("filename");
+    QTest::addColumn<QString>("result");
+
+    QString filename("/mnt/data/photos/2009/digikam_tests/myfile001.jpg");
+
+    QTest::newRow("[dir]")        << QString("[dir]")        << filename << QString("digikam_tests");
+    QTest::newRow("[dir.]")       << QString("[dir.]")       << filename << QString("2009");
+    QTest::newRow("[dir.]_[dir]") << QString("[dir.]_[dir]") << filename << QString("2009_digikam_tests");
+    QTest::newRow("[dir.....]")   << QString("[dir.....]")   << filename << QString();
+}
+
+void AdvancedRenameWidgetTest::testDirectoryNameToken()
+{
+    QFETCH(QString,   parseString);
+    QFETCH(QString,   filename);
+    QFETCH(QString,   result);
+
+    DefaultParser parser;
+
+    ParseInformation info;
+    info.filePath   = filename;
+
+    QString parsed = parser.parse(parseString, info);
+    QCOMPARE(parsed, result);
+}
+
 void AdvancedRenameWidgetTest::testNumberToken_data()
 {
     QTest::addColumn<QString>("parseString");
