@@ -113,7 +113,7 @@ SoftProofDialog::SoftProofDialog(QWidget *parent)
                      "be able to preview how an image will be rendered via an output device.</p>"));
 
     d->infoProofProfiles = new QPushButton;
-    d->infoProofProfiles->setIcon(SmallIcon("documentinfo"));
+    d->infoProofProfiles->setIcon(SmallIcon("dialog-information"));
     d->infoProofProfiles->setWhatsThis( i18n("Press this button to get detailed "
                      "information about the selected proofing profile.</p>"));
 

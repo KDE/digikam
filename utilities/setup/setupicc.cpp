@@ -221,7 +221,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
                                           "Good and safe choices are <b>Adobe RGB (1998)</b> and <b>sRGB IEC61966-2.1</b>"));
 
     d->infoWorkProfiles = new QPushButton;
-    d->infoWorkProfiles->setIcon(SmallIcon("documentinfo"));
+    d->infoWorkProfiles->setIcon(SmallIcon("dialog-information"));
     d->infoWorkProfiles->setWhatsThis( i18n("<p>You can use this button to get more detailed "
                      "information about the selected workspace profile.</p>"));
 
@@ -359,7 +359,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     d->monitorProfilesKC->setWhatsThis( i18n("<p>Select the color profile for your monitor here.</p>"));
 
     d->infoMonitorProfiles = new QPushButton;
-    d->infoMonitorProfiles->setIcon(SmallIcon("documentinfo"));
+    d->infoMonitorProfiles->setIcon(SmallIcon("dialog-information"));
     d->infoMonitorProfiles->setWhatsThis( i18n("<p>You can use this button to get more detailed "
                      "information about the selected monitor profile.</p>"));
 
@@ -398,7 +398,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
                                           "Some of the options about loading behavior above refer to this profile.</b>"));
 
     d->infoInProfiles = new QPushButton;
-    d->infoInProfiles->setIcon(SmallIcon("documentinfo"));
+    d->infoInProfiles->setIcon(SmallIcon("dialog-information"));
     d->infoInProfiles->setWhatsThis( i18n("<p>You can use this button to get more detailed "
                                             "information about the selected input profile.</p>"));
 
@@ -423,7 +423,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
                      "be able to preview how an image will be rendered via an output device.</p>"));
 
     d->infoProofProfiles = new QPushButton;
-    d->infoProofProfiles->setIcon(SmallIcon("documentinfo"));
+    d->infoProofProfiles->setIcon(SmallIcon("dialog-information"));
     d->infoProofProfiles->setWhatsThis( i18n("<p>You can use this button to get more detailed "
                      "information about the selected proofing profile.</p>"));
 
