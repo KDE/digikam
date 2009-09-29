@@ -3,7 +3,7 @@ digiKam 1.0.0-beta5 - Release date: 2009-09-xx
 
 NEW FEATURES:
 
-General        : Metadata fields can be used for renaming in BQM and CameraUI.
+General        : AdvancedRename utility is used throughout digiKam now (AlbumUI, CameraUI and BQM).
 ImageEditor    : New menu option to switch image color space quickly.
 ImageEditor    : Black and White converter: add standard Blue and Yellow-Green color filters.
 
@@ -45,7 +45,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 034 ==> 191854 : digiKam crashed when scanning newly added folders to local collections.
 035 ==> 204237 : Attempting Add HPE427 Photosmart Camera To Import Pictures.
 036 ==> 196480 : Crash on starting digiKam.
-037 ==> 
+037 ==> 207053 : Replace current renaming in AlbumUI with AdvancedRename utility.
+038 ==>
 
 
 *********************************************************************************************************
