@@ -183,13 +183,12 @@ public:
 };
 
 TagFolderView::TagFolderView(QWidget *parent)
-             : FolderView(parent, "TagFolderView"),
-               d(new TagFolderViewPriv)
+             : FolderView(parent, "TagFolderView"), d(new TagFolderViewPriv)
 {
     d->albumMan = AlbumManager::instance();
 
     addColumn(i18n("Tags"));
-    setResizeMode(Q3ListView::LastColumn);
+    setResizeMode(Q3ListView::NoColumn);
     setRootIsDecorated(false);
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);

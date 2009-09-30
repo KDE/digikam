@@ -228,13 +228,12 @@ public:
 };
 
 AlbumFolderView::AlbumFolderView(QWidget *parent)
-               : FolderView(parent, "AlbumFolderView"),
-                 d(new AlbumFolderViewPriv)
+               : FolderView(parent, "AlbumFolderView"), d(new AlbumFolderViewPriv)
 {
     d->albumMan = AlbumManager::instance();
 
     addColumn(i18n("Albums"));
-    setResizeMode(Q3ListView::LastColumn);
+    setResizeMode(Q3ListView::NoColumn);
     setRootIsDecorated(false);
     setAllColumnsShowFocus(true);
 
