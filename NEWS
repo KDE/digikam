@@ -49,7 +49,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 038 ==> 206094 : Camera GUI: Selection with Shift+Pos1/End does not work.
 039 ==> 092098 : Plugin for automatically adding copyright marks to pictures.
 040 ==> 192242 : Album rename sometimes doesn't show existing album name in dialog.
-041 ==>
+041 ==> 208851 : Collections: Detection of duplicate collections too strict.
+042 ==> 
 
 
 *********************************************************************************************************
