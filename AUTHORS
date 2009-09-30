@@ -8,8 +8,11 @@ Andi Clemens <andi dot clemens at gmx dot net>                            : Deve
 CURRENT CONTRIBUTORS :
 --------------------
 
+Pieter Edelman <p dot edelman at gmx dot net>                             : Developer.
+Michael G. Hansen <mike at mghansen dot de>                               : Developer.
+Johannes Wienke <languitar at semipol dot de>                             : Developer.
 Matthias Welwarsky <matze at welwarsky dot de>                            : Developer.
-Patrick Spendrin <patrick_spendrin at gmx dot de>                         : Developer, Windows port.
+Patrick Spendrin <patrick_spendrin at gmx dot de>                         : Developer, Windows port, Marble support.
 Angelo Naselli <anaselli at linux dot it>                                 : Developer, Mandriva packages.
 Arnd Baecker <arnd dot baecker at web dot de>                             : Developer.
 Guillaume Castagnino <casta at xwing dot info>                            : Developer.
@@ -17,7 +20,6 @@ Achim Bohnet <ach at mpe dot mpg dot de>                                  : Bug 
 Gerhard Kulzer <gerhard at kulzer dot net>                                : Bug reports, patches, and handbook writer.
 Oliver Doerr <oliver at doerr-privat dot de>                              : Beta tester, German translations.
 Risto Saukonpaa <paristo at gmail dot com>                                : Design, icons, logo, banner, mocup, beta tester.
-Fabien Salvi <fabien dot ubuntu at gmail dot com>                         : Webmaster, French translations.
 Luka Renko <lure at kubuntu dot org>                                      : Developer, Kubuntu packages.
 Julien Nardoux <Julien at narboux dot fr>                                 : Developer.
 Julien Pontabry <julien dot pontabry at ulp dot u-strasbg dot fr>         : Developer.
@@ -25,7 +27,7 @@ Julien Pontabry <julien dot pontabry at ulp dot u-strasbg dot fr>         : Deve
 OLD CONTRIBUTORS :
 ----------------
 
-Renchi Raju <renchi.raju at gmail dot com>                                : 0.1.0 to 0.8.0 : main coordinator and lead developer.
+Renchi Raju <renchi dot raju at gmail dot com>                            : 0.1.0 to 0.8.0 : main coordinator and lead developer.
 Ralf Holzer <kde at ralfhoelzer dot com>                                  : Developer (0.7.x).
 Joern Ahrens <kde at jokele dot de>                                       : Developer, digiKam webpage maintainer (0.7.x-0.8.x).
 Tom Albers <tomalbers at kde dot nl>                                      : Developer, digiKam webpage maintainer (0.7.x-0.8.x).
@@ -39,6 +41,7 @@ Sebastian Rooder <seppelrockt at web dot de>                              : Crys
 Tung Nguyen <ntung at free dot fr>                                        : Bug reports, French translations, new image plugins icon set.
 Pieter Voloshyn <pieter dot voloshyn at gmail dot com>                    : Image filter algorithms.
 Francisco J. Cruz <fj dot cruz at supercable dot es>                      : Developer (0.9.0-0.9.2: Color Management)
+Fabien Salvi <fabien dot ubuntu at gmail dot com>                         : Webmaster(0.9.0 series), French translations.
 
 OLD TRANSLATORS (before 0.7.0 release) :
 --------------------------------------
@@ -69,7 +72,7 @@ DIGIKAM SPLASHSCREENS CREDITS :
 0.8.1          : Andrea Gagliardi     <andrea at euronia dot it>
 0.8.0          : Tom Albers           <tomalbers at kde dot nl>
 0.7.3          : Andreas Fischer
-0.7.2          : Caulier Gilles       <caulier dot gilles at kdemail dot net>
+0.7.2          : Caulier Gilles       <caulier dot gilles at gmail dot com>
 0.7.1          : Yemu
 0.7.0          : Yves Chaufour        <yves dot chaufour at wanadoo dot fr>
 0.6.2          : Yves Chaufour        <yves dot chaufour at wanadoo dot fr>
