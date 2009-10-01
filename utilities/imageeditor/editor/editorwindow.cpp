@@ -1010,17 +1010,17 @@ void EditorWindow::saveStandardSettings()
 }
 
 /** Method used by Editor Tools. Only Zoom+ and Zoom- are currently supported.
-    TODO: Fix this behavour when editor tool preview widgets will be factored.
+    TODO: Fix this behavior when editor tool preview widgets will be factored.
  */
 void EditorWindow::toggleZoomActions(bool val)
 {
     d->zoomMinusAction->setEnabled(val);
     d->zoomPlusAction->setEnabled(val);
+    d->zoomComboAction->setEnabled(val);
 }
 
 void EditorWindow::toggleStandardActions(bool val)
 {
-    d->zoomComboAction->setEnabled(val);
     d->zoomTo100percents->setEnabled(val);
     d->zoomFitToWindowAction->setEnabled(val);
     d->zoomFitToSelectAction->setEnabled(val);
