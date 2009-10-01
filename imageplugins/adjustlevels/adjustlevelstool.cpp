@@ -501,6 +501,16 @@ void AdjustLevelsTool::slotAdjustSliders()
                   d->maxOutput->value());
 }
 
+void AdjustLevelsTool::adjustSlidersAndSpinboxes(int minIn, double gamIn, int maxIn, int minOut, int maxOut)
+{
+    d->minInput->setValue(minIn);
+    d->maxInput->setValue(maxIn);
+    d->minOutput->setValue(minOut);
+    d->maxOutput->setValue(maxOut);
+
+    adjustSliders(minIn, gamIn, maxIn, minOut, maxOut);
+}
+
 void AdjustLevelsTool::adjustSliders(int minIn, double gamIn, int maxIn, int minOut, int maxOut)
 {
     d->inputLevels->blockSignals(true);
@@ -648,11 +658,11 @@ void AdjustLevelsTool::slotChannelChanged()
             break;
     }
 
-    adjustSliders(d->levels->getLevelLowInputValue(channel),
-                  d->levels->getLevelGammaValue(channel),
-                  d->levels->getLevelHighInputValue(channel),
-                  d->levels->getLevelLowOutputValue(channel),
-                  d->levels->getLevelHighOutputValue(channel));
+    adjustSlidersAndSpinboxes(d->levels->getLevelLowInputValue(channel),
+                              d->levels->getLevelGammaValue(channel),
+                              d->levels->getLevelHighInputValue(channel),
+                              d->levels->getLevelLowOutputValue(channel),
+                              d->levels->getLevelHighOutputValue(channel));
 
     d->levelsHistogramWidget->repaint();
     d->gboxSettings->histogramBox()->slotChannelChanged();

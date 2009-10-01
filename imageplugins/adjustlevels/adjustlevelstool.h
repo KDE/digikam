@@ -53,6 +53,7 @@ private:
     void writeSettings();
     void finalRendering();
     void adjustSliders(int minIn, double gamIn, int maxIn, int minOut, int maxOut);
+    void adjustSlidersAndSpinboxes(int minIn, double gamIn, int maxIn, int minOut, int maxOut);
     bool eventFilter(QObject*, QEvent*);
 
 private Q_SLOTS:
