@@ -299,7 +299,7 @@ void AdvancedRenameInput::resetSelection()
     d->tokenMarked     = false;
     d->selectionStart  = -1;
     d->selectionLength = -1;
-    setSelectionColor(None);
+    setSelectionColor(StandardText);
     emit signalTokenMarked(d->tokenMarked);
 }
 
@@ -359,7 +359,7 @@ void AdvancedRenameInput::setSelectionColor(SelectionType type)
         case TokenAndModifiers:
             css = cssTemplate.arg("yellow").arg("black");
             break;
-        case None:
+        case StandardText:
             css = cssTemplate.arg("palette(highlight)").arg("palette(highlighted-text)");
     }
     setStyleSheet(css);

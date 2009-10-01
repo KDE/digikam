@@ -85,7 +85,7 @@ private:
         Token = 0,
         Modifier,
         TokenAndModifiers,
-        None
+        StandardText
     };
 
     bool tokenIsSelected();
