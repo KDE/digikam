@@ -52,7 +52,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 041 ==> 208851 : Collections: Detection of duplicate collections too strict.
 042 ==> 179370 : Crashed while downloading a video file from camera.
 043 ==> 141238 : Album tree lacks horizontal scroll bar.
-044 ==>
+044 ==> 207486 : With 16-bit images, adjustlevels acts weird when inserting manually values into input fields.
+045 ==>
 
 
 *********************************************************************************************************
