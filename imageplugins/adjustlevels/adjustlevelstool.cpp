@@ -360,29 +360,29 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     connect(d->inputLevels, SIGNAL(leftValueChanged(double)),
             this, SLOT(slotAdjustMinInputSpinBox(double)));
 
-    connect(d->minInput, SIGNAL(valueChanged(int)),
-            this, SLOT(slotAdjustSliders()));
-
-    connect(d->gammaInput, SIGNAL(valueChanged(double)),
-            this, SLOT(slotGammaInputchanged(double)));
-
     connect(d->inputLevels, SIGNAL(rightValueChanged(double)),
             this, SLOT(slotAdjustMaxInputSpinBox(double)));
-
-    connect(d->maxInput, SIGNAL(valueChanged(int)),
-            this, SLOT(slotAdjustSliders()));
 
     connect(d->outputLevels, SIGNAL(leftValueChanged(double)),
             this, SLOT(slotAdjustMinOutputSpinBox(double)));
 
-    connect(d->minOutput, SIGNAL(valueChanged(int)),
-            this, SLOT(slotAdjustSliders()));
-
     connect(d->outputLevels, SIGNAL(rightValueChanged(double)),
             this, SLOT(slotAdjustMaxOutputSpinBox(double)));
 
+    connect(d->minInput, SIGNAL(valueChanged(int)),
+            this, SLOT(slotAdjustSliders()));
+
+    connect(d->maxInput, SIGNAL(valueChanged(int)),
+            this, SLOT(slotAdjustSliders()));
+
+    connect(d->minOutput, SIGNAL(valueChanged(int)),
+            this, SLOT(slotAdjustSliders()));
+
     connect(d->maxOutput, SIGNAL(valueChanged(int)),
             this, SLOT(slotAdjustSliders()));
+
+    connect(d->gammaInput, SIGNAL(valueChanged(double)),
+            this, SLOT(slotGammaInputchanged(double)));
 
     // -------------------------------------------------------------
     // Buttons slots.
@@ -463,9 +463,8 @@ void AdjustLevelsTool::slotAdjustMinInputSpinBox(double val)
     d->minInput->blockSignals(true);
     int newVal = (int)(val*d->histoSegments);
     d->minInput->setValue(newVal);
-    d->levels->setLevelLowInputValue(d->gboxSettings->histogramBox()->channel(), newVal);
     d->minInput->blockSignals(false);
-    slotTimer();
+    slotAdjustSliders();
 }
 
 void AdjustLevelsTool::slotAdjustMaxInputSpinBox(double val)
@@ -473,9 +472,8 @@ void AdjustLevelsTool::slotAdjustMaxInputSpinBox(double val)
     d->maxInput->blockSignals(true);
     int newVal = (int)(val*d->histoSegments);
     d->maxInput->setValue(newVal);
-    d->levels->setLevelHighInputValue(d->gboxSettings->histogramBox()->channel(), newVal);
     d->maxInput->blockSignals(false);
-    slotTimer();
+    slotAdjustSliders();
 }
 
 void AdjustLevelsTool::slotAdjustMinOutputSpinBox(double val)
@@ -483,9 +481,8 @@ void AdjustLevelsTool::slotAdjustMinOutputSpinBox(double val)
     d->minOutput->blockSignals(true);
     int newVal = (int)(val*d->histoSegments);
     d->minOutput->setValue(newVal);
-    d->levels->setLevelLowOutputValue(d->gboxSettings->histogramBox()->channel(), newVal);
     d->minOutput->blockSignals(false);
-    slotTimer();
+    slotAdjustSliders();
 }
 
 void AdjustLevelsTool::slotAdjustMaxOutputSpinBox(double val)
@@ -493,9 +490,8 @@ void AdjustLevelsTool::slotAdjustMaxOutputSpinBox(double val)
     d->maxOutput->blockSignals(true);
     int newVal = (int)(val*d->histoSegments);
     d->maxOutput->setValue(newVal);
-    d->levels->setLevelHighOutputValue(d->gboxSettings->histogramBox()->channel(), newVal);
     d->maxOutput->blockSignals(false);
-    slotTimer();
+    slotAdjustSliders();
 }
 
 void AdjustLevelsTool::slotAdjustSliders()
@@ -507,11 +503,24 @@ void AdjustLevelsTool::slotAdjustSliders()
 
 void AdjustLevelsTool::adjustSliders(int minIn, double gamIn, int maxIn, int minOut, int maxOut)
 {
+    d->inputLevels->blockSignals(true);
+    d->outputLevels->blockSignals(true);
+
     d->inputLevels->setLeftValue((double)minIn/(double)d->histoSegments);
     d->inputLevels->setRightValue((double)maxIn/(double)d->histoSegments);
     d->gammaInput->setValue(gamIn);
     d->outputLevels->setLeftValue((double)minOut/(double)d->histoSegments);
     d->outputLevels->setRightValue((double)maxOut/(double)d->histoSegments);
+
+    d->levels->setLevelLowInputValue(d->gboxSettings->histogramBox()->channel(), minIn);
+    d->levels->setLevelHighInputValue(d->gboxSettings->histogramBox()->channel(), maxIn);
+    d->levels->setLevelLowOutputValue(d->gboxSettings->histogramBox()->channel(), minOut);
+    d->levels->setLevelHighOutputValue(d->gboxSettings->histogramBox()->channel(), maxOut);
+
+    d->inputLevels->blockSignals(false);
+    d->outputLevels->blockSignals(false);
+
+    slotTimer();
 }
 
 void AdjustLevelsTool::slotResetCurrentChannel()
