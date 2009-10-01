@@ -50,7 +50,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 039 ==> 092098 : Plugin for automatically adding copyright marks to pictures.
 040 ==> 192242 : Album rename sometimes doesn't show existing album name in dialog.
 041 ==> 208851 : Collections: Detection of duplicate collections too strict.
-042 ==> 
+042 ==> 179370 : Crashed while downloading a video file from camera.
+043 ==>
 
 
 *********************************************************************************************************
