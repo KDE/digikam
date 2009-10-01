@@ -110,7 +110,7 @@ RangeModifier::RangeModifier()
              i18n("Extract the character at the given index"));
 
     addTokenDescription(QString("{<i>from</i> - <i>to</i>}"), i18n("Range"),
-             i18n("Extract a specific range ('<i>to'</i> = end of string, if omitted)"));
+             i18n("Extract a specific range (if omitted, '<i>to</i>' = end of string)"));
 
     setRegExp("\\{\\s*(\\d+)\\s*(-\\s*((-1|\\d+)\\s*)?)?\\}");
 }
