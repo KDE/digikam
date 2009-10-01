@@ -24,13 +24,17 @@ Luka Renko <lure at kubuntu dot org>                                      : Deve
 Julien Nardoux <Julien at narboux dot fr>                                 : Developer.
 Julien Pontabry <julien dot pontabry at ulp dot u-strasbg dot fr>         : Developer.
 
+FORMER MEMBERS :
+--------------
+
+Renchi Raju <renchi dot raju at gmail dot com>                            : 0.1.0 to 0.8.0 : main coordinator and lead developer.
+Joern Ahrens <kde at jokele dot de>                                       : Developer, digiKam webpage maintainer (0.7.x-0.8.x).
+Tom Albers <tomalbers at kde dot nl>                                      : Developer, digiKam webpage maintainer (0.7.x-0.8.x).
+
 OLD CONTRIBUTORS :
 ----------------
 
-Renchi Raju <renchi dot raju at gmail dot com>                            : 0.1.0 to 0.8.0 : main coordinator and lead developer.
 Ralf Holzer <kde at ralfhoelzer dot com>                                  : Developer (0.7.x).
-Joern Ahrens <kde at jokele dot de>                                       : Developer, digiKam webpage maintainer (0.7.x-0.8.x).
-Tom Albers <tomalbers at kde dot nl>                                      : Developer, digiKam webpage maintainer (0.7.x-0.8.x).
 Todd Shoemaker <todd at theshoemakers dot net>                            : Developer (0.6.x).
 Unai Garro <ugarro at sourceforge dot net>                                : Developer (Hot Pixels Fixer tools - 0.9.x).
 Gregory Kokanosky <gregory dot kokanosky at free dot fr>                  : Feedback and patches (0.6.x).
