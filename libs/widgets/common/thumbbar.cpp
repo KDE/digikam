@@ -97,6 +97,7 @@ public:
         timer           = 0;
         preloadTimer    = 0;
         toolTip         = 0;
+        orientation     = Qt::Horizontal;
     }
 
     bool                        clearing;
