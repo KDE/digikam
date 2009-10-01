@@ -137,9 +137,8 @@ void AdvancedRenameInput::mouseMoveEvent(QMouseEvent* e)
     {
         d->userIsHighlighting = false;
     }
-    else
+    else if (d->userIsHighlighting)
     {
-        setSelectionColor(None);
         deselect();
         d->userIsHighlighting  = false;
         resetSelection();
@@ -208,21 +207,15 @@ void AdvancedRenameInput::rememberSelection()
 {
     if (hasSelectedText())
     {
-        if (tokenIsSelected())
-        {
-            d->selectionStart  = selectionStart();
-            d->selectionLength = selectedText().count();
-        }
-        else
-        {
-            deselect();
-            resetSelection();
-            setCursorPosition(d->curCursorPos);
-        }
+        d->selectionStart  = selectionStart();
+        d->selectionLength = selectedText().count();
+        d->tokenMarked     = true;
     }
     else
     {
+        deselect();
         resetSelection();
+        setCursorPosition(d->curCursorPos);
     }
 }
 
@@ -306,6 +299,7 @@ void AdvancedRenameInput::resetSelection()
     d->tokenMarked     = false;
     d->selectionStart  = -1;
     d->selectionLength = -1;
+    setSelectionColor(None);
     emit signalTokenMarked(d->tokenMarked);
 }
 
@@ -321,6 +315,7 @@ void AdvancedRenameInput::slotAddToken(const QString& token)
         if (hasSelectedText())
         {
             del();
+            resetSelection();
         }
 
         int cursorPos = cursorPosition();
