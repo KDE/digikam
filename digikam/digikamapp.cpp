@@ -1433,8 +1433,7 @@ void DigikamApp::slotImageSelected(const ImageInfoList& selection, bool hasPrev,
             int index = listAll.indexOf(selection.first()) + 1;
 
             d->statusBarSelectionText = selection.first().fileUrl().fileName()
-                                         + i18n(" (%1 of %2)", QString::number(index),
-                                                               QString::number(num_images));
+                                         + i18n(" (%1 of %2)", index, num_images);
             break;
         }
         default:
