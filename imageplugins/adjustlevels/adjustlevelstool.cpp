@@ -718,7 +718,7 @@ void AdjustLevelsTool::readSettings()
     d->minOutput->setValue(d->levels->getLevelLowOutputValue(d->gboxSettings->histogramBox()->channel()));
     d->maxInput->setValue(d->levels->getLevelHighInputValue(d->gboxSettings->histogramBox()->channel()));
     d->maxOutput->setValue(d->levels->getLevelHighOutputValue(d->gboxSettings->histogramBox()->channel()));
-    slotAdjustSliders();
+    slotChannelChanged();
 }
 
 void AdjustLevelsTool::writeSettings()
