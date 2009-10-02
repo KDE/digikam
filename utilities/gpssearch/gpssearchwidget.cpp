@@ -30,8 +30,10 @@
 #include <kdebug.h>
 
 // Marble includes
+#ifdef HAVE_MARBLEWIDGET
 #include <marble/GeoDataLinearRing.h>
 #include <marble/GeoPainter.h>
+#endif // HAVE_MARBLEWIDGET
 
 // Local includes.
 
