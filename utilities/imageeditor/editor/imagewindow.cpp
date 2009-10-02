@@ -242,11 +242,11 @@ ImageWindow::~ImageWindow()
 
 void ImageWindow::closeEvent(QCloseEvent* e)
 {
-    if (!e)
-        return;
-
     if (!queryClose())
+    {
+        e->ignore();
         return;
+    }
 
 
     // put right side bar in a defined state
@@ -492,7 +492,7 @@ void ImageWindow::slotThumbBarItemSelected(const KUrl& url)
     if (d->urlCurrent == url)
         return;
 
-    if (!promptUserSave(d->urlCurrent))
+    if (!promptUserSave(d->urlCurrent, AskIfNeeded, false))
         return;
 
     int index = d->urlList.indexOf(url);
@@ -1217,7 +1217,7 @@ void ImageWindow::slotCollectionImageChange(const CollectionImageChangeset& chan
                 {
                     if (d->imageInfoCurrent == d->imageInfoList[i])
                     {
-                        promptUserSave(d->urlCurrent, AlwaysSaveAs);
+                        promptUserSave(d->urlCurrent, AlwaysSaveAs, false);
                         if (removeItem(i))
                             needLoadCurrent = true;
                     }
@@ -1234,7 +1234,7 @@ void ImageWindow::slotCollectionImageChange(const CollectionImageChangeset& chan
                 {
                     if (d->imageInfoCurrent == d->imageInfoList[i])
                     {
-                        promptUserSave(d->urlCurrent, AlwaysSaveAs);
+                        promptUserSave(d->urlCurrent, AlwaysSaveAs, false);
                         if (removeItem(i))
                             needLoadCurrent = true;
                     }
