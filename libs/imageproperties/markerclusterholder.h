@@ -322,7 +322,7 @@ public:
         PixmapValid = 1,
         PixmapNoAddNumber = 2,
         PixmapNoSoloModify = 4,
-        PixmapNoSelectedModify = 8,
+        PixmapNoSelectedModify = 8
     };
     
     /**
@@ -410,7 +410,7 @@ Q_DECLARE_METATYPE(MarkerClusterHolder::ClusterInfoList)
 namespace Marble
 {
     class GeoPainter;
-};
+}
 
 inline MarkerClusterHolder::PixmapOperations& operator|=(MarkerClusterHolder::PixmapOperations& target, const MarkerClusterHolder::PixmapOperations& source)
 {
