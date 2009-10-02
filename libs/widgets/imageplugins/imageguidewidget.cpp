@@ -591,7 +591,7 @@ void ImageGuideWidget::resizeEvent(QResizeEvent *e)
     int h     = e->size().height();
     int old_w = d->width;
     int old_h = d->height;
-    
+
     uchar *data     = d->iface->setPreviewImageSize(w, h);
     d->width        = d->iface->previewWidth();
     d->height       = d->iface->previewHeight();
@@ -789,17 +789,37 @@ void ImageGuideWidget::drawLineTo(const QPoint& endPoint)
 
 void ImageGuideWidget::drawLineTo(int width, bool erase, const QColor& color, const QPoint& start, const QPoint& end)
 {
+
     QPainter painter(d->maskPixmap);
-    if (erase) 
+    if (erase)
     {
-        painter.setPen(QPen(QBrush(Qt::transparent), width, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-        painter.setCompositionMode(QPainter::CompositionMode_Clear);
+        // drawLine() seems to ignore composition modes, use a tmp pixmap and combine it later on
+        QPixmap tmpMask(d->maskPixmap->width(), d->maskPixmap->height());
+        tmpMask.fill(Qt::transparent);
+        QPainter tmpPainter(&tmpMask);
+
+        painter.setRenderHint(QPainter::Antialiasing, false);
+        painter.setCompositionMode(QPainter::CompositionMode_DestinationOut);
+
+        QPen eraser;
+        eraser.setColor(Qt::yellow);
+        eraser.setStyle(Qt::SolidLine);
+        eraser.setWidth(width);
+        eraser.setCapStyle(Qt::RoundCap);
+        eraser.setJoinStyle(Qt::RoundJoin);
+
+        tmpPainter.setPen(eraser);
+        tmpPainter.setBrush(QBrush());
+        tmpPainter.drawLine(start, end);
+        tmpPainter.end();
+
+        painter.drawPixmap(0, 0, tmpMask);
     }
     else
     {
         painter.setPen(QPen(color, width, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+        painter.drawLine(start, end);
     }
-    painter.drawLine(start, end);
 
     int rad = (width / 2) + 2;
 
