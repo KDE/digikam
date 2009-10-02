@@ -507,8 +507,13 @@ QString FreeRotationTool::centerQString(const QString& str, int maxLength)
     {
         QString delimiter(" ");
         int repeat = (diff / 2);
-        tmp.prepend(delimiter.repeated(repeat));
-        tmp.append(delimiter.repeated(repeat));
+
+        // Qt 4.5 only
+//        tmp.prepend(delimiter.repeated(repeat));
+//        tmp.append(delimiter.repeated(repeat));
+
+        tmp.prepend(repeatString(delimiter, repeat));
+        tmp.append(repeatString(delimiter, repeat));
 
         // too short / long string?
         if (tmp.count() > maxLength)
@@ -519,7 +524,11 @@ QString FreeRotationTool::centerQString(const QString& str, int maxLength)
         else if (tmp.count() < maxLength)
         {
             diff = qAbs<int>(maxLength - tmp.count());
-            tmp.append(delimiter.repeated(diff));
+
+            // Qt 4.5 only
+//            tmp.append(delimiter.repeated(diff));
+
+            tmp.append(repeatString(delimiter, diff));
         }
     }
     return tmp;
@@ -668,6 +677,16 @@ void FreeRotationTool::blockWidgetSignals(bool b)
     d->fineAngleInput->blockSignals(b);
     d->autoCropCB->blockSignals(b);
     d->antialiasInput->blockSignals(b);
+}
+
+QString FreeRotationTool::repeatString(const QString& str, int times)
+{
+    QString tmp;
+    for (int i = 0; i < times; ++i)
+    {
+        tmp.append(str);
+    }
+    return tmp;
 }
 
 }  // namespace DigikamFreeRotationImagesPlugin
