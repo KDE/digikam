@@ -167,6 +167,9 @@ bool DCursorTracker::eventFilter(QObject *object, QEvent *e)
 
 void DCursorTracker::moveToParent(QWidget* parent)
 {
+    if (!parent)
+        return;
+
     switch (d->alignment)
     {
         case Qt::AlignLeft:
