@@ -33,6 +33,7 @@
 #include <QPushButton>
 #include <QStyle>
 #include <QToolButton>
+#include <QSplitter>
 
 // KDE includes
 
@@ -67,15 +68,17 @@ class GPSSearchViewPriv
 public:
 
     GPSSearchViewPriv()
+    : saveBtn(0),
+      zoomInBtn(0),
+      zoomOutBtn(0),
+      nameEdit(0),
+      imageInfoJob(),
+      searchGPSBar(0),
+      gpsSearchFolderView(0),
+      splitter(0),
+      gpsSearchWidget(0),
+      mapThemeBtn(0)
     {
-        gpsSearchWidget     = 0;
-        saveBtn             = 0;
-        nameEdit            = 0;
-        searchGPSBar        = 0;
-        gpsSearchFolderView = 0;
-        zoomInBtn           = 0;
-        zoomOutBtn          = 0;
-        mapThemeBtn         = 0;
     }
 
     QToolButton         *saveBtn;
@@ -90,6 +93,8 @@ public:
 
     GPSSearchFolderView *gpsSearchFolderView;
 
+    QSplitter           *splitter;
+    
     GPSSearchWidget     *gpsSearchWidget;
     WorldMapThemeBtn    *mapThemeBtn;
 };
@@ -107,8 +112,14 @@ GPSSearchView::GPSSearchView(QWidget *parent)
     QFrame *mapPanel   = new QFrame(this);
     QVBoxLayout *vlay2 = new QVBoxLayout(mapPanel);
     d->gpsSearchWidget = new GPSSearchWidget(mapPanel);
-    d->gpsSearchWidget->setWhatsThis(i18n("To perform a search over map, use CTRL+left mouse button "
-                                          "to draw a rectangle where you want to find items."));
+    d->gpsSearchWidget->setWhatsThis(i18n("To perform a search over the map, use CTRL+left mouse button "
+                                          "to draw a rectangle where you want to find items.\n\n"
+                                          "Once you have found items, click on an item using "
+                                          "SHIFT+left mouse button to select it, "
+                                          "click using CTRL+left mouse button to filter using an item "
+                                          "(add SHIFT to filter using multiple items) and click "
+                                          "using CTRL+right mouse button to zoom into an item."
+                                          ));
 
     mapPanel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     mapPanel->setLineWidth(style()->pixelMetric(QStyle::PM_DefaultFrameWidth));
@@ -150,13 +161,29 @@ GPSSearchView::GPSSearchView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    vlay->addWidget(mapPanel);
-    vlay->addWidget(hbox);
-    vlay->addWidget(d->gpsSearchFolderView);
-    vlay->addWidget(d->searchGPSBar);
-    vlay->setStretchFactor(mapPanel, 10);
-    vlay->setMargin(0);
-    vlay->setSpacing(KDialog::spacingHint());
+    d->splitter = new QSplitter(Qt::Vertical, this);
+    d->splitter->setOpaqueResize(KGlobalSettings::opaqueResize());
+
+    QFrame* const frameTop = new QFrame(d->splitter);
+    QVBoxLayout* const vlayTop = new QVBoxLayout(frameTop);
+    vlayTop->addWidget(mapPanel);
+    vlayTop->addWidget(hbox);
+    vlayTop->setStretchFactor(mapPanel, 10);
+    vlayTop->setMargin(0);
+    vlayTop->setSpacing(KDialog::spacingHint());
+    QFrame* const frameBottom = new QFrame(d->splitter);
+    QVBoxLayout* const vlayBottom = new QVBoxLayout(frameBottom);
+    vlayBottom->addWidget(d->gpsSearchFolderView);
+    vlayBottom->addWidget(d->searchGPSBar);
+    vlayBottom->setMargin(0);
+    vlayBottom->setSpacing(KDialog::spacingHint());
+    
+    d->splitter->addWidget(frameTop);
+    d->splitter->addWidget(frameBottom);
+    
+    // ---------------------------------------------------------------
+    
+    vlay->addWidget(d->splitter);
 
     readConfig();
 
@@ -185,6 +212,12 @@ GPSSearchView::GPSSearchView(QWidget *parent)
 
     connect(d->gpsSearchWidget, SIGNAL(signalNewSelectionFromMap()),
             this, SLOT(slotSelectionChanged()));
+            
+    connect(d->gpsSearchWidget, SIGNAL(signalSelectedItems(const GPSInfoList)),
+            this, SLOT(slotMapSelectedItems(const GPSInfoList&)));
+            
+    connect(d->gpsSearchWidget, SIGNAL(signalSoloItems(const GPSInfoList)),
+            this, SLOT(slotMapSoloItems(const GPSInfoList&)));
 
     connect(d->zoomInBtn, SIGNAL(released()),
             d->gpsSearchWidget, SLOT(slotZoomIn()));
@@ -209,7 +242,15 @@ GPSSearchView::~GPSSearchView()
 void GPSSearchView::readConfig()
 {
     KSharedConfig::Ptr config = KGlobal::config();
+    
     KConfigGroup group        = config->group(QString("GPSSearch SideBar"));
+    
+    const QList<int> splitterSizes = group.readEntry(QString("Splitter Sizes"), QList<int>());
+    if (!splitterSizes.isEmpty())
+    {
+        d->splitter->setSizes(splitterSizes);
+    }
+    
     d->gpsSearchWidget->readConfig(group);
 }
 
@@ -217,7 +258,10 @@ void GPSSearchView::writeConfig()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("GPSSearch SideBar"));
+    
+    group.writeEntry(QString("Splitter Sizes"), d->splitter->sizes());
     d->gpsSearchWidget->writeConfig(group);
+    
     config->sync();
 }
 
@@ -233,6 +277,11 @@ SearchTextBar* GPSSearchView::searchBar() const
 
 void GPSSearchView::setActive(bool val)
 {
+    if (!val)
+    {
+        // make sure we reset the custom filters set by the MarkerClusterer:
+        emit(signalMapSoloItems(KUrl::List(), "gpssearch"));
+    }
     if (d->gpsSearchFolderView->selectedItem())
     {
         d->gpsSearchFolderView->setActive(val);
@@ -261,6 +310,9 @@ void GPSSearchView::slotSelectionChanged()
 void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
 {
     AlbumManager::instance()->setCurrentAlbum(0);
+    
+    // clear positions shown on the map:
+    d->gpsSearchWidget->clearGPSPositions();
 
     if (!d->gpsSearchWidget->asSelection())
         return;
@@ -283,6 +335,7 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
 
     SAlbum* salbum = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::MapSearch, writer.xml());
     AlbumManager::instance()->setCurrentAlbum(salbum);
+    d->imageInfoJob.allItemsFromAlbum(salbum);
 }
 
 void GPSSearchView::slotAlbumSelected(SAlbum* salbum)
@@ -290,6 +343,9 @@ void GPSSearchView::slotAlbumSelected(SAlbum* salbum)
     if (!salbum)
         return;
 
+    // clear positions shown on the map:
+    d->gpsSearchWidget->clearGPSPositions();
+    
     AlbumManager::instance()->setCurrentAlbum(salbum);
 
     SearchXmlReader reader(salbum->query());
@@ -320,11 +376,13 @@ void GPSSearchView::slotItemsInfo(const ImageInfoList& items)
             gps.longitude = pos.longitudeNumber();
             gps.altitude  = pos.altitude();
             gps.dateTime  = inf.dateTime();
+            gps.rating    = inf.rating();
             gps.url       = inf.fileUrl();
+            gps.dimensions= inf.dimensions();
             list << gps;
         }
     }
-    d->gpsSearchWidget->setGPSPositions(list);
+    d->gpsSearchWidget->addGPSPositions(list);
 }
 
 bool GPSSearchView::checkName(QString& name)
@@ -394,6 +452,73 @@ void GPSSearchView::slotRenameAlbum(SAlbum* salbum)
     if (!checkName(name)) return;
 
     AlbumManager::instance()->updateSAlbum(salbum, salbum->query(), name);
+}
+
+/**
+ * @brief Slot which gets called when no item is selected in the icon view
+ */
+void GPSSearchView::slotDigikamViewNoCurrentItem()
+{
+    d->gpsSearchWidget->slotSetSelectedImages(GPSInfoList());
+}
+
+/**
+ * @brief Slot which gets called when the user selects images in the icon view
+ * @param selectedImages List of selected images
+ */
+void GPSSearchView::slotDigikamViewImageSelected(const ImageInfoList &selectedImage, bool hasPrevious, bool hasNext, const ImageInfoList &allImages)
+{
+    Q_UNUSED(hasPrevious)
+    Q_UNUSED(hasNext)
+    Q_UNUSED(allImages)
+    GPSInfoList list;
+    foreach(ImageInfo inf, selectedImage)
+    {
+        ImagePosition pos = inf.imagePosition();
+        if (!pos.isEmpty())
+        {
+            GPSInfo gps;
+            gps.latitude  = pos.latitudeNumber();
+            gps.longitude = pos.longitudeNumber();
+            gps.altitude  = pos.altitude();
+            gps.dateTime  = inf.dateTime();
+            gps.rating    = inf.rating();
+            gps.url       = inf.fileUrl();
+            list << gps;
+            kDebug(50003)<<gps.url;
+        }
+    }
+
+    d->gpsSearchWidget->slotSetSelectedImages(list);
+}
+
+/**
+ * @brief Slot which gets called when the user selected items on the map
+ * @param gpsList List of GPSInfos of selected items
+ */
+void GPSSearchView::slotMapSelectedItems(const GPSInfoList& gpsList)
+{
+    KUrl::List urlList;
+    for (GPSInfoList::const_iterator it = gpsList.constBegin(); it!=gpsList.constEnd(); ++it)
+    {
+        urlList << it->url;
+        kDebug(50003)<<it->url;
+    }
+    emit(signalMapSelectedItems(urlList));
+}
+
+/**
+ * @brief Slot which gets called when the user makes items 'solo' on the map
+ * @param gpsList List of GPSInfos which are 'solo'
+ */
+void GPSSearchView::slotMapSoloItems(const GPSInfoList& gpsList)
+{
+    KUrl::List urlList;
+    for (GPSInfoList::const_iterator it = gpsList.constBegin(); it!=gpsList.constEnd(); ++it)
+    {
+        urlList << it->url;
+    }
+    emit(signalMapSoloItems(urlList, "gpssearch"));
 }
 
 }  // namespace Digikam

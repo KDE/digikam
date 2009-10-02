@@ -114,6 +114,11 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     d->longitude->setAlignment(Qt::AlignRight);
     d->date->setAlignment(Qt::AlignRight);
 
+    d->map->slotSetAllowItemSelection(false);
+    d->map->slotSetAllowItemFiltering(false);
+    d->map->slotSetFocusOnAddedItems(true);
+    d->map->slotSetEnableTooltips(true);
+    
     // --------------------------------------------------------
 
     QWidget* box2           = new QWidget(this);

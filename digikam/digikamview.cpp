@@ -442,6 +442,20 @@ void DigikamView::setupConnections()
 
     connect(d->fuzzySearchView, SIGNAL(signalUpdateFingerPrints()),
             d->parent, SLOT(slotRebuildAllFingerPrints()));
+            
+    connect(this, SIGNAL(signalNoCurrentItem()),
+            d->gpsSearchView, SLOT(slotDigikamViewNoCurrentItem()));
+            
+    connect(this, SIGNAL(signalImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)),
+            d->gpsSearchView, SLOT(slotDigikamViewImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)));
+            
+    connect(d->gpsSearchView, SIGNAL(signalMapSelectedItems(const KUrl::List)),
+            d->iconView, SLOT(setSelectedUrls(const KUrl::List&)));
+            
+    connect(d->gpsSearchView,
+            SIGNAL(signalMapSoloItems(const KUrl::List, const QString&)),
+            d->iconView->imageFilterModel(),
+            SLOT(setUrlWhitelist(const KUrl::List, const QString&)));
 
     // -- Filter Bars Connections ---------------------------------
 

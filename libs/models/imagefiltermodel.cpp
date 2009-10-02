@@ -310,6 +310,13 @@ void ImageFilterModel::setRatingFilter(int rating, ImageFilterSettings::RatingCo
     setImageFilterSettings(d->filter);
 }
 
+void ImageFilterModel::setUrlWhitelist(const KUrl::List urlList, const QString& id)
+{
+    Q_D(ImageFilterModel);
+    d->filter.setUrlWhitelist(urlList, id);
+    setImageFilterSettings(d->filter);
+}
+
 void ImageFilterModel::setMimeTypeFilter(int mimeTypeFilter)
 {
     Q_D(ImageFilterModel);

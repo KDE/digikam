@@ -33,4 +33,4 @@ ADD_SUBDIRECTORY( dialogs )
 ADD_SUBDIRECTORY( widgets )
 ADD_SUBDIRECTORY( database )
 ADD_SUBDIRECTORY( template )
-
+ADD_SUBDIRECTORY( imageproperties/markerclusterholderplugin/ )

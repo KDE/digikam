@@ -394,6 +394,28 @@ void ImageCategorizedView::setCurrentUrl(const KUrl& url)
     setCurrentIndex(index);
 }
 
+void ImageCategorizedView::setSelectedUrls(const KUrl::List& urlList)
+{
+    kDebug(50003)<<"urlList.size():"<<urlList.size();
+    QItemSelection mySelection;
+    for (KUrl::List::const_iterator it = urlList.constBegin(); it!=urlList.constEnd(); ++it)
+    {
+        const QString path = it->path();
+        const QModelIndex index = d->filterModel->indexForPath(path);
+        if (!index.isValid())
+        {
+            kWarning() << "no QModelIndex found for" << *it;
+        }
+        else
+        {
+            // TODO: is there a better way?
+            mySelection.select(index, index);
+        }
+    }
+    clearSelection();
+    selectionModel()->select(mySelection, QItemSelectionModel::Select);
+}
+
 void ImageCategorizedView::addOverlay(ImageDelegateOverlay *overlay)
 {
     overlay->setView(this);

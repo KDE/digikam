@@ -108,6 +108,18 @@ void ImageFilterSettings::setAlbumNames(const QHash<int, QString>& hash)
     albumNameHash = hash;
 }
 
+void ImageFilterSettings::setUrlWhitelist(const KUrl::List& urlList, const QString id)
+{
+    if (urlList.isEmpty())
+    {
+        urlWhitelists.remove(id);
+    }
+    else
+    {
+        urlWhitelists.insert(id, urlList);
+    }
+}
+
 bool ImageFilterSettings::matches(const ImageInfo& info, bool *foundText) const
 {
     if (foundText)
@@ -292,6 +304,19 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool *foundText) const
         match &= textMatch;
         if (foundText)
             *foundText = textMatch;
+    }
+    
+    // filter by URL-whitelists:
+    // whitelists are always AND for now:
+    if (match)
+    {
+        const KUrl url = info.fileUrl();
+        for (QHash<QString, KUrl::List>::const_iterator it = urlWhitelists.constBegin(); it!=urlWhitelists.constEnd(); ++it)
+        {
+            match = it->contains(url);
+            if (!match)
+                break;
+        }
     }
 
     return match;

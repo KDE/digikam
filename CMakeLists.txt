@@ -96,6 +96,7 @@ SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_P
 # Check MarbleWidget library for geolocation.
 MACRO_OPTIONAL_FIND_PACKAGE(MarbleWidget)
 MACRO_BOOL_TO_01(MARBLEWIDGET_FOUND HAVE_MARBLEWIDGET)
+INCLUDE(libs/imageproperties/markerclusterholderplugin/CheckPluginBuildable.cmake)
 
 # Check LensFun library for lens correction tool.
 MACRO_OPTIONAL_FIND_PACKAGE(LensFun)
@@ -258,6 +259,11 @@ ENDIF(KDEPIMLIBS_FOUND)
 
 IF(MARBLEWIDGET_FOUND)
     MESSAGE(STATUS " libmarblewidget library found....... YES (optional)")
+    IF(MARBLEWIDGET_SUPPORTS_PLUGINS)
+      MESSAGE(STATUS " Can build Marble plugin............. YES (optional)")
+    ELSE(MARBLEWIDGET_SUPPORTS_PLUGINS)
+      MESSAGE(STATUS " Can build Marble plugin............. NO  (optional)")
+    ENDIF(MARBLEWIDGET_SUPPORTS_PLUGINS)
 ELSE(MARBLEWIDGET_FOUND)
     MESSAGE(STATUS " libmarblewidget library found....... NO  (optional)")
     MESSAGE(STATUS "")
@@ -560,6 +566,12 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiesgpstab.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/worldmapwidget.cpp
        )
+
+    IF(MARBLEWIDGET_FOUND)
+        SET(libimageproperties_SRCS ${libimageproperties_SRCS}
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/markerclusterholder.cpp
+        )
+    ENDIF(MARBLEWIDGET_FOUND)
 
     # --enable-final triggers: http://bugs.kde.org/show_bug.cgi?id=126326
     # digikam: camera download: auto-rotated images lose EXIF info ...
