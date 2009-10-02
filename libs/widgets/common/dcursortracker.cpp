@@ -32,6 +32,7 @@
 #include <QFrame>
 #include <QLabel>
 #include <QMouseEvent>
+#include <QPointer>
 #include <QTimer>
 #include <QToolTip>
 
@@ -55,11 +56,11 @@ public:
         parent        = 0;
     }
 
-    Qt::Alignment alignment;
-    bool          enable;
-    bool          keepOpen;
-    QTimer*       autoHideTimer;
-    QWidget*      parent;
+    Qt::Alignment     alignment;
+    bool              enable;
+    bool              keepOpen;
+    QTimer*           autoHideTimer;
+    QPointer<QWidget> parent;
 };
 
 DCursorTracker::DCursorTracker(const QString& txt, QWidget *parent, Qt::Alignment align)
