@@ -470,13 +470,23 @@ void FreeRotationTool::renderingFinished()
 QString FreeRotationTool::generateButtonLabel(const QPoint& p)
 {
     QString label = i18n("Click to set");
+    int length    = label.count();
 
     if (pointIsValid(p))
     {
 //        label = QString("(%1, %2)")
 //                         .arg(p.x())
 //                         .arg(p.y());
-        label = i18nc("point has been set and is valid", "Ok");
+        label = i18nc("point has been set and is valid", "Ok!");
+
+        // fill with additional whitespace, to match the original label length and center
+        // the text, without moving the button icon
+        int diff = qAbs<int>(length - label.count());
+
+        QString delimiter(" ");
+        int repeat = (diff / 2) + 1;
+        label.prepend(delimiter.repeated(repeat));
+        label.append(delimiter.repeated(repeat));
     }
     return label;
 }
