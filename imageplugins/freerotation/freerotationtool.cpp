@@ -511,12 +511,13 @@ QString FreeRotationTool::centerQString(const QString& str, int maxLength)
         tmp.prepend(repeatString(delimiter, times));
         tmp.append(repeatString(delimiter, times));
 
-        // too short / long string?
+        // too long?
         if (tmp.count() > maxLength)
         {
             diff = qAbs<int>(maxLength - tmp.count());
             tmp.chop(diff);
         }
+        // too short?
         else if (tmp.count() < maxLength)
         {
             diff = qAbs<int>(maxLength - tmp.count());
