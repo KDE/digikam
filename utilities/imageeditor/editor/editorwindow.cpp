@@ -40,6 +40,7 @@
 #include <QImageReader>
 #include <QLabel>
 #include <QLayout>
+#include <QPointer>
 #include <QProgressBar>
 #include <QSignalMapper>
 #include <QSplitter>
@@ -1895,11 +1896,12 @@ void EditorWindow::setColorManagedViewIndicatorToolTip(bool available, bool cmv)
 void EditorWindow::slotSoftProofingOptions()
 {
     // Adjusts global settings
-    SoftProofDialog dlg(this);
-    dlg.exec();
+    QPointer<SoftProofDialog> dlg = new SoftProofDialog(this);
+    dlg->exec();
 
-    d->viewSoftProofAction->setChecked(dlg.shallEnableSoftProofView());
+    d->viewSoftProofAction->setChecked(dlg->shallEnableSoftProofView());
     slotUpdateSoftProofingState();
+    delete dlg;
 }
 
 void EditorWindow::slotUpdateSoftProofingState()

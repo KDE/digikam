@@ -47,6 +47,7 @@ extern "C"
 #include <QFile>
 #include <QRegExp>
 #include <QFileInfo>
+#include <QPointer>
 
 // KDE includes
 
@@ -719,13 +720,17 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
                 break;
             }
 
-            KIO::RenameDialog dlg(d->parent, i18n("Rename File"),
-                                  folder + QString("/") + file, dest,
-                                  KIO::RenameDialog_Mode(KIO::M_MULTI | KIO::M_OVERWRITE | KIO::M_SKIP));
+            QPointer<KIO::RenameDialog> dlg = new KIO::RenameDialog(d->parent, i18n("Rename File"),
+                                                                    folder + QString("/") + file, dest,
+                                                                    KIO::RenameDialog_Mode(KIO::M_MULTI |
+                                                                    KIO::M_OVERWRITE                    |
+                                                                    KIO::M_SKIP));
 
-            int result = dlg.exec();
-            dest       = dlg.newDestUrl().toLocalFile();
+            int result = dlg->exec();
+            dest       = dlg->newDestUrl().toLocalFile();
             info       = QFileInfo(dest);
+
+            delete dlg;
 
             switch (result)
             {

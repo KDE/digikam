@@ -26,8 +26,6 @@
 
 // Qt includes
 
-#include <QTextDocument>
-#include <QPaintDevice>
 #include <QButtonGroup>
 #include <QClipboard>
 #include <QColorGroup>
@@ -38,10 +36,13 @@
 #include <QLabel>
 #include <QMap>
 #include <QMimeData>
+#include <QPaintDevice>
 #include <QPainter>
+#include <QPointer>
 #include <QPrintDialog>
 #include <QPrinter>
 #include <QPushButton>
+#include <QTextDocument>
 #include <QToolButton>
 #include <QVBoxLayout>
 
@@ -398,8 +399,8 @@ void MetadataWidget::slotPrintMetadata()
     QPrinter printer;
     printer.setFullPage(true);
 
-    QPrintDialog dialog(&printer, kapp->activeWindow());
-    if (dialog.exec())
+    QPointer<QPrintDialog> dialog = new QPrintDialog(&printer, kapp->activeWindow());
+    if (dialog->exec())
     {
         QTextDocument doc;
         doc.setHtml(textmetadata);
@@ -408,21 +409,28 @@ void MetadataWidget::slotPrintMetadata()
         doc.setDefaultFont(font);
         doc.print(&printer);
     }
+    delete dialog;
 }
 
 KUrl MetadataWidget::saveMetadataToFile(const QString& caption, const QString& fileFilter)
 {
-    KFileDialog fileSaveDialog(KUrl(KGlobalSettings::documentPath()), QString(), this);
-    fileSaveDialog.setOperationMode(KFileDialog::Saving);
-    fileSaveDialog.setMode(KFile::File);
-    fileSaveDialog.setSelection(d->fileName);
-    fileSaveDialog.setCaption(caption);
-    fileSaveDialog.setFilter(fileFilter);
+    QPointer<KFileDialog> fileSaveDialog = new KFileDialog(KUrl(KGlobalSettings::documentPath()),
+                                                           QString(), this);
+    fileSaveDialog->setOperationMode(KFileDialog::Saving);
+    fileSaveDialog->setMode(KFile::File);
+    fileSaveDialog->setSelection(d->fileName);
+    fileSaveDialog->setCaption(caption);
+    fileSaveDialog->setFilter(fileFilter);
 
     // Check for cancel.
-    if ( fileSaveDialog.exec() == KFileDialog::Accepted )
-        return fileSaveDialog.selectedUrl();
+    if ( fileSaveDialog->exec() == KFileDialog::Accepted )
+    {
+        KUrl selUrl = fileSaveDialog->selectedUrl();
+        delete fileSaveDialog;
+        return selUrl;
+    }
 
+    delete fileSaveDialog;
     return KUrl();
 }
 

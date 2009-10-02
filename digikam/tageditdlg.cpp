@@ -27,9 +27,10 @@
 
 // Qt includes
 
+#include <QGridLayout>
 #include <QLabel>
 #include <QLayout>
-#include <QGridLayout>
+#include <QPointer>
 #include <QTreeWidget>
 
 // KDE includes
@@ -272,29 +273,31 @@ void TagEditDlg::slotTitleChanged(const QString& newtitle)
 
 bool TagEditDlg::tagEdit(QWidget *parent, TAlbum* album, QString& title, QString& icon)
 {
-    TagEditDlg dlg(parent, album);
+    QPointer<TagEditDlg> dlg = new TagEditDlg(parent, album);
 
-    bool valRet = dlg.exec();
+    bool valRet = dlg->exec();
     if (valRet == QDialog::Accepted)
     {
-        title = dlg.title();
-        icon  = dlg.icon();
+        title = dlg->title();
+        icon  = dlg->icon();
     }
 
+    delete dlg;
     return valRet;
 }
 
 bool TagEditDlg::tagCreate(QWidget *parent, TAlbum* album, QString& title, QString& icon)
 {
-    TagEditDlg dlg(parent, album, true);
+    QPointer<TagEditDlg> dlg = new TagEditDlg(parent, album, true);
 
-    bool valRet = dlg.exec();
+    bool valRet = dlg->exec();
     if (valRet == QDialog::Accepted)
     {
-        title = dlg.title();
-        icon  = dlg.icon();
+        title = dlg->title();
+        icon  = dlg->icon();
     }
 
+    delete dlg;
     return valRet;
 }
 
@@ -380,8 +383,9 @@ void TagEditDlg::showtagsListCreationError(QWidget* parent, const QMap<QString, 
 {
     if (!errMap.isEmpty())
     {
-        TagsListCreationErrorDialog dlg(parent, errMap);
-        dlg.exec();
+        QPointer<TagsListCreationErrorDialog> dlg = new TagsListCreationErrorDialog(parent, errMap);
+        dlg->exec();
+        delete dlg;
     }
 }
 

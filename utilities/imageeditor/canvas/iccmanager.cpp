@@ -27,6 +27,8 @@
 
 // Qt includes
 
+#include <QPointer>
+
 // KDE includes
 
 #include <kdebug.h>
@@ -215,36 +217,39 @@ IccTransform IccManager::postLoadingManage(QWidget *parent)
     {
         d->image.removeAttribute("missingProfileAskUser");
         DImg preview = d->image.smoothScale(240, 180, Qt::KeepAspectRatio);
-        ColorCorrectionDlg dlg(ColorCorrectionDlg::MissingProfile, preview,
-                               d->filePath, parent);
-        dlg.exec();
+        QPointer<ColorCorrectionDlg> dlg = new ColorCorrectionDlg(ColorCorrectionDlg::MissingProfile, preview,
+                                                                  d->filePath, parent);
+        dlg->exec();
 
         IccTransform trans;
-        getTransform(trans, dlg.behavior(), dlg.specifiedProfile());
+        getTransform(trans, dlg->behavior(), dlg->specifiedProfile());
+        delete dlg;
         return trans;
     }
     else if (d->image.hasAttribute("profileMismatchAskUser"))
     {
         d->image.removeAttribute("profileMismatchAskUser");
         DImg preview = d->image.smoothScale(240, 180, Qt::KeepAspectRatio);
-        ColorCorrectionDlg dlg(ColorCorrectionDlg::ProfileMismatch, preview,
-                               d->filePath, parent);
-        dlg.exec();
+        QPointer<ColorCorrectionDlg> dlg = new ColorCorrectionDlg(ColorCorrectionDlg::ProfileMismatch, preview,
+                                                                  d->filePath, parent);
+        dlg->exec();
 
         IccTransform trans;
-        getTransform(trans, dlg.behavior(), dlg.specifiedProfile());
+        getTransform(trans, dlg->behavior(), dlg->specifiedProfile());
+        delete dlg;
         return trans;
     }
     else if (d->image.hasAttribute("uncalibratedColorAskUser"))
     {
         d->image.removeAttribute("uncalibratedColorAskUser");
         DImg preview = d->image.smoothScale(240, 180, Qt::KeepAspectRatio);
-        ColorCorrectionDlg dlg(ColorCorrectionDlg::UncalibratedColor, preview,
-                               d->filePath, parent);
-        dlg.exec();
+        QPointer<ColorCorrectionDlg> dlg = new ColorCorrectionDlg(ColorCorrectionDlg::UncalibratedColor, preview,
+                                                                  d->filePath, parent);
+        dlg->exec();
 
         IccTransform trans;
-        getTransform(trans, dlg.behavior(), dlg.specifiedProfile());
+        getTransform(trans, dlg->behavior(), dlg->specifiedProfile());
+        delete dlg;
         return trans;
     }
 

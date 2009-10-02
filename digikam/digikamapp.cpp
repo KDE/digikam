@@ -31,6 +31,7 @@
 
 #include <QDataStream>
 #include <QLabel>
+#include <QPointer>
 #include <QRegExp>
 #include <QSignalMapper>
 #include <QStringList>
@@ -2208,7 +2209,7 @@ void DigikamApp::slotEditKeys()
 void DigikamApp::slotConfToolbars()
 {
     saveMainWindowSettings(d->config->group("General Settings"));
-    KEditToolBar *dlg = new KEditToolBar(actionCollection(), this);
+    QPointer<KEditToolBar> dlg = new KEditToolBar(actionCollection(), this);
     dlg->setResourceFile("digikamui.rc");
 
     if(dlg->exec())
@@ -2663,13 +2664,17 @@ void DigikamApp::slotImportAddImages()
 
 void DigikamApp::slotImportAddFolders()
 {
-    KFileDialog dlg(KUrl(), "inode/directory", this);
-    dlg.setCaption(i18n("Select folders to import into album"));
-    dlg.setMode(KFile::Directory |  KFile::Files);
-    if(dlg.exec() != QDialog::Accepted)
+    QPointer<KFileDialog> dlg = new KFileDialog(KUrl(), "inode/directory", this);
+    dlg->setCaption(i18n("Select folders to import into album"));
+    dlg->setMode(KFile::Directory |  KFile::Files);
+    if(dlg->exec() != QDialog::Accepted)
+    {
+        delete dlg;
         return;
+    }
 
-    KUrl::List urls = dlg.selectedUrls();
+    KUrl::List urls = dlg->selectedUrls();
+    delete dlg;
     if(urls.empty()) return;
 
     Album *album = AlbumManager::instance()->currentAlbum();

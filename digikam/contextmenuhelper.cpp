@@ -31,6 +31,7 @@
 #include <QMap>
 #include <QMenu>
 #include <QMimeData>
+#include <QPointer>
 #include <QString>
 
 // KDE includes
@@ -272,18 +273,25 @@ void ContextMenuHelper::slotOpenWith(QAction* action)
     QString name = action ? action->data().toString() : QString();
     if (name.isEmpty())
     {
-        KOpenWithDialog dlg(list);
-        if (!dlg.exec())
+        QPointer<KOpenWithDialog> dlg = new KOpenWithDialog(list);
+        if (!dlg->exec())
+        {
+            delete dlg;
             return;
-        service = dlg.service();
+        }
+        service = dlg->service();
 
         if (!service)
         {
             // User entered a custom command
-            if (!dlg.text().isEmpty())
-                KRun::run(dlg.text(), list, d->parent);
+            if (!dlg->text().isEmpty())
+            {
+                KRun::run(dlg->text(), list, d->parent);
+            }
+            delete dlg;
             return;
         }
+        delete dlg;
     }
     else
     {

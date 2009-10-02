@@ -36,10 +36,11 @@
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
-#include <QRegExp>
-#include <QValidator>
+#include <QPointer>
 #include <QPushButton>
+#include <QRegExp>
 #include <QTextEdit>
+#include <QValidator>
 
 // KDE includes
 
@@ -300,32 +301,34 @@ bool AlbumPropsEdit::editProps(PAlbum *album, QString& title,
                                QString& comments, QDate& date, QString& category,
                                QStringList& albumCategories)
 {
-    AlbumPropsEdit dlg(album);
+    QPointer<AlbumPropsEdit> dlg = new AlbumPropsEdit(album);
 
-    bool ok = dlg.exec() == QDialog::Accepted;
+    bool ok = dlg->exec() == QDialog::Accepted;
 
-    title           = dlg.title();
-    comments        = dlg.comments();
-    date            = dlg.date();
-    category        = dlg.category();
-    albumCategories = dlg.albumCategories();
+    title           = dlg->title();
+    comments        = dlg->comments();
+    date            = dlg->date();
+    category        = dlg->category();
+    albumCategories = dlg->albumCategories();
 
+    delete dlg;
     return ok;
 }
 
 bool AlbumPropsEdit::createNew(PAlbum *parent, QString& title, QString& comments,
                                QDate& date, QString& category, QStringList& albumCategories)
 {
-    AlbumPropsEdit dlg(parent, true);
+    QPointer<AlbumPropsEdit> dlg = new AlbumPropsEdit(parent, true);
 
-    bool ok = dlg.exec() == QDialog::Accepted;
+    bool ok = dlg->exec() == QDialog::Accepted;
 
-    title           = dlg.title();
-    comments        = dlg.comments();
-    date            = dlg.date();
-    category        = dlg.category();
-    albumCategories = dlg.albumCategories();
+    title           = dlg->title();
+    comments        = dlg->comments();
+    date            = dlg->date();
+    category        = dlg->category();
+    albumCategories = dlg->albumCategories();
 
+    delete dlg;
     return ok;
 }
 

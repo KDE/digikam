@@ -34,6 +34,7 @@
 #include <QCursor>
 #include <QGridLayout>
 #include <QPixmap>
+#include <QPointer>
 
 // KDE includes
 
@@ -151,20 +152,25 @@ PAlbum* AlbumSelectDialog::selectAlbum(QWidget* parent,
                                        const QString& newAlbumString,
                                        bool allowRootSelection )
 {
-    AlbumSelectDialog dlg(parent, albumToSelect,
-                          header, newAlbumString,
-                          allowRootSelection);
+    QPointer<AlbumSelectDialog> dlg = new AlbumSelectDialog(parent, albumToSelect,
+                                                            header, newAlbumString,
+                                                            allowRootSelection);
 
-    if (dlg.exec() != KDialog::Accepted)
-        return 0;
-
-    TreeAlbumItem* item = (TreeAlbumItem*) dlg.d->albumSel->albumView()->currentItem();
-    if ((!item || (item == dlg.d->albumSel->albumView()->topLevelItem(0))) &&
-        !allowRootSelection)
+    if (dlg->exec() != KDialog::Accepted)
     {
+        delete dlg;
         return 0;
     }
 
+    TreeAlbumItem* item = (TreeAlbumItem*) dlg->d->albumSel->albumView()->currentItem();
+    if ((!item || (item == dlg->d->albumSel->albumView()->topLevelItem(0))) &&
+        !allowRootSelection)
+    {
+        delete dlg;
+        return 0;
+    }
+
+    delete dlg;
     return (dynamic_cast<PAlbum*>(item->album()));
 }
 

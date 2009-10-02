@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QLabel>
+#include <QPointer>
 #include <QVBoxLayout>
 
 // KDE includes
@@ -268,27 +269,28 @@ ImageDialog::ImageDialog(QWidget* parent, const KUrl& url, bool singleSelect, co
 
     kDebug(50003) << "file formats=" << d->fileFormats;
 
-    KFileDialog dlg(url, d->fileFormats, parent);
-    ImageDialogPreview *preview = new ImageDialogPreview(&dlg);
-    dlg.setPreviewWidget(preview);
-    dlg.setOperationMode(KFileDialog::Opening);
+    QPointer<KFileDialog> dlg   = new KFileDialog(url, d->fileFormats, parent);
+    ImageDialogPreview *preview = new ImageDialogPreview(dlg);
+    dlg->setPreviewWidget(preview);
+    dlg->setOperationMode(KFileDialog::Opening);
 
     if (d->singleSelect)
     {
-        dlg.setMode(KFile::File);
-        if (caption.isEmpty()) dlg.setCaption(i18n("Select an Image"));
-        else dlg.setWindowTitle(caption);
-        dlg.exec();
-        d->url = dlg.selectedUrl();
+        dlg->setMode(KFile::File);
+        if (caption.isEmpty()) dlg->setCaption(i18n("Select an Image"));
+        else dlg->setWindowTitle(caption);
+        dlg->exec();
+        d->url = dlg->selectedUrl();
     }
     else
     {
-        dlg.setMode(KFile::Files);
-        if (caption.isEmpty()) dlg.setCaption(i18n("Select Images"));
-        else dlg.setWindowTitle(caption);
-        dlg.exec();
-        d->urls = dlg.selectedUrls();
+        dlg->setMode(KFile::Files);
+        if (caption.isEmpty()) dlg->setCaption(i18n("Select Images"));
+        else dlg->setWindowTitle(caption);
+        dlg->exec();
+        d->urls = dlg->selectedUrls();
     }
+    delete dlg;
 }
 
 ImageDialog::~ImageDialog()

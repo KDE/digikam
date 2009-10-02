@@ -50,6 +50,7 @@ extern "C"
 #include <QLabel>
 #include <QLayout>
 #include <QList>
+#include <QPointer>
 #include <QProgressBar>
 #include <QSplitter>
 #include <QVBoxLayout>
@@ -754,10 +755,13 @@ bool ShowFoto::setupICC()
 
 bool ShowFoto::setup(bool iccSetupPage)
 {
-    Setup setup(this, 0, iccSetupPage ? Setup::ICCPage : Setup::LastPageUsed);
+    QPointer<Setup> setup = new Setup(this, 0, iccSetupPage ? Setup::ICCPage : Setup::LastPageUsed);
 
-    if (setup.exec() != QDialog::Accepted)
+    if (setup->exec() != QDialog::Accepted)
+    {
+        delete setup;
         return false;
+    }
 
     KGlobal::config()->sync();
 
@@ -769,6 +773,7 @@ bool ShowFoto::setup(bool iccSetupPage)
         toggleActions(false);
     }
 
+    delete setup;
     return true;
 }
 
