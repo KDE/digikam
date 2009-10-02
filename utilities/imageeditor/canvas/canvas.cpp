@@ -364,7 +364,10 @@ void Canvas::updateUndoState()
 
 DImg Canvas::currentImage()
 {
-    return DImg(*d->im->getImg());
+    DImg *image = d->im->getImg();
+    if (image)
+        return DImg(*image);
+    return DImg();
 }
 
 QString Canvas::currentImageFileFormat()
