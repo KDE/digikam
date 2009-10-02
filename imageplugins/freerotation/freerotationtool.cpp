@@ -190,20 +190,15 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     QString btnWhatsThis = i18n("Select a point in the preview widget, "
                                 "then click this button to assign the point for auto-correction.");
 
-    QPoint p;
-    setPointInvalid(p);
-
     QPixmap pm1 = generateBtnPixmap(QString("1"), Qt::black);
     d->autoAdjustPoint1Btn = new QPushButton;
     d->autoAdjustPoint1Btn->setIcon(pm1);
-    d->autoAdjustPoint1Btn->setText(generateButtonLabel(p));
     d->autoAdjustPoint1Btn->setSizePolicy(QSizePolicy::MinimumExpanding,
                                           QSizePolicy::MinimumExpanding);
 
     QPixmap pm2 = generateBtnPixmap(QString("2"), Qt::black);
     d->autoAdjustPoint2Btn = new QPushButton;
     d->autoAdjustPoint2Btn->setIcon(pm2);
-    d->autoAdjustPoint2Btn->setText(generateButtonLabel(p));
     d->autoAdjustPoint2Btn->setSizePolicy(QSizePolicy::MinimumExpanding,
                                           QSizePolicy::MinimumExpanding);
 
@@ -212,14 +207,28 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     d->autoAdjustPoint2Btn->setToolTip(btnWhatsThis);
     d->autoAdjustPoint2Btn->setWhatsThis(btnWhatsThis);
 
+    // --------------------------------------------------------
+
     // try to determine the maximum text width, to set the button minwidth
+    QPoint p;
+    setPointInvalid(p);
+    QString invalidText = generateButtonLabel(p);
+    p.setX(1); p.setY(2);
+    QString validText  = generateButtonLabel(p);
+    QString biggerText = (invalidText.count() >= validText.count()) ? invalidText : validText;
+
     QFont fnt = d->autoAdjustPoint1Btn->font();
     QFontMetrics fm(fnt);
-    int minWidth = fm.width(QString("(1234, 1234)")) + pm1.width() * 2 + 5;
+    int minWidth = fm.width(biggerText) + pm1.width() * 2 + 5;
 
     // set new minwidth
     d->autoAdjustPoint1Btn->setMinimumWidth(minWidth);
     d->autoAdjustPoint2Btn->setMinimumWidth(minWidth);
+
+    // --------------------------------------------------------
+
+    d->autoAdjustPoint1Btn->setText(invalidText);
+    d->autoAdjustPoint2Btn->setText(invalidText);
 
     d->autoAdjustBtn = new QPushButton(i18nc("Automatic Adjustment", "Adjust"));
     d->autoAdjustBtn->setSizePolicy(QSizePolicy::MinimumExpanding,
