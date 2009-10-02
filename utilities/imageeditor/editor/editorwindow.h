@@ -150,7 +150,7 @@ protected:
         OverwriteWithoutAsking,
         AlwaysSaveAs
     };
-    bool promptUserSave(const KUrl& url, SaveOrSaveAs = AskIfNeeded);
+    bool promptUserSave(const KUrl& url, SaveOrSaveAs = AskIfNeeded, bool allowCancel = true);
     bool waitForSavingToComplete();
     void startingSave(const KUrl& url);
     bool startingSaveAs(const KUrl& url);

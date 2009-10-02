@@ -1169,7 +1169,7 @@ bool EditorWindow::promptForOverWrite()
             ==  KMessageBox::Continue);
 }
 
-bool EditorWindow::promptUserSave(const KUrl& url, SaveOrSaveAs saveOrSaveAs)
+bool EditorWindow::promptUserSave(const KUrl& url, SaveOrSaveAs saveOrSaveAs, bool allowCancel)
 {
     if (m_saveAction->isEnabled())
     {
@@ -1179,13 +1179,27 @@ bool EditorWindow::promptUserSave(const KUrl& url, SaveOrSaveAs saveOrSaveAs)
             KWindowSystem::unminimizeWindow(winId());
         }
 
-        int result = KMessageBox::warningYesNoCancel(this,
+        int result;
+        if (allowCancel)
+        {
+            result = KMessageBox::warningYesNoCancel(this,
                                   i18n("The image '%1' has been modified.\n"
                                        "Do you want to save it?",
                                        url.fileName()),
                                   QString(),
                                   KStandardGuiItem::save(),
                                   KStandardGuiItem::discard());
+        }
+        else
+        {
+            result = KMessageBox::warningYesNo(this,
+                                  i18n("The image '%1' has been modified.\n"
+                                       "Do you want to save it?",
+                                       url.fileName()),
+                                  QString(),
+                                  KStandardGuiItem::save(),
+                                  KStandardGuiItem::discard());
+        }
 
         if (result == KMessageBox::Yes)
         {
