@@ -43,6 +43,9 @@
 #include "markerclusterholderplugin/externaldraw.h"
 #endif // MARBLE_VERSION >= 0x000800
 
+namespace Digikam
+{
+
 // constants for clusters
 const int ClusterRadius = 15;
 const QSize ClusterDefaultSize = QSize(2*ClusterRadius, 2*ClusterRadius);
@@ -1435,3 +1438,6 @@ MarkerClusterHolder::MarkerInfo& MarkerClusterHolder::marker(const int markerInd
 {
     return d->markers[markerIndex];
 }
+
+} // Digikam
+

@@ -42,7 +42,34 @@
 #include <marble/MarbleWidget.h>
 using namespace Marble;
 
+// local includes
+
+#include <thumbnailloadthread.h>
+
 Q_DECLARE_METATYPE(Digikam::GPSInfo)
+
+namespace Digikam
+{
+    
+class ClusterUserData
+{
+public:
+    ClusterUserData()
+      : thumbnailMarkerIndex(-1),
+        thumbnailSettingsHash(0)
+    {
+    }
+    
+    int thumbnailMarkerIndex;
+    int thumbnailSettingsHash;
+};
+
+} // Digikam
+
+Q_DECLARE_METATYPE(Digikam::ClusterUserData)
+
+namespace Digikam
+{
 
 template<> MarkerClusterHolder::MarkerInfo MarkerClusterHolder::MarkerInfo::fromData<Digikam::GPSInfo>(const Digikam::GPSInfo& yourdata)
 {
@@ -62,32 +89,6 @@ bool MarkerInfoDataEqualFunction(const QVariant& one, const QVariant& two, void*
 
 #endif // HAVE_MARBLEWIDGET
 
-
-// local includes
-
-#include <thumbnailloadthread.h>
-
-namespace Digikam
-{
-class ClusterUserData
-{
-public:
-    ClusterUserData()
-      : thumbnailMarkerIndex(-1),
-        thumbnailSettingsHash(0)
-    {
-    }
-    
-    int thumbnailMarkerIndex;
-    int thumbnailSettingsHash;
-};
-}
-
-Q_DECLARE_METATYPE(Digikam::ClusterUserData)
-
-namespace Digikam
-{
-  
 class WorldMapWidgetPriv
 {
 

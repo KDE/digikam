@@ -30,6 +30,14 @@
 #include <marble/MarbleWidget.h>
 #include <marble/GeoDataPoint.h>
 
+namespace Marble
+{
+    class GeoPainter;
+}
+
+namespace Digikam
+{
+
 class MarkerClusterHolderPrivate;
 
 class MarkerClusterHolder : public QObject
@@ -402,16 +410,6 @@ private:
     Q_DISABLE_COPY(MarkerClusterHolder)
 };
 
-Q_DECLARE_METATYPE(MarkerClusterHolder::MarkerInfo)
-Q_DECLARE_METATYPE(MarkerClusterHolder::MarkerInfoList)
-Q_DECLARE_METATYPE(MarkerClusterHolder::ClusterInfo)
-Q_DECLARE_METATYPE(MarkerClusterHolder::ClusterInfoList)
-
-namespace Marble
-{
-    class GeoPainter;
-}
-
 inline MarkerClusterHolder::PixmapOperations& operator|=(MarkerClusterHolder::PixmapOperations& target, const MarkerClusterHolder::PixmapOperations& source)
 {
     target = MarkerClusterHolder::PixmapOperations(target | source);
@@ -442,6 +440,14 @@ protected:
 private:
     Q_DISABLE_COPY(MarbleSubClassWidget)
 };
+
+} // Digikam
+
+Q_DECLARE_METATYPE(Digikam::MarkerClusterHolder::MarkerInfo)
+Q_DECLARE_METATYPE(Digikam::MarkerClusterHolder::MarkerInfoList)
+Q_DECLARE_METATYPE(Digikam::MarkerClusterHolder::ClusterInfo)
+Q_DECLARE_METATYPE(Digikam::MarkerClusterHolder::ClusterInfoList)
+
 
 #endif // MARKERCLUSTERHOLDER_H
 
