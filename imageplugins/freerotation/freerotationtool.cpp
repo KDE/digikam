@@ -508,10 +508,6 @@ QString FreeRotationTool::centerQString(const QString& str, int maxLength)
         QString delimiter(" ");
         int repeat = (diff / 2);
 
-        // Qt 4.5 only
-//        tmp.prepend(delimiter.repeated(repeat));
-//        tmp.append(delimiter.repeated(repeat));
-
         tmp.prepend(repeatString(delimiter, repeat));
         tmp.append(repeatString(delimiter, repeat));
 
@@ -524,10 +520,6 @@ QString FreeRotationTool::centerQString(const QString& str, int maxLength)
         else if (tmp.count() < maxLength)
         {
             diff = qAbs<int>(maxLength - tmp.count());
-
-            // Qt 4.5 only
-//            tmp.append(delimiter.repeated(diff));
-
             tmp.append(repeatString(delimiter, diff));
         }
     }
