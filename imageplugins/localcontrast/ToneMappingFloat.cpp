@@ -236,10 +236,10 @@ void ToneMappingFloat::stretch_contrast(REALTYPE *data, int datasize){
     //first, we compute the histogram
     unsigned int histogram[histogram_size];
     for (unsigned int i=0;i<histogram_size;i++) histogram[i]=0;
-    for (unsigned int i=0;i<datasize;i++){
+    for (unsigned int i=0;i<(unsigned int)datasize;i++){
         int m=(int)(data[i]*(histogram_size-1));
         if (m<0) m=0;
-        if (m>(histogram_size-1)) m=histogram_size-1;
+        if (m>(int)(histogram_size-1)) m=histogram_size-1;
         histogram[m]++;
     };
 
