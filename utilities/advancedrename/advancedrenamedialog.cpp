@@ -127,8 +127,8 @@ public:
         listView             = 0;
     }
 
-    QTreeWidget*                     listView;
-    AdvancedRenameWidget*            advancedRenameWidget;
+    QTreeWidget*                       listView;
+    AdvancedRenameWidget*              advancedRenameWidget;
     AdvancedRenameDialog::NewNamesList newNamesList;
 };
 
