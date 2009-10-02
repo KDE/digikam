@@ -215,11 +215,14 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     QString invalidText = generateButtonLabel(p);
     p.setX(1); p.setY(2);
     QString validText  = generateButtonLabel(p);
-    QString biggerText = (invalidText.count() >= validText.count()) ? invalidText : validText;
 
     QFont fnt = d->autoAdjustPoint1Btn->font();
     QFontMetrics fm(fnt);
-    int minWidth = fm.width(biggerText) + pm1.width() * 2 + 5;
+
+    const int offset = (pm1.width() * 2) + 10;
+    int minWidth1    = fm.width(invalidText) + offset;
+    int minWidth2    = fm.width(validText) + offset;
+    int minWidth     = qMax<int>(minWidth1, minWidth2);
 
     // set new minwidth
     d->autoAdjustPoint1Btn->setMinimumWidth(minWidth);
@@ -478,28 +481,48 @@ void FreeRotationTool::renderingFinished()
 
 QString FreeRotationTool::generateButtonLabel(const QPoint& p)
 {
-    QString label = i18n("Click to set");
-    int length    = label.count();
+    QString clickToSet   = i18n("Click to set");
+    QString isOk         = i18nc("point has been set and is valid", "Ok!");
+    bool clickToSetWider = clickToSet.count() >= isOk.count();
+    QString widestString = clickToSetWider ? clickToSet : isOk;
+    int maxLength        = widestString.count();
+    QString label        = clickToSetWider ? clickToSet : centerQString(clickToSet, maxLength);
 
     if (pointIsValid(p))
     {
-//        label = QString("(%1, %2)")
-//                         .arg(p.x())
-//                         .arg(p.y());
-        label = i18nc("point has been set and is valid", "Ok!");
-
-        // fill with additional whitespace, to match the original label length and center
-        // the text, without moving the button icon
-        int diff = length - label.count();
-        if (diff > 0)
-        {
-            QString delimiter(" ");
-            int repeat = (diff / 2) + 2;
-            label.prepend(delimiter.repeated(repeat));
-            label.append(delimiter.repeated(repeat));
-        }
+        label = clickToSetWider ? centerQString(isOk, maxLength) : isOk;
     }
     return label;
+}
+
+QString FreeRotationTool::centerQString(const QString& str, int maxLength)
+{
+    QString tmp = str;
+    int max     = (maxLength == -1) ? tmp.count() : maxLength;
+
+    // fill with additional whitespace, to match the original label length and center
+    // the text, without moving the button icon
+    int diff = qAbs<int>(max - str.count());
+    if (diff > 0)
+    {
+        QString delimiter(" ");
+        int repeat = (diff / 2);
+        tmp.prepend(delimiter.repeated(repeat));
+        tmp.append(delimiter.repeated(repeat));
+
+        // too short / long string?
+        if (tmp.count() > maxLength)
+        {
+            diff = qAbs<int>(maxLength - tmp.count());
+            tmp.chop(diff);
+        }
+        else if (tmp.count() < maxLength)
+        {
+            diff = qAbs<int>(maxLength - tmp.count());
+            tmp.append(delimiter.repeated(diff));
+        }
+    }
+    return tmp;
 }
 
 void FreeRotationTool::updatePoints()
