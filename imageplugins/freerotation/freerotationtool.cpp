@@ -466,14 +466,14 @@ void FreeRotationTool::renderingFinished()
 
 QString FreeRotationTool::generateButtonLabel(const QPoint& p)
 {
-    if (!pointIsValid(p))
-    {
-        return QString(i18n("Click to set"));
-    }
+    QString label = i18n("Click to set");
 
-    QString label = QString("(%1, %2)")
-                           .arg(p.x())
-                           .arg(p.y());
+    if (pointIsValid(p))
+    {
+        label = QString("(%1, %2)")
+                         .arg(p.x())
+                         .arg(p.y());
+    }
     return label;
 }
 
