@@ -342,6 +342,12 @@ ShowFoto::~ShowFoto()
 {
     unLoadImagePlugins();
 
+    Digikam::ThumbnailLoadThread::cleanUp();
+    Digikam::LoadingCacheInterface::cleanUp();
+#if KDCRAW_VERSION < 0x000400
+    KDcrawIface::DcrawBinary::cleanUp();
+#endif
+
     delete m_imagePluginLoader;
     delete d->thumbBar;
     delete d->rightSideBar;
