@@ -506,10 +506,10 @@ QString FreeRotationTool::centerQString(const QString& str, int maxLength)
     if (diff > 0)
     {
         QString delimiter(" ");
-        int repeat = (diff / 2);
+        int times = (diff / 2);
 
-        tmp.prepend(repeatString(delimiter, repeat));
-        tmp.append(repeatString(delimiter, repeat));
+        tmp.prepend(repeatString(delimiter, times));
+        tmp.append(repeatString(delimiter, times));
 
         // too short / long string?
         if (tmp.count() > maxLength)
