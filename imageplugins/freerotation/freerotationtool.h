@@ -75,7 +75,8 @@ private:
     void    updatePoints();
     void    resetPoints();
     QString generateButtonLabel(const QPoint& p);
-    QString centerQString(const QString& str, int maxLength = -1);
+
+    QString centerString(const QString& str, int maxLength = -1);
     QString repeatString(const QString& str, int times);
 
 private:

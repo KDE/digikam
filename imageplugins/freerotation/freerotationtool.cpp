@@ -486,16 +486,16 @@ QString FreeRotationTool::generateButtonLabel(const QPoint& p)
     bool clickToSetIsWider = clickToSet.count() >= isOk.count();
     QString widestString   = clickToSetIsWider ? clickToSet : isOk;
     int maxLength          = widestString.count();
-    QString label          = clickToSetIsWider ? clickToSet : centerQString(clickToSet, maxLength);
+    QString label          = clickToSetIsWider ? clickToSet : centerString(clickToSet, maxLength);
 
     if (pointIsValid(p))
     {
-        label = clickToSetIsWider ? centerQString(isOk, maxLength) : isOk;
+        label = clickToSetIsWider ? centerString(isOk, maxLength) : isOk;
     }
     return label;
 }
 
-QString FreeRotationTool::centerQString(const QString& str, int maxLength)
+QString FreeRotationTool::centerString(const QString& str, int maxLength)
 {
     QString tmp = str;
     int max     = (maxLength == -1) ? tmp.count() : maxLength;
