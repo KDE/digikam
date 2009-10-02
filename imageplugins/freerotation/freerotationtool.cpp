@@ -464,7 +464,7 @@ void FreeRotationTool::renderingFinished()
     kapp->restoreOverrideCursor();
 }
 
-QString FreeRotationTool::generatePointLabel(const QPoint& p)
+QString FreeRotationTool::generateButtonLabel(const QPoint& p)
 {
     if (!pointIsValid(p))
     {
@@ -481,10 +481,10 @@ void FreeRotationTool::updatePoints()
 {
     // set labels
     QString tmp;
-    tmp = generatePointLabel(d->autoAdjustPoint1);
+    tmp = generateButtonLabel(d->autoAdjustPoint1);
     d->autoAdjustPoint1Btn->setText(tmp);
 
-    tmp = generatePointLabel(d->autoAdjustPoint2);
+    tmp = generateButtonLabel(d->autoAdjustPoint2);
     d->autoAdjustPoint2Btn->setText(tmp);
 
     // set points in preview widget, don't add invalid points

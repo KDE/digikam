@@ -74,7 +74,7 @@ private:
     void    setPointInvalid(QPoint& p);
     void    updatePoints();
     void    resetPoints();
-    QString generatePointLabel(const QPoint& p);
+    QString generateButtonLabel(const QPoint& p);
 
 private:
 
