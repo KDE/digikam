@@ -162,6 +162,7 @@ void KipiInterface::refreshImages(const KUrl::List& urls)
         QString path = url.toLocalFile();
         ThumbnailLoadThread::deleteThumbnail(path);
         LoadingCacheInterface::fileChanged(path);
+        ImageAttributesWatch::instance()->fileMetadataChanged(url);
         dirs << url.directory();
     }
     foreach (const QString& dir, dirs)
