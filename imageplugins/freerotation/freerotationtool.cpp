@@ -484,7 +484,7 @@ QString FreeRotationTool::generateButtonLabel(const QPoint& p)
         int diff = qAbs<int>(length - label.count());
 
         QString delimiter(" ");
-        int repeat = (diff / 2) + 1;
+        int repeat = (diff / 2) + 2;
         label.prepend(delimiter.repeated(repeat));
         label.append(delimiter.repeated(repeat));
     }
