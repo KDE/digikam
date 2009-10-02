@@ -28,17 +28,12 @@
 
 #include <QVBoxLayout>
 #include <QStyle>
-#include <QDomDocument>
-#include <QTextStream>
-#include <QFile>
 #include <QLabel>
-#include <QAbstractItemModel>
 
 // KDE includes
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <ktemporaryfile.h>
 #include <kmenu.h>
 #include <kiconloader.h>
 
@@ -215,15 +210,8 @@ double WorldMapWidget::getLongitude()
 
 void WorldMapWidget::clearGPSPositions()
 {
-//     kDebug(50003) << "WorldMapWidget::clearGPSPositions()";
     d->list.clear();
 #ifdef HAVE_MARBLEWIDGET
-    // TODO: removing placemark data from Marble does not currently work (2009-08-28, r1014558)
-//    QAbstractItemModel* const marbleModel = d->marbleWidget->placemarkModel();
-//    kDebug(50003) << QString("clearing PlacemarkModel: %1 rows").arg(marbleModel->rowCount());
-//     marbleModel->removeRows(0, marbleModel->rowCount());
-//    d->marbleWidget->removePlacemarkKey();
-//    kDebug(50003) << QString("PlacemarkModel cleared: %1 rows").arg(marbleModel->rowCount());
     d->markerClusterHolder->clear();
 #endif // HAVE_MARBLEWIDGET
 }
@@ -248,101 +236,13 @@ void WorldMapWidget::addGPSPositions(const GPSInfoList& list)
         d->marbleWidget->setHome(lng, lat);
         d->marbleWidget->centerOn(lng, lat);
     }
-#endif // HAVE_MARBLEWIDGET
 
-#ifdef HAVE_MARBLEWIDGET
     for (GPSInfoList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
     {
         const MarkerClusterHolder::MarkerInfo marker = MarkerClusterHolder::MarkerInfo::fromData<GPSInfo>(*it);
         d->markerClusterHolder->addMarker(marker);
     }
 #endif // HAVE_MARBLEWIDGET
-
-#if 0
-    return;
-    
-    // To place mark over a map in marble canvas, we will use KML data
-
-    QDomDocument       kmlDocument;
-    QDomImplementation impl;
-    QDomProcessingInstruction instr = kmlDocument.createProcessingInstruction("xml","version=\"1.0\" encoding=\"UTF-8\"");
-    kmlDocument.appendChild(instr);
-    QDomElement kmlRoot = kmlDocument.createElementNS( "http://earth.google.com/kml/2.1","kml");
-    kmlDocument.appendChild(kmlRoot);
-
-    QDomElement kmlAlbum = addKmlElement(kmlDocument, kmlRoot, "Document");
-    QDomElement kmlName  = addKmlTextElement(kmlDocument, kmlAlbum, "name", "Geolocation");
-
-    if (!list.isEmpty())
-    {
-        for (GPSInfoList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
-        {
-            QDomElement kmlPlacemark = addKmlElement(kmlDocument, kmlAlbum, "Placemark");
-            addKmlTextElement(kmlDocument, kmlPlacemark, "name", (*it).url.fileName());
-
-            QDomElement kmlGeometry  = addKmlElement(kmlDocument, kmlPlacemark, "Point");
-            addKmlTextElement(kmlDocument, kmlGeometry, "coordinates", QString("%1,%2")
-                            .arg((*it).longitude)
-                            .arg((*it).latitude));
-            addKmlTextElement(kmlDocument, kmlGeometry, "altitudeMode", "clampToGround");
-            addKmlTextElement(kmlDocument, kmlGeometry, "extrude", "1");
-
-            QDomElement kmlTimeStamp = addKmlElement(kmlDocument, kmlPlacemark, "TimeStamp");
-            addKmlTextElement(kmlDocument, kmlTimeStamp, "when",
-                              (*it).dateTime.toString("yyyy-MM-ddThh:mm:ssZ"));
-        }
-    }
-
-#ifdef HAVE_MARBLEWIDGET
-
-#ifdef MARBLE_VERSION
-
-    // For Marble > 0.5.1
-    if (!list.isEmpty())
-    {
-#if MARBLE_VERSION >= 0x00800
-        d->marbleWidget->addPlacemarkData(kmlDocument.toString());
-#else
-        d->marbleWidget->addPlaceMarkData(kmlDocument.toString(), "digikam");
-#endif
-    }
-#else // MARBLE_VERSION
-
-    // For Marble 0.5.1, there is no method to place a mark over the map using string.
-    // The only way is to use a temp file with all KML information.
-    KTemporaryFile KMLFile;
-    KMLFile.setSuffix(".kml");
-    KMLFile.setAutoRemove(true);
-    KMLFile.open();
-    QFile file(KMLFile.fileName());
-    file.open(QIODevice::WriteOnly);
-    QTextStream stream(&file);
-    stream << kmlDocument.toString();
-    file.close();
-
-    d->marbleWidget->addPlaceMarkFile(KMLFile.fileName());
-
-#endif // MARBLE_VERSION
-
-#endif // HAVE_MARBLEWIDGET
-#endif // 0
-}
-
-QDomElement WorldMapWidget::addKmlElement(QDomDocument& kmlDocument, QDomElement& target, const QString& tag)
-{
-    QDomElement kmlElement = kmlDocument.createElement(tag);
-    target.appendChild(kmlElement);
-    return kmlElement;
-}
-
-QDomElement WorldMapWidget::addKmlTextElement(QDomDocument& kmlDocument, QDomElement& target,
-                                              const QString& tag, const QString& text)
-{
-    QDomElement kmlElement  = kmlDocument.createElement(tag);
-    target.appendChild(kmlElement);
-    QDomText kmlTextElement = kmlDocument.createTextNode(text);
-    kmlElement.appendChild(kmlTextElement);
-    return kmlElement;
 }
 
 void WorldMapWidget::slotZoomIn()
@@ -483,7 +383,7 @@ void WorldMapWidget::slotMapMarkerSelectionChanged()
 {
 #ifdef HAVE_MARBLEWIDGET
     const MarkerClusterHolder::MarkerInfo::List markerList = d->markerClusterHolder->selectedMarkers();
-//     kDebug(50003)<<"markerList.size():"<<markerList.size();
+
     GPSInfoList gpsList;
     for (MarkerClusterHolder::MarkerInfoList::const_iterator it = markerList.constBegin(); it!=markerList.constEnd(); ++it)
     {
@@ -497,7 +397,6 @@ void WorldMapWidget::slotMapMarkerSoloChanged()
 {
 #ifdef HAVE_MARBLEWIDGET
     const MarkerClusterHolder::MarkerInfo::List markerList = d->markerClusterHolder->soloMarkers();
-//     kDebug(50003)<<"markerList.size():"<<markerList.size();
     GPSInfoList gpsList;
     for (MarkerClusterHolder::MarkerInfoList::const_iterator it = markerList.constBegin(); it!=markerList.constEnd(); ++it)
     {
@@ -607,7 +506,7 @@ MarkerClusterHolder::PixmapOperations WorldMapWidget::getClusterPixmap(const int
         markerInfo = mch->marker(clusterUserData.thumbnailMarkerIndex);
         if (!me->d->multiMarkerShowNumbers)
         {
-          pixmapOperations|= MarkerClusterHolder::PixmapNoAddNumber;
+            pixmapOperations|= MarkerClusterHolder::PixmapNoAddNumber;
         }
     }
     else
@@ -703,7 +602,7 @@ MarkerClusterHolder::PixmapOperations WorldMapWidget::getClusterPixmap(const int
             markerInfo = mch->marker(bestIndex);
             if (!me->d->multiMarkerShowNumbers)
             {
-              pixmapOperations|= MarkerClusterHolder::PixmapNoAddNumber;
+                pixmapOperations|= MarkerClusterHolder::PixmapNoAddNumber;
             }
             clusterUserData.thumbnailMarkerIndex = bestIndex;
             clusterUserData.thumbnailSettingsHash = thumbnailSettingsHash;

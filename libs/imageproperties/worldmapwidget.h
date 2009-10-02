@@ -28,7 +28,6 @@
 
 #include <QFrame>
 #include <QDateTime>
-#include <QDomDocument>
 #include <QList>
 #include <QToolButton>
 
@@ -149,8 +148,6 @@ protected:
 
 private:
 
-    QDomElement addKmlElement(QDomDocument& kmlDocument, QDomElement& target, const QString& tag);
-    QDomElement addKmlTextElement(QDomDocument& kmlDocument, QDomElement& target, const QString& tag, const QString& text);
 #ifdef HAVE_MARBLEWIDGET
     static MarkerClusterHolder::PixmapOperations getClusterPixmap(const int clusterIndex, MarkerClusterHolder* const mch, const QSize& maxSize, void* const yourdata, QPixmap* const clusterPixmap);
 #endif // HAVE_MARBLEWIDGET
