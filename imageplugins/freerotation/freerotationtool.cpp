@@ -98,25 +98,25 @@ public:
         angleInput          = 0;
     }
 
-    QCheckBox*           antialiasInput;
+    QCheckBox*          antialiasInput;
 
-    QLabel*              newHeightLabel;
-    QLabel*              newWidthLabel;
+    QLabel*             newHeightLabel;
+    QLabel*             newWidthLabel;
 
-    QPoint               autoAdjustPoint1;
-    QPoint               autoAdjustPoint2;
+    QPoint              autoAdjustPoint1;
+    QPoint              autoAdjustPoint2;
 
-    QPushButton*         autoAdjustBtn;
-    QPushButton*         autoAdjustPoint1Btn;
-    QPushButton*         autoAdjustPoint2Btn;
+    QPushButton*        autoAdjustBtn;
+    QPushButton*        autoAdjustPoint1Btn;
+    QPushButton*        autoAdjustPoint2Btn;
 
-    RExpanderBox*        expanderBox;
-    EditorToolSettings*  gboxSettings;
-    ImageWidget*         previewWidget;
+    RExpanderBox*       expanderBox;
+    EditorToolSettings* gboxSettings;
+    ImageWidget*        previewWidget;
 
-    RComboBox*           autoCropCB;
-    RDoubleNumInput*     fineAngleInput;
-    RIntNumInput*        angleInput;
+    RComboBox*          autoCropCB;
+    RDoubleNumInput*    fineAngleInput;
+    RIntNumInput*       angleInput;
 };
 
 FreeRotationTool::FreeRotationTool(QObject* parent)
@@ -226,10 +226,10 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
 
     QWidget* manualAdjustContainer = new QWidget;
     QGridLayout *containerLayout   = new QGridLayout;
-    containerLayout->addWidget(label3,              0, 0, 1, 1);
-    containerLayout->addWidget(d->angleInput,       1, 0, 1, 1);
-    containerLayout->addWidget(label4,              2, 0, 1, 1);
-    containerLayout->addWidget(d->fineAngleInput,   3, 0, 1, 1);
+    containerLayout->addWidget(label3,            0, 0, 1, 1);
+    containerLayout->addWidget(d->angleInput,     1, 0, 1, 1);
+    containerLayout->addWidget(label4,            2, 0, 1, 1);
+    containerLayout->addWidget(d->fineAngleInput, 3, 0, 1, 1);
     containerLayout->setMargin(KDialog::marginHint());
     manualAdjustContainer->setLayout(containerLayout);
 
@@ -277,12 +277,12 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     // -------------------------------------------------------------
 
     QGridLayout* mainLayout = new QGridLayout;
-    mainLayout->addWidget(label1,               0, 0, 1, 1);
-    mainLayout->addWidget(d->newWidthLabel,     0, 1, 1, 1);
-    mainLayout->addWidget(label2,               1, 0, 1, 1);
-    mainLayout->addWidget(d->newHeightLabel,    1, 1, 1, 1);
-    mainLayout->addWidget(line,                 2, 0, 1,-1);
-    mainLayout->addWidget(d->expanderBox,       3, 0, 1,-1);
+    mainLayout->addWidget(label1,            0, 0, 1, 1);
+    mainLayout->addWidget(d->newWidthLabel,  0, 1, 1, 1);
+    mainLayout->addWidget(label2,            1, 0, 1, 1);
+    mainLayout->addWidget(d->newHeightLabel, 1, 1, 1, 1);
+    mainLayout->addWidget(line,              2, 0, 1,-1);
+    mainLayout->addWidget(d->expanderBox,    3, 0, 1,-1);
     mainLayout->setRowStretch(3, 10);
     mainLayout->setMargin(d->gboxSettings->spacingHint());
     mainLayout->setSpacing(d->gboxSettings->spacingHint());
@@ -467,7 +467,9 @@ void FreeRotationTool::renderingFinished()
 QString FreeRotationTool::generatePointLabel(const QPoint& p)
 {
     if (!pointIsValid(p))
+    {
         return QString(i18n("Click to set"));
+    }
 
     QString label = QString("(%1, %2)")
                            .arg(p.x())
@@ -503,8 +505,9 @@ void FreeRotationTool::updatePoints()
     d->previewWidget->setPoints(points, true);
 
     // enable / disable adjustment buttons
-    bool valid  = (pointIsValid(d->autoAdjustPoint1) && pointIsValid(d->autoAdjustPoint2))
-                  && (d->autoAdjustPoint1 != d->autoAdjustPoint2);
+    bool valid  = (pointIsValid(d->autoAdjustPoint1)  &&
+                   pointIsValid(d->autoAdjustPoint2)) &&
+                  (d->autoAdjustPoint1 != d->autoAdjustPoint2);
     d->autoAdjustBtn->setEnabled(valid);
 }
 
@@ -534,9 +537,13 @@ void FreeRotationTool::slotAutoAdjustClicked()
     if (fabs(angle) > 45.0)
     {
         if (angle < 0.0)
+        {
             angle += 90.0;
+        }
         else
+        {
             angle -= 90.0;
+        }
     }
 
     // we need to add the calculated angle to the currently set angle
@@ -585,8 +592,9 @@ double FreeRotationTool::calculateAutoAngle()
 {
     // check if all points are valid
     if (!pointIsValid(d->autoAdjustPoint1) && !pointIsValid(d->autoAdjustPoint2))
+    {
         return 0.0;
-
+    }
     return FreeRotation::calculateAngle(d->autoAdjustPoint1, d->autoAdjustPoint2);
 }
 
@@ -600,7 +608,9 @@ bool FreeRotationTool::pointIsValid(const QPoint& p)
 {
     bool valid = true;
     if (p.x() == -1 || p.y() == -1)
+    {
         valid = false;
+    }
     return valid;
 }
 
