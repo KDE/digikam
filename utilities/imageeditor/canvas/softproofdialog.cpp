@@ -75,8 +75,7 @@ public:
 };
 
 SoftProofDialog::SoftProofDialog(QWidget *parent)
-               : KDialog(parent),
-              d(new SoftProofDialogPriv)
+               : KDialog(parent), d(new SoftProofDialogPriv)
 {
     setCaption(i18n("Soft Proofing Options"));
 
@@ -99,7 +98,7 @@ SoftProofDialog::SoftProofDialog(QWidget *parent)
     QLabel *headerLabel   = new QLabel(i18n("<b>Configure the Soft Proofing View</b>"));
     KSeparator *separator = new KSeparator(Qt::Horizontal);
 
-    // ---
+    // -------------------------------------------------------------
 
     QGridLayout *profileGrid = new QGridLayout;
 
@@ -125,7 +124,7 @@ SoftProofDialog::SoftProofDialog(QWidget *parent)
     profileGrid->addWidget(d->infoProofProfiles, 1, 2);
     profileGrid->setColumnStretch(1, 10);
 
-    // ---
+    // --------------------------------------------------------------
 
     QGroupBox *optionsBox    = new QGroupBox;
     QGridLayout *optionsGrid = new QGridLayout;
