@@ -190,17 +190,20 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     QString btnWhatsThis = i18n("Select a point in the preview widget, "
                                 "then click this button to assign the point for auto-correction.");
 
+    QPoint p;
+    setPointInvalid(p);
+
     QPixmap pm1 = generateBtnPixmap(QString("1"), Qt::black);
     d->autoAdjustPoint1Btn = new QPushButton;
     d->autoAdjustPoint1Btn->setIcon(pm1);
-    d->autoAdjustPoint1Btn->setText(i18n("Click to set"));
+    d->autoAdjustPoint1Btn->setText(generateButtonLabel(p));
     d->autoAdjustPoint1Btn->setSizePolicy(QSizePolicy::MinimumExpanding,
                                           QSizePolicy::MinimumExpanding);
 
     QPixmap pm2 = generateBtnPixmap(QString("2"), Qt::black);
     d->autoAdjustPoint2Btn = new QPushButton;
     d->autoAdjustPoint2Btn->setIcon(pm2);
-    d->autoAdjustPoint2Btn->setText(i18n("Click to set"));
+    d->autoAdjustPoint2Btn->setText(generateButtonLabel(p));
     d->autoAdjustPoint2Btn->setSizePolicy(QSizePolicy::MinimumExpanding,
                                           QSizePolicy::MinimumExpanding);
 
