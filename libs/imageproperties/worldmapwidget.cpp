@@ -759,6 +759,7 @@ void WorldMapWidget::slotThumbnailLoaded(const LoadingDescription& loadingDescri
 #endif // HAVE_MARBLEWIDGET
 }
 
+#ifdef HAVE_MARBLEWIDGET
 /**
  * @brief Simple forwarding function to set the custom painting function in MarkerClusterHolder
  */
@@ -766,6 +767,7 @@ void WorldMapWidget::setCustomPaintFunction(const MarkerClusterHolder::CustomPai
 {
     d->markerClusterHolder->setCustomPaintFunction(customPaintFunction, yourdata);
 }
+#endif // HAVE_MARBLEWIDGET
 
 // ------------------------------------------------------------------------
 

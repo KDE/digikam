@@ -102,6 +102,7 @@ void GPSSearchWidget::slotNewSelectionFromMap(const QList<double>& sel)
     emit signalNewSelectionFromMap();
 }
 
+#ifdef HAVE_MARBLEWIDGET
 /**
  * @brief Callback that draws the selection for the current search on the map
  * @param geoPainter Painter on which to draw on
@@ -152,5 +153,6 @@ void GPSSearchWidget::markerClusterHolderCustomPaint(Marble::GeoPainter* const g
       geoPainter->restore();
     }
 }
+#endif // HAVE_MARBLEWIDGET
 
 }  // namespace Digikam

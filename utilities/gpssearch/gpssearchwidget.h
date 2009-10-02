@@ -61,8 +61,10 @@ private Q_SLOTS:
     void slotNewSelectionFromMap(const QList<double>&);
 
 private:
-    
+
+#ifdef HAVE_MARBLEWIDGET
     static void markerClusterHolderCustomPaint(Marble::GeoPainter* const geoPainter, const bool isBefore, void* const yourdata);
+#endif // HAVE_MARBLEWIDGET
     GPSSearchWidgetPriv* const d;
 };
 
