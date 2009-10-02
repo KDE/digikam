@@ -481,12 +481,14 @@ QString FreeRotationTool::generateButtonLabel(const QPoint& p)
 
         // fill with additional whitespace, to match the original label length and center
         // the text, without moving the button icon
-        int diff = qAbs<int>(length - label.count());
-
-        QString delimiter(" ");
-        int repeat = (diff / 2) + 2;
-        label.prepend(delimiter.repeated(repeat));
-        label.append(delimiter.repeated(repeat));
+        int diff = length - label.count();
+        if (diff > 0)
+        {
+            QString delimiter(" ");
+            int repeat = (diff / 2) + 2;
+            label.prepend(delimiter.repeated(repeat));
+            label.append(delimiter.repeated(repeat));
+        }
     }
     return label;
 }
