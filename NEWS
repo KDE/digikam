@@ -54,7 +54,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 043 ==> 141238 : Album tree lacks horizontal scroll bar.
 044 ==> 207486 : With 16-bit images, adjustlevels acts weird when inserting manually values into input fields.
 045 ==> 193748 : Crash upon importing images from camera.
-046 ==> 
+046 ==> 206109 : digiKam marble map theme not selectable.
+047 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta4 - Release date: 2009-08-30
