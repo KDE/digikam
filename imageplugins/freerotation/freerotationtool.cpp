@@ -37,24 +37,19 @@
 #include <QGridLayout>
 #include <QImage>
 #include <QLabel>
-#include <QLayout>
 #include <QPainter>
 #include <QPushButton>
 
 // KDE includes
 
-#include <kaboutdata.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kcursor.h>
-#include <kdebug.h>
 #include <kdialog.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kseparator.h>
-#include <kstandarddirs.h>
 
 // LibKDcraw includes
 
@@ -63,13 +58,13 @@
 
 // Local includes
 
-#include "rexpanderbox.h"
 #include "daboutdata.h"
 #include "dimg.h"
 #include "editortoolsettings.h"
 #include "freerotation.h"
 #include "imageiface.h"
 #include "imagewidget.h"
+#include "rexpanderbox.h"
 #include "version.h"
 
 using namespace Digikam;
