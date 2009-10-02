@@ -481,16 +481,16 @@ void FreeRotationTool::renderingFinished()
 
 QString FreeRotationTool::generateButtonLabel(const QPoint& p)
 {
-    QString clickToSet   = i18n("Click to set");
-    QString isOk         = i18nc("point has been set and is valid", "Ok!");
-    bool clickToSetWider = clickToSet.count() >= isOk.count();
-    QString widestString = clickToSetWider ? clickToSet : isOk;
-    int maxLength        = widestString.count();
-    QString label        = clickToSetWider ? clickToSet : centerQString(clickToSet, maxLength);
+    QString clickToSet     = i18n("Click to set");
+    QString isOk           = i18nc("point has been set and is valid", "Ok!");
+    bool clickToSetIsWider = clickToSet.count() >= isOk.count();
+    QString widestString   = clickToSetIsWider ? clickToSet : isOk;
+    int maxLength          = widestString.count();
+    QString label          = clickToSetIsWider ? clickToSet : centerQString(clickToSet, maxLength);
 
     if (pointIsValid(p))
     {
-        label = clickToSetWider ? centerQString(isOk, maxLength) : isOk;
+        label = clickToSetIsWider ? centerQString(isOk, maxLength) : isOk;
     }
     return label;
 }
