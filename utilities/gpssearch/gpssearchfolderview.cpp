@@ -45,6 +45,7 @@
 #include "album.h"
 #include "albummanager.h"
 #include "albumsettings.h"
+#include "contextmenuhelper.h"
 #include "folderitem.h"
 
 namespace Digikam
@@ -277,21 +278,36 @@ void GPSSearchFolderView::slotContextMenu(Q3ListViewItem* item, const QPoint&, i
     if (!item) return;
 
     GPSSearchFolderItem* sItem = dynamic_cast<GPSSearchFolderItem*>(item);
-
-    KMenu popmenu(this);
-    popmenu.addTitle(SmallIcon("digikam"), i18n("My Map Searches"));
-    QAction *renSearch = popmenu.addAction(SmallIcon("edit-rename"), i18n("Rename..."));
-    QAction *delSearch = popmenu.addAction(SmallIcon("edit-delete"), i18n("Delete"));
-    QAction *choice    = popmenu.exec(QCursor::pos());
-    if (choice)
+    if (sItem)
     {
-        if (choice == renSearch)
+        QAction *renSearch = new QAction(SmallIcon("edit-rename"), i18n("Rename..."), this);
+        QAction *delSearch = new QAction(SmallIcon("edit-delete"), i18n("Delete"), this);
+        bool enable        = sItem->album()->title() != currentGPSSearchName();
+        renSearch->setEnabled(enable);
+        delSearch->setEnabled(enable);
+
+        // --------------------------------------------------------
+
+        KMenu popmenu(this);
+        popmenu.addTitle(SmallIcon("digikam"), i18n("My Map Searches"));
+        ContextMenuHelper cmhelper(&popmenu);
+
+        cmhelper.addAction(renSearch, true);
+        cmhelper.addAction(delSearch, true);
+
+        // --------------------------------------------------------
+
+        QAction *choice = cmhelper.exec(QCursor::pos());
+        if (choice)
         {
-            emit signalRenameAlbum(sItem->album());
-        }
-        else if (choice == delSearch)
-        {
-            searchDelete(sItem->album());
+            if (choice == renSearch)
+            {
+                emit signalRenameAlbum(sItem->album());
+            }
+            else if (choice == delSearch)
+            {
+                searchDelete(sItem->album());
+            }
         }
     }
 }
