@@ -30,7 +30,7 @@ namespace Digikam
 {
 
 DigikamImageViewPriv::DigikamImageViewPriv(DigikamImageView *qq) 
-                    : q_ptr(qq), overlaysActive(false)
+                    : overlaysActive(false), q_ptr(qq)
 {
     utilities          = 0;
     renameThread       = 0;
