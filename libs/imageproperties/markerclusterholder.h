@@ -23,10 +23,12 @@
 #ifndef MARKERCLUSTERHOLDER_H
 #define MARKERCLUSTERHOLDER_H
 
-// standard library includes
+// C++ includes
+
 #include <memory>
 
 // Marble includes
+
 #include <marble/MarbleWidget.h>
 #include <marble/GeoDataPoint.h>
 
@@ -43,16 +45,17 @@ class MarkerClusterHolderPrivate;
 class MarkerClusterHolder : public QObject
 {
     Q_OBJECT
-  
+
 public:
-    
+
     typedef QList<int> QIntList;
-    
+
     /**
      * @brief Information about a marker
      */
     class MarkerInfo
     {
+
     private:
         //! latitude of this marker
         qreal m_lat;
@@ -64,7 +67,7 @@ public:
         bool m_selected;
         //! is the marker 'solo'
         bool m_solo;
-        
+
     public:
         /**
          * @brief Constructs a MarkerInfo with given latitude and longitude
@@ -72,10 +75,10 @@ public:
          * @param lat Latitude of marker in degrees
          */
         MarkerInfo(const qreal lon, const qreal lat)
-        : m_lat(lat), m_lon(lon), m_data(), m_selected(false), m_solo(false)
+            : m_lat(lat), m_lon(lon), m_data(), m_selected(false), m_solo(false)
         {
         }
-        
+
         /**
          * @brief Constructs a MarkerInfo with given latitude and longitude
          * @param lon Longitude of marker in degrees
@@ -83,15 +86,15 @@ public:
          * @param yourdata QVariant holding user data associated with this marker
          */
         MarkerInfo(const qreal lon, const qreal lat, const QVariant& yourdata )
-        : m_lat(lat), m_lon(lon), m_data(yourdata), m_selected(false), m_solo(false)
+            : m_lat(lat), m_lon(lon), m_data(yourdata), m_selected(false), m_solo(false)
         {
         }
-        
+
         MarkerInfo()
-        : m_lat(0), m_lon(0), m_data(), m_selected(false), m_solo(false)
+            : m_lat(0), m_lon(0), m_data(), m_selected(false), m_solo(false)
         {
         }
-        
+
         /**
          * @brief Constructs a marker from the applications user data
          *
@@ -103,7 +106,7 @@ public:
          * @return A marker created from the user data
          */
         template<class yourtype> static MarkerInfo fromData(const yourtype& yourdata);
-        
+
         /**
          * @brief Returns the data associated with this marker
          *
@@ -115,7 +118,7 @@ public:
         {
             return m_data.value<yourtype>();
         }
-        
+
         /**
          * @brief Returns the longitude of this marker
          * @return Longitude of this marker in degrees
@@ -124,7 +127,7 @@ public:
         {
             return m_lon;
         }
-        
+
         /**
          * @brief Returns the latitude of this marker
          * @return Latitude of this marker in degrees
@@ -133,7 +136,7 @@ public:
         {
             return m_lat;
         }
-        
+
         /**
          * @brief Sets the latitude of this marker
          * @param lat Latitude in degrees
@@ -142,7 +145,7 @@ public:
         {
             m_lat = lat;
         }
-        
+
         /**
          * @brief Sets the longitude of this marker
          * @param lon Longitude in degrees
@@ -151,7 +154,7 @@ public:
         {
             m_lon = lon;
         }
-        
+
         /**
          * @brief Sets the selected state of this marker
          * @param newState Whether this marker should be selected
@@ -160,7 +163,7 @@ public:
         {
             m_selected = newState;
         }
-        
+
         /**
          * @brief Returns the selected state of this marker
          * @return Whether this marker is selected
@@ -169,7 +172,7 @@ public:
         {
             return m_selected;
         }
-        
+
         /**
          * @brief Sets the solo state of this marker
          * @param newState Whether the marker should be solo
@@ -178,7 +181,7 @@ public:
         {
             m_solo = newState;
         }
-        
+
         /**
          * @brief Returns the solo state of this marker
          * @return Whether this marker is solo
@@ -187,20 +190,22 @@ public:
         {
             return m_solo;
         }
-        
+
         typedef QList<MarkerInfo> List;
-        
+
         friend class MarkerClusterHolder;
     };
-    
+
     typedef QList<MarkerInfo> MarkerInfoList;
-    
+
     /**
      * @brief Information about a cluster
      */
     class ClusterInfo
     {
-      public:
+
+        public:
+
         //! latitude of the center of this cluster
         qreal lat;
         //! longitude of the center of this cluster
@@ -217,25 +222,25 @@ public:
         QSize lastSize;
         //! userdata stored in the cluster
         QVariant userData;
-        
+
         //! Description for a property which can apply for a part of the markers of this cluster
         enum PartialState
         {
-          //! Property does not apply for any markers in this cluster
-          PartialNone = 0,
-          //! Property applies for some of the markers in this cluster
-          PartialSome = 1,
-          //! Property applies for all markers in the cluster
-          PartialAll = 2
+            //! Property does not apply for any markers in this cluster
+            PartialNone = 0,
+            //! Property applies for some of the markers in this cluster
+            PartialSome = 1,
+            //! Property applies for all markers in the cluster
+            PartialAll = 2
         };
 
         //! Selection state of this cluster
         PartialState selected;
         //! Solo state of this cluter
         PartialState solo;
-        
+
         ClusterInfo()
-        : lat(), lon(), centerValid(false), pixelPos(), markerIndices(), maxSize(), lastSize(), userData(), selected(PartialNone), solo(PartialNone)
+            : lat(), lon(), centerValid(false), pixelPos(), markerIndices(), maxSize(), lastSize(), userData(), selected(PartialNone), solo(PartialNone)
         {
         }
 
@@ -247,7 +252,7 @@ public:
         {
             return markerIndices.count();
         }
-        
+
         /**
          * @brief Adds a marker to this cluster
          * @param markerIndex Index of the marker to be added
@@ -256,7 +261,7 @@ public:
         {
             markerIndices << markerIndex;
         }
-        
+
         /**
          * @brief Adds markers to this cluster
          * @param markerIndexList List of indices of the markers to be added
@@ -265,11 +270,11 @@ public:
         {
             markerIndices << markerIndexList;
         }
-        
+
         void getColorInfos(const bool haveAnySolo, QColor *fillColor, QColor *strokeColor, Qt::PenStyle *strokeStyle, QString *labelText, QColor *labelColor) const;
-        
+
         QString getLabelText() const;
-        
+
         /**
          * @brief Sets the center of the cluster
          * @param newLat Latitude of the center of the cluster
@@ -281,7 +286,7 @@ public:
             lon=newLon;
             centerValid=true;
         }
-        
+
         /**
          * @brief Sets the center of the cluster
          * @param marker Marker whose coordinates are to be used as the new center
@@ -292,12 +297,12 @@ public:
             lon = marker.lon();
             centerValid = true;
         }
-        
+
         typedef QList<ClusterInfo> List;
     };
-    
+
     typedef QList<ClusterInfo> ClusterInfoList;
-    
+
     /**
      * @brief Comparison function for the user data of markers
      *
@@ -308,7 +313,7 @@ public:
      * @return true if the data in the two QVariants is equal
      */
     typedef bool (*MarkerDataEqualFunction)(const QVariant& one, const QVariant& two, void* const yourdata);
-    
+
     /**
      * @brief Returns the tooltip text for a cluster
      *
@@ -324,15 +329,16 @@ public:
      * @return The text for the tooltip
      */
     typedef QString (*TooltipFunction)(const int clusterIndex, MarkerClusterHolder* const mch, void* const yourdata);
-    
-    enum PixmapOperations {
-        PixmapInvalid = 0,
-        PixmapValid = 1,
-        PixmapNoAddNumber = 2,
-        PixmapNoSoloModify = 4,
+
+    enum PixmapOperations
+    {
+        PixmapInvalid          = 0,
+        PixmapValid            = 1,
+        PixmapNoAddNumber      = 2,
+        PixmapNoSoloModify     = 4,
         PixmapNoSelectedModify = 8
     };
-    
+
     /**
      * @brief Creates the pixmap for a cluster
      *
@@ -347,15 +353,17 @@ public:
      * @return PixmapValid if a pixmap was returned
      */
     typedef PixmapOperations (*ClusterPixmapFunction)(const int clusterIndex, MarkerClusterHolder* const mch, const QSize& maxSize, void* const yourdata, QPixmap* const clusterPixmap);
-    
+
     /**
      * @brief Custom painting before/after clusters
      */
     typedef void (*CustomPaintFunction)(Marble::GeoPainter* const geoPainter, const bool isBefore, void* const yourdata);
-    
+
 public:
+
     MarkerClusterHolder(Marble::MarbleWidget* const marbleWidget);
     ~MarkerClusterHolder();
+
     void addMarker(const MarkerInfo& marker);
     void addMarkers(const QList<MarkerInfo>& markerList);
     void paintOnMarble(Marble::GeoPainter* const painter);
@@ -371,25 +379,26 @@ public:
     void setCustomPaintFunction(const CustomPaintFunction customPaintFunction, void* const yourdata);
     ClusterInfo& cluster(const int clusterIndex);
     MarkerInfo& marker(const int markerIndex);
-    
+
 protected:
+
      bool eventFilter(QObject *obj, QEvent *event);
      bool markersEqual(const MarkerInfo& one, const MarkerInfo& two);
-     
-private:
-    std::auto_ptr<MarkerClusterHolderPrivate> d;
+
     void reorderClustersPixelGrid();
     void redrawIfNecessary(const bool force = false);
     void updateClusterStates();
     void paintOnMarbleInternal(Marble::GeoPainter* const painter);
     static void ExternalDrawCallback(Marble::GeoPainter *painter, void* yourdata);
     void computeClusterDistances();
-  
+
 signals:
+
     void signalSelectionChanged();
     void signalSoloChanged();
-    
+
 public slots:
+
     void setAutoRedrowOnMarkerAdd(const bool doRedraw);
     void clearSelection();
     void clearFiltering();
@@ -402,8 +411,11 @@ public slots:
     void setAllowSelection(const bool allow);
     void setTooltipFunction(TooltipFunction newTooltipFunction, void* const yourdata);
     void zoomIntoCluster(ClusterInfo cluster);
-    
+
 private:
+
+    std::auto_ptr<MarkerClusterHolderPrivate> d;
+
     Q_DISABLE_COPY(MarkerClusterHolder)
 };
 
@@ -422,19 +434,22 @@ inline MarkerClusterHolder::PixmapOperations& operator|=(MarkerClusterHolder::Pi
 class MarbleSubClassWidget : public Marble::MarbleWidget
 {
     Q_OBJECT
-    
+
 public:
+
     MarkerClusterHolder* const m_markerClusterHolder;
-    
+
     MarbleSubClassWidget(QWidget* parent)
-    : MarbleWidget(parent), m_markerClusterHolder(new MarkerClusterHolder(this))
+        : MarbleWidget(parent), m_markerClusterHolder(new MarkerClusterHolder(this))
     {
     }
-  
+
 protected:
+
     virtual void customPaint(Marble::GeoPainter* painter);
 
 private:
+
     Q_DISABLE_COPY(MarbleSubClassWidget)
 };
 
@@ -445,6 +460,4 @@ Q_DECLARE_METATYPE(Digikam::MarkerClusterHolder::MarkerInfoList)
 Q_DECLARE_METATYPE(Digikam::MarkerClusterHolder::ClusterInfo)
 Q_DECLARE_METATYPE(Digikam::MarkerClusterHolder::ClusterInfoList)
 
-
 #endif // MARKERCLUSTERHOLDER_H
-
