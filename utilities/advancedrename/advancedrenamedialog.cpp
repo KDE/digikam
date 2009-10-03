@@ -211,6 +211,7 @@ void AdvancedRenameDialog::slotParseStringChanged(const QString& parseString)
         }
         ++it;
     }
+    d->listView->viewport()->update();
 }
 
 void AdvancedRenameDialog::slotAddImages(const KUrl::List& urls)
