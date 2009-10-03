@@ -320,8 +320,10 @@ void SearchFolderView::slotContextMenu(Q3ListViewItem* item, const QPoint&, int)
         delAction->setEnabled(false);
         edtAction->setEnabled(false);
     }
-    if (item == m_currentSearchViewSearchItem)
+    if (sItem == m_currentSearchViewSearchItem)
+    {
         delAction->setEnabled(false);
+    }
 
     // --------------------------------------------------------
 
