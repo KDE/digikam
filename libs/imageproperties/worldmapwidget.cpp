@@ -40,6 +40,7 @@
 #include "config-digikam.h"
 #ifdef HAVE_MARBLEWIDGET
 #include <marble/MarbleWidget.h>
+#include "markerclusterholder.h"
 using namespace Marble;
 
 // local includes
@@ -68,6 +69,9 @@ public:
 
 Q_DECLARE_METATYPE(Digikam::ClusterUserData)
 
+namespace Digikam
+{
+
 template<> MarkerClusterHolder::MarkerInfo MarkerClusterHolder::MarkerInfo::fromData<Digikam::GPSInfo>(const Digikam::GPSInfo& yourdata)
 {
     return MarkerClusterHolder::MarkerInfo(yourdata.longitude, yourdata.latitude, QVariant::fromValue(yourdata));
@@ -83,6 +87,8 @@ bool MarkerInfoDataEqualFunction(const QVariant& one, const QVariant& two, void*
     // just compare the urls of the GPSInfos:
     return (oneInfo.url==twoInfo.url);
 }
+
+} // Digikam
 
 #endif // HAVE_MARBLEWIDGET
 
