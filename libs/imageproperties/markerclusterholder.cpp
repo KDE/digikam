@@ -1133,12 +1133,12 @@ bool MarkerClusterHolder::eventFilter(QObject *obj, QEvent *event)
                 const bool doResetOtherClusters = !shiftPressed;
                 
                 ClusterInfo::PartialState soloState = cluster.solo;
-                if ((soloState==ClusterInfo::ClusterInfo::PartialNone)||(soloState==ClusterInfo::ClusterInfo::PartialSome))
+                if ((soloState==ClusterInfo::PartialNone)||(soloState==ClusterInfo::PartialSome))
                 {
                     // mark all markers in the cluster as solo:
                     setSoloMarkers(cluster.markerIndices, true, doResetOtherClusters);
                 }
-                else if (soloState==ClusterInfo::ClusterInfo::PartialAll)
+                else if (soloState==ClusterInfo::PartialAll)
                 {
                     // mark all markers in the cluster as not solo:
                     setSoloMarkers(cluster.markerIndices, false, doResetOtherClusters);
