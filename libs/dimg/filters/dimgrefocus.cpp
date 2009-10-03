@@ -68,6 +68,11 @@ DImgRefocus::DImgRefocus(DImg *orgImage, QObject *parent, int matrixSize, double
             orgImage->sixteenBit(), orgImage->hasAlpha());    
 }
 
+DImgRefocus::~DImgRefocus()
+{
+    cancelFilter();
+}
+
 void DImgRefocus::filterImage(void)
 {
     bool sb = m_orgImage.sixteenBit();

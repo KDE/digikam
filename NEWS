@@ -59,7 +59,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 048 ==> 207911 : Crash after trying to re-open Image Editor containing an unsaved RAW image.
 049 ==> 204080 : It crashed when it was closing.
 050 ==> 198554 : Crash on making thumbnails, every time.
-051 ==>
+051 ==> 207330 : digikamm crashes if the editor has to open a new image while working on another.
+052 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta4 - Release date: 2009-08-30
