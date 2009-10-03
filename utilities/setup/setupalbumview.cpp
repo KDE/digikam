@@ -66,6 +66,7 @@ public:
         iconShowCommentsBox          = 0;
         iconShowTagsBox              = 0;
         iconShowRatingBox            = 0;
+        iconShowOverlaysBox          = 0;
         rightClickActionComboBox     = 0;
         previewLoadFullImageSize     = 0;
         showFolderTreeViewItemsCount = 0;
@@ -83,6 +84,7 @@ public:
     QCheckBox   *iconShowCommentsBox;
     QCheckBox   *iconShowTagsBox;
     QCheckBox   *iconShowRatingBox;
+    QCheckBox   *iconShowOverlaysBox;
     QCheckBox   *previewLoadFullImageSize;
     QCheckBox   *showFolderTreeViewItemsCount;
 
@@ -139,6 +141,10 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
     d->iconShowRatingBox->setWhatsThis(i18n("Set this option to show the digiKam rating "
                                             "below the image thumbnail."));
 
+    d->iconShowOverlaysBox   = new QCheckBox(i18n("Show rotation overlay buttons"), iconViewGroup);
+    d->iconShowOverlaysBox->setWhatsThis(i18n("Set this option to show overlay buttons on "
+                                              "the image thumbnail for image rotation."));
+
     QLabel *rightClickLabel     = new QLabel(i18n("Thumbnail click action:"), iconViewGroup);
     d->rightClickActionComboBox = new KComboBox(iconViewGroup);
     d->rightClickActionComboBox->addItem(i18n("Show embedded preview"), AlbumSettings::ShowPreview);
@@ -157,6 +163,7 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
     grid->addWidget(d->iconShowCommentsBox,      0, 1, 1, 1);
     grid->addWidget(d->iconShowTagsBox,          1, 1, 1, 1);
     grid->addWidget(d->iconShowRatingBox,        2, 1, 1, 1);
+    grid->addWidget(d->iconShowOverlaysBox,      3, 1, 1, 1);
     grid->addWidget(rightClickLabel,             5, 0, 1, 1);
     grid->addWidget(d->rightClickActionComboBox, 5, 1, 1, 1);
     grid->addWidget(d->iconViewFontSelect,       6, 0, 1, 2);
@@ -238,6 +245,7 @@ void SetupAlbumView::applySettings()
     settings->setIconShowResolution(d->iconShowResolutionBox->isChecked());
     settings->setIconShowComments(d->iconShowCommentsBox->isChecked());
     settings->setIconShowRating(d->iconShowRatingBox->isChecked());
+    settings->setIconShowOverlays(d->iconShowOverlaysBox->isChecked());
     settings->setIconViewFont(d->iconViewFontSelect->font());
 
     settings->setItemRightClickAction((AlbumSettings::ItemRightClickAction)
@@ -271,6 +279,7 @@ void SetupAlbumView::readSettings()
     d->iconShowResolutionBox->setChecked(settings->getIconShowResolution());
     d->iconShowCommentsBox->setChecked(settings->getIconShowComments());
     d->iconShowRatingBox->setChecked(settings->getIconShowRating());
+    d->iconShowOverlaysBox->setChecked(settings->getIconShowOverlays());
     d->iconViewFontSelect->setFont(settings->getIconViewFont());
 
     d->rightClickActionComboBox->setCurrentIndex((int)settings->getItemRightClickAction());

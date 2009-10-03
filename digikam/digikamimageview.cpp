@@ -24,6 +24,7 @@
 
 #include "digikamimageview.h"
 #include "digikamimageview.moc"
+#include "digikamimageview_p.h"
 
 // Qt includes
 
@@ -60,54 +61,45 @@
 #include "imagealbummodel.h"
 #include "imagedragdrop.h"
 #include "imageratingoverlay.h"
-#include "imagerotationoverlay.h"
 #include "imageviewutilities.h"
 #include "imagewindow.h"
 #include "metadatamanager.h"
-#include "renamethread.h"
 #include "thumbnailloadthread.h"
 
 namespace Digikam
 {
 
-class DigikamImageViewPriv
-{
-public:
-    DigikamImageViewPriv()
-    {
-        utilities    = 0;
-        renameThread = 0;
-    }
-
-    ImageViewUtilities* utilities;
-    RenameThread*       renameThread;
-};
-
 DigikamImageView::DigikamImageView(QWidget *parent)
-                : ImageCategorizedView(parent), d(new DigikamImageViewPriv)
+                : ImageCategorizedView(parent), d(new DigikamImageViewPriv(this))
 {
+
+    AlbumSettings *settings = AlbumSettings::instance();
+
     imageFilterModel()->setCategorizationMode(ImageSortSettings::CategoryByAlbum);
 
     imageModel()->setThumbnailLoadThread(ThumbnailLoadThread::defaultIconViewThread());
-    setThumbnailSize((ThumbnailSize::Size)AlbumSettings::instance()->getDefaultIconSize());
+    setThumbnailSize((ThumbnailSize::Size)settings->getDefaultIconSize());
 
     imageModel()->setDragDropHandler(new ImageDragDropHandler(imageModel()));
     setDragEnabled(true);
     setAcceptDrops(true);
     setDropIndicatorShown(false);
 
-    setToolTipEnabled(AlbumSettings::instance()->showToolTipsIsValid());
-    imageFilterModel()->setSortRole((ImageSortSettings::SortRole)AlbumSettings::instance()->getImageSortOrder());
-    imageFilterModel()->setCategorizationMode((ImageSortSettings::CategorizationMode)AlbumSettings::instance()->getImageGroupMode());
+    setToolTipEnabled(settings->showToolTipsIsValid());
+    imageFilterModel()->setSortRole((ImageSortSettings::SortRole)settings->getImageSortOrder());
+    imageFilterModel()->setCategorizationMode((ImageSortSettings::CategorizationMode)settings->getImageGroupMode());
 
-    ImageRotateLeftOverlay *rotateLeftOverlay   = new ImageRotateLeftOverlay(this);
-    addOverlay(rotateLeftOverlay);
+    // rotation overlays
+    d->rotateLeftOverlay = new ImageRotateLeftOverlay(this);
+    d->rotateRightOverlay = new ImageRotateRightOverlay(this);
+    d->updateOverlays();
 
-    ImageRotateRightOverlay *rotateRightOverlay = new ImageRotateRightOverlay(this);
-    addOverlay(rotateRightOverlay);
-
-    ImageRatingOverlay *ratingOverlay           = new ImageRatingOverlay(this);
+    // rating overlay
+    ImageRatingOverlay *ratingOverlay = new ImageRatingOverlay(this);
     addOverlay(ratingOverlay);
+
+    connect(ratingOverlay, SIGNAL(ratingEdited(const QModelIndex &, int)),
+            this, SLOT(assignRating(const QModelIndex&, int)));
 
     d->utilities = new ImageViewUtilities(this);
 
@@ -120,16 +112,7 @@ DigikamImageView::DigikamImageView(QWidget *parent)
     connect(imageModel()->dragDropHandler(), SIGNAL(dioResult(KJob*)),
             d->utilities, SLOT(slotDIOResult(KJob*)));
 
-    connect(ratingOverlay, SIGNAL(ratingEdited(const QModelIndex &, int)),
-            this, SLOT(assignRating(const QModelIndex&, int)));
-
-    connect(rotateLeftOverlay, SIGNAL(signalRotateLeft()),
-            this, SLOT(slotRotateLeft()));
-
-    connect(rotateRightOverlay, SIGNAL(signalRotateRight()),
-            this, SLOT(slotRotateRight()));
-
-    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+    connect(settings, SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
 }
 
@@ -146,6 +129,9 @@ ImageViewUtilities *DigikamImageView::utilities() const
 void DigikamImageView::slotSetupChanged()
 {
     setToolTipEnabled(AlbumSettings::instance()->showToolTipsIsValid());
+
+    d->updateOverlays();
+
     ImageCategorizedView::slotSetupChanged();
 }
 

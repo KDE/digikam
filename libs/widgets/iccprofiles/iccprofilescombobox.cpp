@@ -27,6 +27,7 @@
 
 #include <QFileInfo>
 #include <QSignalMapper>
+#include <QSet>
 
 // KDE includes
 

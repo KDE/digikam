@@ -162,6 +162,15 @@ public:
     void setIconShowRating(bool val);
     bool getIconShowRating() const;
 
+    /**
+     * Sets the visibility of the overlay buttons on the image icons.
+     */
+    void setIconShowOverlays(bool val);
+    /**
+     * Determines whether the overlay buttons should be displayed on the icons.
+     */
+    bool getIconShowOverlays() const;
+
     void setExifRotate(bool val);
     bool getExifRotate() const;
 

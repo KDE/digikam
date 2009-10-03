@@ -82,6 +82,7 @@ public:
     bool                                iconShowResolution;
     bool                                iconShowTags;
     bool                                iconShowRating;
+    bool                                iconShowOverlays;
 
     QFont                               iconviewFont;
 
@@ -229,6 +230,7 @@ void AlbumSettings::init()
     d->iconShowResolution           = false;
     d->iconShowTags                 = true;
     d->iconShowRating               = true;
+    d->iconShowOverlays             = true;
     d->iconviewFont                 = KGlobalSettings::generalFont();
 
     d->toolTipsFont                 = KGlobalSettings::generalFont();
@@ -330,6 +332,7 @@ void AlbumSettings::readSettings()
     d->iconShowComments             = group.readEntry("Icon Show Comments",          true);
     d->iconShowTags                 = group.readEntry("Icon Show Tags",              true);
     d->iconShowRating               = group.readEntry("Icon Show Rating",            true);
+    d->iconShowOverlays             = group.readEntry("Icon Show Overlays",          true);
     d->iconviewFont                 = group.readEntry("IconView Font", KGlobalSettings::generalFont());
 
     d->toolTipsFont                 = group.readEntry("ToolTips Font",             KGlobalSettings::generalFont());
@@ -433,15 +436,16 @@ void AlbumSettings::saveSettings()
     group.writeEntry("Theme", d->currentTheme);
     group.writeEntry("Sidebar Title Style", (int)d->sidebarTitleStyle);
 
-    group.writeEntry("Icon Show Name", d->iconShowName);
-    group.writeEntry("Icon Show Resolution", d->iconShowResolution);
-    group.writeEntry("Icon Show Size", d->iconShowSize);
-    group.writeEntry("Icon Show Date", d->iconShowDate);
+    group.writeEntry("Icon Show Name",              d->iconShowName);
+    group.writeEntry("Icon Show Resolution",        d->iconShowResolution);
+    group.writeEntry("Icon Show Size",              d->iconShowSize);
+    group.writeEntry("Icon Show Date",              d->iconShowDate);
     group.writeEntry("Icon Show Modification Date", d->iconShowModDate);
-    group.writeEntry("Icon Show Comments", d->iconShowComments);
-    group.writeEntry("Icon Show Tags", d->iconShowTags);
-    group.writeEntry("Icon Show Rating", d->iconShowRating);
-    group.writeEntry("IconView Font", d->iconviewFont);
+    group.writeEntry("Icon Show Comments",          d->iconShowComments);
+    group.writeEntry("Icon Show Tags",              d->iconShowTags);
+    group.writeEntry("Icon Show Rating",            d->iconShowRating);
+    group.writeEntry("Icon Show Overlays",          d->iconShowOverlays);
+    group.writeEntry("IconView Font",               d->iconviewFont);
 
     group.writeEntry("ToolTips Font",             d->toolTipsFont);
     group.writeEntry("Show ToolTips",             d->showToolTips);
@@ -824,6 +828,16 @@ void AlbumSettings::setIconShowRating(bool val)
 bool AlbumSettings::getIconShowRating() const
 {
     return d->iconShowRating;
+}
+
+void AlbumSettings::setIconShowOverlays(bool val)
+{
+    d->iconShowOverlays = val;
+}
+
+bool AlbumSettings::getIconShowOverlays() const
+{
+    return d->iconShowOverlays;
 }
 
 void AlbumSettings::setExifRotate(bool val)
