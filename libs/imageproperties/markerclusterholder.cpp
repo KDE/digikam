@@ -952,7 +952,7 @@ MarkerClusterHolder::MarkerInfo::List MarkerClusterHolder::indicesToMarkers(cons
 MarkerClusterHolder::MarkerInfo::List MarkerClusterHolder::selectedMarkers() const
 {
     MarkerInfo::List result;
-    for (MarkerInfo::List::const_iterator it = d->markers.begin(); it!=d->markers.end(); ++it)
+    for (MarkerInfo::List::const_iterator it = d->markers.constBegin(); it!=d->markers.constEnd(); ++it)
     {
         if (it->isSelected())
             result << *it;
@@ -970,7 +970,7 @@ MarkerClusterHolder::MarkerInfo::List MarkerClusterHolder::soloMarkers() const
     if (!d->haveAnySoloMarkers)
         return result;
     
-    for (MarkerInfo::List::const_iterator it = d->markers.begin(); it!=d->markers.end(); ++it)
+    for (MarkerInfo::List::const_iterator it = d->markers.constBegin(); it!=d->markers.constEnd(); ++it)
     {
         if (it->isSolo())
             result << *it;
