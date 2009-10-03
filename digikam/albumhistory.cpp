@@ -144,7 +144,7 @@ void AlbumHistory::deleteAlbum(Album *album)
 
     //  Search all HistoryItems, with album and delete them
     AlbumStack::iterator iter = m_backwardStack->begin();
-    AlbumStack::iterator end = m_backwardStack->end();
+    AlbumStack::iterator end  = m_backwardStack->end();
     while(iter != end)
     {
         if((*iter)->album == album)
