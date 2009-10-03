@@ -245,10 +245,13 @@ void GPSSearchView::readConfig()
 
     KConfigGroup group        = config->group(QString("GPSSearch SideBar"));
 
-    const QList<int> splitterSizes = group.readEntry(QString("Splitter Sizes"), QList<int>());
-    if (!splitterSizes.isEmpty())
+    if (group.hasKey("SplitterState"))
     {
-        d->splitter->setSizes(splitterSizes);
+        const QByteArray splitterState = QByteArray::fromBase64(group.readEntry(QString("SplitterState"), QByteArray()));
+        if (!splitterState.isEmpty())
+        {
+            d->splitter->restoreState(splitterState);
+        }
     }
 
     d->gpsSearchWidget->readConfig(group);
@@ -259,7 +262,7 @@ void GPSSearchView::writeConfig()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("GPSSearch SideBar"));
 
-    group.writeEntry(QString("Splitter Sizes"), d->splitter->sizes());
+    group.writeEntry(QString("SplitterState"), d->splitter->saveState().toBase64());
     d->gpsSearchWidget->writeConfig(group);
 
     config->sync();
