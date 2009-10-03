@@ -42,9 +42,9 @@
 #include <marble/MarbleWidget.h>
 using namespace Marble;
 
-// local includes
+// Local includes
 
-#include <thumbnailloadthread.h>
+#include "thumbnailloadthread.h"
 
 Q_DECLARE_METATYPE(Digikam::GPSInfo)
 
