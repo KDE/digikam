@@ -116,6 +116,7 @@ public:
     void writeConfig(KConfigGroup& group);
 #ifdef HAVE_MARBLEWIDGET
     void setCustomPaintFunction(const MarkerClusterHolder::CustomPaintFunction customPaintFunction, void* const yourdata);
+    MarkerClusterHolder* getMarkerClusterHolder() const;
 #endif // HAVE_MARBLEWIDGET
     void setMultiMarkerSettings(const bool showSingleImages, const bool showGroupImages, const bool showHighestRatingFirst, const bool showOldestFirst, const bool showNumbers);
     void getMultiMarkerSettings(bool* const showSingleImages, bool* const showGroupImages, bool* const showHighestRatingFirst, bool* const showOldestFirst, bool* const showNumbers) const;
@@ -138,9 +139,9 @@ public Q_SLOTS:
     void slotSetFocusOnAddedItems(const bool doIt);
     void slotSetEnableTooltips(const bool doIt);
     void slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& pix);
-#ifdef HAVE_MARBLEWIDGET
-    MarkerClusterHolder* getMarkerClusterHolder() const;
-#endif // HAVE_MARBLEWIDGET
+//#ifdef HAVE_MARBLEWIDGET
+//    MarkerClusterHolder* getMarkerClusterHolder() const;
+//#endif // HAVE_MARBLEWIDGET
 
 protected:
 
