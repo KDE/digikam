@@ -40,7 +40,6 @@
 #include "config-digikam.h"
 #ifdef HAVE_MARBLEWIDGET
 #include <marble/MarbleWidget.h>
-#include "markerclusterholder.h"
 using namespace Marble;
 
 // local includes
