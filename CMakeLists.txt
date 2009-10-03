@@ -3,7 +3,6 @@ PROJECT(digikam)
 OPTION(ENABLE_GPHOTO2 "Build digiKam with libgphoto2 support (default=ON)" ON)
 OPTION(ENABLE_THEMEDESIGNER "Build digiKam theme designer (default=OFF)" OFF)
 OPTION(ENABLE_THUMBS_DB "Build digiKam with thumbnails database support (default=ON)" ON)
-OPTION(ENABLE_TESTS "Build digiKam test unit programs (default=OFF)" OFF)
 
 # ==================================================================================================
 # Information to update before to release this package.
@@ -1157,12 +1156,9 @@ ENDIF(MSVC)
     ADD_SUBDIRECTORY(showfoto)
     ADD_SUBDIRECTORY(imageplugins)
 
-    IF(ENABLE_TESTS OR KDE4_BUILD_TESTS)
-        SET(KDE4_BUILD_TESTS "ON" CACHE BOOL "enable KDE4 unit tests" FORCE)
+    IF(KDE4_BUILD_TESTS)
         ADD_SUBDIRECTORY(tests)
-    ELSE(ENABLE_TESTS OR KDE4_BUILD_TESTS)
-        SET(KDE4_BUILD_TESTS "OFF" CACHE BOOL "enable KDE4 unit tests" FORCE)
-    ENDIF(ENABLE_TESTS OR KDE4_BUILD_TESTS)
+    ENDIF(KDE4_BUILD_TESTS)
 
     IF(ENABLE_THEMEDESIGNER)
         ADD_SUBDIRECTORY(themedesigner)
