@@ -127,9 +127,9 @@ public:
         listView             = 0;
     }
 
-    QTreeWidget*                       listView;
-    AdvancedRenameWidget*              advancedRenameWidget;
-    AdvancedRenameDialog::NewNamesList newNamesList;
+    QTreeWidget*          listView;
+    AdvancedRenameWidget* advancedRenameWidget;
+    NewNamesList          newNamesList;
 };
 
 AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
@@ -246,7 +246,7 @@ void AdvancedRenameDialog::initDialog(int count)
     resize(minSize, (count > 1) ? minSize : 0);
 }
 
-AdvancedRenameDialog::NewNamesList AdvancedRenameDialog::newNames()
+NewNamesList AdvancedRenameDialog::newNames()
 {
     return d->newNamesList;
 }

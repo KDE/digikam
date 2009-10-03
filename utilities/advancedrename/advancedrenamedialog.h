@@ -73,16 +73,14 @@ private:
 
 // --------------------------------------------------------
 
+typedef QPair<ImageInfo, QString> NewNameInfo;
+typedef QList<NewNameInfo>        NewNamesList;
+
 class AdvancedRenameDialogPriv;
 
 class AdvancedRenameDialog : public KDialog
 {
     Q_OBJECT
-
-public:
-
-    typedef QPair<ImageInfo, QString> NewNameInfo;
-    typedef QList<NewNameInfo>        NewNamesList;
 
 public:
 

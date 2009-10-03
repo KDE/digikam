@@ -52,7 +52,7 @@ public:
     RenameThread(QObject* parent);
     ~RenameThread();
 
-    void addNewNames(const AdvancedRenameDialog::NewNamesList& newNames);
+    void addNewNames(const NewNamesList& newNames);
     void cancel();
 
 Q_SIGNALS:

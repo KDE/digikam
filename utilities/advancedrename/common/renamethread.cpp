@@ -46,12 +46,12 @@ public:
         running = false;
     }
 
-    bool                               running;
+    bool           running;
 
-    QMutex                             mutex;
-    QWaitCondition                     condVar;
+    QMutex         mutex;
+    QWaitCondition condVar;
 
-    AdvancedRenameDialog::NewNamesList todo;
+    NewNamesList   todo;
 };
 
 RenameThread::RenameThread(QObject* parent)
@@ -69,7 +69,7 @@ RenameThread::~RenameThread()
     delete d;
 }
 
-void RenameThread::addNewNames(const AdvancedRenameDialog::NewNamesList& newNames)
+void RenameThread::addNewNames(const NewNamesList& newNames)
 {
     QMutexLocker lock(&d->mutex);
     d->todo << newNames;
@@ -90,7 +90,7 @@ void RenameThread::run()
 
     while (d->running)
     {
-        AdvancedRenameDialog::NewNameInfo info;
+        NewNameInfo info;
         {
             QMutexLocker lock(&d->mutex);
             if (!d->todo.isEmpty())
