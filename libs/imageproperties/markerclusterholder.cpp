@@ -740,42 +740,37 @@ void MarkerClusterHolder::computeClusterDistances()
     // compute distances only if thumbnails will be used
     if (!d->clusterPixmapFunction)
         return;
-    
+
     const int nClusters = d->clusters.size();
-    int minDistX[nClusters];
-    int minDistY[nClusters];
-    for (int i=0; i<nClusters; ++i)
-    {
-        minDistX[i]=ClusterMaxPixmapSize.width();
-        minDistY[i]=ClusterMaxPixmapSize.height();
-    }
-    
+    QVector<int> minDistX(nClusters, ClusterMaxPixmapSize.width());
+    QVector<int> minDistY(nClusters, ClusterMaxPixmapSize.height());
+
     for (int idest = 0; idest<nClusters; ++idest)
     {
         const QPoint destClusterPos = d->clusters.at(idest).pixelPos;
-        
+
         // only compute distances for clusters behind idest, all distances before that were already calculated
         for (int isource = idest+1; isource<nClusters; ++isource)
         {
             const QPoint sourceClusterPos = d->clusters.at(isource).pixelPos;
-            
+
             const QPoint distance = sourceClusterPos - destClusterPos;
             const int distanceX = abs(distance.x());
             const int distanceY = abs(distance.y());
-            
+
             if (distanceX>distanceY)
             {
-                minDistX[idest] = qMin(minDistX[idest], distanceX);
-                minDistX[isource] = qMin(minDistX[isource], distanceX);
+                minDistX[idest] = qMin(minDistX.at(idest), distanceX);
+                minDistX[isource] = qMin(minDistX.at(isource), distanceX);
             }
             else
             {
-                minDistY[idest] = qMin(minDistY[idest], distanceY);
-                minDistY[isource] = qMin(minDistY[isource], distanceY);
+                minDistY[idest] = qMin(minDistY.at(idest), distanceY);
+                minDistY[isource] = qMin(minDistY.at(isource), distanceY);
             }
         }
-        
-        d->clusters[idest].maxSize = QSize(minDistX[idest], minDistY[idest]);
+
+        d->clusters[idest].maxSize = QSize(minDistX.at(idest), minDistY.at(idest));
         // kDebug(50003)<<QString("visual.addPoint(MyPoint(%1,%2)); // size: %3,%4 - %5 - cluster %6").arg(destClusterPos.x()).arg(destClusterPos.y()).arg(minDistX[idest]).arg(minDistY[idest]).arg(idest).arg(d->clusters.at(idest).markerCount())<<endl;
     }
 }
