@@ -181,74 +181,7 @@ void MarkerClusterHolder::addMarkers(const QList<MarkerInfo>& markerList)
     d->markerCountDirty = true;
     redrawIfNecessary();
 }
-
-/**
- * @brief Removes a range of markers
- * @param start Start index
- * @param end End index (inclusive!)
- */
-void MarkerClusterHolder::removeMarkers(const int start, const int end)
-{
-    for (int i = end; i>=start; --i)
-    {
-        d->markers.removeAt(i);
-    }
-    d->markerCountDirty = true;
-    redrawIfNecessary();
-}
-
-/**
- * @brief Removes a list of markers identitifed by their indices
- *
- * Note that the indices have to be sorted in ascending order
- *
- * @param markerIndices List of indices of markers to be remove
- */
-void MarkerClusterHolder::removeMarkers(const QIntList& markerIndices)
-{
-    for (int i = markerIndices.size()-1; i>=0; --i)
-    {
-        d->markers.removeAt(markerIndices.at(i));
-    }
-    d->markerCountDirty = true;
-    redrawIfNecessary();
-}
-
-/**
- * @brief Removes a list of markers.
- *
- * This function is a slow convenience function. Try to use the index based
- * version instead!
- *
- * @param markerList List of markers to be remove
- */
-void MarkerClusterHolder::removeMarkers(const QList<MarkerInfo>& markerList)
-{
-    MarkerInfo::List markersToDelete = markerList;
-    int i = 0;
-    while ((i<d->markers.count())&&!markersToDelete.isEmpty())
-    {
-        bool deletedOne = false;
-        for (int di = 0; di<markersToDelete.count(); ++di)
-        {
-            if (markersEqual(d->markers.at(i), markersToDelete.at(di)))
-            {
-                d->markers.removeAt(i);
-                markersToDelete.removeAt(di);
-                deletedOne = true;
-                break;
-            }
-        }
-        if (!deletedOne)
-        {
-            ++i;
-        }
-    }
-    
-    d->markerCountDirty = true;
-    redrawIfNecessary();
-}
-
+ 
 /**
  * @brief Returns the label for this cluster
  * @return The label for this cluster

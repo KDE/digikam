@@ -358,9 +358,6 @@ public:
     ~MarkerClusterHolder();
     void addMarker(const MarkerInfo& marker);
     void addMarkers(const QList<MarkerInfo>& markerList);
-    void removeMarkers(const QList<MarkerInfo>& markerList);
-    void removeMarkers(const QIntList& markerIndices);
-    void removeMarkers(const int start, const int end);
     void paintOnMarble(Marble::GeoPainter* const painter);
     void clear();
     void reorderClusters();
