@@ -192,11 +192,11 @@ void ParseResults::debug()
 {
     foreach (const ResultsKey& key, m_results.keys())
     {
-        QString t = token(key);
-        QString r = result(key);
+        QString _token  = token(key);
+        QString _result = result(key);
 
         kDebug(digiKamAreaCode) << "(" << key.first << ":" << key.second << ") => "
-                      << "(" << t         << ":" << r          << ")";
+                                << "(" << _token    << ":" << _result    << ")";
     }
 }
 
