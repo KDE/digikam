@@ -258,9 +258,10 @@ void SearchFolderView::slotAlbumDeleted(Album* a)
 
     SearchFolderItem* item = (SearchFolderItem*) album->extraData(this);
     if (item)
+    {
         delete item;
-
-    setCurrentItem(m_currentSearchViewSearchItem);
+        setCurrentItem(m_currentSearchViewSearchItem);
+    }
 }
 
 void SearchFolderView::slotSelectionChanged()
