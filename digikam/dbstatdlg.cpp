@@ -94,16 +94,6 @@ DBStatDlg::DBStatDlg(QWidget *parent)
     Q_UNUSED(albumItem)
     Q_UNUSED(tagsItem)
 
-#ifdef USE_THUMBS_DB
-
-    QTreeWidgetItem *spacer2 = new QTreeWidgetItem(listView(), QStringList());
-    QTreeWidgetItem *db      = new QTreeWidgetItem(listView(), QStringList() << i18n("Using ThumbsDB")
-                                                                             << QString(i18n("yes")));
-    Q_UNUSED(spacer2)
-    Q_UNUSED(db)
-
-#endif /* USE_THUMBS_DB */
-
     kapp->restoreOverrideCursor();
 }
 
