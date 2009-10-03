@@ -58,7 +58,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 047 ==> 207994 : Refresh meta data view on right side after exif import.
 048 ==> 207911 : Crash after trying to re-open Image Editor containing an unsaved RAW image.
 049 ==> 204080 : It crashed when it was closing.
-050 ==> 
+050 ==> 198554 : Crash on making thumbnails, every time.
+051 ==>
 
 *********************************************************************************************************
 digiKam 1.0.0-beta4 - Release date: 2009-08-30
