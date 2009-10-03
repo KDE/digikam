@@ -16,7 +16,7 @@ if( QTONLY )
                                            ${QT_QTNETWORK_LIBRARY}
                                            ${QT_QTMAIN_LIBRARY}
                                            ${${_target_name}_LIBS}
-                                           marblewidget )
+                                           ${LIBMARBLEWIDGET_LIBRARY} )
     install( TARGETS ${_target_name} DESTINATION ${MARBLE_PLUGIN_INSTALL_PATH} )
 else( QTONLY )
     kde4_add_plugin( ${_target_name} ${_src} )
@@ -31,7 +31,7 @@ else( QTONLY )
                                            ${KDE4_KIO_LIBRARY}
                                            ${QT_QTMAIN_LIBRARY}
                                            ${${_target_name}_LIBS}
-                                           marblewidget )
+                                           ${LIBMARBLEWIDGET_LIBRARY} )
     install( TARGETS ${_target_name} DESTINATION ${MARBLE_PLUGIN_INSTALL_PATH} )
 endif( QTONLY )
 
@@ -61,7 +61,7 @@ if( QTONLY )
                                            ${QT_QTNETWORK_LIBRARY}
                                            ${QT_QTMAIN_LIBRARY}
                                            ${${_target_name}_LIBS}
-                                           marblewidget )
+                                           ${LIBMARBLEWIDGET_LIBRARY} )
     install( TARGETS ${_target_name} DESTINATION ${QT_PLUGINS_DIR}/designer )
 else( QTONLY )
     kde4_add_plugin( ${_target_name} ${_src} )
@@ -76,7 +76,7 @@ else( QTONLY )
                                            ${KDE4_KIO_LIBRARY}
                                            ${QT_QTMAIN_LIBRARY}
                                            ${${_target_name}_LIBS}
-                                           marblewidget )
+                                           ${LIBMARBLEWIDGET_LIBRARY} )
     install( TARGETS ${_target_name} DESTINATION ${PLUGIN_INSTALL_DIR}/plugins/designer )
 endif( QTONLY )
 
