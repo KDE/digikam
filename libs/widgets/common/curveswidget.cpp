@@ -49,7 +49,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kcursor.h>
 #include <klocale.h>
 #include <kiconloader.h>
@@ -58,6 +57,7 @@
 
 #include "imagehistogram.h"
 #include "imagecurves.h"
+#include "debug.h"
 #include "globals.h"
 
 namespace Digikam

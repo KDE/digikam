@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+
 
 
 namespace DigikamLensDistortionImagesPlugin

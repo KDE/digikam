@@ -35,7 +35,6 @@
 // KDE includes
 
 #include <kapplication.h>
-#include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmenu.h>
@@ -63,6 +62,7 @@
 #include "statusprogressbar.h"
 #include "syncjob.h"
 #include "tageditdlg.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -354,7 +354,7 @@ void TagFolderView::slotAlbumAdded(Album *album)
 
         if (!parent)
         {
-            kWarning(50003) << " Failed to find parent for Tag "
+            kWarning(digiKamAreaCode) << " Failed to find parent for Tag "
                             << tag->title();
             return;
         }
@@ -872,7 +872,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
         srcAlbum = d->albumMan->findTAlbum(albumID);
         if (!srcAlbum)
         {
-            kWarning(50003) << "Could not find source album of drag";
+            kWarning(digiKamAreaCode) << "Could not find source album of drag";
             return;
         }
 

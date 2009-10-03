@@ -39,7 +39,6 @@
 
 #include <kapplication.h>
 #include <kconfig.h>
-#include <kdebug.h>
 #include <kdialog.h>
 #include <khbox.h>
 #include <kiconloader.h>
@@ -58,6 +57,7 @@
 #include "searchtextbar.h"
 #include "gpssearchwidget.h"
 #include "gpssearchfolderview.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -94,7 +94,7 @@ public:
     GPSSearchFolderView *gpsSearchFolderView;
 
     QSplitter           *splitter;
-    
+
     GPSSearchWidget     *gpsSearchWidget;
     WorldMapThemeBtn    *mapThemeBtn;
 };
@@ -177,12 +177,12 @@ GPSSearchView::GPSSearchView(QWidget *parent)
     vlayBottom->addWidget(d->searchGPSBar);
     vlayBottom->setMargin(0);
     vlayBottom->setSpacing(KDialog::spacingHint());
-    
+
     d->splitter->addWidget(frameTop);
     d->splitter->addWidget(frameBottom);
-    
+
     // ---------------------------------------------------------------
-    
+
     vlay->addWidget(d->splitter);
 
     readConfig();
@@ -212,10 +212,10 @@ GPSSearchView::GPSSearchView(QWidget *parent)
 
     connect(d->gpsSearchWidget, SIGNAL(signalNewSelectionFromMap()),
             this, SLOT(slotSelectionChanged()));
-            
+
     connect(d->gpsSearchWidget, SIGNAL(signalSelectedItems(const GPSInfoList)),
             this, SLOT(slotMapSelectedItems(const GPSInfoList&)));
-            
+
     connect(d->gpsSearchWidget, SIGNAL(signalSoloItems(const GPSInfoList)),
             this, SLOT(slotMapSoloItems(const GPSInfoList&)));
 
@@ -242,15 +242,15 @@ GPSSearchView::~GPSSearchView()
 void GPSSearchView::readConfig()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    
+
     KConfigGroup group        = config->group(QString("GPSSearch SideBar"));
-    
+
     const QList<int> splitterSizes = group.readEntry(QString("Splitter Sizes"), QList<int>());
     if (!splitterSizes.isEmpty())
     {
         d->splitter->setSizes(splitterSizes);
     }
-    
+
     d->gpsSearchWidget->readConfig(group);
 }
 
@@ -258,10 +258,10 @@ void GPSSearchView::writeConfig()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("GPSSearch SideBar"));
-    
+
     group.writeEntry(QString("Splitter Sizes"), d->splitter->sizes());
     d->gpsSearchWidget->writeConfig(group);
-    
+
     config->sync();
 }
 
@@ -310,7 +310,7 @@ void GPSSearchView::slotSelectionChanged()
 void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
 {
     AlbumManager::instance()->setCurrentAlbum(0);
-    
+
     // clear positions shown on the map:
     d->gpsSearchWidget->clearGPSPositions();
 
@@ -323,7 +323,7 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
     // as left/top, right/bottom rectangle.
     QList<double> coordinates = d->gpsSearchWidget->selectionCoordinates();
 
-    kDebug(50003) << "West, North, East, South: " << coordinates;
+    kDebug(digiKamAreaCode) << "West, North, East, South: " << coordinates;
 
     SearchXmlWriter writer;
     writer.writeGroup();
@@ -345,7 +345,7 @@ void GPSSearchView::slotAlbumSelected(SAlbum* salbum)
 
     // clear positions shown on the map:
     d->gpsSearchWidget->clearGPSPositions();
-    
+
     AlbumManager::instance()->setCurrentAlbum(salbum);
 
     SearchXmlReader reader(salbum->query());
@@ -485,7 +485,7 @@ void GPSSearchView::slotDigikamViewImageSelected(const ImageInfoList &selectedIm
             gps.rating    = inf.rating();
             gps.url       = inf.fileUrl();
             list << gps;
-            kDebug(50003)<<gps.url;
+            kDebug(digiKamAreaCode)<<gps.url;
         }
     }
 
@@ -502,7 +502,7 @@ void GPSSearchView::slotMapSelectedItems(const GPSInfoList& gpsList)
     for (GPSInfoList::const_iterator it = gpsList.constBegin(); it!=gpsList.constEnd(); ++it)
     {
         urlList << it->url;
-        kDebug(50003)<<it->url;
+        kDebug(digiKamAreaCode)<<it->url;
     }
     emit(signalMapSelectedItems(urlList));
 }

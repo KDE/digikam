@@ -49,7 +49,6 @@ extern "C"
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kapplication.h>
 #include <kcursor.h>
 #include <kio/job.h>
@@ -64,6 +63,7 @@ extern "C"
 #include "album.h"
 #include "albummanager.h"
 #include "albumsettings.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -576,7 +576,7 @@ void AlbumLister::slotResult(KJob* job)
 
     if (job->error())
     {
-        kWarning(50003) << "Failed to list url: " << job->errorString();
+        kWarning(digiKamAreaCode) << "Failed to list url: " << job->errorString();
         d->itemMap.clear();
         d->invalidatedItems.clear();
         return;

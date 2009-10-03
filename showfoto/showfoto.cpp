@@ -63,7 +63,6 @@ extern "C"
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
@@ -118,6 +117,7 @@ extern "C"
 #include "thumbbar.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
+#include "debug.h"
 
 namespace ShowFoto
 {
@@ -877,7 +877,7 @@ void ShowFoto::openFolder(const KUrl& url)
     patterns.append (" ");
     patterns.append (filter.toUpper());
 
-    kDebug(50005) << "patterns=" << patterns;
+    kDebug(showFotoAreaCode) << "patterns=" << patterns;
 
     // Get all image files from directory.
 
@@ -1087,7 +1087,7 @@ bool ShowFoto::save()
 {
     if (!d->currentItem)
     {
-        kWarning(50005) << "This should not happen";
+        kWarning(showFotoAreaCode) << "This should not happen";
         return true;
     }
 
@@ -1104,7 +1104,7 @@ bool ShowFoto::saveAs()
 {
     if (!d->currentItem)
     {
-        kWarning(50005) << "This should not happen";
+        kWarning(showFotoAreaCode) << "This should not happen";
         return false;
     }
 

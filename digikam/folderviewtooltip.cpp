@@ -32,7 +32,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+
 #include <klocale.h>
 #include <kglobal.h>
 #include <kdeversion.h>

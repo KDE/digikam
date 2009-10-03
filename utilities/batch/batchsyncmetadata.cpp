@@ -32,7 +32,7 @@
 // KDE includes
 
 #include <kapplication.h>
-#include <kdebug.h>
+
 #include <klocale.h>
 
 // Local includes

@@ -39,10 +39,6 @@
 #include <QStringList>
 #include <QSet>
 
-// KDE includes
-
-#include <kdebug.h>
-
 // LibKDcraw includes
 
 #include <libkdcraw/rawfiles.h>
@@ -59,6 +55,7 @@
 #include "imagescanner.h"
 #include "collectionscannerhints.h"
 #include "collectionscannerobserver.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -272,14 +269,14 @@ void CollectionScanner::partialScan(const QString& albumRoot, const QString& alb
     if (album.isEmpty())
     {
         // If you want to scan the album root, pass "/"
-        kWarning(50003) << "partialScan(QString, QString) called with empty album";
+        kWarning(digiKamAreaCode) << "partialScan(QString, QString) called with empty album";
         return;
     }
 
     if (DatabaseAccess().backend()->isInTransaction())
     {
         // Install ScanController::instance()->suspendCollectionScan around your DatabaseTransaction
-        kError(50003) << "Detected an active database transaction when starting a collection scan. "
+        kError(digiKamAreaCode) << "Detected an active database transaction when starting a collection scan. "
                          "Please report this error.";
         return;
     }
@@ -291,7 +288,7 @@ void CollectionScanner::partialScan(const QString& albumRoot, const QString& alb
 
     if (location.isNull())
     {
-        kWarning(50003) << "Did not find a CollectionLocation for album root path " << albumRoot;
+        kWarning(digiKamAreaCode) << "Did not find a CollectionLocation for album root path " << albumRoot;
         return;
     }
 
@@ -338,14 +335,14 @@ void CollectionScanner::scanFile(const QString& albumRoot, const QString& album,
 {
     if (album.isEmpty() || fileName.isEmpty())
     {
-        kWarning(50003) << "scanFile(QString, QString, QString) called with empty album or empty filename";
+        kWarning(digiKamAreaCode) << "scanFile(QString, QString, QString) called with empty album or empty filename";
         return;
     }
 
     if (DatabaseAccess().backend()->isInTransaction())
     {
         // Install ScanController::instance()->suspendCollectionScan around your DatabaseTransaction
-        kError(50003) << "Detected an active database transaction when starting a collection file scan. "
+        kError(digiKamAreaCode) << "Detected an active database transaction when starting a collection file scan. "
                          "Please report this error.";
         return;
     }
@@ -354,7 +351,7 @@ void CollectionScanner::scanFile(const QString& albumRoot, const QString& album,
 
     if (location.isNull())
     {
-        kWarning(50003) << "Did not find a CollectionLocation for album root path " << albumRoot;
+        kWarning(digiKamAreaCode) << "Did not find a CollectionLocation for album root path " << albumRoot;
         return;
     }
 
@@ -363,7 +360,7 @@ void CollectionScanner::scanFile(const QString& albumRoot, const QString& album,
 
     if (!fi.exists())
     {
-        kWarning(50003) << "File given to scan does not exist" << albumRoot << album << fileName;
+        kWarning(digiKamAreaCode) << "File given to scan does not exist" << albumRoot << album << fileName;
         return;
     }
 
@@ -411,7 +408,7 @@ void CollectionScanner::scanFile(const ImageInfo& info, FileScanMode mode)
     if (DatabaseAccess().backend()->isInTransaction())
     {
         // Install ScanController::instance()->suspendCollectionScan around your DatabaseTransaction
-        kError(50003) << "Detected an active database transaction when starting a collection file scan. "
+        kError(digiKamAreaCode) << "Detected an active database transaction when starting a collection file scan. "
                          "Please report this error.";
         return;
     }
@@ -556,7 +553,7 @@ int CollectionScanner::checkAlbum(const CollectionLocation& location, const QStr
         CollectionScannerHints::Album src = d->albumHints.value(CollectionScannerHints::DstPath(location.id(), album));
         if (!src.isNull())
         {
-            //kDebug(50003) << "Identified album" << src.albumId << "as source of new album" << fi.filePath();
+            //kDebug(digiKamAreaCode) << "Identified album" << src.albumId << "as source of new album" << fi.filePath();
             DatabaseAccess().db()->copyAlbumProperties(src.albumId, albumID);
             d->establishedSourceAlbums[albumID] = src.albumId;
         }
@@ -576,7 +573,7 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
 
     if ( !dir.exists() || !dir.isReadable() )
     {
-        kWarning(50003) << "Folder does not exist or is not readable: "
+        kWarning(digiKamAreaCode) << "Folder does not exist or is not readable: "
                         << dir.path();
         return;
     }
@@ -635,7 +632,7 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
             }
             else
             {
-                //kDebug(50003) << "Adding item " << fi->fileName();
+                //kDebug(digiKamAreaCode) << "Adding item " << fi->fileName();
 
                 scanNewFile(*fi, albumID);
 
@@ -909,7 +906,7 @@ void CollectionScanner::removeStaleAlbums()
     QList<AlbumShortInfo>::const_iterator it;
     for (it = m_foldersToBeDeleted.constBegin(); it != m_foldersToBeDeleted.constEnd(); ++it)
     {
-        kDebug(50003) << "Removing album " << (*it).albumRoot + '/' + (*it).url;
+        kDebug(digiKamAreaCode) << "Removing album " << (*it).albumRoot + '/' + (*it).url;
         access.db()->deleteAlbum((*it).id);
     }
 }
@@ -937,7 +934,7 @@ void CollectionScanner::removeStaleFiles()
     QList< QPair<QString,int> >::const_iterator it;
     for (it = m_filesToBeDeleted.constBegin(); it != m_filesToBeDeleted.constEnd(); ++it)
     {
-        kDebug(50003) << "Removing: " << (*it).first << " in "
+        kDebug(digiKamAreaCode) << "Removing: " << (*it).first << " in "
                 << (*it).second;
         access.db()->deleteItem( (*it).second, (*it).first );
     }
@@ -975,7 +972,7 @@ void CollectionScanner::scan(const QString& folderPath)
 
     if (albumRoot.isNull())
     {
-        kWarning(50003) << "scanAlbums(QString): folder " << folderPath << " not found in collection.";
+        kWarning(digiKamAreaCode) << "scanAlbums(QString): folder " << folderPath << " not found in collection.";
         return;
     }
 
@@ -1031,7 +1028,7 @@ void CollectionScanner::scanAlbum(const QString& albumRoot, const QString& album
     QDir dir( albumRoot + album );
     if ( !dir.exists() || !dir.isReadable() )
     {
-        kWarning(50003) << "Folder does not exist or is not readable: "
+        kWarning(digiKamAreaCode) << "Folder does not exist or is not readable: "
                         << dir.path();
         return;
     }
@@ -1075,7 +1072,7 @@ void CollectionScanner::scanAlbum(const QString& albumRoot, const QString& album
             }
             else
             {
-                kDebug(50003) << "Adding item " << fi->fileName();
+                kDebug(digiKamAreaCode) << "Adding item " << fi->fileName();
                 addItem(albumID, albumRoot, album, fi->fileName());
             }
         }
@@ -1124,7 +1121,7 @@ void CollectionScanner::updateItemsWithoutDate()
 
             if (albumID <= 0)
             {
-                kWarning(50003) << "Album ID == -1: " << albumURL;
+                kWarning(digiKamAreaCode) << "Album ID == -1: " << albumURL;
             }
 
             if (fi.exists())
@@ -1268,7 +1265,7 @@ void CollectionScanner::scanAlbum(const QString& albumRoot, const QString& album
 
 void CollectionScanner::scanOneAlbum(const QString& albumRoot, const QString& album)
 {
-    kDebug(50003) << "CollectionScanner::scanOneAlbum " << albumRoot << "/" << album;
+    kDebug(digiKamAreaCode) << "CollectionScanner::scanOneAlbum " << albumRoot << "/" << album;
     QDir dir(albumRoot + album);
     if (!dir.exists() || !dir.isReadable())
     {
@@ -1282,7 +1279,7 @@ void CollectionScanner::scanOneAlbum(const QString& albumRoot, const QString& al
 
         // get sub albums, but only direct subalbums (Album/ *, not Album/ * / *)
         currAlbumList = DatabaseAccess().db()->getSubalbumsForPath(albumRoot, album, true);
-        kDebug(50003) << "currAlbumList is " << currAlbumList;
+        kDebug(digiKamAreaCode) << "currAlbumList is " << currAlbumList;
 
         const QFileInfoList* infoList = dir.entryInfoList(QDir::Dirs);
         if (!infoList)
@@ -1314,7 +1311,7 @@ void CollectionScanner::scanOneAlbum(const QString& albumRoot, const QString& al
         for (QStringList::iterator it = newAlbumList.begin();
              it != newAlbumList.end(); ++it)
         {
-            kDebug(50003) << "New Album: " << *it;
+            kDebug(digiKamAreaCode) << "New Album: " << *it;
 
             QFileInfo fi(albumRoot + *it);
             DatabaseAccess().db()->addAlbum(albumRoot, *it, QString(), fi.lastModified().date(), QString());
@@ -1395,7 +1392,7 @@ void CollectionScanner::removeInvalidAlbums(const QString& albumRoot)
     DatabaseTransaction transaction(&access);
     for (QValueList<AlbumShortInfo>::iterator it = toBeDeleted.begin(); it != toBeDeleted.end(); ++it)
     {
-        kDebug(50003) << "Removing album " << (*it).albumRoot + '/' + (*it).url;
+        kDebug(digiKamAreaCode) << "Removing album " << (*it).albumRoot + '/' + (*it).url;
         access.db()->deleteAlbum((*it).id);
     }
 }

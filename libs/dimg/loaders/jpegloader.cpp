@@ -44,14 +44,11 @@ extern "C"
 #include <QFile>
 #include <QByteArray>
 
-// KDE includes
-
-#include <kdebug.h>
-
 // Local includes
 
 #include "dimg.h"
 #include "dimgloaderobserver.h"
+#include "debug.h"
 
 #ifdef Q_CC_MSVC
 #include "jpegwin.h"
@@ -70,7 +67,7 @@ void JPEGLoader::dimg_jpeg_error_exit(j_common_ptr cinfo)
     (*cinfo->err->format_message)(cinfo, buffer);
 
 //#ifdef ENABLE_DEBUG_MESSAGES
-    kError(50003) << buffer;
+    kError(digiKamAreaCode) << buffer;
 //#endif
 
     longjmp(myerr->setjmp_buffer, 1);
@@ -82,7 +79,7 @@ void JPEGLoader::dimg_jpeg_emit_message(j_common_ptr cinfo, int msg_level)
     (*cinfo->err->format_message)(cinfo, buffer);
 
 #ifdef ENABLE_DEBUG_MESSAGES
-    kDebug(50003) << buffer << " (" << msg_level << ")";
+    kDebug(digiKamAreaCode) << buffer << " (" << msg_level << ")";
 #else
     Q_UNUSED(msg_level);
 #endif
@@ -94,7 +91,7 @@ void JPEGLoader::dimg_jpeg_output_message(j_common_ptr cinfo)
     (*cinfo->err->format_message)(cinfo, buffer);
 
 #ifdef ENABLE_DEBUG_MESSAGES
-    kDebug(50003) << buffer;
+    kDebug(digiKamAreaCode) << buffer;
 #endif
 }
 
@@ -299,7 +296,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         if (cinfo.rec_outbuf_height > 16)
         {
             jpeg_destroy_decompress(&cinfo);
-            kDebug(50003) << "Height of JPEG scanline buffer out of range!";
+            kDebug(digiKamAreaCode) << "Height of JPEG scanline buffer out of range!";
             delete cleanupData;
             return false;
         }
@@ -311,7 +308,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             ))
         {
             jpeg_destroy_decompress(&cinfo);
-            kDebug(50003)
+            kDebug(digiKamAreaCode)
                     << "JPEG colorspace ("
                     << cinfo.out_color_space
                     << ") or Number of JPEG color components ("
@@ -327,7 +324,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         if (!data)
         {
             jpeg_destroy_decompress(&cinfo);
-            kDebug(50003) << "Cannot allocate memory!";
+            kDebug(digiKamAreaCode) << "Cannot allocate memory!";
             delete cleanupData;
             return false;
         }
@@ -338,7 +335,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         if (!dest)
         {
             jpeg_destroy_decompress(&cinfo);
-            kDebug(50003) << "Cannot allocate memory!";
+            kDebug(digiKamAreaCode) << "Cannot allocate memory!";
             delete cleanupData;
             return false;
         }
@@ -627,7 +624,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     {
         case 1:  // 2x1, 1x1, 1x1 (4:2:2) : Medium
         {
-            kDebug(50003) << "Using LibJPEG medium chroma-subsampling (4:2:2)";
+            kDebug(digiKamAreaCode) << "Using LibJPEG medium chroma-subsampling (4:2:2)";
             cinfo.comp_info[0].h_samp_factor = 2;
             cinfo.comp_info[0].v_samp_factor = 1;
             cinfo.comp_info[1].h_samp_factor = 1;
@@ -638,7 +635,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         }
         case 2:  // 2x2, 1x1, 1x1 (4:1:1) : High
         {
-            kDebug(50003) << "Using LibJPEG high chroma-subsampling (4:1:1)";
+            kDebug(digiKamAreaCode) << "Using LibJPEG high chroma-subsampling (4:1:1)";
             cinfo.comp_info[0].h_samp_factor = 2;
             cinfo.comp_info[0].v_samp_factor = 2;
             cinfo.comp_info[1].h_samp_factor = 1;
@@ -649,7 +646,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
         }
         default:  // 1x1 1x1 1x1 (4:4:4) : None
         {
-            kDebug(50003) << "Using LibJPEG none chroma-subsampling (4:4:4)";
+            kDebug(digiKamAreaCode) << "Using LibJPEG none chroma-subsampling (4:4:4)";
             cinfo.comp_info[0].h_samp_factor = 1;
             cinfo.comp_info[0].v_samp_factor = 1;
             cinfo.comp_info[1].h_samp_factor = 1;
@@ -663,7 +660,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     jpeg_set_quality(&cinfo, quality, true);
     jpeg_start_compress(&cinfo, true);
 
-    kDebug(50003) << "Using LibJPEG quality compression value: " << quality;
+    kDebug(digiKamAreaCode) << "Using LibJPEG quality compression value: " << quality;
 
     if (observer)
         observer->progressInfo(m_image, 0.1F);

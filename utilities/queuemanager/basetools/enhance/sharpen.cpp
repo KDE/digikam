@@ -35,7 +35,7 @@
 
 #include <kvbox.h>
 #include <klocale.h>
-#include <kdebug.h>
+
 #include <kiconloader.h>
 
 // LibKDcraw includes

@@ -40,7 +40,6 @@
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kconfig.h>
-#include <kdebug.h>
 #include <kedittoolbar.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -91,6 +90,7 @@
 #include "imagedialog.h"
 #include "thumbnailsize.h"
 #include "queuemgrwindow_p.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -1123,7 +1123,7 @@ bool QueueMgrWindow::checkTargetAlbum(int queueId)
 
     QString queueName              = d->queuePool->queueTitle(queueId);
     KUrl    processedItemsAlbumUrl = queue->settings().targetUrl;
-    kDebug(50003) << "Target album for queue " << queueName << " is: " << processedItemsAlbumUrl.toLocalFile();
+    kDebug(digiKamAreaCode) << "Target album for queue " << queueName << " is: " << processedItemsAlbumUrl.toLocalFile();
 
     if (processedItemsAlbumUrl.isEmpty())
     {

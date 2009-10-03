@@ -25,7 +25,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+
 #include <kio/deletejob.h>
 #include <klocale.h>
 

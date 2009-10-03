@@ -34,7 +34,7 @@
 #include <kmessagebox.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kdebug.h>
+
 #include <kapplication.h>
 
 // Local includes

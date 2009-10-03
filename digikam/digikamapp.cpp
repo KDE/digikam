@@ -48,7 +48,6 @@
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kapplication.h>
-#include <kdebug.h>
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
@@ -135,6 +134,7 @@
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
 #include "digikamapp_p.h"
+#include "debug.h"
 
 using KIO::Job;
 using KIO::UDSEntryList;
@@ -1722,7 +1722,7 @@ void DigikamApp::openSolidCamera(const QString& udi, const QString& cameraLabel)
         QString model, port;
         if (CameraList::findConnectedCamera(vendorId, productId, model, port))
         {
-            kDebug(50003) << "Found camera from ids " << vendorId << " " << productId
+            kDebug(digiKamAreaCode) << "Found camera from ids " << vendorId << " " << productId
                           << " camera is: " << model << " at " << port;
 
             // the CameraUI will delete itself when it has finished
@@ -1736,7 +1736,7 @@ void DigikamApp::openSolidCamera(const QString& udi, const QString& cameraLabel)
         }
         else
         {
-            kError(50003) << "Failed to detect camera with GPhoto2 from Solid information";
+            kError(digiKamAreaCode) << "Failed to detect camera with GPhoto2 from Solid information";
         }
     }
 }
@@ -1846,7 +1846,7 @@ bool DigikamApp::checkSolidCamera(const Solid::Device& cameraDevice)
 
     QStringList drivers = camera->supportedDrivers();
 
-    kDebug(50003) << "fillSolidMenus: Found Camera " << cameraDevice.vendor() + ' ' + cameraDevice.product() << " protocols " << camera->supportedProtocols() << " drivers " << camera->supportedDrivers("ptp");
+    kDebug(digiKamAreaCode) << "fillSolidMenus: Found Camera " << cameraDevice.vendor() + ' ' + cameraDevice.product() << " protocols " << camera->supportedProtocols() << " drivers " << camera->supportedDrivers("ptp");
 
     // We handle gphoto2 cameras in this loop
     if (! (camera->supportedDrivers().contains("gphoto") || camera->supportedProtocols().contains("ptp")) )
@@ -1855,7 +1855,7 @@ bool DigikamApp::checkSolidCamera(const Solid::Device& cameraDevice)
     QVariant driverHandle = camera->driverHandle("gphoto");
     if (!driverHandle.canConvert(QVariant::List))
     {
-        kWarning(50003) << "Solid returns unsupported driver handle for gphoto2";
+        kWarning(digiKamAreaCode) << "Solid returns unsupported driver handle for gphoto2";
         return false;
     }
     QList<QVariant> driverHandleList = driverHandle.toList();
@@ -1864,7 +1864,7 @@ bool DigikamApp::checkSolidCamera(const Solid::Device& cameraDevice)
         || !driverHandleList[2].canConvert(QVariant::Int)
         )
     {
-        kWarning(50003) << "Solid returns unsupported driver handle for gphoto2";
+        kWarning(digiKamAreaCode) << "Solid returns unsupported driver handle for gphoto2";
         return false;
     }
 
@@ -2443,13 +2443,13 @@ void DigikamApp::slotKipiPluginPlug()
                         break;
                     }
                     default:
-                        kDebug(50003) << "No menu found for a plugin!";
+                        kDebug(digiKamAreaCode) << "No menu found for a plugin!";
                         break;
                 }
             }
             else
             {
-                kDebug(50003) << "Plugin '" << actionName << "' disabled.";
+                kDebug(digiKamAreaCode) << "Plugin '" << actionName << "' disabled.";
             }
         }
     }

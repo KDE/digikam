@@ -34,7 +34,7 @@
 // KDE includes
 
 #include <kcursor.h>
-#include <kdebug.h>
+
 #include <klocale.h>
 
 

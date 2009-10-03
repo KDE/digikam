@@ -32,7 +32,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kfiledialog.h>
@@ -54,6 +53,7 @@
 #include "loadingdescription.h"
 #include "thumbnailsize.h"
 #include "thumbnailloadthread.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -267,7 +267,7 @@ ImageDialog::ImageDialog(QWidget* parent, const KUrl& url, bool singleSelect, co
 
     d->fileFormats = patternList.join("\n");
 
-    kDebug(50003) << "file formats=" << d->fileFormats;
+    kDebug(digiKamAreaCode) << "file formats=" << d->fileFormats;
 
     QPointer<KFileDialog> dlg   = new KFileDialog(url, d->fileFormats, parent);
     ImageDialogPreview *preview = new ImageDialogPreview(dlg);

@@ -49,7 +49,6 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kdebug.h>
 #include <kglobal.h>
 #include <ksharedconfig.h>
 
@@ -57,6 +56,7 @@
 
 #include "iccprofile.h"
 #include "icctransform.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -205,10 +205,10 @@ IccProfile IccSettingsPriv::profileFromWindowSystem(QWidget *widget)
         QByteArray bytes = QByteArray::fromRawData((char*)str, (quint32)nitems);
 
         profile = bytes;
-        kDebug(50003) << "Found X.org XICC monitor profile" << profile.description();
+        kDebug(digiKamAreaCode) << "Found X.org XICC monitor profile" << profile.description();
     }
     //else
-      //  kDebug(50003) << "No X.org XICC profile installed for screen" << screenNumber;
+      //  kDebug(digiKamAreaCode) << "No X.org XICC profile installed for screen" << screenNumber;
 
     // insert to cache even if null
     {
@@ -327,7 +327,7 @@ void IccSettingsPriv::scanDirectory(const QString& path, const QStringList& filt
     {
         if (info.isFile())
         {
-            //kDebug(50003) << info.filePath() << (info.exists() && info.isReadable());
+            //kDebug(digiKamAreaCode) << info.filePath() << (info.exists() && info.isReadable());
             IccProfile profile(info.filePath());
             if (profile.open())
             {

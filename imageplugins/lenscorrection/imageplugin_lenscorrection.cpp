@@ -30,14 +30,15 @@
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
 #include <klocale.h>
 
 // Local includes
 
+#include "debug.h"
 #include "config-digikam.h"
+
 #ifdef HAVE_LENSFUN
 #include "autocorrectiontool.h"
 using namespace DigikamAutoCorrectionImagesPlugin;
@@ -79,7 +80,7 @@ ImagePlugin_LensCorrection::ImagePlugin_LensCorrection(QObject *parent, const QV
 
     setXMLFile("digikamimageplugin_lenscorrection_ui.rc");
 
-    kDebug(50006) << "ImagePlugin_LensCorrection plugin loaded";
+    kDebug(imagePluginsAreaCode) << "ImagePlugin_LensCorrection plugin loaded";
 }
 
 ImagePlugin_LensCorrection::~ImagePlugin_LensCorrection()

@@ -30,7 +30,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
@@ -42,6 +41,7 @@
 // Local includes
 
 #include "distortionfxtool.h"
+#include "debug.h"
 
 using namespace DigikamDistortionFXImagesPlugin;
 
@@ -59,7 +59,7 @@ ImagePlugin_DistortionFX::ImagePlugin_DistortionFX(QObject *parent, const QVaria
 
     setXMLFile( "digikamimageplugin_distortionfx_ui.rc" );
 
-    kDebug(50006) << "ImagePlugin_DistortionFX plugin loaded";
+    kDebug(imagePluginsAreaCode) << "ImagePlugin_DistortionFX plugin loaded";
 }
 
 ImagePlugin_DistortionFX::~ImagePlugin_DistortionFX()

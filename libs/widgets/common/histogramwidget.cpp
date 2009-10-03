@@ -45,7 +45,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+
 #include <kcursor.h>
 #include <klocale.h>
 #include <kiconloader.h>
@@ -54,6 +54,7 @@
 
 #include "ditemtooltip.h"
 #include "imagehistogram.h"
+#include "globals.h"
 
 namespace Digikam
 {

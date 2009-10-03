@@ -33,7 +33,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kconfig.h>
 #include <kapplication.h>
 #include <kglobal.h>
@@ -49,6 +48,7 @@
 // Local includes
 
 #include "dimgloaderobserver.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -472,7 +472,7 @@ bool IccTransform::open(TransformDescription &description)
 
     if (!d->handle)
     {
-        kDebug(50003) << "LCMS internal error: cannot create a color transform instance";
+        kDebug(digiKamAreaCode) << "LCMS internal error: cannot create a color transform instance";
         return false;
     }
 
@@ -507,7 +507,7 @@ bool IccTransform::openProofing(TransformDescription &description)
 
     if (!d->handle)
     {
-        kDebug(50003) << "LCMS internal error: cannot create a color transform instance";
+        kDebug(digiKamAreaCode) << "LCMS internal error: cannot create a color transform instance";
         return false;
     }
 
@@ -518,13 +518,13 @@ bool IccTransform::checkProfiles()
 {
     if (!d->effectiveInputProfile().open())
     {
-        kError(50003) << "Cannot open embedded profile";
+        kError(digiKamAreaCode) << "Cannot open embedded profile";
         return false;
     }
 
     if (!d->outputProfile.open())
     {
-        kError(50003) << "Cannot open output profile";
+        kError(digiKamAreaCode) << "Cannot open output profile";
         return false;
     }
 
@@ -532,7 +532,7 @@ bool IccTransform::checkProfiles()
     {
         if (!d->proofProfile.open())
         {
-            kError(50003) << "Cannot open proofing profile";
+            kError(digiKamAreaCode) << "Cannot open proofing profile";
             return false;
         }
     }
@@ -585,7 +585,7 @@ bool IccTransform::apply(QImage& qimage)
         qimage.format() != QImage::Format_ARGB32 &&
         qimage.format() != QImage::Format_ARGB32_Premultiplied)
     {
-        kError(50003) << "Unsupported QImage format" << qimage.format();
+        kError(digiKamAreaCode) << "Unsupported QImage format" << qimage.format();
         return false;
     }
 

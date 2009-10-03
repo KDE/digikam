@@ -32,7 +32,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kio/job.h>
 #include <kurl.h>
 
@@ -42,6 +41,7 @@
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "imagelister.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -111,7 +111,7 @@ void ImageInfoJob::slotResult(KJob* job)
 
     if (job->error())
     {
-        kWarning(50003) << "Failed to list url: " << job->errorString();
+        kWarning(digiKamAreaCode) << "Failed to list url: " << job->errorString();
         return;
     }
 

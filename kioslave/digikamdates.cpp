@@ -40,7 +40,6 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kcomponentdata.h>
-#include <kdebug.h>
 
 // Local includes
 
@@ -48,6 +47,7 @@
 #include "imagelister.h"
 #include "albumdb.h"
 #include "databaseaccess.h"
+#include "debug.h"
 
 kio_digikamdates::kio_digikamdates(const QByteArray& pool_socket,
                                    const QByteArray& app_socket)
@@ -108,7 +108,7 @@ extern "C"
         KGlobal::locale();
 
         if (argc != 4) {
-            kDebug(50004) << "Usage: kio_digikamdates  protocol domain-socket1 domain-socket2";
+            kDebug(kioslavesAreaCode) << "Usage: kio_digikamdates  protocol domain-socket1 domain-socket2";
             exit(-1);
         }
 

@@ -49,7 +49,6 @@
 
 #include <kapplication.h>
 #include <kcodecs.h>
-#include <kdebug.h>
 #include <kfileitem.h>
 #include <kglobal.h>
 #include <kiconloader.h>
@@ -70,6 +69,7 @@
 #include "dmetadata.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -486,7 +486,7 @@ bool ThumbBarView::pixmapForItem(ThumbBarItem *item, QPixmap& pix) const
         bool hasPixmap = d->thumbLoadThread->find(item->url().toLocalFile(), pix, d->maxTileSize);
         if (hasPixmap)
         {
-            kWarning(50003) << "Thumbbar: Requested thumbnail size" << d->tileSize
+            kWarning(digiKamAreaCode) << "Thumbbar: Requested thumbnail size" << d->tileSize
                             << "is larger than the maximum thumbnail size" << d->maxTileSize
                             << ". Returning a scaled-up image.";
             pix = pix.scaled(d->tileSize, d->tileSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);

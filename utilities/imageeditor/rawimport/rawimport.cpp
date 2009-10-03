@@ -33,7 +33,7 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
-#include <kdebug.h>
+
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>

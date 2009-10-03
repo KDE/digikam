@@ -37,10 +37,6 @@
 #include <cstring>
 #include <cstdlib>
 
-// KDE includes
-
-#include <kdebug.h>
-
 // Local includes
 
 #include "imagehistogram.h"
@@ -50,6 +46,7 @@
 #include "dimgsharpen.h"
 #include "dimgunsharpmask.h"
 #include "dimgrefocus.h"
+#include "debug.h"
 #include "globals.h"
 
 namespace Digikam
@@ -68,7 +65,7 @@ void DImgImageFilters::equalizeImage(uchar *data, int w, int h, bool sixteenBit)
 {
     if (!data || !w || !h)
     {
-       kWarning(50003) << ("DImgImageFilters::equalizeImage: no image data available!");
+       kWarning(digiKamAreaCode) << ("DImgImageFilters::equalizeImage: no image data available!");
        return;
     }
 
@@ -96,7 +93,7 @@ void DImgImageFilters::equalizeImage(uchar *data, int w, int h, bool sixteenBit)
        if(equalize_map)
            delete [] equalize_map;
 
-       kWarning(50003) << ("DImgImageFilters::equalizeImage: Unable to allocate memory!");
+       kWarning(digiKamAreaCode) << ("DImgImageFilters::equalizeImage: Unable to allocate memory!");
        return;
     }
 
@@ -218,7 +215,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
 {
     if (!data || !w || !h)
     {
-       kWarning(50003) << ("DImgImageFilters::stretchContrastImage: no image data available!");
+       kWarning(digiKamAreaCode) << ("DImgImageFilters::stretchContrastImage: no image data available!");
        return;
     }
 
@@ -243,7 +240,7 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
        if(normalize_map)
            delete [] normalize_map;
 
-       kWarning(50003) << ("DImgImageFilters::stretchContrastImage: Unable to allocate memory!");
+       kWarning(digiKamAreaCode) << ("DImgImageFilters::stretchContrastImage: Unable to allocate memory!");
        return;
     }
 
@@ -636,7 +633,7 @@ void DImgImageFilters::autoLevelsCorrectionImage(uchar *data, int w, int h, bool
 {
     if (!data || !w || !h)
     {
-       kWarning(50003) << ("DImgImageFilters::autoLevelsCorrectionImage: no image data available!");
+       kWarning(digiKamAreaCode) << ("DImgImageFilters::autoLevelsCorrectionImage: no image data available!");
        return;
     }
     uchar* desData;
@@ -679,7 +676,7 @@ void DImgImageFilters::invertImage(uchar *data, int w, int h, bool sixteenBit)
 {
     if (!data || !w || !h)
     {
-       kWarning(50003) << ("DImgImageFilters::invertImage: no image data available!");
+       kWarning(digiKamAreaCode) << ("DImgImageFilters::invertImage: no image data available!");
        return;
     }
 
@@ -720,7 +717,7 @@ void DImgImageFilters::channelMixerImage(uchar *data, int Width, int Height, boo
 {
     if (!data || !Width || !Height)
     {
-       kWarning(50003) << ("DImgImageFilters::channelMixerImage: no image data available!");
+       kWarning(digiKamAreaCode) << ("DImgImageFilters::channelMixerImage: no image data available!");
        return;
     }
 
@@ -798,7 +795,7 @@ void DImgImageFilters::changeTonality(uchar *data, int width, int height, bool s
 {
     if (!data || !width || !height)
     {
-       kWarning(50003) << ("DImgImageFilters::changeTonality: no image data available!");
+       kWarning(digiKamAreaCode) << ("DImgImageFilters::changeTonality: no image data available!");
        return;
     }
 
@@ -851,7 +848,7 @@ void DImgImageFilters::gaussianBlurImage(uchar *data, int width, int height, boo
 {
     if (!data || !width || !height)
     {
-       kWarning(50003) << ("DImgImageFilters::gaussianBlurImage: no image data available!");
+       kWarning(digiKamAreaCode) << ("DImgImageFilters::gaussianBlurImage: no image data available!");
        return;
     }
 
@@ -872,7 +869,7 @@ void DImgImageFilters::sharpenImage(uchar *data, int width, int height, bool six
 {
     if (!data || !width || !height)
     {
-       kWarning(50003) << ("DImgImageFilters::sharpenImage: no image data available!");
+       kWarning(digiKamAreaCode) << ("DImgImageFilters::sharpenImage: no image data available!");
        return;
     }
 
@@ -892,7 +889,7 @@ void DImgImageFilters::unsharpMaskImage(uchar *data, int width, int height, bool
 {
     if (!data || !width || !height)
     {
-       kWarning(50003) << ("DImgImageFilters::unsharpMaskImage: no image data available!");
+       kWarning(digiKamAreaCode) << ("DImgImageFilters::unsharpMaskImage: no image data available!");
        return;
     }
 
@@ -909,7 +906,7 @@ void DImgImageFilters::refocusImage(uchar *data, int width, int height, bool six
 {
     if (!data || !width || !height)
     {
-       kWarning(50003) << ("DImgImageFilters::refocusImage: no image data available!");
+       kWarning(digiKamAreaCode) << ("DImgImageFilters::refocusImage: no image data available!");
        return;
     }
 

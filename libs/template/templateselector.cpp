@@ -36,7 +36,7 @@
 #include <klocale.h>
 #include <kdialog.h>
 #include <kiconloader.h>
-#include <kdebug.h>
+
 
 // LibKDcraw includes
 

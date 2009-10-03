@@ -48,10 +48,6 @@ extern "C"
 #include <QByteArray>
 #include <QSysInfo>
 
-// KDE includes
-
-#include <kdebug.h>
-
 // Libkexiv2 includes
 
 #include <libkexiv2/kexiv2.h>
@@ -61,6 +57,7 @@ extern "C"
 #include "version.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
+#include "debug.h"
 
 #ifdef Q_CC_MSVC
 void _ReadProc(struct png_struct_def *png_ptr, unsigned char *data, unsigned int size)
@@ -98,7 +95,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     f = fopen(QFile::encodeName(filePath), "rb");
     if ( !f )
     {
-        kDebug(50003) << "Cannot open image file.";
+        kDebug(digiKamAreaCode) << "Cannot open image file.";
         return false;
     }
 
@@ -107,7 +104,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     fread(buf, 1, PNG_BYTES_TO_CHECK, f);
     if (!png_check_sig(buf, PNG_BYTES_TO_CHECK))
     {
-        kDebug(50003) << "Not a PNG image file.";
+        kDebug(digiKamAreaCode) << "Not a PNG image file.";
         fclose(f);
         return false;
     }
@@ -119,7 +116,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
     if (!png_ptr)
     {
-        kDebug(50003) << "Invalid PNG image file structure.";
+        kDebug(digiKamAreaCode) << "Invalid PNG image file structure.";
         fclose(f);
         return false;
     }
@@ -127,7 +124,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     info_ptr = png_create_info_struct(png_ptr);
     if (!info_ptr)
     {
-        kDebug(50003) << "Cannot reading PNG image file structure.";
+        kDebug(digiKamAreaCode) << "Cannot reading PNG image file structure.";
         png_destroy_read_struct(&png_ptr, NULL, NULL);
         fclose(f);
         return false;
@@ -167,7 +164,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     if (setjmp(png_ptr->jmpbuf))
     {
-        kDebug(50003) << "Internal libPNG error during reading file. Process aborted!";
+        kDebug(digiKamAreaCode) << "Internal libPNG error during reading file. Process aborted!";
         png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
         delete cleanupData;
         return false;
@@ -229,13 +226,13 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         if (bit_depth == 16)
         {
 #ifdef ENABLE_DEBUG_MESSAGES
-            kDebug(50003) << "PNG in 16 bits/color/pixel.";
+            kDebug(digiKamAreaCode) << "PNG in 16 bits/color/pixel.";
 #endif
             switch (color_type)
             {
                 case PNG_COLOR_TYPE_RGB :            // RGB
 #ifdef ENABLE_DEBUG_MESSAGES
-                    kDebug(50003) << "PNG in PNG_COLOR_TYPE_RGB";
+                    kDebug(digiKamAreaCode) << "PNG in PNG_COLOR_TYPE_RGB";
 #endif
                     if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
                         png_set_add_alpha(png_ptr, 0xFFFF, PNG_FILLER_AFTER);
@@ -246,13 +243,13 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
                 case PNG_COLOR_TYPE_RGB_ALPHA :     // RGBA
 #ifdef ENABLE_DEBUG_MESSAGES
-                    kDebug(50003) << "PNG in PNG_COLOR_TYPE_RGB_ALPHA";
+                    kDebug(digiKamAreaCode) << "PNG in PNG_COLOR_TYPE_RGB_ALPHA";
 #endif
                     break;
 
                 case PNG_COLOR_TYPE_GRAY :          // Grayscale
 #ifdef ENABLE_DEBUG_MESSAGES
-                    kDebug(50003) << "PNG in PNG_COLOR_TYPE_GRAY";
+                    kDebug(digiKamAreaCode) << "PNG in PNG_COLOR_TYPE_GRAY";
 #endif
                     png_set_gray_to_rgb(png_ptr);
 
@@ -265,7 +262,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
                 case PNG_COLOR_TYPE_GRAY_ALPHA :    // Grayscale + Alpha
 #ifdef ENABLE_DEBUG_MESSAGES
-                    kDebug(50003) << "PNG in PNG_COLOR_TYPE_GRAY_ALPHA";
+                    kDebug(digiKamAreaCode) << "PNG in PNG_COLOR_TYPE_GRAY_ALPHA";
 #endif
                     png_set_gray_to_rgb(png_ptr);
 
@@ -273,7 +270,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
                 case PNG_COLOR_TYPE_PALETTE :       // Indexed
 #ifdef ENABLE_DEBUG_MESSAGES
-                    kDebug(50003) << "PNG in PNG_COLOR_TYPE_PALETTE";
+                    kDebug(digiKamAreaCode) << "PNG in PNG_COLOR_TYPE_PALETTE";
 #endif
                     png_set_palette_to_rgb(png_ptr);
 
@@ -286,7 +283,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
                 default:
 #ifdef ENABLE_DEBUG_MESSAGES
-                    kDebug(50003) << "PNG color type unknown.";
+                    kDebug(digiKamAreaCode) << "PNG color type unknown.";
 #endif
                     delete cleanupData;
                     return false;
@@ -295,7 +292,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         else
         {
 #ifdef ENABLE_DEBUG_MESSAGES
-            kDebug(50003) << "PNG in >=8 bits/color/pixel.";
+            kDebug(digiKamAreaCode) << "PNG in >=8 bits/color/pixel.";
 #endif
             png_set_packing(png_ptr);
 
@@ -303,7 +300,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             {
                 case PNG_COLOR_TYPE_RGB :           // RGB
 #ifdef ENABLE_DEBUG_MESSAGES
-                    kDebug(50003) << "PNG in PNG_COLOR_TYPE_RGB";
+                    kDebug(digiKamAreaCode) << "PNG in PNG_COLOR_TYPE_RGB";
 #endif
                     if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
                         png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
@@ -314,13 +311,13 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
                 case PNG_COLOR_TYPE_RGB_ALPHA :     // RGBA
 #ifdef ENABLE_DEBUG_MESSAGES
-                    kDebug(50003) << "PNG in PNG_COLOR_TYPE_RGB_ALPHA";
+                    kDebug(digiKamAreaCode) << "PNG in PNG_COLOR_TYPE_RGB_ALPHA";
 #endif
                     break;
 
                 case PNG_COLOR_TYPE_GRAY :          // Grayscale
 #ifdef ENABLE_DEBUG_MESSAGES
-                    kDebug(50003) << "PNG in PNG_COLOR_TYPE_GRAY";
+                    kDebug(digiKamAreaCode) << "PNG in PNG_COLOR_TYPE_GRAY";
 #endif
                     png_set_gray_1_2_4_to_8(png_ptr);
                     png_set_gray_to_rgb(png_ptr);
@@ -334,14 +331,14 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
                 case PNG_COLOR_TYPE_GRAY_ALPHA :    // Grayscale + alpha
 #ifdef ENABLE_DEBUG_MESSAGES
-                    kDebug(50003) << "PNG in PNG_COLOR_TYPE_GRAY_ALPHA";
+                    kDebug(digiKamAreaCode) << "PNG in PNG_COLOR_TYPE_GRAY_ALPHA";
 #endif
                     png_set_gray_to_rgb(png_ptr);
                     break;
 
                 case PNG_COLOR_TYPE_PALETTE :       // Indexed
 #ifdef ENABLE_DEBUG_MESSAGES
-                    kDebug(50003) << "PNG in PNG_COLOR_TYPE_PALETTE";
+                    kDebug(digiKamAreaCode) << "PNG in PNG_COLOR_TYPE_PALETTE";
 #endif
                     png_set_packing(png_ptr);
                     png_set_palette_to_rgb(png_ptr);
@@ -355,7 +352,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
                 default:
 #ifdef ENABLE_DEBUG_MESSAGES
-                    kDebug(50003) << "PNG color type unknown.";
+                    kDebug(digiKamAreaCode) << "PNG color type unknown.";
 #endif
                     delete cleanupData;
                     return false;
@@ -395,7 +392,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
         if (!data || !lines)
         {
-            kDebug(50003) << "Cannot allocate memory to load PNG image data.";
+            kDebug(digiKamAreaCode) << "Cannot allocate memory to load PNG image data.";
             png_read_end(png_ptr, info_ptr);
             png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
             delete cleanupData;
@@ -527,7 +524,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                 imageSetEmbbededText(text_ptr[i].key, text_ptr[i].text);
 
 #ifdef ENABLE_DEBUG_MESSAGES
-                kDebug(50003) << "Reading PNG Embedded text: key=" << text_ptr[i].key
+                kDebug(digiKamAreaCode) << "Reading PNG Embedded text: key=" << text_ptr[i].key
                               << " text=" << text_ptr[i].text;
 #endif
             }
@@ -573,7 +570,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     f = fopen(QFile::encodeName(filePath), "wb");
     if ( !f )
     {
-        kDebug(50003) << "Cannot open target image file.";
+        kDebug(digiKamAreaCode) << "Cannot open target image file.";
         return false;
     }
 
@@ -583,7 +580,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
     if (!png_ptr)
     {
-        kDebug(50003) << "Invalid target PNG image file structure.";
+        kDebug(digiKamAreaCode) << "Invalid target PNG image file structure.";
         fclose(f);
         return false;
     }
@@ -591,7 +588,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     info_ptr = png_create_info_struct(png_ptr);
     if (info_ptr == NULL)
     {
-        kDebug(50003) << "Cannot create PNG image file structure.";
+        kDebug(digiKamAreaCode) << "Cannot create PNG image file structure.";
         png_destroy_write_struct(&png_ptr, (png_infopp) NULL);
         fclose(f);
         return false;
@@ -626,7 +623,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
     if (setjmp(png_ptr->jmpbuf))
     {
-        kDebug(50003) << "Internal libPNG error during writing file. Process aborted!";
+        kDebug(digiKamAreaCode) << "Internal libPNG error during writing file. Process aborted!";
         png_destroy_write_struct(&png_ptr, (png_infopp) & info_ptr);
         png_destroy_info_struct(png_ptr, (png_infopp) & info_ptr);
         delete cleanupData;
@@ -718,7 +715,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
             text.key  = key.data();
             text.text = value.data();
 #ifdef ENABLE_DEBUG_MESSAGES
-            kDebug(50003) << "Writing PNG Embedded text: key=" << text.key << " text=" << text.text;
+            kDebug(digiKamAreaCode) << "Writing PNG Embedded text: key=" << text.key << " text=" << text.text;
 #endif
             text.compression = PNG_TEXT_COMPRESSION_zTXt;
             png_set_text(png_ptr, info_ptr, &(text), 1);
@@ -736,7 +733,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     text.key  = (png_charp)("Software");
     text.text = softwareAsAscii.data();
 #ifdef ENABLE_DEBUG_MESSAGES
-    kDebug(50003) << "Writing PNG Embedded text: key=" << text.key << " text=" << text.text;
+    kDebug(digiKamAreaCode) << "Writing PNG Embedded text: key=" << text.key << " text=" << text.text;
 #endif
     text.compression = PNG_TEXT_COMPRESSION_zTXt;
     png_set_text(png_ptr, info_ptr, &(text), 1);
@@ -774,7 +771,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
                     comment.compression = PNG_ITXT_COMPRESSION_zTXt;
                     png_set_text(png_ptr, info_ptr, &(comment), 1);
 
-                    kDebug(50003) << "Writing digiKam comment into iTXt PNG chunk : " << ba;
+                    kDebug(digiKamAreaCode) << "Writing digiKam comment into iTXt PNG chunk : " << ba;
                     break;
                 }
 #endif
@@ -939,7 +936,7 @@ void PNGLoader::writeRawProfile(png_struct *ping, png_info *ping_info, char *pro
 
     const uchar hex[16] = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
 
-    kDebug(50003) << "Writing Raw profile: type=" << profile_type << ", length=" << length;
+    kDebug(digiKamAreaCode) << "Writing Raw profile: type=" << profile_type << ", length=" << length;
 
     text               = (png_textp) png_malloc(ping, (png_uint_32) sizeof(png_text));
     description_length = strlen((const char *) profile_type);

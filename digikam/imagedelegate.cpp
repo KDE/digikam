@@ -38,7 +38,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kglobal.h>
 #include <kio/global.h>
 #include <klocale.h>
@@ -47,7 +46,7 @@
 
 #include "albummanager.h"
 #include "albumsettings.h"
-#include "globals.h"
+#include "debug.h"
 #include "imagecategorydrawer.h"
 #include "imagecategorizedview.h"
 #include "imagedelegateoverlay.h"

@@ -31,7 +31,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kservicetypetrader.h>
 #include <klibloader.h>
 #include <kapplication.h>
@@ -41,6 +40,7 @@
 // Local includes
 
 #include "splashscreen.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -149,13 +149,13 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
         {
             d->pluginMap[corePlugin->name()] = plugin;
 
-            kDebug(50003) << "ImagePluginLoader: Loaded plugin " << corePlugin->name();
+            kDebug(digiKamAreaCode) << "ImagePluginLoader: Loaded plugin " << corePlugin->name();
 
             ++cpt;
         }
         else
         {
-            kWarning(50003) << "ImagePluginLoader: createInstance returned 0 for "
+            kWarning(digiKamAreaCode) << "ImagePluginLoader: createInstance returned 0 for "
                             << corePlugin->name()
                             << " (" << corePlugin->library() << ")"
                             << " with error: "
@@ -182,13 +182,13 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
             {
                 d->pluginMap[name] = plugin;
 
-                kDebug(50003) << "ImagePluginLoader: Loaded plugin " << service->name();
+                kDebug(digiKamAreaCode) << "ImagePluginLoader: Loaded plugin " << service->name();
 
                 ++cpt;
             }
             else
             {
-                kWarning(50003) << "ImagePluginLoader: createInstance returned 0 for "
+                kWarning(digiKamAreaCode) << "ImagePluginLoader: createInstance returned 0 for "
                                 << service->name()
                                 << " (" << service->library() << ")"
                                 << " with error: "

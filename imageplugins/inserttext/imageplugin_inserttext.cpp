@@ -27,7 +27,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
@@ -39,6 +38,7 @@
 // Local includes
 
 #include "inserttexttool.h"
+#include "debug.h"
 
 using namespace DigikamInsertTextImagesPlugin;
 
@@ -58,7 +58,7 @@ ImagePlugin_InsertText::ImagePlugin_InsertText(QObject *parent, const QVariantLi
 
     setXMLFile("digikamimageplugin_inserttext_ui.rc");
 
-    kDebug(50006) << "ImagePlugin_InsertText plugin loaded";
+    kDebug(imagePluginsAreaCode) << "ImagePlugin_InsertText plugin loaded";
 }
 
 ImagePlugin_InsertText::~ImagePlugin_InsertText()

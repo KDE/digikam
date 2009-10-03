@@ -28,7 +28,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
@@ -40,6 +39,7 @@
 // Local includes
 
 #include "filmgraintool.h"
+#include "debug.h"
 
 using namespace DigikamFilmGrainImagesPlugin;
 
@@ -57,7 +57,7 @@ ImagePlugin_FilmGrain::ImagePlugin_FilmGrain(QObject *parent, const QVariantList
 
     setXMLFile( "digikamimageplugin_filmgrain_ui.rc" );
 
-    kDebug(50006) << "ImagePlugin_FilmGrain plugin loaded";
+    kDebug(imagePluginsAreaCode) << "ImagePlugin_FilmGrain plugin loaded";
 }
 
 ImagePlugin_FilmGrain::~ImagePlugin_FilmGrain()

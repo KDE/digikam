@@ -58,7 +58,6 @@
 #include <kcalendarsystem.h>
 #include <kcombobox.h>
 #include <kconfig.h>
-#include <kdebug.h>
 #include <kdialog.h>
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
@@ -129,6 +128,7 @@
 #include "cameratype.h"
 #include "cameraui_p.h"
 #include "cameranamehelper.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -1338,7 +1338,7 @@ void CameraUI::slotUpload()
 #endif
     fileformats = patternList.join("\n");
 
-    kDebug(50003) << "fileformats=" << fileformats;
+    kDebug(digiKamAreaCode) << "fileformats=" << fileformats;
 
     KUrl::List urls = KFileDialog::getOpenUrls(CollectionManager::instance()->oneAlbumRootPath(),
                                                fileformats, this, i18n("Select Image to Upload"));
@@ -1948,7 +1948,7 @@ void CameraUI::slotExifFromData(const QByteArray& exifData)
     // decode (yet) exif metadata from APP1. We will find Exif header to get data at this place
     // to please with Exiv2...
 
-    kDebug(50003) << "Size of Exif metadata from camera = " << exifData.size();
+    kDebug(digiKamAreaCode) << "Size of Exif metadata from camera = " << exifData.size();
     char exifHeader[] = { 0x45, 0x78, 0x69, 0x66, 0x00, 0x00 };
 
     if (!exifData.isEmpty())
@@ -1956,7 +1956,7 @@ void CameraUI::slotExifFromData(const QByteArray& exifData)
         int i = exifData.indexOf(*exifHeader);
         if (i != -1)
         {
-            kDebug(50003) << "Exif header found at position " << i;
+            kDebug(digiKamAreaCode) << "Exif header found at position " << i;
             i = i + sizeof(exifHeader);
             QByteArray data;
             data.resize(exifData.size()-i);

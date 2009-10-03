@@ -36,7 +36,6 @@
 // KDE includes
 
 #include <kapplication.h>
-#include <kdebug.h>
 #include <kdialog.h>
 #include <khbox.h>
 #include <klocale.h>
@@ -52,6 +51,7 @@
 
 #include "cietonguewidget.h"
 #include "metadatalistview.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -276,7 +276,7 @@ bool ICCProfileWidget::decodeMetadata()
 
     if (!hProfile)
     {
-        kDebug(50003) << "Cannot parse ICC profile tags using LCMS";
+        kDebug(digiKamAreaCode) << "Cannot parse ICC profile tags using LCMS";
         return false;
     }
 

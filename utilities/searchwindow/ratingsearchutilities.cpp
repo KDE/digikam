@@ -40,13 +40,13 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 
 // Local includes
 
-#include "globals.h"
+#include "debug.h"
 #include "themeengine.h"
+#include "globals.h"
 
 namespace Digikam
 {
@@ -88,7 +88,7 @@ QRect RatingStarDrawer::drawStarPolygons(QPainter *painter, int numberOfStars) c
 
 // -------------------------------------------------------------------------
 
-RatingComboBoxDelegate::RatingComboBoxDelegate(QObject *parent) 
+RatingComboBoxDelegate::RatingComboBoxDelegate(QObject *parent)
                       : QItemDelegate(parent)
 {
 }
@@ -106,7 +106,7 @@ QSize RatingComboBoxDelegate::sizeHint ( const QStyleOptionViewItem & option, co
     }
 }
 
-void RatingComboBoxDelegate::paint(QPainter *painter, const QStyleOptionViewItem& option, 
+void RatingComboBoxDelegate::paint(QPainter *painter, const QStyleOptionViewItem& option,
                                    const QModelIndex &index) const
 {
     QVariant value  = index.data(Qt::DisplayRole);
@@ -154,7 +154,7 @@ void RatingComboBoxDelegate::drawRating(QPainter *painter, const QRect& rect, in
 
 // -------------------------------------------------------------------------
 
-RatingComboBoxModel::RatingComboBoxModel(QObject *parent) 
+RatingComboBoxModel::RatingComboBoxModel(QObject *parent)
                    : QAbstractListModel(parent)
 {
     for (int value = RatingComboBox::Null; value <= RatingComboBox::Rating5; ++value)
@@ -272,7 +272,7 @@ void RatingComboBoxWidget::paintEvent(QPaintEvent *e)
 {
     if (m_value >= RatingComboBox::Rating0)
     {
-        //kDebug(50003) << "m_value" << m_value << "defaulting paint to parent" << this;
+        //kDebug(digiKamAreaCode) << "m_value" << m_value << "defaulting paint to parent" << this;
         RatingWidget::paintEvent(e);
     }
     else if (m_value == RatingComboBox::NoRating)

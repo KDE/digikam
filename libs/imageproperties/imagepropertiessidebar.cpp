@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+
 #include <kfileitem.h>
 #include <klocale.h>
 #include <kconfig.h>

@@ -27,7 +27,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kgenericfactory.h>
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -36,6 +35,7 @@
 // Local includes
 
 #include "contentawareresizetool.h"
+#include "debug.h"
 
 using namespace DigikamContentAwareResizingImagesPlugin;
 
@@ -54,7 +54,7 @@ ImagePlugin_ContentAwareResizing::ImagePlugin_ContentAwareResizing(QObject *pare
     actionCollection()->addAction("imageplugin_contentawareresizing", m_contentAwareResizingAction);
     setXMLFile("digikamimageplugin_contentawareresizing_ui.rc");
 
-    kDebug(50006) << "ImagePlugin_ContentAwareResizing plugin loaded";
+    kDebug(imagePluginsAreaCode) << "ImagePlugin_ContentAwareResizing plugin loaded";
 }
 
 ImagePlugin_ContentAwareResizing::~ImagePlugin_ContentAwareResizing()

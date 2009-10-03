@@ -42,7 +42,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kurl.h>
 
 // Local includes
@@ -56,6 +55,7 @@
 #include "databasebackend.h"
 #include "searchxml.h"
 #include "haar.h"
+#include "debug.h"
 /*#include "imagecomments_p.h"
 #include "imageposition_p.h"
 */
@@ -94,7 +94,7 @@ public:
         stream >> version;
         if (version != Version)
         {
-            kError(50003) << "Unsupported binary version of Haar Blob in database";
+            kError(digiKamAreaCode) << "Unsupported binary version of Haar Blob in database";
             return;
         }
 
@@ -469,7 +469,7 @@ QList<qlonglong> HaarIface::bestMatches(Haar::SignatureData *querySig, int numbe
 
 /*
     for (QMap<double, qlonglong>::iterator it = bestMatches.begin(); it != bestMatches.end(); ++it)
-        kDebug(50003) << it.key() << it.value();
+        kDebug(digiKamAreaCode) << it.key() << it.value();
 */
     return bestMatches.values();
 }
@@ -502,10 +502,10 @@ QList<qlonglong> HaarIface::bestMatchesWithThreshold(Haar::SignatureData *queryS
     // Debug output
     if (bestMatches.count() > 1)
     {
-        kDebug(50003) << "Duplicates with id and score:";
+        kDebug(digiKamAreaCode) << "Duplicates with id and score:";
         for (QMultiMap<double, qlonglong>::const_iterator it = bestMatches.constBegin(); it != bestMatches.constEnd(); ++it)
         {
-            kDebug(50003) << it.value() << QString::number(it.key() * 100)+QChar('%');
+            kDebug(digiKamAreaCode) << it.value() << QString::number(it.key() * 100)+QChar('%');
         }
     }
     // We may want to return the map itself, or a list with pairs id - percentage

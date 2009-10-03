@@ -34,14 +34,15 @@
 #include <QSqlError>
 #include <QThread>
 #include <QSqlRecord>
+
 // KDE includes
 
-#include <kdebug.h>
 #include <kglobal.h>
 
 // Local includes
 
 #include "thumbnailschemaupdater.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -256,10 +257,10 @@ bool DatabaseCoreBackend::execSql(const QString& sql, QStringList* values)
 QList<QVariant> DatabaseCoreBackend::readToList(QSqlQuery& query)
 {
     QList<QVariant> list;
-    
+
     QSqlRecord record = query.record();
     int count = record.count();
-    
+
     while (query.next())
     {
         for (int i=0; i<count; ++i)
@@ -308,8 +309,8 @@ bool DatabaseCoreBackend::execSql(const QString& sql,
 }
 
 bool DatabaseCoreBackend::execSql(const QString& sql,
-                              const QVariant& boundValue1, const QVariant& boundValue2, 
-                              const QVariant& boundValue3, QList<QVariant>* values, 
+                              const QVariant& boundValue1, const QVariant& boundValue2,
+                              const QVariant& boundValue3, QList<QVariant>* values,
                               QVariant *lastInsertId)
 {
     QSqlQuery query = execQuery(sql, boundValue1, boundValue2, boundValue3);
@@ -438,7 +439,7 @@ bool DatabaseCoreBackend::exec(QSqlQuery& query)
             if (!app)
             {
                 int limit = 10;
-                kDebug(50003) << "Detected locked database file. Waiting 10s trying again.";
+                kDebug(digiKamAreaCode) << "Detected locked database file. Waiting 10s trying again.";
 
                 do
                 {
@@ -450,12 +451,12 @@ bool DatabaseCoreBackend::exec(QSqlQuery& query)
                 while (limit > 0 && query.lastError().number() == 5);
             }
             else
-                kWarning(50003) << "Detected locked database file. There is an active transaction.";
+                kWarning(digiKamAreaCode) << "Detected locked database file. There is an active transaction.";
         }
-        kDebug(50003) << "Failure executing query: ";
-        kDebug(50003) << query.executedQuery();
-        kDebug(50003) << query.lastError().text() << query.lastError().number();
-        kDebug(50003) << "Bound values: " << query.boundValues().values();
+        kDebug(digiKamAreaCode) << "Failure executing query: ";
+        kDebug(digiKamAreaCode) << query.executedQuery();
+        kDebug(digiKamAreaCode) << query.lastError().text() << query.lastError().number();
+        kDebug(digiKamAreaCode) << "Bound values: " << query.boundValues().values();
         return false;
     }
     return true;
@@ -466,10 +467,10 @@ bool DatabaseCoreBackend::execBatch(QSqlQuery& query)
     if (!query.execBatch())
     {
         // Use DatabaseAccess::lastError?
-        kDebug(50003) << "Failure executing batch query: ";
-        kDebug(50003) << query.executedQuery();
-        kDebug(50003) << query.lastError().text() << query.lastError().number();
-        kDebug(50003) << "Bound values: " << query.boundValues().values();
+        kDebug(digiKamAreaCode) << "Failure executing batch query: ";
+        kDebug(digiKamAreaCode) << query.executedQuery();
+        kDebug(digiKamAreaCode) << query.lastError().text() << query.lastError().number();
+        kDebug(digiKamAreaCode) << "Bound values: " << query.boundValues().values();
         return false;
     }
     return true;

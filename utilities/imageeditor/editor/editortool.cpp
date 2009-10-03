@@ -29,10 +29,6 @@
 #include <QWidget>
 #include <QTimer>
 
-// KDE includes
-
-#include <kdebug.h>
-
 // Local includes
 
 #include "dimgthreadedfilter.h"
@@ -43,6 +39,7 @@
 #include "histogrambox.h"
 #include "editortoolsettings.h"
 #include "editortooliface.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -341,7 +338,7 @@ void EditorToolThreaded::slotFilterFinished(bool success)
         {
             case EditorToolThreaded::PreviewRendering:
             {
-                kDebug(50003) << "Preview " << toolName() << " completed...";
+                kDebug(digiKamAreaCode) << "Preview " << toolName() << " completed...";
                 putPreviewData();
                 slotAbort();
                 break;
@@ -349,7 +346,7 @@ void EditorToolThreaded::slotFilterFinished(bool success)
 
             case EditorToolThreaded::FinalRendering:
             {
-                kDebug(50003) << "Final" << toolName() << " completed...";
+                kDebug(digiKamAreaCode) << "Final" << toolName() << " completed...";
                 putFinalData();
                 EditorToolIface::editorToolIface()->setToolStopProgress();
                 kapp->restoreOverrideCursor();
@@ -367,7 +364,7 @@ void EditorToolThreaded::slotFilterFinished(bool success)
         {
             case EditorToolThreaded::PreviewRendering:
             {
-                kDebug(50003) << "Preview " << toolName() << " failed...";
+                kDebug(digiKamAreaCode) << "Preview " << toolName() << " failed...";
                 slotAbort();
                 break;
             }
@@ -401,7 +398,7 @@ void EditorToolThreaded::slotOk()
     writeSettings();
 
     d->currentRenderingMode = EditorToolThreaded::FinalRendering;
-    kDebug(50003) << "Final " << toolName() << " started...";
+    kDebug(digiKamAreaCode) << "Final " << toolName() << " started...";
     writeSettings();
 
     toolSettings()->enableButton(EditorToolSettings::Ok,      false);
@@ -429,7 +426,7 @@ void EditorToolThreaded::slotEffect()
         return;
 
     d->currentRenderingMode = EditorToolThreaded::PreviewRendering;
-    kDebug(50003) << "Preview " << toolName() << " started...";
+    kDebug(digiKamAreaCode) << "Preview " << toolName() << " started...";
 
     toolSettings()->enableButton(EditorToolSettings::Ok,      false);
     toolSettings()->enableButton(EditorToolSettings::SaveAs,  false);

@@ -42,7 +42,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+
 #include <kcursor.h>
 
 namespace Digikam

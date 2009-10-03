@@ -36,7 +36,7 @@
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kconfig.h>
-#include <kdebug.h>
+
 #include <kedittoolbar.h>
 #include <kglobal.h>
 #include <klocale.h>

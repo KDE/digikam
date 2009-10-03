@@ -27,7 +27,6 @@
 // KDE includes
 
 #include <klocale.h>
-#include <kdebug.h>
 
 // Marble includes
 #ifdef HAVE_MARBLEWIDGET
@@ -38,6 +37,7 @@
 // Local includes.
 
 #include "config-digikam.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -59,7 +59,7 @@ GPSSearchWidget::GPSSearchWidget(QWidget *parent)
     // using CTRL + right mouse button.
     // A new signal named regionSelected() will be emitted when user select an aera.
 
-    
+
 #ifdef HAVE_MARBLEWIDGET
     connect(marbleWidget(), SIGNAL(regionSelected(const QList<double>&)),
             this, SLOT(slotNewSelectionFromMap(const QList<double>&)));
@@ -70,7 +70,7 @@ GPSSearchWidget::GPSSearchWidget(QWidget *parent)
     slotSetAllowItemFiltering(true);
     slotSetAllowItemSelection(true);
     slotSetFocusOnAddedItems(false);
-    
+
     // TODO: connect marble with new selection to perform on the map when the user selects a virtual album.
 }
 
@@ -92,7 +92,7 @@ QList<double> GPSSearchWidget::selectionCoordinates() const
 void GPSSearchWidget::setSelectionCoordinates(const QList<double>& sel)
 {
     d->selection = sel;
-    kDebug(50003) << "Set new selection area: West, North, East, South: " << d->selection;
+    kDebug(digiKamAreaCode) << "Set new selection area: West, North, East, South: " << d->selection;
 
     // Set selection area in marble widget.
     emit signalSetNewMapSelection(d->selection);
@@ -118,14 +118,14 @@ void GPSSearchWidget::markerClusterHolderCustomPaint(Marble::GeoPainter* const g
       GPSSearchWidget* const me = reinterpret_cast<GPSSearchWidget*>(yourdata);
       if (me->d->selection.isEmpty())
         return;
-      
+
       // prepare drawing of a polygon (because drawRect does not take four geo-corners...)
       // West, North, East, South
       const qreal lonWest = me->d->selection.at(0);
       const qreal latNorth = me->d->selection.at(1);
       const qreal lonEast = me->d->selection.at(2);
       const qreal latSouth = me->d->selection.at(3);
-      
+
       // TODO: once support for Marble<0.8 is dropped, mark these variables as const
       Marble::GeoDataCoordinates coordTopLeft(lonWest, latNorth, 0, Marble::GeoDataCoordinates::Degree);
       Marble::GeoDataCoordinates coordTopRight(lonEast, latNorth, 0, Marble::GeoDataCoordinates::Degree);
@@ -140,9 +140,9 @@ void GPSSearchWidget::markerClusterHolderCustomPaint(Marble::GeoPainter* const g
 #else // MARBLE_VERSION < 0x000800
       polyRing << coordTopLeft << coordTopRight << coordBottomRight << coordBottomLeft;
 #endif // MARBLE_VERSION < 0x000800
-      
+
       geoPainter->save();
-      
+
       // paint the selection:
       QPen selectionPen;
       selectionPen.setColor(Qt::blue);
@@ -151,7 +151,7 @@ void GPSSearchWidget::markerClusterHolderCustomPaint(Marble::GeoPainter* const g
       geoPainter->setPen(selectionPen);
       geoPainter->setBrush(Qt::NoBrush);
       geoPainter->drawPolygon(polyRing);
-      
+
       geoPainter->restore();
     }
 }

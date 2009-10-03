@@ -30,7 +30,6 @@
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
 #include <klocale.h>
@@ -38,6 +37,7 @@
 // Local includes
 
 #include "adjustcurvestool.h"
+#include "debug.h"
 
 using namespace DigikamAdjustCurvesImagesPlugin;
 
@@ -57,7 +57,7 @@ ImagePlugin_AdjustCurves::ImagePlugin_AdjustCurves(QObject *parent, const QList<
     m_curvesAction->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_M));
     setXMLFile("digikamimageplugin_adjustcurves_ui.rc");
 
-    kDebug(50006) << "ImagePlugin_AdjustCurves plugin loaded";
+    kDebug(imagePluginsAreaCode) << "ImagePlugin_AdjustCurves plugin loaded";
 }
 
 ImagePlugin_AdjustCurves::~ImagePlugin_AdjustCurves()

@@ -48,6 +48,7 @@
 
 #include "colorgradientwidget.h"
 #include "histogramwidget.h"
+#include "debug.h"
 #include "globals.h"
 
 namespace Digikam

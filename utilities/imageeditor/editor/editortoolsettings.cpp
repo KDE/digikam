@@ -40,7 +40,7 @@
 #include <kapplication.h>
 #include <kcolorbutton.h>
 #include <kcombobox.h>
-#include <kdebug.h>
+
 #include <kdialog.h>
 #include <khbox.h>
 #include <kiconloader.h>
@@ -60,6 +60,7 @@
 #include "histogramwidget.h"
 #include "histogrambox.h"
 #include "imagepaniconwidget.h"
+#include "globals.h"
 
 using namespace KDcrawIface;
 

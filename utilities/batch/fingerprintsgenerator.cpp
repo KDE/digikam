@@ -38,7 +38,7 @@
 
 #include <kapplication.h>
 #include <kcodecs.h>
-#include <kdebug.h>
+
 #include <klocale.h>
 #include <kstandardguiitem.h>
 #include <kpassivepopup.h>

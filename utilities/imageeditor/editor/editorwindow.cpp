@@ -58,7 +58,6 @@
 #include <kcombobox.h>
 #include <kconfig.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
 #include <kfilefiltercombo.h>
@@ -125,6 +124,7 @@
 #include "themeengine.h"
 #include "thumbbar.h"
 #include "printhelper.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -794,7 +794,7 @@ void EditorWindow::loadImagePlugins()
         }
         else
         {
-            kDebug(50003) << "Invalid plugin to add!";
+            kDebug(digiKamAreaCode) << "Invalid plugin to add!";
         }
     }
 
@@ -958,7 +958,7 @@ void EditorWindow::applyStandardSettings()
                 stream >> sizesList;
                 if (sizesList.count() == 3)
                 {
-                    kDebug(50003) << "Found splitter based config, converting to dockbar";
+                    kDebug(digiKamAreaCode) << "Found splitter based config, converting to dockbar";
                     // Remove the first entry (the thumbbar) and write the rest
                     // back. Then it should be fine.
                     sizesList.removeFirst();
@@ -1443,7 +1443,7 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
             return;
         }
 
-        kDebug(50003) << "renaming to " << m_savingContext->destinationURL.toLocalFile();
+        kDebug(digiKamAreaCode) << "renaming to " << m_savingContext->destinationURL.toLocalFile();
 
         if (!moveFile())
         {
@@ -1486,7 +1486,7 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
 
         // Only try to write Exif if both src and destination are JPEG files
 
-        kDebug(50003) << "renaming to " << m_savingContext->destinationURL.toLocalFile();
+        kDebug(digiKamAreaCode) << "renaming to " << m_savingContext->destinationURL.toLocalFile();
 
         if (!moveFile())
         {
@@ -1582,7 +1582,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
 
     QString pattern             = KImageIO::pattern(KImageIO::Writing);
     QStringList writablePattern = pattern.split(QChar('\n'));
-    kDebug(50003) << "KDE Offered pattern: " << writablePattern;
+    kDebug(digiKamAreaCode) << "KDE Offered pattern: " << writablePattern;
     writablePattern.append(QString("*.jp2|") + i18n("JPEG 2000 image"));
     writablePattern.append(QString("*.pgf|") + i18n("Progressive Graphics File"));
 
@@ -1664,7 +1664,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
             // Else, check if format from file name extension is include on file mime type list.
 
             QStringList types = KImageIO::types(KImageIO::Writing);
-            kDebug(50003) << "KDE Offered types: " << types;
+            kDebug(digiKamAreaCode) << "KDE Offered types: " << types;
 
             types << "TIF";
             types << "TIFF";
@@ -1679,7 +1679,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
             if ( !imgExtList.toUpper().contains( m_savingContext->format.toUpper() ) )
             {
                 KMessageBox::error(this, i18n("Target image file format \"%1\" unsupported.", m_savingContext->format));
-                kWarning(50003) << "target image file format " << m_savingContext->format << " unsupported!";
+                kWarning(digiKamAreaCode) << "target image file format " << m_savingContext->format << " unsupported!";
                 return false;
             }
         }
@@ -1690,7 +1690,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
         KMessageBox::error(this, i18n("Failed to save file\n\"%1\"\nto\n\"%2\".",
                                       newURL.fileName(),
                                       newURL.toLocalFile().section('/', -2, -2)));
-        kWarning(50003) << "target URL is not valid !";
+        kWarning(digiKamAreaCode) << "target URL is not valid !";
         return false;
     }
 
@@ -1841,7 +1841,7 @@ bool EditorWindow::moveFile()
     // restore permissions
     if (::chmod(dstFileName, filePermissions) != 0)
     {
-        kWarning(50003) << "Failed to restore file permissions for file " << dstFileName;
+        kWarning(digiKamAreaCode) << "Failed to restore file permissions for file " << dstFileName;
     }
 #endif
     return true;

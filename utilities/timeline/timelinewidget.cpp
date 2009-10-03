@@ -39,7 +39,7 @@
 
 #include <kcalendarsystem.h>
 #include <kcursor.h>
-#include <kdebug.h>
+
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
@@ -442,10 +442,10 @@ DateRangeList TimeLineWidget::selectedDateRange(int& totalCount)
 
 /*
     for (it = list.begin() ; it != list.end(); ++it)
-        kDebug(50003) << (*it).first.date().toString(Qt::ISODate) << " :: "
+        kDebug(digiKamAreaCode) << (*it).first.date().toString(Qt::ISODate) << " :: "
                  << (*it).second.date().toString(Qt::ISODate);
 
-    kDebug(50003) << "Total Count of Items = " << totalCount;
+    kDebug(digiKamAreaCode) << "Total Count of Items = " << totalCount;
 */
 
     // Group contiguous date ranges to optimize query on database.
@@ -481,7 +481,7 @@ DateRangeList TimeLineWidget::selectedDateRange(int& totalCount)
 
     /*
     for (it = list2.begin() ; it != list2.end(); ++it)
-        kDebug(50003) << (*it).first.date().toString(Qt::ISODate) << " :: "
+        kDebug(digiKamAreaCode) << (*it).first.date().toString(Qt::ISODate) << " :: "
                  << (*it).second.date().toString(Qt::ISODate);
     */
 
@@ -1779,7 +1779,7 @@ QDateTime TimeLineWidget::firstDayOfWeek(int year, int weekNumber)
     dt = dt.addDays((weekNumber-1)*7);
 
 /*
-    kDebug(50003) << "Year= " << year << " Week= " << weekNumber
+    kDebug(digiKamAreaCode) << "Year= " << year << " Week= " << weekNumber
              << " 1st day= " << dt;
 */
 

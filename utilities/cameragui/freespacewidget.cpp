@@ -41,7 +41,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kurl.h>
 #include <klocale.h>
 #include <kio/global.h>
@@ -51,6 +50,7 @@
 
 #include "freespacetooltip.h"
 #include "albumsettings.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -268,7 +268,7 @@ unsigned long FreeSpaceWidget::kBAvail(const QString& path) const
 
     if (!mountPointMatch)
     {
-        kWarning(50003) << "Did not identify a valid mount point for" << path;
+        kWarning(digiKamAreaCode) << "Did not identify a valid mount point for" << path;
         return (unsigned long)(-1);
     }
 
@@ -374,9 +374,9 @@ void FreeSpaceWidget::slotTimeout()
         KDiskFreeSpaceInfo info = KDiskFreeSpaceInfo::freeSpaceInfo(path);
         if (info.isValid())
         {
-            addInformation((unsigned long)(info.size()/1024.0), 
-                           (unsigned long)(info.used()/1024.0), 
-                           (unsigned long)(info.available()/1024.0), 
+            addInformation((unsigned long)(info.size()/1024.0),
+                           (unsigned long)(info.used()/1024.0),
+                           (unsigned long)(info.available()/1024.0),
                            info.mountPoint());
         }
     }

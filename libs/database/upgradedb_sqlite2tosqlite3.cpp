@@ -34,7 +34,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kio/global.h>
 
@@ -44,6 +43,7 @@
 #include "databaseaccess.h"
 #include "databasebackend.h"
 #include "albumdb_sqlite2.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -97,14 +97,14 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
 
     #ifdef NFS_HACK
     newDB = locateLocal("appdata", KIO::encodeFileName(QDir::cleanPath(newDB)));
-    kDebug(50003) << "NFS: " << newDB;
+    kDebug(digiKamAreaCode) << "NFS: " << newDB;
     #endif
 
     AlbumDB db3;
     access.db()->setDBPath(newDB);
     if (!access.db()->isValid())
     {
-        kWarning(50003) << "Failed to open new Album Database";
+        kWarning(digiKamAreaCode) << "Failed to open new Album Database";
         return false;
     }
     */
@@ -119,7 +119,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
     /*
     #ifdef NFS_HACK
     dbPath = locateLocal("appdata", KIO::encodeFileName(QDir::cleanPath(dbPath)));
-    kDebug(50003) << "From NFS: " << dbPath;
+    kDebug(digiKamAreaCode) << "From NFS: " << dbPath;
     #endif
     */
 
@@ -127,7 +127,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
 
     if (!fi.exists())
     {
-        kDebug(50003) << "No old database present. Not upgrading";
+        kDebug(digiKamAreaCode) << "No old database present. Not upgrading";
         access.db()->setSetting("UpgradedFromSqlite2", "yes");
         return true;
     }
@@ -136,7 +136,7 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
     db2.setDBPath( dbPath );
     if (!db2.isValid())
     {
-        kDebug(50003) << "Failed to initialize Old Album Database";
+        kDebug(digiKamAreaCode) << "Failed to initialize Old Album Database";
         return false;
     }
 
@@ -312,8 +312,8 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
         AlbumMap::iterator it1 = albumMap.find(url);
         if (it1 == albumMap.end())
         {
-            kDebug(50003) << "Could not find album with url: " << url;
-            kDebug(50003) << "Most likely an external directory. Rejecting.";
+            kDebug(digiKamAreaCode) << "Could not find album with url: " << url;
+            kDebug(digiKamAreaCode) << "Most likely an external directory. Rejecting.";
             continue;
         }
 
@@ -333,15 +333,15 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
     // -- update setting entry ------------------------------------------
     access.db()->setSetting("UpgradedFromSqlite2", "yes");
 
-    kDebug(50003) << "Successfully upgraded database to sqlite3 ";
+    kDebug(digiKamAreaCode) << "Successfully upgraded database to sqlite3 ";
 
     // -- Check for db consistency ----------------------------------------
 
     /*
-    kDebug(50003) << "Checking database consistency";
+    kDebug(digiKamAreaCode) << "Checking database consistency";
 
 
-    kDebug(50003) << "Checking Albums..................";
+    kDebug(digiKamAreaCode) << "Checking Albums..................";
     values.clear();
     db2.execSql("SELECT id, url, date, caption, collection FROM Albums;", &values);
     for (QStringList::iterator it = values.begin(); it != values.end();)
@@ -372,17 +372,17 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
                 .arg(access.backend()->escapeString(album.collection)), &list, false);
         if (list.size() != 1)
         {
-            kError(50003) << "Failed";
-            kWarning(50003) << "";
-            kWarning(50003) << "Consistency check failed for Album: "
+            kError(digiKamAreaCode) << "Failed";
+            kWarning(digiKamAreaCode) << "";
+            kWarning(digiKamAreaCode) << "Consistency check failed for Album: "
                        << album.url;
             return false;
         }
     }
-    kDebug(50003) << " (" << values.count()/5 << " Albums) "  << "OK";
+    kDebug(digiKamAreaCode) << " (" << values.count()/5 << " Albums) "  << "OK";
 
 
-    kDebug(50003) << "Checking Tags....................";
+    kDebug(digiKamAreaCode) << "Checking Tags....................";
     values.clear();
     db2.execSql("SELECT id, pid, name FROM Tags;", &values);
     for (QStringList::iterator it = values.begin(); it != values.end();)
@@ -405,17 +405,17 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
         &list, false);
         if (list.size() != 1)
         {
-            kError(50003) << "Failed";
-            kWarning(50003) << "";
-            kWarning(50003) << "Consistency check failed for Tag: "
+            kError(digiKamAreaCode) << "Failed";
+            kWarning(digiKamAreaCode) << "";
+            kWarning(digiKamAreaCode) << "Consistency check failed for Tag: "
                        << name;
             return false;
         }
     }
-    kDebug(50003) << " (" << values.count()/3 << " Tags) "  << "OK";
+    kDebug(digiKamAreaCode) << " (" << values.count()/3 << " Tags) "  << "OK";
 
 
-    kDebug(50003) << "Checking Images..................";
+    kDebug(digiKamAreaCode) << "Checking Images..................";
     values.clear();
     db2.execSql("SELECT Albums.url, Images.name, Images.caption "
             "FROM Images, Albums WHERE Albums.id=Images.dirid;", &values);
@@ -440,17 +440,17 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
         &list, false);
         if (list.size() != 1)
         {
-            kError(50003) << "Failed";
-            kWarning(50003) << "";
-            kWarning(50003) << "Consistency check failed for Image: "
+            kError(digiKamAreaCode) << "Failed";
+            kWarning(digiKamAreaCode) << "";
+            kWarning(digiKamAreaCode) << "Consistency check failed for Image: "
                        << url << ", " << name << ", " << caption;
             return false;
         }
     }
-    kDebug(50003) << " (" << values.count()/3 << " Images) " << "OK";
+    kDebug(digiKamAreaCode) << " (" << values.count()/3 << " Images) " << "OK";
 
 
-    kDebug(50003) << "Checking ImageTags...............";
+    kDebug(digiKamAreaCode) << "Checking ImageTags...............";
     values.clear();
     db2.execSql("SELECT Albums.url, ImageTags.name, ImageTags.tagid "
             "FROM ImageTags, Albums WHERE \n "
@@ -477,16 +477,16 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
         &list, false);
         if (list.size() != 1)
         {
-            kError(50003) << "Failed";
-            kWarning(50003) << "";
-            kWarning(50003) << "Consistency check failed for ImageTag: "
+            kError(digiKamAreaCode) << "Failed";
+            kWarning(digiKamAreaCode) << "";
+            kWarning(digiKamAreaCode) << "Consistency check failed for ImageTag: "
                        << url << ", " << name << ", " << tagid;
             return false;
         }
     }
-    kDebug(50003) << " (" << values.count()/3 << " ImageTags) " << "OK";
+    kDebug(digiKamAreaCode) << " (" << values.count()/3 << " ImageTags) " << "OK";
 
-    kDebug(50003) << "Checking Album icons ...............";
+    kDebug(digiKamAreaCode) << "Checking Album icons ...............";
     values.clear();
     db2.execSql("SELECT url, icon FROM Albums;", &values);
     for (QStringList::iterator it = values.begin(); it != values.end();)
@@ -509,18 +509,18 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
 
         if (list.size() != 1)
         {
-            kError(50003) << "Failed";
-            kWarning(50003) << "";
-            kWarning(50003) << "Consistency check failed for Album Icon: "
+            kError(digiKamAreaCode) << "Failed";
+            kWarning(digiKamAreaCode) << "";
+            kWarning(digiKamAreaCode) << "Consistency check failed for Album Icon: "
                        << url << ", " << icon;
 
             return false;
         }
     }
-    kDebug(50003) << " (" << values.count()/2 << " Album Icons) " << "OK";
+    kDebug(digiKamAreaCode) << " (" << values.count()/2 << " Album Icons) " << "OK";
 
 
-    kDebug(50003) << "Checking Tag icons ...............";
+    kDebug(digiKamAreaCode) << "Checking Tag icons ...............";
     values.clear();
     db2.execSql("SELECT id, icon FROM Tags;", &values);
     for (QStringList::iterator it = values.begin(); it != values.end();)
@@ -544,9 +544,9 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
 
             if (list.size() != 1)
             {
-                kError(50003) << "Failed";
-                kWarning(50003) << "";
-                kWarning(50003) << "Consistency check failed for Tag Icon: "
+                kError(digiKamAreaCode) << "Failed";
+                kWarning(digiKamAreaCode) << "";
+                kWarning(digiKamAreaCode) << "Consistency check failed for Tag Icon: "
                            << id << ", " << icon;
 
                 return false;
@@ -567,8 +567,8 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
                     .arg(access.backend()->escapeString(url)), &list);
             if (list.isEmpty())
             {
-                kWarning(50003) << "Tag icon not in Album Library Path, Rejecting ";
-                kWarning(50003) << "(" << icon << ")";
+                kWarning(digiKamAreaCode) << "Tag icon not in Album Library Path, Rejecting ";
+                kWarning(digiKamAreaCode) << "(" << icon << ")";
                 continue;
             }
 
@@ -583,9 +583,9 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
                     .arg(id), &list);
             if (list.size() != 1)
             {
-                kError(50003) << "Failed.";
-                kWarning(50003) << "";
-                kWarning(50003) << "Consistency check failed for Tag Icon: "
+                kError(digiKamAreaCode) << "Failed.";
+                kWarning(digiKamAreaCode) << "";
+                kWarning(digiKamAreaCode) << "Consistency check failed for Tag Icon: "
                            << id << ", " << icon;
 
                 return false;
@@ -593,10 +593,10 @@ bool upgradeDB_Sqlite2ToSqlite3(DatabaseAccess &access, const QString& sql2DBPat
 
         }
     }
-    kDebug(50003) << " (" << values.count()/2 << " Tag Icons) " << "OK";
+    kDebug(digiKamAreaCode) << " (" << values.count()/2 << " Tag Icons) " << "OK";
 
-    kDebug(50003) << "";
-    kDebug(50003) << "All Tests: A-OK";
+    kDebug(digiKamAreaCode) << "";
+    kDebug(digiKamAreaCode) << "All Tests: A-OK";
     */
 
     return true;

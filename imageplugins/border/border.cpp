@@ -37,13 +37,10 @@
 #include <QPolygon>
 #include <QRegion>
 
-// KDE includes
-
-#include <kdebug.h>
-
 // Local includes
 
 #include "dimg.h"
+#include "debug.h"
 
 namespace DigikamBorderImagesPlugin
 {
@@ -359,7 +356,7 @@ void Border::pattern(Digikam::DImg& src, Digikam::DImg& dest, int borderWidth,
     }
 
     Digikam::DImg tmp2(width, height, tmp.sixteenBit(), tmp.hasAlpha());
-    kDebug(50006) << "Border File:" << d->borderPath;
+    kDebug(imagePluginsAreaCode) << "Border File:" << d->borderPath;
     Digikam::DImg border(d->borderPath);
     if ( border.isNull() )
         return;
@@ -461,7 +458,7 @@ void Border::pattern2(Digikam::DImg& src, Digikam::DImg& dest, int borderWidth,
     int w = d->orgWidth + borderWidth*2;
     int h = d->orgHeight + borderWidth*2;
 
-    kDebug(50006) << "Border File:" << d->borderPath;
+    kDebug(imagePluginsAreaCode) << "Border File:" << d->borderPath;
     Digikam::DImg border(d->borderPath);
     if ( border.isNull() )
         return;

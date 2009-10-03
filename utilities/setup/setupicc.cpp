@@ -47,7 +47,6 @@
 
 #include <kcombobox.h>
 #include <kconfig.h>
-#include <kdebug.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
@@ -73,6 +72,7 @@
 #include "iccsettings.h"
 #include "iccsettingscontainer.h"
 #include "albumsettings.h"
+#include "debug.h"
 
 using namespace KDcrawIface;
 
@@ -683,7 +683,7 @@ void SetupICC::fillCombos(bool report)
             KMessageBox::sorry(this, message);
         }
 
-        kDebug(50003) << "No ICC profile files found!!!";
+        kDebug(digiKamAreaCode) << "No ICC profile files found!!!";
         d->mainDialog->enableButtonOk(false);
         return;
     }

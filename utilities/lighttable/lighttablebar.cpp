@@ -41,7 +41,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+
 #include <kfileitem.h>
 #include <kglobal.h>
 #include <kiconloader.h>

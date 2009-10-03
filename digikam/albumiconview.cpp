@@ -69,7 +69,6 @@ extern "C"
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kcalendarsystem.h>
-#include <kdebug.h>
 #include <kdeversion.h>
 #include <kglobal.h>
 #include <kiconeffect.h>
@@ -109,7 +108,7 @@ extern "C"
 #include "albumselectdialog.h"
 #include "albumsettings.h"
 #include "cameraui.h"
-#include "globals.h"
+#include "debug.h"
 #include "contextmenuhelper.h"
 #include "databaseaccess.h"
 #include "databasetransaction.h"
@@ -411,7 +410,7 @@ void AlbumIconView::slotImageListerNewItems(const ImageInfoList& itemList)
         PAlbum *album = AlbumManager::instance()->findPAlbum(it->albumId());
         if (!album)
         {
-            kWarning(50003) << "No album for item: " << it->name()
+            kWarning(digiKamAreaCode) << "No album for item: " << it->name()
                             << ", albumID: " << it->albumId();
             continue;
         }
@@ -1750,7 +1749,7 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
 
     for( it = urlList.begin(); it != urlList.end(); ++it )
     {
-        kDebug(50003) << "Setting Exif Orientation tag to " << orientation;
+        kDebug(digiKamAreaCode) << "Setting Exif Orientation tag to " << orientation;
 
         DMetadata metadata((*it).toLocalFile());
         DMetadata::ImageOrientation o = (DMetadata::ImageOrientation)orientation;

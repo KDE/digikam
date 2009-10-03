@@ -28,7 +28,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
@@ -40,6 +39,7 @@
 // Local includes
 
 #include "freerotationtool.h"
+#include "debug.h"
 
 using namespace DigikamFreeRotationImagesPlugin;
 
@@ -58,7 +58,7 @@ ImagePlugin_FreeRotation::ImagePlugin_FreeRotation(QObject *parent, const QVaria
 
     setXMLFile("digikamimageplugin_freerotation_ui.rc");
 
-    kDebug(50006) << "ImagePlugin_FreeRotation plugin loaded";
+    kDebug(imagePluginsAreaCode) << "ImagePlugin_FreeRotation plugin loaded";
 }
 
 ImagePlugin_FreeRotation::~ImagePlugin_FreeRotation()

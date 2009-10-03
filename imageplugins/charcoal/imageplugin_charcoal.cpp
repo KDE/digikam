@@ -33,13 +33,13 @@
 #include <klibloader.h>
 #include <kaction.h>
 #include <kactioncollection.h>
-#include <kdebug.h>
 #include <kcursor.h>
 #include <kapplication.h>
 
 // Local includes
 
 #include "charcoaltool.h"
+#include "debug.h"
 
 using namespace DigikamCharcoalImagesPlugin;
 
@@ -57,7 +57,7 @@ ImagePlugin_Charcoal::ImagePlugin_Charcoal(QObject *parent, const QVariantList &
 
     setXMLFile( "digikamimageplugin_charcoal_ui.rc" );
 
-    kDebug(50006) << "ImagePlugin_Charcoal plugin loaded";
+    kDebug(imagePluginsAreaCode) << "ImagePlugin_Charcoal plugin loaded";
 }
 
 ImagePlugin_Charcoal::~ImagePlugin_Charcoal()

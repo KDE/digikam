@@ -32,6 +32,7 @@
 
 #include "digikam_export.h"
 #include "histogrambox.h"
+#include "debug.h"
 #include "globals.h"
 
 class KPushButton;

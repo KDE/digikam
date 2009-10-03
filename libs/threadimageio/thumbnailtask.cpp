@@ -35,10 +35,6 @@
 #include <QVariant>
 #include <QMatrix>
 
-// KDE includes
-
-#include <kdebug.h>
-
 // LibKDcraw includes
 
 #include <libkdcraw/kdcraw.h>
@@ -50,6 +46,7 @@
 #include "jpegutils.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailcreator.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -197,7 +194,7 @@ void ThumbnailLoadingTask::postProcess()
             break;
         }
         default:
-            kError(50003) << "Unsupported postprocessing parameter for thumbnail loading:"
+            kError(digiKamAreaCode) << "Unsupported postprocessing parameter for thumbnail loading:"
                           << m_loadingDescription.postProcessingParameters.colorManagement;
             break;
     }

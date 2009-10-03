@@ -32,7 +32,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kiconloader.h>
 
 // Local includes
@@ -53,6 +52,7 @@
 #include "loadingcacheinterface.h"
 #include "thumbnailloadthread.h"
 #include "tooltipfiller.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -396,7 +396,7 @@ void ImageCategorizedView::setCurrentUrl(const KUrl& url)
 
 void ImageCategorizedView::setSelectedUrls(const KUrl::List& urlList)
 {
-    kDebug(50003)<<"urlList.size():"<<urlList.size();
+    kDebug(digiKamAreaCode)<<"urlList.size():"<<urlList.size();
     QItemSelection mySelection;
     for (KUrl::List::const_iterator it = urlList.constBegin(); it!=urlList.constEnd(); ++it)
     {

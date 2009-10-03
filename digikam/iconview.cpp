@@ -49,7 +49,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+
 #include <kcursor.h>
 #include <kiconloader.h>
 #include <kglobalsettings.h>

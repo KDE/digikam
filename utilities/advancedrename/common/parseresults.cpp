@@ -23,9 +23,9 @@
 
 #include "parseresults.h"
 
-// KDE includes
+// Local includes
 
-#include <kdebug.h>
+#include "debug.h"
 
 namespace Digikam
 {
@@ -195,7 +195,7 @@ void ParseResults::debug()
         QString t = token(key);
         QString r = result(key);
 
-        kDebug(50003) << "(" << key.first << ":" << key.second << ") => "
+        kDebug(digiKamAreaCode) << "(" << key.first << ":" << key.second << ") => "
                       << "(" << t         << ":" << r          << ")";
     }
 }

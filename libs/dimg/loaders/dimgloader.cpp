@@ -32,13 +32,13 @@
 
 #include <kstandarddirs.h>
 #include <kcodecs.h>       // for KMD5
-#include <kdebug.h>
 
 // Local includes
 
 #include "dimg_p.h"
 #include "dmetadata.h"
 #include "dimgloaderobserver.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -149,7 +149,7 @@ unsigned char* DImgLoader::new_failureTolerant(size_t size)
     try {
         return new uchar[size];
     } catch (std::bad_alloc &ex) {
-        kError(50003) << "Failed to allocate chunk of memory of size" << size << ex.what();
+        kError(digiKamAreaCode) << "Failed to allocate chunk of memory of size" << size << ex.what();
         return 0;
     }
 }
@@ -159,7 +159,7 @@ unsigned short* DImgLoader::new_short_failureTolerant(size_t size)
     try {
         return new unsigned short[size];
     } catch (std::bad_alloc &ex) {
-        kError(50003) << "Failed to allocate chunk of memory of size" << size << ex.what();
+        kError(digiKamAreaCode) << "Failed to allocate chunk of memory of size" << size << ex.what();
         return 0;
     }
 }

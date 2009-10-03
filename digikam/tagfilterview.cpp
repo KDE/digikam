@@ -38,7 +38,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kmenu.h>
 #include <klocale.h>
 #include <kapplication.h>
@@ -69,6 +68,7 @@
 #include "statusprogressbar.h"
 #include "syncjob.h"
 #include "tageditdlg.h"
+#include "debug.h"
 
 #include "config-digikam.h"
 #ifdef HAVE_KDEPIMLIBS
@@ -725,7 +725,7 @@ void TagFilterView::slotTagAdded(Album* album)
 
         if (!parent)
         {
-            kWarning(50003) << " Failed to find parent for Tag "
+            kWarning(digiKamAreaCode) << " Failed to find parent for Tag "
                             << tag->tagPath();
             return;
         }

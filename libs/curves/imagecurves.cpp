@@ -42,9 +42,9 @@
 
 #include <QFile>
 
-// KDE includes
+// Local includes
 
-#include <kdebug.h>
+#include "debug.h"
 
 namespace Digikam
 {
@@ -674,7 +674,7 @@ bool ImageCurves::loadCurvesFromGimpCurvesFile(const KUrl& fileUrl)
           fields = fscanf (file, "%d %d ", &index[i][j], &value[i][j]);
           if (fields != 2)
           {
-             kWarning(50003) <<  "Invalid Gimp curves file!";
+             kWarning(digiKamAreaCode) <<  "Invalid Gimp curves file!";
              fclose(file);
              return false;
           }

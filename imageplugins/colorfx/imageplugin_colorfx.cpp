@@ -34,13 +34,13 @@
 #include <klibloader.h>
 #include <kaction.h>
 #include <kactioncollection.h>
-#include <kdebug.h>
 #include <kcursor.h>
 #include <kapplication.h>
 
 // Local includes
 
 #include "colorfxtool.h"
+#include "debug.h"
 
 using namespace DigikamColorFXImagesPlugin;
 
@@ -58,7 +58,7 @@ ImagePlugin_ColorFX::ImagePlugin_ColorFX(QObject *parent, const QVariantList &)
 
     setXMLFile( "digikamimageplugin_colorfx_ui.rc" );
 
-    kDebug(50006) << "ImagePlugin_ColorFX plugin loaded";
+    kDebug(imagePluginsAreaCode) << "ImagePlugin_ColorFX plugin loaded";
 }
 
 ImagePlugin_ColorFX::~ImagePlugin_ColorFX()

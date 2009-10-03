@@ -34,15 +34,12 @@
 
 #include <cmath>
 
-// KDE includes
-
-#include <kdebug.h>
-
 // Local includes
 
 #include "dimg.h"
 #include "dimggaussianblur.h"
 #include "dimgimagefilters.h"
+#include "debug.h"
 
 namespace DigikamCharcoalImagesPlugin
 {
@@ -60,7 +57,7 @@ void Charcoal::filterImage(void)
 {
     if (m_orgImage.isNull())
     {
-       kWarning(50006) << "No image data available!";
+       kWarning(imagePluginsAreaCode) << "No image data available!";
        return;
     }
 
@@ -77,7 +74,7 @@ void Charcoal::filterImage(void)
 
     if ((int)m_orgImage.width() < kernelWidth)
     {
-        kWarning(50006) << "Image is smaller than radius!";
+        kWarning(imagePluginsAreaCode) << "Image is smaller than radius!";
         return;
     }
 
@@ -85,7 +82,7 @@ void Charcoal::filterImage(void)
 
     if (!kernel)
     {
-        kWarning(50006) << "Unable to allocate memory!";
+        kWarning(imagePluginsAreaCode) << "Unable to allocate memory!";
         return;
     }
 
@@ -147,7 +144,7 @@ bool Charcoal::convolveImage(const unsigned int order, const double *kernel)
 
     if ((kernelWidth % 2) == 0)
     {
-        kWarning(50006) << "Kernel width must be an odd number!";
+        kWarning(imagePluginsAreaCode) << "Kernel width must be an odd number!";
         return(false);
     }
 
@@ -155,7 +152,7 @@ bool Charcoal::convolveImage(const unsigned int order, const double *kernel)
 
     if (!normal_kernel)
     {
-        kWarning(50006) << "Unable to allocate memory!";
+        kWarning(imagePluginsAreaCode) << "Unable to allocate memory!";
         return(false);
     }
 

@@ -33,7 +33,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kcmdlineargs.h>
 #include <kapplication.h>
 #include <kaboutdata.h>
@@ -62,6 +61,7 @@
 #include "collectionlocation.h"
 #include "digikamapp.h"
 #include "assistantdlg.h"
+#include "debug.h"
 
 using namespace Digikam;
 
@@ -140,7 +140,7 @@ int main(int argc, char *argv[])
         AlbumManager::checkDatabaseDirsAfterFirstRun(dbPath, firstAlbumPath);
     }
 
-    kDebug(50003) << "Database Path: " << dbPath;
+    kDebug(digiKamAreaCode) << "Database Path: " << dbPath;
 
     // Check if SQLite Qt4 plugin is available.
 
@@ -151,7 +151,7 @@ int main(int argc, char *argv[])
                                        "Database plugins installed are:"),
                                QSqlDatabase::drivers());
 
-        kDebug(50003) << "QT Sql drivers list: " << QSqlDatabase::drivers();
+        kDebug(digiKamAreaCode) << "QT Sql drivers list: " << QSqlDatabase::drivers();
         return 1;
     }
 

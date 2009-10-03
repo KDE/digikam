@@ -37,7 +37,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kdialog.h>
 #include <kiconloader.h>
 #include <kinputdialog.h>
@@ -53,6 +52,7 @@
 #include "searchwindow.h"
 #include "searchfolderview.h"
 #include "searchxml.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -317,7 +317,7 @@ SearchWindow *SearchTabHeader::searchWindow()
 {
     if (!d->searchWindow)
     {
-        kDebug(50003) << "Creating search window";
+        kDebug(digiKamAreaCode) << "Creating search window";
         // Create the advanced search edit window, deferred from constructor
         d->searchWindow = new SearchWindow;
 

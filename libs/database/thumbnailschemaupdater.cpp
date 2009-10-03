@@ -31,7 +31,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kio/job.h>
 #include <kio/netaccess.h>
 #include <klocale.h>
@@ -45,6 +44,7 @@
 #include "databasetransaction.h"
 #include "thumbnaildatabaseaccess.h"
 #include "thumbnaildb.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -85,13 +85,13 @@ bool ThumbnailSchemaUpdater::startUpdates()
         // Find out schema version of db file
         QString version = m_access->db()->getSetting("DBVersion");
         QString versionRequired = m_access->db()->getSetting("DBVersionRequired");
-        //kDebug(50003) << "Have a database structure version " << version;
+        //kDebug(digiKamAreaCode) << "Have a database structure version " << version;
 
         // We absolutely require the DBVersion setting
         if (version.isEmpty())
         {
             // Something is damaged. Give up.
-            kError(50003) << "DBVersion not available! Giving up schema upgrading.";
+            kError(digiKamAreaCode) << "DBVersion not available! Giving up schema upgrading.";
             QString errorMsg = i18n(
                     "The database is not valid: "
                     "the \"DBVersion\" setting does not exist. "
@@ -141,7 +141,7 @@ bool ThumbnailSchemaUpdater::startUpdates()
     }
     else
     {
-        //kDebug(50003) << "No database file available";
+        //kDebug(digiKamAreaCode) << "No database file available";
         DatabaseParameters parameters = m_access->parameters();
         // No legacy handling: start with a fresh db
         if (!createDatabase())

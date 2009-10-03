@@ -53,7 +53,6 @@
 // KDE includes
 
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kmessagebox.h>
 
 // Local includes
@@ -71,6 +70,7 @@
 #include "dmetadata.h"
 #include "rawimport.h"
 #include "editortooliface.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -512,7 +512,7 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
     if (mimeType.isEmpty())
         mimeType = getImageFormat();
 
-    kDebug(50003) << "Saving to :" << QFile::encodeName(fileName).data() << " ("
+    kDebug(digiKamAreaCode) << "Saving to :" << QFile::encodeName(fileName).data() << " ("
                   << mimeType << ")";
 
     // JPEG file format.
@@ -533,7 +533,7 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
 
     // JPEG 2000 file format.
     if ( mimeType.toUpper() == QString("JP2") || mimeType.toUpper() == QString("JPX") ||
-         mimeType.toUpper() == QString("JPC") || mimeType.toUpper() == QString("PGX") || 
+         mimeType.toUpper() == QString("JPC") || mimeType.toUpper() == QString("PGX") ||
          mimeType.toUpper() == QString("J2K"))
     {
         if (iofileSettings->JPEG2000LossLess)
@@ -564,7 +564,7 @@ void DImgInterface::slotImageSaved(const QString& filePath, bool success)
         return;
 
     if (!success)
-        kWarning(50003) << "error saving image '" << QFile::encodeName(filePath).data();
+        kWarning(digiKamAreaCode) << "error saving image '" << QFile::encodeName(filePath).data();
 
     emit signalImageSaved(filePath, success);
     emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
@@ -996,7 +996,7 @@ DImg* DImgInterface::getImg()
     }
     else
     {
-        kWarning(50003) << "d->image is NULL";
+        kWarning(digiKamAreaCode) << "d->image is NULL";
         return 0;
     }
 }
@@ -1009,7 +1009,7 @@ uchar* DImgInterface::getImage()
     }
     else
     {
-        kWarning(50003) << "d->image is NULL";
+        kWarning(digiKamAreaCode) << "d->image is NULL";
         return 0;
     }
 }
@@ -1034,13 +1034,13 @@ void DImgInterface::putImage(uchar* data, int w, int h, bool sixteenBit)
 {
     if (d->image.isNull())
     {
-       kWarning(50003) << "d->image is NULL";
+       kWarning(digiKamAreaCode) << "d->image is NULL";
        return;
     }
 
     if (!data)
     {
-       kWarning(50003) << "New image is NULL";
+       kWarning(digiKamAreaCode) << "New image is NULL";
        return;
     }
 
@@ -1057,7 +1057,7 @@ void DImgInterface::putImage(uchar* data, int w, int h, bool sixteenBit)
         d->origHeight = h;
     }
 
-    //kDebug(50003) << data << " " << w << " " << h;
+    //kDebug(digiKamAreaCode) << data << " " << w << " " << h;
     d->image.putImageData(w, h, sixteenBit, d->image.hasAlpha(), data);
 
     setModified();
@@ -1067,11 +1067,11 @@ void DImgInterface::putIccProfile(const IccProfile& profile)
 {
     if (d->image.isNull())
     {
-        kWarning(50003) << "d->image is NULL";
+        kWarning(digiKamAreaCode) << "d->image is NULL";
         return;
     }
 
-    //kDebug(50003) << "Embedding profile: " << profile;
+    //kDebug(digiKamAreaCode) << "Embedding profile: " << profile;
     d->image.setIccProfile(profile);
     updateColorManagement();
     setModified();
@@ -1152,7 +1152,7 @@ QString DImgInterface::getImageFormat()
     // It is a bug in the loader if format attribute is not given
     if (mimeType.isEmpty())
     {
-        kWarning(50003) << "DImg object does not contain attribute \"format\"";
+        kWarning(digiKamAreaCode) << "DImg object does not contain attribute \"format\"";
         mimeType = QImageReader::imageFormat(d->filename);
     }
     return mimeType;

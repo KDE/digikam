@@ -41,7 +41,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kmenu.h>
 #include <klocale.h>
 #include <kurl.h>
@@ -81,6 +80,7 @@
 #include "imageattributeswatch.h"
 #include "metadatahub.h"
 #include "statusprogressbar.h"
+#include "debug.h"
 
 #include "config-digikam.h"
 #ifdef HAVE_KDEPIMLIBS
@@ -550,7 +550,7 @@ void ImageDescEditTab::slotApplyAllChanges()
     // remove before final release
     if (d->ignoreImageAttributesWatch)
     {
-        kWarning(50003) << "ImageDescEditTab::slotApplyAllChanges(): re-entering from event loop!";
+        kWarning(digiKamAreaCode) << "ImageDescEditTab::slotApplyAllChanges(): re-entering from event loop!";
     }
 
     // Create a local copy of the current state of the hub.
@@ -1357,7 +1357,7 @@ void ImageDescEditTab::slotAlbumAdded(Album* a)
 
         if (!parent)
         {
-            kWarning(50003) << "Failed to find parent for Tag " << tag->title();
+            kWarning(digiKamAreaCode) << "Failed to find parent for Tag " << tag->title();
             return;
         }
 
@@ -1445,7 +1445,7 @@ void ImageDescEditTab::slotAlbumRenamed(Album* a)
     TAlbumCheckListItem* viewItem = (TAlbumCheckListItem*)(album->extraData(d->tagsView));
     if (!viewItem)
     {
-        kWarning(50003) << "Failed to find view item for Tag "
+        kWarning(digiKamAreaCode) << "Failed to find view item for Tag "
                         << album->title();
         return;
     }

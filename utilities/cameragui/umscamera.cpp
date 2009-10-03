@@ -46,7 +46,6 @@ extern "C"
 // KDE includes
 
 #include <kcodecs.h>
-#include <kdebug.h>
 #include <kio/global.h>
 #include <klocale.h>
 #include <kmimetype.h>
@@ -64,6 +63,7 @@ extern "C"
 #include "dimg.h"
 #include "dmetadata.h"
 #include "imagescanner.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -269,7 +269,7 @@ bool UMSCamera::getExif(const QString&, const QString&, char **, int&)
 {
     // Not necessary to implement this. read data directly from the file
     // (done in camera controller)
-    kWarning(50003) << "Exif implemented yet in camera controller";
+    kWarning(digiKamAreaCode) << "Exif implemented yet in camera controller";
     return false;
 }
 
@@ -284,7 +284,7 @@ bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, con
 
     if ( !sFile.open(QIODevice::ReadOnly) )
     {
-        kWarning(50003) << "Failed to open source file for reading: "
+        kWarning(digiKamAreaCode) << "Failed to open source file for reading: "
                         << src;
         return false;
     }
@@ -292,7 +292,7 @@ bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, con
     if ( !dFile.open(QIODevice::WriteOnly) )
     {
         sFile.close();
-        kWarning(50003) << "Failed to open dest file for writing: "
+        kWarning(digiKamAreaCode) << "Failed to open dest file for writing: "
                         << dest;
         return false;
     }
@@ -382,7 +382,7 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
 
     if ( !sFile.open(QIODevice::ReadOnly) )
     {
-        kWarning(50003) << "Failed to open source file for reading: "
+        kWarning(digiKamAreaCode) << "Failed to open source file for reading: "
                         << src;
         return false;
     }
@@ -390,7 +390,7 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
     if ( !dFile.open(QIODevice::WriteOnly) )
     {
         sFile.close();
-        kWarning(50003) << "Failed to open dest file for writing: "
+        kWarning(digiKamAreaCode) << "Failed to open dest file for writing: "
                         << dest;
         return false;
     }

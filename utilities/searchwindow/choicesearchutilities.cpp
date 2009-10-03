@@ -30,13 +30,13 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 
 // Local includes
 
 #include "rexpanderbox.h"
 #include "searchutilities.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -228,7 +228,7 @@ void ChoiceSearchComboBox::setLabelText(const QString& text)
 
 void ChoiceSearchComboBox::labelClicked()
 {
-    kDebug(50003) << "labelClicked";
+    kDebug(digiKamAreaCode) << "labelClicked";
     showPopup();
 }
 

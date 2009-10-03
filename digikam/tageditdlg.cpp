@@ -35,7 +35,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klineedit.h>
 #include <klocale.h>
 #include <kicondialog.h>
@@ -50,6 +49,7 @@
 #include "album.h"
 #include "syncjob.h"
 #include "searchtextbar.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -330,7 +330,7 @@ AlbumList TagEditDlg::createTAlbum(TAlbum *mainRootAlbum, const QString& tagStr,
                 root = mainRootAlbum;
 
             QStringList tagsList = hierarchy.split('/', QString::SkipEmptyParts);
-            kDebug(50003) << tagsList;
+            kDebug(digiKamAreaCode) << tagsList;
 
             if (!tagsList.isEmpty())
             {
@@ -344,7 +344,7 @@ AlbumList TagEditDlg::createTAlbum(TAlbum *mainRootAlbum, const QString& tagStr,
                     else
                         tagPath = QString("%1/%2").arg(root->tagPath()).arg(tag);
 
-                    kDebug(50003) << tag << " :: " << tagPath;
+                    kDebug(digiKamAreaCode) << tag << " :: " << tagPath;
 
                     if (!tag.isEmpty())
                     {

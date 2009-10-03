@@ -30,7 +30,6 @@
 // KDE includes
 
 #include <kconfig.h>
-#include <kdebug.h>
 #include <klocale.h>
 
 // LibKIPI includes
@@ -39,7 +38,7 @@
 
 // Local includes
 
-#include "globals.h"
+#include "debug.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albumsettings.h"
@@ -61,7 +60,7 @@ KipiImageCollection::KipiImageCollection(Type tp, Album *album, const QString& f
 
     if (!album)
     {
-        kWarning(50003) << "This should not happen. No album specified";
+        kWarning(digiKamAreaCode) << "This should not happen. No album specified";
     }
 }
 
@@ -138,7 +137,7 @@ KUrl::List KipiImageCollection::images()
             }
             else
             {
-                kWarning(50003) << "Unknown album type";
+                kWarning(digiKamAreaCode) << "Unknown album type";
                 return KUrl::List();
             }
 
@@ -227,7 +226,7 @@ KUrl KipiImageCollection::path()
     }
     else
     {
-        kWarning(50003) << "Requesting KUrl from a virtual album";
+        kWarning(digiKamAreaCode) << "Requesting KUrl from a virtual album";
         return QString();
     }
 }
@@ -243,7 +242,7 @@ KUrl KipiImageCollection::uploadPath()
     }
     else
     {
-        kWarning(50003) << "Requesting KUrl from a virtual album";
+        kWarning(digiKamAreaCode) << "Requesting KUrl from a virtual album";
         return KUrl();
     }
 }

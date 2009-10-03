@@ -33,7 +33,6 @@
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
 #include <klocale.h>
@@ -41,6 +40,7 @@
 // Local includes
 
 #include "superimposetool.h"
+#include "debug.h"
 
 using namespace DigikamSuperImposeImagesPlugin;
 
@@ -58,7 +58,7 @@ ImagePlugin_SuperImpose::ImagePlugin_SuperImpose(QObject *parent, const QVariant
 
     setXMLFile("digikamimageplugin_superimpose_ui.rc");
 
-    kDebug(50006) << "ImagePlugin_SuperImpose plugin loaded";
+    kDebug(imagePluginsAreaCode) << "ImagePlugin_SuperImpose plugin loaded";
 }
 
 ImagePlugin_SuperImpose::~ImagePlugin_SuperImpose()

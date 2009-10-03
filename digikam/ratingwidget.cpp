@@ -37,12 +37,9 @@
 #include <QTimeLine>
 #include <QPolygon>
 
-// KDE includes
-
-#include <kdebug.h>
-
 // Local includes
 
+#include "debug.h"
 #include "globals.h"
 #include "themeengine.h"
 

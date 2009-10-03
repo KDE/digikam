@@ -33,7 +33,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kmenu.h>
 #include <klocale.h>
 #include <kurl.h>
@@ -61,6 +60,7 @@
 #include "albumthumbnailloader.h"
 #include "scancontroller.h"
 #include "statusprogressbar.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -336,7 +336,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
         srcAlbum    = AlbumManager::instance()->findTAlbum(albumID);
         if (!srcAlbum)
         {
-            kWarning(50003) << "Could not find source album of drag";
+            kWarning(digiKamAreaCode) << "Could not find source album of drag";
             return;
         }
 

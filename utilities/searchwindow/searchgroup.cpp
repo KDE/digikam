@@ -36,7 +36,6 @@
 // KDE includes
 
 #include <kcombobox.h>
-#include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -48,12 +47,13 @@
 #include "searchfields.h"
 #include "searchfieldgroup.h"
 #include "searchutilities.h"
+#include "debug.h"
 
 namespace Digikam
 {
 
 SearchGroup::SearchGroup(SearchView *parent)
-           : AbstractSearchGroupContainer(parent), 
+           : AbstractSearchGroupContainer(parent),
              m_view(parent), m_layout(0), m_label(0), m_groupType(FirstGroup)
 {
 }
@@ -267,7 +267,7 @@ void SearchGroup::read(SearchXmlCachingReader& reader)
             }
             else
             {
-                kWarning(50003) << "Unhandled search field in XML with field name" << name;
+                kWarning(digiKamAreaCode) << "Unhandled search field in XML with field name" << name;
                 reader.readToEndOfElement();
             }
         }
@@ -359,7 +359,7 @@ public:
 };
 
 SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache *cache, SearchGroup::Type type, QWidget *parent)
-                : QWidget(parent), 
+                : QWidget(parent),
                   m_extended(false), m_groupOp(SearchXml::And), m_fieldOp(SearchXml::And),
                   m_groupOpLabel(0), m_stackedLayout(0), m_themeCache(cache)
 {

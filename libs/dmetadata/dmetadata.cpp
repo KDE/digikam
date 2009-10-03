@@ -35,7 +35,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kglobal.h>
 
@@ -47,8 +46,9 @@
 // Local includes
 
 #include "template.h"
-#include "globals.h"
 #include "version.h"
+#include "debug.h"
+#include "globals.h"
 
 using namespace KExiv2Iface;
 
@@ -249,7 +249,7 @@ bool DMetadata::setImageComments(const CaptionsMap& comments) const
     /*if (comments.isEmpty())
           return false;*/
 
-    kDebug(50003) << getFilePath() << " ==> Comment: " << comments;
+    kDebug(digiKamAreaCode) << getFilePath() << " ==> Comment: " << comments;
 
     // In first, set captions properties to digiKam XMP namespace
 
@@ -428,11 +428,11 @@ bool DMetadata::setImageRating(int rating) const
 
     if (rating < RatingMin || rating > RatingMax)
     {
-        kDebug(50003) << "Rating value to write is out of range!";
+        kDebug(digiKamAreaCode) << "Rating value to write is out of range!";
         return false;
     }
 
-    kDebug(50003) << getFilePath() << " ==> Rating: " << rating;
+    kDebug(digiKamAreaCode) << getFilePath() << " ==> Rating: " << rating;
 
     if (!setProgramId())
         return false;
@@ -581,7 +581,7 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
     {
         // See B.K.O #197285: LightRoom use '|' as separator.
         tagsPath = tagsPath.replaceInStrings("|", "/");
-        kDebug(50003) << "Tags Path imported from LR: " << tagsPath;
+        kDebug(digiKamAreaCode) << "Tags Path imported from LR: " << tagsPath;
         return true;
     }
 
@@ -637,7 +637,7 @@ bool DMetadata::setMetadataTemplate(const Template& t) const
     KExiv2::AltLangMap rightUsage = t.rightUsageTerms();
     QString instructions          = t.instructions();
 
-    kDebug(50003) << "Applying Metadata Template: " << t.templateTitle() << " :: " << authors;
+    kDebug(digiKamAreaCode) << "Applying Metadata Template: " << t.templateTitle() << " :: " << authors;
 
     // Set XMP tags. XMP<->IPTC Schema from Photoshop 7.0
 
@@ -677,7 +677,7 @@ bool DMetadata::setMetadataTemplate(const Template& t) const
     // Set IPTC tags.
 
     if (!setIptcTagsStringList("Iptc.Application2.Byline", 32,
-                               getIptcTagsStringList("Iptc.Application2.Byline"), 
+                               getIptcTagsStringList("Iptc.Application2.Byline"),
                                authors, false)) return false;
 
     if (!setIptcTag(authorsPosition,        32,  "Authors Title", "Iptc.Application2.BylineTitle"))         return false;
@@ -988,7 +988,7 @@ IccProfile DMetadata::getIccProfile() const
     QByteArray data = getExifTagData("Exif.Image.InterColorProfile");
     if (!data.isNull())
     {
-        kDebug(50003) << "Found an ICC profile in Exif metadata";
+        kDebug(digiKamAreaCode) << "Found an ICC profile in Exif metadata";
         return data;
     }
 
@@ -997,13 +997,13 @@ IccProfile DMetadata::getIccProfile() const
     {
         case DMetadata::WORKSPACE_SRGB:
         {
-            kDebug(50003) << "Exif color-space tag is sRGB. Using default sRGB ICC profile.";
+            kDebug(digiKamAreaCode) << "Exif color-space tag is sRGB. Using default sRGB ICC profile.";
             return IccProfile::sRGB();
         }
 
         case DMetadata::WORKSPACE_ADOBERGB:
         {
-            kDebug(50003) << "Exif color-space tag is AdobeRGB. Using default AdobeRGB ICC profile.";
+            kDebug(digiKamAreaCode) << "Exif color-space tag is AdobeRGB. Using default AdobeRGB ICC profile.";
             return IccProfile::adobeRGB();
         }
 
@@ -1019,7 +1019,7 @@ bool DMetadata::setIptcTag(const QString& text, int maxLength,
 {
     QString truncatedText = text;
     truncatedText.truncate(maxLength);
-    kDebug(50003) << getFilePath() << " ==> " << debugLabel << ": " << truncatedText;
+    kDebug(digiKamAreaCode) << getFilePath() << " ==> " << debugLabel << ": " << truncatedText;
     return setIptcTagString(tagKey, truncatedText);    // returns false if failed
 }
 
@@ -1616,7 +1616,7 @@ QMap<int, QString> DMetadata::possibleValuesForEnumField(MetadataInfo::Field fie
             //more: TODO?
             return map;
         default:
-            kWarning(50003) << "Unsupported field " << field << " in DMetadata::possibleValuesForEnumField";
+            kWarning(digiKamAreaCode) << "Unsupported field " << field << " in DMetadata::possibleValuesForEnumField";
             return map;
     }
 

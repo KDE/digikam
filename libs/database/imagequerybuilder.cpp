@@ -36,7 +36,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kcalendarsystem.h>
@@ -52,6 +51,7 @@
 #include "databaseaccess.h"
 #include "albumdb.h"
 #include "geodetictools.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -127,7 +127,7 @@ QString ImageQueryBuilder::buildQueryFromXml(const QString& xml, QList<QVariant>
         }
     }
 
-kDebug() << sql;
+    kDebug() << sql;
     return sql;
 }
 
@@ -1057,11 +1057,11 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     }
     else if (name == "similarity")
     {
-        kWarning(50003) << "Search field \"similarity\" is not supported by ImageQueryBuilder";
+        kWarning(digiKamAreaCode) << "Search field \"similarity\" is not supported by ImageQueryBuilder";
     }
     else
     {
-        kDebug(50003) << "Search field" << name << "not known by this version of ImageQueryBuilder";
+        kDebug(digiKamAreaCode) << "Search field" << name << "not known by this version of ImageQueryBuilder";
         return false;
     }
     return true;
@@ -1387,7 +1387,7 @@ QString ImageQueryBuilder::buildQueryFromUrl(const KUrl& url, QList<QVariant> *b
         }
         else
         {
-            kWarning(50003) << "Unknown rule type: " << key << " passed to kioslave";
+            kWarning(digiKamAreaCode) << "Unknown rule type: " << key << " passed to kioslave";
             continue;
         }
 
@@ -1409,7 +1409,7 @@ QString ImageQueryBuilder::buildQueryFromUrl(const KUrl& url, QList<QVariant> *b
             rule.op = NLIKE;
         else
         {
-            kWarning(50003) << "Unknown op type: " << op << " passed to kioslave";
+            kWarning(digiKamAreaCode) << "Unknown op type: " << op << " passed to kioslave";
             continue;
         }
 
@@ -1589,7 +1589,7 @@ QString SubQueryBuilder::build(enum SKey key, enum SOperator op,
         }
         case (KEYWORD):
         {
-            kWarning(50003) << "KEYWORD Detected which is not possible";
+            kWarning(digiKamAreaCode) << "KEYWORD Detected which is not possible";
             break;
         }
         case(RATING):

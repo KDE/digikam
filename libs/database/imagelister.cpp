@@ -45,7 +45,6 @@
 #include <klocale.h>
 #include <kcomponentdata.h>
 #include <kmimetype.h>
-#include <kdebug.h>
 
 // Local includes
 
@@ -57,6 +56,7 @@
 #include "imagequerybuilder.h"
 #include "dmetadata.h"
 #include "haariface.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -409,7 +409,7 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
     else
         sqlQuery += " );";
 
-    kDebug(50003) << "Search query:\n" << sqlQuery << "\n" << boundValues;
+    kDebug(digiKamAreaCode) << "Search query:\n" << sqlQuery << "\n" << boundValues;
 
     bool executionSuccess;
     {
@@ -424,7 +424,7 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
         receiver->error(errMsg);
         return;
     }
-    kDebug(50003) << "Search result:" << values.size();
+    kDebug(digiKamAreaCode) << "Search result:" << values.size();
 
     QSet<int> albumRoots = albumRootsToList();
 

@@ -30,7 +30,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 
 // Local includes
@@ -38,6 +37,7 @@
 #include "databasecorebackend.h"
 #include "thumbnaildb.h"
 #include "thumbnailschemaupdater.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -161,7 +161,7 @@ bool ThumbnailDatabaseAccess::checkReadyForUse(InitializationObserver *observer)
     QStringList drivers = QSqlDatabase::drivers();
     if (!drivers.contains("QSQLITE"))
     {
-        kError(50003) << "No SQLite3 driver available. List of QSqlDatabase drivers: " << drivers;
+        kError(digiKamAreaCode) << "No SQLite3 driver available. List of QSqlDatabase drivers: " << drivers;
         d->lastError = i18n("The driver \"SQLITE\" for SQLite3 databases is not available.\n"
                             "digiKam depends on the drivers provided by the SQL module of Qt4.");
         return false;
@@ -172,7 +172,7 @@ bool ThumbnailDatabaseAccess::checkReadyForUse(InitializationObserver *observer)
 
     if (!d->backend)
     {
-        kWarning(50003) << "No database backend available in checkReadyForUse. "
+        kWarning(digiKamAreaCode) << "No database backend available in checkReadyForUse. "
                            "Did you call setParameters before?";
         return false;
     }

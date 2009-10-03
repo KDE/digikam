@@ -27,7 +27,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
@@ -39,6 +38,7 @@
 // Local includes
 
 #include "blurfxtool.h"
+#include "debug.h"
 
 using namespace DigikamBlurFXImagesPlugin;
 
@@ -56,7 +56,7 @@ ImagePlugin_BlurFX::ImagePlugin_BlurFX(QObject *parent, const QVariantList &)
 
     setXMLFile( "digikamimageplugin_blurfx_ui.rc" );
 
-    kDebug(50006) << "ImagePlugin_BlurFX plugin loaded";
+    kDebug(imagePluginsAreaCode) << "ImagePlugin_BlurFX plugin loaded";
 }
 
 ImagePlugin_BlurFX::~ImagePlugin_BlurFX()

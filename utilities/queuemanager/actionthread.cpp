@@ -40,13 +40,13 @@ extern "C"
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 
 // Local includes
 
 #include "dimg.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -175,7 +175,7 @@ void ActionThread::run()
                 BatchToolSettings settings = set.settings;
                 inUrl                      = outUrl;
 
-                kDebug(50003) << "Tool Index: " << index;
+                kDebug(digiKamAreaCode) << "Tool Index: " << index;
 
                 ActionData ad2;
                 ad2.fileUrl = t->item.itemUrl;

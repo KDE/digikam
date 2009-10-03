@@ -36,7 +36,7 @@
 // KDE includes
 
 #include <klocale.h>
-#include <kdebug.h>
+
 #include <kiconloader.h>
 #include <kaction.h>
 #include <kmenu.h>

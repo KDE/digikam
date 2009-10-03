@@ -33,7 +33,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kdialog.h>
 #include <klocale.h>
 #include <ktabwidget.h>
@@ -45,7 +44,7 @@
 
 // Local includes
 
-#include "globals.h"
+#include "debug.h"
 #include "album.h"
 #include "albummanager.h"
 #include "albumthumbnailloader.h"
@@ -217,7 +216,7 @@ void KipiImageCollectionSelector::populateTreeView(const AlbumList& aList, QTree
 
             if (!pitem)
             {
-                kWarning(50003) << "Failed to find parent for Album " << album->title();
+                kWarning(digiKamAreaCode) << "Failed to find parent for Album " << album->title();
                 continue;
             }
 
@@ -317,7 +316,7 @@ QList<KIPI::ImageCollection> KipiImageCollectionSelector::selectedImageCollectio
          ++it3;
     }
 
-    kDebug(50003) << list.count() << " collection items selected";
+    kDebug(digiKamAreaCode) << list.count() << " collection items selected";
 
     return list;
 }

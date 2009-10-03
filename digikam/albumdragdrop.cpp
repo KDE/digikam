@@ -33,7 +33,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kiconloader.h>
 #include <kio/job.h>
 #include <klocale.h>
@@ -47,6 +46,7 @@
 #include "dio.h"
 #include "imageinfo.h"
 #include "imageinfolist.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -363,7 +363,7 @@ QMimeData *AlbumDragDropHandler::createMimeData(const QList<Album*>& albums)
         return 0;
 
     if (albums.size() > 1)
-        kWarning(50003) << "Dragging multiple albums is not implemented";
+        kWarning(digiKamAreaCode) << "Dragging multiple albums is not implemented";
 
     return new DAlbumDrag(albums.first()->databaseUrl(), albums.first()->id());
 }

@@ -42,13 +42,16 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kcombobox.h>
 #include <kdialog.h>
 #include <khbox.h>
 #include <klocale.h>
 #include <ksqueezedtextlabel.h>
 #include <ktoolinvocation.h>
+
+// Local includes
+
+#include "debug.h"
 
 namespace Digikam
 {
@@ -118,7 +121,7 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     d->map->slotSetAllowItemFiltering(false);
     d->map->slotSetFocusOnAddedItems(true);
     d->map->slotSetEnableTooltips(true);
-    
+
     // --------------------------------------------------------
 
     QWidget* box2           = new QWidget(this);
@@ -277,7 +280,7 @@ void ImagePropertiesGPSTab::slotGPSDetails()
 
     }
 
-    kDebug(50003) << url;
+    kDebug(digiKamAreaCode) << url;
     KToolInvocation::self()->invokeBrowser(url);
 }
 

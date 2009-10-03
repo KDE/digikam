@@ -27,7 +27,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
@@ -40,6 +39,7 @@
 
 #include "imageiface.h"
 #include "inpaintingtool.h"
+#include "debug.h"
 
 using namespace DigikamInPaintingImagesPlugin;
 using namespace Digikam;
@@ -62,7 +62,7 @@ ImagePlugin_InPainting::ImagePlugin_InPainting(QObject *parent, const QVariantLi
 
     setXMLFile( "digikamimageplugin_inpainting_ui.rc" );
 
-    kDebug(50006) << "ImagePlugin_InPainting plugin loaded";
+    kDebug(imagePluginsAreaCode) << "ImagePlugin_InPainting plugin loaded";
 }
 
 ImagePlugin_InPainting::~ImagePlugin_InPainting()

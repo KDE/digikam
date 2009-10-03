@@ -35,10 +35,12 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kfiletreebranch.h>
 
+// Local includes
+
+#include "debug.h"
 
 namespace DigikamSuperImposeImagesPlugin
 {
@@ -109,7 +111,7 @@ void DirSelectWidget::load()
 
     if ( !branch )
     {
-        kDebug(50006) << "Unable to open " << d->m_handled;
+        kDebug(imagePluginsAreaCode) << "Unable to open " << d->m_handled;
     }
     else
     {

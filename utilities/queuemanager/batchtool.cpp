@@ -31,13 +31,10 @@
 #include <QDateTime>
 #include <QFileInfo>
 
-// KDE includes
-
-#include <kdebug.h>
-
 // Local includes
 
 #include "dimgloaderobserver.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -265,7 +262,7 @@ void BatchTool::setOutputUrlFromInputUrl()
     path.append(QString::number(QDateTime::currentDateTime().toTime_t()));
     path.append("-");
     path.append(fi.fileName());
-    kDebug(50003) << "path: " << path;
+    kDebug(digiKamAreaCode) << "path: " << path;
 
     KUrl url;
     url.setPath(path);
@@ -316,15 +313,15 @@ bool BatchTool::apply()
 {
     d->cancel = false;
 
-    kDebug(50003) << "Tool:       " << toolTitle();
-    kDebug(50003) << "Input url:  " << inputUrl();
-    kDebug(50003) << "Output url: " << outputUrl();
-    kDebug(50003) << "Settings:   ";
+    kDebug(digiKamAreaCode) << "Tool:       " << toolTitle();
+    kDebug(digiKamAreaCode) << "Input url:  " << inputUrl();
+    kDebug(digiKamAreaCode) << "Output url: " << outputUrl();
+    kDebug(digiKamAreaCode) << "Settings:   ";
 
     BatchToolSettings prm = settings();
     for (BatchToolSettings::const_iterator it = prm.constBegin() ; it != prm.constEnd() ; ++it)
     {
-        kDebug(50003) << "   " << it.key() << ": " << it.value();
+        kDebug(digiKamAreaCode) << "   " << it.key() << ": " << it.value();
     }
 
     return toolOperations();

@@ -35,7 +35,6 @@
 // KDE includes
 
 #include <kcomponentdata.h>
-#include <kdebug.h>
 #include <kurl.h>
 #include <klocale.h>
 #include <kglobal.h>
@@ -50,6 +49,7 @@
 #include "albumdb.h"
 #include "imagelister.h"
 #include "imagelisterreceiver.h"
+#include "debug.h"
 
 kio_digikamtagsProtocol::kio_digikamtagsProtocol(const QByteArray& pool_socket,
                                                  const QByteArray& app_socket)
@@ -112,17 +112,17 @@ extern "C"
         KComponentData componentData( "kio_digikamtags" );
         ( void ) KGlobal::locale();
 
-        kDebug(50004) << "*** kio_digikamtag started ***";
+        kDebug(kioslavesAreaCode) << "*** kio_digikamtag started ***";
 
         if (argc != 4) {
-            kDebug(50004) << "Usage: kio_digikamtags  protocol domain-socket1 domain-socket2";
+            kDebug(kioslavesAreaCode) << "Usage: kio_digikamtags  protocol domain-socket1 domain-socket2";
             exit(-1);
         }
 
         kio_digikamtagsProtocol slave(argv[2], argv[3]);
         slave.dispatchLoop();
 
-        kDebug(50004) << "*** kio_digikamtags finished ***";
+        kDebug(kioslavesAreaCode) << "*** kio_digikamtags finished ***";
         return 0;
     }
 }

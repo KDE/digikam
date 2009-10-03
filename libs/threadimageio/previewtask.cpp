@@ -35,10 +35,6 @@
 #include <QVariant>
 #include <QMatrix>
 
-// KDE includes
-
-#include <kdebug.h>
-
 // LibKDcraw includes
 
 #include <libkdcraw/kdcraw.h>
@@ -48,6 +44,7 @@
 #include "dmetadata.h"
 #include "jpegutils.h"
 #include "previewloadthread.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -209,7 +206,7 @@ void PreviewLoadingTask::execute()
 
         if (m_img.isNull())
         {
-            kWarning(50003) << "Cannot extract preview for " << m_loadingDescription.filePath;
+            kWarning(digiKamAreaCode) << "Cannot extract preview for " << m_loadingDescription.filePath;
         }
     }
     else
@@ -261,7 +258,7 @@ void PreviewLoadingTask::execute()
 
         if (m_img.isNull())
         {
-            kWarning(50003) << "Cannot extract preview for " << m_loadingDescription.filePath;
+            kWarning(digiKamAreaCode) << "Cannot extract preview for " << m_loadingDescription.filePath;
         }
     }
 
@@ -352,7 +349,7 @@ bool PreviewLoadingTask::loadImagePreview(QImage& image, const QString& path)
     DMetadata metadata(path);
     if (metadata.getImagePreview(image))
     {
-        kDebug(50003) << "Use Exif/IPTC preview extraction. Size of image: "
+        kDebug(digiKamAreaCode) << "Use Exif/IPTC preview extraction. Size of image: "
                       << image.width() << "x" << image.height();
         return true;
     }

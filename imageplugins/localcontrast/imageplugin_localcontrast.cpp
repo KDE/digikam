@@ -31,7 +31,6 @@
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
 #include <klocale.h>
@@ -39,6 +38,7 @@
 // Local includes
 
 #include "localcontrasttool.h"
+#include "debug.h"
 
 using namespace DigikamLocalContrastImagesPlugin;
 
@@ -56,7 +56,7 @@ ImagePlugin_LocalContrast::ImagePlugin_LocalContrast(QObject *parent, const QVar
 
     setXMLFile("digikamimageplugin_localcontrast_ui.rc");
 
-    kDebug(50006) << "ImagePlugin_LocalContrast plugin loaded";
+    kDebug(imagePluginsAreaCode) << "ImagePlugin_LocalContrast plugin loaded";
 }
 
 ImagePlugin_LocalContrast::~ImagePlugin_LocalContrast()

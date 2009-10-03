@@ -34,7 +34,6 @@
 
 #include <kvbox.h>
 #include <klocale.h>
-#include <kdebug.h>
 #include <kiconloader.h>
 #include <kcombobox.h>
 
@@ -43,6 +42,7 @@
 #include "jpegutils.h"
 #include "dimg.h"
 #include "dmetadata.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -133,7 +133,7 @@ bool Rotate::toolOperations()
                     return (exifTransform(inputUrl().toLocalFile(), inputUrl().fileName(), outputUrl().toLocalFile(), Rotate270));
                     break;
                 default:
-                    kDebug(50003) << "Unknow rotate action";
+                    kDebug(digiKamAreaCode) << "Unknow rotate action";
                     return false;
                     break;
             }

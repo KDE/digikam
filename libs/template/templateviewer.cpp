@@ -33,7 +33,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdialog.h>
-#include <kdebug.h>
+
 #include <kvbox.h>
 #include <kurllabel.h>
 #include <ktoolinvocation.h>

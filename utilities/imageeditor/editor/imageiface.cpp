@@ -32,10 +32,6 @@
 #include <QBitmap>
 #include <QPainter>
 
-// KDE includes
-
-#include <kdebug.h>
-
 // Local includes
 
 #include "exposurecontainer.h"
@@ -45,6 +41,7 @@
 #include "dimginterface.h"
 #include "bcgmodifier.h"
 #include "dmetadata.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -117,7 +114,7 @@ DColor ImageIface::getColorInfoFromOriginalImage(const QPoint& point)
 {
     if ( !DImgInterface::defaultInterface()->getImage() || point.x() > originalWidth() || point.y() > originalHeight() )
     {
-        kWarning(50003) << "Coordinate out of range or no image data available!";
+        kWarning(digiKamAreaCode) << "Coordinate out of range or no image data available!";
         return DColor();
     }
 
@@ -128,7 +125,7 @@ DColor ImageIface::getColorInfoFromPreviewImage(const QPoint& point)
 {
     if ( d->previewImage.isNull() || point.x() > previewWidth() || point.y() > previewHeight() )
     {
-        kWarning(50003) << "Coordinate out of range or no image data available!";
+        kWarning(digiKamAreaCode) << "Coordinate out of range or no image data available!";
         return DColor();
     }
 
@@ -139,7 +136,7 @@ DColor ImageIface::getColorInfoFromTargetPreviewImage(const QPoint& point)
 {
     if ( d->targetPreviewImage.isNull() || point.x() > previewWidth() || point.y() > previewHeight() )
     {
-        kWarning(50003) << "Coordinate out of range or no image data available!";
+        kWarning(digiKamAreaCode) << "Coordinate out of range or no image data available!";
         return DColor::DColor();
     }
 

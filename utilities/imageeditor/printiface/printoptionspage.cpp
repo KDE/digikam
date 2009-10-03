@@ -48,6 +48,7 @@
 #include "signalblocker.h"
 #include "ui_printoptionspage.h"
 #include "editorwindow.h"
+#include "debug.h"
 
 namespace Digikam
 {

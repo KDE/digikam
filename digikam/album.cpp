@@ -27,7 +27,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 
 // Local includes
@@ -37,6 +36,7 @@
 #include "collectionmanager.h"
 #include "databaseaccess.h"
 #include "databaseurl.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -180,7 +180,7 @@ int Album::globalID() const
         case(SEARCH):
             return m_id | (1 << 30);
         default:
-            kError(50003) << "Unknown album type";
+            kError(digiKamAreaCode) << "Unknown album type";
             return -1;
     }
 }

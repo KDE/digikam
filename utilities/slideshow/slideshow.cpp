@@ -48,7 +48,6 @@
 // KDE includes
 
 #include <kapplication.h>
-#include <kdebug.h>
 #include <kdeversion.h>
 #include <kdialog.h>
 #include <kglobalsettings.h>
@@ -58,10 +57,11 @@
 
 // Local includes
 
-#include "globals.h"
+#include "debug.h"
 #include "dimg.h"
 #include "previewloadthread.h"
 #include "toolbar.h"
+#include "globals.h"
 
 namespace Digikam
 {

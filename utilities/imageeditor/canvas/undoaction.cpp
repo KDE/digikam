@@ -24,13 +24,10 @@
 
 #include "undoaction.h"
 
-// KDE includes
-
-#include <kdebug.h>
-
 // Local includes
 
 #include "dimginterface.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -86,7 +83,7 @@ void UndoActionRotate::rollBack()
             m_iface->rotate90(false);
             return;
         default:
-            kWarning(50003) << "Unknown rotate angle specified";
+            kWarning(digiKamAreaCode) << "Unknown rotate angle specified";
     }
 }
 
@@ -104,7 +101,7 @@ void UndoActionRotate::execute()
             m_iface->rotate270(false);
             return;
         default:
-            kWarning(50003) << "Unknown rotate angle specified";
+            kWarning(digiKamAreaCode) << "Unknown rotate angle specified";
     }
 }
 
@@ -132,7 +129,7 @@ void UndoActionFlip::rollBack()
             m_iface->flipVert(false);
             return;
         default:
-            kWarning(50003) << "Unknown flip direction specified";
+            kWarning(digiKamAreaCode) << "Unknown flip direction specified";
     }
 }
 

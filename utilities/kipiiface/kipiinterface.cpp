@@ -29,12 +29,11 @@
 // KDE includes
 
 #include <kconfig.h>
-#include <kdebug.h>
 #include <klocale.h>
 
 // Local includes
 
-#include "globals.h"
+#include "debug.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albumsettings.h"
@@ -76,7 +75,7 @@ KIPI::ImageCollection KipiInterface::currentAlbum()
     if ( currAlbum )
     {
         return KIPI::ImageCollection(new KipiImageCollection(KipiImageCollection::AllItems,
-                                         currAlbum, 
+                                         currAlbum,
 #if KIPI_VERSION >= 0x000300
                                          hostSetting("FileExtensions").toString()));
 #else
@@ -95,7 +94,7 @@ KIPI::ImageCollection KipiInterface::currentSelection()
     if ( currAlbum )
     {
         return KIPI::ImageCollection(new KipiImageCollection(KipiImageCollection::SelectedItems,
-                                                             currAlbum, 
+                                                             currAlbum,
 #if KIPI_VERSION >= 0x000300
                                          hostSetting("FileExtensions").toString()));
 #else
@@ -211,7 +210,7 @@ void KipiInterface::delImage( const KUrl& url )
     KUrl rootURL(CollectionManager::instance()->albumRoot(url));
     if ( !rootURL.isParentOf(url) )
     {
-        kWarning(50003) << "URL not in the album library";
+        kWarning(digiKamAreaCode) << "URL not in the album library";
     }
 
     // Is there a PAlbum for this URL
@@ -225,7 +224,7 @@ void KipiInterface::delImage( const KUrl& url )
     }
     else
     {
-        kWarning(50003) << "Cannot find Parent album in the album library";
+        kWarning(digiKamAreaCode) << "Cannot find Parent album in the album library";
     }
 }
 

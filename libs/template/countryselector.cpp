@@ -30,8 +30,11 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
+
+// Local includes
+
+#include "debug.h"
 
 namespace Digikam
 {
@@ -345,7 +348,7 @@ void CountrySelector::setCountry(const QString& countryCode)
     }
     setCurrentIndex(id);
 
-    kDebug() << count() << " :: " << id;
+    kDebug(digiKamAreaCode) << count() << " :: " << id;
 }
 
 bool CountrySelector::country(QString& countryCode, QString& countryName)

@@ -28,7 +28,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
@@ -40,6 +39,7 @@
 // Local includes
 
 #include "bordertool.h"
+#include "debug.h"
 
 using namespace DigikamBorderImagesPlugin;
 
@@ -57,7 +57,7 @@ ImagePlugin_Border::ImagePlugin_Border(QObject *parent, const QVariantList &)
 
     setXMLFile("digikamimageplugin_border_ui.rc");
 
-    kDebug(50006) << "ImagePlugin_Border plugin loaded";
+    kDebug(imagePluginsAreaCode) << "ImagePlugin_Border plugin loaded";
 }
 
 ImagePlugin_Border::~ImagePlugin_Border()

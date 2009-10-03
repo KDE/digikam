@@ -34,7 +34,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kmenu.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -43,7 +42,7 @@
 
 // Local includes
 
-#include "globals.h"
+#include "debug.h"
 #include "dcursortracker.h"
 #include "themeengine.h"
 

@@ -28,7 +28,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
@@ -40,6 +39,7 @@
 // Local includes
 
 #include "infraredtool.h"
+#include "debug.h"
 
 using namespace DigikamInfraredImagesPlugin;
 
@@ -58,7 +58,7 @@ ImagePlugin_Infrared::ImagePlugin_Infrared(QObject *parent, const QVariantList &
 
     setXMLFile( "digikamimageplugin_infrared_ui.rc" );
 
-    kDebug(50006) << "ImagePlugin_Infrared plugin loaded";
+    kDebug(imagePluginsAreaCode) << "ImagePlugin_Infrared plugin loaded";
 }
 
 ImagePlugin_Infrared::~ImagePlugin_Infrared()

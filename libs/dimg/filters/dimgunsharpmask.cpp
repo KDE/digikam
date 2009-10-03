@@ -32,18 +32,15 @@
 #include <cmath>
 #include <cstdlib>
 
-// KDE includes
-
-#include <kdebug.h>
-
 // Local includes
 
 #include "dimg.h"
 #include "dcolor.h"
 #include "dimgimagefilters.h"
 #include "dimggaussianblur.h"
+#include "debug.h"
 
-namespace Digikam 
+namespace Digikam
 {
 
 DImgUnsharpMask::DImgUnsharpMask(DImg *orgImage, QObject *parent, int radius,
@@ -67,7 +64,7 @@ void DImgUnsharpMask::filterImage()
 
     if (m_orgImage.isNull())
     {
-       kWarning(50006) << "No image data available!";
+       kWarning(imagePluginsAreaCode) << "No image data available!";
        return;
     }
 

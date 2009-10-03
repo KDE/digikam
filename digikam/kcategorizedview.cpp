@@ -30,7 +30,7 @@
 #include <QScrollBar>
 #include <QPaintEvent>
 
-#include <kdebug.h>
+
 
 #include "kcategorydrawer.h"
 #include "kcategorizedsortfilterproxymodel.h"

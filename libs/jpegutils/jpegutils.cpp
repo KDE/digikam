@@ -53,14 +53,11 @@ extern "C"
 #include <QFile>
 #include <QFileInfo>
 
-// KDE includes
-
-#include <kdebug.h>
-
 // Local includes
 
 #include "dmetadata.h"
 #include "transupp.h"
+#include "debug.h"
 
 #ifdef Q_CC_MSVC
 #include "jpegwin.h"
@@ -90,7 +87,7 @@ static void jpegutils_jpeg_error_exit(j_common_ptr cinfo)
     (*cinfo->err->format_message)(cinfo, buffer);
 
 #ifdef ENABLE_DEBUG_MESSAGES
-    kDebug(50003) << buffer;
+    kDebug(digiKamAreaCode) << buffer;
 #endif
 
     longjmp(myerr->setjmp_buffer, 1);
@@ -103,7 +100,7 @@ static void jpegutils_jpeg_emit_message(j_common_ptr cinfo, int msg_level)
     (*cinfo->err->format_message)(cinfo, buffer);
 
 #ifdef ENABLE_DEBUG_MESSAGES
-    kDebug(50003) << buffer << " (" << msg_level << ")";
+    kDebug(digiKamAreaCode) << buffer << " (" << msg_level << ")";
 #endif
 }
 
@@ -113,7 +110,7 @@ static void jpegutils_jpeg_output_message(j_common_ptr cinfo)
     (*cinfo->err->format_message)(cinfo, buffer);
 
 #ifdef ENABLE_DEBUG_MESSAGES
-    kDebug(50003) << buffer;
+    kDebug(digiKamAreaCode) << buffer;
 #endif
 }
 
@@ -282,7 +279,7 @@ bool exifTransform(const QString& file, const QString& documentName,
     QFileInfo fi(file);
     if (!fi.exists())
     {
-        kDebug(50003) << "ExifRotate: file do not exist: " << file;
+        kDebug(digiKamAreaCode) << "ExifRotate: file do not exist: " << file;
         return false;
     }
 
@@ -291,7 +288,7 @@ bool exifTransform(const QString& file, const QString& documentName,
         DMetadata metaData;
         if (!metaData.load(file))
         {
-            kDebug(50003) << "ExifRotate: no Exif data found: " << file;
+            kDebug(digiKamAreaCode) << "ExifRotate: no Exif data found: " << file;
             return true;
         }
 
@@ -386,7 +383,7 @@ bool exifTransform(const QString& file, const QString& documentName,
 
         if (transformoption.transform == JXFORM_NONE)
         {
-            kDebug(50003) << "ExifRotate: no rotation to perform: " << file;
+            kDebug(digiKamAreaCode) << "ExifRotate: no rotation to perform: " << file;
 
             if (trgFile.isEmpty())
             {
@@ -427,7 +424,7 @@ bool exifTransform(const QString& file, const QString& documentName,
             input_file = fopen(in, "rb");
             if (!input_file)
             {
-                kWarning(50003) << "ExifRotate: Error in opening input file: " << input_file;
+                kWarning(digiKamAreaCode) << "ExifRotate: Error in opening input file: " << input_file;
                 return false;
             }
 
@@ -435,7 +432,7 @@ bool exifTransform(const QString& file, const QString& documentName,
             if (!output_file)
             {
                 fclose(input_file);
-                kWarning(50003) << "ExifRotate: Error in opening output file: " << output_file;
+                kWarning(digiKamAreaCode) << "ExifRotate: Error in opening output file: " << output_file;
                 return false;
             }
 
@@ -489,7 +486,7 @@ bool exifTransform(const QString& file, const QString& documentName,
             // -- Metadata operations ------------------------------------------------------
 
             // Reset the Exif orientation tag of the temp image to normal
-            kDebug(50003) << "ExifRotate: set Orientation tag to normal: " << file;
+            kDebug(digiKamAreaCode) << "ExifRotate: set Orientation tag to normal: " << file;
 
             metaData.load(temp);
             metaData.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
@@ -544,7 +541,7 @@ bool exifTransform(const QString& file, const QString& documentName,
     }
 
     // Not a jpeg image.
-    kDebug(50003) << "ExifRotate: not a JPEG file: " << file;
+    kDebug(digiKamAreaCode) << "ExifRotate: not a JPEG file: " << file;
     return false;
 }
 
@@ -553,7 +550,7 @@ bool jpegConvert(const QString& src, const QString& dest, const QString& documen
     QFileInfo fi(src);
     if (!fi.exists())
     {
-        kDebug(50003) << "JpegConvert: file do not exist: " << src;
+        kDebug(digiKamAreaCode) << "JpegConvert: file do not exist: " << src;
         return false;
     }
 
@@ -619,7 +616,7 @@ bool isJpegImage(const QString& file)
 {
     // Check if the file is an JPEG image
     QString format = QString(QImageReader::imageFormat(file)).toUpper();
-    kDebug(50003) << "mimetype = " << format;
+    kDebug(digiKamAreaCode) << "mimetype = " << format;
     if (format !="JPEG") return false;
 
     return true;

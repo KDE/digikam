@@ -40,7 +40,7 @@
 #include <kaction.h>
 #include <kmenu.h>
 #include <klocale.h>
-#include <kdebug.h>
+
 #include <kiconloader.h>
 
 namespace Digikam

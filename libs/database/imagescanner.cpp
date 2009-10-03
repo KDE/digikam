@@ -29,7 +29,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kfilemetainfo.h>
 #include <kmimetype.h>
 #include <klocale.h>
@@ -44,6 +43,7 @@
 #include "imagecomments.h"
 #include "imagecopyright.h"
 #include "imageextendedproperties.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -130,7 +130,7 @@ void ImageScanner::addImage(int albumId)
     // the QByteArray is an ASCII hex string
     m_scanInfo.uniqueHash = uniqueHash();
 
-    kDebug(50003) << "Adding new item" << m_fileInfo.filePath();
+    kDebug(digiKamAreaCode) << "Adding new item" << m_fileInfo.filePath();
     m_scanInfo.id = DatabaseAccess().db()->addItem(m_scanInfo.albumID, m_scanInfo.itemName,
                                                    m_scanInfo.status, m_scanInfo.category,
                                                    m_scanInfo.modificationDate, fileSize,
@@ -207,7 +207,7 @@ bool ImageScanner::scanFromIdenticalFile()
         // Sort by priority, as implemented by custom lessThan()
         qStableSort(candidates.begin(), candidates.end(), lessThanForIdentity);
 
-        kDebug(50003) << "Recognized" << m_fileInfo.filePath() << "as identical to item" << candidates.first().id;
+        kDebug(digiKamAreaCode) << "Recognized" << m_fileInfo.filePath() << "as identical to item" << candidates.first().id;
 
         // Copy attributes.
         // Todo for the future is to worry about syncing identical files.
@@ -228,7 +228,7 @@ bool ImageScanner::copyFromSource(qlonglong srcId)
     if (!info.id)
         return false;
 
-    kDebug(50003) << "Recognized" << m_fileInfo.filePath() << "as copied from" << srcId;
+    kDebug(digiKamAreaCode) << "Recognized" << m_fileInfo.filePath() << "as copied from" << srcId;
     access.db()->copyImageAttributes(srcId, m_scanInfo.id);
     return true;
 }
@@ -596,7 +596,7 @@ QString ImageScanner::detectFormat()
                 }
             }
 
-            kWarning(50003) << "Detecting file format failed: KMimeType for" << m_fileInfo.filePath()
+            kWarning(digiKamAreaCode) << "Detecting file format failed: KMimeType for" << m_fileInfo.filePath()
                             << "is null";
 
         }

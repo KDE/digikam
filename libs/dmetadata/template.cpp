@@ -25,7 +25,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+
 
 namespace Digikam
 {
@@ -56,16 +56,16 @@ bool Template::operator==(const Template& t) const
     bool b9  = m_contactInfo     == t.m_contactInfo;
     bool b10 = m_subjects        == t.m_subjects;
 /*
-    kDebug(50003) << t.authors()         << m_authors         << b1;
-    kDebug(50003) << t.authorsPosition() << m_authorsPosition << b2;
-    kDebug(50003) << t.credit()          << m_credit          << b3;
-    kDebug(50003) << t.copyright()       << m_copyright       << b4;
-    kDebug(50003) << t.rightUsageTerms() << m_rightUsageTerms << b5;
-    kDebug(50003) << t.source()          << m_source          << b6;
-    kDebug(50003) << t.instructions()    << m_instructions    << b7;
-    kDebug(50003) << t.locationInfo()    << m_locationInfo    << b8;
-    kDebug(50003) << t.contactInfo()     << m_contactInfo     << b9;
-    kDebug(50003) << t.IptcSubjects()    << m_subjects        << b10;
+    kDebug(digiKamAreaCode) << t.authors()         << m_authors         << b1;
+    kDebug(digiKamAreaCode) << t.authorsPosition() << m_authorsPosition << b2;
+    kDebug(digiKamAreaCode) << t.credit()          << m_credit          << b3;
+    kDebug(digiKamAreaCode) << t.copyright()       << m_copyright       << b4;
+    kDebug(digiKamAreaCode) << t.rightUsageTerms() << m_rightUsageTerms << b5;
+    kDebug(digiKamAreaCode) << t.source()          << m_source          << b6;
+    kDebug(digiKamAreaCode) << t.instructions()    << m_instructions    << b7;
+    kDebug(digiKamAreaCode) << t.locationInfo()    << m_locationInfo    << b8;
+    kDebug(digiKamAreaCode) << t.contactInfo()     << m_contactInfo     << b9;
+    kDebug(digiKamAreaCode) << t.IptcSubjects()    << m_subjects        << b10;
 */
     return b1 && b2 && b3 && b4 && b5 && b6 && b7 && b8 && b9 && b10;
 }

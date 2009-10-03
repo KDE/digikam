@@ -30,7 +30,7 @@
 // KDE includes
 
 #include <klocale.h>
-#include <kdebug.h>
+
 
 namespace Digikam
 {

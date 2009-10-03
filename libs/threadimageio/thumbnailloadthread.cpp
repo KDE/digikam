@@ -32,7 +32,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <kio/previewjob.h>
@@ -47,6 +46,7 @@
 #include "thumbnailsize.h"
 #include "thumbnailtask.h"
 #include "thumbnailcreator.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -412,12 +412,12 @@ bool ThumbnailLoadThread::checkSize(int size)
 {
     if (size <= 0)
     {
-        kError(50003) << "ThumbnailLoadThread::load: No thumbnail size specified. Refusing to load thumbnail.";
+        kError(digiKamAreaCode) << "ThumbnailLoadThread::load: No thumbnail size specified. Refusing to load thumbnail.";
         return false;
     }
     else if (size > ThumbnailSize::Huge)
     {
-        kError(50003) << "ThumbnailLoadThread::load: Thumbnail size " << size
+        kError(digiKamAreaCode) << "ThumbnailLoadThread::load: Thumbnail size " << size
                       << " is larger than " << ThumbnailSize::Huge << ". Refusing to load.";
         return false;
     }

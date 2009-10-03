@@ -28,13 +28,13 @@
 
 #include <QColor>
 
-// KDE includes
-
-#include <kdebug.h>
-
 // Liquid rescale library include
 
 #include "lqr.h"
+
+// Local includes
+
+#include "debug.h"
 
 namespace DigikamContentAwareResizingImagesPlugin
 {
@@ -77,7 +77,7 @@ public:
 ContentAwareResizer::ContentAwareResizer(DImg *orgImage, uint width, uint height,
                                          int step, double rigidity, int side_switch_freq,
                                          LqrEnergyFuncBuiltinType func,
-                                         LqrResizeOrder resize_order, const QImage& mask, 
+                                         LqrResizeOrder resize_order, const QImage& mask,
                                          bool preserve_skin_tones, QObject *parent)
                    : Digikam::DImgThreadedFilter(orgImage, parent, "ContentAwareResizer"),
                      d(new ContentAwareResizerPriv)
@@ -192,20 +192,20 @@ void ContentAwareResizer::progressCallback(int progress)
     if (progress%5 == 0)
         postProgress( progress );
 
-    //kDebug(50003) << "Content Aware Resizing: " << progress << " %";
+    //kDebug(digiKamAreaCode) << "Content Aware Resizing: " << progress << " %";
 }
 
 void ContentAwareResizer::cancelFilter()
 {
     // Handle cancel operations with lqr library.
-    kDebug(50003) << "Stop LibLqr computation...";
+    kDebug(digiKamAreaCode) << "Stop LibLqr computation...";
     lqr_carver_cancel(d->carver);
     DImgThreadedFilter::cancelFilter();
 }
 
-bool ContentAwareResizer::isSkinTone(const DColor& color) 
+bool ContentAwareResizer::isSkinTone(const DColor& color)
 {
-    // NOTE: color is previously converted to eight bits. 
+    // NOTE: color is previously converted to eight bits.
     double R = color.red()   / 255.0;
     double G = color.green() / 255.0;
     double B = color.blue()  / 255.0;

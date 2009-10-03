@@ -28,7 +28,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
@@ -40,6 +39,7 @@
 // Local includes
 
 #include "whitebalancetool.h"
+#include "debug.h"
 
 using namespace DigikamWhiteBalanceImagesPlugin;
 
@@ -59,7 +59,7 @@ ImagePlugin_WhiteBalance::ImagePlugin_WhiteBalance(QObject *parent, const QVaria
 
     setXMLFile("digikamimageplugin_whitebalance_ui.rc");
 
-    kDebug(50006) << "ImagePlugin_WhiteBalance plugin loaded";
+    kDebug(imagePluginsAreaCode) << "ImagePlugin_WhiteBalance plugin loaded";
 }
 
 ImagePlugin_WhiteBalance::~ImagePlugin_WhiteBalance()

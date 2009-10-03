@@ -45,8 +45,9 @@
 
 // Local includes
 
-#include "globals.h"
+#include "debug.h"
 #include "themeengine.h"
+#include "globals.h"
 
 namespace Digikam
 {

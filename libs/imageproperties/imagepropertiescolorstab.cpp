@@ -44,7 +44,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+
 #include <kapplication.h>
 #include <kcombobox.h>
 #include <kconfig.h>
@@ -66,6 +66,7 @@
 #include "iccprofilewidget.h"
 #include "cietonguewidget.h"
 #include "imagepropertiestxtlabel.h"
+#include "globals.h"
 
 namespace Digikam
 {

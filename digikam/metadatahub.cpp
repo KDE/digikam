@@ -28,10 +28,6 @@
 
 #include <QFileInfo>
 
-// KDE includes
-
-#include <kdebug.h>
-
 // Libkexiv2 includes
 
 #include <libkexiv2/version.h>
@@ -45,6 +41,7 @@
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "imageattributeswatch.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -173,7 +170,7 @@ void MetadataHub::load(const ImageInfo& info)
 
     Template tref = info.metadataTemplate();
     Template t    = TemplateManager::defaultManager()->findByContents(tref);
-    //kDebug(50003) << "Found Metadata Template: " << t.templateTitle();
+    //kDebug(digiKamAreaCode) << "Found Metadata Template: " << t.templateTitle();
 
     load(info.dateTime(), commentMap, info.rating(), t.isNull() ? tref : t);
 
@@ -189,7 +186,7 @@ void MetadataHub::load(const ImageInfo& info)
             TAlbum *album = man->findTAlbum(*it);
             if (!album)
             {
-                kWarning(50003) << "Tag id " << *it << " not found in database.";
+                kWarning(digiKamAreaCode) << "Tag id " << *it << " not found in database.";
                 continue;
             }
             loadedTags << album;
@@ -237,7 +234,7 @@ void MetadataHub::load(const DMetadata& metadata)
     Template tref = metadata.getMetadataTemplate();
     Template t    = TemplateManager::defaultManager()->findByContents(tref);
 
-    kDebug(50003) << "Found Metadata Template: " << t.templateTitle();
+    kDebug(digiKamAreaCode) << "Found Metadata Template: " << t.templateTitle();
 
     load(datetime, comments, rating, t.isNull() ? tref : t);
 
@@ -256,7 +253,7 @@ void MetadataHub::load(const DMetadata& metadata)
                 TAlbum *album = man->findTAlbum(*it);
                 if (!album)
                 {
-                    kWarning(50003) << "Tag id " << *it << " not found in database. Use NewTagsImport mode?";
+                    kWarning(digiKamAreaCode) << "Tag id " << *it << " not found in database. Use NewTagsImport mode?";
                     continue;
                 }
                 loadedTags << album;
@@ -951,7 +948,7 @@ void MetadataHub::setTag(int albumID, bool hasTag, Status status)
     TAlbum *album = AlbumManager::instance()->findTAlbum(albumID);
     if (!album)
     {
-        kWarning(50003) << "Tag ID " << albumID << " not found in database.";
+        kWarning(digiKamAreaCode) << "Tag ID " << albumID << " not found in database.";
         return;
     }
     setTag(album, hasTag, status);

@@ -40,9 +40,9 @@ extern "C"
 
 #include <QFile>
 
-// KDE includes
+// Local includes
 
-#include <kdebug.h>
+#include "debug.h"
 
 namespace Digikam
 {
@@ -76,7 +76,7 @@ void AlbumDB_Sqlite2::setDBPath(const QString& path)
     m_db = sqlite_open(QFile::encodeName(path), 0, &errMsg);
     if (m_db == 0)
     {
-        kWarning(50003) << "Cannot open database: " << errMsg;
+        kWarning(digiKamAreaCode) << "Cannot open database: " << errMsg;
         free(errMsg);
         return;
     }
@@ -90,11 +90,11 @@ bool AlbumDB_Sqlite2::execSql(const QString& sql, QStringList* const values,
                       const bool debug)
 {
     if ( debug )
-        kDebug(50003) << "SQL-query: " << sql;
+        kDebug(digiKamAreaCode) << "SQL-query: " << sql;
 
     if ( !m_db )
     {
-        kWarning(50003) << "SQLite pointer == NULL";
+        kWarning(digiKamAreaCode) << "SQLite pointer == NULL";
         return false;
     }
 
@@ -108,7 +108,7 @@ bool AlbumDB_Sqlite2::execSql(const QString& sql, QStringList* const values,
 
     if ( error != SQLITE_OK )
     {
-        kWarning(50003) << "sqlite_compile error: "
+        kWarning(digiKamAreaCode) << "sqlite_compile error: "
                         << errorStr
                         << " on query: " << sql;
         sqlite_freemem( errorStr );
@@ -138,7 +138,7 @@ bool AlbumDB_Sqlite2::execSql(const QString& sql, QStringList* const values,
 
     if ( error != SQLITE_DONE )
     {
-        kWarning(50003) << "sqlite_step error: "
+        kWarning(digiKamAreaCode) << "sqlite_step error: "
                         << errorStr
                         << " on query: " << sql;
         return false;

@@ -31,6 +31,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "debug.h"
 #include "globals.h"
 
 class QColor;

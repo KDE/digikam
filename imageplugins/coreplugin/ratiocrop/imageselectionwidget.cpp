@@ -64,7 +64,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+
 #include <kstandarddirs.h>
 #include <kcursor.h>
 #include <kglobal.h>

@@ -37,7 +37,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kstandarddirs.h>
 
 // Local includes
@@ -50,6 +49,7 @@
 #include "imagelevels.h"
 #include "bcgmodifier.h"
 #include "whitebalance.h"
+#include "debug.h"
 #include "globals.h"
 
 namespace Digikam
@@ -154,7 +154,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
         uchar *image = new_failureTolerant(width*height*8);
         if (!image)
         {
-            kDebug(50003) << "Failed to allocate memory for loading raw file";
+            kDebug(digiKamAreaCode) << "Failed to allocate memory for loading raw file";
             return false;
         }
 
@@ -213,7 +213,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
             // Search 99th percentile white level.
 
             perc = (int)(width * height * 0.01);
-            kDebug(50003) << "White Level: " << perc;
+            kDebug(digiKamAreaCode) << "White Level: " << perc;
             for (int c = 1 ; c < 4 ; ++c)
             {
                 total = 0;
@@ -226,7 +226,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
 
             white *= 1.0 / m_rawDecodingSettings.brightness;
 
-            kDebug(50003) << "White Point: " << white;
+            kDebug(digiKamAreaCode) << "White Point: " << white;
 
             // Compute the Gamma lut accordingly.
 
@@ -259,7 +259,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
         uchar *image = new_failureTolerant(width*height*4);
         if (!image)
         {
-            kDebug(50003) << "Failed to allocate memory for loading raw file";
+            kDebug(digiKamAreaCode) << "Failed to allocate memory for loading raw file";
             return false;
         }
 

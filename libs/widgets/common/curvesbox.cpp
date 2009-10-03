@@ -49,6 +49,7 @@
 #include "editortoolsettings.h"
 #include "imagecurves.h"
 #include "imagehistogram.h"
+#include "debug.h"
 #include "globals.h"
 
 namespace Digikam

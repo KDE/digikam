@@ -51,7 +51,6 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kdeversion.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
@@ -81,7 +80,7 @@
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "canvas.h"
-#include "globals.h"
+#include "debug.h"
 #include "databaseaccess.h"
 #include "databasewatch.h"
 #include "databasechangesets.h"
@@ -113,6 +112,7 @@
 #include "tagspopupmenu.h"
 #include "themeengine.h"
 #include "thumbbardock.h"
+#include "globals.h"
 
 namespace Digikam
 {

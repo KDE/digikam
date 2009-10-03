@@ -42,7 +42,6 @@
 #include <kaction.h>
 #include <kapplication.h>
 #include <kcalendarsystem.h>
-#include <kdebug.h>
 #include <kdeversion.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
@@ -72,6 +71,7 @@
 #include "digikamapp.h"
 #include "dio.h"
 #include "thumbnailsize.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -375,7 +375,7 @@ void AlbumFolderView::slotAlbumAdded(Album *album)
     AlbumFolderViewItem* parent = findParent(palbum, failed);
     if (failed)
     {
-        kWarning(50003) << " Failed to find Album parent "
+        kWarning(digiKamAreaCode) << " Failed to find Album parent "
                         << palbum->albumPath();
         return;
     }
@@ -624,7 +624,7 @@ void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
     AlbumSettings* settings = AlbumSettings::instance();
     if(!settings)
     {
-        kWarning(50003) << "AlbumFolderView: Could not get Album Settings";
+        kWarning(digiKamAreaCode) << "AlbumFolderView: Could not get Album Settings";
         return;
     }
 

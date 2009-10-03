@@ -39,12 +39,12 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kapplication.h>
 
 // Local includes
 
 #include "dimg.h"
+#include "debug.h"
 #include "globals.h"
 
 namespace Digikam
@@ -182,7 +182,7 @@ void ImageHistogram::calculate()
 
     if ( !d->histogram )
     {
-        kWarning(50003) << ("HistogramWidget::calcHistogramValues: Unable to allocate memory!");
+        kWarning(digiKamAreaCode) << ("HistogramWidget::calcHistogramValues: Unable to allocate memory!");
         emit calculationFinished(this, false);
         return;
     }

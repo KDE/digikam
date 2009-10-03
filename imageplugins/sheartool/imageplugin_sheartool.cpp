@@ -27,7 +27,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
@@ -39,6 +38,7 @@
 // Local includes
 
 #include "sheartool.h"
+#include "debug.h"
 
 using namespace DigikamShearToolImagesPlugin;
 
@@ -56,7 +56,7 @@ ImagePlugin_ShearTool::ImagePlugin_ShearTool(QObject *parent, const QVariantList
 
     setXMLFile("digikamimageplugin_sheartool_ui.rc");
 
-    kDebug(50006) << "ImagePlugin_ShearTool plugin loaded";
+    kDebug(imagePluginsAreaCode) << "ImagePlugin_ShearTool plugin loaded";
 }
 
 ImagePlugin_ShearTool::~ImagePlugin_ShearTool()

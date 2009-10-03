@@ -38,7 +38,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klistwidget.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
@@ -50,6 +49,7 @@
 
 #include "albumsettings.h"
 #include "databaseurl.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -307,7 +307,7 @@ void DeleteDialog::slotUser1Clicked()
     }
     if (m_saveDoNotShowAgain)
     {
-        kDebug(50003) << "setShowTrashDeleteDialog " << !m_widget->m_doNotShowAgain->isChecked();
+        kDebug(digiKamAreaCode) << "setShowTrashDeleteDialog " << !m_widget->m_doNotShowAgain->isChecked();
         settings->setShowTrashDeleteDialog(!m_widget->m_doNotShowAgain->isChecked());
     }
 

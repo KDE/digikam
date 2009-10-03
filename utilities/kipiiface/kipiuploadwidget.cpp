@@ -33,7 +33,7 @@
 // KDE includes
 
 #include <kdialog.h>
-#include <kdebug.h>
+
 #include <klocale.h>
 #include <kpushbutton.h>
 #include <kmessagebox.h>

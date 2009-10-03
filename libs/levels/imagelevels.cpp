@@ -40,13 +40,10 @@
 #include <cstdlib>
 #include <cerrno>
 
-// KDE includes
-
-#include <kdebug.h>
-
 // Local includes
 
 #include "imagehistogram.h"
+#include "debug.h"
 #include "globals.h"
 
 namespace Digikam
@@ -649,14 +646,14 @@ bool ImageLevels::loadLevelsFromGimpLevelsFile(const KUrl& fileUrl)
 
        if (fields != 4)
        {
-          kWarning(50003) <<  "Invalid Gimp levels file!";
+          kWarning(digiKamAreaCode) <<  "Invalid Gimp levels file!";
           fclose(file);
           return false;
        }
 
        if (!fgets (buf, 50, file))
        {
-          kWarning(50003) <<  "Invalid Gimp levels file!";
+          kWarning(digiKamAreaCode) <<  "Invalid Gimp levels file!";
           fclose(file);
           return false;
        }
@@ -665,7 +662,7 @@ bool ImageLevels::loadLevelsFromGimpLevelsFile(const KUrl& fileUrl)
 
        if (buf == nptr || errno == ERANGE)
        {
-          kWarning(50003) <<  "Invalid Gimp levels file!";
+          kWarning(digiKamAreaCode) <<  "Invalid Gimp levels file!";
           fclose(file);
           return false;
        }

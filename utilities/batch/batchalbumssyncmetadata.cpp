@@ -36,7 +36,6 @@
 // KDE includes
 
 #include <kapplication.h>
-#include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kpassivepopup.h>
@@ -47,6 +46,7 @@
 #include "albummanager.h"
 #include "imageinfojob.h"
 #include "metadatahub.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -124,7 +124,7 @@ void BatchAlbumsSyncMetadata::parseAlbum()
     else if (!(*d->albumsIt)->isRoot())
     {
         d->imageInfoJob->allItemsFromAlbum(*d->albumsIt);
-        kDebug(50003) << "Sync Items from Album :" << (*d->albumsIt)->databaseUrl().directory();
+        kDebug(digiKamAreaCode) << "Sync Items from Album :" << (*d->albumsIt)->databaseUrl().directory();
     }
     else
     {

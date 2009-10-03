@@ -38,9 +38,9 @@
 #include <QTextStream>
 #include <QDate>
 #include <QTextCodec>
+
 // KDE includes
 
-#include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -52,6 +52,7 @@
 
 #include "theme.h"
 #include "texture.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -420,8 +421,8 @@ bool ThemeEngine::loadTheme()
     int row, col;
     if (!xmlDoc.setContent(&themeFile, true, &error, &row, &col))
     {
-        kDebug(50003) << "Theme file: " << t->filePath;
-        kDebug(50003) << error << " :: row=" << row << " , col=" << col;
+        kDebug(digiKamAreaCode) << "Theme file: " << t->filePath;
+        kDebug(digiKamAreaCode) << error << " :: row=" << row << " , col=" << col;
         return false;
     }
 
@@ -679,7 +680,7 @@ bool ThemeEngine::loadTheme()
         t->listSelBorderColor = resource;
     }
 
-    kDebug(50003) << "Theme file loaded: " << t->filePath;
+    kDebug(digiKamAreaCode) << "Theme file loaded: " << t->filePath;
     return true;
 }
 

@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+
 
 // Local includes
 
@@ -152,7 +152,7 @@ void SharedLoadingTask::execute()
                 lock.wakeAll();
                 // set to 0, as checked in setStatus
                 m_usedProcess = 0;
-                //kDebug(50003) << "SharedLoadingTask " << this << ": waited";
+                //kDebug(digiKamAreaCode) << "SharedLoadingTask " << this << ": waited";
                 // m_img is now set to the result
             }
             else
@@ -195,7 +195,7 @@ void SharedLoadingTask::execute()
 
     {
         LoadingCache::CacheLock lock(cache);
-        //kDebug(50003) << "SharedLoadingTask " << this << ": image loaded, " << img.isNull();
+        //kDebug(digiKamAreaCode) << "SharedLoadingTask " << this << ": image loaded, " << img.isNull();
         // indicate that loading has finished so that listeners can stop waiting
         m_completed = true;
 

@@ -40,7 +40,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kcursor.h>
 #include <kglobal.h>
@@ -50,6 +49,7 @@
 // Local includes
 
 #include "imageiface.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -453,7 +453,7 @@ void ImageRegionWidget::setContentsSize()
             break;
         }
         default:
-            kWarning(50003) << "Unknown separation view specified";
+            kWarning(digiKamAreaCode) << "Unknown separation view specified";
     }
 }
 

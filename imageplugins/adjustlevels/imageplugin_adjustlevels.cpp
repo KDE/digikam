@@ -31,7 +31,6 @@
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
 #include <klocale.h>
@@ -39,6 +38,7 @@
 // Local includes
 
 #include "adjustlevelstool.h"
+#include "debug.h"
 
 using namespace DigikamAdjustLevelsImagesPlugin;
 
@@ -57,7 +57,7 @@ ImagePlugin_AdjustLevels::ImagePlugin_AdjustLevels(QObject *parent, const QVaria
 
     setXMLFile("digikamimageplugin_adjustlevels_ui.rc");
 
-    kDebug(50006) << "ImagePlugin_AdjustLevels plugin loaded";
+    kDebug(imagePluginsAreaCode) << "ImagePlugin_AdjustLevels plugin loaded";
 }
 
 ImagePlugin_AdjustLevels::~ImagePlugin_AdjustLevels()

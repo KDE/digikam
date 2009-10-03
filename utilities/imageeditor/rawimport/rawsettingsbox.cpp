@@ -37,7 +37,6 @@
 
 #include <kapplication.h>
 #include <kconfig.h>
-#include <kdebug.h>
 #include <kfiledialog.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -62,6 +61,7 @@
 #include "imagedialog.h"
 #include "imagehistogram.h"
 #include "rexpanderbox.h"
+#include "debug.h"
 #include "globals.h"
 
 using namespace KDcrawIface;

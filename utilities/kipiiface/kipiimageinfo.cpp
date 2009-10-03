@@ -29,7 +29,6 @@
 // KDE includes
 
 #include <kconfig.h>
-#include <kdebug.h>
 #include <klocale.h>
 
 // LibKIPI includes
@@ -38,7 +37,7 @@
 
 // Local includes
 
-#include "globals.h"
+#include "debug.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"
@@ -46,6 +45,7 @@
 #include "databaseaccess.h"
 #include "dmetadata.h"
 #include "imageattributeswatch.h"
+#include "globals.h"
 
 namespace Digikam
 {
@@ -106,7 +106,7 @@ void KipiImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec)
 {
     if ( !time.isValid() )
     {
-        kWarning(50003) << "Invalid datetime specified";
+        kWarning(digiKamAreaCode) << "Invalid datetime specified";
         return;
     }
 

@@ -42,7 +42,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kmessagebox.h>
 #include <kapplication.h>
 #include <klocale.h>
@@ -66,6 +65,7 @@
 #include "albummanager.h"
 #include "album.h"
 #include "splashscreen.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -737,7 +737,7 @@ void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum *album, const QString&
     CollectionLocation location = CollectionManager::instance()->locationForPath(dstPath);
     if (location.isNull())
     {
-        kWarning(50003) << "hintAtMoveOrCopyOfAlbum: Destination path" << dstPath 
+        kWarning(digiKamAreaCode) << "hintAtMoveOrCopyOfAlbum: Destination path" << dstPath
                         << "does not point to an available location.";
         return;
     }

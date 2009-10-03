@@ -40,7 +40,6 @@
 #include <kapplication.h>
 #include <kcombobox.h>
 #include <kconfig.h>
-#include <kdebug.h>
 #include <kdialog.h>
 #include <khbox.h>
 #include <kiconloader.h>
@@ -59,6 +58,7 @@
 #include "searchxml.h"
 #include "timelinefolderview.h"
 #include "timelinewidget.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -456,7 +456,7 @@ void TimeLineView::createNewDateSearchAlbum(const QString& name)
     }
     writer.finish();
 
-    kDebug(50003) << "Date search XML:\n" << writer.xml();
+    kDebug(digiKamAreaCode) << "Date search XML:\n" << writer.xml();
 
     SAlbum* album = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::TimeLineSearch, writer.xml());
     AlbumManager::instance()->setCurrentAlbum(album);

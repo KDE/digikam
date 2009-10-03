@@ -45,7 +45,6 @@
 // KDE includes
 
 #include <kcombobox.h>
-#include <kdebug.h>
 #include <kiconloader.h>
 #include <klineedit.h>
 #include <klocale.h>
@@ -70,6 +69,7 @@
 #include "searchfieldgroup.h"
 #include "ratingsearchutilities.h"
 #include "choicesearchutilities.h"
+#include "debug.h"
 
 using namespace KDcrawIface;
 
@@ -514,7 +514,7 @@ SearchField *SearchField::createField(const QString& name, SearchFieldGroup *par
     }
     else
     {
-        kWarning(50003) << "SearchField::createField: cannot create SearchField for" << name;
+        kWarning(digiKamAreaCode) << "SearchField::createField: cannot create SearchField for" << name;
     }
     return 0;
 }
@@ -1893,7 +1893,7 @@ void SearchFieldAlbum::read(SearchXmlCachingReader& reader)
             a = AlbumManager::instance()->findTAlbum(id);
 
         if (!a)
-            kDebug(50003) << "Search: Did not find album for ID" << id << "given in Search XML";
+            kDebug(digiKamAreaCode) << "Search: Did not find album for ID" << id << "given in Search XML";
 
         m_model->setChecked(a, true);
     }

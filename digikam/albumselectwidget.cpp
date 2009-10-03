@@ -33,7 +33,6 @@
 // KDE includes
 
 #include <kdialog.h>
-#include <kdebug.h>
 #include <klocale.h>
 #include <kaction.h>
 #include <kmenu.h>
@@ -43,7 +42,7 @@
 
 // Local includes
 
-#include "globals.h"
+#include "debug.h"
 #include "album.h"
 #include "albummanager.h"
 #include "albumthumbnailloader.h"
@@ -152,7 +151,7 @@ void AlbumSelectWidget::populateTreeView(const AlbumList& aList, QTreeWidget *vi
                 pitem = static_cast<TreeAlbumItem*>(album->parent()->extraData(view));
             if (!pitem)
             {
-                kWarning(50003) << "Failed to find parent for Album " << album->title();
+                kWarning(digiKamAreaCode) << "Failed to find parent for Album " << album->title();
                 continue;
             }
 
@@ -377,7 +376,7 @@ void AlbumSelectWidget::slotAlbumAdded(Album* album)
 
     if (!parentItem)
     {
-        kWarning(50003) << "Failed to find parent for Album "
+        kWarning(digiKamAreaCode) << "Failed to find parent for Album "
                         << album->title();
         return;
     }

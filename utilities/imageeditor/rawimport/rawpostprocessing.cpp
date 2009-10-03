@@ -23,10 +23,6 @@
 
 #include "rawpostprocessing.h"
 
-// KDE includes
-
-#include <kdebug.h>
-
 // Local includes
 
 #include "imagehistogram.h"
@@ -35,6 +31,7 @@
 #include "bcgmodifier.h"
 #include "whitebalance.h"
 #include "dimgimagefilters.h"
+#include "debug.h"
 #include "globals.h"
 
 namespace Digikam
@@ -66,7 +63,7 @@ void RawPostProcessing::rawPostProcessing()
 {
     if (!m_orgImage.bits() || !m_orgImage.width() || !m_orgImage.height())
     {
-       kWarning(50003) << ("RawPostProcessing::rawPostProcessing: no image m_orgImage.bits() available!");
+       kWarning(digiKamAreaCode) << ("RawPostProcessing::rawPostProcessing: no image m_orgImage.bits() available!");
        return;
     }
 

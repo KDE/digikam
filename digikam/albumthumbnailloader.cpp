@@ -40,7 +40,7 @@
 
 #include <kapplication.h>
 #include <kiconloader.h>
-#include <kdebug.h>
+
 
 // Local includes
 

@@ -37,7 +37,6 @@
 #include <kdialog.h>
 #include <kconfig.h>
 #include <kvbox.h>
-#include <kdebug.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kapplication.h>
@@ -49,6 +48,7 @@
 // Local includes
 
 #include "version.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -74,7 +74,7 @@ public:
 };
 
 CollectionPage::CollectionPage(KAssistantDialog* dlg)
-              : AssistantDlgPage(dlg, i18n("<b>Configure where images and meta-data are stored</b>")), 
+              : AssistantDlgPage(dlg, i18n("<b>Configure where images and meta-data are stored</b>")),
                 d(new CollectionPagePriv)
 {
     QWidget *widget      = new QWidget(this);
@@ -88,7 +88,7 @@ CollectionPage::CollectionPage(KAssistantDialog* dlg)
     picturesPath = QDesktopServices::storageLocation(QDesktopServices::PicturesLocation);
 #endif
 #endif
-    kDebug() << picturesPath;
+    kDebug(digiKamAreaCode) << picturesPath;
     if (picturesPath.isEmpty())
     {
         picturesPath = QDir::homePath() + i18nc("This is a path name so you should "
@@ -139,7 +139,7 @@ CollectionPage::CollectionPage(KAssistantDialog* dlg)
     setPageWidget(widget);
 
     QPixmap leftPix = KStandardDirs::locate("data","digikam/data/assistant-collection.png");
-    setLeftBottomPix(leftPix.scaledToWidth(128, Qt::SmoothTransformation)); 
+    setLeftBottomPix(leftPix.scaledToWidth(128, Qt::SmoothTransformation));
 
     connect(d->rootAlbumPathRequester, SIGNAL(urlSelected(const KUrl&)),
             this, SLOT(slotAlbumRootChanged(const KUrl&)));
@@ -195,7 +195,7 @@ bool CollectionPage::checkSettings()
 bool CollectionPage::checkRootAlbum(QString& rootAlbumFolder)
 {
     rootAlbumFolder = d->rootAlbumPathRequester->url().toLocalFile();
-    kDebug(50003) << "Root album is : " << rootAlbumFolder;
+    kDebug(digiKamAreaCode) << "Root album is : " << rootAlbumFolder;
 
     if (rootAlbumFolder.isEmpty())
     {
@@ -269,7 +269,7 @@ bool CollectionPage::checkRootAlbum(QString& rootAlbumFolder)
 bool CollectionPage::checkDatabase(QString& dbFolder)
 {
     dbFolder = d->dbPathRequester->url().toLocalFile();
-    kDebug(50003) << "DB folder is : " << dbFolder;
+    kDebug(digiKamAreaCode) << "DB folder is : " << dbFolder;
 
     if (dbFolder.isEmpty())
     {

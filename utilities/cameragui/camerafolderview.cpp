@@ -27,13 +27,13 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
 
 // Local includes
 
 #include "camerafolderitem.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -103,7 +103,7 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
 {
     CameraFolderItem *parentItem = findFolder(folder);
 
-    kDebug(50003) << "CameraFolderView: Adding Subfolder " << subFolder
+    kDebug(digiKamAreaCode) << "CameraFolderView: Adding Subfolder " << subFolder
              << " of folder " << folder;
 
     if (parentItem)
@@ -116,7 +116,7 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
         path += subFolder;
         CameraFolderItem* item = new CameraFolderItem(parentItem, subFolder, path, pixmap);
 
-        kDebug(50003) << "CameraFolderView: Added ViewItem with path "
+        kDebug(digiKamAreaCode) << "CameraFolderView: Added ViewItem with path "
                  << item->folderPath();
 
         item->setCount(nbItems);
@@ -125,7 +125,7 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
     }
     else
     {
-        kWarning(50003) << "CameraFolderView: Could not find parent for subFolder "
+        kWarning(digiKamAreaCode) << "CameraFolderView: Could not find parent for subFolder "
                         << subFolder << " of folder " << folder;
         return 0;
     }

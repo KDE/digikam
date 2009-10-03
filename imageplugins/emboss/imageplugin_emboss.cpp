@@ -28,7 +28,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
@@ -40,6 +39,7 @@
 // Local includes
 
 #include "embosstool.h"
+#include "debug.h"
 
 using namespace DigikamEmbossImagesPlugin;
 
@@ -58,7 +58,7 @@ ImagePlugin_Emboss::ImagePlugin_Emboss(QObject *parent, const QVariantList &)
 
     setXMLFile( "digikamimageplugin_emboss_ui.rc" );
 
-    kDebug(50006) << "ImagePlugin_Emboss plugin loaded";
+    kDebug(imagePluginsAreaCode) << "ImagePlugin_Emboss plugin loaded";
 }
 
 ImagePlugin_Emboss::~ImagePlugin_Emboss()

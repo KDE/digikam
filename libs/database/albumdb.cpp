@@ -46,7 +46,6 @@ extern "C"
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 
 // Local includes
@@ -54,6 +53,7 @@ extern "C"
 #include "databasebackend.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -3136,7 +3136,7 @@ bool AlbumDB::copyAlbumProperties(int srcAlbumID, int dstAlbumID)
 
     if (values.isEmpty())
     {
-        kWarning(50003) << " src album ID " << srcAlbumID << " does not exist";
+        kWarning(digiKamAreaCode) << " src album ID " << srcAlbumID << " does not exist";
         return false;
     }
 

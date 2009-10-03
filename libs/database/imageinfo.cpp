@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+
 
 // Local includes
 
@@ -636,7 +636,7 @@ ImageInfo ImageInfo::copyItem(int dstAlbumID, const QString& dstFileName)
         return ImageInfo();
 
     DatabaseAccess access;
-    //kDebug(50003) << "ImageInfo::copyItem " << m_data->albumId << " " << m_data->name << " to " << dstAlbumID << " " << dstFileName;
+    //kDebug(digiKamAreaCode) << "ImageInfo::copyItem " << m_data->albumId << " " << m_data->name << " to " << dstAlbumID << " " << dstFileName;
 
     if (dstAlbumID == m_data->albumId && dstFileName == m_data->name)
         return (*this);

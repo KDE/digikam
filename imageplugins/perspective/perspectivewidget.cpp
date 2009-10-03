@@ -50,7 +50,6 @@
 
 #include <kstandarddirs.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kglobal.h>
 #include <kapplication.h>
 
@@ -59,6 +58,7 @@
 #include "triangle.h"
 #include "imageiface.h"
 #include "dimgimagefilters.h"
+#include "debug.h"
 
 namespace DigikamPerspectiveImagesPlugin
 {
@@ -609,7 +609,7 @@ void PerspectiveWidget::transformAffine(Digikam::DImg *orgImage, Digikam::DImg *
                 }
                 else
                 {
-                    kDebug(50006) << "homogeneous coordinate = 0...\n";
+                    kDebug(imagePluginsAreaCode) << "homogeneous coordinate = 0...\n";
                 }
             }
 

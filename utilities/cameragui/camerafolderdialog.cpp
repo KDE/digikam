@@ -33,7 +33,6 @@
 // KDE includes
 
 #include <kapplication.h>
-#include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -43,6 +42,7 @@
 #include "cameraiconview.h"
 #include "camerafolderitem.h"
 #include "camerafolderview.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -100,7 +100,7 @@ CameraFolderDialog::CameraFolderDialog(QWidget *parent, CameraIconView *cameraVi
 
             QString sub = folder.section( '/', -1 );
             m_folderView->addFolder(root, sub, cameraView->countItemsByFolder(*it));
-            kDebug(50003) << "Camera folder: '" << folder << "' (root='" << root << "', sub='" <<sub <<"')";
+            kDebug(digiKamAreaCode) << "Camera folder: '" << folder << "' (root='" << root << "', sub='" <<sub <<"')";
         }
     }
 
@@ -135,7 +135,7 @@ void CameraFolderDialog::slotFolderPathSelectionChanged(CameraFolderItem* item)
     if (item)
     {
         enableButtonOk(true);
-        kDebug(50003) << "Camera folder path: " << selectedFolderPath();
+        kDebug(digiKamAreaCode) << "Camera folder path: " << selectedFolderPath();
     }
     else
     {

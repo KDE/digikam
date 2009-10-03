@@ -35,6 +35,7 @@
 
 #include "dcolor.h"
 #include "digikam_export.h"
+#include "debug.h"
 #include "globals.h"
 
 namespace Digikam

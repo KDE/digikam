@@ -27,7 +27,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
@@ -39,6 +38,7 @@
 // Local includes
 
 #include "channelmixertool.h"
+#include "debug.h"
 
 using namespace DigikamChannelMixerImagesPlugin;
 
@@ -57,7 +57,7 @@ ImagePlugin_ChannelMixer::ImagePlugin_ChannelMixer(QObject *parent, const QVaria
 
     setXMLFile("digikamimageplugin_channelmixer_ui.rc");
 
-    kDebug(50006) << "ImagePlugin_ChannelMixer plugin loaded";
+    kDebug(imagePluginsAreaCode) << "ImagePlugin_ChannelMixer plugin loaded";
 }
 
 ImagePlugin_ChannelMixer::~ImagePlugin_ChannelMixer()

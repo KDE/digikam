@@ -46,7 +46,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kdeversion.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
@@ -55,7 +54,7 @@
 
 // Local includes
 
-#include "globals.h"
+#include "debug.h"
 #include "albummodel.h"
 #include "ratingwidget.h"
 #include "themeengine.h"
@@ -77,13 +76,13 @@ AnimatedClearButton::AnimatedClearButton(QWidget *parent)
     m_timeline->setCurveShape(QTimeLine::EaseInOutCurve);
     m_timeline->setDirection(QTimeLine::Forward);
 
-    connect(m_timeline, SIGNAL(finished()), 
+    connect(m_timeline, SIGNAL(finished()),
             this, SLOT(animationFinished()));
 
-    connect(m_timeline, SIGNAL(frameChanged(int)), 
+    connect(m_timeline, SIGNAL(frameChanged(int)),
             this, SLOT(update()));
 
-    connect(KGlobalSettings::self(), SIGNAL(settingsChanged(int)), 
+    connect(KGlobalSettings::self(), SIGNAL(settingsChanged(int)),
             this, SLOT(updateAnimationSettings()));
 }
 
@@ -104,9 +103,9 @@ void AnimatedClearButton::animateVisible(bool visible)
     if (!isVisible())
         setDirectlyVisible(visible);
 
-    if (visible) 
+    if (visible)
     {
-        if (m_timeline->direction() == QTimeLine::Forward) 
+        if (m_timeline->direction() == QTimeLine::Forward)
         {
             return;
         }
@@ -116,9 +115,9 @@ void AnimatedClearButton::animateVisible(bool visible)
         if (!m_stayAlwaysVisible)
             show();
     }
-    else 
+    else
     {
-        if (m_timeline->direction() == QTimeLine::Backward) 
+        if (m_timeline->direction() == QTimeLine::Backward)
         {
             return;
         }
@@ -128,7 +127,7 @@ void AnimatedClearButton::animateVisible(bool visible)
     }
 
 #if KDE_IS_VERSION(4,0,64)
-    if (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects) 
+    if (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects)
     {
         if (m_timeline->state() != QTimeLine::Running)
             m_timeline->start();
@@ -150,9 +149,9 @@ void AnimatedClearButton::setDirectlyVisible(bool visible)
     // and we don't want to replace it in all occurrences.
     // Most notably, we want to call the QWidget version from animateVisible above.
 
-    if (visible) 
+    if (visible)
     {
-        if (m_timeline->direction() == QTimeLine::Forward) 
+        if (m_timeline->direction() == QTimeLine::Forward)
         {
             return;
         }
@@ -161,9 +160,9 @@ void AnimatedClearButton::setDirectlyVisible(bool visible)
         m_timeline->setDirection(QTimeLine::Forward);
         m_timeline->setCurrentTime(150);
     }
-    else 
+    else
     {
-        if (m_timeline->direction() == QTimeLine::Backward) 
+        if (m_timeline->direction() == QTimeLine::Backward)
         {
             return;
         }
@@ -202,7 +201,7 @@ void AnimatedClearButton::updateAnimationSettings()
     // it wont be painted, resulting (m->timeLine->currentTime() == 0) true,
     // and therefore a bad painting. This is needed for the case that we
     // come from a non animated widget and want it animated. (ereslibre)
-    if (animationsEnabled && m_timeline->direction() == QTimeLine::Forward) 
+    if (animationsEnabled && m_timeline->direction() == QTimeLine::Forward)
     {
         m_timeline->setCurrentTime(150);
     }
@@ -241,11 +240,11 @@ void AnimatedClearButton::paintEvent(QPaintEvent *event)
 
 void AnimatedClearButton::animationFinished()
 {
-    if (m_timeline->direction() == QTimeLine::Forward) 
+    if (m_timeline->direction() == QTimeLine::Forward)
     {
         update();
     }
-    else 
+    else
     {
         if (!m_stayAlwaysVisible)
             hide();
@@ -264,10 +263,10 @@ void AnimatedClearButton::mouseReleaseEvent(QMouseEvent* event)
 
 CustomStepsDoubleSpinBox::CustomStepsDoubleSpinBox(QWidget *parent)
                         : QDoubleSpinBox(parent),
-                          m_beforeInitialValue(true), 
+                          m_beforeInitialValue(true),
                           m_initialValue(0),
-                          m_smallerStep(0), 
-                          m_largerStep(0), 
+                          m_smallerStep(0),
+                          m_largerStep(0),
                           m_invertStepping(false)
 {
 }
@@ -395,10 +394,10 @@ void CustomStepsDoubleSpinBox::slotValueChanged(double d)
 
 CustomStepsIntSpinBox::CustomStepsIntSpinBox(QWidget *parent)
                      : QSpinBox(parent),
-                       m_beforeInitialValue(true), 
+                       m_beforeInitialValue(true),
                        m_initialValue(0),
-                       m_smallerStep(0), 
-                       m_largerStep(0), 
+                       m_smallerStep(0),
+                       m_largerStep(0),
                        m_invertStepping(false)
 {
 }

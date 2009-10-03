@@ -35,7 +35,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+
 #include <kglobal.h>
 
 // Local includes

@@ -39,7 +39,7 @@
 // KDE includes
 
 #include <kseparator.h>
-#include <kdebug.h>
+
 #include <kglobalsettings.h>
 #include <kdialog.h>
 #include <klocale.h>

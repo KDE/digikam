@@ -29,7 +29,6 @@
 
 #include <klocale.h>
 #include <kgenericfactory.h>
-#include <kdebug.h>
 #include <klibloader.h>
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -39,6 +38,7 @@
 // Local includes
 
 #include "texturetool.h"
+#include "debug.h"
 
 using namespace DigikamTextureImagesPlugin;
 
@@ -57,7 +57,7 @@ ImagePlugin_Texture::ImagePlugin_Texture(QObject *parent, const QVariantList &)
 
     setXMLFile( "digikamimageplugin_texture_ui.rc" );
 
-    kDebug(50006) << "ImagePlugin_Texture plugin loaded";
+    kDebug(imagePluginsAreaCode) << "ImagePlugin_Texture plugin loaded";
 }
 
 ImagePlugin_Texture::~ImagePlugin_Texture()

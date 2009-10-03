@@ -31,7 +31,6 @@
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
 #include <klocale.h>
@@ -55,6 +54,7 @@
 #include "sharpentool.h"
 #include "redeyetool.h"
 #include "rgbtool.h"
+#include "debug.h"
 
 using namespace DigikamImagesPluginCore;
 using namespace Digikam;
@@ -211,7 +211,7 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
 
     setXMLFile("digikamimageplugin_core_ui.rc");
 
-    kDebug(50006) << "ImagePlugin_Core plugin loaded";
+    kDebug(imagePluginsAreaCode) << "ImagePlugin_Core plugin loaded";
 }
 
 ImagePlugin_Core::~ImagePlugin_Core()
@@ -274,7 +274,7 @@ void ImagePlugin_Core::slotConvertTo8Bits()
        if (KMessageBox::warningContinueCancel(
                         kapp->activeWindow(),
                         i18n("Performing this operation will reduce image color quality. "
-                             "Do you want to continue?"), QString(), 
+                             "Do you want to continue?"), QString(),
                         KStandardGuiItem::cont(), KStandardGuiItem::cancel(),
                         QString("ImagePluginCore16To8Bits")) == KMessageBox::Cancel)
            return;

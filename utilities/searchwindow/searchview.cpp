@@ -35,7 +35,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kdialogbuttonbox.h>
 #include <klocale.h>
 #include <kpushbutton.h>
@@ -48,6 +47,7 @@
 #include "searchwindow.h"
 #include "searchgroup.h"
 #include "searchutilities.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -71,7 +71,7 @@ void AbstractSearchGroupContainer::removeSearchGroup(SearchGroup *group)
 {
     if (group->groupType() == SearchGroup::FirstGroup)
     {
-        kWarning(50003) << "Attempt to delete the primary search group";
+        kWarning(digiKamAreaCode) << "Attempt to delete the primary search group";
         return;
     }
     m_groups.removeAll(group);

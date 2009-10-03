@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+
 #include <kdialog.h>
 #include <klocale.h>
 #include <phonon/seekslider.h>

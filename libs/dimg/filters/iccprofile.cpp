@@ -38,13 +38,13 @@
 // KDE includes
 
 #include <kcodecs.h>
-#include <kdebug.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 
 // Local includes
 
 #include "dimg.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -149,7 +149,7 @@ IccProfile::IccProfile(const char *location, const QString& relativePath)
     QString filePath = KStandardDirs::locate(location, relativePath);
     if (filePath.isNull())
     {
-        kError(50003) << "The bundled profile" << relativePath << "cannot be found. Check your installation.";
+        kError(digiKamAreaCode) << "The bundled profile" << relativePath << "cannot be found. Check your installation.";
         return;
     }
     d = new IccProfilePriv;
@@ -452,7 +452,7 @@ QStringList IccProfile::defaultSearchPaths()
                 paths << path;
         }
     }
-    //kDebug(50003) << candidates << '\n' << paths;
+    //kDebug(digiKamAreaCode) << candidates << '\n' << paths;
 
     return paths;
 }
@@ -469,7 +469,7 @@ void IccProfile::considerOriginalAdobeRGB(const QString& filePath)
         md5.update(file);
         if (md5.hexDigest() == "dea88382d899d5f6e573b432473ae138")
         {
-            kDebug(50003) << "The original Adobe RGB (1998) profile has been found at" << filePath;
+            kDebug(digiKamAreaCode) << "The original Adobe RGB (1998) profile has been found at" << filePath;
             static_d->adobeRGBPath = filePath;
         }
     }

@@ -25,7 +25,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+
 
 using namespace KExiv2Iface;
 

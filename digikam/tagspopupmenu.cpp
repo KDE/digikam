@@ -44,7 +44,6 @@
 // KDE includes
 
 #include <kapplication.h>
-#include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -57,6 +56,7 @@
 #include "albummanager.h"
 #include "albumthumbnailloader.h"
 #include "tageditdlg.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -623,7 +623,7 @@ void TagsPopupMenu::slotAddTag(QAction *action)
     TAlbum* parent    = man->findTAlbum(tagID);
     if (!parent)
     {
-        kWarning(50003) << "Failed to find album with id " << tagID;
+        kWarning(digiKamAreaCode) << "Failed to find album with id " << tagID;
         return;
     }
 

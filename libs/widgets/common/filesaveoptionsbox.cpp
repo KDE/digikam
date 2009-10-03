@@ -43,7 +43,6 @@
 #include <kimageio.h>
 #include <klocale.h>
 #include <knuminput.h>
-#include <kdebug.h>
 
 // Local includes
 
@@ -52,6 +51,7 @@
 #include "tiffsettings.h"
 #include "jp2ksettings.h"
 #include "pgfsettings.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -149,7 +149,7 @@ void FileSaveOptionsBox::slotImageFileSelected(const QString& file)
 
 void FileSaveOptionsBox::slotImageFileFormatChanged(const QString& ext)
 {
-    kDebug(50003) << "Format selected: " << ext;
+    kDebug(digiKamAreaCode) << "Format selected: " << ext;
     QString format = ext.toUpper();
 
     if (format.contains("JPEG") || format.contains("JPG") || format.contains("JPE"))

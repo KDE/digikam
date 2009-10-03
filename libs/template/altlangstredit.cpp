@@ -39,7 +39,7 @@
 #include <klocale.h>
 #include <ktextedit.h>
 #include <kcombobox.h>
-#include <kdebug.h>
+
 
 // Local includes
 

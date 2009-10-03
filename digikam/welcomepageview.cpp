@@ -40,7 +40,6 @@
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kglobalsettings.h>
 #include <khtml_part.h>
 #include <khtmlview.h>
@@ -55,6 +54,7 @@
 #include "daboutdata.h"
 #include "themeengine.h"
 #include "version.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -274,7 +274,7 @@ void WelcomePageView::slotThemeChanged()
                              .arg(slogan)             // %5
                              .arg(infoPage());        // %6
 
-//    kDebug(50003) << content;
+//    kDebug(digiKamAreaCode) << content;
 
     write(content);
     end();
@@ -287,25 +287,25 @@ void WelcomePageView::disablePredefinedActions()
     if (findAction)
         findAction->setShortcut(KShortcut());
     else
-        kDebug(50003) << "failed to remove the shortcut of khtml's find action";
+        kDebug(digiKamAreaCode) << "failed to remove the shortcut of khtml's find action";
 
     KAction* findNextAction = qobject_cast<KAction*>(actionCollection()->action("findNext"));
     if (findNextAction)
         findNextAction->setShortcut(KShortcut());
     else
-        kDebug(50003) << "failed to remove the shortcut of khtml's findNext action";
+        kDebug(digiKamAreaCode) << "failed to remove the shortcut of khtml's findNext action";
 
     KAction* findPreviousAction = qobject_cast<KAction*>(actionCollection()->action("findPrevious"));
     if (findPreviousAction)
         findPreviousAction->setShortcut(KShortcut());
     else
-        kDebug(50003) << "failed to remove the shortcut of khtml's findPrevious action";
+        kDebug(digiKamAreaCode) << "failed to remove the shortcut of khtml's findPrevious action";
 
     KAction* selectAllAction = qobject_cast<KAction*>(actionCollection()->action("selectAll"));
     if (selectAllAction)
         selectAllAction->setShortcut(KShortcut());
     else
-        kDebug(50003) << "failed to remove the shortcut of khtml's selectAll action";
+        kDebug(digiKamAreaCode) << "failed to remove the shortcut of khtml's selectAll action";
 }
 
 }  // namespace Digikam

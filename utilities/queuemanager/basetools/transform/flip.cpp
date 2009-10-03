@@ -33,7 +33,6 @@
 
 #include <kvbox.h>
 #include <klocale.h>
-#include <kdebug.h>
 #include <kiconloader.h>
 #include <kcombobox.h>
 
@@ -41,6 +40,7 @@
 
 #include "jpegutils.h"
 #include "dimg.h"
+#include "debug.h"
 
 namespace Digikam
 {
@@ -105,7 +105,7 @@ bool Flip::toolOperations()
                 return (exifTransform(inputUrl().toLocalFile(), inputUrl().fileName(), outputUrl().toLocalFile(), FlipVertical));
                 break;
             default:
-                kDebug(50003) << "Unknow flip action";
+                kDebug(digiKamAreaCode) << "Unknow flip action";
                 return false;
                 break;
         }

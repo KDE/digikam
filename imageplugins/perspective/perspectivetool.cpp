@@ -44,7 +44,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kcursor.h>
-#include <kdebug.h>
+
 #include <kglobal.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>

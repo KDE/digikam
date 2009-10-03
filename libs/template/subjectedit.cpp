@@ -31,7 +31,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+
 #include <khbox.h>
 #include <klineedit.h>
 #include <klocale.h>
