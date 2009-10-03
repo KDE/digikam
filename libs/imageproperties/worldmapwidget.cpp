@@ -37,7 +37,7 @@
 #include <kmenu.h>
 #include <kiconloader.h>
 
-#include <config-digikam.h>
+#include "config-digikam.h"
 #ifdef HAVE_MARBLEWIDGET
 #include <marble/MarbleWidget.h>
 using namespace Marble;

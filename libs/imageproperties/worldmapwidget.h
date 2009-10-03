@@ -39,8 +39,8 @@
 // Local includes
 
 #include "digikam_export.h"
-#include <loadingdescription.h>
-#include <config-digikam.h>
+#include "loadingdescription.h"
+#include "config-digikam.h"
 #ifdef HAVE_MARBLEWIDGET
 #include "markerclusterholder.h"
 #endif // HAVE_MARBLEWIDGET
@@ -119,7 +119,7 @@ public:
 #endif // HAVE_MARBLEWIDGET
     void setMultiMarkerSettings(const bool showSingleImages, const bool showGroupImages, const bool showHighestRatingFirst, const bool showOldestFirst, const bool showNumbers);
     void getMultiMarkerSettings(bool* const showSingleImages, bool* const showGroupImages, bool* const showHighestRatingFirst, bool* const showOldestFirst, bool* const showNumbers) const;
-    
+
 Q_SIGNALS:
 
     void signalSettingsChanged();
@@ -178,7 +178,6 @@ private Q_SLOTS:
 private:
 
     WorldMapThemeBtnPriv* const d;
-    
 };
 
 }  // namespace Digikam
