@@ -27,9 +27,11 @@
 #define DIGIKAMIMAGEVIEW_P_H_
 
 // Qt includes
+
 #include <QObject>
 
 // Local includes
+
 #include "digikamimageview.h"
 #include "renamethread.h"
 #include "imagerotationoverlay.h"
@@ -40,14 +42,11 @@ namespace Digikam
 
 class DigikamImageViewPriv : public QObject
 {
-
     Q_OBJECT
     Q_DECLARE_PUBLIC(DigikamImageView)
 
-private:
-    DigikamImageView *q_ptr;
-
 public:
+
     DigikamImageViewPriv(DigikamImageView *qq);
     virtual ~DigikamImageViewPriv();
 
@@ -61,7 +60,11 @@ public:
 
     void updateOverlays();
 
+private:
+
+    DigikamImageView *q_ptr;
 };
-}
+
+} // namespace Digikam
 
 #endif /* DIGIKAMIMAGEVIEW_P_H_ */

@@ -29,35 +29,31 @@
 namespace Digikam
 {
 
-DigikamImageViewPriv::DigikamImageViewPriv(DigikamImageView *qq) :
-    q_ptr(qq), overlaysActive(false)
+DigikamImageViewPriv::DigikamImageViewPriv(DigikamImageView *qq) 
+                    : q_ptr(qq), overlaysActive(false)
 {
-
-    utilities = 0;
-    renameThread = 0;
-    rotateLeftOverlay = 0;
+    utilities          = 0;
+    renameThread       = 0;
+    rotateLeftOverlay  = 0;
     rotateRightOverlay = 0;
 
 }
 
 DigikamImageViewPriv::~DigikamImageViewPriv()
 {
-
 }
 
 void DigikamImageViewPriv::updateOverlays()
 {
-
     AlbumSettings *settings = AlbumSettings::instance();
 
     if (overlaysActive)
     {
-
         if (!settings->getIconShowOverlays())
         {
-
             disconnect(rotateLeftOverlay, SIGNAL(signalRotateLeft()),
                        q_func(), SLOT(slotRotateLeft()));
+
             disconnect(rotateRightOverlay, SIGNAL(signalRotateRight()),
                        q_func(), SLOT(slotRotateRight()));
 
@@ -66,11 +62,9 @@ void DigikamImageViewPriv::updateOverlays()
 
             overlaysActive = false;
         }
-
     }
     else
     {
-
         if (settings->getIconShowOverlays())
         {
             q_func()->addOverlay(rotateLeftOverlay);
@@ -78,14 +72,13 @@ void DigikamImageViewPriv::updateOverlays()
 
             connect(rotateLeftOverlay, SIGNAL(signalRotateLeft()),
                     q_func(), SLOT(slotRotateLeft()));
+
             connect(rotateRightOverlay, SIGNAL(signalRotateRight()),
                     q_func(), SLOT(slotRotateRight()));
 
             overlaysActive = true;
         }
-
     }
-
 }
 
-}
+} // namespace Digikam
