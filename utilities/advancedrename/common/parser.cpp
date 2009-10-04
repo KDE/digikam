@@ -34,9 +34,7 @@ class ParserPriv
 {
 public:
 
-    ParserPriv()
-    {
-    }
+    ParserPriv() {}
     SubParserList subparsers;
 };
 

@@ -54,24 +54,22 @@ class AdvancedRenameWidgetPriv
 {
 public:
 
-    AdvancedRenameWidgetPriv()
-    {
-        renameInputWidget       = 0;
-        tooltipTracker          = 0;
-        tooltipToggleButton     = 0;
-        tokenToolButton         = 0;
-        modifierToolButton      = 0;
-        btnContainer            = 0;
-        parser                  = 0;
-        inputColumns            = 2;
-        tooltipTrackerAlignment = Qt::AlignLeft;
-        controlWidgetsMask      = AdvancedRenameWidget::TokenButtons  |
-                                  AdvancedRenameWidget::ToolTipButton |
-                                  AdvancedRenameWidget::ModifierToolButton;
-    }
+    AdvancedRenameWidgetPriv() :
+        inputColumns(2),
+        tooltipToggleButton(0),
+        tokenToolButton(0),
+        modifierToolButton(0),
+        btnContainer(0),
+        tooltipTrackerAlignment(Qt::AlignLeft),
+        tooltipTracker(0),
+        renameInputWidget(0),
+        parser(0),
+        controlWidgetsMask(AdvancedRenameWidget::TokenButtons  |
+                           AdvancedRenameWidget::ToolTipButton |
+                           AdvancedRenameWidget::ModifierToolButton)
+    {}
 
     int                                  inputColumns;
-    AdvancedRenameWidget::ControlWidgets controlWidgetsMask;
 
     QToolButton*                         tooltipToggleButton;
     QToolButton*                         tokenToolButton;
@@ -84,6 +82,8 @@ public:
     DTipTracker*                         tooltipTracker;
     AdvancedRenameInput*                 renameInputWidget;
     Parser*                              parser;
+
+    AdvancedRenameWidget::ControlWidgets controlWidgetsMask;
 };
 
 AdvancedRenameWidget::AdvancedRenameWidget(QWidget* parent)

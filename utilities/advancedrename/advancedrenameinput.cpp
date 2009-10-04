@@ -46,17 +46,16 @@ class AdvancedRenameInputPriv
 {
 public:
 
-    AdvancedRenameInputPriv()
-    {
-        userIsTyping       = false;
-        userIsHighlighting = false;
-        tokenMarked        = false;
-        selectionStart     = -1;
-        selectionLength    = -1;
-        curCursorPos       = -1;
-        parseTimer         = 0;
-        parser             = 0;
-    }
+    AdvancedRenameInputPriv() :
+        userIsTyping(false),
+        userIsHighlighting(false),
+        tokenMarked(false),
+        selectionStart(-1),
+        selectionLength(-1),
+        curCursorPos(-1),
+        parseTimer(0),
+        parser(0)
+    {}
 
     bool    userIsTyping;
     bool    userIsHighlighting;

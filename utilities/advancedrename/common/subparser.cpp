@@ -45,10 +45,9 @@ class SubParserPriv
 {
 public:
 
-    SubParserPriv()
-    {
-        useModifiers = true;
-    }
+    SubParserPriv() :
+        useModifiers(true)
+    {}
 
     bool         useModifiers;
 

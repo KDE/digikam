@@ -45,12 +45,11 @@ class ParseObjectPriv
 {
 public:
 
-    ParseObjectPriv()
-    {
-        buttonRegistered = false;
-        menuRegistered   = false;
-        useTokenMenu     = true;
-    }
+    ParseObjectPriv() :
+        buttonRegistered(false),
+        menuRegistered(false),
+        useTokenMenu(true)
+    {}
 
     bool         buttonRegistered;
     bool         menuRegistered;

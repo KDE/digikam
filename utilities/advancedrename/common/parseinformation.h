@@ -41,14 +41,13 @@ class ParseInformation
 {
 public:
 
-    ParseInformation() { index = 1; };
-    ParseInformation(const ImageInfo& info)
-    {
-        filePath   = info.filePath();
-        cameraName = info.photoInfoContainer().make + ' ' + info.photoInfoContainer().model;
-        dateTime   = info.dateTime();
-        index      = 1;
-    };
+    ParseInformation() : index(1) {};
+    ParseInformation(const ImageInfo& info) :
+        filePath(info.filePath()),
+        cameraName(info.photoInfoContainer().make + ' ' + info.photoInfoContainer().model),
+        dateTime(info.dateTime()),
+        index(1)
+    {};
 
     bool isValid()
     {

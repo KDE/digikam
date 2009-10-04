@@ -41,10 +41,9 @@ class RenameThreadPriv
 {
 public:
 
-    RenameThreadPriv()
-    {
-        running = false;
-    }
+    RenameThreadPriv() :
+        running(false)
+    {}
 
     bool           running;
 
