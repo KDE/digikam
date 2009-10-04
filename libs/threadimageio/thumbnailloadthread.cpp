@@ -79,6 +79,11 @@ public:
         firstThreadCreated = false;
     }
 
+    ~ThumbnailLoadThreadStaticPriv()
+    {
+        delete provider;
+    }
+
     ThumbnailCreator::StorageMethod  storageMethod;
     ThumbnailInfoProvider           *provider;
     QWidget                         *displayingWidget;
