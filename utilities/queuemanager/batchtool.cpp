@@ -112,7 +112,7 @@ BatchTool::BatchTool(const QString& name, BatchToolGroup group, QObject* parent)
     // are assigned to settings widget by main thread to tool thread.
 
     connect(this, SIGNAL(signalSettingsChanged(const BatchToolSettings&)),
-            this, SLOT(slotAssignSettings2widget()));
+            this, SLOT(slotAssignSettings2Widget()));
 }
 
 BatchTool::~BatchTool()
