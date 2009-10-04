@@ -60,8 +60,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 049 ==> 204080 : It crashed when it was closing.
 050 ==> 198554 : Crash on making thumbnails, every time.
 051 ==> 207330 : digiKam crashes if the editor has to open a new image while working on another.
-052 ==> 209189 : Make albumview rotation buttons optional
-053 ==> 
+052 ==> 209189 : Make albumview rotation buttons optional.
+053 ==> 209343 : Mouse-wheel should jump to next/previous picture if used when viewing a picture.
+054 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta4 - Release date: 2009-08-30
