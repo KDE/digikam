@@ -70,6 +70,7 @@ DMetadata::DMetadata(const QString& filePath)
 
 DMetadata::~DMetadata()
 {
+    unregisterXmpNameSpace(QString("http://ns.adobe.com/lightroom/1.0/"));
 }
 
 bool DMetadata::load(const QString& filePath) const
