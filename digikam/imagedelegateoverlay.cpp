@@ -29,16 +29,11 @@
 #include <QEvent>
 #include <QMouseEvent>
 
-// KDE includes
-
-#include <kdebug.h>
-
 // Local includes
 
 #include "imagecategorizedview.h"
 #include "imagedelegate.h"
 #include "itemviewhoverbutton.h"
-
 
 namespace Digikam
 {
