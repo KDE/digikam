@@ -120,12 +120,12 @@ public:
     };
     GPSInfoList              list;
     WorldMapWidget::MapTheme mapTheme;
-    bool focusOnAddedItems;
-    bool multiMarkerShowSingleImages;
-    bool multiMarkerShowGroupImages;
-    bool multiMarkerShowHighestRatingFirst;
-    bool multiMarkerShowOldestFirst;
-    bool multiMarkerShowNumbers;
+    bool                     focusOnAddedItems;
+    bool                     multiMarkerShowSingleImages;
+    bool                     multiMarkerShowGroupImages;
+    bool                     multiMarkerShowHighestRatingFirst;
+    bool                     multiMarkerShowOldestFirst;
+    bool                     multiMarkerShowNumbers;
 
 #ifdef HAVE_MARBLEWIDGET
     MarbleSubClassWidget*    marbleWidget;
@@ -158,10 +158,13 @@ WorldMapWidget::WorldMapWidget(int w, int h, QWidget *parent)
 
     connect(d->markerClusterHolder, SIGNAL(signalSelectionChanged()),
             this, SLOT(slotMapMarkerSelectionChanged()));
+
     connect(d->markerClusterHolder, SIGNAL(signalSoloChanged()),
             this, SLOT(slotMapMarkerSoloChanged()));
+
     connect(d->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
+
     connect(d->thumbnailLoadThreadBuncher, SIGNAL(timeout()),
             d->marbleWidget, SLOT(update()));
 
