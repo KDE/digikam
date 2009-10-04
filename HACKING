@@ -13,8 +13,8 @@ http://schlitt.info/applications/blog/index.php?/archives/541-10-golden-rules-fo
 Source code formatting:
 ========================================================================
 
-Adhere to this style guide strictly while adding new code to digiKam or 
-working on existing code. 
+Adhere to this style guide strictly while adding new code to digiKam or
+working on existing code.
 
 -------------------------------------------------------------------------
 * Indentation length
@@ -33,13 +33,13 @@ void function()
 
 Emacs by default will indent to 4 spaces
 vim users add this to you .vimrc
- set tabstop=4        
+ set tabstop=4
 
 -------------------------------------------------------------------------
 * Tabs vs Spaces
 -------------------------------------------------------------------------
 
-Absolutely no tabs. Use a sensible editor which will convert tabs to spaces. 
+Absolutely no tabs. Use a sensible editor which will convert tabs to spaces.
 This will reduce unnecessary changes in your cvs commits.
 
 Emacs by default will convert tab to spaces.
@@ -50,17 +50,17 @@ For vim users, add this to your .vimrc
 * Line length
 -------------------------------------------------------------------------
 
-Line length should never exceed 80 chars (unless really necessary - these 
+Line length should never exceed 80 chars (unless really necessary - these
 cases are rare). Having long lines greatly reduces readability of code
 
 -------------------------------------------------------------------------
 * Bracketing
 -------------------------------------------------------------------------
 
-In almost all cases, {} brackets should start on a newline and should be 
+In almost all cases, {} brackets should start on a newline and should be
 aligned with previous line (follow the indentation spaces). for eg.
 
-class A 
+class A
 { //new line
 ...
 
@@ -69,29 +69,29 @@ for (int i=0; i<10; i++)
 
 if (a == foobar)
 { //new line
-... 
+...
 }
 else
 { // new line
 ..
-} 
+}
 
 -------------------------------------------------------------------------
 * Positioning of Access modifiers
 -------------------------------------------------------------------------
 
-public, private, protected, public slots, ... should be aligned to the 
+public, private, protected, public slots, ... should be aligned to the
 beginning of the line with no margin
 
 class A
 {
-public: // aligned to left 
+public: // aligned to left
 ...
-private slots: // aligned to left 
+private slots: // aligned to left
 
 
 Follow a consistent order in defining these attributes. The recommended
-order is public, protected (functions), private (functions), 
+order is public, protected (functions), private (functions),
 signals, public slots, protected slots, private slots, private (variables)
 
 ========================================================================
@@ -102,7 +102,7 @@ Class, file and Variable names:
 * Class and filenames
 -------------------------------------------------------------------------
 
-- filenames should always be in lower-case 
+- filenames should always be in lower-case
 - class names should match the filenames. Capitalize the first letter and
   other letters logically to improve readability
 
@@ -110,10 +110,10 @@ Class, file and Variable names:
 * Protected Member variables
 -------------------------------------------------------------------------
 
-- protected member variable names should always be of the form m_varName. 
+- protected member variable names should always be of the form m_varName.
 - Capitalize logically so that it becomes easy to read it. Do not capitalize
   the first letter after _ (Use m_varName not m_VarName)
-- variable names should be indicative of their functionality and also of 
+- variable names should be indicative of their functionality and also of
   the type they belong too if they are instances of qt widgets.
   for eg, QCheckBox* m_autoRotateCheckBox;
 
@@ -121,7 +121,7 @@ Class, file and Variable names:
 * Non-Member variables
 -------------------------------------------------------------------------
 
-- non-member variables should follow the same naming convention as the member 
+- non-member variables should follow the same naming convention as the member
   variables, except for the leading m_
 
 -------------------------------------------------------------------------
@@ -130,7 +130,7 @@ Class, file and Variable names:
 
 - private member variables must be stored in a d private container to reduce
   compilation time and improve binary compatibility between digiKam components.
-  See more information how to use a 'd' private class at this url: 
+  See more information how to use a 'd' private class at this url:
 
   http://developer.kde.org/policies/librarypolicy.html
 
@@ -145,7 +145,7 @@ Comment as much as possible. Position comments at the beginning of the
 section/line you want to comment, NEVER at the end of the line
 
 // put your comments here
-a = (b == foobar) ? 1 : -1; 
+a = (b == foobar) ? 1 : -1;
 
 a = (b == foobar) ? 1 : -1; // you are asking for trouble by putting comments here
 
@@ -156,7 +156,7 @@ Header files
 
 - Add copyright to top of every file. Use the same header than others digiKam
   source code.
-- Double inclusion protection defines are all upper case letters and are 
+- Double inclusion protection defines are all upper case letters and are
   composed of the classname and a H suffix separated by underscore
 
 #ifndef ANOTHERNICECLASS_H
@@ -181,12 +181,12 @@ class A
 General recommendations
 ========================================================================
 
-Please take a look into KDE contrib page tips before to write code/patches for 
+Please take a look into KDE contrib page tips before to write code/patches for
 digiKam project : http://techbase.kde.org/Contribute
 
 Use the same .cpp/.h header than the rest of digiKam project.
 
-Use a decent editor which does auto-indentation/syntax-highlighting for you. 
+Use a decent editor which does auto-indentation/syntax-highlighting for you.
 I personally use Emacs (Renchi) or Kdevelop (Gilles).
 There are excellent initializer scripts in the kdesdk
 package for xemacs and vim which can substantially increase your productivity.
@@ -194,14 +194,14 @@ package for xemacs and vim which can substantially increase your productivity.
 Just to give a taste of what i can do with emacs (and kdesdk):
 
 * automatically insert copyright (and ifdefs) in new files.
-* insertion of class function definitions for declared class 
+* insertion of class function definitions for declared class
   functions in header with one keystroke
 * switch between header and declaration files with one keystroke
 * go to corresponding definition/declaration with one keystroke
 * tab completion of variable/function names already declared.
 
 ========================================================================
-GDB Backtrace 
+GDB Backtrace
 ========================================================================
 
 If you found a context to crash digiKam, you can provide a backtrace using GDB debugger.
@@ -228,7 +228,7 @@ To make a backtrace with GDB use following command:
 Post this backtrace at the right place (B.K.O or devel ML) for investigations by developers.
 
 ========================================================================
-Memory leak 
+Memory leak
 ========================================================================
 
 To check any memory leak problem in digiKam, valgrind is your friend (http://valgrind.org)
@@ -283,7 +283,7 @@ To generate API documentation, you need to install:
 - Doxygen program (http://www.doxygen.org).
 - Dot program (http://www.graphviz.org)
 
-Go to 'project' sub-folder and just run doxygen binary program. A new subfolder 
+Go to 'project' sub-folder and just run doxygen binary program. A new subfolder
 named 'api' will be create. Warning, this can take a while.
 
 ========================================================================
