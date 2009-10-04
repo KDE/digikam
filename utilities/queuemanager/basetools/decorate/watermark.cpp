@@ -42,7 +42,6 @@
 
 #include <kvbox.h>
 #include <klocale.h>
-
 #include <kiconloader.h>
 #include <kcombobox.h>
 #include <kfontcombobox.h>
@@ -174,7 +173,7 @@ BatchToolSettings WaterMark::defaultSettings()
     return settings;
 }
 
-void WaterMark::assignSettings2Widget()
+void WaterMark::slotAssignSettings2Widget()
 {
     d->textEdit->setText(settings()["Text"].toString());
     d->fontChooserWidget->setFont(settings()["Font"].toString());

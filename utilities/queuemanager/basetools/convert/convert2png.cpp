@@ -34,7 +34,6 @@
 #include <kconfiggroup.h>
 #include <kconfig.h>
 #include <klocale.h>
-
 #include <kiconloader.h>
 
 // Local includes
@@ -73,7 +72,7 @@ BatchToolSettings Convert2PNG::defaultSettings()
     return settings;
 }
 
-void Convert2PNG::assignSettings2Widget()
+void Convert2PNG::slotAssignSettings2Widget()
 {
     m_settings->setCompressionValue(settings()["Quality"].toInt());
 }

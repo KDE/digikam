@@ -88,7 +88,7 @@ BatchToolSettings Rotate::defaultSettings()
     return settings;
 }
 
-void Rotate::assignSettings2Widget()
+void Rotate::slotAssignSettings2Widget()
 {
     m_useExif->setChecked(settings()["UseExif"].toBool());
     m_comboBox->setCurrentIndex(settings()["Rotation"].toInt());

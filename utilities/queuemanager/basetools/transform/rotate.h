@@ -49,11 +49,11 @@ public:
 
 private:
 
-    void assignSettings2Widget();
     bool toolOperations();
 
 private Q_SLOTS:
 
+    void slotAssignSettings2Widget();
     void slotSettingsChanged();
 
 private:

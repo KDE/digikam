@@ -34,7 +34,6 @@
 #include <kconfiggroup.h>
 #include <kconfig.h>
 #include <klocale.h>
-
 #include <kiconloader.h>
 
 // Local includes
@@ -75,7 +74,7 @@ BatchToolSettings Convert2JP2::defaultSettings()
     return settings;
 }
 
-void Convert2JP2::assignSettings2Widget()
+void Convert2JP2::slotAssignSettings2Widget()
 {
     m_settings->setCompressionValue(settings()["quality"].toInt());
     m_settings->setLossLessCompression(settings()["lossless"].toBool());

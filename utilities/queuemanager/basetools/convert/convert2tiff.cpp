@@ -34,7 +34,6 @@
 #include <kconfiggroup.h>
 #include <kconfig.h>
 #include <klocale.h>
-
 #include <kiconloader.h>
 
 // Local includes
@@ -73,7 +72,7 @@ BatchToolSettings Convert2TIFF::defaultSettings()
     return settings;
 }
 
-void Convert2TIFF::assignSettings2Widget()
+void Convert2TIFF::slotAssignSettings2Widget()
 {
     m_settings->setCompression(settings()["compress"].toBool());
 }

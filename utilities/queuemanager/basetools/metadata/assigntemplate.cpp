@@ -33,7 +33,6 @@
 
 #include <kvbox.h>
 #include <klocale.h>
-
 #include <kiconloader.h>
 
 // Local includes
@@ -79,7 +78,7 @@ BatchToolSettings AssignTemplate::defaultSettings()
     return settings;
 }
 
-void AssignTemplate::assignSettings2Widget()
+void AssignTemplate::slotAssignSettings2Widget()
 {
     QString title = settings()["TemplateTitle"].toString();
     Template t    = TemplateManager::defaultManager()->findByTitle(title);

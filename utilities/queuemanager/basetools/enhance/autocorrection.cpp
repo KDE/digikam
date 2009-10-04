@@ -33,7 +33,6 @@
 
 #include <kvbox.h>
 #include <klocale.h>
-
 #include <kiconloader.h>
 #include <kcombobox.h>
 
@@ -82,7 +81,7 @@ BatchToolSettings AutoCorrection::defaultSettings()
     return settings;
 }
 
-void AutoCorrection::assignSettings2Widget()
+void AutoCorrection::slotAssignSettings2Widget()
 {
     m_comboBox->setCurrentIndex(settings()["AutoCorrectionFilter"].toInt());
 }

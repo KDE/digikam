@@ -50,6 +50,7 @@ public:
 
 private Q_SLOTS:
 
+    void slotAssignSettings2Widget();
     void slotSettingsChanged();
 
 private:
@@ -74,7 +75,6 @@ private:
 
 private:
 
-    void assignSettings2Widget();
     bool toolOperations();
     int  presetLengthValue(WidthPreset preset);
 };

@@ -35,7 +35,6 @@
 
 #include <kvbox.h>
 #include <klocale.h>
-
 #include <kiconloader.h>
 
 // LibKDcraw includes
@@ -240,7 +239,7 @@ BatchToolSettings Sharpen::defaultSettings()
     return settings;
 }
 
-void Sharpen::assignSettings2Widget()
+void Sharpen::slotAssignSettings2Widget()
 {
     // sharpen method
     int w = settings()["SharpenFilterType"].toInt();

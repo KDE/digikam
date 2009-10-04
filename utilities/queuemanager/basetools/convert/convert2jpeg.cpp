@@ -34,7 +34,6 @@
 #include <kconfiggroup.h>
 #include <kconfig.h>
 #include <klocale.h>
-
 #include <kiconloader.h>
 
 // Local includes
@@ -75,7 +74,7 @@ BatchToolSettings Convert2JPEG::defaultSettings()
     return settings;
 }
 
-void Convert2JPEG::assignSettings2Widget()
+void Convert2JPEG::slotAssignSettings2Widget()
 {
     m_settings->setCompressionValue(settings()["Quality"].toInt());
     m_settings->setSubSamplingValue(settings()["SubSampling"].toInt());

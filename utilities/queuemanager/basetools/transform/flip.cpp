@@ -78,7 +78,7 @@ BatchToolSettings Flip::defaultSettings()
     return settings;
 }
 
-void Flip::assignSettings2Widget()
+void Flip::slotAssignSettings2Widget()
 {
     m_comboBox->setCurrentIndex(settings()["Flip"].toInt());
 }

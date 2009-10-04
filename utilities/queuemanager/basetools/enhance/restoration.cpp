@@ -33,7 +33,6 @@
 
 #include <kvbox.h>
 #include <klocale.h>
-
 #include <kiconloader.h>
 #include <kcombobox.h>
 #include <kstandarddirs.h>
@@ -94,7 +93,7 @@ BatchToolSettings Restoration::defaultSettings()
     return settings;
 }
 
-void Restoration::assignSettings2Widget()
+void Restoration::slotAssignSettings2Widget()
 {
     m_comboBox->setCurrentIndex(settings()["RestorationMethod"].toInt());
 }

@@ -107,6 +107,12 @@ BatchTool::BatchTool(const QString& name, BatchToolGroup group, QObject* parent)
     d->observer  = new BatchToolObserver(d);
     d->toolGroup = group;
     setObjectName(name);
+
+    // NOTE: see B.K.O #209225 : signal/slot connection used internally to prevent crash when settings
+    // are assigned to settings widget by main thread to tool thread.
+
+    connect(this, SIGNAL(signalSettingsChanged(const BatchToolSettings&)),
+            this, SLOT(slotAssignedToolsChanged()));
 }
 
 BatchTool::~BatchTool()
@@ -169,7 +175,6 @@ void BatchTool::slotResetSettingsToDefault()
 void BatchTool::setSettings(const BatchToolSettings& settings)
 {
     d->settings = settings;
-    assignSettings2Widget();
     emit signalSettingsChanged(d->settings);
 }
 

@@ -97,7 +97,7 @@ BatchToolSettings Resize::defaultSettings()
     return settings;
 }
 
-void Resize::assignSettings2Widget()
+void Resize::slotAssignSettings2Widget()
 {
     m_comboBox->setCurrentIndex(settings()["LengthPreset"].toInt());
     m_useCustom->setChecked(settings()["UseCustom"].toBool());
