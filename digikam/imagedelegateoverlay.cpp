@@ -31,7 +31,7 @@
 
 // KDE includes
 
-
+#include <kdebug.h>
 
 // Local includes
 
@@ -44,7 +44,7 @@ namespace Digikam
 {
 
 ImageDelegateOverlay::ImageDelegateOverlay(QObject *parent)
-                    : QObject(parent)
+                    : QObject(parent), m_view(0), m_delegate(0)
 {
 }
 
