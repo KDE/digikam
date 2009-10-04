@@ -40,7 +40,6 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
-
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
@@ -90,23 +89,23 @@ public:
         gboxSettings      = 0;
     }
 
-    QStackedWidget*      stack;
+    QStackedWidget*     stack;
 
-    RComboBox*           sharpMethod;
+    RComboBox*          sharpMethod;
 
-    RIntNumInput*        matrixSize;
-    RIntNumInput*        radiusInput;
+    RIntNumInput*       matrixSize;
+    RIntNumInput*       radiusInput;
 
-    RDoubleNumInput*     radiusInput2;
-    RDoubleNumInput*     radius;
-    RDoubleNumInput*     gauss;
-    RDoubleNumInput*     correlation;
-    RDoubleNumInput*     noise;
-    RDoubleNumInput*     amountInput;
-    RDoubleNumInput*     thresholdInput;
+    RDoubleNumInput*    radiusInput2;
+    RDoubleNumInput*    radius;
+    RDoubleNumInput*    gauss;
+    RDoubleNumInput*    correlation;
+    RDoubleNumInput*    noise;
+    RDoubleNumInput*    amountInput;
+    RDoubleNumInput*    thresholdInput;
 
-    ImagePanelWidget*    previewWidget;
-    EditorToolSettings*  gboxSettings;
+    ImagePanelWidget*   previewWidget;
+    EditorToolSettings* gboxSettings;
 };
 
 SharpenTool::SharpenTool(QObject* parent)
@@ -155,7 +154,7 @@ SharpenTool::SharpenTool(QObject* parent)
     QWidget *simpleSharpSettings = new QWidget(d->stack);
     QGridLayout* grid1           = new QGridLayout(simpleSharpSettings);
 
-    QLabel *label = new QLabel(i18n("Sharpness:"), simpleSharpSettings);
+    QLabel *label  = new QLabel(i18n("Sharpness:"), simpleSharpSettings);
     d->radiusInput = new RIntNumInput(simpleSharpSettings);
     d->radiusInput->setRange(0, 100, 1);
     d->radiusInput->setSliderEnabled(true);
@@ -184,8 +183,8 @@ SharpenTool::SharpenTool(QObject* parent)
     d->radiusInput2->setWhatsThis( i18n("Radius value is the Gaussian blur matrix radius value "
                                         "used to determines how much to blur the image.") );
 
-    QLabel *label3  = new QLabel(i18n("Amount:"), unsharpMaskSettings);
-    d->amountInput  = new RDoubleNumInput(unsharpMaskSettings);
+    QLabel *label3 = new QLabel(i18n("Amount:"), unsharpMaskSettings);
+    d->amountInput = new RDoubleNumInput(unsharpMaskSettings);
     d->amountInput->setDecimals(1);
     d->amountInput->input()->setRange(0.0, 5.0, 0.1, true);
     d->amountInput->setDefaultValue(1.0);
@@ -217,8 +216,8 @@ SharpenTool::SharpenTool(QObject* parent)
     QWidget *refocusSettings = new QWidget(d->stack);
     QGridLayout* grid3       = new QGridLayout(refocusSettings);
 
-    QLabel *label5  = new QLabel(i18n("Circular sharpness:"), refocusSettings);
-    d->radius       = new RDoubleNumInput(refocusSettings);
+    QLabel *label5 = new QLabel(i18n("Circular sharpness:"), refocusSettings);
+    d->radius      = new RDoubleNumInput(refocusSettings);
     d->radius->setDecimals(2);
     d->radius->input()->setRange(0.0, 5.0, 0.01, true);
     d->radius->setDefaultValue(1.0);
@@ -226,8 +225,8 @@ SharpenTool::SharpenTool(QObject* parent)
                                   "parameter for using this plugin. For most images the default value of 1.0 "
                                   "should give good results. Select a higher value when your image is very blurred."));
 
-    QLabel *label6  = new QLabel(i18n("Correlation:"), refocusSettings);
-    d->correlation  = new RDoubleNumInput(refocusSettings);
+    QLabel *label6 = new QLabel(i18n("Correlation:"), refocusSettings);
+    d->correlation = new RDoubleNumInput(refocusSettings);
     d->correlation->setDecimals(2);
     d->correlation->input()->setRange(0.0, 1.0, 0.01, true);
     d->correlation->setDefaultValue(0.5);
@@ -236,8 +235,8 @@ SharpenTool::SharpenTool(QObject* parent)
                                        "Using a high value for the correlation will reduce the sharpening effect of the "
                                        "plugin."));
 
-    QLabel *label7  = new QLabel(i18n("Noise filter:"), refocusSettings);
-    d->noise        = new RDoubleNumInput(refocusSettings);
+    QLabel *label7 = new QLabel(i18n("Noise filter:"), refocusSettings);
+    d->noise       = new RDoubleNumInput(refocusSettings);
     d->noise->setDecimals(3);
     d->noise->input()->setRange(0.0, 1.0, 0.001, true);
     d->noise->setDefaultValue(0.03);
@@ -247,8 +246,8 @@ SharpenTool::SharpenTool(QObject* parent)
                                  "Using a high value for the noise filter will reduce the sharpening "
                                  "effect of the plugin."));
 
-    QLabel *label8  = new QLabel(i18n("Gaussian sharpness:"), refocusSettings);
-    d->gauss        = new RDoubleNumInput(refocusSettings);
+    QLabel *label8 = new QLabel(i18n("Gaussian sharpness:"), refocusSettings);
+    d->gauss       = new RDoubleNumInput(refocusSettings);
     d->gauss->setDecimals(2);
     d->gauss->input()->setRange(0.0, 1.0, 0.01, true);
     d->gauss->setDefaultValue(0.0);
@@ -257,8 +256,8 @@ SharpenTool::SharpenTool(QObject* parent)
                                  "it causes nasty artifacts. When you use non-zero values, you will probably also have to "
                                  "increase the correlation and/or noise filter parameters."));
 
-    QLabel *label9  = new QLabel(i18n("Matrix size:"), refocusSettings);
-    d->matrixSize   = new RIntNumInput(refocusSettings);
+    QLabel *label9 = new QLabel(i18n("Matrix size:"), refocusSettings);
+    d->matrixSize  = new RIntNumInput(refocusSettings);
     d->matrixSize->setRange(0, DImgRefocus::maxMatrixSize(), 1);
     d->matrixSize->setSliderEnabled(true);
     d->matrixSize->setDefaultValue(5);
@@ -293,7 +292,6 @@ SharpenTool::SharpenTool(QObject* parent)
 
     connect(d->sharpMethod, SIGNAL(activated(int)),
             this, SLOT(slotSharpMethodActived(int)));
-
 }
 
 SharpenTool::~SharpenTool()
@@ -398,20 +396,28 @@ void SharpenTool::slotResetSettings()
     switch (d->stack->indexOf(d->stack->currentWidget()))
     {
         case SimpleSharp:
+	{
             d->radiusInput->slotReset();
             break;
+	}
+
         case UnsharpMask:
+	{
             d->radiusInput2->slotReset();
             d->amountInput->slotReset();
             d->thresholdInput->slotReset();
             break;
+	}
+
         case Refocus:
+	{
             d->matrixSize->slotReset();
             d->radius->slotReset();
             d->gauss->slotReset();
             d->correlation->slotReset();
             d->noise->slotReset();
             break;
+	}
     }
 
     blockWidgetSignals(false);
@@ -443,7 +449,7 @@ void SharpenTool::prepareEffect()
             d->thresholdInput->setEnabled(false);
 
             DImg img  = d->previewWidget->getOriginalRegionImage();
-            int    r  = d->radiusInput2->value();
+            int    r  = (int)d->radiusInput2->value();
             double a  = d->amountInput->value();
             double th = d->thresholdInput->value();
 
@@ -459,12 +465,12 @@ void SharpenTool::prepareEffect()
             d->correlation->setEnabled(false);
             d->noise->setEnabled(false);
 
-            DImg   img    = d->previewWidget->getOriginalRegionImage();
-            int    ms     = d->matrixSize->value();
-            double r      = d->radius->value();
-            double g      = d->gauss->value();
-            double c      = d->correlation->value();
-            double n      = d->noise->value();
+            DImg   img = d->previewWidget->getOriginalRegionImage();
+            int    ms  = d->matrixSize->value();
+            double r   = d->radius->value();
+            double g   = d->gauss->value();
+            double c   = d->correlation->value();
+            double n   = d->noise->value();
 
             setFilter(dynamic_cast<DImgThreadedFilter*>(new DImgRefocus(&img, this, ms, r, g, c, n)));
             break;
@@ -505,7 +511,7 @@ void SharpenTool::prepareFinal()
             d->amountInput->setEnabled(false);
             d->thresholdInput->setEnabled(false);
 
-            int    r  = d->radiusInput2->value();
+            int    r  = (int)d->radiusInput2->value();
             double a  = d->amountInput->value();
             double th = d->thresholdInput->value();
 
@@ -521,11 +527,11 @@ void SharpenTool::prepareFinal()
             d->correlation->setEnabled(false);
             d->noise->setEnabled(false);
 
-            int    ms   = d->matrixSize->value();
-            double r    = d->radius->value();
-            double g    = d->gauss->value();
-            double c    = d->correlation->value();
-            double n    = d->noise->value();
+            int    ms = d->matrixSize->value();
+            double r  = d->radius->value();
+            double g  = d->gauss->value();
+            double c  = d->correlation->value();
+            double n  = d->noise->value();
 
             setFilter(dynamic_cast<DImgThreadedFilter*>(new DImgRefocus(&orgImage, this, ms, r, g, c, n)));
             break;
