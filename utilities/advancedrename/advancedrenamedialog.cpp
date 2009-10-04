@@ -33,10 +33,8 @@
 #include <QMoveEvent>
 #include <QString>
 #include <QTreeWidget>
-#include <QWidget>
 
 // KDE includes
-
 
 #include <klocale.h>
 
@@ -121,11 +119,10 @@ class AdvancedRenameDialogPriv
 {
 public:
 
-    AdvancedRenameDialogPriv()
-    {
-        advancedRenameWidget = 0;
-        listView             = 0;
-    }
+    AdvancedRenameDialogPriv() :
+        listView(0),
+        advancedRenameWidget(0)
+    {}
 
     QTreeWidget*          listView;
     AdvancedRenameWidget* advancedRenameWidget;
