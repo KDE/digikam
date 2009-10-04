@@ -7,8 +7,8 @@
  * Description : a widget to manage sidebar in GUI.
  *
  * Copyright (C) 2005-2006 by Joern Ahrens <joern.ahrens@kdemail.net>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,13 +35,13 @@
 #include <QSplitter>
 #include <QStackedWidget>
 #include <QTimer>
+#include <QHash>
 
 // KDE includes
 
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-
 #include <kdeversion.h>
 #include <kglobal.h>
 #include <kiconloader.h>
@@ -54,8 +54,8 @@ class SidebarState
 
 public:
 
-    SidebarState() : activeWidget(0),size(0) {}
-    SidebarState(QWidget *w, int size) : activeWidget(w),size(size) {}
+    SidebarState() : activeWidget(0), size(0) {}
+    SidebarState(QWidget *w, int size) : activeWidget(w), size(size) {}
 
     QWidget *activeWidget;
     int      size;
@@ -79,22 +79,20 @@ public:
         restoreSize      = 0;
     }
 
-    bool             minimizedDefault;
-    bool             minimized;
-    bool             isMinimized;      // Backup of minimized status (used with Fullscreen)
+    bool                          minimizedDefault;
+    bool                          minimized;
+    bool                          isMinimized;      // Backup of minimized status (used with Fullscreen)
 
-    int              tabs;
-    int              activeTab;
-    int              dragSwitchId;
+    int                           tabs;
+    int                           activeTab;
+    int                           dragSwitchId;
+    int                           restoreSize;
 
-    int              restoreSize;
+    QStackedWidget*               stack;
+    SidebarSplitter*              splitter;
+    QTimer*                       dragSwitchTimer;
 
-    QStackedWidget  *stack;
-    SidebarSplitter *splitter;
-    QTimer          *dragSwitchTimer;
-
-    QHash<QWidget*, SidebarState>
-                     appendedTabsStateCache;
+    QHash<QWidget*, SidebarState> appendedTabsStateCache;
 };
 
 class SidebarSplitterPriv
