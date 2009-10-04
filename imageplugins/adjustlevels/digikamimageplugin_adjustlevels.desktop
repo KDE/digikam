@@ -43,7 +43,7 @@ Encoding=UTF-8
 
 Comment=Image histogram adjust levels plugin for digiKam
 Comment[bg]=Приставка на digiKam за настройка нивата на хистограмите на снимки
-Comment[ca]=Connector pel digiKam d'ajust dels nivells de l'histograma d'imatges
+Comment[ca]=Connector pel DigiKam d'ajust dels nivells de l'histograma d'imatges
 Comment[cs]=digiKam modul pro úpravu úrovní histogramu obrázku
 Comment[da]=digiKam-plugin til justering af niveauer
 Comment[de]=digiKam-Modul zur Tonwertkorrektur mittels Bildhistogramm
