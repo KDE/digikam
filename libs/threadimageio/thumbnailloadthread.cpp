@@ -186,14 +186,14 @@ void ThumbnailLoadThread::initializeThumbnailDatabase(const QString &thumbnailDB
     ThumbnailDatabaseAccess::setParameters(DatabaseParameters::parametersForSQLite(thumbnailDBFile));
     if (ThumbnailDatabaseAccess::checkReadyForUse(0))
     {
-        kDebug() << "Thumbnail db ready for use";
+        kDebug(digiKamAreaCode) << "Thumbnail db ready for use";
         static_d->storageMethod = ThumbnailCreator::ThumbnailDatabase;
         static_d->provider = provider;
     }
     else
     {
-        kError() << "Failed to initialize thumbnail database at" << thumbnailDBFile
-                 << "\n Error message:" << ThumbnailDatabaseAccess().lastError();
+        kError(digiKamAreaCode) << "Failed to initialize thumbnail database at" << thumbnailDBFile
+                                << "\n Error message:" << ThumbnailDatabaseAccess().lastError();
     }
 }
 

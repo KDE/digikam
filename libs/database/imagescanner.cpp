@@ -502,7 +502,7 @@ void ImageScanner::scanVideoFile()
         foreach (const QString& key, keys)
         {
             KFileMetaInfoItem item = metaInfo.item(key);
-            kDebug() << item.name() << item.value();
+            kDebug(digiKamAreaCode) << item.name() << item.value();
         }
     }
     */

@@ -596,7 +596,7 @@ bool CollectionManagerPrivate::checkIfExists(const QString& filePath, QList<Coll
     foreach (AlbumRootLocation *location, locations)
     {
         const KUrl locationPathUrl = location->albumRootPath();
-        //kDebug() << filePathUrl << locationPathUrl;
+        //kDebug(digiKamAreaCode) << filePathUrl << locationPathUrl;
         // make sure filePathUrl is neither a child nor a parent
         // of an existing collection
         if (!locationPathUrl.isEmpty() &&

@@ -127,7 +127,7 @@ QString ImageQueryBuilder::buildQueryFromXml(const QString& xml, QList<QVariant>
         }
     }
 
-    kDebug() << sql;
+    kDebug(digiKamAreaCode) << sql;
     return sql;
 }
 
@@ -422,7 +422,7 @@ public:
             QStringList values = reader.valueToStringList();
             if (values.isEmpty())
             {
-                kDebug() << "List for OneOf is empty";
+                kDebug(digiKamAreaCode) << "List for OneOf is empty";
                 return;
             }
 
@@ -670,7 +670,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
 
             if (ids.isEmpty())
             {
-                kDebug() << "Relation 'InTree', name 'albumid': No values given";
+                kDebug(digiKamAreaCode) << "Relation 'InTree', name 'albumid': No values given";
                 return false;
             }
 
@@ -733,7 +733,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
 
             if (ids.isEmpty())
             {
-                kDebug() << "Relation 'InTree', name 'tagid': No values given";
+                kDebug(digiKamAreaCode) << "Relation 'InTree', name 'tagid': No values given";
                 return false;
             }
 
