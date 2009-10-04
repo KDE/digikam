@@ -2316,6 +2316,7 @@ void DigikamApp::loadPlugins()
     ignores.append( "SlideShow" );
     ignores.append( "PrintWizard" );
     ignores.append( "SimpleViewer" );
+    ignores.append( "KioExport" );
 
     d->kipiPluginLoader = new KIPI::PluginLoader( ignores, d->kipiInterface );
 
