@@ -144,6 +144,7 @@ DatabaseWatch::DatabaseWatch()
 
 DatabaseWatch::~DatabaseWatch()
 {
+    delete d->adaptor;
     delete d->slaveThread;
     delete d;
 }
