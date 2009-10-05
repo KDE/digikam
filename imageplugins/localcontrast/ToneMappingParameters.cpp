@@ -30,6 +30,9 @@
 
 #include "ToneMappingParameters.h"
 
+namespace DigikamLocalContrastImagesPlugin
+{
+
 ToneMappingParameters::ToneMappingParameters()
 {
     info_fast_mode=true;
@@ -174,3 +177,5 @@ bool ToneMappingParameters::load_parameters(const char *filename)
 
     return true;
 }
+
+} // namespace DigikamNoiseReductionImagesPlugin

@@ -26,8 +26,12 @@
 
 #include "ToneMappingBase.h"
 
+namespace DigikamLocalContrastImagesPlugin
+{
+
 class ToneMappingInt:public ToneMappingBase
 {
+
 public:
 
     ToneMappingInt();
@@ -150,5 +154,7 @@ private:
 
     unsigned char *current_func_lookup_table;
 };
+
+} // namespace DigikamNoiseReductionImagesPlugin
 
 #endif // TONE_MAPPING_INT_H

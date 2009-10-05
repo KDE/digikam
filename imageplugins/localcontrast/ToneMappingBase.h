@@ -30,8 +30,12 @@
 
 #include "ToneMappingParameters.h"
 
+namespace DigikamLocalContrastImagesPlugin
+{
+
 class ToneMappingBase
 {
+
 public:
 
     ToneMappingBase();
@@ -172,5 +176,7 @@ protected:
     //preprocessed values
     REALTYPE current_process_power_value;
 };
+
+} // namespace DigikamNoiseReductionImagesPlugin
 
 #endif // TONE_MAPPING_BASE_H

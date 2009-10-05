@@ -29,6 +29,9 @@
 
 #include "ToneMappingFloat.h"
 
+namespace DigikamLocalContrastImagesPlugin
+{
+
 ToneMappingFloat::ToneMappingFloat():ToneMappingBase()
 {
     par.info_fast_mode=false;
@@ -330,3 +333,5 @@ void ToneMappingFloat::stretch_contrast(REALTYPE *data, int datasize)
         data[i]=x;
     };
 }
+
+} // namespace DigikamNoiseReductionImagesPlugin

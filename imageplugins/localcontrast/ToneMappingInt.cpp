@@ -31,6 +31,9 @@
 
 #define FUNC_LOOKUP_TABLE_SIZE 65536
 
+namespace DigikamLocalContrastImagesPlugin
+{
+
 ToneMappingInt::ToneMappingInt():ToneMappingBase()
 {
     par.info_fast_mode=true;
@@ -358,3 +361,5 @@ void ToneMappingInt::inplace_blur_8bit_process(unsigned char *data,int sizex, in
         };
     };
 }
+
+} // namespace DigikamNoiseReductionImagesPlugin

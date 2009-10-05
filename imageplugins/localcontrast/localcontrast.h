@@ -59,6 +59,7 @@ class LocalContrast : public Digikam::DImgThreadedFilter
 
         LocalContrastPriv *d;
 };
-}  // namespace DigikamLocalContrastImagesPlugin
+
+} // namespace DigikamLocalContrastImagesPlugin
 
 #endif /* LOCALCONTRAST_H */

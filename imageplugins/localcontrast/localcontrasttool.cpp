@@ -630,4 +630,4 @@ void LocalContrastTool::putFinalData()
 //     file.close();
 // }
 
-}  // namespace DigikamNoiseReductionImagesPlugin
+} // namespace DigikamNoiseReductionImagesPlugin

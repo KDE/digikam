@@ -28,8 +28,12 @@
 
 #define TONEMAPPING_MAX_STAGES 4
 
+namespace DigikamLocalContrastImagesPlugin
+{
+
 class ToneMappingParameters
 {
+
 public:
 
     ToneMappingParameters();
@@ -67,5 +71,7 @@ public:
         int threshold;
     } unsharp_mask;
 };
+
+} // namespace DigikamNoiseReductionImagesPlugin
 
 #endif // TONE_MAPPING_PARAMETERS_H

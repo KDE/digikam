@@ -26,8 +26,12 @@
 
 #include "ToneMappingBase.h"
 
+namespace DigikamLocalContrastImagesPlugin
+{
+
 class ToneMappingFloat:public ToneMappingBase
 {
+
 public:
 
     ToneMappingFloat();
@@ -124,5 +128,7 @@ private:
         };
     };
 };
+
+} // namespace DigikamNoiseReductionImagesPlugin
 
 #endif // TONE_MAPPING_FLOAT_H
