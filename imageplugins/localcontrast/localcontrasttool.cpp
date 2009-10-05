@@ -251,7 +251,7 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     // -------------------------------------------------------------
 
     QWidget* thirdPage = new QWidget();
-    QGridLayout* grid3  = new QGridLayout( thirdPage );
+    QGridLayout* grid3 = new QGridLayout( thirdPage );
 
     d->stageTwo = new QCheckBox(i18n("Enabled"), thirdPage);
     d->stageTwo->setWhatsThis(i18n("Check to enable this stage."));

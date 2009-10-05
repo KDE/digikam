@@ -31,7 +31,6 @@
 // Local includes
 
 #include "dimgthreadedfilter.h"
-
 #include "ToneMappingParameters.h"
 
 using namespace Digikam;
@@ -43,21 +42,22 @@ class LocalContrastPriv;
 
 class LocalContrast : public Digikam::DImgThreadedFilter
 {
-    public:
 
-        LocalContrast(DImg *image, ToneMappingParameters *par, QObject *parent=0);
-        ~LocalContrast();
+public:
 
-        void progressCallback(int progress);
+    LocalContrast(DImg *image, ToneMappingParameters *par, QObject *parent=0);
+    ~LocalContrast();
 
-    private:
+    void progressCallback(int progress);
 
-        void cancelFilter();
-        void filterImage();
+private:
 
-    private:
+    void cancelFilter();
+    void filterImage();
 
-        LocalContrastPriv *d;
+private:
+
+    LocalContrastPriv* const d;
 };
 
 } // namespace DigikamLocalContrastImagesPlugin

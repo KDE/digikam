@@ -27,7 +27,6 @@
 // Local includes
 
 #include "editortool.h"
-
 #include "ToneMappingParameters.h"
 
 namespace DigikamLocalContrastImagesPlugin

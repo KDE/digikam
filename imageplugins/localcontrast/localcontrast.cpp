@@ -45,16 +45,16 @@ public:
         data        = 0;
     }
 
-    ToneMappingParameters   *par;
+    ToneMappingParameters* par;
 
-    ToneMappingBase         *tonemapping;
+    ToneMappingBase*       tonemapping;
 
-    int                     width;
-    int                     height;
+    int                    width;
+    int                    height;
 
-    uchar                   *data;
+    uchar*                 data;
 
-    bool                    sixteenBit;
+    bool                   sixteenBit;
 };
 
 LocalContrast::LocalContrast(DImg *image, ToneMappingParameters *par, QObject *parent)
@@ -101,7 +101,7 @@ void LocalContrast::filterImage()
     {
         if(d->data != NULL)
         {
-            int size = d->width*d->height*3;
+            int size    = d->width*d->height*3;
             uchar *data = new uchar [size];
 
             for(int i=0, j=0; i<size; i+=3, j+=4)
@@ -137,4 +137,5 @@ void LocalContrast::cancelFilter()
 {
     // TODO
 }
-}
+
+} // namespace DigikamLocalContrastImagesPlugin
