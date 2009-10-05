@@ -40,37 +40,19 @@ public:
     {
         par              = 0;
         tonemappingFloat = 0;
-        width            = 0;
-        height           = 0;
-        data             = 0;
     }
 
     ToneMappingParameters* par;
 
     ToneMappingFloat*      tonemappingFloat;
-
-    int                    width;
-    int                    height;
-
-    uchar*                 data;
-
-    bool                   sixteenBit;
 };
 
 LocalContrast::LocalContrast(DImg *image, ToneMappingParameters *par, QObject *parent)
               : Digikam::DImgThreadedFilter(image, parent, "LocalContrast"),
-                     d(new LocalContrastPriv)
+                d(new LocalContrastPriv)
 {
     initFilter();
-
-    // Parameters
     d->par = par;
-
-    // Image information
-    d->width        = image->width();
-    d->height       = image->height();
-    d->data         = image->bits();
-    d->sixteenBit   = image->sixteenBit();
 }
 
 LocalContrast::~LocalContrast()
@@ -95,28 +77,32 @@ void LocalContrast::filterImage()
     d->tonemappingFloat->apply_parameters(*d->par);
 
     // Process image
-    if(d->sixteenBit) // sixteen bit image
-    {
-        if(d->data != NULL)
-        {
-            int size                = d->width*d->height*3;
-            unsigned short *data    = new unsigned short[size];
-            unsigned short *dataImg = (unsigned short*)(d->data);
 
-            for(int i=0, j=0; i<size; i+=3, j+=4)
+    if(!m_orgImage.isNull())
+    {
+        int size = m_orgImage.width()*m_orgImage.height()*3;
+        int i, j;
+
+        if(m_orgImage.sixteenBit())
+        {
+            // sixteen bit image
+            unsigned short *data    = new unsigned short[size];
+            unsigned short *dataImg = (unsigned short*)(m_orgImage.bits());
+
+            for(i=0, j=0; i < size; i+=3, j+=4)
             {
                 data[i]   = dataImg[j];
                 data[i+1] = dataImg[j+1];
                 data[i+2] = dataImg[j+2];
             }
 
-            d->tonemappingFloat->process_16bit_rgb_image(data, d->width, d->height);
+            d->tonemappingFloat->process_16bit_rgb_image(data, m_orgImage.width(), m_orgImage.height());
 
-            for(int x=0; x<d->width; x++)
+            for(uint x=0; x < m_orgImage.width(); x++)
             {
-                for(int y=0; y<d->height; y++)
+                for(uint y=0; y < m_orgImage.height(); y++)
                 {
-                    int i = (d->width * y + x)*3;
+                    i = (m_orgImage.width() * y + x)*3;
                     m_destImage.setPixelColor(x, y, DColor((unsigned short)data[i+2],
                                                            (unsigned short)data[i+1],
                                                            (unsigned short)data[i],
@@ -126,28 +112,24 @@ void LocalContrast::filterImage()
 
             delete [] data;
         }
-    }
-    else // eight bit image
-    {
-        if(d->data != NULL)
+        else // eight bit image
         {
-            int size    = d->width*d->height*3;
-            uchar *data = new uchar [size];
+            uchar *data = new uchar[size];
 
-            for(int i=0, j=0; i<size; i+=3, j+=4)
+            for(i=0, j=0; i < size; i+=3, j+=4)
             {
-                data[i]   = d->data[j];
-                data[i+1] = d->data[j+1];
-                data[i+2] = d->data[j+2];
+                data[i]   = m_orgImage.bits()[j];
+                data[i+1] = m_orgImage.bits()[j+1];
+                data[i+2] = m_orgImage.bits()[j+2];
             }
 
-            d->tonemappingFloat->process_8bit_rgb_image(data, d->width, d->height);
+            d->tonemappingFloat->process_8bit_rgb_image(data, m_orgImage.width(), m_orgImage.height());
 
-            for(int x=0; x<d->width; x++)
+            for(uint x=0; x < m_orgImage.width(); x++)
             {
-                for(int y=0; y<d->height; y++)
+                for(uint y=0; y < m_orgImage.height(); y++)
                 {
-                    int i = (d->width * y + x)*3;
+                    i = (m_orgImage.width() * y + x)*3;
                     m_destImage.setPixelColor(x, y, DColor(data[i+2], data[i+1], data[i], 255, false));
                 }
             }
