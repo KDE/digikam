@@ -157,7 +157,7 @@ void RainDrop::rainDropsImage(Digikam::DImg *orgImage, Digikam::DImg *destImage,
         return;
 
     uchar *pStatusBits = new uchar[nHeight * nWidth];
-    memset(pStatusBits, 0, sizeof(nHeight * nWidth));
+    memset(pStatusBits, 0, nHeight * nWidth * sizeof(uchar));
 
     // Initially, copy all pixels to destination
 
