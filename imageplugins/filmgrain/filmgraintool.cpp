@@ -147,6 +147,10 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
 
     connect(d->sensibilitySlider, SIGNAL(sliderMoved(int)),
             this, SLOT(slotSliderMoved(int)) );
+
+    // -------------------------------------------------------------
+
+    slotTimer();
 }
 
 FilmGrainTool::~FilmGrainTool()
