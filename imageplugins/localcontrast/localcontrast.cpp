@@ -122,7 +122,7 @@ void LocalContrast::filterImage()
                 }
             }
 
-            delete data;
+            delete [] data;
         }
     }
 }
