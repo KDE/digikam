@@ -51,10 +51,10 @@ public:
     bool info_fast_mode;
 
     //parameters
-    int low_saturation;
-    int high_saturation;
+    int  low_saturation;
+    int  high_saturation;
     bool stretch_contrast;
-    int function_id;
+    int  function_id;
 
     struct
     {
@@ -65,10 +65,10 @@ public:
 
     struct
     {
-        bool enabled;
+        bool     enabled;
         REALTYPE power;
         REALTYPE blur;
-        int threshold;
+        int      threshold;
     } unsharp_mask;
 };
 
