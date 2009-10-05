@@ -125,7 +125,7 @@ BlurFXTool::BlurFXTool(QObject* parent)
     d->effectType->addItem(i18n("Far Blur"));
     d->effectType->addItem(i18n("Motion Blur"));
     d->effectType->addItem(i18n("Softener Blur"));
-    d->effectType->addItem(i18n("Skake Blur"));
+    d->effectType->addItem(i18n("Shake Blur"));
     d->effectType->addItem(i18n("Focus Blur"));
     d->effectType->addItem(i18n("Smart Blur"));
     d->effectType->addItem(i18n("Frost Glass"));
@@ -144,7 +144,7 @@ BlurFXTool::BlurFXTool(QObject* parent)
                                      "tones. This gives images a dreamy and glossy soft focus effect. It is ideal "
                                      "for creating romantic portraits, glamour photographs, or giving images a warm "
                                      "and subtle glow.</p>"
-                                     "<p><b>Skake Blur</b>: blurs the image by skaking randomly the pixels. "
+                                     "<p><b>Shake Blur</b>: blurs the image by shaking randomly the pixels. "
                                      "This simulates the blur of a random moving camera.</p>"
                                      "<p><b>Focus Blur</b>: blurs the image corners to reproduce the astigmatism distortion "
                                      "of a lens.</p>"

@@ -9,7 +9,7 @@
  * Copyright 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
- * Original Blur algorithms copyrighted 2004 by 
+ * Original Blur algorithms copyrighted 2004 by
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
  *
  * This program is free software; you can redistribute it
@@ -17,14 +17,14 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
-  
+
 #ifndef BLURFX_H
 #define BLURFX_H
 
@@ -47,9 +47,9 @@ public:
 
 public:
 
-    enum BlurFXTypes 
+    enum BlurFXTypes
     {
-        ZoomBlur=0,
+        ZoomBlur = 0,
         RadialBlur,
         FarBlur,
         MotionBlur,
@@ -99,11 +99,11 @@ private:  // Internal filter methods.
                                 uint *AverageColorR, uint *AverageColorG, uint *AverageColorB);
 
     // Return the limit defined the max and min values.
-    inline int Lim_Max(int Now, int Up, int Max) 
+    inline int Lim_Max(int Now, int Up, int Max)
     {
-        --Max; 
-        while (Now > Max - Up) --Up; 
-        return (Up); 
+        --Max;
+        while (Now > Max - Up) --Up;
+        return (Up);
     };
 
     // Return the luminance (Y) component of YIQ color model.
@@ -112,7 +112,7 @@ private:  // Internal filter methods.
         return (int)(R * 0.3 + G * 0.59 + B * 0.11);
     };
 
-    // function to allocate a 2d array   
+    // function to allocate a 2d array
     inline int** Alloc2DArray (int Columns, int Rows)
     {
        // First, we declare our future 2d array to be returned
