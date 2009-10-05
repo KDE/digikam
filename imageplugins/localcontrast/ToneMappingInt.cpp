@@ -232,8 +232,8 @@ void ToneMappingInt::process_8bit_rgb_image(unsigned char *img,int sizex,int siz
         int pos=0;
         for (int i=0;i<size;i++)
         {
-            unsigned int src_h,src_s,src_v;
-            unsigned int dest_h,dest_s,dest_v;
+            unsigned int src_h = 0, src_s = 0, src_v = 0;
+            unsigned int dest_h = 0, dest_s = 0, dest_v = 0;
             rgb2hsv(srcimg[pos],srcimg[pos+1],srcimg[pos+2],src_h,src_s,src_v);
             rgb2hsv(img[pos],img[pos+1],img[pos+2],dest_h,dest_s,dest_v);
 
