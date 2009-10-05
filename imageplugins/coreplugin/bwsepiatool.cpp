@@ -106,7 +106,7 @@ private:
 
     QHash<int, QPixmap*> m_previewPixmapMap;
     QSize                m_previewSize;
-    BWSepiaTool         *m_bwSepia;
+    BWSepiaTool*         m_bwSepia;
 };
 
 PreviewPixmapFactory::PreviewPixmapFactory(BWSepiaTool* bwSepia, const QSize& previewSize)
@@ -119,12 +119,11 @@ PreviewPixmapFactory::PreviewPixmapFactory(BWSepiaTool* bwSepia, const QSize& pr
 PreviewPixmapFactory::~PreviewPixmapFactory()
 {
     // Delete all hash items
-    while (!m_previewPixmapMap.isEmpty())
+    foreach (QPixmap* pm, m_previewPixmapMap.values())
     {
-        QPixmap *value = *m_previewPixmapMap.begin();
-        m_previewPixmapMap.erase(m_previewPixmapMap.begin());
-        delete value;
+        delete pm;
     }
+    m_previewPixmapMap.clear();
 }
 
 const QPixmap* PreviewPixmapFactory::pixmap(int id)

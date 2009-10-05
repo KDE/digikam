@@ -400,6 +400,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
 AdjustLevelsTool::~AdjustLevelsTool()
 {
     delete [] d->destinationPreviewData;
+    delete d->levels;
     delete d;
 }
 

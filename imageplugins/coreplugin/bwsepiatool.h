@@ -144,27 +144,27 @@ private:
     // Channel mixer color multiplier.
     double m_redMult, m_greenMult, m_blueMult;
 
-    uchar                        *m_destinationPreviewData;
+    uchar*                         m_destinationPreviewData;
 
-    QListWidget                  *m_bwFilters;
-    QListWidget                  *m_bwFilm;
-    QListWidget                  *m_bwTone;
+    QListWidget*                   m_bwFilters;
+    QListWidget*                   m_bwFilm;
+    QListWidget*                   m_bwTone;
 
-    KTabWidget                   *m_tab;
+    KTabWidget*                    m_tab;
 
-    KDcrawIface::RIntNumInput    *m_cInput;
-    KDcrawIface::RIntNumInput    *m_strengthInput;
+    KDcrawIface::RIntNumInput*     m_cInput;
+    KDcrawIface::RIntNumInput*     m_strengthInput;
 
-    Digikam::ImageWidget         *m_previewWidget;
+    Digikam::ImageWidget*          m_previewWidget;
 
-    Digikam::CurvesBox           *m_curvesBox;
+    Digikam::CurvesBox*            m_curvesBox;
 
-    Digikam::EditorToolSettings  *m_gboxSettings;
+    Digikam::EditorToolSettings*   m_gboxSettings;
 
-    Digikam::DImg                *m_originalImage;
-    Digikam::DImg                 m_thumbnailImage;
+    Digikam::DImg*                 m_originalImage;
+    Digikam::DImg                  m_thumbnailImage;
 
-    PreviewPixmapFactory         *m_previewPixmapFactory;
+    PreviewPixmapFactory*          m_previewPixmapFactory;
 };
 
 }  // namespace DigikamImagesPluginCore
