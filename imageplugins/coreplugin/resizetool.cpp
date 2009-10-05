@@ -562,8 +562,8 @@ void ResizeTool::putPreviewData()
 
 void ResizeTool::renderingFinished()
 {
-    d->settingsWidget->setEnabled(true);
     d->useGreycstorationBox->setEnabled(true);
+    d->settingsWidget->setEnabled(d->useGreycstorationBox->isChecked());
     d->preserveRatioBox->setEnabled(true);
     d->wInput->setEnabled(true);
     d->hInput->setEnabled(true);
