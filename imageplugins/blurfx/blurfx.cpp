@@ -1058,11 +1058,11 @@ void BlurFX::frostGlass(Digikam::DImg *orgImage, Digikam::DImg *destImage, int F
 
     int range = sixteenBit ? 65535 : 255;
 
-    // it is a huge optimizsation to allocate these here once
+    // it is a huge optimization to allocate these here once
     uchar *IntensityCount = new uchar[range + 1];
-    uint *AverageColorR = new uint[range + 1];
-    uint *AverageColorG = new uint[range + 1];
-    uint *AverageColorB = new uint[range + 1];
+    uint *AverageColorR   = new uint[range + 1];
+    uint *AverageColorG   = new uint[range + 1];
+    uint *AverageColorB   = new uint[range + 1];
 
     for (h = 0; !m_cancel && (h < Height); ++h)
     {
@@ -1189,10 +1189,10 @@ Digikam::DColor BlurFX::RandomColor(uchar *Bits, int Width, int Height, bool six
 
     // For 16 bit we have a problem here because this takes 255 times longer,
     // and the algorithm is really slow for 16 bit, but I think this cannot be avoided.
-    memset(IntensityCount, 0, range );
-    memset(AverageColorR,  0, range );
-    memset(AverageColorG,  0, range );
-    memset(AverageColorB,  0, range );
+    memset(IntensityCount, 0, (range + 1) * sizeof(uchar));
+    memset(AverageColorR,  0, (range + 1) * sizeof(uint));
+    memset(AverageColorG,  0, (range + 1) * sizeof(uint));
+    memset(AverageColorB,  0, (range + 1) * sizeof(uint));
 
     for (w = X - Radius; !m_cancel && (w <= X + Radius); ++w)
     {
