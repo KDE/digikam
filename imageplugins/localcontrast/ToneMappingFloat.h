@@ -38,6 +38,7 @@ public:
     ~ToneMappingFloat();
 
     void process_8bit_rgb_image(unsigned char *img,int sizex,int sizey);
+    void process_16bit_rgb_image(unsigned short int *img,int sizex,int sizey);
     void process_rgb_image(REALTYPE *img,int sizex,int sizey);
     void update_preprocessed_values();
 

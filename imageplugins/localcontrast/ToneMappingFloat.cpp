@@ -186,6 +186,36 @@ void ToneMappingFloat::update_preprocessed_values()
 {
 }
 
+void ToneMappingFloat::process_16bit_rgb_image(unsigned short int *img,int sizex,int sizey)
+{
+    int size=sizex*sizey;
+    REALTYPE *tmpimage=new REALTYPE[size*3];
+
+    const float inv_65536=1.0/65536.0;
+
+    for (int i=0;i<size*3;i++)
+    {
+        //convert to floating point
+        tmpimage[i]=img[i]/65535.0;
+    };
+
+    process_rgb_image(tmpimage,sizex,sizey);
+
+    //convert back to 8 bits (with dithering)
+    int pos=0;
+
+    for (int i=0;i<size;i++)
+    {
+        REALTYPE dither=((rand()/65536)%65536)*inv_65536;
+        img[pos]=(int)(tmpimage[pos]*65535.0+dither);
+        img[pos+1]=(int)(tmpimage[pos+1]*65535.0+dither);
+        img[pos+2]=(int)(tmpimage[pos+2]*65535.0+dither);
+        pos+=3;
+    };
+
+    delete[]tmpimage;
+}
+
 void ToneMappingFloat::process_8bit_rgb_image(unsigned char *img,int sizex,int sizey)
 {
     int size=sizex*sizey;

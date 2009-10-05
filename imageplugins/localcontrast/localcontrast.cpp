@@ -38,16 +38,16 @@ public:
 
     LocalContrastPriv()
     {
-        par         = 0;
-        tonemapping = 0;
-        width       = 0;
-        height      = 0;
-        data        = 0;
+        par              = 0;
+        tonemappingFloat = 0;
+        width            = 0;
+        height           = 0;
+        data             = 0;
     }
 
     ToneMappingParameters* par;
 
-    ToneMappingBase*       tonemapping;
+    ToneMappingFloat*      tonemappingFloat;
 
     int                    width;
     int                    height;
@@ -80,22 +80,52 @@ LocalContrast::~LocalContrast()
 
 void LocalContrast::filterImage()
 {
-    if(d->par->info_fast_mode) // fast mode
+/*
+    if(d->par->info_fast_mode)
     {
-        d->tonemapping = new ToneMappingInt();
+        // fast mode
     }
-    else // no fast mode
+    else
     {
-        d->tonemapping = new ToneMappingFloat();
+        // no fast mode
     }
+*/
 
-    // Apply parameters
-    d->tonemapping->apply_parameters(*d->par);
+    d->tonemappingFloat = new ToneMappingFloat();
+    d->tonemappingFloat->apply_parameters(*d->par);
 
     // Process image
     if(d->sixteenBit) // sixteen bit image
     {
-        // TODO : for sixteen bits images
+        if(d->data != NULL)
+        {
+            int size                = d->width*d->height*3;
+            unsigned short *data    = new unsigned short[size];
+            unsigned short *dataImg = (unsigned short*)(d->data);
+
+            for(int i=0, j=0; i<size; i+=3, j+=4)
+            {
+                data[i]   = dataImg[j];
+                data[i+1] = dataImg[j+1];
+                data[i+2] = dataImg[j+2];
+            }
+
+            d->tonemappingFloat->process_16bit_rgb_image(data, d->width, d->height);
+
+            for(int x=0; x<d->width; x++)
+            {
+                for(int y=0; y<d->height; y++)
+                {
+                    int i = (d->width * y + x)*3;
+                    m_destImage.setPixelColor(x, y, DColor((unsigned short)data[i+2],
+                                                           (unsigned short)data[i+1],
+                                                           (unsigned short)data[i],
+                                                           65535, true));
+                }
+            }
+
+            delete [] data;
+        }
     }
     else // eight bit image
     {
@@ -111,7 +141,7 @@ void LocalContrast::filterImage()
                 data[i+2] = d->data[j+2];
             }
 
-            d->tonemapping->process_8bit_rgb_image(data, d->width, d->height);
+            d->tonemappingFloat->process_8bit_rgb_image(data, d->width, d->height);
 
             for(int x=0; x<d->width; x++)
             {
@@ -125,6 +155,8 @@ void LocalContrast::filterImage()
             delete [] data;
         }
     }
+
+    delete d->tonemappingFloat;
 }
 
 void LocalContrast::progressCallback(int progress)
