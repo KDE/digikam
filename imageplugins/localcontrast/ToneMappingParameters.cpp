@@ -37,23 +37,23 @@ namespace DigikamLocalContrastImagesPlugin
 
 ToneMappingParameters::ToneMappingParameters()
 {
-    info_fast_mode=true;
-    high_saturation=100;
-    low_saturation=100;
-    stretch_contrast=true;
-    function_id=0;
+    info_fast_mode   = true;
+    high_saturation  = 100;
+    low_saturation   = 100;
+    stretch_contrast = true;
+    function_id      = 0;
 
-    for (int i=0;i<TONEMAPPING_MAX_STAGES;i++)
+    for (int i=0 ; i < TONEMAPPING_MAX_STAGES ; i++)
     {
-        stage[i].enabled=(i==0);
-        stage[i].power=30.0;
-        stage[i].blur=80;
+        stage[i].enabled = (i==0);
+        stage[i].power   = 30.0;
+        stage[i].blur    = 80;
     };
 
-    unsharp_mask.enabled=false;
-    unsharp_mask.power=30;
-    unsharp_mask.blur=4.0;
-    unsharp_mask.threshold=0;
+    unsharp_mask.enabled   = false;
+    unsharp_mask.power     = 30;
+    unsharp_mask.blur      = 4.0;
+    unsharp_mask.threshold = 0;
 }
 
 ToneMappingParameters::~ToneMappingParameters()
@@ -62,8 +62,8 @@ ToneMappingParameters::~ToneMappingParameters()
 
 REALTYPE ToneMappingParameters::get_power(int nstage)
 {
-    REALTYPE power=stage[nstage].power;
-    power=pow(power/100.0,1.5)*100.0;
+    REALTYPE power = stage[nstage].power;
+    power          = pow(power/100.0,1.5)*100.0;
     return power;
 }
 
@@ -74,8 +74,8 @@ REALTYPE ToneMappingParameters::get_blur(int nstage)
 
 REALTYPE ToneMappingParameters::get_unsharp_mask_power()
 {
-    REALTYPE power=unsharp_mask.power;
-    power=pow(power/100.0,3.0)*10.0;
+    REALTYPE power = unsharp_mask.power;
+    power          = pow(power/100.0,3.0)*10.0;
     return power;
 }
 
@@ -86,7 +86,7 @@ REALTYPE ToneMappingParameters::get_unsharp_mask_blur()
 
 void ToneMappingParameters::save_parameters(const char *filename)
 {
-    FILE *f=fopen(filename,"w");
+    FILE *f = fopen(filename,"w");
     if (!f) return;
     fprintf(f,"Tonemapping_by_PAUL\n");
     fprintf(f,"1\n");//version
@@ -115,7 +115,7 @@ void ToneMappingParameters::save_parameters(const char *filename)
 
 bool ToneMappingParameters::load_parameters(const char *filename)
 {
-    FILE *f=fopen(filename,"r");
+    FILE *f = fopen(filename,"r");
     if (!f) return false;
 
     const int max_line=1024;

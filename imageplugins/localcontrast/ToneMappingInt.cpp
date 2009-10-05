@@ -36,10 +36,11 @@
 namespace DigikamLocalContrastImagesPlugin
 {
 
-ToneMappingInt::ToneMappingInt():ToneMappingBase()
+ToneMappingInt::ToneMappingInt()
+              : ToneMappingBase()
 {
     par.info_fast_mode=true;
-    for (int nstage=0;nstage<TONEMAPPING_MAX_STAGES;nstage++)
+    for (int nstage=0 ; nstage < TONEMAPPING_MAX_STAGES ; nstage++)
     {
         precomputed[nstage].func_lookup_table=new unsigned char [FUNC_LOOKUP_TABLE_SIZE];
         for (int i=0;i<FUNC_LOOKUP_TABLE_SIZE;i++) precomputed[nstage].func_lookup_table[i]=0;
@@ -50,7 +51,7 @@ ToneMappingInt::ToneMappingInt():ToneMappingBase()
 
 ToneMappingInt::~ToneMappingInt()
 {
-    for (int nstage=0;nstage<TONEMAPPING_MAX_STAGES;nstage++)
+    for (int nstage=0 ; nstage < TONEMAPPING_MAX_STAGES ; nstage++)
     {
         delete [] precomputed[nstage].func_lookup_table;
     };
@@ -65,7 +66,8 @@ void ToneMappingInt::set_power(int nstage,REALTYPE value)
 void ToneMappingInt::set_function_id(int value)
 {
     ToneMappingBase::set_function_id(value);
-    for (int nstage=0;nstage<TONEMAPPING_MAX_STAGES;nstage++) precomputed[nstage].changed=true;
+    for (int nstage=0 ; nstage < TONEMAPPING_MAX_STAGES ; nstage++)
+        precomputed[nstage].changed = true;
 }
 
 void ToneMappingInt::recompute_func_table(int nstage)

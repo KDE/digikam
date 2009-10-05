@@ -34,9 +34,10 @@
 namespace DigikamLocalContrastImagesPlugin
 {
 
-ToneMappingFloat::ToneMappingFloat():ToneMappingBase()
+ToneMappingFloat::ToneMappingFloat()
+                : ToneMappingBase()
 {
-    par.info_fast_mode=false;
+    par.info_fast_mode = false;
 }
 
 ToneMappingFloat::~ToneMappingFloat()
@@ -46,11 +47,11 @@ ToneMappingFloat::~ToneMappingFloat()
 void ToneMappingFloat::process_rgb_image(REALTYPE *img,int sizex,int sizey)
 {
     update_preprocessed_values();
-    int size=sizex*sizey;
-    REALTYPE *blurimage=new REALTYPE[size];
-    REALTYPE *srcimg=new REALTYPE[size*3];
+    int size            = sizex*sizey;
+    REALTYPE *blurimage = new REALTYPE[size];
+    REALTYPE *srcimg    = new REALTYPE[size*3];
 
-    for (int i=0;i<(size*3);i++) srcimg[i]=img[i];
+    for (int i=0 ; i<(size*3) ; i++) srcimg[i]=img[i];
     if (par.stretch_contrast)
     {
         stretch_contrast(img,size*3);
