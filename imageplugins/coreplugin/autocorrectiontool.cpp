@@ -27,40 +27,22 @@
 
 // Qt includes
 
-#include <QCheckBox>
-#include <QColor>
-#include <QFrame>
 #include <QGridLayout>
-#include <QGroupBox>
-#include <QHBoxLayout>
-#include <QLabel>
 #include <QListWidget>
 #include <QPixmap>
-#include <QPushButton>
-#include <QRadioButton>
-#include <QTimer>
-#include <QToolButton>
 
 // KDE includes
 
 #include <kapplication.h>
-#include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kcursor.h>
-#include <kglobal.h>
-#include <kicon.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kstandarddirs.h>
-#include <kvbox.h>
 
 // Local includes
 
-#include "colorgradientwidget.h"
 #include "dimg.h"
 #include "dimgimagefilters.h"
 #include "editortoolsettings.h"
-#include "histogrambox.h"
 #include "histogramwidget.h"
 #include "imageiface.h"
 #include "imagewidget.h"
