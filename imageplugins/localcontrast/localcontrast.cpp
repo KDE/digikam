@@ -89,7 +89,7 @@ void LocalContrast::filterImage()
             unsigned short *data    = new unsigned short[size];
             unsigned short *dataImg = (unsigned short*)(m_orgImage.bits());
 
-            for(i=0, j=0; i < size; i+=3, j+=4)
+            for(i=0, j=0; !m_cancel && (i < size); i+=3, j+=4)
             {
                 data[i]   = dataImg[j];
                 data[i+1] = dataImg[j+1];
@@ -98,9 +98,9 @@ void LocalContrast::filterImage()
 
             d->tonemappingFloat->process_16bit_rgb_image(data, m_orgImage.width(), m_orgImage.height());
 
-            for(uint x=0; x < m_orgImage.width(); x++)
+            for(uint x=0; !m_cancel && (x < m_orgImage.width()); x++)
             {
-                for(uint y=0; y < m_orgImage.height(); y++)
+                for(uint y=0; !m_cancel && (y < m_orgImage.height()); y++)
                 {
                     i = (m_orgImage.width() * y + x)*3;
                     m_destImage.setPixelColor(x, y, DColor((unsigned short)data[i+2],
@@ -116,7 +116,7 @@ void LocalContrast::filterImage()
         {
             uchar *data = new uchar[size];
 
-            for(i=0, j=0; i < size; i+=3, j+=4)
+            for(i=0, j=0; !m_cancel && (i < size); i+=3, j+=4)
             {
                 data[i]   = m_orgImage.bits()[j];
                 data[i+1] = m_orgImage.bits()[j+1];
@@ -125,9 +125,9 @@ void LocalContrast::filterImage()
 
             d->tonemappingFloat->process_8bit_rgb_image(data, m_orgImage.width(), m_orgImage.height());
 
-            for(uint x=0; x < m_orgImage.width(); x++)
+            for(uint x=0; !m_cancel && (x < m_orgImage.width()); x++)
             {
-                for(uint y=0; y < m_orgImage.height(); y++)
+                for(uint y=0; !m_cancel && (y < m_orgImage.height()); y++)
                 {
                     i = (m_orgImage.width() * y + x)*3;
                     m_destImage.setPixelColor(x, y, DColor(data[i+2], data[i+1], data[i], 255, false));
