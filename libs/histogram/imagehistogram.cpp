@@ -71,10 +71,11 @@ public:
 
     ImageHistogramPriv()
     {
-        imageData   = 0;
-        histogram   = 0;
-        valid       = false;
-        runningFlag = true;
+        imageData     = 0;
+        histogram     = 0;
+        histoSegments = 0;
+        valid         = false;
+        runningFlag   = true;
     }
 
     /** The histogram data.*/
