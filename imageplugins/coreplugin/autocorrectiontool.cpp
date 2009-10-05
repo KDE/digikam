@@ -83,13 +83,13 @@ public:
         gboxSettings           = 0;
     }
 
-    uchar*               destinationPreviewData;
+    uchar*              destinationPreviewData;
 
-    QListWidget*         correctionTools;
+    QListWidget*        correctionTools;
 
-    ImageWidget*         previewWidget;
-    EditorToolSettings*  gboxSettings;
-    DImg                 thumbnailImage;
+    ImageWidget*        previewWidget;
+    EditorToolSettings* gboxSettings;
+    DImg                thumbnailImage;
 };
 
 AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
@@ -252,18 +252,18 @@ void AutoCorrectionTool::slotResetSettings()
 
 void AutoCorrectionTool::slotEffect()
 {
-    kapp->setOverrideCursor( Qt::WaitCursor );
+    kapp->setOverrideCursor(Qt::WaitCursor);
 
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
     if (d->destinationPreviewData)
        delete [] d->destinationPreviewData;
 
-    ImageIface* iface        = d->previewWidget->imageIface();
+    ImageIface* iface         = d->previewWidget->imageIface();
     d->destinationPreviewData = iface->getPreviewImage();
-    int w                    = iface->previewWidth();
-    int h                    = iface->previewHeight();
-    bool sb                  = iface->previewSixteenBit();
+    int w                     = iface->previewWidth();
+    int h                     = iface->previewHeight();
+    bool sb                   = iface->previewSixteenBit();
 
     autoCorrection(d->destinationPreviewData, w, h, sb, d->correctionTools->currentRow());
 
@@ -289,10 +289,10 @@ void AutoCorrectionTool::finalRendering()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
     ImageIface* iface = d->previewWidget->imageIface();
-    uchar *data                = iface->getOriginalImage();
-    int w                      = iface->originalWidth();
-    int h                      = iface->originalHeight();
-    bool sb                    = iface->originalSixteenBit();
+    uchar *data = iface->getOriginalImage();
+    int w       = iface->originalWidth();
+    int h       = iface->originalHeight();
+    bool sb     = iface->originalSixteenBit();
 
     if (data)
     {
