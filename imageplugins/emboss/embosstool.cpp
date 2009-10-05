@@ -124,6 +124,10 @@ EmbossTool::EmbossTool(QObject* parent)
 
     connect(d->depthInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotTimer()));
+
+    // -------------------------------------------------------------
+
+    slotTimer();
 }
 
 EmbossTool::~EmbossTool()
