@@ -271,10 +271,10 @@ void AutoCorrectionTool::finalRendering()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
     ImageIface* iface = d->previewWidget->imageIface();
-    uchar *data = iface->getOriginalImage();
-    int w       = iface->originalWidth();
-    int h       = iface->originalHeight();
-    bool sb     = iface->originalSixteenBit();
+    uchar *data       = iface->getOriginalImage();
+    int w             = iface->originalWidth();
+    int h             = iface->originalHeight();
+    bool sb           = iface->originalSixteenBit();
 
     if (data)
     {
