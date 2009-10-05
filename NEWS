@@ -1,5 +1,5 @@
 *********************************************************************************************************
-digiKam 1.0.0-beta5 - Release date: 2009-10-04
+digiKam 1.0.0-beta5 - Release date: 2009-10-05
 
 NEW FEATURES:
 
@@ -63,7 +63,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 052 ==> 209189 : Make albumview rotation buttons optional.
 053 ==> 209343 : Mouse-wheel should jump to next/previous picture if used when viewing a picture.
 054 ==> 193879 : Crash while rating pictures.
-055 ==>
+055 ==> 209437 : Allow to use mouse click&drag to move around the image in View mode.
+056 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta4 - Release date: 2009-08-30
