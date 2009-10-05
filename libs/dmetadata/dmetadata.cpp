@@ -43,6 +43,10 @@
 #include <libkdcraw/dcrawinfocontainer.h>
 #include <libkdcraw/kdcraw.h>
 
+// LibKExiv2 includes
+
+#include <libkexiv2/version.h>
+
 // Local includes
 
 #include "template.h"
@@ -58,19 +62,25 @@ namespace Digikam
 DMetadata::DMetadata()
          : KExiv2Iface::KExiv2()
 {
+#if KEXIV2_VERSION >= 0x010000
     registerXmpNameSpace(QString("http://ns.adobe.com/lightroom/1.0/"), QString("lr"));
+#endif
 }
 
 DMetadata::DMetadata(const QString& filePath)
          : KExiv2Iface::KExiv2()
 {
+#if KEXIV2_VERSION >= 0x010000
     registerXmpNameSpace(QString("http://ns.adobe.com/lightroom/1.0/"), QString("lr"));
+#endif
     load(filePath);
 }
 
 DMetadata::~DMetadata()
 {
+#if KEXIV2_VERSION >= 0x010000
     unregisterXmpNameSpace(QString("http://ns.adobe.com/lightroom/1.0/"));
+#endif
 }
 
 bool DMetadata::load(const QString& filePath) const
