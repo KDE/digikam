@@ -219,7 +219,7 @@ QImage ThumbnailCreator::load(const QString& path)
 
     // Prepare for usage in digikam
     image.qimage = image.qimage.scaled(d->thumbnailSize, d->thumbnailSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    handleAlphaChannel(image.qimage);
+    image.qimage = handleAlphaChannel(image.qimage);
 
     if (d->thumbnailStorage == ThumbnailDatabase)
     {
