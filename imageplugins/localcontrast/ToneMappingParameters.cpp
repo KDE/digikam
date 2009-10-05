@@ -19,53 +19,68 @@
 
  */
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <math.h>
+// C++ includes.
+
+#include <cstdio>
+#include <cstring>
+#include <cstdlib>
+#include <cmath>
+
+// Local includes.
+
 #include "ToneMappingParameters.h"
 
-ToneMappingParameters::ToneMappingParameters(){
+ToneMappingParameters::ToneMappingParameters()
+{
     info_fast_mode=true;
     high_saturation=100;
     low_saturation=100;
     stretch_contrast=true;
     function_id=0;
-    for (int i=0;i<TONEMAPPING_MAX_STAGES;i++){
+
+    for (int i=0;i<TONEMAPPING_MAX_STAGES;i++)
+    {
         stage[i].enabled=(i==0);
         stage[i].power=30.0;
         stage[i].blur=80;
     };
+
     unsharp_mask.enabled=false;
     unsharp_mask.power=30;
     unsharp_mask.blur=4.0;
     unsharp_mask.threshold=0;
 }
 
-ToneMappingParameters::~ToneMappingParameters(){
+ToneMappingParameters::~ToneMappingParameters()
+{
 }
 
-REALTYPE ToneMappingParameters::get_power(int nstage){
+REALTYPE ToneMappingParameters::get_power(int nstage)
+{
     REALTYPE power=stage[nstage].power;
     power=pow(power/100.0,1.5)*100.0;
     return power;
 }
 
-REALTYPE ToneMappingParameters::get_blur(int nstage){
+REALTYPE ToneMappingParameters::get_blur(int nstage)
+{
     return stage[nstage].blur;
 }
 
-REALTYPE ToneMappingParameters::get_unsharp_mask_power(){
+REALTYPE ToneMappingParameters::get_unsharp_mask_power()
+{
     REALTYPE power=unsharp_mask.power;
     power=pow(power/100.0,3.0)*10.0;
     return power;
 }
 
-REALTYPE ToneMappingParameters::get_unsharp_mask_blur(){
+REALTYPE ToneMappingParameters::get_unsharp_mask_blur()
+{
     return unsharp_mask.blur;
 }
 
-void ToneMappingParameters::save_parameters(const char *filename){
+void ToneMappingParameters::save_parameters(const char *filename)
+{
     FILE *f=fopen(filename,"w");
     if (!f) return;
     fprintf(f,"Tonemapping_by_PAUL\n");
@@ -76,12 +91,15 @@ void ToneMappingParameters::save_parameters(const char *filename){
     fprintf(f,"high_saturation %d\n",high_saturation);
     fprintf(f,"stretch_contrast %d\n",stretch_contrast);
     fprintf(f,"function_id %d\n",function_id);
-    for (int i=0;i<TONEMAPPING_MAX_STAGES;i++){
+
+    for (int i=0;i<TONEMAPPING_MAX_STAGES;i++)
+    {
         fprintf(f,"STAGE %d\n", i);
         fprintf(f,"enabled %d\n",stage[i].enabled);
         fprintf(f,"power %g\n", stage[i].power);
         fprintf(f,"blur %g\n",stage[i].blur);
     };
+
     fprintf(f,"unsharp_mask_enabled %d\n",unsharp_mask.enabled);
     fprintf(f,"unsharp_mask_power %g\n",unsharp_mask.power);
     fprintf(f,"unsharp_mask_blur %g\n",unsharp_mask.blur);
@@ -90,7 +108,8 @@ void ToneMappingParameters::save_parameters(const char *filename){
     fclose(f);
 }
 
-bool ToneMappingParameters::load_parameters(const char *filename){
+bool ToneMappingParameters::load_parameters(const char *filename)
+{
     FILE *f=fopen(filename,"r");
     if (!f) return false;
 
@@ -103,15 +122,19 @@ bool ToneMappingParameters::load_parameters(const char *filename){
     if (strstr(line,"Tonemapping_by_PAUL")!=line) return false;
     fgets(line,max_line,f);//version
     int current_stage=0;
-    while (!feof(f)){
+
+    while (!feof(f))
+    {
         for (int i=0;i<max_line;i++) line[i]=0;
         fgets(line,max_line-1,f);
 
         if (strlen(line)<3) continue;
 
         int space=0;
-        for (int i=0;i<max_line;i++){
-            if (line[i]==' ') {
+        for (int i=0;i<max_line;i++)
+        {
+            if (line[i]==' ')
+            {
                 line[i]=0;
                 space=i+1;
                 break;
@@ -130,7 +153,8 @@ bool ToneMappingParameters::load_parameters(const char *filename){
         if (strstr(par,"stretch_contrast")==par) stretch_contrast=ipar;
         if (strstr(par,"function_id")==par) function_id=ipar;
 
-        if (strstr(par,"STAGE")==par) {
+        if (strstr(par,"STAGE")==par)
+        {
             if (ipar<0) ipar=0;
             if (ipar>(TONEMAPPING_MAX_STAGES-1)) ipar=TONEMAPPING_MAX_STAGES-1;
             current_stage=ipar;
@@ -145,9 +169,8 @@ bool ToneMappingParameters::load_parameters(const char *filename){
         if (strstr(par,"unsharp_mask_blur")==par) unsharp_mask.blur=fpar;
         if (strstr(par,"unsharp_mask_threshold")==par) unsharp_mask.threshold=ipar;
     };
-    fclose(f);
 
+    fclose(f);
 
     return true;
 }
-
