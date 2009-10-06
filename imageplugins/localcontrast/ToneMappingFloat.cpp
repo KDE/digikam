@@ -61,6 +61,7 @@ void ToneMappingFloat::process_rgb_image(REALTYPE *img, int sizex, int sizey)
     };
 
     int pos=0;
+
     for (int nstage=0 ; par.cancel() && (nstage < TONEMAPPING_MAX_STAGES) ; nstage++)
     {
         if (!par.stage[nstage].enabled) continue;
@@ -80,6 +81,7 @@ void ToneMappingFloat::process_rgb_image(REALTYPE *img, int sizex, int sizey)
         inplace_blur(blurimage, sizex,sizey, par.get_blur(nstage));
 
         pos=0;
+
         for (int i=0 ; par.cancel() && (i<size) ; i++)
         {
             REALTYPE src_r  = img[pos];
@@ -106,6 +108,7 @@ void ToneMappingFloat::process_rgb_image(REALTYPE *img, int sizex, int sizey)
     if ((par.high_saturation != 100) || (par.low_saturation != 100))
     {
         int pos=0;
+
         for (int i=0 ; par.cancel() && (i < size) ; i++)
         {
             REALTYPE src_h, src_s, src_v;
@@ -130,8 +133,10 @@ void ToneMappingFloat::process_rgb_image(REALTYPE *img, int sizex, int sizey)
     if (par.unsharp_mask.enabled)
     {
         REALTYPE *val = new REALTYPE[size];
+
         //compute the desatured image
         int pos = 0;
+
         for (int i=0 ; par.cancel() && (i < size) ; i++)
         {
             val[i] = blurimage[i] = (img[pos]+img[pos+1]+img[pos+2])/3.0;
