@@ -3,11 +3,13 @@ digiKam 1.0.0-beta6 - Release date: 2009-10-??
 
 NEW FEATURES:
 
+ImageEditor    : New Local COntrast tool to simulate HDR images.
+
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 130942 : digiKam should display the default EXIF rotation currently used.
-002 ==>
-
+002 ==> 145442 : Contrast mask image plugin.
+003 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
