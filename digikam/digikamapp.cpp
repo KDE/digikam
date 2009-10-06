@@ -135,6 +135,7 @@
 #include "thumbnailsize.h"
 #include "digikamapp_p.h"
 #include "debug.h"
+#include "dmetadata.h"
 
 using KIO::Job;
 using KIO::UDSEntryList;
@@ -927,90 +928,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
-    QSignalMapper *exifOrientationMapper = new QSignalMapper(d->view);
-
-    connect(exifOrientationMapper, SIGNAL(mapped(int)),
-            d->view, SLOT(slotImageExifOrientation(int)));
-
-    d->imageExifOrientationActionMenu = new KActionMenu(i18n("Adjust Exif Orientation Tag"), this);
-    d->imageExifOrientationActionMenu->setDelayed(false);
-    actionCollection()->addAction("image_set_exif_orientation", d->imageExifOrientationActionMenu);
-
-    d->imageSetExifOrientation1Action =
-        new KAction(i18nc("normal exif orientation", "Normal"), d->imageExifOrientationActionMenu);
-    d->imageSetExifOrientation2Action =
-        new KAction(i18n("Flipped Horizontally"), d->imageExifOrientationActionMenu);
-    d->imageSetExifOrientation3Action =
-        new KAction(i18n("Rotated Upside Down"), d->imageExifOrientationActionMenu);
-    d->imageSetExifOrientation4Action =
-        new KAction(i18n("Flipped Vertically"), d->imageExifOrientationActionMenu);
-    d->imageSetExifOrientation5Action =
-        new KAction(i18n("Rotated Right / Horiz. Flipped"), d->imageExifOrientationActionMenu);
-    d->imageSetExifOrientation6Action =
-        new KAction(i18n("Rotated Right"), d->imageExifOrientationActionMenu);
-    d->imageSetExifOrientation7Action =
-        new KAction(i18n("Rotated Right / Vert. Flipped"), d->imageExifOrientationActionMenu);
-    d->imageSetExifOrientation8Action =
-        new KAction(i18n("Rotated Left"), d->imageExifOrientationActionMenu);
-
-    actionCollection()->addAction("image_set_exif_orientation_normal",
-            d->imageSetExifOrientation1Action);
-    actionCollection()->addAction("image_set_exif_orientation_flipped_horizontal",
-            d->imageSetExifOrientation2Action);
-    actionCollection()->addAction("image_set_exif_orientation_rotated_upside_down",
-            d->imageSetExifOrientation3Action);
-    actionCollection()->addAction("image_set_exif_orientation_flipped_vertically",
-            d->imageSetExifOrientation4Action);
-    actionCollection()->addAction("image_set_exif_orientation_rotated_right_hor_flipped",
-            d->imageSetExifOrientation5Action);
-    actionCollection()->addAction("image_set_exif_orientation_rotated_right",
-            d->imageSetExifOrientation6Action);
-    actionCollection()->addAction("image_set_exif_orientation_rotated_right_ver_flipped",
-            d->imageSetExifOrientation7Action);
-    actionCollection()->addAction("image_set_exif_orientation_rotated_left",
-            d->imageSetExifOrientation8Action);
-
-    d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation1Action);
-    d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation2Action);
-    d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation3Action);
-    d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation4Action);
-    d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation5Action);
-    d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation6Action);
-    d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation7Action);
-    d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation8Action);
-
-    connect(d->imageSetExifOrientation1Action, SIGNAL(triggered()),
-            exifOrientationMapper, SLOT(map()));
-
-    connect(d->imageSetExifOrientation2Action, SIGNAL(triggered()),
-            exifOrientationMapper, SLOT(map()));
-
-    connect(d->imageSetExifOrientation3Action, SIGNAL(triggered()),
-            exifOrientationMapper, SLOT(map()));
-
-    connect(d->imageSetExifOrientation4Action, SIGNAL(triggered()),
-            exifOrientationMapper, SLOT(map()));
-
-    connect(d->imageSetExifOrientation5Action, SIGNAL(triggered()),
-            exifOrientationMapper, SLOT(map()));
-
-    connect(d->imageSetExifOrientation6Action, SIGNAL(triggered()),
-            exifOrientationMapper, SLOT(map()));
-
-    connect(d->imageSetExifOrientation7Action, SIGNAL(triggered()),
-            exifOrientationMapper, SLOT(map()));
-
-    connect(d->imageSetExifOrientation8Action, SIGNAL(triggered()),
-            exifOrientationMapper, SLOT(map()));
-
-    exifOrientationMapper->setMapping(d->imageSetExifOrientation1Action, 1);
-    exifOrientationMapper->setMapping(d->imageSetExifOrientation2Action, 2);
-    exifOrientationMapper->setMapping(d->imageSetExifOrientation3Action, 3);
-    exifOrientationMapper->setMapping(d->imageSetExifOrientation4Action, 4);
-    exifOrientationMapper->setMapping(d->imageSetExifOrientation5Action, 5);
-    exifOrientationMapper->setMapping(d->imageSetExifOrientation6Action, 6);
-    exifOrientationMapper->setMapping(d->imageSetExifOrientation7Action, 7);
-    exifOrientationMapper->setMapping(d->imageSetExifOrientation8Action, 8);
+    setupExifOrientationActions();
 
     // -----------------------------------------------------------------
 
@@ -1431,6 +1349,8 @@ void DigikamApp::slotImageSelected(const ImageInfoList& selection, bool hasPrev,
         }
         case 1:
         {
+            slotSetCheckedExifOrientationAction(selection.first());
+
             int index = listAll.indexOf(selection.first()) + 1;
 
             d->statusBarSelectionText = selection.first().fileUrl().fileName()
@@ -1473,6 +1393,8 @@ void DigikamApp::slotSelectionChanged(int selectionCount)
                                                    "Write Metadata to Selected Images", selectionCount));
         d->imageReadMetadataAction->setText(i18np("Reread Metadata From Image",
                                                   "Reread Metadata From Selected Images", selectionCount));
+
+        slotResetExifOrientationActions();
     }
 }
 
@@ -2762,6 +2684,133 @@ void DigikamApp::updateCameraMenu()
     d->cameraMenu->addSeparator();
 
     d->cameraMenu->addAction(actionCollection()->action("camera_add"));
+}
+
+void DigikamApp::setupExifOrientationActions()
+{
+    QSignalMapper *exifOrientationMapper = new QSignalMapper(d->view);
+
+    connect(exifOrientationMapper, SIGNAL(mapped(int)),
+            d->view, SLOT(slotImageExifOrientation(int)));
+
+    d->imageExifOrientationActionMenu = new KActionMenu(i18n("Adjust Exif Orientation Tag"), this);
+    d->imageExifOrientationActionMenu->setDelayed(false);
+    actionCollection()->addAction("image_set_exif_orientation", d->imageExifOrientationActionMenu);
+
+    d->imageSetExifOrientation1Action = new KToggleAction(i18nc("normal exif orientation", "Normal"), this);
+    d->imageSetExifOrientation2Action = new KToggleAction(i18n("Flipped Horizontally"), this);
+    d->imageSetExifOrientation3Action = new KToggleAction(i18n("Rotated Upside Down"), this);
+    d->imageSetExifOrientation4Action = new KToggleAction(i18n("Flipped Vertically"), this);
+    d->imageSetExifOrientation5Action = new KToggleAction(i18n("Rotated Right / Horiz. Flipped"), this);
+    d->imageSetExifOrientation6Action = new KToggleAction(i18n("Rotated Right"), this);
+    d->imageSetExifOrientation7Action = new KToggleAction(i18n("Rotated Right / Vert. Flipped"), this);
+    d->imageSetExifOrientation8Action = new KToggleAction(i18n("Rotated Left"), this);
+
+    d->exifOrientationActionGroup = new QActionGroup(d->imageExifOrientationActionMenu);
+    d->exifOrientationActionGroup->addAction(d->imageSetExifOrientation1Action);
+    d->exifOrientationActionGroup->addAction(d->imageSetExifOrientation2Action);
+    d->exifOrientationActionGroup->addAction(d->imageSetExifOrientation3Action);
+    d->exifOrientationActionGroup->addAction(d->imageSetExifOrientation4Action);
+    d->exifOrientationActionGroup->addAction(d->imageSetExifOrientation5Action);
+    d->exifOrientationActionGroup->addAction(d->imageSetExifOrientation6Action);
+    d->exifOrientationActionGroup->addAction(d->imageSetExifOrientation7Action);
+    d->exifOrientationActionGroup->addAction(d->imageSetExifOrientation8Action);
+    d->imageSetExifOrientation1Action->setChecked(true);
+
+    actionCollection()->addAction("image_set_exif_orientation_normal",
+            d->imageSetExifOrientation1Action);
+    actionCollection()->addAction("image_set_exif_orientation_flipped_horizontal",
+            d->imageSetExifOrientation2Action);
+    actionCollection()->addAction("image_set_exif_orientation_rotated_upside_down",
+            d->imageSetExifOrientation3Action);
+    actionCollection()->addAction("image_set_exif_orientation_flipped_vertically",
+            d->imageSetExifOrientation4Action);
+    actionCollection()->addAction("image_set_exif_orientation_rotated_right_hor_flipped",
+            d->imageSetExifOrientation5Action);
+    actionCollection()->addAction("image_set_exif_orientation_rotated_right",
+            d->imageSetExifOrientation6Action);
+    actionCollection()->addAction("image_set_exif_orientation_rotated_right_ver_flipped",
+            d->imageSetExifOrientation7Action);
+    actionCollection()->addAction("image_set_exif_orientation_rotated_left",
+            d->imageSetExifOrientation8Action);
+
+    d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation1Action);
+    d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation2Action);
+    d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation3Action);
+    d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation4Action);
+    d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation5Action);
+    d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation6Action);
+    d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation7Action);
+    d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation8Action);
+
+    connect(d->imageSetExifOrientation1Action, SIGNAL(triggered()),
+            exifOrientationMapper, SLOT(map()));
+
+    connect(d->imageSetExifOrientation2Action, SIGNAL(triggered()),
+            exifOrientationMapper, SLOT(map()));
+
+    connect(d->imageSetExifOrientation3Action, SIGNAL(triggered()),
+            exifOrientationMapper, SLOT(map()));
+
+    connect(d->imageSetExifOrientation4Action, SIGNAL(triggered()),
+            exifOrientationMapper, SLOT(map()));
+
+    connect(d->imageSetExifOrientation5Action, SIGNAL(triggered()),
+            exifOrientationMapper, SLOT(map()));
+
+    connect(d->imageSetExifOrientation6Action, SIGNAL(triggered()),
+            exifOrientationMapper, SLOT(map()));
+
+    connect(d->imageSetExifOrientation7Action, SIGNAL(triggered()),
+            exifOrientationMapper, SLOT(map()));
+
+    connect(d->imageSetExifOrientation8Action, SIGNAL(triggered()),
+            exifOrientationMapper, SLOT(map()));
+
+    exifOrientationMapper->setMapping(d->imageSetExifOrientation1Action, 1);
+    exifOrientationMapper->setMapping(d->imageSetExifOrientation2Action, 2);
+    exifOrientationMapper->setMapping(d->imageSetExifOrientation3Action, 3);
+    exifOrientationMapper->setMapping(d->imageSetExifOrientation4Action, 4);
+    exifOrientationMapper->setMapping(d->imageSetExifOrientation5Action, 5);
+    exifOrientationMapper->setMapping(d->imageSetExifOrientation6Action, 6);
+    exifOrientationMapper->setMapping(d->imageSetExifOrientation7Action, 7);
+    exifOrientationMapper->setMapping(d->imageSetExifOrientation8Action, 8);
+
+    // --------------------------------------------------------
+
+
+}
+
+void DigikamApp::slotResetExifOrientationActions()
+{
+    d->imageSetExifOrientation1Action->setChecked(false);
+    d->imageSetExifOrientation2Action->setChecked(false);
+    d->imageSetExifOrientation3Action->setChecked(false);
+    d->imageSetExifOrientation4Action->setChecked(false);
+    d->imageSetExifOrientation5Action->setChecked(false);
+    d->imageSetExifOrientation6Action->setChecked(false);
+    d->imageSetExifOrientation7Action->setChecked(false);
+    d->imageSetExifOrientation8Action->setChecked(false);
+}
+
+void DigikamApp::slotSetCheckedExifOrientationAction(const ImageInfo& info)
+{
+    DMetadata meta(info.fileUrl().toLocalFile());
+    int ori = (meta.isEmpty()) ? 0 : meta.getImageOrientation();
+    kDebug(digiKamAreaCode) << "ori: " << ori;
+
+    switch (ori)
+    {
+        case 1: d->imageSetExifOrientation1Action->setChecked(true); break;
+        case 2: d->imageSetExifOrientation2Action->setChecked(true); break;
+        case 3: d->imageSetExifOrientation3Action->setChecked(true); break;
+        case 4: d->imageSetExifOrientation4Action->setChecked(true); break;
+        case 5: d->imageSetExifOrientation5Action->setChecked(true); break;
+        case 6: d->imageSetExifOrientation6Action->setChecked(true); break;
+        case 7: d->imageSetExifOrientation7Action->setChecked(true); break;
+        case 8: d->imageSetExifOrientation8Action->setChecked(true); break;
+        default: slotResetExifOrientationActions(); break;
+    }
 }
 
 }  // namespace Digikam

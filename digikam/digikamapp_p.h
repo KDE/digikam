@@ -172,6 +172,7 @@ public:
         manualCameraActionGroup              = 0;
         solidCameraActionGroup               = 0;
         solidUsmActionGroup                  = 0;
+        exifOrientationActionGroup           = 0;
         eventLoop                            = 0;
         albumIconViewFilter                  = 0;
         contributeAction                     = 0;
@@ -234,14 +235,14 @@ public:
     KAction                            *imageWriteMetadataAction;
     KAction                            *imageReadMetadataAction;
     KAction                            *imageFindSimilarAction;
-    KAction                            *imageSetExifOrientation1Action;
-    KAction                            *imageSetExifOrientation2Action;
-    KAction                            *imageSetExifOrientation3Action;
-    KAction                            *imageSetExifOrientation4Action;
-    KAction                            *imageSetExifOrientation5Action;
-    KAction                            *imageSetExifOrientation6Action;
-    KAction                            *imageSetExifOrientation7Action;
-    KAction                            *imageSetExifOrientation8Action;
+    KToggleAction                      *imageSetExifOrientation1Action;
+    KToggleAction                      *imageSetExifOrientation2Action;
+    KToggleAction                      *imageSetExifOrientation3Action;
+    KToggleAction                      *imageSetExifOrientation4Action;
+    KToggleAction                      *imageSetExifOrientation5Action;
+    KToggleAction                      *imageSetExifOrientation6Action;
+    KToggleAction                      *imageSetExifOrientation7Action;
+    KToggleAction                      *imageSetExifOrientation8Action;
     KAction                            *imageRenameAction;
     KAction                            *imageDeleteAction;
     KActionMenu                        *imageExifOrientationActionMenu;
@@ -295,6 +296,7 @@ public:
     QActionGroup                       *manualCameraActionGroup;
     QActionGroup                       *solidCameraActionGroup;
     QActionGroup                       *solidUsmActionGroup;
+    QActionGroup                       *exifOrientationActionGroup;
 
     QMap<QString, QPointer<CameraUI> >  cameraUIMap;
 

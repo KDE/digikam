@@ -122,6 +122,7 @@ private:
     void setupStatusBar();
     void setupActions();
     void setupAccelerators();
+    void setupExifOrientationActions();
     void loadPlugins();
     void loadCameras();
     void populateThemes();
@@ -158,6 +159,8 @@ private Q_SLOTS:
     void slotSetup();
     void slotSetupCamera();
     void slotSetupChanged();
+    void slotSetCheckedExifOrientationAction(const ImageInfo& info);
+    void slotResetExifOrientationActions();
 
     void slotKipiPluginPlug();
 
