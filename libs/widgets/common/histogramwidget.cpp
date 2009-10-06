@@ -550,11 +550,11 @@ void HistogramWidget::paintEvent(QPaintEvent*)
        return;
     }
 
-    int    x, y;
-    int    yr, yg, yb;             // For all color channels.
-    int    wWidth  = width();
-    int    wHeight = height();
-    double max;
+    int             x, y;
+    int             yr, yg, yb;             // For all color channels.
+    int             wWidth  = width();
+    int             wHeight = height();
+    double          max;
     ImageHistogram* histogram;
 
     if (d->renderingType == ImageSelectionHistogram && m_selectionHistogram)
