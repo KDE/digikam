@@ -48,6 +48,7 @@ public:
     void     setCancel(bool *b);
 
     void     setProgressCallBackFunction(void *data=0, ToneMappingCallbackPtr cb=0);
+    void     postProgress(int progress);
 
     REALTYPE get_power(int nstage);
     REALTYPE get_blur(int nstage);

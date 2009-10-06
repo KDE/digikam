@@ -29,6 +29,7 @@
 #include "ToneMappingBase.h"
 #include "ToneMappingInt.h"
 #include "ToneMappingFloat.h"
+#include "debug.h"
 
 namespace DigikamLocalContrastImagesPlugin
 {
@@ -86,6 +87,8 @@ void LocalContrast::filterImage()
     }
 */
 
+    progressCallback(0);
+
     d->tonemappingFloat = new ToneMappingFloat();
     d->tonemappingFloat->apply_parameters(*d->par);
 
@@ -108,6 +111,8 @@ void LocalContrast::filterImage()
                 data[i+1] = dataImg[j+1];
                 data[i+2] = dataImg[j+2];
             }
+
+            progressCallback(10);
 
             d->tonemappingFloat->process_16bit_rgb_image(data, m_orgImage.width(), m_orgImage.height());
 
@@ -138,6 +143,8 @@ void LocalContrast::filterImage()
                 data[i+2] = m_orgImage.bits()[j+2];
             }
 
+            progressCallback(10);
+
             d->tonemappingFloat->process_8bit_rgb_image(data, m_orgImage.width(), m_orgImage.height());
 
             for(uint x=0; !m_cancel && (x < m_orgImage.width()); x++)
@@ -154,12 +161,16 @@ void LocalContrast::filterImage()
     }
 
     delete d->tonemappingFloat;
+    progressCallback(100);
 }
 
 void LocalContrast::progressCallback(int progress)
 {
     if (progress%5 == 0)
+    {
         postProgress(progress);
+//        kDebug(imagePluginsAreaCode) << "ToneMapping progress: " << progress;
+    }
 }
 
 } // namespace DigikamLocalContrastImagesPlugin

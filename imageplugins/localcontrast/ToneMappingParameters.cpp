@@ -83,6 +83,11 @@ void ToneMappingParameters::setProgressCallBackFunction(void *data, ToneMappingC
     info_data     = data;
 }
 
+void ToneMappingParameters::postProgress(int progress)
+{
+    info_callBack(info_data, progress);
+}
+
 REALTYPE ToneMappingParameters::get_power(int nstage)
 {
     REALTYPE power = stage[nstage].power;
