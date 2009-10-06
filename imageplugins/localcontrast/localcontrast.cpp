@@ -51,8 +51,10 @@ LocalContrast::LocalContrast(DImg *image, ToneMappingParameters *par, QObject *p
               : Digikam::DImgThreadedFilter(image, parent, "LocalContrast"),
                 d(new LocalContrastPriv)
 {
+    d->par              = par;
+    d->par->info_cancel = &m_cancel;
+
     initFilter();
-    d->par = par;
 }
 
 LocalContrast::~LocalContrast()

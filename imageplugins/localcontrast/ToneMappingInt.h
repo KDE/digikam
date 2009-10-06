@@ -31,32 +31,32 @@
 namespace DigikamLocalContrastImagesPlugin
 {
 
-class ToneMappingInt:public ToneMappingBase
+class ToneMappingInt : public ToneMappingBase
 {
 
 public:
 
     ToneMappingInt();
     ~ToneMappingInt();
-    void set_power(int nstage,REALTYPE value);
+    void set_power(int nstage, REALTYPE value);
     void set_function_id(int value);
 
-    void process_8bit_rgb_image(unsigned char *img,int sizex,int sizey);
+    void process_8bit_rgb_image(unsigned char *img, int sizex,int sizey);
     void recompute_func_table(int nstage);
     void update_preprocessed_values();
 
-    void get_min_max_data(unsigned char *img,int size,int &min,int &max);
-    void stretch_contrast_8bit_rgb_image(unsigned char *img,int sizex,int sizey,int min,int max,unsigned char *stretch_contrast_table=NULL);
+    void get_min_max_data(unsigned char *img, int size, int &min, int &max);
+    void stretch_contrast_8bit_rgb_image(unsigned char *img, int sizex, int sizey, int min, int max, unsigned char *stretch_contrast_table=NULL);
 
 private:
 
-    void inplace_blur_8bit_process(unsigned char *data,int sizex, int sizey,float blur);
+    void inplace_blur_8bit_process(unsigned char *data, int sizex, int sizey, float blur);
     inline unsigned char fast_func(unsigned char x1, unsigned char x2)
     {
         return current_func_lookup_table[(((int)x1)<<8)+x2];
     };
 
-    inline unsigned int max3(unsigned int x1,unsigned int x2,unsigned int x3)
+    inline unsigned int max3(unsigned int x1, unsigned int x2, unsigned int x3)
     {
         unsigned int max=x1;
         if (x2>max) max=x2;
@@ -64,7 +64,7 @@ private:
         return max;
     };
 
-    inline unsigned int min3(unsigned int x1,unsigned int x2,unsigned int x3)
+    inline unsigned int min3(unsigned int x1, unsigned int x2, unsigned int x3)
     {
         unsigned int min=x1;
         if (x2<min) min=x2;

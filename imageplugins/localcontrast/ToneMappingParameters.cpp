@@ -37,6 +37,7 @@ namespace DigikamLocalContrastImagesPlugin
 
 ToneMappingParameters::ToneMappingParameters()
 {
+    info_cancel      = 0;
     info_fast_mode   = true;
     high_saturation  = 100;
     low_saturation   = 100;
@@ -58,6 +59,19 @@ ToneMappingParameters::ToneMappingParameters()
 
 ToneMappingParameters::~ToneMappingParameters()
 {
+}
+
+bool ToneMappingParameters::cancel()
+{
+    if (info_cancel)
+        return *info_cancel;
+
+    return false;
+}
+
+void ToneMappingParameters::setCancel(bool *b)
+{
+    info_cancel = b;
 }
 
 REALTYPE ToneMappingParameters::get_power(int nstage)

@@ -41,26 +41,34 @@ public:
     ToneMappingParameters();
     ~ToneMappingParameters();
 
+    bool     cancel();
+    void     setCancel(bool *b);
+
     REALTYPE get_power(int nstage);
     REALTYPE get_blur(int nstage);
 
     REALTYPE get_unsharp_mask_power();
     REALTYPE get_unsharp_mask_blur();
 
-    void save_parameters(const char *filename);
-    bool load_parameters(const char *filename);
+    void     save_parameters(const char *filename);
+    bool     load_parameters(const char *filename);
 
-    bool info_fast_mode;
+public:
 
-    //parameters
-    int  low_saturation;
-    int  high_saturation;
-    bool stretch_contrast;
-    int  function_id;
+    /** To cancel computation from user interface.
+    */
+    bool* info_cancel;
+
+    bool  info_fast_mode;
+    bool  stretch_contrast;
+
+    int   low_saturation;
+    int   high_saturation;
+    int   function_id;
 
     struct
     {
-        bool enabled;
+        bool     enabled;
         REALTYPE power;
         REALTYPE blur;
     } stage[TONEMAPPING_MAX_STAGES];
