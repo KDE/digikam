@@ -213,7 +213,7 @@ void ToneMappingFloat::process_16bit_rgb_image(unsigned short int *img, int size
     for (int i=0 ; par.cancel() && (i < size) ; i++)
     {
         REALTYPE dither = ((rand()/65536)%65536)*inv_65536;
-        img[pos]        = (int)(tmpimage[pos]*65535.0+dither);
+        img[pos]        = (int)(tmpimage[pos]  *65535.0+dither);
         img[pos+1]      = (int)(tmpimage[pos+1]*65535.0+dither);
         img[pos+2]      = (int)(tmpimage[pos+2]*65535.0+dither);
         pos+=3;
