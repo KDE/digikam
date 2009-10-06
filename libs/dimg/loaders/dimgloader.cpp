@@ -35,10 +35,10 @@
 
 // Local includes
 
+#include "debug.h"
 #include "dimg_p.h"
 #include "dmetadata.h"
 #include "dimgloaderobserver.h"
-#include "debug.h"
 
 namespace Digikam
 {

@@ -50,9 +50,9 @@ extern "C"
 
 // Local includes
 
+#include "debug.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
-#include "debug.h"
 
 namespace Digikam
 {

@@ -6,7 +6,7 @@
  * Date        : 2006-06-14
  * Description : A JPEG2000 IO file for DImg framework
  *
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This implementation use Jasper API
  * library : http://www.ece.uvic.ca/~mdadams/jasper
@@ -44,10 +44,10 @@
 
 // Local includes
 
+#include "debug.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 #include "jp2kloader.h"
-#include "debug.h"
 
 namespace Digikam
 {

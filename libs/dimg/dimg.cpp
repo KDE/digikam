@@ -61,6 +61,7 @@ extern "C"
 
 // Local includes
 
+#include "debug.h"
 #include "pngloader.h"
 #include "jpegloader.h"
 #include "tiffloader.h"
@@ -73,7 +74,6 @@ extern "C"
 #include "exposurecontainer.h"
 #include "dmetadata.h"
 #include "dimgloaderobserver.h"
-#include "debug.h"
 
 typedef uint64_t ullong;
 typedef int64_t  llong;

@@ -49,9 +49,9 @@
 
 // Local includes
 
+#include "debug.h"
 #include "template.h"
 #include "version.h"
-#include "debug.h"
 #include "globals.h"
 
 using namespace KExiv2Iface;

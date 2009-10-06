@@ -61,11 +61,11 @@ extern "C"
 
 // Local includes
 
+#include "debug.h"
 #include "version.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 #include "dmetadata.h"
-#include "debug.h"
 
 #include "tiffloader.h"     //krazy:exclude=includes
 

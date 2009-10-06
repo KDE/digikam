@@ -41,6 +41,7 @@
 
 // Local includes
 
+#include "debug.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 #include "icctransform.h"
@@ -49,7 +50,6 @@
 #include "imagelevels.h"
 #include "bcgmodifier.h"
 #include "whitebalance.h"
-#include "debug.h"
 #include "globals.h"
 
 namespace Digikam

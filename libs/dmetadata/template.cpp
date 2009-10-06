@@ -25,8 +25,6 @@
 
 // KDE includes
 
-
-
 namespace Digikam
 {
 

@@ -54,10 +54,10 @@ extern "C"
 
 // Local includes
 
+#include "debug.h"
 #include "version.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
-#include "debug.h"
 
 #ifdef Q_CC_MSVC
 void _ReadProc(struct png_struct_def *png_ptr, unsigned char *data, unsigned int size)
