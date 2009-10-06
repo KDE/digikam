@@ -39,7 +39,6 @@
 #include <kaboutdata.h>
 #include <kapplication.h>
 #include <kconfig.h>
-
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
@@ -200,7 +199,7 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
                                         "very fast algorithm, which might produce artifacts on the image or a more precise "
                                         "algorithm, which is slower."));
     d->fastModeCheck->setChecked(false);
-    d->fastModeCheck->setEnabled(false);   // disable for the moment...
+    d->fastModeCheck->setVisible(false);   // disable for the moment...
 
     grid1->addWidget(label1,                    0, 0, 1, 1);
     grid1->addWidget(d->functionInput,          0, 1, 1, 1);
