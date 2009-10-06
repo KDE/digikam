@@ -125,8 +125,10 @@ void LocalContrast::filterImage()
 
             delete [] data;
         }
-        else // eight bit image
+        else
         {
+            // eight bit image
+
             uchar *data = new uchar[size];
 
             for(i=0, j=0; !m_cancel && (i < size); i+=3, j+=4)
