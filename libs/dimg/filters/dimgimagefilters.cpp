@@ -109,7 +109,7 @@ void DImgImageFilters::equalizeImage(uchar *data, int w, int h, bool sixteenBit)
        intensity.green += histogram->getValue(GreenChannel, i);
        intensity.blue  += histogram->getValue(BlueChannel, i);
        intensity.alpha += histogram->getValue(AlphaChannel, i);
-       map[i]          = intensity;
+       map[i]           = intensity;
     }
 
     // Stretch the histogram.
@@ -170,7 +170,7 @@ void DImgImageFilters::equalizeImage(uchar *data, int w, int h, bool sixteenBit)
             ptr[1] = green;
             ptr[2] = red;
             ptr[3] = alpha;
-            ptr += 4;
+            ptr   += 4;
         }
     }
     else               // 16 bits image.
@@ -201,7 +201,7 @@ void DImgImageFilters::equalizeImage(uchar *data, int w, int h, bool sixteenBit)
             ptr[1] = green;
             ptr[2] = red;
             ptr[3] = alpha;
-            ptr += 4;
+            ptr   += 4;
         }
     }
 
