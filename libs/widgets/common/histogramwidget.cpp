@@ -555,7 +555,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
     int    wWidth  = width();
     int    wHeight = height();
     double max;
-    class  ImageHistogram *histogram;
+    ImageHistogram* histogram;
 
     if (d->renderingType == ImageSelectionHistogram && m_selectionHistogram)
        histogram = m_selectionHistogram;
