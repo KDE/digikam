@@ -3,7 +3,7 @@ digiKam 1.0.0-beta6 - Release date: 2009-10-??
 
 NEW FEATURES:
 
-ImageEditor    : New Local COntrast tool to simulate HDR images.
+ImageEditor    : New Local Contrast tool to simulate HDR images (Tone Mapping).
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
