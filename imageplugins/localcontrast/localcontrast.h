@@ -52,7 +52,6 @@ public:
 
 private:
 
-    void cancelFilter();
     void filterImage();
 
 private:

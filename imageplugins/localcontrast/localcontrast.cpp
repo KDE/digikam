@@ -149,9 +149,4 @@ void LocalContrast::progressCallback(int progress)
     // TODO
 }
 
-void LocalContrast::cancelFilter()
-{
-    // TODO
-}
-
 } // namespace DigikamLocalContrastImagesPlugin
