@@ -5,7 +5,8 @@ NEW FEATURES:
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==>
+001 ==> 130942 : digiKam should display the default EXIF rotation currently used.
+002 ==>
 
 
 *********************************************************************************************************
