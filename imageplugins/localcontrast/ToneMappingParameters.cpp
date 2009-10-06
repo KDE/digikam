@@ -7,6 +7,7 @@
  * Description : LDR ToneMapper <http://zynaddsubfx.sourceforge.net/other/tonemapping>.
  *
  * Copyright (C) 2009 by Nasca Octavian Paul <zynaddsubfx at yahoo dot com>
+ * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,6 +44,8 @@ ToneMappingParameters::ToneMappingParameters()
     low_saturation   = 100;
     stretch_contrast = true;
     function_id      = 0;
+    info_callBack    = 0;
+    info_data        = 0;
 
     for (int i=0 ; i < TONEMAPPING_MAX_STAGES ; i++)
     {
@@ -72,6 +75,12 @@ bool ToneMappingParameters::cancel()
 void ToneMappingParameters::setCancel(bool *b)
 {
     info_cancel = b;
+}
+
+void ToneMappingParameters::setProgressCallBackFunction(void *data, ToneMappingCallbackPtr cb)
+{
+    info_callBack = cb;
+    info_data     = data;
 }
 
 REALTYPE ToneMappingParameters::get_power(int nstage)

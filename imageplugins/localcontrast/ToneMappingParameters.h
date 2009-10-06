@@ -7,6 +7,7 @@
  * Description : LDR ToneMapper <http://zynaddsubfx.sourceforge.net/other/tonemapping>.
  *
  * Copyright (C) 2009 by Nasca Octavian Paul <zynaddsubfx at yahoo dot com>
+ * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,6 +34,8 @@
 namespace DigikamLocalContrastImagesPlugin
 {
 
+typedef void (*ToneMappingCallbackPtr)(void *data, int progress);
+
 class ToneMappingParameters
 {
 
@@ -43,6 +46,8 @@ public:
 
     bool     cancel();
     void     setCancel(bool *b);
+
+    void     setProgressCallBackFunction(void *data=0, ToneMappingCallbackPtr cb=0);
 
     REALTYPE get_power(int nstage);
     REALTYPE get_blur(int nstage);
@@ -65,6 +70,11 @@ public:
     int   low_saturation;
     int   high_saturation;
     int   function_id;
+
+    /** For progress CallBack method from User interface
+     */
+    ToneMappingCallbackPtr info_callBack;
+    void*                  info_data;
 
     struct
     {
