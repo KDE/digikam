@@ -51,7 +51,7 @@ void ToneMappingFloat::process_rgb_image(REALTYPE *img, int sizex, int sizey)
     REALTYPE *blurimage = new REALTYPE[size];
     REALTYPE *srcimg    = new REALTYPE[size*3];
 
-    for (int i=0 ; i<(size*3) ; i++)
+    for (int i=0 ; i < (size*3) ; i++)
         srcimg[i]=img[i];
 
     if (par.stretch_contrast)
@@ -75,7 +75,7 @@ void ToneMappingFloat::process_rgb_image(REALTYPE *img, int sizex, int sizey)
 
         current_process_power_value = par.get_power(nstage);
         //blur
-        inplace_blur(blurimage,sizex,sizey,par.get_blur(nstage));
+        inplace_blur(blurimage, sizex,sizey, par.get_blur(nstage));
 
         //
         pos=0;
@@ -102,10 +102,10 @@ void ToneMappingFloat::process_rgb_image(REALTYPE *img, int sizex, int sizey)
     int high_saturation_value = 100-par.high_saturation;
     int low_saturation_value  = 100-par.low_saturation;
 
-    if ((par.high_saturation!=100)||(par.low_saturation!=100))
+    if ((par.high_saturation!=100) || (par.low_saturation!=100))
     {
         int pos=0;
-        for (int i=0 ; par.cancel() && (i<size) ; i++)
+        for (int i=0 ; par.cancel() && (i < size) ; i++)
         {
             REALTYPE src_h, src_s, src_v;
             REALTYPE dest_h, dest_s, dest_v;
@@ -131,7 +131,7 @@ void ToneMappingFloat::process_rgb_image(REALTYPE *img, int sizex, int sizey)
         REALTYPE *val = new REALTYPE[size];
         //compute the desatured image
         int pos=0;
-        for (int i=0 ; par.cancel() && (i<size) ; i++)
+        for (int i=0 ; par.cancel() && (i < size) ; i++)
         {
             val[i] = blurimage[i] = (img[pos]+img[pos+1]+img[pos+2])/3.0;
             //val[i]=blurimage[i]=max3(img[pos],img[pos+1],img[pos+2]);
@@ -146,17 +146,17 @@ void ToneMappingFloat::process_rgb_image(REALTYPE *img, int sizex, int sizey)
         REALTYPE threshold  = par.unsharp_mask.threshold*pow/250.0;
         REALTYPE threshold2 = threshold/2;
 
-        for (int i=0 ; par.cancel() && (i<size) ; i++)
+        for (int i=0 ; par.cancel() && (i < size) ; i++)
         {
             REALTYPE dval     = (val[i]-blurimage[i])*pow;
             REALTYPE abs_dval = fabs(dval);
-            if (abs_dval<threshold)
+            if (abs_dval < threshold)
             {
-                if (abs_dval>threshold2)
+                if (abs_dval > threshold2)
                 {
-                    bool sign = (dval<0.0);
+                    bool sign = (dval < 0.0);
                     dval      = (abs_dval-threshold2)*2.0;
-                    if (sign) dval=-dval;
+                    if (sign) dval =- dval;
                 }
                 else
                 {
@@ -164,7 +164,7 @@ void ToneMappingFloat::process_rgb_image(REALTYPE *img, int sizex, int sizey)
                 };
             };
 
-            REALTYPE r   = img[pos]+dval;
+            REALTYPE r   = img[pos]  +dval;
             REALTYPE g   = img[pos+1]+dval;
             REALTYPE b   = img[pos+2]+dval;
 
@@ -228,7 +228,7 @@ void ToneMappingFloat::process_8bit_rgb_image(unsigned char *img, int sizex, int
     REALTYPE *tmpimage  = new REALTYPE[size*3];
     const float inv_256 = 1.0/256.0;
 
-    for (int i=0 ; par.cancel() && (i<size*3) ; i++)
+    for (int i=0 ; par.cancel() && (i < size*3) ; i++)
     {
         //convert to floating point
         tmpimage[i]=img[i]/255.0;
@@ -239,10 +239,10 @@ void ToneMappingFloat::process_8bit_rgb_image(unsigned char *img, int sizex, int
     //convert back to 8 bits (with dithering)
     int pos=0;
 
-    for (int i=0 ; par.cancel() && (i<size) ; i++)
+    for (int i=0 ; par.cancel() && (i < size) ; i++)
     {
         REALTYPE dither = ((rand()/256)%256)*inv_256;
-        img[pos]        = (int)(tmpimage[pos]*255.0+dither);
+        img[pos]        = (int)(tmpimage[pos]  *255.0+dither);
         img[pos+1]      = (int)(tmpimage[pos+1]*255.0+dither);
         img[pos+2]      = (int)(tmpimage[pos+2]*255.0+dither);
         pos+=3;
@@ -259,7 +259,7 @@ void ToneMappingFloat::inplace_blur(REALTYPE *data,int sizex, int sizey, REALTYP
 
     REALTYPE a = exp(log(0.25)/blur);
 
-    if ((a<=0.0)||(a>=1.0)) return;
+    if ((a<=0.0) || (a>=1.0)) return;
 
     a *= a;
     REALTYPE denormal_remove = 1e-15;
@@ -272,7 +272,7 @@ void ToneMappingFloat::inplace_blur(REALTYPE *data,int sizex, int sizey, REALTYP
             REALTYPE old = data[pos];
             pos++;
 
-            for (int x=1 ; par.cancel() && (x<sizex) ; x++)
+            for (int x=1 ; par.cancel() && (x < sizex) ; x++)
             {
                 old       = (data[pos]*(1-a)+old*a)+denormal_remove;
                 data[pos] = old;
@@ -281,7 +281,7 @@ void ToneMappingFloat::inplace_blur(REALTYPE *data,int sizex, int sizey, REALTYP
 
             pos = y*sizex+sizex-1;
 
-            for (int x=1 ; par.cancel() && (x<sizex) ; x++)
+            for (int x=1 ; par.cancel() && (x < sizex) ; x++)
             {
                 old       = (data[pos]*(1-a)+old*a)+denormal_remove;
                 data[pos] = old;
@@ -289,12 +289,12 @@ void ToneMappingFloat::inplace_blur(REALTYPE *data,int sizex, int sizey, REALTYP
             };
         };
 
-        for (int x=0 ; par.cancel() && (x<sizex) ; x++)
+        for (int x=0 ; par.cancel() && (x < sizex) ; x++)
         {
             int pos      = x;
             REALTYPE old = data[pos];
 
-            for (int y=1 ; par.cancel() && (y<sizey) ; y++)
+            for (int y=1 ; par.cancel() && (y < sizey) ; y++)
             {
                 old       = (data[pos]*(1-a)+old*a)+denormal_remove;
                 data[pos] = old;
@@ -303,7 +303,7 @@ void ToneMappingFloat::inplace_blur(REALTYPE *data,int sizex, int sizey, REALTYP
 
             pos = x+sizex*(sizey-1);
 
-            for (int y=1 ; par.cancel() && (y<sizey) ; y++)
+            for (int y=1 ; par.cancel() && (y < sizey) ; y++)
             {
                 old       = (data[pos]*(1-a)+old*a)+denormal_remove;
                 data[pos] = old;
@@ -320,7 +320,7 @@ void ToneMappingFloat::stretch_contrast(REALTYPE *data, int datasize)
     //first, we compute the histogram
     unsigned int histogram[histogram_size];
 
-    for (unsigned int i=0 ; i < histogram_size ; i++) histogram[i]=0;
+    for (unsigned int i=0 ; i < histogram_size ; i++) histogram[i] = 0;
 
     for (unsigned int i=0 ; par.cancel() && (i < (unsigned int)datasize) ; i++)
     {
@@ -365,14 +365,14 @@ void ToneMappingFloat::stretch_contrast(REALTYPE *data, int datasize)
     REALTYPE min_src_val = min/255.0;
     REALTYPE max_src_val = max/255.0;
 
-    for (int i=0 ; par.cancel() && (i<datasize) ; i++)
+    for (int i=0 ; par.cancel() && (i < datasize) ; i++)
     {
         //stretch the contrast
         REALTYPE x = data[i];
         x          = (x-min_src_val)/(max_src_val-min_src_val);
-        if (x<0.0) x=0.0;
-        if (x>1.0) x=1.0;
-        data[i] = x;
+        if (x < 0.0) x = 0.0;
+        if (x > 1.0) x = 1.0;
+        data[i]    = x;
     };
 }
 
