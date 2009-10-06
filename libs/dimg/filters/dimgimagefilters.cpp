@@ -396,10 +396,6 @@ void DImgImageFilters::stretchContrastImage(uchar *data, int w, int h, bool sixt
        }
     }
 
-    // FIX invalid reads of memory.
-    // how was this NOT crashing the following code? weird!
-//    delete histogram;
-
     // Stretch the histogram to create the normalized image mapping.
 
     memset(normalize_map, 0, histogram->getHistogramSegments()*sizeof(struct int_packet));
