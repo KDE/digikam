@@ -64,7 +64,7 @@ private:
         //hue
         if (min == max)
         {
-            h=0.0;
+            h = 0.0;
         }
         else
         {
@@ -82,9 +82,9 @@ private:
                 {
                     //max==b
                     h = 60.0*(r-g)/delta+240.0;
-                };
-            };
-        };
+                }
+            }
+        }
 
         //saturation
         if (max < 1e-6)
@@ -94,7 +94,7 @@ private:
         else
         {
             s = 1.0-min/max;
-        };
+        }
 
         //value
         v = max;
@@ -131,8 +131,8 @@ private:
             case 5:
                 r = v ; g = p ; b = q;
                 break;
-        };
-    };
+        }
+    }
 };
 
 } // namespace DigikamNoiseReductionImagesPlugin
