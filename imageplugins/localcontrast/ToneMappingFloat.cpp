@@ -81,11 +81,11 @@ void ToneMappingFloat::process_rgb_image(REALTYPE *img, int sizex, int sizey)
         pos=0;
         for (int i=0 ; par.cancel() && (i<size) ; i++)
         {
-            REALTYPE src_r = img[pos];
-            REALTYPE src_g = img[pos+1];
-            REALTYPE src_b = img[pos+2];
+            REALTYPE src_r  = img[pos];
+            REALTYPE src_g  = img[pos+1];
+            REALTYPE src_b  = img[pos+2];
 
-            REALTYPE blur  = blurimage[i];
+            REALTYPE blur   = blurimage[i];
 
             REALTYPE dest_r = func(src_r,blur);
             REALTYPE dest_g = func(src_g,blur);
@@ -164,9 +164,9 @@ void ToneMappingFloat::process_rgb_image(REALTYPE *img, int sizex, int sizey)
                 };
             };
 
-            REALTYPE r = img[pos]+dval;
-            REALTYPE g = img[pos+1]+dval;
-            REALTYPE b = img[pos+2]+dval;
+            REALTYPE r   = img[pos]+dval;
+            REALTYPE g   = img[pos+1]+dval;
+            REALTYPE b   = img[pos+2]+dval;
 
             if (r<0.0) r = 0.0;
             if (r>1.0) r = 1.0;
@@ -175,11 +175,11 @@ void ToneMappingFloat::process_rgb_image(REALTYPE *img, int sizex, int sizey)
             if (b<0.0) b = 0.0;
             if (b>1.0) b = 1.0;
 
-            img[pos]   = r;
-            img[pos+1] = g;
-            img[pos+2] = b;
+            img[pos]     = r;
+            img[pos+1]   = g;
+            img[pos+2]   = b;
 
-            pos+=3;
+            pos += 3;
         };
 
         delete [] val;
@@ -222,7 +222,7 @@ void ToneMappingFloat::process_16bit_rgb_image(unsigned short int *img, int size
     delete [] tmpimage;
 }
 
-void ToneMappingFloat::process_8bit_rgb_image(unsigned char *img,int sizex,int sizey)
+void ToneMappingFloat::process_8bit_rgb_image(unsigned char *img, int sizex, int sizey)
 {
     int size            = sizex*sizey;
     REALTYPE *tmpimage  = new REALTYPE[size*3];

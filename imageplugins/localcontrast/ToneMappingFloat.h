@@ -31,7 +31,7 @@
 namespace DigikamLocalContrastImagesPlugin
 {
 
-class ToneMappingFloat:public ToneMappingBase
+class ToneMappingFloat : public ToneMappingBase
 {
 
 public:
@@ -48,6 +48,7 @@ private:
 
     void inplace_blur(REALTYPE *data, int sizex, int sizey, REALTYPE blur);
     void stretch_contrast(REALTYPE *data, int datasize);
+
     inline void rgb2hsv(const REALTYPE &r, const REALTYPE &g, const REALTYPE &b,
                         REALTYPE &h,REALTYPE &s, REALTYPE &v)
     {
