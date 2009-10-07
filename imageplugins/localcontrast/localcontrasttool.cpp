@@ -155,8 +155,8 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel|
-//                              EditorToolSettings::Load|
-//                              EditorToolSettings::SaveAs|
+                                EditorToolSettings::Load|
+                                EditorToolSettings::SaveAs|
                                 EditorToolSettings::Try);
 
 
@@ -622,82 +622,97 @@ void LocalContrastTool::putFinalData()
     iface.putOriginalImage(i18n("Tone Mapping"), filter()->getTargetImage().bits());
 }
 
-// void LocalContrastTool::slotLoadSettings()
-// {
-//     KUrl loadRestorationFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
-//                                QString( "*" ), kapp->activeWindow(),
-//                                QString( i18n("Photograph Noise Reduction Settings File to Load")) );
-//     if ( loadRestorationFile.isEmpty() )
-//         return;
-//
-//     QFile file(loadRestorationFile.toLocalFile());
-//
-//     if ( file.open(QIODevice::ReadOnly) )
-//     {
-//         QTextStream stream( &file );
-//         if ( stream.readLine() != "# Photograph Noise Reduction Configuration File" )
-//         {
-//             KMessageBox::error(kapp->activeWindow(),
-//                                i18n("\"%1\" is not a Photograph Noise Reduction settings text file.",
-//                                     loadRestorationFile.fileName()));
-//             file.close();
-//             return;
-//         }
-//
-//         blockSignals(true);
-//         d->radiusInput->setValue( stream.readLine().toDouble() );
-//         d->lumToleranceInput->setValue( stream.readLine().toDouble() );
-//         d->thresholdInput->setValue( stream.readLine().toDouble() );
-//         d->textureInput->setValue( stream.readLine().toDouble() );
-//         d->sharpnessInput->setValue( stream.readLine().toDouble() );
-//         d->csmoothInput->setValue( stream.readLine().toDouble() );
-//         d->lookaheadInput->setValue( stream.readLine().toDouble() );
-//         d->gammaInput->setValue( stream.readLine().toDouble() );
-//         d->dampingInput->setValue( stream.readLine().toDouble() );
-//         d->phaseInput->setValue( stream.readLine().toDouble() );
-//         blockSignals(false);
-// //         slotEffect();
-//     }
-//     else
-//     {
-//         KMessageBox::error(kapp->activeWindow(), i18n("Cannot load settings from the Photograph Noise Reduction text file."));
-//     }
-//
-//     file.close();
-// }
+void LocalContrastTool::slotLoadSettings()
+{
+    KUrl loadFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
+                    QString( "*" ), kapp->activeWindow(),
+                    QString( i18n("Photograph Tone Mapping Settings File to Load")) );
+    if ( loadFile.isEmpty() )
+        return;
 
-// void LocalContrastTool::slotSaveAsSettings()
-// {
-//     KUrl saveRestorationFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
-//                                QString( "*" ), kapp->activeWindow(),
-//                                QString( i18n("Photograph Noise Reduction Settings File to Save")) );
-//     if ( saveRestorationFile.isEmpty() )
-//         return;
-//
-//     QFile file(saveRestorationFile.toLocalFile());
-//
-//     if ( file.open(QIODevice::WriteOnly) )
-//     {
-//         QTextStream stream( &file );
-//         stream << "# Photograph Noise Reduction Configuration File\n";
-//         stream << d->radiusInput->value() << "\n";
-//         stream << d->lumToleranceInput->value() << "\n";
-//         stream << d->thresholdInput->value() << "\n";
-//         stream << d->textureInput->value() << "\n";
-//         stream << d->sharpnessInput->value() << "\n";
-//         stream << d->csmoothInput->value() << "\n";
-//         stream << d->lookaheadInput->value() << "\n";
-//         stream << d->gammaInput->value() << "\n";
-//         stream << d->dampingInput->value() << "\n";
-//         stream << d->phaseInput->value() << "\n";
-//
-//     }
-//     else
-//     {
-//         KMessageBox::error(kapp->activeWindow(), i18n("Cannot save settings to the Photograph Noise Reduction text file."));
-//     }
-//
-//     file.close();
-// }
+    QFile file(loadFile.toLocalFile());
+
+    if ( file.open(QIODevice::ReadOnly) )
+    {
+        QTextStream stream( &file );
+        if ( stream.readLine() != "# Photograph Tone Mapping Configuration File" )
+        {
+            KMessageBox::error(kapp->activeWindow(),
+                               i18n("\"%1\" is not a Photograph Tone Mapping settings text file.",
+                                    loadFile.fileName()));
+            file.close();
+            return;
+        }
+
+        blockSignals(true);
+        d->stretchContrastCheck->setChecked( stream.readLine().toInt() );
+        d->fastModeCheck->setChecked( stream.readLine().toInt() );
+        d->stageOne->setChecked( stream.readLine().toInt() );
+        d->stageTwo->setChecked( stream.readLine().toInt() );
+        d->stageThree->setChecked( stream.readLine().toInt() );
+        d->stageFour->setChecked( stream.readLine().toInt() );
+        d->lowSaturationInput->setValue( stream.readLine().toInt() );
+        d->highSaturationInput->setValue( stream.readLine().toInt() );
+        d->functionInput->setCurrentIndex( stream.readLine().toInt() );
+        d->powerInput1->setValue( stream.readLine().toDouble() );
+        d->blurInput1->setValue( stream.readLine().toDouble() );
+        d->powerInput2->setValue( stream.readLine().toDouble() );
+        d->blurInput2->setValue( stream.readLine().toDouble() );
+        d->powerInput3->setValue( stream.readLine().toDouble() );
+        d->blurInput3->setValue( stream.readLine().toDouble() );
+        d->powerInput4->setValue( stream.readLine().toDouble() );
+        d->blurInput4->setValue( stream.readLine().toDouble() );
+        blockSignals(false);
+    }
+    else
+    {
+        KMessageBox::error(kapp->activeWindow(),
+                           i18n("Cannot load settings from the Photograph Tone Mapping text file."));
+    }
+
+    file.close();
+}
+
+void LocalContrastTool::slotSaveAsSettings()
+{
+    KUrl saveFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
+                    QString( "*" ), kapp->activeWindow(),
+                    QString( i18n("Photograph Tone Mapping Settings File to Save")) );
+    if ( saveFile.isEmpty() )
+        return;
+
+    QFile file(saveFile.toLocalFile());
+
+    if ( file.open(QIODevice::WriteOnly) )
+    {
+        QTextStream stream( &file );
+        stream << "# Photograph Tone Mapping Configuration File\n";
+
+        stream << d->stretchContrastCheck->isChecked() << "\n";
+        stream << d->fastModeCheck->isChecked() << "\n";
+        stream << d->stageOne->isChecked() << "\n";
+        stream << d->stageTwo->isChecked() << "\n";
+        stream << d->stageThree->isChecked() << "\n";
+        stream << d->stageFour->isChecked() << "\n";
+        stream << d->lowSaturationInput->value() << "\n";
+        stream << d->highSaturationInput->value() << "\n";
+        stream << d->functionInput->currentIndex() << "\n";
+        stream << d->powerInput1->value() << "\n";
+        stream << d->blurInput1->value() << "\n";
+        stream << d->powerInput2->value() << "\n";
+        stream << d->blurInput2->value() << "\n";
+        stream << d->powerInput3->value() << "\n";
+        stream << d->blurInput3->value() << "\n";
+        stream << d->powerInput4->value() << "\n";
+        stream << d->blurInput4->value() << "\n";
+    }
+    else
+    {
+        KMessageBox::error(kapp->activeWindow(),
+                           i18n("Cannot save settings to the Photograph Tone Mapping text file."));
+    }
+
+    file.close();
+}
 
 } // namespace DigikamNoiseReductionImagesPlugin
