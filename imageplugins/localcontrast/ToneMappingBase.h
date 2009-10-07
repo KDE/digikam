@@ -45,14 +45,14 @@ public:
 
     REALTYPE func(REALTYPE x1,REALTYPE x2);
 
-    virtual void set_blur(int nstage,REALTYPE value);//1..5000
-    virtual void set_power(int nstage,REALTYPE value);//0..100.0
-    virtual void set_low_saturation(int value);//0..100
-    virtual void set_high_saturation(int value);//0..100
+    virtual void set_blur(int nstage, REALTYPE value);      //1..5000
+    virtual void set_power(int nstage, REALTYPE value);     //0..100.0
+    virtual void set_low_saturation(int value);             //0..100
+    virtual void set_high_saturation(int value);            //0..100
     virtual void set_stretch_contrast(bool value);
-    virtual void set_function_id (int value);//0..1
+    virtual void set_function_id (int value);               //0..1
 
-    void set_enabled(int nstage,bool enabled)
+    void set_enabled(int nstage, bool enabled)
     {
         par.stage[nstage].enabled=enabled;
     };
@@ -64,31 +64,31 @@ public:
 
     void set_unsharp_mask_enabled(bool value)
     {
-        par.unsharp_mask.enabled=value;
+        par.unsharp_mask.enabled = value;
     };
 
     void set_unsharp_mask_power(float value)
     {
-        if (value<0.0) value=0.0;
-        if (value>100.0) value=100.0;
-        par.unsharp_mask.power=value;
+        if (value < 0.0) value = 0.0;
+        if (value > 100.0) value = 100.0;
+        par.unsharp_mask.power = value;
     };
 
     void set_unsharp_mask_blur(float value)
     {
-        if (value<0.0) value=0.0;
-        if (value>5000.0) value=5000.0;
-        par.unsharp_mask.blur=value;
+        if (value < 0.0) value = 0.0;
+        if (value > 5000.0) value = 5000.0;
+        par.unsharp_mask.blur = value;
     };
 
     void set_unsharp_mask_threshold(int value)
     {
-        if (value<0) value=0;
-        if (value>100) value=100;
-        par.unsharp_mask.threshold=value;
+        if (value < 0) value = 0;
+        if (value > 100) value = 100;
+        par.unsharp_mask.threshold = value;
     };
 
-    virtual void process_8bit_rgb_image(unsigned char *img,int sizex,int sizey)=0;
+    virtual void process_8bit_rgb_image(unsigned char *img, int sizex, int sizey)=0;
     virtual void update_preprocessed_values()=0;
     void apply_parameters(ToneMappingParameters inpar);
 
@@ -159,7 +159,7 @@ public:
 
     void set_current_stage(int nstage)
     {
-        current_process_power_value=par.get_power(nstage);
+        current_process_power_value = par.get_power(nstage);
     };
 
     void save_parameters(const char *filename);
@@ -167,7 +167,7 @@ public:
 
     void set_preview_zoom(REALTYPE val)
     {
-        if ((val>0.001)&&(val<1000.0)) preview_zoom=val;
+        if ((val > 0.001) && (val < 1000.0)) preview_zoom = val;
     };
 
 protected:
