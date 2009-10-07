@@ -596,13 +596,9 @@ void LocalContrastTool::prepareEffect()
     d->expanderBox->setEnabled(false);
 
     ToneMappingParameters *par = createParams();
+    DImg image                 = d->previewWidget->getOriginalRegionImage();
 
-    DImg image   = d->previewWidget->getOriginalRegionImage();
-    DImg *image2 = new DImg(image.width(), image.height(), image.sixteenBit(), image.hasAlpha(), image.bits());
-
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new LocalContrast(image2, par, this)));
-
-//     delete image2;
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new LocalContrast(&image, par, this)));
 }
 
 void LocalContrastTool::prepareFinal()
