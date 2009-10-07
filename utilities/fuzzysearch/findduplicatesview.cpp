@@ -75,8 +75,8 @@ public:
         progressBar          = 0;
         thumbLoadThread      = 0;
         includeAlbumsLabel   = 0;
-        thresholdLabel       = 0;
-        threshold            = 0;
+        similarityLabel      = 0;
+        similarity           = 0;
         albumSelectCB        = 0;
         tagSelectCB          = 0;
         albumModel           = 0;
@@ -87,9 +87,9 @@ public:
     bool                         cancelFindDuplicates;
 
     QLabel*                      includeAlbumsLabel;
-    QLabel*                      thresholdLabel;
+    QLabel*                      similarityLabel;
 
-    QSpinBox*                    threshold;
+    QSpinBox*                    similarity;
 
     QPushButton*                 scanDuplicatesBtn;
     QPushButton*                 updateFingerPrtBtn;
@@ -162,14 +162,14 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    d->threshold = new QSpinBox();
-    d->threshold->setRange(0, 100);
-    d->threshold->setValue(90);
-    d->threshold->setSingleStep(1);
-    d->threshold->setSuffix(QChar('%'));
+    d->similarity = new QSpinBox();
+    d->similarity->setRange(0, 100);
+    d->similarity->setValue(90);
+    d->similarity->setSingleStep(1);
+    d->similarity->setSuffix(QChar('%'));
 
-    d->thresholdLabel = new QLabel(i18n("Threshold:"));
-    d->thresholdLabel->setBuddy(d->threshold);
+    d->similarityLabel = new QLabel(i18n("Similarity:"));
+    d->similarityLabel->setBuddy(d->similarity);
 
     // ---------------------------------------------------------------
 
@@ -178,8 +178,8 @@ FindDuplicatesView::FindDuplicatesView(QWidget *parent)
     mainLayout->addWidget(d->includeAlbumsLabel, 1, 0, 1, 1);
     mainLayout->addWidget(d->albumSelectCB,      1, 1, 1,-1);
     mainLayout->addWidget(d->tagSelectCB,        2, 1, 1,-1);
-    mainLayout->addWidget(d->thresholdLabel,     3, 0, 1, 1);
-    mainLayout->addWidget(d->threshold,          3, 2, 1, 1);
+    mainLayout->addWidget(d->similarityLabel,    3, 0, 1, 1);
+    mainLayout->addWidget(d->similarity,         3, 2, 1, 1);
     mainLayout->addWidget(d->updateFingerPrtBtn, 4, 0, 1,-1);
     mainLayout->addWidget(d->scanDuplicatesBtn,  5, 0, 1,-1);
     mainLayout->addWidget(d->progressBar,        6, 0, 1,-1);
@@ -373,8 +373,8 @@ void FindDuplicatesView::enableControlWidgets(bool val)
     d->includeAlbumsLabel->setEnabled(val);
     d->albumSelectCB->setEnabled(val);
     d->tagSelectCB->setEnabled(val);
-    d->thresholdLabel->setEnabled(val);
-    d->threshold->setEnabled(val);
+    d->similarityLabel->setEnabled(val);
+    d->similarity->setEnabled(val);
 
     d->progressBar->progressBarMode(val ? StatusProgressBar::TextMode
                                         : StatusProgressBar::CancelProgressBarMode);
@@ -400,7 +400,7 @@ void FindDuplicatesView::slotFindDuplicates()
 
     // --------------------------------------------------------
 
-    double thresh = d->threshold->value() / 100.0;
+    double thresh = d->similarity->value() / 100.0;
 
     KIO::Job *job = ImageLister::startListJob(DatabaseUrl::searchUrl(-1));
     job->addMetaData("duplicates", "normal");
