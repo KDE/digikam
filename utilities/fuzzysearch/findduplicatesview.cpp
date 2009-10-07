@@ -69,44 +69,42 @@ public:
 
     FindDuplicatesViewPriv()
     {
-        listView                = 0;
-        scanDuplicatesBtn       = 0;
-        updateFingerPrtBtn      = 0;
-        progressBar             = 0;
-        thumbLoadThread         = 0;
-        includeAlbumsLabel      = 0;
-        thresholdLabel          = 0;
-        threshold               = 0;
-        albumSelectCB           = 0;
-        tagSelectCB             = 0;
-        albumModel              = 0;
-        tagModel                = 0;
-        cancelFindDuplicates    = false;
+        listView             = 0;
+        scanDuplicatesBtn    = 0;
+        updateFingerPrtBtn   = 0;
+        progressBar          = 0;
+        thumbLoadThread      = 0;
+        includeAlbumsLabel   = 0;
+        thresholdLabel       = 0;
+        threshold            = 0;
+        albumSelectCB        = 0;
+        tagSelectCB          = 0;
+        albumModel           = 0;
+        tagModel             = 0;
+        cancelFindDuplicates = false;
     }
 
-    bool                cancelFindDuplicates;
+    bool                         cancelFindDuplicates;
 
-    QLabel              *includeAlbumsLabel;
-    QLabel              *thresholdLabel;
+    QLabel*                      includeAlbumsLabel;
+    QLabel*                      thresholdLabel;
 
-    QSpinBox            *threshold;
+    QSpinBox*                    threshold;
 
-    QPushButton         *scanDuplicatesBtn;
-    QPushButton         *updateFingerPrtBtn;
+    QPushButton*                 scanDuplicatesBtn;
+    QPushButton*                 updateFingerPrtBtn;
 
-    QTreeWidget         *listView;
+    QTreeWidget*                 listView;
 
-    StatusProgressBar   *progressBar;
+    StatusProgressBar*           progressBar;
 
-    ThumbnailLoadThread *thumbLoadThread;
+    ThumbnailLoadThread*         thumbLoadThread;
 
-    AlbumSelectComboBox *albumSelectCB;
-    AlbumSelectComboBox *tagSelectCB;
+    AlbumSelectComboBox*         albumSelectCB;
+    AlbumSelectComboBox*         tagSelectCB;
 
-    AbstractCheckableAlbumModel
-                        *albumModel;
-    AbstractCheckableAlbumModel
-                        *tagModel;
+    AbstractCheckableAlbumModel* albumModel;
+    AbstractCheckableAlbumModel* tagModel;
 };
 
 FindDuplicatesView::FindDuplicatesView(QWidget *parent)
