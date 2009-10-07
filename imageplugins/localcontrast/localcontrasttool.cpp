@@ -95,12 +95,15 @@ public:
         previewWidget       = 0;
         expanderBox         = 0;
         gboxSettings        = 0;
+        label4              = 0;
+        label5              = 0;
+        label6              = 0;
+        label7              = 0;
+        label8              = 0;
+        label9              = 0;
+        label10             = 0;
+        label11             = 0;
     }
-
-    RIntNumInput*       lowSaturationInput;
-    RIntNumInput*       highSaturationInput;
-
-    RComboBox*          functionInput;
 
     QCheckBox*          stretchContrastCheck;
     QCheckBox*          fastModeCheck;
@@ -108,6 +111,20 @@ public:
     QCheckBox*          stageTwo;
     QCheckBox*          stageThree;
     QCheckBox*          stageFour;
+
+    QLabel*             label4;
+    QLabel*             label5;
+    QLabel*             label6;
+    QLabel*             label7;
+    QLabel*             label8;
+    QLabel*             label9;
+    QLabel*             label10;
+    QLabel*             label11;
+
+    RIntNumInput*       lowSaturationInput;
+    RIntNumInput*       highSaturationInput;
+
+    RComboBox*          functionInput;
 
     RDoubleNumInput*    powerInput1;
     RDoubleNumInput*    blurInput1;
@@ -118,8 +135,9 @@ public:
     RDoubleNumInput*    powerInput4;
     RDoubleNumInput*    blurInput4;
 
-    ImagePanelWidget*   previewWidget;
     RExpanderBox*       expanderBox;
+
+    ImagePanelWidget*   previewWidget;
     EditorToolSettings* gboxSettings;
 };
 
@@ -177,8 +195,8 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     d->highSaturationInput->setSliderEnabled(true);
     d->highSaturationInput->setObjectName("highSaturationInput");
     d->highSaturationInput->setWhatsThis(i18n("<b>High and low saturation</b>: Usually the (perceived) saturation is "
-                                             "increased. The user can choose to lower the saturation on original highlight "
-                                             "and shadows from the image with these parameters."));
+                                              "increased. The user can choose to lower the saturation on original highlight "
+                                              "and shadows from the image with these parameters."));
 
     // -------------------------------------------------------------
 
@@ -220,10 +238,11 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     d->stageOne         = new QCheckBox(i18n("Enabled"), secondPage);
     d->stageOne->setWhatsThis(i18n("Check to enable this stage."));
     d->stageOne->setChecked(false);
+    d->stageOne->setObjectName("stageOne");
 
     // -------------------------------------------------------------
 
-    QLabel* label4 = new QLabel(i18n("Power:"), secondPage);
+    d->label4      = new QLabel(i18n("Power:"), secondPage);
     d->powerInput1 = new RDoubleNumInput(firstPage);
     d->powerInput1->input()->setRange(0.0, 100.0, 1.0, true);
     d->powerInput1->setDefaultValue(50.0);
@@ -232,21 +251,24 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel* label5 = new QLabel(i18n("Blur:"), secondPage);
+    d->label5      = new QLabel(i18n("Blur:"), secondPage);
     d->blurInput1  = new RDoubleNumInput(firstPage);
     d->blurInput1->input()->setRange(0.0, 1000.0, 1.0, true);
     d->blurInput1->setDefaultValue(500.0);
     d->blurInput1->setObjectName("blurInput1");
     d->blurInput1->setWhatsThis(i18n("<b>Blur</b>: How strong the image is blured before combining with the original "
-                                    "image with the tonemapping function."));
+                                     "image with the tonemapping function."));
 
     grid2->addWidget(d->stageOne,    0, 0, 1, 1);
-    grid2->addWidget(label4,         1, 0, 1, 1);
+    grid2->addWidget(d->label4,      1, 0, 1, 1);
     grid2->addWidget(d->powerInput1, 1, 1, 1, 1);
-    grid2->addWidget(label5,         2, 0, 1, 1);
+    grid2->addWidget(d->label5,      2, 0, 1, 1);
     grid2->addWidget(d->blurInput1,  2, 1, 1, 1);
     grid2->setMargin(d->gboxSettings->spacingHint());
     grid2->setSpacing(d->gboxSettings->spacingHint());
+
+    connect(d->stageOne,SIGNAL(toggled(bool)),
+            this, SLOT(slotStage1Enabled(bool)));
 
     // -------------------------------------------------------------
 
@@ -256,10 +278,11 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     d->stageTwo = new QCheckBox(i18n("Enabled"), thirdPage);
     d->stageTwo->setWhatsThis(i18n("Check to enable this stage."));
     d->stageTwo->setChecked(false);
+    d->stageTwo->setObjectName("stageTwo");
 
     // -------------------------------------------------------------
 
-    QLabel* label6 = new QLabel(i18n("Power:"), thirdPage);
+    d->label6      = new QLabel(i18n("Power:"), thirdPage);
     d->powerInput2 = new RDoubleNumInput(thirdPage);
     d->powerInput2->input()->setRange(0.0, 100.0, 1.0, true);
     d->powerInput2->setDefaultValue(50.0);
@@ -268,8 +291,8 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel* label7 = new QLabel(i18n("Blur:"), thirdPage);
-    d->blurInput2  = new RDoubleNumInput(thirdPage);
+    d->label7     = new QLabel(i18n("Blur:"), thirdPage);
+    d->blurInput2 = new RDoubleNumInput(thirdPage);
     d->blurInput2->input()->setRange(0.0, 1000.0, 1.0, true);
     d->blurInput2->setDefaultValue(500.0);
     d->blurInput2->setObjectName("blurInput2");
@@ -277,12 +300,15 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
                                      "image with the tonemapping function."));
 
     grid3->addWidget(d->stageTwo,    0, 0, 1, 1);
-    grid3->addWidget(label6,         1, 0, 1, 1);
+    grid3->addWidget(d->label6,      1, 0, 1, 1);
     grid3->addWidget(d->powerInput2, 1, 1, 1, 1);
-    grid3->addWidget(label7,         2, 0, 1, 1);
+    grid3->addWidget(d->label7,      2, 0, 1, 1);
     grid3->addWidget(d->blurInput2,  2, 1, 1, 1);
     grid3->setMargin(d->gboxSettings->spacingHint());
     grid3->setSpacing(d->gboxSettings->spacingHint());
+
+    connect(d->stageTwo,SIGNAL(toggled(bool)),
+            this, SLOT(slotStage2Enabled(bool)));
 
     // -------------------------------------------------------------
 
@@ -292,10 +318,11 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     d->stageThree = new QCheckBox(i18n("Enabled"), fourthPage);
     d->stageThree->setWhatsThis(i18n("Check to enable this stage."));
     d->stageThree->setChecked(false);
+    d->stageThree->setObjectName("stageThree");
 
     // -------------------------------------------------------------
 
-    QLabel* label8 = new QLabel(i18n("Power:"), fourthPage);
+    d->label8      = new QLabel(i18n("Power:"), fourthPage);
     d->powerInput3 = new RDoubleNumInput(fourthPage);
     d->powerInput3->input()->setRange(0.0, 100.0, 1.0, true);
     d->powerInput3->setDefaultValue(50.0);
@@ -304,35 +331,39 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel* label9 = new QLabel(i18n("Blur:"), fourthPage);
-    d->blurInput3  = new RDoubleNumInput(fourthPage);
+    d->label9     = new QLabel(i18n("Blur:"), fourthPage);
+    d->blurInput3 = new RDoubleNumInput(fourthPage);
     d->blurInput3->input()->setRange(0.0, 1000.0, 1.0, true);
     d->blurInput3->setDefaultValue(500.0);
     d->blurInput3->setObjectName("blurInput3");
     d->blurInput3->setWhatsThis(i18n("<b>Blur</b>: How strong the image is blured before combining with the original "
-                                    "image with the tonemapping function."));
+                                     "image with the tonemapping function."));
 
     grid4->addWidget(d->stageThree,  0, 0, 1, 1);
-    grid4->addWidget(label8,         1, 0, 1, 1);
+    grid4->addWidget(d->label8,      1, 0, 1, 1);
     grid4->addWidget(d->powerInput3, 1, 1, 1, 1);
-    grid4->addWidget(label9,         2, 0, 1, 1);
+    grid4->addWidget(d->label9,      2, 0, 1, 1);
     grid4->addWidget(d->blurInput3,  2, 1, 1, 1);
     grid4->setMargin(d->gboxSettings->spacingHint());
     grid4->setSpacing(d->gboxSettings->spacingHint());
 
+    connect(d->stageThree,SIGNAL(toggled(bool)),
+            this, SLOT(slotStage3Enabled(bool)));
+
     // -------------------------------------------------------------
 
     QWidget* fifthPage = new QWidget();
-    QGridLayout* grid5  = new QGridLayout( fifthPage );
+    QGridLayout* grid5 = new QGridLayout( fifthPage );
 
-    d->stageFour = new QCheckBox(i18n("Enabled"), fifthPage);
+    d->stageFour       = new QCheckBox(i18n("Enabled"), fifthPage);
     d->stageFour->setWhatsThis(i18n("Check to enable this stage."));
     d->stageFour->setChecked(false);
+    d->stageFour->setObjectName("stageFour");
 
     // -------------------------------------------------------------
 
-    QLabel* label10 = new QLabel(i18n("Power:"), fifthPage);
-    d->powerInput4  = new RDoubleNumInput(fifthPage);
+    d->label10     = new QLabel(i18n("Power:"), fifthPage);
+    d->powerInput4 = new RDoubleNumInput(fifthPage);
     d->powerInput4->input()->setRange(0.0, 100.0, 1.0, true);
     d->powerInput4->setDefaultValue(50.0);
     d->powerInput4->setObjectName("powerInput4");
@@ -340,21 +371,26 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel* label11 = new QLabel(i18n("Blur:"), fifthPage);
-    d->blurInput4   = new RDoubleNumInput(fifthPage);
+    d->label11    = new QLabel(i18n("Blur:"), fifthPage);
+    d->blurInput4 = new RDoubleNumInput(fifthPage);
     d->blurInput4->input()->setRange(0.0, 1000.0, 1.0, true);
     d->blurInput4->setDefaultValue(500.0);
     d->blurInput4->setObjectName("blurInput4");
     d->blurInput4->setWhatsThis(i18n("<b>Blur</b>: How strong the image is blured before combining with the original "
-                                    "image with the tonemapping function."));
+                                     "image with the tonemapping function."));
 
     grid5->addWidget(d->stageFour,   0, 0, 1, 1);
-    grid5->addWidget(label10,        1, 0, 1, 1);
+    grid5->addWidget(d->label10,     1, 0, 1, 1);
     grid5->addWidget(d->powerInput4, 1, 1, 1, 1);
-    grid5->addWidget(label11,        2, 0, 1, 1);
+    grid5->addWidget(d->label11,     2, 0, 1, 1);
     grid5->addWidget(d->blurInput4,  2, 1, 1, 1);
     grid5->setMargin(d->gboxSettings->spacingHint());
     grid5->setSpacing(d->gboxSettings->spacingHint());
+
+    connect(d->stageFour,SIGNAL(toggled(bool)),
+            this, SLOT(slotStage4Enabled(bool)));
+
+    // -------------------------------------------------------------
 
     d->expanderBox = new RExpanderBox;
     d->expanderBox->addItem(firstPage, SmallIcon("contrast"), i18n("General settings"),
@@ -385,6 +421,39 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
 LocalContrastTool::~LocalContrastTool()
 {
     delete d;
+}
+
+void LocalContrastTool::slotStage1Enabled(bool b)
+{
+    d->label4->setEnabled(b);
+    d->powerInput1->setEnabled(b);
+    d->label5->setEnabled(b);
+    d->blurInput1->setEnabled(b);
+}
+
+void LocalContrastTool::slotStage2Enabled(bool b)
+{
+
+    d->label6->setEnabled(b);
+    d->powerInput2->setEnabled(b);
+    d->label7->setEnabled(b);
+    d->blurInput2->setEnabled(b);
+}
+
+void LocalContrastTool::slotStage3Enabled(bool b)
+{
+    d->label8->setEnabled(b);
+    d->powerInput3->setEnabled(b);
+    d->label9->setEnabled(b);
+    d->blurInput3->setEnabled(b);
+}
+
+void LocalContrastTool::slotStage4Enabled(bool b)
+{
+    d->label10->setEnabled(b);
+    d->powerInput4->setEnabled(b);
+    d->label11->setEnabled(b);
+    d->blurInput4->setEnabled(b);
 }
 
 void LocalContrastTool::renderingFinished()
@@ -419,6 +488,11 @@ void LocalContrastTool::readSettings()
     d->expanderBox->readSettings();
 
     d->expanderBox->setEnabled(true);
+
+    slotStage1Enabled(d->stageOne->isChecked());
+    slotStage2Enabled(d->stageTwo->isChecked());
+    slotStage3Enabled(d->stageThree->isChecked());
+    slotStage4Enabled(d->stageFour->isChecked());
 }
 
 void LocalContrastTool::writeSettings()
