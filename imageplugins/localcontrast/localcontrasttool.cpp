@@ -145,8 +145,8 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
                  : EditorToolThreaded(parent),
                    d(new LocalContrastToolPriv)
 {
-    setObjectName("localcontrast");
-    setToolName(i18n("Local Contrast"));
+    setObjectName("tonemapping");
+    setToolName(i18n("Tone Mapping"));
     setToolIcon(SmallIcon("contrast"));
 
     // -------------------------------------------------------------
@@ -623,7 +623,7 @@ void LocalContrastTool::putPreviewData()
 void LocalContrastTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Local Contrast"), filter()->getTargetImage().bits());
+    iface.putOriginalImage(i18n("Tone Mapping"), filter()->getTargetImage().bits());
 }
 
 // void LocalContrastTool::slotLoadSettings()
