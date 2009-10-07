@@ -68,7 +68,7 @@ void ToneMappingFloat::process_rgb_image(REALTYPE *img, int sizex, int sizey)
         if (par.stage[nstage].enabled)
         {
             //compute the desatured image
-            pos=0;
+            pos = 0;
 
             for (int i=0 ; !par.cancel() && (i < size) ; i++)
             {
@@ -81,7 +81,7 @@ void ToneMappingFloat::process_rgb_image(REALTYPE *img, int sizex, int sizey)
             //blur
             inplace_blur(blurimage, sizex,sizey, par.get_blur(nstage));
 
-            pos=0;
+            pos = 0;
 
             for (int i=0 ; !par.cancel() && (i<size) ; i++)
             {
@@ -99,7 +99,7 @@ void ToneMappingFloat::process_rgb_image(REALTYPE *img, int sizex, int sizey)
                 img[pos+1]      = dest_g;
                 img[pos+2]      = dest_b;
 
-                pos+=3;
+                pos += 3;
             }
         }
         par.postProgress(30 + nstage*10);
@@ -110,7 +110,7 @@ void ToneMappingFloat::process_rgb_image(REALTYPE *img, int sizex, int sizey)
 
     if ((par.high_saturation != 100) || (par.low_saturation != 100))
     {
-        int pos=0;
+        int pos = 0;
 
         for (int i=0 ; !par.cancel() && (i < size) ; i++)
         {
@@ -128,7 +128,7 @@ void ToneMappingFloat::process_rgb_image(REALTYPE *img, int sizex, int sizey)
 
             hsv2rgb(dest_h, dest_saturation, dest_v, img[pos], img[pos+1], img[pos+2]);
 
-            pos+=3;
+            pos += 3;
         }
     }
 
@@ -171,7 +171,7 @@ void ToneMappingFloat::process_rgb_image(REALTYPE *img, int sizex, int sizey)
                 }
                 else
                 {
-                    dval=0;
+                    dval = 0;
                 }
             }
 
@@ -261,7 +261,7 @@ void ToneMappingFloat::process_8bit_rgb_image(unsigned char *img, int sizex, int
         img[pos]        = (int)(tmpimage[pos]  *255.0+dither);
         img[pos+1]      = (int)(tmpimage[pos+1]*255.0+dither);
         img[pos+2]      = (int)(tmpimage[pos+2]*255.0+dither);
-        pos+=3;
+        pos += 3;
     }
 
     delete [] tmpimage;
