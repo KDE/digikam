@@ -124,8 +124,8 @@ public:
 };
 
 LocalContrastTool::LocalContrastTool(QObject* parent)
-                  : EditorToolThreaded(parent),
-                    d(new LocalContrastToolPriv)
+                 : EditorToolThreaded(parent),
+                   d(new LocalContrastToolPriv)
 {
     setObjectName("localcontrast");
     setToolName(i18n("Local Contrast"));
@@ -170,8 +170,8 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label2          = new QLabel(i18n("High saturation:"), firstPage);
-    d->highSaturationInput  = new RIntNumInput(firstPage);
+    QLabel *label2         = new QLabel(i18n("High saturation:"), firstPage);
+    d->highSaturationInput = new RIntNumInput(firstPage);
     d->highSaturationInput->setRange(0, 100, 1);
     d->highSaturationInput->setDefaultValue(50);
     d->highSaturationInput->setSliderEnabled(true);
@@ -182,8 +182,8 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label3         = new QLabel(i18n("Low saturation:"), firstPage);
-    d->lowSaturationInput  = new RIntNumInput(firstPage);
+    QLabel *label3        = new QLabel(i18n("Low saturation:"), firstPage);
+    d->lowSaturationInput = new RIntNumInput(firstPage);
     d->lowSaturationInput->setRange(0, 100, 1);
     d->lowSaturationInput->setDefaultValue(50);
     d->lowSaturationInput->setSliderEnabled(true);
@@ -217,7 +217,7 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     QWidget* secondPage = new QWidget();
     QGridLayout* grid2  = new QGridLayout( secondPage );
 
-    d->stageOne = new QCheckBox(i18n("Enabled"), secondPage);
+    d->stageOne         = new QCheckBox(i18n("Enabled"), secondPage);
     d->stageOne->setWhatsThis(i18n("Check to enable this stage."));
     d->stageOne->setChecked(false);
 
@@ -240,11 +240,11 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     d->blurInput1->setWhatsThis(i18n("<b>Blur</b>: How strong the image is blured before combining with the original "
                                     "image with the tonemapping function."));
 
-    grid2->addWidget(d->stageOne,           0, 0, 1, 1);
-    grid2->addWidget(label4,                1, 0, 1, 1);
-    grid2->addWidget(d->powerInput1,        1, 1, 1, 1);
-    grid2->addWidget(label5,                2, 0, 1, 1);
-    grid2->addWidget(d->blurInput1,         2, 1, 1, 1);
+    grid2->addWidget(d->stageOne,    0, 0, 1, 1);
+    grid2->addWidget(label4,         1, 0, 1, 1);
+    grid2->addWidget(d->powerInput1, 1, 1, 1, 1);
+    grid2->addWidget(label5,         2, 0, 1, 1);
+    grid2->addWidget(d->blurInput1,  2, 1, 1, 1);
     grid2->setMargin(d->gboxSettings->spacingHint());
     grid2->setSpacing(d->gboxSettings->spacingHint());
 
@@ -274,13 +274,13 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     d->blurInput2->setDefaultValue(500.0);
     d->blurInput2->setObjectName("blurInput2");
     d->blurInput2->setWhatsThis(i18n("<b>Blur</b>: How strong the image is blured before combining with the original "
-                                    "image with the tonemapping function."));
+                                     "image with the tonemapping function."));
 
-    grid3->addWidget(d->stageTwo,           0, 0, 1, 1);
-    grid3->addWidget(label6,                1, 0, 1, 1);
-    grid3->addWidget(d->powerInput2,        1, 1, 1, 1);
-    grid3->addWidget(label7,                2, 0, 1, 1);
-    grid3->addWidget(d->blurInput2,         2, 1, 1, 1);
+    grid3->addWidget(d->stageTwo,    0, 0, 1, 1);
+    grid3->addWidget(label6,         1, 0, 1, 1);
+    grid3->addWidget(d->powerInput2, 1, 1, 1, 1);
+    grid3->addWidget(label7,         2, 0, 1, 1);
+    grid3->addWidget(d->blurInput2,  2, 1, 1, 1);
     grid3->setMargin(d->gboxSettings->spacingHint());
     grid3->setSpacing(d->gboxSettings->spacingHint());
 
@@ -312,11 +312,11 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     d->blurInput3->setWhatsThis(i18n("<b>Blur</b>: How strong the image is blured before combining with the original "
                                     "image with the tonemapping function."));
 
-    grid4->addWidget(d->stageThree,         0, 0, 1, 1);
-    grid4->addWidget(label8,                1, 0, 1, 1);
-    grid4->addWidget(d->powerInput3,        1, 1, 1, 1);
-    grid4->addWidget(label9,                2, 0, 1, 1);
-    grid4->addWidget(d->blurInput3,         2, 1, 1, 1);
+    grid4->addWidget(d->stageThree,  0, 0, 1, 1);
+    grid4->addWidget(label8,         1, 0, 1, 1);
+    grid4->addWidget(d->powerInput3, 1, 1, 1, 1);
+    grid4->addWidget(label9,         2, 0, 1, 1);
+    grid4->addWidget(d->blurInput3,  2, 1, 1, 1);
     grid4->setMargin(d->gboxSettings->spacingHint());
     grid4->setSpacing(d->gboxSettings->spacingHint());
 
@@ -348,11 +348,11 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     d->blurInput4->setWhatsThis(i18n("<b>Blur</b>: How strong the image is blured before combining with the original "
                                     "image with the tonemapping function."));
 
-    grid5->addWidget(d->stageFour,          0, 0, 1, 1);
-    grid5->addWidget(label10,               1, 0, 1, 1);
-    grid5->addWidget(d->powerInput4,        1, 1, 1, 1);
-    grid5->addWidget(label11,               2, 0, 1, 1);
-    grid5->addWidget(d->blurInput4,         2, 1, 1, 1);
+    grid5->addWidget(d->stageFour,   0, 0, 1, 1);
+    grid5->addWidget(label10,        1, 0, 1, 1);
+    grid5->addWidget(d->powerInput4, 1, 1, 1, 1);
+    grid5->addWidget(label11,        2, 0, 1, 1);
+    grid5->addWidget(d->blurInput4,  2, 1, 1, 1);
     grid5->setMargin(d->gboxSettings->spacingHint());
     grid5->setSpacing(d->gboxSettings->spacingHint());
 
@@ -399,23 +399,23 @@ void LocalContrastTool::readSettings()
 
     d->expanderBox->setEnabled(false);
 
-    d->lowSaturationInput->setValue(group.readEntry("LowSaturation",        d->lowSaturationInput->defaultValue()));
-    d->highSaturationInput->setValue(group.readEntry("HighSaturation",      d->highSaturationInput->defaultValue()));
-    d->powerInput1->setValue(group.readEntry("Power1",                      d->powerInput1->defaultValue()));
-    d->blurInput1->setValue(group.readEntry("Blur1",                        d->blurInput1->defaultValue()));
-    d->powerInput2->setValue(group.readEntry("Power2",                      d->powerInput2->defaultValue()));
-    d->blurInput2->setValue(group.readEntry("Blur2",                        d->blurInput2->defaultValue()));
-    d->powerInput3->setValue(group.readEntry("Power3",                      d->powerInput3->defaultValue()));
-    d->blurInput3->setValue(group.readEntry("Blur3",                        d->blurInput3->defaultValue()));
-    d->powerInput4->setValue(group.readEntry("Power4",                      d->powerInput4->defaultValue()));
-    d->blurInput4->setValue(group.readEntry("Blur4",                        d->blurInput4->defaultValue()));
-    d->stretchContrastCheck->setChecked(group.readEntry("StretchContrast",  false));
-    d->fastModeCheck->setChecked(group.readEntry("FastMode",                false));
-    d->stageOne->setChecked(group.readEntry("StageOne",                     false));
-    d->stageTwo->setChecked(group.readEntry("StageTwo",                     false));
-    d->stageThree->setChecked(group.readEntry("StageThree",                 false));
-    d->stageFour->setChecked(group.readEntry("StageFour",                   false));
-    d->functionInput->setCurrentIndex(group.readEntry("FunctionInput",      d->functionInput->defaultIndex()));
+    d->lowSaturationInput->setValue(group.readEntry("LowSaturation",       d->lowSaturationInput->defaultValue()));
+    d->highSaturationInput->setValue(group.readEntry("HighSaturation",     d->highSaturationInput->defaultValue()));
+    d->powerInput1->setValue(group.readEntry("Power1",                     d->powerInput1->defaultValue()));
+    d->blurInput1->setValue(group.readEntry("Blur1",                       d->blurInput1->defaultValue()));
+    d->powerInput2->setValue(group.readEntry("Power2",                     d->powerInput2->defaultValue()));
+    d->blurInput2->setValue(group.readEntry("Blur2",                       d->blurInput2->defaultValue()));
+    d->powerInput3->setValue(group.readEntry("Power3",                     d->powerInput3->defaultValue()));
+    d->blurInput3->setValue(group.readEntry("Blur3",                       d->blurInput3->defaultValue()));
+    d->powerInput4->setValue(group.readEntry("Power4",                     d->powerInput4->defaultValue()));
+    d->blurInput4->setValue(group.readEntry("Blur4",                       d->blurInput4->defaultValue()));
+    d->stretchContrastCheck->setChecked(group.readEntry("StretchContrast", false));
+    d->fastModeCheck->setChecked(group.readEntry("FastMode",               false));
+    d->stageOne->setChecked(group.readEntry("StageOne",                    false));
+    d->stageTwo->setChecked(group.readEntry("StageTwo",                    false));
+    d->stageThree->setChecked(group.readEntry("StageThree",                false));
+    d->stageFour->setChecked(group.readEntry("StageFour",                  false));
+    d->functionInput->setCurrentIndex(group.readEntry("FunctionInput",     d->functionInput->defaultIndex()));
     d->expanderBox->readSettings();
 
     d->expanderBox->setEnabled(true);
@@ -426,23 +426,23 @@ void LocalContrastTool::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("localcontrast Tool");
 
-    group.writeEntry("LowSaturation",       d->lowSaturationInput->value());
-    group.writeEntry("HighSaturation",      d->highSaturationInput->value());
-    group.writeEntry("Power1",              d->powerInput1->value());
-    group.writeEntry("Blur1",               d->blurInput1->value());
-    group.writeEntry("Power2",              d->powerInput2->value());
-    group.writeEntry("Blur2",               d->blurInput2->value());
-    group.writeEntry("Power3",              d->powerInput3->value());
-    group.writeEntry("Blur3",               d->blurInput3->value());
-    group.writeEntry("Power4",              d->powerInput4->value());
-    group.writeEntry("Blur4",               d->blurInput4->value());
-    group.writeEntry("StretchContrast",     d->stretchContrastCheck->isChecked());
-    group.writeEntry("FastMode",            d->fastModeCheck->isChecked());
-    group.writeEntry("StageOne",            d->stageOne->isChecked());
-    group.writeEntry("StageTwo",            d->stageTwo->isChecked());
-    group.writeEntry("StageThree",          d->stageThree->isChecked());
-    group.writeEntry("StageFour",           d->stageFour->isChecked());
-    group.writeEntry("FunctionInput",       d->functionInput->currentIndex());
+    group.writeEntry("LowSaturation",   d->lowSaturationInput->value());
+    group.writeEntry("HighSaturation",  d->highSaturationInput->value());
+    group.writeEntry("Power1",          d->powerInput1->value());
+    group.writeEntry("Blur1",           d->blurInput1->value());
+    group.writeEntry("Power2",          d->powerInput2->value());
+    group.writeEntry("Blur2",           d->blurInput2->value());
+    group.writeEntry("Power3",          d->powerInput3->value());
+    group.writeEntry("Blur3",           d->blurInput3->value());
+    group.writeEntry("Power4",          d->powerInput4->value());
+    group.writeEntry("Blur4",           d->blurInput4->value());
+    group.writeEntry("StretchContrast", d->stretchContrastCheck->isChecked());
+    group.writeEntry("FastMode",        d->fastModeCheck->isChecked());
+    group.writeEntry("StageOne",        d->stageOne->isChecked());
+    group.writeEntry("StageTwo",        d->stageTwo->isChecked());
+    group.writeEntry("StageThree",      d->stageThree->isChecked());
+    group.writeEntry("StageFour",       d->stageFour->isChecked());
+    group.writeEntry("FunctionInput",   d->functionInput->currentIndex());
     d->expanderBox->writeSettings();
 
     d->previewWidget->writeSettings();
@@ -523,7 +523,7 @@ void LocalContrastTool::prepareEffect()
 
     ToneMappingParameters *par = createParams();
 
-    DImg image = d->previewWidget->getOriginalRegionImage();
+    DImg image   = d->previewWidget->getOriginalRegionImage();
     DImg *image2 = new DImg(image.width(), image.height(), image.sixteenBit(), image.hasAlpha(), image.bits());
 
     setFilter(dynamic_cast<DImgThreadedFilter*>(new LocalContrast(image2, par, this)));
