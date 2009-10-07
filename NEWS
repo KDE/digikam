@@ -10,7 +10,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 001 ==> 130942 : digiKam should display the default EXIF rotation currently used.
 002 ==> 145442 : Contrast mask image plugin.
 003 ==> 209225 : Crash when running batch queue in background.
-004 ==> 
+004 ==> 208598 : Thumbbar out of digikam
+005 ==>
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
