@@ -36,18 +36,18 @@
 
 // Local includes
 
-#include "localcontrasttool.h"
 #include "debug.h"
+#include "localcontrasttool.h"
 
 using namespace DigikamLocalContrastImagesPlugin;
 
 K_PLUGIN_FACTORY( LocalContrastFactory, registerPlugin<ImagePlugin_LocalContrast>(); )
 K_EXPORT_PLUGIN ( LocalContrastFactory("digikamimageplugin_localcontrast") )
 
-ImagePlugin_LocalContrast::ImagePlugin_LocalContrast(QObject *parent, const QVariantList &)
+ImagePlugin_LocalContrast::ImagePlugin_LocalContrast(QObject *parent, const QVariantList&)
                          : Digikam::ImagePlugin(parent, "ImagePlugin_LocalContrast")
 {
-    m_localContrastAction  = new KAction(KIcon("contrast"), i18n("Local Contrast..."), this);
+    m_localContrastAction  = new KAction(KIcon("contrast"), i18n("Tone Mapping..."), this);
     actionCollection()->addAction("imageplugin_localcontrast", m_localContrastAction );
 
     connect(m_localContrastAction, SIGNAL(triggered(bool)),
