@@ -78,10 +78,10 @@ public:
 
     struct
     {
-        bool     enabled;
-        REALTYPE power;
-        REALTYPE blur;
-        int      threshold;
+        bool     enabled;       // digiKam Unsharp Mask settings:
+        REALTYPE blur;          // Radius    : 0.00 - 120.00
+        REALTYPE power;         // Amount    : 0.0  - 5.0
+        int      threshold;     // threshold : 0.00 - 1.00
     }
     unsharp_mask;
 

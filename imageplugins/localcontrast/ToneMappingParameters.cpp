@@ -51,7 +51,7 @@ ToneMappingParameters::ToneMappingParameters()
     {
         stage[i].enabled = (i == 0);
         stage[i].power   = 30.0;
-        stage[i].blur    = 80.0
+        stage[i].blur    = 80.0;
     }
 
     unsharp_mask.enabled   = false;
