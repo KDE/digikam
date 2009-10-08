@@ -17,7 +17,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 190131 : Sig SIGABRT when importing from Kodak Camera.
 009 ==> 190202 : Crash when transfer image from camera.
 010 ==> 187204 : Keeps crashing 6 (SIGABRT) import from camera.
-011 ==> 
+011 ==> 178540 : Zoom in previewwidget has poor behaviour.
+012 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
