@@ -19,7 +19,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 010 ==> 187204 : Keeps crashing 6 (SIGABRT) import from camera.
 011 ==> 178540 : Zoom in previewwidget has poor behavior.
 012 ==> 191397 : digiKam geolocation selection crash.
-013 ==>
+013 ==> 183753 : digiKam crashes while detecting my camera.
+014 ==>
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
