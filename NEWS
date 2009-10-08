@@ -12,7 +12,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 003 ==> 209225 : Crash when running batch queue in background.
 004 ==> 208598 : Thumbbar out of digikam
 005 ==> 197609 : When rotating an image via the overlay buttons thumbnail is not updated.
-006 ==>
+006 ==> 183972 : "Album Path" config variable still necessary ?
+007 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
