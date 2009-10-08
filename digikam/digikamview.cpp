@@ -143,6 +143,7 @@ public:
         gpsSearchView         = 0;
         needDispatchSelection = false;
         cancelSlideShow       = false;
+        useAlbumHistory       = false;
         thumbSize             = ThumbnailSize::Medium;
     }
 
@@ -150,6 +151,7 @@ public:
 
     bool                      needDispatchSelection;
     bool                      cancelSlideShow;
+    bool                      useAlbumHistory;
 
     int                       initialAlbumID;
     int                       thumbSize;
@@ -713,6 +715,9 @@ void DigikamView::slotAllAlbumsLoaded()
 
     // we don't need to call this again, it is called by setCurrentAlbum()
 //    slotAlbumSelected(album);
+
+    // now that all albums have been loaded, activate the albumHistory
+    d->useAlbumHistory = true;
 }
 
 void DigikamView::slotSortAlbums(int order)
@@ -1173,9 +1178,12 @@ void DigikamView::slotAlbumSelected(Album* album)
         emit signalTagSelected(true);
     }
 
-    d->albumHistory->addAlbum(album, d->leftSideBar->getActiveTab());
-    d->parent->enableAlbumBackwardHistory(!d->albumHistory->isBackwardEmpty());
-    d->parent->enableAlbumForwardHistory(!d->albumHistory->isForwardEmpty());
+    if (d->useAlbumHistory)
+    {
+        d->albumHistory->addAlbum(album, d->leftSideBar->getActiveTab());
+    }
+    d->parent->enableAlbumBackwardHistory(d->useAlbumHistory && !d->albumHistory->isBackwardEmpty());
+    d->parent->enableAlbumForwardHistory(d->useAlbumHistory && !d->albumHistory->isForwardEmpty());
 
     d->iconView->openAlbum(album);
     if (album->isRoot())
