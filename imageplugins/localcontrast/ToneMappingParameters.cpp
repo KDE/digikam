@@ -119,24 +119,24 @@ void ToneMappingParameters::save_parameters(const char *filename)
     fprintf(f, "Tonemapping_by_PAUL\n");
     fprintf(f, "1\n");//version
 
-    fprintf(f, "info_fast_mode %d\n", info_fast_mode);
-    fprintf(f, "low_saturation %d\n", low_saturation);
-    fprintf(f, "high_saturation %d\n", high_saturation);
+    fprintf(f, "info_fast_mode %d\n",   info_fast_mode);
+    fprintf(f, "low_saturation %d\n",   low_saturation);
+    fprintf(f, "high_saturation %d\n",  high_saturation);
     fprintf(f, "stretch_contrast %d\n", stretch_contrast);
-    fprintf(f, "function_id %d\n", function_id);
+    fprintf(f, "function_id %d\n",      function_id);
 
     for (int i=0 ; i < TONEMAPPING_MAX_STAGES ; i++)
     {
-        fprintf(f, "STAGE %d\n", i);
-        fprintf(f, "enabled %d\n",stage[i].enabled);
-        fprintf(f, "power %g\n", stage[i].power);
-        fprintf(f, "blur %g\n",stage[i].blur);
+        fprintf(f, "STAGE %d\n",   i);
+        fprintf(f, "enabled %d\n", stage[i].enabled);
+        fprintf(f, "power %g\n",   stage[i].power);
+        fprintf(f, "blur %g\n",    stage[i].blur);
     }
 
-    fprintf(f, "unsharp_mask_enabled %d\n",unsharp_mask.enabled);
-    fprintf(f, "unsharp_mask_power %g\n",unsharp_mask.power);
-    fprintf(f, "unsharp_mask_blur %g\n",unsharp_mask.blur);
-    fprintf(f, "unsharp_mask_threshold %d\n",unsharp_mask.threshold);
+    fprintf(f, "unsharp_mask_enabled %d\n",   unsharp_mask.enabled);
+    fprintf(f, "unsharp_mask_power %g\n",     unsharp_mask.power);
+    fprintf(f, "unsharp_mask_blur %g\n",      unsharp_mask.blur);
+    fprintf(f, "unsharp_mask_threshold %d\n", unsharp_mask.threshold);
 
     fclose(f);
 }
@@ -161,7 +161,7 @@ bool ToneMappingParameters::load_parameters(const char *filename)
         for (int i=0 ; i < max_line ; i++)
             line[i] = 0;
 
-        fgets(line,max_line-1,f);
+        fgets(line, max_line-1,f);
 
         if (strlen(line)<3) continue;
 
@@ -181,11 +181,11 @@ bool ToneMappingParameters::load_parameters(const char *filename)
         int ipar         = atoi(sval);
         REALTYPE fpar    = atof(sval);
 
-        if (strstr(par, "info_fast_mode") == par) info_fast_mode = ipar;
-        if (strstr(par, "low_saturation") == par) low_saturation = ipar;
-        if (strstr(par, "high_saturation") == par) high_saturation = ipar;
+        if (strstr(par, "info_fast_mode") == par)   info_fast_mode   = ipar;
+        if (strstr(par, "low_saturation") == par)   low_saturation   = ipar;
+        if (strstr(par, "high_saturation") == par)  high_saturation  = ipar;
         if (strstr(par, "stretch_contrast") == par) stretch_contrast = ipar;
-        if (strstr(par, "function_id") == par) function_id = ipar;
+        if (strstr(par, "function_id") == par)      function_id      = ipar;
 
         if (strstr(par, "STAGE") == par)
         {
@@ -195,12 +195,12 @@ bool ToneMappingParameters::load_parameters(const char *filename)
         }
 
         if (strstr(par, "enabled") == par) stage[current_stage].enabled = ipar;
-        if (strstr(par, "power") == par) stage[current_stage].power = fpar;
-        if (strstr(par, "blur") == par) stage[current_stage].blur = fpar;
+        if (strstr(par, "power") == par)   stage[current_stage].power   = fpar;
+        if (strstr(par, "blur") == par)    stage[current_stage].blur    = fpar;
 
-        if (strstr(par, "unsharp_mask_enabled") == par) unsharp_mask.enabled = ipar;
-        if (strstr(par, "unsharp_mask_power") == par) unsharp_mask.power = fpar;
-        if (strstr(par, "unsharp_mask_blur") == par) unsharp_mask.blur = fpar;
+        if (strstr(par, "unsharp_mask_enabled") == par)   unsharp_mask.enabled   = ipar;
+        if (strstr(par, "unsharp_mask_power") == par)     unsharp_mask.power     = fpar;
+        if (strstr(par, "unsharp_mask_blur") == par)      unsharp_mask.blur      = fpar;
         if (strstr(par, "unsharp_mask_threshold") == par) unsharp_mask.threshold = ipar;
     }
 
