@@ -16,7 +16,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 007 ==> 146097 : Images without filename extensions not displayed.
 008 ==> 190131 : Sig SIGABRT when importing from Kodak Camera.
 009 ==> 190202 : Crash when transfer image from camera.
-010 ==> 
+010 ==> 187204 : Keeps crashing 6 (SIGABRT) import from camera.
+011 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
