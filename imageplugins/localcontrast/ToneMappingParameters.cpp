@@ -51,11 +51,11 @@ ToneMappingParameters::ToneMappingParameters()
     {
         stage[i].enabled = (i == 0);
         stage[i].power   = 30.0;
-        stage[i].blur    = 80;
+        stage[i].blur    = 80.0
     }
 
     unsharp_mask.enabled   = false;
-    unsharp_mask.power     = 30;
+    unsharp_mask.power     = 30.0;
     unsharp_mask.blur      = 4.0;
     unsharp_mask.threshold = 0;
 }

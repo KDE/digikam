@@ -73,7 +73,8 @@ public:
         bool     enabled;
         REALTYPE power;
         REALTYPE blur;
-    } stage[TONEMAPPING_MAX_STAGES];
+    }
+    stage[TONEMAPPING_MAX_STAGES];
 
     struct
     {
@@ -81,7 +82,8 @@ public:
         REALTYPE power;
         REALTYPE blur;
         int      threshold;
-    } unsharp_mask;
+    }
+    unsharp_mask;
 
 private:
 

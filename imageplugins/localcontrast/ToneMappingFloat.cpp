@@ -61,13 +61,14 @@ void ToneMappingFloat::process_rgb_image(REALTYPE *img, int sizex, int sizey)
         stretch_contrast(img,size*3);
     }
 
-    int pos=0;
+    int pos = 0;
 
     for (int nstage=0 ; !par.cancel() && (nstage < TONEMAPPING_MAX_STAGES) ; nstage++)
     {
         if (par.stage[nstage].enabled)
         {
-            //compute the desatured image
+            // compute the desatured image
+
             pos = 0;
 
             for (int i=0 ; !par.cancel() && (i < size) ; i++)
@@ -78,7 +79,8 @@ void ToneMappingFloat::process_rgb_image(REALTYPE *img, int sizex, int sizey)
 
             current_process_power_value = par.get_power(nstage);
 
-            //blur
+            // blur
+
             inplace_blur(blurimage, sizex,sizey, par.get_blur(nstage));
 
             pos = 0;
@@ -134,12 +136,14 @@ void ToneMappingFloat::process_rgb_image(REALTYPE *img, int sizex, int sizey)
 
     par.postProgress(70);
 
-    //Unsharp Mask filter
+    // Unsharp Mask filter
+
     if (par.unsharp_mask.enabled)
     {
         REALTYPE *val = new REALTYPE[size];
 
-        //compute the desatured image
+        // compute the desatured image
+
         int pos = 0;
 
         for (int i=0 ; !par.cancel() && (i < size) ; i++)
@@ -150,7 +154,7 @@ void ToneMappingFloat::process_rgb_image(REALTYPE *img, int sizex, int sizey)
         }
 
         REALTYPE blur_value = par.get_unsharp_mask_blur();
-        inplace_blur(blurimage,sizex,sizey,blur_value);
+        inplace_blur(blurimage, sizex, sizey, blur_value);
 
         pos                 = 0;
         REALTYPE pow        = 2.5*par.get_unsharp_mask_power();
