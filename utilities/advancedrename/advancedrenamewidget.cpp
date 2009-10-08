@@ -183,26 +183,28 @@ void AdvancedRenameWidget::createToolTip()
     {
         d->tooltipTracker->setText(QString());
     }
+    else
+    {
+        QString tooltip;
+        tooltip += QString("<qt><table cellspacing=\"0\" cellpadding=\"0\" border=\"0\">");
 
-    QString tooltip;
-    tooltip += QString("<qt><table cellspacing=\"0\" cellpadding=\"0\" border=\"0\">");
+        // --------------------------------------------------------
 
-    // --------------------------------------------------------
+        TOOLTIP_HEADER(i18n("Renaming Options"));
+        TOOLTIP_ENTRIES(SubParser, d->parser->subParsers());
 
-    TOOLTIP_HEADER(i18n("Renaming Options"));
-    TOOLTIP_ENTRIES(SubParser, d->parser->subParsers());
+        tooltip += QString("<tr></tr>");
 
-    tooltip += QString("<tr></tr>");
+        TOOLTIP_HEADER(i18n("Modifiers"));
+        TOOLTIP_ENTRIES(Modifier, d->parser->modifiers());
 
-    TOOLTIP_HEADER(i18n("Modifiers"));
-    TOOLTIP_ENTRIES(Modifier, d->parser->modifiers());
+        // --------------------------------------------------------
 
-    // --------------------------------------------------------
+        tooltip += QString("</table></qt>");
+        tooltip += QString("<font size=\"-1\">%1</font>").arg(d->renameInputWidget->toolTip());
 
-    tooltip += QString("</table></qt>");
-    tooltip += QString("<font size=\"-1\">%1</font>").arg(d->renameInputWidget->toolTip());
-
-    d->tooltipTracker->setText(tooltip);
+        d->tooltipTracker->setText(tooltip);
+    }
 
     // --------------------------------------------------------
 
