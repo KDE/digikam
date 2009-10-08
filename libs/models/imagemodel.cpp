@@ -29,10 +29,6 @@
 #include <QHash>
 #include <QItemSelection>
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "databasechangesets.h"
@@ -509,7 +505,7 @@ void ImageModel::finishIncrementalRefresh()
                 ++it;
         }
     }
-    
+
     // add new indexes
     appendInfos(d->incrementalUpdater->newInfos);
 

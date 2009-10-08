@@ -28,11 +28,6 @@
 
 #include <QAbstractItemView>
 
-// KDE includes
-
-// Local includes
-
-
 namespace Digikam
 {
 

@@ -24,10 +24,6 @@
 
 #include "managedloadsavethread.h"
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "loadsavetask.h"
@@ -321,7 +317,7 @@ void ManagedLoadSaveThread::prependThumbnailGroup(QList<LoadingDescription> desc
 }
 
 LoadingTask *ManagedLoadSaveThread::createLoadingTask(const LoadingDescription& description,
-                                                      bool preloading, LoadingMode loadingMode, 
+                                                      bool preloading, LoadingMode loadingMode,
                                                       AccessMode accessMode)
 {
     if (loadingMode == LoadingModeShared)

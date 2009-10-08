@@ -29,8 +29,6 @@
 #include <QtGui/QAbstractButton>
 #include <QtGui/QAbstractItemView>
 
-// KDE includes
-
 // Local includes
 
 #include "digikam_export.h"

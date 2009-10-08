@@ -23,10 +23,6 @@
 
 #include "loadingdescription.h"
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "icctransform.h"

@@ -24,10 +24,6 @@
 
 #include "sharedloadsavethread.h"
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "loadingcache.h"

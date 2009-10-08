@@ -30,10 +30,6 @@
 #include <cmath>
 #include <cstdlib>
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "dimg.h"

@@ -31,10 +31,6 @@
 #include <QFileInfo>
 #include <QHash>
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "albumdb.h"

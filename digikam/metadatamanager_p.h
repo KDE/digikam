@@ -30,8 +30,6 @@
 #include <QSet>
 #include <QThread>
 
-// KDE includes
-
 // Local includes
 
 #include "imageinfo.h"

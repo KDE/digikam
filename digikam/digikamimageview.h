@@ -25,10 +25,6 @@
 #ifndef DIGIKAMIMAGEVIEW_H
 #define DIGIKAMIMAGEVIEW_H
 
-// Qt includes
-
-// KDE includes
-
 // Local includes
 
 #include "imagecategorizedview.h"

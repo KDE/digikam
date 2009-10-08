@@ -36,10 +36,6 @@
 #include <QPen>
 #include <QTimer>
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "imageiface.h"

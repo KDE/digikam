@@ -24,10 +24,6 @@
 #ifndef IMAGECATEGORIZEDVIEW_H
 #define IMAGECATEGORIZEDVIEW_H
 
-// Qt includes
-
-// KDE includes
-
 // Local includes
 
 #include "imageinfo.h"

@@ -27,10 +27,6 @@
 
 #include <QApplication>
 
-// KDE includes
-
-
-
 // Local includes
 
 namespace Digikam
@@ -117,11 +113,11 @@ bool ItemViewToolTip::eventFilter(QObject *o, QEvent *e)
     if (!isVisible())
         return false;
 
-    switch (e->type()) 
+    switch (e->type())
     {
         #ifdef Q_WS_MAC
         case QEvent::KeyPress:
-        case QEvent::KeyRelease: 
+        case QEvent::KeyRelease:
         {
             int key = static_cast<QKeyEvent *>(e)->key();
             Qt::KeyboardModifiers mody = static_cast<QKeyEvent *>(e)->modifiers();

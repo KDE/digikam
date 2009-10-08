@@ -30,10 +30,6 @@
 #include <QGridLayout>
 #include <QLabel>
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "rexpanderbox.h"

@@ -41,10 +41,6 @@
 
 #include "noisereduction.h"
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "dimg.h"

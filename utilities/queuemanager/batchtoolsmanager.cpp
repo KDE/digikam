@@ -24,10 +24,6 @@
 #include "batchtoolsmanager.h"
 #include "batchtoolsmanager.moc"
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "convert2jpeg.h"

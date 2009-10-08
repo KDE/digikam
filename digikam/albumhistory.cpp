@@ -30,10 +30,6 @@
 #include <QString>
 #include <QWidget>
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "album.h"

@@ -28,10 +28,6 @@
 
 #include <QHash>
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "thumbnailloadthread.h"

@@ -28,8 +28,6 @@
 
 #include <QAbstractItemDelegate>
 
-// KDE includes
-
 // Local includes
 
 #include "thumbnailsize.h"

@@ -32,10 +32,6 @@
 #include <cstdio>
 #include <cmath>
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "dcolor.h"

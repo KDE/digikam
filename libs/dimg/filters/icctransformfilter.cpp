@@ -28,10 +28,6 @@
 
 #include <cmath>
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "dimg.h"

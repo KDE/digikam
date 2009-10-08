@@ -35,8 +35,6 @@
 #include <QtCore/QMap>
 #include <QtCore/QHash>
 
-// KDE includes
-
 // Local includes
 
 #include "thumbnaildatabaseaccess.h"

@@ -24,15 +24,6 @@
 #include "visibilitycontroller.h"
 #include "visibilitycontroller.moc"
 
-// Qt includes
-
-// KDE includes
-
-
-
-// Local includes
-
-
 namespace Digikam
 {
 

@@ -37,10 +37,6 @@
 #include <QtDBus>
 #include <QThread>
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "collectionmanager.h"

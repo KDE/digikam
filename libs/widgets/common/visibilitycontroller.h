@@ -29,8 +29,6 @@
 #include <QtGui/QWidget>
 #include <QtCore/QList>
 
-// KDE includes
-
 // Local includes
 
 #include "digikam_export.h"

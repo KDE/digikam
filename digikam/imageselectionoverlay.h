@@ -29,8 +29,6 @@
 #include <QAbstractButton>
 #include <QAbstractItemView>
 
-// KDE includes
-
 // Local includes
 
 #include "itemviewhoverbutton.h"

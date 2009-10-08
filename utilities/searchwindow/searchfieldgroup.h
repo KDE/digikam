@@ -30,8 +30,6 @@
 #include <QSet>
 #include <QWidget>
 
-// KDE includes
-
 // Local includes
 
 #include "searchxml.h"

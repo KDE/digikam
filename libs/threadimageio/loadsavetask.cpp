@@ -28,10 +28,6 @@
 
 #include <QApplication>
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "iccmanager.h"

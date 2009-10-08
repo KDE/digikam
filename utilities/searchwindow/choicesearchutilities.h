@@ -30,8 +30,6 @@
 #include <QList>
 #include <QVariant>
 
-// KDE includes
-
 // Local includes
 
 #include "searchxml.h"

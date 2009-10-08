@@ -34,10 +34,6 @@
 
 #include <QList>
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "dimginterface.h"

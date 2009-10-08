@@ -31,8 +31,6 @@
 #include <QLabel>
 #include <QComboBox>
 
-// KDE includes
-
 // Local includes
 
 #include "ratingwidget.h"

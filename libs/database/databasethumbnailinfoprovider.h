@@ -24,10 +24,6 @@
 #ifndef DATABASETHUMBNAILINFOPROVIDER_H
 #define DATABASETHUMBNAILINFOPROVIDER_H
 
-// Qt includes
-
-// KDE includes
-
 // Local includes
 
 #include "digikam_export.h"

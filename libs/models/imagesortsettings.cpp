@@ -27,10 +27,6 @@
 
 #include <QDateTime>
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "databasefields.h"
@@ -220,7 +216,7 @@ DatabaseFields::Set ImageSortSettings::watchFlags() const
             set |= DatabaseFields::Width | DatabaseFields::Height;
             break;
     }
-   
+
     switch (categorizationMode)
     {
         case NoCategories:

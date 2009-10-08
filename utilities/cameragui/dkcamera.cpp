@@ -24,10 +24,6 @@
 
 #include "dkcamera.h"
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "albumsettings.h"
