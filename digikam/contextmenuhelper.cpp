@@ -186,6 +186,8 @@ void ContextMenuHelper::addServicesMenu(KUrl::List selectedItems)
     // kdebase/apps/lib/konq/konq_menuactions.cpp
 
     QStringList mimeTypes;
+    KService::List offers;
+
     foreach(const KUrl& item, d->selectedItems)
     {
         const QString mimeType = KMimeType::findByUrl(item, 0, true, true)->name();
@@ -193,32 +195,33 @@ void ContextMenuHelper::addServicesMenu(KUrl::List selectedItems)
             mimeTypes << mimeType;
     }
 
-    // Query trader
-    const QString firstMimeType = mimeTypes.takeFirst();
-    const QString constraintTemplate = "'%1' in ServiceTypes";
-    QStringList constraints;
-    foreach(const QString& mimeType, mimeTypes)
+    if (!mimeTypes.isEmpty())
     {
-        constraints << constraintTemplate.arg(mimeType);
-    }
-
-    KService::List offers = KMimeTypeTrader::self()->query(firstMimeType,
-                                                           "Application",
-                                                           constraints.join( " and "));
-
-    // remove duplicate service entries
-    QSet<QString> seenApps;
-    for (KService::List::iterator it = offers.begin(); it != offers.end();)
-    {
-        const QString appName((*it)->name());
-        if (!seenApps.contains(appName))
+        // Query trader
+        const QString firstMimeType = mimeTypes.takeFirst();
+        const QString constraintTemplate = "'%1' in ServiceTypes";
+        QStringList constraints;
+        foreach(const QString& mimeType, mimeTypes)
         {
-            seenApps.insert(appName);
-            ++it;
+            constraints << constraintTemplate.arg(mimeType);
         }
-        else
+
+        offers = KMimeTypeTrader::self()->query(firstMimeType, "Application", constraints.join( " and "));
+
+        // remove duplicate service entries
+        QSet<QString> seenApps;
+        for (KService::List::iterator it = offers.begin(); it != offers.end();)
         {
-            it = offers.erase(it);
+            const QString appName((*it)->name());
+            if (!seenApps.contains(appName))
+            {
+                seenApps.insert(appName);
+                ++it;
+            }
+            else
+            {
+                it = offers.erase(it);
+            }
         }
     }
 
