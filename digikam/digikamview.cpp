@@ -706,18 +706,14 @@ void DigikamView::slotAllAlbumsLoaded()
                this, SLOT(slotAllAlbumsLoaded()));
 
     loadViewState();
-    Album *album = d->albumManager->findAlbum(d->initialAlbumID);
-    d->albumManager->setCurrentAlbum(album);
-
     d->leftSideBar->loadViewState();
     d->rightSideBar->loadViewState();
     d->rightSideBar->populateTags();
 
-    // we don't need to call this again, it is called by setCurrentAlbum()
-//    slotAlbumSelected(album);
-
     // now that all albums have been loaded, activate the albumHistory
     d->useAlbumHistory = true;
+    Album *album = d->albumManager->findAlbum(d->initialAlbumID);
+    d->albumManager->setCurrentAlbum(album);
 }
 
 void DigikamView::slotSortAlbums(int order)
