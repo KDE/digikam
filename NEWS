@@ -14,7 +14,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 005 ==> 197609 : When rotating an image via the overlay buttons thumbnail is not updated.
 006 ==> 183972 : "Album Path" config variable still necessary ?
 007 ==> 146097 : Images without filename extensions not displayed.
-008 ==> 
+008 ==> 190131 : Sig SIGABRT when importing from Kodak Camera.
+009 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
