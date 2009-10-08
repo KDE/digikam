@@ -87,22 +87,22 @@ class DIGIKAM_EXPORT ThumbnailDB
 
 public:
 
-    void setSetting(const QString& keyword, const QString& value);
+    bool setSetting(const QString& keyword, const QString& value);
     QString getSetting(const QString& keyword);
 
     DatabaseThumbnailInfo findByHash(const QString &uniqueHash, int fileSize);
     DatabaseThumbnailInfo findByFilePath(const QString &path);
 
-    void insertUniqueHash(const QString &uniqueHash, int fileSize, int thumbId);
-    void insertFilePath(const QString &path, int thumbId);
+    DatabaseCoreBackend::QueryState insertUniqueHash(const QString &uniqueHash, int fileSize, int thumbId);
+    DatabaseCoreBackend::QueryState insertFilePath(const QString &path, int thumbId);
 
     /** Removes thumbnail data associated to the given uniqueHash/fileSize */
-    void removeByUniqueHash(const QString &uniqueHash, int fileSize);
+    DatabaseCoreBackend::QueryState removeByUniqueHash(const QString &uniqueHash, int fileSize);
     /** Removes thumbnail data associated to the given file path */
-    void removeByFilePath(const QString &path);
+    DatabaseCoreBackend::QueryState removeByFilePath(const QString &path);
 
-    int insertThumbnail(const DatabaseThumbnailInfo &info);
-    void replaceThumbnail(const DatabaseThumbnailInfo &info);
+    DatabaseCoreBackend::QueryState insertThumbnail(const DatabaseThumbnailInfo &info, QVariant *lastInsertId = 0);
+    DatabaseCoreBackend::QueryState replaceThumbnail(const DatabaseThumbnailInfo &info);
 
     QHash<QString, int> getValidFilePaths();
 

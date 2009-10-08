@@ -68,10 +68,10 @@ ThumbnailDB::~ThumbnailDB()
     delete d;
 }
 
-void ThumbnailDB::setSetting(const QString& keyword,
+bool ThumbnailDB::setSetting(const QString& keyword,
                          const QString& value )
 {
-    d->db->execSql( "REPLACE INTO Settings VALUES (?,?);",
+   return  d->db->execSql( "REPLACE INTO Settings VALUES (?,?);",
                     keyword, value );
 }
 
@@ -150,50 +150,54 @@ QHash<QString, int> ThumbnailDB::getValidFilePaths()
     return filePaths;
 }
 
-void ThumbnailDB::insertUniqueHash(const QString &uniqueHash, int fileSize, int thumbId)
+DatabaseCoreBackend::QueryState ThumbnailDB::insertUniqueHash(const QString &uniqueHash, int fileSize, int thumbId)
 {
-    d->db->execSql("REPLACE INTO UniqueHashes (uniqueHash, fileSize, thumbId) VALUES (?,?,?)",
+    return d->db->execSql("REPLACE INTO UniqueHashes (uniqueHash, fileSize, thumbId) VALUES (?,?,?)",
                    uniqueHash, fileSize, thumbId);
 }
 
-void ThumbnailDB::insertFilePath(const QString &path, int thumbId)
+DatabaseCoreBackend::QueryState ThumbnailDB::insertFilePath(const QString &path, int thumbId)
 {
-    d->db->execSql("REPLACE INTO FilePaths (path, thumbId) VALUES (?,?)",
+    return d->db->execSql("REPLACE INTO FilePaths (path, thumbId) VALUES (?,?)",
                    path, thumbId);
 }
 
-void ThumbnailDB::removeByUniqueHash(const QString &uniqueHash, int fileSize)
+DatabaseCoreBackend::QueryState ThumbnailDB::removeByUniqueHash(const QString &uniqueHash, int fileSize)
 {
     // UniqueHashes + FilePaths entries are removed by trigger
-    d->db->execSql("DELETE FROM Thumbnails WHERE id IN "
+    return d->db->execSql("DELETE FROM Thumbnails WHERE id IN "
                    " (SELECT thumbId FROM UniqueHashes WHERE uniqueHash=? AND fileSize=?);",
                    uniqueHash, fileSize);
 }
 
-void ThumbnailDB::removeByFilePath(const QString &path)
+DatabaseCoreBackend::QueryState ThumbnailDB::removeByFilePath(const QString &path)
 {
     // UniqueHashes + FilePaths entries are removed by trigger
-    d->db->execSql("DELETE FROM Thumbnails WHERE id IN "
+    return d->db->execSql("DELETE FROM Thumbnails WHERE id IN "
                    " (SELECT thumbId FROM FilePaths WHERE path=?);",
                    path);
 }
 
-int ThumbnailDB::insertThumbnail(const DatabaseThumbnailInfo &info)
+DatabaseCoreBackend::QueryState ThumbnailDB::insertThumbnail(const DatabaseThumbnailInfo &info, QVariant *lastInsertId)
 {
     QVariant id;
-    if (!d->db->execSql("INSERT INTO Thumbnails (type, modificationDate, orientationHint, data) VALUES (?, ?, ?, ?);",
+    DatabaseCoreBackend::QueryState lastQueryState;
+    lastQueryState= d->db->execSql("INSERT INTO Thumbnails (type, modificationDate, orientationHint, data) VALUES (?, ?, ?, ?);",
                         info.type, info.modificationDate, info.orientationHint, info.data,
-                        0, &id) )
+                        0, &id);
+    if (DatabaseCoreBackend::NoErrors!=lastQueryState)
     {
-        return -1;
+        *lastInsertId=id.toInt();
+    }else
+    {
+        *lastInsertId=-1;
     }
-
-    return id.toInt();
+    return lastQueryState;
 }
 
-void ThumbnailDB::replaceThumbnail(const DatabaseThumbnailInfo &info)
+DatabaseCoreBackend::QueryState ThumbnailDB::replaceThumbnail(const DatabaseThumbnailInfo &info)
 {
-    d->db->execSql("REPLACE INTO THUMBNAILS (id, type, modificationDate, orientationHint, data) VALUES(?, ?, ?, ?, ?);",
+    return d->db->execSql("REPLACE INTO THUMBNAILS (id, type, modificationDate, orientationHint, data) VALUES(?, ?, ?, ?, ?);",
                     QList<QVariant>() << info.id << info.type << info.modificationDate << info.orientationHint << info.data);
 }
 

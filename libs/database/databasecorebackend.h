@@ -118,6 +118,24 @@ public:
      */
     void close();
 
+    enum QueryState
+    {
+        /**
+         * No errors occurred while executing the query.
+         */
+        NoErrors,
+
+        /**
+         * An SQLError has occurred while executing the query.
+         */
+        SQLError,
+
+        /**
+         * An connection error has occured while executing the query.
+         */
+        ConnectionError
+    };
+
     enum Status
     {
         /**
@@ -175,32 +193,34 @@ public:
      * Methods are provided for up to four bound values (positional binding), or for a list of bound values.
      * If you want the last inserted id (and your query is suitable), sett lastInsertId to the address of a QVariant.
      */
-    bool execSql(const QString& sql, QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
-    bool execSql(const QString& sql, const QVariant& boundValue1,
+    QueryState execSql(const QString& sql, QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
+    QueryState execSql(const QString& sql, const QVariant& boundValue1,
                  QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
-    bool execSql(const QString& sql,
+    QueryState execSql(const QString& sql,
                  const QVariant& boundValue1, const QVariant& boundValue2,
                  QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
-    bool execSql(const QString& sql,
+    QueryState execSql(const QString& sql,
                  const QVariant& boundValue1, const QVariant& boundValue2, const QVariant& boundValue3,
                  QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
-    bool execSql(const QString& sql,
+    QueryState execSql(const QString& sql,
                  const QVariant& boundValue1, const QVariant& boundValue2,
                  const QVariant& boundValue3, const QVariant& boundValue4,
                  QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
-    bool execSql(const QString& sql, const QList<QVariant>& boundValues, QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
+    QueryState execSql(const QString& sql, const QList<QVariant>& boundValues, QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
+
+    QueryState handleQueryResult(SqlQuery &query, QList<QVariant>* values, QVariant *lastInsertId);
 
     /**
      * Method which accepts a map for named binding
      */
-    bool execSql(const QString& sql, const QMap<QString, QVariant>& bindingMap,
+    QueryState execSql(const QString& sql, const QMap<QString, QVariant>& bindingMap,
                  QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
     /**
      * Calls exec on the query, and handles debug output if something went wrong.
      * The query is not prepared, which can be fail in certain situations
      * (e.g. trigger statements on QMYSQL).
      */
-    bool execDirectSql(const QString& query);
+    QueryState execDirectSql(const QString& query);
 
 
 
@@ -256,11 +276,11 @@ public:
     /**
      * Begin a database transaction
      */
-    bool beginTransaction();
+    DatabaseCoreBackend::QueryState beginTransaction();
     /**
      * Commit the current database transaction
      */
-    bool commitTransaction();
+    DatabaseCoreBackend::QueryState commitTransaction();
     /**
      * Rollback the current database transaction
      */

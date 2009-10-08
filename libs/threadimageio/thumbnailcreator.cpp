@@ -526,20 +526,62 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
 
     ThumbnailDatabaseAccess access;
 
-    access.backend()->beginTransaction();
-    // Insert thumbnail data
-    if (dbInfo.id == -1)
-        dbInfo.id = access.db()->insertThumbnail(dbInfo);
-    else
-        access.db()->replaceThumbnail(dbInfo);
+    DatabaseCoreBackend::QueryState lastQueryState=DatabaseCoreBackend::ConnectionError;
+    while(DatabaseCoreBackend::ConnectionError==lastQueryState)
+    {
 
-    // Insert lookup data used to locate thumbnail data
-    if (!info.uniqueHash.isNull())
-        access.db()->insertUniqueHash(info.uniqueHash, info.fileSize, dbInfo.id);
-    if (!info.filePath.isNull())
-        access.db()->insertFilePath(info.filePath, dbInfo.id);
+        lastQueryState = access.backend()->beginTransaction();
+        if (DatabaseCoreBackend::NoErrors!=lastQueryState)
+        {
+            continue;
+        }
 
-    access.backend()->commitTransaction();
+        // Insert thumbnail data
+        if (dbInfo.id == -1)
+        {
+            QVariant id;
+            lastQueryState = access.db()->insertThumbnail(dbInfo, &id);
+            if (DatabaseCoreBackend::NoErrors!=lastQueryState)
+            {
+                continue;
+            }else
+            {
+                dbInfo.id = id.toInt();
+            }
+        }
+        else
+        {
+            lastQueryState = access.db()->replaceThumbnail(dbInfo);
+            if (DatabaseCoreBackend::NoErrors!=lastQueryState)
+            {
+                continue;
+            }
+        }
+
+        // Insert lookup data used to locate thumbnail data
+        if (!info.uniqueHash.isNull())
+        {
+            lastQueryState = access.db()->insertUniqueHash(info.uniqueHash, info.fileSize, dbInfo.id);
+            if (DatabaseCoreBackend::NoErrors!=lastQueryState)
+            {
+                continue;
+            }
+        }
+        if (!info.filePath.isNull())
+        {
+            lastQueryState = access.db()->insertFilePath(info.filePath, dbInfo.id);
+            if (DatabaseCoreBackend::NoErrors!=lastQueryState)
+            {
+                continue;
+            }
+        }
+        lastQueryState = access.backend()->commitTransaction();
+        if (DatabaseCoreBackend::NoErrors!=lastQueryState)
+         {
+             continue;
+         }
+
+    }
 }
 
 ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info)
@@ -618,13 +660,36 @@ ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info)
 void ThumbnailCreator::deleteFromDatabase(const ThumbnailInfo& info)
 {
     ThumbnailDatabaseAccess access;
-
-    access.backend()->beginTransaction();
-    if (!info.uniqueHash.isNull())
-        access.db()->removeByUniqueHash(info.uniqueHash, info.fileSize);
-    if (!info.filePath.isNull())
-        access.db()->removeByFilePath(info.filePath);
-    access.backend()->commitTransaction();
+    DatabaseCoreBackend::QueryState lastQueryState=DatabaseCoreBackend::ConnectionError;
+    while(DatabaseCoreBackend::ConnectionError==lastQueryState)
+    {
+        lastQueryState = access.backend()->beginTransaction();
+        if (DatabaseCoreBackend::NoErrors!=lastQueryState)
+        {
+            continue;
+        }
+        if (!info.uniqueHash.isNull())
+        {
+            lastQueryState=access.db()->removeByUniqueHash(info.uniqueHash, info.fileSize);
+            if (DatabaseCoreBackend::NoErrors!=lastQueryState)
+            {
+                continue;
+            }
+        }
+        if (!info.filePath.isNull())
+        {
+            lastQueryState=access.db()->removeByFilePath(info.filePath);
+            if (DatabaseCoreBackend::NoErrors!=lastQueryState)
+            {
+                continue;
+            }
+        }
+        lastQueryState = access.backend()->commitTransaction();
+        if (DatabaseCoreBackend::NoErrors!=lastQueryState)
+        {
+            continue;
+        }
+    }
 }
 
 // --------------- Freedesktop.org standard implementation -----------------------

@@ -28,7 +28,7 @@
 
 #include "digikam_export.h"
 #include "databaseparameters.h"
-
+#include "databaseerrorhandler.h"
 class QMutexLocker;
 
 namespace Digikam
@@ -56,6 +56,8 @@ public:
     QString lastError();
     static DatabaseParameters parameters();
 
+
+    static void initDatabaseErrorHandler(DatabaseErrorHandler *errorhandler);
     static void setParameters(const DatabaseParameters& parameters);
     static bool checkReadyForUse(InitializationObserver *observer);
 

@@ -128,6 +128,16 @@ DatabaseParameters ThumbnailDatabaseAccess::parameters()
     return DatabaseParameters();
 }
 
+void ThumbnailDatabaseAccess::initDatabaseErrorHandler(DatabaseErrorHandler *errorhandler)
+{
+    if (!d)
+        {
+            d = new ThumbnailDatabaseAccessStaticPriv();
+        }
+    //DatabaseErrorHandler *errorhandler = new DatabaseGUIErrorHandler(d->parameters);
+    d->backend->setDatabaseErrorHandler(errorhandler);
+}
+
 void ThumbnailDatabaseAccess::setParameters(const DatabaseParameters& parameters)
 {
     if (!d)

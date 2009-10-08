@@ -83,6 +83,7 @@ extern "C"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
 #include "databaseaccess.h"
+#include "thumbnaildatabaseaccess.h"
 #include "databaseurl.h"
 #include "databaseparameters.h"
 #include "databasethumbnailinfoprovider.h"
@@ -896,6 +897,16 @@ bool AlbumManager::setDatabase(const QString& dbType, const QString& dbName, con
 #ifdef USE_THUMBS_DB
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
+    ThumbnailDatabaseAccess::setParameters(DatabaseParameters::parametersFromConfig(AlbumSettings::instance()->getDatabaseType(),
+            AlbumSettings::instance()->getDatabaseName(),
+            AlbumSettings::instance()->getDatabaseHostName(),
+            AlbumSettings::instance()->getDatabasePort(),
+            AlbumSettings::instance()->getDatabaseUserName(),
+            AlbumSettings::instance()->getDatabasePassword(),
+            AlbumSettings::instance()->getDatabaseConnectoptions()));
+
+    ThumbnailDatabaseAccess::initDatabaseErrorHandler(handler);
+
     ThumbnailLoadThread::initializeThumbnailDatabase(AlbumSettings::instance()->getDatabaseType(),
             AlbumSettings::instance()->getDatabaseName(),
             AlbumSettings::instance()->getDatabaseHostName(),
@@ -904,6 +915,7 @@ bool AlbumManager::setDatabase(const QString& dbType, const QString& dbName, con
             AlbumSettings::instance()->getDatabasePassword(),
             AlbumSettings::instance()->getDatabaseConnectoptions(),
             new DatabaseThumbnailInfoProvider());
+
     if (AlbumSettings::instance()->getDatabaseType()=="QSQLITE"){
         // Initialize thumbnail database
         QFileInfo thumbFile(d->dbName, "thumbnails-digikam.db");
