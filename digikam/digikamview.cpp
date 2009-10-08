@@ -280,11 +280,10 @@ DigikamView::DigikamView(QWidget *parent)
     d->thumbSizeTimer->setSingleShot(true);
     d->thumbSizeTimer->setInterval(300);
 
-    setupConnections();
-
     d->albumHistory = new AlbumHistory();
 
     slotSidebarTabTitleStyleChanged();
+    setupConnections();
 }
 
 DigikamView::~DigikamView()
@@ -453,10 +452,8 @@ void DigikamView::setupConnections()
     connect(d->gpsSearchView, SIGNAL(signalMapSelectedItems(const KUrl::List)),
             d->iconView, SLOT(setSelectedUrls(const KUrl::List&)));
 
-    connect(d->gpsSearchView,
-            SIGNAL(signalMapSoloItems(const KUrl::List, const QString&)),
-            d->iconView->imageFilterModel(),
-            SLOT(setUrlWhitelist(const KUrl::List, const QString&)));
+    connect(d->gpsSearchView, SIGNAL(signalMapSoloItems(const KUrl::List, const QString&)),
+            d->iconView->imageFilterModel(), SLOT(setUrlWhitelist(const KUrl::List, const QString&)));
 #endif
 
     // -- Filter Bars Connections ---------------------------------
@@ -714,13 +711,15 @@ void DigikamView::slotAllAlbumsLoaded()
     d->rightSideBar->loadViewState();
     d->rightSideBar->populateTags();
 
-    slotAlbumSelected(album);
+    // we don't need to call this again, it is called by setCurrentAlbum()
+//    slotAlbumSelected(album);
 }
 
 void DigikamView::slotSortAlbums(int order)
 {
     AlbumSettings* settings = AlbumSettings::instance();
-    if (!settings) return;
+    if (!settings)
+        return;
     settings->setAlbumSortOrder((AlbumSettings::AlbumSortOrder) order);
     d->folderView->resort();
 }
