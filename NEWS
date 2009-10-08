@@ -13,7 +13,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 208598 : Thumbbar out of digikam
 005 ==> 197609 : When rotating an image via the overlay buttons thumbnail is not updated.
 006 ==> 183972 : "Album Path" config variable still necessary ?
-007 ==> 
+007 ==> 146097 : Images without filename extensions not displayed.
+008 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
