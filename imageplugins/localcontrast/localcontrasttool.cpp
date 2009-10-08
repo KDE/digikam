@@ -145,8 +145,8 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
                  : EditorToolThreaded(parent),
                    d(new LocalContrastToolPriv)
 {
-    setObjectName("tonemapping");
-    setToolName(i18n("Tone Mapping"));
+    setObjectName("localcontrast");
+    setToolName(i18n("Local Contrast"));
     setToolIcon(SmallIcon("contrast"));
 
     // -------------------------------------------------------------
@@ -619,14 +619,14 @@ void LocalContrastTool::putPreviewData()
 void LocalContrastTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Tone Mapping"), filter()->getTargetImage().bits());
+    iface.putOriginalImage(i18n("Local Contrast"), filter()->getTargetImage().bits());
 }
 
 void LocalContrastTool::slotLoadSettings()
 {
     KUrl loadFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
                     QString( "*" ), kapp->activeWindow(),
-                    QString( i18n("Photograph Tone Mapping Settings File to Load")) );
+                    QString( i18n("Photograph Local Contrast Settings File to Load")) );
     if ( loadFile.isEmpty() )
         return;
 
@@ -635,10 +635,10 @@ void LocalContrastTool::slotLoadSettings()
     if ( file.open(QIODevice::ReadOnly) )
     {
         QTextStream stream( &file );
-        if ( stream.readLine() != "# Photograph Tone Mapping Configuration File" )
+        if ( stream.readLine() != "# Photograph Local Contrast Configuration File" )
         {
             KMessageBox::error(kapp->activeWindow(),
-                               i18n("\"%1\" is not a Photograph Tone Mapping settings text file.",
+                               i18n("\"%1\" is not a Photograph Local Contrast settings text file.",
                                     loadFile.fileName()));
             file.close();
             return;
@@ -667,7 +667,7 @@ void LocalContrastTool::slotLoadSettings()
     else
     {
         KMessageBox::error(kapp->activeWindow(),
-                           i18n("Cannot load settings from the Photograph Tone Mapping text file."));
+                           i18n("Cannot load settings from the Photograph Local Contrast text file."));
     }
 
     file.close();
@@ -677,7 +677,7 @@ void LocalContrastTool::slotSaveAsSettings()
 {
     KUrl saveFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
                     QString( "*" ), kapp->activeWindow(),
-                    QString( i18n("Photograph Tone Mapping Settings File to Save")) );
+                    QString( i18n("Photograph Local Contrast Settings File to Save")) );
     if ( saveFile.isEmpty() )
         return;
 
@@ -686,7 +686,7 @@ void LocalContrastTool::slotSaveAsSettings()
     if ( file.open(QIODevice::WriteOnly) )
     {
         QTextStream stream( &file );
-        stream << "# Photograph Tone Mapping Configuration File\n";
+        stream << "# Photograph Local Contrast Configuration File\n";
 
         stream << d->stretchContrastCheck->isChecked() << "\n";
         stream << d->fastModeCheck->isChecked() << "\n";
@@ -709,7 +709,7 @@ void LocalContrastTool::slotSaveAsSettings()
     else
     {
         KMessageBox::error(kapp->activeWindow(),
-                           i18n("Cannot save settings to the Photograph Tone Mapping text file."));
+                           i18n("Cannot save settings to the Photograph Local Contrast text file."));
     }
 
     file.close();

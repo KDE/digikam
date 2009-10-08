@@ -47,7 +47,7 @@ K_EXPORT_PLUGIN ( LocalContrastFactory("digikamimageplugin_localcontrast") )
 ImagePlugin_LocalContrast::ImagePlugin_LocalContrast(QObject *parent, const QVariantList&)
                          : Digikam::ImagePlugin(parent, "ImagePlugin_LocalContrast")
 {
-    m_localContrastAction  = new KAction(KIcon("contrast"), i18n("Tone Mapping..."), this);
+    m_localContrastAction  = new KAction(KIcon("contrast"), i18n("Local Contrast..."), this);
     actionCollection()->addAction("imageplugin_localcontrast", m_localContrastAction );
 
     connect(m_localContrastAction, SIGNAL(triggered(bool)),
