@@ -2797,7 +2797,6 @@ void DigikamApp::slotSetCheckedExifOrientationAction(const ImageInfo& info)
 {
     DMetadata meta(info.fileUrl().toLocalFile());
     int ori = (meta.isEmpty()) ? 0 : meta.getImageOrientation();
-    kDebug(digiKamAreaCode) << "ori: " << ori;
 
     switch (ori)
     {
