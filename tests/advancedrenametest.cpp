@@ -139,11 +139,11 @@ void AdvancedRenameWidgetTest::testTrimmedModifier_data()
 
     QString fileName("myfilename001");
 
-    QTest::newRow("01") << QString("[file]!") << QString("myfilename001 ")                             << fileName;
-    QTest::newRow("02") << QString("[file]!") << QString(" myfilename001 ")                            << fileName;
-    QTest::newRow("03") << QString("[file]!") << QString("               myfilename001              ") << fileName;
-    QTest::newRow("03") << QString("[file]!") << QString("               myfilename    001          ")
-                        << QString("myfilename 001");
+    QTest::newRow("01") << QString("[file]!") << QString("myfilename001 ")  << fileName;
+    QTest::newRow("02") << QString("[file]!") << QString(" myfilename001 ") << fileName;
+
+    QTest::newRow("03") << QString("[file]!") << QString("       myfilename001      ")    << fileName;
+    QTest::newRow("04") << QString("[file]!") << QString("        myfilename    001    ") << QString("myfilename 001");
 }
 
 void AdvancedRenameWidgetTest::testTrimmedModifier()
@@ -203,6 +203,7 @@ void AdvancedRenameWidgetTest::testChainedModifiers_data()
 
     QTest::newRow("[file]*&")    << QString("[file]*&")    << fileName << QString("MYFILENAME001");
     QTest::newRow("[file]{3-}*") << QString("[file]{3-}*") << fileName << QString("Filename001");
+
     QTest::newRow("[file]{3-}{\"name\",\"age\"}*") << QString("[file]{3-}{\"name\",\"age\"}*")
                                                    << fileName << QString("Fileage001");
 }
