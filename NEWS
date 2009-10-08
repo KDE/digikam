@@ -23,7 +23,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 014 ==> 192426 : Tried to open a picture in Gimp  The Picture opens in Gimp and digiKam crashes.
 015 ==> 202029 : digiKam crash after downloading and deleting pictures from camera.
 016 ==> 204967 : Crash import photo SD (Digikam::IconGroupItem::firstItem, Digikam::CameraUI::slotFileList).
-017 ==>
+017 ==> 209906 : Unportable test(1) construct in cleanup_digikamdb.
+018 ==>
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
