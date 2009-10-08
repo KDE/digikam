@@ -24,8 +24,6 @@
 #ifndef SOFTPROOFDIALOG_H
 #define SOFTPROOFDIALOG_H
 
-// Qt includes
-
 // KDE includes
 
 #include <kdialog.h>

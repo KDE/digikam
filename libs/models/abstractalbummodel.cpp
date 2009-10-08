@@ -25,10 +25,7 @@
 #include "abstractalbummodel.moc"
 #include "abstractalbummodelpriv.h"
 
-// Qt includes
-
 // KDE includes
-
 
 #include <klocale.h>
 #include <kglobal.h>

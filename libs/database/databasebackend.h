@@ -24,8 +24,6 @@
 #ifndef DATABASEBACKEND_H
 #define DATABASEBACKEND_H
 
-// Qt includes
-
 // Local includes
 
 #include "digikam_export.h"

@@ -24,8 +24,6 @@
 #ifndef IMAGEDRAGDROP_H
 #define IMAGEDRAGDROP_H
 
-// Qt includes
-
 // Local includes
 
 #include "imagemodeldragdrophandler.h"

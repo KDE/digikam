@@ -29,10 +29,6 @@
 #include <QAbstractItemModel>
 #include <QAbstractItemView>
 
-// Local includes
-
-//#include "digikam_export.h"
-
 namespace Digikam
 {
 

@@ -24,8 +24,6 @@
 #ifndef IMAGEFILTERMODEL_H
 #define IMAGEFILTERMODEL_H
 
-// Qt includes
-
 // KDE includes
 
 #include "kcategorizedsortfilterproxymodel.h"

@@ -24,8 +24,6 @@
 #include "imagerotationoverlay.h"
 #include "imagerotationoverlay.moc"
 
-// Qt includes
-
 // KDE includes
 
 #include <kiconloader.h>

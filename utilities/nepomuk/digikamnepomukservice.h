@@ -24,8 +24,6 @@
 #ifndef DIGIKAMNEPOMUKSERVICE_H
 #define DIGIKAMNEPOMUKSERVICE_H
 
-// Qt includes
-
 // KDE includes
 
 #include <ksharedconfig.h>

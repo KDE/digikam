@@ -26,8 +26,6 @@
 #ifndef ICCMANAGER_H
 #define ICCMANAGER_H
 
-// Qt includes
-
 // Local includes
 
 #include "digikam_export.h"
