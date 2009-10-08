@@ -46,7 +46,6 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-
 #include <kdialog.h>
 #include <kglobal.h>
 #include <kiconloader.h>
@@ -63,7 +62,6 @@
 
 // Local includes
 
-#include "config-digikam.h"
 #include "album.h"
 #include "albumfolderview.h"
 #include "albumhistory.h"
@@ -74,6 +72,7 @@
 #include "albumwidgetstack.h"
 #include "batchsyncmetadata.h"
 #include "collectionmanager.h"
+#include "config-digikam.h"
 #include "datefolderview.h"
 #include "digikamapp.h"
 #include "digikamimageview.h"

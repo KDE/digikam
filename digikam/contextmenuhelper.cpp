@@ -39,7 +39,6 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kapplication.h>
-
 #include <klocale.h>
 #include <kmenu.h>
 #include <kmimetype.h>
@@ -66,7 +65,6 @@
 #include "queuemgrwindow.h"
 #include "ratingpopupmenu.h"
 #include "tagspopupmenu.h"
-
 #include "config-digikam.h"
 #ifdef HAVE_KDEPIMLIBS
 #include <kabc/stdaddressbook.h>

@@ -44,7 +44,6 @@ extern "C"
 #include <kstandarddirs.h>
 #include <kaboutdata.h>
 #include <kcomponentdata.h>
-
 #include <kglobal.h>
 
 namespace Digikam

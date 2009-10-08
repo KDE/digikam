@@ -38,7 +38,6 @@
 
 #include <kapplication.h>
 #include <kcodecs.h>
-
 #include <klocale.h>
 #include <kstandardguiitem.h>
 #include <kpassivepopup.h>

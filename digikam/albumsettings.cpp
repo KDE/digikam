@@ -31,7 +31,6 @@
 #include <kconfig.h>
 #include <klocale.h>
 #include <kapplication.h>
-
 #include <kglobal.h>
 #include <kconfiggroup.h>
 #include <kglobalsettings.h>

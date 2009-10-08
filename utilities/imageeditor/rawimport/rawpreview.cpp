@@ -37,7 +37,6 @@
 
 #include <kcursor.h>
 #include <kdatetable.h>
-
 #include <kiconloader.h>
 #include <klocale.h>
 

@@ -81,7 +81,6 @@
 #include "metadatahub.h"
 #include "statusprogressbar.h"
 #include "debug.h"
-
 #include "config-digikam.h"
 #ifdef HAVE_KDEPIMLIBS
 #include <kabc/stdaddressbook.h>

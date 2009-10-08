@@ -36,7 +36,6 @@
 #include <kdialog.h>
 #include <kconfig.h>
 #include <kvbox.h>
-
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kapplication.h>

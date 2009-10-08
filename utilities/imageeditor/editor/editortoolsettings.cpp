@@ -40,7 +40,6 @@
 #include <kapplication.h>
 #include <kcolorbutton.h>
 #include <kcombobox.h>
-
 #include <kdialog.h>
 #include <khbox.h>
 #include <kiconloader.h>

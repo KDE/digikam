@@ -40,7 +40,6 @@
 // KDE includes
 
 #include <kapplication.h>
-
 #include <kdialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -55,7 +54,6 @@
 #include "findduplicatesalbumitem.h"
 #include "imagelister.h"
 #include "statusprogressbar.h"
-
 #include "albumselectcombobox.h"
 #include "abstractalbummodel.h"
 

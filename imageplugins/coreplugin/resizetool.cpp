@@ -51,7 +51,6 @@
 
 #include <kapplication.h>
 #include <kcursor.h>
-
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>

@@ -39,7 +39,6 @@
 
 #include <kapplication.h>
 #include <kcodecs.h>
-
 #include <klocale.h>
 #include <kpassivepopup.h>
 

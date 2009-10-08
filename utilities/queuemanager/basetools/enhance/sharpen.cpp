@@ -42,6 +42,8 @@
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>
 
+// Local includes
+
 #include "dimg.h"
 #include "dimgimagefilters.h"
 #include "dimgsharpen.h"
@@ -59,7 +61,7 @@ Sharpen::Sharpen(QObject *parent)
     setToolTitle(i18n("Sharpen Image"));
     setToolDescription(i18n("A tool to sharpen images"));
     setToolIcon(KIcon(SmallIcon("sharpenimage")));
-    
+
     /* Settings widget is a KVBox, containing the
      * sharpen method settings, ...
      */
@@ -78,7 +80,7 @@ Sharpen::Sharpen(QObject *parent)
 
     /* ... and then a widget stack, ... */
     m_stack = new QStackedWidget(vbox);
-    
+
     /* ... which in turn contains the settings for SimpleSharp ... */
     KVBox *simpleSharpSettings = new KVBox(m_stack);
     new QLabel(i18n("Sharpness:"), simpleSharpSettings);
@@ -92,11 +94,11 @@ Sharpen::Sharpen(QObject *parent)
     QLabel *space = new QLabel(simpleSharpSettings);
     simpleSharpSettings->setStretchFactor(space, 10);
 
-    connect(m_radiusInput, SIGNAL(valueChanged(int)), 
+    connect(m_radiusInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotSettingsChanged()));
-    
+
     m_stack->insertWidget(SimpleSharp, simpleSharpSettings);
-    
+
     /* ... settings for UnsharpMask ... */
     KVBox *unsharpMaskSettings = new KVBox(m_stack);
     new QLabel(i18n("Radius:"), unsharpMaskSettings);
@@ -107,7 +109,7 @@ Sharpen::Sharpen(QObject *parent)
     m_radiusInput2->setWhatsThis( i18n("Radius value is the Gaussian blur matrix radius value "
                                        "used to determines how much to blur the image.") );
 
-    connect(m_radiusInput2, SIGNAL(valueChanged(int)), 
+    connect(m_radiusInput2, SIGNAL(valueChanged(int)),
             this, SLOT(slotSettingsChanged()));
 
     new QLabel(i18n("Amount:"), unsharpMaskSettings);
@@ -118,7 +120,7 @@ Sharpen::Sharpen(QObject *parent)
     m_amountInput->setWhatsThis( i18n("The value of the difference between the "
                                       "original and the blur image that is added back into the original.") );
 
-    connect(m_amountInput, SIGNAL(valueChanged(double)), 
+    connect(m_amountInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotSettingsChanged()));
 
     new QLabel(i18n("Threshold:"), unsharpMaskSettings);
@@ -129,12 +131,12 @@ Sharpen::Sharpen(QObject *parent)
     m_thresholdInput->setWhatsThis( i18n("The threshold, as a fraction of the maximum "
                                          "luminosity value, needed to apply the difference amount.") );
 
-    connect(m_thresholdInput, SIGNAL(valueChanged(double)), 
+    connect(m_thresholdInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotSettingsChanged()));
 
     QLabel *space2 = new QLabel(unsharpMaskSettings);
     unsharpMaskSettings->setStretchFactor(space2, 10);
-    
+
     m_stack->insertWidget(UnsharpMask, unsharpMaskSettings);
 
     /* ... Refocus settings ... */
@@ -148,7 +150,7 @@ Sharpen::Sharpen(QObject *parent)
                                  "parameter for using this plugin. For most images the default value of 1.0 "
                                  "should give good results. Select a higher value when your image is very blurred."));
 
-    connect(m_radius, SIGNAL(valueChanged(double)), 
+    connect(m_radius, SIGNAL(valueChanged(double)),
             this, SLOT(slotSettingsChanged()));
 
     new QLabel(i18n("Correlation:"), refocusSettings);
@@ -161,7 +163,7 @@ Sharpen::Sharpen(QObject *parent)
                                       "Using a high value for the correlation will reduce the sharpening effect of the "
                                       "plugin."));
 
-    connect(m_correlation, SIGNAL(valueChanged(double)), 
+    connect(m_correlation, SIGNAL(valueChanged(double)),
             this, SLOT(slotSettingsChanged()));
 
     new QLabel(i18n("Noise filter:"), refocusSettings);
@@ -175,7 +177,7 @@ Sharpen::Sharpen(QObject *parent)
                                 "Using a high value for the noise filter will reduce the sharpening "
                                 "effect of the plugin."));
 
-    connect(m_noise, SIGNAL(valueChanged(double)), 
+    connect(m_noise, SIGNAL(valueChanged(double)),
             this, SLOT(slotSettingsChanged()));
 
     new QLabel(i18n("Gaussian sharpness:"), refocusSettings);
@@ -188,7 +190,7 @@ Sharpen::Sharpen(QObject *parent)
                                 "it causes nasty artifacts. When you use non-zero values, you will probably also have to "
                                 "increase the correlation and/or noise filter parameters."));
 
-    connect(m_gauss, SIGNAL(valueChanged(double)), 
+    connect(m_gauss, SIGNAL(valueChanged(double)),
             this, SLOT(slotSettingsChanged()));
 
     new QLabel(i18n("Matrix size:"), refocusSettings);
@@ -200,11 +202,11 @@ Sharpen::Sharpen(QObject *parent)
                                      "Increasing the matrix width may give better results, especially when you have "
                                      "chosen large values for circular or Gaussian sharpness."));
 
-    connect(m_matrixSize, SIGNAL(valueChanged(int)), 
+    connect(m_matrixSize, SIGNAL(valueChanged(int)),
             this, SLOT(slotSettingsChanged()));
 
     m_stack->insertWidget(Refocus, refocusSettings);
-        
+
     /* finally tell the batchtool about its settings widget */
     setSettingsWidget(vbox);
 
@@ -217,25 +219,25 @@ Sharpen::~Sharpen()
 BatchToolSettings Sharpen::defaultSettings()
 {
     BatchToolSettings settings;
-    
+
     // sharpen method
     settings.insert("SharpenFilterType", SimpleSharp);
-    
+
     // simple sharp
     settings.insert("SimpleSharpRadius", 2);
-    
+
     // unsharp mask
     settings.insert("UnsharpMaskRadius",    (int)1);
     settings.insert("UnsharpMaskAmount",    (double)1.0);
     settings.insert("UnsharpMaskThreshold", (double)0.05);
-    
+
     // refocus
     settings.insert("RefocusMatrixSize",  (int)5);
     settings.insert("RefocusRadius",      (double)0.9);
     settings.insert("RefocusGauss",       (double)0.0);
     settings.insert("RefocusCorrelation", (double)0.5);
     settings.insert("RefocusNoise",       (double)0.01);
-    
+
     return settings;
 }
 
@@ -248,12 +250,12 @@ void Sharpen::slotAssignSettings2Widget()
 
     // simple sharp
     m_radiusInput->setValue(settings()["SimpleSharpRadius"].toInt());
-    
+
     // unsharp mask
     m_radiusInput2->setValue(settings()["UnsharpMaskRadius"].toInt());
     m_amountInput->setValue(settings()["UnsharpMaskAmount"].toDouble());
     m_thresholdInput->setValue(settings()["UnsharpMaskThreshold"].toDouble());
-    
+
     // refocus
     m_radius->setValue(settings()["RefocusRadius"].toDouble());
     m_gauss->setValue(settings()["RefocusGauss"].toDouble());
@@ -265,18 +267,18 @@ void Sharpen::slotAssignSettings2Widget()
 void Sharpen::slotSettingsChanged()
 {
     BatchToolSettings settings;
-    
+
     // sharpen type
     settings.insert("SharpenFilterType", (int)m_sharpMethod->currentIndex());
- 
+
     // simple sharp
     settings.insert("SimpleSharpRadius", (int)m_radiusInput->value());
-    
+
     // unsharp mask
     settings.insert("UnsharpMaskRadius",    (int)m_radiusInput2->value());
     settings.insert("UnsharpMaskAmount",    (double)m_amountInput->value());
     settings.insert("UnsharpMaskThreshold", (double)m_thresholdInput->value());
-    
+
     // refocus
     settings.insert("RefocusRadius",      (double)m_radius->value());
     settings.insert("RefocusCorrelation", (double)m_correlation->value());
@@ -304,7 +306,7 @@ bool Sharpen::toolOperations()
     uint height     = image().height();
     uchar *data     = image().bits();
     bool sixteenBit = image().sixteenBit();
-    
+
     switch (filterType)
     {
         case SimpleSharp:
@@ -340,17 +342,17 @@ bool Sharpen::toolOperations()
             delete filter;
             break;
         }
-        
+
         case Refocus:
         {
             int matrixSize     = settings()["RefocusMatrixSize"].toInt();
             double radius      = settings()["RefocusRadius"].toDouble();
-            double gauss       = settings()["RefocusGauss"].toDouble(); 
-            double correlation = settings()["RefocusCorrelation"].toDouble(); 
+            double gauss       = settings()["RefocusGauss"].toDouble();
+            double correlation = settings()["RefocusCorrelation"].toDouble();
             double noise       = settings()["RefocusNoise"].toDouble();
-                
+
             DImg orgImage(width, height, sixteenBit, true, data);
-            DImgRefocus *filter = new DImgRefocus(&orgImage, 0L, matrixSize, 
+            DImgRefocus *filter = new DImgRefocus(&orgImage, 0L, matrixSize,
                                                   radius, gauss, correlation, noise);
             filter->startFilterDirectly();
             DImg imDest = filter->getTargetImage();
@@ -360,7 +362,7 @@ bool Sharpen::toolOperations()
         }
     }
 
-    return savefromDImg();	
+    return savefromDImg();
 }
 
 } // namespace Digikam

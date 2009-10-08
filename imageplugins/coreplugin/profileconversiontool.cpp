@@ -38,7 +38,6 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
-
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>

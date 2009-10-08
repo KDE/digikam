@@ -32,7 +32,6 @@
 // KDE includes
 
 #include <kactionmenu.h>
-
 #include <klocale.h>
 #include <kmenu.h>
 

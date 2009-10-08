@@ -35,7 +35,6 @@
 
 #include <kvbox.h>
 #include <khbox.h>
-
 #include <klocale.h>
 #include <kdialog.h>
 

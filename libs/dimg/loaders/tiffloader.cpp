@@ -66,9 +66,7 @@ extern "C"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 #include "dmetadata.h"
-
 #include "tiffloader.h"     //krazy:exclude=includes
-
 
 namespace Digikam
 {

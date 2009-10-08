@@ -38,7 +38,6 @@
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <kapplication.h>
-
 #include <kmenu.h>
 #include <kmimetype.h>
 #include <krun.h>
