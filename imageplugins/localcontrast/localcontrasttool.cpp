@@ -188,25 +188,25 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label2         = new QLabel(i18n("High saturation:"), firstPage);
+    QLabel *label2         = new QLabel(i18n("Highlights saturation:"), firstPage);
     d->highSaturationInput = new RIntNumInput(firstPage);
     d->highSaturationInput->setRange(0, 100, 1);
     d->highSaturationInput->setDefaultValue(50);
     d->highSaturationInput->setSliderEnabled(true);
     d->highSaturationInput->setObjectName("highSaturationInput");
-    d->highSaturationInput->setWhatsThis(i18n("<b>High and low saturation</b>: Usually the (perceived) saturation is "
+    d->highSaturationInput->setWhatsThis(i18n("<b>Highlights saturation</b>: Usually the (perceived) saturation is "
                                               "increased. The user can choose to lower the saturation on original highlight "
                                               "and shadows from the image with these parameters."));
 
     // -------------------------------------------------------------
 
-    QLabel *label3        = new QLabel(i18n("Low saturation:"), firstPage);
+    QLabel *label3        = new QLabel(i18n("Shadow saturation:"), firstPage);
     d->lowSaturationInput = new RIntNumInput(firstPage);
     d->lowSaturationInput->setRange(0, 100, 1);
     d->lowSaturationInput->setDefaultValue(50);
     d->lowSaturationInput->setSliderEnabled(true);
     d->lowSaturationInput->setObjectName("lowSaturationInput");
-    d->lowSaturationInput->setWhatsThis(i18n("<b>High and low saturation</b>: Usually the (perceived) saturation is "
+    d->lowSaturationInput->setWhatsThis(i18n("<b>Shadow saturation</b>: Usually the (perceived) saturation is "
                                              "increased. The user can choose to lower the saturation on original highlight "
                                              "and shadows from the image with these parameters."));
 
