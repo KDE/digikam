@@ -63,7 +63,7 @@ LocalContrast::LocalContrast(DImg *image, ToneMappingParameters *par, QObject *p
                d(new LocalContrastPriv)
 {
     d->par              = par;
-    d->par->info_cancel = &m_cancel;
+    d->par->setCancel(&m_cancel);
     d->par->setProgressCallBackFunction(this, CallbackForToneMapping);
 
     initFilter();

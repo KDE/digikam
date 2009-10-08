@@ -44,8 +44,8 @@ public:
     ToneMappingParameters();
     ~ToneMappingParameters();
 
-    bool     cancel();
     void     setCancel(bool *b);
+    bool     cancel();
 
     void     setProgressCallBackFunction(void *data=0, ToneMappingCallbackPtr cb=0);
     void     postProgress(int progress);
@@ -61,21 +61,12 @@ public:
 
 public:
 
-    /** To cancel computation from user interface.
-    */
-    bool* info_cancel;
-
     bool  info_fast_mode;
     bool  stretch_contrast;
 
     int   low_saturation;
     int   high_saturation;
     int   function_id;
-
-    /** For progress CallBack method from User interface
-     */
-    ToneMappingCallbackPtr info_callBack;
-    void*                  info_data;
 
     struct
     {
@@ -91,6 +82,17 @@ public:
         REALTYPE blur;
         int      threshold;
     } unsharp_mask;
+
+private:
+
+    /** To cancel computation from user interface.
+    */
+    bool*                  info_cancel;
+
+    /** For progress CallBack method from User interface
+     */
+    ToneMappingCallbackPtr info_callBack;
+    void*                  info_data;
 };
 
 } // namespace DigikamNoiseReductionImagesPlugin

@@ -131,7 +131,7 @@ void ToneMappingParameters::save_parameters(const char *filename)
         fprintf(f,"enabled %d\n",stage[i].enabled);
         fprintf(f,"power %g\n", stage[i].power);
         fprintf(f,"blur %g\n",stage[i].blur);
-    };
+    }
 
     fprintf(f,"unsharp_mask_enabled %d\n",unsharp_mask.enabled);
     fprintf(f,"unsharp_mask_power %g\n",unsharp_mask.power);
