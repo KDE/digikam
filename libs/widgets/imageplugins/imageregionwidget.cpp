@@ -464,9 +464,9 @@ void ImageRegionWidget::contentsWheelEvent(QWheelEvent *e)
     if (e->modifiers() & Qt::ControlModifier)
     {
         if (e->delta() < 0 && !maxZoom())
-            slotIncreaseZoom();
-        else if (e->delta() > 0 && !minZoom())
             slotDecreaseZoom();
+        else if (e->delta() > 0 && !minZoom())
+            slotIncreaseZoom();
         return;
     }
 }
