@@ -949,8 +949,8 @@ void DigikamView::slotAlbumsCleared()
 
 void DigikamView::slotAlbumHistoryBack(int steps)
 {
-    Album   *album=0;
-    QWidget *widget=0;
+    Album *album    = 0;
+    QWidget *widget = 0;
 
     d->albumHistory->back(&album, &widget, steps);
 
@@ -959,8 +959,8 @@ void DigikamView::slotAlbumHistoryBack(int steps)
 
 void DigikamView::slotAlbumHistoryForward(int steps)
 {
-    Album   *album=0;
-    QWidget *widget=0;
+    Album *album    = 0;
+    QWidget *widget = 0;
 
     d->albumHistory->forward(&album, &widget, steps);
 
@@ -974,51 +974,58 @@ void DigikamView::changeAlbumFromHistory(Album *album, QWidget *widget)
         Q3ListViewItem *item = 0;
 
         // Check if widget is a vbox used to host folderview, tagview or searchview.
+        // B.K.O 202886: DateFolderView is also a KVBox widget, so we need to check for that in here, too.
         if (KVBox *v = dynamic_cast<KVBox*>(widget))
         {
             if (v == d->folderBox)
             {
-                item = (Q3ListViewItem*)album->extraData(d->folderView);
-                if(!item) return;
+                item = (Q3ListViewItem*) album->extraData(d->folderView);
+                if (!item)
+                    return;
 
                 d->folderView->setSelected(item, true);
                 d->folderView->ensureItemVisible(item);
             }
             else if (v == d->tagBox)
             {
-                item = (Q3ListViewItem*)album->extraData(d->tagFolderView);
-                if(!item) return;
+                item = (Q3ListViewItem*) album->extraData(d->tagFolderView);
+                if (!item)
+                    return;
 
                 d->tagFolderView->setSelected(item, true);
                 d->tagFolderView->ensureItemVisible(item);
             }
             else if (v == d->searchBox)
             {
-                item = (Q3ListViewItem*)album->extraData(d->searchFolderView);
-                if(!item) return;
+                item = (Q3ListViewItem*) album->extraData(d->searchFolderView);
+                if (!item)
+                    return;
 
                 d->searchFolderView->setSelected(item, true);
                 d->searchFolderView->ensureItemVisible(item);
             }
-        }
-        else if (DateFolderView *v = dynamic_cast<DateFolderView*>(widget))
-        {
-            item = (Q3ListViewItem*)album->extraData(v);
-            if(!item) return;
-            v->setSelected(item);
+            else if (v == d->dateFolderView)
+            {
+                item = (Q3ListViewItem*) album->extraData(v);
+                if (!item)
+                    return;
+                d->dateFolderView->setSelected(item);
+            }
         }
         else if (TimeLineView *v = dynamic_cast<TimeLineView*>(widget))
         {
-            item = (Q3ListViewItem*)album->extraData(v->folderView());
-            if(!item) return;
+            item = (Q3ListViewItem*) album->extraData(v->folderView());
+            if (!item)
+                return;
 
             v->folderView()->setSelected(item, true);
             v->folderView()->ensureItemVisible(item);
         }
         else if (FuzzySearchView *v = dynamic_cast<FuzzySearchView*>(widget))
         {
-            item = (Q3ListViewItem*)album->extraData(v->folderView());
-            if(!item) return;
+            item = (Q3ListViewItem*) album->extraData(v->folderView());
+            if (!item)
+                return;
 
             v->folderView()->setSelected(item, true);
             v->folderView()->ensureItemVisible(item);
@@ -1041,15 +1048,19 @@ void DigikamView::clearHistory()
 void DigikamView::getBackwardHistory(QStringList& titles)
 {
     d->albumHistory->getBackwardHistory(titles);
-    for (int i=0; i<titles.size(); ++i)
+    for (int i = 0; i < titles.size(); ++i)
+    {
         titles[i] = d->userPresentableAlbumTitle(titles[i]);
+    }
 }
 
 void DigikamView::getForwardHistory(QStringList& titles)
 {
     d->albumHistory->getForwardHistory(titles);
-    for (int i=0; i<titles.size(); ++i)
+    for (int i = 0; i < titles.size(); ++i)
+    {
         titles[i] = d->userPresentableAlbumTitle(titles[i]);
+    }
 }
 
 QString DigikamViewPriv::userPresentableAlbumTitle(const QString& title)
