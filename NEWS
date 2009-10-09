@@ -25,7 +25,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 016 ==> 204967 : Crash import photo SD (Digikam::IconGroupItem::firstItem, Digikam::CameraUI::slotFileList).
 017 ==> 209906 : Unportable test(1) construct in cleanup_digikamdb.
 018 ==> 209923 : Crash at right-click image while moving pics in background.
-019 ==>
+019 ==> 202886 : digiKam crash unexpectedly segmentation fault.
+020 ==>
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
