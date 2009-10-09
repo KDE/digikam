@@ -36,6 +36,7 @@
 #include <QSignalMapper>
 #include <QStringList>
 #include <QtDBus>
+#include <QDesktopServices>
 
 // KDE includes
 
@@ -2570,7 +2571,7 @@ void DigikamApp::slotImportAddImages()
 #if KDE_IS_VERSION(4,1,61)
     startingPath = KGlobalSettings::picturesPath();
 #else
-    picturesPath = QDesktopServices::storageLocation(QDesktopServices::PicturesLocation);
+    startingPath = QDesktopServices::storageLocation(QDesktopServices::PicturesLocation);
 #endif
     QString path = KFileDialog::getExistingDirectory(startingPath, this,
                                 i18n("Select folder to parse"));

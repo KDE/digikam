@@ -54,6 +54,7 @@ extern "C"
 #include <QProgressBar>
 #include <QSplitter>
 #include <QVBoxLayout>
+#include <QDesktopServices>
 
 // KDE includes
 
