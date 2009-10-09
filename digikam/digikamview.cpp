@@ -1033,8 +1033,8 @@ void DigikamView::changeAlbumFromHistory(Album *album, QWidget *widget)
 
         d->leftSideBar->setActiveTab(widget);
 
-        d->parent->enableAlbumBackwardHistory(!d->albumHistory->isBackwardEmpty());
-        d->parent->enableAlbumForwardHistory(!d->albumHistory->isForwardEmpty());
+        d->parent->enableAlbumBackwardHistory(d->useAlbumHistory && !d->albumHistory->isBackwardEmpty());
+        d->parent->enableAlbumForwardHistory(d->useAlbumHistory && !d->albumHistory->isForwardEmpty());
     }
 }
 
