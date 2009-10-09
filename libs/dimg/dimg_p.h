@@ -71,14 +71,14 @@ public:
 
     DImgPrivate()
     {
-        null              = true;
-        width             = 0;
-        height            = 0;
-        data              = 0;
-        lanczos_func	  = 0;
-        alpha             = false;
-        sixteenBit        = false;
-        isReadOnly        = false;
+        null         = true;
+        width        = 0;
+        height       = 0;
+        data         = 0;
+        lanczos_func = 0;
+        alpha        = false;
+        sixteenBit   = false;
+        isReadOnly   = false;
     }
 
     ~DImgPrivate()
@@ -95,8 +95,8 @@ public:
     unsigned int            width;
     unsigned int            height;
 
-    unsigned char          *data;
-    LANCZOS_DATA_TYPE	   *lanczos_func;
+    unsigned char*          data;
+    LANCZOS_DATA_TYPE*      lanczos_func;
 
     QMap<int, QByteArray>   metaData;
     QMap<QString, QVariant> attributes;
