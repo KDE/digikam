@@ -26,7 +26,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 017 ==> 209906 : Unportable test(1) construct in cleanup_digikamdb.
 018 ==> 209923 : Crash at right-click image while moving pics in background.
 019 ==> 202886 : digiKam crash unexpectedly segmentation fault.
-020 ==>
+020 ==> 209973 : Mouse wheel inverted in Sharpen Tool.
+021 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
