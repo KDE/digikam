@@ -48,7 +48,7 @@ WelcomePage::WelcomePage(KAssistantDialog* dlg)
     title->setText(i18n("<qt>"
                         "<p><h1><b>Welcome to digiKam %1</b></h1></p>"
                         "<p>digiKam is an advanced digital photo management application published "
-                        "in open-source.</p>"
+                        "as open-source.</p>"
                         "<p>This assistant will help you to configure first run settings to be able to "
                         "use digiKam quickly.</p>"
                         "</qt>", QString(digikam_version_short)));

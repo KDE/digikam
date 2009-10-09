@@ -68,7 +68,6 @@ MetadataPage::MetadataPage(KAssistantDialog* dlg)
     QLabel *label1 = new QLabel(vbox);
     label1->setWordWrap(true);
     label1->setText(i18n("<qt>"
-                         "<p>Configure Metadata Storage to Files.</p>"
                          "<p>Set here if you want to store the information assigned to items in digiKam in the files' "
                          "metadata, to improve interoperability with others photo management programs:</p>"
                          "</qt>"));

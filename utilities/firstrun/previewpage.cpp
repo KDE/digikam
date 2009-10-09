@@ -68,7 +68,6 @@ PreviewPage::PreviewPage(KAssistantDialog* dlg)
     QLabel *label1 = new QLabel(vbox);
     label1->setWordWrap(true);
     label1->setText(i18n("<qt>"
-                         "<p>Configure Preview Behavior.</p>"
                          "<p>Set here how images are displayed in preview mode and on the light table:</p>"
                          "</qt>"));
 

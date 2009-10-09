@@ -68,7 +68,6 @@ RawPage::RawPage(KAssistantDialog* dlg)
     QLabel *label1 = new QLabel(vbox);
     label1->setWordWrap(true);
     label1->setText(i18n("<qt>"
-                        "<p>Configure Raw File Handling.</p>"
                         "<p>Set here how you want to open Raw images in the editor:</p>"
                         "</qt>"));
 

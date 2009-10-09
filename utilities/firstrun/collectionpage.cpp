@@ -74,7 +74,7 @@ public:
 };
 
 CollectionPage::CollectionPage(KAssistantDialog* dlg)
-              : AssistantDlgPage(dlg, i18n("<b>Configure where images and meta-data are stored</b>")),
+              : AssistantDlgPage(dlg, i18n("<b>Configure where images and metadata are stored</b>")),
                 d(new CollectionPagePriv)
 {
     QWidget *widget      = new QWidget(this);
@@ -119,7 +119,7 @@ CollectionPage::CollectionPage(KAssistantDialog* dlg)
 
     QLabel *textLabel3 = new QLabel(widget);
     textLabel3->setWordWrap(true);
-    textLabel3->setText(i18n("<p>digiKam stores information and meta-data about your images in a database file. "
+    textLabel3->setText(i18n("<p>digiKam stores information and metadata about your images in a database file. "
                              "Please set the location of this file or accept the default.</p>"
                              "<p><i>Note:</i> you need to have write access to the folder used here, "
                              "and you cannot use a remote location on a networked server, "
@@ -170,7 +170,7 @@ void CollectionPage::saveSettings()
     group.writeEntry("Version", digikam_version);
 
     group = config->group("Album Settings");
-    group.writeEntry("Album Path", d->rootAlbum);
+    group.writeEntry("Album Path",         d->rootAlbum);
     group.writeEntry("Database File Path", d->dbPath);
 
     config->sync();
@@ -259,7 +259,8 @@ bool CollectionPage::checkRootAlbum(QString& rootAlbumFolder)
     if (!path.isWritable())
 #endif
     {
-        KMessageBox::information(this, i18n("You do not seem to have write access for the folder selected to be the root album.\n"
+        KMessageBox::information(this, i18n("You do not seem to have write access for the folder "
+                                            "selected to be the root album.\n"
                                             "Warning: Without write access, items cannot be edited."));
     }
 
@@ -274,7 +275,7 @@ bool CollectionPage::checkDatabase(QString& dbFolder)
     if (dbFolder.isEmpty())
     {
         KMessageBox::sorry(this, i18n("You must select a folder for digiKam to "
-                                      "store information and meta-data in a database file."));
+                                      "store information and metadata in a database file."));
         return false;
     }
 
@@ -333,7 +334,8 @@ bool CollectionPage::checkDatabase(QString& dbFolder)
     if (!path.isWritable())
 #endif
     {
-        KMessageBox::information(this, i18n("<p>You do not seem to have write access for the folder to host the database file.<br/>"
+        KMessageBox::information(this, i18n("<p>You do not seem to have write access "
+                                            "for the folder to host the database file.<br/>"
                                             "Please select a different location.</p>"
                                             "<p><b>%1</b></p>", dbFolder),
                                  i18n("No Database Write Access"));

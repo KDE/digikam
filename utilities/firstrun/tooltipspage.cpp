@@ -68,7 +68,6 @@ TooltipsPage::TooltipsPage(KAssistantDialog* dlg)
     QLabel *label1 = new QLabel(vbox);
     label1->setWordWrap(true);
     label1->setText(i18n("<qt>"
-                         "<p>Enabled Contextual Tooltips.</p>"
                          "<p>Set here if you want to show contextual tooltips in icon-view and folder-view:</p>"
                          "</qt>"));
 
@@ -93,7 +92,7 @@ TooltipsPage::TooltipsPage(KAssistantDialog* dlg)
     QLabel *label2 = new QLabel(vbox);
     label2->setWordWrap(true);
     label2->setText(i18n("<qt>"
-                         "<p><i>Note:</i> tooltips show photograph and digiKam meta-data on the fly, "
+                         "<p><i>Note:</i> tooltips show photograph and digiKam metadata on the fly, "
                          "as the mouse moves over items. This can be useful when selecting items. "
                          "Tooltips are displayed in the album folder view, "
                          "album icon view, camera icon view, batch queue list, and thumb bar. "

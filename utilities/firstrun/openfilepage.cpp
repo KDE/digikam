@@ -72,7 +72,6 @@ OpenFilePage::OpenFilePage(KAssistantDialog* dlg)
     QLabel *label1 = new QLabel(vbox);
     label1->setWordWrap(true);
     label1->setText(i18n("<qt>"
-                         "<p>Configure Open File Behavior.</p>"
                          "<p>Specify how images should be opened when right-clicked on in the icon view:</p>"
                          "</qt>"));
 
