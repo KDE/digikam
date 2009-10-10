@@ -77,12 +77,12 @@ curdir=$(pwd)
 cd $databasedir 2&> /dev/null
 if [ $? = 0 ]
 then
+    db_prefix="Database:"
     pretty_header "Cleanup databases ($programname)"
     echo -e "Location:\t$(pwd)"
     for db in $(find . -type f -name 'digikam*.db' -print)
     do
-        echo -n "Database:"
-        echo -ne "\t$(basename $db) ... "
+        echo -ne "${db_prefix:-"\\t"}\t$(basename $db) ... "
         sqlite3 $db "VACUUM;"
         if [ $? = 0 ]
         then
@@ -91,6 +91,7 @@ then
             echo "failed!"
             echo "sqlite3 was not able to cleanup the database."
         fi
+        unset db_prefix
     done
     echo "Finished";
 else
