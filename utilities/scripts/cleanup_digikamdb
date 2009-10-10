@@ -21,7 +21,8 @@ function pretty_header
     offset_length=$(expr $(expr length "$offset") \* 2)
 
     # calculate length and print header
-    length=$(expr $(expr length "$*") + $offset_length)
+    str_length=$(expr length "$*")
+    length=$(expr $str_length + $offset_length)
     echo $(repeat_char "-" $length)
     echo "${offset}$*${offset}"
     echo $(repeat_char "-" $length)
@@ -41,6 +42,8 @@ databasekey="Database File Path"
 configfile="digikamrc"
 databasedir=$(kreadconfig --file $configfile --group "$configgroup" --key "$databasekey")
 
+# -----------------------------------------------------------------------------
+
 # make sure digiKam is not running
 proc="$(ps aux | grep $username | grep -v $0 | grep -w $processname | grep -v grep)"
 if [ "$proc" != "" ]
@@ -48,6 +51,8 @@ then
     echo "Please shutdown $programname first."
     exit 1
 fi
+
+# -----------------------------------------------------------------------------
 
 # backup current working dir
 curdir=$(pwd)
