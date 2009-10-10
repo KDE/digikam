@@ -119,10 +119,10 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     QLabel *label1     = new QLabel(i18n("Author Names:"), page1);
     d->authorsEdit     = new KLineEdit(page1);
     d->authorsEdit->setClearButtonShown(true);
-    d->authorsEdit->setClickMessage(i18n("Enter all creator name. Use semi-colons as separator here."));
+    d->authorsEdit->setClickMessage(i18n("Enter the names of the photograph's creators. Use semi-colons as separator here."));
     label1->setBuddy(d->authorsEdit);
-    d->authorsEdit->setWhatsThis(i18n("<p>This field should contain names of the persons who created the photograph. "
-                                      "If it is not appropriate to add the name of the photographer (for example, if the identify of "
+    d->authorsEdit->setWhatsThis(i18n("<p>This field should contain the names of the persons who created the photograph. "
+                                      "If it is not appropriate to add the name of the photographer (for example, if the identity of "
                                       "the photographer needs to be protected) the name of a company or organization can also be used. "
                                       "Once saved, this field should not be changed by anyone. "
                                       "<p>To enter more than one name, use <b>semi-colons as separators</b>.</p>"
@@ -133,9 +133,9 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     QLabel *label2         = new QLabel(i18n("Authors Position:"), page1);
     d->authorsPositionEdit = new KLineEdit(page1);
     d->authorsPositionEdit->setClearButtonShown(true);
-    d->authorsPositionEdit->setClickMessage(i18n("Enter the job title of authors here."));
+    d->authorsPositionEdit->setClickMessage(i18n("Enter the job titles of the authors here."));
     label2->setBuddy(d->authorsPositionEdit);
-    d->authorsPositionEdit->setWhatsThis(i18n("<p>This field should contain the job title of authors. Examples might include "
+    d->authorsPositionEdit->setWhatsThis(i18n("<p>This field should contain the job title of the authors. Examples might include "
                                               "titles such as: Staff Photographer, Freelance Photographer, or Independent Commercial "
                                               "Photographer. Since this is a qualifier for the Author field, the Author field must also "
                                               "be filled out.</p>"
@@ -188,14 +188,14 @@ TemplatePanel::TemplatePanel(QWidget* parent)
                                          "a resource can be legally used."
                                          "<p>With XMP, you can include more than one right usage terms string using "
                                          "different languages.</p>"
-                                         "<p>This field do not exist with IPTC.</p>"));
+                                         "<p>This field does not exist with IPTC.</p>"));
 
     // --------------------------------------------------------
 
     QLabel *label6 = new QLabel(i18n("Source:"), page1);
     d->sourceEdit  = new KLineEdit(page1);
     d->sourceEdit->setClearButtonShown(true);
-    d->sourceEdit->setClickMessage(i18n("Enter original owner of the photograph here."));
+    d->sourceEdit->setClickMessage(i18n("Enter the original owner of the photograph here."));
     label6->setBuddy(d->sourceEdit);
     d->sourceEdit->setWhatsThis(i18n("<p>The Source field should be used to identify the original owner or copyright holder of the "
                                      "photograph. The value of this field should never be changed after the information is entered "
@@ -248,37 +248,37 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     d->locationCountryCodeEdit = new CountrySelector(page2);
     label9->setBuddy(d->locationCountryCodeEdit);
     d->locationCountryCodeEdit->setWhatsThis(i18n("<p>Select here the country "
-                                                  "where have been taken the photograph.</p>"));
+                                                  "where the photograph has been taken.</p>"));
 
     // --------------------------------------------------------
 
     QLabel *label10              = new QLabel(i18n("Province State:"), page2);
     d->locationProvinceStateEdit = new KLineEdit(page2);
     d->locationProvinceStateEdit->setClearButtonShown(true);
-    d->locationProvinceStateEdit->setClickMessage(i18n("Enter province state of contents here."));
+    d->locationProvinceStateEdit->setClickMessage(i18n("Enter the province state of contents here."));
     label10->setBuddy(d->locationProvinceStateEdit);
-    d->locationProvinceStateEdit->setWhatsThis(i18n("<p>This field should contain province state "
-                                                    "where have been taken the photograph.</p>"));
+    d->locationProvinceStateEdit->setWhatsThis(i18n("<p>This field should contain the province state "
+                                                    "where the photograph has been taken.</p>"));
 
     // --------------------------------------------------------
 
     QLabel *label11     = new QLabel(i18n("City:"), page2);
     d->locationCityEdit = new KLineEdit(page2);
     d->locationCityEdit->setClearButtonShown(true);
-    d->locationCityEdit->setClickMessage(i18n("Enter city of contents here."));
+    d->locationCityEdit->setClickMessage(i18n("Enter the city of contents here."));
     label11->setBuddy(d->locationCityEdit);
-    d->locationCityEdit->setWhatsThis(i18n("<p>This field should contain city name "
-                                           "where have been taken the photograph.</p>"));
+    d->locationCityEdit->setWhatsThis(i18n("<p>This field should contain the city name "
+                                           "where the photograph has been taken.</p>"));
 
     // --------------------------------------------------------
 
     QLabel *label12            = new QLabel(i18n("Sublocation:"), page2);
     d->locationSublocationEdit = new KLineEdit(page2);
     d->locationSublocationEdit->setClearButtonShown(true);
-    d->locationSublocationEdit->setClickMessage(i18n("Enter sublocation place of contents here."));
+    d->locationSublocationEdit->setClickMessage(i18n("Enter the sublocation place of contents here."));
     label12->setBuddy(d->locationSublocationEdit);
-    d->locationSublocationEdit->setWhatsThis(i18n("<p>This field should contain sublocation from the city "
-                                                  "where have been taken the photograph.</p>"));
+    d->locationSublocationEdit->setWhatsThis(i18n("<p>This field should contain the sublocation from the city "
+                                                  "where the photograph has been taken.</p>"));
 
     // --------------------------------------------------------
 
@@ -306,80 +306,80 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     QLabel *label13    = new QLabel(i18n("City:"), page3);
     d->contactCityEdit = new KLineEdit(page3);
     d->contactCityEdit->setClearButtonShown(true);
-    d->contactCityEdit->setClickMessage(i18n("Enter city name of lead author here."));
+    d->contactCityEdit->setClickMessage(i18n("Enter the city name of the lead author here."));
     label13->setBuddy(d->contactCityEdit);
-    d->contactCityEdit->setWhatsThis(i18n("<p>This field should contain city name "
-                                          "where lead author live.</p>"));
+    d->contactCityEdit->setWhatsThis(i18n("<p>This field should contain the city name "
+                                          "where the lead author lives.</p>"));
 
     // --------------------------------------------------------
 
     QLabel *label14       = new QLabel(i18n("Country:"), page3);
     d->contactCountryEdit = new KLineEdit(page3);
     d->contactCountryEdit->setClearButtonShown(true);
-    d->contactCountryEdit->setClickMessage(i18n("Enter country name of lead author here."));
+    d->contactCountryEdit->setClickMessage(i18n("Enter the country name of the lead author here."));
     label14->setBuddy(d->contactCountryEdit);
-    d->contactCountryEdit->setWhatsThis(i18n("<p>This field should contain country name "
-                                             "where lead author live.</p>"));
+    d->contactCountryEdit->setWhatsThis(i18n("<p>This field should contain the country name "
+                                             "where the lead author lives.</p>"));
 
     // --------------------------------------------------------
 
     QLabel *label15       = new QLabel(i18n("Address:"), page3);
     d->contactAddressEdit = new KLineEdit(page3);
     d->contactAddressEdit->setClearButtonShown(true);
-    d->contactAddressEdit->setClickMessage(i18n("Enter address of lead author here."));
+    d->contactAddressEdit->setClickMessage(i18n("Enter the address of the lead author here."));
     label15->setBuddy(d->contactAddressEdit);
-    d->contactAddressEdit->setWhatsThis(i18n("<p>This field should contain address "
-                                             "where lead author live.</p>"));
+    d->contactAddressEdit->setWhatsThis(i18n("<p>This field should contain the address "
+                                             "where the lead author lives.</p>"));
 
     // --------------------------------------------------------
 
     QLabel *label16          = new QLabel(i18n("Postal Code:"), page3);
     d->contactPostalCodeEdit = new KLineEdit(page3);
     d->contactPostalCodeEdit->setClearButtonShown(true);
-    d->contactPostalCodeEdit->setClickMessage(i18n("Enter postal code of lead author here."));
+    d->contactPostalCodeEdit->setClickMessage(i18n("Enter the postal code of the lead author here."));
     label16->setBuddy(d->contactPostalCodeEdit);
-    d->contactPostalCodeEdit->setWhatsThis(i18n("<p>This field should contain postal code "
-                                                "where lead author live.</p>"));
+    d->contactPostalCodeEdit->setWhatsThis(i18n("<p>This field should contain the postal code "
+                                                "where the lead author lives.</p>"));
 
     // --------------------------------------------------------
 
     QLabel *label17             = new QLabel(i18n("Province:"), page3);
     d->contactProvinceStateEdit = new KLineEdit(page3);
     d->contactProvinceStateEdit->setClearButtonShown(true);
-    d->contactProvinceStateEdit->setClickMessage(i18n("Enter province of lead author here."));
+    d->contactProvinceStateEdit->setClickMessage(i18n("Enter the province of the lead author here."));
     label17->setBuddy(d->contactProvinceStateEdit);
-    d->contactProvinceStateEdit->setWhatsThis(i18n("<p>This field should contain province "
-                                                   "where lead author live.</p>"));
+    d->contactProvinceStateEdit->setWhatsThis(i18n("<p>This field should contain the province "
+                                                   "where the lead author lives.</p>"));
 
     // --------------------------------------------------------
 
     QLabel *label18     = new QLabel(i18n("Email:"), page3);
     d->contactEmailEdit = new KLineEdit(page3);
     d->contactEmailEdit->setClearButtonShown(true);
-    d->contactEmailEdit->setClickMessage(i18n("Enter email of lead author here."));
+    d->contactEmailEdit->setClickMessage(i18n("Enter the email of the lead author here."));
     label18->setBuddy(d->contactEmailEdit);
-    d->contactEmailEdit->setWhatsThis(i18n("<p>This field should contain email "
-                                           "of lead author.</p>"));
+    d->contactEmailEdit->setWhatsThis(i18n("<p>This field should contain the email "
+                                           "of the lead author.</p>"));
 
     // --------------------------------------------------------
 
     QLabel *label19     = new QLabel(i18n("Phone:"), page3);
     d->contactPhoneEdit = new KLineEdit(page3);
     d->contactPhoneEdit->setClearButtonShown(true);
-    d->contactPhoneEdit->setClickMessage(i18n("Enter phone number of lead author here."));
+    d->contactPhoneEdit->setClickMessage(i18n("Enter the phone number of the lead author here."));
     label19->setBuddy(d->contactPhoneEdit);
-    d->contactPhoneEdit->setWhatsThis(i18n("<p>This field should contain phone number "
-                                           "of lead author.</p>"));
+    d->contactPhoneEdit->setWhatsThis(i18n("<p>This field should contain the phone number "
+                                           "of the lead author.</p>"));
 
     // --------------------------------------------------------
 
     QLabel *label20      = new QLabel(i18n("Url:"), page3);
     d->contactWebUrlEdit = new KLineEdit(page3);
     d->contactWebUrlEdit->setClearButtonShown(true);
-    d->contactWebUrlEdit->setClickMessage(i18n("Enter Web site Url of lead author here."));
+    d->contactWebUrlEdit->setClickMessage(i18n("Enter the web site URL of the lead author here."));
     label20->setBuddy(d->contactWebUrlEdit);
-    d->contactWebUrlEdit->setWhatsThis(i18n("<p>This field should contain web site Url "
-                                            "of lead author.</p>"));
+    d->contactWebUrlEdit->setWhatsThis(i18n("<p>This field should contain the web site URL "
+                                            "of the lead author.</p>"));
 
     // --------------------------------------------------------
 
