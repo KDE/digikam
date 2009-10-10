@@ -97,14 +97,14 @@ then
         sqlite3 $db "VACUUM;"
         if [ $? = 0 ]
         then
-            echo "done"
+            echo "done!"
         else
             echo "failed!"
             echo "sqlite3 was not able to cleanup the database."
         fi
         unset db_prefix
     done
-    echo "Finished";
+    echo -e "\nFinished";
 else
     echo -e "\nI was not able to enter the database folder ($databasedir).\n"
     echo "Make sure that the variable 'Database File Path' in $rcpath "
