@@ -12,10 +12,12 @@
 # size.
 
 # -----------------------------------------------------------------------------
-# VARIABLES
+# CONST VARIABLES
 # -----------------------------------------------------------------------------
 
-# const variables
+SCRIPT_NAME="Cleanup Databases"
+VERSION="1.0"
+
 HEADER_OFFSET=20
 PROGRAM_NAME="digiKam"
 PROGRAMVERSION=$(digikam -v | grep -i digikam | cut -d: -f2 | sed 's/ //g')
@@ -90,7 +92,7 @@ cd $DATABASEDIR 2&> /dev/null
 if [ $? = 0 ]
 then
     db_out="$OUTPUT_DATABASE:"
-    pretty_header "Cleanup databases ($PROGRAM_NAME $PROGRAMVERSION)"
+    pretty_header "$SCRIPT_NAME v$VERSION ($PROGRAM_NAME $PROGRAMVERSION)"
     echo -e "$OUTPUT_LOCATION:\t$(pwd)"
     for db in $(find . -type f -name 'digikam*.db' -print)
     do
