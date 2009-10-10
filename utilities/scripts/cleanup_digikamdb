@@ -12,7 +12,7 @@
 # size.
 
 # -----------------------------------------------------------------------------
-# CONST VARIABLES
+# VARIABLES
 # -----------------------------------------------------------------------------
 
 NAME="Cleanup Databases"
@@ -29,10 +29,13 @@ CONFIGFILE="digikamrc"
 DATABASEDIR=$(kreadconfig --file "$CONFIGFILE" --group "$CONFIGGROUP" --key "$DATABASEKEY")
 
 HEADER_OFFSET=20
-MIN_ARGS=0
 
 OUTPUT_LOCATION="Location"
 OUTPUT_DATABASE="Database"
+
+DB_DIGIKAM="digikam*.db"
+DB_THUMBS="thumbnails-digikam.db"
+db_find_cmd="-name '$DB_DIGIKAM'"
 
 # -----------------------------------------------------------------------------
 # FUNCTIONS
@@ -77,14 +80,30 @@ checkForRunningProgram()
     return 0
 }
 
+help()
+{
+    cat <<EOF
+Usage: cleanup_digikamdb <options>
+
+options:
+  -t     cleanup thumbnail databases
+  -h     show help
+EOF
+    exit 1
+}
+
 # -----------------------------------------------------------------------------
 # MAIN
 # -----------------------------------------------------------------------------
 
-if [ $# -gt $MIN_ARGS ]; then
-    echo "Usage: $(basename $0) options"
-    exit 1
-fi
+while getopts "th" Option
+do
+    case $Option in
+        t)  db_find_cmd="$db_find_cmd -or -name '$DB_THUMBS'";;
+        h)  help;;
+        *)  help;;
+    esac
+done
 
 checkForRunningProgram
 if [ $? = 1 ]; then
@@ -102,7 +121,8 @@ if [ $? = 0 ]
 then
     db_out="$OUTPUT_DATABASE:"
     echo -e "$OUTPUT_LOCATION:\t$(pwd)"
-    for db in $(find . -type f -name 'digikam*.db' -print)
+
+    for db in $(eval find . -type f "$db_find_cmd")
     do
         echo -ne "${db_out:-"\\t"}\t$(basename $db) ... "
         sqlite3 $db "VACUUM;"
@@ -115,7 +135,6 @@ then
         fi
         unset db_out
     done
-    db_out="$OUTPUT_DATABASE:"
     echo -e "\n=> Finished";
 else
     echo -e "\nI was not able to enter the database folder.\n"
