@@ -129,7 +129,7 @@ SetupMetadata::SetupMetadata(QWidget* parent )
                     "a standard used by most digital cameras today to store technical "
                     "information (like aperture and shutter speed) about an image.</p>"));
 
-    txt.append(i18n("<p><a href='http://en.wikipedia.org/wiki/IPTC'>IPTC</a> - "
+    txt.append(i18n("<p><a href='http://en.wikipedia.org/wiki/IPTC_Information_Interchange_Model'>IPTC</a> - "
                     "an older standard used in digital photography to store "
                     "photographer information in images.</p>"));
 
