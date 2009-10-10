@@ -43,6 +43,7 @@
 
 // Local includes
 
+#include "debug.h"
 #include "msgtextedit.h"
 
 using namespace KExiv2Iface;
@@ -57,9 +58,10 @@ public:
     AltLangStrEditPriv()
     {
         titleLabel     = 0;
-        addValueButton = 0;
         delValueButton = 0;
         languageCB     = 0;
+
+        currentLanguage = "x-default";
 
         // We cannot use KLocale::allLanguagesList() here because KDE only
         // support 2 characters country codes. XMP require 2+2 characters language+country
@@ -247,9 +249,10 @@ public:
 
     LanguageCodeMap                 languageCodeMap;
 
+    QString                         currentLanguage;
+
     QLabel                         *titleLabel;
 
-    QToolButton                    *addValueButton;
     QToolButton                    *delValueButton;
 
     MsgTextEdit                    *valueEdit;
@@ -264,12 +267,9 @@ AltLangStrEdit::AltLangStrEdit(QWidget* parent)
 {
     QGridLayout *grid = new QGridLayout(this);
     d->titleLabel     = new QLabel(this);
-    d->addValueButton = new QToolButton(this);
     d->delValueButton = new QToolButton(this);
-    d->addValueButton->setIcon(SmallIcon("list-add"));
-    d->delValueButton->setIcon(SmallIcon("list-remove"));
-    d->delValueButton->setToolTip(i18n("Remove current item"));
-    d->addValueButton->setEnabled(false);
+    d->delValueButton->setIcon(SmallIcon("edit-clear"));
+    d->delValueButton->setToolTip(i18n("Remove entry for this language"));
     d->delValueButton->setEnabled(false);
 
     d->languageCB = new KComboBox(this);
@@ -284,8 +284,7 @@ AltLangStrEdit::AltLangStrEdit(QWidget* parent)
     grid->setAlignment( Qt::AlignTop );
     grid->addWidget(d->titleLabel,     0, 0, 1, 1);
     grid->addWidget(d->languageCB,     0, 2, 1, 1);
-    grid->addWidget(d->addValueButton, 0, 3, 1, 1);
-    grid->addWidget(d->delValueButton, 0, 4, 1, 1);
+    grid->addWidget(d->delValueButton, 0, 3, 1, 1);
     grid->addWidget(d->valueEdit,      1, 0, 1,-1);
     grid->setColumnStretch(1, 10);
     grid->setMargin(0);
@@ -295,14 +294,8 @@ AltLangStrEdit::AltLangStrEdit(QWidget* parent)
 
     // --------------------------------------------------------
 
-    connect(d->languageCB, SIGNAL(activated(int)),
-            this, SLOT(slotSelectionChanged(int)));
-
-    connect(d->addValueButton, SIGNAL(clicked()),
-            this, SLOT(slotAddValue()));
-
-    connect(d->addValueButton, SIGNAL(clicked()),
-            this, SIGNAL(signalModified()));
+    connect(d->languageCB, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(slotSelectionChanged()));
 
     connect(d->delValueButton, SIGNAL(clicked()),
             this, SLOT(slotDeleteValue()));
@@ -318,7 +311,7 @@ AltLangStrEdit::~AltLangStrEdit()
 
 QString AltLangStrEdit::currentLanguageCode() const
 {
-    return d->languageCB->currentText();
+    return d->currentLanguage;
 }
 
 QString AltLangStrEdit::languageCode(int index) const
@@ -341,71 +334,49 @@ void AltLangStrEdit::reset()
     setValues(KExiv2::AltLangMap());
 }
 
-void AltLangStrEdit::slotAddValue()
-{
-    QString lang = d->languageCB->currentText();
-    QString text = d->valueEdit->toPlainText();
-    if (text.isEmpty()) return;
-
-    d->values.insert(lang, text);
-    blockSignals(true);
-    d->valueEdit->clear();
-    loadLangAltListEntries(lang);
-    blockSignals(false);
-
-    emit signalAddValue(lang, text);
-}
-
 void AltLangStrEdit::slotDeleteValue()
 {
-    QString lang = d->languageCB->currentText();
-    d->values.remove(lang);
+    d->values.remove(d->currentLanguage);
     loadLangAltListEntries();
-    emit signalDeleteValue(lang);
-    emit signalModified();
+    emit signalValueDeleted(d->currentLanguage);
 }
 
-void AltLangStrEdit::slotSelectionChanged(int index)
+void AltLangStrEdit::slotSelectionChanged()
 {
-    QString lang        = d->languageCB->currentText();
-    QString langISO3066 = lang;
+    d->currentLanguage = d->languageCB->currentText();
 
     // There are bogus signals caused by spell checking, see bug #141663.
     // so we must block signals here.
 
     d->valueEdit->blockSignals(true);
-    d->valueEdit->setSpellCheckingLanguage(langISO3066.replace("-", "_"));
 
-    if (!d->languageCB->itemIcon(index).isNull())
-    {
-        QString text = d->values[lang];
-        d->valueEdit->setText(text);
-        d->addValueButton->setEnabled(false);
-        d->delValueButton->setEnabled(true);
-        d->addValueButton->setIcon(SmallIcon("view-refresh"));
-        d->addValueButton->setToolTip(i18n("Update current item"));
-    }
-    else
-    {
-        d->valueEdit->clear();
-        d->addValueButton->setEnabled(false);
-        d->delValueButton->setEnabled(false);
-        d->addValueButton->setIcon(SmallIcon("list-add"));
-        d->addValueButton->setToolTip(i18n("Add new item"));
-    }
+    QString langISO3066 = d->currentLanguage;
+    langISO3066.replace("-", "_");
+    d->valueEdit->setSpellCheckingLanguage(langISO3066);
+
+    QString text = d->values.value(d->currentLanguage);
+    d->valueEdit->setText(text);
+    d->delValueButton->setEnabled(!text.isNull());
 
     d->valueEdit->blockSignals(false);
-    d->languageCB->setToolTip(d->languageCodeMap[lang]);
 
-    emit signalSelectionChanged(lang);
+    d->languageCB->setToolTip(d->languageCodeMap[d->currentLanguage]);
+
+    emit signalSelectionChanged(d->currentLanguage);
 }
 
 void AltLangStrEdit::setValues(const KExiv2::AltLangMap& values)
 {
-    blockSignals(true);
     d->values = values;
     loadLangAltListEntries();
-    blockSignals(false);
+
+    d->valueEdit->blockSignals(true);
+
+    QString text = d->values.value(d->currentLanguage);
+    d->valueEdit->setText(text);
+    d->delValueButton->setEnabled(!text.isNull());
+
+    d->valueEdit->blockSignals(false);
 }
 
 KExiv2::AltLangMap& AltLangStrEdit::values()
@@ -413,8 +384,19 @@ KExiv2::AltLangMap& AltLangStrEdit::values()
     return d->values;
 }
 
-void AltLangStrEdit::loadLangAltListEntries(const QString& currentLang)
+/*void AltLangStrEdit::setCurrentLanguageCode(const QString& code)
 {
+    QString codeToSelect = code;
+    if (!d->languageCodeMap.contains(codeToSelect))
+        codeToSelect = "x-default";
+    d->languageCB->setCurrentItem(codeToSelect);
+}
+*/
+
+void AltLangStrEdit::loadLangAltListEntries()
+{
+    d->languageCB->blockSignals(true);
+
     d->languageCB->clear();
 
     // In first we fill already assigned languages.
@@ -439,15 +421,14 @@ void AltLangStrEdit::loadLangAltListEntries(const QString& currentLang)
             d->languageCB->addItem(it.key());
     }
 
-    d->languageCB->setCurrentItem(currentLang);
-    slotSelectionChanged(d->languageCB->currentIndex());
+    d->languageCB->setCurrentItem(d->currentLanguage);
 
-    d->languageCB->updateGeometry();
+    d->languageCB->blockSignals(false);
 }
 
 QString AltLangStrEdit::defaultAltLang() const
 {
-    return d->values[QString("x-default")];
+    return d->values.value(QString("x-default"));
 }
 
 bool AltLangStrEdit::asDefaultAltLang() const
@@ -457,38 +438,35 @@ bool AltLangStrEdit::asDefaultAltLang() const
 
 void AltLangStrEdit::slotTextChanged()
 {
-    QString text = d->valueEdit->toPlainText();
-    if (text.isEmpty())
+    QString editedText   = d->valueEdit->toPlainText();
+    QString previousText = d->values.value(d->currentLanguage);
+
+    if (editedText.isEmpty())
     {
         slotDeleteValue();
-        return;
     }
-
-    // we cannot trust that the text actually changed
-    // (there are bogus signals caused by spell checking, see bug #141663)
-    // so we have to check before marking the metadata as modified.
-
-    bool dirty = (text != d->values[d->languageCB->currentText()]);
-    setDirty(dirty);
-
-    if (dirty)
-        emit signalModified();
+    else if (previousText.isNull())
+    {
+        addCurrent();
+    }
+    else if (editedText != previousText)
+    {
+        // we cannot trust that the text actually changed
+        // (there are bogus signals caused by spell checking, see bug #141663)
+        // so we have to check before marking the metadata as modified.
+        d->values.insert(d->currentLanguage, editedText);
+        emit signalModified(d->currentLanguage, editedText);
+    }
 }
 
-void AltLangStrEdit::setDirty(bool dirty)
+void AltLangStrEdit::addCurrent()
 {
-    d->addValueButton->setEnabled(dirty);
-}
+    QString text = d->valueEdit->toPlainText();
 
-bool AltLangStrEdit::isDirty() const
-{
-    return d->addValueButton->isEnabled();
-}
-
-void AltLangStrEdit::apply()
-{
-    if (d->addValueButton->isEnabled())
-        slotAddValue();
+    d->values.insert(d->currentLanguage, text);
+    loadLangAltListEntries();
+    d->delValueButton->setEnabled(true);
+    emit signalValueAdded(d->currentLanguage, text);
 }
 
 }  // namespace Digikam

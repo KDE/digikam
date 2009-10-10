@@ -61,34 +61,40 @@ public:
     QString defaultAltLang() const;
     bool    asDefaultAltLang() const;
 
-    /** Reset all entries
+    /**
+     * Reset widget, clear all entries
      */
     void reset();
 
-    /** Force current text to be registered in captions map
+    /**
+     * Ensure that the current language is added to the list of entries,
+     * even if the text is empty.
+     * signalValueAdded() will be emitted.
      */
-    void apply();
-
-    void setDirty(bool dirty);
-    bool isDirty() const;
+    void addCurrent();
 
 Q_SIGNALS:
 
-    void signalModified();
-    void signalSelectionChanged(const QString&);
-    void signalAddValue(const QString&, const QString&);
-    void signalDeleteValue(const QString&);
+    /**
+     * Emitted when the user changes the text for the current language.
+     */
+    void signalModified(const QString& lang, const QString& text);
+    /// Emitted when the current language changed
+    void signalSelectionChanged(const QString& lang);
+    /// Emitted when an entry for a new language is added
+    void signalValueAdded(const QString& lang, const QString& text);
+    /// Emitted when the entry for a language is removed.
+    void signalValueDeleted(const QString& lang);
 
 protected Q_SLOTS:
 
     void slotTextChanged();
-    void slotSelectionChanged(int);
-    void slotAddValue();
+    void slotSelectionChanged();
     void slotDeleteValue();
 
 protected:
 
-    void loadLangAltListEntries(const QString& currentLang=QString("x-default"));
+    void loadLangAltListEntries();
 
 private:
 
