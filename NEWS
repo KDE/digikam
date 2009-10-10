@@ -28,7 +28,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 019 ==> 202886 : digiKam crash unexpectedly segmentation fault.
 020 ==> 209973 : Mouse wheel inverted in Sharpen Tool.
 021 ==> 210053 : digiKam new folder does not see photos inside.
-022 ==> 
+022 ==> 200032 : digikam,inconsistency data about rotation
+023 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
