@@ -12,6 +12,24 @@
 # size.
 
 # -----------------------------------------------------------------------------
+# VARIABLES
+# -----------------------------------------------------------------------------
+
+# const variables
+HEADER_OFFSET=20
+PROGRAM_NAME="digiKam"
+PROGRAMVERSION=$(digikam -v | grep -i digikam | cut -d: -f2 | sed 's/ //g')
+USERNAME=$(whoami)
+
+CONFIGGROUP="Album Settings"
+DATABASEKEY="Database File Path"
+CONFIGFILE="digikamrc"
+DATABASEDIR=$(kreadconfig --file "$CONFIGFILE" --group "$CONFIGGROUP" --key "$DATABASEKEY")
+
+OUTPUT_LOCATION="Location"
+OUTPUT_DATABASE="Database"
+
+# -----------------------------------------------------------------------------
 # FUNCTIONS
 # -----------------------------------------------------------------------------
 
@@ -19,8 +37,7 @@
 # $2 (optional): count
 repeat_char()
 {
-    default_count=10
-    for i in $(seq ${2:-$default_count}); do
+    for i in $(seq ${2:-$HEADER_OFFSET}); do
         echo -n "$1"
     done
 }
@@ -28,7 +45,7 @@ repeat_char()
 # $*: string
 pretty_header()
 {
-    # use an offset to center text (default = 10)
+    # use an offset to center text (default = $HEADER_OFFSET)
     offset=$(repeat_char " ")
     offset_length=$(expr $(expr length "$offset") \* 2)
 
@@ -46,29 +63,14 @@ pretty_header()
 
 checkForRunningProgram()
 {
-    proc="$(ps aux | grep $username | grep -v $0 | grep -w digikam | grep -v grep)"
+    proc="$(ps aux | grep $USERNAME | grep -v $0 | grep -w digikam | grep -v grep)"
     if [ "$proc" != "" ]
     then
-        echo "Please shutdown $programname before running this script."
+        echo "Please shutdown $PROGRAM_NAME before running this script."
         return 1
     fi
     return 0
 }
-
-# -----------------------------------------------------------------------------
-# VARIABLES
-# -----------------------------------------------------------------------------
-
-# general information
-username=$(whoami)
-programname="digiKam"
-programversion=$(digikam -v | grep -i digikam | cut -d: -f2 | sed 's/ //g')
-
-# config file
-configgroup="Album Settings"
-databasekey="Database File Path"
-configfile="digikamrc"
-databasedir=$(kreadconfig --file "$configfile" --group "$configgroup" --key "$databasekey")
 
 # -----------------------------------------------------------------------------
 # MAIN
@@ -84,15 +86,15 @@ fi
 curdir=$(pwd)
 
 # try to enter the database directory
-cd $databasedir 2&> /dev/null
+cd $DATABASEDIR 2&> /dev/null
 if [ $? = 0 ]
 then
-    db_prefix="Database:"
-    pretty_header "Cleanup databases ($programname $programversion)"
-    echo -e "Location:\t$(pwd)"
+    db_out="$OUTPUT_DATABASE:"
+    pretty_header "Cleanup databases ($PROGRAM_NAME $PROGRAMVERSION)"
+    echo -e "$OUTPUT_LOCATION:\t$(pwd)"
     for db in $(find . -type f -name 'digikam*.db' -print)
     do
-        echo -ne "${db_prefix:-"\\t"}\t$(basename $db) ... "
+        echo -ne "${db_out:-"\\t"}\t$(basename $db) ... "
         sqlite3 $db "VACUUM;"
         if [ $? = 0 ]
         then
@@ -101,11 +103,12 @@ then
             echo "failed!"
             echo "sqlite3 was not able to cleanup the database."
         fi
-        unset db_prefix
+        unset db_out
     done
+    db_out="$OUTPUT_DATABASE:"
     echo -e "\nFinished";
 else
-    echo -e "\nI was not able to enter the database folder ($databasedir).\n"
+    echo -e "\nI was not able to enter the database folder ($DATABASEDIR).\n"
     echo "Make sure that the variable 'Database File Path' in $rcpath "
     echo "is set correctly and that you have permissions to access this folder."
 fi
