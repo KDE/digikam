@@ -11,6 +11,10 @@
 # This will often lead to great performance gain and a smaller database file
 # size.
 
+# -----------------------------------------------------------------------------
+# FUNCTIONS
+# -----------------------------------------------------------------------------
+
 function repeat_char
 {
     for i in $(seq $2); do
@@ -33,6 +37,8 @@ function pretty_header
 }
 
 # -----------------------------------------------------------------------------
+# VARIABLES
+# -----------------------------------------------------------------------------
 
 # general information
 username=$(whoami)
@@ -46,6 +52,8 @@ databasekey="Database File Path"
 configfile="digikamrc"
 databasedir=$(kreadconfig --file $configfile --group "$configgroup" --key "$databasekey")
 
+# -----------------------------------------------------------------------------
+# MAIN
 # -----------------------------------------------------------------------------
 
 # make sure digiKam is not running
