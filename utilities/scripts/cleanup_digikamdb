@@ -33,9 +33,9 @@ HEADER_OFFSET=20
 OUTPUT_LOCATION="Location"
 OUTPUT_DATABASE="Database"
 
-DB_DIGIKAM="digikam*.db"
+DB_DIGIKAM="digikam[34].db"
 DB_THUMBS="thumbnails-digikam.db"
-db_find_cmd="-name '$DB_DIGIKAM'"
+db_find_cmd="-type f -name '$DB_DIGIKAM'"
 
 # -----------------------------------------------------------------------------
 # FUNCTIONS
@@ -57,13 +57,14 @@ pretty_header()
     offset=$(repeat_char " ")
     offset_length=$(expr $(expr length "$offset") \* 2)
 
-    # calculate length and print header
+    # calculate length
     str_length=$(expr length "$*")
     length=$(expr $str_length + $offset_length)
 
     # delimiter line
     delimiter=$(repeat_char "-" $length)
 
+    # print header
     echo $delimiter
     echo "${offset}$*${offset}"
     echo $delimiter
@@ -117,12 +118,11 @@ curdir=$(pwd)
 
 # try to enter the database directory
 cd $DATABASEDIR 2&> /dev/null
-if [ $? = 0 ]
-then
+if [ $? = 0 ]; then
     db_out="$OUTPUT_DATABASE:"
     echo -e "$OUTPUT_LOCATION:\t$(pwd)"
 
-    for db in $(eval find . -type f "$db_find_cmd")
+    for db in $(eval find . "$db_find_cmd")
     do
         echo -ne "${db_out:-"\\t"}\t$(basename $db) ... "
         sqlite3 $db "VACUUM;"
@@ -131,7 +131,6 @@ then
             echo "done!"
         else
             echo "failed!"
-            echo "sqlite3 was not able to cleanup the database."
         fi
         unset db_out
     done
