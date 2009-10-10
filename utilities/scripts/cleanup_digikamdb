@@ -7,6 +7,24 @@
 # This will often lead to great performance gain and a smaller database file
 # size.
 
+function repeat_char
+{
+    for i in $(seq 1 $2); do
+        echo -n "$1"
+    done
+    echo ""
+}
+
+function pretty_header
+{
+    length=$(expr length "$*")
+    repeat_char "-" $length
+    echo "$*"
+    repeat_char "-" $length
+}
+
+# -----------------------------------------------------------------------------
+
 # general information
 username=$(whoami)
 programversion=$(digikam -v | grep -i digikam | cut -d: -f2)
@@ -34,8 +52,8 @@ curdir=$(pwd)
 cd $databasedir 2&> /dev/null
 if [ $? = 0 ]
 then
-    echo "$programname:"
-    echo "Cleaning up databases in $(pwd)"
+    pretty_header "Cleanup databases ($programname)"
+    echo "Location: $(pwd)"
     for db in $(find . -type f -name 'digikam*.db' -print)
     do
         echo -n "$db ... "
