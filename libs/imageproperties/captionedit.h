@@ -56,7 +56,6 @@ public:
     CaptionsMap& values();
 
     void reset();
-    void apply();
 
 Q_SIGNALS:
 
@@ -65,6 +64,7 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotSelectionChanged(const QString&);
+    void slotCaptionModified(const QString&, const QString&);
     void slotAddValue(const QString&, const QString&);
     void slotDeleteValue(const QString&);
     void slotAuthorChanged(const QString&);
