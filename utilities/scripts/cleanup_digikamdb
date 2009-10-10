@@ -15,6 +15,8 @@
 # FUNCTIONS
 # -----------------------------------------------------------------------------
 
+# $1: char
+# $2 (optional): count
 function repeat_char
 {
     default_count=10
@@ -23,9 +25,10 @@ function repeat_char
     done
 }
 
+# $*: string
 function pretty_header
 {
-    # use an offset of 5 chars left and right
+    # use an offset to center text (default = 10)
     offset=$(repeat_char " ")
     offset_length=$(expr $(expr length "$offset") \* 2)
 
