@@ -9,7 +9,8 @@
 
 # general information
 username=$(whoami)
-programname="digiKam"
+programversion=$(digikam -v | grep -i digikam | cut -d: -f2)
+programname="$(digikam -v | grep -i digikam | cut -d: -f1)$programversion"
 processname="digikam"
 
 # config file
@@ -33,7 +34,8 @@ curdir=$(pwd)
 cd $databasedir 2&> /dev/null
 if [ $? = 0 ]
 then
-    echo "Cleaning up $programname databases in $(pwd)"
+    echo "$programname:"
+    echo "Cleaning up databases in $(pwd)"
     for db in $(find . -type f -name 'digikam*.db' -print)
     do
         echo -n "$db ... "
