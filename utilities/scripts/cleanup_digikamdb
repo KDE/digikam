@@ -36,8 +36,8 @@ function pretty_header
 
 # general information
 username=$(whoami)
-programversion=$(digikam -v | grep -i digikam | cut -d: -f2)
-programname="$(digikam -v | grep -i digikam | cut -d: -f1)$programversion"
+programversion=$(digikam -v | grep -i digikam | cut -d: -f2 | sed 's/ //g')
+programname="digiKam $programversion"
 processname="digikam"
 
 # config file
