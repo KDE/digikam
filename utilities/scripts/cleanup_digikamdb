@@ -75,7 +75,7 @@ then
 else
     echo -e "\nI was not able to enter the database folder ($databasedir).\n"
     echo "Make sure that the variable 'Database File Path' in $rcpath "
-    echo "is set correctly and that you have permissions to enter this folder."
+    echo "is set correctly and that you have permissions to access this folder."
 fi
 
 cd $curdir
