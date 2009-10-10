@@ -116,7 +116,7 @@ then
         unset db_out
     done
     db_out="$OUTPUT_DATABASE:"
-    echo -e "\nFinished";
+    echo -e "\n=> Finished";
 else
     echo -e "\nI was not able to enter the database folder.\n"
     echo "Make sure that the variable '$DATABASEKEY' in your 'digikamrc' config file"
