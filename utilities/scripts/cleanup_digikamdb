@@ -44,15 +44,25 @@ function pretty_header
     echo $delimiter
 }
 
+function checkForRunningProgram
+{
+    proc="$(ps aux | grep $username | grep -v $0 | grep -w digikam | grep -v grep)"
+    if [ "$proc" != "" ]
+    then
+        echo "Please shutdown $programname before running this script."
+        exit 1
+    fi
+}
+
+
 # -----------------------------------------------------------------------------
 # VARIABLES
 # -----------------------------------------------------------------------------
 
 # general information
 username=$(whoami)
+programname="digiKam"
 programversion=$(digikam -v | grep -i digikam | cut -d: -f2 | sed 's/ //g')
-programname="digiKam $programversion"
-processname="digikam"
 
 # config file
 configgroup="Album Settings"
@@ -65,14 +75,7 @@ databasedir=$(kreadconfig --file $configfile --group "$configgroup" --key "$data
 # -----------------------------------------------------------------------------
 
 # make sure digiKam is not running
-proc="$(ps aux | grep $username | grep -v $0 | grep -w $processname | grep -v grep)"
-if [ "$proc" != "" ]
-then
-    echo "Please shutdown $programname first."
-    exit 1
-fi
-
-# -----------------------------------------------------------------------------
+checkForRunningProgram
 
 # backup current working dir
 curdir=$(pwd)
@@ -82,7 +85,7 @@ cd $databasedir 2&> /dev/null
 if [ $? = 0 ]
 then
     db_prefix="Database:"
-    pretty_header "Cleanup databases ($programname)"
+    pretty_header "Cleanup databases ($programname $programversion)"
     echo -e "Location:\t$(pwd)"
     for db in $(find . -type f -name 'digikam*.db' -print)
     do
