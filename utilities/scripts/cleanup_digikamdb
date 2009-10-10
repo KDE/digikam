@@ -13,7 +13,7 @@
 
 function repeat_char
 {
-    for i in $(seq 1 $2); do
+    for i in $(seq $2); do
         echo -n "$1"
     done
 }
