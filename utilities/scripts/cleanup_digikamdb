@@ -35,9 +35,13 @@ function pretty_header
     # calculate length and print header
     str_length=$(expr length "$*")
     length=$(expr $str_length + $offset_length)
-    echo $(repeat_char "-" $length)
+
+    # delimiter line
+    delimiter=$(repeat_char "-" $length)
+
+    echo $delimiter
     echo "${offset}$*${offset}"
-    echo $(repeat_char "-" $length)
+    echo $delimiter
 }
 
 # -----------------------------------------------------------------------------
