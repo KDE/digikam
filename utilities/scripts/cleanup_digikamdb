@@ -17,7 +17,8 @@
 
 function repeat_char
 {
-    for i in $(seq $2); do
+    default_count=10
+    for i in $(seq ${2:-$default_count}); do
         echo -n "$1"
     done
 }
@@ -25,7 +26,7 @@ function repeat_char
 function pretty_header
 {
     # use an offset of 5 chars left and right
-    offset=$(repeat_char " " 5)
+    offset=$(repeat_char " ")
     offset_length=$(expr $(expr length "$offset") \* 2)
 
     # calculate length and print header
