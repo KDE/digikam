@@ -29,6 +29,7 @@ CONFIGFILE="digikamrc"
 DATABASEDIR=$(kreadconfig --file "$CONFIGFILE" --group "$CONFIGGROUP" --key "$DATABASEKEY")
 
 HEADER_OFFSET=20
+MIN_ARGS=1
 
 OUTPUT_LOCATION="Location"
 OUTPUT_DATABASE="Database"
@@ -80,7 +81,11 @@ checkForRunningProgram()
 # MAIN
 # -----------------------------------------------------------------------------
 
-# make sure digiKam is not running
+if [ $# -gt $MIN_ARGS ]; then
+    echo "Usage: $(basename $0) options"
+    exit 1
+fi
+
 checkForRunningProgram
 if [ $? = 1 ]; then
     exit 1
