@@ -17,7 +17,7 @@
 
 # $1: char
 # $2 (optional): count
-function repeat_char
+repeat_char()
 {
     default_count=10
     for i in $(seq ${2:-$default_count}); do
@@ -26,7 +26,7 @@ function repeat_char
 }
 
 # $*: string
-function pretty_header
+pretty_header()
 {
     # use an offset to center text (default = 10)
     offset=$(repeat_char " ")
@@ -44,7 +44,7 @@ function pretty_header
     echo $delimiter
 }
 
-function checkForRunningProgram
+checkForRunningProgram()
 {
     proc="$(ps aux | grep $username | grep -v $0 | grep -w digikam | grep -v grep)"
     if [ "$proc" != "" ]
