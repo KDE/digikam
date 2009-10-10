@@ -12,15 +12,19 @@ function repeat_char
     for i in $(seq 1 $2); do
         echo -n "$1"
     done
-    echo ""
 }
 
 function pretty_header
 {
-    length=$(expr length "$*")
-    repeat_char "-" $length
-    echo "$*"
-    repeat_char "-" $length
+    # use an offset of 5 chars left and right
+    offset=$(repeat_char " " 5)
+    offset_length=$(expr $(expr length "$offset") \* 2)
+
+    # calculate length and print header
+    length=$(expr $(expr length "$*") + $offset_length)
+    echo $(repeat_char "-" $length)
+    echo "${offset}$*${offset}"
+    echo $(repeat_char "-" $length)
 }
 
 # -----------------------------------------------------------------------------
