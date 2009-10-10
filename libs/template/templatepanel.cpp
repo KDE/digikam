@@ -490,8 +490,6 @@ Template TemplatePanel::getTemplate() const
 
 void TemplatePanel::apply()
 {
-    d->copyrightEdit->apply();
-    d->rightUsageEdit->apply();
 }
 
 }  // namespace Digikam

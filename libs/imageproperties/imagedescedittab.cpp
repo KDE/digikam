@@ -540,8 +540,6 @@ void ImageDescEditTab::slotApplyAllChanges()
     if (d->currInfos.isEmpty())
         return;
 
-    d->captionsEdit->apply();
-
     bool progressInfo                   = (d->currInfos.count() > 1);
     MetadataWriteSettings writeSettings = MetadataHub::defaultWriteSettings();
 
