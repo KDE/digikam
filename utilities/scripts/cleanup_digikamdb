@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# Author: Andi Clemens, <andi dot clemens at gmx dot net>
+#
+# Description:
+#
 # This script will read in the digiKam configuration file to determine the
 # database location. It will then make sure that digiKam is not running and
 # call "sqlite3 DATABASE 'VACUUM;" on the database, to clean up and optimize
