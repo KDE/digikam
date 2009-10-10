@@ -55,7 +55,6 @@ checkForRunningProgram()
     return 0
 }
 
-
 # -----------------------------------------------------------------------------
 # VARIABLES
 # -----------------------------------------------------------------------------
@@ -69,7 +68,7 @@ programversion=$(digikam -v | grep -i digikam | cut -d: -f2 | sed 's/ //g')
 configgroup="Album Settings"
 databasekey="Database File Path"
 configfile="digikamrc"
-databasedir=$(kreadconfig --file $configfile --group "$configgroup" --key "$databasekey")
+databasedir=$(kreadconfig --file "$configfile" --group "$configgroup" --key "$databasekey")
 
 # -----------------------------------------------------------------------------
 # MAIN
