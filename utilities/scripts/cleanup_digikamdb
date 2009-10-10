@@ -50,8 +50,9 @@ checkForRunningProgram()
     if [ "$proc" != "" ]
     then
         echo "Please shutdown $programname before running this script."
-        exit 1
+        return 1
     fi
+    return 0
 }
 
 
@@ -76,6 +77,9 @@ databasedir=$(kreadconfig --file $configfile --group "$configgroup" --key "$data
 
 # make sure digiKam is not running
 checkForRunningProgram
+if [ $? = 1 ]; then
+    exit 1
+fi
 
 # backup current working dir
 curdir=$(pwd)
