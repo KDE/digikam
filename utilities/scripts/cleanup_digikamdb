@@ -18,9 +18,10 @@
 NAME="Cleanup Databases"
 VERSION="1.0"
 
-PROGRAM_NAME="digiKam"
-PROGRAMVERSION=$(digikam -v | grep -i digikam | cut -d: -f2 | sed 's/ //g')
 USERNAME=$(whoami)
+
+DIGIKAM_NAME="digiKam"
+DIGIKAM_VERSION=$(digikam -v | grep -i digikam | cut -d: -f2 | sed 's/ //g')
 
 CONFIGGROUP="Album Settings"
 DATABASEKEY="Database File Path"
@@ -37,7 +38,7 @@ OUTPUT_DATABASE="Database"
 # -----------------------------------------------------------------------------
 
 # $1: char
-# $2 (optional): count
+# $2: count (optional)
 repeat_char()
 {
     for i in $(seq ${2:-$HEADER_OFFSET}); do
@@ -69,7 +70,7 @@ checkForRunningProgram()
     proc="$(ps aux | grep $USERNAME | grep -v $0 | grep -w digikam | grep -v grep)"
     if [ "$proc" != "" ]
     then
-        echo "Please shutdown $PROGRAM_NAME before running this script."
+        echo "Please shutdown $DIGIKAM_NAME before running this script."
         return 1
     fi
     return 0
@@ -85,7 +86,7 @@ if [ $? = 1 ]; then
     exit 1
 fi
 
-pretty_header "$NAME v$VERSION ($PROGRAM_NAME $PROGRAMVERSION)"
+pretty_header "$NAME v$VERSION ($DIGIKAM_NAME $DIGIKAM_VERSION)"
 
 # backup current working dir
 curdir=$(pwd)
