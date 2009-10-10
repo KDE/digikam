@@ -15,7 +15,7 @@
 # CONST VARIABLES
 # -----------------------------------------------------------------------------
 
-SCRIPT_NAME="Cleanup Databases"
+NAME="Cleanup Databases"
 VERSION="1.0"
 
 HEADER_OFFSET=20
@@ -92,7 +92,7 @@ cd $DATABASEDIR 2&> /dev/null
 if [ $? = 0 ]
 then
     db_out="$OUTPUT_DATABASE:"
-    pretty_header "$SCRIPT_NAME v$VERSION ($PROGRAM_NAME $PROGRAMVERSION)"
+    pretty_header "$NAME v$VERSION ($PROGRAM_NAME $PROGRAMVERSION)"
     echo -e "$OUTPUT_LOCATION:\t$(pwd)"
     for db in $(find . -type f -name 'digikam*.db' -print)
     do
