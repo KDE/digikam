@@ -82,7 +82,7 @@ then
     for db in $(find . -type f -name 'digikam*.db' -print)
     do
         echo -n "Database:"
-        echo -ne "\t$db ... "
+        echo -ne "\t$(basename $db) ... "
         sqlite3 $db "VACUUM;"
         if [ $? = 0 ]
         then
