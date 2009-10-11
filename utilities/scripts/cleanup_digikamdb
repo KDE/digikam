@@ -102,8 +102,11 @@ help()
 Usage: cleanup_digikamdb <options>
 
 options:
-  -t     cleanup thumbnail databases
-  -h     show help
+  -t            cleanup thumbnail databases
+  -p <path>     specify a different database path, ignore the entry from the
+                digiKam configuration file. If the specified path is invalid,
+                the entry from the configuration file will be used.
+  -h            show this help
 EOF
     exit 1
 }
@@ -116,10 +119,15 @@ EOF
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
 
-while getopts "th" Option
+while getopts "tp:h" Option
 do
     case $Option in
         t)  db_find_cmd="$db_find_cmd -or -name '$db_thumbs'";;
+        p)  if [ -n $OPTARG ]; then 
+                if [ -d $OPTARG ]; then
+                    db_dir=$OPTARG
+                fi
+            fi;;
         h)  help;;
         *)  help;;
     esac
@@ -149,9 +157,9 @@ if [ $? = 0 ]; then
     db_out="$output_str_database:"
     echo -e "$output_str_location:\t$(pwd)"
 
-    for db in $(eval find . "$db_find_cmd")
+    for db in $(eval "find . $db_find_cmd 2> /dev/null")
     do
-        echo -ne "${db_out:-"\\t"}\t$(basename $db) ... "
+        echo -ne "${db_out:-"\\t"}\t$db ... "
         sqlite3 $db "VACUUM;"
         if [ $? = 0 ]
         then
