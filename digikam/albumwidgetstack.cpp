@@ -66,12 +66,13 @@ public:
     AlbumWidgetStackPriv()
     {
         dockArea           = 0;
+        splitter           = 0;
+        thumbBar           = 0;
+        thumbBarDock       = 0;
         imageIconView      = 0;
         imagePreviewView   = 0;
         welcomePageView    = 0;
         mediaPlayerView    = 0;
-        splitter           = 0;
-        thumbBar           = 0;
         thumbbarTimer      = 0;
         needUpdateBar      = false;
     }
@@ -111,8 +112,8 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
     // if scrollbar appears or disapears.
     d->thumbBar->setHScrollBarMode(Q3ScrollView::AlwaysOn);
 
-    d->welcomePageView  = new WelcomePageView(this);
-    d->mediaPlayerView  = new MediaPlayerView(this);
+    d->welcomePageView = new WelcomePageView(this);
+    d->mediaPlayerView = new MediaPlayerView(this);
 
     insertWidget(PreviewAlbumMode, d->imageIconView);
     insertWidget(PreviewImageMode, d->imagePreviewView);
