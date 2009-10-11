@@ -174,6 +174,7 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
     d->expoBBox                   = new QWidget(this);
     QHBoxLayout *hlay2            = new QHBoxLayout(d->expoBBox);
     QButtonGroup *exposureButtons = new QButtonGroup(d->expoBBox);
+    exposureButtons->setExclusive(false);
     hlay2->setSpacing(0);
     hlay2->setMargin(0);
 
