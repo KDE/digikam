@@ -209,8 +209,8 @@ void LightTableWindow::closeEvent(QCloseEvent* e)
 
 void LightTableWindow::showEvent(QShowEvent*)
 {
-	// Restore the visibility of the thumbbar and start autosaving again.
-	d->barViewDock->restoreVisibility();
+    // Restore the visibility of the thumbbar and start autosaving again.
+    d->barViewDock->restoreVisibility();
 }
 
 void LightTableWindow::setupUserArea()
@@ -909,7 +909,7 @@ void LightTableWindow::slotSetItemLeft()
 
 void LightTableWindow::slotSetItemRight()
 {
-    if (d->barView->currentItemImageInfo().isNull())
+    if (!d->barView->currentItemImageInfo().isNull())
     {
         slotSetItemOnRightPanel(d->barView->currentItemImageInfo());
     }
