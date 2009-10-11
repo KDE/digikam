@@ -12,48 +12,59 @@
 # size.
 
 # -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # VARIABLES
 # -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
-NAME="Cleanup Databases"
-VERSION="1.0"
+script_name="Cleanup Databases"
+script_version="1.0"
 
-USERNAME=$(whoami)
+user_name=$(whoami)
 
-DIGIKAM_NAME="digiKam"
-DIGIKAM_VERSION=$(digikam -v | grep -i digikam | cut -d: -f2 | sed 's/ //g')
+digikam_name="digiKam"
+digikam_version=$(digikam -v | grep -i digikam | cut -d: -f2 | sed 's/ //g')
 
-CONFIGGROUP="Album Settings"
-DATABASEKEY="Database File Path"
-CONFIGFILE="digikamrc"
-DATABASEDIR=$(kreadconfig --file "$CONFIGFILE" --group "$CONFIGGROUP" --key "$DATABASEKEY")
+config_group="Album Settings"
+config_key="Database File Path"
+config_file="digikamrc"
 
-HEADER_OFFSET=20
+db_dir=$(kreadconfig --file "$config_file" --group "$config_group" --key "$config_key")
+db_digikam="digikam[34].db"
+db_thumbs="thumbnails-digikam.db"
 
-OUTPUT_LOCATION="Location"
-OUTPUT_DATABASE="Database"
+header_offset=20
 
-DB_DIGIKAM="digikam[34].db"
-DB_THUMBS="thumbnails-digikam.db"
-db_find_cmd="-type f -name '$DB_DIGIKAM'"
+output_str_location="Location"
+output_str_database="Database"
+
+db_find_cmd="-type f -name '$db_digikam'"
 
 # -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # FUNCTIONS
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
 
 # $1: char
 # $2: count (optional)
 repeat_char()
 {
-    for i in $(seq ${2:-$HEADER_OFFSET}); do
+    for i in $(seq ${2:-$header_offset}); do
         echo -n "$1"
     done
 }
 
+# -----------------------------------------------------------------------------
+
 # $*: string
 pretty_header()
 {
-    # use an offset to center text (default = $HEADER_OFFSET)
+    # use an offset to center text (default = $header_offset)
     offset=$(repeat_char " ")
     offset_length=$(expr $(expr length "$offset") \* 2)
 
@@ -70,16 +81,20 @@ pretty_header()
     echo $delimiter
 }
 
+# -----------------------------------------------------------------------------
+
 checkForRunningProgram()
 {
-    proc="$(ps aux | grep $USERNAME | grep -v $0 | grep -w digikam | grep -v grep)"
+    proc="$(ps aux | grep $user_name | grep -v $0 | grep -w digikam | grep -v grep)"
     if [ "$proc" != "" ]
     then
-        echo "Please shutdown $DIGIKAM_NAME before running this script."
+        echo "Please shutdown $digikam_name before running this script."
         return 1
     fi
     return 0
 }
+
+# -----------------------------------------------------------------------------
 
 help()
 {
@@ -94,33 +109,45 @@ EOF
 }
 
 # -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # MAIN
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
 
 while getopts "th" Option
 do
     case $Option in
-        t)  db_find_cmd="$db_find_cmd -or -name '$DB_THUMBS'";;
+        t)  db_find_cmd="$db_find_cmd -or -name '$db_thumbs'";;
         h)  help;;
         *)  help;;
     esac
 done
+
+# -----------------------------------------------------------------------------
 
 checkForRunningProgram
 if [ $? = 1 ]; then
     exit 1
 fi
 
-pretty_header "$NAME v$VERSION ($DIGIKAM_NAME $DIGIKAM_VERSION)"
+# -----------------------------------------------------------------------------
+
+pretty_header "$script_name v$script_version ($digikam_name $digikam_version)"
+
+# -----------------------------------------------------------------------------
 
 # backup current working dir
 curdir=$(pwd)
 
+# -----------------------------------------------------------------------------
+
 # try to enter the database directory
-cd $DATABASEDIR 2&> /dev/null
+cd $db_dir 2&> /dev/null
 if [ $? = 0 ]; then
-    db_out="$OUTPUT_DATABASE:"
-    echo -e "$OUTPUT_LOCATION:\t$(pwd)"
+    db_out="$output_str_database:"
+    echo -e "$output_str_location:\t$(pwd)"
 
     for db in $(eval find . "$db_find_cmd")
     do
@@ -137,8 +164,12 @@ if [ $? = 0 ]; then
     echo -e "\n=> Finished";
 else
     echo -e "\nI was not able to enter the database folder.\n"
-    echo "Make sure that the variable '$DATABASEKEY' in your 'digikamrc' config file"
+    echo "Make sure that the variable '$config_key' in your 'digikamrc' config file"
     echo "is set correctly and that you have permissions to access the database folder."
 fi
 
+# -----------------------------------------------------------------------------
+
+# restore old working dir
 cd $curdir
+
