@@ -504,7 +504,7 @@ QString FreeRotationTool::centerString(const QString& str, int maxLength)
         int times = (diff / 2);
 
 
-#if QT_VERSION >= 040500
+#if QT_VERSION >= 0x040500
         tmp.prepend(delimiter.repeated(times));
         tmp.append(delimiter.repeated(times));
 #else
@@ -523,7 +523,7 @@ QString FreeRotationTool::centerString(const QString& str, int maxLength)
             // too short?
             else if (tmp.count() < maxLength)
             {
-#if QT_VERSION >= 040500
+#if QT_VERSION >= 0x040500
                 tmp.append(delimiter.repeated(diff));
 #else
                 tmp.append(repeatString(delimiter, diff));
