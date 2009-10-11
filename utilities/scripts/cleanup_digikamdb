@@ -99,7 +99,7 @@ checkForRunningProgram()
 help()
 {
     cat <<EOF
-Usage: cleanup_digikamdb <options>
+Usage: $(basename $0) <options>
 
 options:
   -t            cleanup thumbnail databases
