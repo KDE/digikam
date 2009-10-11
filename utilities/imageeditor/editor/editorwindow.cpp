@@ -1929,7 +1929,7 @@ void EditorWindow::slotSetUnderExposureIndicator(bool on)
     d->exposureSettings->underExposureIndicator = on;
     m_canvas->setExposureSettings(d->exposureSettings);
 
-    d->underExposureIndicator->setChecked(on);
+    d->underExposureIndicator->setEnabled(on);
     d->viewUnderExpoAction->setChecked(on);
     setUnderExposureToolTip(on);
 }
@@ -1946,7 +1946,7 @@ void EditorWindow::slotSetOverExposureIndicator(bool on)
     d->exposureSettings->overExposureIndicator = on;
     m_canvas->setExposureSettings(d->exposureSettings);
 
-    d->overExposureIndicator->setChecked(on);
+    d->overExposureIndicator->setEnabled(on);
     d->viewOverExpoAction->setChecked(on);
     setOverExposureToolTip(on);
 }
