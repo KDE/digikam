@@ -49,6 +49,15 @@ db_find_cmd="$db_find_args -name '$db_digikam'"
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
 
+_log()
+{
+    if [ "$_DEBUG" = "true" ]; then
+        echo 1>&2 "  => LOG: $@"
+    fi
+}
+
+# -----------------------------------------------------------------------------
+
 # $1: char
 # $2: count (optional)
 repeat_char()
@@ -84,12 +93,16 @@ pretty_header()
 
 checkForRunningProgram()
 {
+    _log "checkForRunningProgram: start"
     proc=$(pgrep -u $USER -x digikam)
     if [ "$proc" != "" ]
     then
+        _log "$proc"
         echo "Please shutdown $digikam_name before running this script."
+        _log "checkForRunningProgram: failed"
         return 1
     fi
+    _log "checkForRunningProgram: finished"
     return 0
 }
 
@@ -119,20 +132,28 @@ EOF
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
 
+_log "getopts: start"
+_options=
 while getopts "tTp:h" Option
 do
     case $Option in
-        t)  db_find_cmd="$db_find_cmd -or -name '$db_thumbs'";;
-        T)  db_find_cmd="$db_find_args -name '$db_thumbs'";;
+        t)  db_find_cmd="$db_find_cmd -or -name '$db_thumbs'";
+                 _options="$_options -t";;
+        T)  db_find_cmd="$db_find_args -name '$db_thumbs'";
+                 _options="$_options -T";;
         p)  if [ -n $OPTARG ]; then 
                 if [ -d $OPTARG ]; then
                     db_dir=$OPTARG
+                        _options="$_options -p:$OPTARG"
                 fi
             fi;;
-        h)  help;;
+        h)  help;
+                _options="$_options -h";;
         *)  help;;
     esac
 done
+_log "getopts: options: $_options"
+_log "getopts: finished"
 
 # -----------------------------------------------------------------------------
 
@@ -149,12 +170,16 @@ pretty_header "$script_name v$script_version ($digikam_name $digikam_version)"
 
 # backup current working dir
 curdir=$(pwd)
+_log "current dir: $curdir"
 
 # -----------------------------------------------------------------------------
 
 # try to enter the database directory
+_log "entering: $db_dir"
 cd $db_dir 2&> /dev/null
 if [ $? = 0 ]; then
+    _log "current dir: $(pwd)"
+
     db_out="$output_str_database:"
     echo -e "$output_str_location:\t$(pwd)"
 
@@ -180,5 +205,7 @@ fi
 # -----------------------------------------------------------------------------
 
 # restore old working dir
+_log "entering: $curdir"
 cd $curdir
+_log "current dir: $(pwd)"
 
