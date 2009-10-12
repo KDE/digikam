@@ -84,17 +84,15 @@ AlbumHistory::~AlbumHistory()
 void AlbumHistory::clearHistory()
 {
     AlbumStack::const_iterator iter = m_backwardStack->constBegin();
-    AlbumStack::const_iterator end  = m_backwardStack->constEnd();
 
-    for(; iter != end; ++iter)
+    for(; iter != m_backwardStack->constEnd(); ++iter)
         delete *iter;
 
     m_backwardStack->clear();
 
     iter = m_forwardStack->constBegin();
-    end = m_forwardStack->constEnd();
 
-    for(; iter != end; ++iter)
+    for(; iter != m_forwardStack->constEnd(); ++iter)
         delete *iter;
 
     m_forwardStack->clear();
@@ -140,8 +138,7 @@ void AlbumHistory::deleteAlbum(Album *album)
 
     //  Search all HistoryItems, with album and delete them
     AlbumStack::iterator iter = m_backwardStack->begin();
-    AlbumStack::iterator end  = m_backwardStack->end();
-    while(iter != end)
+    while(iter != m_backwardStack->end())
     {
         if((*iter)->album == album)
         {
@@ -154,8 +151,7 @@ void AlbumHistory::deleteAlbum(Album *album)
         }
     }
     iter = m_forwardStack->begin();
-    end  = m_forwardStack->end();
-    while(iter != end)
+    while(iter != m_forwardStack->end())
     {
         if((*iter)->album == album)
         {
@@ -177,7 +173,7 @@ void AlbumHistory::deleteAlbum(Album *album)
         forward();
 
     // After the album is deleted from the history it has to be ensured,
-    // that neigboring albums are different
+    // that neighboring albums are different
     AlbumStack::iterator lhs = m_backwardStack->begin();
     AlbumStack::iterator rhs = lhs;
     ++rhs;
