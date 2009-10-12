@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" 
+"http://www.docbook.org/xml/4.5/docbookx.dtd"
+[
+<!ENTITY product "cleanup_digikamdb">
+<!ENTITY digikam "digiKam">
+<!ENTITY vacuum "VACUUM">
+]>
+
+<refentry lang="en" id="cleanup_digikamdb">
+    <refentryinfo>
+        <productname>&product;</productname>
+        <authorgroup>
+            <author>
+                <contrib>Developer</contrib>
+                <firstname>Andi</firstname>
+                <surname>Clemens</surname>
+                <email>andi dot clemens at gmx dot net</email>
+            </author>
+        </authorgroup>
+    </refentryinfo>
+
+    <refmeta>
+        <refentrytitle>&product;</refentrytitle>
+        <manvolnum>1</manvolnum>
+        <refmiscinfo
+            class="source">http://www.digikam.org</refmiscinfo>
+    </refmeta>
+
+    <refnamediv>
+        <refname>&product;</refname>
+        <refpurpose>
+            Cleanup the &digikam; databases to reduce their sizes and increase access
+            speed </refpurpose>
+    </refnamediv>
+
+    <refsynopsisdiv>
+        <cmdsynopsis><command>&product;</command>
+            <arg>options</arg>
+        </cmdsynopsis>
+    </refsynopsisdiv>
+
+    <refsect1
+        id="foo.options">
+        <title>Options</title>
+        <variablelist>
+
+            <varlistentry>
+                <term><option>-t</option></term>
+                <listitem>
+                    <para>Cleanup thumbnail databases. This can take a while (default: disabled)
+                    </para>
+                </listitem>
+            </varlistentry>
+
+            <varlistentry>
+                <term><option> -p <filename>path</filename> </option></term>
+                <listitem>
+                    <para>Specify a different database path, ignore the entry
+                        from the &digikam; configuration file. If the specified path
+                        is invalid, the entry from the configuration file will be
+                        used.
+                    </para>
+                </listitem>
+            </varlistentry>
+
+            <varlistentry>
+                <term><option>-h</option></term>
+                <listitem>
+                    <para> Show help.
+                    </para>
+                </listitem>
+            </varlistentry>
+
+        </variablelist>
+    </refsect1>
+
+    <refsect1
+        id="foo.description">
+        <title>Description</title>
+        <para>
+            &product; will cleanup and optimize the &digikam; database file.
+            This will, in most cases, lead to a smaller database file size and an increased access speed, because unneeded elements are removed from the database and data is optimized.
+        </para>
+        <para>
+            The program will make sure that no instance of &digikam; is running, because it is more safe to have no database access during
+            the optimization process.
+            It then will read the &digikam; configuration file and determine the database location. 
+            In a final step the database will be optimized by invoking the
+            sqlite command '&vacuum;;' on it. 
+            If more then one database is found in this location, &product; will optimize every database found in this path and below. 
+        </para>
+        <para>
+            For further explanation, see the following description of the
+            &vacuum; command from the sqlite3 website: 
+        </para>
+        <para>
+            When an object (table, index, or trigger) is dropped from the database, it leaves behind empty space. 
+            This empty space will be reused the next time new information is added to the database. 
+            But in the meantime, the database file might be larger than strictly necessary. 
+            Also, frequent inserts, updates, and deletes can cause the information in the database to become fragmented - scrattered out all 
+            across the database file rather than clustered together in one
+            place.
+        </para>
+        <para>
+            The &vacuum; command cleans the main database by copying its contents to a temporary database file and reloading 
+            the original database file from the copy. 
+            This eliminates free pages, aligns table data to be contiguous, and otherwise cleans up the database file structure. 
+        </para>
+    </refsect1>
+
+</refentry>
+

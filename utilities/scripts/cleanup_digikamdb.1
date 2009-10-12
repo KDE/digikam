@@ -1,48 +1,58 @@
-.\"             -*-Nroff-*-
-.\"
-.TH cleanup_digikamdb 1 "10 May 2009 " " " "Linux User's Manual"
+.\" -*- coding: us-ascii -*-
+.if \n(.g .ds T< \\FC
+.if \n(.g .ds T> \\F[\n[.fam]]
+.de URL
+\\$2 \(la\\$1\(ra\\$3
+..
+.if \n(.g .mso www.tmac
+.TH cleanup_digikamdb 1 "12 October 2009" http://www.digikam.org ""
 .SH NAME
-cleanup_digikamdb \- Cleanup the digiKam database to reduce its size and increase access speed.
+cleanup_digikamdb \- Cleanup the digiKam databases to reduce their sizes and increase access speed 
 .SH SYNOPSIS
-.B cleanup_digikamdb 
+'nh
+.fi
+.ad l
+\fBcleanup_digikamdb\fR \kx
+.if (\nx>(\n(.l/2)) .nr x (\n(.l/5)
+'in \n(.iu+\nxu
 [options]
-
+'in \n(.iu-\nxu
+.ad b
+'hy
 .SH OPTIONS
-
-.TP 6
-.B \-t
-Cleanup thumbnail databases. This can take a while, so it is disabled by default.
-
-.TP 6
-.B \-p <path>
-Specify a different database path, ignore the entry from the digiKam configuration file.
-If the specified path is invalid, the entry from the configuration file will be used.
-
-
-.TP 6
-.BI \-h
+.TP 
+\*(T<\fB\-t\fR\*(T>
+Cleanup thumbnail databases. This can take a while (default: disabled)
+.TP 
+\*(T<\fB\-p \fR\*(T>\*(T<\fB\fIpath\fR\fR\*(T>\*(T<\fB \fR\*(T>
+Specify a different database path, ignore the entry
+from the digiKam configuration file. If the specified path
+is invalid, the entry from the configuration file will be
+used.
+.TP 
+\*(T<\fB\-h\fR\*(T>
 Show help.
-
 .SH DESCRIPTION
-.B "cleanup_digikamdb "
-will cleanup and optimize the digiKam database file. This will, in most cases, lead to a smaller database file size
-and an increased access speed, because unneeded elements are removed from the database and data is optimized.
-
-The program will make sure that no instance of digiKam is running, because it is more safe to have no database
-access during the optimization process. It then will read the digiKam configuration file  and
-determine the database location. In a final step the database will be optimized by invoking the sqlite command 'VACUUM;'
-on it. If more then one database is found in this location,
-.B "cleanup_digikamdb "
-will optimize every database found in this path and below.
-
-For further explanation, see the following description of the VACUUM command from the sqlite3 website:
-
-When an object (table, index, or trigger) is dropped from the database, it leaves behind empty space. This empty space will be reused the next time new information is added to the database. But in the meantime, the database file might be larger than strictly necessary. Also, frequent inserts, updates, and deletes can cause the information in the database to become fragmented - scrattered out all across the database file rather than clustered together in one place.
-
-The VACUUM command cleans the main database by copying its contents to a temporary database file and reloading the original database file from the copy. This eliminates free pages, aligns table data to be contiguous, and otherwise cleans up the database file structure.
- 
+cleanup_digikamdb will cleanup and optimize the digiKam database file.
+This will, in most cases, lead to a smaller database file size and an increased access speed, because unneeded elements are removed from the database and data is optimized.
 .PP
-
-.SH AUTHORS
-.B cleanup_digikamdb
-was written by Andi Clemens <andi dot clemens at gmx dot net>
+The program will make sure that no instance of digiKam is running, because it is more safe to have no database access during
+the optimization process.
+It then will read the digiKam configuration file and determine the database location. 
+In a final step the database will be optimized by invoking the
+sqlite command 'VACUUM;' on it. 
+If more then one database is found in this location, cleanup_digikamdb will optimize every database found in this path and below. 
+.PP
+For further explanation, see the following description of the
+VACUUM command from the sqlite3 website: 
+.PP
+When an object (table, index, or trigger) is dropped from the database, it leaves behind empty space. 
+This empty space will be reused the next time new information is added to the database. 
+But in the meantime, the database file might be larger than strictly necessary. 
+Also, frequent inserts, updates, and deletes can cause the information in the database to become fragmented - scrattered out all 
+across the database file rather than clustered together in one
+place.
+.PP
+The VACUUM command cleans the main database by copying its contents to a temporary database file and reloading 
+the original database file from the copy. 
+This eliminates free pages, aligns table data to be contiguous, and otherwise cleans up the database file structure. 
