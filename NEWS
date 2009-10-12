@@ -30,7 +30,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 021 ==> 210053 : digiKam new folder does not see photos inside.
 022 ==> 210162 : Lighttable keyboard shortcuts "On Right" do not work.
 023 ==> 193347 : Crash while searching in menus.
-024 ==>
+024 ==> 209207 : Crash when deleting saved searches (GPS and Timeline).
+025 ==>
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
