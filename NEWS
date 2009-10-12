@@ -32,7 +32,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 023 ==> 193347 : Crash while searching in menus.
 024 ==> 209207 : Crash when deleting saved searches (GPS and Timeline).
 025 ==> 205292 : Error message after deleting images outside of digiKam.
-026 ==>
+026 ==> 210358 : AND instead of OR in tag selecting.
+027 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
