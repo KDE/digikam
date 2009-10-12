@@ -32,8 +32,8 @@
     <refnamediv>
         <refname>&product;</refname>
         <refpurpose>
-            Cleanup the &digikam; databases to reduce their sizes and increase access
-            speed </refpurpose>
+            Cleanup the &digikam; databases to reduce their sizes and increase access speed 
+        </refpurpose>
     </refnamediv>
 
     <refsynopsisdiv>
@@ -51,7 +51,8 @@
             <varlistentry>
                 <term><option>-t</option></term>
                 <listitem>
-                    <para>Cleanup thumbnail databases. This can take a while (default: disabled)
+                    <para>
+                        Cleanup thumbnail databases. This can take a while (default: disabled)
                     </para>
                 </listitem>
             </varlistentry>
@@ -59,10 +60,9 @@
             <varlistentry>
                 <term><option> -p <filename>path</filename> </option></term>
                 <listitem>
-                    <para>Specify a different database path, ignore the entry
-                        from the &digikam; configuration file. If the specified path
-                        is invalid, the entry from the configuration file will be
-                        used.
+                    <para>
+                        Specify a different database path, ignore the entry from the &digikam; configuration file. If the specified path
+                        is invalid, the entry from the configuration file will be used.
                     </para>
                 </listitem>
             </varlistentry>
@@ -70,7 +70,8 @@
             <varlistentry>
                 <term><option>-h</option></term>
                 <listitem>
-                    <para> Show help.
+                    <para>
+                        Show help.
                     </para>
                 </listitem>
             </varlistentry>
@@ -86,15 +87,12 @@
         </para>
         <para>
             The program will make sure that no instance of &digikam; is running, because it is more safe to have no database access during
-            the optimization process.
-            It then will read the &digikam; configuration file and determine the database location. 
-            In a final step the database will be optimized by invoking the
-            sqlite command '&vacuum;;' on it. 
+            the optimization process.  It then will read the &digikam; configuration file and determine the database location. 
+            In a final step the database will be optimized by invoking the sqlite command '&vacuum;;' on it. 
             If more then one database is found in this location, &product; will optimize every database found in this path and below. 
         </para>
         <para>
-            For further explanation, see the following description of the
-            &vacuum; command from the sqlite3 website: 
+            For further explanation, see the following description of the &vacuum; command from the sqlite3 website: 
         </para>
         <para>
             When an object (table, index, or trigger) is dropped from the database, it leaves behind empty space. 

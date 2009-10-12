@@ -25,10 +25,8 @@ cleanup_digikamdb \- Cleanup the digiKam databases to reduce their sizes and inc
 Cleanup thumbnail databases. This can take a while (default: disabled)
 .TP 
 \*(T<\fB\-p \fR\*(T>\*(T<\fB\fIpath\fR\fR\*(T>\*(T<\fB \fR\*(T>
-Specify a different database path, ignore the entry
-from the digiKam configuration file. If the specified path
-is invalid, the entry from the configuration file will be
-used.
+Specify a different database path, ignore the entry from the digiKam configuration file. If the specified path
+is invalid, the entry from the configuration file will be used.
 .TP 
 \*(T<\fB\-h\fR\*(T>
 Show help.
@@ -37,14 +35,11 @@ Show help.
 This will, in most cases, lead to a smaller database file size and an increased access speed, because unneeded elements are removed from the database and data is optimized.
 .PP
 The program will make sure that no instance of digiKam is running, because it is more safe to have no database access during
-the optimization process.
-It then will read the digiKam configuration file and determine the database location. 
-In a final step the database will be optimized by invoking the
-sqlite command 'VACUUM;' on it. 
+the optimization process. It then will read the digiKam configuration file and determine the database location. 
+In a final step the database will be optimized by invoking the sqlite command 'VACUUM;' on it. 
 If more then one database is found in this location, \fBcleanup_digikamdb\fR will optimize every database found in this path and below. 
 .PP
-For further explanation, see the following description of the
-VACUUM command from the sqlite3 website: 
+For further explanation, see the following description of the VACUUM command from the sqlite3 website: 
 .PP
 When an object (table, index, or trigger) is dropped from the database, it leaves behind empty space. 
 This empty space will be reused the next time new information is added to the database. 
