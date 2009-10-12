@@ -86,6 +86,8 @@ def generate_includes(fp, includes, comment, bstart=None, bend=None):
         includes.sort()
         if (comment):
             fp.write("\n// %s includes\n\n" % comment)
+        else:
+            fp.write("\n")
         if bstart: fp.write(bstart+"\n")
         for inc in includes: fp.write("#include " + inc)
         if bend: fp.write(bend+"\n")
