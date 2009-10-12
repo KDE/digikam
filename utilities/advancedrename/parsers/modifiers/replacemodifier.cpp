@@ -31,9 +31,9 @@
 
 // KDE includes
 
-#include <klocale.h>
 #include <kiconloader.h>
 #include <klineedit.h>
+#include <klocale.h>
 
 namespace Digikam
 {

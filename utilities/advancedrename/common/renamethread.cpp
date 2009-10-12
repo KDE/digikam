@@ -30,10 +30,6 @@
 #include <QMutexLocker>
 #include <QWaitCondition>
 
-// KDE includes
-
-
-
 namespace Digikam
 {
 

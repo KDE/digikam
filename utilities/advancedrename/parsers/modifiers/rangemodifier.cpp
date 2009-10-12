@@ -25,14 +25,14 @@
 
 // Qt includes
 
-#include <QPointer>
 #include <QGridLayout>
+#include <QPointer>
 
 // KDE includes
 
+#include <kiconloader.h>
 #include <klocale.h>
 #include <knuminput.h>
-#include <kiconloader.h>
 
 namespace Digikam
 {

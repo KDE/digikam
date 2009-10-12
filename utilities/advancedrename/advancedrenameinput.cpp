@@ -26,10 +26,10 @@
 
 // Qt includes
 
-#include <QMouseEvent>
 #include <QFocusEvent>
-#include <QToolButton>
+#include <QMouseEvent>
 #include <QTimer>
+#include <QToolButton>
 
 // KDE includes
 

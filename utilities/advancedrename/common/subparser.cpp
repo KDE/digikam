@@ -31,12 +31,12 @@
 
 // Local includes
 
-#include "lowercasemodifier.h"
-#include "uppercasemodifier.h"
 #include "firstletterofeachworduppercasemodifier.h"
-#include "trimmedmodifier.h"
+#include "lowercasemodifier.h"
 #include "rangemodifier.h"
 #include "replacemodifier.h"
+#include "trimmedmodifier.h"
+#include "uppercasemodifier.h"
 
 namespace Digikam
 {

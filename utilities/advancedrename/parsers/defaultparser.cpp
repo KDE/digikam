@@ -23,7 +23,7 @@
 
 #include "defaultparser.h"
 
-// Libkexiv2 includes
+// LibKExiv2 includes
 
 #include <libkexiv2/version.h>
 
