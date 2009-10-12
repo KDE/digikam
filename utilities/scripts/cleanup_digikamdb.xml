@@ -2,7 +2,8 @@
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" 
 "http://www.docbook.org/xml/4.5/docbookx.dtd"
 [
-<!ENTITY product "cleanup_digikamdb">
+<!ENTITY product "<command>cleanup_digikamdb</command>">
+<!ENTITY version "1.0">
 <!ENTITY digikam "digiKam">
 <!ENTITY vacuum "VACUUM">
 ]>
@@ -23,8 +24,9 @@
     <refmeta>
         <refentrytitle>&product;</refentrytitle>
         <manvolnum>1</manvolnum>
-        <refmiscinfo
-            class="source">http://www.digikam.org</refmiscinfo>
+        <refmiscinfo class="source">&product;</refmiscinfo>
+        <refmiscinfo class="software">&product;</refmiscinfo>
+        <refmiscinfo class="version">&version;</refmiscinfo>
     </refmeta>
 
     <refnamediv>
@@ -35,7 +37,8 @@
     </refnamediv>
 
     <refsynopsisdiv>
-        <cmdsynopsis><command>&product;</command>
+        <cmdsynopsis>
+            &product;
             <arg>options</arg>
         </cmdsynopsis>
     </refsynopsisdiv>
@@ -75,8 +78,7 @@
         </variablelist>
     </refsect1>
 
-    <refsect1
-        id="foo.description">
+    <refsect1>
         <title>Description</title>
         <para>
             &product; will cleanup and optimize the &digikam; database file.
@@ -106,6 +108,13 @@
             The &vacuum; command cleans the main database by copying its contents to a temporary database file and reloading 
             the original database file from the copy. 
             This eliminates free pages, aligns table data to be contiguous, and otherwise cleans up the database file structure. 
+        </para>
+    </refsect1>
+
+    <refsect1>
+        <title>Author</title>
+        <para>
+            &product; was written by Andi Clemens &lt;andi dot clemens at gmx dot net&gt;
         </para>
     </refsect1>
 

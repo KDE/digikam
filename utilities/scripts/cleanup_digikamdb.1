@@ -5,7 +5,7 @@
 \\$2 \(la\\$1\(ra\\$3
 ..
 .if \n(.g .mso www.tmac
-.TH cleanup_digikamdb 1 "12 October 2009" http://www.digikam.org ""
+.TH cleanup_digikamdb 1 "12 October 2009" cleanup_digikamdb ""
 .SH NAME
 cleanup_digikamdb \- Cleanup the digiKam databases to reduce their sizes and increase access speed 
 .SH SYNOPSIS
@@ -33,7 +33,7 @@ used.
 \*(T<\fB\-h\fR\*(T>
 Show help.
 .SH DESCRIPTION
-cleanup_digikamdb will cleanup and optimize the digiKam database file.
+\fBcleanup_digikamdb\fR will cleanup and optimize the digiKam database file.
 This will, in most cases, lead to a smaller database file size and an increased access speed, because unneeded elements are removed from the database and data is optimized.
 .PP
 The program will make sure that no instance of digiKam is running, because it is more safe to have no database access during
@@ -41,7 +41,7 @@ the optimization process.
 It then will read the digiKam configuration file and determine the database location. 
 In a final step the database will be optimized by invoking the
 sqlite command 'VACUUM;' on it. 
-If more then one database is found in this location, cleanup_digikamdb will optimize every database found in this path and below. 
+If more then one database is found in this location, \fBcleanup_digikamdb\fR will optimize every database found in this path and below. 
 .PP
 For further explanation, see the following description of the
 VACUUM command from the sqlite3 website: 
@@ -56,3 +56,5 @@ place.
 The VACUUM command cleans the main database by copying its contents to a temporary database file and reloading 
 the original database file from the copy. 
 This eliminates free pages, aligns table data to be contiguous, and otherwise cleans up the database file structure. 
+.SH AUTHOR
+\fBcleanup_digikamdb\fR was written by Andi Clemens <andi dot clemens at gmx dot net>
