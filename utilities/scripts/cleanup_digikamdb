@@ -102,11 +102,11 @@ help()
 Usage: $(basename $0) <options>
 
 options:
-  -t            cleanup thumbnail databases
-  -p <path>     specify a different database path, ignore the entry from the
-                digiKam configuration file. If the specified path is invalid,
+  -t            Cleanup thumbnail databases
+  -p <path>     Specify a different database path. The entry from the
+                digiKam configuration file will be ignored. If the specified path is invalid,
                 the entry from the configuration file will be used.
-  -h            show this help
+  -h            Show this help.
 EOF
     exit 1
 }

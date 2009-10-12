@@ -39,7 +39,9 @@
     <refsynopsisdiv>
         <cmdsynopsis>
             &product;
-            <arg>options</arg>
+            <arg>-t</arg>
+            <arg>-p</arg>
+            <arg>-h</arg>
         </cmdsynopsis>
     </refsynopsisdiv>
 
@@ -52,7 +54,7 @@
                 <term><option>-t</option></term>
                 <listitem>
                     <para>
-                        Cleanup thumbnail databases. This can take a while (default: disabled)
+                        Include thumbnail databases.
                     </para>
                 </listitem>
             </varlistentry>
@@ -61,8 +63,9 @@
                 <term><option> -p <filename>path</filename> </option></term>
                 <listitem>
                     <para>
-                        Specify a different database path, ignore the entry from the &digikam; configuration file. If the specified path
-                        is invalid, the entry from the configuration file will be used.
+                        Specify a different database <emphasis>path</emphasis>.
+                        The entry from the &digikam; configuration file will be ignored.
+                        If the specified <emphasis>path</emphasis> is invalid, the entry from the configuration file will be used.
                     </para>
                 </listitem>
             </varlistentry>
@@ -71,7 +74,7 @@
                 <term><option>-h</option></term>
                 <listitem>
                     <para>
-                        Show help.
+                        Show command line options.
                     </para>
                 </listitem>
             </varlistentry>

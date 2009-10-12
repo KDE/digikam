@@ -15,21 +15,22 @@ cleanup_digikamdb \- Cleanup the digiKam databases to reduce their sizes and inc
 \fBcleanup_digikamdb\fR \kx
 .if (\nx>(\n(.l/2)) .nr x (\n(.l/5)
 'in \n(.iu+\nxu
-[options]
+[-t] [-p] [-h]
 'in \n(.iu-\nxu
 .ad b
 'hy
 .SH OPTIONS
 .TP 
 \*(T<\fB\-t\fR\*(T>
-Cleanup thumbnail databases. This can take a while (default: disabled)
+Include thumbnail databases.
 .TP 
 \*(T<\fB\-p \fR\*(T>\*(T<\fB\fIpath\fR\fR\*(T>\*(T<\fB \fR\*(T>
-Specify a different database path, ignore the entry from the digiKam configuration file. If the specified path
-is invalid, the entry from the configuration file will be used.
+Specify a different database \fIpath\fR.
+The entry from the digiKam configuration file will be ignored.
+If the specified \fIpath\fR is invalid, the entry from the configuration file will be used.
 .TP 
 \*(T<\fB\-h\fR\*(T>
-Show help.
+Show command line options.
 .SH DESCRIPTION
 \fBcleanup_digikamdb\fR will cleanup and optimize the digiKam database file.
 This will, in most cases, lead to a smaller database file size and an increased access speed, because unneeded elements are removed from the database and data is optimized.
