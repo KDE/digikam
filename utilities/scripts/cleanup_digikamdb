@@ -85,7 +85,7 @@ pretty_header()
 
 checkForRunningProgram()
 {
-    proc=$(pgrep -u $user_name -l digikam | grep -v kio)
+    proc=$(pgrep -u $user_name -x digikam)
     if [ "$proc" != "" ]
     then
         echo "Please shutdown $digikam_name before running this script."
