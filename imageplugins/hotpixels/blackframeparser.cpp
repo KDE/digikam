@@ -171,8 +171,7 @@ void BlackFrameParser::consolidatePixels (QList<HotPixel>& list)
     HotPixel tmp;
     HotPixel point;
     HotPixel point_below;
-    QList<HotPixel>::iterator end(list.end());
-    for (; it != end; ++it )
+    for (; it != list.end(); ++it )
     {
         while (1)
         {
