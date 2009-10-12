@@ -15,7 +15,7 @@ cleanup_digikamdb \- Cleanup the digiKam databases to reduce their sizes and inc
 \fBcleanup_digikamdb\fR \kx
 .if (\nx>(\n(.l/2)) .nr x (\n(.l/5)
 'in \n(.iu+\nxu
-[-t] [-p] [-h]
+[-t] [-T] [-p] [-h]
 'in \n(.iu-\nxu
 .ad b
 'hy
@@ -23,6 +23,9 @@ cleanup_digikamdb \- Cleanup the digiKam databases to reduce their sizes and inc
 .TP 
 \*(T<\fB\-t\fR\*(T>
 Include thumbnail databases.
+.TP 
+\*(T<\fB\-T\fR\*(T>
+Only cleanup thumbnail databases.
 .TP 
 \*(T<\fB\-p \fR\*(T>\*(T<\fB\fIpath\fR\fR\*(T>\*(T<\fB \fR\*(T>
 Specify a different database \fIpath\fR.

@@ -40,7 +40,8 @@ header_offset=20
 output_str_location="Location"
 output_str_database="Database"
 
-db_find_cmd="-type f -name '$db_digikam'"
+db_find_args="-type f"
+db_find_cmd="$db_find_args -name '$db_digikam'"
 
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
@@ -102,7 +103,8 @@ help()
 Usage: $(basename $0) <options>
 
 options:
-  -t            Cleanup thumbnail databases
+  -t            Include thumbnail databases
+  -T            Only cleanup thumbnail databases
   -p <path>     Specify a different database path. The entry from the
                 digiKam configuration file will be ignored. If the specified path is invalid,
                 the entry from the configuration file will be used.
@@ -119,10 +121,11 @@ EOF
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
 
-while getopts "tp:h" Option
+while getopts "tTp:h" Option
 do
     case $Option in
         t)  db_find_cmd="$db_find_cmd -or -name '$db_thumbs'";;
+        T)  db_find_cmd="$db_find_args -name '$db_thumbs'";;
         p)  if [ -n $OPTARG ]; then 
                 if [ -d $OPTARG ]; then
                     db_dir=$OPTARG

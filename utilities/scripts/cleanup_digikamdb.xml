@@ -40,6 +40,7 @@
         <cmdsynopsis>
             &product;
             <arg>-t</arg>
+            <arg>-T</arg>
             <arg>-p</arg>
             <arg>-h</arg>
         </cmdsynopsis>
@@ -55,6 +56,15 @@
                 <listitem>
                     <para>
                         Include thumbnail databases.
+                    </para>
+                </listitem>
+            </varlistentry>
+
+            <varlistentry>
+                <term><option>-T</option></term>
+                <listitem>
+                    <para>
+                        Only cleanup thumbnail databases.
                     </para>
                 </listitem>
             </varlistentry>
