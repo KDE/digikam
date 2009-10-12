@@ -5,7 +5,7 @@
 <!ENTITY product "<command>cleanup_digikamdb</command>">
 <!ENTITY version "1.0">
 <!ENTITY digikam "digiKam">
-<!ENTITY vacuum "VACUUM">
+<!ENTITY vacuum "<emphasis>VACUUM</emphasis>">
 ]>
 
 <refentry lang="en" id="cleanup_digikamdb">
