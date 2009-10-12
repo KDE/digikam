@@ -1109,12 +1109,12 @@ void CameraUI::slotFileList(const GPItemInfoList& fileList)
     QStringList list = settings->getAllFileFilter().toLower().split(' ');
 
     QMultiMap<QDateTime, GPItemInfo> map;
-    CameraIconItem *citem = dynamic_cast<CameraIconItem*>(d->view->firstItem());
+    CameraIconItem *citem = static_cast<CameraIconItem*>(d->view->firstItem());
     while(citem)
     {
         info.setFile(citem->itemInfo()->name);
         map.insertMulti(citem->itemInfo()->mtime, *citem->itemInfo());
-        citem = dynamic_cast<CameraIconItem*>(citem->nextItem());
+        citem = static_cast<CameraIconItem*>(citem->nextItem());
     }
 
     foreach(const GPItemInfo& item, fileList)
@@ -1128,11 +1128,12 @@ void CameraUI::slotFileList(const GPItemInfoList& fileList)
         }
     }
 
-    citem = dynamic_cast<CameraIconItem*>(d->view->firstItem());
+    citem = static_cast<CameraIconItem*>(d->view->firstItem());
     while(citem)
     {
-        d->view->removeItem(citem->itemInfo()->folder,citem->itemInfo()->name);
-        citem = dynamic_cast<CameraIconItem*>(citem->nextItem());
+        CameraIconItem *tempItem = citem;
+        citem = static_cast<CameraIconItem*>(tempItem->nextItem());
+        d->view->removeItem(tempItem->itemInfo()->folder,tempItem->itemInfo()->name);
     }
 
     refreshIconView(map);
