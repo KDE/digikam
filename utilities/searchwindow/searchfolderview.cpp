@@ -29,13 +29,12 @@
 
 // Qt includes
 
+#include <QCursor>
 #include <QFont>
 #include <QPainter>
 #include <QStyle>
-#include <QCursor>
 
 // KDE includes
-
 
 #include <kdeversion.h>
 #include <kglobal.h>

@@ -26,27 +26,27 @@
 
 // Qt includes
 
+#include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
 #include <QLineEdit>
 #include <QToolButton>
-#include <QGridLayout>
 #include <QVBoxLayout>
 #include <QWhatsThis>
 
 // KDE includes
 
-#include <klocale.h>
 #include <kdialog.h>
 #include <kiconloader.h>
+#include <klocale.h>
 #include <kmessagebox.h>
 #include <kvbox.h>
 
 // Local includes
 
+#include "albumdb.h"
 #include "albumsettings.h"
 #include "databaseaccess.h"
-#include "albumdb.h"
 
 namespace Digikam
 {

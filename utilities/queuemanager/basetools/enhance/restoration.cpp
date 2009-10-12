@@ -26,17 +26,17 @@
 
 // Qt includes
 
-#include <QWidget>
 #include <QLabel>
+#include <QWidget>
 
 // KDE includes
 
-#include <kvbox.h>
-#include <klocale.h>
-#include <kiconloader.h>
 #include <kcombobox.h>
+#include <kiconloader.h>
+#include <klocale.h>
 #include <kstandarddirs.h>
 #include <kurllabel.h>
+#include <kvbox.h>
 
 // Local includes
 

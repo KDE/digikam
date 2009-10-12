@@ -26,8 +26,8 @@
 
 // Qt includes
 
-#include <QPixmap>
 #include <QPainter>
+#include <QPixmap>
 
 // KDE includes
 
@@ -35,8 +35,8 @@
 
 // Local includes
 
-#include "themeengine.h"
 #include "themediconview.h"
+#include "themeengine.h"
 
 namespace Digikam
 {

@@ -26,15 +26,15 @@
 
 // Qt includes
 
-#include <QWidget>
 #include <QDataStream>
 #include <QDateTime>
 #include <QFileInfo>
+#include <QWidget>
 
 // Local includes
 
-#include "dimgloaderobserver.h"
 #include "debug.h"
+#include "dimgloaderobserver.h"
 
 namespace Digikam
 {

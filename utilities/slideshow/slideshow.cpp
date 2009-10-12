@@ -59,9 +59,9 @@
 
 #include "debug.h"
 #include "dimg.h"
+#include "globals.h"
 #include "previewloadthread.h"
 #include "toolbar.h"
-#include "globals.h"
 
 namespace Digikam
 {

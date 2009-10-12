@@ -30,11 +30,11 @@
 
 // KDE includes
 
+#include <kapplication.h>
 #include <kdeversion.h>
-#include <kmessagebox.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kapplication.h>
+#include <kmessagebox.h>
 
 // Local includes
 

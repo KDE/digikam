@@ -30,20 +30,20 @@
 
 // KDE includes
 
-#include <klocale.h>
-#include <kdialog.h>
-#include <kconfig.h>
 #include <kapplication.h>
-#include <kseparator.h>
+#include <kconfig.h>
+#include <kdialog.h>
 #include <kglobal.h>
+#include <klocale.h>
+#include <kseparator.h>
 
 // Local includes
 
+#include "jp2ksettings.h"
 #include "jpegsettings.h"
+#include "pgfsettings.h"
 #include "pngsettings.h"
 #include "tiffsettings.h"
-#include "jp2ksettings.h"
-#include "pgfsettings.h"
 
 namespace Digikam
 {

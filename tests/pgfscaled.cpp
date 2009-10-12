@@ -20,16 +20,16 @@
  *
  * ============================================================ */
 
-// Qt includes.
+// Qt includes
 
-#include <QImage>
 #include <QFile>
 #include <QIODevice>
+#include <QImage>
 
-// Local includes.
+// Local includes
 
-#include "pgfutils.h"
 #include "debug.h"
+#include "pgfutils.h"
 
 using namespace Digikam;
 

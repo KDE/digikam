@@ -42,12 +42,12 @@
 
 // Local includes
 
-#include "searchxml.h"
-#include "themeengine.h"
-#include "searchwindow.h"
+#include "debug.h"
 #include "searchgroup.h"
 #include "searchutilities.h"
-#include "debug.h"
+#include "searchwindow.h"
+#include "searchxml.h"
+#include "themeengine.h"
 
 namespace Digikam
 {

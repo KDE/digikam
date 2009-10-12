@@ -26,31 +26,31 @@
 
 // Qt includes
 
-#include <QTimer>
-#include <QLabel>
-#include <QScrollArea>
 #include <QButtonGroup>
-#include <QVBoxLayout>
-#include <QRadioButton>
 #include <QGroupBox>
+#include <QLabel>
+#include <QRadioButton>
+#include <QScrollArea>
+#include <QTimer>
 #include <QTreeWidget>
+#include <QVBoxLayout>
 
 // KDE includes
 
+#include <kconfig.h>
 #include <kdeversion.h>
+#include <kdialog.h>
+#include <kglobal.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kdialog.h>
-#include <kconfig.h>
-#include <kglobal.h>
 #include <kvbox.h>
 
 // Local includes
 
-#include "batchtool.h"
+#include "advancedrenamewidget.h"
 #include "album.h"
 #include "albumselectwidget.h"
-#include "advancedrenamewidget.h"
+#include "batchtool.h"
 
 namespace Digikam
 {

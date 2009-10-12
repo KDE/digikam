@@ -26,29 +26,29 @@
 
 // Qt includes
 
-#include <QWidget>
 #include <QLabel>
-#include <QStackedWidget>
 #include <QScrollArea>
+#include <QStackedWidget>
+#include <QWidget>
 
 // KDE includes
 
-#include <kvbox.h>
-#include <klocale.h>
 #include <kiconloader.h>
+#include <klocale.h>
+#include <kvbox.h>
 
 // LibKDcraw includes
 
-#include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rcombobox.h>
+#include <libkdcraw/rnuminput.h>
 
 // Local includes
 
 #include "dimg.h"
 #include "dimgimagefilters.h"
+#include "dimgrefocus.h"
 #include "dimgsharpen.h"
 #include "dimgunsharpmask.h"
-#include "dimgrefocus.h"
 
 using namespace KDcrawIface;
 

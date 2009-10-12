@@ -27,31 +27,31 @@
 // Qt includes
 
 #include <QButtonGroup>
-#include <QGroupBox>
 #include <QCheckBox>
 #include <QFrame>
+#include <QGridLayout>
+#include <QGroupBox>
 #include <QLabel>
 #include <QVBoxLayout>
-#include <QGridLayout>
 
 // KDE includes
 
-#include <klocale.h>
-#include <kdialog.h>
-#include <kurllabel.h>
-#include <kiconloader.h>
-#include <kglobalsettings.h>
-#include <kstandarddirs.h>
-#include <kvbox.h>
-#include <ktoolinvocation.h>
-#include <ktabwidget.h>
 #include <kapplication.h>
 #include <kconfig.h>
+#include <kdialog.h>
+#include <kglobalsettings.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kstandarddirs.h>
+#include <ktabwidget.h>
+#include <ktoolinvocation.h>
+#include <kurllabel.h>
+#include <kvbox.h>
 
-// Libkexiv2 includes
+// LibKExiv2 includes
 
-#include <libkexiv2/version.h>
 #include <libkexiv2/kexiv2.h>
+#include <libkexiv2/version.h>
 
 // Local includes
 

@@ -26,20 +26,19 @@
 
 // Qt includes
 
-#include <QScrollArea>
 #include <QHBoxLayout>
 #include <QKeyEvent>
+#include <QScrollArea>
 
 // KDE includes
-
 
 #include <klocale.h>
 
 // Local includes
 
-#include "themeengine.h"
 #include "searchview.h"
 #include "searchxml.h"
+#include "themeengine.h"
 
 namespace Digikam
 {

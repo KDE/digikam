@@ -28,17 +28,17 @@
 
 // KDE includes
 
-#include <kapplication.h>
 #include <kaboutdata.h>
+#include <kapplication.h>
 #include <kcmdlineargs.h>
-#include <klocale.h>
 #include <kglobal.h>
+#include <klocale.h>
 
 // Local includes
 
-#include "version.h"
 #include "daboutdata.h"
 #include "mainwindow.h"
+#include "version.h"
 
 int main(int argc, char** argv)
 {

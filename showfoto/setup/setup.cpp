@@ -39,9 +39,9 @@
 #include "setupeditor.h"
 #include "setupicc.h"
 #include "setupiofiles.h"
+#include "setupmetadata.h"
 #include "setupslideshow.h"
 #include "setuptooltip.h"
-#include "setupmetadata.h"
 
 namespace ShowFoto
 {

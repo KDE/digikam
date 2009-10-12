@@ -27,35 +27,35 @@
 
 // Qt includes
 
-#include <QGroupBox>
-#include <QPushButton>
 #include <QDateTime>
 #include <QGridLayout>
-#include <QPixmap>
-#include <QVBoxLayout>
+#include <QGroupBox>
 #include <QHeaderView>
+#include <QPixmap>
+#include <QPushButton>
 #include <QTreeWidget>
 #include <QTreeWidgetItemIterator>
+#include <QVBoxLayout>
 
 // KDE includes
 
+#include <kapplication.h>
+#include <kcursor.h>
+#include <kglobalsettings.h>
+#include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kurllabel.h>
-#include <kiconloader.h>
-#include <kglobalsettings.h>
 #include <kstandarddirs.h>
-#include <kcursor.h>
-#include <kapplication.h>
 #include <ktoolinvocation.h>
+#include <kurllabel.h>
 
 // Local includes
 
+#include "cameralist.h"
+#include "cameraselection.h"
+#include "cameratype.h"
 #include "config-digikam.h"
 #include "gpcamera.h"
-#include "cameraselection.h"
-#include "cameralist.h"
-#include "cameratype.h"
 
 namespace Digikam
 {

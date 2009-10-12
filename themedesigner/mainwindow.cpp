@@ -40,11 +40,11 @@
 #include <kcolorbutton.h>
 #include <kcombobox.h>
 #include <kfiledialog.h>
+#include <kglobal.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kstandardguiitem.h>
-#include <kglobal.h>
 #include <kstandarddirs.h>
+#include <kstandardguiitem.h>
 #include <kurl.h>
 
 // Local includes

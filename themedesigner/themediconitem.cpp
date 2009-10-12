@@ -26,26 +26,26 @@
 
 // Qt includes
 
+#include <QDateTime>
+#include <QFont>
+#include <QFontMetrics>
 #include <QPainter>
-#include <QPixmap>
 #include <QPalette>
 #include <QPen>
-#include <QFontMetrics>
-#include <QFont>
-#include <QDateTime>
+#include <QPixmap>
 
 // KDE includes
 
-#include <kglobal.h>
-#include <klocale.h>
 #include <kapplication.h>
+#include <kglobal.h>
 #include <kiconloader.h>
+#include <klocale.h>
 
 // Local includes
 
 #include "imagedelegate.h"
-#include "themeengine.h"
 #include "themediconview.h"
+#include "themeengine.h"
 
 namespace Digikam
 {

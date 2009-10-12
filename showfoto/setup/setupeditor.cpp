@@ -35,7 +35,6 @@
 
 // KDE includes
 
-#include <kmultitabbar.h>
 #include <kapplication.h>
 #include <kcolorbutton.h>
 #include <kcombobox.h>
@@ -43,6 +42,7 @@
 #include <kdialog.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <kmultitabbar.h>
 #include <knuminput.h>
 #include <kvbox.h>
 

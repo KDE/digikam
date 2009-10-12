@@ -31,33 +31,33 @@
 
 // KDE includes
 
-#include <kmessagebox.h>
-#include <klocale.h>
-#include <kiconloader.h>
-#include <kconfig.h>
 #include <kapplication.h>
+#include <kconfig.h>
 #include <kglobal.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kmessagebox.h>
 #include <kvbox.h>
 
 // Local includes
 
 #include "albumsettings.h"
 #include "batchthumbsgenerator.h"
-#include "setupcollections.h"
 #include "setupalbumview.h"
-#include "setuptooltip.h"
-#include "setupmetadata.h"
-#include "setupcategory.h"
-#include "setupmime.h"
-#include "setuplighttable.h"
-#include "setupeditor.h"
-#include "setupdcraw.h"
-#include "setupiofiles.h"
-#include "setupslideshow.h"
-#include "setupicc.h"
-#include "setupplugins.h"
 #include "setupcamera.h"
+#include "setupcategory.h"
+#include "setupcollections.h"
+#include "setupdcraw.h"
+#include "setupeditor.h"
+#include "setupicc.h"
+#include "setupiofiles.h"
+#include "setuplighttable.h"
+#include "setupmetadata.h"
+#include "setupmime.h"
 #include "setupmisc.h"
+#include "setupplugins.h"
+#include "setupslideshow.h"
+#include "setuptooltip.h"
 
 namespace Digikam
 {

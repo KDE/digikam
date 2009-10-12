@@ -28,12 +28,12 @@
 
 // Qt includes
 
-#include <QPainter>
 #include <QDragEnterEvent>
-#include <QUrl>
 #include <QFileInfo>
 #include <QHeaderView>
+#include <QPainter>
 #include <QTimer>
+#include <QUrl>
 
 // KDE includes
 
@@ -45,11 +45,11 @@
 
 // Local includes
 
-#include "defaultparser.h"
 #include "albumdb.h"
 #include "databasechangesets.h"
 #include "databasewatch.h"
 #include "ddragobjects.h"
+#include "defaultparser.h"
 #include "queuemgrwindow.h"
 #include "queuetooltip.h"
 #include "thumbnailloadthread.h"

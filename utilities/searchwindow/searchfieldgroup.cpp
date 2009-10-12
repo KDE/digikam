@@ -26,17 +26,17 @@
 
 // Qt includes
 
-#include <QVBoxLayout>
 #include <QGridLayout>
 #include <QLabel>
+#include <QVBoxLayout>
 
 // Local includes
 
 #include "rexpanderbox.h"
-#include "themeengine.h"
-#include "searchgroup.h"
 #include "searchfields.h"
+#include "searchgroup.h"
 #include "searchutilities.h"
+#include "themeengine.h"
 
 namespace Digikam
 {

@@ -27,30 +27,30 @@
 // Qt includes
 
 #include <QButtonGroup>
-#include <QGroupBox>
-#include <QRadioButton>
 #include <QCheckBox>
+#include <QDir>
+#include <QGridLayout>
+#include <QGroupBox>
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
-#include <QDir>
-#include <QGridLayout>
+#include <QRadioButton>
 #include <QVBoxLayout>
 
 // KDE includes
 
-#include <klocale.h>
-#include <kpagedialog.h>
-#include <kurl.h>
 #include <kiconloader.h>
-#include <kmessagebox.h>
 #include <klineedit.h>
 #include <klistwidget.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kpagedialog.h>
+#include <kurl.h>
 
 // Local includes
 
-#include "thumbnailsize.h"
 #include "albumsettings.h"
+#include "thumbnailsize.h"
 
 namespace Digikam
 {

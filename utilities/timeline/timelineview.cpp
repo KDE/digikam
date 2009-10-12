@@ -54,11 +54,11 @@
 
 #include "album.h"
 #include "albummanager.h"
+#include "debug.h"
 #include "searchtextbar.h"
 #include "searchxml.h"
 #include "timelinefolderview.h"
 #include "timelinewidget.h"
-#include "debug.h"
 
 namespace Digikam
 {

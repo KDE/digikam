@@ -31,8 +31,8 @@
 // Qt includes
 
 #include <QPainter>
-#include <QPixmap>
 #include <QPen>
+#include <QPixmap>
 #include <QTimer>
 
 // KDE includes

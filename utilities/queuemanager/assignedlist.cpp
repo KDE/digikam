@@ -26,19 +26,19 @@
 
 // Qt includes
 
-#include <QPainter>
 #include <QDragEnterEvent>
-#include <QUrl>
 #include <QFileInfo>
 #include <QHeaderView>
+#include <QPainter>
+#include <QUrl>
 
 // KDE includes
 
-#include <klocale.h>
-#include <kiconloader.h>
 #include <kaction.h>
-#include <kmenu.h>
 #include <kactioncollection.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kmenu.h>
 
 // Local includes
 

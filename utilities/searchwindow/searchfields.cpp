@@ -56,20 +56,20 @@
 
 // Local includes
 
-#include "dimg.h"
-#include "albummanager.h"
 #include "album.h"
+#include "albummanager.h"
 #include "albummodel.h"
 #include "albumselectcombobox.h"
-#include "rexpanderbox.h"
-#include "kdateedit.h"
-#include "dmetadata.h"
-#include "imagescanner.h"
-#include "searchwindow.h"
-#include "searchfieldgroup.h"
-#include "ratingsearchutilities.h"
 #include "choicesearchutilities.h"
 #include "debug.h"
+#include "dimg.h"
+#include "dmetadata.h"
+#include "imagescanner.h"
+#include "kdateedit.h"
+#include "ratingsearchutilities.h"
+#include "rexpanderbox.h"
+#include "searchfieldgroup.h"
+#include "searchwindow.h"
 
 using namespace KDcrawIface;
 

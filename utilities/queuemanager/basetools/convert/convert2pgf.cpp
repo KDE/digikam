@@ -26,15 +26,15 @@
 
 // Qt includes
 
-#include <QWidget>
 #include <QFileInfo>
+#include <QWidget>
 
 // KDE includes
 
-#include <kconfiggroup.h>
 #include <kconfig.h>
-#include <klocale.h>
+#include <kconfiggroup.h>
 #include <kiconloader.h>
+#include <klocale.h>
 
 // Local includes
 

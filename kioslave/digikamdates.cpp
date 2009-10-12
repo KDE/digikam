@@ -31,23 +31,23 @@
 // Qt includes
 
 #include <QCoreApplication>
-#include <QFile>
 #include <QDataStream>
+#include <QFile>
 
 // KDE includes
 
-#include <kio/global.h>
-#include <kglobal.h>
-#include <klocale.h>
 #include <kcomponentdata.h>
+#include <kglobal.h>
+#include <kio/global.h>
+#include <klocale.h>
 
 // Local includes
 
-#include "digikam_export.h"
-#include "imagelister.h"
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "debug.h"
+#include "digikam_export.h"
+#include "imagelister.h"
 
 kio_digikamdates::kio_digikamdates(const QByteArray& pool_socket,
                                    const QByteArray& app_socket)

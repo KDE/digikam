@@ -34,9 +34,9 @@
 
 // Local includes
 
+#include "debug.h"
 #include "rexpanderbox.h"
 #include "searchutilities.h"
-#include "debug.h"
 
 namespace Digikam
 {

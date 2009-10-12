@@ -35,21 +35,21 @@
 // KDE includes
 
 #include <kcomponentdata.h>
-#include <kurl.h>
-#include <klocale.h>
 #include <kglobal.h>
-#include <kstandarddirs.h>
 #include <kio/global.h>
+#include <klocale.h>
+#include <kstandarddirs.h>
+#include <kurl.h>
 
 // Local includes
 
-#include "digikam_export.h"
+#include "albumdb.h"
 #include "databaseaccess.h"
 #include "databaseurl.h"
-#include "albumdb.h"
+#include "debug.h"
+#include "digikam_export.h"
 #include "imagelister.h"
 #include "imagelisterreceiver.h"
-#include "debug.h"
 
 kio_digikamtagsProtocol::kio_digikamtagsProtocol(const QByteArray& pool_socket,
                                                  const QByteArray& app_socket)

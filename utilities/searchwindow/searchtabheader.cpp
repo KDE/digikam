@@ -49,10 +49,10 @@
 
 #include "album.h"
 #include "albummanager.h"
-#include "searchwindow.h"
-#include "searchfolderview.h"
-#include "searchxml.h"
 #include "debug.h"
+#include "searchfolderview.h"
+#include "searchwindow.h"
+#include "searchxml.h"
 
 namespace Digikam
 {

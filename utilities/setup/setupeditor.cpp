@@ -26,24 +26,23 @@
 
 // Qt includes
 
+#include <QCheckBox>
 #include <QColor>
 #include <QGroupBox>
 #include <QLabel>
-#include <QCheckBox>
 #include <QVBoxLayout>
 
 // KDE includes
 
-#include <klocale.h>
-#include <kdialog.h>
-#include <kcolorbutton.h>
-#include <knuminput.h>
-#include <kconfig.h>
-#include <kapplication.h>
-#include <kglobal.h>
-#include <kvbox.h>
 #include <kaboutdata.h>
-
+#include <kapplication.h>
+#include <kcolorbutton.h>
+#include <kconfig.h>
+#include <kdialog.h>
+#include <kglobal.h>
+#include <klocale.h>
+#include <knuminput.h>
+#include <kvbox.h>
 
 namespace Digikam
 {

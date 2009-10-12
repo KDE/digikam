@@ -27,16 +27,16 @@
 // Qt includes
 
 #include <QLabel>
-#include <QString>
-#include <QScrollArea>
 #include <QPushButton>
+#include <QScrollArea>
+#include <QString>
 
 // KDE includes
 
-#include <kvbox.h>
+#include <kdialog.h>
 #include <khbox.h>
 #include <klocale.h>
-#include <kdialog.h>
+#include <kvbox.h>
 
 // Local includes
 

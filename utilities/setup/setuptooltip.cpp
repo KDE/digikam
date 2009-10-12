@@ -26,21 +26,21 @@
 
 // Qt includes
 
-#include <QGroupBox>
 #include <QCheckBox>
+#include <QGroupBox>
 #include <QVBoxLayout>
 
 // KDE includes
 
-#include <kvbox.h>
-#include <klocale.h>
 #include <kdialog.h>
+#include <klocale.h>
 #include <ktabwidget.h>
+#include <kvbox.h>
 
 // Local includes
 
-#include "dfontselect.h"
 #include "albumsettings.h"
+#include "dfontselect.h"
 
 namespace Digikam
 {

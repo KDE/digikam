@@ -28,8 +28,8 @@
 
 #include <QAbstractListModel>
 #include <QItemDelegate>
-#include <QLinearGradient>
 #include <QLineEdit>
+#include <QLinearGradient>
 #include <QListView>
 #include <QMouseEvent>
 #include <QPainter>
@@ -45,8 +45,8 @@
 // Local includes
 
 #include "debug.h"
-#include "themeengine.h"
 #include "globals.h"
+#include "themeengine.h"
 
 namespace Digikam
 {

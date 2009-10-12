@@ -30,17 +30,17 @@
 
 // KDE includes
 
-#include <klocale.h>
-#include <kdialog.h>
-#include <kconfig.h>
 #include <kapplication.h>
+#include <kconfig.h>
+#include <kdialog.h>
 #include <kglobal.h>
 #include <kiconloader.h>
+#include <klocale.h>
 
 // LibKDcraw includes
 
-#include <libkdcraw/version.h>
 #include <libkdcraw/dcrawsettingswidget.h>
+#include <libkdcraw/version.h>
 
 // Local includes
 

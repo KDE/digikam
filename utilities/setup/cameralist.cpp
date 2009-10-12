@@ -28,22 +28,22 @@
 // Qt includes
 
 #include <QDateTime>
-#include <QString>
-#include <QFile>
 #include <QDomDocument>
 #include <QDomElement>
-#include <QTextStream>
+#include <QFile>
+#include <QString>
 #include <QTextCodec>
+#include <QTextStream>
 
 // KDE includes
 
-#include <kmessagebox.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 
 // Local includes
 
-#include "gpcamera.h"
 #include "cameratype.h"
+#include "gpcamera.h"
 
 namespace Digikam
 {

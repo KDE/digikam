@@ -45,8 +45,8 @@ extern "C"
 
 // Local includes
 
-#include "dimg.h"
 #include "debug.h"
+#include "dimg.h"
 
 namespace Digikam
 {

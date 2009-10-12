@@ -26,19 +26,19 @@
 
 // Qt includes
 
-#include <QGroupBox>
 #include <QCheckBox>
+#include <QGroupBox>
 #include <QVBoxLayout>
 
 // KDE includes
 
-#include <khbox.h>
-#include <klocale.h>
-#include <kdialog.h>
 #include <kapplication.h>
 #include <kconfig.h>
+#include <kdialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
+#include <khbox.h>
+#include <klocale.h>
 
 // Local includes
 

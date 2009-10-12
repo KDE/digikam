@@ -42,6 +42,7 @@ extern "C"
 // Qt includes
 
 #include <QCursor>
+#include <QDesktopServices>
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
@@ -54,7 +55,6 @@ extern "C"
 #include <QProgressBar>
 #include <QSplitter>
 #include <QVBoxLayout>
-#include <QDesktopServices>
 
 // KDE includes
 
@@ -75,8 +75,8 @@ extern "C"
 #include <klocale.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
-#include <kprotocolinfo.h>
 #include <kmultitabbar.h>
+#include <kprotocolinfo.h>
 #include <kstandardaction.h>
 #include <kstandarddirs.h>
 #include <kstatusbar.h>
@@ -84,10 +84,10 @@ extern "C"
 #include <ktoolbar.h>
 #include <ktoolbarpopupaction.h>
 
-// Libkdcraw includes
+// LibKDcraw includes
 
-#include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
+#include <libkdcraw/version.h>
 
 #if KDCRAW_VERSION < 0x000400
 #include <libkdcraw/dcrawbinary.h>
@@ -96,6 +96,7 @@ extern "C"
 // Local includes
 
 #include "canvas.h"
+#include "debug.h"
 #include "dimginterface.h"
 #include "dmetadata.h"
 #include "dpopupmenu.h"
@@ -118,7 +119,6 @@ extern "C"
 #include "thumbbar.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
-#include "debug.h"
 
 namespace ShowFoto
 {

@@ -26,19 +26,19 @@
 
 // Qt includes
 
-#include <QLabel>
-#include <QGridLayout>
-#include <QPushButton>
 #include <QFrame>
+#include <QGridLayout>
+#include <QLabel>
+#include <QPushButton>
 
 // KDE includes
 
 #include <kconfig.h>
-#include <klocale.h>
 #include <kdialog.h>
-#include <klineedit.h>
-#include <kmessagebox.h>
 #include <kglobalsettings.h>
+#include <klineedit.h>
+#include <klocale.h>
+#include <kmessagebox.h>
 
 // Local includes
 

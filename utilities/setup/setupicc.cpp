@@ -29,17 +29,17 @@
 // Qt includes
 
 #include <QButtonGroup>
-#include <QGroupBox>
 #include <QCheckBox>
-#include <QRadioButton>
-#include <QLabel>
-#include <QIcon>
-#include <QPixmap>
-#include <QPushButton>
-#include <QStringList>
-#include <QMap>
 #include <QDir>
 #include <QGridLayout>
+#include <QGroupBox>
+#include <QIcon>
+#include <QLabel>
+#include <QMap>
+#include <QPixmap>
+#include <QPushButton>
+#include <QRadioButton>
+#include <QStringList>
 #include <QVBoxLayout>
 #include <QWhatsThis>
 
@@ -67,12 +67,12 @@
 
 // Local includes
 
+#include "albumsettings.h"
+#include "debug.h"
 #include "iccprofileinfodlg.h"
 #include "iccprofilescombobox.h"
 #include "iccsettings.h"
 #include "iccsettingscontainer.h"
-#include "albumsettings.h"
-#include "debug.h"
 
 using namespace KDcrawIface;
 

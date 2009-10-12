@@ -34,18 +34,18 @@
 
 // KDE includes
 
-#include <klocale.h>
 #include <kcomponentdata.h>
+#include <klocale.h>
 
 // Local includes
 
-#include "digikam_export.h"
-#include "imagelister.h"
+#include "albumdb.h"
 #include "databaseaccess.h"
 #include "databaseurl.h"
-#include "albumdb.h"
-#include "haariface.h"
 #include "debug.h"
+#include "digikam_export.h"
+#include "haariface.h"
+#include "imagelister.h"
 
 kio_digikamsearch::kio_digikamsearch(const QByteArray& pool_socket,
                                      const QByteArray& app_socket)

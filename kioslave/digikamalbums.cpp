@@ -33,16 +33,16 @@
 // Qt includes
 
 #include <QCoreApplication>
-#include <QFileInfo>
 #include <QDataStream>
+#include <QFileInfo>
 
 // KDE includes
 
-#include <kglobal.h>
-#include <klocale.h>
 #include <kcomponentdata.h>
-#include <kmimetype.h>
+#include <kglobal.h>
 #include <kio/deletejob.h>
+#include <klocale.h>
+#include <kmimetype.h>
 
 // LibKDcraw includes
 
@@ -51,12 +51,12 @@
 // Local includes
 
 #include "albumdb.h"
-#include "digikam_export.h"
+#include "collectionscanner.h"
 #include "databaseaccess.h"
 #include "databaseurl.h"
-#include "collectionscanner.h"
-#include "imagelister.h"
 #include "debug.h"
+#include "digikam_export.h"
+#include "imagelister.h"
 
 kio_digikamalbums::kio_digikamalbums(const QByteArray& pool_socket,
                                      const QByteArray& app_socket)

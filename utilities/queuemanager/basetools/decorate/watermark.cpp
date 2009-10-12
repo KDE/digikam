@@ -30,25 +30,25 @@
 
 // Qt includes
 
-#include <QWidget>
-#include <QLabel>
 #include <QFontMetrics>
+#include <QLabel>
+#include <QPainter>
+#include <QPen>
 #include <QPoint>
 #include <QRect>
-#include <QPen>
-#include <QPainter>
+#include <QWidget>
 
 // KDE includes
 
-#include <kvbox.h>
-#include <klocale.h>
-#include <kiconloader.h>
-#include <kcombobox.h>
-#include <kfontcombobox.h>
 #include <kcolorbutton.h>
-#include <klineedit.h>
+#include <kcombobox.h>
 #include <kdialog.h>
+#include <kfontcombobox.h>
+#include <kiconloader.h>
+#include <klineedit.h>
+#include <klocale.h>
 #include <knuminput.h>
+#include <kvbox.h>
 
 // Local includes
 

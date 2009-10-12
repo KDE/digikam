@@ -32,8 +32,8 @@
 
 #include <QAbstractListModel>
 #include <QItemDelegate>
-#include <QLinearGradient>
 #include <QLineEdit>
+#include <QLinearGradient>
 #include <QListView>
 #include <QMouseEvent>
 #include <QPainter>
@@ -54,8 +54,8 @@
 
 // Local includes
 
-#include "debug.h"
 #include "albummodel.h"
+#include "debug.h"
 #include "ratingwidget.h"
 #include "themeengine.h"
 

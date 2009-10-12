@@ -26,26 +26,25 @@
 
 // Qt includes
 
-#include <QGroupBox>
-#include <QLabel>
 #include <QDir>
-#include <QList>
 #include <QFileInfo>
 #include <QGridLayout>
-#include <QVBoxLayout>
+#include <QGroupBox>
+#include <QLabel>
+#include <QList>
 #include <QPushButton>
+#include <QVBoxLayout>
 
 // KDE includes
 
-
-#include <klocale.h>
-#include <klineedit.h>
-#include <kpagedialog.h>
 #include <kfiledialog.h>
-#include <kurl.h>
+#include <klineedit.h>
+#include <klocale.h>
 #include <kmessagebox.h>
-#include <kurlrequester.h>
+#include <kpagedialog.h>
 #include <ktemporaryfile.h>
+#include <kurl.h>
+#include <kurlrequester.h>
 
 // Local includes
 

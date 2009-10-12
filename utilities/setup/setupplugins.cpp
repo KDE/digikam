@@ -26,18 +26,18 @@
 
 // Qt includes
 
-#include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QLabel>
 #include <QLayout>
 #include <QString>
-#include <QLabel>
+#include <QVBoxLayout>
 
 // KDE includes
 
-#include <klocale.h>
 #include <kdialog.h>
+#include <klocale.h>
 
-// LibKIPI includes
+// Libkipi includes
 
 #include <libkipi/pluginloader.h>
 #include <libkipi/version.h>

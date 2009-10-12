@@ -42,12 +42,12 @@
 
 // Local includes
 
-#include "rexpanderbox.h"
-#include "searchview.h"
-#include "searchfields.h"
-#include "searchfieldgroup.h"
-#include "searchutilities.h"
 #include "debug.h"
+#include "rexpanderbox.h"
+#include "searchfieldgroup.h"
+#include "searchfields.h"
+#include "searchutilities.h"
+#include "searchview.h"
 
 namespace Digikam
 {

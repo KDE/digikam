@@ -27,17 +27,17 @@
 
 // Qt includes
 
+#include <QCursor>
 #include <QFont>
 #include <QPainter>
 #include <QStyle>
-#include <QCursor>
 
 // KDE includes
 
-#include <kmenu.h>
-#include <klocale.h>
 #include <kglobal.h>
 #include <kiconloader.h>
+#include <klocale.h>
+#include <kmenu.h>
 #include <kmessagebox.h>
 
 // Local includes
