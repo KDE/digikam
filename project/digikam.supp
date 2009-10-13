@@ -14,6 +14,13 @@
    fun:_ZNK11KExiv2Iface6KExiv220registerXmpNameSpaceERK7QStringS3_
 }
 
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/libgobject*.so.*
+   obj:/usr/lib/libgobject*.so.*
+}
 
 {
    <insert_a_suppression_name_here>
