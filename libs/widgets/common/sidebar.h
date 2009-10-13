@@ -218,6 +218,8 @@ public:
     void setSize(Sidebar *bar, int size);
     void setSize(QWidget *widget, int size);
 
+    void addSplitterCollapserButton(QWidget* widget);
+
 private Q_SLOTS:
 
     void slotSplitterMoved(int pos, int index);
