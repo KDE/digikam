@@ -1,0 +1,96 @@
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:_ZN3DOM13DOMStringImplC1EPKc
+   fun:_ZN3DOM9DOMStringC1EPKc
+   fun:_ZN5khtml16LocalNameFactory11initIdTableEv
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:_ZN5Exiv213XmpProperties10registerNsERKSsS2_
+   fun:_ZNK11KExiv2Iface6KExiv220registerXmpNameSpaceERK7QStringS3_
+}
+
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/libdbus*.so.*
+   obj:/usr/lib/libdbus*.so.*
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/libfontconfig.so.*
+   obj:/usr/lib/libfontconfig.so.*
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/libfreetype.so.*
+   obj:/usr/lib/libfreetype.so.*
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/libsolid.so.*
+   obj:/usr/lib/libsolid.so.*
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/libmarblewidget.so.*
+   obj:/usr/lib/libmarblewidget.so.*
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/libQt*.so.*
+   obj:/usr/lib/libQt*.so.*
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/libkde*.so.*
+   obj:/usr/lib/libkde*.so.*
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/libkhtml.so.*
+   obj:/usr/lib/libkhtml.so.*
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/libsqlite3.so.*
+   obj:/usr/lib/libsqlite3.so.*
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/libasound.so.*
+   obj:/usr/lib/libasound.so.*
+}
