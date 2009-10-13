@@ -5,7 +5,7 @@
 E_ERROR=1
 
 function usage() {
-    echo "usage: " $0 "<path>"
+    echo "Usage: $(basename $0) <path>"
 }
 
 if [ $# -ne 1 ]; then
