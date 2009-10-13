@@ -52,6 +52,8 @@ Parser::~Parser()
         delete subparser;
     }
     d->subparsers.clear();
+
+    delete d;
 }
 
 bool Parser::stringIsValid(const QString& str)
