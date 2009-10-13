@@ -76,6 +76,8 @@ ParseObject::~ParseObject()
         delete token;
     }
     d->tokens.clear();
+
+    delete d;
 }
 
 void ParseObject::setDescription(const QString& desc)
