@@ -275,7 +275,7 @@ void ContextMenuHelper::slotOpenWith(QAction* action)
     if (name.isEmpty())
     {
         QPointer<KOpenWithDialog> dlg = new KOpenWithDialog(list);
-        if (!dlg->exec())
+        if (!dlg->exec() == KOpenWithDialog::Accepted)
         {
             delete dlg;
             return;
