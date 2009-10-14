@@ -54,6 +54,8 @@ public:
     DSplitterButton(QSplitter* sp, QWidget* widget);
     ~DSplitterButton();
 
+    void updatePosition();
+
     virtual QSize sizeHint() const;
 
 Q_SIGNALS:

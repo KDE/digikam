@@ -86,14 +86,14 @@ public:
         q               = parent;
     }
 
-    int                mSizeAtCollaps;
+    int              sizeAtCollaps;
 
-    QSplitter*         splitter;
-    QWidget*           widget;
-    QTimeLine*         opacityTimeLine;
+    QSplitter*       splitter;
+    QWidget*         widget;
+    QTimeLine*       opacityTimeLine;
 
-    Direction          direction;
-    DSplitterButton*   q;
+    Direction        direction;
+    DSplitterButton* q;
 
     bool isVertical() const
     {
@@ -107,11 +107,11 @@ public:
 
         if (isVisible)
         {
-          QPoint br = widgetRect.bottomRight();
-          if ((br.x() <= 0) || (br.y() <=0))
-          {
-              isVisible = false;
-          }
+            QPoint br = widgetRect.bottomRight();
+            if ((br.x() <= 0) || (br.y() <=0))
+            {
+                isVisible = false;
+            }
         }
         return isVisible;
     }
@@ -274,6 +274,11 @@ DSplitterButton::~DSplitterButton()
     delete d;
 }
 
+void DSplitterButton::updatePosition()
+{
+    d->updatePosition();
+}
+
 bool DSplitterButton::eventFilter(QObject* object, QEvent* event)
 {
     if (object == d->widget)
@@ -302,21 +307,20 @@ QSize DSplitterButton::sizeHint() const
     return sh;
 }
 
-
 void DSplitterButton::slotClicked()
 {
     QList<int> sizes = d->splitter->sizes();
     int index        = d->splitter->indexOf(d->widget);
     if (d->isVisible())
     {
-        d->mSizeAtCollaps = sizes[index];
+        d->sizeAtCollaps = sizes[index];
         sizes[index]      = 0;
     }
     else
     {
-        if (d->mSizeAtCollaps != 0)
+        if (d->sizeAtCollaps != 0)
         {
-            sizes[index] = d->mSizeAtCollaps;
+            sizes[index] = d->sizeAtCollaps;
         }
         else
         {
