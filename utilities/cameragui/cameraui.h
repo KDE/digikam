@@ -208,6 +208,8 @@ private Q_SLOTS:
 
     void slotSidebarTabTitleStyleChanged();
 
+    void slotRefreshIconView();
+
 private:
 
     CameraUIPriv* const d;

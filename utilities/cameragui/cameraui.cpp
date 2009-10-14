@@ -145,6 +145,15 @@ CameraUI::CameraUI(QWidget* parent, const QString& cameraTitle,
 
     // -------------------------------------------------------------------
 
+    d->refreshIconViewTimer = new QTimer(this);
+    d->refreshIconViewTimer->setInterval(0);
+    d->refreshIconViewTimer->setSingleShot(true);
+
+    connect(d->refreshIconViewTimer, SIGNAL(timeout()),
+            this, SLOT(slotRefreshIconView()));
+
+    // -------------------------------------------------------------------
+
     setupUserArea();
     setupStatusBar();
     setupActions();
@@ -1087,6 +1096,18 @@ void CameraUI::slotFileList(const GPItemInfoList& fileList)
     if (fileList.empty())
         return;
 
+    d->filesToBeAdded << fileList;
+    slotRefreshIconView();
+}
+
+void CameraUI::slotRefreshIconView()
+{
+    if (d->busy)
+    {
+        d->refreshIconViewTimer->start();
+        return;
+    }
+
     AlbumSettings* settings = AlbumSettings::instance();
     if (!settings) return;
 
@@ -1117,7 +1138,7 @@ void CameraUI::slotFileList(const GPItemInfoList& fileList)
         citem = static_cast<CameraIconItem*>(citem->nextItem());
     }
 
-    foreach(const GPItemInfo& item, fileList)
+    foreach(const GPItemInfo& item, d->filesToBeAdded)
     {
         info.setFile(item.name);
         if (!fileNames.contains(info.fileName().toLower()) &&
@@ -1153,11 +1174,14 @@ void CameraUI::refreshIconView(QMultiMap<QDateTime, GPItemInfo>& map)
     QList<QVariant> itemsList;
 
     it = lastPhotoFirst ? map.end() : map.begin();
+
+    // This can be slow and lock the GUI. Maybe we need to move this into the camera controller thread?
     do
     {
         if (lastPhotoFirst) --it;
 
         item = *it;
+
         // We query database to check if item have been already downloaded from camera.
         switch(DownloadHistory::status(d->controller->cameraMD5ID(), item.name, item.size, item.mtime))
         {

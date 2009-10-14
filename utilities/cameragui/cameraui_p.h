@@ -116,6 +116,7 @@ public:
         kdeJob                    = 0;
         historyView               = 0;
         lastPhotoFirstAction      = 0;
+        refreshIconViewTimer      = 0;
     }
 
     bool                          deleteAfter;
@@ -130,6 +131,7 @@ public:
     QStringList                   currentlyDeleting;
     QStringList                   cameraFolderList;
     QSet<QString>                 foldersToScan;
+    GPItemInfoList                filesToBeAdded;
 
     QCheckBox                    *autoRotateCheck;
     QCheckBox                    *autoAlbumDateCheck;
@@ -139,6 +141,8 @@ public:
 
     QLabel                       *formatLabel;
     QLabel                       *folderDateLabel;
+
+    QTimer                       *refreshIconViewTimer;
 
     KMenu                        *downloadMenu;
     KMenu                        *deleteMenu;
