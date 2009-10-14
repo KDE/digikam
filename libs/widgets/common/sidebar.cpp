@@ -46,10 +46,6 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 
-// Local includes.
-
-#include "dsplitterbutton.h"
-
 namespace Digikam
 {
 
@@ -81,7 +77,6 @@ public:
         stack            = 0;
         dragSwitchTimer  = 0;
         restoreSize      = 0;
-        splitterBtn      = 0;
     }
 
     bool                          minimizedDefault;
@@ -96,7 +91,6 @@ public:
     QStackedWidget*               stack;
     SidebarSplitter*              splitter;
     QTimer*                       dragSwitchTimer;
-    DSplitterButton*              splitterBtn;
 
     QHash<QWidget*, SidebarState> appendedTabsStateCache;
 };
@@ -122,11 +116,6 @@ Sidebar::Sidebar(QWidget *parent, SidebarSplitter *sp, KMultiTabBarPosition side
             this, SLOT(slotDragSwitchTimer()));
 
     d->splitter->d->sidebars << this;
-
-    d->splitterBtn = new DSplitterButton(d->splitter, d->stack);
-
-    connect(d->splitterBtn, SIGNAL(signalClicked()),
-            this, SLOT(slotSplitterBtnClicked()));
 
     setStyle(KMultiTabBar::VSNET);
 }
