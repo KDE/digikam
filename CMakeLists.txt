@@ -642,7 +642,6 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dlogoaction.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dpopupmenu.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/drubberband.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dsplitterbutton.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/filesaveoptionsbox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/histogrambox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/histogramwidget.cpp
