@@ -153,7 +153,8 @@ PAlbum* AlbumSelectDialog::selectAlbum(QWidget* parent,
         return 0;
     }
 
-    TreeAlbumItem* item = (TreeAlbumItem*) dlg->d->albumSel->albumView()->currentItem();
+    QTreeWidgetItem* cItem = dlg->d->albumSel->albumView()->currentItem();
+    TreeAlbumItem* item    = dynamic_cast<TreeAlbumItem*>(cItem);
     if (!item || (item == dlg->d->albumSel->albumView()->topLevelItem(0)))
     {
         delete dlg;
