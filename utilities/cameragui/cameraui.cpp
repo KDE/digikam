@@ -1495,10 +1495,10 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
         QString header(i18n("<p>Please select the destination album from the digiKam library to "
                             "import the camera pictures into.</p>"));
 
-        album = AlbumSelectDialog::selectAlbum(this, (PAlbum*)album, header, newDirName,
-                                               false);
+        album = AlbumSelectDialog::selectAlbum(this, (PAlbum*)album, header, newDirName, false);
 
-        if (!album) return;
+        if (!album)
+            return;
     }
 
     PAlbum *pAlbum = dynamic_cast<PAlbum*>(album);
