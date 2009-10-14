@@ -15,7 +15,6 @@ INSTALL(FILES histogramwidget.h
               previewwidget.h
               searchtextbar.h
               dgradientslider.h
-              dsplitterbutton.h
          DESTINATION ${INCLUDE_INSTALL_DIR}/digikam COMPONENT Devel
         )
 
