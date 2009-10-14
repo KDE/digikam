@@ -31,7 +31,6 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QDateTime>
-#include <QPointer>
 #include <QPixmap>
 #include <QCloseEvent>
 

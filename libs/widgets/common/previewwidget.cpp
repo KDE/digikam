@@ -36,7 +36,6 @@
 #include <QImage>
 #include <QPixmap>
 #include <QRect>
-#include <QPointer>
 #include <QWheelEvent>
 #include <QPaintEvent>
 #include <QResizeEvent>

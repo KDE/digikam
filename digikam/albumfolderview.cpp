@@ -35,7 +35,6 @@
 #include <QDropEvent>
 #include <QList>
 #include <QPixmap>
-#include <QPointer>
 
 // KDE includes
 

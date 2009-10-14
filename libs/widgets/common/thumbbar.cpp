@@ -40,7 +40,6 @@
 #include <QPalette>
 #include <QPixmap>
 #include <QPoint>
-#include <QPointer>
 #include <QTextDocument>
 #include <QTimer>
 #include <QToolTip>
