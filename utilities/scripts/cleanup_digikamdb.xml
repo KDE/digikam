@@ -74,7 +74,6 @@
                 <listitem>
                     <para>
                         Specify a different database <emphasis>path</emphasis>.
-                        The entry from the &digikam; configuration file will be ignored.
                         If the specified <emphasis>path</emphasis> is invalid, the entry from the configuration file will be used.
                     </para>
                 </listitem>

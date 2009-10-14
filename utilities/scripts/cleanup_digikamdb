@@ -103,9 +103,8 @@ Usage: $(basename $0) <options>
 options:
   -t            Include thumbnail databases
   -T            Only cleanup thumbnail databases
-  -p <path>     Specify a different database path. The entry from the
-                digiKam configuration file will be ignored. If the specified path is invalid,
-                the entry from the configuration file will be used.
+  -p <path>     Specify a different database path.
+                If the specified path is invalid, the entry from the configuration file will be used.
   -h            Show this help.
 EOF
     exit 1
