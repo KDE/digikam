@@ -1553,7 +1553,7 @@ QStringList AlbumDB::getDirtyOrMissingFingerprintURLs()
     d->db->execSql( QString("SELECT Albums.albumRoot, Albums.relativePath, Images.name FROM Images "
                             "LEFT JOIN ImageHaarMatrix ON Images.id=ImageHaarMatrix.imageid "
                             "LEFT JOIN Albums ON Albums.id=Images.album "
-                            " WHERE Images.status=1 AND "
+                            " WHERE Images.status=1 AND Images.category=1 AND"
                             " ( ImageHaarMatrix.imageid IS NULL "
                             "   OR Images.modificationDate != ImageHaarMatrix.modificationDate "
                             "   OR Images.uniqueHash != ImageHaarMatrix.uniqueHash ); "),
