@@ -393,6 +393,7 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     // -------------------------------------------------------------
 
     d->expanderBox = new RExpanderBox;
+    d->expanderBox->setObjectName("LocalContrastTool Expander");
     d->expanderBox->addItem(firstPage, SmallIcon("contrast"), i18n("General settings"),
                             QString("GeneralSettingsContainer"), true);
     d->expanderBox->addItem(secondPage, SmallIcon("contrast"), i18n("Stage 1"),
