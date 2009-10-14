@@ -2596,7 +2596,9 @@ void DigikamApp::slotImportAddFolders()
 
     KUrl::List urls = dlg->selectedUrls();
     delete dlg;
-    if(urls.empty()) return;
+
+    if(urls.empty())
+        return;
 
     Album *album = AlbumManager::instance()->currentAlbum();
     if (album && album->type() != Album::PHYSICAL)
