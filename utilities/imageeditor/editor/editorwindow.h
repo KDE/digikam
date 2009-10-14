@@ -34,6 +34,7 @@
 
 #include <kxmlguiwindow.h>
 #include <kurl.h>
+#include <kjob.h>
 
 // Local includes
 
@@ -155,7 +156,7 @@ protected:
     void startingSave(const KUrl& url);
     bool startingSaveAs(const KUrl& url);
     bool checkPermissions(const KUrl& url);
-    bool moveFile();
+    void moveFile();
     void colorManage();
 
     EditorStackView* editorStackView() const;
@@ -254,6 +255,7 @@ private Q_SLOTS:
     void slotPrepareToLoad();
     void slotShowMenuBar();
     void slotCloseTool();
+    void slotKioMoveFinished(KJob *job);
 
 private:
 
@@ -268,6 +270,16 @@ private:
     void setToolStartProgress(const QString& toolName);
     void setToolProgress(int progress);
     void setToolStopProgress();
+
+    /**
+     * Sets up a temp file to save image contents to and updates the saving
+     * context to use this file
+     *
+     * @param url file to save the image to
+     */
+    void setupTempSaveFile(const KUrl & url);
+
+    void movingSaveFileFinished(bool successful);
 
 private:
 

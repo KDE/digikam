@@ -89,6 +89,7 @@
 #include <kxmlguifactory.h>
 #include <kdeversion.h>
 #include <kde_file.h>
+#include <kio/copyjob.h>
 
 // LibKDcraw includes
 
@@ -288,6 +289,7 @@ void EditorWindow::setupStandardConnections()
 
     connect(IccSettings::instance(), SIGNAL(settingsChanged()),
             this, SLOT(slotColorManagementOptionsChanged()));
+
 }
 
 void EditorWindow::setupStandardActions()
@@ -1424,10 +1426,42 @@ void EditorWindow::slotSavingStarted(const QString& /*filename*/)
     m_nameLabel->progressBarMode(StatusProgressBar::CancelProgressBarMode, i18n("Saving: "));
 }
 
+void EditorWindow::movingSaveFileFinished(bool successful)
+{
+
+    if (!successful)
+    {
+        finishSaving(false);
+        return;
+    }
+
+    m_canvas->setUndoHistoryOrigin();
+
+    // remove image from cache since it has changed
+    LoadingCacheInterface::fileChanged(m_savingContext->destinationURL.toLocalFile());
+
+    // restore state of disabled actions. saveIsComplete can start any other task
+    // (loading!) which might itself in turn change states
+    finishSaving(true);
+
+    saveIsComplete();
+
+    // Take all actions necessary to update information and re-enable sidebar
+    slotChanged();
+
+
+}
+
 void EditorWindow::slotSavingFinished(const QString& filename, bool success)
 {
-    if (m_savingContext->savingState == SavingContextContainer::SavingStateSave)
+
+    Q_UNUSED(filename);
+
+    // only handle this if we really wanted to save a file...
+    if ((m_savingContext->savingState == SavingContextContainer::SavingStateSave)
+                    || (m_savingContext->savingState == SavingContextContainer::SavingStateSaveAs))
     {
+
         // from save()
         m_savingContext->savingState = SavingContextContainer::SavingStateNone;
 
@@ -1443,68 +1477,15 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
             return;
         }
 
-        kDebug(digiKamAreaCode) << "renaming to " << m_savingContext->destinationURL.toLocalFile();
+        moveFile();
 
-        if (!moveFile())
-        {
-            finishSaving(false);
-            return;
-        }
-
-        m_canvas->setUndoHistoryOrigin();
-
-        // remove image from cache since it has changed
-        LoadingCacheInterface::fileChanged(m_savingContext->destinationURL.toLocalFile());
-        // this won't be in the cache, but does not hurt to do it anyway
-        LoadingCacheInterface::fileChanged(filename);
-
-        // restore state of disabled actions. saveIsComplete can start any other task
-        // (loading!) which might itself in turn change states
-        finishSaving(true);
-
-        saveIsComplete();
-
-        // Take all actions necessary to update information and re-enable sidebar
-        slotChanged();
     }
-    else if (m_savingContext->savingState == SavingContextContainer::SavingStateSaveAs)
+    else
     {
-        m_savingContext->savingState = SavingContextContainer::SavingStateNone;
-
-        // from saveAs()
-        if (!success)
-        {
-            if (!m_savingContext->abortingSaving)
-            {
-                KMessageBox::error(this, i18n("Failed to save file\n\"%1\"\nto\n\"%2\".",
-                                              m_savingContext->destinationURL.fileName(),
-                                              m_savingContext->destinationURL.toLocalFile()));
-            }
-            finishSaving(false);
-            return;
-        }
-
-        // Only try to write Exif if both src and destination are JPEG files
-
-        kDebug(digiKamAreaCode) << "renaming to " << m_savingContext->destinationURL.toLocalFile();
-
-        if (!moveFile())
-        {
-            finishSaving(false);
-            return;
-        }
-
-        m_canvas->setUndoHistoryOrigin();
-
-        LoadingCacheInterface::fileChanged(m_savingContext->destinationURL.toLocalFile());
-        LoadingCacheInterface::fileChanged(filename);
-
-        finishSaving(true);
-        saveAsIsComplete();
-
-        // Take all actions necessary to update information and re-enable sidebar
-        slotChanged();
+        kWarning(digiKamAreaCode) << "Why was slotSavingFinished called "
+                                  << "if we did not want to save a file?";
     }
+
 }
 
 void EditorWindow::finishSaving(bool success)
@@ -1535,19 +1516,18 @@ void EditorWindow::finishSaving(bool success)
     }
 }
 
-void EditorWindow::startingSave(const KUrl& url)
+void EditorWindow::setupTempSaveFile(const KUrl & url)
 {
-    // avoid any reentrancy. Should be impossible anyway since actions will be disabled.
-    if (m_savingContext->savingState != SavingContextContainer::SavingStateNone)
-        return;
-
-    if (!checkPermissions(url))
-        return;
 
     QString tempDir = url.directory(KUrl::AppendTrailingSlash);
     // use magic file extension which tells the digikamalbums ioslave to ignore the file
     m_savingContext->saveTempFile = new KTemporaryFile();
-    m_savingContext->saveTempFile->setPrefix(tempDir);
+    // if the destination url is on local file system, try to set the temp file
+    // location to the destination folder, otherwise use a local default
+    if (url.isLocalFile())
+    {
+        m_savingContext->saveTempFile->setPrefix(tempDir);
+    }
     m_savingContext->saveTempFile->setSuffix(".digikamtempfile.tmp");
     m_savingContext->saveTempFile->setAutoRemove(false);
     m_savingContext->saveTempFile->open();
@@ -1559,9 +1539,26 @@ void EditorWindow::startingSave(const KUrl& url)
                                       m_savingContext->saveTempFile->error()));
         return;
     }
+
     m_savingContext->saveTempFileName = m_savingContext->saveTempFile->fileName();
     delete m_savingContext->saveTempFile;
     m_savingContext->saveTempFile = 0;
+
+}
+
+void EditorWindow::startingSave(const KUrl& url)
+{
+
+    kDebug(digiKamAreaCode) << "startSaving url = " << url;
+
+    // avoid any reentrancy. Should be impossible anyway since actions will be disabled.
+    if (m_savingContext->savingState != SavingContextContainer::SavingStateNone)
+        return;
+
+    if (!checkPermissions(url))
+        return;
+
+    setupTempSaveFile(url);
 
     m_savingContext->srcURL             = url;
     m_savingContext->destinationURL     = m_savingContext->srcURL;
@@ -1577,6 +1574,9 @@ void EditorWindow::startingSave(const KUrl& url)
 
 bool EditorWindow::startingSaveAs(const KUrl& url)
 {
+
+    kDebug(digiKamAreaCode) << "startSavingAs called";
+
     if (m_savingContext->savingState != SavingContextContainer::SavingStateNone)
         return false;
 
@@ -1736,25 +1736,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
 
     // Now do the actual saving -----------------------------------------------------
 
-    // use magic file extension which tells the digikamalbums ioslave to ignore the file
-
-    QString tempDir = newURL.directory(KUrl::AppendTrailingSlash);
-
-    m_savingContext->saveTempFile = new KTemporaryFile();
-    m_savingContext->saveTempFile->setPrefix(tempDir);
-    m_savingContext->saveTempFile->setSuffix(".digikamtempfile.tmp");
-    m_savingContext->saveTempFile->setAutoRemove(false);
-
-    if (!m_savingContext->saveTempFile->open())
-    {
-        KMessageBox::error(this, i18n("Could not open a temporary file in the folder \"%1\": %2 (%3)",
-                                      tempDir, m_savingContext->saveTempFile->errorString(),
-                                      m_savingContext->saveTempFile->error()));
-        return false;
-    }
-    m_savingContext->saveTempFileName = m_savingContext->saveTempFile->fileName();
-    delete m_savingContext->saveTempFile;
-    m_savingContext->saveTempFile = 0;
+    setupTempSaveFile(newURL);
 
     m_savingContext->destinationURL = newURL;
     m_savingContext->originalFormat = m_canvas->currentImageFileFormat();
@@ -1795,56 +1777,94 @@ bool EditorWindow::checkPermissions(const KUrl& url)
     return true;
 }
 
-bool EditorWindow::moveFile()
+void EditorWindow::moveFile()
 {
-    QByteArray dstFileName = QFile::encodeName(m_savingContext->destinationURL.toLocalFile());
-#ifndef _WIN32
-    // Store old permissions:
-    // Just get the current umask.
-    mode_t curr_umask = umask(S_IREAD | S_IWRITE);
-    // Restore the umask.
-    umask(curr_umask);
 
-    // For new files respect the umask setting.
-    mode_t filePermissions = (S_IREAD | S_IWRITE | S_IROTH | S_IWOTH | S_IRGRP | S_IWGRP) & ~curr_umask;
-
-    // For existing files, use the mode of the original file.
-    if (m_savingContext->destinationExisted)
+    // how to move a file depends on if the file is on a local system or not.
+    if (m_savingContext->destinationURL.isLocalFile())
     {
-        struct stat stbuf;
-        if (::stat(dstFileName, &stbuf) == 0)
+
+        kDebug(digiKamAreaCode) << "moving a local file";
+
+        QByteArray dstFileName = QFile::encodeName(m_savingContext->destinationURL.toLocalFile());
+#ifndef _WIN32
+        // Store old permissions:
+        // Just get the current umask.
+        mode_t curr_umask = umask(S_IREAD | S_IWRITE);
+        // Restore the umask.
+        umask(curr_umask);
+
+        // For new files respect the umask setting.
+        mode_t filePermissions = (S_IREAD | S_IWRITE | S_IROTH | S_IWOTH | S_IRGRP | S_IWGRP) & ~curr_umask;
+
+        // For existing files, use the mode of the original file.
+        if (m_savingContext->destinationExisted)
         {
-            filePermissions = stbuf.st_mode;
+            struct stat stbuf;
+            if (::stat(dstFileName, &stbuf) == 0)
+            {
+                filePermissions = stbuf.st_mode;
+            }
         }
-    }
 #endif
-    // rename tmp file to dest
-    int ret;
+        // rename tmp file to dest
+        int ret;
 #if KDE_IS_VERSION(4,2,85)
-    // KDE 4.3.0
-    // KDE::rename() takes care of QString -> bytestring encoding
-    ret = KDE::rename(m_savingContext->saveTempFileName,
-                       m_savingContext->destinationURL.toLocalFile());
+        // KDE 4.3.0
+        // KDE::rename() takes care of QString -> bytestring encoding
+        ret = KDE::rename(m_savingContext->saveTempFileName,
+                           m_savingContext->destinationURL.toLocalFile());
 #else
-    // KDE 4.2.x or 4.1.x
-    ret = KDE_rename(QFile::encodeName(m_savingContext->saveTempFileName),
-                      dstFileName);
+        // KDE 4.2.x or 4.1.x
+        ret = KDE_rename(QFile::encodeName(m_savingContext->saveTempFileName),
+                          dstFileName);
 #endif
-    if (ret != 0)
-    {
-        KMessageBox::error(this, i18n("Failed to overwrite original file"),
-                           i18n("Error Saving File"));
-        return false;
-    }
+        if (ret != 0)
+        {
+            KMessageBox::error(this, i18n("Failed to overwrite original file"),
+                               i18n("Error Saving File"));
+            movingSaveFileFinished(false);
+            return;
+        }
 
 #ifndef _WIN32
-    // restore permissions
-    if (::chmod(dstFileName, filePermissions) != 0)
-    {
-        kWarning(digiKamAreaCode) << "Failed to restore file permissions for file " << dstFileName;
-    }
+        // restore permissions
+        if (::chmod(dstFileName, filePermissions) != 0)
+        {
+            kWarning(digiKamAreaCode) << "Failed to restore file permissions for file " << dstFileName;
+        }
 #endif
-    return true;
+        movingSaveFileFinished(true);
+        return;
+
+    }
+    else
+    {
+
+        // for remote destinations use kio to move the temp file over there
+
+        kDebug(digiKamAreaCode) << "moving a remote file via KIO";
+
+        KIO::CopyJob *moveJob = KIO::move(KUrl(
+                        m_savingContext->saveTempFileName),
+                        m_savingContext->destinationURL);
+        connect(moveJob, SIGNAL(result(KJob*)),
+                this, SLOT(slotKioMoveFinished(KJob*)));
+
+    }
+
+}
+
+void EditorWindow::slotKioMoveFinished(KJob *job)
+{
+
+    if (job->error())
+    {
+        KMessageBox::error(this, i18n("Failed to save file: %1", job->errorString()),
+                           i18n("Error Saving File"));
+    }
+
+    movingSaveFileFinished(!job->error());
 }
 
 void EditorWindow::slotColorManagementOptionsChanged()
