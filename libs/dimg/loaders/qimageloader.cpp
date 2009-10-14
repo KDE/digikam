@@ -55,7 +55,7 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     if (image.isNull())
     {
-        kDebug(digiKamAreaCode) << "Cannot loading \"" << filePath << "\" using DImg::QImageLoader!";
+        kDebug(digiKamAreaCode) << "Can not load \"" << filePath << "\" using DImg::QImageLoader!";
         return false;
     }
 
