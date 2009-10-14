@@ -153,23 +153,23 @@ PAlbum* AlbumSelectDialog::selectAlbum(QWidget* parent,
         return 0;
     }
 
-    QTreeWidgetItem* cItem = dlg->d->albumSel->albumView()->currentItem();
-    TreeAlbumItem* item    = dynamic_cast<TreeAlbumItem*>(cItem);
-    if (!item || (item == dlg->d->albumSel->albumView()->topLevelItem(0)))
+    QTreeWidgetItem* cItem  = dlg->d->albumSel->albumView()->currentItem();
+    QTreeWidgetItem* tlItem = dlg->d->albumSel->albumView()->topLevelItem(0);
+    if (!cItem || (cItem == tlItem))
     {
         delete dlg;
         return 0;
     }
 
-    delete dlg;
-
-    // FIX?: I don't know what happens if we try to cast a null pointer, maybe this is the cause of the crash?
-    // Maybe we should check for a valid pointer first?
-    if (!item->album())
+    TreeAlbumItem* item = dynamic_cast<TreeAlbumItem*>(cItem);
+    PAlbum* album       = 0;
+    if (item && item->album())
     {
-        return 0;
+        album = dynamic_cast<PAlbum*>(item->album());
     }
-    return (dynamic_cast<PAlbum*>(item->album()));
+
+    delete dlg;
+    return album;
 }
 
 }  // namespace Digikam
