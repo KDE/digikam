@@ -8,7 +8,7 @@
  *               and allows easy collapsing of the widget on the opposite side.
  *
  * Copyright (C) 2009 by Gilles Caulier<caulier dot gilles at gmail dot com>
- * Copyright (c) 2009 Aurélien Gateau <agateau@kde.org>
+ * Copyright (c) 2009 Aurelien Gateau <agateau@kde.org>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -61,13 +61,13 @@ protected:
     virtual bool eventFilter(QObject*, QEvent*);
     virtual void paintEvent(QPaintEvent*);
 
-private:
-
-    DSplitterButtonPrivate* const d;
-
 private Q_SLOTS:
 
     void slotClicked();
+
+private:
+
+    DSplitterButtonPrivate* const d;
 };
 
 } // namespace Digikam

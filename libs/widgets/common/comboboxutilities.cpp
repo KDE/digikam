@@ -38,7 +38,6 @@
 
 // KDE includes
 
-
 #include <klocale.h>
 
 namespace Digikam

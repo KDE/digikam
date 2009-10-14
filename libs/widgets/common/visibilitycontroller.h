@@ -91,6 +91,8 @@ protected:
     void step();
     void allSteps();
 
+private:
+
     VisibilityControllerPriv* const d;
 };
 

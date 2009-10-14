@@ -83,7 +83,6 @@ protected:
     QTimeLine            *m_fadingTimeLine;
 };
 
-
 } // namespace Digikam
 
 #endif /* ITEMVIEWHOVERBUTTON_H */

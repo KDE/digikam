@@ -196,5 +196,4 @@ void VisibilityController::allSteps()
     }
 }
 
-
 } // namespace Digikam
