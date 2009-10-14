@@ -118,11 +118,11 @@ public:
 
     void updatePosition()
     {
-        int x, y;
-        QRect widgetRect  = widget->geometry();
-        int splitterWidth = splitter->width();
-        int handleWidth   = splitter->handleWidth();
-        int width         = q->width();
+        int   x, y;
+        QRect widgetRect    = widget->geometry();
+        int   splitterWidth = splitter->width();
+        int   handleWidth   = splitter->handleWidth();
+        int   width         = q->width();
 
         if (!isVertical())
         {
@@ -132,30 +132,30 @@ public:
           {
               if (isVisible())
               {
-                x = widgetRect.right() + handleWidth;
+                  x = widgetRect.right() + handleWidth;
               }
               else
               {
-                x = 0;
+                  x = 0;
               }
           }
           else
           { // RTL
               if (isVisible())
               {
-                x = widgetRect.left() - handleWidth - width;
+                  x = widgetRect.left() - handleWidth - width;
               }
               else
               {
-                x = splitterWidth - handleWidth - width;
+                  x = splitterWidth - handleWidth - width;
               }
           }
         }
         else
         {
-          // FIXME
-          x = 0;
-          y = 0;
+            // FIXME
+            x = 0;
+            y = 0;
         }
         q->move(x, y);
     }
@@ -165,10 +165,10 @@ public:
         static QMap<Direction, ArrowTypes> arrowForDirection;
         if (arrowForDirection.isEmpty())
         {
-          arrowForDirection[LTR] = ArrowTypes(Qt::LeftArrow,  Qt::RightArrow);
-          arrowForDirection[RTL] = ArrowTypes(Qt::RightArrow, Qt::LeftArrow);
-          arrowForDirection[TTB] = ArrowTypes(Qt::UpArrow,    Qt::DownArrow);
-          arrowForDirection[BTT] = ArrowTypes(Qt::DownArrow,  Qt::UpArrow);
+            arrowForDirection[LTR] = ArrowTypes(Qt::LeftArrow,  Qt::RightArrow);
+            arrowForDirection[RTL] = ArrowTypes(Qt::RightArrow, Qt::LeftArrow);
+            arrowForDirection[TTB] = ArrowTypes(Qt::UpArrow,    Qt::DownArrow);
+            arrowForDirection[BTT] = ArrowTypes(Qt::DownArrow,  Qt::UpArrow);
         }
         q->setArrowType(arrowForDirection[direction].get(isVisible()));
     }
@@ -204,13 +204,13 @@ public:
 
         if (opaqueCollapser && frame == opacityTimeLine->startFrame())
         {
-          opacityTimeLine->setDirection(QTimeLine::Forward);
-          startTimeLine();
+            opacityTimeLine->setDirection(QTimeLine::Forward);
+            startTimeLine();
         }
         else if (!opaqueCollapser && frame == opacityTimeLine->endFrame())
         {
-          opacityTimeLine->setDirection(QTimeLine::Backward);
-          startTimeLine();
+            opacityTimeLine->setDirection(QTimeLine::Backward);
+            startTimeLine();
         }
     }
 
@@ -218,7 +218,7 @@ public:
     {
         if (opacityTimeLine->state() != QTimeLine::Running)
         {
-          opacityTimeLine->start();
+            opacityTimeLine->start();
         }
     }
 };
@@ -238,13 +238,12 @@ DSplitterButton::DSplitterButton(QSplitter* splitter, QWidget* widget)
     connect(d->opacityTimeLine, SIGNAL(valueChanged(qreal)),
             this, SLOT(update()));
 
-    d->widget = widget;
+    d->splitter = splitter;
+    d->widget   = widget;
     d->widget->installEventFilter(this);
 
-    qApp->installEventFilter(this);
-
-    d->splitter = splitter;
     setParent(d->splitter);
+    qApp->installEventFilter(this);
 
     int index = splitter->indexOf(widget);
     if (index < 1)
@@ -286,7 +285,7 @@ bool DSplitterButton::eventFilter(QObject* object, QEvent* event)
         /* app */
         if (event->type() == QEvent::MouseMove)
         {
-          d->updateOpacity();
+            d->updateOpacity();
         }
     }
     return false;
@@ -317,21 +316,23 @@ void DSplitterButton::slotClicked()
     {
         if (d->mSizeAtCollaps != 0)
         {
-          sizes[index] = d->mSizeAtCollaps;
+            sizes[index] = d->mSizeAtCollaps;
         }
         else
         {
-          if (d->isVertical())
-          {
-              sizes[index] = d->widget->sizeHint().height();
-          }
-          else
-          {
-              sizes[index] = d->widget->sizeHint().width();
-          }
+            if (d->isVertical())
+            {
+                sizes[index] = d->widget->sizeHint().height();
+            }
+            else
+            {
+                sizes[index] = d->widget->sizeHint().width();
+            }
         }
     }
     d->splitter->setSizes(sizes);
+
+    emit signalClicked();
 }
 
 void DSplitterButton::paintEvent(QPaintEvent*)

@@ -159,6 +159,8 @@ private Q_SLOTS:
 
     void slotDragSwitchTimer();
 
+    void slotSplitterBtnClicked();
+
 Q_SIGNALS:
 
     /**

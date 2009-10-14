@@ -117,12 +117,16 @@ Sidebar::Sidebar(QWidget *parent, SidebarSplitter *sp, KMultiTabBarPosition side
     d->minimizedDefault = minimizedDefault;
     d->stack            = new QStackedWidget(d->splitter);
     d->dragSwitchTimer  = new QTimer(this);
-    d->splitterBtn      = new DSplitterButton(d->splitter, d->stack);
-
-    d->splitter->d->sidebars << this;
 
     connect(d->dragSwitchTimer, SIGNAL(timeout()),
             this, SLOT(slotDragSwitchTimer()));
+
+    d->splitter->d->sidebars << this;
+
+    d->splitterBtn = new DSplitterButton(d->splitter, d->stack);
+
+    connect(d->splitterBtn, SIGNAL(signalClicked()),
+            this, SLOT(slotSplitterBtnClicked()));
 
     setStyle(KMultiTabBar::VSNET);
 }
@@ -144,8 +148,8 @@ void Sidebar::loadViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("%1").arg(objectName()));
-    int tab                   = group.readEntry("ActiveTab", 0);
-    bool minimized            = group.readEntry("Minimized", d->minimizedDefault);
+    int tab                   = group.readEntry("ActiveTab",   0);
+    bool minimized            = group.readEntry("Minimized",   d->minimizedDefault);
     d->restoreSize            = group.readEntry("RestoreSize", -1);
 
     // validate
@@ -170,8 +174,8 @@ void Sidebar::saveViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("%1").arg(objectName()));
-    group.writeEntry("ActiveTab", d->activeTab);
-    group.writeEntry("Minimized", d->minimized);
+    group.writeEntry("ActiveTab",   d->activeTab);
+    group.writeEntry("Minimized",   d->minimized);
     group.writeEntry("RestoreSize", d->minimized ? d->restoreSize : -1);
     config->sync();
 }
@@ -421,6 +425,11 @@ bool Sidebar::eventFilter(QObject *obj, QEvent *ev)
 void Sidebar::slotDragSwitchTimer()
 {
     clicked(d->dragSwitchId);
+}
+
+void Sidebar::slotSplitterBtnClicked()
+{
+    clicked(d->activeTab);
 }
 
 // -----------------------------------------------------------------------------

@@ -56,6 +56,10 @@ public:
 
     virtual QSize sizeHint() const;
 
+Q_SIGNALS:
+
+    void signalClicked();
+
 protected:
 
     virtual bool eventFilter(QObject*, QEvent*);
