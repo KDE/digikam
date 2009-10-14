@@ -171,6 +171,13 @@ PAlbum* AlbumSelectDialog::selectAlbum(QWidget* parent,
     }
 
     delete dlg;
+
+    // FIX?: I don't know what happens if we try to cast a null pointer, maybe this is the cause of the crash?
+    // Maybe we should check for a valid pointer first?
+    if (!item->album())
+    {
+        return 0;
+    }
     return (dynamic_cast<PAlbum*>(item->album()));
 }
 
