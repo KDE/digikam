@@ -1496,7 +1496,7 @@ void CameraUI::slotDownload(bool onlySelected, bool deleteAfter, Album *album)
                             "import the camera pictures into.</p>"));
 
         album = AlbumSelectDialog::selectAlbum(this, (PAlbum*)album, header, newDirName,
-                                               d->autoAlbumDateCheck->isChecked());
+                                               false);
 
         if (!album) return;
     }
