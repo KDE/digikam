@@ -62,12 +62,9 @@ public:
 
     AlbumSelectDialogPrivate()
     {
-        allowRootSelection = false;
         albumSel           = 0;
         searchBar          = 0;
     }
-
-    bool               allowRootSelection;
 
     QString            newAlbumString;
 
@@ -78,12 +75,10 @@ public:
 
 AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
                                      const QString& header,
-                                     const QString& newAlbumString,
-                                     bool allowRootSelection)
+                                     const QString& newAlbumString)
                  : KDialog(parent), d(new AlbumSelectDialogPrivate)
 {
-    d->allowRootSelection = allowRootSelection;
-    d->newAlbumString     = newAlbumString;
+    d->newAlbumString = newAlbumString;
 
     setCaption(i18n("Select Album"));
     setButtons(Help|Ok|Cancel);
@@ -136,8 +131,7 @@ void AlbumSelectDialog::slotSelectionChanged()
 {
     QTreeWidgetItem* selItem = d->albumSel->albumView()->currentItem();
 
-    if ((!selItem || (selItem == d->albumSel->albumView()->topLevelItem(0))) &&
-        !d->allowRootSelection)
+    if (!selItem || (selItem == d->albumSel->albumView()->topLevelItem(0)))
     {
         enableButtonOk(false);
         return;
@@ -149,12 +143,9 @@ void AlbumSelectDialog::slotSelectionChanged()
 PAlbum* AlbumSelectDialog::selectAlbum(QWidget* parent,
                                        PAlbum* albumToSelect,
                                        const QString& header,
-                                       const QString& newAlbumString,
-                                       bool allowRootSelection )
+                                       const QString& newAlbumString)
 {
-    QPointer<AlbumSelectDialog> dlg = new AlbumSelectDialog(parent, albumToSelect,
-                                                            header, newAlbumString,
-                                                            allowRootSelection);
+    QPointer<AlbumSelectDialog> dlg = new AlbumSelectDialog(parent, albumToSelect, header, newAlbumString);
 
     if (dlg->exec() != KDialog::Accepted)
     {
@@ -163,8 +154,7 @@ PAlbum* AlbumSelectDialog::selectAlbum(QWidget* parent,
     }
 
     TreeAlbumItem* item = (TreeAlbumItem*) dlg->d->albumSel->albumView()->currentItem();
-    if ((!item || (item == dlg->d->albumSel->albumView()->topLevelItem(0))) &&
-        !allowRootSelection)
+    if (!item || (item == dlg->d->albumSel->albumView()->topLevelItem(0)))
     {
         delete dlg;
         return 0;
