@@ -7,7 +7,7 @@
  * Description : central place for ICC settings
  *
  * Copyright (C) 2005-2006 by F.J. Cruz <fj.cruz@supercable.es>
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -34,7 +34,7 @@
 #include <X11/Xatom.h>
 #include <fixx11h.h>
 #include <QX11Info>
-#endif
+#endif /* Q_WS_X11 */
 
 // Qt includes
 
@@ -65,16 +65,14 @@ class IccSettingsPriv
 {
 public:
 
-    IccSettingsPriv()
-    {
-    }
+    IccSettingsPriv(){}
 
-    ICCSettingsContainer    settings;
-    QMutex                  mutex;
+    ICCSettingsContainer   settings;
+    QMutex                 mutex;
 
-    QList<IccProfile>       profiles;
+    QList<IccProfile>      profiles;
 
-    QHash<int, IccProfile>  screenProfiles;
+    QHash<int, IccProfile> screenProfiles;
 
     QList<IccProfile> scanDirectories(const QStringList& dirs);
     void scanDirectory(const QString& path, const QStringList& filter, QList<IccProfile> *profiles);
@@ -91,7 +89,7 @@ IccSettings *IccSettings::instance()
 }
 
 IccSettings::IccSettings()
-            : d(new IccSettingsPriv)
+           : d(new IccSettingsPriv)
 {
     IccTransform::init();
     readFromConfig();
@@ -180,11 +178,11 @@ IccProfile IccSettingsPriv::profileFromWindowSystem(QWidget *widget)
         atomName = "_ICC_PROFILE";
     }
 
-    Atom type;
-    int format;
+    Atom          type;
+    int           format;
     unsigned long nitems;
     unsigned long bytes_after;
-    quint8 * str;
+    quint8 *      str;
 
     static Atom icc_atom = XInternAtom( QX11Info::display(), atomName.toLatin1(), True );
 
@@ -224,7 +222,6 @@ IccProfile IccSettingsPriv::profileFromWindowSystem(QWidget *widget)
 #endif
 
     return IccProfile();
-
 }
 
 bool IccSettings::isEnabled()
@@ -447,7 +444,4 @@ void IccSettings::loadAllProfilesProperties()
     }
 }
 
-
-
 }  // namespace Digikam
-
