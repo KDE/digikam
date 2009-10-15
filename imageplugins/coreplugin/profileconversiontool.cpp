@@ -70,9 +70,9 @@ public:
 
     ProfileConversionToolPriv()
     {
-        profilesBox       = 0;
-        previewWidget     = 0;
-        gboxSettings      = 0;
+        profilesBox   = 0;
+        previewWidget = 0;
+        gboxSettings  = 0;
 
         favoriteProfiles.setMaxCost(10);
     }
@@ -158,6 +158,9 @@ ProfileConversionTool::ProfileConversionTool(QObject* parent)
 
     grid->addLayout(currentProfVBox, 0, 0);
     grid->addLayout(newProfVBox,     1, 0);
+    grid->setRowStretch(2, 10);
+    grid->setMargin(d->gboxSettings->spacingHint());
+    grid->setSpacing(d->gboxSettings->spacingHint());
 
     // ---
 
