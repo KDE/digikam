@@ -44,7 +44,6 @@ namespace Digikam
 
 class DIGIKAM_EXPORT IccProfilesComboBox : public KDcrawIface::SqueezedComboBox
 {
-
     Q_OBJECT
 
 public:
@@ -78,8 +77,9 @@ public:
     void setCurrentProfile(const IccProfile& profile);
 
     /// Use the signal currentIndexChanged(int) for change notification
-
 };
+
+// ----------------------------------------------------------------------------
 
 class DIGIKAM_EXPORT IccRenderingIntentComboBox : public QComboBox
 {
@@ -90,6 +90,8 @@ public:
     void setIntent(int intent);
     int intent() const;
 };
+
+// ----------------------------------------------------------------------------
 
 class DIGIKAM_EXPORT IccProfilesMenuAction : public KActionMenu
 {

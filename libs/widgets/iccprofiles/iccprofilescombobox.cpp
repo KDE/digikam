@@ -22,6 +22,7 @@
  * ============================================================ */
 
 #include "iccprofilescombobox.h"
+#include "iccprofilescombobox.moc"
 
 // Qt includes
 
@@ -43,7 +44,7 @@ namespace Digikam
 {
 
 IccProfilesComboBox::IccProfilesComboBox(QWidget *parent)
-                : KDcrawIface::SqueezedComboBox( parent )
+                   : KDcrawIface::SqueezedComboBox( parent )
 {
 }
 
@@ -76,7 +77,7 @@ static QString profileUserString(const IccProfile& p)
 static void formatProfiles(const QList<IccProfile>& givenProfiles, QList<IccProfile> *returnedProfiles, QStringList *userText)
 {
     QList<IccProfile> profiles;
-    QSet<QString> filePaths;
+    QSet<QString>     filePaths;
     foreach (IccProfile profile, givenProfiles)
     {
         QString filePath = profile.filePath();
@@ -103,7 +104,7 @@ static void formatProfiles(const QList<IccProfile>& givenProfiles, QList<IccProf
 void IccProfilesComboBox::addProfilesSqueezed(const QList<IccProfile>& givenProfiles)
 {
     QList<IccProfile> profiles;
-    QStringList userDescription;
+    QStringList       userDescription;
     formatProfiles(givenProfiles, &profiles, &userDescription);
 
     for (int i=0; i<profiles.size(); i++)
@@ -161,22 +162,24 @@ void IccProfilesComboBox::setCurrentProfile(const IccProfile& profile)
     setCurrentIndex(-1);
 }
 
-// ---------------
+// ------------------------------------------------------------------------------------------
 
-IccProfilesMenuAction::IccProfilesMenuAction(const KIcon &icon, const QString &text, QObject *parent)
-            : KActionMenu(icon, text, parent),
-              m_parent(parent)
+IccProfilesMenuAction::IccProfilesMenuAction(const KIcon& icon, const QString& text, QObject *parent)
+                     : KActionMenu(icon, text, parent),
+                       m_parent(parent)
 {
     m_mapper = new QSignalMapper(this);
-    connect(m_mapper, SIGNAL(mapped(QObject*)), this, SLOT(slotTriggered(QObject*)));
+    connect(m_mapper, SIGNAL(mapped(QObject*)), 
+            this, SLOT(slotTriggered(QObject*)));
 }
 
 IccProfilesMenuAction::IccProfilesMenuAction(const QString &text, QObject *parent)
-            : KActionMenu(text, parent),
-              m_parent(parent)
+                     : KActionMenu(text, parent),
+                       m_parent(parent)
 {
     m_mapper = new QSignalMapper(this);
-    connect(m_mapper, SIGNAL(mapped(QObject*)), this, SLOT(slotTriggered(QObject*)));
+    connect(m_mapper, SIGNAL(mapped(QObject*)),
+            this, SLOT(slotTriggered(QObject*)));
 }
 
 void IccProfilesMenuAction::replaceProfiles(const QList<IccProfile>& profiles)
@@ -200,7 +203,6 @@ void IccProfilesMenuAction::addProfiles(const QList<IccProfile>& givenProfiles)
     {
         addProfile(profiles[i], userDescription[i]);
     }
-
 }
 
 void IccProfilesMenuAction::addProfile(const IccProfile& profile, const QString& d)
@@ -213,7 +215,9 @@ void IccProfilesMenuAction::addProfile(const IccProfile& profile, const QString&
     action->setData(QVariant::fromValue(profile));
     addAction(action);
 
-    connect(action, SIGNAL(triggered()), m_mapper, SLOT(map()));
+    connect(action, SIGNAL(triggered()), 
+            m_mapper, SLOT(map()));
+
     m_mapper->setMapping(action, action);
 }
 
@@ -231,10 +235,10 @@ void IccProfilesMenuAction::slotTriggered(QObject *obj)
         emit triggered(profile);
 }
 
-// ---------------
+// ------------------------------------------------------------------------------------------
 
 IccRenderingIntentComboBox::IccRenderingIntentComboBox(QWidget *parent)
-            : QComboBox(parent)
+                          : QComboBox(parent)
 {
     addItem("Perceptual", IccTransform::Perceptual);
     addItem("Relative Colorimetric", IccTransform::RelativeColorimetric);
@@ -283,6 +287,4 @@ int IccRenderingIntentComboBox::intent() const
     return itemData(currentIndex()).toInt();
 }
 
-
 } // namespace Digikam
-
