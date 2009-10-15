@@ -35,7 +35,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 026 ==> 210358 : AND instead of OR in tag selecting.
 027 ==> 210520 : DSplitterButton not always expanding the sidebar.
 028 ==> 132745 : Can not save image to fish:// protocol.
-029 ==> 
+029 ==> 210462 : digiKam crash select new download.
+030 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
