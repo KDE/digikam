@@ -26,6 +26,7 @@
 
 // Qt includes
 
+#include <QObject>
 #include <QWidget>
 #include <QMap>
 
@@ -64,11 +65,24 @@ class SearchField : public QObject, public VisibilityObject
 
 public:
 
+    enum WidgetRectType
+    {
+        LabelAndValueWidgetRects,
+        ValueWidgetRectsOnly
+    };
+
+public:
+
     static SearchField *createField(const QString& fieldName, SearchFieldGroup *parent);
 
     SearchField(QObject *parent);
     void setup(QGridLayout *layout, int row = -1);
     void setFieldName(const QString& fieldName);
+    void setCategoryLabelVisible(bool visible);
+    void setCategoryLabelVisibleFromPreviousField(SearchField *previousField);
+
+    QList<QRect> widgetRects(WidgetRectType = ValueWidgetRectsOnly) const;
+
     virtual void setText(const QString& label, const QString& detailLabel);
 
     virtual bool supportsField(const QString& fieldName);
@@ -79,25 +93,19 @@ public:
     virtual void setVisible(bool visible);
     virtual bool isVisible();
 
-    void setCategoryLabelVisible(bool visible);
-    void setCategoryLabelVisibleFromPreviousField(SearchField *previousField);
-
-    enum WidgetRectType { LabelAndValueWidgetRects, ValueWidgetRectsOnly };
-    QList<QRect> widgetRects(WidgetRectType = ValueWidgetRectsOnly) const;
-
 protected Q_SLOTS:
 
     void clearButtonClicked();
 
 protected:
 
+    void setValidValueState(bool valueIsValid);
+
     virtual void setupValueWidgets(QGridLayout *layout, int row, int column) = 0;
     virtual void setupLabels(QGridLayout *layout, int line);
 
     virtual void setValueWidgetsVisible(bool visible) = 0;
     virtual QList<QRect> valueWidgetRects() const = 0;
-
-    void setValidValueState(bool valueIsValid);
 
 protected:
 
@@ -248,6 +256,8 @@ public:
         DateTime
     };
 
+public:
+
     SearchFieldRangeDate(QObject *parent, Type type);
 
     virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
@@ -304,6 +314,8 @@ protected:
 
     void updateComboText();
 
+protected:
+
     ChoiceSearchComboBox *m_comboBox;
     QVariant::Type        m_type;
     QString               m_anyText;
@@ -326,6 +338,8 @@ public:
         TypeAlbum,
         TypeTag
     };
+
+public:
 
     SearchFieldAlbum(QObject *parent, Type type);
 
