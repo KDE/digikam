@@ -6,7 +6,7 @@
  * Date        : 2008-01-20
  * Description : User interface for searches
  *
- * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -519,16 +519,16 @@ SearchField *SearchField::createField(const QString& name, SearchFieldGroup *par
     return 0;
 }
 
+// -------------------------------------------------------------------------------------------
+
 SearchField::SearchField(QObject *parent)
            : QObject(parent)
 {
-    m_label       = new QLabel;
-    m_detailLabel = new QLabel;
-
-    m_clearButton = new AnimatedClearButton;
-
+    m_label                = new QLabel;
+    m_detailLabel          = new QLabel;
+    m_clearButton          = new AnimatedClearButton;
     m_categoryLabelVisible = true;
-    m_valueIsValid = false;
+    m_valueIsValid         = false;
 }
 
 void SearchField::setup(QGridLayout *layout, int line)
@@ -552,9 +552,12 @@ void SearchField::setup(QGridLayout *layout, int line)
     setupValueWidgets(layout, line, 3);
 
     // setup the clear button that appears dynamically
-    if (qApp->isLeftToRight()) {
+    if (qApp->isLeftToRight())
+    {
         m_clearButton->setPixmap(SmallIcon("edit-clear-locationbar-rtl", 0, KIconLoader::DefaultState));
-    } else {
+    }
+    else
+    {
         m_clearButton->setPixmap(SmallIcon("edit-clear-locationbar-ltr", 0, KIconLoader::DefaultState));
     }
     // Important: Don't cause re-layouting when button gets hidden/shown!
@@ -756,11 +759,13 @@ void SearchFieldRangeDate::setupValueWidgets(QGridLayout *layout, int row, int c
         layout->addWidget(m_firstDateEdit, row, column);
         layout->addWidget(m_betweenLabel, row, column+1, Qt::AlignHCenter);
         layout->addWidget(m_secondDateEdit, row, column+2);
-/*        hbox->addWidget(m_firstDateEdit);
+        /*
+        hbox->addWidget(m_firstDateEdit);
         hbox->addWidget(m_betweenLabel);
         hbox->addWidget(m_secondDateEdit);
         hbox->addWidget(m_endLabel);
-        hbox->addStretch(1);*/
+        hbox->addStretch(1);
+        */
     }
     else
     {
@@ -776,7 +781,8 @@ void SearchFieldRangeDate::setupValueWidgets(QGridLayout *layout, int row, int c
         hbox2->addWidget(m_secondDateEdit);
         hbox2->addWidget(m_secondTimeEdit);
 
-/*        m_firstTimeEdit = new QTimeEdit;
+        /*
+        m_firstTimeEdit = new QTimeEdit;
         m_secondTimeEdit = new QTimeEdit;
 
         hbox->addWidget(m_firstDateEdit);
@@ -785,7 +791,8 @@ void SearchFieldRangeDate::setupValueWidgets(QGridLayout *layout, int row, int c
         hbox->addWidget(m_secondDateEdit);
         hbox->addWidget(m_secondTimeEdit);
         hbox->addWidget(m_endLabel);
-        hbox->addStretch(1);*/
+        hbox->addStretch(1);
+        */
     }
 
     connect(m_firstDateEdit, SIGNAL(dateChanged(const QDate &)),
@@ -1323,8 +1330,8 @@ void SearchFieldRangeDouble::read(SearchXmlCachingReader& reader)
 
 void SearchFieldRangeDouble::write(SearchXmlWriter& writer)
 {
-    if (m_firstBox->value() != m_firstBox->minimum()
-        && m_secondBox->value() != m_secondBox->minimum())
+    if (m_firstBox->value() != m_firstBox->minimum() &&
+        m_secondBox->value() != m_secondBox->minimum())
     {
         if (m_firstBox->value() != m_secondBox->value())
         {
@@ -1424,8 +1431,8 @@ void SearchFieldRangeDouble::setInvertStepping(bool invert)
 
 void SearchFieldRangeDouble::valueChanged()
 {
-    bool validValue = false;
-    bool firstAtMinimum = (m_firstBox->value() == m_firstBox->minimum());
+    bool validValue      = false;
+    bool firstAtMinimum  = (m_firstBox->value() == m_firstBox->minimum());
     bool secondAtMinimum = (m_secondBox->value() == m_secondBox->minimum());
     if (!secondAtMinimum)
     {
@@ -1637,7 +1644,7 @@ QList<QRect> SearchFieldChoice::valueWidgetRects() const
 /*
 class SearchFieldChoice : public SearchField
 {
-    Q_OBJ ECT
+    Q_OBJECT
 
 public:
 
@@ -2251,7 +2258,7 @@ void SearchFieldColorDepth::read(SearchXmlCachingReader& reader)
 // -------------------------------------------------------------------------
 
 SearchFieldPageOrientation::SearchFieldPageOrientation(QObject *parent)
-                     : SearchFieldComboBox(parent)
+                          : SearchFieldComboBox(parent)
 {
 }
 

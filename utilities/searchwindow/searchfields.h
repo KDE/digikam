@@ -6,7 +6,7 @@
  * Date        : 2008-01-20
  * Description : User interface for searches
  *
- * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -99,16 +99,20 @@ protected:
 
     void setValidValueState(bool valueIsValid);
 
-    QString m_name;
+protected:
 
-    QLabel *m_label;
-    QLabel *m_detailLabel;
+    QString              m_name;
+
+    QLabel              *m_label;
+    QLabel              *m_detailLabel;
 
     AnimatedClearButton *m_clearButton;
 
-    bool    m_categoryLabelVisible;
-    bool    m_valueIsValid;
+    bool                 m_categoryLabelVisible;
+    bool                 m_valueIsValid;
 };
+
+//-----------------------------------------------------------------------------
 
 class SearchFieldText : public SearchField
 {
@@ -134,6 +138,8 @@ protected:
     QLineEdit *m_edit;
 };
 
+//-----------------------------------------------------------------------------
+
 class SearchFieldKeyword : public SearchFieldText
 {
 public:
@@ -143,6 +149,8 @@ public:
     virtual void read(SearchXmlCachingReader& reader);
     virtual void write(SearchXmlWriter& writer);
 };
+
+//-----------------------------------------------------------------------------
 
 class SearchFieldRangeInt : public SearchField
 {
@@ -184,6 +192,8 @@ protected:
     QLabel                *m_betweenLabel;
 };
 
+//-----------------------------------------------------------------------------
+
 class SearchFieldRangeDouble : public SearchField
 {
     Q_OBJECT
@@ -224,6 +234,8 @@ protected:
     QLabel                   *m_betweenLabel;
 };
 
+//-----------------------------------------------------------------------------
+
 class SearchFieldRangeDate : public SearchField
 {
     Q_OBJECT
@@ -260,8 +272,10 @@ protected:
     KDateEdit *m_secondDateEdit;
     QLabel    *m_betweenLabel;
 
-    Type           m_type;
+    Type       m_type;
 };
+
+//-----------------------------------------------------------------------------
 
 class SearchFieldChoice : public SearchField
 {
@@ -290,14 +304,17 @@ protected:
 
     void updateComboText();
 
-    ChoiceSearchComboBox        *m_comboBox;
-    QVariant::Type               m_type;
-    QString                      m_anyText;
-    ChoiceSearchModel           *m_model;
+    ChoiceSearchComboBox *m_comboBox;
+    QVariant::Type        m_type;
+    QString               m_anyText;
+    ChoiceSearchModel    *m_model;
 };
+
+//-----------------------------------------------------------------------------
 
 class Album;
 class AbstractCheckableAlbumModel;
+
 class SearchFieldAlbum : public SearchField
 {
     Q_OBJECT
@@ -330,6 +347,8 @@ protected:
     AbstractCheckableAlbumModel *m_model;
 };
 
+//-----------------------------------------------------------------------------
+
 class SearchFieldRating : public SearchField
 {
     Q_OBJECT
@@ -359,6 +378,8 @@ protected:
     QLabel         *m_betweenLabel;
 };
 
+//-----------------------------------------------------------------------------
+
 class SearchFieldComboBox : public SearchField
 {
     Q_OBJECT
@@ -379,8 +400,10 @@ protected Q_SLOTS:
 
 protected:
 
-    QComboBox      *m_comboBox;
+    QComboBox *m_comboBox;
 };
+
+//-----------------------------------------------------------------------------
 
 class SearchFieldCheckBox : public SearchField
 {
@@ -405,9 +428,11 @@ protected Q_SLOTS:
 
 protected:
 
-    QCheckBox      *m_checkBox;
-    QString         m_label;
+    QCheckBox *m_checkBox;
+    QString    m_label;
 };
+
+//-----------------------------------------------------------------------------
 
 class SearchFieldColorDepth : public SearchFieldComboBox
 {
@@ -420,6 +445,8 @@ public:
     virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
     virtual void read(SearchXmlCachingReader& reader);
 };
+
+//-----------------------------------------------------------------------------
 
 class SearchFieldPageOrientation: public SearchFieldComboBox
 {
