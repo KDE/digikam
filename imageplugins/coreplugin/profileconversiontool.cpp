@@ -77,15 +77,15 @@ public:
         favoriteProfiles.setMaxCost(10);
     }
 
-    IccProfilesComboBox *profilesBox;
+    IccProfilesComboBox*     profilesBox;
 
-    ImagePanelWidget*    previewWidget;
-    EditorToolSettings*  gboxSettings;
+    ImagePanelWidget*        previewWidget;
+    EditorToolSettings*      gboxSettings;
 
-    IccProfile           currentProfile;
+    IccProfile               currentProfile;
     QCache<QString, QString> favoriteProfiles;
 
-    IccTransform         transform;
+    IccTransform             transform;
 
     static IccTransform getTransform(const IccProfile& in, const IccProfile& out);
 };
@@ -105,8 +105,8 @@ IccTransform ProfileConversionToolPriv::getTransform(const IccProfile& in, const
 }
 
 ProfileConversionTool::ProfileConversionTool(QObject* parent)
-           : EditorToolThreaded(parent),
-             d(new ProfileConversionToolPriv)
+                     : EditorToolThreaded(parent),
+                       d(new ProfileConversionToolPriv)
 {
     setObjectName("profile conversion");
     setToolName(i18n("Color Profile Conversion"));
@@ -130,9 +130,9 @@ ProfileConversionTool::ProfileConversionTool(QObject* parent)
     // ---
 
     QVBoxLayout *currentProfVBox = new QVBoxLayout;
-    QLabel *currentProfileTitle   = new QLabel(i18n("Current Color Space:"));
-    QLabel *currentProfileDesc    = new QLabel(QString("<b>%1</b>").arg(d->currentProfile.description()));
-    QPushButton *currentProfInfo  = new QPushButton(i18n("Info..."));
+    QLabel *currentProfileTitle  = new QLabel(i18n("Current Color Space:"));
+    QLabel *currentProfileDesc   = new QLabel(QString("<b>%1</b>").arg(d->currentProfile.description()));
+    QPushButton *currentProfInfo = new QPushButton(i18n("Info..."));
     currentProfileDesc->setWordWrap(true);
 
     currentProfVBox->addWidget(currentProfileTitle);
@@ -143,12 +143,12 @@ ProfileConversionTool::ProfileConversionTool(QObject* parent)
 
     QVBoxLayout *newProfVBox = new QVBoxLayout;
 
-    QLabel *newProfileLabel = new QLabel(i18n("Convert to:"));
+    QLabel *newProfileLabel  = new QLabel(i18n("Convert to:"));
     d->profilesBox = new IccProfilesComboBox;
     d->profilesBox->addProfilesSqueezed(IccSettings::instance()->workspaceProfiles());
     d->profilesBox->setWhatsThis( i18n("Select the profile of the color space to convert to."));
     newProfileLabel->setBuddy(d->profilesBox);
-    QPushButton *newProfInfo  = new QPushButton(i18n("Info..."));
+    QPushButton *newProfInfo = new QPushButton(i18n("Info..."));
 
     newProfVBox->addWidget(newProfileLabel);
     newProfVBox->addWidget(d->profilesBox);

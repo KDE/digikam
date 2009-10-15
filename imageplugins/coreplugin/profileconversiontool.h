@@ -28,7 +28,10 @@
 
 #include "editortool.h"
 
-namespace Digikam { class IccProfile; }
+namespace Digikam
+{
+    class IccProfile;
+}
 
 namespace DigikamImagesPluginCore
 {
@@ -65,8 +68,6 @@ private:
     void putFinalData();
     void renderingFinished();
     void updateTransform();
-
-private:
 
 private:
 
