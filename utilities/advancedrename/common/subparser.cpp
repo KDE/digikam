@@ -77,6 +77,8 @@ SubParser::~SubParser()
     }
 
     d->modifiers.clear();
+
+    delete d;
 }
 
 void SubParser::registerModifier(Modifier* modifier)

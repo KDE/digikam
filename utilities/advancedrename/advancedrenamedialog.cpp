@@ -74,6 +74,7 @@ AdvancedRenameListItem::AdvancedRenameListItem(QTreeWidget* view, const ImageInf
 
 AdvancedRenameListItem:: ~AdvancedRenameListItem()
 {
+    delete d;
 }
 
 void AdvancedRenameListItem::setImageInfo(const ImageInfo& info)
