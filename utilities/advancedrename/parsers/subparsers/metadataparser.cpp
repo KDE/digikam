@@ -159,9 +159,17 @@ QString MetadataParserDialog::separator() const
 
 MetadataParser::MetadataParser()
               : SubParser(i18n("Metadata..."),
-                          i18n("Add metadata fields from Exif, IPTC and XMP"),
-                          SmallIcon("metadataedit"))
+                          i18n("Add metadata fields from Exif, IPTC and XMP"))
 {
+    // metadataedit icon can be missing if KIPI plugins are not installed, load different icon in this case
+    QIcon icon = KIconLoader::global()->loadIcon("metadataedit", KIconLoader::Small, 0,
+                                                 KIconLoader::DefaultState, QStringList(), 0L, true);
+    if (icon.isNull())
+    {
+        icon = SmallIcon("editimage");
+    }
+    setIcon(icon);
+
     addTokenDescription("[meta:<i>keycode</i>]", i18n("Metadata"),
              i18n("Add metadata (use the quick access dialog for keycodes)"));
 
