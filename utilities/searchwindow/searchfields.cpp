@@ -1644,7 +1644,7 @@ QList<QRect> SearchFieldChoice::valueWidgetRects() const
 /*
 class SearchFieldChoice : public SearchField
 {
-    Q_OBJECT
+    Q_OBJ ECT
 
 public:
 
