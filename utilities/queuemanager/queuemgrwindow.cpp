@@ -429,7 +429,7 @@ void QueueMgrWindow::setupActions()
     connect(d->rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
     actionCollection()->addAction("queuemgr_rawcameralist", d->rawCameraListAction);
 
-    d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components info"), this);
+    d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components Information"), this);
     connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
     actionCollection()->addAction("queuemgr_librariesinfo", d->libsInfoAction);
 
