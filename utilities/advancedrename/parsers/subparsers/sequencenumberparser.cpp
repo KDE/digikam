@@ -100,6 +100,7 @@ SequenceNumberDialog::SequenceNumberDialog()
 
 SequenceNumberDialog::~SequenceNumberDialog()
 {
+    delete d;
 }
 
 int SequenceNumberDialog::digits() const

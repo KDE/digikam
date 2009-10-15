@@ -142,6 +142,7 @@ MetadataParserDialog::MetadataParserDialog()
 
 MetadataParserDialog::~MetadataParserDialog()
 {
+    delete d;
 }
 
 QStringList MetadataParserDialog::checkedTags() const
