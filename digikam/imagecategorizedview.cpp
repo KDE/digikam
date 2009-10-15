@@ -588,7 +588,7 @@ void ImageCategorizedView::rowsAboutToBeRemoved(const QModelIndex &parent, int s
                 newCurrent = model()->index(start - 1, 0); // last remaining, no next one left
             else
                 newCurrent = model()->index(end + 1, 0); // next remaining
-            selectionModel()->select(newCurrent, QItemSelectionModel::SelectCurrent);
+            selectionModel()->setCurrentIndex(newCurrent, QItemSelectionModel::SelectCurrent);
         }
     }
 }
