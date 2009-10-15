@@ -425,7 +425,7 @@ void QueueMgrWindow::setupActions()
     connect(d->contributeAction, SIGNAL(triggered()), this, SLOT(slotContribute()));
     actionCollection()->addAction("queuemgr_contribute", d->contributeAction);
 
-    d->rawCameraListAction = new KAction(KIcon("kdcraw"), i18n("supported RAW cameras"), this);
+    d->rawCameraListAction = new KAction(KIcon("kdcraw"), i18n("Supported RAW Cameras"), this);
     connect(d->rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
     actionCollection()->addAction("queuemgr_rawcameralist", d->rawCameraListAction);
 
