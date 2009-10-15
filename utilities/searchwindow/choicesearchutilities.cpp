@@ -138,7 +138,7 @@ QStringList ChoiceSearchModel::checkedDisplayTexts() const
 void ChoiceSearchModel::setChecked(int i, bool checked)
 {
     m_entries[i].checkState = checked;
-    QModelIndex modelIndex = index(i);
+    QModelIndex modelIndex  = index(i);
     emit dataChanged(modelIndex, modelIndex);
     emit checkStateChanged(m_entries[i].key, checked);
 }
@@ -195,7 +195,9 @@ bool ChoiceSearchModel::setData(const QModelIndex& index, const QVariant& value,
         return true;
     }
     else
+    {
         return QAbstractListModel::setData(index, value, role);
+    }
 }
 
 // --------------------------------------------------------------------------------------
