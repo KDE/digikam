@@ -36,7 +36,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 027 ==> 210520 : DSplitterButton not always expanding the sidebar.
 028 ==> 132745 : Can not save image to fish:// protocol.
 029 ==> 210462 : digiKam crash select new download.
-030 ==> 
+030 ==> 151972 : Color Management shows repeatedly error messages on resizing.
+031 ==> 131948 : Broken "Open File" dialog in Color Management plugin.
+032 ==>
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
