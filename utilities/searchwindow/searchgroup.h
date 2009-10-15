@@ -122,7 +122,7 @@ protected Q_SLOTS:
 
 protected:
 
-    virtual void paintEvent(QPaintEvent *ev);
+    virtual void paintEvent(QPaintEvent*);
 
     void setExtended(bool extended);
     void adjustOperatorOptions();
@@ -130,20 +130,20 @@ protected:
 
 private:
 
-    bool                           m_extended;
-    SearchXml::Operator            m_groupOp;
-    SearchXml::Operator            m_fieldOp;
-    QGridLayout                   *m_layout;
-    //QComboBox                     *m_groupOpBox;
-    RClickLabel                   *m_groupOpLabel;
-    QRadioButton                  *m_allBox;
-    QRadioButton                  *m_anyBox;
-    QRadioButton                  *m_noneBox;
-    QRadioButton                  *m_oneNotBox;
-    RClickLabel                    *m_optionsLabel;
-    RClickLabel                    *m_removeLabel;
-    QStackedLayout                *m_stackedLayout;
-    SearchViewThemedPartsCache    *m_themeCache;
+    bool                        m_extended;
+    SearchXml::Operator         m_groupOp;
+    SearchXml::Operator         m_fieldOp;
+    QGridLayout                *m_layout;
+    //QComboBox                  *m_groupOpBox;
+    RClickLabel                *m_groupOpLabel;
+    QRadioButton               *m_allBox;
+    QRadioButton               *m_anyBox;
+    QRadioButton               *m_noneBox;
+    QRadioButton               *m_oneNotBox;
+    RClickLabel                *m_optionsLabel;
+    RClickLabel                *m_removeLabel;
+    QStackedLayout             *m_stackedLayout;
+    SearchViewThemedPartsCache *m_themeCache;
 };
 
 } // namespace Digikam

@@ -204,7 +204,7 @@ void SearchGroup::setup(Type type)
     QStyleOption option;
     option.initFrom(this);
     int indent = 5 * style()->pixelMetric(QStyle::PM_LayoutLeftMargin, &option, this);
-    indent = qMax(indent, 20);
+    indent     = qMax(indent, 20);
     indentLayout->addSpacing(indent);
 
     m_subgroupLayout = new QVBoxLayout;
@@ -341,8 +341,9 @@ QList<QRect> SearchGroup::startupAnimationArea() const
 class RadioButtonHBox : public QHBoxLayout
 {
 public:
+
     RadioButtonHBox(QWidget* left, QWidget *right, Qt::LayoutDirection dir)
-                : QHBoxLayout()
+        : QHBoxLayout()
     {
         if (dir == Qt::RightToLeft)
         {
