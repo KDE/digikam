@@ -6,7 +6,7 @@
  * Date        : 2008-08-20
  * Description : Image editor interface used by editor tools.
  *
- * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -143,6 +143,11 @@ void EditorToolIface::slotCloseTool()
 {
     EditorTool *tool = dynamic_cast<EditorTool*>(d->tool);
     if (tool) tool->slotCloseTool();
+}
+
+void EditorToolIface::setupICC()
+{
+    d->editor->setupICC();
 }
 
 }  // namespace Digikam
