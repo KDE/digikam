@@ -41,6 +41,7 @@
 #include "dimg.h"
 #include "dimgimagefilters.h"
 #include "imageiface.h"
+#include "editortooliface.h"
 #include "iccprofilescombobox.h"
 #include "iccsettings.h"
 #include "autocorrectiontool.h"
@@ -85,19 +86,19 @@ public:
         profileMenuAction     = 0;
     }
 
-    KAction *redeyeAction;
-    KAction *BCGAction;
-    KAction *HSLAction;
-    KAction *RGBAction;
-    KAction *autoCorrectionAction;
-    KAction *invertAction;
-    KAction *BWAction;
-    KAction *aspectRatioCropAction;
-    KAction *resizeAction;
-    KAction *sharpenAction;
-    KAction *blurAction;
-    KAction *convertTo8Bits;
-    KAction *convertTo16Bits;
+    KAction               *redeyeAction;
+    KAction               *BCGAction;
+    KAction               *HSLAction;
+    KAction               *RGBAction;
+    KAction               *autoCorrectionAction;
+    KAction               *invertAction;
+    KAction               *BWAction;
+    KAction               *aspectRatioCropAction;
+    KAction               *resizeAction;
+    KAction               *sharpenAction;
+    KAction               *blurAction;
+    KAction               *convertTo8Bits;
+    KAction               *convertTo16Bits;
     IccProfilesMenuAction *profileMenuAction;
 };
 
@@ -352,7 +353,7 @@ void ImagePlugin_Core::slotColorManagement()
 }
 */
 
-void ImagePlugin_Core::slotConvertToColorSpace(const IccProfile &profile)
+void ImagePlugin_Core::slotConvertToColorSpace(const IccProfile& profile)
 {
     kDebug() << "";
     ImageIface iface(0, 0);
@@ -372,12 +373,17 @@ void ImagePlugin_Core::slotUpdateColorSpaceMenu()
 {
     d->profileMenuAction->clear();
 
-    ICCSettingsContainer settings = IccSettings::instance()->settings();
-    if (!settings.enableCM)
+    if (!IccSettings::instance()->isEnabled())
     {
-        d->profileMenuAction->setEnabled(false);
+        KAction *action = new KAction(i18n("Color Management is disabled..."), this);
+        d->profileMenuAction->addAction(action);
+
+        connect(action, SIGNAL(triggered()), 
+                this, SLOT(slotSetupICC()));
         return;
     }
+
+    ICCSettingsContainer settings = IccSettings::instance()->settings();
 
     QList<IccProfile> standardProfiles, favoriteProfiles;
     QSet<QString> standardProfilePaths, favoriteProfilePaths;
@@ -404,7 +410,13 @@ void ImagePlugin_Core::slotUpdateColorSpaceMenu()
 
     KAction *moreAction = new KAction(i18n("Other..."), this);
     d->profileMenuAction->addAction(moreAction);
-    connect(moreAction, SIGNAL(triggered()), this, SLOT(slotProfileConversionTool()));
+    connect(moreAction, SIGNAL(triggered()), 
+            this, SLOT(slotProfileConversionTool()));
+}
+
+void ImagePlugin_Core::slotSetupICC()
+{
+    EditorToolIface::editorToolIface()->setupICC();
 }
 
 void ImagePlugin_Core::slotProfileConversionTool()
