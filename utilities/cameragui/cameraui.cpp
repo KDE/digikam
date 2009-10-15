@@ -1108,6 +1108,9 @@ void CameraUI::slotRefreshIconView()
         return;
     }
 
+    if (d->filesToBeAdded.isEmpty())
+        return;
+
     AlbumSettings* settings = AlbumSettings::instance();
     if (!settings) return;
 
@@ -1138,15 +1141,17 @@ void CameraUI::slotRefreshIconView()
         citem = static_cast<CameraIconItem*>(citem->nextItem());
     }
 
-    foreach(const GPItemInfo& item, d->filesToBeAdded)
+    GPItemInfoList::iterator it = d->filesToBeAdded.begin();
+    while (it != d->filesToBeAdded.end())
     {
-        info.setFile(item.name);
+        info.setFile((*it).name);
         if (!fileNames.contains(info.fileName().toLower()) &&
             !fileExts.contains(info.suffix().toLower())    &&
             list.contains(QString("*.%1").arg(info.suffix().toLower())))
         {
-            map.insertMulti(item.mtime, item);
+            map.insertMulti((*it).mtime, *it);
         }
+        it = d->filesToBeAdded.erase(it);
     }
 
     citem = static_cast<CameraIconItem*>(d->view->firstItem());
