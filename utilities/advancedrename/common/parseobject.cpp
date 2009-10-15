@@ -66,7 +66,7 @@ ParseObject::ParseObject(const QString& name, const QIcon& icon)
            : QObject(0), d(new ParseObjectPriv)
 {
     setObjectName(name);
-    d->icon = icon;
+    setIcon(icon);
 }
 
 ParseObject::~ParseObject()
@@ -78,6 +78,16 @@ ParseObject::~ParseObject()
     d->tokens.clear();
 
     delete d;
+}
+
+void ParseObject::setIcon(const QIcon& icon)
+{
+    d->icon = icon;
+}
+
+QIcon ParseObject::icon() const
+{
+    return d->icon;
 }
 
 void ParseObject::setDescription(const QString& desc)

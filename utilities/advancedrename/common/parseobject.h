@@ -80,6 +80,9 @@ public:
     void    setDescription(const QString& desc);
     QString description() const;
 
+    QIcon   icon() const;
+    void    setIcon(const QIcon& icon);
+
     /**
      * @return a list of all registered tokens
      */
