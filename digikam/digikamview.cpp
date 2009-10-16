@@ -1655,6 +1655,11 @@ void DigikamView::slotSortImages(int sortRole)
     d->iconView->imageFilterModel()->setSortRole((ImageSortSettings::SortRole) sortRole);
 }
 
+void DigikamView::slotSortImagesOrder(int order)
+{
+    d->iconView->imageFilterModel()->setSortOrder((ImageSortSettings::SortOrder) order);
+}
+
 void DigikamView::slotGroupImages(int categoryMode)
 {
     AlbumSettings* settings = AlbumSettings::instance();

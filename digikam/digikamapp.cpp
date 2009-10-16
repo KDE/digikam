@@ -907,6 +907,23 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
+    d->imageSortOrderAction = new KSelectAction(i18n("Image Sorting &Order"), this);
+    d->imageSortOrderAction->setWhatsThis(i18n("Defines whether images are sorted in ascending or descending manner."));
+    QSignalMapper *imageSortOrderMapper = new QSignalMapper(this);
+    connect(imageSortOrderMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImagesOrder(int)));
+    actionCollection()->addAction("image_sort_order", d->imageSortOrderAction);
+
+    QAction *sortAscendingAction = d->imageSortOrderAction->addAction(i18n("Ascending"));
+    QAction *sortDescendingAction = d->imageSortOrderAction->addAction(i18n("Descending"));
+
+    connect(sortAscendingAction, SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
+    connect(sortDescendingAction, SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
+
+    imageSortOrderMapper->setMapping(sortAscendingAction, (int)ImageSortSettings::AscendingOrder);
+    imageSortOrderMapper->setMapping(sortDescendingAction, (int)ImageSortSettings::DescendingOrder);
+
+    // -----------------------------------------------------------
+
     d->imageGroupAction = new KSelectAction(i18n("&Group Images"), this);
     d->imageGroupAction->setWhatsThis(i18n("The categories in which the images in the thumbnail view are displayed"));
     QSignalMapper *imageGroupMapper = new QSignalMapper(this);
@@ -1201,6 +1218,7 @@ void DigikamApp::setupActions()
 
     d->albumSortAction->setCurrentItem((int)AlbumSettings::instance()->getAlbumSortOrder());
     d->imageSortAction->setCurrentItem((int)AlbumSettings::instance()->getImageSortOrder());
+    d->imageSortOrderAction->setCurrentItem((int)AlbumSettings::instance()->getImageSorting());
     d->imageGroupAction->setCurrentItem((int)AlbumSettings::instance()->getImageGroupMode()-1); // no action for enum 0
     d->recurseAlbumsAction->setChecked(AlbumSettings::instance()->getRecurseAlbums());
     d->recurseTagsAction->setChecked(AlbumSettings::instance()->getRecurseTags());

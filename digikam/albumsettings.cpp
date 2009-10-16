@@ -162,6 +162,7 @@ public:
 
     // icon view settings
     int                                 imageSortOrder;
+    int                                 imageSorting;
     int                                 imageGroupMode;
     AlbumSettings::ItemRightClickAction itemRightClickAction;
 
@@ -206,6 +207,7 @@ void AlbumSettings::init()
 
     d->albumSortOrder               = AlbumSettings::ByFolder;
     d->imageSortOrder               = ImageSortSettings::SortByFileName;
+    d->imageSorting                 = ImageSortSettings::AscendingOrder;
     d->imageGroupMode               = ImageSortSettings::CategoryByAlbum;
     d->itemRightClickAction         = AlbumSettings::ShowPreview;
 
@@ -304,6 +306,7 @@ void AlbumSettings::readSettings()
                                                       (int)AlbumSettings::ByFolder));
 
     d->imageSortOrder               = group.readEntry("Image Sort Order", (int)ImageSortSettings::SortByFileName);
+    d->imageSorting                 = group.readEntry("Image Sorting", (int)ImageSortSettings::AscendingOrder);
     d->imageGroupMode               = group.readEntry("Image Group Mode", (int)ImageSortSettings::CategoryByAlbum);
 
     d->itemRightClickAction         = AlbumSettings::ItemRightClickAction(group.readEntry(
@@ -424,6 +427,7 @@ void AlbumSettings::saveSettings()
     group.writeEntry("Album Collections", d->albumCategoryNames);
     group.writeEntry("Album Sort Order", (int)d->albumSortOrder);
     group.writeEntry("Image Sort Order", (int)d->imageSortOrder);
+    group.writeEntry("Image Sorting", (int)d->imageSorting);
     group.writeEntry("Image Group Mode", (int)d->imageGroupMode);
     group.writeEntry("Item Right Click Action", (int)d->itemRightClickAction);
     group.writeEntry("Default Icon Size", QString::number(d->thumbnailSize));
@@ -600,6 +604,16 @@ void AlbumSettings::setImageSortOrder(int order)
 int AlbumSettings::getImageSortOrder() const
 {
     return d->imageSortOrder;
+}
+
+void AlbumSettings::setImageSorting(int sorting)
+{
+    d->imageSorting = sorting;
+}
+
+int AlbumSettings::getImageSorting() const
+{
+    return d->imageSorting;
 }
 
 void AlbumSettings::setImageGroupMode(int mode)

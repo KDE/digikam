@@ -75,6 +75,7 @@
      <Separator />
      <Action name="album_sort" />
      <Action name="image_sort" />
+     <Action name="image_sort_order" />
      <Action name="image_group" />
      <Action name="albums_recursive" />
      <Action name="tags_recursive" />

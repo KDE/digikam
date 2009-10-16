@@ -105,6 +105,10 @@ public:
     void setImageSortOrder(int order);
     int getImageSortOrder() const;
 
+    // means ascending or descending
+    void setImageSorting(int sorting);
+    int getImageSorting() const;
+
     void setImageGroupMode(int mode);
     int getImageGroupMode() const;
 

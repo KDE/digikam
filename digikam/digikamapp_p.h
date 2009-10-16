@@ -259,6 +259,7 @@ public:
     KAction                            *zoomFitToWindowAction;
     KAction                            *zoomTo100percents;
     KSelectAction                      *imageSortAction;
+    KSelectAction                      *imageSortOrderAction;
     KSelectAction                      *imageGroupAction;
     KSelectAction                      *albumSortAction;
     KToggleAction                      *recurseAlbumsAction;
