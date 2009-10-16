@@ -6,7 +6,7 @@
  * Date        : 2008-05-05
  * Description : Geodetic tools
  *
- * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -65,7 +65,9 @@ inline double toDegreesFactor()
     return 180.0 / M_PI;
 }
 
-}
+} // namespace Coordinates
+
+// ------------------------------------------------------------------------------------------------
 
 class DIGIKAM_EXPORT Ellipsoid
 {
@@ -267,6 +269,8 @@ protected:
     bool m_isSphere;
 };
 
+// ------------------------------------------------------------------------------------------------
+
 class DIGIKAM_EXPORT GeodeticCalculator
 {
 /**
@@ -454,9 +458,6 @@ protected:
     * @param  distance The orthodromic distance value.
     */
     bool checkOrthodromicDistance(const double distance);
-
-
-
 
     /**
      * Tolerance factors from the strictest (<code>TOLERANCE_0</CODE>)
