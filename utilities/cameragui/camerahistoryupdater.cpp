@@ -71,7 +71,7 @@ CameraHistoryUpdater::CameraHistoryUpdater(QWidget* parent)
 
 CameraHistoryUpdater::~CameraHistoryUpdater()
 {
-    // clear commands, stop camera
+    // clear updateItems, stop processing
     slotCancel();
 
     // stop thread
@@ -88,6 +88,7 @@ CameraHistoryUpdater::~CameraHistoryUpdater()
 void CameraHistoryUpdater::slotCancel()
 {
     d->canceled = true;
+    d->updateItems.clear();
     QMutexLocker lock(&d->mutex);
 }
 
