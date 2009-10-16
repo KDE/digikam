@@ -40,7 +40,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 031 ==> 131948 : Broken "Open File" dialog in Color Management plugin.
 032 ==> 210773 : Compiling error on solaris 10 with gcc.
 033 ==> 167242 : Thumbnails need a lot of space compared to the pictures.
-034 ==> 
+034 ==> 175923 : digiKam uses wrong album root path/wrong disk uuid.
+035 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
