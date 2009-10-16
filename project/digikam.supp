@@ -1,5 +1,5 @@
 {
-   <insert_a_suppression_name_here>
+   KHTML DOM 
    Memcheck:Leak
    ...
    fun:_ZN3DOM13DOMStringImplC1EPKc
@@ -7,7 +7,7 @@
    fun:_ZN5khtml16LocalNameFactory11initIdTableEv
 }
 {
-   <insert_a_suppression_name_here>
+   Exiv2 registerNS
    Memcheck:Leak
    ...
    fun:_ZN5Exiv213XmpProperties10registerNsERKSsS2_
@@ -15,7 +15,7 @@
 }
 
 {
-   <insert_a_suppression_name_here>
+   GObject lib
    Memcheck:Leak
    ...
    obj:/usr/lib/libgobject*.so.*
@@ -23,7 +23,7 @@
 }
 
 {
-   <insert_a_suppression_name_here>
+   dbus lib
    Memcheck:Leak
    ...
    obj:/usr/lib/libdbus*.so.*
@@ -31,7 +31,7 @@
 }
 
 {
-   <insert_a_suppression_name_here>
+   fontconfig lib
    Memcheck:Leak
    ...
    obj:/usr/lib/libfontconfig.so.*
@@ -39,7 +39,7 @@
 }
 
 {
-   <insert_a_suppression_name_here>
+   freetype lib
    Memcheck:Leak
    ...
    obj:/usr/lib/libfreetype.so.*
@@ -47,7 +47,7 @@
 }
 
 {
-   <insert_a_suppression_name_here>
+   solid lib
    Memcheck:Leak
    ...
    obj:/usr/lib/libsolid.so.*
@@ -55,7 +55,7 @@
 }
 
 {
-   <insert_a_suppression_name_here>
+   marble lib
    Memcheck:Leak
    ...
    obj:/usr/lib/libmarblewidget.so.*
@@ -63,7 +63,7 @@
 }
 
 {
-   <insert_a_suppression_name_here>
+   qt lib
    Memcheck:Leak
    ...
    obj:/usr/lib/libQt*.so.*
@@ -71,7 +71,7 @@
 }
 
 {
-   <insert_a_suppression_name_here>
+   kde lib
    Memcheck:Leak
    ...
    obj:/usr/lib/libkde*.so.*
@@ -79,7 +79,7 @@
 }
 
 {
-   <insert_a_suppression_name_here>
+   khtml lib
    Memcheck:Leak
    ...
    obj:/usr/lib/libkhtml.so.*
@@ -87,7 +87,7 @@
 }
 
 {
-   <insert_a_suppression_name_here>
+   sqlite3 lib
    Memcheck:Leak
    ...
    obj:/usr/lib/libsqlite3.so.*
@@ -95,7 +95,7 @@
 }
 
 {
-   <insert_a_suppression_name_here>
+   asound lib
    Memcheck:Leak
    ...
    obj:/usr/lib/libasound.so.*
