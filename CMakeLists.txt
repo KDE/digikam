@@ -1003,6 +1003,7 @@ ENDIF(MSVC)
 
     SET(libcameragui_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameracontroller.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerahistoryupdater.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerafolderdialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerafolderitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerafolderview.cpp

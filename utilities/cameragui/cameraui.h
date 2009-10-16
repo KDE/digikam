@@ -44,6 +44,7 @@
 
 #include "gpiteminfo.h"
 #include "dhistoryview.h"
+#include "camerahistoryupdater.h"
 
 class KFileItem;
 class KJob;
@@ -55,6 +56,7 @@ class Album;
 class CameraIconItem;
 class CollectionLocation;
 class CameraUIPriv;
+class CameraHistoryUpdater;
 
 class CameraUI : public KXmlGuiWindow
 {
@@ -117,7 +119,6 @@ private:
     void finishDialog();
     void showToolBars();
     void hideToolBars();
-    void refreshIconView(QMultiMap<QDateTime, GPItemInfo>& map);
     void refreshFreeSpace();
     void refreshCollectionFreeSpace();
     void startKdePreviewJob();
@@ -208,7 +209,8 @@ private Q_SLOTS:
 
     void slotSidebarTabTitleStyleChanged();
 
-    void slotRefreshIconView();
+    void slotRefreshIconViewTimer();
+    void slotRefreshIconView(const CHUpdateItemMap& map);
 
 private:
 

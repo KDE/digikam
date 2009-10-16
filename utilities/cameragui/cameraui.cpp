@@ -150,7 +150,7 @@ CameraUI::CameraUI(QWidget* parent, const QString& cameraTitle,
     d->refreshIconViewTimer->setSingleShot(true);
 
     connect(d->refreshIconViewTimer, SIGNAL(timeout()),
-            this, SLOT(slotRefreshIconView()));
+            this, SLOT(slotRefreshIconViewTimer()));
 
     // -------------------------------------------------------------------
 
@@ -172,6 +172,18 @@ CameraUI::CameraUI(QWidget* parent, const QString& cameraTitle,
     // -- Init. camera controller ----------------------------------------
 
     setupCameraController(model, port, path);
+
+    // --------------------------------------------------------
+
+    d->historyUpdater = new CameraHistoryUpdater(this);
+
+    connect (d->historyUpdater, SIGNAL(signalHistoryMap(const CHUpdateItemMap&)),
+             this, SLOT(slotRefreshIconView(const CHUpdateItemMap&)));
+
+    connect(d->historyUpdater, SIGNAL(signalBusy(bool)),
+            this, SLOT(slotBusy(bool)));
+
+    // --------------------------------------------------------
 
     d->renameCustomizer->setStartIndex(startIndex);
     d->view->setFocus();
@@ -814,6 +826,7 @@ void CameraUI::slotCancelButton()
     d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
                                           i18n("Canceling current operation, please wait..."));
     d->controller->slotCancel();
+    d->historyUpdater->slotCancel();
     d->currentlyDeleting.clear();
     refreshFreeSpace();
 }
@@ -1097,10 +1110,10 @@ void CameraUI::slotFileList(const GPItemInfoList& fileList)
         return;
 
     d->filesToBeAdded << fileList;
-    slotRefreshIconView();
+    d->refreshIconViewTimer->start();
 }
 
-void CameraUI::slotRefreshIconView()
+void CameraUI::slotRefreshIconViewTimer()
 {
     if (d->busy)
     {
@@ -1162,13 +1175,15 @@ void CameraUI::slotRefreshIconView()
         d->view->removeItem(tempItem->itemInfo()->folder,tempItem->itemInfo()->name);
     }
 
-    refreshIconView(map);
+    d->historyUpdater->addItems(d->controller->cameraMD5ID(), map);
 }
 
-void CameraUI::refreshIconView(QMultiMap<QDateTime, GPItemInfo>& map)
+void CameraUI::slotRefreshIconView(const CHUpdateItemMap& map)
 {
     if (map.empty())
         return;
+
+    CHUpdateItemMap _map = map;
 
     int curr = d->statusProgressBar->progressTotalSteps();
     d->statusProgressBar->setProgressTotalSteps(curr + map.count());
@@ -1178,34 +1193,19 @@ void CameraUI::refreshIconView(QMultiMap<QDateTime, GPItemInfo>& map)
     GPItemInfo item;
     QList<QVariant> itemsList;
 
-    it = lastPhotoFirst ? map.end() : map.begin();
+    it = lastPhotoFirst ? _map.end() : _map.begin();
 
-    // This can be slow and lock the GUI. Maybe we need to move this into the camera controller thread?
     do
     {
         if (lastPhotoFirst) --it;
 
         item = *it;
-
-        // We query database to check if item have been already downloaded from camera.
-        switch(DownloadHistory::status(d->controller->cameraMD5ID(), item.name, item.size, item.mtime))
-        {
-            case DownloadHistory::NotDownloaded:
-                item.downloaded = GPItemInfo::NewPicture;
-                break;
-            case DownloadHistory::Downloaded:
-                item.downloaded = GPItemInfo::DownloadedYes;
-                break;
-            default:      // DownloadHistory::StatusUnknown
-                item.downloaded = GPItemInfo::DownloadUnknown;
-                break;
-        }
         d->view->addItem(item);
         itemsList.append(QStringList() << item.folder << item.name);
 
         if (!lastPhotoFirst) it++;
     }
-    while((lastPhotoFirst ? it != map.begin() : it != map.end()));
+    while((lastPhotoFirst ? it != _map.begin() : it != _map.end()));
 
     d->controller->getThumbnails(itemsList);
 }
@@ -1231,7 +1231,7 @@ void CameraUI::slotlastPhotoFirst()
         item = dynamic_cast<CameraIconItem*>(item->nextItem());
     }
 
-    refreshIconView(map);
+    slotRefreshIconView(map);
 }
 
 void CameraUI::slotThumbnail(const QString& folder, const QString& file,

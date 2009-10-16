@@ -70,6 +70,7 @@ public:
         autoAlbumDateCheck        = 0;
         autoAlbumExtCheck         = 0;
         controller                = 0;
+        historyUpdater            = 0;
         view                      = 0;
         renameCustomizer          = 0;
         anim                      = 0;
@@ -197,6 +198,7 @@ public:
     SidebarSplitter              *splitter;
 
     CameraController             *controller;
+    CameraHistoryUpdater         *historyUpdater;
 
     CameraIconView               *view;
 
