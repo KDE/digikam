@@ -1644,6 +1644,12 @@ QList<QRect> SearchFieldChoice::valueWidgetRects() const
 /*
 class SearchFieldChoice : public SearchField
 {
+    // Note: Someone added this space on purpose (Marcel?)
+    // It seems that automoc4 is not recognizing this macro to be in a comment
+    // block and therefore will fail when parsing this file. Adding a space to the
+    // macro name will fix this issue. When uncommenting this block again, make sure to
+    // fix the macro name of course.
+
     Q_OBJ ECT
 
 public:
