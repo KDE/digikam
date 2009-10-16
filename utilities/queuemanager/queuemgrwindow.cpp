@@ -1000,7 +1000,7 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
                     break;
                 }
                 default:    // Overwrite.
-                    addHistoryMessage(i18n("Item overwrited..."), DHistoryView::WarningEntry);
+                    addHistoryMessage(i18n("Item overwritten..."), DHistoryView::WarningEntry);
                     break;
             }
         }
@@ -1022,7 +1022,7 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
             {
                 d->currentProcessItem->setDestFileName(dest.fileName());
                 d->currentProcessItem->setDone();
-                addHistoryMessage(i18n("Item processed successfuly..."), DHistoryView::SuccessEntry);
+                addHistoryMessage(i18n("Item processed successfully..."), DHistoryView::SuccessEntry);
             }
 
             // TODO: assign attributes from original image.

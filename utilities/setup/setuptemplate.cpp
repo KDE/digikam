@@ -236,7 +236,7 @@ void SetupTemplate::slotAddTemplate()
 
     if (d->listView->find(title))
     {
-        KMessageBox::error(this, i18n("A metadata template named '%1' already exist.", title));
+        KMessageBox::error(this, i18n("A metadata template named '%1' already exists.", title));
         return;
     }
 

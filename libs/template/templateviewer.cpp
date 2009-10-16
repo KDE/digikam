@@ -218,7 +218,7 @@ TemplateViewer::TemplateViewer(QWidget* parent=0)
     d->labelContactPhone         = new DTextBrowser(QString(), w3);
     d->contactEmail              = new DTextLabelName(i18n("Email:"), w3);
     d->labelContactEmail         = new KUrlLabel(w3);
-    d->contactWebUrl             = new DTextLabelName(i18n("Url:"), w3);
+    d->contactWebUrl             = new DTextLabelName(i18n("URL:"), w3);
     d->labelContactWebUrl        = new KUrlLabel(w3);
 
     d->contactAddress->setAlignment(Qt::AlignLeft | Qt::AlignTop);

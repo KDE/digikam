@@ -256,8 +256,8 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     d->blurInput1->input()->setRange(0.0, 1000.0, 1.0, true);
     d->blurInput1->setDefaultValue(500.0);
     d->blurInput1->setObjectName("blurInput1");
-    d->blurInput1->setWhatsThis(i18n("<b>Blur</b>: How strong the image is blured before combining with the original "
-                                     "image with the tonemapping function."));
+    d->blurInput1->setWhatsThis(i18n("<b>Blur</b>: How strong the image is blurred before combining with the original "
+                                     "image and with the tonemapping function."));
 
     grid2->addWidget(d->stageOne,    0, 0, 1, 1);
     grid2->addWidget(d->label4,      1, 0, 1, 1);
@@ -296,8 +296,8 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     d->blurInput2->input()->setRange(0.0, 1000.0, 1.0, true);
     d->blurInput2->setDefaultValue(500.0);
     d->blurInput2->setObjectName("blurInput2");
-    d->blurInput2->setWhatsThis(i18n("<b>Blur</b>: How strong the image is blured before combining with the original "
-                                     "image with the tonemapping function."));
+    d->blurInput2->setWhatsThis(i18n("<b>Blur</b>: How strong the image is blurred before combining with the original "
+                                     "image and with the tonemapping function."));
 
     grid3->addWidget(d->stageTwo,    0, 0, 1, 1);
     grid3->addWidget(d->label6,      1, 0, 1, 1);
@@ -336,8 +336,8 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     d->blurInput3->input()->setRange(0.0, 1000.0, 1.0, true);
     d->blurInput3->setDefaultValue(500.0);
     d->blurInput3->setObjectName("blurInput3");
-    d->blurInput3->setWhatsThis(i18n("<b>Blur</b>: How strong the image is blured before combining with the original "
-                                     "image with the tonemapping function."));
+    d->blurInput3->setWhatsThis(i18n("<b>Blur</b>: How strong the image is blurred before combining with the original "
+                                     "image and with the tonemapping function."));
 
     grid4->addWidget(d->stageThree,  0, 0, 1, 1);
     grid4->addWidget(d->label8,      1, 0, 1, 1);
@@ -376,8 +376,8 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     d->blurInput4->input()->setRange(0.0, 1000.0, 1.0, true);
     d->blurInput4->setDefaultValue(500.0);
     d->blurInput4->setObjectName("blurInput4");
-    d->blurInput4->setWhatsThis(i18n("<b>Blur</b>: How strong the image is blured before combining with the original "
-                                     "image with the tonemapping function."));
+    d->blurInput4->setWhatsThis(i18n("<b>Blur</b>: How strong the image is blurred before combining with the original "
+                                     "image and with the tonemapping function."));
 
     grid5->addWidget(d->stageFour,   0, 0, 1, 1);
     grid5->addWidget(d->label10,     1, 0, 1, 1);

@@ -341,7 +341,7 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
                             "<p>Simulate black and white film exposure using a yellow-green filter. "
                             "A yellow-green filter is highly effective for outdoor portraits because "
                             "red is rendered dark while green appears lighter. Great for correcting skin tones, "
-                            "bring out facial expressions in close-ups and emphasizing the feeling of liveliness. "
+                            "bringing out facial expressions in close-ups and emphasizing the feeling of liveliness. "
                             "This filter is highly effective for indoor portraits under tungsten lighting.</p>"));
 
     ++type;

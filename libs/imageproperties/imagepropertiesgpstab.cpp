@@ -136,7 +136,7 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     d->detailsCombo = new KComboBox(box2);
     d->detailsBtn   = new QToolButton(box2);
     d->detailsBtn->setIcon(SmallIcon("internet-web-browser"));
-    d->detailsBtn->setToolTip(i18n("See more info on the internet"));
+    d->detailsBtn->setToolTip(i18n("See more info on the Internet"));
     d->detailsCombo->setMaximumHeight( fontMetrics().height()+4 );
     d->detailsCombo->insertItem(MapQuest,      QString("MapQuest"));
     d->detailsCombo->insertItem(GoogleMaps,    QString("Google Maps"));

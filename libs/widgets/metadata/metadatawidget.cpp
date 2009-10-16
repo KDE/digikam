@@ -125,7 +125,7 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
     simpleLevel->setCheckable(true);
 #if KEXIV2_VERSION >= 0x010000
     simpleLevel->setWhatsThis(i18n("Switch the tags view to a custom human-readable list. "
-                                   "To customize tags filter list, go to Metadata configuration panel."));
+                                   "To customize the tag filter list, go to the Metadata configuration panel."));
     simpleLevel->setToolTip(i18n("Custom list"));
 #else
     simpleLevel->setWhatsThis(i18n("Switch the tags view to a human-readable list"));

@@ -130,12 +130,12 @@ TemplatePanel::TemplatePanel(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label2         = new QLabel(i18n("Authors Position:"), page1);
+    QLabel *label2         = new QLabel(i18n("Authors' Positions:"), page1);
     d->authorsPositionEdit = new KLineEdit(page1);
     d->authorsPositionEdit->setClearButtonShown(true);
     d->authorsPositionEdit->setClickMessage(i18n("Enter the job titles of the authors here."));
     label2->setBuddy(d->authorsPositionEdit);
-    d->authorsPositionEdit->setWhatsThis(i18n("<p>This field should contain the job title of the authors. Examples might include "
+    d->authorsPositionEdit->setWhatsThis(i18n("<p>This field should contain the job titles of the authors. Examples might include "
                                               "titles such as: Staff Photographer, Freelance Photographer, or Independent Commercial "
                                               "Photographer. Since this is a qualifier for the Author field, the Author field must also "
                                               "be filled out.</p>"
@@ -248,17 +248,17 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     d->locationCountryCodeEdit = new CountrySelector(page2);
     label9->setBuddy(d->locationCountryCodeEdit);
     d->locationCountryCodeEdit->setWhatsThis(i18n("<p>Select here the country "
-                                                  "where the photograph has been taken.</p>"));
+                                                  "where the photograph was taken.</p>"));
 
     // --------------------------------------------------------
 
     QLabel *label10              = new QLabel(i18n("Province State:"), page2);
     d->locationProvinceStateEdit = new KLineEdit(page2);
     d->locationProvinceStateEdit->setClearButtonShown(true);
-    d->locationProvinceStateEdit->setClickMessage(i18n("Enter the province state of contents here."));
+    d->locationProvinceStateEdit->setClickMessage(i18n("Enter the province or state of contents here."));
     label10->setBuddy(d->locationProvinceStateEdit);
-    d->locationProvinceStateEdit->setWhatsThis(i18n("<p>This field should contain the province state "
-                                                    "where the photograph has been taken.</p>"));
+    d->locationProvinceStateEdit->setWhatsThis(i18n("<p>This field should contain the province or state "
+                                                    "where the photograph was taken.</p>"));
 
     // --------------------------------------------------------
 
@@ -267,18 +267,18 @@ TemplatePanel::TemplatePanel(QWidget* parent)
     d->locationCityEdit->setClearButtonShown(true);
     d->locationCityEdit->setClickMessage(i18n("Enter the city of contents here."));
     label11->setBuddy(d->locationCityEdit);
-    d->locationCityEdit->setWhatsThis(i18n("<p>This field should contain the city name "
-                                           "where the photograph has been taken.</p>"));
+    d->locationCityEdit->setWhatsThis(i18n("<p>This field should contain the name of the city "
+                                           "where the photograph was taken.</p>"));
 
     // --------------------------------------------------------
 
     QLabel *label12            = new QLabel(i18n("Sublocation:"), page2);
     d->locationSublocationEdit = new KLineEdit(page2);
     d->locationSublocationEdit->setClearButtonShown(true);
-    d->locationSublocationEdit->setClickMessage(i18n("Enter the sublocation place of contents here."));
+    d->locationSublocationEdit->setClickMessage(i18n("Enter the city sublocation of contents here."));
     label12->setBuddy(d->locationSublocationEdit);
-    d->locationSublocationEdit->setWhatsThis(i18n("<p>This field should contain the sublocation from the city "
-                                                  "where the photograph has been taken.</p>"));
+    d->locationSublocationEdit->setWhatsThis(i18n("<p>This field should contain the sublocation of the city "
+                                                  "where the photograph was taken.</p>"));
 
     // --------------------------------------------------------
 
@@ -373,7 +373,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label20      = new QLabel(i18n("Url:"), page3);
+    QLabel *label20      = new QLabel(i18n("URL:"), page3);
     d->contactWebUrlEdit = new KLineEdit(page3);
     d->contactWebUrlEdit->setClearButtonShown(true);
     d->contactWebUrlEdit->setClickMessage(i18n("Enter the web site URL of the lead author here."));

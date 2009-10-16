@@ -1009,7 +1009,7 @@ void ICCProofTool::getICCInfo(const IccProfile& profile)
     if (profile.isNull())
     {
         KMessageBox::error(kapp->activeWindow(),
-                           i18n("Sorry, there is no profile data"), i18n("Profile Error"));
+                           i18n("No profile data can be found."), i18n("Profile Error"));
         return;
     }
 

@@ -81,11 +81,11 @@ TemplateSelector::TemplateSelector(QWidget* parent=0)
     d->setupButton   = new QToolButton(this);
     d->setupButton->setIcon(SmallIcon("document-edit"));
     d->setupButton->setWhatsThis(i18n("Open metadata template editor"));
-    d->templateCombo->setWhatsThis(i18n("<p>Select here the action to do with metadata template.</p>"
-                                        "<p><b>To remove</b>: delete template already assigned.</p>"
-                                        "<p><b>Don't change</b>: Do not touch template information.</p>"
+    d->templateCombo->setWhatsThis(i18n("<p>Select here the action to perform using the metadata template.</p>"
+                                        "<p><b>To remove</b>: delete already-assigned template.</p>"
+                                        "<p><b>Do not change</b>: Do not touch template information.</p>"
                                         "<p>All other values are template titles managed by digiKam. "
-                                        "Select one will assign information as well.</p>"));
+                                        "Selecting one will assign information as well.</p>"));
 
     setSpacing(KDialog::spacingHint());
     setMargin(0);
@@ -119,7 +119,7 @@ void TemplateSelector::populateTemplates()
 {
     d->templateCombo->clear();
     d->templateCombo->insertSqueezedItem(i18n("To remove"),    REMOVETEMPLATE);
-    d->templateCombo->insertSqueezedItem(i18n("Don't change"), DONTCHANGE);
+    d->templateCombo->insertSqueezedItem(i18n("Do not change"), DONTCHANGE);
     d->templateCombo->insertSeparator(DONTCHANGE+1);
 
     TemplateManager* tm = TemplateManager::defaultManager();

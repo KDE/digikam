@@ -228,7 +228,7 @@ void ImageCategoryDrawer::textForFormat(const QModelIndex& index, QString *heade
     *header = format;
 
     int count  = d->view->categoryRange(index).height();
-    *subLine = i18n("%1 Items", count);
+    *subLine = i18np("1 Item", "%1 Items", count);
 }
 
 void ImageCategoryDrawer::textForPAlbum(PAlbum *album, bool recursive, int count, QString *header, QString *subLine) const
@@ -272,9 +272,14 @@ void ImageCategoryDrawer::textForTAlbum(TAlbum *talbum, bool recursive, int coun
         int n=0;
         for (AlbumIterator it(talbum); it.current(); ++it)
             n++;
-        *subLine = i18ncp("%2: a tag title; %3: number of subtags; %1: number of items in tag",
-                         "%2 including %3 subtags - 1 Item", "%2 including %3 subtags - %1 Items",
-                         count, talbum->tagPath(false), n);
+
+        QString firstPart = i18ncp("%2: a tag title; %3: number of subtags",
+                                   "%2 including 1 subtag", "%2 including %1 subtags",
+                                   n, talbum->tagPath(false));
+
+        *subLine = i18ncp("%2: the previous string (e.g. 'Foo including 7 subtags'); %1: number of items in tag",
+                         "%2 - 1 Item", "%2 - %1 Items",
+                         count, firstPart);
     }
     else
     {
