@@ -88,8 +88,8 @@ CameraHistoryUpdater::~CameraHistoryUpdater()
 void CameraHistoryUpdater::slotCancel()
 {
     d->canceled = true;
-    d->updateItems.clear();
     QMutexLocker lock(&d->mutex);
+    d->updateItems.clear();
 }
 
 void CameraHistoryUpdater::run()
