@@ -67,14 +67,13 @@ class InfraredToolPriv
 {
 public:
 
-    InfraredToolPriv()
-    {
-        addFilmGrain          = 0;
-        sensibilitySlider     = 0;
-        sensibilityLCDValue   = 0;
-        previewWidget         = 0;
-        gboxSettings          = 0;
-    }
+    InfraredToolPriv() :
+        addFilmGrain(0),
+        sensibilitySlider(0),
+        sensibilityLCDValue(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
 
     QCheckBox*          addFilmGrain;
     QSlider*            sensibilitySlider;

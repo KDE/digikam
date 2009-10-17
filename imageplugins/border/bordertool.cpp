@@ -71,21 +71,46 @@ class BorderToolPriv
 {
 public:
 
-    BorderToolPriv()
-    {
-         preserveAspectRatio  = 0;
-         labelBackground      = 0;
-         labelBorderPercent   = 0;
-         labelBorderWidth     = 0;
-         labelForeground      = 0;
-         firstColorButton     = 0;
-         secondColorButton    = 0;
-         gboxSettings         = 0;
-         previewWidget        = 0;
-         borderType           = 0;
-         borderPercent        = 0;
-         borderWidth          = 0;
-    }
+    BorderToolPriv() :
+        configGroupName("border Tool"),
+        configBorderTypeEntry("Border Type"),
+        configBorderPercentEntry("Border Percent"),
+        configBorderWidthEntry("Border Width"),
+        configPreserveAspectRatioEntry("Preserve Aspect Ratio"),
+        configSolidColorEntry("Solid Color"),
+        configNiepceBorderColorEntry("Niepce Border Color"),
+        configNiepceLineColorEntry("Niepce Line Color"),
+        configBevelUpperLeftColorEntry("Bevel Upper Left Color"),
+        configBevelLowerRightColorEntry("Bevel Lower Right Color"),
+        configDecorativeFirstColorEntry("Decorative First Color"),
+        configDecorativeSecondColorEntry("Decorative Second Color"),
+
+        preserveAspectRatio(0),
+        labelBackground(0),
+        labelBorderPercent(0),
+        labelBorderWidth(0),
+        labelForeground(0),
+        firstColorButton(0),
+        secondColorButton(0),
+        gboxSettings(0),
+        previewWidget(0),
+        borderType(0),
+        borderPercent(0),
+        borderWidth(0)
+        {}
+
+    const QString       configGroupName;
+    const QString       configBorderTypeEntry;
+    const QString       configBorderPercentEntry;
+    const QString       configBorderWidthEntry;
+    const QString       configPreserveAspectRatioEntry;
+    const QString       configSolidColorEntry;
+    const QString       configNiepceBorderColorEntry;
+    const QString       configNiepceLineColorEntry;
+    const QString       configBevelUpperLeftColorEntry;
+    const QString       configBevelLowerRightColorEntry;
+    const QString       configDecorativeFirstColorEntry;
+    const QString       configDecorativeSecondColorEntry;
 
     QCheckBox*          preserveAspectRatio;
 
@@ -255,27 +280,27 @@ BorderTool::~BorderTool()
 void BorderTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("border Tool");
+    KConfigGroup group = config->group(d->configGroupName);
 
     blockWidgetSignals(true);
 
-    d->borderType->setCurrentIndex(group.readEntry("Border Type", d->borderType->defaultIndex()));
-    d->borderPercent->setValue(group.readEntry("Border Percent", d->borderPercent->defaultValue()));
-    d->borderWidth->setValue(group.readEntry("Border Width", d->borderWidth->defaultValue()));
-    d->preserveAspectRatio->setChecked(group.readEntry("Preserve Aspect Ratio", true));
+    d->borderType->setCurrentIndex(group.readEntry(d->configBorderTypeEntry, d->borderType->defaultIndex()));
+    d->borderPercent->setValue(group.readEntry(d->configBorderPercentEntry,  d->borderPercent->defaultValue()));
+    d->borderWidth->setValue(group.readEntry(d->configBorderWidthEntry,      d->borderWidth->defaultValue()));
+    d->preserveAspectRatio->setChecked(group.readEntry(d->configPreserveAspectRatioEntry, true));
 
     QColor black(0, 0, 0);
     QColor white(255, 255, 255);
     QColor gray1(192, 192, 192);
     QColor gray2(128, 128, 128);
 
-    d->solidColor = group.readEntry("Solid Color", black);
-    d->niepceBorderColor = group.readEntry("Niepce Border Color", white);
-    d->niepceLineColor = group.readEntry("Niepce Line Color", black);
-    d->bevelUpperLeftColor = group.readEntry("Bevel Upper Left Color", gray1);
-    d->bevelLowerRightColor = group.readEntry("Bevel Lower Right Color", gray2);
-    d->decorativeFirstColor = group.readEntry("Decorative First Color", black);
-    d->decorativeSecondColor = group.readEntry("Decorative Second Color", black);
+    d->solidColor = group.readEntry(d->configSolidColorEntry,                       black);
+    d->niepceBorderColor = group.readEntry(d->configNiepceBorderColorEntry,         white);
+    d->niepceLineColor = group.readEntry(d->configNiepceLineColorEntry,             black);
+    d->bevelUpperLeftColor = group.readEntry(  d->configBevelUpperLeftColorEntry,   gray1);
+    d->bevelLowerRightColor = group.readEntry( d->configBevelLowerRightColorEntry,  gray2);
+    d->decorativeFirstColor = group.readEntry( d->configDecorativeFirstColorEntry,  black);
+    d->decorativeSecondColor = group.readEntry(d->configDecorativeSecondColorEntry, black);
 
     blockWidgetSignals(false);
 
@@ -285,20 +310,20 @@ void BorderTool::readSettings()
 void BorderTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("border Tool");
+    KConfigGroup group = config->group(d->configGroupName);
 
-    group.writeEntry("Border Type", d->borderType->currentIndex());
-    group.writeEntry("Border Percent", d->borderPercent->value());
-    group.writeEntry("Border Width", d->borderWidth->value());
-    group.writeEntry("Preserve Aspect Ratio", d->preserveAspectRatio->isChecked());
+    group.writeEntry(d->configBorderTypeEntry,          d->borderType->currentIndex());
+    group.writeEntry(d->configBorderPercentEntry,       d->borderPercent->value());
+    group.writeEntry(d->configBorderWidthEntry,         d->borderWidth->value());
+    group.writeEntry(d->configPreserveAspectRatioEntry, d->preserveAspectRatio->isChecked());
 
-    group.writeEntry("Solid Color", d->solidColor);
-    group.writeEntry("Niepce Border Color", d->niepceBorderColor);
-    group.writeEntry("Niepce Line Color", d->niepceLineColor);
-    group.writeEntry("Bevel Upper Left Color", d->bevelUpperLeftColor);
-    group.writeEntry("Bevel Lower Right Color", d->bevelLowerRightColor);
-    group.writeEntry("Decorative First Color", d->decorativeFirstColor);
-    group.writeEntry("Decorative Second Color", d->decorativeSecondColor);
+    group.writeEntry(d->configSolidColorEntry,            d->solidColor);
+    group.writeEntry(d->configNiepceBorderColorEntry,     d->niepceBorderColor);
+    group.writeEntry(d->configNiepceLineColorEntry,       d->niepceLineColor);
+    group.writeEntry(d->configBevelUpperLeftColorEntry,   d->bevelUpperLeftColor);
+    group.writeEntry(d->configBevelLowerRightColorEntry,  d->bevelLowerRightColor);
+    group.writeEntry(d->configDecorativeFirstColorEntry,  d->decorativeFirstColor);
+    group.writeEntry(d->configDecorativeSecondColorEntry, d->decorativeSecondColor);
 
     d->previewWidget->writeSettings();
 

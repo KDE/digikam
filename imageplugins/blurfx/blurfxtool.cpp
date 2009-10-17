@@ -69,17 +69,27 @@ class BlurFXToolPriv
 {
 public:
 
-    BlurFXToolPriv()
-    {
-       effectTypeLabel = 0;
-       distanceLabel   = 0;
-       levelLabel      = 0;
-       effectType      = 0;
-       distanceInput   = 0;
-       levelInput      = 0;
-       previewWidget   = 0;
-       gboxSettings    = 0;
-    }
+    BlurFXToolPriv() :
+        configGroupName("blurfx Tool"),
+        configEffectTypeEntry("EffectType"),
+        configDistanceAdjustmentEntry("DistanceAdjustment"),
+        configLevelAdjustmentEntry("LevelAdjustment"),
+
+        effectTypeLabel(0),
+        distanceLabel(0),
+        levelLabel(0),
+        effectType(0),
+        distanceInput(0),
+        levelInput(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
+
+
+    const QString       configGroupName;
+    const QString       configEffectTypeEntry;
+    const QString       configDistanceAdjustmentEntry;
+    const QString       configLevelAdjustmentEntry;
 
     QLabel*             effectTypeLabel;
     QLabel*             distanceLabel;
@@ -229,13 +239,13 @@ void BlurFXTool::renderingFinished()
 void BlurFXTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("blurfx Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
 
     blockWidgetSignals(true);
 
-    d->effectType->setCurrentIndex(group.readEntry("EffectType", d->effectType->defaultIndex()));
-    d->distanceInput->setValue(group.readEntry("DistanceAdjustment", d->distanceInput->defaultValue()));
-    d->levelInput->setValue(group.readEntry("LevelAdjustment",d->levelInput->defaultValue()));
+    d->effectType->setCurrentIndex(group.readEntry(d->configEffectTypeEntry,     d->effectType->defaultIndex()));
+    d->distanceInput->setValue(group.readEntry(d->configDistanceAdjustmentEntry, d->distanceInput->defaultValue()));
+    d->levelInput->setValue(group.readEntry(d->configLevelAdjustmentEntry,       d->levelInput->defaultValue()));
 
     blockWidgetSignals(false);
 }
@@ -243,10 +253,11 @@ void BlurFXTool::readSettings()
 void BlurFXTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("blurfx Tool");
-    group.writeEntry("EffectType", d->effectType->currentIndex());
-    group.writeEntry("DistanceAdjustment", d->distanceInput->value());
-    group.writeEntry("LevelAdjustment", d->levelInput->value());
+    KConfigGroup group        = config->group(d->configGroupName);
+
+    group.writeEntry(d->configEffectTypeEntry,         d->effectType->currentIndex());
+    group.writeEntry(d->configDistanceAdjustmentEntry, d->distanceInput->value());
+    group.writeEntry(d->configLevelAdjustmentEntry,    d->levelInput->value());
     d->previewWidget->writeSettings();
     group.sync();
 }

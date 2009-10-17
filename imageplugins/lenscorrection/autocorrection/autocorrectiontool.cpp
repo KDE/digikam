@@ -67,19 +67,18 @@ class AutoCorrectionToolPriv
 {
 public:
 
-    AutoCorrectionToolPriv()
-    {
-        maskPreviewLabel  = 0;
-        showGrid          = 0;
-        filterCCA         = 0;
-        filterVig         = 0;
-        filterCCI         = 0;
-        filterDist        = 0;
-        filterGeom        = 0;
-        cameraSelector    = 0;
-        previewWidget     = 0;
-        gboxSettings      = 0;
-    }
+    AutoCorrectionToolPriv() :
+        maskPreviewLabel(0),
+        showGrid(0),
+        filterCCA(0),
+        filterVig(0),
+        filterCCI(0),
+        filterDist(0),
+        filterGeom(0),
+        cameraSelector(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
 
     QLabel*             maskPreviewLabel;
 

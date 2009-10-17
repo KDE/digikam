@@ -91,31 +91,35 @@ public:
 
 public:
 
-    ContentAwareResizeToolPriv()
-    {
-        preserveRatioBox  = 0;
-        weightMaskBox     = 0;
-        preserveSkinTones = 0;
-        previewWidget     = 0;
-        gboxSettings      = 0;
-        wInput            = 0;
-        hInput            = 0;
-        stepInput         = 0;
-        wpInput           = 0;
-        hpInput           = 0;
-        mixedRescaleInput = 0;
-        rigidityInput     = 0;
-        funcInput         = 0;
-        resizeOrderInput  = 0;
-        redMaskTool       = 0;
-        greenMaskTool     = 0;
-        eraseMaskTool     = 0;
-        maskGroup         = 0;
-        prevW             = 0;
-        prevH             = 0;
-        maskPenSize       = 0;
-        expanderBox       = 0;
-    }
+    ContentAwareResizeToolPriv() :
+        orgWidth(0),
+        orgHeight(0),
+        prevW(0),
+        prevH(0),
+        prevWP(0),
+        prevHP(0),
+        preserveRatioBox(0),
+        weightMaskBox(0),
+        preserveSkinTones(0),
+        previewWidget(0),
+        gboxSettings(0),
+        wInput(0),
+        hInput(0),
+        stepInput(0),
+        maskPenSize(0),
+        sideSwitchInput(0),
+        wpInput(0),
+        hpInput(0),
+        mixedRescaleInput(0),
+        rigidityInput(0),
+        funcInput(0),
+        resizeOrderInput(0),
+        expanderBox(0),
+        redMaskTool(0),
+        greenMaskTool(0),
+        eraseMaskTool(0),
+        maskGroup(0)
+        {}
 
     int                 orgWidth;
     int                 orgHeight;

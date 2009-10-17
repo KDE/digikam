@@ -86,15 +86,14 @@ class InPaintingToolPriv
 {
 public:
 
-    InPaintingToolPriv()
-    {
-        isComputed        = false;
-        mainTab           = 0;
-        inpaintingTypeCB  = 0;
-        settingsWidget    = 0;
-        previewWidget     = 0;
-        gboxSettings      = 0;
-    }
+    InPaintingToolPriv() :
+        isComputed(false),
+        mainTab(0),
+        inpaintingTypeCB(0),
+        settingsWidget(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
 
     bool                  isComputed;
 

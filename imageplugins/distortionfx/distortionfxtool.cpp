@@ -76,17 +76,16 @@ class DistortionFXToolPriv
 {
 public:
 
-    DistortionFXToolPriv()
-    {
-        effectTypeLabel   = 0;
-        levelLabel        = 0;
-        iterationLabel    = 0;
-        effectType        = 0;
-        levelInput        = 0;
-        iterationInput    = 0;
-        previewWidget     = 0;
-        gboxSettings      = 0;
-    }
+    DistortionFXToolPriv() :
+        effectTypeLabel(0),
+        levelLabel(0),
+        iterationLabel(0),
+        effectType(0),
+        levelInput(0),
+        iterationInput(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
 
     QLabel*             effectTypeLabel;
     QLabel*             levelLabel;

@@ -65,13 +65,12 @@ class FilmGrainToolPriv
 {
 public:
 
-    FilmGrainToolPriv()
-    {
-        sensibilitySlider   = 0;
-        sensibilityLCDValue = 0;
-        previewWidget       = 0;
-        gboxSettings        = 0;
-    }
+    FilmGrainToolPriv() :
+        sensibilitySlider(0),
+        sensibilityLCDValue(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
 
     QSlider*            sensibilitySlider;
 

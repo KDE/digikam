@@ -67,13 +67,12 @@ class OilPaintToolPriv
 {
 public:
 
-    OilPaintToolPriv()
-    {
-        brushSizeInput = 0;
-        smoothInput    = 0;
-        previewWidget  = 0;
-        gboxSettings   = 0;
-    }
+    OilPaintToolPriv() :
+        brushSizeInput(0),
+        smoothInput(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
 
     RIntNumInput*       brushSizeInput;
     RIntNumInput*       smoothInput;

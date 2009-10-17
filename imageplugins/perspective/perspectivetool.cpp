@@ -71,20 +71,19 @@ class PerspectiveToolPriv
 {
 public:
 
-    PerspectiveToolPriv()
-    {
-        newWidthLabel             = 0;
-        newHeightLabel            = 0;
-        topLeftAngleLabel         = 0;
-        topRightAngleLabel        = 0;
-        bottomLeftAngleLabel      = 0;
-        bottomRightAngleLabel     = 0;
-        drawWhileMovingCheckBox   = 0;
-        drawGridCheckBox          = 0;
-        inverseTransformation     = 0;
-        previewWidget             = 0;
-        gboxSettings              = 0;
-    }
+    PerspectiveToolPriv() :
+        newWidthLabel(0),
+        newHeightLabel(0),
+        topLeftAngleLabel(0),
+        topRightAngleLabel(0),
+        bottomLeftAngleLabel(0),
+        bottomRightAngleLabel(0),
+        drawWhileMovingCheckBox(0),
+        drawGridCheckBox(0),
+        inverseTransformation(0),
+        previewWidget(0),
+        gboxSettings(0)
+    {}
 
     QLabel*             newWidthLabel;
     QLabel*             newHeightLabel;

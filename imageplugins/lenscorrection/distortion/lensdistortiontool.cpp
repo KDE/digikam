@@ -73,16 +73,15 @@ class LensDistortionToolPriv
 {
 public:
 
-    LensDistortionToolPriv()
-    {
-        maskPreviewLabel  = 0;
-        mainInput         = 0;
-        edgeInput         = 0;
-        rescaleInput      = 0;
-        brightenInput     = 0;
-        previewWidget     = 0;
-        gboxSettings      = 0;
-    }
+    LensDistortionToolPriv() :
+        maskPreviewLabel(0),
+        mainInput(0),
+        edgeInput(0),
+        rescaleInput(0),
+        brightenInput(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
 
     QLabel*              maskPreviewLabel;
 

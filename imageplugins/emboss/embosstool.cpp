@@ -65,12 +65,11 @@ class EmbossToolPriv
 {
 public:
 
-    EmbossToolPriv()
-    {
-        depthInput    = 0;
-        previewWidget = 0;
-        gboxSettings  = 0;
-    }
+    EmbossToolPriv() :
+        depthInput(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
 
     RIntNumInput*       depthInput;
     ImagePanelWidget*   previewWidget;

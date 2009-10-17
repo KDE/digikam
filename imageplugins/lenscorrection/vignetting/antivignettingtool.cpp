@@ -73,18 +73,17 @@ class AntiVignettingToolPriv
 {
 public:
 
-    AntiVignettingToolPriv()
-    {
-        maskPreviewLabel  = 0;
-        brightnessInput   = 0;
-        contrastInput     = 0;
-        gammaInput        = 0;
-        densityInput      = 0;
-        powerInput        = 0;
-        radiusInput       = 0;
-        previewWidget     = 0;
-        gboxSettings      = 0;
-    }
+    AntiVignettingToolPriv() :
+        maskPreviewLabel(0),
+        brightnessInput(0),
+        contrastInput(0),
+        gammaInput(0),
+        densityInput(0),
+        powerInput(0),
+        radiusInput(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
 
     QLabel*             maskPreviewLabel;
 

@@ -86,18 +86,31 @@ class ColorFXToolPriv
 {
 public:
 
-    ColorFXToolPriv()
-    {
-        destinationPreviewData = 0;
-        effectTypeLabel        = 0;
-        levelLabel             = 0;
-        iterationLabel         = 0;
-        effectType             = 0;
-        levelInput             = 0;
-        iterationInput         = 0;
-        previewWidget          = 0;
-        gboxSettings           = 0;
-    }
+    ColorFXToolPriv() :
+        configGroupName("coloreffect Tool"),
+        configHistogramChannelEntry("Histogram Channel"),
+        configHistogramScaleEntry("Histogram Scale"),
+        configEffectTypeEntry("EffectType"),
+        configLevelAdjustmentEntry("LevelAdjustment"),
+        configIterationAdjustmentEntry("IterationAdjustment"),
+
+        destinationPreviewData(0),
+        effectTypeLabel(0),
+        levelLabel(0),
+        iterationLabel(0),
+        effectType(0),
+        levelInput(0),
+        iterationInput(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
+
+    const QString        configGroupName;
+    const QString        configHistogramChannelEntry;
+    const QString        configHistogramScaleEntry;
+    const QString        configEffectTypeEntry;
+    const QString        configLevelAdjustmentEntry;
+    const QString        configIterationAdjustmentEntry;
 
     uchar*               destinationPreviewData;
 
@@ -171,12 +184,12 @@ ColorFXTool::ColorFXTool(QObject* parent)
     // -------------------------------------------------------------
 
     QGridLayout* mainLayout = new QGridLayout();
-    mainLayout->addWidget(d->effectTypeLabel,  0, 0, 1, 5);
-    mainLayout->addWidget(d->effectType,       1, 0, 1, 5);
-    mainLayout->addWidget(d->levelLabel,       2, 0, 1, 5);
-    mainLayout->addWidget(d->levelInput,       3, 0, 1, 5);
-    mainLayout->addWidget(d->iterationLabel,   4, 0, 1, 5);
-    mainLayout->addWidget(d->iterationInput,   5, 0, 1, 5);
+    mainLayout->addWidget(d->effectTypeLabel, 0, 0, 1, 5);
+    mainLayout->addWidget(d->effectType,      1, 0, 1, 5);
+    mainLayout->addWidget(d->levelLabel,      2, 0, 1, 5);
+    mainLayout->addWidget(d->levelInput,      3, 0, 1, 5);
+    mainLayout->addWidget(d->iterationLabel,  4, 0, 1, 5);
+    mainLayout->addWidget(d->iterationInput,  5, 0, 1, 5);
     mainLayout->setRowStretch(6, 10);
     mainLayout->setMargin(d->gboxSettings->spacingHint());
     mainLayout->setSpacing(d->gboxSettings->spacingHint());
@@ -216,28 +229,30 @@ ColorFXTool::~ColorFXTool()
 void ColorFXTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("coloreffect Tool");
+    KConfigGroup group = config->group(d->configGroupName);
 
-    d->gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
+    d->gboxSettings->histogramBox()->setChannel(group.readEntry(d->configHistogramChannelEntry,
                         (int)LuminosityChannel));
-    d->gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
+    d->gboxSettings->histogramBox()->setScale(group.readEntry(d->configHistogramScaleEntry,
                         (int)LogScaleHistogram));
 
-    d->effectType->setCurrentIndex(group.readEntry("EffectType", d->effectType->defaultIndex()));
-    d->levelInput->setValue(group.readEntry("LevelAdjustment", d->levelInput->defaultValue()));
-    d->iterationInput->setValue(group.readEntry("IterationAdjustment", d->iterationInput->defaultValue()));
+    d->effectType->setCurrentIndex(group.readEntry(d->configEffectTypeEntry,       d->effectType->defaultIndex()));
+    d->levelInput->setValue(group.readEntry(d->configLevelAdjustmentEntry,         d->levelInput->defaultValue()));
+    d->iterationInput->setValue(group.readEntry(d->configIterationAdjustmentEntry, d->iterationInput->defaultValue()));
     slotEffectTypeChanged(d->effectType->currentIndex());  //check for enable/disable of iteration
 }
 
 void ColorFXTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("coloreffect Tool");
-    group.writeEntry("Histogram Channel", d->gboxSettings->histogramBox()->channel());
-    group.writeEntry("Histogram Scale", d->gboxSettings->histogramBox()->scale());
-    group.writeEntry("EffectType", d->effectType->currentIndex());
-    group.writeEntry("LevelAdjustment", d->levelInput->value());
-    group.writeEntry("IterationAdjustment", d->iterationInput->value());
+    KConfigGroup group = config->group(d->configGroupName);
+
+    group.writeEntry(d->configHistogramChannelEntry,    d->gboxSettings->histogramBox()->channel());
+    group.writeEntry(d->configHistogramScaleEntry,      d->gboxSettings->histogramBox()->scale());
+
+    group.writeEntry(d->configEffectTypeEntry,          d->effectType->currentIndex());
+    group.writeEntry(d->configLevelAdjustmentEntry,     d->levelInput->value());
+    group.writeEntry(d->configIterationAdjustmentEntry, d->iterationInput->value());
     d->previewWidget->writeSettings();
     group.sync();
 }

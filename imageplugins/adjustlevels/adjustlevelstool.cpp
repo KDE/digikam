@@ -89,31 +89,30 @@ class AdjustLevelsToolPriv
 {
 public:
 
-    AdjustLevelsToolPriv()
-    {
-        destinationPreviewData    = 0;
-        histoSegments             = 0;
-        currentPreviewMode        = 0;
-        pickerBox                 = 0;
-        resetButton               = 0;
-        autoButton                = 0;
-        pickBlack                 = 0;
-        pickGray                  = 0;
-        pickWhite                 = 0;
-        pickerColorButtonGroup    = 0;
-        minInput                  = 0;
-        maxInput                  = 0;
-        minOutput                 = 0;
-        maxOutput                 = 0;
-        gammaInput                = 0;
-        levelsHistogramWidget     = 0;
-        inputLevels               = 0;
-        outputLevels              = 0;
-        previewWidget             = 0;
-        levels                    = 0;
-        originalImage             = 0;
-        gboxSettings              = 0;
-    }
+    AdjustLevelsToolPriv() :
+        destinationPreviewData(0),
+        histoSegments(0),
+        currentPreviewMode(0),
+        pickerBox(0),
+        resetButton(0),
+        autoButton(0),
+        pickBlack(0),
+        pickGray(0),
+        pickWhite(0),
+        pickerColorButtonGroup(0),
+        minInput(0),
+        maxInput(0),
+        minOutput(0),
+        maxOutput(0),
+        gammaInput(0),
+        levelsHistogramWidget(0),
+        inputLevels(0),
+        outputLevels(0),
+        previewWidget(0),
+        levels(0),
+        originalImage(0),
+        gboxSettings(0)
+        {}
 
     uchar*               destinationPreviewData;
 

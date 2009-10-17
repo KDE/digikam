@@ -80,20 +80,19 @@ class InsertTextToolPriv
 {
 public:
 
-    InsertTextToolPriv()
-    {
-        alignTextMode     = 0;
-        defaultSizeFont   = 0;
-        borderText        = 0;
-        transparentText   = 0;
-        alignButtonGroup  = 0;
-        textRotation      = 0;
-        fontColorButton   = 0;
-        fontChooserWidget = 0;
-        textEdit          = 0;
-        previewWidget     = 0;
-        gboxSettings      = 0;
-    }
+    InsertTextToolPriv() :
+        alignTextMode(0),
+        defaultSizeFont(0),
+        borderText(0),
+        transparentText(0),
+        alignButtonGroup(0),
+        textRotation(0),
+        fontColorButton(0),
+        fontChooserWidget(0),
+        textEdit(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
 
     int                 alignTextMode;
     int                 defaultSizeFont;

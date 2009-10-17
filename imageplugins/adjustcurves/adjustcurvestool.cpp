@@ -89,17 +89,16 @@ class AdjustCurvesToolPriv
 {
 public:
 
-    AdjustCurvesToolPriv()
-    {
-        destinationPreviewData = 0;
-        histoSegments          = 0;
-        currentPreviewMode     = 0;
-        channelCB              = 0;
-        curvesBox              = 0;
-        previewWidget          = 0;
-        originalImage          = 0;
-        gboxSettings           = 0;
-    }
+    AdjustCurvesToolPriv() :
+        destinationPreviewData(0),
+        histoSegments(0),
+        currentPreviewMode(0),
+        channelCB(0),
+        curvesBox(0),
+        previewWidget(0),
+        originalImage(0),
+        gboxSettings(0)
+        {}
 
     uchar*               destinationPreviewData;
 

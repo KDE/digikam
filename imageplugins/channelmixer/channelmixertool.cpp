@@ -100,30 +100,65 @@ class ChannelMixerToolPriv
 {
 public:
 
-    ChannelMixerToolPriv()
-    {
-        destinationPreviewData = 0;
-        redRedGain             = 0.0;
-        redGreenGain           = 0.0;
-        redBlueGain            = 0.0;
-        greenRedGain           = 0.0;
-        greenGreenGain         = 0.0;
-        greenBlueGain          = 0.0;
-        blueRedGain            = 0.0;
-        blueGreenGain          = 0.0;
-        blueBlueGain           = 0.0;
-        blackRedGain           = 0.0;
-        blackGreenGain         = 0.0;
-        blackBlueGain          = 0.0;
-        resetButton            = 0;
-        preserveLuminosity     = 0;
-        monochrome             = 0;
-        redGain                = 0;
-        greenGain              = 0;
-        blueGain               = 0;
-        previewWidget          = 0;
-        gboxSettings           = 0;
-    }
+    ChannelMixerToolPriv() :
+        configGroupName("channelmixer Tool"),
+        configMonochromeEntry("Monochrome"),
+        configPreserveLuminosityEntry("PreserveLuminosity"),
+        configRedRedGainEntry("RedRedGain"),
+        configRedGreenGainEntry("RedGreenGain"),
+        configRedBlueGainEntry("RedBlueGain"),
+        configGreenRedGainEntry("GreenRedGain"),
+        configGreenGreenGainEntry("GreenGreenGain"),
+        configGreenBlueGainEntry("GreenBlueGain"),
+        configBlueRedGainEntry("BlueRedGain"),
+        configBlueGreenGainEntry("BlueGreenGain"),
+        configBlueBlueGainEntry("BlueBlueGain"),
+        configBlackRedGainEntry("BlackRedGain"),
+        configBlackGreenGainEntry("BlackGreenGain"),
+        configBlackBlueGainEntry("BlackBlueGain"),
+        configHistogramChannelEntry("Histogram Channel"),
+        configHistogramScaleEntry("Histogram Scale"),
+
+        destinationPreviewData(0),
+        redRedGain(0.0),
+        redGreenGain(0.0),
+        redBlueGain(0.0),
+        greenRedGain(0.0),
+        greenGreenGain(0.0),
+        greenBlueGain(0.0),
+        blueRedGain(0.0),
+        blueGreenGain(0.0),
+        blueBlueGain(0.0),
+        blackRedGain(0.0),
+        blackGreenGain(0.0),
+        blackBlueGain(0.0),
+        resetButton(0),
+        preserveLuminosity(0),
+        monochrome(0),
+        redGain(0),
+        greenGain(0),
+        blueGain(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
+
+    const QString       configGroupName;
+    const QString       configMonochromeEntry;
+    const QString       configPreserveLuminosityEntry;
+    const QString       configRedRedGainEntry;
+    const QString       configRedGreenGainEntry;
+    const QString       configRedBlueGainEntry;
+    const QString       configGreenRedGainEntry;
+    const QString       configGreenGreenGainEntry;
+    const QString       configGreenBlueGainEntry;
+    const QString       configBlueRedGainEntry;
+    const QString       configBlueGreenGainEntry;
+    const QString       configBlueBlueGainEntry;
+    const QString       configBlackRedGainEntry;
+    const QString       configBlackGreenGainEntry;
+    const QString       configBlackBlueGainEntry;
+    const QString       configHistogramChannelEntry;
+    const QString       configHistogramScaleEntry;
 
     uchar*              destinationPreviewData;
 
@@ -503,33 +538,33 @@ void ChannelMixerTool::slotChannelChanged()
 void ChannelMixerTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("channelmixer Tool");
+    KConfigGroup group = config->group(d->configGroupName);
 
-    d->monochrome->setChecked(group.readEntry("Monochrome", false));
-    d->preserveLuminosity->setChecked(group.readEntry("PreserveLuminosity", false));
+    d->monochrome->setChecked(group.readEntry(d->configMonochromeEntry,                 false));
+    d->preserveLuminosity->setChecked(group.readEntry(d->configPreserveLuminosityEntry, false));
 
-    d->redRedGain     = group.readEntry("RedRedGain", 1.0);
-    d->redGreenGain   = group.readEntry("RedGreenGain", 0.0);
-    d->redBlueGain    = group.readEntry("RedBlueGain", 0.0);
+    d->redRedGain     = group.readEntry(d->configRedRedGainEntry,   1.0);
+    d->redGreenGain   = group.readEntry(d->configRedGreenGainEntry, 0.0);
+    d->redBlueGain    = group.readEntry(d->configRedBlueGainEntry,  0.0);
 
-    d->greenRedGain   = group.readEntry("GreenRedGain", 0.0);
-    d->greenGreenGain = group.readEntry("GreenGreenGain", 1.0);
-    d->greenBlueGain  = group.readEntry("GreenBlueGain", 0.0);
+    d->greenRedGain   = group.readEntry(d->configGreenRedGainEntry,   0.0);
+    d->greenGreenGain = group.readEntry(d->configGreenGreenGainEntry, 1.0);
+    d->greenBlueGain  = group.readEntry(d->configGreenBlueGainEntry,  0.0);
 
-    d->blueRedGain    = group.readEntry("BlueRedGain", 0.0);
-    d->blueGreenGain  = group.readEntry("BlueGreenGain", 0.0);
-    d->blueBlueGain   = group.readEntry("BlueBlueGain", 1.0);
+    d->blueRedGain    = group.readEntry(d->configBlueRedGainEntry,   0.0);
+    d->blueGreenGain  = group.readEntry(d->configBlueGreenGainEntry, 0.0);
+    d->blueBlueGain   = group.readEntry(d->configBlueBlueGainEntry,  1.0);
 
-    d->blackRedGain   = group.readEntry("BlackRedGain", 1.0);
-    d->blackGreenGain = group.readEntry("BlackGreenGain", 0.0);
-    d->blackBlueGain  = group.readEntry("BlackBlueGain", 0.0);
+    d->blackRedGain   = group.readEntry(d->configBlackRedGainEntry,   1.0);
+    d->blackGreenGain = group.readEntry(d->configBlackGreenGainEntry, 0.0);
+    d->blackBlueGain  = group.readEntry(d->configBlackBlueGainEntry,  0.0);
 
     adjustSliders();
 
     // we need to call the set methods here, otherwise the histogram will not be updated correctly
-    d->gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
+    d->gboxSettings->histogramBox()->setChannel(group.readEntry(d->configHistogramChannelEntry,
                         (int)LuminosityChannel));
-    d->gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
+    d->gboxSettings->histogramBox()->setScale(group.readEntry(d->configHistogramScaleEntry,
                         (int)LogScaleHistogram));
 
     d->gboxSettings->histogramBox()->histogram()->reset();
@@ -540,29 +575,29 @@ void ChannelMixerTool::readSettings()
 void ChannelMixerTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("channelmixer Tool");
+    KConfigGroup group = config->group(d->configGroupName);
 
-    group.writeEntry("Histogram Channel", d->gboxSettings->histogramBox()->channel());
-    group.writeEntry("Histogram Scale", d->gboxSettings->histogramBox()->scale());
+    group.writeEntry(d->configHistogramChannelEntry, d->gboxSettings->histogramBox()->channel());
+    group.writeEntry(d->configHistogramScaleEntry,   d->gboxSettings->histogramBox()->scale());
 
-    group.writeEntry("Monochrome", d->monochrome->isChecked());
-    group.writeEntry("PreserveLuminosity", d->preserveLuminosity->isChecked());
+    group.writeEntry(d->configMonochromeEntry,         d->monochrome->isChecked());
+    group.writeEntry(d->configPreserveLuminosityEntry, d->preserveLuminosity->isChecked());
 
-    group.writeEntry("RedRedGain", d->redRedGain);
-    group.writeEntry("RedGreenGain", d->redGreenGain);
-    group.writeEntry("RedBlueGain", d->redBlueGain);
+    group.writeEntry(d->configRedRedGainEntry,     d->redRedGain);
+    group.writeEntry(d->configRedGreenGainEntry,   d->redGreenGain);
+    group.writeEntry(d->configRedBlueGainEntry,    d->redBlueGain);
 
-    group.writeEntry("GreenRedGain", d->greenRedGain);
-    group.writeEntry("GreenGreenGain", d->greenGreenGain);
-    group.writeEntry("GreenBlueGain", d->greenBlueGain);
+    group.writeEntry(d->configGreenRedGainEntry,   d->greenRedGain);
+    group.writeEntry(d->configGreenGreenGainEntry, d->greenGreenGain);
+    group.writeEntry(d->configGreenBlueGainEntry,  d->greenBlueGain);
 
-    group.writeEntry("BlueRedGain", d->blueRedGain);
-    group.writeEntry("BlueGreenGain", d->blueGreenGain);
-    group.writeEntry("BlueBlueGain", d->blueBlueGain);
+    group.writeEntry(d->configBlueRedGainEntry,    d->blueRedGain);
+    group.writeEntry(d->configBlueGreenGainEntry,  d->blueGreenGain);
+    group.writeEntry(d->configBlueBlueGainEntry,   d->blueBlueGain);
 
-    group.writeEntry("BlackRedGain", d->blackRedGain);
-    group.writeEntry("BlackGreenGain", d->blackGreenGain);
-    group.writeEntry("BlackBlueGain", d->blackBlueGain);
+    group.writeEntry(d->configBlackRedGainEntry,   d->blackRedGain);
+    group.writeEntry(d->configBlackGreenGainEntry, d->blackGreenGain);
+    group.writeEntry(d->configBlackBlueGainEntry,  d->blackBlueGain);
 
     d->previewWidget->writeSettings();
 

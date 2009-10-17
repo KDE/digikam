@@ -73,22 +73,21 @@ class NoiseReductionToolPriv
 {
 public:
 
-    NoiseReductionToolPriv()
-    {
-        radiusInput       = 0;
-        lumToleranceInput = 0;
-        thresholdInput    = 0;
-        textureInput      = 0;
-        sharpnessInput    = 0;
-        csmoothInput      = 0;
-        lookaheadInput    = 0;
-        gammaInput        = 0;
-        dampingInput      = 0;
-        phaseInput        = 0;
-        previewWidget     = 0;
-        expanderBox       = 0;
-        gboxSettings      = 0;
-    }
+    NoiseReductionToolPriv() :
+        radiusInput(0),
+        lumToleranceInput(0),
+        thresholdInput(0),
+        textureInput(0),
+        sharpnessInput(0),
+        csmoothInput(0),
+        lookaheadInput(0),
+        gammaInput(0),
+        dampingInput(0),
+        phaseInput(0),
+        previewWidget(0),
+        expanderBox(0),
+        gboxSettings(0)
+        {}
 
     RDoubleNumInput*     radiusInput;
     RDoubleNumInput*     lumToleranceInput;

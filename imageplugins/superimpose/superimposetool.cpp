@@ -75,13 +75,12 @@ class SuperImposeToolPriv
 {
 public:
 
-    SuperImposeToolPriv()
-    {
-        thumbnailsBar = 0;
-        gboxSettings  = 0;
-        previewWidget = 0;
-        dirSelect     = 0;
-    }
+    SuperImposeToolPriv() :
+        thumbnailsBar(0),
+        gboxSettings(0),
+        previewWidget(0),
+        dirSelect(0)
+        {}
 
     KUrl                templatesUrl;
     KUrl                templatesRootUrl;

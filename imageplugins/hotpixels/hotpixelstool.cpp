@@ -73,15 +73,14 @@ class HotPixelsToolPriv
 {
 public:
 
-    HotPixelsToolPriv()
-    {
-        blackFrameButton   = 0;
-        progressBar        = 0;
-        filterMethodCombo  = 0;
-        blackFrameListView = 0;
-        previewWidget      = 0;
-        gboxSettings       = 0;
-    }
+    HotPixelsToolPriv() :
+        blackFrameButton(0),
+        progressBar(0),
+        filterMethodCombo(0),
+        blackFrameListView(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
 
     QPushButton*        blackFrameButton;
     QProgressBar*       progressBar;

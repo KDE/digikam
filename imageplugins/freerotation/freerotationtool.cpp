@@ -94,7 +94,7 @@ public:
         autoCropCB(0),
         fineAngleInput(0),
         angleInput(0)
-    {}
+        {}
 
     const QString       configGroupName;
     const QString       configAutoCropTypeEntry;

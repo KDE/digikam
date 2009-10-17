@@ -74,36 +74,36 @@ class LocalContrastToolPriv
 {
 public:
 
-    LocalContrastToolPriv()
-    {
-        lowSaturationInput  = 0;
-        highSaturationInput = 0;
-        functionInput       = 0;
-        fastModeCheck       = 0;
-        stageOne            = 0;
-        stageTwo            = 0;
-        stageThree          = 0;
-        stageFour           = 0;
-        powerInput1         = 0;
-        blurInput1          = 0;
-        powerInput2         = 0;
-        blurInput2          = 0;
-        powerInput3         = 0;
-        blurInput3          = 0;
-        powerInput4         = 0;
-        blurInput4          = 0;
-        previewWidget       = 0;
-        expanderBox         = 0;
-        gboxSettings        = 0;
-        label4              = 0;
-        label5              = 0;
-        label6              = 0;
-        label7              = 0;
-        label8              = 0;
-        label9              = 0;
-        label10             = 0;
-        label11             = 0;
-    }
+    LocalContrastToolPriv() :
+        stretchContrastCheck(0),
+        fastModeCheck(0),
+        stageOne(0),
+        stageTwo(0),
+        stageThree(0),
+        stageFour(0),
+        label4(0),
+        label5(0),
+        label6(0),
+        label7(0),
+        label8(0),
+        label9(0),
+        label10(0),
+        label11(0),
+        lowSaturationInput(0),
+        highSaturationInput(0),
+        functionInput(0),
+        powerInput1(0),
+        blurInput1(0),
+        powerInput2(0),
+        blurInput2(0),
+        powerInput3(0),
+        blurInput3(0),
+        powerInput4(0),
+        blurInput4(0),
+        expanderBox(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
 
     QCheckBox*          stretchContrastCheck;
     QCheckBox*          fastModeCheck;
