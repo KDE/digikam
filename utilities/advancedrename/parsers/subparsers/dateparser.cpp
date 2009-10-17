@@ -260,18 +260,19 @@ void DateParser::slotTokenTriggered(const QString& token)
         }
         else
         {
-            QString identifier = df.identifier((DateFormat::Type)index);
-            if (index == DateFormat::Custom)
+            switch (index)
             {
-                tmp = tokenStr.arg(dlg->ui->customFormatInput->text());
-            }
-            else
-            {
-                if (identifier.isEmpty())
-                {
+                case DateFormat::Standard:
+                    tmp = tokenStr.arg(QString(""));
                     tmp.remove(':');
-                }
-                tmp = tokenStr.arg(identifier);
+                    break;
+                case DateFormat::Custom:
+                    tmp = tokenStr.arg(dlg->ui->customFormatInput->text());
+                    break;
+                default:
+                    QString identifier = df.identifier((DateFormat::Type) index);
+                    tmp = tokenStr.arg(identifier);
+                    break;
             }
         }
     }
