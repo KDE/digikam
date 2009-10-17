@@ -43,7 +43,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 034 ==> 175923 : digiKam uses wrong album root path/wrong disk uuid.
 035 ==> 137386 : Sort images in descending date order in album view.
 036 ==> 210845 : Date interval search returns nothing if you specify the same date as interval.
-037 ==> 
+037 ==> 210873 : Renaming in digiKam always uses advanced renaming.
+038 ==>
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05

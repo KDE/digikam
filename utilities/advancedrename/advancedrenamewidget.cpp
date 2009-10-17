@@ -438,4 +438,9 @@ void AdvancedRenameWidget::slotTokenMarked(bool marked)
     d->modifierToolButton->setEnabled(enableMod);
 }
 
+void AdvancedRenameWidget::focusLineEdit()
+{
+    d->renameInputWidget->setFocus();
+}
+
 }  // namespace Digikam

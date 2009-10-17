@@ -68,6 +68,7 @@ public:
     QString parse(ParseInformation& info) const;
 
     void setTooltipAlignment(Qt::Alignment alignment);
+    void focusLineEdit();
 
 Q_SIGNALS:
 

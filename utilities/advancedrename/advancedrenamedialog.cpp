@@ -229,6 +229,15 @@ void AdvancedRenameDialog::slotAddImages(const KUrl::List& urls)
         item->setImageInfo(info);
         ++itemCount;
     }
+
+    // set current filename if only one image has been added
+    if (itemCount == 1)
+    {
+        QFileInfo info(urls.first().toLocalFile());
+        d->advancedRenameWidget->setText(info.completeBaseName());
+        d->advancedRenameWidget->focusLineEdit();
+    }
+
     initDialog(itemCount);
 }
 
@@ -240,7 +249,7 @@ void AdvancedRenameDialog::initDialog(int count)
     setWindowTitle(title);
 
     // resize the dialog when only a single image is selected, it doesn't need to be so big
-    // in this case
+    // in this case.
     resize(minSize, (count > 1) ? minSize : 0);
 }
 
