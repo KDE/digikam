@@ -77,21 +77,28 @@ class FreeRotationToolPriv
 {
 public:
 
-    FreeRotationToolPriv()
-    {
-        antialiasInput      = 0;
-        newHeightLabel      = 0;
-        newWidthLabel       = 0;
-        autoAdjustBtn       = 0;
-        autoAdjustPoint1Btn = 0;
-        autoAdjustPoint2Btn = 0;
-        expanderBox         = 0;
-        gboxSettings        = 0;
-        previewWidget       = 0;
-        autoCropCB          = 0;
-        fineAngleInput      = 0;
-        angleInput          = 0;
-    }
+    FreeRotationToolPriv() :
+        optionsGroupName("freerotation Tool"),
+        optionsAutoCropTypeEntry("Auto Crop Type"),
+        optionsAntiAliasingEntry("Anti Aliasing"),
+
+        antialiasInput(0),
+        newHeightLabel(0),
+        newWidthLabel(0),
+        autoAdjustBtn(0),
+        autoAdjustPoint1Btn(0),
+        autoAdjustPoint2Btn(0),
+        expanderBox(0),
+        gboxSettings(0),
+        previewWidget(0),
+        autoCropCB(0),
+        fineAngleInput(0),
+        angleInput(0)
+    {}
+
+    const QString       optionsGroupName;
+    const QString       optionsAutoCropTypeEntry;
+    const QString       optionsAntiAliasingEntry;
 
     QCheckBox*          antialiasInput;
 
@@ -342,12 +349,12 @@ void FreeRotationTool::slotColorGuideChanged()
 void FreeRotationTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("freerotation Tool");
+    KConfigGroup group        = config->group(d->optionsGroupName);
 
     blockWidgetSignals(true);
 
-    d->autoCropCB->setCurrentIndex(group.readEntry("Auto Crop Type", d->autoCropCB->defaultIndex()));
-    d->antialiasInput->setChecked(group.readEntry("Anti Aliasing", true));
+    d->autoCropCB->setCurrentIndex(group.readEntry(d->optionsAutoCropTypeEntry, d->autoCropCB->defaultIndex()));
+    d->antialiasInput->setChecked(group.readEntry(d->optionsAntiAliasingEntry, true));
     d->expanderBox->readSettings();
 
     d->angleInput->slotReset();
@@ -362,9 +369,9 @@ void FreeRotationTool::readSettings()
 void FreeRotationTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("freerotation Tool");
-    group.writeEntry("Auto Crop Type", d->autoCropCB->currentIndex());
-    group.writeEntry("Anti Aliasing", d->antialiasInput->isChecked());
+    KConfigGroup group        = config->group(d->optionsGroupName);
+    group.writeEntry(d->optionsAutoCropTypeEntry, d->autoCropCB->currentIndex());
+    group.writeEntry(d->optionsAntiAliasingEntry, d->antialiasInput->isChecked());
     d->previewWidget->writeSettings();
     group.sync();
 }
