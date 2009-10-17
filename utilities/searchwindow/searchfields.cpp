@@ -829,7 +829,16 @@ void SearchFieldRangeDate::read(SearchXmlCachingReader& reader)
         QDateTime dt = reader.valueToDateTime();
         if (dt.time() == QTime(0,0,0,0))
         {
-            if (relation == SearchXml::GreaterThanOrEqual)
+            if (relation == SearchXml::Equal)
+            {
+                m_firstDateEdit->setDate(dt.date());
+                if (m_type == DateTime)
+                    m_firstTimeEdit->setTime(QTime(0,0,0,0));
+                m_secondDateEdit->setDate(dt.date());
+                if (m_type == DateTime)
+                    m_secondTimeEdit->setTime(QTime(0,0,0,0));
+            }
+            else if (relation == SearchXml::GreaterThanOrEqual)
             {
                 m_firstDateEdit->setDate(dt.date());
                 if (m_type == DateTime)
@@ -858,7 +867,16 @@ void SearchFieldRangeDate::read(SearchXmlCachingReader& reader)
         }
         else
         {
-            if (relation == SearchXml::GreaterThanOrEqual || relation == SearchXml::GreaterThan)
+            if (relation == SearchXml::Equal)
+            {
+                m_firstDateEdit->setDate(dt.date());
+                if (m_type == DateTime)
+                    m_firstTimeEdit->setTime(dt.time());
+                m_secondDateEdit->setDate(dt.date());
+                if (m_type == DateTime)
+                    m_secondTimeEdit->setTime(dt.time());
+            }
+            else if (relation == SearchXml::GreaterThanOrEqual || relation == SearchXml::GreaterThan)
             {
                 m_firstDateEdit->setDate(dt.date());
                 if (m_type == DateTime)
@@ -878,18 +896,25 @@ void SearchFieldRangeDate::write(SearchXmlWriter& writer)
 {
     if (m_firstDateEdit->date().isValid() && m_secondDateEdit->date().isValid())
     {
-        writer.writeField(m_name, SearchXml::Interval);
-        QList<QDateTime> dates;
-        QDateTime date(m_firstDateEdit->date());
+        QDateTime firstDate(m_firstDateEdit->date());
         if (m_type == DateTime)
-            date.setTime(m_firstTimeEdit->time());
-        dates << date;
-        date = QDateTime(m_secondDateEdit->date());
+            firstDate.setTime(m_firstTimeEdit->time());
+        QDateTime secondDate(m_secondDateEdit->date());
         if (m_type == DateTime)
-            date.setTime(m_secondTimeEdit->time());
-        dates << date;
-        writer.writeValue(dates);
-        writer.finishField();
+            secondDate.setTime(m_secondTimeEdit->time());
+
+        if (firstDate == secondDate)
+        {
+            writer.writeField(m_name, SearchXml::Equal);
+            writer.writeValue(firstDate);
+            writer.finishField();
+        }
+        else
+        {
+            writer.writeField(m_name, SearchXml::Interval);
+            writer.writeValue(QList<QDateTime>() << firstDate << secondDate);
+            writer.finishField();
+        }
     }
     else
     {
