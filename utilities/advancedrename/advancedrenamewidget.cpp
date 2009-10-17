@@ -55,10 +55,11 @@ class AdvancedRenameWidgetPriv
 public:
 
     AdvancedRenameWidgetPriv() :
+        configGroupName("AdvancedRenameWidget"),
+        configExpandedStateEntry("Options are expanded"),
+        configExpandedStateDefault(false),
+
         inputColumns(2),
-        optionsExpandedStateDefault(false),
-        optionsGroupName("AdvancedRenameWidget"),
-        optionsExpandedStateEntry("Options are expanded"),
         tooltipToggleButton(0),
         tokenToolButton(0),
         modifierToolButton(0),
@@ -73,11 +74,11 @@ public:
                            AdvancedRenameWidget::ModifierToolButton)
     {}
 
-    int                                  inputColumns;
+    const QString                        configGroupName;
+    const QString                        configExpandedStateEntry;
+    bool                                 configExpandedStateDefault;
 
-    bool                                 optionsExpandedStateDefault;
-    const QString                        optionsGroupName;
-    const QString                        optionsExpandedStateEntry;
+    int                                  inputColumns;
 
     QToolButton*                         tooltipToggleButton;
     QToolButton*                         tokenToolButton;
@@ -466,17 +467,17 @@ void AdvancedRenameWidget::focusLineEdit()
 void AdvancedRenameWidget::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(d->optionsGroupName);
-    d->optionsLabel->setExpanded(group.readEntry(d->optionsExpandedStateEntry, d->optionsExpandedStateDefault));
+    KConfigGroup group        = config->group(d->configGroupName);
+    d->optionsLabel->setExpanded(group.readEntry(d->configExpandedStateEntry, d->configExpandedStateDefault));
 }
 
 void AdvancedRenameWidget::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(d->optionsGroupName);
-    group.writeEntry(d->optionsExpandedStateEntry, (d->optionsLabel) ?
+    KConfigGroup group        = config->group(d->configGroupName);
+    group.writeEntry(d->configExpandedStateEntry, (d->optionsLabel) ?
                                                     d->optionsLabel->isExpanded() :
-                                                    d->optionsExpandedStateDefault);
+                                                    d->configExpandedStateDefault);
 }
 
 }  // namespace Digikam

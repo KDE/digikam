@@ -78,9 +78,9 @@ class FreeRotationToolPriv
 public:
 
     FreeRotationToolPriv() :
-        optionsGroupName("freerotation Tool"),
-        optionsAutoCropTypeEntry("Auto Crop Type"),
-        optionsAntiAliasingEntry("Anti Aliasing"),
+        configGroupName("freerotation Tool"),
+        configAutoCropTypeEntry("Auto Crop Type"),
+        configAntiAliasingEntry("Anti Aliasing"),
 
         antialiasInput(0),
         newHeightLabel(0),
@@ -96,9 +96,9 @@ public:
         angleInput(0)
     {}
 
-    const QString       optionsGroupName;
-    const QString       optionsAutoCropTypeEntry;
-    const QString       optionsAntiAliasingEntry;
+    const QString       configGroupName;
+    const QString       configAutoCropTypeEntry;
+    const QString       configAntiAliasingEntry;
 
     QCheckBox*          antialiasInput;
 
@@ -349,12 +349,12 @@ void FreeRotationTool::slotColorGuideChanged()
 void FreeRotationTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(d->optionsGroupName);
+    KConfigGroup group        = config->group(d->configGroupName);
 
     blockWidgetSignals(true);
 
-    d->autoCropCB->setCurrentIndex(group.readEntry(d->optionsAutoCropTypeEntry, d->autoCropCB->defaultIndex()));
-    d->antialiasInput->setChecked(group.readEntry(d->optionsAntiAliasingEntry, true));
+    d->autoCropCB->setCurrentIndex(group.readEntry(d->configAutoCropTypeEntry, d->autoCropCB->defaultIndex()));
+    d->antialiasInput->setChecked(group.readEntry(d->configAntiAliasingEntry, true));
     d->expanderBox->readSettings();
 
     d->angleInput->slotReset();
@@ -369,9 +369,9 @@ void FreeRotationTool::readSettings()
 void FreeRotationTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(d->optionsGroupName);
-    group.writeEntry(d->optionsAutoCropTypeEntry, d->autoCropCB->currentIndex());
-    group.writeEntry(d->optionsAntiAliasingEntry, d->antialiasInput->isChecked());
+    KConfigGroup group        = config->group(d->configGroupName);
+    group.writeEntry(d->configAutoCropTypeEntry, d->autoCropCB->currentIndex());
+    group.writeEntry(d->configAntiAliasingEntry, d->antialiasInput->isChecked());
     d->previewWidget->writeSettings();
     group.sync();
 }
