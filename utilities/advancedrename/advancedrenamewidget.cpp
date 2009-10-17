@@ -57,6 +57,8 @@ public:
     AdvancedRenameWidgetPriv() :
         inputColumns(2),
         optionsExpandedDefault(false),
+        optionsGroupName("AdvancedRenameWidget"),
+        optionsExpandedStateEntry("Options are expanded"),
         tooltipToggleButton(0),
         tokenToolButton(0),
         modifierToolButton(0),
@@ -72,7 +74,10 @@ public:
     {}
 
     int                                  inputColumns;
+
     bool                                 optionsExpandedDefault;
+    const QString                        optionsGroupName;
+    const QString                        optionsExpandedStateEntry;
 
     QToolButton*                         tooltipToggleButton;
     QToolButton*                         tokenToolButton;
@@ -461,17 +466,17 @@ void AdvancedRenameWidget::focusLineEdit()
 void AdvancedRenameWidget::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("AdvancedRenameWidget");
-    d->optionsLabel->setExpanded(group.readEntry("Options are expanded", d->optionsExpandedDefault));
+    KConfigGroup group        = config->group(d->optionsGroupName);
+    d->optionsLabel->setExpanded(group.readEntry(d->optionsExpandedStateEntry, d->optionsExpandedDefault));
 }
 
 void AdvancedRenameWidget::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("AdvancedRenameWidget");
-    group.writeEntry("Options are expanded", (d->optionsLabel) ?
-                                              d->optionsLabel->isExpanded() :
-                                              d->optionsExpandedDefault);
+    KConfigGroup group        = config->group(d->optionsGroupName);
+    group.writeEntry(d->optionsExpandedStateEntry, (d->optionsLabel) ?
+                                                    d->optionsLabel->isExpanded() :
+                                                    d->optionsExpandedDefault);
 }
 
 }  // namespace Digikam
