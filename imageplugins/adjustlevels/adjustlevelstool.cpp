@@ -90,6 +90,15 @@ class AdjustLevelsToolPriv
 public:
 
     AdjustLevelsToolPriv() :
+        configGroupName("adjustlevels Tool"),
+        configGammaChannelEntry("GammaChannel%1"),
+        configLowInputChannelEntry("LowInputChannel%1"),
+        configLowOutputChannelEntry("LowOutputChannel%1"),
+        configHighInputChannelEntry("HighInputChannel%1"),
+        configHighOutputChannelEntry("HighOutputChannel%1"),
+        configHistogramChannelEntry("Histogram Channel"),
+        configHistogramScaleEntry("Histogram Scale"),
+
         destinationPreviewData(0),
         histoSegments(0),
         currentPreviewMode(0),
@@ -113,6 +122,15 @@ public:
         originalImage(0),
         gboxSettings(0)
         {}
+
+    const QString        configGroupName;
+    const QString        configGammaChannelEntry;
+    const QString        configLowInputChannelEntry;
+    const QString        configLowOutputChannelEntry;
+    const QString        configHighInputChannelEntry;
+    const QString        configHighOutputChannelEntry;
+    const QString        configHistogramChannelEntry;
+    const QString        configHistogramScaleEntry;
 
     uchar*               destinationPreviewData;
 
@@ -676,7 +694,7 @@ void AdjustLevelsTool::slotScaleChanged()
 void AdjustLevelsTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("adjustlevels Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
 
     {
         bool sb        = d->originalImage->sixteenBit();
@@ -689,11 +707,11 @@ void AdjustLevelsTool::readSettings()
 
         for (int i = 0 ; i < 5 ; ++i)
         {
-            gamma      = group.readEntry(QString("GammaChannel%1").arg(i), 1.0);
-            lowInput   = group.readEntry(QString("LowInputChannel%1").arg(i), 0);
-            lowOutput  = group.readEntry(QString("LowOutputChannel%1").arg(i), 0);
-            highInput  = group.readEntry(QString("HighInputChannel%1").arg(i), max);
-            highOutput = group.readEntry(QString("HighOutputChannel%1").arg(i), max);
+            gamma      = group.readEntry(d->configGammaChannelEntry.arg(i), 1.0);
+            lowInput   = group.readEntry(d->configLowInputChannelEntry.arg(i), 0);
+            lowOutput  = group.readEntry(d->configLowOutputChannelEntry.arg(i), 0);
+            highInput  = group.readEntry(d->configHighInputChannelEntry.arg(i), max);
+            highOutput = group.readEntry(d->configHighOutputChannelEntry.arg(i), max);
 
             d->levels->setLevelGammaValue(i, gamma);
             d->levels->setLevelLowInputValue(i, sb ? lowInput*255 : lowInput);
@@ -706,9 +724,9 @@ void AdjustLevelsTool::readSettings()
     d->levelsHistogramWidget->reset();
     d->gboxSettings->histogramBox()->histogram()->reset();
 
-    d->gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
+    d->gboxSettings->histogramBox()->setChannel(group.readEntry(d->configHistogramChannelEntry,
                     (int)LuminosityChannel));
-    d->gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
+    d->gboxSettings->histogramBox()->setScale(group.readEntry(d->configHistogramScaleEntry,
                     (int)LogScaleHistogram));
 
     // This is mandatory here to set spinbox values because slot connections
@@ -723,9 +741,9 @@ void AdjustLevelsTool::readSettings()
 void AdjustLevelsTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("adjustlevels Tool");
-    group.writeEntry("Histogram Channel", d->gboxSettings->histogramBox()->channel());
-    group.writeEntry("Histogram Scale", d->gboxSettings->histogramBox()->scale());
+    KConfigGroup group        = config->group(d->configGroupName);
+    group.writeEntry(d->configHistogramChannelEntry, d->gboxSettings->histogramBox()->channel());
+    group.writeEntry(d->configHistogramScaleEntry,   d->gboxSettings->histogramBox()->scale());
 
     {
         bool sb        = d->originalImage->sixteenBit();
@@ -743,11 +761,11 @@ void AdjustLevelsTool::writeSettings()
             highInput  = d->levels->getLevelHighInputValue(i);
             highOutput = d->levels->getLevelHighOutputValue(i);
 
-            group.writeEntry(QString("GammaChannel%1").arg(i), gamma);
-            group.writeEntry(QString("LowInputChannel%1").arg(i), sb ? lowInput/255 : lowInput);
-            group.writeEntry(QString("LowOutputChannel%1").arg(i), sb ? lowOutput/255 : lowOutput);
-            group.writeEntry(QString("HighInputChannel%1").arg(i), sb ? highInput/255 : highInput);
-            group.writeEntry(QString("HighOutputChannel%1").arg(i), sb ? highOutput/255 : highOutput);
+            group.writeEntry(d->configGammaChannelEntry.arg(i), gamma);
+            group.writeEntry(d->configLowInputChannelEntry.arg(i), sb ? lowInput/255 : lowInput);
+            group.writeEntry(d->configLowOutputChannelEntry.arg(i), sb ? lowOutput/255 : lowOutput);
+            group.writeEntry(d->configHighInputChannelEntry.arg(i), sb ? highInput/255 : highInput);
+            group.writeEntry(d->configHighOutputChannelEntry.arg(i), sb ? highOutput/255 : highOutput);
         }
     }
 

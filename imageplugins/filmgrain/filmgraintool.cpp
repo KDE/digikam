@@ -66,11 +66,16 @@ class FilmGrainToolPriv
 public:
 
     FilmGrainToolPriv() :
+        configGroupName("filmgrain Tool"),
+        configSensitivityAdjustmentEntry("SensitivityAdjustment"),
         sensibilitySlider(0),
         sensibilityLCDValue(0),
         previewWidget(0),
         gboxSettings(0)
         {}
+
+    const QString       configGroupName;
+    const QString       configSensitivityAdjustmentEntry;
 
     QSlider*            sensibilitySlider;
 
@@ -164,9 +169,9 @@ void FilmGrainTool::renderingFinished()
 void FilmGrainTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("filmgrain Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
     d->sensibilitySlider->blockSignals(true);
-    d->sensibilitySlider->setValue(group.readEntry("SensitivityAdjustment", 12));
+    d->sensibilitySlider->setValue(group.readEntry(d->configSensitivityAdjustmentEntry, 12));
     d->sensibilitySlider->blockSignals(false);
     slotSliderMoved(d->sensibilitySlider->value());
 }
@@ -174,8 +179,8 @@ void FilmGrainTool::readSettings()
 void FilmGrainTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("filmgrain Tool");
-    group.writeEntry("SensitivityAdjustment", d->sensibilitySlider->value());
+    KConfigGroup group        = config->group(d->configGroupName);
+    group.writeEntry(d->configSensitivityAdjustmentEntry, d->sensibilitySlider->value());
     d->previewWidget->writeSettings();
     config->sync();
 }

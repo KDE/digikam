@@ -68,6 +68,13 @@ class AutoCorrectionToolPriv
 public:
 
     AutoCorrectionToolPriv() :
+        configGroupName("Lens Auto-Correction Tool"),
+        configCCAEntry("CCA"),
+        configVignettingEntry("Vignetting"),
+        configCCIEntry("CCI"),
+        configDistortionEntry("Distortion"),
+        configGeometryEntry("Geometry"),
+
         maskPreviewLabel(0),
         showGrid(0),
         filterCCA(0),
@@ -79,6 +86,13 @@ public:
         previewWidget(0),
         gboxSettings(0)
         {}
+
+    const QString       configGroupName;
+    const QString       configCCAEntry;
+    const QString       configVignettingEntry;
+    const QString       configCCIEntry;
+    const QString       configDistortionEntry;
+    const QString       configGeometryEntry;
 
     QLabel*             maskPreviewLabel;
 
@@ -214,13 +228,13 @@ void AutoCorrectionTool::readSettings()
 {
     d->gboxSettings->blockSignals(true);
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("Lens Auto-Correction Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
 
-    d->filterCCA->setCheckState(group.readEntry("CCA", true)         ? Qt::Checked : Qt::Unchecked);
-    d->filterVig->setCheckState(group.readEntry("Vignetting", true)  ? Qt::Checked : Qt::Unchecked);
-    d->filterCCI->setCheckState(group.readEntry("CCI", true)         ? Qt::Checked : Qt::Unchecked);
-    d->filterDist->setCheckState(group.readEntry("Distortion", true) ? Qt::Checked : Qt::Unchecked);
-    d->filterGeom->setCheckState(group.readEntry("Geometry", true)   ? Qt::Checked : Qt::Unchecked);
+    d->filterCCA->setCheckState(group.readEntry(d->configCCAEntry, true)         ? Qt::Checked : Qt::Unchecked);
+    d->filterVig->setCheckState(group.readEntry(d->configVignettingEntry, true)  ? Qt::Checked : Qt::Unchecked);
+    d->filterCCI->setCheckState(group.readEntry(d->configCCIEntry, true)         ? Qt::Checked : Qt::Unchecked);
+    d->filterDist->setCheckState(group.readEntry(d->configDistortionEntry, true) ? Qt::Checked : Qt::Unchecked);
+    d->filterGeom->setCheckState(group.readEntry(d->configGeometryEntry, true)   ? Qt::Checked : Qt::Unchecked);
 
     d->gboxSettings->blockSignals(false);
     slotSetFilters();
@@ -229,17 +243,17 @@ void AutoCorrectionTool::readSettings()
 void AutoCorrectionTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("Lens Auto-Correction Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
     if ( d->filterCCA->isEnabled() )
-        group.writeEntry("CCA",        (d->filterCCA->checkState() == Qt::Checked)  ? true : false);
+        group.writeEntry(d->configCCAEntry,        (d->filterCCA->checkState() == Qt::Checked)  ? true : false);
     if ( d->filterVig->isEnabled() )
-        group.writeEntry("Vignetting", (d->filterVig->checkState() == Qt::Checked)  ? true : false);
+        group.writeEntry(d->configVignettingEntry, (d->filterVig->checkState() == Qt::Checked)  ? true : false);
     if ( d->filterCCI->isEnabled() )
-        group.writeEntry("CCI",        (d->filterCCI->checkState() == Qt::Checked)  ? true : false);
+        group.writeEntry(d->configCCIEntry,        (d->filterCCI->checkState() == Qt::Checked)  ? true : false);
     if ( d->filterDist->isEnabled() )
-        group.writeEntry("Distortion", (d->filterDist->checkState() == Qt::Checked) ? true : false);
+        group.writeEntry(d->configDistortionEntry, (d->filterDist->checkState() == Qt::Checked) ? true : false);
     if ( d->filterGeom->isEnabled() )
-        group.writeEntry("Geometry",   (d->filterGeom->checkState() == Qt::Checked) ? true : false);
+        group.writeEntry(d->configGeometryEntry,   (d->filterGeom->checkState() == Qt::Checked) ? true : false);
 
     d->previewWidget->writeSettings();
     group.sync();

@@ -68,12 +68,20 @@ class InfraredToolPriv
 public:
 
     InfraredToolPriv() :
+        configGroupName("infrared Tool"),
+        configSensitivityAdjustmentEntry("SensitivityAdjustment"),
+        configAddFilmGrainEntry("AddFilmGrain"),
+
         addFilmGrain(0),
         sensibilitySlider(0),
         sensibilityLCDValue(0),
         previewWidget(0),
         gboxSettings(0)
         {}
+
+    const QString       configGroupName;
+    const QString       configSensitivityAdjustmentEntry;
+    const QString       configAddFilmGrainEntry;
 
     QCheckBox*          addFilmGrain;
     QSlider*            sensibilitySlider;
@@ -185,11 +193,13 @@ void InfraredTool::renderingFinished()
 void InfraredTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("infrared Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
     d->sensibilitySlider->blockSignals(true);
     d->addFilmGrain->blockSignals(true);
-    d->sensibilitySlider->setValue(group.readEntry("SensitivityAdjustment", 1));
-    d->addFilmGrain->setChecked(group.readEntry("AddFilmGrain", false));
+
+    d->sensibilitySlider->setValue(group.readEntry(d->configSensitivityAdjustmentEntry, 1));
+    d->addFilmGrain->setChecked(group.readEntry(d->configAddFilmGrainEntry,             false));
+
     d->sensibilitySlider->blockSignals(false);
     d->addFilmGrain->blockSignals(false);
     slotSliderMoved(d->sensibilitySlider->value());
@@ -199,9 +209,10 @@ void InfraredTool::readSettings()
 void InfraredTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("infrared Tool");
-    group.writeEntry("SensitivityAdjustment", d->sensibilitySlider->value());
-    group.writeEntry("AddFilmGrain", d->addFilmGrain->isChecked());
+    KConfigGroup group        = config->group(d->configGroupName);
+
+    group.writeEntry(d->configSensitivityAdjustmentEntry, d->sensibilitySlider->value());
+    group.writeEntry(d->configAddFilmGrainEntry,          d->addFilmGrain->isChecked());
     d->previewWidget->writeSettings();
     group.sync();
 }

@@ -74,6 +74,10 @@ class HotPixelsToolPriv
 public:
 
     HotPixelsToolPriv() :
+        configGroupName("hotpixels Tool"),
+        configLastBlackFrameFileEntry("Last Black Frame File"),
+        configFilterMethodEntry("Filter Method"),
+
         blackFrameButton(0),
         progressBar(0),
         filterMethodCombo(0),
@@ -81,6 +85,10 @@ public:
         previewWidget(0),
         gboxSettings(0)
         {}
+
+    const QString       configGroupName;
+    const QString       configLastBlackFrameFileEntry;
+    const QString       configFilterMethodEntry;
 
     QPushButton*        blackFrameButton;
     QProgressBar*       progressBar;
@@ -166,9 +174,9 @@ HotPixelsTool::~HotPixelsTool()
 void HotPixelsTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("hotpixels Tool");
-    d->blackFrameURL = KUrl(group.readEntry("Last Black Frame File", QString()));
-    d->filterMethodCombo->setCurrentIndex(group.readEntry("Filter Method", d->filterMethodCombo->defaultIndex()));
+    KConfigGroup group        = config->group(d->configGroupName);
+    d->blackFrameURL          = KUrl(group.readEntry(d->configLastBlackFrameFileEntry, QString()));
+    d->filterMethodCombo->setCurrentIndex(group.readEntry(d->configFilterMethodEntry,  d->filterMethodCombo->defaultIndex()));
 
     if (d->blackFrameURL.isValid())
     {
@@ -183,6 +191,16 @@ void HotPixelsTool::readSettings()
     }
 }
 
+void HotPixelsTool::writeSettings()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(d->configGroupName);
+    group.writeEntry(d->configLastBlackFrameFileEntry, d->blackFrameURL.url());
+    group.writeEntry(d->configFilterMethodEntry,       d->filterMethodCombo->currentIndex());
+    d->previewWidget->writeSettings();
+    group.sync();
+}
+
 void HotPixelsTool::slotLoadingProgress(float v)
 {
     EditorToolIface::editorToolIface()->setToolProgress((int)(v*100));
@@ -191,16 +209,6 @@ void HotPixelsTool::slotLoadingProgress(float v)
 void HotPixelsTool::slotLoadingComplete()
 {
     EditorToolIface::editorToolIface()->setToolStopProgress();
-}
-
-void HotPixelsTool::writeSettings()
-{
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("hotpixels Tool");
-    group.writeEntry("Last Black Frame File", d->blackFrameURL.url());
-    group.writeEntry("Filter Method", d->filterMethodCombo->currentIndex());
-    d->previewWidget->writeSettings();
-    group.sync();
 }
 
 void HotPixelsTool::slotResetSettings()

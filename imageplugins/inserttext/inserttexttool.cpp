@@ -81,6 +81,16 @@ class InsertTextToolPriv
 public:
 
     InsertTextToolPriv() :
+        configGroupName("inserttext Tool"),
+        configTextRotationEntry("Text Rotation"),
+        configFontColorEntry("Font Color"),
+        configTextStringEntry("Enter your text here."),
+        configFontPropertiesEntry("Font Properties"),
+        configTextAlignmentEntry("Text Alignment"),
+        configBorderTextEntry("Border Text"),
+        configTransparentTextEntry("Transparent Text"),
+        configPositionHintEntry("Position Hint"),
+
         alignTextMode(0),
         defaultSizeFont(0),
         borderText(0),
@@ -93,6 +103,16 @@ public:
         previewWidget(0),
         gboxSettings(0)
         {}
+
+    const QString       configGroupName;
+    const QString       configTextRotationEntry;
+    const QString       configFontColorEntry;
+    const QString       configTextStringEntry;
+    const QString       configFontPropertiesEntry;
+    const QString       configTextAlignmentEntry;
+    const QString       configBorderTextEntry;
+    const QString       configTransparentTextEntry;
+    const QString       configPositionHintEntry;
 
     int                 alignTextMode;
     int                 defaultSizeFont;
@@ -274,7 +294,7 @@ InsertTextTool::~InsertTextTool()
 void InsertTextTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group =  config->group("inserttext Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
     QColor black(0, 0, 0);
     QFont  defaultFont;
 
@@ -285,15 +305,16 @@ void InsertTextTool::readSettings()
     else d->defaultSizeFont = (int)(orgW / 8.0);
 
     defaultFont.setPointSize(d->defaultSizeFont);
-    d->textRotation->setCurrentIndex(group.readEntry("Text Rotation", 0));
-    d->fontColorButton->setColor(group.readEntry("Font Color", black));
-    d->textEdit->setText(group.readEntry("Text String", i18n("Enter your text here.")));
-    d->textFont = group.readEntry("Font Properties", defaultFont);
+
+    d->textRotation->setCurrentIndex(group.readEntry(d->configTextRotationEntry,  0));
+    d->fontColorButton->setColor(group.readEntry(d->configFontColorEntry,         black));
+    d->textEdit->setText(group.readEntry(d->configTextStringEntry,                i18n("Enter your text here.")));
+    d->textFont = group.readEntry(d->configFontPropertiesEntry,                   defaultFont);
     d->fontChooserWidget->setFont(d->textFont);
-    d->alignTextMode = group.readEntry("Text Alignment", (int) ALIGN_LEFT);
-    d->borderText->setChecked(group.readEntry("Border Text", false));
-    d->transparentText->setChecked(group.readEntry("Transparent Text", false));
-    d->previewWidget->setPositionHint(group.readEntry("Position Hint", QRect()));
+    d->alignTextMode = group.readEntry(d->configTextAlignmentEntry,               (int) ALIGN_LEFT);
+    d->borderText->setChecked(group.readEntry(d->configBorderTextEntry,           false));
+    d->transparentText->setChecked(group.readEntry(d->configTransparentTextEntry, false));
+    d->previewWidget->setPositionHint(group.readEntry(d->configPositionHintEntry, QRect()));
 
     d->alignButtonGroup->button(d->alignTextMode)->setChecked(true);
     slotAlignModeChanged(d->alignTextMode);
@@ -302,16 +323,16 @@ void InsertTextTool::readSettings()
 void InsertTextTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("inserttext Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
 
-    group.writeEntry("Text Rotation", d->textRotation->currentIndex());
-    group.writeEntry("Font Color", d->fontColorButton->color());
-    group.writeEntry("Text String", d->textEdit->document()->toPlainText());
-    group.writeEntry("Font Properties", d->textFont);
-    group.writeEntry("Text Alignment", d->alignTextMode);
-    group.writeEntry("Border Text", d->borderText->isChecked());
-    group.writeEntry("Transparent Text", d->transparentText->isChecked());
-    group.writeEntry("Position Hint", d->previewWidget->getPositionHint());
+    group.writeEntry(d->configTextRotationEntry,    d->textRotation->currentIndex());
+    group.writeEntry(d->configFontColorEntry,       d->fontColorButton->color());
+    group.writeEntry(d->configTextStringEntry,      d->textEdit->document()->toPlainText());
+    group.writeEntry(d->configFontPropertiesEntry,  d->textFont);
+    group.writeEntry(d->configTextAlignmentEntry,   d->alignTextMode);
+    group.writeEntry(d->configBorderTextEntry,      d->borderText->isChecked());
+    group.writeEntry(d->configTransparentTextEntry, d->transparentText->isChecked());
+    group.writeEntry(d->configPositionHintEntry,    d->previewWidget->getPositionHint());
 
     config->sync();
 }

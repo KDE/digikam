@@ -92,6 +92,16 @@ public:
 public:
 
     ContentAwareResizeToolPriv() :
+        configGroupName("liquidrescale Tool"),
+        configStepEntry("Step"),
+        configSideSwitchEntry("SideSwitch"),
+        configRigidityEntry("Rigidity"),
+        configFunctionEntry("Function"),
+        configOrderEntry("Order"),
+        configMixedRescaleValueEntry("MixedRescaleValue"),
+        configBrushSizeEntry("BrushSize"),
+        configPreserveTonesEntry("PreserveTones"),
+
         orgWidth(0),
         orgHeight(0),
         prevW(0),
@@ -120,6 +130,16 @@ public:
         eraseMaskTool(0),
         maskGroup(0)
         {}
+
+    const QString       configGroupName;
+    const QString       configStepEntry;
+    const QString       configSideSwitchEntry;
+    const QString       configRigidityEntry;
+    const QString       configFunctionEntry;
+    const QString       configOrderEntry;
+    const QString       configMixedRescaleValueEntry;
+    const QString       configBrushSizeEntry;
+    const QString       configPreserveTonesEntry;
 
     int                 orgWidth;
     int                 orgHeight;
@@ -473,19 +493,19 @@ ContentAwareResizeTool::~ContentAwareResizeTool()
 void ContentAwareResizeTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("liquidrescale Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
 
     blockWidgetSignals(true);
 
     // NOTE: size settings are not restored here because they depands of image size.
-    d->stepInput->setValue(group.readEntry("Step",                      d->stepInput->defaultValue()));
-    d->stepInput->setValue(group.readEntry("SideSwitch",                d->sideSwitchInput->defaultValue()));
-    d->rigidityInput->setValue(group.readEntry("Rigidity",              d->rigidityInput->defaultValue()));
-    d->funcInput->setCurrentIndex(group.readEntry("Function",           d->funcInput->defaultIndex()));
-    d->resizeOrderInput->setCurrentIndex(group.readEntry("Order",       d->resizeOrderInput->defaultIndex()));
-    d->mixedRescaleInput->setValue(group.readEntry("MixedRescaleValue", d->mixedRescaleInput->defaultValue()));
-    d->maskPenSize->setValue(group.readEntry("BrushSize",               d->maskPenSize->defaultValue()));
-    d->preserveSkinTones->setChecked(group.readEntry("PreserveTones",   false));
+    d->stepInput->setValue(group.readEntry(d->configStepEntry,                      d->stepInput->defaultValue()));
+    d->stepInput->setValue(group.readEntry(d->configSideSwitchEntry,                d->sideSwitchInput->defaultValue()));
+    d->rigidityInput->setValue(group.readEntry(d->configRigidityEntry,              d->rigidityInput->defaultValue()));
+    d->funcInput->setCurrentIndex(group.readEntry(d->configFunctionEntry,           d->funcInput->defaultIndex()));
+    d->resizeOrderInput->setCurrentIndex(group.readEntry(d->configOrderEntry,       d->resizeOrderInput->defaultIndex()));
+    d->mixedRescaleInput->setValue(group.readEntry(d->configMixedRescaleValueEntry, d->mixedRescaleInput->defaultValue()));
+    d->maskPenSize->setValue(group.readEntry(d->configBrushSizeEntry,               d->maskPenSize->defaultValue()));
+    d->preserveSkinTones->setChecked(group.readEntry(d->configPreserveTonesEntry,   false));
     d->expanderBox->readSettings();
 
     enableContentAwareSettings(d->mixedRescaleInput->value() > 0.0);
@@ -496,17 +516,17 @@ void ContentAwareResizeTool::readSettings()
 void ContentAwareResizeTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("liquidrescale Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
 
     // NOTE: size settings are not saved here because they depands of image size.
-    group.writeEntry("Step",              d->stepInput->value());
-    group.writeEntry("SideSwitch",        d->sideSwitchInput->value());
-    group.writeEntry("Rigidity",          d->rigidityInput->value());
-    group.writeEntry("Function",          d->funcInput->currentIndex());
-    group.writeEntry("Order",             d->resizeOrderInput->currentIndex());
-    group.writeEntry("MixedRescaleValue", d->mixedRescaleInput->value());
-    group.writeEntry("BrushSize",         d->maskPenSize->value());
-    group.writeEntry("PreserveTones",     d->preserveSkinTones->isChecked());
+    group.writeEntry(d->configStepEntry,              d->stepInput->value());
+    group.writeEntry(d->configSideSwitchEntry,        d->sideSwitchInput->value());
+    group.writeEntry(d->configRigidityEntry,          d->rigidityInput->value());
+    group.writeEntry(d->configFunctionEntry,          d->funcInput->currentIndex());
+    group.writeEntry(d->configOrderEntry,             d->resizeOrderInput->currentIndex());
+    group.writeEntry(d->configMixedRescaleValueEntry, d->mixedRescaleInput->value());
+    group.writeEntry(d->configBrushSizeEntry,         d->maskPenSize->value());
+    group.writeEntry(d->configPreserveTonesEntry,     d->preserveSkinTones->isChecked());
 
     d->previewWidget->writeSettings();
     group.sync();

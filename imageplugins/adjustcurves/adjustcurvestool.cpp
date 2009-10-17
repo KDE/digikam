@@ -90,6 +90,9 @@ class AdjustCurvesToolPriv
 public:
 
     AdjustCurvesToolPriv() :
+        configGroupName("adjustcurves Tool"),
+        configHistogramChannelEntry("Histogram Channel"),
+        configHistogramScaleEntry("Histogram Scale"),
         destinationPreviewData(0),
         histoSegments(0),
         currentPreviewMode(0),
@@ -99,6 +102,10 @@ public:
         originalImage(0),
         gboxSettings(0)
         {}
+
+    const QString        configGroupName;
+    const QString        configHistogramChannelEntry;
+    const QString        configHistogramScaleEntry;
 
     uchar*               destinationPreviewData;
 
@@ -357,16 +364,17 @@ void AdjustCurvesTool::slotScaleChanged()
 void AdjustCurvesTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("adjustcurves Tool");
+    KConfigGroup group = config->group(d->configGroupName);
 
     d->curvesBox->reset();
     d->curvesBox->readCurveSettings(group);
 
     // we need to call the set methods here, otherwise the curve will not be updated correctly
-    d->gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
+    d->gboxSettings->histogramBox()->setChannel(group.readEntry(d->configHistogramChannelEntry,
                     (int)LuminosityChannel));
-    d->gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
+    d->gboxSettings->histogramBox()->setScale(group.readEntry(d->configHistogramScaleEntry,
                     (int)LogScaleHistogram));
+
     d->curvesBox->setScale(d->gboxSettings->histogramBox()->scale());
     d->curvesBox->setChannel(d->gboxSettings->histogramBox()->channel());
     d->curvesBox->update();
@@ -377,9 +385,9 @@ void AdjustCurvesTool::readSettings()
 void AdjustCurvesTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("adjustcurves Tool");
-    group.writeEntry("Histogram Channel", d->gboxSettings->histogramBox()->channel());
-    group.writeEntry("Histogram Scale", d->gboxSettings->histogramBox()->scale());
+    KConfigGroup group = config->group(d->configGroupName);
+    group.writeEntry(d->configHistogramChannelEntry, d->gboxSettings->histogramBox()->channel());
+    group.writeEntry(d->configHistogramScaleEntry,   d->gboxSettings->histogramBox()->scale());
 
     d->curvesBox->writeCurveSettings(group);
     d->previewWidget->writeSettings();
