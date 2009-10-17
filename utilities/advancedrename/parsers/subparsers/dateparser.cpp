@@ -183,7 +183,7 @@ DateParser::DateParser()
              i18n("Date and time (key = ISO|Text|Locale)"));
 
     addTokenDescription("[date:<i>format</i>]", i18n("Date && Time (custom format)"),
-             i18n("Date and time") + " (" +  dateFormatLink + ")");
+             i18n("Date and time") + " (" +  dateFormatLink + ')');
 
     setRegExp("\\[date(:.*)?\\]");
 }
@@ -240,6 +240,7 @@ void DateParser::slotTokenTriggered(const QString& token)
     {
         int index = dlg->ui->dateFormatPicker->currentIndex();
 
+        // use custom date format?
         if (dlg->ui->fixedDateBtn->isChecked())
         {
             QDateTime date;
@@ -258,7 +259,7 @@ void DateParser::slotTokenTriggered(const QString& token)
                 tmp = date.toString((Qt::DateFormat)v.toInt());
             }
         }
-        else
+        else        // use predefined keywords for date formatting
         {
             switch (index)
             {
