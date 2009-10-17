@@ -507,23 +507,23 @@ void LocalContrastTool::readSettings()
 
     d->expanderBox->setEnabled(false);
 
-    d->lowSaturationInput->setValue(    group.readEntry(d->configLowSaturationEntry,   d->lowSaturationInput->defaultValue()));
-    d->highSaturationInput->setValue(   group.readEntry(d->configHighSaturationEntry,  d->highSaturationInput->defaultValue()));
-    d->blurInput1->setValue(            group.readEntry(d->configBlur1Entry,           d->blurInput1->defaultValue()));
-    d->blurInput2->setValue(            group.readEntry(d->configBlur2Entry,           d->blurInput2->defaultValue()));
-    d->blurInput3->setValue(            group.readEntry(d->configBlur3Entry,           d->blurInput3->defaultValue()));
-    d->blurInput4->setValue(            group.readEntry(d->configBlur4Entry,           d->blurInput4->defaultValue()));
-    d->powerInput1->setValue(           group.readEntry(d->configPower1Entry,          d->powerInput1->defaultValue()));
-    d->powerInput2->setValue(           group.readEntry(d->configPower2Entry,          d->powerInput2->defaultValue()));
-    d->powerInput3->setValue(           group.readEntry(d->configPower3Entry,          d->powerInput3->defaultValue()));
-    d->powerInput4->setValue(           group.readEntry(d->configPower4Entry,          d->powerInput4->defaultValue()));
+    d->lowSaturationInput->setValue(group.readEntry(d->configLowSaturationEntry,       d->lowSaturationInput->defaultValue()));
+    d->highSaturationInput->setValue(group.readEntry(d->configHighSaturationEntry,     d->highSaturationInput->defaultValue()));
+    d->blurInput1->setValue(group.readEntry(d->configBlur1Entry,                       d->blurInput1->defaultValue()));
+    d->blurInput2->setValue(group.readEntry(d->configBlur2Entry,                       d->blurInput2->defaultValue()));
+    d->blurInput3->setValue(group.readEntry(d->configBlur3Entry,                       d->blurInput3->defaultValue()));
+    d->blurInput4->setValue(group.readEntry(d->configBlur4Entry,                       d->blurInput4->defaultValue()));
+    d->powerInput1->setValue(group.readEntry(d->configPower1Entry,                     d->powerInput1->defaultValue()));
+    d->powerInput2->setValue(group.readEntry(d->configPower2Entry,                     d->powerInput2->defaultValue()));
+    d->powerInput3->setValue(group.readEntry(d->configPower3Entry,                     d->powerInput3->defaultValue()));
+    d->powerInput4->setValue(group.readEntry(d->configPower4Entry,                     d->powerInput4->defaultValue()));
     d->stretchContrastCheck->setChecked(group.readEntry(d->configStretchContrastEntry, false));
-    d->fastModeCheck->setChecked(       group.readEntry(d->configFastModeEntry,        false));
-    d->stageOne->setChecked(            group.readEntry(d->configStageOneEntry,        false));
-    d->stageTwo->setChecked(            group.readEntry(d->configStageTwoEntry,        false));
-    d->stageThree->setChecked(          group.readEntry(d->configStageThreeEntry,      false));
-    d->stageFour->setChecked(           group.readEntry(d->configStageFourEntry,       false));
-    d->functionInput->setCurrentIndex(  group.readEntry(d->configFunctionInputEntry,   d->functionInput->defaultIndex()));
+    d->fastModeCheck->setChecked(group.readEntry(d->configFastModeEntry,               false));
+    d->stageOne->setChecked(group.readEntry(d->configStageOneEntry,                    false));
+    d->stageTwo->setChecked(group.readEntry(d->configStageTwoEntry,                    false));
+    d->stageThree->setChecked(group.readEntry(d->configStageThreeEntry,                false));
+    d->stageFour->setChecked(group.readEntry(d->configStageFourEntry,                  false));
+    d->functionInput->setCurrentIndex(group.readEntry(d->configFunctionInputEntry,     d->functionInput->defaultIndex()));
     d->expanderBox->readSettings();
 
     d->expanderBox->setEnabled(true);
