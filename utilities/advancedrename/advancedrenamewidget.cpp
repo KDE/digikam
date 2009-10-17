@@ -389,6 +389,7 @@ void AdvancedRenameWidget::setupWidgets()
     d->optionsLabel = new RLabelExpander(this);
     d->optionsLabel->setText(i18n("Renaming Options"));
     d->optionsLabel->setWidget(d->btnContainer);
+    d->optionsLabel->setLineVisible(false);
 
     // --------------------------------------------------------
 
