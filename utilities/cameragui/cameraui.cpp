@@ -300,7 +300,7 @@ void CameraUI::setupUserArea()
     d->autoRotateCheck->setWhatsThis( i18n("Enable this option if you want images automatically "
                      "rotated or flipped using EXIF information provided by the camera."));
     d->templateSelector->setWhatsThis( i18n("Select here which metadata template you want to apply "
-                     "on images."));
+                     "to images."));
     d->fixDateTimeCheck->setWhatsThis( i18n("Enable this option to set date and time metadata "
                      "tags to the right values if your camera does not set "
                      "these tags correctly when pictures are taken. The values will "

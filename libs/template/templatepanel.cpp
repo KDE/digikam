@@ -252,7 +252,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label10              = new QLabel(i18n("Province State:"), page2);
+    QLabel *label10              = new QLabel(i18n("Province/State:"), page2);
     d->locationProvinceStateEdit = new KLineEdit(page2);
     d->locationProvinceStateEdit->setClearButtonShown(true);
     d->locationProvinceStateEdit->setClickMessage(i18n("Enter the province or state of contents here."));
