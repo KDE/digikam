@@ -93,35 +93,57 @@ class WhiteBalanceToolPriv
 {
 public:
 
-    WhiteBalanceToolPriv()
-    {
-        destinationPreviewData  = 0;
-        currentPreviewMode      = 0;
-        pickTemperature         = 0;
-        autoAdjustExposure      = 0;
-        adjTemperatureLabel     = 0;
-        temperaturePresetLabel  = 0;
-        darkLabel               = 0;
-        blackLabel              = 0;
-        mainExposureLabel       = 0;
-        fineExposureLabel       = 0;
-        gammaLabel              = 0;
-        saturationLabel         = 0;
-        greenLabel              = 0;
-        exposureLabel           = 0;
-        temperatureLabel        = 0;
-        temperaturePresetCB     = 0;
-        temperatureInput        = 0;
-        darkInput               = 0;
-        blackInput              = 0;
-        mainExposureInput       = 0;
-        fineExposureInput       = 0;
-        gammaInput              = 0;
-        saturationInput         = 0;
-        greenInput              = 0;
-        previewWidget           = 0;
-        gboxSettings            = 0;
-    }
+    WhiteBalanceToolPriv() :
+        configGroupName("whitebalance Tool"),
+        configDarkInputEntry("Dark"),
+        configBlackInputEntry("Black"),
+        configMainExposureEntry("MainExposure"),
+        configFineExposureEntry("FineExposure"),
+        configGammaInputEntry("Gamma"),
+        configSaturationInputEntry("Saturation"),
+        configGreenInputEntry("Green"),
+        configTemeratureInputEntry("Temperature"),
+        configHistogramChannelEntry("Histogram Chanel"),
+        configHistogramScaleEntry("Histogram Scale"),
+
+        destinationPreviewData(0),
+        currentPreviewMode(0),
+        pickTemperature(0),
+        autoAdjustExposure(0),
+        adjTemperatureLabel(0),
+        temperaturePresetLabel(0),
+        darkLabel(0), blackLabel(0),
+        mainExposureLabel(0),
+        fineExposureLabel(0),
+        gammaLabel(0),
+        saturationLabel(0),
+        greenLabel(0),
+        exposureLabel(0),
+        temperatureLabel(0),
+        temperaturePresetCB(0),
+        temperatureInput(0),
+        darkInput(0),
+        blackInput(0),
+        mainExposureInput(0),
+        fineExposureInput(0),
+        gammaInput(0),
+        saturationInput(0),
+        greenInput(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
+
+    const QString        configGroupName;
+    const QString        configDarkInputEntry;
+    const QString        configBlackInputEntry;
+    const QString        configMainExposureEntry;
+    const QString        configFineExposureEntry;
+    const QString        configGammaInputEntry;
+    const QString        configSaturationInputEntry;
+    const QString        configGreenInputEntry;
+    const QString        configTemeratureInputEntry;
+    const QString        configHistogramChannelEntry;
+    const QString        configHistogramScaleEntry;
 
     uchar*               destinationPreviewData;
 
@@ -690,20 +712,21 @@ void WhiteBalanceTool::slotResetSettings()
 void WhiteBalanceTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("whitebalance Tool");
+    KConfigGroup group = config->group(d->configGroupName);
 
-    d->gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
+    d->gboxSettings->histogramBox()->setChannel(group.readEntry(d->configHistogramChannelEntry,
                         (int)LuminosityChannel));
-    d->gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
+    d->gboxSettings->histogramBox()->setScale(group.readEntry(d->configHistogramScaleEntry,
                         (int)LogScaleHistogram));
 
-    d->blackInput->setValue(group.readEntry("Black", d->blackInput->defaultValue()));
-    d->mainExposureInput->setValue(group.readEntry("MainExposure", d->mainExposureInput->defaultValue()));
-    d->fineExposureInput->setValue(group.readEntry("FineExposure", d->fineExposureInput->defaultValue()));
-    d->gammaInput->setValue(group.readEntry("Gamma", d->gammaInput->defaultValue()));
-    d->saturationInput->setValue(group.readEntry("Saturation", d->saturationInput->defaultValue()));
-    d->greenInput->setValue(group.readEntry("Green", d->greenInput->defaultValue()));
-    d->temperatureInput->setValue(group.readEntry("Temperature", d->temperatureInput->defaultValue()));
+    d->blackInput->setValue(group.readEntry(d->configDarkInputEntry,             d->darkInput->defaultValue()));
+    d->blackInput->setValue(group.readEntry(d->configBlackInputEntry,            d->blackInput->defaultValue()));
+    d->mainExposureInput->setValue(group.readEntry(d->configMainExposureEntry,   d->mainExposureInput->defaultValue()));
+    d->fineExposureInput->setValue(group.readEntry(d->configFineExposureEntry,   d->fineExposureInput->defaultValue()));
+    d->gammaInput->setValue(group.readEntry(d->configGammaInputEntry,            d->gammaInput->defaultValue()));
+    d->saturationInput->setValue(group.readEntry(d->configSaturationInputEntry,  d->saturationInput->defaultValue()));
+    d->greenInput->setValue(group.readEntry(d->configGreenInputEntry,            d->greenInput->defaultValue()));
+    d->temperatureInput->setValue(group.readEntry(d->configTemeratureInputEntry, d->temperatureInput->defaultValue()));
 
     slotTemperatureChanged(d->temperatureInput->value());
 }
@@ -711,18 +734,18 @@ void WhiteBalanceTool::readSettings()
 void WhiteBalanceTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("whitebalance Tool");
-    group.writeEntry("Histogram Channel", d->gboxSettings->histogramBox()->channel());
-    group.writeEntry("Histogram Scale", d->gboxSettings->histogramBox()->scale());
+    KConfigGroup group = config->group(d->configGroupName);
+    group.writeEntry(d->configHistogramChannelEntry, d->gboxSettings->histogramBox()->channel());
+    group.writeEntry(d->configHistogramScaleEntry,   d->gboxSettings->histogramBox()->scale());
 
-    group.writeEntry("Dark", d->darkInput->value());
-    group.writeEntry("Black", d->blackInput->value());
-    group.writeEntry("MainExposure", d->mainExposureInput->value());
-    group.writeEntry("FineExposure", d->fineExposureInput->value());
-    group.writeEntry("Gamma", d->gammaInput->value());
-    group.writeEntry("Saturation", d->saturationInput->value());
-    group.writeEntry("Green", d->greenInput->value());
-    group.writeEntry("Temperature", d->temperatureInput->value());
+    group.writeEntry(d->configDarkInputEntry,       d->darkInput->value());
+    group.writeEntry(d->configBlackInputEntry,      d->blackInput->value());
+    group.writeEntry(d->configMainExposureEntry,    d->mainExposureInput->value());
+    group.writeEntry(d->configFineExposureEntry,    d->fineExposureInput->value());
+    group.writeEntry(d->configGammaInputEntry,      d->gammaInput->value());
+    group.writeEntry(d->configSaturationInputEntry, d->saturationInput->value());
+    group.writeEntry(d->configGreenInputEntry,      d->greenInput->value());
+    group.writeEntry(d->configTemeratureInputEntry, d->temperatureInput->value());
     d->previewWidget->writeSettings();
     config->sync();
 }
