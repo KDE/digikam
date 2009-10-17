@@ -123,11 +123,6 @@ void AdvancedRenameInput::mouseMoveEvent(QMouseEvent* e)
     {
         searchAndHighlightTokens(Token, pos);
     }
-//    else if ((e->modifiers() & (Qt::ControlModifier)) &&
-//             (e->modifiers())& (Qt::ShiftModifier))
-//    {
-//        searchAndHighlightTokens(Modifier, pos);
-//    }
     else if (e->modifiers() & Qt::ShiftModifier)
     {
         searchAndHighlightTokens(TokenAndModifiers, pos);
@@ -298,7 +293,7 @@ void AdvancedRenameInput::resetSelection()
     d->tokenMarked     = false;
     d->selectionStart  = -1;
     d->selectionLength = -1;
-    setSelectionColor(StandardText);
+    setSelectionColor(Text);
     emit signalTokenMarked(d->tokenMarked);
 }
 
@@ -352,13 +347,10 @@ void AdvancedRenameInput::setSelectionColor(SelectionType type)
         case Token:
             css = cssTemplate.arg("red").arg("white");
             break;
-        case Modifier:
-            css = cssTemplate.arg("green").arg("white");
-            break;
         case TokenAndModifiers:
             css = cssTemplate.arg("yellow").arg("black");
             break;
-        case StandardText:
+        case Text:
             css = cssTemplate.arg("palette(highlight)").arg("palette(highlighted-text)");
     }
     setStyleSheet(css);

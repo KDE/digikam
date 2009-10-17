@@ -83,9 +83,8 @@ private:
     enum SelectionType
     {
         Token = 0,
-        Modifier,
         TokenAndModifiers,
-        StandardText
+        Text
     };
 
     bool tokenIsSelected();
