@@ -816,77 +816,63 @@ void SearchFieldRangeDate::read(SearchXmlCachingReader& reader)
         if (dates.size() != 2)
             return;
 
-        m_firstDateEdit->setDate(dates.first().date());
         if (m_type == DateTime)
+        {
+            m_firstDateEdit->setDate(dates.first().date());
             m_firstTimeEdit->setTime(dates.first().time());
-
-        m_secondDateEdit->setDate(dates.last().date());
-        if (m_type == DateTime)
+            m_secondDateEdit->setDate(dates.last().date());
             m_secondTimeEdit->setTime(dates.last().time());
+        }
+        else
+        {
+            if (relation == SearchXml::Interval)
+                dates.last() = dates.last().addDays(-1);
+
+            m_firstDateEdit->setDate(dates.first().date());
+            m_secondDateEdit->setDate(dates.last().date());
+        }
     }
     else
     {
         QDateTime dt = reader.valueToDateTime();
-        if (dt.time() == QTime(0,0,0,0))
+        if (m_type == DateTime)
         {
             if (relation == SearchXml::Equal)
             {
                 m_firstDateEdit->setDate(dt.date());
-                if (m_type == DateTime)
-                    m_firstTimeEdit->setTime(QTime(0,0,0,0));
+                m_firstTimeEdit->setTime(dt.time());
                 m_secondDateEdit->setDate(dt.date());
-                if (m_type == DateTime)
-                    m_secondTimeEdit->setTime(QTime(0,0,0,0));
-            }
-            else if (relation == SearchXml::GreaterThanOrEqual)
-            {
-                m_firstDateEdit->setDate(dt.date());
-                if (m_type == DateTime)
-                    m_firstTimeEdit->setTime(QTime(0,0,0,0));
-            }
-            else if (relation == SearchXml::GreaterThan)
-            {
-                dt.addDays(1);
-                m_firstDateEdit->setDate(dt.date());
-                if (m_type == DateTime)
-                    m_firstTimeEdit->setTime(QTime(0,0,0,0));
-            }
-            else if (relation == SearchXml::LessThanOrEqual)
-            {
-                m_secondDateEdit->setDate(dt.date());
-                if (m_type == DateTime)
-                    m_secondTimeEdit->setTime(QTime(0,0,0,0));
-            }
-            else if (relation == SearchXml::LessThan)
-            {
-                dt.addDays(-1);
-                m_secondDateEdit->setDate(dt.date());
-                if (m_type == DateTime)
-                    m_secondTimeEdit->setTime(QTime(0,0,0,0));
-            }
-        }
-        else
-        {
-            if (relation == SearchXml::Equal)
-            {
-                m_firstDateEdit->setDate(dt.date());
-                if (m_type == DateTime)
-                    m_firstTimeEdit->setTime(dt.time());
-                m_secondDateEdit->setDate(dt.date());
-                if (m_type == DateTime)
-                    m_secondTimeEdit->setTime(dt.time());
+                m_secondTimeEdit->setTime(dt.time());
             }
             else if (relation == SearchXml::GreaterThanOrEqual || relation == SearchXml::GreaterThan)
             {
                 m_firstDateEdit->setDate(dt.date());
-                if (m_type == DateTime)
-                    m_firstTimeEdit->setTime(dt.time());
+                m_firstTimeEdit->setTime(dt.time());
+            }
+            {
+                m_secondDateEdit->setDate(dt.date());
+                m_secondTimeEdit->setTime(dt.time());
+            }
+        }
+        else
+        {
+            // In DateOnly mode, we always assume dealing with the beginning of the day, QTime(0,0,0).
+            // In the UI, we show the date only (including the whole day).
+            // The difference between ...Than and ...ThanOrEqual is only one second, ignored.
+
+            if (relation == SearchXml::Equal)
+            {
+                m_firstDateEdit->setDate(dt.date());
+                m_secondDateEdit->setDate(dt.date());
+            }
+            else if (relation == SearchXml::GreaterThanOrEqual || relation == SearchXml::GreaterThan)
+            {
+                m_firstDateEdit->setDate(dt.date());
             }
             else if (relation == SearchXml::LessThanOrEqual || relation == SearchXml::LessThan)
             {
+                dt = dt.addDays(-1);
                 m_secondDateEdit->setDate(dt.date());
-                if (m_type == DateTime)
-                    m_secondTimeEdit->setTime(dt.time());
             }
         }
     }
@@ -911,6 +897,8 @@ void SearchFieldRangeDate::write(SearchXmlWriter& writer)
         }
         else
         {
+            if (m_type == DateOnly)
+                secondDate = secondDate.addDays(1);
             writer.writeField(m_name, SearchXml::Interval);
             writer.writeValue(QList<QDateTime>() << firstDate << secondDate);
             writer.finishField();
@@ -938,7 +926,7 @@ void SearchFieldRangeDate::write(SearchXmlWriter& writer)
                 dt.setTime(m_secondTimeEdit->time());
             else
                 dt = dt.addDays(1); // include whole day
-                writer.writeValue(dt);
+            writer.writeValue(dt);
             writer.finishField();
         }
     }
