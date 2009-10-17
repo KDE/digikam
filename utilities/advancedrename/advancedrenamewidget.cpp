@@ -97,6 +97,8 @@ AdvancedRenameWidget::AdvancedRenameWidget(QWidget* parent)
 
 AdvancedRenameWidget::~AdvancedRenameWidget()
 {
+    writeSettings();
+
     // we need to delete it manually, because it has no parent
     delete d->tooltipTracker;
 
@@ -438,6 +440,7 @@ void AdvancedRenameWidget::setupWidgets()
             this, SLOT(slotTokenMarked(bool)));
 
     slotTokenMarked(false);
+    readSettings();
 }
 
 void AdvancedRenameWidget::slotTokenMarked(bool marked)
@@ -450,6 +453,22 @@ void AdvancedRenameWidget::slotTokenMarked(bool marked)
 void AdvancedRenameWidget::focusLineEdit()
 {
     d->renameInputWidget->setFocus();
+}
+
+void AdvancedRenameWidget::readSettings()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group("AdvancedRenameWidget");
+    d->optionsLabel->setExpanded(group.readEntry("Options are expanded", true));
+}
+
+void AdvancedRenameWidget::writeSettings()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group("AdvancedRenameWidget");
+    group.writeEntry("Options are expanded", (d->optionsLabel) ?
+                                              d->optionsLabel->isExpanded() :
+                                              true);
 }
 
 }  // namespace Digikam

@@ -90,6 +90,9 @@ private:
     void registerParserControls();
     void setupWidgets();
 
+    void readSettings();
+    void writeSettings();
+
 private:
 
     AdvancedRenameWidgetPriv* const d;
