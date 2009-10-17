@@ -28,7 +28,6 @@
 
 #include <QAction>
 #include <QGridLayout>
-#include <QGroupBox>
 #include <QMenu>
 #include <QPushButton>
 #include <QToolButton>
@@ -46,6 +45,7 @@
 #include "dcursortracker.h"
 #include "defaultparser.h"
 #include "themeengine.h"
+#include "rexpanderbox.h"
 
 namespace Digikam
 {
@@ -64,6 +64,7 @@ public:
         tooltipTracker(0),
         renameInputWidget(0),
         parser(0),
+        optionsLabel(0),
         controlWidgetsMask(AdvancedRenameWidget::TokenButtons  |
                            AdvancedRenameWidget::ToolTipButton |
                            AdvancedRenameWidget::ModifierToolButton)
@@ -75,13 +76,14 @@ public:
     QToolButton*                         tokenToolButton;
     QToolButton*                         modifierToolButton;
 
-    QGroupBox*                           btnContainer;
+    QWidget*                             btnContainer;
 
     Qt::Alignment                        tooltipTrackerAlignment;
 
     DTipTracker*                         tooltipTracker;
     AdvancedRenameInput*                 renameInputWidget;
     Parser*                              parser;
+    RLabelExpander*                      optionsLabel;
 
     AdvancedRenameWidget::ControlWidgets controlWidgetsMask;
 };
@@ -229,7 +231,7 @@ void AdvancedRenameWidget::setControlWidgets(ControlWidgets mask)
     bool enableModBtn = enable && !(d->parser->modifiers().isEmpty());
 
     d->renameInputWidget->setEnabled(enable);
-    d->btnContainer->setVisible(enable && (mask & TokenButtons));
+    d->optionsLabel->setVisible(enable && (mask & TokenButtons));
     d->tokenToolButton->setVisible(enable && (mask & TokenToolButton));
     d->modifierToolButton->setVisible(enableModBtn && (mask & ModifierToolButton));
     d->tooltipToggleButton->setVisible(enable && (mask & ToolTipButton));
@@ -379,7 +381,14 @@ void AdvancedRenameWidget::setupWidgets()
     // --------------------------------------------------------
 
     delete d->btnContainer;
-    d->btnContainer = new QGroupBox(i18n("Renaming Options"), this);
+    d->btnContainer = new QWidget(this);
+
+    delete d->optionsLabel;
+    d->optionsLabel = new RLabelExpander(this);
+    d->optionsLabel->setText(i18n("Renaming Options"));
+    d->optionsLabel->setWidget(d->btnContainer);
+
+    // --------------------------------------------------------
 
     delete d->tokenToolButton;
     d->tokenToolButton = new QToolButton;
@@ -411,7 +420,7 @@ void AdvancedRenameWidget::setupWidgets()
     mainLayout->addWidget(d->tooltipToggleButton, 0, 1, 1, 1);
     mainLayout->addWidget(d->tokenToolButton,     0, 2, 1, 1);
     mainLayout->addWidget(d->modifierToolButton,  0, 3, 1, 1);
-    mainLayout->addWidget(d->btnContainer,        1, 0, 1,-1);
+    mainLayout->addWidget(d->optionsLabel,        1, 0, 1,-1);
     mainLayout->setColumnStretch(0, 10);
     mainLayout->setMargin(0);
     mainLayout->setSpacing(KDialog::marginHint());
