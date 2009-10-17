@@ -75,6 +75,25 @@ class LocalContrastToolPriv
 public:
 
     LocalContrastToolPriv() :
+        configGroupName("localcontrast Tool"),
+        configLowSaturationEntry("LowSaturation"),
+        configHighSaturationEntry("HighSaturation"),
+        configPower1Entry("Power1"),
+        configBlur1Entry("Blur1"),
+        configPower2Entry("Power2"),
+        configBlur2Entry("Blur2"),
+        configPower3Entry("Power3"),
+        configBlur3Entry("Blur3"),
+        configPower4Entry("Power4"),
+        configBlur4Entry("Blur4"),
+        configStretchContrastEntry("StretchContrast"),
+        configFastModeEntry("FastMode"),
+        configStageOneEntry("StageOne"),
+        configStageTwoEntry("StageTwo"),
+        configStageThreeEntry("StageThree"),
+        configStageFourEntry("StageFour"),
+        configFunctionInputEntry("FunctionInput"),
+
         stretchContrastCheck(0),
         fastModeCheck(0),
         stageOne(0),
@@ -104,6 +123,25 @@ public:
         previewWidget(0),
         gboxSettings(0)
         {}
+
+    const QString       configGroupName;
+    const QString       configLowSaturationEntry;
+    const QString       configHighSaturationEntry;
+    const QString       configPower1Entry;
+    const QString       configBlur1Entry;
+    const QString       configPower2Entry;
+    const QString       configBlur2Entry;
+    const QString       configPower3Entry;
+    const QString       configBlur3Entry;
+    const QString       configPower4Entry;
+    const QString       configBlur4Entry;
+    const QString       configStretchContrastEntry;
+    const QString       configFastModeEntry;
+    const QString       configStageOneEntry;
+    const QString       configStageTwoEntry;
+    const QString       configStageThreeEntry;
+    const QString       configStageFourEntry;
+    const QString       configFunctionInputEntry;
 
     QCheckBox*          stretchContrastCheck;
     QCheckBox*          fastModeCheck;
@@ -465,27 +503,27 @@ void LocalContrastTool::renderingFinished()
 void LocalContrastTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("localcontrast Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
 
     d->expanderBox->setEnabled(false);
 
-    d->lowSaturationInput->setValue(group.readEntry("LowSaturation",       d->lowSaturationInput->defaultValue()));
-    d->highSaturationInput->setValue(group.readEntry("HighSaturation",     d->highSaturationInput->defaultValue()));
-    d->powerInput1->setValue(group.readEntry("Power1",                     d->powerInput1->defaultValue()));
-    d->blurInput1->setValue(group.readEntry("Blur1",                       d->blurInput1->defaultValue()));
-    d->powerInput2->setValue(group.readEntry("Power2",                     d->powerInput2->defaultValue()));
-    d->blurInput2->setValue(group.readEntry("Blur2",                       d->blurInput2->defaultValue()));
-    d->powerInput3->setValue(group.readEntry("Power3",                     d->powerInput3->defaultValue()));
-    d->blurInput3->setValue(group.readEntry("Blur3",                       d->blurInput3->defaultValue()));
-    d->powerInput4->setValue(group.readEntry("Power4",                     d->powerInput4->defaultValue()));
-    d->blurInput4->setValue(group.readEntry("Blur4",                       d->blurInput4->defaultValue()));
-    d->stretchContrastCheck->setChecked(group.readEntry("StretchContrast", false));
-    d->fastModeCheck->setChecked(group.readEntry("FastMode",               false));
-    d->stageOne->setChecked(group.readEntry("StageOne",                    false));
-    d->stageTwo->setChecked(group.readEntry("StageTwo",                    false));
-    d->stageThree->setChecked(group.readEntry("StageThree",                false));
-    d->stageFour->setChecked(group.readEntry("StageFour",                  false));
-    d->functionInput->setCurrentIndex(group.readEntry("FunctionInput",     d->functionInput->defaultIndex()));
+    d->lowSaturationInput->setValue(    group.readEntry(d->configLowSaturationEntry,   d->lowSaturationInput->defaultValue()));
+    d->highSaturationInput->setValue(   group.readEntry(d->configHighSaturationEntry,  d->highSaturationInput->defaultValue()));
+    d->blurInput1->setValue(            group.readEntry(d->configBlur1Entry,           d->blurInput1->defaultValue()));
+    d->blurInput2->setValue(            group.readEntry(d->configBlur2Entry,           d->blurInput2->defaultValue()));
+    d->blurInput3->setValue(            group.readEntry(d->configBlur3Entry,           d->blurInput3->defaultValue()));
+    d->blurInput4->setValue(            group.readEntry(d->configBlur4Entry,           d->blurInput4->defaultValue()));
+    d->powerInput1->setValue(           group.readEntry(d->configPower1Entry,          d->powerInput1->defaultValue()));
+    d->powerInput2->setValue(           group.readEntry(d->configPower2Entry,          d->powerInput2->defaultValue()));
+    d->powerInput3->setValue(           group.readEntry(d->configPower3Entry,          d->powerInput3->defaultValue()));
+    d->powerInput4->setValue(           group.readEntry(d->configPower4Entry,          d->powerInput4->defaultValue()));
+    d->stretchContrastCheck->setChecked(group.readEntry(d->configStretchContrastEntry, false));
+    d->fastModeCheck->setChecked(       group.readEntry(d->configFastModeEntry,        false));
+    d->stageOne->setChecked(            group.readEntry(d->configStageOneEntry,        false));
+    d->stageTwo->setChecked(            group.readEntry(d->configStageTwoEntry,        false));
+    d->stageThree->setChecked(          group.readEntry(d->configStageThreeEntry,      false));
+    d->stageFour->setChecked(           group.readEntry(d->configStageFourEntry,       false));
+    d->functionInput->setCurrentIndex(  group.readEntry(d->configFunctionInputEntry,   d->functionInput->defaultIndex()));
     d->expanderBox->readSettings();
 
     d->expanderBox->setEnabled(true);
@@ -499,25 +537,25 @@ void LocalContrastTool::readSettings()
 void LocalContrastTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("localcontrast Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
 
-    group.writeEntry("LowSaturation",   d->lowSaturationInput->value());
-    group.writeEntry("HighSaturation",  d->highSaturationInput->value());
-    group.writeEntry("Power1",          d->powerInput1->value());
-    group.writeEntry("Blur1",           d->blurInput1->value());
-    group.writeEntry("Power2",          d->powerInput2->value());
-    group.writeEntry("Blur2",           d->blurInput2->value());
-    group.writeEntry("Power3",          d->powerInput3->value());
-    group.writeEntry("Blur3",           d->blurInput3->value());
-    group.writeEntry("Power4",          d->powerInput4->value());
-    group.writeEntry("Blur4",           d->blurInput4->value());
-    group.writeEntry("StretchContrast", d->stretchContrastCheck->isChecked());
-    group.writeEntry("FastMode",        d->fastModeCheck->isChecked());
-    group.writeEntry("StageOne",        d->stageOne->isChecked());
-    group.writeEntry("StageTwo",        d->stageTwo->isChecked());
-    group.writeEntry("StageThree",      d->stageThree->isChecked());
-    group.writeEntry("StageFour",       d->stageFour->isChecked());
-    group.writeEntry("FunctionInput",   d->functionInput->currentIndex());
+    group.writeEntry(d->configLowSaturationEntry,   d->lowSaturationInput->value());
+    group.writeEntry(d->configHighSaturationEntry,  d->highSaturationInput->value());
+    group.writeEntry(d->configBlur1Entry,           d->blurInput1->value());
+    group.writeEntry(d->configBlur2Entry,           d->blurInput2->value());
+    group.writeEntry(d->configBlur3Entry,           d->blurInput3->value());
+    group.writeEntry(d->configBlur4Entry,           d->blurInput4->value());
+    group.writeEntry(d->configPower1Entry,          d->powerInput1->value());
+    group.writeEntry(d->configPower2Entry,          d->powerInput2->value());
+    group.writeEntry(d->configPower3Entry,          d->powerInput3->value());
+    group.writeEntry(d->configPower4Entry,          d->powerInput4->value());
+    group.writeEntry(d->configStretchContrastEntry, d->stretchContrastCheck->isChecked());
+    group.writeEntry(d->configFastModeEntry,        d->fastModeCheck->isChecked());
+    group.writeEntry(d->configStageOneEntry,        d->stageOne->isChecked());
+    group.writeEntry(d->configStageTwoEntry,        d->stageTwo->isChecked());
+    group.writeEntry(d->configStageThreeEntry,      d->stageThree->isChecked());
+    group.writeEntry(d->configStageFourEntry,       d->stageFour->isChecked());
+    group.writeEntry(d->configFunctionInputEntry,   d->functionInput->currentIndex());
     d->expanderBox->writeSettings();
 
     d->previewWidget->writeSettings();
