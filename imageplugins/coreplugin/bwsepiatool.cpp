@@ -209,6 +209,16 @@ class BWSepiaToolPriv
 public:
 
     BWSepiaToolPriv() :
+        configGroupName("convertbw Tool"),
+        configSettingsTabEntry("Settings Tab"),
+        configBWFilterEntry("BW Filter"),
+        configBWFilmEntry("BW Film"),
+        configBWToneEntry("BW Tone"),
+        configContrastAdjustmentEntry("ContrastAdjustment"),
+        configStrengthAdjustmentEntry("StrengthAdjustment"),
+        configHistogramChannelEntry("Histogram Channel"),
+        configHistogramScaleEntry("Histogram Scale"),
+
         redAttn(0.0),
         greenAttn(0.0),
         blueAttn(0.0),
@@ -228,6 +238,16 @@ public:
         originalImage(0),
         previewPixmapFactory(0)
         {}
+
+    const QString                configGroupName;
+    const QString                configSettingsTabEntry;
+    const QString                configBWFilterEntry;
+    const QString                configBWFilmEntry;
+    const QString                configBWToneEntry;
+    const QString                configContrastAdjustmentEntry;
+    const QString                configStrengthAdjustmentEntry;
+    const QString                configHistogramChannelEntry;
+    const QString                configHistogramScaleEntry;
 
     // Color filter attenuation in percents.
     double                       redAttn;
@@ -666,22 +686,21 @@ void BWSepiaTool::slotColorSelectedFromTarget( const DColor& color )
 void BWSepiaTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("convertbw Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
 
-    d->tab->setCurrentIndex(group.readEntry("Settings Tab", (int)BWFiltersTab));
-
-    d->bwFilters->setCurrentRow(group.readEntry("BW Filter", 0));
-    d->bwFilm->setCurrentRow(group.readEntry("BW Film", 0));
-    d->bwTone->setCurrentRow(group.readEntry("BW Tone", 0));
-    d->cInput->setValue(group.readEntry("ContrastAdjustment", d->cInput->defaultValue()));
-    d->strengthInput->setValue(group.readEntry("StrengthAdjustment", d->strengthInput->defaultValue()));
+    d->tab->setCurrentIndex(group.readEntry(d->configSettingsTabEntry,           (int)BWFiltersTab));
+    d->bwFilters->setCurrentRow(group.readEntry(d->configBWFilterEntry,          0));
+    d->bwFilm->setCurrentRow(group.readEntry(d->configBWFilmEntry,               0));
+    d->bwTone->setCurrentRow(group.readEntry(d->configBWToneEntry,               0));
+    d->cInput->setValue(group.readEntry(d->configContrastAdjustmentEntry,        d->cInput->defaultValue()));
+    d->strengthInput->setValue(group.readEntry(d->configStrengthAdjustmentEntry, d->strengthInput->defaultValue()));
 
     d->curvesBox->readCurveSettings(group);
 
     // we need to call the set methods here, otherwise the curve will not be updated correctly
-    d->gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
+    d->gboxSettings->histogramBox()->setChannel(group.readEntry(d->configHistogramChannelEntry,
                     (int)LuminosityChannel));
-    d->gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
+    d->gboxSettings->histogramBox()->setScale(group.readEntry(d->configHistogramScaleEntry,
                     (int)LogScaleHistogram));
 
     slotFilterSelected();
@@ -690,15 +709,16 @@ void BWSepiaTool::readSettings()
 void BWSepiaTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("convertbw Tool");
-    group.writeEntry("Settings Tab", d->tab->currentIndex());
-    group.writeEntry("Histogram Channel", d->gboxSettings->histogramBox()->channel());
-    group.writeEntry("Histogram Scale", d->gboxSettings->histogramBox()->scale());
-    group.writeEntry("BW Filter", d->bwFilters->currentRow());
-    group.writeEntry("BW Film", d->bwFilm->currentRow());
-    group.writeEntry("BW Tone", d->bwTone->currentRow());
-    group.writeEntry("ContrastAdjustment", d->cInput->value());
-    group.writeEntry("StrengthAdjustment", d->strengthInput->value());
+    KConfigGroup group        = config->group(d->configGroupName);
+
+    group.writeEntry(d->configSettingsTabEntry,        d->tab->currentIndex());
+    group.writeEntry(d->configHistogramChannelEntry,   d->gboxSettings->histogramBox()->channel());
+    group.writeEntry(d->configHistogramScaleEntry,     d->gboxSettings->histogramBox()->scale());
+    group.writeEntry(d->configBWFilterEntry,           d->bwFilters->currentRow());
+    group.writeEntry(d->configBWFilmEntry,             d->bwFilm->currentRow());
+    group.writeEntry(d->configBWToneEntry,             d->bwTone->currentRow());
+    group.writeEntry(d->configContrastAdjustmentEntry, d->cInput->value());
+    group.writeEntry(d->configStrengthAdjustmentEntry, d->strengthInput->value());
 
     d->curvesBox->writeCurveSettings(group);
 
