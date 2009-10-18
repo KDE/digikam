@@ -73,6 +73,18 @@ class SharpenToolPriv
 public:
 
     SharpenToolPriv() :
+        configGroupName("sharpen Tool"),
+        configUnsharpMaskAmountAdjustmentEntry("UnsharpMaskAmountAdjustment"),
+        configRefocusCorrelationAdjustmentEntry("RefocusCorrelationAdjustment"),
+        configRefocusGaussAdjustmentEntry("RefocusGaussAdjustment"),
+        configRefocusMatrixSizeEntry("RefocusMatrixSize"),
+        configRefocusNoiseAdjustmentEntry("RefocusNoiseAdjustment"),
+        configRefocusRadiusAdjustmentEntry("RefocusRadiusAdjustment"),
+        configSimpleSharpRadiusAdjustmentEntry("SimpleSharpRadiusAdjustment"),
+        configUnsharpMaskRadiusAdjustmentEntry("UnsharpMaskRadiusAdjustment"),
+        configSharpenMethodEntry("SharpenMethod"),
+        configUnsharpMaskThresholdAdjustmentEntry("UnsharpMaskThresholdAdjustment"),
+
         stack(0),
         sharpMethod(0),
         matrixSize(0),
@@ -87,6 +99,18 @@ public:
         previewWidget(0),
         gboxSettings(0)
         {}
+
+    const QString       configGroupName;
+    const QString       configUnsharpMaskAmountAdjustmentEntry;
+    const QString       configRefocusCorrelationAdjustmentEntry;
+    const QString       configRefocusGaussAdjustmentEntry;
+    const QString       configRefocusMatrixSizeEntry;
+    const QString       configRefocusNoiseAdjustmentEntry;
+    const QString       configRefocusRadiusAdjustmentEntry;
+    const QString       configSimpleSharpRadiusAdjustmentEntry;
+    const QString       configUnsharpMaskRadiusAdjustmentEntry;
+    const QString       configSharpenMethodEntry;
+    const QString       configUnsharpMaskThresholdAdjustmentEntry;
 
     QStackedWidget*     stack;
 
@@ -350,20 +374,30 @@ void SharpenTool::slotSharpMethodActived(int w)
 void SharpenTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("sharpen Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
 
     blockWidgetSignals(true);
 
-    d->amountInput->setValue(group.readEntry("UnsharpMaskAmountAdjustment", d->amountInput->defaultValue()));
-    d->correlation->setValue(group.readEntry("RefocusCorrelationAdjustment", d->correlation->defaultValue()));
-    d->gauss->setValue(group.readEntry("RefocusGaussAdjustment", d->gauss->defaultValue()));
-    d->matrixSize->setValue(group.readEntry("RefocusMatrixSize", d->matrixSize->defaultValue()));
-    d->noise->setValue(group.readEntry("RefocusNoiseAdjustment", d->noise->defaultValue()));
-    d->radius->setValue(group.readEntry("RefocusRadiusAdjustment", d->radius->defaultValue()));
-    d->radiusInput->setValue(group.readEntry("SimpleSharpRadiusAdjustment", d->radiusInput->defaultValue()));
-    d->radiusInput2->setValue(group.readEntry("UnsharpMaskRadiusAdjustment", d->radiusInput2->defaultValue()));
-    d->sharpMethod->setCurrentIndex(group.readEntry("SharpenMethod", d->sharpMethod->defaultIndex()));
-    d->thresholdInput->setValue(group.readEntry("UnsharpMaskThresholdAdjustment", d->thresholdInput->defaultValue()));
+    d->amountInput->setValue(group.readEntry(d->configUnsharpMaskAmountAdjustmentEntry,
+            d->amountInput->defaultValue()));
+    d->correlation->setValue(group.readEntry(d->configRefocusCorrelationAdjustmentEntry,
+            d->correlation->defaultValue()));
+    d->gauss->setValue(group.readEntry(d->configRefocusGaussAdjustmentEntry,
+            d->gauss->defaultValue()));
+    d->matrixSize->setValue(group.readEntry(d->configRefocusMatrixSizeEntry,
+            d->matrixSize->defaultValue()));
+    d->noise->setValue(group.readEntry(d->configRefocusNoiseAdjustmentEntry,
+            d->noise->defaultValue()));
+    d->radius->setValue(group.readEntry(d->configRefocusRadiusAdjustmentEntry,
+            d->radius->defaultValue()));
+    d->radiusInput->setValue(group.readEntry(d->configSimpleSharpRadiusAdjustmentEntry,
+            d->radiusInput->defaultValue()));
+    d->radiusInput2->setValue(group.readEntry(d->configUnsharpMaskRadiusAdjustmentEntry,
+            d->radiusInput2->defaultValue()));
+    d->sharpMethod->setCurrentIndex(group.readEntry(d->configSharpenMethodEntry,
+            d->sharpMethod->defaultIndex()));
+    d->thresholdInput->setValue(group.readEntry(d->configUnsharpMaskThresholdAdjustmentEntry,
+            d->thresholdInput->defaultValue()));
 
     blockWidgetSignals(false);
 
@@ -373,17 +407,17 @@ void SharpenTool::readSettings()
 void SharpenTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("sharpen Tool");
-    group.writeEntry("SimpleSharpRadiusAdjustment", d->radiusInput->value());
-    group.writeEntry("UnsharpMaskRadiusAdjustment", d->radiusInput2->value());
-    group.writeEntry("UnsharpMaskAmountAdjustment", d->amountInput->value());
-    group.writeEntry("UnsharpMaskThresholdAdjustment", d->thresholdInput->value());
-    group.writeEntry("RefocusMatrixSize", d->matrixSize->value());
-    group.writeEntry("RefocusRadiusAdjustment", d->radius->value());
-    group.writeEntry("RefocusGaussAdjustment", d->gauss->value());
-    group.writeEntry("RefocusCorrelationAdjustment", d->correlation->value());
-    group.writeEntry("RefocusNoiseAdjustment", d->noise->value());
-    group.writeEntry("SharpenMethod", d->sharpMethod->currentIndex());
+    KConfigGroup group        = config->group(d->configGroupName);
+    group.writeEntry(d->configSimpleSharpRadiusAdjustmentEntry,    d->radiusInput->value());
+    group.writeEntry(d->configUnsharpMaskRadiusAdjustmentEntry,    d->radiusInput2->value());
+    group.writeEntry(d->configUnsharpMaskAmountAdjustmentEntry,    d->amountInput->value());
+    group.writeEntry(d->configUnsharpMaskThresholdAdjustmentEntry, d->thresholdInput->value());
+    group.writeEntry(d->configRefocusMatrixSizeEntry,              d->matrixSize->value());
+    group.writeEntry(d->configRefocusRadiusAdjustmentEntry,        d->radius->value());
+    group.writeEntry(d->configRefocusGaussAdjustmentEntry,         d->gauss->value());
+    group.writeEntry(d->configRefocusCorrelationAdjustmentEntry,   d->correlation->value());
+    group.writeEntry(d->configRefocusNoiseAdjustmentEntry,         d->noise->value());
+    group.writeEntry(d->configSharpenMethodEntry,                  d->sharpMethod->currentIndex());
     d->previewWidget->writeSettings();
     config->sync();
 }
