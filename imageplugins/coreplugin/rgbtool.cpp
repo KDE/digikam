@@ -79,6 +79,13 @@ class RGBToolPriv
 public:
 
     RGBToolPriv() :
+        configGroupName("colorbalance Tool"),
+        configHistogramChannelEntry("Histogram Channel"),
+        configHistogramScaleEntry("Histogram Scale"),
+        configRedAdjustmentEntry("RedAdjustment"),
+        configGreenAdjustmentEntry("GreenAdjustment"),
+        configBlueAdjustmentEntry("BlueAdjustment"),
+
         destinationPreviewData(0),
         rSlider(0),
         gSlider(0),
@@ -90,6 +97,13 @@ public:
         previewWidget(0),
         gboxSettings(0)
         {}
+
+    const QString        configGroupName;
+    const QString        configHistogramChannelEntry;
+    const QString        configHistogramScaleEntry;
+    const QString        configRedAdjustmentEntry;
+    const QString        configGreenAdjustmentEntry;
+    const QString        configBlueAdjustmentEntry;
 
     uchar*               destinationPreviewData;
 
@@ -271,28 +285,29 @@ void RGBTool::slotColorSelectedFromTarget( const DColor& color )
 void RGBTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("colorbalance Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
 
-    d->gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
+    d->gboxSettings->histogramBox()->setChannel(group.readEntry(d->configHistogramChannelEntry,
                         (int)LuminosityChannel));
-    d->gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
+    d->gboxSettings->histogramBox()->setScale(group.readEntry(d->configHistogramScaleEntry,
                         (int)LogScaleHistogram));
 
-    int r = group.readEntry("RedAdjustment", d->rInput->defaultValue());
-    int g = group.readEntry("GreenAdjustment", d->gInput->defaultValue());
-    int b = group.readEntry("BlueAdjustment", d->bInput->defaultValue());
+    int r = group.readEntry(d->configRedAdjustmentEntry,   d->rInput->defaultValue());
+    int g = group.readEntry(d->configGreenAdjustmentEntry, d->gInput->defaultValue());
+    int b = group.readEntry(d->configBlueAdjustmentEntry,  d->bInput->defaultValue());
     adjustSliders(r, g, b);
 }
 
 void RGBTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("colorbalance Tool");
-    group.writeEntry("Histogram Channel", d->gboxSettings->histogramBox()->channel());
-    group.writeEntry("Histogram Scale", d->gboxSettings->histogramBox()->scale());
-    group.writeEntry("RedAdjustment", d->rSlider->value());
-    group.writeEntry("GreenAdjustment", d->gInput->value());
-    group.writeEntry("BlueAdjustment", d->bInput->value());
+    KConfigGroup group        = config->group(d->configGroupName);
+
+    group.writeEntry(d->configHistogramChannelEntry, d->gboxSettings->histogramBox()->channel());
+    group.writeEntry(d->configHistogramScaleEntry,   d->gboxSettings->histogramBox()->scale());
+    group.writeEntry(d->configRedAdjustmentEntry,    d->rSlider->value());
+    group.writeEntry(d->configGreenAdjustmentEntry,  d->gInput->value());
+    group.writeEntry(d->configBlueAdjustmentEntry,   d->bInput->value());
     d->previewWidget->writeSettings();
     group.sync();
 }
