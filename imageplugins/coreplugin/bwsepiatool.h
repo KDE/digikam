@@ -25,21 +25,9 @@
 #ifndef BWSEPIATOOL_H
 #define BWSEPIATOOL_H
 
-// Qt includes
-
-#include <QString>
-
 // Local includes
 
-#include "dimg.h"
 #include "editortool.h"
-
-class QListWidget;
-class QToolButton;
-class QButtonGroup;
-class QPushButton;
-
-class KTabWidget;
 
 namespace KDcrawIface
 {
@@ -48,12 +36,7 @@ class RIntNumInput;
 
 namespace Digikam
 {
-class HistogramWidget;
-class ColorGradientWidget;
-class ImageWidget;
 class DColor;
-class CurvesBox;
-class EditorToolSettings;
 }
 
 namespace DigikamImagesPluginCore

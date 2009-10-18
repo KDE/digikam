@@ -27,36 +27,23 @@
 
 // Qt includes
 
-#include <QButtonGroup>
-#include <QColor>
 #include <QFile>
-#include <QFrame>
 #include <QGridLayout>
-#include <QGroupBox>
-#include <QHBoxLayout>
 #include <QHash>
-#include <QLabel>
 #include <QListWidget>
 #include <QPixmap>
-#include <QPushButton>
 #include <QTextStream>
-#include <QTimer>
-#include <QToolButton>
 
 // KDE includes
 
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kcursor.h>
 #include <kfiledialog.h>
-#include <kglobal.h>
 #include <kglobalsettings.h>
-#include <kicon.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kstandarddirs.h>
 #include <ktabwidget.h>
 #include <kvbox.h>
 
