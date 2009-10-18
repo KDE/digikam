@@ -508,6 +508,7 @@ void RatioCropTool::readSettings()
     d->flipVerBox->setChecked(group.readEntry("Golden Flip Vertical", false));
     d->guideColorBt->setColor(group.readEntry("Guide Color", defaultGuideColor));
     d->guideSize->setValue(group.readEntry("Guide Width", d->guideSize->defaultValue()));
+
     d->imageSelectionWidget->slotGuideLines(d->guideLinesCB->currentIndex());
     d->imageSelectionWidget->slotChangeGuideColor(d->guideColorBt->color());
 

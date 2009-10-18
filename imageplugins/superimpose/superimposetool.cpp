@@ -238,7 +238,6 @@ void SuperImposeTool::readSettings()
     KConfigGroup group = config->group("Album Settings");
     KUrl albumDBUrl( group.readEntry("Album Path", KGlobalSettings::documentPath()) );
     group = config->group("superimpose Tool");
-    group = config->group("Template Superimpose Tool Settings");
     d->templatesRootUrl.setPath( group.readEntry("Templates Root URL", albumDBUrl.toLocalFile()) );
     d->templatesUrl.setPath( group.readEntry("Templates URL", albumDBUrl.toLocalFile()) );
     d->dirSelect->setRootPath(d->templatesRootUrl, d->templatesUrl);
