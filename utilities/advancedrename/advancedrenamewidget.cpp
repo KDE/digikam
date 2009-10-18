@@ -476,8 +476,8 @@ void AdvancedRenameWidget::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
     group.writeEntry(d->configExpandedStateEntry, (d->optionsLabel) ?
-                                                    d->optionsLabel->isExpanded() :
-                                                    d->configExpandedStateDefault);
+                                                   d->optionsLabel->isExpanded() :
+                                                   d->configExpandedStateDefault);
 }
 
 }  // namespace Digikam
