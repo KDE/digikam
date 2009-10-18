@@ -69,12 +69,20 @@ class ProfileConversionToolPriv
 public:
 
     ProfileConversionToolPriv() :
+        configGroupName("Profile Conversion Tool"),
+        configProfileEntry("Profile"),
+        configRecentlyUsedProfilesEntry("Recently Used Profiles"),
+
         profilesBox(0),
         previewWidget(0),
         gboxSettings(0)
     {
         favoriteProfiles.setMaxCost(10);
     }
+
+    const QString            configGroupName;
+    const QString            configProfileEntry;
+    const QString            configRecentlyUsedProfilesEntry;
 
     IccProfilesComboBox*     profilesBox;
 
@@ -240,9 +248,11 @@ void ProfileConversionTool::slotProfileChanged()
 void ProfileConversionTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("Profile Conversion Tool");
-    d->profilesBox->setCurrentProfile(group.readPathEntry("Profile", d->currentProfile.filePath()));
-    QStringList lastProfiles = group.readPathEntry("Recently Used Profiles", QStringList());
+    KConfigGroup group        = config->group(d->configGroupName);
+
+    d->profilesBox->setCurrentProfile(group.readPathEntry(d->configProfileEntry,       d->currentProfile.filePath()));
+    QStringList lastProfiles = group.readPathEntry(d->configRecentlyUsedProfilesEntry, QStringList());
+
     foreach (const QString &path, lastProfiles)
         d->favoriteProfiles.insert(path, 0);
 }
@@ -250,9 +260,11 @@ void ProfileConversionTool::readSettings()
 void ProfileConversionTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("Profile Conversion Tool");
-    group.writePathEntry("Profile", d->profilesBox->currentProfile().filePath());
-    group.writePathEntry("Recently Used Profiles", d->favoriteProfiles.keys());
+    KConfigGroup group        = config->group(d->configGroupName);
+
+    group.writePathEntry(d->configProfileEntry,              d->profilesBox->currentProfile().filePath());
+    group.writePathEntry(d->configRecentlyUsedProfilesEntry, d->favoriteProfiles.keys());
+
     d->previewWidget->writeSettings();
     config->sync();
 }

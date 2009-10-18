@@ -68,23 +68,22 @@ class ImagePlugin_CorePriv
 
 public:
 
-    ImagePlugin_CorePriv()
-    {
-        redeyeAction          = 0;
-        BCGAction             = 0;
-        HSLAction             = 0;
-        RGBAction             = 0;
-        autoCorrectionAction  = 0;
-        invertAction          = 0;
-        BWAction              = 0;
-        aspectRatioCropAction = 0;
-        resizeAction          = 0;
-        sharpenAction         = 0;
-        blurAction            = 0;
-        convertTo8Bits        = 0;
-        convertTo16Bits       = 0;
-        profileMenuAction     = 0;
-    }
+    ImagePlugin_CorePriv() :
+        redeyeAction(0),
+        BCGAction(0),
+        HSLAction(0),
+        RGBAction(0),
+        autoCorrectionAction(0),
+        invertAction(0),
+        BWAction(0),
+        aspectRatioCropAction(0),
+        resizeAction(0),
+        sharpenAction(0),
+        blurAction(0),
+        convertTo8Bits(0),
+        convertTo16Bits(0),
+        profileMenuAction(0)
+        {}
 
     KAction               *redeyeAction;
     KAction               *BCGAction;
@@ -378,7 +377,7 @@ void ImagePlugin_Core::slotUpdateColorSpaceMenu()
         KAction *action = new KAction(i18n("Color Management is disabled..."), this);
         d->profileMenuAction->addAction(action);
 
-        connect(action, SIGNAL(triggered()), 
+        connect(action, SIGNAL(triggered()),
                 this, SLOT(slotSetupICC()));
         return;
     }
@@ -410,7 +409,7 @@ void ImagePlugin_Core::slotUpdateColorSpaceMenu()
 
     KAction *moreAction = new KAction(i18n("Other..."), this);
     d->profileMenuAction->addAction(moreAction);
-    connect(moreAction, SIGNAL(triggered()), 
+    connect(moreAction, SIGNAL(triggered()),
             this, SLOT(slotProfileConversionTool()));
 }
 
