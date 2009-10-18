@@ -60,6 +60,7 @@ namespace DigikamImagesPluginCore
 {
 
 class PreviewPixmapFactory;
+class BWSepiaToolPriv;
 
 class BWSepiaTool : public Digikam::EditorTool
 {
@@ -95,76 +96,7 @@ private Q_SLOTS:
 
 private:
 
-    enum BlackWhiteConversionType
-    {
-        BWNoFilter=0,         // B&W filter to the front of lens.
-        BWGreenFilter,
-        BWOrangeFilter,
-        BWRedFilter,
-        BWYellowFilter,
-        BWYellowGreenFilter,
-        BWBlueFilter,
-
-        BWGeneric,            // B&W film simulation.
-        BWAgfa200X,
-        BWAgfapan25,
-        BWAgfapan100,
-        BWAgfapan400,
-        BWIlfordDelta100,
-        BWIlfordDelta400,
-        BWIlfordDelta400Pro3200,
-        BWIlfordFP4,
-        BWIlfordHP5,
-        BWIlfordPanF,
-        BWIlfordXP2Super,
-        BWKodakTmax100,
-        BWKodakTmax400,
-        BWKodakTriX,
-
-        BWNoTone,             // Chemical color tone filter.
-        BWSepiaTone,
-        BWBrownTone,
-        BWColdTone,
-        BWSeleniumTone,
-        BWPlatinumTone,
-        BWGreenTone
-    };
-
-    enum SettingsTab
-    {
-        FilmTab=0,
-        BWFiltersTab,
-        ToneTab,
-        LuminosityTab
-    };
-
-    // Color filter attenuation in percents.
-    double m_redAttn, m_greenAttn, m_blueAttn;
-
-    // Channel mixer color multiplier.
-    double m_redMult, m_greenMult, m_blueMult;
-
-    uchar*                         m_destinationPreviewData;
-
-    QListWidget*                   m_bwFilters;
-    QListWidget*                   m_bwFilm;
-    QListWidget*                   m_bwTone;
-
-    KTabWidget*                    m_tab;
-
-    KDcrawIface::RIntNumInput*     m_cInput;
-    KDcrawIface::RIntNumInput*     m_strengthInput;
-
-    Digikam::ImageWidget*          m_previewWidget;
-
-    Digikam::CurvesBox*            m_curvesBox;
-
-    Digikam::EditorToolSettings*   m_gboxSettings;
-
-    Digikam::DImg*                 m_originalImage;
-    Digikam::DImg                  m_thumbnailImage;
-
-    PreviewPixmapFactory*          m_previewPixmapFactory;
+    BWSepiaToolPriv* const d;
 };
 
 }  // namespace DigikamImagesPluginCore
