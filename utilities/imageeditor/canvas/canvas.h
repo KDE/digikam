@@ -7,7 +7,7 @@
  * Description : image editor canvas management class
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -69,21 +69,21 @@ public:
     Canvas(QWidget *parent=0);
     ~Canvas();
 
-    void  load(const QString& filename, IOFileSettingsContainer *IOFileSettings);
-    void  preload(const QString& filename);
+    void    load(const QString& filename, IOFileSettingsContainer *IOFileSettings);
+    void    preload(const QString& filename);
 
-    void  saveAs(const QString& filename, IOFileSettingsContainer *IOFileSettings,
-                 bool setExifOrientationTag, const QString& mimeType=QString());
-    void  resetImage();
-    void  switchToLastSaved(const QString& newFilename);
-    void  abortSaving();
-    void  applyTransform(const IccTransform& transform);
-    void  setModified();
-    void  readMetadataFromFile(const QString& file);
-    void  clearUndoHistory();
-    void  setUndoHistoryOrigin();
-    void  updateUndoState();
-    DImg  currentImage();
+    void    saveAs(const QString& filename, IOFileSettingsContainer *IOFileSettings,
+                   bool setExifOrientationTag, const QString& mimeType=QString());
+    void    resetImage();
+    void    switchToLastSaved(const QString& newFilename);
+    void    abortSaving();
+    void    applyTransform(const IccTransform& transform);
+    void    setModified();
+    void    readMetadataFromFile(const QString& file);
+    void    clearUndoHistory();
+    void    setUndoHistoryOrigin();
+    void    updateUndoState();
+    DImg    currentImage();
     QString currentImageFileFormat();
     QString currentImageFilePath();
 
@@ -191,9 +191,9 @@ private:
     void   updateAutoZoom();
     void   updateContentsSize(bool deleteRubber);
 
-    void paintViewport(const QRect& er, bool antialias);
+    void   paintViewport(const QRect& er, bool antialias);
 
-    void reset();
+    void   reset();
 
 private Q_SLOTS:
 

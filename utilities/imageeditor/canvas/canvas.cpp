@@ -7,7 +7,7 @@
  * Description : image editor canvas management class
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -94,6 +94,10 @@ public:
         rtActive         = false;
         lbActive         = false;
         rbActive         = false;
+        lsActive         = false;
+        rsActive         = false;
+        bsActive         = false;
+        tsActive         = false;
         midButtonPressed = false;
         midButtonX       = 0;
         midButtonY       = 0;
@@ -119,6 +123,10 @@ public:
     bool                     rtActive;
     bool                     lbActive;
     bool                     rbActive;
+    bool                     lsActive;
+    bool                     rsActive;
+    bool                     bsActive;
+    bool                     tsActive;
     bool                     midButtonPressed;
 
     const int                tileSize;
@@ -440,6 +448,10 @@ void Canvas::updateContentsSize(bool deleteRubber)
         d->rtActive     = false;
         d->lbActive     = false;
         d->rbActive     = false;
+        d->lsActive     = false;
+        d->rsActive     = false;
+        d->bsActive     = false;
+        d->tsActive     = false;
         d->pressedMoved = false;
         viewport()->unsetCursor();
         viewport()->setMouseTracking(false);
@@ -453,13 +465,12 @@ void Canvas::updateContentsSize(bool deleteRubber)
     if (visibleWidth() > wZ || visibleHeight() > hZ)
     {
         // Center the image
-        int centerx = contentsRect().width()/2;
-        int centery = contentsRect().height()/2;
-        int xoffset = int(centerx - wZ/2);
-        int yoffset = int(centery - hZ/2);
-        xoffset     = qMax(xoffset, 0);
-        yoffset     = qMax(yoffset, 0);
-
+        int centerx   = contentsRect().width()/2;
+        int centery   = contentsRect().height()/2;
+        int xoffset   = int(centerx - wZ/2);
+        int yoffset   = int(centery - hZ/2);
+        xoffset       = qMax(xoffset, 0);
+        yoffset       = qMax(yoffset, 0);
         d->pixmapRect = QRect(xoffset, yoffset, wZ, hZ);
     }
     else
@@ -662,7 +673,9 @@ void Canvas::contentsMousePressEvent(QMouseEvent *e)
     if (e->button() == Qt::LeftButton)
     {
         if (d->ltActive || d->rtActive ||
-            d->lbActive || d->rbActive)
+            d->lbActive || d->rbActive ||
+            d->lsActive || d->rsActive ||
+            d->tsActive || d->bsActive)
         {
             if (!d->rubber->isActive())
                 return;
@@ -671,22 +684,22 @@ void Canvas::contentsMousePressEvent(QMouseEvent *e)
 
             QRect r(d->rubber->rubberBandAreaOnContents());
 
-            if (d->ltActive)
+            if (d->ltActive || d->tsActive)
             {
                 d->rubber->setFirstPointOnViewport(r.bottomRight());
                 d->rubber->setSecondPointOnViewport(r.topLeft());
             }
-            else if (d->rtActive)
+            else if (d->rtActive || d->rsActive)
             {
                 d->rubber->setFirstPointOnViewport(r.bottomLeft());
                 d->rubber->setSecondPointOnViewport(r.topRight());
             }
-            else if (d->lbActive)
+            else if (d->lbActive || d->lsActive)
             {
                 d->rubber->setFirstPointOnViewport(r.topRight());
                 d->rubber->setSecondPointOnViewport(r.bottomLeft());
             }
-            else if (d->rbActive)
+            else if (d->rbActive || d->bsActive)
             {
                 d->rubber->setFirstPointOnViewport(r.topLeft());
                 d->rubber->setSecondPointOnViewport(r.bottomRight());
@@ -749,7 +762,9 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
 
         if (e->buttons() != Qt::LeftButton &&
             !(d->ltActive || d->rtActive ||
-              d->lbActive || d->rbActive))
+              d->lbActive || d->rbActive ||
+              d->lsActive || d->rsActive ||
+              d->tsActive || d->bsActive))
             return;
 
         // Move content if necessary.
@@ -760,7 +775,33 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
         blockSignals(false);
 
         // set the new rubber position.
-        d->rubber->setSecondPointOnViewport(e->pos());
+        if (!(d->lsActive || d->rsActive ||
+              d->tsActive || d->bsActive))
+            d->rubber->setSecondPointOnViewport(e->pos());
+        else
+        {
+            QRect r(d->rubber->rubberBandAreaOnContents());
+            if (d->lsActive)
+            {
+                QPoint sp(e->x(), r.y()+r.height());
+                d->rubber->setSecondPointOnViewport(sp);
+            }
+            else if (d->bsActive)
+            {
+                QPoint sp(r.x()+r.width(), e->y());
+                d->rubber->setSecondPointOnViewport(sp);
+            }
+            else if (d->rsActive)
+            {
+                QPoint sp(e->x(), r.y());
+                d->rubber->setSecondPointOnViewport(sp);
+            }
+            else
+            {
+                QPoint sp(r.x(), e->y());
+                d->rubber->setSecondPointOnViewport(sp);
+            }
+        }
 
         d->pressedMoved  = true;
         d->pressedMoving = true;
@@ -775,15 +816,23 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
 
         QRect r(d->rubber->rubberBandAreaOnContents());
 
-        QRect lt(r.x()-5,           r.y()-5,            10, 10);
-        QRect rt(r.x()+r.width()-5, r.y()-5,            10, 10);
-        QRect lb(r.x()-5,           r.y()+r.height()-5, 10, 10);
-        QRect rb(r.x()+r.width()-5, r.y()+r.height()-5, 10, 10);
+        QRect lt(r.x()-5,           r.y()-5,            10,           10);
+        QRect rt(r.x()+r.width()-5, r.y()-5,            10,           10);
+        QRect lb(r.x()-5,           r.y()+r.height()-5, 10,           10);
+        QRect rb(r.x()+r.width()-5, r.y()+r.height()-5, 10,           10);
+        QRect ls(r.x()-5,           r.y()+5,            10,           r.height()-10);
+        QRect rs(r.x()+r.width()-5, r.y()+5,            10,           r.height()-10);
+        QRect ts(r.x()+5,           r.y()-5,            r.width()-10, 10);
+        QRect bs(r.x()+5,           r.y()+r.height()-5, r.width()-10, 10);
 
         d->ltActive = false;
         d->rtActive = false;
         d->lbActive = false;
         d->rbActive = false;
+        d->lsActive = false;
+        d->rsActive = false;
+        d->bsActive = false;
+        d->tsActive = false;
 
         if (lt.contains(e->x(), e->y()))
         {
@@ -805,8 +854,30 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
             viewport()->setCursor(Qt::SizeBDiagCursor);
             d->rtActive = true;
         }
+        else if (ls.contains(e->x(), e->y()))
+        {
+            viewport()->setCursor(Qt::SizeHorCursor);
+            d->lsActive = true;
+        }
+        else if (ts.contains(e->x(), e->y()))
+        {
+            viewport()->setCursor(Qt::SizeVerCursor);
+            d->tsActive = true;
+        }
+        else if (rs.contains(e->x(), e->y()))
+        {
+            viewport()->setCursor(Qt::SizeHorCursor);
+            d->rsActive = true;
+        }
+        else if (bs.contains(e->x(), e->y()))
+        {
+            viewport()->setCursor(Qt::SizeVerCursor);
+            d->bsActive = true;
+        }
         else
+        {
             viewport()->unsetCursor();
+        }
     }
 }
 
@@ -836,6 +907,10 @@ void Canvas::contentsMouseReleaseEvent(QMouseEvent *e)
         d->rtActive = false;
         d->lbActive = false;
         d->rbActive = false;
+        d->lsActive = false;
+        d->rsActive = false;
+        d->bsActive = false;
+        d->tsActive = false;
         d->rubber->setActive(false);
         viewport()->setMouseTracking(false);
         viewport()->unsetCursor();
@@ -994,10 +1069,10 @@ void Canvas::setZoomFactor(double zoom)
     double cpx = contentsX() + visibleWidth()  / 2.0;
     double cpy = contentsY() + visibleHeight() / 2.0;
 
-    cpx = (cpx / d->tileSize) * floor(d->tileSize / d->zoom);
-    cpy = (cpy / d->tileSize) * floor(d->tileSize / d->zoom);
+    cpx        = (cpx / d->tileSize) * floor(d->tileSize / d->zoom);
+    cpy        = (cpy / d->tileSize) * floor(d->tileSize / d->zoom);
 
-    d->zoom = zoom;
+    d->zoom    = zoom;
 
     d->im->zoom(d->zoom);
     updateContentsSize(false);
@@ -1020,17 +1095,15 @@ void Canvas::fitToSelect()
     {
         // If selected area, use center of selection
         // and recompute zoom factor accordingly.
-        double cpx = xSel + wSel / 2.0;
-        double cpy = ySel + hSel / 2.0;
-
+        double cpx       = xSel + wSel / 2.0;
+        double cpy       = ySel + hSel / 2.0;
         double srcWidth  = wSel;
         double srcHeight = hSel;
         double dstWidth  = contentsRect().width();
         double dstHeight = contentsRect().height();
+        d->zoom          = qMin(dstWidth/srcWidth, dstHeight/srcHeight);
+        d->autoZoom      = false;
 
-        d->zoom = qMin(dstWidth/srcWidth, dstHeight/srcHeight);
-
-        d->autoZoom = false;
         emit signalToggleOffFitToWindow();
         d->im->zoom(d->zoom);
         updateContentsSize(true);
@@ -1234,7 +1307,7 @@ void Canvas::slotCopy()
         return;
 
     QApplication::setOverrideCursor (Qt::WaitCursor);
-    uchar* data = d->im->getImageSelection();
+    uchar* data  = d->im->getImageSelection();
     DImg selDImg = DImg(w, h, d->im->sixteenBit(), d->im->hasAlpha(), data);
     delete [] data;
 
@@ -1252,10 +1325,10 @@ void Canvas::slotSelected()
     if (d->rubber->isActive() && d->pressedMoved)
     {
         QRect sel = calcSelectedArea();
-        x = sel.x();
-        y = sel.y();
-        w = sel.width();
-        h = sel.height();
+        x         = sel.x();
+        y         = sel.y();
+        w         = sel.width();
+        h         = sel.height();
     }
 
     d->im->setSelectedArea(x, y, w, h);
