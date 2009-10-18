@@ -392,12 +392,12 @@ protected:
     static void ExternalDrawCallback(Marble::GeoPainter *painter, void* yourdata);
     void computeClusterDistances();
 
-signals:
+Q_SIGNALS:
 
     void signalSelectionChanged();
     void signalSoloChanged();
 
-public slots:
+public Q_SLOTS:
 
     void setAutoRedrowOnMarkerAdd(const bool doRedraw);
     void clearSelection();

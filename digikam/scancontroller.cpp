@@ -208,7 +208,7 @@ public:
 
     ScanControllerLoadingCacheFileWatch();
 
-private slots:
+private Q_SLOTS:
 
     void slotImageChanged(const ImageChangeset& changeset);
 };

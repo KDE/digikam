@@ -82,7 +82,7 @@ public:
     virtual QList<QWidget*> createItemWidgets() const;
     virtual void updateItemWidgets(const QList<QWidget*> widgets, const QStyleOptionViewItem& option, const QPersistentModelIndex& index) const;
 
-signals:
+Q_SIGNALS:
 
     void categoryButtonPressed(int mappedId);
     void buttonPressed(int mappedId);

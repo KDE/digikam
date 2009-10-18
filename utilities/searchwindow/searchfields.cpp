@@ -1679,7 +1679,7 @@ public:
     virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
     virtual void setValueWidgetsVisible(bool visible);
 
-protected slots:
+protected Q_SLOTS:
 
     void slotClicked();
     void slotUpdateLabel();
