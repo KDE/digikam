@@ -80,6 +80,16 @@ class RedEyeToolPriv
 public:
 
     RedEyeToolPriv() :
+        configGroupName("redeye Tool"),
+        configHistogramChannelEntry("Histogram Channel"),
+        configHistogramScaleEntry("Histogram Scale"),
+        configRedThresholdEntry("RedThreshold"),
+        configSmoothLevelEntry("SmoothLevel"),
+        configHueColoringTintEntry("HueColoringTint"),
+        configSatColoringTintEntry("SatColoringTint"),
+        configValColoringTintEntry("ValColoringTint"),
+        configTintLevelEntry("TintLevel"),
+
         destinationPreviewData(0),
         thresholdLabel(0),
         smoothLabel(0),
@@ -91,6 +101,16 @@ public:
         previewWidget(0),
         gboxSettings(0)
         {}
+
+    const QString           configGroupName;
+    const QString           configHistogramChannelEntry;
+    const QString           configHistogramScaleEntry;
+    const QString           configRedThresholdEntry;
+    const QString           configSmoothLevelEntry;
+    const QString           configHueColoringTintEntry;
+    const QString           configSatColoringTintEntry;
+    const QString           configValColoringTintEntry;
+    const QString           configTintLevelEntry;
 
     uchar*                  destinationPreviewData;
 
@@ -290,19 +310,19 @@ void RedEyeTool::slotColorSelectedFromTarget(const DColor& color)
 void RedEyeTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("redeye Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
 
-    d->gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
+    d->gboxSettings->histogramBox()->setChannel(group.readEntry(d->configHistogramChannelEntry,
                         (int)LuminosityChannel));
-    d->gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
+    d->gboxSettings->histogramBox()->setScale(group.readEntry(d->configHistogramScaleEntry,
                         (int)LogScaleHistogram));
 
-    d->redThreshold->setValue(group.readEntry("RedThreshold", d->redThreshold->defaultValue()));
-    d->smoothLevel->setValue(group.readEntry("SmoothLevel", d->smoothLevel->defaultValue()));
-    d->HSSelector->setHue(group.readEntry("HueColoringTint", 0));
-    d->HSSelector->setSaturation(group.readEntry("SatColoringTint", 128));
-    d->VSelector->setValue(group.readEntry("ValColoringTint", 255));
-    d->tintLevel->setValue(group.readEntry("TintLevel", d->tintLevel->defaultValue()));
+    d->redThreshold->setValue(group.readEntry(d->configRedThresholdEntry,       d->redThreshold->defaultValue()));
+    d->smoothLevel->setValue(group.readEntry(d->configSmoothLevelEntry,         d->smoothLevel->defaultValue()));
+    d->HSSelector->setHue(group.readEntry(d->configHueColoringTintEntry,        0));
+    d->HSSelector->setSaturation(group.readEntry(d->configSatColoringTintEntry, 128));
+    d->VSelector->setValue(group.readEntry(d->configValColoringTintEntry,       255));
+    d->tintLevel->setValue(group.readEntry(d->configTintLevelEntry,             d->tintLevel->defaultValue()));
 
     QColor col;
     col.setHsv(d->HSSelector->hue(),
@@ -314,15 +334,15 @@ void RedEyeTool::readSettings()
 void RedEyeTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("redeye Tool");
-    group.writeEntry("Histogram Channel", d->gboxSettings->histogramBox()->channel());
-    group.writeEntry("Histogram Scale", d->gboxSettings->histogramBox()->scale());
-    group.writeEntry("RedThreshold", d->redThreshold->value());
-    group.writeEntry("SmoothLevel", d->smoothLevel->value());
-    group.writeEntry("HueColoringTint", d->HSSelector->hue());
-    group.writeEntry("SatColoringTint", d->HSSelector->saturation());
-    group.writeEntry("ValColoringTint", d->VSelector->value());
-    group.writeEntry("TintLevel", d->tintLevel->value());
+    KConfigGroup group        = config->group(d->configGroupName);
+    group.writeEntry(d->configHistogramChannelEntry, d->gboxSettings->histogramBox()->channel());
+    group.writeEntry(d->configHistogramScaleEntry,   d->gboxSettings->histogramBox()->scale());
+    group.writeEntry(d->configRedThresholdEntry,     d->redThreshold->value());
+    group.writeEntry(d->configSmoothLevelEntry,      d->smoothLevel->value());
+    group.writeEntry(d->configHueColoringTintEntry,  d->HSSelector->hue());
+    group.writeEntry(d->configSatColoringTintEntry,  d->HSSelector->saturation());
+    group.writeEntry(d->configValColoringTintEntry,  d->VSelector->value());
+    group.writeEntry(d->configTintLevelEntry,        d->tintLevel->value());
     d->previewWidget->writeSettings();
     config->sync();
 }
