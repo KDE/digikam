@@ -203,9 +203,10 @@ ProfileConversionTool::~ProfileConversionTool()
 
 QStringList ProfileConversionTool::favoriteProfiles()
 {
+    ProfileConversionToolPriv d;
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("Profile Conversion Tool");
-    return group.readPathEntry("Recently Used Profiles", QStringList());
+    KConfigGroup group        = config->group(d.configGroupName);
+    return group.readPathEntry(d.configRecentlyUsedProfilesEntry, QStringList());
 }
 
 void ProfileConversionTool::fastConversion(const IccProfile& profile)
