@@ -81,6 +81,13 @@ class BCGToolPriv
 public:
 
     BCGToolPriv() :
+        configGroupName("bcgadjust Tool"),
+        configHistogramChannelEntry("Histogram Channel"),
+        configHistogramScaleEntry("Histogram Scale"),
+        configBrightnessAdjustmentEntry("BrightnessAdjustment"),
+        configContrastAdjustmentEntry("ContrastAdjustment"),
+        configGammaAdjustmentEntry("GammaAdjustment"),
+
         destinationPreviewData(0),
         bInput(0),
         cInput(0),
@@ -88,6 +95,13 @@ public:
         previewWidget(0),
         gboxSettings(0)
         {}
+
+    const QString        configGroupName;
+    const QString        configHistogramChannelEntry;
+    const QString        configHistogramScaleEntry;
+    const QString        configBrightnessAdjustmentEntry;
+    const QString        configContrastAdjustmentEntry;
+    const QString        configGammaAdjustmentEntry;
 
     uchar*               destinationPreviewData;
 
@@ -203,27 +217,28 @@ void BCGTool::slotColorSelectedFromTarget( const DColor& color )
 void BCGTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("bcgadjust Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
 
-    d->gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
+    d->gboxSettings->histogramBox()->setChannel(group.readEntry(d->configHistogramChannelEntry,
                         (int)LuminosityChannel));
-    d->gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
+    d->gboxSettings->histogramBox()->setScale(group.readEntry(d->configHistogramScaleEntry,
                         (int)LogScaleHistogram));
 
-    d->bInput->setValue(group.readEntry("BrightnessAdjustment", d->bInput->defaultValue()));
-    d->cInput->setValue(group.readEntry("ContrastAdjustment", d->cInput->defaultValue()));
-    d->gInput->setValue(group.readEntry("GammaAdjustment", d->gInput->defaultValue()));
+    d->bInput->setValue(group.readEntry(d->configBrightnessAdjustmentEntry, d->bInput->defaultValue()));
+    d->cInput->setValue(group.readEntry(d->configContrastAdjustmentEntry,   d->cInput->defaultValue()));
+    d->gInput->setValue(group.readEntry(d->configGammaAdjustmentEntry,      d->gInput->defaultValue()));
 }
 
 void BCGTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("bcgadjust Tool");
-    group.writeEntry("Histogram Channel", d->gboxSettings->histogramBox()->channel());
-    group.writeEntry("Histogram Scale", d->gboxSettings->histogramBox()->scale());
-    group.writeEntry("BrightnessAdjustment", d->bInput->value());
-    group.writeEntry("ContrastAdjustment", d->cInput->value());
-    group.writeEntry("GammaAdjustment", d->gInput->value());
+    KConfigGroup group        = config->group(d->configGroupName);
+
+    group.writeEntry(d->configHistogramChannelEntry,     d->gboxSettings->histogramBox()->channel());
+    group.writeEntry(d->configHistogramScaleEntry,       d->gboxSettings->histogramBox()->scale());
+    group.writeEntry(d->configBrightnessAdjustmentEntry, d->bInput->value());
+    group.writeEntry(d->configContrastAdjustmentEntry,   d->cInput->value());
+    group.writeEntry(d->configGammaAdjustmentEntry,      d->gInput->value());
     d->previewWidget->writeSettings();
     config->sync();
 }
