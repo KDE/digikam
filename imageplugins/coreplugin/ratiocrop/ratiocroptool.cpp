@@ -76,6 +76,35 @@ class RatioCropToolPriv
 public:
 
     RatioCropToolPriv() :
+        configGroupName("aspectratiocrop Tool"),
+        configHorOrientedAspectRatioEntry("Hor.Oriented Aspect Ratio"),
+        configHorOrientedAspectRatioOrientationEntry("Hor.Oriented Aspect Ratio Orientation"),
+        configHorOrientedCustomAspectRatioNumEntry("Hor.Oriented Custom Aspect Ratio Num"),
+        configHorOrientedCustomAspectRatioDenEntry("Hor.Oriented Custom Aspect Ratio Den"),
+        configHorOrientedCustomAspectRatioXposEntry("Hor.Oriented Custom Aspect Ratio Xpos"),
+        configHorOrientedCustomAspectRatioYposEntry("Hor.Oriented Custom Aspect Ratio Ypos"),
+        configHorOrientedCustomAspectRatioWidthEntry("Hor.Oriented Custom Aspect Ratio Width"),
+        configHorOrientedCustomAspectRatioHeightEntry("Hor.Oriented Custom Aspect Ratio Height"),
+        configVerOrientedAspectRatioEntry("Ver.Oriented Aspect Ratio"),
+        configVerOrientedAspectRatioOrientationEntry("Ver.Oriented Aspect Ratio Orientation"),
+        configVerOrientedCustomAspectRatioNumEntry("Ver.Oriented Custom Aspect Ratio Num"),
+        configVerOrientedCustomAspectRatioDenEntry("Ver.Oriented Custom Aspect Ratio Den"),
+        configVerOrientedCustomAspectRatioXposEntry("Ver.Oriented Custom Aspect Ratio Xpos"),
+        configVerOrientedCustomAspectRatioYposEntry("Ver.Oriented Custom Aspect Ratio Ypos"),
+        configVerOrientedCustomAspectRatioWidthEntry("Ver.Oriented Custom Aspect Ratio Width"),
+        configVerOrientedCustomAspectRatioHeightEntry("Ver.Oriented Custom Aspect Ratio Height"),
+        configPreciseAspectRatioCropEntry("Precise Aspect Ratio Crop"),
+        configAutoOrientationEntry("Auto Orientation"),
+        configGuideLinesTypeEntry("Guide Lines Type"),
+        configGoldenSectionEntry("Golden Section"),
+        configGoldenSpiralSectionEntry("Golden Spiral Section"),
+        configGoldenSpiralEntry("Golden Spiral"),
+        configGoldenTriangleEntry("Golden Triangle"),
+        configGoldenFlipHorizontalEntry("Golden Flip Horizontal"),
+        configGoldenFlipVerticalEntry("Golden Flip Vertical"),
+        configGuideColorEntry("Guide Color"),
+        configGuideWidthEntry("Guide Width"),
+
         originalIsLandscape(false),
         customLabel(0),
         orientLabel(0),
@@ -105,6 +134,35 @@ public:
         expbox(0),
         gboxSettings(0)
         {}
+
+    const QString         configGroupName;
+    const QString         configHorOrientedAspectRatioEntry;
+    const QString         configHorOrientedAspectRatioOrientationEntry;
+    const QString         configHorOrientedCustomAspectRatioNumEntry;
+    const QString         configHorOrientedCustomAspectRatioDenEntry;
+    const QString         configHorOrientedCustomAspectRatioXposEntry;
+    const QString         configHorOrientedCustomAspectRatioYposEntry;
+    const QString         configHorOrientedCustomAspectRatioWidthEntry;
+    const QString         configHorOrientedCustomAspectRatioHeightEntry;
+    const QString         configVerOrientedAspectRatioEntry;
+    const QString         configVerOrientedAspectRatioOrientationEntry;
+    const QString         configVerOrientedCustomAspectRatioNumEntry;
+    const QString         configVerOrientedCustomAspectRatioDenEntry;
+    const QString         configVerOrientedCustomAspectRatioXposEntry;
+    const QString         configVerOrientedCustomAspectRatioYposEntry;
+    const QString         configVerOrientedCustomAspectRatioWidthEntry;
+    const QString         configVerOrientedCustomAspectRatioHeightEntry;
+    const QString         configPreciseAspectRatioCropEntry;
+    const QString         configAutoOrientationEntry;
+    const QString         configGuideLinesTypeEntry;
+    const QString         configGoldenSectionEntry;
+    const QString         configGoldenSpiralSectionEntry;
+    const QString         configGoldenSpiralEntry;
+    const QString         configGoldenTriangleEntry;
+    const QString         configGoldenFlipHorizontalEntry;
+    const QString         configGoldenFlipVerticalEntry;
+    const QString         configGuideColorEntry;
+    const QString         configGuideWidthEntry;
 
     bool                  originalIsLandscape;
 
@@ -487,7 +545,7 @@ void RatioCropTool::readSettings()
 {
     QColor defaultGuideColor(250, 250, 255);
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("aspectratiocrop Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
 
     // --------------------------------------------------------
 
@@ -498,61 +556,61 @@ void RatioCropTool::readSettings()
     d->expbox->readSettings();
 
     // No guide lines per default.
-    d->guideLinesCB->setCurrentIndex(group.readEntry("Guide Lines Type",
-                                    (int)ImageSelectionWidget::GuideNone));
-    d->goldenSectionBox->setChecked(group.readEntry("Golden Section", true));
-    d->goldenSpiralSectionBox->setChecked(group.readEntry("Golden Spiral Section", false));
-    d->goldenSpiralBox->setChecked(group.readEntry("Golden Spiral", false));
-    d->goldenTriangleBox->setChecked(group.readEntry("Golden Triangle", false));
-    d->flipHorBox->setChecked(group.readEntry("Golden Flip Horizontal", false));
-    d->flipVerBox->setChecked(group.readEntry("Golden Flip Vertical", false));
-    d->guideColorBt->setColor(group.readEntry("Guide Color", defaultGuideColor));
-    d->guideSize->setValue(group.readEntry("Guide Width", d->guideSize->defaultValue()));
+    d->guideLinesCB->setCurrentIndex(group.readEntry(d->configGuideLinesTypeEntry,
+            (int)ImageSelectionWidget::GuideNone));
+    d->goldenSectionBox->setChecked(group.readEntry(d->configGoldenSectionEntry,             true));
+    d->goldenSpiralSectionBox->setChecked(group.readEntry(d->configGoldenSpiralSectionEntry, false));
+    d->goldenSpiralBox->setChecked(group.readEntry(d->configGoldenSpiralEntry,               false));
+    d->goldenTriangleBox->setChecked(group.readEntry(d->configGoldenTriangleEntry,           false));
+    d->flipHorBox->setChecked(group.readEntry(d->configGoldenFlipHorizontalEntry,            false));
+    d->flipVerBox->setChecked(group.readEntry(d->configGoldenFlipVerticalEntry,              false));
+    d->guideColorBt->setColor(group.readEntry(d->configGuideColorEntry,                      defaultGuideColor));
+    d->guideSize->setValue(group.readEntry(d->configGuideWidthEntry,                         d->guideSize->defaultValue()));
 
     d->imageSelectionWidget->slotGuideLines(d->guideLinesCB->currentIndex());
     d->imageSelectionWidget->slotChangeGuideColor(d->guideColorBt->color());
 
-    d->preciseCrop->setChecked( group.readEntry("Precise Aspect Ratio Crop", false) );
+    d->preciseCrop->setChecked( group.readEntry(d->configPreciseAspectRatioCropEntry, false) );
     d->imageSelectionWidget->setPreciseCrop( d->preciseCrop->isChecked() );
 
     // Empty selection so it can be moved w/out size constraint
     d->widthInput->setValue(0);
     d->heightInput->setValue(0);
 
-    d->xInput->setValue(group.readEntry("Hor.Oriented Custom Aspect Ratio Xpos",
+    d->xInput->setValue(group.readEntry(d->configHorOrientedCustomAspectRatioXposEntry,
                         d->xInput->defaultValue()));
-    d->yInput->setValue(group.readEntry("Hor.Oriented Custom Aspect Ratio Ypos",
+    d->yInput->setValue(group.readEntry(d->configHorOrientedCustomAspectRatioYposEntry,
                         d->yInput->defaultValue()));
 
-    d->widthInput->setValue(group.readEntry("Hor.Oriented Custom Aspect Ratio Width",
+    d->widthInput->setValue(group.readEntry(d->configHorOrientedCustomAspectRatioWidthEntry,
                             d->widthInput->defaultValue()));
-    d->heightInput->setValue(group.readEntry("Hor.Oriented Custom Aspect Ratio Height",
+    d->heightInput->setValue(group.readEntry(d->configHorOrientedCustomAspectRatioHeightEntry,
                              d->heightInput->defaultValue()));
 
     d->imageSelectionWidget->setSelectionOrientation(d->orientCB->currentIndex());
 
-    d->customRatioNInput->setValue(group.readEntry("Hor.Oriented Custom Aspect Ratio Num",
+    d->customRatioNInput->setValue(group.readEntry(d->configHorOrientedCustomAspectRatioNumEntry,
                                    d->customRatioNInput->defaultValue()));
-    d->customRatioDInput->setValue(group.readEntry("Hor.Oriented Custom Aspect Ratio Den",
+    d->customRatioDInput->setValue(group.readEntry(d->configHorOrientedCustomAspectRatioDenEntry,
                                    d->customRatioDInput->defaultValue()));
-    d->ratioCB->setCurrentIndex(group.readEntry("Hor.Oriented Aspect Ratio",
+    d->ratioCB->setCurrentIndex(group.readEntry(d->configHorOrientedAspectRatioEntry,
                                 d->ratioCB->defaultIndex()));
 
     if (d->originalIsLandscape)
     {
-        d->orientCB->setCurrentIndex(group.readEntry("Hor.Oriented Aspect Ratio Orientation",
+        d->orientCB->setCurrentIndex(group.readEntry(d->configHorOrientedAspectRatioOrientationEntry,
                                     (int)ImageSelectionWidget::Landscape));
         d->orientCB->setDefaultIndex(ImageSelectionWidget::Landscape);
     }
     else
     {
-        d->orientCB->setCurrentIndex(group.readEntry("Ver.Oriented Aspect Ratio Orientation",
+        d->orientCB->setCurrentIndex(group.readEntry(d->configVerOrientedAspectRatioOrientationEntry,
                                     (int)ImageSelectionWidget::Portrait));
         d->orientCB->setDefaultIndex(ImageSelectionWidget::Portrait);
     }
 
 
-    d->autoOrientation->setChecked(group.readEntry("Auto Orientation", false));
+    d->autoOrientation->setChecked(group.readEntry(d->configAutoOrientationEntry, false));
     slotAutoOrientChanged( d->autoOrientation->isChecked() );
     applyRatioChanges(d->ratioCB->currentIndex());
 
@@ -571,44 +629,44 @@ void RatioCropTool::readSettings()
 void RatioCropTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("aspectratiocrop Tool");
+    KConfigGroup group = config->group(d->configGroupName);
 
     if (d->originalIsLandscape)
     {
-        group.writeEntry("Hor.Oriented Aspect Ratio", d->ratioCB->currentIndex());
-        group.writeEntry("Hor.Oriented Aspect Ratio Orientation", d->orientCB->currentIndex());
-        group.writeEntry("Hor.Oriented Custom Aspect Ratio Num", d->customRatioNInput->value());
-        group.writeEntry("Hor.Oriented Custom Aspect Ratio Den", d->customRatioDInput->value());
+        group.writeEntry(d->configHorOrientedAspectRatioEntry,             d->ratioCB->currentIndex());
+        group.writeEntry(d->configHorOrientedAspectRatioOrientationEntry,  d->orientCB->currentIndex());
+        group.writeEntry(d->configHorOrientedCustomAspectRatioNumEntry,    d->customRatioNInput->value());
+        group.writeEntry(d->configHorOrientedCustomAspectRatioDenEntry,    d->customRatioDInput->value());
 
-        group.writeEntry("Hor.Oriented Custom Aspect Ratio Xpos", d->xInput->value());
-        group.writeEntry("Hor.Oriented Custom Aspect Ratio Ypos", d->yInput->value());
-        group.writeEntry("Hor.Oriented Custom Aspect Ratio Width", d->widthInput->value());
-        group.writeEntry("Hor.Oriented Custom Aspect Ratio Height", d->heightInput->value());
+        group.writeEntry(d->configHorOrientedCustomAspectRatioXposEntry,   d->xInput->value());
+        group.writeEntry(d->configHorOrientedCustomAspectRatioYposEntry,   d->yInput->value());
+        group.writeEntry(d->configHorOrientedCustomAspectRatioWidthEntry,  d->widthInput->value());
+        group.writeEntry(d->configHorOrientedCustomAspectRatioHeightEntry, d->heightInput->value());
     }
     else
     {
-        group.writeEntry("Ver.Oriented Aspect Ratio", d->ratioCB->currentIndex());
-        group.writeEntry("Ver.Oriented Aspect Ratio Orientation", d->orientCB->currentIndex());
-        group.writeEntry("Ver.Oriented Custom Aspect Ratio Num", d->customRatioNInput->value());
-        group.writeEntry("Ver.Oriented Custom Aspect Ratio Den", d->customRatioDInput->value());
+        group.writeEntry(d->configVerOrientedAspectRatioEntry,             d->ratioCB->currentIndex());
+        group.writeEntry(d->configVerOrientedAspectRatioOrientationEntry,  d->orientCB->currentIndex());
+        group.writeEntry(d->configVerOrientedCustomAspectRatioNumEntry,    d->customRatioNInput->value());
+        group.writeEntry(d->configVerOrientedCustomAspectRatioDenEntry,    d->customRatioDInput->value());
 
-        group.writeEntry("Ver.Oriented Custom Aspect Ratio Xpos", d->xInput->value());
-        group.writeEntry("Ver.Oriented Custom Aspect Ratio Ypos", d->yInput->value());
-        group.writeEntry("Ver.Oriented Custom Aspect Ratio Width", d->widthInput->value());
-        group.writeEntry("Ver.Oriented Custom Aspect Ratio Height", d->heightInput->value());
+        group.writeEntry(d->configVerOrientedCustomAspectRatioXposEntry,   d->xInput->value());
+        group.writeEntry(d->configVerOrientedCustomAspectRatioYposEntry,   d->yInput->value());
+        group.writeEntry(d->configVerOrientedCustomAspectRatioWidthEntry,  d->widthInput->value());
+        group.writeEntry(d->configVerOrientedCustomAspectRatioHeightEntry, d->heightInput->value());
     }
 
-    group.writeEntry("Precise Aspect Ratio Crop", d->preciseCrop->isChecked());
-    group.writeEntry("Auto Orientation", d->autoOrientation->isChecked());
-    group.writeEntry("Guide Lines Type", d->guideLinesCB->currentIndex());
-    group.writeEntry("Golden Section", d->goldenSectionBox->isChecked());
-    group.writeEntry("Golden Spiral Section", d->goldenSpiralSectionBox->isChecked());
-    group.writeEntry("Golden Spiral", d->goldenSpiralBox->isChecked());
-    group.writeEntry("Golden Triangle", d->goldenTriangleBox->isChecked());
-    group.writeEntry("Golden Flip Horizontal", d->flipHorBox->isChecked());
-    group.writeEntry("Golden Flip Vertical", d->flipVerBox->isChecked());
-    group.writeEntry("Guide Color", d->guideColorBt->color());
-    group.writeEntry("Guide Width", d->guideSize->value());
+    group.writeEntry(d->configPreciseAspectRatioCropEntry, d->preciseCrop->isChecked());
+    group.writeEntry(d->configAutoOrientationEntry,        d->autoOrientation->isChecked());
+    group.writeEntry(d->configGuideLinesTypeEntry,         d->guideLinesCB->currentIndex());
+    group.writeEntry(d->configGoldenSectionEntry,          d->goldenSectionBox->isChecked());
+    group.writeEntry(d->configGoldenSpiralSectionEntry,    d->goldenSpiralSectionBox->isChecked());
+    group.writeEntry(d->configGoldenSpiralEntry,           d->goldenSpiralBox->isChecked());
+    group.writeEntry(d->configGoldenTriangleEntry,         d->goldenTriangleBox->isChecked());
+    group.writeEntry(d->configGoldenFlipHorizontalEntry,   d->flipHorBox->isChecked());
+    group.writeEntry(d->configGoldenFlipVerticalEntry,     d->flipVerBox->isChecked());
+    group.writeEntry(d->configGuideColorEntry,             d->guideColorBt->color());
+    group.writeEntry(d->configGuideWidthEntry,             d->guideSize->value());
     group.sync();
 }
 
