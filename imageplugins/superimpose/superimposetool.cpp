@@ -76,11 +76,19 @@ class SuperImposeToolPriv
 public:
 
     SuperImposeToolPriv() :
+        configGroupName("superimpose Tool"),
+        configTemplatesRootURLEntry("Templates Root URL"),
+        configTemplatesURLEntry("Templates URL"),
+
         thumbnailsBar(0),
         gboxSettings(0),
         previewWidget(0),
         dirSelect(0)
         {}
+
+    const QString       configGroupName;
+    const QString       configTemplatesRootURLEntry;
+    const QString       configTemplatesURLEntry;
 
     KUrl                templatesUrl;
     KUrl                templatesRootUrl;
@@ -147,8 +155,8 @@ SuperImposeTool::SuperImposeTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    gridFrame->addWidget(d->previewWidget,  0, 0, 1, 3);
-    gridFrame->addWidget(toolBox,           1, 1, 1, 1);
+    gridFrame->addWidget(d->previewWidget, 0, 0, 1, 3);
+    gridFrame->addWidget(toolBox,          1, 1, 1, 1);
     gridFrame->setColumnStretch(0, 10);
     gridFrame->setColumnStretch(2, 10);
     gridFrame->setRowStretch(0, 10);
@@ -237,18 +245,19 @@ void SuperImposeTool::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("Album Settings");
     KUrl albumDBUrl( group.readEntry("Album Path", KGlobalSettings::documentPath()) );
-    group = config->group("superimpose Tool");
-    d->templatesRootUrl.setPath( group.readEntry("Templates Root URL", albumDBUrl.toLocalFile()) );
-    d->templatesUrl.setPath( group.readEntry("Templates URL", albumDBUrl.toLocalFile()) );
+
+    group = config->group(d->configGroupName);
+    d->templatesRootUrl.setPath( group.readEntry(d->configTemplatesRootURLEntry, albumDBUrl.toLocalFile()) );
+    d->templatesUrl.setPath( group.readEntry(d->configTemplatesURLEntry,         albumDBUrl.toLocalFile()) );
     d->dirSelect->setRootPath(d->templatesRootUrl, d->templatesUrl);
 }
 
 void SuperImposeTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("superimpose Tool");
-    group.writeEntry( "Templates Root URL", d->dirSelect->rootPath().toLocalFile() );
-    group.writeEntry( "Templates URL", d->templatesUrl.toLocalFile() );
+    KConfigGroup group = config->group(d->configGroupName);
+    group.writeEntry( d->configTemplatesRootURLEntry, d->dirSelect->rootPath().toLocalFile() );
+    group.writeEntry( d->configTemplatesURLEntry,     d->templatesUrl.toLocalFile() );
     group.sync();
 }
 
