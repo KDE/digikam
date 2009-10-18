@@ -78,17 +78,30 @@ class HSLToolPriv
 {
 public:
 
-    HSLToolPriv()
-    {
-        destinationPreviewData    = 0;
-        HSSelector                = 0;
-        hInput                    = 0;
-        sInput                    = 0;
-        lInput                    = 0;
-        HSPreview                 = 0;
-        previewWidget             = 0;
-        gboxSettings              = 0;
-    }
+    HSLToolPriv() :
+        configGroupName("hsladjust Tool"),
+        configHistogramChannelEntry("Histogram Channel"),
+        configHistogramScaleEntry("Histogram Scale"),
+        configHueAdjustmentEntry("HueAdjustment"),
+        configSaturationAdjustmentEntry("SaturationAdjustment"),
+        configLighnessAdjustmentEntry("LighnessAdjustment"),
+
+        destinationPreviewData(0),
+        HSSelector(0),
+        hInput(0),
+        sInput(0),
+        lInput(0),
+        HSPreview(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
+
+    const QString           configGroupName;
+    const QString           configHistogramChannelEntry;
+    const QString           configHistogramScaleEntry;
+    const QString           configHueAdjustmentEntry;
+    const QString           configSaturationAdjustmentEntry;
+    const QString           configLighnessAdjustmentEntry;
 
     uchar*                  destinationPreviewData;
 
@@ -264,16 +277,16 @@ void HSLTool::slotSChanged(double s)
 void HSLTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("hsladjust Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
 
-    d->gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
+    d->gboxSettings->histogramBox()->setChannel(group.readEntry(d->configHistogramChannelEntry,
                         (int)LuminosityChannel));
-    d->gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
+    d->gboxSettings->histogramBox()->setScale(group.readEntry(d->configHistogramScaleEntry,
                         (int)LogScaleHistogram));
 
-    d->hInput->setValue(group.readEntry("HueAdjustment", d->hInput->defaultValue()));
-    d->sInput->setValue(group.readEntry("SaturationAdjustment", d->sInput->defaultValue()));
-    d->lInput->setValue(group.readEntry("LighnessAdjustment", d->lInput->defaultValue()));
+    d->hInput->setValue(group.readEntry(d->configHueAdjustmentEntry,        d->hInput->defaultValue()));
+    d->sInput->setValue(group.readEntry(d->configSaturationAdjustmentEntry, d->sInput->defaultValue()));
+    d->lInput->setValue(group.readEntry(d->configLighnessAdjustmentEntry,   d->lInput->defaultValue()));
     slotHChanged(d->hInput->value());
     slotSChanged(d->sInput->value());
 }
@@ -281,12 +294,13 @@ void HSLTool::readSettings()
 void HSLTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("hsladjust Tool");
-    group.writeEntry("Histogram Channel", d->gboxSettings->histogramBox()->channel());
-    group.writeEntry("Histogram Scale", d->gboxSettings->histogramBox()->scale());
-    group.writeEntry("HueAdjustment", d->hInput->value());
-    group.writeEntry("SaturationAdjustment", d->sInput->value());
-    group.writeEntry("LighnessAdjustment", d->lInput->value());
+    KConfigGroup group        = config->group(d->configGroupName);
+
+    group.writeEntry(d->configHistogramChannelEntry,     d->gboxSettings->histogramBox()->channel());
+    group.writeEntry(d->configHistogramScaleEntry,       d->gboxSettings->histogramBox()->scale());
+    group.writeEntry(d->configHueAdjustmentEntry,        d->hInput->value());
+    group.writeEntry(d->configSaturationAdjustmentEntry, d->sInput->value());
+    group.writeEntry(d->configLighnessAdjustmentEntry,   d->lInput->value());
     d->previewWidget->writeSettings();
     config->sync();
 }

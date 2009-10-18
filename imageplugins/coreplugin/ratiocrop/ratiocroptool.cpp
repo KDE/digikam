@@ -75,37 +75,36 @@ class RatioCropToolPriv
 {
 public:
 
-    RatioCropToolPriv()
-    {
-        originalIsLandscape       = false;
-        customLabel               = 0;
-        orientLabel               = 0;
-        colorGuideLabel           = 0;
-        centerWidth               = 0;
-        centerHeight              = 0;
-        goldenSectionBox          = 0;
-        goldenSpiralSectionBox    = 0;
-        goldenSpiralBox           = 0;
-        goldenTriangleBox         = 0;
-        flipHorBox                = 0;
-        flipVerBox                = 0;
-        autoOrientation           = 0;
-        preciseCrop               = 0;
-        ratioCB                   = 0;
-        orientCB                  = 0;
-        guideLinesCB              = 0;
-        customRatioDInput         = 0;
-        customRatioNInput         = 0;
-        guideSize                 = 0;
-        heightInput               = 0;
-        widthInput                = 0;
-        xInput                    = 0;
-        yInput                    = 0;
-        guideColorBt              = 0;
-        imageSelectionWidget      = 0;
-        expbox                    = 0;
-        gboxSettings              = 0;
-    }
+    RatioCropToolPriv() :
+        originalIsLandscape(false),
+        customLabel(0),
+        orientLabel(0),
+        colorGuideLabel(0),
+        centerWidth(0),
+        centerHeight(0),
+        goldenSectionBox(0),
+        goldenSpiralSectionBox(0),
+        goldenSpiralBox(0),
+        goldenTriangleBox(0),
+        flipHorBox(0),
+        flipVerBox(0),
+        autoOrientation(0),
+        preciseCrop(0),
+        ratioCB(0),
+        orientCB(0),
+        guideLinesCB(0),
+        customRatioDInput(0),
+        customRatioNInput(0),
+        guideSize(0),
+        heightInput(0),
+        widthInput(0),
+        xInput(0),
+        yInput(0),
+        guideColorBt(0),
+        imageSelectionWidget(0),
+        expbox(0),
+        gboxSettings(0)
+        {}
 
     bool                  originalIsLandscape;
 

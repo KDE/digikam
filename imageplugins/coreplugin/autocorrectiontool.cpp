@@ -57,13 +57,22 @@ class AutoCorrectionToolPriv
 {
 public:
 
-    AutoCorrectionToolPriv()
-    {
-        destinationPreviewData = 0;
-        correctionTools        = 0;
-        previewWidget          = 0;
-        gboxSettings           = 0;
-    }
+    AutoCorrectionToolPriv() :
+        configGroupName("autocorrection Tool"),
+        configHistogramChannelEntry("Histogram Channel"),
+        configHistogramScaleEntry("Histogram Scale"),
+        configAutoCorrectionFilterEntry("Auto Correction Filter"),
+
+        destinationPreviewData(0),
+        correctionTools(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
+
+    const QString       configGroupName;
+    const QString       configHistogramChannelEntry;
+    const QString       configHistogramScaleEntry;
+    const QString       configAutoCorrectionFilterEntry;
 
     uchar*              destinationPreviewData;
 
@@ -202,23 +211,25 @@ void AutoCorrectionTool::slotColorSelectedFromTarget(const DColor& color)
 void AutoCorrectionTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("autocorrection Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
 
-    d->gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
+    d->gboxSettings->histogramBox()->setChannel(group.readEntry(d->configHistogramChannelEntry,
                         (int)LuminosityChannel));
-    d->gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
+    d->gboxSettings->histogramBox()->setScale(group.readEntry(d->configHistogramScaleEntry,
                         (int)LogScaleHistogram));
 
-    d->correctionTools->setCurrentRow(group.readEntry("Auto Correction Filter", (int)AutoLevelsCorrection));
+    d->correctionTools->setCurrentRow(group.readEntry(d->configAutoCorrectionFilterEntry,
+                                                      (int)AutoLevelsCorrection));
 }
 
 void AutoCorrectionTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("autocorrection Tool");
-    group.writeEntry("Histogram Channel", d->gboxSettings->histogramBox()->channel());
-    group.writeEntry("Histogram Scale", d->gboxSettings->histogramBox()->scale());
-    group.writeEntry("Auto Correction Filter", d->correctionTools->currentRow());
+    KConfigGroup group        = config->group(d->configGroupName);
+
+    group.writeEntry(d->configHistogramChannelEntry,     d->gboxSettings->histogramBox()->channel());
+    group.writeEntry(d->configHistogramScaleEntry,       d->gboxSettings->histogramBox()->scale());
+    group.writeEntry(d->configAutoCorrectionFilterEntry, d->correctionTools->currentRow());
     d->previewWidget->writeSettings();
     config->sync();
 }

@@ -80,15 +80,14 @@ class BCGToolPriv
 {
 public:
 
-    BCGToolPriv()
-    {
-        destinationPreviewData = 0;
-        bInput                 = 0;
-        cInput                 = 0;
-        gInput                 = 0;
-        previewWidget          = 0;
-        gboxSettings           = 0;
-    }
+    BCGToolPriv() :
+        destinationPreviewData(0),
+        bInput(0),
+        cInput(0),
+        gInput(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
 
     uchar*               destinationPreviewData;
 

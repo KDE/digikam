@@ -72,22 +72,21 @@ class SharpenToolPriv
 {
 public:
 
-    SharpenToolPriv()
-    {
-        stack             = 0;
-        sharpMethod       = 0;
-        matrixSize        = 0;
-        radiusInput       = 0;
-        radiusInput2      = 0;
-        radius            = 0;
-        gauss             = 0;
-        correlation       = 0;
-        noise             = 0;
-        amountInput       = 0;
-        thresholdInput    = 0;
-        previewWidget     = 0;
-        gboxSettings      = 0;
-    }
+    SharpenToolPriv() :
+        stack(0),
+        sharpMethod(0),
+        matrixSize(0),
+        radiusInput(0),
+        radiusInput2(0),
+        radius(0),
+        gauss(0),
+        correlation(0),
+        noise(0),
+        amountInput(0),
+        thresholdInput(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
 
     QStackedWidget*     stack;
 
@@ -396,28 +395,28 @@ void SharpenTool::slotResetSettings()
     switch (d->stack->indexOf(d->stack->currentWidget()))
     {
         case SimpleSharp:
-	{
+    {
             d->radiusInput->slotReset();
             break;
-	}
+    }
 
         case UnsharpMask:
-	{
+    {
             d->radiusInput2->slotReset();
             d->amountInput->slotReset();
             d->thresholdInput->slotReset();
             break;
-	}
+    }
 
         case Refocus:
-	{
+    {
             d->matrixSize->slotReset();
             d->radius->slotReset();
             d->gauss->slotReset();
             d->correlation->slotReset();
             d->noise->slotReset();
             break;
-	}
+    }
     }
 
     blockWidgetSignals(false);

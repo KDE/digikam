@@ -99,43 +99,42 @@ class ICCProofToolPriv
 {
 public:
 
-    ICCProofToolPriv()
-    {
-        cmEnabled                 = false;
-        hasICC                    = false;
-        destinationPreviewData    = 0;
-        doSoftProofBox            = 0;
-        checkGamutBox             = 0;
-        embeddProfileBox          = 0;
-        BPCBox                    = 0;
-        useEmbeddedProfile        = 0;
-        useInDefaultProfile       = 0;
-        useInSelectedProfile      = 0;
-        useProofDefaultProfile    = 0;
-        useProofSelectedProfile   = 0;
-        useSpaceDefaultProfile    = 0;
-        useSpaceSelectedProfile   = 0;
-        useSRGBDefaultProfile     = 0;
-        optionsBG                 = 0;
-        inProfileBG               = 0;
-        spaceProfileBG            = 0;
-        proofProfileBG            = 0;
-        renderingIntentBG         = 0;
-        profilesBG                = 0;
-        toolBoxWidgets            = 0;
-        inProfilesPath            = 0;
-        spaceProfilePath          = 0;
-        proofProfilePath          = 0;
-        cInput                    = 0;
-        renderingIntentsCB        = 0;
-        originalImage             = 0;
-        curvesWidget              = 0;
-        previewWidget             = 0;
-        iccInPreviewWidget        = 0;
-        iccSpacePreviewWidget     = 0;
-        iccProofPreviewWidget     = 0;
-        gboxSettings              = 0;
-    }
+    ICCProofToolPriv() :
+        cmEnabled(false),
+        hasICC(false),
+        destinationPreviewData(0),
+        doSoftProofBox(0),
+        checkGamutBox(0),
+        embeddProfileBox(0),
+        BPCBox(0),
+        useEmbeddedProfile(0),
+        useInDefaultProfile(0),
+        useInSelectedProfile(0),
+        useProofDefaultProfile(0),
+        useProofSelectedProfile(0),
+        useSpaceDefaultProfile(0),
+        useSpaceSelectedProfile(0),
+        useSRGBDefaultProfile(0),
+        optionsBG(0),
+        inProfileBG(0),
+        spaceProfileBG(0),
+        proofProfileBG(0),
+        renderingIntentBG(0),
+        profilesBG(0),
+        toolBoxWidgets(0),
+        inProfilesPath(0),
+        spaceProfilePath(0),
+        proofProfilePath(0),
+        cInput(0),
+        renderingIntentsCB(0),
+        originalImage(0),
+        curvesWidget(0),
+        previewWidget(0),
+        iccInPreviewWidget(0),
+        iccSpacePreviewWidget(0),
+        iccProofPreviewWidget(0),
+        gboxSettings(0)
+        {}
 
     bool                cmEnabled;
     bool                hasICC;

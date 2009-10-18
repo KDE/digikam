@@ -63,12 +63,17 @@ class BlurToolPriv
 {
 public:
 
-    BlurToolPriv()
-    {
-        radiusInput   = 0;
-        previewWidget = 0;
-        gboxSettings  = 0;
-    }
+    BlurToolPriv() :
+        configGroupName("gaussianblur Tool"),
+        configRadiusAdjustmentEntry("RadiusAdjustment"),
+
+        radiusInput(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
+
+    const QString       configGroupName;
+    const QString       configRadiusAdjustmentEntry;
 
     RDoubleNumInput*    radiusInput;
     ImagePanelWidget*   previewWidget;
@@ -132,15 +137,15 @@ BlurTool::~BlurTool()
 void BlurTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("gaussianblur Tool");
-    d->radiusInput->setValue(group.readEntry("RadiusAdjustment", d->radiusInput->defaultValue()));
+    KConfigGroup group        = config->group(d->configGroupName);
+    d->radiusInput->setValue(group.readEntry(d->configRadiusAdjustmentEntry, d->radiusInput->defaultValue()));
 }
 
 void BlurTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("gaussianblur Tool");
-    group.writeEntry("RadiusAdjustment", d->radiusInput->value());
+    KConfigGroup group        = config->group(d->configGroupName);
+    group.writeEntry(d->configRadiusAdjustmentEntry, d->radiusInput->value());
     d->previewWidget->writeSettings();
     config->sync();
 }

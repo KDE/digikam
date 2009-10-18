@@ -68,12 +68,11 @@ class ProfileConversionToolPriv
 {
 public:
 
-    ProfileConversionToolPriv()
+    ProfileConversionToolPriv() :
+        profilesBox(0),
+        previewWidget(0),
+        gboxSettings(0)
     {
-        profilesBox   = 0;
-        previewWidget = 0;
-        gboxSettings  = 0;
-
         favoriteProfiles.setMaxCost(10);
     }
 

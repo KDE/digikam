@@ -124,21 +124,26 @@ class ResizeToolPriv
 {
 public:
 
-    ResizeToolPriv()
-    {
-        previewWidget        = 0;
-        preserveRatioBox     = 0;
-        useGreycstorationBox = 0;
-        mainTab              = 0;
-        gboxSettings         = 0;
-        wInput               = 0;
-        hInput               = 0;
-        wpInput              = 0;
-        hpInput              = 0;
-        settingsWidget       = 0;
-        cimgLogoLabel        = 0;
-        restorationTips      = 0;
-    }
+    ResizeToolPriv() :
+        orgWidth(0),
+        orgHeight(0),
+        prevW(0),
+        prevH(0),
+        prevWP(0.0),
+        prevHP(0.0),
+        restorationTips(0),
+        preserveRatioBox(0),
+        useGreycstorationBox(0),
+        mainTab(0),
+        cimgLogoLabel(0),
+        previewWidget(0),
+        wInput(0),
+        hInput(0),
+        wpInput(0),
+        hpInput(0),
+        gboxSettings(0),
+        settingsWidget(0)
+        {}
 
     int                   orgWidth;
     int                   orgHeight;

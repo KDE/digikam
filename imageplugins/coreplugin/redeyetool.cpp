@@ -79,19 +79,18 @@ class RedEyeToolPriv
 {
 public:
 
-    RedEyeToolPriv()
-    {
-        destinationPreviewData = 0;
-        thresholdLabel         = 0;
-        smoothLabel            = 0;
-        HSSelector             = 0;
-        VSelector              = 0;
-        tintLevel              = 0;
-        redThreshold           = 0;
-        smoothLevel            = 0;
-        previewWidget          = 0;
-        gboxSettings           = 0;
-    }
+    RedEyeToolPriv() :
+        destinationPreviewData(0),
+        thresholdLabel(0),
+        smoothLabel(0),
+        HSSelector(0),
+        VSelector(0),
+        tintLevel(0),
+        redThreshold(0),
+        smoothLevel(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
 
     uchar*                  destinationPreviewData;
 

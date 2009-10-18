@@ -78,19 +78,18 @@ class RGBToolPriv
 {
 public:
 
-    RGBToolPriv()
-    {
-        destinationPreviewData    = 0;
-        rSlider                   = 0;
-        gSlider                   = 0;
-        bSlider                   = 0;
-        channelCB                 = 0;
-        rInput                    = 0;
-        gInput                    = 0;
-        bInput                    = 0;
-        previewWidget             = 0;
-        gboxSettings              = 0;
-    }
+    RGBToolPriv() :
+        destinationPreviewData(0),
+        rSlider(0),
+        gSlider(0),
+        bSlider(0),
+        channelCB(0),
+        rInput(0),
+        gInput(0),
+        bInput(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
 
     uchar*               destinationPreviewData;
 
