@@ -47,6 +47,8 @@ QString UndoAction::getTitle() const
     return m_title;
 }
 
+// ---------------------------------------------------------------------------------------------
+
 UndoActionRotate::UndoActionRotate(DImgInterface* iface,
                                    UndoActionRotate::Angle angle)
                 : UndoAction(iface), m_angle(angle)
@@ -105,6 +107,8 @@ void UndoActionRotate::execute()
     }
 }
 
+// ---------------------------------------------------------------------------------------------
+
 UndoActionFlip::UndoActionFlip(DImgInterface* iface, UndoActionFlip::Direction dir)
               : UndoAction(iface), m_dir(dir)
 {
@@ -138,6 +142,8 @@ void UndoActionFlip::execute()
     rollBack();
 }
 
+// ---------------------------------------------------------------------------------------------
+
 UndoActionBCG::UndoActionBCG(DImgInterface* iface,
                              double oldGamma, double oldBrightness,
                              double oldContrast, double newGamma,
@@ -163,9 +169,10 @@ void UndoActionBCG::execute()
     m_iface->changeBCG(m_newGamma, m_newBrightness, m_newContrast);
 }
 
-UndoActionIrreversible::UndoActionIrreversible(DImgInterface* iface,
-                                               const QString &title)
-    : UndoAction(iface)
+// ---------------------------------------------------------------------------------------------
+
+UndoActionIrreversible::UndoActionIrreversible(DImgInterface* iface, const QString& title)
+                      : UndoAction(iface)
 {
     m_title = title;
 }

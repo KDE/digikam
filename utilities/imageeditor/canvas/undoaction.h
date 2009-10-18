@@ -57,6 +57,8 @@ protected:
     QString        m_title;
 };
 
+// --------------------------------------------------------------------
+
 class DIGIKAM_EXPORT UndoActionRotate : public UndoAction
 {
 
@@ -80,6 +82,8 @@ private:
     int m_angle;
 };
 
+// --------------------------------------------------------------------
+
 class DIGIKAM_EXPORT UndoActionFlip : public UndoAction
 {
 
@@ -102,6 +106,8 @@ private:
     int m_dir;
 };
 
+// --------------------------------------------------------------------
+
 class DIGIKAM_EXPORT UndoActionBCG : public UndoAction
 {
 
@@ -114,7 +120,7 @@ public:
     ~UndoActionBCG();
 
     void rollBack();
-    void execute();    
+    void execute();
 
 private:
 
@@ -125,6 +131,8 @@ private:
     double m_newBrightness;
     double m_newContrast;
 };
+
+// --------------------------------------------------------------------
 
 class DIGIKAM_EXPORT UndoActionIrreversible : public UndoAction
 {
