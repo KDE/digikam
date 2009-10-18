@@ -100,6 +100,23 @@ class ICCProofToolPriv
 public:
 
     ICCProofToolPriv() :
+        configGroupName("colormanagement Tool"),
+        configHistogramChannelEntry("Histogram Channel"),
+        configHistogramScaleEntry("Histogram Scale"),
+        configInputProfilePathEntry("InputProfilePath"),
+        configProofProfilePathEntry("ProofProfilePath"),
+        configSpaceProfilePathEntry("SpaceProfilePath"),
+        configRenderingIntentEntry("RenderingIntent"),
+        configDoSoftProofEntry("DoSoftProof"),
+        configCheckGamutEntry("CheckGamut"),
+        configEmbeddProfileEntry("EmbeddProfile"),
+        configBPCEntry("BPC"),
+        configInputProfileMethodEntry("InputProfileMethod"),
+        configSpaceProfileMethodEntry("SpaceProfileMethod"),
+        configProofProfileMethodEntry("ProofProfileMethod"),
+        configContrastAdjustmentEntry("ContrastAdjustment"),
+        configCurveAdjustmentPointEntry("CurveAdjustmentPoint%1"),
+
         cmEnabled(false),
         hasICC(false),
         destinationPreviewData(0),
@@ -135,6 +152,23 @@ public:
         iccProofPreviewWidget(0),
         gboxSettings(0)
         {}
+
+    const QString       configGroupName;
+    const QString       configHistogramChannelEntry;
+    const QString       configHistogramScaleEntry;
+    const QString       configInputProfilePathEntry;
+    const QString       configProofProfilePathEntry;
+    const QString       configSpaceProfilePathEntry;
+    const QString       configRenderingIntentEntry;
+    const QString       configDoSoftProofEntry;
+    const QString       configCheckGamutEntry;
+    const QString       configEmbeddProfileEntry;
+    const QString       configBPCEntry;
+    const QString       configInputProfileMethodEntry;
+    const QString       configSpaceProfileMethodEntry;
+    const QString       configProofProfileMethodEntry;
+    const QString       configContrastAdjustmentEntry;
+    const QString       configCurveAdjustmentPointEntry;
 
     bool                cmEnabled;
     bool                hasICC;
@@ -634,21 +668,21 @@ void ICCProofTool::readSettings()
     }
 
     // Plugin settings.
-    group = config->group("colormanagement Tool");
+    group = config->group(d->configGroupName);
 
     d->toolBoxWidgets->readSettings();
-    d->inProfilesPath->setUrl(group.readPathEntry("InputProfilePath", defaultICCPath));
-    d->proofProfilePath->setUrl(group.readPathEntry("ProofProfilePath", defaultICCPath));
-    d->spaceProfilePath->setUrl(group.readPathEntry("SpaceProfilePath", defaultICCPath));
-    d->renderingIntentsCB->setCurrentIndex(group.readEntry("RenderingIntent", d->renderingIntentsCB->defaultIndex()));
-    d->doSoftProofBox->setChecked(group.readEntry("DoSoftProof", false));
-    d->checkGamutBox->setChecked(group.readEntry("CheckGamut", false));
-    d->embeddProfileBox->setChecked(group.readEntry("EmbeddProfile", true));
-    d->BPCBox->setChecked(group.readEntry("BPC", true));
-    d->inProfileBG->button(group.readEntry("InputProfileMethod", 0))->setChecked(true);
-    d->spaceProfileBG->button(group.readEntry("SpaceProfileMethod", 0))->setChecked(true);
-    d->proofProfileBG->button(group.readEntry("ProofProfileMethod", 0))->setChecked(true);
-    d->cInput->setValue(group.readEntry("ContrastAdjustment", d->cInput->defaultValue()));
+    d->inProfilesPath->setUrl(group.readPathEntry(d->configInputProfilePathEntry,         defaultICCPath));
+    d->proofProfilePath->setUrl(group.readPathEntry(d->configProofProfilePathEntry,       defaultICCPath));
+    d->spaceProfilePath->setUrl(group.readPathEntry(d->configSpaceProfilePathEntry,       defaultICCPath));
+    d->renderingIntentsCB->setCurrentIndex(group.readEntry(d->configRenderingIntentEntry, d->renderingIntentsCB->defaultIndex()));
+    d->doSoftProofBox->setChecked(group.readEntry(d->configDoSoftProofEntry,              false));
+    d->checkGamutBox->setChecked(group.readEntry(d->configCheckGamutEntry,                false));
+    d->embeddProfileBox->setChecked(group.readEntry(d->configEmbeddProfileEntry,          true));
+    d->BPCBox->setChecked(group.readEntry(d->configBPCEntry,                              true));
+    d->inProfileBG->button(group.readEntry(d->configInputProfileMethodEntry,              0))->setChecked(true);
+    d->spaceProfileBG->button(group.readEntry(d->configSpaceProfileMethodEntry,           0))->setChecked(true);
+    d->proofProfileBG->button(group.readEntry(d->configProofProfileMethodEntry,           0))->setChecked(true);
+    d->cInput->setValue(group.readEntry(d->configContrastAdjustmentEntry,                 d->cInput->defaultValue()));
 
     for (int i = 0 ; i < 5 ; ++i)
         d->curvesWidget->curves()->curvesChannelReset(i);
@@ -659,7 +693,7 @@ void ICCProofTool::readSettings()
     for (int j = 0 ; j < 17 ; ++j)
     {
         QPoint disable(-1, -1);
-        QPoint p = group.readEntry(QString("CurveAdjustmentPoint%1").arg(j), disable);
+        QPoint p = group.readEntry(d->configCurveAdjustmentPointEntry.arg(j), disable);
 
         if (d->originalImage->sixteenBit() && p.x() != -1)
         {
@@ -674,30 +708,30 @@ void ICCProofTool::readSettings()
         d->curvesWidget->curves()->curvesCalculateCurve(i);
 
     // we need to call the set methods here, otherwise the curve will not be updated correctly
-    d->gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
+    d->gboxSettings->histogramBox()->setChannel(group.readEntry(d->configHistogramChannelEntry,
                     (int)LuminosityChannel));
-    d->gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
+    d->gboxSettings->histogramBox()->setScale(group.readEntry(d->configHistogramScaleEntry,
                     (int)LogScaleHistogram));
 }
 
 void ICCProofTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("colormanagement Tool");
-    group.writeEntry("Histogram Channel", d->gboxSettings->histogramBox()->channel());
-    group.writeEntry("Histogram Scale", d->gboxSettings->histogramBox()->scale());
-    group.writeEntry("InputProfilePath", d->inProfilesPath->url());
-    group.writeEntry("ProofProfilePath", d->proofProfilePath->url());
-    group.writeEntry("SpaceProfilePath", d->spaceProfilePath->url());
-    group.writeEntry("RenderingIntent", d->renderingIntentsCB->currentIndex());
-    group.writeEntry("DoSoftProof", d->doSoftProofBox->isChecked());
-    group.writeEntry("CheckGamut", d->checkGamutBox->isChecked());
-    group.writeEntry("EmbeddProfile", d->embeddProfileBox->isChecked());
-    group.writeEntry("BPC", d->BPCBox->isChecked());
-    group.writeEntry("InputProfileMethod", d->inProfileBG->checkedId());
-    group.writeEntry("SpaceProfileMethod", d->spaceProfileBG->checkedId());
-    group.writeEntry("ProofProfileMethod", d->proofProfileBG->checkedId());
-    group.writeEntry("ContrastAdjustment", d->cInput->value());
+    KConfigGroup group        = config->group(d->configGroupName);
+    group.writeEntry(d->configHistogramChannelEntry,   d->gboxSettings->histogramBox()->channel());
+    group.writeEntry(d->configHistogramScaleEntry,     d->gboxSettings->histogramBox()->scale());
+    group.writeEntry(d->configInputProfilePathEntry,   d->inProfilesPath->url());
+    group.writeEntry(d->configProofProfilePathEntry,   d->proofProfilePath->url());
+    group.writeEntry(d->configSpaceProfilePathEntry,   d->spaceProfilePath->url());
+    group.writeEntry(d->configRenderingIntentEntry,    d->renderingIntentsCB->currentIndex());
+    group.writeEntry(d->configDoSoftProofEntry,        d->doSoftProofBox->isChecked());
+    group.writeEntry(d->configCheckGamutEntry,         d->checkGamutBox->isChecked());
+    group.writeEntry(d->configEmbeddProfileEntry,      d->embeddProfileBox->isChecked());
+    group.writeEntry(d->configBPCEntry,                d->BPCBox->isChecked());
+    group.writeEntry(d->configInputProfileMethodEntry, d->inProfileBG->checkedId());
+    group.writeEntry(d->configSpaceProfileMethodEntry, d->spaceProfileBG->checkedId());
+    group.writeEntry(d->configProofProfileMethodEntry, d->proofProfileBG->checkedId());
+    group.writeEntry(d->configContrastAdjustmentEntry, d->cInput->value());
 
     for (int j = 0 ; j < 17 ; ++j)
     {
@@ -709,7 +743,7 @@ void ICCProofTool::writeSettings()
             p.setY(p.y()/255);
         }
 
-        group.writeEntry(QString("CurveAdjustmentPoint%1").arg(j), p);
+        group.writeEntry(d->configCurveAdjustmentPointEntry.arg(j), p);
     }
 
     d->previewWidget->writeSettings();
