@@ -477,9 +477,12 @@ void AdvancedRenameWidget::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
-    d->patternHistory         = group.readEntry(d->configPatternHistoryListEntry, QStringList());
+
+    d->patternHistory = group.readEntry(d->configPatternHistoryListEntry, QStringList());
+    d->patternHistory.removeAll(QString(""));
     d->renameInput->addItems(d->patternHistory);
     d->renameInput->lineEdit()->clear();
+
     d->optionsLabel->setExpanded(group.readEntry(d->configExpandedStateEntry, d->configExpandedStateDefault));
 }
 
