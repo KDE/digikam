@@ -486,9 +486,10 @@ void AdvancedRenameWidget::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    // remove duplicate entries and save pattern history
+    // remove duplicate entries and save pattern history, omit empty strings
     QString pattern = d->renameInputWidget->lineEdit()->text();
     d->patternHistory.removeAll(pattern);
+    d->patternHistory.removeAll(QString(""));
     d->patternHistory.prepend(pattern);
     group.writeEntry(d->configPatternHistoryListEntry, d->patternHistory);
 
