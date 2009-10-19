@@ -398,8 +398,8 @@ AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
 
     d->lineEdit = new AdvancedRenameLineEdit(this);
 
-    // we need to disable stylesheet setting when used in a combobox, otherwise it looks weird and
-    // token coloring is not working
+    // we need to disable applying a stylesheet when used in a combobox, otherwise it looks weird and
+    // token coloring is not working.
     d->lineEdit->setUpdateStyleSheet(false);
 
     setLineEdit(d->lineEdit);
