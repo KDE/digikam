@@ -52,6 +52,7 @@ public:
         userIsTyping(false),
         userIsHighlighting(false),
         tokenMarked(false),
+        updateStyleSheet(true),
         selectionStart(-1),
         selectionLength(-1),
         curCursorPos(-1),
@@ -60,23 +61,26 @@ public:
         selectionType(AdvancedRenameLineEdit::Text)
         {}
 
-    bool    userIsTyping;
-    bool    userIsHighlighting;
-    bool    tokenMarked;
+    bool     userIsTyping;
+    bool     userIsHighlighting;
+    bool     tokenMarked;
+    bool     updateStyleSheet;
 
-    int     selectionStart;
-    int     selectionLength;
-    int     curCursorPos;
+    int      selectionStart;
+    int      selectionLength;
+    int      curCursorPos;
 
-    QTimer* parseTimer;
-    Parser* parser;
+    QTimer*  parseTimer;
+    Parser*  parser;
 
-    ST      selectionType;
+    ST       selectionType;
 };
 
 AdvancedRenameLineEdit::AdvancedRenameLineEdit(QWidget* parent)
                       : KLineEdit(parent), d(new AdvancedRenameLineEditPriv)
 {
+    d->curCursorPos = cursorPosition();
+
     setFocusPolicy(Qt::StrongFocus);
     setClearButtonShown(true);
     setClickMessage(i18n("Enter renaming string (without extension)"));
@@ -84,8 +88,6 @@ AdvancedRenameLineEdit::AdvancedRenameLineEdit(QWidget* parent)
                     "Hold SHIFT and move the mouse to highlight a token and its modifiers.<br/>"
                     "To mark a token, press the left mouse button while it is highlighted."
                     "</p>"));
-
-    d->curCursorPos = cursorPosition();
 
     // --------------------------------------------------------
 
@@ -118,6 +120,11 @@ void AdvancedRenameLineEdit::setParser(Parser* parser)
     }
 }
 
+void AdvancedRenameLineEdit::setUpdateStyleSheet(bool value)
+{
+    d->updateStyleSheet = value;
+}
+
 void AdvancedRenameLineEdit::mouseMoveEvent(QMouseEvent* e)
 {
     KLineEdit::mouseMoveEvent(e);
@@ -125,12 +132,10 @@ void AdvancedRenameLineEdit::mouseMoveEvent(QMouseEvent* e)
 
     if (e->modifiers() == Qt::ControlModifier)
     {
-        d->selectionType = Token;
         searchAndHighlightTokens(Token, pos);
     }
     else if (e->modifiers() & Qt::ShiftModifier)
     {
-        d->selectionType = TokenAndModifiers;
         searchAndHighlightTokens(TokenAndModifiers, pos);
     }
     else if (d->tokenMarked)
@@ -247,13 +252,17 @@ void AdvancedRenameLineEdit::searchAndHighlightTokens(SelectionType type, int po
 
     if (found)
     {
-        setSelectionColor(type);
-
         deselect();
         setSelection(start, length);
 
         d->selectionStart  = start;
         d->selectionLength = length;
+
+        if (d->selectionType != type)
+        {
+            d->selectionType = type;
+            setSelectionColor(type);
+        }
     }
     else
     {
@@ -343,7 +352,7 @@ void AdvancedRenameLineEdit::slotAddModifier(const QString& token)
 
 void AdvancedRenameLineEdit::setSelectionColor(SelectionType type)
 {
-    QString cssTemplate("QLineEdit { selection-background-color: %1; selection-color: %2;}");
+    QString cssTemplate("* { selection-background-color: %1; selection-color: %2;}");
     QString css;
 
     switch (type)
@@ -357,7 +366,12 @@ void AdvancedRenameLineEdit::setSelectionColor(SelectionType type)
         case Text:
             css = cssTemplate.arg("palette(highlight)").arg("palette(highlighted-text)");
     }
-    setStyleSheet(css);
+
+    if (d->updateStyleSheet)
+    {
+        setStyleSheet(css);
+    }
+    emit signalStyleSheetChanged(css);
 }
 
 // --------------------------------------------------------
@@ -383,6 +397,11 @@ AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
     setEditable(true);
 
     d->lineEdit = new AdvancedRenameLineEdit(this);
+
+    // we need to disable stylesheet setting when used in a combobox, otherwise it looks weird and
+    // token coloring is not working
+    d->lineEdit->setUpdateStyleSheet(false);
+
     setLineEdit(d->lineEdit);
 
     connect(d->lineEdit, SIGNAL(signalTextChanged(const QString&)),
@@ -390,6 +409,9 @@ AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
 
     connect(d->lineEdit, SIGNAL(signalTokenMarked(bool)),
             this, SIGNAL(signalTokenMarked(bool)));
+
+    connect(d->lineEdit, SIGNAL(signalStyleSheetChanged(const QString&)),
+            this, SLOT(slotSetStyleSheet(const QString&)));
 }
 
 AdvancedRenameInput::~AdvancedRenameInput()
@@ -415,6 +437,11 @@ void AdvancedRenameInput::slotAddToken(const QString& str)
 void AdvancedRenameInput::slotAddModifier(const QString& str)
 {
     d->lineEdit->slotAddModifier(str);
+}
+
+void AdvancedRenameInput::slotSetStyleSheet(const QString& css)
+{
+    setStyleSheet(css);
 }
 
 }  // namespace Digikam
