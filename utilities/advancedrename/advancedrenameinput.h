@@ -31,6 +31,7 @@
 // KDE includes
 
 #include <klineedit.h>
+#include <kcombobox.h>
 
 // Local includes
 
@@ -41,9 +42,10 @@ namespace Digikam
 {
 
 class Parser;
-class AdvancedRenameInputPriv;
 
-class AdvancedRenameInput : public KLineEdit
+class AdvancedRenameLineEditPriv;
+
+class AdvancedRenameLineEdit : public KLineEdit
 {
     Q_OBJECT
 
@@ -58,8 +60,8 @@ public:
 
 public:
 
-    AdvancedRenameInput(QWidget* parent = 0);
-    ~AdvancedRenameInput();
+    AdvancedRenameLineEdit(QWidget* parent = 0);
+    ~AdvancedRenameLineEdit();
 
     void setParser(Parser* parser);
 
@@ -95,6 +97,38 @@ private:
     void setSelectionColor(SelectionType type);
     void rememberSelection();
     void resetSelection();
+
+private:
+
+    AdvancedRenameLineEditPriv* const d;
+};
+
+// --------------------------------------------------------
+
+class AdvancedRenameInputPriv;
+
+class AdvancedRenameInput : public KComboBox
+{
+    Q_OBJECT
+
+public:
+
+    AdvancedRenameInput(QWidget* parent = 0);
+    ~AdvancedRenameInput();
+
+    AdvancedRenameLineEdit* lineEdit();
+
+    void setParser(Parser* parser);
+
+Q_SIGNALS:
+
+    void signalTextChanged(const QString&);
+    void signalTokenMarked(bool);
+
+public Q_SLOTS:
+
+void slotAddToken(const QString&);
+void slotAddModifier(const QString&);
 
 private:
 

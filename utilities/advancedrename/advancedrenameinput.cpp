@@ -42,11 +42,13 @@
 namespace Digikam
 {
 
-class AdvancedRenameInputPriv
+class AdvancedRenameLineEditPriv
 {
+    typedef AdvancedRenameLineEdit::SelectionType ST;
+
 public:
 
-    AdvancedRenameInputPriv() :
+    AdvancedRenameLineEditPriv() :
         userIsTyping(false),
         userIsHighlighting(false),
         tokenMarked(false),
@@ -55,29 +57,28 @@ public:
         curCursorPos(-1),
         parseTimer(0),
         parser(0),
-        selectionType(AdvancedRenameInput::Text)
-    {}
+        selectionType(AdvancedRenameLineEdit::Text)
+        {}
 
-    bool                               userIsTyping;
-    bool                               userIsHighlighting;
-    bool                               tokenMarked;
+    bool    userIsTyping;
+    bool    userIsHighlighting;
+    bool    tokenMarked;
 
-    int                                selectionStart;
-    int                                selectionLength;
-    int                                curCursorPos;
+    int     selectionStart;
+    int     selectionLength;
+    int     curCursorPos;
 
-    QTimer*                            parseTimer;
-    Parser*                            parser;
+    QTimer* parseTimer;
+    Parser* parser;
 
-    AdvancedRenameInput::SelectionType selectionType;
+    ST      selectionType;
 };
 
-AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
-                    : KLineEdit(parent), d(new AdvancedRenameInputPriv)
+AdvancedRenameLineEdit::AdvancedRenameLineEdit(QWidget* parent)
+                      : KLineEdit(parent), d(new AdvancedRenameLineEditPriv)
 {
     setFocusPolicy(Qt::StrongFocus);
     setClearButtonShown(true);
-    setCompletionMode(KGlobalSettings::CompletionAuto);
     setClickMessage(i18n("Enter renaming string (without extension)"));
     setToolTip(i18n("<p>Hold CTRL and move the mouse over the line edit widget to highlight token words.<br/>"
                     "Hold SHIFT and move the mouse to highlight a token and its modifiers.<br/>"
@@ -104,12 +105,12 @@ AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
             this, SLOT(slotCursorPositionChanged(int, int)));
 }
 
-AdvancedRenameInput::~AdvancedRenameInput()
+AdvancedRenameLineEdit::~AdvancedRenameLineEdit()
 {
     delete d;
 }
 
-void AdvancedRenameInput::setParser(Parser* parser)
+void AdvancedRenameLineEdit::setParser(Parser* parser)
 {
     if (parser)
     {
@@ -117,7 +118,7 @@ void AdvancedRenameInput::setParser(Parser* parser)
     }
 }
 
-void AdvancedRenameInput::mouseMoveEvent(QMouseEvent* e)
+void AdvancedRenameLineEdit::mouseMoveEvent(QMouseEvent* e)
 {
     KLineEdit::mouseMoveEvent(e);
     int pos = cursorPositionAt(e->pos());
@@ -145,7 +146,7 @@ void AdvancedRenameInput::mouseMoveEvent(QMouseEvent* e)
     }
 }
 
-void AdvancedRenameInput::mousePressEvent(QMouseEvent* e)
+void AdvancedRenameLineEdit::mousePressEvent(QMouseEvent* e)
 {
     if ((e->modifiers() == Qt::ControlModifier) || (e->modifiers() & Qt::ShiftModifier))
     {
@@ -176,13 +177,13 @@ void AdvancedRenameInput::mousePressEvent(QMouseEvent* e)
     }
 }
 
-void AdvancedRenameInput::leaveEvent(QEvent* e)
+void AdvancedRenameLineEdit::leaveEvent(QEvent* e)
 {
     rememberSelection();
     KLineEdit::leaveEvent(e);
 }
 
-void AdvancedRenameInput::focusInEvent(QFocusEvent* e)
+void AdvancedRenameLineEdit::focusInEvent(QFocusEvent* e)
 {
     KLineEdit::focusInEvent(e);
 
@@ -192,13 +193,13 @@ void AdvancedRenameInput::focusInEvent(QFocusEvent* e)
     }
 }
 
-void AdvancedRenameInput::focusOutEvent(QFocusEvent* e)
+void AdvancedRenameLineEdit::focusOutEvent(QFocusEvent* e)
 {
     rememberSelection();
     KLineEdit::focusOutEvent(e);
 }
 
-void AdvancedRenameInput::rememberSelection()
+void AdvancedRenameLineEdit::rememberSelection()
 {
     if ((hasSelectedText() && d->selectionType == Text) ||
         (hasSelectedText() && (d->selectionType ==Token || d->selectionType == TokenAndModifiers) && tokenIsSelected()))
@@ -215,7 +216,7 @@ void AdvancedRenameInput::rememberSelection()
     }
 }
 
-void AdvancedRenameInput::searchAndHighlightTokens(SelectionType type, int pos)
+void AdvancedRenameLineEdit::searchAndHighlightTokens(SelectionType type, int pos)
 {
     if (d->userIsTyping)
     {
@@ -261,25 +262,25 @@ void AdvancedRenameInput::searchAndHighlightTokens(SelectionType type, int pos)
     }
 }
 
-bool AdvancedRenameInput::tokenIsSelected()
+bool AdvancedRenameLineEdit::tokenIsSelected()
 {
     bool selected = (d->selectionStart != -1) && (d->selectionLength != -1) && d->tokenMarked;
     return selected;
 }
 
-void AdvancedRenameInput::slotTextChanged()
+void AdvancedRenameLineEdit::slotTextChanged()
 {
     d->userIsTyping = true;
     d->parseTimer->start();
 }
 
-void AdvancedRenameInput::slotParseTimer()
+void AdvancedRenameLineEdit::slotParseTimer()
 {
     d->userIsTyping = false;
     emit signalTextChanged(text());
 }
 
-void AdvancedRenameInput::slotCursorPositionChanged(int oldPos, int newPos)
+void AdvancedRenameLineEdit::slotCursorPositionChanged(int oldPos, int newPos)
 {
     Q_UNUSED(oldPos)
 
@@ -290,7 +291,7 @@ void AdvancedRenameInput::slotCursorPositionChanged(int oldPos, int newPos)
     resetSelection();
 }
 
-void AdvancedRenameInput::resetSelection()
+void AdvancedRenameLineEdit::resetSelection()
 {
     d->tokenMarked     = false;
     d->selectionStart  = -1;
@@ -300,7 +301,7 @@ void AdvancedRenameInput::resetSelection()
     emit signalTokenMarked(d->tokenMarked);
 }
 
-void AdvancedRenameInput::slotAddToken(const QString& token)
+void AdvancedRenameLineEdit::slotAddToken(const QString& token)
 {
     if (!token.isEmpty())
     {
@@ -324,7 +325,7 @@ void AdvancedRenameInput::slotAddToken(const QString& token)
     setFocus();
 }
 
-void AdvancedRenameInput::slotAddModifier(const QString& token)
+void AdvancedRenameLineEdit::slotAddModifier(const QString& token)
 {
     if (!token.isEmpty())
     {
@@ -340,7 +341,7 @@ void AdvancedRenameInput::slotAddModifier(const QString& token)
     setFocus();
 }
 
-void AdvancedRenameInput::setSelectionColor(SelectionType type)
+void AdvancedRenameLineEdit::setSelectionColor(SelectionType type)
 {
     QString cssTemplate("QLineEdit { selection-background-color: %1; selection-color: %2;}");
     QString css;
@@ -357,6 +358,63 @@ void AdvancedRenameInput::setSelectionColor(SelectionType type)
             css = cssTemplate.arg("palette(highlight)").arg("palette(highlighted-text)");
     }
     setStyleSheet(css);
+}
+
+// --------------------------------------------------------
+
+class AdvancedRenameInputPriv
+{
+public:
+
+    AdvancedRenameInputPriv() :
+        lineEdit(0)
+    {}
+
+    AdvancedRenameLineEdit* lineEdit;
+};
+
+// --------------------------------------------------------
+
+AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
+                   : KComboBox(parent), d(new AdvancedRenameInputPriv)
+{
+    // important: setEditable() has to be called before adding the actual line edit widget, otherwise
+    //            our lineEdit gets removed again.
+    setEditable(true);
+
+    d->lineEdit = new AdvancedRenameLineEdit(this);
+    setLineEdit(d->lineEdit);
+
+    connect(d->lineEdit, SIGNAL(signalTextChanged(const QString&)),
+            this, SIGNAL(signalTextChanged(const QString&)));
+
+    connect(d->lineEdit, SIGNAL(signalTokenMarked(bool)),
+            this, SIGNAL(signalTokenMarked(bool)));
+}
+
+AdvancedRenameInput::~AdvancedRenameInput()
+{
+    delete d;
+}
+
+AdvancedRenameLineEdit* AdvancedRenameInput::lineEdit()
+{
+    return d->lineEdit;
+}
+
+void AdvancedRenameInput::setParser(Parser* parser)
+{
+    d->lineEdit->setParser(parser);
+}
+
+void AdvancedRenameInput::slotAddToken(const QString& str)
+{
+    d->lineEdit->slotAddToken(str);
+}
+
+void AdvancedRenameInput::slotAddModifier(const QString& str)
+{
+    d->lineEdit->slotAddModifier(str);
 }
 
 }  // namespace Digikam

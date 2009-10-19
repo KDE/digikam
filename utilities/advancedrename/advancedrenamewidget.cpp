@@ -56,10 +56,12 @@ public:
 
     AdvancedRenameWidgetPriv() :
         configGroupName("AdvancedRenameWidget"),
+        configPatternHistoryListEntry("Pattern History List"),
         configExpandedStateEntry("Options are expanded"),
         configExpandedStateDefault(false),
 
         inputColumns(2),
+        maxPatternHistory(8),
         tooltipToggleButton(0),
         tokenToolButton(0),
         modifierToolButton(0),
@@ -75,10 +77,14 @@ public:
     {}
 
     const QString                        configGroupName;
+    const QString                        configPatternHistoryListEntry;
     const QString                        configExpandedStateEntry;
     bool                                 configExpandedStateDefault;
 
     int                                  inputColumns;
+
+    const int                            maxPatternHistory;
+    QStringList                          patternHistory;
 
     QToolButton*                         tooltipToggleButton;
     QToolButton*                         tokenToolButton;
@@ -116,12 +122,12 @@ AdvancedRenameWidget::~AdvancedRenameWidget()
 
 QString AdvancedRenameWidget::text() const
 {
-    return d->renameInputWidget->text();
+    return d->renameInputWidget->lineEdit()->text();
 }
 
 void AdvancedRenameWidget::setText(const QString& text)
 {
-    d->renameInputWidget->setText(text);
+    d->renameInputWidget->lineEdit()->setText(text);
 }
 
 void AdvancedRenameWidget::setTooltipAlignment(Qt::Alignment alignment)
@@ -148,7 +154,7 @@ QString AdvancedRenameWidget::parse(ParseInformation& info) const
         return QString();
     }
 
-    QString parseString = d->renameInputWidget->text();
+    QString parseString = d->renameInputWidget->lineEdit()->text();
 
     QString parsed;
     parsed = d->parser->parse(parseString, info);
@@ -336,7 +342,7 @@ void AdvancedRenameWidget::registerParserControls()
        d->tokenToolButton->setMenu(tokenToolBtnMenu);
        d->modifierToolButton->setMenu(modifierToolBtnMenu);
 
-       d->renameInputWidget->setParser(d->parser);
+       d->renameInputWidget->lineEdit()->setParser(d->parser);
        createToolTip();
    }
 }
@@ -381,6 +387,7 @@ void AdvancedRenameWidget::setupWidgets()
      */
     delete d->renameInputWidget;
     d->renameInputWidget = new AdvancedRenameInput;
+    d->renameInputWidget->setMaxCount(d->maxPatternHistory);
 
     delete d->tooltipToggleButton;
     d->tooltipToggleButton = new QToolButton;
@@ -468,6 +475,9 @@ void AdvancedRenameWidget::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
+    d->patternHistory         = group.readEntry(d->configPatternHistoryListEntry, QStringList());
+    d->renameInputWidget->addItems(d->patternHistory);
+    d->renameInputWidget->lineEdit()->clear();
     d->optionsLabel->setExpanded(group.readEntry(d->configExpandedStateEntry, d->configExpandedStateDefault));
 }
 
@@ -475,6 +485,13 @@ void AdvancedRenameWidget::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
+
+    // remove duplicate entries and save pattern history
+    QString pattern = d->renameInputWidget->lineEdit()->text();
+    d->patternHistory.removeAll(pattern);
+    d->patternHistory.prepend(pattern);
+    group.writeEntry(d->configPatternHistoryListEntry, d->patternHistory);
+
     group.writeEntry(d->configExpandedStateEntry, (d->optionsLabel) ?
                                                    d->optionsLabel->isExpanded() :
                                                    d->configExpandedStateDefault);
