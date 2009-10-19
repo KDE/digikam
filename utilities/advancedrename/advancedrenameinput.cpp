@@ -28,9 +28,9 @@
 
 #include <QFocusEvent>
 #include <QMouseEvent>
+#include <QPalette>
 #include <QTimer>
 #include <QToolButton>
-#include <QPalette>
 
 // KDE includes
 
@@ -62,18 +62,18 @@ public:
         selectionType(AdvancedRenameLineEdit::Text)
         {}
 
-    bool     userIsTyping;
-    bool     userIsHighlighting;
-    bool     tokenMarked;
+    bool    userIsTyping;
+    bool    userIsHighlighting;
+    bool    tokenMarked;
 
-    int      selectionStart;
-    int      selectionLength;
-    int      curCursorPos;
+    int     selectionStart;
+    int     selectionLength;
+    int     curCursorPos;
 
-    QTimer*  parseTimer;
-    Parser*  parser;
+    QTimer* parseTimer;
+    Parser* parser;
 
-    ST       selectionType;
+    ST      selectionType;
 };
 
 AdvancedRenameLineEdit::AdvancedRenameLineEdit(QWidget* parent)
