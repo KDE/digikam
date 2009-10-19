@@ -63,7 +63,7 @@ public:
         configExpandedStateDefault(false),
 
         inputColumns(2),
-        maxPatternHistory(8),
+        maxPatternHistory(10),
         tooltipToggleButton(0),
         tokenToolButton(0),
         modifierToolButton(0),
