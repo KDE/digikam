@@ -203,7 +203,6 @@ void AdvancedRenameInput::rememberSelection()
     {
         d->selectionStart  = selectionStart();
         d->selectionLength = selectedText().count();
-        d->tokenMarked     = true;
     }
     else
     {
