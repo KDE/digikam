@@ -142,11 +142,7 @@ void AdvancedRenameInput::mouseMoveEvent(QMouseEvent* e)
 
 void AdvancedRenameInput::mousePressEvent(QMouseEvent* e)
 {
-    if (
-            (e->modifiers() == Qt::ControlModifier)                                             ||
-//            ((e->modifiers() & (Qt::ControlModifier)) && (e->modifiers())& (Qt::ShiftModifier)) ||
-            (e->modifiers() & Qt::ShiftModifier)
-       )
+    if ((e->modifiers() == Qt::ControlModifier) || (e->modifiers() & Qt::ShiftModifier))
     {
         if (e->button() == Qt::LeftButton)
         {
