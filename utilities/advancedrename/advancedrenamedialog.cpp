@@ -259,7 +259,7 @@ void AdvancedRenameDialog::initDialog(int count)
     QString title = i18np("Rename", "Rename (%1 images)", count);
     setWindowTitle(title);
 
-    d->singleFileMode = (count > 1);
+    d->singleFileMode = (count <= 1);
 
     // resize the dialog when only a single image is selected, it doesn't need to be so big
     // in this case.
