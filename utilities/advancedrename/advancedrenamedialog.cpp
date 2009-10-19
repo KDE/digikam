@@ -124,12 +124,15 @@ public:
         configGroupName("Advanced Rename Dialog"),
         configLastUsedRenamePattern("Last Used Rename Pattern"),
 
+        singleFileMode(true),
         listView(0),
         advancedRenameWidget(0)
     {}
 
     const QString         configGroupName;
     const QString         configLastUsedRenamePattern;
+
+    bool                  singleFileMode;
 
     QTreeWidget*          listView;
     AdvancedRenameWidget* advancedRenameWidget;
@@ -256,6 +259,8 @@ void AdvancedRenameDialog::initDialog(int count)
     QString title = i18np("Rename", "Rename (%1 images)", count);
     setWindowTitle(title);
 
+    d->singleFileMode = (count > 1) ? false : true;
+
     // resize the dialog when only a single image is selected, it doesn't need to be so big
     // in this case.
     resize(minSize, (count > 1) ? minSize : 0);
@@ -295,10 +300,13 @@ void AdvancedRenameDialog::readSettings()
 
 void AdvancedRenameDialog::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(d->configGroupName);
+    if (!d->singleFileMode)
+    {
+        KSharedConfig::Ptr config = KGlobal::config();
+        KConfigGroup group        = config->group(d->configGroupName);
 
-    group.writeEntry(d->configLastUsedRenamePattern, d->advancedRenameWidget->text());
+        group.writeEntry(d->configLastUsedRenamePattern, d->advancedRenameWidget->text());
+    }
 }
 
 }  // namespace Digikam
