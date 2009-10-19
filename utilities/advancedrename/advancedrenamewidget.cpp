@@ -221,7 +221,7 @@ void AdvancedRenameWidget::createToolTip()
         // --------------------------------------------------------
 
         tooltip += QString("</table></qt>");
-        tooltip += QString("<font size=\"-1\">%1</font>").arg(d->renameInput->toolTip());
+        tooltip += QString("<font size=\"-1\">%1</font>").arg(d->renameInput->lineEdit()->toolTip());
 
         d->tooltipTracker->setText(tooltip);
     }
