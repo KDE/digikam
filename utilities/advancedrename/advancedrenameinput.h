@@ -49,6 +49,15 @@ class AdvancedRenameInput : public KLineEdit
 
 public:
 
+    enum SelectionType
+    {
+        Token = 0,
+        TokenAndModifiers,
+        Text
+    };
+
+public:
+
     AdvancedRenameInput(QWidget* parent = 0);
     ~AdvancedRenameInput();
 
@@ -79,13 +88,6 @@ private Q_SLOTS:
     void slotCursorPositionChanged(int, int);
 
 private:
-
-    enum SelectionType
-    {
-        Token = 0,
-        TokenAndModifiers,
-        Text
-    };
 
     bool tokenIsSelected();
     void searchAndHighlightTokens(SelectionType type, int pos);

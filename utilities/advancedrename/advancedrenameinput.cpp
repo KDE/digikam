@@ -54,19 +54,22 @@ public:
         selectionLength(-1),
         curCursorPos(-1),
         parseTimer(0),
-        parser(0)
+        parser(0),
+        selectionType(AdvancedRenameInput::Text)
     {}
 
-    bool    userIsTyping;
-    bool    userIsHighlighting;
-    bool    tokenMarked;
+    bool                               userIsTyping;
+    bool                               userIsHighlighting;
+    bool                               tokenMarked;
 
-    int     selectionStart;
-    int     selectionLength;
-    int     curCursorPos;
+    int                                selectionStart;
+    int                                selectionLength;
+    int                                curCursorPos;
 
-    QTimer* parseTimer;
-    Parser* parser;
+    QTimer*                            parseTimer;
+    Parser*                            parser;
+
+    AdvancedRenameInput::SelectionType selectionType;
 };
 
 AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
@@ -121,10 +124,12 @@ void AdvancedRenameInput::mouseMoveEvent(QMouseEvent* e)
 
     if (e->modifiers() == Qt::ControlModifier)
     {
+        d->selectionType = Token;
         searchAndHighlightTokens(Token, pos);
     }
     else if (e->modifiers() & Qt::ShiftModifier)
     {
+        d->selectionType = TokenAndModifiers;
         searchAndHighlightTokens(TokenAndModifiers, pos);
     }
     else if (d->tokenMarked)
@@ -153,7 +158,7 @@ void AdvancedRenameInput::mousePressEvent(QMouseEvent* e)
 
             if (selectionStart() == d->selectionStart)
             {
-                d->tokenMarked    = true;
+                d->tokenMarked = true;
                 emit signalTokenMarked(d->tokenMarked);
             }
             else
@@ -195,10 +200,12 @@ void AdvancedRenameInput::focusOutEvent(QFocusEvent* e)
 
 void AdvancedRenameInput::rememberSelection()
 {
-    if (hasSelectedText())
+    if ((hasSelectedText() && d->selectionType == Text) ||
+        (hasSelectedText() && (d->selectionType ==Token || d->selectionType == TokenAndModifiers) && tokenIsSelected()))
     {
         d->selectionStart  = selectionStart();
         d->selectionLength = selectedText().count();
+        d->tokenMarked     = true;
     }
     else
     {
@@ -288,6 +295,7 @@ void AdvancedRenameInput::resetSelection()
     d->tokenMarked     = false;
     d->selectionStart  = -1;
     d->selectionLength = -1;
+    d->selectionType   = Text;
     setSelectionColor(Text);
     emit signalTokenMarked(d->tokenMarked);
 }
