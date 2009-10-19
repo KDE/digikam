@@ -54,9 +54,9 @@ public:
     {
     }
 
-    ImageInfo imageInfo;
-    QString   baseName;
-    QString   extension;
+    ImageInfo     imageInfo;
+    QString       baseName;
+    QString       extension;
 };
 
 // --------------------------------------------------------
@@ -121,9 +121,15 @@ class AdvancedRenameDialogPriv
 public:
 
     AdvancedRenameDialogPriv() :
+        configGroupName("Advanced Rename Dialog"),
+        configLastUsedRenamePattern("Last Used Rename Pattern"),
+
         listView(0),
         advancedRenameWidget(0)
     {}
+
+    const QString         configGroupName;
+    const QString         configLastUsedRenamePattern;
 
     QTreeWidget*          listView;
     AdvancedRenameWidget* advancedRenameWidget;
@@ -164,6 +170,7 @@ AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
     enableButton(Ok, false);
     setHelp("advancedrename.anchor", "digikam");
     initDialog();
+    readSettings();
 
     // avoid focusing the AdvancedRenameWidget, to show the click message
     d->listView->setFocus();
@@ -182,6 +189,7 @@ AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
 
 AdvancedRenameDialog::~AdvancedRenameDialog()
 {
+    writeSettings();
     delete d;
 }
 
@@ -275,6 +283,22 @@ bool AdvancedRenameDialog::event(QEvent* e)
             break;
     }
     return KDialog::event(e);
+}
+
+void AdvancedRenameDialog::readSettings()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(d->configGroupName);
+
+    d->advancedRenameWidget->setText(group.readEntry(d->configLastUsedRenamePattern, QString()));
+}
+
+void AdvancedRenameDialog::writeSettings()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(d->configGroupName);
+
+    group.writeEntry(d->configLastUsedRenamePattern, d->advancedRenameWidget->text());
 }
 
 }  // namespace Digikam

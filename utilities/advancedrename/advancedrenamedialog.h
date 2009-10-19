@@ -110,6 +110,8 @@ private Q_SLOTS:
 private:
 
     void initDialog(int count = 1);
+    void readSettings();
+    void writeSettings();
 
 private:
 
