@@ -783,12 +783,16 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
             QRect r(d->rubber->rubberBandAreaOnContents());
             if (d->lsActive)
             {
-                QPoint sp(e->x(), r.y()+r.height());
-                d->rubber->setSecondPointOnViewport(sp);
+                QPoint sp = r.topLeft();
+                sp.setX(e->x());
+                d->rubber->setFirstPointOnViewport(sp);
+                d->rubber->setSecondPointOnViewport(r.bottomRight());
             }
             else if (d->bsActive)
             {
-                QPoint sp(r.x()+r.width(), e->y());
+                QPoint sp = r.bottomRight();
+                sp.setY(e->y());
+                d->rubber->setFirstPointOnViewport(r.topLeft());
                 d->rubber->setSecondPointOnViewport(sp);
             }
             else if (d->rsActive)
