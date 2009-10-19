@@ -30,9 +30,11 @@
 #include <QMouseEvent>
 #include <QTimer>
 #include <QToolButton>
+#include <QPalette>
 
 // KDE includes
 
+#include <kapplication.h>
 #include <klocale.h>
 
 // Local includes
@@ -52,7 +54,6 @@ public:
         userIsTyping(false),
         userIsHighlighting(false),
         tokenMarked(false),
-        updateStyleSheet(true),
         selectionStart(-1),
         selectionLength(-1),
         curCursorPos(-1),
@@ -64,7 +65,6 @@ public:
     bool     userIsTyping;
     bool     userIsHighlighting;
     bool     tokenMarked;
-    bool     updateStyleSheet;
 
     int      selectionStart;
     int      selectionLength;
@@ -118,11 +118,6 @@ void AdvancedRenameLineEdit::setParser(Parser* parser)
     {
         d->parser = parser;
     }
-}
-
-void AdvancedRenameLineEdit::setUpdateStyleSheet(bool value)
-{
-    d->updateStyleSheet = value;
 }
 
 void AdvancedRenameLineEdit::mouseMoveEvent(QMouseEvent* e)
@@ -258,11 +253,8 @@ void AdvancedRenameLineEdit::searchAndHighlightTokens(SelectionType type, int po
         d->selectionStart  = start;
         d->selectionLength = length;
 
-        if (d->selectionType != type)
-        {
-            d->selectionType = type;
-            setSelectionColor(type);
-        }
+        d->selectionType = type;
+        setSelectionColor(type);
     }
     else
     {
@@ -352,26 +344,24 @@ void AdvancedRenameLineEdit::slotAddModifier(const QString& token)
 
 void AdvancedRenameLineEdit::setSelectionColor(SelectionType type)
 {
-    QString cssTemplate("* { selection-background-color: %1; selection-color: %2;}");
-    QString css;
+    QPalette p = palette();
 
     switch (type)
     {
         case Token:
-            css = cssTemplate.arg("red").arg("white");
+            p.setColor(QPalette::Active, QPalette::Highlight, Qt::red);
+            p.setColor(QPalette::Active, QPalette::HighlightedText, Qt::white);
             break;
         case TokenAndModifiers:
-            css = cssTemplate.arg("yellow").arg("black");
+            p.setColor(QPalette::Active, QPalette::Highlight, Qt::yellow);
+            p.setColor(QPalette::Active, QPalette::HighlightedText, Qt::black);
             break;
         case Text:
-            css = cssTemplate.arg("palette(highlight)").arg("palette(highlighted-text)");
+        default:
+            p = kapp->palette();
+            break;
     }
-
-    if (d->updateStyleSheet)
-    {
-        setStyleSheet(css);
-    }
-    emit signalStyleSheetChanged(css);
+    setPalette(p);
 }
 
 // --------------------------------------------------------
@@ -397,11 +387,6 @@ AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
     setEditable(true);
 
     d->lineEdit = new AdvancedRenameLineEdit(this);
-
-    // we need to disable applying a stylesheet when used in a combobox, otherwise it looks weird and
-    // token coloring is not working.
-    d->lineEdit->setUpdateStyleSheet(false);
-
     setLineEdit(d->lineEdit);
 
     connect(d->lineEdit, SIGNAL(signalTextChanged(const QString&)),
@@ -409,9 +394,6 @@ AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
 
     connect(d->lineEdit, SIGNAL(signalTokenMarked(bool)),
             this, SIGNAL(signalTokenMarked(bool)));
-
-    connect(d->lineEdit, SIGNAL(signalStyleSheetChanged(const QString&)),
-            this, SLOT(slotSetStyleSheet(const QString&)));
 }
 
 AdvancedRenameInput::~AdvancedRenameInput()
@@ -437,11 +419,6 @@ void AdvancedRenameInput::slotAddToken(const QString& str)
 void AdvancedRenameInput::slotAddModifier(const QString& str)
 {
     d->lineEdit->slotAddModifier(str);
-}
-
-void AdvancedRenameInput::slotSetStyleSheet(const QString& css)
-{
-    setStyleSheet(css);
 }
 
 }  // namespace Digikam

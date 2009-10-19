@@ -64,7 +64,6 @@ public:
     ~AdvancedRenameLineEdit();
 
     void setParser(Parser* parser);
-    void setUpdateStyleSheet(bool value);
 
 public Q_SLOTS:
 
@@ -75,7 +74,6 @@ Q_SIGNALS:
 
     void signalTextChanged(const QString&);
     void signalTokenMarked(bool);
-    void signalStyleSheetChanged(const QString&);
 
 protected:
 
@@ -131,10 +129,6 @@ public Q_SLOTS:
 
     void slotAddToken(const QString&);
     void slotAddModifier(const QString&);
-
-private Q_SLOTS:
-
-    void slotSetStyleSheet(const QString&);
 
 private:
 
