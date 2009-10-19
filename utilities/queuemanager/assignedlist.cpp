@@ -140,6 +140,20 @@ AssignedListView::~AssignedListView()
 {
 }
 
+void AssignedListView::keyPressEvent(QKeyEvent *event)
+{
+
+    if (event->key() == Qt::Key_Delete)
+    {
+        slotRemoveCurrentTool();
+    }
+    else
+    {
+        QTreeWidget::keyPressEvent(event);
+    }
+
+}
+
 void AssignedListView::setBusy(bool b)
 {
     viewport()->setEnabled(!b);

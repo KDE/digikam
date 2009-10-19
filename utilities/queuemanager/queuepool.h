@@ -94,6 +94,10 @@ public Q_SLOTS:
     void slotAssignedToolsChanged(const AssignedBatchTools&);
     void slotSettingsChanged(const QueueSettings&);
 
+protected:
+
+    virtual void keyPressEvent(QKeyEvent *event);
+
 private Q_SLOTS:
 
     void slotQueueSelected(int);

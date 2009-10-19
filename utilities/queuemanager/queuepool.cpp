@@ -69,6 +69,20 @@ QueuePool::~QueuePool()
 {
 }
 
+void QueuePool::keyPressEvent(QKeyEvent *event)
+{
+
+    if (event->key() == Qt::Key_Delete)
+    {
+        slotRemoveSelectedItems();
+    }
+    else
+    {
+        KTabWidget::keyPressEvent(event);
+    }
+
+}
+
 void QueuePool::setBusy(bool b)
 {
     tabBar()->setEnabled(!b);
