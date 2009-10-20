@@ -32,6 +32,10 @@
 
 #include <kurl.h>
 
+// Local includes
+
+#include "albuminfo.h"
+
 class Q3ListViewItem;
 class QAction;
 class QMenu;
@@ -296,7 +300,7 @@ public:
      * This method will add some of the KIPI actions into the context menu, right now only the
      * rotation actions are added.
      */
-    void addKipiActions();
+    void addKipiActions(imageIds& ids);
 
     /**
      * Add Import KIPI actions menu.
@@ -340,6 +344,7 @@ private:
 
     void setSelectedIds(imageIds& ids);
     void setSelectedItems(KUrl::List urls);
+    bool imageIdsHaveSameCategory(const imageIds& ids, DatabaseItem::Category category);
 
 private:
 

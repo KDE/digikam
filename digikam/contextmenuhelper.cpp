@@ -302,11 +302,15 @@ void ContextMenuHelper::slotOpenWith(QAction* action)
     KRun::run(*service, list, d->parent);
 }
 
-void ContextMenuHelper::addKipiActions()
+void ContextMenuHelper::addKipiActions(imageIds& ids)
 {
-    KAction* action = kipiRotateAction();
-    if (action)
-        d->parent->addAction(action);
+    setSelectedIds(ids);
+    if (imageIdsHaveSameCategory(ids, DatabaseItem::Image))
+    {
+        KAction* action = kipiRotateAction();
+        if (action)
+            d->parent->addAction(action);
+    }
 }
 
 KAction* ContextMenuHelper::kipiRotateAction()
@@ -329,6 +333,23 @@ KAction* ContextMenuHelper::kipiRotateAction()
         }
     }
     return 0;
+}
+
+bool ContextMenuHelper::imageIdsHaveSameCategory(const imageIds& ids, DatabaseItem::Category category)
+{
+    bool sameCategory = true;
+    QVariantList varList;
+
+    foreach (const qlonglong& id, ids)
+    {
+        varList = DatabaseAccess().db()->getImagesFields(id, DatabaseFields::Category);
+        if (varList.first().toInt() != category)
+        {
+            sameCategory = false;
+            break;
+        }
+    }
+    return sameCategory;
 }
 
 void ContextMenuHelper::addAssignTagsMenu(imageIds& ids)

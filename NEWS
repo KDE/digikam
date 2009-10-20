@@ -48,7 +48,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 039 ==> 211060 : Advanced rename: keep the pattern.
 040 ==> 210839 : "New Album From Selection" should be renamed.
 041 ==> 144642 : Ctrl-X does nothing in Album GUI.
-042 ==>
+042 ==> 132828 : Rotate video file does not work.
+043 ==>
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05

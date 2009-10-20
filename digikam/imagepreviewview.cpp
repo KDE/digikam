@@ -358,7 +358,7 @@ void ImagePreviewView::slotContextMenu()
     // --------------------------------------------------------
     cmhelper.addAction("image_edit");
     cmhelper.addServicesMenu(selectedItems);
-    cmhelper.addKipiActions();
+    cmhelper.addKipiActions(idList);
     popmenu.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAction("image_find_similar");

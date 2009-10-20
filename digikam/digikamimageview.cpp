@@ -182,7 +182,7 @@ void DigikamImageView::showContextMenu(QContextMenuEvent* event, const ImageInfo
     cmhelper.addAction("image_edit");
     cmhelper.addServicesMenu(selectedUrls());
     cmhelper.addGotoMenu(selectedImageIDs);
-    cmhelper.addKipiActions();
+    cmhelper.addKipiActions(selectedImageIDs);
     popmenu.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAction("image_find_similar");
