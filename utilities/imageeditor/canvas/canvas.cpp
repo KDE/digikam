@@ -86,7 +86,7 @@ class CanvasPrivate
 public:
 
     CanvasPrivate() :
-        tileSize(128), minZoom(0.1), maxZoom(12.0), zoomMultiplier(1.2)
+        snapArea(8), tileSize(128), minZoom(0.1), maxZoom(12.0), zoomMultiplier(1.2)
     {
         pressedMoved     = false;
         pressedMoving    = false;
@@ -98,6 +98,7 @@ public:
         rsActive         = false;
         bsActive         = false;
         tsActive         = false;
+        dragActive       = false;
         midButtonPressed = false;
         midButtonX       = 0;
         midButtonY       = 0;
@@ -127,8 +128,10 @@ public:
     bool                     rsActive;
     bool                     bsActive;
     bool                     tsActive;
+    bool                     dragActive;
     bool                     midButtonPressed;
 
+    const int                snapArea;
     const int                tileSize;
     int                      midButtonX;
     int                      midButtonY;
@@ -142,6 +145,8 @@ public:
 
     DRubberBand             *rubber;
     QRect                    pixmapRect;
+    QPoint                   dragStart;
+    QRect                    dragStartRect;
 
     QCache<QString, QPixmap> tileCache;
 
@@ -452,6 +457,7 @@ void Canvas::updateContentsSize(bool deleteRubber)
         d->rsActive     = false;
         d->bsActive     = false;
         d->tsActive     = false;
+        d->dragActive   = false;
         d->pressedMoved = false;
         viewport()->unsetCursor();
         viewport()->setMouseTracking(false);
@@ -618,12 +624,15 @@ void Canvas::paintViewport(const QRect& er, bool antialias)
                         QPainter p(pix);
                         p.setPen(d->rubber->palette().color(QPalette::Active, QPalette::Highlight));
                         p.drawRect(rr);
-                        if (rr.width() >= 10 && rr.height() >= 10)
+
+                        const int halfSA = d->snapArea / 2;
+
+                        if (rr.width() >= d->snapArea && rr.height() >= d->snapArea)
                         {
-                            p.fillRect(QRect(rr.x(),              rr.y(),               5, 5), d->rubber->palette().highlight());
-                            p.fillRect(QRect(rr.x(),              rr.y()+rr.height()-5, 5, 5), d->rubber->palette().highlight());
-                            p.fillRect(QRect(rr.x()+rr.width()-5, rr.y()+rr.height()-5, 5, 5), d->rubber->palette().highlight());
-                            p.fillRect(QRect(rr.x()+rr.width()-5, rr.y(),               5, 5), d->rubber->palette().highlight());
+                            p.drawRect(QRect(rr.x()-halfSA,            rr.y()-halfSA,             d->snapArea, d->snapArea));
+                            p.drawRect(QRect(rr.x()-halfSA,            rr.y()+rr.height()-halfSA, d->snapArea, d->snapArea));
+                            p.drawRect(QRect(rr.x()+rr.width()-halfSA, rr.y()+rr.height()-halfSA, d->snapArea, d->snapArea));
+                            p.drawRect(QRect(rr.x()+rr.width()-halfSA, rr.y()-halfSA,             d->snapArea, d->snapArea));
                         }
                         p.end();
                     }
@@ -675,7 +684,8 @@ void Canvas::contentsMousePressEvent(QMouseEvent *e)
         if (d->ltActive || d->rtActive ||
             d->lbActive || d->rbActive ||
             d->lsActive || d->rsActive ||
-            d->tsActive || d->bsActive)
+            d->tsActive || d->bsActive ||
+            d->dragActive)
         {
             if (!d->rubber->isActive())
                 return;
@@ -703,6 +713,11 @@ void Canvas::contentsMousePressEvent(QMouseEvent *e)
             {
                 d->rubber->setFirstPointOnViewport(r.topLeft());
                 d->rubber->setSecondPointOnViewport(r.bottomRight());
+            }
+            else
+            {
+                d->dragStartRect=d->rubber->rubberBandAreaOnContents();
+                d->dragStart=e->pos();
             }
 
             viewport()->setMouseTracking(false);
@@ -764,7 +779,8 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
             !(d->ltActive || d->rtActive ||
               d->lbActive || d->rbActive ||
               d->lsActive || d->rsActive ||
-              d->tsActive || d->bsActive))
+              d->tsActive || d->bsActive ||
+              d->dragActive))
             return;
 
         // Move content if necessary.
@@ -776,34 +792,44 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
 
         // set the new rubber position.
         if (!(d->lsActive || d->rsActive ||
-              d->tsActive || d->bsActive))
+              d->tsActive || d->bsActive ||
+              d->dragActive))
             d->rubber->setSecondPointOnViewport(e->pos());
         else
         {
             QRect r(d->rubber->rubberBandAreaOnContents());
             if (d->lsActive)
             {
-                QPoint sp = r.topLeft();
-                sp.setX(e->x());
-                d->rubber->setFirstPointOnViewport(sp);
-                d->rubber->setSecondPointOnViewport(r.bottomRight());
-            }
-            else if (d->bsActive)
-            {
-                QPoint sp = r.bottomRight();
-                sp.setY(e->y());
-                d->rubber->setFirstPointOnViewport(r.topLeft());
-                d->rubber->setSecondPointOnViewport(sp);
+                d->rubber->setSecondPointOnViewport(QPoint(e->x(), r.bottom()));
             }
             else if (d->rsActive)
             {
-                QPoint sp(e->x(), r.y());
-                d->rubber->setSecondPointOnViewport(sp);
+                d->rubber->setSecondPointOnViewport(QPoint(e->x(), r.y()));
+            }
+            else if (d->tsActive)
+            {
+                d->rubber->setSecondPointOnViewport(QPoint(r.x(), e->y()));
+            }
+            else if (d->bsActive)
+            {
+                d->rubber->setSecondPointOnViewport(QPoint(r.right(), e->y()));
             }
             else
             {
-                QPoint sp(r.x(), e->y());
-                d->rubber->setSecondPointOnViewport(sp);
+                QPoint tr = e->pos()-d->dragStart;
+                QRect nr = d->dragStartRect;
+                nr.translate(tr);
+                if (nr.left() <= d->pixmapRect.left())
+                    nr.moveLeft(d->pixmapRect.left());
+                else if (nr.right() >= d->pixmapRect.right())
+                    nr.moveRight(d->pixmapRect.right());
+                if (nr.top() <= d->pixmapRect.top())
+                    nr.moveTop(d->pixmapRect.top());
+                else if (nr.bottom() >= d->pixmapRect.bottom())
+                    nr.moveBottom(d->pixmapRect.bottom());
+                d->rubber->setRectOnViewport(nr);
+                d->dragStart = e->pos();
+                d->dragStartRect = nr;
             }
         }
 
@@ -818,25 +844,29 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
         if (!d->rubber->isActive())
             return;
 
+        const int halfSA = d->snapArea / 2;
+
         QRect r(d->rubber->rubberBandAreaOnContents());
 
-        QRect lt(r.x()-5,           r.y()-5,            10,           10);
-        QRect rt(r.x()+r.width()-5, r.y()-5,            10,           10);
-        QRect lb(r.x()-5,           r.y()+r.height()-5, 10,           10);
-        QRect rb(r.x()+r.width()-5, r.y()+r.height()-5, 10,           10);
-        QRect ls(r.x()-5,           r.y()+5,            10,           r.height()-10);
-        QRect rs(r.x()+r.width()-5, r.y()+5,            10,           r.height()-10);
-        QRect ts(r.x()+5,           r.y()-5,            r.width()-10, 10);
-        QRect bs(r.x()+5,           r.y()+r.height()-5, r.width()-10, 10);
+        QRect lt(r.x()-halfSA,           r.y()-halfSA,            d->snapArea,            d->snapArea);
+        QRect rt(r.x()+r.width()-halfSA, r.y()-halfSA,            d->snapArea,            d->snapArea);
+        QRect lb(r.x()-halfSA,           r.y()+r.height()-halfSA, d->snapArea,            d->snapArea);
+        QRect rb(r.x()+r.width()-halfSA, r.y()+r.height()-halfSA, d->snapArea,            d->snapArea);
+        QRect ls(r.x()-halfSA,           r.y()+halfSA,            d->snapArea,            r.height()-d->snapArea);
+        QRect rs(r.x()+r.width()-halfSA, r.y()+halfSA,            d->snapArea,            r.height()-d->snapArea);
+        QRect ts(r.x()+halfSA,           r.y()-halfSA,            r.width()-d->snapArea,  d->snapArea);
+        QRect bs(r.x()+halfSA,           r.y()+r.height()-halfSA, r.width()-d->snapArea,  d->snapArea);
+        QRect dg(r.x()+halfSA,           r.y()+halfSA,            r.width()-d->snapArea,  r.height()-d->snapArea);
 
-        d->ltActive = false;
-        d->rtActive = false;
-        d->lbActive = false;
-        d->rbActive = false;
-        d->lsActive = false;
-        d->rsActive = false;
-        d->bsActive = false;
-        d->tsActive = false;
+        d->ltActive   = false;
+        d->rtActive   = false;
+        d->lbActive   = false;
+        d->rbActive   = false;
+        d->lsActive   = false;
+        d->rsActive   = false;
+        d->bsActive   = false;
+        d->tsActive   = false;
+        d->dragActive = false;
 
         if (lt.contains(e->x(), e->y()))
         {
@@ -878,6 +908,11 @@ void Canvas::contentsMouseMoveEvent(QMouseEvent *e)
             viewport()->setCursor(Qt::SizeVerCursor);
             d->bsActive = true;
         }
+        else if (dg.contains(e->x(), e->y()))
+        {
+            viewport()->setCursor(Qt::SizeAllCursor);
+            d->dragActive = true;
+        }
         else
         {
             viewport()->unsetCursor();
@@ -907,14 +942,15 @@ void Canvas::contentsMouseReleaseEvent(QMouseEvent *e)
     }
     else
     {
-        d->ltActive = false;
-        d->rtActive = false;
-        d->lbActive = false;
-        d->rbActive = false;
-        d->lsActive = false;
-        d->rsActive = false;
-        d->bsActive = false;
-        d->tsActive = false;
+        d->ltActive   = false;
+        d->rtActive   = false;
+        d->lbActive   = false;
+        d->rbActive   = false;
+        d->lsActive   = false;
+        d->rsActive   = false;
+        d->bsActive   = false;
+        d->tsActive   = false;
+        d->dragActive = false;
         d->rubber->setActive(false);
         viewport()->setMouseTracking(false);
         viewport()->unsetCursor();
