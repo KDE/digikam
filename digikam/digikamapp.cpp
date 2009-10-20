@@ -666,10 +666,10 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
-    d->newAlbumFromSelectionAction = new KAction(KIcon("albumfolder-new"), i18n("&New Album From Selection..."), this);
-    d->newAlbumFromSelectionAction->setWhatsThis(i18n("Move selected images into a new album."));
-    connect(d->newAlbumFromSelectionAction, SIGNAL(triggered()), d->view, SLOT(slotNewAlbumFromSelection()));
-    actionCollection()->addAction("album_new_from_selection", d->newAlbumFromSelectionAction);
+    d->moveSelectionToAlbumAction = new KAction(KIcon("albumfolder-new"), i18n("&Move to Album..."), this);
+    d->moveSelectionToAlbumAction->setWhatsThis(i18n("Move selected images into an album."));
+    connect(d->moveSelectionToAlbumAction, SIGNAL(triggered()), d->view, SLOT(slotNewAlbumFromSelection()));
+    actionCollection()->addAction("move_selection_to_album", d->moveSelectionToAlbumAction);
 
     // -----------------------------------------------------------------
 
@@ -1401,7 +1401,7 @@ void DigikamApp::slotSelectionChanged(int selectionCount)
     d->imageDeleteAction->setEnabled(selectionCount > 0);
     d->imageExifOrientationActionMenu->setEnabled(selectionCount > 0);
     d->slideShowSelectionAction->setEnabled(selectionCount > 0);
-    d->newAlbumFromSelectionAction->setEnabled(selectionCount > 1);
+    d->moveSelectionToAlbumAction->setEnabled(selectionCount > 0);
 
     if (selectionCount > 0)
     {

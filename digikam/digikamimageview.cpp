@@ -177,7 +177,7 @@ void DigikamImageView::showContextMenu(QContextMenuEvent* event, const ImageInfo
     DPopupMenu popmenu(this);
     ContextMenuHelper cmhelper(&popmenu);
 
-    cmhelper.addAction("album_new_from_selection");
+    cmhelper.addAction("move_selection_to_album");
     cmhelper.addAction(viewAction);
     cmhelper.addAction("image_edit");
     cmhelper.addServicesMenu(selectedUrls());

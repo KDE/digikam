@@ -87,7 +87,7 @@ public:
         usbMediaMenu                         = 0;
         cardReaderMenu                       = 0;
         newAction                            = 0;
-        newAlbumFromSelectionAction          = 0;
+        moveSelectionToAlbumAction           = 0;
         deleteAction                         = 0;
         imageDeletePermanentlyAction         = 0;
         imageDeletePermanentlyDirectlyAction = 0;
@@ -204,7 +204,7 @@ public:
 
     // Album Actions
     KAction                            *newAction;
-    KAction                            *newAlbumFromSelectionAction;
+    KAction                            *moveSelectionToAlbumAction;
     KAction                            *deleteAction;
     KAction                            *imageDeletePermanentlyAction;
     KAction                            *imageDeletePermanentlyDirectlyAction;

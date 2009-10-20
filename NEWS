@@ -46,7 +46,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 037 ==> 210873 : Renaming in digiKam always uses advanced renaming.
 038 ==> 210956 : Zoom slider looks not centered with Oxygen style.
 039 ==> 211060 : Advanced rename: keep the pattern.
-040 ==>
+040 ==> 210839 : "New Album From Selection" should be renamed.
+041 ==>
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
