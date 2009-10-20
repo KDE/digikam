@@ -192,7 +192,15 @@ AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
 
 AdvancedRenameDialog::~AdvancedRenameDialog()
 {
-    writeSettings();
+    if (d->singleFileMode)
+    {
+        // clear the input of the renamewidget, otherwise the pattern will be saved
+        d->advancedRenameWidget->clear();
+    }
+    else
+    {
+        writeSettings();
+    }
     delete d;
 }
 
@@ -300,13 +308,10 @@ void AdvancedRenameDialog::readSettings()
 
 void AdvancedRenameDialog::writeSettings()
 {
-    if (!d->singleFileMode)
-    {
-        KSharedConfig::Ptr config = KGlobal::config();
-        KConfigGroup group        = config->group(d->configGroupName);
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(d->configGroupName);
 
-        group.writeEntry(d->configLastUsedRenamePattern, d->advancedRenameWidget->text());
-    }
+    group.writeEntry(d->configLastUsedRenamePattern, d->advancedRenameWidget->text());
 }
 
 }  // namespace Digikam
