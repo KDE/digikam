@@ -52,7 +52,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 043 ==> 192748 : Tree-view thumbnail size changes lead to inconsistent tree-view until restart.
 044 ==> 177524 : Album navigator tree disappeared.
 045 ==> 193422 : When deleting images the icon view backs to top.
-046 ==>
+046 ==> 200654 : Image dimensions in albums slows down scrolling dramatically.
+047 ==>
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
