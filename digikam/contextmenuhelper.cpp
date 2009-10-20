@@ -578,6 +578,12 @@ void ContextMenuHelper::addQueueManagerMenu()
     d->parent->addMenu(bqmMenu);
 }
 
+void ContextMenuHelper::addActionCut(QObject* recv, const char* slot)
+{
+    KAction* cut = KStandardAction::cut(recv, slot, d->parent);
+    addAction(cut);
+}
+
 void ContextMenuHelper::addActionCopy(QObject* recv, const char* slot)
 {
     KAction* copy = KStandardAction::copy(recv, slot, d->parent);

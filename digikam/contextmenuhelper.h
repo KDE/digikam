@@ -139,6 +139,14 @@ public:
     void addAction(QAction* action, QObject* recv, const char* slot, bool addDisabled = false);
 
     /**
+     * Add the standard cut action and connect it to the appropriate slot
+     *
+     * @param recv the receiver of the triggered action
+     * @param slot the slot to connect the triggered action to
+     */
+    void addActionCut(QObject* recv, const char* slot);
+
+    /**
      * Add the standard copy action and connect it to the appropriate slot
      *
      * @param recv the receiver of the triggered action

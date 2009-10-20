@@ -29,14 +29,13 @@
 namespace Digikam
 {
 
-DigikamImageViewPriv::DigikamImageViewPriv(DigikamImageView *qq) 
+DigikamImageViewPriv::DigikamImageViewPriv(DigikamImageView *qq)
                     : overlaysActive(false), q_ptr(qq)
 {
     utilities          = 0;
     renameThread       = 0;
     rotateLeftOverlay  = 0;
     rotateRightOverlay = 0;
-
 }
 
 DigikamImageViewPriv::~DigikamImageViewPriv()

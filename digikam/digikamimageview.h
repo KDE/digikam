@@ -29,6 +29,8 @@
 
 #include "imagecategorizedview.h"
 
+class QMimeData;
+
 namespace Digikam
 {
 
@@ -48,6 +50,7 @@ public:
 
 public Q_SLOTS:
 
+    virtual void cut();
     virtual void copy();
     virtual void paste();
 
@@ -89,6 +92,11 @@ private Q_SLOTS:
 
     void slotRotateLeft();
     void slotRotateRight();
+
+private:
+
+    void addIsCutSelection(QMimeData* mime, bool cut);
+    bool decodeIsCutSelection(const QMimeData *mimeData);
 
 private:
 
