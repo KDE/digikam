@@ -581,15 +581,14 @@ void DigikamApp::setupAccelerators()
     lastImageAction->setShortcut( QKeySequence(Qt::Key_End) );
     connect(lastImageAction, SIGNAL(triggered()), this, SIGNAL(signalLastItem()));
 
-    KAction *copyItemsAction = new KAction(i18n("Copy Selected Album Items"), this);
-    actionCollection()->addAction("copy_album_selection", copyItemsAction);
-    copyItemsAction->setShortcut( QKeySequence(Qt::CTRL+Qt::Key_C) );
-    connect(copyItemsAction, SIGNAL(triggered()), this, SIGNAL(signalCopyAlbumItemsSelection()));
+    KAction *cutItemsAction = KStandardAction::cut(this, SIGNAL(signalCutAlbumItemsSelection()), this);
+    actionCollection()->addAction("cut_album_selection", cutItemsAction);
 
-    KAction *pasteItemsAction = new KAction(i18n("Paste Selected Album Items"), this);
+    KAction *copyItemsAction = KStandardAction::copy(this, SIGNAL(signalCopyAlbumItemsSelection()), this);
+    actionCollection()->addAction("copy_album_selection", copyItemsAction);
+
+    KAction *pasteItemsAction = KStandardAction::paste(this, SIGNAL(signalPasteAlbumItemsSelection()), this);
     actionCollection()->addAction("paste_album_selection", pasteItemsAction);
-    pasteItemsAction->setShortcut( QKeySequence(Qt::CTRL+Qt::Key_V) );
-    connect(pasteItemsAction, SIGNAL(triggered()), this, SIGNAL(signalPasteAlbumItemsSelection()));
 }
 
 void DigikamApp::setupActions()

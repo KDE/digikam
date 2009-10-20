@@ -335,6 +335,9 @@ void DigikamView::setupConnections()
     connect(d->parent, SIGNAL(signalLastItem()),
             this, SLOT(slotLastItem()));
 
+    connect(d->parent, SIGNAL(signalCutAlbumItemsSelection()),
+            d->iconView, SLOT(cut()));
+
     connect(d->parent, SIGNAL(signalCopyAlbumItemsSelection()),
             d->iconView, SLOT(copy()));
 

@@ -191,9 +191,9 @@ void DigikamImageView::showContextMenu(QContextMenuEvent* event, const ImageInfo
     popmenu.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAction("image_rename");
-    cmhelper.addActionCut(this, SLOT(cut()));
-    cmhelper.addActionCopy(this, SLOT(copy()));
-    cmhelper.addActionPaste(this, SLOT(paste()));
+    cmhelper.addAction("cut_album_selection");
+    cmhelper.addAction("copy_album_selection");
+    cmhelper.addAction("paste_album_selection");
     cmhelper.addActionItemDelete(this, SLOT(deleteSelected()), selectedImageIDs.count());
     popmenu.addSeparator();
     // --------------------------------------------------------

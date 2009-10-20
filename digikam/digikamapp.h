@@ -100,6 +100,7 @@ Q_SIGNALS:
     void signalPrevItem();
     void signalFirstItem();
     void signalLastItem();
+    void signalCutAlbumItemsSelection();
     void signalCopyAlbumItemsSelection();
     void signalPasteAlbumItemsSelection();
     void signalCancelButtonPressed();
