@@ -389,6 +389,8 @@ AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
     // important: setEditable() has to be called before adding the actual line edit widget, otherwise
     //            our lineEdit gets removed again.
     setEditable(true);
+    setMaxVisibleItems(10);
+    setMaxCount(20);
 
     d->lineEdit = new AdvancedRenameLineEdit(this);
     setLineEdit(d->lineEdit);

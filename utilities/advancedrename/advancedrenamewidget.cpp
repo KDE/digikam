@@ -63,7 +63,6 @@ public:
         configExpandedStateDefault(false),
 
         inputColumns(2),
-        maxPatternHistory(10),
         tooltipToggleButton(0),
         tokenToolButton(0),
         modifierToolButton(0),
@@ -85,7 +84,6 @@ public:
 
     int                  inputColumns;
 
-    const int            maxPatternHistory;
     QStringList          patternHistory;
 
     QToolButton*         tooltipToggleButton;
@@ -389,7 +387,6 @@ void AdvancedRenameWidget::setupWidgets()
      */
     delete d->renameInput;
     d->renameInput = new AdvancedRenameInput;
-    d->renameInput->setMaxCount(d->maxPatternHistory);
 
     delete d->tooltipToggleButton;
     d->tooltipToggleButton = new QToolButton;
