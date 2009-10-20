@@ -34,6 +34,8 @@
 
 // KDE includes
 
+#include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kdialog.h>
 #include <kicon.h>
 #include <kiconloader.h>
@@ -57,8 +59,7 @@ class AdvancedRenameWidgetPriv
 public:
 
     AdvancedRenameWidgetPriv() :
-        configGroupName("AdvancedRenameWidget"),
-        configPatternHistoryListEntry("Pattern History List"),
+        configGroupName("AdvancedRename Widget"),
         configExpandedStateEntry("Options are expanded"),
         configExpandedStateDefault(false),
 
@@ -78,13 +79,10 @@ public:
     {}
 
     const QString        configGroupName;
-    const QString        configPatternHistoryListEntry;
     const QString        configExpandedStateEntry;
     bool                 configExpandedStateDefault;
 
     int                  inputColumns;
-
-    QStringList          patternHistory;
 
     QToolButton*         tooltipToggleButton;
     QToolButton*         tokenToolButton;
@@ -474,12 +472,6 @@ void AdvancedRenameWidget::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
-
-    d->patternHistory = group.readEntry(d->configPatternHistoryListEntry, QStringList());
-    d->patternHistory.removeAll(QString(""));
-    d->renameInput->addItems(d->patternHistory);
-    d->renameInput->lineEdit()->clear();
-
     d->optionsLabel->setExpanded(group.readEntry(d->configExpandedStateEntry, d->configExpandedStateDefault));
 }
 
@@ -490,11 +482,6 @@ void AdvancedRenameWidget::writeSettings()
 
     // remove duplicate entries and save pattern history, omit empty strings
     QString pattern = d->renameInput->lineEdit()->text();
-    d->patternHistory.removeAll(pattern);
-    d->patternHistory.removeAll(QString(""));
-    d->patternHistory.prepend(pattern);
-    group.writeEntry(d->configPatternHistoryListEntry, d->patternHistory);
-
     group.writeEntry(d->configExpandedStateEntry, (d->optionsLabel) ?
                                                    d->optionsLabel->isExpanded() :
                                                    d->configExpandedStateDefault);

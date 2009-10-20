@@ -132,6 +132,11 @@ public Q_SLOTS:
 
 private:
 
+    void readSettings();
+    void writeSettings();
+
+private:
+
     AdvancedRenameInputPriv* const d;
 };
 

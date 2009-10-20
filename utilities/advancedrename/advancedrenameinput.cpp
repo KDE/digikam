@@ -36,6 +36,8 @@
 
 #include <kapplication.h>
 #include <klocale.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 
 // Local includes
 
@@ -375,8 +377,21 @@ class AdvancedRenameInputPriv
 public:
 
     AdvancedRenameInputPriv() :
+        configGroupName("AdvancedRename Input"),
+        configPatternHistoryListEntry("Pattern History List"),
+
+        maxVisibleItems(10),
+        maxHistoryItems(20),
         lineEdit(0)
-    {}
+        {}
+
+    const QString           configGroupName;
+    const QString           configPatternHistoryListEntry;
+
+    const int               maxVisibleItems;
+    const int               maxHistoryItems;
+
+    QStringList             patternHistory;
 
     AdvancedRenameLineEdit* lineEdit;
 };
@@ -389,8 +404,8 @@ AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
     // important: setEditable() has to be called before adding the actual line edit widget, otherwise
     //            our lineEdit gets removed again.
     setEditable(true);
-    setMaxVisibleItems(10);
-    setMaxCount(20);
+    setMaxVisibleItems(d->maxVisibleItems);
+    setMaxCount(d->maxHistoryItems);
 
     d->lineEdit = new AdvancedRenameLineEdit(this);
     setLineEdit(d->lineEdit);
@@ -400,10 +415,13 @@ AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
 
     connect(d->lineEdit, SIGNAL(signalTokenMarked(bool)),
             this, SIGNAL(signalTokenMarked(bool)));
+
+    readSettings();
 }
 
 AdvancedRenameInput::~AdvancedRenameInput()
 {
+    writeSettings();
     delete d;
 }
 
@@ -425,6 +443,30 @@ void AdvancedRenameInput::slotAddToken(const QString& str)
 void AdvancedRenameInput::slotAddModifier(const QString& str)
 {
     d->lineEdit->slotAddModifier(str);
+}
+
+void AdvancedRenameInput::readSettings()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(d->configGroupName);
+
+    d->patternHistory = group.readEntry(d->configPatternHistoryListEntry, QStringList());
+    d->patternHistory.removeAll(QString(""));
+    addItems(d->patternHistory);
+    d->lineEdit->clear();
+}
+
+void AdvancedRenameInput::writeSettings()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(d->configGroupName);
+
+    // remove duplicate entries and save pattern history, omit empty strings
+    QString pattern = d->lineEdit->text();
+    d->patternHistory.removeAll(pattern);
+    d->patternHistory.removeAll(QString(""));
+    d->patternHistory.prepend(pattern);
+    group.writeEntry(d->configPatternHistoryListEntry, d->patternHistory);
 }
 
 }  // namespace Digikam

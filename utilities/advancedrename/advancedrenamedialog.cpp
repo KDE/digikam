@@ -121,7 +121,7 @@ class AdvancedRenameDialogPriv
 public:
 
     AdvancedRenameDialogPriv() :
-        configGroupName("Advanced Rename Dialog"),
+        configGroupName("AdvancedRename Dialog"),
         configLastUsedRenamePattern("Last Used Rename Pattern"),
 
         singleFileMode(true),
