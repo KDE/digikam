@@ -729,11 +729,6 @@ void DigikamView::slotNewAlbum()
     d->folderView->albumNew();
 }
 
-void DigikamView::slotNewAlbumFromSelection()
-{
-    d->iconView->createNewAlbumForSelected();
-}
-
 void DigikamView::slotDeleteAlbum()
 {
     d->folderView->albumDelete();
@@ -1667,6 +1662,11 @@ void DigikamView::slotGroupImages(int categoryMode)
         return;
     settings->setImageGroupMode(categoryMode);
     d->iconView->imageFilterModel()->setCategorizationMode((ImageSortSettings::CategorizationMode) categoryMode);
+}
+
+void DigikamView::slotMoveSelectionToAlbum()
+{
+    d->iconView->createNewAlbumForSelected();
 }
 
 void DigikamView::slotLeftSidebarChangedTab(QWidget* w)

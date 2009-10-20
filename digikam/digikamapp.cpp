@@ -668,7 +668,7 @@ void DigikamApp::setupActions()
 
     d->moveSelectionToAlbumAction = new KAction(KIcon("albumfolder-new"), i18n("&Move to Album..."), this);
     d->moveSelectionToAlbumAction->setWhatsThis(i18n("Move selected images into an album."));
-    connect(d->moveSelectionToAlbumAction, SIGNAL(triggered()), d->view, SLOT(slotNewAlbumFromSelection()));
+    connect(d->moveSelectionToAlbumAction, SIGNAL(triggered()), d->view, SLOT(slotMoveSelectionToAlbum()));
     actionCollection()->addAction("move_selection_to_album", d->moveSelectionToAlbumAction);
 
     // -----------------------------------------------------------------

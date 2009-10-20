@@ -107,7 +107,6 @@ public Q_SLOTS:
 
     // Album action slots
     void slotNewAlbum();
-    void slotNewAlbumFromSelection();
     void slotSortAlbums(int order);
     void slotDeleteAlbum();
     void slotSelectAlbum(const KUrl& url);
@@ -160,6 +159,7 @@ public Q_SLOTS:
     void slotSortImages(int order);
     void slotSortImagesOrder(int order);
     void slotGroupImages(int mode);
+    void slotMoveSelectionToAlbum();
 
     // Image Rating slots
     void slotAssignRating(int rating);

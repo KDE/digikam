@@ -174,7 +174,7 @@ public Q_SLOTS:
     void slotSetAlbumThumbnail(ImageInfo& imageInfo);
     void slotCopy();
     void slotPaste();
-    void slotNewAlbumFromSelection();
+    void slotMoveSelectionToAlbum();
 
     void slotAssignRating(int rating);
     void slotAssignRatingNoStar();

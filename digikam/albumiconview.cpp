@@ -2310,7 +2310,7 @@ void AlbumIconView::slotEditRatingFromItem(int rating)
     updateContents();
 }
 
-void AlbumIconView::slotNewAlbumFromSelection()
+void AlbumIconView::slotMoveSelectionToAlbum()
 {
     KUrl::List kioURLs;
     QList<qlonglong> selectedImageIDs;
