@@ -569,6 +569,7 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
     cmhelper.addAction("album_new");
     cmhelper.addAction(renameAction);
     cmhelper.addAction(resetIconAction);
+    cmhelper.addAction("album_openinkonqui");
     popmenu.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAction(findDuplAction);
