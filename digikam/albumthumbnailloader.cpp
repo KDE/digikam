@@ -364,10 +364,12 @@ void AlbumThumbnailLoader::setThumbnailSize(int size)
     if (d->iconAlbumThumbThread)
     {
         d->iconAlbumThumbThread->stopLoading();
+        d->iconAlbumThumbThread->setThumbnailSize(size);
     }
     if (d->iconTagThumbThread)
     {
         d->iconTagThumbThread->stopLoading();
+        d->iconTagThumbThread->setThumbnailSize(size);
     }
 
     emit signalReloadThumbnails();
