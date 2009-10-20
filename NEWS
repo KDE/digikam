@@ -50,7 +50,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 041 ==> 144642 : Ctrl-X does nothing in Album GUI.
 042 ==> 132828 : Rotate video file does not work.
 043 ==> 192748 : Tree-view thumbnail size changes lead to inconsistent tree-view until restart.
-044 ==>
+044 ==> 177524 : Album navigator tree disappeared.
+045 ==>
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
