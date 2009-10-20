@@ -425,11 +425,6 @@ AdvancedRenameInput::~AdvancedRenameInput()
     delete d;
 }
 
-AdvancedRenameLineEdit* AdvancedRenameInput::lineEdit()
-{
-    return d->lineEdit;
-}
-
 void AdvancedRenameInput::setParser(Parser* parser)
 {
     d->lineEdit->setParser(parser);

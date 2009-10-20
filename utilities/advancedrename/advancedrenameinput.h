@@ -116,8 +116,6 @@ public:
     AdvancedRenameInput(QWidget* parent = 0);
     ~AdvancedRenameInput();
 
-    AdvancedRenameLineEdit* lineEdit();
-
     void setParser(Parser* parser);
 
 Q_SIGNALS:

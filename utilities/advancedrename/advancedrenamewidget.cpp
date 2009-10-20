@@ -340,7 +340,7 @@ void AdvancedRenameWidget::registerParserControls()
        d->tokenToolButton->setMenu(tokenToolBtnMenu);
        d->modifierToolButton->setMenu(modifierToolBtnMenu);
 
-       d->renameInput->lineEdit()->setParser(d->parser);
+       d->renameInput->setParser(d->parser);
        createToolTip();
    }
 }
