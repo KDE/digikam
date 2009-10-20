@@ -53,7 +53,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 044 ==> 177524 : Album navigator tree disappeared.
 045 ==> 193422 : When deleting images the icon view backs to top.
 046 ==> 200654 : Image dimensions in albums slows down scrolling dramatically.
-047 ==>
+047 ==> 148105 : Problems with albums who's name start as the album library path.
+048 ==>
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
