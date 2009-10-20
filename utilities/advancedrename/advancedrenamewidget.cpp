@@ -61,7 +61,7 @@ public:
     AdvancedRenameWidgetPriv() :
         configGroupName("AdvancedRename Widget"),
         configExpandedStateEntry("Options are expanded"),
-        configExpandedStateDefault(false),
+        configExpandedStateDefault(true),
 
         inputColumns(2),
         tooltipToggleButton(0),
