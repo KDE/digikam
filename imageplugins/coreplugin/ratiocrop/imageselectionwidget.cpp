@@ -1361,7 +1361,7 @@ void ImageSelectionWidget::mouseReleaseEvent ( QMouseEvent * )
     }
     else if ( d->regionSelection.contains( d->lastPos ) )
     {
-        setCursor( Qt::PointingHandCursor );
+        setCursor( Qt::SizeAllCursor );
         regionSelectionMoved();
     }
     else
@@ -1455,7 +1455,7 @@ void ImageSelectionWidget::mouseMoveEvent ( QMouseEvent * e )
                   d->localBottomLeftCorner.contains( e->x(), e->y() ) )
             setCursor( Qt::SizeBDiagCursor );
         else if ( d->localRegionSelection.contains( e->x(), e->y() ) )
-            setCursor( Qt::PointingHandCursor );
+            setCursor( Qt::SizeAllCursor );
         else
             setCursor( Qt::ArrowCursor );
     }
