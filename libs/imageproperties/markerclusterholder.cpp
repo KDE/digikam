@@ -46,14 +46,15 @@ namespace Digikam
 {
 
 // constants for clusters
-const int ClusterRadius = 15;
-const QSize ClusterDefaultSize = QSize(2*ClusterRadius, 2*ClusterRadius);
-const int ClusterGridSizeScreen = 60;
+const int ClusterRadius          = 15;
+const QSize ClusterDefaultSize   = QSize(2*ClusterRadius, 2*ClusterRadius);
+const int ClusterGridSizeScreen  = 60;
 const QSize ClusterMaxPixmapSize = QSize(60, 60);
 
 class MarkerClusterHolderPrivate
 {
 public:
+
     Marble::MarbleWidget* marbleWidget;
     QList<MarkerClusterHolder::ClusterInfo> clusters;
     QList<MarkerClusterHolder::MarkerInfo> markers;
@@ -82,29 +83,29 @@ public:
 
 
     MarkerClusterHolderPrivate(Marble::MarbleWidget* parameterMarbleWidget)
-    : marbleWidget(parameterMarbleWidget),
-      clusters(),
-      markers(),
-      lastZoom(-1),
-      lastCenterLatitude(marbleWidget->centerLatitude()),
-      lastCenterLongitude(marbleWidget->centerLongitude()),
-      markerCountDirty(true),
-      autoRedrawOnMarkerAdd(true),
-      clusterStateDirty(false),
-      haveAnySoloMarkers(false),
-      markerDataEqual(0),
-      markerDataEqualData(0),
-      allowSelection(true),
-      allowFiltering(true),
-      tooltipFunction(0),
-      tooltipFunctionData(0),
-      clusterPixmapFunction(0),
-      clusterPixmapFunctionData(0),
-      customPaintFunction(0),
-      customPaintFunctionData(0)
+        : marbleWidget(parameterMarbleWidget),
+          clusters(),
+          markers(),
+          lastZoom(-1),
+          lastCenterLatitude(marbleWidget->centerLatitude()),
+          lastCenterLongitude(marbleWidget->centerLongitude()),
+          markerCountDirty(true),
+          autoRedrawOnMarkerAdd(true),
+          clusterStateDirty(false),
+          haveAnySoloMarkers(false),
+          markerDataEqual(0),
+          markerDataEqualData(0),
+          allowSelection(true),
+          allowFiltering(true),
+          tooltipFunction(0),
+          tooltipFunctionData(0),
+          clusterPixmapFunction(0),
+          clusterPixmapFunctionData(0),
+          customPaintFunction(0),
+          customPaintFunctionData(0)
 // externaldraw plugin only supported on version 0.8 or higher
 #if MARBLE_VERSION >= 0x000800
-      , externalDrawPlugin(0)
+          , externalDrawPlugin(0)
 #endif // MARBLE_VERSION >= 0x000800
     {
     }
@@ -132,7 +133,7 @@ void MarkerClusterHolder::ExternalDrawCallback(Marble::GeoPainter *painter, void
  * @param marbleWidget Map on which the clusters should be shown. Will also be used as parent for this object.
  */
 MarkerClusterHolder::MarkerClusterHolder(Marble::MarbleWidget* const marbleWidget)
-  : QObject(marbleWidget), d(new MarkerClusterHolderPrivate(marbleWidget))
+                   : QObject(marbleWidget), d(new MarkerClusterHolderPrivate(marbleWidget))
 {
     d->marbleWidget->installEventFilter(this);
 
@@ -228,7 +229,8 @@ QString MarkerClusterHolder::ClusterInfo::getLabelText() const
  * @param labelText Text for the label
  * @param labelColor Color for the label text
  */
-void MarkerClusterHolder::ClusterInfo::getColorInfos(const bool haveAnySolo, QColor *fillColor, QColor *strokeColor, Qt::PenStyle *strokeStyle, QString *labelText, QColor *labelColor) const
+void MarkerClusterHolder::ClusterInfo::getColorInfos(const bool haveAnySolo, QColor *fillColor, QColor *strokeColor, 
+                                                     Qt::PenStyle *strokeStyle, QString *labelText, QColor *labelColor) const
 {
     *labelText = getLabelText();
     *labelColor = QColor(Qt::black);
@@ -471,7 +473,7 @@ void MarkerClusterHolder::clear()
 {
     d->clusters.clear();
     d->markers.clear();
-    d->markerCountDirty = true;
+    d->markerCountDirty   = true;
     d->haveAnySoloMarkers = false;
     emit(signalSoloChanged());
     emit(signalSelectionChanged());
@@ -534,8 +536,8 @@ inline int QPointSquareDistance(const QPoint& a, const QPoint& b)
 void MarkerClusterHolder::reorderClustersPixelGrid()
 {
     // check whether the parameters of the map changed:
-    const int newZoom = d->marbleWidget->zoom();
-    const qreal newCenterLatitude = d->marbleWidget->centerLatitude();
+    const int newZoom              = d->marbleWidget->zoom();
+    const qreal newCenterLatitude  = d->marbleWidget->centerLatitude();
     const qreal newCenterLongitude = d->marbleWidget->centerLongitude();
 
     if (! ((newZoom!=d->lastZoom)||(newCenterLatitude!=d->lastCenterLatitude)||(newCenterLongitude!=d->lastCenterLongitude)||d->markerCountDirty) )
@@ -557,8 +559,8 @@ void MarkerClusterHolder::reorderClustersPixelGrid()
     const int gridSize = ClusterGridSizeScreen;
 
     // add all markers to a grid:
-    const QSize mapSize = d->marbleWidget->map()->size();
-    const int gridWidth = mapSize.width();
+    const QSize mapSize  = d->marbleWidget->map()->size();
+    const int gridWidth  = mapSize.width();
     const int gridHeight = mapSize.height();
     QVector<QIntList> pixelGrid(gridWidth*gridHeight, QIntList());
     QList<QPair<QPoint, QIntList> > leftOverList;
@@ -572,8 +574,8 @@ void MarkerClusterHolder::reorderClustersPixelGrid()
         qreal qrealMarkerX, qrealMarkerY;
         if (!d->marbleWidget->screenCoordinates(marker.lon(), marker.lat(), qrealMarkerX, qrealMarkerY))
             continue;
-        markerX = qrealMarkerX;
-        markerY = qrealMarkerY;
+        markerX = (int)qrealMarkerX;
+        markerY = (int)qrealMarkerY;
 #else
         if (!d->marbleWidget->screenCoordinates(marker.lon(), marker.lat(), markerX, markerY))
             continue;
@@ -681,10 +683,10 @@ void MarkerClusterHolder::reorderClustersPixelGrid()
         // pixelGridIndices in the loop above
         // make sure we do not go over the grid boundaries:
         const int eatRadius = gridSize/4;
-        const int xStart = qMax( (markerX-eatRadius), 0);
-        const int yStart = qMax( (markerY-eatRadius), 0);
-        const int xEnd = qMin( (markerX+eatRadius), gridWidth-1);
-        const int yEnd = qMin( (markerY+eatRadius), gridHeight-1);
+        const int xStart    = qMax( (markerX-eatRadius), 0);
+        const int yStart    = qMax( (markerY-eatRadius), 0);
+        const int xEnd      = qMin( (markerX+eatRadius), gridWidth-1);
+        const int yEnd      = qMin( (markerY+eatRadius), gridHeight-1);
         for (int indexX=xStart; indexX<=xEnd; ++indexX)
         {
             for (int indexY=yStart; indexY<=yEnd; ++indexY)
@@ -1366,5 +1368,4 @@ MarkerClusterHolder::MarkerInfo& MarkerClusterHolder::marker(const int markerInd
     return d->markers[markerIndex];
 }
 
-} // Digikam
-
+} // namespace Digikam
