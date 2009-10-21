@@ -448,8 +448,13 @@ WhiteBalanceTool::~WhiteBalanceTool()
 
 void WhiteBalanceTool::slotTemperatureChanged(double temperature)
 {
-    int id = d->temperaturePresetCB->combo()->findData(QVariant((int)temperature));
-    d->temperaturePresetCB->setCurrentIndex(id);
+    int index = d->temperaturePresetCB->combo()->findData(QVariant((int)temperature));
+    if (index == -1)
+    {
+        index = d->temperaturePresetCB->combo()->findData(QVariant((int)None));
+    }
+    d->temperaturePresetCB->setCurrentIndex(index);
+
     slotTimer();
 }
 
