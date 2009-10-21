@@ -89,6 +89,24 @@ using namespace Digikam;
 namespace DigikamWhiteBalanceImagesPlugin
 {
 
+enum TemperaturePreset
+{
+    Candle=0,
+    Lamp40W,
+    Lamp100W,
+    Lamp200W,
+    Sunrise,
+    StudioLamp,
+    MoonLight,
+    Neutral,
+    DaylightD50,
+    Flash,
+    Sun,
+    XeonLamp,
+    DaylightD65,
+    None
+};
+
 class WhiteBalanceToolPriv
 {
 public:
@@ -133,56 +151,55 @@ public:
         gboxSettings(0)
         {}
 
-    const QString        configGroupName;
-    const QString        configDarkInputEntry;
-    const QString        configBlackInputEntry;
-    const QString        configMainExposureEntry;
-    const QString        configFineExposureEntry;
-    const QString        configGammaInputEntry;
-    const QString        configSaturationInputEntry;
-    const QString        configGreenInputEntry;
-    const QString        configTemeratureInputEntry;
-    const QString        configHistogramChannelEntry;
-    const QString        configHistogramScaleEntry;
+    const QString       configGroupName;
+    const QString       configDarkInputEntry;
+    const QString       configBlackInputEntry;
+    const QString       configMainExposureEntry;
+    const QString       configFineExposureEntry;
+    const QString       configGammaInputEntry;
+    const QString       configSaturationInputEntry;
+    const QString       configGreenInputEntry;
+    const QString       configTemeratureInputEntry;
+    const QString       configHistogramChannelEntry;
+    const QString       configHistogramScaleEntry;
 
-    uchar*               destinationPreviewData;
+    uchar*              destinationPreviewData;
 
-    int                  currentPreviewMode;
+    int                 currentPreviewMode;
 
-    QToolButton*         pickTemperature;
-    QToolButton*         autoAdjustExposure;
+    QToolButton*        pickTemperature;
+    QToolButton*        autoAdjustExposure;
 
-    QLabel*              adjTemperatureLabel;
-    QLabel*              temperaturePresetLabel;
-    QLabel*              darkLabel;
-    QLabel*              blackLabel;
-    QLabel*              mainExposureLabel;
-    QLabel*              fineExposureLabel;
-    QLabel*              gammaLabel;
-    QLabel*              saturationLabel;
-    QLabel*              greenLabel;
-    QLabel*              exposureLabel;
-    QLabel*              temperatureLabel;
+    QLabel*             adjTemperatureLabel;
+    QLabel*             temperaturePresetLabel;
+    QLabel*             darkLabel;
+    QLabel*             blackLabel;
+    QLabel*             mainExposureLabel;
+    QLabel*             fineExposureLabel;
+    QLabel*             gammaLabel;
+    QLabel*             saturationLabel;
+    QLabel*             greenLabel;
+    QLabel*             exposureLabel;
+    QLabel*             temperatureLabel;
 
-    RComboBox*           temperaturePresetCB;
+    RComboBox*          temperaturePresetCB;
 
-    RDoubleNumInput*     temperatureInput;
-    RDoubleNumInput*     darkInput;
-    RDoubleNumInput*     blackInput;
-    RDoubleNumInput*     mainExposureInput;
-    RDoubleNumInput*     fineExposureInput;
-    RDoubleNumInput*     gammaInput;
-    RDoubleNumInput*     saturationInput;
-    RDoubleNumInput*     greenInput;
+    RDoubleNumInput*    temperatureInput;
+    RDoubleNumInput*    darkInput;
+    RDoubleNumInput*    blackInput;
+    RDoubleNumInput*    mainExposureInput;
+    RDoubleNumInput*    fineExposureInput;
+    RDoubleNumInput*    gammaInput;
+    RDoubleNumInput*    saturationInput;
+    RDoubleNumInput*    greenInput;
 
-    ImageWidget*         previewWidget;
+    ImageWidget*        previewWidget;
 
-    EditorToolSettings*  gboxSettings;
+    EditorToolSettings* gboxSettings;
 };
 
 WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
-                : EditorTool(parent),
-                  d(new WhiteBalanceToolPriv)
+                : EditorTool(parent), d(new WhiteBalanceToolPriv)
 {
     setObjectName("whitebalance");
     setToolName(i18n("White Balance"));

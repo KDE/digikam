@@ -71,26 +71,6 @@ private:
 
 private:
 
-    enum TemperaturePreset
-    {
-        Candle=0,
-        Lamp40W,
-        Lamp100W,
-        Lamp200W,
-        Sunrise,
-        StudioLamp,
-        MoonLight,
-        Neutral,
-        DaylightD50,
-        Flash,
-        Sun,
-        XeonLamp,
-        DaylightD65,
-        None
-    };
-
-private:
-
     WhiteBalanceToolPriv* const d;
 };
 
