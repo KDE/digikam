@@ -39,6 +39,7 @@
 #include <QPixmap>
 #include <QProgressBar>
 #include <QPushButton>
+#include <QRegExp>
 #include <QTextStream>
 #include <QTimer>
 #include <QToolButton>
@@ -196,6 +197,23 @@ public:
     ImageWidget*        previewWidget;
 
     EditorToolSettings* gboxSettings;
+
+public:
+
+    QString addTemperatureDescription(const QString& desc, TemperaturePreset preset)
+    {
+        int index        = temperaturePresetCB->combo()->findData((int)preset);
+        QString itemText = temperaturePresetCB->combo()->itemText(index);
+        QString tempDesc = QString("<p><b>%1</b>: %2 (%3K).</p>")
+                                  .arg(itemText)
+                                  .arg(desc)
+                                  .arg((int)preset);
+        if (preset == None)
+        {
+            tempDesc.remove(QRegExp("\\(.*\\)"));
+        }
+        return tempDesc;
+    }
 };
 
 WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
@@ -257,23 +275,25 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
     d->temperaturePresetCB->combo()->addItem(i18n("Daylight D65"),                   QVariant(DaylightD65));
     d->temperaturePresetCB->combo()->addItem(i18nc("no temperature preset", "None"), QVariant(None));
     d->temperaturePresetCB->setDefaultIndex(DaylightD65);
-    d->temperaturePresetCB->setWhatsThis(i18n("<p>Select the white balance color temperature "
-                                              "preset to use here:</p>"
-                                              "<p><b>Candle</b>: candle light (1850K).</p>"
-                                              "<p><b>40W Lamp</b>: 40 Watt incandescent lamp (2680K).</p>"
-                                              "<p><b>100W Lamp</b>: 100 Watt incandescent lamp (2800K).</p>"
-                                              "<p><b>200W Lamp</b>: 200 Watt incandescent lamp (3000K).</p>"
-                                              "<p><b>Sunrise</b>: sunrise or sunset light (3200K).</p>"
-                                              "<p><b>Studio Lamp</b>: tungsten lamp used in photo studio or "
-                                              "light at 1 hour from dusk/dawn (3400K).</p>"
-                                              "<p><b>Moonlight</b>: moon light (4100K).</p>"
-                                              "<p><b>Neutral</b>: neutral color temperature (4750K).</p>"
-                                              "<p><b>Daylight D50</b>: sunny daylight around noon (5000K).</p>"
-                                              "<p><b>Photo Flash</b>: electronic photo flash (5500K).</p>"
-                                              "<p><b>Sun</b>: effective sun temperature (5770K).</p>"
-                                              "<p><b>Xenon Lamp</b>: xenon lamp or light arc (6420K).</p>"
-                                              "<p><b>Daylight D65</b>: overcast sky light (6500K).</p>"
-                                              "<p><b>None</b>: no preset value.</p>"));
+
+    QString toolTip("<p>Select the white balance color temperature preset to use here:</p>");
+    toolTip += d->addTemperatureDescription("candle light",                          Candle);
+    toolTip += d->addTemperatureDescription("40 Watt incandescent lamp",             Lamp40W);
+    toolTip += d->addTemperatureDescription("100 Watt incandescent lamp",            Lamp100W);
+    toolTip += d->addTemperatureDescription("200 Watt incandescent lamp",            Lamp200W);
+    toolTip += d->addTemperatureDescription("sunrise or sunset light",               Sunrise);
+    toolTip += d->addTemperatureDescription("tungsten lamp used in photo studio or "
+                                            "light at 1 hour from dusk/dawn",        StudioLamp);
+    toolTip += d->addTemperatureDescription("moon light",                            MoonLight);
+    toolTip += d->addTemperatureDescription("neutral color temperature",             Neutral);
+    toolTip += d->addTemperatureDescription("sunny daylight around noon",            DaylightD50);
+    toolTip += d->addTemperatureDescription("electronic photo flash",                Flash);
+    toolTip += d->addTemperatureDescription("effective sun temperature",             Sun);
+    toolTip += d->addTemperatureDescription("xenon lamp or light arc",               XenonLamp);
+    toolTip += d->addTemperatureDescription("overcast sky light",                    DaylightD65);
+    toolTip += d->addTemperatureDescription("no preset value",                       None);
+    d->temperaturePresetCB->setToolTip(toolTip);
+
     d->pickTemperature = new QToolButton;
     d->pickTemperature->setIcon(KIcon("color-picker-grey"));
     d->pickTemperature->setCheckable(true);
