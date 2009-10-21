@@ -91,20 +91,20 @@ namespace DigikamWhiteBalanceImagesPlugin
 
 enum TemperaturePreset
 {
-    Candle=0,
-    Lamp40W,
-    Lamp100W,
-    Lamp200W,
-    Sunrise,
-    StudioLamp,
-    MoonLight,
-    Neutral,
-    DaylightD50,
-    Flash,
-    Sun,
-    XeonLamp,
-    DaylightD65,
-    None
+    None             = -1,
+    Candle           = 1850,
+    Lamp40W          = 2680,
+    Lamp100W         = 2800,
+    Lamp200W         = 3000,
+    Sunrise          = 3200,
+    StudioLamp       = 3400,
+    MoonLight        = 4100,
+    Neutral          = 4750,
+    DaylightD50      = 5000,
+    Flash            = 5500,
+    Sun              = 5770,
+    XenonLamp        = 6420,
+    DaylightD65      = 6500
 };
 
 class WhiteBalanceToolPriv
@@ -242,20 +242,20 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
 
     d->temperaturePresetLabel = new QLabel(i18n("Preset:"));
     d->temperaturePresetCB    = new RComboBox;
-    d->temperaturePresetCB->addItem(i18n("Candle"));
-    d->temperaturePresetCB->addItem(i18n("40W Lamp"));
-    d->temperaturePresetCB->addItem(i18n("100W Lamp"));
-    d->temperaturePresetCB->addItem(i18n("200W Lamp"));
-    d->temperaturePresetCB->addItem(i18n("Sunrise"));
-    d->temperaturePresetCB->addItem(i18n("Studio Lamp"));
-    d->temperaturePresetCB->addItem(i18n("Moonlight"));
-    d->temperaturePresetCB->addItem(i18n("Neutral"));
-    d->temperaturePresetCB->addItem(i18n("Daylight D50"));
-    d->temperaturePresetCB->addItem(i18n("Photo Flash"));
-    d->temperaturePresetCB->addItem(i18n("Sun"));
-    d->temperaturePresetCB->addItem(i18n("Xenon Lamp"));
-    d->temperaturePresetCB->addItem(i18n("Daylight D65"));
-    d->temperaturePresetCB->addItem(i18nc("no temperature preset", "None"));
+    d->temperaturePresetCB->combo()->addItem(i18n("Candle"),                         QVariant(Candle));
+    d->temperaturePresetCB->combo()->addItem(i18n("40W Lamp"),                       QVariant(Lamp40W));
+    d->temperaturePresetCB->combo()->addItem(i18n("100W Lamp"),                      QVariant(Lamp100W));
+    d->temperaturePresetCB->combo()->addItem(i18n("200W Lamp"),                      QVariant(Lamp200W));
+    d->temperaturePresetCB->combo()->addItem(i18n("Sunrise"),                        QVariant(Sunrise));
+    d->temperaturePresetCB->combo()->addItem(i18n("Studio Lamp"),                    QVariant(StudioLamp));
+    d->temperaturePresetCB->combo()->addItem(i18n("Moonlight"),                      QVariant(MoonLight));
+    d->temperaturePresetCB->combo()->addItem(i18n("Neutral"),                        QVariant(Neutral));
+    d->temperaturePresetCB->combo()->addItem(i18n("Daylight D50"),                   QVariant(DaylightD50));
+    d->temperaturePresetCB->combo()->addItem(i18n("Photo Flash"),                    QVariant(Flash));
+    d->temperaturePresetCB->combo()->addItem(i18n("Sun"),                            QVariant(Sun));
+    d->temperaturePresetCB->combo()->addItem(i18n("Xenon Lamp"),                     QVariant(XenonLamp));
+    d->temperaturePresetCB->combo()->addItem(i18n("Daylight D65"),                   QVariant(DaylightD65));
+    d->temperaturePresetCB->combo()->addItem(i18nc("no temperature preset", "None"), QVariant(None));
     d->temperaturePresetCB->setDefaultIndex(DaylightD65);
     d->temperaturePresetCB->setWhatsThis(i18n("<p>Select the white balance color temperature "
                                               "preset to use here:</p>"
@@ -448,127 +448,20 @@ WhiteBalanceTool::~WhiteBalanceTool()
 
 void WhiteBalanceTool::slotTemperatureChanged(double temperature)
 {
-   switch ((uint) temperature)
-    {
-        case 1850:
-            d->temperaturePresetCB->setCurrentIndex(Candle);
-            break;
-
-        case 2680:
-            d->temperaturePresetCB->setCurrentIndex(Lamp40W);
-            break;
-
-        case 2800:
-            d->temperaturePresetCB->setCurrentIndex(Lamp100W);
-            break;
-
-        case 3000:
-            d->temperaturePresetCB->setCurrentIndex(Lamp200W);
-            break;
-
-        case 3200:
-            d->temperaturePresetCB->setCurrentIndex(Sunrise);
-            break;
-
-        case 3400:
-            d->temperaturePresetCB->setCurrentIndex(StudioLamp);
-            break;
-
-        case 4100:
-            d->temperaturePresetCB->setCurrentIndex(MoonLight);
-            break;
-
-        case 4750:
-            d->temperaturePresetCB->setCurrentIndex(Neutral);
-            break;
-
-        case 5000:
-            d->temperaturePresetCB->setCurrentIndex(DaylightD50);
-            break;
-
-        case 5500:
-            d->temperaturePresetCB->setCurrentIndex(Flash);
-            break;
-
-        case 5770:
-            d->temperaturePresetCB->setCurrentIndex(Sun);
-            break;
-
-        case 6420:
-            d->temperaturePresetCB->setCurrentIndex(XeonLamp);
-            break;
-
-        case 6500:
-            d->temperaturePresetCB->setCurrentIndex(DaylightD65);
-            break;
-
-        default:
-            d->temperaturePresetCB->setCurrentIndex(None);
-            break;
-    }
-
+    int id = d->temperaturePresetCB->combo()->findData(QVariant((int)temperature));
+    d->temperaturePresetCB->setCurrentIndex(id);
     slotTimer();
 }
 
 void WhiteBalanceTool::slotTemperaturePresetChanged(int tempPreset)
 {
-   switch (tempPreset)
+    bool ok = true;
+    double temperature = d->temperaturePresetCB->combo()->itemData(tempPreset).toDouble(&ok);
+    if (!ok)
     {
-        case Candle:
-            d->temperatureInput->setValue(1850.0);
-            break;
-
-        case Lamp40W:
-            d->temperatureInput->setValue(2680.0);
-            break;
-
-        case Lamp100W:
-            d->temperatureInput->setValue(2800.0);
-            break;
-
-        case Lamp200W:
-            d->temperatureInput->setValue(3000.0);
-            break;
-
-        case Sunrise:
-            d->temperatureInput->setValue(3200.0);
-            break;
-
-        case StudioLamp:
-            d->temperatureInput->setValue(3400.0);
-            break;
-
-        case MoonLight:
-            d->temperatureInput->setValue(4100.0);
-            break;
-
-        case Neutral:
-            d->temperatureInput->setValue(4750.0);
-            break;
-
-        case DaylightD50:
-            d->temperatureInput->setValue(5000.0);
-            break;
-
-        case Flash:
-            d->temperatureInput->setValue(5500.0);
-            break;
-
-        case Sun:
-            d->temperatureInput->setValue(5770.0);
-            break;
-
-        case XeonLamp:
-            d->temperatureInput->setValue(6420.0);
-            break;
-
-        case DaylightD65:
-            d->temperatureInput->setValue(6500.0);
-            break;
-
-        default: // None.
-            break;
+        temperature = (double)Neutral;
     }
+    d->temperatureInput->setValue(temperature);
 
     slotEffect();
 }
