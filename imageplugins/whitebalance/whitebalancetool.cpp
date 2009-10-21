@@ -92,20 +92,20 @@ namespace DigikamWhiteBalanceImagesPlugin
 
 enum TemperaturePreset
 {
-    None             = -1,
-    Candle           = 1850,
-    Lamp40W          = 2680,
-    Lamp100W         = 2800,
-    Lamp200W         = 3000,
-    Sunrise          = 3200,
-    StudioLamp       = 3400,
-    MoonLight        = 4100,
-    Neutral          = 4750,
-    DaylightD50      = 5000,
-    Flash            = 5500,
-    Sun              = 5770,
-    XenonLamp        = 6420,
-    DaylightD65      = 6500
+    None        = -1,
+    Candle      = 1850,
+    Lamp40W     = 2680,
+    Lamp100W    = 2800,
+    Lamp200W    = 3000,
+    Sunrise     = 3200,
+    StudioLamp  = 3400,
+    MoonLight   = 4100,
+    Neutral     = 4750,
+    DaylightD50 = 5000,
+    Flash       = 5500,
+    Sun         = 5770,
+    XenonLamp   = 6420,
+    DaylightD65 = 6500
 };
 
 class WhiteBalanceToolPriv
@@ -292,7 +292,7 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
     toolTip += d->addTemperatureDescription("xenon lamp or light arc",               XenonLamp);
     toolTip += d->addTemperatureDescription("overcast sky light",                    DaylightD65);
     toolTip += d->addTemperatureDescription("no preset value",                       None);
-    d->temperaturePresetCB->setToolTip(toolTip);
+    d->temperaturePresetCB->setToolTip(i18n(toolTip.toAscii()));
 
     d->pickTemperature = new QToolButton;
     d->pickTemperature->setIcon(KIcon("color-picker-grey"));
