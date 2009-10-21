@@ -101,8 +101,8 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     unsigned char buf[PNG_BYTES_TO_CHECK];
 
-    fread(buf, 1, PNG_BYTES_TO_CHECK, f);
-    if (!png_check_sig(buf, PNG_BYTES_TO_CHECK))
+    size_t membersRead = fread(buf, 1, PNG_BYTES_TO_CHECK, f);
+    if ((membersRead != PNG_BYTES_TO_CHECK) || !png_check_sig(buf, PNG_BYTES_TO_CHECK))
     {
         kDebug(digiKamAreaCode) << "Not a PNG image file.";
         fclose(f);
