@@ -53,6 +53,11 @@ public:
 
     ImageViewUtilities(QWidget *parentWidget);
 
+public:
+
+    void addIsCutSelection(QMimeData* mime, bool cut);
+    bool decodeIsCutSelection(const QMimeData *mimeData);
+
 public Q_SLOTS:
 
     void createNewAlbumForInfos(const QList<ImageInfo>& infos, Album *currentAlbum);

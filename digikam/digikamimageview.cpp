@@ -270,7 +270,7 @@ void DigikamImageView::cut()
     QMimeData *data = imageModel()->dragDropHandler()->createMimeData(selectedImageInfos());
     if (data)
     {
-        addIsCutSelection(data, true);
+        d->utilities->addIsCutSelection(data, true);
         kapp->clipboard()->setMimeData(data);
     }
 }
@@ -280,7 +280,7 @@ void DigikamImageView::copy()
     QMimeData *data = imageModel()->dragDropHandler()->createMimeData(selectedImageInfos());
     if (data)
     {
-        addIsCutSelection(data, false);
+        d->utilities->addIsCutSelection(data, false);
         kapp->clipboard()->setMimeData(data);
     }
 }
@@ -294,29 +294,16 @@ void DigikamImageView::paste()
     QPoint eventPos = mapFromGlobal(QCursor::pos());
     if (!rect().contains(eventPos))
         eventPos = QPoint(0, 0);
+
+    bool cutAction = d->utilities->decodeIsCutSelection(data);
     QDropEvent event(eventPos,
-                     (decodeIsCutSelection(data)) ? Qt::MoveAction : Qt::CopyAction,
+                     cutAction ? Qt::MoveAction : Qt::CopyAction,
                      data, Qt::NoButton,
-                     (decodeIsCutSelection(data)) ? Qt::ShiftModifier : Qt::ControlModifier);
+                     cutAction ? Qt::ShiftModifier : Qt::ControlModifier);
     QModelIndex index = indexAt(event.pos());
     if (!imageModel()->dragDropHandler()->accepts(&event, index))
         return;
     imageModel()->dragDropHandler()->dropEvent(this, &event, index);
-}
-
-void DigikamImageView::addIsCutSelection(QMimeData* mime, bool cut)
-{
-    const QString mimeType("application/x-kde-cutselection");
-    const QByteArray cutSelection = cut ? "1" : "0";
-    mime->setData(mimeType, cutSelection);
-}
-
-bool DigikamImageView::decodeIsCutSelection(const QMimeData* mime)
-{
-    QByteArray a = mime->data("application/x-kde-cutselection");
-    if (a.isEmpty())
-        return false;
-    return (a.at(0) == '1'); // true if 1
 }
 
 void DigikamImageView::insertSelectedToLightTable(bool addTo)

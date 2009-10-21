@@ -334,5 +334,19 @@ void ImageViewUtilities::openInEditor(const ImageInfo& info, const QList<ImageIn
     KWindowSystem::activateWindow(imview->winId());
 }
 
+void ImageViewUtilities::addIsCutSelection(QMimeData* mime, bool cut)
+{
+    const QString mimeType("application/x-kde-cutselection");
+    const QByteArray cutSelection = cut ? "1" : "0";
+    mime->setData(mimeType, cutSelection);
+}
+
+bool ImageViewUtilities::decodeIsCutSelection(const QMimeData* mime)
+{
+    QByteArray a = mime->data("application/x-kde-cutselection");
+    if (a.isEmpty())
+        return false;
+    return (a.at(0) == '1'); // true if 1
+}
 
 } // namespace Digikam

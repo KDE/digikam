@@ -95,11 +95,6 @@ private Q_SLOTS:
 
 private:
 
-    void addIsCutSelection(QMimeData* mime, bool cut);
-    bool decodeIsCutSelection(const QMimeData *mimeData);
-
-private:
-
     DigikamImageViewPriv* const d;
 };
 
