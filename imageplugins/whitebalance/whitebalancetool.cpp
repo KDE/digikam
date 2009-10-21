@@ -292,7 +292,7 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
     toolTip += d->addTemperatureDescription("xenon lamp or light arc",               XenonLamp);
     toolTip += d->addTemperatureDescription("overcast sky light",                    DaylightD65);
     toolTip += d->addTemperatureDescription("no preset value",                       None);
-    d->temperaturePresetCB->setToolTip(i18n(toolTip.toAscii()));
+    d->temperaturePresetCB->setToolTip(i18n(toolTip.toUtf8()));
 
     d->pickTemperature = new QToolButton;
     d->pickTemperature->setIcon(KIcon("color-picker-grey"));
