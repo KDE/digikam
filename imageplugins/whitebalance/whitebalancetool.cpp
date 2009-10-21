@@ -455,13 +455,17 @@ void WhiteBalanceTool::slotTemperatureChanged(double temperature)
 
 void WhiteBalanceTool::slotTemperaturePresetChanged(int tempPreset)
 {
-    bool ok = true;
-    double temperature = d->temperaturePresetCB->combo()->itemData(tempPreset).toDouble(&ok);
+    bool ok         = true;
+    int temperature = d->temperaturePresetCB->combo()->itemData(tempPreset).toInt(&ok);
     if (!ok)
     {
         temperature = (double)Neutral;
     }
-    d->temperatureInput->setValue(temperature);
+
+    if (temperature != -1)
+    {
+        d->temperatureInput->setValue((double)temperature);
+    }
 
     slotEffect();
 }
