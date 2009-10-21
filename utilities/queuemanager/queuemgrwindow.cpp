@@ -91,11 +91,16 @@
 #include "thumbnailsize.h"
 #include "queuemgrwindow_p.h"
 #include "debug.h"
+#include "sidebar.h"
 
 namespace Digikam
 {
 
 QueueMgrWindow* QueueMgrWindow::m_instance = 0;
+
+const QString QueueMgrWindowPriv::TOP_SPLITTER_CONFIG_KEY = "BqmTopSplitter";
+const QString QueueMgrWindowPriv::BOTTOM_SPLITTER_CONFIG_KEY = "BqmBottomSplitter";
+const QString QueueMgrWindowPriv::VERTICAL_SPLITTER_CONFIG_KEY = "BqmVerticalSplitter";
 
 QueueMgrWindow* QueueMgrWindow::queueManagerWindow()
 {
@@ -182,7 +187,7 @@ void QueueMgrWindow::closeEvent(QCloseEvent* e)
 void QueueMgrWindow::setupUserArea()
 {
     QWidget* mainW     = new QWidget(this);
-    QGridLayout *grid  = new QGridLayout(mainW);
+    QVBoxLayout *mainLayout = new QVBoxLayout(mainW);
 
     // ------------------------------------------------------------------------------
 
@@ -231,18 +236,20 @@ void QueueMgrWindow::setupUserArea()
 
     // ------------------------------------------------------------------------------
 
-    grid->addWidget(queuesBox,        0, 0, 2, 1);
-    grid->addWidget(queueSettingsBox, 2, 0, 2, 1);
-    grid->addWidget(toolsBox,         2, 1, 1, 2);
-    grid->addWidget(assignBox,        0, 1, 2, 1);
-    grid->addWidget(toolSettingsBox,  0, 2, 2, 2);
-    grid->setColumnStretch(0, 5);
-    grid->setColumnStretch(1, 5);
-    grid->setColumnStretch(2, 5);
-    grid->setRowStretch(0, 100);
-    grid->setRowStretch(2, 70);
-    grid->setSpacing(0);
-    grid->setMargin(0);
+    d->topSplitter = new SidebarSplitter(mainW);
+    d->topSplitter->addWidget(queuesBox);
+    d->topSplitter->addWidget(assignBox);
+    d->topSplitter->addWidget(toolSettingsBox);
+
+    d->bottomSplitter = new SidebarSplitter(mainW);
+    d->bottomSplitter->addWidget(queueSettingsBox);
+    d->bottomSplitter->addWidget(toolsBox);
+
+    d->verticalSplitter = new SidebarSplitter(Qt::Vertical, mainW);
+    d->verticalSplitter->addWidget(d->topSplitter);
+    d->verticalSplitter->addWidget(d->bottomSplitter);
+
+    mainLayout->addWidget(d->verticalSplitter);
 
     setCentralWidget(mainW);
 }
@@ -475,6 +482,14 @@ void QueueMgrWindow::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Batch Queue Manager Settings");
+
+    d->verticalSplitter->restoreState(group,
+                    QueueMgrWindowPriv::VERTICAL_SPLITTER_CONFIG_KEY);
+    d->bottomSplitter->restoreState(group,
+                    QueueMgrWindowPriv::BOTTOM_SPLITTER_CONFIG_KEY);
+    d->topSplitter->restoreState(group,
+                    QueueMgrWindowPriv::TOP_SPLITTER_CONFIG_KEY);
+
     // TODO
 }
 
@@ -482,6 +497,14 @@ void QueueMgrWindow::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Batch Queue Manager Settings");
+
+    d->topSplitter->saveState(group,
+                    QueueMgrWindowPriv::TOP_SPLITTER_CONFIG_KEY);
+    d->bottomSplitter->saveState(group,
+                    QueueMgrWindowPriv::BOTTOM_SPLITTER_CONFIG_KEY);
+    d->verticalSplitter->saveState(group,
+                    QueueMgrWindowPriv::VERTICAL_SPLITTER_CONFIG_KEY);
+
     // TODO
     config->sync();
 }

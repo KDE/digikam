@@ -423,6 +423,8 @@ void Sidebar::slotSplitterBtnClicked()
 
 // -----------------------------------------------------------------------------
 
+const QString SidebarSplitter::DEFAULT_CONFIG_KEY = "SplitterState";
+
 SidebarSplitter::SidebarSplitter(QWidget *parent)
                : QSplitter(parent), d(new SidebarSplitterPriv)
 {
@@ -446,11 +448,13 @@ SidebarSplitter::~SidebarSplitter()
     delete d;
 }
 
-void SidebarSplitter::restoreState(KConfigGroup& group, const char *key)
+void SidebarSplitter::restoreState(KConfigGroup& group)
 {
-    if (!key)
-        key = "SplitterState";
+    restoreState(group, DEFAULT_CONFIG_KEY);
+}
 
+void SidebarSplitter::restoreState(KConfigGroup& group, QString key)
+{
     if (group.hasKey(key))
     {
         QByteArray state;
@@ -459,10 +463,13 @@ void SidebarSplitter::restoreState(KConfigGroup& group, const char *key)
     }
 }
 
-void SidebarSplitter::saveState(KConfigGroup& group, const char *key)
+void SidebarSplitter::saveState(KConfigGroup& group)
 {
-    if (!key)
-        key = "SplitterState";
+    saveState(group, DEFAULT_CONFIG_KEY);
+}
+
+void SidebarSplitter::saveState(KConfigGroup& group, QString key)
+{
     group.writeEntry(key, QSplitter::saveState().toBase64());
 }
 

@@ -24,6 +24,10 @@
 #ifndef QUEUEMGRWINDOWPRIVATE_H
 #define QUEUEMGRWINDOWPRIVATE_H
 
+// Qt includes
+
+#include <qstring.h>
+
 // KDE includes
 
 #include <kaction.h>
@@ -32,6 +36,7 @@
 // Local includes
 
 #include "statusprogressbar.h"
+#include "sidebar.h"
 
 namespace Digikam
 {
@@ -42,6 +47,10 @@ class QueueMgrWindowPriv
 {
 
 public:
+
+    const static QString TOP_SPLITTER_CONFIG_KEY;
+    const static QString BOTTOM_SPLITTER_CONFIG_KEY;
+    const static QString VERTICAL_SPLITTER_CONFIG_KEY;
 
     QueueMgrWindowPriv()
     {
@@ -67,6 +76,9 @@ public:
         rawCameraListAction    = 0;
         libsInfoAction         = 0;
         dbStatAction           = 0;
+        topSplitter            = 0;
+        bottomSplitter         = 0;
+        verticalSplitter       = 0;
         themeMenuAction        = 0;
         contributeAction       = 0;
         assignedList           = 0;
@@ -116,6 +128,10 @@ public:
     KAction                   *rawCameraListAction;
     KAction                   *libsInfoAction;
     KAction                   *dbStatAction;
+
+    SidebarSplitter           *topSplitter;
+    SidebarSplitter           *bottomSplitter;
+    SidebarSplitter           *verticalSplitter;
 
     KToggleAction             *showMenuBarAction;
 
