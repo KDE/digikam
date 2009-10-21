@@ -342,7 +342,8 @@ bool ContextMenuHelper::imageIdsHaveSameCategory(const imageIds& ids, DatabaseIt
     foreach (const qlonglong& id, ids)
     {
         varList = DatabaseAccess().db()->getImagesFields(id, DatabaseFields::Category);
-        if (varList.isEmpty() || varList.first().toInt() != category)
+        if ( varList.isEmpty() ||
+             (DatabaseItem::Category)varList.first().toInt() != category )
         {
             sameCategory = false;
             break;
