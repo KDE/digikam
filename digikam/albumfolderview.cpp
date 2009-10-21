@@ -426,8 +426,7 @@ void AlbumFolderView::slotAlbumAdded(Album *album)
     AlbumFolderViewItem* parent = findParent(palbum, failed);
     if (failed)
     {
-        kWarning(digiKamAreaCode) << " Failed to find Album parent "
-                        << palbum->albumPath();
+        kWarning(digiKamAreaCode) << " Failed to find Album parent " << palbum->albumPath();
         return;
     }
 
