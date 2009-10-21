@@ -684,6 +684,11 @@ void ThumbBarView::contentsMousePressEvent(QMouseEvent* e)
     d->toolTipTimer->stop();
     slotToolTip();
 
+    if (e->button() != Qt::LeftButton)
+    {
+    	return;
+    }
+
     ThumbBarItem* barItem = findItem(e->pos());
     d->dragging           = true;
     d->dragStartPos       = e->pos();
@@ -772,7 +777,7 @@ void ThumbBarView::contentsMouseReleaseEvent(QMouseEvent *e)
 {
     d->dragging = false;
     ThumbBarItem *item = findItem(e->pos());
-    if (item)
+    if (e->button() == Qt::LeftButton && item)
     {
         emit signalUrlSelected(item->url());
         emit signalItemSelected(item);

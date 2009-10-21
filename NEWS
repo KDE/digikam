@@ -57,7 +57,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 048 ==> 198695 : Filtering on albums is difficult to use when albums are sorted by date.
 049 ==> 206272 : Failed to overwrite original file.
 050 ==> 211356 : Name suggestion in save dialog.
-051 ==>
+051 ==> 211366 : Right clicking on a thumbnail in light table should not move selection.
+052 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
