@@ -56,7 +56,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 047 ==> 148105 : Problems with albums who's name start as the album library path.
 048 ==> 198695 : Filtering on albums is difficult to use when albums are sorted by date.
 049 ==> 206272 : Failed to overwrite original file.
-050 ==> 
+050 ==> 211356 : Name suggestion in save dialog.
+051 ==>
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
