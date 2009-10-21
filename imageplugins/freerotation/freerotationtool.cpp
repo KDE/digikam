@@ -462,8 +462,10 @@ void FreeRotationTool::putPreviewData(void)
     d->previewWidget->updatePreview();
     QSize newSize = dynamic_cast<FreeRotation *>(filter())->getNewSize();
     QString temp;
-    d->newWidthLabel->setText(temp.setNum( newSize.width()) + i18n(" px") );
-    d->newHeightLabel->setText(temp.setNum( newSize.height()) + i18n(" px") );
+    int new_w = (newSize.width()  == -1) ? w : newSize.width();
+    int new_h = (newSize.height() == -1) ? h : newSize.height();
+    d->newWidthLabel->setText(temp.setNum(new_w)  + i18n(" px") );
+    d->newHeightLabel->setText(temp.setNum(new_h) + i18n(" px") );
 }
 
 void FreeRotationTool::putFinalData(void)
