@@ -276,23 +276,24 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
     d->temperaturePresetCB->combo()->addItem(i18nc("no temperature preset", "None"), QVariant(None));
     d->temperaturePresetCB->setDefaultIndex(DaylightD65);
 
-    QString toolTip("<p>Select the white balance color temperature preset to use here:</p>");
-    toolTip += d->addTemperatureDescription("candle light",                          Candle);
-    toolTip += d->addTemperatureDescription("40 Watt incandescent lamp",             Lamp40W);
-    toolTip += d->addTemperatureDescription("100 Watt incandescent lamp",            Lamp100W);
-    toolTip += d->addTemperatureDescription("200 Watt incandescent lamp",            Lamp200W);
-    toolTip += d->addTemperatureDescription("sunrise or sunset light",               Sunrise);
-    toolTip += d->addTemperatureDescription("tungsten lamp used in photo studio or "
-                                            "light at 1 hour from dusk/dawn",        StudioLamp);
-    toolTip += d->addTemperatureDescription("moon light",                            MoonLight);
-    toolTip += d->addTemperatureDescription("neutral color temperature",             Neutral);
-    toolTip += d->addTemperatureDescription("sunny daylight around noon",            DaylightD50);
-    toolTip += d->addTemperatureDescription("electronic photo flash",                Flash);
-    toolTip += d->addTemperatureDescription("effective sun temperature",             Sun);
-    toolTip += d->addTemperatureDescription("xenon lamp or light arc",               XenonLamp);
-    toolTip += d->addTemperatureDescription("overcast sky light",                    DaylightD65);
-    toolTip += d->addTemperatureDescription("no preset value",                       None);
-    d->temperaturePresetCB->setToolTip(i18n(toolTip.toUtf8()));
+    QString toolTip = QString("<p>%1</p>")
+                              .arg(i18n("Select the white balance color temperature preset to use."));
+    toolTip += d->addTemperatureDescription(i18n("candle light"),                          Candle);
+    toolTip += d->addTemperatureDescription(i18n("40 Watt incandescent lamp"),             Lamp40W);
+    toolTip += d->addTemperatureDescription(i18n("100 Watt incandescent lamp"),            Lamp100W);
+    toolTip += d->addTemperatureDescription(i18n("200 Watt incandescent lamp"),            Lamp200W);
+    toolTip += d->addTemperatureDescription(i18n("sunrise or sunset light"),               Sunrise);
+    toolTip += d->addTemperatureDescription(i18n("tungsten lamp used in photo studio or "
+                                                 "light at 1 hour from dusk/dawn"),        StudioLamp);
+    toolTip += d->addTemperatureDescription(i18n("moon light"),                            MoonLight);
+    toolTip += d->addTemperatureDescription(i18n("neutral color temperature"),             Neutral);
+    toolTip += d->addTemperatureDescription(i18n("sunny daylight around noon"),            DaylightD50);
+    toolTip += d->addTemperatureDescription(i18n("electronic photo flash"),                Flash);
+    toolTip += d->addTemperatureDescription(i18n("effective sun temperature"),             Sun);
+    toolTip += d->addTemperatureDescription(i18n("xenon lamp or light arc"),               XenonLamp);
+    toolTip += d->addTemperatureDescription(i18n("overcast sky light"),                    DaylightD65);
+    toolTip += d->addTemperatureDescription(i18n("no preset value"),                       None);
+    d->temperaturePresetCB->setToolTip(toolTip);
 
     d->pickTemperature = new QToolButton;
     d->pickTemperature->setIcon(KIcon("color-picker-grey"));
