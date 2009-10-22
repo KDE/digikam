@@ -60,7 +60,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 051 ==> 211366 : Right clicking on a thumbnail in light table should not move selection.
 052 ==> 210967 : Deleting left image in Light Table in Pair mode jumps to next pair.
 053 ==> 196668 : Crash opening some images (possibly EXIF).
-054 ==>
+054 ==> 211237 : Advanced rename: only one shot.
+055 ==>
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
