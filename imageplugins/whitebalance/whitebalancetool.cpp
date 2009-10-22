@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-
 #include "whitebalancetool.h"
 #include "whitebalancetool.moc"
 
@@ -485,7 +484,7 @@ void WhiteBalanceTool::slotTemperaturePresetChanged(int tempPreset)
     int temperature = d->temperaturePresetCB->combo()->itemData(tempPreset).toInt(&ok);
     if (!ok)
     {
-        temperature = (double)Neutral;
+        temperature = (int)Neutral;
     }
 
     if (temperature != -1)
@@ -508,7 +507,7 @@ void WhiteBalanceTool::slotColorSelectedFromOriginal(const DColor& color)
     if ( d->pickTemperature->isChecked() )
     {
         DColor dc = color;
-        QColor tc          = dc.getQColor();
+        QColor tc = dc.getQColor();
         double temperatureLevel, greenLevel;
 
         WhiteBalance::autoWBAdjustementFromColor(tc, temperatureLevel, greenLevel);
@@ -518,7 +517,9 @@ void WhiteBalanceTool::slotColorSelectedFromOriginal(const DColor& color)
         d->pickTemperature->setChecked(false);
     }
     else
+    {
         return;
+    }
 
     // restore previous rendering mode.
     d->previewWidget->setRenderingPreviewMode(d->currentPreviewMode);
@@ -536,10 +537,10 @@ void WhiteBalanceTool::slotAutoAdjustExposure()
     kapp->activeWindow()->setCursor( Qt::WaitCursor );
 
     ImageIface* iface = d->previewWidget->imageIface();
-    uchar *data                = iface->getOriginalImage();
-    int width                  = iface->originalWidth();
-    int height                 = iface->originalHeight();
-    bool sb                    = iface->originalSixteenBit();
+    uchar *data       = iface->getOriginalImage();
+    int width         = iface->originalWidth();
+    int height        = iface->originalHeight();
+    bool sb           = iface->originalSixteenBit();
 
     double blackLevel;
     double exposureLevel;
@@ -558,10 +559,10 @@ void WhiteBalanceTool::slotAutoAdjustExposure()
 void WhiteBalanceTool::slotEffect()
 {
     ImageIface* iface = d->previewWidget->imageIface();
-    uchar *data                = iface->getPreviewImage();
-    int w                      = iface->previewWidth();
-    int h                      = iface->previewHeight();
-    bool sb                    = iface->previewSixteenBit();
+    uchar *data       = iface->getPreviewImage();
+    int w             = iface->previewWidth();
+    int h             = iface->previewHeight();
+    bool sb           = iface->previewSixteenBit();
 
     // Create the new empty destination image data space.
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
@@ -570,15 +571,14 @@ void WhiteBalanceTool::slotEffect()
        delete [] d->destinationPreviewData;
 
     d->destinationPreviewData = new uchar[w*h*(sb ? 8 : 4)];
-
-    double temperature  = d->temperatureInput->value();
-    double dark         = d->darkInput->value();
-    double black        = d->blackInput->value();
-    double mainExposure = d->mainExposureInput->value();
-    double fineExposure = d->fineExposureInput->value();
-    double gamma        = d->gammaInput->value();
-    double saturation   = d->saturationInput->value();
-    double green        = d->greenInput->value();
+    double temperature        = d->temperatureInput->value();
+    double dark               = d->darkInput->value();
+    double black              = d->blackInput->value();
+    double mainExposure       = d->mainExposureInput->value();
+    double fineExposure       = d->fineExposureInput->value();
+    double gamma              = d->gammaInput->value();
+    double saturation         = d->saturationInput->value();
+    double green              = d->greenInput->value();
 
     WhiteBalance wbFilter(sb);
     wbFilter.whiteBalance(data, w, h, sb,
@@ -598,12 +598,11 @@ void WhiteBalanceTool::slotEffect()
 void WhiteBalanceTool::finalRendering()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
-    ImageIface* iface = d->previewWidget->imageIface();
-    uchar *data       = iface->getOriginalImage();
-    int w             = iface->originalWidth();
-    int h             = iface->originalHeight();
-    bool sb           = iface->originalSixteenBit();
-
+    ImageIface* iface   = d->previewWidget->imageIface();
+    uchar *data         = iface->getOriginalImage();
+    int w               = iface->originalWidth();
+    int h               = iface->originalHeight();
+    bool sb             = iface->originalSixteenBit();
     double temperature  = d->temperatureInput->value();
     double dark         = d->darkInput->value();
     double black        = d->blackInput->value();
@@ -652,7 +651,7 @@ void WhiteBalanceTool::slotResetSettings()
 void WhiteBalanceTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(d->configGroupName);
+    KConfigGroup group        = config->group(d->configGroupName);
 
     d->gboxSettings->histogramBox()->setChannel(group.readEntry(d->configHistogramChannelEntry,
                         (int)LuminosityChannel));
@@ -674,23 +673,21 @@ void WhiteBalanceTool::readSettings()
 void WhiteBalanceTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(d->configGroupName);
+    KConfigGroup group        = config->group(d->configGroupName);
     group.writeEntry(d->configHistogramChannelEntry, d->gboxSettings->histogramBox()->channel());
     group.writeEntry(d->configHistogramScaleEntry,   d->gboxSettings->histogramBox()->scale());
-
-    group.writeEntry(d->configDarkInputEntry,       d->darkInput->value());
-    group.writeEntry(d->configBlackInputEntry,      d->blackInput->value());
-    group.writeEntry(d->configMainExposureEntry,    d->mainExposureInput->value());
-    group.writeEntry(d->configFineExposureEntry,    d->fineExposureInput->value());
-    group.writeEntry(d->configGammaInputEntry,      d->gammaInput->value());
-    group.writeEntry(d->configSaturationInputEntry, d->saturationInput->value());
-    group.writeEntry(d->configGreenInputEntry,      d->greenInput->value());
-    group.writeEntry(d->configTemeratureInputEntry, d->temperatureInput->value());
+    group.writeEntry(d->configDarkInputEntry,        d->darkInput->value());
+    group.writeEntry(d->configBlackInputEntry,       d->blackInput->value());
+    group.writeEntry(d->configMainExposureEntry,     d->mainExposureInput->value());
+    group.writeEntry(d->configFineExposureEntry,     d->fineExposureInput->value());
+    group.writeEntry(d->configGammaInputEntry,       d->gammaInput->value());
+    group.writeEntry(d->configSaturationInputEntry,  d->saturationInput->value());
+    group.writeEntry(d->configGreenInputEntry,       d->greenInput->value());
+    group.writeEntry(d->configTemeratureInputEntry,  d->temperatureInput->value());
     d->previewWidget->writeSettings();
     config->sync();
 }
 
-// Load all settings.
 void WhiteBalanceTool::slotLoadSettings()
 {
     KUrl loadWhiteBalanceFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
@@ -728,13 +725,14 @@ void WhiteBalanceTool::slotLoadSettings()
         slotEffect();
     }
     else
+    {
         KMessageBox::error(kapp->activeWindow(),
                            i18n("Cannot load settings from the White Color Balance text file."));
+    }
 
     file.close();
 }
 
-// Save all settings.
 void WhiteBalanceTool::slotSaveAsSettings()
 {
     KUrl saveWhiteBalanceFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
@@ -759,8 +757,10 @@ void WhiteBalanceTool::slotSaveAsSettings()
         stream << d->greenInput->value() << "\n";
     }
     else
+    {
         KMessageBox::error(kapp->activeWindow(),
                            i18n("Cannot save settings to the White Color Balance text file."));
+    }
 
     file.close();
 }
