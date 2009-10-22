@@ -71,14 +71,15 @@ public Q_SLOTS:
     void notifyFileContentChanged(const KUrl::List& urls);
 
     void openInEditor(const ImageInfo& info, const QList<ImageInfo>& allInfosToOpen, Album *currentAlbum);
-    void rename(const ImageInfo& renameInfo);
-    void rename(const ImageInfo& renameInfo, const QString& newName);
+    void rename(const KUrl& imageUrl, const QString& newName);
     void setAsAlbumThumbnail(Album *album, const ImageInfo& imageInfo);
 
 Q_SIGNALS:
 
     void editorCurrentUrlChanged(const KUrl& url);
-    void imageRenamed();
+
+    void imageRenameSucceeded(const KUrl&);
+    void imageRenameFailed(const KUrl&);
 
 protected Q_SLOTS:
 

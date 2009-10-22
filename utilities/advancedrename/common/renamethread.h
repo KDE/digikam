@@ -57,11 +57,12 @@ public:
 
 Q_SIGNALS:
 
-    void renameFile(const ImageInfo&, const QString&);
+    void renameFile(const KUrl&, const QString&);
 
 public Q_SLOTS:
 
-    void processNext();
+    void slotSuccess(const KUrl&);
+    void slotFailed(const KUrl&);
 
 protected:
 

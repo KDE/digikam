@@ -386,11 +386,14 @@ void DigikamImageView::rename()
     {
         d->renameThread = new RenameThread(this);
 
-        connect(d->renameThread, SIGNAL(renameFile(const ImageInfo&, const QString&)),
-                d->utilities, SLOT(rename(const ImageInfo&, const QString&)));
+        connect(d->renameThread, SIGNAL(renameFile(const KUrl&, const QString&)),
+                d->utilities, SLOT(rename(const KUrl&, const QString&)));
 
-        connect(d->utilities, SIGNAL(imageRenamed()),
-                d->renameThread, SLOT(processNext()));
+        connect(d->utilities, SIGNAL(imageRenameSucceeded(const KUrl&)),
+                d->renameThread, SLOT(slotSuccess(const KUrl&)));
+
+        connect(d->utilities, SIGNAL(imageRenameFailed(const KUrl&)),
+                d->renameThread, SLOT(slotFailed(const KUrl&)));
     }
 
     KUrl::List urls = selectedUrls();

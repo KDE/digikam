@@ -61,6 +61,7 @@ namespace Digikam
 {
 
 const QString mimeTypeCutSelection("application/x-kde-cutselection");
+const QString renameFileProperty("AdvancedRename source file");
 
 ImageViewUtilities::ImageViewUtilities(QWidget *parentWidget)
             : QObject(parentWidget)
@@ -94,34 +95,18 @@ void ImageViewUtilities::setAsAlbumThumbnail(Album *album, const ImageInfo& imag
     }
 }
 
-void ImageViewUtilities::rename(const ImageInfo& renameInfo)
+void ImageViewUtilities::rename(const KUrl& imageUrl, const QString& newName)
 {
-    if (renameInfo.isNull())
+    if (imageUrl.isEmpty() || !imageUrl.isLocalFile() || newName.isEmpty())
         return;
 
-    QFileInfo fi(renameInfo.name());
-    QString ext  = QString(".") + fi.suffix();
-    QString name = fi.fileName();
-    name.truncate(fi.fileName().length() - ext.length());
-
-    bool ok;
-
-    QString newName = KInputDialog::getText(i18n("Rename Item (%1)",fi.fileName()),
-                                            i18n("Enter new name (without extension):"),
-                                            name, &ok, m_widget);
-
-    rename(renameInfo, newName);
-}
-
-void ImageViewUtilities::rename(const ImageInfo& renameInfo, const QString& newName)
-{
-    if (renameInfo.isNull() || newName.isEmpty())
-        return;
-
-    QFileInfo fi(renameInfo.name());
+    QFileInfo fi(imageUrl.toLocalFile());
     QString ext = QString(".") + fi.suffix();
 
-    KIO::CopyJob* job = DIO::rename(renameInfo, newName + ext);
+    ImageInfo info(imageUrl.toLocalFile());
+
+    KIO::CopyJob* job = DIO::rename(info, newName + ext);
+    job->setProperty(renameFileProperty.toAscii(), imageUrl.toLocalFile());
 
     connect(job, SIGNAL(result(KJob*)),
             this, SLOT(slotDIOResult(KJob*)));
@@ -130,7 +115,7 @@ void ImageViewUtilities::rename(const ImageInfo& renameInfo, const QString& newN
             this, SLOT(slotRenamed(KIO::Job*, const KUrl &, const KUrl&)));
 }
 
-void ImageViewUtilities::slotRenamed(KIO::Job*, const KUrl &, const KUrl&newURL)
+void ImageViewUtilities::slotRenamed(KIO::Job* job, const KUrl &, const KUrl&newURL)
 {
     // reconstruct file path from digikamalbums:// URL
     KUrl fileURL;
@@ -142,7 +127,8 @@ void ImageViewUtilities::slotRenamed(KIO::Job*, const KUrl &, const KUrl&newURL)
     // clean LoadingCache as well - be pragmatic, do it here.
     LoadingCacheInterface::fileChanged(fileURL.toLocalFile());
 
-    emit imageRenamed();
+    KUrl url(job->property(renameFileProperty.toAscii()).toString());
+    emit imageRenameSucceeded(url);
 }
 
 void ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos, bool deletePermanently)
@@ -207,6 +193,9 @@ void ImageViewUtilities::slotDIOResult(KJob* kjob)
     KIO::Job *job = static_cast<KIO::Job*>(kjob);
     if (job->error())
     {
+        KUrl url(job->property(renameFileProperty.toAscii()).toString());
+        emit imageRenameFailed(url);
+
         job->ui()->setWindow(m_widget);
         job->ui()->showErrorMessage();
     }

@@ -54,7 +54,7 @@ public:
     {
     }
 
-    ImageInfo imageInfo;
+    KUrl      imageUrl;
     QString   baseName;
     QString   extension;
 };
@@ -66,10 +66,10 @@ AdvancedRenameListItem::AdvancedRenameListItem(QTreeWidget* view)
 {
 }
 
-AdvancedRenameListItem::AdvancedRenameListItem(QTreeWidget* view, const ImageInfo& info)
+AdvancedRenameListItem::AdvancedRenameListItem(QTreeWidget* view, const KUrl& url)
                     : QTreeWidgetItem(view), d(new AdvancedRenameListItemPriv)
 {
-    setImageInfo(info);
+    setImageUrl(url);
 }
 
 AdvancedRenameListItem:: ~AdvancedRenameListItem()
@@ -77,11 +77,11 @@ AdvancedRenameListItem:: ~AdvancedRenameListItem()
     delete d;
 }
 
-void AdvancedRenameListItem::setImageInfo(const ImageInfo& info)
+void AdvancedRenameListItem::setImageUrl(const KUrl& url)
 {
-    d->imageInfo = info;
+    d->imageUrl = url;
 
-    QFileInfo fi(d->imageInfo.filePath());
+    QFileInfo fi(d->imageUrl.toLocalFile());
     d->baseName  = fi.baseName();
     d->extension = fi.completeSuffix();
 
@@ -89,9 +89,9 @@ void AdvancedRenameListItem::setImageInfo(const ImageInfo& info)
     setNewName(d->baseName);
 }
 
-ImageInfo AdvancedRenameListItem::imageInfo() const
+KUrl AdvancedRenameListItem::imageUrl() const
 {
-    return d->imageInfo;
+    return d->imageUrl;
 }
 
 void AdvancedRenameListItem::setName(const QString& name)
@@ -212,12 +212,12 @@ void AdvancedRenameDialog::slotParseStringChanged(const QString& parseString)
         AdvancedRenameListItem* item = dynamic_cast<AdvancedRenameListItem*>((*it));
         if (item)
         {
-            ParseInformation parseInfo(item->imageInfo());
+            ParseInformation parseInfo(item->imageUrl());
             parseInfo.index = index;
 
             QString newName = d->advancedRenameWidget->parse(parseInfo);
             item->setNewName(newName);
-            d->newNamesList << NewNameInfo(item->imageInfo(), newName);
+            d->newNamesList << NewNameInfo(item->imageUrl(), newName);
 
             ++index;
         }
@@ -234,13 +234,13 @@ void AdvancedRenameDialog::slotAddImages(const KUrl::List& urls)
     int itemCount = 0;
     for (KUrl::List::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
     {
-        ImageInfo info(*it);
-        if (info.isNull())
-        {
-            continue;
-        }
+//        ImageInfo info(*it);
+//        if (info.isNull())
+//        {
+//            continue;
+//        }
         item = new AdvancedRenameListItem(d->listView);
-        item->setImageInfo(info);
+        item->setImageUrl(*it);
         ++itemCount;
     }
 

@@ -54,11 +54,11 @@ class AdvancedRenameListItem : public QTreeWidgetItem
 public:
 
     AdvancedRenameListItem(QTreeWidget* view);
-    AdvancedRenameListItem(QTreeWidget* view, const ImageInfo& info);
+    AdvancedRenameListItem(QTreeWidget* view, const KUrl& info);
     virtual ~AdvancedRenameListItem();
 
-    void setImageInfo(const ImageInfo& info);
-    ImageInfo imageInfo() const;
+    void setImageUrl(const KUrl& url);
+    KUrl imageUrl() const;
 
     void setName(const QString& name);
     QString name() const;
@@ -73,7 +73,7 @@ private:
 
 // --------------------------------------------------------
 
-typedef QPair<ImageInfo, QString> NewNameInfo;
+typedef QPair<KUrl, QString>      NewNameInfo;
 typedef QList<NewNameInfo>        NewNamesList;
 
 class AdvancedRenameDialogPriv;

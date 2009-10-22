@@ -30,6 +30,10 @@
 #include <QMutexLocker>
 #include <QWaitCondition>
 
+// Local includes
+
+#include "debug.h"
+
 namespace Digikam
 {
 
@@ -98,7 +102,7 @@ void RenameThread::run()
             }
         }
 
-        if (!info.first.isNull() && !info.second.isEmpty())
+        if (!info.first.isEmpty() && !info.second.isEmpty())
         {
             emit renameFile(info.first, info.second);
             d->condVar.wait(&d->mutex);
@@ -106,8 +110,21 @@ void RenameThread::run()
     }
 }
 
-void RenameThread::processNext()
+void RenameThread::slotSuccess(const KUrl& file)
 {
+    /*
+     * no real error handling needed, just wake up
+     */
+    kDebug(digiKamAreaCode) << file;
+    d->condVar.wakeAll();
+}
+
+void RenameThread::slotFailed(const KUrl& file)
+{
+    /*
+     * no real error handling needed, just wake up
+     */
+    kDebug(digiKamAreaCode) << file;
     d->condVar.wakeAll();
 }
 
