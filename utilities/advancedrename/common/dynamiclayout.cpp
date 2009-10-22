@@ -173,7 +173,8 @@ QSize DynamicLayout::minimumSize() const
     }
 
     size += QSize(2 * margin(), 2 * margin());
-    size.setWidth(size.width() * d->minColumns);
+    int w = (size.width() * d->minColumns) + (d->minColumns * d->spaceX);
+    size.setWidth(w);
     return size;
 }
 
