@@ -48,6 +48,7 @@
 #include "albummanager.h"
 #include "albumselectdialog.h"
 #include "albumsettings.h"
+#include "debug.h"
 #include "deletedialog.h"
 #include "dio.h"
 #include "imageinfo.h"
@@ -199,8 +200,15 @@ void ImageViewUtilities::slotDIOResult(KJob* kjob)
         QVariant v = job->property(renameFileProperty.toAscii());
         if (!v.isNull())
         {
-            KUrl url(v.toString());
-            emit imageRenameFailed(url);
+            if (job->error() == KIO::Job::KilledJobError)
+            {
+                emit renamingAborted();
+            }
+            else
+            {
+                KUrl url(v.toString());
+                emit imageRenameFailed(url);
+            }
         }
 
         job->ui()->setWindow(m_widget);

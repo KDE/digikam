@@ -394,6 +394,9 @@ void DigikamImageView::rename()
 
         connect(d->utilities, SIGNAL(imageRenameFailed(const KUrl&)),
                 d->renameThread, SLOT(slotFailed(const KUrl&)));
+
+        connect(d->utilities, SIGNAL(renamingAborted()),
+                d->renameThread, SLOT(cancel()));
     }
 
     KUrl::List urls = selectedUrls();

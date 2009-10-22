@@ -53,7 +53,6 @@ public:
     ~RenameThread();
 
     void addNewNames(const NewNamesList& newNames);
-    void cancel();
 
 Q_SIGNALS:
 
@@ -61,6 +60,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
+    void cancel();
     void slotSuccess(const KUrl&);
     void slotFailed(const KUrl&);
 

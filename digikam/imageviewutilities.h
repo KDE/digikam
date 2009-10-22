@@ -80,6 +80,7 @@ Q_SIGNALS:
 
     void imageRenameSucceeded(const KUrl&);
     void imageRenameFailed(const KUrl&);
+    void renamingAborted();
 
 protected Q_SLOTS:
 
