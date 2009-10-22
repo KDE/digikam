@@ -45,7 +45,8 @@ public:
         vSpace(vSpacing),
         spaceX(0),
         spaceY(0),
-        minItemWidth(0)
+        minItemWidth(0),
+        minColumns(2)
         {}
 
     int                  hSpace;
@@ -53,6 +54,7 @@ public:
     int                  spaceX;
     int                  spaceY;
     int                  minItemWidth;
+    const int            minColumns;
 
     QList<QLayoutItem *> itemList;
 };
@@ -165,13 +167,13 @@ QSize DynamicLayout::sizeHint() const
 QSize DynamicLayout::minimumSize() const
 {
     QSize size;
-    QLayoutItem *item;
-    foreach (item, d->itemList)
+    foreach (QLayoutItem* item, d->itemList)
     {
         size = size.expandedTo(item->minimumSize());
     }
 
     size += QSize(2 * margin(), 2 * margin());
+    size.setWidth(size.width() * d->minColumns);
     return size;
 }
 
@@ -193,8 +195,10 @@ int DynamicLayout::doLayout(const QRect &rect, bool testOnly) const
     int buttonWidth     = d->minItemWidth + d->spaceX;
 
     int maxButtonsInRow = (effectiveRect.width() - d->spaceX) / buttonWidth;
-    if (maxButtonsInRow < 1)
-        maxButtonsInRow = 1;
+    if (maxButtonsInRow < d->minColumns)
+    {
+        maxButtonsInRow = d->minColumns;
+    }
 
     int maxButtonWidth  = d->minItemWidth + (
             (effectiveRect.width() - (maxButtonsInRow * buttonWidth)) / maxButtonsInRow );

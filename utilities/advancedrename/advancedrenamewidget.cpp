@@ -300,6 +300,7 @@ void AdvancedRenameWidget::registerParserControls()
        // --------------------------------------------------------
 
        d->btnContainer->setLayout(layout);
+       setMinimumWidth(d->btnContainer->layout()->sizeHint().width());
 
        d->tokenToolButton->setMenu(tokenToolBtnMenu);
        d->modifierToolButton->setMenu(modifierToolBtnMenu);
