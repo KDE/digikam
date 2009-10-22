@@ -1123,8 +1123,11 @@ void LightTableWindow::slotRemoveItem(const ImageInfo& info)
                     new_linfo = curr_rinfo;
                     // Set the right panel to the next image:
                     new_rinfo = next_rinfo;
-                    // set the right panel active
-                    leftPanelActive = false;
+                    // set the right panel active, but not in pair mode
+                    if (!d->navigateByPairAction->isChecked())
+                    {
+                        leftPanelActive = false;
+                    }
                 }
             }
         }

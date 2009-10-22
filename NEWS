@@ -58,7 +58,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 049 ==> 206272 : Failed to overwrite original file.
 050 ==> 211356 : Name suggestion in save dialog.
 051 ==> 211366 : Right clicking on a thumbnail in light table should not move selection.
-052 ==> 
+052 ==> 210967 : Deleting left image in Light Table in Pair mode jumps to next pair.
+053 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
