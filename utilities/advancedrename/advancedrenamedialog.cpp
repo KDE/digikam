@@ -54,9 +54,9 @@ public:
     {
     }
 
-    ImageInfo     imageInfo;
-    QString       baseName;
-    QString       extension;
+    ImageInfo imageInfo;
+    QString   baseName;
+    QString   extension;
 };
 
 // --------------------------------------------------------
