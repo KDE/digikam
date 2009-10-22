@@ -122,17 +122,21 @@ public:
 
     AdvancedRenameDialogPriv() :
         configGroupName("AdvancedRename Dialog"),
-        configLastUsedRenamePattern("Last Used Rename Pattern"),
+        configLastUsedRenamePatternEntry("Last Used Rename Pattern"),
+        configDialogSizeEntry("Dialog Size"),
 
         singleFileMode(true),
+        minSizeDialog(450),
         listView(0),
         advancedRenameWidget(0)
     {}
 
     const QString         configGroupName;
-    const QString         configLastUsedRenamePattern;
+    const QString         configLastUsedRenamePatternEntry;
+    const QString         configDialogSizeEntry;
 
     bool                  singleFileMode;
+    int                   minSizeDialog;
 
     QTreeWidget*          listView;
     AdvancedRenameWidget* advancedRenameWidget;
@@ -191,15 +195,7 @@ AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
 
 AdvancedRenameDialog::~AdvancedRenameDialog()
 {
-    if (d->singleFileMode)
-    {
-        // clear the input of the renamewidget, otherwise the pattern will be saved
-        d->advancedRenameWidget->clear();
-    }
-    else
-    {
-        writeSettings();
-    }
+    writeSettings(d->singleFileMode);
     delete d;
 }
 
@@ -261,16 +257,9 @@ void AdvancedRenameDialog::slotAddImages(const KUrl::List& urls)
 
 void AdvancedRenameDialog::initDialog(int count)
 {
-    const int minSize = 450;
-
     QString title = i18np("Rename", "Rename (%1 images)", count);
     setWindowTitle(title);
-
     d->singleFileMode = (count <= 1);
-
-    // resize the dialog when only a single image is selected, it doesn't need to be so big
-    // in this case.
-    resize(minSize, (count > 1) ? minSize : 0);
 }
 
 NewNamesList AdvancedRenameDialog::newNames()
@@ -302,15 +291,25 @@ void AdvancedRenameDialog::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    d->advancedRenameWidget->setText(group.readEntry(d->configLastUsedRenamePattern, QString()));
+    QSize s = group.readEntry(d->configDialogSizeEntry, QSize(d->minSizeDialog, d->minSizeDialog));
+    resize(s);
+    d->advancedRenameWidget->setText(group.readEntry(d->configLastUsedRenamePatternEntry, QString()));
 }
 
-void AdvancedRenameDialog::writeSettings()
+void AdvancedRenameDialog::writeSettings(bool singleFileMode)
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    group.writeEntry(d->configLastUsedRenamePattern, d->advancedRenameWidget->text());
+    group.writeEntry(d->configDialogSizeEntry, size());
+    if (singleFileMode)
+    {
+        d->advancedRenameWidget->clear();
+    }
+    else
+    {
+        group.writeEntry(d->configLastUsedRenamePatternEntry, d->advancedRenameWidget->text());
+    }
 }
 
 }  // namespace Digikam
