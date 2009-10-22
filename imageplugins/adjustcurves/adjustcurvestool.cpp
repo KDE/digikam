@@ -93,6 +93,7 @@ public:
         configGroupName("adjustcurves Tool"),
         configHistogramChannelEntry("Histogram Channel"),
         configHistogramScaleEntry("Histogram Scale"),
+        configCurveEntry("AdjustCurves"),
         destinationPreviewData(0),
         histoSegments(0),
         currentPreviewMode(0),
@@ -106,6 +107,7 @@ public:
     const QString        configGroupName;
     const QString        configHistogramChannelEntry;
     const QString        configHistogramScaleEntry;
+    const QString        configCurveEntry;
 
     uchar*               destinationPreviewData;
 
@@ -367,7 +369,7 @@ void AdjustCurvesTool::readSettings()
     KConfigGroup group = config->group(d->configGroupName);
 
     d->curvesBox->reset();
-    d->curvesBox->readCurveSettings(group);
+    d->curvesBox->readCurveSettings(group, d->configCurveEntry);
 
     // we need to call the set methods here, otherwise the curve will not be updated correctly
     d->gboxSettings->histogramBox()->setChannel(group.readEntry(d->configHistogramChannelEntry,
@@ -389,7 +391,7 @@ void AdjustCurvesTool::writeSettings()
     group.writeEntry(d->configHistogramChannelEntry, d->gboxSettings->histogramBox()->channel());
     group.writeEntry(d->configHistogramScaleEntry,   d->gboxSettings->histogramBox()->scale());
 
-    d->curvesBox->writeCurveSettings(group);
+    d->curvesBox->writeCurveSettings(group, d->configCurveEntry);
     d->previewWidget->writeSettings();
 
     config->sync();

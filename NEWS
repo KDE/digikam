@@ -61,7 +61,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 052 ==> 210967 : Deleting left image in Light Table in Pair mode jumps to next pair.
 053 ==> 196668 : Crash opening some images (possibly EXIF).
 054 ==> 211237 : Advanced rename: only one shot.
-055 ==>
+055 ==> 211423 : Raw import intensity curve is not restored.
+056 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05

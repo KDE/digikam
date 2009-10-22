@@ -684,27 +684,27 @@ void ICCProofTool::readSettings()
     d->proofProfileBG->button(group.readEntry(d->configProofProfileMethodEntry,           0))->setChecked(true);
     d->cInput->setValue(group.readEntry(d->configContrastAdjustmentEntry,                 d->cInput->defaultValue()));
 
-    for (int i = 0 ; i < 5 ; ++i)
+    for (int i = 0 ; i < ImageCurves::NUM_CHANNELS ; ++i)
         d->curvesWidget->curves()->curvesChannelReset(i);
 
     d->curvesWidget->curves()->setCurveType(d->curvesWidget->m_channelType, ImageCurves::CURVE_SMOOTH);
     d->curvesWidget->reset();
 
-    for (int j = 0 ; j < 17 ; ++j)
+    for (int j = 0 ; j < ImageCurves::NUM_POINTS ; ++j)
     {
         QPoint disable(-1, -1);
         QPoint p = group.readEntry(d->configCurveAdjustmentPointEntry.arg(j), disable);
 
         if (d->originalImage->sixteenBit() && p.x() != -1)
         {
-            p.setX(p.x()*255);
-            p.setY(p.y()*255);
+            p.setX(p.x()*ImageCurves::MULTIPLIER_16BIT);
+            p.setY(p.y()*ImageCurves::MULTIPLIER_16BIT);
         }
 
         d->curvesWidget->curves()->setCurvePoint(LuminosityChannel, j, p);
     }
 
-    for (int i = 0 ; i < 5 ; ++i)
+    for (int i = 0 ; i < ImageCurves::NUM_CHANNELS ; ++i)
         d->curvesWidget->curves()->curvesCalculateCurve(i);
 
     // we need to call the set methods here, otherwise the curve will not be updated correctly
@@ -733,14 +733,14 @@ void ICCProofTool::writeSettings()
     group.writeEntry(d->configProofProfileMethodEntry, d->proofProfileBG->checkedId());
     group.writeEntry(d->configContrastAdjustmentEntry, d->cInput->value());
 
-    for (int j = 0 ; j < 17 ; ++j)
+    for (int j = 0 ; j < ImageCurves::NUM_POINTS ; ++j)
     {
         QPoint p = d->curvesWidget->curves()->getCurvePoint(LuminosityChannel, j);
 
         if (d->originalImage->sixteenBit() && p.x() != -1)
         {
-            p.setX(p.x()/255);
-            p.setY(p.y()/255);
+            p.setX(p.x()/ImageCurves::MULTIPLIER_16BIT);
+            p.setY(p.y()/ImageCurves::MULTIPLIER_16BIT);
         }
 
         group.writeEntry(d->configCurveAdjustmentPointEntry.arg(j), p);
@@ -770,7 +770,7 @@ void ICCProofTool::slotResetSettings()
     d->cInput->blockSignals(true);
     d->cInput->slotReset();
 
-    for (int i = 0 ; i < 5 ; ++i)
+    for (int i = 0 ; i < ImageCurves::NUM_CHANNELS ; ++i)
        d->curvesWidget->curves()->curvesChannelReset(i);
 
     d->curvesWidget->reset();
@@ -1159,13 +1159,13 @@ void ICCProofTool::slotLoadSettings()
         d->spaceProfilePath->setUrl( stream.readLine() );
         d->cInput->setValue( stream.readLine().toInt() );
 
-        for (int i = 0 ; i < 5 ; ++i)
+        for (int i = 0 ; i < ImageCurves::NUM_CHANNELS ; ++i)
             d->curvesWidget->curves()->curvesChannelReset(i);
 
         d->curvesWidget->curves()->setCurveType(d->curvesWidget->m_channelType, ImageCurves::CURVE_SMOOTH);
         d->curvesWidget->reset();
 
-        for (int j = 0 ; j < 17 ; ++j)
+        for (int j = 0 ; j < ImageCurves::NUM_POINTS ; ++j)
         {
             QPoint disable(-1, -1);
             QPoint p;
@@ -1174,8 +1174,8 @@ void ICCProofTool::slotLoadSettings()
 
             if (d->originalImage->sixteenBit() && p != disable)
             {
-                p.setX(p.x()*255);
-                p.setY(p.y()*255);
+                p.setX(p.x()*ImageCurves::MULTIPLIER_16BIT);
+                p.setY(p.y()*ImageCurves::MULTIPLIER_16BIT);
             }
 
             d->curvesWidget->curves()->setCurvePoint(LuminosityChannel, j, p);
@@ -1183,7 +1183,7 @@ void ICCProofTool::slotLoadSettings()
 
         blockSignals(false);
 
-        for (int i = 0 ; i < 5 ; ++i)
+        for (int i = 0 ; i < ImageCurves::NUM_CHANNELS ; ++i)
            d->curvesWidget->curves()->curvesCalculateCurve(i);
 
         d->gboxSettings->histogramBox()->histogram()->reset();
@@ -1225,13 +1225,13 @@ void ICCProofTool::slotSaveAsSettings()
         stream << d->spaceProfilePath->url().toLocalFile() << "\n";
         stream << d->cInput->value() << "\n";
 
-        for (int j = 0 ; j < 17 ; ++j)
+        for (int j = 0 ; j < ImageCurves::NUM_POINTS ; ++j)
         {
             QPoint p = d->curvesWidget->curves()->getCurvePoint(LuminosityChannel, j);
             if (d->originalImage->sixteenBit())
             {
-                p.setX(p.x()/255);
-                p.setY(p.y()/255);
+                p.setX(p.x()/ImageCurves::MULTIPLIER_16BIT);
+                p.setY(p.y()/ImageCurves::MULTIPLIER_16BIT);
             }
             stream << p.x() << "\n";
             stream << p.y() << "\n";

@@ -31,6 +31,10 @@
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPaintEvent>
 
+// KDE includes
+
+#include <kconfiggroup.h>
+
 // Local includes
 
 #include "dcolor.h"
@@ -61,6 +65,33 @@ public:
     ~CurvesWidget();
 
     void setup(int w, int h, bool readOnly);
+
+    /**
+     * Saves the currently created curve to the given group with prefix as a
+     * prefix for the curve point config entries.
+     *
+     * @param group group to save the curve to
+     * @param prefix prefix prepended to the point numbers in the config
+     */
+    void saveCurve(KConfigGroup & group, QString prefix);
+
+    /**
+     * Restores the curve tfrom the given group with prefix as a
+     * prefix for the curve point config entries.
+     *
+     * @param group group to restore the curve from
+     * @param prefix prefix prepended to the point numbers in the config
+     */
+    void restoreCurve(KConfigGroup & group, QString prefix);
+
+    /**
+     * Updates the image data the curve should be used for.
+     *
+     * @param i_data image data
+     * @param i_w width of the image
+     * @param i_h height of the image
+     * @param i_sicteenBits if true, the image is interpreted as having 16 bits
+     */
     void updateData(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits);
 
     // Stop current histogram computations.
@@ -69,7 +100,14 @@ public:
     void setDataLoading();
     void setLoadingFailed();
 
+    /**
+     * Resets the ui including the user specified curve.
+     */
     void reset();
+    /**
+     * Resets only the ui and keeps the curve.
+     */
+    void resetUI();
     void curveTypeChanged();
     void setCurveGuide(const DColor& color);
 

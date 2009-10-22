@@ -218,6 +218,7 @@ public:
         configStrengthAdjustmentEntry("StrengthAdjustment"),
         configHistogramChannelEntry("Histogram Channel"),
         configHistogramScaleEntry("Histogram Scale"),
+        configCurveEntry("BWSepiaCurve"),
 
         redAttn(0.0),
         greenAttn(0.0),
@@ -248,6 +249,7 @@ public:
     const QString                configStrengthAdjustmentEntry;
     const QString                configHistogramChannelEntry;
     const QString                configHistogramScaleEntry;
+    const QString                configCurveEntry;
 
     // Color filter attenuation in percents.
     double                       redAttn;
@@ -695,7 +697,7 @@ void BWSepiaTool::readSettings()
     d->cInput->setValue(group.readEntry(d->configContrastAdjustmentEntry,        d->cInput->defaultValue()));
     d->strengthInput->setValue(group.readEntry(d->configStrengthAdjustmentEntry, d->strengthInput->defaultValue()));
 
-    d->curvesBox->readCurveSettings(group);
+    d->curvesBox->readCurveSettings(group, d->configCurveEntry);
 
     // we need to call the set methods here, otherwise the curve will not be updated correctly
     d->gboxSettings->histogramBox()->setChannel(group.readEntry(d->configHistogramChannelEntry,
@@ -720,20 +722,7 @@ void BWSepiaTool::writeSettings()
     group.writeEntry(d->configContrastAdjustmentEntry, d->cInput->value());
     group.writeEntry(d->configStrengthAdjustmentEntry, d->strengthInput->value());
 
-    d->curvesBox->writeCurveSettings(group);
-
-//    for (int j = 0 ; j < 17 ; ++j)
-//    {
-//        QPoint p = d->curvesBox->curves()->getCurvePoint(ValueChannel, j);
-//
-//        if (d->originalImage->sixteenBit() && p.x() != -1)
-//        {
-//            p.setX(p.x()/255);
-//            p.setY(p.y()/255);
-//        }
-//
-//        group.writeEntry(QString("CurveAdjustmentPoint%1").arg(j), p);
-//    }
+    d->curvesBox->writeCurveSettings(group, d->configCurveEntry);
 
     d->previewWidget->writeSettings();
     group.sync();
@@ -1133,23 +1122,24 @@ void BWSepiaTool::slotLoadSettings()
         d->curvesBox->curves()->setCurveType(d->curvesBox->channel(), ImageCurves::CURVE_SMOOTH);
         d->curvesBox->reset();
 
-        QPoint disable(-1, -1);
+        // TODO cant we use the kconfig mechanisms provided by CurveWidget here?
+        QPoint disable = ImageCurves::getDisabledValue();
         QPoint p;
-        for (int j = 0 ; j < 17 ; ++j)
+        for (int j = 0 ; j < ImageCurves::NUM_POINTS ; ++j)
         {
             p.setX( stream.readLine().toInt() );
             p.setY( stream.readLine().toInt() );
 
             if (d->originalImage->sixteenBit() && p != disable)
             {
-                p.setX(p.x()*255);
-                p.setY(p.y()*255);
+                p.setX(p.x()*ImageCurves::MULTIPLIER_16BIT);
+                p.setY(p.y()*ImageCurves::MULTIPLIER_16BIT);
             }
 
             d->curvesBox->curves()->setCurvePoint(LuminosityChannel, j, p);
         }
 
-        for (int i = 0 ; i < 5 ; ++i)
+        for (int i = 0 ; i < ImageCurves::NUM_CHANNELS ; ++i)
             d->curvesBox->curves()->curvesCalculateCurve(i);
 
         blockWidgetSignals(false);
@@ -1188,13 +1178,14 @@ void BWSepiaTool::slotSaveAsSettings()
         stream << d->bwTone->currentItem() << "\n";
         stream << d->cInput->value() << "\n";
 
-        for (int j = 0 ; j < 17 ; ++j)
+        // TODO cant we use the kconfig mechanisms provided by CurveWidget here?
+        for (int j = 0 ; j < ImageCurves::NUM_POINTS ; ++j)
         {
             QPoint p = d->curvesBox->curves()->getCurvePoint(LuminosityChannel, j);
             if (d->originalImage->sixteenBit())
             {
-                p.setX(p.x()/255);
-                p.setY(p.y()/255);
+                p.setX(p.x()/ImageCurves::MULTIPLIER_16BIT);
+                p.setY(p.y()/ImageCurves::MULTIPLIER_16BIT);
             }
             stream << p.x() << "\n";
             stream << p.y() << "\n";

@@ -110,6 +110,17 @@ public:
     DColor       colorGuide;
 
     ImageCurves *curves;             // Curves data instance.
+
+    static QString getChannelPattern(QString prefix)
+    {
+        return prefix + "Channel%1Type";
+    }
+
+    static QString getPointPattern(QString prefix)
+    {
+        return prefix + "Channel%1Point%2";
+    }
+
 };
 
 CurvesWidget::CurvesWidget(int w, int h, QWidget *parent, bool readOnly)
@@ -159,8 +170,84 @@ void CurvesWidget::setup(int w, int h, bool readOnly)
             this, SLOT(slotProgressTimerDone()));
 }
 
+void CurvesWidget::saveCurve(KConfigGroup & group, QString prefix)
+{
+
+    kDebug(digiKamAreaCode) << "Storing curves";
+
+    for (int channel = 0; channel < ImageCurves::NUM_CHANNELS; ++channel)
+    {
+
+        group.writeEntry(CurvesWidgetPriv::getChannelPattern(prefix).arg(
+                        channel), (int) curves()->getCurveType(channel));
+
+        for (int point = 0; point <= ImageCurves::NUM_POINTS; ++point)
+        {
+            QPoint p = curves()->getCurvePoint(channel, point);
+            if (!curves()->isSixteenBits() && p
+                            != ImageCurves::getDisabledValue())
+            {
+                // Store point as 16 bits depth.
+                p.setX(p.x() * ImageCurves::MULTIPLIER_16BIT);
+                p.setY(p.y() * ImageCurves::MULTIPLIER_16BIT);
+            }
+
+            group.writeEntry(CurvesWidgetPriv::getPointPattern(prefix).arg(
+                            channel, point), p);
+        }
+
+    }
+
+}
+
+void CurvesWidget::restoreCurve(KConfigGroup & group, QString prefix)
+{
+
+    kDebug(digiKamAreaCode) << "Restoring curves";
+
+    reset();
+
+    kDebug(digiKamAreaCode) << "curves " << curves() << " isSixteenBits = "
+                    << curves()->isSixteenBits();
+
+    for (int channel = 0; channel < ImageCurves::NUM_CHANNELS; ++channel)
+    {
+
+        curves()->setCurveType(
+                        channel,
+                        (ImageCurves::CurveType) group.readEntry(
+                                        CurvesWidgetPriv::getChannelPattern(
+                                                        prefix).arg(channel), 0));
+
+        for (int point = 0; point <= ImageCurves::NUM_POINTS; ++point)
+        {
+            QPoint p = group.readEntry(
+                            CurvesWidgetPriv::getPointPattern(prefix).arg(
+                                            channel, point),
+                            ImageCurves::getDisabledValue());
+
+            // always load a 16 bit curve and stretch it to 8 bit if necessary
+            if (!curves()->isSixteenBits() && p
+                            != ImageCurves::getDisabledValue())
+            {
+                p.setX(p.x() / ImageCurves::MULTIPLIER_16BIT);
+                p.setY(p.y() / ImageCurves::MULTIPLIER_16BIT);
+            }
+
+            curves()->setCurvePoint(channel, point, p);
+        }
+
+        curves()->curvesCalculateCurve(channel);
+
+    }
+
+}
+
 void CurvesWidget::updateData(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits)
 {
+
+    kDebug(digiKamAreaCode) << "updating data";
+
     stopHistogramComputation();
 
     d->sixteenBits = i_sixteenBits;
@@ -179,11 +266,17 @@ void CurvesWidget::updateData(uchar *i_data, uint i_w, uint i_h, bool i_sixteenB
 
     m_imageHistogram->calculateInThread();
 
+    // keep the old curve
+    ImageCurves *newCurves = new ImageCurves(i_sixteenBits);
+    newCurves->setCurveType(ImageCurves::CURVE_SMOOTH);
     if (d->curves)
+    {
+        newCurves->fillFromOtherCurvers(d->curves);
         delete d->curves;
+    }
+    d->curves = newCurves;
 
-    d->curves = new ImageCurves(i_sixteenBits);
-    reset();
+    resetUI();
 }
 
 void CurvesWidget::reset()
@@ -191,6 +284,11 @@ void CurvesWidget::reset()
     if (d->curves)
         d->curves->curvesReset();
 
+    resetUI();
+}
+
+void CurvesWidget::resetUI()
+{
     d->grabPoint    = -1;
     d->guideVisible = false;
     repaint();
@@ -495,11 +593,12 @@ void CurvesWidget::paintEvent(QPaintEvent*)
 
    if (!d->readOnlyMode && d->curves->getCurveType(m_channelType) == ImageCurves::CURVE_SMOOTH)
    {
+
       p1.save();
       p1.setPen(QPen(Qt::red, 3, Qt::SolidLine));
       p1.setRenderHint(QPainter::Antialiasing);
 
-      for (int p = 0 ; p < 17 ; ++p)
+      for (int p = 0 ; p < ImageCurves::NUM_POINTS ; ++p)
       {
          QPoint curvePoint = d->curves->getCurvePoint(m_channelType, p);
 
@@ -626,9 +725,9 @@ void CurvesWidget::mousePressEvent(QMouseEvent *e)
                        ((float)(m_imageHistogram->getHistogramSegments()-1) / (float)height())),
                     0, m_imageHistogram->getHistogramSegments()-1 );
 
-    distance = 65536;
+    distance = ImageCurves::NUM_VALUES_16BIT;
 
-    for (i = 0, closest_point = 0 ; i < 17 ; ++i)
+    for (i = 0, closest_point = 0 ; i < ImageCurves::NUM_POINTS ; ++i)
     {
         int xcurvepoint = d->curves->getCurvePointX(m_channelType, i);
 
@@ -667,7 +766,7 @@ void CurvesWidget::mousePressEvent(QMouseEvent *e)
 
             d->rightMost = m_imageHistogram->getHistogramSegments();
 
-            for (i = closest_point + 1 ; i < 17 ; ++i)
+            for (i = closest_point + 1 ; i < ImageCurves::NUM_POINTS ; ++i)
             {
                 if (d->curves->getCurvePointX(m_channelType, i) != -1)
                 {
@@ -715,6 +814,8 @@ void CurvesWidget::mouseMoveEvent(QMouseEvent *e)
 {
    if (d->readOnlyMode || !m_imageHistogram) return;
 
+   // FIXME code duplication from mousePressEvent
+
    int i;
    int closest_point;
    int x1, x2, y1, y2;
@@ -728,9 +829,9 @@ void CurvesWidget::mouseMoveEvent(QMouseEvent *e)
    int y = CLAMP( (int)(e->pos().y()*((float)(m_imageHistogram->getHistogramSegments()-1)/(float)height())),
                   0, m_imageHistogram->getHistogramSegments()-1 );
 
-   distance = 65536;
+   distance = ImageCurves::NUM_VALUES_16BIT;
 
-   for (i = 0, closest_point = 0 ; i < 17 ; ++i)
+   for (i = 0, closest_point = 0 ; i < ImageCurves::NUM_POINTS ; ++i)
    {
       if (d->curves->getCurvePointX(m_channelType, i) != -1)
       {

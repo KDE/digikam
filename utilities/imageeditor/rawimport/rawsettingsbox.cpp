@@ -458,21 +458,7 @@ void RawSettingsBox::readSettings()
     d->saturationInput->setValue(group.readEntry("Saturation", 1.0));
     d->fineExposureInput->setValue(group.readEntry("FineExposure", 0.0));
 
-    d->curveWidget->reset();
-
-    for (int j = 0 ; j <= ImageCurves::NUM_POINTS ; ++j)
-    {
-        QPoint disable(-1, -1);
-        QPoint p = group.readEntry(QString("CurveAjustmentPoint%1").arg(j), disable);
-        if (!d->decodingSettingsBox->sixteenBits() && p != disable)
-        {
-            // Restore point as 16 bits depth.
-            p.setX(p.x()/255);
-            p.setY(p.y()/255);
-        }
-        d->curveWidget->curves()->setCurvePoint(LuminosityChannel, j, p);
-    }
-    d->curveWidget->curves()->curvesCalculateCurve(LuminosityChannel);
+    d->curveWidget->restoreCurve(group, "RawCurvePoint");
 
     d->tabView->setCurrentIndex(group.readEntry("Settings Page", 0));
 #if KDCRAW_VERSION <= 0x000500
@@ -523,17 +509,7 @@ void RawSettingsBox::writeSettings()
     group.writeEntry("Saturation",                 d->saturationInput->value());
     group.writeEntry("FineExposure",               d->fineExposureInput->value());
 
-    for (int j = 0 ; j <= ImageCurves::NUM_POINTS ; ++j)
-    {
-        QPoint p = d->curveWidget->curves()->getCurvePoint(LuminosityChannel, j);
-        if (!d->curveWidget->curves()->isSixteenBits())
-        {
-            // Store point as 16 bits depth.
-            p.setX(p.x()*255);
-            p.setY(p.y()*255);
-        }
-        group.writeEntry(QString("CurveAjustmentPoint%1").arg(j), p);
-    }
+    d->curveWidget->saveCurve(group, "RawCurvePoint");
 
     group.writeEntry("Settings Page", d->tabView->currentIndex());
 #if KDCRAW_VERSION <= 0x000500
