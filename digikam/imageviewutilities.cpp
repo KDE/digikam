@@ -127,6 +127,7 @@ void ImageViewUtilities::slotRenamed(KIO::Job* job, const KUrl &, const KUrl&new
     // clean LoadingCache as well - be pragmatic, do it here.
     LoadingCacheInterface::fileChanged(fileURL.toLocalFile());
 
+    // no need to check the property here, this slot is only used by the RenameThread
     KUrl url(job->property(renameFileProperty.toAscii()).toString());
     emit imageRenameSucceeded(url);
 }
@@ -193,8 +194,14 @@ void ImageViewUtilities::slotDIOResult(KJob* kjob)
     KIO::Job *job = static_cast<KIO::Job*>(kjob);
     if (job->error())
     {
-        KUrl url(job->property(renameFileProperty.toAscii()).toString());
-        emit imageRenameFailed(url);
+        // this slot can be used by others, too.
+        // check if image renaming property is set.
+        QVariant v = job->property(renameFileProperty.toAscii());
+        if (!v.isNull())
+        {
+            KUrl url(v.toString());
+            emit imageRenameFailed(url);
+        }
 
         job->ui()->setWindow(m_widget);
         job->ui()->showErrorMessage();
