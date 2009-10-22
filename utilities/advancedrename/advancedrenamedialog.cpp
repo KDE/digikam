@@ -172,6 +172,9 @@ AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
     mainWidget->setLayout(mainLayout);
 
     setMainWidget(mainWidget);
+
+    setMinimumWidth(d->advancedRenameWidget->minimumWidth());
+
     setButtons(Help|Cancel|Ok);
     enableButton(Ok, false);
     setHelp("advancedrename.anchor", "digikam");
