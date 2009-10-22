@@ -49,6 +49,21 @@ class DIGIKAM_EXPORT ImageCurves
 
 public:
 
+    /**
+     * The max number of points contained in a curve.
+     */
+    const static int NUM_POINTS;
+
+    /**
+     * Number of channels in a curve.
+     */
+    const static int NUM_CHANNELS;
+
+    /**
+     * Number of discrete values managed per curve.
+     */
+    const static int NUM_VALUES;
+
     enum CurveType
     {
         CURVE_SMOOTH = 0,            // Smooth curve type
