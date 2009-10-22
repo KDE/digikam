@@ -46,8 +46,9 @@
 #include "advancedrenameinput.h"
 #include "dcursortracker.h"
 #include "defaultparser.h"
-#include "themeengine.h"
+#include "dynamiclayout.h"
 #include "rexpanderbox.h"
+#include "themeengine.h"
 
 namespace Digikam
 {
@@ -63,7 +64,6 @@ public:
         configExpandedStateEntry("Options are expanded"),
         configExpandedStateDefault(true),
 
-        inputColumns(2),
         tooltipToggleButton(0),
         tokenToolButton(0),
         modifierToolButton(0),
@@ -81,8 +81,6 @@ public:
     const QString        configGroupName;
     const QString        configExpandedStateEntry;
     bool                 configExpandedStateDefault;
-
-    int                  inputColumns;
 
     QToolButton*         tooltipToggleButton;
     QToolButton*         tokenToolButton;
@@ -261,15 +259,10 @@ void AdvancedRenameWidget::registerParserControls()
 
        QMenu* tokenToolBtnMenu    = new QMenu(d->tokenToolButton);
        QMenu* modifierToolBtnMenu = new QMenu(d->modifierToolButton);
-       int column                 = 0;
-       int row                    = 0;
        QPushButton* btn           = 0;
        QAction* action            = 0;
-       QGridLayout* gridLayout    = new QGridLayout;
-       gridLayout->setSpacing(KDialog::marginHint());
-       gridLayout->setMargin(KDialog::marginHint());
+       DynamicLayout* layout      = new DynamicLayout(KDialog::marginHint(), KDialog::marginHint());
 
-       int maxParsers = d->parser->subParsers().count();
        foreach (SubParser* subparser, d->parser->subParsers())
        {
            btn    = subparser->registerButton(this);
@@ -283,32 +276,10 @@ void AdvancedRenameWidget::registerParserControls()
            // set button tooltip
            btn->setToolTip(subparser->description());
 
-           gridLayout->addWidget(btn, row, column, 1, 1);
+           layout->addWidget(btn);
 
            connect(subparser, SIGNAL(signalTokenTriggered(const QString&)),
                    d->renameInput, SLOT(slotAddToken(const QString&)));
-
-           ++column;
-
-           if (column % d->inputColumns == 0)
-           {
-               ++row;
-               column = 0;
-           }
-       }
-
-       // --------------------------------------------------------
-
-       // If the buttons don't fill up all columns, expand the last button to fit the layout
-       if ((row >= (maxParsers / d->inputColumns)) && (column == 0))
-       {
-           gridLayout->removeWidget(btn);
-           gridLayout->addWidget(btn, (row - 1), (d->inputColumns - 1), 1, 1);
-       }
-       else if (column != d->inputColumns)
-       {
-           gridLayout->removeWidget(btn);
-           gridLayout->addWidget(btn, row, (column - 1), 1, -1);
        }
 
        // --------------------------------------------------------
@@ -328,7 +299,7 @@ void AdvancedRenameWidget::registerParserControls()
 
        // --------------------------------------------------------
 
-       d->btnContainer->setLayout(gridLayout);
+       d->btnContainer->setLayout(layout);
 
        d->tokenToolButton->setMenu(tokenToolBtnMenu);
        d->modifierToolButton->setMenu(modifierToolBtnMenu);
@@ -351,19 +322,6 @@ void AdvancedRenameWidget::setParser(Parser* parser)
     }
     d->parser = parser;
 
-    setInputColumns(d->inputColumns);
-    registerParserControls();
-    setControlWidgets(d->controlWidgetsMask);
-}
-
-void AdvancedRenameWidget::setInputColumns(int col)
-{
-    if (col == d->inputColumns)
-    {
-        return;
-    }
-
-    d->inputColumns = col;
     registerParserControls();
     setControlWidgets(d->controlWidgetsMask);
 }

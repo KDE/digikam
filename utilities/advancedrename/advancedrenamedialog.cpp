@@ -143,7 +143,6 @@ AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
                     : KDialog(parent), d(new AdvancedRenameDialogPriv)
 {
     d->advancedRenameWidget = new AdvancedRenameWidget(this);
-    d->advancedRenameWidget->setInputColumns(3);
     d->advancedRenameWidget->setTooltipAlignment(Qt::AlignCenter);
 
     // --------------------------------------------------------

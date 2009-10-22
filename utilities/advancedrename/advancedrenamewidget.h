@@ -61,8 +61,6 @@ public:
     void    clear();
 
     void setParser(Parser* parser);
-
-    void setInputColumns(int col);
     void setControlWidgets(ControlWidgets mask);
 
     QString parse(ParseInformation& info) const;
