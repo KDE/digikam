@@ -91,7 +91,7 @@ FingerPrintsGenerator::FingerPrintsGenerator(QWidget* /*parent*/, bool rebuildAl
 
     setModal(false);
     setValue(0);
-    setCaption(i18n("Rebuild All Fingerprints"));
+    setCaption(d->rebuildAll ? i18n("Rebuild All Fingerprints") : i18n("Scan for Changed Fingerprints"));
     setLabel(i18n("<b>Updating fingerprint database. Please wait...</b>"));
     setButtonText(i18n("&Abort"));
     resize(600, 300);
