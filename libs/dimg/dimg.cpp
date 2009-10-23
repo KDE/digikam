@@ -265,7 +265,6 @@ uchar *DImg::stripImageData()
 
 void DImg::copyMetaData(const DImgPrivate *src)
 {
-    m_priv->isReadOnly   = src->isReadOnly;
     m_priv->attributes   = src->attributes;
     m_priv->embeddedText = src->embeddedText;
     m_priv->iccProfile   = src->iccProfile;
@@ -379,7 +378,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
                 m_priv->null       = !loader.hasLoadedData();
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
-                m_priv->isReadOnly = loader.isReadOnly();
+                setAttribute("isreadonly", loader.isReadOnly());
                 return true;
             }
             break;
@@ -394,7 +393,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
                 m_priv->null       = !loader.hasLoadedData();
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
-                m_priv->isReadOnly = loader.isReadOnly();
+                setAttribute("isreadonly", loader.isReadOnly());
                 return true;
             }
             break;
@@ -409,7 +408,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
                 m_priv->null       = !loader.hasLoadedData();
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
-                m_priv->isReadOnly = loader.isReadOnly();
+                setAttribute("isreadonly", loader.isReadOnly());
                 return true;
             }
             break;
@@ -424,7 +423,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
                 m_priv->null       = !loader.hasLoadedData();
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
-                m_priv->isReadOnly = loader.isReadOnly();
+                setAttribute("isreadonly", loader.isReadOnly());
                 return true;
             }
             break;
@@ -439,7 +438,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
                 m_priv->null       = !loader.hasLoadedData();
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
-                m_priv->isReadOnly = loader.isReadOnly();
+                setAttribute("isreadonly", loader.isReadOnly());
                 loader.postProcess(observer);
                 return true;
             }
@@ -455,7 +454,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
                 m_priv->null       = !loader.hasLoadedData();
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
-                m_priv->isReadOnly = loader.isReadOnly();
+                setAttribute("isreadonly", loader.isReadOnly());
                 return true;
             }
             break;
@@ -470,7 +469,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
                 m_priv->null       = !loader.hasLoadedData();
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
-                m_priv->isReadOnly = loader.isReadOnly();
+                setAttribute("isreadonly", loader.isReadOnly());
                 return true;
             }
             break;
@@ -485,7 +484,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver *o
                 m_priv->null       = !loader.hasLoadedData();
                 m_priv->alpha      = loader.hasAlpha();
                 m_priv->sixteenBit = loader.sixteenBit();
-                m_priv->isReadOnly = loader.isReadOnly();
+                setAttribute("isreadonly", loader.isReadOnly());
                 return true;
             }
             break;
@@ -571,32 +570,38 @@ bool DImg::save(const QString& filePath, const QString& format, DImgLoaderObserv
     else if (frm == "PNG")
     {
         PNGLoader loader(this);
+        setAttribute("savedformat-isreadonly", loader.isReadOnly());
         return loader.save(filePath, observer);
     }
     else if (frm == "TIFF" || frm == "TIF")
     {
         TIFFLoader loader(this);
+        setAttribute("savedformat-isreadonly", loader.isReadOnly());
         return loader.save(filePath, observer);
     }
     else if (frm == "PPM")
     {
         PPMLoader loader(this);
+        setAttribute("savedformat-isreadonly", loader.isReadOnly());
         return loader.save(filePath, observer);
     }
     if (frm == "JP2" || frm == "J2K" || frm == "JPX" || frm == "JPC" || frm == "PGX")
     {
         JP2KLoader loader(this);
+        setAttribute("savedformat-isreadonly", loader.isReadOnly());
         return loader.save(filePath, observer);
     }
     if (frm == "PGF")
     {
         PGFLoader loader(this);
+        setAttribute("savedformat-isreadonly", loader.isReadOnly());
         return loader.save(filePath, observer);
     }
     else
     {
         setAttribute("format", format);
         QImageLoader loader(this);
+        setAttribute("savedformat-isreadonly", loader.isReadOnly());
         return loader.save(filePath, observer);
     }
 
@@ -778,7 +783,7 @@ bool DImg::sixteenBit() const
 
 bool DImg::isReadOnly() const
 {
-    return m_priv->isReadOnly;
+    return attribute("isreadonly").toBool();
 }
 
 DImg::COLORMODEL DImg::originalColorModel() const

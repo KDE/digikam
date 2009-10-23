@@ -78,7 +78,6 @@ public:
         lanczos_func = 0;
         alpha        = false;
         sixteenBit   = false;
-        isReadOnly   = false;
     }
 
     ~DImgPrivate()
@@ -90,7 +89,6 @@ public:
     bool                    null;
     bool                    alpha;
     bool                    sixteenBit;
-    bool                    isReadOnly;
 
     unsigned int            width;
     unsigned int            height;
