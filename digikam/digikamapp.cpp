@@ -60,6 +60,7 @@
 #include <klocale.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
+#include <kshortcut.h>
 #include <kshortcutsdialog.h>
 #include <kstandardaction.h>
 #include <kstandarddirs.h>
@@ -582,6 +583,7 @@ void DigikamApp::setupAccelerators()
     connect(lastImageAction, SIGNAL(triggered()), this, SIGNAL(signalLastItem()));
 
     KAction *cutItemsAction = KStandardAction::cut(this, SIGNAL(signalCutAlbumItemsSelection()), this);
+    cutItemsAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_X));
     actionCollection()->addAction("cut_album_selection", cutItemsAction);
 
     KAction *copyItemsAction = KStandardAction::copy(this, SIGNAL(signalCopyAlbumItemsSelection()), this);
