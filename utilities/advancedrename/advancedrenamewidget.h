@@ -58,6 +58,11 @@ public:
 
     QString text() const;
     void    setText(const QString& text);
+    void    clearText();
+
+    /*
+     * clear the text as well as the history
+     */
     void    clear();
 
     void setParser(Parser* parser);

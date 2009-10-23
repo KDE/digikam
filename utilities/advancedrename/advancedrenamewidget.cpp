@@ -126,6 +126,11 @@ void AdvancedRenameWidget::setText(const QString& text)
     d->renameInput->lineEdit()->setText(text);
 }
 
+void AdvancedRenameWidget::clearText()
+{
+    d->renameInput->lineEdit()->clear();
+}
+
 void AdvancedRenameWidget::setTooltipAlignment(Qt::Alignment alignment)
 {
     d->tooltipTrackerAlignment = alignment;
