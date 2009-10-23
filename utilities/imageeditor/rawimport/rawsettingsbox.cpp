@@ -82,7 +82,37 @@ public:
 
 public:
 
-    RawSettingsBoxPriv()
+    RawSettingsBoxPriv() :
+        optionGroupName("RAW Import Settings"),
+        optionHistogramChannelEntry("Histogram Channel"),
+        optionHistogramScaleEntry("Histogram Scale"),
+        optionDecodeSixteenBitEntry("SixteenBitsImage"),
+        optionWhiteBalanceEntry("White Balance"),
+        optionCustomWhiteBalanceEntry("Custom White Balance"),
+        optionCustomWBGreenEntry("Custom White Balance Green"),
+        optionFourColorRGBEntry("Four Color RGB"),
+        optionUnclipColorsEntry("Unclip Color"),
+        optionDontStretchPxielsEntry("Dont Stretch Pixels"),
+        optionNoiseReductionEntry("Use Noise Reduction"),
+        optionMedianFilterPassesEntry("Median Filter Passes"),
+        optionNRThresholdEntry("NR Threshold"),
+        optionUseCACorrectionEntry("EnableCACorrection"),
+        optionCARedMultiplierEntry("caRedMultiplier"),
+        optionCABlueMultiplierEntry("caBlueMultiplier"),
+        optionAutoBrightnessEntry("AutoBrightness"),
+        optionDecodingQualityEntry("Decoding Quality"),
+        optionInputColorSpaceEntry("Input Color Space"),
+        optionOutputColorSpaceEntry("Output Color Space"),
+        optionInputColorProfileEntry("Input Color Profile"),
+        optionOutputColorProfileEntry("Output Color Profile"),
+        optionBrightnessEntry("Brightness"),
+        optionContrastEntry("Contrast"),
+        optionGammaEntry("Gamma"),
+        optionSaturationEntry("Saturation"),
+        optionFineExposureEntry("FineExposure"),
+        optionCurvePrefix("RawCurve"),
+        optionSettingsPageEntry("Settings Page"),
+        optionDecodingSettingsTabEntry("Decoding Settings Tab")
     {
         infoBox                = 0;
         advExposureBox         = 0;
@@ -138,6 +168,38 @@ public:
     RDoubleNumInput     *fineExposureInput;
 
     DcrawSettingsWidget *decodingSettingsBox;
+
+    const QString optionGroupName;
+    const QString optionHistogramChannelEntry;
+    const QString optionHistogramScaleEntry;
+    const QString optionDecodeSixteenBitEntry;
+    const QString optionWhiteBalanceEntry;
+    const QString optionCustomWhiteBalanceEntry;
+    const QString optionCustomWBGreenEntry;
+    const QString optionFourColorRGBEntry;
+    const QString optionUnclipColorsEntry;
+    const QString optionDontStretchPxielsEntry;
+    const QString optionNoiseReductionEntry;
+    const QString optionMedianFilterPassesEntry;
+    const QString optionNRThresholdEntry;
+    const QString optionUseCACorrectionEntry;
+    const QString optionCARedMultiplierEntry;
+    const QString optionCABlueMultiplierEntry;
+    const QString optionAutoBrightnessEntry;
+    const QString optionDecodingQualityEntry;
+    const QString optionInputColorSpaceEntry;
+    const QString optionOutputColorSpaceEntry;
+    const QString optionInputColorProfileEntry;
+    const QString optionOutputColorProfileEntry;
+    const QString optionBrightnessEntry;
+    const QString optionContrastEntry;
+    const QString optionGammaEntry;
+    const QString optionSaturationEntry;
+    const QString optionFineExposureEntry;
+    const QString optionCurvePrefix;
+    const QString optionSettingsPageEntry;
+    const QString optionDecodingSettingsTabEntry;
+
 };
 
 RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
@@ -410,59 +472,81 @@ CurvesWidget* RawSettingsBox::curve() const
 void RawSettingsBox::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("RAW Import Settings");
+    KConfigGroup group        = config->group(d->optionGroupName);
 
-    histogramBox()->setChannel(group.readEntry("Histogram Channel",
-                            (int)LuminosityChannel));
-    histogramBox()->setScale(group.readEntry("Histogram Scale",
-                            (int)LogScaleHistogram));
+    histogramBox()->setChannel(group.readEntry(d->optionHistogramChannelEntry,
+                    (int) LuminosityChannel));
+    histogramBox()->setScale(group.readEntry(d->optionHistogramScaleEntry,
+                    (int) LogScaleHistogram));
 
 //    d->colorsCB->setCurrentIndex(group.readEntry("Histogram Color", (int)RawSettingsBoxPriv::AllColorsRed));
 
-    d->decodingSettingsBox->setSixteenBits(group.readEntry("SixteenBitsImage", false));
-    d->decodingSettingsBox->setWhiteBalance((DRawDecoding::WhiteBalance)
-                                            group.readEntry("White Balance",
-                                            (int)DRawDecoding::CAMERA));
-    d->decodingSettingsBox->setCustomWhiteBalance(group.readEntry("Custom White Balance", 6500));
-    d->decodingSettingsBox->setCustomWhiteBalanceGreen(group.readEntry("Custom White Balance Green", 1.0));
-    d->decodingSettingsBox->setFourColor(group.readEntry("Four Color RGB", false));
-    d->decodingSettingsBox->setUnclipColor(group.readEntry("Unclip Color", 0));
-    d->decodingSettingsBox->setDontStretchPixels(group.readEntry("Dont Stretch Pixels", false)); // krazy:exclude=spelling
-    d->decodingSettingsBox->setNoiseReduction(group.readEntry("Use Noise Reduction", false));
-    d->decodingSettingsBox->setMedianFilterPasses(group.readEntry("Median Filter Passes", 0));
-    d->decodingSettingsBox->setNRThreshold(group.readEntry("NR Threshold", 100));
-    d->decodingSettingsBox->setUseCACorrection(group.readEntry("EnableCACorrection", false));
-    d->decodingSettingsBox->setcaRedMultiplier(group.readEntry("caRedMultiplier", 1.0));
-    d->decodingSettingsBox->setcaBlueMultiplier(group.readEntry("caBlueMultiplier", 1.0));
+    d->decodingSettingsBox->setSixteenBits(group.readEntry(
+                    d->optionDecodeSixteenBitEntry, false));
+    d->decodingSettingsBox->setWhiteBalance(
+                    (DRawDecoding::WhiteBalance) group.readEntry(
+                                    d->optionWhiteBalanceEntry,
+                                    (int) DRawDecoding::CAMERA));
+    d->decodingSettingsBox->setCustomWhiteBalance(group.readEntry(
+                    d->optionCustomWhiteBalanceEntry, 6500));
+    d->decodingSettingsBox->setCustomWhiteBalanceGreen(group.readEntry(
+                    d->optionCustomWBGreenEntry, 1.0));
+    d->decodingSettingsBox->setFourColor(group.readEntry(
+                    d->optionFourColorRGBEntry, false));
+    d->decodingSettingsBox->setUnclipColor(group.readEntry(
+                    d->optionUnclipColorsEntry, 0));
+    d->decodingSettingsBox->setDontStretchPixels(group.readEntry(
+                    d->optionDontStretchPxielsEntry, false)); // krazy:exclude=spelling
+    d->decodingSettingsBox->setNoiseReduction(group.readEntry(
+                    d->optionNoiseReductionEntry, false));
+    d->decodingSettingsBox->setMedianFilterPasses(group.readEntry(
+                    d->optionMedianFilterPassesEntry, 0));
+    d->decodingSettingsBox->setNRThreshold(group.readEntry(
+                    d->optionNRThresholdEntry, 100));
+    d->decodingSettingsBox->setUseCACorrection(group.readEntry(
+                    d->optionUseCACorrectionEntry, false));
+    d->decodingSettingsBox->setcaRedMultiplier(group.readEntry(
+                    d->optionCARedMultiplierEntry, 1.0));
+    d->decodingSettingsBox->setcaBlueMultiplier(group.readEntry(
+                    d->optionCABlueMultiplierEntry, 1.0));
 #if KDCRAW_VERSION >= 0x000500
-    d->decodingSettingsBox->setAutoBrightness(group.readEntry("AutoBrightness", true));
+    d->decodingSettingsBox->setAutoBrightness(group.readEntry(
+                    d->optionAutoBrightnessEntry, true));
 #endif
     d->decodingSettingsBox->setQuality(
-        (DRawDecoding::DecodingQuality)group.readEntry("Decoding Quality",
-            (int)(DRawDecoding::BILINEAR)));
+                    (DRawDecoding::DecodingQuality) group.readEntry(
+                                    d->optionDecodingQualityEntry,
+                                    (int) (DRawDecoding::BILINEAR)));
 
     d->decodingSettingsBox->setInputColorSpace(
-        (DRawDecoding::InputColorSpace)group.readEntry("Input Color Space",
-            (int)(DRawDecoding::NOINPUTCS)));
+                    (DRawDecoding::InputColorSpace) group.readEntry(
+                                    d->optionInputColorSpaceEntry,
+                                    (int) (DRawDecoding::NOINPUTCS)));
 
     d->decodingSettingsBox->setOutputColorSpace(
-        (DRawDecoding::OutputColorSpace)group.readEntry("Output Color Space",
-            (int)(DRawDecoding::SRGB)));
+                    (DRawDecoding::OutputColorSpace) group.readEntry(
+                                    d->optionOutputColorSpaceEntry,
+                                    (int) (DRawDecoding::SRGB)));
 
-    d->decodingSettingsBox->setInputColorProfile(group.readEntry("Input Color Profile", QString()));
-    d->decodingSettingsBox->setOutputColorProfile(group.readEntry("Output Color Profile", QString()));
+    d->decodingSettingsBox->setInputColorProfile(group.readEntry(
+                    d->optionInputColorProfileEntry, QString()));
+    d->decodingSettingsBox->setOutputColorProfile(group.readEntry(
+                    d->optionOutputColorProfileEntry, QString()));
 
-    d->brightnessInput->setValue(group.readEntry("Brightness", 0));
-    d->contrastInput->setValue(group.readEntry("Contrast", 0));
-    d->gammaInput->setValue(group.readEntry("Gamma", 1.0));
-    d->saturationInput->setValue(group.readEntry("Saturation", 1.0));
-    d->fineExposureInput->setValue(group.readEntry("FineExposure", 0.0));
+    d->brightnessInput->setValue(group.readEntry(d->optionBrightnessEntry, 0));
+    d->contrastInput->setValue(group.readEntry(d->optionContrastEntry, 0));
+    d->gammaInput->setValue(group.readEntry(d->optionGammaEntry, 1.0));
+    d->saturationInput->setValue(group.readEntry(d->optionSaturationEntry, 1.0));
+    d->fineExposureInput->setValue(group.readEntry(d->optionFineExposureEntry,
+                    0.0));
 
-    d->curveWidget->restoreCurve(group, "RawCurvePoint");
+    d->curveWidget->restoreCurve(group, d->optionCurvePrefix);
 
-    d->tabView->setCurrentIndex(group.readEntry("Settings Page", 0));
+    d->tabView->setCurrentIndex(group.readEntry(d->optionSettingsPageEntry, 0));
 #if KDCRAW_VERSION <= 0x000500
-    d->decodingSettingsBox->setCurrentIndex(group.readEntry("Decoding Settings Tab", (int)DcrawSettingsWidget::DEMOSAICING));
+    d->decodingSettingsBox->setCurrentIndex(group.readEntry(
+                    d->optionDecodingSettingsTabEntry,
+                    (int) DcrawSettingsWidget::DEMOSAICING));
 #else
     d->decodingSettingsBox->readSettings();
 #endif
@@ -476,44 +560,64 @@ void RawSettingsBox::readSettings()
 void RawSettingsBox::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("RAW Import Settings");
+    KConfigGroup group        = config->group(d->optionGroupName);
 
-    group.writeEntry("Histogram Channel",          histogramBox()->channel());
-    group.writeEntry("Histogram Scale",            histogramBox()->scale());
+    group.writeEntry(d->optionHistogramChannelEntry, histogramBox()->channel());
+    group.writeEntry(d->optionHistogramScaleEntry, histogramBox()->scale());
 //    group.writeEntry("Histogram Color",            d->colorsCB->currentIndex());
 
-    group.writeEntry("SixteenBitsImage",           d->decodingSettingsBox->sixteenBits());
-    group.writeEntry("White Balance",              (int)d->decodingSettingsBox->whiteBalance());
-    group.writeEntry("Custom White Balance",       d->decodingSettingsBox->customWhiteBalance());
-    group.writeEntry("Custom White Balance Green", d->decodingSettingsBox->customWhiteBalanceGreen());
-    group.writeEntry("Four Color RGB",             d->decodingSettingsBox->useFourColor());
-    group.writeEntry("Unclip Color",               d->decodingSettingsBox->unclipColor());
-    group.writeEntry("Dont Stretch Pixels",        d->decodingSettingsBox->useDontStretchPixels()); // krazy:exclude=spelling
-    group.writeEntry("Use Noise Reduction",        d->decodingSettingsBox->useNoiseReduction());
-    group.writeEntry("MedianFilterPasses",         d->decodingSettingsBox->medianFilterPasses());
-    group.writeEntry("NR Threshold",               d->decodingSettingsBox->NRThreshold());
-    group.writeEntry("EnableCACorrection",         d->decodingSettingsBox->useCACorrection());
-    group.writeEntry("caRedMultiplier",            d->decodingSettingsBox->caRedMultiplier());
-    group.writeEntry("caBlueMultiplier",           d->decodingSettingsBox->caBlueMultiplier());
-    group.writeEntry("Decoding Quality",           (int)d->decodingSettingsBox->quality());
-    group.writeEntry("Input Color Space",          (int)d->decodingSettingsBox->inputColorSpace());
-    group.writeEntry("Output Color Space",         (int)d->decodingSettingsBox->outputColorSpace());
-    group.writeEntry("Input Color Profile",        d->decodingSettingsBox->inputColorProfile());
-    group.writeEntry("Output Color Profile",       d->decodingSettingsBox->outputColorProfile());
+    group.writeEntry(d->optionDecodeSixteenBitEntry,
+                    d->decodingSettingsBox->sixteenBits());
+    group.writeEntry(d->optionWhiteBalanceEntry,
+                    (int) d->decodingSettingsBox->whiteBalance());
+    group.writeEntry(d->optionCustomWhiteBalanceEntry,
+                    d->decodingSettingsBox->customWhiteBalance());
+    group.writeEntry(d->optionCustomWBGreenEntry,
+                    d->decodingSettingsBox->customWhiteBalanceGreen());
+    group.writeEntry(d->optionFourColorRGBEntry,
+                    d->decodingSettingsBox->useFourColor());
+    group.writeEntry(d->optionUnclipColorsEntry,
+                    d->decodingSettingsBox->unclipColor());
+    group.writeEntry(d->optionDontStretchPxielsEntry,
+                    d->decodingSettingsBox->useDontStretchPixels()); // krazy:exclude=spelling
+    group.writeEntry(d->optionNoiseReductionEntry,
+                    d->decodingSettingsBox->useNoiseReduction());
+    group.writeEntry(d->optionMedianFilterPassesEntry,
+                    d->decodingSettingsBox->medianFilterPasses());
+    group.writeEntry(d->optionNRThresholdEntry,
+                    d->decodingSettingsBox->NRThreshold());
+    group.writeEntry(d->optionUseCACorrectionEntry,
+                    d->decodingSettingsBox->useCACorrection());
+    group.writeEntry(d->optionCARedMultiplierEntry,
+                    d->decodingSettingsBox->caRedMultiplier());
+    group.writeEntry(d->optionCABlueMultiplierEntry,
+                    d->decodingSettingsBox->caBlueMultiplier());
+    group.writeEntry(d->optionDecodingQualityEntry,
+                    (int) d->decodingSettingsBox->quality());
+    group.writeEntry(d->optionInputColorSpaceEntry,
+                    (int) d->decodingSettingsBox->inputColorSpace());
+    group.writeEntry(d->optionOutputColorSpaceEntry,
+                    (int) d->decodingSettingsBox->outputColorSpace());
+    group.writeEntry(d->optionInputColorProfileEntry,
+                    d->decodingSettingsBox->inputColorProfile());
+    group.writeEntry(d->optionOutputColorProfileEntry,
+                    d->decodingSettingsBox->outputColorProfile());
 #if KDCRAW_VERSION >= 0x000500
-    group.writeEntry("AutoBrightness",             d->decodingSettingsBox->useAutoBrightness());
+    group.writeEntry(d->optionAutoBrightnessEntry,
+                    d->decodingSettingsBox->useAutoBrightness());
 #endif
-    group.writeEntry("Brightness",                 d->brightnessInput->value());
-    group.writeEntry("Contrast",                   d->contrastInput->value());
-    group.writeEntry("Gamma",                      d->gammaInput->value());
-    group.writeEntry("Saturation",                 d->saturationInput->value());
-    group.writeEntry("FineExposure",               d->fineExposureInput->value());
+    group.writeEntry(d->optionBrightnessEntry, d->brightnessInput->value());
+    group.writeEntry(d->optionContrastEntry, d->contrastInput->value());
+    group.writeEntry(d->optionGammaEntry, d->gammaInput->value());
+    group.writeEntry(d->optionSaturationEntry, d->saturationInput->value());
+    group.writeEntry(d->optionFineExposureEntry, d->fineExposureInput->value());
 
-    d->curveWidget->saveCurve(group, "RawCurvePoint");
+    d->curveWidget->saveCurve(group, d->optionCurvePrefix);
 
-    group.writeEntry("Settings Page", d->tabView->currentIndex());
+    group.writeEntry(d->optionSettingsPageEntry, d->tabView->currentIndex());
 #if KDCRAW_VERSION <= 0x000500
-    group.writeEntry("Decoding Settings Tab", d->decodingSettingsBox->currentIndex());
+    group.writeEntry(d->optionDecodingSettingsTabEntry,
+                    d->decodingSettingsBox->currentIndex());
 #endif
     group.sync();
 }
@@ -550,7 +654,9 @@ DRawDecoding RawSettingsBox::settings()
     settings.exposureComp            = d->fineExposureInput->value();
 
     if (d->curveWidget->curves()->isDirty())
+    {
         settings.curveAdjust         = d->curveWidget->curves()->getCurvePoints(LuminosityChannel);
+    }
 
     return settings;
 }
