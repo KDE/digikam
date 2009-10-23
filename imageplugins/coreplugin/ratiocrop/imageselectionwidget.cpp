@@ -783,17 +783,17 @@ void ImageSelectionWidget::updatePixmap()
     if (d->preview.isNull())
         return;
 
-    int sx              = d->localRegionSelection.left() - d->rect.left();
-    int sy              = d->localRegionSelection.top()  - d->rect.top();
-    int dw              = d->localRegionSelection.width();
-    int dh              = d->localRegionSelection.height();
+    int sx = d->localRegionSelection.left() - d->rect.left();
+    int sy = d->localRegionSelection.top()  - d->rect.top();
+    int dw = d->localRegionSelection.width();
+    int dh = d->localRegionSelection.height();
 
     QPainter p(d->pixmap);
 
     p.drawPixmap(d->rect.x(), d->rect.y(), d->grayOverLay);
 
     // Stop here if no selection to draw
-    if ( d->regionSelection.isEmpty() || !d->isDrawingSelection )
+    if (d->regionSelection.isEmpty() || !d->isDrawingSelection)
         return;
 
     p.drawPixmap(d->localRegionSelection.left(), d->localRegionSelection.top(), d->previewPixmap,
