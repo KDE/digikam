@@ -198,7 +198,6 @@ void QueueSettingsView::slotResetSettings()
     // TODO: reset d->albumSel
     d->conflictButtonGroup->button(QueueSettings::ASKTOUSER)->setChecked(true);
     d->renamingButtonGroup->button(QueueSettings::USEORIGINAL)->setChecked(true);
-    d->advancedRenameWidget->clear();
     blockSignals(false);
     slotSettingsChanged();
 }
