@@ -54,6 +54,7 @@ public:
         destinationExisted      = false;
         synchronousSavingResult = false;
         abortingSaving          = false;
+        executedOperation       = SavingStateNone;
     }
 
     enum SavingState
@@ -74,6 +75,7 @@ public:
     bool                synchronousSavingResult;
     bool                destinationExisted;
     bool                abortingSaving;
+    SavingState         executedOperation;
 
     QString             originalFormat;
     QString             format;

@@ -1444,7 +1444,10 @@ void EditorWindow::movingSaveFileFinished(bool successful)
     // (loading!) which might itself in turn change states
     finishSaving(true);
 
-    saveIsComplete();
+    if (m_savingContext->executedOperation == SavingContextContainer::SavingStateSave)
+        saveIsComplete();
+    else
+        saveAsIsComplete();
 
     // Take all actions necessary to update information and re-enable sidebar
     slotChanged();
@@ -1463,6 +1466,7 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
     {
 
         // from save()
+        m_savingContext->executedOperation = m_savingContext->savingState;
         m_savingContext->savingState = SavingContextContainer::SavingStateNone;
 
         if (!success)
@@ -1567,6 +1571,7 @@ void EditorWindow::startingSave(const KUrl& url)
     m_savingContext->format             = m_savingContext->originalFormat;
     m_savingContext->abortingSaving     = false;
     m_savingContext->savingState        = SavingContextContainer::SavingStateSave;
+    m_savingContext->executedOperation  = SavingContextContainer::SavingStateNone;
 
     m_canvas->saveAs(m_savingContext->saveTempFileName, m_IOFileSettings,
                      m_setExifOrientationTag && (m_rotatedOrFlipped || m_canvas->exifRotated()));
@@ -1741,6 +1746,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     m_savingContext->destinationURL = newURL;
     m_savingContext->originalFormat = m_canvas->currentImageFileFormat();
     m_savingContext->savingState    = SavingContextContainer::SavingStateSaveAs;
+    m_savingContext->executedOperation = SavingContextContainer::SavingStateNone;
     m_savingContext->abortingSaving = false;
 
     m_canvas->saveAs(m_savingContext->saveTempFileName, m_IOFileSettings,

@@ -972,8 +972,6 @@ void ImageWindow::saveAsIsComplete()
         d->urlCurrent = m_savingContext->destinationURL;
         m_canvas->switchToLastSaved(m_savingContext->destinationURL.toLocalFile());
 
-        slotUpdateItemInfo();
-
         // If the DImg is put in the cache under the new name, this means the new file will not be reloaded.
         // This may irritate users who want to check for quality loss in lossy formats.
         // In any case, only do that if the format did not change - too many assumptions otherwise (see bug #138949).
@@ -1006,6 +1004,8 @@ void ImageWindow::saveAsIsComplete()
         d->thumbBar->blockSignals(true);
         d->thumbBar->setSelected(foundItem);
         d->thumbBar->blockSignals(false);
+
+        slotUpdateItemInfo();
     }
     else
     {
