@@ -865,7 +865,6 @@ void ImageSelectionWidget::updatePixmap()
                p.drawLine(0, h, h, 0);
                p.drawLine(w-h, 0, w, h);
                p.drawLine(w-h, h, w, 0);
-
            }
            else
            {
@@ -882,7 +881,6 @@ void ImageSelectionWidget::updatePixmap()
                p.drawLine(0, h, h, 0);
                p.drawLine(w-h, 0, w, h);
                p.drawLine(w-h, h, w, 0);
-
            }
            else
            {
