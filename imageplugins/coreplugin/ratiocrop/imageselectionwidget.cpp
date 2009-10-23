@@ -73,6 +73,7 @@
 
 #include "imageiface.h"
 #include "dimg.h"
+#include "debug.h"
 
 namespace DigikamImagesPluginCore
 {
@@ -139,6 +140,7 @@ public:
 
     QPixmap             *pixmap;
     QPixmap              grayOverLay;
+    QPixmap              previewPixmap;
 
     QColor               guideColor;
 
@@ -262,7 +264,8 @@ void ImageSelectionWidget::resizeEvent(QResizeEvent *e)
                 ptr+=4;
             }
         }
-        d->grayOverLay = image.convertToPixmap();
+        d->grayOverLay   = image.convertToPixmap();
+        d->previewPixmap = d->preview.convertToPixmap();
     }
 
     updatePixmap();
@@ -784,20 +787,17 @@ void ImageSelectionWidget::updatePixmap()
     int sy              = d->localRegionSelection.top()  - d->rect.top();
     int dw              = d->localRegionSelection.width();
     int dh              = d->localRegionSelection.height();
-    Digikam::DImg image = d->preview.copy(sx, sy, dw, dh);
 
-    QPixmap pix = d->iface->convertToPixmap(image);
     QPainter p(d->pixmap);
 
-    p.drawPixmap(d->rect.x(), d->rect.y(),
-                 d->grayOverLay);
+    p.drawPixmap(d->rect.x(), d->rect.y(), d->grayOverLay);
 
     // Stop here if no selection to draw
     if ( d->regionSelection.isEmpty() || !d->isDrawingSelection )
         return;
 
-    p.drawPixmap(d->localRegionSelection.left(), d->localRegionSelection.top(),
-                 pix);
+    p.drawPixmap(d->localRegionSelection.left(), d->localRegionSelection.top(), d->previewPixmap,
+                 sx, sy, dw, dh);
 
     // Drawing selection borders.
 
