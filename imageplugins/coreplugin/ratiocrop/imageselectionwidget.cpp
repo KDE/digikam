@@ -1281,7 +1281,7 @@ void ImageSelectionWidget::placeSelection(QPoint pm, bool symmetric, QPoint cent
 
 void ImageSelectionWidget::mousePressEvent ( QMouseEvent * e )
 {
-    if ( e->button() == Qt::LeftButton )
+    if (e->button() == Qt::LeftButton)
     {
         QPoint pm        = QPoint(e->x(), e->y());
         QPoint pmVirtual = convertPoint(pm);
@@ -1373,7 +1373,7 @@ void ImageSelectionWidget::mouseReleaseEvent ( QMouseEvent * )
 
 void ImageSelectionWidget::mouseMoveEvent ( QMouseEvent * e )
 {
-    if ( ( e->buttons() & Qt::LeftButton ) == Qt::LeftButton )
+    if (e->buttons() & Qt::LeftButton)
     {
         if ( d->moving )
         {
