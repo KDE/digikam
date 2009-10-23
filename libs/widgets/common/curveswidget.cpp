@@ -76,7 +76,7 @@ public:
         HistogramFailed           // Histogram values calculation failed.
     };
 
-    CurvesWidgetPriv()
+    CurvesWidgetPriv(CurvesWidget *q) : q(q)
     {
         curves        = 0;
         grabPoint     = -1;
@@ -111,6 +111,356 @@ public:
 
     ImageCurves *curves;             // Curves data instance.
 
+    void renderLoadingAnimation()
+    {
+
+        QPixmap anim(progressPix.copy(0, progressCount*22, 22, 22));
+        progressCount++;
+        if (progressCount == 8)
+        {
+            progressCount = 0;
+        }
+
+        // ... and we render busy text.
+
+        QPixmap pm(q->size());
+        QPainter p1;
+        p1.begin(&pm);
+        p1.initFrom(q);
+        p1.fillRect(0, 0, q->width(), q->height(), q->palette().color(QPalette::Active, QPalette::Background));
+        p1.setPen(QPen(q->palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
+        p1.drawRect(0, 0, q->width()-1, q->height()-1);
+        p1.drawPixmap(q->width()/2 - anim.width() /2, anim.height(), anim);
+        p1.setPen(q->palette().color(QPalette::Active, QPalette::Text));
+
+        if (clearFlag == CurvesWidgetPriv::HistogramDataLoading)
+        {
+            p1.drawText(0, 0, q->width(), q->height(), Qt::AlignCenter,
+                        i18n("Loading image..."));
+        }
+        else
+        {
+            p1.drawText(0, 0, q->width(), q->height(), Qt::AlignCenter,
+                        i18n("Histogram calculation..."));
+        }
+
+        p1.end();
+        QPainter p3(q);
+        p3.drawPixmap(0, 0, pm);
+        p3.end();
+    }
+
+    void renderHistogramFailed()
+    {
+        QPixmap pm(q->size());
+        QPainter p1;
+        p1.begin(&pm);
+        p1.initFrom(q);
+        p1.fillRect(0, 0, q->width(), q->height(), q->palette().color(QPalette::Active, QPalette::Background));
+        p1.setPen(QPen(q->palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
+        p1.drawRect(0, 0, q->width()-1, q->height()-1);
+        p1.setPen(q->palette().color(QPalette::Active, QPalette::Text));
+        p1.drawText(0, 0, q->width(), q->height(), Qt::AlignCenter,
+                    i18n("Histogram\ncalculation\nfailed."));
+        p1.end();
+        QPainter p2(q);
+        p2.drawPixmap(0, 0, pm);
+        p2.end();
+    }
+
+    void renderHistogram(QPixmap & pm)
+    {
+
+         int    wWidth  = pm.width();
+         int    wHeight = pm.height();
+         ImageHistogram *histogram = q->m_imageHistogram;
+
+         int x   = 0;
+         int y   = 0;
+         double max = 0.0;
+
+         switch(q->m_channelType)
+         {
+             case GreenChannel:
+               max = histogram->getMaximum(GreenChannel);
+               break;
+
+            case BlueChannel:
+               max = histogram->getMaximum(BlueChannel);
+               break;
+
+            case RedChannel:
+               max = histogram->getMaximum(RedChannel);
+               break;
+
+            case AlphaChannel:
+               max = histogram->getMaximum(AlphaChannel);
+               break;
+
+            case LuminosityChannel:
+               max = histogram->getMaximum(LuminosityChannel);
+               break;
+         }
+
+         switch (q->m_scaleType)
+         {
+            case LinScaleHistogram:
+               break;
+
+            case LogScaleHistogram:
+               if (max > 0.0)
+                   max = log (max);
+               else
+                   max = 1.0;
+               break;
+         }
+
+         // Drawing selection or all histogram values.
+         // A QPixmap is used to enable  double buffering.
+
+         QPainter p1;
+         p1.begin(&pm);
+         p1.initFrom(q);
+
+         for (x = 0; x < wWidth; ++x)
+         {
+             double value = 0.0;
+
+             int i = (x       * histogram->getHistogramSegments()) / wWidth;
+             int j = ((x + 1) * histogram->getHistogramSegments()) / wWidth;
+
+             do
+             {
+                 double v = 0.0;
+
+                 switch(q->m_channelType)
+                 {
+                     case RedChannel:
+                         v = histogram->getValue(RedChannel, i++);
+                         break;
+
+                     case GreenChannel:
+                         v = histogram->getValue(GreenChannel, i++);
+                         break;
+
+                     case BlueChannel:
+                         v = histogram->getValue(BlueChannel, i++);
+                         break;
+
+                     case AlphaChannel:
+                         v = histogram->getValue(AlphaChannel, i++);
+                         break;
+
+                     case LuminosityChannel:
+                         v = histogram->getValue(LuminosityChannel, i++);
+                         break;
+                 }
+
+                 if (v > value)
+                     value = v;
+             }
+             while (i < j);
+
+             switch (q->m_scaleType)
+             {
+                 case LinScaleHistogram:
+                     y = (int) ((wHeight * value) / max);
+                     break;
+
+                 case LogScaleHistogram:
+                     if (value <= 0.0) value = 1.0;
+                     y = (int) ((wHeight * log (value)) / max);
+                     break;
+
+                 default:
+                     y = 0;
+                     break;
+             }
+
+             // Drawing histogram
+
+             p1.setPen(QPen(q->palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
+             p1.drawLine(x, wHeight, x, wHeight - y);
+             p1.setPen(QPen(q->palette().color(QPalette::Active, QPalette::Background), 1, Qt::SolidLine));
+             p1.drawLine(x, wHeight - y, x, 0);
+         }
+
+    }
+
+    void renderCurve(QPixmap & pm)
+    {
+        QPainter p1;
+        p1.begin(&pm);
+        p1.initFrom(q);
+
+        int wWidth = pm.width();
+        int wHeight = pm.height();
+
+        // Drawing curves.
+        int curvePrevVal = 0;
+        for (int x = 0 ; x < wWidth; ++x)
+        {
+
+            // TODO duplicate code...
+            int i = (x * q->m_imageHistogram->getHistogramSegments()) / wWidth;
+
+            int curveVal = curves->getCurveValue(q->m_channelType, i);
+
+            p1.save();
+            p1.setRenderHint(QPainter::Antialiasing);
+            p1.setPen(QPen(q->palette().color(QPalette::Active, QPalette::Link), 2, Qt::SolidLine));
+            p1.drawLine(x - 1, wHeight - ((curvePrevVal * wHeight) / q->m_imageHistogram->getHistogramSegments()),
+                        x,     wHeight - ((curveVal * wHeight) / q->m_imageHistogram->getHistogramSegments()));
+
+            p1.restore();
+            curvePrevVal = curveVal;
+        }
+
+        // Drawing curves points.
+        if (!readOnlyMode && curves->getCurveType(q->m_channelType) == ImageCurves::CURVE_SMOOTH)
+        {
+
+            p1.save();
+            p1.setPen(QPen(Qt::red, 3, Qt::SolidLine));
+            p1.setRenderHint(QPainter::Antialiasing);
+
+            for (int p = 0 ; p < ImageCurves::NUM_POINTS ; ++p)
+            {
+                QPoint curvePoint = curves->getCurvePoint(q->m_channelType, p);
+
+                if (curvePoint.x() >= 0)
+                {
+                    p1.drawEllipse( ((curvePoint.x() * wWidth) / q->m_imageHistogram->getHistogramSegments()) - 2,
+                                 wHeight - 2 - ((curvePoint.y() * wHeight) / q->m_imageHistogram->getHistogramSegments()),
+                                 4, 4 );
+                }
+            }
+            p1.restore();
+        }
+
+    }
+
+    void renderGrid(QPixmap & pm)
+    {
+
+        QPainter p1;
+        p1.begin(&pm);
+        p1.initFrom(q);
+
+        int wWidth = pm.width();
+        int wHeight = pm.height();
+
+        // Drawing black/middle/highlight tone grid separators.
+        p1.setPen(QPen(q->palette().color(QPalette::Active, QPalette::Base), 1, Qt::SolidLine));
+        p1.drawLine(wWidth/4, 0, wWidth/4, wHeight);
+        p1.drawLine(wWidth/2, 0, wWidth/2, wHeight);
+        p1.drawLine(3*wWidth/4, 0, 3*wWidth/4, wHeight);
+        p1.drawLine(0, wHeight/4, wWidth, wHeight/4);
+        p1.drawLine(0, wHeight/2, wWidth, wHeight/2);
+        p1.drawLine(0, 3*wHeight/4, wWidth, 3*wHeight/4);
+
+    }
+
+    void renderMousePosition(QPixmap & pm)
+    {
+        QPainter p1;
+        p1.begin(&pm);
+        p1.initFrom(q);
+
+        int wWidth = pm.width();
+        int wHeight = pm.height();
+
+        // Drawing X,Y point position dragged by mouse over widget.
+        p1.setPen(QPen(Qt::red, 1, Qt::DotLine));
+
+        if (xMouseOver != -1 && yMouseOver != -1)
+        {
+            QString string = i18n("x:%1\ny:%2",xMouseOver,yMouseOver);
+            QFontMetrics fontMt(string);
+            QRect rect = fontMt.boundingRect(0, 0, wWidth, wHeight, 0, string);
+            rect.moveRight(wWidth);
+            rect.moveBottom(wHeight);
+            p1.drawText(rect, Qt::AlignLeft||Qt::AlignTop, string);
+        }
+    }
+
+    void renderColorGuide(QPixmap & pm)
+    {
+        QPainter p1;
+        p1.begin(&pm);
+        p1.initFrom(q);
+
+        // Drawing color guide.
+        int wWidth = pm.width();
+        int wHeight = pm.height();
+
+        if (guideVisible)
+        {
+            int guidePos;
+            switch(q->m_channelType)
+            {
+                case RedChannel:
+                    guidePos = colorGuide.red();
+                    break;
+
+                case GreenChannel:
+                    guidePos = colorGuide.green();
+                    break;
+
+                case BlueChannel:
+                    guidePos = colorGuide.blue();
+                    break;
+
+                case LuminosityChannel:
+                    guidePos = qMax(qMax(colorGuide.red(), colorGuide.green()), colorGuide.blue());
+                    break;
+
+                default:                  // Alpha.
+                    guidePos = -1;
+                    break;
+            }
+
+            if (guidePos != -1)
+            {
+                int xGuide = (guidePos * wWidth) / q->m_imageHistogram->getHistogramSegments();
+                p1.drawLine(xGuide, 0, xGuide, wHeight);
+
+                QString string = i18n("x:%1",guidePos);
+                QFontMetrics fontMt( string );
+                QRect rect = fontMt.boundingRect(0, 0, wWidth, wHeight, 0, string);
+                p1.setPen(QPen(Qt::red, 1, Qt::SolidLine));
+                rect.moveTop(1);
+
+                if (xGuide < wWidth/2)
+                {
+                    rect.moveLeft(xGuide);
+                    p1.fillRect(rect, QBrush(QColor(250, 250, 255)));
+                    p1.drawRect(rect);
+                    rect.moveLeft(xGuide+3);
+                    p1.drawText(rect, Qt::AlignLeft, string);
+                }
+                else
+                {
+                    rect.moveRight(xGuide);
+                    p1.fillRect(rect, QBrush(QColor(250, 250, 255)));
+                    p1.drawRect(rect);
+                    rect.moveRight(xGuide-3);
+                    p1.drawText(rect, Qt::AlignRight, string);
+                }
+            }
+        }
+    }
+
+    void renderFrame(QPixmap & pm)
+    {
+        QPainter p1;
+        p1.begin(&pm);
+        p1.initFrom(q);
+        p1.setPen(QPen(q->palette().color(QPalette::Active,
+                        QPalette::Foreground), 1, Qt::SolidLine));
+        p1.drawRect(0, 0, pm.width() - 1, pm.height() - 1);
+    }
+
     static QString getChannelPattern(QString prefix)
     {
         return prefix + "Channel%1Type";
@@ -121,10 +471,13 @@ public:
         return prefix + "Channel%1Point%2";
     }
 
+private:
+    CurvesWidget *q;
+
 };
 
 CurvesWidget::CurvesWidget(int w, int h, QWidget *parent, bool readOnly)
-            : QWidget(parent), d(new CurvesWidgetPriv)
+            : QWidget(parent), d(new CurvesWidgetPriv(this))
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setup(w, h, readOnly);
@@ -133,7 +486,7 @@ CurvesWidget::CurvesWidget(int w, int h, QWidget *parent, bool readOnly)
 CurvesWidget::CurvesWidget(int w, int h,
                            uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits,
                            QWidget *parent, bool readOnly)
-            : QWidget(parent), d(new CurvesWidgetPriv)
+            : QWidget(parent), d(new CurvesWidgetPriv(this))
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setup(w, h, readOnly);
@@ -399,312 +752,45 @@ void CurvesWidget::slotProgressTimerDone()
 
 void CurvesWidget::paintEvent(QPaintEvent*)
 {
+
+    // special cases
+
     if (d->clearFlag == CurvesWidgetPriv::HistogramDataLoading ||
         d->clearFlag == CurvesWidgetPriv::HistogramStarted)
     {
-        // In first, we draw an animation.
-
-        QPixmap anim(d->progressPix.copy(0, d->progressCount*22, 22, 22));
-        d->progressCount++;
-        if (d->progressCount == 8) d->progressCount = 0;
-
-        // ... and we render busy text.
-
-        QPixmap pm(size());
-        QPainter p1;
-        p1.begin(&pm);
-        p1.initFrom(this);
-        p1.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Background));
-        p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
-        p1.drawRect(0, 0, width()-1, height()-1);
-        p1.drawPixmap(width()/2 - anim.width() /2, anim.height(), anim);
-        p1.setPen(palette().color(QPalette::Active, QPalette::Text));
-
-        if (d->clearFlag == CurvesWidgetPriv::HistogramDataLoading)
-            p1.drawText(0, 0, width(), height(), Qt::AlignCenter,
-                        i18n("Loading image..."));
-        else
-            p1.drawText(0, 0, width(), height(), Qt::AlignCenter,
-                        i18n("Histogram calculation..."));
-
-        p1.end();
-        QPainter p3(this);
-        p3.drawPixmap(0, 0, pm);
-        p3.end();
+        d->renderLoadingAnimation();
+        return;
+    }
+    else if (d->clearFlag == CurvesWidgetPriv::HistogramFailed)
+    {
+        d->renderHistogramFailed();
         return;
     }
 
-    if (d->clearFlag == CurvesWidgetPriv::HistogramFailed)
+    // normal case, histogram present
+
+    if (!m_imageHistogram)
     {
-        QPixmap pm(size());
-        QPainter p1;
-        p1.begin(&pm);
-        p1.initFrom(this);
-        p1.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Background));
-        p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
-        p1.drawRect(0, 0, width()-1, height()-1);
-        p1.setPen(palette().color(QPalette::Active, QPalette::Text));
-        p1.drawText(0, 0, width(), height(), Qt::AlignCenter,
-                    i18n("Histogram\ncalculation\nfailed."));
-        p1.end();
-        QPainter p2(this);
-        p2.drawPixmap(0, 0, pm);
-        p2.end();
+        kWarning(digiKamAreaCode)
+                        << "Should render a histogram, but did not get one.";
         return;
     }
 
-    if (!m_imageHistogram) return;
-
-    int    x, y;
-    int    wWidth  = width();
-    int    wHeight = height();
-    double max;
-    class ImageHistogram *histogram = m_imageHistogram;
-
-    x   = 0;
-    y   = 0;
-    max = 0.0;
-
-    switch(m_channelType)
-    {
-        case GreenChannel:
-          max = histogram->getMaximum(GreenChannel);
-          break;
-
-       case BlueChannel:
-          max = histogram->getMaximum(BlueChannel);
-          break;
-
-       case RedChannel:
-          max = histogram->getMaximum(RedChannel);
-          break;
-
-       case AlphaChannel:
-          max = histogram->getMaximum(AlphaChannel);
-          break;
-
-       case LuminosityChannel:
-          max = histogram->getMaximum(LuminosityChannel);
-          break;
-    }
-
-    switch (m_scaleType)
-    {
-       case LinScaleHistogram:
-          break;
-
-       case LogScaleHistogram:
-          if (max > 0.0)
-              max = log (max);
-          else
-              max = 1.0;
-          break;
-    }
-
-    // Drawing selection or all histogram values.
-    // A QPixmap is used to enable  double buffering.
-
+    // render subelements on a pixmap
     QPixmap pm(size());
-    QPainter p1;
-    p1.begin(&pm);
-    p1.initFrom(this);
 
-    int curvePrevVal = 0;
+    d->renderHistogram(pm);
+    d->renderCurve(pm);
+    d->renderGrid(pm);
+    d->renderMousePosition(pm);
+    d->renderColorGuide(pm);
+    d->renderFrame(pm);
 
-    for (x = 0 ; x < wWidth ; ++x)
-    {
-        double value = 0.0;
-        int    i, j;
-        int    curveVal;
-
-        i = (x       * histogram->getHistogramSegments()) / wWidth;
-        j = ((x + 1) * histogram->getHistogramSegments()) / wWidth;
-
-        curveVal = d->curves->getCurveValue(m_channelType, i);
-
-        do
-        {
-            double v = 0.0;
-
-            switch(m_channelType)
-            {
-                case RedChannel:
-                    v = histogram->getValue(RedChannel, i++);
-                    break;
-
-                case GreenChannel:
-                    v = histogram->getValue(GreenChannel, i++);
-                    break;
-
-                case BlueChannel:
-                    v = histogram->getValue(BlueChannel, i++);
-                    break;
-
-                case AlphaChannel:
-                    v = histogram->getValue(AlphaChannel, i++);
-                    break;
-
-                case LuminosityChannel:
-                    v = histogram->getValue(LuminosityChannel, i++);
-                    break;
-            }
-
-            if (v > value)
-                value = v;
-        }
-        while (i < j);
-
-        switch (m_scaleType)
-        {
-            case LinScaleHistogram:
-                y = (int) ((wHeight * value) / max);
-                break;
-
-            case LogScaleHistogram:
-                if (value <= 0.0) value = 1.0;
-                y = (int) ((wHeight * log (value)) / max);
-                break;
-
-            default:
-                y = 0;
-                break;
-        }
-
-        // Drawing histogram
-
-        p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
-        p1.drawLine(x, wHeight, x, wHeight - y);
-        p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Background), 1, Qt::SolidLine));
-        p1.drawLine(x, wHeight - y, x, 0);
-
-        // Drawing curves.
-
-        p1.save();
-        p1.setRenderHint(QPainter::Antialiasing);
-        p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Link), 2, Qt::SolidLine));
-        p1.drawLine(x - 1, wHeight - ((curvePrevVal * wHeight) / histogram->getHistogramSegments()),
-                    x,     wHeight - ((curveVal * wHeight) / histogram->getHistogramSegments()));
-
-        p1.restore();
-        curvePrevVal = curveVal;
-   }
-
-   // Drawing curves points.
-
-   if (!d->readOnlyMode && d->curves->getCurveType(m_channelType) == ImageCurves::CURVE_SMOOTH)
-   {
-
-      p1.save();
-      p1.setPen(QPen(Qt::red, 3, Qt::SolidLine));
-      p1.setRenderHint(QPainter::Antialiasing);
-
-      for (int p = 0 ; p < ImageCurves::NUM_POINTS ; ++p)
-      {
-         QPoint curvePoint = d->curves->getCurvePoint(m_channelType, p);
-
-         if (curvePoint.x() >= 0)
-         {
-             p1.drawEllipse( ((curvePoint.x() * wWidth) / histogram->getHistogramSegments()) - 2,
-                             wHeight - 2 - ((curvePoint.y() * wHeight) / histogram->getHistogramSegments()),
-                             4, 4 );
-         }
-      }
-      p1.restore();
-   }
-
-   // Drawing black/middle/highlight tone grid separators.
-
-   p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Base), 1, Qt::SolidLine));
-   p1.drawLine(wWidth/4, 0, wWidth/4, wHeight);
-   p1.drawLine(wWidth/2, 0, wWidth/2, wHeight);
-   p1.drawLine(3*wWidth/4, 0, 3*wWidth/4, wHeight);
-   p1.drawLine(0, wHeight/4, wWidth, wHeight/4);
-   p1.drawLine(0, wHeight/2, wWidth, wHeight/2);
-   p1.drawLine(0, 3*wHeight/4, wWidth, 3*wHeight/4);
-
-   // Drawing X,Y point position dragged by mouse over widget.
-
-   p1.setPen(QPen(Qt::red, 1, Qt::DotLine));
-
-   if (d->xMouseOver != -1 && d->yMouseOver != -1)
-   {
-        QString string = i18n("x:%1\ny:%2",d->xMouseOver,d->yMouseOver);
-        QFontMetrics fontMt(string);
-        QRect rect = fontMt.boundingRect(0, 0, wWidth, wHeight, 0, string);
-        rect.moveRight(wWidth);
-        rect.moveBottom(wHeight);
-        p1.drawText(rect, Qt::AlignLeft||Qt::AlignTop, string);
-   }
-
-   // Drawing color guide.
-
-   int guidePos;
-
-   if (d->guideVisible)
-   {
-        switch(m_channelType)
-        {
-            case RedChannel:
-                guidePos = d->colorGuide.red();
-                break;
-
-            case GreenChannel:
-                guidePos = d->colorGuide.green();
-                break;
-
-            case BlueChannel:
-                guidePos = d->colorGuide.blue();
-                break;
-
-            case LuminosityChannel:
-                guidePos = qMax(qMax(d->colorGuide.red(), d->colorGuide.green()), d->colorGuide.blue());
-                break;
-
-            default:                  // Alpha.
-                guidePos = -1;
-                break;
-        }
-
-        if (guidePos != -1)
-        {
-            int xGuide = (guidePos * wWidth) / histogram->getHistogramSegments();
-            p1.drawLine(xGuide, 0, xGuide, wHeight);
-
-            QString string = i18n("x:%1",guidePos);
-            QFontMetrics fontMt( string );
-            QRect rect = fontMt.boundingRect(0, 0, wWidth, wHeight, 0, string);
-            p1.setPen(QPen(Qt::red, 1, Qt::SolidLine));
-            rect.moveTop(1);
-
-            if (xGuide < wWidth/2)
-            {
-                rect.moveLeft(xGuide);
-                p1.fillRect(rect, QBrush(QColor(250, 250, 255)));
-                p1.drawRect(rect);
-                rect.moveLeft(xGuide+3);
-                p1.drawText(rect, Qt::AlignLeft, string);
-
-            }
-            else
-            {
-                rect.moveRight(xGuide);
-                p1.fillRect(rect, QBrush(QColor(250, 250, 255)));
-                p1.drawRect(rect);
-                rect.moveRight(xGuide-3);
-                p1.drawText(rect, Qt::AlignRight, string);
-          }
-        }
-    }
-
-    // Drawing frame.
-
-    p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
-    p1.drawRect(0, 0, width()-1, height()-1);
-    p1.end();
-
+    // render pixmap on widget
     QPainter p2(this);
     p2.drawPixmap(0, 0, pm);
     p2.end();
+
 }
 
 void CurvesWidget::mousePressEvent(QMouseEvent *e)
