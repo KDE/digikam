@@ -63,7 +63,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 054 ==> 211237 : Advanced rename: only one shot.
 055 ==> 211423 : Raw import intensity curve is not restored.
 056 ==> 188235 : Assigning a color profile to TIFF images does not work anymore with 0.10.0.
-057 ==>
+057 ==> 152483 : Raw converted images can only be saved once.
+058 ==>
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05

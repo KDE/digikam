@@ -590,9 +590,12 @@ void DImgInterface::switchToLastSaved(const QString& newFilename)
 
     // Currently the only place where a DImg is connected to the file it originates from
     // is the format attribute.
-    QString savedformat = d->image.attribute("savedformat").toString();
-    if (!savedformat.isEmpty())
-        d->image.setAttribute("format", savedformat);
+    QVariant savedformat = d->image.attribute("savedformat");
+    if (!savedformat.isNull())
+        d->image.setAttribute("format", savedformat.toString());
+    QVariant readonly = d->image.attribute("savedformat-isreadonly");
+    if (!readonly.isNull())
+        d->image.setAttribute("isreadonly", readonly.toBool());
 }
 
 void DImgInterface::setModified()
