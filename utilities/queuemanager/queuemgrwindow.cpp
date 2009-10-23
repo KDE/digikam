@@ -342,13 +342,13 @@ void QueueMgrWindow::setupActions()
     // -- Standard 'File' menu actions ---------------------------------------------
 
     d->runAction = new KAction(KIcon("media-playback-start"), i18n("Run"), this);
-    d->runAction->setShortcut(Qt::CTRL+Qt::Key_P);
+    d->runAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_P));
     d->runAction->setEnabled(false);
     connect(d->runAction, SIGNAL(triggered()), this, SLOT(slotRun()));
     actionCollection()->addAction("queuemgr_run", d->runAction);
 
     d->stopAction = new KAction(KIcon("media-playback-stop"), i18n("Stop"), this);
-    d->stopAction->setShortcut(Qt::CTRL+Qt::Key_S);
+    d->stopAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_S));
     d->stopAction->setEnabled(false);
     connect(d->stopAction, SIGNAL(triggered()), this, SLOT(slotStop()));
     actionCollection()->addAction("queuemgr_stop", d->stopAction);
@@ -362,7 +362,7 @@ void QueueMgrWindow::setupActions()
     actionCollection()->addAction("queuemgr_removequeue", d->removeQueueAction);
 
     d->removeItemsSelAction = new KAction(KIcon("list-remove"), i18n("Remove items"), this);
-    d->removeItemsSelAction->setShortcut(Qt::CTRL+Qt::Key_K);
+    d->removeItemsSelAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_K));
     d->removeItemsSelAction->setEnabled(false);
     connect(d->removeItemsSelAction, SIGNAL(triggered()), d->queuePool, SLOT(slotRemoveSelectedItems()));
     actionCollection()->addAction("queuemgr_removeitemssel", d->removeItemsSelAction);
@@ -373,7 +373,7 @@ void QueueMgrWindow::setupActions()
     actionCollection()->addAction("queuemgr_removeitemsdone", d->removeItemsDoneAction);
 
     d->clearQueueAction = new KAction(KIcon("edit-clear"), i18n("Clear Queue"), this);
-    d->clearQueueAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_K);
+    d->clearQueueAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_K));
     d->clearQueueAction->setEnabled(false);
     connect(d->clearQueueAction, SIGNAL(triggered()), d->queuePool, SLOT(slotClearList()));
     actionCollection()->addAction("queuemgr_clearlist", d->clearQueueAction);
@@ -454,7 +454,7 @@ void QueueMgrWindow::setupActions()
 
 //    KAction *exitFullscreenAction = new KAction(i18n("Exit Fullscreen mode"), this);
 //    actionCollection()->addAction("editorwindow_exitfullscreen", exitFullscreenAction);
-//    exitFullscreenAction->setShortcut( QKeySequence(Qt::Key_Escape) );
+//    exitFullscreenAction->setShortcut(KShortcut(Qt::Key_Escape) );
 //    connect(exitFullscreenAction, SIGNAL(triggered()), this, SLOT(slotEscapePressed()));
 
     // ---------------------------------------------------------------------------------

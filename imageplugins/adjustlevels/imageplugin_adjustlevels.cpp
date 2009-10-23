@@ -49,7 +49,7 @@ ImagePlugin_AdjustLevels::ImagePlugin_AdjustLevels(QObject *parent, const QVaria
                         : Digikam::ImagePlugin(parent, "ImagePlugin_AdjustLevels")
 {
     m_levelsAction  = new KAction(KIcon("adjustlevels"), i18n("Levels Adjust..."), this);
-    m_levelsAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_L));
+    m_levelsAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_L));
     actionCollection()->addAction("imageplugin_adjustlevels", m_levelsAction );
 
     connect(m_levelsAction, SIGNAL(triggered(bool) ),

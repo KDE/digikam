@@ -50,7 +50,7 @@ ImagePlugin_WhiteBalance::ImagePlugin_WhiteBalance(QObject *parent, const QVaria
                         : Digikam::ImagePlugin(parent, "ImagePlugin_WhiteBalance")
 {
     m_whitebalanceAction = new KAction(KIcon("whitebalance"), i18n("White Balance..."), this);
-    m_whitebalanceAction->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_W));
+    m_whitebalanceAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_W));
 
     connect(m_whitebalanceAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotWhiteBalance()));

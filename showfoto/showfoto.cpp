@@ -239,32 +239,32 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
         d->BCGAction->setDelayed(false);
 
         KAction *incGammaAction = new KAction(i18n("Increase Gamma"), this);
-        incGammaAction->setShortcut(Qt::ALT+Qt::Key_G);
+        incGammaAction->setShortcut(KShortcut(Qt::ALT+Qt::Key_G));
         connect(incGammaAction, SIGNAL(triggered()), this, SLOT(slotChangeBCG()));
         actionCollection()->addAction("gamma_plus", incGammaAction);
 
         KAction *decGammaAction = new KAction(i18n("Decrease Gamma"), this);
-        decGammaAction->setShortcut(Qt::ALT+Qt::SHIFT+Qt::Key_G);
+        decGammaAction->setShortcut(KShortcut(Qt::ALT+Qt::SHIFT+Qt::Key_G));
         connect(decGammaAction, SIGNAL(triggered()), this, SLOT(slotChangeBCG()));
         actionCollection()->addAction("gamma_minus", decGammaAction);
 
         KAction *incBrightAction = new KAction(i18n("Increase Brightness"), this);
-        incBrightAction->setShortcut(Qt::ALT+Qt::Key_B);
+        incBrightAction->setShortcut(KShortcut(Qt::ALT+Qt::Key_B));
         connect(incBrightAction, SIGNAL(triggered()), this, SLOT(slotChangeBCG()));
         actionCollection()->addAction("brightness_plus", incBrightAction);
 
         KAction *decBrightAction = new KAction(i18n("Decrease Brightness"), this);
-        decBrightAction->setShortcut(Qt::ALT+Qt::SHIFT+Qt::Key_B);
+        decBrightAction->setShortcut(KShortcut(Qt::ALT+Qt::SHIFT+Qt::Key_B));
         connect(decBrightAction, SIGNAL(triggered()), this, SLOT(slotChangeBCG()));
         actionCollection()->addAction("brightness_minus", decBrightAction);
 
         KAction *incContrastAction = new KAction(i18n("Increase Contrast"), this);
-        incContrastAction->setShortcut(Qt::ALT+Qt::Key_C);
+        incContrastAction->setShortcut(KShortcut(Qt::ALT+Qt::Key_C));
         connect(incContrastAction, SIGNAL(triggered()), this, SLOT(slotChangeBCG()));
         actionCollection()->addAction("contrast_plus", incContrastAction);
 
         KAction *decContrastAction = new KAction(i18n("Decrease Contrast"), this);
-        decContrastAction->setShortcut(Qt::ALT+Qt::SHIFT+Qt::Key_C);
+        decContrastAction->setShortcut(KShortcut(Qt::ALT+Qt::SHIFT+Qt::Key_C));
         connect(decContrastAction, SIGNAL(triggered()), this, SLOT(slotChangeBCG()));
         actionCollection()->addAction("contrast_minus", decContrastAction);
 
@@ -523,7 +523,7 @@ void ShowFoto::setupActions()
                                                       this, SLOT(slotOpenFile()));
 
     d->openFilesInFolderAction = new KAction(KIcon("folder-image"), i18n("Open folder"), this);
-    d->openFilesInFolderAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_O);
+    d->openFilesInFolderAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_O));
     connect(d->openFilesInFolderAction, SIGNAL(triggered()), this, SLOT(slotOpenFilesInFolder()));
     actionCollection()->addAction("showfoto_open_folder", d->openFilesInFolderAction);
 

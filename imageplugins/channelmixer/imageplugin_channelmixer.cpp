@@ -49,7 +49,7 @@ ImagePlugin_ChannelMixer::ImagePlugin_ChannelMixer(QObject *parent, const QVaria
                         : Digikam::ImagePlugin(parent, "ImagePlugin_ChannelMixer")
 {
     m_channelMixerAction  = new KAction(KIcon("channelmixer"), i18n("Channel Mixer..."), this);
-    m_channelMixerAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_H));
+    m_channelMixerAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_H));
     actionCollection()->addAction("imageplugin_channelmixer", m_channelMixerAction );
 
     connect(m_channelMixerAction, SIGNAL(triggered(bool)),

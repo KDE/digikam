@@ -51,7 +51,7 @@ ImagePlugin_InPainting::ImagePlugin_InPainting(QObject *parent, const QVariantLi
                       : Digikam::ImagePlugin(parent, "ImagePlugin_InPainting")
 {
     m_inPaintingAction = new KAction(KIcon("inpainting"), i18n("In-painting..."), this);
-    m_inPaintingAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_E));
+    m_inPaintingAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_E));
     m_inPaintingAction->setWhatsThis( i18n( "This filter can be used to in-paint a part in a photo. "
                                             "To use this option, select a region to in-paint.") );
 

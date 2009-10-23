@@ -46,7 +46,7 @@ ImagePlugin_ContentAwareResizing::ImagePlugin_ContentAwareResizing(QObject *pare
                                 : Digikam::ImagePlugin(parent, "ImagePlugin_ContentAwareResizing")
 {
     m_contentAwareResizingAction = new KAction(KIcon("transform-scale"), i18n("Liquid Rescale..."), this);
-    // m_contentAwareResizingAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_C));
+    // m_contentAwareResizingAction->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_C));
 
     connect(m_contentAwareResizingAction, SIGNAL(triggered(bool)),
             this, SLOT(slotContentAwareResizing()));

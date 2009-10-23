@@ -352,21 +352,21 @@ void CameraUI::setupActions()
     // -- Edit menu ----------------------------------------------------
 
     d->selectAllAction = new KAction(i18n("Select All"), this);
-    d->selectAllAction->setShortcut(Qt::CTRL+Qt::Key_A);
+    d->selectAllAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_A));
     connect(d->selectAllAction, SIGNAL(triggered()), d->view, SLOT(slotSelectAll()));
     actionCollection()->addAction("cameraui_selectall", d->selectAllAction);
 
     // -----------------------------------------------------------------
 
     d->selectNoneAction = new KAction(i18n("Select None"), this);
-    d->selectNoneAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_A);
+    d->selectNoneAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_A));
     connect(d->selectNoneAction, SIGNAL(triggered()), d->view, SLOT(slotSelectNone()));
     actionCollection()->addAction("cameraui_selectnone", d->selectNoneAction);
 
     // -----------------------------------------------------------------
 
     d->selectInvertAction = new KAction(i18n("Invert Selection"), this);
-    d->selectInvertAction->setShortcut(Qt::CTRL+Qt::Key_Asterisk);
+    d->selectInvertAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_Asterisk));
     connect(d->selectInvertAction, SIGNAL(triggered()), d->view, SLOT(slotSelectInvert()));
     actionCollection()->addAction("cameraui_selectinvert", d->selectInvertAction);
 
@@ -460,7 +460,7 @@ void CameraUI::setupActions()
                           "cameraui_fullscreen", this, SLOT(slotToggleFullScreen()));
 
     d->showLogAction = new KToggleAction(KIcon("view-history"), i18n("Show History"), this);
-    d->showLogAction->setShortcut(Qt::CTRL+Qt::Key_L);
+    d->showLogAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_L));
     connect(d->showLogAction, SIGNAL(triggered()), this, SLOT(slotShowLog()));
     actionCollection()->addAction("cameraui_showlog", d->showLogAction);
 
@@ -514,7 +514,7 @@ void CameraUI::setupActions()
 
 //    KAction *exitFullscreenAction = new KAction(i18n("Exit Fullscreen mode"), this);
 //    actionCollection()->addAction("cameraui_exitfullscreen", exitFullscreenAction);
-//    exitFullscreenAction->setShortcut( QKeySequence(Qt::Key_Escape) );
+//    exitFullscreenAction->setShortcut(KShortcut(Qt::Key_Escape) );
 //    connect(exitFullscreenAction, SIGNAL(triggered()), this, SLOT(slotEscapePressed()));
 
     KAction *altBackwardAction = new KAction(i18n("Previous Image"), this);

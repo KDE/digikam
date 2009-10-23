@@ -151,7 +151,7 @@ KToggleAction *ThumbBarDock::getToggleAction(QObject *parent, QString caption)
     KToggleAction *action = new KToggleAction(KIcon("view-choose"), caption, parent);
 
     // Default shortcut is Ctrl+T.
-    action->setShortcut(Qt::CTRL+Qt::Key_T);
+    action->setShortcut(KShortcut(Qt::CTRL+Qt::Key_T));
 
     // Connect the triggered signal, which is only emitted after a user action
     // and not programmatically, to the show/hide method.

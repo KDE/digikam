@@ -132,28 +132,28 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
 
     // NOTE: Photoshop 7 use CTRL+U.
     d->HSLAction = new KAction(KIcon("adjusthsl"), i18n("Hue/Saturation/Lightness..."), this);
-    d->HSLAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_U));
+    d->HSLAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_U));
     actionCollection()->addAction("implugcore_hsl", d->HSLAction );
     connect(d->HSLAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotHSL()));
 
     // NOTE: Photoshop 7 use CTRL+B.
     d->RGBAction = new KAction(KIcon("adjustrgb"), i18n("Color Balance..."), this);
-    d->RGBAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_B));
+    d->RGBAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_B));
     actionCollection()->addAction("implugcore_rgb", d->RGBAction );
     connect(d->RGBAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotRGB()));
 
     // NOTE: Photoshop 7 use CTRL+SHIFT+B with
     d->autoCorrectionAction = new KAction(KIcon("autocorrection"), i18n("Auto-Correction..."), this);
-    d->autoCorrectionAction->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_B));
+    d->autoCorrectionAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_B));
     actionCollection()->addAction("implugcore_autocorrection", d->autoCorrectionAction );
     connect(d->autoCorrectionAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotAutoCorrection()));
 
     // NOTE: Photoshop 7 use CTRL+I.
     d->invertAction = new KAction(KIcon("invertimage"), i18n("Invert"), this);
-    d->invertAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_I));
+    d->invertAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_I));
     actionCollection()->addAction("implugcore_invert", d->invertAction );
     connect(d->invertAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotInvert()));

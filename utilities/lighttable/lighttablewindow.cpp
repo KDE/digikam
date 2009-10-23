@@ -408,39 +408,39 @@ void LightTableWindow::setupActions()
     actionCollection()->addAction("lighttable_last", d->lastAction);
 
     d->setItemLeftAction = new KAction(KIcon("arrow-left"), i18n("On left"), this);
-    d->setItemLeftAction->setShortcut(Qt::CTRL+Qt::Key_L);
+    d->setItemLeftAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_L));
     d->setItemLeftAction->setEnabled(false);
     d->setItemLeftAction->setWhatsThis(i18n("Show item on left panel"));
     connect(d->setItemLeftAction, SIGNAL(triggered()), this, SLOT(slotSetItemLeft()));
     actionCollection()->addAction("lighttable_setitemleft", d->setItemLeftAction);
 
     d->setItemRightAction = new KAction(KIcon("arrow-right"), i18n("On right"), this);
-    d->setItemRightAction->setShortcut(Qt::CTRL+Qt::Key_R);
+    d->setItemRightAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_R));
     d->setItemRightAction->setEnabled(false);
     d->setItemRightAction->setWhatsThis(i18n("Show item on right panel"));
     connect(d->setItemRightAction, SIGNAL(triggered()), this, SLOT(slotSetItemRight()));
     actionCollection()->addAction("lighttable_setitemright", d->setItemRightAction);
 
     d->editItemAction = new KAction(KIcon("editimage"), i18n("Edit"), this);
-    d->editItemAction->setShortcut(Qt::Key_F4);
+    d->editItemAction->setShortcut(KShortcut(Qt::Key_F4));
     d->editItemAction->setEnabled(false);
     connect(d->editItemAction, SIGNAL(triggered()), this, SLOT(slotEditItem()));
     actionCollection()->addAction("lighttable_edititem", d->editItemAction);
 
     d->removeItemAction = new KAction(KIcon("list-remove"), i18n("Remove item from LightTable"), this);
-    d->removeItemAction->setShortcut(Qt::CTRL+Qt::Key_K);
+    d->removeItemAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_K));
     d->removeItemAction->setEnabled(false);
     connect(d->removeItemAction, SIGNAL(triggered()), this, SLOT(slotRemoveItem()));
     actionCollection()->addAction("lighttable_removeitem", d->removeItemAction);
 
     d->clearListAction = new KAction(KIcon("edit-clear"), i18n("Remove all items from LightTable"), this);
-    d->clearListAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_K);
+    d->clearListAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_K));
     d->clearListAction->setEnabled(false);
     connect(d->clearListAction, SIGNAL(triggered()), this, SLOT(slotClearItemsList()));
     actionCollection()->addAction("lighttable_clearlist", d->clearListAction);
 
     d->fileDeleteAction = new KAction(KIcon("user-trash"), i18n("Move to Trash"), this);
-    d->fileDeleteAction->setShortcut(Qt::Key_Delete);
+    d->fileDeleteAction->setShortcut(KShortcut(Qt::Key_Delete));
     d->fileDeleteAction->setEnabled(false);
     connect(d->fileDeleteAction, SIGNAL(triggered()), this, SLOT(slotDeleteItem()));
     actionCollection()->addAction("lighttable_filedelete", d->fileDeleteAction);
@@ -451,21 +451,21 @@ void LightTableWindow::setupActions()
     // -- Standard 'View' menu actions ---------------------------------------------
 
     d->syncPreviewAction = new KToggleAction(KIcon("view-split-left-right"), i18n("Synchronize"), this);
-    d->syncPreviewAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_Y);
+    d->syncPreviewAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_Y));
     d->syncPreviewAction->setEnabled(false);
     d->syncPreviewAction->setWhatsThis(i18n("Synchronize preview from left and right panels"));
     connect(d->syncPreviewAction, SIGNAL(triggered()), this, SLOT(slotToggleSyncPreview()));
     actionCollection()->addAction("lighttable_syncpreview", d->syncPreviewAction);
 
     d->navigateByPairAction = new KToggleAction(KIcon("system-run"), i18n("By Pair"), this);
-    d->navigateByPairAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_P);
+    d->navigateByPairAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_P));
     d->navigateByPairAction->setEnabled(false);
     d->navigateByPairAction->setWhatsThis(i18n("Navigate by pairs with all items"));
     connect(d->navigateByPairAction, SIGNAL(triggered()), this, SLOT(slotToggleNavigateByPair()));
     actionCollection()->addAction("lighttable_navigatebypair", d->navigateByPairAction);
 
     d->clearOnCloseAction = new KToggleAction(KIcon("edit-clear"), i18n("Clear On Close"), this);
-    d->clearOnCloseAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_C);
+    d->clearOnCloseAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_C));
     d->clearOnCloseAction->setEnabled(true);
     d->clearOnCloseAction->setToolTip(i18n("Clear light table when it is closed"));
     d->clearOnCloseAction->setWhatsThis(i18n("Remove all images from the light table when it is closed"));
@@ -473,21 +473,21 @@ void LightTableWindow::setupActions()
 
     d->zoomPlusAction = KStandardAction::zoomIn(d->previewView, SLOT(slotIncreaseZoom()), this);
     d->zoomPlusAction->setEnabled(false);
-    d->zoomPlusAction->setShortcut(QKeySequence(Qt::Key_Plus));
+    d->zoomPlusAction->setShortcut(KShortcut(Qt::Key_Plus));
     actionCollection()->addAction("lighttable_zoomplus", d->zoomPlusAction);
 
     d->zoomMinusAction = KStandardAction::zoomOut(d->previewView, SLOT(slotDecreaseZoom()), this);
     d->zoomMinusAction->setEnabled(false);
-    d->zoomMinusAction->setShortcut(QKeySequence(Qt::Key_Minus));
+    d->zoomMinusAction->setShortcut(KShortcut(Qt::Key_Minus));
     actionCollection()->addAction("lighttable_zoomminus", d->zoomMinusAction);
 
     d->zoomTo100percents = new KAction(KIcon("zoom-original"), i18n("Zoom to 100%"), this);
-    d->zoomTo100percents->setShortcut(Qt::ALT+Qt::CTRL+Qt::Key_0);       // NOTE: Photoshop 7 use ALT+CTRL+0
+    d->zoomTo100percents->setShortcut(KShortcut(Qt::ALT+Qt::CTRL+Qt::Key_0));       // NOTE: Photoshop 7 use ALT+CTRL+0
     connect(d->zoomTo100percents, SIGNAL(triggered()), this, SLOT(slotZoomTo100Percents()));
     actionCollection()->addAction("lighttable_zoomto100percents", d->zoomTo100percents);
 
     d->zoomFitToWindowAction = new KToggleAction(KIcon("zoom-fit-best"), i18n("Fit to &Window"), this);
-    d->zoomFitToWindowAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_E); // NOTE: Gimp 2 use CTRL+SHIFT+E.
+    d->zoomFitToWindowAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_E)); // NOTE: Gimp 2 use CTRL+SHIFT+E.
     connect(d->zoomFitToWindowAction, SIGNAL(triggered()), this, SLOT(slotFitToWindow()));
     actionCollection()->addAction("lighttable_zoomfit2window", d->zoomFitToWindowAction);
 
@@ -498,7 +498,7 @@ void LightTableWindow::setupActions()
                           "lighttable_fullscreen", this, SLOT(slotToggleFullScreen()));
 
     d->slideShowAction = new KAction(KIcon("view-presentation"), i18n("Slideshow"), this);
-    d->slideShowAction->setShortcut(Qt::Key_F9);
+    d->slideShowAction->setShortcut(KShortcut(Qt::Key_F9));
     connect(d->slideShowAction, SIGNAL(triggered()), this, SLOT(slotToggleSlideShow()));
     actionCollection()->addAction("lighttable_slideshow", d->slideShowAction);
 
@@ -551,32 +551,32 @@ void LightTableWindow::setupActions()
     // -- Rating actions ---------------------------------------------------------------
 
     d->star0 = new KAction(i18n("Assign Rating \"No Stars\""), this);
-    d->star0->setShortcut(Qt::CTRL+Qt::Key_0);
+    d->star0->setShortcut(KShortcut(Qt::CTRL+Qt::Key_0));
     connect(d->star0, SIGNAL(triggered()), d->barView, SLOT(slotAssignRatingNoStar()));
     actionCollection()->addAction("lighttable_ratenostar", d->star0);
 
     d->star1 = new KAction(i18n("Assign Rating \"One Star\""), this);
-    d->star1->setShortcut(Qt::CTRL+Qt::Key_1);
+    d->star1->setShortcut(KShortcut(Qt::CTRL+Qt::Key_1));
     connect(d->star1, SIGNAL(triggered()), d->barView, SLOT(slotAssignRatingOneStar()));
     actionCollection()->addAction("lighttable_rateonestar", d->star1);
 
     d->star2 = new KAction(i18n("Assign Rating \"Two Stars\""), this);
-    d->star2->setShortcut(Qt::CTRL+Qt::Key_2);
+    d->star2->setShortcut(KShortcut(Qt::CTRL+Qt::Key_2));
     connect(d->star2, SIGNAL(triggered()), d->barView, SLOT(slotAssignRatingTwoStar()));
     actionCollection()->addAction("lighttable_ratetwostar", d->star2);
 
     d->star3 = new KAction(i18n("Assign Rating \"Three Stars\""), this);
-    d->star3->setShortcut(Qt::CTRL+Qt::Key_3);
+    d->star3->setShortcut(KShortcut(Qt::CTRL+Qt::Key_3));
     connect(d->star3, SIGNAL(triggered()), d->barView, SLOT(slotAssignRatingThreeStar()));
     actionCollection()->addAction("lighttable_ratethreestar", d->star3);
 
     d->star4 = new KAction(i18n("Assign Rating \"Four Stars\""), this);
-    d->star4->setShortcut(Qt::CTRL+Qt::Key_4);
+    d->star4->setShortcut(KShortcut(Qt::CTRL+Qt::Key_4));
     connect(d->star4, SIGNAL(triggered()), d->barView, SLOT(slotAssignRatingFourStar()));
     actionCollection()->addAction("lighttable_ratefourstar", d->star4);
 
     d->star5 = new KAction(i18n("Assign Rating \"Five Stars\""), this);
-    d->star5->setShortcut(Qt::CTRL+Qt::Key_5);
+    d->star5->setShortcut(KShortcut(Qt::CTRL+Qt::Key_5));
     connect(d->star5, SIGNAL(triggered()), d->barView, SLOT(slotAssignRatingFiveStar()));
     actionCollection()->addAction("lighttable_ratefivestar", d->star5);
 
@@ -584,7 +584,7 @@ void LightTableWindow::setupActions()
 
 //    KAction *exitFullscreenAction = new KAction(i18n("Exit Fullscreen mode"), this);
 //    actionCollection()->addAction("editorwindow_exitfullscreen", exitFullscreenAction);
-//    exitFullscreenAction->setShortcut( QKeySequence(Qt::Key_Escape) );
+//    exitFullscreenAction->setShortcut(KShortcut(Qt::Key_Escape) );
 //    connect(exitFullscreenAction, SIGNAL(triggered()), this, SLOT(slotEscapePressed()));
 
     KAction *altBackwardAction = new KAction(i18n("Previous Image"), this);

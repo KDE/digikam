@@ -552,7 +552,7 @@ void DigikamApp::setupAccelerators()
     // Action are added by <MainWindow> tag in ui.rc XML file
     KAction *escapeAction = new KAction(i18n("Exit Preview Mode"), this);
     actionCollection()->addAction("exit_preview_mode", escapeAction);
-    escapeAction->setShortcut( QKeySequence(Qt::Key_Escape) );
+    escapeAction->setShortcut( KShortcut(Qt::Key_Escape) );
     connect(escapeAction, SIGNAL(triggered()), this, SIGNAL(signalEscapePressed()));
 
     KAction *nextImageAction = new KAction(i18n("Next Image"), this);
@@ -574,12 +574,12 @@ void DigikamApp::setupAccelerators()
 
     KAction *firstImageAction = new KAction(i18n("First Image"), this);
     actionCollection()->addAction("first_image", firstImageAction);
-    firstImageAction->setShortcut( QKeySequence(Qt::Key_Home) );
+    firstImageAction->setShortcut(KShortcut(Qt::Key_Home) );
     connect(firstImageAction, SIGNAL(triggered()), this, SIGNAL(signalFirstItem()));
 
     KAction *lastImageAction = new KAction(i18n("Last Image"), this);
     actionCollection()->addAction("last_image", lastImageAction);
-    lastImageAction->setShortcut( QKeySequence(Qt::Key_End) );
+    lastImageAction->setShortcut(KShortcut(Qt::Key_End) );
     connect(lastImageAction, SIGNAL(triggered()), this, SIGNAL(signalLastItem()));
 
     KAction *cutItemsAction = KStandardAction::cut(this, SIGNAL(signalCutAlbumItemsSelection()), this);
@@ -621,7 +621,7 @@ void DigikamApp::setupActions()
 
     d->backwardActionMenu = new KToolBarPopupAction(KIcon("go-previous"), i18n("&Back"), this);
     d->backwardActionMenu->setEnabled(false);
-    d->backwardActionMenu->setShortcut(Qt::ALT+Qt::Key_Left);
+    d->backwardActionMenu->setShortcut(KShortcut(Qt::ALT+Qt::Key_Left));
     actionCollection()->addAction("album_back", d->backwardActionMenu);
 
     connect(d->backwardActionMenu->menu(), SIGNAL(aboutToShow()),
@@ -643,7 +643,7 @@ void DigikamApp::setupActions()
 
     d->forwardActionMenu = new KToolBarPopupAction(KIcon("go-next"), i18n("Forward"), this);
     d->forwardActionMenu->setEnabled(false);
-    d->forwardActionMenu->setShortcut(Qt::ALT+Qt::Key_Right);
+    d->forwardActionMenu->setShortcut(KShortcut(Qt::ALT+Qt::Key_Right));
     actionCollection()->addAction("album_forward", d->forwardActionMenu);
 
     connect(d->forwardActionMenu->menu(), SIGNAL(aboutToShow()),
@@ -688,7 +688,7 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------------
 
     d->refreshAlbumAction = new KAction(KIcon("view-refresh"), i18n("Refresh"), this);
-    d->refreshAlbumAction->setShortcut(Qt::Key_F5);
+    d->refreshAlbumAction->setShortcut(KShortcut(Qt::Key_F5));
     d->refreshAlbumAction->setWhatsThis(i18n("Refresh the contents of the current album."));
     connect(d->refreshAlbumAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumRefresh()));
     actionCollection()->addAction("album_refresh", d->refreshAlbumAction);
@@ -740,14 +740,14 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
     d->imagePreviewAction = new KToggleAction(KIcon("viewimage"), i18nc("View the selected image", "View..."), this);
-    d->imagePreviewAction->setShortcut(Qt::Key_F3);
+    d->imagePreviewAction->setShortcut(KShortcut(Qt::Key_F3));
     connect(d->imagePreviewAction, SIGNAL(triggered()), d->view, SLOT(slotImagePreview()));
     actionCollection()->addAction("image_view", d->imagePreviewAction);
 
     // -----------------------------------------------------------
 
     d->imageViewAction = new KAction(KIcon("editimage"), i18n("Edit..."), this);
-    d->imageViewAction->setShortcut(Qt::Key_F4);
+    d->imageViewAction->setShortcut(KShortcut(Qt::Key_F4));
     d->imageViewAction->setWhatsThis(i18n("Open the selected item in the image editor."));
     connect(d->imageViewAction, SIGNAL(triggered()), d->view, SLOT(slotImageEdit()));
     actionCollection()->addAction("image_edit", d->imageViewAction);
@@ -755,7 +755,7 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
     d->imageLightTableAction = new KAction(KIcon("lighttable"), i18n("Place onto Light Table"), this);
-    d->imageLightTableAction->setShortcut(Qt::CTRL+Qt::Key_L);
+    d->imageLightTableAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_L));
     d->imageLightTableAction->setWhatsThis(i18n("Place the selected items on the light table thumbbar."));
     connect(d->imageLightTableAction, SIGNAL(triggered()), d->view, SLOT(slotImageLightTable()));
     actionCollection()->addAction("image_lighttable", d->imageLightTableAction);
@@ -763,7 +763,7 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
     d->imageAddLightTableAction = new KAction(KIcon("lighttableadd"), i18n("Add to Light Table"), this);
-    d->imageAddLightTableAction->setShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_L);
+    d->imageAddLightTableAction->setShortcut(KShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_L));
     d->imageAddLightTableAction->setWhatsThis(i18n("Add selected items to the light table thumbbar."));
     connect(d->imageAddLightTableAction, SIGNAL(triggered()), d->view, SLOT(slotImageAddToLightTable()));
     actionCollection()->addAction("image_add_to_lighttable", d->imageAddLightTableAction);
@@ -771,13 +771,13 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
     d->imageAddCurrentQueueAction = new KAction(KIcon("bqm-commit"), i18n("Add to Current Queue"), this);
-    d->imageAddCurrentQueueAction->setShortcut(Qt::CTRL+Qt::Key_B);
+    d->imageAddCurrentQueueAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_B));
     d->imageAddCurrentQueueAction->setWhatsThis(i18n("Add selected items to current queue from batch manager."));
     connect(d->imageAddCurrentQueueAction, SIGNAL(triggered()), d->view, SLOT(slotImageAddToCurrentQueue()));
     actionCollection()->addAction("image_add_to_current_queue", d->imageAddCurrentQueueAction);
 
     d->imageAddNewQueueAction = new KAction(KIcon("bqm-add"), i18n("Add to New Queue"), this);
-    d->imageAddNewQueueAction->setShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_B);
+    d->imageAddNewQueueAction->setShortcut(KShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_B));
     d->imageAddNewQueueAction->setWhatsThis(i18n("Add selected items to a new queue from batch manager."));
     connect(d->imageAddNewQueueAction, SIGNAL(triggered()), d->view, SLOT(slotImageAddToNewQueue()));
     actionCollection()->addAction("image_add_to_new_queue", d->imageAddNewQueueAction);
@@ -812,7 +812,7 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
     d->imageRenameAction = new KAction(KIcon("edit-rename"), i18n("Rename..."), this);
-    d->imageRenameAction->setShortcut(Qt::Key_F2);
+    d->imageRenameAction->setShortcut(KShortcut(Qt::Key_F2));
     d->imageRenameAction->setWhatsThis(i18n("Change the filename of the currently selected item."));
     connect(d->imageRenameAction, SIGNAL(triggered()), d->view, SLOT(slotImageRename()));
     actionCollection()->addAction("image_rename", d->imageRenameAction);
@@ -821,7 +821,7 @@ void DigikamApp::setupActions()
 
     // Pop up dialog to ask user whether to move to trash
     d->imageDeleteAction = new KAction(KIcon("user-trash"), i18n("Move to Trash"), this);
-    d->imageDeleteAction->setShortcut(Qt::Key_Delete);
+    d->imageDeleteAction->setShortcut(KShortcut(Qt::Key_Delete));
     connect(d->imageDeleteAction, SIGNAL(triggered()), d->view, SLOT(slotImageDelete()));
     actionCollection()->addAction("image_delete", d->imageDeleteAction);
 
@@ -829,7 +829,7 @@ void DigikamApp::setupActions()
 
     // Pop up dialog to ask user whether to permanently delete
     d->imageDeletePermanentlyAction = new KAction(KIcon("edit-delete"), i18n("Delete Permanently"), this);
-    d->imageDeletePermanentlyAction->setShortcut(Qt::SHIFT+Qt::Key_Delete);
+    d->imageDeletePermanentlyAction->setShortcut(KShortcut(Qt::SHIFT+Qt::Key_Delete));
     connect(d->imageDeletePermanentlyAction, SIGNAL(triggered()), d->view, SLOT(slotImageDeletePermanently()));
     actionCollection()->addAction("image_delete_permanently", d->imageDeletePermanentlyAction);
 
@@ -951,21 +951,21 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------------
 
     d->selectAllAction = new KAction(i18n("Select All"), this);
-    d->selectAllAction->setShortcut(Qt::CTRL+Qt::Key_A);
+    d->selectAllAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_A));
     connect(d->selectAllAction, SIGNAL(triggered()), d->view, SLOT(slotSelectAll()));
     actionCollection()->addAction("selectAll", d->selectAllAction);
 
     // -----------------------------------------------------------------
 
     d->selectNoneAction = new KAction(i18n("Select None"), this);
-    d->selectNoneAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_A);
+    d->selectNoneAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_A));
     connect(d->selectNoneAction, SIGNAL(triggered()), d->view, SLOT(slotSelectNone()));
     actionCollection()->addAction("selectNone", d->selectNoneAction);
 
     // -----------------------------------------------------------------
 
     d->selectInvertAction = new KAction(i18n("Invert Selection"), this);
-    d->selectInvertAction->setShortcut(Qt::CTRL+Qt::Key_Asterisk);
+    d->selectInvertAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_Asterisk));
     connect(d->selectInvertAction, SIGNAL(triggered()), d->view, SLOT(slotSelectInvert()));
     actionCollection()->addAction("selectInvert", d->selectInvertAction);
 
@@ -990,14 +990,14 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
     d->zoomTo100percents = new KAction(KIcon("zoom-original"), i18n("Zoom to 100%"), this);
-    d->zoomTo100percents->setShortcut(Qt::ALT+Qt::CTRL+Qt::Key_0);       // NOTE: Photoshop 7 use ALT+CTRL+0
+    d->zoomTo100percents->setShortcut(KShortcut(Qt::ALT+Qt::CTRL+Qt::Key_0));       // NOTE: Photoshop 7 use ALT+CTRL+0
     connect(d->zoomTo100percents, SIGNAL(triggered()), d->view, SLOT(slotZoomTo100Percents()));
     actionCollection()->addAction("album_zoomto100percents", d->zoomTo100percents);
 
     // -----------------------------------------------------------
 
     d->zoomFitToWindowAction = new KAction(KIcon("zoom-fit-best"), i18n("Fit to &Window"), this);
-    d->zoomFitToWindowAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_E); // NOTE: Gimp 2 use CTRL+SHIFT+E.
+    d->zoomFitToWindowAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_E)); // NOTE: Gimp 2 use CTRL+SHIFT+E.
     connect(d->zoomFitToWindowAction, SIGNAL(triggered()), d->view, SLOT(slotFitToWindow()));
     actionCollection()->addAction("album_zoomfit2window", d->zoomFitToWindowAction);
 
@@ -1013,19 +1013,19 @@ void DigikamApp::setupActions()
     actionCollection()->addAction("slideshow", d->slideShowAction);
 
     d->slideShowAllAction = new KAction(i18n("All"), this);
-    d->slideShowAllAction->setShortcut(Qt::Key_F9);
+    d->slideShowAllAction->setShortcut(KShortcut(Qt::Key_F9));
     connect(d->slideShowAllAction, SIGNAL(triggered()), d->view, SLOT(slotSlideShowAll()));
     actionCollection()->addAction("slideshow_all", d->slideShowAllAction);
     d->slideShowAction->addAction(d->slideShowAllAction);
 
     d->slideShowSelectionAction = new KAction(i18n("Selection"), this);
-    d->slideShowSelectionAction->setShortcut(Qt::ALT+Qt::Key_F9);
+    d->slideShowSelectionAction->setShortcut(KShortcut(Qt::ALT+Qt::Key_F9));
     connect(d->slideShowSelectionAction, SIGNAL(triggered()), d->view, SLOT(slotSlideShowSelection()));
     actionCollection()->addAction("slideshow_selected", d->slideShowSelectionAction);
     d->slideShowAction->addAction(d->slideShowSelectionAction);
 
     d->slideShowRecursiveAction = new KAction(i18n("With All Sub-Albums"), this);
-    d->slideShowRecursiveAction->setShortcut(Qt::SHIFT+Qt::Key_F9);
+    d->slideShowRecursiveAction->setShortcut(KShortcut(Qt::SHIFT+Qt::Key_F9));
     connect(d->slideShowRecursiveAction, SIGNAL(triggered()), d->view, SLOT(slotSlideShowRecursive()));
     actionCollection()->addAction("slideshow_recursive", d->slideShowRecursiveAction);
     d->slideShowAction->addAction(d->slideShowRecursiveAction);
@@ -1033,7 +1033,7 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
     d->showBarAction = new KToggleAction(KIcon("view-choose"), i18n("Show Thumbbar"), this);
-    d->showBarAction->setShortcut(Qt::CTRL+Qt::Key_T);
+    d->showBarAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_T));
     connect(d->showBarAction, SIGNAL(triggered()), this, SLOT(slotToggleShowBar()));
     actionCollection()->addAction("showthumbs", d->showBarAction);
 
@@ -1088,67 +1088,67 @@ void DigikamApp::setupActions()
     // -- Rating actions ---------------------------------------------------------------
 
     d->rating0Star = new KAction(i18n("Assign Rating \"No Stars\""), this);
-    d->rating0Star->setShortcut(Qt::CTRL+Qt::Key_0);
+    d->rating0Star->setShortcut(KShortcut(Qt::CTRL+Qt::Key_0));
     connect(d->rating0Star, SIGNAL(triggered()), d->view, SLOT(slotAssignRatingNoStar()));
     actionCollection()->addAction("ratenostar", d->rating0Star);
 
     d->rating1Star = new KAction(i18n("Assign Rating \"One Star\""), this);
-    d->rating1Star->setShortcut(Qt::CTRL+Qt::Key_1);
+    d->rating1Star->setShortcut(KShortcut(Qt::CTRL+Qt::Key_1));
     connect(d->rating1Star, SIGNAL(triggered()), d->view, SLOT(slotAssignRatingOneStar()));
     actionCollection()->addAction("rateonestar", d->rating1Star);
 
     d->rating2Star = new KAction(i18n("Assign Rating \"Two Stars\""), this);
-    d->rating2Star->setShortcut(Qt::CTRL+Qt::Key_2);
+    d->rating2Star->setShortcut(KShortcut(Qt::CTRL+Qt::Key_2));
     connect(d->rating2Star, SIGNAL(triggered()), d->view, SLOT(slotAssignRatingTwoStar()));
     actionCollection()->addAction("ratetwostar", d->rating2Star);
 
     d->rating3Star = new KAction(i18n("Assign Rating \"Three Stars\""), this);
-    d->rating3Star->setShortcut(Qt::CTRL+Qt::Key_3);
+    d->rating3Star->setShortcut(KShortcut(Qt::CTRL+Qt::Key_3));
     connect(d->rating3Star, SIGNAL(triggered()), d->view, SLOT(slotAssignRatingThreeStar()));
     actionCollection()->addAction("ratethreestar", d->rating3Star);
 
     d->rating4Star = new KAction(i18n("Assign Rating \"Four Stars\""), this);
-    d->rating4Star->setShortcut(Qt::CTRL+Qt::Key_4);
+    d->rating4Star->setShortcut(KShortcut(Qt::CTRL+Qt::Key_4));
     connect(d->rating4Star, SIGNAL(triggered()), d->view, SLOT(slotAssignRatingFourStar()));
     actionCollection()->addAction("ratefourstar", d->rating4Star);
 
     d->rating5Star = new KAction(i18n("Assign Rating \"Five Stars\""), this);
-    d->rating5Star->setShortcut(Qt::CTRL+Qt::Key_5);
+    d->rating5Star->setShortcut(KShortcut(Qt::CTRL+Qt::Key_5));
     connect(d->rating5Star, SIGNAL(triggered()), d->view, SLOT(slotAssignRatingFiveStar()));
     actionCollection()->addAction("ratefivestar", d->rating5Star);
 
     // -----------------------------------------------------------
 
     KAction* findAction = new KAction(KIcon("system-search"), i18n("Search..."), this);
-    findAction->setShortcut(Qt::CTRL+Qt::Key_F);
+    findAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_F));
     connect(findAction, SIGNAL(triggered()), d->view, SLOT(slotNewKeywordSearch()));
     actionCollection()->addAction("search_quick", findAction);
 
     // -----------------------------------------------------------
 
     KAction* advFindAction = new KAction(KIcon("system-search"), i18n("Advanced Search..."), this);
-    advFindAction->setShortcut(Qt::CTRL+Qt::ALT+Qt::Key_F);
+    advFindAction->setShortcut(KShortcut(Qt::CTRL+Qt::ALT+Qt::Key_F));
     connect(advFindAction, SIGNAL(triggered()), d->view, SLOT(slotNewAdvancedSearch()));
     actionCollection()->addAction("search_advanced", advFindAction);
 
     // -----------------------------------------------------------
 
     KAction* duplicatesAction = new KAction(KIcon("tools-wizard"), i18n("Find Duplicates..."), this);
-    duplicatesAction->setShortcut(Qt::CTRL+Qt::Key_D);
+    duplicatesAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_D));
     connect(duplicatesAction, SIGNAL(triggered()), d->view, SLOT(slotNewDuplicatesSearch()));
     actionCollection()->addAction("find_duplicates", duplicatesAction);
 
     // -----------------------------------------------------------
 
     KAction *ltAction = new KAction(KIcon("lighttable"), i18n("Light Table"), this);
-    ltAction->setShortcut(Qt::Key_L);
+    ltAction->setShortcut(KShortcut(Qt::Key_L));
     connect(ltAction, SIGNAL(triggered()), d->view, SLOT(slotLightTable()));
     actionCollection()->addAction("light_table", ltAction);
 
     // -----------------------------------------------------------
 
     KAction *bqmAction = new KAction(KIcon("bqm-diff"), i18n("Batch Queue Manager"), this);
-    bqmAction->setShortcut(Qt::Key_B);
+    bqmAction->setShortcut(KShortcut(Qt::Key_B));
     connect(bqmAction, SIGNAL(triggered()), d->view, SLOT(slotQueueMgr()));
     actionCollection()->addAction("queue_manager", bqmAction);
 
@@ -1473,7 +1473,7 @@ void DigikamApp::loadCameras()
     // -----------------------------------------------------------------
 
     d->addImagesAction = new KAction(KIcon("albumfolder-importimages"), i18n("Add Images..."), this);
-    d->addImagesAction->setShortcut(Qt::CTRL+Qt::Key_I);
+    d->addImagesAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_I));
     d->addImagesAction->setWhatsThis(i18n("Adds new items to an Album."));
     connect(d->addImagesAction, SIGNAL(triggered()), this, SLOT(slotImportAddImages()));
     actionCollection()->addAction("import_addImages", d->addImagesAction);

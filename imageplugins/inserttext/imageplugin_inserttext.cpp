@@ -49,7 +49,7 @@ ImagePlugin_InsertText::ImagePlugin_InsertText(QObject *parent, const QVariantLi
                       : Digikam::ImagePlugin(parent, "ImagePlugin_InsertText")
 {
     m_insertTextAction = new KAction(KIcon("insert-text"), i18n("Insert Text..."), this);
-    m_insertTextAction->setShortcut(QKeySequence(Qt::SHIFT+Qt::CTRL+Qt::Key_T));
+    m_insertTextAction->setShortcut(KShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_T));
 
     connect(m_insertTextAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotInsertText()));
