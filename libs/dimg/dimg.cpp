@@ -1985,9 +1985,10 @@ void DImg::convertDepth(int depth)
         uchar*  dptr = data;
         ushort* sptr = (ushort*)bits();
 
-        for (uint i=0; i<width()*height()*4; ++i)
+        uint dim = width() * height() * 4;
+        for (uint i = 0; i < dim; ++i)
         {
-            *dptr++ = (*sptr++ * 255UL)/65535UL;
+            *dptr++ = (*sptr++ * 255UL) / 65535UL;
         }
 
         delete [] m_priv->data;
@@ -2002,9 +2003,10 @@ void DImg::convertDepth(int depth)
         ushort* dptr = (ushort*)data;
         uchar*  sptr = bits();
 
-        for (uint i=0; i<width()*height()*4; ++i)
+        uint dim = width() * height() * 4;
+        for (uint i = 0; i < dim; ++i)
         {
-            *dptr++ = (*sptr++ * 65535ULL)/255ULL;
+            *dptr++ = (*sptr++ * 65535ULL) / 255ULL;
         }
 
         delete [] m_priv->data;
