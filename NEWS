@@ -67,7 +67,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 058 ==> 211625 : Converting bulb RAW image produces unusable results.
 059 ==> 211640 : Status LED looks bad [patch].
 060 ==> 207608 : digiKam 1.0beta4 cannot save to mounted CIFS/SAMBA-share.
-061 ==> 
+061 ==> 211707 : Use horizontal thumbbar in the editor options doesn't work.
+062 ==>
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05

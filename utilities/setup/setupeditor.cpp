@@ -59,7 +59,6 @@ public:
         overExposureColor    = 0;
         underExposureColor   = 0;
         hideThumbBar         = 0;
-        horizontalThumbBar   = 0;
         useRawImportTool     = 0;
     }
 
@@ -68,7 +67,6 @@ public:
     QCheckBox    *hideToolBar;
     QCheckBox    *themebackgroundColor;
     QCheckBox    *hideThumbBar;
-    QCheckBox    *horizontalThumbBar;
     QCheckBox    *useRawImportTool;
 
     KColorButton *backgroundColor;
@@ -107,13 +105,6 @@ SetupEditor::SetupEditor(QWidget* parent)
     d->backgroundColor->setWhatsThis( i18n("Customize the background color to use "
                                            "in the image editor area.") );
 
-    d->horizontalThumbBar = new QCheckBox(i18n("Use &horizontal thumbbar (needs to restart %1)",
-                                               KGlobal::mainComponent().aboutData()->programName()),
-                                          interfaceOptionsGroup);
-    d->horizontalThumbBar->setWhatsThis( i18n("If this option is enabled, the thumbnails bar will be displayed "
-                                              "horizontally behind the image area. You need to restart the editor "
-                                              "for this option take effect."));
-
     d->hideThumbBar = new QCheckBox(i18n("Hide &thumbbar in fullscreen mode"), interfaceOptionsGroup);
     d->hideToolBar  = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"),
                                     interfaceOptionsGroup);
@@ -127,7 +118,6 @@ SetupEditor::SetupEditor(QWidget* parent)
     gLayout1->addWidget(d->colorBox);
     gLayout1->addWidget(d->hideToolBar);
     gLayout1->addWidget(d->hideThumbBar);
-    gLayout1->addWidget(d->horizontalThumbBar);
     gLayout1->addWidget(d->useRawImportTool);
     gLayout1->setMargin(KDialog::spacingHint());
     gLayout1->setSpacing(KDialog::spacingHint());
@@ -192,7 +182,6 @@ void SetupEditor::readSettings()
     d->backgroundColor->setColor(group.readEntry("BackgroundColor", Black));
     d->hideToolBar->setChecked(group.readEntry("FullScreen Hide ToolBar", false));
     d->hideThumbBar->setChecked(group.readEntry("FullScreenHideThumbBar", true));
-    d->horizontalThumbBar->setChecked(group.readEntry("HorizontalThumbbar", false));
     d->underExposureColor->setColor(group.readEntry("UnderExposureColor", White));
     d->overExposureColor->setColor(group.readEntry("OverExposureColor", Black));
     d->useRawImportTool->setChecked(group.readEntry("UseRawImportTool", false));
@@ -206,7 +195,6 @@ void SetupEditor::applySettings()
     group.writeEntry("BackgroundColor",         d->backgroundColor->color());
     group.writeEntry("FullScreen Hide ToolBar", d->hideToolBar->isChecked());
     group.writeEntry("FullScreenHideThumbBar",  d->hideThumbBar->isChecked());
-    group.writeEntry("HorizontalThumbbar",      d->horizontalThumbBar->isChecked());
     group.writeEntry("UnderExposureColor",      d->underExposureColor->color());
     group.writeEntry("OverExposureColor",       d->overExposureColor->color());
     group.writeEntry("UseRawImportTool",        d->useRawImportTool->isChecked());
