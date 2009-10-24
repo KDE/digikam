@@ -64,7 +64,7 @@ public:
 };
 
 DCursorTracker::DCursorTracker(const QString& txt, QWidget *parent, Qt::Alignment align)
-              : QLabel(txt, 0, Qt::ToolTip), d(new DCursorTrackerPriv)
+              : QLabel(txt, parent, Qt::ToolTip), d(new DCursorTrackerPriv)
 {
     d->parent = parent;
     d->parent->setMouseTracking(true);
