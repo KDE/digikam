@@ -546,10 +546,10 @@ CurvesWidget::~CurvesWidget()
     d->progressTimer->stop();
 
     if (m_imageHistogram)
-       delete m_imageHistogram;
+        delete m_imageHistogram;
 
     if (d->curves)
-       delete d->curves;
+        delete d->curves;
 
     delete d;
 }
@@ -786,7 +786,7 @@ void CurvesWidget::slotCalculationFinished(const ImageHistogram*, bool success)
 void CurvesWidget::stopHistogramComputation()
 {
     if (m_imageHistogram)
-       m_imageHistogram->stopCalculation();
+        m_imageHistogram->stopCalculation();
 
     d->progressTimer->stop();
     d->progressCount = 0;
@@ -1011,10 +1011,10 @@ void CurvesWidget::mouseMoveEvent(QMouseEvent *e)
 
 void CurvesWidget::leaveEvent(QEvent*)
 {
-   d->xMouseOver = -1;
-   d->yMouseOver = -1;
-   emit signalMouseMoved(d->xMouseOver, d->yMouseOver);
-   repaint();
+    d->xMouseOver = -1;
+    d->yMouseOver = -1;
+    emit signalMouseMoved(d->xMouseOver, d->yMouseOver);
+    repaint();
 }
 
 }  // namespace Digikam
