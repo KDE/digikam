@@ -25,7 +25,7 @@ SET(DIGIKAM_RELEASE_DATE "2009-10-xx")
 SET(DIGIKAM_SUFFIX_VERSION "-beta6")
 
 # ==================================================================================================
-# Set env. variables accordinly.
+# Set env. variables accordingly.
 
 SET(DIGIKAM_VERSION_SHORT
     "${DIGIKAM_MAJOR_VERSION}.${DIGIKAM_MINOR_VERSION}.${DIGIKAM_PATCH_VERSION}"
@@ -36,7 +36,7 @@ SET(DIGIKAM_VERSION_STRING
    )
 
 # ==================================================================================================
-# Depencies
+# Dependencies
 
 FIND_PACKAGE(KDE4 REQUIRED)
 INCLUDE(KDE4Defaults)
@@ -85,7 +85,7 @@ ELSE(NOT WIN32)
 ENDIF(NOT WIN32)
 
 # ==================================================================================================
-# Optional depencies
+# Optional dependencies
 
 MACRO_OPTIONAL_FIND_PACKAGE(KdepimLibs)
 MACRO_BOOL_TO_01(KDEPIMLIBS_FOUND HAVE_KDEPIMLIBS)
@@ -117,7 +117,7 @@ ELSE (${KDE_VERSION} VERSION_GREATER "4.2.70")
     SET(HAVE_NEPOMUK 0)
 ENDIF (${KDE_VERSION} VERSION_GREATER "4.2.70")
 
-# Set config file depending of optional depencies
+# Set config file depending of optional dependencies
 
 CONFIGURE_FILE(config-digikam.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-digikam.h)
 
