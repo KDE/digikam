@@ -192,7 +192,7 @@ SuperImposeTool::SuperImposeTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    connect(bGroup, SIGNAL(released(int)),
+    connect(bGroup, SIGNAL(buttonReleased(int)),
             d->previewWidget, SLOT(slotEditModeChanged(int)));
 
     connect(d->thumbnailsBar, SIGNAL(signalUrlSelected(const KUrl&)),
