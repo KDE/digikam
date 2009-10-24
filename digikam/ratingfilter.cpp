@@ -86,7 +86,6 @@ RatingFilter::RatingFilter(QWidget* parent)
 
 RatingFilter::~RatingFilter()
 {
-    delete d->ratingTracker;
     delete d;
 }
 

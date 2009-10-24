@@ -124,7 +124,6 @@ StatusZoomBar::~StatusZoomBar()
     if (d->zoomTimer)
         delete d->zoomTimer;
 
-    delete d->zoomTracker;
     delete d;
 }
 

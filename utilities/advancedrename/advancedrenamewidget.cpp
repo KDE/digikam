@@ -376,7 +376,7 @@ void AdvancedRenameWidget::setupWidgets()
 
     // --------------------------------------------------------
 
-    delete d->tooltipTracker;
+    // DTipTracker HAS a parent, don't delete it manually!!!!!!!!!
     d->tooltipTracker = new DTipTracker(QString(), d->renameInput, Qt::AlignLeft);
     d->tooltipTracker->setTextFormat(Qt::RichText);
     d->tooltipTracker->setEnable(false);
