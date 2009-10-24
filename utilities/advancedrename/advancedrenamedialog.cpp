@@ -54,9 +54,9 @@ public:
     {
     }
 
-    KUrl      imageUrl;
-    QString   baseName;
-    QString   extension;
+    KUrl    imageUrl;
+    QString baseName;
+    QString extension;
 };
 
 // --------------------------------------------------------
