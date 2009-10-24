@@ -404,7 +404,7 @@ void HistogramWidget::updateData(uchar *i_data, uint i_w, uint i_h,
 
     // Do not using ImageHistogram::getHistogramSegments()
     // method here because histogram hasn't yet been computed.
-    d->range = d->sixteenBits ? 65535 : 255;
+    d->range = d->sixteenBits ? MAX_SEGMENT_16BIT : MAX_SEGMENT_8BIT;
     emit signalMaximumValueChanged( d->range );
 
 
@@ -458,6 +458,8 @@ void HistogramWidget::slotProgressTimerDone()
     repaint();
     d->progressTimer->start( 200 );
 }
+
+// TODO code duplication with curves widget
 
 void HistogramWidget::paintEvent(QPaintEvent*)
 {

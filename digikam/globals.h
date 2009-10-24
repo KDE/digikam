@@ -35,6 +35,14 @@ static const int NoRating  = -1;
 
 // --------------------------------------------------------
 
+// segments for histograms and curves
+static const int NUM_SEGMENTS_16BIT = 65536;
+static const int NUM_SEGMENTS_8BIT = 256;
+static const int MAX_SEGMENT_16BIT = NUM_SEGMENTS_16BIT - 1;
+static const int MAX_SEGMENT_8BIT = NUM_SEGMENTS_8BIT - 1;
+
+// --------------------------------------------------------
+
 enum HistogramBoxType
 {
     RGB = 0,

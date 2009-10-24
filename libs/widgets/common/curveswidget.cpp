@@ -124,13 +124,13 @@ public:
     {
 
         x = CLAMP((int)(mousePosition.x() *
-                           ((float)(q->m_imageHistogram->getHistogramSegments() - 1) / (float)q->width())),
-                        0, q->m_imageHistogram->getHistogramSegments() - 1);
+                           ((float)(q->m_imageHistogram->getMaxSegmentIndex()) / (float)q->width())),
+                        0, q->m_imageHistogram->getMaxSegmentIndex());
         y = CLAMP((int)(mousePosition.y() *
-                           ((float)(q->m_imageHistogram->getHistogramSegments() - 1) / (float)q->height())),
-                        0, q->m_imageHistogram->getHistogramSegments() - 1);
+                           ((float)(q->m_imageHistogram->getMaxSegmentIndex()) / (float)q->height())),
+                        0, q->m_imageHistogram->getMaxSegmentIndex());
 
-        int distance = ImageCurves::NUM_VALUES_16BIT;
+        int distance = NUM_SEGMENTS_16BIT;
 
         closestPoint = 0;
         for (int i = 0; i < ImageCurves::NUM_POINTS; ++i)
@@ -737,8 +737,8 @@ void CurvesWidget::curveTypeChanged()
 
             for (int i = 0; i <= 8; ++i)
             {
-                int index = CLAMP(i * m_imageHistogram->getHistogramSegments()/8,
-                                  0, m_imageHistogram->getHistogramSegments()-1);
+                int index = CLAMP(i * m_imageHistogram->getHistogramSegments() / 8,
+                                  0, m_imageHistogram->getMaxSegmentIndex());
 
                 d->curves->setCurvePoint(m_channelType, i * 2,
                                          QPoint(index, d->curves->getCurveValue(m_channelType, index)));
@@ -952,7 +952,7 @@ void CurvesWidget::mouseMoveEvent(QMouseEvent *e)
                         d->grabPoint = closest_point;
 
                     d->curves->setCurvePoint(m_channelType, d->grabPoint,
-                                             QPoint(x, m_imageHistogram->getHistogramSegments()-1 - y));
+                                             QPoint(x, m_imageHistogram->getMaxSegmentIndex() - y));
                 }
 
                 d->curves->curvesCalculateCurve(m_channelType);
@@ -986,11 +986,11 @@ void CurvesWidget::mouseMoveEvent(QMouseEvent *e)
                 {
                     for (int i = x1 ; i <= x2 ; ++i)
                         d->curves->setCurveValue(m_channelType, i,
-                            m_imageHistogram->getHistogramSegments() - 1 - (y1 + ((y2 - y1) * (i - x1)) / (x2 - x1)));
+                            m_imageHistogram->getMaxSegmentIndex() - (y1 + ((y2 - y1) * (i - x1)) / (x2 - x1)));
                 }
                 else
                 {
-                    d->curves->setCurveValue(m_channelType, x, m_imageHistogram->getHistogramSegments() - 1 - y);
+                    d->curves->setCurveValue(m_channelType, x, m_imageHistogram->getMaxSegmentIndex() - y);
                 }
 
                 d->grabPoint = x;
@@ -1004,7 +1004,7 @@ void CurvesWidget::mouseMoveEvent(QMouseEvent *e)
     }
 
     d->xMouseOver = x;
-    d->yMouseOver = m_imageHistogram->getHistogramSegments() - 1 - y;
+    d->yMouseOver = m_imageHistogram->getMaxSegmentIndex() - y;
     emit signalMouseMoved(d->xMouseOver, d->yMouseOver);
     repaint();
 }

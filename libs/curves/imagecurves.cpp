@@ -45,18 +45,14 @@
 // Local includes
 
 #include "debug.h"
+#include "globals.h"
 
 namespace Digikam
 {
 
 const int ImageCurves::NUM_POINTS = 17;
 const int ImageCurves::NUM_CHANNELS = 5;
-const int ImageCurves::NUM_VALUES_16BIT = 65536;
-const int ImageCurves::NUM_VALUES_8BIT = 256;
 const int ImageCurves::MULTIPLIER_16BIT = 255;
-
-const int ImageCurves::MAX_SEGMENT_16BIT = ImageCurves::NUM_VALUES_16BIT - 1;
-const int ImageCurves::MAX_SEGMENT_8BIT = ImageCurves::NUM_VALUES_8BIT - 1;
 
 class ImageCurvesPriv
 {
@@ -76,7 +72,7 @@ public:
         /**
          * Curve values by channels
          */
-        unsigned short         curve[ImageCurves::NUM_CHANNELS][ImageCurves::NUM_VALUES_16BIT];
+        unsigned short         curve[ImageCurves::NUM_CHANNELS][NUM_SEGMENTS_16BIT];
     };
 
     struct _Lut

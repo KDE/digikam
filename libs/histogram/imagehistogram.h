@@ -70,6 +70,7 @@ public:
     double getMaximum(int channel);
 
     int    getHistogramSegments(void);
+    int    getMaxSegmentIndex(void);
     int    getMedian(int channel, int start, int end);
 
 Q_SIGNALS:

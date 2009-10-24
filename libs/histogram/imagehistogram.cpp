@@ -111,7 +111,7 @@ void ImageHistogram::setup(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits
     d->imageData     = i_data;
     d->imageWidth    = i_w;
     d->imageHeight   = i_h;
-    d->histoSegments = i_sixteenBits ? 65536 : 256;
+    d->histoSegments = i_sixteenBits ? NUM_SEGMENTS_16BIT : NUM_SEGMENTS_8BIT;
 }
 
 ImageHistogram::~ImageHistogram()
@@ -119,7 +119,7 @@ ImageHistogram::~ImageHistogram()
     stopCalculation();
 
     if (d->histogram)
-       delete [] d->histogram;
+        delete [] d->histogram;
 
     delete d;
 }
@@ -127,6 +127,11 @@ ImageHistogram::~ImageHistogram()
 int ImageHistogram::getHistogramSegments(void)
 {
     return d->histoSegments;
+}
+
+int ImageHistogram::getMaxSegmentIndex(void)
+{
+    return d->histoSegments - 1;
 }
 
 void ImageHistogram::calculateInThread()
@@ -190,7 +195,7 @@ void ImageHistogram::calculate()
 
     memset(d->histogram, 0, d->histoSegments*sizeof(struct ImageHistogramPriv::double_packet));
 
-    if (d->histoSegments == 65536)         // 16 bits image.
+    if (d->histoSegments == NUM_SEGMENTS_16BIT)         // 16 bits image.
     {
         unsigned short  blue, green, red, alpha;
         unsigned short *data = (unsigned short*)d->imageData;
@@ -289,15 +294,15 @@ double ImageHistogram::getCount(int channel, int start, int end)
         break;
     }
 
-  return count;
+    return count;
 }
 
 double ImageHistogram::getPixels()
 {
-  if ( !d->histogram )
-       return 0.0;
+    if ( !d->histogram )
+        return 0.0;
 
-  return(d->imageWidth * d->imageHeight);
+    return(d->imageWidth * d->imageHeight);
 }
 
 double ImageHistogram::getMean(int channel, int start, int end)

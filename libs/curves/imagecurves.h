@@ -60,17 +60,7 @@ public:
     const static int NUM_CHANNELS;
 
     /**
-     * Number of discrete values managed per curve for a 16 bit image.
-     */
-    const static int NUM_VALUES_16BIT;
-
-    /**
-     * Number of discrete values managed per curve for a 8 bit image.
-     */
-    const static int NUM_VALUES_8BIT;
-
-    /**
-     * Curve points have to multiplied iwth this value for 16 bit images.
+     * Curve points have to multiplied with this value for 16 bit images.
      */
     const static int MULTIPLIER_16BIT;
 
@@ -81,10 +71,6 @@ public:
     };
 
     typedef double CRMatrix[4][4];
-
-private:
-    const static int MAX_SEGMENT_16BIT;
-    const static int MAX_SEGMENT_8BIT;
 
 public:
 
