@@ -39,17 +39,11 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 
-// Local includes
-
-#include "parser.h"
-
 namespace Digikam
 {
 
 class AdvancedRenameLineEditPriv
 {
-    typedef AdvancedRenameLineEdit::SelectionType ST;
-
 public:
 
     AdvancedRenameLineEditPriv() :
@@ -61,21 +55,21 @@ public:
         curCursorPos(-1),
         parseTimer(0),
         parser(0),
-        selectionType(AdvancedRenameLineEdit::Text)
+        selectionType(Parser::Text)
         {}
 
-    bool    userIsTyping;
-    bool    userIsHighlighting;
-    bool    tokenMarked;
+    bool                  userIsTyping;
+    bool                  userIsHighlighting;
+    bool                  tokenMarked;
 
-    int     selectionStart;
-    int     selectionLength;
-    int     curCursorPos;
+    int                   selectionStart;
+    int                   selectionLength;
+    int                   curCursorPos;
 
-    QTimer* parseTimer;
-    Parser* parser;
+    QTimer*               parseTimer;
+    Parser*               parser;
 
-    ST      selectionType;
+    Parser::Type selectionType;
 };
 
 AdvancedRenameLineEdit::AdvancedRenameLineEdit(QWidget* parent)
@@ -129,11 +123,11 @@ void AdvancedRenameLineEdit::mouseMoveEvent(QMouseEvent* e)
 
     if (e->modifiers() == Qt::ControlModifier)
     {
-        searchAndHighlightTokens(Token, pos);
+        searchAndHighlightTokens(Parser::Token, pos);
     }
     else if (e->modifiers() & Qt::ShiftModifier)
     {
-        searchAndHighlightTokens(TokenAndModifiers, pos);
+        searchAndHighlightTokens(Parser::TokenAndModifiers, pos);
     }
     else if (d->tokenMarked)
     {
@@ -203,8 +197,9 @@ void AdvancedRenameLineEdit::focusOutEvent(QFocusEvent* e)
 
 void AdvancedRenameLineEdit::rememberSelection()
 {
-    if ((hasSelectedText() && d->selectionType == Text) ||
-        (hasSelectedText() && (d->selectionType ==Token || d->selectionType == TokenAndModifiers) && tokenIsSelected()))
+    if ((hasSelectedText() && d->selectionType == Parser::Text) ||
+        (hasSelectedText() && (d->selectionType ==Parser::Token || d->selectionType == Parser::TokenAndModifiers)
+                           && tokenIsSelected()))
     {
         d->selectionStart  = selectionStart();
         d->selectionLength = selectedText().count();
@@ -218,7 +213,7 @@ void AdvancedRenameLineEdit::rememberSelection()
     }
 }
 
-void AdvancedRenameLineEdit::searchAndHighlightTokens(SelectionType type, int pos)
+void AdvancedRenameLineEdit::searchAndHighlightTokens(Parser::Type type, int pos)
 {
     if (d->userIsTyping)
     {
@@ -234,18 +229,7 @@ void AdvancedRenameLineEdit::searchAndHighlightTokens(SelectionType type, int po
     int start;
     int length;
 
-    bool found = false;
-
-    switch (type)
-    {
-        case Token:
-            found = d->parser->tokenAtPosition(text(), pos, start, length);
-            break;
-        case TokenAndModifiers:
-            found = d->parser->tokenModifierAtPosition(text(), pos, start, length);
-            break;
-        default: break;
-    }
+    bool found = d->parser->tokenAtPosition(type, text(), pos, start, length);
 
     if (found)
     {
@@ -299,8 +283,8 @@ void AdvancedRenameLineEdit::resetSelection()
     d->tokenMarked     = false;
     d->selectionStart  = -1;
     d->selectionLength = -1;
-    d->selectionType   = Text;
-    setSelectionColor(Text);
+    d->selectionType   = Parser::Text;
+    setSelectionColor(Parser::Text);
     emit signalTokenMarked(d->tokenMarked);
 }
 
@@ -344,25 +328,25 @@ void AdvancedRenameLineEdit::slotAddModifier(const QString& token)
     setFocus();
 }
 
-void AdvancedRenameLineEdit::setSelectionColor(SelectionType type)
+void AdvancedRenameLineEdit::setSelectionColor(Parser::Type type)
 {
     QPalette p = palette();
 
     switch (type)
     {
-        case Token:
+        case Parser::Token:
             p.setColor(QPalette::Active,   QPalette::Highlight,       Qt::red);
             p.setColor(QPalette::Active,   QPalette::HighlightedText, Qt::white);
             p.setColor(QPalette::Inactive, QPalette::Highlight,       Qt::red);
             p.setColor(QPalette::Inactive, QPalette::HighlightedText, Qt::white);
             break;
-        case TokenAndModifiers:
+        case Parser::TokenAndModifiers:
             p.setColor(QPalette::Active,   QPalette::Highlight,       Qt::yellow);
             p.setColor(QPalette::Active,   QPalette::HighlightedText, Qt::black);
             p.setColor(QPalette::Inactive, QPalette::Highlight,       Qt::yellow);
             p.setColor(QPalette::Inactive, QPalette::HighlightedText, Qt::black);
             break;
-        case Text:
+        case Parser::Text:
         default:
             p = kapp->palette();
             break;

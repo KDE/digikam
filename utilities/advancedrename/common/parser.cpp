@@ -159,41 +159,31 @@ QString Parser::parseOperation(const QString& parseString, ParseInformation& inf
     return parsed;
 }
 
-bool Parser::tokenAtPosition(const QString& parseString, int pos)
+bool Parser::tokenAtPosition(Type type, const QString& parseString, int pos)
 {
     int start;
     int length;
-    return tokenAtPosition(parseString, pos, start, length);
+    return tokenAtPosition(type, parseString, pos, start, length);
 }
 
-bool Parser::tokenAtPosition(const QString& parseString, int pos, int& start, int& length)
+bool Parser::tokenAtPosition(Type type, const QString& parseString, int pos, int& start, int& length)
 {
     bool found = false;
 
-    ParseResults results         = parseResults(parseString);
-    ParseResults::ResultsKey key = results.keyAtApproximatePosition(pos);
-    start  = key.first;
-    length = key.second;
+    ParseResults results;
 
-    if ((pos >= start) && (pos <= start + length))
+    switch (type)
     {
-        found = true;
+        case Token:
+            results = parseResults(parseString);
+            break;
+        case TokenAndModifiers:
+            results = modifierResults(parseString);
+            break;
+        default:
+            break;
     }
-    return found;
-}
 
-bool Parser::tokenModifierAtPosition(const QString& parseString, int pos)
-{
-    int start;
-    int length;
-    return tokenAtPosition(parseString, pos, start, length);
-}
-
-bool Parser::tokenModifierAtPosition(const QString& parseString, int pos, int& start, int& length)
-{
-    bool found = false;
-
-    ParseResults results         = modifierResults(parseString);
     ParseResults::ResultsKey key = results.keyAtApproximatePosition(pos);
     start  = key.first;
     length = key.second;

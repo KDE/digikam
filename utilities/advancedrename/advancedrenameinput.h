@@ -35,28 +35,19 @@
 
 // Local includes
 
+#include "parser.h"
+
 class QMouseEvent;
 class QFocusEvent;
 
 namespace Digikam
 {
 
-class Parser;
-
 class AdvancedRenameLineEditPriv;
 
 class AdvancedRenameLineEdit : public KLineEdit
 {
     Q_OBJECT
-
-public:
-
-    enum SelectionType
-    {
-        Token = 0,
-        TokenAndModifiers,
-        Text
-    };
 
 public:
 
@@ -92,9 +83,9 @@ private Q_SLOTS:
 private:
 
     bool tokenIsSelected();
-    void searchAndHighlightTokens(SelectionType type, int pos);
+    void searchAndHighlightTokens(Parser::Type type, int pos);
 
-    void setSelectionColor(SelectionType type);
+    void setSelectionColor(Parser::Type type);
     void rememberSelection();
     void resetSelection();
 

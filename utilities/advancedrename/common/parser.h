@@ -49,6 +49,15 @@ class Parser
 
 public:
 
+    enum Type
+    {
+        Token = 0,
+        TokenAndModifiers,
+        Text
+    };
+
+public:
+
     Parser();
     virtual ~Parser();
 
@@ -57,11 +66,8 @@ public:
     SubParserList subParsers() const;
     ModifierList  modifiers()  const;
 
-    bool          tokenAtPosition(const QString& parseString, int pos);
-    bool          tokenAtPosition(const QString& parseString, int pos, int& start, int& length);
-
-    bool          tokenModifierAtPosition(const QString& parseString, int pos);
-    bool          tokenModifierAtPosition(const QString& parseString, int pos, int& start, int& length);
+    bool          tokenAtPosition(Type type, const QString& parseString, int pos);
+    bool          tokenAtPosition(Type type, const QString& parseString, int pos, int& start, int& length);
 
     /**
      * check if the given parse string is valid
