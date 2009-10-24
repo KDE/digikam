@@ -91,11 +91,9 @@ void DynamicLayout::addItem(QLayoutItem *item)
     {
         QWidget* wid    = item->widget();
         d->spaceX       = qMax<int>(wid->style()->layoutSpacing(QSizePolicy::PushButton, QSizePolicy::PushButton,
-                                                                Qt::Horizontal),
-                                    d->spaceX);
+                                                                Qt::Horizontal), d->spaceX);
         d->spaceY       = qMax<int>(wid->style()->layoutSpacing(QSizePolicy::PushButton, QSizePolicy::PushButton,
-                                                                Qt::Vertical),
-                                    d->spaceY);
+                                                                Qt::Vertical), d->spaceY);
         d->minItemWidth = qMax<int>(wid->sizeHint().width(), d->minItemWidth);
     }
 
@@ -149,14 +147,14 @@ bool DynamicLayout::hasHeightForWidth() const
 
 int DynamicLayout::heightForWidth(int width) const
 {
-    int height = doLayout(QRect(0, 0, width, 0), true);
+    int height = reLayout(QRect(0, 0, width, 0), true);
     return height;
 }
 
 void DynamicLayout::setGeometry(const QRect &rect)
 {
     QLayout::setGeometry(rect);
-    doLayout(rect, false);
+    reLayout(rect, false);
 }
 
 QSize DynamicLayout::sizeHint() const
@@ -178,7 +176,7 @@ QSize DynamicLayout::minimumSize() const
     return size;
 }
 
-int DynamicLayout::doLayout(const QRect &rect, bool testOnly) const
+int DynamicLayout::reLayout(const QRect &rect, bool testOnly) const
 {
     int left   = 0;
     int top    = 0;

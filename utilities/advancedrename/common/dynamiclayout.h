@@ -69,7 +69,7 @@ public:
 
 private:
 
-    int doLayout(const QRect& rect, bool testOnly) const;
+    int reLayout(const QRect& rect, bool testOnly) const;
 
 private:
 
