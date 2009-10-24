@@ -121,7 +121,7 @@ QString Parser::parse(const QString& parseString, ParseInformation& info)
 }
 
 QString Parser::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results,
-                               bool replace)
+                               bool modify)
 {
     if (!stringIsValid(parseString))
     {
@@ -137,7 +137,7 @@ QString Parser::parseOperation(const QString& parseString, ParseInformation& inf
             parser->parse(parseString, info);
 
             ParseResults r;
-            if (replace)
+            if (modify)
             {
                 r = parser->modifiedResults();
             }
@@ -151,7 +151,7 @@ QString Parser::parseOperation(const QString& parseString, ParseInformation& inf
     }
 
     QString parsed;
-    if (replace)
+    if (modify)
     {
         parsed = results.replaceTokens(parseString);
     }

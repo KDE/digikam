@@ -85,7 +85,7 @@ private:
     ParseResults parseResults(const QString& parseString);
     ParseResults modifierResults(const QString& parseString);
     QString      parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results,
-                                bool replace = true);
+                                bool modify = true);
 
 private:
 
