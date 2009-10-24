@@ -181,9 +181,6 @@ AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
     initDialog();
     readSettings();
 
-    // avoid focusing the AdvancedRenameWidget, to show the click message
-    d->listView->setFocus();
-
     // --------------------------------------------------------
 
     connect(d->advancedRenameWidget, SIGNAL(signalTextChanged(const QString&)),
