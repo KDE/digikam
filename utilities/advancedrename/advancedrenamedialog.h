@@ -111,7 +111,7 @@ private:
 
     void initDialog(int count = 1);
     void readSettings();
-    void writeSettings(bool singleFileMode = false);
+    void writeSettings();
 
 private:
 

@@ -195,7 +195,7 @@ AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
 
 AdvancedRenameDialog::~AdvancedRenameDialog()
 {
-    writeSettings(d->singleFileMode);
+    writeSettings();
     delete d;
 }
 
@@ -291,13 +291,13 @@ void AdvancedRenameDialog::readSettings()
     d->advancedRenameWidget->setText(group.readEntry(d->configLastUsedRenamePatternEntry, QString()));
 }
 
-void AdvancedRenameDialog::writeSettings(bool singleFileMode)
+void AdvancedRenameDialog::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
     group.writeEntry(d->configDialogSizeEntry, size());
-    if (singleFileMode)
+    if (d->singleFileMode)
     {
         d->advancedRenameWidget->clear();
     }
