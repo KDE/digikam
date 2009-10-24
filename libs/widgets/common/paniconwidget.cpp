@@ -39,11 +39,13 @@
 #include <QPaintEvent>
 #include <QMouseEvent>
 #include <QHideEvent>
+#include <QToolButton>
 
 // KDE includes
 
-
 #include <kcursor.h>
+#include <kiconloader.h>
+#include <klocale.h>
 
 namespace Digikam
 {
@@ -53,19 +55,20 @@ class PanIconWidgetPriv
 
 public:
 
-    PanIconWidgetPriv()
-    {
-        moveSelection = false;
-    }
+    PanIconWidgetPriv() :
+        moveSelection(false),
+        xpos(0),
+        ypos(0),
+        timer(0)
+    {}
 
-    bool    moveSelection;
+    bool         moveSelection;
 
-    int     xpos;
-    int     ypos;
+    int          xpos;
+    int          ypos;
 
-    QRect   regionSelection;         // Original size image selection.
-
-    QTimer *timer;
+    QRect        regionSelection;         // Original size image selection.
+    QTimer*      timer;
 };
 
 PanIconWidget::PanIconWidget(QWidget *parent, Qt::WidgetAttribute attribute)
@@ -87,6 +90,16 @@ PanIconWidget::PanIconWidget(QWidget *parent, Qt::WidgetAttribute attribute)
 PanIconWidget::~PanIconWidget()
 {
     delete d;
+}
+
+QToolButton* PanIconWidget::button()
+{
+    QToolButton* btn = new QToolButton;
+    btn->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    btn->setIcon(SmallIcon("transform-move"));
+    btn->hide();
+    btn->setToolTip( i18n("Pan the image to a region"));
+    return btn;
 }
 
 void PanIconWidget::setImage(int previewWidth, int previewHeight, const QImage& image)

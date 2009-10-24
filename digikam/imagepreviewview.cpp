@@ -139,10 +139,7 @@ ImagePreviewView::ImagePreviewView(QWidget *parent, AlbumWidgetStack *stack)
 
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    d->cornerButton = new QToolButton(this);
-    d->cornerButton->setIcon(SmallIcon("transform-move"));
-    d->cornerButton->hide();
-    d->cornerButton->setToolTip( i18n("Pan the image to a region"));
+    d->cornerButton = PanIconWidget::button();
     setCornerWidget(d->cornerButton);
 
     // ------------------------------------------------------------

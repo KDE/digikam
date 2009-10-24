@@ -138,10 +138,7 @@ LightTablePreview::LightTablePreview(QWidget *parent)
     slotThemeChanged();
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    d->cornerButton = new QToolButton(this);
-    d->cornerButton->setIcon(SmallIcon("transform-move"));
-    d->cornerButton->hide();
-    d->cornerButton->setToolTip( i18n("Pan the image"));
+    d->cornerButton = PanIconWidget::button();
     setCornerWidget(d->cornerButton);
 
     setLineWidth(5);

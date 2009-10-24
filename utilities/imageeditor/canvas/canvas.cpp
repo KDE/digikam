@@ -181,10 +181,7 @@ Canvas::Canvas(QWidget *parent)
     p.fillRect(8, 0, 8, 8, QColor(100, 100, 100));
     p.end();
 
-    d->cornerButton = new QToolButton(this);
-    d->cornerButton->setIcon(SmallIcon("transform-move"));
-    d->cornerButton->hide();
-    d->cornerButton->setToolTip( i18n("Pan the image to a region"));
+    d->cornerButton = PanIconWidget::button();
     setCornerWidget(d->cornerButton);
 
     QPalette palette;
