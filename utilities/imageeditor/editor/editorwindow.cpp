@@ -584,18 +584,15 @@ void EditorWindow::setupStatusBar()
 {
     m_nameLabel = new StatusProgressBar(statusBar());
     m_nameLabel->setAlignment(Qt::AlignCenter);
-    m_nameLabel->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addWidget(m_nameLabel, 100);
 
     d->selectLabel = new QLabel(i18n("No selection"), statusBar());
     d->selectLabel->setAlignment(Qt::AlignCenter);
-    d->selectLabel->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addWidget(d->selectLabel, 100);
     d->selectLabel->setToolTip( i18n("Information about current selection area"));
 
     m_resLabel  = new QLabel(statusBar());
     m_resLabel->setAlignment(Qt::AlignCenter);
-    m_resLabel->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addWidget(m_resLabel, 100);
     m_resLabel->setToolTip( i18n("Information about image size"));
 
