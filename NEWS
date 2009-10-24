@@ -65,7 +65,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 056 ==> 188235 : Assigning a color profile to TIFF images does not work anymore with 0.10.0.
 057 ==> 152483 : Raw converted images can only be saved once.
 058 ==> 211625 : Converting bulb RAW image produces unusable results.
-059 ==> 
+059 ==> 211640 : Status LED looks bad [patch].
+060 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
