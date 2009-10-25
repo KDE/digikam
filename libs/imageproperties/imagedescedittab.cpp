@@ -1691,6 +1691,11 @@ void ImageDescEditTab::slotTagsSearchChanged(const SearchTextSettings& settings)
         return;
     }
 
+    // see TODO below.
+    // if we filter, we should reset the assignedTagsBtn again
+    d->assignedTagsBtn->setChecked(false);
+    slotAssignedTagsToggled(false);
+
     //TODO: this will destroy assigned-tags filtering. Unify in one method.
     QString search = settings.text;
 
