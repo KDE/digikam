@@ -51,18 +51,20 @@ public:
 
     SetupMiscPriv()
     {
-        showSplashCheck            = 0;
-        showTrashDeleteDialogCheck = 0;
-        sidebarApplyDirectlyCheck  = 0;
-        scanAtStart                = 0;
-        sidebarTypeLabel           = 0;
-        sidebarType                = 0;
+        showSplashCheck                = 0;
+        showTrashDeleteDialogCheck     = 0;
+        showPermanentDeleteDialogCheck = 0;
+        sidebarApplyDirectlyCheck      = 0;
+        scanAtStart                    = 0;
+        sidebarTypeLabel               = 0;
+        sidebarType                    = 0;
     }
 
     QLabel*    sidebarTypeLabel;
 
     QCheckBox* showSplashCheck;
     QCheckBox* showTrashDeleteDialogCheck;
+    QCheckBox* showPermanentDeleteDialogCheck;
     QCheckBox* sidebarApplyDirectlyCheck;
     QCheckBox* scanAtStart;
 
@@ -78,15 +80,12 @@ SetupMisc::SetupMisc(QWidget* parent)
     setWidgetResizable(true);
     viewport()->setAutoFillBackground(false);
 
-    QVBoxLayout *layout           = new QVBoxLayout(panel);
-
-    d->showTrashDeleteDialogCheck = new QCheckBox(i18n("Confirm when moving items to the &trash."), panel);
-
-    d->sidebarApplyDirectlyCheck  = new QCheckBox(i18n("Do not confirm when applying changes in the &right sidebar."), panel);
-
-    d->showSplashCheck            = new QCheckBox(i18n("&Show splash screen at startup."), panel);
-
-    d->scanAtStart                = new QCheckBox(i18n("&Scan for new items at startup (makes startup slower.)"), panel);
+    QVBoxLayout *layout               = new QVBoxLayout(panel);
+    d->showTrashDeleteDialogCheck     = new QCheckBox(i18n("Confirm when moving items to the &trash."), panel);
+    d->showPermanentDeleteDialogCheck = new QCheckBox(i18n("Confirm when permanently deleting items."), panel);
+    d->sidebarApplyDirectlyCheck      = new QCheckBox(i18n("Do not confirm when applying changes in the &right sidebar."), panel);
+    d->showSplashCheck                = new QCheckBox(i18n("&Show splash screen at startup."), panel);
+    d->scanAtStart                    = new QCheckBox(i18n("&Scan for new items at startup (makes startup slower.)"), panel);
 
     KHBox *hbox         = new KHBox(panel);
     d->sidebarTypeLabel = new QLabel(i18n("Sidebar tab title:"), hbox);
@@ -100,6 +99,7 @@ SetupMisc::SetupMisc(QWidget* parent)
     layout->setMargin(KDialog::spacingHint());
     layout->setSpacing(KDialog::spacingHint());
     layout->addWidget(d->showTrashDeleteDialogCheck);
+    layout->addWidget(d->showPermanentDeleteDialogCheck);
     layout->addWidget(d->sidebarApplyDirectlyCheck);
     layout->addWidget(d->showSplashCheck);
     layout->addWidget(d->scanAtStart);
@@ -121,6 +121,7 @@ void SetupMisc::applySettings()
 
     settings->setShowSplashScreen(d->showSplashCheck->isChecked());
     settings->setShowTrashDeleteDialog(d->showTrashDeleteDialogCheck->isChecked());
+    settings->setShowPermanentDeleteDialog(d->showPermanentDeleteDialogCheck->isChecked());
     settings->setApplySidebarChangesDirectly(d->sidebarApplyDirectlyCheck->isChecked());
     settings->setScanAtStart(d->scanAtStart->isChecked());
     settings->setSidebarTitleStyle(d->sidebarType->currentIndex() == 0 ? KMultiTabBar::VSNET : KMultiTabBar::KDEV3ICON);
@@ -133,6 +134,7 @@ void SetupMisc::readSettings()
 
     d->showSplashCheck->setChecked(settings->getShowSplashScreen());
     d->showTrashDeleteDialogCheck->setChecked(settings->getShowTrashDeleteDialog());
+    d->showPermanentDeleteDialogCheck->setChecked(settings->getShowPermanentDeleteDialog());
     d->sidebarApplyDirectlyCheck->setChecked(settings->getApplySidebarChangesDirectly());
     d->scanAtStart->setChecked(settings->getScanAtStart());
     d->sidebarType->setCurrentIndex(settings->getSidebarTitleStyle() == KMultiTabBar::VSNET ? 0 : 1);

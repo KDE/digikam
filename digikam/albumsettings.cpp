@@ -67,6 +67,7 @@ public:
     // file ops settings
     bool                                useTrash;
     bool                                showTrashDeleteDialog;
+    bool                                showPermanentDeleteDialog;
     // metadata setting
     bool                                sidebarApplyDirectly;
     // database setting
@@ -221,6 +222,7 @@ void AlbumSettings::init()
     d->showSplash                   = true;
     d->useTrash                     = true;
     d->showTrashDeleteDialog        = true;
+    d->showPermanentDeleteDialog    = true;
     d->sidebarApplyDirectly         = false;
 
     d->iconShowName                 = false;
@@ -393,11 +395,12 @@ void AlbumSettings::readSettings()
 
     group = config->group("General Settings");
 
-    d->showSplash            = group.readEntry("Show Splash", true);
-    d->useTrash              = group.readEntry("Use Trash", true);
-    d->showTrashDeleteDialog = group.readEntry("Show Trash Delete Dialog", true);
-    d->sidebarApplyDirectly  = group.readEntry("Apply Sidebar Changes Directly", false);
-    d->scanAtStart           = group.readEntry("Scan At Start", true);
+    d->showSplash                = group.readEntry("Show Splash", true);
+    d->useTrash                  = group.readEntry("Use Trash", true);
+    d->showTrashDeleteDialog     = group.readEntry("Show Trash Delete Dialog", true);
+    d->showPermanentDeleteDialog = group.readEntry("Show Permanent Delete Dialog", true);
+    d->sidebarApplyDirectly      = group.readEntry("Apply Sidebar Changes Directly", false);
+    d->scanAtStart               = group.readEntry("Scan At Start", true);
 
     // ---------------------------------------------------------------------
 
@@ -509,6 +512,7 @@ void AlbumSettings::saveSettings()
     group.writeEntry("Show Splash", d->showSplash);
     group.writeEntry("Use Trash", d->useTrash);
     group.writeEntry("Show Trash Delete Dialog", d->showTrashDeleteDialog);
+    group.writeEntry("Show Permanent Delete Dialog", d->showPermanentDeleteDialog);
     group.writeEntry("Apply Sidebar Changes Directly", d->sidebarApplyDirectly);
     group.writeEntry("Scan At Start", d->scanAtStart);
 
@@ -1221,6 +1225,16 @@ void AlbumSettings::setShowTrashDeleteDialog(bool val)
 bool AlbumSettings::getShowTrashDeleteDialog() const
 {
     return d->showTrashDeleteDialog;
+}
+
+void AlbumSettings::setShowPermanentDeleteDialog(bool val)
+{
+    d->showPermanentDeleteDialog = val;
+}
+
+bool AlbumSettings::getShowPermanentDeleteDialog() const
+{
+    return d->showPermanentDeleteDialog;
 }
 
 void AlbumSettings::setApplySidebarChangesDirectly(bool val)

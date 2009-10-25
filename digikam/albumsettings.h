@@ -286,6 +286,9 @@ public:
     void    setShowTrashDeleteDialog(bool val);
     bool    getShowTrashDeleteDialog() const;
 
+    void    setShowPermanentDeleteDialog(bool val);
+    bool    getShowPermanentDeleteDialog() const;
+
     void    setApplySidebarChangesDirectly(bool val);
     bool    getApplySidebarChangesDirectly() const;
 

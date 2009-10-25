@@ -62,7 +62,7 @@ namespace DeleteDialogMode
     enum DeleteMode
     {
         NoChoiceTrash,             // "Do not show again" checkbox, does not show if config entry is set
-        NoChoiceDeletePermanently, // No checkbox
+        NoChoiceDeletePermanently, // same as above
         UserPreference,            // Checkbox to toggle trash/permanent, preset to user's last preference
         UseTrash,                  // same checkbox as above, preset to trash
         DeletePermanently          // same checkbox as above, preset to permanent
@@ -152,7 +152,8 @@ private:
 private:
 
     bool          m_saveShouldDeleteUserPreference;
-    bool          m_saveDoNotShowAgain;
+    bool          m_saveDoNotShowAgainTrash;
+    bool          m_saveDoNotShowAgainPermanent;
 
     KGuiItem      m_trashGuiItem;
 
