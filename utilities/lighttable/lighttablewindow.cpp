@@ -442,7 +442,7 @@ void LightTableWindow::setupActions()
     actionCollection()->addAction("lighttable_filedelete", d->fileDeleteAction);
 
     d->fileDeleteFinalAction = new KAction(KIcon("edit-delete"), i18n("Delete immediately"), this);
-    d->fileDeleteFinalAction->setShortcut(Qt::SHIFT + Qt::Key_Delete);
+    d->fileDeleteFinalAction->setShortcut(KShortcut(Qt::SHIFT + Qt::Key_Delete));
     d->fileDeleteFinalAction->setEnabled(false);
     connect(d->fileDeleteFinalAction, SIGNAL(triggered()), this, SLOT(slotDeleteFinalItem()));
     actionCollection()->addAction("lighttable_filefinaldelete", d->fileDeleteFinalAction);
