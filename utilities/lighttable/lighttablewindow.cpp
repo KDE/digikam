@@ -741,25 +741,27 @@ void LightTableWindow::slotRightPreviewLoaded(bool b)
 
 void LightTableWindow::slotItemSelected(const ImageInfo& info)
 {
-    if (!info.isNull())
-    {
-        d->setItemLeftAction->setEnabled(true);
-        d->setItemRightAction->setEnabled(true);
-        d->editItemAction->setEnabled(true);
-        d->removeItemAction->setEnabled(true);
-        d->clearListAction->setEnabled(true);
-        d->fileDeleteAction->setEnabled(true);
-        d->fileDeleteFinalAction->setEnabled(true);
-        d->backwardAction->setEnabled(true);
-        d->forwardAction->setEnabled(true);
-        d->firstAction->setEnabled(true);
-        d->lastAction->setEnabled(true);
-        d->syncPreviewAction->setEnabled(true);
-        d->zoomPlusAction->setEnabled(true);
-        d->zoomMinusAction->setEnabled(true);
-        d->navigateByPairAction->setEnabled(true);
-        d->slideShowAction->setEnabled(true);
+    bool hasInfo = !info.isNull();
 
+    d->setItemLeftAction->setEnabled(hasInfo);
+    d->setItemRightAction->setEnabled(hasInfo);
+    d->editItemAction->setEnabled(hasInfo);
+    d->removeItemAction->setEnabled(hasInfo);
+    d->clearListAction->setEnabled(hasInfo);
+    d->fileDeleteAction->setEnabled(hasInfo);
+    d->fileDeleteFinalAction->setEnabled(hasInfo);
+    d->backwardAction->setEnabled(hasInfo);
+    d->forwardAction->setEnabled(hasInfo);
+    d->firstAction->setEnabled(hasInfo);
+    d->lastAction->setEnabled(hasInfo);
+    d->syncPreviewAction->setEnabled(hasInfo);
+    d->zoomPlusAction->setEnabled(hasInfo);
+    d->zoomMinusAction->setEnabled(hasInfo);
+    d->navigateByPairAction->setEnabled(hasInfo);
+    d->slideShowAction->setEnabled(hasInfo);
+
+    if (hasInfo)
+    {
         LightTableBarItem* curr = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(info));
         if (curr)
         {
@@ -787,25 +789,6 @@ void LightTableWindow::slotItemSelected(const ImageInfo& info)
                 slotSetItemOnRightPanel(info);
             }
         }
-    }
-    else
-    {
-        d->setItemLeftAction->setEnabled(false);
-        d->setItemRightAction->setEnabled(false);
-        d->editItemAction->setEnabled(false);
-        d->removeItemAction->setEnabled(false);
-        d->clearListAction->setEnabled(false);
-        d->fileDeleteAction->setEnabled(false);
-        d->fileDeleteFinalAction->setEnabled(false);
-        d->backwardAction->setEnabled(false);
-        d->forwardAction->setEnabled(false);
-        d->firstAction->setEnabled(false);
-        d->lastAction->setEnabled(false);
-        d->zoomPlusAction->setEnabled(false);
-        d->zoomMinusAction->setEnabled(false);
-        d->syncPreviewAction->setEnabled(false);
-        d->navigateByPairAction->setEnabled(false);
-        d->slideShowAction->setEnabled(false);
     }
 
     d->previewView->checkForSelection(info);
