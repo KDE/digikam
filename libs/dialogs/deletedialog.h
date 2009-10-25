@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2004 by Michael Pyne <michael.pyne@kdemail.net>
  * Copyright (C) 2006 by Ian Monroe <ian@monroe.nu>
+ * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -94,16 +95,16 @@ protected:
 
 protected:
 
-    QStackedWidget               *m_checkBoxStack;
+    QStackedWidget*               m_checkBoxStack;
 
-    QLabel                       *m_warningIcon;
-    QLabel                       *m_deleteText;
-    QLabel                       *m_numFiles;
+    QLabel*                       m_warningIcon;
+    QLabel*                       m_deleteText;
+    QLabel*                       m_numFiles;
 
-    QCheckBox                    *m_shouldDelete;
-    QCheckBox                    *m_doNotShowAgain;
+    QCheckBox*                    m_shouldDelete;
+    QCheckBox*                    m_doNotShowAgain;
 
-    KListWidget                  *m_fileList;
+    KListWidget*                  m_fileList;
 
     DeleteDialogMode::ListMode    m_listMode;
     DeleteDialogMode::DeleteMode  m_deleteMode;
@@ -157,7 +158,7 @@ private:
 
     KGuiItem      m_trashGuiItem;
 
-    DeleteWidget *m_widget;
+    DeleteWidget* m_widget;
 };
 
 } // namespace Digikam
