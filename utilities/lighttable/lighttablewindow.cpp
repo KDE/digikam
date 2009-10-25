@@ -968,8 +968,6 @@ void LightTableWindow::deleteItem(bool permanently)
 
 void LightTableWindow::deleteItem(const ImageInfo& info, bool permanently)
 {
-    bool ask = true;
-
     KUrl u = info.fileUrl();
     PAlbum *palbum = AlbumManager::instance()->findPAlbum(u.directory());
     if (!palbum)
@@ -980,27 +978,21 @@ void LightTableWindow::deleteItem(const ImageInfo& info, bool permanently)
     KUrl fileURL = u;
 
     bool useTrash;
+    bool preselectDeletePermanently = permanently;
 
-    if (ask)
+    DeleteDialog dialog(this);
+
+    KUrl::List urlList;
+    urlList.append(u);
+    if (!dialog.confirmDeleteList(urlList,
+            DeleteDialogMode::Files,
+            preselectDeletePermanently ?
+                    DeleteDialogMode::NoChoiceDeletePermanently : DeleteDialogMode::NoChoiceTrash))
     {
-        bool preselectDeletePermanently = permanently;
-
-        DeleteDialog dialog(this);
-
-        KUrl::List urlList;
-        urlList.append(u);
-        if (!dialog.confirmDeleteList(urlList,
-             DeleteDialogMode::Files,
-             preselectDeletePermanently ?
-                     DeleteDialogMode::NoChoiceDeletePermanently : DeleteDialogMode::NoChoiceTrash))
-            return;
-
-        useTrash = !dialog.shouldDelete();
+        return;
     }
-    else
-    {
-        useTrash = !permanently;
-    }
+
+    useTrash = !dialog.shouldDelete();
 
     // trash does not like non-local URLs, put is not implemented
     if (useTrash)
