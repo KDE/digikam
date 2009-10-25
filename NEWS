@@ -72,7 +72,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 063 ==> 197399 : Tree view for tag hierarchy doesn't expand when selecting "tags already assigned".
 064 ==> 210907 : Allow immediate deleting of images without diverting through the "trash-folder".
 065 ==> 149490 : After uploading new pictures, the album isn't displaying new picture.
-066 ==>
+066 ==> 211818 : Raw import tool: problem with curvers.
+067 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
