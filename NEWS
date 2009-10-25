@@ -68,7 +68,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 059 ==> 211640 : Status LED looks bad [patch].
 060 ==> 207608 : digiKam 1.0beta4 cannot save to mounted CIFS/SAMBA-share.
 061 ==> 211707 : Use horizontal thumbbar in the editor options doesn't work.
-062 ==>
+062 ==> 202142 : Tag list inconsistent size.
+063 ==>
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
