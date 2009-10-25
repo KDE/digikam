@@ -79,7 +79,7 @@ public:
         configDefaultIconSizeEntry("Default Icon Size"),
         configDefaultTreeIconSizeEntry("Default Tree Icon Size"),
         configTreeViewFontEntry("TreeView Font"),
-        configThemeEntry("Default"),
+        configThemeEntry("Theme"),
         configSidebarTitleStyleEntry("Sidebar Title Style"),
         configRatingFilterConditionEntry("Rating Filter Condition"),
         configRecursiveAlbumsEntry("Recursive Albums"),
