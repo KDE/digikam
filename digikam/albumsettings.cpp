@@ -69,7 +69,7 @@ public:
         configGroupNepomuk("Nepomuk Settings"),
         configGroupGeneral("General Settings"),
 
-        configDatabaseFilePathEntry("DatabaseFilePath"),
+        configDatabaseFilePathEntry("Database File Path"),
         configAlbumCollectionsEntry("Album Collections"),
         configAlbumSortOrderEntry("Album Sort Order"),
         configImageSortOrderEntry("Image Sort Order"),
