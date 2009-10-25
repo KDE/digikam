@@ -90,6 +90,11 @@ public:
         dirty  = false;
     }
 
+    bool isPointEnabled(const QPoint &point)
+    {
+        return (point.x() > - 1) && (point.y() > -1);
+    }
+
     // Curves data.
     struct _Curves *curves;
 
@@ -150,7 +155,7 @@ void ImageCurves::fillFromOtherCurvers(ImageCurves *otherCurves)
             for (int point = 0; point < NUM_POINTS; ++point)
             {
                 QPoint p = otherCurves->getCurvePoint(channel, point);
-                if (p != ImageCurves::getDisabledValue())
+                if (d->isPointEnabled(p))
                 {
                     setCurvePoint(channel, point, p);
                 }
@@ -166,7 +171,7 @@ void ImageCurves::fillFromOtherCurvers(ImageCurves *otherCurves)
             for (int point = 0; point < NUM_POINTS; ++point)
             {
                 QPoint p = otherCurves->getCurvePoint(channel, point);
-                if (p != ImageCurves::getDisabledValue())
+                if (d->isPointEnabled(p))
                 {
                     p.setX(p.x() * MULTIPLIER_16BIT);
                     p.setY(p.y() * MULTIPLIER_16BIT);
@@ -186,7 +191,7 @@ void ImageCurves::fillFromOtherCurvers(ImageCurves *otherCurves)
             {
                 QPoint p = otherCurves->getCurvePoint(channel, point);
                 kDebug(digiKamAreaCode) << "Point " << point << " in original is " << p;
-                if (p != ImageCurves::getDisabledValue())
+                if (d->isPointEnabled(p))
                 {
                     p.setX(p.x() / MULTIPLIER_16BIT);
                     p.setY(p.y() / MULTIPLIER_16BIT);
