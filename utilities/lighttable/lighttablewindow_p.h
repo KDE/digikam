@@ -76,6 +76,7 @@ public:
         editItemAction         = 0;
         removeItemAction       = 0;
         fileDeleteAction       = 0;
+        fileDeleteFinalAction  = 0;
         slideShowAction        = 0;
         fullScreenAction       = 0;
         donateMoneyAction      = 0;
@@ -117,6 +118,7 @@ public:
     KAction                  *editItemAction;
     KAction                  *removeItemAction;
     KAction                  *fileDeleteAction;
+    KAction                  *fileDeleteFinalAction;
     KAction                  *slideShowAction;
     KAction                  *zoomPlusAction;
     KAction                  *zoomMinusAction;

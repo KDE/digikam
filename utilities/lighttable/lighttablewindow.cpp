@@ -31,7 +31,6 @@
 #include <QVBoxLayout>
 
 // KDE includes
-
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kapplication.h>
@@ -442,6 +441,12 @@ void LightTableWindow::setupActions()
     connect(d->fileDeleteAction, SIGNAL(triggered()), this, SLOT(slotDeleteItem()));
     actionCollection()->addAction("lighttable_filedelete", d->fileDeleteAction);
 
+    d->fileDeleteFinalAction = new KAction(KIcon("edit-delete"), i18n("Delete immediately"), this);
+    d->fileDeleteFinalAction->setShortcut(Qt::SHIFT + Qt::Key_Delete);
+    d->fileDeleteFinalAction->setEnabled(false);
+    connect(d->fileDeleteFinalAction, SIGNAL(triggered()), this, SLOT(slotDeleteFinalItem()));
+    actionCollection()->addAction("lighttable_filefinaldelete", d->fileDeleteFinalAction);
+
     KAction* closeAction = KStandardAction::close(this, SLOT(close()), this);
     actionCollection()->addAction("lighttable_close", closeAction);
 
@@ -744,6 +749,7 @@ void LightTableWindow::slotItemSelected(const ImageInfo& info)
         d->removeItemAction->setEnabled(true);
         d->clearListAction->setEnabled(true);
         d->fileDeleteAction->setEnabled(true);
+        d->fileDeleteFinalAction->setEnabled(true);
         d->backwardAction->setEnabled(true);
         d->forwardAction->setEnabled(true);
         d->firstAction->setEnabled(true);
@@ -790,6 +796,7 @@ void LightTableWindow::slotItemSelected(const ImageInfo& info)
         d->removeItemAction->setEnabled(false);
         d->clearListAction->setEnabled(false);
         d->fileDeleteAction->setEnabled(false);
+        d->fileDeleteFinalAction->setEnabled(false);
         d->backwardAction->setEnabled(false);
         d->forwardAction->setEnabled(false);
         d->firstAction->setEnabled(false);
@@ -950,14 +957,35 @@ void LightTableWindow::slotClearItemsList()
 
 void LightTableWindow::slotDeleteItem()
 {
-    if (!d->barView->currentItemImageInfo().isNull())
-        slotDeleteItem(d->barView->currentItemImageInfo());
+    deleteItem(false);
 }
 
 void LightTableWindow::slotDeleteItem(const ImageInfo& info)
 {
-    bool ask         = true;
-    bool permanently = false;
+    deleteItem(info, false);
+}
+
+void LightTableWindow::slotDeleteFinalItem()
+{
+    deleteItem(true);
+}
+
+void LightTableWindow::slotDeleteFinalItem(const ImageInfo& info)
+{
+    deleteItem(info, true);
+}
+
+void LightTableWindow::deleteItem(bool permanently)
+{
+    if (!d->barView->currentItemImageInfo().isNull())
+    {
+        deleteItem(d->barView->currentItemImageInfo(), permanently);
+    }
+}
+
+void LightTableWindow::deleteItem(const ImageInfo& info, bool permanently)
+{
+    bool ask = true;
 
     KUrl u = info.fileUrl();
     PAlbum *palbum = AlbumManager::instance()->findPAlbum(u.directory());
