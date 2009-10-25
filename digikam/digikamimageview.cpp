@@ -140,7 +140,7 @@ void DigikamImageView::activated(const ImageInfo& info)
     if (info.isNull())
         return;
 
-    if (AlbumSettings::instance()->getItemRightClickAction() == AlbumSettings::ShowPreview)
+    if (AlbumSettings::instance()->getItemLeftClickAction() == AlbumSettings::ShowPreview)
         previewRequested(info);
     else
         openInEditor(info);

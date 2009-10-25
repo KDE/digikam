@@ -67,7 +67,7 @@ public:
         iconShowTagsBox              = 0;
         iconShowRatingBox            = 0;
         iconShowOverlaysBox          = 0;
-        rightClickActionComboBox     = 0;
+        leftClickActionComboBox      = 0;
         previewLoadFullImageSize     = 0;
         showFolderTreeViewItemsCount = 0;
         treeViewFontSelect           = 0;
@@ -89,7 +89,7 @@ public:
     QCheckBox   *showFolderTreeViewItemsCount;
 
     KComboBox   *iconTreeThumbSize;
-    KComboBox   *rightClickActionComboBox;
+    KComboBox   *leftClickActionComboBox;
 
     DFontSelect *iconViewFontSelect;
     DFontSelect *treeViewFontSelect;
@@ -145,12 +145,11 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
     d->iconShowOverlaysBox->setWhatsThis(i18n("Set this option to show overlay buttons on "
                                               "the image thumbnail for image rotation."));
 
-    QLabel *rightClickLabel     = new QLabel(i18n("Thumbnail click action:"), iconViewGroup);
-    d->rightClickActionComboBox = new KComboBox(iconViewGroup);
-    d->rightClickActionComboBox->addItem(i18n("Show embedded preview"), AlbumSettings::ShowPreview);
-    d->rightClickActionComboBox->addItem(i18n("Start image editor"), AlbumSettings::StartEditor);
-    d->rightClickActionComboBox->setToolTip(i18n("Here, choose what should happen when you "
-                                                 "click on a thumbnail."));
+    QLabel *leftClickLabel     = new QLabel(i18n("Thumbnail click action:"), iconViewGroup);
+    d->leftClickActionComboBox = new KComboBox(iconViewGroup);
+    d->leftClickActionComboBox->addItem(i18n("Show embedded preview"), AlbumSettings::ShowPreview);
+    d->leftClickActionComboBox->addItem(i18n("Start image editor"), AlbumSettings::StartEditor);
+    d->leftClickActionComboBox->setToolTip(i18n("Choose what should happen when you click on a thumbnail."));
 
     d->iconViewFontSelect = new DFontSelect(i18n("Icon View font:"), panel);
     d->iconViewFontSelect->setToolTip(i18n("Select here the font used to display text in Icon Views."));
@@ -164,8 +163,8 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
     grid->addWidget(d->iconShowTagsBox,          1, 1, 1, 1);
     grid->addWidget(d->iconShowRatingBox,        2, 1, 1, 1);
     grid->addWidget(d->iconShowOverlaysBox,      3, 1, 1, 1);
-    grid->addWidget(rightClickLabel,             5, 0, 1, 1);
-    grid->addWidget(d->rightClickActionComboBox, 5, 1, 1, 1);
+    grid->addWidget(leftClickLabel,              5, 0, 1, 1);
+    grid->addWidget(d->leftClickActionComboBox,  5, 1, 1, 1);
     grid->addWidget(d->iconViewFontSelect,       6, 0, 1, 2);
     grid->setSpacing(KDialog::spacingHint());
     grid->setMargin(KDialog::spacingHint());
@@ -248,8 +247,8 @@ void SetupAlbumView::applySettings()
     settings->setIconShowOverlays(d->iconShowOverlaysBox->isChecked());
     settings->setIconViewFont(d->iconViewFontSelect->font());
 
-    settings->setItemRightClickAction((AlbumSettings::ItemRightClickAction)
-                                      d->rightClickActionComboBox->currentIndex());
+    settings->setItemLeftClickAction((AlbumSettings::ItemLeftClickAction)
+                                     d->leftClickActionComboBox->currentIndex());
 
     settings->setPreviewLoadFullImageSize(d->previewLoadFullImageSize->isChecked());
     settings->setShowFolderTreeViewItemsCount(d->showFolderTreeViewItemsCount->isChecked());
@@ -282,7 +281,7 @@ void SetupAlbumView::readSettings()
     d->iconShowOverlaysBox->setChecked(settings->getIconShowOverlays());
     d->iconViewFontSelect->setFont(settings->getIconViewFont());
 
-    d->rightClickActionComboBox->setCurrentIndex((int)settings->getItemRightClickAction());
+    d->leftClickActionComboBox->setCurrentIndex((int)settings->getItemLeftClickAction());
 
     d->previewLoadFullImageSize->setChecked(settings->getPreviewLoadFullImageSize());
     d->showFolderTreeViewItemsCount->setChecked(settings->getShowFolderTreeViewItemsCount());

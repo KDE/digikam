@@ -513,7 +513,7 @@ void AlbumIconView::slotDoubleClicked(IconItem *item)
 {
     if (!item) return;
 
-    if (d->albumSettings->getItemRightClickAction() == AlbumSettings::ShowPreview)
+    if (d->albumSettings->getItemLeftClickAction() == AlbumSettings::ShowPreview)
     {
         // icon effect takes too much time
         //KIconEffect::visualActivate(viewport(), contentsRectToViewport(item->rect()));

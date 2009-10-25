@@ -75,7 +75,7 @@ public:
         configImageSortOrderEntry("Image Sort Order"),
         configImageSortingEntry("Image Sorting"),
         configImageGroupModeEntry("Image Group Mode"),
-        configItemRightClickActionEntry("Item Right Click Action"),
+        configItemLeftClickActionEntry("Item Left Click Action"),
         configDefaultIconSizeEntry("Default Icon Size"),
         configDefaultTreeIconSizeEntry("Default Tree Icon Size"),
         configTreeViewFontEntry("TreeView Font"),
@@ -152,7 +152,7 @@ public:
     const QString                       configImageSortOrderEntry;
     const QString                       configImageSortingEntry;
     const QString                       configImageGroupModeEntry;
-    const QString                       configItemRightClickActionEntry;
+    const QString                       configItemLeftClickActionEntry;
     const QString                       configDefaultIconSizeEntry;
     const QString                       configDefaultTreeIconSizeEntry;
     const QString                       configTreeViewFontEntry;
@@ -319,7 +319,7 @@ public:
     int                                 imageSortOrder;
     int                                 imageSorting;
     int                                 imageGroupMode;
-    AlbumSettings::ItemRightClickAction itemRightClickAction;
+    AlbumSettings::ItemLeftClickAction  itemLeftClickAction;
 
     // nepomuk settings
     bool                                syncToDigikam;
@@ -364,7 +364,7 @@ void AlbumSettings::init()
     d->imageSortOrder               = ImageSortSettings::SortByFileName;
     d->imageSorting                 = ImageSortSettings::AscendingOrder;
     d->imageGroupMode               = ImageSortSettings::CategoryByAlbum;
-    d->itemRightClickAction         = AlbumSettings::ShowPreview;
+    d->itemLeftClickAction          = AlbumSettings::ShowPreview;
 
     d->thumbnailSize                = ThumbnailSize::Medium;
     d->treeThumbnailSize            = 22;
@@ -465,7 +465,7 @@ void AlbumSettings::readSettings()
     d->imageSorting                 = group.readEntry(d->configImageSortingEntry,   (int)ImageSortSettings::AscendingOrder);
     d->imageGroupMode               = group.readEntry(d->configImageGroupModeEntry, (int)ImageSortSettings::CategoryByAlbum);
 
-    d->itemRightClickAction         = AlbumSettings::ItemRightClickAction(group.readEntry( d->configItemRightClickActionEntry,
+    d->itemLeftClickAction          = AlbumSettings::ItemLeftClickAction(group.readEntry( d->configItemLeftClickActionEntry,
                                                                                      (int)AlbumSettings::ShowPreview));
 
     d->thumbnailSize                = group.readEntry(d->configDefaultIconSizeEntry,        (int)ThumbnailSize::Medium);
@@ -586,7 +586,7 @@ void AlbumSettings::saveSettings()
     group.writeEntry(d->configImageSortOrderEntry,               (int)d->imageSortOrder);
     group.writeEntry(d->configImageSortingEntry,                 (int)d->imageSorting);
     group.writeEntry(d->configImageGroupModeEntry,               (int)d->imageGroupMode);
-    group.writeEntry(d->configItemRightClickActionEntry,         (int)d->itemRightClickAction);
+    group.writeEntry(d->configItemLeftClickActionEntry,          (int)d->itemLeftClickAction);
     group.writeEntry(d->configDefaultIconSizeEntry,              QString::number(d->thumbnailSize));
     group.writeEntry(d->configDefaultTreeIconSizeEntry,          QString::number(d->treeThumbnailSize));
     group.writeEntry(d->configTreeViewFontEntry,                 d->treeviewFont);
@@ -784,14 +784,14 @@ int AlbumSettings::getImageGroupMode() const
     return d->imageGroupMode;
 }
 
-void AlbumSettings::setItemRightClickAction(const ItemRightClickAction action)
+void AlbumSettings::setItemLeftClickAction(const ItemLeftClickAction action)
 {
-    d->itemRightClickAction = action;
+    d->itemLeftClickAction = action;
 }
 
-AlbumSettings::ItemRightClickAction AlbumSettings::getItemRightClickAction() const
+AlbumSettings::ItemLeftClickAction AlbumSettings::getItemLeftClickAction() const
 {
-    return d->itemRightClickAction;
+    return d->itemLeftClickAction;
 }
 
 QString AlbumSettings::getImageFileFilter() const

@@ -59,7 +59,7 @@ public:
         ByDate
     };
 
-    enum ItemRightClickAction
+    enum ItemLeftClickAction
     {
         ShowPreview = 0,
         StartEditor
@@ -112,8 +112,8 @@ public:
     void setImageGroupMode(int mode);
     int getImageGroupMode() const;
 
-    void setItemRightClickAction(const ItemRightClickAction action);
-    ItemRightClickAction getItemRightClickAction() const;
+    void setItemLeftClickAction(const ItemLeftClickAction action);
+    ItemLeftClickAction getItemLeftClickAction() const;
 
     QString getImageFileFilter() const;
     void addToImageFileFilter(const QString& extensions);
