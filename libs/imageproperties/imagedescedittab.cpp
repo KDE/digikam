@@ -1781,8 +1781,17 @@ void ImageDescEditTab::slotTagsSearchChanged(const SearchTextSettings& settings)
 
 void ImageDescEditTab::slotAssignedTagsToggled(bool t)
 {
-    //TODO: this will destroy name filtering. Unify in one method.
+
     Q3ListViewItemIterator it(d->tagsView);
+    while (it.current())
+    {
+        it.current()->setOpen(t);
+        it.current()->setVisible(true);
+        ++it;
+    }
+
+    //TODO: this will destroy name filtering. Unify in one method.
+    it = d->tagsView;
     while (it.current())
     {
         TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(it.current());
@@ -1870,9 +1879,14 @@ void ImageDescEditTab::slotAssignedTagsToggled(bool t)
     if (rootItem)
     {
         if (t)
+        {
             rootItem->setText(0, i18n("Assigned Tags"));
+        }
         else
+        {
             rootItem->setText(0, root->title());
+        }
+        rootItem->setOpen(true);
     }
 }
 
