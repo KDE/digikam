@@ -308,11 +308,11 @@ void QueueMgrWindow::setupConnections()
 
     // -- Multithreaded interface connections -------------------------------
 
-    connect(d->thread, SIGNAL(starting(const ActionData&)),
-            this, SLOT(slotAction(const ActionData&)));
+    connect(d->thread, SIGNAL(starting(const Digikam::ActionData&)),
+            this, SLOT(slotAction(const Digikam::ActionData&)));
 
-    connect(d->thread, SIGNAL(finished(const ActionData&)),
-            this, SLOT(slotAction(const ActionData&)));
+    connect(d->thread, SIGNAL(finished(const Digikam::ActionData&)),
+            this, SLOT(slotAction(const Digikam::ActionData&)));
 
     // -- GUI connections ---------------------------------------------------
 

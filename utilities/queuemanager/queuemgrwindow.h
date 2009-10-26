@@ -133,7 +133,7 @@ private Q_SLOTS:
     void slotRawCameraList();
     void slotComponentsInfo();
     void slotDBStat();
-    void slotAction(const ActionData&);
+    void slotAction(const Digikam::ActionData&);
     void slotProgressTimerDone();
     void slotHistoryEntryClicked(int, qlonglong);
     void slotAssignedToolsChanged(const AssignedBatchTools&);

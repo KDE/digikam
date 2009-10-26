@@ -60,8 +60,8 @@ public:
 
 Q_SIGNALS:
 
-    void starting(const ActionData& ad);
-    void finished(const ActionData& ad);
+    void starting(const Digikam::ActionData& ad);
+    void finished(const Digikam::ActionData& ad);
 
 protected:
 

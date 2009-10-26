@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QString>
+#include <QMetaType>
 
 // KDE includes
 
@@ -70,5 +71,7 @@ public:
 };
 
 }  // namespace Digikam
+
+Q_DECLARE_METATYPE(Digikam::ActionData)
 
 #endif /* ACTIONS_H */

@@ -90,7 +90,7 @@ public:
 ActionThread::ActionThread(QObject *parent)
             : QThread(parent), d(new ActionThreadPriv)
 {
-    qRegisterMetaType<ActionData>("ActionData");
+    qRegisterMetaType<ActionData>();
 }
 
 ActionThread::~ActionThread()
