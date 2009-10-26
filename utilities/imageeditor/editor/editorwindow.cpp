@@ -99,16 +99,17 @@
 
 #include "canvas.h"
 #include "colorcorrectiondlg.h"
+#include "debug.h"
 #include "dimginterface.h"
-#include "dpopupmenu.h"
 #include "dlogoaction.h"
+#include "dpopupmenu.h"
 #include "editorstackview.h"
 #include "editortooliface.h"
 #include "exposurecontainer.h"
 #include "filesaveoptionsbox.h"
 #include "iccmanager.h"
-#include "iccsettingscontainer.h"
 #include "iccsettings.h"
+#include "iccsettingscontainer.h"
 #include "icctransform.h"
 #include "imagedialog.h"
 #include "imageplugin.h"
@@ -116,6 +117,7 @@
 #include "iofilesettingscontainer.h"
 #include "libsinfodlg.h"
 #include "loadingcacheinterface.h"
+#include "printhelper.h"
 #include "rawcameradlg.h"
 #include "savingcontextcontainer.h"
 #include "sidebar.h"
@@ -124,8 +126,6 @@
 #include "statusprogressbar.h"
 #include "themeengine.h"
 #include "thumbbar.h"
-#include "printhelper.h"
-#include "debug.h"
 
 namespace Digikam
 {
@@ -421,6 +421,11 @@ void EditorWindow::setupStandardActions()
 
     // --------------------------------------------------------
 
+    d->zoomCombo = new KComboBox(true);
+    d->zoomCombo->setDuplicatesEnabled(false);
+    d->zoomCombo->setFocusPolicy(Qt::ClickFocus);
+    d->zoomCombo->setInsertPolicy(QComboBox::NoInsert);
+
     QList<double> zoomLevels;
     zoomLevels << 10.0;
     zoomLevels << 25.0;
@@ -435,13 +440,10 @@ void EditorWindow::setupStandardActions()
     zoomLevels << 800.0;
     zoomLevels << 1200.0;
 
-    d->zoomCombo = new KComboBox(true);
-    d->zoomCombo->setDuplicatesEnabled(false);
-    d->zoomCombo->setFocusPolicy(Qt::ClickFocus);
-    d->zoomCombo->setInsertPolicy(QComboBox::NoInsert);
     foreach (const double zoom, zoomLevels)
     {
-        d->zoomCombo->addItem(QString("%1%").arg((int)zoom), QVariant(zoom));
+        d->zoomCombo->addItem(QString("%1%").arg((int)zoom),
+                              QVariant(zoom));
     }
 
     connect(d->zoomCombo, SIGNAL(activated(int)),
@@ -567,11 +569,6 @@ void EditorWindow::setupStandardActions()
     actionCollection()->addAction("editorwindow_librariesinfo", d->libsInfoAction);
 
     // -- Keyboard-only actions added to <MainWindow> ------------------------------
-
-//    KAction *exitFullscreenAction = new KAction(i18n("Exit Full Screen"), this);
-//    actionCollection()->addAction("editorwindow_exitfullscreen", exitFullscreenAction);
-//    exitFullscreenAction->setShortcut(KShortcut(Qt::Key_Escape) );
-//    connect(exitFullscreenAction, SIGNAL(triggered()), this, SLOT(slotEscapePressed()));
 
     KAction *closeToolAction = new KAction(i18n("Close Tool"), this);
     actionCollection()->addAction("editorwindow_closetool", closeToolAction);
@@ -732,7 +729,7 @@ void EditorWindow::slotZoomTo100Percents()
     d->zoomPlusAction->setEnabled(true);
     d->zoomComboAction->setEnabled(true);
     d->zoomMinusAction->setEnabled(true);
-    m_stackView->zoomTo100Percents();
+    m_stackView->zoomTo100Percent();
 }
 
 void EditorWindow::slotZoomSelected(int index)

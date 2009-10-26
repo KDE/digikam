@@ -161,7 +161,7 @@ void EditorStackView::fitToSelect()
     }
 }
 
-void EditorStackView::zoomTo100Percents()
+void EditorStackView::zoomTo100Percent()
 {
     if (viewMode() == CanvasMode)
     {

@@ -69,7 +69,7 @@ public:
     void decreaseZoom();
     void toggleFitToWindow();
     void fitToSelect();
-    void zoomTo100Percents();
+    void zoomTo100Percent();
     void setZoomFactor(double zoom);
 
     /** Two widgets are embedded in Editor Tool to perform preview with panning and zooming:
