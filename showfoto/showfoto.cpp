@@ -232,57 +232,6 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     m_imagePluginLoader = new Digikam::ImagePluginLoader(this, d->splash);
     loadImagePlugins();
 
-    // If plugin core is not available, plug BCG actions to collection instead.
-
-    if ( !m_imagePluginLoader->pluginLibraryIsLoaded("digikamimageplugin_core") )
-    {
-        d->BCGAction = new KActionMenu(i18n("Brightness/Contrast/Gamma"), 0);
-        d->BCGAction->setObjectName("showfoto_bcg");
-        d->BCGAction->setDelayed(false);
-
-        KAction *incGammaAction = new KAction(i18n("Increase Gamma"), this);
-        incGammaAction->setShortcut(KShortcut(Qt::ALT+Qt::Key_G));
-        connect(incGammaAction, SIGNAL(triggered()), this, SLOT(slotChangeBCG()));
-        actionCollection()->addAction("gamma_plus", incGammaAction);
-
-        KAction *decGammaAction = new KAction(i18n("Decrease Gamma"), this);
-        decGammaAction->setShortcut(KShortcut(Qt::ALT+Qt::SHIFT+Qt::Key_G));
-        connect(decGammaAction, SIGNAL(triggered()), this, SLOT(slotChangeBCG()));
-        actionCollection()->addAction("gamma_minus", decGammaAction);
-
-        KAction *incBrightAction = new KAction(i18n("Increase Brightness"), this);
-        incBrightAction->setShortcut(KShortcut(Qt::ALT+Qt::Key_B));
-        connect(incBrightAction, SIGNAL(triggered()), this, SLOT(slotChangeBCG()));
-        actionCollection()->addAction("brightness_plus", incBrightAction);
-
-        KAction *decBrightAction = new KAction(i18n("Decrease Brightness"), this);
-        decBrightAction->setShortcut(KShortcut(Qt::ALT+Qt::SHIFT+Qt::Key_B));
-        connect(decBrightAction, SIGNAL(triggered()), this, SLOT(slotChangeBCG()));
-        actionCollection()->addAction("brightness_minus", decBrightAction);
-
-        KAction *incContrastAction = new KAction(i18n("Increase Contrast"), this);
-        incContrastAction->setShortcut(KShortcut(Qt::ALT+Qt::Key_C));
-        connect(incContrastAction, SIGNAL(triggered()), this, SLOT(slotChangeBCG()));
-        actionCollection()->addAction("contrast_plus", incContrastAction);
-
-        KAction *decContrastAction = new KAction(i18n("Decrease Contrast"), this);
-        decContrastAction->setShortcut(KShortcut(Qt::ALT+Qt::SHIFT+Qt::Key_C));
-        connect(decContrastAction, SIGNAL(triggered()), this, SLOT(slotChangeBCG()));
-        actionCollection()->addAction("contrast_minus", decContrastAction);
-
-        d->BCGAction->addAction(incBrightAction);
-        d->BCGAction->addAction(decBrightAction);
-        d->BCGAction->addAction(incContrastAction);
-        d->BCGAction->addAction(decContrastAction);
-        d->BCGAction->addAction(incGammaAction);
-        d->BCGAction->addAction(decGammaAction);
-
-        QList<QAction*> bcg_actions;
-        bcg_actions.append( d->BCGAction );
-        unplugActionList( "showfoto_bcg" );
-        plugActionList( "showfoto_bcg", bcg_actions );
-    }
-
     // Create context menu.
 
     setupContextMenu();
@@ -672,38 +621,6 @@ Digikam::ThumbBarDock *ShowFoto::thumbBar() const
 Digikam::Sidebar *ShowFoto::rightSideBar() const
 {
     return (dynamic_cast<Digikam::Sidebar*>(d->rightSideBar));
-}
-
-void ShowFoto::slotChangeBCG()
-{
-    QString name;
-    if (sender())
-        name = sender()->objectName();
-
-    if (name == "gamma_plus")
-    {
-        m_canvas->increaseGamma();
-    }
-    else if  (name == "gamma_minus")
-    {
-        m_canvas->decreaseGamma();
-    }
-    else if  (name == "brightness_plus")
-    {
-        m_canvas->increaseBrightness();
-    }
-    else if  (name == "brightness_minus")
-    {
-        m_canvas->decreaseBrightness();
-    }
-    else if  (name == "contrast_plus")
-    {
-        m_canvas->increaseContrast();
-    }
-    else if  (name == "contrast_minus")
-    {
-        m_canvas->decreaseContrast();
-    }
 }
 
 void ShowFoto::slotChanged()

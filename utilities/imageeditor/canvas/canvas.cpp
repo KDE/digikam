@@ -1260,48 +1260,6 @@ void Canvas::setExifOrient(bool exifOrient)
     viewport()->update();
 }
 
-void Canvas::increaseGamma()
-{
-    d->im->changeGamma(1);
-    d->tileCache.clear();
-    viewport()->update();
-}
-
-void Canvas::decreaseGamma()
-{
-    d->im->changeGamma(-1);
-    d->tileCache.clear();
-    viewport()->update();
-}
-
-void Canvas::increaseBrightness()
-{
-    d->im->changeBrightness(1);
-    d->tileCache.clear();
-    viewport()->update();
-}
-
-void Canvas::decreaseBrightness()
-{
-    d->im->changeBrightness(-1);
-    d->tileCache.clear();
-    viewport()->update();
-}
-
-void Canvas::increaseContrast()
-{
-    d->im->changeContrast(5);
-    d->tileCache.clear();
-    viewport()->update();
-}
-
-void Canvas::decreaseContrast()
-{
-    d->im->changeContrast(-5);
-    d->tileCache.clear();
-    viewport()->update();
-}
-
 void Canvas::slotRestore()
 {
     d->im->restore();

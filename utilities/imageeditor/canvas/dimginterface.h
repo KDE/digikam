@@ -7,7 +7,7 @@
  * Description : DImg interface for image editor
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -123,11 +123,6 @@ public:
 
     void   resize(int w, int h);
 
-    void   changeGamma(double gamma);
-    void   changeBrightness(double brightness);
-    void   changeContrast(double contrast);
-    void   changeBCG(double gamma, double brightness, double contrast);
-
     void   setBCG(double brightness, double contrast, double gamma);
 
     void   convertDepth(int depth);
@@ -148,7 +143,7 @@ public:
 
     void   putIccProfile(const IccProfile& profile);
 
-    /** Convert a DImg image to a pixmap for screen using color 
+    /** Convert a DImg image to a pixmap for screen using color
         managed view if necessary */
     QPixmap               convertToPixmap(DImg& img);
 

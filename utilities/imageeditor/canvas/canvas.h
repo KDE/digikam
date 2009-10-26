@@ -117,13 +117,6 @@ public:
 
     void  setExifOrient(bool exifOrient);
 
-    void  increaseGamma();
-    void  decreaseGamma();
-    void  increaseBrightness();
-    void  decreaseBrightness();
-    void  increaseContrast();
-    void  decreaseContrast();
-
     void  getUndoHistory(QStringList& titles);
     void  getRedoHistory(QStringList& titles);
 

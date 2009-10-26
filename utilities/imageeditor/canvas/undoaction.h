@@ -14,7 +14,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -104,32 +104,6 @@ public:
 private:
 
     int m_dir;
-};
-
-// --------------------------------------------------------------------
-
-class DIGIKAM_EXPORT UndoActionBCG : public UndoAction
-{
-
-public:
-
-    UndoActionBCG(DImgInterface* iface,
-                  double oldGamma, double oldBrightness,
-                  double oldContrast, double newGamma,
-                  double newBrightness, double newContrast);
-    ~UndoActionBCG();
-
-    void rollBack();
-    void execute();
-
-private:
-
-    double m_oldGamma;
-    double m_oldBrightness;
-    double m_oldContrast;
-    double m_newGamma;
-    double m_newBrightness;
-    double m_newContrast;
 };
 
 // --------------------------------------------------------------------

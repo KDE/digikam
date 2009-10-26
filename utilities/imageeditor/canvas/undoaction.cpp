@@ -144,33 +144,6 @@ void UndoActionFlip::execute()
 
 // ---------------------------------------------------------------------------------------------
 
-UndoActionBCG::UndoActionBCG(DImgInterface* iface,
-                             double oldGamma, double oldBrightness,
-                             double oldContrast, double newGamma,
-                             double newBrightness, double newContrast)
-             : UndoAction(iface), m_oldGamma(oldGamma), m_oldBrightness(oldBrightness),
-               m_oldContrast(oldContrast), m_newGamma(newGamma), m_newBrightness(newBrightness),
-               m_newContrast(newContrast)
-{
-    m_title = i18n("Brightness,Contrast,Gamma");
-}
-
-UndoActionBCG::~UndoActionBCG()
-{
-}
-
-void UndoActionBCG::rollBack()
-{
-    m_iface->changeBCG(m_oldGamma, m_oldBrightness, m_oldContrast);
-}
-
-void UndoActionBCG::execute()
-{
-    m_iface->changeBCG(m_newGamma, m_newBrightness, m_newContrast);
-}
-
-// ---------------------------------------------------------------------------------------------
-
 UndoActionIrreversible::UndoActionIrreversible(DImgInterface* iface, const QString& title)
                       : UndoAction(iface)
 {

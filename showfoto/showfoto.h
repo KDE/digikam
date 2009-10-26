@@ -108,8 +108,6 @@ private Q_SLOTS:
     void slotOpenFilesInFolder();
     void slotDeleteCurrentItem();
 
-    void slotChangeBCG();
-
     void slotChanged();
     void slotUndoStateChanged(bool, bool, bool);
     void slotUpdateItemInfo();
