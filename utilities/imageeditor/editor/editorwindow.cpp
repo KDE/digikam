@@ -419,22 +419,30 @@ void EditorWindow::setupStandardActions()
     d->zoomFitToSelectAction->setWhatsThis(i18n("This option can be used to zoom the image to the "
                                                 "current selection area."));
 
+    // --------------------------------------------------------
+
+    QList<double> zoomLevels;
+    zoomLevels << 10.0;
+    zoomLevels << 25.0;
+    zoomLevels << 50.0;
+    zoomLevels << 75.0;
+    zoomLevels << 100.0;
+    zoomLevels << 150.0;
+    zoomLevels << 200.0;
+    zoomLevels << 300.0;
+    zoomLevels << 450.0;
+    zoomLevels << 600.0;
+    zoomLevels << 800.0;
+    zoomLevels << 1200.0;
+
     d->zoomCombo = new KComboBox(true);
     d->zoomCombo->setDuplicatesEnabled(false);
     d->zoomCombo->setFocusPolicy(Qt::ClickFocus);
     d->zoomCombo->setInsertPolicy(QComboBox::NoInsert);
-    d->zoomCombo->addItem(QString("10%") ,  QVariant(10.0));
-    d->zoomCombo->addItem(QString("25%") ,  QVariant(25.0));
-    d->zoomCombo->addItem(QString("50%") ,  QVariant(50.0));
-    d->zoomCombo->addItem(QString("75%") ,  QVariant(75.0));
-    d->zoomCombo->addItem(QString("100%"),  QVariant(100.0));
-    d->zoomCombo->addItem(QString("150%"),  QVariant(150.0));
-    d->zoomCombo->addItem(QString("200%"),  QVariant(200.0));
-    d->zoomCombo->addItem(QString("300%"),  QVariant(300.0));
-    d->zoomCombo->addItem(QString("450%"),  QVariant(450.0));
-    d->zoomCombo->addItem(QString("600%"),  QVariant(600.0));
-    d->zoomCombo->addItem(QString("800%"),  QVariant(800.0));
-    d->zoomCombo->addItem(QString("1200%"), QVariant(1200.0));
+    foreach (const double zoom, zoomLevels)
+    {
+        d->zoomCombo->addItem(QString("%1%").arg((int)zoom), QVariant(zoom));
+    }
 
     connect(d->zoomCombo, SIGNAL(activated(int)),
             this, SLOT(slotZoomSelected(int)));
@@ -443,6 +451,8 @@ void EditorWindow::setupStandardActions()
     d->zoomComboAction->setDefaultWidget(d->zoomCombo);
     d->zoomComboAction->setText(i18n("Zoom"));
     actionCollection()->addAction("editorwindow_zoomto", d->zoomComboAction);
+
+    // --------------------------------------------------------
 
     m_fullScreenAction = KStandardAction::fullScreen(this, SLOT(slotToggleFullScreen()), this, this);
     actionCollection()->addAction("editorwindow_fullscreen", m_fullScreenAction);
