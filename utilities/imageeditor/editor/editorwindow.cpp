@@ -423,24 +423,21 @@ void EditorWindow::setupStandardActions()
     d->zoomCombo->setDuplicatesEnabled(false);
     d->zoomCombo->setFocusPolicy(Qt::ClickFocus);
     d->zoomCombo->setInsertPolicy(QComboBox::NoInsert);
-    d->zoomCombo->insertItem(-1, QString("10%"));
-    d->zoomCombo->insertItem(-1, QString("25%"));
-    d->zoomCombo->insertItem(-1, QString("50%"));
-    d->zoomCombo->insertItem(-1, QString("75%"));
-    d->zoomCombo->insertItem(-1, QString("100%"));
-    d->zoomCombo->insertItem(-1, QString("150%"));
-    d->zoomCombo->insertItem(-1, QString("200%"));
-    d->zoomCombo->insertItem(-1, QString("300%"));
-    d->zoomCombo->insertItem(-1, QString("450%"));
-    d->zoomCombo->insertItem(-1, QString("600%"));
-    d->zoomCombo->insertItem(-1, QString("800%"));
-    d->zoomCombo->insertItem(-1, QString("1200%"));
+    d->zoomCombo->addItem(QString("10%") ,  QVariant(10.0));
+    d->zoomCombo->addItem(QString("25%") ,  QVariant(25.0));
+    d->zoomCombo->addItem(QString("50%") ,  QVariant(50.0));
+    d->zoomCombo->addItem(QString("75%") ,  QVariant(75.0));
+    d->zoomCombo->addItem(QString("100%"),  QVariant(100.0));
+    d->zoomCombo->addItem(QString("150%"),  QVariant(150.0));
+    d->zoomCombo->addItem(QString("200%"),  QVariant(200.0));
+    d->zoomCombo->addItem(QString("300%"),  QVariant(300.0));
+    d->zoomCombo->addItem(QString("450%"),  QVariant(450.0));
+    d->zoomCombo->addItem(QString("600%"),  QVariant(600.0));
+    d->zoomCombo->addItem(QString("800%"),  QVariant(800.0));
+    d->zoomCombo->addItem(QString("1200%"), QVariant(1200.0));
 
     connect(d->zoomCombo, SIGNAL(activated(int)),
-            this, SLOT(slotZoomSelected()) );
-
-    connect(d->zoomCombo, SIGNAL(returnPressed(const QString&)),
-            this, SLOT(slotZoomTextChanged(const QString &)) );
+            this, SLOT(slotZoomSelected(int)));
 
     d->zoomComboAction = new QWidgetAction(this);
     d->zoomComboAction->setDefaultWidget(d->zoomCombo);
@@ -728,19 +725,14 @@ void EditorWindow::slotZoomTo100Percents()
     m_stackView->zoomTo100Percents();
 }
 
-void EditorWindow::slotZoomSelected()
+void EditorWindow::slotZoomSelected(int index)
 {
-    QString txt = d->zoomCombo->currentText();
-    txt         = txt.left(txt.indexOf('%'));
-    slotZoomTextChanged(txt);
-}
-
-void EditorWindow::slotZoomTextChanged(const QString& txt)
-{
-    bool r      = false;
-    double zoom = KGlobal::locale()->readNumber(txt, &r) / 100.0;
-    if (r && zoom > 0.0)
+    bool ok     = false;
+    double zoom = d->zoomCombo->itemData(index).toDouble(&ok) / 100.0;
+    if (ok && zoom > 0.0)
+    {
         m_stackView->setZoomFactor(zoom);
+    }
 }
 
 void EditorWindow::slotZoomChanged(bool isMax, bool isMin, double zoom)
