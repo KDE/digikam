@@ -54,7 +54,7 @@
         </font>
        </property>
        <property name="text">
-        <string>TextLabel</string>
+        <string comment="KDE::DoNotExtract">TextLabel</string>
        </property>
       </widget>
      </item>
@@ -64,7 +64,7 @@
         <bool>false</bool>
        </property>
        <property name="text">
-        <string>TextLabel</string>
+        <string comment="KDE::DoNotExtract">TextLabel</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
