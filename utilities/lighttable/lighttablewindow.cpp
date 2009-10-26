@@ -584,11 +584,6 @@ void LightTableWindow::setupActions()
 
     // -- Keyboard-only actions added to <MainWindow> ------------------------------
 
-//    KAction *exitFullscreenAction = new KAction(i18n("Exit Fullscreen mode"), this);
-//    actionCollection()->addAction("editorwindow_exitfullscreen", exitFullscreenAction);
-//    exitFullscreenAction->setShortcut(KShortcut(Qt::Key_Escape) );
-//    connect(exitFullscreenAction, SIGNAL(triggered()), this, SLOT(slotEscapePressed()));
-
     KAction *altBackwardAction = new KAction(i18n("Previous Image"), this);
     actionCollection()->addAction("lighttable_backward_shift_space", altBackwardAction);
     altBackwardAction->setShortcut( KShortcut(Qt::SHIFT+Qt::Key_Space) );

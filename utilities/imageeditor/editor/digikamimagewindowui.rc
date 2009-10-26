@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="30" name="digikamimagewindow" >
+<gui version="31" name="digikamimagewindow" >
 
 <MenuBar>
 
@@ -35,13 +35,13 @@
         <Action name="editorwindow_fullscreen" />
         <Action name="editorwindow_slideshow" />
         <Separator/>
-        <Action name="editorwindow_zoomplus" /> 
-        <Action name="editorwindow_zoomminus" /> 
+        <Action name="editorwindow_zoomplus" />
+        <Action name="editorwindow_zoomminus" />
         <Action name="editorwindow_zoomto100percents" />
         <Action name="editorwindow_zoomfit2window" />
         <Action name="editorwindow_zoomfit2select" />
         <Separator/>
-        <Action name="editorwindow_showthumbs" /> 
+        <Action name="editorwindow_showthumbs" />
         <Separator/>
         <Action name="editorwindow_underexposure" />
         <Action name="editorwindow_overexposure" />
@@ -58,14 +58,14 @@
     </Menu>
 
     <Menu name="Transform" ><text>Tra&amp;nsform</text>
-        <Action name="editorwindow_rotate_left" /> 
-        <Action name="editorwindow_rotate_right" /> 
+        <Action name="editorwindow_rotate_left" />
+        <Action name="editorwindow_rotate_right" />
         <Separator/>
-        <Action name="editorwindow_flip_horiz" /> 
-        <Action name="editorwindow_flip_vert" /> 
+        <Action name="editorwindow_flip_horiz" />
+        <Action name="editorwindow_flip_vert" />
         <Separator/>
-        <Action name="editorwindow_crop" /> 
-        <Action name="editorwindow_resize" /> 
+        <Action name="editorwindow_crop" />
+        <Action name="editorwindow_resize" />
     </Menu>
 
     <Menu name="Decorate" ><text>&amp;Decorate</text>
@@ -126,10 +126,6 @@
      <WeakSeparator/>
      <Action name="logo_action" />
 </ToolBar>
-
-<MainWindow>
-     <Action name="editorwindow_exitfullscreen" />
-</MainWindow>
 
 <ActionProperties/>
 

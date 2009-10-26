@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="28" name="lighttablewindow" >
+<gui version="29" name="lighttablewindow" >
 
 <MenuBar>
 
@@ -28,8 +28,8 @@
         <Action name="lighttable_syncpreview" />
         <Action name="lighttable_navigatebypair" />
         <Separator/>
-        <Action name="lighttable_zoomplus" /> 
-        <Action name="lighttable_zoomminus" /> 
+        <Action name="lighttable_zoomplus" />
+        <Action name="lighttable_zoomminus" />
         <Action name="lighttable_zoomto100percents" />
         <Action name="lighttable_zoomfit2window" />
         <Separator/>
@@ -66,13 +66,13 @@
      <Action name="lighttable_forward" />
      <Action name="lighttable_last" />
      <Separator/>
-     <Action name="lighttable_zoomplus" /> 
-     <Action name="lighttable_zoomminus" /> 
-     <Action name="lighttable_zoomfit2window" /> 
+     <Action name="lighttable_zoomplus" />
+     <Action name="lighttable_zoomminus" />
+     <Action name="lighttable_zoomfit2window" />
      <Separator/>
      <Action name="lighttable_setitemleft" />
      <Action name="lighttable_setitemright" />
-     <Action name="lighttable_syncpreview" /> 
+     <Action name="lighttable_syncpreview" />
      <Action name="lighttable_navigatebypair" />
      <Separator/>
      <Action name="lighttable_fullscreen" />
@@ -81,10 +81,6 @@
      <WeakSeparator/>
      <Action name="logo_action" />
  </ToolBar>
-
-<MainWindow>
-     <Action name="editorwindow_exitfullscreen" />
-</MainWindow>
 
 <ActionProperties/>
 

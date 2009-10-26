@@ -450,13 +450,6 @@ void QueueMgrWindow::setupActions()
     // Provides a menu entry that allows showing/hiding the statusbar
     createStandardStatusBarAction();
 
-    // -- Keyboard-only actions added to <MainWindow> ------------------------------
-
-//    KAction *exitFullscreenAction = new KAction(i18n("Exit Fullscreen mode"), this);
-//    actionCollection()->addAction("editorwindow_exitfullscreen", exitFullscreenAction);
-//    exitFullscreenAction->setShortcut(KShortcut(Qt::Key_Escape) );
-//    connect(exitFullscreenAction, SIGNAL(triggered()), this, SLOT(slotEscapePressed()));
-
     // ---------------------------------------------------------------------------------
 
     d->animLogo = new DLogoAction(this);
