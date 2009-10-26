@@ -62,7 +62,9 @@ namespace Digikam
 
 class NewlyAppearedFile
 {
+
 public:
+
     NewlyAppearedFile() : albumId(0) {}
     NewlyAppearedFile(int albumId, const QString &fileName)
         : albumId(albumId), fileName(fileName) {}
@@ -83,6 +85,7 @@ inline uint qHash(const NewlyAppearedFile &file)
 
 class CollectionScannerPriv
 {
+
 public:
 
     CollectionScannerPriv()
@@ -258,8 +261,10 @@ void CollectionScanner::completeScan()
 void CollectionScanner::partialScan(const QString& filePath)
 {
     QString albumRoot = CollectionManager::instance()->albumRootPath(filePath);
+
     if (albumRoot.isNull())
         return;
+
     QString album = CollectionManager::instance()->album(filePath);
     partialScan(albumRoot, album);
 }
@@ -323,10 +328,12 @@ void CollectionScanner::partialScan(const QString& albumRoot, const QString& alb
 void CollectionScanner::scanFile(const QString& filePath, FileScanMode mode)
 {
     QFileInfo info(filePath);
-    QString dirPath = info.path(); // strip off filename
+    QString dirPath   = info.path(); // strip off filename
     QString albumRoot = CollectionManager::instance()->albumRootPath(dirPath);
+    
     if (albumRoot.isNull())
         return;
+    
     QString album = CollectionManager::instance()->album(dirPath);
     scanFile(albumRoot, album, info.fileName(), mode);
 }
@@ -364,7 +371,7 @@ void CollectionScanner::scanFile(const QString& albumRoot, const QString& album,
         return;
     }
 
-    int albumId = checkAlbum(location, album);
+    int albumId       = checkAlbum(location, album);
     qlonglong imageId = DatabaseAccess().db()->getImageId(albumId, fileName);
 
     loadNameFilters();
@@ -773,6 +780,7 @@ int CollectionScanner::countItemsInFolder(const QString& directory)
 DatabaseItem::Category CollectionScanner::category(const QFileInfo& info)
 {
     QString suffix = info.suffix().toLower();
+
     if (d->imageFilterSet.contains(suffix))
         return DatabaseItem::Image;
     else if (d->audioFilterSet.contains(suffix))
@@ -857,9 +865,10 @@ bool CollectionScanner::checkDeleteRemoved()
     // Now look at time since items were removed, and the number of complete scans
     // since removed items were deleted. Values arbitrarily chosen.
     int daysPast = removedItemsTime.daysTo(now);
-    return (daysPast > 7 && completeScans > 2)
-        || (daysPast > 30 && completeScans > 0)
-        || (completeScans > 30);
+
+    return (daysPast > 7  && completeScans > 2) ||
+           (daysPast > 30 && completeScans > 0) ||
+           (completeScans > 30);
 }
 
 // ------------------------------------------------------------------------------------------
@@ -1028,8 +1037,7 @@ void CollectionScanner::scanAlbum(const QString& albumRoot, const QString& album
     QDir dir( albumRoot + album );
     if ( !dir.exists() || !dir.isReadable() )
     {
-        kWarning(digiKamAreaCode) << "Folder does not exist or is not readable: "
-                        << dir.path();
+        kWarning(digiKamAreaCode) << "Folder does not exist or is not readable: " << dir.path();
         return;
     }
 
@@ -1156,7 +1164,7 @@ int CollectionScanner::countItemsInFolder(const QString& directory)
     QFileInfoList::const_iterator fi;
     for (fi = list.constBegin(); fi != list.constEnd(); ++fi)
     {
-        if ( fi->isDir() &&
+        if ( fi->isDir()           &&
              fi->fileName() != "." &&
              fi->fileName() != "..")
         {
@@ -1172,7 +1180,6 @@ void CollectionScanner::markDatabaseAsScanned()
     DatabaseAccess access;
     access.db()->setSetting("Scanned", QDateTime::currentDateTime().toString(Qt::ISODate));
 }
-
 
 // ------------------- Tools ------------------------
 
