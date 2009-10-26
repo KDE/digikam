@@ -1167,7 +1167,7 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
     KAction *rebuildFingerPrintsAction = new KAction(KIcon("run-build"), i18n("Rebuild Fingerprints..."), this);
-    connect(rebuildFingerPrintsAction, SIGNAL(triggered()), this, SLOT(slotRebuildAllFingerPrints()));
+    connect(rebuildFingerPrintsAction, SIGNAL(triggered()), this, SLOT(slotRebuildFingerPrints()));
     actionCollection()->addAction("fingerprints_rebuild", rebuildFingerPrintsAction);
 
     // -----------------------------------------------------------
@@ -2487,7 +2487,7 @@ void DigikamApp::runThumbnailsGenerator(bool rebuildAll)
     thumbsGenerator->show();
 }
 
-void DigikamApp::slotRebuildAllFingerPrints()
+void DigikamApp::slotRebuildFingerPrints()
 {
     QString msg = i18n("Image fingerprinting can take some time.\n"
                        "Which would you prefer?\n"
@@ -2509,12 +2509,12 @@ void DigikamApp::runFingerPrintsGenerator(bool rebuildAll)
     FingerPrintsGenerator *fingerprintsGenerator = new FingerPrintsGenerator(this, rebuildAll);
 
     connect(fingerprintsGenerator, SIGNAL(signalRebuildAllFingerPrintsDone()),
-            this, SLOT(slotRebuildAllFingerPrintsDone()));
+            this, SLOT(slotRebuildFingerPrintsDone()));
 
     fingerprintsGenerator->show();
 }
 
-void DigikamApp::slotRebuildAllFingerPrintsDone()
+void DigikamApp::slotRebuildFingerPrintsDone()
 {
     d->config->group("General Settings").writeEntry("Finger Prints Generator First Run", true);
 }

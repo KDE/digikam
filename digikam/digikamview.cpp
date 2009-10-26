@@ -444,7 +444,7 @@ void DigikamView::setupConnections()
             d->parent, SLOT(slotProgressValue(int)));
 
     connect(d->fuzzySearchView, SIGNAL(signalUpdateFingerPrints()),
-            d->parent, SLOT(slotRebuildAllFingerPrints()));
+            d->parent, SLOT(slotRebuildFingerPrints()));
 
 #ifdef HAVE_MARBLEWIDGET
     connect(this, SIGNAL(signalNoCurrentItem()),

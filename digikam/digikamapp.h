@@ -187,8 +187,8 @@ private Q_SLOTS:
     void slotDatabaseRescan();
     void slotRebuildThumbnails();
     void slotWriteMetadataToAllImages();
-    void slotRebuildAllFingerPrints();
-    void slotRebuildAllFingerPrintsDone();
+    void slotRebuildFingerPrints();
+    void slotRebuildFingerPrintsDone();
 
     void slotChangeTheme(const QString& theme);
     void slotThemeChanged();
