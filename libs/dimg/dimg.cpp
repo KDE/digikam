@@ -935,7 +935,6 @@ QString DImg::embeddedText(const QString& key) const
 
 DColor DImg::getPixelColor(uint x, uint y) const
 {
-
     if (m_priv->null || x >= m_priv->width || y >= m_priv->height)
     {
         kDebug(digiKamAreaCode) << "DImg::getPixelColor() : wrong pixel position!";
@@ -1561,31 +1560,44 @@ QImage DImg::pureColorMask(ExposureSettingsContainer *expoSettings)
 
     uchar *bits = img.bits();
     int    max  = sixteenBit() ? 65535 : 255;
-    int    index;
-    DColor pix;
 
-    for (uint x=0 ; x < width() ; ++x)
+    // --------------------------------------------------------
+
+    // caching
+    int depth        = bytesDepth();
+    int bytesPerLine = img.bytesPerLine();
+
+    int u_red        = expoSettings->underExposureColor.red();
+    int u_green      = expoSettings->underExposureColor.green();
+    int u_blue       = expoSettings->underExposureColor.blue();
+
+    int o_red        = expoSettings->overExposureColor.red();
+    int o_green      = expoSettings->overExposureColor.green();
+    int o_blue       = expoSettings->overExposureColor.blue();
+
+    // --------------------------------------------------------
+
+    for (uint x = 0; x < m_priv->width; ++x)
     {
-        for (uint y=0 ; y<height() ; ++y)
+        for (uint y = 0; y < m_priv->height; ++y)
         {
-            pix   = getPixelColor(x, y);
-            index = y*img.bytesPerLine() + x*4;
+            // Even though it might look ugly, don't change the DColor call here. It saves us 3 constructors.
+            DColor pix = DColor((m_priv->data + x * depth + (m_priv->width * y * depth)), m_priv->sixteenBit);
+            int index  = y * bytesPerLine + x * 4;
 
-            if (expoSettings->underExposureIndicator &&
-                pix.red() == 0 && pix.green() == 0 && pix.blue() == 0)
+            if (expoSettings->underExposureIndicator && pix.isPureGray(0))
             {
-                bits[index    ] = expoSettings->underExposureColor.blue();
-                bits[index + 1] = expoSettings->underExposureColor.green();
-                bits[index + 2] = expoSettings->underExposureColor.red();
+                bits[index    ] = u_blue;
+                bits[index + 1] = u_green;
+                bits[index + 2] = u_red;
                 bits[index + 3] = 0xFF;
             }
 
-            if (expoSettings->overExposureIndicator &&
-                pix.red() == max && pix.green() == max && pix.blue() == max)
+            if (expoSettings->overExposureIndicator && pix.isPureGray(max))
             {
-                bits[index    ] = expoSettings->overExposureColor.blue();
-                bits[index + 1] = expoSettings->overExposureColor.green();
-                bits[index + 2] = expoSettings->overExposureColor.red();
+                bits[index    ] = o_blue;
+                bits[index + 1] = o_green;
+                bits[index + 2] = o_red;
                 bits[index + 3] = 0xFF;
             }
         }
