@@ -61,7 +61,6 @@ extern "C"
 
 #include <kaction.h>
 #include <kactioncollection.h>
-#include <kactionmenu.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
@@ -135,7 +134,6 @@ public:
         currentItem             = 0;
         itemsNb                 = 0;
         splash                  = 0;
-        BCGAction               = 0;
         openFilesInFolderAction = 0;
         fileOpenAction          = 0;
         thumbBar                = 0;
@@ -160,8 +158,6 @@ public:
     KUrl                             lastOpenedDirectory;
 
     KAction                         *openFilesInFolderAction;
-
-    KActionMenu                     *BCGAction;
 
     Digikam::ThumbnailLoadThread    *thumbLoadThread;
     Digikam::ThumbBarView           *thumbBar;
@@ -658,10 +654,6 @@ void ShowFoto::slotUndoStateChanged(bool moreUndo, bool moreRedo, bool canSave)
 void ShowFoto::toggleActions(bool val)
 {
     toggleStandardActions(val);
-
-    // if BCG actions exists then toggle it.
-    if (d->BCGAction)
-        d->BCGAction->setEnabled(val);
 }
 
 void ShowFoto::slotFilePrint()
