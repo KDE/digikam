@@ -1178,12 +1178,12 @@ bool EditorWindow::promptUserSave(const KUrl& url, SaveOrSaveAs saveOrSaveAs, bo
         }
 
         int result;
+        QString boxMessage = i18n("The image '%1' has been modified.\n"
+                                  "Do you want to save it?", url.fileName());
         if (allowCancel)
         {
             result = KMessageBox::warningYesNoCancel(this,
-                                  i18n("The image '%1' has been modified.\n"
-                                       "Do you want to save it?",
-                                       url.fileName()),
+                                  boxMessage,
                                   QString(),
                                   KStandardGuiItem::save(),
                                   KStandardGuiItem::discard());
@@ -1191,9 +1191,7 @@ bool EditorWindow::promptUserSave(const KUrl& url, SaveOrSaveAs saveOrSaveAs, bo
         else
         {
             result = KMessageBox::warningYesNo(this,
-                                  i18n("The image '%1' has been modified.\n"
-                                       "Do you want to save it?",
-                                       url.fileName()),
+                                  boxMessage,
                                   QString(),
                                   KStandardGuiItem::save(),
                                   KStandardGuiItem::discard());
