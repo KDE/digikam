@@ -106,6 +106,7 @@ enum TemperaturePreset
     XenonLamp   = 6420,
     DaylightD65 = 6500
 };
+const int DEFAULT_TEMPERATURE = DaylightD65;
 
 class WhiteBalanceToolPriv
 {
@@ -254,7 +255,7 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
     d->temperatureInput    = new RDoubleNumInput;
     d->temperatureInput->setDecimals(1);
     d->temperatureInput->input()->setRange(1750.0, 12000.0, 10.0);
-    d->temperatureInput->setDefaultValue((double)DaylightD65);
+    d->temperatureInput->setDefaultValue((double)DEFAULT_TEMPERATURE);
     d->temperatureInput->setWhatsThis( i18n("Set here the white balance color temperature in Kelvin."));
 
     d->temperaturePresetLabel = new QLabel(i18n("Preset:"));
@@ -273,7 +274,7 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
     d->temperaturePresetCB->combo()->addItem(i18n("Sunrise"),                        QVariant(Sunrise));
     d->temperaturePresetCB->combo()->addItem(i18n("Xenon Lamp"),                     QVariant(XenonLamp));
     d->temperaturePresetCB->combo()->addItem(i18nc("no temperature preset", "None"), QVariant(None));
-    d->temperaturePresetCB->setDefaultIndex(d->temperaturePresetCB->combo()->findData(QVariant(DaylightD65)));
+    d->temperaturePresetCB->setDefaultIndex(d->temperaturePresetCB->combo()->findData(QVariant(DEFAULT_TEMPERATURE)));
 
     QString toolTip = QString("<p>%1</p>")
                               .arg(i18n("Select the white balance color temperature preset to use."));
@@ -484,7 +485,7 @@ void WhiteBalanceTool::slotTemperaturePresetChanged(int tempPreset)
     int temperature = d->temperaturePresetCB->combo()->itemData(tempPreset).toInt(&ok);
     if (!ok)
     {
-        temperature = (int)DaylightD65;
+        temperature = DEFAULT_TEMPERATURE;
     }
 
     if (temperature != -1)
