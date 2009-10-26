@@ -53,49 +53,75 @@ class SetupToolTipPriv
 {
 public:
 
-    SetupToolTipPriv()
-    {
-        showToolTipsBox   = 0;
-        fontSelect        = 0;
+    SetupToolTipPriv() :
+        configGroupName("ImageViewer Settings"),
+        configShowToolTipsEntry("Show ToolTips"),
+        configToolTipsFontEntry("ToolTips Font"),
+        configToolTipsShowFileNameEntry("ToolTips Show File Name"),
+        configToolTipsShowFileDateEntry("ToolTips Show File Date"),
+        configToolTipsShowFileSizeEntry("ToolTips Show File Size"),
+        configToolTipsShowImageTypeEntry("ToolTips Show Image Type"),
+        configToolTipsShowImageDimEntry("ToolTips Show Image Dim"),
+        configToolTipsShowPhotoMakeEntry("ToolTips Show Photo Make"),
+        configToolTipsShowPhotoDateEntry("ToolTips Show Photo Date"),
+        configToolTipsShowPhotoFocalEntry("ToolTips Show Photo Focal"),
+        configToolTipsShowPhotoExpoEntry("ToolTips Show Photo Expo"),
+        configToolTipsShowPhotoModeEntry("ToolTips Show Photo Mode"),
+        configToolTipsShowPhotoFlashEntry("ToolTips Show Photo Flash"),
+        configToolTipsShowPhotoWBEntry("ToolTips Show Photo WB"),
 
-        showFileNameBox   = 0;
-        showFileDateBox   = 0;
-        showFileSizeBox   = 0;
-        showImageTypeBox  = 0;
-        showImageDimBox   = 0;
+        showFileDateBox(0),
+        showFileNameBox(0),
+        showFileSizeBox(0),
+        showImageDimBox(0),
+        showImageTypeBox(0),
+        showPhotoDateBox(0),
+        showPhotoExpoBox(0),
+        showPhotoFlashBox(0),
+        showPhotoFocalBox(0),
+        showPhotoMakeBox(0),
+        showPhotoModeBox(0),
+        showPhotoWbBox(0),
+        showToolTipsBox(0),
+        fileSettingBox(0),
+        photoSettingBox(0),
+        fontSelect(0)
+        {}
 
-        showPhotoMakeBox  = 0;
-        showPhotoDateBox  = 0;
-        showPhotoFocalBox = 0;
-        showPhotoExpoBox  = 0;
-        showPhotoModeBox  = 0;
-        showPhotoFlashBox = 0;
-        showPhotoWbBox    = 0;
+    const QString configGroupName;
+    const QString configShowToolTipsEntry;
+    const QString configToolTipsFontEntry;
+    const QString configToolTipsShowFileNameEntry;
+    const QString configToolTipsShowFileDateEntry;
+    const QString configToolTipsShowFileSizeEntry;
+    const QString configToolTipsShowImageTypeEntry;
+    const QString configToolTipsShowImageDimEntry;
+    const QString configToolTipsShowPhotoMakeEntry;
+    const QString configToolTipsShowPhotoDateEntry;
+    const QString configToolTipsShowPhotoFocalEntry;
+    const QString configToolTipsShowPhotoExpoEntry;
+    const QString configToolTipsShowPhotoModeEntry;
+    const QString configToolTipsShowPhotoFlashEntry;
+    const QString configToolTipsShowPhotoWBEntry;
 
-        fileSettingBox    = 0;
-        photoSettingBox   = 0;
-    }
+    QCheckBox*    showFileDateBox;
+    QCheckBox*    showFileNameBox;
+    QCheckBox*    showFileSizeBox;
+    QCheckBox*    showImageDimBox;
+    QCheckBox*    showImageTypeBox;
+    QCheckBox*    showPhotoDateBox;
+    QCheckBox*    showPhotoExpoBox;
+    QCheckBox*    showPhotoFlashBox;
+    QCheckBox*    showPhotoFocalBox;
+    QCheckBox*    showPhotoMakeBox;
+    QCheckBox*    showPhotoModeBox;
+    QCheckBox*    showPhotoWbBox;
+    QCheckBox*    showToolTipsBox;
 
-    QCheckBox   *showToolTipsBox;
+    QGroupBox*    fileSettingBox;
+    QGroupBox*    photoSettingBox;
 
-    QCheckBox   *showFileNameBox;
-    QCheckBox   *showFileDateBox;
-    QCheckBox   *showFileSizeBox;
-    QCheckBox   *showImageTypeBox;
-    QCheckBox   *showImageDimBox;
-
-    QCheckBox   *showPhotoMakeBox;
-    QCheckBox   *showPhotoDateBox;
-    QCheckBox   *showPhotoFocalBox;
-    QCheckBox   *showPhotoExpoBox;
-    QCheckBox   *showPhotoModeBox;
-    QCheckBox   *showPhotoFlashBox;
-    QCheckBox   *showPhotoWbBox;
-
-    QGroupBox   *fileSettingBox;
-    QGroupBox   *photoSettingBox;
-
-    DFontSelect *fontSelect;
+    DFontSelect*  fontSelect;
 };
 
 SetupToolTip::SetupToolTip(QWidget* parent)
@@ -218,24 +244,24 @@ SetupToolTip::~SetupToolTip()
 void SetupToolTip::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("ImageViewer Settings"));
+    KConfigGroup group        = config->group(d->configGroupName);
 
-    d->showToolTipsBox->setChecked(group.readEntry("Show ToolTips", true));
-    d->fontSelect->setFont(group.readEntry("ToolTips Font", KGlobalSettings::generalFont()));
+    d->showToolTipsBox->setChecked(group.readEntry(d->configShowToolTipsEntry, true));
+    d->fontSelect->setFont(group.readEntry(d->configToolTipsFontEntry,         KGlobalSettings::generalFont()));
 
-    d->showFileNameBox->setChecked(group.readEntry("ToolTips Show File Name", true));
-    d->showFileDateBox->setChecked(group.readEntry("ToolTips Show File Date", false));
-    d->showFileSizeBox->setChecked(group.readEntry("ToolTips Show File Size", false));
-    d->showImageTypeBox->setChecked(group.readEntry("ToolTips Show Image Type", false));
-    d->showImageDimBox->setChecked(group.readEntry("ToolTips Show Image Dim", true));
+    d->showFileNameBox->setChecked(group.readEntry(d->configToolTipsShowFileNameEntry,   true));
+    d->showFileDateBox->setChecked(group.readEntry(d->configToolTipsShowFileDateEntry,   false));
+    d->showFileSizeBox->setChecked(group.readEntry(d->configToolTipsShowFileSizeEntry,   false));
+    d->showImageTypeBox->setChecked(group.readEntry(d->configToolTipsShowImageTypeEntry, false));
+    d->showImageDimBox->setChecked(group.readEntry(d->configToolTipsShowImageDimEntry,   true));
 
-    d->showPhotoMakeBox->setChecked(group.readEntry("ToolTips Show Photo Make", true));
-    d->showPhotoDateBox->setChecked(group.readEntry("ToolTips Show Photo Date", true));
-    d->showPhotoFocalBox->setChecked(group.readEntry("ToolTips Show Photo Focal", true));
-    d->showPhotoExpoBox->setChecked(group.readEntry("ToolTips Show Photo Expo", true));
-    d->showPhotoModeBox->setChecked(group.readEntry("ToolTips Show Photo Mode", true));
-    d->showPhotoFlashBox->setChecked(group.readEntry("ToolTips Show Photo Flash", false));
-    d->showPhotoWbBox->setChecked(group.readEntry("ToolTips Show Photo WB", false));
+    d->showPhotoMakeBox->setChecked(group.readEntry(d->configToolTipsShowPhotoMakeEntry,   true));
+    d->showPhotoDateBox->setChecked(group.readEntry(d->configToolTipsShowPhotoDateEntry,   true));
+    d->showPhotoFocalBox->setChecked(group.readEntry(d->configToolTipsShowPhotoFocalEntry, true));
+    d->showPhotoExpoBox->setChecked(group.readEntry(d->configToolTipsShowPhotoExpoEntry,   true));
+    d->showPhotoModeBox->setChecked(group.readEntry(d->configToolTipsShowPhotoModeEntry,   true));
+    d->showPhotoFlashBox->setChecked(group.readEntry(d->configToolTipsShowPhotoFlashEntry, false));
+    d->showPhotoWbBox->setChecked(group.readEntry(d->configToolTipsShowPhotoWBEntry,       false));
 
     d->fileSettingBox->setEnabled(d->showToolTipsBox->isChecked());
     d->photoSettingBox->setEnabled(d->showToolTipsBox->isChecked());
@@ -244,24 +270,24 @@ void SetupToolTip::readSettings()
 void SetupToolTip::applySettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("ImageViewer Settings"));
+    KConfigGroup group        = config->group(d->configGroupName);
 
-    group.writeEntry("Show ToolTips",             d->showToolTipsBox->isChecked());
-    group.writeEntry("ToolTips Font",             d->fontSelect->font());
+    group.writeEntry(d->configShowToolTipsEntry,           d->showToolTipsBox->isChecked());
+    group.writeEntry(d->configToolTipsFontEntry,           d->fontSelect->font());
 
-    group.writeEntry("ToolTips Show File Name",   d->showFileNameBox->isChecked());
-    group.writeEntry("ToolTips Show File Date",   d->showFileDateBox->isChecked());
-    group.writeEntry("ToolTips Show File Size",   d->showFileSizeBox->isChecked());
-    group.writeEntry("ToolTips Show Image Type",  d->showImageTypeBox->isChecked());
-    group.writeEntry("ToolTips Show Image Dim",   d->showImageDimBox->isChecked());
+    group.writeEntry(d->configToolTipsShowFileNameEntry,   d->showFileNameBox->isChecked());
+    group.writeEntry(d->configToolTipsShowFileDateEntry,   d->showFileDateBox->isChecked());
+    group.writeEntry(d->configToolTipsShowFileSizeEntry,   d->showFileSizeBox->isChecked());
+    group.writeEntry(d->configToolTipsShowImageTypeEntry,  d->showImageTypeBox->isChecked());
+    group.writeEntry(d->configToolTipsShowImageDimEntry,   d->showImageDimBox->isChecked());
 
-    group.writeEntry("ToolTips Show Photo Make",  d->showPhotoMakeBox->isChecked());
-    group.writeEntry("ToolTips Show Photo Date",  d->showPhotoDateBox->isChecked());
-    group.writeEntry("ToolTips Show Photo Focal", d->showPhotoFocalBox->isChecked());
-    group.writeEntry("ToolTips Show Photo Expo",  d->showPhotoExpoBox->isChecked());
-    group.writeEntry("ToolTips Show Photo Mode",  d->showPhotoModeBox->isChecked());
-    group.writeEntry("ToolTips Show Photo Flash", d->showPhotoFlashBox->isChecked());
-    group.writeEntry("ToolTips Show Photo WB",    d->showPhotoWbBox->isChecked());
+    group.writeEntry(d->configToolTipsShowPhotoMakeEntry,  d->showPhotoMakeBox->isChecked());
+    group.writeEntry(d->configToolTipsShowPhotoDateEntry,  d->showPhotoDateBox->isChecked());
+    group.writeEntry(d->configToolTipsShowPhotoFocalEntry, d->showPhotoFocalBox->isChecked());
+    group.writeEntry(d->configToolTipsShowPhotoExpoEntry,  d->showPhotoExpoBox->isChecked());
+    group.writeEntry(d->configToolTipsShowPhotoModeEntry,  d->showPhotoModeBox->isChecked());
+    group.writeEntry(d->configToolTipsShowPhotoFlashEntry, d->showPhotoFlashBox->isChecked());
+    group.writeEntry(d->configToolTipsShowPhotoWBEntry,    d->showPhotoWbBox->isChecked());
 
     config->sync();
 }

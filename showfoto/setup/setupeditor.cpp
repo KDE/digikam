@@ -53,42 +53,69 @@ class SetupEditorPriv
 {
 public:
 
-    SetupEditorPriv()
-    {
-        backgroundColor       = 0;
-        hideToolBar           = 0;
-        hideThumbBar          = 0;
-        showSplash            = 0;
-        useTrash              = 0;
-        overExposureColor     = 0;
-        underExposureColor    = 0;
-        themebackgroundColor  = 0;
-        colorBox              = 0;
-        sortOrderComboBox     = 0;
-        sortReverse           = 0;
-        useRawImportTool      = 0;
-        sidebarTypeLabel      = 0;
-        sidebarType           = 0;
-    }
+    SetupEditorPriv() :
+        configGroupName("ImageViewer Settings"),
+        configUseThemeBackgroundColorEntry("UseThemeBackgroundColor"),
+        configBackgroundColorEntry("BackgroundColor"),
+        configFullScreenHideToolBarEntry("FullScreen Hide ToolBar"),
+        configFullScreenHideThumbBarEntry("FullScreenHideThumbBar"),
+        configDeleteItem2TrashEntry("DeleteItem2Trash"),
+        configShowSplashEntry("ShowSplash"),
+        configSidebarTitleStyleEntry("Sidebar Title Style"),
+        configUnderExposureColorEntry("UnderExposureColor"),
+        configOverExposureColorEntry("OverExposureColor"),
+        configSortOrderEntry("SortOrder"),
+        configReverseSortEntry("ReverseSort"),
+        configUseRawImportToolEntry("UseRawImportTool"),
 
-    KHBox        *colorBox;
+        sidebarTypeLabel(0),
+        hideThumbBar(0),
+        hideToolBar(0),
+        showSplash(0),
+        sortReverse(0),
+        themebackgroundColor(0),
+        useRawImportTool(0),
+        useTrash(0),
+        colorBox(0),
+        sidebarType(0),
+        sortOrderComboBox(0),
+        backgroundColor(0),
+        overExposureColor(0),
+        underExposureColor(0)
+        {}
 
-    QLabel       *sidebarTypeLabel;
+    const QString configGroupName;
+    const QString configUseThemeBackgroundColorEntry;
+    const QString configBackgroundColorEntry;
+    const QString configFullScreenHideToolBarEntry;
+    const QString configFullScreenHideThumbBarEntry;
+    const QString configDeleteItem2TrashEntry;
+    const QString configShowSplashEntry;
+    const QString configSidebarTitleStyleEntry;
+    const QString configUnderExposureColorEntry;
+    const QString configOverExposureColorEntry;
+    const QString configSortOrderEntry;
+    const QString configReverseSortEntry;
+    const QString configUseRawImportToolEntry;
 
-    QCheckBox    *sortReverse;
-    QCheckBox    *hideToolBar;
-    QCheckBox    *hideThumbBar;
-    QCheckBox    *showSplash;
-    QCheckBox    *useTrash;
-    QCheckBox    *themebackgroundColor;
-    QCheckBox    *useRawImportTool;
+    QLabel*       sidebarTypeLabel;
 
-    KComboBox    *sortOrderComboBox;
-    KComboBox    *sidebarType;
+    QCheckBox*    hideThumbBar;
+    QCheckBox*    hideToolBar;
+    QCheckBox*    showSplash;
+    QCheckBox*    sortReverse;
+    QCheckBox*    themebackgroundColor;
+    QCheckBox*    useRawImportTool;
+    QCheckBox*    useTrash;
 
-    KColorButton *backgroundColor;
-    KColorButton *underExposureColor;
-    KColorButton *overExposureColor;
+    KHBox*        colorBox;
+
+    KComboBox*    sidebarType;
+    KComboBox*    sortOrderComboBox;
+
+    KColorButton* backgroundColor;
+    KColorButton* overExposureColor;
+    KColorButton* underExposureColor;
 };
 
 SetupEditor::SetupEditor(QWidget* parent)
@@ -223,39 +250,39 @@ void SetupEditor::slotThemeBackgroundColor(bool e)
 void SetupEditor::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("ImageViewer Settings"));
+    KConfigGroup group        = config->group(d->configGroupName);
     QColor Black(Qt::black);
     QColor White(Qt::white);
-    d->themebackgroundColor->setChecked(group.readEntry("UseThemeBackgroundColor", true));
-    d->backgroundColor->setColor(group.readEntry("BackgroundColor", Black));
-    d->hideToolBar->setChecked(group.readEntry("FullScreen Hide ToolBar", false));
-    d->hideThumbBar->setChecked(group.readEntry("FullScreenHideThumbBar", true));
-    d->useTrash->setChecked(group.readEntry("DeleteItem2Trash", false));
-    d->showSplash->setChecked(group.readEntry("ShowSplash", true));
-    d->sidebarType->setCurrentIndex(group.readEntry("Sidebar Title Style", 0));
-    d->underExposureColor->setColor(group.readEntry("UnderExposureColor", White));
-    d->overExposureColor->setColor(group.readEntry("OverExposureColor", Black));
-    d->sortOrderComboBox->setCurrentIndex(group.readEntry("SortOrder", 0));
-    d->sortReverse->setChecked(group.readEntry("ReverseSort", false));
-    d->useRawImportTool->setChecked(group.readEntry("UseRawImportTool", false));
+    d->themebackgroundColor->setChecked(group.readEntry(d->configUseThemeBackgroundColorEntry, true));
+    d->backgroundColor->setColor(group.readEntry(d->configBackgroundColorEntry,                Black));
+    d->hideToolBar->setChecked(group.readEntry(d->configFullScreenHideToolBarEntry,            false));
+    d->hideThumbBar->setChecked(group.readEntry(d->configFullScreenHideThumbBarEntry,          true));
+    d->useTrash->setChecked(group.readEntry(d->configDeleteItem2TrashEntry,                    false));
+    d->showSplash->setChecked(group.readEntry(d->configShowSplashEntry,                        true));
+    d->sidebarType->setCurrentIndex(group.readEntry(d->configSidebarTitleStyleEntry,           0));
+    d->underExposureColor->setColor(group.readEntry(d->configUnderExposureColorEntry,          White));
+    d->overExposureColor->setColor(group.readEntry(d->configOverExposureColorEntry,            Black));
+    d->sortOrderComboBox->setCurrentIndex(group.readEntry(d->configSortOrderEntry,             0));
+    d->sortReverse->setChecked(group.readEntry(d->configReverseSortEntry,                      false));
+    d->useRawImportTool->setChecked(group.readEntry(d->configUseRawImportToolEntry,            false));
 }
 
 void SetupEditor::applySettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("ImageViewer Settings"));
-    group.writeEntry("UseThemeBackgroundColor", d->themebackgroundColor->isChecked());
-    group.writeEntry("BackgroundColor",         d->backgroundColor->color());
-    group.writeEntry("FullScreen Hide ToolBar", d->hideToolBar->isChecked());
-    group.writeEntry("FullScreenHideThumbBar",  d->hideThumbBar->isChecked());
-    group.writeEntry("DeleteItem2Trash",        d->useTrash->isChecked());
-    group.writeEntry("ShowSplash",              d->showSplash->isChecked());
-    group.writeEntry("Sidebar Title Style",     d->sidebarType->currentIndex());
-    group.writeEntry("UnderExposureColor",      d->underExposureColor->color());
-    group.writeEntry("OverExposureColor",       d->overExposureColor->color());
-    group.writeEntry("SortOrder",               d->sortOrderComboBox->currentIndex());
-    group.writeEntry("ReverseSort",             d->sortReverse->isChecked());
-    group.writeEntry("UseRawImportTool",        d->useRawImportTool->isChecked());
+    KConfigGroup group        = config->group(d->configGroupName);
+    group.writeEntry(d->configUseThemeBackgroundColorEntry, d->themebackgroundColor->isChecked());
+    group.writeEntry(d->configBackgroundColorEntry,         d->backgroundColor->color());
+    group.writeEntry(d->configFullScreenHideToolBarEntry,   d->hideToolBar->isChecked());
+    group.writeEntry(d->configFullScreenHideThumbBarEntry,  d->hideThumbBar->isChecked());
+    group.writeEntry(d->configDeleteItem2TrashEntry,        d->useTrash->isChecked());
+    group.writeEntry(d->configShowSplashEntry,              d->showSplash->isChecked());
+    group.writeEntry(d->configSidebarTitleStyleEntry,       d->sidebarType->currentIndex());
+    group.writeEntry(d->configUnderExposureColorEntry,      d->underExposureColor->color());
+    group.writeEntry(d->configOverExposureColorEntry,       d->overExposureColor->color());
+    group.writeEntry(d->configSortOrderEntry,               d->sortOrderComboBox->currentIndex());
+    group.writeEntry(d->configReverseSortEntry,             d->sortReverse->isChecked());
+    group.writeEntry(d->configUseRawImportToolEntry,        d->useRawImportTool->isChecked());
     config->sync();
 }
 
