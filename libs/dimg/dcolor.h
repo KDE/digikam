@@ -90,7 +90,8 @@ public:
 
     QColor getQColor() const;
 
-    bool isPureGray(int v) { return (m_red == v && m_green == v && m_blue == v); };
+    inline bool isPureGrayValue(int v) { return (m_red == v && m_green == v && m_blue == v); };
+    inline bool isPureGray()           { return ( (m_red == m_green) && (m_red == m_blue) ); };
 
     /** Convert the color values of this color to and from sixteen bit
         and set the sixteenBit value accordingly

@@ -1585,7 +1585,7 @@ QImage DImg::pureColorMask(ExposureSettingsContainer *expoSettings)
             DColor pix = DColor((m_priv->data + x * depth + (m_priv->width * y * depth)), m_priv->sixteenBit);
             int index  = y * bytesPerLine + x * 4;
 
-            if (expoSettings->underExposureIndicator && pix.isPureGray(0))
+            if (expoSettings->underExposureIndicator && pix.isPureGrayValue(0))
             {
                 bits[index    ] = u_blue;
                 bits[index + 1] = u_green;
@@ -1593,7 +1593,7 @@ QImage DImg::pureColorMask(ExposureSettingsContainer *expoSettings)
                 bits[index + 3] = 0xFF;
             }
 
-            if (expoSettings->overExposureIndicator && pix.isPureGray(max))
+            if (expoSettings->overExposureIndicator && pix.isPureGrayValue(max))
             {
                 bits[index    ] = o_blue;
                 bits[index + 1] = o_green;
