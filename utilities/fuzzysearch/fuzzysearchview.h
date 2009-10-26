@@ -64,6 +64,7 @@ public:
     Q_SIGNALS:
 
     void signalUpdateFingerPrints();
+    void signalGenerateFingerPrintsFirstTime();
 
 protected:
 

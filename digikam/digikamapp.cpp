@@ -2487,6 +2487,11 @@ void DigikamApp::runThumbnailsGenerator(bool rebuildAll)
     thumbsGenerator->show();
 }
 
+void DigikamApp::slotGenerateFingerPrintsFirstTime()
+{
+    runFingerPrintsGenerator(true);
+}
+
 void DigikamApp::slotRebuildFingerPrints()
 {
     QString msg = i18n("Image fingerprinting can take some time.\n"

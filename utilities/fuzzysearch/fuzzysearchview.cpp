@@ -569,7 +569,7 @@ void FuzzySearchView::setActive(bool val)
 
             if (result == KMessageBox::Yes)
             {
-                emit signalUpdateFingerPrints();
+                emit signalGenerateFingerPrintsFirstTime();
             }
         }
         d->fingerprintsChecked = true;
