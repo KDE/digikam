@@ -107,7 +107,6 @@ public:
     bool                       valid;
     bool                       rotatedOrFlipped;
     bool                       exifOrient;
-    bool                       changedBCG;
     bool                       doSoftProofing;
 
     int                        width;
@@ -133,8 +132,6 @@ public:
     DImg                       image;
 
     UndoManager               *undoMan;
-
-    BCGModifier                cmod;
 
     ICCSettingsContainer      *cmSettings;
 
@@ -299,9 +296,7 @@ void DImgInterface::resetValues()
     d->gamma          = 1.0f;
     d->contrast       = 1.0f;
     d->brightness     = 0.0f;
-    d->changedBCG     = false;
 
-    d->cmod.reset();
     d->undoMan->clear();
 }
 
@@ -467,43 +462,11 @@ void DImgInterface::redo()
     emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
 }
 
-/*
-This code is unused and untested
-void DImgInterface::save(const QString& file, IOFileSettingsContainer *iofileSettings)
-{
-    d->cmod.reset();
-    d->cmod.setGamma(d->gamma);
-    d->cmod.setBrightness(d->brightness);
-    d->cmod.setContrast(d->contrast);
-    d->cmod.applyBCG(d->image);
-
-    d->cmod.reset();
-    d->gamma      = 1.0f;
-    d->contrast   = 1.0f;
-    d->brightness = 0.0f;
-
-    QString currentMimeType(QImageIO::imageFormat(d->filename));
-
-    d->needClearUndoManager = true;
-
-    saveAction(file, iofileSettings, currentMimeType);
-}
-*/
-
 void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iofileSettings,
                            bool setExifOrientationTag, const QString& givenMimeType)
 {
     // No need to toggle off undo, redo or save action during saving using
     // signalUndoStateChanged(), this is will done by GUI implementation directly.
-
-    if (d->changedBCG)
-    {
-        d->cmod.reset();
-        d->cmod.setGamma(d->gamma);
-        d->cmod.setBrightness(d->brightness);
-        d->cmod.setContrast(d->contrast);
-        d->cmod.applyBCG(d->image);
-    }
 
     // Try hard to find a mimetype.
     QString mimeType = givenMimeType;
@@ -711,7 +674,6 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
         return;
 
     DImg img = d->image.smoothScaleSection(sx, sy, sw, sh, dw, dh);
-    d->cmod.applyBCG(img);
     img.convertDepth(32);
     QPainter painter(p);
 
@@ -748,7 +710,6 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
         return;
 
     DImg img = d->image.smoothScaleSection(sx, sy, sw, sh, dw, dh);
-    d->cmod.applyBCG(img);
     img.convertDepth(32);
     QPainter painter(p);
 
@@ -894,25 +855,6 @@ void DImgInterface::resize(int w, int h)
 
     d->origWidth  = d->image.width();
     d->origHeight = d->image.height();
-
-    setModified();
-}
-
-void DImgInterface::setBCG(double brightness, double contrast, double gamma)
-{
-    d->undoMan->addAction(new UndoActionIrreversible(this, "Brightness, Contrast, Gamma"));
-
-    d->cmod.reset();
-    d->cmod.setGamma(gamma);
-    d->cmod.setBrightness(brightness);
-    d->cmod.setContrast(contrast);
-    d->cmod.applyBCG(d->image);
-
-    d->cmod.reset();
-    d->gamma      = 1.0f;
-    d->contrast   = 1.0f;
-    d->brightness = 0.0f;
-    d->changedBCG = false;
 
     setModified();
 }

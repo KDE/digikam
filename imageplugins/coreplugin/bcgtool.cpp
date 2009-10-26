@@ -305,12 +305,24 @@ void BCGTool::finalRendering()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
     ImageIface* iface = d->previewWidget->imageIface();
+    uchar* data       = iface->getOriginalImage();
+    int w             = iface->originalWidth();
+    int h             = iface->originalHeight();
+    bool a            = iface->originalHasAlpha();
+    bool sb           = iface->originalSixteenBit();
 
     double b = (double)d->bInput->value()/250.0;
     double c = (double)(d->cInput->value()/100.0) + 1.00;
     double g = d->gInput->value();
 
-    iface->setOriginalBCG(b, c, g);
+    BCGModifier cmod;
+    DImg finalImage(w, h, sb, a, data);
+    cmod.setGamma(g);
+    cmod.setBrightness(b);
+    cmod.setContrast(c);
+    cmod.applyBCG(finalImage);
+
+    iface->putOriginalImage(i18n("Brightness / Contrast / Gamma"), finalImage.bits());
     kapp->restoreOverrideCursor();
 }
 

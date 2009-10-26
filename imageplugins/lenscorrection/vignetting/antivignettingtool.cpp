@@ -390,17 +390,22 @@ void AntiVignettingTool::putPreviewData()
 
 void AntiVignettingTool::putFinalData()
 {
-    ImageIface iface(0, 0);
+    kapp->setOverrideCursor( Qt::WaitCursor );
+    ImageIface* iface = d->previewWidget->imageIface();
+    DImg finalImage   = filter()->getTargetImage();
 
-    iface.putOriginalImage(i18n("Vignetting Correction"),
-                           filter()->getTargetImage().bits());
-
-    double b = (double)(d->brightnessInput->value() / 100.0);
+    double b = (double)(d->brightnessInput->value() / 250.0);
     double c = (double)(d->contrastInput->value()   / 100.0) + (double)(1.00);
     double g = d->gammaInput->value();
 
-    // Adjust Image BCG.
-    iface.setOriginalBCG(b, c, g);
+    BCGModifier cmod;
+    cmod.setGamma(g);
+    cmod.setBrightness(b);
+    cmod.setContrast(c);
+    cmod.applyBCG(finalImage);
+
+    iface->putOriginalImage(i18n("Vignetting Correction"), finalImage.bits());
+    kapp->restoreOverrideCursor();
 }
 
 void AntiVignettingTool::blockWidgetSignals(bool b)

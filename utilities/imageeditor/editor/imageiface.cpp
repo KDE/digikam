@@ -330,22 +330,6 @@ int ImageIface::selectedYOrg()
     return y;
 }
 
-void ImageIface::setPreviewBCG(double brightness, double contrast, double gamma)
-{
-    DImg preview = d->targetPreviewImage.copyImageData();
-    BCGModifier cmod;
-    cmod.setGamma(gamma);
-    cmod.setBrightness(brightness);
-    cmod.setContrast(contrast);
-    cmod.applyBCG(preview);
-    putPreviewImage(preview.bits());
-}
-
-void ImageIface::setOriginalBCG(double brightness, double contrast, double gamma)
-{
-    DImgInterface::defaultInterface()->setBCG(brightness, contrast, gamma);
-}
-
 void ImageIface::convertOriginalColorDepth(int depth)
 {
     DImgInterface::defaultInterface()->convertDepth(depth);

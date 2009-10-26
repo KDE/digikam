@@ -123,8 +123,6 @@ public:
 
     void   resize(int w, int h);
 
-    void   setBCG(double brightness, double contrast, double gamma);
-
     void   convertDepth(int depth);
 
     void   getUndoHistory(QStringList& titles);
