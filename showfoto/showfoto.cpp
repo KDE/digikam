@@ -111,6 +111,7 @@ extern "C"
 #include "loadingcacheinterface.h"
 #include "savingcontextcontainer.h"
 #include "setup.h"
+#include "setupeditor.h"
 #include "setupicc.h"
 #include "slideshow.h"
 #include "splashscreen.h"
@@ -892,26 +893,46 @@ void ShowFoto::openFolder(const KUrl& url)
 
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("ImageViewer Settings");
+
     QDir::SortFlags flag;
+    bool reverse = group.readEntry("ReverseSort", false);
 
-    switch(group.readEntry("SortOrder", 0))
+    switch(group.readEntry("SortOrder", (int)SetupEditor::SortByDate))
     {
-        case 1:
+        case SetupEditor::SortByName:
+        {
             flag = QDir::Name;  // Ordering by file name.
+            if (reverse)
+            {
+                flag = flag | QDir::Reversed;
+            }
             break;
-        case 2:
+        }
+        case SetupEditor::SortByFileSize:
+        {
             flag = QDir::Size;  // Ordering by file size.
+
+            // Disabled reverse in the settings leads e.g. to increasing file sizes
+            // Note, that this is just the opposite to the sort order for QDir.
+            if (!reverse)
+            {
+                flag = flag | QDir::Reversed;
+            }
             break;
+        }
         default:
+        {
             flag = QDir::Time;  // Ordering by file date.
+
+            // Disabled reverse in the settings leads e.g. to increasing dates
+            // Note, that this is just the opposite to the sort order for QDir.
+            if (!reverse)
+            {
+                flag = flag | QDir::Reversed;
+            }
             break;
+        }
     }
-
-    // Disabled reverse in the settings leads e.g. to increasing dates
-    // Note, that this is just the opposite to the sort order for QDir.
-
-    if (!group.readEntry("ReverseSort", false))
-        flag = flag | QDir::Reversed;
 
     dir.setSorting(flag);
 

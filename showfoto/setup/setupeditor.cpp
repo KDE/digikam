@@ -206,9 +206,9 @@ SetupEditor::SetupEditor(QWidget* parent)
     KHBox* sortBox       = new KHBox(sortOptionsGroup);
     new QLabel(i18n("Sort images by:"), sortBox);
     d->sortOrderComboBox = new KComboBox(sortBox);
-    d->sortOrderComboBox->insertItem(0, i18nc("sort images by date", "Date"));
-    d->sortOrderComboBox->insertItem(1, i18nc("sort images by name", "Name"));
-    d->sortOrderComboBox->insertItem(2, i18nc("sort images by size", "File Size"));
+    d->sortOrderComboBox->insertItem(SortByDate,     i18nc("sort images by date", "Date"));
+    d->sortOrderComboBox->insertItem(SortByName,     i18nc("sort images by name", "Name"));
+    d->sortOrderComboBox->insertItem(SortByFileSize, i18nc("sort images by size", "File Size"));
     d->sortOrderComboBox->setWhatsThis(i18n("Here, select whether newly-loaded "
                                             "images are sorted by their date, name, or size on disk."));
 
@@ -262,7 +262,7 @@ void SetupEditor::readSettings()
     d->sidebarType->setCurrentIndex(group.readEntry(d->configSidebarTitleStyleEntry,           0));
     d->underExposureColor->setColor(group.readEntry(d->configUnderExposureColorEntry,          White));
     d->overExposureColor->setColor(group.readEntry(d->configOverExposureColorEntry,            Black));
-    d->sortOrderComboBox->setCurrentIndex(group.readEntry(d->configSortOrderEntry,             0));
+    d->sortOrderComboBox->setCurrentIndex(group.readEntry(d->configSortOrderEntry,             (int)SortByDate));
     d->sortReverse->setChecked(group.readEntry(d->configReverseSortEntry,                      false));
     d->useRawImportTool->setChecked(group.readEntry(d->configUseRawImportToolEntry,            false));
 }
