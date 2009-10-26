@@ -75,7 +75,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 066 ==> 211818 : Raw import tool: problem with curvers.
 067 ==> 211642 : Subdirectories opening and closing again when pressing on the + in Album View.
 068 ==> 211117 : showFoto no filters or decorate menu.
-069 ==>
+069 ==> 164799 : showFoto: "Sort images by filename" is sorted in reverted order
+070 ==>
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
