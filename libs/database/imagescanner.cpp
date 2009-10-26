@@ -68,8 +68,8 @@ ImageScanner::ImageScanner(qlonglong imageid)
     }
 
     QString albumRootPath = CollectionManager::instance()->albumRootPath(shortInfo.albumRootID);
-    m_fileInfo = QFileInfo(DatabaseUrl::fromAlbumAndName(shortInfo.itemName,
-                            shortInfo.album, albumRootPath, shortInfo.albumRootID).fileUrl().toLocalFile());
+    m_fileInfo            = QFileInfo(DatabaseUrl::fromAlbumAndName(shortInfo.itemName,
+                                      shortInfo.album, albumRootPath, shortInfo.albumRootID).fileUrl().toLocalFile());
 }
 
 void ImageScanner::setCategory(DatabaseItem::Category category)
@@ -121,28 +121,30 @@ void ImageScanner::copiedFrom(int albumId, qlonglong srcId)
 void ImageScanner::addImage(int albumId)
 {
     // there is a limit here for file size <2TB
-    m_scanInfo.albumID = albumId;
-    m_scanInfo.itemName = m_fileInfo.fileName();
-    m_scanInfo.status = DatabaseItem::Visible;
+    m_scanInfo.albumID          = albumId;
+    m_scanInfo.itemName         = m_fileInfo.fileName();
+    m_scanInfo.status           = DatabaseItem::Visible;
+
     // category is set by setCategory
     m_scanInfo.modificationDate = m_fileInfo.lastModified();
-    int fileSize = (int)m_fileInfo.size();
+    int fileSize                = (int)m_fileInfo.size();
+
     // the QByteArray is an ASCII hex string
-    m_scanInfo.uniqueHash = uniqueHash();
+    m_scanInfo.uniqueHash       = uniqueHash();
 
     kDebug(digiKamAreaCode) << "Adding new item" << m_fileInfo.filePath();
-    m_scanInfo.id = DatabaseAccess().db()->addItem(m_scanInfo.albumID, m_scanInfo.itemName,
-                                                   m_scanInfo.status, m_scanInfo.category,
-                                                   m_scanInfo.modificationDate, fileSize,
-                                                   m_scanInfo.uniqueHash);
+    m_scanInfo.id               = DatabaseAccess().db()->addItem(m_scanInfo.albumID, m_scanInfo.itemName,
+                                                                 m_scanInfo.status, m_scanInfo.category,
+                                                                 m_scanInfo.modificationDate, fileSize,
+                                                                 m_scanInfo.uniqueHash);
 }
 
 void ImageScanner::updateImage()
 {
     // part from addImage()
     m_scanInfo.modificationDate = m_fileInfo.lastModified();
-    int fileSize = (int)m_fileInfo.size();
-    m_scanInfo.uniqueHash = uniqueHash();
+    int fileSize                = (int)m_fileInfo.size();
+    m_scanInfo.uniqueHash       = uniqueHash();
 
     DatabaseAccess().db()->updateItem(m_scanInfo.id, m_scanInfo.category,
                                       m_scanInfo.modificationDate, fileSize, m_scanInfo.uniqueHash);
@@ -224,6 +226,7 @@ bool ImageScanner::copyFromSource(qlonglong srcId)
     // some basic validity checking
     if (srcId == m_scanInfo.id)
         return false;
+
     ItemScanInfo info = access.db()->getItemScanInfo(srcId);
     if (!info.id)
         return false;
@@ -597,7 +600,7 @@ QString ImageScanner::detectFormat()
             }
 
             kWarning(digiKamAreaCode) << "Detecting file format failed: KMimeType for" << m_fileInfo.filePath()
-                            << "is null";
+                                      << "is null";
 
         }
     }
@@ -607,10 +610,12 @@ QString ImageScanner::detectFormat()
 QString ImageScanner::detectVideoFormat()
 {
     QString suffix = m_fileInfo.suffix().toUpper();
+
     if (suffix == "MPEG" || suffix == "MPG" || suffix == "MPO" || suffix == "MPE")
         return "MPEG";
     if (suffix =="ASF" || suffix == "WMV")
         return "WMV";
+
     return suffix;
 }
 
