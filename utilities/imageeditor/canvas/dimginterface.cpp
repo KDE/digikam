@@ -271,9 +271,9 @@ void DImgInterface::loadCurrent()
 
 void DImgInterface::restore()
 {
+    LoadingDescription description = d->currentDescription;
     resetValues();
-    loadCurrent();
-    EditorToolIface::editorToolIface()->unLoadTool();
+    load(description);
 }
 
 void DImgInterface::resetImage()
