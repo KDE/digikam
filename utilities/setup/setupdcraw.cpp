@@ -26,7 +26,7 @@
 
 // Qt includes
 
-#include <QVBoxLayout>
+#include <QGridLayout>
 
 // KDE includes
 
@@ -71,15 +71,15 @@ SetupDcraw::SetupDcraw(QWidget* parent )
     setWidget(panel);
     setWidgetResizable(true);
 
-    QVBoxLayout *layout = new QVBoxLayout(panel);
+    QGridLayout *layout = new QGridLayout(panel);
     d->dcrawSettings    = new DcrawSettingsWidget(panel, DcrawSettingsWidget::SIXTEENBITS);
     d->dcrawSettings->setItemIcon(0, SmallIcon("kdcraw"));
     d->dcrawSettings->setItemIcon(1, SmallIcon("whitebalance"));
     d->dcrawSettings->setItemIcon(2, SmallIcon("lensdistortion"));
+    layout->addWidget(d->dcrawSettings, 0, 0);
     layout->setSpacing(0);
     layout->setMargin(0);
-    layout->addWidget(d->dcrawSettings);
-    layout->addStretch();
+    layout->setRowStretch(0, 10);
 
     connect(d->dcrawSettings, SIGNAL(signalSixteenBitsImageToggled(bool)),
             this, SLOT(slotSixteenBitsImageToggled(bool)));
