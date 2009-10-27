@@ -83,10 +83,8 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
 {
     d->mainDialog  = dialog;
     QWidget *panel = new QWidget(viewport());
-    panel->setAutoFillBackground(false);
     setWidget(panel);
     setWidgetResizable(true);
-    viewport()->setAutoFillBackground(false);
 
     QVBoxLayout *layout = new QVBoxLayout(panel);
 
@@ -153,6 +151,12 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
 
     readSettings();
     adjustSize();
+
+    // --------------------------------------------------------
+
+    viewport()->setAutoFillBackground(false);
+    setAutoFillBackground(false);
+    panel->setAutoFillBackground(false);
 
     // --------------------------------------------------------
 
