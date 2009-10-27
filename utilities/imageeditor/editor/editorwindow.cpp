@@ -426,7 +426,6 @@ void EditorWindow::setupStandardActions()
     d->zoomCombo->setDuplicatesEnabled(false);
     d->zoomCombo->setFocusPolicy(Qt::ClickFocus);
     d->zoomCombo->setInsertPolicy(QComboBox::NoInsert);
-    d->zoomCombo->lineEdit()->setReadOnly(true);
 
     QList<double> zoomLevels;
     zoomLevels << 10.0;
@@ -450,6 +449,9 @@ void EditorWindow::setupStandardActions()
 
     connect(d->zoomCombo, SIGNAL(activated(int)),
             this, SLOT(slotZoomSelected(int)));
+
+    connect(d->zoomCombo, SIGNAL(returnPressed(const QString&)),
+            this, SLOT(slotZoomTextChanged(const QString&)));
 
     d->zoomComboAction = new QWidgetAction(this);
     d->zoomComboAction->setDefaultWidget(d->zoomCombo);
@@ -2102,6 +2104,17 @@ void EditorWindow::slotCloseTool()
 {
     if (d->toolIface)
         d->toolIface->slotCloseTool();
+}
+
+void EditorWindow::slotZoomTextChanged(const QString& txt)
+{
+    bool r      = false;
+    double zoom = KGlobal::locale()->readNumber(txt, &r) / 100.0;
+    if (r && zoom > 0.0)
+    {
+        m_stackView->setZoomFactor(zoom);
+    }
+
 }
 
 }  // namespace Digikam
