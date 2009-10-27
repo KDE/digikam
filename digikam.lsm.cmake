@@ -11,7 +11,7 @@ Author:         Gilles Caulier <caulier dot gilles at gmail dot com>,
                 Francisco J. Cruz <fj dot cruz at supercable dot es>, 
                 Joern Ahrens <joern dot ahrens at kdemail dot net>, 
                 Tom Albers <tomalbers at kde.nl>, 
-                Renchi Raju <renchi at pooh.tam.uiuc.edu>, 
+                Renchi Raju <renchi dot raju at gmail dot com>, 
                 Ralf Holzer <kde at ralfhoelzer.com>
 Home-page:      http://www.digikam.org
 Platforms:      Linux and other Unices, MacOs-X, Win32. Needs KDE 4.x
