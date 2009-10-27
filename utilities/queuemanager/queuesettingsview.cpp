@@ -104,10 +104,8 @@ QueueSettingsView::QueueSettingsView(QWidget *parent)
 
     QScrollArea *sv = new QScrollArea(this);
     QWidget *panel  = new QWidget(sv->viewport());
-    panel->setAutoFillBackground(false);
     sv->setWidget(panel);
     sv->setWidgetResizable(true);
-    sv->viewport()->setAutoFillBackground(false);
 
     QVBoxLayout *layout    = new QVBoxLayout(panel);
     d->conflictLabel       = new QLabel(i18n("If Target File Exists:"), panel);
@@ -138,10 +136,8 @@ QueueSettingsView::QueueSettingsView(QWidget *parent)
 
     QScrollArea *sv2 = new QScrollArea(this);
     KVBox *vbox2     = new KVBox(sv2->viewport());
-    vbox2->setAutoFillBackground(false);
     sv2->setWidget(vbox2);
     sv2->setWidgetResizable(true);
-    sv2->viewport()->setAutoFillBackground(false);
 
     d->renamingButtonGroup = new QButtonGroup(vbox2);
     d->renameOriginal      = new QRadioButton(i18n("Use original filenames"), vbox2);
@@ -179,6 +175,18 @@ QueueSettingsView::QueueSettingsView(QWidget *parent)
     // --------------------------------------------------------
 
     QTimer::singleShot(0, this, SLOT(slotResetSettings()));
+
+    // --------------------------------------------------------
+
+    setAutoFillBackground(false);
+
+    sv->setAutoFillBackground(false);
+    sv->viewport()->setAutoFillBackground(false);
+    panel->setAutoFillBackground(false);
+
+    sv2->setAutoFillBackground(false);
+    sv2->viewport()->setAutoFillBackground(false);
+    vbox2->setAutoFillBackground(false);
 }
 
 QueueSettingsView::~QueueSettingsView()
