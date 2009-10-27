@@ -1511,7 +1511,8 @@ QPixmap DImg::convertToPixmap()
         uchar* sptr = bits();
         uint*  dptr = (uint*)img.bits();
 
-        for (uint i=0; i<width()*height(); ++i)
+        uint dim = width() * height();
+        for (uint i = 0; i < dim; ++i)
         {
             *dptr++ = qRgba(sptr[2], sptr[1], sptr[0], sptr[3]);
             sptr += 4;
