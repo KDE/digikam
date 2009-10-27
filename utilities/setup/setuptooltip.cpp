@@ -129,10 +129,8 @@ SetupToolTip::SetupToolTip(QWidget* parent)
             : QScrollArea(parent), d(new SetupToolTipPriv)
 {
     QWidget *panel = new QWidget(viewport());
-    panel->setAutoFillBackground(false);
     setWidget(panel);
     setWidgetResizable(true);
-    viewport()->setAutoFillBackground(false);
 
     QVBoxLayout *vlay     = new QVBoxLayout(panel);
 
@@ -312,6 +310,12 @@ SetupToolTip::SetupToolTip(QWidget* parent)
 
     readSettings();
     adjustSize();
+
+    // --------------------------------------------------------
+
+    setAutoFillBackground(false);
+    viewport()->setAutoFillBackground(false);
+    panel->setAutoFillBackground(false);
 }
 
 SetupToolTip::~SetupToolTip()

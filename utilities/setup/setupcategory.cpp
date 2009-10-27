@@ -81,10 +81,8 @@ SetupCategory::SetupCategory(QWidget* parent )
              : QScrollArea(parent), d(new SetupCategoryPriv)
 {
     QWidget *panel = new QWidget(viewport());
-    panel->setAutoFillBackground(false);
     setWidget(panel);
     setWidgetResizable(true);
-    viewport()->setAutoFillBackground(false);
 
     QGridLayout *grid = new QGridLayout(panel);
 
@@ -139,6 +137,12 @@ SetupCategory::SetupCategory(QWidget* parent )
 
     readSettings();
     adjustSize();
+
+    // --------------------------------------------------------
+
+    setAutoFillBackground(false);
+    viewport()->setAutoFillBackground(false);
+    panel->setAutoFillBackground(false);
 }
 
 SetupCategory::~SetupCategory()

@@ -99,10 +99,8 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
               : QScrollArea(parent), d(new SetupAlbumViewPriv)
 {
     QWidget *panel = new QWidget(viewport());
-    panel->setAutoFillBackground(false);
     setWidget(panel);
     setWidgetResizable(true);
-    viewport()->setAutoFillBackground(false);
 
     QVBoxLayout *layout = new QVBoxLayout(panel);
 
@@ -222,6 +220,12 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
 
     readSettings();
     adjustSize();
+
+    // --------------------------------------------------------
+
+    setAutoFillBackground(false);
+    viewport()->setAutoFillBackground(false);
+    panel->setAutoFillBackground(false);
 }
 
 SetupAlbumView::~SetupAlbumView()
