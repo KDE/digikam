@@ -1917,7 +1917,8 @@ void DImg::flip(FLIP direction)
                 unsigned short* data = (unsigned short*) bits();
 
                 // can be done inplace
-                for (uint y = 0 ; y < (h/2) ; ++y)
+                uint hHalf = (h / 2);
+                for (uint y = 0 ; y < hHalf ; ++y)
                 {
                     line1 = data + y * w * 4;
                     line2 = data + (h-y-1) * w * 4;
@@ -1942,7 +1943,8 @@ void DImg::flip(FLIP direction)
                 uchar* data = bits();
 
                 // can be done inplace
-                for (uint y = 0 ; y < (h/2) ; ++y)
+                uint hHalf = (h / 2);
+                for (uint y = 0 ; y < hHalf ; ++y)
                 {
                     line1 = data + y * w * 4;
                     line2 = data + (h-y-1) * w * 4;
