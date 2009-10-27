@@ -22,9 +22,7 @@
  * ============================================================ */
 
 #include "databasewatch.h"
-#include "databasewatch.moc"
 #include "databasewatchadaptor.h"
-#include "databasewatchadaptor.moc"
 
 // C Ansi includes
 
