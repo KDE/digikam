@@ -95,7 +95,6 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     d->tab = new KTabWidget(viewport());
     setWidget(d->tab);
     setWidgetResizable(true);
-    viewport()->setAutoFillBackground(false);
 
     QWidget *panel          = new QWidget(d->tab);
     QVBoxLayout *mainLayout = new QVBoxLayout(panel);
@@ -175,6 +174,12 @@ SetupMetadata::SetupMetadata(QWidget* parent )
 
     connect(exiv2LogoLabel, SIGNAL(leftClickedUrl(const QString&)),
             this, SLOT(slotProcessExiv2Url(const QString&)));
+
+    // --------------------------------------------------------
+
+    setAutoFillBackground(false);
+    viewport()->setAutoFillBackground(false);
+    d->tab->setAutoFillBackground(false);
 }
 
 SetupMetadata::~SetupMetadata()

@@ -122,10 +122,8 @@ SetupEditor::SetupEditor(QWidget* parent)
            : QScrollArea(parent), d(new SetupEditorPriv)
 {
     QWidget *panel = new QWidget(viewport());
-    panel->setAutoFillBackground(false);
     setWidget(panel);
     setWidgetResizable(true);
-    viewport()->setAutoFillBackground(false);
 
     QVBoxLayout *layout = new QVBoxLayout(panel);
 
@@ -235,6 +233,12 @@ SetupEditor::SetupEditor(QWidget* parent)
             this, SLOT(slotThemeBackgroundColor(bool)));
 
     readSettings();
+
+    // --------------------------------------------------------
+
+    setAutoFillBackground(false);
+    viewport()->setAutoFillBackground(false);
+    panel->setAutoFillBackground(false);
 }
 
 SetupEditor::~SetupEditor()
