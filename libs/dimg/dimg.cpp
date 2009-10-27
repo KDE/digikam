@@ -1726,7 +1726,8 @@ void DImg::rotate(ANGLE angle)
             ullong  tmp;
 
             // can be done inplace
-            for (uint y = 0; y < (h+1)/2; ++y)
+            uint ymax = (h + 1) / 2;
+            for (uint y = 0; y < ymax; ++y)
             {
                 line1 = data + y * w;
                 line2 = data + (h-y) * w;
@@ -1752,7 +1753,8 @@ void DImg::rotate(ANGLE angle)
             uint  tmp;
 
             // can be done inplace
-            for (uint y = 0; y < (h+1)/2; ++y)
+            uint ymax = (h + 1) / 2;
+            for (uint y = 0; y < ymax; ++y)
             {
                 line1 = data + y * w;
                 line2 = data + (h-y) * w;
