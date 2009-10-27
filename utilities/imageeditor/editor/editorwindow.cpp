@@ -426,6 +426,7 @@ void EditorWindow::setupStandardActions()
     d->zoomCombo->setDuplicatesEnabled(false);
     d->zoomCombo->setFocusPolicy(Qt::ClickFocus);
     d->zoomCombo->setInsertPolicy(QComboBox::NoInsert);
+    d->zoomCombo->lineEdit()->setReadOnly(true);
 
     QList<double> zoomLevels;
     zoomLevels << 10.0;
