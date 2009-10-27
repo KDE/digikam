@@ -138,7 +138,6 @@ bool Charcoal::convolveImage(const unsigned int order, const double *kernel)
     long    kernelWidth, i;
     double  red, green, blue, alpha, normalize=0.0;
     double *k=0;
-    Digikam::DColor  color;
 
     kernelWidth = order;
 
@@ -148,7 +147,7 @@ bool Charcoal::convolveImage(const unsigned int order, const double *kernel)
         return(false);
     }
 
-    double *normal_kernel = new double[kernelWidth*kernelWidth];
+    double *normal_kernel = new double[kernelWidth * kernelWidth];
 
     if (!normal_kernel)
     {
@@ -156,42 +155,62 @@ bool Charcoal::convolveImage(const unsigned int order, const double *kernel)
         return(false);
     }
 
-    for(i=0 ; i < (kernelWidth*kernelWidth) ; ++i)
+    for (i = 0; i < (kernelWidth * kernelWidth); ++i)
+    {
         normalize += kernel[i];
+    }
 
     if (fabs(normalize) <= Epsilon)
+    {
         normalize=1.0;
+    }
 
     normalize = 1.0/normalize;
 
-    for(i=0 ; i < (kernelWidth*kernelWidth) ; ++i)
-        normal_kernel[i] = normalize*kernel[i];
+    for (i = 0; i < (kernelWidth * kernelWidth); ++i)
+    {
+        normal_kernel[i] = normalize * kernel[i];
+    }
+
+    // --------------------------------------------------------
+
+    // caching
+    uint height     = m_destImage.height();
+    uint width      = m_destImage.width();
+    bool sixteenBit = m_destImage.sixteenBit();
+    uchar *ddata    = m_destImage.bits();
+    int ddepth      = m_destImage.bytesDepth();
+
+    uchar *sdata    = m_orgImage.bits();
+    int sdepth      = m_orgImage.bytesDepth();
 
     double maxClamp = m_destImage.sixteenBit() ? 16777215.0 : 65535.0;
 
-    for(y=0 ; !m_cancel && (y < m_destImage.height()) ; ++y)
+    // --------------------------------------------------------
+
+    for (y = 0; !m_cancel && (y < height); ++y)
     {
-        sy = y-(kernelWidth/2);
+        sy = y - (kernelWidth / 2);
 
-        for(x=0 ; !m_cancel && (x < m_destImage.width()) ; ++x)
+        for (x = 0; !m_cancel && (x < width); ++x)
         {
-            k   = normal_kernel;
+            k = normal_kernel;
             red = green = blue = alpha = 0;
-            sy  = y-(kernelWidth/2);
+            sy = y - (kernelWidth / 2);
 
-            for(mcy=0 ; !m_cancel && (mcy < kernelWidth) ; ++mcy, ++sy)
+            for (mcy = 0; !m_cancel && (mcy < kernelWidth); ++mcy, ++sy)
             {
-                my = sy < 0 ? 0 : sy > (int)m_destImage.height()-1 ? m_destImage.height()-1 : sy;
-                sx = x+(-kernelWidth/2);
+                my = sy < 0 ? 0 : sy > (int) height - 1 ? height - 1 : sy;
+                sx = x + (-kernelWidth / 2);
 
-                for(mcx=0 ; !m_cancel && (mcx < kernelWidth) ; ++mcx, ++sx)
+                for (mcx = 0; !m_cancel && (mcx < kernelWidth); ++mcx, ++sx)
                 {
-                    mx     = sx < 0 ? 0 : sx > (int)m_destImage.width()-1 ? m_destImage.width()-1 : sx;
-                    color  = m_orgImage.getPixelColor(mx, my);
-                    red   += (*k)*(color.red()   * 257.0);
-                    green += (*k)*(color.green() * 257.0);
-                    blue  += (*k)*(color.blue()  * 257.0);
-                    alpha += (*k)*(color.alpha() * 257.0);
+                    mx = sx < 0 ? 0 : sx > (int) width - 1 ? width - 1 : sx;
+                    Digikam::DColor color(sdata + mx * sdepth + (width * my * sdepth), sixteenBit);
+                    red += (*k) * (color.red() * 257.0);
+                    green += (*k) * (color.green() * 257.0);
+                    blue += (*k) * (color.blue() * 257.0);
+                    alpha += (*k) * (color.alpha() * 257.0);
                     ++k;
                 }
             }
@@ -201,14 +220,16 @@ bool Charcoal::convolveImage(const unsigned int order, const double *kernel)
             blue  =  blue < 0.0 ? 0.0 :  blue > maxClamp ? maxClamp :  blue+0.5;
             alpha = alpha < 0.0 ? 0.0 : alpha > maxClamp ? maxClamp : alpha+0.5;
 
-            m_destImage.setPixelColor(x, y, Digikam::DColor((int)(red / 257UL),  (int)(green / 257UL),
-                                            (int)(blue / 257UL), (int)(alpha / 257UL),
-                                            m_destImage.sixteenBit()));
+            Digikam::DColor color((int)(red / 257UL),  (int)(green / 257UL),
+                                  (int)(blue / 257UL), (int)(alpha / 257UL), sixteenBit);
+            color.setPixel((ddata + x * ddepth + (width * y * ddepth)));
         }
 
-        progress = (int)(((double)y * 50.0) / m_destImage.height());
-        if ( progress%5 == 0 )
-           postProgress( progress );
+        progress = (int) (((double) y * 50.0) / height);
+        if (progress % 5 == 0)
+        {
+            postProgress(progress);
+        }
     }
 
     delete [] normal_kernel;
