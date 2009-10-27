@@ -66,10 +66,8 @@ SetupLightTable::SetupLightTable(QWidget* parent)
                : QScrollArea(parent), d(new SetupLightTablePriv)
 {
     QWidget *panel = new QWidget(viewport());
-    panel->setAutoFillBackground(false);
     setWidget(panel);
     setWidgetResizable(true);
-    viewport()->setAutoFillBackground(false);
 
     QVBoxLayout *layout = new QVBoxLayout(panel);
 
@@ -97,9 +95,9 @@ SetupLightTable::SetupLightTable(QWidget* parent)
 
     d->clearOnClose = new QCheckBox(i18n("Clear the light table on close"));
     d->clearOnClose->setWhatsThis(i18n("Set this option to remove all images "
-    		                       "from the light table when you close it, "
-    		                       "or unset it to preserve the images "
-    		                       "currently on the light table."));
+                                   "from the light table when you close it, "
+                                   "or unset it to preserve the images "
+                                   "currently on the light table."));
 
     gLayout->addWidget(d->autoSyncPreview);
     gLayout->addWidget(d->autoLoadOnRightPanel);
@@ -119,6 +117,12 @@ SetupLightTable::SetupLightTable(QWidget* parent)
     // --------------------------------------------------------
 
     readSettings();
+
+    // --------------------------------------------------------
+
+    setAutoFillBackground(false);
+    viewport()->setAutoFillBackground(false);
+    panel->setAutoFillBackground(false);
 }
 
 SetupLightTable::~SetupLightTable()

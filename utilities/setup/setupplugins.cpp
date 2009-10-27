@@ -64,10 +64,8 @@ SetupPlugins::SetupPlugins(QWidget* parent)
             : QScrollArea(parent), d(new SetupPluginsPriv)
 {
     QWidget *panel = new QWidget(viewport());
-    panel->setAutoFillBackground(false);
     setWidget(panel);
     setWidgetResizable(true);
-    viewport()->setAutoFillBackground(false);
 
     QVBoxLayout *layout = new QVBoxLayout(panel);
     d->pluginsNumber    = new QLabel(panel);
@@ -87,6 +85,12 @@ SetupPlugins::SetupPlugins(QWidget* parent)
         KIPI::PluginLoader::PluginList list = KIPI::PluginLoader::instance()->pluginList();
         initPlugins((int)list.count());
     }
+
+    // --------------------------------------------------------
+
+    setAutoFillBackground(false);
+    viewport()->setAutoFillBackground(false);
+    panel->setAutoFillBackground(false);
 }
 
 SetupPlugins::~SetupPlugins()

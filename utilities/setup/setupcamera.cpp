@@ -129,10 +129,8 @@ SetupCamera::SetupCamera( QWidget* parent )
            : QScrollArea(parent), d(new SetupCameraPriv)
 {
     QWidget *panel = new QWidget(viewport());
-    panel->setAutoFillBackground(false);
     setWidget(panel);
     setWidgetResizable(true);
-    viewport()->setAutoFillBackground(false);
 
     QGridLayout* grid = new QGridLayout(panel);
     d->listView       = new QTreeWidget(panel);
@@ -237,6 +235,12 @@ SetupCamera::SetupCamera( QWidget* parent )
             new SetupCameraItem(d->listView, ctype);
         }
     }
+
+    // --------------------------------------------------------
+
+    setAutoFillBackground(false);
+    viewport()->setAutoFillBackground(false);
+    panel->setAutoFillBackground(false);
 }
 
 SetupCamera::~SetupCamera()

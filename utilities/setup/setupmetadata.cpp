@@ -112,7 +112,6 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     d->tab = new KTabWidget(viewport());
     setWidget(d->tab);
     setWidgetResizable(true);
-    viewport()->setAutoFillBackground(false);
 
     QWidget *panel          = new QWidget(d->tab);
     QVBoxLayout *mainLayout = new QVBoxLayout(panel);
@@ -327,6 +326,12 @@ SetupMetadata::SetupMetadata(QWidget* parent )
 
     connect(d->exifRotateBox, SIGNAL(toggled(bool)),
             this, SLOT(slotExifAutoRotateToggled(bool)));
+
+    // --------------------------------------------------------
+
+    setAutoFillBackground(false);
+    viewport()->setAutoFillBackground(false);
+    d->tab->setAutoFillBackground(false);
 }
 
 SetupMetadata::~SetupMetadata()

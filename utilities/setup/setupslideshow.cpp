@@ -77,10 +77,8 @@ SetupSlideShow::SetupSlideShow(QWidget* parent)
               : QScrollArea(parent), d(new SetupSlideShowPriv)
 {
     QWidget *panel = new QWidget(viewport());
-    panel->setAutoFillBackground(false);
     setWidget(panel);
     setWidgetResizable(true);
-    viewport()->setAutoFillBackground(false);
 
     QVBoxLayout *layout = new QVBoxLayout(panel);
 
@@ -137,6 +135,12 @@ SetupSlideShow::SetupSlideShow(QWidget* parent)
     layout->setSpacing(KDialog::spacingHint());
 
     readSettings();
+
+    // --------------------------------------------------------
+
+    setAutoFillBackground(false);
+    viewport()->setAutoFillBackground(false);
+    panel->setAutoFillBackground(false);
 }
 
 SetupSlideShow::~SetupSlideShow()

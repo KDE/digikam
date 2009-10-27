@@ -78,10 +78,8 @@ SetupTemplate::SetupTemplate(QWidget* parent)
              : QScrollArea(parent), d(new SetupTemplatePriv)
 {
     QWidget *panel = new QWidget(viewport());
-    panel->setAutoFillBackground(false);
     setWidget(panel);
     setWidgetResizable(true);
-    viewport()->setAutoFillBackground(false);
 
     QGridLayout* grid = new QGridLayout(panel);
     d->listView       = new TemplateList(panel);
@@ -165,6 +163,11 @@ SetupTemplate::SetupTemplate(QWidget* parent)
     readSettings();
     d->titleEdit->setFocus();
 
+    // --------------------------------------------------------
+
+    setAutoFillBackground(false);
+    viewport()->setAutoFillBackground(false);
+    panel->setAutoFillBackground(false);
 }
 
 SetupTemplate::~SetupTemplate()

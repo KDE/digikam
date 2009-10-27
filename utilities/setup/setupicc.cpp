@@ -180,7 +180,6 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     d->tab = new KTabWidget(viewport());
     setWidget(d->tab);
     setWidgetResizable(true);
-    viewport()->setAutoFillBackground(false);
 
     d->behaviorPanel        = new QWidget;
     QVBoxLayout *mainLayout = new QVBoxLayout(d->behaviorPanel);
@@ -541,6 +540,12 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
 
     readSettings();
     slotToggledEnabled();
+
+    // --------------------------------------------------------
+
+    setAutoFillBackground(false);
+    viewport()->setAutoFillBackground(false);
+    d->tab->setAutoFillBackground(false);
 }
 
 SetupICC::~SetupICC()

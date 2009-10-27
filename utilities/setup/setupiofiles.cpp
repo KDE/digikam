@@ -77,10 +77,8 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
             : QScrollArea(parent), d(new SetupIOFilesPriv)
 {
     QWidget *panel = new QWidget(viewport());
-    panel->setAutoFillBackground(false);
     setWidget(panel);
     setWidgetResizable(true);
-    viewport()->setAutoFillBackground(false);
 
     QVBoxLayout* vbox = new QVBoxLayout(panel);
 
@@ -122,6 +120,12 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
     vbox->addStretch(10);
 
     readSettings();
+
+    // --------------------------------------------------------
+
+    setAutoFillBackground(false);
+    viewport()->setAutoFillBackground(false);
+    panel->setAutoFillBackground(false);
 }
 
 SetupIOFiles::~SetupIOFiles()

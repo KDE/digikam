@@ -75,10 +75,8 @@ SetupMisc::SetupMisc(QWidget* parent)
          : QScrollArea(parent), d(new SetupMiscPriv)
 {
     QWidget *panel = new QWidget(viewport());
-    panel->setAutoFillBackground(false);
     setWidget(panel);
     setWidgetResizable(true);
-    viewport()->setAutoFillBackground(false);
 
     QVBoxLayout *layout               = new QVBoxLayout(panel);
     d->showTrashDeleteDialogCheck     = new QCheckBox(i18n("Confirm when moving items to the &trash."), panel);
@@ -108,6 +106,12 @@ SetupMisc::SetupMisc(QWidget* parent)
 
     readSettings();
     adjustSize();
+
+    // --------------------------------------------------------
+
+    setAutoFillBackground(false);
+    viewport()->setAutoFillBackground(false);
+    panel->setAutoFillBackground(false);
 }
 
 SetupMisc::~SetupMisc()

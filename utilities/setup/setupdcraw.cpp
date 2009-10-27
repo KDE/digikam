@@ -68,10 +68,8 @@ SetupDcraw::SetupDcraw(QWidget* parent )
           : QScrollArea(parent), d(new SetupDcrawPriv)
 {
     QWidget *panel = new QWidget(viewport());
-    panel->setAutoFillBackground(false);
     setWidget(panel);
     setWidgetResizable(true);
-    viewport()->setAutoFillBackground(false);
 
     QVBoxLayout *layout = new QVBoxLayout(panel);
     d->dcrawSettings    = new DcrawSettingsWidget(panel, DcrawSettingsWidget::SIXTEENBITS);
@@ -87,6 +85,12 @@ SetupDcraw::SetupDcraw(QWidget* parent )
             this, SLOT(slotSixteenBitsImageToggled(bool)));
 
     readSettings();
+
+    // --------------------------------------------------------
+
+    setAutoFillBackground(false);
+    viewport()->setAutoFillBackground(false);
+    panel->setAutoFillBackground(false);
 }
 
 SetupDcraw::~SetupDcraw()

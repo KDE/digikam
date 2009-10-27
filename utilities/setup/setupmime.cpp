@@ -85,10 +85,8 @@ SetupMime::SetupMime(QWidget* parent)
          : QScrollArea(parent), d(new SetupMimePriv)
 {
     QWidget *panel = new QWidget(viewport());
-    panel->setAutoFillBackground(false);
     setWidget(panel);
     setWidgetResizable(true);
-    viewport()->setAutoFillBackground(false);
 
     QVBoxLayout *layout = new QVBoxLayout(panel);
 
@@ -246,6 +244,12 @@ SetupMime::SetupMime(QWidget* parent)
     // --------------------------------------------------------
 
     readSettings();
+
+    // --------------------------------------------------------
+
+    setAutoFillBackground(false);
+    viewport()->setAutoFillBackground(false);
+    panel->setAutoFillBackground(false);
 }
 
 SetupMime::~SetupMime()
