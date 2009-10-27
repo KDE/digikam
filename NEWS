@@ -77,7 +77,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 068 ==> 211117 : showFoto no filters or decorate menu.
 069 ==> 164799 : showFoto: "Sort images by filename" is sorted in reverted order
 070 ==> 211535 : Revert and undo in image editor does not work.
-071 ==> 
+071 ==> 189861 : Keyboard shortcuts for assigning markers.
+072 ==>
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
