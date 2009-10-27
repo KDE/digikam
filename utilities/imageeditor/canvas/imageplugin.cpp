@@ -33,14 +33,25 @@
 namespace Digikam
 {
 
+class ImagePluginPriv
+{
+public:
+
+    ImagePluginPriv()
+    {}
+
+    QString actionCategory;
+};
+
 ImagePlugin::ImagePlugin(QObject *parent, const char* name)
-           : QObject(parent)
+           : QObject(parent), d(new ImagePluginPriv())
 {
     setObjectName(name);
 }
 
 ImagePlugin::~ImagePlugin()
 {
+    delete d;
 }
 
 void ImagePlugin::setEnabledSelectionActions(bool)
@@ -67,4 +78,17 @@ void ImagePlugin::slotToolDone()
     EditorToolIface::editorToolIface()->unLoadTool();
 }
 
+QString ImagePlugin::actionCategory() const
+{
+    return d->actionCategory;
+}
+
+void ImagePlugin::setActionCategory(const QString& name)
+{
+    // only set once
+    if (d->actionCategory.isEmpty())
+    {
+        d->actionCategory = name;
+    }
+}
 }  // namespace Digikam

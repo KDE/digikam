@@ -53,6 +53,7 @@
 
 #include <kaboutdata.h>
 #include <kaction.h>
+#include <kactioncategory.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kapplication.h>
@@ -800,10 +801,25 @@ void EditorWindow::loadImagePlugins()
             plugin->setEnabledSelectionActions(false);
 
             // add actions to imagepluginsActionCollection
-            foreach (QAction* action, plugin->actionCollection()->actions())
+#if KDE_IS_VERSION(4,1,68)
+            if (!plugin->actionCategory().isEmpty())
             {
-                d->imagepluginsActionCollection->addAction(action->objectName(), action);
+                KActionCategory *category = new KActionCategory(plugin->actionCategory(), d->imagepluginsActionCollection);
+                foreach (QAction* action, plugin->actionCollection()->actions())
+                {
+                    category->addAction(action->objectName(), action);
+                }
             }
+            else
+            {
+#endif
+                foreach (QAction* action, plugin->actionCollection()->actions())
+                {
+                    d->imagepluginsActionCollection->addAction(action->objectName(), action);
+                }
+#if KDE_IS_VERSION(4,1,68)
+            }
+#endif
         }
         else
         {

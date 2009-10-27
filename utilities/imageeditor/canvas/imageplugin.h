@@ -43,6 +43,7 @@ namespace Digikam
 {
 
 class EditorTool;
+class ImagePluginPriv;
 
 class DIGIKAM_EXPORT ImagePlugin : public QObject, public KXMLGUIClient
 {
@@ -58,9 +59,19 @@ public:
 
     void loadTool(EditorTool* tool);
 
+    QString actionCategory() const;
+
+protected:
+
+    void setActionCategory(const QString& name);
+
 private Q_SLOTS:
 
     void slotToolDone();
+
+private:
+
+    ImagePluginPriv* const d;
 };
 
 }  //namespace Digikam
