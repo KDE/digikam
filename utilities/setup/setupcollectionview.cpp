@@ -23,7 +23,7 @@
  * ============================================================ */
 
 #include "setupcollectionview.h"
-#include "setupcollectionview.moc"
+#include "moc_setupcollectionview.cpp"
 
 // Qt includes
 
