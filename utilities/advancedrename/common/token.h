@@ -30,7 +30,7 @@
 #include <QObject>
 #include <QString>
 
-class  QAction;
+class QAction;
 
 namespace Digikam
 {
@@ -68,6 +68,5 @@ private:
 typedef QList<Token*> TokenList;
 
 } // namespace Digikam
-
 
 #endif /* TOKEN_H */

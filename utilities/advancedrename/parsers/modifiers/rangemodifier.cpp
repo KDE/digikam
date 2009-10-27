@@ -22,6 +22,7 @@
  * ============================================================ */
 
 #include "rangemodifier.h"
+#include "rangemodifier.moc"
 
 // Qt includes
 

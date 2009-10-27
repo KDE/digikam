@@ -6,8 +6,8 @@
  * Date        : 2008-05-19
  * Description : a widget to draw sketch.
  *
- * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,6 +23,7 @@
  * ============================================================ */
 
 #include "sketchwidget.h"
+#include "sketchwidget.moc"
 
 // Qt includes
 
@@ -40,7 +41,6 @@
 
 #include <klocale.h>
 
-
 namespace Digikam
 {
 
@@ -56,8 +56,8 @@ public:
 
     DrawEvent(int width, const QColor& color)
     {
-        penWidth   = width;
-        penColor   = color;
+        penWidth = width;
+        penColor = color;
     };
 
     void lineTo(const QPoint &pos)
@@ -65,9 +65,9 @@ public:
         path.lineTo(pos);
     }
 
-    int    penWidth;
+    int          penWidth;
 
-    QColor penColor;
+    QColor       penColor;
 
     QPainterPath path;
 };

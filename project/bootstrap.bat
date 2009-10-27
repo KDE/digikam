@@ -4,6 +4,7 @@ set KDEDIRS=C:\kde4-mingw
 set PATH=%PATH%;%KDEDIRS%\bin;%KDEDIRS%\plugins
 set KDE4_INSTALL_DIR=%KDEDIRS%
 set KDEDIRS=%KDEDIRS%
+set KDE4_LIB_DIRS=%KDEDIRS%
 set KDEROOT=%KDEDIRS%
 set QTMAKESPEC=%KDEDIRS%\mkspecs\win32-g++
 set QT_PLUGIN_PATH=%KDEDIRS%\plugins
