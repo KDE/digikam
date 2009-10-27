@@ -1365,15 +1365,16 @@ void DImg::bitBlt (const uchar *src, uchar *dest,
     uint   slinelength = swidth * sdepth;
     uint   dlinelength = dwidth * ddepth;
 
-    int scurY = sy;
-    int dcurY = dy;
+    int scurY        = sy;
+    int dcurY        = dy;
+    int sdepthlength = w * sdepth;
     for (int j = 0 ; j < h ; ++j, ++scurY, ++dcurY)
     {
         sptr  = &src [ scurY * slinelength ] + sx * sdepth;
         dptr  = &dest[ dcurY * dlinelength ] + dx * ddepth;
 
             // plain and simple bitBlt
-        for (int i = 0; i < w * sdepth ; ++i, ++sptr, ++dptr)
+        for (int i = 0; i < sdepthlength ; ++i, ++sptr, ++dptr)
         {
             *dptr = *sptr;
         }
