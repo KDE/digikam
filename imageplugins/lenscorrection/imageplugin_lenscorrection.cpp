@@ -56,6 +56,8 @@ K_EXPORT_PLUGIN ( LensCorrectionFactory("digikamimageplugin_lenscorrection") )
 ImagePlugin_LensCorrection::ImagePlugin_LensCorrection(QObject *parent, const QVariantList &)
                           : Digikam::ImagePlugin(parent, "ImagePlugin_LensCorrection")
 {
+    setActionCategory(i18n("Lens Correction"));
+
 #ifdef HAVE_LENSFUN
 
     m_autoCorrectionAction  = new KAction(KIcon("lensdistortion"), i18n("Auto-Correction..."), this);
