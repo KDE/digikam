@@ -1857,12 +1857,13 @@ void DImg::flip(FLIP direction)
                 unsigned short * data = (unsigned short *)bits();
 
                 // can be done inplace
+                uint wHalf = (w / 2);
                 for (uint y = 0 ; y < h ; ++y)
                 {
                     beg = data + y * w * 4;
                     end = beg  + (w-1) * 4;
 
-                    for (uint x=0 ; x < (w/2) ; ++x)
+                    for (uint x=0 ; x < wHalf ; ++x)
                     {
                         memcpy(&tmp, beg, 8);
                         memcpy(beg, end, 8);
@@ -1882,12 +1883,13 @@ void DImg::flip(FLIP direction)
                 uchar* data = bits();
 
                 // can be done inplace
+                uint wHalf = (w / 2);
                 for (uint y = 0 ; y < h ; ++y)
                 {
                     beg = data + y * w * 4;
                     end = beg  + (w-1) * 4;
 
-                    for (uint x=0 ; x < (w/2) ; ++x)
+                    for (uint x=0 ; x < wHalf ; ++x)
                     {
                         memcpy(&tmp, beg, 4);
                         memcpy(beg, end, 4);
