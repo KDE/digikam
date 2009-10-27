@@ -2037,28 +2037,39 @@ void DImg::fill(const DColor& color)
     if (isNull())
         return;
 
+    // caching
+    uint dim = width() * height() * 4;
+
     if (sixteenBit())
     {
         unsigned short *imgData16 = (unsigned short *)m_priv->data;
+        unsigned short red        = (unsigned short)color.red();
+        unsigned short green      = (unsigned short)color.green();
+        unsigned short blue       = (unsigned short)color.blue();
+        unsigned short alpha      = (unsigned short)color.alpha();
 
-        for (uint i = 0 ; i < width()*height()*4 ; i+=4)
+        for (uint i = 0 ; i < dim ; i+=4)
         {
-            imgData16[ i ] = (unsigned short)color.blue();
-            imgData16[i+1] = (unsigned short)color.green();
-            imgData16[i+2] = (unsigned short)color.red();
-            imgData16[i+3] = (unsigned short)color.alpha();
+            imgData16[ i ] = blue;
+            imgData16[i+1] = green;
+            imgData16[i+2] = red;
+            imgData16[i+3] = alpha;
         }
     }
     else
     {
         uchar *imgData = m_priv->data;
+        uchar red      = (uchar)color.red();
+        uchar green    = (uchar)color.green();
+        uchar blue     = (uchar)color.blue();
+        uchar alpha    = (uchar)color.alpha();
 
-        for (uint i = 0 ; i < width()*height()*4 ; i+=4)
+        for (uint i = 0 ; i < dim ; i+=4)
         {
-            imgData[ i ] = (uchar)color.blue();
-            imgData[i+1] = (uchar)color.green();
-            imgData[i+2] = (uchar)color.red();
-            imgData[i+3] = (uchar)color.alpha();
+            imgData[ i ] = blue;
+            imgData[i+1] = green;
+            imgData[i+2] = red;
+            imgData[i+3] = alpha;
         }
     }
 }
