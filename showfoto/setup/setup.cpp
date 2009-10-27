@@ -139,6 +139,14 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
                                  "<i>Customize slideshow settings</i></qt>"));
     d->page_slideshow->setIcon(KIcon("view-presentation"));
 
+    d->editorPage->setFrameShape(QFrame::NoFrame);
+    d->metadataPage->setFrameShape(QFrame::NoFrame);
+    d->toolTipPage->setFrameShape(QFrame::NoFrame);
+    d->dcrawPage->setFrameShape(QFrame::NoFrame);
+    d->iofilesPage->setFrameShape(QFrame::NoFrame);
+    d->slideshowPage->setFrameShape(QFrame::NoFrame);
+    d->iccPage->setFrameShape(QFrame::NoFrame);
+
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotOkClicked()) );
 
