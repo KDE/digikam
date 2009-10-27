@@ -746,6 +746,17 @@ void EditorWindow::slotZoomSelected(int index)
     }
 }
 
+void EditorWindow::slotZoomTextChanged(const QString& txt)
+{
+    bool r      = false;
+    double zoom = KGlobal::locale()->readNumber(txt, &r) / 100.0;
+    if (r && zoom > 0.0)
+    {
+        m_stackView->setZoomFactor(zoom);
+    }
+
+}
+
 void EditorWindow::slotZoomChanged(bool isMax, bool isMin, double zoom)
 {
     d->zoomPlusAction->setEnabled(!isMax);
@@ -2104,17 +2115,6 @@ void EditorWindow::slotCloseTool()
 {
     if (d->toolIface)
         d->toolIface->slotCloseTool();
-}
-
-void EditorWindow::slotZoomTextChanged(const QString& txt)
-{
-    bool r      = false;
-    double zoom = KGlobal::locale()->readNumber(txt, &r) / 100.0;
-    if (r && zoom > 0.0)
-    {
-        m_stackView->setZoomFactor(zoom);
-    }
-
 }
 
 }  // namespace Digikam
