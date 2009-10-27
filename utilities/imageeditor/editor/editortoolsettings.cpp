@@ -138,7 +138,6 @@ EditorToolSettings::EditorToolSettings(QWidget *parent)
     setWidgetResizable(true);
 
     d->settingsArea = new QWidget;
-    setWidget(d->settingsArea);
 
     // ---------------------------------------------------------------
 
@@ -233,6 +232,14 @@ EditorToolSettings::EditorToolSettings(QWidget *parent)
     gridSettings->addWidget(d->btnBox1,        6, 0, 1, 2);
     gridSettings->setSpacing(spacingHint());
     gridSettings->setMargin(spacingHint());
+
+    // ---------------------------------------------------------------
+
+    setWidget(d->settingsArea);
+    setAutoFillBackground(false);
+    viewport()->setAutoFillBackground(false);
+    d->settingsArea->setAutoFillBackground(false);
+    d->plainPage->setAutoFillBackground(false);
 
     // ---------------------------------------------------------------
 
