@@ -204,6 +204,7 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     d->autoAdjustPoint2Btn->setSizePolicy(QSizePolicy::MinimumExpanding,
                                           QSizePolicy::MinimumExpanding);
 
+    d->autoAdjustPoint1Btn->setShortcut(QKeySequence(Qt::Key_1));
     d->autoAdjustPoint1Btn->setToolTip(btnWhatsThis);
     d->autoAdjustPoint1Btn->setWhatsThis(btnWhatsThis);
     d->autoAdjustPoint2Btn->setToolTip(btnWhatsThis);
@@ -599,6 +600,11 @@ void FreeRotationTool::slotAutoAdjustP2Clicked()
 
 void FreeRotationTool::slotAutoAdjustClicked()
 {
+    // we need to check manually here if the button is enabled, because this slot can be called
+    // with an action now
+    if (!d->autoAdjustBtn->isEnabled())
+        return;
+
     double angle = calculateAutoAngle();
     if (fabs(angle) > 45.0)
     {

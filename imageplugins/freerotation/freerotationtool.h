@@ -47,14 +47,16 @@ public:
     FreeRotationTool(QObject *parent);
     ~FreeRotationTool();
 
-private Q_SLOTS:
-
-    void slotResetSettings();
-    void slotColorGuideChanged();
+public Q_SLOTS:
 
     void slotAutoAdjustP1Clicked();
     void slotAutoAdjustP2Clicked();
     void slotAutoAdjustClicked();
+
+private Q_SLOTS:
+
+    void slotResetSettings();
+    void slotColorGuideChanged();
 
 private:
 

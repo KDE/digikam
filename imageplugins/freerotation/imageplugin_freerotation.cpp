@@ -49,12 +49,29 @@ K_EXPORT_PLUGIN ( FreeRotationFactory("digikamimageplugin_freerotation") )
 ImagePlugin_FreeRotation::ImagePlugin_FreeRotation(QObject *parent, const QVariantList &)
                         : Digikam::ImagePlugin(parent, "ImagePlugin_FreeRotation")
 {
-    m_freerotationAction = new KAction(KIcon("freerotation"), i18n("Free Rotation..."), this);
+    QString pluginName(i18n("Free Rotation"));
 
-    connect(m_freerotationAction, SIGNAL(triggered(bool) ),
-            this, SLOT(slotFreeRotation()));
+    // we want to have an actionCategory for this plugin (if possible), set a name for it
+    setActionCategory(pluginName);
 
+    m_freerotationAction = new KAction(KIcon("freerotation"), QString("%1...").arg(pluginName), this);
+    connect(m_freerotationAction, SIGNAL(triggered(bool) ), this, SLOT(slotFreeRotation()));
     actionCollection()->addAction("imageplugin_freerotation", m_freerotationAction );
+
+    KAction* point1Action = new KAction(i18n("Set Point 1"), this);
+    point1Action->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_1));
+    connect(point1Action, SIGNAL(triggered(bool)), this, SIGNAL(signalPoint1Action()));
+    actionCollection()->addAction("imageplugin_freerotation_point1", point1Action);
+
+    KAction* point2Action = new KAction(i18n("Set Point 2"), this);
+    point2Action->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_2));
+    connect(point2Action, SIGNAL(triggered(bool)), this, SIGNAL(signalPoint2Action()));
+    actionCollection()->addAction("imageplugin_freerotation_point2", point2Action);
+
+    KAction* autoAdjustAction = new KAction(i18n("Auto Adjust"), this);
+    autoAdjustAction->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_R));
+    connect(autoAdjustAction, SIGNAL(triggered(bool)), this, SIGNAL(signalAutoAdjustAction()));
+    actionCollection()->addAction("imageplugin_freerotation_autoadjust", autoAdjustAction);
 
     setXMLFile("digikamimageplugin_freerotation_ui.rc");
 
@@ -73,5 +90,15 @@ void ImagePlugin_FreeRotation::setEnabledActions(bool enable)
 void ImagePlugin_FreeRotation::slotFreeRotation()
 {
     FreeRotationTool *tool = new FreeRotationTool(this);
+
+    connect(this, SIGNAL(signalPoint1Action()),
+            tool, SLOT(slotAutoAdjustP1Clicked()));
+
+    connect(this, SIGNAL(signalPoint2Action()),
+            tool, SLOT(slotAutoAdjustP2Clicked()));
+
+    connect(this, SIGNAL(signalAutoAdjustAction()),
+            tool, SLOT(slotAutoAdjustClicked()));
+
     loadTool(tool);
 }
