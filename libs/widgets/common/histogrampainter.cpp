@@ -1,10 +1,10 @@
 /* ============================================================
  *
- * This file is a part of digikam project
+ * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 26.10.2009
- * Description : a class that manages painting histogramsw
+ * Date        : 2009-10-26
+ * Description : a class that manages painting histograms
  *
  * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
  *
