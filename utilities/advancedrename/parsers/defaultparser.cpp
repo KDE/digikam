@@ -32,7 +32,7 @@
 #include "cameranameparser.h"
 #include "dateparser.h"
 #include "directorynameparser.h"
-#include "filenameparser.h"
+#include "filepropertiesparser.h"
 #include "metadataparser.h"
 #include "sequencenumberparser.h"
 
@@ -42,7 +42,7 @@ namespace Digikam
 DefaultParser::DefaultParser()
              : Parser()
 {
-    registerSubParser(new FilenameParser());
+    registerSubParser(new FilePropertiesParser());
     registerSubParser(new DirectoryNameParser());
     registerSubParser(new CameraNameParser());
     registerSubParser(new SequenceNumberParser());

@@ -1082,7 +1082,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/subparsers/cameranameparser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/subparsers/dateparser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/subparsers/directorynameparser.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/subparsers/filenameparser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/subparsers/filepropertiesparser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/subparsers/metadataparser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/subparsers/sequencenumberparser.cpp
        )

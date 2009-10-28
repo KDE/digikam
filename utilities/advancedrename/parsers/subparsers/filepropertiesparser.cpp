@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-08-08
- * Description : a filename parser class
+ * Description : a file properties parser class
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#include "filenameparser.h"
-#include "filenameparser.moc"
+#include "filepropertiesparser.h"
+#include "filepropertiesparser.moc"
 
 // Qt includes
 
@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-FilenameParser::FilenameParser()
+FilePropertiesParser::FilePropertiesParser()
               : SubParser(i18n("File"), i18n("Add file properties"), SmallIcon("folder-image"))
 {
     addTokenDescription("[file]", i18nc("image filename", "Name"),
@@ -48,7 +48,7 @@ FilenameParser::FilenameParser()
     setRegExp("\\[(file|ext)\\]");
 }
 
-void FilenameParser::parseOperation(const QString& parseString, const ParseInformation& info, ParseResults& results)
+void FilePropertiesParser::parseOperation(const QString& parseString, const ParseInformation& info, ParseResults& results)
 {
     QFileInfo fi(info.filePath);
 

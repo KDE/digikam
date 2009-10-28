@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-08-08
- * Description : a filename parser class
+ * Description : a file properties parser class
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FILENAMEPARSER_H
-#define FILENAMEPARSER_H
+#ifndef FILEPROPERTIESPARSER_H
+#define FILEPROPERTIESPARSER_H
 
 // Qt includes
 
@@ -35,14 +35,14 @@
 namespace Digikam
 {
 
-class FilenameParser : public SubParser
+class FilePropertiesParser : public SubParser
 {
     Q_OBJECT
 
 public:
 
-    FilenameParser();
-    ~FilenameParser() {};
+    FilePropertiesParser();
+    ~FilePropertiesParser() {};
 
 protected:
 
@@ -51,4 +51,4 @@ protected:
 
 } // namespace Digikam
 
-#endif /* FILENAMEPARSER_H */
+#endif /* FILEPROPERTIESPARSER_H */
