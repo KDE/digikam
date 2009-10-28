@@ -58,6 +58,10 @@ public:
 
     QTreeWidget* albumView() const;
 
+Q_SIGNALS:
+
+    void signalAlbumRenamed();
+
 private:
 
     void populateTreeView(const AlbumList& aList, QTreeWidget *view, PAlbum* albumToSelect);

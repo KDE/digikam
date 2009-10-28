@@ -409,6 +409,7 @@ void AlbumSelectWidget::slotAlbumRenamed(Album* album)
     if (item)
     {
         item->setText(0, album->title());
+        emit signalAlbumRenamed();
     }
 }
 
