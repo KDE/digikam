@@ -458,8 +458,8 @@ public:
     DColor            colorGuide;
 };
 
-HistogramPainter::HistogramPainter(QObject *parent) :
-    QObject(parent), d(new HistogramPainterPriv(this))
+HistogramPainter::HistogramPainter(QObject* parent)
+                : QObject(parent), d(new HistogramPainterPriv(this))
 {
 }
 
@@ -468,7 +468,7 @@ HistogramPainter::~HistogramPainter()
     delete d;
 }
 
-void HistogramPainter::setHistogram(ImageHistogram *histogram)
+void HistogramPainter::setHistogram(ImageHistogram* histogram)
 {
     d->histogram = histogram;
 }
@@ -530,12 +530,12 @@ void HistogramPainter::disableHistogramGuide()
     d->showColorGuide = false;
 }
 
-void HistogramPainter::initFrom(QWidget *widget)
+void HistogramPainter::initFrom(QWidget* widget)
 {
     d->widgetToInitFrom = widget;
 }
 
-void HistogramPainter::render(QPixmap &bufferPixmap)
+void HistogramPainter::render(QPixmap& bufferPixmap)
 {
     if (!d->histogram)
     {
