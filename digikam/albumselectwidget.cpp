@@ -112,6 +112,9 @@ AlbumSelectWidget::AlbumSelectWidget(QWidget *parent, PAlbum* albumToSelect)
     connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
             this, SLOT(slotAlbumsCleared()));
 
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumRenamed(Album*)),
+            this, SLOT(slotAlbumRenamed(Album*)));
+
     connect(d->albumsView, SIGNAL(customContextMenuRequested(const QPoint&)),
             this, SLOT(slotContextMenu()));
 
@@ -395,6 +398,18 @@ void AlbumSelectWidget::slotAlbumDeleted(Album* album)
     TreeAlbumItem *item = (TreeAlbumItem*)(album->extraData(d->albumsView));
     if (item)
         delete item;
+}
+
+void AlbumSelectWidget::slotAlbumRenamed(Album* album)
+{
+    if (!album || album->type() != Album::PHYSICAL)
+        return;
+
+    TreeAlbumItem *item = (TreeAlbumItem*)(album->extraData(d->albumsView));
+    if (item)
+    {
+        item->setText(0, album->title());
+    }
 }
 
 void AlbumSelectWidget::slotAlbumsCleared()

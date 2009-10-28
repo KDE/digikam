@@ -62,13 +62,14 @@ private:
 
     void populateTreeView(const AlbumList& aList, QTreeWidget *view, PAlbum* albumToSelect);
 
-private Q_SLOTS: 
+private Q_SLOTS:
 
     void slotSearchTextChanged(const SearchTextSettings&);
     void slotNewAlbum();
     void slotAlbumAdded(Album* a);
     void slotAlbumDeleted(Album* a);
     void slotAlbumsCleared();
+    void slotAlbumRenamed(Album*);
     void slotContextMenu();
 
 private:
