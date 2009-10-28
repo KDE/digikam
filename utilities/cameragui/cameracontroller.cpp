@@ -433,15 +433,14 @@ void CameraController::executeCommand(CameraCommand *cmd)
         {
             QList<QVariant> list = cmd->map["list"].toList();
 
-            foreach (const QVariant& item, list)
+            for (QList<QVariant>::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
             {
                 if (d->canceled)
                 {
-                    list.clear();
                     break;
                 }
-                QString folder = item.toStringList()[0];
-                QString file   = item.toStringList()[1];
+                QString folder = (*it).toStringList()[0];
+                QString file   = (*it).toStringList()[1];
 
                 sendLogMsg(i18n("Getting thumbnails for %1...", file), DHistoryView::StartingEntry, folder, file);
                 QImage thumbnail;
