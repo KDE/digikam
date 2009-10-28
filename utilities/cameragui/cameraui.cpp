@@ -221,7 +221,7 @@ void CameraUI::setupUserArea()
 
     // -------------------------------------------------------------------------
 
-    d->advBox           = new RExpanderBox(d->rightSideBar);
+    d->advBox = new RExpanderBox(d->rightSideBar);
     d->advBox->setObjectName("Camera Settings Expander");
 
     d->renameCustomizer = new RenameCustomizer(d->advBox, d->cameraTitle);
