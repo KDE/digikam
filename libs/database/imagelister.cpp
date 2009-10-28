@@ -409,7 +409,7 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
     else
         sqlQuery += " );";
 
-    kDebug(digiKamAreaCode) << "Search query:\n" << sqlQuery << "\n" << boundValues;
+    kDebug() << "Search query:\n" << sqlQuery << "\n" << boundValues;
 
     bool executionSuccess;
     {
@@ -424,7 +424,7 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
         receiver->error(errMsg);
         return;
     }
-    kDebug(digiKamAreaCode) << "Search result:" << values.size();
+    kDebug() << "Search result:" << values.size();
 
     QSet<int> albumRoots = albumRootsToList();
 

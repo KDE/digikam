@@ -330,7 +330,7 @@ AlbumList TagEditDlg::createTAlbum(TAlbum *mainRootAlbum, const QString& tagStr,
                 root = mainRootAlbum;
 
             QStringList tagsList = hierarchy.split('/', QString::SkipEmptyParts);
-            kDebug(digiKamAreaCode) << tagsList;
+            kDebug() << tagsList;
 
             if (!tagsList.isEmpty())
             {
@@ -344,7 +344,7 @@ AlbumList TagEditDlg::createTAlbum(TAlbum *mainRootAlbum, const QString& tagStr,
                     else
                         tagPath = QString("%1/%2").arg(root->tagPath()).arg(tag);
 
-                    kDebug(digiKamAreaCode) << tag << " :: " << tagPath;
+                    kDebug() << tag << " :: " << tagPath;
 
                     if (!tag.isEmpty())
                     {

@@ -148,7 +148,7 @@ void SharedLoadingTask::execute()
                 lock.wakeAll();
                 // set to 0, as checked in setStatus
                 m_usedProcess = 0;
-                //kDebug(digiKamAreaCode) << "SharedLoadingTask " << this << ": waited";
+                //kDebug() << "SharedLoadingTask " << this << ": waited";
                 // m_img is now set to the result
             }
             else
@@ -191,7 +191,7 @@ void SharedLoadingTask::execute()
 
     {
         LoadingCache::CacheLock lock(cache);
-        //kDebug(digiKamAreaCode) << "SharedLoadingTask " << this << ": image loaded, " << img.isNull();
+        //kDebug() << "SharedLoadingTask " << this << ": image loaded, " << img.isNull();
         // indicate that loading has finished so that listeners can stop waiting
         m_completed = true;
 

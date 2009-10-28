@@ -71,7 +71,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     FILE *file = fopen(QFile::encodeName(filePath), "rb");
     if (!file)
     {
-        kDebug(digiKamAreaCode) << "Cannot open image file.";
+        kDebug() << "Cannot open image file.";
         return false;
     }
 
@@ -79,7 +79,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     if (fread(&header, 2, 1, file) != 1)
     {
-        kDebug(digiKamAreaCode) << "Cannot read header of file.";
+        kDebug() << "Cannot read header of file.";
         fclose(file);
         return false;
     }
@@ -87,7 +87,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     uchar* c = (uchar*) &header;
     if (*c != 'P')
     {
-        kDebug(digiKamAreaCode) << "Not a PPM file.";
+        kDebug() << "Not a PPM file.";
         fclose(file);
         return false;
     }
@@ -95,7 +95,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     ++c;
     if (*c != '6')
     {
-        kDebug(digiKamAreaCode) << "Not a PPM file.";
+        kDebug() << "Not a PPM file.";
         fclose(file);
         return false;
     }
@@ -104,14 +104,14 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     if (fscanf (file, "P6 %d %d %d%c", &width, &height, &rgbmax, &nl) != 4)
     {
-        kDebug(digiKamAreaCode) << "Corrupted PPM file.";
+        kDebug() << "Corrupted PPM file.";
         pclose (file);
         return false;
     }
 
     if (rgbmax <= 255)
     {
-        kDebug(digiKamAreaCode) << "Not a 16 bits per color per pixel PPM file.";
+        kDebug() << "Not a 16 bits per color per pixel PPM file.";
         pclose (file);
         return false;
     }
@@ -126,7 +126,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         data = new_short_failureTolerant(width*height*4);
         if (!data)
         {
-            kDebug(digiKamAreaCode) << "Failed to allocate memory for loading" << filePath;
+            kDebug() << "Failed to allocate memory for loading" << filePath;
             fclose(file);
             return false;
         }
@@ -137,7 +137,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         int checkpoint = 0;
 
     #ifdef ENABLE_DEBUG_MESSAGES
-        kDebug(digiKamAreaCode) << "rgbmax=" << rgbmax << "  fac=" << fac;
+        kDebug() << "rgbmax=" << rgbmax << "  fac=" << fac;
     #endif
 
         for (int h = 0; h < height; ++h)

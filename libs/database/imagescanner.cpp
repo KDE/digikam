@@ -132,7 +132,7 @@ void ImageScanner::addImage(int albumId)
     // the QByteArray is an ASCII hex string
     m_scanInfo.uniqueHash       = uniqueHash();
 
-    kDebug(digiKamAreaCode) << "Adding new item" << m_fileInfo.filePath();
+    kDebug() << "Adding new item" << m_fileInfo.filePath();
     m_scanInfo.id               = DatabaseAccess().db()->addItem(m_scanInfo.albumID, m_scanInfo.itemName,
                                                                  m_scanInfo.status, m_scanInfo.category,
                                                                  m_scanInfo.modificationDate, fileSize,
@@ -209,7 +209,7 @@ bool ImageScanner::scanFromIdenticalFile()
         // Sort by priority, as implemented by custom lessThan()
         qStableSort(candidates.begin(), candidates.end(), lessThanForIdentity);
 
-        kDebug(digiKamAreaCode) << "Recognized" << m_fileInfo.filePath() << "as identical to item" << candidates.first().id;
+        kDebug() << "Recognized" << m_fileInfo.filePath() << "as identical to item" << candidates.first().id;
 
         // Copy attributes.
         // Todo for the future is to worry about syncing identical files.
@@ -231,7 +231,7 @@ bool ImageScanner::copyFromSource(qlonglong srcId)
     if (!info.id)
         return false;
 
-    kDebug(digiKamAreaCode) << "Recognized" << m_fileInfo.filePath() << "as copied from" << srcId;
+    kDebug() << "Recognized" << m_fileInfo.filePath() << "as copied from" << srcId;
     access.db()->copyImageAttributes(srcId, m_scanInfo.id);
     return true;
 }
@@ -505,7 +505,7 @@ void ImageScanner::scanVideoFile()
         foreach (const QString& key, keys)
         {
             KFileMetaInfoItem item = metaInfo.item(key);
-            kDebug(digiKamAreaCode) << item.name() << item.value();
+            kDebug() << item.name() << item.value();
         }
     }
     */
@@ -599,7 +599,7 @@ QString ImageScanner::detectFormat()
                 }
             }
 
-            kWarning(digiKamAreaCode) << "Detecting file format failed: KMimeType for" << m_fileInfo.filePath()
+            kWarning() << "Detecting file format failed: KMimeType for" << m_fileInfo.filePath()
                                       << "is null";
 
         }

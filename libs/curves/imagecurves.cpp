@@ -142,14 +142,14 @@ ImageCurves::~ImageCurves()
 void ImageCurves::fillFromOtherCurvers(ImageCurves *otherCurves)
 {
 
-    kDebug(digiKamAreaCode) << "Filling this curve from other curve " << otherCurves;
+    kDebug() << "Filling this curve from other curve " << otherCurves;
 
     curvesReset();
 
     // if the other curves have the same bit depth, simply copy their data
     if (isSixteenBits() == otherCurves->isSixteenBits())
     {
-        kDebug(digiKamAreaCode) << "Both curves have same type: isSixteenBits = " << isSixteenBits();
+        kDebug() << "Both curves have same type: isSixteenBits = " << isSixteenBits();
         for (int channel = 0; channel < NUM_CHANNELS; ++channel)
         {
             for (int point = 0; point < NUM_POINTS; ++point)
@@ -165,7 +165,7 @@ void ImageCurves::fillFromOtherCurvers(ImageCurves *otherCurves)
     // other curve is 8 bit and this curve is 16 bit
     else if (isSixteenBits() && !otherCurves->isSixteenBits())
     {
-        kDebug(digiKamAreaCode) << "This curve is 16 bit and the other is 8 bit";
+        kDebug() << "This curve is 16 bit and the other is 8 bit";
         for (int channel = 0; channel < NUM_CHANNELS; ++channel)
         {
             for (int point = 0; point < NUM_POINTS; ++point)
@@ -183,39 +183,39 @@ void ImageCurves::fillFromOtherCurvers(ImageCurves *otherCurves)
     // other curve is 16 bit and this is 8 bit
     else if (!isSixteenBits() && otherCurves->isSixteenBits())
     {
-        kDebug(digiKamAreaCode) << "This curve is 8 bit and the other is 16 bit";
+        kDebug() << "This curve is 8 bit and the other is 16 bit";
         for (int channel = 0; channel < NUM_CHANNELS; ++channel)
         {
-            kDebug(digiKamAreaCode) << "Adopting points of channel " << channel;
+            kDebug() << "Adopting points of channel " << channel;
             for (int point = 0; point < NUM_POINTS; ++point)
             {
                 QPoint p = otherCurves->getCurvePoint(channel, point);
-                kDebug(digiKamAreaCode) << "Point " << point << " in original is " << p;
+                kDebug() << "Point " << point << " in original is " << p;
                 if (d->isPointEnabled(p))
                 {
                     p.setX(p.x() / MULTIPLIER_16BIT);
                     p.setY(p.y() / MULTIPLIER_16BIT);
-                    kDebug(digiKamAreaCode) << "Setting curve point " << point << " to " << p;
+                    kDebug() << "Setting curve point " << point << " to " << p;
                     setCurvePoint(channel, point, p);
                 }
                 else
                 {
-                    kDebug(digiKamAreaCode) << "ignoring this point";
+                    kDebug() << "ignoring this point";
                 }
             }
         }
     }
     else
     {
-        kError(digiKamAreaCode) << "Bad logic error, could not fill one curve into another";
+        kError() << "Bad logic error, could not fill one curve into another";
     }
 
-    kDebug(digiKamAreaCode) << "Updating curve types";
+    kDebug() << "Updating curve types";
 
     // adopt channel types
     for (int channel = 0; channel < NUM_CHANNELS; ++channel)
     {
-        kDebug(digiKamAreaCode) << "Curve type for channel " << channel
+        kDebug() << "Curve type for channel " << channel
                         << " is " << (int) otherCurves->getCurveType(channel);
         setCurveType(channel, otherCurves->getCurveType(channel));
     }
@@ -810,7 +810,7 @@ bool ImageCurves::loadCurvesFromGimpCurvesFile(const KUrl& fileUrl)
           fields = fscanf (file, "%d %d ", &index[i][j], &value[i][j]);
           if (fields != 2)
           {
-             kWarning(digiKamAreaCode) <<  "Invalid Gimp curves file!";
+             kWarning() <<  "Invalid Gimp curves file!";
              fclose(file);
              return false;
           }

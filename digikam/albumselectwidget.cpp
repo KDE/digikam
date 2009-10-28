@@ -151,7 +151,7 @@ void AlbumSelectWidget::populateTreeView(const AlbumList& aList, QTreeWidget *vi
                 pitem = static_cast<TreeAlbumItem*>(album->parent()->extraData(view));
             if (!pitem)
             {
-                kWarning(digiKamAreaCode) << "Failed to find parent for Album " << album->title();
+                kWarning() << "Failed to find parent for Album " << album->title();
                 continue;
             }
 
@@ -376,7 +376,7 @@ void AlbumSelectWidget::slotAlbumAdded(Album* album)
 
     if (!parentItem)
     {
-        kWarning(digiKamAreaCode) << "Failed to find parent for Album "
+        kWarning() << "Failed to find parent for Album "
                         << album->title();
         return;
     }

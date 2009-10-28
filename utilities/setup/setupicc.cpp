@@ -688,7 +688,7 @@ void SetupICC::fillCombos(bool report)
             KMessageBox::sorry(this, message);
         }
 
-        kDebug(digiKamAreaCode) << "No ICC profile files found!!!";
+        kDebug() << "No ICC profile files found!!!";
         d->mainDialog->enableButtonOk(false);
         return;
     }

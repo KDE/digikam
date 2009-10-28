@@ -267,7 +267,7 @@ ImageDialog::ImageDialog(QWidget* parent, const KUrl& url, bool singleSelect, co
 
     d->fileFormats = patternList.join("\n");
 
-    kDebug(digiKamAreaCode) << "file formats=" << d->fileFormats;
+    kDebug() << "file formats=" << d->fileFormats;
 
     QPointer<KFileDialog> dlg   = new KFileDialog(url, d->fileFormats, parent);
     ImageDialogPreview *preview = new ImageDialogPreview(dlg);

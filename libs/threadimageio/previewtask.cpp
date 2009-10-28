@@ -206,7 +206,7 @@ void PreviewLoadingTask::execute()
 
         if (m_img.isNull())
         {
-            kWarning(digiKamAreaCode) << "Cannot extract preview for " << m_loadingDescription.filePath;
+            kWarning() << "Cannot extract preview for " << m_loadingDescription.filePath;
         }
     }
     else
@@ -258,7 +258,7 @@ void PreviewLoadingTask::execute()
 
         if (m_img.isNull())
         {
-            kWarning(digiKamAreaCode) << "Cannot extract preview for " << m_loadingDescription.filePath;
+            kWarning() << "Cannot extract preview for " << m_loadingDescription.filePath;
         }
     }
 
@@ -349,7 +349,7 @@ bool PreviewLoadingTask::loadImagePreview(QImage& image, const QString& path)
     DMetadata metadata(path);
     if (metadata.getImagePreview(image))
     {
-        kDebug(digiKamAreaCode) << "Use Exif/IPTC preview extraction. Size of image: "
+        kDebug() << "Use Exif/IPTC preview extraction. Size of image: "
                       << image.width() << "x" << image.height();
         return true;
     }

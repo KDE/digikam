@@ -71,7 +71,7 @@ void AbstractSearchGroupContainer::removeSearchGroup(SearchGroup *group)
 {
     if (group->groupType() == SearchGroup::FirstGroup)
     {
-        kWarning(digiKamAreaCode) << "Attempt to delete the primary search group";
+        kWarning() << "Attempt to delete the primary search group";
         return;
     }
     m_groups.removeAll(group);

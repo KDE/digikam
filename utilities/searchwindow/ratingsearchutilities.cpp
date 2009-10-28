@@ -272,7 +272,7 @@ void RatingComboBoxWidget::paintEvent(QPaintEvent *e)
 {
     if (m_value >= RatingComboBox::Rating0)
     {
-        //kDebug(digiKamAreaCode) << "m_value" << m_value << "defaulting paint to parent" << this;
+        //kDebug() << "m_value" << m_value << "defaulting paint to parent" << this;
         RatingWidget::paintEvent(e);
     }
     else if (m_value == RatingComboBox::NoRating)

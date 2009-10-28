@@ -276,7 +276,7 @@ bool ICCProfileWidget::decodeMetadata()
 
     if (!hProfile)
     {
-        kDebug(digiKamAreaCode) << "Cannot parse ICC profile tags using LCMS";
+        kDebug() << "Cannot parse ICC profile tags using LCMS";
         return false;
     }
 

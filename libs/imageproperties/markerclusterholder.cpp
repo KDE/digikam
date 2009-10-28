@@ -388,7 +388,7 @@ void MarkerClusterHolder::paintOnMarbleInternal(Marble::GeoPainter* const painte
 
         if (pixmapOperations&PixmapValid)
         {
-            // kDebug(digiKamAreaCode)<<cluster.maxSize<<clusterPixmap.size();
+            // kDebug()<<cluster.maxSize<<clusterPixmap.size();
             // is the cluster partially hidden?
             if ( d->haveAnySoloMarkers && (cluster.solo!=ClusterInfo::PartialAll) && ((pixmapOperations&PixmapNoSoloModify)==0) )
             {
@@ -730,7 +730,7 @@ void MarkerClusterHolder::reorderClustersPixelGrid()
     // highlight the clusters:
     updateClusterStates();
 
-    // kDebug(digiKamAreaCode) << QString("%1 markers in %2 clusters").arg(d->markers.size()).arg(d->clusters.count());
+    // kDebug() << QString("%1 markers in %2 clusters").arg(d->markers.size()).arg(d->clusters.count());
 }
 
 /**
@@ -772,7 +772,7 @@ void MarkerClusterHolder::computeClusterDistances()
         }
 
         d->clusters[idest].maxSize = QSize(minDistX.at(idest), minDistY.at(idest));
-        // kDebug(digiKamAreaCode)<<QString("visual.addPoint(MyPoint(%1,%2)); // size: %3,%4 - %5 - cluster %6").arg(destClusterPos.x()).arg(destClusterPos.y()).arg(minDistX[idest]).arg(minDistY[idest]).arg(idest).arg(d->clusters.at(idest).markerCount())<<endl;
+        // kDebug()<<QString("visual.addPoint(MyPoint(%1,%2)); // size: %3,%4 - %5 - cluster %6").arg(destClusterPos.x()).arg(destClusterPos.y()).arg(minDistX[idest]).arg(minDistY[idest]).arg(idest).arg(d->clusters.at(idest).markerCount())<<endl;
     }
 }
 

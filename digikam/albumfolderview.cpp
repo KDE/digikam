@@ -426,7 +426,7 @@ void AlbumFolderView::slotAlbumAdded(Album *album)
     AlbumFolderViewItem* parent = findParent(palbum, failed);
     if (failed)
     {
-        kWarning(digiKamAreaCode) << " Failed to find Album parent " << palbum->albumPath();
+        kWarning() << " Failed to find Album parent " << palbum->albumPath();
         return;
     }
 
@@ -675,7 +675,7 @@ void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
     AlbumSettings* settings = AlbumSettings::instance();
     if(!settings)
     {
-        kWarning(digiKamAreaCode) << "AlbumFolderView: Could not get Album Settings";
+        kWarning() << "AlbumFolderView: Could not get Album Settings";
         return;
     }
 

@@ -124,7 +124,7 @@ SubjectWidget::SubjectWidget(QWidget* parent)
     QString path = KGlobal::dirs()->findResource("iptcschema", "topicset.iptc-subjectcode.xml");
 
     if (!loadSubjectCodesFromXML(KUrl(path)))
-        kDebug(digiKamAreaCode) << "Cannot load IPTC/NAA subject codes XML database";
+        kDebug() << "Cannot load IPTC/NAA subject codes XML database";
 
     // --------------------------------------------------------
 

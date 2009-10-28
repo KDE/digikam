@@ -455,7 +455,7 @@ private:
  *  AlbumIterator it(album);
  *  while ( it.current() )
  *  {
- *     kDebug(digiKamAreaCode) << "Album: " << it.current()->title();
+ *     kDebug() << "Album: " << it.current()->title();
  *     ++it;
  *  }
  * \endcode

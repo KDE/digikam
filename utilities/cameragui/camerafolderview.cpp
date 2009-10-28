@@ -103,7 +103,7 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
 {
     CameraFolderItem *parentItem = findFolder(folder);
 
-    kDebug(digiKamAreaCode) << "CameraFolderView: Adding Subfolder " << subFolder
+    kDebug() << "CameraFolderView: Adding Subfolder " << subFolder
              << " of folder " << folder;
 
     if (parentItem)
@@ -116,7 +116,7 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
         path += subFolder;
         CameraFolderItem* item = new CameraFolderItem(parentItem, subFolder, path, pixmap);
 
-        kDebug(digiKamAreaCode) << "CameraFolderView: Added ViewItem with path "
+        kDebug() << "CameraFolderView: Added ViewItem with path "
                  << item->folderPath();
 
         item->setCount(nbItems);
@@ -125,7 +125,7 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
     }
     else
     {
-        kWarning(digiKamAreaCode) << "CameraFolderView: Could not find parent for subFolder "
+        kWarning() << "CameraFolderView: Could not find parent for subFolder "
                         << subFolder << " of folder " << folder;
         return 0;
     }

@@ -54,16 +54,16 @@ bool Template::operator==(const Template& t) const
     bool b9  = m_contactInfo     == t.m_contactInfo;
     bool b10 = m_subjects        == t.m_subjects;
 /*
-    kDebug(digiKamAreaCode) << t.authors()         << m_authors         << b1;
-    kDebug(digiKamAreaCode) << t.authorsPosition() << m_authorsPosition << b2;
-    kDebug(digiKamAreaCode) << t.credit()          << m_credit          << b3;
-    kDebug(digiKamAreaCode) << t.copyright()       << m_copyright       << b4;
-    kDebug(digiKamAreaCode) << t.rightUsageTerms() << m_rightUsageTerms << b5;
-    kDebug(digiKamAreaCode) << t.source()          << m_source          << b6;
-    kDebug(digiKamAreaCode) << t.instructions()    << m_instructions    << b7;
-    kDebug(digiKamAreaCode) << t.locationInfo()    << m_locationInfo    << b8;
-    kDebug(digiKamAreaCode) << t.contactInfo()     << m_contactInfo     << b9;
-    kDebug(digiKamAreaCode) << t.IptcSubjects()    << m_subjects        << b10;
+    kDebug() << t.authors()         << m_authors         << b1;
+    kDebug() << t.authorsPosition() << m_authorsPosition << b2;
+    kDebug() << t.credit()          << m_credit          << b3;
+    kDebug() << t.copyright()       << m_copyright       << b4;
+    kDebug() << t.rightUsageTerms() << m_rightUsageTerms << b5;
+    kDebug() << t.source()          << m_source          << b6;
+    kDebug() << t.instructions()    << m_instructions    << b7;
+    kDebug() << t.locationInfo()    << m_locationInfo    << b8;
+    kDebug() << t.contactInfo()     << m_contactInfo     << b9;
+    kDebug() << t.IptcSubjects()    << m_subjects        << b10;
 */
     return b1 && b2 && b3 && b4 && b5 && b6 && b7 && b8 && b9 && b10;
 }

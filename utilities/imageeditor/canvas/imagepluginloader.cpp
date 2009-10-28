@@ -149,13 +149,13 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
         {
             d->pluginMap[corePlugin->name()] = plugin;
 
-            kDebug(digiKamAreaCode) << "ImagePluginLoader: Loaded plugin " << corePlugin->name();
+            kDebug() << "ImagePluginLoader: Loaded plugin " << corePlugin->name();
 
             ++cpt;
         }
         else
         {
-            kWarning(digiKamAreaCode) << "ImagePluginLoader: createInstance returned 0 for "
+            kWarning() << "ImagePluginLoader: createInstance returned 0 for "
                             << corePlugin->name()
                             << " (" << corePlugin->library() << ")"
                             << " with error: "
@@ -182,13 +182,13 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
             {
                 d->pluginMap[name] = plugin;
 
-                kDebug(digiKamAreaCode) << "ImagePluginLoader: Loaded plugin " << service->name();
+                kDebug() << "ImagePluginLoader: Loaded plugin " << service->name();
 
                 ++cpt;
             }
             else
             {
-                kWarning(digiKamAreaCode) << "ImagePluginLoader: createInstance returned 0 for "
+                kWarning() << "ImagePluginLoader: createInstance returned 0 for "
                                 << service->name()
                                 << " (" << service->library() << ")"
                                 << " with error: "

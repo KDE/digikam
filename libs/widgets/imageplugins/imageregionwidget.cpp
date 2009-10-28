@@ -453,7 +453,7 @@ void ImageRegionWidget::setContentsSize()
             break;
         }
         default:
-            kWarning(digiKamAreaCode) << "Unknown separation view specified";
+            kWarning() << "Unknown separation view specified";
     }
 }
 

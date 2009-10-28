@@ -63,7 +63,7 @@ void RawPostProcessing::rawPostProcessing()
 {
     if (!m_orgImage.bits() || !m_orgImage.width() || !m_orgImage.height())
     {
-       kWarning(digiKamAreaCode) << ("RawPostProcessing::rawPostProcessing: no image m_orgImage.bits() available!");
+       kWarning() << ("RawPostProcessing::rawPostProcessing: no image m_orgImage.bits() available!");
        return;
     }
 

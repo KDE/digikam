@@ -574,7 +574,7 @@ void CurvesWidget::setup(int w, int h, bool readOnly)
 void CurvesWidget::saveCurve(KConfigGroup & group, QString prefix)
 {
 
-    kDebug(digiKamAreaCode) << "Storing curves";
+    kDebug() << "Storing curves";
 
     for (int channel = 0; channel < ImageCurves::NUM_CHANNELS; ++channel)
     {
@@ -604,11 +604,11 @@ void CurvesWidget::saveCurve(KConfigGroup & group, QString prefix)
 void CurvesWidget::restoreCurve(KConfigGroup & group, QString prefix)
 {
 
-    kDebug(digiKamAreaCode) << "Restoring curves";
+    kDebug() << "Restoring curves";
 
     reset();
 
-    kDebug(digiKamAreaCode) << "curves " << curves() << " isSixteenBits = "
+    kDebug() << "curves " << curves() << " isSixteenBits = "
                     << curves()->isSixteenBits();
 
     for (int channel = 0; channel < ImageCurves::NUM_CHANNELS; ++channel)
@@ -647,7 +647,7 @@ void CurvesWidget::restoreCurve(KConfigGroup & group, QString prefix)
 void CurvesWidget::updateData(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits)
 {
 
-    kDebug(digiKamAreaCode) << "updating data";
+    kDebug() << "updating data";
 
     stopHistogramComputation();
 
@@ -819,7 +819,7 @@ void CurvesWidget::paintEvent(QPaintEvent*)
 
     if (!m_imageHistogram)
     {
-        kWarning(digiKamAreaCode)
+        kWarning()
                         << "Should render a histogram, but did not get one.";
         return;
     }

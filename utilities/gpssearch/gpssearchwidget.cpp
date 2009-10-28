@@ -92,7 +92,7 @@ QList<double> GPSSearchWidget::selectionCoordinates() const
 void GPSSearchWidget::setSelectionCoordinates(const QList<double>& sel)
 {
     d->selection = sel;
-    kDebug(digiKamAreaCode) << "Set new selection area: West, North, East, South: " << d->selection;
+    kDebug() << "Set new selection area: West, North, East, South: " << d->selection;
 
     // Set selection area in marble widget.
     emit signalSetNewMapSelection(d->selection);

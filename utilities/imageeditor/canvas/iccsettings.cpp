@@ -203,10 +203,10 @@ IccProfile IccSettingsPriv::profileFromWindowSystem(QWidget *widget)
         QByteArray bytes = QByteArray::fromRawData((char*)str, (quint32)nitems);
 
         profile = bytes;
-        kDebug(digiKamAreaCode) << "Found X.org XICC monitor profile" << profile.description();
+        kDebug() << "Found X.org XICC monitor profile" << profile.description();
     }
     //else
-      //  kDebug(digiKamAreaCode) << "No X.org XICC profile installed for screen" << screenNumber;
+      //  kDebug() << "No X.org XICC profile installed for screen" << screenNumber;
 
     // insert to cache even if null
     {
@@ -324,7 +324,7 @@ void IccSettingsPriv::scanDirectory(const QString& path, const QStringList& filt
     {
         if (info.isFile())
         {
-            //kDebug(digiKamAreaCode) << info.filePath() << (info.exists() && info.isReadable());
+            //kDebug() << info.filePath() << (info.exists() && info.isReadable());
             IccProfile profile(info.filePath());
             if (profile.open())
             {

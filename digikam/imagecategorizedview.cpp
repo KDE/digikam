@@ -396,7 +396,7 @@ void ImageCategorizedView::setCurrentUrl(const KUrl& url)
 
 void ImageCategorizedView::setSelectedUrls(const KUrl::List& urlList)
 {
-    kDebug(digiKamAreaCode)<<"urlList.size():"<<urlList.size();
+    kDebug()<<"urlList.size():"<<urlList.size();
     QItemSelection mySelection;
     for (KUrl::List::const_iterator it = urlList.constBegin(); it!=urlList.constEnd(); ++it)
     {

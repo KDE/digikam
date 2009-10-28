@@ -124,7 +124,7 @@ void BatchAlbumsSyncMetadata::parseAlbum()
     else if (!(*d->albumsIt)->isRoot())
     {
         d->imageInfoJob->allItemsFromAlbum(*d->albumsIt);
-        kDebug(digiKamAreaCode) << "Sync Items from Album :" << (*d->albumsIt)->databaseUrl().directory();
+        kDebug() << "Sync Items from Album :" << (*d->albumsIt)->databaseUrl().directory();
     }
     else
     {

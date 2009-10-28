@@ -576,7 +576,7 @@ void AlbumLister::slotResult(KJob* job)
 
     if (job->error())
     {
-        kWarning(digiKamAreaCode) << "Failed to list url: " << job->errorString();
+        kWarning() << "Failed to list url: " << job->errorString();
         d->itemMap.clear();
         d->invalidatedItems.clear();
         return;

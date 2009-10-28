@@ -37,8 +37,8 @@ int main(int argc, char** argv)
 {
     if(argc != 2)
     {
-        kDebug(digiKamAreaCode) << "pgfscaled - Load scaled version of PGF image and save to PNG";
-        kDebug(digiKamAreaCode) << "Usage: <pgffile>";
+        kDebug() << "pgfscaled - Load scaled version of PGF image and save to PNG";
+        kDebug() << "Usage: <pgffile>";
         return -1;
     }
 
@@ -50,7 +50,7 @@ int main(int argc, char** argv)
     QFile file(fname);
     if ( !file.open(QIODevice::ReadOnly) )
     {
-        kDebug(digiKamAreaCode) << "Cannot open PGF file to read...";
+        kDebug() << "Cannot open PGF file to read...";
         return -1;
     }
 
@@ -58,7 +58,7 @@ int main(int argc, char** argv)
 
     if (!loadPGFScaled(img, file.fileName(), 1280))
     {
-        kDebug(digiKamAreaCode) << "loadPGFScaled failed...";
+        kDebug() << "loadPGFScaled failed...";
         return -1;
     }
     img.save(file.fileName()+QString("-scaled.png"), "PNG");

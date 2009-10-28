@@ -823,7 +823,7 @@ void EditorWindow::loadImagePlugins()
         }
         else
         {
-            kDebug(digiKamAreaCode) << "Invalid plugin to add!";
+            kDebug() << "Invalid plugin to add!";
         }
     }
 
@@ -987,7 +987,7 @@ void EditorWindow::applyStandardSettings()
                 stream >> sizesList;
                 if (sizesList.count() == 3)
                 {
-                    kDebug(digiKamAreaCode) << "Found splitter based config, converting to dockbar";
+                    kDebug() << "Found splitter based config, converting to dockbar";
                     // Remove the first entry (the thumbbar) and write the rest
                     // back. Then it should be fine.
                     sizesList.removeFirst();
@@ -1511,7 +1511,7 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
     }
     else
     {
-        kWarning(digiKamAreaCode) << "Why was slotSavingFinished called "
+        kWarning() << "Why was slotSavingFinished called "
                                   << "if we did not want to save a file?";
     }
 
@@ -1578,7 +1578,7 @@ void EditorWindow::setupTempSaveFile(const KUrl & url)
 void EditorWindow::startingSave(const KUrl& url)
 {
 
-    kDebug(digiKamAreaCode) << "startSaving url = " << url;
+    kDebug() << "startSaving url = " << url;
 
     // avoid any reentrancy. Should be impossible anyway since actions will be disabled.
     if (m_savingContext->savingState != SavingContextContainer::SavingStateNone)
@@ -1605,14 +1605,14 @@ void EditorWindow::startingSave(const KUrl& url)
 bool EditorWindow::startingSaveAs(const KUrl& url)
 {
 
-    kDebug(digiKamAreaCode) << "startSavingAs called";
+    kDebug() << "startSavingAs called";
 
     if (m_savingContext->savingState != SavingContextContainer::SavingStateNone)
         return false;
 
     QString pattern             = KImageIO::pattern(KImageIO::Writing);
     QStringList writablePattern = pattern.split(QChar('\n'));
-    kDebug(digiKamAreaCode) << "KDE Offered pattern: " << writablePattern;
+    kDebug() << "KDE Offered pattern: " << writablePattern;
     writablePattern.append(QString("*.jp2|") + i18n("JPEG 2000 image"));
     writablePattern.append(QString("*.pgf|") + i18n("Progressive Graphics File"));
 
@@ -1694,7 +1694,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
             // Else, check if format from file name extension is include on file mime type list.
 
             QStringList types = KImageIO::types(KImageIO::Writing);
-            kDebug(digiKamAreaCode) << "KDE Offered types: " << types;
+            kDebug() << "KDE Offered types: " << types;
 
             types << "TIF";
             types << "TIFF";
@@ -1709,7 +1709,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
             if ( !imgExtList.toUpper().contains( m_savingContext->format.toUpper() ) )
             {
                 KMessageBox::error(this, i18n("Target image file format \"%1\" unsupported.", m_savingContext->format));
-                kWarning(digiKamAreaCode) << "target image file format " << m_savingContext->format << " unsupported!";
+                kWarning() << "target image file format " << m_savingContext->format << " unsupported!";
                 return false;
             }
         }
@@ -1720,7 +1720,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
         KMessageBox::error(this, i18n("Failed to save file\n\"%1\"\nto\n\"%2\".",
                                       newURL.fileName(),
                                       newURL.toLocalFile().section('/', -2, -2)));
-        kWarning(digiKamAreaCode) << "target URL is not valid !";
+        kWarning() << "target URL is not valid !";
         return false;
     }
 
@@ -1815,7 +1815,7 @@ void EditorWindow::moveFile()
     if (m_savingContext->destinationURL.isLocalFile())
     {
 
-        kDebug(digiKamAreaCode) << "moving a local file";
+        kDebug() << "moving a local file";
 
         QByteArray dstFileName = QFile::encodeName(m_savingContext->destinationURL.toLocalFile());
 #ifndef _WIN32
@@ -1862,7 +1862,7 @@ void EditorWindow::moveFile()
         // restore permissions
         if (::chmod(dstFileName, filePermissions) != 0)
         {
-            kWarning(digiKamAreaCode) << "Failed to restore file permissions for file " << dstFileName;
+            kWarning() << "Failed to restore file permissions for file " << dstFileName;
         }
 #endif
         movingSaveFileFinished(true);
@@ -1874,7 +1874,7 @@ void EditorWindow::moveFile()
 
         // for remote destinations use kio to move the temp file over there
 
-        kDebug(digiKamAreaCode) << "moving a remote file via KIO";
+        kDebug() << "moving a remote file via KIO";
 
         KIO::CopyJob *moveJob = KIO::move(KUrl(
                         m_savingContext->saveTempFileName),

@@ -326,12 +326,12 @@ void DeleteDialog::slotUser1Clicked()
     }
     if (m_saveDoNotShowAgainTrash)
     {
-        kDebug(digiKamAreaCode) << "setShowTrashDeleteDialog " << !m_widget->m_doNotShowAgain->isChecked();
+        kDebug() << "setShowTrashDeleteDialog " << !m_widget->m_doNotShowAgain->isChecked();
         settings->setShowTrashDeleteDialog(!m_widget->m_doNotShowAgain->isChecked());
     }
     if (m_saveDoNotShowAgainPermanent)
     {
-        kDebug(digiKamAreaCode) << "setShowPermanentDeleteDialog " << !m_widget->m_doNotShowAgain->isChecked();
+        kDebug() << "setShowPermanentDeleteDialog " << !m_widget->m_doNotShowAgain->isChecked();
         settings->setShowPermanentDeleteDialog(!m_widget->m_doNotShowAgain->isChecked());
     }
 

@@ -55,7 +55,7 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     if (image.isNull())
     {
-        kDebug(digiKamAreaCode) << "Can not load \"" << filePath << "\" using DImg::QImageLoader!";
+        kDebug() << "Can not load \"" << filePath << "\" using DImg::QImageLoader!";
         return false;
     }
 
@@ -96,7 +96,7 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     uchar* data = new_failureTolerant(w*h*4);
     if (!data)
     {
-        kDebug(digiKamAreaCode) << "Failed to allocate memory for loading" << filePath;
+        kDebug() << "Failed to allocate memory for loading" << filePath;
         return false;
     }
     uint*  sptr = (uint*)target.bits();

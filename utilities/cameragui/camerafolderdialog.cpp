@@ -100,7 +100,7 @@ CameraFolderDialog::CameraFolderDialog(QWidget *parent, CameraIconView *cameraVi
 
             QString sub = folder.section( '/', -1 );
             m_folderView->addFolder(root, sub, cameraView->countItemsByFolder(*it));
-            kDebug(digiKamAreaCode) << "Camera folder: '" << folder << "' (root='" << root << "', sub='" <<sub <<"')";
+            kDebug() << "Camera folder: '" << folder << "' (root='" << root << "', sub='" <<sub <<"')";
         }
     }
 
@@ -135,7 +135,7 @@ void CameraFolderDialog::slotFolderPathSelectionChanged(CameraFolderItem* item)
     if (item)
     {
         enableButtonOk(true);
-        kDebug(digiKamAreaCode) << "Camera folder path: " << selectedFolderPath();
+        kDebug() << "Camera folder path: " << selectedFolderPath();
     }
     else
     {

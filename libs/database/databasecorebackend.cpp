@@ -439,7 +439,7 @@ bool DatabaseCoreBackend::exec(QSqlQuery& query)
             if (!app)
             {
                 int limit = 10;
-                kDebug(digiKamAreaCode) << "Detected locked database file. Waiting 10s trying again.";
+                kDebug() << "Detected locked database file. Waiting 10s trying again.";
 
                 do
                 {
@@ -451,12 +451,12 @@ bool DatabaseCoreBackend::exec(QSqlQuery& query)
                 while (limit > 0 && query.lastError().number() == 5);
             }
             else
-                kWarning(digiKamAreaCode) << "Detected locked database file. There is an active transaction.";
+                kWarning() << "Detected locked database file. There is an active transaction.";
         }
-        kDebug(digiKamAreaCode) << "Failure executing query: ";
-        kDebug(digiKamAreaCode) << query.executedQuery();
-        kDebug(digiKamAreaCode) << query.lastError().text() << query.lastError().number();
-        kDebug(digiKamAreaCode) << "Bound values: " << query.boundValues().values();
+        kDebug() << "Failure executing query: ";
+        kDebug() << query.executedQuery();
+        kDebug() << query.lastError().text() << query.lastError().number();
+        kDebug() << "Bound values: " << query.boundValues().values();
         return false;
     }
     return true;
@@ -467,10 +467,10 @@ bool DatabaseCoreBackend::execBatch(QSqlQuery& query)
     if (!query.execBatch())
     {
         // Use DatabaseAccess::lastError?
-        kDebug(digiKamAreaCode) << "Failure executing batch query: ";
-        kDebug(digiKamAreaCode) << query.executedQuery();
-        kDebug(digiKamAreaCode) << query.lastError().text() << query.lastError().number();
-        kDebug(digiKamAreaCode) << "Bound values: " << query.boundValues().values();
+        kDebug() << "Failure executing batch query: ";
+        kDebug() << query.executedQuery();
+        kDebug() << query.lastError().text() << query.lastError().number();
+        kDebug() << "Bound values: " << query.boundValues().values();
         return false;
     }
     return true;

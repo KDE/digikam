@@ -57,7 +57,7 @@ bool readPGFImageData(const QByteArray& data, QImage& img)
 
         if (pgfImg.Channels() != 4)
         {
-            kDebug(digiKamAreaCode) << "PGF channels not supported";
+            kDebug() << "PGF channels not supported";
             return false;
         }
 
@@ -70,7 +70,7 @@ bool readPGFImageData(const QByteArray& data, QImage& img)
         int err = e.error;
 
         if (err >= AppError) err -= AppError;
-        kDebug(digiKamAreaCode) << "Error running libpgf (" << err << ")!";
+        kDebug() << "Error running libpgf (" << err << ")!";
         return false;
     }
 
@@ -83,7 +83,7 @@ bool writePGFImageData(const QImage& img, QByteArray& data, int quality)
     {
         if (img.isNull())
         {
-            kDebug(digiKamAreaCode) << "Thumb image is null";
+            kDebug() << "Thumb image is null";
             return false;
         }
 
@@ -116,7 +116,7 @@ bool writePGFImageData(const QImage& img, QByteArray& data, int quality)
         int err = e.error;
 
         if (err >= AppError) err -= AppError;
-        kDebug(digiKamAreaCode) << "Error running libpgf (" << err << ")!";
+        kDebug() << "Error running libpgf (" << err << ")!";
         return false;
     }
 
@@ -128,7 +128,7 @@ bool loadPGFScaled(QImage& img, const QString& path, int maximumSize)
     FILE *file = fopen(QFile::encodeName(path), "rb");
     if (!file)
     {
-        kDebug(digiKamAreaCode) << "Error: Could not open source file.";
+        kDebug() << "Error: Could not open source file.";
         return false;
     }
 
@@ -195,16 +195,16 @@ bool loadPGFScaled(QImage& img, const QString& path, int maximumSize)
 
 /*
         const PGFHeader* header = pgf.GetHeader();
-        kDebug(digiKamAreaCode) << "PGF width    = " << header->width;
-        kDebug(digiKamAreaCode) << "PGF height   = " << header->height;
-        kDebug(digiKamAreaCode) << "PGF bbp      = " << header->bpp;
-        kDebug(digiKamAreaCode) << "PGF channels = " << header->channels;
-        kDebug(digiKamAreaCode) << "PGF quality  = " << header->quality;
-        kDebug(digiKamAreaCode) << "PGF mode     = " << header->mode;
-        kDebug(digiKamAreaCode) << "PGF levels   = " << header->nLevels;
-        kDebug(digiKamAreaCode) << "Level (w x h)= " << i << "(" << pgf.Width(i)
+        kDebug() << "PGF width    = " << header->width;
+        kDebug() << "PGF height   = " << header->height;
+        kDebug() << "PGF bbp      = " << header->bpp;
+        kDebug() << "PGF channels = " << header->channels;
+        kDebug() << "PGF quality  = " << header->quality;
+        kDebug() << "PGF mode     = " << header->mode;
+        kDebug() << "PGF levels   = " << header->nLevels;
+        kDebug() << "Level (w x h)= " << i << "(" << pgf.Width(i)
                       << " x " << pgf.Height(i) << ")";
-        kDebug(digiKamAreaCode) << "QImage depth = " << img.depth();
+        kDebug() << "QImage depth = " << img.depth();
 */
 
         pgf.GetBitmap(img.bytesPerLine(), (UINT8*)img.bits(), img.depth(), map);
@@ -214,7 +214,7 @@ bool loadPGFScaled(QImage& img, const QString& path, int maximumSize)
         int err = e.error;
 
         if (err >= AppError) err -= AppError;
-        kDebug(digiKamAreaCode) << "Error running libpgf (" << err << ")!";
+        kDebug() << "Error running libpgf (" << err << ")!";
         return false;
     }
 

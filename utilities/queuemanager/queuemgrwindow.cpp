@@ -1139,7 +1139,7 @@ bool QueueMgrWindow::checkTargetAlbum(int queueId)
 
     QString queueName              = d->queuePool->queueTitle(queueId);
     KUrl    processedItemsAlbumUrl = queue->settings().targetUrl;
-    kDebug(digiKamAreaCode) << "Target album for queue " << queueName << " is: " << processedItemsAlbumUrl.toLocalFile();
+    kDebug() << "Target album for queue " << queueName << " is: " << processedItemsAlbumUrl.toLocalFile();
 
     if (processedItemsAlbumUrl.isEmpty())
     {

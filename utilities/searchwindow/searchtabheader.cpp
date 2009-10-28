@@ -317,7 +317,7 @@ SearchWindow *SearchTabHeader::searchWindow()
 {
     if (!d->searchWindow)
     {
-        kDebug(digiKamAreaCode) << "Creating search window";
+        kDebug() << "Creating search window";
         // Create the advanced search edit window, deferred from constructor
         d->searchWindow = new SearchWindow;
 

@@ -338,7 +338,7 @@ void EditorToolThreaded::slotFilterFinished(bool success)
         {
             case EditorToolThreaded::PreviewRendering:
             {
-                kDebug(digiKamAreaCode) << "Preview " << toolName() << " completed...";
+                kDebug() << "Preview " << toolName() << " completed...";
                 putPreviewData();
                 slotAbort();
                 break;
@@ -346,7 +346,7 @@ void EditorToolThreaded::slotFilterFinished(bool success)
 
             case EditorToolThreaded::FinalRendering:
             {
-                kDebug(digiKamAreaCode) << "Final" << toolName() << " completed...";
+                kDebug() << "Final" << toolName() << " completed...";
                 putFinalData();
                 EditorToolIface::editorToolIface()->setToolStopProgress();
                 kapp->restoreOverrideCursor();
@@ -364,7 +364,7 @@ void EditorToolThreaded::slotFilterFinished(bool success)
         {
             case EditorToolThreaded::PreviewRendering:
             {
-                kDebug(digiKamAreaCode) << "Preview " << toolName() << " failed...";
+                kDebug() << "Preview " << toolName() << " failed...";
                 slotAbort();
                 break;
             }
@@ -398,7 +398,7 @@ void EditorToolThreaded::slotOk()
     writeSettings();
 
     d->currentRenderingMode = EditorToolThreaded::FinalRendering;
-    kDebug(digiKamAreaCode) << "Final " << toolName() << " started...";
+    kDebug() << "Final " << toolName() << " started...";
     writeSettings();
 
     toolSettings()->enableButton(EditorToolSettings::Ok,      false);
@@ -426,7 +426,7 @@ void EditorToolThreaded::slotEffect()
         return;
 
     d->currentRenderingMode = EditorToolThreaded::PreviewRendering;
-    kDebug(digiKamAreaCode) << "Preview " << toolName() << " started...";
+    kDebug() << "Preview " << toolName() << " started...";
 
     toolSettings()->enableButton(EditorToolSettings::Ok,      false);
     toolSettings()->enableButton(EditorToolSettings::SaveAs,  false);

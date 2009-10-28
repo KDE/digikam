@@ -363,7 +363,7 @@ QMimeData *AlbumDragDropHandler::createMimeData(const QList<Album*>& albums)
         return 0;
 
     if (albums.size() > 1)
-        kWarning(digiKamAreaCode) << "Dragging multiple albums is not implemented";
+        kWarning() << "Dragging multiple albums is not implemented";
 
     return new DAlbumDrag(albums.first()->databaseUrl(), albums.first()->id());
 }

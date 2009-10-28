@@ -456,7 +456,7 @@ void TimeLineView::createNewDateSearchAlbum(const QString& name)
     }
     writer.finish();
 
-    kDebug(digiKamAreaCode) << "Date search XML:\n" << writer.xml();
+    kDebug() << "Date search XML:\n" << writer.xml();
 
     SAlbum* album = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::TimeLineSearch, writer.xml());
     AlbumManager::instance()->setCurrentAlbum(album);

@@ -105,7 +105,7 @@ bool Flip::toolOperations()
                 return (exifTransform(inputUrl().toLocalFile(), inputUrl().fileName(), outputUrl().toLocalFile(), FlipVertical));
                 break;
             default:
-                kDebug(digiKamAreaCode) << "Unknow flip action";
+                kDebug() << "Unknow flip action";
                 return false;
                 break;
         }

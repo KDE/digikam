@@ -175,7 +175,7 @@ void ActionThread::run()
                 BatchToolSettings settings = set.settings;
                 inUrl                      = outUrl;
 
-                kDebug(digiKamAreaCode) << "Tool Index: " << index;
+                kDebug() << "Tool Index: " << index;
 
                 ActionData ad2;
                 ad2.fileUrl = t->item.itemUrl;

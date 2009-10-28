@@ -140,7 +140,7 @@ int main(int argc, char *argv[])
         AlbumManager::checkDatabaseDirsAfterFirstRun(dbPath, firstAlbumPath);
     }
 
-    kDebug(digiKamAreaCode) << "Database Path: " << dbPath;
+    kDebug() << "Database Path: " << dbPath;
 
     // Check if SQLite Qt4 plugin is available.
 
@@ -151,7 +151,7 @@ int main(int argc, char *argv[])
                                        "Database plugins installed are:"),
                                QSqlDatabase::drivers());
 
-        kDebug(digiKamAreaCode) << "QT Sql drivers list: " << QSqlDatabase::drivers();
+        kDebug() << "QT Sql drivers list: " << QSqlDatabase::drivers();
         return 1;
     }
 

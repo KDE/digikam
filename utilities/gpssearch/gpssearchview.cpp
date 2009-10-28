@@ -326,7 +326,7 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
     // as left/top, right/bottom rectangle.
     QList<double> coordinates = d->gpsSearchWidget->selectionCoordinates();
 
-    kDebug(digiKamAreaCode) << "West, North, East, South: " << coordinates;
+    kDebug() << "West, North, East, South: " << coordinates;
 
     SearchXmlWriter writer;
     writer.writeGroup();
@@ -488,7 +488,7 @@ void GPSSearchView::slotDigikamViewImageSelected(const ImageInfoList &selectedIm
             gps.rating    = inf.rating();
             gps.url       = inf.fileUrl();
             list << gps;
-            kDebug(digiKamAreaCode)<<gps.url;
+            kDebug()<<gps.url;
         }
     }
 
@@ -505,7 +505,7 @@ void GPSSearchView::slotMapSelectedItems(const GPSInfoList& gpsList)
     for (GPSInfoList::const_iterator it = gpsList.constBegin(); it!=gpsList.constEnd(); ++it)
     {
         urlList << it->url;
-        kDebug(digiKamAreaCode)<<it->url;
+        kDebug()<<it->url;
     }
     emit(signalMapSelectedItems(urlList));
 }

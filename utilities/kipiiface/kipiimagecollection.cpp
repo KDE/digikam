@@ -60,7 +60,7 @@ KipiImageCollection::KipiImageCollection(Type tp, Album *album, const QString& f
 
     if (!album)
     {
-        kWarning(digiKamAreaCode) << "This should not happen. No album specified";
+        kWarning() << "This should not happen. No album specified";
     }
 }
 
@@ -137,7 +137,7 @@ KUrl::List KipiImageCollection::images()
             }
             else
             {
-                kWarning(digiKamAreaCode) << "Unknown album type";
+                kWarning() << "Unknown album type";
                 return KUrl::List();
             }
 
@@ -226,7 +226,7 @@ KUrl KipiImageCollection::path()
     }
     else
     {
-        kWarning(digiKamAreaCode) << "Requesting KUrl from a virtual album";
+        kWarning() << "Requesting KUrl from a virtual album";
         return QString();
     }
 }
@@ -242,7 +242,7 @@ KUrl KipiImageCollection::uploadPath()
     }
     else
     {
-        kWarning(digiKamAreaCode) << "Requesting KUrl from a virtual album";
+        kWarning() << "Requesting KUrl from a virtual album";
         return KUrl();
     }
 }

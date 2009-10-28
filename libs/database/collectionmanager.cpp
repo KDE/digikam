@@ -68,7 +68,7 @@ public:
 
     AlbumRootLocation(const AlbumRootInfo &info)
     {
-        kDebug(digiKamAreaCode) << "Creating new Location " << info.specificPath << " uuid " << info.identifier;
+        kDebug() << "Creating new Location " << info.specificPath << " uuid " << info.identifier;
         m_id         = info.id;
         m_type       = (Type)info.type;
         specificPath = info.specificPath;
@@ -280,9 +280,9 @@ QList<SolidVolumeInfo> CollectionManagerPrivate::actuallyListVolumes()
 {
     QList<SolidVolumeInfo> volumes;
 
-    //kDebug(digiKamAreaCode) << "listFromType";
+    //kDebug() << "listFromType";
     QList<Solid::Device> devices = Solid::Device::listFromType(Solid::DeviceInterface::StorageAccess);
-    //kDebug(digiKamAreaCode) << "got listFromType";
+    //kDebug() << "got listFromType";
 
     udisToWatch.clear();
 
@@ -493,7 +493,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForLocation(const AlbumRootL
             // bail out if not provided
             if (dirHash.isNull())
             {
-                kDebug(digiKamAreaCode) << "No directory hash specified for the non-unique Label"
+                kDebug() << "No directory hash specified for the non-unique Label"
                          << queryItem << "Resorting to returning the first match.";
                 return candidateVolumes.first();
             }
@@ -582,7 +582,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForUrl(const KUrl& fileUrl, 
 
     if (!volumeMatch)
     {
-        kError(digiKamAreaCode) << "Failed to detect a storage volume for path " << path << " with Solid";
+        kError() << "Failed to detect a storage volume for path " << path << " with Solid";
     }
 
     return volume;
@@ -596,7 +596,7 @@ bool CollectionManagerPrivate::checkIfExists(const QString& filePath, QList<Coll
     foreach (AlbumRootLocation *location, locations)
     {
         const KUrl locationPathUrl = location->albumRootPath();
-        //kDebug(digiKamAreaCode) << filePathUrl << locationPathUrl;
+        //kDebug() << filePathUrl << locationPathUrl;
         // make sure filePathUrl is neither a child nor a parent
         // of an existing collection
         if (!locationPathUrl.isEmpty() &&
@@ -671,7 +671,7 @@ void CollectionManager::refresh()
 
 CollectionLocation CollectionManager::addLocation(const KUrl& fileUrl, const QString& label)
 {
-    kDebug(digiKamAreaCode) << "addLocation " << fileUrl;
+    kDebug() << "addLocation " << fileUrl;
     QString path = fileUrl.toLocalFile(KUrl::RemoveTrailingSlash);
 
     if (!locationForPath(path).isNull())
@@ -699,14 +699,14 @@ CollectionLocation CollectionManager::addLocation(const KUrl& fileUrl, const QSt
         // Empty volumes indicates that Solid is not working correctly.
         if (volumes.isEmpty())
         {
-            kError(digiKamAreaCode) << "Solid did not return any storage volumes on your system.";
-            kError(digiKamAreaCode) << "This indicates a missing implementation or a problem with your installation";
-            kError(digiKamAreaCode) << "On Linux, check that Solid and HAL are working correctly."
+            kError() << "Solid did not return any storage volumes on your system.";
+            kError() << "This indicates a missing implementation or a problem with your installation";
+            kError() << "On Linux, check that Solid and HAL are working correctly."
                              "Problems with RAID partitions have been reported, if you have RAID this error may be normal.";
-            kError(digiKamAreaCode) << "On Windows, Solid may not be fully implemented, if you are running Windows this error may be normal.";
+            kError() << "On Windows, Solid may not be fully implemented, if you are running Windows this error may be normal.";
         }
         // fall back
-        kWarning(digiKamAreaCode) << "Unable to identify a path with Solid. Adding the location with path only.";
+        kWarning() << "Unable to identify a path with Solid. Adding the location with path only.";
         ChangingDB changing(d);
         DatabaseAccess().db()->addAlbumRoot(AlbumRoot::VolumeHardWired,
                                             d->volumeIdentifier(path), "/", label);
@@ -720,7 +720,7 @@ CollectionLocation CollectionManager::addLocation(const KUrl& fileUrl, const QSt
 
 CollectionLocation CollectionManager::addNetworkLocation(const KUrl& fileUrl, const QString& label)
 {
-    kDebug(digiKamAreaCode) << "addLocation " << fileUrl;
+    kDebug() << "addLocation " << fileUrl;
     QString path = fileUrl.toLocalFile(KUrl::RemoveTrailingSlash);
 
     if (!locationForPath(path).isNull())
@@ -1092,7 +1092,7 @@ CollectionLocation CollectionManager::locationForPath(const QString& filePath)
     foreach (AlbumRootLocation *location, d->locations)
     {
         QString rootPath = location->albumRootPath();
-        //kDebug(digiKamAreaCode) << "Testing location " << location->id() << filePath << rootPath;
+        //kDebug() << "Testing location " << location->id() << filePath << rootPath;
         if (!rootPath.isEmpty() && filePath.startsWith(rootPath))
             return *location;
     }
@@ -1327,7 +1327,7 @@ void CollectionManager::updateLocations()
             // Don't touch location->status, do not interfere with "hidden" setting
             location->available = available;
             location->setAbsolutePath(absolutePath);
-            kDebug(digiKamAreaCode) << "location for " << absolutePath << " is available " << available;
+            kDebug() << "location for " << absolutePath << " is available " << available;
             // set the status depending on "hidden" and "available"
             location->setStatusFromFlags();
         }

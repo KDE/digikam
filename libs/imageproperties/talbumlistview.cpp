@@ -336,7 +336,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
         srcAlbum    = AlbumManager::instance()->findTAlbum(albumID);
         if (!srcAlbum)
         {
-            kWarning(digiKamAreaCode) << "Could not find source album of drag";
+            kWarning() << "Could not find source album of drag";
             return;
         }
 

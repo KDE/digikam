@@ -547,7 +547,7 @@ void ImageDescEditTab::slotApplyAllChanges()
     // remove before final release
     if (d->ignoreImageAttributesWatch)
     {
-        kWarning(digiKamAreaCode) << "ImageDescEditTab::slotApplyAllChanges(): re-entering from event loop!";
+        kWarning() << "ImageDescEditTab::slotApplyAllChanges(): re-entering from event loop!";
     }
 
     // Create a local copy of the current state of the hub.
@@ -1354,7 +1354,7 @@ void ImageDescEditTab::slotAlbumAdded(Album* a)
 
         if (!parent)
         {
-            kWarning(digiKamAreaCode) << "Failed to find parent for Tag " << tag->title();
+            kWarning() << "Failed to find parent for Tag " << tag->title();
             return;
         }
 
@@ -1442,7 +1442,7 @@ void ImageDescEditTab::slotAlbumRenamed(Album* a)
     TAlbumCheckListItem* viewItem = (TAlbumCheckListItem*)(album->extraData(d->tagsView));
     if (!viewItem)
     {
-        kWarning(digiKamAreaCode) << "Failed to find view item for Tag "
+        kWarning() << "Failed to find view item for Tag "
                         << album->title();
         return;
     }

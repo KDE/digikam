@@ -136,48 +136,48 @@ Theme& Theme::operator=(const Theme& theme)
 void Theme::print()
 {
     /*
-    kDebug(digiKamAreaCode) << "Theme :                      " << name;
+    kDebug() << "Theme :                      " << name;
 
-    kDebug(digiKamAreaCode) << "Base Color:                  " << baseColor;
-    kDebug(digiKamAreaCode) << "Text Regular  Color:         " << textRegColor;
-    kDebug(digiKamAreaCode) << "Text Selected Color:         " << textSelColor;
-    kDebug(digiKamAreaCode) << "Text Special Regular Color:  " << textSpecialRegColor;
-    kDebug(digiKamAreaCode) << "Text Special Selected Color: " << textSpecialSelColor;
+    kDebug() << "Base Color:                  " << baseColor;
+    kDebug() << "Text Regular  Color:         " << textRegColor;
+    kDebug() << "Text Selected Color:         " << textSelColor;
+    kDebug() << "Text Special Regular Color:  " << textSpecialRegColor;
+    kDebug() << "Text Special Selected Color: " << textSpecialSelColor;
 
-    kDebug(digiKamAreaCode) << "Banner Color:                " << bannerColor;
-    kDebug(digiKamAreaCode) << "Banner ColorTo :             " << bannerColorTo;
-    kDebug(digiKamAreaCode) << "Banner Bevel :               " << bannerBevel;
-    kDebug(digiKamAreaCode) << "Banner Gradient :            " << bannerGrad;
-    kDebug(digiKamAreaCode) << "Banner Border :              " << bannerBorder;
-    kDebug(digiKamAreaCode) << "Banner Border Color :        " << bannerBorderColor;
+    kDebug() << "Banner Color:                " << bannerColor;
+    kDebug() << "Banner ColorTo :             " << bannerColorTo;
+    kDebug() << "Banner Bevel :               " << bannerBevel;
+    kDebug() << "Banner Gradient :            " << bannerGrad;
+    kDebug() << "Banner Border :              " << bannerBorder;
+    kDebug() << "Banner Border Color :        " << bannerBorderColor;
 
-    kDebug(digiKamAreaCode) << "ThumbReg Color:              " << thumbRegColor;
-    kDebug(digiKamAreaCode) << "ThumbReg ColorTo :           " << thumbRegColorTo;
-    kDebug(digiKamAreaCode) << "ThumbReg Bevel :             " << thumbRegBevel;
-    kDebug(digiKamAreaCode) << "ThumbReg Gradient :          " << thumbRegGrad;
-    kDebug(digiKamAreaCode) << "ThumbReg Border :            " << thumbRegBorder;
-    kDebug(digiKamAreaCode) << "ThumbReg Border Color :      " << thumbRegBorderColor;
+    kDebug() << "ThumbReg Color:              " << thumbRegColor;
+    kDebug() << "ThumbReg ColorTo :           " << thumbRegColorTo;
+    kDebug() << "ThumbReg Bevel :             " << thumbRegBevel;
+    kDebug() << "ThumbReg Gradient :          " << thumbRegGrad;
+    kDebug() << "ThumbReg Border :            " << thumbRegBorder;
+    kDebug() << "ThumbReg Border Color :      " << thumbRegBorderColor;
 
-    kDebug(digiKamAreaCode) << "ThumbSel Color:              " << thumbSelColor;
-    kDebug(digiKamAreaCode) << "ThumbSel ColorTo :           " << thumbSelColorTo;
-    kDebug(digiKamAreaCode) << "ThumbSel Bevel :             " << thumbSelBevel;
-    kDebug(digiKamAreaCode) << "ThumbSel Gradient :          " << thumbSelGrad;
-    kDebug(digiKamAreaCode) << "ThumbSel Border :            " << thumbSelBorder;
-    kDebug(digiKamAreaCode) << "ThumbSel Border Color :      " << thumbSelBorderColor;
+    kDebug() << "ThumbSel Color:              " << thumbSelColor;
+    kDebug() << "ThumbSel ColorTo :           " << thumbSelColorTo;
+    kDebug() << "ThumbSel Bevel :             " << thumbSelBevel;
+    kDebug() << "ThumbSel Gradient :          " << thumbSelGrad;
+    kDebug() << "ThumbSel Border :            " << thumbSelBorder;
+    kDebug() << "ThumbSel Border Color :      " << thumbSelBorderColor;
 
-    kDebug(digiKamAreaCode) << "ListReg Color:              " << listRegColor;
-    kDebug(digiKamAreaCode) << "ListReg ColorTo :           " << listRegColorTo;
-    kDebug(digiKamAreaCode) << "ListReg Bevel :             " << listRegBevel;
-    kDebug(digiKamAreaCode) << "ListReg Gradient :          " << listRegGrad;
-    kDebug(digiKamAreaCode) << "ListReg Border :            " << listRegBorder;
-    kDebug(digiKamAreaCode) << "ListReg Border Color :      " << listRegBorderColor;
+    kDebug() << "ListReg Color:              " << listRegColor;
+    kDebug() << "ListReg ColorTo :           " << listRegColorTo;
+    kDebug() << "ListReg Bevel :             " << listRegBevel;
+    kDebug() << "ListReg Gradient :          " << listRegGrad;
+    kDebug() << "ListReg Border :            " << listRegBorder;
+    kDebug() << "ListReg Border Color :      " << listRegBorderColor;
 
-    kDebug(digiKamAreaCode) << "ListSel Color:              " << listSelColor;
-    kDebug(digiKamAreaCode) << "ListSel ColorTo :           " << listSelColorTo;
-    kDebug(digiKamAreaCode) << "ListSel Bevel :             " << listSelBevel;
-    kDebug(digiKamAreaCode) << "ListSel Gradient :          " << listSelGrad;
-    kDebug(digiKamAreaCode) << "ListSel Border :            " << listSelBorder;
-    kDebug(digiKamAreaCode) << "ListSel Border Color :      " << listSelBorderColor;
+    kDebug() << "ListSel Color:              " << listSelColor;
+    kDebug() << "ListSel ColorTo :           " << listSelColorTo;
+    kDebug() << "ListSel Bevel :             " << listSelBevel;
+    kDebug() << "ListSel Gradient :          " << listSelGrad;
+    kDebug() << "ListSel Border :            " << listSelBorder;
+    kDebug() << "ListSel Border Color :      " << listSelBorderColor;
     */
 }
 

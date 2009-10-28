@@ -514,7 +514,7 @@ SearchField *SearchField::createField(const QString& name, SearchFieldGroup *par
     }
     else
     {
-        kWarning(digiKamAreaCode) << "SearchField::createField: cannot create SearchField for" << name;
+        kWarning() << "SearchField::createField: cannot create SearchField for" << name;
     }
     return 0;
 }
@@ -1919,7 +1919,7 @@ void SearchFieldAlbum::read(SearchXmlCachingReader& reader)
             a = AlbumManager::instance()->findTAlbum(id);
 
         if (!a)
-            kDebug(digiKamAreaCode) << "Search: Did not find album for ID" << id << "given in Search XML";
+            kDebug() << "Search: Did not find album for ID" << id << "given in Search XML";
 
         m_model->setChecked(a, true);
     }

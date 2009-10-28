@@ -82,7 +82,7 @@ SchemaUpdater::SchemaUpdater(DatabaseAccess *access)
 
 bool SchemaUpdater::update()
 {
-    kDebug(digiKamAreaCode) << "SchemaUpdater update";
+    kDebug() << "SchemaUpdater update";
     bool success = startUpdates();
     // cancelled?
     if (m_observer && !m_observer->continueQuery())
@@ -114,13 +114,13 @@ bool SchemaUpdater::startUpdates()
         // Find out schema version of db file
         QString version = m_access->db()->getSetting("DBVersion");
         QString versionRequired = m_access->db()->getSetting("DBVersionRequired");
-        kDebug(digiKamAreaCode) << "Have a database structure version " << version;
+        kDebug() << "Have a database structure version " << version;
 
         // We absolutely require the DBVersion setting
         if (version.isEmpty())
         {
             // Something is damaged. Give up.
-            kError(digiKamAreaCode) << "DBVersion not available! Giving up schema upgrading.";
+            kError() << "DBVersion not available! Giving up schema upgrading.";
             QString errorMsg = i18n(
                     "The database is not valid: "
                     "the \"DBVersion\" setting does not exist. "
@@ -170,7 +170,7 @@ bool SchemaUpdater::startUpdates()
     }
     else
     {
-        kDebug(digiKamAreaCode) << "No database file available";
+        kDebug() << "No database file available";
         // Legacy handling?
 
         // first test if there are older files that need to be upgraded.
@@ -231,7 +231,7 @@ bool SchemaUpdater::startUpdates()
 
 bool SchemaUpdater::makeUpdates()
 {
-    kDebug(digiKamAreaCode) << "makeUpdates " << m_currentVersion << " to " << schemaVersion();
+    kDebug() << "makeUpdates " << m_currentVersion << " to " << schemaVersion();
     //DatabaseTransaction transaction(m_access);
     if (m_currentVersion < schemaVersion())
     {
@@ -257,7 +257,7 @@ bool SchemaUpdater::makeUpdates()
                     // error or cancelled?
                     if (!m_observer->continueQuery())
                     {
-                        kDebug(digiKamAreaCode) << "Schema update cancelled by user";
+                        kDebug() << "Schema update cancelled by user";
                     }
                     else if (!m_setError)
                     {
@@ -276,7 +276,7 @@ bool SchemaUpdater::makeUpdates()
                 }
                 return false;
             }
-            kDebug(digiKamAreaCode) << "Success updating to v5";
+            kDebug() << "Success updating to v5";
             m_access->backend()->commitTransaction();
             // REMOVE BEFORE FINAL VERSION
             m_access->db()->setSetting("preAlpha010Update1", "true");
@@ -819,7 +819,7 @@ static QStringList cleanUserFilterString(const QString &filterString)
 
 bool SchemaUpdater::updateV4toV5()
 {
-    kDebug(digiKamAreaCode) << "updateV4toV5";
+    kDebug() << "updateV4toV5";
     if (m_observer)
     {
         if (!m_observer->continueQuery())
@@ -840,7 +840,7 @@ bool SchemaUpdater::updateV4toV5()
     if (!m_access->backend()->execSql(QString("ALTER TABLE Searches RENAME TO SearchesV3;")))
         return false;
 
-    kDebug(digiKamAreaCode) << "Moved tables";
+    kDebug() << "Moved tables";
     // --- Drop some triggers and indices ---
 
     // Don't check for errors here. The "IF EXISTS" clauses seem not supported in SQLite
@@ -859,7 +859,7 @@ bool SchemaUpdater::updateV4toV5()
             return false;
         m_observer->schemaUpdateProgress(i18n("Prepared table creation"));
     }
-    kDebug(digiKamAreaCode) << "Dropped triggers";
+    kDebug() << "Dropped triggers";
 
     // --- Create new tables ---
 
@@ -882,7 +882,7 @@ bool SchemaUpdater::updateV4toV5()
 
     if (albumLibraryPath.isEmpty())
     {
-        kError(digiKamAreaCode) << "Album library path from config file is empty. Aborting update.";
+        kError() << "Album library path from config file is empty. Aborting update.";
         QString errorMsg = i18n("No album library path has been found in the configuration file. "
                                 "Giving up the schema updating process. "
                                 "Please try with an empty database, or repair your configuration.");
@@ -900,7 +900,7 @@ bool SchemaUpdater::updateV4toV5()
             CollectionManager::instance()->addLocation(KUrl::fromPath(albumLibraryPath));
     if (location.isNull())
     {
-        kError(digiKamAreaCode) << "Failure to create a collection location. Aborting update.";
+        kError() << "Failure to create a collection location. Aborting update.";
         QString errorMsg = i18n("There was an error associating your albumLibraryPath (\"%1\") "
                                 "with a storage volume of your system. "
                                 "This problem may indicate that there is a problem with your installation. "
@@ -924,7 +924,7 @@ bool SchemaUpdater::updateV4toV5()
             return false;
         m_observer->schemaUpdateProgress(i18n("Configured one album root"));
     }
-    kDebug(digiKamAreaCode) << "Inserted album root";
+    kDebug() << "Inserted album root";
 
     // --- With the album root, populate albums ---
 
@@ -944,7 +944,7 @@ bool SchemaUpdater::updateV4toV5()
             return false;
         m_observer->schemaUpdateProgress(i18n("Imported albums"));
     }
-    kDebug(digiKamAreaCode) << "Populated albums";
+    kDebug() << "Populated albums";
 
     // --- Add images ---
 
@@ -968,7 +968,7 @@ bool SchemaUpdater::updateV4toV5()
         m_observer->schemaUpdateProgress(i18n("Imported images information"));
     }
 
-    kDebug(digiKamAreaCode) << "Populated Images";
+    kDebug() << "Populated Images";
 
     // --- Port searches ---
 
@@ -1012,7 +1012,7 @@ bool SchemaUpdater::updateV4toV5()
 
     if (!createTriggersV5())
         return false;
-    kDebug(digiKamAreaCode) << "Created triggers";
+    kDebug() << "Created triggers";
 
     // --- Populate name filters ---
 
@@ -1036,7 +1036,7 @@ bool SchemaUpdater::updateV4toV5()
     configAudioFilter.subtract(defaultAudioFilter.toSet());
 
     m_access->db()->setUserFilterSettings(configImageFilter.toList(), configVideoFilter.toList(), configAudioFilter.toList());
-    kDebug(digiKamAreaCode) << "Set initial filter settings with user settings" << configImageFilter;
+    kDebug() << "Set initial filter settings with user settings" << configImageFilter;
 
     if (m_observer)
     {
@@ -1137,7 +1137,7 @@ bool SchemaUpdater::updateV4toV5()
         m_observer->schemaUpdateProgress(i18n("Dropped v3 tables"));
 
     m_currentVersion = 5;
-    kDebug(digiKamAreaCode) << "Returning true from updating to 5";
+    kDebug() << "Returning true from updating to 5";
     return true;
 }
 

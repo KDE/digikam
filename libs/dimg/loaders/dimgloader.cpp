@@ -149,7 +149,7 @@ unsigned char* DImgLoader::new_failureTolerant(size_t size)
     try {
         return new uchar[size];
     } catch (std::bad_alloc &ex) {
-        kError(digiKamAreaCode) << "Failed to allocate chunk of memory of size" << size << ex.what();
+        kError() << "Failed to allocate chunk of memory of size" << size << ex.what();
         return 0;
     }
 }
@@ -159,7 +159,7 @@ unsigned short* DImgLoader::new_short_failureTolerant(size_t size)
     try {
         return new unsigned short[size];
     } catch (std::bad_alloc &ex) {
-        kError(digiKamAreaCode) << "Failed to allocate chunk of memory of size" << size << ex.what();
+        kError() << "Failed to allocate chunk of memory of size" << size << ex.what();
         return 0;
     }
 }

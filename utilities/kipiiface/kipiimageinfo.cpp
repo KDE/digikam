@@ -106,7 +106,7 @@ void KipiImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec)
 {
     if ( !time.isValid() )
     {
-        kWarning(digiKamAreaCode) << "Invalid datetime specified";
+        kWarning() << "Invalid datetime specified";
         return;
     }
 

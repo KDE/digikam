@@ -661,7 +661,7 @@ bool AlbumManager::setDatabase(const QString& dbPath, bool priority, const QStri
 
     if (dbLocale.isNull())
     {
-        kDebug(digiKamAreaCode) << "No locale found in database";
+        kDebug() << "No locale found in database";
 
         // Copy an existing locale from the settings file (used < 0.8)
         // to the database.
@@ -669,7 +669,7 @@ bool AlbumManager::setDatabase(const QString& dbPath, bool priority, const QStri
         KConfigGroup group = config->group("General Settings");
         if (group.hasKey("Locale"))
         {
-            kDebug(digiKamAreaCode) << "Locale found in configfile";
+            kDebug() << "Locale found in configfile";
             dbLocale = group.readEntry("Locale", QString());
 
             // this hack is necessary, as we used to store the entire
@@ -687,7 +687,7 @@ bool AlbumManager::setDatabase(const QString& dbPath, bool priority, const QStri
         }
         else
         {
-            kDebug(digiKamAreaCode) << "No locale found in config file";
+            kDebug() << "No locale found in config file";
             dbLocale = currLocale;
 
             localeChanged = false;
@@ -732,7 +732,7 @@ bool AlbumManager::setDatabase(const QString& dbPath, bool priority, const QStri
         QString locDescription;
         QStringList candidateIds, candidateDescriptions;
         CollectionManager::instance()->migrationCandidates(loc, &locDescription, &candidateIds, &candidateDescriptions);
-        kDebug(digiKamAreaCode) << "Migration candidates for" << locDescription << ":" << candidateIds << candidateDescriptions;
+        kDebug() << "Migration candidates for" << locDescription << ":" << candidateIds << candidateDescriptions;
 
         KDialog *dialog = new KDialog;
 
@@ -899,14 +899,14 @@ bool AlbumManager::checkNepomukService()
                                     "/servicemanager", "org.kde.nepomuk.ServiceManager");
     if (!nepomukInterface.isValid())
     {
-        kDebug(digiKamAreaCode) << "Nepomuk server is not reachable. Cannot start Digikam Nepomuk Service";
+        kDebug() << "Nepomuk server is not reachable. Cannot start Digikam Nepomuk Service";
         return false;
     }
 
     QDBusReply<QStringList> availableServicesReply = nepomukInterface.call("availableServices");
     if (!availableServicesReply.isValid() || !availableServicesReply.value().contains("digikamnepomukservice"))
     {
-        kDebug(digiKamAreaCode) << "digikamnepomukservice is not available in NepomukServer";
+        kDebug() << "digikamnepomukservice is not available in NepomukServer";
         return false;
     }
 
@@ -916,14 +916,14 @@ bool AlbumManager::checkNepomukService()
     if (!connect(&nepomukInterface, SIGNAL(serviceInitialized(const QString &)),
                  &loop, SLOT(quit())))
     {
-        kDebug(digiKamAreaCode) << "Could not connect to Nepomuk server signal";
+        kDebug() << "Could not connect to Nepomuk server signal";
         return false;
     }
 
     QTimer::singleShot(1000, &loop, SLOT(quit()));
     */
 
-    kDebug(digiKamAreaCode) << "Trying to start up digikamnepomukservice";
+    kDebug() << "Trying to start up digikamnepomukservice";
     nepomukInterface.call(QDBus::NoBlock, "startService", "digikamnepomukservice");
 
     /*
@@ -955,7 +955,7 @@ void AlbumManager::startScan()
         mName = QString("Stat");
     else if (m == KDirWatch::INotify)
         mName = QString("INotify");
-    kDebug(digiKamAreaCode) << "KDirWatch method = " << mName;
+    kDebug() << "KDirWatch method = " << mName;
 
     // connect to KDirNotify
 
@@ -1168,7 +1168,7 @@ void AlbumManager::scanPAlbums()
 
             if (!album)
             {
-                kError(digiKamAreaCode) << "Did not find album root album in hash";
+                kError() << "Did not find album root album in hash";
                 continue;
             }
 
@@ -1190,7 +1190,7 @@ void AlbumManager::scanPAlbums()
 
             if (!parent)
             {
-                kError(digiKamAreaCode) <<  "Could not find parent with url: "
+                kError() <<  "Could not find parent with url: "
                               << parentPath << " for: " << info.relativePath;
                 continue;
             }
@@ -1383,7 +1383,7 @@ void AlbumManager::scanTAlbums()
             }
             else
             {
-                kWarning(digiKamAreaCode) << "Failed to find parent tag for tag "
+                kWarning() << "Failed to find parent tag for tag "
                                 << album->m_title
                                 << " with pid "
                                 << album->m_pid;
@@ -1420,7 +1420,7 @@ void AlbumManager::scanTAlbums()
         TagMap::iterator iter = tmap.find(info.pid);
         if (iter == tmap.end())
         {
-            kWarning(digiKamAreaCode) << "Failed to find parent tag for tag "
+            kWarning() << "Failed to find parent tag for tag "
                             << info.name
                             << " with pid "
                             << info.pid;
@@ -2461,7 +2461,7 @@ void AlbumManager::slotAlbumsJobResult(KJob* job)
 
     if (job->error())
     {
-        kWarning(digiKamAreaCode) << k_funcinfo << "Failed to list albums";
+        kWarning() << k_funcinfo << "Failed to list albums";
         return;
     }
 }
@@ -2485,7 +2485,7 @@ void AlbumManager::slotTagsJobResult(KJob* job)
 
     if (job->error())
     {
-        kWarning(digiKamAreaCode) << k_funcinfo << "Failed to list tags";
+        kWarning() << k_funcinfo << "Failed to list tags";
         return;
     }
 }
@@ -2509,7 +2509,7 @@ void AlbumManager::slotDatesJobResult(KJob* job)
 
     if (job->error())
     {
-        kWarning(digiKamAreaCode) << "Failed to list dates";
+        kWarning() << "Failed to list dates";
         return;
     }
 
@@ -2775,7 +2775,7 @@ void AlbumManager::slotDirWatchDirty(const QString& path)
             // check for equality
             if (modList == d->dbPathModificationDateList)
             {
-                //kDebug(digiKamAreaCode) << "Filtering out db-file-triggered dir watch signal";
+                //kDebug() << "Filtering out db-file-triggered dir watch signal";
                 // we can skip the signal
                 return;
             }
@@ -2785,27 +2785,27 @@ void AlbumManager::slotDirWatchDirty(const QString& path)
         }
     }
 
-    kDebug(digiKamAreaCode) << "KDirWatch detected change at" << path;
+    kDebug() << "KDirWatch detected change at" << path;
 
     slotNotifyFileChange(path);
 }
 
 void AlbumManager::slotKioFileMoved(const QString& urlFrom, const QString& urlTo)
 {
-    kDebug(digiKamAreaCode) << urlFrom << urlTo;
+    kDebug() << urlFrom << urlTo;
     handleKioNotification(KUrl(urlFrom));
     handleKioNotification(KUrl(urlTo));
 }
 
 void AlbumManager::slotKioFilesAdded(const QString& url)
 {
-    kDebug(digiKamAreaCode) << url;
+    kDebug() << url;
     handleKioNotification(KUrl(url));
 }
 
 void AlbumManager::slotKioFilesDeleted(const QStringList& urls)
 {
-    kDebug(digiKamAreaCode) << urls;
+    kDebug() << urls;
     foreach (const QString& url, urls)
         handleKioNotification(KUrl(url));
 }

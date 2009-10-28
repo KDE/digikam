@@ -127,7 +127,7 @@ QString ImageQueryBuilder::buildQueryFromXml(const QString& xml, QList<QVariant>
         }
     }
 
-    kDebug(digiKamAreaCode) << sql;
+    kDebug() << sql;
     return sql;
 }
 
@@ -422,7 +422,7 @@ public:
             QStringList values = reader.valueToStringList();
             if (values.isEmpty())
             {
-                kDebug(digiKamAreaCode) << "List for OneOf is empty";
+                kDebug() << "List for OneOf is empty";
                 return;
             }
 
@@ -670,7 +670,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
 
             if (ids.isEmpty())
             {
-                kDebug(digiKamAreaCode) << "Relation 'InTree', name 'albumid': No values given";
+                kDebug() << "Relation 'InTree', name 'albumid': No values given";
                 return false;
             }
 
@@ -733,7 +733,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
 
             if (ids.isEmpty())
             {
-                kDebug(digiKamAreaCode) << "Relation 'InTree', name 'tagid': No values given";
+                kDebug() << "Relation 'InTree', name 'tagid': No values given";
                 return false;
             }
 
@@ -1057,11 +1057,11 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     }
     else if (name == "similarity")
     {
-        kWarning(digiKamAreaCode) << "Search field \"similarity\" is not supported by ImageQueryBuilder";
+        kWarning() << "Search field \"similarity\" is not supported by ImageQueryBuilder";
     }
     else
     {
-        kDebug(digiKamAreaCode) << "Search field" << name << "not known by this version of ImageQueryBuilder";
+        kDebug() << "Search field" << name << "not known by this version of ImageQueryBuilder";
         return false;
     }
     return true;
@@ -1387,7 +1387,7 @@ QString ImageQueryBuilder::buildQueryFromUrl(const KUrl& url, QList<QVariant> *b
         }
         else
         {
-            kWarning(digiKamAreaCode) << "Unknown rule type: " << key << " passed to kioslave";
+            kWarning() << "Unknown rule type: " << key << " passed to kioslave";
             continue;
         }
 
@@ -1409,7 +1409,7 @@ QString ImageQueryBuilder::buildQueryFromUrl(const KUrl& url, QList<QVariant> *b
             rule.op = NLIKE;
         else
         {
-            kWarning(digiKamAreaCode) << "Unknown op type: " << op << " passed to kioslave";
+            kWarning() << "Unknown op type: " << op << " passed to kioslave";
             continue;
         }
 
@@ -1589,7 +1589,7 @@ QString SubQueryBuilder::build(enum SKey key, enum SOperator op,
         }
         case (KEYWORD):
         {
-            kWarning(digiKamAreaCode) << "KEYWORD Detected which is not possible";
+            kWarning() << "KEYWORD Detected which is not possible";
             break;
         }
         case(RATING):

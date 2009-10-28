@@ -195,7 +195,7 @@ void ParseResults::debug()
         QString _token  = token(key);
         QString _result = result(key);
 
-        kDebug(digiKamAreaCode) << "(" << key.first << ":" << key.second << ") => "
+        kDebug() << "(" << key.first << ":" << key.second << ") => "
                                 << "(" << _token    << ":" << _result    << ")";
     }
 }

@@ -149,7 +149,7 @@ void GreycstorationIface::computeChildrenThreads()
     const int numProcs    = qMax(Solid::Device::listFromType(Solid::DeviceInterface::Processor).count(), 1);
     const int maxThreads  = 16;
     d->computationThreads = qMin(maxThreads, 2 + ((numProcs - 1) * 2));
-    kDebug(digiKamAreaCode) << "GreycstorationIface::Computation threads: " << d->computationThreads;
+    kDebug() << "GreycstorationIface::Computation threads: " << d->computationThreads;
 }
 
 void GreycstorationIface::setup()
@@ -163,7 +163,7 @@ void GreycstorationIface::setup()
     {
         m_destImage = DImg(d->newSize.width(), d->newSize.height(),
                            m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
-        kDebug(digiKamAreaCode) << "GreycstorationIface::Resize: new size: ("
+        kDebug() << "GreycstorationIface::Resize: new size: ("
                       << d->newSize.width() << ", " << d->newSize.height() << ")";
     }
     else
@@ -198,7 +198,7 @@ void GreycstorationIface::cancelFilter()
     if (d->img.greycstoration_is_running())
     {
         // If the user abort, we stop the algorithm.
-        kDebug(digiKamAreaCode) << "Stop Greycstoration computation...";
+        kDebug() << "Stop Greycstoration computation...";
         d->img.greycstoration_stop();
     }
 
@@ -210,7 +210,7 @@ void GreycstorationIface::filterImage()
 {
     register int x, y;
 
-    kDebug(digiKamAreaCode) << "GreycstorationIface::Initialization...";
+    kDebug() << "GreycstorationIface::Initialization...";
 
     uchar* data = m_orgImage.bits();
     int width   = m_orgImage.width();
@@ -228,7 +228,7 @@ void GreycstorationIface::filterImage()
                  get_permute_axes("yzvx");
     }
 
-    kDebug(digiKamAreaCode) << "GreycstorationIface::Process Computation...";
+    kDebug() << "GreycstorationIface::Process Computation...";
 
     try
     {
@@ -253,7 +253,7 @@ void GreycstorationIface::filterImage()
     }
     catch(...)         // Everything went wrong.
     {
-       kDebug(digiKamAreaCode) << "GreycstorationIface::Error during Greycstoration filter computation!";
+       kDebug() << "GreycstorationIface::Error during Greycstoration filter computation!";
 
        if (m_parent)
            emit finished(false);
@@ -266,7 +266,7 @@ void GreycstorationIface::filterImage()
 
     // Copy CImg onto destination.
 
-    kDebug(digiKamAreaCode) << "GreycstorationIface::Finalization...";
+    kDebug() << "GreycstorationIface::Finalization...";
 
     uchar* newData = m_destImage.bits();
     int newWidth   = m_destImage.width();
@@ -360,7 +360,7 @@ void GreycstorationIface::inpainting()
     }
     else
     {
-        kDebug(digiKamAreaCode) << "Inpainting image: mask is null!";
+        kDebug() << "Inpainting image: mask is null!";
         m_cancel = true;
         return;
     }

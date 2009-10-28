@@ -412,6 +412,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     IF(MARBLEWIDGET_FOUND)
         INCLUDE_DIRECTORIES(${LIBMARBLEWIDGET_INCLUDE_DIR})
     ENDIF(MARBLEWIDGET_FOUND)
+    
+    #default debug area code
+    ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=50003)
 
     # ==================================================================================================
     # LibLqr-1 library rules

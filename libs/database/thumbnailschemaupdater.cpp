@@ -85,13 +85,13 @@ bool ThumbnailSchemaUpdater::startUpdates()
         // Find out schema version of db file
         QString version = m_access->db()->getSetting("DBVersion");
         QString versionRequired = m_access->db()->getSetting("DBVersionRequired");
-        //kDebug(digiKamAreaCode) << "Have a database structure version " << version;
+        //kDebug() << "Have a database structure version " << version;
 
         // We absolutely require the DBVersion setting
         if (version.isEmpty())
         {
             // Something is damaged. Give up.
-            kError(digiKamAreaCode) << "DBVersion not available! Giving up schema upgrading.";
+            kError() << "DBVersion not available! Giving up schema upgrading.";
             QString errorMsg = i18n(
                     "The database is not valid: "
                     "the \"DBVersion\" setting does not exist. "
@@ -141,7 +141,7 @@ bool ThumbnailSchemaUpdater::startUpdates()
     }
     else
     {
-        //kDebug(digiKamAreaCode) << "No database file available";
+        //kDebug() << "No database file available";
         DatabaseParameters parameters = m_access->parameters();
         // No legacy handling: start with a fresh db
         if (!createDatabase())

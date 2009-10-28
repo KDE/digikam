@@ -280,7 +280,7 @@ void ImagePropertiesGPSTab::slotGPSDetails()
 
     }
 
-    kDebug(digiKamAreaCode) << url;
+    kDebug() << url;
     KToolInvocation::self()->invokeBrowser(url);
 }
 

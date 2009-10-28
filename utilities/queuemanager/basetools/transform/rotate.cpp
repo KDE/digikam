@@ -133,7 +133,7 @@ bool Rotate::toolOperations()
                     return (exifTransform(inputUrl().toLocalFile(), inputUrl().fileName(), outputUrl().toLocalFile(), Rotate270));
                     break;
                 default:
-                    kDebug(digiKamAreaCode) << "Unknow rotate action";
+                    kDebug() << "Unknow rotate action";
                     return false;
                     break;
             }

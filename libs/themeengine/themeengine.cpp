@@ -421,8 +421,8 @@ bool ThemeEngine::loadTheme()
     int row, col;
     if (!xmlDoc.setContent(&themeFile, true, &error, &row, &col))
     {
-        kDebug(digiKamAreaCode) << "Theme file: " << t->filePath;
-        kDebug(digiKamAreaCode) << error << " :: row=" << row << " , col=" << col;
+        kDebug() << "Theme file: " << t->filePath;
+        kDebug() << error << " :: row=" << row << " , col=" << col;
         return false;
     }
 
@@ -680,7 +680,7 @@ bool ThemeEngine::loadTheme()
         t->listSelBorderColor = resource;
     }
 
-    kDebug(digiKamAreaCode) << "Theme file loaded: " << t->filePath;
+    kDebug() << "Theme file loaded: " << t->filePath;
     return true;
 }
 

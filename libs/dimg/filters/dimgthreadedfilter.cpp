@@ -125,7 +125,7 @@ void DImgThreadedFilter::startFilter()
     else  // No image data
     {
         emit finished(false);
-        kDebug(digiKamAreaCode) << m_name << "::No valid image data !!! ...";
+        kDebug() << m_name << "::No valid image data !!! ...";
     }
 }
 
@@ -142,7 +142,7 @@ void DImgThreadedFilter::startFilterDirectly()
     else  // No image data
     {
         emit finished(false);
-        kDebug(digiKamAreaCode) << m_name << "::No valid image data !!! ...";
+        kDebug() << m_name << "::No valid image data !!! ...";
     }
 }
 

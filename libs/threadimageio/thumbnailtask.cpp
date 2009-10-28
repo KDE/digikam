@@ -194,7 +194,7 @@ void ThumbnailLoadingTask::postProcess()
             break;
         }
         default:
-            kError(digiKamAreaCode) << "Unsupported postprocessing parameter for thumbnail loading:"
+            kError() << "Unsupported postprocessing parameter for thumbnail loading:"
                           << m_loadingDescription.postProcessingParameters.colorManagement;
             break;
     }

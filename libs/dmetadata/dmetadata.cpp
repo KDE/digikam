@@ -260,7 +260,7 @@ bool DMetadata::setImageComments(const CaptionsMap& comments) const
     /*if (comments.isEmpty())
           return false;*/
 
-    kDebug(digiKamAreaCode) << getFilePath() << " ==> Comment: " << comments;
+    kDebug() << getFilePath() << " ==> Comment: " << comments;
 
     // In first, set captions properties to digiKam XMP namespace
 
@@ -439,11 +439,11 @@ bool DMetadata::setImageRating(int rating) const
 
     if (rating < RatingMin || rating > RatingMax)
     {
-        kDebug(digiKamAreaCode) << "Rating value to write is out of range!";
+        kDebug() << "Rating value to write is out of range!";
         return false;
     }
 
-    kDebug(digiKamAreaCode) << getFilePath() << " ==> Rating: " << rating;
+    kDebug() << getFilePath() << " ==> Rating: " << rating;
 
     if (!setProgramId())
         return false;
@@ -592,7 +592,7 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
     {
         // See B.K.O #197285: LightRoom use '|' as separator.
         tagsPath = tagsPath.replaceInStrings("|", "/");
-        kDebug(digiKamAreaCode) << "Tags Path imported from LR: " << tagsPath;
+        kDebug() << "Tags Path imported from LR: " << tagsPath;
         return true;
     }
 
@@ -648,7 +648,7 @@ bool DMetadata::setMetadataTemplate(const Template& t) const
     KExiv2::AltLangMap rightUsage = t.rightUsageTerms();
     QString instructions          = t.instructions();
 
-    kDebug(digiKamAreaCode) << "Applying Metadata Template: " << t.templateTitle() << " :: " << authors;
+    kDebug() << "Applying Metadata Template: " << t.templateTitle() << " :: " << authors;
 
     // Set XMP tags. XMP<->IPTC Schema from Photoshop 7.0
 
@@ -999,7 +999,7 @@ IccProfile DMetadata::getIccProfile() const
     QByteArray data = getExifTagData("Exif.Image.InterColorProfile");
     if (!data.isNull())
     {
-        kDebug(digiKamAreaCode) << "Found an ICC profile in Exif metadata";
+        kDebug() << "Found an ICC profile in Exif metadata";
         return data;
     }
 
@@ -1008,13 +1008,13 @@ IccProfile DMetadata::getIccProfile() const
     {
         case DMetadata::WORKSPACE_SRGB:
         {
-            kDebug(digiKamAreaCode) << "Exif color-space tag is sRGB. Using default sRGB ICC profile.";
+            kDebug() << "Exif color-space tag is sRGB. Using default sRGB ICC profile.";
             return IccProfile::sRGB();
         }
 
         case DMetadata::WORKSPACE_ADOBERGB:
         {
-            kDebug(digiKamAreaCode) << "Exif color-space tag is AdobeRGB. Using default AdobeRGB ICC profile.";
+            kDebug() << "Exif color-space tag is AdobeRGB. Using default AdobeRGB ICC profile.";
             return IccProfile::adobeRGB();
         }
 
@@ -1030,7 +1030,7 @@ bool DMetadata::setIptcTag(const QString& text, int maxLength,
 {
     QString truncatedText = text;
     truncatedText.truncate(maxLength);
-    kDebug(digiKamAreaCode) << getFilePath() << " ==> " << debugLabel << ": " << truncatedText;
+    kDebug() << getFilePath() << " ==> " << debugLabel << ": " << truncatedText;
     return setIptcTagString(tagKey, truncatedText);    // returns false if failed
 }
 
@@ -1627,7 +1627,7 @@ QMap<int, QString> DMetadata::possibleValuesForEnumField(MetadataInfo::Field fie
             //more: TODO?
             return map;
         default:
-            kWarning(digiKamAreaCode) << "Unsupported field " << field << " in DMetadata::possibleValuesForEnumField";
+            kWarning() << "Unsupported field " << field << " in DMetadata::possibleValuesForEnumField";
             return map;
     }
 

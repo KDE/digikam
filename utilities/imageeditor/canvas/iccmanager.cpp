@@ -76,7 +76,7 @@ IccManager::IccManager(DImg& image, const QString& filePath, const ICCSettingsCo
 
     if (!d->workspaceProfile.open())
     {
-        kError(digiKamAreaCode) << "Cannot open workspace color profile" << d->workspaceProfile.filePath();
+        kError() << "Cannot open workspace color profile" << d->workspaceProfile.filePath();
         return;
     }
 
@@ -84,7 +84,7 @@ IccManager::IccManager(DImg& image, const QString& filePath, const ICCSettingsCo
     {
         // Treat as missing profile
         d->embeddedProfile = IccProfile();
-        kWarning(digiKamAreaCode) << "Encountered invalid embbeded color profile in file" << d->filePath;
+        kWarning() << "Encountered invalid embbeded color profile in file" << d->filePath;
     }
 
     if (!d->embeddedProfile.isNull())
@@ -271,13 +271,13 @@ IccProfile IccManager::imageProfile(ICCSettingsContainer::Behavior behavior, Icc
         return specifiedProfile;
     else if (behavior & ICCSettingsContainer::AutomaticColors)
     {
-        kError(digiKamAreaCode) << "Let the RAW loader do automatic color conversion";
+        kError() << "Let the RAW loader do automatic color conversion";
         return IccProfile();
     }
     else if (behavior & ICCSettingsContainer::DoNotInterpret)
         return IccProfile();
 
-    kError(digiKamAreaCode) << "No input profile: invalid Behavior flags" << (int)behavior;
+    kError() << "No input profile: invalid Behavior flags" << (int)behavior;
     return IccProfile();
 }
 
@@ -344,7 +344,7 @@ void IccManager::transformForDisplay(const IccProfile& profile)
     if (isUncalibratedColor())
     {
         // set appropriate outputColorSpace in RawLoadingSettings
-        kError(digiKamAreaCode) << "Do not use transformForDisplay for uncalibrated data "
+        kError() << "Do not use transformForDisplay for uncalibrated data "
                          "but let the RAW loader do the conversion to sRGB";
     }
 
@@ -385,7 +385,7 @@ IccTransform IccManager::displayTransform(const IccProfile& displayProfile)
     if (isUncalibratedColor())
     {
         // set appropriate outputColorSpace in RawLoadingSettings
-        kError(digiKamAreaCode) << "Do not use transformForDisplay for uncalibrated data "
+        kError() << "Do not use transformForDisplay for uncalibrated data "
                          "but let the RAW loader do the conversion to sRGB";
     }
     else if (isMissingProfile())
@@ -443,7 +443,7 @@ void IccManager::transformToSRGB()
     if (isUncalibratedColor())
     {
         // set appropriate outputColorSpace in RawLoadingSettings
-        kError(digiKamAreaCode) << "Do not use transformForDisplay for uncalibrated data "
+        kError() << "Do not use transformForDisplay for uncalibrated data "
                          "but let the RAW loader do the conversion to sRGB";
     }
     else if (isMissingProfile())
@@ -524,7 +524,7 @@ void IccManager::transformForOutput(const IccProfile& prof)
     if (isUncalibratedColor())
     {
         // set appropriate outputColorSpace in RawLoadingSettings
-        kError(digiKamAreaCode) << "Do not use transformForOutput for uncalibrated data "
+        kError() << "Do not use transformForOutput for uncalibrated data "
                          "but let the RAW loader do the conversion to sRGB";
     }
     else if (isMissingProfile())

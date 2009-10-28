@@ -69,12 +69,12 @@ void ICCPreviewWidget::showPreview( const KUrl& url)
 
     if ( url.isLocalFile() && fInfo.isFile() && fInfo.isReadable() )
     {
-        kDebug(digiKamAreaCode) << url << " is a readable local file";
+        kDebug() << url << " is a readable local file";
         m_iccProfileWidget->loadFromURL(url);
     }
     else
     {
-        kDebug(digiKamAreaCode) << url << " is not a readable local file";
+        kDebug() << url << " is not a readable local file";
     }
 }
 

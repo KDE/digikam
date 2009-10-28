@@ -725,7 +725,7 @@ void TagFilterView::slotTagAdded(Album* album)
 
         if (!parent)
         {
-            kWarning(digiKamAreaCode) << " Failed to find parent for Tag "
+            kWarning() << " Failed to find parent for Tag "
                             << tag->tagPath();
             return;
         }

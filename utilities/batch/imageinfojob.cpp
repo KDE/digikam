@@ -111,7 +111,7 @@ void ImageInfoJob::slotResult(KJob* job)
 
     if (job->error())
     {
-        kWarning(digiKamAreaCode) << "Failed to list url: " << job->errorString();
+        kWarning() << "Failed to list url: " << job->errorString();
         return;
     }
 

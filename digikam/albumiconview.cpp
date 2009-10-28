@@ -410,7 +410,7 @@ void AlbumIconView::slotImageListerNewItems(const ImageInfoList& itemList)
         PAlbum *album = AlbumManager::instance()->findPAlbum(it->albumId());
         if (!album)
         {
-            kWarning(digiKamAreaCode) << "No album for item: " << it->name()
+            kWarning() << "No album for item: " << it->name()
                             << ", albumID: " << it->albumId();
             continue;
         }
@@ -1749,7 +1749,7 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
 
     for( it = urlList.begin(); it != urlList.end(); ++it )
     {
-        kDebug(digiKamAreaCode) << "Setting Exif Orientation tag to " << orientation;
+        kDebug() << "Setting Exif Orientation tag to " << orientation;
 
         DMetadata metadata((*it).toLocalFile());
         DMetadata::ImageOrientation o = (DMetadata::ImageOrientation)orientation;

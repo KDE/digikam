@@ -115,7 +115,7 @@ void RenameThread::slotSuccess(const KUrl& file)
     /*
      * no real error handling needed, just wake up
      */
-    kDebug(digiKamAreaCode) << file;
+    kDebug() << file;
     d->condVar.wakeAll();
 }
 
@@ -124,7 +124,7 @@ void RenameThread::slotFailed(const KUrl& file)
     /*
      * no real error handling needed, just wake up
      */
-    kDebug(digiKamAreaCode) << file;
+    kDebug() << file;
     d->condVar.wakeAll();
 }
 

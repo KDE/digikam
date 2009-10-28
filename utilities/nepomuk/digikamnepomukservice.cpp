@@ -221,7 +221,7 @@ void NepomukService::enableSyncToDigikam(bool syncToDigikam)
     // Controls syncing Nepomuk -> Digikam.
     // Called from readConfig or via DBus (from DigikamApp)
 
-    kDebug(digiKamAreaCode) << "Sync to digikam enabled: " << syncToDigikam;
+    kDebug() << "Sync to digikam enabled: " << syncToDigikam;
     if (d->syncToDigikam == syncToDigikam)
         return;
     d->syncToDigikam = syncToDigikam;
@@ -264,7 +264,7 @@ void NepomukService::enableSyncToNepomuk(bool syncToNepomuk)
      // Controls syncing Digikam -> Nepomuk.
     // Called from readConfig or via DBus (from DigikamApp)
 
-    kDebug(digiKamAreaCode) << "Sync to nepomuk enabled:" << syncToNepomuk;
+    kDebug() << "Sync to nepomuk enabled:" << syncToNepomuk;
     if (d->syncToNepomuk == syncToNepomuk)
         return;
     d->syncToNepomuk = syncToNepomuk;
@@ -310,7 +310,7 @@ void NepomukService::setDatabase(const QString &paramsUrl)
         return;
 
     KUrl url(paramsUrl);
-    kDebug(digiKamAreaCode) << "Got database params pushed from running instance:" << url;
+    kDebug() << "Got database params pushed from running instance:" << url;
     connectToDatabase(DatabaseParameters(url));
 }
 
@@ -332,7 +332,7 @@ void NepomukService::connectToDatabase(const DatabaseParameters &params)
         if (!d->isConnected)
         {
             QString errorMsg = DatabaseAccess().lastError();
-            kDebug(digiKamAreaCode) << "Failed to initialize database" << params.databaseName;
+            kDebug() << "Failed to initialize database" << params.databaseName;
             return;
         }
     }
@@ -481,7 +481,7 @@ void NepomukService::syncToNepomuk(const QList<ImageInfo>& infos, SyncToNepomukS
             int rating = info.rating();
             if (rating != -1 || syncSettings & SyncHasNoRating)
             {
-                //kDebug(digiKamAreaCode) << "Setting rating" << info.rating() << res.resourceUri() << res.isValid();
+                //kDebug() << "Setting rating" << info.rating() << res.resourceUri() << res.isValid();
                 res.setRating(digikamToNepomukRating(info.rating()));
                 d->addIgnoreUri(res.resourceUri(), NaoRating);
             }
@@ -492,7 +492,7 @@ void NepomukService::syncToNepomuk(const QList<ImageInfo>& infos, SyncToNepomukS
             QString comment = info.comment();
             if (!comment.isEmpty())
             {
-                //kDebug(digiKamAreaCode) << "Setting comment" << info.comment() << res.resourceUri() << res.isValid();
+                //kDebug() << "Setting comment" << info.comment() << res.resourceUri() << res.isValid();
                 res.setDescription(info.comment());
                 d->addIgnoreUri(res.resourceUri(), NaoDescription);
             }
@@ -607,21 +607,21 @@ void NepomukService::slotStatementAdded(const Soprano::Statement& statement)
     {
         if (d->checkIgnoreUris(subject.uri(), NaoRating))
             return;
-        //kDebug(digiKamAreaCode) << "Changed rating" << subject.toN3() << statement.object().toN3() << d->changingNepomuk;
+        //kDebug() << "Changed rating" << subject.toN3() << statement.object().toN3() << d->changingNepomuk;
         d->triggerSyncToDigikam();
     }
     else if (predicate == Soprano::Vocabulary::NAO::description())
     {
         if (d->checkIgnoreUris(subject.uri(), NaoDescription))
             return;
-        //kDebug(digiKamAreaCode) << "Changed comment" << subject.toN3() << statement.object().toN3() << d->changingNepomuk;
+        //kDebug() << "Changed comment" << subject.toN3() << statement.object().toN3() << d->changingNepomuk;
         d->triggerSyncToDigikam();
     }
     else if (predicate == Soprano::Vocabulary::NAO::hasTag())
     {
         if (d->checkIgnoreUris(subject.uri(), NaoTags))
             return;
-        //kDebug(digiKamAreaCode) << "Added tag" << subject.toN3() << statement.object().toN3() << d->changingNepomuk;
+        //kDebug() << "Added tag" << subject.toN3() << statement.object().toN3() << d->changingNepomuk;
         d->triggerSyncToDigikam();
     }
 }
@@ -640,7 +640,7 @@ void NepomukService::slotStatementRemoved(const Soprano::Statement& statement)
     {
         if (d->checkIgnoreUris(subject.uri(), NaoTags))
             return;
-        kDebug(digiKamAreaCode) << "Removed tag" << subject.toN3() << statement.object().toN3() << d->changingNepomuk;
+        kDebug() << "Removed tag" << subject.toN3() << statement.object().toN3() << d->changingNepomuk;
         Nepomuk::Resource res(subject.uri());
         removeTagInDigikam(res.property(Soprano::Vocabulary::Xesam::url()).toString(), statement.object().uri());
     }
@@ -980,7 +980,7 @@ QString NepomukService::tagnameForNepomukTag(const QUrl& tagUri)
             return tag.genericLabel();
         }
         else
-            kWarning(digiKamAreaCode) << "invalid tag" << tagUri;
+            kWarning() << "invalid tag" << tagUri;
     }
     return QString();
 }
@@ -1048,7 +1048,7 @@ DatabaseParameters NepomukService::databaseParameters()
                     if (paramReply.isValid())
                     {
                         KUrl url(paramReply.value());
-                        kDebug(digiKamAreaCode) << "Got database params from running instance:" << url;
+                        kDebug() << "Got database params from running instance:" << url;
                         return DatabaseParameters(url);
                     }
                 }
@@ -1062,7 +1062,7 @@ DatabaseParameters NepomukService::databaseParameters()
     if (group.exists())
     {
         QString dbPath = group.readEntry("Database File Path", QString());
-        kDebug(digiKamAreaCode) << "Using database path from config file:" << dbPath;
+        kDebug() << "Using database path from config file:" << dbPath;
         if (!dbPath.isEmpty())
             return DatabaseParameters::parametersForSQLiteDefaultFile(dbPath);
     }

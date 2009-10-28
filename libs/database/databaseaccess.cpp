@@ -210,7 +210,7 @@ bool DatabaseAccess::checkReadyForUse(InitializationObserver *observer)
     QStringList drivers = QSqlDatabase::drivers();
     if (!drivers.contains("QSQLITE"))
     {
-        kError(digiKamAreaCode) << "No SQLite3 driver available. List of QSqlDatabase drivers: " << drivers;
+        kError() << "No SQLite3 driver available. List of QSqlDatabase drivers: " << drivers;
         d->lastError = i18n("The driver \"SQLITE\" for SQLite3 databases is not available.\n"
                             "digiKam depends on the drivers provided by the SQL module of Qt4.");
         return false;
@@ -221,7 +221,7 @@ bool DatabaseAccess::checkReadyForUse(InitializationObserver *observer)
 
     if (!d->backend)
     {
-        kWarning(digiKamAreaCode) << "No database backend available in checkReadyForUse. "
+        kWarning() << "No database backend available in checkReadyForUse. "
                            "Did you call setParameters before?";
         return false;
     }

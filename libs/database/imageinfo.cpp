@@ -632,7 +632,7 @@ ImageInfo ImageInfo::copyItem(int dstAlbumID, const QString& dstFileName)
         return ImageInfo();
 
     DatabaseAccess access;
-    //kDebug(digiKamAreaCode) << "ImageInfo::copyItem " << m_data->albumId << " " << m_data->name << " to " << dstAlbumID << " " << dstFileName;
+    //kDebug() << "ImageInfo::copyItem " << m_data->albumId << " " << m_data->name << " to " << dstAlbumID << " " << dstFileName;
 
     if (dstAlbumID == m_data->albumId && dstFileName == m_data->name)
         return (*this);

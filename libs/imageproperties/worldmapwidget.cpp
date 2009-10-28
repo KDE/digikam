@@ -557,10 +557,10 @@ MarkerClusterHolder::PixmapOperations WorldMapWidget::getClusterPixmap(const int
             }
         }
 
-//         kDebug(digiKamAreaCode)<<QString("nMarkers=%1").arg(markerList->count());
+//         kDebug()<<QString("nMarkers=%1").arg(markerList->count());
 //         for (int i=0; i<=5; ++i)
 //         {
-//             kDebug(digiKamAreaCode)<<QString("rating: %1, bestdate: %2, index: %3").arg(i).arg(maxDate[i].toString()).arg(maxIndex[i]);
+//             kDebug()<<QString("rating: %1, bestdate: %2, index: %3").arg(i).arg(maxDate[i].toString()).arg(maxIndex[i]);
 //         }
 
         // now pick the best match:
@@ -604,7 +604,7 @@ MarkerClusterHolder::PixmapOperations WorldMapWidget::getClusterPixmap(const int
             }
         }
 
-//         kDebug(digiKamAreaCode)<<QString("bestIndex: %1").arg(bestIndex);
+//         kDebug()<<QString("bestIndex: %1").arg(bestIndex);
         if (bestIndex>=0)
         {
             markerInfo = mch->marker(bestIndex);
@@ -619,7 +619,7 @@ MarkerClusterHolder::PixmapOperations WorldMapWidget::getClusterPixmap(const int
         else
         {
             // TODO: algorithm not checked thoroughly enough, make sure we at least don't crash:
-            kDebug(digiKamAreaCode)<<"Index invalid";
+            kDebug()<<"Index invalid";
             return MarkerClusterHolder::PixmapInvalid;
         }
     }
@@ -632,10 +632,10 @@ MarkerClusterHolder::PixmapOperations WorldMapWidget::getClusterPixmap(const int
     // TODO: why is 0,0 returned in some cases? maybe the image has never been loaded before?
     if (!imageSize.isNull())
     {
-//         kDebug(digiKamAreaCode)<<imageSize;
+//         kDebug()<<imageSize;
         imageSize.scale(maxSize, Qt::KeepAspectRatio);
         maxOfWidths = qMax(imageSize.width(), imageSize.height());
-//         kDebug(digiKamAreaCode)<<maxSize<<imageSize<<maxOfWidths;
+//         kDebug()<<maxSize<<imageSize<<maxOfWidths;
     }
     bool havePixmap = me->d->thumbnailLoadThread->find(gpsInfo.url.path() , *clusterPixmap, maxOfWidths);
     if (havePixmap)

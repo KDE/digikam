@@ -230,7 +230,7 @@ void ChoiceSearchComboBox::setLabelText(const QString& text)
 
 void ChoiceSearchComboBox::labelClicked()
 {
-    kDebug(digiKamAreaCode) << "labelClicked";
+    kDebug() << "labelClicked";
     showPopup();
 }
 

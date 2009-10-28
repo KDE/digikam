@@ -186,13 +186,13 @@ void ThumbnailLoadThread::initializeThumbnailDatabase(const QString &thumbnailDB
     ThumbnailDatabaseAccess::setParameters(DatabaseParameters::parametersForSQLite(thumbnailDBFile));
     if (ThumbnailDatabaseAccess::checkReadyForUse(0))
     {
-        kDebug(digiKamAreaCode) << "Thumbnail db ready for use";
+        kDebug() << "Thumbnail db ready for use";
         static_d->storageMethod = ThumbnailCreator::ThumbnailDatabase;
         static_d->provider = provider;
     }
     else
     {
-        kError(digiKamAreaCode) << "Failed to initialize thumbnail database at" << thumbnailDBFile
+        kError() << "Failed to initialize thumbnail database at" << thumbnailDBFile
                                 << "\n Error message:" << ThumbnailDatabaseAccess().lastError();
     }
 }
@@ -417,12 +417,12 @@ bool ThumbnailLoadThread::checkSize(int size)
 {
     if (size <= 0)
     {
-        kError(digiKamAreaCode) << "ThumbnailLoadThread::load: No thumbnail size specified. Refusing to load thumbnail.";
+        kError() << "ThumbnailLoadThread::load: No thumbnail size specified. Refusing to load thumbnail.";
         return false;
     }
     else if (size > ThumbnailSize::Huge)
     {
-        kError(digiKamAreaCode) << "ThumbnailLoadThread::load: Thumbnail size " << size
+        kError() << "ThumbnailLoadThread::load: Thumbnail size " << size
                       << " is larger than " << ThumbnailSize::Huge << ". Refusing to load.";
         return false;
     }

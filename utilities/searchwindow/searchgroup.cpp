@@ -267,7 +267,7 @@ void SearchGroup::read(SearchXmlCachingReader& reader)
             }
             else
             {
-                kWarning(digiKamAreaCode) << "Unhandled search field in XML with field name" << name;
+                kWarning() << "Unhandled search field in XML with field name" << name;
                 reader.readToEndOfElement();
             }
         }

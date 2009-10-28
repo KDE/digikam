@@ -180,7 +180,7 @@ int Album::globalID() const
         case(SEARCH):
             return m_id | (1 << 30);
         default:
-            kError(digiKamAreaCode) << "Unknown album type";
+            kError() << "Unknown album type";
             return -1;
     }
 }
