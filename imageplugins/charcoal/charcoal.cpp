@@ -95,7 +95,7 @@ void Charcoal::filterImage(void)
 
     // -- Applying Gaussian blur effect ---------------------------------------
 
-    Digikam::DImgGaussianBlur(this, m_destImage, m_destImage, 50, 60, (int)(m_smooth/10.0));
+    Digikam::DImgGaussianBlur(this, m_destImage, m_destImage, 80, 85, (int)(m_smooth/10.0));
 
     if (m_cancel)
         return;
@@ -104,7 +104,7 @@ void Charcoal::filterImage(void)
 
     Digikam::DImgImageFilters().stretchContrastImage(m_destImage.bits(), m_destImage.width(),
                                 m_destImage.height(), m_destImage.sixteenBit());
-    postProgress( 70 );
+    postProgress( 90 );
     if (m_cancel)
         return;
 
@@ -112,7 +112,7 @@ void Charcoal::filterImage(void)
 
     Digikam::DImgImageFilters().invertImage(m_destImage.bits(), m_destImage.width(),
                                 m_destImage.height(), m_destImage.sixteenBit());
-    postProgress( 80 );
+    postProgress( 95 );
     if (m_cancel)
         return;
 
@@ -126,7 +126,7 @@ void Charcoal::filterImage(void)
                    0.3F, 0.59F , 0.11F,                             // Red channel gains.
                    0.0F, 1.0F,   0.0F,                              // Green channel gains (not used).
                    0.0F, 0.0F,   1.0F);                             // Blue channel gains (not used).
-    postProgress( 90 );
+    postProgress( 100 );
     if (m_cancel)
         return;
 }
@@ -225,7 +225,7 @@ bool Charcoal::convolveImage(const unsigned int order, const double *kernel)
             color.setPixel((ddata + x * ddepth + (width * y * ddepth)));
         }
 
-        progress = (int) (((double) y * 50.0) / height);
+        progress = (int) (((double) y * 80.0) / height);
         if (progress % 5 == 0)
         {
             postProgress(progress);
