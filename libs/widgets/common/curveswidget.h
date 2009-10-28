@@ -39,6 +39,7 @@
 
 #include "dcolor.h"
 #include "digikam_export.h"
+#include "globals.h"
 
 namespace Digikam
 {
@@ -115,8 +116,8 @@ public:
 
 public:
 
-    int             m_channelType;     // Channel type to draw.
-    int             m_scaleType;       // Scale to use for drawing.
+    ChannelType            m_channelType;     // Channel type to draw.
+    HistogramScale         m_scaleType;       // Scale to use for drawing.
 
     ImageHistogram *m_imageHistogram;
 

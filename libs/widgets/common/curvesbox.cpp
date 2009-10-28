@@ -319,7 +319,7 @@ void CurvesBox::slotCurveTypeChanged(int type)
     emit signalCurveTypeChanged(type);
 }
 
-void CurvesBox::setScale(int type)
+void CurvesBox::setScale(HistogramScale type)
 {
     d->curvesWidget->m_scaleType = type;
     d->curvesWidget->repaint();

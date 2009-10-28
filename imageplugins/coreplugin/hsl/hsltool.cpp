@@ -281,7 +281,7 @@ void HSLTool::readSettings()
 
     d->gboxSettings->histogramBox()->setChannel(group.readEntry(d->configHistogramChannelEntry,
                         (int)LuminosityChannel));
-    d->gboxSettings->histogramBox()->setScale(group.readEntry(d->configHistogramScaleEntry,
+    d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,
                         (int)LogScaleHistogram));
 
     d->hInput->setValue(group.readEntry(d->configHueAdjustmentEntry,        d->hInput->defaultValue()));
@@ -297,7 +297,7 @@ void HSLTool::writeSettings()
     KConfigGroup group        = config->group(d->configGroupName);
 
     group.writeEntry(d->configHistogramChannelEntry,     d->gboxSettings->histogramBox()->channel());
-    group.writeEntry(d->configHistogramScaleEntry,       d->gboxSettings->histogramBox()->scale());
+    group.writeEntry(d->configHistogramScaleEntry,       (int)d->gboxSettings->histogramBox()->scale());
     group.writeEntry(d->configHueAdjustmentEntry,        d->hInput->value());
     group.writeEntry(d->configSaturationAdjustmentEntry, d->sInput->value());
     group.writeEntry(d->configLighnessAdjustmentEntry,   d->lInput->value());

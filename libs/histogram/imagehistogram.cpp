@@ -124,6 +124,11 @@ ImageHistogram::~ImageHistogram()
     delete d;
 }
 
+bool ImageHistogram::isSixteenBit()
+{
+    return d->histoSegments == NUM_SEGMENTS_16BIT;
+}
+
 int ImageHistogram::getHistogramSegments(void)
 {
     return d->histoSegments;

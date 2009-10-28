@@ -476,7 +476,7 @@ void RawSettingsBox::readSettings()
 
     histogramBox()->setChannel(group.readEntry(d->optionHistogramChannelEntry,
                     (int) LuminosityChannel));
-    histogramBox()->setScale(group.readEntry(d->optionHistogramScaleEntry,
+    histogramBox()->setScale((HistogramScale)group.readEntry(d->optionHistogramScaleEntry,
                     (int) LogScaleHistogram));
 
 //    d->colorsCB->setCurrentIndex(group.readEntry("Histogram Color", (int)RawSettingsBoxPriv::AllColorsRed));
@@ -563,7 +563,7 @@ void RawSettingsBox::writeSettings()
     KConfigGroup group        = config->group(d->optionGroupName);
 
     group.writeEntry(d->optionHistogramChannelEntry, histogramBox()->channel());
-    group.writeEntry(d->optionHistogramScaleEntry, histogramBox()->scale());
+    group.writeEntry(d->optionHistogramScaleEntry, (int)histogramBox()->scale());
 //    group.writeEntry("Histogram Color",            d->colorsCB->currentIndex());
 
     group.writeEntry(d->optionDecodeSixteenBitEntry,

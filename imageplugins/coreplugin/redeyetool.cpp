@@ -314,7 +314,7 @@ void RedEyeTool::readSettings()
 
     d->gboxSettings->histogramBox()->setChannel(group.readEntry(d->configHistogramChannelEntry,
                         (int)LuminosityChannel));
-    d->gboxSettings->histogramBox()->setScale(group.readEntry(d->configHistogramScaleEntry,
+    d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,
                         (int)LogScaleHistogram));
 
     d->redThreshold->setValue(group.readEntry(d->configRedThresholdEntry,       d->redThreshold->defaultValue()));
@@ -336,7 +336,7 @@ void RedEyeTool::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
     group.writeEntry(d->configHistogramChannelEntry, d->gboxSettings->histogramBox()->channel());
-    group.writeEntry(d->configHistogramScaleEntry,   d->gboxSettings->histogramBox()->scale());
+    group.writeEntry(d->configHistogramScaleEntry,   (int)d->gboxSettings->histogramBox()->scale());
     group.writeEntry(d->configRedThresholdEntry,     d->redThreshold->value());
     group.writeEntry(d->configSmoothLevelEntry,      d->smoothLevel->value());
     group.writeEntry(d->configHueColoringTintEntry,  d->HSSelector->hue());

@@ -24,10 +24,6 @@
 #include "histogramwidget.h"
 #include "histogramwidget.moc"
 
-// C++ includes
-
-#include <cmath>
-
 // Qt includes
 
 #include <QPixmap>
@@ -55,6 +51,7 @@
 #include "ditemtooltip.h"
 #include "imagehistogram.h"
 #include "globals.h"
+#include "histogrampainter.h"
 
 namespace Digikam
 {
@@ -113,6 +110,9 @@ public:
     QPixmap progressPix;
 
     DColor  colorGuide;
+
+    HistogramPainter *histogramPainter;
+
 };
 
 // Constructor without image data (needed to use updateData() method after instance created).
@@ -127,6 +127,7 @@ HistogramWidget::HistogramWidget(int w, int h,
 
     m_imageHistogram     = 0;
     m_selectionHistogram = 0;
+    d->histogramPainter  = new HistogramPainter(this);
 }
 
 // Constructor without image selection.
@@ -144,6 +145,7 @@ HistogramWidget::HistogramWidget(int w, int h,
 
     m_imageHistogram     = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits);
     m_selectionHistogram = 0L;
+    d->histogramPainter  = new HistogramPainter(this);
 
     connectHistogram(m_imageHistogram);
 
@@ -166,6 +168,7 @@ HistogramWidget::HistogramWidget(int w, int h,
 
     m_imageHistogram     = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits);
     m_selectionHistogram = new ImageHistogram(s_data, s_w, s_h, i_sixteenBits);
+    d->histogramPainter  = new HistogramPainter(this);
 
     connectHistogram(m_imageHistogram);
     connectHistogram(m_selectionHistogram);
@@ -256,7 +259,7 @@ ImageHistogram *HistogramWidget::currentHistogram()
 
 void HistogramWidget::reset()
 {
-    d->guideVisible = false;
+    d->histogramPainter->disableHistogramGuide();
     repaint();
 }
 
@@ -552,484 +555,42 @@ void HistogramWidget::paintEvent(QPaintEvent*)
        return;
     }
 
-    int             x, y;
-    int             yr, yg, yb;             // For all color channels.
-    int             wWidth  = width();
-    int             wHeight = height();
-    double          max;
-    ImageHistogram* histogram;
-
+    // render histogram in normal case
+    ImageHistogram* histogram = 0;
     if (d->renderingType == ImageSelectionHistogram && m_selectionHistogram)
+    {
        histogram = m_selectionHistogram;
+    }
     else
+    {
        histogram = m_imageHistogram;
+    }
 
     if (!histogram)
+    {
         return;
-
-    x   = 0; y  = 0;
-    yr  = 0; yg = 0; yb = 0;
-    max = 0.0;
-
-    switch(m_channelType)
-    {
-       case GreenChannel:
-          max = histogram->getMaximum(GreenChannel);
-          break;
-
-       case BlueChannel:
-          max = histogram->getMaximum(BlueChannel);
-          break;
-
-       case RedChannel:
-          max = histogram->getMaximum(RedChannel);
-          break;
-
-       case AlphaChannel:
-          max = histogram->getMaximum(AlphaChannel);
-          break;
-
-       case ColorChannels:
-          max = qMax (qMax (histogram->getMaximum(RedChannel),
-                            histogram->getMaximum(GreenChannel)),
-                      histogram->getMaximum(BlueChannel));
-          break;
-
-       case LuminosityChannel:
-          max = histogram->getMaximum(LuminosityChannel);
-          break;
     }
 
-    switch (m_scaleType)
-    {
-       case LinScaleHistogram:
-          break;
+    d->histogramPainter->setHistogram(histogram);
 
-       case LogScaleHistogram:
-          if (max > 0.0)
-              max = log (max);
-          else
-              max = 1.0;
-          break;
-    }
+    d->histogramPainter->setChannelType(static_cast<ChannelType>(m_channelType));
+    d->histogramPainter->setMainColorChannel(static_cast<ColorChannelsType>(m_colorType));
+    d->histogramPainter->setScale(static_cast<HistogramScale>(m_scaleType));
+    d->histogramPainter->setSelection(d->xmin, d->xmax);
+    d->histogramPainter->setHighlightSelection(d->selectMode);
 
     // A QPixmap is used to enable the double buffering.
+    QPixmap bufferPixmap(size());
 
-    QPixmap pm(size());
-    QPainter p1;
-    p1.begin(&pm);
-    p1.initFrom(this);
-    p1.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Background));
+    d->histogramPainter->initFrom(this);
+    d->histogramPainter->render(bufferPixmap);
 
-    // Drawing selection or all histogram values.
+    // render the pixmap on the widget
+    QPainter p2(this);
+    p2.drawPixmap(0, 0, bufferPixmap);
+    p2.end();
 
-    for (x = 0 ; x < wWidth ; ++x)
-    {
-      double value   = 0.0;
-      double value_r = 0.0, value_g = 0.0, value_b = 0.0; // For all color channels.
-      int    i, j;
-
-      i = (x       * histogram->getHistogramSegments()) / wWidth;
-      j = ((x + 1) * histogram->getHistogramSegments()) / wWidth;
-
-      do
-      {
-          double v;
-          double vr, vg, vb;                              // For all color channels.
-
-          v  = 0.0;
-          vr = 0.0; vg = 0.0; vb = 0.0;
-
-          switch(m_channelType)
-          {
-             case GreenChannel:
-                v = histogram->getValue(GreenChannel, i++);
-                break;
-
-             case BlueChannel:
-                v = histogram->getValue(BlueChannel, i++);
-                break;
-
-             case RedChannel:
-                v = histogram->getValue(RedChannel, i++);
-                break;
-
-             case AlphaChannel:
-                v = histogram->getValue(AlphaChannel, i++);
-                break;
-
-             case ColorChannels:   // All color channels.
-                vr = histogram->getValue(RedChannel, i++);
-                vg = histogram->getValue(GreenChannel, i);
-                vb = histogram->getValue(BlueChannel, i);
-                break;
-
-             case LuminosityChannel:           // Luminosity.
-                v = histogram->getValue(LuminosityChannel, i++);
-                break;
-          }
-
-          if ( m_channelType != ColorChannels )
-          {
-             if (v > value)
-                value = v;
-          }
-          else
-          {
-             if (vr > value_r)
-                value_r = vr;
-             if (vg > value_g)
-                value_g = vg;
-             if (vb > value_b)
-                value_b = vb;
-          }
-      }
-      while (i < j);
-
-      if ( m_channelType != ColorChannels )
-      {
-         switch (m_scaleType)
-         {
-            case LinScaleHistogram:
-              y = (int) ((wHeight * value) / max);
-              break;
-
-            case LogScaleHistogram:
-              if (value <= 0.0) value = 1.0;
-              y = (int) ((wHeight * log (value)) / max);
-              break;
-
-            default:
-              y = 0;
-              break;
-         }
-      }
-      else
-      {
-         switch (m_scaleType)
-         {
-            case LinScaleHistogram:
-              yr = (int) ((wHeight * value_r) / max);
-              yg = (int) ((wHeight * value_g) / max);
-              yb = (int) ((wHeight * value_b) / max);
-              break;
-
-            case LogScaleHistogram:
-              if (value_r <= 0.0) value_r = 1.0;
-              if (value_g <= 0.0) value_g = 1.0;
-              if (value_b <= 0.0) value_b = 1.0;
-              yr = (int) ((wHeight * log (value_r)) / max);
-              yg = (int) ((wHeight * log (value_g)) / max);
-              yb = (int) ((wHeight * log (value_b)) / max);
-              break;
-
-            default:
-              yr = 0;
-              yg = 0;
-              yb = 0;
-              break;
-         }
-      }
-
-      // Drawing the histogram + selection or only the histogram.
-
-      if ( m_channelType != ColorChannels )
-      {
-         if ( d->selectMode == true )   // Selection mode enable ?
-         {
-            if ( x >= (int)(d->xmin * wWidth) && x <= (int)(d->xmax * wWidth) )
-            {
-               p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
-               p1.drawLine(x, wHeight, x, 0);
-               p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Background), 1, Qt::SolidLine));
-               p1.drawLine(x, wHeight, x, wHeight - y);
-            }
-            else
-            {
-               p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
-               p1.drawLine(x, wHeight, x, wHeight - y);
-               p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Background), 1, Qt::SolidLine));
-               p1.drawLine(x, wHeight - y, x, 0);
-
-               if ( x == wWidth/4 || x == wWidth/2 || x == 3*wWidth/4 )
-               {
-                  p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Base), 1, Qt::SolidLine));
-                  p1.drawLine(x, wHeight, x, 0);
-               }
-            }
-         }
-         else
-         {
-            p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
-            p1.drawLine(x, wHeight, x, wHeight - y);
-            p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Background), 1, Qt::SolidLine));
-            p1.drawLine(x, wHeight - y, x, 0);
-
-            if ( x == wWidth/4 || x == wWidth/2 || x == 3*wWidth/4 )
-            {
-               p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Base), 1, Qt::SolidLine));
-               p1.drawLine(x, wHeight, x, 0);
-            }
-         }
-      }
-      else
-      {
-         if ( d->selectMode == true )   // Histogram selection mode enable ?
-         {
-             if ( x >= (int)(d->xmin * wWidth) && x <= (int)(d->xmax * wWidth) )
-            {
-               p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
-               p1.drawLine(x, wHeight, x, 0);
-               p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Background), 1, Qt::SolidLine));
-
-               // Witch color must be used on the foreground with all colors channel mode?
-               switch (m_colorType)
-               {
-                   case ColorChannelsRed:
-                    p1.drawLine(x, wHeight, x, wHeight - yr);
-                    break;
-
-                  case ColorChannelsGreen:
-                    p1.drawLine(x, wHeight, x, wHeight - yg);
-                    break;
-
-                  default:
-                    p1.drawLine(x, wHeight, x, wHeight - yb);
-                    break;
-               }
-            }
-            else
-            {
-               // Which color must be used on the foreground with all colors channel mode?
-               switch (m_colorType)
-               {
-                  case ColorChannelsRed:
-                    p1.setPen(QPen(Qt::green, 1, Qt::SolidLine));
-                    p1.drawLine(x, wHeight, x, wHeight - yg);
-                    p1.setPen(QPen(Qt::blue, 1, Qt::SolidLine));
-                    p1.drawLine(x, wHeight, x, wHeight - yb);
-                    p1.setPen(QPen(Qt::red, 1, Qt::SolidLine));
-                    p1.drawLine(x, wHeight, x, wHeight - yr);
-
-                    p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Background), 1, Qt::SolidLine));
-                    p1.drawLine(x, wHeight - qMax(qMax(yr, yg), yb), x, 0);
-                    p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
-                    p1.drawLine(x, wHeight - yg -1, x, wHeight - yg);
-                    p1.drawLine(x, wHeight - yb -1, x, wHeight - yb);
-                    p1.drawLine(x, wHeight - yr -1, x, wHeight - yr);
-
-                    if ( x == wWidth/4 || x == wWidth/2 || x == 3*wWidth/4 )
-                    {
-                       p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Base), 1, Qt::SolidLine));
-                       p1.drawLine(x, wHeight, x, 0);
-                    }
-
-                    break;
-
-                  case ColorChannelsGreen:
-                    p1.setPen(QPen(Qt::blue, 1, Qt::SolidLine));
-                    p1.drawLine(x, wHeight, x, wHeight - yb);
-                    p1.setPen(QPen(Qt::red, 1, Qt::SolidLine));
-                    p1.drawLine(x, wHeight, x, wHeight - yr);
-                    p1.setPen(QPen(Qt::green, 1, Qt::SolidLine));
-                    p1.drawLine(x, wHeight, x, wHeight - yg);
-
-                    p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Background), 1, Qt::SolidLine));
-                    p1.drawLine(x, wHeight - qMax(qMax(yr, yg), yb), x, 0);
-                    p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
-                    p1.drawLine(x, wHeight - yb -1, x, wHeight - yb);
-                    p1.drawLine(x, wHeight - yr -1, x, wHeight - yr);
-                    p1.drawLine(x, wHeight - yg -1, x, wHeight - yg);
-
-                    if ( x == wWidth/4 || x == wWidth/2 || x == 3*wWidth/4 )
-                    {
-                       p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Base), 1, Qt::SolidLine));
-                       p1.drawLine(x, wHeight, x, 0);
-                    }
-
-                    break;
-
-                  default:
-                    p1.setPen(QPen(Qt::red, 1, Qt::SolidLine));
-                    p1.drawLine(x, wHeight, x, wHeight - yr);
-                    p1.setPen(QPen(Qt::green, 1, Qt::SolidLine));
-                    p1.drawLine(x, wHeight, x, wHeight - yg);
-                    p1.setPen(QPen(Qt::blue, 1, Qt::SolidLine));
-                    p1.drawLine(x, wHeight, x, wHeight - yb);
-
-                    p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Background), 1, Qt::SolidLine));
-                    p1.drawLine(x, wHeight - qMax(qMax(yr, yg), yb), x, 0);
-                    p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
-                    p1.drawLine(x, wHeight - yr -1, x, wHeight - yr);
-                    p1.drawLine(x, wHeight - yg -1, x, wHeight - yg);
-                    p1.drawLine(x, wHeight - yb -1, x, wHeight - yb);
-
-                    if ( x == wWidth/4 || x == wWidth/2 || x == 3*wWidth/4 )
-                    {
-                       p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Base), 1, Qt::SolidLine));
-                       p1.drawLine(x, wHeight, x, 0);
-                    }
-
-                    break;
-               }
-            }
-         }
-         else
-         {
-            // Which color must be used on the foreground with all colors channel mode?
-            switch (m_colorType)
-            {
-               case ColorChannelsRed:
-                 p1.setPen(QPen(Qt::green, 1, Qt::SolidLine));
-                 p1.drawLine(x, wHeight, x, wHeight - yg);
-                 p1.setPen(QPen(Qt::blue, 1, Qt::SolidLine));
-                 p1.drawLine(x, wHeight, x, wHeight - yb);
-                 p1.setPen(QPen(Qt::red, 1, Qt::SolidLine));
-                 p1.drawLine(x, wHeight, x, wHeight - yr);
-
-                 p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Background), 1, Qt::SolidLine));
-                 p1.drawLine(x, wHeight - qMax(qMax(yr, yg), yb), x, 0);
-                 p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
-                 p1.drawLine(x, wHeight - yg -1, x, wHeight - yg);
-                 p1.drawLine(x, wHeight - yb -1, x, wHeight - yb);
-                 p1.drawLine(x, wHeight - yr -1, x, wHeight - yr);
-
-                 if ( x == wWidth/4 || x == wWidth/2 || x == 3*wWidth/4 )
-                 {
-                     p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Base), 1, Qt::SolidLine));
-                     p1.drawLine(x, wHeight, x, 0);
-                 }
-
-                 break;
-
-               case ColorChannelsGreen:
-                 p1.setPen(QPen(Qt::blue, 1, Qt::SolidLine));
-                 p1.drawLine(x, wHeight, x, wHeight - yb);
-                 p1.setPen(QPen(Qt::red, 1, Qt::SolidLine));
-                 p1.drawLine(x, wHeight, x, wHeight - yr);
-                 p1.setPen(QPen(Qt::green, 1, Qt::SolidLine));
-                 p1.drawLine(x, wHeight, x, wHeight - yg);
-
-                 p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Background), 1, Qt::SolidLine));
-                 p1.drawLine(x, wHeight - qMax(qMax(yr, yg), yb), x, 0);
-                 p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
-                 p1.drawLine(x, wHeight - yb -1, x, wHeight - yb);
-                 p1.drawLine(x, wHeight - yr -1, x, wHeight - yr);
-                 p1.drawLine(x, wHeight - yg -1, x, wHeight - yg);
-
-                 if ( x == wWidth/4 || x == wWidth/2 || x == 3*wWidth/4 )
-                 {
-                     p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Base), 1, Qt::SolidLine));
-                     p1.drawLine(x, wHeight, x, 0);
-                 }
-
-                 break;
-
-               default:
-                 p1.setPen(QPen(Qt::red, 1, Qt::SolidLine));
-                 p1.drawLine(x, wHeight, x, wHeight - yr);
-                 p1.setPen(QPen(Qt::green, 1, Qt::SolidLine));
-                 p1.drawLine(x, wHeight, x, wHeight - yg);
-                 p1.setPen(QPen(Qt::blue, 1, Qt::SolidLine));
-                 p1.drawLine(x, wHeight, x, wHeight - yb);
-
-                 p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Background), 1, Qt::SolidLine));
-                 p1.drawLine(x, wHeight - qMax(qMax(yr, yg), yb), x, 0);
-                 p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
-                 p1.drawLine(x, wHeight - yr -1, x, wHeight - yr);
-                 p1.drawLine(x, wHeight - yg -1, x, wHeight - yg);
-                 p1.drawLine(x, wHeight - yb -1, x, wHeight - yb);
-
-                 if ( x == wWidth/4 || x == wWidth/2 || x == 3*wWidth/4 )
-                 {
-                     p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Base), 1, Qt::SolidLine));
-                     p1.drawLine(x, wHeight, x, 0);
-                 }
-
-                 break;
-             }
-          }
-       }
-    }
-
-    // Drawing color guide.
-
-    p1.setPen(QPen(Qt::red, 1, Qt::DotLine));
-    int guidePos;
-
-    if (d->guideVisible)
-    {
-       switch(m_channelType)
-       {
-           case RedChannel:
-             guidePos = d->colorGuide.red();
-             break;
-
-          case GreenChannel:
-             guidePos = d->colorGuide.green();
-             break;
-
-          case BlueChannel:
-             guidePos = d->colorGuide.blue();
-             break;
-
-          case LuminosityChannel:
-             guidePos = qMax(qMax(d->colorGuide.red(), d->colorGuide.green()), d->colorGuide.blue());
-             break;
-
-          case ColorChannels:
-          {
-             switch(m_channelType)
-             {
-                 case RedChannel:
-                     guidePos = d->colorGuide.red();
-                     break;
-
-                 case GreenChannel:
-                     guidePos = d->colorGuide.green();
-                     break;
-
-                 case BlueChannel:
-                     guidePos = d->colorGuide.blue();
-                     break;
-             }
-          }
-
-          default:
-             guidePos = d->colorGuide.alpha();
-             break;
-       }
-
-       if (guidePos != -1)
-       {
-          int xGuide = (guidePos * wWidth) / histogram->getHistogramSegments();
-          p1.drawLine(xGuide, 0, xGuide, wHeight);
-
-          QString string = i18n("x:%1", guidePos);
-          QFontMetrics fontMt( string );
-          QRect rect = fontMt.boundingRect(0, 0, wWidth, wHeight, 0, string);
-          p1.setPen(QPen(Qt::red, 1, Qt::SolidLine));
-          rect.moveTop(1);
-
-          if (xGuide < wWidth/2)
-          {
-             rect.moveLeft(xGuide);
-             p1.fillRect(rect, QBrush(QColor(250, 250, 255)) );
-             p1.drawRect(rect);
-             rect.moveLeft(xGuide+3);
-             p1.drawText(rect, Qt::AlignLeft, string);
-          }
-          else
-          {
-             rect.moveRight(xGuide);
-             p1.fillRect(rect, QBrush(QColor(250, 250, 255)) );
-             p1.drawRect(rect);
-             rect.moveRight(xGuide-3);
-             p1.drawText(rect, Qt::AlignRight, string);
-          }
-       }
-    }
-
+    // render statistics if needed
     if (d->statisticsVisible)
     {
        DToolTipStyleSheet cnt;
@@ -1062,33 +623,26 @@ void HistogramWidget::paintEvent(QPaintEvent*)
 
        tipText += "</table></qt>";
 
-       this->setToolTip( tipText);
+       this->setToolTip(tipText);
     }
 
-    p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
-    p1.drawRect(0, 0, width()-1, height()-1);
-    p1.end();
-
-    QPainter p2(this);
-    p2.drawPixmap(0, 0, pm);
-    p2.end();
 }
 
 void HistogramWidget::mousePressEvent ( QMouseEvent * e )
 {
     if ( d->selectMode == true && d->clearFlag == HistogramWidgetPriv::HistogramCompleted )
     {
-       if (!d->inSelected)
-       {
-          d->inSelected = true;
-          repaint();
-       }
+        if (!d->inSelected)
+        {
+            d->inSelected = true;
+            repaint();
+        }
 
-       d->xmin = ((double)e->pos().x()) / ((double)width());
-       d->xminOrg = d->xmin;
-       notifyValuesChanged();
-       //emit signalValuesChanged( (int)(d->xmin * d->range),  );
-       d->xmax = 0.0;
+        d->xmin = ((double)e->pos().x()) / ((double)width());
+        d->xminOrg = d->xmin;
+        notifyValuesChanged();
+        //emit signalValuesChanged( (int)(d->xmin * d->range),  );
+        d->xmax = 0.0;
     }
 }
 

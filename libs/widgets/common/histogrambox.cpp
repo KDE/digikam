@@ -240,12 +240,12 @@ void HistogramBox::setColorsChannel(int color)
     emit signalColorsChanged();
 }
 
-int HistogramBox::scale() const
+HistogramScale HistogramBox::scale() const
 {
-    return d->scaleBG->checkedId();
+    return static_cast<HistogramScale>(d->scaleBG->checkedId());
 }
 
-void HistogramBox::setScale(int scale)
+void HistogramBox::setScale(HistogramScale scale)
 {
     d->scaleBG->button((int)scale)->setChecked(true);
     slotScaleChanged();

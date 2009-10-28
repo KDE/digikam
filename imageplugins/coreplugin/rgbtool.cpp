@@ -289,7 +289,7 @@ void RGBTool::readSettings()
 
     d->gboxSettings->histogramBox()->setChannel(group.readEntry(d->configHistogramChannelEntry,
                         (int)LuminosityChannel));
-    d->gboxSettings->histogramBox()->setScale(group.readEntry(d->configHistogramScaleEntry,
+    d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,
                         (int)LogScaleHistogram));
 
     int r = group.readEntry(d->configRedAdjustmentEntry,   d->rInput->defaultValue());
@@ -304,7 +304,7 @@ void RGBTool::writeSettings()
     KConfigGroup group        = config->group(d->configGroupName);
 
     group.writeEntry(d->configHistogramChannelEntry, d->gboxSettings->histogramBox()->channel());
-    group.writeEntry(d->configHistogramScaleEntry,   d->gboxSettings->histogramBox()->scale());
+    group.writeEntry(d->configHistogramScaleEntry,   (int)d->gboxSettings->histogramBox()->scale());
     group.writeEntry(d->configRedAdjustmentEntry,    d->rSlider->value());
     group.writeEntry(d->configGreenAdjustmentEntry,  d->gInput->value());
     group.writeEntry(d->configBlueAdjustmentEntry,   d->bInput->value());

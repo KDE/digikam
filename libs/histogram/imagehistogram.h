@@ -61,6 +61,7 @@ public:
     bool isCalculating();
 
     /** Methods to access the histogram data.*/
+    bool   isSixteenBit();
     bool   isValid();
     double getCount(int channel, int start, int end);
     double getMean(int channel, int start, int end);

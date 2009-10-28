@@ -66,8 +66,8 @@ public:
     void setColorsChannel(int color);
     void setColorsEnabled(bool enabled);
 
-    int  scale() const;
-    void setScale(int scale);
+    HistogramScale scale() const;
+    void setScale(HistogramScale scale);
 
 Q_SIGNALS:
 

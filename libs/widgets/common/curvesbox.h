@@ -31,6 +31,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "globals.h"
 
 class KConfigGroup;
 class KUrl;
@@ -81,7 +82,7 @@ public:
     void enableCurveTypes(bool enable);
     void enableControlWidgets(bool enable);
 
-    void setScale(int type);
+    void setScale(HistogramScale type);
     void setChannel(int channel);
     void setCurveGuide(const DColor& color);
 
