@@ -1229,15 +1229,17 @@ void CameraUI::slotlastPhotoFirst()
 void CameraUI::slotThumbnail(const QString& folder, const QString& file,
                              const QImage& thumbnail)
 {
-    QImage thumb = thumbnail;
-
-    if (thumb.isNull())
+    if (thumbnail.isNull())
     {
         // This call must be run outside Camera Controller thread.
-        thumb = d->controller->mimeTypeThumbnail(file).toImage();
+        QImage thumb = d->controller->mimeTypeThumbnail(file).toImage();
+        d->view->setThumbnail(folder, file, thumb);
+    }
+    else
+    {
+        d->view->setThumbnail(folder, file, thumbnail);
     }
 
-    d->view->setThumbnail(folder, file, thumb);
     int curr = d->statusProgressBar->progressValue();
     d->statusProgressBar->setProgressValue(curr+1);
 }
