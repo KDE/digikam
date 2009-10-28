@@ -60,7 +60,7 @@ public:
 
 private:
 
-    HistogramPainter *q;
+    HistogramPainter* q;
 
 public:
 
