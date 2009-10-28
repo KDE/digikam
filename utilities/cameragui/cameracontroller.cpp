@@ -435,6 +435,11 @@ void CameraController::executeCommand(CameraCommand *cmd)
 
             foreach (const QVariant& item, list)
             {
+                if (d->canceled)
+                {
+                    list.clear();
+                    break;
+                }
                 QString folder = item.toStringList()[0];
                 QString file   = item.toStringList()[1];
 
