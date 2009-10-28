@@ -40,6 +40,9 @@ private Q_SLOTS:
     void testFileNameToken();
     void testFileNameToken_data();
 
+    void testFileExtensionToken();
+    void testFileExtensionToken_data();
+
     void testDirectoryNameToken();
     void testDirectoryNameToken_data();
 

@@ -63,6 +63,34 @@ void AdvancedRenameWidgetTest::testFileNameToken()
     QCOMPARE(parsed, result);
 }
 
+void AdvancedRenameWidgetTest::testFileExtensionToken_data()
+{
+    QTest::addColumn<QString>("parseString");
+    QTest::addColumn<QString>("filename");
+    QTest::addColumn<QString>("result");
+
+    QString filename("myfile001.jpg");
+    QString filename2("myfile001.blub.jpg");
+
+    QTest::newRow(filename.toAscii())  << QString("[ext]") << filename  << QString("jpg");
+    QTest::newRow(filename2.toAscii()) << QString("[ext]") << filename2 << QString("jpg");
+}
+
+void AdvancedRenameWidgetTest::testFileExtensionToken()
+{
+    QFETCH(QString,   parseString);
+    QFETCH(QString,   filename);
+    QFETCH(QString,   result);
+
+    DefaultParser parser;
+
+    ParseInformation info;
+    info.filePath   = filename;
+
+    QString parsed = parser.parse(parseString, info);
+    QCOMPARE(parsed, result);
+}
+
 void AdvancedRenameWidgetTest::testDirectoryNameToken_data()
 {
     QTest::addColumn<QString>("parseString");
