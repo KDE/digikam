@@ -42,20 +42,27 @@ class HistogramPainterPriv
 {
 
 public:
+
     HistogramPainterPriv(HistogramPainter *q) :
-        q(q), histogram(0), widgetToInitFrom(0), scale(LogScaleHistogram),
-                        channelType(LuminosityChannel), mainColorChannel(
-                                        ColorChannelsRed), highlightSelection(
-                                        false), selectionMin(0.0),
-                        selectionMax(0.0), showColorGuide(false),
-                        showXGrid(true)
-    {
-    }
+        q(q),
+        histogram(0),
+        widgetToInitFrom(0),
+        scale(LogScaleHistogram),
+        channelType(LuminosityChannel),
+        mainColorChannel(ColorChannelsRed),
+        highlightSelection(false),
+        selectionMin(0.0),
+        selectionMax(0.0),
+        showColorGuide(false),
+        showXGrid(true)
+        {}
 
 private:
+
     HistogramPainter *q;
 
 public:
+
     double calculateMax()
     {
         double max = 0.0;
@@ -201,7 +208,6 @@ public:
                     const int &x, const int &max, const int &startSegment,
                     const int &endSegment, const bool &highlight)
     {
-
         double value = 0.0;
         calculateSegmentMaxSingleColor(value, startSegment, endSegment);
 
@@ -434,22 +440,22 @@ public:
     }
 
 public:
-    ImageHistogram *histogram;
-    QPainter painter;
-    QWidget *widgetToInitFrom;
-    QPalette palette;
+
+    ImageHistogram*   histogram;
+    QPainter          painter;
+    QWidget*          widgetToInitFrom;
+    QPalette          palette;
 
     // rendering settings
-    HistogramScale scale;
-    ChannelType channelType;
+    HistogramScale    scale;
+    ChannelType       channelType;
     ColorChannelsType mainColorChannel;
-    bool highlightSelection;
-    double selectionMin;
-    double selectionMax;
-    bool showColorGuide;
-    bool showXGrid;
-    DColor colorGuide;
-
+    bool              highlightSelection;
+    double            selectionMin;
+    double            selectionMax;
+    bool              showColorGuide;
+    bool              showXGrid;
+    DColor            colorGuide;
 };
 
 HistogramPainter::HistogramPainter(QObject *parent) :
@@ -531,7 +537,6 @@ void HistogramPainter::initFrom(QWidget *widget)
 
 void HistogramPainter::render(QPixmap &bufferPixmap)
 {
-
     if (!d->histogram)
     {
         kError() << "Cannot render because the histogram is missing";
@@ -596,7 +601,6 @@ void HistogramPainter::render(QPixmap &bufferPixmap)
     d->painter.setPen(QPen(d->palette.color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
     d->painter.drawRect(0, 0, wWidth -1, wHeight - 1);
     d->painter.end();
-
 }
 
-}
+} // namespace Digikam

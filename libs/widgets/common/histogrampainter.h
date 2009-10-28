@@ -54,7 +54,7 @@ public:
      *
      * @param parent parent for Qt's destruction mechanism
      */
-    HistogramPainter(QObject *parent);
+    HistogramPainter(QObject* parent);
 
     /**
      * Destructor.
@@ -67,7 +67,7 @@ public:
      * @param histogram an existing pointer to a histogram to paint on next call
      *                  to render. The histogram must still exist at that call.
      */
-    void setHistogram(ImageHistogram *histogram);
+    void setHistogram(ImageHistogram* histogram);
 
     /**
      * Set the scale to paint the histogram with.
@@ -140,7 +140,7 @@ public:
      *
      * @param widget widget to initialize painting from
      */
-    void initFrom(QWidget *widget);
+    void initFrom(QWidget* widget);
 
     /**
      * Renders the given histogram on the pixmap. The whole size of the pixmap
@@ -151,13 +151,13 @@ public:
      *
      * @param paintDevice pixmap to paint the histogram on
      */
-    void render(QPixmap &paintDevice);
+    void render(QPixmap& paintDevice);
 
 private:
-    HistogramPainterPriv *d;
 
+    HistogramPainterPriv *d;
 };
 
-}
+} // namespace Digikam
 
 #endif /* HISTOGRAMPAINTER_H */
