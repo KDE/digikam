@@ -47,6 +47,8 @@ class HistogramPainterPriv;
  */
 class HistogramPainter : public QObject
 {
+    Q_OBJECT
+
 public:
 
     /**
