@@ -37,18 +37,20 @@ namespace Digikam
 {
 
 FilenameParser::FilenameParser()
-              : SubParser(i18n("File Name"), i18n("Add the current file name"), SmallIcon("folder-image"))
+              : SubParser(i18n("File"), i18n("Add file properties"), SmallIcon("folder-image"))
 {
-    addTokenDescription("[file]", i18nc("image filename", "Filename"),
+    addTokenDescription("[file]", i18nc("image filename", "Name"),
              i18n("Filename"));
 
-    setRegExp("\\[file\\]");
+    addTokenDescription("[ext]", i18nc("image extension", "Extension"),
+             i18n("File extension"));
+
+    setRegExp("\\[(file|ext)\\]");
 }
 
 void FilenameParser::parseOperation(const QString& parseString, const ParseInformation& info, ParseResults& results)
 {
     QFileInfo fi(info.filePath);
-    QString baseFileName = fi.baseName();
 
     QRegExp reg = regExp();
     reg.setCaseSensitivity(Qt::CaseInsensitive);
@@ -58,7 +60,14 @@ void FilenameParser::parseOperation(const QString& parseString, const ParseInfor
     QString tmp;
     PARSE_LOOP_START(parseString, reg)
     {
-        tmp = baseFileName;
+        if (reg.cap(1) == QString("file"))
+        {
+            tmp = fi.baseName();
+        }
+        else        // extension
+        {
+            tmp = fi.suffix();
+        }
     }
     PARSE_LOOP_END(parseString, reg, tmp, results)
 }
