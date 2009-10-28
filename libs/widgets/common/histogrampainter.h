@@ -155,7 +155,7 @@ public:
 
 private:
 
-    HistogramPainterPriv *d;
+    HistogramPainterPriv* const d;
 };
 
 } // namespace Digikam
