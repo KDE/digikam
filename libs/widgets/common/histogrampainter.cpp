@@ -111,7 +111,7 @@ public:
 
     }
 
-    void calculateSegmentMaxSingleColor(double &maxValue, const int &startSegment, const int &endSegment)
+    void calculateSegmentMaxSingleColor(double& maxValue, const int& startSegment, const int& endSegment)
     {
 
         // sanity checks
@@ -126,8 +126,7 @@ public:
                 // these cases are known to work with this function
                 break;
             default:
-                kError() << "Untreated channel type " << channelType
-                                << ". Using luminosity as default";
+                kError() << "Untreated channel type " << channelType << ". Using luminosity as default";
                 channel = LuminosityChannel;
         }
 
@@ -145,13 +144,14 @@ public:
 
     }
 
-    void calculateSegmentMaxMultiColor(double &maxValueR, double &maxValueG,
-                    double &maxValueB, const int &startSegment,
-                    const int &endSegment)
+    void calculateSegmentMaxMultiColor(double& maxValueR, double& maxValueG,
+                                       double& maxValueB, const int& startSegment,
+                                       const int& endSegment)
     {
 
         // sanity checks
-        if (channelType != ColorChannels) {
+        if (channelType != ColorChannels)
+        {
             kError() << "This function can only be used for color channels "
                      << "and not for type " << channelType
                      << ". Using color channels as fallback.";
@@ -177,37 +177,41 @@ public:
 
     }
 
-    inline int scaleToPixmapHeight(const double &value,
-                    const int &pixmapHeight, const int &max)
+    inline int scaleToPixmapHeight(const double& value, const int& pixmapHeight, const double& max)
     {
         switch (scale)
         {
             case LinScaleHistogram:
+            {
                 return (int) ((pixmapHeight * value) / max);
+            }
             case LogScaleHistogram:
+            {
                 if (value <= 0.0)
                 {
-                    kWarning() << "Scaling value < 0: " << value
-                                    << ". Falling back to 1.0";
+                    kWarning() << "Scaling value < 0: " << value << ". Falling back to 1.0";
                     return (int) ((pixmapHeight * log(1.0)) / max);
                 }
                 return (int) ((pixmapHeight * log(value)) / max);
+            }
             default:
+            {
                 kError() << "Unknown scale type " << scale;
                 return 0;
+            }
         }
     }
 
-    inline void calculateSegementsForIndex(const int &x, const int &drawWidth,
-                    int &startSegment, int &endSegment)
+    inline void calculateSegementsForIndex(const int& x, const int& drawWidth,
+                                           int& startSegment, int& endSegment)
     {
         startSegment = (x       * histogram->getHistogramSegments()) / drawWidth;
         endSegment   = ((x + 1) * histogram->getHistogramSegments()) / drawWidth;
     }
 
-    void renderSingleColorLine(QPixmap &bufferPixmap, QPainter &p1,
-                    const int &x, const int &max, const int &startSegment,
-                    const int &endSegment, const bool &highlight)
+    void renderSingleColorLine(QPixmap& bufferPixmap, QPainter& p1,
+                               const int& x, const int& max, const int& startSegment,
+                               const int& endSegment, const bool& highlight)
     {
         double value = 0.0;
         calculateSegmentMaxSingleColor(value, startSegment, endSegment);
@@ -228,19 +232,16 @@ public:
             p1.setPen(QPen(palette.color(QPalette::Active, QPalette::Background), 1, Qt::SolidLine));
             p1.drawLine(x, bufferPixmap.height() - lineHeight, x, 0);
         }
-
     }
 
-    void renderMultiColorLine(QPixmap &bufferPixmap, QPainter &p1,
-                    const int &x, const int &max, const int &startSegment,
-                    const int &endSegment, const bool &highlight)
+    void renderMultiColorLine(QPixmap& bufferPixmap, QPainter& p1,
+                              const int& x, const double& max, const int& startSegment,
+                              const int& endSegment, const bool& highlight)
     {
-
         double valueR = 0.0;
         double valueG = 0.0;
         double valueB = 0.0;
-        calculateSegmentMaxMultiColor(valueR, valueG, valueB, startSegment,
-                        endSegment);
+        calculateSegmentMaxMultiColor(valueR, valueG, valueB, startSegment, endSegment);
 
         int lineHeightR = scaleToPixmapHeight(valueR, bufferPixmap.height(), max);
         int lineHeightG = scaleToPixmapHeight(valueG, bufferPixmap.height(), max);
@@ -325,27 +326,22 @@ public:
                 break;
             }
         }
-
-
     }
 
-    void renderXGrid(QPixmap &bufferPixmap, QPainter &p1)
+    void renderXGrid(QPixmap& bufferPixmap, QPainter& p1)
     {
-
         for (int x = 0; x < bufferPixmap.width(); x++)
         {
-            if ((x == bufferPixmap.width() / 4) || (x == bufferPixmap.width()
-                            / 2) || (x == 3 * bufferPixmap.width() / 4))
+            if ((x == bufferPixmap.width() / 4) || (x == bufferPixmap.width() / 2) || 
+                (x == 3 * bufferPixmap.width() / 4))
             {
-                p1.setPen(QPen(palette.color(QPalette::Active, QPalette::Base),
-                                1, Qt::SolidLine));
+                p1.setPen(QPen(palette.color(QPalette::Active, QPalette::Base), 1, Qt::SolidLine));
                 p1.drawLine(x, bufferPixmap.height(), x, 0);
             }
         }
-
     }
 
-    void renderColorGuide(QPixmap &bufferPixmap, QPainter &p1)
+    void renderColorGuide(QPixmap& bufferPixmap, QPainter& p1)
     {
 
         if (histogram->isSixteenBit() && !colorGuide.sixteenBit())
@@ -417,7 +413,7 @@ public:
 
             QString string = i18n("x:%1", guidePos);
             QFontMetrics fontMt( string );
-            QRect rect = fontMt.boundingRect(0, 0, bufferPixmap.width(), bufferPixmap.height(), 0, string);
+            QRect rect     = fontMt.boundingRect(0, 0, bufferPixmap.width(), bufferPixmap.height(), 0, string);
             p1.setPen(QPen(Qt::red, 1, Qt::SolidLine));
             rect.moveTop(1);
 
@@ -496,23 +492,19 @@ void HistogramPainter::setHighlightSelection(bool highlightSelection)
 
 void HistogramPainter::setSelection(double selectionMin, double selectionMax)
 {
-
-    if (selectionMin < 0.0 || selectionMin > 1.0)
+   if (selectionMin < 0.0 || selectionMin > 1.0)
     {
-        kWarning() << "selectionMin out of range: " << selectionMin
-                        << ". Clamping value";
+        kWarning() << "selectionMin out of range: " << selectionMin << ". Clamping value";
         selectionMin = qMax(0.0, qMin(1.0, selectionMin));
     }
     if (selectionMax < 0.0 || selectionMax > 1.0)
     {
-        kWarning() << "selectionMax out of range: " << selectionMax
-                        << ". Clamping value";
+        kWarning() << "selectionMax out of range: " << selectionMax << ". Clamping value";
         selectionMax = qMax(0.0, qMin(1.0, selectionMax));
     }
 
     d->selectionMin = selectionMin;
     d->selectionMax = selectionMax;
-
 }
 
 void HistogramPainter::setRenderXGrid(bool renderXGrid)
@@ -522,7 +514,7 @@ void HistogramPainter::setRenderXGrid(bool renderXGrid)
 
 void HistogramPainter::enableHistogramGuideByColor(const DColor& color)
 {
-    d->colorGuide = color;
+    d->colorGuide     = color;
     d->showColorGuide = true;
 }
 
@@ -546,8 +538,7 @@ void HistogramPainter::render(QPixmap& bufferPixmap)
 
     int wWidth  = bufferPixmap.width();
     int wHeight = bufferPixmap.height();
-
-    double max = d->calculateMax();
+    double max  = d->calculateMax();
 
     d->painter.begin(&bufferPixmap);
     if (d->widgetToInitFrom)
@@ -565,25 +556,22 @@ void HistogramPainter::render(QPixmap& bufferPixmap)
 
         // calculate histogram segments included in this single pixel line
         int startSegment = 0;
-        int endSegment = 0;
-        d->calculateSegementsForIndex(x, bufferPixmap.width(), startSegment,
-                        endSegment);
+        int endSegment   = 0;
+        d->calculateSegementsForIndex(x, bufferPixmap.width(), startSegment, endSegment);
 
         // decide whether the current line shall be highlighted as being in the selection
         const bool highlight = d->highlightSelection &&
-                        (x >= (int) (d->selectionMin * bufferPixmap.width())) &&
-                        (x <= (int) (d->selectionMax * bufferPixmap.width()));
+                               (x >= (int) (d->selectionMin * bufferPixmap.width())) &&
+                               (x <= (int) (d->selectionMax * bufferPixmap.width()));
 
         // decide how to render the line
         if (d->channelType == ColorChannels)
         {
-            d->renderMultiColorLine(bufferPixmap, d->painter, x, max,
-                            startSegment, endSegment, highlight);
+            d->renderMultiColorLine(bufferPixmap, d->painter, x, max, startSegment, endSegment, highlight);
         }
         else
         {
-            d->renderSingleColorLine(bufferPixmap, d->painter, x, max,
-                            startSegment, endSegment, highlight);
+            d->renderSingleColorLine(bufferPixmap, d->painter, x, max, startSegment, endSegment, highlight);
         }
 
     }
