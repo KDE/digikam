@@ -169,7 +169,7 @@ void LocalContrast::progressCallback(int progress)
     if (progress%5 == 0)
     {
         postProgress(progress);
-//        kDebug(imagePluginsAreaCode) << "ToneMapping progress: " << progress;
+//        kDebug() << "ToneMapping progress: " << progress;
     }
 }
 

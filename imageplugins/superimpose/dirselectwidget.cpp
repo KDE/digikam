@@ -111,7 +111,7 @@ void DirSelectWidget::load()
 
     if ( !branch )
     {
-        kDebug(imagePluginsAreaCode) << "Unable to open " << d->m_handled;
+        kDebug() << "Unable to open " << d->m_handled;
     }
     else
     {

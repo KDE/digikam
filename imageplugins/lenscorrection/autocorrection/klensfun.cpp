@@ -287,14 +287,14 @@ void KLFDeviceSelector::findFromMetadata()
         m_lens->setEnabled(true);
     }
 
-    kDebug(imagePluginsAreaCode) << "Search for Lens: " << make << " :: " << lens
+    kDebug() << "Search for Lens: " << make << " :: " << lens
              << "< and found: >" << m_lens->combo()->itemText(0) + '<';
 
     QString temp = photoInfo.focalLength;
     if (!temp.isEmpty())
     {
         double focal = temp.mid(0, temp.length() -3).toDouble(); // HACK: strip the " mm" at the end ...
-        kDebug(imagePluginsAreaCode) << "Focal Length: " << focal;
+        kDebug() << "Focal Length: " << focal;
         m_focal->setValue(focal);
         m_focal->setEnabled(false);
     }
@@ -303,7 +303,7 @@ void KLFDeviceSelector::findFromMetadata()
     if (!temp.isEmpty())
     {
         double aperture = temp.mid(1).toDouble();
-        kDebug(imagePluginsAreaCode) << "Aperture: " << aperture;
+        kDebug() << "Aperture: " << aperture;
         m_aperture->setValue(aperture);
         m_aperture->setEnabled(false);
     }
@@ -329,7 +329,7 @@ void KLFDeviceSelector::findFromMetadata()
     if (!temp.isEmpty())
     {
         double distance = temp.toDouble();
-        kDebug(imagePluginsAreaCode) << "Subject Distance: " << distance;
+        kDebug() << "Subject Distance: " << distance;
         m_distance->setValue(distance);
         m_distance->setEnabled(false);
     }
@@ -418,7 +418,7 @@ void KLFDeviceSelector::slotUpdateLensCombo()
     DevicePtr dev = v.value<KLFDeviceSelector::DevicePtr>();
     if (!dev)
     {
-        kDebug(imagePluginsAreaCode) << "slotUpdateLensCombo() => Device is null!";
+        kDebug() << "slotUpdateLensCombo() => Device is null!";
         return;
     }
 
@@ -507,7 +507,7 @@ void KLensFunFilter::filterImage()
 
     if (!m_lfModifier)
     {
-        kError(imagePluginsAreaCode) << "ERROR: cannot initialize LensFun Modifier.";
+        kError() << "ERROR: cannot initialize LensFun Modifier.";
         return;
     }
 
@@ -517,7 +517,7 @@ void KLensFunFilter::filterImage()
                 ( m_klf->m_filterVig || m_klf->m_filterCCI )   ? 1 : 0 +
                 ( m_klf->m_filterDist || m_klf->m_filterGeom ) ? 1 : 0;
 
-    kDebug(imagePluginsAreaCode) << "LensFun Modifier Flags: " << modflags << "  Steps:" << steps;
+    kDebug() << "LensFun Modifier Flags: " << modflags << "  Steps:" << steps;
 
     if ( steps < 1 )
        return;
@@ -558,7 +558,7 @@ void KLensFunFilter::filterImage()
                 postProgress(progress/steps);
         }
 
-        kDebug(imagePluginsAreaCode) << "Applying TCA correction... (loop: " << loop << ")";
+        kDebug() << "Applying TCA correction... (loop: " << loop << ")";
     }
     else
     {
@@ -593,7 +593,7 @@ void KLensFunFilter::filterImage()
                 postProgress(progress/steps + offset);
         }
 
-        kDebug(imagePluginsAreaCode) << "Applying Color Correction: Vignetting and CCI. (loop: " << loop << ")";
+        kDebug() << "Applying Color Correction: Vignetting and CCI. (loop: " << loop << ")";
     }
 
     // Stage 3: Distortion and Geometry
@@ -628,7 +628,7 @@ void KLensFunFilter::filterImage()
 
         /*qDebug (" for %f %f %i %i", tempImage.height(), tempImage.width(),
                                       tempImage.height(), tempImage.width());*/
-        kDebug(imagePluginsAreaCode) << "Applying Distortion and Geometry Correction. (loop: " << loop << ")";
+        kDebug() << "Applying Distortion and Geometry Correction. (loop: " << loop << ")";
 
         m_destImage = tempImage;
     }

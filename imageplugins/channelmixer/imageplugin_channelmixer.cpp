@@ -57,7 +57,7 @@ ImagePlugin_ChannelMixer::ImagePlugin_ChannelMixer(QObject *parent, const QVaria
 
     setXMLFile("digikamimageplugin_channelmixer_ui.rc");
 
-    kDebug(imagePluginsAreaCode) << "ImagePlugin_ChannelMixer plugin loaded";
+    kDebug() << "ImagePlugin_ChannelMixer plugin loaded";
 }
 
 ImagePlugin_ChannelMixer::~ImagePlugin_ChannelMixer()

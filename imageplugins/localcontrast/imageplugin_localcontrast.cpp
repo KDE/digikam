@@ -55,7 +55,7 @@ ImagePlugin_LocalContrast::ImagePlugin_LocalContrast(QObject *parent, const QVar
 
     setXMLFile("digikamimageplugin_localcontrast_ui.rc");
 
-    kDebug(imagePluginsAreaCode) << "ImagePlugin_LocalContrast plugin loaded";
+    kDebug() << "ImagePlugin_LocalContrast plugin loaded";
 }
 
 ImagePlugin_LocalContrast::~ImagePlugin_LocalContrast()

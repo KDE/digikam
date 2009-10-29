@@ -25,6 +25,14 @@ SET(DIGIKAM_RELEASE_DATE "2009-10-xx")
 SET(DIGIKAM_SUFFIX_VERSION "-beta6")
 
 # ==================================================================================================
+# debug area codes
+SET(AREA_CODE_GENERAL       "50003")
+SET(AREA_CODE_KIOSLAVES     "50004")
+SET(AREA_CODE_SHOWFOTO      "50005")
+SET(AREA_CODE_IMAGEPLUGINS  "50006")
+ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${AREA_CODE_GENERAL})
+
+# ==================================================================================================
 # Set env. variables accordingly.
 
 SET(DIGIKAM_VERSION_SHORT
@@ -412,9 +420,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     IF(MARBLEWIDGET_FOUND)
         INCLUDE_DIRECTORIES(${LIBMARBLEWIDGET_INCLUDE_DIR})
     ENDIF(MARBLEWIDGET_FOUND)
-    
-    #default debug area code
-    ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=50003)
 
     # ==================================================================================================
     # LibLqr-1 library rules

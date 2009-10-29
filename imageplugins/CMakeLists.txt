@@ -1,22 +1,24 @@
+REMOVE_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${AREA_CODE_GENERAL})
+ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${AREA_CODE_IMAGEPLUGINS})
 
 INCLUDE_DIRECTORIES(../utilities/imageeditor/editor
                     ../utilities/imageeditor/canvas
-                    ../libs/histogram 
+                    ../libs/histogram
                     ../libs/levels
-                    ../libs/curves 
+                    ../libs/curves
                     ../libs/greycstoration
                     ../libs/whitebalance
                     ../libs/widgets/common
                     ../libs/widgets/iccprofiles
                     ../libs/widgets/imageplugins
-                    ../libs/dialogs 
-                    ../libs/dimg 
-                    ../libs/dimg/filters 
-                    ../libs/dimg/loaders 
+                    ../libs/dialogs
+                    ../libs/dimg
+                    ../libs/dimg/filters
+                    ../libs/dimg/loaders
                     ../libs/threadimageio
-                    ../libs/dmetadata 
-                    ../libs/themeengine 
-                    ../digikam 
+                    ../libs/dmetadata
+                    ../libs/themeengine
+                    ../digikam
                     ../
                     ${KDCRAW_INCLUDE_DIR}
                    )

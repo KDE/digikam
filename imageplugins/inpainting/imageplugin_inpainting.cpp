@@ -62,7 +62,7 @@ ImagePlugin_InPainting::ImagePlugin_InPainting(QObject *parent, const QVariantLi
 
     setXMLFile( "digikamimageplugin_inpainting_ui.rc" );
 
-    kDebug(imagePluginsAreaCode) << "ImagePlugin_InPainting plugin loaded";
+    kDebug() << "ImagePlugin_InPainting plugin loaded";
 }
 
 ImagePlugin_InPainting::~ImagePlugin_InPainting()

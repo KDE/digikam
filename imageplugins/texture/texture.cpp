@@ -73,7 +73,7 @@ void Texture::filterImage(void)
     int bytesDepth  = m_orgImage.bytesDepth();
     bool sixteenBit = m_orgImage.sixteenBit();
 
-    kDebug(imagePluginsAreaCode) << "Texture File: " << m_texturePath;
+    kDebug() << "Texture File: " << m_texturePath;
     Digikam::DImg texture(m_texturePath);
     if ( texture.isNull() ) return;
 

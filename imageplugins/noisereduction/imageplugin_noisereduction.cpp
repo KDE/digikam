@@ -56,7 +56,7 @@ ImagePlugin_NoiseReduction::ImagePlugin_NoiseReduction(QObject *parent, const QV
 
     setXMLFile("digikamimageplugin_noisereduction_ui.rc");
 
-    kDebug(imagePluginsAreaCode) << "ImagePlugin_NoiseReduction plugin loaded";
+    kDebug() << "ImagePlugin_NoiseReduction plugin loaded";
 }
 
 ImagePlugin_NoiseReduction::~ImagePlugin_NoiseReduction()

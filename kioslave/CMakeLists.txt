@@ -1,7 +1,9 @@
+REMOVE_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${AREA_CODE_GENERAL})
+ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${AREA_CODE_KIOSLAVES})
 
 INCLUDE_DIRECTORIES(../digikam
-                    ../libs/dmetadata 
-                    ../libs/dimg 
+                    ../libs/dmetadata
+                    ../libs/dimg
                     ../libs/database
                     ../libs/database/haar
                     ../libs/database/sqlite2

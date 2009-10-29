@@ -753,7 +753,7 @@ void ChannelMixerTool::slotSaveAsSettings()
               str = "BLUE";
               break;
            default:
-              kWarning(imagePluginsAreaCode) <<  "Unknown Color channel gains";
+              kWarning() <<  "Unknown Color channel gains";
               break;
         }
 

@@ -57,7 +57,7 @@ ImagePlugin_FilmGrain::ImagePlugin_FilmGrain(QObject *parent, const QVariantList
 
     setXMLFile( "digikamimageplugin_filmgrain_ui.rc" );
 
-    kDebug(imagePluginsAreaCode) << "ImagePlugin_FilmGrain plugin loaded";
+    kDebug() << "ImagePlugin_FilmGrain plugin loaded";
 }
 
 ImagePlugin_FilmGrain::~ImagePlugin_FilmGrain()

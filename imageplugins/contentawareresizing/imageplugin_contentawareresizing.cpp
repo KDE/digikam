@@ -54,7 +54,7 @@ ImagePlugin_ContentAwareResizing::ImagePlugin_ContentAwareResizing(QObject *pare
     actionCollection()->addAction("imageplugin_contentawareresizing", m_contentAwareResizingAction);
     setXMLFile("digikamimageplugin_contentawareresizing_ui.rc");
 
-    kDebug(imagePluginsAreaCode) << "ImagePlugin_ContentAwareResizing plugin loaded";
+    kDebug() << "ImagePlugin_ContentAwareResizing plugin loaded";
 }
 
 ImagePlugin_ContentAwareResizing::~ImagePlugin_ContentAwareResizing()

@@ -57,7 +57,7 @@ ImagePlugin_AdjustCurves::ImagePlugin_AdjustCurves(QObject *parent, const QList<
     m_curvesAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_M));
     setXMLFile("digikamimageplugin_adjustcurves_ui.rc");
 
-    kDebug(imagePluginsAreaCode) << "ImagePlugin_AdjustCurves plugin loaded";
+    kDebug() << "ImagePlugin_AdjustCurves plugin loaded";
 }
 
 ImagePlugin_AdjustCurves::~ImagePlugin_AdjustCurves()

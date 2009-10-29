@@ -59,7 +59,7 @@ ImagePlugin_DistortionFX::ImagePlugin_DistortionFX(QObject *parent, const QVaria
 
     setXMLFile( "digikamimageplugin_distortionfx_ui.rc" );
 
-    kDebug(imagePluginsAreaCode) << "ImagePlugin_DistortionFX plugin loaded";
+    kDebug() << "ImagePlugin_DistortionFX plugin loaded";
 }
 
 ImagePlugin_DistortionFX::~ImagePlugin_DistortionFX()

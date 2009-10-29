@@ -56,7 +56,7 @@ ImagePlugin_BlurFX::ImagePlugin_BlurFX(QObject *parent, const QVariantList &)
 
     setXMLFile( "digikamimageplugin_blurfx_ui.rc" );
 
-    kDebug(imagePluginsAreaCode) << "ImagePlugin_BlurFX plugin loaded";
+    kDebug() << "ImagePlugin_BlurFX plugin loaded";
 }
 
 ImagePlugin_BlurFX::~ImagePlugin_BlurFX()

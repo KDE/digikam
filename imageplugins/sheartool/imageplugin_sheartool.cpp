@@ -56,7 +56,7 @@ ImagePlugin_ShearTool::ImagePlugin_ShearTool(QObject *parent, const QVariantList
 
     setXMLFile("digikamimageplugin_sheartool_ui.rc");
 
-    kDebug(imagePluginsAreaCode) << "ImagePlugin_ShearTool plugin loaded";
+    kDebug() << "ImagePlugin_ShearTool plugin loaded";
 }
 
 ImagePlugin_ShearTool::~ImagePlugin_ShearTool()
