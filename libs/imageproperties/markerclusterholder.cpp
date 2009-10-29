@@ -61,6 +61,8 @@ public:
     int lastZoom;
     qreal lastCenterLatitude;
     qreal lastCenterLongitude;
+    Marble::Projection lastMapProjection;
+    QSize lastWidgetSize;
     int markerCountDirty;
     bool autoRedrawOnMarkerAdd;
     bool clusterStateDirty;
@@ -89,6 +91,8 @@ public:
           lastZoom(-1),
           lastCenterLatitude(marbleWidget->centerLatitude()),
           lastCenterLongitude(marbleWidget->centerLongitude()),
+          lastMapProjection(marbleWidget->projection()),
+          lastWidgetSize(marbleWidget->size()),
           markerCountDirty(true),
           autoRedrawOnMarkerAdd(true),
           clusterStateDirty(false),
@@ -536,11 +540,16 @@ inline int QPointSquareDistance(const QPoint& a, const QPoint& b)
 void MarkerClusterHolder::reorderClustersPixelGrid()
 {
     // check whether the parameters of the map changed:
-    const int newZoom              = d->marbleWidget->zoom();
-    const qreal newCenterLatitude  = d->marbleWidget->centerLatitude();
-    const qreal newCenterLongitude = d->marbleWidget->centerLongitude();
+    const int newZoom                         = d->marbleWidget->zoom();
+    const qreal newCenterLatitude             = d->marbleWidget->centerLatitude();
+    const qreal newCenterLongitude            = d->marbleWidget->centerLongitude();
+    const Marble::Projection newMapProjection = d->marbleWidget->projection();
+    const QSize newWidgetSize                 = d->marbleWidget->size();
 
-    if (! ((newZoom!=d->lastZoom)||(newCenterLatitude!=d->lastCenterLatitude)||(newCenterLongitude!=d->lastCenterLongitude)||d->markerCountDirty) )
+    if (! ( (newZoom!=d->lastZoom) || (newCenterLatitude!=d->lastCenterLatitude)
+        || (newCenterLongitude!=d->lastCenterLongitude) ||
+        (newMapProjection!=d->lastMapProjection) ||
+        (newWidgetSize!=d->lastWidgetSize) || d->markerCountDirty ) )
     {
         // no big changes, check if highlighting has changed:
         updateClusterStates();
