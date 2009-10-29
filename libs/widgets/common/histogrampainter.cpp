@@ -81,8 +81,7 @@ public:
                                 histogram->getMaximum(GreenChannel)),
                                 histogram->getMaximum(BlueChannel));
             default:
-                kError() << "Untreated channel type " << channelType
-                                << ". Using luminosity as default.";
+                kError() << "Untreated channel type " << channelType << ". Using luminosity as default.";
                 max = histogram->getMaximum(LuminosityChannel);
                 break;
         }
@@ -102,8 +101,7 @@ public:
                 }
                 break;
             default:
-                kError() << "Untreated histogram scale " << scale
-                                << ". Using linear as default.";
+                kError() << "Untreated histogram scale " << scale << ". Using linear as default.";
                 break;
         }
 
@@ -165,12 +163,9 @@ public:
         int currentSegment = startSegment;
         do
         {
-            maxValueR = qMax(maxValueR, histogram->getValue(RedChannel,
-                            currentSegment));
-            maxValueG = qMax(maxValueG, histogram->getValue(GreenChannel,
-                            currentSegment));
-            maxValueB = qMax(maxValueB, histogram->getValue(BlueChannel,
-                            currentSegment));
+            maxValueR = qMax(maxValueR, histogram->getValue(RedChannel, currentSegment));
+            maxValueG = qMax(maxValueG, histogram->getValue(GreenChannel, currentSegment));
+            maxValueB = qMax(maxValueB, histogram->getValue(BlueChannel, currentSegment));
             ++currentSegment;
         }
         while (currentSegment < endSegment);
@@ -210,7 +205,7 @@ public:
     }
 
     void renderSingleColorLine(QPixmap& bufferPixmap, QPainter& p1,
-                               const int& x, const int& max, const int& startSegment,
+                               const int& x, const double& max, const int& startSegment,
                                const int& endSegment, const bool& highlight)
     {
         double value = 0.0;
@@ -553,7 +548,6 @@ void HistogramPainter::render(QPixmap& bufferPixmap)
     // draw histogram pixel line by pixel line (on x axis)
     for (int x = 0 ; x < wWidth ; ++x)
     {
-
         // calculate histogram segments included in this single pixel line
         int startSegment = 0;
         int endSegment   = 0;
@@ -573,7 +567,6 @@ void HistogramPainter::render(QPixmap& bufferPixmap)
         {
             d->renderSingleColorLine(bufferPixmap, d->painter, x, max, startSegment, endSegment, highlight);
         }
-
     }
 
     if (d->showXGrid)
