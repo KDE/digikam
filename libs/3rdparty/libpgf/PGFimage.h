@@ -86,8 +86,8 @@ public:
 	void ReadPreview() THROW_										{ Read(Levels() - 1); }
 
 	//////////////////////////////////////////////////////////////////////
-	// After you've written a PGF image, you can call this method followed by GetBitmap/GetYUV
-	// to get a quick reconstruction (coded -> decoded image).
+	/// After you've written a PGF image, you can call this method followed by GetBitmap/GetYUV
+	/// to get a quick reconstruction (coded -> decoded image).
 	void Reconstruct() THROW_;
 
 	//////////////////////////////////////////////////////////////////////
@@ -340,14 +340,14 @@ public:
 	//////////////////////////////////////////////////////////////////////
 	/// Return image width of channel 0 at given level in pixels.
 	/// The returned width is independent of any Read-operations and ROI.
-	/// @param c A level
+	/// @param level A level
 	/// @return Image level width in pixels
 	UINT32 Width(int level = 0) const								{ ASSERT(level >= 0); return LevelWidth(m_header.width, level); }
 
 	//////////////////////////////////////////////////////////////////////
 	/// Return image height of channel 0 at given level in pixels.
 	/// The returned height is independent of any Read-operations and ROI.
-	/// @param c A level
+	/// @param level A level
 	/// @return Image level height in pixels
 	UINT32 Height(int level = 0) const								{ ASSERT(level >= 0); return LevelHeight(m_header.height, level); }
 
@@ -414,7 +414,7 @@ public:
 
 	//////////////////////////////////////////////////////////////////////
 	/// Compute and return image height at given level.
-	/// @param width Original image height (at level 0)
+	/// @param height Original image height (at level 0)
 	/// @param level An image level
 	/// @return Image level height in pixels
 	static UINT32 LevelHeight(UINT32 height, int level)				{ ASSERT(level >= 0); UINT32 h = (height >> level); return ((h << level) == height) ? h : h + 1; }

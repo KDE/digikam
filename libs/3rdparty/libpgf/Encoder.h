@@ -54,16 +54,6 @@ public:
 	~CEncoder();
 
 	/////////////////////////////////////////////////////////////////////
-	/// Encoding of HL and LH Band (interleaved) using partitioning scheme,
-	/// Partitioning scheme: partitions the plane in squares of side length InterBlockSize,
-	/// Write wavelet coefficients into buffer.
-	/// It might throw an IOException.
-	/// @param wtChannel A wavelet transform channel containing the HL and HL band
-	/// @param level Wavelet transform level
-	/// @param quant A quantization value (linear scalar quantization)
-	///void EncodeInterleaved(CWaveletTransform* wtChannel, int level, int quant) THROW_;
-
-	/////////////////////////////////////////////////////////////////////
 	/// Pad buffer with zeros, encode buffer, write levelLength into header
 	/// Return number of bytes written into stream
 	/// It might throw an IOException.
@@ -91,7 +81,7 @@ public:
 	/// Write a single value into subband at given position.
 	/// It might throw an IOException.
 	/// @param band A subband
-	/// @param bandPosition A valid position in subband band
+	/// @param bandPos A valid position in subband band
 	void WriteValue(CSubband* band, int bandPos) THROW_;
 
 #ifdef __PGFROISUPPORT__

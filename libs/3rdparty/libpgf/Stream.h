@@ -27,7 +27,7 @@
 #include "PGFtypes.h"
 
 /////////////////////////////////////////////////////////////////////
-// Abstract stream base class.
+/// Abstract stream base class.
 /// @author C. Stamm
 class CPGFStream {
 public:
@@ -69,34 +69,44 @@ public:
 };
 
 /////////////////////////////////////////////////////////////////////
-// A PGF stream subclass for external storage files.
+/// A PGF stream subclass for external storage files.
+/// @author C. Stamm
 class CPGFFileStream : public CPGFStream {
 protected:
 	HANDLE m_hFile;
 
 public:
 	CPGFFileStream() : m_hFile(0) {}
+	/// Constructor
+	/// @param hFile File handle
 	CPGFFileStream(HANDLE hFile) : m_hFile(hFile) {}
-	virtual ~CPGFFileStream() { m_hFile = 0; }
+	/// @return File handle
+	HANDLE GetHandle() { return m_hFile; }
 
+	virtual ~CPGFFileStream() { m_hFile = 0; }
 	virtual void Write(int *count, void *buffer) THROW_; // throws IOException 
 	virtual void Read(int *count, void *buffer) THROW_; // throws IOException 
 	virtual void SetPos(short posMode, INT64 posOff) THROW_; // throws IOException
 	virtual UINT64 GetPos() const THROW_; // throws IOException
 	virtual bool   IsValid() const	{ return m_hFile != 0; }
-	HANDLE GetHandle() { return m_hFile; }
 };
 
 /////////////////////////////////////////////////////////////////////
-// A PGF stream subclass for internal memory.
+/// A PGF stream subclass for internal memory.
+/// @author C. Stamm
 class CPGFMemoryStream : public CPGFStream {
 protected:
-	UINT8 *m_buffer, *m_pos; 
+	UINT8 *m_buffer, *m_pos;
 	size_t m_size;
 	bool   m_allocated;
 
 public:
+	/// Constructor
+	/// @param size Size of new allocated memory buffer
 	CPGFMemoryStream(size_t size) THROW_;
+	/// Constructor. Use already allocated memory of given size
+	/// @param pBuffer Memory location
+	/// @param size Memory size
 	CPGFMemoryStream(UINT8 *pBuffer, size_t size) THROW_;
 	virtual ~CPGFMemoryStream() { 
 		m_pos = 0; 
@@ -111,13 +121,18 @@ public:
 	virtual void SetPos(short posMode, INT64 posOff) THROW_; // throws IOException
 	virtual UINT64 GetPos() const THROW_; // throws IOException
 	virtual bool   IsValid() const	{ return m_buffer != 0; }
+
+	/// @return Memory size
 	size_t GetSize() const			{ return m_size; }
+	/// @return Memory buffer 
 	const UINT8* GetBuffer() const	{ return m_buffer; }
+	/// @return Memory buffer
 	UINT8* GetBuffer()				{ return m_buffer; }
 };
 
 /////////////////////////////////////////////////////////////////////
-// A PGF stream subclass for internal memory files. Usable only with MFC.
+/// A PGF stream subclass for internal memory files. Usable only with MFC.
+/// @author C. Stamm
 #ifdef _MFC_VER
 class CPGFMemFileStream : public CPGFStream {
 protected:
@@ -134,7 +149,8 @@ public:
 #endif
 
 /////////////////////////////////////////////////////////////////////
-// A PGF stream subclass for IStream. Usable only with COM.
+/// A PGF stream subclass for IStream. Usable only with COM.
+/// @author C. Stamm
 #if defined(WIN32) || defined(WINCE)
 class CPGFIStream : public CPGFStream {
 protected:

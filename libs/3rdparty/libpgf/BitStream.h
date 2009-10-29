@@ -214,26 +214,6 @@ inline UINT32 SeekBitRange(UINT32* stream, UINT32 pos, UINT32 len) {
 		}
 	}
 
-	/* old version
-	UINT32 bitPos  = pos%WordWidth;
-
-	while (((stream[wordPos] & testMask) == 0) && (count < len)) {
-		ASSERT(bitPos < WordWidth);
-		count++; 
-		bitPos++;
-		if (bitPos < WordWidth) {
-			testMask <<= 1;
-		} else {
-			wordPos++; bitPos = 0; testMask = 1;
-
-			// fast steps if all bits in a word are zero
-			while ((count + WordWidth <= len) && (stream[wordPos] == 0)) {
-				wordPos++; 
-				count += WordWidth;
-			}
-		}
-	}
-	*/
 	return count;
 }
 

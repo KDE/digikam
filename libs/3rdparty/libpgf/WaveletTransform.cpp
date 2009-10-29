@@ -162,14 +162,14 @@ void CWaveletTransform::ForwardTransform(int level) {
 // low pass filter at odd positions: 1/8(-1, 2, 6, 2, -1)
 void CWaveletTransform::ForwardRow(DataT* src, UINT32 width) {
 	if (width >= FilterWidth) {
-		UINT32 i;
+		UINT32 i = 3;
 
 		// left border handling
 		src[1] -= ((src[0] + src[2] + c1) >> 1);
 		src[0] += ((src[1] + c1) >> 1);
 		
 		// middle part
-		for (i=3; i < width-1; i += 2) {
+		for (; i < width-1; i += 2) {
 			src[i] -= ((src[i-1] + src[i+1] + c1) >> 1);
 			src[i-1] += ((src[i-2] + src[i] + c2) >> 2);
 		}
@@ -367,13 +367,13 @@ void CWaveletTransform::InverseTransform(int srcLevel, UINT32* w, UINT32* h, Dat
 // inverse low pass filter for odd positions: 1/8(-1, 4, 6, 4, -1)
 void CWaveletTransform::InverseRow(DataT* dest, UINT32 width) {
 	if (width >= FilterWidth) {
-		UINT32 i;
+		UINT32 i = 2;
 
 		// left border handling
 		dest[0] -= ((dest[1] + c1) >> 1);
 
 		// middle part
-		for (i=2; i < width - 1; i += 2) {
+		for (; i < width - 1; i += 2) {
 			dest[i] -= ((dest[i-1] + dest[i+1] + c2) >> 2);
 			dest[i-1] += ((dest[i-2] + dest[i] + c1) >> 1);
 		}

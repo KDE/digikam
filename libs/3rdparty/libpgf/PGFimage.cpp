@@ -321,8 +321,8 @@ void CPGFImage::Read(int level /*= 0*/, CallbackPtr cb /*= NULL*/, void *data /*
 }
 
 //////////////////////////////////////////////////////////////////////
-// After you've written a PGF image, you can call this method followed by GetBitmap/GetYUV
-// to get a quick reconstruction (coded -> decoded image).
+/// After you've written a PGF image, you can call this method followed by GetBitmap/GetYUV
+/// to get a quick reconstruction (coded -> decoded image).
 void CPGFImage::Reconstruct() THROW_ {
 	int i;
 
@@ -1129,7 +1129,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 					cnt += channels;
 					yPos++;
 				}
-				buff16 += pitch16;	
+				buff16 += pitch16;
 			}
 		}
 		break;
@@ -1553,7 +1553,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 			}
 			break;
 		}
-	case ImageModeRGBColor: 
+	case ImageModeRGBColor:
 		{
 			ASSERT(m_header.channels == 3);
 			ASSERT(m_header.bpp == m_header.channels*8);
@@ -1563,40 +1563,62 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 			DataT* y = m_channel[0]; ASSERT(y);
 			DataT* u = m_channel[1]; ASSERT(u);
 			DataT* v = m_channel[2]; ASSERT(v);
+			UINT8 *buffg = &buff[channelMap[1]],
+				*buffu = &buff[channelMap[2]],
+				*buffv = &buff[channelMap[0]];
 			UINT8 g;
 			int cnt, channels = bpp/8;
-
-			for (i=0; i < h; i++) {
-				if (i%2) sampledPos -= (w + 1)/2;
-				cnt = 0;
-				for (j=0; j < w; j++) {
-					if (m_downsample) {
+			if(m_downsample){
+				for (i=0; i < h; i++) {
+					if (i%2) sampledPos -= (w + 1)/2;
+					cnt = 0;
+					for (j=0; j < w; j++) {
 						// image was downsampled
 						uAvg = u[sampledPos];
 						vAvg = v[sampledPos];
-					} else {
+						// Yuv
+						buffg[cnt] = g = Clamp(y[yPos] + YUVoffset8 - ((uAvg + vAvg ) >> 2)); // must be logical shift operator
+						buffu[cnt] = Clamp(uAvg + g);
+						buffv[cnt] = Clamp(vAvg + g);
+						yPos++;
+						cnt += channels;
+						if (j%2) sampledPos++;
+					}
+					buffg += pitch;
+					buffu += pitch;
+					buffv += pitch;
+					if (wOdd) sampledPos++;
+					if (cb) {
+						percent += dP;
+						if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
+					}
+				}
+			}else{
+				for (i=0; i < h; i++) {
+					cnt = 0;
+					for (j = 0; j < w; j++) {
 						uAvg = u[yPos];
 						vAvg = v[yPos];
+						// Yuv
+						buffg[cnt] = g = Clamp(y[yPos] + YUVoffset8 - ((uAvg + vAvg ) >> 2)); // must be logical shift operator
+						buffu[cnt] = Clamp(uAvg + g);
+						buffv[cnt] = Clamp(vAvg + g);
+						yPos++;
+						cnt += channels;
 					}
-					// Yuv
-					buff[cnt + channelMap[1]] = g = Clamp(y[yPos] + YUVoffset8 - ((uAvg + vAvg ) >> 2)); // must be logical shift operator
-					buff[cnt + channelMap[2]] = Clamp(uAvg + g);
-					buff[cnt + channelMap[0]] = Clamp(vAvg + g);
-					yPos++; 
-					cnt += channels;
-					if (j%2) sampledPos++;
-				}
-				buff += pitch;
-				if (wOdd) sampledPos++;
+					buffg += pitch;
+					buffu += pitch;
+					buffv += pitch;
 
-				if (cb) {
-					percent += dP;
-					if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
+					if (cb) {
+						percent += dP;
+						if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
+					}
 				}
 			}
 			break;
 		}
-	case ImageModeRGB48: 
+	case ImageModeRGB48:
 		{
 			ASSERT(m_header.channels == 3);
 			ASSERT(m_header.bpp == 48);

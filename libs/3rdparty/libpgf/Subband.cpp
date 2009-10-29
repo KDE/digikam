@@ -136,7 +136,7 @@ void CSubband::Quantize(int quantParam) {
 				}
 			}
 		}
-	}			
+	}
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -144,6 +144,7 @@ void CSubband::Quantize(int quantParam) {
 /// A scalar quantization (with dead-zone) is used. A large quantization value
 /// results in strong quantization and therefore in big quality loss.
 /// @param quantParam A quantization parameter (larger or equal to 0)
+/// @param level Level
 void CSubband::Dequantize(int quantParam, int /*level*/) {
 	if (m_orientation == LL) {
 		quantParam -= m_level + 1;
