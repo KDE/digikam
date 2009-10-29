@@ -46,6 +46,7 @@
 #include <kapplication.h>
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -65,7 +66,6 @@
 #include "albummanager.h"
 #include "album.h"
 #include "splashscreen.h"
-#include "debug.h"
 
 namespace Digikam
 {

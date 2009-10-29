@@ -32,6 +32,7 @@
 #include <kfilemetainfo.h>
 #include <kmimetype.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -43,7 +44,6 @@
 #include "imagecomments.h"
 #include "imagecopyright.h"
 #include "imageextendedproperties.h"
-#include "debug.h"
 
 namespace Digikam
 {

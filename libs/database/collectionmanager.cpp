@@ -31,6 +31,7 @@
 
 // KDE includes
 
+#include <kdebug.h>
 #include <kglobal.h>
 #include <kcodecs.h>
 #include <klocale.h>
@@ -52,7 +53,6 @@
 #include "albumdb.h"
 #include "collectionscanner.h"
 #include "collectionlocation.h"
-#include "debug.h"
 
 namespace Digikam
 {

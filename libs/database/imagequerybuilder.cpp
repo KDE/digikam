@@ -41,6 +41,7 @@
 #include <kcalendarsystem.h>
 #include <kcomponentdata.h>
 #include <kmimetype.h>
+#include <kdebug.h>
 
 // KExiv2 includes
 
@@ -51,7 +52,6 @@
 #include "databaseaccess.h"
 #include "albumdb.h"
 #include "geodetictools.h"
-#include "debug.h"
 
 namespace Digikam
 {

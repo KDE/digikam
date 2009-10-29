@@ -37,6 +37,7 @@
 
 #include <klocale.h>
 #include <kglobal.h>
+#include <kdebug.h>
 
 // LibKDcraw includes
 
@@ -49,7 +50,6 @@
 
 // Local includes
 
-#include "debug.h"
 #include "template.h"
 #include "version.h"
 #include "globals.h"

@@ -60,6 +60,7 @@
 #include <kurllabel.h>
 #include <kurlrequester.h>
 #include <kvbox.h>
+#include <kdebug.h>
 
 // LibKDcraw includes
 
@@ -68,7 +69,6 @@
 // Local includes
 
 #include "albumsettings.h"
-#include "debug.h"
 #include "iccprofileinfodlg.h"
 #include "iccprofilescombobox.h"
 #include "iccsettings.h"

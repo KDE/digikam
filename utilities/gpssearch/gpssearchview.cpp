@@ -46,6 +46,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -57,7 +58,6 @@
 #include "searchtextbar.h"
 #include "gpssearchwidget.h"
 #include "gpssearchfolderview.h"
-#include "debug.h"
 
 namespace Digikam
 {

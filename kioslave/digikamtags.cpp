@@ -40,13 +40,13 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kurl.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "databaseurl.h"
-#include "debug.h"
 #include "digikam_export.h"
 #include "imagelister.h"
 #include "imagelisterreceiver.h"

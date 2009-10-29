@@ -51,11 +51,11 @@
 #include <klocale.h>
 #include <kpushbutton.h>
 #include <kstandardguiitem.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "albummodel.h"
-#include "debug.h"
 #include "ratingwidget.h"
 #include "themeengine.h"
 

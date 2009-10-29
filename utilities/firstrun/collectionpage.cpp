@@ -44,11 +44,11 @@
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
 #include <ktemporaryfile.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "version.h"
-#include "debug.h"
 
 namespace Digikam
 {

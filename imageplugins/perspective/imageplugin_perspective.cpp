@@ -33,11 +33,11 @@
 #include <kgenericfactory.h>
 #include <klibloader.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "perspectivetool.h"
-#include "debug.h"
 
 using namespace DigikamPerspectiveImagesPlugin;
 

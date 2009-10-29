@@ -29,12 +29,15 @@
 
 #include <QPointer>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
 #include "colorcorrectiondlg.h"
 #include "iccprofile.h"
 #include "icctransform.h"
-#include "debug.h"
 
 namespace Digikam
 {

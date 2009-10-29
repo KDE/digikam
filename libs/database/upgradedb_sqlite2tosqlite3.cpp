@@ -34,6 +34,7 @@
 
 // KDE includes
 
+#include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kio/global.h>
 
@@ -43,7 +44,6 @@
 #include "databaseaccess.h"
 #include "databasebackend.h"
 #include "albumdb_sqlite2.h"
-#include "debug.h"
 
 namespace Digikam
 {

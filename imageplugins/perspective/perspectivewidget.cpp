@@ -52,13 +52,13 @@
 #include <kcursor.h>
 #include <kglobal.h>
 #include <kapplication.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "triangle.h"
 #include "imageiface.h"
 #include "dimgimagefilters.h"
-#include "debug.h"
 
 namespace DigikamPerspectiveImagesPlugin
 {

@@ -31,10 +31,7 @@
 // KDE includes
 
 #include <klocale.h>
-
-// Local includes
-
-#include "debug.h"
+#include <kdebug.h>
 
 namespace Digikam
 {

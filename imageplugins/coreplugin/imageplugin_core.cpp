@@ -35,6 +35,7 @@
 #include <klibloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -55,7 +56,6 @@
 #include "sharpentool.h"
 #include "redeyetool.h"
 #include "rgbtool.h"
-#include "debug.h"
 
 using namespace DigikamImagesPluginCore;
 using namespace Digikam;

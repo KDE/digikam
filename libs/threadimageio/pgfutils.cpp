@@ -39,10 +39,13 @@ extern "C"
 #include <QByteArray>
 #include <QFile>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // LibPGF includes
 
 #include "PGFimage.h"
-#include "debug.h"
 
 namespace Digikam
 {

@@ -34,6 +34,7 @@
 
 // KDE includes
 
+#include <kdebug.h>
 #include <kcomponentdata.h>
 #include <kconfiggroup.h>
 #include <kio/job.h>
@@ -65,7 +66,6 @@
 #include "databasewatch.h"
 #include "imageinfo.h"
 #include "imagelister.h"
-#include "debug.h"
 
 namespace Digikam
 {

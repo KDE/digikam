@@ -31,10 +31,10 @@
 // KDE includes
 
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
-#include "debug.h"
 #include "rexpanderbox.h"
 #include "searchutilities.h"
 

@@ -36,11 +36,11 @@
 #include <kactioncollection.h>
 #include <kcursor.h>
 #include <kapplication.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "colorfxtool.h"
-#include "debug.h"
 
 using namespace DigikamColorFXImagesPlugin;
 

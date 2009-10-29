@@ -35,6 +35,7 @@
 #include <klocale.h>
 #include <kmenu.h>
 #include <kiconloader.h>
+#include <kdebug.h>
 
 #include "config-digikam.h"
 #ifdef HAVE_MARBLEWIDGET
@@ -44,7 +45,6 @@ using namespace Marble;
 // Local includes
 
 #include "thumbnailloadthread.h"
-#include "debug.h"
 
 Q_DECLARE_METATYPE(Digikam::GPSInfo)
 

@@ -47,13 +47,13 @@ extern "C"
 // KDE includes
 
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "databasebackend.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
-#include "debug.h"
 
 namespace Digikam
 {

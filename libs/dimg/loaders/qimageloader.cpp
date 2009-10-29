@@ -30,11 +30,14 @@
 #include <QImage>
 #include <QByteArray>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
 #include "dimg.h"
 #include "dimgloaderobserver.h"
-#include "debug.h"
 
 namespace Digikam
 {

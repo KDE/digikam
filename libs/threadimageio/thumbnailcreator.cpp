@@ -51,6 +51,7 @@
 #include <kurl.h>
 #include <kdeversion.h>
 #include <kde_file.h>
+#include <kdebug.h>
 
 // LibKDcraw includes
 
@@ -69,7 +70,6 @@
 #include "pgfutils.h"
 #include "thumbnaildatabaseaccess.h"
 #include "thumbnaildb.h"
-#include "debug.h"
 
 namespace Digikam
 {

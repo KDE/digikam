@@ -24,12 +24,15 @@
 
 #include "localcontrast.h"
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Tonemapping includes
 
 #include "ToneMappingBase.h"
 #include "ToneMappingInt.h"
 #include "ToneMappingFloat.h"
-#include "debug.h"
 
 namespace DigikamLocalContrastImagesPlugin
 {

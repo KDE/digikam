@@ -31,13 +31,13 @@
 // KDE includes
 
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "databasecorebackend.h"
 #include "thumbnaildb.h"
 #include "thumbnailschemaupdater.h"
-#include "debug.h"
 
 namespace Digikam
 {

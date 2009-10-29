@@ -39,10 +39,10 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
+#include <kdebug.h>
 
 // Local includes
 
-#include "debug.h"
 #include "dcursortracker.h"
 #include "themeengine.h"
 

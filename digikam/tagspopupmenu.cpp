@@ -48,6 +48,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <ktoggleaction.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -56,7 +57,6 @@
 #include "albummanager.h"
 #include "albumthumbnailloader.h"
 #include "tageditdlg.h"
-#include "debug.h"
 
 namespace Digikam
 {

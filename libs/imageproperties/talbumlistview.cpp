@@ -44,6 +44,7 @@
 #include <kglobalsettings.h>
 #include <kdialog.h>
 #include <kstringhandler.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -60,7 +61,6 @@
 #include "albumthumbnailloader.h"
 #include "scancontroller.h"
 #include "statusprogressbar.h"
-#include "debug.h"
 
 namespace Digikam
 {

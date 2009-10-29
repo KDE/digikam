@@ -29,6 +29,10 @@
 #include <QWidget>
 #include <QTimer>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
 #include "dimgthreadedfilter.h"
@@ -39,7 +43,6 @@
 #include "histogrambox.h"
 #include "editortoolsettings.h"
 #include "editortooliface.h"
-#include "debug.h"
 
 namespace Digikam
 {

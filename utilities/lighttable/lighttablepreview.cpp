@@ -49,13 +49,13 @@
 #include <kmenu.h>
 #include <kmimetype.h>
 #include <kmimetypetrader.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "albumdb.h"
 #include "albummanager.h"
 #include "albumsettings.h"
-#include "debug.h"
 #include "contextmenuhelper.h"
 #include "ddragobjects.h"
 #include "dimg.h"

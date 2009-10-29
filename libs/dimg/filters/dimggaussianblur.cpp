@@ -33,10 +33,13 @@
 
 #include "CImg.h"
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
 #include "dimgimagefilters.h"
-#include "debug.h"
 
 using namespace cimg_library;
 

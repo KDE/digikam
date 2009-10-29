@@ -86,6 +86,7 @@ extern "C"
 #include <ktrader.h>
 #include <kurl.h>
 #include <kwindowsystem.h>
+#include <kdebug.h>
 
 // LibKDcraw includes
 
@@ -108,7 +109,6 @@ extern "C"
 #include "albumselectdialog.h"
 #include "albumsettings.h"
 #include "cameraui.h"
-#include "debug.h"
 #include "contextmenuhelper.h"
 #include "databaseaccess.h"
 #include "databasetransaction.h"

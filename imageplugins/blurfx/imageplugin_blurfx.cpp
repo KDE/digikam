@@ -34,11 +34,11 @@
 #include <kactioncollection.h>
 #include <kcursor.h>
 #include <kapplication.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "blurfxtool.h"
-#include "debug.h"
 
 using namespace DigikamBlurFXImagesPlugin;
 

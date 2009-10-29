@@ -35,6 +35,10 @@
 #include <QVariant>
 #include <QMatrix>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // LibKDcraw includes
 
 #include <libkdcraw/kdcraw.h>
@@ -44,7 +48,6 @@
 #include "dmetadata.h"
 #include "jpegutils.h"
 #include "previewloadthread.h"
-#include "debug.h"
 
 namespace Digikam
 {

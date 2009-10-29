@@ -68,12 +68,12 @@
 #include <kstandarddirs.h>
 #include <kcursor.h>
 #include <kglobal.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "imageiface.h"
 #include "dimg.h"
-#include "debug.h"
 
 namespace DigikamImagesPluginCore
 {

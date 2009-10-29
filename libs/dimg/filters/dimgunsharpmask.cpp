@@ -32,13 +32,16 @@
 #include <cmath>
 #include <cstdlib>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
 #include "dimg.h"
 #include "dcolor.h"
 #include "dimgimagefilters.h"
 #include "dimggaussianblur.h"
-#include "debug.h"
 
 namespace Digikam
 {

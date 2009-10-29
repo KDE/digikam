@@ -43,13 +43,13 @@
 #include <kiconloader.h>
 #include <kseparator.h>
 #include <kstandarddirs.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "album.h"
 #include "syncjob.h"
 #include "searchtextbar.h"
-#include "debug.h"
 
 namespace Digikam
 {

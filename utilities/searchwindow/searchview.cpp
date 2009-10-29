@@ -39,10 +39,10 @@
 #include <klocale.h>
 #include <kpushbutton.h>
 #include <kstandardguiitem.h>
+#include <kdebug.h>
 
 // Local includes
 
-#include "debug.h"
 #include "searchgroup.h"
 #include "searchutilities.h"
 #include "searchwindow.h"

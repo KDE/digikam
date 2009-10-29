@@ -38,6 +38,7 @@
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -48,7 +49,6 @@
 #include "signalblocker.h"
 #include "ui_printoptionspage.h"
 #include "editorwindow.h"
-#include "debug.h"
 
 namespace Digikam
 {

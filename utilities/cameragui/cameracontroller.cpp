@@ -57,6 +57,7 @@ extern "C"
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kurl.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -67,7 +68,6 @@ extern "C"
 #include "umscamera.h"
 #include "dmetadata.h"
 #include "jpegutils.h"
-#include "debug.h"
 
 namespace Digikam
 {

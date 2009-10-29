@@ -41,12 +41,12 @@
 #include <kglobal.h>
 #include <kio/global.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "albummanager.h"
 #include "albumsettings.h"
-#include "debug.h"
 #include "imagecategorydrawer.h"
 #include "imagecategorizedview.h"
 #include "imagedelegateoverlay.h"

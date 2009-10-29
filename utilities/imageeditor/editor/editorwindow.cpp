@@ -92,6 +92,7 @@
 #include <kdeversion.h>
 #include <kde_file.h>
 #include <kio/copyjob.h>
+#include <kdebug.h>
 
 // LibKDcraw includes
 
@@ -101,7 +102,6 @@
 
 #include "canvas.h"
 #include "colorcorrectiondlg.h"
-#include "debug.h"
 #include "dimginterface.h"
 #include "dlogoaction.h"
 #include "dpopupmenu.h"

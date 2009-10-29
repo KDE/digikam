@@ -37,11 +37,11 @@
 // KDE includes
 
 #include <kurl.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "iccprofilewidget.h"
-#include "debug.h"
 
 namespace Digikam
 {

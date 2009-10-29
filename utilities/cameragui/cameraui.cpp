@@ -81,6 +81,7 @@
 #include <ktoolinvocation.h>
 #include <kurllabel.h>
 #include <kvbox.h>
+#include <kdebug.h>
 
 // Libkdcraw includes
 
@@ -128,7 +129,6 @@
 #include "cameratype.h"
 #include "cameraui_p.h"
 #include "cameranamehelper.h"
-#include "debug.h"
 
 namespace Digikam
 {

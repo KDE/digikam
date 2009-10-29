@@ -32,6 +32,10 @@
 #include <QBitmap>
 #include <QPainter>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
 #include "exposurecontainer.h"
@@ -41,7 +45,6 @@
 #include "dimginterface.h"
 #include "bcgmodifier.h"
 #include "dmetadata.h"
-#include "debug.h"
 
 namespace Digikam
 {

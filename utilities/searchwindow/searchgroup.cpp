@@ -39,10 +39,10 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kdebug.h>
 
 // Local includes
 
-#include "debug.h"
 #include "rexpanderbox.h"
 #include "searchfieldgroup.h"
 #include "searchfields.h"

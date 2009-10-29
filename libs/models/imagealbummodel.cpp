@@ -31,6 +31,7 @@
 // KDE includes
 
 #include <kio/job.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -41,7 +42,6 @@
 #include "imageinfo.h"
 #include "imageinfolist.h"
 #include "imagelister.h"
-#include "debug.h"
 
 namespace Digikam
 {

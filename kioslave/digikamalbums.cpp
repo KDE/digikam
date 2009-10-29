@@ -43,6 +43,7 @@
 #include <kio/deletejob.h>
 #include <klocale.h>
 #include <kmimetype.h>
+#include <kdebug.h>
 
 // LibKDcraw includes
 
@@ -54,7 +55,6 @@
 #include "collectionscanner.h"
 #include "databaseaccess.h"
 #include "databaseurl.h"
-#include "debug.h"
 #include "digikam_export.h"
 #include "imagelister.h"
 

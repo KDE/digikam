@@ -37,10 +37,7 @@
 
 #include <klocale.h>
 #include <kfiletreebranch.h>
-
-// Local includes
-
-#include "debug.h"
+#include <kdebug.h>
 
 namespace DigikamSuperImposeImagesPlugin
 {

@@ -44,12 +44,12 @@
 #include <klocale.h>
 #include <ksqueezedtextlabel.h>
 #include <kurllabel.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "album.h"
 #include "albummanager.h"
-#include "debug.h"
 #include "searchfolderview.h"
 #include "searchwindow.h"
 #include "searchxml.h"

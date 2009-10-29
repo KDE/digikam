@@ -43,9 +43,12 @@ extern "C"
 #include <QFile>
 #include <QByteArray>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
-#include "debug.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 

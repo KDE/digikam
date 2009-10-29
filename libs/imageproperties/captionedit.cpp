@@ -29,12 +29,11 @@
 #include <kdialog.h>
 #include <klocale.h>
 #include <klineedit.h>
-
+#include <kdebug.h>
 
 // Local includes
 
 #include "altlangstredit.h"
-#include "debug.h"
 
 namespace Digikam
 {

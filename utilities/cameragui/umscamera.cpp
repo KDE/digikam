@@ -45,6 +45,7 @@ extern "C"
 
 // KDE includes
 
+#include <kdebug.h>
 #include <kcodecs.h>
 #include <kio/global.h>
 #include <klocale.h>
@@ -63,7 +64,6 @@ extern "C"
 #include "dimg.h"
 #include "dmetadata.h"
 #include "imagescanner.h"
-#include "debug.h"
 
 namespace Digikam
 {

@@ -34,12 +34,12 @@
 #include <kactioncollection.h>
 #include <kcursor.h>
 #include <kapplication.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "imageiface.h"
 #include "inpaintingtool.h"
-#include "debug.h"
 
 using namespace DigikamInPaintingImagesPlugin;
 using namespace Digikam;

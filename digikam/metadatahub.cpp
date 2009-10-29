@@ -28,6 +28,10 @@
 
 #include <QFileInfo>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Libkexiv2 includes
 
 #include <libkexiv2/version.h>
@@ -41,7 +45,6 @@
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "imageattributeswatch.h"
-#include "debug.h"
 
 namespace Digikam
 {

@@ -34,11 +34,11 @@
 #include <kactioncollection.h>
 #include <kcursor.h>
 #include <kapplication.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "raindroptool.h"
-#include "debug.h"
 
 using namespace DigikamRainDropImagesPlugin;
 

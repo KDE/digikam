@@ -52,12 +52,12 @@
 #include <kcursor.h>
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "imagehistogram.h"
 #include "imagecurves.h"
-#include "debug.h"
 #include "globals.h"
 #include "histogrampainter.h"
 

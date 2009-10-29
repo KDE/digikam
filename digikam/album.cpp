@@ -28,6 +28,7 @@
 // KDE includes
 
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -36,7 +37,6 @@
 #include "collectionmanager.h"
 #include "databaseaccess.h"
 #include "databaseurl.h"
-#include "debug.h"
 
 namespace Digikam
 {

@@ -33,11 +33,11 @@
 
 #include <kglobal.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "albumsettings.h"
-#include "debug.h"
 #include "databasetransaction.h"
 #include "imageattributeswatch.h"
 #include "loadingcacheinterface.h"

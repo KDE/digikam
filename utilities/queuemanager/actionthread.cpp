@@ -42,10 +42,10 @@ extern "C"
 
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kdebug.h>
 
 // Local includes
 
-#include "debug.h"
 #include "dimg.h"
 
 namespace Digikam

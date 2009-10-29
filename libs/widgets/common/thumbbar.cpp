@@ -53,6 +53,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmimetype.h>
+#include <kdebug.h>
 
 // LibKDcraw includes
 
@@ -68,7 +69,6 @@
 #include "dmetadata.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
-#include "debug.h"
 
 namespace Digikam
 {
@@ -686,7 +686,7 @@ void ThumbBarView::contentsMousePressEvent(QMouseEvent* e)
 
     if (e->button() != Qt::LeftButton)
     {
-    	return;
+        return;
     }
 
     ThumbBarItem* barItem = findItem(e->pos());

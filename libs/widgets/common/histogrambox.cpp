@@ -43,12 +43,12 @@
 #include <kcombobox.h>
 #include <kicon.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "colorgradientwidget.h"
 #include "histogramwidget.h"
-#include "debug.h"
 #include "globals.h"
 
 namespace Digikam

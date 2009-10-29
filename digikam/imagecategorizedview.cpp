@@ -33,6 +33,7 @@
 // KDE includes
 
 #include <kiconloader.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -52,7 +53,6 @@
 #include "loadingcacheinterface.h"
 #include "thumbnailloadthread.h"
 #include "tooltipfiller.h"
-#include "debug.h"
 
 namespace Digikam
 {

@@ -27,6 +27,7 @@
 // KDE includes
 
 #include <klocale.h>
+#include <kdebug.h>
 
 // Marble includes
 #ifdef HAVE_MARBLEWIDGET
@@ -37,7 +38,6 @@
 // Local includes.
 
 #include "config-digikam.h"
-#include "debug.h"
 
 namespace Digikam
 {

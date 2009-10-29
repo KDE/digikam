@@ -47,12 +47,12 @@
 #include <kuser.h>
 #include <kapplication.h>
 #include <kglobalsettings.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "theme.h"
 #include "texture.h"
-#include "debug.h"
 
 namespace Digikam
 {

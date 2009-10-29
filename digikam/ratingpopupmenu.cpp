@@ -42,10 +42,10 @@
 
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kdebug.h>
 
 // Local includes
 
-#include "debug.h"
 #include "themeengine.h"
 #include "globals.h"
 

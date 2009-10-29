@@ -33,10 +33,10 @@
 #include <kgenericfactory.h>
 #include <klibloader.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
-#include "debug.h"
 #include "localcontrasttool.h"
 
 using namespace DigikamLocalContrastImagesPlugin;

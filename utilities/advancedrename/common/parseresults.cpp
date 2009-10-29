@@ -23,9 +23,9 @@
 
 #include "parseresults.h"
 
-// Local includes
+// KDE includes
 
-#include "debug.h"
+#include <kdebug.h>
 
 namespace Digikam
 {

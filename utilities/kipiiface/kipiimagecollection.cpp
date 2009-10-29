@@ -31,6 +31,7 @@
 
 #include <kconfig.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // LibKIPI includes
 
@@ -38,7 +39,6 @@
 
 // Local includes
 
-#include "debug.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albumsettings.h"

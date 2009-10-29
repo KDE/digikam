@@ -44,11 +44,11 @@
 
 #include <kcodecs.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "config-digikam.h"
-#include "debug.h"
 
 #ifdef ENABLE_GPHOTO2
 

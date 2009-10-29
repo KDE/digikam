@@ -45,6 +45,7 @@
 #include <kactioncategory.h>
 #endif
 
+#include <kdebug.h>
 #include <kaboutdata.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
@@ -135,7 +136,6 @@
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
 #include "digikamapp_p.h"
-#include "debug.h"
 #include "dmetadata.h"
 
 using KIO::Job;

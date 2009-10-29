@@ -32,9 +32,9 @@
 
 #include <cassert>
 
-// Local includes
+// KDE includes
 
-#include "debug.h"
+#include <kdebug.h>
 
 #define cimg_plugin "greycstoration.h"
 // Unix-like (Linux, Solaris, BSD, MacOSX, Irix,...).

@@ -31,9 +31,12 @@
 #include <QFileInfo>
 #include <QWidget>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
-#include "debug.h"
 #include "dimgloaderobserver.h"
 
 namespace Digikam

@@ -41,6 +41,7 @@
 #include <kservicetypetrader.h>
 #include <kurl.h>
 #include <kwindowsystem.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -48,7 +49,6 @@
 #include "albummanager.h"
 #include "albumselectdialog.h"
 #include "albumsettings.h"
-#include "debug.h"
 #include "deletedialog.h"
 #include "dio.h"
 #include "imageinfo.h"

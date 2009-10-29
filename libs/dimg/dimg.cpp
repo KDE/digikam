@@ -50,6 +50,10 @@ extern "C"
 #include <QPixmap>
 #include <QSysInfo>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // LibKDcraw includes
 
 #include <libkdcraw/version.h>
@@ -59,9 +63,9 @@ extern "C"
 #include <libkdcraw/dcrawbinary.h>
 #endif
 
+
 // Local includes
 
-#include "debug.h"
 #include "pngloader.h"
 #include "jpegloader.h"
 #include "tiffloader.h"

@@ -28,10 +28,13 @@
 
 #include <QtGui/QWidget>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
 #include "digikam_export.h"
-#include "debug.h"
 #include "globals.h"
 
 class QColor;

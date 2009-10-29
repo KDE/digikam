@@ -36,13 +36,13 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "cameraiconview.h"
 #include "camerafolderitem.h"
 #include "camerafolderview.h"
-#include "debug.h"
 
 namespace Digikam
 {

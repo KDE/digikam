@@ -36,13 +36,13 @@
 
 #include <kcomponentdata.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "databaseurl.h"
-#include "debug.h"
 #include "digikam_export.h"
 #include "haariface.h"
 #include "imagelister.h"

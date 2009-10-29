@@ -37,6 +37,7 @@
 #include <kapplication.h>
 #include <kglobal.h>
 #include <kconfiggroup.h>
+#include <kdebug.h>
 
 // Lcms includes
 
@@ -48,7 +49,6 @@
 // Local includes
 
 #include "dimgloaderobserver.h"
-#include "debug.h"
 
 namespace Digikam
 {

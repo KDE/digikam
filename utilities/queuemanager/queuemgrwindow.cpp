@@ -57,6 +57,7 @@
 #include <kxmlguifactory.h>
 #include <kpassivepopup.h>
 #include <kio/renamedialog.h>
+#include <kdebug.h>
 
 // Libkdcraw includes
 
@@ -90,7 +91,6 @@
 #include "imagedialog.h"
 #include "thumbnailsize.h"
 #include "queuemgrwindow_p.h"
-#include "debug.h"
 #include "sidebar.h"
 
 namespace Digikam

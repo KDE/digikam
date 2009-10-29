@@ -34,6 +34,10 @@
 
 #include <QDateTime>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
 #include "dimg.h"
@@ -41,7 +45,6 @@
 #include "imagecurves.h"
 #include "imagehistogram.h"
 #include "dimgimagefilters.h"
-#include "debug.h"
 #include "globals.h"
 
 namespace DigikamFilmGrainImagesPlugin

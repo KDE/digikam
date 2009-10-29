@@ -41,6 +41,7 @@
 #include <kdialog.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -49,7 +50,6 @@
 #include "editortoolsettings.h"
 #include "imagecurves.h"
 #include "imagehistogram.h"
-#include "debug.h"
 #include "globals.h"
 
 namespace Digikam

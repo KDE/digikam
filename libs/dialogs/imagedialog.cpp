@@ -36,6 +36,7 @@
 #include <kstandarddirs.h>
 #include <kfiledialog.h>
 #include <kimageio.h>
+#include <kdebug.h>
 
 // LibKDcraw includes
 
@@ -53,7 +54,6 @@
 #include "loadingdescription.h"
 #include "thumbnailsize.h"
 #include "thumbnailloadthread.h"
-#include "debug.h"
 
 namespace Digikam
 {

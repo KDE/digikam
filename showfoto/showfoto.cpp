@@ -83,6 +83,7 @@ extern "C"
 #include <ktoggleaction.h>
 #include <ktoolbar.h>
 #include <ktoolbarpopupaction.h>
+#include <kdebug.h>
 
 // LibKDcraw includes
 
@@ -96,7 +97,6 @@ extern "C"
 // Local includes
 
 #include "canvas.h"
-#include "debug.h"
 #include "dimginterface.h"
 #include "dmetadata.h"
 #include "dpopupmenu.h"

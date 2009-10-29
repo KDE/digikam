@@ -71,6 +71,7 @@
 #include <ktoolbar.h>
 #include <ktoolbarpopupaction.h>
 #include <kwindowsystem.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -80,7 +81,6 @@
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "canvas.h"
-#include "debug.h"
 #include "databaseaccess.h"
 #include "databasewatch.h"
 #include "databasechangesets.h"

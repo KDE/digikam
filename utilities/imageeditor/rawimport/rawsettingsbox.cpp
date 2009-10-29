@@ -43,6 +43,7 @@
 #include <kstandarddirs.h>
 #include <ktabwidget.h>
 #include <kvbox.h>
+#include <kdebug.h>
 
 // LibKDcraw includes
 
@@ -61,7 +62,6 @@
 #include "imagedialog.h"
 #include "imagehistogram.h"
 #include "rexpanderbox.h"
-#include "debug.h"
 #include "globals.h"
 
 using namespace KDcrawIface;

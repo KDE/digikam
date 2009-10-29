@@ -54,10 +54,10 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kdebug.h>
 
 // Local includes
 
-#include "debug.h"
 #include "dimg.h"
 #include "globals.h"
 #include "previewloadthread.h"

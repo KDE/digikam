@@ -48,10 +48,7 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 #include <klocale.h>
 #include <ksqueezedtextlabel.h>
 #include <ktoolinvocation.h>
-
-// Local includes
-
-#include "debug.h"
+#include <kdebug.h>
 
 namespace Digikam
 {

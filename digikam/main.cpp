@@ -43,6 +43,7 @@
 #include <ktip.h>
 #include <kdeversion.h>
 #include <kmessagebox.h>
+#include <kdebug.h>
 
 // Libkexiv2 includes
 
@@ -61,7 +62,6 @@
 #include "collectionlocation.h"
 #include "digikamapp.h"
 #include "assistantdlg.h"
-#include "debug.h"
 
 using namespace Digikam;
 

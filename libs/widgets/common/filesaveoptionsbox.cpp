@@ -43,6 +43,7 @@
 #include <kimageio.h>
 #include <klocale.h>
 #include <knuminput.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -51,7 +52,6 @@
 #include "tiffsettings.h"
 #include "jp2ksettings.h"
 #include "pgfsettings.h"
-#include "debug.h"
 
 namespace Digikam
 {

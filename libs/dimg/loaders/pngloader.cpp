@@ -48,13 +48,16 @@ extern "C"
 #include <QByteArray>
 #include <QSysInfo>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Libkexiv2 includes
 
 #include <libkexiv2/kexiv2.h>
 
 // Local includes
 
-#include "debug.h"
 #include "version.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"

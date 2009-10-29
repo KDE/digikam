@@ -45,6 +45,7 @@
 #include <klocale.h>
 #include <kcomponentdata.h>
 #include <kmimetype.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -56,7 +57,6 @@
 #include "imagequerybuilder.h"
 #include "dmetadata.h"
 #include "haariface.h"
-#include "debug.h"
 
 namespace Digikam
 {

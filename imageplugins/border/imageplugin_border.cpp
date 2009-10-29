@@ -35,11 +35,11 @@
 #include <kactioncollection.h>
 #include <kcursor.h>
 #include <kapplication.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "bordertool.h"
-#include "debug.h"
 
 using namespace DigikamBorderImagesPlugin;
 

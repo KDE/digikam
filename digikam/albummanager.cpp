@@ -73,6 +73,7 @@ extern "C"
 #include <kio/job.h>
 #include <kdirwatch.h>
 #include <kconfiggroup.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -93,7 +94,6 @@ extern "C"
 #include "thumbnailloadthread.h"
 #include "upgradedb_sqlite2tosqlite3.h"
 #include "config-digikam.h"
-#include "debug.h"
 
 namespace Digikam
 {

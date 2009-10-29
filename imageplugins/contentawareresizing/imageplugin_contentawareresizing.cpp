@@ -31,11 +31,11 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kapplication.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "contentawareresizetool.h"
-#include "debug.h"
 
 using namespace DigikamContentAwareResizingImagesPlugin;
 

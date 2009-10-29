@@ -48,13 +48,13 @@
 #include <kstandarddirs.h>
 #include <ktoolinvocation.h>
 #include <kurl.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "daboutdata.h"
 #include "themeengine.h"
 #include "version.h"
-#include "debug.h"
 
 namespace Digikam
 {

@@ -36,6 +36,7 @@
 #include <klocale.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
+#include <kdebug.h>
 
 // LibKDcraw includes
 
@@ -57,7 +58,6 @@
 #include "collectionscanner.h"
 #include "imagequerybuilder.h"
 #include "collectionscannerobserver.h"
-#include "debug.h"
 
 namespace Digikam
 {

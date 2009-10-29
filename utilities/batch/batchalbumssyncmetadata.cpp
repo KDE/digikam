@@ -39,6 +39,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kpassivepopup.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -46,7 +47,6 @@
 #include "albummanager.h"
 #include "imageinfojob.h"
 #include "metadatahub.h"
-#include "debug.h"
 
 namespace Digikam
 {

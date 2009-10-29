@@ -49,6 +49,7 @@
 #include <kglobal.h>
 #include <kselectaction.h>
 #include <kstringhandler.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -68,7 +69,6 @@
 #include "statusprogressbar.h"
 #include "syncjob.h"
 #include "tageditdlg.h"
-#include "debug.h"
 
 #include "config-digikam.h"
 #ifdef HAVE_KDEPIMLIBS

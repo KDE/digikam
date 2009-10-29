@@ -40,6 +40,7 @@
 #include <kmenu.h>
 #include <kmessagebox.h>
 #include <kstringhandler.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -62,7 +63,6 @@
 #include "statusprogressbar.h"
 #include "syncjob.h"
 #include "tageditdlg.h"
-#include "debug.h"
 
 namespace Digikam
 {

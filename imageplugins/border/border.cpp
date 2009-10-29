@@ -37,10 +37,13 @@
 #include <QPolygon>
 #include <QRegion>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
 #include "dimg.h"
-#include "debug.h"
 
 namespace DigikamBorderImagesPlugin
 {

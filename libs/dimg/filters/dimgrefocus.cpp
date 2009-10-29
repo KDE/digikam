@@ -28,13 +28,16 @@
 
 #include <cmath>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
 #include "dimg.h"
 #include "dcolor.h"
 #include "dimgimagefilters.h"
 #include "matrix.h"
-#include "debug.h"
 
 #define MAX_MATRIX_SIZE 25
 

@@ -39,6 +39,10 @@
 #include <QStringList>
 #include <QSet>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // LibKDcraw includes
 
 #include <libkdcraw/rawfiles.h>
@@ -55,7 +59,6 @@
 #include "imagescanner.h"
 #include "collectionscannerhints.h"
 #include "collectionscannerobserver.h"
-#include "debug.h"
 
 namespace Digikam
 {
@@ -330,10 +333,10 @@ void CollectionScanner::scanFile(const QString& filePath, FileScanMode mode)
     QFileInfo info(filePath);
     QString dirPath   = info.path(); // strip off filename
     QString albumRoot = CollectionManager::instance()->albumRootPath(dirPath);
-    
+
     if (albumRoot.isNull())
         return;
-    
+
     QString album = CollectionManager::instance()->album(dirPath);
     scanFile(albumRoot, album, info.fileName(), mode);
 }

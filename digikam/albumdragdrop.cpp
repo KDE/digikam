@@ -37,6 +37,7 @@
 #include <kio/job.h>
 #include <klocale.h>
 #include <kmenu.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -46,7 +47,6 @@
 #include "dio.h"
 #include "imageinfo.h"
 #include "imageinfolist.h"
-#include "debug.h"
 
 namespace Digikam
 {

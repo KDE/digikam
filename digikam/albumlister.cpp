@@ -53,6 +53,7 @@ extern "C"
 #include <kcursor.h>
 #include <kio/job.h>
 #include <kurl.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -63,7 +64,6 @@ extern "C"
 #include "album.h"
 #include "albummanager.h"
 #include "albumsettings.h"
-#include "debug.h"
 
 namespace Digikam
 {

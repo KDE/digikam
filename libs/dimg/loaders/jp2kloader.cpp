@@ -42,9 +42,12 @@
 #include <QByteArray>
 #include <QTextStream>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
-#include "debug.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 #include "jp2kloader.h"

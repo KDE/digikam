@@ -35,6 +35,7 @@
 #include <kcombobox.h>
 #include <kdialog.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // LibKDcraw includes
 
@@ -43,7 +44,6 @@
 
 // Local includes
 
-#include "debug.h"
 
 Q_DECLARE_METATYPE( DigikamAutoCorrectionImagesPlugin::KLFDeviceSelector::DevicePtr )
 Q_DECLARE_METATYPE( DigikamAutoCorrectionImagesPlugin::KLFDeviceSelector::LensPtr )

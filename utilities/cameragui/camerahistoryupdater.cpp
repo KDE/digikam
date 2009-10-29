@@ -32,9 +32,12 @@
 #include <QWaitCondition>
 #include <QWidget>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
-#include "debug.h"
 #include "downloadhistory.h"
 
 namespace Digikam

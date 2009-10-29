@@ -57,6 +57,7 @@ extern "C"
 // KDE includes
 
 #include <ktemporaryfile.h>
+#include <kdebug.h>
 
 // Libkexiv2 includes
 
@@ -71,7 +72,6 @@ extern "C"
 
 // Local includes
 
-#include "debug.h"
 #include "PGFimage.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"

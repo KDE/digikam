@@ -39,6 +39,7 @@
 #include <kdialog.h>
 #include <khbox.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // Lcms includes
 
@@ -51,7 +52,6 @@
 
 #include "cietonguewidget.h"
 #include "metadatalistview.h"
-#include "debug.h"
 
 namespace Digikam
 {

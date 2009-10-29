@@ -40,11 +40,11 @@
 // KDE includes
 
 #include <kapplication.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "dimg.h"
-#include "debug.h"
 #include "globals.h"
 
 namespace Digikam

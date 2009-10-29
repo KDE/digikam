@@ -32,10 +32,10 @@
 
 #include <kstandarddirs.h>
 #include <kcodecs.h>       // for KMD5
+#include <kdebug.h>
 
 // Local includes
 
-#include "debug.h"
 #include "dimg_p.h"
 #include "dmetadata.h"
 #include "dimgloaderobserver.h"

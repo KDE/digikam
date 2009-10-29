@@ -47,10 +47,7 @@
 #include <klistwidget.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
-
-// Local includes
-
-#include "debug.h"
+#include <kdebug.h>
 
 namespace Digikam
 {

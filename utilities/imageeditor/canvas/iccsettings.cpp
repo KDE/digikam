@@ -51,12 +51,12 @@
 #include <kconfiggroup.h>
 #include <kglobal.h>
 #include <ksharedconfig.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "iccprofile.h"
 #include "icctransform.h"
-#include "debug.h"
 
 namespace Digikam
 {

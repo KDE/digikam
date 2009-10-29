@@ -39,10 +39,10 @@
 #include <kpushbutton.h>
 #include <kmessagebox.h>
 #include <kinputdialog.h>
+#include <kdebug.h>
 
 // Local includes
 
-#include "debug.h"
 #include "album.h"
 #include "albummanager.h"
 #include "albumthumbnailloader.h"

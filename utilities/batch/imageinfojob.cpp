@@ -34,6 +34,7 @@
 
 #include <kio/job.h>
 #include <kurl.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -41,7 +42,6 @@
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "imagelister.h"
-#include "debug.h"
 
 namespace Digikam
 {

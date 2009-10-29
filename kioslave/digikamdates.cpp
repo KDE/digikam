@@ -40,12 +40,12 @@
 #include <kglobal.h>
 #include <kio/global.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "albumdb.h"
 #include "databaseaccess.h"
-#include "debug.h"
 #include "digikam_export.h"
 #include "imagelister.h"
 

@@ -26,9 +26,12 @@
 #include <QIODevice>
 #include <QImage>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
-#include "debug.h"
 #include "pgfutils.h"
 
 using namespace Digikam;

@@ -34,12 +34,15 @@
 
 #include <cmath>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
 #include "dimg.h"
 #include "dimggaussianblur.h"
 #include "dimgimagefilters.h"
-#include "debug.h"
 
 namespace DigikamCharcoalImagesPlugin
 {

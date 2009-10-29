@@ -37,6 +37,10 @@
 #include <cstring>
 #include <cstdlib>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
 #include "imagehistogram.h"
@@ -46,7 +50,6 @@
 #include "dimgsharpen.h"
 #include "dimgunsharpmask.h"
 #include "dimgrefocus.h"
-#include "debug.h"
 #include "globals.h"
 
 namespace Digikam

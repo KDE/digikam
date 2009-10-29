@@ -49,12 +49,12 @@
 #include <kmessagebox.h>
 #include <ksqueezedtextlabel.h>
 #include <kstandarddirs.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "album.h"
 #include "albummanager.h"
-#include "debug.h"
 #include "searchtextbar.h"
 #include "searchxml.h"
 #include "timelinefolderview.h"

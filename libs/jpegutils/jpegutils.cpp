@@ -46,6 +46,10 @@ extern "C"
 #include <jpeglib.h>
 }
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Qt includes
 
 #include <QImageReader>
@@ -57,7 +61,6 @@ extern "C"
 
 #include "dmetadata.h"
 #include "transupp.h"
-#include "debug.h"
 
 #ifdef Q_CC_MSVC
 #include "jpegwin.h"

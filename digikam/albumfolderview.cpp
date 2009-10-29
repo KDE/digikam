@@ -52,6 +52,7 @@
 #include <kmenu.h>
 #include <kmessagebox.h>
 #include <kstringhandler.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -70,7 +71,6 @@
 #include "digikamapp.h"
 #include "dio.h"
 #include "thumbnailsize.h"
-#include "debug.h"
 
 namespace Digikam
 {

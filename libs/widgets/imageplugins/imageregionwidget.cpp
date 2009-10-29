@@ -45,11 +45,11 @@
 #include <kglobal.h>
 #include <kapplication.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "imageiface.h"
-#include "debug.h"
 
 namespace Digikam
 {

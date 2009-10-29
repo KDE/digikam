@@ -55,6 +55,7 @@
 #include <kselectaction.h>
 #include <kvbox.h>
 #include <ktabwidget.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -80,7 +81,6 @@
 #include "imageattributeswatch.h"
 #include "metadatahub.h"
 #include "statusprogressbar.h"
-#include "debug.h"
 #include "config-digikam.h"
 #ifdef HAVE_KDEPIMLIBS
 #include <kabc/stdaddressbook.h>

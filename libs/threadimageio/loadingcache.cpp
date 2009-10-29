@@ -35,11 +35,11 @@
 // KDE includes
 
 #include <kdirwatch.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "iccsettings.h"
-#include "debug.h"
 
 namespace Digikam
 {

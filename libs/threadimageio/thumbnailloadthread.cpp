@@ -32,6 +32,7 @@
 
 // KDE includes
 
+#include <kdebug.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <kio/previewjob.h>
@@ -46,7 +47,6 @@
 #include "thumbnailsize.h"
 #include "thumbnailtask.h"
 #include "thumbnailcreator.h"
-#include "debug.h"
 
 namespace Digikam
 {

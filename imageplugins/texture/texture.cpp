@@ -30,10 +30,13 @@
 #include <cmath>
 #include <cstdlib>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
 #include "dimg.h"
-#include "debug.h"
 
 namespace DigikamTextureImagesPlugin
 {

@@ -37,6 +37,7 @@
 #include <klocale.h>
 #include <ktabwidget.h>
 #include <kvbox.h>
+#include <kdebug.h>
 
 // LibKIPI includes
 
@@ -44,7 +45,6 @@
 
 // Local includes
 
-#include "debug.h"
 #include "album.h"
 #include "albummanager.h"
 #include "albumthumbnailloader.h"

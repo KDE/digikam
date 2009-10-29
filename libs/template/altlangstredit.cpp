@@ -39,11 +39,10 @@
 #include <klocale.h>
 #include <ktextedit.h>
 #include <kcombobox.h>
-
+#include <kdebug.h>
 
 // Local includes
 
-#include "debug.h"
 #include "msgtextedit.h"
 
 using namespace KExiv2Iface;

@@ -45,12 +45,12 @@
 #include <klocale.h>
 #include <kstdguiitem.h>
 #include <kpushbutton.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "albumsettings.h"
 #include "databaseurl.h"
-#include "debug.h"
 
 namespace Digikam
 {

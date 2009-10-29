@@ -35,10 +35,10 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kvbox.h>
+#include <kdebug.h>
 
 // Local includes
 
-#include "debug.h"
 #include "dimg.h"
 #include "jpegutils.h"
 

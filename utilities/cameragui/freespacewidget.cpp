@@ -45,12 +45,12 @@
 #include <klocale.h>
 #include <kio/global.h>
 #include <kiconloader.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "freespacetooltip.h"
 #include "albumsettings.h"
-#include "debug.h"
 
 namespace Digikam
 {

@@ -40,10 +40,13 @@
 #include <cstdlib>
 #include <cerrno>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
 #include "imagehistogram.h"
-#include "debug.h"
 #include "globals.h"
 
 namespace Digikam

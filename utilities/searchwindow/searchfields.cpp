@@ -49,6 +49,7 @@
 #include <klineedit.h>
 #include <klocale.h>
 #include <ksqueezedtextlabel.h>
+#include <kdebug.h>
 
 // LibKDcraw includes
 
@@ -61,7 +62,6 @@
 #include "albummodel.h"
 #include "albumselectcombobox.h"
 #include "choicesearchutilities.h"
-#include "debug.h"
 #include "dimg.h"
 #include "dmetadata.h"
 #include "imagescanner.h"

@@ -36,11 +36,11 @@
 #include <kapplication.h>
 #include <klocale.h>
 #include <kxmlguiclient.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "splashscreen.h"
-#include "debug.h"
 
 namespace Digikam
 {

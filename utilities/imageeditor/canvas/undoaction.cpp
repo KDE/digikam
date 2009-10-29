@@ -24,10 +24,13 @@
 
 #include "undoaction.h"
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
 #include "dimginterface.h"
-#include "debug.h"
 
 namespace Digikam
 {

@@ -36,6 +36,7 @@
 #include <klocale.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -44,7 +45,6 @@
 #include "databasetransaction.h"
 #include "thumbnaildatabaseaccess.h"
 #include "thumbnaildb.h"
-#include "debug.h"
 
 namespace Digikam
 {

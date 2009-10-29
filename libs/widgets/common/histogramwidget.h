@@ -31,11 +31,14 @@
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPaintEvent>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
 #include "dcolor.h"
 #include "digikam_export.h"
-#include "debug.h"
 #include "globals.h"
 
 namespace Digikam

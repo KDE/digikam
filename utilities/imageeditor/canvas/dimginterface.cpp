@@ -54,6 +54,7 @@
 
 #include <kcursor.h>
 #include <kmessagebox.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -70,7 +71,6 @@
 #include "dmetadata.h"
 #include "rawimport.h"
 #include "editortooliface.h"
-#include "debug.h"
 
 namespace Digikam
 {

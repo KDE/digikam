@@ -43,6 +43,7 @@
 // KDE includes
 
 #include <kurl.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -55,7 +56,6 @@
 #include "databasebackend.h"
 #include "searchxml.h"
 #include "haar.h"
-#include "debug.h"
 /*#include "imagecomments_p.h"
 #include "imageposition_p.h"
 */

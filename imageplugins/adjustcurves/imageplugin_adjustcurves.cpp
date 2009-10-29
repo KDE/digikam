@@ -33,11 +33,11 @@
 #include <kgenericfactory.h>
 #include <klibloader.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "adjustcurvestool.h"
-#include "debug.h"
 
 using namespace DigikamAdjustCurvesImagesPlugin;
 
