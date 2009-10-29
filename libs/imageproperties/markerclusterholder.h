@@ -443,6 +443,13 @@ public:
         : MarbleWidget(parent), m_markerClusterHolder(new MarkerClusterHolder(this))
     {
     }
+    
+    ~MarbleSubClassWidget()
+    {
+        // delete the MarkerClusterHolder before the MarbleWidget is destroyed:
+        // MarkerClusterHolder unregisters itself from the ExternalDrawPlugin
+        delete m_markerClusterHolder;
+    }
 
 protected:
 

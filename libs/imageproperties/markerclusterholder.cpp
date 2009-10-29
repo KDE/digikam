@@ -27,6 +27,7 @@
 
 #include <QMouseEvent>
 #include <QToolTip>
+#include <QPointer>
 
 // Marble includes
 
@@ -80,7 +81,7 @@ public:
 
 // externaldraw plugin only supported on version 0.8 or higher
 #if MARBLE_VERSION >= 0x000800
-    Marble::ExternalDrawPlugin* externalDrawPlugin;
+    QPointer<Marble::ExternalDrawPlugin> externalDrawPlugin;
 #endif // MARBLE_VERSION >= 0x000800
 
 
