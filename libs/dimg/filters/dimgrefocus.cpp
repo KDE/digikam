@@ -143,7 +143,7 @@ void DImgRefocus::refocusImage(uchar* data, int width, int height, bool sixteenB
     CMat *matrix=0;
 
     // Compute matrix
-    kDebug(imagePluginsAreaCode) << "DImgRefocus::Compute matrix...";
+    kDebug() << "DImgRefocus::Compute matrix...";
 
     CMat circle, gaussian, convolution;
 
@@ -159,7 +159,7 @@ void DImgRefocus::refocusImage(uchar* data, int width, int height, bool sixteenB
     RefocusMatrix::finish_c_mat (&circle);
 
     // Apply deconvolution kernel to image.
-    kDebug(imagePluginsAreaCode) << "DImgRefocus::Apply Matrix to image...";
+    kDebug() << "DImgRefocus::Apply Matrix to image...";
     convolveImage(data, m_preImage.bits(), width, height, sixteenBit,
                   matrix->data, 2 * matrixSize + 1);
 

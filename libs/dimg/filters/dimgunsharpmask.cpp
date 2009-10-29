@@ -64,7 +64,7 @@ void DImgUnsharpMask::filterImage()
 
     if (m_orgImage.isNull())
     {
-       kWarning(imagePluginsAreaCode) << "No image data available!";
+       kWarning() << "No image data available!";
        return;
     }
 
