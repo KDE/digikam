@@ -178,25 +178,6 @@ class A
 ....QFileInfo* m_fileInfo;
 
 ========================================================================
-Debugging information
-========================================================================
-
-To write debugging information to the console, add the "debug.h" header file
-to your includes and use the areaCode variables provided by that file.
-For example:
-
-#include "debug.h"
-
-void Foo::doSomething()
-{
-    ...
-    kDebug(digiKamAreaCode)  << "some debugging info";
-    kDebug(showFotoAreaCode) << "some more debugging info";
-}
-
-You do not need to include <kdebug.h>, it is already done for you.
-
-========================================================================
 General recommendations
 ========================================================================
 
