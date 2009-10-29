@@ -789,7 +789,7 @@ void ShowFoto::openFolder(const KUrl& url)
     patterns.append (" ");
     patterns.append (filter.toUpper());
 
-    kDebug(showFotoAreaCode) << "patterns=" << patterns;
+    kDebug() << "patterns=" << patterns;
 
     // Get all image files from directory.
 
@@ -1019,7 +1019,7 @@ bool ShowFoto::save()
 {
     if (!d->currentItem)
     {
-        kWarning(showFotoAreaCode) << "This should not happen";
+        kWarning() << "This should not happen";
         return true;
     }
 
@@ -1036,7 +1036,7 @@ bool ShowFoto::saveAs()
 {
     if (!d->currentItem)
     {
-        kWarning(showFotoAreaCode) << "This should not happen";
+        kWarning() << "This should not happen";
         return false;
     }
 

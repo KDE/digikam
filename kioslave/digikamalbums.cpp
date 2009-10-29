@@ -78,7 +78,7 @@ void kio_digikamalbums::special(const QByteArray& data)
     QDataStream ds(data);
     ds >> kurl;
 
-    kDebug(kioslavesAreaCode) << "kio_digikamalbums::special " << kurl;
+    kDebug() << "kio_digikamalbums::special " << kurl;
 
     Digikam::DatabaseUrl dbUrl(kurl);
     Digikam::DatabaseAccess::setParameters(dbUrl);
@@ -113,7 +113,7 @@ void kio_digikamalbums::special(const QByteArray& data)
 
 void kio_digikamalbums::get( const KUrl& url )
 {
-    kDebug(kioslavesAreaCode) << " : " << url;
+    kDebug() << " : " << url;
 
     // no need to open the db. we don't need to read/write to it
 
@@ -129,7 +129,7 @@ void kio_digikamalbums::get( const KUrl& url )
 
 void kio_digikamalbums::put(const KUrl& url, int permissions, KIO::JobFlags flags)
 {
-    kDebug(kioslavesAreaCode) << " : " << url.url();
+    kDebug() << " : " << url.url();
 
     Digikam::DatabaseUrl dbUrl(url);
     Digikam::DatabaseAccess::setParameters(dbUrl);
@@ -156,7 +156,7 @@ void kio_digikamalbums::put(const KUrl& url, int permissions, KIO::JobFlags flag
 
 void kio_digikamalbums::copy( const KUrl& src, const KUrl& dst, int mode, KIO::JobFlags flags )
 {
-    kDebug(kioslavesAreaCode) << "Src: " << src.path() << ", Dst: " << dst.path();
+    kDebug() << "Src: " << src.path() << ", Dst: " << dst.path();
 
     Digikam::DatabaseUrl dbUrlSrc(src);
     Digikam::DatabaseUrl dbUrlDst(dst);
@@ -224,7 +224,7 @@ void kio_digikamalbums::copy( const KUrl& src, const KUrl& dst, int mode, KIO::J
 
 void kio_digikamalbums::rename( const KUrl& src, const KUrl& dst, KIO::JobFlags flags )
 {
-    kDebug(kioslavesAreaCode) << "Src: " << src << ", Dst: " << dst;
+    kDebug() << "Src: " << src << ", Dst: " << dst;
 
     // if the filename is .digikam_properties ignore it
     if (src.fileName() == ".digikam_properties")
@@ -301,7 +301,7 @@ void kio_digikamalbums::rename( const KUrl& src, const KUrl& dst, KIO::JobFlags 
 
 void kio_digikamalbums::mkdir( const KUrl& url, int permissions )
 {
-    kDebug(kioslavesAreaCode) << " : " << url.url();
+    kDebug() << " : " << url.url();
 
     Digikam::DatabaseUrl dbUrl(url);
     // DatabaseUrl has a strong opinion there should be a slash, KDE does not
@@ -323,7 +323,7 @@ void kio_digikamalbums::mkdir( const KUrl& url, int permissions )
 
 void kio_digikamalbums::chmod( const KUrl& url, int permissions )
 {
-    kDebug(kioslavesAreaCode) << " : " << url.url();
+    kDebug() << " : " << url.url();
 
     Digikam::DatabaseUrl dbUrl(url);
 
@@ -337,7 +337,7 @@ void kio_digikamalbums::chmod( const KUrl& url, int permissions )
 
 void kio_digikamalbums::del( const KUrl& url, bool isFile)
 {
-    kDebug(kioslavesAreaCode) << " : " << url.url();
+    kDebug() << " : " << url.url();
 
     // if the filename is .digikam_properties ignore it
     if (isFile && url.fileName() == ".digikam_properties")
@@ -418,7 +418,7 @@ void kio_digikamalbums::stat( const KUrl& url )
 
 void kio_digikamalbums::listDir( const KUrl& url )
 {
-    kDebug(kioslavesAreaCode) << " : " << url.path();
+    kDebug() << " : " << url.path();
 
     Digikam::DatabaseUrl dbUrl(url);
 
@@ -611,7 +611,7 @@ extern "C"
         KGlobal::locale();
 
         if (argc != 4) {
-            kDebug(kioslavesAreaCode) << "Usage: kio_digikamalbums  protocol domain-socket1 domain-socket2";
+            kDebug() << "Usage: kio_digikamalbums  protocol domain-socket1 domain-socket2";
             exit(-1);
         }
 

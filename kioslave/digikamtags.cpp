@@ -112,17 +112,17 @@ extern "C"
         KComponentData componentData( "kio_digikamtags" );
         ( void ) KGlobal::locale();
 
-        kDebug(kioslavesAreaCode) << "*** kio_digikamtag started ***";
+        kDebug() << "*** kio_digikamtag started ***";
 
         if (argc != 4) {
-            kDebug(kioslavesAreaCode) << "Usage: kio_digikamtags  protocol domain-socket1 domain-socket2";
+            kDebug() << "Usage: kio_digikamtags  protocol domain-socket1 domain-socket2";
             exit(-1);
         }
 
         kio_digikamtagsProtocol slave(argv[2], argv[3]);
         slave.dispatchLoop();
 
-        kDebug(kioslavesAreaCode) << "*** kio_digikamtags finished ***";
+        kDebug() << "*** kio_digikamtags finished ***";
         return 0;
     }
 }

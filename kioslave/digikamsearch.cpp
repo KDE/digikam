@@ -69,7 +69,7 @@ void kio_digikamsearch::special(const QByteArray& data)
     if (!ds.atEnd())
         ds >> listingType;
 
-    kDebug(kioslavesAreaCode) << "kio_digikamsearch::special " << kurl;
+    kDebug() << "kio_digikamsearch::special " << kurl;
 
     Digikam::DatabaseUrl dbUrl(kurl);
     Digikam::DatabaseAccess::setParameters(dbUrl);
@@ -134,7 +134,7 @@ void kio_digikamsearch::special(const QByteArray& data)
 
         if (albumIds.isEmpty() && tagIds.isEmpty())
         {
-            kDebug(kioslavesAreaCode) << "No album ids passed for duplicates search";
+            kDebug() << "No album ids passed for duplicates search";
             error(KIO::ERR_INTERNAL, i18n("No album ids passed"));
             return;
         }
@@ -190,7 +190,7 @@ extern "C"
 
         if (argc != 4)
         {
-            kDebug(kioslavesAreaCode) << "Usage: kio_digikamsearch  protocol domain-socket1 domain-socket2";
+            kDebug() << "Usage: kio_digikamsearch  protocol domain-socket1 domain-socket2";
             exit(-1);
         }
 
