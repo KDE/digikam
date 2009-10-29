@@ -40,7 +40,7 @@ FilePropertiesParser::FilePropertiesParser()
               : SubParser(i18n("File"), i18n("Add file properties"), SmallIcon("folder-image"))
 {
     addTokenDescription("[file]", i18nc("image filename", "Name"),
-             i18n("File name"));
+             i18n("Filename"));
 
     addTokenDescription("[ext]", i18nc("image extension", "Extension"),
              i18n("File extension"));
