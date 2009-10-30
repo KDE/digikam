@@ -43,10 +43,6 @@ extern "C"
 #include <unistd.h>
 #include <utime.h>
 #include <setjmp.h>
-
-// to avoid warnings under win32
-#undef HAVE_STDLIB_H
-#undef HAVE_STDDEF_H 
 #include <jpeglib.h>
 }
 
