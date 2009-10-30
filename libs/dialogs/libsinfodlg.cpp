@@ -63,11 +63,11 @@ using namespace Marble;
 extern "C"
 {
 #endif
+#include <jasper/jas_version.h>
 #include <png.h>
 #include <tiffvers.h>
-#include <jpeglib.h>
-#include <jasper/jas_version.h>
 #include <lcms.h>
+#include <jpeglib.h>
 #ifndef Q_CC_MSVC
 }
 #endif
