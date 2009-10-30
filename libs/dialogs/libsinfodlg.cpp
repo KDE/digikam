@@ -67,7 +67,12 @@ extern "C"
 #include <png.h>
 #include <tiffvers.h>
 #include <lcms.h>
+
+// Avoid Warnings under Win32
+#undef HAVE_STDLIB_H
+#undef HAVE_STDDEF_H
 #include <jpeglib.h>
+
 #ifndef Q_CC_MSVC
 }
 #endif
