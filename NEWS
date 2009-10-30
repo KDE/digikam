@@ -82,7 +82,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 073 ==> 198183 : When i try to run digiKam, it crashes.
 074 ==> 188334 : Crash when applying free rotation to TIF16 picture.
 075 ==> 190593 : digiKam crashes on start-up.
-076 ==> 
+076 ==> 089364 : Change date of album to exif date of first image.
+077 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
