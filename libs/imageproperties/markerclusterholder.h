@@ -443,7 +443,7 @@ public:
         : MarbleWidget(parent), m_markerClusterHolder(new MarkerClusterHolder(this))
     {
     }
-    
+
     ~MarbleSubClassWidget()
     {
         // delete the MarkerClusterHolder before the MarbleWidget is destroyed:
