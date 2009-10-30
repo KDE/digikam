@@ -47,36 +47,27 @@ class ExternalDrawPlugin : public RenderPlugin
     MARBLE_PLUGIN( ExternalDrawPlugin )
 
 public:
+
     ExternalDrawPlugin();
-    
+
     QStringList backendTypes() const;
-
-    QString renderPolicy() const;
-
+    QString     renderPolicy() const;
     QStringList renderPosition() const;
-
-    QString name() const;
-
-    QString guiString() const;
-
-    QString nameId() const;
-
-    QString description() const;
-
-    QIcon icon () const;
-
+    QString     name() const;
+    QString     guiString() const;
+    QString     nameId() const;
+    QString     description() const;
+    QIcon       icon () const;
 
     void initialize ();
-
     bool isInitialized () const;
 
-
     bool render( GeoPainter *painter, ViewportParams *viewport, const QString& renderPos, GeoSceneLayer * layer = 0 );
-    
+
     typedef void (*RenderCallbackFunction)(GeoPainter *painter, void* yourdata);
     RenderCallbackFunction renderCallbackFunction;
     void* renderCallbackFunctionData;
-    
+
     /**
      * @brief Install a callback function
      *
@@ -91,7 +82,7 @@ public:
         renderCallbackFunction = yourFunction;
         renderCallbackFunctionData = yourdata;
     }
-    
+
     /**
      * @brief Find the ExternalDrawPlugin instance for a given MarbleWidget
      *
@@ -105,30 +96,31 @@ public:
     static ExternalDrawPlugin* findPluginInstance(MarbleWidget* const marbleWidget)
     {
         Marble::MarbleMap* const marbleMap = marbleWidget->map();
-        
+
         // find the ExternalDraw plugin:
         const QList<Marble::RenderPlugin*> renderPlugins = marbleMap->renderPlugins();
-        Marble::ExternalDrawPlugin* myPlugin = 0;
-        for (QList<Marble::RenderPlugin*>::const_iterator it = renderPlugins.constBegin(); it!=renderPlugins.constEnd(); ++it)
+        Marble::ExternalDrawPlugin* myPlugin             = 0;
+
+        for (QList<Marble::RenderPlugin*>::const_iterator it = renderPlugins.constBegin();
+             it != renderPlugins.constEnd(); ++it)
         {
             // TODO: find a stricter way to verify that it is the right plugin
             // tried qobject_cast, but that did not work because we do not link to the plugin
-            if ((*it)->nameId()==EXTERNALDRAWPLUGIN_IDENTIFIER)
+            if ((*it)->nameId() == EXTERNALDRAWPLUGIN_IDENTIFIER)
             {
                 myPlugin = reinterpret_cast<Marble::ExternalDrawPlugin*>(*it);
                 break;
             }
         }
-        
+
         return myPlugin;
     }
-    
-    
+
 private:
+
     Q_DISABLE_COPY(ExternalDrawPlugin)
-    
 };
 
-}
+} // namespace Marble
 
 #endif // EXTERNALDRAW_H

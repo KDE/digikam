@@ -22,9 +22,10 @@
  *
  * ============================================================ */
 
-
 #include "externaldraw.h"
 #include "externaldraw.moc"
+
+// Marble includes
 
 #include <marble/MarbleDirs.h>
 #include <marble/GeoPainter.h>
@@ -32,9 +33,9 @@
 
 namespace Marble
 {
-  
+
 ExternalDrawPlugin::ExternalDrawPlugin()
-: RenderPlugin(), renderCallbackFunction(0), renderCallbackFunctionData(0)
+    : RenderPlugin(), renderCallbackFunction(0), renderCallbackFunctionData(0)
 {
 }
 
@@ -74,36 +75,34 @@ QString ExternalDrawPlugin::description() const
     return tr( "Plugin to allow client applications to draw in layers. Used by Digikam." );
 }
 
-QIcon ExternalDrawPlugin::icon () const
+QIcon ExternalDrawPlugin::icon() const
 {
     return QIcon();
 }
 
-
-void ExternalDrawPlugin::initialize ()
+void ExternalDrawPlugin::initialize()
 {
 }
 
-bool ExternalDrawPlugin::isInitialized () const
+bool ExternalDrawPlugin::isInitialized() const
 {
     return true;
 }
 
-bool ExternalDrawPlugin::render( GeoPainter *painter, ViewportParams *viewport, const QString& renderPos, GeoSceneLayer * layer )
+bool ExternalDrawPlugin::render(GeoPainter* painter, ViewportParams* viewport, const QString& renderPos, GeoSceneLayer* layer)
 {
     Q_UNUSED(viewport)
     Q_UNUSED(renderPos)
     Q_UNUSED(layer)
-    
+
     if (renderCallbackFunction)
     {
         renderCallbackFunction(painter, renderCallbackFunctionData);
     }
-    
+
     return true;
 }
 
-}
+} // namespace Marble
 
 Q_EXPORT_PLUGIN2( ExternalDrawPlugin, Marble::ExternalDrawPlugin )
-
