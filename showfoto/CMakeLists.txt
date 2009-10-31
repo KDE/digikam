@@ -6,8 +6,6 @@ IF(NOT MSVC)
     ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
 ENDIF(NOT MSVC)
 
-ADD_SUBDIRECTORY(setup)
-
 INCLUDE_DIRECTORIES( ../showfoto/setup
                      ../libs/widgets/common
                      ../libs/widgets/imageplugins
