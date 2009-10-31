@@ -91,7 +91,7 @@ void ToneMappingParameters::postProgress(int progress)
 REALTYPE ToneMappingParameters::get_power(int nstage)
 {
     REALTYPE power = stage[nstage].power;
-    power          = pow(power/100.0,1.5)*100.0;
+    power          = (REALTYPE)(pow(power/100.0,1.5)*100.0);
     return power;
 }
 
@@ -103,7 +103,7 @@ REALTYPE ToneMappingParameters::get_blur(int nstage)
 REALTYPE ToneMappingParameters::get_unsharp_mask_power()
 {
     REALTYPE power = unsharp_mask.power;
-    power          = pow(power/100.0,3.0)*10.0;
+    power          = (REALTYPE)(pow(power/100.0,3.0)*10.0);
     return power;
 }
 
@@ -179,7 +179,7 @@ bool ToneMappingParameters::load_parameters(const char *filename)
         const char *par  = line;
         const char *sval = &line[space];
         int ipar         = atoi(sval);
-        REALTYPE fpar    = atof(sval);
+        REALTYPE fpar    = (REALTYPE)(atof(sval));
 
         if (strstr(par, "info_fast_mode") == par)   info_fast_mode   = ipar;
         if (strstr(par, "low_saturation") == par)   low_saturation   = ipar;

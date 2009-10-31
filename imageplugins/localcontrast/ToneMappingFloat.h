@@ -50,8 +50,8 @@ private:
     void inplace_blur(REALTYPE *data, int sizex, int sizey, REALTYPE blur);
     void stretch_contrast(REALTYPE *data, int datasize);
 
-    inline void rgb2hsv(const REALTYPE &r, const REALTYPE &g, const REALTYPE &b,
-                        REALTYPE &h,REALTYPE &s, REALTYPE &v)
+    inline void rgb2hsv(const REALTYPE& r, const REALTYPE& g, const REALTYPE& b,
+                        REALTYPE& h, REALTYPE& s, REALTYPE& v)
     {
         REALTYPE maxrg = (r>g) ? r : g;
         REALTYPE max   = (maxrg>b) ? maxrg : b;
@@ -70,18 +70,18 @@ private:
         {
             if (max == r)
             {
-                h = fmod(60.0*(g-b)/delta+360.0,360.0);
+                h = (REALTYPE)(fmod(60.0*(g-b)/delta+360.0, 360.0));
             }
             else
             {
                 if (max == g)
                 {
-                    h = 60.0*(b-r)/delta+120.0;
+                    h = (REALTYPE)(60.0*(b-r)/delta+120.0);
                 }
                 else
                 {
                     //max==b
-                    h = 60.0*(r-g)/delta+240.0;
+                    h = (REALTYPE)(60.0*(r-g)/delta+240.0);
                 }
             }
         }
@@ -93,23 +93,23 @@ private:
         }
         else
         {
-            s = 1.0-min/max;
+            s = (REALTYPE)(1.0-min/max);
         }
 
         //value
         v = max;
     };
 
-    inline void hsv2rgb(const REALTYPE &h, const REALTYPE &s, const REALTYPE &v,
-                        REALTYPE &r, REALTYPE &g, REALTYPE &b)
+    inline void hsv2rgb(const REALTYPE& h, const REALTYPE& s, const REALTYPE& v,
+                        REALTYPE& r, REALTYPE& g, REALTYPE& b)
     {
-        REALTYPE hfi = floor(h/60.0);
-        REALTYPE f   = (h/60.0)-hfi;
+        REALTYPE hfi = (REALTYPE)(floor(h/60.0));
+        REALTYPE f   = (REALTYPE)((h/60.0)-hfi);
         int hi       = ((int)hfi)%6;
 
-        REALTYPE p   = v*(1.0-s);
-        REALTYPE q   = v*(1.0-f*s);
-        REALTYPE t   = v*(1.0-(1.0-f)*s);
+        REALTYPE p   = (REALTYPE)(v*(1.0-s));
+        REALTYPE q   = (REALTYPE)(v*(1.0-f*s));
+        REALTYPE t   = (REALTYPE)(v*(1.0-(1.0-f)*s));
 
         switch (hi)
         {

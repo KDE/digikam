@@ -84,7 +84,7 @@ void ToneMappingInt::recompute_func_table(int nstage)
     {
         for (int x2=0 ; x2 < 256 ; x2++)
         {
-            REALTYPE f             = func(x1/255.0,x2/255.0);
+            REALTYPE f             = func((REALTYPE)(x1/255.0), (REALTYPE)(x2/255.0));
             func_lookup_table[pos] = (int) (f*255.0);
             pos++;
         }
@@ -342,7 +342,7 @@ void ToneMappingInt::process_8bit_rgb_image(unsigned char *img, int sizex, int s
 void ToneMappingInt::inplace_blur_8bit_process(unsigned char *data, int sizex, int sizey, REALTYPE blur)
 {
     blur /= preview_zoom;
-    REALTYPE af = exp(log(0.5)/blur*sqrt(2));
+    REALTYPE af = (REALTYPE)(exp(log(0.5)/blur*sqrt(2)));
 
     if ((af <= 0.0) || (af >= 1.0)) return;
 
