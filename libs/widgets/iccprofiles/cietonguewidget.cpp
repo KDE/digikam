@@ -324,7 +324,7 @@ void CIETongueWidget::setProfile(cmsHPROFILE hProfile)
 
     ZeroMemory(&(d->Primaries), sizeof(cmsCIExyYTRIPLE));
 
-    if (cmsIsTag(hProfile, icSigRedColorantTag) &&
+    if (cmsIsTag(hProfile, icSigRedColorantTag)   &&
         cmsIsTag(hProfile, icSigGreenColorantTag) &&
         cmsIsTag(hProfile, icSigBlueColorantTag))
     {
@@ -388,9 +388,9 @@ void CIETongueWidget::biasedLine(int x1, int y1, int x2, int y2)
     d->painter.drawLine(x1 + d->xBias, y1, x2 + d->xBias, y2);
 }
 
-void CIETongueWidget::biasedText(int x, int y, QString Txt)
+void CIETongueWidget::biasedText(int x, int y, const QString& txt)
 {
-    d->painter.drawText(QPoint(d->xBias + x, y), Txt);
+    d->painter.drawText(QPoint(d->xBias + x, y), txt);
 }
 
 QRgb CIETongueWidget::colorByCoord(double x, double y)
@@ -497,7 +497,7 @@ void CIETongueWidget::drawTongueAxis()
 
     d->painter.setPen(qRgb(255, 255, 255));
 
-    biasedLine(0, 0,          0,          d->pxrows - 1);
+    biasedLine(0, 0,           0,           d->pxrows - 1);
     biasedLine(0, d->pxrows-1, d->pxcols-1, d->pxrows - 1);
 
     for (int y = 1; y <= 9; y += 1)

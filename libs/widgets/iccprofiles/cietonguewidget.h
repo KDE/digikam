@@ -55,7 +55,7 @@ class CIETongueWidgetPriv;
 
 class DIGIKAM_EXPORT CIETongueWidget : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
@@ -81,7 +81,7 @@ protected:
     QRgb colorByCoord(double x, double y);
     void drawSmallElipse(LPcmsCIExyY xyY, BYTE r, BYTE g, BYTE b, int sz);
 
-    void paintEvent( QPaintEvent * );
+    void paintEvent(QPaintEvent*);
 
 private:
 
@@ -92,7 +92,7 @@ private:
 
     void mapPoint(int& icx, int& icy, LPcmsCIExyY xyY);
     void biasedLine(int x1, int y1, int x2, int y2);
-    void biasedText(int x, int y, QString Txt);
+    void biasedText(int x, int y, const QString& txt);
 
     void sweep_sRGB();
 
