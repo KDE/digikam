@@ -110,7 +110,7 @@ public:
         operator=(other);
     }
 
-    IccTransformPriv &operator=(const IccTransformPriv& other)
+    IccTransformPriv& operator=(const IccTransformPriv& other)
     {
         // Attention: This is sensitive. Add any new members here.
         // We can't use the default operator= because of handle.
@@ -163,14 +163,14 @@ public:
     IccProfile proofProfile;
     IccProfile builtinProfile;
 
-    IccProfile &sRGB()
+    IccProfile& sRGB()
     {
         if (builtinProfile.isNull())
             builtinProfile = IccProfile::sRGB();
         return builtinProfile;
     }
 
-    IccProfile &effectiveInputProfile()
+    IccProfile& effectiveInputProfile()
     {
         if (!embeddedProfile.isNull())
             return embeddedProfile;
@@ -190,7 +190,7 @@ public:
             return IccProfile::sRGB();
     }
 
-    cmsHTRANSFORM handle;
+    cmsHTRANSFORM        handle;
     TransformDescription currentDescription;
 };
 
@@ -204,7 +204,7 @@ IccTransform::IccTransform(const IccTransform& other)
 {
 }
 
-IccTransform &IccTransform::operator=(const IccTransform& other)
+IccTransform& IccTransform::operator=(const IccTransform& other)
 {
     d = other.d;
     return *this;

@@ -54,7 +54,7 @@ public:
     ~IccTransform();
 
     IccTransform(const IccTransform& other);
-    IccTransform &operator=(const IccTransform& other);
+    IccTransform& operator=(const IccTransform& other);
 
     /**
      * Apply this transform with the set profiles and options to the image.
