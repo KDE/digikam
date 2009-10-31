@@ -47,7 +47,7 @@ ToneMappingParameters::ToneMappingParameters()
     info_callBack    = 0;
     info_data        = 0;
 
-    for (int i=0 ; i < TONEMAPPING_MAX_STAGES ; i++)
+    for (int i = 0 ; i < TONEMAPPING_MAX_STAGES ; i++)
     {
         stage[i].enabled = (i == 0);
         stage[i].power   = 30.0;
@@ -158,12 +158,12 @@ bool ToneMappingParameters::load_parameters(const char *filename)
 
     while (!feof(f))
     {
-        for (int i=0 ; i < max_line ; i++)
+        for (int i = 0 ; i < max_line ; i++)
             line[i] = 0;
 
         fgets(line, max_line-1,f);
 
-        if (strlen(line)<3) continue;
+        if (strlen(line) < 3) continue;
 
         int space = 0;
         for (int i=0 ; i < max_line ; i++)
@@ -181,10 +181,10 @@ bool ToneMappingParameters::load_parameters(const char *filename)
         int ipar         = atoi(sval);
         REALTYPE fpar    = (REALTYPE)(atof(sval));
 
-        if (strstr(par, "info_fast_mode") == par)   info_fast_mode   = ipar;
+        if (strstr(par, "info_fast_mode") == par)   info_fast_mode   = (bool)ipar;
         if (strstr(par, "low_saturation") == par)   low_saturation   = ipar;
         if (strstr(par, "high_saturation") == par)  high_saturation  = ipar;
-        if (strstr(par, "stretch_contrast") == par) stretch_contrast = ipar;
+        if (strstr(par, "stretch_contrast") == par) stretch_contrast = (bool)ipar;
         if (strstr(par, "function_id") == par)      function_id      = ipar;
 
         if (strstr(par, "STAGE") == par)
@@ -194,11 +194,11 @@ bool ToneMappingParameters::load_parameters(const char *filename)
             current_stage = ipar;
         }
 
-        if (strstr(par, "enabled") == par) stage[current_stage].enabled = ipar;
+        if (strstr(par, "enabled") == par) stage[current_stage].enabled = (bool)ipar;
         if (strstr(par, "power") == par)   stage[current_stage].power   = fpar;
         if (strstr(par, "blur") == par)    stage[current_stage].blur    = fpar;
 
-        if (strstr(par, "unsharp_mask_enabled") == par)   unsharp_mask.enabled   = ipar;
+        if (strstr(par, "unsharp_mask_enabled") == par)   unsharp_mask.enabled   = (bool)ipar;
         if (strstr(par, "unsharp_mask_power") == par)     unsharp_mask.power     = fpar;
         if (strstr(par, "unsharp_mask_blur") == par)      unsharp_mask.blur      = fpar;
         if (strstr(par, "unsharp_mask_threshold") == par) unsharp_mask.threshold = ipar;
