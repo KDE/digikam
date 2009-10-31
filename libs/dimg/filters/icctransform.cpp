@@ -7,7 +7,8 @@
  * Description : a class to apply ICC color correction to image.
  *
  * Copyright (C) 2005-2006 by F.J. Cruz <fj.cruz@supercable.es>
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -59,13 +60,13 @@ public:
 
     TransformDescription()
     {
-        inputFormat      = 0;
-        outputFormat     = 0;
-        intent           = 0;
-        transformFlags   = 0;
+        inputFormat    = 0;
+        outputFormat   = 0;
+        intent         = 0;
+        transformFlags = 0;
     }
 
-    bool operator==(const TransformDescription &other)
+    bool operator==(const TransformDescription& other)
     {
         return inputProfile   == other.inputProfile &&
                inputFormat    == other.inputFormat &&
@@ -93,18 +94,17 @@ public:
 
     IccTransformPriv()
     {
-        intent               = INTENT_PERCEPTUAL;
-        proofIntent          = INTENT_ABSOLUTE_COLORIMETRIC;
-        useBPC               = false;
-        checkGamut           = false;
-        doNotEmbed           = false;
-        checkGamutColor      = QColor(126, 255, 255);
-
-        handle               = 0;
+        intent          = INTENT_PERCEPTUAL;
+        proofIntent     = INTENT_ABSOLUTE_COLORIMETRIC;
+        useBPC          = false;
+        checkGamut      = false;
+        doNotEmbed      = false;
+        checkGamutColor = QColor(126, 255, 255);
+        handle          = 0;
     }
 
     IccTransformPriv(const IccTransformPriv& other)
-                : QSharedData(other)
+         : QSharedData(other)
     {
         handle = 0;
         operator=(other);
@@ -221,7 +221,7 @@ void IccTransform::init()
     cmsErrorAction(LCMS_ERROR_SHOW);
 }
 
-void IccTransform::setInputProfile(const IccProfile &profile)
+void IccTransform::setInputProfile(const IccProfile& profile)
 {
     if (profile == d->inputProfile)
         return;
@@ -238,7 +238,7 @@ void IccTransform::setEmbeddedProfile(const DImg& image)
     d->embeddedProfile = profile;
 }
 
-void IccTransform::setOutputProfile(const IccProfile &profile)
+void IccTransform::setOutputProfile(const IccProfile& profile)
 {
     if (profile == d->outputProfile)
         return;
@@ -246,7 +246,7 @@ void IccTransform::setOutputProfile(const IccProfile &profile)
     d->outputProfile = profile;
 }
 
-void IccTransform::setProofProfile(const IccProfile &profile)
+void IccTransform::setProofProfile(const IccProfile& profile)
 {
     if (profile == d->proofProfile)
         return;
@@ -328,7 +328,7 @@ void IccTransform::setCheckGamut(bool checkGamut)
     d->checkGamut = checkGamut;
 }
 
-void IccTransform::setCheckGamutMaskColor(const QColor &color)
+void IccTransform::setCheckGamutMaskColor(const QColor& color)
 {
     d->checkGamutColor = color;
 }
@@ -410,20 +410,20 @@ TransformDescription IccTransform::getDescription(const DImg& image)
     return description;
 }
 
-TransformDescription IccTransform::getDescription(const QImage& )
+TransformDescription IccTransform::getDescription(const QImage&)
 {
     TransformDescription description;
 
-    description.inputProfile = d->effectiveInputProfile();
+    description.inputProfile  = d->effectiveInputProfile();
     description.outputProfile = d->outputProfile;
-    description.intent = d->intent;
+    description.intent        = d->intent;
 
     if (d->useBPC)
     {
         description.transformFlags |= cmsFLAGS_WHITEBLACKCOMPENSATION;
     }
 
-    description.inputFormat = TYPE_BGRA_8;
+    description.inputFormat  = TYPE_BGRA_8;
     description.outputFormat = TYPE_BGRA_8;
 
     return description;
@@ -446,7 +446,7 @@ TransformDescription IccTransform::getProofingDescription(const DImg& image)
     return description;
 }
 
-bool IccTransform::open(TransformDescription &description)
+bool IccTransform::open(TransformDescription& description)
 {
     if (d->handle)
     {
@@ -463,12 +463,12 @@ bool IccTransform::open(TransformDescription &description)
     d->currentDescription = description;
 
     LcmsLock lock();
-    d->handle = cmsCreateTransform( description.inputProfile,
-                                    description.inputFormat,
-                                    description.outputProfile,
-                                    description.outputFormat,
-                                    description.intent,
-                                    description.transformFlags);
+    d->handle = cmsCreateTransform(description.inputProfile,
+                                   description.inputFormat,
+                                   description.outputProfile,
+                                   description.outputFormat,
+                                   description.intent,
+                                   description.transformFlags);
 
     if (!d->handle)
     {
@@ -479,7 +479,7 @@ bool IccTransform::open(TransformDescription &description)
     return true;
 }
 
-bool IccTransform::openProofing(TransformDescription &description)
+bool IccTransform::openProofing(TransformDescription& description)
 {
     if (d->handle)
     {
@@ -496,14 +496,14 @@ bool IccTransform::openProofing(TransformDescription &description)
     d->currentDescription = description;
 
     LcmsLock lock();
-    d->handle = cmsCreateProofingTransform( description.inputProfile,
-                                    description.inputFormat,
-                                    description.outputProfile,
-                                    description.outputFormat,
-                                    description.proofProfile,
-                                    description.intent,
-                                    description.proofIntent,
-                                    description.transformFlags);
+    d->handle = cmsCreateProofingTransform(description.inputProfile,
+                                           description.inputFormat,
+                                           description.outputProfile,
+                                           description.outputFormat,
+                                           description.proofProfile,
+                                           description.intent,
+                                           description.proofIntent,
+                                           description.transformFlags);
 
     if (!d->handle)
     {
@@ -658,16 +658,16 @@ void IccTransform::transform(DImg& image, const TransformDescription& descriptio
 
 void IccTransform::transform(QImage& image, const TransformDescription&)
 {
-    const int bytesDepth = 4;
-    const int pixels = image.width() * image.height();
+    const int bytesDepth    = 4;
+    const int pixels        = image.width() * image.height();
     // convert ten scanlines in a batch
     const int pixelsPerStep = image.width() * 10;
-    uchar *data = image.bits();
+    uchar *data             = image.bits();
 
     for (int p=pixels; p > 0; p -= pixelsPerStep)
     {
         int pixelsThisStep = qMin(p, pixelsPerStep);
-        int size = pixelsThisStep * bytesDepth;
+        int size           = pixelsThisStep * bytesDepth;
         LcmsLock lock();
         cmsDoTransform(d->handle, data, data, pixelsThisStep);
         data += size;

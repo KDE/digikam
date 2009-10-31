@@ -7,7 +7,8 @@
  * Description : a class to apply ICC color correction to image.
  *
  * Copyright (C) 2005-2006 by F.J. Cruz <fj.cruz@supercable.es>
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -68,9 +69,9 @@ public:
 
     enum RenderingIntent
     {
-        Perceptual = 0,
+        Perceptual           = 0,
         RelativeColorimetric = 1,
-        Saturation = 2,
+        Saturation           = 2,
         AbsoluteColorimetric = 3
     };
 
@@ -82,11 +83,11 @@ public:
      * without an embedded profile. If none is set, sRGB is used.
      */
     void setEmbeddedProfile(const DImg& image);
-    void setInputProfile(const IccProfile &profile);
+    void setInputProfile(const IccProfile& profile);
     /// Sets the output transform
-    void setOutputProfile(const IccProfile &profile);
+    void setOutputProfile(const IccProfile& profile);
     /// Makes this transform a proofing transform, if profile is not null
-    void setProofProfile(const IccProfile &profile);
+    void setProofProfile(const IccProfile& profile);
     /**
      * Call this with 'true' if you do not want the output profile
      * to be set as embedded profile after apply() did a transformation.
@@ -101,7 +102,7 @@ public:
     void setProofIntent(int intent) { setProofIntent((RenderingIntent)intent); }
     void setUseBlackPointCompensation(bool useBPC);
     void setCheckGamut(bool checkGamut);
-    void setCheckGamutMaskColor(const QColor &color);
+    void setCheckGamutMaskColor(const QColor& color);
 
     /// Returns the contained profiles
     IccProfile embeddedProfile() const;
@@ -130,15 +131,14 @@ private:
     TransformDescription getDescription(const DImg& image);
     TransformDescription getProofingDescription(const DImg& image);
     TransformDescription getDescription(const QImage& image);
-    bool open(TransformDescription &description);
-    bool openProofing(TransformDescription &description);
+    bool open(TransformDescription& description);
+    bool openProofing(TransformDescription& description);
     void transform(DImg& img, const TransformDescription&, DImgLoaderObserver *observer = 0);
     void transform(QImage& img, const TransformDescription&);
 
 private:
 
     QSharedDataPointer<IccTransformPriv> d;
-
 };
 
 }  // namespace Digikam
