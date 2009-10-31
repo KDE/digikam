@@ -84,7 +84,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 075 ==> 190593 : digiKam crashes on start-up.
 076 ==> 089364 : Change date of album to exif date of first image.
 077 ==> 210580 : digiKam crashes on PPC Linux when changing thumbnail size.
-078 ==> 
+078 ==> 201717 : Changing rating filter when images are selected, select all images between first and last selected image.
+079 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
