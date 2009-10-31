@@ -240,7 +240,7 @@ BOOL cmsxLevenbergMarquardtIterate(LCMSHANDLE hMRQ)
 		pLM->oneda->Values[j][0] = pLM->beta->Values[j][0];
 	}
 	
-	if((sts = MATNsolve (pLM->covar, pLM->oneda)) != true)  /* Matrix solution. */
+	if((sts = MATNsolve (pLM->covar, pLM->oneda)) != TRUE)  /* Matrix solution. */
 		return sts;
 
 	for(j = 0; j < pLM->ma; j++)							/* Did the trial succeed? */
