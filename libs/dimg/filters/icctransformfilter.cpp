@@ -3,11 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2005-05-25
- * Description : Refocus threaded image filter.
+ * Date        : 2009-09-19
+ * Description : ICC Transform threaded image filter.
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009 by Matthias Welwarsky <matze at welwarsky dot de>
+ * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,21 +35,21 @@ namespace Digikam
 {
 
 IccTransformFilter::IccTransformFilter(DImg *orgImage, QObject *parent, const IccTransform& transform)
-           : DImgThreadedFilter(orgImage, parent, "ICC Transform")
+                  : DImgThreadedFilter(orgImage, parent, "ICC Transform")
 {
     m_transform = transform;
     // initialize filter
     initFilter();
 }
 
-void IccTransformFilter::filterImage(void)
+void IccTransformFilter::filterImage()
 {
     m_destImage = m_orgImage;
     m_transform.apply(m_destImage, this);
     m_destImage.setIccProfile(m_transform.outputProfile());
 }
 
-void IccTransformFilter::progressInfo(const DImg *, float progress)
+void IccTransformFilter::progressInfo(const DImg*, float progress)
 {
     postProgress(lround(progress * 100));
 }
