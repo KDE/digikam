@@ -248,9 +248,8 @@ bool CIETongueWidget::setProfileData(const QByteArray& profileData)
 {
     if (!profileData.isEmpty())
     {
-        LcmsLock lock();
-        cmsHPROFILE hProfile = cmsOpenProfileFromMem((void*)profileData.data(),
-                                                    (DWORD)profileData.size());
+        LcmsLock lock;
+        cmsHPROFILE hProfile = cmsOpenProfileFromMem((void*)profileData.data(), (DWORD)profileData.size());
 
         if (!hProfile)
         {
@@ -283,7 +282,7 @@ bool CIETongueWidget::setProfileFromFile(const KUrl& file)
 {
     if (!file.isEmpty() && file.isValid())
     {
-        LcmsLock lock();
+        LcmsLock lock;
         cmsHPROFILE hProfile = cmsOpenProfileFromFile(QFile::encodeName(file.toLocalFile()), "r");
 
         if (!hProfile)

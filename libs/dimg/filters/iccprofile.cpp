@@ -86,7 +86,7 @@ public:
     {
         if (handle)
         {
-            LcmsLock lock();
+            LcmsLock lock;
             cmsCloseProfile(handle);
             handle = 0;
         }
@@ -286,7 +286,7 @@ bool IccProfile::open()
 
     if (!d->data.isEmpty())
     {
-        LcmsLock lock();
+        LcmsLock lock;
         d->handle = cmsOpenProfileFromMem(d->data.data(), (DWORD)d->data.size());
     }
     else if (!d->filePath.isNull())
@@ -296,7 +296,8 @@ bool IccProfile::open()
 
         if (d->data.isEmpty())
             return false;
-        LcmsLock lock();
+
+        LcmsLock lock;
         d->handle = cmsOpenProfileFromMem(d->data.data(), (DWORD)d->data.size());
     }
 
@@ -338,7 +339,7 @@ QString IccProfile::description()
     if (!open())
         return QString();
 
-    LcmsLock lock();
+    LcmsLock lock;
     const char *desc = cmsTakeProductDesc(d->handle);
 
     if (desc && desc[0] != '\0')
@@ -358,7 +359,8 @@ IccProfile::ProfileType IccProfile::type()
     if (!open())
         return InvalidType;
 
-    LcmsLock lock();
+    LcmsLock lock;
+
     switch ((int)cmsGetDeviceClass(d->handle))
     {
         case icSigInputClass:

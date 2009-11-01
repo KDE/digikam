@@ -144,7 +144,7 @@ public:
         if (handle)
         {
             currentDescription = TransformDescription();
-            LcmsLock lock();
+            LcmsLock lock;
             cmsDeleteTransform(handle);
             handle = 0;
         }
@@ -217,7 +217,7 @@ IccTransform::~IccTransform()
 
 void IccTransform::init()
 {
-    LcmsLock lock();
+    LcmsLock lock;
     cmsErrorAction(LCMS_ERROR_SHOW);
 }
 
@@ -372,7 +372,7 @@ TransformDescription IccTransform::getDescription(const DImg& image)
         description.transformFlags |= cmsFLAGS_WHITEBLACKCOMPENSATION;
     }
 
-    LcmsLock lock();
+    LcmsLock lock;
     // Do not use TYPE_BGR_ - this implies 3 bytes per pixel, but even if !image.hasAlpha(),
     // our image data has 4 bytes per pixel with the fourth byte filled with 0xFF.
     if (image.sixteenBit())
@@ -462,7 +462,7 @@ bool IccTransform::open(TransformDescription& description)
 
     d->currentDescription = description;
 
-    LcmsLock lock();
+    LcmsLock lock;
     d->handle = cmsCreateTransform(description.inputProfile,
                                    description.inputFormat,
                                    description.outputProfile,
@@ -495,7 +495,7 @@ bool IccTransform::openProofing(TransformDescription& description)
 
     d->currentDescription = description;
 
-    LcmsLock lock();
+    LcmsLock lock;
     d->handle = cmsCreateProofingTransform(description.inputProfile,
                                            description.inputFormat,
                                            description.outputProfile,
@@ -608,10 +608,10 @@ bool IccTransform::apply(QImage& qimage)
 void IccTransform::transform(DImg& image, const TransformDescription& description, DImgLoaderObserver *observer)
 {
     const int bytesDepth = image.bytesDepth();
-    const int pixels = image.width() * image.height();
+    const int pixels     = image.width() * image.height();
     // convert ten scanlines in a batch
     const int pixelsPerStep = image.width() * 10;
-    uchar *data = image.bits();
+    uchar *data             = image.bits();
 
     // see dimgloader.cpp, granularity().
     int granularity=1;
@@ -625,8 +625,8 @@ void IccTransform::transform(DImg& image, const TransformDescription& descriptio
         for (int p=pixels; p > 0; p -= pixelsPerStep)
         {
             int pixelsThisStep = qMin(p, pixelsPerStep);
-            int size = pixelsThisStep * bytesDepth;
-            LcmsLock lock();
+            int size           = pixelsThisStep * bytesDepth;
+            LcmsLock lock;
             cmsDoTransform(d->handle, data, data, pixelsThisStep);
             data += size;
             if (observer && p <= checkPoint)
@@ -642,8 +642,8 @@ void IccTransform::transform(DImg& image, const TransformDescription& descriptio
         for (int p=pixels; p > 0; p -= pixelsPerStep)
         {
             int pixelsThisStep = qMin(p, pixelsPerStep);
-            int size = pixelsThisStep * bytesDepth;
-            LcmsLock lock();
+            int size           = pixelsThisStep * bytesDepth;
+            LcmsLock lock;
             memcpy(buffer.data(), data, size);
             cmsDoTransform(d->handle, buffer.data(), data, pixelsThisStep);
             data += size;
@@ -668,7 +668,7 @@ void IccTransform::transform(QImage& image, const TransformDescription&)
     {
         int pixelsThisStep = qMin(p, pixelsPerStep);
         int size           = pixelsThisStep * bytesDepth;
-        LcmsLock lock();
+        LcmsLock lock;
         cmsDoTransform(d->handle, data, data, pixelsThisStep);
         data += size;
     }
@@ -679,12 +679,14 @@ void IccTransform::close()
     d->close();
 }
 
-/*void IccTransform::closeProfiles()
+/*
+void IccTransform::closeProfiles()
 {
     d->inputProfile.close();
     d->outputProfile.close();
     d->proofProfile.close();
     d->embeddedProfile.close();
-}*/
+}
+*/
 
 }  // namespace Digikam
