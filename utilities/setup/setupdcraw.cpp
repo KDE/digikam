@@ -56,12 +56,47 @@ class SetupDcrawPriv
 public:
 
 
-    SetupDcrawPriv()
-    {
-        dcrawSettings = 0;
-    }
+    SetupDcrawPriv() :
+        configGroupName("ImageViewer Settings"), 
+        configSixteenBitsImageEntry("SixteenBitsImage"),
+        configWhiteBalanceEntry("WhiteBalance"),
+        configCustomWhiteBalanceEntry("CustomWhiteBalance"),
+        configCustomWhiteBalanceGreenEntry("CustomWhiteBalanceGreen"),
+        configRGBInterpolate4ColorsEntry("RGBInterpolate4Colors"),
+        configDontStretchPixelsEntry("DontStretchPixels"),
+        configEnableNoiseReductionEntry("EnableNoiseReduction"),
+        configNRThresholdEntry("NRThreshold"),
+        configEnableCACorrectionEntry("EnableCACorrection"),
+        configcaRedMultiplierEntry("caRedMultiplier"),
+        configcaBlueMultiplierEntry("caBlueMultiplier"),
+        configUnclipColorsEntry("UnclipColors"),
+        configRAWBrightnessEntry("RAWBrightness"),
+        configRAWQualityEntry("RAWQuality"),
+        configMedianFilterPassesEntry("MedianFilterPasses"),
+        configAutoBrightnessEntry("AutoBrightness"),
 
-    DcrawSettingsWidget *dcrawSettings;
+        dcrawSettings(0)
+    {}
+
+    const QString        configGroupName; 
+    const QString        configSixteenBitsImageEntry;
+    const QString        configWhiteBalanceEntry;
+    const QString        configCustomWhiteBalanceEntry;
+    const QString        configCustomWhiteBalanceGreenEntry;
+    const QString        configRGBInterpolate4ColorsEntry;
+    const QString        configDontStretchPixelsEntry;
+    const QString        configEnableNoiseReductionEntry;
+    const QString        configNRThresholdEntry;
+    const QString        configEnableCACorrectionEntry;
+    const QString        configcaRedMultiplierEntry;
+    const QString        configcaBlueMultiplierEntry;
+    const QString        configUnclipColorsEntry;
+    const QString        configRAWBrightnessEntry;
+    const QString        configRAWQualityEntry;
+    const QString        configMedianFilterPassesEntry;
+    const QString        configAutoBrightnessEntry;
+
+    DcrawSettingsWidget* dcrawSettings;
 };
 
 SetupDcraw::SetupDcraw(QWidget* parent )
@@ -110,24 +145,24 @@ void SetupDcraw::slotSixteenBitsImageToggled(bool)
 void SetupDcraw::applySettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("ImageViewer Settings"));
-    group.writeEntry("SixteenBitsImage",        d->dcrawSettings->sixteenBits());
-    group.writeEntry("WhiteBalance",            (int)d->dcrawSettings->whiteBalance());
-    group.writeEntry("CustomWhiteBalance",      d->dcrawSettings->customWhiteBalance());
-    group.writeEntry("CustomWhiteBalanceGreen", d->dcrawSettings->customWhiteBalanceGreen());
-    group.writeEntry("RGBInterpolate4Colors",   d->dcrawSettings->useFourColor());
-    group.writeEntry("DontStretchPixels",       d->dcrawSettings->useDontStretchPixels());
-    group.writeEntry("EnableNoiseReduction",    d->dcrawSettings->useNoiseReduction());
-    group.writeEntry("NRThreshold",             d->dcrawSettings->NRThreshold());
-    group.writeEntry("EnableCACorrection",      d->dcrawSettings->useCACorrection());
-    group.writeEntry("caRedMultiplier",         d->dcrawSettings->caRedMultiplier());
-    group.writeEntry("caBlueMultiplier",        d->dcrawSettings->caBlueMultiplier());
-    group.writeEntry("UnclipColors",            d->dcrawSettings->unclipColor());
-    group.writeEntry("RAWBrightness",           d->dcrawSettings->brightness());
-    group.writeEntry("RAWQuality",              (int)d->dcrawSettings->quality());
-    group.writeEntry("MedianFilterPasses",      d->dcrawSettings->medianFilterPasses());
+    KConfigGroup group        = config->group(d->configGroupName);
+    group.writeEntry(d->configSixteenBitsImageEntry,        d->dcrawSettings->sixteenBits());
+    group.writeEntry(d->configWhiteBalanceEntry,            (int)d->dcrawSettings->whiteBalance());
+    group.writeEntry(d->configCustomWhiteBalanceEntry,      d->dcrawSettings->customWhiteBalance());
+    group.writeEntry(d->configCustomWhiteBalanceGreenEntry, d->dcrawSettings->customWhiteBalanceGreen());
+    group.writeEntry(d->configRGBInterpolate4ColorsEntry,   d->dcrawSettings->useFourColor());
+    group.writeEntry(d->configDontStretchPixelsEntry,       d->dcrawSettings->useDontStretchPixels());
+    group.writeEntry(d->configEnableNoiseReductionEntry,    d->dcrawSettings->useNoiseReduction());
+    group.writeEntry(d->configNRThresholdEntry,             d->dcrawSettings->NRThreshold());
+    group.writeEntry(d->configEnableCACorrectionEntry,      d->dcrawSettings->useCACorrection());
+    group.writeEntry(d->configcaRedMultiplierEntry,         d->dcrawSettings->caRedMultiplier());
+    group.writeEntry(d->configcaBlueMultiplierEntry,        d->dcrawSettings->caBlueMultiplier());
+    group.writeEntry(d->configUnclipColorsEntry,            d->dcrawSettings->unclipColor());
+    group.writeEntry(d->configRAWBrightnessEntry,           d->dcrawSettings->brightness());
+    group.writeEntry(d->configRAWQualityEntry,              (int)d->dcrawSettings->quality());
+    group.writeEntry(d->configMedianFilterPassesEntry,      d->dcrawSettings->medianFilterPasses());
 #if KDCRAW_VERSION >= 0x000500
-    group.writeEntry("AutoBrightness",          d->dcrawSettings->useAutoBrightness());
+    group.writeEntry(d->configAutoBrightnessEntry,          d->dcrawSettings->useAutoBrightness());
 #endif
     config->sync();
 }
@@ -135,29 +170,30 @@ void SetupDcraw::applySettings()
 void SetupDcraw::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("ImageViewer Settings"));
-    d->dcrawSettings->setSixteenBits(group.readEntry("SixteenBitsImage", false));
-    d->dcrawSettings->setNoiseReduction(group.readEntry("EnableNoiseReduction", false));
-    d->dcrawSettings->setNRThreshold(group.readEntry("NRThreshold", 100));
-    d->dcrawSettings->setUseCACorrection(group.readEntry("EnableCACorrection", false));
-    d->dcrawSettings->setcaRedMultiplier(group.readEntry("caRedMultiplier", 1.0));
-    d->dcrawSettings->setcaBlueMultiplier(group.readEntry("caBlueMultiplier", 1.0));
-    d->dcrawSettings->setDontStretchPixels(group.readEntry("DontStretchPixels", false));
-    d->dcrawSettings->setUnclipColor(group.readEntry("UnclipColors", 0));
+    KConfigGroup group        = config->group(d->configGroupName);
+
+    d->dcrawSettings->setSixteenBits(group.readEntry(d->configSixteenBitsImageEntry,        false));
+    d->dcrawSettings->setNoiseReduction(group.readEntry(d->configEnableNoiseReductionEntry, false));
+    d->dcrawSettings->setNRThreshold(group.readEntry(d->configNRThresholdEntry,             100));
+    d->dcrawSettings->setUseCACorrection(group.readEntry(d->configEnableCACorrectionEntry,  false));
+    d->dcrawSettings->setcaRedMultiplier(group.readEntry(d->configcaRedMultiplierEntry,     1.0));
+    d->dcrawSettings->setcaBlueMultiplier(group.readEntry(d->configcaBlueMultiplierEntry,   1.0));
+    d->dcrawSettings->setDontStretchPixels(group.readEntry(d->configDontStretchPixelsEntry, false));
+    d->dcrawSettings->setUnclipColor(group.readEntry(d->configUnclipColorsEntry,            0));
     d->dcrawSettings->setWhiteBalance((DRawDecoding::WhiteBalance)
-                                      group.readEntry("WhiteBalance",
+                                      group.readEntry(d->configWhiteBalanceEntry,
                                       (int)DRawDecoding::CAMERA));
-    d->dcrawSettings->setCustomWhiteBalance(group.readEntry("CustomWhiteBalance", 6500));
-    d->dcrawSettings->setCustomWhiteBalanceGreen(group.readEntry("CustomWhiteBalanceGreen", 1.0));
-    d->dcrawSettings->setFourColor(group.readEntry("RGBInterpolate4Colors", false));
+    d->dcrawSettings->setCustomWhiteBalance(group.readEntry(d->configCustomWhiteBalanceEntry,           6500));
+    d->dcrawSettings->setCustomWhiteBalanceGreen(group.readEntry(d->configCustomWhiteBalanceGreenEntry, 1.0));
+    d->dcrawSettings->setFourColor(group.readEntry(d->configRGBInterpolate4ColorsEntry,                 false));
     d->dcrawSettings->setQuality((DRawDecoding::DecodingQuality)
-                                  group.readEntry("RAWQuality",
+                                  group.readEntry(d->configRAWQualityEntry,
                                   (int)DRawDecoding::BILINEAR));
-    d->dcrawSettings->setBrightness(group.readEntry("RAWBrightness", 1.0));
-    d->dcrawSettings->setMedianFilterPasses(group.readEntry("MedianFilterPasses", 0));
+    d->dcrawSettings->setBrightness(group.readEntry(d->configRAWBrightnessEntry,              1.0));
+    d->dcrawSettings->setMedianFilterPasses(group.readEntry(d->configMedianFilterPassesEntry, 0));
 
 #if KDCRAW_VERSION >= 0x000500
-    d->dcrawSettings->setAutoBrightness(group.readEntry("AutoBrightness", true));
+    d->dcrawSettings->setAutoBrightness(group.readEntry(d->configAutoBrightnessEntry, true));
 #endif
 }
 
