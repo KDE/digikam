@@ -62,9 +62,8 @@ public:
         settingsBox   = 0;
     }
 
-    RawSettingsBox *settingsBox;
-
-    RawPreview     *previewWidget;
+    RawSettingsBox* settingsBox;
+    RawPreview*     previewWidget;
 };
 
 RawImport::RawImport(const KUrl& url, QObject *parent)

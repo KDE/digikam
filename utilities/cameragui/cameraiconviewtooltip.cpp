@@ -58,9 +58,8 @@ public:
         iconItem = 0;
     }
 
-    CameraIconView *view;
-
-    CameraIconItem *iconItem;
+    CameraIconView* view;
+    CameraIconItem* iconItem;
 };
 
 CameraIconViewToolTip::CameraIconViewToolTip(CameraIconView* view)

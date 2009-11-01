@@ -69,13 +69,13 @@ public:
 
     bool                     rootsPathChanged;
 
-    SetupCollectionTreeView *collectionView;
-    SetupCollectionModel    *collectionModel;
+    SetupCollectionTreeView* collectionView;
+    SetupCollectionModel*    collectionModel;
 
-    KUrlRequester           *databasePathEdit;
+    KUrlRequester*           databasePathEdit;
     QString                  originalDbPath;
 
-    KPageDialog             *mainDialog;
+    KPageDialog*             mainDialog;
 };
 
 SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)

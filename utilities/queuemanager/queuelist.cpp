@@ -204,17 +204,17 @@ public:
 
     bool                 showTips;
 
-    QTimer              *toolTipTimer;
+    QTimer*              toolTipTimer;
 
-    ThumbnailLoadThread *thumbLoadThread;
+    ThumbnailLoadThread* thumbLoadThread;
 
     QueueSettings        settings;
 
     AssignedBatchTools   toolsList;
 
-    QueueToolTip        *toolTip;
+    QueueToolTip*        toolTip;
 
-    QueueListViewItem   *toolTipItem;
+    QueueListViewItem*   toolTipItem;
 };
 
 QueueListView::QueueListView(QWidget *parent)

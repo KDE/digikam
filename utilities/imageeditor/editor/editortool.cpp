@@ -62,13 +62,11 @@ public:
     QString             helpAnchor;
     QString             name;
 
-    QWidget            *view;
-
+    QWidget*            view;
     QPixmap             icon;
+    QTimer*             timer;
 
-    QTimer             *timer;
-
-    EditorToolSettings *settings;
+    EditorToolSettings* settings;
 };
 
 EditorTool::EditorTool(QObject *parent)

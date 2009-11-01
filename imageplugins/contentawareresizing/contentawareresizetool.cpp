@@ -149,35 +149,35 @@ public:
     double              prevWP;
     double              prevHP;
 
-    QCheckBox          *preserveRatioBox;
-    QCheckBox          *weightMaskBox;
-    QCheckBox          *preserveSkinTones;
+    QCheckBox*          preserveRatioBox;
+    QCheckBox*          weightMaskBox;
+    QCheckBox*          preserveSkinTones;
 
-    ImageWidget        *previewWidget;
+    ImageWidget*        previewWidget;
 
-    EditorToolSettings *gboxSettings;
+    EditorToolSettings* gboxSettings;
 
-    RIntNumInput       *wInput;
-    RIntNumInput       *hInput;
-    RIntNumInput       *stepInput;
-    RIntNumInput       *maskPenSize;
-    RIntNumInput       *sideSwitchInput;
+    RIntNumInput*       wInput;
+    RIntNumInput*       hInput;
+    RIntNumInput*       stepInput;
+    RIntNumInput*       maskPenSize;
+    RIntNumInput*       sideSwitchInput;
 
-    RDoubleNumInput    *wpInput;
-    RDoubleNumInput    *hpInput;
-    RDoubleNumInput    *mixedRescaleInput;
-    RDoubleNumInput    *rigidityInput;
+    RDoubleNumInput*    wpInput;
+    RDoubleNumInput*    hpInput;
+    RDoubleNumInput*    mixedRescaleInput;
+    RDoubleNumInput*    rigidityInput;
 
-    RComboBox          *funcInput;
-    RComboBox          *resizeOrderInput;
+    RComboBox*          funcInput;
+    RComboBox*          resizeOrderInput;
 
-    RExpanderBox       *expanderBox;
+    RExpanderBox*       expanderBox;
 
-    QToolButton        *redMaskTool;
-    QToolButton        *greenMaskTool;
-    QToolButton        *eraseMaskTool;
+    QToolButton*        redMaskTool;
+    QToolButton*        greenMaskTool;
+    QToolButton*        eraseMaskTool;
 
-    QButtonGroup       *maskGroup;
+    QButtonGroup*       maskGroup;
 };
 
 ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)

@@ -134,90 +134,90 @@ public:
     QSet<QString>                 foldersToScan;
     GPItemInfoList                filesToBeAdded;
 
-    QCheckBox                    *autoRotateCheck;
-    QCheckBox                    *autoAlbumDateCheck;
-    QCheckBox                    *autoAlbumExtCheck;
-    QCheckBox                    *fixDateTimeCheck;
-    QCheckBox                    *convertJpegCheck;
+    QCheckBox*                    autoRotateCheck;
+    QCheckBox*                    autoAlbumDateCheck;
+    QCheckBox*                    autoAlbumExtCheck;
+    QCheckBox*                    fixDateTimeCheck;
+    QCheckBox*                    convertJpegCheck;
 
-    QLabel                       *formatLabel;
-    QLabel                       *folderDateLabel;
+    QLabel*                       formatLabel;
+    QLabel*                       folderDateLabel;
 
-    QTimer                       *refreshIconViewTimer;
+    QTimer*                       refreshIconViewTimer;
 
-    KMenu                        *downloadMenu;
-    KMenu                        *deleteMenu;
-    KMenu                        *imageMenu;
+    KMenu*                        downloadMenu;
+    KMenu*                        deleteMenu;
+    KMenu*                        imageMenu;
 
     KUrl::List                    kdeTodo;
 
-    KAction                      *cameraCancelAction;
-    KAction                      *cameraCaptureAction;
-    KAction                      *cameraInfoAction;
-    KAction                      *contributeAction;
-    KAction                      *decreaseThumbsAction;
-    KAction                      *deleteAllAction;
-    KAction                      *deleteSelectedAction;
-    KAction                      *donateMoneyAction;
-    KAction                      *downloadAllAction;
-    KAction                      *downloadDelAllAction;
-    KAction                      *downloadDelSelectedAction;
-    KAction                      *downloadSelectedAction;
-    KAction                      *fullScreenAction;
-    KAction                      *imageViewAction;
-    KAction                      *increaseThumbsAction;
-    KAction                      *rawCameraListAction;
-    KAction                      *libsInfoAction;
-    KAction                      *dbStatAction;
-    KAction                      *lockAction;
-    KAction                      *selectAllAction;
-    KAction                      *selectInvertAction;
-    KAction                      *selectLockedItemsAction;
-    KAction                      *selectNewItemsAction;
-    KAction                      *selectNoneAction;
-    KAction                      *uploadAction;
-    KToggleAction                *lastPhotoFirstAction;
-    KToggleAction                *showMenuBarAction;
-    KToggleAction                *showLogAction;
+    KAction*                      cameraCancelAction;
+    KAction*                      cameraCaptureAction;
+    KAction*                      cameraInfoAction;
+    KAction*                      contributeAction;
+    KAction*                      decreaseThumbsAction;
+    KAction*                      deleteAllAction;
+    KAction*                      deleteSelectedAction;
+    KAction*                      donateMoneyAction;
+    KAction*                      downloadAllAction;
+    KAction*                      downloadDelAllAction;
+    KAction*                      downloadDelSelectedAction;
+    KAction*                      downloadSelectedAction;
+    KAction*                      fullScreenAction;
+    KAction*                      imageViewAction;
+    KAction*                      increaseThumbsAction;
+    KAction*                      rawCameraListAction;
+    KAction*                      libsInfoAction;
+    KAction*                      dbStatAction;
+    KAction*                      lockAction;
+    KAction*                      selectAllAction;
+    KAction*                      selectInvertAction;
+    KAction*                      selectLockedItemsAction;
+    KAction*                      selectNewItemsAction;
+    KAction*                      selectNoneAction;
+    KAction*                      uploadAction;
+    KToggleAction*                lastPhotoFirstAction;
+    KToggleAction*                showMenuBarAction;
+    KToggleAction*                showLogAction;
 
-    KComboBox                    *losslessFormat;
-    KComboBox                    *folderDateFormat;
+    KComboBox*                    losslessFormat;
+    KComboBox*                    folderDateFormat;
 
-    KSelectAction                *themeMenuAction;
+    KSelectAction*                themeMenuAction;
 
     KUrl                          lastDestURL;
 
-    KHelpMenu                    *helpMenu;
+    KHelpMenu*                    helpMenu;
 
-    KDateTimeEdit                *dateTimeEdit;
+    KDateTimeEdit*                dateTimeEdit;
 
-    KIO::PreviewJob              *kdeJob;
+    KIO::PreviewJob*              kdeJob;
 
-    RExpanderBox                 *advBox;
+    RExpanderBox*                 advBox;
 
-    SidebarSplitter              *splitter;
+    SidebarSplitter*              splitter;
 
-    CameraController             *controller;
-    CameraHistoryUpdater         *historyUpdater;
+    CameraController*             controller;
+    CameraHistoryUpdater*         historyUpdater;
 
-    CameraIconView               *view;
+    CameraIconView*               view;
 
-    RenameCustomizer             *renameCustomizer;
+    RenameCustomizer*             renameCustomizer;
 
-    DLogoAction                  *anim;
+    DLogoAction*                  anim;
 
-    TemplateSelector             *templateSelector;
+    TemplateSelector*             templateSelector;
 
-    ImagePropertiesSideBarCamGui *rightSideBar;
+    ImagePropertiesSideBarCamGui* rightSideBar;
 
-    StatusZoomBar                *statusZoomBar;
-    StatusProgressBar            *statusProgressBar;
-    StatusNavigateBar            *statusNavigateBar;
+    StatusZoomBar*                statusZoomBar;
+    StatusProgressBar*            statusProgressBar;
+    StatusNavigateBar*            statusNavigateBar;
 
-    FreeSpaceWidget              *albumLibraryFreeSpace;
-    FreeSpaceWidget              *cameraFreeSpace;
+    FreeSpaceWidget*              albumLibraryFreeSpace;
+    FreeSpaceWidget*              cameraFreeSpace;
 
-    DHistoryView                 *historyView;
+    DHistoryView*                 historyView;
 };
 
 }  // namespace Digikam

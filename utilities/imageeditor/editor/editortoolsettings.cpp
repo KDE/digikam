@@ -95,39 +95,39 @@ public:
         panWidgetFrame  = 0;
     }
 
-    QButtonGroup        *scaleBG;
+    QButtonGroup*        scaleBG;
 
-    QFrame              *panWidgetFrame;
+    QFrame*              panWidgetFrame;
 
-    QToolButton         *linHistoButton;
-    QToolButton         *logHistoButton;
+    QToolButton*         linHistoButton;
+    QToolButton*         logHistoButton;
 
-    QWidget             *settingsArea;
-    QWidget             *plainPage;
+    QWidget*             settingsArea;
+    QWidget*             plainPage;
 
-    KHBox               *btnBox1;
-    KHBox               *btnBox2;
-    KHBox               *guideBox;
+    KHBox*               btnBox1;
+    KHBox*               btnBox2;
+    KHBox*               guideBox;
 
-    KComboBox           *channelCB;
-    KComboBox           *colorsCB;
+    KComboBox*           channelCB;
+    KComboBox*           colorsCB;
 
-    KPushButton         *okBtn;
-    KPushButton         *cancelBtn;
-    KPushButton         *tryBtn;
-    KPushButton         *defaultBtn;
-    KPushButton         *saveAsBtn;
-    KPushButton         *loadBtn;
+    KPushButton*         okBtn;
+    KPushButton*         cancelBtn;
+    KPushButton*         tryBtn;
+    KPushButton*         defaultBtn;
+    KPushButton*         saveAsBtn;
+    KPushButton*         loadBtn;
 
-    KColorButton        *guideColorBt;
+    KColorButton*        guideColorBt;
 
-    ColorGradientWidget *hGradient;
+    ColorGradientWidget* hGradient;
 
-    ImagePanIconWidget  *panIconView;
+    ImagePanIconWidget*  panIconView;
 
-    HistogramBox        *histogramBox;
+    HistogramBox*        histogramBox;
 
-    RIntNumInput        *guideSize;
+    RIntNumInput*        guideSize;
 };
 
 //EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, int histogramType, QWidget *parent)

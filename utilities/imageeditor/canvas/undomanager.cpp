@@ -59,9 +59,9 @@ public:
     QList<UndoAction*>  redoActions;
     int                 origin;
 
-    UndoCache          *undoCache;
+    UndoCache*          undoCache;
 
-    DImgInterface      *dimgiface;
+    DImgInterface*      dimgiface;
 };
 
 UndoManager::UndoManager(DImgInterface* iface)

@@ -51,8 +51,8 @@ public:
 
     QString           cameraName;
 
-    CameraFolderItem *virtualFolder;
-    CameraFolderItem *rootFolder;
+    CameraFolderItem* virtualFolder;
+    CameraFolderItem* rootFolder;
 };
 
 CameraFolderView::CameraFolderView(QWidget* parent)

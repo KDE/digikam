@@ -68,15 +68,15 @@ public:
         tool              = 0;
     }
 
-    QLabel      *messageView;
-    QLabel      *settingsViewIcon;
-    QLabel      *settingsViewTitle;
+    QLabel*      messageView;
+    QLabel*      settingsViewIcon;
+    QLabel*      settingsViewTitle;
 
-    QPushButton *settingsViewReset;
+    QPushButton* settingsViewReset;
 
-    QScrollArea *settingsView;
+    QScrollArea* settingsView;
 
-    BatchTool   *tool;
+    BatchTool*   tool;
 };
 
 ToolSettingsView::ToolSettingsView(QWidget *parent)

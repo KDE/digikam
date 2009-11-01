@@ -88,22 +88,22 @@ public:
     bool              exifAutoRotateAsChanged;
     bool              exifAutoRotateOrg;
 
-    QCheckBox        *saveCommentsBox;
-    QCheckBox        *exifRotateBox;
-    QCheckBox        *exifSetOrientationBox;
-    QCheckBox        *saveRatingBox;
-    QCheckBox        *saveTagsBox;
-    QCheckBox        *saveDateTimeBox;
-    QCheckBox        *saveTemplateBox;
-    QCheckBox        *writeRawFilesBox;
-    QCheckBox        *updateFileTimeStampBox;
+    QCheckBox*        saveCommentsBox;
+    QCheckBox*        exifRotateBox;
+    QCheckBox*        exifSetOrientationBox;
+    QCheckBox*        saveRatingBox;
+    QCheckBox*        saveTagsBox;
+    QCheckBox*        saveDateTimeBox;
+    QCheckBox*        saveTemplateBox;
+    QCheckBox*        writeRawFilesBox;
+    QCheckBox*        updateFileTimeStampBox;
 
-    QCheckBox        *saveToNepomukBox;
-    QCheckBox        *readFromNepomukBox;
+    QCheckBox*        saveToNepomukBox;
+    QCheckBox*        readFromNepomukBox;
 
-    KTabWidget       *tab;
+    KTabWidget*       tab;
 
-    MetadataPanel    *tagsCfgPanel;
+    MetadataPanel*    tagsCfgPanel;
 };
 
 SetupMetadata::SetupMetadata(QWidget* parent )

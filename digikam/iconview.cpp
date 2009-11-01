@@ -120,24 +120,24 @@ public:
 
     QCache<QString, QPixmap>  thumbnailBorderCache;
 
-    DRubberBand              *rubber;
+    DRubberBand*              rubber;
 
     QPoint                    dragStartPos;
 
-    QTimer                   *rearrangeTimer;
-    QTimer                   *toolTipTimer;
+    QTimer*                   rearrangeTimer;
+    QTimer*                   toolTipTimer;
 
-    IconItem                 *toolTipItem;
-    IconItem                 *currItem;
-    IconItem                 *anchorItem;
-    IconItem                 *storedVisibleItem; // store position for slotRearrange
-    IconItem                 *highlightedItem;
-    IconItem                 *ratingItem;
+    IconItem*                 toolTipItem;
+    IconItem*                 currItem;
+    IconItem*                 anchorItem;
+    IconItem*                 storedVisibleItem; // store position for slotRearrange
+    IconItem*                 highlightedItem;
+    IconItem*                 ratingItem;
 
-    IconGroupItem            *firstGroup;
-    IconGroupItem            *lastGroup;
+    IconGroupItem*            firstGroup;
+    IconGroupItem*            lastGroup;
 
-    RatingWidget             *ratingWidget;
+    RatingWidget*             ratingWidget;
 
     struct ItemContainer
     {

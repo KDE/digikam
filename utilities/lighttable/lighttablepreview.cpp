@@ -107,18 +107,18 @@ public:
     QString            nextPath;
     QString            previousPath;
 
-    QToolButton       *cornerButton;
+    QToolButton*       cornerButton;
 
-    KPopupFrame       *panIconPopup;
+    KPopupFrame*       panIconPopup;
 
-    PanIconWidget     *panIconWidget;
+    PanIconWidget*     panIconWidget;
 
     DImg               preview;
 
     ImageInfo          imageInfo;
 
-    PreviewLoadThread *previewThread;
-    PreviewLoadThread *previewPreloadThread;
+    PreviewLoadThread* previewThread;
+    PreviewLoadThread* previewPreloadThread;
 };
 
 LightTablePreview::LightTablePreview(QWidget *parent)

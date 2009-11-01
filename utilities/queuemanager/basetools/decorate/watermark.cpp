@@ -82,15 +82,15 @@ public:
         comboBox          = 0;
     }
 
-    KLineEdit     *textEdit;
+    KLineEdit*     textEdit;
 
-    KIntNumInput  *stringLength;
+    KIntNumInput*  stringLength;
 
-    KFontComboBox *fontChooserWidget;
+    KFontComboBox* fontChooserWidget;
 
-    KColorButton  *fontColorButton;
+    KColorButton*  fontColorButton;
 
-    KComboBox     *comboBox;
+    KComboBox*     comboBox;
 };
 
 WaterMark::WaterMark(QObject* parent)

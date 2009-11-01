@@ -52,12 +52,12 @@ public:
         leftBottomPix = 0;
     }
     
-    QLabel          *logo;
-    QLabel          *leftBottomPix;
+    QLabel*          logo;
+    QLabel*          leftBottomPix;
 
-    QHBoxLayout     *hlay;
+    QHBoxLayout*     hlay;
     
-    KPageWidgetItem *page;
+    KPageWidgetItem* page;
 };
 
 AssistantDlgPage::AssistantDlgPage(KAssistantDialog* dlg, const QString& title)

@@ -84,30 +84,30 @@ public:
         mode                  = ColorCorrectionDlg::ProfileMismatch;
     }
 
-    DImg              preview;
-    QString           filePath;
+    DImg                     preview;
+    QString                  filePath;
 
-    QLabel           *imageProfileTitle;
-    QLabel           *imageProfileDesc;
-    QLabel           *previewTarget;
+    QLabel*                  imageProfileTitle;
+    QLabel*                  imageProfileDesc;
+    QLabel*                  previewTarget;
 
-    QRadioButton     *keepProfile;
-    QRadioButton     *convertToWorkingSpace;
-    QRadioButton     *thirdOption;
-    QCheckBox        *thirdCheckBox;
+    QRadioButton*            keepProfile;
+    QRadioButton*            convertToWorkingSpace;
+    QRadioButton*            thirdOption;
+    QCheckBox*               thirdCheckBox;
 
-    QRadioButton     *imageSRGB;
-    QRadioButton     *imageWorkingSpace;
-    QRadioButton     *imageOtherSpace;
+    QRadioButton*            imageSRGB;
+    QRadioButton*            imageWorkingSpace;
+    QRadioButton*            imageOtherSpace;
 
-    IccProfilesComboBox *otherProfileBox;
-    IccProfilesComboBox *imageProfileBox;
+    IccProfilesComboBox*     otherProfileBox;
+    IccProfilesComboBox*     imageProfileBox;
 
     ColorCorrectionDlg::Mode mode;
 
-    IccProfile     workspaceProfile;
-    IccProfile     imageProfile;
-    IccProfile     outputProfile;
+    IccProfile               workspaceProfile;
+    IccProfile               imageProfile;
+    IccProfile               outputProfile;
 };
 
 ColorCorrectionDlg::ColorCorrectionDlg(Mode mode, const DImg& preview,

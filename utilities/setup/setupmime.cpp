@@ -68,17 +68,17 @@ public:
         revertAudioFileFilterBtn = 0;
     }
 
-    QLabel      *imageFileFilterLabel;
-    QLabel      *movieFileFilterLabel;
-    QLabel      *audioFileFilterLabel;
+    QLabel*      imageFileFilterLabel;
+    QLabel*      movieFileFilterLabel;
+    QLabel*      audioFileFilterLabel;
 
-    QToolButton *revertImageFileFilterBtn;
-    QToolButton *revertMovieFileFilterBtn;
-    QToolButton *revertAudioFileFilterBtn;
+    QToolButton* revertImageFileFilterBtn;
+    QToolButton* revertMovieFileFilterBtn;
+    QToolButton* revertAudioFileFilterBtn;
 
-    QLineEdit   *imageFileFilterEdit;
-    QLineEdit   *movieFileFilterEdit;
-    QLineEdit   *audioFileFilterEdit;
+    QLineEdit*   imageFileFilterEdit;
+    QLineEdit*   movieFileFilterEdit;
+    QLineEdit*   audioFileFilterEdit;
 };
 
 SetupMime::SetupMime(QWidget* parent)

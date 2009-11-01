@@ -52,9 +52,8 @@ public:
         tool    = 0;
     }
 
-    EditorTool   *tool;
-
-    EditorWindow *editor;
+    EditorTool*   tool;
+    EditorWindow* editor;
 };
 
 EditorToolIface* EditorToolIface::m_iface = 0;

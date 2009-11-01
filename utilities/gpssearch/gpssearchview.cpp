@@ -67,36 +67,35 @@ class GPSSearchViewPriv
 
 public:
 
-    GPSSearchViewPriv()
-    : saveBtn(0),
-      zoomInBtn(0),
-      zoomOutBtn(0),
-      nameEdit(0),
-      imageInfoJob(),
-      searchGPSBar(0),
-      gpsSearchFolderView(0),
-      splitter(0),
-      gpsSearchWidget(0),
-      mapThemeBtn(0)
-    {
-    }
+    GPSSearchViewPriv() :
+        saveBtn(0),
+        zoomInBtn(0),
+        zoomOutBtn(0),
+        nameEdit(0),
+        imageInfoJob(),
+        searchGPSBar(0),
+        gpsSearchFolderView(0),
+        splitter(0),
+        gpsSearchWidget(0),
+        mapThemeBtn(0)
+    {}
 
-    QToolButton         *saveBtn;
-    QToolButton         *zoomInBtn;
-    QToolButton         *zoomOutBtn;
+    QToolButton*         saveBtn;
+    QToolButton*         zoomInBtn;
+    QToolButton*         zoomOutBtn;
 
-    KLineEdit           *nameEdit;
+    KLineEdit*           nameEdit;
 
     ImageInfoJob         imageInfoJob;
 
-    SearchTextBar       *searchGPSBar;
+    SearchTextBar*       searchGPSBar;
 
-    GPSSearchFolderView *gpsSearchFolderView;
+    GPSSearchFolderView* gpsSearchFolderView;
 
-    QSplitter           *splitter;
+    QSplitter*           splitter;
 
-    GPSSearchWidget     *gpsSearchWidget;
-    WorldMapThemeBtn    *mapThemeBtn;
+    GPSSearchWidget*     gpsSearchWidget;
+    WorldMapThemeBtn*    mapThemeBtn;
 };
 
 GPSSearchView::GPSSearchView(QWidget *parent)

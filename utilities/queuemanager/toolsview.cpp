@@ -55,10 +55,10 @@ public:
         historyView = 0;
     }
 
-    ToolsListView *baseTools;
-//    ToolsListView *customTools;
+    ToolsListView* baseTools;
+//    ToolsListView* customTools;
 
-    DHistoryView  *historyView;
+    DHistoryView*  historyView;
 };
 
 ToolsView::ToolsView(QWidget *parent)

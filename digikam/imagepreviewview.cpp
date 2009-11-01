@@ -108,20 +108,20 @@ public:
     QString            nextPath;
     QString            previousPath;
 
-    QToolButton       *cornerButton;
+    QToolButton*       cornerButton;
 
-    KPopupFrame       *panIconPopup;
+    KPopupFrame*       panIconPopup;
 
-    PanIconWidget     *panIconWidget;
+    PanIconWidget*     panIconWidget;
 
     DImg               preview;
 
     ImageInfo          imageInfo;
 
-    PreviewLoadThread *previewThread;
-    PreviewLoadThread *previewPreloadThread;
+    PreviewLoadThread* previewThread;
+    PreviewLoadThread* previewPreloadThread;
 
-    AlbumWidgetStack  *stack;
+    AlbumWidgetStack*  stack;
 };
 
 ImagePreviewView::ImagePreviewView(QWidget *parent, AlbumWidgetStack *stack)

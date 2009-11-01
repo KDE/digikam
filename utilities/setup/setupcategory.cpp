@@ -68,13 +68,13 @@ public:
         repCategoryButton = 0;
     }
 
-    QPushButton *addCategoryButton;
-    QPushButton *delCategoryButton;
-    QPushButton *repCategoryButton;
+    QPushButton* addCategoryButton;
+    QPushButton* delCategoryButton;
+    QPushButton* repCategoryButton;
 
-    KListWidget *albumCategoryBox;
+    KListWidget* albumCategoryBox;
 
-    KLineEdit   *categoryEdit;
+    KLineEdit*   categoryEdit;
 };
 
 SetupCategory::SetupCategory(QWidget* parent )

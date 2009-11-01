@@ -124,20 +124,20 @@ public:
 
     double                     zoom;
 
-    QWidget                   *displayingWidget;
+    QWidget*                   displayingWidget;
 
     QString                    filename;
     QString                    savingFilename;
 
     DImg                       image;
 
-    UndoManager               *undoMan;
+    UndoManager*               undoMan;
 
-    ICCSettingsContainer      *cmSettings;
+    ICCSettingsContainer*      cmSettings;
 
-    ExposureSettingsContainer *expoSettings;
+    ExposureSettingsContainer* expoSettings;
 
-    SharedLoadSaveThread      *thread;
+    SharedLoadSaveThread*      thread;
     LoadingDescription         currentDescription;
     LoadingDescription         nextRawDescription;
 

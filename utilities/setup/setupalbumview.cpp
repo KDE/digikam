@@ -74,25 +74,25 @@ public:
         iconViewFontSelect           = 0;
     }
 
-    QLabel      *iconTreeThumbLabel;
+    QLabel*      iconTreeThumbLabel;
 
-    QCheckBox   *iconShowNameBox;
-    QCheckBox   *iconShowSizeBox;
-    QCheckBox   *iconShowDateBox;
-    QCheckBox   *iconShowModDateBox;
-    QCheckBox   *iconShowResolutionBox;
-    QCheckBox   *iconShowCommentsBox;
-    QCheckBox   *iconShowTagsBox;
-    QCheckBox   *iconShowRatingBox;
-    QCheckBox   *iconShowOverlaysBox;
-    QCheckBox   *previewLoadFullImageSize;
-    QCheckBox   *showFolderTreeViewItemsCount;
+    QCheckBox*   iconShowNameBox;
+    QCheckBox*   iconShowSizeBox;
+    QCheckBox*   iconShowDateBox;
+    QCheckBox*   iconShowModDateBox;
+    QCheckBox*   iconShowResolutionBox;
+    QCheckBox*   iconShowCommentsBox;
+    QCheckBox*   iconShowTagsBox;
+    QCheckBox*   iconShowRatingBox;
+    QCheckBox*   iconShowOverlaysBox;
+    QCheckBox*   previewLoadFullImageSize;
+    QCheckBox*   showFolderTreeViewItemsCount;
 
-    KComboBox   *iconTreeThumbSize;
-    KComboBox   *leftClickActionComboBox;
+    KComboBox*   iconTreeThumbSize;
+    KComboBox*   leftClickActionComboBox;
 
-    DFontSelect *iconViewFontSelect;
-    DFontSelect *treeViewFontSelect;
+    DFontSelect* iconViewFontSelect;
+    DFontSelect* treeViewFontSelect;
 };
 
 SetupAlbumView::SetupAlbumView(QWidget* parent)

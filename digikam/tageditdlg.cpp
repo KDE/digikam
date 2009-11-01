@@ -82,15 +82,15 @@ public:
 
     bool           create;
 
-    QLabel        *topLabel;
+    QLabel*        topLabel;
 
     QString        icon;
 
-    QPushButton   *iconButton;
-    QPushButton   *resetIconButton;
+    QPushButton*   iconButton;
+    QPushButton*   resetIconButton;
 
-    TAlbum        *mainRootAlbum;
-    SearchTextBar *titleEdit;
+    TAlbum*        mainRootAlbum;
+    SearchTextBar* titleEdit;
 };
 
 TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album, bool create)

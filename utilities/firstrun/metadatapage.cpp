@@ -54,10 +54,10 @@ public:
         metadataStorage = 0;
     }
 
-    QRadioButton *doNothing;
-    QRadioButton *storeInFiles;
+    QRadioButton* doNothing;
+    QRadioButton* storeInFiles;
 
-    QButtonGroup *metadataStorage;
+    QButtonGroup* metadataStorage;
 };
 
 MetadataPage::MetadataPage(KAssistantDialog* dlg)

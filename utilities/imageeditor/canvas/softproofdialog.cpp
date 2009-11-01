@@ -64,14 +64,14 @@ public:
 
     bool                        switchOn;
 
-    IccProfilesComboBox        *deviceProfileBox;
-    QPushButton                *infoProofProfiles;
+    IccProfilesComboBox*        deviceProfileBox;
+    QPushButton*                infoProofProfiles;
 
-    QCheckBox                  *gamutCheckBox;
-    QLabel                     *maskColorLabel;
-    KColorButton               *maskColorButton;
+    QCheckBox*                  gamutCheckBox;
+    QLabel*                     maskColorLabel;
+    KColorButton*               maskColorButton;
 
-    IccRenderingIntentComboBox *proofingIntentBox;
+    IccRenderingIntentComboBox* proofingIntentBox;
 };
 
 SoftProofDialog::SoftProofDialog(QWidget *parent)

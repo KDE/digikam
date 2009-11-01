@@ -101,13 +101,13 @@ public:
     QPixmap                          pixmapDownloaded;
     QPixmap                          pixmapDownloadFailed;
 
-    RenameCustomizer                *renamer;
+    RenameCustomizer*                renamer;
 
-    IconGroupItem                   *groupItem;
+    IconGroupItem*                   groupItem;
 
-    CameraUI                        *cameraUI;
+    CameraUI*                        cameraUI;
 
-    CameraIconViewToolTip           *toolTip;
+    CameraIconViewToolTip*           toolTip;
 };
 
 CameraIconView::CameraIconView(CameraUI* ui, QWidget* parent)

@@ -84,7 +84,7 @@ public:
 
     KUrl            workingUrl;
 
-    BatchTool      *tool;
+    BatchTool*      tool;
 };
 
 ActionThread::ActionThread(QObject *parent)

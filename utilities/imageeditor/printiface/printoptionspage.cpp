@@ -73,14 +73,14 @@ class PrintOptionsPagePrivate : public Ui_PrintOptionsPage
 {
 public:
 
-    QWidget              *mParent;
+    QWidget*              mParent;
     QSize                 mImageSize;
     QButtonGroup          mScaleGroup;
     QButtonGroup          mPositionGroup;
-    KConfigDialogManager *mConfigDialogManager;
+    KConfigDialogManager* mConfigDialogManager;
     IccProfile            outputProfile;
-    QCheckBox            *colorManaged;
-    QPushButton          *cmPreferences;
+    QCheckBox*            colorManaged;
+    QPushButton*          cmPreferences;
     bool                  cmEnabled;
 
     void initColorManagement()

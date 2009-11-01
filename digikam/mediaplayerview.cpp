@@ -69,13 +69,13 @@ public:
         slider          = 0;
     }
 
-    QFrame              *errorView;
-    QFrame              *mediaPlayerView;
+    QFrame*              errorView;
+    QFrame*              mediaPlayerView;
 
-    QGridLayout         *grid;
+    QGridLayout*         grid;
 
-    Phonon::VideoPlayer *player;
-    Phonon::SeekSlider  *slider;
+    Phonon::VideoPlayer* player;
+    Phonon::SeekSlider*  slider;
 };
 
 MediaPlayerView::MediaPlayerView(QWidget *parent)

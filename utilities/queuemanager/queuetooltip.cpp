@@ -53,9 +53,8 @@ public:
         item = 0;
     }
 
-    QueueListView     *view;
-
-    QueueListViewItem *item;
+    QueueListView*     view;
+    QueueListViewItem* item;
 };
 
 QueueToolTip::QueueToolTip(QueueListView* view)

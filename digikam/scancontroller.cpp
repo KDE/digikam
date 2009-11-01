@@ -122,10 +122,10 @@ public:
 
     bool                      fileWatchInstalled;
 
-    QEventLoop               *eventLoop;
+    QEventLoop*               eventLoop;
 
-    QTimer                   *showTimer;
-    QTimer                   *relaxedTimer;
+    QTimer*                   showTimer;
+    QTimer*                   relaxedTimer;
 
     QPixmap                   albumPix;
     QPixmap                   rootPix;
@@ -137,9 +137,9 @@ public:
 
     QDateTime                 lastHintAdded;
 
-    DProgressDlg             *progressDialog;
+    DProgressDlg*             progressDialog;
 
-    SplashScreen             *splash;
+    SplashScreen*             splash;
 
     ScanController::Advice    advice;
 

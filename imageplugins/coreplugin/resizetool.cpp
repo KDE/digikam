@@ -183,25 +183,25 @@ public:
     double                prevWP;
     double                prevHP;
 
-    QLabel               *restorationTips;
+    QLabel*               restorationTips;
 
-    QCheckBox            *preserveRatioBox;
-    QCheckBox            *useGreycstorationBox;
+    QCheckBox*            preserveRatioBox;
+    QCheckBox*            useGreycstorationBox;
 
-    KTabWidget           *mainTab;
+    KTabWidget*           mainTab;
 
-    KUrlLabel            *cimgLogoLabel;
+    KUrlLabel*            cimgLogoLabel;
 
-    ImageWidget          *previewWidget;
+    ImageWidget*          previewWidget;
 
-    RIntNumInput         *wInput;
-    RIntNumInput         *hInput;
+    RIntNumInput*         wInput;
+    RIntNumInput*         hInput;
 
-    RDoubleNumInput      *wpInput;
-    RDoubleNumInput      *hpInput;
+    RDoubleNumInput*      wpInput;
+    RDoubleNumInput*      hpInput;
 
-    EditorToolSettings   *gboxSettings;
-    GreycstorationWidget *settingsWidget;
+    EditorToolSettings*   gboxSettings;
+    GreycstorationWidget* settingsWidget;
 };
 
 // -------------------------------------------------------------

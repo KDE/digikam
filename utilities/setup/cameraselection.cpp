@@ -73,14 +73,14 @@ public:
         searchBar        = 0;
     }
 
-    QButtonGroup  *portButtonGroup;
+    QButtonGroup*  portButtonGroup;
 
-    QRadioButton  *usbButton;
-    QRadioButton  *serialButton;
+    QRadioButton*  usbButton;
+    QRadioButton*  serialButton;
 
-    QLabel        *portPathLabel;
+    QLabel*        portPathLabel;
 
-    KComboBox     *portPathComboBox;
+    KComboBox*     portPathComboBox;
 
     QString        UMSCameraNameActual;
     QString        UMSCameraNameShown;
@@ -88,13 +88,13 @@ public:
 
     QStringList    serialPortList;
 
-    QTreeWidget   *listView;
+    QTreeWidget*   listView;
 
-    KLineEdit     *titleEdit;
+    KLineEdit*     titleEdit;
 
-    KUrlRequester *umsMountURL;
+    KUrlRequester* umsMountURL;
 
-    SearchTextBar *searchBar;
+    SearchTextBar* searchBar;
 };
 
 CameraSelection::CameraSelection( QWidget* parent )

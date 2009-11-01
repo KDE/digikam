@@ -138,7 +138,7 @@ public:
     QRect                localTopRightCorner;
     QRect                localBottomRightCorner;
 
-    QPixmap             *pixmap;
+    QPixmap*             pixmap;
     QPixmap              grayOverLay;
     QPixmap              previewPixmap;
 
@@ -146,7 +146,7 @@ public:
 
     Digikam::DImg        preview;
 
-    Digikam::ImageIface *iface;
+    Digikam::ImageIface* iface;
 };
 
 ImageSelectionWidget::ImageSelectionWidget(int w, int h, QWidget *parent)

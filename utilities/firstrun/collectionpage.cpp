@@ -69,8 +69,8 @@ public:
     QString        rootAlbum;
     QString        dbPath;
 
-    KUrlRequester *rootAlbumPathRequester;
-    KUrlRequester *dbPathRequester;
+    KUrlRequester* rootAlbumPathRequester;
+    KUrlRequester* dbPathRequester;
 };
 
 CollectionPage::CollectionPage(KAssistantDialog* dlg)

@@ -147,27 +147,27 @@ public:
     KUrl                      urlCurrent;
 
     // Rating actions.
-    KAction                  *star0;
-    KAction                  *star1;
-    KAction                  *star2;
-    KAction                  *star3;
-    KAction                  *star4;
-    KAction                  *star5;
+    KAction*                  star0;
+    KAction*                  star1;
+    KAction*                  star2;
+    KAction*                  star3;
+    KAction*                  star4;
+    KAction*                  star5;
 
     // Delete actions
-    KAction                  *fileDeletePermanentlyAction;
-    KAction                  *fileDeletePermanentlyDirectlyAction;
-    KAction                  *fileTrashDirectlyAction;
+    KAction*                  fileDeletePermanentlyAction;
+    KAction*                  fileDeletePermanentlyDirectlyAction;
+    KAction*                  fileTrashDirectlyAction;
 
-    KAction                  *dbStatAction;
+    KAction*                  dbStatAction;
 
     ImageInfoList             imageInfoList;
     ImageInfo                 imageInfoCurrent;
 
-    ImagePreviewBar          *thumbBar;
-    ThumbBarDock             *thumbBarDock;
+    ImagePreviewBar*          thumbBar;
+    ThumbBarDock*             thumbBarDock;
 
-    ImagePropertiesSideBarDB *rightSideBar;
+    ImagePropertiesSideBarDB* rightSideBar;
 };
 
 ImageWindow* ImageWindow::m_instance = 0;

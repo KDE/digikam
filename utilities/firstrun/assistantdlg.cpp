@@ -58,14 +58,14 @@ public:
         startScanPage  = 0;
     }
 
-    WelcomePage    *welcomePage;
-    CollectionPage *collectionPage;
-    RawPage        *rawPage;
-    MetadataPage   *metadataPage;
-    PreviewPage    *previewPage;
-    OpenFilePage   *openFilePage;
-    TooltipsPage   *tooltipsPage;
-    StartScanPage  *startScanPage;
+    WelcomePage*    welcomePage;
+    CollectionPage* collectionPage;
+    RawPage*        rawPage;
+    MetadataPage*   metadataPage;
+    PreviewPage*    previewPage;
+    OpenFilePage*   openFilePage;
+    TooltipsPage*   tooltipsPage;
+    StartScanPage*  startScanPage;
 };
 
 AssistantDlg::AssistantDlg(QWidget* parent)

@@ -81,14 +81,14 @@ public:
 
     QPoint             dragStartPos;
 
-    QTimer            *toolTipTimer;
+    QTimer*            toolTipTimer;
 
-    Q3ListViewItem    *toolTipItem;
-    Q3ListViewItem    *dragItem;
-    Q3ListViewItem    *oldHighlightItem;
-    Q3ListViewItem    *highlightedItem;
+    Q3ListViewItem*    toolTipItem;
+    Q3ListViewItem*    dragItem;
+    Q3ListViewItem*    oldHighlightItem;
+    Q3ListViewItem*    highlightedItem;
 
-    FolderViewToolTip *toolTip;
+    FolderViewToolTip* toolTip;
 };
 
 //-----------------------------------------------------------------------------

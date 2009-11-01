@@ -85,20 +85,20 @@ public:
         profileMenuAction(0)
         {}
 
-    KAction               *redeyeAction;
-    KAction               *BCGAction;
-    KAction               *HSLAction;
-    KAction               *RGBAction;
-    KAction               *autoCorrectionAction;
-    KAction               *invertAction;
-    KAction               *BWAction;
-    KAction               *aspectRatioCropAction;
-    KAction               *resizeAction;
-    KAction               *sharpenAction;
-    KAction               *blurAction;
-    KAction               *convertTo8Bits;
-    KAction               *convertTo16Bits;
-    IccProfilesMenuAction *profileMenuAction;
+    KAction*               redeyeAction;
+    KAction*               BCGAction;
+    KAction*               HSLAction;
+    KAction*               RGBAction;
+    KAction*               autoCorrectionAction;
+    KAction*               invertAction;
+    KAction*               BWAction;
+    KAction*               aspectRatioCropAction;
+    KAction*               resizeAction;
+    KAction*               sharpenAction;
+    KAction*               blurAction;
+    KAction*               convertTo8Bits;
+    KAction*               convertTo16Bits;
+    IccProfilesMenuAction* profileMenuAction;
 };
 
 ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)

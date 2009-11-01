@@ -54,10 +54,10 @@ public:
         tooltipsBehavour = 0;
     }
 
-    QRadioButton *showTooltips;
-    QRadioButton *hideTooltips;
+    QRadioButton* showTooltips;
+    QRadioButton* hideTooltips;
 
-    QButtonGroup *tooltipsBehavour;
+    QButtonGroup* tooltipsBehavour;
 };
 
 TooltipsPage::TooltipsPage(KAssistantDialog* dlg)

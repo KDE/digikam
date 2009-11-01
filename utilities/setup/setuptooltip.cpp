@@ -87,42 +87,42 @@ public:
         showAlbumCaptionBox    = 0;
     }
 
-    QCheckBox   *showToolTipsBox;
+    QCheckBox*   showToolTipsBox;
 
-    QCheckBox   *showFileNameBox;
-    QCheckBox   *showFileDateBox;
-    QCheckBox   *showFileSizeBox;
-    QCheckBox   *showImageTypeBox;
-    QCheckBox   *showImageDimBox;
+    QCheckBox*   showFileNameBox;
+    QCheckBox*   showFileDateBox;
+    QCheckBox*   showFileSizeBox;
+    QCheckBox*   showImageTypeBox;
+    QCheckBox*   showImageDimBox;
 
-    QCheckBox   *showPhotoMakeBox;
-    QCheckBox   *showPhotoDateBox;
-    QCheckBox   *showPhotoFocalBox;
-    QCheckBox   *showPhotoExpoBox;
-    QCheckBox   *showPhotoModeBox;
-    QCheckBox   *showPhotoFlashBox;
-    QCheckBox   *showPhotoWbBox;
+    QCheckBox*   showPhotoMakeBox;
+    QCheckBox*   showPhotoDateBox;
+    QCheckBox*   showPhotoFocalBox;
+    QCheckBox*   showPhotoExpoBox;
+    QCheckBox*   showPhotoModeBox;
+    QCheckBox*   showPhotoFlashBox;
+    QCheckBox*   showPhotoWbBox;
 
-    QCheckBox   *showAlbumNameBox;
-    QCheckBox   *showCommentsBox;
-    QCheckBox   *showTagsBox;
-    QCheckBox   *showRatingBox;
+    QCheckBox*   showAlbumNameBox;
+    QCheckBox*   showCommentsBox;
+    QCheckBox*   showTagsBox;
+    QCheckBox*   showRatingBox;
 
-    QCheckBox   *showAlbumToolTipsBox;
-    QCheckBox   *showAlbumTitleBox;
-    QCheckBox   *showAlbumDateBox;
-    QCheckBox   *showAlbumCollectionBox;
-    QCheckBox   *showAlbumCategoryBox;
-    QCheckBox   *showAlbumCaptionBox;
+    QCheckBox*   showAlbumToolTipsBox;
+    QCheckBox*   showAlbumTitleBox;
+    QCheckBox*   showAlbumDateBox;
+    QCheckBox*   showAlbumCollectionBox;
+    QCheckBox*   showAlbumCategoryBox;
+    QCheckBox*   showAlbumCaptionBox;
 
-    QGroupBox   *fileSettingBox;
-    QGroupBox   *photoSettingBox;
-    QGroupBox   *digikamSettingBox;
-    QGroupBox   *albumSettingBox;
+    QGroupBox*   fileSettingBox;
+    QGroupBox*   photoSettingBox;
+    QGroupBox*   digikamSettingBox;
+    QGroupBox*   albumSettingBox;
 
-    KTabWidget  *tab;
+    KTabWidget*  tab;
 
-    DFontSelect *fontSelect;
+    DFontSelect* fontSelect;
 };
 
 SetupToolTip::SetupToolTip(QWidget* parent)

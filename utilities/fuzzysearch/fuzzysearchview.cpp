@@ -121,46 +121,46 @@ public:
 
     QColor                  selColor;
 
-    QToolButton            *resetButton;
-    QToolButton            *saveBtnSketch;
-    QToolButton            *undoBtnSketch;
-    QToolButton            *redoBtnSketch;
-    QToolButton            *saveBtnImage;
+    QToolButton*            resetButton;
+    QToolButton*            saveBtnSketch;
+    QToolButton*            undoBtnSketch;
+    QToolButton*            redoBtnSketch;
+    QToolButton*            saveBtnImage;
 
-    QSpinBox               *penSize;
-    QSpinBox               *resultsSketch;
-    QSpinBox               *levelImage;
+    QSpinBox*               penSize;
+    QSpinBox*               resultsSketch;
+    QSpinBox*               levelImage;
 
-    QLabel                 *imageWidget;
+    QLabel*                 imageWidget;
 
-    QTimer                 *timerSketch;
-    QTimer                 *timerImage;
+    QTimer*                 timerSketch;
+    QTimer*                 timerImage;
 
-    KVBox                  *folderView;
+    KVBox*                  folderView;
 
-    KLineEdit              *nameEditSketch;
-    KLineEdit              *nameEditImage;
+    KLineEdit*              nameEditSketch;
+    KLineEdit*              nameEditImage;
 
-    KTabWidget             *tabWidget;
+    KTabWidget*             tabWidget;
 
-    KHueSaturationSelector *hsSelector;
+    KHueSaturationSelector* hsSelector;
 
-    KColorValueSelector    *vSelector;
+    KColorValueSelector*    vSelector;
 
-    KSqueezedTextLabel     *labelFile;
-    KSqueezedTextLabel     *labelFolder;
+    KSqueezedTextLabel*     labelFile;
+    KSqueezedTextLabel*     labelFolder;
 
     ImageInfo               imageInfo;
 
-    SearchTextBar          *searchFuzzyBar;
+    SearchTextBar*          searchFuzzyBar;
 
-    FuzzySearchFolderView  *fuzzySearchFolderView;
+    FuzzySearchFolderView*  fuzzySearchFolderView;
 
-    SketchWidget           *sketchWidget;
+    SketchWidget*           sketchWidget;
 
-    ThumbnailLoadThread    *thumbLoadThread;
+    ThumbnailLoadThread*    thumbLoadThread;
 
-    FindDuplicatesView     *findDuplicatesPanel;
+    FindDuplicatesView*     findDuplicatesPanel;
 
     AlbumPointer<SAlbum>    imageSAlbum;
     AlbumPointer<SAlbum>    sketchSAlbum;

@@ -65,7 +65,7 @@ public:
     QString                    toolTitle;          // User friendly tool title.
     QString                    toolDescription;    // User friendly tool description.
 
-    QWidget                   *settingsWidget;
+    QWidget*                   settingsWidget;
 
     KIcon                      toolIcon;
 
@@ -77,7 +77,7 @@ public:
 
     BatchToolSettings          settings;
 
-    BatchToolObserver         *observer;
+    BatchToolObserver*         observer;
 
     BatchTool::BatchToolGroup  toolGroup;
 };

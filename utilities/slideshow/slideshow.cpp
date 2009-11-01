@@ -72,13 +72,13 @@ public:
 
     SlideShowPriv()
     {
-        previewThread  = 0;
-        mouseMoveTimer = 0;
-        timer          = 0;
-        toolBar        = 0;
-        fileIndex      = -1;
-        endOfShow      = false;
-        pause          = false;
+        previewThread     = 0;
+        mouseMoveTimer    = 0;
+        timer             = 0;
+        toolBar           = 0;
+        fileIndex         = -1;
+        endOfShow         = false;
+        pause             = false;
         screenSaverCookie = -1;
 
         // Pre-computed star polygon for a 15x15 pixmap.
@@ -104,8 +104,8 @@ public:
     int                fileIndex;
     int                screenSaverCookie;
 
-    QTimer            *mouseMoveTimer;  // To hide cursor when not moved.
-    QTimer            *timer;
+    QTimer*            mouseMoveTimer;  // To hide cursor when not moved.
+    QTimer*            timer;
 
     QPixmap            pixmap;
     QPixmap            selPixmap;      // Selected rating star.
@@ -117,10 +117,10 @@ public:
 
     KUrl               currentImage;
 
-    PreviewLoadThread *previewThread;
-    PreviewLoadThread *previewPreloadThread;
+    PreviewLoadThread* previewThread;
+    PreviewLoadThread* previewPreloadThread;
 
-    ToolBar           *toolBar;
+    ToolBar*           toolBar;
 
     SlideShowSettings  settings;
 };

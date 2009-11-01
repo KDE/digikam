@@ -45,8 +45,8 @@ public:
         toolView = 0;
     }
 
-    QWidget *toolView;
-    Canvas  *canvas;
+    QWidget* toolView;
+    Canvas*  canvas;
 };
 
 EditorStackView::EditorStackView(QWidget *parent)

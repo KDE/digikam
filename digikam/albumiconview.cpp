@@ -197,14 +197,14 @@ public:
 
     KUrl                             itemUrlToFind;
 
-    AlbumLister                     *imageLister;
-    Album                           *currentAlbum;
-    const AlbumSettings             *albumSettings;
+    AlbumLister*                     imageLister;
+    Album*                           currentAlbum;
+    const AlbumSettings*             albumSettings;
     QHash<int, AlbumIconGroupItem*>  albumDict;
 
     ThumbnailSize                    thumbSize;
 
-    AlbumIconViewToolTip            *toolTip;
+    AlbumIconViewToolTip*            toolTip;
 };
 
 AlbumIconView::AlbumIconView(QWidget* parent)

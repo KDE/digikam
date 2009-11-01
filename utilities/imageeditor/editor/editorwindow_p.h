@@ -99,57 +99,57 @@ public:
     bool                       removeFullScreenButton;
     bool                       fullScreenHideToolBar;
 
-    QWidgetAction             *zoomComboAction;
+    QWidgetAction*             zoomComboAction;
 
-    QLabel                    *selectLabel;
+    QLabel*                    selectLabel;
 
-    QToolButton               *cmViewIndicator;
-    QToolButton               *underExposureIndicator;
-    QToolButton               *overExposureIndicator;
+    QToolButton*               cmViewIndicator;
+    QToolButton*               underExposureIndicator;
+    QToolButton*               overExposureIndicator;
 
-    KActionCollection         *imagepluginsActionCollection;
+    KActionCollection*         imagepluginsActionCollection;
 
-    KAction                   *donateMoneyAction;
-    KAction                   *contributeAction;
-    KAction                   *filePrintAction;
-    KAction                   *copyAction;
-    KAction                   *cropAction;
-    KAction                   *zoomPlusAction;
-    KAction                   *zoomMinusAction;
-    KAction                   *zoomTo100percents;
-    KAction                   *zoomFitToSelectAction;
-    KAction                   *rotateLeftAction;
-    KAction                   *rotateRightAction;
-    KAction                   *flipHorizAction;
-    KAction                   *flipVertAction;
-    KAction                   *slideShowAction;
-    KAction                   *selectAllAction;
-    KAction                   *selectNoneAction;
-    KAction                   *rawCameraListAction;
-    KAction                   *libsInfoAction;
-    KAction                   *softProofOptionsAction;
+    KAction*                   donateMoneyAction;
+    KAction*                   contributeAction;
+    KAction*                   filePrintAction;
+    KAction*                   copyAction;
+    KAction*                   cropAction;
+    KAction*                   zoomPlusAction;
+    KAction*                   zoomMinusAction;
+    KAction*                   zoomTo100percents;
+    KAction*                   zoomFitToSelectAction;
+    KAction*                   rotateLeftAction;
+    KAction*                   rotateRightAction;
+    KAction*                   flipHorizAction;
+    KAction*                   flipVertAction;
+    KAction*                   slideShowAction;
+    KAction*                   selectAllAction;
+    KAction*                   selectNoneAction;
+    KAction*                   rawCameraListAction;
+    KAction*                   libsInfoAction;
+    KAction*                   softProofOptionsAction;
 
-    QSignalMapper             *undoSignalMapper;
-    QSignalMapper             *redoSignalMapper;
+    QSignalMapper*             undoSignalMapper;
+    QSignalMapper*             redoSignalMapper;
 
-    QEventLoop                *waitingLoop;
+    QEventLoop*                waitingLoop;
 
-    KToggleAction             *zoomFitToWindowAction;
-    KToggleAction             *viewCMViewAction;
-    KToggleAction             *viewSoftProofAction;
-    KToggleAction             *viewUnderExpoAction;
-    KToggleAction             *viewOverExpoAction;
-    KToggleAction             *showMenuBarAction;
+    KToggleAction*             zoomFitToWindowAction;
+    KToggleAction*             viewCMViewAction;
+    KToggleAction*             viewSoftProofAction;
+    KToggleAction*             viewUnderExpoAction;
+    KToggleAction*             viewOverExpoAction;
+    KToggleAction*             showMenuBarAction;
 
-    KComboBox                 *zoomCombo;
+    KComboBox*                 zoomCombo;
 
     QList<int>                 fullscreenSizeBackup;
 
-    ICCSettingsContainer      *ICCSettings;
+    ICCSettingsContainer*      ICCSettings;
 
-    ExposureSettingsContainer *exposureSettings;
+    ExposureSettingsContainer* exposureSettings;
 
-    EditorToolIface           *toolIface;
+    EditorToolIface*           toolIface;
 };
 
 }  // namespace Digikam

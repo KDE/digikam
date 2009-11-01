@@ -105,11 +105,11 @@ public:
     QStringList                     paths;
     QHash<QString, MountPointInfo>  infos;
 
-    QTimer                         *timer;
+    QTimer*                         timer;
 
     QPixmap                         iconPix;
 
-    FreeSpaceToolTip               *toolTip;
+    FreeSpaceToolTip*               toolTip;
 
     FreeSpaceWidget::FreeSpaceMode  mode;
 };

@@ -125,11 +125,11 @@ public:
 
     int                     downloadTotal;
 
-    QWidget                *parent;
+    QWidget*                parent;
 
-    QTimer                 *timer;
+    QTimer*                 timer;
 
-    DKCamera               *camera;
+    DKCamera*               camera;
 
     QMutex                  mutex;
     QWaitCondition          condVar;

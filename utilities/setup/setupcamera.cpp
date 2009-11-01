@@ -117,12 +117,12 @@ public:
         autoDetectButton = 0;
     }
 
-    QPushButton         *addButton;
-    QPushButton         *removeButton;
-    QPushButton         *editButton;
-    QPushButton         *autoDetectButton;
+    QPushButton*         addButton;
+    QPushButton*         removeButton;
+    QPushButton*         editButton;
+    QPushButton*         autoDetectButton;
 
-    QTreeWidget         *listView;
+    QTreeWidget*         listView;
 };
 
 SetupCamera::SetupCamera( QWidget* parent )

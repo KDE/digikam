@@ -63,15 +63,15 @@ public:
         titleEdit = 0;
     }
 
-    QPushButton   *addButton;
-    QPushButton   *delButton;
-    QPushButton   *repButton;
+    QPushButton*   addButton;
+    QPushButton*   delButton;
+    QPushButton*   repButton;
 
-    KLineEdit     *titleEdit;
+    KLineEdit*     titleEdit;
 
-    TemplateList  *listView;
+    TemplateList*  listView;
 
-    TemplatePanel *tview;
+    TemplatePanel* tview;
 };
 
 SetupTemplate::SetupTemplate(QWidget* parent)

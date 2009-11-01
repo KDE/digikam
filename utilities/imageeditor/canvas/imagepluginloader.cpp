@@ -73,8 +73,7 @@ public:
     }
 
     QStringList   obsoleteImagePluginsList;
-
-    SplashScreen *splash;
+    SplashScreen* splash;
 
     // a map of _loaded_ plugins
     QMap<QString, ImagePlugin*> pluginMap;

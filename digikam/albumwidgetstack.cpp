@@ -77,24 +77,18 @@ public:
         needUpdateBar      = false;
     }
 
-    QMainWindow      *dockArea;
-
-    QSplitter        *splitter;
-
-    ImagePreviewBar  *thumbBar;
-    ThumbBarDock     *thumbBarDock;
-
-    DigikamImageView *imageIconView;
-
-    ImagePreviewView *imagePreviewView;
-
-    WelcomePageView  *welcomePageView;
-
-    MediaPlayerView  *mediaPlayerView;
-
-    QTimer           *thumbbarTimer;
-
     bool              needUpdateBar;
+
+    QMainWindow*      dockArea;
+    QSplitter*        splitter;
+    QTimer*           thumbbarTimer;
+
+    DigikamImageView* imageIconView;
+    ImagePreviewBar*  thumbBar;
+    ImagePreviewView* imagePreviewView;
+    MediaPlayerView*  mediaPlayerView;
+    ThumbBarDock*     thumbBarDock;
+    WelcomePageView*  welcomePageView;
 };
 
 AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)

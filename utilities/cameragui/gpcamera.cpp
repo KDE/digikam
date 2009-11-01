@@ -118,11 +118,11 @@ public:
 #ifdef ENABLE_GPHOTO2
     bool             cameraInitialized;
 
-    Camera          *camera;
+    Camera*          camera;
 
     CameraAbilities  cameraAbilities;
 
-    GPStatus        *status;
+    GPStatus*        status;
 #endif /* ENABLE_GPHOTO2 */
 };
 
@@ -177,8 +177,8 @@ bool GPCamera::doConnect()
         d->camera = 0;
     }
 
-    CameraAbilitiesList *abilList;
-    GPPortInfoList      *infoList;
+    CameraAbilitiesList* abilList;
+    GPPortInfoList*      infoList;
     GPPortInfo           info;
 
     gp_camera_new(&d->camera);

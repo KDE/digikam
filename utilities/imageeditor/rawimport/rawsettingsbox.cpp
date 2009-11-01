@@ -137,38 +137,6 @@ public:
         brightnessInput        = 0;
     }
 
-    QWidget             *advExposureBox;
-    QWidget             *curveBox;
-    QWidget             *rawdecodingBox;
-
-    QLabel              *brightnessLabel;
-    QLabel              *contrastLabel;
-    QLabel              *gammaLabel;
-    QLabel              *saturationLabel;
-    QLabel              *fineExposureLabel;
-
-    QPushButton         *abortBtn;
-    QPushButton         *updateBtn;
-
-    QToolButton         *resetCurveBtn;
-
-    KTabWidget          *tabView;
-
-    CurvesWidget        *curveWidget;
-
-    ImageDialogPreview  *infoBox;
-
-    RExpanderBox        *postProcessSettingsBox;
-
-    RIntNumInput        *contrastInput;
-    RIntNumInput        *brightnessInput;
-
-    RDoubleNumInput     *gammaInput;
-    RDoubleNumInput     *saturationInput;
-    RDoubleNumInput     *fineExposureInput;
-
-    DcrawSettingsWidget *decodingSettingsBox;
-
     const QString optionGroupName;
     const QString optionHistogramChannelEntry;
     const QString optionHistogramScaleEntry;
@@ -199,6 +167,38 @@ public:
     const QString optionCurvePrefix;
     const QString optionSettingsPageEntry;
     const QString optionDecodingSettingsTabEntry;
+
+    QWidget*             advExposureBox;
+    QWidget*             curveBox;
+    QWidget*             rawdecodingBox;
+
+    QLabel*              brightnessLabel;
+    QLabel*              contrastLabel;
+    QLabel*              gammaLabel;
+    QLabel*              saturationLabel;
+    QLabel*              fineExposureLabel;
+
+    QPushButton*         abortBtn;
+    QPushButton*         updateBtn;
+
+    QToolButton*         resetCurveBtn;
+
+    KTabWidget*          tabView;
+
+    CurvesWidget*        curveWidget;
+
+    ImageDialogPreview*  infoBox;
+
+    RExpanderBox*        postProcessSettingsBox;
+
+    RIntNumInput*        contrastInput;
+    RIntNumInput*        brightnessInput;
+
+    RDoubleNumInput*     gammaInput;
+    RDoubleNumInput*     saturationInput;
+    RDoubleNumInput*     fineExposureInput;
+
+    DcrawSettingsWidget* decodingSettingsBox;
 
 };
 

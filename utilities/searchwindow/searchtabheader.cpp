@@ -138,30 +138,30 @@ public:
         currentAlbum            = 0;
     }
 
-    QGroupBox          *newSearchWidget;
-    QGroupBox          *saveAsWidget;
-    QGroupBox          *editSimpleWidget;
-    QGroupBox          *editAdvancedWidget;
+    QGroupBox*          newSearchWidget;
+    QGroupBox*          saveAsWidget;
+    QGroupBox*          editSimpleWidget;
+    QGroupBox*          editAdvancedWidget;
 
-    QStackedLayout     *lowerArea;
+    QStackedLayout*     lowerArea;
 
-    KeywordLineEdit    *keywordEdit;
-    QPushButton        *advancedEditLabel;
+    KeywordLineEdit*    keywordEdit;
+    QPushButton*        advancedEditLabel;
 
-    KLineEdit          *saveNameEdit;
-    QToolButton        *saveButton;
+    KLineEdit*          saveNameEdit;
+    QToolButton*        saveButton;
 
-    KSqueezedTextLabel *storedKeywordEditName;
-    KLineEdit          *storedKeywordEdit;
-    KSqueezedTextLabel *storedAdvancedEditName;
-    QPushButton        *storedAdvancedEditLabel;
+    KSqueezedTextLabel* storedKeywordEditName;
+    KLineEdit*          storedKeywordEdit;
+    KSqueezedTextLabel* storedAdvancedEditName;
+    QPushButton*        storedAdvancedEditLabel;
 
-    QTimer             *keywordEditTimer;
-    QTimer             *storedKeywordEditTimer;
+    QTimer*             keywordEditTimer;
+    QTimer*             storedKeywordEditTimer;
 
-    SearchWindow       *searchWindow;
+    SearchWindow*       searchWindow;
 
-    SAlbum             *currentAlbum;
+    SAlbum*             currentAlbum;
 
     QString             oldKeywordContent;
     QString             oldStoredKeywordContent;

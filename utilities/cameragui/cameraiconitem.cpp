@@ -67,9 +67,9 @@ public:
     QRect       textRect;
     QRect       extraRect;
 
-    QTimer     *progressTimer;
+    QTimer*     progressTimer;
 
-    GPItemInfo *itemInfo;
+    GPItemInfo* itemInfo;
 };
 
 CameraIconItem::CameraIconItem(IconGroupItem* parent, const GPItemInfo& itemInfo,

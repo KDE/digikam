@@ -141,9 +141,9 @@ public:
     const double             maxZoom;
     const double             zoomMultiplier;
 
-    QToolButton             *cornerButton;
+    QToolButton*             cornerButton;
 
-    DRubberBand             *rubber;
+    DRubberBand*             rubber;
     QRect                    pixmapRect;
     QPoint                   dragStart;
     QRect                    dragStartRect;
@@ -155,13 +155,13 @@ public:
 
     QColor                   bgColor;
 
-    QWidget                 *parent;
+    QWidget*                 parent;
 
-    KPopupFrame             *panIconPopup;
+    KPopupFrame*             panIconPopup;
 
-    DImgInterface           *im;
+    DImgInterface*           im;
 
-    ImagePanIconWidget      *panIconWidget;
+    ImagePanIconWidget*      panIconWidget;
 
     QString                  errorMessage;
 };

@@ -54,10 +54,10 @@ public:
         previewBehavour = 0;
     }
 
-    QRadioButton *loadReduced;
-    QRadioButton *loadimage;
+    QRadioButton* loadReduced;
+    QRadioButton* loadimage;
 
-    QButtonGroup *previewBehavour;
+    QButtonGroup* previewBehavour;
 };
 
 PreviewPage::PreviewPage(KAssistantDialog* dlg)

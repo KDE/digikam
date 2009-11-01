@@ -69,8 +69,8 @@ public:
     uint         width;
     uint         height;
 
-    LqrCarver   *carver;
-    LqrProgress *progress;
+    LqrCarver*   carver;
+    LqrProgress* progress;
 
 };
 

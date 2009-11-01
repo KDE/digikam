@@ -103,41 +103,41 @@ public:
         pluginsPage      = 0;
     }
 
-    KPageWidgetItem  *page_collections;
-    KPageWidgetItem  *page_albumView;
-    KPageWidgetItem  *page_tooltip;
-    KPageWidgetItem  *page_metadata;
-    KPageWidgetItem  *page_template;
-    KPageWidgetItem  *page_category;
-    KPageWidgetItem  *page_mime;
-    KPageWidgetItem  *page_lighttable;
-    KPageWidgetItem  *page_editor;
-    KPageWidgetItem  *page_dcraw;
-    KPageWidgetItem  *page_iofiles;
-    KPageWidgetItem  *page_slideshow;
-    KPageWidgetItem  *page_icc;
-    KPageWidgetItem  *page_plugins;
-    KPageWidgetItem  *page_camera;
-    KPageWidgetItem  *page_misc;
+    KPageWidgetItem*  page_collections;
+    KPageWidgetItem*  page_albumView;
+    KPageWidgetItem*  page_tooltip;
+    KPageWidgetItem*  page_metadata;
+    KPageWidgetItem*  page_template;
+    KPageWidgetItem*  page_category;
+    KPageWidgetItem*  page_mime;
+    KPageWidgetItem*  page_lighttable;
+    KPageWidgetItem*  page_editor;
+    KPageWidgetItem*  page_dcraw;
+    KPageWidgetItem*  page_iofiles;
+    KPageWidgetItem*  page_slideshow;
+    KPageWidgetItem*  page_icc;
+    KPageWidgetItem*  page_plugins;
+    KPageWidgetItem*  page_camera;
+    KPageWidgetItem*  page_misc;
 
-    SetupCollections *collectionsPage;
-    SetupAlbumView   *albumViewPage;
-    SetupToolTip     *tooltipPage;
-    SetupMetadata    *metadataPage;
-    SetupTemplate    *templatePage;
-    SetupCategory    *categoryPage;
-    SetupMime        *mimePage;
-    SetupLightTable  *lighttablePage;
-    SetupEditor      *editorPage;
-    SetupDcraw       *dcrawPage;
-    SetupIOFiles     *iofilesPage;
-    SetupSlideShow   *slideshowPage;
-    SetupICC         *iccPage;
-    SetupCamera      *cameraPage;
-    SetupMisc        *miscPage;
-    SetupPlugins     *pluginsPage;
+    SetupCollections* collectionsPage;
+    SetupAlbumView*   albumViewPage;
+    SetupToolTip*     tooltipPage;
+    SetupMetadata*    metadataPage;
+    SetupTemplate*    templatePage;
+    SetupCategory*    categoryPage;
+    SetupMime*        mimePage;
+    SetupLightTable*  lighttablePage;
+    SetupEditor*      editorPage;
+    SetupDcraw*       dcrawPage;
+    SetupIOFiles*     iofilesPage;
+    SetupSlideShow*   slideshowPage;
+    SetupICC*         iccPage;
+    SetupCamera*      cameraPage;
+    SetupMisc*        miscPage;
+    SetupPlugins*     pluginsPage;
 
-    KPageWidgetItem  *pageItem(Setup::Page page);
+    KPageWidgetItem*  pageItem(Setup::Page page);
 };
 
 Setup::Setup(QWidget* parent)

@@ -55,10 +55,10 @@ public:
 
     bool         canHide;
 
-    QToolButton *playBtn;
-    QToolButton *stopBtn;
-    QToolButton *nextBtn;
-    QToolButton *prevBtn;
+    QToolButton* playBtn;
+    QToolButton* stopBtn;
+    QToolButton* nextBtn;
+    QToolButton* prevBtn;
 };
 
 ToolBar::ToolBar(QWidget* parent)

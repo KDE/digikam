@@ -66,22 +66,16 @@ public:
 
     double                 currentFitWindowZoom;
 
-    QToolButton           *cornerButton;
+    QToolButton*           cornerButton;
 
-    KPopupFrame           *panIconPopup;
-
+    KPopupFrame*           panIconPopup;
     KUrl                   url;
 
-    PanIconWidget         *panIconWidget;
-
+    PanIconWidget*         panIconWidget;
     DImg                   demosaicedImg;
-
     DImg                   postProcessedImg;
-
     DRawDecoding           settings;
-
-    ManagedLoadSaveThread *thread;
-
+    ManagedLoadSaveThread* thread;
     LoadingDescription     loadingDesc;
 };
 

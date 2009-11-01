@@ -54,10 +54,10 @@ public:
         rawHandling  = 0;
     }
 
-    QRadioButton *openDirectly;
-    QRadioButton *useRawImport;
+    QRadioButton* openDirectly;
+    QRadioButton* useRawImport;
 
-    QButtonGroup *rawHandling;
+    QButtonGroup* rawHandling;
 };
 
 RawPage::RawPage(KAssistantDialog* dlg)

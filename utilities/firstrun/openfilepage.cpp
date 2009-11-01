@@ -58,10 +58,10 @@ public:
         openFileBehavour = 0;
     }
 
-    QRadioButton *openAsPreview;
-    QRadioButton *openInEditor;
+    QRadioButton* openAsPreview;
+    QRadioButton* openInEditor;
 
-    QButtonGroup *openFileBehavour;
+    QButtonGroup* openFileBehavour;
 };
 
 OpenFilePage::OpenFilePage(KAssistantDialog* dlg)

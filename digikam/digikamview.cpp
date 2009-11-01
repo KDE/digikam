@@ -155,42 +155,42 @@ public:
     int                       initialAlbumID;
     int                       thumbSize;
 
-    QMainWindow              *dockArea;
+    QMainWindow*              dockArea;
 
-    SidebarSplitter          *splitter;
+    SidebarSplitter*          splitter;
 
-    QTimer                   *selectionTimer;
-    QTimer                   *thumbSizeTimer;
+    QTimer*                   selectionTimer;
+    QTimer*                   thumbSizeTimer;
 
-    KVBox                    *folderBox;
-    KVBox                    *tagBox;
-    KVBox                    *searchBox;
-    KVBox                    *tagFilterBox;
+    KVBox*                    folderBox;
+    KVBox*                    tagBox;
+    KVBox*                    searchBox;
+    KVBox*                    tagFilterBox;
 
-    SearchTextBar            *folderSearchBar;
-    SearchTextBar            *tagSearchBar;
-    SearchTextBar            *searchSearchBar;
-    SearchTextBar            *tagFilterSearchBar;
+    SearchTextBar*            folderSearchBar;
+    SearchTextBar*            tagSearchBar;
+    SearchTextBar*            searchSearchBar;
+    SearchTextBar*            tagFilterSearchBar;
 
-    DigikamApp               *parent;
+    DigikamApp*               parent;
 
-    DigikamImageView         *iconView;
-    AlbumFolderView          *folderView;
-    AlbumManager             *albumManager;
-    AlbumHistory             *albumHistory;
-    AlbumWidgetStack         *albumWidgetStack;
+    DigikamImageView*         iconView;
+    AlbumFolderView*          folderView;
+    AlbumManager*             albumManager;
+    AlbumHistory*             albumHistory;
+    AlbumWidgetStack*         albumWidgetStack;
 
-    Sidebar                  *leftSideBar;
-    ImagePropertiesSideBarDB *rightSideBar;
+    Sidebar*                  leftSideBar;
+    ImagePropertiesSideBarDB* rightSideBar;
 
-    DateFolderView           *dateFolderView;
-    TimeLineView             *timeLineView;
-    TagFolderView            *tagFolderView;
-    SearchFolderView         *searchFolderView;
-    SearchTabHeader          *searchTabHeader;
-    TagFilterView            *tagFilterView;
-    FuzzySearchView          *fuzzySearchView;
-    GPSSearchView            *gpsSearchView;
+    DateFolderView*           dateFolderView;
+    TimeLineView*             timeLineView;
+    TagFolderView*            tagFolderView;
+    SearchFolderView*         searchFolderView;
+    SearchTabHeader*          searchTabHeader;
+    TagFilterView*            tagFilterView;
+    FuzzySearchView*          fuzzySearchView;
+    GPSSearchView*            gpsSearchView;
 };
 
 DigikamView::DigikamView(QWidget *parent)

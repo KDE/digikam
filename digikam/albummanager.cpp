@@ -175,16 +175,16 @@ public:
     QList<QDateTime>            dbPathModificationDateList;
     QList<QString>              dirWatchBlackList;
 
-    KIO::TransferJob           *albumListJob;
-    KIO::TransferJob           *dateListJob;
-    KIO::TransferJob           *tagListJob;
+    KIO::TransferJob*           albumListJob;
+    KIO::TransferJob*           dateListJob;
+    KIO::TransferJob*           tagListJob;
 
-    KDirWatch                  *dirWatch;
+    KDirWatch*                  dirWatch;
 
-    PAlbum                     *rootPAlbum;
-    TAlbum                     *rootTAlbum;
-    DAlbum                     *rootDAlbum;
-    SAlbum                     *rootSAlbum;
+    PAlbum*                     rootPAlbum;
+    TAlbum*                     rootTAlbum;
+    DAlbum*                     rootDAlbum;
+    SAlbum*                     rootSAlbum;
 
     QHash<int,Album *>          allAlbumsIdHash;
     QHash<PAlbumPath, PAlbum*>  albumPathHash;
@@ -192,16 +192,16 @@ public:
 
     QMultiHash<Album*, Album**> guardedPointers;
 
-    Album                      *currentAlbum;
+    Album*                      currentAlbum;
 
     bool                        changingDB;
-    QTimer                     *scanPAlbumsTimer;
-    QTimer                     *scanTAlbumsTimer;
-    QTimer                     *scanSAlbumsTimer;
-    QTimer                     *scanDAlbumsTimer;
-    QTimer                     *updatePAlbumsTimer;
-    QTimer                     *albumItemCountTimer;
-    QTimer                     *tagItemCountTimer;
+    QTimer*                     scanPAlbumsTimer;
+    QTimer*                     scanTAlbumsTimer;
+    QTimer*                     scanSAlbumsTimer;
+    QTimer*                     scanDAlbumsTimer;
+    QTimer*                     updatePAlbumsTimer;
+    QTimer*                     albumItemCountTimer;
+    QTimer*                     tagItemCountTimer;
     QSet<int>                   changedPAlbums;
 
 

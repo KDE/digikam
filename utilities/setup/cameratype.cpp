@@ -55,7 +55,7 @@ public:
     QString             port;
     QString             path;
 
-    KAction            *action;
+    KAction*            action;
 
     QPointer<CameraUI>  currentCameraUI;
 };

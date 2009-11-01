@@ -123,53 +123,53 @@ public:
         advancedPanel         = 0;
      }
 
-    QLabel                 *iccFolderLabel;
+    QLabel*                 iccFolderLabel;
 
-    QCheckBox              *enableColorManagement;
-    QCheckBox              *defaultSRGBConvert;
-    QCheckBox              *bpcAlgorithm;
-    QCheckBox              *managedView;
-    QCheckBox              *managedPreviews;
+    QCheckBox*              enableColorManagement;
+    QCheckBox*              defaultSRGBConvert;
+    QCheckBox*              bpcAlgorithm;
+    QCheckBox*              managedView;
+    QCheckBox*              managedPreviews;
 
-    QRadioButton           *defaultAskMismatch;
-    QRadioButton           *defaultConvertMismatch;
-    QRadioButton           *defaultAskMissing;
-    QRadioButton           *defaultSRGBMissing;
-    QRadioButton           *defaultWSMissing;
-    QRadioButton           *defaultInputMissing;
-    QRadioButton           *defaultAskRaw;
-    QRadioButton           *defaultInputRaw;
-    QRadioButton           *defaultGuessRaw;
+    QRadioButton*           defaultAskMismatch;
+    QRadioButton*           defaultConvertMismatch;
+    QRadioButton*           defaultAskMissing;
+    QRadioButton*           defaultSRGBMissing;
+    QRadioButton*           defaultWSMissing;
+    QRadioButton*           defaultInputMissing;
+    QRadioButton*           defaultAskRaw;
+    QRadioButton*           defaultInputRaw;
+    QRadioButton*           defaultGuessRaw;
 
-    QPushButton            *infoWorkProfiles;
-    QPushButton            *infoMonitorProfiles;
-    QPushButton            *infoInProfiles;
-    QPushButton            *infoProofProfiles;
+    QPushButton*            infoWorkProfiles;
+    QPushButton*            infoMonitorProfiles;
+    QPushButton*            infoInProfiles;
+    QPushButton*            infoProofProfiles;
 
-    QGroupBox              *workspaceGB;
-    QGroupBox              *mismatchGB;
-    QGroupBox              *missingGB;
-    QGroupBox              *rawGB;
-    QGroupBox              *inputGB;
-    QGroupBox              *viewGB;
-    QGroupBox              *proofGB;
-    QGroupBox              *iccFolderGB;
-    QGroupBox              *advancedSettingsGB;
+    QGroupBox*              workspaceGB;
+    QGroupBox*              mismatchGB;
+    QGroupBox*              missingGB;
+    QGroupBox*              rawGB;
+    QGroupBox*              inputGB;
+    QGroupBox*              viewGB;
+    QGroupBox*              proofGB;
+    QGroupBox*              iccFolderGB;
+    QGroupBox*              advancedSettingsGB;
 
-    KUrlRequester          *defaultPathKU;
+    KUrlRequester*          defaultPathKU;
 
-    IccRenderingIntentComboBox *renderingIntentKC;
+    IccRenderingIntentComboBox* renderingIntentKC;
 
-    QWidget                *behaviorPanel;
-    QWidget                *profilesPanel;
-    QWidget                *advancedPanel;
-    KTabWidget             *tab;
-    KPageDialog            *mainDialog;
+    QWidget*                behaviorPanel;
+    QWidget*                profilesPanel;
+    QWidget*                advancedPanel;
+    KTabWidget*             tab;
+    KPageDialog*            mainDialog;
 
-    IccProfilesComboBox    *inProfilesKC;
-    IccProfilesComboBox    *workProfilesKC;
-    IccProfilesComboBox    *proofProfilesKC;
-    IccProfilesComboBox    *monitorProfilesKC;
+    IccProfilesComboBox*    inProfilesKC;
+    IccProfilesComboBox*    workProfilesKC;
+    IccProfilesComboBox*    proofProfilesKC;
+    IccProfilesComboBox*    monitorProfilesKC;
 };
 
 SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )

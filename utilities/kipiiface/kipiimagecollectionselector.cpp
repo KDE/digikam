@@ -75,17 +75,17 @@ public:
         searchesSearchBar = 0;
     }
 
-    QTreeWidget   *albumsView;
-    QTreeWidget   *tagsView;
-    QTreeWidget   *searchesView;
+    QTreeWidget*   albumsView;
+    QTreeWidget*   tagsView;
+    QTreeWidget*   searchesView;
 
-    KTabWidget    *tab;
+    KTabWidget*    tab;
 
-    KipiInterface *iface;
+    KipiInterface* iface;
 
-    SearchTextBar *albumsSearchBar;
-    SearchTextBar *tagsSearchBar;
-    SearchTextBar *searchesSearchBar;
+    SearchTextBar* albumsSearchBar;
+    SearchTextBar* tagsSearchBar;
+    SearchTextBar* searchesSearchBar;
 };
 
 KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface *iface, QWidget *parent)

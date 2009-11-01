@@ -104,55 +104,55 @@ public:
 
     int                        progressCount;
 
-    QTimer                    *progressTimer;
+    QTimer*                    progressTimer;
 
     QPixmap                    progressPix;
 
-    QLabel                    *statusLabel;
+    QLabel*                    statusLabel;
 
-    KAction                   *clearQueueAction;
-    KAction                   *removeItemsSelAction;
-    QAction                   *removeItemsDoneAction;
-    QAction                   *fullScreenAction;
-    QAction                   *moveUpToolAction;
-    QAction                   *moveDownToolAction;
-    QAction                   *removeToolAction;
-    QAction                   *clearToolsAction;
+    KAction*                   clearQueueAction;
+    KAction*                   removeItemsSelAction;
+    QAction*                   removeItemsDoneAction;
+    QAction*                   fullScreenAction;
+    QAction*                   moveUpToolAction;
+    QAction*                   moveDownToolAction;
+    QAction*                   removeToolAction;
+    QAction*                   clearToolsAction;
 
-    KAction                   *runAction;
-    KAction                   *stopAction;
-    KAction                   *removeQueueAction;
-    KAction                   *newQueueAction;
-    KAction                   *donateMoneyAction;
-    KAction                   *contributeAction;
-    KAction                   *rawCameraListAction;
-    KAction                   *libsInfoAction;
-    KAction                   *dbStatAction;
+    KAction*                   runAction;
+    KAction*                   stopAction;
+    KAction*                   removeQueueAction;
+    KAction*                   newQueueAction;
+    KAction*                   donateMoneyAction;
+    KAction*                   contributeAction;
+    KAction*                   rawCameraListAction;
+    KAction*                   libsInfoAction;
+    KAction*                   dbStatAction;
 
-    SidebarSplitter           *topSplitter;
-    SidebarSplitter           *bottomSplitter;
-    SidebarSplitter           *verticalSplitter;
+    SidebarSplitter*           topSplitter;
+    SidebarSplitter*           bottomSplitter;
+    SidebarSplitter*           verticalSplitter;
 
-    KToggleAction             *showMenuBarAction;
+    KToggleAction*             showMenuBarAction;
 
-    KSelectAction             *themeMenuAction;
+    KSelectAction*             themeMenuAction;
 
-    DLogoAction               *animLogo;
-    QueueListViewItem         *currentProcessItem;
+    DLogoAction*               animLogo;
+    QueueListViewItem*         currentProcessItem;
 
-    AssignedListViewItem      *currentTaskItem;
+    AssignedListViewItem*      currentTaskItem;
 
-    BatchToolsManager         *batchToolsMgr;
+    BatchToolsManager*         batchToolsMgr;
 
-    StatusProgressBar         *statusProgressBar;
+    StatusProgressBar*         statusProgressBar;
 
-    ActionThread              *thread;
+    ActionThread*              thread;
 
-    ToolsView                 *toolsView;
-    ToolSettingsView          *toolSettings;
-    AssignedListView          *assignedList;
-    QueuePool                 *queuePool;
-    QueueSettingsView         *queueSettingsView;
+    ToolsView*                 toolsView;
+    ToolSettingsView*          toolSettings;
+    AssignedListView*          assignedList;
+    QueuePool*                 queuePool;
+    QueueSettingsView*         queueSettingsView;
 
     QueuePoolItemsList         itemsList;
 };

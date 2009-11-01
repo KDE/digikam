@@ -57,17 +57,14 @@ public:
          digiKam crash. Text Filter bar is replaced by a simple QLineEdit in this case.
  */
 #if KDE_IS_VERSION(4,1,0)
-    SearchTextBar       *textFilter;
+    SearchTextBar*       textFilter;
 #else
-    QLineEdit           *textFilter;
+    QLineEdit*           textFilter;
 #endif
 
-    StatusLed           *led;
-
-    MimeFilter          *mimeFilter;
-
-    RatingFilter        *ratingFilter;
-
+    StatusLed*           led;
+    MimeFilter*          mimeFilter;
+    RatingFilter*        ratingFilter;
     ImageFilterSettings  settings;
 };
 

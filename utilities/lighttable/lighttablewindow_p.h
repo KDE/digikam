@@ -109,60 +109,60 @@ public:
     bool                      removeFullScreenButton;
     bool                      cancelSlideShow;
 
-    SidebarSplitter          *hSplitter;
-    ThumbBarDock             *barViewDock;
+    SidebarSplitter*          hSplitter;
+    ThumbBarDock*             barViewDock;
 
-    KAction                  *setItemLeftAction;
-    KAction                  *setItemRightAction;
-    KAction                  *clearListAction;
-    KAction                  *editItemAction;
-    KAction                  *removeItemAction;
-    KAction                  *fileDeleteAction;
-    KAction                  *fileDeleteFinalAction;
-    KAction                  *slideShowAction;
-    KAction                  *zoomPlusAction;
-    KAction                  *zoomMinusAction;
-    KAction                  *zoomTo100percents;
-    KAction                  *zoomFitToWindowAction;
-    KAction                  *fullScreenAction;
-    KToggleAction            *showThumbBarAction;
+    KAction*                  setItemLeftAction;
+    KAction*                  setItemRightAction;
+    KAction*                  clearListAction;
+    KAction*                  editItemAction;
+    KAction*                  removeItemAction;
+    KAction*                  fileDeleteAction;
+    KAction*                  fileDeleteFinalAction;
+    KAction*                  slideShowAction;
+    KAction*                  zoomPlusAction;
+    KAction*                  zoomMinusAction;
+    KAction*                  zoomTo100percents;
+    KAction*                  zoomFitToWindowAction;
+    KAction*                  fullScreenAction;
+    KToggleAction*            showThumbBarAction;
 
     // Rating actions.
-    KAction                  *star0;
-    KAction                  *star1;
-    KAction                  *star2;
-    KAction                  *star3;
-    KAction                  *star4;
-    KAction                  *star5;
+    KAction*                  star0;
+    KAction*                  star1;
+    KAction*                  star2;
+    KAction*                  star3;
+    KAction*                  star4;
+    KAction*                  star5;
 
-    KAction                  *forwardAction;
-    KAction                  *backwardAction;
-    KAction                  *firstAction;
-    KAction                  *lastAction;
-    KAction                  *donateMoneyAction;
-    KAction                  *contributeAction;
-    KAction                  *rawCameraListAction;
-    KAction                  *libsInfoAction;
-    KAction                  *dbStatAction;
+    KAction*                  forwardAction;
+    KAction*                  backwardAction;
+    KAction*                  firstAction;
+    KAction*                  lastAction;
+    KAction*                  donateMoneyAction;
+    KAction*                  contributeAction;
+    KAction*                  rawCameraListAction;
+    KAction*                  libsInfoAction;
+    KAction*                  dbStatAction;
 
-    KSelectAction            *themeMenuAction;
+    KSelectAction*            themeMenuAction;
 
-    KToggleAction            *syncPreviewAction;
-    KToggleAction            *navigateByPairAction;
-    KToggleAction            *showMenuBarAction;
-    KToggleAction            *clearOnCloseAction;
+    KToggleAction*            syncPreviewAction;
+    KToggleAction*            navigateByPairAction;
+    KToggleAction*            showMenuBarAction;
+    KToggleAction*            clearOnCloseAction;
 
-    LightTableBar            *barView;
+    LightTableBar*            barView;
 
-    LightTableView           *previewView;
+    LightTableView*           previewView;
 
-    StatusZoomBar            *leftZoomBar;
-    StatusZoomBar            *rightZoomBar;
+    StatusZoomBar*            leftZoomBar;
+    StatusZoomBar*            rightZoomBar;
 
-    StatusProgressBar        *statusProgressBar;
+    StatusProgressBar*        statusProgressBar;
 
-    ImagePropertiesSideBarDB *leftSideBar;
-    ImagePropertiesSideBarDB *rightSideBar;
+    ImagePropertiesSideBarDB* leftSideBar;
+    ImagePropertiesSideBarDB* rightSideBar;
 };
 
 }  // namespace Digikam

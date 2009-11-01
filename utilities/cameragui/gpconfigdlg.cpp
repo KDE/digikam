@@ -62,11 +62,11 @@ public:
 
     QMap<CameraWidget*, QWidget*>  wmap;
 
-    QTabWidget                    *tabWidget;
+    QTabWidget*                    tabWidget;
 
-    Camera                        *camera;
+    Camera*                        camera;
 
-    CameraWidget                  *widgetRoot;
+    CameraWidget*                  widgetRoot;
 };
 
 GPConfigDlg::GPConfigDlg(Camera *camera, CameraWidget *widget, QWidget *parent)

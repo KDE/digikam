@@ -56,11 +56,11 @@ public:
 
     bool              stopPreview;
 
-    QTimer           *timer;
+    QTimer*           timer;
 
-    CameraController *controller;
+    CameraController* controller;
 
-    CaptureWidget    *captureWidget;
+    CaptureWidget*    captureWidget;
 };
 
 CaptureDlg::CaptureDlg(QWidget* parent, CameraController* controller,
