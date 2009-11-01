@@ -53,24 +53,39 @@ class SetupIOFilesPriv
 public:
 
 
-    SetupIOFilesPriv()
-    {
-        JPEGOptions     = 0;
-        PNGOptions      = 0;
-        TIFFOptions     = 0;
-        JPEG2000Options = 0;
-        PGFOptions      = 0;
-    }
+    SetupIOFilesPriv() :
+        configGroupName("ImageViewer Settings"),
+        configJPEGCompressionEntry("JPEGCompression"),
+        configJPEGSubSamplingEntry("JPEGSubSampling"),
+        configPNGCompressionEntry("PNGCompression"),
+        configTIFFCompressionEntry("TIFFCompression"),
+        configJPEG2000CompressionEntry("JPEG2000Compression"),
+        configJPEG2000LossLessEntry("JPEG2000LossLess"),
+        configPGFCompressionEntry("PGFCompression"),
+        configPGFLossLessEntry("PGFLossLess"),
 
-    JPEGSettings *JPEGOptions;
+        JPEGOptions(0),
+        PNGOptions(0),
+        TIFFOptions(0),
+        JPEG2000Options(0),
+        PGFOptions(0)
+    {}
 
-    PNGSettings  *PNGOptions;
+    const QString configGroupName; 
+    const QString configJPEGCompressionEntry;
+    const QString configJPEGSubSamplingEntry;
+    const QString configPNGCompressionEntry;
+    const QString configTIFFCompressionEntry;
+    const QString configJPEG2000CompressionEntry;
+    const QString configJPEG2000LossLessEntry;
+    const QString configPGFCompressionEntry;
+    const QString configPGFLossLessEntry;
 
-    TIFFSettings *TIFFOptions;
-
-    JP2KSettings *JPEG2000Options;
-
-    PGFSettings  *PGFOptions;
+    JPEGSettings* JPEGOptions;
+    PNGSettings*  PNGOptions;
+    TIFFSettings* TIFFOptions;
+    JP2KSettings* JPEG2000Options;
+    PGFSettings*  PGFOptions;
 };
 
 SetupIOFiles::SetupIOFiles(QWidget* parent )
@@ -136,30 +151,30 @@ SetupIOFiles::~SetupIOFiles()
 void SetupIOFiles::applySettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("ImageViewer Settings"));
-    group.writeEntry("JPEGCompression",     d->JPEGOptions->getCompressionValue());
-    group.writeEntry("JPEGSubSampling",     d->JPEGOptions->getSubSamplingValue());
-    group.writeEntry("PNGCompression",      d->PNGOptions->getCompressionValue());
-    group.writeEntry("TIFFCompression",     d->TIFFOptions->getCompression());
-    group.writeEntry("JPEG2000Compression", d->JPEG2000Options->getCompressionValue());
-    group.writeEntry("JPEG2000LossLess",    d->JPEG2000Options->getLossLessCompression());
-    group.writeEntry("PGFCompression",      d->PGFOptions->getCompressionValue());
-    group.writeEntry("PGFLossLess",         d->PGFOptions->getLossLessCompression());
+    KConfigGroup group        = config->group(d->configGroupName);
+    group.writeEntry(d->configJPEGCompressionEntry,     d->JPEGOptions->getCompressionValue());
+    group.writeEntry(d->configJPEGSubSamplingEntry,     d->JPEGOptions->getSubSamplingValue());
+    group.writeEntry(d->configPNGCompressionEntry,      d->PNGOptions->getCompressionValue());
+    group.writeEntry(d->configTIFFCompressionEntry,     d->TIFFOptions->getCompression());
+    group.writeEntry(d->configJPEG2000CompressionEntry, d->JPEG2000Options->getCompressionValue());
+    group.writeEntry(d->configJPEG2000LossLessEntry,    d->JPEG2000Options->getLossLessCompression());
+    group.writeEntry(d->configPGFCompressionEntry,      d->PGFOptions->getCompressionValue());
+    group.writeEntry(d->configPGFLossLessEntry,         d->PGFOptions->getLossLessCompression());
     config->sync();
 }
 
 void SetupIOFiles::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("ImageViewer Settings"));
-    d->JPEGOptions->setCompressionValue(group.readEntry("JPEGCompression", 75) );
-    d->JPEGOptions->setSubSamplingValue(group.readEntry("JPEGSubSampling", 1) ); // Medium sub-sampling
-    d->PNGOptions->setCompressionValue(group.readEntry("PNGCompression", 9) );
-    d->TIFFOptions->setCompression(group.readEntry("TIFFCompression", false));
-    d->JPEG2000Options->setCompressionValue( group.readEntry("JPEG2000Compression", 75) );
-    d->JPEG2000Options->setLossLessCompression( group.readEntry("JPEG2000LossLess", true) );
-    d->PGFOptions->setCompressionValue( group.readEntry("PGFCompression", 3) );
-    d->PGFOptions->setLossLessCompression( group.readEntry("PGFLossLess", true) );
+    KConfigGroup group        = config->group(d->configGroupName);
+    d->JPEGOptions->setCompressionValue(group.readEntry(d->configJPEGCompressionEntry,          75) );
+    d->JPEGOptions->setSubSamplingValue(group.readEntry(d->configJPEGSubSamplingEntry,          1) ); // Medium sub-sampling
+    d->PNGOptions->setCompressionValue(group.readEntry(d->configPNGCompressionEntry,            9) );
+    d->TIFFOptions->setCompression(group.readEntry(d->configTIFFCompressionEntry,               false));
+    d->JPEG2000Options->setCompressionValue( group.readEntry(d->configJPEG2000CompressionEntry, 75) );
+    d->JPEG2000Options->setLossLessCompression( group.readEntry(d->configJPEG2000LossLessEntry, true) );
+    d->PGFOptions->setCompressionValue( group.readEntry(d->configPGFCompressionEntry,           3) );
+    d->PGFOptions->setLossLessCompression( group.readEntry(d->configPGFLossLessEntry,           true) );
 }
 
 }  // namespace Digikam
