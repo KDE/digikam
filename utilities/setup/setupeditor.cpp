@@ -50,28 +50,44 @@ class SetupEditorPriv
 {
 public:
 
-    SetupEditorPriv()
-    {
-        hideToolBar          = 0;
-        themebackgroundColor = 0;
-        backgroundColor      = 0;
-        colorBox             = 0;
-        overExposureColor    = 0;
-        underExposureColor   = 0;
-        hideThumbBar         = 0;
-        useRawImportTool     = 0;
-    }
+    SetupEditorPriv() :
+        configGroupName("ImageViewer Settings"),
+        configUseThemeBackgroundColorEntry("UseThemeBackgroundColor"),
+        configBackgroundColorEntry("BackgroundColor"),
+        configFullScreenHideToolBarEntry("FullScreen Hide ToolBar"),
+        configFullScreenHideThumbBarEntry("FullScreenHideThumbBar"),
+        configUnderExposureColorEntry("UnderExposureColor"),
+        configOverExposureColorEntry("OverExposureColor"),
+        configUseRawImportToolEntry("UseRawImportTool"),
 
-    KHBox        *colorBox;
+        hideToolBar(0),
+        themebackgroundColor(0),
+        hideThumbBar(0),
+        useRawImportTool(0),
+        colorBox(0),
+        backgroundColor(0),
+        underExposureColor(0),
+        overExposureColor(0)
+    {}
 
-    QCheckBox    *hideToolBar;
-    QCheckBox    *themebackgroundColor;
-    QCheckBox    *hideThumbBar;
-    QCheckBox    *useRawImportTool;
+    const QString configGroupName;
+    const QString configUseThemeBackgroundColorEntry;
+    const QString configBackgroundColorEntry;
+    const QString configFullScreenHideToolBarEntry;
+    const QString configFullScreenHideThumbBarEntry;
+    const QString configUnderExposureColorEntry;
+    const QString configOverExposureColorEntry;
+    const QString configUseRawImportToolEntry;
 
-    KColorButton *backgroundColor;
-    KColorButton *underExposureColor;
-    KColorButton *overExposureColor;
+    QCheckBox*    hideToolBar;
+    QCheckBox*    themebackgroundColor;
+    QCheckBox*    hideThumbBar;
+    QCheckBox*    useRawImportTool;
+
+    KHBox*        colorBox;
+    KColorButton* backgroundColor;
+    KColorButton* underExposureColor;
+    KColorButton* overExposureColor;
 };
 
 SetupEditor::SetupEditor(QWidget* parent)
@@ -179,29 +195,29 @@ void SetupEditor::slotThemeBackgroundColor(bool e)
 void SetupEditor::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("ImageViewer Settings"));
+    KConfigGroup group        = config->group(d->configGroupName);
     QColor Black(Qt::black);
     QColor White(Qt::white);
-    d->themebackgroundColor->setChecked(group.readEntry("UseThemeBackgroundColor", true));
-    d->backgroundColor->setColor(group.readEntry("BackgroundColor", Black));
-    d->hideToolBar->setChecked(group.readEntry("FullScreen Hide ToolBar", false));
-    d->hideThumbBar->setChecked(group.readEntry("FullScreenHideThumbBar", true));
-    d->underExposureColor->setColor(group.readEntry("UnderExposureColor", White));
-    d->overExposureColor->setColor(group.readEntry("OverExposureColor", Black));
-    d->useRawImportTool->setChecked(group.readEntry("UseRawImportTool", false));
+    d->themebackgroundColor->setChecked(group.readEntry(d->configUseThemeBackgroundColorEntry, true));
+    d->backgroundColor->setColor(group.readEntry(d->configBackgroundColorEntry,                Black));
+    d->hideToolBar->setChecked(group.readEntry(d->configFullScreenHideToolBarEntry,            false));
+    d->hideThumbBar->setChecked(group.readEntry(d->configFullScreenHideThumbBarEntry,          true));
+    d->underExposureColor->setColor(group.readEntry(d->configUnderExposureColorEntry,          White));
+    d->overExposureColor->setColor(group.readEntry(d->configOverExposureColorEntry,            Black));
+    d->useRawImportTool->setChecked(group.readEntry(d->configUseRawImportToolEntry,            false));
 }
 
 void SetupEditor::applySettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("ImageViewer Settings"));
-    group.writeEntry("UseThemeBackgroundColor", d->themebackgroundColor->isChecked());
-    group.writeEntry("BackgroundColor",         d->backgroundColor->color());
-    group.writeEntry("FullScreen Hide ToolBar", d->hideToolBar->isChecked());
-    group.writeEntry("FullScreenHideThumbBar",  d->hideThumbBar->isChecked());
-    group.writeEntry("UnderExposureColor",      d->underExposureColor->color());
-    group.writeEntry("OverExposureColor",       d->overExposureColor->color());
-    group.writeEntry("UseRawImportTool",        d->useRawImportTool->isChecked());
+    KConfigGroup group        = config->group(d->configGroupName);
+    group.writeEntry(d->configUseThemeBackgroundColorEntry, d->themebackgroundColor->isChecked());
+    group.writeEntry(d->configBackgroundColorEntry,         d->backgroundColor->color());
+    group.writeEntry(d->configFullScreenHideToolBarEntry,   d->hideToolBar->isChecked());
+    group.writeEntry(d->configFullScreenHideThumbBarEntry,  d->hideThumbBar->isChecked());
+    group.writeEntry(d->configUnderExposureColorEntry,      d->underExposureColor->color());
+    group.writeEntry(d->configOverExposureColorEntry,       d->overExposureColor->color());
+    group.writeEntry(d->configUseRawImportToolEntry,        d->useRawImportTool->isChecked());
     group.sync();
 }
 
