@@ -92,13 +92,13 @@ public:
         }
     }
 
-    QByteArray  data;
-    QString     filePath;
-    QString     description;
-    IccProfile::ProfileType
-                type;
+    QByteArray              data;
+    QString                 filePath;
+    QString                 description;
 
-    cmsHPROFILE handle;
+    IccProfile::ProfileType type;
+
+    cmsHPROFILE             handle;
 };
 
 class IccProfileStatic
@@ -127,24 +127,24 @@ LcmsLock::~LcmsLock()
 }
 
 IccProfile::IccProfile()
-            : d(0)
+          : d(0)
 {
 }
 
 IccProfile::IccProfile(const QByteArray& data)
-            : d(new IccProfilePriv)
+          : d(new IccProfilePriv)
 {
     d->data = data;
 }
 
 IccProfile::IccProfile(const QString& filePath)
-            : d(new IccProfilePriv)
+          : d(new IccProfilePriv)
 {
     d->filePath = filePath;
 }
 
 IccProfile::IccProfile(const char *location, const QString& relativePath)
-            : d(0)
+          : d(0)
 {
     QString filePath = KStandardDirs::locate(location, relativePath);
     if (filePath.isNull())
@@ -201,7 +201,7 @@ QList<IccProfile> IccProfile::defaultProfiles()
 }
 
 IccProfile::IccProfile(const IccProfile& other)
-            : d(other.d)
+          : d(other.d)
 {
 }
 
@@ -440,9 +440,10 @@ QStringList IccProfile::defaultSearchPaths()
         candidates << QDir::homePath() + "/.local/share/color/icc/";
         candidates << QDir::homePath() + "/.local/share/icc/";
         candidates << QDir::homePath() + "/.color/icc/";
+
     #endif
 
-    foreach (const QString &candidate, candidates)
+    foreach (const QString& candidate, candidates)
     {
         QDir dir(candidate);
         if (dir.exists() && dir.isReadable())
@@ -474,6 +475,5 @@ void IccProfile::considerOriginalAdobeRGB(const QString& filePath)
         }
     }
 }
-
 
 }  // namespace Digikam

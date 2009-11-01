@@ -163,8 +163,12 @@ private:
 
     IccProfile(const char *location, const QString& relativePath);
 
+private:
+
     QSharedDataPointer<IccProfilePriv> d;
 };
+
+// --------------------------------------------------------------------------------------
 
 class DIGIKAM_EXPORT LcmsLock
 {
@@ -174,7 +178,6 @@ public:
     LcmsLock();
     ~LcmsLock();
 };
-
 
 }  // namespace Digikam
 
