@@ -68,44 +68,46 @@ class TimeLineViewPriv
 
 public:
 
-    TimeLineViewPriv()
-    {
-        timeUnitCB            = 0;
-        scaleBG               = 0;
-        cursorDateLabel       = 0;
-        cursorCountLabel      = 0;
-        timeLineWidget        = 0;
-        timer                 = 0;
-        scrollBar             = 0;
-        timeLineFolderView    = 0;
-        resetButton           = 0;
-        saveButton            = 0;
-        nameEdit              = 0;
-        searchDateBar         = 0;
-    }
+    TimeLineViewPriv() :
+        configGroupName("TimeLine SideBar"),
+        configHistogramTimeUnitEntry("Histogram TimeUnit"),
+        configHistogramScaleEntry("Histogram Scale"),
+        configCursorPositionEntry("Cursor Position"),
 
-    QScrollBar         *scrollBar;
+        scaleBG(0),
+        cursorCountLabel(0),
+        scrollBar(0),
+        timer(0),
+        resetButton(0),
+        saveButton(0),
+        timeUnitCB(0),
+        nameEdit(0),
+        cursorDateLabel(0),
+        searchDateBar(0),
+        timeLineFolderView(0),
+        timeLineWidget(0)
+    {}
 
-    QTimer             *timer;
 
-    KComboBox          *timeUnitCB;
+    const QString       configGroupName; 
+    const QString       configHistogramTimeUnitEntry;
+    const QString       configHistogramScaleEntry;
+    const QString       configCursorPositionEntry;
 
-    QButtonGroup       *scaleBG;
+    QButtonGroup*       scaleBG;
+    QLabel*             cursorCountLabel;
+    QScrollBar*         scrollBar;
+    QTimer*             timer;
+    QToolButton*        resetButton;
+    QToolButton*        saveButton;
 
-    QLabel             *cursorCountLabel;
+    KComboBox*          timeUnitCB;
+    KLineEdit*          nameEdit;
+    KSqueezedTextLabel* cursorDateLabel;
 
-    QToolButton        *resetButton;
-    QToolButton        *saveButton;
-
-    KLineEdit          *nameEdit;
-
-    KSqueezedTextLabel *cursorDateLabel;
-
-    SearchTextBar      *searchDateBar;
-
-    TimeLineWidget     *timeLineWidget;
-
-    TimeLineFolderView *timeLineFolderView;
+    SearchTextBar*      searchDateBar;
+    TimeLineFolderView* timeLineFolderView;
+    TimeLineWidget*     timeLineWidget;
 };
 
 TimeLineView::TimeLineView(QWidget *parent)
@@ -319,28 +321,29 @@ void TimeLineView::slotInit()
 void TimeLineView::readConfig()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("TimeLine SideBar"));
+    KConfigGroup group        = config->group(d->configGroupName);
 
-    d->timeUnitCB->setCurrentIndex(group.readEntry("Histogram TimeUnit", (int)TimeLineWidget::Month));
+    d->timeUnitCB->setCurrentIndex(group.readEntry(d->configHistogramTimeUnitEntry, (int)TimeLineWidget::Month));
     slotTimeUnitChanged(d->timeUnitCB->currentIndex());
 
-    int id = group.readEntry("Histogram Scale", (int)TimeLineWidget::LinScale);
+    int id = group.readEntry(d->configHistogramScaleEntry, (int)TimeLineWidget::LinScale);
     if ( d->scaleBG->button( id ) )
        d->scaleBG->button( id )->setChecked(true);
     slotScaleChanged(d->scaleBG->checkedId());
 
     QDateTime now = QDateTime::currentDateTime();
-    d->timeLineWidget->setCursorDateTime(group.readEntry("Cursor Position", now));
+    d->timeLineWidget->setCursorDateTime(group.readEntry(d->configCursorPositionEntry, now));
     d->timeLineWidget->setCurrentIndex(d->timeLineWidget->indexForCursorDateTime());
 }
 
 void TimeLineView::writeConfig()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("TimeLine SideBar"));
-    group.writeEntry("Histogram TimeUnit", d->timeUnitCB->currentIndex());
-    group.writeEntry("Histogram Scale", d->scaleBG->checkedId());
-    group.writeEntry("Cursor Position", d->timeLineWidget->cursorDateTime());
+    KConfigGroup group        = config->group(d->configGroupName);
+
+    group.writeEntry(d->configHistogramTimeUnitEntry, d->timeUnitCB->currentIndex());
+    group.writeEntry(d->configHistogramScaleEntry,    d->scaleBG->checkedId());
+    group.writeEntry(d->configCursorPositionEntry,    d->timeLineWidget->cursorDateTime());
     group.sync();
 }
 
