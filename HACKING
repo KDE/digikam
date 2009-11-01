@@ -264,7 +264,8 @@ The following site check on a daily basis for the a.m. errors:
 www.englishbreakfastnetwork.org/krazy/
 
 It can be very useful, in particular before major releases.
-Don't trust it blindly! Sometimes they propose too advanced modifications that are no compatible with the prevailant include files.
+Don't trust it blindly! Sometimes they propose too advanced modifications that
+are no compatible with the prevailant include files.
 
 ========================================================================
 Usability issues
