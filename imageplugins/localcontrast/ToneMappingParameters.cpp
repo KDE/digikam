@@ -29,9 +29,17 @@
 #include <cstdlib>
 #include <cmath>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes.
 
 #include "ToneMappingParameters.h"
+
+#ifdef Q_CC_MSVC
+	#pragma warning ( disable : 4800 )	// forcing value to bool 'true' or 'false' (performance warning)
+#endif
 
 namespace DigikamLocalContrastImagesPlugin
 {
@@ -112,7 +120,7 @@ REALTYPE ToneMappingParameters::get_unsharp_mask_blur()
     return unsharp_mask.blur;
 }
 
-void ToneMappingParameters::save_parameters(const char *filename)
+void ToneMappingParameters::save_parameters(const char* filename)
 {
     FILE *f = fopen(filename, "w");
     if (!f) return;
@@ -141,7 +149,7 @@ void ToneMappingParameters::save_parameters(const char *filename)
     fclose(f);
 }
 
-bool ToneMappingParameters::load_parameters(const char *filename)
+bool ToneMappingParameters::load_parameters(const char* filename)
 {
     FILE *f = fopen(filename, "r");
     if (!f) return false;
@@ -181,10 +189,10 @@ bool ToneMappingParameters::load_parameters(const char *filename)
         int ipar         = atoi(sval);
         REALTYPE fpar    = (REALTYPE)(atof(sval));
 
-        if (strstr(par, "info_fast_mode") == par)   info_fast_mode   = (bool)ipar;
+        if (strstr(par, "info_fast_mode") == par)   info_fast_mode   = ipar;
         if (strstr(par, "low_saturation") == par)   low_saturation   = ipar;
         if (strstr(par, "high_saturation") == par)  high_saturation  = ipar;
-        if (strstr(par, "stretch_contrast") == par) stretch_contrast = (bool)ipar;
+        if (strstr(par, "stretch_contrast") == par) stretch_contrast = ipar;
         if (strstr(par, "function_id") == par)      function_id      = ipar;
 
         if (strstr(par, "STAGE") == par)
@@ -194,11 +202,11 @@ bool ToneMappingParameters::load_parameters(const char *filename)
             current_stage = ipar;
         }
 
-        if (strstr(par, "enabled") == par) stage[current_stage].enabled = (bool)ipar;
+        if (strstr(par, "enabled") == par) stage[current_stage].enabled = ipar;
         if (strstr(par, "power") == par)   stage[current_stage].power   = fpar;
         if (strstr(par, "blur") == par)    stage[current_stage].blur    = fpar;
 
-        if (strstr(par, "unsharp_mask_enabled") == par)   unsharp_mask.enabled   = (bool)ipar;
+        if (strstr(par, "unsharp_mask_enabled") == par)   unsharp_mask.enabled   = ipar;
         if (strstr(par, "unsharp_mask_power") == par)     unsharp_mask.power     = fpar;
         if (strstr(par, "unsharp_mask_blur") == par)      unsharp_mask.blur      = fpar;
         if (strstr(par, "unsharp_mask_threshold") == par) unsharp_mask.threshold = ipar;
