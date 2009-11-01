@@ -588,12 +588,13 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/jpegutils.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/transupp.cpp
        )
-IF(MSVC)
-    SET(libjpegutils_SRCS
-        ${libjpegutils_SRCS}
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/jpegwin.cpp
-       )
-ENDIF(MSVC)
+
+    IF(MSVC)
+	SET(libjpegutils_SRCS
+    	    ${libjpegutils_SRCS}
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/jpegwin.cpp
+           )
+    ENDIF(MSVC)
 
     SET(liblevels_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/levels/imagelevels.cpp
