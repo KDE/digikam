@@ -223,44 +223,45 @@ QByteArray WelcomePageView::fileToString(const QString& aFileName)
     return result;
 }
 
-QString WelcomePageView::updateInfoPageCss()
-{
-    QColor background = ThemeEngine::instance()->baseColor();
-    QColor text       = ThemeEngine::instance()->textRegColor();
-    QColor highlight  = ThemeEngine::instance()->textSpecialRegColor();
-
-    QString infoPageCss  = fileToString(KStandardDirs::locate("data", "digikam/about/infopage.css"));
-    infoPageCss          = infoPageCss
-                           .arg(background.name())                                                     // %1
-                           .arg(text.name())                                                           // %2
-                           .arg(highlight.name())                                                      // %3
-                           .arg(highlight.name())                                                      // %4
-                           .arg(highlight.name())                                                      // %5
-                           .arg(background.name())                                                     // %6
-                           .arg(background.name())                                                     // %7
-                           .arg(KStandardDirs::locate("data", "digikam/about/top-middle.png"))         // %8
-                           .arg(KStandardDirs::locate("data", "digikam/about/top-left-digikam.png"))   // %9
-                           .arg(KStandardDirs::locate("data", "digikam/about/box-top-left.png"))       // %10
-                           .arg(KStandardDirs::locate("data", "digikam/about/box-top-right.png"))      // %11
-                           .arg(KStandardDirs::locate("data", "digikam/about/box-top-middle.png"))     // %12
-                           .arg(KStandardDirs::locate("data", "digikam/about/box-middle-left.png"))    // %13
-                           .arg(background.name())                                                     // %14
-                           .arg(KStandardDirs::locate("data", "digikam/about/box-middle-right.png"))   // %15
-                           .arg(KStandardDirs::locate("data", "digikam/about/box-bottom-left.png"))    // %16
-                           .arg(KStandardDirs::locate("data", "digikam/about/box-bottom-right.png"))   // %17
-                           .arg(KStandardDirs::locate("data", "digikam/about/box-bottom-middle.png")); // %18
-
-    return infoPageCss;
-}
+//QString WelcomePageView::updateInfoPageCss()
+//{
+//    QColor background = ThemeEngine::instance()->baseColor();
+//    QColor text       = ThemeEngine::instance()->textRegColor();
+//    QColor highlight  = ThemeEngine::instance()->textSpecialRegColor();
+//
+//    QString infoPageCss  = fileToString(KStandardDirs::locate("data", "digikam/about/infopage.css"));
+//    infoPageCss          = infoPageCss
+//                           .arg(background.name())                                                     // %1
+//                           .arg(text.name())                                                           // %2
+//                           .arg(highlight.name())                                                      // %3
+//                           .arg(highlight.name())                                                      // %4
+//                           .arg(highlight.name())                                                      // %5
+//                           .arg(background.name())                                                     // %6
+//                           .arg(background.name())                                                     // %7
+//                           .arg(KStandardDirs::locate("data", "digikam/about/top-middle.png"))         // %8
+//                           .arg(KStandardDirs::locate("data", "digikam/about/top-left-digikam.png"))   // %9
+//                           .arg(KStandardDirs::locate("data", "digikam/about/box-top-left.png"))       // %10
+//                           .arg(KStandardDirs::locate("data", "digikam/about/box-top-right.png"))      // %11
+//                           .arg(KStandardDirs::locate("data", "digikam/about/box-top-middle.png"))     // %12
+//                           .arg(KStandardDirs::locate("data", "digikam/about/box-middle-left.png"))    // %13
+//                           .arg(background.name())                                                     // %14
+//                           .arg(KStandardDirs::locate("data", "digikam/about/box-middle-right.png"))   // %15
+//                           .arg(KStandardDirs::locate("data", "digikam/about/box-bottom-left.png"))    // %16
+//                           .arg(KStandardDirs::locate("data", "digikam/about/box-bottom-right.png"))   // %17
+//                           .arg(KStandardDirs::locate("data", "digikam/about/box-bottom-middle.png")); // %18
+//
+//    return infoPageCss;
+//}
 
 void WelcomePageView::slotThemeChanged()
 {
-    QString infoPageCss      = updateInfoPageCss();
+    QString infoPageCss      = KStandardDirs::locate("data", "kdeui/about/kde_infopage.css");
+    QString digikamCss       = KStandardDirs::locate("data", "digikam/about/digikam.css");
     QString fontSize         = QString::number(12);
     QString appTitle         = i18n("digiKam");
     QString slogan           = digiKamSlogan().toString();
     QString locationHtml     = KStandardDirs::locate("data", "digikam/about/main.html");
-    QString locationRtl      = KStandardDirs::locate("data", "digikam/about/infopage_rtl.css" );
+    QString locationRtl      = KStandardDirs::locate("data", "kdeui/about/kde_infopage_rtl.css" );
     QString rtl              = kapp->isRightToLeft() ? QString("@import \"%1\";" ).arg(locationRtl)
                                                      : QString();
 
@@ -272,7 +273,8 @@ void WelcomePageView::slotThemeChanged()
                              .arg(fontSize)           // %3
                              .arg(appTitle)           // %4
                              .arg(slogan)             // %5
-                             .arg(infoPage());        // %6
+                             .arg(infoPage())         // %6
+                             .arg(digikamCss);        // %7
 
 //    kDebug() << content;
 

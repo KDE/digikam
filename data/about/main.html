@@ -8,7 +8,8 @@
 
   <style type="text/css">
   /*<![CDATA[*/
-    %1                       /* Css contents   */
+    @import "%1";            /* KDE css        */
+    @import "%7";            /* local css      */
     @import "%2";            /* locationRtl    */
     body {font-size: %3px;}  /* fontSize       */
   /*]]>*/
@@ -18,19 +19,31 @@
 </head>
 
 <body>
-  <div id="header">
+
+<div id="header">
     <div id="headerL"/>
+    <div id="headerR"/>
 
     <div id="title">
         %4 <!-- appTitle -->
     </div>
 
     <div id="tagline">
-        %5 <!-- Slogan -->
     </div>
-  </div>
-  
-  <div style='clear:both;'/>
+</div>
+
+ <!-- the bar -->
+<div id="bar">
+<div id="barT"><div id="barTL"/><div id="barTR"/><div id="barTC"/></div>
+<div id="barL">
+<div id="barR">
+<div id="barCenter" class="bar_text">
+        %5 <!-- Slogan -->
+</div>
+</div>
+</div>
+<div id="barB"><div id="barBL"/><div id="barBR"/><div id="barBC"/></div>
+</div>
 
   <!-- the main text box -->
   <div id="box">
@@ -38,7 +51,7 @@
     <div id="boxL">
       <div id="boxR">
         <div id="boxCenter">
-	       %6 <!-- Advanced information -->
+           %6 <!-- Advanced information -->
         </div>
       </div>
     </div>

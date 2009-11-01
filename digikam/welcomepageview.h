@@ -55,7 +55,7 @@ private:
 
     QByteArray fileToString(const QString& aFileName);
     QString    infoPage();
-    QString    updateInfoPageCss();
+//    QString    updateInfoPageCss();
     void       disablePredefinedActions();
 
 private Q_SLOTS:
