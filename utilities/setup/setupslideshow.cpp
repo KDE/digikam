@@ -46,31 +46,54 @@ class SetupSlideShowPriv
 {
 public:
 
-    SetupSlideShowPriv()
-    {
-        delayInput          = 0;
-        startWithCurrent    = 0;
-        loopMode            = 0;
-        showName            = 0;
-        showDate            = 0;
-        showApertureFocal   = 0;
-        showExpoSensitivity = 0;
-        showMakeModel       = 0;
-        showComment         = 0;
-        showRating          = 0;
-    }
+    SetupSlideShowPriv() :
+        configGroupName("ImageViewer Settings"),
+        configSlideShowDelayEntry("SlideShowDelay"),
+        configSlideShowStartCurrentEntry("SlideShowStartCurrent"),
+        configSlideShowLoopEntry("SlideShowLoop"),
+        configSlideShowPrintNameEntry("SlideShowPrintName"),
+        configSlideShowPrintDateEntry("SlideShowPrintDate"),
+        configSlideShowPrintApertureFocalEntry("SlideShowPrintApertureFocal"),
+        configSlideShowPrintExpoSensitivityEntry("SlideShowPrintExpoSensitivity"),
+        configSlideShowPrintMakeModelEntry("SlideShowPrintMakeModel"),
+        configSlideShowPrintCommentEntry("SlideShowPrintComment"),
+        configSlideShowPrintRatingEntry("SlideShowPrintRating"),
 
-    QCheckBox    *startWithCurrent;
-    QCheckBox    *loopMode;
-    QCheckBox    *showName;
-    QCheckBox    *showDate;
-    QCheckBox    *showApertureFocal;
-    QCheckBox    *showExpoSensitivity;
-    QCheckBox    *showMakeModel;
-    QCheckBox    *showComment;
-    QCheckBox    *showRating;
+        startWithCurrent(0),
+        loopMode(0),
+        showName(0),
+        showDate(0),
+        showApertureFocal(0),
+        showExpoSensitivity(0),
+        showMakeModel(0),
+        showComment(0),
+        showRating(0),
+        delayInput(0)
+        {}
 
-    KIntNumInput *delayInput;
+    const QString configGroupName;
+    const QString configSlideShowDelayEntry;
+    const QString configSlideShowStartCurrentEntry;
+    const QString configSlideShowLoopEntry;
+    const QString configSlideShowPrintNameEntry;
+    const QString configSlideShowPrintDateEntry;
+    const QString configSlideShowPrintApertureFocalEntry;
+    const QString configSlideShowPrintExpoSensitivityEntry;
+    const QString configSlideShowPrintMakeModelEntry;
+    const QString configSlideShowPrintCommentEntry;
+    const QString configSlideShowPrintRatingEntry;
+
+    QCheckBox*    startWithCurrent;
+    QCheckBox*    loopMode;
+    QCheckBox*    showName;
+    QCheckBox*    showDate;
+    QCheckBox*    showApertureFocal;
+    QCheckBox*    showExpoSensitivity;
+    QCheckBox*    showMakeModel;
+    QCheckBox*    showComment;
+    QCheckBox*    showRating;
+
+    KIntNumInput* delayInput;
 };
 
 SetupSlideShow::SetupSlideShow(QWidget* parent)
@@ -151,36 +174,36 @@ SetupSlideShow::~SetupSlideShow()
 void SetupSlideShow::applySettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("ImageViewer Settings"));
+    KConfigGroup group        = config->group(d->configGroupName);
 
-    group.writeEntry("SlideShowDelay", d->delayInput->value());
-    group.writeEntry("SlideShowStartCurrent", d->startWithCurrent->isChecked());
-    group.writeEntry("SlideShowLoop", d->loopMode->isChecked());
-    group.writeEntry("SlideShowPrintName", d->showName->isChecked());
-    group.writeEntry("SlideShowPrintDate", d->showDate->isChecked());
-    group.writeEntry("SlideShowPrintApertureFocal", d->showApertureFocal->isChecked());
-    group.writeEntry("SlideShowPrintExpoSensitivity", d->showExpoSensitivity->isChecked());
-    group.writeEntry("SlideShowPrintMakeModel", d->showMakeModel->isChecked());
-    group.writeEntry("SlideShowPrintComment", d->showComment->isChecked());
-    group.writeEntry("SlideShowPrintRating", d->showRating->isChecked());
+    group.writeEntry(d->configSlideShowDelayEntry,                d->delayInput->value());
+    group.writeEntry(d->configSlideShowStartCurrentEntry,         d->startWithCurrent->isChecked());
+    group.writeEntry(d->configSlideShowLoopEntry,                 d->loopMode->isChecked());
+    group.writeEntry(d->configSlideShowPrintNameEntry,            d->showName->isChecked());
+    group.writeEntry(d->configSlideShowPrintDateEntry,            d->showDate->isChecked());
+    group.writeEntry(d->configSlideShowPrintApertureFocalEntry,   d->showApertureFocal->isChecked());
+    group.writeEntry(d->configSlideShowPrintExpoSensitivityEntry, d->showExpoSensitivity->isChecked());
+    group.writeEntry(d->configSlideShowPrintMakeModelEntry,       d->showMakeModel->isChecked());
+    group.writeEntry(d->configSlideShowPrintCommentEntry,         d->showComment->isChecked());
+    group.writeEntry(d->configSlideShowPrintRatingEntry,          d->showRating->isChecked());
     config->sync();
 }
 
 void SetupSlideShow::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("ImageViewer Settings"));
+    KConfigGroup group        = config->group(d->configGroupName);
 
-    d->delayInput->setValue(group.readEntry("SlideShowDelay", 5));
-    d->startWithCurrent->setChecked(group.readEntry("SlideShowStartCurrent", false));
-    d->loopMode->setChecked(group.readEntry("SlideShowLoop", false));
-    d->showName->setChecked(group.readEntry("SlideShowPrintName", true));
-    d->showDate->setChecked(group.readEntry("SlideShowPrintDate", false));
-    d->showApertureFocal->setChecked(group.readEntry("SlideShowPrintApertureFocal", false));
-    d->showExpoSensitivity->setChecked(group.readEntry("SlideShowPrintExpoSensitivity", false));
-    d->showMakeModel->setChecked(group.readEntry("SlideShowPrintMakeModel", false));
-    d->showComment->setChecked(group.readEntry("SlideShowPrintComment", false));
-    d->showRating->setChecked(group.readEntry("SlideShowPrintRating", false));
+    d->delayInput->setValue(group.readEntry(d->configSlideShowDelayEntry,                           5));
+    d->startWithCurrent->setChecked(group.readEntry(d->configSlideShowStartCurrentEntry,            false));
+    d->loopMode->setChecked(group.readEntry(d->configSlideShowLoopEntry,                            false));
+    d->showName->setChecked(group.readEntry(d->configSlideShowPrintNameEntry,                       true));
+    d->showDate->setChecked(group.readEntry(d->configSlideShowPrintDateEntry,                       false));
+    d->showApertureFocal->setChecked(group.readEntry(d->configSlideShowPrintApertureFocalEntry,     false));
+    d->showExpoSensitivity->setChecked(group.readEntry(d->configSlideShowPrintExpoSensitivityEntry, false));
+    d->showMakeModel->setChecked(group.readEntry(d->configSlideShowPrintMakeModelEntry,             false));
+    d->showComment->setChecked(group.readEntry(d->configSlideShowPrintCommentEntry,                 false));
+    d->showRating->setChecked(group.readEntry(d->configSlideShowPrintRatingEntry,                   false));
 }
 
 }   // namespace Digikam
