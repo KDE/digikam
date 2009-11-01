@@ -2799,10 +2799,6 @@ void DigikamApp::setupExifOrientationActions()
     exifOrientationMapper->setMapping(d->imageSetExifOrientation6Action, 6);
     exifOrientationMapper->setMapping(d->imageSetExifOrientation7Action, 7);
     exifOrientationMapper->setMapping(d->imageSetExifOrientation8Action, 8);
-
-    // --------------------------------------------------------
-
-
 }
 
 void DigikamApp::slotResetExifOrientationActions()
@@ -2820,9 +2816,9 @@ void DigikamApp::slotResetExifOrientationActions()
 void DigikamApp::slotSetCheckedExifOrientationAction(const ImageInfo& info)
 {
     DMetadata meta(info.fileUrl().toLocalFile());
-    int ori = (meta.isEmpty()) ? 0 : meta.getImageOrientation();
+    int orientation = (meta.isEmpty()) ? 0 : meta.getImageOrientation();
 
-    switch (ori)
+    switch (orientation)
     {
         case 1: d->imageSetExifOrientation1Action->setChecked(true); break;
         case 2: d->imageSetExifOrientation2Action->setChecked(true); break;
