@@ -46,20 +46,33 @@ class SetupLightTablePriv
 {
 public:
 
-    SetupLightTablePriv()
-    {
-        hideToolBar          = 0;
-        autoSyncPreview      = 0;
-        autoLoadOnRightPanel = 0;
-        loadFullImageSize    = 0;
-        clearOnClose         = 0;
-    }
+    SetupLightTablePriv() :
+        configGroupName("LightTable Settings"), 
+        configFullScreenHideToolBarEntry("FullScreen Hide ToolBar"),
+        configAutoSyncPreviewEntry("Auto Sync Preview"),
+        configAutoLoadRightPanelEntry("Auto Load Right Panel"),
+        configLoadFullImagesizeEntry("Load Full Image size"),
+        configClearOnCloseEntry("Clear On Close"),
 
-    QCheckBox *hideToolBar;
-    QCheckBox *autoSyncPreview;
-    QCheckBox *autoLoadOnRightPanel;
-    QCheckBox *loadFullImageSize;
-    QCheckBox *clearOnClose;
+        hideToolBar(0),
+        autoSyncPreview(0),
+        autoLoadOnRightPanel(0),
+        loadFullImageSize(0),
+        clearOnClose(0)
+    {}
+
+    const QString configGroupName; 
+    const QString configFullScreenHideToolBarEntry;
+    const QString configAutoSyncPreviewEntry;
+    const QString configAutoLoadRightPanelEntry;
+    const QString configLoadFullImagesizeEntry;
+    const QString configClearOnCloseEntry;
+
+    QCheckBox*    hideToolBar;
+    QCheckBox*    autoSyncPreview;
+    QCheckBox*    autoLoadOnRightPanel;
+    QCheckBox*    loadFullImageSize;
+    QCheckBox*    clearOnClose;
 };
 
 SetupLightTable::SetupLightTable(QWidget* parent)
@@ -133,25 +146,26 @@ SetupLightTable::~SetupLightTable()
 void SetupLightTable::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("LightTable Settings"));
+    KConfigGroup group        = config->group(d->configGroupName);
     QColor Black(Qt::black);
     QColor White(Qt::white);
-    d->hideToolBar->setChecked(group.readEntry("FullScreen Hide ToolBar",        false));
-    d->autoSyncPreview->setChecked(group.readEntry("Auto Sync Preview",          true));
-    d->autoLoadOnRightPanel->setChecked(group.readEntry("Auto Load Right Panel", true));
-    d->loadFullImageSize->setChecked(group.readEntry("Load Full Image size",     false));
-    d->clearOnClose->setChecked(group.readEntry("Clear On Close",                false));
+
+    d->hideToolBar->setChecked(group.readEntry(d->configFullScreenHideToolBarEntry,       false));
+    d->autoSyncPreview->setChecked(group.readEntry(d->configAutoSyncPreviewEntry,         true));
+    d->autoLoadOnRightPanel->setChecked(group.readEntry(d->configAutoLoadRightPanelEntry, true));
+    d->loadFullImageSize->setChecked(group.readEntry(d->configLoadFullImagesizeEntry,     false));
+    d->clearOnClose->setChecked(group.readEntry(d->configClearOnCloseEntry,               false));
 }
 
 void SetupLightTable::applySettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("LightTable Settings"));
-    group.writeEntry("FullScreen Hide ToolBar", d->hideToolBar->isChecked());
-    group.writeEntry("Auto Sync Preview",       d->autoSyncPreview->isChecked());
-    group.writeEntry("Auto Load Right Panel",   d->autoLoadOnRightPanel->isChecked());
-    group.writeEntry("Load Full Image size",    d->loadFullImageSize->isChecked());
-    group.writeEntry("Clear On Close",          d->clearOnClose->isChecked());
+    KConfigGroup group        = config->group(d->configGroupName);
+    group.writeEntry(d->configFullScreenHideToolBarEntry, d->hideToolBar->isChecked());
+    group.writeEntry(d->configAutoSyncPreviewEntry,       d->autoSyncPreview->isChecked());
+    group.writeEntry(d->configAutoLoadRightPanelEntry,    d->autoLoadOnRightPanel->isChecked());
+    group.writeEntry(d->configLoadFullImagesizeEntry,     d->loadFullImageSize->isChecked());
+    group.writeEntry(d->configClearOnCloseEntry,          d->clearOnClose->isChecked());
     config->sync();
 }
 
