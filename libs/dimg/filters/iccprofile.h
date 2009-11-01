@@ -7,7 +7,7 @@
  * Description : a wrapper class for an ICC color profile
  *
  * Copyright (C) 2005-2006 by F.J. Cruz <fj.cruz@supercable.es>
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -80,7 +80,6 @@ public:
      *  Returns true if both profiles are null, if both profiles are created from the
      *  same file profile, or if the loaded profile data is identical.
      *  Note: This will not ensure that the data is loaded. Use isSameProfile().
-     *  
      */
     bool operator==(const IccProfile& other) const;
     bool operator!=(const IccProfile& other) const { return !operator==(other); }

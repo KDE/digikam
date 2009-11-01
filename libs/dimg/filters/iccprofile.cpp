@@ -7,7 +7,7 @@
  * Description : a wrapper class for an ICC color profile
  *
  * Copyright (C) 2005-2006 by F.J. Cruz <fj.cruz@supercable.es>
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -101,6 +101,8 @@ public:
     cmsHPROFILE             handle;
 };
 
+// ----------------------------------------------------------------------------------
+
 class IccProfileStatic
 {
 public:
@@ -110,11 +112,13 @@ public:
     {
     }
 
-    QMutex      lcmsMutex;
-    QString     adobeRGBPath;
+    QMutex  lcmsMutex;
+    QString adobeRGBPath;
 };
 
 K_GLOBAL_STATIC(IccProfileStatic, static_d)
+
+// ----------------------------------------------------------------------------------
 
 LcmsLock::LcmsLock()
 {
@@ -125,6 +129,8 @@ LcmsLock::~LcmsLock()
 {
     static_d->lcmsMutex.unlock();
 }
+
+// ----------------------------------------------------------------------------------
 
 IccProfile::IccProfile()
           : d(0)
@@ -156,7 +162,6 @@ IccProfile::IccProfile(const char *location, const QString& relativePath)
     d->filePath = filePath;
 }
 
-
 IccProfile IccProfile::sRGB()
 {
     // The srgb.icm file seems to have a whitepoint of D50, see #133913
@@ -168,8 +173,10 @@ IccProfile IccProfile::adobeRGB()
     QString path = static_d->adobeRGBPath;
     if (path.isEmpty())
         path = KStandardDirs::locate("data", "libkdcraw/profiles/compatibleWithAdobeRGB1998.icc");
+
     if (path.isEmpty()) // this one has a wrong whitepoint. Remove when sufficiently recent libkdcraw is a digikam dependency.
         path = KStandardDirs::locate("data", "libkdcraw/profiles/adobergb.icm");
+
     return IccProfile(path);
 }
 
@@ -224,6 +231,7 @@ bool IccProfile::operator==(const IccProfile& other) const
 {
     if (d == other.d)
         return true;
+
     if (d && other.d)
     {
         if (!d->filePath.isNull() || !other.d->filePath.isNull())
@@ -238,6 +246,7 @@ bool IccProfile::isSameProfileAs(IccProfile& other)
 {
     if (d == other.d)
         return true;
+
     if (d && other.d)
     {
         // uses memcmp
@@ -331,8 +340,10 @@ QString IccProfile::description()
 
     LcmsLock lock();
     const char *desc = cmsTakeProductDesc(d->handle);
+
     if (desc && desc[0] != '\0')
         d->description = QString::fromLatin1(desc);
+
     return d->description;
 }
 
@@ -392,6 +403,7 @@ bool IccProfile::writeToFile(const QString& filePath)
 
         if (file.write(profile) == -1)
             return false;
+
         file.close();
         return true;
     }
@@ -421,11 +433,14 @@ QStringList IccProfile::defaultSearchPaths()
 
         // XDG data dirs, including /usr/share/color/icc
         QStringList dataDirs = QString::fromLocal8Bit(getenv("XDG_DATA_DIRS")).split(":", QString::SkipEmptyParts);
+
         if (!dataDirs.contains(QLatin1String("/usr/share")))
             dataDirs << "/usr/share";
+
         if (!dataDirs.contains(QLatin1String("/usr/local/share")))
             dataDirs << "/usr/local/share";
-        foreach (const QString &dataDir, dataDirs)
+
+        foreach (const QString& dataDir, dataDirs)
             candidates << dataDir + "/color/icc";
 
         // XDG_DATA_HOME
