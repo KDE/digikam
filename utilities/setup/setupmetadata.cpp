@@ -85,28 +85,28 @@ public:
         tab                     = 0;
     }
 
-    bool              exifAutoRotateAsChanged;
-    bool              exifAutoRotateOrg;
+    bool           exifAutoRotateAsChanged;
+    bool           exifAutoRotateOrg;
 
-    QCheckBox*        saveCommentsBox;
-    QCheckBox*        exifRotateBox;
-    QCheckBox*        exifSetOrientationBox;
-    QCheckBox*        saveRatingBox;
-    QCheckBox*        saveTagsBox;
-    QCheckBox*        saveDateTimeBox;
-    QCheckBox*        saveTemplateBox;
-    QCheckBox*        writeRawFilesBox;
-    QCheckBox*        updateFileTimeStampBox;
+    QCheckBox*     saveCommentsBox;
+    QCheckBox*     exifRotateBox;
+    QCheckBox*     exifSetOrientationBox;
+    QCheckBox*     saveRatingBox;
+    QCheckBox*     saveTagsBox;
+    QCheckBox*     saveDateTimeBox;
+    QCheckBox*     saveTemplateBox;
+    QCheckBox*     writeRawFilesBox;
+    QCheckBox*     updateFileTimeStampBox;
 
-    QCheckBox*        saveToNepomukBox;
-    QCheckBox*        readFromNepomukBox;
+    QCheckBox*     saveToNepomukBox;
+    QCheckBox*     readFromNepomukBox;
 
-    KTabWidget*       tab;
+    KTabWidget*    tab;
 
-    MetadataPanel*    tagsCfgPanel;
+    MetadataPanel* tagsCfgPanel;
 };
 
-SetupMetadata::SetupMetadata(QWidget* parent )
+SetupMetadata::SetupMetadata(QWidget* parent)
              : QScrollArea(parent), d(new SetupMetadataPriv)
 {
     d->tab = new KTabWidget(viewport());
@@ -118,10 +118,10 @@ SetupMetadata::SetupMetadata(QWidget* parent )
 
     // --------------------------------------------------------
 
-    QGroupBox *ExifGroup  = new QGroupBox(i18n("EXIF Actions"), panel);
-    QVBoxLayout *gLayout1 = new QVBoxLayout(ExifGroup);
+    QGroupBox *ExifGroup     = new QGroupBox(i18n("EXIF Actions"), panel);
+    QVBoxLayout *gLayout1    = new QVBoxLayout(ExifGroup);
 
-    d->exifRotateBox      = new QCheckBox(ExifGroup);
+    d->exifRotateBox         = new QCheckBox(ExifGroup);
     d->exifRotateBox->setText(i18n("Show images/thumbnails &rotated according to orientation tag."));
 
     d->exifSetOrientationBox = new QCheckBox(ExifGroup);
@@ -249,15 +249,15 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     QWidget *nepoPanel      = new QWidget(d->tab);
     QVBoxLayout *nepoLayout = new QVBoxLayout(nepoPanel);
 
-    QGroupBox *nepoGroup = new QGroupBox(i18n("Nepomuk Semantic Desktop"), nepoPanel);
-    QVBoxLayout *gLayout3  = new QVBoxLayout(nepoGroup);
+    QGroupBox *nepoGroup    = new QGroupBox(i18n("Nepomuk Semantic Desktop"), nepoPanel);
+    QVBoxLayout *gLayout3   = new QVBoxLayout(nepoGroup);
 
-    d->saveToNepomukBox = new QCheckBox;
+    d->saveToNepomukBox     = new QCheckBox;
     d->saveToNepomukBox->setText(i18n("Store metadata from digiKam in Nepomuk"));
     d->saveToNepomukBox->setWhatsThis( i18n("Turn on this option to push rating, comments and tags "
                                             "from digiKam into the Nepomuk storage"));
 
-    d->readFromNepomukBox = new QCheckBox;
+    d->readFromNepomukBox   = new QCheckBox;
     d->readFromNepomukBox->setText(i18n("Read metadata from Nepomuk"));
     d->readFromNepomukBox->setWhatsThis( i18n("Turn on this option if you want to apply changes to "
                                               "rating, comments and tags made in Nepomuk to digiKam's metadata storage. "
@@ -295,8 +295,8 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     nepoExplanation->setText(nepotxt);
     nepoExplanation->setFont(KGlobalSettings::smallestReadableFont());
 
-    nepoGrid->addWidget(nepoLogoLabel, 0, 0, 1, 1);
-    nepoGrid->addWidget(nepoExplanation,    0, 1, 1, 2);
+    nepoGrid->addWidget(nepoLogoLabel,   0, 0, 1, 1);
+    nepoGrid->addWidget(nepoExplanation, 0, 1, 1, 2);
     nepoGrid->setColumnStretch(1, 10);
     nepoGrid->setRowStretch(1, 10);
     nepoGrid->setMargin(KDialog::spacingHint());
