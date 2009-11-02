@@ -1,12 +1,12 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="6" name="digikamimageplugin_contentawareresizing" >
+<gui version="7" name="digikamimageplugin_contentawareresizing" >
   <MenuBar>
     <Menu name="Transform" ><text>Tra&amp;nsform</text>
       <Action name="imageplugin_contentawareresizing" />
     </Menu>
   </MenuBar>
 
-  <ToolBar name="ToolBar" >
+  <ToolBar name="mainToolBar" >
     <text>Main Toolbar</text>
   </ToolBar>
 

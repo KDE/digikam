@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="6" name="digikamimageplugin_inpainting" >
+<gui version="7" name="digikamimageplugin_inpainting" >
 
  <MenuBar>
 
@@ -9,7 +9,7 @@
 
  </MenuBar>
 
- <ToolBar name="ToolBar" >
+ <ToolBar name="mainToolBar" >
   <text>Main Toolbar</text>
  </ToolBar>
 

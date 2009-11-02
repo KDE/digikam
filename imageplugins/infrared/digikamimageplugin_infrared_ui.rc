@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="6" name="digikamimageplugin_infrared" >
+<gui version="7" name="digikamimageplugin_infrared" >
  <MenuBar>
 
   <Menu name="Filters" ><text>F&amp;ilters</text>
@@ -8,7 +8,7 @@
 
  </MenuBar>
 
- <ToolBar name="ToolBar" >
+ <ToolBar name="mainToolBar" >
   <text>Main Toolbar</text>
  </ToolBar>
 
