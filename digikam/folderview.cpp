@@ -187,14 +187,6 @@ void FolderView::resizeEvent(QResizeEvent* e)
 {
     Q3ListView::resizeEvent(e);
 
-    int w = frameRect().width();
-    int h = itemHeight();
-    if (d->itemRegPix.width() != w ||
-        d->itemRegPix.height() != h)
-    {
-        slotThemeChanged();
-    }
-
     // Q3ListView (and also the Qt4 version) is not behaving the way we want it to do.
     // We want to have a scrollbar if content doesn't fit the view, but we also want to expand the columns
     // when the sidebar is wider than the listview content.
@@ -221,6 +213,14 @@ void FolderView::resizeEvent(QResizeEvent* e)
         setColumnWidthMode(0, Maximum);
         setColumnWidth(0, maxw);
         triggerUpdate();
+    }
+
+    int w = contentsWidth();
+    int h = itemHeight();
+    if (d->itemRegPix.width() != w ||
+        d->itemRegPix.height() != h)
+    {
+        slotThemeChanged();
     }
 }
 
@@ -553,7 +553,7 @@ bool FolderView::mouseInItemRect(Q3ListViewItem* item, int x) const
 
 void FolderView::slotThemeChanged()
 {
-    int w = frameRect().width();
+    int w = contentsWidth();
     int h = itemHeight();
 
     d->itemRegPix = ThemeEngine::instance()->listRegPixmap(w, h);
