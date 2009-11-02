@@ -97,7 +97,7 @@ FolderView::FolderView(QWidget *parent, const char *name)
           : Q3ListView(parent), d(new FolderViewPriv)
 {
     setObjectName(name);
-    setColumnWidthMode(0, Q3ListView::Maximum);
+    setColumnWidthMode(0, Maximum);
     setColumnAlignment(0, Qt::AlignLeft|Qt::AlignVCenter);
     setShowSortIndicator(true);
 
@@ -193,6 +193,34 @@ void FolderView::resizeEvent(QResizeEvent* e)
         d->itemRegPix.height() != h)
     {
         slotThemeChanged();
+    }
+
+    // Q3ListView (and also the Qt4 version) is not behaving the way we want it to do.
+    // We want to have a scrollbar if content doesn't fit the view, but we also want to expand the columns
+    // when the sidebar is wider than the listview content.
+    // So we need to calculate and set the columns width on our own.
+    int maxw = 0;
+    Q3ListViewItemIterator it(this);
+    while (it.current())
+    {
+        int w = (*it)->width(fontMetrics(), this, 0) +
+                (*it)->pixmap(0)->width() + 5 + (itemMargin() * 2) +
+                ((*it)->depth() * treeStepSize());
+
+        maxw = qMax<int>(w, maxw);
+        ++it;
+    }
+
+    if (e->size().width() > maxw)
+    {
+        setResizeMode(LastColumn);
+    }
+    else
+    {
+        setResizeMode(NoColumn);
+        setColumnWidthMode(0, Maximum);
+        setColumnWidth(0, maxw);
+        triggerUpdate();
     }
 }
 

@@ -188,7 +188,6 @@ TagFolderView::TagFolderView(QWidget *parent)
     d->albumMan = AlbumManager::instance();
 
     addColumn(i18n("Tags"));
-    setResizeMode(Q3ListView::NoColumn);
     setRootIsDecorated(false);
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
