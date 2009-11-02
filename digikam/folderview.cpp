@@ -212,7 +212,7 @@ void FolderView::resizeEvent(QResizeEvent* e)
         setResizeMode(NoColumn);
         setColumnWidthMode(0, Maximum);
         setColumnWidth(0, maxw);
-        triggerUpdate();
+        slotThemeChanged();
     }
 
     int w = contentsWidth();

@@ -127,6 +127,7 @@ void FolderItem::paintCell(QPainter* p, const QColorGroup& cg, int column, int w
     {
         p->setPen(cg.color(QColorGroup::Highlight));
         QRect r = fv->itemRect(this);
+        r.setWidth(fv->columnWidth(0));
         p->drawRect(0, 0, r.width()-1, r.height()-1);
     }
 }
@@ -276,6 +277,7 @@ void FolderCheckListItem::paintCell(QPainter* p, const QColorGroup& cg, int colu
     {
         p->setPen(cg.color(QColorGroup::Link));
         QRect r = fv->itemRect(this);
+        r.setWidth(fv->columnWidth(0));
         p->drawRect(0, 0, r.width()-1, r.height()-1);
     }
 }
