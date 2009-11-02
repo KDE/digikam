@@ -27,6 +27,7 @@
 
 #include <QFile>
 #include <QXmlSimpleReader>
+#include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 
 namespace Digikam
@@ -37,7 +38,7 @@ const QString toolbarAttribute("name");
 const QString toolbarGoodValue("mainToolBar");
 const QString toolbarBadValue("ToolBar");
 
-bool ToolbarHandler::startElement(const QString & namespaceURI, const QString & localName, const QString & qName,
+bool ToolbarNameHandler::startElement(const QString & namespaceURI, const QString & localName, const QString & qName,
                                   const QXmlAttributes & atts)
 {
     Q_UNUSED(namespaceURI);
@@ -63,8 +64,10 @@ public:
     const QString filename;
 };
 
+// --------------------------------------------------------
+
 UiFileValidator::UiFileValidator(const QString& filename)
-                   : d(new UiFileValidatorPriv(filename))
+               : d(new UiFileValidatorPriv(filename))
 {
 }
 
@@ -99,17 +102,13 @@ bool UiFileValidator::isValid() const
         return false;
     }
 
-    QXmlSimpleReader xmlReader;
-    ToolbarHandler handler;
+    QXmlSimpleReader   xmlReader;
+    ToolbarNameHandler handler;
     xmlReader.setContentHandler(&handler);
     QXmlInputSource source(&fi);
 
     bool ok = xmlReader.parse(&source);
-    if (!ok)
-    {
-        return false;
-    }
-    return true;
+    return ok;
 }
 
 bool UiFileValidator::fixConfigFile()

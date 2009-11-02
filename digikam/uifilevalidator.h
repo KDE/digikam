@@ -38,7 +38,7 @@ class QFile;
 namespace Digikam
 {
 
-class ToolbarHandler : public QXmlDefaultHandler
+class ToolbarNameHandler : public QXmlDefaultHandler
 {
 public:
 
