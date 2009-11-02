@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="67" name="digikam" >
+<gui version="68" name="digikam" >
 
  <MenuBar>
 
@@ -142,7 +142,7 @@
 
  </MenuBar>
 
- <ToolBar noMerge="1" name="ToolBar" >
+ <ToolBar noMerge="1" name="mainToolBar" >
   <text>Main Toolbar</text>
   <Action name="album_back" />
   <Action name="album_forward" />

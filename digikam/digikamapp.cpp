@@ -137,6 +137,7 @@
 #include "thumbnailsize.h"
 #include "digikamapp_p.h"
 #include "dmetadata.h"
+#include "uifilevalidator.h"
 
 using KIO::Job;
 using KIO::UDSEntryList;
@@ -150,6 +151,16 @@ DigikamApp* DigikamApp::m_instance = 0;
 DigikamApp::DigikamApp()
           : KXmlGuiWindow(0), d(new DigikamAppPriv)
 {
+    // --------------------------------------------------------
+
+    UiFileValidator validator(localXMLFile()+"/digikamui.rc");
+    if (!validator.isValid())
+    {
+        validator.fixConfigFile();
+    }
+
+    // --------------------------------------------------------
+
     m_instance = this;
     d->config  = KGlobal::config();
 
