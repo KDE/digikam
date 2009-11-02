@@ -80,6 +80,7 @@
 #include "thumbnailsize.h"
 #include "lighttablepreview.h"
 #include "lighttablewindow_p.h"
+#include "uifilevalidator.h"
 
 namespace Digikam
 {
@@ -102,6 +103,14 @@ bool LightTableWindow::lightTableWindowCreated()
 LightTableWindow::LightTableWindow()
                 : KXmlGuiWindow(0), d(new LightTableWindowPriv)
 {
+    UiFileValidator validator(localXMLFile()+"/lighttablewindowui.rc");
+    if (!validator.isValid())
+    {
+        validator.fixConfigFile();
+    }
+
+    // --------------------------------------------------------
+
     m_instance = this;
 
     setWindowFlags(Qt::Window);

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="29" name="lighttablewindow" >
+<gui version="30" name="lighttablewindow" >
 
 <MenuBar>
 
@@ -60,7 +60,7 @@
 
 </MenuBar>
 
-<ToolBar name="ToolBar" ><text>Main Toolbar</text>
+<ToolBar name="mainToolBar" ><text>Main Toolbar</text>
      <Action name="lighttable_first" />
      <Action name="lighttable_backward" />
      <Action name="lighttable_forward" />
