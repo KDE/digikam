@@ -88,7 +88,7 @@ public:
     IccRenderingIntentComboBox(QWidget *parent = 0);
 
     void setIntent(int intent);
-    int intent() const;
+    int  intent() const;
 };
 
 // ----------------------------------------------------------------------------
@@ -99,8 +99,8 @@ class DIGIKAM_EXPORT IccProfilesMenuAction : public KActionMenu
 
 public:
 
-    IccProfilesMenuAction(const KIcon &icon, const QString &text, QObject *parent);
-    IccProfilesMenuAction(const QString &text, QObject *parent);
+    IccProfilesMenuAction(const KIcon& icon, const QString& text, QObject *parent);
+    IccProfilesMenuAction(const QString& text, QObject *parent);
 
     /**
      * Checks the given profiles for validity, creates a suitable description (ICC profile description, file path),
@@ -131,7 +131,7 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
 
-    void slotTriggered(QObject *);
+    void slotTriggered(QObject*);
 
 protected:
 
