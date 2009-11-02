@@ -37,6 +37,8 @@ const QString toolbarKey("ToolBar");
 const QString toolbarAttribute("name");
 const QString toolbarValue("mainToolBar");
 
+// --------------------------------------------------------
+
 bool ToolbarNameHandler::startElement(const QString & namespaceURI, const QString & localName, const QString & qName,
                                   const QXmlAttributes & atts)
 {
