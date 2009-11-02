@@ -175,7 +175,6 @@ TAlbumListView::TAlbumListView(QWidget* parent)
 {
     addColumn(i18n("Tags"));
     header()->hide();
-    setResizeMode(Q3ListView::LastColumn);
     setRootIsDecorated(true);
 
     setAcceptDrops(true);

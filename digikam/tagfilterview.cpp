@@ -286,7 +286,6 @@ TagFilterView::TagFilterView(QWidget* parent)
     d->timer = new QTimer(this);
 
     addColumn(i18n("Tag Filters"));
-    setResizeMode(Q3ListView::LastColumn);
     setRootIsDecorated(true);
 
     setAcceptDrops(true);
