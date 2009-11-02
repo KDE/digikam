@@ -88,7 +88,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 079 ==> 156146 : Reading data base, digikam don't start.
 080 ==> 210823 : digiKam does not respect KDE default toolbar style.
 081 ==> 212780 : digiKam crashes when opening large JPG.
-082 ==> 
+082 ==> 212748 : digiKam image editor crashes when browsing too fast.
+083 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
