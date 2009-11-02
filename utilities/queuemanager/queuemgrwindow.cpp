@@ -92,6 +92,7 @@
 #include "thumbnailsize.h"
 #include "queuemgrwindow_p.h"
 #include "sidebar.h"
+#include "uifilevalidator.h"
 
 namespace Digikam
 {
@@ -118,6 +119,14 @@ bool QueueMgrWindow::queueManagerWindowCreated()
 QueueMgrWindow::QueueMgrWindow()
               : KXmlGuiWindow(0), d(new QueueMgrWindowPriv)
 {
+    UiFileValidator validator(localXMLFile()+"/queuemgrwindowui.rc");
+    if (!validator.isValid())
+    {
+        validator.fixConfigFile();
+    }
+
+    // --------------------------------------------------------
+
     qRegisterMetaType<BatchToolSettings>("BatchToolSettings");
     qRegisterMetaType<BatchToolSet>("BatchToolSet");
 
