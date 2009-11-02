@@ -35,8 +35,7 @@ namespace Digikam
 
 const QString toolbarKey("ToolBar");
 const QString toolbarAttribute("name");
-const QString toolbarGoodValue("mainToolBar");
-const QString toolbarBadValue("ToolBar");
+const QString toolbarValue("mainToolBar");
 
 bool ToolbarNameHandler::startElement(const QString & namespaceURI, const QString & localName, const QString & qName,
                                   const QXmlAttributes & atts)
@@ -44,7 +43,7 @@ bool ToolbarNameHandler::startElement(const QString & namespaceURI, const QStrin
     Q_UNUSED(namespaceURI);
     Q_UNUSED(localName);
 
-    if ( (qName == toolbarKey) && (atts.value(toolbarAttribute) != toolbarGoodValue) )
+    if ( (qName == toolbarKey) && (atts.value(toolbarAttribute) != toolbarValue) )
     {
         return false;
     }
@@ -147,9 +146,9 @@ bool UiFileValidator::fixConfigFile()
                 QXmlStreamAttributes _a = reader.attributes();
                 for (QXmlStreamAttributes::iterator it = _a.begin(); it != _a.end(); ++it)
                 {
-                    if (it->qualifiedName() == toolbarAttribute && it->value() == toolbarBadValue)
+                    if (it->qualifiedName() == toolbarAttribute && it->value() != toolbarValue)
                     {
-                        attrs.append(toolbarAttribute, toolbarGoodValue);
+                        attrs.append(toolbarAttribute, toolbarValue);
                     }
                     else
                     {
