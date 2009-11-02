@@ -1,20 +1,20 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="5" name="digikamimageplugin_blurfx" >
+<gui version="6" name="digikamimageplugin_blurfx" >
 
  <MenuBar>
 
   <Menu name="Filters" ><text>F&amp;ilters</text>
-   <Action name="imageplugin_blurfx" /> 
+   <Action name="imageplugin_blurfx" />
   </Menu>
 
  </MenuBar>
- 
+
  <ToolBar name="ToolBar" >
   <text>Main Toolbar</text>
  </ToolBar>
- 
+
  <ActionProperties>
   <Action shortcut="" name="imageplugin_blurfx" />
  </ActionProperties>
 
-</kpartgui>
+</gui>

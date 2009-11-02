@@ -1,24 +1,24 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="6" name="digikamimageplugin_lenscorrection" >
+<gui version="7" name="digikamimageplugin_lenscorrection" >
 
  <MenuBar>
 
   <Menu name="Enhance" ><text>Enh&amp;ance</text>
       <Menu name="Lens" ><text>&amp;Lens</text>
-          <Action name="imageplugin_autocorrection" /> 
-          <Action name="imageplugin_lensdistortion" /> 
-          <Action name="imageplugin_antivignetting" /> 
+          <Action name="imageplugin_autocorrection" />
+          <Action name="imageplugin_lensdistortion" />
+          <Action name="imageplugin_antivignetting" />
       </Menu>
   </Menu>
 
  </MenuBar>
- 
+
  <ToolBar name="ToolBar" >
   <text>Main Toolbar</text>
  </ToolBar>
- 
+
  <ActionProperties>
   <Action name="imageplugin_lenscorrection" />
  </ActionProperties>
 
-</kpartgui>
+</gui>

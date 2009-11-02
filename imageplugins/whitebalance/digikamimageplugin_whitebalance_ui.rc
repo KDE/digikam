@@ -1,20 +1,20 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="5" name="digikamimageplugin_whitebalance" >
+<gui version="6" name="digikamimageplugin_whitebalance" >
 
  <MenuBar>
- 
+
    <Menu name="Color"><text>&amp;Color</text>
-      <Action name="imageplugin_whitebalance" /> 
+      <Action name="imageplugin_whitebalance" />
    </Menu>
- 
+
  </MenuBar>
- 
+
  <ToolBar name="ToolBar" >
   <text>Main Toolbar</text>
  </ToolBar>
- 
+
  <ActionProperties>
   <Action name="imageplugin_whitebalance" />
  </ActionProperties>
 
-</kpartgui>
+</gui>
