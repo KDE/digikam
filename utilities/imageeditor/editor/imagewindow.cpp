@@ -113,6 +113,7 @@
 #include "themeengine.h"
 #include "thumbbardock.h"
 #include "globals.h"
+#include "uifilevalidator.h"
 
 namespace Digikam
 {
@@ -188,6 +189,14 @@ bool ImageWindow::imagewindowCreated()
 ImageWindow::ImageWindow()
            : EditorWindow("Image Editor"), d(new ImageWindowPriv)
 {
+    UiFileValidator validator(localXMLFile()+"/digikamimagewindowui.rc");
+    if (!validator.isValid())
+    {
+        validator.fixConfigFile();
+    }
+
+    // --------------------------------------------------------
+
     m_instance = this;
     // We don't want to be deleted on close
     setAttribute(Qt::WA_DeleteOnClose, false);
