@@ -129,6 +129,7 @@
 #include "cameratype.h"
 #include "cameraui_p.h"
 #include "cameranamehelper.h"
+#include "uifilevalidator.h"
 
 namespace Digikam
 {
@@ -139,6 +140,14 @@ CameraUI::CameraUI(QWidget* parent, const QString& cameraTitle,
         : KXmlGuiWindow(parent), d(new CameraUIPriv)
 
 {
+    UiFileValidator validator(localXMLFile()+"/cameraui.rc");
+    if (!validator.isValid())
+    {
+        validator.fixConfigFile();
+    }
+
+    // --------------------------------------------------------
+
     QString title  = CameraNameHelper::formattedCameraName(cameraTitle);
     d->cameraTitle = (title.isEmpty()) ? cameraTitle : title;
     setCaption(d->cameraTitle);
