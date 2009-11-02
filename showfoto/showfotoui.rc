@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="35" name="showfoto" >
+<gui version="36" name="showfoto" >
 
 <MenuBar>
 
@@ -35,7 +35,7 @@
     </Menu>
 
     <Menu name="View" ><text>&amp;View</text>
-        <Action name="editorwindow_fullscreen" /> 
+        <Action name="editorwindow_fullscreen" />
         <Action name="editorwindow_slideshow" />
         <Separator/>
         <Action name="editorwindow_zoomplus" />
@@ -98,7 +98,7 @@
 
 </MenuBar>
 
-<ToolBar name="ToolBar"><text>Main Toolbar</text>
+<ToolBar name="mainToolBar"><text>Main Toolbar</text>
     <Action name="editorwindow_first" />
     <Action name="editorwindow_backward" />
     <Action name="editorwindow_forward" />
@@ -110,20 +110,20 @@
     <Action name="editorwindow_saveas" />
     <Action name="editorwindow_undo" />
     <Action name="editorwindow_redo" />
-    <Action name="editorwindow_revert" />  
+    <Action name="editorwindow_revert" />
     <Separator/>
     <Action name="editorwindow_zoomplus" />
     <Action name="editorwindow_zoomto" />
     <Action name="editorwindow_zoomminus" />
-    <Action name="editorwindow_zoomfit2window" /> 
-    <Action name="editorwindow_zoomfit2select" /> 
+    <Action name="editorwindow_zoomfit2window" />
+    <Action name="editorwindow_zoomfit2select" />
     <Separator/>
-    <Action name="editorwindow_rotate_left" /> 
-    <Action name="editorwindow_rotate_right" /> 
+    <Action name="editorwindow_rotate_left" />
+    <Action name="editorwindow_rotate_right" />
     <Action name="editorwindow_crop" />
     <Separator/>
-    <Action name="editorwindow_fullscreen" /> 
-    <Action name="editorwindow_slideshow" /> 
+    <Action name="editorwindow_fullscreen" />
+    <Action name="editorwindow_slideshow" />
     <Merge />
     <WeakSeparator/>
     <Action name="logo_action" />

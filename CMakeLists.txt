@@ -1157,8 +1157,11 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagspopupmenu.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tooltipfiller.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/treefolderitem.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/uifilevalidator.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/welcomepageview.cpp
+       )
+
+    SET(libdigikamhelpers_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/uifilevalidator.cpp
        )
 
     ADD_SUBDIRECTORY(data)

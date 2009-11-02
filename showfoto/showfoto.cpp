@@ -120,6 +120,7 @@ extern "C"
 #include "thumbbar.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
+#include "uifilevalidator.h"
 
 namespace ShowFoto
 {
@@ -170,6 +171,14 @@ public:
 ShowFoto::ShowFoto(const KUrl::List& urlList)
         : Digikam::EditorWindow("Showfoto"), d(new ShowFotoPriv)
 {
+    Digikam::UiFileValidator validator(localXMLFile()+"/showfotoui.rc");
+    if (!validator.isValid())
+    {
+        validator.fixConfigFile();
+    }
+
+    // --------------------------------------------------------
+
     // Show splash-screen at start up.
 
     KGlobal::dirs()->addResourceDir("data", KStandardDirs::installPath("data") + QString("digikam"));

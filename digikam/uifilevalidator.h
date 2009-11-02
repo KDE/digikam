@@ -28,6 +28,10 @@
 
 #include <QXmlDefaultHandler>
 
+// Local includes
+
+#include "digikam_export.h"
+
 class QString;
 class QFile;
 
@@ -46,7 +50,7 @@ public:
 
 class UiFileValidatorPriv;
 
-class UiFileValidator
+class DIGIKAM_EXPORT UiFileValidator
 {
 public:
 

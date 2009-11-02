@@ -102,6 +102,7 @@ SET(digikamcore_LIB_SRCS
                         ${libthemeengine_SRCS}
                         ${libpgf_SRCS}
                         ${pgfutils_SRCS}
+                        ${libdigikamhelpers_SRCS}
 
                         # widgets and dialogs
                         ${libcommonwidgets_SRCS}
