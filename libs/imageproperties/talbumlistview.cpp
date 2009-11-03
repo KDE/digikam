@@ -176,7 +176,6 @@ TAlbumListView::TAlbumListView(QWidget* parent)
     addColumn(i18n("Tags"));
     header()->hide();
     setRootIsDecorated(true);
-
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
 

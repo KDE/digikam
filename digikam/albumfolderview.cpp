@@ -233,8 +233,6 @@ AlbumFolderView::AlbumFolderView(QWidget *parent)
 
     addColumn(i18n("Albums"));
     setRootIsDecorated(false);
-    setAllColumnsShowFocus(true);
-
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
 
