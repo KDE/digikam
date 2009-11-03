@@ -62,10 +62,10 @@
 
 
 LCMSHANDLE cdecl cmsxLevenbergMarquardtInit(LPSAMPLEDCURVE x, LPSAMPLEDCURVE y, double sig,
-								double a[],
-								int ma,  
-								void (*funcs)(double, double[], double*, double[], int)
-								);
+                                double a[],
+                                int ma,
+                                void (*funcs)(double, double[], double*, double[], int)
+                                );
 
 double    cdecl cmsxLevenbergMarquardtAlamda(LCMSHANDLE hMRQ);
 double    cdecl cmsxLevenbergMarquardtChiSq(LCMSHANDLE hMRQ);
@@ -78,211 +78,211 @@ BOOL      cdecl cmsxLevenbergMarquardtFree(LCMSHANDLE hMRQ);
 
 typedef struct {
 
-	LPSAMPLEDCURVE x;
-	LPSAMPLEDCURVE y;		     
-	int     ndata;  	 
-	double* a;		     
-	int     ma;
-	LPMATN  covar;		 
-	LPMATN  alpha;		 
-	double* atry;		 
-	LPMATN  beta;		 
-	LPMATN  oneda;		 
-	double* dyda;	 	 		
-	double  ochisq;
-	double  sig;
+    LPSAMPLEDCURVE x;
+    LPSAMPLEDCURVE y;
+    int     ndata;
+    double* a;
+    int     ma;
+    LPMATN  covar;
+    LPMATN  alpha;
+    double* atry;
+    LPMATN  beta;
+    LPMATN  oneda;
+    double* dyda;
+    double  ochisq;
+    double  sig;
 
 
-	void (*funcs)(double, double[], double*, double[], int); 
+    void (*funcs)(double, double[], double*, double[], int);
 
-	double alamda;
-	double chisq;
+    double alamda;
+    double chisq;
 
 } LMRQMIN, FAR* LPLMRQMIN;
 
 
 
 
-static 
+static
 void  mrqcof(LPLMRQMIN pLM, double *a, LPMATN alpha, LPMATN beta, double *chisq)
 {
-	int i, j, k;
-	double ymod, wt, sig2i, dy;
+    int i, j, k;
+    double ymod, wt, sig2i, dy;
 
-	for(j = 0; j < pLM->ma; j++)
-	{
-		for(k = 0; k <= j; k++)
-			alpha->Values[j][k] = 0.0;
+    for(j = 0; j < pLM->ma; j++)
+    {
+        for(k = 0; k <= j; k++)
+            alpha->Values[j][k] = 0.0;
 
-		beta->Values[j][0] = 0.0;
-	}
-	
-	*chisq = 0.0;
-	sig2i = 1.0 / (pLM->sig * pLM->sig);
+        beta->Values[j][0] = 0.0;
+    }
 
-	for(i = 0; i < pLM->ndata; i++)
-	{
-		(*(pLM->funcs))(pLM->x ->Values[i], a, &ymod, pLM->dyda, pLM->ma);
+    *chisq = 0.0;
+    sig2i = 1.0 / (pLM->sig * pLM->sig);
 
-		dy = pLM->y->Values[i] - ymod;
+    for(i = 0; i < pLM->ndata; i++)
+    {
+        (*(pLM->funcs))(pLM->x ->Values[i], a, &ymod, pLM->dyda, pLM->ma);
 
-		for(j = 0; j < pLM->ma; j++)
-		{
-			wt = pLM->dyda[j] * sig2i;
-			
-			for(k = 0; k <= j; k++)
-				alpha->Values[j][k] += wt * pLM->dyda[k];
+        dy = pLM->y->Values[i] - ymod;
 
-			beta->Values[j][0] += dy * wt;
-		}
+        for(j = 0; j < pLM->ma; j++)
+        {
+            wt = pLM->dyda[j] * sig2i;
 
-		*chisq += dy * dy * sig2i;  
-	}
+            for(k = 0; k <= j; k++)
+                alpha->Values[j][k] += wt * pLM->dyda[k];
 
-	for(j = 1; j < pLM->ma; j++)	/* Fill in the symmetric side. */
-		for(k = 0; k < j; k++)
-			alpha->Values[k][j] = alpha->Values[j][k];
+            beta->Values[j][0] += dy * wt;
+        }
+
+        *chisq += dy * dy * sig2i;
+    }
+
+    for(j = 1; j < pLM->ma; j++)    /* Fill in the symmetric side. */
+        for(k = 0; k < j; k++)
+            alpha->Values[k][j] = alpha->Values[j][k];
 }
 
 
 
-static 
+static
 void FreeStruct(LPLMRQMIN pLM)
-{	
-	if(pLM == NULL) return;
+{
+    if(pLM == NULL) return;
 
-	if(pLM->covar) MATNfree (pLM->covar);
-	if(pLM->alpha) MATNfree (pLM->alpha);
-	if(pLM->atry)  free(pLM->atry);
-	if(pLM->beta)  MATNfree (pLM->beta);
-	if(pLM->oneda) MATNfree (pLM->oneda);
-	if(pLM->dyda)  free(pLM->dyda);
-	free(pLM);
+    if(pLM->covar) MATNfree (pLM->covar);
+    if(pLM->alpha) MATNfree (pLM->alpha);
+    if(pLM->atry)  free(pLM->atry);
+    if(pLM->beta)  MATNfree (pLM->beta);
+    if(pLM->oneda) MATNfree (pLM->oneda);
+    if(pLM->dyda)  free(pLM->dyda);
+    free(pLM);
 }
 
 
 
 LCMSHANDLE cmsxLevenbergMarquardtInit(LPSAMPLEDCURVE x, LPSAMPLEDCURVE y, double sig,
-							double a[],
-							int ma,  
-							void (*funcs)(double, double[], double*, double[], int))
-							
+                            double a[],
+                            int ma,
+                            void (*funcs)(double, double[], double*, double[], int))
+
 {
-	int i;
-	LPLMRQMIN pLM;
-	
-	if (x ->nItems != y ->nItems) return NULL;
+    int i;
+    LPLMRQMIN pLM;
 
-	pLM = (LPLMRQMIN) malloc(sizeof(LMRQMIN));
-	if(!pLM)
-		return NULL;
+    if (x ->nItems != y ->nItems) return NULL;
 
-	ZeroMemory(pLM, sizeof(LMRQMIN));
-	
-	if((pLM->atry = (double*)malloc(ma * sizeof(double))) == NULL) goto failed;
-	if((pLM->beta = MATNalloc (ma, 1)) == NULL) goto failed;
-	if((pLM->oneda = MATNalloc (ma, 1)) == NULL) goto failed;
+    pLM = (LPLMRQMIN) malloc(sizeof(LMRQMIN));
+    if(!pLM)
+        return NULL;
 
-	
+    ZeroMemory(pLM, sizeof(LMRQMIN));
 
-	if((pLM->covar = MATNalloc(ma, ma)) == NULL) goto failed;
-	if((pLM->alpha = MATNalloc(ma, ma)) == NULL) goto failed;		
-	if((pLM->dyda = (double*)malloc(ma * sizeof(double))) == NULL) goto failed;
+    if((pLM->atry = (double*)malloc(ma * sizeof(double))) == NULL) goto failed;
+    if((pLM->beta = MATNalloc (ma, 1)) == NULL) goto failed;
+    if((pLM->oneda = MATNalloc (ma, 1)) == NULL) goto failed;
 
-	pLM->alamda = 0.001;
 
-	pLM->ndata = x ->nItems;
-	pLM->x = x;
-	pLM->y = y;
-	pLM->ma = ma;
-	pLM->a = a;
-	pLM->funcs = funcs;
-	pLM->sig = sig;
-		
-	mrqcof(pLM, a, pLM->alpha, pLM->beta, &pLM->chisq);	
-	pLM->ochisq = (pLM->chisq);
 
-	for(i = 0; i < ma; i++) pLM->atry[i] = a[i];
+    if((pLM->covar = MATNalloc(ma, ma)) == NULL) goto failed;
+    if((pLM->alpha = MATNalloc(ma, ma)) == NULL) goto failed;
+    if((pLM->dyda = (double*)malloc(ma * sizeof(double))) == NULL) goto failed;
 
-	return (LCMSHANDLE) pLM;
+    pLM->alamda = 0.001;
+
+    pLM->ndata = x ->nItems;
+    pLM->x = x;
+    pLM->y = y;
+    pLM->ma = ma;
+    pLM->a = a;
+    pLM->funcs = funcs;
+    pLM->sig = sig;
+
+    mrqcof(pLM, a, pLM->alpha, pLM->beta, &pLM->chisq);
+    pLM->ochisq = (pLM->chisq);
+
+    for(i = 0; i < ma; i++) pLM->atry[i] = a[i];
+
+    return (LCMSHANDLE) pLM;
 
 failed:
-	FreeStruct(pLM);
-	return NULL;
+    FreeStruct(pLM);
+    return NULL;
 }
 
 
 BOOL cmsxLevenbergMarquardtFree(LCMSHANDLE hMRQ)
 {
-	LPLMRQMIN pLM = (LPLMRQMIN)hMRQ;
-	if(!pLM)
-		return false;
+    LPLMRQMIN pLM = (LPLMRQMIN)hMRQ;
+    if(!pLM)
+        return false;
 
-	FreeStruct(pLM);	
-	return true;
+    FreeStruct(pLM);
+    return true;
 }
 
 
 BOOL cmsxLevenbergMarquardtIterate(LCMSHANDLE hMRQ)
 {
-	int j, k;
-	BOOL sts;
-	LPLMRQMIN pLM = (LPLMRQMIN)hMRQ;
-	if(!pLM)
-		return false;
+    int j, k;
+    BOOL sts;
+    LPLMRQMIN pLM = (LPLMRQMIN)hMRQ;
+    if(!pLM)
+        return false;
 
-	for(j = 0; j < pLM->ma; j++) /* Alter linearized fitting matrix, by augmenting diagonal elements.  */
-	{
-		for(k = 0; k < pLM->ma; k++)
-			pLM->covar->Values[j][k] = pLM->alpha->Values[j][k];
+    for(j = 0; j < pLM->ma; j++) /* Alter linearized fitting matrix, by augmenting diagonal elements.  */
+    {
+        for(k = 0; k < pLM->ma; k++)
+            pLM->covar->Values[j][k] = pLM->alpha->Values[j][k];
 
-		pLM->covar->Values[j][j] = pLM->alpha->Values[j][j] * (1.0 + pLM ->alamda);
-		pLM->oneda->Values[j][0] = pLM->beta->Values[j][0];
-	}
-	
-	if((sts = MATNsolve (pLM->covar, pLM->oneda)) != TRUE)  /* Matrix solution. */
-		return sts;
+        pLM->covar->Values[j][j] = pLM->alpha->Values[j][j] * (1.0 + pLM ->alamda);
+        pLM->oneda->Values[j][0] = pLM->beta->Values[j][0];
+    }
 
-	for(j = 0; j < pLM->ma; j++)							/* Did the trial succeed? */
-		pLM->atry[j] = pLM->a[j] + pLM->oneda->Values[j][0];
+    if((sts = MATNsolve (pLM->covar, pLM->oneda)) != true)  /* Matrix solution. */
+        return sts;
 
-	mrqcof(pLM, pLM->atry, pLM->covar, pLM->oneda, &pLM -> chisq);
-	
-	if (pLM->chisq < pLM->ochisq) {	 /* Success, accept the new solution. */
+    for(j = 0; j < pLM->ma; j++)                            /* Did the trial succeed? */
+        pLM->atry[j] = pLM->a[j] + pLM->oneda->Values[j][0];
 
-		pLM->alamda *= 0.1;
-		pLM->ochisq = pLM->chisq;
+    mrqcof(pLM, pLM->atry, pLM->covar, pLM->oneda, &pLM -> chisq);
 
-		for(j = 0; j < pLM->ma; j++)
-		{
-			for(k = 0; k < pLM->ma; k++) 
-				pLM->alpha->Values[j][k] = pLM->covar->Values[j][k];
+    if (pLM->chisq < pLM->ochisq) {     /* Success, accept the new solution. */
 
-			pLM->beta->Values[j][0] = pLM->oneda->Values[j][0];			
-		}
+        pLM->alamda *= 0.1;
+        pLM->ochisq = pLM->chisq;
 
-		for (j=0; j < pLM ->ma; j++) pLM->a[j] = pLM->atry[j];
-	}
-	else   /* Failure, increase alamda and return. */
-	{
-		pLM -> alamda *= 10.0;
-		pLM->chisq = pLM->ochisq;
-	}
-	
-	return true;
+        for(j = 0; j < pLM->ma; j++)
+        {
+            for(k = 0; k < pLM->ma; k++)
+                pLM->alpha->Values[j][k] = pLM->covar->Values[j][k];
+
+            pLM->beta->Values[j][0] = pLM->oneda->Values[j][0];
+        }
+
+        for (j=0; j < pLM ->ma; j++) pLM->a[j] = pLM->atry[j];
+    }
+    else   /* Failure, increase alamda and return. */
+    {
+        pLM -> alamda *= 10.0;
+        pLM->chisq = pLM->ochisq;
+    }
+
+    return true;
 }
 
 
 double cmsxLevenbergMarquardtAlamda(LCMSHANDLE hMRQ)
 {
-		LPLMRQMIN pLM = (LPLMRQMIN)hMRQ;
+        LPLMRQMIN pLM = (LPLMRQMIN)hMRQ;
 
-		return pLM ->alamda;
+        return pLM ->alamda;
 }
 
 double cmsxLevenbergMarquardtChiSq(LCMSHANDLE hMRQ)
 {
-		LPLMRQMIN pLM = (LPLMRQMIN)hMRQ;
+        LPLMRQMIN pLM = (LPLMRQMIN)hMRQ;
 
-		return pLM ->chisq;
+        return pLM ->chisq;
 }

@@ -40,10 +40,10 @@
 /* Convex hull management */
 
 LCMSHANDLE cdecl cmsxHullInit(void);
-void	   cdecl cmsxHullDone(LCMSHANDLE hHull);
-BOOL	   cdecl cmsxHullAddPoint(LCMSHANDLE hHull, int x, int y, int z);
-BOOL	   cdecl cmsxHullComputeHull(LCMSHANDLE hHull);
-char	   cdecl cmsxHullCheckpoint(LCMSHANDLE hHull, int x, int y, int z);
+void       cdecl cmsxHullDone(LCMSHANDLE hHull);
+BOOL       cdecl cmsxHullAddPoint(LCMSHANDLE hHull, int x, int y, int z);
+BOOL       cdecl cmsxHullComputeHull(LCMSHANDLE hHull);
+char       cdecl cmsxHullCheckpoint(LCMSHANDLE hHull, int x, int y, int z);
 BOOL       cdecl cmsxHullDumpVRML(LCMSHANDLE hHull, const char* fname);
 
 /* --------------------------------------------------------------------- */
@@ -58,32 +58,32 @@ BOOL       cdecl cmsxHullDumpVRML(LCMSHANDLE hHull, const char* fname);
 /* not removed. */
 /* -------------------------------------------------------------------- */
 
-#define SWAP(t,x,y)	{ t = x; x = y; y = t; }
+#define SWAP(t,x,y)    { t = x; x = y; y = t; }
 
-#define XFREE(p)	
+#define XFREE(p)
 /* if (p) { free ((char *) p); p = NULL; } */
 
 
 #define ADD( head, p )  if ( head )  { \
-				p->Next = head; \
-				p->Prev = head->Prev; \
-				head->Prev = p; \
-				p->Prev->Next = p; \
-			} \
-			else { \
-				head = p; \
-				head->Next = head->Prev = p; \
-			}
+                p->Next = head; \
+                p->Prev = head->Prev; \
+                head->Prev = p; \
+                p->Prev->Next = p; \
+            } \
+            else { \
+                head = p; \
+                head->Next = head->Prev = p; \
+            }
 
 #define XDELETE( head, p ) if ( head )  { \
-				if ( head == head->Next ) \
-					head = NULL;  \
-				else if ( p == head ) \
-					head = head->Next; \
-				p->Next->Prev = p->Prev;  \
-				p->Prev->Next = p->Next;  \
-				XFREE( p ); \
-			} 
+                if ( head == head->Next ) \
+                    head = NULL;  \
+                else if ( p == head ) \
+                    head = head->Next; \
+                p->Next->Prev = p->Prev;  \
+                p->Prev->Next = p->Next;  \
+                XFREE( p ); \
+            }
 
 /* Define Vertex indices.  */
 #define X   0
@@ -93,16 +93,16 @@ BOOL       cdecl cmsxHullDumpVRML(LCMSHANDLE hHull, const char* fname);
 /* Define structures for vertices, edges and faces  */
 
 typedef struct _vertex_struct VERTEX,FAR *LPVERTEX;
-typedef struct _edge_struct EDGE, FAR *LPEDGE;
-typedef struct _face_struct FACE, FAR *LPFACE;
+typedef struct _edge_struct   EDGE, FAR *LPEDGE;
+typedef struct _face_struct   FACE, FAR *LPFACE;
 
 
 struct _edge_struct {
 
    LPFACE    AdjFace[2];
    LPVERTEX  EndPts[2];
-   LPFACE    NewFace;			    /* pointer to incident cone face. */
-   BOOL      DoDelete;				/* T iff Edge should be delete. */
+   LPFACE    NewFace;                /* pointer to incident cone face. */
+   BOOL      DoDelete;               /* T iff Edge should be delete. */
 
    LPEDGE    Next, Prev;
 };
@@ -111,53 +111,53 @@ struct _face_struct {
 
    LPEDGE    Edge[3];
    LPVERTEX  Vertex[3];
-   BOOL	     Visible;	         /* T iff face Visible from new point. */
+   BOOL      Visible;             /* T iff face Visible from new point. */
 
    LPFACE    Next, Prev;
 };
 
 struct _vertex_struct {
-   
+
    int      v[3];
-   int	    vnum;
-   LPEDGE   duplicate;	        /* pointer to incident cone Edge (or NULL) */
-   BOOL     onhull;				/* T iff point on hull. */
-   BOOL	    mark;				/* T iff point already processed. */
+   int      vnum;
+   LPEDGE   duplicate;            /* pointer to incident cone Edge (or NULL) */
+   BOOL     onhull;               /* T iff point on hull. */
+   BOOL     mark;                 /* T iff point already processed. */
 
    LPVERTEX  Next, Prev;
 };
 
 /* Define flags */
 
-#define ONHULL   	true
-#define REMOVED  	true
-#define VISIBLE  	true
-#define PROCESSED	true
-#define SAFE		1000000		/* Range of safe coord values. */
+#define ONHULL       true
+#define REMOVED      true
+#define VISIBLE      true
+#define PROCESSED    true
+#define SAFE        1000000        /* Range of safe coord values. */
 
 #define DIM 3                  /* Dimension of points */
 typedef int    VEC3I[DIM];   /* Type integer point */
 
-#define PMAX 10000	 /* Max # of pts */
+#define PMAX 10000     /* Max # of pts */
 
 typedef struct {
 
-	/* Global variable definitions */
-	LPVERTEX vertices;
-	LPEDGE edges;
-	LPFACE faces;
-				 
-	VEC3I Vertices[PMAX];        /* All the points */
-	VEC3I Faces[PMAX];           /* Each triangle face is 3 indices */
-	VEC3I Box[PMAX][2];          /* Box around each face */
+    /* Global variable definitions */
+    LPVERTEX vertices;
+    LPEDGE edges;
+    LPFACE faces;
+
+    VEC3I Vertices[PMAX];        /* All the points */
+    VEC3I Faces[PMAX];           /* Each triangle face is 3 indices */
+    VEC3I Box[PMAX][2];          /* Box around each face */
 
 
-	VEC3I bmin, bmax;
-	int radius;
-	int vnumCounter;
+    VEC3I bmin, bmax;
+    int radius;
+    int vnumCounter;
 
-	int nfaces;
-	int nvertex;
+    int nfaces;
+    int nvertex;
 
 } HULL, FAR* LPHULL;
 
@@ -172,10 +172,10 @@ static
 LPVERTEX MakeNullVertex(LPHULL hull)
 {
    LPVERTEX  v;
-   
+
    v = (LPVERTEX) malloc(sizeof(VERTEX));
    if (!v) return NULL;
-   
+
    v->duplicate = NULL;
    v->onhull = !ONHULL;
    v->mark = !PROCESSED;
@@ -194,7 +194,7 @@ static
 LPEDGE MakeNullEdge(LPHULL hull)
 {
    LPEDGE  e;
-   
+
    e = (LPEDGE) malloc(sizeof(EDGE));
    if (!e) return NULL;
 
@@ -218,7 +218,7 @@ LPFACE MakeNullFace(LPHULL hull)
 
    f = (LPFACE) malloc(sizeof(FACE));
    if (!f) return NULL;
-   
+
    for ( i=0; i < 3; ++i ) {
       f->Edge[i] = NULL;
       f->Vertex[i] = NULL;
@@ -254,15 +254,15 @@ LPFACE MakeFace(LPHULL hull, LPVERTEX v0, LPVERTEX v1, LPVERTEX v2, LPFACE fold)
    e0->EndPts[0] = v0; e0->EndPts[1] = v1;
    e1->EndPts[0] = v1; e1->EndPts[1] = v2;
    e2->EndPts[0] = v2; e2->EndPts[1] = v0;
-	
+
    /* Create face for triangle. */
    f = MakeNullFace(hull);
    f->Edge[0]   = e0;  f->Edge[1]   = e1; f->Edge[2]   = e2;
    f->Vertex[0] = v0;  f->Vertex[1] = v1; f->Vertex[2] = v2;
-	
+
    /* Link edges to face. */
    e0->AdjFace[0] = e1->AdjFace[0] = e2->AdjFace[0] = f;
-	
+
    return f;
 }
 
@@ -273,7 +273,7 @@ by checking to see if each element of the cross product is zero.
 static
 BOOL Collinear( LPVERTEX a, LPVERTEX b, LPVERTEX c )
 {
-   return 
+   return
          ( c->v[Z] - a->v[Z] ) * ( b->v[Y] - a->v[Y] ) -
          ( b->v[Z] - a->v[Z] ) * ( c->v[Y] - a->v[Y] ) == 0
       && ( b->v[Z] - a->v[Z] ) * ( c->v[X] - a->v[X] ) -
@@ -285,13 +285,13 @@ BOOL Collinear( LPVERTEX a, LPVERTEX b, LPVERTEX c )
 /*---------------------------------------------------------------------
 VolumeSign returns the sign of the volume of the tetrahedron determined by f
 and p.  VolumeSign is +1 iff p is on the negative side of f,
-where the positive side is determined by the rh-rule.  So the volume 
+where the positive side is determined by the rh-rule.  So the volume
 is positive if the ccw normal to f points outside the tetrahedron.
 The final fewer-multiplications form is due to Bob Williamson.
 ---------------------------------------------------------------------*/
 int  VolumeSign( LPFACE f, LPVERTEX p )
 {
-   double  vol;   
+   double  vol;
    double  ax, ay, az, bx, by, bz, cx, cy, cz;
 
    ax = f->Vertex[0]->v[X] - p->v[X];
@@ -307,7 +307,7 @@ int  VolumeSign( LPFACE f, LPVERTEX p )
    vol =   ax * (by*cz - bz*cy)
          + ay * (bz*cx - bx*cz)
          + az * (bx*cy - by*cx);
-   
+
 
    /* The volume should be an integer. */
    if      ( vol >  0.5 )  return  1;
@@ -319,36 +319,36 @@ int  VolumeSign( LPFACE f, LPVERTEX p )
 
 /*---------------------------------------------------------------------
 CleanEdges runs through the Edge list and cleans up the structure.
-If there is a NewFace then it will put that face in place of the 
+If there is a NewFace then it will put that face in place of the
 Visible face and NULL out NewFace. It also deletes so marked edges.
 ---------------------------------------------------------------------*/
 static
 void CleanEdges(LPHULL hull)
 {
-   LPEDGE  e;	/* Primary index into Edge list. */
-   LPEDGE  t;	/* Temporary Edge pointer. */
-		
+   LPEDGE  e;    /* Primary index into Edge list. */
+   LPEDGE  t;    /* Temporary Edge pointer. */
+
    /* Integrate the NewFace's into the data structure. */
    /* Check every Edge. */
 
    e = hull ->edges;
    do {
-		if ( e->NewFace ) { 
+        if ( e->NewFace ) {
 
-			if ( e->AdjFace[0]->Visible )
-				    e->AdjFace[0] = e->NewFace; 
-			else	
-					e->AdjFace[1] = e->NewFace;
-	 
-			e->NewFace = NULL;
-		}
+            if ( e->AdjFace[0]->Visible )
+                    e->AdjFace[0] = e->NewFace;
+            else
+                    e->AdjFace[1] = e->NewFace;
+
+            e->NewFace = NULL;
+        }
 
       e = e->Next;
 
    } while ( e != hull ->edges );
 
    /* Delete any edges marked for deletion. */
-   while ( hull ->edges && hull ->edges->DoDelete ) { 
+   while ( hull ->edges && hull ->edges->DoDelete ) {
 
       e = hull ->edges;
 
@@ -358,13 +358,13 @@ void CleanEdges(LPHULL hull)
    e = hull ->edges->Next;
 
    do {
-		if ( e->DoDelete ) {
+        if ( e->DoDelete ) {
 
-			t = e;
-			e = e->Next;
-			XDELETE( hull ->edges, t );
-		}
-		else e = e->Next;
+            t = e;
+            e = e->Next;
+            XDELETE( hull ->edges, t );
+        }
+        else e = e->Next;
 
    } while ( e != hull ->edges );
 }
@@ -375,24 +375,24 @@ CleanFaces runs through the face list and deletes any face marked Visible.
 static
 void CleanFaces(LPHULL hull)
 {
-   LPFACE  f;	/* Primary pointer into face list. */
-   LPFACE  t;	/* Temporary pointer, for deleting. */
-	
+   LPFACE  f;    /* Primary pointer into face list. */
+   LPFACE  t;    /* Temporary pointer, for deleting. */
 
-   while ( hull ->faces && hull ->faces->Visible ) { 
 
-		f = hull ->faces;
-		XDELETE( hull ->faces, f );
+   while ( hull ->faces && hull ->faces->Visible ) {
+
+        f = hull ->faces;
+        XDELETE( hull ->faces, f );
    }
-   
+
    f = hull ->faces->Next;
-   
+
    do {
       if ( f->Visible ) {
 
-			t = f;
-			f = f->Next;
-			XDELETE( hull ->faces, t );
+            t = f;
+            f = f->Next;
+            XDELETE( hull ->faces, t );
       }
       else f = f->Next;
 
@@ -402,57 +402,57 @@ void CleanFaces(LPHULL hull)
 
 
 /*---------------------------------------------------------------------
-CleanVertices runs through the Vertex list and deletes the 
-vertices that are marked as processed but are not incident to any 
-undeleted edges. 
+CleanVertices runs through the Vertex list and deletes the
+vertices that are marked as processed but are not incident to any
+undeleted edges.
 ---------------------------------------------------------------------*/
 static
 void CleanVertices(LPHULL hull)
 {
    LPEDGE    e;
    LPVERTEX  v, t;
-	
+
    /* Mark all vertices incident to some undeleted Edge as on the hull. */
 
    e = hull ->edges;
    do {
-		e->EndPts[0]->onhull = e->EndPts[1]->onhull = ONHULL;
-		e = e->Next;
-   
+        e->EndPts[0]->onhull = e->EndPts[1]->onhull = ONHULL;
+        e = e->Next;
+
    } while (e != hull ->edges);
 
- 
+
    /* Delete all vertices that have been processed but
       are not on the hull. */
- 
-   while ( hull ->vertices && hull->vertices->mark && !hull ->vertices->onhull ) { 
 
-		v = hull ->vertices;
-		XDELETE(hull ->vertices, v );
+   while ( hull ->vertices && hull->vertices->mark && !hull ->vertices->onhull ) {
+
+        v = hull ->vertices;
+        XDELETE(hull ->vertices, v );
    }
 
-  
+
    v = hull ->vertices->Next;
    do {
-		if (v->mark && !v->onhull ) {    
-				t = v; 
-				v = v->Next;
-				XDELETE(hull ->vertices, t )
-		}
-		else 
-				v = v->Next;
+        if (v->mark && !v->onhull ) {
+                t = v;
+                v = v->Next;
+                XDELETE(hull ->vertices, t )
+        }
+        else
+                v = v->Next;
 
    } while ( v != hull ->vertices );
-	
+
 
    /* Reset flags. */
 
    v = hull ->vertices;
    do {
-			v->duplicate = NULL; 
-			v->onhull = !ONHULL; 
-			v = v->Next;
-   
+            v->duplicate = NULL;
+            v->onhull = !ONHULL;
+            v = v->Next;
+
    } while (v != hull->vertices );
 
 }
@@ -461,13 +461,13 @@ void CleanVertices(LPHULL hull)
 
 
 /*---------------------------------------------------------------------
-MakeCcw puts the vertices in the face structure in counterclock wise 
-order.  We want to store the vertices in the same 
+MakeCcw puts the vertices in the face structure in counterclock wise
+order.  We want to store the vertices in the same
 order as in the Visible face.  The third Vertex is always p.
 
 Although no specific ordering of the edges of a face are used
 by the code, the following condition is maintained for each face f:
-one of the two endpoints of f->Edge[i] matches f->Vertex[i]. 
+one of the two endpoints of f->Edge[i] matches f->Vertex[i].
 But note that this does not imply that f->Edge[i] is between
 f->Vertex[i] and f->Vertex[(i+1)%3].  (Thanks to Bob Williamson.)
 ---------------------------------------------------------------------*/
@@ -477,16 +477,16 @@ void MakeCcw(LPFACE f, LPEDGE e, LPVERTEX p)
 {
    LPFACE  fv;   /* The Visible face adjacent to e */
    int    i;    /* Index of e->endpoint[0] in fv. */
-   LPEDGE  s;	/* Temporary, for swapping */
-      
-   if  (e->AdjFace[0]->Visible)      
+   LPEDGE  s;    /* Temporary, for swapping */
+
+   if  (e->AdjFace[0]->Visible)
 
         fv = e->AdjFace[0];
-   else 
-		fv = e->AdjFace[1];
-       
+   else
+        fv = e->AdjFace[1];
+
    /* Set Vertex[0] & [1] of f to have the same orientation
-      as do the corresponding vertices of fv. */ 
+      as do the corresponding vertices of fv. */
 
    for ( i=0; fv->Vertex[i] != e->EndPts[0]; ++i )
       ;
@@ -494,25 +494,25 @@ void MakeCcw(LPFACE f, LPEDGE e, LPVERTEX p)
    /* Orient f the same as fv. */
 
    if ( fv->Vertex[ (i+1) % 3 ] != e->EndPts[1] ) {
-   
-		f->Vertex[0] = e->EndPts[1];  
-		f->Vertex[1] = e->EndPts[0];    
+
+        f->Vertex[0] = e->EndPts[1];
+        f->Vertex[1] = e->EndPts[0];
    }
-   else {                               
-		f->Vertex[0] = e->EndPts[0];   
-		f->Vertex[1] = e->EndPts[1];      
-		SWAP( s, f->Edge[1], f->Edge[2] );
+   else {
+        f->Vertex[0] = e->EndPts[0];
+        f->Vertex[1] = e->EndPts[1];
+        SWAP( s, f->Edge[1], f->Edge[2] );
    }
 
    /* This swap is tricky. e is Edge[0]. Edge[1] is based on endpt[0],
       Edge[2] on endpt[1].  So if e is oriented "forwards," we
       need to move Edge[1] to follow [0], because it precedes. */
-   
+
    f->Vertex[2] = p;
 }
- 
+
 /*---------------------------------------------------------------------
-MakeConeFace makes a new face and two new edges between the 
+MakeConeFace makes a new face and two new edges between the
 Edge and the point that are passed to it. It returns a pointer to
 the new face.
 ---------------------------------------------------------------------*/
@@ -522,44 +522,44 @@ LPFACE MakeConeFace(LPHULL hull, LPEDGE e, LPVERTEX p)
 {
    LPEDGE  new_edge[2];
    LPFACE  new_face;
-   int 	  i, j;
+   int       i, j;
 
    /* Make two new edges (if don't already exist). */
 
-   for ( i=0; i < 2; ++i ) 
+   for ( i=0; i < 2; ++i )
       /* If the Edge exists, copy it into new_edge. */
       if ( !( new_edge[i] = e->EndPts[i]->duplicate) ) {
 
-		/* Otherwise (duplicate is NULL), MakeNullEdge. */
-		new_edge[i] = MakeNullEdge(hull);
-		new_edge[i]->EndPts[0] = e->EndPts[i];
-		new_edge[i]->EndPts[1] = p;
-		e->EndPts[i]->duplicate = new_edge[i];
+        /* Otherwise (duplicate is NULL), MakeNullEdge. */
+        new_edge[i] = MakeNullEdge(hull);
+        new_edge[i]->EndPts[0] = e->EndPts[i];
+        new_edge[i]->EndPts[1] = p;
+        e->EndPts[i]->duplicate = new_edge[i];
       }
 
-	/* Make the new face. */
-	new_face = MakeNullFace(hull);   
-	new_face->Edge[0] = e;
-	new_face->Edge[1] = new_edge[0];
-	new_face->Edge[2] = new_edge[1];
-	MakeCcw( new_face, e, p ); 
-        
+    /* Make the new face. */
+    new_face = MakeNullFace(hull);
+    new_face->Edge[0] = e;
+    new_face->Edge[1] = new_edge[0];
+    new_face->Edge[2] = new_edge[1];
+    MakeCcw( new_face, e, p );
+
    /* Set the adjacent face pointers. */
-	for ( i=0; i < 2; ++i )
-		for ( j=0; j < 2; ++j )  
-			/* Only one NULL link should be set to new_face. */
-			if ( !new_edge[i]->AdjFace[j] ) {
-					new_edge[i]->AdjFace[j] = new_face;
-					break;
-			}
-        
+    for ( i=0; i < 2; ++i )
+        for ( j=0; j < 2; ++j )
+            /* Only one NULL link should be set to new_face. */
+            if ( !new_edge[i]->AdjFace[j] ) {
+                    new_edge[i]->AdjFace[j] = new_face;
+                    break;
+            }
+
    return new_face;
 }
 
 
 /*---------------------------------------------------------------------
-AddOne is passed a Vertex.  It first determines all faces Visible from 
-that point.  If none are Visible then the point is marked as not 
+AddOne is passed a Vertex.  It first determines all faces Visible from
+that point.  If none are Visible then the point is marked as not
 onhull.  Next is a loop over edges.  If both faces adjacent to an Edge
 are Visible, then the Edge is marked for deletion.  If just one of the
 adjacent faces is Visible then a new face is constructed.
@@ -567,34 +567,34 @@ adjacent faces is Visible then a new face is constructed.
 static
 BOOL AddOne(LPHULL hull, LPVERTEX p)
 {
-   LPFACE  f; 
+   LPFACE  f;
    LPEDGE  e, temp;
-   int 	  vol;
-   BOOL	  vis = false;
+   int       vol;
+   BOOL      vis = false;
 
- 
+
    /* Mark faces Visible from p. */
    f = hull -> faces;
 
    do {
-   
-	   vol = VolumeSign(f, p);
-      
+
+       vol = VolumeSign(f, p);
+
       if ( vol < 0 ) {
-			f->Visible = VISIBLE;  
-			vis = true;                      
+            f->Visible = VISIBLE;
+            vis = true;
       }
-      
-	  f = f->Next;
-   
+
+      f = f->Next;
+
    } while ( f != hull ->faces );
 
    /* If no faces are Visible from p, then p is inside the hull. */
 
    if ( !vis ) {
 
-			p->onhull = !ONHULL;  
-			return false; 
+            p->onhull = !ONHULL;
+            return false;
    }
 
    /* Mark edges in interior of Visible region for deletion.
@@ -607,15 +607,15 @@ BOOL AddOne(LPHULL hull, LPVERTEX p)
       temp = e->Next;
 
       if ( e->AdjFace[0]->Visible && e->AdjFace[1]->Visible )
-				/* e interior: mark for deletion. */
-				e->DoDelete = REMOVED;
+                /* e interior: mark for deletion. */
+                e->DoDelete = REMOVED;
 
-      else 
-		  if ( e->AdjFace[0]->Visible || e->AdjFace[1]->Visible ) 
-				/* e border: make a new face. */
-				e->NewFace = MakeConeFace(hull, e, p );
+      else
+          if ( e->AdjFace[0]->Visible || e->AdjFace[1]->Visible )
+                /* e border: make a new face. */
+                e->NewFace = MakeConeFace(hull, e, p );
 
-		e = temp;
+        e = temp;
 
    } while ( e != hull ->edges );
 
@@ -624,13 +624,13 @@ BOOL AddOne(LPHULL hull, LPVERTEX p)
 
 
 /*---------------------------------------------------------------------
- DoubleTriangle builds the initial double triangle.  It first finds 3 
+ DoubleTriangle builds the initial double triangle.  It first finds 3
  noncollinear points and makes two faces out of them, in opposite order.
- It then finds a fourth point that is not coplanar with that face.  The  
- vertices are stored in the face structure in counterclockwise order so 
+ It then finds a fourth point that is not coplanar with that face.  The
+ vertices are stored in the face structure in counterclockwise order so
  that the volume between the face and the point is negative. Lastly, the
  3 newfaces to the fourth point are constructed and the data structures
- are cleaned up. 
+ are cleaned up.
 ---------------------------------------------------------------------*/
 
 static
@@ -639,21 +639,21 @@ BOOL DoubleTriangle(LPHULL hull)
    LPVERTEX  v0, v1, v2, v3;
    LPFACE    f0, f1 = NULL;
    int      vol;
-	
+
    /* Find 3 noncollinear points. */
    v0 = hull ->vertices;
    while ( Collinear( v0, v0->Next, v0->Next->Next ) )
       if ( ( v0 = v0->Next ) == hull->vertices )
-				return false; /* All points are Collinear! */
+                return false; /* All points are Collinear! */
 
    v1 = v0->Next;
    v2 = v1->Next;
-	
+
    /* Mark the vertices as processed. */
    v0->mark = PROCESSED;
    v1->mark = PROCESSED;
    v2->mark = PROCESSED;
-   
+
    /* Create the two "twin" faces. */
    f0 = MakeFace(hull, v0, v1, v2, f1 );
    f1 = MakeFace(hull, v2, v1, v0, f0 );
@@ -665,19 +665,19 @@ BOOL DoubleTriangle(LPHULL hull)
    f1->Edge[0]->AdjFace[1] = f0;
    f1->Edge[1]->AdjFace[1] = f0;
    f1->Edge[2]->AdjFace[1] = f0;
-	
+
    /* Find a fourth, noncoplanar point to form tetrahedron. */
    v3 = v2->Next;
    vol = VolumeSign( f0, v3 );
 
    while ( !vol )   {
 
-      if ( ( v3 = v3->Next ) == v0 ) 
-			return false; /* All points are coplanar! */
+      if ( ( v3 = v3->Next ) == v0 )
+            return false; /* All points are coplanar! */
 
       vol = VolumeSign( f0, v3 );
    }
-	
+
    /* Insure that v3 will be the first added. */
    hull ->vertices = v3;
    return true;
@@ -698,24 +698,24 @@ void ConstructHull(LPHULL hull)
  v = hull->vertices;
 
  do {
-		vnext = v->Next;
-				
+        vnext = v->Next;
+
         changed = false;
 
-		if (!v->mark ) {
+        if (!v->mark ) {
 
                 v->mark = PROCESSED;
                 changed = AddOne(hull,  v );
 
-				CleanEdges(hull);
-				CleanFaces(hull);
-				CleanVertices(hull);
+                CleanEdges(hull);
+                CleanFaces(hull);
+                CleanVertices(hull);
     }
 
     v = vnext;
 
  } while (v != hull->vertices );
-  
+
 }
 
 
@@ -727,7 +727,7 @@ static
 void AddVec( VEC3I q, VEC3I ray )
 {
   int i;
-  
+
   for( i = 0; i < DIM; i++ )
     ray[i] = q[i] + ray[i];
 }
@@ -749,7 +749,7 @@ void  SubVec( VEC3I a, VEC3I b, VEC3I c )
 Returns the dot product of the two input vectors.
 ---------------------------------------------------------------------*/
 static
-double	Dot( VEC3I a, LPVEC3 b )
+double    Dot( VEC3I a, LPVEC3 b )
 {
     int i;
     double sum = 0.0;
@@ -764,7 +764,7 @@ double	Dot( VEC3I a, LPVEC3 b )
 Compute the cross product of (b-a)x(c-a) and place into N.
 ---------------------------------------------------------------------*/
 static
-void	NormalVec( VEC3I a, VEC3I b, VEC3I c, LPVEC3 N )
+void    NormalVec( VEC3I a, VEC3I b, VEC3I c, LPVEC3 N )
 {
     N->n[X] = ( c[Z] - a[Z] ) * ( b[Y] - a[Y] ) -
            ( b[Z] - a[Z] ) * ( c[Y] - a[Y] );
@@ -780,7 +780,7 @@ void	NormalVec( VEC3I a, VEC3I b, VEC3I c, LPVEC3 N )
 static
 int InBox( VEC3I q, VEC3I bmin, VEC3I bmax )
 {
- 
+
   if( ( bmin[X] <= q[X] ) && ( q[X] <= bmax[X] ) &&
       ( bmin[Y] <= q[Y] ) && ( q[Y] <= bmax[Y] ) &&
       ( bmin[Z] <= q[Z] ) && ( q[Z] <= bmax[Z] ) )
@@ -788,12 +788,12 @@ int InBox( VEC3I q, VEC3I bmin, VEC3I bmax )
 
   return false;
 }
-    
+
 
 
 /*
   This function returns a char:
-    '0': the segment [ab] does not intersect (completely misses) the 
+    '0': the segment [ab] does not intersect (completely misses) the
          bounding box surrounding the n-th triangle T.  It lies
          strictly to one side of one of the six supporting planes.
     '?': status unknown: the segment may or may not intersect T.
@@ -808,8 +808,8 @@ char BoxTest(LPHULL hull, int n, VEC3I a, VEC3I b)
    for ( i=0; i < DIM; i++ ) {
 
        w = hull ->Box[ n ][0][i]; /* min: lower left */
-       
-	   if ( (a[i] < w) && (b[i] < w) ) return '0';
+
+       if ( (a[i] < w) && (b[i] < w) ) return '0';
 
        w = hull ->Box[ n ][1][i]; /* max: upper right */
 
@@ -837,7 +837,7 @@ void RandomRay( VEC3I ray, int radius )
   w = sqrt( 1 - z*z );
   x = w * cos( t );
   y = w * sin( t );
-  
+
   ray[X] = (int) ( radius * x );
   ray[Y] = (int) ( radius * y );
   ray[Z] = (int) ( radius * z );
@@ -850,30 +850,30 @@ int ComputeBox(LPHULL hull, int F, VEC3I bmin, VEC3I bmax )
 {
   int i, j;
   double radius;
-  
+
   for( i = 0; i < F; i++ )
     for( j = 0; j < DIM; j++ ) {
 
       if( hull ->Vertices[i][j] < bmin[j] )
-			bmin[j] = hull ->Vertices[i][j];
+            bmin[j] = hull ->Vertices[i][j];
 
-      if( hull ->Vertices[i][j] > bmax[j] ) 
-				bmax[j] = hull ->Vertices[i][j];
+      if( hull ->Vertices[i][j] > bmax[j] )
+                bmax[j] = hull ->Vertices[i][j];
     }
-  
+
   radius = sqrt( pow( (double)(bmax[X] - bmin[X]), 2.0 ) +
                  pow( (double)(bmax[Y] - bmin[Y]), 2.0 ) +
                  pow( (double)(bmax[Z] - bmin[Z]), 2.0 ) );
 
   return (int)( radius +1 ) + 1;
 }
-    
+
 
 /*---------------------------------------------------------------------
 Computes N & D and returns index m of largest component.
 ---------------------------------------------------------------------*/
 static
-int	PlaneCoeff(LPHULL hull,  VEC3I T, LPVEC3 N, double *D )
+int    PlaneCoeff(LPHULL hull,  VEC3I T, LPVEC3 N, double *D )
 {
     int i;
     double t;              /* Temp storage */
@@ -938,7 +938,7 @@ char SegPlaneInt(LPHULL hull, VEC3I T, VEC3I q, VEC3I r, LPVEC3 p, int *m)
 
 
 static
-int  AreaSign( VEC3I a, VEC3I b, VEC3I c )  
+int  AreaSign( VEC3I a, VEC3I b, VEC3I c )
 {
     double area2;
 
@@ -949,11 +949,11 @@ int  AreaSign( VEC3I a, VEC3I b, VEC3I c )
     if      ( area2 >  0.5 ) return  1;
     else if ( area2 < -0.5 ) return -1;
     else                     return  0;
-}     
+}
 
 
 static
-char 	InTri2D( VEC3I Tp[3], VEC3I pp )
+char     InTri2D( VEC3I Tp[3], VEC3I pp )
 {
    int area0, area1, area2;
 
@@ -964,28 +964,28 @@ char 	InTri2D( VEC3I Tp[3], VEC3I pp )
 
    if ( (( area0 == 0 ) && ( area1 > 0 ) && ( area2 > 0 )) ||
         (( area1 == 0 ) && ( area0 > 0 ) && ( area2 > 0 )) ||
-        (( area2 == 0 ) && ( area0 > 0 ) && ( area1 > 0 )) ) 
+        (( area2 == 0 ) && ( area0 > 0 ) && ( area1 > 0 )) )
      return 'E';
 
    if ( (( area0 == 0 ) && ( area1 < 0 ) && ( area2 < 0 )) ||
         (( area1 == 0 ) && ( area0 < 0 ) && ( area2 < 0 )) ||
         (( area2 == 0 ) && ( area0 < 0 ) && ( area1 < 0 )))
-     return 'E';                 
-   
+     return 'E';
+
    if ( (( area0 >  0 ) && ( area1 > 0 ) && ( area2 > 0 )) ||
         (( area0 <  0 ) && ( area1 < 0 ) && ( area2 < 0 )))
      return 'F';
 
    if ( ( area0 == 0 ) && ( area1 == 0 ) && ( area2 == 0 ) )
      return '?'; /* Error in InTriD */
-     
+
    if ( (( area0 == 0 ) && ( area1 == 0 )) ||
         (( area0 == 0 ) && ( area2 == 0 )) ||
         (( area1 == 0 ) && ( area2 == 0 )) )
      return 'V';
 
-   else  
-     return '0';  
+   else
+     return '0';
 }
 
 /* Assumption: p lies in the plane containing T.
@@ -997,7 +997,7 @@ char 	InTri2D( VEC3I Tp[3], VEC3I pp )
 */
 
 static
-char 	InTri3D(LPHULL hull,  VEC3I T, int m, VEC3I p )
+char     InTri3D(LPHULL hull,  VEC3I T, int m, VEC3I p )
 {
    int i;           /* Index for X,Y,Z           */
    int j;           /* Index for X,Y             */
@@ -1011,17 +1011,17 @@ char 	InTri3D(LPHULL hull,  VEC3I T, int m, VEC3I p )
      if ( i != m ) {    /* skip largest coordinate */
        pp[j] = p[i];
        for ( k = 0; k < 3; k++ )
-			Tp[k][j] = hull->Vertices[T[k]][i];
+            Tp[k][j] = hull->Vertices[T[k]][i];
        j++;
      }
    }
    return( InTri2D( Tp, pp ) );
 }
 
-              
 
-static         
-int 	VolumeSign2( VEC3I a, VEC3I b, VEC3I c, VEC3I d )
+
+static
+int     VolumeSign2( VEC3I a, VEC3I b, VEC3I c, VEC3I d )
 {
    double vol;
    double ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz;
@@ -1033,7 +1033,7 @@ int 	VolumeSign2( VEC3I a, VEC3I b, VEC3I c, VEC3I d )
    bx = b[X];
    by = b[Y];
    bz = b[Z];
-   cx = c[X]; 
+   cx = c[X];
    cy = c[Y];
    cz = c[Z];
    dx = d[X];
@@ -1062,7 +1062,7 @@ int 	VolumeSign2( VEC3I a, VEC3I b, VEC3I c, VEC3I d )
 
 /*---------------------------------------------------------------------
 The signed volumes of three tetrahedra are computed, determined
-by the segment qr, and each Edge of the triangle.  
+by the segment qr, and each Edge of the triangle.
 Returns a char:
    'v': the open segment includes a Vertex of T.
    'e': the open segment includes a point in the relative interior of an Edge
@@ -1076,17 +1076,17 @@ static
 char SegTriCross(LPHULL hull,  VEC3I T, VEC3I q, VEC3I r )
 {
    int vol0, vol1, vol2;
-   
-   vol0 = VolumeSign2( q, hull->Vertices[ T[0] ], hull->Vertices[ T[1] ], r ); 
-   vol1 = VolumeSign2( q, hull->Vertices[ T[1] ], hull->Vertices[ T[2] ], r ); 
+
+   vol0 = VolumeSign2( q, hull->Vertices[ T[0] ], hull->Vertices[ T[1] ], r );
+   vol1 = VolumeSign2( q, hull->Vertices[ T[1] ], hull->Vertices[ T[2] ], r );
    vol2 = VolumeSign2( q, hull->Vertices[ T[2] ], hull->Vertices[ T[0] ], r );
- 
-     
+
+
    /* Same sign: segment intersects interior of triangle. */
    if ( ( ( vol0 > 0 ) && ( vol1 > 0 ) && ( vol2 > 0 ) ) ||
         ( ( vol0 < 0 ) && ( vol1 < 0 ) && ( vol2 < 0 ) ) )
       return 'f';
-   
+
    /* Opposite sign: no intersection between segment and triangle */
    if ( ( ( vol0 > 0 ) || ( vol1 > 0 ) || ( vol2 > 0 ) ) &&
         ( ( vol0 < 0 ) || ( vol1 < 0 ) || ( vol2 < 0 ) ) )
@@ -1094,17 +1094,17 @@ char SegTriCross(LPHULL hull,  VEC3I T, VEC3I q, VEC3I r )
 
    else if ( ( vol0 == 0 ) && ( vol1 == 0 ) && ( vol2 == 0 ) )
      return '?'; /* Error 1 in SegTriCross */
-        
+
    /* Two zeros: segment intersects Vertex. */
-   else if ( ( ( vol0 == 0 ) && ( vol1 == 0 ) ) || 
-             ( ( vol0 == 0 ) && ( vol2 == 0 ) ) || 
+   else if ( ( ( vol0 == 0 ) && ( vol1 == 0 ) ) ||
+             ( ( vol0 == 0 ) && ( vol2 == 0 ) ) ||
              ( ( vol1 == 0 ) && ( vol2 == 0 ) ) )
       return 'v';
 
    /* One zero: segment intersects Edge. */
    else if ( ( vol0 == 0 ) || ( vol1 == 0 ) || ( vol2 == 0 ) )
       return 'e';
-   
+
    else
      return '?'; /* Error 2 in SegTriCross */
 }
@@ -1124,8 +1124,8 @@ char    SegTriInt(LPHULL hull, VEC3I T, VEC3I q, VEC3I r, LPVEC3 p )
     else if ( code == 'r')   return InTri3D(hull,  T, m, r );
     else if ( code == 'p')   return 'p';
     else if ( code == '1' )  return SegTriCross(hull, T, q, r );
-    else 
-       return code;		/* Error */
+    else
+       return code;        /* Error */
 }
 
 
@@ -1148,17 +1148,17 @@ char InPolyhedron(LPHULL hull, VEC3I q)
    /* If query point is outside bounding box, finished. */
    if ( !InBox( q, hull->bmin, hull->bmax ) )
       return 'o';
-   
+
    LOOP:
    while( k++ < F ) {
 
       crossings = 0;
 
       RandomRay(Ray, hull->radius );
-	  
+
       AddVec( q, Ray );
 
-  
+
       for ( f = 0; f < F; f++ ) {  /* Begin check each face */
 
          if ( BoxTest(hull,  f, q, Ray ) == '0' ) {
@@ -1182,16 +1182,16 @@ char InPolyhedron(LPHULL hull, VEC3I q)
 
          /* If query endpoint q sits on a V/E/F, return inside. */
          else if ( code == 'V' || code == 'E' || code == 'F' )
-			return code; /* 'i'; MM2 */
+            return code; /* 'i'; MM2 */
 
          /* If ray misses triangle, do nothing. */
          else if ( code == '0' )
             ;
 
-         else 
+         else
             return '?'; /* Error */
 
-      } 
+      }
       /* No degeneracies encountered: ray is generic, so finished. */
       break;
 
@@ -1214,12 +1214,12 @@ char InPolyhedron(LPHULL hull, VEC3I q)
 static
 void StoreResults(LPHULL hull)
 {
-   
-   int   i, w;
+
+   int       i, w;
    LPVERTEX  v;
    LPFACE    f;
-   int 	V = 0, F = 0;
-   int j, k;
+   int       V = 0, F = 0;
+   int       j, k;
 
    /* Vertices */
 
@@ -1228,9 +1228,9 @@ void StoreResults(LPHULL hull)
    do {
 
       v -> vnum = V;
-	  hull ->Vertices[V][X] = v -> v[X];
-	  hull ->Vertices[V][Y] = v -> v[Y];
-	  hull ->Vertices[V][Z] = v -> v[Z];
+      hull ->Vertices[V][X] = v -> v[X];
+      hull ->Vertices[V][Y] = v -> v[Y];
+      hull ->Vertices[V][Z] = v -> v[Z];
 
       v = v->Next;
       V++;
@@ -1240,28 +1240,28 @@ void StoreResults(LPHULL hull)
    hull ->nvertex = V;
 
    /* Faces */
-   f = hull ->faces; 
+   f = hull ->faces;
    F = 0;
    do {
 
-	  hull ->Faces[F][0] = f->Vertex[0]->vnum;
-	  hull ->Faces[F][1] = f->Vertex[1]->vnum;
-	  hull ->Faces[F][2] = f->Vertex[2]->vnum;
+      hull ->Faces[F][0] = f->Vertex[0]->vnum;
+      hull ->Faces[F][1] = f->Vertex[1]->vnum;
+      hull ->Faces[F][2] = f->Vertex[2]->vnum;
 
-	  for ( j=0; j < 3; j++ ) {
+      for ( j=0; j < 3; j++ ) {
 
        hull ->Box[F][0][j] = hull ->Vertices[ hull ->Faces[F][0] ][j];
        hull ->Box[F][1][j] = hull ->Vertices[ hull ->Faces[F][0] ][j];
-	  }
-	
-	  /* Check k=1,2 vertices of face. */
-	  for ( k=1; k < 3; k++ )
-		for ( j=0; j < 3; j++ ) {
+      }
 
-			w = hull ->Vertices[ hull ->Faces[F][k] ][j];
-			if ( w < hull ->Box[F][0][j] ) hull ->Box[F][0][j] = w;
-			if ( w > hull ->Box[F][1][j] ) hull ->Box[F][1][j] = w;
-		}
+      /* Check k=1,2 vertices of face. */
+      for ( k=1; k < 3; k++ )
+        for ( j=0; j < 3; j++ ) {
+
+            w = hull ->Vertices[ hull ->Faces[F][k] ][j];
+            if ( w < hull ->Box[F][0][j] ) hull ->Box[F][0][j] = w;
+            if ( w > hull ->Box[F][1][j] ) hull ->Box[F][1][j] = w;
+        }
 
 
       f = f->Next; F++;
@@ -1284,34 +1284,34 @@ void StoreResults(LPHULL hull)
 
 LCMSHANDLE cmsxHullInit(void)
 {
-	LPHULL hull = (LPHULL) malloc(sizeof(HULL));
+    LPHULL hull = (LPHULL) malloc(sizeof(HULL));
 
-	ZeroMemory(hull, sizeof(HULL));
+    ZeroMemory(hull, sizeof(HULL));
 
-	hull->vnumCounter  = 0;
-	hull->vertices	 = NULL;
-	hull->edges     = NULL;
-	hull->faces     = NULL;
-	hull->nfaces    = 0;
-	hull->nvertex   = 0;
+    hull->vnumCounter  = 0;
+    hull->vertices     = NULL;
+    hull->edges        = NULL;
+    hull->faces        = NULL;
+    hull->nfaces       = 0;
+    hull->nvertex      = 0;
 
-	return (LCMSHANDLE) (LPSTR) hull;
+    return (LCMSHANDLE) (LPSTR) hull;
 }
 
 
 void cmsxHullDone(LCMSHANDLE hHull)
 {
-	LPHULL hull = (LPHULL) (LPSTR) hHull;
+    LPHULL hull = (LPHULL) (LPSTR) hHull;
 
-	if (hull) 
-		free((LPVOID) hull);
+    if (hull)
+        free((LPVOID) hull);
 }
 
 
 BOOL cmsxHullAddPoint(LCMSHANDLE hHull, int x, int y, int z)
 {
-	 LPVERTEX  v;
-	 LPHULL hull = (LPHULL) (LPSTR) hHull;
+     LPVERTEX  v;
+     LPHULL hull = (LPHULL) (LPSTR) hHull;
 
 
       v = MakeNullVertex(hull);
@@ -1320,7 +1320,7 @@ BOOL cmsxHullAddPoint(LCMSHANDLE hHull, int x, int y, int z)
       v->v[Z] = z;
       v->vnum = hull->vnumCounter++;
 
-	  return true;
+      return true;
 }
 
 BOOL cmsxHullComputeHull(LCMSHANDLE hHull)
@@ -1339,8 +1339,8 @@ BOOL cmsxHullComputeHull(LCMSHANDLE hHull)
 
 char cmsxHullCheckpoint(LCMSHANDLE hHull, int x, int y, int z)
 {
-	 VEC3I q;
-	 LPHULL hull = (LPHULL) (LPSTR) hHull;
+     VEC3I q;
+     LPHULL hull = (LPHULL) (LPSTR) hHull;
 
      q[X] = x; q[Y] = y; q[Z] = z;
 
@@ -1350,131 +1350,131 @@ char cmsxHullCheckpoint(LCMSHANDLE hHull, int x, int y, int z)
 
 BOOL cmsxHullDumpVRML(LCMSHANDLE hHull, const char* fname)
 {
-	FILE*           fp;
-	int             i;
-	LPHULL hull = (LPHULL) (LPSTR) hHull;
-	
-	fp = fopen (fname, "wt");
-	if (fp == NULL)
-		return false;
+    FILE*           fp;
+    int             i;
+    LPHULL hull = (LPHULL) (LPSTR) hHull;
 
-	fprintf (fp, "#VRML V2.0 utf8\n");
+    fp = fopen (fname, "wt");
+    if (fp == NULL)
+        return false;
 
-	/* set the viewing orientation and distance */
-	fprintf (fp, "DEF CamTest Group {\n");
-	fprintf (fp, "\tchildren [\n"); 
-	fprintf (fp, "\t\tDEF Cameras Group {\n"); 
-	fprintf (fp, "\t\t\tchildren [\n"); 
-	fprintf (fp, "\t\t\t\tDEF DefaultView Viewpoint {\n"); 
-	fprintf (fp, "\t\t\t\t\tposition 0 0 340\n"); 
-	fprintf (fp, "\t\t\t\t\torientation 0 0 1 0\n"); 
-	fprintf (fp, "\t\t\t\t\tdescription \"default view\"\n"); 
-	fprintf (fp, "\t\t\t\t}\n"); 
-	fprintf (fp, "\t\t\t]\n"); 
-	fprintf (fp, "\t\t},\n"); 
-	fprintf (fp, "\t]\n"); 
-	fprintf (fp, "}\n"); 
+    fprintf (fp, "#VRML V2.0 utf8\n");
 
-	/* Output the background stuff */
-	fprintf (fp, "Background {\n");
-	fprintf (fp, "\tskyColor [\n");
-	fprintf (fp, "\t\t.5 .5 .5\n");
-	fprintf (fp, "\t]\n");
-	fprintf (fp, "}\n");
+    /* set the viewing orientation and distance */
+    fprintf (fp, "DEF CamTest Group {\n");
+    fprintf (fp, "\tchildren [\n");
+    fprintf (fp, "\t\tDEF Cameras Group {\n");
+    fprintf (fp, "\t\t\tchildren [\n");
+    fprintf (fp, "\t\t\t\tDEF DefaultView Viewpoint {\n");
+    fprintf (fp, "\t\t\t\t\tposition 0 0 340\n");
+    fprintf (fp, "\t\t\t\t\torientation 0 0 1 0\n");
+    fprintf (fp, "\t\t\t\t\tdescription \"default view\"\n");
+    fprintf (fp, "\t\t\t\t}\n");
+    fprintf (fp, "\t\t\t]\n");
+    fprintf (fp, "\t\t},\n");
+    fprintf (fp, "\t]\n");
+    fprintf (fp, "}\n");
 
-	/* Output the shape stuff */
-	fprintf (fp, "Transform {\n");
-	fprintf (fp, "\tscale 8 8 8\n");
-	fprintf (fp, "\tchildren [\n");
+    /* Output the background stuff */
+    fprintf (fp, "Background {\n");
+    fprintf (fp, "\tskyColor [\n");
+    fprintf (fp, "\t\t.5 .5 .5\n");
+    fprintf (fp, "\t]\n");
+    fprintf (fp, "}\n");
 
-	/* Draw the axes as a shape: */
-	fprintf (fp, "\t\tShape {\n");
-	fprintf (fp, "\t\t\tappearance Appearance {\n");
-	fprintf (fp, "\t\t\t\tmaterial Material {\n");
-	fprintf (fp, "\t\t\t\t\tdiffuseColor 0 0.8 0\n");
-	fprintf (fp, "\t\t\t\t\temissiveColor 1.0 1.0 1.0\n");
-	fprintf (fp, "\t\t\t\t\tshininess 0.8\n");
-	fprintf (fp, "\t\t\t\t}\n");
-	fprintf (fp, "\t\t\t}\n");
-	fprintf (fp, "\t\t\tgeometry IndexedLineSet {\n");
-	fprintf (fp, "\t\t\t\tcoord Coordinate {\n");
-	fprintf (fp, "\t\t\t\t\tpoint [\n");
-	fprintf (fp, "\t\t\t\t\t0.0 0.0 0.0,\n");
-	fprintf (fp, "\t\t\t\t\t%f 0.0 0.0,\n",  255.0);
-	fprintf (fp, "\t\t\t\t\t0.0 %f 0.0,\n",  255.0);
-	fprintf (fp, "\t\t\t\t\t0.0 0.0 %f]\n",  255.0);
-	fprintf (fp, "\t\t\t\t}\n");
-	fprintf (fp, "\t\t\t\tcoordIndex [\n");
-	fprintf (fp, "\t\t\t\t\t0, 1, -1\n");
-	fprintf (fp, "\t\t\t\t\t0, 2, -1\n");
-	fprintf (fp, "\t\t\t\t\t0, 3, -1]\n");
-	fprintf (fp, "\t\t\t}\n");
-	fprintf (fp, "\t\t}\n");
+    /* Output the shape stuff */
+    fprintf (fp, "Transform {\n");
+    fprintf (fp, "\tscale 8 8 8\n");
+    fprintf (fp, "\tchildren [\n");
+
+    /* Draw the axes as a shape: */
+    fprintf (fp, "\t\tShape {\n");
+    fprintf (fp, "\t\t\tappearance Appearance {\n");
+    fprintf (fp, "\t\t\t\tmaterial Material {\n");
+    fprintf (fp, "\t\t\t\t\tdiffuseColor 0 0.8 0\n");
+    fprintf (fp, "\t\t\t\t\temissiveColor 1.0 1.0 1.0\n");
+    fprintf (fp, "\t\t\t\t\tshininess 0.8\n");
+    fprintf (fp, "\t\t\t\t}\n");
+    fprintf (fp, "\t\t\t}\n");
+    fprintf (fp, "\t\t\tgeometry IndexedLineSet {\n");
+    fprintf (fp, "\t\t\t\tcoord Coordinate {\n");
+    fprintf (fp, "\t\t\t\t\tpoint [\n");
+    fprintf (fp, "\t\t\t\t\t0.0 0.0 0.0,\n");
+    fprintf (fp, "\t\t\t\t\t%f 0.0 0.0,\n",  255.0);
+    fprintf (fp, "\t\t\t\t\t0.0 %f 0.0,\n",  255.0);
+    fprintf (fp, "\t\t\t\t\t0.0 0.0 %f]\n",  255.0);
+    fprintf (fp, "\t\t\t\t}\n");
+    fprintf (fp, "\t\t\t\tcoordIndex [\n");
+    fprintf (fp, "\t\t\t\t\t0, 1, -1\n");
+    fprintf (fp, "\t\t\t\t\t0, 2, -1\n");
+    fprintf (fp, "\t\t\t\t\t0, 3, -1]\n");
+    fprintf (fp, "\t\t\t}\n");
+    fprintf (fp, "\t\t}\n");
 
 
-	/* Draw the triangles as a shape: */
-	fprintf (fp, "\t\tShape {\n");
-	fprintf (fp, "\t\t\tappearance Appearance {\n");
-	fprintf (fp, "\t\t\t\tmaterial Material {\n");
-	fprintf (fp, "\t\t\t\t\tdiffuseColor 0 0.8 0\n");
-	fprintf (fp, "\t\t\t\t\temissiveColor 0 0 0\n");
-	fprintf (fp, "\t\t\t\t\tshininess 0.8\n");
-	fprintf (fp, "\t\t\t\t}\n");
-	fprintf (fp, "\t\t\t}\n");
-	fprintf (fp, "\t\t\tgeometry IndexedFaceSet {\n");
-	fprintf (fp, "\t\t\t\tsolid false\n");
+    /* Draw the triangles as a shape: */
+    fprintf (fp, "\t\tShape {\n");
+    fprintf (fp, "\t\t\tappearance Appearance {\n");
+    fprintf (fp, "\t\t\t\tmaterial Material {\n");
+    fprintf (fp, "\t\t\t\t\tdiffuseColor 0 0.8 0\n");
+    fprintf (fp, "\t\t\t\t\temissiveColor 0 0 0\n");
+    fprintf (fp, "\t\t\t\t\tshininess 0.8\n");
+    fprintf (fp, "\t\t\t\t}\n");
+    fprintf (fp, "\t\t\t}\n");
+    fprintf (fp, "\t\t\tgeometry IndexedFaceSet {\n");
+    fprintf (fp, "\t\t\t\tsolid false\n");
 
-	/* fill in the points here */
-	fprintf (fp, "\t\t\t\tcoord Coordinate {\n");
-	fprintf (fp, "\t\t\t\t\tpoint [\n");
+    /* fill in the points here */
+    fprintf (fp, "\t\t\t\tcoord Coordinate {\n");
+    fprintf (fp, "\t\t\t\t\tpoint [\n");
 
-	for (i = 0; i < hull->nvertex; ++i)
-	{
-		fprintf (fp, "\t\t\t\t\t%g %g %g%c\n", 
-			(double) hull->Vertices[i][X], (double) hull->Vertices[i][Y], (double) hull->Vertices[i][Z], 
-			i == hull->nvertex-1? ']': ',');
-	}
-	fprintf (fp, "\t\t\t\t}\n");
+    for (i = 0; i < hull->nvertex; ++i)
+    {
+        fprintf (fp, "\t\t\t\t\t%g %g %g%c\n",
+            (double) hull->Vertices[i][X], (double) hull->Vertices[i][Y], (double) hull->Vertices[i][Z],
+            i == hull->nvertex-1? ']': ',');
+    }
+    fprintf (fp, "\t\t\t\t}\n");
 
-	/* fill in the Vertex indices (followed by -1) */
+    /* fill in the Vertex indices (followed by -1) */
 
-	
-	fprintf (fp, "\t\t\t\tcoordIndex [\n");
-	for (i = 0; i < hull->nfaces; ++i)
-	{
-		fprintf (fp, "\t\t\t\t\t%d, %d, %d, -1\n", 
-			hull->Faces[i][0], hull->Faces[i][1], hull->Faces[i][2]);
-			
-	}
-	fprintf (fp, "]\n");
-	
 
-	/* fill in the face colors */
-	fprintf (fp, "\t\t\t\tcolor Color {\n");
-	fprintf (fp, "\t\t\t\t\tcolor [\n");
-	for (i = 0; i < hull->nfaces; ++i)
-	{
-		int vx, vy, vz;
-		double r, g, b;
+    fprintf (fp, "\t\t\t\tcoordIndex [\n");
+    for (i = 0; i < hull->nfaces; ++i)
+    {
+        fprintf (fp, "\t\t\t\t\t%d, %d, %d, -1\n",
+            hull->Faces[i][0], hull->Faces[i][1], hull->Faces[i][2]);
 
-		vx = hull->Faces[i][0]; vy = hull->Faces[i][1]; vz = hull->Faces[i][2];
-		r = (double) (hull->Vertices[vx][X] + hull->Vertices[vy][X] + hull->Vertices[vz][X]) / (3* 255);
-		g = (double) (hull->Vertices[vx][Y] + hull->Vertices[vy][Y] + hull->Vertices[vz][Y]) / (3* 255);
-		b = (double) (hull->Vertices[vx][Z] + hull->Vertices[vy][Z] + hull->Vertices[vz][Z]) / (3* 255);
+    }
+    fprintf (fp, "]\n");
 
-		fprintf (fp, "\t\t\t\t\t%g %g %g%c\n", r, g, b,			
-			i == hull->nfaces-1? ']': ',');
-	}
-	fprintf (fp, "\t\t\t}\n");
-	
-	fprintf (fp, "\t\t\tcolorPerVertex false\n");
 
-	fprintf (fp, "\t\t\t}\n");
-	fprintf (fp, "\t\t}\n");
-	fprintf (fp, "\t]\n");
-	fprintf (fp, "}\n");
+    /* fill in the face colors */
+    fprintf (fp, "\t\t\t\tcolor Color {\n");
+    fprintf (fp, "\t\t\t\t\tcolor [\n");
+    for (i = 0; i < hull->nfaces; ++i)
+    {
+        int vx, vy, vz;
+        double r, g, b;
 
-	fclose (fp);
+        vx = hull->Faces[i][0]; vy = hull->Faces[i][1]; vz = hull->Faces[i][2];
+        r = (double) (hull->Vertices[vx][X] + hull->Vertices[vy][X] + hull->Vertices[vz][X]) / (3* 255);
+        g = (double) (hull->Vertices[vx][Y] + hull->Vertices[vy][Y] + hull->Vertices[vz][Y]) / (3* 255);
+        b = (double) (hull->Vertices[vx][Z] + hull->Vertices[vy][Z] + hull->Vertices[vz][Z]) / (3* 255);
 
-	return true;
+        fprintf (fp, "\t\t\t\t\t%g %g %g%c\n", r, g, b,
+            i == hull->nfaces-1? ']': ',');
+    }
+    fprintf (fp, "\t\t\t}\n");
+
+    fprintf (fp, "\t\t\tcolorPerVertex false\n");
+
+    fprintf (fp, "\t\t\t}\n");
+    fprintf (fp, "\t\t}\n");
+    fprintf (fp, "\t]\n");
+    fprintf (fp, "}\n");
+
+    fclose (fp);
+
+    return true;
 }
