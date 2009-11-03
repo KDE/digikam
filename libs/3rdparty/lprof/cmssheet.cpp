@@ -164,7 +164,7 @@ typedef struct {
     LPKEYVALUE    ValidKeywords;
     LPKEYVALUE    ValidSampleID;
 
-    char           FileName[MAX_PATH];  
+    char           FileName[MAX_PATH];
     int            lineno;             /* line counter for error reporting */
 
     char           SheetType[MAXSTR];  /* New 1.09 */
@@ -731,7 +731,7 @@ char *AllocString(LPIT8 it8, const char* str)
     ptr = (char *) AllocChunk(it8, Size);
     if (ptr) strncpy (ptr, str, Size);
     return ptr;
-}  
+}
 
 /* Searches through linked list */
 
@@ -837,7 +837,7 @@ LCMSHANDLE cmsxIT8Alloc(void)
     strcpy(it8->SheetType, "IT8.7/2");
 
     /* Initialize predefined properties & data */
-    
+
     for (i=0; i < (int)NUMPREDEFINEDPROPS; i++)
             AddAvailableProperty(it8, PredefinedProperties[i]);
 
@@ -950,7 +950,7 @@ BOOL SetDataFormat(LPIT8 it8, int n, const char *label)
         AllocateDataFormat(it8);
 
     if (it8->DataFormat) {
-                
+
         it8->DataFormat[n] = AllocString(it8, label);
     }
 
@@ -1012,7 +1012,7 @@ BOOL SetData(LPIT8 it8, int nSet, int nField, char *Val)
             return false;
     }
 
-            
+
     it8->Data [nSet * it8 -> nSamples + nField] = AllocString(it8, Val);
     return true;
 }
@@ -1243,10 +1243,6 @@ BOOL DataSection (LPIT8 it8)
 }
 
 
-
-
-
-
 static
 BOOL HeaderSection (LPIT8 it8)
 {
@@ -1298,11 +1294,11 @@ BOOL HeaderSection (LPIT8 it8)
 static
 BOOL ParseIT8(LPIT8 it8)
 {
-    
+
     InSymbol(it8);
 
     if (it8->sy == SIDENT) {
-    
+
             strncpy(it8->SheetType, it8->id, MAXSTR-1);
             InSymbol(it8);
 
@@ -1369,7 +1365,7 @@ void CleanPatchName(char *cell)
        if (lOneNum) {
 
               sprintf(Buffer, "%d", n);
-              strcat(cleaned, Buffer);              
+              strcat(cleaned, Buffer);
        }
 
        if (strcmp(cleaned, "GS0") == 0)
@@ -1398,14 +1394,14 @@ void CookPointers(LPIT8 it8)
 
         if (strcmp(Fld, "SAMPLE_ID") == 0) {
                     it8 -> SampleID = idField;
-                
-        
+
+
         for (i=0; i < it8 -> nPatches; i++) {
 
                 char *Data = GetData(it8, i, idField);
                 if (Data) {
                     char Buffer[256];
-                
+
                     strncpy(Buffer, Data, 255);
                     CleanPatchName(Buffer);
 
@@ -1416,7 +1412,7 @@ void CookPointers(LPIT8 it8)
 
                 }
                 }
-        
+
         }
     }
 
@@ -1518,7 +1514,7 @@ int LocatePatch(LPIT8 it8, const char* cPatch)
     for (i=0; i < it8-> nPatches; i++) {
 
         data = GetData(it8, i, it8->SampleID);
-        
+
         if (data != NULL) {
 
                 if (stricmp(data, cPatch) == 0)
@@ -1539,10 +1535,10 @@ int LocateEmptyPatch(LPIT8 it8, const char* /*cPatch*/)
     for (i=0; i < it8-> nPatches; i++) {
 
         data = GetData(it8, i, it8->SampleID);
-        
-        if (data == NULL) 
+
+        if (data == NULL)
                     return i;
-                
+
         }
 
         return -1;
@@ -1570,7 +1566,7 @@ BOOL cmsxIT8GetDataSetByPos(LCMSHANDLE hIT8, int col, int row, char* Val, int Va
     LPIT8 it8 = (LPIT8) hIT8;
     const char *data =  GetData(it8, row, col);
 
-    if (!data) 
+    if (!data)
     {
         *Val = '\0';
         return false;
@@ -1632,7 +1628,7 @@ BOOL cmsxIT8SetDataSet(LCMSHANDLE hIT8, const char* cPatch,
     iField = LocateSample(it8, cSample);
 
     if (iField < 0) {
-    
+
         cmsSignalError(LCMS_ERRC_ABORTED, "Couldn't find data field %s\n", cSample);
         return false;
         }

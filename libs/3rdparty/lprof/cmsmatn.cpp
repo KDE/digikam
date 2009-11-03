@@ -319,5 +319,3 @@ void MATNprintf(char* name, LPMATN mat)
     }
 }
 #endif
-
-

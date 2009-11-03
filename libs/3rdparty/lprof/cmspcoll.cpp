@@ -42,7 +42,7 @@
 
 BOOL        cdecl cmsxPCollLoadFromSheet(LPMEASUREMENT m, LCMSHANDLE hSheet);
 
-BOOL        cdecl cmsxPCollBuildMeasurement(LPMEASUREMENT m, 
+BOOL        cdecl cmsxPCollBuildMeasurement(LPMEASUREMENT m,
                                             const char *ReferenceSheet,
                                             const char *MeasurementSheet,
                                             DWORD dwNeededSamplesType);
@@ -77,14 +77,14 @@ int          cdecl cmsxPCollPatchesNearNeutral(LPMEASUREMENT m, SETOFPATCHES Val
 int          cdecl cmsxPCollPatchesNearPrimary(LPMEASUREMENT m, SETOFPATCHES Valids,
                                            int nChannel, int need, SETOFPATCHES Result);
 
-int          cdecl cmsxPCollPatchesInLabCube(LPMEASUREMENT m, SETOFPATCHES Valids, 
+int          cdecl cmsxPCollPatchesInLabCube(LPMEASUREMENT m, SETOFPATCHES Valids,
                                            double Lmin, double LMax, double a, double b, SETOFPATCHES Result);
 
-int 	     cdecl cmsxPCollPatchesInGamutLUT(LPMEASUREMENT m, SETOFPATCHES Valids, 
-											  LPLUT Gamut, SETOFPATCHES Result);
+int          cdecl cmsxPCollPatchesInGamutLUT(LPMEASUREMENT m, SETOFPATCHES Valids,
+                                              LPLUT Gamut, SETOFPATCHES Result);
 
-LPPATCH		 cdecl cmsxPCollFindWhite(LPMEASUREMENT m, SETOFPATCHES Valids, double* Distance);
-LPPATCH		 cdecl cmsxPCollFindBlack(LPMEASUREMENT m, SETOFPATCHES Valids, double* Distance);
+LPPATCH         cdecl cmsxPCollFindWhite(LPMEASUREMENT m, SETOFPATCHES Valids, double* Distance);
+LPPATCH         cdecl cmsxPCollFindBlack(LPMEASUREMENT m, SETOFPATCHES Valids, double* Distance);
 LPPATCH      cdecl cmsxPCollFindPrimary(LPMEASUREMENT m, SETOFPATCHES Valids, int Channel, double* Distance);
 
 
@@ -161,7 +161,7 @@ LPPATCH cmsxPCollAddPatchRGB(LPMEASUREMENT m, const char *Name,
                 p -> dwFlags |= PATCH_HAS_Lab;
         }
 
-        
+
         return p;
 }
 
@@ -169,47 +169,47 @@ LPPATCH cmsxPCollAddPatchRGB(LPMEASUREMENT m, const char *Name,
 /* i.e, from 0.0..1.0 or from 0.0..100.0 This routine tries to */
 /* detect such situations */
 
-static 
+static
 void NormalizeColorant(LPMEASUREMENT m)
 {
-	int i, j;
-	double MaxColorant=0;
-	double Normalize;
-
-	
-	for (i=0; i < m -> nPatches; i++) {
+    int i, j;
+    double MaxColorant=0;
+    double Normalize;
 
 
-           LPPATCH p = m -> Patches + i;
-		   	
-		   for (j=0; j < MAXCHANNELS; j++) {
-						if (p ->Colorant.Hexa[j] > MaxColorant)
-								MaxColorant = p ->Colorant.Hexa[j];
-		   }
-	}
-
-	/* Ok, some heuristics */
-
-	if (MaxColorant < 2) 
-		Normalize = 255.0;  /* goes 0..1 */
-	else
-	if (MaxColorant < 102)
-		Normalize = 2.55;  /* goes 0..100 */
-	else
-	if (MaxColorant > 300)
-		Normalize = (255.0 / 65535.0);  /* Goes 0..65535.0 */
-	else 
-		return;		/* Is ok */
-
-
-	/* Rearrange patches */
-	for (i=0; i < m -> nPatches; i++) {
+    for (i=0; i < m -> nPatches; i++) {
 
 
            LPPATCH p = m -> Patches + i;
-		   for (j=0; j < MAXCHANNELS; j++)
-				p ->Colorant.Hexa[j] *= Normalize;
-	}
+
+           for (j=0; j < MAXCHANNELS; j++) {
+                        if (p ->Colorant.Hexa[j] > MaxColorant)
+                                MaxColorant = p ->Colorant.Hexa[j];
+           }
+    }
+
+    /* Ok, some heuristics */
+
+    if (MaxColorant < 2)
+        Normalize = 255.0;  /* goes 0..1 */
+    else
+    if (MaxColorant < 102)
+        Normalize = 2.55;  /* goes 0..100 */
+    else
+    if (MaxColorant > 300)
+        Normalize = (255.0 / 65535.0);  /* Goes 0..65535.0 */
+    else
+        return;        /* Is ok */
+
+
+    /* Rearrange patches */
+    for (i=0; i < m -> nPatches; i++) {
+
+
+           LPPATCH p = m -> Patches + i;
+           for (j=0; j < MAXCHANNELS; j++)
+                p ->Colorant.Hexa[j] *= Normalize;
+    }
 
 }
 
@@ -218,13 +218,13 @@ void NormalizeColorant(LPMEASUREMENT m)
 
 BOOL cmsxPCollLoadFromSheet(LPMEASUREMENT m, LCMSHANDLE hSheet)
 {
-    int i;   
+    int i;
     DWORD dwMask;
 
 
     if (m -> nPatches == 0) {
 
-            m -> nPatches = (int) cmsxIT8GetPropertyDbl(hSheet, "NUMBER_OF_SETS");				
+            m -> nPatches = (int) cmsxIT8GetPropertyDbl(hSheet, "NUMBER_OF_SETS");
             m -> Patches  = (PATCH*)calloc(m -> nPatches, sizeof(PATCH));            // C->C++ : cast
 
             if (m -> Patches == NULL) {
@@ -235,9 +235,9 @@ BOOL cmsxPCollLoadFromSheet(LPMEASUREMENT m, LCMSHANDLE hSheet)
             for (i=0; i < m -> nPatches; i++) {
 
                     LPPATCH p = m -> Patches + i;
-					p -> dwFlags = 0; 
-					cmsxIT8GetPatchName(hSheet, i, p ->Name);				
-                                 
+                    p -> dwFlags = 0;
+                    cmsxIT8GetPatchName(hSheet, i, p ->Name);
+
             }
 
     }
@@ -252,7 +252,7 @@ BOOL cmsxPCollLoadFromSheet(LPMEASUREMENT m, LCMSHANDLE hSheet)
     for (i = 0; i < m->nPatches; i++) {
 
         LPPATCH Patch = m -> Patches + i;
-			      
+
         /* Fill in data according to mask */
 
         if (dwMask & PATCH_HAS_Lab) {
@@ -284,16 +284,16 @@ BOOL cmsxPCollLoadFromSheet(LPMEASUREMENT m, LCMSHANDLE hSheet)
         }
 
         if (dwMask & PATCH_HAS_STD_DE) {
-            
+
             if (cmsxIT8GetDataSetDbl(hSheet, Patch->Name, "STDEV_DE", &Patch -> dEStd))
 
                                 Patch -> dwFlags |= PATCH_HAS_STD_DE;
 
         }
-	
+
     }
 
-	NormalizeColorant(m);
+    NormalizeColorant(m);
     return true;
 }
 
@@ -301,115 +301,115 @@ BOOL cmsxPCollLoadFromSheet(LPMEASUREMENT m, LCMSHANDLE hSheet)
 /* Does save parameters to a empty sheet */
 
 BOOL cmsxPCollSaveToSheet(LPMEASUREMENT m, LCMSHANDLE it8)
-{			
-	int nNumberOfSets   = cmsxPCollCountSet(m, m->Allowed);	
-	int nNumberOfFields = 0;
-	DWORD dwMask = 0;
-	int i;
+{
+    int nNumberOfSets   = cmsxPCollCountSet(m, m->Allowed);
+    int nNumberOfFields = 0;
+    DWORD dwMask = 0;
+    int i;
 
-	/* Find mask of fields */
-	for (i=0; i < m ->nPatches; i++) {
-		if (m ->Allowed[i]) {
+    /* Find mask of fields */
+    for (i=0; i < m ->nPatches; i++) {
+        if (m ->Allowed[i]) {
 
-				LPPATCH p = m ->Patches + i;
-				dwMask |= p ->dwFlags;
-		}
-	}
+                LPPATCH p = m ->Patches + i;
+                dwMask |= p ->dwFlags;
+        }
+    }
 
-	nNumberOfFields = 1; /* SampleID */
+    nNumberOfFields = 1; /* SampleID */
 
-	if (dwMask & PATCH_HAS_RGB)
-			nNumberOfFields += 3;
+    if (dwMask & PATCH_HAS_RGB)
+            nNumberOfFields += 3;
 
-	if (dwMask & PATCH_HAS_XYZ)
-			nNumberOfFields += 3;
+    if (dwMask & PATCH_HAS_XYZ)
+            nNumberOfFields += 3;
 
-	if (dwMask & PATCH_HAS_Lab)
-			nNumberOfFields += 3;
-	
+    if (dwMask & PATCH_HAS_Lab)
+            nNumberOfFields += 3;
+
 
     cmsxIT8SetPropertyDbl(it8, "NUMBER_OF_SETS", nNumberOfSets);
     cmsxIT8SetPropertyDbl(it8, "NUMBER_OF_FIELDS", nNumberOfFields);
 
-	nNumberOfFields = 0;
+    nNumberOfFields = 0;
     cmsxIT8SetDataFormat(it8, nNumberOfFields++, "SAMPLE_ID");
 
-	if (dwMask & PATCH_HAS_RGB) {
+    if (dwMask & PATCH_HAS_RGB) {
 
-		cmsxIT8SetDataFormat(it8, nNumberOfFields++, "RGB_R");
-		cmsxIT8SetDataFormat(it8, nNumberOfFields++, "RGB_G");
-		cmsxIT8SetDataFormat(it8, nNumberOfFields++, "RGB_B");
-	}
-    
-	if (dwMask & PATCH_HAS_XYZ) {
-		
-		cmsxIT8SetDataFormat(it8, nNumberOfFields++, "XYZ_X");
-		cmsxIT8SetDataFormat(it8, nNumberOfFields++, "XYZ_Y");
-		cmsxIT8SetDataFormat(it8, nNumberOfFields++, "XYZ_Z");
-		
-	}
+        cmsxIT8SetDataFormat(it8, nNumberOfFields++, "RGB_R");
+        cmsxIT8SetDataFormat(it8, nNumberOfFields++, "RGB_G");
+        cmsxIT8SetDataFormat(it8, nNumberOfFields++, "RGB_B");
+    }
+
+    if (dwMask & PATCH_HAS_XYZ) {
+
+        cmsxIT8SetDataFormat(it8, nNumberOfFields++, "XYZ_X");
+        cmsxIT8SetDataFormat(it8, nNumberOfFields++, "XYZ_Y");
+        cmsxIT8SetDataFormat(it8, nNumberOfFields++, "XYZ_Z");
+
+    }
 
 
-	if (dwMask & PATCH_HAS_XYZ) {
-		
-		cmsxIT8SetDataFormat(it8, nNumberOfFields++, "LAB_L");
-		cmsxIT8SetDataFormat(it8, nNumberOfFields++, "LAB_A");
-		cmsxIT8SetDataFormat(it8, nNumberOfFields++, "LAB_B");
-		
-	}
+    if (dwMask & PATCH_HAS_XYZ) {
 
-	for (i=0; i < m ->nPatches; i++) {
-		if (m ->Allowed[i]) {
+        cmsxIT8SetDataFormat(it8, nNumberOfFields++, "LAB_L");
+        cmsxIT8SetDataFormat(it8, nNumberOfFields++, "LAB_A");
+        cmsxIT8SetDataFormat(it8, nNumberOfFields++, "LAB_B");
 
-			LPPATCH Patch = m ->Patches + i;
+    }
 
-			cmsxIT8SetDataSet(it8, Patch->Name, "SAMPLE_ID", Patch->Name);
-			
-			if (dwMask & PATCH_HAS_RGB) {
-				cmsxIT8SetDataSetDbl(it8, Patch->Name, "RGB_R", Patch ->Colorant.RGB[0]);
-				cmsxIT8SetDataSetDbl(it8, Patch->Name, "RGB_G", Patch ->Colorant.RGB[1]);
-				cmsxIT8SetDataSetDbl(it8, Patch->Name, "RGB_B", Patch ->Colorant.RGB[2]);
-			} 
+    for (i=0; i < m ->nPatches; i++) {
+        if (m ->Allowed[i]) {
 
-			if (dwMask & PATCH_HAS_XYZ) {
-				cmsxIT8SetDataSetDbl(it8, Patch->Name, "XYZ_X", Patch ->XYZ.X);
-				cmsxIT8SetDataSetDbl(it8, Patch->Name, "XYZ_Y", Patch ->XYZ.Y);
-				cmsxIT8SetDataSetDbl(it8, Patch->Name, "XYZ_Z", Patch ->XYZ.Z);				
-			}	
+            LPPATCH Patch = m ->Patches + i;
 
-			if (dwMask & PATCH_HAS_Lab) {				
-				cmsxIT8SetDataSetDbl(it8, Patch->Name, "LAB_L", Patch ->Lab.L);
-				cmsxIT8SetDataSetDbl(it8, Patch->Name, "LAB_A", Patch ->Lab.a);
-				cmsxIT8SetDataSetDbl(it8, Patch->Name, "LAB_B", Patch ->Lab.b);
-				
-			}	
-		}
-	}
+            cmsxIT8SetDataSet(it8, Patch->Name, "SAMPLE_ID", Patch->Name);
 
-	return true;
+            if (dwMask & PATCH_HAS_RGB) {
+                cmsxIT8SetDataSetDbl(it8, Patch->Name, "RGB_R", Patch ->Colorant.RGB[0]);
+                cmsxIT8SetDataSetDbl(it8, Patch->Name, "RGB_G", Patch ->Colorant.RGB[1]);
+                cmsxIT8SetDataSetDbl(it8, Patch->Name, "RGB_B", Patch ->Colorant.RGB[2]);
+            }
+
+            if (dwMask & PATCH_HAS_XYZ) {
+                cmsxIT8SetDataSetDbl(it8, Patch->Name, "XYZ_X", Patch ->XYZ.X);
+                cmsxIT8SetDataSetDbl(it8, Patch->Name, "XYZ_Y", Patch ->XYZ.Y);
+                cmsxIT8SetDataSetDbl(it8, Patch->Name, "XYZ_Z", Patch ->XYZ.Z);
+            }
+
+            if (dwMask & PATCH_HAS_Lab) {
+                cmsxIT8SetDataSetDbl(it8, Patch->Name, "LAB_L", Patch ->Lab.L);
+                cmsxIT8SetDataSetDbl(it8, Patch->Name, "LAB_A", Patch ->Lab.a);
+                cmsxIT8SetDataSetDbl(it8, Patch->Name, "LAB_B", Patch ->Lab.b);
+
+            }
+        }
+    }
+
+    return true;
 }
 
 static
 void FixLabOnly(LPMEASUREMENT m)
 {
-	int i;
+    int i;
 
-	for (i=0; i < m ->nPatches; i++) {
-	
-			LPPATCH p = m ->Patches + i;
-			if ((p ->dwFlags & PATCH_HAS_Lab) && 
-				!(p ->dwFlags & PATCH_HAS_XYZ))
-			{
-				cmsLab2XYZ(cmsD50_XYZ(), &p->XYZ, &p ->Lab);
+    for (i=0; i < m ->nPatches; i++) {
 
-				p ->XYZ.X *= 100.;
-				p ->XYZ.Y *= 100.;
-				p ->XYZ.Z *= 100.;
+            LPPATCH p = m ->Patches + i;
+            if ((p ->dwFlags & PATCH_HAS_Lab) &&
+                !(p ->dwFlags & PATCH_HAS_XYZ))
+            {
+                cmsLab2XYZ(cmsD50_XYZ(), &p->XYZ, &p ->Lab);
 
-				p ->dwFlags |= PATCH_HAS_XYZ;
-			}
-	
-	}
+                p ->XYZ.X *= 100.;
+                p ->XYZ.Y *= 100.;
+                p ->XYZ.Z *= 100.;
+
+                p ->dwFlags |= PATCH_HAS_XYZ;
+            }
+
+    }
 
 }
 
@@ -437,23 +437,23 @@ void FixLabOnly(LPMEASUREMENT m)
 /* See lprof.h for further info */
 
 
-BOOL cmsxPCollBuildMeasurement(LPMEASUREMENT m, 
+BOOL cmsxPCollBuildMeasurement(LPMEASUREMENT m,
                                const char *ReferenceSheet,
                                const char *MeasurementSheet,
                                DWORD dwNeededSamplesType)
 {
     LCMSHANDLE hSheet;
-	BOOL rc = true;
+    BOOL rc = true;
 
     ZeroMemory(m, sizeof(MEASUREMENT));
 
 
     if (ReferenceSheet != NULL && *ReferenceSheet) {
 
-                hSheet = cmsxIT8LoadFromFile(ReferenceSheet);       
-                if (hSheet == NULL) return false;               
-                
-				rc = cmsxPCollLoadFromSheet(m,  hSheet);
+                hSheet = cmsxIT8LoadFromFile(ReferenceSheet);
+                if (hSheet == NULL) return false;
+
+                rc = cmsxPCollLoadFromSheet(m,  hSheet);
                 cmsxIT8Free(hSheet);
     }
 
@@ -471,10 +471,10 @@ BOOL cmsxPCollBuildMeasurement(LPMEASUREMENT m,
     if (!rc) return false;
 
 
-	/* Fix up -- If only Lab is present, then compute  */
-	/* XYZ based on D50 */
+    /* Fix up -- If only Lab is present, then compute  */
+    /* XYZ based on D50 */
 
-	FixLabOnly(m);
+    FixLabOnly(m);
 
     cmsxPCollValidatePatches(m, dwNeededSamplesType);
     return true;
@@ -489,7 +489,7 @@ void cmsxPCollFreeMeasurements(LPMEASUREMENT m)
 
     m->Patches  = NULL;
     m->nPatches = 0;
-    
+
     if (m -> Allowed)
         free(m -> Allowed);
 
@@ -552,17 +552,17 @@ BOOL cmsxPCollValidatePatches(LPMEASUREMENT m, DWORD dwFlags)
 {
         int i, n;
 
-		if (m->Allowed) 
-				free(m->Allowed);
+        if (m->Allowed)
+                free(m->Allowed);
 
         m -> Allowed = cmsxPCollBuildSet(m, true);
-        
+
         /* Check for flags */
         for (i=n=0; i < m -> nPatches; i++) {
 
-                LPPATCH p = m -> Patches + i;               
+                LPPATCH p = m -> Patches + i;
                 m -> Allowed[i] = ((p -> dwFlags & dwFlags) == dwFlags);
-                
+
         }
 
         return true;
@@ -576,8 +576,8 @@ BOOL cmsxPCollValidatePatches(LPMEASUREMENT m, DWORD dwFlags)
 /* device-color space. Currently only RGB is supported */
 
 static
-void PatchesByRGB(LPMEASUREMENT m, SETOFPATCHES Valids, 
-				  double R, double G, double B, double radius, SETOFPATCHES Result)
+void PatchesByRGB(LPMEASUREMENT m, SETOFPATCHES Valids,
+                  double R, double G, double B, double radius, SETOFPATCHES Result)
 {
     int  i;
     double ra, rmax = sqrt(radius / 255.);
@@ -586,7 +586,7 @@ void PatchesByRGB(LPMEASUREMENT m, SETOFPATCHES Valids,
 
     for (i=0; i < m->nPatches; i++) {
 
-       
+
        if (Valids[i]) {
 
         p = m->Patches + i;
@@ -597,9 +597,9 @@ void PatchesByRGB(LPMEASUREMENT m, SETOFPATCHES Valids,
 
         ra = sqrt(dR*dR + dG*dG + dB*dB);
 
-        if (ra <= rmax) 
-            Result[i] = true;       
-        else 
+        if (ra <= rmax)
+            Result[i] = true;
+        else
             Result[i] = false;
 
        }
@@ -612,7 +612,7 @@ void PatchesByRGB(LPMEASUREMENT m, SETOFPATCHES Valids,
 /* in the device-independent side. */
 /*
 static
-void PatchesByLab(LPMEASUREMENT m, SETOFPATCHES Valids, 
+void PatchesByLab(LPMEASUREMENT m, SETOFPATCHES Valids,
                   double L, double a, double b, double dEmax, SETOFPATCHES Result)
 {
     int  i;
@@ -623,7 +623,7 @@ void PatchesByLab(LPMEASUREMENT m, SETOFPATCHES Valids,
 
     for (i=0; i < m->nPatches; i++) {
 
-       
+
        if (Valids[i]) {
 
         p = m->Patches + i;
@@ -633,10 +633,10 @@ void PatchesByLab(LPMEASUREMENT m, SETOFPATCHES Valids,
         db = fabs(b - p -> Lab.b);
 
         dE = sqrt(dL*dL + da*da + db*db);
-       
-        if (dE <= dEMaxSQR) 
-            Result[i] = true; 
-        else 
+
+        if (dE <= dEMaxSQR)
+            Result[i] = true;
+        else
             Result[i] = false;
        }
     }
@@ -647,24 +647,24 @@ void PatchesByLab(LPMEASUREMENT m, SETOFPATCHES Valids,
 /* stripper used in estimations. */
 
 static
-void  PatchesInLabCube(LPMEASUREMENT m, SETOFPATCHES Valids, 
+void  PatchesInLabCube(LPMEASUREMENT m, SETOFPATCHES Valids,
                             double Lmin, double Lmax, double da, double db, SETOFPATCHES Result)
 {
         int i;
- 
+
         for (i=0; i < m -> nPatches; i++) {
 
-    
+
                 if (Valids[i]) {
 
                         LPPATCH p = m -> Patches + i;
 
-                        if ((p->Lab.L >= Lmin && p->Lab.L <= Lmax) && 
+                        if ((p->Lab.L >= Lmin && p->Lab.L <= Lmax) &&
                             (fabs(p -> Lab.a) < da) &&
-                            (fabs(p -> Lab.b) < db)) 
+                            (fabs(p -> Lab.b) < db))
 
                              Result[i] = true;
-                         else   
+                         else
                              Result[i] = false;
                 }
         }
@@ -674,25 +674,25 @@ void  PatchesInLabCube(LPMEASUREMENT m, SETOFPATCHES Valids,
 /* Restrict to low colorfullness */
 
 static
-void PatchesOfLowC(LPMEASUREMENT m, SETOFPATCHES Valids, 
+void PatchesOfLowC(LPMEASUREMENT m, SETOFPATCHES Valids,
                             double Cmax, SETOFPATCHES Result)
 {
         int i;
-		cmsCIELCh LCh;
- 
+        cmsCIELCh LCh;
+
         for (i=0; i < m -> nPatches; i++) {
 
-    
+
                 if (Valids[i]) {
 
                         LPPATCH p = m -> Patches + i;
 
-						cmsLab2LCh(&LCh, &p->Lab);
+                        cmsLab2LCh(&LCh, &p->Lab);
 
 
                         if (LCh.C < Cmax)
                              Result[i] = true;
-                         else   
+                         else
                              Result[i] = false;
                 }
         }
@@ -705,7 +705,7 @@ void PatchesOfLowC(LPMEASUREMENT m, SETOFPATCHES Valids,
 /* on device-space Colorants. dEMax is the maximum allowed ratio */
 
 static
-void PatchesPrimary(LPMEASUREMENT m, SETOFPATCHES Valids, 
+void PatchesPrimary(LPMEASUREMENT m, SETOFPATCHES Valids,
                            int nColorant, double dEMax, SETOFPATCHES Result)
 {
         int i, j;
@@ -713,7 +713,7 @@ void PatchesPrimary(LPMEASUREMENT m, SETOFPATCHES Valids,
 
         for (i=0; i < m -> nPatches; i++) {
 
-    
+
                 if (Valids[i]) {
 
                         LPPATCH p = m -> Patches + i;
@@ -721,8 +721,8 @@ void PatchesPrimary(LPMEASUREMENT m, SETOFPATCHES Valids,
 
                         if (nColorant < 0) /* device-grey? */
                         {
-							    /* cross. */
-							
+                                /* cross. */
+
                                 double drg = fabs(p -> Colorant.RGB[0] - p -> Colorant.RGB[1]) / 255.;
                                 double drb = fabs(p -> Colorant.RGB[0] - p -> Colorant.RGB[2]) / 255.;
                                 double dbg = fabs(p -> Colorant.RGB[1] - p -> Colorant.RGB[2]) / 255.;
@@ -747,9 +747,9 @@ void PatchesPrimary(LPMEASUREMENT m, SETOFPATCHES Valids,
 
 
 
-                        if (sqrt(dE) < dEMax) 
+                        if (sqrt(dE) < dEMax)
                              Result[i] = true;
-                         else   
+                         else
                              Result[i] = false;
                 }
         }
@@ -760,8 +760,8 @@ void PatchesPrimary(LPMEASUREMENT m, SETOFPATCHES Valids,
 /* The high level extractors ----------------------------------------------------- */
 
 int cmsxPCollPatchesNearRGB(LPMEASUREMENT m, SETOFPATCHES Valids,
-							double r, double g, double b, 
-							int need, SETOFPATCHES Result)
+                            double r, double g, double b,
+                            int need, SETOFPATCHES Result)
 {
     double radius;
     int nCollected;
@@ -784,8 +784,8 @@ int cmsxPCollPatchesNearRGB(LPMEASUREMENT m, SETOFPATCHES Valids,
 }
 
 
-int cmsxPCollPatchesNearNeutral(LPMEASUREMENT m, SETOFPATCHES Valids, 
-								int need, SETOFPATCHES Result)
+int cmsxPCollPatchesNearNeutral(LPMEASUREMENT m, SETOFPATCHES Valids,
+                                int need, SETOFPATCHES Result)
 {
         int nGrays;
         double Cmax;
@@ -794,8 +794,8 @@ int cmsxPCollPatchesNearNeutral(LPMEASUREMENT m, SETOFPATCHES Valids,
         do {
 
 
-				PatchesOfLowC(m, Valids, Cmax, Result);                            
-               
+                PatchesOfLowC(m, Valids, Cmax, Result);
+
                 nGrays = cmsxPCollCountSet(m, Result);
                 if (nGrays <= need) {
 
@@ -808,14 +808,14 @@ int cmsxPCollPatchesNearNeutral(LPMEASUREMENT m, SETOFPATCHES Valids,
 }
 
 
-int cmsxPCollPatchesInLabCube(LPMEASUREMENT m, SETOFPATCHES Valids, 
-                              double Lmin, double Lmax, double a, double b, 
-							  SETOFPATCHES Result)
+int cmsxPCollPatchesInLabCube(LPMEASUREMENT m, SETOFPATCHES Valids,
+                              double Lmin, double Lmax, double a, double b,
+                              SETOFPATCHES Result)
 
 
-{        
+{
         PatchesInLabCube(m, Valids, Lmin, Lmax, a, b, Result);
-        return cmsxPCollCountSet(m, Result);                
+        return cmsxPCollCountSet(m, Result);
 }
 
 
@@ -864,7 +864,7 @@ void AddOneGray(LPMEASUREMENT m, int n, SETOFPATCHES Grays)
 
     p = cmsxPCollGetPatchByName(m, Buffer, &pos);
 
-    if (p) 
+    if (p)
         Grays[pos] = true;
 }
 
@@ -875,7 +875,7 @@ void cmsxPCollPatchesGS(LPMEASUREMENT m, SETOFPATCHES Result)
 
     int i;
 
-    for (i=0; i < cmsxIT8_GRAYCOLS; i++) 
+    for (i=0; i < cmsxIT8_GRAYCOLS; i++)
         AddOneGray(m, i, Result);
 }
 
@@ -900,43 +900,43 @@ void cmsxPCollLinearizePatches(LPMEASUREMENT m, SETOFPATCHES Valids, LPGAMMATABL
 }
 
 
-int cmsxPCollPatchesInGamutLUT(LPMEASUREMENT m, SETOFPATCHES Valids, 
-										LPLUT Gamut, SETOFPATCHES Result)
+int cmsxPCollPatchesInGamutLUT(LPMEASUREMENT m, SETOFPATCHES Valids,
+                                        LPLUT Gamut, SETOFPATCHES Result)
 {
-	int i;
-	int nCollected = 0;
+    int i;
+    int nCollected = 0;
 
     for (i=0; i < m -> nPatches; i++) {
 
        if (Valids[i]) {
 
         LPPATCH p = m -> Patches + i;
-		WORD EncodedLab[3];
-		WORD dE;
+        WORD EncodedLab[3];
+        WORD dE;
 
-		cmsFloat2LabEncoded(EncodedLab, &p->Lab);
-		cmsEvalLUT(Gamut, EncodedLab, &dE);
-		Result[i] = (dE < 2) ? true : false;			        
-		if (Result[i]) nCollected++;
+        cmsFloat2LabEncoded(EncodedLab, &p->Lab);
+        cmsEvalLUT(Gamut, EncodedLab, &dE);
+        Result[i] = (dE < 2) ? true : false;
+        if (Result[i]) nCollected++;
         }
     }
 
-	return nCollected;
+    return nCollected;
 }
 
 LPPATCH cmsxPCollFindWhite(LPMEASUREMENT m, SETOFPATCHES Valids, double* TheDistance)
 {
-	int i;
-	LPPATCH Candidate = NULL;
-	double Distance, CandidateDistance = 255;
-	double dR, dG, dB;
+    int i;
+    LPPATCH Candidate = NULL;
+    double Distance, CandidateDistance = 255;
+    double dR, dG, dB;
 
-	Candidate = cmsxPCollGetPatchByName(m, "DMIN", NULL);
-	if (Candidate) {
+    Candidate = cmsxPCollGetPatchByName(m, "DMIN", NULL);
+    if (Candidate) {
 
-		if (TheDistance) *TheDistance = 0.0;
-		return Candidate;
-	}
+        if (TheDistance) *TheDistance = 0.0;
+        return Candidate;
+    }
 
     for (i=0; i < m -> nPatches; i++) {
 
@@ -944,39 +944,39 @@ LPPATCH cmsxPCollFindWhite(LPMEASUREMENT m, SETOFPATCHES Valids, double* TheDist
 
         LPPATCH p = m -> Patches + i;
 
-		dR = fabs(255.0 - p -> Colorant.RGB[0]) / 255.0;
+        dR = fabs(255.0 - p -> Colorant.RGB[0]) / 255.0;
         dG = fabs(255.0 - p -> Colorant.RGB[1]) / 255.0;
         dB = fabs(255.0 - p -> Colorant.RGB[2]) / 255.0;
 
         Distance = sqrt(dR*dR + dG*dG + dB*dB);
 
-		if (Distance < CandidateDistance) {
-			Candidate = p;
-			CandidateDistance = Distance;
-		}
-	   }		        
+        if (Distance < CandidateDistance) {
+            Candidate = p;
+            CandidateDistance = Distance;
+        }
+       }
     }
 
-	if (TheDistance) 
-		*TheDistance = floor(CandidateDistance * 255.0 + .5);
+    if (TheDistance)
+        *TheDistance = floor(CandidateDistance * 255.0 + .5);
 
-	return Candidate;
+    return Candidate;
 }
 
 LPPATCH cmsxPCollFindBlack(LPMEASUREMENT m, SETOFPATCHES Valids, double* TheDistance)
 {
-	int i;
-	LPPATCH Candidate = NULL;
-	double Distance, CandidateDistance = 255;
-	double dR, dG, dB;
+    int i;
+    LPPATCH Candidate = NULL;
+    double Distance, CandidateDistance = 255;
+    double dR, dG, dB;
 
 
-	Candidate = cmsxPCollGetPatchByName(m, "DMAX", NULL);
-	if (Candidate) {
+    Candidate = cmsxPCollGetPatchByName(m, "DMAX", NULL);
+    if (Candidate) {
 
-		if (TheDistance) *TheDistance = 0.0;
-		return Candidate;
-	}
+        if (TheDistance) *TheDistance = 0.0;
+        return Candidate;
+    }
 
     for (i=0; i < m -> nPatches; i++) {
 
@@ -984,39 +984,39 @@ LPPATCH cmsxPCollFindBlack(LPMEASUREMENT m, SETOFPATCHES Valids, double* TheDist
 
         LPPATCH p = m -> Patches + i;
 
-		dR = (p -> Colorant.RGB[0]) / 255.0;
+        dR = (p -> Colorant.RGB[0]) / 255.0;
         dG = (p -> Colorant.RGB[1]) / 255.0;
         dB = (p -> Colorant.RGB[2]) / 255.0;
 
         Distance = sqrt(dR*dR + dG*dG + dB*dB);
 
-		if (Distance < CandidateDistance) {
-			Candidate = p;
-			CandidateDistance = Distance;
-		}
-	   }		        
+        if (Distance < CandidateDistance) {
+            Candidate = p;
+            CandidateDistance = Distance;
+        }
+       }
     }
 
-	if (TheDistance) 
-		*TheDistance = floor(CandidateDistance * 255.0 + .5);
+    if (TheDistance)
+        *TheDistance = floor(CandidateDistance * 255.0 + .5);
 
-	return Candidate;
+    return Candidate;
 }
 
 
 LPPATCH cmsxPCollFindPrimary(LPMEASUREMENT m, SETOFPATCHES Valids, int Channel, double* TheDistance)
 {
-	int i;
-	LPPATCH Candidate = NULL;
-	double Distance, CandidateDistance = 255;
-	double dR, dG, dB;
-	const struct { 
-				 double r, g, b; 
+    int i;
+    LPPATCH Candidate = NULL;
+    double Distance, CandidateDistance = 255;
+    double dR, dG, dB;
+    const struct {
+                 double r, g, b;
 
-				} RGBPrimaries[3] = {		
-					{ 255.0, 0, 0}, 
-					{ 0, 255.0, 0},
-					{ 0, 0, 255  }};
+                } RGBPrimaries[3] = {
+                    { 255.0, 0, 0},
+                    { 0, 255.0, 0},
+                    { 0, 0, 255  }};
 
 
     for (i=0; i < m -> nPatches; i++) {
@@ -1025,21 +1025,21 @@ LPPATCH cmsxPCollFindPrimary(LPMEASUREMENT m, SETOFPATCHES Valids, int Channel, 
 
         LPPATCH p = m -> Patches + i;
 
-		dR = fabs(RGBPrimaries[Channel].r - p -> Colorant.RGB[0]) / 255.0;
+        dR = fabs(RGBPrimaries[Channel].r - p -> Colorant.RGB[0]) / 255.0;
         dG = fabs(RGBPrimaries[Channel].g - p -> Colorant.RGB[1]) / 255.0;
         dB = fabs(RGBPrimaries[Channel].b - p -> Colorant.RGB[2]) / 255.0;
 
         Distance = sqrt(dR*dR + dG*dG + dB*dB);
 
-		if (Distance < CandidateDistance) {
-			Candidate = p;
-			CandidateDistance = Distance;
-		}
-	   }		        
+        if (Distance < CandidateDistance) {
+            Candidate = p;
+            CandidateDistance = Distance;
+        }
+       }
     }
 
-	if (TheDistance) 
-		*TheDistance = floor(CandidateDistance * 255.0 + .5);
+    if (TheDistance)
+        *TheDistance = floor(CandidateDistance * 255.0 + .5);
 
-	return Candidate;
+    return Candidate;
 }

@@ -58,7 +58,7 @@ BOOL cdecl cmsxRegressionInterpolatorRGB(LPMEASUREMENT m,
 static
 void EstimateRegression(LPMEASUREMENT m, double r, double g, double b,
                                         int ColorSpace,
-                                        LPMATN* ptfm,                                        
+                                        LPMATN* ptfm,
                                         int nterms,
                                         BOOL lIncludeAllPatches,
                                         int MinPatchesToCollect)
@@ -110,7 +110,7 @@ void EstimateRegression(LPMEASUREMENT m, double r, double g, double b,
 
                 maxAns.R2adj = -100;  /* No, repeat               */
         }
-	
+
 
     } while (!lPatchesExhausted && maxAns.R2adj < 0.95);
 
@@ -125,7 +125,7 @@ void EstimateRegression(LPMEASUREMENT m, double r, double g, double b,
 
 
 BOOL cmsxRegressionInterpolatorRGB(LPMEASUREMENT m,
-                                       int ColorSpace,                                       
+                                       int ColorSpace,
                                        int    RegressionTerms,
                                        BOOL   lUseLocalPatches,
                                        int    MinPatchesToCollect,
@@ -134,11 +134,11 @@ BOOL cmsxRegressionInterpolatorRGB(LPMEASUREMENT m,
 {
     LPMATN   tfm = NULL;
 
-            
-	EstimateRegression(m, r, g, b, ColorSpace, &tfm, RegressionTerms, 
-									!lUseLocalPatches, MinPatchesToCollect);
 
-	if (tfm == NULL) return false; 
+    EstimateRegression(m, r, g, b, ColorSpace, &tfm, RegressionTerms,
+                                    !lUseLocalPatches, MinPatchesToCollect);
+
+    if (tfm == NULL) return false;
 
     switch (ColorSpace) {
 
@@ -170,20 +170,20 @@ BOOL cmsxRegressionInterpolatorRGB(LPMEASUREMENT m,
 /* Check the results of a given regression matrix */
 
 static
-void CheckOneRegressionMatrix(LPPROFILERCOMMONDATA hdr, LPMATN Matrix, 
-										double* Mean, double* Std, double* Max)
+void CheckOneRegressionMatrix(LPPROFILERCOMMONDATA hdr, LPMATN Matrix,
+                                        double* Mean, double* Std, double* Max)
 {
 
     cmsCIELab Lab;
     cmsCIEXYZ XYZ;
     double Hit, sum, sum2, n, dE;
     int i;
-	cmsCIEXYZ D50;
+    cmsCIEXYZ D50;
 
 
-	D50.X = cmsD50_XYZ() -> X* 100.;
-	D50.Y = cmsD50_XYZ() -> Y* 100.;
-	D50.Z = cmsD50_XYZ() -> Z* 100.;
+    D50.X = cmsD50_XYZ() -> X* 100.;
+    D50.Y = cmsD50_XYZ() -> Y* 100.;
+    D50.Z = cmsD50_XYZ() -> Z* 100.;
 
     Hit = sum = sum2 = n = 0;
     for (i=0; i < hdr -> m.nPatches; i++) {
@@ -196,7 +196,7 @@ void CheckOneRegressionMatrix(LPPROFILERCOMMONDATA hdr, LPMATN Matrix,
 
                     WORD ProfileLabEncoded[3];
 
-                    cmsxRegressionRGB2Lab(p -> Colorant.RGB[0], 
+                    cmsxRegressionRGB2Lab(p -> Colorant.RGB[0],
                                         p -> Colorant.RGB[1],
                                         p -> Colorant.RGB[2],
                                         Matrix, &Lab);
@@ -209,11 +209,11 @@ void CheckOneRegressionMatrix(LPPROFILERCOMMONDATA hdr, LPMATN Matrix,
             else {
                     cmsCIELab Lab2;
 
-                    cmsxRegressionRGB2XYZ(p -> Colorant.RGB[0], 
+                    cmsxRegressionRGB2XYZ(p -> Colorant.RGB[0],
                                         p -> Colorant.RGB[1],
                                         p -> Colorant.RGB[2],
                                         Matrix, &XYZ);
-					_cmsxClampXYZ100(&XYZ);
+                    _cmsxClampXYZ100(&XYZ);
 
                     cmsXYZ2Lab(&D50, &Lab, &XYZ);
                     cmsXYZ2Lab(&D50, &Lab2, &p ->XYZ);
@@ -249,19 +249,19 @@ int cmsxFindOptimumNumOfTerms(LPPROFILERCOMMONDATA hdr, int nMaxTerms, BOOL* lAl
     MLRSTATISTICS Stat;
     double dEmean, dEStd, dEHit, Best;
     BOOL lOneFound;
-	
+
 
     BestTerms = 4;
     Best = 1000.;
     lOneFound = false;
 
-    for (i=4; i <= nMaxTerms; i++) {		/* 55 */
+    for (i=4; i <= nMaxTerms; i++) {        /* 55 */
 
-            rc = cmsxRegressionCreateMatrix(&hdr -> m, hdr -> m.Allowed, 
+            rc = cmsxRegressionCreateMatrix(&hdr -> m, hdr -> m.Allowed,
                                        i, hdr -> PCSType, &Matrix, &Stat);
 
             if (rc && Stat.R2adj < 1 && Stat.R2adj > 0.6) {
-                
+
                 CheckOneRegressionMatrix(hdr, Matrix, &dEmean, &dEStd, &dEHit);
 
                 if (dEStd < Best && dEHit < 50.) {
@@ -277,8 +277,6 @@ int cmsxFindOptimumNumOfTerms(LPPROFILERCOMMONDATA hdr, int nMaxTerms, BOOL* lAl
     }
 
     *lAllOk = lOneFound;
-	
+
     return BestTerms;
 }
-
-
