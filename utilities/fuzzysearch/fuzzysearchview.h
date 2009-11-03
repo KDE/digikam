@@ -61,7 +61,7 @@ public:
 
     void newDuplicatesSearch(Album*);
 
-    Q_SIGNALS:
+Q_SIGNALS:
 
     void signalUpdateFingerPrints();
     void signalGenerateFingerPrintsFirstTime();
@@ -70,26 +70,6 @@ protected:
 
     void dragEnterEvent(QDragEnterEvent *e);
     void dropEvent(QDropEvent *e);
-
-private:
-
-    void setCurrentImage(qlonglong imageid);
-    void setCurrentImage(const ImageInfo& info);
-
-    void readConfig();
-    void writeConfig();
-
-    void createNewFuzzySearchAlbumFromSketch(const QString& name);
-    void createNewFuzzySearchAlbumFromImage(const QString& name);
-
-    bool checkName(QString& name);
-    bool checkAlbum(const QString& name) const;
-
-    void setColor(QColor c);
-
-    QWidget* setupFindSimilarPanel();
-    QWidget* setupSketchPanel();
-    void     setupConnections();
 
 private Q_SLOTS:
 
@@ -114,6 +94,27 @@ private Q_SLOTS:
 
     void slotLevelImageChanged();
     void slotTimerImageDone();
+
+private:
+
+    void setCurrentImage(qlonglong imageid);
+    void setCurrentImage(const ImageInfo& info);
+
+    void readConfig();
+    void writeConfig();
+
+    void createNewFuzzySearchAlbumFromSketch(const QString& name);
+    void createNewFuzzySearchAlbumFromImage(const QString& name);
+
+    bool checkName(QString& name);
+    bool checkAlbum(const QString& name) const;
+
+    void setColor(QColor c);
+
+    QWidget* setupFindSimilarPanel();
+    QWidget* setupSketchPanel();
+    void     setupConnections();
+
 
 private:
 

@@ -485,8 +485,6 @@ FuzzySearchView::~FuzzySearchView()
     delete d;
 }
 
-// Common methods ----------------------------------------------------------------------
-
 void FuzzySearchView::newDuplicatesSearch(Album* album)
 {
     if (album)
