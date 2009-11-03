@@ -195,9 +195,10 @@ void FolderView::resizeEvent(QResizeEvent* e)
     Q3ListViewItemIterator it(this);
     while (it.current())
     {
-        int w = (*it)->width(fontMetrics(), this, 0) +
-                (*it)->pixmap(0)->width() + 5 + (itemMargin() * 2) +
-                ((*it)->depth() * treeStepSize());
+        int pwidth = (*it)->pixmap(0) ? (*it)->pixmap(0)->width() : 0;
+        int w      = (*it)->width(fontMetrics(), this, 0) +
+                     pwidth + 5 + (itemMargin() * 2) +
+                     ((*it)->depth() * treeStepSize());
 
         maxw = qMax<int>(w, maxw);
         ++it;
