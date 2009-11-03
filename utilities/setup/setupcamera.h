@@ -29,6 +29,10 @@
 
 #include <QScrollArea>
 
+// Local includes
+
+#include "dbusydlg.h"
+
 namespace Digikam
 {
 
@@ -66,6 +70,33 @@ private:
     SetupCameraPriv* const d;
 };
 
+// -------------------------------------------------------------------------
+
+class CameraAutoDetectThread : public DBusyThread
+{
+    Q_OBJECT
+
+public:
+
+    CameraAutoDetectThread(QObject *parent);
+    virtual ~CameraAutoDetectThread();
+
+    int     result();
+    QString model() const;
+    QString port() const;
+
+private:
+
+    void run();
+
+private:
+
+    int     m_result;
+
+    QString m_model;
+    QString m_port;
+};
+
 }  // namespace Digikam
 
-#endif // SETUPCAMERA_H 
+#endif // SETUPCAMERA_H

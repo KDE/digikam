@@ -104,6 +104,39 @@ private:
 
 // -------------------------------------------------------------------
 
+CameraAutoDetectThread::CameraAutoDetectThread(QObject *parent)
+                      : DBusyThread(parent)
+{
+    m_result = -1;
+}
+
+CameraAutoDetectThread::~CameraAutoDetectThread()
+{
+}
+
+void CameraAutoDetectThread::run()
+{
+    m_result = GPCamera::autoDetect(m_model, m_port);
+    emit signalComplete();
+}
+
+int CameraAutoDetectThread::result()
+{
+    return(m_result);
+}
+
+QString CameraAutoDetectThread::model() const
+{
+    return(m_model);
+}
+
+QString CameraAutoDetectThread::port() const
+{
+    return(m_port);
+}
+
+// -------------------------------------------------------------------
+
 class SetupCameraPriv
 {
 public:
@@ -324,11 +357,14 @@ void SetupCamera::slotEditedCamera(const QString& title, const QString& model,
 
 void SetupCamera::slotAutoDetectCamera()
 {
-    QString model, port;
+    DBusyDlg *dlg                  = new DBusyDlg(i18n("Device detection under progress, please wait..."), this);
+    CameraAutoDetectThread *thread = new CameraAutoDetectThread(this);
+    dlg->setBusyThread(thread);
+    dlg->exec();
 
-    kapp->setOverrideCursor(Qt::WaitCursor);
-    int ret = GPCamera::autoDetect(model, port);
-    kapp->restoreOverrideCursor();
+    QString model = thread->model();
+    QString port  = thread->port();
+    int ret       = thread->result();
 
     if (ret != 0)
     {
