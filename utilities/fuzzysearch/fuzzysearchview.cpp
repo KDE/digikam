@@ -223,11 +223,7 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 
 QWidget* FuzzySearchView::setupFindSimilarPanel()
 {
-    QWidget* imagePanel = new QWidget;
-    QGridLayout *grid   = new QGridLayout(imagePanel);
-    QWidget *box2       = new QWidget(imagePanel);
-    QVBoxLayout *vlay3  = new QVBoxLayout(box2);
-    KHBox *imageBox     = new KHBox(box2);
+    KHBox* imageBox     = new KHBox();
     d->imageWidget      = new QLabel(imageBox);
     d->imageWidget->setFixedSize(256, 256);
     d->imageWidget->setText(i18n("<p>Drag & drop an image here<br/>to perform similar<br/>items search.</p>"
@@ -236,18 +232,12 @@ QWidget* FuzzySearchView::setupFindSimilarPanel()
     imageBox->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     imageBox->setLineWidth(1);
 
-    vlay3->addStretch(10);
-    vlay3->addWidget(imageBox, 0, Qt::AlignCenter);
-    vlay3->addStretch(10);
-    vlay3->setMargin(0);
-    vlay3->setSpacing(0);
-
     // ---------------------------------------------------------------
 
-    QLabel *file   = new QLabel(i18n("<b>File</b>:"), imagePanel);
-    d->labelFile   = new KSqueezedTextLabel(0, imagePanel);
-    QLabel *folder = new QLabel(i18n("<b>Folder</b>:"), imagePanel);
-    d->labelFolder = new KSqueezedTextLabel(0, imagePanel);
+    QLabel* file   = new QLabel(i18n("<b>File</b>:"));
+    d->labelFile   = new KSqueezedTextLabel(0);
+    QLabel *folder = new QLabel(i18n("<b>Folder</b>:"));
+    d->labelFolder = new KSqueezedTextLabel(0);
     int hgt        = fontMetrics().height()-2;
     file->setMaximumHeight(hgt);
     folder->setMaximumHeight(hgt);
@@ -256,146 +246,139 @@ QWidget* FuzzySearchView::setupFindSimilarPanel()
 
     // ---------------------------------------------------------------
 
-    KHBox *hbox3          = new KHBox(imagePanel);
-    QLabel *resultsLabel2 = new QLabel(i18n("Threshold:"), hbox3);
-    d->levelImage         = new QSpinBox(hbox3);
+    QLabel* resultsLabel  = new QLabel(i18n("Threshold:"));
+    d->levelImage         = new QSpinBox();
     d->levelImage->setSuffix(QChar('%'));
     d->levelImage->setRange(1, 100);
     d->levelImage->setSingleStep(1);
     d->levelImage->setValue(90);
     d->levelImage->setWhatsThis(i18n("Select here the approximate threshold "
-            "value, as a percentage. "
-            "This value is used by the algorithm to distinguish two "
-            "similar images. The default value is 90."));
-
-    hbox3->setStretchFactor(resultsLabel2, 10);
-    hbox3->setMargin(0);
-    hbox3->setSpacing(KDialog::spacingHint());
+                                     "value, as a percentage. "
+                                     "This value is used by the algorithm to distinguish two "
+                                     "similar images. The default value is 90."));
 
     // ---------------------------------------------------------------
 
-    KHBox *hbox4     = new KHBox(imagePanel);
-    hbox4->setMargin(0);
-    hbox4->setSpacing(KDialog::spacingHint());
+    KHBox* saveBox = new KHBox();
+    saveBox->setMargin(0);
+    saveBox->setSpacing(KDialog::spacingHint());
 
-    d->nameEditImage = new KLineEdit(hbox4);
+    d->nameEditImage = new KLineEdit(saveBox);
     d->nameEditImage->setClearButtonShown(true);
     d->nameEditImage->setWhatsThis(i18n("Enter the name of the current similar image search to save in the "
-            "\"My Fuzzy Searches\" view."));
+                                        "\"My Fuzzy Searches\" view."));
 
-    d->saveBtnImage  = new QToolButton(hbox4);
+    d->saveBtnImage  = new QToolButton(saveBox);
     d->saveBtnImage->setIcon(SmallIcon("document-save"));
     d->saveBtnImage->setEnabled(false);
     d->saveBtnImage->setToolTip(i18n("Save current similar image search to a new virtual Album"));
     d->saveBtnImage->setWhatsThis(i18n("If you press this button, the current "
-            "similar image search will be saved to a new search "
-            "virtual album using name "
-            "set on the left side."));
+                                       "similar image search will be saved to a new search "
+                                       "virtual album using name "
+                                       "set on the left side."));
 
     // ---------------------------------------------------------------
 
-    grid->addWidget(box2,           0, 0, 1, 3);
-    grid->addWidget(file,           1, 0, 1, 1);
-    grid->addWidget(d->labelFile,   1, 1, 1, 1);
-    grid->addWidget(folder,         2, 0, 1, 1);
-    grid->addWidget(d->labelFolder, 2, 1, 1, 1);
-    grid->addWidget(hbox3,          3, 0, 1, 3);
-    grid->addWidget(hbox4,          4, 0, 1, 3);
-    grid->setRowStretch(5, 10);
-    grid->setColumnStretch(1, 10);
-    grid->setMargin(KDialog::spacingHint());
-    grid->setSpacing(KDialog::spacingHint());
+    QWidget* mainWidget     = new QWidget();
+    QGridLayout* mainLayout = new QGridLayout();
+    mainLayout->addWidget(imageBox,       0, 0, 1,-1);
+    mainLayout->addWidget(file,           1, 0, 1, 1);
+    mainLayout->addWidget(d->labelFile,   1, 1, 1,-1);
+    mainLayout->addWidget(folder,         2, 0, 1, 1);
+    mainLayout->addWidget(d->labelFolder, 2, 1, 1,-1);
+    mainLayout->addWidget(resultsLabel,   3, 0, 1, 1);
+    mainLayout->addWidget(d->levelImage,  3, 2, 1,-1);
+    mainLayout->addWidget(saveBox,        4, 0, 1, 3);
+    mainLayout->setRowStretch(5, 10);
+    mainLayout->setColumnStretch(1, 10);
+    mainLayout->setMargin(KDialog::spacingHint());
+    mainLayout->setSpacing(KDialog::spacingHint());
+    mainWidget->setLayout(mainLayout);
 
-    return imagePanel;
+    return mainWidget;
 }
 
 QWidget* FuzzySearchView::setupSketchPanel()
 {
-    QWidget *sketchPanel = new QWidget;
-    QGridLayout *grid2   = new QGridLayout(sketchPanel);
-    QWidget *box         = new QWidget(sketchPanel);
-    QVBoxLayout *vlay2   = new QVBoxLayout(box);
-    KHBox *drawingBox    = new KHBox(box);
-    d->sketchWidget      = new SketchWidget(drawingBox);
+    KHBox* drawingBox = new KHBox();
+    d->sketchWidget   = new SketchWidget(drawingBox);
     drawingBox->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     drawingBox->setLineWidth(1);
 
-    vlay2->addStretch(10);
-    vlay2->addWidget(drawingBox, 0, Qt::AlignCenter);
-    vlay2->addStretch(10);
-    vlay2->setMargin(0);
-    vlay2->setSpacing(0);
-
     // ---------------------------------------------------------------
 
-    QString tips(i18n("Set here the brush color used to draw sketch."));
+    QString tooltip(i18n("Set here the brush color used to draw sketch."));
 
-    d->hsSelector = new KHueSaturationSelector(sketchPanel);
+    d->hsSelector = new KHueSaturationSelector();
     d->hsSelector->setMinimumSize(200, 96);
     d->hsSelector->setChooserMode(ChooserValue);
     d->hsSelector->setColorValue(255);
-    d->hsSelector->setWhatsThis(tips);
+    d->hsSelector->setWhatsThis(tooltip);
 
-    d->vSelector  = new KColorValueSelector(sketchPanel);
+    d->vSelector  = new KColorValueSelector();
     d->vSelector->setMinimumSize(26, 96);
     d->vSelector->setChooserMode(ChooserValue);
     d->vSelector->setIndent(false);
-    d->vSelector->setWhatsThis(tips);
+    d->vSelector->setWhatsThis(tooltip);
 
     // ---------------------------------------------------------------
 
-    KHBox *hbox        = new KHBox(sketchPanel);
-
-    d->undoBtnSketch   = new QToolButton(hbox);
+    d->undoBtnSketch   = new QToolButton();
     d->undoBtnSketch->setAutoRepeat(true);
     d->undoBtnSketch->setIcon(SmallIcon("edit-undo"));
     d->undoBtnSketch->setToolTip(i18n("Undo last draw on sketch"));
     d->undoBtnSketch->setWhatsThis(i18n("Use this button to undo last drawing action on sketch."));
     d->undoBtnSketch->setEnabled(false);
 
-    d->redoBtnSketch   = new QToolButton(hbox);
+    d->redoBtnSketch   = new QToolButton();
     d->redoBtnSketch->setAutoRepeat(true);
     d->redoBtnSketch->setIcon(SmallIcon("edit-redo"));
     d->redoBtnSketch->setToolTip(i18n("Redo last draw on sketch"));
     d->redoBtnSketch->setWhatsThis(i18n("Use this button to redo last drawing action on sketch."));
     d->redoBtnSketch->setEnabled(false);
 
-    QLabel *brushLabel = new QLabel(i18n("Pen:"), hbox);
-    d->penSize         = new QSpinBox(hbox);
+    QLabel* brushLabel = new QLabel(i18n("Pen:"));
+    d->penSize         = new QSpinBox();
     d->penSize->setRange(1, 40);
     d->penSize->setSingleStep(1);
     d->penSize->setValue(10);
     d->penSize->setWhatsThis(i18n("Set here the brush size in pixels used to draw sketch."));
 
-    QLabel *resultsLabel = new QLabel(i18n("Items:"), hbox);
-    d->resultsSketch     = new QSpinBox(hbox);
+    QLabel* resultsLabel = new QLabel(i18n("Items:"));
+    d->resultsSketch     = new QSpinBox();
     d->resultsSketch->setRange(1, 50);
     d->resultsSketch->setSingleStep(1);
     d->resultsSketch->setValue(10);
     d->resultsSketch->setWhatsThis(i18n("Set here the number of items to find using sketch."));
 
-    hbox->setStretchFactor(brushLabel, 10);
-    hbox->setStretchFactor(resultsLabel, 10);
-    hbox->setMargin(0);
-    hbox->setSpacing(KDialog::spacingHint());
+    QGridLayout* settingsLayout = new QGridLayout();
+    settingsLayout->addWidget(d->undoBtnSketch, 0, 0);
+    settingsLayout->addWidget(d->redoBtnSketch, 0, 1);
+    settingsLayout->addWidget(brushLabel,       0, 2);
+    settingsLayout->addWidget(d->penSize,       0, 3);
+    settingsLayout->addWidget(resultsLabel,     0, 5);
+    settingsLayout->addWidget(d->resultsSketch, 0, 6);
+    settingsLayout->setColumnStretch(4, 10);
+    settingsLayout->setMargin(0);
+    settingsLayout->setSpacing(KDialog::spacingHint());
 
     // ---------------------------------------------------------------
 
-    KHBox *hbox2      = new KHBox(sketchPanel);
-    hbox2->setMargin(0);
-    hbox2->setSpacing(KDialog::spacingHint());
+    KHBox* saveBox = new KHBox();
+    saveBox->setMargin(0);
+    saveBox->setSpacing(KDialog::spacingHint());
 
-    d->resetButton    = new QToolButton(hbox2);
+    d->resetButton = new QToolButton(saveBox);
     d->resetButton->setIcon(SmallIcon("document-revert"));
     d->resetButton->setToolTip(i18n("Clear sketch"));
     d->resetButton->setWhatsThis(i18n("Use this button to clear sketch contents."));
 
-    d->nameEditSketch = new KLineEdit(hbox2);
+    d->nameEditSketch = new KLineEdit(saveBox);
     d->nameEditSketch->setClearButtonShown(true);
     d->nameEditSketch->setWhatsThis(i18n("Enter the name of the current sketch search to save in the "
                                          "\"My Fuzzy Searches\" view."));
 
-    d->saveBtnSketch  = new QToolButton(hbox2);
+    d->saveBtnSketch = new QToolButton(saveBox);
     d->saveBtnSketch->setIcon(SmallIcon("document-save"));
     d->saveBtnSketch->setEnabled(false);
     d->saveBtnSketch->setToolTip(i18n("Save current sketch search to a new virtual Album"));
@@ -406,17 +389,20 @@ QWidget* FuzzySearchView::setupSketchPanel()
 
     // ---------------------------------------------------------------
 
-    grid2->addWidget(box,            0, 0, 1, 3);
-    grid2->addWidget(d->hsSelector,  1, 0, 1, 2);
-    grid2->addWidget(d->vSelector,   1, 2, 1, 1);
-    grid2->addWidget(hbox,           2, 0, 1, 3);
-    grid2->addWidget(hbox2,          3, 0, 1, 3);
-    grid2->setRowStretch(5, 10);
-    grid2->setColumnStretch(1, 10);
-    grid2->setMargin(KDialog::spacingHint());
-    grid2->setSpacing(KDialog::spacingHint());
+    QWidget* mainWidget     = new QWidget;
+    QGridLayout* mainLayout = new QGridLayout();
+    mainLayout->addWidget(drawingBox,     0, 0, 1, 3);
+    mainLayout->addWidget(d->hsSelector,  1, 0, 1, 2);
+    mainLayout->addWidget(d->vSelector,   1, 2, 1, 1);
+    mainLayout->addLayout(settingsLayout, 2, 0, 1, 3);
+    mainLayout->addWidget(saveBox,        3, 0, 1, 3);
+    mainLayout->setRowStretch(5, 10);
+    mainLayout->setColumnStretch(1, 10);
+    mainLayout->setMargin(KDialog::spacingHint());
+    mainLayout->setSpacing(KDialog::spacingHint());
+    mainWidget->setLayout(mainLayout);
 
-    return sketchPanel;
+    return mainWidget;
 }
 
 void FuzzySearchView::setupConnections()
