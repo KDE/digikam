@@ -37,15 +37,23 @@ the same distribution terms that you use for the rest of that program.
 
 #ifndef __cmsprf_H
 
+// liblcms includes.
+
 #include <lcms.h>
 
-#include <ctype.h>
-#include <limits.h>
-#include <stdarg.h>
+// C++ includes.
+
+#include <cctype>
+#include <climits>
+#include <cstdarg>
+
+// C Ansi includes.
+
 #include <sys/stat.h>
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 #ifdef NON_WINDOWS
@@ -58,20 +66,21 @@ extern "C" {
 #define max(a,b) ((a) > (b)?(a):(b))
 #endif
 
-
-/* Matrix operations - arbitrary size ----------------------------------------------------- */
-
-typedef struct {
-
-    int       Cols, Rows;
-    double**  Values;
-
-    } MATN,FAR* LPMATN;
-
 // See B.K.O #148930: compile with lcms v.1.17
 #if (LCMS_VERSION > 116)
 typedef LCMSBOOL BOOL;
 #endif
+
+
+/* Matrix operations - arbitrary size ----------------------------------------------------- */
+
+typedef struct
+{
+
+    int       Cols, Rows;
+    double**  Values;
+
+} MATN,FAR* LPMATN;
 
 LPMATN      cdecl MATNalloc(int Rows, int Cols);
 void        cdecl MATNfree (LPMATN mat);
@@ -107,23 +116,12 @@ double      cdecl cmsxIT8GetPropertyDbl(LCMSHANDLE hcmsxIT8, const char* cProp);
 int         cdecl cmsxIT8EnumProperties(LCMSHANDLE cmsxIT8, char ***PropertyNames);
 int         cdecl cmsxIT8EnumDataFormat(LCMSHANDLE cmsxIT8, char ***SampleNames);
 BOOL        cdecl cmsxIT8SetDataFormat(LCMSHANDLE cmsxIT8, int n, const char *Sample);
-
 BOOL        cdecl cmsxIT8GetDataSetByPos(LCMSHANDLE IT8, int col, int row, char* Val, int ValBufferLen);
-
-BOOL        cdecl cmsxIT8GetDataSet(LCMSHANDLE cmsxIT8, const char* cPatch,
-                        const char* cSample,
-                        char* Val, int ValBuffLen);
-
+BOOL        cdecl cmsxIT8GetDataSet(LCMSHANDLE cmsxIT8, const char* cPatch, const char* cSample, char* Val, int ValBuffLen);
 BOOL        cdecl cmsxIT8GetDataSetDbl(LCMSHANDLE cmsxIT8, const char* cPatch, const char* cSample, double* v);
-
-BOOL        cdecl cmsxIT8SetDataSet(LCMSHANDLE cmsxIT8, const char* cPatch,
-                        const char* cSample,
-                        char *Val);
-
+BOOL        cdecl cmsxIT8SetDataSet(LCMSHANDLE cmsxIT8, const char* cPatch, const char* cSample, char *Val);
 BOOL        cdecl cmsxIT8SetDataSetDbl(LCMSHANDLE cmsxIT8, const char* cPatch, const char* cSample, double Val);
-
 const char *cdecl cmsxIT8GenericPatchName(int nPatch, char* buffer);
-
 
 
 /* Patch collections (measurement lists) -------------------------------------------------- */
@@ -136,16 +134,18 @@ const char *cdecl cmsxIT8GenericPatchName(int nPatch, char* buffer);
 #define PATCH_HAS_HEXACRM     0x00000020
 #define PATCH_HAS_STD_Lab     0x00010000
 #define PATCH_HAS_STD_XYZ     0x00020000
-#define PATCH_HAS_XYZ_PROOF   0x00100000  
+#define PATCH_HAS_XYZ_PROOF   0x00100000
 #define PATCH_HAS_MEAN_DE     0x01000000
 #define PATCH_HAS_STD_DE      0x02000000
 #define PATCH_HAS_CHISQ       0x04000000
 
 
-#define MAXPATCHNAMELEN     20
+#define MAXPATCHNAMELEN       20
+
 /* A patch in memory */
 
-typedef struct {
+typedef struct
+            {
 
                 DWORD        dwFlags;   /* Is quite possible to have colorant in only */
                                         /* some patches of sheet, so mark each entry with */
@@ -156,8 +156,8 @@ typedef struct {
                 cmsCIELab Lab;          /* The tristimulus values of target */
                 cmsCIEXYZ XYZ;
 
-				cmsCIEXYZ XYZProof;		/* The absolute XYZ value returned by profile */
-										/* (gamut constrained to device) */
+                cmsCIEXYZ XYZProof;     /* The absolute XYZ value returned by profile */
+                                        /* (gamut constrained to device) */
 
                 union {                 /* The possible colorants. Only one space is */
                                         /* allowed...obviously only one set of */
@@ -167,7 +167,7 @@ typedef struct {
                         double CMYK[4];
                         double Hexa[MAXCHANNELS];
 
-                        } Colorant;             
+                        } Colorant;
 
                 double dEStd;               /* Standard deviation  */
                 double ChiSq;               /* Chi-square parameter (mean of STD of colorants) */
@@ -184,7 +184,8 @@ typedef BOOL* SETOFPATCHES;
 
 /* This struct holds whole Patches collection */
 
-typedef struct _measurement {
+typedef struct _measurement
+           {
 
            int          nPatches;
            LPPATCH      Patches;
@@ -196,10 +197,8 @@ typedef struct _measurement {
 void         cdecl cmsxPCollFreeMeasurements(LPMEASUREMENT m);
 SETOFPATCHES cdecl cmsxPCollBuildSet(LPMEASUREMENT m, BOOL lDefault);
 
-BOOL         cdecl cmsxPCollBuildMeasurement(LPMEASUREMENT m, 
-                                             const char *ReferenceSheet,
-                                             const char *MeasurementSheet,
-                                             DWORD dwNeededSamplesType);
+BOOL         cdecl cmsxPCollBuildMeasurement(LPMEASUREMENT m, const char *ReferenceSheet,
+                                             const char *MeasurementSheet, DWORD dwNeededSamplesType);
 
 int          cdecl cmsxPCollCountSet(LPMEASUREMENT m, SETOFPATCHES Set);
 BOOL         cdecl cmsxPCollValidatePatches(LPMEASUREMENT m, DWORD dwFlags);
@@ -214,8 +213,7 @@ LPPATCH      cdecl cmsxPCollAddPatchRGB(LPMEASUREMENT m, const char *Name,
                                         double r, double g, double b,
                                         LPcmsCIEXYZ XYZ, LPcmsCIELab Lab);
 
-void         cdecl cmsxPCollLinearizePatches(LPMEASUREMENT m, SETOFPATCHES Valids,
-                                             LPGAMMATABLE Gamma[3]);
+void         cdecl cmsxPCollLinearizePatches(LPMEASUREMENT m, SETOFPATCHES Valids, LPGAMMATABLE Gamma[3]);
 
 /* Extraction utilities */
 
@@ -241,16 +239,17 @@ int          cdecl cmsxPCollPatchesInGamutLUT(LPMEASUREMENT m, SETOFPATCHES Vali
 
 /* Find important values */
 
-LPPATCH		 cdecl cmsxPCollFindWhite(LPMEASUREMENT m, SETOFPATCHES Valids, double* Distance);
-LPPATCH		 cdecl cmsxPCollFindBlack(LPMEASUREMENT m, SETOFPATCHES Valids, double* Distance);
-LPPATCH		 cdecl cmsxPCollFindPrimary(LPMEASUREMENT m, SETOFPATCHES Valids, int Channel, double* Distance);
+LPPATCH      cdecl cmsxPCollFindWhite(LPMEASUREMENT m, SETOFPATCHES Valids, double* Distance);
+LPPATCH      cdecl cmsxPCollFindBlack(LPMEASUREMENT m, SETOFPATCHES Valids, double* Distance);
+LPPATCH      cdecl cmsxPCollFindPrimary(LPMEASUREMENT m, SETOFPATCHES Valids, int Channel, double* Distance);
 
 /* Multiple linear regression stuff ---------------------------------------- */
 
 
 /* A measurement of error */
 
-typedef struct {
+typedef struct
+    {
 
         double SSE;             /* The error sum of squares */
         double MSE;             /* The error mean sum of squares */
@@ -281,7 +280,7 @@ BOOL cdecl cmsxRegressionRGB2XYZ(double r, double g, double b,
                                        LPMATN tfm, LPcmsCIEXYZ XYZ);
 
 BOOL cdecl cmsxRegressionInterpolatorRGB(LPMEASUREMENT m,
-                                       int ColorSpace,                            
+                                       int ColorSpace,
                                        int    RegressionTerms,
                                        BOOL   lUseLocalPatches,
                                        int    MinPatchesToCollect,
@@ -289,14 +288,11 @@ BOOL cdecl cmsxRegressionInterpolatorRGB(LPMEASUREMENT m,
                                        void* Res);
 
 
-
 /* Levenberg-Marquardt ---------------------------------------------------------------------- */
 
 LCMSHANDLE cdecl cmsxLevenbergMarquardtInit(LPSAMPLEDCURVE x, LPSAMPLEDCURVE y, double sig,
-								double a[],
-								int ma,  
-								void (*funcs)(double, double[], double*, double[], int)
-								);
+                                            double a[], int ma,
+                                            void (*funcs)(double, double[], double*, double[], int));
 
 double    cdecl cmsxLevenbergMarquardtAlamda(LCMSHANDLE hMRQ);
 double    cdecl cmsxLevenbergMarquardtChiSq(LCMSHANDLE hMRQ);
@@ -307,29 +303,25 @@ BOOL      cdecl cmsxLevenbergMarquardtFree(LCMSHANDLE hMRQ);
 /* Convex hull geometric routines ------------------------------------------------------------ */
 
 LCMSHANDLE cdecl cmsxHullInit(void);
-void	   cdecl cmsxHullDone(LCMSHANDLE hHull);
-BOOL	   cdecl cmsxHullAddPoint(LCMSHANDLE hHull, int x, int y, int z);
-BOOL	   cdecl cmsxHullComputeHull(LCMSHANDLE hHull);
-char	   cdecl cmsxHullCheckpoint(LCMSHANDLE hHull, int x, int y, int z);
+void       cdecl cmsxHullDone(LCMSHANDLE hHull);
+BOOL       cdecl cmsxHullAddPoint(LCMSHANDLE hHull, int x, int y, int z);
+BOOL       cdecl cmsxHullComputeHull(LCMSHANDLE hHull);
+char       cdecl cmsxHullCheckpoint(LCMSHANDLE hHull, int x, int y, int z);
 BOOL       cdecl cmsxHullDumpVRML(LCMSHANDLE hHull, const char* fname);
 
 
 /* Linearization ---------------------------------------------------------------------------- */
 
 
-#define MEDIUM_REFLECTIVE_D50	0	/* Used for scanner targets */
-#define MEDIUM_TRANSMISSIVE		1	/* Used for monitors & projectors */
-           
-void cdecl cmsxComputeLinearizationTables(LPMEASUREMENT m, 
-                                    int ColorSpace, 
-                                    LPGAMMATABLE Lin[3],
-									int nResultingPoints,
-									int Medium);                                    
-                     
-         
-void		 cdecl cmsxCompleteLabOfPatches(LPMEASUREMENT m, SETOFPATCHES Valids, int Medium);
+#define MEDIUM_REFLECTIVE_D50    0    /* Used for scanner targets */
+#define MEDIUM_TRANSMISSIVE      1    /* Used for monitors & projectors */
+
+void cdecl cmsxComputeLinearizationTables(LPMEASUREMENT m, int ColorSpace, 
+                                    LPGAMMATABLE Lin[3], int nResultingPoints, int Medium);
+
+void         cdecl cmsxCompleteLabOfPatches(LPMEASUREMENT m, SETOFPATCHES Valids, int Medium);
 LPGAMMATABLE cdecl cmsxEstimateGamma(LPSAMPLEDCURVE X, LPSAMPLEDCURVE Y, int nResultingPoints);
-                                            
+
 void cdecl cmsxApplyLinearizationTable(double In[3], LPGAMMATABLE Gamma[3], double Out[3]);
 void cdecl cmsxApplyLinearizationGamma(WORD In[3], LPGAMMATABLE Gamma[3], WORD Out[3]);
 
@@ -342,9 +334,9 @@ void   cdecl _cmsxClampXYZ100(LPcmsCIEXYZ xyz);
 /* Matrix shaper profiler API ------------------------------------------------------------- */
 
 
-BOOL cdecl cmsxComputeMatrixShaper(const char* ReferenceSheet,                              
+BOOL cdecl cmsxComputeMatrixShaper(const char* ReferenceSheet,
                                    const char* MeasurementSheet,
-								   int Medium,
+                                   int Medium,
                                    LPGAMMATABLE TransferCurves[3],
                                    LPcmsCIEXYZ WhitePoint,
                                    LPcmsCIEXYZ BlackPoint,
@@ -358,7 +350,8 @@ BOOL cdecl cmsxComputeMatrixShaper(const char* ReferenceSheet,
 typedef int (* cmsxGAUGER)(const char *Label, int nMin, int nMax, int Pos);
 typedef int (* cmsxPRINTF)(const char *Frm, ...);
 
-typedef struct {
+typedef struct
+    {
 
            /* Files */
            char ReferenceSheet[MAX_PATH];
@@ -381,37 +374,36 @@ typedef struct {
            cmsCIExyYTRIPLE Primaries;       /* The primaries */
            LPGAMMATABLE Gamma[3];           /* Gamma curves */
 
-		   /* Profile */ 
-		   cmsHPROFILE hProfile;            /* handle to profile */
+           /* Profile */
+           cmsHPROFILE hProfile;            /* handle to profile */
 
            icProfileClassSignature DeviceClass;
            icColorSpaceSignature   ColorSpace;
 
            int PCSType;                    /* PT_XYZ or PT_Lab */
            int CLUTPoints;                 /* Final CLUT resolution */
-		   int ProfileVerbosityLevel;	   /* 0=minimum, 1=additional, 2=Verbose, 3=Any suitable */
+           int ProfileVerbosityLevel;       /* 0=minimum, 1=additional, 2=Verbose, 3=Any suitable */
 
-           
-		   /* Measurement */	
+
+           /* Measurement */
            MEASUREMENT m;                /* Contains list of available patches */
-		   int Medium;
+           int Medium;
 
 
-		   /* RGB Gamut hull */
-		   LCMSHANDLE hRGBHull;   /* Contains bobbin of valid RGB values */
+           /* RGB Gamut hull */
+           LCMSHANDLE hRGBHull;   /* Contains bobbin of valid RGB values */
 
-		   /* CIECAM97s */
-		   BOOL lUseCIECAM97s;   /* Use CIECAM97s for chromatic adaptation? */
+           /* CIECAM97s */
+           BOOL lUseCIECAM97s;   /* Use CIECAM97s for chromatic adaptation? */
 
-		   cmsViewingConditions device;     /* Viewing condition of source */
+           cmsViewingConditions device;     /* Viewing condition of source */
            cmsViewingConditions PCS;        /* Viewing condition of PCS */
 
            LCMSHANDLE hDevice;              /* CIECAM97s models used for adaptation */
            LCMSHANDLE hPCS;                 /* and viewing conditions */
-           
 
     } PROFILERCOMMONDATA,FAR* LPPROFILERCOMMONDATA;
- 
+
 
 /* Shared routines */
 
@@ -427,20 +419,18 @@ BOOL cdecl cmsxChoosePCS(LPPROFILERCOMMONDATA hdr);
 
 /* Monitor profiler API ------------------------------------------------------------------- */
 
-typedef struct {
+typedef struct
+           {
 
            PROFILERCOMMONDATA hdr;
-                                                
-                     
+
            LPGAMMATABLE         Prelinearization[3];    /* Canonic gamma */
            LPGAMMATABLE         ReverseTables[3];       /* Reverse (direct) gamma */
            LPGAMMATABLE         PreLab[3];
            LPGAMMATABLE         PreLabRev[3];
-         
 
            MAT3                 PrimariesMatrix;
            MAT3                 PrimariesMatrixRev; 
-         
 
            } MONITORPROFILERDATA,FAR* LPMONITORPROFILERDATA;
 
@@ -453,21 +443,20 @@ BOOL   cdecl cmsxMonitorProfilerDo(LPMONITORPROFILERDATA sys);
 /* Scanner profiler API ------------------------------------------------------------------- */
 
 
-typedef struct {
+typedef struct
+           {
 
            PROFILERCOMMONDATA hdr;
-                                                                                   
-           LPGAMMATABLE Prelinearization[3];        
-                             
-		   LPMATN HiTerms;      /* Regression matrix of many terms */
-		   LPMATN LoTerms;      /* Low order regression matrix used for extrapolation */
-		   
-		   BOOL   lLocalConvergenceExtrapolation;
-			 		                          
+
+           LPGAMMATABLE Prelinearization[3];
+
+           LPMATN HiTerms;      /* Regression matrix of many terms */
+           LPMATN LoTerms;      /* Low order regression matrix used for extrapolation */
+
+           BOOL   lLocalConvergenceExtrapolation;
+
 
            } SCANNERPROFILERDATA,FAR* LPSCANNERPROFILERDATA;
-
-
 
 
 BOOL   cdecl cmsxScannerProfilerInit(LPSCANNERPROFILERDATA sys);                                       
