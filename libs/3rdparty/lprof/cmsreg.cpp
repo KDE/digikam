@@ -313,7 +313,7 @@ BOOL CreateRegressionMatrix(const LPMATN Input, const LPMATN Output,
 static
 double Term(int n, double r, double g, double b)
 {
-        
+
         switch (n) {
 
         /* 0 */
@@ -385,7 +385,7 @@ double Term(int n, double r, double g, double b)
         case 53: return g * g * g * g * g;      /* 0  5  0 */
         case 54: return b * b * b * b * b;      /* 0  0  5 */
 
-        
+
         default: return 0;
         }
 }
@@ -555,4 +555,3 @@ BOOL cmsxRegressionXYZ2RGB(LPcmsCIEXYZ XYZ, LPMATN tfm, double RGB[3])
     MATNfree(inVec);
     return true;
 }
-
