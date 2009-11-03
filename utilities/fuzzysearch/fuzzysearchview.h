@@ -87,6 +87,10 @@ private:
 
     void setColor(QColor c);
 
+    QWidget* setupFindSimilarPanel();
+    QWidget* setupSketchPanel();
+    void     setupConnections();
+
 private Q_SLOTS:
 
     void slotTabChanged(int);

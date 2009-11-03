@@ -171,22 +171,59 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 {
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
 
-    QWidget *panel = new QWidget(viewport());
-    panel->setAutoFillBackground(false);
-    setWidget(panel);
     setWidgetResizable(true);
     setAttribute(Qt::WA_DeleteOnClose);
     setAcceptDrops(true);
-    viewport()->setAutoFillBackground(false);
     viewport()->setAcceptDrops(true);
 
-    QVBoxLayout *vlay    = new QVBoxLayout(panel);
-    d->tabWidget         = new KTabWidget(panel);
+    // ---------------------------------------------------------------
+
+    QWidget *imagePanel    = setupFindSimilarPanel();
+    QWidget *sketchPanel   = setupSketchPanel();
+    d->findDuplicatesPanel = new FindDuplicatesView();
+
+    d->tabWidget = new KTabWidget();
+    d->tabWidget->insertTab(FuzzySearchViewPriv::SIMILARS,   imagePanel,             i18n("Image"));
+    d->tabWidget->insertTab(FuzzySearchViewPriv::SKETCH,     sketchPanel,            i18n("Sketch"));
+    d->tabWidget->insertTab(FuzzySearchViewPriv::DUPLICATES, d->findDuplicatesPanel, i18n("Duplicates"));
 
     // ---------------------------------------------------------------
-    // Find Similar Images Panel
 
-    QWidget *imagePanel = new QWidget(panel);
+    d->folderView            = new KVBox();
+    d->fuzzySearchFolderView = new FuzzySearchFolderView(d->folderView);
+    d->searchFuzzyBar        = new SearchTextBar(d->folderView, "FuzzySearchViewSearchFuzzyBar");
+    d->folderView->setSpacing(KDialog::spacingHint());
+    d->folderView->setMargin(0);
+
+    // ---------------------------------------------------------------
+
+    QWidget *mainWidget     = new QWidget(this);
+    QVBoxLayout *mainLayout = new QVBoxLayout();
+    mainLayout->addWidget(d->tabWidget);
+    mainLayout->addWidget(d->folderView);
+    mainLayout->setMargin(0);
+    mainLayout->setSpacing(0);
+    mainWidget->setLayout(mainLayout);
+
+    setWidget(mainWidget);
+    setAutoFillBackground(false);
+    mainWidget->setAutoFillBackground(false);
+    viewport()->setAutoFillBackground(false);
+
+    // ---------------------------------------------------------------
+
+    readConfig();
+    setupConnections();
+
+    // ---------------------------------------------------------------
+
+    slotCheckNameEditSketchConditions();
+    slotCheckNameEditImageConditions();
+}
+
+QWidget* FuzzySearchView::setupFindSimilarPanel()
+{
+    QWidget* imagePanel = new QWidget;
     QGridLayout *grid   = new QGridLayout(imagePanel);
     QWidget *box2       = new QWidget(imagePanel);
     QVBoxLayout *vlay3  = new QVBoxLayout(box2);
@@ -227,9 +264,9 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     d->levelImage->setSingleStep(1);
     d->levelImage->setValue(90);
     d->levelImage->setWhatsThis(i18n("Select here the approximate threshold "
-                                     "value, as a percentage. "
-                                     "This value is used by the algorithm to distinguish two "
-                                     "similar images. The default value is 90."));
+            "value, as a percentage. "
+            "This value is used by the algorithm to distinguish two "
+            "similar images. The default value is 90."));
 
     hbox3->setStretchFactor(resultsLabel2, 10);
     hbox3->setMargin(0);
@@ -244,16 +281,16 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     d->nameEditImage = new KLineEdit(hbox4);
     d->nameEditImage->setClearButtonShown(true);
     d->nameEditImage->setWhatsThis(i18n("Enter the name of the current similar image search to save in the "
-                                        "\"My Fuzzy Searches\" view."));
+            "\"My Fuzzy Searches\" view."));
 
     d->saveBtnImage  = new QToolButton(hbox4);
     d->saveBtnImage->setIcon(SmallIcon("document-save"));
     d->saveBtnImage->setEnabled(false);
     d->saveBtnImage->setToolTip(i18n("Save current similar image search to a new virtual Album"));
     d->saveBtnImage->setWhatsThis(i18n("If you press this button, the current "
-                                       "similar image search will be saved to a new search "
-                                       "virtual album using name "
-                                       "set on the left side."));
+            "similar image search will be saved to a new search "
+            "virtual album using name "
+            "set on the left side."));
 
     // ---------------------------------------------------------------
 
@@ -269,10 +306,12 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
 
-    // ---------------------------------------------------------------
-    // Find by Sketch Panel
+    return imagePanel;
+}
 
-    QWidget *sketchPanel = new QWidget(panel);
+QWidget* FuzzySearchView::setupSketchPanel()
+{
+    QWidget *sketchPanel = new QWidget;
     QGridLayout *grid2   = new QGridLayout(sketchPanel);
     QWidget *box         = new QWidget(sketchPanel);
     QVBoxLayout *vlay2   = new QVBoxLayout(box);
@@ -377,34 +416,11 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     grid2->setMargin(KDialog::spacingHint());
     grid2->setSpacing(KDialog::spacingHint());
 
-    // ---------------------------------------------------------------
-    // Find Duplicates Panel
+    return sketchPanel;
+}
 
-    d->findDuplicatesPanel = new FindDuplicatesView(panel);
-
-    d->tabWidget->insertTab(FuzzySearchViewPriv::SIMILARS,   imagePanel,             i18n("Image"));
-    d->tabWidget->insertTab(FuzzySearchViewPriv::SKETCH,     sketchPanel,            i18n("Sketch"));
-    d->tabWidget->insertTab(FuzzySearchViewPriv::DUPLICATES, d->findDuplicatesPanel, i18n("Duplicates"));
-
-    // ---------------------------------------------------------------
-
-    d->folderView            = new KVBox(panel);
-    d->fuzzySearchFolderView = new FuzzySearchFolderView(d->folderView);
-    d->searchFuzzyBar        = new SearchTextBar(d->folderView, "FuzzySearchViewSearchFuzzyBar");
-    d->folderView->setSpacing(KDialog::spacingHint());
-    d->folderView->setMargin(0);
-
-    // ---------------------------------------------------------------
-
-    vlay->addWidget(d->tabWidget);
-    vlay->addWidget(d->folderView);
-    vlay->setMargin(0);
-    vlay->setSpacing(0);
-
-    readConfig();
-
-    // ---------------------------------------------------------------
-
+void FuzzySearchView::setupConnections()
+{
     connect(d->tabWidget, SIGNAL(currentChanged(int)),
             this, SLOT(slotTabChanged(int)));
 
@@ -473,11 +489,6 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 
     connect(d->findDuplicatesPanel, SIGNAL(signalUpdateFingerPrints()),
             this, SIGNAL(signalUpdateFingerPrints()));
-
-    // ---------------------------------------------------------------
-
-    slotCheckNameEditSketchConditions();
-    slotCheckNameEditImageConditions();
 }
 
 FuzzySearchView::~FuzzySearchView()
