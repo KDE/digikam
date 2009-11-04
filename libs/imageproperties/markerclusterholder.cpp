@@ -571,6 +571,8 @@ void MarkerClusterHolder::reorderClustersPixelGrid()
     d->lastZoom            = newZoom;
     d->lastCenterLatitude  = newCenterLatitude;
     d->lastCenterLongitude = newCenterLongitude;
+    d->lastMapProjection   = newMapProjection;
+    d->lastWidgetSize      = newWidgetSize;
     d->markerCountDirty    = false;
 
     // clear all clusters:
