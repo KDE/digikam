@@ -628,7 +628,9 @@ void SetupICC::readSettings(bool restore)
         d->defaultConvertMismatch->setChecked(true);
 
     if (settings.defaultMissingProfileBehavior & ICCSettingsContainer::AskUser)
+    {
         d->defaultAskMissing->setChecked(true);
+    }
     else
     {
         if (settings.defaultMissingProfileBehavior & ICCSettingsContainer::UseSRGB)
@@ -808,10 +810,12 @@ void SetupICC::slotShowDefaultSearchPaths()
 {
     QStringList defaultSearchPaths = IccProfile::defaultSearchPaths();
     QString existingPaths;
+
     if (defaultSearchPaths.isEmpty())
         existingPaths = i18nc("none of the paths", "none");
     else
         existingPaths = defaultSearchPaths.join("</li><li>");
+
     QString text = i18n("On Linux, the default search paths include "
                         "<ul>"
                         "<li>/usr/share/color/icc</li>"
