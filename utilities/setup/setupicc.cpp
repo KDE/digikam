@@ -595,15 +595,16 @@ void SetupICC::applySettings()
     else if (d->defaultGuessRaw->isChecked())
         settings.defaultUncalibratedBehavior = ICCSettingsContainer::AutomaticColors | ICCSettingsContainer::ConvertToWorkspace;
 
-    settings.iccFolder = d->defaultPathKU->url().toLocalFile();
-    settings.useBPC =  d->bpcAlgorithm->isChecked();
-    settings.renderingIntent = d->renderingIntentKC->intent();
-    settings.useManagedView = d->managedView->isChecked();
+    settings.iccFolder          = d->defaultPathKU->url().toLocalFile();
+    settings.useBPC             = d->bpcAlgorithm->isChecked();
+    settings.renderingIntent    = d->renderingIntentKC->intent();
+    settings.useManagedView     = d->managedView->isChecked();
     settings.useManagedPreviews = d->managedPreviews->isChecked();
 
     settings.defaultInputProfile = d->inProfilesKC->currentProfile().filePath();
-    settings.workspaceProfile = d->workProfilesKC->currentProfile().filePath();
+    settings.workspaceProfile    = d->workProfilesKC->currentProfile().filePath();
     settings.defaultProofProfile = d->proofProfilesKC->currentProfile().filePath();
+
     if (!IccSettings::instance()->monitorProfileFromSystem())
         settings.monitorProfile = d->monitorProfilesKC->currentProfile().filePath();
 
