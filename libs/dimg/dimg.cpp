@@ -1623,11 +1623,7 @@ QImage DImg::pureColorMask(ExposureSettingsContainer *expoSettings)
     {
         for (uint i = 0; i < dim; ++i)
         {
-            int s_red   = qRed(*sptr);
-            int s_green = qGreen(*sptr);
-            int s_blue  = qBlue(*sptr);
-
-            if ((s_red == 0) && (s_green == 0) && (s_blue == 0))
+            if ((qRed(*sptr) == 0) && (qGreen(*sptr) == 0) && (qBlue(*sptr) == 0))
             {
                 dptr[0] = u_blue;
                 dptr[1] = u_green;
@@ -1643,11 +1639,7 @@ QImage DImg::pureColorMask(ExposureSettingsContainer *expoSettings)
     {
         for (uint i = 0; i < dim; ++i)
         {
-            int s_red   = qRed(*sptr);
-            int s_green = qGreen(*sptr);
-            int s_blue  = qBlue(*sptr);
-
-            if ((s_red == max) && (s_green == max) && (s_blue == max))
+            if ((qRed(*sptr) == max) && (qGreen(*sptr) == max) && (qBlue(*sptr) == max))
             {
                 dptr[0] = o_blue;
                 dptr[1] = o_green;
