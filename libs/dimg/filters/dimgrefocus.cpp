@@ -196,6 +196,7 @@ void DImgRefocus::convolveImage(uchar *orgData, uchar *destData, int width, int 
 
                 for (y2 = 0; !m_cancel && (y2 < mat_size); ++y2)
                 {
+                    int y2_matsize = y2 * mat_size;
                     for (x2 = 0; !m_cancel && (x2 < mat_size); ++x2)
                     {
                         index1 = width * (y1 + y2 - mat_offset) +
@@ -207,7 +208,7 @@ void DImgRefocus::convolveImage(uchar *orgData, uchar *destData, int width, int 
                             blue  = ptr[0];
                             green = ptr[1];
                             red   = ptr[2];
-                            const double matrixValue = matrix[y2 * mat_size + x2];
+                            const double matrixValue = matrix[y2_matsize + x2];
                             valRed   += matrixValue * red;
                             valGreen += matrixValue * green;
                             valBlue  += matrixValue * blue;
@@ -236,6 +237,7 @@ void DImgRefocus::convolveImage(uchar *orgData, uchar *destData, int width, int 
 
                 for (y2 = 0; !m_cancel && (y2 < mat_size); ++y2)
                 {
+                    int y2_matsize = y2 * mat_size;
                     for (x2 = 0; !m_cancel && (x2 < mat_size); ++x2)
                     {
                         index1 = width * (y1 + y2 - mat_offset) +
@@ -247,7 +249,7 @@ void DImgRefocus::convolveImage(uchar *orgData, uchar *destData, int width, int 
                             blue  = ptr[0];
                             green = ptr[1];
                             red   = ptr[2];
-                            const double matrixValue = matrix[y2 * mat_size + x2];
+                            const double matrixValue = matrix[y2_matsize + x2];
                             valRed   += matrixValue * red;
                             valGreen += matrixValue * green;
                             valBlue  += matrixValue * blue;
