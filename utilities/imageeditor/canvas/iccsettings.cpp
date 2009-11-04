@@ -80,8 +80,12 @@ public:
     IccProfile profileFromWindowSystem(QWidget *widget);
 };
 
+// -----------------------------------------------------------------------------------------------
+
 class IccSettingsCreator { public: IccSettings object; };
 K_GLOBAL_STATIC(IccSettingsCreator, creator)
+
+// -----------------------------------------------------------------------------------------------
 
 IccSettings *IccSettings::instance()
 {
@@ -158,7 +162,7 @@ IccProfile IccSettingsPriv::profileFromWindowSystem(QWidget *widget)
     QString atomName;
 
     QDesktopWidget *desktop = QApplication::desktop();
-    int screenNumber = desktop->screenNumber(widget);
+    int screenNumber        = desktop->screenNumber(widget);
 
     IccProfile profile;
     {
@@ -170,12 +174,12 @@ IccProfile IccSettingsPriv::profileFromWindowSystem(QWidget *widget)
     if (desktop->isVirtualDesktop())
     {
         appRootWindow = QX11Info::appRootWindow(QX11Info::appScreen());
-        atomName = QString("_ICC_PROFILE_%1").arg(screenNumber);
+        atomName      = QString("_ICC_PROFILE_%1").arg(screenNumber);
     }
     else
     {
         appRootWindow = QX11Info::appRootWindow(screenNumber);
-        atomName = "_ICC_PROFILE";
+        atomName      = "_ICC_PROFILE";
     }
 
     Atom          type;
@@ -199,7 +203,8 @@ IccProfile IccSettingsPriv::profileFromWindowSystem(QWidget *widget)
                     &nitems,
                     &bytes_after,
                     (unsigned char **) &str) == Success
-                ) {
+                )
+    {
         QByteArray bytes = QByteArray::fromRawData((char*)str, (quint32)nitems);
 
         profile = bytes;
@@ -233,11 +238,11 @@ void IccSettings::readFromConfig()
 {
     ICCSettingsContainer old, s;
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(QString("Color Management"));
+    KConfigGroup group        = config->group(QString("Color Management"));
     s.readFromConfig(group);
     {
         QMutexLocker lock(&d->mutex);
-        old = d->settings;
+        old         = d->settings;
         d->settings = s;
     }
     emit settingsChanged();
@@ -251,11 +256,12 @@ void IccSettings::setSettings(const ICCSettingsContainer& settings)
         QMutexLocker lock(&d->mutex);
         if (settings.iccFolder != d->settings.iccFolder)
             d->profiles.clear();
-        old = d->settings;
+
+        old         = d->settings;
         d->settings = settings;
     }
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(QString("Color Management"));
+    KConfigGroup group        = config->group(QString("Color Management"));
     settings.writeToConfig(group);
     emit settingsChanged();
     emit settingsChanged(settings, old);
@@ -266,12 +272,12 @@ void IccSettings::setUseManagedView(bool useManagedView)
     ICCSettingsContainer old, current;
     {
         QMutexLocker lock(&d->mutex);
-        old = d->settings;
+        old                        = d->settings;
         d->settings.useManagedView = useManagedView;
-        current = d->settings;
+        current 		   = d->settings;
     }
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(QString("Color Management"));
+    KConfigGroup group        = config->group(QString("Color Management"));
     d->settings.writeManagedViewToConfig(group);
     emit settingsChanged();
     emit settingsChanged(current, old);
@@ -284,13 +290,14 @@ void IccSettings::setIccPath(const QString& path)
         QMutexLocker lock(&d->mutex);
         if (path == d->settings.iccFolder)
             return;
+
         d->profiles.clear();
-        old = d->settings;
+        old                   = d->settings;
         d->settings.iccFolder = path;
-        current = d->settings;
+        current 	      = d->settings;
     }
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(QString("Color Management"));
+    KConfigGroup group        = config->group(QString("Color Management"));
     d->settings.writeManagedViewToConfig(group);
     emit settingsChanged();
     emit settingsChanged(current, old);
@@ -303,7 +310,7 @@ QList<IccProfile> IccSettingsPriv::scanDirectories(const QStringList& dirs)
     QStringList filters;
     filters << "*.icc" << "*.icm";
     kDebug() << dirs;
-    foreach (const QString &dirPath, dirs)
+    foreach (const QString& dirPath, dirs)
     {
         QDir dir(dirPath);
         if (!dir.exists())
@@ -320,7 +327,7 @@ void IccSettingsPriv::scanDirectory(const QString& path, const QStringList& filt
     QFileInfoList infos;
     infos << dir.entryInfoList(filter, QDir::Files | QDir::Readable);
     infos << dir.entryInfoList(QDir::Dirs | QDir::Readable | QDir::NoDotAndDotDot);
-    foreach (const QFileInfo &info, infos)
+    foreach (const QFileInfo& info, infos)
     {
         if (info.isFile())
         {
@@ -347,17 +354,22 @@ QList<IccProfile> IccSettings::allProfiles()
         QMutexLocker lock(&d->mutex);
         if (!d->profiles.isEmpty())
             return d->profiles;
+
         extraPath = d->settings.iccFolder;
     }
 
     QList<IccProfile> profiles;
+
     // get system paths, e.g. /usr/share/color/icc
     QStringList paths = IccProfile::defaultSearchPaths();
+
     // add user-specified path
     if (!extraPath.isEmpty() && !paths.contains(extraPath))
         paths << extraPath;
+
     // check search directories
     profiles << d->scanDirectories(paths);
+
     // load profiles that come with libkdcraw
     profiles << IccProfile::defaultProfiles();
 

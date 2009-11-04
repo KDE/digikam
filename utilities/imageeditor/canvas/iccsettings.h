@@ -102,7 +102,7 @@ public:
 Q_SIGNALS:
 
     void settingsChanged();
-    void settingsChanged(const ICCSettingsContainer &current, const ICCSettingsContainer &previous);
+    void settingsChanged(const ICCSettingsContainer& current, const ICCSettingsContainer& previous);
 
 private:
 
