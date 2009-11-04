@@ -423,7 +423,7 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h,
             expoSettings.overExposureColor      = DImgInterface::defaultInterface()->overExposureColor();
 
             QImage pureColorMask = d->targetPreviewImage.pureColorMask(&expoSettings);
-            QPixmap pixMask = QPixmap::fromImage(pureColorMask);
+            QPixmap pixMask      = QPixmap::fromImage(pureColorMask);
             p->drawPixmap(x, y, pixMask, 0, 0, width, height);
         }
     }
