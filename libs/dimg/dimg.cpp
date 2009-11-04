@@ -1586,6 +1586,9 @@ QImage DImg::pureColorMask(ExposureSettingsContainer *expoSettings)
     int s_green = 0;
     int s_blue  = 0;
 
+    bool under  = expoSettings->underExposureIndicator;
+    bool over   = expoSettings->overExposureIndicator;
+
     // --------------------------------------------------------
 
     uint dim    = m_priv->width * m_priv->height;
@@ -1598,21 +1601,26 @@ QImage DImg::pureColorMask(ExposureSettingsContainer *expoSettings)
         s_green = qGreen(*sptr);
         s_blue  = qBlue(*sptr);
 
-        if (expoSettings->underExposureIndicator && (s_red == 0) && (s_green == 0) && (s_blue == 0))
+        if (under)
         {
-            dptr[0] = u_blue;
-            dptr[1] = u_green;
-            dptr[2] = u_red;
-            dptr[3] = 0xFF;
-
+            if ((s_red == 0) && (s_green == 0) && (s_blue == 0))
+            {
+                dptr[0] = u_blue;
+                dptr[1] = u_green;
+                dptr[2] = u_red;
+                dptr[3] = 0xFF;
+            }
         }
 
-        if (expoSettings->overExposureIndicator && (s_red == max) && (s_green == max) && (s_blue == max))
+        if (over)
         {
-            dptr[0] = o_blue;
-            dptr[1] = o_green;
-            dptr[2] = o_red;
-            dptr[3] = 0xFF;
+            if ((s_red == max) && (s_green == max) && (s_blue == max))
+            {
+                dptr[0] = o_blue;
+                dptr[1] = o_green;
+                dptr[2] = o_red;
+                dptr[3] = 0xFF;
+            }
         }
 
         dptr += 4;
