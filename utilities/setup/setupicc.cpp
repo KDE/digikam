@@ -123,7 +123,7 @@ public:
         advancedPanel          = 0;
      }
 
-    QLabel*                 iccFolderLabel;
+    QLabel*                     iccFolderLabel;
 
     QCheckBox*                  enableColorManagement;
     QCheckBox*                  defaultSRGBConvert;
@@ -264,12 +264,12 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     d->missingGB             = new QGroupBox;//(i18n("Missing Profile Behavior"));
     QVBoxLayout *vlayMissing = new QVBoxLayout(d->missingGB);
 
-    QLabel *missingIcon = new QLabel;
+    QLabel *missingIcon  = new QLabel;
     missingIcon->setPixmap(SmallIcon("image-missing", KIconLoader::SizeMedium));
     QLabel *missingLabel = new QLabel(i18n("When an image has no color profile information"));
     missingLabel->setWordWrap(true);
 
-    QHBoxLayout *hboxMP = new QHBoxLayout;
+    QHBoxLayout *hboxMP  = new QHBoxLayout;
     hboxMP->addWidget(missingIcon);
     hboxMP->addWidget(missingLabel, 10);
 
@@ -290,7 +290,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     gridRgb->addWidget(d->defaultSRGBConvert, 1, 1);
     gridRgb->setColumnMinimumWidth(0, 10);
 
-    d->defaultWSMissing = new QRadioButton(i18n("Assume it is using the working color space"));
+    d->defaultWSMissing  = new QRadioButton(i18n("Assume it is using the working color space"));
     //TODO d->defaultWSMissing->setWhatsThis( i18n("<p></p>"));
 
     d->defaultInputMissing = new QRadioButton(i18n("Convert it from default input color space to working space"));
@@ -344,24 +344,23 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
 
     d->profilesPanel         = new QWidget;
     QVBoxLayout *vboxDisplay = new QVBoxLayout(d->profilesPanel);
+    d->viewGB                = new QGroupBox(i18n("Color Managed View"));
+    QGridLayout* gridView    = new QGridLayout(d->viewGB);
 
-    d->viewGB             = new QGroupBox(i18n("Color Managed View"));
-    QGridLayout* gridView = new QGridLayout(d->viewGB);
-
-    QLabel *monitorIcon     = new QLabel;
+    QLabel *monitorIcon      = new QLabel;
     monitorIcon->setPixmap(SmallIcon("video-display", KIconLoader::SizeMedium));
-    QLabel *monitorProfiles = new QLabel(i18n("Monitor profile:"));
+    QLabel *monitorProfiles  = new QLabel(i18n("Monitor profile:"));
 
-    d->monitorProfilesKC    = new IccProfilesComboBox;
+    d->monitorProfilesKC     = new IccProfilesComboBox;
     monitorProfiles->setBuddy(d->monitorProfilesKC);
     d->monitorProfilesKC->setWhatsThis(i18n("<p>Select the color profile for your monitor here.</p>"));
 
-    d->infoMonitorProfiles  = new QPushButton;
+    d->infoMonitorProfiles   = new QPushButton;
     d->infoMonitorProfiles->setIcon(SmallIcon("dialog-information"));
     d->infoMonitorProfiles->setWhatsThis(i18n("<p>You can use this button to get more detailed "
                                               "information about the selected monitor profile.</p>"));
 
-    d->managedView = new QCheckBox;
+    d->managedView     = new QCheckBox;
     d->managedView->setText(i18n("Use color managed view in editor"));
     d->managedView->setWhatsThis(i18n("<p>Turn on this option if "
                                       "you want to use your <b>Monitor Color Profile</b> to show your pictures in "
@@ -383,19 +382,19 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
 
     // --------------------------------------------------------
 
-    d->inputGB = new QGroupBox(i18n("Camera and Scanner"));
+    d->inputGB           = new QGroupBox(i18n("Camera and Scanner"));
     QGridLayout *gridIP  = new QGridLayout(d->inputGB);
 
-    QLabel *inputIcon  = new QLabel;
+    QLabel *inputIcon    = new QLabel;
     inputIcon->setPixmap(SmallIcon("input-tablet", KIconLoader::SizeMedium));
-    QLabel *inputLabel = new QLabel(i18n("Default input color profile:"));
-    d->inProfilesKC    = new IccProfilesComboBox;
+    QLabel *inputLabel   = new QLabel(i18n("Default input color profile:"));
+    d->inProfilesKC      = new IccProfilesComboBox;
     d->inProfilesKC->setWhatsThis(i18n("<p>This is the default color profile for your input device "
                                        "(that is your camera - or your scanner). A camera input profile "
                                        "is recommended for correct conversion of RAW images in 16bit. "
                                        "Some of the options about loading behavior above refer to this profile.</b>"));
 
-    d->infoInProfiles = new QPushButton;
+    d->infoInProfiles    = new QPushButton;
     d->infoInProfiles->setIcon(SmallIcon("dialog-information"));
     d->infoInProfiles->setWhatsThis(i18n("<p>You can use this button to get more detailed "
                                          "information about the selected input profile.</p>"));
@@ -408,19 +407,19 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
 
     // --------------------------------------------------------
 
-    d->proofGB = new QGroupBox(i18n("Printing and Proofing"));
+    d->proofGB             = new QGroupBox(i18n("Printing and Proofing"));
     QGridLayout *gridProof = new QGridLayout(d->proofGB);
 
-    QLabel *proofIcon  = new QLabel;
+    QLabel *proofIcon      = new QLabel;
     proofIcon->setPixmap(SmallIcon("printer", KIconLoader::SizeMedium));
-    QLabel *proofLabel = new QLabel(i18n("Output device profile:"));
-    d->proofProfilesKC = new IccProfilesComboBox;
+    QLabel *proofLabel     = new QLabel(i18n("Output device profile:"));
+    d->proofProfilesKC     = new IccProfilesComboBox;
     proofLabel->setBuddy(d->proofProfilesKC);
     d->proofProfilesKC->setWhatsThis(i18n("<p>Select the profile for your output device "
                                           "(usually, your printer). This profile will be used to do a soft proof, so you will "
                                           "be able to preview how an image will be rendered via an output device.</p>"));
 
-    d->infoProofProfiles = new QPushButton;
+    d->infoProofProfiles   = new QPushButton;
     d->infoProofProfiles->setIcon(SmallIcon("dialog-information"));
     d->infoProofProfiles->setWhatsThis(i18n("<p>You can use this button to get more detailed "
                                             "information about the selected proofing profile.</p>"));
@@ -433,16 +432,16 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
 
     // --------------------------------------------------------
 
-    d->iccFolderGB = new QGroupBox(i18n("Color Profiles Repository"));
+    d->iccFolderGB             = new QGroupBox(i18n("Color Profiles Repository"));
     QGridLayout *gridIccFolder = new QGridLayout(d->iccFolderGB);
 
-    QLabel *iccFolderIcon = new QLabel;
+    QLabel *iccFolderIcon      = new QLabel;
     iccFolderIcon->setPixmap(SmallIcon("folder-downloads", KIconLoader::SizeMedium));
     d->iccFolderLabel = new QLabel(i18n("digiKam looks for ICC profiles in a number of <a href='default'>default locations</a>. "
                                         "You can specify an additional folder:"));
     d->iccFolderLabel->setWordWrap(true);
 
-    d->defaultPathKU = new KUrlRequester;
+    d->defaultPathKU  = new KUrlRequester;
     d->iccFolderLabel->setBuddy(d->defaultPathKU);
     d->defaultPathKU->lineEdit()->setReadOnly(true);
     d->defaultPathKU->setMode(KFile::Directory | KFile::LocalOnly | KFile::ExistingOnly);
