@@ -1639,7 +1639,7 @@ QImage DImg::pureColorMask(ExposureSettingsContainer *expoSettings)
             ++sptr;
         }
     }
-    else if (over)
+    else        // over-exposure
     {
         for (uint i = 0; i < dim; ++i)
         {
