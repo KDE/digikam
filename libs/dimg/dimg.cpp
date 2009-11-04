@@ -294,12 +294,12 @@ int DImg::allocateData()
 {
     int size = m_priv->width * m_priv->height * (m_priv->sixteenBit ? 8 : 4);
     try
-	{
+    {
         m_priv->data = new uchar[size];
     }
-	catch (std::bad_alloc& ex)
-	{
-		Q_UNUSED(ex);
+    catch (std::bad_alloc& ex)
+    {
+        Q_UNUSED(ex);
         m_priv->null = true;
         return 0;
     }
@@ -1574,48 +1574,53 @@ QImage DImg::pureColorMask(ExposureSettingsContainer *expoSettings)
     // --------------------------------------------------------
 
     // caching
-    int depth        = bytesDepth();
-    int bytesPerLine = img.bytesPerLine();
+    int u_red   = expoSettings->underExposureColor.red();
+    int u_green = expoSettings->underExposureColor.green();
+    int u_blue  = expoSettings->underExposureColor.blue();
 
-    int u_red        = expoSettings->underExposureColor.red();
-    int u_green      = expoSettings->underExposureColor.green();
-    int u_blue       = expoSettings->underExposureColor.blue();
+    int o_red   = expoSettings->overExposureColor.red();
+    int o_green = expoSettings->overExposureColor.green();
+    int o_blue  = expoSettings->overExposureColor.blue();
 
-    int o_red        = expoSettings->overExposureColor.red();
-    int o_green      = expoSettings->overExposureColor.green();
-    int o_blue       = expoSettings->overExposureColor.blue();
+    int s_red   = 0;
+    int s_green = 0;
+    int s_blue  = 0;
 
     // --------------------------------------------------------
 
-    for (uint x = 0; x < m_priv->width; ++x)
+    uint dim    = m_priv->width * m_priv->height;
+    uint*  sptr = (uint*)m_priv->data;
+    uchar* dptr = bits;
+
+    for (uint i = 0; i < dim; ++i)
     {
-        for (uint y = 0; y < m_priv->height; ++y)
+        s_red      = qRed(*sptr);
+        s_green    = qGreen(*sptr);
+        s_blue     = qBlue(*sptr);
+
+        if (expoSettings->underExposureIndicator && (s_red == 0) && (s_green == 0) && (s_blue == 0))
         {
-            // Even though it might look ugly, don't change the DColor call here. It saves us 3 constructors.
-            DColor pix = DColor((m_priv->data + x * depth + (m_priv->width * y * depth)), m_priv->sixteenBit);
-            int index  = y * bytesPerLine + x * 4;
+            dptr[0] = u_blue;
+            dptr[1] = u_green;
+            dptr[2] = u_red;
+            dptr[3] = 0xFF;
 
-            if (expoSettings->underExposureIndicator && pix.isPureGrayValue(0))
-            {
-                bits[index    ] = u_blue;
-                bits[index + 1] = u_green;
-                bits[index + 2] = u_red;
-                bits[index + 3] = 0xFF;
-            }
-
-            if (expoSettings->overExposureIndicator && pix.isPureGrayValue(max))
-            {
-                bits[index    ] = o_blue;
-                bits[index + 1] = o_green;
-                bits[index + 2] = o_red;
-                bits[index + 3] = 0xFF;
-            }
         }
+
+        if (expoSettings->overExposureIndicator && (s_red == max) && (s_green == max) && (s_blue == max))
+        {
+            dptr[0] = o_blue;
+            dptr[1] = o_green;
+            dptr[2] = o_red;
+            dptr[3] = 0xFF;
+        }
+
+        dptr += 4;
+        ++sptr;
     }
 
     return img;
 }
-
 
 //---------------------------------------------------------------------------------------------------
 // basic imaging operations
