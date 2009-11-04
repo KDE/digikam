@@ -1594,9 +1594,9 @@ QImage DImg::pureColorMask(ExposureSettingsContainer *expoSettings)
 
     for (uint i = 0; i < dim; ++i)
     {
-        s_red      = qRed(*sptr);
-        s_green    = qGreen(*sptr);
-        s_blue     = qBlue(*sptr);
+        s_red   = qRed(*sptr);
+        s_green = qGreen(*sptr);
+        s_blue  = qBlue(*sptr);
 
         if (expoSettings->underExposureIndicator && (s_red == 0) && (s_green == 0) && (s_blue == 0))
         {
