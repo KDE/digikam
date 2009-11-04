@@ -1647,7 +1647,7 @@ QImage DImg::pureColorMask(ExposureSettingsContainer *expoSettings)
             int s_green = qGreen(*sptr);
             int s_blue  = qBlue(*sptr);
 
-            if ((s_red == 0) && (s_green == 0) && (s_blue == 0))
+            if ((s_red == max) && (s_green == max) && (s_blue == max))
             {
                 dptr[0] = o_blue;
                 dptr[1] = o_green;
