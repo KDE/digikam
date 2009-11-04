@@ -79,7 +79,7 @@ GPSSearchWidget::~GPSSearchWidget()
     delete d;
 }
 
-bool GPSSearchWidget::asSelection() const
+bool GPSSearchWidget::hasSelection() const
 {
     return !d->selection.isEmpty();
 }

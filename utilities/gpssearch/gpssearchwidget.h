@@ -46,7 +46,7 @@ public:
     GPSSearchWidget(QWidget *parent=0);
     ~GPSSearchWidget();
 
-    bool asSelection() const;
+    bool hasSelection() const;
 
     QList<double> selectionCoordinates() const;
     void setSelectionCoordinates(const QList<double>&);

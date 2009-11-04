@@ -316,7 +316,7 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
     // clear positions shown on the map:
     d->gpsSearchWidget->clearGPSPositions();
 
-    if (!d->gpsSearchWidget->asSelection())
+    if (!d->gpsSearchWidget->hasSelection())
         return;
 
     // We query database here
@@ -421,7 +421,7 @@ bool GPSSearchView::checkAlbum(const QString& name) const
 
 void GPSSearchView::slotCheckNameEditGPSConditions()
 {
-    if (d->gpsSearchWidget->asSelection())
+    if (d->gpsSearchWidget->hasSelection())
     {
         d->nameEdit->setEnabled(true);
 
