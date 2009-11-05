@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" 
-"http://www.docbook.org/xml/4.5/docbookx.dtd"
+    "http://www.docbook.org/xml/4.5/docbookx.dtd"
 [
 <!ENTITY product "<command>cleanup_digikamdb</command>">
 <!ENTITY version "1.0">
 <!ENTITY digikam "digiKam">
-<!ENTITY vacuum "<emphasis>VACUUM</emphasis>">
+<!ENTITY vacuum  "<emphasis>VACUUM</emphasis>">
 ]>
 
 <refentry lang="en" id="cleanup_digikamdb">
