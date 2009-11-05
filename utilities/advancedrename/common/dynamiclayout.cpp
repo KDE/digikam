@@ -56,7 +56,7 @@ public:
     int                  minItemWidth;
     const int            minColumns;
 
-    QList<QLayoutItem *> itemList;
+    QList<QLayoutItem*>  itemList;
 };
 
 // --------------------------------------------------------
@@ -222,7 +222,7 @@ int DynamicLayout::reLayout(const QRect &rect, bool testOnly) const
             item->setGeometry(QRect(QPoint(x, y), s));
         }
 
-        x = nextX;
+        x          = nextX;
         lineHeight = qMax(lineHeight, item->sizeHint().height());
     }
 

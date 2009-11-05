@@ -61,7 +61,6 @@ public:
     QString   cameraName;
     QDateTime dateTime;
     int       index;
-
 };
 
 } // namespace Digikam
