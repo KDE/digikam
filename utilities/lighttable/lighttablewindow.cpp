@@ -103,7 +103,11 @@ bool LightTableWindow::lightTableWindowCreated()
 LightTableWindow::LightTableWindow()
                 : KXmlGuiWindow(0), d(new LightTableWindowPriv)
 {
-    UiFileValidator validator(localXMLFile()+"/lighttablewindowui.rc");
+    setXMLFile("lighttablewindowui.rc");
+
+    // --------------------------------------------------------
+
+    UiFileValidator validator(localXMLFile());
     if (!validator.isValid())
     {
         validator.fixConfigFile();
@@ -602,7 +606,7 @@ void LightTableWindow::setupActions()
 
     actionCollection()->addAction("logo_action", new DLogoAction(this));
 
-    createGUI("lighttablewindowui.rc");
+    createGUI(xmlFile());
 
     d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
 }
