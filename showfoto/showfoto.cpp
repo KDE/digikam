@@ -171,7 +171,11 @@ public:
 ShowFoto::ShowFoto(const KUrl::List& urlList)
         : Digikam::EditorWindow("Showfoto"), d(new ShowFotoPriv)
 {
-    Digikam::UiFileValidator validator(localXMLFile()+"/showfotoui.rc");
+    setXMLFile("showfotoui.rc");
+
+    // --------------------------------------------------------
+
+    Digikam::UiFileValidator validator(localXMLFile());
     if (!validator.isValid())
     {
         validator.fixConfigFile();
@@ -487,7 +491,7 @@ void ShowFoto::setupActions()
 
     // --- Create the GUI ----------------------------------------------------
 
-    createGUI("showfotoui.rc");
+    createGUI(xmlFile());
 }
 
 void ShowFoto::readSettings()
