@@ -40,6 +40,7 @@ QTEST_MAIN(UiFileValidatorTest)
 
 const QString goodFile(KDESRCDIR"digikamui_good.rc");
 const QString badFile(KDESRCDIR"digikamui_bad.rc");
+const QString fixedFile(KDESRCDIR"fixedui.rc");
 
 bool UiFileValidatorTest::isReadable(QFile& file) const
 {
@@ -117,16 +118,15 @@ void UiFileValidatorTest::testGetFixedContent()
 
 void UiFileValidatorTest::testFixConfigFile()
 {
-    QString destFile(KDESRCDIR"fixedui.rc");
 
     UiFileValidator validator(badFile);
-    validator.fixConfigFile(destFile);
+    validator.fixConfigFile(fixedFile);
 
     QByteArray goodContent  = readContent(goodFile);
-    QByteArray fixedContent = readContent(destFile);
+    QByteArray fixedContent = readContent(fixedFile);
 
     // remove the dest file again
-    QVERIFY(removeFile(destFile));
+    QVERIFY(removeFile(fixedFile));
 
     // check for valid results
     QVERIFY(!goodContent.isEmpty());
