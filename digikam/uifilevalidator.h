@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QXmlDefaultHandler>
+#include <QByteArray>
 
 // Local includes
 
@@ -59,6 +60,9 @@ public:
 
     bool isValid() const;
     bool fixConfigFile();
+    bool fixConfigFile(const QString& destination);
+
+    QByteArray getFixedContent();
 
 private:
 

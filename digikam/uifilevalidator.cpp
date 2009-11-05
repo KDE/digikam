@@ -114,27 +114,47 @@ bool UiFileValidator::isValid() const
 
 bool UiFileValidator::fixConfigFile()
 {
-    QFile fr(d->filename);
-    if (!isReadable(fr))
-    {
-        return false;
-    }
-    QByteArray xmlContent = fr.readAll();
+    return fixConfigFile(d->filename);
+}
 
-    if (xmlContent.isEmpty())
-    {
-        return false;
-    }
-    fr.close();
-
-    QFile fw(d->filename);
+bool UiFileValidator::fixConfigFile(const QString& destination)
+{
+    QFile fw(destination);
     if (!isWritable(fw))
     {
         return false;
     }
 
+    QByteArray result = getFixedContent();
+    if (result.isEmpty())
+    {
+        return false;
+    }
+    fw.write(result);
+    fw.close();
+
+    return true;
+}
+
+QByteArray UiFileValidator::getFixedContent()
+{
+    QFile fr(d->filename);
+    if (!isReadable(fr))
+    {
+        return QByteArray();
+    }
+    QByteArray xmlContent = fr.readAll();
+
+    if (xmlContent.isEmpty())
+    {
+        return QByteArray();
+    }
+    fr.close();
+
+    QByteArray xmlDest;
+
     QXmlStreamReader reader(xmlContent);
-    QXmlStreamWriter writer(&fw);
+    QXmlStreamWriter writer(&xmlDest);
     while (!reader.atEnd())
     {
         reader.readNext();
@@ -163,9 +183,8 @@ bool UiFileValidator::fixConfigFile()
         }
         writer.writeCurrentToken(reader);
     }
-    fw.close();
 
-    return true;
+    return xmlDest;
 }
 
 } // namespace Digikam

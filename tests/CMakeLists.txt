@@ -79,6 +79,22 @@ TARGET_LINK_LIBRARIES(cameranamehelpertest
 
 #------------------------------------------------------------------------
 
+SET(uifilevalidator_SRCS
+    uifilevalidatortest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/uifilevalidator.cpp
+)
+KDE4_ADD_UNIT_TEST(uifilevalidatortest ${uifilevalidator_SRCS})
+TARGET_LINK_LIBRARIES(uifilevalidatortest
+                      ${KDE4_KDECORE_LIBS}
+                      ${QT_QTGUI_LIBRARY}
+                      ${QT_QTTEST_LIBRARY}
+                      ${GPHOTO2_LIBRARIES}
+                      digikamcore
+                      digikamdatabase
+                      )
+
+#------------------------------------------------------------------------
+
 SET(freerotationtest_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/../imageplugins/freerotation/freerotation.cpp
     freerotationtest.cpp
