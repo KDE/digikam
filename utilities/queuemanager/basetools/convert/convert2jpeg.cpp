@@ -97,7 +97,11 @@ bool Convert2JPEG::toolOperations()
 {
     if (!loadToDImg()) return false;
 
-    image().setAttribute("quality",     settings()["Quality"].toInt());
+    // JPEG quality slider settings : 1 - 100 ==> libjpeg settings : 25 - 100.
+    int JPEGCompression = (int)((75.0/100.0)*
+                          (float)settings()["Quality"].toInt()
+                          + 26.0 - (75.0/100.0));
+    image().setAttribute("quality",     JPEGCompression);
     image().setAttribute("subsampling", settings()["SubSampling"].toInt());
 
     return (savefromDImg());

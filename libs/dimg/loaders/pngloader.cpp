@@ -677,6 +677,8 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     QVariant qualityAttr = imageGetAttribute("quality");
     quality              = qualityAttr.isValid() ? qualityAttr.toInt() : 90;
 
+    kDebug() << "DImg quality level: " << quality;
+
     if (quality < 1)
         quality = 1;
     if (quality > 99)
