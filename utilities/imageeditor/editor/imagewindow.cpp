@@ -189,7 +189,11 @@ bool ImageWindow::imagewindowCreated()
 ImageWindow::ImageWindow()
            : EditorWindow("Image Editor"), d(new ImageWindowPriv)
 {
-    UiFileValidator validator(localXMLFile()+"/digikamimagewindowui.rc");
+    setXMLFile("digikamimagewindowui.rc");
+
+    // --------------------------------------------------------
+
+    UiFileValidator validator(localXMLFile());
     if (!validator.isValid())
     {
         validator.fixConfigFile();
@@ -478,7 +482,7 @@ void ImageWindow::setupActions()
 
     // ---------------------------------------------------------------------------------
 
-    createGUI("digikamimagewindowui.rc");
+    createGUI(xmlFile());
 }
 
 void ImageWindow::applySettings()
