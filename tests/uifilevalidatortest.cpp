@@ -34,17 +34,26 @@
 
 #include "uifilevalidator.h"
 
-using namespace Digikam;
-
-QTEST_MAIN(UiFileValidatorTest)
-
 const QString goodFile(KDESRCDIR"digikamui_good.rc");
 const QString badFile(KDESRCDIR"digikamui_bad.rc");
 const QString fixedFile(KDESRCDIR"fixedui.rc");
 
+using namespace Digikam;
+
+QTEST_MAIN(UiFileValidatorTest)
+
 bool UiFileValidatorTest::isReadable(QFile& file) const
 {
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        return false;
+    }
+    return true;
+}
+
+bool UiFileValidatorTest::isWritable(QFile& file) const
+{
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
         return false;
     }
@@ -61,15 +70,6 @@ QByteArray UiFileValidatorTest::readContent(const QString& filename)
     QByteArray content = fi.readAll();
     fi.close();
     return content;
-}
-
-bool UiFileValidatorTest::isWritable(QFile& file) const
-{
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-    {
-        return false;
-    }
-    return true;
 }
 
 bool UiFileValidatorTest::removeFile(const QString& filename)
