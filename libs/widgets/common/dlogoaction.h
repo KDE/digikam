@@ -34,7 +34,7 @@
 
 class KUrlLabel;
 
-namespace Digikam 
+namespace Digikam
 {
 
 class DLogoActionPriv;
@@ -52,7 +52,10 @@ public:
     void stop();
     bool running() const;
 
-    virtual QWidget* createWidget(QWidget* parent);
+protected:
+
+    QWidget* createWidget(QWidget* parent);
+    void     deleteWidget(QWidget* widget);
 
 private Q_SLOTS:
 

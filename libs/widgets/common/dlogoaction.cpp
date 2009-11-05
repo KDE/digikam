@@ -101,7 +101,6 @@ DLogoAction::DLogoAction(QObject* parent, bool alignOnright)
 
 DLogoAction::~DLogoAction()
 {
-    d->progressTimer->stop();
     delete d;
 }
 
@@ -136,7 +135,7 @@ void DLogoAction::slotProgressTimerDone()
     d->progressTimer->start(100);
 }
 
-QWidget* DLogoAction::createWidget(QWidget * parent)
+QWidget* DLogoAction::createWidget(QWidget* parent)
 {
     QWidget* container  = new QWidget(parent);
     QHBoxLayout* layout = new QHBoxLayout(container);
@@ -160,6 +159,12 @@ QWidget* DLogoAction::createWidget(QWidget * parent)
             this, SLOT(slotProcessUrl(const QString&)));
 
     return container;
+}
+
+void DLogoAction::deleteWidget(QWidget* widget)
+{
+    stop();
+    KAction::deleteWidget(widget);
 }
 
 void DLogoAction::slotProcessUrl(const QString& url)
