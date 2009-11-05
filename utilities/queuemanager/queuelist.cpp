@@ -811,7 +811,7 @@ void QueueListView::slotAssignedToolsChanged(const AssignedBatchTools& tools)
 
 void QueueListView::updateDestFileNames()
 {
-    DefaultParser p;
+    DefaultRenameParser p;
     QString parseString      = settings().renamingParser;
     AssignedBatchTools tools = assignedTools();
 

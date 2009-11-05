@@ -102,7 +102,7 @@ AdvancedRenameWidget::AdvancedRenameWidget(QWidget* parent)
                  : QWidget(parent), d(new AdvancedRenameWidgetPriv)
 {
     setupWidgets();
-    setParser(new DefaultParser());
+    setParser(new DefaultRenameParser());
 }
 
 AdvancedRenameWidget::~AdvancedRenameWidget()

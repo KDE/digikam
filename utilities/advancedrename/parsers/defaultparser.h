@@ -31,12 +31,12 @@
 namespace Digikam
 {
 
-class DefaultParser : public Parser
+class DefaultRenameParser : public Parser
 {
 
 public:
 
-    DefaultParser();
+    DefaultRenameParser();
 };
 
 }  // namespace Digikam
