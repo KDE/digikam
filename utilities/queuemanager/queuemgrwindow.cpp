@@ -119,7 +119,11 @@ bool QueueMgrWindow::queueManagerWindowCreated()
 QueueMgrWindow::QueueMgrWindow()
               : KXmlGuiWindow(0), d(new QueueMgrWindowPriv)
 {
-    UiFileValidator validator(localXMLFile()+"/queuemgrwindowui.rc");
+    setXMLFile("queuemgrwindowui.rc");
+
+    // --------------------------------------------------------
+
+    UiFileValidator validator(localXMLFile());
     if (!validator.isValid())
     {
         validator.fixConfigFile();
@@ -464,7 +468,7 @@ void QueueMgrWindow::setupActions()
     d->animLogo = new DLogoAction(this);
     actionCollection()->addAction("logo_action", d->animLogo);
 
-    createGUI("queuemgrwindowui.rc");
+    createGUI(xmlFile());
 
     d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
 }
