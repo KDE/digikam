@@ -49,6 +49,8 @@ public:
     void setCompressionValue(int val);
     int  getCompressionValue();
 
+    static int convertCompressionForLibPng(int value);
+
 Q_SIGNALS:
 
     void signalSettingsChanged();

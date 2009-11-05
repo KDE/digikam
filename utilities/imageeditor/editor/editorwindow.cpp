@@ -120,6 +120,8 @@
 #include "libsinfodlg.h"
 #include "loadingcacheinterface.h"
 #include "printhelper.h"
+#include "jpegsettings.h"
+#include "pngsettings.h"
 #include "rawcameradlg.h"
 #include "savingcontextcontainer.h"
 #include "sidebar.h"
@@ -887,17 +889,11 @@ void EditorWindow::applyStandardSettings()
 
     KConfigGroup group = config->group("ImageViewer Settings");
 
-    // JPEG quality slider settings : 1 - 100 ==> libjpeg settings : 25 - 100.
-    m_IOFileSettings->JPEGCompression     = (int)((75.0/100.0)*
-                                                 (float)group.readEntry("JPEGCompression", 75)
-                                                 + 26.0 - (75.0/100.0));
+    m_IOFileSettings->JPEGCompression     = JPEGSettings::convertCompressionForLibJpeg(group.readEntry("JPEGCompression", 75));
 
     m_IOFileSettings->JPEGSubSampling     = group.readEntry("JPEGSubSampling", 1);  // Medium subsampling
 
-    // PNG compression slider settings : 1 - 9 ==> libpng settings : 100 - 1.
-    m_IOFileSettings->PNGCompression      = (int)(((1.0-100.0)/8.0)*
-                                                 (float)group.readEntry("PNGCompression", 1)
-                                                 + 100.0 - ((1.0-100.0)/8.0));
+    m_IOFileSettings->PNGCompression      = PNGSettings::convertCompressionForLibPng(group.readEntry("PNGCompression", 1));
 
     // TIFF compression setting.
     m_IOFileSettings->TIFFCompression     = group.readEntry("TIFFCompression", false);

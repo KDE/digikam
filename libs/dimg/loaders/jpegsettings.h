@@ -52,6 +52,8 @@ public:
     void setSubSamplingValue(int val);
     int  getSubSamplingValue();
 
+    static int convertCompressionForLibJpeg(int value);
+
 Q_SIGNALS:
 
     void signalSettingsChanged();

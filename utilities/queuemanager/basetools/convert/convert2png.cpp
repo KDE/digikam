@@ -93,10 +93,7 @@ bool Convert2PNG::toolOperations()
 {
     if (!loadToDImg()) return false;
 
-    // PNG compression slider settings : 1 - 9 ==> libpng settings : 100 - 1.
-    int PNGCompression = (int)(((1.0-100.0)/8.0)*
-                         (float)settings()["Quality"].toInt()
-                         + 100.0 - ((1.0-100.0)/8.0));
+    int PNGCompression = PNGSettings::convertCompressionForLibPng(settings()["Quality"].toInt());
     image().setAttribute("quality", PNGCompression);
 
     return (savefromDImg());
