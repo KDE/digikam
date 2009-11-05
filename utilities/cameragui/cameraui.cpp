@@ -140,7 +140,11 @@ CameraUI::CameraUI(QWidget* parent, const QString& cameraTitle,
         : KXmlGuiWindow(parent), d(new CameraUIPriv)
 
 {
-    UiFileValidator validator(localXMLFile()+"/cameraui.rc");
+    setXMLFile("cameraui.rc");
+
+    // --------------------------------------------------------
+
+    UiFileValidator validator(localXMLFile());
     if (!validator.isValid())
     {
         validator.fixConfigFile();
@@ -531,7 +535,7 @@ void CameraUI::setupActions()
     d->anim = new DLogoAction(this);
     actionCollection()->addAction("logo_action", d->anim);
 
-    createGUI("cameraui.rc");
+    createGUI(xmlFile());
 
     d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
 }
