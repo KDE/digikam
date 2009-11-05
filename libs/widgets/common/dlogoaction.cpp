@@ -94,6 +94,7 @@ DLogoAction::DLogoAction(QObject* parent, bool alignOnright)
 
     d->alignOnright  = alignOnright;
     d->progressTimer = new QTimer(this);
+    d->progressTimer->setSingleShot(true);
 
     connect(d->progressTimer, SIGNAL(timeout()),
             this, SLOT(slotProgressTimerDone()));
