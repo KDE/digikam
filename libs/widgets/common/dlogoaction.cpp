@@ -70,11 +70,11 @@ public:
 
     int        progressCount;         // Position of animation.
 
-    QTimer    *progressTimer;
+    QTimer*    progressTimer;
 
     QPixmap    progressPixmap;
 
-    KUrlLabel *urlLabel;
+    KUrlLabel* urlLabel;
 };
 
 DLogoAction::DLogoAction(QObject* parent, bool alignOnright)
@@ -101,6 +101,7 @@ DLogoAction::DLogoAction(QObject* parent, bool alignOnright)
 
 DLogoAction::~DLogoAction()
 {
+    d->progressTimer->stop();
     delete d;
 }
 
