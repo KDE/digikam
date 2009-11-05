@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "defaultparser.h"
+#include "defaultrenameparser.h"
 
 // LibKExiv2 includes
 

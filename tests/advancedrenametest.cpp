@@ -30,7 +30,7 @@
 
 // Local includes
 
-#include "defaultparser.h"
+#include "defaultrenameparser.h"
 #include "parser.h"
 
 using namespace Digikam;

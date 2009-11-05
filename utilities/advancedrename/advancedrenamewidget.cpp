@@ -45,7 +45,7 @@
 
 #include "advancedrenameinput.h"
 #include "dcursortracker.h"
-#include "defaultparser.h"
+#include "defaultrenameparser.h"
 #include "dynamiclayout.h"
 #include "rexpanderbox.h"
 #include "themeengine.h"

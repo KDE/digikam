@@ -49,7 +49,7 @@
 #include "databasechangesets.h"
 #include "databasewatch.h"
 #include "ddragobjects.h"
-#include "defaultparser.h"
+#include "defaultrenameparser.h"
 #include "queuemgrwindow.h"
 #include "queuetooltip.h"
 #include "thumbnailloadthread.h"
