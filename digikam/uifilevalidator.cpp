@@ -39,6 +39,14 @@ const QString toolbarValue("mainToolBar");
 
 // --------------------------------------------------------
 
+class ToolbarNameHandler : public QXmlDefaultHandler
+{
+public:
+
+    virtual bool startElement(const QString & namespaceURI, const QString & localName, const QString & qName,
+                              const QXmlAttributes & atts);
+};
+
 bool ToolbarNameHandler::startElement(const QString & namespaceURI, const QString & localName, const QString & qName,
                                       const QXmlAttributes & atts)
 {

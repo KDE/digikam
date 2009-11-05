@@ -39,16 +39,6 @@ class QFile;
 namespace Digikam
 {
 
-class ToolbarNameHandler : public QXmlDefaultHandler
-{
-public:
-
-    virtual bool startElement(const QString & namespaceURI, const QString & localName, const QString & qName,
-                              const QXmlAttributes & atts);
-};
-
-// --------------------------------------------------------
-
 class UiFileValidatorPriv;
 
 class DIGIKAM_EXPORT UiFileValidator
@@ -59,15 +49,17 @@ public:
     ~UiFileValidator();
 
     bool isValid() const;
-    bool fixConfigFile();
-    bool fixConfigFile(const QString& destination);
 
     QByteArray getFixedContent();
+    bool       fixConfigFile();
+    bool       fixConfigFile(const QString& destination);
 
 private:
 
     bool isReadable(QFile& file) const;
     bool isWritable(QFile& file) const;
+
+private:
 
     UiFileValidatorPriv* const d;
 };
