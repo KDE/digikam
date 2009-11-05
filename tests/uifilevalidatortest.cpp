@@ -125,7 +125,7 @@ void UiFileValidatorTest::testFixConfigFile()
     QByteArray goodContent  = readContent(goodFile);
     QByteArray fixedContent = readContent(fixedFile);
 
-    // remove the dest file again
+    // remove the temporary fixed file again
     QVERIFY(removeFile(fixedFile));
 
     // check for valid results
