@@ -215,11 +215,7 @@ void MetadataParser::parseOperation(const QString& parseString, const ParseInfor
     PARSE_LOOP_START(parseString, reg)
     {
         QString keyword = reg.cap(1);
-#if KEXIV2_VERSION >= 0x010000
         tmp = parseMetadata(keyword, info);
-#else
-        Q_UNUSED(info)
-#endif
     }
     PARSE_LOOP_END(parseString, reg, tmp, results)
 }
