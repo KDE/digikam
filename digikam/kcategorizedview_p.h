@@ -133,39 +133,39 @@ public:
     struct ElementInfo
     {
         QString category;
-        int relativeOffsetToCategory;
+        int     relativeOffsetToCategory;
     };
 
     // Basic data
-    KCategorizedView *listView;
-    KCategoryDrawer *categoryDrawer;
-    QSize biggestItemSize;
+    KCategorizedView* listView;
+    KCategoryDrawer*  categoryDrawer;
+    QSize             biggestItemSize;
 
     // Behavior data
-    bool mouseButtonPressed;
-    bool rightMouseButtonPressed;
-    bool dragLeftViewport;
-    bool drawItemsWhileDragging;
+    bool        mouseButtonPressed;
+    bool        rightMouseButtonPressed;
+    bool        dragLeftViewport;
+    bool        drawItemsWhileDragging;
     QModelIndex hovered;
-    QString hoveredCategory;
-    QPoint initialPressPosition;
-    QPoint mousePosition;
-    int forcedSelectionPosition;
+    QString     hoveredCategory;
+    QPoint      initialPressPosition;
+    QPoint      mousePosition;
+    int         forcedSelectionPosition;
 
     // Cache data
     // We cannot merge some of them into structs because it would affect
     // performance
-    QVector<struct ElementInfo> elementsInfo;
-    QHash<int, QRect> elementsPosition;
+    QVector<struct ElementInfo>   elementsInfo;
+    QHash<int, QRect>             elementsPosition;
     QHash<QString, QVector<int> > categoriesIndexes;
-    QHash<QString, QRect> categoriesPosition;
-    QStringList categories;
-    QModelIndexList intersectedIndexes;
-    QRect lastDraggedItemsRect;
-    QItemSelection lastSelection;
+    QHash<QString, QRect>         categoriesPosition;
+    QStringList                   categories;
+    QModelIndexList               intersectedIndexes;
+    QRect                         lastDraggedItemsRect;
+    QItemSelection                lastSelection;
 
     // Attributes for speed reasons
-    KCategorizedSortFilterProxyModel *proxyModel;
+    KCategorizedSortFilterProxyModel* proxyModel;
 };
 
 #endif // KCATEGORIZEDVIEW_P_H

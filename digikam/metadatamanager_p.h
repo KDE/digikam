@@ -62,16 +62,16 @@ public:
     void setExifOrientation(const QList<ImageInfo>& infos, int orientation)
         { emit signalSetExifOrientation(infos, orientation); }
 
-    int               dbTodo;
-    int               dbDone;
-    int               writerTodo;
-    int               writerDone;
-    QSet<qlonglong>   scheduledToWrite;
-    QString           dbMessage;
-    QString           writerMessage;
-    QMutex            mutex;
+    int              dbTodo;
+    int              dbDone;
+    int              writerTodo;
+    int              writerDone;
+    QSet<qlonglong>  scheduledToWrite;
+    QString          dbMessage;
+    QString          writerMessage;
+    QMutex           mutex;
 
-    MetadataManager  *q;
+    MetadataManager* q;
 
     // -- Workflow controlling --
 

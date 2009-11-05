@@ -55,14 +55,14 @@ public:
 
     bool overlaysActive;
 
-    ImageRotateLeftOverlay  *rotateLeftOverlay;
-    ImageRotateRightOverlay *rotateRightOverlay;
+    ImageRotateLeftOverlay*  rotateLeftOverlay;
+    ImageRotateRightOverlay* rotateRightOverlay;
 
     void updateOverlays();
 
 private:
 
-    DigikamImageView *q_ptr;
+    DigikamImageView* q_ptr;
 };
 
 } // namespace Digikam
