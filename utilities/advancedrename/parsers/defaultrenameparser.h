@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DEFAULTPARSER_H
-#define DEFAULTPARSER_H
+#ifndef DEFAULTRENAMEPARSER_H
+#define DEFAULTRENAMEPARSER_H
 
 // Local includes
 
@@ -42,4 +42,4 @@ public:
 }  // namespace Digikam
 
 
-#endif /* DEFAULTPARSER_H */
+#endif /* DEFAULTRENAMEPARSER_H */
