@@ -125,7 +125,7 @@ public:
         configLastUsedRenamePatternEntry("Last Used Rename Pattern"),
         configDialogSizeEntry("Dialog Size"),
 
-        singleFileMode(true),
+        singleFileMode(false),
         minSizeDialog(450),
         listView(0),
         advancedRenameWidget(0)
@@ -134,6 +134,8 @@ public:
     const QString         configGroupName;
     const QString         configLastUsedRenamePatternEntry;
     const QString         configDialogSizeEntry;
+
+    QString               singleFileModeOldFilename;
 
     bool                  singleFileMode;
     int                   minSizeDialog;
@@ -203,7 +205,9 @@ void AdvancedRenameDialog::slotParseStringChanged(const QString& parseString)
 {
     d->newNamesList.clear();
 
-    enableButton(Ok, !parseString.isEmpty());
+    bool enableBtn = !parseString.isEmpty();
+    enableBtn      = d->singleFileMode ? (enableBtn && d->singleFileModeOldFilename != parseString) : enableBtn;
+    enableButton(Ok, enableBtn);
 
     int index = 1;
     QTreeWidgetItemIterator it(d->listView);
@@ -245,7 +249,9 @@ void AdvancedRenameDialog::slotAddImages(const KUrl::List& urls)
         QFileInfo info(urls.first().toLocalFile());
         d->advancedRenameWidget->setText(info.completeBaseName());
         d->advancedRenameWidget->focusLineEdit();
+        d->singleFileModeOldFilename = info.completeBaseName();
     }
+    d->singleFileMode = (itemCount <= 1);
 
     initDialog(itemCount);
 }
@@ -254,7 +260,6 @@ void AdvancedRenameDialog::initDialog(int count)
 {
     QString title = i18np("Rename", "Rename (%1 images)", count);
     setWindowTitle(title);
-    d->singleFileMode = (count <= 1);
 }
 
 NewNamesList AdvancedRenameDialog::newNames()
