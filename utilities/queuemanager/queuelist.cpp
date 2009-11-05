@@ -811,6 +811,10 @@ void QueueListView::slotAssignedToolsChanged(const AssignedBatchTools& tools)
 
 void QueueListView::updateDestFileNames()
 {
+    DefaultParser p;
+    QString parseString      = settings().renamingParser;
+    AssignedBatchTools tools = assignedTools();
+
     int index = 1;
     QTreeWidgetItemIterator it(this);
     while (*it)
@@ -825,18 +829,14 @@ void QueueListView::updateDestFileNames()
             QString baseName = fi.baseName();
             if (settings().renamingRule == QueueSettings::CUSTOMIZE)
             {
-                DefaultParser p;
                 ParseInformation parseInfo(info);
                 parseInfo.index = index;
-
-                QString parseString = settings().renamingParser;
-                baseName            = p.parse(parseString, parseInfo);
+                baseName        = p.parse(parseString, parseInfo);
             }
 
             // Update suffix using assigned batch tool rules.
-            AssignedBatchTools tools = assignedTools();
-            tools.itemUrl            = item->info().fileUrl();
-            QString newSuffix        = tools.targetSuffix();
+            tools.itemUrl     = item->info().fileUrl();
+            QString newSuffix = tools.targetSuffix();
 
             item->setDestFileName(QString("%1.%2").arg(baseName).arg(newSuffix));
         }
