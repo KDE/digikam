@@ -153,12 +153,17 @@ DigikamApp::DigikamApp()
 {
     // --------------------------------------------------------
 
+    setXMLFile("digikamui.rc");
+
+    // --------------------------------------------------------
+
     // To adept the global KDE toolbar style, the toolbar needs to be named "mainToolBar".
     // digiKam used to name the toolbars "ToolBar", which makes it not behave like other KDE applications do.
     // A simple rename in the *ui.rc files does not prevent users from the "faulty" behavior if they have a custom
     // *ui.rc file in their home directories.
     // In this case, we need to parse the ui files and alter the name on startup. See BKO: 210823
-    UiFileValidator validator(localXMLFile()+"/digikamui.rc");
+
+    UiFileValidator validator(localXMLFile());
     if (!validator.isValid())
     {
         validator.fixConfigFile();
