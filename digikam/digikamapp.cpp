@@ -1219,7 +1219,7 @@ void DigikamApp::setupActions()
 
     loadCameras();
 
-    createGUI("digikamui.rc");
+    createGUI(xmlFile());
 
     // Initialize Actions ---------------------------------------
 
@@ -2170,11 +2170,11 @@ void DigikamApp::slotConfToolbars()
 {
     saveMainWindowSettings(d->config->group("General Settings"));
     QPointer<KEditToolBar> dlg = new KEditToolBar(actionCollection(), this);
-    dlg->setResourceFile("digikamui.rc");
+    dlg->setResourceFile(xmlFile());
 
     if(dlg->exec())
     {
-        createGUI("digikamui.rc");
+        createGUI(xmlFile());
         applyMainWindowSettings(d->config->group("General Settings"));
         plugActionList( QString::fromLatin1("file_actions_import"), d->kipiFileActionsImport );
         plugActionList( QString::fromLatin1("image_actions"),       d->kipiImageActions );
