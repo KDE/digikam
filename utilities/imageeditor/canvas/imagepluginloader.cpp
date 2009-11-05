@@ -154,6 +154,16 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
             kDebug() << "ImagePluginLoader: Loaded plugin " << corePlugin->name();
 
             ++cpt;
+
+            // --------------------------------------------------------
+
+            // fix old ui file layout
+            UiFileValidator validator(plugin->localXMLFile());
+            if (!validator.isValid())
+            {
+                kDebug() << "Old ui file layout detected: " << corePlugin->name();
+                validator.fixConfigFile();
+            }
         }
         else
         {
@@ -186,6 +196,8 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
 
                 kDebug() << "ImagePluginLoader: Loaded plugin " << service->name();
 
+                ++cpt;
+
                 // --------------------------------------------------------
 
                 // fix old ui file layout
@@ -195,8 +207,6 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
                     kDebug() << "Old ui file layout detected: " << service->name();
                     validator.fixConfigFile();
                 }
-
-                ++cpt;
             }
             else
             {
