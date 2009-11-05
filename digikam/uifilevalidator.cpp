@@ -108,7 +108,10 @@ bool UiFileValidator::isValid() const
     QFile fi(d->filename);
     if (!isReadable(fi))
     {
-        return false;
+        // We want to return true if the file is not readable,
+        // because this means that we have no custom ui file and therefore can not decide if it is
+        // valid or not.
+        return true;
     }
 
     QXmlSimpleReader   xmlReader;

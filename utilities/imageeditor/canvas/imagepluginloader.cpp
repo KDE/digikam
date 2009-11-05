@@ -41,6 +41,7 @@
 // Local includes
 
 #include "splashscreen.h"
+#include "uifilevalidator.h"
 
 namespace Digikam
 {
@@ -106,7 +107,9 @@ ImagePluginLoader::ImagePluginLoader(QObject *parent, SplashScreen *splash)
     foreach (const KService::Ptr& service, d->pluginServiceMap)
     {
         if (!d->obsoleteImagePluginsList.contains(service->library()))
+        {
             imagePluginsList2Load.append(service->name());
+        }
     }
 
     loadPluginsFromList(imagePluginsList2Load);
@@ -182,6 +185,16 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
                 d->pluginMap[name] = plugin;
 
                 kDebug() << "ImagePluginLoader: Loaded plugin " << service->name();
+
+                // --------------------------------------------------------
+
+                // fix old ui file layout
+                UiFileValidator validator(plugin->localXMLFile());
+                if (!validator.isValid())
+                {
+                    kDebug() << "Old ui file layout detected: " << service->name();
+                    validator.fixConfigFile();
+                }
 
                 ++cpt;
             }
