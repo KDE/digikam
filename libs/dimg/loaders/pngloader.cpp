@@ -675,7 +675,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     // Quality to convert to compression
 
     QVariant qualityAttr = imageGetAttribute("quality");
-    quality = qualityAttr.isValid() ? qualityAttr.toInt() : 90;
+    quality              = qualityAttr.isValid() ? qualityAttr.toInt() : 90;
 
     if (quality < 1)
         quality = 1;
@@ -690,6 +690,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     if (compression > 9)
         compression = 9;
 
+    kDebug() << "PNG compression level: " << compression;
     png_set_compression_level(png_ptr, compression);
 
     // -------------------------------------------------------------------
