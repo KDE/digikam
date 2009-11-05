@@ -91,7 +91,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 082 ==> 212748 : digiKam image editor crashes when browsing too fast.
 083 ==> 213111 : Crash on edit image.
 084 ==> 213188 : BQM convert to png: setting the "PNG compression" has no impact.
-085 ==> 
+085 ==> 213289 : Record custom date format.
+086 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
