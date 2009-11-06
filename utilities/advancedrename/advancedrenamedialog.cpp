@@ -85,8 +85,8 @@ void AdvancedRenameListItem::setImageUrl(const KUrl& url)
     QFileInfo fi(d->imageUrl.toLocalFile());
     d->completeFileName  = fi.fileName();
 
-    setName(d->completeFileName);
-    setNewName(d->completeFileName);
+    setName(d->completeFileName,    false);
+    setNewName(d->completeFileName, false);
 }
 
 KUrl AdvancedRenameListItem::imageUrl() const
@@ -94,10 +94,13 @@ KUrl AdvancedRenameListItem::imageUrl() const
     return d->imageUrl;
 }
 
-void AdvancedRenameListItem::setName(const QString& name)
+void AdvancedRenameListItem::setName(const QString& name, bool check)
 {
     setText(OldName, name);
-    markInvalid(isInvalid());
+//    if (check)
+//    {
+        markInvalid(isInvalid());
+//    }
 }
 
 QString AdvancedRenameListItem::name() const
@@ -105,10 +108,13 @@ QString AdvancedRenameListItem::name() const
     return text(OldName);
 }
 
-void AdvancedRenameListItem::setNewName(const QString& name)
+void AdvancedRenameListItem::setNewName(const QString& name, bool check)
 {
     setText(NewName, name);
-    markInvalid(isInvalid());
+//    if (check)
+//    {
+        markInvalid(isInvalid());
+//    }
 }
 
 QString AdvancedRenameListItem::newName() const
@@ -269,6 +275,7 @@ void AdvancedRenameDialog::slotAddImages(const KUrl::List& urls)
 
     enableButton(Ok, checkNewNames());
     initDialog(itemCount);
+    slotParseStringChanged(d->advancedRenameWidget->text());
 }
 
 void AdvancedRenameDialog::initDialog(int count)
@@ -339,6 +346,7 @@ bool AdvancedRenameDialog::checkNewNames()
         if (item)
         {
             valid = valid && (!item->isInvalid()) && ( !tmpNewNames.contains(item->newName()) );
+            item->markInvalid(!valid);
             tmpNewNames << item->newName();
         }
         ++it;
