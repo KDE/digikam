@@ -37,8 +37,7 @@ namespace Digikam
 {
 
 CameraNameParser::CameraNameParser()
-                : SubParser(i18n("Camera Name"), i18n("Add the camera name"),
-                            SmallIcon("camera-photo"))
+                : SubParser(i18n("Camera"), i18n("Add the camera name"), SmallIcon("camera-photo"))
 {
     addTokenDescription("[cam]", i18n("Camera Name"), i18n("Camera name"));
 

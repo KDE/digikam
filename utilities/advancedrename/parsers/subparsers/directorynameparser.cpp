@@ -38,8 +38,7 @@ namespace Digikam
 {
 
 DirectoryNameParser::DirectoryNameParser()
-                   : SubParser(i18n("Directory Name"), i18n("Add the directory name"),
-                               SmallIcon("folder"))
+                   : SubParser(i18n("Directory"), i18n("Add the directory name"), SmallIcon("folder"))
 {
     setUseTokenMenu(false);
 
