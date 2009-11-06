@@ -97,10 +97,10 @@ KUrl AdvancedRenameListItem::imageUrl() const
 void AdvancedRenameListItem::setName(const QString& name, bool check)
 {
     setText(OldName, name);
-//    if (check)
-//    {
+    if (check)
+    {
         markInvalid(isInvalid());
-//    }
+    }
 }
 
 QString AdvancedRenameListItem::name() const
@@ -111,10 +111,10 @@ QString AdvancedRenameListItem::name() const
 void AdvancedRenameListItem::setNewName(const QString& name, bool check)
 {
     setText(NewName, name);
-//    if (check)
-//    {
+    if (check)
+    {
         markInvalid(isInvalid());
-//    }
+    }
 }
 
 QString AdvancedRenameListItem::newName() const
