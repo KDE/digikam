@@ -97,6 +97,7 @@ KUrl AdvancedRenameListItem::imageUrl() const
 void AdvancedRenameListItem::setName(const QString& name)
 {
     setText(OldName, name);
+    markInvalid(isInvalid());
 }
 
 QString AdvancedRenameListItem::name() const
@@ -107,6 +108,7 @@ QString AdvancedRenameListItem::name() const
 void AdvancedRenameListItem::setNewName(const QString& name)
 {
     setText(NewName, name);
+    markInvalid(isInvalid());
 }
 
 QString AdvancedRenameListItem::newName() const
@@ -119,6 +121,11 @@ void AdvancedRenameListItem::markInvalid(bool invalid)
     QColor normalText = kapp->palette().text().color();
     setTextColor(OldName, invalid ? Qt::red : normalText);
     setTextColor(NewName, invalid ? Qt::red : normalText);
+}
+
+bool AdvancedRenameListItem::isInvalid()
+{
+    return ( name() == newName() );
 }
 
 // --------------------------------------------------------
@@ -188,6 +195,9 @@ AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
     enableButton(Ok, false);
     setHelp("advancedrename.anchor", "digikam");
 
+    initDialog();
+    readSettings();
+
     // --------------------------------------------------------
 
     connect(d->advancedRenameWidget, SIGNAL(signalTextChanged(const QString&)),
@@ -198,11 +208,6 @@ AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
 
     connect(this, SIGNAL(signalWindowLostFocus()),
             d->advancedRenameWidget, SLOT(slotHideToolTipTracker()));
-
-    // --------------------------------------------------------
-
-    initDialog();
-    readSettings();
 }
 
 AdvancedRenameDialog::~AdvancedRenameDialog()
@@ -333,8 +338,7 @@ bool AdvancedRenameDialog::checkNewNames()
         AdvancedRenameListItem* item = dynamic_cast<AdvancedRenameListItem*>((*it));
         if (item)
         {
-            valid = valid && (item->name() != item->newName()) && ( !tmpNewNames.contains(item->newName()) );
-            item->markInvalid(!valid);
+            valid = valid && (!item->isInvalid()) && ( !tmpNewNames.contains(item->newName()) );
             tmpNewNames << item->newName();
         }
         ++it;

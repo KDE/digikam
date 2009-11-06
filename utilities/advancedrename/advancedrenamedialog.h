@@ -75,6 +75,7 @@ public:
     QString newName() const;
 
     void markInvalid(bool invalid);
+    bool isInvalid();
 
 private:
 
