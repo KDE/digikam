@@ -41,7 +41,11 @@ class ParseInformation
 {
 public:
 
-    ParseInformation() : index(1), useFileExtension(true) {};
+    ParseInformation() :
+        index(1),
+        useFileExtension(true)
+    {};
+
     ParseInformation(const ImageInfo& info) :
         filePath(info.filePath()),
         cameraName(info.photoInfoContainer().make + ' ' + info.photoInfoContainer().model),
@@ -59,7 +63,6 @@ public:
 public:
 
     QString   filePath;
-    QString   fileExtension;
     QString   cameraName;
     QDateTime dateTime;
     int       index;
