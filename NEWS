@@ -93,7 +93,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 083 ==> 213111 : Crash on edit image.
 084 ==> 213188 : BQM convert to png: setting the "PNG compression" has no impact.
 085 ==> 213289 : Record custom date format.
-086 ==> 
+086 ==> 208907 : Rename Images - file extension in uppercase.
+087 ==>
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
