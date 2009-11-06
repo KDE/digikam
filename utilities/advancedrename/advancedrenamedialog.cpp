@@ -37,6 +37,7 @@
 
 // KDE includes
 
+#include <kapplication.h>
 #include <klocale.h>
 
 // Local includes
@@ -115,8 +116,9 @@ QString AdvancedRenameListItem::newName() const
 
 void AdvancedRenameListItem::markInvalid(bool invalid)
 {
-    setBackgroundColor(OldName, invalid ? Qt::red : Qt::transparent);
-    setBackgroundColor(NewName, invalid ? Qt::red : Qt::transparent);
+    QColor normalText = kapp->palette().text().color();
+    setTextColor(OldName, invalid ? Qt::red : normalText);
+    setTextColor(NewName, invalid ? Qt::red : normalText);
 }
 
 // --------------------------------------------------------
@@ -185,8 +187,6 @@ AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
     setButtons(Help|Cancel|Ok);
     enableButton(Ok, false);
     setHelp("advancedrename.anchor", "digikam");
-    initDialog();
-    readSettings();
 
     // --------------------------------------------------------
 
@@ -198,6 +198,11 @@ AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
 
     connect(this, SIGNAL(signalWindowLostFocus()),
             d->advancedRenameWidget, SLOT(slotHideToolTipTracker()));
+
+    // --------------------------------------------------------
+
+    initDialog();
+    readSettings();
 }
 
 AdvancedRenameDialog::~AdvancedRenameDialog()
@@ -246,7 +251,6 @@ void AdvancedRenameDialog::slotAddImages(const KUrl::List& urls)
         item->setImageUrl(*it);
         ++itemCount;
     }
-    enableButton(Ok, checkNewNames());
 
     // set current filename if only one image has been added
     if (itemCount == 1)
@@ -258,6 +262,7 @@ void AdvancedRenameDialog::slotAddImages(const KUrl::List& urls)
     }
     d->singleFileMode = (itemCount <= 1);
 
+    enableButton(Ok, checkNewNames());
     initDialog(itemCount);
 }
 
