@@ -204,30 +204,6 @@ void AdvancedRenameDialog::slotParseStringChanged(const QString& parseString)
     d->newNamesList.clear();
     bool enableBtn = !parseString.isEmpty();
 
-    // --------------------------------------------------------
-
-    if (d->singleFileMode)
-    {
-        QTreeWidgetItemIterator it(d->listView);
-        while (*it)
-        {
-            AdvancedRenameListItem* item = dynamic_cast<AdvancedRenameListItem*>((*it));
-            if (item)
-            {
-                ParseInformation parseInfo(item->imageUrl());
-                QString newName = d->advancedRenameWidget->parse(parseInfo);
-                enableBtn = enableBtn && (d->singleFileModeOldFilename != newName);
-            }
-            ++it;
-        }
-    }
-
-    // --------------------------------------------------------
-
-    enableButton(Ok, enableBtn);
-
-    // --------------------------------------------------------
-
     int index = 1;
     QTreeWidgetItemIterator it(d->listView);
     while (*it)
@@ -242,10 +218,14 @@ void AdvancedRenameDialog::slotParseStringChanged(const QString& parseString)
             item->setNewName(newName);
             d->newNamesList << NewNameInfo(item->imageUrl(), newName);
 
+            enableBtn = enableBtn && (item->name() != newName);
+
             ++index;
         }
         ++it;
     }
+
+    enableButton(Ok, enableBtn);
     d->listView->viewport()->update();
 }
 
