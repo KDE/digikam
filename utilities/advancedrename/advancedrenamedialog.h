@@ -53,6 +53,14 @@ class AdvancedRenameListItem : public QTreeWidgetItem
 {
 public:
 
+    enum Column
+    {
+        OldName = 0,
+        NewName
+    };
+
+public:
+
     AdvancedRenameListItem(QTreeWidget* view);
     AdvancedRenameListItem(QTreeWidget* view, const KUrl& info);
     virtual ~AdvancedRenameListItem();
@@ -65,6 +73,8 @@ public:
 
     void setNewName(const QString& name);
     QString newName() const;
+
+    void markInvalid(bool invalid);
 
 private:
 
@@ -112,7 +122,7 @@ private:
     void initDialog(int count = 1);
     void readSettings();
     void writeSettings();
-    bool newNamesAreValid();
+    bool checkNewNames();
 
 private:
 

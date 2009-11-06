@@ -95,22 +95,28 @@ KUrl AdvancedRenameListItem::imageUrl() const
 
 void AdvancedRenameListItem::setName(const QString& name)
 {
-    setText(0, name);
+    setText(OldName, name);
 }
 
 QString AdvancedRenameListItem::name() const
 {
-    return text(0);
+    return text(OldName);
 }
 
 void AdvancedRenameListItem::setNewName(const QString& name)
 {
-    setText(1, name);
+    setText(NewName, name);
 }
 
 QString AdvancedRenameListItem::newName() const
 {
-    return text(1);
+    return text(NewName);
+}
+
+void AdvancedRenameListItem::markInvalid(bool invalid)
+{
+    setBackgroundColor(OldName, invalid ? Qt::red : Qt::transparent);
+    setBackgroundColor(NewName, invalid ? Qt::red : Qt::transparent);
 }
 
 // --------------------------------------------------------
@@ -222,7 +228,7 @@ void AdvancedRenameDialog::slotParseStringChanged(const QString& parseString)
         ++it;
     }
 
-    bool enableBtn = !parseString.isEmpty() && newNamesAreValid();
+    bool enableBtn = !parseString.isEmpty() && checkNewNames();
     enableButton(Ok, enableBtn);
 
     d->listView->viewport()->update();
@@ -240,6 +246,7 @@ void AdvancedRenameDialog::slotAddImages(const KUrl::List& urls)
         item->setImageUrl(*it);
         ++itemCount;
     }
+    enableButton(Ok, checkNewNames());
 
     // set current filename if only one image has been added
     if (itemCount == 1)
@@ -310,7 +317,7 @@ void AdvancedRenameDialog::writeSettings()
     }
 }
 
-bool AdvancedRenameDialog::newNamesAreValid()
+bool AdvancedRenameDialog::checkNewNames()
 {
     QSet<QString> tmpNewNames;
     bool valid = true;
@@ -321,11 +328,8 @@ bool AdvancedRenameDialog::newNamesAreValid()
         AdvancedRenameListItem* item = dynamic_cast<AdvancedRenameListItem*>((*it));
         if (item)
         {
-            valid = (item->name() != item->newName()) && ( !tmpNewNames.contains(item->newName()) );
-            if (!valid)
-            {
-                break;
-            }
+            valid = valid && (item->name() != item->newName()) && ( !tmpNewNames.contains(item->newName()) );
+            item->markInvalid(!valid);
             tmpNewNames << item->newName();
         }
         ++it;
