@@ -111,7 +111,7 @@ ModifierList SubParser::modifiers() const
     return d->modifiers;
 }
 
-void SubParser::parse(const QString& parseString, const ParseInformation& info)
+void SubParser::parse(const QString& parseString, ParseInformation& info)
 {
     d->parseResults.clear();
     d->modifierResults.clear();

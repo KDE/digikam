@@ -188,7 +188,7 @@ DateParser::DateParser()
     setRegExp("\\[date(:.*)?\\]");
 }
 
-void DateParser::parseOperation(const QString& parseString, const ParseInformation& info, ParseResults& results)
+void DateParser::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
 {
     QRegExp reg = regExp();
     reg.setMinimal(true);

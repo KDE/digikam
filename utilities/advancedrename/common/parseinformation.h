@@ -41,12 +41,13 @@ class ParseInformation
 {
 public:
 
-    ParseInformation() : index(1) {};
+    ParseInformation() : index(1), useFileExtension(true) {};
     ParseInformation(const ImageInfo& info) :
         filePath(info.filePath()),
         cameraName(info.photoInfoContainer().make + ' ' + info.photoInfoContainer().model),
         dateTime(info.dateTime()),
-        index(1)
+        index(1),
+        useFileExtension(true)
     {};
 
     bool isValid()
@@ -58,9 +59,11 @@ public:
 public:
 
     QString   filePath;
+    QString   fileExtension;
     QString   cameraName;
     QDateTime dateTime;
     int       index;
+    bool      useFileExtension;
 };
 
 } // namespace Digikam

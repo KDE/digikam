@@ -60,7 +60,7 @@ public:
 
     void    setUseDefault(bool val);
     bool    useDefault() const;
-    QString newName(const QString& fileName, const QDateTime& date, int index, const QString& extension) const;
+    QString newName(const QString& fileName, const QDateTime& date, int index) const;
     Case    changeCase() const;
 
     int     startIndex() const;

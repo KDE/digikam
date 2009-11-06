@@ -52,7 +52,7 @@ DirectoryNameParser::DirectoryNameParser()
     setRegExp("\\[dir(\\.*)\\]");
 }
 
-void DirectoryNameParser::parseOperation(const QString& parseString, const ParseInformation& info, ParseResults& results)
+void DirectoryNameParser::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
 {
     QFileInfo fi(info.filePath);
     QStringList folders = fi.absolutePath().split('/', QString::SkipEmptyParts);

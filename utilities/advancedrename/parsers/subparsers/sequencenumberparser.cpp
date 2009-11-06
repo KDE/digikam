@@ -170,7 +170,7 @@ void SequenceNumberParser::slotTokenTriggered(const QString& token)
     emit signalTokenTriggered(tmp);
 }
 
-void SequenceNumberParser::parseOperation(const QString& parseString, const ParseInformation& info, ParseResults& results)
+void SequenceNumberParser::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
 {
     QRegExp reg = regExp();
     int slength = 0;

@@ -101,12 +101,9 @@ void ImageViewUtilities::rename(const KUrl& imageUrl, const QString& newName)
     if (imageUrl.isEmpty() || !imageUrl.isLocalFile() || newName.isEmpty())
         return;
 
-    QFileInfo fi(imageUrl.toLocalFile());
-    QString ext = QString(".") + fi.suffix();
-
     ImageInfo info(imageUrl.toLocalFile());
 
-    KIO::CopyJob* job = DIO::rename(info, newName + ext);
+    KIO::CopyJob* job = DIO::rename(info, newName);
     job->setProperty(renameFileProperty.toAscii(), imageUrl.toLocalFile());
 
     connect(job, SIGNAL(result(KJob*)),

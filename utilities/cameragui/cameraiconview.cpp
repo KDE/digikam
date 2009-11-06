@@ -395,22 +395,13 @@ QString CameraIconView::defaultDownloadName(CameraIconItem *viewItem)
 
 QString CameraIconView::getTemplatedName(const GPItemInfo* itemInfo, int position)
 {
-    QString ext = itemInfo->name;
-    int pos     = ext.lastIndexOf('.');
-    if (pos < 0)
-        ext = "";
-    else
-        ext = ext.right( ext.length() - pos );
-
-
     QFileInfo fi;
     fi.setFile(QDir(itemInfo->folder), itemInfo->name);
 
-    return d->renamer->newName(fi.absoluteFilePath(), itemInfo->mtime, position+1, ext);
+    return d->renamer->newName(fi.absoluteFilePath(), itemInfo->mtime, position+1);
 }
 
-QString CameraIconView::getCasedName(const RenameCustomizer::Case ccase,
-                                     const GPItemInfo* itemInfo)
+QString CameraIconView::getCasedName(const RenameCustomizer::Case ccase, const GPItemInfo* itemInfo)
 {
     QString dname;
 

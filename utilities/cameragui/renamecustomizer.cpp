@@ -184,8 +184,7 @@ void RenameCustomizer::setStartIndex(int startIndex)
     d->startIndex = startIndex;
 }
 
-QString RenameCustomizer::newName(const QString& fileName, const QDateTime& dateTime,
-                                  int index, const QString &extension) const
+QString RenameCustomizer::newName(const QString& fileName, const QDateTime& dateTime, int index) const
 {
 
     if (d->renameDefault->isChecked())
@@ -203,7 +202,6 @@ QString RenameCustomizer::newName(const QString& fileName, const QDateTime& date
         parseInfo.index      = index;
 
         name = d->advancedRenameWidget->parse(parseInfo);
-        name += extension;
     }
 
     return name;

@@ -123,11 +123,11 @@ QString Parser::parse(const QString& parseString, ParseInformation& info)
 QString Parser::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results,
                                bool modify)
 {
+    QFileInfo fi(info.filePath);
+
     if (!stringIsValid(parseString))
     {
-        QFileInfo fi(info.filePath);
-        QString baseName = fi.baseName();
-        return baseName;
+        return fi.fileName();
     }
 
     if (!d->subparsers.isEmpty())
@@ -156,7 +156,18 @@ QString Parser::parseOperation(const QString& parseString, ParseInformation& inf
         parsed = results.replaceTokens(parseString);
     }
 
-    return parsed;
+    QString newname = parsed;
+    if (newname.isEmpty())
+    {
+        return fi.fileName();
+    }
+
+    if (info.useFileExtension)
+    {
+        newname.append('.').append(fi.completeSuffix());
+    }
+
+    return newname;
 }
 
 bool Parser::tokenAtPosition(Type type, const QString& parseString, int pos)

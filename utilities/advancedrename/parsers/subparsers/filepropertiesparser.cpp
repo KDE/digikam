@@ -45,10 +45,10 @@ FilePropertiesParser::FilePropertiesParser()
     addTokenDescription("[ext]", i18nc("image extension", "Extension"),
              i18n("File extension"));
 
-    setRegExp("\\[(file|ext)\\]");
+    setRegExp("(\\[file\\]|(\\.?)\\[ext\\])");
 }
 
-void FilePropertiesParser::parseOperation(const QString& parseString, const ParseInformation& info, ParseResults& results)
+void FilePropertiesParser::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
 {
     QFileInfo fi(info.filePath);
 
@@ -60,13 +60,18 @@ void FilePropertiesParser::parseOperation(const QString& parseString, const Pars
     QString tmp;
     PARSE_LOOP_START(parseString, reg)
     {
-        if (reg.cap(1) == QString("file"))
+        if (reg.cap(1) == QString("[file]"))
         {
             tmp = fi.baseName();
         }
-        else        // extension
+        else if (reg.cap(1) == QString("[ext]"))
         {
-            tmp = fi.suffix();
+                tmp = fi.completeSuffix();
+        }
+        else if (reg.cap(1) == QString(".[ext]"))
+        {
+            tmp = "." + fi.completeSuffix();
+            info.useFileExtension = false;
         }
     }
     PARSE_LOOP_END(parseString, reg, tmp, results)

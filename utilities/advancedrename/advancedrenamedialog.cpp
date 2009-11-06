@@ -55,19 +55,18 @@ public:
     }
 
     KUrl    imageUrl;
-    QString baseName;
-    QString extension;
+    QString completeFileName;
 };
 
 // --------------------------------------------------------
 
 AdvancedRenameListItem::AdvancedRenameListItem(QTreeWidget* view)
-                    : QTreeWidgetItem(view), d(new AdvancedRenameListItemPriv)
+                      : QTreeWidgetItem(view), d(new AdvancedRenameListItemPriv)
 {
 }
 
 AdvancedRenameListItem::AdvancedRenameListItem(QTreeWidget* view, const KUrl& url)
-                    : QTreeWidgetItem(view), d(new AdvancedRenameListItemPriv)
+                      : QTreeWidgetItem(view), d(new AdvancedRenameListItemPriv)
 {
     setImageUrl(url);
 }
@@ -82,11 +81,10 @@ void AdvancedRenameListItem::setImageUrl(const KUrl& url)
     d->imageUrl = url;
 
     QFileInfo fi(d->imageUrl.toLocalFile());
-    d->baseName  = fi.baseName();
-    d->extension = fi.completeSuffix();
+    d->completeFileName  = fi.fileName();
 
-    setName(d->baseName);
-    setNewName(d->baseName);
+    setName(d->completeFileName);
+    setNewName(d->completeFileName);
 }
 
 KUrl AdvancedRenameListItem::imageUrl() const
@@ -96,7 +94,7 @@ KUrl AdvancedRenameListItem::imageUrl() const
 
 void AdvancedRenameListItem::setName(const QString& name)
 {
-    setText(0, name + '.' + d->extension);
+    setText(0, name);
 }
 
 QString AdvancedRenameListItem::name() const
@@ -106,7 +104,7 @@ QString AdvancedRenameListItem::name() const
 
 void AdvancedRenameListItem::setNewName(const QString& name)
 {
-    setText(1, name + '.' + d->extension);
+    setText(1, name);
 }
 
 QString AdvancedRenameListItem::newName() const
@@ -204,10 +202,31 @@ AdvancedRenameDialog::~AdvancedRenameDialog()
 void AdvancedRenameDialog::slotParseStringChanged(const QString& parseString)
 {
     d->newNamesList.clear();
-
     bool enableBtn = !parseString.isEmpty();
-    enableBtn      = d->singleFileMode ? (enableBtn && d->singleFileModeOldFilename != parseString) : enableBtn;
+
+    // --------------------------------------------------------
+
+    if (d->singleFileMode)
+    {
+        QTreeWidgetItemIterator it(d->listView);
+        while (*it)
+        {
+            AdvancedRenameListItem* item = dynamic_cast<AdvancedRenameListItem*>((*it));
+            if (item)
+            {
+                ParseInformation parseInfo(item->imageUrl());
+                QString newName = d->advancedRenameWidget->parse(parseInfo);
+                enableBtn = enableBtn && (d->singleFileModeOldFilename != newName);
+            }
+            ++it;
+        }
+    }
+
+    // --------------------------------------------------------
+
     enableButton(Ok, enableBtn);
+
+    // --------------------------------------------------------
 
     int index = 1;
     QTreeWidgetItemIterator it(d->listView);
@@ -247,9 +266,9 @@ void AdvancedRenameDialog::slotAddImages(const KUrl::List& urls)
     if (itemCount == 1)
     {
         QFileInfo info(urls.first().toLocalFile());
-        d->advancedRenameWidget->setText(info.completeBaseName());
+        d->advancedRenameWidget->setText(info.baseName());
         d->advancedRenameWidget->focusLineEdit();
-        d->singleFileModeOldFilename = info.completeBaseName();
+        d->singleFileModeOldFilename = info.fileName();
     }
     d->singleFileMode = (itemCount <= 1);
 
