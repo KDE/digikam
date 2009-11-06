@@ -33,6 +33,7 @@
 #include <QMoveEvent>
 #include <QString>
 #include <QTreeWidget>
+#include <QSet>
 
 // KDE includes
 
@@ -311,6 +312,7 @@ void AdvancedRenameDialog::writeSettings()
 
 bool AdvancedRenameDialog::newNamesAreValid()
 {
+    QSet<QString> tmpNewNames;
     bool valid = true;
 
     QTreeWidgetItemIterator it(d->listView);
@@ -319,11 +321,12 @@ bool AdvancedRenameDialog::newNamesAreValid()
         AdvancedRenameListItem* item = dynamic_cast<AdvancedRenameListItem*>((*it));
         if (item)
         {
-            valid = item->name() != item->newName();
+            valid = (item->name() != item->newName()) && ( !tmpNewNames.contains(item->newName()) );
             if (!valid)
             {
                 break;
             }
+            tmpNewNames << item->newName();
         }
         ++it;
     }
