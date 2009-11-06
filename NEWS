@@ -1,8 +1,9 @@
 *********************************************************************************************************
-digiKam 1.0.0-beta6 - Release date: 2009-10-??
+digiKam 1.0.0-beta6 - Release date: 2009-11-08
 
 NEW FEATURES:
 
+General        : Updated internal LibPGF to 6.09.44.
 ImageEditor    : New Local Contrast tool to simulate HDR images (Tone Mapping).
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
