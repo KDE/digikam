@@ -202,7 +202,6 @@ AdvancedRenameDialog::~AdvancedRenameDialog()
 void AdvancedRenameDialog::slotParseStringChanged(const QString& parseString)
 {
     d->newNamesList.clear();
-    bool enableBtn = !parseString.isEmpty();
 
     int index = 1;
     QTreeWidgetItemIterator it(d->listView);
@@ -217,15 +216,14 @@ void AdvancedRenameDialog::slotParseStringChanged(const QString& parseString)
             QString newName = d->advancedRenameWidget->parse(parseInfo);
             item->setNewName(newName);
             d->newNamesList << NewNameInfo(item->imageUrl(), newName);
-
-            enableBtn = enableBtn && (item->name() != newName);
-
             ++index;
         }
         ++it;
     }
 
+    bool enableBtn = !parseString.isEmpty() && newNamesAreValid();
     enableButton(Ok, enableBtn);
+
     d->listView->viewport()->update();
 }
 
@@ -309,6 +307,28 @@ void AdvancedRenameDialog::writeSettings()
     {
         group.writeEntry(d->configLastUsedRenamePatternEntry, d->advancedRenameWidget->text());
     }
+}
+
+bool AdvancedRenameDialog::newNamesAreValid()
+{
+    bool valid = true;
+
+    QTreeWidgetItemIterator it(d->listView);
+    while (*it)
+    {
+        AdvancedRenameListItem* item = dynamic_cast<AdvancedRenameListItem*>((*it));
+        if (item)
+        {
+            valid = item->name() != item->newName();
+            if (!valid)
+            {
+                break;
+            }
+        }
+        ++it;
+    }
+
+    return valid;
 }
 
 }  // namespace Digikam

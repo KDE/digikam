@@ -112,6 +112,7 @@ private:
     void initDialog(int count = 1);
     void readSettings();
     void writeSettings();
+    bool newNamesAreValid();
 
 private:
 
