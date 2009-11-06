@@ -73,7 +73,7 @@ void AdvancedRenameWidgetTest::testFileExtensionToken_data()
     QString filename2("myfile001.blub.jpg");
 
     QTest::newRow(filename.toAscii())  << QString("[ext]") << filename  << QString("jpg.jpg");
-    QTest::newRow(filename2.toAscii()) << QString("[ext]") << filename2 << QString("blub.jpg.blub.jpg");
+    QTest::newRow(filename2.toAscii()) << QString("[ext]") << filename2 << QString("jpg.jpg");
     QTest::newRow("[ext]_lala_####") << QString("[ext]_lala_####") << filename << QString("jpg_lala_0001.jpg");
     QTest::newRow("[ext]_lala_####[ext]") << QString("[ext]_lala_####[ext]") << filename << QString("jpg_lala_0001jpg.jpg");
     QTest::newRow("[ext]_lala_####.[ext]") << QString("[ext]_lala_####.[ext]") << filename << QString("jpg_lala_0001.jpg");

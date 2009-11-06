@@ -66,11 +66,11 @@ void FilePropertiesParser::parseOperation(const QString& parseString, ParseInfor
         }
         else if (reg.cap(1) == QString("[ext]"))
         {
-                tmp = fi.completeSuffix();
+                tmp = fi.suffix();
         }
         else if (reg.cap(1) == QString(".[ext]"))
         {
-            tmp = "." + fi.completeSuffix();
+            tmp = "." + fi.suffix();
             info.useFileExtension = false;
         }
     }

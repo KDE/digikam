@@ -164,7 +164,7 @@ QString Parser::parseOperation(const QString& parseString, ParseInformation& inf
 
     if (info.useFileExtension)
     {
-        newname.append('.').append(fi.completeSuffix());
+        newname.append('.').append(fi.suffix());
     }
 
     return newname;
