@@ -43,7 +43,7 @@ FilePropertiesParser::FilePropertiesParser()
              i18n("Filename"));
 
     addTokenDescription("[ext]", i18nc("image extension", "Extension"),
-             i18n("File extension. Prepend with a '.' character, to modify the real file extension."));
+             i18n("File extension, prepend with a '.' character, to modify the real file extension."));
 
     setRegExp("(\\[file\\]|(\\.?)\\[ext\\])");
 }
