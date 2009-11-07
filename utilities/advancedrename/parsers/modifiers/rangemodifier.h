@@ -32,6 +32,10 @@
 
 #include "modifier.h"
 
+class QCheckBox;
+class QGroupBox;
+class KIntNumInput;
+
 namespace Digikam
 {
 
@@ -46,12 +50,13 @@ public:
     RangeDialog();
     ~RangeDialog();
 
-    int start() const;
-    int stop()  const;
+    KIntNumInput* startInput;
+    KIntNumInput* stopInput;
+    QCheckBox*    toTheEndCheckBox;
 
-private:
+private Q_SLOTS:
 
-    RangeDialogPriv* const d;
+    void slotToTheEndChecked(bool checked);
 };
 
 // --------------------------------------------------------

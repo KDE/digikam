@@ -26,6 +26,7 @@
 
 // Qt includes
 
+#include <QCheckBox>
 #include <QGridLayout>
 #include <QPointer>
 
@@ -38,65 +39,59 @@
 namespace Digikam
 {
 
-class RangeDialogPriv
-{
-public:
-
-    RangeDialogPriv()
-    {
-        start  = 0;
-        stop   = 0;
-    }
-
-    KIntNumInput* start;
-    KIntNumInput* stop;
-};
-
 RangeDialog::RangeDialog()
-             : KDialog(0), d(new RangeDialogPriv)
+             : KDialog(0), startInput(0), stopInput(0), toTheEndCheckBox(0)
 {
     setCaption("Specify a text range", "Range");
+
+    // --------------------------------------------------------
 
     const int minRange = 1;
     const int maxRange = 999999;
 
-    d->start = new KIntNumInput(this);
-    d->start->setMinimum(minRange);
-    d->start->setMaximum(maxRange);
-    d->start->setLabel(i18nc("Beginning of the text range", "From:"));
+    startInput = new KIntNumInput(this);
+    startInput->setMinimum(minRange);
+    startInput->setMaximum(maxRange);
+    startInput->setLabel(i18nc("Beginning of the text range", "From:"));
 
-    d->stop = new KIntNumInput(this);
-    d->stop->setMinimum(minRange);
-    d->stop->setMaximum(maxRange);
-    d->stop->setLabel(i18nc("End of the text range", "To:"));
+    stopInput = new KIntNumInput(this);
+    stopInput->setMinimum(minRange);
+    stopInput->setMaximum(maxRange);
+    stopInput->setLabel(i18nc("end of the text range", "To:"));
+
+    toTheEndCheckBox = new QCheckBox(i18nc("range is specified until the end of the string", "to the end"));
+    toTheEndCheckBox->setChecked(true);
+    slotToTheEndChecked(true);
+
+    // --------------------------------------------------------
 
     QWidget*     mainWidget = new QWidget(this);
     QGridLayout* mainLayout = new QGridLayout(this);
-    mainLayout->addWidget(d->start, 0, 0);
-    mainLayout->addWidget(d->stop,  1, 0);
+    mainLayout->addWidget(startInput,          0, 0);
+    mainLayout->addWidget(toTheEndCheckBox,    1, 0);
+    mainLayout->addWidget(stopInput,           2, 0);
     mainLayout->setSpacing(KDialog::spacingHint());
     mainLayout->setMargin(KDialog::spacingHint());
-    mainLayout->setRowStretch(2, 10);
+    mainLayout->setRowStretch(3, 10);
     mainWidget->setLayout(mainLayout);
 
     setMainWidget(mainWidget);
 
-    d->start->setFocus();
+    // --------------------------------------------------------
+
+    startInput->setFocus();
+
+    connect(toTheEndCheckBox, SIGNAL(toggled(bool)),
+            this, SLOT(slotToTheEndChecked(bool)));
 }
 
 RangeDialog::~RangeDialog()
 {
-    delete d;
 }
 
-int RangeDialog::start() const
+void RangeDialog::slotToTheEndChecked(bool checked)
 {
-    return d->start->value();
-}
-
-int RangeDialog::stop() const
-{
-    return d->stop->value();
+    stopInput->setEnabled(!checked);
 }
 
 // --------------------------------------------------------
@@ -106,9 +101,6 @@ RangeModifier::RangeModifier()
                         SmallIcon("measure"))
 {
     setUseTokenMenu(false);
-
-    addTokenDescription(QString("{<i>index</i>}"), i18n("Index"),
-             i18n("Extract the character at the given index"));
 
     addTokenDescription(QString("{<i>from</i> - <i>to</i>}"), i18n("Range"),
              i18n("Extract a specific range (if omitted, '<i>to</i>' = end of string)"));
@@ -125,10 +117,18 @@ void RangeModifier::slotTokenTriggered(const QString& token)
     QPointer<RangeDialog> dlg = new RangeDialog;
     if (dlg->exec() == KDialog::Accepted)
     {
-        int start = dlg->start();
-        int stop  = dlg->stop();
-        tmp       = QString("{%1-%2}").arg(QString::number(start))
-                                      .arg(QString::number(stop));
+        int start = dlg->startInput->value();
+        int stop  = dlg->stopInput->value();
+
+        if (dlg->toTheEndCheckBox->isChecked())
+        {
+            tmp = QString("{%1-}").arg(QString::number(start));
+        }
+        else
+        {
+            tmp = QString("{%1-%2}").arg(QString::number(start))
+                                    .arg(QString::number(stop));
+        }
     }
     delete dlg;
 
