@@ -225,7 +225,7 @@ BOOL cmsxLevenbergMarquardtFree(LCMSHANDLE hMRQ)
 
 BOOL cmsxLevenbergMarquardtIterate(LCMSHANDLE hMRQ)
 {
-    int j, k;
+    int  j, k;
     BOOL sts;
     LPLMRQMIN pLM = (LPLMRQMIN)hMRQ;
     if(!pLM)
@@ -240,7 +240,8 @@ BOOL cmsxLevenbergMarquardtIterate(LCMSHANDLE hMRQ)
         pLM->oneda->Values[j][0] = pLM->beta->Values[j][0];
     }
 
-    if((sts = MATNsolve (pLM->covar, pLM->oneda)) != true)  /* Matrix solution. */
+	sts = MATNsolve (pLM->covar, pLM->oneda);
+    if(sts != TRUE)  /* Matrix solution. */
         return sts;
 
     for(j = 0; j < pLM->ma; j++)                            /* Did the trial succeed? */
@@ -248,7 +249,9 @@ BOOL cmsxLevenbergMarquardtIterate(LCMSHANDLE hMRQ)
 
     mrqcof(pLM, pLM->atry, pLM->covar, pLM->oneda, &pLM -> chisq);
 
-    if (pLM->chisq < pLM->ochisq) {     /* Success, accept the new solution. */
+    if (pLM->chisq < pLM->ochisq)
+	{ 
+		/* Success, accept the new solution. */
 
         pLM->alamda *= 0.1;
         pLM->ochisq = pLM->chisq;
