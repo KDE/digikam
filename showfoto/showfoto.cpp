@@ -1028,17 +1028,26 @@ void ShowFoto::saveAsIsComplete()
     slotUpdateItemInfo();
 }
 
+KUrl ShowFoto::saveDestinationUrl()
+{
+
+    if (!d->currentItem)
+    {
+        kWarning() << "Cannot return the url of the image to save "
+                   << "because no image is selected.";
+        return KUrl();
+    }
+
+    return d->currentItem->url();
+
+}
+
 bool ShowFoto::save()
 {
     if (!d->currentItem)
     {
         kWarning() << "This should not happen";
         return true;
-    }
-
-    if (!d->currentItem->url().isLocalFile())
-    {
-        return false;
     }
 
     startingSave(d->currentItem->url());

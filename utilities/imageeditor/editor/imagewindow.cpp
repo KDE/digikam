@@ -1058,6 +1058,11 @@ bool ImageWindow::saveAs()
     return ( startingSaveAs(d->urlCurrent) );
 }
 
+KUrl ImageWindow::saveDestinationUrl()
+{
+    return d->urlCurrent;
+}
+
 void ImageWindow::slotDeleteCurrentItem()
 {
     deleteCurrentItem(true, false);

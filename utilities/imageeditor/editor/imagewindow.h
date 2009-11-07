@@ -97,6 +97,7 @@ private:
 
     bool save();
     bool saveAs();
+    KUrl saveDestinationUrl();
 
     void saveIsComplete();
     void saveAsIsComplete();

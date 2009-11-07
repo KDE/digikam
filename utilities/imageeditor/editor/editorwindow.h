@@ -181,6 +181,16 @@ protected:
     virtual bool saveAs()=0;
     virtual bool save()=0;
 
+    /**
+     * Hook method that subclasses must implement to return the destination url
+     * of the image to save. This may also be a remote url.
+     *
+     * This method will only be called while saving.
+     *
+     * @return destination for the file that is currently being saved.
+     */
+    virtual KUrl saveDestinationUrl() = 0;
+
     virtual void saveIsComplete()=0;
     virtual void saveAsIsComplete()=0;
 
@@ -279,6 +289,44 @@ private:
      * @param url file to save the image to
      */
     void setupTempSaveFile(const KUrl & url);
+
+    /**
+     * Returns a list of filters that can be passed to a KFileDialog for all
+     * writable image types.
+     *
+     * @return list of filters for KFileDialog
+     */
+    QStringList getWritingFilters();
+
+    /**
+     * Find the KFileDialog filter that belongs to an extension.
+     *
+     * @param allFilters list with all filters
+     * @param extension the extension to search for
+     * @return filter string or empty string if not found
+     */
+    QString findFilterByExtension(const QStringList& allFilters,
+                                  const QString& extension);
+
+    /**
+     * Tries to extract a file extension from a KFileDialog filter.
+     *
+     * @param filter to extract the file extension from
+     * @return file extension found in the filter or an empty string if no
+     *         extension was found
+     */
+    QString getExtensionFromFilter(const QString& filter);
+
+    /**
+     * Sets the format to use in the saving context. Therefore multiple sources
+     * are used starting with the extension found in the save dialog.
+     *
+     * @param filterExtension extension extracted from the save dialog
+     * @param targetUrl target url selected for the file to save
+     * @return true if a valid extension could be found, else false
+     */
+    bool selectValidSavingFormat(const QString& filterExtension,
+                                 const KUrl& targetUrl);
 
     void movingSaveFileFinished(bool successful);
 

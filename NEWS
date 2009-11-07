@@ -95,7 +95,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 085 ==> 213289 : Record custom date format.
 086 ==> 208907 : Rename Images - file extension in uppercase.
 087 ==> 208553 : Wrong number of images in a closed recursive tag.
-088 ==> 
+088 ==> 132079 : Support for editing non-local files.
+089 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05

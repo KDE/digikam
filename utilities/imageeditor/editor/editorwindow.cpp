@@ -1183,15 +1183,29 @@ void EditorWindow::slotSavingProgress(const QString&, float progress)
 
 bool EditorWindow::promptForOverWrite()
 {
-    QFileInfo fi(m_canvas->currentImageFilePath());
-    QString warnMsg(i18n("About to overwrite file \"%1\"\nAre you sure?", fi.fileName()));
-    return (KMessageBox::warningContinueCancel(this,
-                                               warnMsg,
-                                               i18n("Warning"),
-                                               KGuiItem(i18n("Overwrite")),
-                                               KStandardGuiItem::cancel(),
-                                               QString("editorWindowSaveOverwrite"))
-            ==  KMessageBox::Continue);
+
+    KUrl destination = saveDestinationUrl();
+
+    if (destination.isLocalFile())
+    {
+
+        QFileInfo fi(m_canvas->currentImageFilePath());
+        QString warnMsg(i18n("About to overwrite file \"%1\"\nAre you sure?", fi.fileName()));
+        return (KMessageBox::warningContinueCancel(this,
+                                                   warnMsg,
+                                                   i18n("Warning"),
+                                                   KGuiItem(i18n("Overwrite")),
+                                                   KStandardGuiItem::cancel(),
+                                                   QString("editorWindowSaveOverwrite"))
+                ==  KMessageBox::Continue);
+
+    }
+    else
+    {
+        // in this case kio handles the overwrite request
+        return true;
+    }
+
 }
 
 bool EditorWindow::promptUserSave(const KUrl& url, SaveOrSaveAs saveOrSaveAs, bool allowCancel)
@@ -1429,10 +1443,12 @@ void EditorWindow::slotNameLabelCancelButtonPressed()
 
 void EditorWindow::slotSave()
 {
+
     if (m_canvas->isReadOnly())
         saveAs();
     else if (promptForOverWrite())
         save();
+
 }
 
 void EditorWindow::slotSavingStarted(const QString& /*filename*/)
@@ -1598,6 +1614,168 @@ void EditorWindow::startingSave(const KUrl& url)
                      m_setExifOrientationTag && (m_rotatedOrFlipped || m_canvas->exifRotated()));
 }
 
+QStringList EditorWindow::getWritingFilters()
+{
+
+    // begin with the filtersa KImageIO supports
+    QString pattern             = KImageIO::pattern(KImageIO::Writing);
+    QStringList writablePattern = pattern.split(QChar('\n'));
+    kDebug() << "KImageIO offered pattern: " << writablePattern;
+
+    // remove "all images" type
+    // XXX bad assumption that this is always the first type in the list
+    writablePattern.removeFirst();
+
+    // append custom file types
+    writablePattern.append(QString("*.jp2|") + i18n("JPEG 2000 image"));
+    writablePattern.append(QString("*.pgf|") + i18n("Progressive Graphics File"));
+
+    return writablePattern;
+
+}
+
+QString EditorWindow::findFilterByExtension(const QStringList& allFilters, const QString& extension)
+{
+
+    kDebug() << "Searching for a filter with extension '" << extension
+             << "' in: " << allFilters;
+
+    const QString filterExtension = QString("*.%1").arg(extension.toLower());
+
+    foreach(const QString& filter, allFilters)
+    {
+
+        if (filter.contains(filterExtension))
+        {
+            kDebug() << "Found filter '" << filter << "'";
+            return filter;
+        }
+
+    }
+
+    // fall back to "all image types"
+    if (!allFilters.empty() && allFilters.first().contains(filterExtension))
+    {
+        kDebug() << "using fall back all images filter: " << allFilters.first();
+        return allFilters.first();
+    }
+
+    return QString();
+
+}
+
+QString EditorWindow::getExtensionFromFilter(const QString& filter)
+{
+
+    kDebug () << "Trying to extract format from filter: " << filter;
+
+    // find locations of interesting characters in the filter string
+    const int asteriskLocation = filter.indexOf('*');
+    if (asteriskLocation < 0)
+    {
+        kDebug() << "Could not find a * in the filter";
+        return QString();
+    }
+
+    const int endLocation = filter.indexOf(QRegExp("[|\\* ]"), asteriskLocation + 1);
+    if (endLocation < 0)
+    {
+        kDebug() << "Could not find a valid end of the format in the filter";
+        return QString();
+    }
+
+    kDebug() << "astriskLocation = " << asteriskLocation
+             << ", endLocation = " << endLocation;
+
+    // extract extension with the locations found above
+    QString formatString = filter;
+    formatString.remove(0, asteriskLocation + 2);
+    formatString = formatString.left(endLocation - asteriskLocation - 2);
+    kDebug() << "Extracted format " << formatString;
+    return formatString;
+
+}
+
+bool EditorWindow::selectValidSavingFormat(const QString& filterExtension, const KUrl& targetUrl)
+{
+
+    kDebug() << "Trying to find a saving format with filterExtension = "
+             << filterExtension << ", targetUrl = " << targetUrl;
+
+    // build a list of valid types
+    QStringList validTypes = KImageIO::types(KImageIO::Writing);
+    kDebug() << "KDE Offered types: " << validTypes;
+
+    validTypes << "TIF";
+    validTypes << "TIFF";
+    validTypes << "JPG";
+    validTypes << "JPEG";
+    validTypes << "JPE";
+    validTypes << "J2K";
+    validTypes << "JP2";
+    validTypes << "PGF";
+
+    kDebug() << "Writable formats: " << validTypes;
+
+    // first check if the selected filter extension can be used
+    {
+        if (!filterExtension.isEmpty() &&
+            validTypes.contains(filterExtension, Qt::CaseInsensitive))
+        {
+            kDebug() << "Using format from filter extension: " << filterExtension;
+            m_savingContext->format = filterExtension;
+            return true;
+        }
+    }
+
+    // as a second step, try to determine the desired format from the extension
+    // of the target url
+    {
+        QString suffix;
+        if (targetUrl.isLocalFile())
+        {
+            // for local files QFileInfo can be used
+            QFileInfo fi(targetUrl.toLocalFile());
+            suffix = fi.suffix();
+            kDebug() << "Possible format from local file: " << suffix;
+        }
+        else
+        {
+            // for remote files string manipulation is needed unfortunately
+            QString fileName = targetUrl.fileName();
+            const int periodLocation = fileName.lastIndexOf('.');
+            if (periodLocation >= 0)
+            {
+                suffix = fileName.right(fileName.size() - periodLocation - 1);
+            }
+            kDebug() << "Possible format from remote file: " << suffix;
+        }
+        if (!suffix.isEmpty() && validTypes.contains(suffix, Qt::CaseInsensitive))
+        {
+            kDebug() << "Using format from target url " << suffix;
+            m_savingContext->format = suffix;
+            return true;
+        }
+    }
+
+    // another way to determine the format is to use the original file
+    {
+        QString originalFormat(QImageReader::imageFormat(
+                        m_savingContext->srcURL.toLocalFile()));
+        if (validTypes.contains(originalFormat, Qt::CaseInsensitive))
+        {
+            kDebug() << "Using format from original file: " << originalFormat;
+            m_savingContext->format = originalFormat;
+            return true;
+        }
+    }
+
+    kDebug() << "No suitable format found";
+
+    return false;
+
+}
+
 bool EditorWindow::startingSaveAs(const KUrl& url)
 {
 
@@ -1606,14 +1784,9 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     if (m_savingContext->savingState != SavingContextContainer::SavingStateNone)
         return false;
 
-    QString pattern             = KImageIO::pattern(KImageIO::Writing);
-    QStringList writablePattern = pattern.split(QChar('\n'));
-    kDebug() << "KDE Offered pattern: " << writablePattern;
-    writablePattern.append(QString("*.jp2|") + i18n("JPEG 2000 image"));
-    writablePattern.append(QString("*.pgf|") + i18n("Progressive Graphics File"));
-
     m_savingContext->srcURL = url;
 
+    // prepare the save dialog
     FileSaveOptionsBox *options      = new FileSaveOptionsBox();
     KFileDialog *imageFileSaveDialog = new KFileDialog(m_savingContext->srcURL.isLocalFile() ?
                                                        m_savingContext->srcURL : KUrl(QDir::homePath()),
@@ -1641,17 +1814,20 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     QString fileName          = info.completeBaseName() + QString(".") + ext;
 
     // Determine the default filter from LastSavedImageTypeMime
-    QString defaultFilter;
-    foreach(const QString& filter, writablePattern)
-    {
-        if (filter.contains(QString("*.%1").arg(ext.toLower())))
-        {
-            defaultFilter = filter;
-            break;
-        }
-    }
-    imageFileSaveDialog->filterWidget()->setDefaultFilter(defaultFilter);
+    QStringList writablePattern = getWritingFilters();
     imageFileSaveDialog->setFilter(writablePattern.join(QChar('\n')));
+    QString initialFilter = findFilterByExtension(writablePattern, ext);
+    if (!initialFilter.isEmpty())
+    {
+        imageFileSaveDialog->filterWidget()->setCurrentFilter(initialFilter);
+    }
+    else
+    {
+        kWarning() << "Could not find a filter for extension " << ext
+                   << ". Is this really writable?";
+    }
+    kDebug() << "Using initial filter '" << initialFilter
+             << "' out of all possible ones:" << writablePattern;
     imageFileSaveDialog->setSelection(fileName);
 
     options->slotImageFileFormatChanged(ext);
@@ -1665,57 +1841,25 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     applyStandardSettings();
 
     KUrl newURL = imageFileSaveDialog->selectedUrl();
+    kDebug() << "Writing file to " << newURL;
 
-    // Check if target image format have been selected from Combo List of SaveAs dialog.
+    // select the format to save the image with
+    kDebug() << "filter from save dialog: " << imageFileSaveDialog->currentFilter();
+    QString dialogExtension = getExtensionFromFilter(imageFileSaveDialog->currentFilter());
+    kDebug() << "extracted extension from filter: " << dialogExtension;
+    bool validFormatSet = selectValidSavingFormat(dialogExtension, newURL);
 
-    QStringList mimes = KImageIO::typeForMime(imageFileSaveDialog->currentMimeFilter());
-    if (!mimes.isEmpty())
+    if (!validFormatSet)
     {
-        m_savingContext->format = mimes.first();
-    }
-    else
-    {
-        // Else, check if target image format have been add to target image file name using extension.
-
-        QFileInfo fi(newURL.toLocalFile());
-        m_savingContext->format = fi.suffix();
-
-        if ( m_savingContext->format.isEmpty() )
-        {
-            // If format is empty then file format is same as that of the original file.
-            m_savingContext->format = QImageReader::imageFormat(m_savingContext->srcURL.toLocalFile());
-        }
-        else
-        {
-            // Else, check if format from file name extension is include on file mime type list.
-
-            QStringList types = KImageIO::types(KImageIO::Writing);
-            kDebug() << "KDE Offered types: " << types;
-
-            types << "TIF";
-            types << "TIFF";
-            types << "JPG";
-            types << "JPEG";
-            types << "JPE";
-            types << "J2K";
-            types << "JP2";
-            types << "PGF";
-            QString imgExtList = types.join(" ");
-
-            if ( !imgExtList.toUpper().contains( m_savingContext->format.toUpper() ) )
-            {
-                KMessageBox::error(this, i18n("Target image file format \"%1\" unsupported.", m_savingContext->format));
-                kWarning() << "target image file format " << m_savingContext->format << " unsupported!";
-                return false;
-            }
-        }
+        KMessageBox::error(this, i18n("Unable to determine the format to save the target image with."));
+        return false;
     }
 
     if (!newURL.isValid())
     {
         KMessageBox::error(this, i18n("Failed to save file\n\"%1\"\nto\n\"%2\".",
-                                      newURL.fileName(),
-                                      newURL.toLocalFile().section('/', -2, -2)));
+                                      info.completeBaseName(),
+                                      newURL.prettyUrl()));
         kWarning() << "target URL is not valid !";
         return false;
     }

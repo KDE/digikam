@@ -83,6 +83,7 @@ private:
     bool save();
     bool saveAs();
     void finishSaving(bool success);
+    KUrl saveDestinationUrl();
 
     void saveIsComplete();
     void saveAsIsComplete();
