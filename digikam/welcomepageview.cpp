@@ -102,7 +102,7 @@ QString WelcomePageView::infoPage()
                         "<ul><li>Hardware handling with <a href=\"http://solid.kde.org\">Solid</a> interface;</li>"
                         "<li>More comprehensive multimedia file handling using <a href=\"http://phonon.kde.org\">Phonon</a> interface;</li>"
                         "<li>Easy Geolocation with <a href=\"http://edu.kde.org/marble\">Marble</a> interface;</li>"
-                        "<li>Social Semantic Desktop syncronization using <a href=\"http://nepomuk.semanticdesktop.org\">Nepomuk</a> interface.</li></ul>");
+                        "<li>Social Semantic Desktop synchronization using <a href=\"http://nepomuk.semanticdesktop.org\">Nepomuk</a> interface.</li></ul>");
     newFeatures << i18n("XMP metadata support;");
     newFeatures << i18n("TIFF/EP RAW metadata editing;");
     newFeatures << i18n("Customizable file storage for the digiKam database, supporting remote albums;");
