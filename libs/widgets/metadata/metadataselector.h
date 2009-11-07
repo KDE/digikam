@@ -120,6 +120,10 @@ public:
 
     void setControlElements(ControlElements controllerMask);
 
+    void clearSelection();
+    void selectAll();
+    void selectDefault();
+
 private Q_SLOTS:
 
     void slotSearchTextChanged(const SearchTextSettings&);

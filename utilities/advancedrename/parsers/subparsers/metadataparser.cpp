@@ -83,11 +83,14 @@ MetadataParserDialog::MetadataParserDialog()
 
     // --------------------------------------------------------
 
-    // we only need the "SearchBar" and "ClearBtn" control elements
+    // We only need the "SearchBar" and "ClearBtn" control elements.
+    // Also we need to reset the default selections
     foreach (MetadataSelectorView* viewer, d->metadataPanel->viewers())
     {
         viewer->setControlElements(MetadataSelectorView::SearchBar |
                                    MetadataSelectorView::ClearBtn);
+
+        viewer->clearSelection();
     }
 
     // --------------------------------------------------------
@@ -104,6 +107,7 @@ MetadataParserDialog::MetadataParserDialog()
         {
             makerNotesTabIndex = i;
         }
+
     }
 
     if (makerNotesTabIndex != -1)

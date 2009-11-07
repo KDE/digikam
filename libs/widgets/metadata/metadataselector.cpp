@@ -396,4 +396,19 @@ void MetadataSelectorView::setControlElements(ControlElements controllerMask)
     d->defaultSelectionBtn->setVisible(controllerMask & DefaultBtn);
 }
 
+void MetadataSelectorView::clearSelection()
+{
+    slotClearSelection();
+}
+
+void MetadataSelectorView::selectAll()
+{
+    slotSelectAll();
+}
+
+void MetadataSelectorView::selectDefault()
+{
+    slotDeflautSelection();
+}
+
 }  // namespace Digikam
