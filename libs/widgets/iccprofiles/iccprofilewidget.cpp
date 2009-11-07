@@ -268,7 +268,7 @@ bool ICCProfileWidget::decodeMetadata()
 
     d->cieTongue->setProfileData(d->profile.data());
 
-    LcmsLock lock();
+    LcmsLock lock;
     cmsHPROFILE hProfile = d->profile.handle();
 
     if (!hProfile)
