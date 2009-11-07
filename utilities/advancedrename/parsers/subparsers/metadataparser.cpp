@@ -57,11 +57,10 @@ class MetadataParserDialogPriv
 {
 public:
 
-    MetadataParserDialogPriv()
-    {
-        metadataPanel     = 0;
-        separatorLineEdit = 0;
-    }
+    MetadataParserDialogPriv() :
+        metadataPanel(0),
+        separatorLineEdit(0)
+    {}
 
     MetadataPanel* metadataPanel;
     KLineEdit*     separatorLineEdit;
