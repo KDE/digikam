@@ -161,7 +161,7 @@ void RawImport::slotLoadingStarted()
 {
     d->settingsBox->enableUpdateBtn(false);
     d->settingsBox->histogramBox()->histogram()->setDataLoading();
-    d->settingsBox->curve()->setDataLoading();
+    d->settingsBox->curvesWidget()->setDataLoading();
     EditorToolIface::editorToolIface()->setToolStartProgress(i18n("Raw Decoding"));
     setBusy(true);
 }
@@ -205,6 +205,10 @@ void RawImport::slotLoadingProgress(float v)
 
 void RawImport::slotOk()
 {
+    // NOTE: work around B.K.O #211810
+    if (d->settingsBox->curvesWidget()->isSixteenBits() != d->settingsBox->settings().sixteenBitsImage)
+        d->settingsBox->curvesWidget()->updateData(0, 0, 0, d->settingsBox->settings().sixteenBitsImage);
+      
     EditorTool::slotOk();
 }
 

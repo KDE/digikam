@@ -464,7 +464,7 @@ void RawSettingsBox::slotResetCurve()
     emit signalPostProcessingChanged();
 }
 
-CurvesWidget* RawSettingsBox::curve() const
+CurvesWidget* RawSettingsBox::curvesWidget() const
 {
     return d->curveWidget;
 }

@@ -45,12 +45,12 @@ class DIGIKAM_EXPORT RawSettingsBox : public EditorToolSettings
 
 public:
 
-    RawSettingsBox(const KUrl& url, QWidget *parent);
+    RawSettingsBox(const KUrl& url, QWidget* parent);
     ~RawSettingsBox();
 
     void setBusy(bool b);
 
-    CurvesWidget* curve() const;
+    CurvesWidget* curvesWidget() const;
     DRawDecoding  settings();
 
     void writeSettings();
