@@ -96,7 +96,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 086 ==> 208907 : Rename Images - file extension in uppercase.
 087 ==> 208553 : Wrong number of images in a closed recursive tag.
 088 ==> 132079 : Support for editing non-local files.
-089 ==> 
+089 ==> 211810 : Raw import tool: black picture after import.
+090 ==>
 
 *********************************************************************************************************
 digiKam 1.0.0-beta5 - Release date: 2009-10-05
