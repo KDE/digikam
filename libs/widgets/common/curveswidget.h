@@ -54,12 +54,12 @@ class DIGIKAM_EXPORT CurvesWidget : public QWidget
 
 public:
 
-    CurvesWidget(int w, int h, QWidget *parent, bool readOnly=false);
+    CurvesWidget(int w, int h, QWidget* parent, bool readOnly=false);
 
     CurvesWidget(int w, int h,                         // Widget size.
-                 uchar *i_data, uint i_w, uint i_h,    // Full image info.
+                 uchar* i_data, uint i_w, uint i_h,    // Full image info.
                  bool i_sixteenBits,                   // 8 or 16 bits image.
-                 QWidget *parent=0,                    // Parent widget instance.
+                 QWidget* parent=0,                    // Parent widget instance.
                  bool readOnly=false);                 // If true : widget with full edition mode capabilities.
                                                        // If false : display curve data only without edition.
 
@@ -74,7 +74,7 @@ public:
      * @param group group to save the curve to
      * @param prefix prefix prepended to the point numbers in the config
      */
-    void saveCurve(KConfigGroup & group, const QString& prefix);
+    void saveCurve(KConfigGroup& group, const QString& prefix);
 
     /**
      * Restores the curve tfrom the given group with prefix as a
@@ -93,7 +93,7 @@ public:
      * @param i_h height of the image
      * @param i_sicteenBits if true, the image is interpreted as having 16 bits
      */
-    void updateData(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits);
+    void updateData(uchar* i_data, uint i_w, uint i_h, bool i_sixteenBits);
 
     // Stop current histogram computations.
     void stopHistogramComputation();
@@ -132,8 +132,8 @@ Q_SIGNALS:
 protected Q_SLOTS:
 
     void slotProgressTimerDone();
-    void slotCalculationStarted(const ImageHistogram *histogram);
-    void slotCalculationFinished(const ImageHistogram *histogram, bool success);
+    void slotCalculationStarted(const ImageHistogram* histogram);
+    void slotCalculationFinished(const ImageHistogram* histogram, bool success);
 
 protected:
 

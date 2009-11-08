@@ -77,7 +77,8 @@ public:
         HistogramFailed           // Histogram values calculation failed.
     };
 
-    CurvesWidgetPriv(CurvesWidget *q) : q(q)
+    CurvesWidgetPriv(CurvesWidget *q)
+        : q(q)
     {
         curves        = 0;
         grabPoint     = -1;
@@ -121,8 +122,7 @@ public:
         return q->m_imageHistogram->getHistogramSegments() / 16;
     }
 
-    void getHistogramCoordinates(const QPoint & mousePosition, int &x, int &y,
-                    int &closestPoint)
+    void getHistogramCoordinates(const QPoint& mousePosition, int& x, int& y, int& closestPoint)
     {
 
         x = CLAMP((int)(mousePosition.x() *
@@ -222,7 +222,7 @@ public:
         p1.begin(&pm);
         p1.initFrom(q);
 
-        int wWidth = pm.width();
+        int wWidth  = pm.width();
         int wHeight = pm.height();
 
         // Drawing curves.
@@ -266,17 +266,15 @@ public:
             }
             p1.restore();
         }
-
     }
 
     void renderGrid(QPixmap& pm)
     {
-
         QPainter p1;
         p1.begin(&pm);
         p1.initFrom(q);
 
-        int wWidth = pm.width();
+        int wWidth  = pm.width();
         int wHeight = pm.height();
 
         // Drawing black/middle/highlight tone grid separators.
@@ -296,7 +294,7 @@ public:
         p1.begin(&pm);
         p1.initFrom(q);
 
-        int wWidth = pm.width();
+        int wWidth  = pm.width();
         int wHeight = pm.height();
 
         // Drawing X,Y point position dragged by mouse over widget.
@@ -306,7 +304,7 @@ public:
         {
             QString string = i18n("x:%1\ny:%2",xMouseOver,yMouseOver);
             QFontMetrics fontMt(string);
-            QRect rect = fontMt.boundingRect(0, 0, wWidth, wHeight, 0, string);
+            QRect rect     = fontMt.boundingRect(0, 0, wWidth, wHeight, 0, string);
             rect.moveRight(wWidth);
             rect.moveBottom(wHeight);
             p1.drawText(rect, Qt::AlignLeft||Qt::AlignTop, string);
@@ -319,7 +317,7 @@ public:
         p1.begin(&pm);
         p1.initFrom(q);
         p1.setPen(QPen(q->palette().color(QPalette::Active,
-                        QPalette::Foreground), 1, Qt::SolidLine));
+                       QPalette::Foreground), 1, Qt::SolidLine));
         p1.drawRect(0, 0, pm.width() - 1, pm.height() - 1);
     }
 
@@ -428,15 +426,14 @@ void CurvesWidget::restoreCurve(KConfigGroup& group, const QString& prefix)
     for (int channel = 0; channel < ImageCurves::NUM_CHANNELS; ++channel)
     {
 
-        curves()->setCurveType(channel,
-                               (ImageCurves::CurveType) group.readEntry(
+        curves()->setCurveType(channel, (ImageCurves::CurveType) group.readEntry(
                                         CurvesWidgetPriv::getChannelTypeOption(
-                                                        prefix, channel), 0));
+                                        prefix, channel), 0));
 
         for (int point = 0; point <= ImageCurves::NUM_POINTS; ++point)
         {
             QPoint p = group.readEntry(CurvesWidgetPriv::getPointOption(prefix,
-                            channel, point), ImageCurves::getDisabledValue());
+                                       channel, point), ImageCurves::getDisabledValue());
 
             // always load a 16 bit curve and stretch it to 8 bit if necessary
             if (!isSixteenBits() && p != ImageCurves::getDisabledValue())
@@ -452,9 +449,8 @@ void CurvesWidget::restoreCurve(KConfigGroup& group, const QString& prefix)
     }
 }
 
-void CurvesWidget::updateData(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits)
+void CurvesWidget::updateData(uchar* i_data, uint i_w, uint i_h, bool i_sixteenBits)
 {
-
     kDebug() << "updating data";
 
     stopHistogramComputation();
@@ -465,16 +461,16 @@ void CurvesWidget::updateData(uchar *i_data, uint i_w, uint i_h, bool i_sixteenB
 
     m_imageHistogram = new ImageHistogram(i_data, i_w, i_h, i_sixteenBits);
 
-    connect(m_imageHistogram, SIGNAL(calculationStarted(const ImageHistogram *)),
-            this, SLOT(slotCalculationStarted(const ImageHistogram *)));
+    connect(m_imageHistogram, SIGNAL(calculationStarted(const ImageHistogram*)),
+            this, SLOT(slotCalculationStarted(const ImageHistogram*)));
 
-    connect(m_imageHistogram, SIGNAL(calculationFinished(const ImageHistogram *, bool)),
-            this, SLOT(slotCalculationFinished(const ImageHistogram *, bool)));
+    connect(m_imageHistogram, SIGNAL(calculationFinished(const ImageHistogram*, bool)),
+            this, SLOT(slotCalculationFinished(const ImageHistogram*, bool)));
 
     m_imageHistogram->calculateInThread();
 
     // keep the old curve
-    ImageCurves *newCurves = new ImageCurves(i_sixteenBits);
+    ImageCurves* newCurves = new ImageCurves(i_sixteenBits);
     newCurves->setCurveType(ImageCurves::CURVE_SMOOTH);
     if (d->curves)
     {
@@ -611,7 +607,6 @@ void CurvesWidget::slotProgressTimerDone()
 
 void CurvesWidget::paintEvent(QPaintEvent*)
 {
-
     // special cases
 
     if (d->clearFlag == CurvesWidgetPriv::HistogramDataLoading ||
@@ -630,8 +625,7 @@ void CurvesWidget::paintEvent(QPaintEvent*)
 
     if (!m_imageHistogram)
     {
-        kWarning()
-                        << "Should render a histogram, but did not get one.";
+        kWarning() << "Should render a histogram, but did not get one.";
         return;
     }
 
@@ -659,13 +653,11 @@ void CurvesWidget::paintEvent(QPaintEvent*)
     QPainter p2(this);
     p2.drawPixmap(0, 0, pm);
     p2.end();
-
 }
 
 void CurvesWidget::mousePressEvent(QMouseEvent *e)
 {
     if (d->readOnlyMode || !m_imageHistogram) return;
-
 
     if (e->button() != Qt::LeftButton || d->clearFlag == CurvesWidgetPriv::HistogramStarted)
         return;
@@ -712,7 +704,6 @@ void CurvesWidget::mousePressEvent(QMouseEvent *e)
 
         case ImageCurves::CURVE_FREE:
         {
-
             d->curves->setCurveValue(m_channelType, x, m_imageHistogram->getHistogramSegments() - y);
             d->grabPoint = x;
             d->last      = y;
@@ -724,7 +715,7 @@ void CurvesWidget::mousePressEvent(QMouseEvent *e)
     repaint();
 }
 
-void CurvesWidget::mouseReleaseEvent(QMouseEvent * e)
+void CurvesWidget::mouseReleaseEvent(QMouseEvent* e)
 {
     if (d->readOnlyMode || !m_imageHistogram) return;
 
@@ -738,7 +729,7 @@ void CurvesWidget::mouseReleaseEvent(QMouseEvent * e)
     emit signalCurvesChanged();
 }
 
-void CurvesWidget::mouseMoveEvent(QMouseEvent *e)
+void CurvesWidget::mouseMoveEvent(QMouseEvent* e)
 {
     if (d->readOnlyMode || !m_imageHistogram) return;
 
@@ -806,8 +797,8 @@ void CurvesWidget::mouseMoveEvent(QMouseEvent *e)
                 if (x2 != x1)
                 {
                     for (int i = x1 ; i <= x2 ; ++i)
-                        d->curves->setCurveValue(m_channelType, i,
-                            m_imageHistogram->getMaxSegmentIndex() - (y1 + ((y2 - y1) * (i - x1)) / (x2 - x1)));
+                        d->curves->setCurveValue(m_channelType, i, m_imageHistogram->getMaxSegmentIndex() - 
+                                                                   (y1 + ((y2 - y1) * (i - x1)) / (x2 - x1)));
                 }
                 else
                 {
