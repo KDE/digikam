@@ -174,8 +174,13 @@ INSTALL(TARGETS digikamcore ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 # Shared libdigikamdatabase ########################################################
 
-# Disable libsqlite2 C code warnings.
-SET_SOURCE_FILES_PROPERTIES(${libsqlite2_SRCS} PROPERTIES COMPILE_FLAGS "-w")
+# Disable libsqlite2 C code warnings plus specific flags.
+IF(WIN32)
+    SET_SOURCE_FILES_PROPERTIES(${libsqlite2_SRCS} PROPERTIES COMPILE_FLAGS "-w -D_OFF_T_ -D_OFF_T_DEFINED")
+ELSEIF(WIN32)
+    SET_SOURCE_FILES_PROPERTIES(${libsqlite2_SRCS} PROPERTIES COMPILE_FLAGS "-w")
+ENDIF(WIN32)
+
 # Disable libpgf warnings.
 SET_SOURCE_FILES_PROPERTIES(${libpgf_SRCS} PROPERTIES COMPILE_FLAGS "-w")
 
@@ -201,11 +206,7 @@ TARGET_LINK_LIBRARIES(digikamdatabase
                      )
 
 SET_TARGET_PROPERTIES(digikamdatabase PROPERTIES VERSION 1.0.0 SOVERSION 1 )
-IF(WIN32)
-    SET_SOURCE_FILES_PROPERTIES(${libsqlite2_SRCS} PROPERTIES COMPILE_FLAGS "-D_OFF_T_ -D_OFF_T_DEFINED")
-ENDIF(WIN32)
 INSTALL(TARGETS digikamdatabase ${INSTALL_TARGETS_DEFAULT_ARGS} )
-
 
 # digiKam nepomuk services #########################################################
 
