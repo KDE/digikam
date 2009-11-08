@@ -42,8 +42,8 @@ namespace Digikam
 {
 
 const QString dateFormatLink = QString("<a href='http://doc.trolltech.com/latest/qdatetime.html#toString'>"
-                  "format settings"
-                  "</a>");
+                                       "format settings"
+                                       "</a>");
 
 // --------------------------------------------------------
 
