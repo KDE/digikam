@@ -326,14 +326,14 @@ public:
 
     // --- patterns for storing / restoring state ---
 
-    static QString getChannelPattern(QString prefix)
+    static QString getChannelTypeOption(QString prefix, int channel)
     {
-        return prefix + "Channel%1Type";
+        return QString(prefix + "Channel%1Type").arg(channel);
     }
 
-    static QString getPointPattern(QString prefix)
+    static QString getPointOption(QString prefix, int channel, int point)
     {
-        return prefix + "Channel%1Point%2";
+        return QString(prefix + "Channel%1Point%2").arg(channel).arg(point);
     }
 
 private:
@@ -401,8 +401,8 @@ void CurvesWidget::saveCurve(KConfigGroup & group, QString prefix)
     for (int channel = 0; channel < ImageCurves::NUM_CHANNELS; ++channel)
     {
 
-        group.writeEntry(CurvesWidgetPriv::getChannelPattern(prefix).arg(
-                        channel), (int) curves()->getCurveType(channel));
+        group.writeEntry(CurvesWidgetPriv::getChannelTypeOption(prefix, channel),
+                         (int) curves()->getCurveType(channel));
 
         for (int point = 0; point <= ImageCurves::NUM_POINTS; ++point)
         {
@@ -415,8 +415,9 @@ void CurvesWidget::saveCurve(KConfigGroup & group, QString prefix)
                 p.setY(p.y() * ImageCurves::MULTIPLIER_16BIT);
             }
 
-            group.writeEntry(CurvesWidgetPriv::getPointPattern(prefix).arg(
-                            channel, point), p);
+            group.writeEntry(CurvesWidgetPriv::getPointOption(prefix, channel,
+                                                              point),
+                             p);
         }
 
     }
@@ -436,18 +437,15 @@ void CurvesWidget::restoreCurve(KConfigGroup & group, QString prefix)
     for (int channel = 0; channel < ImageCurves::NUM_CHANNELS; ++channel)
     {
 
-        curves()->setCurveType(
-                        channel,
-                        (ImageCurves::CurveType) group.readEntry(
-                                        CurvesWidgetPriv::getChannelPattern(
-                                                        prefix).arg(channel), 0));
+        curves()->setCurveType(channel,
+                               (ImageCurves::CurveType) group.readEntry(
+                                        CurvesWidgetPriv::getChannelTypeOption(
+                                                        prefix, channel), 0));
 
         for (int point = 0; point <= ImageCurves::NUM_POINTS; ++point)
         {
-            QPoint p = group.readEntry(
-                            CurvesWidgetPriv::getPointPattern(prefix).arg(
-                                            channel, point),
-                            ImageCurves::getDisabledValue());
+            QPoint p = group.readEntry(CurvesWidgetPriv::getPointOption(prefix,
+                            channel, point), ImageCurves::getDisabledValue());
 
             // always load a 16 bit curve and stretch it to 8 bit if necessary
             if (!curves()->isSixteenBits() && p
