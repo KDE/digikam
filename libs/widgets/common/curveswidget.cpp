@@ -91,7 +91,6 @@ public:
         progressPix   = SmallIcon("process-working", 22);
     }
 
-    bool              sixteenBits;
     bool              readOnlyMode;
     bool              guideVisible;
 
@@ -406,17 +405,14 @@ void CurvesWidget::saveCurve(KConfigGroup& group, const QString& prefix)
         for (int point = 0; point <= ImageCurves::NUM_POINTS; ++point)
         {
             QPoint p = curves()->getCurvePoint(channel, point);
-            if (!curves()->isSixteenBits() && p
-                            != ImageCurves::getDisabledValue())
+            if (!isSixteenBits() && p != ImageCurves::getDisabledValue())
             {
                 // Store point as 16 bits depth.
                 p.setX(p.x() * ImageCurves::MULTIPLIER_16BIT);
                 p.setY(p.y() * ImageCurves::MULTIPLIER_16BIT);
             }
 
-            group.writeEntry(CurvesWidgetPriv::getPointOption(prefix, channel,
-                                                              point),
-                             p);
+            group.writeEntry(CurvesWidgetPriv::getPointOption(prefix, channel, point), p);
         }
     }
 }
@@ -427,8 +423,7 @@ void CurvesWidget::restoreCurve(KConfigGroup& group, const QString& prefix)
 
     reset();
 
-    kDebug() << "curves " << curves() << " isSixteenBits = "
-             << curves()->isSixteenBits();
+    kDebug() << "curves " << curves() << " isSixteenBits = " << isSixteenBits();
 
     for (int channel = 0; channel < ImageCurves::NUM_CHANNELS; ++channel)
     {
@@ -444,8 +439,7 @@ void CurvesWidget::restoreCurve(KConfigGroup& group, const QString& prefix)
                             channel, point), ImageCurves::getDisabledValue());
 
             // always load a 16 bit curve and stretch it to 8 bit if necessary
-            if (!curves()->isSixteenBits() && p
-                            != ImageCurves::getDisabledValue())
+            if (!SixteenBits() && p != ImageCurves::getDisabledValue())
             {
                 p.setX(p.x() / ImageCurves::MULTIPLIER_16BIT);
                 p.setY(p.y() / ImageCurves::MULTIPLIER_16BIT);
@@ -464,8 +458,6 @@ void CurvesWidget::updateData(uchar *i_data, uint i_w, uint i_h, bool i_sixteenB
     kDebug() << "updating data";
 
     stopHistogramComputation();
-
-    d->sixteenBits = i_sixteenBits;
 
     // Remove old histogram data from memory.
     if (m_imageHistogram)
@@ -496,7 +488,7 @@ void CurvesWidget::updateData(uchar *i_data, uint i_w, uint i_h, bool i_sixteenB
 
 bool CurvesWidget::isSixteenBits()
 {
-    return d->sixteenBits;
+    return curves()->isSixteenBits();
 }
 
 void CurvesWidget::reset()
