@@ -439,7 +439,7 @@ void CurvesWidget::restoreCurve(KConfigGroup& group, const QString& prefix)
                             channel, point), ImageCurves::getDisabledValue());
 
             // always load a 16 bit curve and stretch it to 8 bit if necessary
-            if (!SixteenBits() && p != ImageCurves::getDisabledValue())
+            if (!isSixteenBits() && p != ImageCurves::getDisabledValue())
             {
                 p.setX(p.x() / ImageCurves::MULTIPLIER_16BIT);
                 p.setY(p.y() / ImageCurves::MULTIPLIER_16BIT);
