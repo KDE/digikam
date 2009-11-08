@@ -50,7 +50,7 @@ class CurvesWidgetPriv;
 
 class DIGIKAM_EXPORT CurvesWidget : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
@@ -74,7 +74,7 @@ public:
      * @param group group to save the curve to
      * @param prefix prefix prepended to the point numbers in the config
      */
-    void saveCurve(KConfigGroup & group, QString prefix);
+    void saveCurve(KConfigGroup & group, const QString& prefix);
 
     /**
      * Restores the curve tfrom the given group with prefix as a
@@ -83,7 +83,7 @@ public:
      * @param group group to restore the curve from
      * @param prefix prefix prepended to the point numbers in the config
      */
-    void restoreCurve(KConfigGroup & group, QString prefix);
+    void restoreCurve(KConfigGroup& group, const QString& prefix);
 
     /**
      * Updates the image data the curve should be used for.
@@ -113,13 +113,14 @@ public:
     void setCurveGuide(const DColor& color);
 
     ImageCurves* curves() const;
+    bool isSixteenBits();
 
 public:
 
-    ChannelType            m_channelType;     // Channel type to draw.
-    HistogramScale         m_scaleType;       // Scale to use for drawing.
+    ChannelType     m_channelType;     // Channel type to draw.
+    HistogramScale  m_scaleType;       // Scale to use for drawing.
 
-    ImageHistogram *m_imageHistogram;
+    ImageHistogram* m_imageHistogram;
 
 Q_SIGNALS:
 

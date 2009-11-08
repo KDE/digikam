@@ -91,28 +91,28 @@ public:
         progressPix   = SmallIcon("process-working", 22);
     }
 
-    bool         sixteenBits;
-    bool         readOnlyMode;
-    bool         guideVisible;
+    bool              sixteenBits;
+    bool              readOnlyMode;
+    bool              guideVisible;
 
-    int          clearFlag;          // Clear drawing zone with message.
-    int          leftMost;
-    int          rightMost;
-    int          grabPoint;
-    int          last;
-    int          xMouseOver;
-    int          yMouseOver;
-    int          progressCount;      // Position of animation during loading/calculation.
+    int               clearFlag;          // Clear drawing zone with message.
+    int               leftMost;
+    int               rightMost;
+    int               grabPoint;
+    int               last;
+    int               xMouseOver;
+    int               yMouseOver;
+    int               progressCount;      // Position of animation during loading/calculation.
 
-    QTimer      *progressTimer;
+    QTimer*           progressTimer;
 
-    QPixmap      progressPix;
+    QPixmap           progressPix;
 
-    DColor       colorGuide;
+    DColor            colorGuide;
 
-    ImageCurves *curves;             // Curves data instance.
+    ImageCurves*      curves;             // Curves data instance.
 
-    HistogramPainter *histogramPainter;
+    HistogramPainter* histogramPainter;
 
     // --- misc methods ---
 
@@ -217,7 +217,7 @@ public:
         p2.end();
     }
 
-    void renderCurve(QPixmap & pm)
+    void renderCurve(QPixmap& pm)
     {
         QPainter p1;
         p1.begin(&pm);
@@ -270,7 +270,7 @@ public:
 
     }
 
-    void renderGrid(QPixmap & pm)
+    void renderGrid(QPixmap& pm)
     {
 
         QPainter p1;
@@ -291,7 +291,7 @@ public:
 
     }
 
-    void renderMousePosition(QPixmap & pm)
+    void renderMousePosition(QPixmap& pm)
     {
         QPainter p1;
         p1.begin(&pm);
@@ -314,7 +314,7 @@ public:
         }
     }
 
-    void renderFrame(QPixmap & pm)
+    void renderFrame(QPixmap& pm)
     {
         QPainter p1;
         p1.begin(&pm);
@@ -326,19 +326,19 @@ public:
 
     // --- patterns for storing / restoring state ---
 
-    static QString getChannelTypeOption(QString prefix, int channel)
+    static QString getChannelTypeOption(const QString& prefix, int channel)
     {
         return QString(prefix + "Channel%1Type").arg(channel);
     }
 
-    static QString getPointOption(QString prefix, int channel, int point)
+    static QString getPointOption(const QString& prefix, int channel, int point)
     {
         return QString(prefix + "Channel%1Point%2").arg(channel).arg(point);
     }
 
 private:
-    CurvesWidget *q;
 
+    CurvesWidget *q;
 };
 
 CurvesWidget::CurvesWidget(int w, int h, QWidget *parent, bool readOnly)
@@ -393,9 +393,8 @@ void CurvesWidget::setup(int w, int h, bool readOnly)
             this, SLOT(slotProgressTimerDone()));
 }
 
-void CurvesWidget::saveCurve(KConfigGroup & group, QString prefix)
+void CurvesWidget::saveCurve(KConfigGroup& group, const QString& prefix)
 {
-
     kDebug() << "Storing curves";
 
     for (int channel = 0; channel < ImageCurves::NUM_CHANNELS; ++channel)
@@ -419,20 +418,17 @@ void CurvesWidget::saveCurve(KConfigGroup & group, QString prefix)
                                                               point),
                              p);
         }
-
     }
-
 }
 
-void CurvesWidget::restoreCurve(KConfigGroup & group, QString prefix)
+void CurvesWidget::restoreCurve(KConfigGroup& group, const QString& prefix)
 {
-
     kDebug() << "Restoring curves";
 
     reset();
 
     kDebug() << "curves " << curves() << " isSixteenBits = "
-                    << curves()->isSixteenBits();
+             << curves()->isSixteenBits();
 
     for (int channel = 0; channel < ImageCurves::NUM_CHANNELS; ++channel)
     {
@@ -459,9 +455,7 @@ void CurvesWidget::restoreCurve(KConfigGroup & group, QString prefix)
         }
 
         curves()->curvesCalculateCurve(channel);
-
     }
-
 }
 
 void CurvesWidget::updateData(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits)
@@ -498,6 +492,11 @@ void CurvesWidget::updateData(uchar *i_data, uint i_w, uint i_h, bool i_sixteenB
     d->curves = newCurves;
 
     resetUI();
+}
+
+bool CurvesWidget::isSixteenBits()
+{
+    return d->sixteenBits;
 }
 
 void CurvesWidget::reset()
