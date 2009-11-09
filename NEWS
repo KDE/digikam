@@ -8,7 +8,8 @@ NEW FEATURES:
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 213805 : Changing properties on a tag causes the tag tree to close.
-002 ==>
+002 ==> 161295 : Allow inclusion of original filename in custom filename.
+003 ==>
 
 *********************************************************************************************************
 digiKam 1.0.0-beta6 - Release date: 2009-11-08
