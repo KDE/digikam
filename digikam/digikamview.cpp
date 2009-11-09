@@ -881,17 +881,27 @@ void DigikamView::slotAlbumRenamed(Album *album)
         {
             case Album::PHYSICAL:
             {
+                d->folderView->setAllowAutoCollapse(false);
+
                 d->folderSearchBar->completionObject()->addItem(album->title());
                 d->folderView->slotTextFolderFilterChanged(d->folderSearchBar->searchTextSettings());
+
+                d->folderView->setAllowAutoCollapse(true);
                 break;
             }
             case Album::TAG:
             {
+                d->tagFolderView->setAllowAutoCollapse(false);
+                d->tagFilterView->setAllowAutoCollapse(false);
+
                 d->tagSearchBar->completionObject()->addItem(album->title());
                 d->tagFolderView->slotTextTagFilterChanged(d->tagSearchBar->searchTextSettings());
 
                 d->tagFilterSearchBar->completionObject()->addItem(album->title());
                 d->tagFilterView->slotTextTagFilterChanged(d->tagFilterSearchBar->searchTextSettings());
+
+                d->tagFolderView->setAllowAutoCollapse(true);
+                d->tagFilterView->setAllowAutoCollapse(true);
                 break;
             }
             case Album::SEARCH:

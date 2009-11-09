@@ -59,20 +59,22 @@ public:
 
     FolderViewPriv()
     {
-        showTips         = false;
-        active           = false;
-        doNotCollapse    = false;
-        toolTipItem      = 0;
-        toolTipTimer     = 0;
-        dragItem         = 0;
-        oldHighlightItem = 0;
-        highlightedItem  = 0;
-        toolTip          = 0;
+        showTips          = false;
+        active            = false;
+        doNotCollapse     = false;
+        allowAutoCollapse = true;
+        toolTipItem       = 0;
+        toolTipTimer      = 0;
+        dragItem          = 0;
+        oldHighlightItem  = 0;
+        highlightedItem   = 0;
+        toolTip           = 0;
     }
 
     bool               active;
     bool               showTips;
     bool               doNotCollapse;
+    bool               allowAutoCollapse;
 
     int                itemHeight;
 
@@ -647,8 +649,18 @@ void FolderView::selectItem(int)
 {
 }
 
+void FolderView::setAllowAutoCollapse(bool collapse)
+{
+    d->allowAutoCollapse = collapse;
+}
+
 void FolderView::collapseView(CollapseMode mode)
 {
+    if (!d->allowAutoCollapse)
+    {
+        return;
+    }
+
     // collapse the whole list first
     Q3ListViewItemIterator iter(this);
     while (iter.current())
