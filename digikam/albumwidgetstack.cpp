@@ -207,6 +207,7 @@ void AlbumWidgetStack::setDockArea(QMainWindow *dockArea)
     d->dockArea = dockArea;
     d->thumbBarDock->setParent(d->dockArea);
     d->dockArea->addDockWidget(Qt::TopDockWidgetArea, d->thumbBarDock);
+    d->thumbBarDock->setFloating(false);
 }
 
 ThumbBarDock *AlbumWidgetStack::thumbBarDock()

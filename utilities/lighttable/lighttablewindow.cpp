@@ -264,6 +264,7 @@ void LightTableWindow::setupUserArea()
                                        AlbumSettings::instance()->getExifRotate());
     d->barViewDock->setWidget(d->barView);
     viewContainer->addDockWidget(Qt::TopDockWidgetArea, d->barViewDock);
+    d->barViewDock->setFloating(false);
 
     // Restore the previous state. This doesn't emit the proper signals to the
     // dock widget, so it has to be manually reinitialized.
