@@ -174,12 +174,11 @@ class TagFolderViewPriv
 
 public:
 
-    TagFolderViewPriv()
-    {
-        albumMan          = 0;
-    }
+    TagFolderViewPriv() :
+        albumMan(0)
+    {}
 
-    AlbumManager      *albumMan;
+    AlbumManager* albumMan;
 };
 
 TagFolderView::TagFolderView(QWidget *parent)
