@@ -193,7 +193,6 @@ int DynamicLayout::reLayout(const QRect &rect, bool testOnly) const
 
     int buttonWidth     = d->minItemWidth + d->spaceX;
 
-
     int maxButtonsInRow = (effectiveRect.width() - d->spaceX) / buttonWidth;
     if (maxButtonsInRow < d->minColumns)
     {
@@ -203,25 +202,25 @@ int DynamicLayout::reLayout(const QRect &rect, bool testOnly) const
     int maxButtonWidth  = d->minItemWidth + (
             (effectiveRect.width() - (maxButtonsInRow * buttonWidth)) / maxButtonsInRow );
 
-    int _btnWidth = (maxButtonsInRow >= d->itemList.count()) ? buttonWidth : maxButtonWidth;
+    int currentBtnWidth = (maxButtonsInRow >= d->itemList.count()) ? buttonWidth : maxButtonWidth;
 
     // --------------------------------------------------------
 
     foreach (QLayoutItem* item, d->itemList)
     {
-        int nextX = x + _btnWidth + d->spaceX;
+        int nextX = x + currentBtnWidth + d->spaceX;
         if ( (nextX - d->spaceX) > effectiveRect.right() && (lineHeight > 0) )
         {
             x          = effectiveRect.x();
             y          = y + lineHeight + d->spaceY;
-            nextX      = x + _btnWidth  + d->spaceX;
+            nextX      = x + currentBtnWidth  + d->spaceX;
             lineHeight = 0;
         }
 
         if (!testOnly)
         {
             QSize s = item->sizeHint();
-            s.setWidth(_btnWidth);
+            s.setWidth(currentBtnWidth);
             item->setGeometry(QRect(QPoint(x, y), s));
         }
 
