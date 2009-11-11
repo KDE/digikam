@@ -103,7 +103,7 @@ ReplaceModifier::ReplaceModifier()
                : Modifier(i18nc("Replace text", "Replace..."), i18n("Replace text"),
                           SmallIcon("document-edit"))
 {
-    addTokenDescription(QString("{\"<i>old</i>\", \"<i>new</i>\"}"), i18n("Replace"), description());
+    addTokenDescription(QString("{\"|old|\", \"|new|\"}"), i18n("Replace"), description());
 
     setRegExp("\\{\\s*\"(.+)\"\\s*,\\s*\"(.*)\"\\s*\\}");
 }

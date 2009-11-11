@@ -30,6 +30,7 @@
 #include <QGridLayout>
 #include <QMenu>
 #include <QPushButton>
+#include <QRegExp>
 #include <QToolButton>
 
 // KDE includes
@@ -165,35 +166,43 @@ QString AdvancedRenameWidget::parse(ParseInformation& info) const
 
 void AdvancedRenameWidget::createToolTip()
 {
-#define TOOLTIP_HEADER(str)                                                                     \
-    do                                                                                          \
-    {                                                                                           \
-        tooltip += QString("<tr bgcolor=\"%1\"><td colspan=\"2\">"                              \
-                           "<nobr><font color=\"%2\"><center><b>")                              \
-                           .arg(ThemeEngine::instance()->baseColor().name())                    \
-                           .arg(ThemeEngine::instance()->textRegColor().name());                \
-        tooltip += QString(str);                                                                \
-        tooltip += QString("</b></center></font></nobr></td></tr>");                            \
-    } while (0)                                                                                 \
+    QRegExp optionsRegExp("\\|(.*)\\|");
+    optionsRegExp.setMinimal(true);
+
+#define MARK_OPTIONS(str)                                                                      \
+    str.replace(optionsRegExp, "<i><font color=\"%1\">\\1</font></i>")                         \
+                               .arg(ThemeEngine::instance()->textSpecialRegColor().name())
+
+#define TOOLTIP_HEADER(str)                                                                    \
+    do                                                                                         \
+    {                                                                                          \
+        tooltip += QString("<tr bgcolor=\"%1\"><td colspan=\"2\">"                             \
+                           "<nobr><font color=\"%2\"><center><b>")                             \
+                           .arg(ThemeEngine::instance()->baseColor().name())                   \
+                           .arg(ThemeEngine::instance()->textRegColor().name());               \
+        tooltip += QString(str);                                                               \
+        tooltip += QString("</b></center></font></nobr></td></tr>");                           \
+    } while (0)                                                                                \
 
 
-#define TOOLTIP_ENTRIES(type, data)                                                             \
-    do                                                                                          \
-    {                                                                                           \
-        foreach (type* t, data)                                                                 \
-        {                                                                                       \
-            foreach (Token* token, t->tokens())                                                 \
-            {                                                                                   \
-                tooltip += QString("<tr>"                                                       \
-                                   "<td bgcolor=\"%1\">"                                        \
-                                       "<font color=\"%2\"><b>&nbsp;%3&nbsp;</b></font></td>"   \
-                                   "<td>&nbsp;%4&nbsp;</td></tr>")                              \
-                                   .arg(ThemeEngine::instance()->baseColor().name())            \
-                                   .arg(ThemeEngine::instance()->textRegColor().name())         \
-                                   .arg(token->id())                                            \
-                                   .arg(token->description());                                  \
-            }                                                                                   \
-        }                                                                                       \
+#define TOOLTIP_ENTRIES(type, data)                                                            \
+    do                                                                                         \
+    {                                                                                          \
+                                                                                               \
+        foreach (type* t, data)                                                                \
+        {                                                                                      \
+            foreach (Token* token, t->tokens())                                                \
+            {                                                                                  \
+                tooltip += QString("<tr>"                                                      \
+                                   "<td bgcolor=\"%1\">"                                       \
+                                       "<font color=\"%2\"><b>&nbsp;%3&nbsp;</b></font></td>"  \
+                                   "<td>&nbsp;%4&nbsp;</td></tr>")                             \
+                                   .arg(ThemeEngine::instance()->baseColor().name())           \
+                                   .arg(ThemeEngine::instance()->textRegColor().name())        \
+                                   .arg(MARK_OPTIONS(token->id()))                             \
+                                   .arg(MARK_OPTIONS(token->description()));                   \
+            }                                                                                  \
+        }                                                                                      \
     } while (0)
 
     // --------------------------------------------------------
@@ -229,6 +238,7 @@ void AdvancedRenameWidget::createToolTip()
 
 #undef TOOLTIP_HEADER
 #undef TOOLTIP_ENTRIES
+#undef MARK_OPTIONS
 }
 
 void AdvancedRenameWidget::slotToolTipButtonToggled(bool checked)

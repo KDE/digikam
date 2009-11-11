@@ -102,8 +102,8 @@ RangeModifier::RangeModifier()
 {
     setUseTokenMenu(false);
 
-    addTokenDescription(QString("{<i>from</i> - <i>to</i>}"), i18n("Range"),
-             i18n("Extract a specific range (if omitted, '<i>to</i>' = end of string)"));
+    addTokenDescription(QString("{|from| - |to|}"), i18n("Range"),
+             i18n("Extract a specific range (if omitted, '|to|' = end of string)"));
 
     setRegExp("\\{\\s*(\\d+)\\s*(-\\s*((-1|\\d+)\\s*)?)?\\}");
 }

@@ -173,7 +173,7 @@ MetadataParser::MetadataParser()
     }
     setIcon(icon);
 
-    addTokenDescription("[meta:<i>keycode</i>]", i18n("Metadata"),
+    addTokenDescription("[meta:|keycode|]", i18n("Metadata"),
              i18n("Add metadata (use the quick access dialog for keycodes)"));
 
     setRegExp("\\[meta:\\s*(.*)\\s*\\s*\\]");

@@ -77,7 +77,7 @@ DefaultValueModifier::DefaultValueModifier()
                                i18n("Set a default value for empty strings"),
                                SmallIcon("edit-undo"))
 {
-    addTokenDescription(QString("{\"<i>default</i>\"}"), i18nc("default value", "Default"), description());
+    addTokenDescription(QString("{\"|default|\"}"), i18nc("default value", "Default"), description());
 
     setRegExp("\\{\\s*\"(.+)\"\\s*\\}");
 }
