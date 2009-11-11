@@ -343,6 +343,40 @@ void AdvancedRenameWidgetTest::testRangeModifier()
     QCOMPARE(parsed, result);
 }
 
+void AdvancedRenameWidgetTest::testDefaultValueModifier_data()
+{
+    QTest::addColumn<QString>("parseString");
+    QTest::addColumn<QString>("filename");
+    QTest::addColumn<QString>("camera");
+    QTest::addColumn<QString>("result");
+
+    QString fileName("DSC1234.jpg");
+    QDateTime curdate = QDateTime::currentDateTime();
+
+    QTest::newRow("[cam]_[file]") << QString("[cam]{\"Unknown\"}_[file]") << fileName << QString("Canon Powershot A80")
+                                  << QString("Canon Powershot A80_DSC1234.jpg");
+
+    QTest::newRow("[cam]{\"Unknown\"}_[file]") << QString("[cam]{\"Unknown\"}_[file]") << fileName << QString()
+                                               << QString("Unknown_DSC1234.jpg");
+}
+
+void AdvancedRenameWidgetTest::testDefaultValueModifier()
+{
+    QFETCH(QString,   parseString);
+    QFETCH(QString,   filename);
+    QFETCH(QString,   camera);
+    QFETCH(QString,   result);
+
+    DefaultRenameParser parser;
+
+    ParseInformation info;
+    info.filePath   = filename;
+    info.cameraName = camera;
+
+    QString parsed = parser.parse(parseString, info);
+    QCOMPARE(parsed, result);
+}
+
 void AdvancedRenameWidgetTest::testLowercaseModifier_data()
 {
     QTest::addColumn<QString>("parseString");

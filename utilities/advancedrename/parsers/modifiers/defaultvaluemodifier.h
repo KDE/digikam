@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-09-14
- * Description : a token result modifier class
+ * Date        : 2009-11-11
+ * Description : a modifier for setting a default value if option parsing failed
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,21 +21,53 @@
  *
  * ============================================================ */
 
+#ifndef DEFAULTVALUEMODIFIER_H
+#define DEFAULTVALUEMODIFIER_H
+
+// KDE includes
+
+#include <kdialog.h>
+
+// Local includes
+
 #include "modifier.h"
-#include "modifier.moc"
+
+class KLineEdit;
 
 namespace Digikam
 {
 
-Modifier::Modifier(const QString& name, const QString& description, const QIcon& icon)
-        : ParseObject(name, icon)
+class DefaultValueDialog : public KDialog
 {
-    setDescription(description);
-}
+    Q_OBJECT
 
-QString Modifier::modify(const QString& parseString, const QString& result)
+public:
+
+    DefaultValueDialog();
+    ~DefaultValueDialog();
+
+public:
+
+    KLineEdit* valueInput;
+};
+
+// --------------------------------------------------------
+
+class DefaultValueModifier : public Modifier
 {
-    return modifyOperation(parseString, result);
-}
+    Q_OBJECT
+
+public:
+
+    DefaultValueModifier();
+    virtual QString modifyOperation(const QString& parseString, const QString& result);
+
+private Q_SLOTS:
+
+    void slotTokenTriggered(const QString& token);
+};
 
 } // namespace Digikam
+
+
+#endif /* DEFAULTVALUEMODIFIER_H */

@@ -58,6 +58,9 @@ private Q_SLOTS:
     void testRangeModifier();
     void testRangeModifier_data();
 
+    void testDefaultValueModifier();
+    void testDefaultValueModifier_data();
+
     void testUppercaseModifier();
     void testUppercaseModifier_data();
 
