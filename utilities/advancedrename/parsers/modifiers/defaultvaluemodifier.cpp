@@ -42,12 +42,15 @@ namespace Digikam
 DefaultValueDialog::DefaultValueDialog()
                   : KDialog(0)
 {
-    QString replace = i18n("Default Value");
+    QString defaultValueStr = i18n("Default Value");
 
-    setCaption(replace);
+    setCaption(defaultValueStr);
 
-    QLabel* srcLabel = new QLabel(replace + ':');
+    QLabel* srcLabel = new QLabel(defaultValueStr + ':');
     valueInput       = new KLineEdit(this);
+    valueInput->setToolTip(i18n("<p>Set a default value for empty strings.<br/>"
+                                "When applied to a renaming option, "
+                                "an empty string will be replaced by the value you specify here.</p>"));
 
     QWidget*     mainWidget = new QWidget(this);
     QGridLayout* mainLayout = new QGridLayout(this);
