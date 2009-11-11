@@ -100,8 +100,7 @@ QString ReplaceDialog::destination() const
 // --------------------------------------------------------
 
 ReplaceModifier::ReplaceModifier()
-               : Modifier(i18nc("Replace text", "Replace..."), i18n("Replace text in renaming options results"),
-                          SmallIcon("document-edit"))
+               : Modifier(i18nc("Replace text", "Replace..."), i18n("Replace text"))
 {
     addTokenDescription(QString("{\"<i>old</i>\", \"<i>new</i>\"}"), i18n("Replace"), description());
 

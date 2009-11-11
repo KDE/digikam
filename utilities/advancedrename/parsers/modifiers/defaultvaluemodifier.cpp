@@ -70,8 +70,8 @@ DefaultValueDialog::~DefaultValueDialog()
 // --------------------------------------------------------
 
 DefaultValueModifier::DefaultValueModifier()
-               : Modifier(i18nc("default value for replaced text", "Default Value..."),
-                          i18n("Replace empty renaming options results with a default value"),
+               : Modifier(i18nc("default value for empty strings", "Default Value..."),
+                          i18n("Set a default value for empty strings"),
                           SmallIcon("document-edit"))
 {
     addTokenDescription(QString("{\"<i>default</i>\"}"), i18nc("default value", "Default"), description());
