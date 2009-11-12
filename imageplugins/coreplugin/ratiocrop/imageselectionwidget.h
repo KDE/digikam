@@ -171,6 +171,14 @@ private:
     void   placeSelection(QPoint pm, bool symmetric, QPoint center);
     void   setCursorResizing();
 
+    // drawing functions for the various guide types
+    void   drawRulesOfThirds(QPainter &p, const int &xThird, const int &yThird);
+    void   drawDiagonalMethod(QPainter &p, const int &w, const int &h);
+    void   drawHarmoniousTriangles(QPainter &p, const int &dst);
+    void   drawGoldenMean(QPainter &p, const QRect &R1, const QRect &R2,
+                          const QRect &R3, const QRect &R4, const QRect &R5,
+                          const QRect &R6, const QRect &R7);
+
     void setup(int width, int height,
                int widthRatioValue=1, int heightRatioValue=1,
                int aspectRatio=RATIO01X01, int orient=Landscape,
