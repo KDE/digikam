@@ -296,9 +296,9 @@ inline OSError SetFPos(HANDLE hFile, int posMode, INT64 posOff) {
 
 
 //-------------------------------------------------------------------------------
-// LINUX
+// LINUX / GLIBC
 //-------------------------------------------------------------------------------
-#ifdef __linux__
+#if defined(__linux__) || defined(__GLIBC__)
 #define __POSIX__
 #endif /* __linux__ */
 
