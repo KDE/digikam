@@ -68,7 +68,8 @@ Q_SIGNALS:
 
 private:
 
-    void viewportPaintEvent(QPaintEvent*);
+    void drawItem(ThumbBarItem *item, QPainter &p, QPixmap &tile);
+    void drawEmptyMessage(QPixmap &pixmap);
     void contentsMouseReleaseEvent(QMouseEvent*);
     void startDrag();
     void contentsDragEnterEvent(QDragEnterEvent*);

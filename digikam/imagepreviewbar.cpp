@@ -485,6 +485,41 @@ void ImagePreviewBar::contentsMouseMoveEvent(QMouseEvent* e)
     ThumbBarView::contentsMouseMoveEvent(e);
 }
 
+void ImagePreviewBar::drawItem(ThumbBarItem *item, QPainter &p, QPixmap &tile)
+{
+
+    Q_UNUSED(tile);
+
+    if (item != d->ratingItem)
+    {
+        ImagePreviewBarItem *rItem = dynamic_cast<ImagePreviewBarItem*>(item);
+        int rating                 = rItem->info().rating();
+        QRect r                    = clickToRateRect(rItem);
+
+        if (getOrientation() == Qt::Vertical)
+        {
+            r.translate(0, -rItem->position());
+        }
+        else
+        {
+            r.translate(-rItem->position(), 0);
+        }
+
+        r.setX(((r.right() - rating * d->ratingPixmap.width())/2) - 1);
+        r.setY(r.y()+1);
+        r.setWidth((rating * d->ratingPixmap.width()));
+        r.setBottom(r.bottom()+1);
+        p.drawTiledPixmap(r, d->ratingPixmap);
+
+    }
+
+}
+
+void ImagePreviewBar::drawEmptyMessage(QPixmap &pixmap)
+{
+    Q_UNUSED(pixmap)
+}
+
 void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
 {
     ThemeEngine* te = ThemeEngine::instance();
@@ -565,19 +600,7 @@ void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
                                                                  QColor(0, 0, 0, 128), 3));
                         item->setTooltipRect(QRect(x, y+item->position(), pix.width(), pix.height()));
 
-
-                        if (item != d->ratingItem)
-                        {
-                            ImagePreviewBarItem *rItem = dynamic_cast<ImagePreviewBarItem*>(item);
-                            int rating                 = rItem->info().rating();
-                            QRect r                    = clickToRateRect(rItem);
-                            r.translate(0, -rItem->position());
-                            r.setX(((r.right() - rating * d->ratingPixmap.width())/2) - 1);
-                            r.setY(r.y()+1);
-                            r.setWidth((rating * d->ratingPixmap.width()));
-                            r.setBottom(r.bottom()+1);
-                            p.drawTiledPixmap(r, d->ratingPixmap);
-                        }
+                        drawItem(item, p, tile);
                     }
 
                     p.end();
@@ -626,18 +649,7 @@ void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
                                                                  QColor(0, 0, 0, 128), 3));
                         item->setTooltipRect(QRect(x+item->position(), y, pix.width(), pix.height()));
 
-                        if (item != d->ratingItem)
-                        {
-                            ImagePreviewBarItem *rItem = dynamic_cast<ImagePreviewBarItem*>(item);
-                            int rating                 = rItem->info().rating();
-                            QRect r                    = clickToRateRect(rItem);
-                            r.translate(-rItem->position(), 0);
-                            r.setX(((r.right() - rating * d->ratingPixmap.width())/2) - 1);
-                            r.setY(r.y()+1);
-                            r.setWidth((rating * d->ratingPixmap.width()));
-                            r.setBottom(r.bottom()+1);
-                            p.drawTiledPixmap(r, d->ratingPixmap);
-                        }
+                        drawItem(item, p, tile);
                     }
 
                     p.end();
@@ -662,6 +674,8 @@ void ImagePreviewBar::viewportPaintEvent(QPaintEvent* e)
     {
         bgPix = QPixmap(contentsRect().width(), contentsRect().height());
         bgPix.fill(te->baseColor());
+
+        drawEmptyMessage(bgPix);
 
         QPainter p5(viewport());
         p5.drawPixmap(0, 0, bgPix);

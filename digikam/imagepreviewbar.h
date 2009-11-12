@@ -77,6 +77,24 @@ protected:
     QPixmap ratingPixmap() const;
     void startDrag();
 
+    /**
+     * Hook method that can be implemented to provide custom item drawing.
+     *
+     * @param item the item to draw
+     * @param p painter to use that is already prepared according to the item's
+     *          role like being selected etc.
+     * @param tile the pixmap to draw on
+     */
+    virtual void drawItem(ThumbBarItem *item, QPainter &p, QPixmap &tile);
+
+    /**
+     * Hook method that can be implemented to draw a custom message if there are
+     * no images to display.
+     *
+     * @param pixmap pixmap to paint on
+     */
+    virtual void drawEmptyMessage(QPixmap &pixmap);
+
     virtual void rearrangeItems();
     virtual void contentsMouseMoveEvent(QMouseEvent*);
     virtual void viewportPaintEvent(QPaintEvent*);
