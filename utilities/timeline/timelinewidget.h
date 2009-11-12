@@ -151,6 +151,12 @@ private:
     void          updateYearSelection(const QDateTime dts, const QDateTime dte);
     void          updateAllSelection();
 
+    // helper methods for painting
+    int           calculateTop(int &val);
+    void          paintItem(QPainter &p, const QRect &barRect,
+                            const QDateTime &ref, const int &separatorPosition,
+                            const QColor &dateColor, const QColor &subDateColor);
+
 private:
 
     TimeLineWidgetPriv* const d;

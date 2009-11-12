@@ -621,6 +621,161 @@ void TimeLineWidget::slotDatesMap(const QMap<QDateTime, int>& datesStatMap)
     emit signalDateMapChanged();
 }
 
+int TimeLineWidget::calculateTop(int &val)
+{
+
+    const int minimum_valid_height = 1;
+
+    double max = (double)maxCount();
+    int dim    = height() - d->bottomMargin - d->topMargin;
+
+    if (d->scaleMode == TimeLineWidget::LogScale)
+    {
+        if (max > 0.0) max = log(max);
+        else           max = 1.0;
+
+        double logVal = 0;
+        if (val <= 0) logVal = 0;
+        else          logVal = log(val);
+
+        int pix = lround((logVal * dim) / max);
+        if (val)
+            pix = qMax(pix, minimum_valid_height);
+        int top = dim + d->topMargin - pix;
+
+        if (top < 0) val = 0;
+
+        return top;
+    }
+    else
+    {
+        int pix = lround((val * dim) / max);
+        if (val)
+            pix = qMax(pix, minimum_valid_height);
+        int top = dim + d->topMargin - pix;
+
+        return top;
+    }
+
+}
+
+void TimeLineWidget::paintItem(QPainter &p, const QRect &barRect,
+                const QDateTime &ref, const int &separatorPosition,
+                const QColor &dateColor, const QColor &subDateColor)
+{
+
+    switch(d->timeUnit)
+    {
+        case Day:
+        {
+            {
+                p.save();
+                QFont fnt = p.font();
+                fnt.setPointSize(fnt.pointSize()-4);
+                p.setFont(fnt);
+                p.setPen(subDateColor);
+                QString txt = QString(d->calendar->weekDayName(ref.date(), KCalendarSystem::ShortDayName)[0]);
+                QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt);
+                p.drawText(barRect.left() + ((barRect.width()-br.width())/2),
+                           barRect.bottom()+br.height(), txt);
+                p.restore();
+            }
+
+            if (d->calendar->dayOfWeek(ref.date()) == 1)
+            {
+                p.setPen(dateColor);
+                p.drawLine(barRect.left(), barRect.bottom(),
+                           barRect.left(), barRect.bottom()+d->bottomMargin/2);
+                QString txt = KGlobal::locale()->formatDate(ref.date(), KLocale::ShortDate);
+                QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt);
+                p.drawText(barRect.left()-br.width()/2, barRect.bottom() + d->bottomMargin, txt);
+            }
+            break;
+        }
+        case Week:
+        {
+            int week = d->calendar->weekNumber(ref.date());
+            {
+                p.save();
+                QFont fnt = p.font();
+                fnt.setPointSize(fnt.pointSize()-4);
+                p.setFont(fnt);
+                p.setPen(subDateColor);
+                QString txt = QString::number(week);
+                QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt);
+                p.drawText(barRect.left() + ((barRect.width()-br.width())/2),
+                           barRect.bottom()+br.height(), txt);
+                p.restore();
+            }
+
+            p.setPen(dateColor);
+            if (week == 1 || week == 10 || week == 20 || week == 30 || week == 40 || week == 50)
+            {
+                p.drawLine(barRect.left(), barRect.bottom(),
+                           barRect.left(), barRect.bottom()+d->bottomMargin/2);
+                QString txt = KGlobal::locale()->formatDate(ref.date(), KLocale::ShortDate);
+                QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt);
+                if (week != 50)
+                    p.drawText(barRect.left()-br.width()/2, barRect.bottom() + d->bottomMargin, txt);
+            }
+            else if (week == 6 || week == 16 || week == 26 || week == 36 || week == 46)
+            {
+                p.drawLine(barRect.left(), barRect.bottom(),
+                           barRect.left(), barRect.bottom()+d->bottomMargin/4);
+            }
+            break;
+        }
+        case Month:
+        {
+            {
+                p.save();
+                QFont fnt = p.font();
+                fnt.setPointSize(fnt.pointSize()-4);
+                p.setFont(fnt);
+                p.setPen(subDateColor);
+                QString txt = QString(d->calendar->monthName(ref.date(), KCalendarSystem::ShortName)[0]);
+                QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt);
+                p.drawText(barRect.left() + ((barRect.width()-br.width())/2),
+                           barRect.bottom()+br.height(), txt);
+                p.restore();
+            }
+
+            p.setPen(dateColor);
+            if (ref.date().month() == 1)
+            {
+                p.drawLine(barRect.left(), barRect.bottom(),
+                           barRect.left(), barRect.bottom()+d->bottomMargin/2);
+                QString txt = QString::number(ref.date().year());
+                QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt);
+                p.drawText(barRect.left()-br.width()/2, barRect.bottom() + d->bottomMargin, txt);
+            }
+            else if (ref.date().month() == 7)
+            {
+                p.drawLine(separatorPosition, barRect.bottom(),
+                           separatorPosition, barRect.bottom()+d->bottomMargin/4);
+            }
+            break;
+        }
+        case Year:
+        {
+            p.setPen(dateColor);
+            if (ref.date().year() % 10 == 0)
+            {
+                p.drawLine(barRect.left(), barRect.bottom(),
+                           barRect.left(), barRect.bottom()+d->bottomMargin/2);
+                QString txt = QString::number(ref.date().year());
+                QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt);
+                p.drawText(barRect.left()-br.width()/2, barRect.bottom() + d->bottomMargin, txt);
+            }
+            else if (ref.date().year() % 5 == 0)
+                p.drawLine(separatorPosition, barRect.bottom(),
+                           separatorPosition, barRect.bottom()+d->bottomMargin/4);
+            break;
+        }
+    }
+
+}
+
 void TimeLineWidget::paintEvent(QPaintEvent*)
 {
     QPainter p(this);
@@ -629,15 +784,12 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
     d->barWidth     = p.fontMetrics().width("00");
     d->nbItems      = (int)((width() / 2.0) / (float)d->barWidth);
     d->startPos     = (int)((width() / 2.0) - ((float)(d->barWidth) / 2.0));
-    int dim         = height() - d->bottomMargin - d->topMargin;
     QDateTime     ref;
-    double        max, logVal;
-    int           val, pix, top;
+    int           val, top;
     SelectionMode sel;
     QRect         focusRect, selRect, barRect;
     QBrush        selBrush;
     QColor        dateColor, subDateColor;
-    const int     minimum_valid_height = 1;
 
     // Date histogram drawing is divided in 2 parts. The current date-time
     // is placed on the center of the view and all dates on right are computed,
@@ -651,30 +803,7 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
     for (int i = 0 ; i < d->nbItems ; ++i)
     {
         val = statForDateTime(ref, &sel);
-        max = (double)maxCount();
-
-        if (d->scaleMode == TimeLineWidget::LogScale)
-        {
-            if (max > 0.0) max = log(max);
-            else           max = 1.0;
-
-            if (val <= 0) logVal = 0;
-            else          logVal = log(val);
-
-            pix = lround((logVal * dim) / max);
-            if (val)
-                pix = qMax(pix, minimum_valid_height);
-            top = dim + d->topMargin - pix;
-
-            if (top < 0) val = 0;
-        }
-        else
-        {
-            pix = lround((val * dim) / max);
-            if (val)
-                pix = qMax(pix, minimum_valid_height);
-            top = dim + d->topMargin - pix;
-        }
+        top = calculateTop(val);
 
         barRect.setTop(top);
         barRect.setLeft(d->startPos + i*d->barWidth);
@@ -722,115 +851,7 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
             p.fillRect(selRect, selBrush);
         }
 
-        switch(d->timeUnit)
-        {
-            case Day:
-            {
-                {
-                    p.save();
-                    QFont fnt = p.font();
-                    fnt.setPointSize(fnt.pointSize()-4);
-                    p.setFont(fnt);
-                    p.setPen(subDateColor);
-                    QString txt = QString(d->calendar->weekDayName(ref.date(), KCalendarSystem::ShortDayName)[0]);
-                    QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt);
-                    p.drawText(barRect.left() + ((barRect.width()-br.width())/2),
-                               barRect.bottom()+br.height(), txt);
-                    p.restore();
-                }
-
-                if (d->calendar->dayOfWeek(ref.date()) == 1)
-                {
-                    p.setPen(dateColor);
-                    p.drawLine(barRect.left(), barRect.bottom(),
-                               barRect.left(), barRect.bottom()+d->bottomMargin/2);
-                    QString txt = KGlobal::locale()->formatDate(ref.date(), KLocale::ShortDate);
-                    QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt);
-                    p.drawText(barRect.left()-br.width()/2, barRect.bottom() + d->bottomMargin, txt);
-                }
-                break;
-            }
-            case Week:
-            {
-                int week = d->calendar->weekNumber(ref.date());
-                {
-                    p.save();
-                    QFont fnt = p.font();
-                    fnt.setPointSize(fnt.pointSize()-4);
-                    p.setFont(fnt);
-                    p.setPen(subDateColor);
-                    QString txt = QString::number(week);
-                    QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt);
-                    p.drawText(barRect.left() + ((barRect.width()-br.width())/2),
-                               barRect.bottom()+br.height(), txt);
-                    p.restore();
-                }
-
-                p.setPen(dateColor);
-                if (week == 1 || week == 10 || week == 20 || week == 30 || week == 40 || week == 50)
-                {
-                    p.drawLine(barRect.left(), barRect.bottom(),
-                               barRect.left(), barRect.bottom()+d->bottomMargin/2);
-                    QString txt = KGlobal::locale()->formatDate(ref.date(), KLocale::ShortDate);
-                    QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt);
-                    if (week != 50)
-                        p.drawText(barRect.left()-br.width()/2, barRect.bottom() + d->bottomMargin, txt);
-                }
-                else if (week == 6 || week == 16 || week == 26 || week == 36 || week == 46)
-                {
-                    p.drawLine(barRect.left(), barRect.bottom(),
-                               barRect.left(), barRect.bottom()+d->bottomMargin/4);
-                }
-                break;
-            }
-            case Month:
-            {
-                {
-                    p.save();
-                    QFont fnt = p.font();
-                    fnt.setPointSize(fnt.pointSize()-4);
-                    p.setFont(fnt);
-                    p.setPen(subDateColor);
-                    QString txt = QString(d->calendar->monthName(ref.date(), KCalendarSystem::ShortName)[0]);
-                    QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt);
-                    p.drawText(barRect.left() + ((barRect.width()-br.width())/2),
-                               barRect.bottom()+br.height(), txt);
-                    p.restore();
-                }
-
-                p.setPen(dateColor);
-                if (ref.date().month() == 1)
-                {
-                    p.drawLine(barRect.left(), barRect.bottom(),
-                               barRect.left(), barRect.bottom()+d->bottomMargin/2);
-                    QString txt = QString::number(ref.date().year());
-                    QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt);
-                    p.drawText(barRect.left()-br.width()/2, barRect.bottom() + d->bottomMargin, txt);
-                }
-                else if (ref.date().month() == 7)
-                {
-                    p.drawLine(barRect.left(), barRect.bottom(),
-                               barRect.left(), barRect.bottom()+d->bottomMargin/4);
-                }
-                break;
-            }
-            case Year:
-            {
-                p.setPen(dateColor);
-                if (ref.date().year() % 10 == 0)
-                {
-                    p.drawLine(barRect.left(), barRect.bottom(),
-                               barRect.left(), barRect.bottom()+d->bottomMargin/2);
-                    QString txt = QString::number(ref.date().year());
-                    QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt);
-                    p.drawText(barRect.left()-br.width()/2, barRect.bottom() + d->bottomMargin, txt);
-                }
-                else if (ref.date().year() % 5 == 0)
-                    p.drawLine(barRect.left(), barRect.bottom(),
-                               barRect.left(), barRect.bottom()+d->bottomMargin/4);
-                break;
-            }
-        }
+        paintItem(p, barRect, ref, barRect.left(), dateColor, subDateColor);
 
         ref = nextDateTime(ref);
     }
@@ -844,30 +865,7 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
     for (int i = 0 ; i < d->nbItems-1 ; ++i)
     {
         val = statForDateTime(ref, &sel);
-        max = (double)maxCount();
-
-        if (d->scaleMode == TimeLineWidget::LogScale)
-        {
-            if (max > 0.0) max = log(max);
-            else           max = 1.0;
-
-            if (val <= 0) logVal = 0;
-            else          logVal = log(val);
-
-            pix = lround((logVal * dim) / max);
-            if (val)
-                pix = qMax(pix, minimum_valid_height);
-            top = dim + d->topMargin - pix;
-
-            if (top < 0) val = 0;
-        }
-        else
-        {
-            pix = lround((val * dim) / max);
-            if (val)
-                pix = qMax(pix, minimum_valid_height);
-            top = dim + d->topMargin - pix;
-        }
+        top = calculateTop(val);
 
         barRect.setTop(top);
         barRect.setRight(d->startPos - i*d->barWidth);
@@ -915,115 +913,7 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
             p.fillRect(selRect, selBrush);
         }
 
-        switch(d->timeUnit)
-        {
-            case Day:
-            {
-                {
-                    p.save();
-                    QFont fnt = p.font();
-                    fnt.setPointSize(fnt.pointSize()-4);
-                    p.setFont(fnt);
-                    p.setPen(subDateColor);
-                    QString txt = QString(d->calendar->weekDayName(ref.date(), KCalendarSystem::ShortDayName)[0]);
-                    QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt);
-                    p.drawText(barRect.left() + ((barRect.width()-br.width())/2),
-                               barRect.bottom()+br.height(), txt);
-                    p.restore();
-                }
-
-                if (d->calendar->dayOfWeek(ref.date()) == 1)
-                {
-                    p.setPen(dateColor);
-                    p.drawLine(barRect.left(), barRect.bottom(),
-                               barRect.left(), barRect.bottom()+d->bottomMargin/2);
-                    QString txt = KGlobal::locale()->formatDate(ref.date(), KLocale::ShortDate);
-                    QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt);
-                    p.drawText(barRect.left()-br.width()/2, barRect.bottom() + d->bottomMargin, txt);
-                }
-                break;
-            }
-            case Week:
-            {
-                int week = d->calendar->weekNumber(ref.date());
-                {
-                    p.save();
-                    QFont fnt = p.font();
-                    fnt.setPointSize(fnt.pointSize()-4);
-                    p.setFont(fnt);
-                    p.setPen(subDateColor);
-                    QString txt = QString::number(week);
-                    QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt);
-                    p.drawText(barRect.left() + ((barRect.width()-br.width())/2),
-                               barRect.bottom()+br.height(), txt);
-                    p.restore();
-                }
-
-                p.setPen(dateColor);
-                if (week == 1 || week == 10 || week == 20 || week == 30 || week == 40 || week == 50)
-                {
-                    p.drawLine(barRect.left(), barRect.bottom(),
-                               barRect.left(), barRect.bottom()+d->bottomMargin/2);
-                    QString txt = KGlobal::locale()->formatDate(ref.date(), KLocale::ShortDate);
-                    QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt);
-                    if (week != 50)
-                        p.drawText(barRect.left()-br.width()/2, barRect.bottom() + d->bottomMargin, txt);
-                }
-                else if (week == 6 || week == 16 || week == 26 || week == 36 || week == 46)
-                {
-                    p.drawLine(barRect.left(), barRect.bottom(),
-                               barRect.left(), barRect.bottom()+d->bottomMargin/4);
-                }
-                break;
-            }
-            case Month:
-            {
-                {
-                    p.save();
-                    QFont fnt = p.font();
-                    fnt.setPointSize(fnt.pointSize()-4);
-                    p.setFont(fnt);
-                    p.setPen(subDateColor);
-                    QString txt = QString(d->calendar->monthName(ref.date(), KCalendarSystem::ShortName)[0]);
-                    QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt);
-                    p.drawText(barRect.left() + ((barRect.width()-br.width())/2),
-                               barRect.bottom()+br.height(), txt);
-                    p.restore();
-                }
-
-                p.setPen(dateColor);
-                if (ref.date().month() == 1)
-                {
-                    p.drawLine(barRect.left(), barRect.bottom(),
-                               barRect.left(), barRect.bottom()+d->bottomMargin/2);
-                    QString txt = QString::number(ref.date().year());
-                    QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt);
-                    p.drawText(barRect.left()-br.width()/2, barRect.bottom() + d->bottomMargin, txt);
-                }
-                else if (ref.date().month() == 7)
-                {
-                    p.drawLine(barRect.right(), barRect.bottom(),
-                               barRect.right(), barRect.bottom()+d->bottomMargin/4);
-                }
-                break;
-            }
-            case Year:
-            {
-                p.setPen(dateColor);
-                if (ref.date().year() % 10 == 0)
-                {
-                    p.drawLine(barRect.left(), barRect.bottom(),
-                               barRect.left(), barRect.bottom()+d->bottomMargin/2);
-                    QString txt = QString::number(ref.date().year());
-                    QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt);
-                    p.drawText(barRect.left()-br.width()/2, barRect.bottom() + d->bottomMargin, txt);
-                }
-                else if (ref.date().year() % 5 == 0)
-                    p.drawLine(barRect.right(), barRect.bottom(),
-                               barRect.right(), barRect.bottom()+d->bottomMargin/4);
-                break;
-            }
-        }
+        paintItem(p, barRect, ref, barRect.right(), dateColor, subDateColor);
 
         ref = prevDateTime(ref);
     }
