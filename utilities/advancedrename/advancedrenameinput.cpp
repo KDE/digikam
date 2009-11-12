@@ -336,21 +336,27 @@ void AdvancedRenameLineEdit::setSelectionColor(Parser::Type type)
     switch (type)
     {
         case Parser::Token:
+        {
             p.setColor(QPalette::Active,   QPalette::Highlight,       Qt::red);
             p.setColor(QPalette::Active,   QPalette::HighlightedText, Qt::white);
             p.setColor(QPalette::Inactive, QPalette::Highlight,       Qt::red);
             p.setColor(QPalette::Inactive, QPalette::HighlightedText, Qt::white);
             break;
+        }
         case Parser::TokenAndModifiers:
+        {
             p.setColor(QPalette::Active,   QPalette::Highlight,       Qt::yellow);
             p.setColor(QPalette::Active,   QPalette::HighlightedText, Qt::black);
             p.setColor(QPalette::Inactive, QPalette::Highlight,       Qt::yellow);
             p.setColor(QPalette::Inactive, QPalette::HighlightedText, Qt::black);
             break;
+        }
         case Parser::Text:
         default:
+        {
             p = kapp->palette();
             break;
+        }
     }
     setPalette(p);
 }
