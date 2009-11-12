@@ -152,16 +152,9 @@ void AdvancedRenameLineEdit::mousePressEvent(QMouseEvent* e)
             {
                 return;
             }
-
-            if (selectionStart() == d->selectionStart)
-            {
-                d->tokenMarked = true;
-                emit signalTokenMarked(d->tokenMarked);
-            }
-            else
-            {
-                d->tokenMarked = false;
-            }
+            bool tokenSelected = (selectionStart() != -1 && d->selectionStart != -1) &&
+                                 (selectionStart() == d->selectionStart);
+            setTokenSelected(tokenSelected);
         }
     }
     else
@@ -247,6 +240,12 @@ void AdvancedRenameLineEdit::searchAndHighlightTokens(Parser::Type type, int pos
         deselect();
         resetSelection();
     }
+}
+
+void AdvancedRenameLineEdit::setTokenSelected(bool selected)
+{
+    d->tokenMarked = selected;
+    emit signalTokenMarked(d->tokenMarked);
 }
 
 bool AdvancedRenameLineEdit::tokenIsSelected()
