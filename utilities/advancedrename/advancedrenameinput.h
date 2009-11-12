@@ -83,6 +83,7 @@ private Q_SLOTS:
 private:
 
     void setTokenSelected(bool selected);
+    bool selectionIsValid();
     bool tokenIsSelected();
     void searchAndHighlightTokens(Parser::Type type, int pos);
 
