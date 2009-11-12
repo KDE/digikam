@@ -56,20 +56,20 @@ public:
         parseTimer(0),
         parser(0),
         selectionType(Parser::Text)
-        {}
+    {}
 
-    bool                  userIsTyping;
-    bool                  userIsHighlighting;
-    bool                  tokenMarked;
+    bool          userIsTyping;
+    bool          userIsHighlighting;
+    bool          tokenMarked;
 
-    int                   selectionStart;
-    int                   selectionLength;
-    int                   curCursorPos;
+    int           selectionStart;
+    int           selectionLength;
+    int           curCursorPos;
 
-    QTimer*               parseTimer;
-    Parser*               parser;
+    QTimer*       parseTimer;
+    Parser*       parser;
 
-    Parser::Type selectionType;
+    Parser::Type  selectionType;
 };
 
 AdvancedRenameLineEdit::AdvancedRenameLineEdit(QWidget* parent)
