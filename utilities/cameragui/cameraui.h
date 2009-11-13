@@ -168,6 +168,7 @@ private Q_SLOTS:
     void slotDownloadAndDeleteSelected();
     void slotDeleteAll();
     void slotToggleLock();
+    void slotMarkAsDownloaded();
 
     void slotFileView();
     void slotFileView(CameraIconItem* item);
