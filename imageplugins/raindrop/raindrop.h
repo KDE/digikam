@@ -39,8 +39,8 @@ class RainDrop : public Digikam::DImgThreadedFilter
 
 public:
     
-    RainDrop(Digikam::DImg *orgImage, QObject *parent=0, int drop=80, 
-             int amount=150, int coeff=30, QRect *selection=0L);
+    explicit RainDrop(Digikam::DImg *orgImage, QObject *parent=0, int drop=80,
+                      int amount=150, int coeff=30, QRect *selection=0L);
     
     ~RainDrop(){};
 

@@ -49,7 +49,7 @@ public:
         {};
 
     /** Read value from data. Equivalent to setColor() */
-    DColor(const uchar *data, bool sixteenBit = false)
+    explicit DColor(const uchar *data, bool sixteenBit = false)
         { setColor(data, sixteenBit); }
 
     /** Initialize with given RGBA values */
@@ -58,7 +58,7 @@ public:
         {};
 
     /** Read values from QColor, convert to sixteenBit of sixteenBit is true */
-    DColor(const QColor& color, bool sixteenBit=false);
+    explicit DColor(const QColor& color, bool sixteenBit=false);
 
     // Use default copy constructor, assignment operator and destructor
 

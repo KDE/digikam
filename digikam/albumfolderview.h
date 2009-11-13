@@ -25,6 +25,43 @@
 #ifndef ALBUMFOLDERVIEW_H
 #define ALBUMFOLDERVIEW_H
 
+// QT includes
+#include <qtreeview.h>
+
+// Local includes
+#include "albummodel.h"
+#include "albumtreeview.h"
+
+namespace Digikam {
+
+class AlbumFolderViewNewPriv;
+
+/**
+ * Basic album view based on a QTreeWidget.
+ *
+ * @author jwienke
+ */
+class AlbumFolderViewNew: public AlbumTreeView
+{
+Q_OBJECT
+public:
+    AlbumFolderViewNew(QWidget *parent);
+
+private:
+    void contextMenuEvent(QContextMenuEvent *event);
+
+private Q_SLOTS:
+    void slotAlbumSelected(const QModelIndex &index);
+
+private:
+    AlbumFolderViewNewPriv *d;
+
+};
+
+}
+
+// TODO jwienke: old code without model view
+
 // KDE includes
 
 #include <kio/job.h>

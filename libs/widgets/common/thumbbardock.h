@@ -93,7 +93,7 @@ class DIGIKAM_EXPORT ThumbBarDock : public QDockWidget
 
 public:
 
-    ThumbBarDock(QWidget *parent = 0, Qt::WindowFlags flags = 0);
+    explicit ThumbBarDock(QWidget *parent = 0, Qt::WindowFlags flags = 0);
     ~ThumbBarDock();
 
     /* Measure the orientation and size of the widget and adjust the containing

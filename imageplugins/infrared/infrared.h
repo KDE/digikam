@@ -37,7 +37,7 @@ class Infrared : public Digikam::DImgThreadedFilter
 
 public:
 
-    Infrared(Digikam::DImg *orgImage, QObject *parent=0, int sensibility=1, bool grain=true);
+    explicit Infrared(Digikam::DImg *orgImage, QObject *parent=0, int sensibility=1, bool grain=true);
 
     ~Infrared(){};
 

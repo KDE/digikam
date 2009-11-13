@@ -37,7 +37,7 @@ class FilmGrain : public Digikam::DImgThreadedFilter
 
 public:
 
-    FilmGrain(Digikam::DImg *orgImage, QObject *parent=0, int sensibility=12);
+    explicit FilmGrain(Digikam::DImg *orgImage, QObject *parent=0, int sensibility=12);
 
     ~FilmGrain(){};
 

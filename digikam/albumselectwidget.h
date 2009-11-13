@@ -47,7 +47,7 @@ class AlbumSelectWidget : public QWidget
 
 public:
 
-    AlbumSelectWidget(QWidget *parent=0, PAlbum* albumToSelect=0);
+    explicit AlbumSelectWidget(QWidget *parent=0, PAlbum* albumToSelect=0);
     ~AlbumSelectWidget();
 
     void setCurrentAlbumUrl(const KUrl& albumUrl);

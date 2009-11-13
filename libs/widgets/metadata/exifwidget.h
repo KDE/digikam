@@ -42,7 +42,7 @@ class DIGIKAM_EXPORT ExifWidget : public MetadataWidget
 
 public:
 
-    ExifWidget(QWidget* parent, const char* name=0);
+    explicit ExifWidget(QWidget* parent, const char* name=0);
     ~ExifWidget();
 
     bool loadFromURL(const KUrl& url);

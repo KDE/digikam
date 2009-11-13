@@ -37,6 +37,7 @@ class AbstractAlbumModel;
 
 class AlbumModelDragDropHandler : public QObject
 {
+    Q_OBJECT
 public:
 
     AlbumModelDragDropHandler(AbstractAlbumModel *model);

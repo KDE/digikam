@@ -43,7 +43,7 @@ class DIGIKAM_EXPORT UndoAction
 
 public:
 
-    UndoAction(DImgInterface* iface);
+    explicit UndoAction(DImgInterface* iface);
     virtual ~UndoAction();
 
     virtual void rollBack() = 0;

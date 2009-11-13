@@ -42,9 +42,9 @@ class FreeRotation : public Digikam::DImgThreadedFilter
 
 public:
 
-    FreeRotation(Digikam::DImg *orgImage, QObject *parent=0, double angle=0.0,
-                 bool antialiasing=true, int autoCrop=NoAutoCrop, QColor backgroundColor=Qt::black,
-                 int orgW=0, int orgH=0);
+    explicit FreeRotation(Digikam::DImg *orgImage, QObject *parent=0, double angle=0.0,
+                          bool antialiasing=true, int autoCrop=NoAutoCrop, QColor backgroundColor=Qt::black,
+                          int orgW=0, int orgH=0);
 
     ~FreeRotation(){};
 

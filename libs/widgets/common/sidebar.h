@@ -195,7 +195,7 @@ public:
      *  in config files, especially if Sidebars are contained in the splitter.
      */
     SidebarSplitter(QWidget *parent = 0);
-    SidebarSplitter(Qt::Orientation orientation, QWidget *parent = 0);
+    explicit SidebarSplitter(Qt::Orientation orientation, QWidget *parent = 0);
 
     ~SidebarSplitter();
 

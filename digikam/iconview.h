@@ -56,7 +56,7 @@ class IconView : public Q3ScrollView
 
 public:
 
-    IconView(QWidget* parent=0, const char* name=0);
+    explicit IconView(QWidget* parent=0, const char* name=0);
     virtual ~IconView();
 
     IconGroupItem* firstGroup() const;

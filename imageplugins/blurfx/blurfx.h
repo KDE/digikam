@@ -40,8 +40,8 @@ class BlurFX : public Digikam::DImgThreadedFilter
 
 public:
 
-    BlurFX(Digikam::DImg *orgImage, QObject *parent=0, int blurFXType=ZoomBlur,
-           int distance=100, int level=45);
+    explicit BlurFX(Digikam::DImg *orgImage, QObject *parent=0, int blurFXType=ZoomBlur,
+                    int distance=100, int level=45);
 
     ~BlurFX(){};
 

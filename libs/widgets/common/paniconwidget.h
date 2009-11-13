@@ -54,7 +54,7 @@ class DIGIKAM_EXPORT PanIconWidget : public QWidget
 
 public:
 
-    PanIconWidget(QWidget *parent=0, Qt::WidgetAttribute attribute=Qt::WA_DeleteOnClose);
+    explicit PanIconWidget(QWidget *parent=0, Qt::WidgetAttribute attribute=Qt::WA_DeleteOnClose);
     ~PanIconWidget();
 
     static QToolButton* button();

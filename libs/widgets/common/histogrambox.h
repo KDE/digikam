@@ -51,7 +51,7 @@ Q_OBJECT
 
 public:
 
-    HistogramBox(QWidget* parent = 0, HistogramBoxType type = Digikam::LRGB, bool selectMode = false);
+    explicit HistogramBox(QWidget* parent = 0, HistogramBoxType type = Digikam::LRGB, bool selectMode = false);
     ~HistogramBox();
 
     void setHistogramType(HistogramBoxType type);

@@ -348,6 +348,18 @@ AlbumModel *AlbumTreeView::albumModel() const
     return static_cast<AlbumModel*>(m_albumModel);
 }
 
+PAlbum* AlbumTreeView::currentAlbum() const
+{
+    return dynamic_cast<PAlbum*> (m_albumModel->albumForIndex(
+                    m_albumFilterModel->mapToSource(currentIndex())));
+}
+
+PAlbum *AlbumTreeView::albumForIndex(const QModelIndex &index) const
+{
+    return dynamic_cast<PAlbum*> (m_albumModel->albumForIndex(
+                    m_albumFilterModel->mapToSource(index)));
+}
+
 TagTreeView::TagTreeView(QWidget *parent)
     : AbstractCheckableAlbumTreeView(new TagModel(AlbumModel::IncludeRootAlbum), parent)
 {

@@ -36,7 +36,7 @@ class AlbumModel : public AbstractCheckableAlbumModel
 public:
 
     /// Create a model containing all physical albums
-    AlbumModel(RootAlbumBehavior rootBehavior = IncludeRootAlbum, QObject *parent = 0);
+    explicit AlbumModel(RootAlbumBehavior rootBehavior = IncludeRootAlbum, QObject *parent = 0);
 
     PAlbum *albumForIndex(const QModelIndex& index) const;
 
@@ -53,7 +53,7 @@ class TagModel : public AbstractCheckableAlbumModel
 public:
 
     /// Create a model containing all tags
-    TagModel(RootAlbumBehavior rootBehavior = IncludeRootAlbum, QObject *parent = 0);
+    explicit TagModel(RootAlbumBehavior rootBehavior = IncludeRootAlbum, QObject *parent = 0);
 
     TAlbum *albumForIndex(const QModelIndex& index) const;
 

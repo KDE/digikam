@@ -48,7 +48,7 @@ class AlbumPropsEdit : public KDialog
 
 public:
 
-    AlbumPropsEdit(PAlbum* album, bool create=false);
+    explicit AlbumPropsEdit(PAlbum* album, bool create=false);
     ~AlbumPropsEdit();
 
     QString     title() const;

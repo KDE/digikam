@@ -51,7 +51,7 @@ class DIGIKAM_EXPORT ImagePlugin : public QObject, public KXMLGUIClient
 
 public:
 
-    ImagePlugin(QObject *parent, const char* name=0);
+    explicit ImagePlugin(QObject *parent, const char* name=0);
     virtual ~ImagePlugin();
 
     virtual void setEnabledSelectionActions(bool enable);

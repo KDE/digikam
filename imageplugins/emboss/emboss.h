@@ -40,7 +40,7 @@ class Emboss : public Digikam::DImgThreadedFilter
 
 public:
 
-    Emboss(Digikam::DImg *orgImage, QObject *parent=0, int depth=30);
+    explicit Emboss(Digikam::DImg *orgImage, QObject *parent=0, int depth=30);
     ~Emboss(){};
 
 private:  

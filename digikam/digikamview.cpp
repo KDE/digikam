@@ -68,6 +68,7 @@
 #include "albumiconviewfilter.h"
 #include "albummanager.h"
 #include "albummodel.h"
+#include "albummodificationhelper.h"
 #include "albumsettings.h"
 #include "albumwidgetstack.h"
 #include "batchsyncmetadata.h"
@@ -175,10 +176,12 @@ public:
     DigikamApp*               parent;
 
     DigikamImageView*         iconView;
-    AlbumFolderView*          folderView;
+    AlbumFolderViewNew*       folderView;
     AlbumManager*             albumManager;
     AlbumHistory*             albumHistory;
     AlbumWidgetStack*         albumWidgetStack;
+
+    AlbumModificationHelper*  albumModificationHelper;
 
     Sidebar*                  leftSideBar;
     ImagePropertiesSideBarDB* rightSideBar;
@@ -198,6 +201,8 @@ DigikamView::DigikamView(QWidget *parent)
 {
     d->parent       = static_cast<DigikamApp*>(parent);
     d->albumManager = AlbumManager::instance();
+
+    d->albumModificationHelper = new AlbumModificationHelper(this);
 
     d->splitter = new SidebarSplitter;
     d->splitter->setFrameStyle( QFrame::NoFrame );
@@ -224,7 +229,7 @@ DigikamView::DigikamView(QWidget *parent)
     // To the left.
     // Folders sidebar tab contents.
     d->folderBox       = new KVBox(this);
-    d->folderView      = new AlbumFolderView(d->folderBox);
+    d->folderView      = new AlbumFolderViewNew(d->folderBox);
     d->folderSearchBar = new SearchTextBar(d->folderBox, "DigikamViewFolderSearchBar");
     d->folderBox->setSpacing(KDialog::spacingHint());
     d->folderBox->setMargin(0);
@@ -300,13 +305,15 @@ void DigikamView::applySettings()
     AlbumSettings *settings = AlbumSettings::instance();
     d->albumWidgetStack->applySettings();
 
-    d->folderView->setEnableToolTips(settings->getShowAlbumToolTips());
+    //d->folderView->setEnableToolTips(settings->getShowAlbumToolTips());
     refreshView();
 }
 
 void DigikamView::refreshView()
 {
-    d->folderView->refresh();
+    //d->folderView->refresh();
+    // TODO is this correct
+    d->folderView->update();
     d->dateFolderView->refresh();
     d->tagFolderView->refresh();
     d->tagFilterView->refresh();
@@ -465,8 +472,9 @@ void DigikamView::setupConnections()
 
     // -- Filter Bars Connections ---------------------------------
 
-    connect(d->folderSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            d->folderView, SLOT(slotTextFolderFilterChanged(const SearchTextSettings&)));
+    // TODO update
+    //connect(d->folderSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
+    //        d->folderView, SLOT(slotTextFolderFilterChanged(const SearchTextSettings&)));
 
     connect(d->tagSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
             d->tagFolderView, SLOT(slotTextTagFilterChanged(const SearchTextSettings&)));
@@ -477,11 +485,12 @@ void DigikamView::setupConnections()
     connect(d->tagFilterSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
             d->tagFilterView, SLOT(slotTextTagFilterChanged(const SearchTextSettings&)));
 
-    connect(d->folderView, SIGNAL(signalTextFolderFilterMatch(bool)),
-            d->folderSearchBar, SLOT(slotSearchResult(bool)));
+    // TODO update
+    //connect(d->folderView, SIGNAL(signalTextFolderFilterMatch(bool)),
+    //        d->folderSearchBar, SLOT(slotSearchResult(bool)));
 
-    connect(d->folderView, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
-            this, SLOT(slotNewDuplicatesSearch(Album*)));
+    //connect(d->folderView, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
+    //        this, SLOT(slotNewDuplicatesSearch(Album*)));
 
     connect(d->tagFolderView, SIGNAL(signalFindDuplicatesInTag(Album*)),
             this, SLOT(slotNewDuplicatesSearch(Album*)));
@@ -727,17 +736,19 @@ void DigikamView::slotSortAlbums(int order)
     if (!settings)
         return;
     settings->setAlbumSortOrder((AlbumSettings::AlbumSortOrder) order);
-    d->folderView->resort();
+    // TODO update
+    //d->folderView->resort();
 }
 
 void DigikamView::slotNewAlbum()
 {
-    d->folderView->albumNew();
+    d->albumModificationHelper->slotNewAlbum(d->folderView->currentAlbum());
 }
 
 void DigikamView::slotDeleteAlbum()
 {
-    d->folderView->albumDelete();
+    // TODO update
+    //d->folderView->albumDelete();
 }
 
 void DigikamView::slotNewTag()
@@ -881,12 +892,13 @@ void DigikamView::slotAlbumRenamed(Album *album)
         {
             case Album::PHYSICAL:
             {
-                d->folderView->setAllowAutoCollapse(false);
+                // TODO update
+                //d->folderView->setAllowAutoCollapse(false);
 
                 d->folderSearchBar->completionObject()->addItem(album->title());
-                d->folderView->slotTextFolderFilterChanged(d->folderSearchBar->searchTextSettings());
+                //d->folderView->slotTextFolderFilterChanged(d->folderSearchBar->searchTextSettings());
 
-                d->folderView->setAllowAutoCollapse(true);
+                //d->folderView->setAllowAutoCollapse(true);
                 break;
             }
             case Album::TAG:
@@ -990,12 +1002,13 @@ void DigikamView::changeAlbumFromHistory(Album *album, QWidget *widget)
         {
             if (v == d->folderBox)
             {
-                item = (Q3ListViewItem*) album->extraData(d->folderView);
+                // TODO update
+                /*item = (Q3ListViewItem*) album->extraData(d->folderView);
                 if (!item)
                     return;
 
                 d->folderView->setSelected(item, true);
-                d->folderView->ensureItemVisible(item);
+                d->folderView->ensureItemVisible(item);*/
             }
             else if (v == d->tagBox)
             {
@@ -1114,7 +1127,8 @@ void DigikamView::slotGotoAlbumAndItem(const ImageInfo& imageInfo)
     Album* album = dynamic_cast<Album*>(AlbumManager::instance()->findPAlbum(imageInfo.albumId()));
 
     // Change the current album in list view.
-    d->folderView->setCurrentAlbum(album);
+    // TODO update
+    //d->folderView->setCurrentAlbum(album);
 
     // Change to (physical) Album view.
     // Note, that this also opens the side bar if it is closed; this is
@@ -1400,7 +1414,8 @@ void DigikamView::slotZoomFactorChanged(double zoom)
 
 void DigikamView::slotAlbumPropsEdit()
 {
-    d->folderView->albumEdit();
+    // TODO update
+    //d->folderView->albumEdit();
 }
 
 void DigikamView::connectBatchSyncMetadata(BatchSyncMetadata *syncMetadata)
@@ -1692,7 +1707,8 @@ void DigikamView::slotLeftSidebarChangedTab(QWidget* w)
     // So this is the place which causes the behavior that when the left sidebar
     // tab is changed, the current album is changed as well.
     d->dateFolderView->setActive(w == d->dateFolderView);
-    d->folderView->setActive(w == d->folderBox);
+    // TODO update
+    //d->folderView->setActive(w == d->folderBox);
     d->tagFolderView->setActive(w == d->tagBox);
     d->searchFolderView->setActive(w == d->searchBox);
     d->timeLineView->setActive(w == d->timeLineView);

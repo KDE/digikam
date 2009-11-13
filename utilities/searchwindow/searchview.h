@@ -160,7 +160,7 @@ class SearchViewBottomBar : public QWidget
 
 public:
 
-    SearchViewBottomBar(SearchViewThemedPartsCache * cache, QWidget *parent = 0);
+    explicit SearchViewBottomBar(SearchViewThemedPartsCache * cache, QWidget *parent = 0);
 
 Q_SIGNALS:
 

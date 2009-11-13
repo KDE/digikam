@@ -36,7 +36,7 @@ class Charcoal : public Digikam::DImgThreadedFilter
 
 public:
     
-    Charcoal(Digikam::DImg *orgImage, QObject *parent=0, double pencil=5.0, double smooth=10.0);
+    explicit Charcoal(Digikam::DImg *orgImage, QObject *parent=0, double pencil=5.0, double smooth=10.0);
     ~Charcoal(){};
             
 private:

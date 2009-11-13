@@ -37,9 +37,9 @@ class LensDistortion : public Digikam::DImgThreadedFilter
 
 public:
 
-    LensDistortion(Digikam::DImg *orgImage, QObject *parent=0, double main=0.0, 
-                   double edge=0.0, double rescale=0.0, double brighten=0.0,
-                   int center_x=0, int center_y=0);
+    explicit LensDistortion(Digikam::DImg *orgImage, QObject *parent=0, double main=0.0,
+                            double edge=0.0, double rescale=0.0, double brighten=0.0,
+                            int center_x=0, int center_y=0);
 
     ~LensDistortion(){};
 

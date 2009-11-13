@@ -39,7 +39,7 @@ class ShearTool : public Digikam::EditorToolThreaded
 
 public:
 
-    ShearTool(QObject* parent);
+    explicit ShearTool(QObject* parent);
     ~ShearTool();
 
 private Q_SLOTS:
