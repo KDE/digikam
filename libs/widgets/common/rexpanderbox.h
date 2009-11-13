@@ -51,7 +51,7 @@ class DIGIKAM_EXPORT RClickLabel : public QLabel
 public:
 
     RClickLabel(QWidget *parent = 0);
-    RClickLabel(const QString& text, QWidget *parent = 0);
+    explicit RClickLabel(const QString& text, QWidget *parent = 0);
     ~RClickLabel(){};
 
 Q_SIGNALS:
@@ -76,7 +76,7 @@ class DIGIKAM_EXPORT RSqueezedClickLabel : public KSqueezedTextLabel
 public:
 
     RSqueezedClickLabel(QWidget *parent = 0);
-    RSqueezedClickLabel(const QString& text, QWidget *parent = 0);
+    explicit RSqueezedClickLabel(const QString& text, QWidget *parent = 0);
     ~RSqueezedClickLabel(){};
 
 Q_SIGNALS:

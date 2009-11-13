@@ -49,8 +49,8 @@ public:
      * Constructs an IccManager object.
      * The DImg will be edited. The filePath is for display only.
      */
-    IccManager(DImg& image, const QString& filePath = QString(),
-               const ICCSettingsContainer& settings = IccSettings::instance()->settings());
+    explicit IccManager(DImg& image, const QString& filePath = QString(),
+                        const ICCSettingsContainer& settings = IccSettings::instance()->settings());
     ~IccManager();
 
     void setObserver(DImgLoaderObserver *observer);

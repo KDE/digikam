@@ -47,8 +47,8 @@ class ImagePreviewBar : public ThumbBarView
 
 public:
 
-    ImagePreviewBar(QWidget* parent, int orientation=Qt::Vertical, 
-                    bool exifRotate=true);
+    explicit ImagePreviewBar(QWidget* parent, int orientation=Qt::Vertical,
+                             bool exifRotate=true);
     virtual ~ImagePreviewBar();
 
     ThumbBarItem* ratingItem() const;

@@ -104,7 +104,7 @@ public:
     class TagStatus
     {
         public:
-            TagStatus(Status status, bool hasTag = false) : status(status), hasTag(hasTag) {};
+            explicit TagStatus(Status status, bool hasTag = false) : status(status), hasTag(hasTag) {};
             TagStatus() : status(MetadataInvalid), hasTag(false) {};
 
             Status status;

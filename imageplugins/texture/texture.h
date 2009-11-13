@@ -41,8 +41,8 @@ class Texture : public Digikam::DImgThreadedFilter
 
 public:
 
-    Texture(Digikam::DImg *orgImage, QObject *parent=0, int blendGain=200,
-            QString texturePath=QString());
+    explicit Texture(Digikam::DImg *orgImage, QObject *parent=0, int blendGain=200,
+                     QString texturePath=QString());
 
     ~Texture(){};
 

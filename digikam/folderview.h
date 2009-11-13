@@ -85,7 +85,7 @@ public:
         OmitRoot
     };
 
-    FolderView(QWidget *parent, const char *name = "FolderView");
+    explicit FolderView(QWidget *parent, const char *name = "FolderView");
     virtual ~FolderView();
 
     void setActive(bool val);

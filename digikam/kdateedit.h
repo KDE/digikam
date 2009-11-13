@@ -65,7 +65,7 @@ class KDateEdit : public QComboBox
 
   public:
 
-    KDateEdit(QWidget *parent=0, const char *name=0);
+    explicit KDateEdit(QWidget *parent=0, const char *name=0);
     virtual ~KDateEdit();
 
     /**

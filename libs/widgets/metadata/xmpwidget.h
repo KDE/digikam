@@ -38,7 +38,7 @@ class DIGIKAM_EXPORT XmpWidget : public MetadataWidget
 
 public:
 
-    XmpWidget(QWidget* parent, const char* name=0);
+    explicit XmpWidget(QWidget* parent, const char* name=0);
     ~XmpWidget();
 
     bool loadFromURL(const KUrl& url);

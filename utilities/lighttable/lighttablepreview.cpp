@@ -190,7 +190,7 @@ void LightTablePreview::setDragAndDropMessage()
                    Qt::AlignCenter|Qt::TextWordWrap,
                    i18n("Drag and drop an image here"));
         p.end();
-        setImage(pix.toImage());
+        setImage(DImg(pix.toImage()));
     }
 }
 

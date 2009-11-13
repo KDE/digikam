@@ -54,7 +54,7 @@ class SetupICC : public QScrollArea
 
 public:
 
-    SetupICC(QWidget* parent = 0, KPageDialog* dialog = 0);
+    explicit SetupICC(QWidget* parent = 0, KPageDialog* dialog = 0);
     ~SetupICC();
 
     void applySettings();

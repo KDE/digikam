@@ -350,7 +350,7 @@ void AltLangStrEdit::slotSelectionChanged()
     d->valueEdit->blockSignals(true);
 
     QString langISO3066 = d->currentLanguage;
-    langISO3066.replace("-", "_");
+    langISO3066.replace('-', '_');
     d->valueEdit->setSpellCheckingLanguage(langISO3066);
 
     QString text = d->values.value(d->currentLanguage);

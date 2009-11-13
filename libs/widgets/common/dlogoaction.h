@@ -45,7 +45,7 @@ class DIGIKAM_EXPORT DLogoAction : public KAction
 
 public:
 
-    DLogoAction(QObject* parent, bool alignOnright=true);
+    explicit DLogoAction(QObject* parent, bool alignOnright=true);
     ~DLogoAction();
 
     void start();

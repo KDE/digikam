@@ -121,13 +121,13 @@ public:
 
     /** Load image using QByteArray as file path
      */
-    DImg(const QByteArray& filePath, DImgLoaderObserver *observer = 0,
-         DRawDecoding rawDecodingSettings=DRawDecoding());
+    explicit DImg(const QByteArray& filePath, DImgLoaderObserver *observer = 0,
+                  DRawDecoding rawDecodingSettings=DRawDecoding());
 
     /** Load image using QString as file path
      */
-    DImg(const QString& filePath, DImgLoaderObserver *observer = 0,
-         DRawDecoding rawDecodingSettings=DRawDecoding());
+    explicit DImg(const QString& filePath, DImgLoaderObserver *observer = 0,
+                  DRawDecoding rawDecodingSettings=DRawDecoding());
 
     /** Copy image: Creates a shallow copy that refers to the same shared data.
         The two images will be equal. Call detach() or copy() to create deep copies.
@@ -137,7 +137,7 @@ public:
     /** Copy image: Creates a copy of a QImage object. If the QImage is null, a
         null DImg will be created.
      */
-    DImg(const QImage& image);
+    explicit DImg(const QImage& image);
 
     /** Create image from data.
         If data is 0, a new buffer will be allocated, otherwise the given data will be used:

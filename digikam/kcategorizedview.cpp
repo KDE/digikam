@@ -1714,7 +1714,7 @@ void KCategorizedView::rowsInsertedArtifficial(const QModelIndex &parent,
 
         offset = 0;
         QVector<int> rows(upperBound - k);
-        for (int i=k; i<upperBound; i++, offset++)
+        for (int i=k; i<upperBound; ++i, ++offset)
         {
             rows[offset] = i;
             struct Private::ElementInfo &elementInfo = d->elementsInfo[i];

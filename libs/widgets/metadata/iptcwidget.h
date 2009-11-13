@@ -38,7 +38,7 @@ class DIGIKAM_EXPORT IptcWidget : public MetadataWidget
 
 public:
 
-    IptcWidget(QWidget* parent, const char* name=0);
+    explicit IptcWidget(QWidget* parent, const char* name=0);
     ~IptcWidget();
 
     bool loadFromURL(const KUrl& url);

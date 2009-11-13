@@ -43,7 +43,7 @@ class DistortionFXTool : public Digikam::EditorToolThreaded
 
 public:
 
-    DistortionFXTool(QObject *parent);
+    explicit DistortionFXTool(QObject *parent);
     ~DistortionFXTool();
 
 private Q_SLOTS:

@@ -47,10 +47,10 @@ Q_OBJECT
 
 public:
 
-    DirSelectWidget(QWidget* parent, const char* name=0, QString headerLabel=QString());
+    explicit DirSelectWidget(QWidget* parent, const char* name=0, QString headerLabel=QString());
 
-    DirSelectWidget(KUrl rootUrl=KUrl("/"), KUrl currentUrl=KUrl(), 
-                    QWidget* parent=0, const char* name=0, QString headerLabel=QString());
+    explicit DirSelectWidget(KUrl rootUrl=KUrl("/"), KUrl currentUrl=KUrl(),
+                             QWidget* parent=0, const char* name=0, QString headerLabel=QString());
 
     ~DirSelectWidget();
 

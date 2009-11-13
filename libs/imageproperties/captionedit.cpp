@@ -121,7 +121,7 @@ void CaptionEdit::slotAddValue(const QString& lang, const QString& text)
         d->authorEdit->setText(val.author);
         d->authorEdit->blockSignals(false);
     }
-    d->lastDeletedLanguage = QString();
+    d->lastDeletedLanguage.clear();
 
     d->captionsValues.insert(lang, val);
     emit signalModified();
@@ -154,7 +154,7 @@ void CaptionEdit::slotSelectionChanged(const QString& lang)
 
 void CaptionEdit::setValues(const CaptionsMap& values)
 {
-    d->lastDeletedLanguage = QString();
+    d->lastDeletedLanguage.clear();
 
     d->captionsValues = values;
     d->altLangStrEdit->setValues(d->captionsValues.toAltLangMap());

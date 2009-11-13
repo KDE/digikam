@@ -76,8 +76,8 @@ class KDatePickerPopup: public KMenu
        @param parent The object's parent.
        @param name The object's name.
     */
-    KDatePickerPopup( Items items = DatePicker, const QDate& date = QDate::currentDate(),
-                      QWidget *parent = 0 );
+    explicit KDatePickerPopup( Items items = DatePicker, const QDate& date = QDate::currentDate(),
+                               QWidget *parent = 0 );
 
     /**
        @return A pointer to the private variable mDatePicker, an instance of

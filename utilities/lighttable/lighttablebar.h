@@ -42,8 +42,8 @@ class LightTableBar : public ImagePreviewBar
 
 public:
 
-    LightTableBar(QWidget* parent, int orientation=Qt::Vertical, 
-                  bool exifRotate=true);
+    explicit LightTableBar(QWidget* parent, int orientation=Qt::Vertical,
+                           bool exifRotate=true);
     ~LightTableBar();
 
     void setOnLeftPanel(const ImageInfo& info);

@@ -37,7 +37,7 @@ class OilPaint : public Digikam::DImgThreadedFilter
 
 public:
 
-    OilPaint(Digikam::DImg *orgImage, QObject *parent=0, int brushSize=1, int smoothness=30);
+    explicit OilPaint(Digikam::DImg *orgImage, QObject *parent=0, int brushSize=1, int smoothness=30);
 
     ~OilPaint(){};
 

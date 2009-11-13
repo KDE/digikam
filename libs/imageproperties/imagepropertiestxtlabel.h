@@ -45,7 +45,7 @@ class DTextLabelName : public QLabel
 
 public:
 
-    DTextLabelName(const QString& name, QWidget* parent=0)
+    explicit DTextLabelName(const QString& name, QWidget* parent=0)
         : QLabel(parent)
     {
         setText(name);
@@ -66,7 +66,7 @@ class DTextLabelValue : public KSqueezedTextLabel
 
 public:
 
-    DTextLabelValue(const QString& value, QWidget* parent=0)
+    explicit DTextLabelValue(const QString& value, QWidget* parent=0)
         : KSqueezedTextLabel(parent)
     {
         setText(value);
@@ -85,7 +85,7 @@ class DTextBrowser : public KTextBrowser
 {
 public:
 
-    DTextBrowser(const QString& text, QWidget* parent=0)
+    explicit DTextBrowser(const QString& text, QWidget* parent=0)
         : KTextBrowser(parent)
     {
         setOpenExternalLinks(false);
@@ -114,7 +114,7 @@ class DTextList : public KListWidget
 {
 public:
 
-    DTextList(const QStringList& list, QWidget* parent=0)
+    explicit DTextList(const QStringList& list, QWidget* parent=0)
         : KListWidget(parent)
     {
         addItems(list);

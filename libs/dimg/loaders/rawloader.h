@@ -48,7 +48,7 @@ class DIGIKAM_EXPORT RAWLoader : public KDcrawIface::KDcraw, public DImgLoader
 
 public:
 
-    RAWLoader(DImg* image, DRawDecoding rawDecodingSettings=DRawDecoding());
+    explicit RAWLoader(DImg* image, DRawDecoding rawDecodingSettings=DRawDecoding());
 
     bool load(const QString& filePath, DImgLoaderObserver *observer=0);
     void postProcess(DImgLoaderObserver *observer);

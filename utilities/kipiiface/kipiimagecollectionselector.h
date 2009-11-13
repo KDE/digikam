@@ -54,7 +54,7 @@ class KipiImageCollectionSelector : public KIPI::ImageCollectionSelector
 
 public:
 
-    KipiImageCollectionSelector(KipiInterface *iface, QWidget *parent=0);
+    explicit KipiImageCollectionSelector(KipiInterface *iface, QWidget *parent=0);
     ~KipiImageCollectionSelector();
 
     QList<KIPI::ImageCollection> selectedImageCollections() const;

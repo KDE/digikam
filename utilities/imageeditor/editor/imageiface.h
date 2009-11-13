@@ -56,7 +56,7 @@ class DIGIKAM_EXPORT ImageIface
 {
 public:
 
-    ImageIface(int w=0, int h=0);
+    explicit ImageIface(int w=0, int h=0);
     ~ImageIface();
 
     /** Use this method to use the current selection in editor instead the full

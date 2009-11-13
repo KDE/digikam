@@ -72,7 +72,7 @@ class KipiInterface : public KIPI::Interface
 
 public:
 
-    KipiInterface(QObject *parent, const char *name=0);
+    explicit KipiInterface(QObject *parent, const char *name=0);
     ~KipiInterface();
 
     KIPI::ImageCollection currentAlbum();
