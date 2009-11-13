@@ -430,6 +430,13 @@ void ImageAlbumModel::slotAlbumAdded(Album* /*album*/)
 
 void ImageAlbumModel::slotAlbumDeleted(Album *album)
 {
+    if (d->currentAlbum == album)
+    {
+        d->currentAlbum = 0;
+        clearImageInfos();
+        return;
+    }
+
     // display changed tags
     if (album->type() == Album::TAG)
     {
