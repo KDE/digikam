@@ -341,6 +341,14 @@ public:
     */
     QMap<int, TagStatus>   tagIDs() const;
 
+    /**
+        If you are keeping a MetadataHub over the scope of one
+        event loop run, listen to AlbumManager's signals about removal
+        of tags and call this method each time.
+    */
+    void notifyTagRemoved(TAlbum *);
+    void notifyTagsCleared();
+
     // --------------------------------------------------
 
     /**

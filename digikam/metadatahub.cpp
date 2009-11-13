@@ -966,4 +966,14 @@ void MetadataHub::resetChanged()
     d->tagsChanged     = false;
 }
 
+void MetadataHub::notifyTagRemoved(TAlbum *album)
+{
+    d->tags.remove(album);
+}
+
+void MetadataHub::notifyTagsCleared()
+{
+    d->tags.clear();
+}
+
 } // namespace Digikam

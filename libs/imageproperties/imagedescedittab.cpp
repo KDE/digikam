@@ -1385,7 +1385,7 @@ void ImageDescEditTab::slotAlbumDeleted(Album* a)
     TAlbumCheckListItem* viewItem = (TAlbumCheckListItem*)(album->extraData(d->tagsView));
     delete viewItem;
     album->removeExtraData(this);
-    d->hub.setTag(album, false, MetadataHub::MetadataDisjoint);
+    d->hub.notifyTagRemoved(album);
 }
 
 void ImageDescEditTab::slotAlbumsCleared()
@@ -1393,6 +1393,7 @@ void ImageDescEditTab::slotAlbumsCleared()
     d->tagsView->clear();
     d->tagsSearchBar->completionObject()->clear();
     d->newTagEdit->completionObject()->clear();
+    d->hub.notifyTagsCleared();
 }
 
 void ImageDescEditTab::slotAlbumIconChanged(Album* a)
