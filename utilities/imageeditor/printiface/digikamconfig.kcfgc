@@ -1,0 +1,8 @@
+File=digikamconfig.kcfg
+ClassName=DigikamConfig
+NameSpace=Digikam
+Singleton=true
+Mutators=true
+UseEnumTypes=true
+IncludeFiles=digikam_export.h
+Visibility=DIGIKAM_EXPORT

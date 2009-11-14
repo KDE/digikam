@@ -1,0 +1,2 @@
+ADD_SUBDIRECTORY(canvas)
+ADD_SUBDIRECTORY(editor)

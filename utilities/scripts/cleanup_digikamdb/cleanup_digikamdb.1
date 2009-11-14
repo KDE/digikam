@@ -1,0 +1,58 @@
+.\" -*- coding: us-ascii -*-
+.if \n(.g .ds T< \\FC
+.if \n(.g .ds T> \\F[\n[.fam]]
+.de URL
+\\$2 \(la\\$1\(ra\\$3
+..
+.if \n(.g .mso www.tmac
+.TH cleanup_digikamdb 1 "14 October 2009" cleanup_digikamdb ""
+.SH NAME
+cleanup_digikamdb \- Cleanup the digiKam databases to reduce their sizes and increase access speed 
+.SH SYNOPSIS
+'nh
+.fi
+.ad l
+\fBcleanup_digikamdb\fR \kx
+.if (\nx>(\n(.l/2)) .nr x (\n(.l/5)
+'in \n(.iu+\nxu
+[-t] [-T] [-p] [-h]
+'in \n(.iu-\nxu
+.ad b
+'hy
+.SH OPTIONS
+.TP 
+\*(T<\fB\-t\fR\*(T>
+Include thumbnail databases.
+.TP 
+\*(T<\fB\-T\fR\*(T>
+Only cleanup thumbnail databases.
+.TP 
+\*(T<\fB\-p \fR\*(T>\*(T<\fB\fIpath\fR\fR\*(T>\*(T<\fB \fR\*(T>
+Specify a different database \fIpath\fR.
+If the specified \fIpath\fR is invalid, the entry from the configuration file will be used.
+.TP 
+\*(T<\fB\-h\fR\*(T>
+Show command line options.
+.SH DESCRIPTION
+\fBcleanup_digikamdb\fR will cleanup and optimize the digiKam database file.
+This will, in most cases, lead to a smaller database file size and an increased access speed, because unneeded elements are removed from the database and data is optimized.
+.PP
+The program will make sure that no instance of digiKam is running, because it is more safe to have no database access during
+the optimization process. It then will read the digiKam configuration file and determine the database location. 
+In a final step the database will be optimized by invoking the sqlite command '\fIVACUUM\fR;' on it. 
+If more then one database is found in this location, \fBcleanup_digikamdb\fR will optimize every database found in this path and below. 
+.PP
+For further explanation, see the following description of the \fIVACUUM\fR command from the sqlite3 website: 
+.PP
+When an object (table, index, or trigger) is dropped from the database, it leaves behind empty space. 
+This empty space will be reused the next time new information is added to the database. 
+But in the meantime, the database file might be larger than strictly necessary. 
+Also, frequent inserts, updates, and deletes can cause the information in the database to become fragmented - scrattered out all 
+across the database file rather than clustered together in one
+place.
+.PP
+The \fIVACUUM\fR command cleans the main database by copying its contents to a temporary database file and reloading 
+the original database file from the copy. 
+This eliminates free pages, aligns table data to be contiguous, and otherwise cleans up the database file structure. 
+.SH AUTHOR
+\fBcleanup_digikamdb\fR was written by Andi Clemens <andi dot clemens at gmx dot net>

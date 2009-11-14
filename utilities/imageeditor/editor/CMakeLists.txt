@@ -1,0 +1,4 @@
+
+INSTALL( FILES imageiface.h DESTINATION ${INCLUDE_INSTALL_DIR}/digikam COMPONENT Devel)
+INSTALL( FILES digikamimageplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR} )
+INSTALL( FILES digikamimagewindowui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam )

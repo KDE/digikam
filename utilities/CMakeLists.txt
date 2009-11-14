@@ -1,0 +1,6 @@
+ADD_SUBDIRECTORY(scripts)
+ADD_SUBDIRECTORY(imageeditor)
+ADD_SUBDIRECTORY(hotplug)
+ADD_SUBDIRECTORY(lighttable)
+ADD_SUBDIRECTORY(cameragui)
+ADD_SUBDIRECTORY(queuemanager)

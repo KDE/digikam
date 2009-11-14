@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
+<kcfg>
+	<kcfgfile name="digikamrc"/>
+	<include>printoptionspage.h</include>
+
+	<group name="Print">
+		<entry name="PrintPosition" type="Int">
+			<default code="true">
+				Qt::AlignHCenter | Qt::AlignVCenter
+			</default>
+		</entry>
+
+		<entry name="PrintScaleMode" type="Enum">
+			<choices name="Digikam::PrintOptionsPage::ScaleMode">
+				<choice name="PrintOptionsPage::NoScale"/>
+				<choice name="PrintOptionsPage::ScaleToPage"/>
+				<choice name="PrintOptionsPage::ScaleToCustomSize"/>
+			</choices>
+			<default>PrintOptionsPage::ScaleToPage</default>
+		</entry>
+
+		<entry name="PrintEnlargeSmallerImages" type="Bool">
+			<default>false</default>
+		</entry>
+
+		<entry name="PrintWidth" type="Double">
+			<default>15.0</default>
+		</entry>
+
+		<entry name="PrintHeight" type="Double">
+			<default>10.0</default>
+			<!-- Default is in fact computed from PrintWidth because PrintKeepRatio is true -->
+		</entry>
+
+		<entry name="PrintUnit" type="Enum">
+			<choices name="Digikam::PrintOptionsPage::Unit">
+				<choice name="PrintOptionsPage::Millimeters"/>
+				<choice name="PrintOptionsPage::Centimeters"/>
+				<choice name="PrintOptionsPage::Inches"/>
+			</choices>
+			<default>PrintOptionsPage::Centimeters</default>
+		</entry>
+
+		<entry name="PrintKeepRatio" type="Bool">
+			<default>true</default>
+		</entry>
+
+		<entry name="PrintColorManaged" type="Bool">
+			<default>false</default>
+		</entry>
+
+		<entry name="PrintAutoRotate" type="Bool">
+			<default>false</default>
+		</entry>
+	</group>
+
+</kcfg>
+

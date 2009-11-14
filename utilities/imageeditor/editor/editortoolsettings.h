@@ -1,0 +1,130 @@
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2008-08-21
+ * Description : Editor tool settings template box
+ *
+ * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
+
+#ifndef EDITORTOOLSETTINGS_H
+#define EDITORTOOLSETTINGS_H
+
+// Qt includes
+
+#include <QScrollArea>
+
+// KDE includes
+
+#include <kdebug.h>
+
+// Local includes
+
+#include "digikam_export.h"
+#include "histogrambox.h"
+#include "globals.h"
+
+class KPushButton;
+
+namespace Digikam
+{
+class HistogramBox;
+class ImagePanIconWidget;
+class EditorToolSettingsPriv;
+
+class DIGIKAM_EXPORT EditorToolSettings : public QScrollArea
+{
+    Q_OBJECT
+
+public:
+
+    enum ButtonCode
+    {
+        Default = 0x00000001,
+        Try     = 0x00000002,
+        Ok      = 0x00000004,
+        Cancel  = 0x00000008,
+        SaveAs  = 0x00000010,
+        Load    = 0x00000020
+    };
+    Q_DECLARE_FLAGS(Buttons, ButtonCode)
+
+    enum ToolCode
+    {
+        NoTool     = 0x00000000,
+        ColorGuide = 0x00000001,
+        PanIcon    = 0x00000002,
+        Histogram  = 0x00000004
+    };
+    Q_DECLARE_FLAGS(Tools, ToolCode)
+
+public:
+
+    EditorToolSettings(QWidget *parent = 0);
+    ~EditorToolSettings();
+
+    void setButtons(Buttons buttonMask);
+    void setTools(Tools toolMask);
+    void setHistogramType(HistogramBoxType type);
+
+    virtual void setBusy(bool){};
+    virtual void writeSettings(){};
+    virtual void readSettings(){};
+    virtual void resetSettings(){};
+
+    int marginHint();
+    int spacingHint();
+
+    QWidget* plainPage() const;
+    HistogramBox* histogramBox() const;
+    ImagePanIconWidget* panIconView() const;
+
+    QColor guideColor() const;
+    void setGuideColor(const QColor& color);
+
+    int guideSize() const;
+    void setGuideSize(int size);
+
+    KPushButton* button(int buttonCode) const;
+    void enableButton(int buttonCode, bool state);
+
+    virtual QSize minimumSizeHint() const;
+
+Q_SIGNALS:
+
+    void signalOkClicked();
+    void signalCancelClicked();
+    void signalTryClicked();
+    void signalDefaultClicked();
+    void signalSaveAsClicked();
+    void signalLoadClicked();
+    void signalColorGuideChanged();
+    void signalChannelChanged();
+    void signalScaleChanged();
+    void signalColorsChanged();
+
+private:
+
+    EditorToolSettingsPriv* const d;
+};
+
+} // namespace Digikam
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::EditorToolSettings::Buttons)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::EditorToolSettings::Tools)
+
+#endif // EDITORTOOLSETTINGS_H

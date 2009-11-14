@@ -37,6 +37,11 @@ namespace Digikam
 
 class ImageCategorizedView;
 class ImageCategoryDrawerPriv;
+class Album;
+class PAlbum;
+class TAlbum;
+class SAlbum;
+class DAlbum;
 
 class ImageCategoryDrawer : public KCategoryDrawer
 {
@@ -56,7 +61,13 @@ public:
 private:
 
     void updateRectsAndPixmaps(int width);
+    void viewHeaderText(const QModelIndex& index, QString *header, QString *subLine) const;
     void textForAlbum(const QModelIndex& index, QString *header, QString *subLine) const;
+    void textForPAlbum(PAlbum *a, bool recursive, int count, QString *header, QString *subLine) const;
+    void textForTAlbum(TAlbum *a, bool recursive, int count, QString *header, QString *subLine) const;
+    void textForSAlbum(SAlbum *a, int count, QString *header, QString *subLine) const;
+    void textForDAlbum(DAlbum *a, int count, QString *header, QString *subLine) const;
+    void textForFormat(const QModelIndex& index, QString *header, QString *subLine) const;
 
 private:
 

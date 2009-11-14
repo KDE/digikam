@@ -1,0 +1,2 @@
+
+INSTALL( FILES cameraui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam )

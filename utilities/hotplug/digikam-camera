@@ -1,0 +1,47 @@
+#!/bin/sh
+
+action="$1"; shift;
+
+case "$action" in
+downloadFrom)
+    cmdoption=--download-from
+    dcopcall=org.kde.digikam.downloadFrom
+    args="$@"
+    ;;
+downloadFromUdi)
+    cmdoption=--download-from-udi
+    dcopcall=org.kde.digikam.downloadFromUdi
+    args="$@"
+    ;;
+detectCamera)
+	cmdoption=--detect-camera
+	dcopcall=detectCamera
+	;;
+*)
+	echo "${0##*/}: wrong action.  Usage"
+    echo "  ${0##*/}  downloadFrom <path> # for directories with images"
+    echo "  ${0##*/}  downloadFromUdi <udi> # for devices with images"
+	echo "	${0##*/}  detect 	# for gphoto2 supported cameras"
+	exit 1
+	;;
+esac
+
+for app in `qdbus`; do
+	case "$app" in
+	    org.kde.digikam-*)
+		echo "recycling running $app: $dcopcall $@"
+        if test -z "$args"; then
+		    exec qdbus "$app" "/Digikam" "$dcopcall"
+        else
+            exec qdbus "$app" "/Digikam" "$dcopcall" "$args"
+        fi
+        break
+	    ;;
+	esac
+done;
+echo "starting digikam with $cmdoption $args"
+if test -z "$args"; then
+    exec digikam  "$cmdoption"
+else
+    exec digikam  "$cmdoption" "$args"
+fi

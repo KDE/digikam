@@ -2,7 +2,7 @@ PROJECT(digikam)
 
 OPTION(ENABLE_GPHOTO2 "Build digiKam with libgphoto2 support (default=ON)" ON)
 OPTION(ENABLE_THEMEDESIGNER "Build digiKam theme designer (default=OFF)" OFF)
-OPTION(ENABLE_THUMBS_DB "Build digiKam with thumbnails database support (default=OFF)" ON)
+OPTION(ENABLE_THUMBS_DB "Build digiKam with thumbnails database support (default=ON)" ON)
 
 # ==================================================================================================
 # Information to update before to release this package.
@@ -12,6 +12,9 @@ SET(DIGIKAM_MAJOR_VERSION "1")
 SET(DIGIKAM_MINOR_VERSION "0")
 SET(DIGIKAM_PATCH_VERSION "0")
 
+#digiKam release date
+SET(DIGIKAM_RELEASE_DATE "2009-11-29")
+
 # Suffix to add at end of version string. Usual values are:
 # "-svn"   : alpha code unstable from svn. Do not use in production
 # "-beta1" : beta1 release.
@@ -19,10 +22,18 @@ SET(DIGIKAM_PATCH_VERSION "0")
 # "-beta3" : beta3 release.
 # "-rc"    : release candidate.
 # ""       : final release. Can be used in production.
-SET(DIGIKAM_SUFFIX_VERSION "-dbext")
+SET(DIGIKAM_SUFFIX_VERSION "-rc")
 
 # ==================================================================================================
-# Set env. variables accordinly.
+# debug area codes
+SET(AREA_CODE_GENERAL       "50003")
+SET(AREA_CODE_KIOSLAVES     "50004")
+SET(AREA_CODE_SHOWFOTO      "50005")
+SET(AREA_CODE_IMAGEPLUGINS  "50006")
+ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${AREA_CODE_GENERAL})
+
+# ==================================================================================================
+# Set env. variables accordingly.
 
 SET(DIGIKAM_VERSION_SHORT
     "${DIGIKAM_MAJOR_VERSION}.${DIGIKAM_MINOR_VERSION}.${DIGIKAM_PATCH_VERSION}"
@@ -33,7 +44,7 @@ SET(DIGIKAM_VERSION_STRING
    )
 
 # ==================================================================================================
-# Depencies
+# Dependencies
 
 FIND_PACKAGE(KDE4 REQUIRED)
 INCLUDE(KDE4Defaults)
@@ -82,17 +93,17 @@ ELSE(NOT WIN32)
 ENDIF(NOT WIN32)
 
 # ==================================================================================================
-# Optional depencies
+# Optional dependencies
 
 MACRO_OPTIONAL_FIND_PACKAGE(KdepimLibs)
 MACRO_BOOL_TO_01(KDEPIMLIBS_FOUND HAVE_KDEPIMLIBS)
-FIND_PACKAGE(Nepomuk REQUIRED)
 
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH} )
 
 # Check MarbleWidget library for geolocation.
 MACRO_OPTIONAL_FIND_PACKAGE(MarbleWidget)
 MACRO_BOOL_TO_01(MARBLEWIDGET_FOUND HAVE_MARBLEWIDGET)
+INCLUDE(libs/imageproperties/markerclusterholderplugin/CheckPluginBuildable.cmake)
 
 # Check LensFun library for lens correction tool.
 MACRO_OPTIONAL_FIND_PACKAGE(LensFun)
@@ -105,9 +116,16 @@ MACRO_OPTIONAL_FIND_PACKAGE(Lqr-1)
 MACRO_BOOL_TO_01(LQR-1_FOUND USE_EXT_LIBLQR-1)
 
 MACRO_BOOL_TO_01(ENABLE_THUMBS_DB USE_THUMBS_DB)
-MESSAGE("Thumbs DB:" ${USE_THUMBS_DB} ${CMAKE_CURRENT_BINARY_DIR})
 
-# Set config file depending of optional depencies
+IF (${KDE_VERSION} VERSION_GREATER "4.2.70")
+    MACRO_OPTIONAL_FIND_PACKAGE(Nepomuk)
+    MACRO_BOOL_TO_01(NEPOMUK_FOUND HAVE_NEPOMUK)
+ELSE (${KDE_VERSION} VERSION_GREATER "4.2.70")
+    SET(NEPOMUK_FOUND FALSE)
+    SET(HAVE_NEPOMUK 0)
+ENDIF (${KDE_VERSION} VERSION_GREATER "4.2.70")
+
+# Set config file depending of optional dependencies
 
 CONFIGURE_FILE(config-digikam.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-digikam.h)
 
@@ -238,7 +256,7 @@ ENDIF(ENABLE_GPHOTO2)
 
 IF(KDEPIMLIBS_FOUND)
     MESSAGE(STATUS " libkdepimlibs library found......... YES (optional)")
-    INCLUDE_DIRECTORIES(${KDEPIMLIBS_INCLUDE_DIR})    
+    INCLUDE_DIRECTORIES(${KDEPIMLIBS_INCLUDE_DIR})
 ELSE(KDEPIMLIBS_FOUND)
     MESSAGE(STATUS " libkdepimlibs library found......... NO  (optional)")
     MESSAGE(STATUS "")
@@ -248,12 +266,30 @@ ENDIF(KDEPIMLIBS_FOUND)
 
 IF(MARBLEWIDGET_FOUND)
     MESSAGE(STATUS " libmarblewidget library found....... YES (optional)")
+    IF(MARBLEWIDGET_SUPPORTS_PLUGINS)
+      MESSAGE(STATUS " Can build Marble plugin............. YES (optional)")
+    ELSE(MARBLEWIDGET_SUPPORTS_PLUGINS)
+      MESSAGE(STATUS " Can build Marble plugin............. NO  (optional)")
+    ENDIF(MARBLEWIDGET_SUPPORTS_PLUGINS)
 ELSE(MARBLEWIDGET_FOUND)
     MESSAGE(STATUS " libmarblewidget library found....... NO  (optional)")
     MESSAGE(STATUS "")
     MESSAGE(STATUS " digiKam will be compiled without geolocation using Marble widget support.")
     MESSAGE(STATUS "")
 ENDIF(MARBLEWIDGET_FOUND)
+
+IF(NEPOMUK_FOUND)
+    MESSAGE(STATUS " Nepomuk libraries found............. YES (optional)")
+ELSE(NEPOMUK_FOUND)
+    IF (${KDE_VERSION} VERSION_GREATER "4.2.70")
+        MESSAGE(STATUS " Nepomuk libraries found............. NO  (optional)")
+    ELSE (${KDE_VERSION} VERSION_GREATER "4.2.70")
+        MESSAGE(STATUS " Nepomuk libraries found............. NO  (at least KDE 4.3 required)")
+    ENDIF (${KDE_VERSION} VERSION_GREATER "4.2.70")
+    MESSAGE(STATUS "")
+    MESSAGE(STATUS " digiKam will be compiled without support for the Nepomuk semantic desktop services.")
+    MESSAGE(STATUS "")
+ENDIF(NEPOMUK_FOUND)
 
 IF(LENSFUN_FOUND)
     MESSAGE(STATUS " liblensfun library found............ YES (optional)")
@@ -269,7 +305,7 @@ IF(GLIB2_FOUND)
     IF(LQR-1_FOUND)
         MESSAGE(STATUS " liblqr-1 library found.............. YES (optional)")
     ELSE(LQR-1_FOUND)
-        MESSAGE(STATUS " liblqr-1 library found.............. NO  (optional)")
+        MESSAGE(STATUS " liblqr-1 library found.............. NO  (optional - internal version used instead)")
     ENDIF(LQR-1_FOUND)
 ELSE(GLIB2_FOUND)
     MESSAGE(STATUS " libglib2 library found.............. NO  (optional)")
@@ -362,9 +398,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                    )
 
     # QT3 support rules
-    ADD_DEFINITIONS(-DQT3_SUPPORT
-                    -DQT3_SUPPORT_WARNINGS
-                   )
+    ADD_DEFINITIONS(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
     # Enable C++ Exceptions support, require by Greycstoration algorithm (CImg.h)
     IF(NOT MSVC)
@@ -390,7 +424,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     # ==================================================================================================
     # LibLqr-1 library rules
 
-    INCLUDE_DIRECTORIES(${GLIB2_INCLUDE_DIR})
+    IF(GLIB2_FOUND)
+        INCLUDE_DIRECTORIES(${GLIB2_INCLUDE_DIR})
+    ENDIF(GLIB2_FOUND)
 
     IF(LQR-1_FOUND)
 
@@ -492,7 +528,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${libclapack_SRCS}
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bcgmodifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/hslmodifier.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/iccprofile.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icctransform.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icctransformfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgimagefilters.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/colormodifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimggaussianblur.cpp
@@ -536,6 +574,12 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/worldmapwidget.cpp
        )
 
+    IF(MARBLEWIDGET_FOUND)
+        SET(libimageproperties_SRCS ${libimageproperties_SRCS}
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/markerclusterholder.cpp
+        )
+    ENDIF(MARBLEWIDGET_FOUND)
+
     # --enable-final triggers: http://bugs.kde.org/show_bug.cgi?id=126326
     # digikam: camera download: auto-rotated images lose EXIF info ...
     # So make sure nofinal is always used here!
@@ -544,12 +588,13 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/jpegutils.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/transupp.cpp
        )
-IF(MSVC)
-    SET(libjpegutils_SRCS
-        ${libjpegutils_SRCS}
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/jpegwin.cpp
-       )
-ENDIF(MSVC)
+
+    IF(MSVC)
+	SET(libjpegutils_SRCS
+    	    ${libjpegutils_SRCS}
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/jpegwin.cpp
+           )
+    ENDIF(MSVC)
 
     SET(liblevels_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/levels/imagelevels.cpp
@@ -609,9 +654,9 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/filesaveoptionsbox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/histogrambox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/histogramwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/histogrampainter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/itemviewhoverbutton.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/itemviewtooltip.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/manualrenameinput.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/paniconwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/previewwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/rexpanderbox.cpp
@@ -623,6 +668,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/statusprogressbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/statuszoombar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/thumbbar.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/thumbbardock.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/thumbbartooltip.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/visibilitycontroller.cpp
        )
@@ -631,6 +677,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles/iccpreviewwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles/iccprofilewidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles/cietonguewidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles/iccprofilescombobox.cpp
        )
 
     SET(libimagepluginswidgets_SRCS
@@ -673,7 +720,11 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/undoaction.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/undomanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/colorcorrectiondlg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/softproofdialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/dimginterface.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/iccsettingscontainer.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/iccsettings.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/iccmanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/canvas.cpp
        )
 
@@ -725,6 +776,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/infodlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/iccprofileinfodlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/dprogressdlg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/dbusydlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/imagedialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/rawcameradlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/libsinfodlg.cpp
@@ -754,7 +806,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupdcraw.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupcamera.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameraselection.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameralist.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameralist.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameratype.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupdatabase.cpp 
        )
@@ -826,7 +878,7 @@ ENDIF(MSVC)
 
     SET(libdatabase_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/albumdb.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/albumdb_sqlite2.cpp        
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/albumdb_sqlite2.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collectionscanner.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collectionmanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collectionlocation.cpp
@@ -854,7 +906,7 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/searchxml.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/schemaupdater.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/upgradedb_sqlite2tosqlite3.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlquery.cpp        
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlquery.cpp                
        )
 
     SET(pgfutils_SRCS
@@ -964,24 +1016,26 @@ ENDIF(MSVC)
        )
 
     SET(libcameragui_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/dkcamera.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/umscamera.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/gpcamera.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/gpiteminfo.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/renamecustomizer.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerainfodialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameracontroller.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerahistoryupdater.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerafolderdialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerafolderitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerafolderview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameraiconitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameraiconview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameraiconviewtooltip.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameracontroller.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/camerainfodialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameranamehelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/cameraui.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/freespacewidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/freespacetooltip.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/capturewidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/capturedlg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/capturewidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/dkcamera.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/freespacetooltip.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/freespacewidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/gpcamera.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/gpiteminfo.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/renamecustomizer.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/cameragui/umscamera.cpp
        )
 
     SET(libsearchwindow_SRCS
@@ -1017,70 +1071,103 @@ ENDIF(MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/timeline/timelinewidget.cpp
        )
 
+    SET(libadvancedrename_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/advancedrenamedialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/advancedrenameinput.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/advancedrenamewidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/dynamiclayout.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/modifier.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/parseobject.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/parser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/parseresults.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/renamethread.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/subparser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/token.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/defaultrenameparser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/modifiers/defaultvaluemodifier.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/modifiers/firstletterofeachworduppercasemodifier.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/modifiers/lowercasemodifier.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/modifiers/rangemodifier.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/modifiers/replacemodifier.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/modifiers/trimmedmodifier.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/modifiers/uppercasemodifier.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/subparsers/cameranameparser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/subparsers/dateparser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/subparsers/directorynameparser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/subparsers/filepropertiesparser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/subparsers/metadataparser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parsers/subparsers/sequencenumberparser.cpp
+       )
+
     SET(libdigikamgui_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumdragdrop.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumiconviewfilter.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumfolderview.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumhistory.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumlister.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albummanager.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumpropsedit.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumfolderview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumhistory.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumiconviewfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumlister.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albummanager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumpropsedit.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumselectcombobox.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumselectwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumselectdialog.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumsettings.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumthumbnailloader.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumselectwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumsettings.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumthumbnailloader.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumtreeview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumwidgetstack.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/contextmenuhelper.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/datefolderview.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dbstatdlg.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamapp.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumwidgetstack.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/contextmenuhelper.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/datefolderview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dbstatdlg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/ddragobjects.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamapp.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamimageview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamview.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dio.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/ddragobjects.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/folderitem.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/folderview.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/folderviewtooltip.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/iconview.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/icongroupitem.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/iconitem.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imageattributeswatch.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamimageview_p.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dio.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/folderitem.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/folderview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/folderviewtooltip.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/icongroupitem.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/iconitem.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/iconview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imageattributeswatch.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagecategorizedview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagecategorydrawer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagedelegate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagedelegateoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagedragdrop.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagepreviewview.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagepreviewbar.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagepreviewbar.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagepreviewview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imageratingoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagerotationoverlay.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imageviewutilities.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imageselectionoverlay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imageviewutilities.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/kcategorizedview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/kdateedit.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/kdatetimeedit.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/kdatepickerpopup.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/mediaplayerview.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadatahub.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/kdateedit.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/kdatepickerpopup.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/kdatetimeedit.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/mediaplayerview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadatahub.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadatamanager.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/mimefilter.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/monthwidget.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/mimefilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/monthwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/ratingfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/ratingpopupmenu.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/ratingwidget.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/ratingpopupmenu.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/ratingwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/scancontroller.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/syncjob.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tageditdlg.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagfolderview.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagfilterview.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/syncjob.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tageditdlg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagfilterview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagfolderview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagspopupmenu.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tooltipfiller.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/treefolderitem.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagspopupmenu.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/welcomepageview.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/treefolderitem.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/welcomepageview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/databaseerrorhandler.cpp
+       )
+
+    SET(libdigikamhelpers_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/uifilevalidator.cpp
        )
 
     ADD_SUBDIRECTORY(data)
@@ -1090,7 +1177,10 @@ ENDIF(MSVC)
     ADD_SUBDIRECTORY(kioslave)
     ADD_SUBDIRECTORY(showfoto)
     ADD_SUBDIRECTORY(imageplugins)
-    ADD_SUBDIRECTORY(tests)
+
+    IF(KDE4_BUILD_TESTS)
+        MACRO_OPTIONAL_ADD_SUBDIRECTORY(tests)
+    ENDIF(KDE4_BUILD_TESTS)
 
     IF(ENABLE_THEMEDESIGNER)
         ADD_SUBDIRECTORY(themedesigner)

@@ -1,0 +1,183 @@
+#!/bin/sh
+
+# Author: Andi Clemens, <andi dot clemens at gmx dot net>
+#
+# Description:
+#
+# This script will read in the digiKam configuration file to determine the
+# database location. It will then make sure that digiKam is not running and
+# call "sqlite3 DATABASE 'VACUUM;" on the database, to clean up and optimize
+# the tables.
+# This will often lead to great performance gain and a smaller database file
+# size.
+
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# VARIABLES
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+
+script_name="Cleanup Databases"
+script_version="1.0"
+
+digikam_name="digiKam"
+digikam_version=$(digikam -v | grep "$digikam_name" | cut -d: -f2 | sed 's/ //g')
+
+config_group="Album Settings"
+config_key="Database File Path"
+config_file="digikamrc"
+
+db_dir=$(kreadconfig --file "$config_file" --group "$config_group" --key "$config_key")
+db_digikam="digikam[34].db"
+db_thumbs="thumbnails-digikam.db"
+
+header_offset=20
+
+output_str_location="Location"
+output_str_database="Database"
+
+db_find_args="-type f"
+db_find_cmd="$db_find_args -name '$db_digikam'"
+
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# FUNCTIONS
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+
+# $1: char
+# $2: count (optional)
+repeat_char()
+{
+    for i in $(seq ${2:-$header_offset}); do
+        echo -n "$1"
+    done
+}
+
+# -----------------------------------------------------------------------------
+
+# $*: string
+pretty_header()
+{
+    # use an offset to center text (default = $header_offset)
+    offset=$(repeat_char " ")
+    offset_length=$(expr $(expr length "$offset") \* 2)
+
+    # calculate length
+    str_length=$(expr length "$*")
+    length=$(expr $str_length + $offset_length)
+
+    # delimiter line
+    delimiter=$(repeat_char "-" $length)
+
+    # print header
+    echo $delimiter
+    echo "${offset}$*${offset}"
+    echo $delimiter
+}
+
+# -----------------------------------------------------------------------------
+
+checkForRunningProgram()
+{
+    proc=$(pgrep -u $USER -x digikam)
+    if [ "$proc" != "" ]
+    then
+        echo "Please shutdown $digikam_name before running this script."
+        return 1
+    fi
+    return 0
+}
+
+# -----------------------------------------------------------------------------
+
+help()
+{
+    cat <<EOF
+Usage: $(basename $0) <options>
+
+options:
+  -t            Include thumbnail databases
+  -T            Only cleanup thumbnail databases
+  -p <path>     Specify a different database path.
+                If the specified path is invalid, the entry from the configuration file will be used.
+  -h            Show this help.
+EOF
+    exit 1
+}
+
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# MAIN
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+
+while getopts "tTp:h" Option
+do
+    case $Option in
+        t)  db_find_cmd="$db_find_cmd -or -name '$db_thumbs'";;
+        T)  db_find_cmd="$db_find_args -name '$db_thumbs'";;
+        p)  if [ -n $OPTARG ]; then 
+                if [ -d $OPTARG ]; then
+                    db_dir=$OPTARG
+                fi
+            fi;;
+        h)  help;;
+        *)  help;;
+    esac
+done
+
+# -----------------------------------------------------------------------------
+
+checkForRunningProgram
+if [ $? = 1 ]; then
+    exit 1
+fi
+
+# -----------------------------------------------------------------------------
+
+pretty_header "$script_name v$script_version ($digikam_name $digikam_version)"
+
+# -----------------------------------------------------------------------------
+
+# backup current working dir
+curdir=$(pwd)
+
+# -----------------------------------------------------------------------------
+
+# try to enter the database directory
+cd $db_dir 2&> /dev/null
+if [ $? = 0 ]; then
+    db_out="$output_str_database:"
+    echo -e "$output_str_location:\t$(pwd)"
+
+    for db in $(eval "find . $db_find_cmd 2> /dev/null")
+    do
+        echo -ne "${db_out:-"\\t"}\t$db ... "
+        sqlite3 $db "VACUUM;"
+        if [ $? = 0 ]
+        then
+            echo "done!"
+        else
+            echo "failed!"
+        fi
+        unset db_out
+    done
+    echo -e "\n=> Finished";
+else
+    echo -e "\nI was not able to enter the database folder.\n"
+    echo "Make sure that the variable '$config_key' in your 'digikamrc' config file"
+    echo "is set correctly and that you have permissions to access the database folder."
+fi
+
+# -----------------------------------------------------------------------------
+
+# restore old working dir
+cd $curdir
+

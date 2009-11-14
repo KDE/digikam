@@ -29,6 +29,7 @@
 
 // KDE includes
 
+#include <kcalendarsystem.h>
 #include <kglobal.h>
 #include <klocale.h>
 
@@ -36,10 +37,17 @@
 
 #include "album.h"
 #include "albummanager.h"
+#include "fuzzysearchfolderview.h"
+#include "gpssearchfolderview.h"
+#include "imagealbummodel.h"
 #include "imagecategorizedview.h"
 #include "imagedelegate.h"
 #include "imagefiltermodel.h"
+#include "imagemodel.h"
+#include "imagescanner.h"
+#include "searchfolderview.h"
 #include "themeengine.h"
+#include "timelinefolderview.h"
 
 namespace Digikam
 {
@@ -136,9 +144,20 @@ void ImageCategoryDrawer::drawCategory(const QModelIndex& index, int /*sortRole*
     QString header;
     QString subLine;
 
-    if (mode == ImageSortSettings::CategoryByAlbum)
-        textForAlbum(index, &header, &subLine);
-    //TODO: other modes
+    switch (mode)
+    {
+        case ImageSortSettings::NoCategories:
+            break;
+        case ImageSortSettings::OneCategory:
+            viewHeaderText(index, &header, &subLine);
+            break;
+        case ImageSortSettings::CategoryByAlbum:
+            textForAlbum(index, &header, &subLine);
+            break;
+        case ImageSortSettings::CategoryByFormat:
+            textForFormat(index, &header, &subLine);
+            break;
+    }
 
     p->setPen(ThemeEngine::instance()->textSelColor());
     p->setFont(fontBold);
@@ -158,10 +177,48 @@ void ImageCategoryDrawer::drawCategory(const QModelIndex& index, int /*sortRole*
     p->restore();
 }
 
+void ImageCategoryDrawer::viewHeaderText(const QModelIndex& index, QString *header, QString *subLine) const
+{
+    ImageModel *sourceModel = index.data(ImageModel::ImageModelPointerRole).value<ImageModel*>();
+    if (!sourceModel)
+        return;
+
+    int count  = d->view->categoryRange(index).height();
+
+    // Add here further model subclasses in use with ImageCategoryDrawer.
+    // Note you need a Q_OBJECT in the class's header for this to work.
+    ImageAlbumModel *albumModel = qobject_cast<ImageAlbumModel *>(sourceModel);
+    if (albumModel)
+    {
+        Album *album = albumModel->currentAlbum();
+        if (!album)
+            return;
+
+        switch (album->type())
+        {
+            case Album::PHYSICAL:
+                textForPAlbum(static_cast<PAlbum*>(album), albumModel->isRecursingAlbums(), count, header, subLine);
+                break;
+            case Album::TAG:
+                textForTAlbum(static_cast<TAlbum*>(album), albumModel->isRecursingTags(), count, header, subLine);
+                break;
+            case Album::DATE:
+                textForDAlbum(static_cast<DAlbum*>(album), count, header, subLine);
+                break;
+            case Album::SEARCH:
+                textForSAlbum(static_cast<SAlbum*>(album), count, header, subLine);
+                break;
+        }
+    }
+}
+
 void ImageCategoryDrawer::textForAlbum(const QModelIndex& index, QString *header, QString *subLine) const
 {
     int albumId   = index.data(ImageFilterModel::CategoryAlbumIdRole).toInt();
     PAlbum* album = AlbumManager::instance()->findPAlbum(albumId);
+    int count  = d->view->categoryRange(index).height();
+    textForPAlbum(album, false, count, header, subLine);
+}
 
 void ImageCategoryDrawer::textForFormat(const QModelIndex& index, QString *header, QString *subLine) const
 {
@@ -199,13 +256,16 @@ void ImageCategoryDrawer::textForPAlbum(PAlbum *album, bool recursive, int count
 
     if (!album->caption().isEmpty())
     {
-        int count  = d->view->categoryRange(index).height();
-        QDate date = album->date();
+        QString caption = album->caption();
+        *subLine += " - " + caption.replace('\n', ' ');
+    }
 
-        KLocale tmpLocale(*KGlobal::locale());
+    *header = album->prettyUrl().left(-1);
+}
 
-        tmpLocale.setDateFormat("%d"); // day of month with two digits
-        QString day = tmpLocale.formatDate(date);
+void ImageCategoryDrawer::textForTAlbum(TAlbum *talbum, bool recursive, int count, QString *header, QString *subLine) const
+{
+    *header = talbum->title();
 
     if (recursive && talbum->firstChild())
     {
@@ -227,21 +287,45 @@ void ImageCategoryDrawer::textForPAlbum(PAlbum *album, bool recursive, int count
     }
 }
 
-        tmpLocale.setDateFormat("%Y"); // long form of the year
-        QString year = tmpLocale.formatDate(date);
+void ImageCategoryDrawer::textForSAlbum(SAlbum *salbum, int count, QString *header, QString *subLine) const
+{
+    QString title = salbum->title();
 
-        *subLine = i18ncp("%1: day of month with two digits, %2: short month name, %3: year",
-                          "Album Date: %2 %3 %4 - 1 Item", "Album Date: %2 %3 %4 - %1 Items",
-                          count, day, month, year);
+    if (title == FuzzySearchFolderView::currentFuzzySketchSearchName())
+        title = i18n("Fuzzy Sketch Search");
+    else if (title == FuzzySearchFolderView::currentFuzzyImageSearchName())
+        title = i18n("Fuzzy Image Search");
+    else if (title == GPSSearchFolderView::currentGPSSearchName())
+        title = i18n("Map Search");
+    else if (title == SearchFolderView::currentSearchViewSearchName())
+        title = i18n("Current Search");
+    else if (title == TimeLineFolderView::currentTimeLineSearchName())
+        title = i18n("Search By Time Line");
 
-        if (!album->caption().isEmpty())
-        {
-            QString caption = album->caption();
-            *subLine += " - " + caption.replace('\n', ' ');
-        }
+    *header = title;
 
-        *header = album->prettyUrl().left(-1);
+    if (salbum->isNormalSearch())
+        *subLine = i18np("Keyword Search - 1 Item", "Keyword Search - %1 Items", count);
+    else if (salbum->isAdvancedSearch())
+        *subLine = i18np("Advanced Search - 1 Item", "Advanced Search - %1 Items", count);
+    else
+        *subLine = i18np("1 Item", "%1 Items", count);
+}
+
+void ImageCategoryDrawer::textForDAlbum(DAlbum *album, int count, QString *header, QString *subLine) const
+{
+    if (album->range() == DAlbum::Month)
+    {
+        *header = i18nc("Month String - Year String", "%1 %2",
+                        KGlobal::locale()->calendar()->monthName(album->date(), KCalendarSystem::LongName),
+                        KGlobal::locale()->calendar()->yearString(album->date()));
     }
+    else
+    {
+        *header = QString("%1").arg(KGlobal::locale()->calendar()->year(album->date()));
+    }
+
+    *subLine = i18np("1 Item", "%1 Items", count);
 }
 
 void ImageCategoryDrawer::updateRectsAndPixmaps(int width)
