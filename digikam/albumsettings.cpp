@@ -67,7 +67,16 @@ public:
         configGroupMetadata("Metadata Settings"),
         configGroupNepomuk("Nepomuk Settings"),
         configGroupGeneral("General Settings"),
-//TODO: Add database constants
+        //TODO: Add database constants
+
+        configGroupDatabase("Database Settings"),
+        configDatabaseType("Database Type"),
+        configDatabaseName("Database Name"),
+        configDatabaseHostName("Database Hostname"),
+        configDatabasePort("Database Port"),
+        configDatabaseUsername("Database Username"),
+        configDatabasePassword("Database Password"),
+        configDatabaseConnectOptions("Database Connectoptions"),
 
         configDatabaseFilePathEntry("Database File Path"),
         configAlbumCollectionsEntry("Album Collections"),
@@ -145,6 +154,15 @@ public:
     const QString                       configGroupMetadata;
     const QString                       configGroupNepomuk;
     const QString                       configGroupGeneral;
+
+    const QString                       configGroupDatabase;
+    const QString                       configDatabaseType;
+    const QString                       configDatabaseName;
+    const QString                       configDatabaseHostName;
+    const QString                       configDatabasePort;
+    const QString                       configDatabaseUsername;
+    const QString                       configDatabasePassword;
+    const QString                       configDatabaseConnectOptions;
 
     const QString                       configDatabaseFilePathEntry;
     const QString                       configAlbumCollectionsEntry;
@@ -561,14 +579,14 @@ void AlbumSettings::readSettings()
 
     // ---------------------------------------------------------------------
 
-    group = config->group("Database Settings");
-    d->databaseType             = group.readEntry("Database Type");
-    d->databaseName             = group.readEntry("Database Name");
-    d->databaseHostName         = group.readEntry("Database Hostname");
-    d->databasePort             = group.readEntry("Database Port").toInt();
-    d->databaseUserName         = group.readEntry("Database Username");
-    d->databasePassword         = group.readEntry("Database Password");
-    d->databaseConnectoptions   = group.readEntry("Database Connectoptions");
+    group = config->group(d->configGroupDatabase);
+    d->databaseType             = group.readEntry(d->configDatabaseType);
+    d->databaseName             = group.readEntry(d->configDatabaseName);
+    d->databaseHostName         = group.readEntry(d->configDatabaseHostName);
+    d->databasePort             = group.readEntry(d->configDatabasePort).toInt();
+    d->databaseUserName         = group.readEntry(d->configDatabaseUsername);
+    d->databasePassword         = group.readEntry(d->configDatabasePassword);
+    d->databaseConnectoptions   = group.readEntry(d->configDatabaseConnectOptions);
 
 
 #ifdef HAVE_NEPOMUK
@@ -695,14 +713,15 @@ void AlbumSettings::saveSettings()
     group.writeEntry(d->configScanAtStartEntry,                 d->scanAtStart);
 
     // ---------------------------------------------------------------------
-    group = config->group("Database Settings");
-    group.writeEntry("Database Type", d->databaseType);
-    group.writeEntry("Database Name", d->databaseName);
-    group.writeEntry("Database Hostname", d->databaseHostName);
-    group.writeEntry("Database Port", d->databasePort);
-    group.writeEntry("Database Username", d->databaseUserName);
-    group.writeEntry("Database Password", d->databasePassword);
-    group.writeEntry("Database Connectoptions", d->databaseConnectoptions);
+
+    group = config->group(d->configGroupDatabase);
+    group.writeEntry(d->configDatabaseType, d->databaseType);
+    group.writeEntry(d->configDatabaseName, d->databaseName);
+    group.writeEntry(d->configDatabaseHostName, d->databaseHostName);
+    group.writeEntry(d->configDatabasePort, d->databasePort);
+    group.writeEntry(d->configDatabaseUsername, d->databaseUserName);
+    group.writeEntry(d->configDatabasePassword, d->databasePassword);
+    group.writeEntry(d->configDatabaseConnectOptions, d->databaseConnectoptions);
 
     // ---------------------------------------------------------------------
 #ifdef HAVE_NEPOMUK
