@@ -30,6 +30,7 @@
 
 // KDE includes
 
+#include <kdebug.h>
 #include <kstringhandler.h>
 
 // Local includes
@@ -50,6 +51,21 @@ void AlbumFilterModel::setSearchTextSettings(const SearchTextSettings& settings)
     m_settings = settings;
     invalidateFilter();
     emit filterChanged();
+
+    // find out if this setting has some results or not
+    int validRows = 0;
+    // for every collection we got
+    for(int i = 0; i < rowCount(rootAlbumIndex()); ++i)
+    {
+        QModelIndex collectionIndex = index(i, 0, rootAlbumIndex());
+        // count the number of rows
+        validRows += rowCount(collectionIndex);
+    }
+    bool hasResult = validRows > 0;
+    kDebug() << "new search text settings: " << settings.text
+             << ": hasResult = " << hasResult << ", validRows = "
+             << validRows;
+    emit hasSearchResult(hasResult);
 }
 
 bool AlbumFilterModel::isFiltering() const

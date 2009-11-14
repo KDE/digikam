@@ -482,9 +482,8 @@ void DigikamView::setupConnections()
     connect(d->tagFilterSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
             d->tagFilterView, SLOT(slotTextTagFilterChanged(const SearchTextSettings&)));
 
-    // TODO update
-    //connect(d->folderView, SIGNAL(signalTextFolderFilterMatch(bool)),
-    //        d->folderSearchBar, SLOT(slotSearchResult(bool)));
+    connect(d->folderView->albumFilterModel(), SIGNAL(hasSearchResult(bool)),
+            d->folderSearchBar, SLOT(slotSearchResult(bool)));
 
     connect(d->folderView, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
             this, SLOT(slotNewDuplicatesSearch(Album*)));

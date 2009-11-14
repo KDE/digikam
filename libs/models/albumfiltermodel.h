@@ -79,6 +79,7 @@ public Q_SLOTS:
 Q_SIGNALS:
 
     void filterChanged();
+    void hasSearchResult(bool);
 
 protected:
 

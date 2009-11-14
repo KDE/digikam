@@ -37,6 +37,7 @@
 #include <kconfiggroup.h>
 #include <kglobal.h>
 #include <kconfig.h>
+#include <kdebug.h>
 
 namespace Digikam
 {
@@ -135,6 +136,9 @@ void SearchTextBar::slotTextChanged(const QString& text)
 
 void SearchTextBar::slotSearchResult(bool match)
 {
+
+    kDebug() << "match = " << match;
+
     if (text().isEmpty())
     {
         setPalette(QPalette());
