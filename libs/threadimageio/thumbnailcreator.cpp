@@ -540,12 +540,12 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
 
     ThumbnailDatabaseAccess access;
 
-    DatabaseCoreBackend::QueryState lastQueryState=DatabaseCoreBackend::ConnectionError;
-    while(DatabaseCoreBackend::ConnectionError==lastQueryState)
+    DatabaseCoreBackend::QueryState lastQueryState = DatabaseCoreBackend::ConnectionError;
+    while(lastQueryState == DatabaseCoreBackend::ConnectionError)
     {
 
         lastQueryState = access.backend()->beginTransaction();
-        if (DatabaseCoreBackend::NoErrors!=lastQueryState)
+        if (DatabaseCoreBackend::NoErrors != lastQueryState)
         {
             continue;
         }
@@ -555,7 +555,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
         {
             QVariant id;
             lastQueryState = access.db()->insertThumbnail(dbInfo, &id);
-            if (DatabaseCoreBackend::NoErrors!=lastQueryState)
+            if (DatabaseCoreBackend::NoErrors != lastQueryState)
             {
                 continue;
             }else
@@ -566,7 +566,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
         else
         {
             lastQueryState = access.db()->replaceThumbnail(dbInfo);
-            if (DatabaseCoreBackend::NoErrors!=lastQueryState)
+            if (DatabaseCoreBackend::NoErrors != lastQueryState)
             {
                 continue;
             }
@@ -576,7 +576,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
         if (!info.uniqueHash.isNull())
         {
             lastQueryState = access.db()->insertUniqueHash(info.uniqueHash, info.fileSize, dbInfo.id);
-            if (DatabaseCoreBackend::NoErrors!=lastQueryState)
+            if (DatabaseCoreBackend::NoErrors != lastQueryState)
             {
                 continue;
             }
@@ -584,16 +584,18 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
         if (!info.filePath.isNull())
         {
             lastQueryState = access.db()->insertFilePath(info.filePath, dbInfo.id);
-            if (DatabaseCoreBackend::NoErrors!=lastQueryState)
+            if (DatabaseCoreBackend::NoErrors != lastQueryState)
             {
                 continue;
             }
         }
+
         lastQueryState = access.backend()->commitTransaction();
-        if (DatabaseCoreBackend::NoErrors!=lastQueryState)
-         {
-             continue;
-         }
+
+        if (DatabaseCoreBackend::NoErrors != lastQueryState)
+        {
+            continue;
+        }
 
     }
 }
