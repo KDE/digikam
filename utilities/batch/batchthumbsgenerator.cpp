@@ -39,7 +39,6 @@
 #include <kapplication.h>
 #include <kcodecs.h>
 #include <klocale.h>
-#include <kpassivepopup.h>
 
 // Local includes
 
@@ -52,6 +51,7 @@
 #include "thumbnailsize.h"
 #include "thumbnaildatabaseaccess.h"
 #include "thumbnaildb.h"
+#include "knotificationwrapper.h"
 #include "config-digikam.h"
 
 namespace Digikam
@@ -165,7 +165,8 @@ void BatchThumbsGenerator::complete()
     setTitle(i18n("Duration: %1", t.toString()));
     setButtonText(i18n("&Close"));
     // Pop-up a message to bring user when all is done.
-    KPassivePopup::message(windowTitle(), i18n("The thumbnails database has been updated."), this);
+    KNotificationWrapper("", i18n("The thumbnails database has been updated."),
+                         this, windowTitle());
     emit signalRebuildAllThumbsDone();
 }
 

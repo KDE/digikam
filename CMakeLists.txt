@@ -657,6 +657,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/histogrampainter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/itemviewhoverbutton.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/itemviewtooltip.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/knotificationwrapper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/paniconwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/previewwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/rexpanderbox.cpp

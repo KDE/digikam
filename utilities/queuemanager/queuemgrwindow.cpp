@@ -55,7 +55,6 @@
 #include <ktoolinvocation.h>
 #include <kwindowsystem.h>
 #include <kxmlguifactory.h>
-#include <kpassivepopup.h>
 #include <kio/renamedialog.h>
 #include <kdebug.h>
 
@@ -93,6 +92,7 @@
 #include "queuemgrwindow_p.h"
 #include "sidebar.h"
 #include "uifilevalidator.h"
+#include "knotificationwrapper.h"
 
 namespace Digikam
 {
@@ -871,7 +871,8 @@ void QueueMgrWindow::processOne()
     if (d->itemsList.empty())
     {
         // Pop-up a message to bring user when all is done.
-        KPassivePopup::message(windowTitle(), i18n("Batch queue is completed..."), this);
+        KNotificationWrapper("", i18n("Batch queue is completed..."),
+                             this, windowTitle());
         processingAborted();
         return;
     }

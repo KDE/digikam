@@ -38,7 +38,6 @@
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kpassivepopup.h>
 #include <kdebug.h>
 
 // Local includes
@@ -47,6 +46,7 @@
 #include "albummanager.h"
 #include "imageinfojob.h"
 #include "metadatahub.h"
+#include "knotificationwrapper.h"
 
 namespace Digikam
 {
@@ -117,7 +117,8 @@ void BatchAlbumsSyncMetadata::parseAlbum()
         setTitle(i18n("Duration: %1",t.toString()));
         setButtonText(i18n("&Close"));
         // Pop-up a message to bring user when all is done.
-        KPassivePopup::message(windowTitle(), i18n("Images' metadata synchronization with database is done."), this);
+        KNotificationWrapper("", i18n("Images' metadata synchronization with database is done."),
+                             this, windowTitle());
         advance(1);
         abort();
     }
