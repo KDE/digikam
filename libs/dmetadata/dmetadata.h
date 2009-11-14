@@ -130,7 +130,7 @@ public:
     static KExiv2::AltLangMap toAltLangMap(const QVariant &var);
 
     //------------------------------------------------------------------------------------------------
-    // Scheduled to be moved to libkexiv2
+    // Pushed to libkexiv2 for KDE4.4
 
     /** Set an Xmp tag content using a list of strings defined by the 'entriesToAdd' parameter.
         The existing entries are preserved. The method will compare
@@ -196,7 +196,7 @@ public:
      */
     bool removeXmpSubCategories(const QStringList& categoriesToRemove, bool setProgramName=true);
 
-    // End: Scheduled to be moved to libkexiv2
+    // End: Pushed to libkexiv2 for KDE4.4
     //------------------------------------------------------------------------------------------------
 
 private:
