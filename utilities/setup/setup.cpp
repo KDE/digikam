@@ -58,6 +58,7 @@
 #include "setupplugins.h"
 #include "setupslideshow.h"
 #include "setuptooltip.h"
+#include "setupdatabase.h"
 
 namespace Digikam
 {
@@ -68,6 +69,7 @@ public:
 
     SetupPrivate()
     {
+        page_database = 0;
         page_collections = 0;
         page_albumView   = 0;
         page_tooltip     = 0;
@@ -85,6 +87,7 @@ public:
         page_camera      = 0;
         page_misc        = 0;
 
+        databasePage     = 0;
         collectionsPage  = 0;
         albumViewPage    = 0;
         tooltipPage      = 0;
@@ -103,6 +106,7 @@ public:
         pluginsPage      = 0;
     }
 
+    KPageWidgetItem  *page_database;
     KPageWidgetItem*  page_collections;
     KPageWidgetItem*  page_albumView;
     KPageWidgetItem*  page_tooltip;
@@ -120,6 +124,7 @@ public:
     KPageWidgetItem*  page_camera;
     KPageWidgetItem*  page_misc;
 
+    SetupDatabase    *databasePage;
     SetupCollections* collectionsPage;
     SetupAlbumView*   albumViewPage;
     SetupToolTip*     tooltipPage;
@@ -137,7 +142,7 @@ public:
     SetupMisc*        miscPage;
     SetupPlugins*     pluginsPage;
 
-    KPageWidgetItem*  pageItem(Setup::Page page);
+    KPageWidgetItem  *pageItem(Setup::Page page);
 };
 
 Setup::Setup(QWidget* parent)
@@ -149,6 +154,12 @@ Setup::Setup(QWidget* parent)
     setHelp("setupdialog.anchor", "digikam");
     setFaceType(List);
     setModal(true);
+
+    d->databasePage     = new SetupDatabase(this);
+    d->page_database    = addPage(d->databasePage, i18n("Database"));
+    d->page_database->setHeader(i18n("<qt>Database Settings<br/>"
+                                   "<i>Customize database settings</i></qt>"));
+    d->page_database->setIcon(KIcon("folder-image"));
 
     d->collectionsPage  = new SetupCollections(this);
     d->page_collections = addPage(d->collectionsPage, i18n("Collections"));
@@ -246,6 +257,7 @@ Setup::Setup(QWidget* parent)
                                  "<i>Customize behavior of the other parts of digiKam</i></qt>"));
     d->page_misc->setIcon(KIcon("preferences-other"));
 
+
     for (int page = 0; page != SetupPageEnumLast; ++page)
     {
         KPageWidgetItem *item = d->pageItem((Page)page);
@@ -289,10 +301,9 @@ QSize Setup::sizeHint() const
     // that some important tabs get a scroll bar, although the dialog could be larger
     // on a normal display (QScrollArea size hint does not take widget into account)
     // Adjust size hint here so that certain selected tabs are display full per default.
-    QSize hint          = KPageDialog::sizeHint();
-    int maxHintHeight   = 0;
+    QSize hint 			= KPageDialog::sizeHint();
+    int maxHintHeight 	= 0;
     int maxWidgetHeight = 0;
-
     for (int page = 0; page != SetupPageEnumLast; ++page)
     {
         // only take tabs into account here that should better be displayed without scrolling
@@ -306,30 +317,23 @@ QSize Setup::sizeHint() const
             page == DcrawPage       ||
             page == MiscellaneousPage)
         {
-            KPageWidgetItem *item   = d->pageItem((Page)page);
+            KPageWidgetItem *item 	= d->pageItem((Page)page);
             if (!item)
                 continue;
-
-            QWidget *page           = item->widget();
-            maxHintHeight           = qMax(maxHintHeight, page->sizeHint().height());
-            QScrollArea *scrollArea = qobject_cast<QScrollArea*>(page);
-
+            QWidget *page			 = item->widget();
+            maxHintHeight 			 = qMax(maxHintHeight, page->sizeHint().height());
+            QScrollArea *scrollArea  = qobject_cast<QScrollArea*>(page);
+            
             if (scrollArea)
                 maxWidgetHeight = qMax(maxWidgetHeight, scrollArea->widget()->sizeHint().height());
         }
     }
-
     // The additional 20 is a hack to make it work.
     // Don't know why, the largest page would have scroll bars without this
     if (maxWidgetHeight > maxHintHeight)
         hint.setHeight(hint.height() + (maxWidgetHeight - maxHintHeight) + 20);
-
+        
     return hint;
-}
-
-bool Setup::exec(Page page)
-{
-    return exec(0, page);
 }
 
 bool Setup::exec(QWidget *parent, Page page)
@@ -369,6 +373,7 @@ bool Setup::execTemplateEditor(QWidget *parent, const Template& t)
 
 void Setup::slotOkClicked()
 {
+    d->databasePage->applySettings();
     d->collectionsPage->applySettings();
     d->albumViewPage->applySettings();
     d->tooltipPage->applySettings();
@@ -419,7 +424,6 @@ void Setup::showPage(Setup::Page page)
     {
         item = d->pageItem(page);
     }
-
     if (!item)
         item = d->pageItem(CollectionsPage);
 
@@ -430,6 +434,8 @@ KPageWidgetItem *SetupPrivate::pageItem(Setup::Page page)
 {
     switch(page)
     {
+        case Setup::DatabasePage:
+            return page_database;
         case Setup::CollectionsPage:
             return page_collections;
         case Setup::AlbumViewPage:
@@ -471,6 +477,7 @@ Setup::Page Setup::activePageIndex()
 {
     KPageWidgetItem *cur = currentPage();
 
+    if (cur == d->page_collections) return CollectionsPage;
     if (cur == d->page_albumView)   return AlbumViewPage;
     if (cur == d->page_tooltip)     return ToolTipPage;
     if (cur == d->page_metadata)    return MetadataPage;
@@ -487,7 +494,7 @@ Setup::Page Setup::activePageIndex()
     if (cur == d->page_camera)      return CameraPage;
     if (cur == d->page_misc)        return MiscellaneousPage;
 
-    return CollectionsPage;
+    return DatabasePage;
 }
 
 }  // namespace Digikam

@@ -26,25 +26,31 @@
 
 // Qt includes
 
-#include <QDir>
-#include <QFileInfo>
-#include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
+#include <QDir>
 #include <QList>
-#include <QPushButton>
+#include <QFileInfo>
+#include <QGridLayout>
 #include <QVBoxLayout>
+#include <QPushButton>
+#include <QComboBox>
+#include <QLineEdit>
+#include <QIntValidator>
+#include <QSpinBox>
+#include <QFormLayout>
 
 // KDE includes
 
-#include <kfiledialog.h>
-#include <klineedit.h>
+#include <kdebug.h>
 #include <klocale.h>
-#include <kmessagebox.h>
+#include <klineedit.h>
 #include <kpagedialog.h>
-#include <ktemporaryfile.h>
+#include <kfiledialog.h>
 #include <kurl.h>
+#include <kmessagebox.h>
 #include <kurlrequester.h>
+#include <ktemporaryfile.h>
 
 // Local includes
 
@@ -63,19 +69,15 @@ public:
         mainDialog       = 0;
         collectionView   = 0;
         collectionModel  = 0;
-        databasePathEdit = 0;
         rootsPathChanged = false;
     }
 
     bool                     rootsPathChanged;
 
-    SetupCollectionTreeView* collectionView;
-    SetupCollectionModel*    collectionModel;
+    SetupCollectionTreeView *collectionView;
+    SetupCollectionModel    *collectionModel;
 
-    KUrlRequester*           databasePathEdit;
-    QString                  originalDbPath;
-
-    KPageDialog*             mainDialog;
+    KPageDialog             *mainDialog;
 };
 
 SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
@@ -83,8 +85,10 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
 {
     d->mainDialog  = dialog;
     QWidget *panel = new QWidget(viewport());
+    panel->setAutoFillBackground(false);
     setWidget(panel);
     setWidgetResizable(true);
+    viewport()->setAutoFillBackground(false);
 
     QVBoxLayout *layout = new QVBoxLayout(panel);
 
@@ -121,30 +125,9 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
 
     // --------------------------------------------------------
 
-    QGroupBox *dbPathBox      = new QGroupBox(i18n("Database File Path"), panel);
-    QVBoxLayout *vlay         = new QVBoxLayout(dbPathBox);
-    QLabel *databasePathLabel = new QLabel(i18n("<p>The location where the database file will be stored on your system. "
-                                                "There is one common database file for all root albums.<br/>"
-                                                "Write access is required to be able to edit image properties.</p>"
-                                                "<p>Note: a remote file system, such as NFS, cannot be used here.</p><p></p>"),
-                                           dbPathBox);
-    databasePathLabel->setWordWrap(true);
-    databasePathLabel->setFont(KGlobalSettings::smallestReadableFont());
-
-    d->databasePathEdit = new KUrlRequester(dbPathBox);
-    d->databasePathEdit->setMode(KFile::Directory | KFile::LocalOnly);
-
-    vlay->addWidget(databasePathLabel);
-    vlay->addWidget(d->databasePathEdit);
-    vlay->setSpacing(0);
-    vlay->setMargin(KDialog::spacingHint());
-
-    // --------------------------------------------------------
-
     layout->setMargin(0);
     layout->setSpacing(KDialog::spacingHint());
     layout->addWidget(albumPathBox);
-    layout->addWidget(dbPathBox);
     layout->addStretch();
 
     // --------------------------------------------------------
@@ -152,19 +135,6 @@ SetupCollections::SetupCollections(KPageDialog* dialog, QWidget* parent)
     readSettings();
     adjustSize();
 
-    // --------------------------------------------------------
-
-    viewport()->setAutoFillBackground(false);
-    setAutoFillBackground(false);
-    panel->setAutoFillBackground(false);
-
-    // --------------------------------------------------------
-
-    connect(d->databasePathEdit, SIGNAL(urlSelected(const KUrl&)),
-            this, SLOT(slotChangeDatabasePath(const KUrl&)));
-
-    connect(d->databasePathEdit, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotDatabasePathEdited(const QString&)));
 }
 
 SetupCollections::~SetupCollections()
@@ -174,83 +144,12 @@ SetupCollections::~SetupCollections()
 
 void SetupCollections::applySettings()
 {
-    AlbumSettings* settings = AlbumSettings::instance();
-    if (!settings) return;
-
-    QString newPath = d->databasePathEdit->url().toLocalFile();
-    QDir oldDir(d->originalDbPath);
-    QDir newDir(newPath);
-    if (oldDir != newDir)
-    {
-        settings->setDatabaseFilePath(newPath);
-        settings->saveSettings();
-    }
-    else
-    {
-        d->collectionModel->apply();
-    }
+    d->collectionModel->apply();
 }
 
 void SetupCollections::readSettings()
 {
-    AlbumSettings* settings = AlbumSettings::instance();
-    if (!settings) return;
-
-    d->originalDbPath = settings->getDatabaseFilePath();
-    d->databasePathEdit->setUrl(settings->getDatabaseFilePath());
     d->collectionModel->loadCollections();
-}
-
-void SetupCollections::slotChangeDatabasePath(const KUrl& result)
-{
-#ifdef _WIN32
-    // Work around B.K.O #189168
-    KTemporaryFile temp;
-    temp.setPrefix(result.toLocalFile(KUrl::AddTrailingSlash));
-    temp.open();
-
-    if (!result.isEmpty() && !temp.open())
-#else
-    QFileInfo targetPath(result.toLocalFile());
-
-    if (!result.isEmpty() && !targetPath.isWritable())
-#endif
-    {
-        KMessageBox::information(0, i18n("You do not seem to have write access to this database folder.\n"
-                                         "Without this access, the caption and tag features will not work."));
-    }
-
-    checkDBPath();
-}
-
-void SetupCollections::slotDatabasePathEdited(const QString& newPath)
-{
-#ifndef _WIN32
-    if (!newPath.isEmpty() && !QDir::isAbsolutePath(newPath))
-    {
-        d->databasePathEdit->setUrl(QDir::homePath() + '/' + newPath);
-    }
-#endif
-
-    checkDBPath();
-}
-
-void SetupCollections::checkDBPath()
-{
-    bool dbOk          = false;
-    bool pathUnchanged = true;
-    QString newPath    = d->databasePathEdit->url().toLocalFile();
-    if (!d->databasePathEdit->url().toLocalFile().isEmpty())
-    {
-        QDir dbDir(newPath);
-        QDir oldDir(d->originalDbPath);
-        dbOk          = dbDir.exists();
-        pathUnchanged = (dbDir == oldDir);
-    }
-
-    d->collectionView->setEnabled(pathUnchanged);
-
-    d->mainDialog->enableButtonOk(dbOk);
 }
 
 }  // namespace Digikam
