@@ -20,6 +20,11 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+/*
+#ifndef DATABASCOREBACKEND_DEBUG
+#define DATABASCOREBACKEND_DEBUG
+#endif
+*/
 
 #include "databasecorebackend.h"
 #include "databasecorebackend_p.h"
@@ -406,7 +411,10 @@ bool DatabaseCoreBackend::execDBAction(const databaseAction &action, const QMap<
     bool returnResult = true;
     QSqlDatabase db = d->databaseForThread();
 
+#ifdef DATABASCOREBACKEND_DEBUG
     kDebug(50003) << "Executing DBAction ["<<  action.m_Name  <<"]";
+#endif
+
     bool wrapInTransaction = (action.m_Mode == QString("transaction"));
     if (wrapInTransaction)
     {
@@ -562,8 +570,9 @@ QList<QVariant> DatabaseCoreBackend::readToList(SqlQuery& query)
         for (int i=0; i<count; ++i)	  
 	  list << query.value(i);	
     }
-    
+#ifdef DATABASCOREBACKEND_DEBUG
     kDebug(50003) << "Setting result value list ["<< list <<"]";
+#endif
     return list;
 }
 
@@ -654,7 +663,9 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(const QString& sql,
 SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QVariant& boundValue1)
 {
     SqlQuery query = prepareQuery(sql);
+#ifdef DATABASCOREBACKEND_DEBUG
     kDebug(50003) << "Trying to sql ["<< sql <<"] query ["<<query.lastQuery()<<"]";
+#endif
     query.bindValue(0, boundValue1);
     exec(query);
     return query;
@@ -706,7 +717,9 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QList<QVariant
 SqlQuery DatabaseCoreBackend::execQuery(const QString& sql)
 {
     SqlQuery query = prepareQuery(sql);
+#ifdef DATABASCOREBACKEND_DEBUG
     kDebug(50003)<<"execQuery: Using statement ["<< query.lastQuery() <<"]";
+#endif
     exec(query);
     return query;
 }
@@ -718,7 +731,9 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
 
     if (!bindingMap.isEmpty())
     {
+#ifdef DATABASCOREBACKEND_DEBUG
         kDebug(50003)<<"Prepare statement ["<< preparedString <<"]";
+#endif
         QRegExp identifierRegExp(":[A-Za-z0-9]+");
         int pos=0;
 
@@ -726,12 +741,16 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
         {
             QString namedPlaceholder = identifierRegExp.cap(0);
             namedPlaceholderValues.append(bindingMap[namedPlaceholder]);
+#ifdef DATABASCOREBACKEND_DEBUG
             kDebug(50003)<<"Bind key ["<< namedPlaceholder <<"] to value ["<< bindingMap[namedPlaceholder] <<"]";
+#endif
             preparedString = preparedString.replace(pos, identifierRegExp.matchedLength(), "?");
             pos=0; // reset pos
         }
     }
+#ifdef DATABASCOREBACKEND_DEBUG
     kDebug(50003)<<"Prepared statement ["<< preparedString <<"] values ["<< namedPlaceholderValues <<"]";
+#endif
 
     SqlQuery query = prepareQuery(preparedString);
 
@@ -821,7 +840,9 @@ bool DatabaseCoreBackend::exec(SqlQuery& query)
     int retries = 0;
     forever
     {
+#ifdef DATABASCOREBACKEND_DEBUG
         kDebug(50003) << "Trying to query ["<<query.lastQuery()<<"]";
+#endif
         if (query.lastQuery().isEmpty() || query.exec())
             break;
         else

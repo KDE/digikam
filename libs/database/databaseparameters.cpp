@@ -20,6 +20,11 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+/*
+#ifndef DATABASEPARAMETERS_DEBUG
+#define DATABASEPARAMETERS_DEBUG
+#endif
+*/
 
 #include "databaseparameters.h"
 
@@ -207,7 +212,9 @@ void DatabaseParameters::readConfig(){
 	    QString filepath = KStandardDirs::locate("data", "digikam/database/dbconfig.xml");
         QFile file(filepath);
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+#ifdef DATABASEPARAMETERS_DEBUG
             kDebug(50003) << "Couldn't open file: " << file.fileName().toAscii();
+#endif
 	        return;
 	    }
 
@@ -220,23 +227,28 @@ void DatabaseParameters::readConfig(){
 
         QDomElement element = doc.namedItem("databaseconfig").toElement();
         if (element.isNull()){
+#ifdef DATABASEPARAMETERS_DEBUG
             kDebug(50003) << "Missing element <databaseconfig>.";
+#endif
             return;
         }
         QDomElement defaultDB =  element.namedItem("defaultDB").toElement();
         if (defaultDB.isNull()){
+#ifdef DATABASEPARAMETERS_DEBUG
             kDebug(50003) << "Missing element <defaultDB>.";
+#endif
             return;
         }         
          m_DefaultDatabase = defaultDB.text();
+#ifdef DATABASEPARAMETERS_DEBUG
          kDebug(50003) << "Default DB Node contains: " << m_DefaultDatabase;
-
+#endif
          QDomElement databaseElement =  element.firstChildElement("database");
          for( ; !databaseElement.isNull();  databaseElement=databaseElement.nextSiblingElement("database")){
             databaseconfigelement l_DBCfgElement = readDatabase(databaseElement);
             m_DatabaseConfigs.insert(l_DBCfgElement.m_DatabaseID, l_DBCfgElement);
          }
-
+#ifdef DATABASEPARAMETERS_DEBUG
                kDebug(50003) << "Found entries: " << m_DatabaseConfigs.size();
                foreach (const databaseconfigelement& l_Element, m_DatabaseConfigs ){
                    kDebug(50003) << "DatabaseID: " << l_Element.m_DatabaseID;
@@ -257,6 +269,7 @@ void DatabaseParameters::readConfig(){
                        }
                    }
            }
+#endif
      }
 
 databaseconfigelement DatabaseParameters::readDatabase(QDomElement &databaseElement){
