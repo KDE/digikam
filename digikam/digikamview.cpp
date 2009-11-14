@@ -46,6 +46,7 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
+#include <kdebug.h>
 #include <kdialog.h>
 #include <kglobal.h>
 #include <kiconloader.h>
@@ -202,7 +203,7 @@ DigikamView::DigikamView(QWidget *parent)
     d->parent       = static_cast<DigikamApp*>(parent);
     d->albumManager = AlbumManager::instance();
 
-    d->albumModificationHelper = new AlbumModificationHelper(this);
+    d->albumModificationHelper = new AlbumModificationHelper(this, this);
 
     d->splitter = new SidebarSplitter;
     d->splitter->setFrameStyle( QFrame::NoFrame );
@@ -229,7 +230,7 @@ DigikamView::DigikamView(QWidget *parent)
     // To the left.
     // Folders sidebar tab contents.
     d->folderBox       = new KVBox(this);
-    d->folderView      = new AlbumFolderViewNew(d->folderBox);
+    d->folderView      = new AlbumFolderViewNew(d->folderBox, d->albumModificationHelper);
     d->folderSearchBar = new SearchTextBar(d->folderBox, "DigikamViewFolderSearchBar");
     d->folderBox->setSpacing(KDialog::spacingHint());
     d->folderBox->setMargin(0);
@@ -311,9 +312,6 @@ void DigikamView::applySettings()
 
 void DigikamView::refreshView()
 {
-    //d->folderView->refresh();
-    // TODO is this correct
-    d->folderView->update();
     d->dateFolderView->refresh();
     d->tagFolderView->refresh();
     d->tagFilterView->refresh();
@@ -472,9 +470,8 @@ void DigikamView::setupConnections()
 
     // -- Filter Bars Connections ---------------------------------
 
-    // TODO update
-    //connect(d->folderSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-    //        d->folderView, SLOT(slotTextFolderFilterChanged(const SearchTextSettings&)));
+    connect(d->folderSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
+            d->folderView->albumFilterModel(), SLOT(setSearchTextSettings(const SearchTextSettings&)));
 
     connect(d->tagSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
             d->tagFolderView, SLOT(slotTextTagFilterChanged(const SearchTextSettings&)));
@@ -489,8 +486,8 @@ void DigikamView::setupConnections()
     //connect(d->folderView, SIGNAL(signalTextFolderFilterMatch(bool)),
     //        d->folderSearchBar, SLOT(slotSearchResult(bool)));
 
-    //connect(d->folderView, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
-    //        this, SLOT(slotNewDuplicatesSearch(Album*)));
+    connect(d->folderView, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
+            this, SLOT(slotNewDuplicatesSearch(Album*)));
 
     connect(d->tagFolderView, SIGNAL(signalFindDuplicatesInTag(Album*)),
             this, SLOT(slotNewDuplicatesSearch(Album*)));
@@ -742,13 +739,12 @@ void DigikamView::slotSortAlbums(int order)
 
 void DigikamView::slotNewAlbum()
 {
-    d->albumModificationHelper->slotNewAlbum(d->folderView->currentAlbum());
+    d->albumModificationHelper->slotAlbumNew(d->folderView->currentAlbum());
 }
 
 void DigikamView::slotDeleteAlbum()
 {
-    // TODO update
-    //d->folderView->albumDelete();
+    d->albumModificationHelper->slotAlbumDelete(d->folderView->currentAlbum());
 }
 
 void DigikamView::slotNewTag()
@@ -782,6 +778,7 @@ void DigikamView::slotNewAdvancedSearch()
 
 void DigikamView::slotNewDuplicatesSearch(Album* album)
 {
+    kDebug() << "called";
     if (d->leftSideBar->getActiveTab() != d->fuzzySearchView)
         d->leftSideBar->setActiveTab(d->fuzzySearchView);
     d->fuzzySearchView->newDuplicatesSearch(album);
@@ -892,13 +889,7 @@ void DigikamView::slotAlbumRenamed(Album *album)
         {
             case Album::PHYSICAL:
             {
-                // TODO update
-                //d->folderView->setAllowAutoCollapse(false);
-
                 d->folderSearchBar->completionObject()->addItem(album->title());
-                //d->folderView->slotTextFolderFilterChanged(d->folderSearchBar->searchTextSettings());
-
-                //d->folderView->setAllowAutoCollapse(true);
                 break;
             }
             case Album::TAG:
@@ -1002,13 +993,7 @@ void DigikamView::changeAlbumFromHistory(Album *album, QWidget *widget)
         {
             if (v == d->folderBox)
             {
-                // TODO update
-                /*item = (Q3ListViewItem*) album->extraData(d->folderView);
-                if (!item)
-                    return;
-
-                d->folderView->setSelected(item, true);
-                d->folderView->ensureItemVisible(item);*/
+                d->folderView->slotSelectAlbum(album);
             }
             else if (v == d->tagBox)
             {

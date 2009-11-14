@@ -10,6 +10,10 @@
 
 // QT includes
 #include <qobject.h>
+#include <qwidget.h>
+
+// KDE includes
+#include <kjob.h>
 
 // Local includes
 #include "album.h"
@@ -17,15 +21,26 @@
 namespace Digikam
 {
 
+class AlbumModificationHelperPriv;
 class AlbumModificationHelper : public QObject
 {
     Q_OBJECT
 public:
-    AlbumModificationHelper(QObject *parent);
+    AlbumModificationHelper(QObject *parent, QWidget *dialogParent);
     virtual ~AlbumModificationHelper();
 
 public Q_SLOTS:
-    void slotNewAlbum(PAlbum *parentAlbum);
+    void slotAlbumNew(PAlbum *parentAlbum);
+    void slotAlbumDelete(PAlbum *album);
+    void slotAlbumRename(PAlbum *album);
+
+private Q_SLOTS:
+    void slotDIOResult(KJob* kjob);
+
+private:
+    void addAlbumChildrenToList(KUrl::List& list, Album *album);
+
+    AlbumModificationHelperPriv *d;
 
 };
 

@@ -122,7 +122,7 @@ AlbumSelectWidget::AlbumSelectWidget(QWidget *parent, PAlbum* albumToSelect)
             this, SLOT(slotSearchTextChanged(const SearchTextSettings&)));
 
     connect(d->newAlbumBtn, SIGNAL(clicked()),
-            this, SLOT(slotNewAlbum()));
+            this, SLOT(slotAlbumNew()));
 }
 
 AlbumSelectWidget::~AlbumSelectWidget()
@@ -430,7 +430,7 @@ void AlbumSelectWidget::slotContextMenu()
 
     KAction *action = new KAction(KIcon("albumfolder-new"), i18n("Create New Album"), this);
     connect(action, SIGNAL(triggered(bool) ),
-            this, SLOT(slotNewAlbum()));
+            this, SLOT(slotAlbumNew()));
 
     popmenu.addAction(action);
     popmenu.exec(QCursor::pos());

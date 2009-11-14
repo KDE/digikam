@@ -44,13 +44,15 @@ class AlbumFolderViewNewPriv
 {
 
 public:
-
+    AlbumModificationHelper *albumModificationHelper;
 
 };
 
-AlbumFolderViewNew::AlbumFolderViewNew(QWidget *parent) :
+AlbumFolderViewNew::AlbumFolderViewNew(QWidget *parent, AlbumModificationHelper *albumModificationHelper) :
     AlbumTreeView(parent), d(new AlbumFolderViewNewPriv)
 {
+
+    d->albumModificationHelper = albumModificationHelper;
 
     setSortingEnabled(true);
 
@@ -63,12 +65,12 @@ AlbumFolderViewNew::AlbumFolderViewNew(QWidget *parent) :
 void AlbumFolderViewNew::contextMenuEvent(QContextMenuEvent *event)
 {
 
+    Q_UNUSED(event);
+
     kDebug() << "context menu requested";
 
-    QModelIndex clickedIndex = indexAt(event->pos());
-
-    kDebug() << "clickedIndex = " << clickedIndex;
-
+    // TODO is this always the right album? That means is the album always
+    // selected before showing the menu
     PAlbum *album = currentAlbum();
     if (!album || album->isRoot())
     {
@@ -123,13 +125,12 @@ void AlbumFolderViewNew::contextMenuEvent(QContextMenuEvent *event)
         }
         else if (choice == renameAction)
         {
-            // TODO update
-            //albumRename(item);
+            d->albumModificationHelper->slotAlbumRename(album);
         }
         else if (choice == findDuplAction)
         {
-            // TODO update
-            //emit signalFindDuplicatesInAlbum(album);
+            kDebug() << "emitting signal for finding duplicates";
+            emit signalFindDuplicatesInAlbum(album);
         }
     }
 
@@ -142,6 +143,13 @@ void AlbumFolderViewNew::slotAlbumSelected(const QModelIndex &index)
 
     AlbumManager::instance()->setCurrentAlbum(albumForIndex(index));
 
+}
+
+void AlbumFolderViewNew::slotSelectAlbum(Album *album)
+{
+    kDebug() << "Selecting album " << album;
+    setCurrentIndex(albumFilterModel()->mapFromSource(
+                    albumModel()->indexForAlbum(album)));
 }
 
 }

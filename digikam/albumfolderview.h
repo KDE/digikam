@@ -31,6 +31,7 @@
 // Local includes
 #include "albummodel.h"
 #include "albumtreeview.h"
+#include "albummodificationhelper.h"
 
 namespace Digikam {
 
@@ -45,7 +46,13 @@ class AlbumFolderViewNew: public AlbumTreeView
 {
 Q_OBJECT
 public:
-    AlbumFolderViewNew(QWidget *parent);
+    AlbumFolderViewNew(QWidget *parent, AlbumModificationHelper *albumModificationHelper);
+
+Q_SIGNALS:
+    void signalFindDuplicatesInAlbum(Album *album);
+
+public Q_SLOTS:
+    void slotSelectAlbum(Album *album);
 
 private:
     void contextMenuEvent(QContextMenuEvent *event);
