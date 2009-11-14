@@ -651,21 +651,17 @@ bool AlbumManager::setDatabase(const QString& dbType, const QString& dbName, con
 
     // -- Database initialization -------------------------------------------------
 
-    // still suspended from above
-    ScanController::instance()->resumeCollectionScan();
-
-    ScanController::Advice advice = ScanController::AbortImmediately;
     QString databaseName = AlbumSettings::instance()->getDatabaseName();
     QString thumbnailDatabaseName;
 
-    if (AlbumSettings::instance()->getDatabaseType()=="QSQLITE"
-        || AlbumSettings::instance()->getDatabaseType().isEmpty())
+    // SQLite specifics
+    if (AlbumSettings::instance()->getDatabaseType().isEmpty())
+        AlbumSettings::instance()->setDatabaseType("QSQLITE");
+
+    if (AlbumSettings::instance()->getDatabaseType() == "QSQLITE")
     {
-        if (AlbumSettings::instance()->getDatabaseType().isEmpty())
-        {
-            AlbumSettings::instance()->setDatabaseType("QSQLITE");
+        if (AlbumSettings::instance()->getDatabaseName().isEmpty())
             databaseName = dbName;
-        }
         QString databasePath = databaseName;
         databaseName = QDir::cleanPath(databasePath + '/' + "digikam4.db");
         thumbnailDatabaseName = QDir::cleanPath(databasePath + '/' + "thumbnails-digikam.db");
@@ -678,12 +674,15 @@ bool AlbumManager::setDatabase(const QString& dbType, const QString& dbName, con
                                                                            AlbumSettings::instance()->getDatabaseUserName(),
                                                                            AlbumSettings::instance()->getDatabasePassword(),
                                                                            AlbumSettings::instance()->getDatabaseConnectoptions()),
-                                  DatabaseAccess::MainApplication);
+                                                                           DatabaseAccess::MainApplication);
+
     DatabaseGUIErrorHandler *handler = new DatabaseGUIErrorHandler(DatabaseAccess::parameters());
     DatabaseAccess::initDatabaseErrorHandler(handler);
-    advice = ScanController::instance()->databaseInitialization();
 
-    kDebug(50003) << "Database initialization done.";
+    // still suspended from above
+    ScanController::instance()->resumeCollectionScan();
+
+    ScanController::Advice advice = ScanController::instance()->databaseInitialization();
 
     QApplication::restoreOverrideCursor();
 
