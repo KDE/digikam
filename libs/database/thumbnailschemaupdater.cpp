@@ -66,7 +66,8 @@ bool ThumbnailSchemaUpdater::update()
 {
     bool success = startUpdates();
     // even on failure, try to set current version - it may have incremented
-    m_access->db()->setSetting("DBThumbnailsVersion",QString::number(m_currentVersion));
+    if (m_currentVersion)
+        m_access->db()->setSetting("DBThumbnailsVersion", QString::number(m_currentVersion));
     return success;
 }
 
@@ -86,6 +87,12 @@ bool ThumbnailSchemaUpdater::startUpdates()
         QString version = m_access->db()->getSetting("DBThumbnailsVersion");
         QString versionRequired = m_access->db()->getSetting("DBThumbnailsVersionRequired");
         kDebug(50003) << "Have a database structure version " << version;
+
+        // mini schema update
+        if (version.isEmpty() && m_access->parameters().isSQLite())
+        {
+            version = m_access->db()->getSetting("DBVersion");
+        }
 
         // We absolutely require the DBThumbnailsVersion setting
         if (version.isEmpty())
