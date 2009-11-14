@@ -109,7 +109,6 @@ public Q_SLOTS:
     void slotNewAlbum();
     void slotSortAlbums(int order);
     void slotDeleteAlbum();
-    void slotSelectAlbum(const KUrl& url);
     void slotAlbumPropsEdit();
     void slotAlbumOpenInKonqui();
     void slotAlbumRefresh();

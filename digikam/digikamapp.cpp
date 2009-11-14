@@ -877,7 +877,8 @@ void DigikamApp::setupActions()
     d->albumSortAction = new KSelectAction(i18n("&Sort Albums"), this);
     d->albumSortAction->setWhatsThis(i18n("Sort Albums in tree-view."));
     connect(d->albumSortAction, SIGNAL(triggered(int)), d->view, SLOT(slotSortAlbums(int)));
-    actionCollection()->addAction("album_sort", d->albumSortAction);
+    // TODO this action is currently not supported by the model
+    //actionCollection()->addAction("album_sort", d->albumSortAction);
 
     // Use same list order as in albumsettings enum
     QStringList sortActionList;

@@ -33,6 +33,7 @@ public Q_SLOTS:
     void slotAlbumNew(PAlbum *parentAlbum);
     void slotAlbumDelete(PAlbum *album);
     void slotAlbumRename(PAlbum *album);
+    void slotAlbumEdit(PAlbum *album);
 
 private Q_SLOTS:
     void slotDIOResult(KJob* kjob);

@@ -345,7 +345,7 @@ AlbumTreeView::AlbumTreeView(QWidget *parent)
 
 AlbumModel *AlbumTreeView::albumModel() const
 {
-    return static_cast<AlbumModel*>(m_albumModel);
+    return dynamic_cast<AlbumModel*>(m_albumModel);
 }
 
 PAlbum* AlbumTreeView::currentAlbum() const

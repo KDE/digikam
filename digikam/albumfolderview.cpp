@@ -44,7 +44,12 @@ class AlbumFolderViewNewPriv
 {
 
 public:
+    AlbumFolderViewNewPriv() : lastContextMenuAlbum(0)
+    {
+    }
+
     AlbumModificationHelper *albumModificationHelper;
+    PAlbum *lastContextMenuAlbum;
 
 };
 
@@ -57,9 +62,14 @@ AlbumFolderViewNew::AlbumFolderViewNew(QWidget *parent, AlbumModificationHelper 
     setSortingEnabled(true);
 
     // connections
-    connect(this, SIGNAL(activated(const QModelIndex&)),
+    connect(this, SIGNAL(clicked(const QModelIndex&)),
             this, SLOT(slotAlbumSelected(const QModelIndex&)));
 
+}
+
+PAlbum* AlbumFolderViewNew::lastContextMenuAlbum() const
+{
+    return d->lastContextMenuAlbum;
 }
 
 void AlbumFolderViewNew::contextMenuEvent(QContextMenuEvent *event)
@@ -67,16 +77,31 @@ void AlbumFolderViewNew::contextMenuEvent(QContextMenuEvent *event)
 
     Q_UNUSED(event);
 
-    kDebug() << "context menu requested";
-
-    // TODO is this always the right album? That means is the album always
-    // selected before showing the menu
-    PAlbum *album = currentAlbum();
-    if (!album || album->isRoot())
+    PAlbum *album = dynamic_cast<PAlbum*> (albumFilterModel()->albumForIndex(
+                    indexAt(event->pos())));
+    if (!album)
     {
-        // if collection/date return
+        kDebug() << "No album clicked, displaying no context menu";
         return;
     }
+
+    // we need to switch to the selected album here also on right click.
+    // Otherwise most of the actions in the context menu will not be enabled
+    // because they are provided by the global action collection. That in turn
+    // is controlled by the selected album
+    slotSelectAlbum(album);
+
+    // ensure that we are not working on the album root that doesn't allow
+    // anything else than collections
+    kDebug() << "context menu requested at album " << album->title();
+    if (album->isRoot())
+    {
+        kDebug() << "returning because there is no album or album is root";
+        // if collection/date return
+        d->lastContextMenuAlbum = 0;
+        return;
+    }
+    d->lastContextMenuAlbum = album;
 
     // temporary actions  -------------------------------------
 
@@ -150,6 +175,7 @@ void AlbumFolderViewNew::slotSelectAlbum(Album *album)
     kDebug() << "Selecting album " << album;
     setCurrentIndex(albumFilterModel()->mapFromSource(
                     albumModel()->indexForAlbum(album)));
+    AlbumManager::instance()->setCurrentAlbum(album);
 }
 
 }

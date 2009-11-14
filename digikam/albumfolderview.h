@@ -48,6 +48,14 @@ Q_OBJECT
 public:
     AlbumFolderViewNew(QWidget *parent, AlbumModificationHelper *albumModificationHelper);
 
+    /**
+     * Returns the album on that the last context menu was triggered.
+     *
+     * @return album for which the last context menu was triggered or null if it
+     *         wasn't triggered on a real album.
+     */
+    PAlbum *lastContextMenuAlbum() const;
+
 Q_SIGNALS:
     void signalFindDuplicatesInAlbum(Album *album);
 

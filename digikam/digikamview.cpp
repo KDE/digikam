@@ -732,18 +732,18 @@ void DigikamView::slotSortAlbums(int order)
     if (!settings)
         return;
     settings->setAlbumSortOrder((AlbumSettings::AlbumSortOrder) order);
-    // TODO update
+    // TODO sorting by anyting else then the name is currently not supported by the model
     //d->folderView->resort();
 }
 
 void DigikamView::slotNewAlbum()
 {
-    d->albumModificationHelper->slotAlbumNew(d->folderView->currentAlbum());
+    d->albumModificationHelper->slotAlbumNew(d->folderView->lastContextMenuAlbum());
 }
 
 void DigikamView::slotDeleteAlbum()
 {
-    d->albumModificationHelper->slotAlbumDelete(d->folderView->currentAlbum());
+    d->albumModificationHelper->slotAlbumDelete(d->folderView->lastContextMenuAlbum());
 }
 
 void DigikamView::slotNewTag()
@@ -1086,24 +1086,6 @@ QString DigikamViewPriv::userPresentableAlbumTitle(const QString& title)
     return title;
 }
 
-void DigikamView::slotSelectAlbum(const KUrl &)
-{
-    /* TODO
-    if (url.isEmpty())
-        return;
-
-    Album *album = d->albumManager->findPAlbum(url);
-    if(album && album->getViewItem())
-    {
-        AlbumFolderItem_Deprecated *item;
-        item = static_cast<AlbumFolderItem_Deprecated*>(album->getViewItem());
-        mFolderView_Deprecated->setSelected(item);
-        d->parent->enableAlbumBackwardHistory(!d->albumHistory->isBackwardEmpty());
-        d->parent->enableAlbumForwardHistory(!d->albumHistory->isForwardEmpty());
-    }
-    */
-}
-
 void DigikamView::slotGotoAlbumAndItem(const ImageInfo& imageInfo)
 {
     emit signalNoCurrentItem();
@@ -1111,8 +1093,7 @@ void DigikamView::slotGotoAlbumAndItem(const ImageInfo& imageInfo)
     Album* album = dynamic_cast<Album*>(AlbumManager::instance()->findPAlbum(imageInfo.albumId()));
 
     // Change the current album in list view.
-    // TODO update
-    //d->folderView->setCurrentAlbum(album);
+    d->folderView->slotSelectAlbum(album);
 
     // Change to (physical) Album view.
     // Note, that this also opens the side bar if it is closed; this is
@@ -1398,8 +1379,7 @@ void DigikamView::slotZoomFactorChanged(double zoom)
 
 void DigikamView::slotAlbumPropsEdit()
 {
-    // TODO update
-    //d->folderView->albumEdit();
+    d->albumModificationHelper->slotAlbumEdit(d->folderView->lastContextMenuAlbum());
 }
 
 void DigikamView::connectBatchSyncMetadata(BatchSyncMetadata *syncMetadata)

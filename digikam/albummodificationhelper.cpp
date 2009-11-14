@@ -195,4 +195,58 @@ void AlbumModificationHelper::slotDIOResult(KJob* kjob)
     }
 }
 
+void AlbumModificationHelper::slotAlbumEdit(PAlbum *album)
+{
+
+    if (!album || album->isRoot() || album->isAlbumRoot())
+    {
+        return;
+    }
+
+    QString     oldTitle(album->title());
+    QString     oldComments(album->caption());
+    QString     oldCategory(album->category());
+    QDate       oldDate(album->date());
+    QStringList oldAlbumCategories(AlbumSettings::instance()->getAlbumCategoryNames());
+
+    QString     title, comments, category;
+    QDate       date;
+    QStringList albumCategories;
+
+    if(AlbumPropsEdit::editProps(album, title, comments, date,
+                                 category, albumCategories))
+    {
+        if(comments != oldComments)
+        {
+            album->setCaption(comments);
+        }
+
+        if(date != oldDate && date.isValid())
+        {
+            album->setDate(date);
+        }
+
+        if(category != oldCategory)
+        {
+            album->setCategory(category);
+        }
+
+        AlbumSettings::instance()->setAlbumCategoryNames(albumCategories);
+
+        // Do this last : so that if anything else changed we can
+        // successfuly save to the db with the old name
+
+        if(title != oldTitle)
+        {
+            QString errMsg;
+            if (!AlbumManager::instance()->renamePAlbum(album, title, errMsg))
+            {
+                KMessageBox::error(d->dialogParent, errMsg);
+            }
+        }
+
+    }
+
+}
+
 }
