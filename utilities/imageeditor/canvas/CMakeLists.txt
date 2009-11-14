@@ -1,2 +1,0 @@
-
-INSTALL( FILES imageplugin.h DESTINATION ${INCLUDE_INSTALL_DIR}/digikam COMPONENT Devel)
