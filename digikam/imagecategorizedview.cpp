@@ -508,6 +508,10 @@ void ImageCategorizedView::slotActivated(const QModelIndex& index)
         if (shiftKeyPressed || controlKeyPressed)
             return;
 
+        const bool rightClick = d->currentMouseEvent->button() & Qt::RightButton;
+        if(rightClick)
+            return;
+        
         // if the activation is caused by mouse click (not keyboard)
         // we need to check the hot area
         if (!d->delegate->acceptsActivation(d->currentMouseEvent->pos(), visualRect(index), index))
@@ -805,6 +809,7 @@ void ImageCategorizedView::paste()
 void ImageCategorizedView::contextMenuEvent(QContextMenuEvent* event)
 {
     userInteraction();
+    qDebug() << ">>>>>>>>>>>>>>>>>>>mousePressEventD";
     QModelIndex index = indexAt(event->pos());
     if (index.isValid())
     {
@@ -820,19 +825,22 @@ void ImageCategorizedView::mousePressEvent(QMouseEvent *event)
     userInteraction();
     const QModelIndex index = indexAt(event->pos());
 
+    qDebug() << "<<<<<<<<<<<<<<<<<<<<mousePressEventC";
     // Clear selection on click on empty area. Standard behavior, but not done by QAbstractItemView for some reason.
-    if (!index.isValid()) {
-        Qt::KeyboardModifiers modifiers = event->modifiers();
-        const Qt::MouseButton button = event->button();
-        const bool rightButtonPressed = button & Qt::RightButton;
-        const bool shiftKeyPressed = modifiers & Qt::ShiftModifier;
-        const bool controlKeyPressed = modifiers & Qt::ControlModifier;
-        if (!index.isValid() && !rightButtonPressed && !shiftKeyPressed && !controlKeyPressed)
-            clearSelection();
-    }
-
+    Qt::KeyboardModifiers modifiers = event->modifiers();
+    const Qt::MouseButton button = event->button();
+    const bool rightButtonPressed = button & Qt::RightButton;
+    const bool shiftKeyPressed = modifiers & Qt::ShiftModifier;
+    const bool controlKeyPressed = modifiers & Qt::ControlModifier;
+    if (!index.isValid() && !rightButtonPressed && !shiftKeyPressed && !controlKeyPressed)
+        clearSelection();
+    qDebug() << rightButtonPressed << shiftKeyPressed << controlKeyPressed;
+    
     // store event for entered(), clicked(), activated() signal handlers
-    d->currentMouseEvent = event;
+    if(!rightButtonPressed)
+        d->currentMouseEvent = event;
+    else
+        d->currentMouseEvent = 0;
     KCategorizedView::mousePressEvent(event);
     d->currentMouseEvent = 0;
 }
