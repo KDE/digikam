@@ -53,10 +53,10 @@ CameraFolderDialog::CameraFolderDialog(QWidget *parent, CameraIconView *cameraVi
                   : KDialog(parent)
 {
     setHelp("camerainterface.anchor", "digikam");
-    enableButtonOk(false);
     setCaption(i18n("%1 - Select Camera Folder",cameraName));
     setButtons(Help|Ok|Cancel);
     setDefaultButton(Ok);
+    enableButtonOk(false);
     setModal(true);
 
     m_rootPath = rootPath;
@@ -108,6 +108,9 @@ CameraFolderDialog::CameraFolderDialog(QWidget *parent, CameraIconView *cameraVi
             this, SLOT(slotFolderPathSelectionChanged(CameraFolderItem*)));
 
     resize(500, 500);
+    
+    // make sure the ok button is properly set up
+    enableButtonOk( m_folderView->currentItem() != 0 );
 }
 
 CameraFolderDialog::~CameraFolderDialog()
