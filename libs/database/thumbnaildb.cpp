@@ -197,7 +197,7 @@ DatabaseCoreBackend::QueryState ThumbnailDB::insertThumbnail(const DatabaseThumb
 
 DatabaseCoreBackend::QueryState ThumbnailDB::replaceThumbnail(const DatabaseThumbnailInfo &info)
 {
-    return d->db->execSql("REPLACE INTO THUMBNAILS (id, type, modificationDate, orientationHint, data) VALUES(?, ?, ?, ?, ?);",
+    return d->db->execSql("REPLACE INTO Thumbnails (id, type, modificationDate, orientationHint, data) VALUES(?, ?, ?, ?, ?);",
                     QList<QVariant>() << info.id << info.type << info.modificationDate << info.orientationHint << info.data);
 }
 
